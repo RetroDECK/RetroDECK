@@ -1,7 +1,7 @@
 # RetroDECK
 RetroDECK is a fork of 351ELEC which is based on EmuELEC, CoreELEC, Lakka, and Batocera.
 
-RetroDECK brings an enviornment to catalogue and play your retro games directly from SteamOS and it's tailored specifically for the Steam Deck.
+RetroDECK brings an enviornment to catalog and play your retro games directly from SteamOS and it's tailored specifically for the Steam Deck.
 
 Powered by EmulationStation, RetroArch and standalone emulators allows you to import your favorite retro (but even not-so-retro) games in a tidy enviornment without flooding your Steam library.
 
