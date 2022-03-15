@@ -174,6 +174,10 @@ mv $INSTALL_DIR/emulators/RetroArch-Linux-x86_64/RetroArch-Linux-x86_64.AppImage
 # Installing 351elec-emulationstation
 cd $INSTALL_DIR
 git clone --recursive https://github.com/351ELEC/351elec-emulationstation emulationstation
+# TODO: one day I will have to fork this emustation...
+# applying patches
+cp $INSTALL_DIR/patches/Splash.h $INSTALL_DIR/emulationstation/es-core/src/Splash.h
+# pathes applied
 cd emulationstation
 sudo pacman -S base-devel cmake freeimage sdl2_mixer sdl2 rapidjson boost
 cmake -DENABLE_EMUELEC=1 -DGLES2=0 -DDISABLE_KODI=1 -DENABLE_FILEMANAGER=0 -DCEC=0 -DRG552=1
@@ -235,12 +239,13 @@ chmod 777 $INSTALL_DIR/retrodeck.sh
 chmod 777 $INSTALL_DIR/export_func.sh
 
 # Cleaning up
-# TODO: these removal must be made when I am sure tghis file is safe on github
+# TODO: these removal must be made when I am sure this files are safe on github
 #rm -rf $INSTALL_DIR/emulators/RetroArch-Linux-x86_64
 #rm -rf $INSTALL_DIR/emulators/RetroArch_cores.7z
-#rm $INSTALL_DIR/es_systems.cfg $INSTALL_DIR/emulationstation/
-#rm $INSTALL_DIR/es_settings.cfg $INSTALL_DIR/emulationstation/
-#rm $INSTALL_DIR/es_input.cfg $INSTALL_DIR/emulationstation/
+#rm $INSTALL_DIR/es_systems.cfg
+#rm $INSTALL_DIR/es_settings.cfg
+#rm $INSTALL_DIR/es_input.cfg
+#rm -rf $INSTALL_DIR/patches
 
 echo "Installation terminated, you can run RetroDECK from the desktop link or add it on your Steam Library."
 # TODO: maybe I can add it to the steam library directly, I think I have to close steam and  design a banner
