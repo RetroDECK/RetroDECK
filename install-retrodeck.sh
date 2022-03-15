@@ -177,6 +177,7 @@ git clone --recursive https://github.com/351ELEC/351elec-emulationstation emulat
 # TODO: one day I will have to fork this emustation...
 # applying patches
 cp $INSTALL_DIR/patches/Splash.h $INSTALL_DIR/emulationstation/es-core/src/Splash.h
+cp $INSTALL_DIR/patches/GuiMenu.cpp $INSTALL_DIR/emulationstation/es-app/src/guis/GuiMenu.cpp
 # pathes applied
 cd emulationstation
 sudo pacman -S base-devel cmake freeimage sdl2_mixer sdl2 rapidjson boost
