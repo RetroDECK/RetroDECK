@@ -18,7 +18,7 @@ class TextureResource;
 #define DEFAULT_SPLASH_IMAGE ":/splash.svg"
 #define OLD_SPLASH_LAYOUT true
 #else
-#define DEFAULT_SPLASH_IMAGE "/home/deck/retrodeck/res/logo.png"
+#define DEFAULT_SPLASH_IMAGE "./res/logo.png"
 #define OLD_SPLASH_LAYOUT false
 #endif
 
