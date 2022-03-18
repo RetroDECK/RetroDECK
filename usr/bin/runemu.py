@@ -133,7 +133,7 @@ standalone_emulators: 'MutableMapping[str, StandaloneEmulator]' = {
 	'raze': StandaloneEmulator('raze', [INSTALL_DIR + '/usr/bin/raze.sh', '<path>']),
 	'solarus': StandaloneEmulator('solarus-run', [INSTALL_DIR + '/usr/bin/solarus.sh', '<path>']),
 	'yuzu': StandaloneEmulator('yuzu', [INSTALL_DIR + '/emulators/yuzu.sh', '<path>']),
-	'ryujinx': StandaloneEmulator('ryujinx', [INSTALL_DIR + '/emulators/ryujinx/ryujinx.sh', '<path>']),
+	'ryujinx': StandaloneEmulator('ryujinx', [INSTALL_DIR + '/emulators/ryujinx.sh', '<path>']),
 }
 
 def _load_customized_standalone_emulators():
@@ -219,9 +219,9 @@ class EmuRunner():
 			log(f'platform: {self.platform}')
 			log(f'core: {self.core}')
 		retroarch_binary = 'retroarch'
-		if self.core in {'pcsx_rearmed', 'parallel_n64'}:
-			retroarch_binary = 'retroarch32'
-			self.environment['LD_LIBRARY_PATH'] = '/usr/lib32'
+		#if self.core in {'pcsx_rearmed', 'parallel_n64'}:
+		#	retroarch_binary = 'retroarch32'
+		#	self.environment['LD_LIBRARY_PATH'] = '/usr/lib32'
 		
 		rom_path: 'Optional[Union[str, Path]]' = self.rom
 
@@ -387,7 +387,7 @@ def main():
 	except subprocess.CalledProcessError as cpe:
 		log(f'Process exited improperly with return code {cpe.returncode}')
 		exit_code = 1
-		requires_bios = {'atari5200', 'atari800', 'atari7800', 'atarilynx', 'colecovision', 'amiga', 'amigacd32', 'o2em', 'intellivision', 'pcengine', 'pcenginecd', 'pcfx', 'fds', 'segacd', 'saturn', 'dreamcast', 'naomi', 'atomiswave', 'x68000', 'neogeo', 'neogeocd', 'msx', 'msx2', 'sc-3000'}
+		requires_bios = {'atari5200', 'atari800', 'atari7800', 'atarilynx', 'colecovision', 'amiga', 'amigacd32', 'o2em', 'intellivision', 'pcengine', 'pcenginecd', 'pcfx', 'fds', 'segacd', 'saturn', 'dreamcast', 'naomi', 'atomiswave', 'x68000', 'neogeo', 'neogeocd', 'msx', 'msx2', 'sc-3000', 'pcsx2'}
 		if platform in requires_bios:
 			if platform == 'msx2':
 				platform_to_check = 'msx2'

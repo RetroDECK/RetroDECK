@@ -28,6 +28,7 @@ fi
 if [ test ! -d "$INSTALL_DIR/roms" ]; then
     ln -s $INSTALL_DIR/storage/roms $INSTALL_DIR/roms
 fi
+mkdir -p $INSTALL_DIR/roms/bios
 mkdir -p $INSTALL_DIR/roms/3do
 mkdir -p $INSTALL_DIR/roms/amiga
 mkdir -p $INSTALL_DIR/roms/amigacd32
@@ -174,10 +175,7 @@ mv $INSTALL_DIR/emulators/RetroArch-Linux-x86_64/RetroArch-Linux-x86_64.AppImage
 flatpak install flathub org.yuzu_emu.yuzu
 
 # Switch - Ryujinx
-cd $INSTALL_DIR/emulators
-wget https://github.com/Ryujinx/release-channel-master/releases/download/1.1.76/ryujinx-1.1.76-linux_x64.tar.gz
-tar -xvf ryujinx-1.1.76-linux_x64.tar.gz
-mv publish ryujinx
+flatpak install flathub org.ryujinx.Ryujinx
 
 # PS3 - RPCS3
 # DOS - dosbox-pure is included?
@@ -192,7 +190,7 @@ cp $INSTALL_DIR/patches/Splash.h $INSTALL_DIR/emulationstation/es-core/src/Splas
 cp $INSTALL_DIR/patches/GuiMenu.cpp $INSTALL_DIR/emulationstation/es-app/src/guis/GuiMenu.cpp
 # pathes applied
 cd emulationstation
-sudo pacman -S base-devel cmake freeimage sdl2_mixer sdl2 rapidjson boost openal # openal is needed for ryujinx
+sudo pacman -S base-devel cmake freeimage sdl2_mixer sdl2 rapidjson boost
 cmake -DENABLE_EMUELEC=1 -DGLES2=0 -DDISABLE_KODI=1 -DENABLE_FILEMANAGER=0 -DCEC=0 -DRG552=1
 make -j$(nproc)
 cp $INSTALL_DIR/es_systems.cfg $INSTALL_DIR/emulationstation/
