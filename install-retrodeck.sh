@@ -179,7 +179,9 @@ wget https://github.com/Ryujinx/release-channel-master/releases/download/1.1.76/
 tar -xvf ryujinx-1.1.76-linux_x64.tar.gz
 mv publish ryujinx
 
-
+# PS3 - RPCS3
+# DOS - dosbox-pure is included?
+# PSVITA - vita3k
 
 # Installing 351elec-emulationstation
 cd $INSTALL_DIR
@@ -253,6 +255,7 @@ chmod 777 $INSTALL_DIR/export_func.sh
 # TODO: these removal must be made when I am sure this files are safe on github
 #rm -rf $INSTALL_DIR/emulators/RetroArch-Linux-x86_64
 #rm -rf $INSTALL_DIR/emulators/RetroArch_cores.7z
+#rm -rf $INSTALL_DIR/emulators/ryujinx-1.1.76-linux_x64.tar.gz
 #rm $INSTALL_DIR/es_systems.cfg
 #rm $INSTALL_DIR/es_settings.cfg
 #rm $INSTALL_DIR/es_input.cfg
