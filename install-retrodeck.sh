@@ -130,6 +130,7 @@ mkdir -p $INSTALL_DIR/roms/j2me
 mkdir -p $INSTALL_DIR/roms/uzebox
 mkdir -p $INSTALL_DIR/roms/supervision
 mkdir -p $INSTALL_DIR/roms/doom
+mkdir -p $INSTALL_DIR/roms/switch
 
 # Initializing directories
 mkdir -p $INSTALL_DIR/storage/.config/
@@ -162,14 +163,23 @@ if test -f "$INSTALL_DIR/emulators/RetroArch_cores.7z"; then
         rm -rf RetroArch*
         wget $CORES_LINK
     fi
-else
-    wget $CORES_LINK
 fi
 
 7z x RetroArch_cores.7z
 mv $INSTALL_DIR/emulators/RetroArch-Linux-x86_64/RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores $INSTALL_DIR/emulators/
 
 # TODO: Installing standalone emulators
+
+# Switch - Yuzu
+flatpak install flathub org.yuzu_emu.yuzu
+
+# Switch - Ryujinx
+cd $INSTALL_DIR/emulators
+wget https://github.com/Ryujinx/release-channel-master/releases/download/1.1.76/ryujinx-1.1.76-linux_x64.tar.gz
+tar -xvf ryujinx-1.1.76-linux_x64.tar.gz
+mv publish ryujinx
+
+
 
 # Installing 351elec-emulationstation
 cd $INSTALL_DIR
@@ -180,7 +190,7 @@ cp $INSTALL_DIR/patches/Splash.h $INSTALL_DIR/emulationstation/es-core/src/Splas
 cp $INSTALL_DIR/patches/GuiMenu.cpp $INSTALL_DIR/emulationstation/es-app/src/guis/GuiMenu.cpp
 # pathes applied
 cd emulationstation
-sudo pacman -S base-devel cmake freeimage sdl2_mixer sdl2 rapidjson boost
+sudo pacman -S base-devel cmake freeimage sdl2_mixer sdl2 rapidjson boost openal # openal is needed for ryujinx
 cmake -DENABLE_EMUELEC=1 -DGLES2=0 -DDISABLE_KODI=1 -DENABLE_FILEMANAGER=0 -DCEC=0 -DRG552=1
 make -j$(nproc)
 cp $INSTALL_DIR/es_systems.cfg $INSTALL_DIR/emulationstation/
