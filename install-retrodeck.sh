@@ -134,6 +134,7 @@ mkdir -p $INSTALL_DIR/roms/doom
 mkdir -p $INSTALL_DIR/roms/switch
 mkdir -p $INSTALL_DIR/roms/wii
 mkdir -p $INSTALL_DIR/roms/gc
+mkdir -p $INSTALL_DIR/roms/3ds
 
 # Initializing directories
 mkdir -p $INSTALL_DIR/storage/.config/
