@@ -1,0 +1,270 @@
+app-id: com.xargon.retrodeck
+runtime: org.kde.Platform
+runtime-version: '5.15-21.08'
+sdk: org.kde.Sdk
+# command: retrodeck.sh
+command: retroarch
+
+finish-args:
+   - --socket=x11
+   - --socket=wayland
+   - --socket=pulseaudio
+   - --share=ipc
+   - --share=network
+   - --device=all
+   - --filesystem=~/retrodeck/roms:create
+   - --allow=multiarch
+   - --talk-name=org.freedesktop.ScreenSaver
+   - --talk-name=org.freedesktop.PowerManagement.Inhibit
+   - --talk-name=org.freedesktop.login1
+
+modules:
+
+  - name: unappimage
+    buildsystem: simple
+    build-commands:
+      - make -C squashfs-tools -j ${FLATPAK_BUILDER_N_JOBS} install INSTALL_DIR=/app/bin
+    cleanup: ['*']
+    sources:
+      - type: git
+        url: https://github.com/refi64/unappimage
+        commit: d7f86f2a0d7ec3a69211125207d5f127386b849a
+
+  - name: retroarch
+    buildsystem: simple
+    build-commands:
+        - unappimage ./RetroArch-Linux-x86_64.AppImage
+        - mv ./squashfs-root/usr /app/usr
+        - ln -s /app/usr/bin/retroarch /app/bin/retroarch
+    cleanup:
+        - RetroArch-Linux-x86_64.AppImage*
+    sources:
+      - type: archive
+        url: https://buildbot.libretro.com/stable/1.10.1/linux/x86_64/RetroArch.7z
+        sha256: 0ab48b247fd7ce05d9532f28b706f35a1c96da67b826a9a312d66b86b9dd8f39
+    
+  # needed for reatroarch
+  - name: libusb
+    config-opts:
+      - --disable-static
+    build-commands:
+      - ./autogen.sh
+      - ./bootstrap.sh
+      - ./configure --prefix=/app
+      - make
+      - make install
+    cleanup:
+      - /lib/*.la
+      - /lib/pkgconfig
+      - /include
+    sources:
+      - type: archive
+        url: https://github.com/libusb/libusb/archive/v1.0.25.tar.gz
+        sha256: f9c4b7dad27a6196ca9ec3c6ec7fa446194342de326c71e030eb2c480895e169
+    post-install:
+      - install -Dm644 COPYING /app/share/licenses/libusb/COPYING
+
+  - name: retroarch-cores
+    buildsystem: simple
+    build-commands:
+        - install -Dm755 ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* -t ~/retroarch/emulators/cores/
+    cleanup:
+        - RetroArch_cores.7z
+    sources:
+      - type: archive
+        url: https://buildbot.libretro.com/stable/1.10.1/linux/x86_64/RetroArch_cores.7z
+        sha256: 3467de291c0849947993a535b0f32e7c211878dcaf6a37a9f864cf50cbe824fd
+    
+    # - name: template
+    #   builsystem: simple
+    #   build-commands:
+    #     - 
+    #   cleanup: ['*']
+    #   sources:
+    #     - type:
+    #       url:
+    #       sha256:
+
+    # - name: yuzu
+    #   builsystem: simple
+    #   build-commands:
+    #     - unappimage ./yuzu*.AppImage
+    #     - ls ./squashfs-root/
+    #     - mv ./squashfs-root/ ~/retrodeck/emulators/yuzu/ 
+    # TODO: see how are the files and implement, edit the yuzu.sh script
+    #   cleanup: ['*']
+    #   sources:
+    #     - type: file
+    #       url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-957/yuzu-20220320-1ce8136c7.AppImage
+    #       sha256: 000b7f09aa562a1f844697ded35618cef3189f339a207759e11295f31589a40d
+
+    # - name: ryujinx
+    # - name: xemu
+    # - name: rpcs3
+    # - name: vita3k
+
+    # - name: 351elec-emulationstation
+    #   build commands:
+    #     - mv 351elec-emulationstation ~/emulationstation
+    #     - install -Dm755 patches/Splash.h -t ~/emulationstation/es-core/src/
+    #     - install -Dm755 patches/GuiMenu.cpp -t ~/emulationstation/es-app/src/guis/
+    #     - cd ~/emulationstation
+    #     - cmake -DENABLE_EMUELEC=1 -DGLES2=0 -DDISABLE_KODI=1 -DENABLE_FILEMANAGER=0 -DCEC=0 -DRG552=1
+    #     - make -j$(nproc)
+    #     - ln -s emulationstation /app/usr/bin/emulationstation
+    ##   make-args:
+    ##     - -DENABLE_EMUELEC=1
+    ##     - -DGLES2=0
+    ##     - -DDISABLE_KODI=1
+    ##     - -DENABLE_FILEMANAGER=0
+    ##     - -DCEC=0
+    ##     - -DRG552=1
+    ##   cleanup: ['*']
+    #   sources:
+    #     - type: git
+    #       url: https://github.com/351ELEC/351elec-emulationstation.git
+    #       branch: 6b704cfa1161090de4ca1b5ec343ebab2060e7fc
+    #    - type: dir
+    #       path: patches
+    
+    # - name: art-book-next
+    #   builsystem: simple
+    #   build-commands:
+    #     - install -Dm755 art-book-next -t ~/emulationstation/themes/art-book-next
+    #   cleanup: ['*']
+    #   sources:
+    #     - type: git
+    #       url: https://github.com/anthonycaccese/es-theme-art-book-next.git
+    #       branch: eaf73a4eefde22791681c7f430a238fb324bdeaf
+
+    # TODO 351elec-es-packages  batocera-config  batocera-scraper  batocera-settings  runemu.py  setsettings.py
+
+  - name: retrodeck
+    buildsystem: simple
+    build-commands:
+        - mkdir -p ~/retrodeck/roms/bios
+        - mkdir -p ~/retrodeck/roms/3do
+        - mkdir -p ~/retrodeck/roms/amiga
+        - mkdir -p ~/retrodeck/roms/amigacd32
+        - mkdir -p ~/retrodeck/roms/amstradcpc
+        - mkdir -p ~/retrodeck/roms/arcade
+        - mkdir -p ~/retrodeck/roms/atari2600
+        - mkdir -p ~/retrodeck/roms/atari5200
+        - mkdir -p ~/retrodeck/roms/atari7800
+        - mkdir -p ~/retrodeck/roms/atarist
+        - mkdir -p ~/retrodeck/roms/atari800
+        - mkdir -p ~/retrodeck/roms/atomiswave
+        - mkdir -p ~/retrodeck/roms/channelf
+        - mkdir -p ~/retrodeck/roms/colecovision
+        - mkdir -p ~/retrodeck/roms/c64
+        - mkdir -p ~/retrodeck/roms/c128
+        - mkdir -p ~/retrodeck/roms/vic20
+        - mkdir -p ~/retrodeck/roms/laserdisc
+        - mkdir -p ~/retrodeck/roms/dreamcast
+        - mkdir -p ~/retrodeck/roms/easyrpg
+        - mkdir -p ~/retrodeck/roms/famicom
+        - mkdir -p ~/retrodeck/roms/fbn
+        - mkdir -p ~/retrodeck/roms/gb
+        - mkdir -p ~/retrodeck/roms/gbh
+        - mkdir -p ~/retrodeck/roms/gameandwatch
+        - mkdir -p ~/retrodeck/roms/gba
+        - mkdir -p ~/retrodeck/roms/fds
+        - mkdir -p ~/retrodeck/roms/c16
+        - mkdir -p ~/retrodeck/roms/ggh
+        - mkdir -p ~/retrodeck/roms/gbah
+        - mkdir -p ~/retrodeck/roms/intellivision
+        - mkdir -p ~/retrodeck/roms/gbch
+        - mkdir -p ~/retrodeck/roms/atarilynx
+        - mkdir -p ~/retrodeck/roms/mame
+        - mkdir -p ~/retrodeck/roms/dos
+        - mkdir -p ~/retrodeck/roms/snesmsu1
+        - mkdir -p ~/retrodeck/roms/msx
+        - mkdir -p ~/retrodeck/roms/msx2
+        - mkdir -p ~/retrodeck/roms/naomi
+        - mkdir -p ~/retrodeck/roms/neogeo
+        - mkdir -p ~/retrodeck/roms/ngp
+        - mkdir -p ~/retrodeck/roms/nds
+        - mkdir -p ~/retrodeck/roms/n64
+        - mkdir -p ~/retrodeck/roms/nes
+        - mkdir -p ~/retrodeck/roms/nesh
+        - mkdir -p ~/retrodeck/roms/ngpc
+        - mkdir -p ~/retrodeck/roms/neocd
+        - mkdir -p ~/retrodeck/roms/pc-9800
+        - mkdir -p ~/retrodeck/roms/pcengine
+        - mkdir -p ~/retrodeck/roms/pcenginecd
+        - mkdir -p ~/retrodeck/roms/pcfx
+        - mkdir -p ~/retrodeck/roms/openbor
+        - mkdir -p ~/retrodeck/roms/piece
+        - mkdir -p ~/retrodeck/roms/odyssey2
+        - mkdir -p ~/retrodeck/roms/psp
+        - mkdir -p ~/retrodeck/roms/pspminis
+        - mkdir -p ~/retrodeck/roms/pokemini
+        - mkdir -p ~/retrodeck/roms/homebrew
+        - mkdir -p ~/retrodeck/roms/ports
+        - mkdir -p ~/retrodeck/roms/sc-3000
+        - mkdir -p ~/retrodeck/roms/scummvm
+        - mkdir -p ~/retrodeck/roms/psx
+        - mkdir -p ~/retrodeck/roms/segacd
+        - mkdir -p ~/retrodeck/roms/sega32x
+        - mkdir -p ~/retrodeck/roms/genesis
+        - mkdir -p ~/retrodeck/roms/genh
+        - mkdir -p ~/retrodeck/roms/mastersystem
+        - mkdir -p ~/retrodeck/roms/megadrive
+        - mkdir -p ~/retrodeck/roms/megaduck
+        - mkdir -p ~/retrodeck/roms/saturn
+        - mkdir -p ~/retrodeck/roms/sg-1000
+        - mkdir -p ~/retrodeck/roms/x1
+        - mkdir -p ~/retrodeck/roms/zxspectrum
+        - mkdir -p ~/retrodeck/roms/zx81
+        - mkdir -p ~/retrodeck/roms/pc-8800
+        - mkdir -p ~/retrodeck/roms/snes
+        - mkdir -p ~/retrodeck/roms/supergrafx
+        - mkdir -p ~/retrodeck/roms/pico-8
+        - mkdir -p ~/retrodeck/roms/megacd
+        - mkdir -p ~/retrodeck/roms/snesh
+        - mkdir -p ~/retrodeck/roms/satellaview
+        - mkdir -p ~/retrodeck/roms/sfc
+        - mkdir -p ~/retrodeck/roms/sufami
+        - mkdir -p ~/retrodeck/roms/tic-80
+        - mkdir -p ~/retrodeck/roms/tg16
+        - mkdir -p ~/retrodeck/roms/solarus
+        - mkdir -p ~/retrodeck/roms/vectrex
+        - mkdir -p ~/retrodeck/roms/gbc
+        - mkdir -p ~/retrodeck/roms/videopac
+        - mkdir -p ~/retrodeck/roms/virtualboy
+        - mkdir -p ~/retrodeck/roms/wonderswan
+        - mkdir -p ~/retrodeck/roms/wonderswancolor
+        - mkdir -p ~/retrodeck/roms/ecwolf
+        - mkdir -p ~/retrodeck/roms/x68000
+        - mkdir -p ~/retrodeck/roms/build
+        - mkdir -p ~/retrodeck/roms/tools
+        - mkdir -p ~/retrodeck/roms/imageviewer
+        - mkdir -p ~/retrodeck/roms/gamegear
+        - mkdir -p ~/retrodeck/roms/tg16cd
+        - mkdir -p ~/retrodeck/roms/j2me
+        - mkdir -p ~/retrodeck/roms/uzebox
+        - mkdir -p ~/retrodeck/roms/supervision
+        - mkdir -p ~/retrodeck/roms/doom
+        - mkdir -p ~/retrodeck/roms/switch
+        - mkdir -p ~/retrodeck/roms/wii
+        - mkdir -p ~/retrodeck/roms/gc
+        - mkdir -p ~/retrodeck/roms/3ds
+
+        - install -Dm755 retrodeck.sh -t ~/retrodeck/
+        - install -Dm755 export_func.sh -t ~/retrodeck/
+
+        - install -Dm755 es_* -t ~/emulationstation
+
+        # move other files (check old install script)
+    sources:
+      - type: file
+        path: retrodeck.sh
+      - type: file
+        path: export_func.sh
+      - type: file
+        path: es_systems.cfg
+      - type: file
+        path: es_settings.cfg
+      - type: file
+        path: es_input.cfg
+    # create desktop entry
