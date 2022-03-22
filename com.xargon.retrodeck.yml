@@ -17,6 +17,7 @@ finish-args:
    - --talk-name=org.freedesktop.ScreenSaver
    - --talk-name=org.freedesktop.PowerManagement.Inhibit
    - --talk-name=org.freedesktop.login1
+   #- --env=PATH=/app/bin:/usr/bin
 
 modules:
 
@@ -33,6 +34,8 @@ modules:
   - name: retroarch
     buildsystem: simple
     build-commands:
+        - ls -l
+        - pwd
         - unappimage ./RetroArch-Linux-x86_64.AppImage
         - mv ./squashfs-root/usr /app/usr
         - ln -s /app/usr/bin/retroarch /app/bin/retroarch
@@ -42,6 +45,21 @@ modules:
       - type: archive
         url: https://buildbot.libretro.com/stable/1.10.1/linux/x86_64/RetroArch.7z
         sha256: 0ab48b247fd7ce05d9532f28b706f35a1c96da67b826a9a312d66b86b9dd8f39
+
+  - name: retroarch-assets
+    builsystem: simple
+    #no-autogen: true
+    make-install-args:
+      - PREFIX=/app
+    post-install:
+      - mkdir -p /app/config/retroarch/assets/
+      - mv -f ./* /app/config/retroarch/assets/
+      #- rm -f Automatic/README.md
+    cleanup: ['*']
+    sources:
+      - type: archive
+        url: https://github.com/libretro/retroarch-assets/archive/948def88f11c8c62f85f606a1cd8f5a1bbad671b.zip
+        sha256: d7b2d79d6809521f73818117575f49b706a913cfc61822582d1f12a697944791
     
   # needed for reatroarch
   - name: libusb
@@ -67,7 +85,7 @@ modules:
   - name: retroarch-cores
     buildsystem: simple
     build-commands:
-        - install -Dm755 ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* -t /app/retroarch/emulators/cores/
+        - install -Dm755 ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* -t /var/config/retroarch/cores
     cleanup:
         - RetroArch_cores.7z
     sources:
@@ -75,69 +93,102 @@ modules:
         url: https://buildbot.libretro.com/stable/1.10.1/linux/x86_64/RetroArch_cores.7z
         sha256: 3467de291c0849947993a535b0f32e7c211878dcaf6a37a9f864cf50cbe824fd
     
-    # - name: template
-    #   builsystem: simple
-    #   build-commands:
-    #     - 
-    #   cleanup: ['*']
-    #   sources:
-    #     - type:
-    #       url:
-    #       sha256:
+  # - name: template
+  #   builsystem: simple
+  #   build-commands:
+  #     - 
+  #   cleanup: ['*']
+  #   sources:
+  #     - type:
+  #       url:
+  #       sha256:
 
-    # - name: yuzu
-    #   builsystem: simple
-    #   build-commands:
-    #     - unappimage ./yuzu*.AppImage
-    #     - ls ./squashfs-root/
-    #     - mv ./squashfs-root/ /app/retrodeck/emulators/yuzu/ 
-    # TODO: see how are the files and implement, edit the yuzu.sh script
-    #   cleanup: ['*']
-    #   sources:
-    #     - type: file
-    #       url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-957/yuzu-20220320-1ce8136c7.AppImage
-    #       sha256: 000b7f09aa562a1f844697ded35618cef3189f339a207759e11295f31589a40d
+  # - name: yuzu
+  #   builsystem: simple
+  #   build-commands:
+  #     - unappimage ./yuzu*.AppImage
+  #     - ls ./squashfs-root/
+  #     - mv ./squashfs-root/ /app/retrodeck/emulators/yuzu/ 
+  # TODO: see how are the files and implement, edit the yuzu.sh script
+  #   cleanup: ['*']
+  #   sources:
+  #     - type: archive
+  #       url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-957/yuzu-20220320-1ce8136c7.AppImage
+  #       sha256: 000b7f09aa562a1f844697ded35618cef3189f339a207759e11295f31589a40d
 
-    # - name: ryujinx
-    # - name: xemu
-    # - name: rpcs3
-    # - name: vita3k
+  # - name: ryujinx
+  # - name: xemu
+  # - name: rpcs3
+  # - name: vita3k
 
-    # - name: 351elec-emulationstation
-    #   build commands:
-    #     - mv 351elec-emulationstation /app/emulationstation
-    #     - install -Dm755 patches/Splash.h -t /app/emulationstation/es-core/src/
-    #     - install -Dm755 patches/GuiMenu.cpp -t /app/emulationstation/es-app/src/guis/
-    #     - cd /app/emulationstation
-    #     - cmake -DENABLE_EMUELEC=1 -DGLES2=0 -DDISABLE_KODI=1 -DENABLE_FILEMANAGER=0 -DCEC=0 -DRG552=1
-    #     - make -j$(nproc)
-    #     - ln -s emulationstation /app/usr/bin/emulationstation
-    ##   make-args:
-    ##     - -DENABLE_EMUELEC=1
-    ##     - -DGLES2=0
-    ##     - -DDISABLE_KODI=1
-    ##     - -DENABLE_FILEMANAGER=0
-    ##     - -DCEC=0
-    ##     - -DRG552=1
-    ##   cleanup: ['*']
-    #   sources:
-    #     - type: git
-    #       url: https://github.com/351ELEC/351elec-emulationstation.git
-    #       branch: 6b704cfa1161090de4ca1b5ec343ebab2060e7fc
-    #    - type: dir
-    #       path: patches
-    
-    # - name: art-book-next
-    #   builsystem: simple
-    #   build-commands:
-    #     - install -Dm755 art-book-next -t /app/emulationstation/themes/art-book-next
-    #   cleanup: ['*']
-    #   sources:
-    #     - type: git
-    #       url: https://github.com/anthonycaccese/es-theme-art-book-next.git
-    #       branch: eaf73a4eefde22791681c7f430a238fb324bdeaf
+  ## Needed for 351elec-emulationstation
+  #- name: autoconf-2.13
+  #  builsystem: simple
+  #  config-opts:
+  #    - --program-suffix=-2.13
+  #  cleanup:
+  #    - '*'
+  #  sources:
+  #    - type: archive
+  #      url: https://ftp.gnu.org/gnu/autoconf/autoconf-2.13.tar.gz
+  #      sha256: f0611136bee505811e9ca11ca7ac188ef5323a8e2ef19cffd3edb3cf08fd791e
+#
+  - name: freeimage
+    no-autogen: true
+    build-options:
+      #C++17 is not supported
+      cxxflags: -std=c++14
+    make-args:
+    - DESTDIR=/app
+    sources:
+    - type: archive
+      url: http://downloads.sourceforge.net/freeimage/FreeImage3180.zip
+      sha256: f41379682f9ada94ea7b34fe86bf9ee00935a3147be41b6569c9605a53e438fd
+    - type: shell
+      commands:
+      - sed -i 's|-o root -g root ||' ./Makefile.gnu
+      - sed -i 's|/usr|/app|' ./Makefile.gnu
 
-    # TODO 351elec-es-packages  batocera-config  batocera-scraper  batocera-settings  runemu.py  setsettings.py
+ #- name: 351elec-emulationstation
+ #  buildsystem: simple
+ #  build-commands:
+ #    - install -Dm755 Splash.h -t /app/emulationstation/es-core/src/
+ #    - install -Dm755 GuiMenu.cpp -t /app/emulationstation/es-app/src/guis/
+ #    - cd /app/emulationstation
+ #    - cmake -DENABLE_EMUELEC=1 -DGLES2=0 -DDISABLE_KODI=1 -DENABLE_FILEMANAGER=0 -DCEC=0 -DRG552=1
+ #    - make -j$(nproc)
+ #    - ln -s emulationstation /app/usr/bin/emulationstation
+ ##   make-args:
+ ##     - -DENABLE_EMUELEC=1
+ ##     - -DGLES2=0
+ ##     - -DDISABLE_KODI=1
+ ##     - -DENABLE_FILEMANAGER=0
+ ##     - -DCEC=0
+ ##     - -DRG552=1
+ ##   cleanup: ['*']
+ #  sources:
+ #    - type: git
+ #      url: https://github.com/351ELEC/351elec-emulationstation.git
+ #      branch: 6b704cfa1161090de4ca1b5ec343ebab2060e7fc
+ #    #- type: file
+ #    #  url: https://github.com/351ELEC/351elec-emulationstation/archive/6b704cfa1161090de4ca1b5ec343ebab2060e7fc.zip
+ #    #  sha256: 5d659033da662bf85d5986609e4d92c55e3c1c4a4c79e2461350134f509c47ac
+ #    - type: file
+ #      path: patches/Splash.h
+ #    - type: file
+ #      path: patches/GuiMenu.cpp
+  
+  # - name: art-book-next
+  #   builsystem: simple
+  #   build-commands:
+  #     - install -Dm755 art-book-next -t /app/emulationstation/themes/art-book-next
+  #   cleanup: ['*']
+  #   sources:
+  #     - type: git
+  #       url: https://github.com/anthonycaccese/es-theme-art-book-next.git
+  #       branch: eaf73a4eefde22791681c7f430a238fb324bdeaf
+
+  # TODO 351elec-es-packages  batocera-config  batocera-scraper  batocera-settings  runemu.py  setsettings.py
 
   - name: retrodeck
     buildsystem: simple
@@ -255,6 +306,9 @@ modules:
 
         - install -Dm755 es_* -t /app/emulationstation
 
+        - rm -f /var/config/retroarch/retroarch.cfg
+        - mv retroarch.cfg /var/config/retroarch/retroarch.cfg
+
         # move other files (check old install script)
     sources:
       - type: file
@@ -267,4 +321,6 @@ modules:
         path: es_settings.cfg
       - type: file
         path: es_input.cfg
+      - type: file
+        path: retroarch.cfg
     # create desktop entry
