@@ -14,4 +14,4 @@ No, no partitioning or format is required: RetroDECK, diffrentely from 351ELEC, 
 Is it available on Windows?
 No, I don't support Windows, but the project is fully opensource so you can port it if you wish.
 
-Join our Discord! https://discord.gg/peE36jjv
+Join our Discord! https://discord.gg/Dz3szYsP8g
