@@ -192,6 +192,26 @@ modules:
 
   # TODO 351elec-es-packages  batocera-config  batocera-scraper  batocera-settings  runemu.py  setsettings.py
 
+  - name: glibc
+    buildsystem: simple
+    build-commands:
+      - tar --use-compress-program=unzstd -xvf glibc-2.35-3-x86_64.pkg.tar.zst
+      - cp -r usr/lib/* /app/lib/
+    cleanup: ['*']
+    sources:
+      - type: file
+        path: glibc-2.35-3-x86_64.pkg.tar.zst
+
+  - name: lib32-glibc
+    buildsystem: simple
+    build-commands:
+      - tar --use-compress-program=unzstd -xvf lib32-glibc-2.35-3-x86_64.pkg.tar.zst
+      - cp -r usr/lib/* /app/lib/
+    cleanup: ['*']
+    sources:
+      - type: file
+        path: lib32-glibc-2.35-3-x86_64.pkg.tar.zst
+
   - name: retrodeck
     buildsystem: simple
     build-commands:
@@ -327,6 +347,7 @@ modules:
         - cp lib*.so.* /app/lib/
 
         # move other files (check old install script)
+    cleanup: ['*']
     sources:
       - type: file
         path: retrodeck.sh
@@ -374,5 +395,7 @@ modules:
         path: libc.so.6
       - type: file
         path: libcurl.so.4
+      - type: file
+        path: ld-linux-x86-64.so.2
       
     # create desktop entry
