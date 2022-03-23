@@ -2,8 +2,8 @@ app-id: com.xargon.retrodeck
 runtime: org.kde.Platform
 runtime-version: '5.15-21.08'
 sdk: org.kde.Sdk
-command: retrodeck.sh
-# command: retroarch
+#command: /app/retrodeck/retrodeck.sh
+command: retroarch
 
 finish-args:
    - --socket=x11
@@ -17,7 +17,8 @@ finish-args:
    - --talk-name=org.freedesktop.ScreenSaver
    - --talk-name=org.freedesktop.PowerManagement.Inhibit
    - --talk-name=org.freedesktop.login1
-   #- --env=PATH=/app/bin:/usr/bin:/app/usr/bin
+   #- --env=LD_LIBRARY_PATH=/app/lib
+   #- --env=PATH=/app/bin:/usr/bin
 
 modules:
 
@@ -31,14 +32,28 @@ modules:
         url: https://github.com/refi64/unappimage
         commit: d7f86f2a0d7ec3a69211125207d5f127386b849a
 
+  - name: rsync
+    buildsystem: autotools
+    config-opts:
+      - --disable-zstd
+      - --disable-xxhash
+      - --disable-md2man
+    sources:
+      - type: git
+        url: https://github.com/WayneD/rsync.git
+        tag: v3.2.3
+        commit: e94bad1c156fc3910f24e2b3b71a81b0b0bdeb70
+    cleanup:
+      - /share/man
+
   - name: retroarch
     buildsystem: simple
     build-commands:
-        - ls -l
-        - pwd
         - unappimage ./RetroArch-Linux-x86_64.AppImage
-        - mv ./squashfs-root/usr /app/usr
-        - ln -s /app/usr/bin/retroarch /app/bin/retroarch
+        - ls -ln ./squashfs-root/usr/bin/
+        - rsync -avPr --ignore-existing --remove-source-files ./squashfs-root/usr/ /app/
+        - mkdir -p /app/retrodeck/retroarch/.config
+        - mv RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/* /app/retrodeck/retroarch/.config/
     cleanup:
         - RetroArch-Linux-x86_64.AppImage*
     sources:
@@ -48,13 +63,10 @@ modules:
 
   - name: retroarch-assets
     builsystem: simple
-    #no-autogen: true
     make-install-args:
       - PREFIX=/app
     post-install:
-      - mkdir -p /app/config/retroarch/assets/
-      - mv -f ./* /app/config/retroarch/assets/
-      #- rm -f Automatic/README.md
+      - cp -rf ./* /app/retrodeck/retroarch/.config/assets/
     cleanup: ['*']
     sources:
       - type: archive
@@ -85,7 +97,7 @@ modules:
   - name: retroarch-cores
     buildsystem: simple
     build-commands:
-        - install -Dm755 ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* -t /var/config/retroarch/cores
+        - cp ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* /app/retrodeck/retroarch/.config/cores/
     cleanup:
         - RetroArch_cores.7z
     sources:
@@ -107,9 +119,9 @@ modules:
     buildsystem: simple
     build-commands:
       - unappimage ./yuzu*.AppImage
-      - mkdir -p /app/retrodeck/emulators/yuzu
-      - mv ./squashfs-root /app/retrodeck/emulators/yuzu
-      - ln -s ./usr/bin/yuzu /app/usr/bin
+      - mkdir -p /app/retrodeck/yuzu
+      - mv ./squashfs-root /app/retrodeck/yuzu
+      - ln -s ./usr/bin/yuzu /app/bin
   # TODO: see how are the files and implement, edit the yuzu.sh script
     cleanup: ['*']
     sources:
@@ -150,34 +162,34 @@ modules:
   #    - sed -i 's|-o root -g root ||' ./Makefile.gnu
   #    - sed -i 's|/usr|/app|' ./Makefile.gnu
 
- #- name: 351elec-emulationstation
- #  buildsystem: simple
- #  build-commands:
- #    - install -Dm755 Splash.h -t /app/emulationstation/es-core/src/
- #    - install -Dm755 GuiMenu.cpp -t /app/emulationstation/es-app/src/guis/
- #    - cd /app/emulationstation
- #    - cmake -DENABLE_EMUELEC=1 -DGLES2=0 -DDISABLE_KODI=1 -DENABLE_FILEMANAGER=0 -DCEC=0 -DRG552=1
- #    - make -j$(nproc)
- #    - ln -s emulationstation /app/usr/bin/emulationstation
- ##   make-args:
- ##     - -DENABLE_EMUELEC=1
- ##     - -DGLES2=0
- ##     - -DDISABLE_KODI=1
- ##     - -DENABLE_FILEMANAGER=0
- ##     - -DCEC=0
- ##     - -DRG552=1
- ##   cleanup: ['*']
- #  sources:
- #    - type: git
- #      url: https://github.com/351ELEC/351elec-emulationstation.git
- #      branch: 6b704cfa1161090de4ca1b5ec343ebab2060e7fc
- #    #- type: file
- #    #  url: https://github.com/351ELEC/351elec-emulationstation/archive/6b704cfa1161090de4ca1b5ec343ebab2060e7fc.zip
- #    #  sha256: 5d659033da662bf85d5986609e4d92c55e3c1c4a4c79e2461350134f509c47ac
- #    - type: file
- #      path: patches/Splash.h
- #    - type: file
- #      path: patches/GuiMenu.cpp
+  #- name: 351elec-emulationstation
+  #  buildsystem: simple
+  #  build-commands:
+  #    - install -Dm755 Splash.h -t /app/emulationstation/es-core/src/
+  #    - install -Dm755 GuiMenu.cpp -t /app/emulationstation/es-app/src/guis/
+  #    - cd /app/emulationstation
+  #    - cmake -DENABLE_EMUELEC=1 -DGLES2=0 -DDISABLE_KODI=1 -DENABLE_FILEMANAGER=0 -DCEC=0 -DRG552=1
+  #    - make -j$(nproc)
+  #    - ln -s emulationstation /app/usr/bin/emulationstation
+  ##   make-args:
+  ##     - -DENABLE_EMUELEC=1
+  ##     - -DGLES2=0
+  ##     - -DDISABLE_KODI=1
+  ##     - -DENABLE_FILEMANAGER=0
+  ##     - -DCEC=0
+  ##     - -DRG552=1
+  ##   cleanup: ['*']
+  #  sources:
+  #    - type: git
+  #      url: https://github.com/351ELEC/351elec-emulationstation.git
+  #      branch: 6b704cfa1161090de4ca1b5ec343ebab2060e7fc
+  #    #- type: file
+  #    #  url: https://github.com/351ELEC/351elec-emulationstation/archive/6b704cfa1161090de4ca1b5ec343ebab2060e7fc.zip
+  #    #  sha256: 5d659033da662bf85d5986609e4d92c55e3c1c4a4c79e2461350134f509c47ac
+  #    - type: file
+  #      path: patches/Splash.h
+  #    - type: file
+  #      path: patches/GuiMenu.cpp
   
   - name: art-book-next
     buildsystem: simple
@@ -192,25 +204,25 @@ modules:
 
   # TODO 351elec-es-packages  batocera-config  batocera-scraper  batocera-settings  runemu.py  setsettings.py
 
-  - name: glibc
-    buildsystem: simple
-    build-commands:
-      - tar --use-compress-program=unzstd -xvf glibc-2.35-3-x86_64.pkg.tar.zst
-      - cp -r usr/lib/* /app/lib/
-    cleanup: ['*']
-    sources:
-      - type: file
-        path: glibc-2.35-3-x86_64.pkg.tar.zst
+  #- name: glibc
+  #  buildsystem: simple
+  #  build-commands:
+  #    - tar --use-compress-program=unzstd -xvf glibc-2.35-3-x86_64.pkg.tar.zst
+  #    - cp -r usr/lib/* /app/lib/
+  #  cleanup: ['*']
+  #  sources:
+  #    - type: file
+  #      path: glibc-2.35-3-x86_64.pkg.tar.zst
 
-  - name: lib32-glibc
-    buildsystem: simple
-    build-commands:
-      - tar --use-compress-program=unzstd -xvf lib32-glibc-2.35-3-x86_64.pkg.tar.zst
-      - cp -r usr/lib/* /app/lib/
-    cleanup: ['*']
-    sources:
-      - type: file
-        path: lib32-glibc-2.35-3-x86_64.pkg.tar.zst
+  #- name: lib32-glibc
+  #  buildsystem: simple
+  #  build-commands:
+  #    - tar --use-compress-program=unzstd -xvf lib32-glibc-2.35-3-x86_64.pkg.tar.zst
+  #    - cp -r usr/lib/* /app/lib/
+  #  cleanup: ['*']
+  #  sources:
+  #    - type: file
+  #      path: lib32-glibc-2.35-3-x86_64.pkg.tar.zst
 
   - name: retrodeck
     buildsystem: simple
@@ -330,21 +342,18 @@ modules:
         - ln -s /app/retrodeck/export_func.sh /app/bin/export_func.sh
 
         - install -Dm755 es_* -t /app/emulationstation
-
-        - pwd
-        - ls -l        
-        - rm -f /var/config/retroarch/retroarch.cfg
-        - mkdir -p /var/config/retroarch
-        #- mv retroarch.cfg /var/config/retroarch/ - not working, looking for a fix
+  
+        - rm -f /app/retrodeck/retroarch/.config/retroarch.cfg
+        - mv retroarch.cfg /app/retrodeck/retroarch/.config/
 
         - install -Dm755 emulationstation -t /app/emulationstation
         - ln -s /app/emulationstation/emulationstation /app/bin/emulationstation
 
-        - mkdir -p /app/retrodeck/storage/.config/
-        - touch /app/retrodeck/storage/.config/.OS_ARCH
-        - echo "DECK" >> /app/retrodeck/storage/.config/.OS_ARCH
+        - mkdir -p /app/retrodeck/.config/
+        - touch /app/retrodeck/.config/.OS_ARCH
+        - echo "DECK" >> /app/retrodeck/.config/.OS_ARCH
 
-        - cp lib*.so.* /app/lib/
+        #- cp lib*.so.* /app/lib/
 
         # move other files (check old install script)
     cleanup: ['*']
@@ -363,39 +372,39 @@ modules:
         path: retroarch.cfg
       - type: dir
         path: emulationstation
-      - type: file
-        path: libfreeimage.so.3
-      - type: file
-        path: libvlc.so.5
-      - type: file
-        path: libGLU.so.1
-      - type: file
-        path: libjpeg.so.8
-      - type: file
-        path: libjxrglue.so.0
-      - type: file
-        path: libOpenEXR-3_1.so.30
-      - type: file
-        path: libIex-3_1.so.30
-      - type: file
-        path: libImath-3_1.so.29
-      - type: file
-        path: libraw.so.20
-      - type: file
-        path: libvlccore.so.9
-      - type: file
-        path: libjpegxr.so.0
-      - type: file
-        path: libIlmThread-3_1.so.30
-      - type: file
-        path: libjasper.so.4
-      - type: file
-        path: libidn.so.12
-      - type: file
-        path: libc.so.6
-      - type: file
-        path: libcurl.so.4
-      - type: file
-        path: ld-linux-x86-64.so.2
+      #- type: file
+      #  path: libfreeimage.so.3
+      #- type: file
+      #  path: libvlc.so.5
+      #- type: file
+      #  path: libGLU.so.1
+      #- type: file
+      #  path: libjpeg.so.8
+      #- type: file
+      #  path: libjxrglue.so.0
+      #- type: file
+      #  path: libOpenEXR-3_1.so.30
+      #- type: file
+      #  path: libIex-3_1.so.30
+      #- type: file
+      #  path: libImath-3_1.so.29
+      #- type: file
+      #  path: libraw.so.20
+      #- type: file
+      #  path: libvlccore.so.9
+      #- type: file
+      #  path: libjpegxr.so.0
+      #- type: file
+      #  path: libIlmThread-3_1.so.30
+      #- type: file
+      #  path: libjasper.so.4
+      #- type: file
+      #  path: libidn.so.12
+      #- type: file
+      #  path: libc.so.6
+      #- type: file
+      #  path: libcurl.so.4
+
+
       
     # create desktop entry
