@@ -133,21 +133,21 @@ modules:
   #      url: https://ftp.gnu.org/gnu/autoconf/autoconf-2.13.tar.gz
   #      sha256: f0611136bee505811e9ca11ca7ac188ef5323a8e2ef19cffd3edb3cf08fd791e
 #
-  - name: freeimage
-    no-autogen: true
-    build-options:
-      #C++17 is not supported
-      cxxflags: -std=c++14
-    make-args:
-    - DESTDIR=/app
-    sources:
-    - type: archive
-      url: http://downloads.sourceforge.net/freeimage/FreeImage3180.zip
-      sha256: f41379682f9ada94ea7b34fe86bf9ee00935a3147be41b6569c9605a53e438fd
-    - type: shell
-      commands:
-      - sed -i 's|-o root -g root ||' ./Makefile.gnu
-      - sed -i 's|/usr|/app|' ./Makefile.gnu
+  #- name: freeimage
+  #  no-autogen: true
+  #  build-options:
+  #    #C++17 is not supported
+  #    cxxflags: -std=c++14
+  #  make-args:
+  #  - DESTDIR=/app
+  #  sources:
+  #  - type: archive
+  #    url: http://downloads.sourceforge.net/freeimage/FreeImage3180.zip
+  #    sha256: f41379682f9ada94ea7b34fe86bf9ee00935a3147be41b6569c9605a53e438fd
+  #  - type: shell
+  #    commands:
+  #    - sed -i 's|-o root -g root ||' ./Makefile.gnu
+  #    - sed -i 's|/usr|/app|' ./Makefile.gnu
 
  #- name: 351elec-emulationstation
  #  buildsystem: simple
@@ -178,15 +178,16 @@ modules:
  #    - type: file
  #      path: patches/GuiMenu.cpp
   
-  # - name: art-book-next
-  #   builsystem: simple
-  #   build-commands:
-  #     - install -Dm755 art-book-next -t /app/emulationstation/themes/art-book-next
-  #   cleanup: ['*']
-  #   sources:
-  #     - type: git
-  #       url: https://github.com/anthonycaccese/es-theme-art-book-next.git
-  #       branch: eaf73a4eefde22791681c7f430a238fb324bdeaf
+  - name: art-book-next
+    buildsystem: simple
+    build-commands:
+      - mkdir -p /app/emulationstation/themes/art-book-next
+      - mv -f * /app/emulationstation/themes/art-book-next/
+    cleanup: ['*']
+    sources:
+      - type: git
+        url: https://github.com/anthonycaccese/es-theme-art-book-next.git
+        branch: eaf73a4eefde22791681c7f430a238fb324bdeaf
 
   # TODO 351elec-es-packages  batocera-config  batocera-scraper  batocera-settings  runemu.py  setsettings.py
 
@@ -306,8 +307,14 @@ modules:
 
         - install -Dm755 es_* -t /app/emulationstation
 
+        - pwd
+        - ls -l        
         - rm -f /var/config/retroarch/retroarch.cfg
-        - mv retroarch.cfg /var/config/retroarch/retroarch.cfg
+        - mkdir -p /var/config/retroarch
+        - mv ./retroarch.cfg /var/config/retroarch/
+
+        - ln -s emulationstation /app/usr/bin/emulationstation
+        - install -Dm755 emulationstation -t /app/emulationstation
 
         # move other files (check old install script)
     sources:
@@ -323,4 +330,6 @@ modules:
         path: es_input.cfg
       - type: file
         path: retroarch.cfg
+      - type: dir
+        path: emulationstation
     # create desktop entry
