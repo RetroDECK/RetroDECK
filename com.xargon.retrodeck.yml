@@ -2,8 +2,8 @@ app-id: com.xargon.retrodeck
 runtime: org.kde.Platform
 runtime-version: '5.15-21.08'
 sdk: org.kde.Sdk
-# command: retrodeck.sh
-command: retroarch
+command: retrodeck.sh
+# command: retroarch
 
 finish-args:
    - --socket=x11
@@ -17,7 +17,7 @@ finish-args:
    - --talk-name=org.freedesktop.ScreenSaver
    - --talk-name=org.freedesktop.PowerManagement.Inhibit
    - --talk-name=org.freedesktop.login1
-   #- --env=PATH=/app/bin:/usr/bin
+   #- --env=PATH=/app/bin:/usr/bin:/app/usr/bin
 
 modules:
 
@@ -103,18 +103,19 @@ modules:
   #       url:
   #       sha256:
 
-  # - name: yuzu
-  #   builsystem: simple
-  #   build-commands:
-  #     - unappimage ./yuzu*.AppImage
-  #     - ls ./squashfs-root/
-  #     - mv ./squashfs-root/ /app/retrodeck/emulators/yuzu/ 
+  - name: yuzu
+    buildsystem: simple
+    build-commands:
+      - unappimage ./yuzu*.AppImage
+      - mkdir -p /app/retrodeck/emulators/yuzu
+      - mv ./squashfs-root /app/retrodeck/emulators/yuzu
+      - ln -s ./usr/bin/yuzu /app/usr/bin
   # TODO: see how are the files and implement, edit the yuzu.sh script
-  #   cleanup: ['*']
-  #   sources:
-  #     - type: archive
-  #       url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-957/yuzu-20220320-1ce8136c7.AppImage
-  #       sha256: 000b7f09aa562a1f844697ded35618cef3189f339a207759e11295f31589a40d
+    cleanup: ['*']
+    sources:
+      - type: file
+        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-957/yuzu-20220320-1ce8136c7.AppImage
+        sha256: 000b7f09aa562a1f844697ded35618cef3189f339a207759e11295f31589a40d
 
   # - name: ryujinx
   # - name: xemu
@@ -305,16 +306,25 @@ modules:
         - install -Dm755 retrodeck.sh -t /app/retrodeck/
         - install -Dm755 export_func.sh -t /app/retrodeck/
 
+        - ln -s /app/retrodeck/retrodeck.sh /app/bin/retrodeck.sh
+        - ln -s /app/retrodeck/export_func.sh /app/bin/export_func.sh
+
         - install -Dm755 es_* -t /app/emulationstation
 
         - pwd
         - ls -l        
         - rm -f /var/config/retroarch/retroarch.cfg
         - mkdir -p /var/config/retroarch
-        - mv ./retroarch.cfg /var/config/retroarch/
+        #- mv retroarch.cfg /var/config/retroarch/ - not working, looking for a fix
 
-        - ln -s emulationstation /app/usr/bin/emulationstation
         - install -Dm755 emulationstation -t /app/emulationstation
+        - ln -s /app/emulationstation/emulationstation /app/bin/emulationstation
+
+        - mkdir -p /app/retrodeck/storage/.config/
+        - touch /app/retrodeck/storage/.config/.OS_ARCH
+        - echo "DECK" >> /app/retrodeck/storage/.config/.OS_ARCH
+
+        - cp lib*.so.* /app/lib/
 
         # move other files (check old install script)
     sources:
@@ -332,4 +342,37 @@ modules:
         path: retroarch.cfg
       - type: dir
         path: emulationstation
+      - type: file
+        path: libfreeimage.so.3
+      - type: file
+        path: libvlc.so.5
+      - type: file
+        path: libGLU.so.1
+      - type: file
+        path: libjpeg.so.8
+      - type: file
+        path: libjxrglue.so.0
+      - type: file
+        path: libOpenEXR-3_1.so.30
+      - type: file
+        path: libIex-3_1.so.30
+      - type: file
+        path: libImath-3_1.so.29
+      - type: file
+        path: libraw.so.20
+      - type: file
+        path: libvlccore.so.9
+      - type: file
+        path: libjpegxr.so.0
+      - type: file
+        path: libIlmThread-3_1.so.30
+      - type: file
+        path: libjasper.so.4
+      - type: file
+        path: libidn.so.12
+      - type: file
+        path: libc.so.6
+      - type: file
+        path: libcurl.so.4
+      
     # create desktop entry
