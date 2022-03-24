@@ -2,8 +2,8 @@ app-id: com.xargon.retrodeck
 runtime: org.kde.Platform
 runtime-version: '5.15-21.08'
 sdk: org.kde.Sdk
-#command: /app/retrodeck/retrodeck.sh
-command: retroarch
+command: /app/retrodeck/retrodeck.sh
+#command: retroarch #--appendconfig /app/retrodeck/retroarch/.config/retroarch.cfg
 
 finish-args:
    - --socket=x11
@@ -51,7 +51,7 @@ modules:
     build-commands:
         - unappimage ./RetroArch-Linux-x86_64.AppImage
         - ls -ln ./squashfs-root/usr/bin/
-        - rsync -avPr --ignore-existing --remove-source-files ./squashfs-root/usr/ /app/
+        - rsync -avr --ignore-existing --remove-source-files ./squashfs-root/usr/ /app/
         - mkdir -p /app/retrodeck/retroarch/.config
         - mv RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/* /app/retrodeck/retroarch/.config/
         - mkdir -p /app/retrodeck/retroarch/.config/database/cht
@@ -133,7 +133,10 @@ modules:
   # - name: ryujinx
   # - name: xemu
   # - name: rpcs3
+  # - name: pcsx2
   # - name: vita3k
+  # - name: dolphin
+  # - name: arduboy
 
   ## Needed for 351elec-emulationstation
   #- name: autoconf-2.13
@@ -191,6 +194,58 @@ modules:
   #      path: patches/Splash.h
   #    - type: file
   #      path: patches/GuiMenu.cpp
+
+  - name: 351elec-emulationstation-prebuilt
+    buildsystem: simple
+    build-commands:
+        - mkdir -p /app/emulationstation
+        - rsync -avr --ignore-existing --remove-source-files * /app/emulationstation
+        - ln -s /app/emulationstation/emulationstation /app/bin/emulationstation
+    #post-install:
+        # clean the /app/emulationstation folder from the source files
+        #- cp lib*.so.* /app/lib/
+    #cleanup: ['*']
+    sources:
+      - type: dir
+        path: emulationstation
+      - type: file
+        path: es_systems.cfg
+      - type: file
+        path: es_settings.cfg
+      - type: file
+        path: es_input.cfg
+      #- type: file
+      #  path: libfreeimage.so.3
+      #- type: file
+      #  path: libvlc.so.5
+      #- type: file
+      #  path: libGLU.so.1
+      #- type: file
+      #  path: libjpeg.so.8
+      #- type: file
+      #  path: libjxrglue.so.0
+      #- type: file
+      #  path: libOpenEXR-3_1.so.30
+      #- type: file
+      #  path: libIex-3_1.so.30
+      #- type: file
+      #  path: libImath-3_1.so.29
+      #- type: file
+      #  path: libraw.so.20
+      #- type: file
+      #  path: libvlccore.so.9
+      #- type: file
+      #  path: libjpegxr.so.0
+      #- type: file
+      #  path: libIlmThread-3_1.so.30
+      #- type: file
+      #  path: libjasper.so.4
+      #- type: file
+      #  path: libidn.so.12
+      #- type: file
+      #  path: libc.so.6
+      #- type: file
+      #  path: libcurl.so.4
   
   - name: art-book-next
     buildsystem: simple
@@ -338,74 +393,24 @@ modules:
 
         - install -Dm755 retrodeck.sh -t /app/retrodeck/
         - install -Dm755 export_func.sh -t /app/retrodeck/
-
         - ln -s /app/retrodeck/retrodeck.sh /app/bin/retrodeck.sh
-        - ln -s /app/retrodeck/export_func.sh /app/bin/export_func.sh
-
-        - install -Dm755 es_* -t /app/emulationstation
+        - ln -s /app/retrodeck/export_func.sh /app/bin/export_func.sh      
   
         - rm -f /app/retrodeck/retroarch/.config/retroarch.cfg
         - mv retroarch.cfg /app/retrodeck/retroarch/.config/
-
-        - install -Dm755 emulationstation -t /app/emulationstation
-        - ln -s /app/emulationstation/emulationstation /app/bin/emulationstation
 
         - mkdir -p /app/retrodeck/.config/
         - touch /app/retrodeck/.config/.OS_ARCH
         - echo "DECK" >> /app/retrodeck/.config/.OS_ARCH
 
-        #- cp lib*.so.* /app/lib/
-
         # move other files (check old install script)
-    cleanup: ['*']
+    #cleanup: ['*']
     sources:
       - type: file
         path: retrodeck.sh
       - type: file
         path: export_func.sh
       - type: file
-        path: es_systems.cfg
-      - type: file
-        path: es_settings.cfg
-      - type: file
-        path: es_input.cfg
-      - type: file
         path: retroarch.cfg
-      - type: dir
-        path: emulationstation
-      #- type: file
-      #  path: libfreeimage.so.3
-      #- type: file
-      #  path: libvlc.so.5
-      #- type: file
-      #  path: libGLU.so.1
-      #- type: file
-      #  path: libjpeg.so.8
-      #- type: file
-      #  path: libjxrglue.so.0
-      #- type: file
-      #  path: libOpenEXR-3_1.so.30
-      #- type: file
-      #  path: libIex-3_1.so.30
-      #- type: file
-      #  path: libImath-3_1.so.29
-      #- type: file
-      #  path: libraw.so.20
-      #- type: file
-      #  path: libvlccore.so.9
-      #- type: file
-      #  path: libjpegxr.so.0
-      #- type: file
-      #  path: libIlmThread-3_1.so.30
-      #- type: file
-      #  path: libjasper.so.4
-      #- type: file
-      #  path: libidn.so.12
-      #- type: file
-      #  path: libc.so.6
-      #- type: file
-      #  path: libcurl.so.4
-
-
       
     # create desktop entry
