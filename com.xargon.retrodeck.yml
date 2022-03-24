@@ -54,6 +54,7 @@ modules:
         - rsync -avPr --ignore-existing --remove-source-files ./squashfs-root/usr/ /app/
         - mkdir -p /app/retrodeck/retroarch/.config
         - mv RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/* /app/retrodeck/retroarch/.config/
+        - mkdir -p /app/retrodeck/retroarch/.config/database/cht
     cleanup:
         - RetroArch-Linux-x86_64.AppImage*
     sources:
