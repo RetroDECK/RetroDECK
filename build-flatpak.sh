@@ -9,6 +9,9 @@ echo "This script is helping the flatpak building in $INSTALL_DIR."
 read -n 1 -r -s -p $'Press enter to continue...\n'
 echo "Building RetroDECK, please stand by."
 
+pacman -S flatpak-builder
+flatpak install org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08
+
 # Installing 351elec-emulationstation
 cd $INSTALL_DIR
 git clone --recursive https://github.com/351ELEC/351elec-emulationstation emulationstation
@@ -31,6 +34,8 @@ flatpak-builder retrodeck-flatpak com.xargon.retrodeck.yml --force-clean
 #
 # flatpak --user remote-add --no-gpg-verify xargon-dev repo
 # flatpak --user install xargon-dev com.xargon.retrodeck
+#
+# flatpak run --command=/bin/bash com.xargon.retrodeck
 
 echo "Building terminated, you can install retrodeck by typing `flatpak run com.xargon.retrodeck`."
 

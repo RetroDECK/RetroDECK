@@ -2,7 +2,7 @@ app-id: com.xargon.retrodeck
 runtime: org.kde.Platform
 runtime-version: '5.15-21.08'
 sdk: org.kde.Sdk
-command: /app/retrodeck/retrodeck.sh
+command: emulationstation
 #command: retroarch #--appendconfig /app/retrodeck/retroarch/.config/retroarch.cfg
 
 finish-args:
@@ -46,6 +46,27 @@ modules:
     cleanup:
       - /share/man
 
+  # needed for reatroarch
+  - name: libusb
+    config-opts:
+      - --disable-static
+    build-commands:
+      - ./autogen.sh
+      - ./bootstrap.sh
+      - ./configure --prefix=/app
+      - make
+      - make install
+    cleanup:
+      - /lib/*.la
+      - /lib/pkgconfig
+      - /include
+    sources:
+      - type: archive
+        url: https://github.com/libusb/libusb/archive/v1.0.25.tar.gz
+        sha256: f9c4b7dad27a6196ca9ec3c6ec7fa446194342de326c71e030eb2c480895e169
+    post-install:
+      - install -Dm644 COPYING /app/share/licenses/libusb/COPYING
+
   - name: retroarch
     buildsystem: simple
     build-commands:
@@ -73,27 +94,6 @@ modules:
       - type: archive
         url: https://github.com/libretro/retroarch-assets/archive/948def88f11c8c62f85f606a1cd8f5a1bbad671b.zip
         sha256: d7b2d79d6809521f73818117575f49b706a913cfc61822582d1f12a697944791
-    
-  # needed for reatroarch
-  - name: libusb
-    config-opts:
-      - --disable-static
-    build-commands:
-      - ./autogen.sh
-      - ./bootstrap.sh
-      - ./configure --prefix=/app
-      - make
-      - make install
-    cleanup:
-      - /lib/*.la
-      - /lib/pkgconfig
-      - /include
-    sources:
-      - type: archive
-        url: https://github.com/libusb/libusb/archive/v1.0.25.tar.gz
-        sha256: f9c4b7dad27a6196ca9ec3c6ec7fa446194342de326c71e030eb2c480895e169
-    post-install:
-      - install -Dm644 COPYING /app/share/licenses/libusb/COPYING
 
   - name: retroarch-cores
     buildsystem: simple
@@ -106,16 +106,6 @@ modules:
         url: https://buildbot.libretro.com/stable/1.10.1/linux/x86_64/RetroArch_cores.7z
         sha256: 3467de291c0849947993a535b0f32e7c211878dcaf6a37a9f864cf50cbe824fd
     
-  # - name: template
-  #   builsystem: simple
-  #   build-commands:
-  #     - 
-  #   cleanup: ['*']
-  #   sources:
-  #     - type:
-  #       url:
-  #       sha256:
-
   - name: yuzu
     buildsystem: simple
     build-commands:
@@ -195,58 +185,69 @@ modules:
   #    - type: file
   #      path: patches/GuiMenu.cpp
 
-  - name: 351elec-emulationstation-prebuilt
+  #- name: 351elec-emulationstation-prebuilt
+  #  buildsystem: simple
+  #  build-commands:
+  #      - mkdir -p /app/emulationstation
+  #      - rsync -avr --ignore-existing --remove-source-files * /app/emulationstation
+  #      - ln -s /app/emulationstation/emulationstation /app/bin/emulationstation
+  #  #post-install:
+  #      # clean the /app/emulationstation folder from the source files
+  #      #- cp lib*.so.* /app/lib/
+  #  #cleanup: ['*']
+  #  sources:
+  #    - type: dir
+  #      path: emulationstation
+  #    - type: file
+  #      path: es_systems.cfg
+  #    - type: file
+  #      path: es_settings.cfg
+  #    - type: file
+  #      path: es_input.cfg
+  #    #- type: file
+  #    #  path: libfreeimage.so.3
+  #    #- type: file
+  #    #  path: libvlc.so.5
+  #    #- type: file
+  #    #  path: libGLU.so.1
+  #    #- type: file
+  #    #  path: libjpeg.so.8
+  #    #- type: file
+  #    #  path: libjxrglue.so.0
+  #    #- type: file
+  #    #  path: libOpenEXR-3_1.so.30
+  #    #- type: file
+  #    #  path: libIex-3_1.so.30
+  #    #- type: file
+  #    #  path: libImath-3_1.so.29
+  #    #- type: file
+  #    #  path: libraw.so.20
+  #    #- type: file
+  #    #  path: libvlccore.so.9
+  #    #- type: file
+  #    #  path: libjpegxr.so.0
+  #    #- type: file
+  #    #  path: libIlmThread-3_1.so.30
+  #    #- type: file
+  #    #  path: libjasper.so.4
+  #    #- type: file
+  #    #  path: libidn.so.12
+  #    #- type: file
+  #    #  path: libc.so.6
+  #    #- type: file
+  #    #  path: libcurl.so.4
+  
+  - name: emulationstation-de
     buildsystem: simple
     build-commands:
-        - mkdir -p /app/emulationstation
-        - rsync -avr --ignore-existing --remove-source-files * /app/emulationstation
-        - ln -s /app/emulationstation/emulationstation /app/bin/emulationstation
-    #post-install:
-        # clean the /app/emulationstation folder from the source files
-        #- cp lib*.so.* /app/lib/
-    #cleanup: ['*']
+      - unappimage download
+      - rsync -avr --ignore-existing --remove-source-files ./squashfs-root/usr/ /app/
+      - ln -s /app/usr/share/emulationstation /app/emulationstation
     sources:
-      - type: dir
-        path: emulationstation
       - type: file
-        path: es_systems.cfg
-      - type: file
-        path: es_settings.cfg
-      - type: file
-        path: es_input.cfg
-      #- type: file
-      #  path: libfreeimage.so.3
-      #- type: file
-      #  path: libvlc.so.5
-      #- type: file
-      #  path: libGLU.so.1
-      #- type: file
-      #  path: libjpeg.so.8
-      #- type: file
-      #  path: libjxrglue.so.0
-      #- type: file
-      #  path: libOpenEXR-3_1.so.30
-      #- type: file
-      #  path: libIex-3_1.so.30
-      #- type: file
-      #  path: libImath-3_1.so.29
-      #- type: file
-      #  path: libraw.so.20
-      #- type: file
-      #  path: libvlccore.so.9
-      #- type: file
-      #  path: libjpegxr.so.0
-      #- type: file
-      #  path: libIlmThread-3_1.so.30
-      #- type: file
-      #  path: libjasper.so.4
-      #- type: file
-      #  path: libidn.so.12
-      #- type: file
-      #  path: libc.so.6
-      #- type: file
-      #  path: libcurl.so.4
-  
+        url: https://gitlab.com/leonstyhre/emulationstation-de/-/package_files/32296532/download
+        sha256: 1fd3e437539d54e90d0a17b4577a8c91a1987943470fcfbf3badba99d8dac879
+
   - name: art-book-next
     buildsystem: simple
     build-commands:
@@ -391,9 +392,9 @@ modules:
         - mkdir -p ~/retrodeck/roms/gc
         - mkdir -p ~/retrodeck/roms/3ds
 
-        - install -Dm755 retrodeck.sh -t /app/retrodeck/
+        #- install -Dm755 retrodeck.sh -t /app/retrodeck/
         - install -Dm755 export_func.sh -t /app/retrodeck/
-        - ln -s /app/retrodeck/retrodeck.sh /app/bin/retrodeck.sh
+        #- ln -s /app/retrodeck/retrodeck.sh /app/bin/retrodeck.sh
         - ln -s /app/retrodeck/export_func.sh /app/bin/export_func.sh      
   
         - rm -f /app/retrodeck/retroarch/.config/retroarch.cfg
@@ -406,8 +407,8 @@ modules:
         # move other files (check old install script)
     #cleanup: ['*']
     sources:
-      - type: file
-        path: retrodeck.sh
+      #- type: file
+      #  path: retrodeck.sh
       - type: file
         path: export_func.sh
       - type: file
