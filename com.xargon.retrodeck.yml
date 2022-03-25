@@ -17,6 +17,7 @@ finish-args:
    - --talk-name=org.freedesktop.ScreenSaver
    - --talk-name=org.freedesktop.PowerManagement.Inhibit
    - --talk-name=org.freedesktop.login1
+   #- --filesystem=host
    #- --env=LD_LIBRARY_PATH=/app/lib
    #- --env=PATH=/app/bin:/usr/bin
 
@@ -46,7 +47,7 @@ modules:
     cleanup:
       - /share/man
 
-  # needed for reatroarch
+  # RA dependency
   - name: libusb
     config-opts:
       - --disable-static
@@ -66,6 +67,63 @@ modules:
         sha256: f9c4b7dad27a6196ca9ec3c6ec7fa446194342de326c71e030eb2c480895e169
     post-install:
       - install -Dm644 COPYING /app/share/licenses/libusb/COPYING
+
+  # ES-DE dependency 
+  - name: pugixml
+    buildsystem: cmake
+    config-opts:
+    - -DBUILD_SHARED_LIBS=on .
+    sources:
+    - type: archive
+      url: https://github.com/zeux/pugixml/releases/download/v1.11.4/pugixml-1.11.4.tar.gz
+      sha256: 8ddf57b65fb860416979a3f0640c2ad45ddddbbafa82508ef0a0af3ce7061716
+
+  # ES-DE dependency 
+  - name: freeimage
+    no-autogen: true
+    build-options:
+      #C++17 is not supported
+      cxxflags: -std=c++14
+    make-args:
+    - DESTDIR=/app
+    sources:
+    - type: archive
+      url: http://downloads.sourceforge.net/freeimage/FreeImage3180.zip
+      sha256: f41379682f9ada94ea7b34fe86bf9ee00935a3147be41b6569c9605a53e438fd
+    - type: shell
+      commands:
+      - sed -i 's|-o root -g root ||' ./Makefile.gnu
+      - sed -i 's|/usr|/app|' ./Makefile.gnu
+
+  # ES-DE dependency 
+  - name: ffmpeg
+    config-opts:
+      - --enable-shared
+      - --disable-static
+      - --enable-gnutls
+      - --disable-doc
+      - --disable-programs
+      - --disable-encoders
+      - --disable-muxers
+      - --enable-encoder=png
+    sources:
+      - type: archive
+        url: https://www.ffmpeg.org/releases/ffmpeg-4.2.3.tar.xz
+        sha256: 9df6c90aed1337634c1fb026fb01c154c29c82a64ea71291ff2da9aacb9aad31
+    cleanup:
+      - /share/ffmpeg/examples
+
+  - name: emulationstation-de
+    buildsystem: cmake
+    config-opts:
+      - -DCMAKE_INSTALL_PREFIX=/app
+    cleanup:
+      - es-app
+      - es-core
+    sources:
+    - type: git
+      url: https://gitlab.com/leonstyhre/emulationstation-de.git
+      branch: stable-1.2
 
   - name: retroarch
     buildsystem: simple
@@ -128,168 +186,15 @@ modules:
   # - name: dolphin
   # - name: arduboy
 
-  # Needed for building EmulationStation
-  - name: freeimage
-    no-autogen: true
-    post-install:
-      - ls -ln /app
-    build-options:
-      #C++17 is not supported
-      cxxflags: -std=c++14
-    make-args:
-    - DESTDIR=/app
-    sources:
-    - type: archive
-      url: http://downloads.sourceforge.net/freeimage/FreeImage3180.zip
-      sha256: f41379682f9ada94ea7b34fe86bf9ee00935a3147be41b6569c9605a53e438fd
-    - type: shell
-      commands:
-      - sed -i 's|-o root -g root ||' ./Makefile.gnu
-      - sed -i 's|/usr|/app|' ./Makefile.gnu
-
-  #- name: 351elec-emulationstation
-  #  buildsystem: simple
-  #  build-commands:
-  #    - install -Dm755 Splash.h -t /app/emulationstation/es-core/src/
-  #    - install -Dm755 GuiMenu.cpp -t /app/emulationstation/es-app/src/guis/
-  #    - cd /app/emulationstation
-  #    - cmake -DENABLE_EMUELEC=1 -DGLES2=0 -DDISABLE_KODI=1 -DENABLE_FILEMANAGER=0 -DCEC=0 -DRG552=1
-  #    - make -j$(nproc)
-  #    - ln -s emulationstation /app/bin/emulationstation
-  ##   make-args:
-  ##     - -DENABLE_EMUELEC=1
-  ##     - -DGLES2=0
-  ##     - -DDISABLE_KODI=1
-  ##     - -DENABLE_FILEMANAGER=0
-  ##     - -DCEC=0
-  ##     - -DRG552=1
-  ##   cleanup: ['*']
-  #  sources:
-  #    - type: git
-  #      url: https://github.com/351ELEC/351elec-emulationstation.git
-  #      branch: 6b704cfa1161090de4ca1b5ec343ebab2060e7fc
-  #    #- type: file
-  #    #  url: https://github.com/351ELEC/351elec-emulationstation/archive/6b704cfa1161090de4ca1b5ec343ebab2060e7fc.zip
-  #    #  sha256: 5d659033da662bf85d5986609e4d92c55e3c1c4a4c79e2461350134f509c47ac
-  #    - type: file
-  #      path: patches/Splash.h
-  #    - type: file
-  #      path: patches/GuiMenu.cpp
-
-  #- name: 351elec-emulationstation-prebuilt
-  #  buildsystem: simple
-  #  build-commands:
-  #      - mkdir -p /app/emulationstation
-  #      - rsync -avr --ignore-existing --remove-source-files * /app/emulationstation
-  #      - ln -s /app/emulationstation/emulationstation /app/bin/emulationstation
-  #  #post-install:
-  #      # clean the /app/emulationstation folder from the source files
-  #      #- cp lib*.so.* /app/lib/
-  #  #cleanup: ['*']
-  #  sources:
-  #    - type: dir
-  #      path: emulationstation
-  #    - type: file
-  #      path: es_systems.cfg
-  #    - type: file
-  #      path: es_settings.cfg
-  #    - type: file
-  #      path: es_input.cfg
-  #    #- type: file
-  #    #  path: libfreeimage.so.3
-  #    #- type: file
-  #    #  path: libvlc.so.5
-  #    #- type: file
-  #    #  path: libGLU.so.1
-  #    #- type: file
-  #    #  path: libjpeg.so.8
-  #    #- type: file
-  #    #  path: libjxrglue.so.0
-  #    #- type: file
-  #    #  path: libOpenEXR-3_1.so.30
-  #    #- type: file
-  #    #  path: libIex-3_1.so.30
-  #    #- type: file
-  #    #  path: libImath-3_1.so.29
-  #    #- type: file
-  #    #  path: libraw.so.20
-  #    #- type: file
-  #    #  path: libvlccore.so.9
-  #    #- type: file
-  #    #  path: libjpegxr.so.0
-  #    #- type: file
-  #    #  path: libIlmThread-3_1.so.30
-  #    #- type: file
-  #    #  path: libjasper.so.4
-  #    #- type: file
-  #    #  path: libidn.so.12
-  #    #- type: file
-  #    #  path: libc.so.6
-  #    #- type: file
-  #    #  path: libcurl.so.4
-
-  - name: 351elec-emulationstation
-    buildsystem: simple
-    build-commands:
-      #- install -Dm755 Splash.h -t /app/emulationstation/es-core/src/
-      #- install -Dm755 GuiMenu.cpp -t /app/emulationstation/es-app/src/guis/
-      - ls -ln
-      - cmake . -DDISABLE_KODI=1
-      - make
-      - ln -s emulationstation /app/bin/emulationstation
-  #   cleanup: ['*']
-    sources:
-      - type: git
-        url: https://github.com/batocera-linux/batocera-emulationstation.git
-        branch: 779548e217311edb15d21a5316033292d2b452fc
-      #- type: file
-      #  path: patches/Splash.h
-      #- type: file
-      #  path: patches/GuiMenu.cpp
-  
-  #- name: emulationstation-de
-  #  buildsystem: simple
-  #  build-commands:
-  #    - unappimage download
-  #    - rsync -avr --ignore-existing --remove-source-files ./squashfs-root/usr/ /app/
-  #    - ln -s /app/share/emulationstation /app/emulationstation
-  #  sources:
-  #    - type: file
-  #      url: https://gitlab.com/leonstyhre/emulationstation-de/-/package_files/32296532/download
-  #      sha256: 1fd3e437539d54e90d0a17b4577a8c91a1987943470fcfbf3badba99d8dac879
-
   - name: art-book-next
     buildsystem: simple
     build-commands:
       - mkdir -p /app/emulationstation/themes/art-book-next
       - mv -f * /app/emulationstation/themes/art-book-next/
-    cleanup: ['*']
     sources:
       - type: git
         url: https://github.com/anthonycaccese/es-theme-art-book-next.git
         branch: eaf73a4eefde22791681c7f430a238fb324bdeaf
-
-  # TODO 351elec-es-packages  batocera-config  batocera-scraper  batocera-settings  runemu.py  setsettings.py
-
-  #- name: glibc
-  #  buildsystem: simple
-  #  build-commands:
-  #    - tar --use-compress-program=unzstd -xvf glibc-2.35-3-x86_64.pkg.tar.zst
-  #    - cp -r usr/lib/* /app/lib/
-  #  cleanup: ['*']
-  #  sources:
-  #    - type: file
-  #      path: glibc-2.35-3-x86_64.pkg.tar.zst
-
-  #- name: lib32-glibc
-  #  buildsystem: simple
-  #  build-commands:
-  #    - tar --use-compress-program=unzstd -xvf lib32-glibc-2.35-3-x86_64.pkg.tar.zst
-  #    - cp -r usr/lib/* /app/lib/
-  #  cleanup: ['*']
-  #  sources:
-  #    - type: file
-  #      path: lib32-glibc-2.35-3-x86_64.pkg.tar.zst
 
   - name: retrodeck
     buildsystem: simple
@@ -402,25 +307,15 @@ modules:
         - mkdir -p ~/retrodeck/roms/gc
         - mkdir -p ~/retrodeck/roms/3ds
 
-        #- install -Dm755 retrodeck.sh -t /app/retrodeck/
-        - install -Dm755 export_func.sh -t /app/retrodeck/
-        #- ln -s /app/retrodeck/retrodeck.sh /app/bin/retrodeck.sh
-        - ln -s /app/retrodeck/export_func.sh /app/bin/export_func.sh      
-  
         - rm -f /app/retrodeck/retroarch/.config/retroarch.cfg
         - mv retroarch.cfg /app/retrodeck/retroarch/.config/
 
-        - mkdir -p /app/retrodeck/.config/
-        - touch /app/retrodeck/.config/.OS_ARCH
-        - echo "DECK" >> /app/retrodeck/.config/.OS_ARCH
+        #- mkdir -p /app/retrodeck/.config/
+        #- touch /app/retrodeck/.config/.OS_ARCH
+        #- echo "DECK" >> /app/retrodeck/.config/.OS_ARCH
 
-        # move other files (check old install script)
     #cleanup: ['*']
     sources:
-      #- type: file
-      #  path: retrodeck.sh
-      - type: file
-        path: export_func.sh
       - type: file
         path: retroarch.cfg
       
