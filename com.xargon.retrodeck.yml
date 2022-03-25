@@ -128,18 +128,6 @@ modules:
   # - name: dolphin
   # - name: arduboy
 
-  ## Needed for 351elec-emulationstation
-  #- name: autoconf-2.13
-  #  builsystem: simple
-  #  config-opts:
-  #    - --program-suffix=-2.13
-  #  cleanup:
-  #    - '*'
-  #  sources:
-  #    - type: archive
-  #      url: https://ftp.gnu.org/gnu/autoconf/autoconf-2.13.tar.gz
-  #      sha256: f0611136bee505811e9ca11ca7ac188ef5323a8e2ef19cffd3edb3cf08fd791e
-#
   #- name: freeimage
   #  no-autogen: true
   #  build-options:
@@ -242,7 +230,7 @@ modules:
     build-commands:
       - unappimage download
       - rsync -avr --ignore-existing --remove-source-files ./squashfs-root/usr/ /app/
-      - ln -s /app/usr/share/emulationstation /app/emulationstation
+      - ln -s /app/share/emulationstation /app/emulationstation
     sources:
       - type: file
         url: https://gitlab.com/leonstyhre/emulationstation-de/-/package_files/32296532/download
