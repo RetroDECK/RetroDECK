@@ -17,56 +17,10 @@ finish-args:
    - --talk-name=org.freedesktop.ScreenSaver
    - --talk-name=org.freedesktop.PowerManagement.Inhibit
    - --talk-name=org.freedesktop.login1
-   #- --filesystem=host
-   #- --env=LD_LIBRARY_PATH=/app/lib
-   #- --env=PATH=/app/bin:/usr/bin
+   - --filesystem=host
+   - --filesystem=xdg-run/app/com.discordapp.Discord:create
 
 modules:
-
-  - name: unappimage
-    buildsystem: simple
-    build-commands:
-      - make -C squashfs-tools -j ${FLATPAK_BUILDER_N_JOBS} install INSTALL_DIR=/app/bin
-    cleanup: ['*']
-    sources:
-      - type: git
-        url: https://github.com/refi64/unappimage
-        commit: d7f86f2a0d7ec3a69211125207d5f127386b849a
-
-  - name: rsync
-    buildsystem: autotools
-    config-opts:
-      - --disable-zstd
-      - --disable-xxhash
-      - --disable-md2man
-    sources:
-      - type: git
-        url: https://github.com/WayneD/rsync.git
-        tag: v3.2.3
-        commit: e94bad1c156fc3910f24e2b3b71a81b0b0bdeb70
-    cleanup:
-      - /share/man
-
-  # RA dependency
-  - name: libusb
-    config-opts:
-      - --disable-static
-    build-commands:
-      - ./autogen.sh
-      - ./bootstrap.sh
-      - ./configure --prefix=/app
-      - make
-      - make install
-    cleanup:
-      - /lib/*.la
-      - /lib/pkgconfig
-      - /include
-    sources:
-      - type: archive
-        url: https://github.com/libusb/libusb/archive/v1.0.25.tar.gz
-        sha256: f9c4b7dad27a6196ca9ec3c6ec7fa446194342de326c71e030eb2c480895e169
-    post-install:
-      - install -Dm644 COPYING /app/share/licenses/libusb/COPYING
 
   # ES-DE dependency 
   - name: pugixml
@@ -125,59 +79,7 @@ modules:
       url: https://gitlab.com/leonstyhre/emulationstation-de.git
       branch: stable-1.2
 
-  - name: retroarch
-    buildsystem: simple
-    build-commands:
-        - unappimage ./RetroArch-Linux-x86_64.AppImage
-        - ls -ln ./squashfs-root/usr/bin/
-        - rsync -avr --ignore-existing --remove-source-files ./squashfs-root/usr/ /app/
-        - mkdir -p /app/retrodeck/retroarch/.config
-        - mv RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/* /app/retrodeck/retroarch/.config/
-        - mkdir -p /app/retrodeck/retroarch/.config/database/cht
-    cleanup:
-        - RetroArch-Linux-x86_64.AppImage*
-    sources:
-      - type: archive
-        url: https://buildbot.libretro.com/stable/1.10.1/linux/x86_64/RetroArch.7z
-        sha256: 0ab48b247fd7ce05d9532f28b706f35a1c96da67b826a9a312d66b86b9dd8f39
-
-  - name: retroarch-assets
-    builsystem: simple
-    make-install-args:
-      - PREFIX=/app
-    post-install:
-      - cp -rf ./* /app/retrodeck/retroarch/.config/assets/
-    cleanup: ['*']
-    sources:
-      - type: archive
-        url: https://github.com/libretro/retroarch-assets/archive/948def88f11c8c62f85f606a1cd8f5a1bbad671b.zip
-        sha256: d7b2d79d6809521f73818117575f49b706a913cfc61822582d1f12a697944791
-
-  - name: retroarch-cores
-    buildsystem: simple
-    build-commands:
-        - cp ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* /app/retrodeck/retroarch/.config/cores/
-    cleanup:
-        - RetroArch_cores.7z
-    sources:
-      - type: archive
-        url: https://buildbot.libretro.com/stable/1.10.1/linux/x86_64/RetroArch_cores.7z
-        sha256: 3467de291c0849947993a535b0f32e7c211878dcaf6a37a9f864cf50cbe824fd
-    
-  - name: yuzu
-    buildsystem: simple
-    build-commands:
-      - unappimage ./yuzu*.AppImage
-      - mkdir -p /app/retrodeck/yuzu
-      - mv ./squashfs-root /app/retrodeck/yuzu
-      - ln -s ./usr/bin/yuzu /app/bin
-  # TODO: see how are the files and implement, edit the yuzu.sh script
-    cleanup: ['*']
-    sources:
-      - type: file
-        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-957/yuzu-20220320-1ce8136c7.AppImage
-        sha256: 000b7f09aa562a1f844697ded35618cef3189f339a207759e11295f31589a40d
-
+  # - yuzu
   # - name: ryujinx
   # - name: xemu
   # - name: rpcs3
@@ -195,6 +97,131 @@ modules:
       - type: git
         url: https://github.com/anthonycaccese/es-theme-art-book-next.git
         branch: eaf73a4eefde22791681c7f430a238fb324bdeaf
+
+
+  # External manifests start
+
+  # RetroArch - https://github.com/flathub/org.libretro.RetroArch
+  # nope: remember to put ' /org.libretro.RetroArch/' as submodules prefix
+
+  - name: retroarch
+    config-opts:
+      - '--enable-dbus'
+    make-args:
+      - GLOBAL_CONFIG_DIR=${FLATPAK_DEST}/etc
+    sources:
+      - type: git
+        url: https://github.com/libretro/RetroArch.git
+        branch: 60fab1c4a169beb46b7b79d2ae549e12f05c53fc
+      - type: file
+        path: org.libretro.RetroArch.appdata.xml
+      - type: file
+        path: retroarch.cfg
+    post-install:
+      - mkdir -p ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/
+      - >-
+        mv ${FLATPAK_DEST}/share/pixmaps/retroarch.svg
+        ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/
+      - rmdir ${FLATPAK_DEST}/share/pixmaps/
+      - mkdir -p ${FLATPAK_DEST}/etc
+      - >-
+        sed s:@prefix@:${FLATPAK_DEST}:g retroarch.cfg >
+        ${FLATPAK_DEST}/etc/retroarch.cfg
+      - mkdir -p ${FLATPAK_DEST}/share/appdata
+      - cp org.libretro.RetroArch.appdata.xml ${FLATPAK_DEST}/share/appdata
+    modules:
+      - libpng/libpng-1.6.35.json
+      - nvidia-cg-toolkit/nvidia-cg-toolkit-3.1.0013.json
+      - shared-modules/SDL/SDL-1.2.15.json
+      - shared-modules/SDL/SDL_image-1.2.12.json
+      - shared-modules/SDL/SDL_mixer-1.2.12.json
+      - shared-modules/SDL/SDL_net-1.2.8.json
+      - shared-modules/SDL/SDL_ttf-2.0.11.json
+      - shared-modules/libusb/libusb.json
+      - shared-modules/gudev/gudev.json
+      - libbz2/libbz2-1.0.8.json
+      - xrandr/xrandr-1.5.1.json
+      - libaio/libaio-0.3.112.json
+      - shared-modules/glu/glu-9.json
+      - libdecor/libdecor-0.1.0.json
+  - name: retroarch-filers-video
+    subdir: gfx/video_filters
+    make-install-args:
+      - PREFIX=${FLATPAK_DEST}
+    sources:
+      - type: git
+        url: https://github.com/libretro/RetroArch.git
+        commit: 60fab1c4a169beb46b7b79d2ae549e12f05c53fc
+  - name: retroarch-filers-audio
+    subdir: libretro-common/audio/dsp_filters
+    make-install-args:
+      - PREFIX=${FLATPAK_DEST}
+    sources:
+      - type: git
+        url: https://github.com/libretro/RetroArch.git
+        commit: 60fab1c4a169beb46b7b79d2ae549e12f05c53fc
+  - name: retroarch-assets
+    make-install-args:
+      - PREFIX=${FLATPAK_DEST}
+    sources:
+      - type: git
+        url: https://github.com/libretro/retroarch-assets.git
+        commit: f45dd1351e6bfb9f01e12bee8d358ad22a2bb8f9
+  - name: libretro-database
+    make-install-args:
+      - PREFIX=${FLATPAK_DEST}
+    sources:
+      - type: git
+        url: https://github.com/libretro/libretro-database.git
+        commit: 1754130f72d8c00a512797bf85442576258279e8
+  - name: libretro-core-info
+    make-install-args:
+      - PREFIX=${FLATPAK_DEST}
+    sources:
+      - type: git
+        url: https://github.com/libretro/libretro-core-info.git
+        commit: 1b2472eca14a5a187ff298ace1b614fd3d47bc7c
+  - name: retroarch-joypad-autoconfig
+    make-install-args:
+      - PREFIX=${FLATPAK_DEST}
+    sources:
+      - type: git
+        url: https://github.com/libretro/retroarch-joypad-autoconfig.git
+        commit: 0eb3ad2666e6bdc2de2cde4c5d4af29b8c7f2c67
+  - name: common-shaders
+    make-install-args:
+      - PREFIX=${FLATPAK_DEST}
+    sources:
+      - type: git
+        url: https://github.com/libretro/common-shaders.git
+        commit: 55e401834b732e62c34411321c4ffd82524345d4
+  - name: slang-shaders
+    make-install-args:
+      - PREFIX=${FLATPAK_DEST}
+    sources:
+      - type: git
+        url: https://github.com/libretro/slang-shaders.git
+        commit: 77558d5f2ac807b27201fb888cbf2caee8e289fa
+  - name: glsl-shaders
+    make-install-args:
+      - PREFIX=${FLATPAK_DEST}
+    sources:
+      - type: git
+        url: https://github.com/libretro/glsl-shaders.git
+        commit: 20801b38aa2c89a2beb9f57ffbbbcea7256e2523
+  - name: common-overlays
+    make-install-args:
+      - PREFIX=${FLATPAK_DEST}
+    sources:
+      - type: git
+        url: https://github.com/libretro/common-overlays.git
+        commit: db9744f4e58a740f0f10b04b62af347cd6f01928
+
+  # RetroArch - END
+
+
+  # External manifests end
+  
 
   - name: retrodeck
     buildsystem: simple
@@ -309,10 +336,6 @@ modules:
 
         - rm -f /app/retrodeck/retroarch/.config/retroarch.cfg
         - mv retroarch.cfg /app/retrodeck/retroarch/.config/
-
-        #- mkdir -p /app/retrodeck/.config/
-        #- touch /app/retrodeck/.config/.OS_ARCH
-        #- echo "DECK" >> /app/retrodeck/.config/.OS_ARCH
 
     #cleanup: ['*']
     sources:
