@@ -484,10 +484,12 @@ modules:
         # Remove this when/if commited to ES-DE
         - rm -rf /app/share/emulationstation/resources/systems/unix/es_find_rules.xml
         - cp es_find_rules.xml /app/share/emulationstation/resources/systems/unix/
+      
+        - mkdir -p ${FLATPAK_DEST}/retrodeck/
+        - cp es_settings.xml ${FLATPAK_DEST}/retrodeck/es_settings.xml
 
-        # Create retrodeck.sh scripts:
-        # sed the es_config to inject the default rom folder
-        
+        - cp retrodeck.sh /app/bin/retrodeck.sh
+        - chmod +x /app/bin/retrodeck.sh
 
     #cleanup: ['*']
     sources:
@@ -495,5 +497,8 @@ modules:
       #  path: retroarch.cfg
       - type: file # Remove this when/if commited to ES-DE
         path: es_find_rules.xml
-      
+      - type: file
+        path: es_settings.xml
+      - type: file
+        path: retrodeck.sh
     # create desktop entry
