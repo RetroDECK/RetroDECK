@@ -23,24 +23,89 @@ finish-args:
    - --filesystem=home:ro
    - --filesystem=/run/media:ro
 
+cleanup:
+  # ES-DE
+  - /include
+  - /share/ffmpeg
+  - /lib/cmake
+  - /lib/debug
+  - /lib/pkgconfig
+  - /lib/libfreeimage.a
+  - /lib/libogg.a
+  - /lib/libvpx.a
+
 modules:
 
-  # ES-DE dependency 
-  - name: pugixml
+  # ES-DE
+
+  - name: fdk-aac
+    buildsystem: cmake
+    sources:
+    - type: git
+      url: https://git.code.sf.net/p/opencore-amr/fdk-aac.git
+      tag: v2.0.2
+
+  - name: libvpx
+    config-opts:
+    - --disable-examples
+    - --disable-docs
+    - --enable-pic
+    - --enable-vp9-highbitdepth
+    sources:
+    - type: git
+      url: https://github.com/webmproject/libvpx.git
+      tag: v1.11.0
+
+  - name: ogg
     buildsystem: cmake
     config-opts:
-    - -DBUILD_SHARED_LIBS=on .
+    - -DCMAKE_POSITION_INDEPENDENT_CODE=on
+    - -DINSTALL_DOCS=off
     sources:
-    - type: archive
-      url: https://github.com/zeux/pugixml/releases/download/v1.11.4/pugixml-1.11.4.tar.gz
-      sha256: 8ddf57b65fb860416979a3f0640c2ad45ddddbbafa82508ef0a0af3ce7061716
+    - type: git
+      url: https://github.com/xiph/ogg.git
+      tag: v1.3.5
 
-  # ES-DE dependency 
+  - name: vorbis
+    buildsystem: cmake
+    config-opts:
+    - -DBUILD_SHARED_LIBS=on
+    sources:
+    - type: git
+      url: https://gitlab.xiph.org/xiph/vorbis.git
+      tag: v1.3.7
+
+  - name: opus
+    buildsystem: cmake
+    config-opts:
+    - -DBUILD_SHARED_LIBS=on
+    sources:
+    - type: git
+      url: https://gitlab.xiph.org/xiph/opus.git
+      tag: v1.3.1
+
+  - name: ffmpeg
+    config-opts:
+    - --disable-static
+    - --disable-programs
+    - --disable-doc
+    - --enable-gpl
+    - --enable-nonfree
+    - --enable-shared
+    - --enable-libvorbis
+    - --enable-libopus
+    - --enable-libfdk-aac
+    - --enable-libvpx
+    - --enable-postproc
+    sources:
+    - type: git
+      url: https://github.com/FFmpeg/FFmpeg.git
+      tag: n5.0
+
   - name: freeimage
     no-autogen: true
     build-options:
-      #C++17 is not supported
-      cxxflags: -std=c++14
+        cxxflags: -std=c++14
     make-args:
     - DESTDIR=/app
     sources:
@@ -52,23 +117,14 @@ modules:
       - sed -i 's|-o root -g root ||' ./Makefile.gnu
       - sed -i 's|/usr|/app|' ./Makefile.gnu
 
-  # ES-DE dependency 
-  - name: ffmpeg
+  - name: pugixml
+    buildsystem: cmake
     config-opts:
-      - --enable-shared
-      - --disable-static
-      - --enable-gnutls
-      - --disable-doc
-      - --disable-programs
-      - --disable-encoders
-      - --disable-muxers
-      - --enable-encoder=png
+    - -DBUILD_SHARED_LIBS=on .
     sources:
-      - type: archive
-        url: https://www.ffmpeg.org/releases/ffmpeg-4.2.3.tar.xz
-        sha256: 9df6c90aed1337634c1fb026fb01c154c29c82a64ea71291ff2da9aacb9aad31
-    cleanup:
-      - /share/ffmpeg/examples
+    - type: archive
+      url: https://github.com/zeux/pugixml/releases/download/v1.11.4/pugixml-1.11.4.tar.gz
+      sha256: 8ddf57b65fb860416979a3f0640c2ad45ddddbbafa82508ef0a0af3ce7061716
 
   - name: emulationstation-de
     buildsystem: cmake
@@ -81,6 +137,8 @@ modules:
     - type: git
       url: https://gitlab.com/leonstyhre/emulationstation-de.git
       branch: stable-1.2
+
+  # ES-DE - END
 
   - name: art-book-next
     buildsystem: simple
@@ -116,7 +174,7 @@ modules:
       - >-
         mv ${FLATPAK_DEST}/share/pixmaps/retroarch.svg
         ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/
-      - rmdir ${FLATPAK_DEST}/share/pixmaps/
+      - rmdir --ignore-fail-on-non-empty ${FLATPAK_DEST}/share/pixmaps/
       - mkdir -p ${FLATPAK_DEST}/etc
       - >-
         sed s:@prefix@:${FLATPAK_DEST}:g retroarch.cfg >
@@ -508,8 +566,8 @@ modules:
         - mkdir -p ~/retrodeck/roms/gc
         - mkdir -p ~/retrodeck/roms/3ds
 
-        - rm -f /app/retrodeck/retroarch/.config/retroarch.cfg
-        - mv retroarch.cfg /app/retrodeck/retroarch/.config/
+        - rm -f ${FLATPAK_DEST}/etc/retroarch.cfg
+        - mv retroarch.cfg ${FLATPAK_DEST}/etc/retroarch.cfg
 
     #cleanup: ['*']
     sources:
