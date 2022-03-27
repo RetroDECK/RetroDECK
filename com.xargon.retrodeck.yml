@@ -471,125 +471,29 @@ modules:
   - name: retrodeck
     buildsystem: simple
     build-commands:
-        - mkdir -p ~/retrodeck/roms/bios
-        - mkdir -p ~/retrodeck/roms/3do
-        - mkdir -p ~/retrodeck/roms/amiga
-        - mkdir -p ~/retrodeck/roms/amigacd32
-        - mkdir -p ~/retrodeck/roms/amstradcpc
-        - mkdir -p ~/retrodeck/roms/arcade
-        - mkdir -p ~/retrodeck/roms/atari2600
-        - mkdir -p ~/retrodeck/roms/atari5200
-        - mkdir -p ~/retrodeck/roms/atari7800
-        - mkdir -p ~/retrodeck/roms/atarist
-        - mkdir -p ~/retrodeck/roms/atari800
-        - mkdir -p ~/retrodeck/roms/atomiswave
-        - mkdir -p ~/retrodeck/roms/channelf
-        - mkdir -p ~/retrodeck/roms/colecovision
-        - mkdir -p ~/retrodeck/roms/c64
-        - mkdir -p ~/retrodeck/roms/c128
-        - mkdir -p ~/retrodeck/roms/vic20
-        - mkdir -p ~/retrodeck/roms/laserdisc
-        - mkdir -p ~/retrodeck/roms/dreamcast
-        - mkdir -p ~/retrodeck/roms/easyrpg
-        - mkdir -p ~/retrodeck/roms/famicom
-        - mkdir -p ~/retrodeck/roms/fbn
-        - mkdir -p ~/retrodeck/roms/gb
-        - mkdir -p ~/retrodeck/roms/gbh
-        - mkdir -p ~/retrodeck/roms/gameandwatch
-        - mkdir -p ~/retrodeck/roms/gba
-        - mkdir -p ~/retrodeck/roms/fds
-        - mkdir -p ~/retrodeck/roms/c16
-        - mkdir -p ~/retrodeck/roms/ggh
-        - mkdir -p ~/retrodeck/roms/gbah
-        - mkdir -p ~/retrodeck/roms/intellivision
-        - mkdir -p ~/retrodeck/roms/gbch
-        - mkdir -p ~/retrodeck/roms/atarilynx
-        - mkdir -p ~/retrodeck/roms/mame
-        - mkdir -p ~/retrodeck/roms/dos
-        - mkdir -p ~/retrodeck/roms/snesmsu1
-        - mkdir -p ~/retrodeck/roms/msx
-        - mkdir -p ~/retrodeck/roms/msx2
-        - mkdir -p ~/retrodeck/roms/naomi
-        - mkdir -p ~/retrodeck/roms/neogeo
-        - mkdir -p ~/retrodeck/roms/ngp
-        - mkdir -p ~/retrodeck/roms/nds
-        - mkdir -p ~/retrodeck/roms/n64
-        - mkdir -p ~/retrodeck/roms/nes
-        - mkdir -p ~/retrodeck/roms/nesh
-        - mkdir -p ~/retrodeck/roms/ngpc
-        - mkdir -p ~/retrodeck/roms/neocd
-        - mkdir -p ~/retrodeck/roms/pc-9800
-        - mkdir -p ~/retrodeck/roms/pcengine
-        - mkdir -p ~/retrodeck/roms/pcenginecd
-        - mkdir -p ~/retrodeck/roms/pcfx
-        - mkdir -p ~/retrodeck/roms/openbor
-        - mkdir -p ~/retrodeck/roms/piece
-        - mkdir -p ~/retrodeck/roms/odyssey2
-        - mkdir -p ~/retrodeck/roms/psp
-        - mkdir -p ~/retrodeck/roms/pspminis
-        - mkdir -p ~/retrodeck/roms/pokemini
-        - mkdir -p ~/retrodeck/roms/homebrew
-        - mkdir -p ~/retrodeck/roms/ports
-        - mkdir -p ~/retrodeck/roms/sc-3000
-        - mkdir -p ~/retrodeck/roms/scummvm
-        - mkdir -p ~/retrodeck/roms/psx
-        - mkdir -p ~/retrodeck/roms/segacd
-        - mkdir -p ~/retrodeck/roms/sega32x
-        - mkdir -p ~/retrodeck/roms/genesis
-        - mkdir -p ~/retrodeck/roms/genh
-        - mkdir -p ~/retrodeck/roms/mastersystem
-        - mkdir -p ~/retrodeck/roms/megadrive
-        - mkdir -p ~/retrodeck/roms/megaduck
-        - mkdir -p ~/retrodeck/roms/saturn
-        - mkdir -p ~/retrodeck/roms/sg-1000
-        - mkdir -p ~/retrodeck/roms/x1
-        - mkdir -p ~/retrodeck/roms/zxspectrum
-        - mkdir -p ~/retrodeck/roms/zx81
-        - mkdir -p ~/retrodeck/roms/pc-8800
-        - mkdir -p ~/retrodeck/roms/snes
-        - mkdir -p ~/retrodeck/roms/supergrafx
-        - mkdir -p ~/retrodeck/roms/pico-8
-        - mkdir -p ~/retrodeck/roms/megacd
-        - mkdir -p ~/retrodeck/roms/snesh
-        - mkdir -p ~/retrodeck/roms/satellaview
-        - mkdir -p ~/retrodeck/roms/sfc
-        - mkdir -p ~/retrodeck/roms/sufami
-        - mkdir -p ~/retrodeck/roms/tic-80
-        - mkdir -p ~/retrodeck/roms/tg16
-        - mkdir -p ~/retrodeck/roms/solarus
-        - mkdir -p ~/retrodeck/roms/vectrex
-        - mkdir -p ~/retrodeck/roms/gbc
-        - mkdir -p ~/retrodeck/roms/videopac
-        - mkdir -p ~/retrodeck/roms/virtualboy
-        - mkdir -p ~/retrodeck/roms/wonderswan
-        - mkdir -p ~/retrodeck/roms/wonderswancolor
-        - mkdir -p ~/retrodeck/roms/ecwolf
-        - mkdir -p ~/retrodeck/roms/x68000
-        - mkdir -p ~/retrodeck/roms/build
-        - mkdir -p ~/retrodeck/roms/tools
-        - mkdir -p ~/retrodeck/roms/imageviewer
-        - mkdir -p ~/retrodeck/roms/gamegear
-        - mkdir -p ~/retrodeck/roms/tg16cd
-        - mkdir -p ~/retrodeck/roms/j2me
-        - mkdir -p ~/retrodeck/roms/uzebox
-        - mkdir -p ~/retrodeck/roms/supervision
-        - mkdir -p ~/retrodeck/roms/doom
-        - mkdir -p ~/retrodeck/roms/switch
-        - mkdir -p ~/retrodeck/roms/wii
-        - mkdir -p ~/retrodeck/roms/gc
-        - mkdir -p ~/retrodeck/roms/3ds
-
-        - rm -f ${FLATPAK_DEST}/etc/retroarch.cfg
-        - mv retroarch.cfg ${FLATPAK_DEST}/etc/retroarch.cfg
+    
+        # RA is already doing this no?
+        #- rm -f ${FLATPAK_DEST}/etc/retroarch.cfg
+        #- mv retroarch.cfg ${FLATPAK_DEST}/etc/retroarch.cfg
 
         # - symlink useful dirs and files in ~/retrodeck
-        # TODO: cannot see home folder at this point
+        # TODO: cannot see home folder at this point, same for es_settings.xml
         #- ln -s ${FLATPAK_DEST}/etc/retroarch.cfg ~/retrodeck/retroarch.cfg
         #- ln -s ${FLATPAK_DEST}/share/emulationstation/themes/ ~/retrodeck/
 
+        # Remove this when/if commited to ES-DE
+        - rm -rf /app/share/emulationstation/resources/systems/unix/es_find_rules.xml
+        - cp es_find_rules.xml /app/share/emulationstation/resources/systems/unix/
+
+        # Create retrodeck.sh scripts:
+        # sed the es_config to inject the default rom folder
+        
+
     #cleanup: ['*']
     sources:
-      - type: file
-        path: retroarch.cfg
+      #- type: file
+      #  path: retroarch.cfg
+      - type: file # Remove this when/if commited to ES-DE
+        path: es_find_rules.xml
       
     # create desktop entry
