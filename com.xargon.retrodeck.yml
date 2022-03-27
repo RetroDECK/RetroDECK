@@ -12,14 +12,14 @@ finish-args:
    - --share=ipc
    - --share=network
    - --device=all
-   - --filesystem=~/retrodeck/roms:create
+   - --filesystem=~/retrodeck:create
    - --allow=multiarch
    - --talk-name=org.freedesktop.ScreenSaver
    - --talk-name=org.freedesktop.PowerManagement.Inhibit
    - --talk-name=org.freedesktop.login1
    - --filesystem=host
    - --filesystem=xdg-run/app/com.discordapp.Discord:create
-    # Yuzu
+  # Yuzu
    - --filesystem=home:ro
    - --filesystem=/run/media:ro
 
@@ -143,8 +143,8 @@ modules:
   - name: art-book-next
     buildsystem: simple
     build-commands:
-      - mkdir -p /app/emulationstation/themes/art-book-next
-      - mv -f * /app/emulationstation/themes/art-book-next/
+      - mkdir -p ${FLATPAK_DEST}/share/emulationstation/themes/art-book-next/
+      - mv -f * ${FLATPAK_DEST}/share/emulationstation/themes/art-book-next/
     sources:
       - type: git
         url: https://github.com/anthonycaccese/es-theme-art-book-next.git
@@ -270,6 +270,19 @@ modules:
         commit: db9744f4e58a740f0f10b04b62af347cd6f01928
 
   # RetroArch - END
+
+  # Not part of the offical RetroArch manifest
+  - name: retroarch-cores
+    buildsystem: simple
+    build-commands:
+        - mkdir -p /app/share/libretro/cores/
+        - mv ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* /app/share/libretro/cores/
+    cleanup:
+        - RetroArch_cores.7z
+    sources:
+      - type: archive
+        url: https://buildbot.libretro.com/stable/1.10.1/linux/x86_64/RetroArch_cores.7z
+        sha256: 3467de291c0849947993a535b0f32e7c211878dcaf6a37a9f864cf50cbe824fd
 
   # Yuzu - https://github.com/flathub/org.yuzu_emu.yuzu
 
@@ -568,6 +581,11 @@ modules:
 
         - rm -f ${FLATPAK_DEST}/etc/retroarch.cfg
         - mv retroarch.cfg ${FLATPAK_DEST}/etc/retroarch.cfg
+
+        # - symlink useful dirs and files in ~/retrodeck
+        # TODO: cannot see home folder at this point
+        #- ln -s ${FLATPAK_DEST}/etc/retroarch.cfg ~/retrodeck/retroarch.cfg
+        #- ln -s ${FLATPAK_DEST}/share/emulationstation/themes/ ~/retrodeck/
 
     #cleanup: ['*']
     sources:
