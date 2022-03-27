@@ -32,10 +32,10 @@ ln -s org.libretro.RetroArch/* $INSTALL_DIR/
 
 # Yuzu
 # https://github.com/flathub/org.yuzu_emu.yuzu/blob/master/org.yuzu_emu.yuzu.json
-git clone --recursive https://github.com/flathub/org.yuzu_emu.yuzu
+#git clone --recursive https://github.com/flathub/org.yuzu_emu.yuzu
 #rm -rf org.yuzu_emu.yuzu/shared-modules
 #rm -rf org.yuzu_emu.yuzu/.*
-ln -s org.yuzu_emu.yuzu/* $INSTALL_DIR/
+#ln -s org.yuzu_emu.yuzu/* $INSTALL_DIR/
 
 
 cd $INSTALL_DIR
