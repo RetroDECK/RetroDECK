@@ -3,15 +3,12 @@
 # if we got the .lock file it means that it's not a first run
 if [ ! -f ~/retrodeck/.lock ]
 then
-    #mkdir -p /tmp/retrodeck_logs/
-    #ln -s /tmp/retrodeck_logs/ ~/retrodeck/logs/
-    #touch ~/retrodeck/logs/retrodeck.log
-    #echo "RetroDECK: .lock file not found, initializing."
     mkdir -p ~/retrodeck/.emulationstation
     mkdir -p ~/retrodeck/saves
     mkdir -p ~/retrodeck/states
     mkdir -p ~/retrodeck/screenshots
-    mkdir -p /var/config/retroarch/
+    mkdir -p /var/config/retroarch/system
+    ln -s ~/.var/app/com.xargon.retrodeck/config/retroarch/system/ ~/retrodeck/bios
     rm -rf ~/retrodeck/.emulationstation/es_settings.xml
     rm -rf ~/retrodeck/.emulationstation/es_input.xml
     cp /app/retrodeck/es_settings.xml ~/retrodeck/.emulationstation/es_settings.xml

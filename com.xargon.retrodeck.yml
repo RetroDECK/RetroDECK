@@ -492,6 +492,10 @@ modules:
         - cp es_settings.xml ${FLATPAK_DEST}/retrodeck/es_settings.xml
         - cp retrodeck-retroarch.cfg ${FLATPAK_DEST}/retrodeck/retrodeck-retroarch.cfg
 
+        # Logo
+        - rm -f /app/share/emulationstation/resources/graphics/splash.svg
+        - cp splash.svg /app/share/emulationstation/resources/graphics/splash.svg
+
         #- find / -iname es_settings.xml #debug
         #- BREAK #debug
         
@@ -514,4 +518,6 @@ modules:
         path: retrodeck.sh
       - type: file
         path: retrodeck-retroarch.cfg
+      - type: file
+        path: res/splash.svg
     # create desktop entry
