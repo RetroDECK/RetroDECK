@@ -2,8 +2,7 @@ app-id: com.xargon.retrodeck
 runtime: org.kde.Platform
 runtime-version: '5.15-21.08'
 sdk: org.kde.Sdk
-command: emulationstation
-#command: retroarch #--appendconfig /app/retrodeck/retroarch/.config/retroarch.cfg
+command: retrodeck.sh
 
 finish-args:
    - --socket=x11
@@ -17,7 +16,7 @@ finish-args:
    - --talk-name=org.freedesktop.ScreenSaver
    - --talk-name=org.freedesktop.PowerManagement.Inhibit
    - --talk-name=org.freedesktop.login1
-   - --filesystem=host
+   #- --filesystem=host
    - --filesystem=xdg-run/app/com.discordapp.Discord:create
   # Yuzu
    - --filesystem=home:ro
@@ -143,12 +142,12 @@ modules:
   - name: art-book-next
     buildsystem: simple
     build-commands:
-      - mkdir -p ${FLATPAK_DEST}/share/emulationstation/themes/art-book-next/
-      - mv -f * ${FLATPAK_DEST}/share/emulationstation/themes/art-book-next/
+      - mkdir -p ${FLATPAK_DEST}/share/emulationstation/themes/art-book-next-de/
+      - mv -f * ${FLATPAK_DEST}/share/emulationstation/themes/art-book-next-de/
     sources:
       - type: git
-        url: https://github.com/anthonycaccese/es-theme-art-book-next.git
-        branch: eaf73a4eefde22791681c7f430a238fb324bdeaf
+        url: https://github.com/anthonycaccese/art-book-next-de.git
+        branch: cba2e914128dd749df53e710b7c1feb9fc7b5cc8
 
 
   # External manifests start
@@ -481,13 +480,21 @@ modules:
         #- ln -s ${FLATPAK_DEST}/etc/retroarch.cfg ~/retrodeck/retroarch.cfg
         #- ln -s ${FLATPAK_DEST}/share/emulationstation/themes/ ~/retrodeck/
 
-        # Remove this when/if commited to ES-DE
+        # Prep the ES-DE and RetroArch config files
         - rm -rf /app/share/emulationstation/resources/systems/unix/es_find_rules.xml
         - cp es_find_rules.xml /app/share/emulationstation/resources/systems/unix/
-      
+        - rm -rf /app/share/emulationstation/resources/systems/unix/es_systems.xml
+        - cp es_systems.xml /app/share/emulationstation/resources/systems/unix/
+        - rm -rf /app/share/emulationstation/resources/systems/unix/es_input.xml
+        - cp es_input.xml /app/share/emulationstation/resources/systems/unix/
+        # These must be put in home folder, managed by retrodeck.sh
         - mkdir -p ${FLATPAK_DEST}/retrodeck/
         - cp es_settings.xml ${FLATPAK_DEST}/retrodeck/es_settings.xml
+        - cp retrodeck-retroarch.cfg ${FLATPAK_DEST}/retrodeck/retrodeck-retroarch.cfg
 
+        #- find / -iname es_settings.xml #debug
+        #- BREAK #debug
+        
         - cp retrodeck.sh /app/bin/retrodeck.sh
         - chmod +x /app/bin/retrodeck.sh
 
@@ -500,5 +507,11 @@ modules:
       - type: file
         path: es_settings.xml
       - type: file
+        path: es_systems.xml
+      - type: file
+        path: es_input.xml
+      - type: file
         path: retrodeck.sh
+      - type: file
+        path: retrodeck-retroarch.cfg
     # create desktop entry
