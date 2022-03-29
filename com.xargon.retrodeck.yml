@@ -163,7 +163,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/RetroArch.git
-        branch: 60fab1c4a169beb46b7b79d2ae549e12f05c53fc
+        branch: de4e56ecf28a09057734f8624af6d62f3088734f
       - type: file
         path: org.libretro.RetroArch.appdata.xml
       - type: file
@@ -202,7 +202,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/RetroArch.git
-        commit: 60fab1c4a169beb46b7b79d2ae549e12f05c53fc
+        commit: de4e56ecf28a09057734f8624af6d62f3088734f
   - name: retroarch-filers-audio
     subdir: libretro-common/audio/dsp_filters
     make-install-args:
@@ -210,7 +210,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/RetroArch.git
-        commit: 60fab1c4a169beb46b7b79d2ae549e12f05c53fc
+        commit: de4e56ecf28a09057734f8624af6d62f3088734f
   - name: retroarch-assets
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
@@ -280,8 +280,8 @@ modules:
         - RetroArch_cores.7z
     sources:
       - type: archive
-        url: https://buildbot.libretro.com/stable/1.10.1/linux/x86_64/RetroArch_cores.7z
-        sha256: 3467de291c0849947993a535b0f32e7c211878dcaf6a37a9f864cf50cbe824fd
+        url: https://buildbot.libretro.com/stable/1.10.2/linux/x86_64/RetroArch_cores.7z
+        sha256: 0c59f99534a1ae3a2d34b1747c40398325e53db69acfab35b99c8fa8d76430e5
 
   # Yuzu - https://github.com/flathub/org.yuzu_emu.yuzu
 

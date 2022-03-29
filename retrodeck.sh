@@ -4,20 +4,23 @@
 if [ ! -f ~/retrodeck/.lock ]
 then
     mkdir -p ~/retrodeck/.emulationstation
-    mkdir -p ~/retrodeck/saves
-    mkdir -p ~/retrodeck/states
-    mkdir -p ~/retrodeck/screenshots
-    mkdir -p ~/retrodeck/tools
-    mkdir -p /var/config/retroarch/system
-    
-    ln -s ~/.var/app/com.xargon.retrodeck/config/retroarch/system/ ~/retrodeck/bios
     rm -rf ~/retrodeck/.emulationstation/es_settings.xml
     rm -rf ~/retrodeck/.emulationstation/es_input.xml
     cp /app/retrodeck/es_settings.xml ~/retrodeck/.emulationstation/es_settings.xml
     cp /app/retrodeck/es_settings.xml ~/retrodeck/.emulationstation/es_input.xml
-    cp /app/retrodeck/retrodeck-retroarch.cfg /var/config/retroarch/retroarch.cfg
+
+    mkdir -p ~/retrodeck/saves
+    mkdir -p ~/retrodeck/states
+    mkdir -p ~/retrodeck/screenshots
+
+    mkdir -p ~/retrodeck/tools
     cp -r /app/retrodeck/tools/* ~/retrodeck/tools/
 
+    mkdir -p /var/config/retroarch/system
+    ln -s ~/.var/app/com.xargon.retrodeck/config/retroarch/system/ ~/retrodeck/bios
+        
+    cp /app/retrodeck/retrodeck-retroarch.cfg /var/config/retroarch/retroarch.cfg
+    
     mkdir -p ~/retrodeck/.emulationstation/gamelists/tools/
     cp /app/retrodeck/tools-gamelist.xml ~/retrodeck/.emulationstation/gamelists/tools/gamelist.xml
     
