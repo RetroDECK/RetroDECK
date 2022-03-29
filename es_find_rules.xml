@@ -178,4 +178,13 @@
             <entry>~/bin/yuzu*.AppImage</entry>
         </rule>
     </emulator>
+    <emulator name="tools">
+        <!-- Linux shell-->
+        <rule type="systempath">
+            <entry>bash</entry>
+        </rule>
+        <rule type="staticpath">
+            <entry>/bin/bash</entry>
+        </rule>
+    </emulator>
 </ruleList>
