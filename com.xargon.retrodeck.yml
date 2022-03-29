@@ -496,8 +496,10 @@ modules:
         - rm -f /app/share/emulationstation/resources/graphics/splash.svg
         - cp splash.svg /app/share/emulationstation/resources/graphics/splash.svg
 
-        #- find / -iname es_settings.xml #debug
-        #- BREAK #debug
+        # Tools
+        - mkdir -p ${FLATPAK_DEST}/retrodeck/tools/
+        - cp start-retroarch.sh ${FLATPAK_DEST}/retrodeck/tools/
+        - cp tools-gamelist.xml ${FLATPAK_DEST}/retrodeck/
         
         - cp retrodeck.sh /app/bin/retrodeck.sh
         - chmod +x /app/bin/retrodeck.sh
@@ -519,5 +521,9 @@ modules:
       - type: file
         path: retrodeck-retroarch.cfg
       - type: file
+        path: tools-gamelist.xml
+      - type: file
         path: res/splash.svg
+      - type: dir
+        path: tools
     # create desktop entry

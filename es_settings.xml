@@ -92,7 +92,7 @@
 <int name="SoundVolumeNavigation" value="70" />
 <int name="SoundVolumeVideos" value="80" />
 <string name="ApplicationVersion" value="1.2.0" />
-<string name="CollectionSystemsAuto" value="" />
+<string name="CollectionSystemsAuto" value="all" />
 <string name="CollectionSystemsCustom" value="" />
 <string name="DefaultSortOrder" value="filename, ascending" />
 <string name="ExitButtonCombo" value="F4" />
@@ -103,7 +103,7 @@
 <string name="MenuOpeningEffect" value="scale-up" />
 <string name="MiximageBoxSize" value="medium" />
 <string name="MiximagePhysicalMediaSize" value="medium" />
-<string name="MiximageResolution" value="1280x960" />
+<string name="MiximageResolution" value="1280x800" />
 <string name="MiximageScreenshotScaling" value="sharp" />
 <string name="ROMDirectory" value="~/roms" />
 <string name="SaveGamelistsMode" value="always" />
