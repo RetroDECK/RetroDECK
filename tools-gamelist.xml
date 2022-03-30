@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <gameList>
 	<game>
-		<path>./start-retroarch.sh</path>
+		<path>start-retroarch.sh</path>
 		<name>Start RetroArch</name>
 		<sortname>RetroArch</sortname>
 		<desc>RetroArch is a frontend for emulators, game engines and media players.

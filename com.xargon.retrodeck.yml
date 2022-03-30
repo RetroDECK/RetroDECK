@@ -35,6 +35,13 @@ cleanup:
 
 modules:
 
+  - name: kdialog
+    buildsystem: cmake
+    sources:
+    - type: git
+      url: https://github.com/KDE/kdialog.git
+      tag: v22.03.80
+
   # ES-DE
 
   - name: fdk-aac
