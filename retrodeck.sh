@@ -9,8 +9,8 @@ is_mounted() {
 # if we got the .lock file it means that it's not a first run
 if [ ! -f ~/retrodeck/.lock ]
 then
-    internal=`kdialog --title "RetroDECK" -- yes-label "Internal" --no-label "SD Card" --yesno "Where do you want your rom folder to be located?"`
-    if $internal #yes - Internal
+    kdialog --title "RetroDECK" --yes-label "Internal" --no-label "SD Card" --yesno "Where do you want your rom folder to be located?"
+    if [ $? == 0 ] #yes - Internal
     then
         roms_folder=~/retrodeck/roms
     else #no - SD Card
@@ -22,11 +22,14 @@ then
             exit 0
         fi
     fi
+
+    kdialog --title "RetroDECK" --msgbox "RetroDECK will initialize the system, please wait a few minutes, a popup will tell you when the process is finished."
+
     mkdir -p $roms_folder
     rm -rf /var/config/.emulationstation/ROMs
     rm -rf /var/config/.emulationstation/roms
+    mkdir -p /var/config/.emulationstation
     ln -s $roms_folder /var/config/.emulationstation/roms
-    kdialog --Title "RetroDECK" --msgbox "Done, please put your roms in: $roms_folder. In order to change location you may use the tool provided in the tools section of RetroDECK."
 
     mkdir -p /var/config/.emulationstation
     rm -rf /var/config/.emulationstation/es_settings.xml
@@ -42,7 +45,7 @@ then
     cp -r /app/retrodeck/tools/* /var/config/retrodeck/tools
 
     mkdir -p /var/config/retroarch/system
-    ln -s ~/.var/app/com.xargon.retrodeck/config/retroarch/system/ ~/retrodeck/bios
+    ln -s ~/.var/app/com.xargon.retrodeck/config/retroarch/system ~/retrodeck/bios
         
     cp /app/retrodeck/retrodeck-retroarch.cfg /var/config/retroarch/retroarch.cfg
     
@@ -53,6 +56,8 @@ then
     cp /app/share/libretro/cores/* /var/config/retroarch/cores/
     
     touch ~/retrodeck/.lock
+
+    kdialog --title "RetroDECK" --msgbox "Initialization completed, please put your roms in: $roms_folder.\nIf you wish to change the roms location you may use the tool located the tools section of RetroDECK."
 fi
 
 #numFields=$(xmlstarlet sel -t -m '//system' -o "." /app/share/emulationstation/resources/systems/unix/es_systems.xml | wc -c)

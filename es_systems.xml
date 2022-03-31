@@ -314,15 +314,6 @@
         <theme>daphne</theme>
     </system>
     <system>
-        <name>desktop</name>
-        <fullname>Desktop Applications</fullname>
-        <path>%ROMPATH%/desktop</path>
-        <extension>.sh</extension>
-        <command>bash %ROM%</command>
-        <platform>pc</platform>
-        <theme>desktop</theme>
-    </system>
-    <system>
         <name>doom</name>
         <fullname>Doom</fullname>
         <path>%ROMPATH%/doom</path>
@@ -333,13 +324,10 @@
     </system>
     <system>
         <name>dos</name>
-        <fullname>DOS (PC)</fullname>
+        <fullname>DOS</fullname>
         <path>%ROMPATH%/dos</path>
-        <extension>.bat .BAT .com .COM .conf .CONF .cue .CUE .exe .EXE .iso .ISO .7z .7Z .zip .ZIP</extension>
-        <command label="DOSBox-Core">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/dosbox_core_libretro.so %ROM%</command>
+        <extension>.dosz .DOSZ</extension>
         <command label="DOSBox-Pure">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/dosbox_pure_libretro.so %ROM%</command>
-        <command label="DOSBox-SVN">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/dosbox_svn_libretro.so %ROM%</command>
-        <command label="DOSBox Staging (Standalone)">%EMULATOR_DOSBOX-STAGING% %ROM%</command>
         <platform>dos</platform>
         <theme>dos</theme>
     </system>
@@ -360,15 +348,6 @@
         <command>%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/flycast_libretro.so %ROM%</command>
         <platform>dreamcast</platform>
         <theme>dreamcast</theme>
-    </system>
-    <system>
-        <name>epic</name>
-        <fullname>Epic Games Store</fullname>
-        <path>%ROMPATH%/epic</path>
-        <extension>.sh</extension>
-        <command>bash %ROM%</command>
-        <platform>pc</platform>
-        <theme>epic</theme>
     </system>
     <system>
         <name>famicom</name>
@@ -524,15 +503,6 @@
         <command>%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/squirreljme_libretro.so %ROM%</command>
         <platform>android</platform>
         <theme>j2me</theme>
-    </system>
-    <system>
-        <name>kodi</name>
-        <fullname>Kodi Home Theatre Software</fullname>
-        <path>%ROMPATH%/kodi</path>
-        <extension>.sh</extension>
-        <command>bash %ROM%</command>
-        <platform>pc</platform>
-        <theme>kodi</theme>
     </system>
     <system>
         <name>lutris</name>
@@ -863,18 +833,6 @@
         <theme>palm</theme>
     </system>
     <system>
-        <name>pc</name>
-        <fullname>IBM PC</fullname>
-        <path>%ROMPATH%/pc</path>
-        <extension>.bat .BAT .com .COM .conf .CONF .cue .CUE .exe .EXE .iso .ISO .7z .7Z .zip .ZIP</extension>
-        <command label="DOSBox-Core">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/dosbox_core_libretro.so %ROM%</command>
-        <command label="DOSBox-Pure">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/dosbox_pure_libretro.so %ROM%</command>
-        <command label="DOSBox-SVN">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/dosbox_svn_libretro.so %ROM%</command>
-        <command label="DOSBox Staging (Standalone)">%EMULATOR_DOSBOX-STAGING% %ROM%</command>
-        <platform>pc</platform>
-        <theme>pc</theme>
-    </system>
-    <system>
         <name>pc88</name>
         <fullname>NEC PC-8800 Series</fullname>
         <path>%ROMPATH%/pc88</path>
@@ -930,15 +888,6 @@
         <command>%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/pokemini_libretro.so %ROM%</command>
         <platform>pokemini</platform>
         <theme>pokemini</theme>
-    </system>
-    <system>
-        <name>ports</name>
-        <fullname>Ports</fullname>
-        <path>%ROMPATH%/ports</path>
-        <extension>.sh</extension>
-        <command>bash %ROM%</command>
-        <platform>pc</platform>
-        <theme>ports</theme>
     </system>
     <system>
         <name>ps2</name>
@@ -1149,15 +1098,6 @@
         <command>%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/bluemsx_libretro.so %ROM%</command>
         <platform>spectravideo</platform>
         <theme>spectravideo</theme>
-    </system>
-    <system>
-        <name>steam</name>
-        <fullname>Valve Steam</fullname>
-        <path>%ROMPATH%/steam</path>
-        <extension>.sh</extension>
-        <command>%RUNINBACKGROUND% bash %ROM%</command>
-        <platform>steam</platform>
-        <theme>steam</theme>
     </system>
     <system>
         <name>stratagus</name>
@@ -1423,7 +1363,7 @@
         <fullname>RetroDECK Tools</fullname>
         <path>/var/config/retrodeck/tools</path>
         <extension>.sh .SH</extension>
-        <command>./%ROM%</command>
+        <command>bash %ROM%</command>
         <platform>tools</platform>
         <theme>tools</theme>
     </system>
