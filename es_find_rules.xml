@@ -59,16 +59,6 @@
             <entry>~/bin/Dolphin_Emulator*.AppImage</entry>
         </rule>
     </emulator>
-    <emulator name="DOSBOX-STAGING">
-        <!-- DOS emulator DOSBox Staging -->
-        <rule type="systempath">
-            <entry>dosbox-staging</entry>
-            <entry>io.github.dosbox-staging</entry>
-        </rule>
-        <rule type="staticpath">
-            <entry>/var/lib/flatpak/exports/bin/io.github.dosbox-staging</entry>
-        </rule>
-    </emulator>
     <emulator name="FS-UAE">
         <!-- Commodore Amiga emulator FS-UAE -->
         <rule type="systempath">
@@ -176,15 +166,6 @@
             <entry>~/Applications/yuzu*.AppImage</entry>
             <entry>~/.local/bin/yuzu*.AppImage</entry>
             <entry>~/bin/yuzu*.AppImage</entry>
-        </rule>
-    </emulator>
-    <emulator name="tools">
-        <!-- Linux shell-->
-        <rule type="systempath">
-            <entry>bash</entry>
-        </rule>
-        <rule type="staticpath">
-            <entry>/bin/bash</entry>
         </rule>
     </emulator>
 </ruleList>
