@@ -523,15 +523,6 @@
         <theme>lutro</theme>
     </system>
     <system>
-        <name>macintosh</name>
-        <fullname>Apple Macintosh</fullname>
-        <path>%ROMPATH%/macintosh</path>
-        <extension>.7z .7Z .zip .ZIP</extension>
-        <command>PLACEHOLDER %ROM%</command>
-        <platform>macintosh</platform>
-        <theme>macintosh</theme>
-    </system>
-    <system>
         <name>mame</name>
         <fullname>Multiple Arcade Machine Emulator</fullname>
         <path>%ROMPATH%/mame</path>
