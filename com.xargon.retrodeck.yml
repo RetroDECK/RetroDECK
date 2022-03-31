@@ -509,8 +509,6 @@ modules:
         - cp es_find_rules.xml /app/share/emulationstation/resources/systems/unix/
         - rm -rf /app/share/emulationstation/resources/systems/unix/es_systems.xml
         - cp es_systems.xml /app/share/emulationstation/resources/systems/unix/
-        - rm -rf /app/share/emulationstation/resources/systems/unix/es_input.xml
-        - cp es_input.xml /app/share/emulationstation/resources/systems/unix/
         # These must be put in home folder, managed by retrodeck.sh
         - mkdir -p ${FLATPAK_DEST}/retrodeck/
         - cp es_settings.xml ${FLATPAK_DEST}/retrodeck/es_settings.xml
@@ -538,8 +536,6 @@ modules:
         path: es_settings.xml
       - type: file
         path: es_systems.xml
-      - type: file
-        path: es_input.xml
       - type: file
         path: retrodeck.sh
       - type: file
