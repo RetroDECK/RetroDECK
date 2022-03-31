@@ -494,15 +494,6 @@ modules:
   - name: retrodeck
     buildsystem: simple
     build-commands:
-    
-        # RA is already doing this no?
-        #- rm -f ${FLATPAK_DEST}/etc/retroarch.cfg
-        #- mv retroarch.cfg ${FLATPAK_DEST}/etc/retroarch.cfg
-
-        # - symlink useful dirs and files in ~/retrodeck
-        # TODO: cannot see home folder at this point, same for es_settings.xml
-        #- ln -s ${FLATPAK_DEST}/etc/retroarch.cfg ~/retrodeck/retroarch.cfg
-        #- ln -s ${FLATPAK_DEST}/share/emulationstation/themes/ ~/retrodeck/
 
         # Prep the ES-DE and RetroArch config files
         - rm -rf /app/share/emulationstation/resources/systems/unix/es_find_rules.xml
@@ -513,10 +504,12 @@ modules:
         - mkdir -p ${FLATPAK_DEST}/retrodeck/
         - cp es_settings.xml ${FLATPAK_DEST}/retrodeck/es_settings.xml
         - cp retrodeck-retroarch.cfg ${FLATPAK_DEST}/retrodeck/retrodeck-retroarch.cfg
+        - cp systemfolders.zip ${FLATPAK_DEST}/retrodeck/
 
-        # Logo
+        # Logo, res
         - rm -f /app/share/emulationstation/resources/graphics/splash.svg
         - cp splash.svg /app/share/emulationstation/resources/graphics/splash.svg
+        - cp icon.svg /app/share/icons/hicolor/scalable/apps/com.xargon.retrodeck.svg
 
         # Tools
         - mkdir -p ${FLATPAK_DEST}/retrodeck/tools/
@@ -526,11 +519,12 @@ modules:
         - cp retrodeck.sh /app/bin/retrodeck.sh
         - chmod +x /app/bin/retrodeck.sh
 
+        # Desktop entry
+        - cp desktop_entry /app/share/applications/com.xargon.retrodeck.desktop
+
     #cleanup: ['*']
     sources:
-      #- type: file
-      #  path: retroarch.cfg
-      - type: file # Remove this when/if commited to ES-DE
+      - type: file
         path: es_find_rules.xml
       - type: file
         path: es_settings.xml
@@ -542,8 +536,11 @@ modules:
         path: retrodeck-retroarch.cfg
       - type: file
         path: tools-gamelist.xml
-      - type: file
-        path: res/splash.svg
+      - type: dir
+        path: res
       - type: dir
         path: tools
-    # create desktop entry
+      - type: file
+        path: desktop_entry
+      - type: file
+        path: systemfolders.zip
