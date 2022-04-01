@@ -504,7 +504,6 @@ modules:
         - mkdir -p ${FLATPAK_DEST}/retrodeck/
         - cp es_settings.xml ${FLATPAK_DEST}/retrodeck/es_settings.xml
         - cp retrodeck-retroarch.cfg ${FLATPAK_DEST}/retrodeck/retrodeck-retroarch.cfg
-        - cp systemfolders.zip ${FLATPAK_DEST}/retrodeck/
 
         # Logo, res
         - rm -f /app/share/emulationstation/resources/graphics/splash.svg
@@ -542,5 +541,3 @@ modules:
         path: tools
       - type: file
         path: desktop_entry
-      - type: file
-        path: systemfolders.zip
