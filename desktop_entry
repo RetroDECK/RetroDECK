@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=RetroDECK
-GenericName=Frontend for the libretro API
+GenericName=Emulation bundle for Steam Deck
 Type=Application
 Comment=All you need for emulation on Steam Deck
 Icon=com.xargon.retrodeck
