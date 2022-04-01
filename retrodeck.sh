@@ -17,6 +17,7 @@ then
         if is_mounted "/run/media/mmcblk0p1"
         then
             roms_folder=/run/media/mmcblk0p1/retrodeck/roms
+            mkdir -p /run/media/mmcblk0p1/retrodeck/
         else
             kdialog --title "RetroDECK" --error "SD Card is not readable, please check if it inserted or mounted correctly and run RetroDECK again."
             exit 0
@@ -31,10 +32,6 @@ then
     rm -rf /var/config/emulationstation/
     rm ~/retrodeck/bios
     rm /var/config/retrodeck/tools/*
-
-    ls -ln /var/config/ #DEBUG
-    ls -ln /var/config/emulationstation/.emulationstation #DEBUG
-    read -n 1 -r -s -p $'Press enter to continue...\n' #DEBUG
 
     kdialog --title "RetroDECK" --msgbox "EmulationStation will now initialize the system, please don't edit the rom location.\nJust select CREATE DIRECTORIES, YES, QUIT buttons.\nRetroDECK will manage the rest."
 
