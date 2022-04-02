@@ -9,7 +9,14 @@ echo "This script is helping the flatpak building in $INSTALL_DIR."
 read -n 1 -r -s -p $'Press enter to continue...\n'
 echo "Building RetroDECK, please stand by."
 
-sudo pacman -S flatpak-builder
+if command -v apt >/dev/null; then
+  sudo apt install flatpak-builder
+elif command -v yum >/dev/null; then
+  sudo yum install flatpak-builder # not sure about this
+else
+  sudo pacman -S flatpak-builder
+fi
+
 flatpak install org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08
 
 cd $INSTALL_DIR
