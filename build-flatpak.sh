@@ -9,8 +9,8 @@ echo "This script is helping the flatpak building in $INSTALL_DIR."
 read -n 1 -r -s -p $'Press enter to continue...\n'
 echo "Building RetroDECK, please stand by."
 
-if command -v apt >/dev/null; then
-  sudo apt install flatpak flatpak-builder
+if command -v apt-get >/dev/null; then
+  sudo apt-get install flatpak flatpak-builder
 elif command -v yum >/dev/null; then
   sudo yum install flatpak flatpak-builder # not sure about this
 else
