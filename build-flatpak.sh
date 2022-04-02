@@ -20,8 +20,8 @@ else
 fi
 
 echo "Initializing Flatpak"
-yes | sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-flatpak install org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08
+sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+flatpak install -y org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08
 
 cd $INSTALL_DIR
 
