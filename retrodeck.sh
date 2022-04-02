@@ -9,7 +9,12 @@ is_mounted() {
 # if we got the .lock file it means that it's not a first run
 if [ ! -f ~/retrodeck/.lock ]
 then
-    kdialog --title "RetroDECK" --yes-label "Internal" --no-label "SD Card" --yesno "Where do you want your rom folder to be located?"
+	kdialog --title "RetroDECK" --yes-label "Yes" --no-label "Quit" --yesno "Welcome to the first configuration of RetroDECK.\n\nBefore starting, are you in Desktop Mode?\nIf not the program will quit as the first setup MUST be done in Desktop Mode."
+	if [ $? == 1 ] #quit
+    then
+		exit 0
+	fi
+    kdialog --title "RetroDECK" --yes-label "Internal" --no-label "SD Card" --yesno "Where do you want your roms folder to be located?"
     if [ $? == 0 ] #yes - Internal
     then
         roms_folder=~/retrodeck/roms
@@ -33,11 +38,13 @@ then
     rm ~/retrodeck/bios
     rm /var/config/retrodeck/tools/*
 
-    kdialog --title "RetroDECK" --msgbox "EmulationStation will now initialize the system, please don't edit the rom location.\nJust select CREATE DIRECTORIES, YES, QUIT buttons.\nRetroDECK will manage the rest."
+    kdialog --title "RetroDECK" --msgbox "EmulationStation will now initialize the system, please don't edit the roms location, just select:\n\nCREATE DIRECTORIES, YES, QUIT\n\nRetroDECK will manage the rest."
 
     mkdir -p /var/config/emulationstation/
 
     emulationstation --home /var/config/emulationstation
+
+	kdialog --title "RetroDECK" --msgbox "RetroDECK will now install the needed files, please wait one minute, another message will notify when the process will be finished.\n\nPress OK to continue."
 
     mv /var/config/emulationstation/ROMs /var/config/emulationstation/ROMs.bak
     ln -s $roms_folder /var/config/emulationstation/ROMs
@@ -65,7 +72,7 @@ then
 
     touch ~/retrodeck/.lock
 
-    kdialog --title "RetroDECK" --msgbox "Initialization completed, please put your roms in: $roms_folder.\nIf you wish to change the roms location you may use the tool located the tools section of RetroDECK."
+    kdialog --title "RetroDECK" --msgbox "Initialization completed, please put your roms in: $roms_folder.\nIf you wish to change the roms location you may use the tool located the tools section of RetroDECK (coming soon)."
 else
     emulationstation --home /var/config/emulationstation
 fi
