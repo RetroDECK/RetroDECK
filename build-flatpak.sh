@@ -17,6 +17,7 @@ else
   sudo pacman -S flatpak flatpak-builder
 fi
 
+echo "Initializing Flatpak"
 flatpak install org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08
 
 cd $INSTALL_DIR
