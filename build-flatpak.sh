@@ -9,7 +9,9 @@ echo "This script is helping the flatpak building in $INSTALL_DIR."
 read -n 1 -r -s -p $'Press enter to continue...\n'
 echo "Building RetroDECK, please stand by."
 
-if command -v apt-get >/dev/null; then
+if command -v apt >/dev/null; then
+  sudo apt install flatpak flatpak-builder
+elif command -v apt-get >/dev/null; then
   sudo apt-get install flatpak flatpak-builder
 elif command -v yum >/dev/null; then
   sudo yum install flatpak flatpak-builder # not sure about this
@@ -18,6 +20,7 @@ else
 fi
 
 echo "Initializing Flatpak"
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 flatpak install org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08
 
 cd $INSTALL_DIR
