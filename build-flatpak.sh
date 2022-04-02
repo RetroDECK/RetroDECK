@@ -10,11 +10,11 @@ read -n 1 -r -s -p $'Press enter to continue...\n'
 echo "Building RetroDECK, please stand by."
 
 if command -v apt >/dev/null; then
-  sudo apt install flatpak-builder
+  sudo apt install flatpak flatpak-builder
 elif command -v yum >/dev/null; then
-  sudo yum install flatpak-builder # not sure about this
+  sudo yum install flatpak flatpak-builder # not sure about this
 else
-  sudo pacman -S flatpak-builder
+  sudo pacman -S flatpak flatpak-builder
 fi
 
 flatpak install org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08
