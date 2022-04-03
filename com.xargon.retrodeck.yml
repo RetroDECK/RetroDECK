@@ -35,6 +35,8 @@ cleanup:
 
 modules:
 
+  - rd-submodules/retroarch.yml
+
   - name: xmlstarlet
     config-opts:
       - --disable-static-libs
