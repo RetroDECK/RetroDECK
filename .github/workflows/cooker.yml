@@ -27,7 +27,7 @@ jobs:
 
       - name: Prepearing enviornment
         run: |
-          sudo apt install flatpak flatpak-builder 7z
+          sudo apt install flatpak flatpak-builder 7zip
           sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
           sudo flatpak install -y org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08 7z
       
