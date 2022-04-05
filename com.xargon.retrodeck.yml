@@ -190,11 +190,11 @@ modules:
         url: https://github.com/libretro/RetroArch.git
         branch: de4e56ecf28a09057734f8624af6d62f3088734f
       - type: dir
-        path: rd-submodules/retroarch/
-      - type: file
-        path: org.libretro.RetroArch.appdata.xml
-      - type: file
-        path: retroarch.cfg
+        path: rd-submodules/retroarch
+      #- type: file
+      #  path: org.libretro.RetroArch.appdata.xml
+      #- type: file
+      #  path: retroarch.cfg
     post-install:
       - mkdir -p ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/
       - >-
