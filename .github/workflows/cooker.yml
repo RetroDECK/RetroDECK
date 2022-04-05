@@ -29,8 +29,8 @@ jobs:
       - name: Build flatpak
         run: |
           sudo apt install flatpak flatpak-builder
-          flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-          flatpak install -y org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08
+          sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+          sudo flatpak install -y org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08
           sudo flatpak-builder --user --install --force-clean retrodeck-flatpak com.xargon.retrodeck.yml
           sudo flatpak-builder --repo=local --force-clean localrepo com.xargon.retrodeck.yml
           sudo flatpak build-bundle local RetroDECK.flatpak com.xargon.retrodeck
