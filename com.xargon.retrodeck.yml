@@ -190,9 +190,9 @@ modules:
         url: https://github.com/libretro/RetroArch.git
         branch: de4e56ecf28a09057734f8624af6d62f3088734f
       - type: file
-        path: rd-submodules/org.libretro.RetroArch.appdata.xml
+        path: rd-submodules/retroarch/org.libretro.RetroArch.appdata.xml
       - type: file
-        path: rd-submodules/retroarch.cfg
+        path: rd-submodules/retroarch/retroarch.cfg
     post-install:
       - mkdir -p ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/
       - >-
@@ -206,8 +206,8 @@ modules:
       - mkdir -p ${FLATPAK_DEST}/share/appdata
       - cp org.libretro.RetroArch.appdata.xml ${FLATPAK_DEST}/share/appdata
     modules:
-      - rd-submodules/libpng/libpng-1.6.35.json
-      - rd-submodules/nvidia-cg-toolkit/nvidia-cg-toolkit-3.1.0013.json
+      - rd-submodules/retroarch/libpng/libpng-1.6.35.json
+      - rd-submodules/retroarch/nvidia-cg-toolkit/nvidia-cg-toolkit-3.1.0013.json
       - shared-modules/SDL/SDL-1.2.15.json
       - shared-modules/SDL/SDL_image-1.2.12.json
       - shared-modules/SDL/SDL_mixer-1.2.12.json
@@ -215,11 +215,11 @@ modules:
       - shared-modules/SDL/SDL_ttf-2.0.11.json
       - shared-modules/libusb/libusb.json
       - shared-modules/gudev/gudev.json
-      - rd-submodules/libbz2/libbz2-1.0.8.json
-      - rd-submodules/xrandr/xrandr-1.5.1.json
-      - rd-submodules/libaio/libaio-0.3.112.json
-      - rd-submodules/shared-modules/glu/glu-9.json
-      - rd-submodules/libdecor/libdecor-0.1.0.json
+      - rd-submodules/retroarch/libbz2/libbz2-1.0.8.json
+      - rd-submodules/retroarch/xrandr/xrandr-1.5.1.json
+      - rd-submodules/retroarch/libaio/libaio-0.3.112.json
+      - rd-submodules/retroarch/shared-modules/glu/glu-9.json
+      - rd-submodules/retroarch/libdecor/libdecor-0.1.0.json
   - name: retroarch-filers-video
     subdir: gfx/video_filters
     make-install-args:
