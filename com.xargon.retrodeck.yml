@@ -193,6 +193,12 @@ modules:
         path: rd-submodules/retroarch/org.libretro.RetroArch.appdata.xml
       - type: file
         path: rd-submodules/retroarch/retroarch.cfg
+      #debug
+      - type: shell
+        commands:
+          - ls -ln
+          - BREAK
+      #/debug
     post-install:
       - mkdir -p ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/
       - >-
