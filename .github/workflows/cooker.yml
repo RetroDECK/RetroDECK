@@ -1,0 +1,65 @@
+# Due to the changes to the build systems actually on the branch integrated, this script will fail on main until merged
+
+name: Cooker
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ '*' ]
+  pull_request: 
+    branches: [ '*' ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build_cooker_snap:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      - name: Prepearing enviornment
+        run: |
+          sudo apt install flatpak flatpak-builder
+          sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+          sudo flatpak install -y org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08
+      
+      # Runs a set of commands using the runners shell
+      - name: Building flatpak
+        run: |
+          sudo flatpak-builder --user --install --force-clean retrodeck-flatpak com.xargon.retrodeck.yml
+          sudo flatpak-builder --repo=local --force-clean localrepo com.xargon.retrodeck.yml
+          sudo flatpak build-bundle local RetroDECK.flatpak com.xargon.retrodeck
+
+      - name: Publish the flatpak in a new cooker release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: "${{ steps.version.outputs.version }}"
+          body: |
+            # Release Notes (Cooker)
+            This is a cooker snapshot based on the commit: ${{ github.event.repository.full_name }}@${{github.sha}}.
+    
+            Cooker channel is provided for the community to test fixes and explore new functionality.  Please DO NOT open issues on this build and instead post in the `#pre-release-feedback` section of discord.
+            
+            See the [wiki](https://amberelec.org/Contributing-to-AmberELEC) for more info.
+            
+            ### Changes (since last prerelease version):
+            ${{ github.event.client_payload.release_notes }}
+            
+            ### Upgrade Instructions
+            You can update to this release using the `prerelease` channel on your device. This is the recommended way to use prerelease versions.
+
+
+          artifacts: "RetroDECK.flatpak"
+          allowUpdates: true
+          prerelease: true
+          draft: false
+          token: ${{ secrets.TRIGGER_BUILD_TOKEN }}
+          repo: RetroDECK-cooker
