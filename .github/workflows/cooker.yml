@@ -24,22 +24,18 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-
       - name: Prepearing enviornment
         run: |
           git submodule init
           git submodule update
-          sudo apt install flatpak flatpak-builder
-          sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-          sudo flatpak install -y org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08
-          flatpak --version
+          #sudo apt install flatpak flatpak-builder
+          #sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+          #sudo flatpak install -y org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08
+          #flatpak --version
       
       # Runs a set of commands using the runners shell
       - name: Building flatpak
-        run: |
-          sudo flatpak-builder --user --install --force-clean retrodeck-flatpak com.xargon.retrodeck.yml
-          sudo flatpak-builder --repo=local --force-clean localrepo com.xargon.retrodeck.yml
-          sudo flatpak build-bundle local RetroDECK.flatpak com.xargon.retrodeck
+        uses: louib/flatpak-action@1.0.3
 
       - name: Publish the flatpak in a new cooker release
         uses: ncipollo/release-action@v1
