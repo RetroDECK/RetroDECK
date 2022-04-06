@@ -458,8 +458,8 @@ modules:
     post-install:
       - install -Dm755 ../yuzu-launcher.sh /app/bin/yuzu-launcher
       - >-
-        install -Dm644 ../org.yuzu_emu.yuzu.metainfo.xml
-        /app/share/appdata/org.yuzu_emu.yuzu.metainfo.xml
+#        install -Dm644 ../org.yuzu_emu.yuzu.metainfo.xml
+#        /app/share/appdata/org.yuzu_emu.yuzu.metainfo.xml
       - desktop-file-install --dir=/app/share/applications ../dist/yuzu.desktop
       - >-
         desktop-file-edit --set-key StartupWMClass --set-value yuzu --set-key
@@ -482,8 +482,8 @@ modules:
         x-checker-data:
           type: git
           tag-pattern: ^(mainline-0-\d+)$
-      - type: file
-        path: org.yuzu_emu.yuzu.metainfo.xml
+      #- type: file
+      #  path: org.yuzu_emu.yuzu.metainfo.xml
       - type: file
         path: yuzu-launcher.sh
       - type: file
