@@ -15,33 +15,32 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  # This workflow contains a single job called "build"
   build_cooker_snap:
+    # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    container:
-      image: bilelmoussaoui/flatpak-github-actions:kde-5.15-21.08
-      options: --privileged
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-    
+
       - name: Prepearing enviornment
         run: |
           git submodule init
           git submodule update
+          sudo add-apt-repository ppa:alexlarsson/flatpak
+          sudo apt-get update
+          sudo apt install flatpak flatpak-builder 7z
+          sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+          sudo flatpak install -y org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08
       
       # Runs a set of commands using the runners shell
-      #- name: Building flatpak
-      #  run: |
-      #    flatpak-builder --user --install --force-clean retrodeck-flatpak com.xargon.retrodeck.yml
-      #    flatpak-builder --repo=local --force-clean localrepo com.xargon.retrodeck.yml
-      #    flatpak build-bundle local RetroDECK.flatpak com.xargon.retrodeck
-      
-      - name: Build Flatpak      
-        uses: bilelmoussaoui/flatpak-github-actions/flatpak-builder@v4
-        with:
-          bundle: RetroDECK.flatpak
-          manifest-path: com.xargon.retrodeck.yml
-          cache-key: flatpak-builder-${{ github.sha }}
+      - name: Building flatpak
+        run: |
+          sudo flatpak-builder --user --install --force-clean retrodeck-flatpak com.xargon.retrodeck.yml
+          sudo flatpak-builder --repo=local --force-clean localrepo com.xargon.retrodeck.yml
+          sudo flatpak build-bundle local RetroDECK.flatpak com.xargon.retrodeck
 
       - name: Publish the flatpak in a new cooker release
         uses: ncipollo/release-action@v1
