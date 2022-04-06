@@ -41,6 +41,7 @@ jobs:
           bundle: RetroDECK.flatpak
           manifest-path: com.xargon.retrodeck.yml
           cache-key: flatpak-builder-${{ github.sha }}
+          image: bilelmoussaoui/flatpak-github-actions:kde-5.15-21.08
 
       - name: Publish the flatpak in a new cooker release
         uses: ncipollo/release-action@v1
