@@ -27,10 +27,11 @@ jobs:
 
       - name: Prepearing enviornment
         run: |
+          git submodule init
+          git submodule update
           sudo apt install flatpak flatpak-builder
           sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
           sudo flatpak install -y org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08
-          git submodule update
       
       # Runs a set of commands using the runners shell
       - name: Building flatpak
