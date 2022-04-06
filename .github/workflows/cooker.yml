@@ -42,10 +42,14 @@ jobs:
           sudo flatpak-builder --repo=local --force-clean localrepo com.xargon.retrodeck.yml
           sudo flatpak build-bundle local RetroDECK.flatpak com.xargon.retrodeck
 
+      - name: Get date for artifacts
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y%m%d_%H%M')"
+
       - name: Publish the flatpak in a new cooker release
         uses: ncipollo/release-action@v1
         with:
-          tag: "${{ steps.version.outputs.version }}"
+          tag: "${{ steps.date.outputs.date }}"
           body: |
             # Release Notes (Cooker)
             This is a cooker snapshot based on the commit: ${{ github.event.repository.full_name }}@${{github.sha}}.
