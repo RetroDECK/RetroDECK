@@ -23,6 +23,7 @@ jobs:
     steps:
     
       - uses: actions/checkout@v3
+    
       - name: Prepearing enviornment
         run: |
           git submodule init
@@ -35,8 +36,8 @@ jobs:
       #    flatpak-builder --repo=local --force-clean localrepo com.xargon.retrodeck.yml
       #    flatpak build-bundle local RetroDECK.flatpak com.xargon.retrodeck
       
-      - uses: bilelmoussaoui/flatpak-github-actions/flatpak-builder@v4
-      - name: Build Flatpak
+      - name: Build Flatpak      
+        uses: bilelmoussaoui/flatpak-github-actions/flatpak-builder@v4
         with:
           bundle: RetroDECK.flatpak
           manifest-path: com.xargon.retrodeck.yml
