@@ -54,7 +54,8 @@ jobs:
             # Release Notes (Cooker)
             This is a cooker snapshot based on the commit: ${{ github.event.repository.full_name }}@${{github.sha}}.
     
-            Cooker channel is provided for the community to test fixes and explore new functionality. Please DO NOT open issues or ask support on this build.
+            Cooker channel is provided for the community to test fixes and explore new functionality.
+            Please DO NOT open issues or ask support on this build.
             
             ### Changes (since last prerelease version):
             ${{ github.event.client_payload.release_notes }}
