@@ -64,7 +64,7 @@ then
 
     cp /app/retrodeck/retrodeck-retroarch.cfg /var/config/retroarch/retroarch.cfg
 
-    mkdir -p /var/config/emulationstation/.emulationstation/gamelists/tools/
+    mkdir -p /var/config/emulationstation/.emulationstation/custom_systems/tools/
     cp /app/retrodeck/tools-gamelist.xml /var/config/emulationstation/.emulationstation/custom_systems/tools/gamelist.xml
 
     mkdir -p /var/config/retroarch/cores/
@@ -72,7 +72,7 @@ then
 
     touch ~/retrodeck/.lock
 
-    kdialog --title "RetroDECK" --msgbox "Initialization completed, please put your roms in: $roms_folder.\nIf you wish to change the roms location you may use the tool located the tools section of RetroDECK (coming soon)."
+    kdialog --title "RetroDECK" --msgbox "Initialization completed.\nplease put your roms in:\n\n$roms_folder.\n\nIf you wish to change the roms location, you may use the tool located the tools section of RetroDECK."
 else
     emulationstation --home /var/config/emulationstation
 fi
