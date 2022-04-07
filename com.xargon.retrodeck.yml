@@ -638,6 +638,7 @@ modules:
   # arduboy
   # pocket station
   # cemu - win only: wine
+  # Anbox?
 
 
   # External manifests end
