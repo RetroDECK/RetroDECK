@@ -22,12 +22,13 @@ then
         if is_mounted "/run/media/mmcblk0p1"
         then
             roms_folder=/run/media/mmcblk0p1/retrodeck/roms
-            mkdir -p /run/media/mmcblk0p1/retrodeck/
         else
             kdialog --title "RetroDECK" --error "SD Card is not readable, please check if it inserted or mounted correctly and run RetroDECK again."
             exit 0
         fi
     fi
+
+    mkdir -p $roms_folder
 
     # initializing ES-DE
 
@@ -35,7 +36,6 @@ then
 
     # Cleaning
     rm -rf /var/config/emulationstation/
-    rm ~/retrodeck/bios
     rm /var/config/retrodeck/tools/*
 
     kdialog --title "RetroDECK" --msgbox "EmulationStation will now initialize the system, please don't edit the roms location, just select:\n\nCREATE DIRECTORIES, YES, QUIT\n\nRetroDECK will manage the rest."
@@ -46,9 +46,9 @@ then
 
 	kdialog --title "RetroDECK" --msgbox "RetroDECK will now install the needed files, please wait one minute, another message will notify when the process will be finished.\n\nPress OK to continue."
 
-    mv /var/config/emulationstation/ROMs /var/config/emulationstation/ROMs.bak
+    mv -f /var/config/emulationstation/ROMs /var/config/emulationstation/ROMs.bak
     ln -s $roms_folder /var/config/emulationstation/ROMs
-    mv /var/config/emulationstation/ROMs.bak $roms_folder
+    mv -f /var/config/emulationstation/ROMs.bak/* $roms_folder/
 
     # XMLSTARLET HERE
     cp /app/retrodeck/es_settings.xml /var/config/emulationstation/.emulationstation/es_settings.xml
@@ -56,11 +56,12 @@ then
     mkdir -p ~/retrodeck/saves
     mkdir -p ~/retrodeck/states
     mkdir -p ~/retrodeck/screenshots
+    mkdir -p ~/retrodeck/bios
 
     cp -r /app/retrodeck/tools/* /var/config/retrodeck/tools
 
-    mkdir -p /var/config/retroarch/system
-    ln -s ~/.var/app/com.xargon.retrodeck/config/retroarch/system ~/retrodeck/bios
+    rm -rf /var/config/retroarch/system
+    ln -s ~/retrodeck/bios /var/config/retroarch/system
 
     cp /app/retrodeck/retrodeck-retroarch.cfg /var/config/retroarch/retroarch.cfg
 
@@ -72,7 +73,7 @@ then
 
     touch ~/retrodeck/.lock
 
-    kdialog --title "RetroDECK" --msgbox "Initialization completed.\nplease put your roms in:\n\n$roms_folder.\n\nIf you wish to change the roms location, you may use the tool located the tools section of RetroDECK."
+    kdialog --title "RetroDECK" --msgbox "Initialization completed.\nplease put your roms in:\n\n$roms_folder.\n\nand start the program again.\nIf you wish to change the roms location, you may use the tool located the tools section of RetroDECK.\n\nIt's suggested to add RetroDECK to your Steam Library for a quick access."
 else
     emulationstation --home /var/config/emulationstation
 fi
