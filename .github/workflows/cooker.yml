@@ -54,15 +54,11 @@ jobs:
             # Release Notes (Cooker)
             This is a cooker snapshot based on the commit: ${{ github.event.repository.full_name }}@${{github.sha}}.
     
-            Cooker channel is provided for the community to test fixes and explore new functionality.  Please DO NOT open issues on this build and instead post in the `#pre-release-feedback` section of discord.
-            
-            See the [wiki](https://amberelec.org/Contributing-to-AmberELEC) for more info.
+            Cooker channel is provided for the community to test fixes and explore new functionality.
+            Please DO NOT open issues or ask support on this build.
             
             ### Changes (since last prerelease version):
             ${{ github.event.client_payload.release_notes }}
-            
-            ### Upgrade Instructions
-            You can update to this release using the `prerelease` channel on your device. This is the recommended way to use prerelease versions.
 
 
           artifacts: "RetroDECK.flatpak"
