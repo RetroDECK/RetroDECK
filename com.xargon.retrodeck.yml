@@ -666,6 +666,7 @@ modules:
         # Tools
         - mkdir -p ${FLATPAK_DEST}/retrodeck/tools/
         - cp start-retroarch.sh ${FLATPAK_DEST}/retrodeck/tools/
+        - cp move-roms.sh ${FLATPAK_DEST}/retrodeck/tools/
         - cp tools-gamelist.xml ${FLATPAK_DEST}/retrodeck/
         
         - cp retrodeck.sh /app/bin/retrodeck.sh
