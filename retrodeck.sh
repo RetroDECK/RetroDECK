@@ -57,9 +57,8 @@ then
     mkdir -p ~/retrodeck/states
     mkdir -p ~/retrodeck/screenshots
     mkdir -p ~/retrodeck/bios
-    mkdir -p ~/retrodeck/.tools
 
-    cp -r /app/retrodeck/tools/* /var/config/retrodeck/.tools/
+    cp -r /app/retrodeck/tools/* /var/config/retrodeck/tools/
 
     rm -rf /var/config/retroarch/system
     ln -s ~/retrodeck/bios /var/config/retroarch/system
