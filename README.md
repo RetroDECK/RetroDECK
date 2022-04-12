@@ -18,11 +18,7 @@ No, I don't support Windows, but the project is fully opensource so you can port
 **Can I help?**\
 Of course, any help is appreciated.
 
-#If you want to build the RetroDECK flatpak on your machine for developing or just testing purposes:
-#```
-#git clone --recursive https://github.com/XargonWan/RetroDECK.git
-#cd RetroDECK
-#./build-retrodeck.sh
-#```
+If you want to build the RetroDECK flatpak on your machine for developing or just testing purposes:
+***Coming soon***
 
 Join our [Discord](https://discord.gg/Dz3szYsP8g)!
