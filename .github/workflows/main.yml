@@ -1,4 +1,4 @@
-# This is a basic workflow to help you get started with Actions
+# Due to the changes to the build systems actually on the branch integrated, this script will fail on main until merged
 
 name: main
 
@@ -18,7 +18,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build:
+  build_cooker_snap:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -27,10 +27,42 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      # Runs a set of commands using the runners shell
-      - name: Build flatpak
+      - name: Prepearing enviornment
         run: |
-          sudo ./build-flatpak.sh
+          git submodule init
+          git submodule update
+          sudo add-apt-repository ppa:alexlarsson/flatpak
+          sudo apt-get update
+          sudo apt install flatpak flatpak-builder p7zip-full
+          sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+          sudo flatpak install -y org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08 io.qt.qtwebengine.BaseApp/x86_64/5.15-21.08
+      
+      # Runs a set of commands using the runners shell
+      - name: Building flatpak
+        run: |
           sudo flatpak-builder --user --install --force-clean retrodeck-flatpak com.xargon.retrodeck.yml
           sudo flatpak-builder --repo=local --force-clean localrepo com.xargon.retrodeck.yml
           sudo flatpak build-bundle local RetroDECK.flatpak com.xargon.retrodeck
+
+      - name: Get date for artifacts
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y%m%d_%H%M')"
+
+      - name: Publish the flatpak in a new cooker release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: "${{ steps.date.outputs.date }}"
+          body: |
+            # Release Notes
+            
+            Changelog:
+            - 
+            - 
+            -
+
+          artifacts: "RetroDECK.flatpak"
+          allowUpdates: true
+          prerelease: true
+          draft: true
+          token: ${{ secrets.TRIGGER_BUILD_TOKEN }}
+          repo: RetroDECK
