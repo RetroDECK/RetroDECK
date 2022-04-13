@@ -19,7 +19,7 @@ finish-args:
    - --share=network
    - --device=all
    - --filesystem=~/retrodeck:create
-   - --filesystem=/run/media/mmcblk0p1
+   - --filesystem=/run/media
    - --allow=multiarch
    - --talk-name=org.freedesktop.ScreenSaver
    - --talk-name=org.freedesktop.PowerManagement.Inhibit
