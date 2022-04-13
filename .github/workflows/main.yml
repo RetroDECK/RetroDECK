@@ -1,6 +1,6 @@
 # Due to the changes to the build systems actually on the branch integrated, this script will fail on main until merged
 
-name: Main
+name: main
 
 # Controls when the workflow will run
 on:
