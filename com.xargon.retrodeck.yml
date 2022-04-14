@@ -86,11 +86,9 @@ modules:
     - --disable-programs
     - --disable-doc
     - --enable-gpl
-    - --enable-nonfree
     - --enable-shared
     - --enable-libvorbis
     - --enable-libopus
-    - --enable-libfdk-aac
     - --enable-libvpx
     - --enable-postproc
     sources:
