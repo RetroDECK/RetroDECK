@@ -27,7 +27,7 @@ finish-args:
    - --filesystem=home:ro
   # - --filesystem=/run/media:ro
   # Dolphin
-  - --allow=bluetooth
+   - --allow=bluetooth
   #- --env=QT_QPA_PLATFORM=xcb not sure if this will break something
 
 cleanup:
