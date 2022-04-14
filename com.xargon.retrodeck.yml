@@ -26,6 +26,9 @@ finish-args:
   # Yuzu
    - --filesystem=home:ro
   # - --filesystem=/run/media:ro
+  # Dolphin
+  - --allow=bluetooth
+  #- --env=QT_QPA_PLATFORM=xcb not sure if this will break something
 
 cleanup:
   # ES-DE
@@ -579,12 +582,199 @@ modules:
 
   # pcsx2 - END
 
+  # Dolphin - START
+
+  # needed for the emulate bluetooth adapter feature to work
+  - name: bluez
+    config-opts:
+      - --enable-library
+      - --disable-manpages
+      - --disable-udev
+      - --disable-tools
+      - --disable-cups
+      - --disable-monitor
+      - --disable-client
+      - --disable-systemd
+      - --disable-a2dp
+      - --disable-avrcp
+      - --disable-network
+      - --with-dbusconfdir=/app/etc
+      - --with-dbussessionbusdir=/app/usr/lib/system-services
+    sources:
+      - type: archive
+        url: https://www.kernel.org/pub/linux/bluetooth/bluez-5.64.tar.xz
+        sha256: ae437e65b6b3070c198bc5b0109fe9cdeb9eaa387380e2072f9de65fe8a1de34
+        x-checker-data:
+          type: anitya
+          project-id: 10029
+          stable-only: true
+          url-template: https://www.kernel.org/pub/linux/bluetooth/bluez-$version.tar.xz
+
+  # enables motion controls on non-wii controllers (switch, ps4, etc)
+  # requires a udev rule enabling Motion Sensors access
+  - name: libevdev
+    buildsystem: meson
+    config-opts:
+      - -Dtests=disabled
+      - -Ddocumentation=disabled
+    sources:
+      - type: archive
+        url: https://www.freedesktop.org/software/libevdev/libevdev-1.12.1.tar.xz
+        sha256: 1dbba41bc516d3ca7abc0da5b862efe3ea8a7018fa6e9b97ce9d39401b22426c
+        x-checker-data:
+          type: anitya
+          project-id: 20540
+          stable-only: true
+          url-template: https://www.freedesktop.org/software/libevdev/libevdev-$version.tar.xz
+
+  # needed for screensaver inhibition
+  - name: xdg-screensaver-shim
+    buildsystem: meson
+    sources:
+      - type: archive
+        url: https://github.com/Unrud/xdg-screensaver-shim/archive/0.0.2.tar.gz
+        sha256: 0ed2a69fe6ee6cbffd2fe16f85116db737f17fb1e79bfb812d893cf15c728399
+
+  - name: dolphin-emu
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DENABLE_ALSA=OFF
+      - -DENABLE_SDL=ON
+      - -DENABLE_EVDEV=ON
+      - -DDISTRIBUTOR=Flathub
+    cleanup:
+      - /share/man
+    post-install:
+      - install -D dolphin-emu-wrapper /app/bin/dolphin-emu-wrapper
+      - install -Dm644 appdata.xml /app/share/appdata/dolphin-emu.appdata.xml
+      - sed -i -e 's/"2048"/"512"/g' /app/share/icons/hicolor/scalable/apps/dolphin-emu.svg
+      - desktop-file-edit --set-key=Exec --set-value='/app/bin/dolphin-emu-wrapper'
+        /app/share/applications/dolphin-emu.desktop
+    sources:
+      - type: git
+        url: https://github.com/dolphin-emu/dolphin.git
+        commit: 8ecfa537a242de74d2e372e30d9d79b14584b2fb
+      # detects whether dolphin is running in a flatpak sandbox
+      # and makes it use xdg directories if it is.
+      # prevents dolphin from attempting to write conf files
+      # in non-writable paths, typically happens when a user
+      # has leftover files from a previous non-flatpak install
+      - type: patch
+        path: rd-submodules/dolphin/detectflatpak.patch
+      # version strings must match exactly for online multiplayer
+      - type: patch
+        path: rd-submodules/dolphin/nodirtyversion.patch
+      - type: file
+        path: rd-submodules/dolphin/appdata.xml
+      - type: script
+        commands:
+          - for i in {0..9}; do
+          - test -S $XDG_RUNTIME_DIR/discord-ipc-$i || ln -sf {app/com.discordapp.Discord,$XDG_RUNTIME_DIR}/discord-ipc-$i;
+          - done
+          - dolphin-emu "$@"
+        dest-filename: dolphin-emu-wrapper
+
+  # Dolphin - END
+
+  # RPCS3 - START
+
+  - name: rpcs3-llvm
+    buildsystem: cmake-ninja
+    builddir: true
+    build-options:
+      cflags: &optflags -O2 -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong
+        -grecord-gcc-switches -fasynchronous-unwind-tables -fstack-clash-protection
+        -fcf-protection -fno-omit-frame-pointer
+      cflags-override: true
+      cxxflags: -O2 -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong
+        -grecord-gcc-switches -fasynchronous-unwind-tables -fstack-clash-protection
+        -fcf-protection -fno-omit-frame-pointer -msse -msse2 -mcx16
+      cxxflags-override: true
+      env:
+        AR: llvm-ar
+        CC: clang
+        CXX: clang++
+        RANLIB: llvm-ranlib
+      ldflags: -fuse-ld=lld
+      prepend-ld-library-path: /usr/lib/sdk/llvm13/lib
+      prepend-path: /usr/lib/sdk/llvm13/bin
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DBUILD_SHARED_LIBS=OFF
+      - -DLLVM_CCACHE_BUILD=ON
+      - -DLLVM_TARGETS_TO_BUILD='X86'
+      - -DLLVM_BUILD_RUNTIME=OFF
+      - -DLLVM_BUILD_TOOLS=OFF
+      - -DLLVM_INCLUDE_DOCS=OFF
+      - -DLLVM_INCLUDE_EXAMPLES=OFF
+      - -DLLVM_INCLUDE_TESTS=OFF
+      - -DLLVM_INCLUDE_TOOLS=OFF
+      - -DLLVM_INCLUDE_UTILS=OFF
+      - -DLLVM_USE_INTEL_JITEVENTS=ON
+      - -DLLVM_USE_PERF=ON
+      - -DLLVM_ENABLE_Z3_SOLVER=OFF
+      - -DCMAKE_CXX_STANDARD=17
+      - -DITTAPI_SOURCE_DIR=/run/build/rpcs3-llvm/ittapi
+      - -Wno-dev
+    cleanup:
+      - '*'
+    sources:
+      - type: git
+        url: https://github.com/RPCS3/llvm-mirror.git
+        branch: master
+        commit: 509d31ad89676522f7121b3bb8688f7d29b7ee60
+      - type: git
+        url: https://github.com/intel/ittapi.git
+        dest: ittapi/ittapi
+        disable-shallow-clone: true
+
+  - name: rpcs3
+    buildsystem: cmake-ninja
+    builddir: true
+    build-options:
+      append-ld-library-path: /usr/lib/sdk/llvm13/lib
+      append-path: /usr/lib/sdk/llvm13/bin
+      cflags: *optflags
+      cflags-override: true
+      cxxflags: *optflags
+      cxxflags-override: true
+      env:
+        AR: llvm-ar
+        CC: clang
+        CXX: clang++
+        RANLIB: llvm-ranlib
+      ldflags: -fuse-ld=lld
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
+      - -DBUILD_LLVM_SUBMODULE=OFF
+      - -DUSE_NATIVE_INSTRUCTIONS=OFF
+      - -DUSE_PRECOMPILED_HEADERS=OFF
+      - -DUSE_SYSTEM_CURL=ON
+      - -DUSE_SYSTEM_FFMPEG=ON
+      - -DUSE_SYSTEM_LIBPNG=ON
+      - -DUSE_SYSTEM_ZLIB=ON
+      - -Wno-dev
+    post-install:
+      - |
+        set -eux;
+        sed -i 's|<id>RPCS3</id>|<id>net.rpcs3.RPCS3</id>|' ${FLATPAK_DEST}/share/metainfo/rpcs3.metainfo.xml;
+        COMM_TAG="$(awk -F'[\{,]' '/version{.*}/{printf "%d.%d.%d", $2, $3, $4}' ../rpcs3/rpcs3_version.cpp)";
+        COMM_COUNT="$(git rev-list --count HEAD)";
+        COMM_HASH="$(git rev-parse --short=8 HEAD)";
+        sed -i 's|</component>|<content_rating type="oars-1.1"/><releases><release date="'$(git show -s --format=%cs)'" version="'"${COMM_TAG}"'-'"${COMM_COUNT}"'-'"${COMM_HASH}"'"/></releases></component>|' ${FLATPAK_DEST}/share/metainfo/rpcs3.metainfo.xml;
+    sources:
+      - type: git
+        url: https://github.com/RPCS3/rpcs3.git
+        branch: master
+        commit: d6b026314409980734605e9275950f835f04e8df
+
+  # RPCS3 - END
+
 
   # Ryujinx
   # Xemu
-  # Rpcs3
   # vita3k
-  # dolphin
   # arduboy
   # pocket station
   # cemu - win only: wine
