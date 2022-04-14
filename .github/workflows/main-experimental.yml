@@ -41,8 +41,7 @@ jobs:
       - name: Building flatpak
         run: |
           mkdir clean
-          ls
-          cp com.xargon.retrodeck clean/com.xargon.retrodeck
+          cp com.xargon.retrodeck.yml clean/com.xargon.retrodeck.yml
           cd clean
           sudo flatpak-builder --user --install --force-clean retrodeck-flatpak com.xargon.retrodeck.yml
           sudo flatpak-builder --repo=local --force-clean localrepo com.xargon.retrodeck.yml
