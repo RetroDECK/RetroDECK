@@ -884,6 +884,69 @@ modules:
 
   # Ryujinx - END
 
+  # CITRA - START
+  # https://github.com/flathub/org.citra_emu.citra
+
+  - name: citra
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
+      - '-DCMAKE_BUILD_TYPE=Release'
+      - '-DENABLE_QT_TRANSLATION=ON'
+      - '-DCITRA_ENABLE_COMPATIBILITY_REPORTING=ON'
+      - '-DENABLE_COMPATIBILITY_LIST_DOWNLOAD=ON'
+      - '-DENABLE_FFMPEG_VIDEO_DUMPER=ON'
+      - '-DENABLE_FDK=ON'
+    build-options:
+      env:
+        CI: '1'
+        GITHUB_ACTIONS: '1'
+        GITHUB_REPOSITORY: citra-emu/citra-nightly
+        GIT_TAG_NAME: nightly-1759
+    cleanup:
+      - /share/man
+      - /share/pixmaps
+    post-install:
+      - >-
+        install -Dm644 ../org.citra_emu.citra.metainfo.xml
+        /app/share/appdata/org.citra_emu.citra.metainfo.xml
+      - desktop-file-install --dir=/app/share/applications ../dist/citra.desktop
+      - echo 'StartupWMClass=citra-qt' >> /app/share/applications/citra.desktop
+      - >-
+        install -Dm644 ../dist/citra.svg
+        /app/share/icons/hicolor/scalable/apps/citra.svg
+      - >-
+        install -Dm644 ../dist/icon.png
+        /app/share/icons/hicolor/512x512/apps/citra.png
+      - >-
+        mv /app/share/mime/packages/citra.xml
+        /app/share/mime/packages/org.citra_emu.citra.xml
+      - >-
+        sed 's/citra/org.citra_emu.citra/g' -i
+        /app/share/mime/packages/org.citra_emu.citra.xml
+    sources:
+      - type: git
+        url: 'https://github.com/citra-emu/citra-nightly.git'
+        tag: nightly-1759
+        commit: 3df43f9505505fbe2abb543c795f791615541cd4
+        disable-shallow-clone: true
+        x-checker-data:
+          type: git
+          tag-pattern: ^(nightly-\d+)$
+          is-main-source: true
+      - type: file
+        path: org.citra_emu.citra.metainfo.xml
+      - type: file
+        path: compatibility_list.json
+        dest-filename: compatibility_list.json
+      - type: shell
+        commands:
+          - >-
+            cp -v compatibility_list.json
+            dist/compatibility_list/compatibility_list.json
+
+  # CITRA - END
+
 
   # vita3k
   # arduboy

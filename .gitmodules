@@ -16,3 +16,6 @@
 [submodule "rd-submodules/ryujinx"]
 	path = rd-submodules/ryujinx
 	url = https://github.com/flathub/org.ryujinx.Ryujinx.git
+[submodule "rd-submodules/citra"]
+	path = rd-submodules/citra
+	url = https://github.com/flathub/org.citra_emu.citra.git
