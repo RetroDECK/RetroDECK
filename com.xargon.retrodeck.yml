@@ -672,6 +672,8 @@ modules:
   # Dolphin - END
 
   # RPCS3 - START
+  # Disabled because of this error:
+  # https://github.com/flathub/net.rpcs3.RPCS3/issues/854
 
   #- name: rpcs3-llvm
   #  buildsystem: cmake-ninja
@@ -765,9 +767,68 @@ modules:
   #
   # RPCS3 - END
 
+  # XEMU - START
+
+  - name: libglu
+    buildsystem: meson
+    cleanup:
+      - /include
+      - /lib/debug
+      - /lib/pkgconfig
+      - /lib/*.a
+    sources:
+      - type: archive
+        url: https://mesa.freedesktop.org/archive/glu/glu-9.0.2.tar.xz
+        sha256: 6e7280ff585c6a1d9dfcdf2fca489251634b3377bfc33c29e4002466a38d02d4
+        x-checker-data:
+          type: anitya
+          project-id: 13518
+          stable-only: true
+          url-template: https://mesa.freedesktop.org/archive/glu/glu-$version.tar.xz
+
+  - name: xemu
+    buildsystem: autotools
+    builddir: true
+    no-make-install: true
+    build-options:
+      cflags: -O3 -DXBOX=1 -Wno-error=redundant-decls
+    config-opts:
+      - --audio-drv-list=sdl
+      - --disable-werror
+      - --target-list=i386-softmmu
+    make-args:
+      - qemu-system-i386
+    post-install:
+      - |-
+        for px in 16 32 48 64 128 256 512; do
+          install -Dm644 ../ui/icons/xemu_${px}x${px}.png /app/share/icons/hicolor/${px}x${px}/apps/app.xemu.xemu.png
+        done
+      - install -Dm644 ../ui/icons/xemu.svg /app/share/icons/hicolor/scalable/apps/app.xemu.xemu.svg
+      - desktop-file-install ../ui/xemu.desktop --dir /app/share/applications
+      - sed -i 's/^Icon=xemu/Icon=app.xemu.xemu/' /app/share/applications/xemu.desktop
+      - mv qemu-system-i386 /app/bin/xemu
+      - mkdir -p /app/share/licenses/xemu
+      - cd .. && python3 scripts/gen-license.py > /app/share/licenses/xemu/LICENSE.txt
+      #- install -Dm644 ../app.xemu.xemu.metainfo.xml /app/share/metainfo/app.xemu.xemu.metainfo.xml
+    sources:
+      - type: git
+        url: https://github.com/mborgerson/xemu.git
+        tag: gh-release/0.6.2-90-g6f507c80af
+        commit: 6f507c80af546e0f5d316622d20f78820423ce6e
+        x-checker-data:
+          type: json
+          url: https://api.github.com/repos/mborgerson/xemu/releases/latest
+          tag-query: .tag_name
+          version-query: $tag | sub("^gh-release/"; "")
+          timestamp-query: .published_at
+          is-main-source: true
+
+      - type: file
+        #path: app.xemu.xemu.metainfo.xml
+
+  # XEMU - END
 
   # Ryujinx
-  # Xemu
   # vita3k
   # arduboy
   # pocket station
