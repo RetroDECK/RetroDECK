@@ -13,3 +13,6 @@
 [submodule "rd-submodules/dolphin"]
 	path = rd-submodules/dolphin
 	url = https://github.com/flathub/org.DolphinEmu.dolphin-emu
+[submodule "rd-submodules/ryujinx"]
+	path = rd-submodules/ryujinx
+	url = https://github.com/flathub/org.ryujinx.Ryujinx.git
