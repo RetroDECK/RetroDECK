@@ -677,93 +677,93 @@ modules:
   # Disabled because of this error:
   # https://github.com/flathub/net.rpcs3.RPCS3/issues/854
 
-  - name: rpcs3-llvm
-    buildsystem: cmake-ninja
-    builddir: true
-    build-options:
-      cflags: &optflags -O2 -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong
-        -grecord-gcc-switches -fasynchronous-unwind-tables -fstack-clash-protection
-        -fcf-protection -fno-omit-frame-pointer
-      cflags-override: true
-      cxxflags: -O2 -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong
-        -grecord-gcc-switches -fasynchronous-unwind-tables -fstack-clash-protection
-        -fcf-protection -fno-omit-frame-pointer -msse -msse2 -mcx16
-      cxxflags-override: true
-      env:
-        AR: llvm-ar
-        CC: clang
-        CXX: clang++
-        RANLIB: llvm-ranlib
-      ldflags: -fuse-ld=lld
-      prepend-ld-library-path: /usr/lib/sdk/llvm13/lib
-      prepend-path: /usr/lib/sdk/llvm13/bin
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-      - -DBUILD_SHARED_LIBS=OFF
-      - -DLLVM_CCACHE_BUILD=ON
-      - -DLLVM_TARGETS_TO_BUILD='X86'
-      - -DLLVM_BUILD_RUNTIME=OFF
-      - -DLLVM_BUILD_TOOLS=OFF
-      - -DLLVM_INCLUDE_DOCS=OFF
-      - -DLLVM_INCLUDE_EXAMPLES=OFF
-      - -DLLVM_INCLUDE_TESTS=OFF
-      - -DLLVM_INCLUDE_TOOLS=OFF
-      - -DLLVM_INCLUDE_UTILS=OFF
-      - -DLLVM_USE_INTEL_JITEVENTS=ON
-      - -DLLVM_USE_PERF=ON
-      - -DLLVM_ENABLE_Z3_SOLVER=OFF
-      - -DCMAKE_CXX_STANDARD=17
-      - -DITTAPI_SOURCE_DIR=/run/build/rpcs3-llvm/ittapi
-      - -Wno-dev
-    cleanup:
-      - '*'
-    sources:
-      - type: git
-        url: https://github.com/RPCS3/llvm-mirror.git
-        commit: 509d31ad89676522f7121b3bb8688f7d29b7ee60
-      - type: git
-        url: https://github.com/intel/ittapi.git
-        dest: ittapi/ittapi
-        disable-shallow-clone: true
+  # - name: rpcs3-llvm
+  #   buildsystem: cmake-ninja
+  #   builddir: true
+  #   build-options:
+  #     cflags: &optflags -O2 -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong
+  #       -grecord-gcc-switches -fasynchronous-unwind-tables -fstack-clash-protection
+  #       -fcf-protection -fno-omit-frame-pointer
+  #     cflags-override: true
+  #     cxxflags: -O2 -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong
+  #       -grecord-gcc-switches -fasynchronous-unwind-tables -fstack-clash-protection
+  #       -fcf-protection -fno-omit-frame-pointer -msse -msse2 -mcx16
+  #     cxxflags-override: true
+  #     env:
+  #       AR: llvm-ar
+  #       CC: clang
+  #       CXX: clang++
+  #       RANLIB: llvm-ranlib
+  #     ldflags: -fuse-ld=lld
+  #     prepend-ld-library-path: /usr/lib/sdk/llvm13/lib
+  #     prepend-path: /usr/lib/sdk/llvm13/bin
+  #   config-opts:
+  #     - -DCMAKE_BUILD_TYPE=Release
+  #     - -DBUILD_SHARED_LIBS=OFF
+  #     - -DLLVM_CCACHE_BUILD=ON
+  #     - -DLLVM_TARGETS_TO_BUILD='X86'
+  #     - -DLLVM_BUILD_RUNTIME=OFF
+  #     - -DLLVM_BUILD_TOOLS=OFF
+  #     - -DLLVM_INCLUDE_DOCS=OFF
+  #     - -DLLVM_INCLUDE_EXAMPLES=OFF
+  #     - -DLLVM_INCLUDE_TESTS=OFF
+  #     - -DLLVM_INCLUDE_TOOLS=OFF
+  #     - -DLLVM_INCLUDE_UTILS=OFF
+  #     - -DLLVM_USE_INTEL_JITEVENTS=ON
+  #     - -DLLVM_USE_PERF=ON
+  #     - -DLLVM_ENABLE_Z3_SOLVER=OFF
+  #     - -DCMAKE_CXX_STANDARD=17
+  #     - -DITTAPI_SOURCE_DIR=/run/build/rpcs3-llvm/ittapi
+  #     - -Wno-dev
+  #   cleanup:
+  #     - '*'
+  #   sources:
+  #     - type: git
+  #       url: https://github.com/RPCS3/llvm-mirror.git
+  #       commit: 509d31ad89676522f7121b3bb8688f7d29b7ee60
+  #     - type: git
+  #       url: https://github.com/intel/ittapi.git
+  #       dest: ittapi/ittapi
+  #       disable-shallow-clone: true
   
-  - name: rpcs3
-    buildsystem: cmake-ninja
-    builddir: true
-    build-options:
-      append-ld-library-path: /usr/lib/sdk/llvm13/lib
-      append-path: /usr/lib/sdk/llvm13/bin
-      cflags: *optflags
-      cflags-override: true
-      cxxflags: *optflags
-      cxxflags-override: true
-      env:
-        AR: llvm-ar
-        CC: clang
-        CXX: clang++
-        RANLIB: llvm-ranlib
-      ldflags: -fuse-ld=lld
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
-      - -DBUILD_LLVM_SUBMODULE=OFF
-      - -DUSE_NATIVE_INSTRUCTIONS=OFF
-      - -DUSE_PRECOMPILED_HEADERS=OFF
-      - -DUSE_SYSTEM_CURL=ON
-      - -DUSE_SYSTEM_FFMPEG=ON
-      - -DUSE_SYSTEM_LIBPNG=ON
-      - -DUSE_SYSTEM_ZLIB=ON
-      - -Wno-dev
-    post-install:
-      - |
-        set -eux;
-        sed -i 's|<id>RPCS3</id>|<id>net.rpcs3.RPCS3</id>|' ${FLATPAK_DEST}/share/metainfo/rpcs3.metainfo.xml;
-        COMM_TAG="$(awk -F'[\{,]' '/version{.*}/{printf "%d.%d.%d", $2, $3, $4}' ../rpcs3/rpcs3_version.cpp)";
-        COMM_COUNT="$(git rev-list --count HEAD)";
-        COMM_HASH="$(git rev-parse --short=8 HEAD)";
-        sed -i 's|</component>|<content_rating type="oars-1.1"/><releases><release date="'$(git show -s --format=%cs)'" version="'"${COMM_TAG}"'-'"${COMM_COUNT}"'-'"${COMM_HASH}"'"/></releases></component>|' ${FLATPAK_DEST}/share/metainfo/rpcs3.metainfo.xml;
-    sources:
-      - type: git
-        url: https://github.com/RPCS3/rpcs3.git
-        commit: d6b026314409980734605e9275950f835f04e8df
+  # - name: rpcs3
+  #   buildsystem: cmake-ninja
+  #   builddir: true
+  #   build-options:
+  #     append-ld-library-path: /usr/lib/sdk/llvm13/lib
+  #     append-path: /usr/lib/sdk/llvm13/bin
+  #     cflags: *optflags
+  #     cflags-override: true
+  #     cxxflags: *optflags
+  #     cxxflags-override: true
+  #     env:
+  #       AR: llvm-ar
+  #       CC: clang
+  #       CXX: clang++
+  #       RANLIB: llvm-ranlib
+  #     ldflags: -fuse-ld=lld
+  #   config-opts:
+  #     - -DCMAKE_BUILD_TYPE=RelWithDebInfo
+  #     - -DBUILD_LLVM_SUBMODULE=OFF
+  #     - -DUSE_NATIVE_INSTRUCTIONS=OFF
+  #     - -DUSE_PRECOMPILED_HEADERS=OFF
+  #     - -DUSE_SYSTEM_CURL=ON
+  #     - -DUSE_SYSTEM_FFMPEG=ON
+  #     - -DUSE_SYSTEM_LIBPNG=ON
+  #     - -DUSE_SYSTEM_ZLIB=ON
+  #     - -Wno-dev
+  #   post-install:
+  #     - |
+  #       set -eux;
+  #       sed -i 's|<id>RPCS3</id>|<id>net.rpcs3.RPCS3</id>|' ${FLATPAK_DEST}/share/metainfo/rpcs3.metainfo.xml;
+  #       COMM_TAG="$(awk -F'[\{,]' '/version{.*}/{printf "%d.%d.%d", $2, $3, $4}' ../rpcs3/rpcs3_version.cpp)";
+  #       COMM_COUNT="$(git rev-list --count HEAD)";
+  #       COMM_HASH="$(git rev-parse --short=8 HEAD)";
+  #       sed -i 's|</component>|<content_rating type="oars-1.1"/><releases><release date="'$(git show -s --format=%cs)'" version="'"${COMM_TAG}"'-'"${COMM_COUNT}"'-'"${COMM_HASH}"'"/></releases></component>|' ${FLATPAK_DEST}/share/metainfo/rpcs3.metainfo.xml;
+  #   sources:
+  #     - type: git
+  #       url: https://github.com/RPCS3/rpcs3.git
+  #       commit: d6b026314409980734605e9275950f835f04e8df
   
   # RPCS3 - END
 
@@ -771,62 +771,58 @@ modules:
   # https://github.com/flathub/app.xemu.xemu
   # Disabled because of this: https://github.com/XargonWan/RetroDECK/runs/6033071862?check_suite_focus=true
 
-  # - name: libglu
-  #   buildsystem: meson
-  #   cleanup:
-  #     - /include
-  #     - /lib/debug
-  #     - /lib/pkgconfig
-  #     - /lib/*.a
-  #   sources:
-  #     - type: archive
-  #       url: https://mesa.freedesktop.org/archive/glu/glu-9.0.2.tar.xz
-  #       sha256: 6e7280ff585c6a1d9dfcdf2fca489251634b3377bfc33c29e4002466a38d02d4
-  #       x-checker-data:
-  #         type: anitya
-  #         project-id: 13518
-  #         stable-only: true
-  #         url-template: https://mesa.freedesktop.org/archive/glu/glu-$version.tar.xz
+  - name: libglu
+    buildsystem: meson
+    cleanup:
+      - /include
+      - /lib/debug
+      - /lib/pkgconfig
+      - /lib/*.a
+    sources:
+      - type: archive
+        url: https://mesa.freedesktop.org/archive/glu/glu-9.0.2.tar.xz
+        sha256: 6e7280ff585c6a1d9dfcdf2fca489251634b3377bfc33c29e4002466a38d02d4
+        x-checker-data:
+          type: anitya
+          project-id: 13518
+          stable-only: true
+          url-template: https://mesa.freedesktop.org/archive/glu/glu-$version.tar.xz
 
-  # - name: xemu
-  #   buildsystem: autotools
-  #   builddir: true
-  #   no-make-install: true
-  #   build-options:
-  #     cflags: -O3 -DXBOX=1 -Wno-error=redundant-decls
-  #   config-opts:
-  #     - --audio-drv-list=sdl
-  #     - --disable-werror
-  #     - --target-list=i386-softmmu
-  #   make-args:
-  #     - qemu-system-i386
-  #   post-install:
-  #     - |-
-  #       for px in 16 32 48 64 128 256 512; do
-  #         install -Dm644 ../ui/icons/xemu_${px}x${px}.png /app/share/icons/hicolor/${px}x${px}/apps/app.xemu.xemu.png
-  #       done
-  #     - install -Dm644 ../ui/icons/xemu.svg /app/share/icons/hicolor/scalable/apps/app.xemu.xemu.svg
-  #     - desktop-file-install ../ui/xemu.desktop --dir /app/share/applications
-  #     - sed -i 's/^Icon=xemu/Icon=app.xemu.xemu/' /app/share/applications/xemu.desktop
-  #     - mv qemu-system-i386 /app/bin/xemu
-  #     - mkdir -p /app/share/licenses/xemu
-  #     - cd .. && python3 scripts/gen-license.py > /app/share/licenses/xemu/LICENSE.txt
-  #     #- install -Dm644 ../app.xemu.xemu.metainfo.xml /app/share/metainfo/app.xemu.xemu.metainfo.xml
-  #   sources:
-  #     - type: git
-  #       url: https://github.com/mborgerson/xemu.git
-  #       tag: gh-release/0.6.2-90-g6f507c80af
-  #       commit: 6f507c80af546e0f5d316622d20f78820423ce6e
-  #       x-checker-data:
-  #         type: json
-  #         url: https://api.github.com/repos/mborgerson/xemu/releases/latest
-  #         tag-query: .tag_name
-  #         version-query: $tag | sub("^gh-release/"; "")
-  #         timestamp-query: .published_at
-  #         is-main-source: true
-
-  #     - type: file
-  #       #path: app.xemu.xemu.metainfo.xml
+  - name: xemu
+    buildsystem: autotools
+    builddir: true
+    no-make-install: true
+    build-options:
+      cflags: -O3 -DXBOX=1 -Wno-error=redundant-decls
+    config-opts:
+      - --audio-drv-list=sdl
+      - --disable-werror
+      - --target-list=i386-softmmu
+    make-args:
+      - qemu-system-i386
+    post-install:
+      - |-
+        for px in 16 32 48 64 128 256 512; do
+          install -Dm644 ../ui/icons/xemu_${px}x${px}.png /app/share/icons/hicolor/${px}x${px}/apps/app.xemu.xemu.png
+        done
+      - install -Dm644 ../ui/icons/xemu.svg /app/share/icons/hicolor/scalable/apps/app.xemu.xemu.svg
+      - desktop-file-install ../ui/xemu.desktop --dir /app/share/applications
+      - sed -i 's/^Icon=xemu/Icon=app.xemu.xemu/' /app/share/applications/xemu.desktop
+      - mv qemu-system-i386 /app/bin/xemu
+      - mkdir -p /app/share/licenses/xemu
+      - cd .. && python3 scripts/gen-license.py > /app/share/licenses/xemu/LICENSE.txt
+    sources:
+      - type: git
+        url: https://github.com/mborgerson/xemu.git
+        tag: gh-release/0.6.2-90-g6f507c80af
+        commit: 6f507c80af546e0f5d316622d20f78820423ce6e
+        x-checker-data:
+          type: json
+          url: https://api.github.com/repos/mborgerson/xemu/releases/latest
+          tag-query: .tag_name
+          version-query: $tag | sub("^gh-release/"; "")
+          timestamp-query: .published_at
+          is-main-source: true
 
   # XEMU - END
 
