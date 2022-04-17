@@ -7,10 +7,10 @@ on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
     branches:
-     - cooker
+     - cooker*
   pull_request: 
     branches:
-     - cooker
+     - cooker*
 
 # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
