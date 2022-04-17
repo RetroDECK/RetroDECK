@@ -35,7 +35,7 @@ jobs:
           sudo apt-get update
           sudo apt install flatpak flatpak-builder p7zip-full
           sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-          sudo flatpak install -y org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08 io.qt.qtwebengine.BaseApp/x86_64/5.15-21.08
+          sudo flatpak install -y org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08 io.qt.qtwebengine.BaseApp/x86_64/5.15-21.08 org.freedesktop.Sdk.Extension.dotnet6
       
       # Runs a set of commands using the runners shell
       - name: Building flatpak
