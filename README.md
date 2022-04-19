@@ -13,7 +13,7 @@ Means that all the configurations are ready to go and tweaked to get the best gr
 No partitioning or formatting is required. RetroDECK (differently from AmberELEC, Batocera and others) comes as a flatpak: just install it as any other application and launch it from your desktop or Steam library. You still retain the ability to return to SteamOS by pressing the Steam button or opening the Quick Access menu while using RetroDECK.
 
 **Is it available on Windows?**\
-No, RetroDECK doesn't support Windows, but the project is fully opensource so you can port it if you wish.
+No, RetroDECK doesn't support Windows, but the project is fully opensource so you can port it if you wish. As an alternative, [Retrobat](http://www.retrobat.ovh/) offers similar functionality (but may not be compatible with RetroDECK's rom paths).
 
 **Can I help?**\
 Of course, any help is appreciated.
