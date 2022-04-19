@@ -4,16 +4,16 @@
 
 It's inspired from embedded emulation systems like AmberELEC, EmuELEC, CoreELEC, Lakka, and Batocera.
 
-Powered by [EmulationStation Desktop Edition](https://es-de.org), RetroArch and standalone emulators allows you to import your favorite retro (but even not-so-retro) games in a tidy enviornment without flooding your Steam library.
+Powered by [EmulationStation Desktop Edition](https://es-de.org), which uses RetroArch and other standalone emulators to allow you to import and play your favorite retro (and even not-so-retro) games in a tidy enviornment without flooding your Steam library.
 
 **What does it means "tailored for the Steam Deck"?**\
-Means that all the configurations are ready and tweaked to get the best graphics and perfomances on the Deck itself without having the hassle to choose, install and congifure tons of emulators: just put your games in the roms folder, provide your own bioses and you can start your games.
+Means that all the configurations are ready to go and tweaked to get the best graphics and perfomance on the Deck without having the hassle of choosing, installing and configuring tons of emulators: just put your games in the roms folder, provide your own bioses and start your games.
 
 **Do I have to partition my disk to install it?**\
-No, no partitioning or format is required: RetroDECK, diffrentely from AmberELEC, Batocera & co. comes as a flatpak: just install it as any other application and launch it from your desktop or Steam library.
+No partitioning or formatting is required. RetroDECK (differently from AmberELEC, Batocera and others) comes as a flatpak: just install it as any other application and launch it from your desktop or Steam library. You still retain the ability to return to SteamOS by pressing the Steam button or opening the Quick Access menu while using RetroDECK.
 
 **Is it available on Windows?**\
-No, I don't support Windows, but the project is fully opensource so you can port it if you wish.
+No, RetroDECK doesn't support Windows, but the project is fully opensource so you can port it if you wish.
 
 **Can I help?**\
 Of course, any help is appreciated.
