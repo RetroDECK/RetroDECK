@@ -1,8 +1,8 @@
 #!/bin/bash
 
-if [ -d ~/retrodeck/roms ] && [ -d ~/retrodeck/roms ]
+if [ -d ~/retrodeck/roms ] && [ -d /run/media/mmcblk0p1/retrodeck/roms ]
 then # found both internal and sd folders
-    kdialog --title "RetroDECK" --warning "I found a roms folder both in internal and SD Card, in order to make this tool useful you should remove one of the two."
+    kdialog --title "RetroDECK" --warning "I found a roms folder both in internal and SD Card, in order to make this tool useful you should remove one of the two or merge them."
     exit 0
 fi
 
