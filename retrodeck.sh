@@ -67,7 +67,7 @@ then
     cp /app/retrodeck/retrodeck-retroarch.cfg /var/config/retroarch/retroarch.cfg
 
     mkdir -p /var/config/emulationstation/.emulationstation/custom_systems/tools/
-    cp /app/retrodeck/tools-gamelist.xml /var/config/emulationstation/.emulationstation/custom_systems/tools/gamelist.xml
+    cp /app/retrodeck/tools-gamelist.xml /var/config/retrodeck/tools/gamelist.xml
 
     mkdir -p /var/config/retroarch/cores/
     cp /app/share/libretro/cores/* /var/config/retroarch/cores/
