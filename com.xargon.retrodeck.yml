@@ -986,8 +986,7 @@ modules:
         - chmod +x /app/bin/retrodeck.sh
 
         # Configuring Yuzu
-        - sed -i -e 's/Paths\romsPath=*' -e 's/Paths\romsPath=~/retrodeck/roms/switch' /var/config/yuzu/qt-config.ini
-        - sed -i -e 's/Screenshots\screenshot_path=*' -e 's/Screenshots\screenshot_path=~/retrodeck/screenshots/' /var/config/yuzu/qt-config.ini
+        - cp qt-config.ini /var/config/yuzu/qt-config.ini
 
         # Desktop entry
         - cp com.xargon.retrodeck.desktop /app/share/applications/com.xargon.retrodeck.desktop
@@ -1002,8 +1001,8 @@ modules:
         path: es_systems.xml
       - type: file
         path: retrodeck.sh
-      - type: file
-        path: retrodeck-retroarch.cfg
+      - type: dir
+        path: emu-configs
       - type: file
         path: tools-gamelist.xml
       - type: dir
