@@ -12,7 +12,7 @@ cd ~/flathub
 rm -rf shared-submodules
 rm -rf rd-submodules
 
-# # rebuilding submodules
+# rebuilding submodules
 git config -f .gitmodules --get-regexp '^submodule\..*\.path$' |
     while read path_key path
     do
@@ -38,12 +38,8 @@ git config -f .gitmodules --get-regexp '^submodule\..*\.path$' |
 git submodule sync;
 
 # Now actually pull all the modules. I used to use this...
-#
-# git submodule update --init --remote --force --recursive
-# ...but the submodules would check out in detached HEAD state and I 
-# didn't like that, so now I do this...
-
 git submodule foreach --recursive 'git checkout $(git config -f $toplevel/.gitmodules submodule.$name.branch || echo master)';
+
 rm flathub-pr.sh
 git add *
 git commit -m "Updating flathub"
