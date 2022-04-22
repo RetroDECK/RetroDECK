@@ -37,6 +37,7 @@ then
     # Cleaning
     rm -rf /var/config/emulationstation/
     rm /var/config/retrodeck/tools/*
+    rm -f /var/config/yuzu/qt-config.ini
 
     kdialog --title "RetroDECK" --msgbox "EmulationStation will now initialize the system, please don't edit the roms location, just select:\n\nCREATE DIRECTORIES, YES, QUIT\n\nRetroDECK will manage the rest."
 
@@ -64,6 +65,7 @@ then
     rm -rf /var/config/retroarch/system
     ln -s ~/retrodeck/bios /var/config/retroarch/system
 
+    # This should become a sed in the future
     cp /app/retrodeck/retrodeck-retroarch.cfg /var/config/retroarch/retroarch.cfg
 
     mkdir -p /var/config/emulationstation/.emulationstation/custom_systems/tools/
@@ -71,6 +73,11 @@ then
 
     mkdir -p /var/config/retroarch/cores/
     cp /app/share/libretro/cores/* /var/config/retroarch/cores/
+
+    # Initializing Yuzu
+    mkdir -p ~/retrodeck/bios/switch/keys
+    ln -s ~/retrodeck/bios/switch/keys /var/data/yuzu/keys
+    ln -s /var/data/yuzu/registered ~/retrodeck/bios/switch/registered
 
     touch ~/retrodeck/.lock
 
