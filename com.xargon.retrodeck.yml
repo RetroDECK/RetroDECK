@@ -988,6 +988,10 @@ modules:
         # Desktop entry
         - cp com.xargon.retrodeck.desktop /app/share/applications/com.xargon.retrodeck.desktop
 
+        # Configuring Dolphin
+        - mkdir -p /var/config/dolphin-emu/
+        - cp Dolphin.ini /var/config/dolphin-emu/
+
     #cleanup: ['*']
     sources:
       - type: file
@@ -998,8 +1002,8 @@ modules:
         path: es_systems.xml
       - type: file
         path: retrodeck.sh
-      - type: file
-        path: retrodeck-retroarch.cfg
+      - type: dir
+        path: emu-configs
       - type: file
         path: tools-gamelist.xml
       - type: dir
