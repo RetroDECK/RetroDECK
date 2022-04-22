@@ -54,7 +54,7 @@ jobs:
       - name: Publish the flatpak in a new cooker release
         uses: ncipollo/release-action@v1
         with:
-          tag: "${{ steps.extract_branch.outputs.branch }}" + "-" + "${{ steps.date.outputs.date }}"
+          tag: "${{ steps.extract_branch.outputs.branch }}-${{ steps.date.outputs.date }}"
           body: |
             # Release Notes (Cooker)
             This is a cooker snapshot based on the commit: ${{ github.event.repository.full_name }}@${{github.sha}}.
