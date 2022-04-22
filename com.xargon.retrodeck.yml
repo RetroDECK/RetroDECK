@@ -990,7 +990,7 @@ modules:
 
         # Setup pcsx2
         - mkdir -p /var/config/PCSX2/inis/
-        - cp PCSX2_ui.ini /var/config/PCSX2/inis/PCSX2_ui.ini
+        - cp PCSX2_ui.ini /var/config/PCSX2/inis/
 
     #cleanup: ['*']
     sources:
