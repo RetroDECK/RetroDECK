@@ -72,6 +72,10 @@ then
     mkdir -p /var/config/retroarch/cores/
     cp /app/share/libretro/cores/* /var/config/retroarch/cores/
 
+    # pcsx2
+    mkdir -p /var/config/PCSX2/inis/
+    cp /var/config/retroarch/emu-configs/PCSX2_ui.ini /var/config/PCSX2/inis/PCSX2_ui.ini
+
     touch ~/retrodeck/.lock
 
     kdialog --title "RetroDECK" --msgbox "Initialization completed.\nplease put your roms in:\n\n$roms_folder\n\nand your bioses in\n\n~/retrodeck/bios\n\nThen start the program again.\nIf you wish to change the roms location, you may use the tool located the tools section of RetroDECK.\n\nIt's suggested to add RetroDECK to your Steam Library for a quick access."

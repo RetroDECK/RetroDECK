@@ -988,10 +988,9 @@ modules:
         # Desktop entry
         - cp com.xargon.retrodeck.desktop /app/share/applications/com.xargon.retrodeck.desktop
 
-        # Setup pcsx2
-        - mkdir -p /var/config/PCSX2/inis/
-        - ls -l /var/config/PCSX2/ #debug
-        - cp PCSX2_ui.ini /var/config/PCSX2/inis/
+        # Pcsx2
+        - mkdir -p ${FLATPAK_DEST}/retrodeck/emu-configs
+        - cp PCSX2_ui.ini ${FLATPAK_DEST}/retrodeck/emu-configs/PCSX2_ui.ini
 
     #cleanup: ['*']
     sources:
