@@ -984,8 +984,8 @@ modules:
         
         - cp retrodeck.sh /app/bin/retrodeck.sh
         - chmod +x /app/bin/retrodeck.sh
-
-	      # Yuzu
+        
+        # Yuzu
         - mkdir -p ${FLATPAK_DEST}/retrodeck/emu-configs
         - cp qt-config.ini ${FLATPAK_DEST}/retrodeck/emu-configs
 
