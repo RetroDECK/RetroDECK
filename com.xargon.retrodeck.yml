@@ -17,6 +17,7 @@ finish-args:
    - --device=all
    - --filesystem=~/retrodeck:create
    - --filesystem=/run/media
+   - --filesystem=/media
    - --allow=multiarch
    - --talk-name=org.freedesktop.ScreenSaver
    - --talk-name=org.freedesktop.PowerManagement.Inhibit
@@ -127,7 +128,7 @@ modules:
     sources:
     - type: git
       url: https://gitlab.com/leonstyhre/emulationstation-de.git
-      branch: c3fc30cfd5c26195024e0da328349d83af067b9e
+      commit: c3fc30cfd5c26195024e0da328349d83af067b9e
 
   # ES-DE - END
 
@@ -139,7 +140,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/anthonycaccese/art-book-next-de.git
-        branch: 4452f8356819d3cd079549b113fb15edb919a0df
+        commit: 4452f8356819d3cd079549b113fb15edb919a0df
 
 
   # External manifests start
@@ -156,8 +157,6 @@ modules:
         url: https://github.com/libretro/RetroArch.git
         branch: de4e56ecf28a09057734f8624af6d62f3088734f
       - type: file
-        path: rd-submodules/retroarch/org.libretro.RetroArch.appdata.xml
-      - type: file
         path: rd-submodules/retroarch/retroarch.cfg
     post-install:
       - mkdir -p ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/
@@ -169,20 +168,18 @@ modules:
       - >-
         sed s:@prefix@:${FLATPAK_DEST}:g retroarch.cfg >
         ${FLATPAK_DEST}/etc/retroarch.cfg
-      - mkdir -p ${FLATPAK_DEST}/share/appdata
-      - cp org.libretro.RetroArch.appdata.xml ${FLATPAK_DEST}/share/appdata
     modules:
-      - nvidia-cg-toolkit/nvidia-cg-toolkit-3.1.0013.json
+      - rd-submodules/retroarch/nvidia-cg-toolkit/nvidia-cg-toolkit-3.1.0013.json
       - shared-modules/SDL/SDL-1.2.15.json
       - shared-modules/SDL/SDL_image-1.2.12.json
       - shared-modules/SDL/SDL_mixer-1.2.12.json
       - shared-modules/SDL/SDL_net-1.2.8.json
       - shared-modules/libusb/libusb.json
       - shared-modules/gudev/gudev.json
-      - libbz2/libbz2-1.0.8.json
-      - libaio/libaio-0.3.112.json
+      - rd-submodules/retroarch/libbz2/libbz2-1.0.8.json
+      - rd-submodules/retroarch/libaio/libaio-0.3.112.json
       - shared-modules/glu/glu-9.json
-      - libdecor/libdecor-0.1.0.json
+      - rd-submodules/retroarch/libdecor/libdecor-0.1.0.json
   - name: retroarch-filers-video
     subdir: gfx/video_filters
     make-install-args:
@@ -190,7 +187,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/RetroArch.git
-        commit: de4e56ecf28a09057734f8624af6d62f3088734f
+        branch: de4e56ecf28a09057734f8624af6d62f3088734f
   - name: retroarch-filers-audio
     subdir: libretro-common/audio/dsp_filters
     make-install-args:
@@ -198,7 +195,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/RetroArch.git
-        commit: de4e56ecf28a09057734f8624af6d62f3088734f
+        branch: de4e56ecf28a09057734f8624af6d62f3088734f
   - name: retroarch-assets
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
@@ -407,9 +404,6 @@ modules:
       - /share/pixmaps
     post-install:
       - install -Dm755 ../yuzu-launcher.sh /app/bin/yuzu-launcher
-      - >-
-        install -Dm644 ../org.yuzu_emu.yuzu.metainfo.xml
-        /app/share/appdata/org.yuzu_emu.yuzu.metainfo.xml
       - desktop-file-install --dir=/app/share/applications ../dist/yuzu.desktop
       - >-
         desktop-file-edit --set-key StartupWMClass --set-value yuzu --set-key
@@ -432,8 +426,6 @@ modules:
         x-checker-data:
           type: git
           tag-pattern: ^(mainline-0-\d+)$
-      - type: file
-        path: rd-submodules/yuzu/org.yuzu_emu.yuzu.metainfo.xml
       - type: file
         path: rd-submodules/yuzu/yuzu-launcher.sh
       - type: file
@@ -460,7 +452,6 @@ modules:
           type: git
           tag-pattern: ^v([\d.]+)$
     modules:
-      - shared-modules/glu/glu-9.json
   - name: libaio
     no-autogen: true
     make-install-args:
@@ -560,16 +551,11 @@ modules:
       - >-
         install -Dm644 ../AppIcon128.png
         /app/share/icons/hicolor/128x128/apps/PCSX2.png
-      - >-
-        install -Dm644 ../net.pcsx2.PCSX2.metainfo.xml
-        /app/share/metainfo/net.pcsx2.PCSX2.metainfo.xml
     sources:
       - type: git
         url: https://github.com/PCSX2/pcsx2.git
         tag: v1.7.2554
         commit: 0d1675fbaa0d40874df98eed6270efc55620271b
-      - type: file
-        path: rd-submodules/pcsx2/net.pcsx2.PCSX2.metainfo.xml
       - type: file
         path: rd-submodules/pcsx2/AppIcon128.png
 
