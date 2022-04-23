@@ -987,7 +987,7 @@ modules:
 
         # Configuring Yuzu
         - mkdir -p /var/config/yuzu/
-        - cp qt-config.ini /var/config/yuzu/
+        - cp qt-config.ini /var/config/yuzu/qt-config.ini
 
         # Desktop entry
         - cp com.xargon.retrodeck.desktop /app/share/applications/com.xargon.retrodeck.desktop
