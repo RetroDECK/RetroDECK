@@ -74,10 +74,13 @@ then
     mkdir -p /var/config/retroarch/cores/
     cp /app/share/libretro/cores/* /var/config/retroarch/cores/
 
-    # Initializing Yuzu
-    mkdir -p ~/retrodeck/bios/switch/keys
+    # Yuzu
+    mkdir -p ~/retrodeck/bios/switch/
+    mkdir -p /var/config/yuzu/keys
+    mkdir -p /var/data/yuzu/registered
     ln -s ~/retrodeck/bios/switch/keys /var/data/yuzu/keys
     ln -s /var/data/yuzu/registered ~/retrodeck/bios/switch/registered
+    cp /var/config/retroarch/emu-configs/qt-config.ini /var/config/yuzu/qt-config.ini
 
     touch ~/retrodeck/.lock
 

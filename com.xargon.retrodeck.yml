@@ -985,9 +985,9 @@ modules:
         - cp retrodeck.sh /app/bin/retrodeck.sh
         - chmod +x /app/bin/retrodeck.sh
 
-        # Configuring Yuzu
-        - mkdir -p /var/config/yuzu/
-        - cp qt-config.ini /var/config/yuzu/qt-config.ini
+	      # Yuzu
+        - mkdir -p ${FLATPAK_DEST}/retrodeck/emu-configs
+        - cp qt-config.ini ${FLATPAK_DEST}/retrodeck/emu-configs
 
         # Desktop entry
         - cp com.xargon.retrodeck.desktop /app/share/applications/com.xargon.retrodeck.desktop
