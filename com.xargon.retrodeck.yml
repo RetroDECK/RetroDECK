@@ -988,9 +988,9 @@ modules:
         # Desktop entry
         - cp com.xargon.retrodeck.desktop /app/share/applications/com.xargon.retrodeck.desktop
 
-        # Configuring Dolphin
-        - mkdir -p /var/config/dolphin-emu/
-        - cp Dolphin.ini /var/config/dolphin-emu/Dolphin.ini
+        # Configuring Initializing emu-configs (Dolphin)
+        - mkdir -p ${FLATPAK_DEST}/retrodeck/emu-configs
+        - cp Dolphin.ini ${FLATPAK_DEST}/retrodeck/emu-configs
 
     #cleanup: ['*']
     sources:
