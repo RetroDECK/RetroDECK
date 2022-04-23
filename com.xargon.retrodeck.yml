@@ -775,6 +775,8 @@ modules:
         - cp Dolphin.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
         # Yuzu
         - cp qt-config.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
+        # Pcsx2
+        - cp PCSX2_ui.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
 
     #cleanup: ['*']
     sources:

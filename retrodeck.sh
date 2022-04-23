@@ -85,6 +85,11 @@ then
     mkdir -p /var/config/dolphin-emu/
     cp $emuconfigs/Dolphin.ini /var/config/dolphin-emu/
 
+    # pcsx2
+    mkdir -p /var/config/PCSX2/inis/
+    cp $emuconfigs/PCSX2_ui.ini /var/config/PCSX2/inis/
+
+
     # Locking RetroDECK
     touch ~/retrodeck/.lock
 
