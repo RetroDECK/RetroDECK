@@ -37,6 +37,7 @@ then
     # Cleaning
     rm -rf /var/config/emulationstation/
     rm /var/config/retrodeck/tools/*
+    rm -f /var/config/yuzu/qt-config.ini
 
     kdialog --title "RetroDECK" --msgbox "EmulationStation will now initialize the system, please don't edit the roms location, just select:\n\nCREATE DIRECTORIES, YES, QUIT\n\nRetroDECK will manage the rest."
 
@@ -64,6 +65,7 @@ then
     rm -rf /var/config/retroarch/system
     ln -s ~/retrodeck/bios /var/config/retroarch/system
 
+    # This should become a sed in the future
     cp /app/retrodeck/retrodeck-retroarch.cfg /var/config/retroarch/retroarch.cfg
 
     mkdir -p /var/config/emulationstation/.emulationstation/custom_systems/tools/
@@ -74,10 +76,19 @@ then
 
     # Initializing standalone emulators configs
 
-    #Dolphin
+    # Yuzu
+    mkdir -p ~/retrodeck/bios/switch/
+    mkdir -p /var/config/yuzu/keys
+    mkdir -p /var/data/yuzu/registered
+    ln -s ~/retrodeck/bios/switch/keys /var/data/yuzu/keys
+    ln -s /var/data/yuzu/registered ~/retrodeck/bios/switch/registered
+    cp /var/config/retroarch/emu-configs/qt-config.ini /var/config/yuzu/qt-config.ini
+
+    # Dolphin
     mkdir -p /var/config/dolphin-emu/
     cp /var/config/retroarch/emu-configs/Dolphin.ini /var/config/dolphin-emu/Dolphin.ini
 
+    # Locking RetroDECK
     touch ~/retrodeck/.lock
 
     kdialog --title "RetroDECK" --msgbox "Initialization completed.\nplease put your roms in:\n\n$roms_folder\n\nand your bioses in\n\n~/retrodeck/bios\n\nThen start the program again.\nIf you wish to change the roms location, you may use the tool located the tools section of RetroDECK.\n\nIt's suggested to add RetroDECK to your Steam Library for a quick access."
