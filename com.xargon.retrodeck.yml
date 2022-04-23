@@ -990,7 +990,7 @@ modules:
 
         # Configuring Dolphin
         - mkdir -p /var/config/dolphin-emu/
-        - cp Dolphin.ini /var/config/dolphin-emu/
+        - cp Dolphin.ini /var/config/dolphin-emu/Dolphin.ini
 
     #cleanup: ['*']
     sources:
