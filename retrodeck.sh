@@ -58,23 +58,20 @@ then
     mkdir -p ~/retrodeck/states
     mkdir -p ~/retrodeck/screenshots
     mkdir -p ~/retrodeck/bios
-    mkdir -p /var/config/retroarch/
-
+    # ES-DE
     cp -r /app/retrodeck/tools/* /var/config/retrodeck/tools/
-
-    rm -rf /var/config/retroarch/system
-    ln -s ~/retrodeck/bios /var/config/retroarch/system
-
-    # This should become a sed in the future
-    cp /app/retrodeck/retrodeck-retroarch.cfg /var/config/retroarch/retroarch.cfg
-
     mkdir -p /var/config/emulationstation/.emulationstation/custom_systems/tools/
     cp /app/retrodeck/tools-gamelist.xml /var/config/retrodeck/tools/gamelist.xml
 
-    mkdir -p /var/config/retroarch/cores/
-    cp /app/share/libretro/cores/* /var/config/retroarch/cores/
+    # Initializing emulators configs
+    emuconfigs=/app/retrodeck/emu-configs/
 
-    # Initializing standalone emulators configs
+    # RetroArch
+    mkdir -p /var/config/retroarch/cores/
+    rm -rf /var/config/retroarch/system
+    ln -s ~/retrodeck/bios /var/config/retroarch/system
+    cp /app/share/libretro/cores/* /var/config/retroarch/cores/
+    cp $emuconfigs/retroarch.cfg /var/config/retroarch/
 
     # Yuzu
     mkdir -p ~/retrodeck/bios/switch/
@@ -82,11 +79,11 @@ then
     mkdir -p /var/data/yuzu/registered
     ln -s ~/retrodeck/bios/switch/keys /var/data/yuzu/keys
     ln -s /var/data/yuzu/registered ~/retrodeck/bios/switch/registered
-    cp /var/config/retroarch/emu-configs/qt-config.ini /var/config/yuzu/qt-config.ini
+    cp $emuconfigs/qt-config.ini /var/config/yuzu/
 
     # Dolphin
     mkdir -p /var/config/dolphin-emu/
-    cp /var/config/retroarch/emu-configs/Dolphin.ini /var/config/dolphin-emu/Dolphin.ini
+    cp $emuconfigs/Dolphin.ini /var/config/dolphin-emu/
 
     # Locking RetroDECK
     touch ~/retrodeck/.lock

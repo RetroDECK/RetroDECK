@@ -748,7 +748,6 @@ modules:
         # These must be put in home folder, managed by retrodeck.sh
         - mkdir -p ${FLATPAK_DEST}/retrodeck/
         - cp es_settings.xml ${FLATPAK_DEST}/retrodeck/es_settings.xml
-        - cp retrodeck-retroarch.cfg ${FLATPAK_DEST}/retrodeck/retrodeck-retroarch.cfg
 
         # Logo, res
         - rm -f /app/share/emulationstation/resources/graphics/splash.svg
@@ -769,11 +768,13 @@ modules:
         - cp com.xargon.retrodeck.desktop /app/share/applications/com.xargon.retrodeck.desktop
 
         # Configuring emulators:
-        - mkdir -p ${FLATPAK_DEST}/retrodeck/emu-configs
+        - mkdir -p ${FLATPAK_DEST}/retrodeck/emu-configs/
+        # RetroArch
+        - cp retroarch.cfg ${FLATPAK_DEST}/retrodeck/emu-configs/
         # Dolphin 
-        - cp Dolphin.ini ${FLATPAK_DEST}/retrodeck/emu-configs
+        - cp Dolphin.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
         # Yuzu
-        - cp qt-config.ini ${FLATPAK_DEST}/retrodeck/emu-configs
+        - cp qt-config.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
 
     #cleanup: ['*']
     sources:
