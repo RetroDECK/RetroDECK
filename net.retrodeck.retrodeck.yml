@@ -763,9 +763,13 @@ modules:
         - cp retrodeck.sh /app/bin/retrodeck.sh
         - chmod +x /app/bin/retrodeck.sh
         
-
         # Desktop entry
         - cp net.retrodeck.retrodeck.desktop /app/share/applications/net.retrodeck.retrodeck.desktop
+
+        # Steam Grids
+        - cp banner_main.png ${FLATPAK_DEST}/retrodeck/steam/
+        - cp poster_main.png ${FLATPAK_DEST}/retrodeck/steam/
+        - cp poster_main_nodecklogo.png ${FLATPAK_DEST}/retrodeck/steam/
 
         # Configuring emulators:
         - mkdir -p ${FLATPAK_DEST}/retrodeck/emu-configs/
