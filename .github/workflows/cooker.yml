@@ -39,8 +39,8 @@ jobs:
       
       - name: Building flatpak
         run: |
-          sudo flatpak-builder --user --install --force-clean --repo=local retrodeck-flatpak com.xargon.retrodeck.yml
-          sudo flatpak build-bundle local RetroDECK.flatpak com.xargon.retrodeck
+          sudo flatpak-builder --user --install --force-clean --repo=local retrodeck-flatpak net.retrodeck.retrodeck.yml
+          sudo flatpak build-bundle local RetroDECK.flatpak net.retrodeck.retrodeck
 
       - name: Get date for artifacts
         id: date
