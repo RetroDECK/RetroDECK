@@ -132,7 +132,7 @@ modules:
     sources:
     - type: git
       url: https://gitlab.com/leonstyhre/emulationstation-de.git
-      branch: 5861455f1fad4f56f3310094bf0c66e1a1446784
+      branch: 3cb464c7adcea8d020cdff92803c64b7f72fb443
 
   # ES-DE - END
 
@@ -144,7 +144,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/anthonycaccese/art-book-next-de.git
-        branch: 8084ef17f05e68789ed83636de3a1b15f920d701
+        branch: 4452f8356819d3cd079549b113fb15edb919a0df
 
 
   # External manifests start
