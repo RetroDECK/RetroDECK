@@ -266,8 +266,6 @@ modules:
     build-commands:
         - mkdir -p /app/share/libretro/cores/
         - mv ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* /app/share/libretro/cores/
-    cleanup:
-        - RetroArch_cores.7z
     sources:
       - type: archive
         url: https://buildbot.libretro.com/stable/1.10.2/linux/x86_64/RetroArch_cores.7z
