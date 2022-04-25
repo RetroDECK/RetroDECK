@@ -18,8 +18,12 @@ then # found external folder and not the internal
     new_roms_path=~/retrodeck
 fi
 
-mkdir -p $new_roms_path
-mv -f $roms_path/roms $new_roms_path/roms
-rm -f /var/config/emulationstation/ROMs
-ln -s $new_roms_path/roms /var/config/emulationstation/ROMs
-rm -f $roms_path/roms
+kdialog --title "RetroDECK" --warningyesno "Should I move the roms from\n\n$roms_path/roms\n\nto\n\n$new_roms_path/roms?"
+if [ $? == 0 ] #yes
+then
+    mkdir -p $new_roms_path
+    mv -f $roms_path/roms $new_roms_path/roms
+    rm -f /var/config/emulationstation/ROMs
+    ln -s $new_roms_path/roms /var/config/emulationstation/ROMs
+    rm -f $roms_path/roms
+fi
