@@ -753,6 +753,7 @@ modules:
         - cp net.retrodeck.retrodeck.desktop /app/share/applications/net.retrodeck.retrodeck.desktop
 
         # Steam Grids
+        - mkdir -p ${FLATPAK_DEST}/retrodeck/steam/
         - cp banner_main.png ${FLATPAK_DEST}/retrodeck/steam/
         - cp poster_main.png ${FLATPAK_DEST}/retrodeck/steam/
         - cp poster_main_nodecklogo.png ${FLATPAK_DEST}/retrodeck/steam/
