@@ -12,8 +12,8 @@ Powered by [EmulationStation Desktop Edition](https://es-de.org), which uses Ret
 
 Join our [Discord](https://discord.gg/Dz3szYsP8g)!
 <p float="center">
-<img src="https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen03.jpg?raw=true" alt="screenshot" width="300"/>
-<img src="https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen04.jpg?raw=true" alt="screenshot" width="300"/><br/>
+<img src="https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen05.png?raw=true" alt="screenshot" width="300"/>
+<img src="https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen04.png?raw=true" alt="screenshot" width="300"/><br/>
 <img src="https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen01.png?raw=true" alt="screenshot" width="300"/>
 <img src="https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen02.png?raw=true" alt="screenshot" width="300"/>
 </p>
