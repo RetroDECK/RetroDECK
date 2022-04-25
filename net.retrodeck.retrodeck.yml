@@ -785,6 +785,8 @@ modules:
       - type: dir
         path: res
       - type: dir
+        path: res/steam
+      - type: dir
         path: tools
       - type: file
         path: net.retrodeck.retrodeck.desktop
