@@ -7,7 +7,7 @@ cd ~/RetroDECK
 git checkout main
 git submodule init
 git submodule update
-rsync -rav --progress --exclude={'shared-modules/','rd-submodules/','.git/','docs','retrodeck-flatpak/','retrodeck-flatpak-cooker/','.flatpak-builder/'} ~/RetroDECK/ ~/flathub/
+rsync -rav --progress --exclude={'res/screenshots/','shared-modules/','rd-submodules/','.git/','docs','retrodeck-flatpak/','retrodeck-flatpak-cooker/','.flatpak-builder/'} ~/RetroDECK/ ~/flathub/
 cd ~/flathub
 rm -rf shared-submodules
 rm -rf rd-submodules
