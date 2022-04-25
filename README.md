@@ -32,4 +32,4 @@ No, RetroDECK doesn't support Windows, but the project is fully open source so y
 Check the [Installation instructions](https://github.com/XargonWan/RetroDECK/wiki#installation-instructions) on the Wiki
 
 ## Can I help?
-Of course, any help is appreciated, and not only byp rogramming, just check out our [Discord](https://discord.gg/Dz3szYsP8g)!
+Of course, any help is appreciated, and not only by programming, just check out our [Discord](https://discord.gg/Dz3szYsP8g)!
