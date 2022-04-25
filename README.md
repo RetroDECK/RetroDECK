@@ -29,7 +29,7 @@ No partitioning or formatting is required. RetroDECK (differently from AmberELEC
 No, RetroDECK doesn't support Windows, but the project is fully open source so you can port it if you wish. As an alternative, [Retrobat](http://www.retrobat.ovh/) offers similar functionality (but may not be compatible with RetroDECK's rom paths).
 
 ## How can I install it?
-Check the [Managing RetroDECK flatpak file](https://github.com/XargonWan/RetroDECK/wiki/Developer-notes#managing-retrodeck-flatpak-file) on the Wiki
+Check the [Installation instructions](https://github.com/XargonWan/RetroDECK/wiki#installation-instructions) on the Wiki
 
 ## Can I help?
 Of course, any help is appreciated, and not only byp rogramming, just check out our [Discord](https://discord.gg/Dz3szYsP8g)!
