@@ -12,8 +12,8 @@ Powered by [EmulationStation Desktop Edition](https://es-de.org), which uses Ret
 
 Join our [Discord](https://discord.gg/Dz3szYsP8g)!
 <p float="center">
-<img src="https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen03.jpg?raw=true" alt="screenshot" width="300"/>
-<img src="https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen04.jpg?raw=true" alt="screenshot" width="300"/><br/>
+<img src="https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen05.png?raw=true" alt="screenshot" width="300"/>
+<img src="https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen04.png?raw=true" alt="screenshot" width="300"/><br/>
 <img src="https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen01.png?raw=true" alt="screenshot" width="300"/>
 <img src="https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen02.png?raw=true" alt="screenshot" width="300"/>
 </p>
@@ -28,50 +28,8 @@ No partitioning or formatting is required. RetroDECK (differently from AmberELEC
 ## Is it available on Windows?
 No, RetroDECK doesn't support Windows, but the project is fully open source so you can port it if you wish. As an alternative, [Retrobat](http://www.retrobat.ovh/) offers similar functionality (but may not be compatible with RetroDECK's rom paths).
 
+## How can I install it?
+Check the [Installation instructions](https://github.com/XargonWan/RetroDECK/wiki#installation-instructions) on the Wiki
+
 ## Can I help?
-Of course, any help is appreciated, and not only byp rogramming, just check out our [Discord](https://discord.gg/Dz3szYsP8g)!
-<br/><br/>
-# Developer notes: build instructions
-
-If you want to build the RetroDECK flatpak on your machine for developing or just testing purposes:
-```
-cd ~
-git clone --recursive https://github.com/XargonWan/RetroDECK.git
-cd RetroDECK
-git submodule init
-git submodule update
-```
-
-install `flatpak flatpak-builder p7zip-full` with your distro's package manager.
-
-```flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-flatpak install -y org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08 io.qt.qtwebengine.BaseApp/x86_64/5.15-21.08 org.freedesktop.Sdk.Extension.llvm13
-```
-
-To build the stable release:
-```
-flatpak-builder --user --install --force-clean --repo=local ~/RetroDECK/retrodeck-main ~/RetroDECK/com.xargon.retrodeck.yml
-flatpak build-bundle local ~/RetroDECK.flatpak com.xargon.retrodeck
-```
-
-Or alternatively, to build the cooker (experimental) release:
-```
-git checkout cooker
-flatpak-builder --user --install --force-clean --repo=local ~/RetroDECK/retrodeck-cooker ~/RetroDECK/com.xargon.retrodeck.yml
-flatpak build-bundle local ~/RetroDECK.flatpak com.xargon.retrodeck
-```
-
-Install RetroDECK:
-```
-flatpak install com.xargon.retrodeck
-```
-
-Run RetroDECK:
-```
-flatpak run com.xargon.retrodeck
-```
-
-Uninstall RetroDECK:
-```
-flatpak uninstall com.xargon.retrodeck
-```
+Of course, any help is appreciated, and not only by programming, just check out our [Discord](https://discord.gg/Dz3szYsP8g)!
