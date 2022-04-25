@@ -7,10 +7,10 @@ on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
     branches:
-     - cooker
+     - cooker*
   pull_request: 
     branches:
-     - cooker
+     - cooker*
 
 # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -35,23 +35,26 @@ jobs:
           sudo apt-get update
           sudo apt install flatpak flatpak-builder p7zip-full
           sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-          sudo flatpak install -y org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08 io.qt.qtwebengine.BaseApp/x86_64/5.15-21.08
+          sudo flatpak install -y org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08 io.qt.qtwebengine.BaseApp/x86_64/5.15-21.08 org.freedesktop.Sdk.Extension.llvm13
       
-      # Runs a set of commands using the runners shell
       - name: Building flatpak
         run: |
-          sudo flatpak-builder --user --install --force-clean retrodeck-flatpak com.xargon.retrodeck.yml
-          sudo flatpak-builder --repo=local --force-clean localrepo com.xargon.retrodeck.yml
-          sudo flatpak build-bundle local RetroDECK.flatpak com.xargon.retrodeck
+          sudo flatpak-builder --user --install --force-clean --repo=local retrodeck-flatpak net.retrodeck.retrodeck.yml
+          sudo flatpak build-bundle local RetroDECK.flatpak net.retrodeck.retrodeck
 
       - name: Get date for artifacts
         id: date
         run: echo "::set-output name=date::$(date +'%Y%m%d_%H%M')"
 
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+
       - name: Publish the flatpak in a new cooker release
         uses: ncipollo/release-action@v1
         with:
-          tag: "${{ steps.date.outputs.date }}"
+          tag: "${{ steps.extract_branch.outputs.branch }}-${{ steps.date.outputs.date }}"
           body: |
             # Release Notes (Cooker)
             This is a cooker snapshot based on the commit: ${{ github.event.repository.full_name }}@${{github.sha}}.
