@@ -2,6 +2,10 @@
     <img src="https://github.com/XargonWan/RetroDECK/blob/main/res/logo.png?raw=true" alt="RetroDECK logo" width="600"/>
 </p>
 
+![GitHub all releases](https://img.shields.io/github/downloads/XargonWan/RetroDECK/total?label=downloads)
+![Discord](https://img.shields.io/discord/951662718102962256?label=discord)
+![GitHub](https://img.shields.io/github/license/XargonWan/RetroDECK)
+
 # RetroDECK
 
 **RetroDECK** brings an environment to catalog and play your retro games directly from SteamOS and it's tailored specifically for the **Steam Deck**.
