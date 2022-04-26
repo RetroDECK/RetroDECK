@@ -41,6 +41,7 @@ git submodule sync;
 git submodule foreach --recursive 'git checkout $(git config -f $toplevel/.gitmodules submodule.$name.branch || echo master)';
 
 rm flathub-pr.sh
+git submodule update
 git add *
 git commit -m "Updating flathub"
 git push origin RetroDECK
