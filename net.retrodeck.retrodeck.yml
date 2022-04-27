@@ -34,7 +34,7 @@ finish-args:
    - --allow=bluetooth
   #- --env=QT_QPA_PLATFORM=xcb not sure if this will break something
   # rpcs3
-  - --socket=fallback-x11
+   - --socket=fallback-x11
 
 # rpcs3
 add-extensions:
