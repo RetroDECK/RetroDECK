@@ -741,8 +741,6 @@ modules:
       - type: git
         url: https://github.com/Arisotura/melonDS.git
         commit: cce9de5ee1f51e906a644922b2ada6644d81287a
-      - type: file
-        path: net.kuribo64.melonDS.appdata.xml
 
   # MELONDS - END
 
