@@ -723,18 +723,13 @@ modules:
   - name: citra
     buildsystem: cmake-ninja
     builddir: true
-    build-options:
-      env:
-        CI: '1'
-        GITHUB_ACTIONS: '1'
-        GITHUB_REPOSITORY: citra-emu/citra-nightly
-        GIT_TAG_NAME: nightly-1762
     config-opts:
       - '-DCMAKE_BUILD_TYPE=Release'
       - '-DENABLE_QT_TRANSLATION=ON'
       - '-DCITRA_ENABLE_COMPATIBILITY_REPORTING=ON'
       - '-DENABLE_COMPATIBILITY_LIST_DOWNLOAD=ON'
-      - '-DENABLE_FFMPEG_VIDEO_DUMPER=ON'
+      #- '-DENABLE_FFMPEG_VIDEO_DUMPER=ON'
+      # Disabled because of this: https://github.com/citra-emu/citra/issues/5949
       - '-DENABLE_FDK=ON'
     cleanup:
       - /share/man
