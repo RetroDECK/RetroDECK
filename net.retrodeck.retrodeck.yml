@@ -719,6 +719,7 @@ modules:
   # XEMU - END
 
   # PRIMEHACK - START
+  # https://github.com/flathub/io.github.shiiion.primehack
 
   - name: primehack
     buildsystem: cmake-ninja
