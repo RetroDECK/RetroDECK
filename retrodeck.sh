@@ -57,7 +57,7 @@ then
     mkdir -p ~/retrodeck/saves
     mkdir -p ~/retrodeck/states
     mkdir -p ~/retrodeck/screenshots
-    mkdir -p ~/retrodeck/bios
+    mkdir -p ~/retrodeck/bios/pico-8
     # ES-DE
     cp -r /app/retrodeck/tools/* /var/config/retrodeck/tools/
     mkdir -p /var/config/emulationstation/.emulationstation/custom_systems/tools/
@@ -88,7 +88,6 @@ then
     # pcsx2
     mkdir -p /var/config/PCSX2/inis/
     cp $emuconfigs/PCSX2_ui.ini /var/config/PCSX2/inis/
-
 
     # Locking RetroDECK
     touch ~/retrodeck/.lock
