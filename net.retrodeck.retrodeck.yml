@@ -46,9 +46,6 @@ add-extensions:
     autodelete: false
 cleanup-commands:
   - mkdir -p ${FLATPAK_DEST}/lib/ffmpeg
-modules:
-  - shared-modules/glu/glu-9.json
-  - shared-modules/glew/glew.json
 
 cleanup:
   # ES-DE
@@ -734,6 +731,9 @@ modules:
 
   # RPCS3 - START
   # https://github.com/flathub/net.rpcs3.RPCS3
+
+  - shared-modules/glu/glu-9.json
+  - shared-modules/glew/glew.json
 
   - name: rpcs3-llvm
     buildsystem: cmake-ninja
