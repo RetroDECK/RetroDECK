@@ -735,8 +735,6 @@ modules:
         aarch64:
           config-opts:
             - -DENABLE_OGLRENDERER=OFF
-    build-commands:
-      - install -D -m644 -t /app/share/appdata/ ../${FLATPAK_ID}.appdata.xml
     sources:
       - type: git
         url: https://github.com/Arisotura/melonDS.git
