@@ -742,6 +742,42 @@ modules:
 
   # MELONDS - END
 
+  # CITRA - START
+  # https://github.com/flathub/org.citra_emu.citra
+
+  - name: citra
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
+      - '-DCMAKE_BUILD_TYPE=Release'
+      - '-DENABLE_QT_TRANSLATION=ON'
+      - '-DCITRA_ENABLE_COMPATIBILITY_REPORTING=ON'
+      - '-DENABLE_COMPATIBILITY_LIST_DOWNLOAD=ON'
+      #- '-DENABLE_FFMPEG_VIDEO_DUMPER=ON'
+      # Disabled because of this: https://github.com/citra-emu/citra/issues/5949
+      - '-DENABLE_FDK=ON'
+    cleanup:
+      - /share/man
+      - /share/pixmaps
+    post-install:
+      - >-
+        install -Dm644 ../dist/citra.svg
+        /app/share/icons/hicolor/scalable/apps/citra.svg
+      - >-
+        install -Dm644 ../dist/icon.png
+        /app/share/icons/hicolor/512x512/apps/citra.png
+    sources:
+      - type: git
+        url: https://github.com/citra-emu/citra-nightly.git
+        tag: nightly-1762
+        commit: 1382035d4de5ada310c7f4fd00f1836b16ab74fb
+        disable-shallow-clone: true
+        x-checker-data:
+          type: git
+          tag-pattern: ^(nightly-\d+)$
+          is-main-source: true
+
+  # CITRA - END
 
   # External manifests end
   
