@@ -168,4 +168,12 @@
             <entry>~/bin/yuzu*.AppImage</entry>
         </rule>
     </emulator>
+    <emulator name="PICO-8">
+        <rule type="systempath">
+            <entry>pico8</entry>
+        </rule>
+        <rule type="staticpath">
+            <entry>~/retrodeck/bios/pico-8/pico8</entry>
+        </rule>
+    </emulator>
 </ruleList>
