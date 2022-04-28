@@ -1468,4 +1468,15 @@
         <platform>tools</platform>
         <theme>tools</theme>
     </system>
+    <system>
+    	<name>pico-8</name>
+		<fullname>Pico-8</fullname>
+		<manufacturer>Lexaloffle</manufacturer>
+		<release>2015</release>
+		<hardware>console</hardware>
+		<path>%ROMPATH%/pico-8</path>
+		<extension>.p8 .png</extension>
+		<command>%EMULATOR_PICO-8% -desktop ~/retrodeck/screenshots -windowed 0 -root_path %ROMPATH%/pico-8 -run %ROM%</command>
+		<platform>pico-8</platform>
+		<theme>pico-8</theme>
 </systemList>
