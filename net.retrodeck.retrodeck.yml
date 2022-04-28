@@ -717,6 +717,32 @@ modules:
 
   # XEMU - END
 
+  # MELONDS - START
+  # https://github.com/flathub/net.kuribo64.melonDS
+  # ちっちゃい、かわいい！
+
+  - name: libslirp
+    buildsystem: meson
+    sources:
+      - type: git
+        url: https://gitlab.freedesktop.org/slirp/libslirp.git
+        tag: v4.4.0
+  - name: melonds
+    buildsystem: cmake-ninja
+    builddir: true
+    build-options:
+      arch:
+        aarch64:
+          config-opts:
+            - -DENABLE_OGLRENDERER=OFF
+    sources:
+      - type: git
+        url: https://github.com/Arisotura/melonDS.git
+        commit: cce9de5ee1f51e906a644922b2ada6644d81287a
+
+  # MELONDS - END
+
+
   # External manifests end
   
 
