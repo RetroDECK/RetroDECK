@@ -74,11 +74,12 @@ then
     cp $emuconfigs/retroarch.cfg /var/config/retroarch/
 
     # Yuzu
-    mkdir -p ~/retrodeck/bios/switch/
-    mkdir -p /var/config/yuzu/keys
-    mkdir -p /var/data/yuzu/registered
+    mkdir -p ~/retrodeck/bios/switch/keys
+    rm -rf /var/data/yuzu/keys
     ln -s ~/retrodeck/bios/switch/keys /var/data/yuzu/keys
-    ln -s /var/data/yuzu/registered ~/retrodeck/bios/switch/registered
+    mkdir -p /var/data/yuzu/nand/system/Contents/registered/
+    rm ~/retrodeck/bios/switch/registered
+    ln -s data/yuzu/nand/system/Contents/registered/ ~/retrodeck/bios/switch/registered
     cp $emuconfigs/qt-config.ini /var/config/yuzu/
 
     # Dolphin
