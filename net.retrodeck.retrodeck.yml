@@ -33,11 +33,8 @@ finish-args:
   # Dolphin
    - --allow=bluetooth
   #- --env=QT_QPA_PLATFORM=xcb not sure if this will break something
-<<<<<<< HEAD
   # rpcs3
    - --socket=fallback-x11
-
-# rpcs3
 add-extensions:
   org.freedesktop.Platform.ffmpeg-full:
     directory: lib/ffmpeg
@@ -47,9 +44,6 @@ add-extensions:
     autodelete: false
 cleanup-commands:
   - mkdir -p ${FLATPAK_DEST}/lib/ffmpeg
-=======
-  # primehack
->>>>>>> cooker-primehack
 
 cleanup:
   # ES-DE
