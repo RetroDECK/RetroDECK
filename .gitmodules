@@ -19,3 +19,6 @@
 [submodule "rd-submodules/citra"]
 	path = rd-submodules/citra
 	url = https://github.com/flathub/org.citra_emu.citra.git
+[submodule "rd-submodules/primehack"]
+	path = rd-submodules/primehack
+	url = https://github.com/flathub/io.github.shiiion.primehack
