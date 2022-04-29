@@ -18,7 +18,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build_cooker_snap:
+  build_main:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -48,17 +48,17 @@ jobs:
         id: date
         run: echo "::set-output name=date::$(date +'%Y%m%d_%H%M')"
 
-      - name: Publish the flatpak in a new cooker release
+      - name: Publish the flatpak in a new main draft release
         uses: ncipollo/release-action@v1
         with:
           tag: "${{ steps.date.outputs.date }}"
           body: |
             # Release Notes
-            
-            Changelog:
+
+            General installation instructions can be found in the [Wiki](https://github.com/XargonWan/RetroDECK/wiki#installation-instructions).
+
+            ## Changelog resume:
             - 
-            - 
-            -
 
           artifacts: "RetroDECK.flatpak"
           allowUpdates: true
