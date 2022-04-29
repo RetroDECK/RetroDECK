@@ -99,6 +99,7 @@ then
 
     # MelonDS
     mkdir -p /var/config/melonDS/
+    ln -s ~/retrodeck/bios /var/config/melonDS/bios
     cp $emuconfigs/melonDS.ini /var/config/melonDS/
 
     # Locking RetroDECK
