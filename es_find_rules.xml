@@ -43,6 +43,7 @@
         <rule type="systempath">
             <entry>citra-emu.citra-nightly</entry>
             <entry>org.citra_emu.citra</entry>
+            <entry>citra-qt</entry>
         </rule>
         <rule type="staticpath">
             <entry>/var/lib/flatpak/exports/bin/org.citra_emu.citra</entry>

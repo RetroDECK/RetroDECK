@@ -87,7 +87,7 @@ then
     mkdir -p /var/data/yuzu/nand/system/Contents/registered/
     rm ~/retrodeck/bios/switch/registered
     ln -s data/yuzu/nand/system/Contents/registered/ ~/retrodeck/bios/switch/registered
-    cp $emuconfigs/qt-config.ini /var/config/yuzu/
+    cp $emuconfigs/yuzu-qt-config.ini /var/config/yuzu/qt-config.ini
 
     # Dolphin
     mkdir -p /var/config/dolphin-emu/
@@ -101,6 +101,11 @@ then
     mkdir -p /var/config/melonDS/
     ln -s ~/retrodeck/bios /var/config/melonDS/bios
     cp $emuconfigs/melonDS.ini /var/config/melonDS/
+
+    # CITRA
+    mkdir -p /var/config/citra-emu/
+    cp $emuconfigs/citra-qt-config.ini /var/config/citra-emu/qt-config.ini
+    
 
     # Locking RetroDECK
     touch ~/retrodeck/.lock
