@@ -74,12 +74,16 @@ then
     cp $emuconfigs/retroarch.cfg /var/config/retroarch/
 
     # Yuzu
-    mkdir -p ~/retrodeck/bios/switch/keys
+    # Original keys and registered folders will be in retrodeck bios folder, yuzu dirs are a symlink
     rm -rf /var/data/yuzu/keys
     ln -s ~/retrodeck/bios/switch/keys /var/data/yuzu/keys
-    mkdir -p /var/data/yuzu/nand/system/Contents/registered/
-    rm ~/retrodeck/bios/switch/registered
-    ln -s data/yuzu/nand/system/Contents/registered/ ~/retrodeck/bios/switch/registered
+
+    mv /var/data/yuzu/nand/system/Contents/registered /var/data/yuzu/nand/system/Contents/registered.old
+    mkdir ~/retrodeck/bios/switch/registered
+    ln -s ~/retrodeck/bios/switch/registered /var/data/yuzu/nand/system/Contents/
+    mv -f /var/data/yuzu/nand/system/Contents/registered.old/* /var/data/yuzu/nand/system/Contents/registered/
+    rm -rf /var/data/yuzu/nand/system/Contents/registered.old
+
     cp $emuconfigs/qt-config.ini /var/config/yuzu/
 
     # Dolphin
