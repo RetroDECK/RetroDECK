@@ -940,8 +940,7 @@ modules:
 
         # Tools
         - mkdir -p ${FLATPAK_DEST}/retrodeck/tools/
-        - cp start-retroarch.sh ${FLATPAK_DEST}/retrodeck/tools/
-        - cp start-splore.sh ${FLATPAK_DEST}/retrodeck/tools/
+        - cp start-*.sh ${FLATPAK_DEST}/retrodeck/tools/
         - cp move-roms.sh ${FLATPAK_DEST}/retrodeck/tools/
         - cp tools-gamelist.xml ${FLATPAK_DEST}/retrodeck/
         
@@ -971,6 +970,8 @@ modules:
         - cp melonDS.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
         # CITRA
         - cp citra-qt-config.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
+        # RPCS3
+        - cp config.yml ${FLATPAK_DEST}/retrodeck/emu-configs/
 
     #cleanup: ['*']
     sources:

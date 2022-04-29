@@ -105,6 +105,10 @@ then
     # CITRA
     mkdir -p /var/config/citra-emu/
     cp $emuconfigs/citra-qt-config.ini /var/config/citra-emu/qt-config.ini
+
+    # RPCS3
+    mkdir -p /var/config/rpcs3/
+    cp $emuconfigs/config.yml /var/config/rpcs3/
     
 
     # Locking RetroDECK
