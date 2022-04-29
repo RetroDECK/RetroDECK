@@ -21,7 +21,14 @@
 		<nogamecount>true</nogamecount>
 		<nomultiscrape>true</nomultiscrape>
 	</game>
-		<game>
+	<game>
+		<path>./start-citra.sh</path>
+		<name>Start CITRA</name>
+		<desc>Start CITRA to manually tweak your settings.</desc>
+		<nogamecount>true</nogamecount>
+		<nomultiscrape>true</nomultiscrape>
+	</game>
+	<game>
 		<path>./start-splore.sh</path>
 		<name>Start Splore</name>
 		<desc>Start PICO-8's splore</desc>
