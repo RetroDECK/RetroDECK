@@ -316,15 +316,6 @@
         <theme>daphne</theme>
     </system>
     <system>
-							
-												 
-									  
-								  
-									 
-							   
-							  
-			 
-			
         <name>doom</name>
         <fullname>Doom</fullname>
         <path>%ROMPATH%/doom</path>
@@ -337,11 +328,8 @@
         <name>dos</name>
         <fullname>DOS</fullname>
         <path>%ROMPATH%/dos</path>
-        <extension>.dosz .DOSZ</extension>
-																													 
-        <command label="DOSBox-Pure">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/dosbox_pure_libretro.so %ROM%</command>
-																												   
-																							  
+        <extension>.dosz .DOSZ</extension>																									 
+        <command label="DOSBox-Pure">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/dosbox_pure_libretro.so %ROM%</command>																			  
         <platform>dos</platform>
         <theme>dos</theme>
     </system>
@@ -366,15 +354,6 @@
         <theme>dreamcast</theme>
     </system>
     <system>
-						 
-											 
-								   
-								  
-									 
-							   
-						   
-			 
-			
         <name>famicom</name>
         <fullname>Nintendo Family Computer</fullname>
         <path>%ROMPATH%/famicom</path>
@@ -541,15 +520,6 @@
         <theme>j2me</theme>
     </system>
     <system>
-						 
-													   
-								   
-								  
-									 
-							   
-						   
-			 
-			
         <name>lutris</name>
         <fullname>Lutris Open Gaming Platform</fullname>
         <path>%ROMPATH%/lutris</path>
@@ -568,15 +538,6 @@
         <theme>lutro</theme>
     </system>
     <system>
-							  
-											
-										
-												
-											
-									  
-								
-			 
-			
         <name>mame</name>
         <fullname>Multiple Arcade Machine Emulator</fullname>
         <path>%ROMPATH%/mame</path>
@@ -881,18 +842,6 @@
         <theme>palm</theme>
     </system>
     <system>
-					   
-								   
-								 
-																														  
-																													 
-																													 
-																												   
-																							  
-							   
-						 
-			 
-			
         <name>pc88</name>
         <fullname>NEC PC-8800 Series</fullname>
         <path>%ROMPATH%/pc88</path>
@@ -950,15 +899,6 @@
         <theme>pokemini</theme>
     </system>
     <system>
-						  
-								  
-									
-								  
-									 
-							   
-							
-			 
-			
         <name>ps2</name>
         <fullname>Sony PlayStation 2</fullname>
         <path>%ROMPATH%/ps2</path>
@@ -1189,15 +1129,6 @@
         <theme>spectravideo</theme>
     </system>
     <system>
-						  
-										
-									
-								  
-													   
-								  
-							
-			 
-			
         <name>stratagus</name>
         <fullname>Stratagus Game Engine</fullname>
         <path>%ROMPATH%/stratagus</path>
@@ -1479,4 +1410,5 @@
 		<command>%EMULATOR_PICO-8% -desktop ~/retrodeck/screenshots -windowed 0 -root_path %ROMPATH%/pico-8 -run %ROM%</command>
 		<platform>pico-8</platform>
 		<theme>pico-8</theme>
+    </system>
 </systemList>
