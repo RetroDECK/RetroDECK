@@ -58,10 +58,17 @@ then
     mkdir -p ~/retrodeck/states
     mkdir -p ~/retrodeck/screenshots
     mkdir -p ~/retrodeck/bios/pico-8
+
     # ES-DE
     cp -r /app/retrodeck/tools/* /var/config/retrodeck/tools/
     mkdir -p /var/config/emulationstation/.emulationstation/custom_systems/tools/
     cp /app/retrodeck/tools-gamelist.xml /var/config/retrodeck/tools/gamelist.xml
+    # ES-DE scraped folder
+    mv -f /var/config/emulationstation/.emulationstation/downloaded_media /var/config/emulationstation/.emulationstation/downloaded_media.old
+	mkdir ~/retrodeck/.downloaded_media
+	ln -s ~/retrodeck/.downloaded_media /var/config/emulationstation/.emulationstation/downloaded_media
+	mv -f /var/config/emulationstation/.emulationstation/downloaded_media.old/* ~/retrodeck/.downloaded_media
+	rm -rf /var/config/emulationstation/.emulationstation/downloaded_media.old
 
     # Initializing emulators configs
     emuconfigs=/app/retrodeck/emu-configs/
