@@ -65,10 +65,10 @@ then
     cp /app/retrodeck/tools-gamelist.xml /var/config/retrodeck/tools/gamelist.xml
     # ES-DE scraped folder
     mv -f /var/config/emulationstation/.emulationstation/downloaded_media /var/config/emulationstation/.emulationstation/downloaded_media.old
-	mkdir ~/retrodeck/.downloaded_media
-	ln -s ~/retrodeck/.downloaded_media /var/config/emulationstation/.emulationstation/downloaded_media
-	mv -f /var/config/emulationstation/.emulationstation/downloaded_media.old/* ~/retrodeck/.downloaded_media
-	rm -rf /var/config/emulationstation/.emulationstation/downloaded_media.old
+    mkdir ~/retrodeck/.downloaded_media
+    ln -s ~/retrodeck/.downloaded_media /var/config/emulationstation/.emulationstation/downloaded_media
+    mv -f /var/config/emulationstation/.emulationstation/downloaded_media.old/* ~/retrodeck/.downloaded_media
+    rm -rf /var/config/emulationstation/.emulationstation/downloaded_media.old
 
     # Initializing emulators configs
     emuconfigs=/app/retrodeck/emu-configs/
@@ -96,6 +96,10 @@ then
     # pcsx2
     mkdir -p /var/config/PCSX2/inis/
     cp $emuconfigs/PCSX2_ui.ini /var/config/PCSX2/inis/
+
+    # MelonDS
+    mkdir -p /var/config/melonDS/
+    cp $emuconfigs/melonDS.ini /var/config/melonDS/
 
     # Locking RetroDECK
     touch ~/retrodeck/.lock

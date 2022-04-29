@@ -941,6 +941,7 @@ modules:
         # Tools
         - mkdir -p ${FLATPAK_DEST}/retrodeck/tools/
         - cp start-retroarch.sh ${FLATPAK_DEST}/retrodeck/tools/
+        - cp start-splore.sh ${FLATPAK_DEST}/retrodeck/tools/
         - cp move-roms.sh ${FLATPAK_DEST}/retrodeck/tools/
         - cp tools-gamelist.xml ${FLATPAK_DEST}/retrodeck/
         
@@ -966,6 +967,8 @@ modules:
         - cp qt-config.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
         # Pcsx2
         - cp PCSX2_ui.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
+        # MelonDS
+        - cp melonDS.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
 
     #cleanup: ['*']
     sources:
