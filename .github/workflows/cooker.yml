@@ -41,7 +41,7 @@ jobs:
 
   Job2_-_Downloading_Sources:
     runs-on: ubuntu-latest
-    needs: [Job1_-_Prepearing_enviornment]
+    #needs: [Job1_-_Prepearing_enviornment]
     steps:
       - name: Downloading sources
         if: steps.cache-cooker.outputs.cache-hit != 'true'
