@@ -34,6 +34,7 @@ jobs:
 
   Job2_-_Downloading_Sources:
     runs-on: ubuntu-latest
+    needs: [Job1_-_Prepearing_enviornment]
     steps:
       - name: Downloading sources
         run: |
@@ -41,6 +42,7 @@ jobs:
 
   Job3_-_Building_part_1:
     runs-on: ubuntu-latest
+    needs: [Job2_-_Downloading_Sources]
     steps:
       - name: Bulding part 1 - Until RetroArch Cores
         run: |
@@ -48,6 +50,7 @@ jobs:
 
   Job4_-_Building_part_2:
     runs-on: ubuntu-latest
+    needs: [Job3_-_Building_part_1]
     steps:
       - name: Bulding part 1 - Until the end
         run: |
@@ -55,6 +58,7 @@ jobs:
 
   Job5_-_Finishing_build:
     runs-on: ubuntu-latest
+    needs: [Job4_-_Building_part_2]
     steps:
       - name: Finishing build
         run: |
@@ -62,6 +66,7 @@ jobs:
 
   Job6_-_Build_bundle:
     runs-on: ubuntu-latest
+    needs: [Job5_-_Finishing_build]
     steps:
       - name: Build bundle
         run: |
@@ -69,6 +74,7 @@ jobs:
 
   Job7_-_Publishing_flatpak:
     runs-on: ubuntu-latest
+    needs: [Job6_-_Build_bundle]
     steps:
 
     - name: Get date for artifacts
