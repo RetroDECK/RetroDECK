@@ -17,7 +17,7 @@ on:
 
 jobs:
 
-  Job 1 - Prepearing_enviornment:
+  Job1_-_Prepearing_enviornment:
     runs-on: ubuntu-latest
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -32,42 +32,42 @@ jobs:
           sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
           sudo flatpak install -y org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08 io.qt.qtwebengine.BaseApp/x86_64/5.15-21.08 org.freedesktop.Sdk.Extension.llvm13
 
-  Job 2 - Downloading_Sources:
+  Job2_-_Downloading_Sources:
     runs-on: ubuntu-latest
     steps:
       - name: Downloading sources
         run: |
           sudo flatpak-builder --download-only --user --install --force-clean --repo=local retrodeck-flatpak net.retrodeck.retrodeck.yml
 
-  Job 3 - Building_part_1:
+  Job3_-_Building_part_1:
     runs-on: ubuntu-latest
     steps:
       - name: Bulding part 1 - Until RetroArch Cores
         run: |
           sudo flatpak-builder --build-only --stop-at=retroarch-cores --user --install --force-clean --repo=local retrodeck-flatpak net.retrodeck.retrodeck.yml
 
-  Job 4 - Building_part_2:
+  Job4_-_Building_part_2:
     runs-on: ubuntu-latest
     steps:
       - name: Bulding part 1 - Until the end
         run: |
           sudo flatpak-builder --build-only --user --install --force-clean --repo=local retrodeck-flatpak net.retrodeck.retrodeck.yml
 
-  Job 5 - Finishing_build:
+  Job5_-_Finishing_build:
     runs-on: ubuntu-latest
     steps:
       - name: Finishing build
         run: |
           sudo flatpak-builder --finish-only --user --install --force-clean --repo=local retrodeck-flatpak net.retrodeck.retrodeck.yml
 
-  Job 6 - Build_bundle:
+  Job6_-_Build_bundle:
     runs-on: ubuntu-latest
     steps:
       - name: Build bundle
         run: |
           sudo flatpak build-bundle local RetroDECK.flatpak net.retrodeck.retrodeck
 
-  Job 7 - Publishing_flatpak:
+  Job7_-_Publishing_flatpak:
     runs-on: ubuntu-latest
     steps:
 
