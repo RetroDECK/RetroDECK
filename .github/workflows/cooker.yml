@@ -36,7 +36,7 @@ jobs:
   #       id: cache-cooker
   #       uses: actions/cache@v2
   #       with:
-  #         path: ./*flatpak*
+  #         path:  /home/runner/work/RetroDECK
   #         key: ${{ runner.os }}-cache
 
   Job2_-_Downloading_Sources:
@@ -60,7 +60,7 @@ jobs:
         id: cache-cooker
         uses: actions/cache@v2
         with:
-          path: ./*flatpak*
+          path:  /home/runner/work/RetroDECK
           key: ${{ runner.os }}-cache
 
   Job3_-_Building_part_1:
@@ -84,7 +84,7 @@ jobs:
         id: cache-cooker
         uses: actions/cache@v2
         with:
-          path: ./*flatpak*
+          path:  /home/runner/work/RetroDECK
           key: ${{ runner.os }}-cache
 
   Job4_-_Building_part_2:
