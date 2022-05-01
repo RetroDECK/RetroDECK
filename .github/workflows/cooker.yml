@@ -204,11 +204,11 @@ jobs:
     steps:
 
     - name: cache-cooker
-        id: cache-cooker
-        uses: actions/cache@v2
-        with:
-          path:  /home/runner/work/RetroDECK
-          key: ${{ runner.os }}-cooker-cache
+      id: cache-cooker
+      uses: actions/cache@v2
+      with:
+        path:  /home/runner/work/RetroDECK
+        key: ${{ runner.os }}-cooker-cache
 
     - name: Get date for artifacts
       id: date
