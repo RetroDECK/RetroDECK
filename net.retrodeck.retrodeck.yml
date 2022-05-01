@@ -973,6 +973,11 @@ modules:
         # RPCS3
         - cp config.yml ${FLATPAK_DEST}/retrodeck/emu-configs/
 
+        # Placing appdata
+        - mkdir -p ${FLATPAK_DEST}/share/appdata
+        - cp net.retrodeck.retrodeck.appdata.xml ${FLATPAK_DEST}/share/appdata
+
+
     #cleanup: ['*']
     sources:
       - type: file
@@ -995,3 +1000,6 @@ modules:
         path: tools
       - type: file
         path: net.retrodeck.retrodeck.desktop
+      - type: file
+        path: net.retrodeck.retrodeck.appdata.xml
+      
