@@ -103,7 +103,7 @@ jobs:
           sudo flatpak install -y org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08 io.qt.qtwebengine.BaseApp/x86_64/5.15-21.08 org.freedesktop.Sdk.Extension.llvm13
 
       - name: Bulding part 1 - Until RetroArch Cores
-        if: steps.cache-cooker.outputs.cache-hit != 'true'
+        #if: steps.cache-cooker.outputs.cache-hit != 'true'
         run: |
           cd /home/runner/work/RetroDECK/RetroDECK
           sudo flatpak-builder --build-only --stop-at=retroarch-cores --user --install --force-clean --repo=local retrodeck-flatpak net.retrodeck.retrodeck.yml
@@ -133,7 +133,7 @@ jobs:
           sudo flatpak install -y org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08 io.qt.qtwebengine.BaseApp/x86_64/5.15-21.08 org.freedesktop.Sdk.Extension.llvm13
 
       - name: Bulding part 1 - Until the end
-        if: steps.cache-cooker.outputs.cache-hit != 'true'
+        #if: steps.cache-cooker.outputs.cache-hit != 'true'
         run: |
           cd /home/runner/work/RetroDECK/RetroDECK
           sudo flatpak-builder --build-only --user --install --force-clean --repo=local retrodeck-flatpak net.retrodeck.retrodeck.yml
@@ -163,7 +163,7 @@ jobs:
           sudo flatpak install -y org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08 io.qt.qtwebengine.BaseApp/x86_64/5.15-21.08 org.freedesktop.Sdk.Extension.llvm13
 
       - name: Finishing build
-        if: steps.cache-cooker.outputs.cache-hit != 'true'
+        #if: steps.cache-cooker.outputs.cache-hit != 'true'
         run: |
           cd /home/runner/work/RetroDECK/RetroDECK
           sudo flatpak-builder --finish-only --user --install --force-clean --repo=local retrodeck-flatpak net.retrodeck.retrodeck.yml
@@ -193,7 +193,7 @@ jobs:
           sudo flatpak install -y org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08 io.qt.qtwebengine.BaseApp/x86_64/5.15-21.08 org.freedesktop.Sdk.Extension.llvm13
 
       - name: Build bundle
-        if: steps.cache-cooker.outputs.cache-hit != 'true'
+        #if: steps.cache-cooker.outputs.cache-hit != 'true'
         run: |
           cd /home/runner/work/RetroDECK/RetroDECK
           sudo flatpak build-bundle local RetroDECK.flatpak net.retrodeck.retrodeck
@@ -220,7 +220,7 @@ jobs:
       id: extract_branch
 
     - name: Publish the flatpak in a new cooker release
-      if: steps.cache-cooker.outputs.cache-hit != 'true'
+      #if: steps.cache-cooker.outputs.cache-hit != 'true'
       uses: ncipollo/release-action@v1
       with:
         tag: "${{ steps.extract_branch.outputs.branch }}-${{ steps.date.outputs.date }}"
