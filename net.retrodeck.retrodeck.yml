@@ -917,6 +917,36 @@ modules:
 
   # PRIMEHACK - END
 
+  # PPSSPP - START
+  # https://github.com/flathub/org.ppsspp.PPSSPP
+
+  - name: ppsspp
+    buildsystem: cmake-ninja
+    config-opts:
+    - '-DUSE_SYSTEM_FFMPEG=OFF' # turn this on?
+    - '-DUSE_SYSTEM_LIBZIP=ON'
+    - '-DUSE_SYSTEM_ZSTD=ON'
+
+    - '-DUSE_WAYLAND_WSI=ON'
+    - '-DUSING_X11_VULKAN=ON'
+    - '-DUSING_QT_UI=OFF'
+
+    - '-DBUILD_TESTING=OFF'
+    - '-DOpenGL_GL_PREFERENCE=GLVND'
+    build-options:
+      - '-DX86_64=ON'
+    sources:
+      - type: git
+        url: https://github.com/hrydgard/ppsspp.git
+        tag: v1.12.3
+        commit: ce0a45cf0fcdd5bebf32208b9998f68dfc1107b7
+        x-checker-data:
+          type: git
+          tag-pattern: "^v([\\d.]+)$"
+          is-main-source: true
+
+  # PPSSPP - END
+
   # External manifests end
   
 
