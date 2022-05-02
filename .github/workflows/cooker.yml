@@ -19,6 +19,7 @@ on:
 jobs:
 
   Job1_-_Prepearing_enviornment:
+    id: job1
     runs-on: ubuntu-latest
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it+++++++++++++++++++++++++++++++++++
@@ -65,7 +66,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /home/runner/work/RetroDECK
-          key: ${{ jobs.Job1_-_Prepearing_enviornment.steps.buildID }}
+          key: ${{ jobs.job1.steps.buildID }}
 
     # - name: Continuing with previous worklow cache
     #     if: steps.cache-cooker.outputs.cache-hit == 'true'
@@ -92,7 +93,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /home/runner/work/RetroDECK
-          key: ${{ jobs.Job1_-_Prepearing_enviornment.steps.buildID }}
+          key: ${{ jobs.job1.steps.buildID }}
 
       - name: Initializing enviornment
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
@@ -122,7 +123,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /home/runner/work/RetroDECK
-          key: ${{ jobs.Job1_-_Prepearing_enviornment.steps.buildID }}
+          key: ${{ jobs.job1.steps.buildID }}
 
       - name: Initializing enviornment
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
@@ -152,7 +153,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /home/runner/work/RetroDECK
-          key: ${{ jobs.Job1_-_Prepearing_enviornment.steps.buildID }}
+          key: ${{ jobs.job1.steps.buildID }}
 
       - name: Initializing enviornment
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
@@ -182,7 +183,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /home/runner/work/RetroDECK
-          key: ${{ jobs.Job1_-_Prepearing_enviornment.steps.buildID }}
+          key: ${{ jobs.job1.steps.buildID }}
 
       - name: Initializing enviornment
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
@@ -211,7 +212,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: /home/runner/work/RetroDECK
-        key: ${{ jobs.Job1_-_Prepearing_enviornment.steps.buildID }}
+        key: ${{ jobs.job1.steps.buildID }}
 
     - name: Get date for artifacts
       id: date
