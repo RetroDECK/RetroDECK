@@ -34,8 +34,9 @@ jobs:
       id: extract_branch
 
     - name: Generating build ID
-      id: buildID
-      run: echo "${{ steps.extract_branch.outputs.branch }}-${{ steps.date.outputs.date }}"
+      id: generating-buildID
+      outputs:
+        buildID: "${{ steps.extract_branch.outputs.branch }}-${{ steps.date.outputs.date }}"
 
   Job2_-_Downloading_Sources:
     runs-on: ubuntu-latest
@@ -66,7 +67,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /home/runner/work/RetroDECK
-          key: ${{ jobs.job1.steps.buildID }}
+          key: ${{ jobs.Job1_-_Prepearing_enviornment.steps.buildID }}
 
     # - name: Continuing with previous worklow cache
     #     if: steps.cache-cooker.outputs.cache-hit == 'true'
@@ -93,7 +94,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /home/runner/work/RetroDECK
-          key: ${{ jobs.job1.steps.buildID }}
+          key: ${{ jobs.Job1_-_Prepearing_enviornment.steps.buildID }}
 
       - name: Initializing enviornment
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
@@ -123,7 +124,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /home/runner/work/RetroDECK
-          key: ${{ jobs.job1.steps.buildID }}
+          key: ${{ jobs.Job1_-_Prepearing_enviornment.steps.buildID }}
 
       - name: Initializing enviornment
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
@@ -153,7 +154,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /home/runner/work/RetroDECK
-          key: ${{ jobs.job1.steps.buildID }}
+          key: ${{ jobs.Job1_-_Prepearing_enviornment.steps.buildID }}
 
       - name: Initializing enviornment
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
@@ -183,7 +184,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /home/runner/work/RetroDECK
-          key: ${{ jobs.job1.steps.buildID }}
+          key: ${{ jobs.Job1_-_Prepearing_enviornment.steps.buildID }}
 
       - name: Initializing enviornment
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
@@ -212,7 +213,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: /home/runner/work/RetroDECK
-        key: ${{ jobs.job1.steps.buildID }}
+        key: ${{ jobs.Job1_-_Prepearing_enviornment.steps.buildID }}
 
     - name: Get date for artifacts
       id: date
