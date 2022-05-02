@@ -34,7 +34,6 @@ jobs:
       id: extract_branch
 
     - name: Generating build ID
-      id: generating-buildID
       run: echo "${{ steps.extract_branch.outputs.branch }}-${{ steps.date.outputs.date }}"
       outputs:
         buildID: "${{ steps.extract_branch.outputs.branch }}-${{ steps.date.outputs.date }}"
@@ -108,11 +107,11 @@ jobs:
           sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
           sudo flatpak install -y org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08 io.qt.qtwebengine.BaseApp/x86_64/5.15-21.08 org.freedesktop.Sdk.Extension.llvm13
 
-      - name: Bulding part 1 - Until RetroArch Cores
+      - name: Bulding part 1 - Until dolphin-emu
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
         run: |
           cd /home/runner/work/RetroDECK/RetroDECK
-          sudo flatpak-builder --build-only --stop-at=retroarch-cores --user --install --force-clean --repo=local retrodeck-flatpak net.retrodeck.retrodeck.yml
+          sudo flatpak-builder --build-only --stop-at=dolphin-emu --user --install --force-clean --repo=local retrodeck-flatpak net.retrodeck.retrodeck.yml
 
   Job4_-_Building_part_2:
     runs-on: ubuntu-latest
