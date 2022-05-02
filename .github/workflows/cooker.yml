@@ -19,7 +19,6 @@ on:
 jobs:
 
   Job1_-_Prepearing_enviornment:
-    id: job1
     runs-on: ubuntu-latest
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it+++++++++++++++++++++++++++++++++++
