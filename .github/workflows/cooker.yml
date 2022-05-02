@@ -35,6 +35,7 @@ jobs:
 
     - name: Generating build ID
       id: generating-buildID
+      run: echo "${{ steps.extract_branch.outputs.branch }}-${{ steps.date.outputs.date }}"
       outputs:
         buildID: "${{ steps.extract_branch.outputs.branch }}-${{ steps.date.outputs.date }}"
 
