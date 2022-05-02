@@ -67,7 +67,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /home/runner/work/RetroDECK
-          key: ${{ jobs.Job1_-_Prepearing_enviornment.steps.buildID }}
+          key: ${{ needs.Job1_-_Prepearing_enviornment.outputs.buildID }}
 
     # - name: Continuing with previous worklow cache
     #     if: steps.cache-cooker.outputs.cache-hit == 'true'
@@ -94,7 +94,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /home/runner/work/RetroDECK
-          key: ${{ jobs.Job1_-_Prepearing_enviornment.steps.buildID }}
+          key: ${{ needs.Job1_-_Prepearing_enviornment.outputs.buildID }}
 
       - name: Initializing enviornment
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
@@ -124,7 +124,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /home/runner/work/RetroDECK
-          key: ${{ jobs.Job1_-_Prepearing_enviornment.steps.buildID }}
+          key: ${{ needs.Job1_-_Prepearing_enviornment.outputs.buildID }}
 
       - name: Initializing enviornment
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
@@ -154,7 +154,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /home/runner/work/RetroDECK
-          key: ${{ jobs.Job1_-_Prepearing_enviornment.steps.buildID }}
+          key: ${{ needs.Job1_-_Prepearing_enviornment.outputs.buildID }}
 
       - name: Initializing enviornment
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
@@ -184,7 +184,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /home/runner/work/RetroDECK
-          key: ${{ jobs.Job1_-_Prepearing_enviornment.steps.buildID }}
+          key: ${{ needs.Job1_-_Prepearing_enviornment.outputs.buildID }}
 
       - name: Initializing enviornment
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
@@ -213,7 +213,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: /home/runner/work/RetroDECK
-        key: ${{ jobs.Job1_-_Prepearing_enviornment.steps.buildID }}
+        key: ${{ needs.Job1_-_Prepearing_enviornment.outputs.buildID }}
 
     - name: Get date for artifacts
       id: date
