@@ -242,8 +242,8 @@ jobs:
         repo: RetroDECK-cooker
 
     - uses: actions/download-artifact@v2
-        with:
-          name: global-cache
+      with:
+        name: global-cache
 
   # Job8_-_Uploading_cache:
   #   runs-on: ubuntu-latest
