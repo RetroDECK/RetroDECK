@@ -41,12 +41,9 @@ jobs:
     needs: [Job1_-_Prepearing_enviornment]
     steps:
 
-      - name: Retrieve previous cache
-        id: global-cache
-        uses: actions/cache@v2
+      - uses: actions/download-artifact@v2
         with:
-          path: /home/runner/work/RetroDECK
-          key: cooker-global-cache
+          name: global-cache
 
       - uses: actions/checkout@v3
 
@@ -68,7 +65,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /home/runner/work/RetroDECK
-          key: jobs.Job1_-_Prepearing_enviornment.steps.buildID
+          key: ${{ jobs.Job1_-_Prepearing_enviornment.steps.buildID }}
 
     # - name: Continuing with previous worklow cache
     #     if: steps.cache-cooker.outputs.cache-hit == 'true'
@@ -95,7 +92,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /home/runner/work/RetroDECK
-          key: jobs.Job1_-_Prepearing_enviornment.steps.buildID
+          key: ${{ jobs.Job1_-_Prepearing_enviornment.steps.buildID }}
 
       - name: Initializing enviornment
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
@@ -125,7 +122,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /home/runner/work/RetroDECK
-          key: jobs.Job1_-_Prepearing_enviornment.steps.buildID
+          key: ${{ jobs.Job1_-_Prepearing_enviornment.steps.buildID }}
 
       - name: Initializing enviornment
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
@@ -155,7 +152,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /home/runner/work/RetroDECK
-          key: jobs.Job1_-_Prepearing_enviornment.steps.buildID
+          key: ${{ jobs.Job1_-_Prepearing_enviornment.steps.buildID }}
 
       - name: Initializing enviornment
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
@@ -185,7 +182,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /home/runner/work/RetroDECK
-          key: jobs.Job1_-_Prepearing_enviornment.steps.buildID
+          key: ${{ jobs.Job1_-_Prepearing_enviornment.steps.buildID }}
 
       - name: Initializing enviornment
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
@@ -214,7 +211,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: /home/runner/work/RetroDECK
-        key: jobs.Job1_-_Prepearing_enviornment.steps.buildID
+        key: ${{ jobs.Job1_-_Prepearing_enviornment.steps.buildID }}
 
     - name: Get date for artifacts
       id: date
@@ -244,12 +241,9 @@ jobs:
         token: ${{ secrets.TRIGGER_BUILD_TOKEN }}
         repo: RetroDECK-cooker
 
-    - name: Regenerate global cache
-        id: global-cache
-        uses: actions/cache@v2
+    - uses: actions/download-artifact@v2
         with:
-          path: /home/runner/work/RetroDECK
-          key: cooker-global-cache
+          name: global-cache
 
   # Job8_-_Uploading_cache:
   #   runs-on: ubuntu-latest
