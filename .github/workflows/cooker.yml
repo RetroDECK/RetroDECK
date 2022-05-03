@@ -305,3 +305,4 @@ jobs:
         name: global-cache
         path: /home/runner/work/RetroDECK
       continue-on-error: true
+      
