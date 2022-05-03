@@ -200,7 +200,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: ${{ needs.Job1_-_Prepearing_enviornment.outputs.buildID }}
-         path: retrodeck-cooker.zip
+          path: retrodeck-cooker.zip
 
       - name: Exctracting cache
         run: unzip retrodeck-cooker.zip -d /home/runner/work/RetroDECK
@@ -229,7 +229,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ${{ needs.Job1_-_Prepearing_enviornment.outputs.buildID }}
-          retrodeck-cooker.zip
+          path: retrodeck-cooker.zip
 
   Job6_-_Build_bundle:
     runs-on: ubuntu-latest
