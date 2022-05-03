@@ -49,7 +49,7 @@ jobs:
   #       continue-on-error: true
       
   #     - name: Exctracting cache
-  #       run: unzip -n retrodeck-cooker.zip -d /home/runner/work/RetroDECK
+  #       run: mkdir -p /home/runner/work/RetroDECK/RetroDECK && tar -xzvf retrodeck-cooker.tar.gz -C /home/runner/work/RetroDECK/RetroDECK
   #       continue-on-error: true
 
   #     - uses: actions/checkout@v3
@@ -75,7 +75,7 @@ jobs:
   #     #     key: ${{ needs.Job1_-_Prepearing_enviornment.outputs.buildID }}
 
   #     - name: Compressing cache
-  #       run: zip -r retrodeck-cooker.zip /home/runner/work/RetroDECK/* -x retrodeck-cooker.zip
+  #       run: tar -czvf retrodeck-cooker.tar.gz --exclude=retrodeck-cooker.tar.gz -C /home/runner/work/RetroDECK/RetroDECK .
 
   #     - name: Upload build specific cache
   #       uses: actions/upload-artifact@v3
@@ -110,7 +110,7 @@ jobs:
         continue-on-error: true
 
       - name: Exctracting cache
-        run: unzip -n retrodeck-cooker.zip -d /home/runner/work/RetroDECK
+        run: mkdir -p /home/runner/work/RetroDECK/RetroDECK && tar -xzvf retrodeck-cooker.tar.gz -C /home/runner/work/RetroDECK/RetroDECK
         continue-on-error: true
 
       - uses: actions/checkout@v3
@@ -135,7 +135,7 @@ jobs:
           sudo flatpak-builder --build-only --stop-at=melonds --user --repo=local retrodeck-flatpak net.retrodeck.retrodeck.yml
 
       - name: Compressing cache
-        run: zip -r retrodeck-cooker.zip /home/runner/work/RetroDECK/* -x retrodeck-cooker.zip
+        run: tar -czvf retrodeck-cooker.tar.gz --exclude=retrodeck-cooker.tar.gz -C /home/runner/work/RetroDECK/RetroDECK .
 
       - name: Upload build specific cache
         uses: actions/upload-artifact@v3
@@ -173,7 +173,7 @@ jobs:
           sudo flatpak-builder --build-only --user --repo=local retrodeck-flatpak net.retrodeck.retrodeck.yml
 
       - name: Compressing cache
-        run: zip -r retrodeck-cooker.zip /home/runner/work/RetroDECK/* -x retrodeck-cooker.zip
+        run: tar -czvf retrodeck-cooker.tar.gz --exclude=retrodeck-cooker.tar.gz -C /home/runner/work/RetroDECK/RetroDECK .
 
       - name: Upload build specific cache
         uses: actions/upload-artifact@v3
@@ -201,7 +201,7 @@ jobs:
           path: retrodeck-cooker.zip
 
       - name: Exctracting cache
-        run: unzip -n retrodeck-cooker.zip -d /home/runner/work/RetroDECK
+        run: mkdir -p /home/runner/work/RetroDECK/RetroDECK && tar -xzvf retrodeck-cooker.tar.gz -C /home/runner/work/RetroDECK/RetroDECK
 
       - name: Initializing enviornment
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
@@ -221,7 +221,7 @@ jobs:
           sudo flatpak-builder --finish-only --user --repo=local retrodeck-flatpak net.retrodeck.retrodeck.yml
 
       - name: Compressing cache
-        run: zip -r retrodeck-cooker.zip /home/runner/work/RetroDECK/* -x retrodeck-cooker.zip
+        run: tar -czvf retrodeck-cooker.tar.gz --exclude=retrodeck-cooker.tar.gz -C /home/runner/work/RetroDECK/RetroDECK .
 
       - name: Upload build specific cache
         uses: actions/upload-artifact@v3
@@ -249,7 +249,7 @@ jobs:
           path: retrodeck-cooker.zip
       
       - name: Exctracting cache
-        run: unzip -n retrodeck-cooker.zip -d /home/runner/work/RetroDECK
+        run: mkdir -p /home/runner/work/RetroDECK/RetroDECK && tar -xzvf retrodeck-cooker.tar.gz -C /home/runner/work/RetroDECK/RetroDECK
 
       - name: Initializing enviornment
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
@@ -269,7 +269,7 @@ jobs:
           sudo flatpak build-bundle local RetroDECK.flatpak net.retrodeck.retrodeck
 
       - name: Compressing cache
-        run: zip -r retrodeck-cooker.zip /home/runner/work/RetroDECK/* -x retrodeck-cooker.zip
+        run: tar -czvf retrodeck-cooker.tar.gz --exclude=retrodeck-cooker.tar.gz -C /home/runner/work/RetroDECK/RetroDECK .
 
       - name: Upload build specific cache
         uses: actions/upload-artifact@v3
@@ -296,7 +296,7 @@ jobs:
           path: retrodeck-cooker.zip
 
       - name: Exctracting cache
-        run: unzip -n retrodeck-cooker.zip -d /home/runner/work/RetroDECK
+        run: mkdir -p /home/runner/work/RetroDECK/RetroDECK && tar -xzvf retrodeck-cooker.tar.gz -C /home/runner/work/RetroDECK/RetroDECK
 
       - name: Get date for artifacts
         id: date
@@ -327,7 +327,7 @@ jobs:
           repo: RetroDECK-cooker
 
       - name: Compressing cache
-        run: zip -r retrodeck-cooker.zip /home/runner/work/RetroDECK/* -x retrodeck-cooker.zip
+        run: tar -czvf retrodeck-cooker.tar.gz --exclude=retrodeck-cooker.tar.gz -C /home/runner/work/RetroDECK/RetroDECK .
 
       - name: Upload global cache
         uses: actions/upload-artifact@v3
