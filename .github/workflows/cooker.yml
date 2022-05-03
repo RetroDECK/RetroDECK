@@ -47,11 +47,14 @@ jobs:
         with:
           name: global-cache
         continue-on-error: true
+      
+      - name: Exctracting cache
+        run: unzip retrodeck-cooker.zip -d /home/runner/work/RetroDECK
 
       - uses: actions/checkout@v3
+        #if: steps.global-cache.outputs.cache-hit != 'true'
 
       - name: Downloading sources
-        #if: steps.cache-cooker.outputs.cache-hit != 'true'
         run: |
           git pull
           git submodule init
@@ -67,14 +70,17 @@ jobs:
       #   id: intenral-cache
       #   uses: actions/cache@v2
       #   with:
-      #     path: /home/runner/work/RetroDECK
+      #     retrodeck-cooker.zip
       #     key: ${{ needs.Job1_-_Prepearing_enviornment.outputs.buildID }}
+
+      - name: Compressing cache
+        run: zip -r retrodeck-cooker.zip /home/runner/work/RetroDECK/* -x retrodeck-cooker.zip
 
       - name: Upload build specific cache
         uses: actions/upload-artifact@v3
         with:
           name: ${{ needs.Job1_-_Prepearing_enviornment.outputs.buildID }}
-          path: /home/runner/work/RetroDECK
+          retrodeck-cooker.zip
 
 
     # - name: Continuing with previous worklow cache
@@ -101,14 +107,17 @@ jobs:
       #   id: internal-cache
       #   uses: actions/cache@v2
       #   with:
-      #     path: /home/runner/work/RetroDECK
+      #     retrodeck-cooker.zip
       #     key: ${{ needs.Job1_-_Prepearing_enviornment.outputs.buildID }}
 
       - name: Download build specific cache
         uses: actions/download-artifact@v2
         with:
           name: ${{ needs.Job1_-_Prepearing_enviornment.outputs.buildID }}
-          path: /home/runner/work/RetroDECK
+          retrodeck-cooker.zip
+
+      - name: Exctracting cache
+        run: unzip retrodeck-cooker.zip -d /home/runner/work/RetroDECK
 
       - name: Initializing enviornment
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
@@ -127,11 +136,14 @@ jobs:
           cd /home/runner/work/RetroDECK/RetroDECK
           sudo flatpak-builder --build-only --stop-at=melonds --user --repo=local retrodeck-flatpak net.retrodeck.retrodeck.yml
 
+      - name: Compressing cache
+        run: zip -r retrodeck-cooker.zip /home/runner/work/RetroDECK/* -x retrodeck-cooker.zip
+
       - name: Upload build specific cache
         uses: actions/upload-artifact@v3
         with:
           name: ${{ needs.Job1_-_Prepearing_enviornment.outputs.buildID }}
-          path: /home/runner/work/RetroDECK
+          retrodeck-cooker.zip
 
   Job4_-_Building_part_2:
     runs-on: ubuntu-latest
@@ -139,12 +151,11 @@ jobs:
     steps:
       #- uses: actions/checkout@v3
 
-      - name: cache-cooker
-        id: internal-cache
-        uses: actions/cache@v2
+      - name: Download build specific cache
+        uses: actions/download-artifact@v2
         with:
-          path: /home/runner/work/RetroDECK
-          key: ${{ needs.Job1_-_Prepearing_enviornment.outputs.buildID }}
+          name: ${{ needs.Job1_-_Prepearing_enviornment.outputs.buildID }}
+          retrodeck-cooker.zip
 
       - name: Initializing enviornment
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
@@ -163,11 +174,14 @@ jobs:
           cd /home/runner/work/RetroDECK/RetroDECK
           sudo flatpak-builder --build-only --user --repo=local retrodeck-flatpak net.retrodeck.retrodeck.yml
 
+      - name: Compressing cache
+        run: zip -r retrodeck-cooker.zip /home/runner/work/RetroDECK/* -x retrodeck-cooker.zip
+
       - name: Upload build specific cache
         uses: actions/upload-artifact@v3
         with:
           name: ${{ needs.Job1_-_Prepearing_enviornment.outputs.buildID }}
-          path: /home/runner/work/RetroDECK
+          retrodeck-cooker.zip
 
   Job5_-_Finishing_build:
     runs-on: ubuntu-latest
@@ -179,14 +193,17 @@ jobs:
       #   id: internal-cache
       #   uses: actions/cache@v2
       #   with:
-      #     path: /home/runner/work/RetroDECK
+      #     retrodeck-cooker.zip
       #     key: ${{ needs.Job1_-_Prepearing_enviornment.outputs.buildID }}
 
       - name: Download build specific cache
         uses: actions/download-artifact@v2
         with:
           name: ${{ needs.Job1_-_Prepearing_enviornment.outputs.buildID }}
-          path: /home/runner/work/RetroDECK
+          retrodeck-cooker.zip
+
+      - name: Exctracting cache
+        run: unzip retrodeck-cooker.zip -d /home/runner/work/RetroDECK
 
       - name: Initializing enviornment
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
@@ -205,11 +222,14 @@ jobs:
           cd /home/runner/work/RetroDECK/RetroDECK
           sudo flatpak-builder --finish-only --user --repo=local retrodeck-flatpak net.retrodeck.retrodeck.yml
 
+      - name: Compressing cache
+        run: zip -r retrodeck-cooker.zip /home/runner/work/RetroDECK/* -x retrodeck-cooker.zip
+
       - name: Upload build specific cache
         uses: actions/upload-artifact@v3
         with:
           name: ${{ needs.Job1_-_Prepearing_enviornment.outputs.buildID }}
-          path: /home/runner/work/RetroDECK
+          retrodeck-cooker.zip
 
   Job6_-_Build_bundle:
     runs-on: ubuntu-latest
@@ -221,14 +241,17 @@ jobs:
       #   id: internal-cache
       #   uses: actions/cache@v2
       #   with:
-      #     path: /home/runner/work/RetroDECK
+      #     retrodeck-cooker.zip
       #     key: ${{ needs.Job1_-_Prepearing_enviornment.outputs.buildID }}
 
       - name: Download build specific cache
         uses: actions/download-artifact@v2
         with:
           name: ${{ needs.Job1_-_Prepearing_enviornment.outputs.buildID }}
-          path: /home/runner/work/RetroDECK
+          retrodeck-cooker.zip
+      
+      - name: Exctracting cache
+        run: unzip retrodeck-cooker.zip -d /home/runner/work/RetroDECK
 
       - name: Initializing enviornment
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
@@ -247,11 +270,14 @@ jobs:
           cd /home/runner/work/RetroDECK/RetroDECK
           sudo flatpak build-bundle local RetroDECK.flatpak net.retrodeck.retrodeck
 
+      - name: Compressing cache
+        run: zip -r retrodeck-cooker.zip /home/runner/work/RetroDECK/* -x retrodeck-cooker.zip
+
       - name: Upload build specific cache
         uses: actions/upload-artifact@v3
         with:
           name: ${{ needs.Job1_-_Prepearing_enviornment.outputs.buildID }}
-          path: /home/runner/work/RetroDECK
+          retrodeck-cooker.zip
 
   Job7_-_Publishing_flatpak:
     runs-on: ubuntu-latest
@@ -262,14 +288,17 @@ jobs:
     #   id: internal-cache
     #   uses: actions/cache@v2
     #   with:
-    #     path: /home/runner/work/RetroDECK
+    #     retrodeck-cooker.zip
     #     key: ${{ needs.Job1_-_Prepearing_enviornment.outputs.buildID }}
 
       - name: Download build specific cache
         uses: actions/download-artifact@v2
         with:
           name: ${{ needs.Job1_-_Prepearing_enviornment.outputs.buildID }}
-          path: /home/runner/work/RetroDECK
+          retrodeck-cooker.zip
+
+      - name: Exctracting cache
+        run: unzip retrodeck-cooker.zip -d /home/runner/work/RetroDECK
 
       - name: Get date for artifacts
         id: date
@@ -299,9 +328,12 @@ jobs:
           token: ${{ secrets.TRIGGER_BUILD_TOKEN }}
           repo: RetroDECK-cooker
 
+      - name: Compressing cache
+        run: zip -r retrodeck-cooker.zip /home/runner/work/RetroDECK/* -x retrodeck-cooker.zip
+
       - name: Upload global cache
         uses: actions/upload-artifact@v3
         with:
           name: global-cache
-          path: /home/runner/work/RetroDECK
+          retrodeck-cooker.zip
         continue-on-error: true
