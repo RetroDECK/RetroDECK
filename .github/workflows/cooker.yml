@@ -50,6 +50,7 @@ jobs:
       
       - name: Exctracting cache
         run: unzip retrodeck-cooker.zip -d /home/runner/work/RetroDECK
+        continue-on-error: true
 
       - uses: actions/checkout@v3
         #if: steps.global-cache.outputs.cache-hit != 'true'
