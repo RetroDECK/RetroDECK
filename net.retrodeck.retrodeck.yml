@@ -138,7 +138,7 @@ modules:
     - type: shell
       commands:
         - sed -i 's/QUIT EMULATIONSTATION/QUIT RETRODECK/g' es-app/src/guis/GuiMenu.cpp 
-        #- sed -i 's/"EMULATIONSTATION-DE  V" + Utils::String::toUpper(PROGRAM_VERSION_STRING)/"RetroDECK v--RETRODECKVERSION--, ES-DE  v" + Utils::String::toUpper(PROGRAM_VERSION_STRING)/g' es-app/src/guis/GuiMenu.cpp
+        - sed -i 's/"EMULATIONSTATION-DE  V" + Utils::String::toUpper(PROGRAM_VERSION_STRING)/"RetroDECK v0.4.0b, ES-DE  v" + Utils::String::toUpper(PROGRAM_VERSION_STRING)/g' es-app/src/guis/GuiMenu.cpp
 
   # ES-DE - END
 
