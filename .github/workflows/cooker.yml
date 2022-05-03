@@ -265,44 +265,43 @@ jobs:
     #     path: /home/runner/work/RetroDECK
     #     key: ${{ needs.Job1_-_Prepearing_enviornment.outputs.buildID }}
 
-    - name: Download build specific cache
+      - name: Download build specific cache
         uses: actions/download-artifact@v2
         with:
           name: ${{ needs.Job1_-_Prepearing_enviornment.outputs.buildID }}
           path: /home/runner/work/RetroDECK
 
-    - name: Get date for artifacts
-      id: date
-      run: echo "::set-output name=date::$(date +'%Y%m%d_%H%M')"
+      - name: Get date for artifacts
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y%m%d_%H%M')"
 
-    - name: Extract branch name
-      shell: bash
-      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-      id: extract_branch
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
 
-    - name: Publish the flatpak in a new cooker release
-      #if: steps.cache-cooker.outputs.cache-hit != 'true'
-      uses: ncipollo/release-action@v1
-      with:
-        tag: "${{ steps.extract_branch.outputs.branch }}-${{ steps.date.outputs.date }}"
-        body: |
-          # Release Notes (Cooker)
-          This is a cooker snapshot based on the commit: ${{ github.event.repository.full_name }}@${{github.sha}}.
-    
-          Cooker channel is provided for the community to test fixes and explore new functionality.
-          Please DO NOT open issues or ask support on this build.
-
-        artifacts: "RetroDECK.flatpak"
-        allowUpdates: true
-        prerelease: true
-        draft: false
-        token: ${{ secrets.TRIGGER_BUILD_TOKEN }}
-        repo: RetroDECK-cooker
-
-    - name: Upload global cache
-      uses: actions/upload-artifact@v3
-      with:
-        name: global-cache
-        path: /home/runner/work/RetroDECK
-      continue-on-error: true
+      - name: Publish the flatpak in a new cooker release
+        #if: steps.cache-cooker.outputs.cache-hit != 'true'
+        uses: ncipollo/release-action@v1
+        with:
+          tag: "${{ steps.extract_branch.outputs.branch }}-${{ steps.date.outputs.date }}"
+          body: |
+            # Release Notes (Cooker)
+            This is a cooker snapshot based on the commit: ${{ github.event.repository.full_name }}@${{github.sha}}.
       
+            Cooker channel is provided for the community to test fixes and explore new functionality.
+            Please DO NOT open issues or ask support on this build.
+
+          artifacts: "RetroDECK.flatpak"
+          allowUpdates: true
+          prerelease: true
+          draft: false
+          token: ${{ secrets.TRIGGER_BUILD_TOKEN }}
+          repo: RetroDECK-cooker
+
+      - name: Upload global cache
+        uses: actions/upload-artifact@v3
+        with:
+          name: global-cache
+          path: /home/runner/work/RetroDECK
+        continue-on-error: true
