@@ -75,7 +75,9 @@ jobs:
   #     #     key: ${{ needs.Job1_-_Prepearing_enviornment.outputs.buildID }}
 
   #     - name: Compressing cache
-  #       run: tar -czvf retrodeck-cooker.tar.gz --exclude=retrodeck-cooker.tar.gz --ignore-failed-read -C /home/runner/work/RetroDECK/RetroDECK .
+  #       run: |
+          touch /home/runner/work/RetroDECK/RetroDECK/retrodeck-cooker.tar.gz
+          tar --ignore-failed-read -czvf retrodeck-cooker.tar.gz --exclude=retrodeck-cooker.tar.gz -C /home/runner/work/RetroDECK/RetroDECK .
 
   #     - name: Upload build specific cache
   #       uses: actions/upload-artifact@v3
@@ -135,7 +137,9 @@ jobs:
           sudo flatpak-builder --build-only --stop-at=melonds --user --repo=local retrodeck-flatpak net.retrodeck.retrodeck.yml
 
       - name: Compressing cache
-        run: tar -czvf retrodeck-cooker.tar.gz --exclude=retrodeck-cooker.tar.gz --ignore-failed-read -C /home/runner/work/RetroDECK/RetroDECK .
+        run: |
+          touch /home/runner/work/RetroDECK/RetroDECK/retrodeck-cooker.tar.gz
+          tar --ignore-failed-read -czvf retrodeck-cooker.tar.gz --exclude=retrodeck-cooker.tar.gz -C /home/runner/work/RetroDECK/RetroDECK .
 
       - name: Upload build specific cache
         uses: actions/upload-artifact@v3
@@ -173,7 +177,9 @@ jobs:
           sudo flatpak-builder --build-only --user --repo=local retrodeck-flatpak net.retrodeck.retrodeck.yml
 
       - name: Compressing cache
-        run: tar -czvf retrodeck-cooker.tar.gz --exclude=retrodeck-cooker.tar.gz --ignore-failed-read -C /home/runner/work/RetroDECK/RetroDECK .
+        run: |
+          touch /home/runner/work/RetroDECK/RetroDECK/retrodeck-cooker.tar.gz
+          tar --ignore-failed-read -czvf retrodeck-cooker.tar.gz --exclude=retrodeck-cooker.tar.gz -C /home/runner/work/RetroDECK/RetroDECK .
 
       - name: Upload build specific cache
         uses: actions/upload-artifact@v3
@@ -221,7 +227,9 @@ jobs:
           sudo flatpak-builder --finish-only --user --repo=local retrodeck-flatpak net.retrodeck.retrodeck.yml
 
       - name: Compressing cache
-        run: tar -czvf retrodeck-cooker.tar.gz --exclude=retrodeck-cooker.tar.gz --ignore-failed-read -C /home/runner/work/RetroDECK/RetroDECK .
+        run: |
+          touch /home/runner/work/RetroDECK/RetroDECK/retrodeck-cooker.tar.gz
+          tar --ignore-failed-read -czvf retrodeck-cooker.tar.gz --exclude=retrodeck-cooker.tar.gz -C /home/runner/work/RetroDECK/RetroDECK .
 
       - name: Upload build specific cache
         uses: actions/upload-artifact@v3
@@ -269,7 +277,9 @@ jobs:
           sudo flatpak build-bundle local RetroDECK.flatpak net.retrodeck.retrodeck
 
       - name: Compressing cache
-        run: tar -czvf retrodeck-cooker.tar.gz --exclude=retrodeck-cooker.tar.gz --ignore-failed-read -C /home/runner/work/RetroDECK/RetroDECK .
+        run: |
+          touch /home/runner/work/RetroDECK/RetroDECK/retrodeck-cooker.tar.gz
+          tar --ignore-failed-read -czvf retrodeck-cooker.tar.gz --exclude=retrodeck-cooker.tar.gz -C /home/runner/work/RetroDECK/RetroDECK .
 
       - name: Upload build specific cache
         uses: actions/upload-artifact@v3
@@ -327,7 +337,9 @@ jobs:
           repo: RetroDECK-cooker
 
       - name: Compressing cache
-        run: tar -czvf retrodeck-cooker.tar.gz --exclude=retrodeck-cooker.tar.gz --ignore-failed-read -C /home/runner/work/RetroDECK/RetroDECK .
+        run: |
+          touch /home/runner/work/RetroDECK/RetroDECK/retrodeck-cooker.tar.gz
+          tar --ignore-failed-read -czvf retrodeck-cooker.tar.gz --exclude=retrodeck-cooker.tar.gz -C /home/runner/work/RetroDECK/RetroDECK .
 
       - name: Upload global cache
         uses: actions/upload-artifact@v3
