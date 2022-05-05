@@ -833,7 +833,6 @@ modules:
     sources:
       - type: git
         url: https://github.com/RPCS3/llvm-mirror.git
-        branch: master
         commit: 509d31ad89676522f7121b3bb8688f7d29b7ee60
       - type: git
         url: https://github.com/intel/ittapi.git
