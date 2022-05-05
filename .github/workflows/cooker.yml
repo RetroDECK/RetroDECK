@@ -34,8 +34,9 @@ jobs:
 
     - name: Generating build ID
       run: echo "${{ steps.extract_branch.outputs.branch }}-${{ steps.date.outputs.date }}"
-    outputs:
-      buildID: "${{ steps.extract_branch.outputs.branch }}-${{ steps.date.outputs.date }}"
+    
+  outputs:
+    buildID: "${{ steps.extract_branch.outputs.branch }}-${{ steps.date.outputs.date }}"
 
   # Job2_-_Downloading_Sources:
   #   runs-on: ubuntu-latest
@@ -76,8 +77,8 @@ jobs:
 
   #     - name: Compressing cache
   #       run: |
-          touch /home/runner/work/RetroDECK/RetroDECK/retrodeck-cooker.tar.gz
-          tar --ignore-failed-read -czvf retrodeck-cooker.tar.gz --exclude=retrodeck-cooker.tar.gz -C /home/runner/work/RetroDECK/RetroDECK .
+  #        touch /home/runner/work/RetroDECK/RetroDECK/retrodeck-cooker.tar.gz
+  #        tar --ignore-failed-read -czvf retrodeck-cooker.tar.gz --exclude=retrodeck-cooker.tar.gz -C /home/runner/work/RetroDECK/RetroDECK .
 
   #     - name: Upload build specific cache
   #       uses: actions/upload-artifact@v3
