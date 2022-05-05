@@ -50,7 +50,7 @@ jobs:
   #       continue-on-error: true
       
   #     - name: Exctracting cache
-  #       run: mkdir -p /home/runner/work/RetroDECK/RetroDECK && tar -xzvf retrodeck-cooker.tar.gz -C /home/runner/work/RetroDECK/RetroDECK
+  #       run: mkdir -p /home/runner/work/RetroDECK/RetroDECK && tar -xzvf --skip-old-files retrodeck-cooker.tar.gz -C /home/runner/work/RetroDECK/RetroDECK
   #       continue-on-error: true
 
   #     - uses: actions/checkout@v3
@@ -115,7 +115,7 @@ jobs:
         continue-on-error: true
 
       - name: Exctracting cache
-        run: mkdir -p /home/runner/work/RetroDECK/RetroDECK && tar -xzvf retrodeck-cooker.tar.gz -C /home/runner/work/RetroDECK/RetroDECK
+        run: mkdir -p /home/runner/work/RetroDECK/RetroDECK && tar -xzvf --skip-old-files retrodeck-cooker.tar.gz -C /home/runner/work/RetroDECK/RetroDECK
         continue-on-error: true
 
       - name: Initializing enviornment
@@ -210,7 +210,7 @@ jobs:
           path: retrodeck-cooker.tar.gz
 
       - name: Exctracting cache
-        run: mkdir -p /home/runner/work/RetroDECK/RetroDECK && tar -xzvf retrodeck-cooker.tar.gz -C /home/runner/work/RetroDECK/RetroDECK
+        run: mkdir -p /home/runner/work/RetroDECK/RetroDECK && tar -xzvf --skip-old-files retrodeck-cooker.tar.gz -C /home/runner/work/RetroDECK/RetroDECK
 
       - name: Initializing enviornment
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
@@ -261,7 +261,7 @@ jobs:
           path: retrodeck-cooker.tar.gz
       
       - name: Exctracting cache
-        run: mkdir -p /home/runner/work/RetroDECK/RetroDECK && tar -xzvf retrodeck-cooker.tar.gz -C /home/runner/work/RetroDECK/RetroDECK
+        run: mkdir -p /home/runner/work/RetroDECK/RetroDECK && tar -xzvf --skip-old-files retrodeck-cooker.tar.gz -C /home/runner/work/RetroDECK/RetroDECK
 
       - name: Initializing enviornment
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
@@ -310,7 +310,7 @@ jobs:
           path: retrodeck-cooker.tar.gz
 
       - name: Exctracting cache
-        run: mkdir -p /home/runner/work/RetroDECK/RetroDECK && tar -xzvf retrodeck-cooker.tar.gz -C /home/runner/work/RetroDECK/RetroDECK
+        run: mkdir -p /home/runner/work/RetroDECK/RetroDECK && tar -xzvf --skip-old-files retrodeck-cooker.tar.gz -C /home/runner/work/RetroDECK/RetroDECK
 
       - name: Get date for artifacts
         id: date
