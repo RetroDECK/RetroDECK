@@ -182,7 +182,7 @@ jobs:
       - name: Bulding part 1 - Until the end
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
         run: |
-          cd $GITHUB_WORKSPACE
+          #cd $GITHUB_WORKSPACE
           sudo flatpak-builder --build-only --user --repo=local retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
 
       - name: Compressing cache
@@ -234,7 +234,7 @@ jobs:
       - name: Finishing build
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
         run: |
-          cd $GITHUB_WORKSPACE
+          #cd $GITHUB_WORKSPACE
           sudo flatpak-builder --finish-only --user --repo=local retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
 
       - name: Compressing cache
@@ -286,7 +286,7 @@ jobs:
       - name: Build bundle
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
         run: |
-          cd $GITHUB_WORKSPACE
+          #cd $GITHUB_WORKSPACE
           sudo flatpak build-bundle local RetroDECK.flatpak net.retrodeck.retrodeck
 
       - name: Compressing cache
