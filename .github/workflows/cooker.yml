@@ -162,6 +162,12 @@ jobs:
         with:
           name: ${{ needs.Job1_-_Prepearing_enviornment.outputs.buildID }}
 
+      - name: Extracting cache
+        run: |
+          tar --skip-old-files -xzvf retrodeck-cooker.tar.gz
+          rm -f retrodeck-cooker.tar.gz
+        continue-on-error: true
+
       - name: Initializing enviornment
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
         run: |
