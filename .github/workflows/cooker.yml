@@ -49,8 +49,10 @@ jobs:
   #         name: global-cache
   #       continue-on-error: true
       
-  #     - name: Exctracting cache
-  #       run: mkdir -p /home/runner/work/RetroDECK/RetroDECK && tar -xzvf --skip-old-files retrodeck-cooker.tar.gz -C /home/runner/work/RetroDECK/RetroDECK
+  #     - name: Extracting cache
+  #       run: |
+          tar --skip-old-files -xzvf retrodeck-cooker.tar.gz
+          rm -f retrodeck-cooker.tar.gz
   #       continue-on-error: true
 
   #     - uses: actions/checkout@v3
@@ -77,8 +79,8 @@ jobs:
 
   #     - name: Compressing cache
   #       run: |
-  #        touch /home/runner/work/RetroDECK/RetroDECK/retrodeck-cooker.tar.gz
-  #        tar --ignore-failed-read -cfz retrodeck-cooker.tar.gz -C /home/runner/work/RetroDECK/RetroDECK .flatpak-builder retrodeck-flatpak-cooker
+  #        touch $GITHUB_WORKSPACE/retrodeck-cooker.tar.gz
+  #        tar --ignore-failed-read -cfz retrodeck-cooker.tar.gz -C $GITHUB_WORKSPACE .flatpak-builder retrodeck-flatpak-cooker
 
   #     - name: Upload build specific cache
   #       uses: actions/upload-artifact@v3
@@ -90,7 +92,7 @@ jobs:
     # - name: Continuing with previous worklow cache
     #     if: steps.cache-cooker.outputs.cache-hit == 'true'
     #     run: |
-    #       cd /home/runner/work/RetroDECK/RetroDECK
+    #       cd $GITHUB_WORKSPACE
     #       git pull
     #       git submodule init
     #       git submodule update
@@ -114,8 +116,10 @@ jobs:
           name: global-cache
         continue-on-error: true
 
-      - name: Exctracting cache
-        run: mkdir -p /home/runner/work/RetroDECK/RetroDECK && tar -xzvf --skip-old-files retrodeck-cooker.tar.gz -C /home/runner/work/RetroDECK/RetroDECK
+      - name: Extracting cache
+        run: |
+          tar --skip-old-files -xzvf retrodeck-cooker.tar.gz
+          rm -f retrodeck-cooker.tar.gz
         continue-on-error: true
 
       - name: Initializing enviornment
@@ -133,14 +137,12 @@ jobs:
 
       - name: Bulding part 1 - Until melonds
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
-        run: |
-          cd /home/runner/work/RetroDECK/RetroDECK
-          sudo flatpak-builder --build-only --stop-at=melonds --user --repo=local retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
+        run: sudo flatpak-builder --build-only --stop-at=melonds --user --repo=local retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
 
       - name: Compressing cache
         run: |
-          touch /home/runner/work/RetroDECK/RetroDECK/retrodeck-cooker.tar.gz
-          tar --ignore-failed-read -cfz retrodeck-cooker.tar.gz -C /home/runner/work/RetroDECK/RetroDECK .flatpak-builder retrodeck-flatpak-cooker
+          touch retrodeck-cooker.tar.gz
+          tar --ignore-failed-read -czvf retrodeck-cooker.tar.gz .flatpak-builder retrodeck-flatpak-cooker
 
       - name: Upload build specific cache
         uses: actions/upload-artifact@v3
@@ -159,7 +161,6 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: ${{ needs.Job1_-_Prepearing_enviornment.outputs.buildID }}
-          path: retrodeck-cooker.tar.gz
 
       - name: Initializing enviornment
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
@@ -175,13 +176,13 @@ jobs:
       - name: Bulding part 1 - Until the end
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
         run: |
-          cd /home/runner/work/RetroDECK/RetroDECK
+          cd $GITHUB_WORKSPACE
           sudo flatpak-builder --build-only --user --repo=local retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
 
       - name: Compressing cache
         run: |
-          touch /home/runner/work/RetroDECK/RetroDECK/retrodeck-cooker.tar.gz
-          tar --ignore-failed-read -cfz retrodeck-cooker.tar.gz -C /home/runner/work/RetroDECK/RetroDECK .flatpak-builder retrodeck-flatpak-cooker
+          touch retrodeck-cooker.tar.gz
+          tar --ignore-failed-read -czvf retrodeck-cooker.tar.gz .flatpak-builder retrodeck-flatpak-cooker
 
       - name: Upload build specific cache
         uses: actions/upload-artifact@v3
@@ -207,10 +208,11 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: ${{ needs.Job1_-_Prepearing_enviornment.outputs.buildID }}
-          path: retrodeck-cooker.tar.gz
 
-      - name: Exctracting cache
-        run: mkdir -p /home/runner/work/RetroDECK/RetroDECK && tar -xzvf --skip-old-files retrodeck-cooker.tar.gz -C /home/runner/work/RetroDECK/RetroDECK
+      - name: Extracting cache
+        run: |
+          tar --skip-old-files -xzvf retrodeck-cooker.tar.gz
+          rm -f retrodeck-cooker.tar.gz
 
       - name: Initializing enviornment
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
@@ -226,13 +228,13 @@ jobs:
       - name: Finishing build
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
         run: |
-          cd /home/runner/work/RetroDECK/RetroDECK
+          cd $GITHUB_WORKSPACE
           sudo flatpak-builder --finish-only --user --repo=local retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
 
       - name: Compressing cache
         run: |
-          touch /home/runner/work/RetroDECK/RetroDECK/retrodeck-cooker.tar.gz
-          tar --ignore-failed-read -cfz retrodeck-cooker.tar.gz -C /home/runner/work/RetroDECK/RetroDECK .flatpak-builder retrodeck-flatpak-cooker
+          touch retrodeck-cooker.tar.gz
+          tar --ignore-failed-read -czvf retrodeck-cooker.tar.gz .flatpak-builder retrodeck-flatpak-cooker
 
       - name: Upload build specific cache
         uses: actions/upload-artifact@v3
@@ -258,10 +260,11 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: ${{ needs.Job1_-_Prepearing_enviornment.outputs.buildID }}
-          path: retrodeck-cooker.tar.gz
       
-      - name: Exctracting cache
-        run: mkdir -p /home/runner/work/RetroDECK/RetroDECK && tar -xzvf --skip-old-files retrodeck-cooker.tar.gz -C /home/runner/work/RetroDECK/RetroDECK
+      - name: Extracting cache
+        run: |
+          tar --skip-old-files -xzvf retrodeck-cooker.tar.gz
+          rm -f retrodeck-cooker.tar.gz
 
       - name: Initializing enviornment
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
@@ -277,13 +280,13 @@ jobs:
       - name: Build bundle
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
         run: |
-          cd /home/runner/work/RetroDECK/RetroDECK
+          cd $GITHUB_WORKSPACE
           sudo flatpak build-bundle local RetroDECK.flatpak net.retrodeck.retrodeck
 
       - name: Compressing cache
         run: |
-          touch /home/runner/work/RetroDECK/RetroDECK/retrodeck-cooker.tar.gz
-          tar --ignore-failed-read -cfz retrodeck-cooker.tar.gz -C /home/runner/work/RetroDECK/RetroDECK .flatpak-builder retrodeck-flatpak-cooker
+          touch retrodeck-cooker.tar.gz
+          tar --ignore-failed-read -czvf retrodeck-cooker.tar.gz .flatpak-builder retrodeck-flatpak-cooker
 
       - name: Upload build specific cache
         uses: actions/upload-artifact@v3
@@ -307,10 +310,11 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: ${{ needs.Job1_-_Prepearing_enviornment.outputs.buildID }}
-          path: retrodeck-cooker.tar.gz
 
-      - name: Exctracting cache
-        run: mkdir -p /home/runner/work/RetroDECK/RetroDECK && tar -xzvf --skip-old-files retrodeck-cooker.tar.gz -C /home/runner/work/RetroDECK/RetroDECK
+      - name: Extracting cache
+        run: |
+          tar --skip-old-files -xzvf retrodeck-cooker.tar.gz
+          rm -f retrodeck-cooker.tar.gz
 
       - name: Get date for artifacts
         id: date
@@ -342,8 +346,8 @@ jobs:
 
       - name: Compressing cache
         run: |
-          touch /home/runner/work/RetroDECK/RetroDECK/retrodeck-cooker.tar.gz
-          tar --ignore-failed-read -cfz retrodeck-cooker.tar.gz -C /home/runner/work/RetroDECK/RetroDECK .flatpak-builder retrodeck-flatpak-cooker
+          touch retrodeck-cooker.tar.gz
+          tar --ignore-failed-read -czvf retrodeck-cooker.tar.gz .flatpak-builder retrodeck-flatpak-cooker
 
       - name: Upload global cache
         uses: actions/upload-artifact@v3
