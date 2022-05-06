@@ -68,7 +68,7 @@ jobs:
   #         sudo apt install flatpak flatpak-builder p7zip-full
   #         sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
   #         sudo flatpak install -y org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08 io.qt.qtwebengine.BaseApp/x86_64/5.15-21.08 org.freedesktop.Sdk.Extension.llvm13
-  #         sudo flatpak-builder --download-only --user --repo=local retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
+  #         sudo flatpak-builder --download-only --user --force-clean --repo=local retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
 
   #     # - name: Generating build specific cache
   #     #   id: intenral-cache
@@ -101,7 +101,7 @@ jobs:
     #       sudo apt install flatpak flatpak-builder p7zip-full
     #       sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
     #       sudo flatpak install -y org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08 io.qt.qtwebengine.BaseApp/x86_64/5.15-21.08 org.freedesktop.Sdk.Extension.llvm13
-    #       sudo flatpak-builder --download-only --user --repo=local retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
+    #       sudo flatpak-builder --download-only --user --force-clean --repo=local retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
 
   Job3_-_Building_part_1:
     runs-on: ubuntu-latest
@@ -133,11 +133,11 @@ jobs:
           sudo apt install flatpak flatpak-builder p7zip-full
           sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
           sudo flatpak install -y org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08 io.qt.qtwebengine.BaseApp/x86_64/5.15-21.08 org.freedesktop.Sdk.Extension.llvm13
-          sudo flatpak-builder --download-only --user --repo=local retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
+          sudo flatpak-builder --download-only --user --force-clean --repo=local retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
 
       - name: Bulding part 1 - Until melonds
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
-        run: sudo flatpak-builder --build-only --stop-at=melonds --user --repo=local retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
+        run: sudo flatpak-builder --build-only --stop-at=melonds --user --force-clean --repo=local retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
 
       - name: Compressing cache
         run: |
@@ -183,7 +183,7 @@ jobs:
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
         run: |
           #cd $GITHUB_WORKSPACE
-          sudo flatpak-builder --build-only --user --repo=local retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
+          sudo flatpak-builder --build-only --user --force-clean --repo=local retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
 
       - name: Compressing cache
         run: |
@@ -235,7 +235,7 @@ jobs:
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
         run: |
           #cd $GITHUB_WORKSPACE
-          sudo flatpak-builder --finish-only --user --repo=local retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
+          sudo flatpak-builder --finish-only --user --force-clean --repo=local retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
 
       - name: Compressing cache
         run: |
