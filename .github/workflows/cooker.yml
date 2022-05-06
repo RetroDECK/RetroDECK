@@ -51,8 +51,8 @@ jobs:
       
   #     - name: Extracting cache
   #       run: |
-          tar --skip-old-files -xzvf retrodeck-cooker.tar.gz
-          rm -f retrodeck-cooker.tar.gz
+  #        tar --skip-old-files -xzvf retrodeck-cooker.tar.gz
+  #        rm -f retrodeck-cooker.tar.gz
   #       continue-on-error: true
 
   #     - uses: actions/checkout@v3
