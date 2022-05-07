@@ -30,14 +30,13 @@
     </screenshot>
   </screenshots>
   <description>
-    <p>
+  <p>
 	RetroDECK brings an environment to catalog and play your retro games directly from SteamOS and it's tailored specifically for the Steam Deck.<br/>
 	It's inspired by embedded emulation systems like AmberELEC, EmuELEC, CoreELEC, Lakka, and Batocera.
-	</p>
-	<p>
+	<br/>
 	Powered by EmulationStation Desktop Edition, which uses RetroArch and other standalone emulators to allow you to import and play your favorite retro (and even not-so-retro) games in a tidy environment without flooding your Steam library.<br/>
 	No other software is needed as everything it's already included!
-    </p>
+  </p>
   </description>
   <project_license>GPL-3.0</project_license>
   <metadata_license>CC0-1.0</metadata_license>
