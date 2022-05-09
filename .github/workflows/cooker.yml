@@ -142,7 +142,7 @@ jobs:
       - name: Compressing cache
         run: |
           touch retrodeck-cooker.tar.gz
-          tar --ignore-failed-read -czvf retrodeck-cooker.tar.gz .flatpak-builder retrodeck-flatpak-cooker local
+          tar --ignore-failed-read -czvf retrodeck-cooker.tar.gz .flatpak-builder retrodeck-flatpak-cooker 
 
       - name: Upload build specific cache
         uses: actions/upload-artifact@v3
@@ -150,55 +150,55 @@ jobs:
           name: ${{ needs.Job1_-_Prepearing_enviornment.outputs.buildID }}
           path: retrodeck-cooker.tar.gz
 
-  Job4_-_Building_part_2:
-    runs-on: ubuntu-latest
-    needs: [Job1_-_Prepearing_enviornment, Job3_-_Building_part_1]
-    steps:
+  # Job4_-_Building_part_2:
+  #   runs-on: ubuntu-latest
+  #   needs: [Job1_-_Prepearing_enviornment, Job3_-_Building_part_1]
+  #   steps:
 
-      - uses: actions/checkout@v3
+  #     - uses: actions/checkout@v3
 
-      - name: Download build specific cache
-        uses: actions/download-artifact@v2
-        with:
-          name: ${{ needs.Job1_-_Prepearing_enviornment.outputs.buildID }}
+  #     - name: Download build specific cache
+  #       uses: actions/download-artifact@v2
+  #       with:
+  #         name: ${{ needs.Job1_-_Prepearing_enviornment.outputs.buildID }}
 
-      - name: Extracting cache
-        run: |
-          tar --skip-old-files -xzvf retrodeck-cooker.tar.gz
-          rm -f retrodeck-cooker.tar.gz
-        continue-on-error: true
+  #     - name: Extracting cache
+  #       run: |
+  #         tar --skip-old-files -xzvf retrodeck-cooker.tar.gz
+  #         rm -f retrodeck-cooker.tar.gz
+  #       continue-on-error: true
 
-      - name: Initializing enviornment
-        #if: steps.cache-cooker.outputs.cache-hit != 'true'
-        run: |
-          git submodule init
-          git submodule update
-          sudo add-apt-repository ppa:alexlarsson/flatpak
-          sudo apt-get update
-          sudo apt install flatpak flatpak-builder p7zip-full
-          sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-          sudo flatpak install -y org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08 io.qt.qtwebengine.BaseApp/x86_64/5.15-21.08 org.freedesktop.Sdk.Extension.llvm13
+  #     - name: Initializing enviornment
+  #       #if: steps.cache-cooker.outputs.cache-hit != 'true'
+  #       run: |
+  #         git submodule init
+  #         git submodule update
+  #         sudo add-apt-repository ppa:alexlarsson/flatpak
+  #         sudo apt-get update
+  #         sudo apt install flatpak flatpak-builder p7zip-full
+  #         sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+  #         sudo flatpak install -y org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08 io.qt.qtwebengine.BaseApp/x86_64/5.15-21.08 org.freedesktop.Sdk.Extension.llvm13
 
-      - name: Bulding part 1 - Until the end
-        #if: steps.cache-cooker.outputs.cache-hit != 'true'
-        run: |
-          #cd $GITHUB_WORKSPACE
-          sudo flatpak-builder --build-only --user --force-clean --repo=$GITHUB_WORKSPACE/local retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
+  #     - name: Bulding part 1 - Until the end
+  #       #if: steps.cache-cooker.outputs.cache-hit != 'true'
+  #       run: |
+  #         cd $GITHUB_WORKSPACE
+  #         sudo flatpak-builder --build-only --user --force-clean --repo=$GITHUB_WORKSPACE/local retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
 
-      - name: Compressing cache
-        run: |
-          touch retrodeck-cooker.tar.gz
-          tar --ignore-failed-read -czvf retrodeck-cooker.tar.gz .flatpak-builder retrodeck-flatpak-cooker local
+  #     - name: Compressing cache
+  #       run: |
+  #         touch retrodeck-cooker.tar.gz
+  #         tar --ignore-failed-read -czvf retrodeck-cooker.tar.gz .flatpak-builder retrodeck-flatpak-cooker 
 
-      - name: Upload build specific cache
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ needs.Job1_-_Prepearing_enviornment.outputs.buildID }}
-          path: retrodeck-cooker.tar.gz
+  #     - name: Upload build specific cache
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: ${{ needs.Job1_-_Prepearing_enviornment.outputs.buildID }}
+  #         path: retrodeck-cooker.tar.gz
 
   Job5_-_Finishing_build:
     runs-on: ubuntu-latest
-    needs: [Job1_-_Prepearing_enviornment, Job3_-_Building_part_1, Job4_-_Building_part_2]
+    needs: [Job1_-_Prepearing_enviornment, Job3_-_Building_part_1]
     steps:
 
       - uses: actions/checkout@v3
@@ -234,13 +234,13 @@ jobs:
       - name: Finishing build
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
         run: |
-          #cd $GITHUB_WORKSPACE
-          sudo flatpak-builder --finish-only --user --force-clean --repo=$GITHUB_WORKSPACE/local retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
+#cd $GITHUB_WORKSPACE
+          sudo flatpak-builder --user --force-clean --repo=$GITHUB_WORKSPACE/local retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
 
       - name: Compressing cache
         run: |
           touch retrodeck-cooker.tar.gz
-          tar --ignore-failed-read -czvf retrodeck-cooker.tar.gz .flatpak-builder retrodeck-flatpak-cooker local
+          tar --ignore-failed-read -czvf retrodeck-cooker.tar.gz .flatpak-builder retrodeck-flatpak-cooker 
 
       - name: Upload build specific cache
         uses: actions/upload-artifact@v3
@@ -250,7 +250,7 @@ jobs:
 
   Job6_-_Build_bundle:
     runs-on: ubuntu-latest
-    needs: [Job1_-_Prepearing_enviornment, Job3_-_Building_part_1, Job4_-_Building_part_2, Job5_-_Finishing_build]
+    needs: [Job1_-_Prepearing_enviornment, Job3_-_Building_part_1, Job5_-_Finishing_build]
     steps:
 
       - uses: actions/checkout@v3
@@ -292,7 +292,7 @@ jobs:
       - name: Compressing cache
         run: |
           touch retrodeck-cooker.tar.gz
-          tar --ignore-failed-read -czvf retrodeck-cooker.tar.gz .flatpak-builder retrodeck-flatpak-cooker local
+          tar --ignore-failed-read -czvf retrodeck-cooker.tar.gz .flatpak-builder retrodeck-flatpak-cooker 
 
       - name: Upload build specific cache
         uses: actions/upload-artifact@v3
@@ -302,7 +302,7 @@ jobs:
 
   Job7_-_Publishing_flatpak:
     runs-on: ubuntu-latest
-    needs: [Job1_-_Prepearing_enviornment, Job3_-_Building_part_1, Job4_-_Building_part_2, Job5_-_Finishing_build, Job6_-_Build_bundle]
+    needs: [Job1_-_Prepearing_enviornment, Job3_-_Building_part_1, Job5_-_Finishing_build, Job6_-_Build_bundle]
     steps:
 
     # - name: cache-cooker
@@ -353,7 +353,7 @@ jobs:
       - name: Compressing cache
         run: |
           touch retrodeck-cooker.tar.gz
-          tar --ignore-failed-read -czvf retrodeck-cooker.tar.gz .flatpak-builder retrodeck-flatpak-cooker local
+          tar --ignore-failed-read -czvf retrodeck-cooker.tar.gz .flatpak-builder retrodeck-flatpak-cooker 
 
       - name: Upload global cache
         uses: actions/upload-artifact@v3
