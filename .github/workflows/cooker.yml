@@ -234,7 +234,6 @@ jobs:
       - name: Finishing build
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
         run: |
-#cd $GITHUB_WORKSPACE
           sudo flatpak-builder --user --force-clean --repo=$GITHUB_WORKSPACE/local retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
 
       - name: Compressing cache
