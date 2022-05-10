@@ -137,7 +137,7 @@ jobs:
 
       - name: Bulding part 1 - Until melonds
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
-        run: sudo flatpak-builder --build-only --stop-at=melonds --user --force-clean --repo=$GITHUB_WORKSPACE/local retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
+        run: sudo flatpak-builder --build-only --disable-download --stop-at=melonds --user --force-clean --repo=$GITHUB_WORKSPACE/local retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
 
       - name: Compressing cache
         run: |
@@ -234,7 +234,7 @@ jobs:
       - name: Finishing build
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
         run: |
-          sudo flatpak-builder --user --force-clean --repo=$GITHUB_WORKSPACE/local retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
+          sudo flatpak-builder --user --force-clean --disable-download --repo=$GITHUB_WORKSPACE/local retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
 
       - name: Compressing cache
         run: |
