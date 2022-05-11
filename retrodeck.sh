@@ -2,6 +2,9 @@
 
 # Steam Deck SD path: /run/media/mmcblk0p1
 
+# Create log
+exec > ~/retrodeck/retrodeck.log 2>&1
+
 is_mounted() {
     mount | awk -v DIR="$1" '{if ($3 == DIR) { exit 0}} ENDFILE{exit -1}'
 }
