@@ -291,7 +291,7 @@ jobs:
         #if: steps.cache-cooker.outputs.cache-hit != 'true'
         run: |
           #cd $GITHUB_WORKSPACE
-          sudo flatpak build-bundle local RetroDECK.flatpak net.retrodeck.retrodeck
+          sudo flatpak build-bundle $GITHUB_WORKSPACE/local RetroDECK.flatpak net.retrodeck.retrodeck
 
       - name: Compressing cache
         run: |
