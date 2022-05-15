@@ -133,7 +133,7 @@ modules:
       - es-core
     sources:
     - type: git
-      url: https://gitlab.com/leonstyhre/emulationstation-de.git
+      url: https://gitlab.com/es-de/emulationstation-de
       branch: 3cb464c7adcea8d020cdff92803c64b7f72fb443
     - type: shell
       commands:
