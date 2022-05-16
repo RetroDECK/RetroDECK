@@ -50,9 +50,11 @@ then
 
 	kdialog --title "RetroDECK" --msgbox "RetroDECK will now install the needed files, please wait one minute, another message will notify when the process will be finished.\n\nPress OK to continue."
 
+    # Initializing ROMs folder - Original in ~/retrodeck (or SD Card)
     mv -f /var/config/emulationstation/ROMs /var/config/emulationstation/ROMs.bak
     ln -s $roms_folder /var/config/emulationstation/ROMs
     mv -f /var/config/emulationstation/ROMs.bak/* $roms_folder/
+    rm -rf /var/config/emulationstation/ROMs.bak
 
     # XMLSTARLET HERE
     cp /app/retrodeck/es_settings.xml /var/config/emulationstation/.emulationstation/es_settings.xml
@@ -66,12 +68,18 @@ then
     cp -r /app/retrodeck/tools/* /var/config/retrodeck/tools/
     mkdir -p /var/config/emulationstation/.emulationstation/custom_systems/tools/
     cp /app/retrodeck/tools-gamelist.xml /var/config/retrodeck/tools/gamelist.xml
-    # ES-DE scraped folder
+    # ES-DE scraped folder - Original in ~/retrodeck
     mv -f /var/config/emulationstation/.emulationstation/downloaded_media /var/config/emulationstation/.emulationstation/downloaded_media.old
     mkdir ~/retrodeck/.downloaded_media
     ln -s ~/retrodeck/.downloaded_media /var/config/emulationstation/.emulationstation/downloaded_media
     mv -f /var/config/emulationstation/.emulationstation/downloaded_media.old/* ~/retrodeck/.downloaded_media
     rm -rf /var/config/emulationstation/.emulationstation/downloaded_media.old
+    # ES-DE themes folder - Original in ~/retrodeck
+    mv -f /var/config/emulationstation/.emulationstation/themes /var/config/emulationstation/.emulationstation/themes.old
+    mkdir ~/retrodeck/.themes
+    ln -s ~/retrodeck/.themes /var/config/emulationstation/.emulationstation/themes
+    mv -f /var/config/emulationstation/.emulationstation/themes.old/* ~/retrodeck/.themes
+    rm -rf /var/config/emulationstation/.emulationstation/themes.old
 
     # Initializing emulators configs
     emuconfigs=/app/retrodeck/emu-configs/
