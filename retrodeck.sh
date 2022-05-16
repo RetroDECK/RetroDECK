@@ -6,7 +6,7 @@
 #exec > ~/retrodeck/.retrodeck.log 2>&1
 exec 3>&1 4>&2
 trap 'exec 2>&4 1>&3' 0 1 2 3
-echo "$(date) : part 1 - start" >&3
+echo "$(date) : RetroDECK started" >&3
 exec 1>~/retrodeck/.retrodeck.log 2>&1
 
 is_mounted() {
