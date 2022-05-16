@@ -97,7 +97,7 @@ then
     ln -s ~/retrodeck/bios/switch/keys /var/data/yuzu/keys
     mkdir -p /var/data/yuzu/nand/system/Contents/registered/
     rm ~/retrodeck/bios/switch/registered
-    ln -s data/yuzu/nand/system/Contents/registered/ ~/retrodeck/bios/switch/registered
+    ln -s /var/data/yuzu/nand/system/Contents/registered/ ~/retrodeck/bios/switch/registered
     cp $emuconfigs/yuzu-qt-config.ini /var/config/yuzu/qt-config.ini
 
     # Dolphin
