@@ -68,7 +68,7 @@ jobs:
     - name: Upload build specific cache
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ needs.Job1_-_Prepearing_enviornment.outputs.buildID }}
+        name: ${{ needs.Job1_-_Building_P1.outputs.buildID }}
         path: retrodeck-cooker.tar.gz
 
     outputs:
@@ -84,7 +84,7 @@ jobs:
       - name: Download build specific cache
         uses: actions/download-artifact@v2
         with:
-          name: ${{ needs.Job1_-_Prepearing_enviornment.outputs.buildID }}
+          name: ${{ needs.Job1_-_Building_P1.outputs.buildID }}
       
       - name: Extracting cache
         run: |
