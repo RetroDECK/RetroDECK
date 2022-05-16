@@ -822,7 +822,7 @@
         <name>openbor</name>
         <fullname>OpenBOR Game Engine</fullname>
         <path>%ROMPATH%/openbor</path>
-        <extension>.7z .7Z .zip .ZIP</extension>
+        <extension>.AppImage</extension>
         <command>%STARTDIR%=%GAMEDIR% %EMULATOR_OS-SHELL% -c "%ROM%"</command>
         <platform>openbor</platform>
         <theme>openbor</theme>
