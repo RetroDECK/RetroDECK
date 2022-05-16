@@ -101,7 +101,7 @@ then
     mkdir -p ~/retrodeck/bios/switch/keys
     rm -rf /var/data/yuzu/keys
     ln -s ~/retrodeck/bios/switch/keys /var/data/yuzu/keys
-    # nitializing the firmware folder
+    # initializing the firmware folder
     mkdir -p ~/retrodeck/bios/switch/registered
     rm -rf /var/data/yuzu/nand/system/Contents/registered/
     ln -s ~/retrodeck/bios/switch/registered /var/data/yuzu/nand/system/Contents/registered/
