@@ -3,7 +3,11 @@
 # Steam Deck SD path: /run/media/mmcblk0p1
 
 # Create log
-exec > ~/retrodeck/retrodeck.log 2>&1
+#exec > ~/retrodeck/.retrodeck.log 2>&1
+exec 3>&1 4>&2
+trap 'exec 2>&4 1>&3' 0 1 2 3
+echo "$(date) : part 1 - start" >&3
+exec 1>~/retrodeck/.retrodeck.log 2>&1
 
 is_mounted() {
     mount | awk -v DIR="$1" '{if ($3 == DIR) { exit 0}} ENDFILE{exit -1}'
@@ -92,12 +96,16 @@ then
     cp $emuconfigs/retroarch.cfg /var/config/retroarch/
 
     # Yuzu
+    find ~/retrodeck/bios/switch -xtype l -exec rm {} \; # removing dead symlinks
+    # initializing the keys folder
     mkdir -p ~/retrodeck/bios/switch/keys
     rm -rf /var/data/yuzu/keys
     ln -s ~/retrodeck/bios/switch/keys /var/data/yuzu/keys
-    mkdir -p /var/data/yuzu/nand/system/Contents/registered/
-    rm ~/retrodeck/bios/switch/registered
-    ln -s /var/data/yuzu/nand/system/Contents/registered/ ~/retrodeck/bios/switch/registered
+    # nitializing the firmware folder
+    mkdir -p ~/retrodeck/bios/switch/registered
+    rm -rf /var/data/yuzu/nand/system/Contents/registered/
+    ln -s ~/retrodeck/bios/switch/registered /var/data/yuzu/nand/system/Contents/registered/
+    # configuring Yuzu
     cp $emuconfigs/yuzu-qt-config.ini /var/config/yuzu/qt-config.ini
 
     # Dolphin
