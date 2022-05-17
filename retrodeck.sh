@@ -3,7 +3,6 @@
 # Steam Deck SD path: /run/media/mmcblk0p1
 
 # Create log
-#exec > ~/retrodeck/.retrodeck.log 2>&1
 exec 3>&1 4>&2
 trap 'exec 2>&4 1>&3' 0 1 2 3
 echo "$(date) : RetroDECK started" >&3
@@ -67,6 +66,8 @@ then
     mkdir -p ~/retrodeck/states
     mkdir -p ~/retrodeck/screenshots
     mkdir -p ~/retrodeck/bios/pico-8
+
+    # TODO: write a function for these stuff below
 
     # ES-DE
     cp -r /app/retrodeck/tools/* /var/config/retrodeck/tools/

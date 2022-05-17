@@ -28,6 +28,9 @@ jobs:
 
     - name: Generating build ID
       run: echo "${{ steps.extract_branch.outputs.branch }}-${{ steps.date.outputs.date }}"
+
+    outputs:
+      buildID: "${{ steps.extract_branch.outputs.branch }}-${{ steps.date.outputs.date }}"
     
     - uses: actions/checkout@v3
 
@@ -70,9 +73,6 @@ jobs:
       with:
         name: ${{ needs.Job1_-_Building_P1.outputs.buildID }}
         path: retrodeck-cooker.tar.gz
-
-    outputs:
-      buildID: "${{ steps.extract_branch.outputs.branch }}-${{ steps.date.outputs.date }}"
 
   Job2_-_Build_P2_and_publish:
     runs-on: ubuntu-latest
