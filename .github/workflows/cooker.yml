@@ -28,7 +28,7 @@ jobs:
 
       - name: Generating build ID
         id: generating_buildid
-        run: echo "##[set-output name=build-id;]$(echo "${{ steps.extract_branch.outputs.branch }}-${{ steps.date.outputs.date }})"
+        run: echo "##[set-output name=build-id;]$(echo "${{ steps.extract_branch.outputs.branch }}-${{ steps.date.outputs.date }}")"
       
       - uses: actions/checkout@v3
 
