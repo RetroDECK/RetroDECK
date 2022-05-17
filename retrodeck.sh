@@ -95,6 +95,7 @@ then
     ln -s ~/retrodeck/bios /var/config/retroarch/system
     cp /app/share/libretro/cores/* /var/config/retroarch/cores/
     cp $emuconfigs/retroarch.cfg /var/config/retroarch/
+    rm -f ~/retrodeck/bios/bios # in some situations a double bios link is creted
 
     # Yuzu
     find ~/retrodeck/bios/switch -xtype l -exec rm {} \; # removing dead symlinks
