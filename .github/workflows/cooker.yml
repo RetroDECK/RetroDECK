@@ -27,10 +27,8 @@ jobs:
         id: extract_branch
 
       - name: Generating build ID
-        run: echo "${{ steps.extract_branch.outputs.branch }}-${{ steps.date.outputs.date }}"
-
-        outputs:
-          buildID: "${{ steps.extract_branch.outputs.branch }}-${{ steps.date.outputs.date }}"
+        id: generating_buildid
+        run: echo "##[set-output name=build-id;]$(echo "${{ steps.extract_branch.outputs.branch }}-${{ steps.date.outputs.date }}"
       
       - uses: actions/checkout@v3
 
@@ -71,8 +69,11 @@ jobs:
       - name: Upload build specific cache
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ needs.Job1_-_Building_P1.outputs.buildID }}
+          name: "${{ steps.generating_buildid.outputs.build-id }}"
           path: retrodeck-cooker.tar.gz
+
+    outputs:
+      buildID: "${{ steps.generating_buildid.outputs.build-id }}"
 
   Job2_-_Build_P2_and_publish:
     runs-on: ubuntu-latest
