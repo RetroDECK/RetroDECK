@@ -130,6 +130,9 @@ then
     # RPCS3
     mkdir -p /var/config/rpcs3/
     cp $emuconfigs/config.yml /var/config/rpcs3/
+
+    # PICO-8
+    mkdir -p $roms_folder/pico-8
     
 
     # Locking RetroDECK
