@@ -49,6 +49,13 @@
 		<nogamecount>true</nogamecount>
 		<nomultiscrape>true</nomultiscrape>
 	</game>
+		<game>
+		<path>./start-rpcs3.sh</path>
+		<name>Start RPCS3 (Standalone)</name>
+		<desc>Start RPCS3 to manually tweak your settings.</desc>
+		<nogamecount>true</nogamecount>
+		<nomultiscrape>true</nomultiscrape>
+	</game>
 	<game>
 		<path>./start-splore.sh</path>
 		<name>Start Splore</name>
