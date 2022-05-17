@@ -17,62 +17,62 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-    - name: Get date for artifacts
-      id: date
-      run: echo "::set-output name=date::$(date +'%Y%m%d_%H%M%S')"
+      - name: Get date for artifacts
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y%m%d_%H%M%S')"
 
-    - name: Extract branch name
-      shell: bash
-      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-      id: extract_branch
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
 
-    - name: Generating build ID
-      run: echo "${{ steps.extract_branch.outputs.branch }}-${{ steps.date.outputs.date }}"
+      - name: Generating build ID
+        run: echo "${{ steps.extract_branch.outputs.branch }}-${{ steps.date.outputs.date }}"
 
-    outputs:
-      buildID: "${{ steps.extract_branch.outputs.branch }}-${{ steps.date.outputs.date }}"
-    
-    - uses: actions/checkout@v3
+        outputs:
+          buildID: "${{ steps.extract_branch.outputs.branch }}-${{ steps.date.outputs.date }}"
+      
+      - uses: actions/checkout@v3
 
-    - name: Download global cache
-      uses: actions/download-artifact@v2
-      with:
-        name: global-cache
-      continue-on-error: true
+      - name: Download global cache
+        uses: actions/download-artifact@v2
+        with:
+          name: global-cache
+        continue-on-error: true
 
-    - name: Extracting cache
-      run: |
-        tar --skip-old-files -xzvf retrodeck-cooker.tar.gz
-        rm -f retrodeck-cooker.tar.gz
-      continue-on-error: true
+      - name: Extracting cache
+        run: |
+          tar --skip-old-files -xzvf retrodeck-cooker.tar.gz
+          rm -f retrodeck-cooker.tar.gz
+        continue-on-error: true
 
-    - name: Initializing enviornment
-      run: |
-        git pull
-        git submodule init
-        git submodule update
-        sudo add-apt-repository ppa:alexlarsson/flatpak
-        sudo apt-get update
-        sudo apt install flatpak flatpak-builder p7zip-full
-        sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-        sudo flatpak install -y org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08 io.qt.qtwebengine.BaseApp/x86_64/5.15-21.08 org.freedesktop.Sdk.Extension.llvm13
+      - name: Initializing enviornment
+        run: |
+          git pull
+          git submodule init
+          git submodule update
+          sudo add-apt-repository ppa:alexlarsson/flatpak
+          sudo apt-get update
+          sudo apt install flatpak flatpak-builder p7zip-full
+          sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+          sudo flatpak install -y org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08 io.qt.qtwebengine.BaseApp/x86_64/5.15-21.08 org.freedesktop.Sdk.Extension.llvm13
 
-    - name: Bulding part 1 - Until rpcs3
-      run: |
-        sudo flatpak-builder --build-only --stop-at=rpcs3 --user --force-clean --repo=$GITHUB_WORKSPACE/local retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
+      - name: Bulding part 1 - Until rpcs3
+        run: |
+          sudo flatpak-builder --build-only --stop-at=rpcs3 --user --force-clean --repo=$GITHUB_WORKSPACE/local retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
 
-    - name: Compressing cache
-      run: |
-        touch retrodeck-cooker.tar.gz
-        rm -rf .flatpak-builder/build/*-{2,3,4,5,6}
-        find .flatpak-builder/build -xtype l -exec rm {} \; # removing dead symlinks
-        tar --ignore-failed-read -czvf retrodeck-cooker.tar.gz retrodeck-flatpak-cooker
+      - name: Compressing cache
+        run: |
+          touch retrodeck-cooker.tar.gz
+          rm -rf .flatpak-builder/build/*-{2,3,4,5,6}
+          find .flatpak-builder/build -xtype l -exec rm {} \; # removing dead symlinks
+          tar --ignore-failed-read -czvf retrodeck-cooker.tar.gz retrodeck-flatpak-cooker
 
-    - name: Upload build specific cache
-      uses: actions/upload-artifact@v3
-      with:
-        name: ${{ needs.Job1_-_Building_P1.outputs.buildID }}
-        path: retrodeck-cooker.tar.gz
+      - name: Upload build specific cache
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ needs.Job1_-_Building_P1.outputs.buildID }}
+          path: retrodeck-cooker.tar.gz
 
   Job2_-_Build_P2_and_publish:
     runs-on: ubuntu-latest
