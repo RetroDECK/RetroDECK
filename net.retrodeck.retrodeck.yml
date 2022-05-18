@@ -61,6 +61,7 @@ cleanup-commands:
 modules:
 
   - name: version-initialization
+    buildsystem: simple
     sources:
     - type: shell
       commands:
