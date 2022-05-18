@@ -60,6 +60,15 @@ cleanup-commands:
 
 modules:
 
+  - name: version-initialization
+    sources:
+    - type: shell
+      commands:
+        - mkdir -p ${FLATPAK_DEST}/retrodeck/
+        - VERSION="cooker" # REMEMBER TO CHANGE THE VERSION BEFORE PUBLISHING (AND UPDATE THE APPDATA)
+        - if [ $VERSION == "cooker" ]; then VERSION=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')-$(date +'%Y%m%d_%H%M'); fi
+        - $VERSION >> ${FLATPAK_DEST}/retrodeck/version
+
   - name: xmlstarlet
     config-opts:
       - --disable-static-libs
@@ -963,7 +972,6 @@ modules:
         - rm -rf /app/share/emulationstation/resources/systems/unix/es_systems.xml
         - cp es_systems.xml /app/share/emulationstation/resources/systems/unix/
         # These must be put in home folder, managed by retrodeck.sh
-        - mkdir -p ${FLATPAK_DEST}/retrodeck/
         - cp es_settings.xml ${FLATPAK_DEST}/retrodeck/es_settings.xml
 
         # Logo, res
