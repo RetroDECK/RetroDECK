@@ -3,14 +3,50 @@
 # Steam Deck SD path: /run/media/mmcblk0p1
 
 # Create log
-exec 3>&1 4>&2
-trap 'exec 2>&4 1>&3' 0 1 2 3
-echo "$(date) : RetroDECK started" >&3
-exec 1>~/retrodeck/.retrodeck.log 2>&1
+# exec 3>&1 4>&2
+# trap 'exec 2>&4 1>&3' 0 1 2 3
+# echo "$(date) : RetroDECK started" >&3
+# exec 1>~/retrodeck/.retrodeck.log 2>&1
 
 is_mounted() {
     mount | awk -v DIR="$1" '{if ($3 == DIR) { exit 0}} ENDFILE{exit -1}'
 }
+
+for i in "$@"; do
+  case $i in
+    -h*|--help*)
+      echo "RetroDECK v"$(cat /var/config/retrodeck/version)
+      echo "
+      Usage:
+flatpak run [FLATPAK-RUN-OPTION] net.retrodeck-retrodeck [ARGUMENTS]
+
+Arguments:
+    -h, --help          Print this help
+    -v, --version       Print RetroDECK version
+    --reset             Starts the initial RetroDECK installer (backup your data first!)
+
+For flatpak run specific options please run: flatpak run -h
+
+https://retrodeck.net
+"
+      exit
+      ;;
+    --version*|-v*)
+      cat /var/config/retrodeck/version
+      exit
+      ;;
+    --reset)
+      rm -f ~/retrodeck/.lock
+      shift # past argument with no value
+      ;;
+    -*|--*)
+      echo "Unknown option $i"
+      exit 1
+      ;;
+    *)
+      ;;
+  esac
+done
 
 # if we got the .lock file it means that it's not a first run
 if [ ! -f ~/retrodeck/.lock ]
