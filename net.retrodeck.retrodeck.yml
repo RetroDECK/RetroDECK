@@ -28,11 +28,11 @@ finish-args:
    - --talk-name=org.freedesktop.login1
    - --filesystem=xdg-run/app/com.discordapp.Discord:create
   # Yuzu
-   - --filesystem=home:ro
+  # - --filesystem=home:ro # This may break Yuzu, let's see
   # - --filesystem=/run/media:ro
   # Dolphin
    - --allow=bluetooth
-  #- --env=QT_QPA_PLATFORM=xcb not sure if this will break something
+  #- --env=QT_QPA_PLATFORM=xcb #not sure if this will break something
   # rpcs3
    - --socket=fallback-x11
 
@@ -60,6 +60,23 @@ cleanup-commands:
 
 modules:
 
+  # This module is used to define the RetroDECK version
+  # If the version is set as cooker it will automatically generate the version tag based on the date
+  # else it will just put what is written, "v" is not needed
+  # The version number is stored in /var/conf/retrodeck/version
+  # 
+  # UPDATE STEPS FOR MAIN:
+  # [ ] Update the VERSION variable
+  # [ ] Update the appdata.xml with the version number and notes
+  #
+  - name: version-initialization
+    buildsystem: simple
+    build-commands:
+      - mkdir -p ${FLATPAK_DEST}/retrodeck/
+      - VERSION="cooker"
+      - if [ $VERSION == "cooker" ]; then VERSION=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')-$(date +'%Y%m%d_%H%M'); fi
+      - $VERSION >> ${FLATPAK_DEST}/retrodeck/version
+
   - name: xmlstarlet
     config-opts:
       - --disable-static-libs
@@ -76,13 +93,6 @@ modules:
     post-install:
       - ln -s "xml" "${FLATPAK_DEST}/bin/xmlstarlet" ||:
     cleanup: ["*"]
-
-  - name: kdialog
-    buildsystem: cmake-ninja
-    sources:
-    - type: git
-      url: https://github.com/KDE/kdialog.git
-      tag: v22.03.80
 
   # ES-DE
 
@@ -137,8 +147,8 @@ modules:
       branch: d89cedd25f1bbb9a38c1f66bca18b74d5332cad1
     - type: shell
       commands:
-        - sed -i 's/QUIT EMULATIONSTATION/QUIT RETRODECK/g' es-app/src/guis/GuiMenu.cpp 
-        - sed -i 's/"EMULATIONSTATION-DE  V" + Utils::String::toUpper(PROGRAM_VERSION_STRING)/"RetroDECK v0.4.0b, ES-DE  v" + Utils::String::toUpper(PROGRAM_VERSION_STRING)/g' es-app/src/guis/GuiMenu.cpp
+        - sed -i "s/QUIT EMULATIONSTATION/QUIT RETRODECK/g" es-app/src/guis/GuiMenu.cpp 
+        - sed -i "s/"EMULATIONSTATION-DE  V" + Utils::String::toUpper(PROGRAM_VERSION_STRING)/"RetroDECK v$(cat ${FLATPAK_DEST}/retrodeck/version), ES-DE  v" + Utils::String::toUpper(PROGRAM_VERSION_STRING)/g" es-app/src/guis/GuiMenu.cpp
 
   # ES-DE - END
 
@@ -962,8 +972,7 @@ modules:
         - cp es_find_rules.xml /app/share/emulationstation/resources/systems/unix/
         - rm -rf /app/share/emulationstation/resources/systems/unix/es_systems.xml
         - cp es_systems.xml /app/share/emulationstation/resources/systems/unix/
-        # These must be put in home folder, managed by retrodeck.sh - Same as above
-        - mkdir -p ${FLATPAK_DEST}/retrodeck/
+        # These must be put in home folder, managed by retrodeck.sh
         - cp es_settings.xml ${FLATPAK_DEST}/retrodeck/es_settings.xml
 
         # Logo, res
@@ -1010,8 +1019,6 @@ modules:
         - mkdir -p ${FLATPAK_DEST}/share/appdata
         - cp net.retrodeck.retrodeck.appdata.xml ${FLATPAK_DEST}/share/appdata
 
-
-    #cleanup: ['*']
     sources:
       - type: dir
         path: es_configs
