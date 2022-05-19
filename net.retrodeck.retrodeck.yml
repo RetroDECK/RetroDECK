@@ -957,12 +957,12 @@ modules:
     buildsystem: simple
     build-commands:
 
-        # Prep the ES-DE and RetroArch config files
+        # Prep the ES-DE and RetroArch config files - I will have to SED/XMLSTARLET them soon
         - rm -rf /app/share/emulationstation/resources/systems/unix/es_find_rules.xml
         - cp es_find_rules.xml /app/share/emulationstation/resources/systems/unix/
         - rm -rf /app/share/emulationstation/resources/systems/unix/es_systems.xml
         - cp es_systems.xml /app/share/emulationstation/resources/systems/unix/
-        # These must be put in home folder, managed by retrodeck.sh
+        # These must be put in home folder, managed by retrodeck.sh - Same as above
         - mkdir -p ${FLATPAK_DEST}/retrodeck/
         - cp es_settings.xml ${FLATPAK_DEST}/retrodeck/es_settings.xml
 
@@ -983,7 +983,7 @@ modules:
         # Desktop entry
         - cp net.retrodeck.retrodeck.desktop /app/share/applications/net.retrodeck.retrodeck.desktop
 
-        # Steam Grids
+        # Steam Grids - When BoilR comes it will be deprecated
         - mkdir -p ${FLATPAK_DEST}/retrodeck/steam/
         - cp banner_main.png ${FLATPAK_DEST}/retrodeck/steam/
         - cp poster_main.png ${FLATPAK_DEST}/retrodeck/steam/
@@ -1013,18 +1013,12 @@ modules:
 
     #cleanup: ['*']
     sources:
-      - type: file
-        path: es_find_rules.xml
-      - type: file
-        path: es_settings.xml
-      - type: file
-        path: es_systems.xml
+      - type: dir
+        path: es_configs
       - type: file
         path: retrodeck.sh
       - type: dir
         path: emu-configs
-      - type: file
-        path: tools-gamelist.xml
       - type: dir
         path: res
       - type: dir
