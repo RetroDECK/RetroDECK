@@ -28,11 +28,11 @@ finish-args:
    - --talk-name=org.freedesktop.login1
    - --filesystem=xdg-run/app/com.discordapp.Discord:create
   # Yuzu
-   - --filesystem=home:ro
+  # - --filesystem=home:ro # This may break Yuzu, let's see
   # - --filesystem=/run/media:ro
   # Dolphin
    - --allow=bluetooth
-  #- --env=QT_QPA_PLATFORM=xcb not sure if this will break something
+  #- --env=QT_QPA_PLATFORM=xcb #not sure if this will break something
   # rpcs3
    - --socket=fallback-x11
 
@@ -60,15 +60,22 @@ cleanup-commands:
 
 modules:
 
+  # This module is used to define the RetroDECK version
+  # If the version is set as cooker it will automatically generate the version tag based on the date
+  # else it will just put what is written, "v" is not needed
+  # The version number is stored in /var/conf/retrodeck/version
+  # 
+  # UPDATE STEPS FOR MAIN:
+  # [ ] Update the VERSION variable
+  # [ ] Update the appdata.xml with the version number and notes
+  #
   - name: version-initialization
     buildsystem: simple
-    sources:
-    - type: shell
-      commands:
-        - mkdir -p ${FLATPAK_DEST}/retrodeck/
-        - VERSION="cooker" # REMEMBER TO CHANGE THE VERSION BEFORE PUBLISHING (AND UPDATE THE APPDATA)
-        - if [ $VERSION == "cooker" ]; then VERSION=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')-$(date +'%Y%m%d_%H%M'); fi
-        - $VERSION >> ${FLATPAK_DEST}/retrodeck/version
+    build-commands:
+      - mkdir -p ${FLATPAK_DEST}/retrodeck/
+      - VERSION="cooker"
+      - if [ $VERSION == "cooker" ]; then VERSION=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')-$(date +'%Y%m%d_%H%M'); fi
+      - $VERSION >> ${FLATPAK_DEST}/retrodeck/version
 
   - name: xmlstarlet
     config-opts:
@@ -1019,8 +1026,6 @@ modules:
         - mkdir -p ${FLATPAK_DEST}/share/appdata
         - cp net.retrodeck.retrodeck.appdata.xml ${FLATPAK_DEST}/share/appdata
 
-
-    #cleanup: ['*']
     sources:
       - type: file
         path: es_find_rules.xml
