@@ -111,7 +111,7 @@ standalones_init() {
     cp -fv $emuconfigs/config.yml /var/config/rpcs3/
 
     # PICO-8
-    mkdir -pv $roms_folder/pico-8
+    # Moved PICO-8 stuff in the finit as only it knows here roms folders is
 
 }
 
@@ -197,6 +197,9 @@ finit() {
     dir_prep "$rdhome/.downloaded_media" "/var/config/emulationstation/.emulationstation/downloaded_media"
     dir_prep "$rdhome/.themes" "/var/config/emulationstation/.emulationstation/themes"
 
+    # PICO-8
+    dir_prep "$roms_folder/pico-8" "$rdhome/bios/pico-8/bbs/carts" #this is the folder where pico-8 is saving the carts
+
     ra_init
     standalones_init
     tools_init
@@ -234,10 +237,6 @@ https://retrodeck.net
       cat /var/config/retrodeck/version
       exit
       ;;
-    --reset*)
-      rm -f "$lockfile"
-      shift # past argument with no value
-      ;;
     --reset-ra*)
       ra_init
       shift # past argument with no value
@@ -248,6 +247,10 @@ https://retrodeck.net
       ;;
     --reset-tools*)
       tools_init
+      shift # past argument with no value
+      ;;
+    --reset*)
+      rm -f "$lockfile"
       shift # past argument with no value
       ;;
     -*|--*)
