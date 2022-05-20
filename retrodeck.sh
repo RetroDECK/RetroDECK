@@ -34,17 +34,8 @@ dir_prep() {
     
     # creating the symlink
     echo "linking $real in $symlink" #DEBUG
-    mkdir -pv "$symlink" # creating the full path...
-    previous_dir=$PWD
-    cd "$symlink"
-    cd ..
-    echo "We are in $PWD" #DEBUG
-    ls -ln #DEBUG
-    rmdir -v "$symlink"
-    ln -sv "$real" .
-    echo "We are in $PWD" #DEBUG
-    ls -ln #DEBUG
-    cd $previous_dir
+    mkdir -pv "$(dirname "$symlink")" # creating the full path except the last folder
+    ln -sv "$real" "$symlink"
 
     # moving everything from the old folder to the new one, delete the old one
     if [ -d "$symlink.old" ];
