@@ -117,10 +117,14 @@ jobs:
       #   run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
       #   id: extract_branch
 
+      - name: Generate tag
+        id: tag
+        run: "##[set-output name=tag;]echo $(flatpak run net.retrodeck.retrodeck -v)"
+
       - name: Publish the flatpak in a new cooker release
         uses: ncipollo/release-action@v1
         with:
-          tag: "$(flatpak run net.retrodeck.retrodeck -v)"
+          tag: "${{ steps.tag.outputs.tag }}"
           body: |
             # Release Notes (Cooker)
             This is a cooker snapshot based on the commit: ${{ github.event.repository.full_name }}@${{github.sha}}.
