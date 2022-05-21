@@ -142,6 +142,7 @@ jobs:
           draft: false
           token: ${{ secrets.TRIGGER_BUILD_TOKEN }}
           repo: RetroDECK-cooker
+        continue-on-error: true
 
       - name: Compressing global cache
         run: |
