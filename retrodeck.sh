@@ -135,6 +135,7 @@ post_update() {
     # Doing the dir prep as we don know from which version we came
     dir_prep "$rdhome/.downloaded_media" "/var/config/emulationstation/.emulationstation/downloaded_media"
     dir_prep "$rdhome/.themes" "/var/config/emulationstation/.emulationstation/themes"
+    mkdir -pv $rdhome/.logs #this was added later, maybe safe to remove in a few versions
     ra_init
     standalones_init
     tools_init
@@ -189,6 +190,7 @@ finit() {
     mkdir -pv $rdhome/states
     mkdir -pv $rdhome/screenshots
     mkdir -pv $rdhome/bios/pico-8
+    mkdir -pv $rdhome/.logs
 
     # XMLSTARLET HERE
     cp -f /app/retrodeck/es_settings.xml /var/config/emulationstation/.emulationstation/es_settings.xml
