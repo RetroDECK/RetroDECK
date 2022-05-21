@@ -33,9 +33,12 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Download global cache
-        uses: actions/download-artifact@v2
+        uses: dawidd6/action-download-artifact@v2
         with:
+          workflow: cooker.yml
+          workflow_conclusion: success
           name: global-cache
+          search_artifacts: true
         continue-on-error: true
 
       - name: Extracting cache
