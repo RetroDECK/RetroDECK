@@ -41,7 +41,8 @@ jobs:
           search_artifacts: true
         continue-on-error: true
 
-      - name: Extracting cache
+      # not needed maybe?
+      - name: Extracting global cache
         run: |
           tar --skip-old-files -xzvf retrodeck-cooker.tar.gz
           rm -f retrodeck-cooker.tar.gz
@@ -67,7 +68,7 @@ jobs:
           touch retrodeck-cooker.tar.gz
           rm -rf .flatpak-builder/build/*-{2,3,4,5,6}
           find .flatpak-builder/build -xtype l -exec rm {} \; # removing dead symlinks
-          tar --ignore-failed-read -czvf retrodeck-cooker.tar.gz retrodeck-flatpak-cooker
+          tar --ignore-failed-read -czvf retrodeck-cooker.tar.gz retrodeck-flatpak-cooker .flatpak-builder/downloads
 
       - name: Upload build specific cache
         uses: actions/upload-artifact@v3
@@ -147,7 +148,7 @@ jobs:
           touch retrodeck-cooker.tar.gz
           rm -rf .flatpak-builder/build/*-{2,3,4,5,6}
           find .flatpak-builder/build -xtype l -exec rm {} \; # removing dead symlinks
-          tar --ignore-failed-read -czvf retrodeck-cooker.tar.gz retrodeck-flatpak-cooker
+          tar --ignore-failed-read -czvf retrodeck-cooker.tar.gz retrodeck-flatpak-cooker .flatpak-builder/downloads
         continue-on-error: true
 
       - name: Upload global cache
