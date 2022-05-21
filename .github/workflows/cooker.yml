@@ -151,5 +151,5 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: global-cache
-          path: retrodeck-cooker.tar.gz
+          path: retrodeck-cooker.tar.gz RetroDECK.flatpak
         continue-on-error: true
