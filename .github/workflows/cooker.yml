@@ -123,7 +123,7 @@ jobs:
 
       - name: Read version from version file
         id: version
-        run: echo "##[set-output name=version;]cat $(find . -name version)"
+        run: echo "##[set-output name=version;]$(cat $(find . -name version))"
 
       - name: Publish the flatpak in a new cooker release
         uses: ncipollo/release-action@v1
