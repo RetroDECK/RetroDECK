@@ -84,7 +84,7 @@ standalones_init() {
     # initializing the keys folder
     dir_prep "$rdhome/bios/switch/keys" "/var/data/yuzu/keys"
     # initializing the firmware folder
-    dir_prep "$rdhome/bios/switch/registered" "/var/data/yuzu/nand/system/Contents/registered/"
+    dir_prep "$rdhome/bios/switch/registered" "/var/data/yuzu/nand/system/Contents/registered"
     # configuring Yuzu
     mkdir -pv /var/config/yuzu/
     cp -fv $emuconfigs/yuzu-qt-config.ini /var/config/yuzu/qt-config.ini
