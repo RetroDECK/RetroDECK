@@ -38,6 +38,13 @@ jobs:
           workflow: cooker.yml
           name: global-cache
           search_artifacts: true
+          skip_unpack: true
+        continue-on-error: true
+
+      - name: Extract global cache
+        run: |
+          tar --skip-old-files -xzvf retrodeck-cooker.tar.gz
+          rm -f retrodeck-cooker.tar.gz
         continue-on-error: true
 
       - name: DEBUG
