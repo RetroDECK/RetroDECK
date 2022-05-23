@@ -36,7 +36,6 @@ jobs:
         uses: dawidd6/action-download-artifact@v2
         with:
           workflow: cooker.yml
-          workflow_conclusion: success
           name: global-cache
           search_artifacts: true
         continue-on-error: true
@@ -44,7 +43,7 @@ jobs:
       - name: DEBUG
         run: |
           echo "Listing folder $PWD contents"
-          ls -ln
+          ls -lna
           echo "Checking for verson file"
           find ~ -iname version
           cat $(find ~ -iname version)
@@ -123,7 +122,7 @@ jobs:
       - name: DEBUG
         run: |
           echo "Listing folder $PWD contents"
-          ls -ln
+          ls -lna
           echo "Checking for verson file"
           find ~ -iname version
           cat $(find ~ -iname version)
