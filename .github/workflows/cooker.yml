@@ -37,7 +37,6 @@ jobs:
         with:
           workflow: cooker.yml
           name: global-cache
-          path: $GITHUB_WORKSPACE
           search_artifacts: true
         continue-on-error: true
 
@@ -48,13 +47,6 @@ jobs:
           echo "Checking for verson file"
           find ~ -iname version
           cat $(find ~ -iname version)
-
-      # not needed maybe?
-      - name: Extract global cache
-        run: |
-          tar --skip-old-files -xzvf retrodeck-cooker.tar.gz
-          rm -f retrodeck-cooker.tar.gz
-        continue-on-error: true
 
       - name: Initialize enviornment
         run: |
