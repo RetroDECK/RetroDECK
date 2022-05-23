@@ -112,14 +112,14 @@ jobs:
           sudo flatpak-builder --user --force-clean --repo=$GITHUB_WORKSPACE/local retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
           sudo flatpak build-bundle $GITHUB_WORKSPACE/local RetroDECK.flatpak net.retrodeck.retrodeck
 
-      # - name: Get date for artifacts
-      #   id: date
-      #   run: echo "::set-output name=date::$(date +'%Y%m%d_%H%M')"
+       - name: Get date for artifacts
+         id: date
+         run: echo "::set-output name=date::$(date +'%Y%m%d_%H%M')"
 
-      # - name: Extract branch name
-      #   shell: bash
-      #   run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-      #   id: extract_branch
+       - name: Extract branch name
+         shell: bash
+         run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+         id: extract_branch
 
       - name: Read version from version file
         id: version
@@ -128,7 +128,8 @@ jobs:
       - name: Publish the flatpak in a new cooker release
         uses: ncipollo/release-action@v1
         with:
-          tag: "${{ steps.version.outputs.version }}"
+          #tag: "${{ steps.version.outputs.version }}"
+          tag: "${{ steps.extract_branch.outputs.branch }}-${{ steps.date.outputs.date }}"
           body: |
             # Release Notes (Cooker)
             This is a cooker snapshot based on the commit: ${{ github.event.repository.full_name }}@${{github.sha}}.
