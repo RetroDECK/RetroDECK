@@ -37,6 +37,7 @@ jobs:
         with:
           workflow: cooker.yml
           name: global-cache
+          path: $GITHUB_WORKSPACE
           search_artifacts: true
         continue-on-error: true
 
