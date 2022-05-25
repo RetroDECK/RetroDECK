@@ -161,7 +161,6 @@ jobs:
         run: |
           echo "DEBUG: printing version from version file"
           echo "${{ steps.version.outputs.version }}"
-        id: extract_branch
 
       - name: Publish the flatpak in a new cooker release
         uses: ncipollo/release-action@v1
