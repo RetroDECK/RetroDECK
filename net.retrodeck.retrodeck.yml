@@ -74,7 +74,7 @@ modules:
     build-commands:
       - mkdir -p ${FLATPAK_DEST}/retrodeck/
       - VERSION="cooker"
-      - if [ $VERSION == "cooker" ]; then VERSION=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')-$(date +'%Y%m%d_%H%M'); fi
+      - if [[] $VERSION == "cooker" ]]; then VERSION=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')-$(date +'%Y%m%d_%H%M'); fi
       - $VERSION >> ${FLATPAK_DEST}/retrodeck/version
       - echo "DEBUG - reading version "
       - cat ${FLATPAK_DEST}/retrodeck/version
