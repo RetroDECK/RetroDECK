@@ -40,6 +40,70 @@
   <project_license>GPL-3.0</project_license>
   <metadata_license>CC0-1.0</metadata_license>
   <releases>
+
+  <release version="0.4.0b" date="2022-05-26">
+      <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.4.0b</url>
+      <description>
+          Emulators:
+        <ul>
+          <li>Yuzu was broken: fixed
+          <li>Dolphin-libretro is now the default emulator as Dolphin (Standalone) seems to be broken
+        </ul>
+          New Standalone emulators:
+        <ul>
+          <li>RPCS3
+          <li>PPSSPP
+          <li>CITRA
+          <li>MelonDS
+          <li>PICO-8
+        </ul>
+
+          Tools:
+        <ul>
+          <li>Added tools to start each standalone emulator
+          <li>Added a tool to start PICO-8's SPLORE
+          <li>Fixed the Move ROMs tool (probably)
+        </ul>
+        
+          Frontend:
+        <ul>
+          <li>Updated ES-DE to 1.2.4 and redirected to the new repo
+          <li>Updated Art-Book theme to fix the mising images for n3ds and pico-8
+          <li>Now The quit button is showing "Quit RetroDECK"
+          <li>Added RetroDECK version in the ES-DE main menu
+        </ul>
+        
+          Backend:
+        <ul>
+          <li>Wrapper complete rewrite, now it's faster, tidier, solid
+          <li>Wrapper: user data is now backup and moved when managing the internal folders
+          <li>Introduced versioning: now the version is visible by CLI or in the options menu
+          <li>Rewrote cooker.yml workflow as the old one was no more useful for the scope
+          <li>Removed the bios/bios folder that in some situations is mistakenly created
+          <li>Logs are now into ~/retrodeck/.logs however they must be improved
+          <li>Moved the scraped data folder into ~/retrodeck/.downloaded_data for backup purposes and to avoid data loss when resetting RetroDECK
+          <li>Moved themes folder in ~/retrodeck/.downloaded_data, same as above
+          <li>Updated es_find_rules.xml
+          <li>Updated es_systems.xml: some default emulators are changed, if you cannot load the game is maybe because of that, you can still choose the former emulator from the list
+          <li>Added post-install scripts, now deleting ~/retrodeck/.log or ~/.var/app/net.retrodeck.retrodeck is no more needed (hopefully)
+          <li>Added CLI arguments, run flatpak run net.retrodeck.retrodeck -h for more info
+          <li>Added a CLI option to reset RetroDECK --reset
+          <li>Replaced Kdialog with Zenity
+          <li>Added manifest: this should fix the Discover bug
+        </ul>
+
+          Known Issues:
+        <ul>
+          <li>Controller is not configured for most of the standalone emulators, I will configure them when I will get my Steam Deck (ETA mid June)
+          <li>External controllers seems not to be working
+          <li>Yuzu makes RetroDECK freeze in some situations, like if the rom is a bad dump
+        </ul>
+        <p>
+          IMPORTANT NOTE:
+          At the moment the emulator configs are reset during every update, this was made because every version may bring new configurations, please back them up if you did some manual configs.
+        </p>
+      </description>
+    </release>
   
     <release version="0.3.1b" date="2022-04-26">
       <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.3.1b</url>
