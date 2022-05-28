@@ -44,12 +44,12 @@
   <release version="0.4.0b" date="2022-05-26">
       <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.4.0b</url>
       <description>
-          Emulators:
+          <p>Emulators:</p>
         <ul>
           <li>Yuzu was broken: fixed</li>
           <li>Dolphin-libretro is now the default emulator as Dolphin (Standalone) seems to be broken</li>
         </ul>
-          New Standalone emulators:
+          <p>New Standalone emulators:</p>
         <ul>
           <li>RPCS3</li>
           <li>PPSSPP</li>
@@ -57,23 +57,20 @@
           <li>MelonDS</li>
           <li>PICO-8</li>
         </ul>
-
-          Tools:
+          <p>Tools:</p>
         <ul>
           <li>Added tools to start each standalone emulator</li>
           <li>Added a tool to start PICO-8's SPLORE</li>
           <li>Fixed the Move ROMs tool (probably)</li>
         </ul>
-        
-          Frontend:
+          <p>Frontend:</p>
         <ul>
           <li>Updated ES-DE to 1.2.4 and redirected to the new repo</li>
           <li>Updated Art-Book theme to fix the mising images for n3ds and pico-8</li>
           <li>Now The quit button is showing "Quit RetroDECK"</li>
           <li>Added RetroDECK version in the ES-DE main menu</li>
         </ul>
-        
-          Backend:
+          <p>Backend:</p>
         <ul>
           <li>Wrapper complete rewrite, now it's faster, tidier, solid</li>
           <li>Wrapper: user data is now backup and moved when managing the internal folders</li>
@@ -91,8 +88,7 @@
           <li>Replaced Kdialog with Zenity</li>
           <li>Added manifest: this should fix the Discover bug</li>
         </ul>
-
-          Known Issues:
+          <p>Known Issues:</p>
         <ul>
           <li>Controller is not configured for most of the standalone emulators, I will configure them when I will get my Steam Deck (ETA mid June)</li>
           <li>External controllers seems not to be working</li>
