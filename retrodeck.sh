@@ -91,8 +91,9 @@ standalones_init() {
 
     # Dolphin
     mkdir -pv /var/config/dolphin-emu/
-    cp -fv $emuconfigs/Dolphin.ini /var/config/dolphin-emu/
-    cp -fv $emuconfigs/Dolphin-Hotkeys.ini /var/config/dolphin-emu/Hotkeys.ini
+    cp -fv $emuconfigs/Dolphin/* /var/config/dolphin-emu/
+    dir_prep "$rdhome/saves" "/var/data/dolphin-emu/GBA/Saves"
+    dir_prep "$rdhome/saves" "/var/data/dolphin-emu/Wii" 
 
     # pcsx2
     mkdir -pv /var/config/PCSX2/inis/
