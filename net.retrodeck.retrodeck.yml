@@ -1014,6 +1014,7 @@ modules:
         - cp retroarch.cfg ${FLATPAK_DEST}/retrodeck/emu-configs/
         # Dolphin 
         - cp Dolphin.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
+        - cp Dolphin-Hotkeys.ini ${FLATPAK_DEST}/retrodeck/emu-configs
         # Yuzu
         - cp yuzu-qt-config.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
         # Pcsx2
