@@ -1031,7 +1031,7 @@ modules:
 
     sources:
       - type: dir
-        path: es_configs
+        path: es-configs
       - type: file
         path: retrodeck.sh
       - type: dir
