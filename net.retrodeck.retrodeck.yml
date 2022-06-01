@@ -1019,6 +1019,8 @@ modules:
         - cp yuzu-qt-config.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
         # Pcsx2
         - cp PCSX2_ui.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
+        - cp GS.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
+        - cp PCSX2_vm.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
         # MelonDS
         - cp melonDS.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
         # CITRA
