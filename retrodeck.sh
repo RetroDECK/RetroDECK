@@ -92,6 +92,7 @@ standalones_init() {
     # Dolphin
     mkdir -pv /var/config/dolphin-emu/
     cp -fv $emuconfigs/Dolphin.ini /var/config/dolphin-emu/
+    cp -fv $emuconfigs/Dolphin-Hotkeys.ini /var/config/dolphin-emu/Hotkeys.ini
 
     # pcsx2
     mkdir -pv /var/config/PCSX2/inis/
