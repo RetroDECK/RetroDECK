@@ -88,6 +88,7 @@ standalones_init() {
     # configuring Yuzu
     mkdir -pv /var/config/yuzu/
     cp -fv $emuconfigs/yuzu-qt-config.ini /var/config/yuzu/qt-config.ini
+    dir_prep "$rdhome/screenshots" "/var/data/yuzu/screenshots"
 
     # Dolphin
     mkdir -pv /var/config/dolphin-emu/
