@@ -97,6 +97,11 @@ standalones_init() {
     # pcsx2
     mkdir -pv /var/config/PCSX2/inis/
     cp -fv $emuconfigs/PCSX2_ui.ini /var/config/PCSX2/inis/
+    cp -fv $emuconfigs/GS.ini /var/config/PCSX2/inis/
+    cp -fv $emuconfigs/PCSX2_vm.ini /var/config/PCSX2/inis/
+    dir_prep "$rdhome/states" "/var/config/PCSX2/sstates"
+    dir_prep "$rdhome/screenshots" "/var/config/PCSX2/snaps"
+    dir_prep "$rdhome/.logs" "/var/config/PCSX2/logs"
 
     # MelonDS
     mkdir -pv /var/config/melonDS/
