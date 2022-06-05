@@ -58,10 +58,10 @@ dir_prep() {
     echo $symlink is now $real
 }
 
-is_mounted() {
-    # This script checks if the provided path in $1 is mounted
-    mount | awk -v DIR="$1" '{if ($3 == DIR) { exit 0}} ENDFILE{exit -1}'
-}
+# is_mounted() {
+#     # This script checks if the provided path in $1 is mounted
+#     mount | awk -v DIR="$1" '{if ($3 == DIR) { exit 0}} ENDFILE{exit -1}'
+# }
 
 tools_init() {
     rm -rfv /var/config/retrodeck/tools/
@@ -168,12 +168,34 @@ finit() {
     then
         roms_folder="$rdhome/roms"
     else #no - SD Card
-        if [ is_mounted "$sdcard" ];
+        if [ -d "$sdcard" ];
         then
             roms_folder="$sdcard/retrodeck/roms"
         else
-            zenity --error --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --text="SD Card is not readable.\nPlease check if it's inserted or mounted correctly and run RetroDECK again."
-            exit 0
+            sdselected=false
+            zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="Cancel" --ok-label "Browse" --text="SD Card was not find in the default location.\nPlease choose the SD Card root.\nA retrodeck/roms folder will be created starting from the directory that you selected."
+            if [ $? == 1 ] #cancel
+            then
+              exit 0
+            fi
+            while [ $sdselected == false ]
+            do
+              sdcard="$(zenity --file-selection --title="Choose SD Card root" --directory)"
+              echo "DEBUG: sdcard=$sdcard, answer=$?"
+              zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" --text="Your rom folder will be:\n\n$sdcard/retrodeck/roms\n\nis that ok?"
+              if [ $? == 0 ] #yes
+              then
+                sdselected == true
+                roms_folder="$sdcard/retrodeck/roms"
+                break
+              else
+                zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" --text="Do you want to quit?"
+                if [ $? == 0 ] # yes, quit
+                then
+                  exit 0
+                fi
+              fi
+            done
         fi
     fi
 
