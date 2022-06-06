@@ -702,7 +702,7 @@ modules:
           type: anitya
           project-id: 13518
           stable-only: true
-          url-template: https://mesa.freedesktop.org/archive/glu/glu-$version.tar.xz
+          url-template: http://mesa.freedesktop.org/archive/glu/glu-$version.tar.xz
 
   - name: xemu
     buildsystem: autotools
