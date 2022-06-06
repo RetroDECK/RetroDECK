@@ -130,10 +130,10 @@ jobs:
           sudo flatpak-builder --user --force-clean --repo=${GITHUB_WORKSPACE}/local retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
           sudo flatpak build-bundle $GITHUB_WORKSPACE/local RetroDECK.flatpak net.retrodeck.retrodeck
 
-      - name: Extract branch name
-        shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-        id: extract_branch
+      # - name: Extract branch name
+      #   shell: bash
+      #   run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+      #   id: extract_branch
 
       - name: Read version from version file
         id: version
