@@ -52,7 +52,7 @@ jobs:
           git pull
           git submodule init
           git submodule update
-          sudo add-apt-repository ppa:alexlarsson/flatpak
+          #sudo add-apt-repository ppa:alexlarsson/flatpak
           sudo apt-get update
           sudo apt install flatpak flatpak-builder p7zip-full
           sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
@@ -180,6 +180,7 @@ jobs:
       #     path: retrodeck-cooker.tar.gz RetroDECK.flatpak
       #   continue-on-error: true
 
+      # In case it cannot publish the release at least it's probiding the flatpak file for creating a manual release
       - name: Upload RetroDECK.flatpak
         uses: actions/upload-artifact@v3
         with:
