@@ -58,7 +58,7 @@ jobs:
 
       - name: Build flatpak
         run: |
-          flatpak run org.flatpakBuilder --build-only --user --force-clean --repo=${GITHUB_WORKSPACE}/local retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
+          flatpak run org.flatpak.Builder --build-only --user --force-clean --repo=${GITHUB_WORKSPACE}/local retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
 
       # - name: Compress cache
       #   run: |
