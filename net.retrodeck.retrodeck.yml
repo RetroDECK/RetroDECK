@@ -104,6 +104,21 @@ modules:
       - ln -s "xml" "${FLATPAK_DEST}/bin/xmlstarlet" ||:
     cleanup: ["*"]
 
+  # mesa repo got a double certificate issue and gnutils cannot handle that so GLU download fails,
+  # this affects even the shared-modules's glu so I have to replace it temporarly
+  # more info there: https://gitlab.com/gnutls/gnutls/-/issues/1335
+  - name: libglu
+    buildsystem: meson
+    cleanup:
+      - /include
+      - /lib/debug
+      - /lib/pkgconfig
+      - /lib/*.a
+    sources:
+      - type: archive
+        url: https://ftp.osuosl.org/pub/blfs/conglomeration/glu/glu-9.0.2.tar.xz
+        sha256: 6e7280ff585c6a1d9dfcdf2fca489251634b3377bfc33c29e4002466a38d02d4
+
   # ES-DE
 
   - name: ffmpeg
@@ -208,7 +223,8 @@ modules:
       - shared-modules/gudev/gudev.json
       - rd-submodules/retroarch/libbz2/libbz2-1.0.8.json
       - rd-submodules/retroarch/libaio/libaio-0.3.112.json
-      - shared-modules/glu/glu-9.json
+      # glu issue, check libglu module for more info
+      #- shared-modules/glu/glu-9.json
       - rd-submodules/retroarch/libdecor/libdecor-0.1.0.json
   - name: retroarch-filers-video
     subdir: gfx/video_filters
@@ -687,22 +703,23 @@ modules:
 
   # XEMU - START
 
-  - name: libglu
-    buildsystem: meson
-    cleanup:
-      - /include
-      - /lib/debug
-      - /lib/pkgconfig
-      - /lib/*.a
-    sources:
-      - type: archive
-        url: http://mesa.freedesktop.org/archive/glu/glu-9.0.2.tar.xz
-        sha256: 6e7280ff585c6a1d9dfcdf2fca489251634b3377bfc33c29e4002466a38d02d4
-        x-checker-data:
-          type: anitya
-          project-id: 13518
-          stable-only: true
-          url-template: http://mesa.freedesktop.org/archive/glu/glu-$version.tar.xz
+  # glu issue, check libglu module for more info
+  # - name: libglu
+  #   buildsystem: meson
+  #   cleanup:
+  #     - /include
+  #     - /lib/debug
+  #     - /lib/pkgconfig
+  #     - /lib/*.a
+  #   sources:
+  #     - type: archive
+  #       url: http://mesa.freedesktop.org/archive/glu/glu-9.0.2.tar.xz
+  #       sha256: 6e7280ff585c6a1d9dfcdf2fca489251634b3377bfc33c29e4002466a38d02d4
+  #       x-checker-data:
+  #         type: anitya
+  #         project-id: 13518
+  #         stable-only: true
+  #         url-template: http://mesa.freedesktop.org/archive/glu/glu-$version.tar.xz
 
   - name: xemu
     buildsystem: autotools
@@ -807,7 +824,8 @@ modules:
   # RPCS3 - START
   # https://github.com/flathub/net.rpcs3.RPCS3
 
-  - shared-modules/glu/glu-9.json
+  # glu issue, check libglu module for more info
+  #- shared-modules/glu/glu-9.json
   - shared-modules/glew/glew.json
 
   - name: rpcs3-llvm
