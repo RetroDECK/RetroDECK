@@ -1,12 +1,12 @@
 name: cooker
 
-# on:
-#   push:
-#     branches:
-#      - cooker*
-#   pull_request: 
-#     branches:
-#      - cooker*
+on:
+  # push:
+  #   branches:
+  #    - cooker*
+  # pull_request: 
+  #   branches:
+  #    - cooker*
 
   workflow_dispatch:
 
