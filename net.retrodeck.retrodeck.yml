@@ -322,6 +322,7 @@ modules:
   - name: libzip
     buildsystem: cmake-ninja
     config-opts:
+      - '-DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON'
       - '-DCMAKE_BUILD_TYPE=RelWithDebInfo'
     sources:
       - type: archive
@@ -349,6 +350,7 @@ modules:
   - name: fmt
     buildsystem: cmake-ninja
     config-opts:
+      - '-DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON'
       - '-DFMT_TEST=OFF'
     sources:
       - type: archive
@@ -365,8 +367,8 @@ modules:
       - '-DCMAKE_BUILD_TYPE=Release'
     sources:
       - type: archive
-        url: https://github.com/KhronosGroup/glslang/archive/11.8.0.tar.gz
-        sha256: 9e5fbe5b844d203da5e61bcd84eda76326e0ff5dc696cb862147bbe01d2febb0
+        url: https://github.com/KhronosGroup/glslang/archive/11.9.0.tar.gz
+        sha256: d5744adba19eef9ad3d73f524226b39fec559d94cb582cd442e3c5de930004b2
         x-checker-data:
           type: anitya
           stable-only: true
@@ -376,12 +378,13 @@ modules:
     buildsystem: cmake-ninja
     config-opts:
       - '-DCMAKE_BUILD_TYPE=Release'
+      - '-DCATCH_INSTALL_EXTRAS=ON'
       - '-DCATCH_BUILD_TESTING=OFF'
     builddir: true
     sources:
       - type: archive
-        url: https://github.com/catchorg/Catch2/archive/v2.13.8.tar.gz
-        sha256: b9b592bd743c09f13ee4bf35fc30eeee2748963184f6bea836b146e6cc2a585a
+        url: https://github.com/catchorg/Catch2/archive/v2.13.9.tar.gz
+        sha256: 06dbc7620e3b96c2b69d57bf337028bf245a211b3cddb843835bfe258f427a52
         x-checker-data:
           type: anitya
           stable-only: true
@@ -391,6 +394,7 @@ modules:
     buildsystem: cmake-ninja
     config-opts:
       - '-DCMAKE_BUILD_TYPE=Release'
+      - '-DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON'
       - '-DJSON_BuildTests=OFF'
     sources:
       - type: archive
@@ -398,7 +402,7 @@ modules:
         sha256: 5daca6ca216495edf89d167f808d1d03c4a4d929cef7da5e10f135ae1540c7e4
         x-checker-data:
           type: anitya
-          project-id: 141453
+          project-id: 11152
           url-template: https://github.com/nlohmann/json/archive/v$version.tar.gz
   - name: boost
     buildsystem: simple
@@ -408,13 +412,13 @@ modules:
     sources:
       - type: archive
         url: >-
-          https://boostorg.jfrog.io/artifactory/main/release/1.78.0/source/boost_1_78_0.tar.bz2
-        sha256: 8681f175d4bdb26c52222665793eef08490d7758529330f98d3b29dd0735bccc
+          https://boostorg.jfrog.io/artifactory/main/release/1.79.0/source/boost_1_79_0.tar.bz2
+        sha256: 475d589d51a7f8b3ba2ba4eda022b170e562ca3b760ee922c146b6c65856ef39
         x-checker-data:
           type: anitya
           project-id: 6845
           url-template: >-
-            https://boostorg.jfrog.io/artifactory/main/release/$version/source/boost_1_78_0.tar.bz2
+            https://boostorg.jfrog.io/artifactory/main/release/$version/source/boost_1_79_0.tar.bz2
   - name: nv-codec-headers
     make-install-args:
       - PREFIX=/app
@@ -440,8 +444,8 @@ modules:
       - '-DENABLE_COMPATIBILITY_LIST_DOWNLOAD=ON'
       - '-DYUZU_USE_QT_WEB_ENGINE=ON'
       - '-DYUZU_USE_BUNDLED_FFMPEG=ON'
-      - '-DDISPLAY_VERSION=969'
-      - '-DBUILD_TAG=mainline-969'
+      - '-DDISPLAY_VERSION=1039'
+      - '-DBUILD_TAG=mainline-1039'
       - '-DBUILD_REPOSITORY=yuzu-emu/yuzu-mainline'
     build-options:
       env:
@@ -453,24 +457,14 @@ modules:
       - /share/pixmaps
     post-install:
       - install -Dm755 ../yuzu-launcher.sh /app/bin/yuzu-launcher
-      - desktop-file-install --dir=/app/share/applications ../dist/yuzu.desktop
-      - >-
-        desktop-file-edit --set-key StartupWMClass --set-value yuzu --set-key
-        Exec --set-value yuzu-launcher /app/share/applications/yuzu.desktop
       - >-
         install -Dm644 ../dist/yuzu.svg
         /app/share/icons/hicolor/scalable/apps/yuzu.svg
-      - >-
-        mv /app/share/mime/packages/yuzu.xml
-        /app/share/mime/packages/org.yuzu_emu.yuzu.xml
-      - >-
-        sed 's/yuzu/org.yuzu_emu.yuzu/g' -i
-        /app/share/mime/packages/org.yuzu_emu.yuzu.xml
     sources:
       - type: git
         url: https://github.com/yuzu-emu/yuzu-mainline.git
-        tag: mainline-0-969
-        commit: d179e12137cd8ff88b0eade7d13de801661f869b
+        tag: mainline-0-1039
+        commit: 983afc5328725109a1cf13c61103b8a553c005d0
         disable-shallow-clone: true
         x-checker-data:
           type: git
