@@ -822,8 +822,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/citra-emu/citra-nightly.git
-        tag: nightly-1762
-        commit: 1382035d4de5ada310c7f4fd00f1836b16ab74fb
+        tag: nightly-1767
+        commit: 6f6a9357c26eccf09bf0c993f159d69bbe472f49
         disable-shallow-clone: true
         x-checker-data:
           type: git
