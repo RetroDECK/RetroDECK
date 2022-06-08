@@ -706,6 +706,7 @@ modules:
   # Dolphin - END
 
   # XEMU - START
+  # https://github.com/flathub/app.xemu.xemu
 
   # glu issue, check libglu module for more info
   # - name: libglu
@@ -725,6 +726,15 @@ modules:
   #         stable-only: true
   #         url-template: http://mesa.freedesktop.org/archive/glu/glu-$version.tar.xz
 
+  - name: PyYAML
+    buildsystem: simple
+    build-commands:
+      - python3 setup.py install --prefix=/app --root=/
+    sources:
+      - type: archive
+        url: https://github.com/yaml/pyyaml/archive/refs/tags/6.0.tar.gz
+        sha256: f33eaba25d8e0c1a959bbf00655198c287dfc5868f5b7b01e401eaa1796cc778
+
   - name: xemu
     buildsystem: autotools
     builddir: true
@@ -743,21 +753,18 @@ modules:
           install -Dm644 ../ui/icons/xemu_${px}x${px}.png /app/share/icons/hicolor/${px}x${px}/apps/app.xemu.xemu.png
         done
       - install -Dm644 ../ui/icons/xemu.svg /app/share/icons/hicolor/scalable/apps/app.xemu.xemu.svg
-      - desktop-file-install ../ui/xemu.desktop --dir /app/share/applications
-      - sed -i 's/^Icon=xemu/Icon=app.xemu.xemu/' /app/share/applications/xemu.desktop
       - mv qemu-system-i386 /app/bin/xemu
       - mkdir -p /app/share/licenses/xemu
       - cd .. && python3 scripts/gen-license.py > /app/share/licenses/xemu/LICENSE.txt
     sources:
       - type: git
         url: https://github.com/mborgerson/xemu.git
-        tag: gh-release/0.6.2-90-g6f507c80af
-        commit: 6f507c80af546e0f5d316622d20f78820423ce6e
+        tag: v0.7.29
+        commit: 69dcbe9b3081ee51d1468b1b7777b8b930bfba6c
         x-checker-data:
           type: json
           url: https://api.github.com/repos/mborgerson/xemu/releases/latest
           tag-query: .tag_name
-          version-query: $tag | sub("^gh-release/"; "")
           timestamp-query: .published_at
           is-main-source: true
 
