@@ -857,8 +857,8 @@ modules:
         CXX: clang++
         RANLIB: llvm-ranlib
       ldflags: -fuse-ld=lld
-      prepend-ld-library-path: /usr/lib/sdk/llvm13/lib
-      prepend-path: /usr/lib/sdk/llvm13/bin
+      prepend-ld-library-path: /usr/lib/sdk/llvm14/lib
+      prepend-path: /usr/lib/sdk/llvm14/bin
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
       - -DBUILD_SHARED_LIBS=OFF
@@ -882,7 +882,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/RPCS3/llvm-mirror.git
-        commit: 509d31ad89676522f7121b3bb8688f7d29b7ee60
+        commit: c725f494c91611018f5d830eca22c0a1662c0f31
       - type: git
         url: https://github.com/intel/ittapi.git
         dest: ittapi/ittapi
@@ -892,8 +892,8 @@ modules:
     buildsystem: cmake-ninja
     builddir: true
     build-options:
-      append-ld-library-path: /usr/lib/sdk/llvm13/lib
-      append-path: /usr/lib/sdk/llvm13/bin
+      append-ld-library-path: /usr/lib/sdk/llvm14/lib
+      append-path: /usr/lib/sdk/llvm14/bin
       cflags: *optflags
       cflags-override: true
       cxxflags: *optflags
@@ -925,7 +925,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/RPCS3/rpcs3.git
-        commit: e9570d1a0045926f63ec8ea9af68f81743d4f365
+        commit: 8d46840e091fa8e330d505f91be45a527f529efd
 
   # RPCS3 - END
   
