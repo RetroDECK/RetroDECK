@@ -103,6 +103,7 @@ standalones_init() {
     # configuring Yuzu
     mkdir -pv /var/config/yuzu/
     cp -fv $emuconfigs/yuzu-qt-config.ini /var/config/yuzu/qt-config.ini
+    sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/yuzu/qt-config.ini
     dir_prep "$rdhome/screenshots" "/var/data/yuzu/screenshots"
 
     # Dolphin
@@ -114,6 +115,7 @@ standalones_init() {
     # pcsx2
     mkdir -pv /var/config/PCSX2/inis/
     cp -fv $emuconfigs/PCSX2_ui.ini /var/config/PCSX2/inis/
+    sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2_ui.ini
     cp -fv $emuconfigs/GS.ini /var/config/PCSX2/inis/
     cp -fv $emuconfigs/PCSX2_vm.ini /var/config/PCSX2/inis/
     dir_prep "$rdhome/states" "/var/config/PCSX2/sstates"
@@ -147,6 +149,7 @@ ra_init() {
     cp -f $emuconfigs/retroarch.cfg /var/config/retroarch/
     cp -f $emuconfigs/retroarch-core-options.cfg /var/config/retroarch/
     #rm -rf $rdhome/bios/bios # in some situations a double bios symlink is created
+    sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/retroarch/retroarch.cfg
 }
 
 create_lock() {
