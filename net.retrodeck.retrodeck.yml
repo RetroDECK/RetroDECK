@@ -489,8 +489,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/wxWidgets/wxWidgets.git
-        tag: v3.1.5
-        commit: 9c0a8be1dc32063d91ed1901fd5fcd54f4f955a1
+        tag: v3.1.6
+        commit: 19907924842a9152b8ee5f03f117aed65193b964
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+)$
@@ -502,8 +502,8 @@ modules:
     sources:
       - type: git
         url: https://pagure.io/libaio.git
-        tag: libaio-0.3.112
-        commit: d025927efa75a0d1b46ca3a5ef331caa2f46ee0e
+        tag: libaio-0.3.113
+        commit: 1b18bfafc6a2f7b9fa2c6be77a95afed8b7be448
         x-checker-data:
           type: git
           tag-pattern: ^libaio-([\d.]+)$
@@ -597,8 +597,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/PCSX2/pcsx2.git
-        tag: v1.7.2554
-        commit: 0d1675fbaa0d40874df98eed6270efc55620271b
+        tag: v1.7.2889
+        commit: a6649b2d6b558806fbe7cbaf6296014e3c5c192e
       - type: file
         path: rd-submodules/pcsx2/AppIcon128.png
 
