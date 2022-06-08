@@ -3,7 +3,7 @@
 lockfile="$HOME/retrodeck/.lock"           # where the lockfile is located
 version="$(cat /app/retrodeck/version)"    # version info taken from the version file
 rdhome="$HOME/retrodeck"                   # the retrodeck home, aka ~/retrodecck
-emuconfigs="/app/retrodeck/emu-configs"   # folder with all the default emulator configs
+emuconfigs="/app/retrodeck/emu-configs"    # folder with all the default emulator configs
 sdcard="/run/media/mmcblk0p1"              # Steam Deck SD default path
 
 # Functions area
@@ -56,6 +56,21 @@ dir_prep() {
     #DEBUG
 
     echo $symlink is now $real
+}
+
+cfg_init() {
+  # Initializing retrodeck config file
+  #rdconf=/var/config/retrodeck/retrodeck.cfg
+
+  # if I got a config file already I parse it
+  #if []
+
+  #else 
+  #  touch $rdconf
+  #fi
+
+  #$roms_folder > /var/config/retrodeck/retrodeck.cfg
+  return
 }
 
 # is_mounted() {
@@ -205,11 +220,15 @@ finit() {
     zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --text="EmulationStation will now initialize the system.\nPlease DON'T EDIT THE ROMS LOCATION, just select:\n\nCREATE DIRECTORIES\nYES\nOK\nQUIT\n\nRetroDECK will manage the rest."
 
     # Recreating the folder
-    /var/config/retrodeck/tools/
+    rm -rfv /var/config/emulationstation/
+    rm -rfv /var/config/retrodeck/tools/
     mkdir -pv /var/config/emulationstation/
+    
     # Initializing ES-DE
     # TODO: after the next update of ES-DE this will not be needed
     start_retrodeck
+
+    mkdir -pv /var/config/retrodeck/tools/
 
     zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --text="RetroDECK will now install the needed files.\nPlease wait up to one minute,\nanother message will notify when the process will be finished.\n\nPress OK to continue."
 
