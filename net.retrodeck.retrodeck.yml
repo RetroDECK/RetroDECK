@@ -174,7 +174,7 @@ modules:
       branch: 5a76fef25ffc659f098ee65215281c51a63c3198
     - type: shell
       commands:
-        - sed -i 's/QUIT EMULATIONSTATION/QUIT RETRODECK/g' es-app/src/guis/GuiMenu.cpp 
+        - sed -i 's/QUIT EMULATIONSTATION/QUIT RETRODECK/g' es-app/src/guis/GuiMenu.cpp
         - sed -i 's#"EMULATIONSTATION-DE  V" + Utils::String::toUpper(PROGRAM_VERSION_STRING)#"RetroDECK v'$(cat ${FLATPAK_DEST}/retrodeck/version)', ES-DE  v" + Utils::String::toUpper(PROGRAM_VERSION_STRING)#g' es-app/src/guis/GuiMenu.cpp
 
   # ES-DE - END

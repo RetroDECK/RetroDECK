@@ -124,6 +124,8 @@ standalones_init() {
     mkdir -pv /var/config/melonDS/
     dir_prep "$rdhome/bios" "/var/config/melonDS/bios"
     cp -fv $emuconfigs/melonDS.ini /var/config/melonDS/
+    # Replace ~/retrodeck with $rdhome as ~ cannot be understood by MelonDS
+    sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/melonDS/melonDS.ini
 
     # CITRA
     mkdir -pv /var/config/citra-emu/
