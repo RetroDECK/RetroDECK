@@ -143,6 +143,7 @@ ra_init() {
     mkdir -pv /var/config/retroarch/cores/
     cp /app/share/libretro/cores/* /var/config/retroarch/cores/
     cp -f $emuconfigs/retroarch.cfg /var/config/retroarch/
+    cp -f $emuconfigs/retroarch-core-options.cfg /var/config/retroarch/
     #rm -rf $rdhome/bios/bios # in some situations a double bios symlink is created
 }
 
