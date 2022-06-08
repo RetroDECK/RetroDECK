@@ -1031,7 +1031,7 @@ modules:
         # Configuring emulators:
         - mkdir -p ${FLATPAK_DEST}/retrodeck/emu-configs/
         # RetroArch
-        - cp retroarch.cfg ${FLATPAK_DEST}/retrodeck/emu-configs/
+        - cp retroarch* ${FLATPAK_DEST}/retrodeck/emu-configs/
         # Dolphin 
         - cp Dolphin.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
         - cp Hotkeys.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
@@ -1074,4 +1074,3 @@ modules:
         path: net.retrodeck.retrodeck.desktop
       - type: file
         path: net.retrodeck.retrodeck.appdata.xml
-      
