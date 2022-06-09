@@ -56,9 +56,10 @@ jobs:
           flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
           flatpak install -y org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08 io.qt.qtwebengine.BaseApp/x86_64/5.15-21.08 org.freedesktop.Sdk.Extension.llvm13
 
+      # for main remember to change ~ into ${GITHUB_WORKSPACE}
       - name: Build flatpak
         run: |
-          flatpak-builder --build-only --user --force-clean --repo=${GITHUB_WORKSPACE}/local ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
+          flatpak-builder --build-only --user --force-clean --repo=~/local ~/retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
 
       # - name: Compress cache
       #   run: |
@@ -125,7 +126,7 @@ jobs:
 
       - name: Create Bundle
         run: |
-          flatpak-builder --user --force-clean --repo=${GITHUB_WORKSPACE}/local ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
+          flatpak-builder --user --force-clean --repo=~/local ~/retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
           flatpak build-bundle $GITHUB_WORKSPACE/local RetroDECK.flatpak net.retrodeck.retrodeck
 
       # - name: Extract branch name
