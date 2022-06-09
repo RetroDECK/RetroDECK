@@ -314,8 +314,8 @@ modules:
         - mv ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* /app/share/libretro/cores/
     sources:
       - type: archive
-        url: https://buildbot.libretro.com/stable/1.10.2/linux/x86_64/RetroArch_cores.7z
-        sha256: 0c59f99534a1ae3a2d34b1747c40398325e53db69acfab35b99c8fa8d76430e5
+        url: https://buildbot.libretro.com/stable/1.10.3/linux/x86_64/RetroArch_cores.7z
+        sha256: 33abf39839687f8faba202ed5dcf3a54c06266a49fad35f0521fa445523d009f
 
   # Yuzu - https://github.com/flathub/org.yuzu_emu.yuzu
 
