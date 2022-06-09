@@ -1,29 +1,30 @@
 #!/bin/bash
 
-if [ -d ~/retrodeck/roms ] && [ -d /run/media/mmcblk0p1/retrodeck/roms ]
-then # found both internal and sd folders
-    zenity --title "RetroDECK" --warning --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --text="I found a roms folder both in internal and SD Card,\nin order to make this tool useful you should remove one of the two or merge them."
+source global.sh
+
+zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="Quit" --ok-label "Continue" --text="WARNING: this script is experimental\nplease be sure you back up your data before continuing.\n\nDo you want to continue?"
+if [ $? == 1 ] #cancel
+then
     exit 0
 fi
 
-if [ -d ~/retrodeck/roms ] && [ ! -d /run/media/mmcblk0p1/retrodeck/roms ] 
-then # found internal folder and not the external
-    roms_path=~/retrodeck
-    new_roms_path=/run/media/mmcblk0p1/retrodeck
+zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="Cancel" --ok-label "Browse" --text="The roms folder is now: $roms_folder\nplease select the new location.\nA retrodeck/roms folder will be created starting from the directory that you selected."
+if [ $? == 1 ] #cancel
+then
+    exit 0
 fi
 
-if [ ! -d ~/retrodeck/roms ] && [ -d /run/media/mmcblk0p1/retrodeck/roms ] 
-then # found external folder and not the internal
-    roms_path=/run/media/mmcblk0p1/retrodeck
-    new_roms_path=~/retrodeck
-fi
+new_roms_path="$(zenity --file-selection --title="Choose a new roms folder location" --directory)"/retrodeck/roms
 
-zenity --title "RetroDECK" --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --text="Should I move the roms from\n\n$roms_path/roms\n\nto\n\n$new_roms_path/roms?"
+zenity --title "RetroDECK" --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --text="Should I move the roms from\n\n$roms_folder\n\nto\n\n$new_roms_path?"
 if [ $? == 0 ] #yes
 then
     mkdir -p $new_roms_path
-    mv -f $roms_path/roms $new_roms_path/roms
+    mv -f $roms_folder $new_roms_path
     rm -f /var/config/emulationstation/ROMs
-    ln -s $new_roms_path/roms /var/config/emulationstation/ROMs
-    rm -f $roms_path/roms
+    ln -s $new_roms_path /var/config/emulationstation/ROMs
+    rm -f $roms_folder
+    zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --text="Done\nYour roms are now located in:\n\n$roms_folder\n\nPress OK to continue."
+    $roms_folder=$new_roms_path     # Updating variable
+    conf_write                      # Writing variables in the config file (sourced from global.sh)
 fi
