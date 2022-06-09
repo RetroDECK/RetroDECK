@@ -1,10 +1,15 @@
 #!/bin/bash
 
+# Init default values, this may be overwritten by retrodeck.cfg as it sourced later with global.sh
+
 lockfile="$HOME/retrodeck/.lock"           # where the lockfile is located
-version="$(cat /app/retrodeck/version)"    # version info taken from the version file
-rdhome="$HOME/retrodeck"                   # the retrodeck home, aka ~/retrodecck
 emuconfigs="/app/retrodeck/emu-configs"    # folder with all the default emulator configs
 sdcard="/run/media/mmcblk0p1"              # Steam Deck SD default path
+rd_conf="/app/retrodeck/retrodeck.cfg"     # RetroDECK config file path
+version="$(cat /app/retrodeck/version)"    # version info taken from the version file
+rdhome="$HOME/retrodeck"                   # the retrodeck home, aka ~/retrodeck
+
+source global.sh
 
 # Functions area
 
@@ -325,7 +330,9 @@ done
 if [ -f "$lockfile" ] && [ "$(cat "$lockfile")" != "$version" ]; 
 then
     echo "Lockfile version is "$(cat "$lockfile")" but the actual version is $version"
-    post_update
+    conf_init         # Initializing/reading the config file (sourced from global.sh)
+    post_update       # Executing post update script
+    conf_write        # Writing variables in the config file (sourced from global.sh)
     start_retrodeck
     exit 0
 fi
@@ -335,7 +342,9 @@ fi
 if [ ! -f "$lockfile" ];
 then
   echo "Lockfile not found"
-  finit
+  conf_init         # Initializing/reading the config file (sourced from global.sh)
+  finit             # Executing First/Force init
+  conf_write        # Writing variables in the config file (sourced from global.sh)
 	exit 0
 fi
 
