@@ -58,7 +58,7 @@ jobs:
 
       - name: Build flatpak
         run: |
-          flatpak-builder --build-only --user --force-clean --repo=${GITHUB_WORKSPACE}/local retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
+          flatpak-builder --build-only --user --force-clean --repo=${GITHUB_WORKSPACE}/local ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
 
       # - name: Compress cache
       #   run: |
@@ -125,7 +125,7 @@ jobs:
 
       - name: Create Bundle
         run: |
-          flatpak-builder --user --force-clean --repo=${GITHUB_WORKSPACE}/local retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
+          flatpak-builder --user --force-clean --repo=${GITHUB_WORKSPACE}/local ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
           flatpak build-bundle $GITHUB_WORKSPACE/local RetroDECK.flatpak net.retrodeck.retrodeck
 
       # - name: Extract branch name
