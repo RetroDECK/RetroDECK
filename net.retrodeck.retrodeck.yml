@@ -107,7 +107,7 @@ modules:
   # mesa repo got a double certificate issue and gnutils cannot handle that so GLU download fails,
   # this affects even the shared-modules's glu so I have to replace it temporarly
   # more info there: https://gitlab.com/gnutls/gnutls/-/issues/1335
-  - name: libglu
+  - name: glu
     buildsystem: meson
     cleanup:
       - /include
@@ -118,6 +118,33 @@ modules:
       - type: archive
         url: https://ftp.osuosl.org/pub/blfs/conglomeration/glu/glu-9.0.2.tar.xz
         sha256: 6e7280ff585c6a1d9dfcdf2fca489251634b3377bfc33c29e4002466a38d02d4
+
+  - name: libgudev
+    buildsystem: meson
+    config-opts:
+      - '-Dtests=disabled'
+      - '-Dvapi=disabled'
+      - '-Dintrospection=disabled'
+      - '-Dgtk_doc=false'
+    cleanup:
+      - /include
+      - /etc
+      - /libexec
+      - /sbin
+      - /lib/pkgconfig
+      - /lib/systemd
+      - /man
+      - /share/aclocal
+      - /share/doc
+      - /share/gtk-doc
+      - /share/man
+      - /share/pkgconfig
+      - '*.la'
+      - '*.a'
+    sources:
+      - type: archive
+        url: https://ftp.osuosl.org/pub/blfs/conglomeration/libgudev/libgudev-237.tar.xz
+        sha256: 0d06b21170d20c93e4f0534dbb9b0a8b4f1119ffb00b4031aaeb5b9148b686aa
 
   # ES-DE
 
@@ -222,10 +249,11 @@ modules:
       - shared-modules/SDL/SDL_mixer-1.2.12.json
       - shared-modules/SDL/SDL_net-1.2.8.json
       - shared-modules/libusb/libusb.json
-      - shared-modules/gudev/gudev.json
+      # certificate glu issue
+      #- shared-modules/gudev/gudev.json
       - rd-submodules/retroarch/libbz2/libbz2-1.0.8.json
       - rd-submodules/retroarch/libaio/libaio-0.3.112.json
-      # glu issue, check libglu module for more info
+      # certificate issue, check libglu module for more info
       #- shared-modules/glu/glu-9.json
       - rd-submodules/retroarch/libdecor/libdecor-0.1.0.json
   - name: retroarch-filers-video
@@ -705,7 +733,7 @@ modules:
 
   # XEMU - START
 
-  # glu issue, check libglu module for more info
+  # certificate issue, check libglu module for more info
   # - name: libglu
   #   buildsystem: meson
   #   cleanup:
