@@ -210,7 +210,7 @@ modules:
       - >-
         mv ${FLATPAK_DEST}/share/pixmaps/retroarch.svg
         ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/
-      - rmdir --ignore-fail-on-non-empty ${FLATPAK_DEST}/share/pixmaps/
+      - rm -rf ${FLATPAK_DEST}/share/pixmaps/
       - mkdir -p ${FLATPAK_DEST}/etc
       - >-
         sed s:@prefix@:${FLATPAK_DEST}:g retroarch.cfg >
