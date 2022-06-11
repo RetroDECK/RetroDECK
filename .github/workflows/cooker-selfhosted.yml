@@ -41,15 +41,14 @@ jobs:
           flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
           flatpak install -y org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08 io.qt.qtwebengine.BaseApp/x86_64/5.15-21.08 org.freedesktop.Sdk.Extension.llvm13
 
-      # for main remember to change ~ into ${GITHUB_WORKSPACE}
+      # for main remember to change ${HOME} into ${GITHUB_WORKSPACE}
       - name: Build flatpak
         run: |
-          flatpak-builder --build-only --user --force-clean --repo=~/local ~/retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
+          flatpak-builder --user --force-clean --keep-build-dirs --repo=${HOME}/local ${HOME}/retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
 
       - name: Create Bundle
         run: |
-          flatpak-builder --user --force-clean --repo=~/local ~/retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
-          flatpak build-bundle $GITHUB_WORKSPACE/local RetroDECK.flatpak net.retrodeck.retrodeck
+          flatpak build-bundle ${HOME}/local RetroDECK.flatpak net.retrodeck.retrodeck
 
       - name: Read version from version file
         id: version
