@@ -119,6 +119,33 @@ modules:
         url: https://ftp.osuosl.org/pub/blfs/conglomeration/glu/glu-9.0.2.tar.xz
         sha256: 6e7280ff585c6a1d9dfcdf2fca489251634b3377bfc33c29e4002466a38d02d4
 
+  - name: gudev
+    buildsystem: meson
+    config-opts:
+      - '-Dtests=disabled'
+      - '-Dvapi=disabled'
+      - '-Dintrospection=disabled'
+      - '-Dgtk_doc=false'
+    cleanup:
+      - /include
+      - /etc
+      - /libexec
+      - /sbin
+      - /lib/pkgconfig
+      - /lib/systemd
+      - /man
+      - /share/aclocal
+      - /share/doc
+      - /share/gtk-doc
+      - /share/man
+      - /share/pkgconfig
+      - '*.la'
+      - '*.a'
+    sources:
+      - type: archive
+        url: https://ftp.osuosl.org/pub/blfs/conglomeration/libgudev/libgudev-237.tar.xz
+        sha256: 0d06b21170d20c93e4f0534dbb9b0a8b4f1119ffb00b4031aaeb5b9148b686aa
+
   # ES-DE
 
   - name: ffmpeg
@@ -224,7 +251,8 @@ modules:
       - shared-modules/SDL/SDL_net-1.2.8.json
       - shared-modules/SDL/SDL_ttf-2.0.11.json
       - shared-modules/libusb/libusb.json
-      - shared-modules/gudev/gudev.json
+      # same glu issue
+      # - shared-modules/gudev/gudev.json
       - rd-submodules/retroarch/libbz2/libbz2-1.0.8.json
       - rd-submodules/retroarch/xrandr/xrandr-1.5.1.json
       - rd-submodules/retroarch/libaio/libaio-0.3.112.json
