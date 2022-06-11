@@ -1108,3 +1108,4 @@ modules:
         path: net.retrodeck.retrodeck.desktop
       - type: file
         path: net.retrodeck.retrodeck.appdata.xml
+        
