@@ -68,6 +68,7 @@ modules:
   # UPDATE STEPS FOR MAIN:
   # [ ] Update the VERSION variable
   # [ ] Update the appdata.xml with the version number and notes
+  # [ ] change branch into main in retrodeck module (last one)
   #
   - name: version-initialization
     buildsystem: simple
@@ -221,116 +222,129 @@ modules:
 
   # RetroArch - https://github.com/flathub/org.libretro.RetroArch
 
+  # - name: retroarch
+  #   config-opts:
+  #     - '--enable-dbus'
+  #   make-args:
+  #     - GLOBAL_CONFIG_DIR=${FLATPAK_DEST}/etc
+  #   sources:
+  #     - type: git
+  #       url: https://github.com/libretro/RetroArch.git
+  #       branch: 9b282aa742b6c3d2f2925ae5a12e2cd7c6b6ad38
+  #     - type: file
+  #       path: retroarch.cfg
+  #   post-install:
+  #     - mkdir -p ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/
+  #     - >-
+  #       mv ${FLATPAK_DEST}/share/pixmaps/retroarch.svg
+  #       ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/
+  #     - rmdir --ignore-fail-on-non-empty ${FLATPAK_DEST}/share/pixmaps/
+  #     - mkdir -p ${FLATPAK_DEST}/etc
+  #     - >-
+  #       sed s:@prefix@:${FLATPAK_DEST}:g retroarch.cfg >
+  #       ${FLATPAK_DEST}/etc/retroarch.cfg
+  #   modules:
+  #     - libpng/libpng-1.6.35.json
+  #     #nvidia-cg-toolkit/nvidia-cg-toolkit-3.1.0013.json
+  #     - shared-modules/SDL/SDL-1.2.15.json
+  #     - shared-modules/SDL/SDL_image-1.2.12.json
+  #     - shared-modules/SDL/SDL_mixer-1.2.12.json
+  #     - shared-modules/SDL/SDL_net-1.2.8.json
+  #     - shared-modules/SDL/SDL_ttf-2.0.11.json
+  #     - shared-modules/libusb/libusb.json
+  #     # certificate glu issue
+  #     #- shared-modules/gudev/gudev.json
+  #     libbz2/libbz2-1.0.8.json
+  #     xrandr/xrandr-1.5.1.json
+  #     libaio/libaio-0.3.112.json
+  #     # certificate issue, check libglu module for more info
+  #     #- shared-modules/glu/glu-9.json
+  #     libdecor/libdecor-0.1.0.json
+  # - name: retroarch-filers-video
+  #   subdir: gfx/video_filters
+  #   make-install-args:
+  #     - PREFIX=${FLATPAK_DEST}
+  #   sources:
+  #     - type: git
+  #       url: https://github.com/libretro/RetroArch.git
+  #       branch: 9b282aa742b6c3d2f2925ae5a12e2cd7c6b6ad38
+  # - name: retroarch-filers-audio
+  #   subdir: libretro-common/audio/dsp_filters
+  #   make-install-args:
+  #     - PREFIX=${FLATPAK_DEST}
+  #   sources:
+  #     - type: git
+  #       url: https://github.com/libretro/RetroArch.git
+  #       branch: 9b282aa742b6c3d2f2925ae5a12e2cd7c6b6ad38
+  # - name: retroarch-assets
+  #   make-install-args:
+  #     - PREFIX=${FLATPAK_DEST}
+  #   sources:
+  #     - type: git
+  #       url: https://github.com/libretro/retroarch-assets.git
+  #       commit: f45dd1351e6bfb9f01e12bee8d358ad22a2bb8f9
+  # - name: libretro-database
+  #   make-install-args:
+  #     - PREFIX=${FLATPAK_DEST}
+  #   sources:
+  #     - type: git
+  #       url: https://github.com/libretro/libretro-database.git
+  #       commit: f3b10ec262fcbd78da3473f46d244270d12a327e
+  # - name: libretro-core-info
+  #   make-install-args:
+  #     - PREFIX=${FLATPAK_DEST}
+  #   sources:
+  #     - type: git
+  #       url: https://github.com/libretro/libretro-core-info.git
+  #       commit: 06dac6318c067a6a40e2ea1e1260e74681ada844
+  # - name: retroarch-joypad-autoconfig
+  #   make-install-args:
+  #     - PREFIX=${FLATPAK_DEST}
+  #   sources:
+  #     - type: git
+  #       url: https://github.com/libretro/retroarch-joypad-autoconfig.git
+  #       commit: 760b057f1865a827762a54a8a32afda2cdd9e170
+  # - name: common-shaders
+  #   make-install-args:
+  #     - PREFIX=${FLATPAK_DEST}
+  #   sources:
+  #     - type: git
+  #       url: https://github.com/libretro/common-shaders.git
+  #       commit: 55e401834b732e62c34411321c4ffd82524345d4
+  # - name: slang-shaders
+  #   make-install-args:
+  #     - PREFIX=${FLATPAK_DEST}
+  #   sources:
+  #     - type: git
+  #       url: https://github.com/libretro/slang-shaders.git
+  #       commit: 148c57d9747f5db124135501ac280b5ca129a83f
+  # - name: glsl-shaders
+  #   make-install-args:
+  #     - PREFIX=${FLATPAK_DEST}
+  #   sources:
+  #     - type: git
+  #       url: https://github.com/libretro/glsl-shaders.git
+  #       commit: 8f6b2649489760caea8f36ec6099998854059569
+  # - name: common-overlays
+  #   make-install-args:
+  #     - PREFIX=${FLATPAK_DEST}
+  #   sources:
+  #     - type: git
+  #       url: https://github.com/libretro/common-overlays.git
+  #       commit: db9744f4e58a740f0f10b04b62af347cd6f01928
+
+  # RetroArch experiment: cloning the flathub repository directly and adding its manifest as module
+
   - name: retroarch
-    config-opts:
-      - '--enable-dbus'
-    make-args:
-      - GLOBAL_CONFIG_DIR=${FLATPAK_DEST}/etc
+    buildsystem: simple
+    build-commands:
+      - echo ""
     sources:
       - type: git
         url: https://github.com/libretro/RetroArch.git
-        branch: 9b282aa742b6c3d2f2925ae5a12e2cd7c6b6ad38
-      - type: file
-        path: rd-submodules/retroarch/retroarch.cfg
-    post-install:
-      - mkdir -p ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/
-      - >-
-        mv ${FLATPAK_DEST}/share/pixmaps/retroarch.svg
-        ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/
-      - rmdir --ignore-fail-on-non-empty ${FLATPAK_DEST}/share/pixmaps/
-      - mkdir -p ${FLATPAK_DEST}/etc
-      - >-
-        sed s:@prefix@:${FLATPAK_DEST}:g retroarch.cfg >
-        ${FLATPAK_DEST}/etc/retroarch.cfg
+        tag: v1.10.2
     modules:
-      - libpng/libpng-1.6.35.json
-      #- rd-submodules/retroarch/nvidia-cg-toolkit/nvidia-cg-toolkit-3.1.0013.json
-      - shared-modules/SDL/SDL-1.2.15.json
-      - shared-modules/SDL/SDL_image-1.2.12.json
-      - shared-modules/SDL/SDL_mixer-1.2.12.json
-      - shared-modules/SDL/SDL_net-1.2.8.json
-      - shared-modules/SDL/SDL_ttf-2.0.11.json
-      - shared-modules/libusb/libusb.json
-      # certificate glu issue
-      #- shared-modules/gudev/gudev.json
-      - rd-submodules/retroarch/libbz2/libbz2-1.0.8.json
-      - rd-submodules/retroarch/xrandr/xrandr-1.5.1.json
-      - rd-submodules/retroarch/libaio/libaio-0.3.112.json
-      # certificate issue, check libglu module for more info
-      #- shared-modules/glu/glu-9.json
-      - rd-submodules/retroarch/libdecor/libdecor-0.1.0.json
-  - name: retroarch-filers-video
-    subdir: gfx/video_filters
-    make-install-args:
-      - PREFIX=${FLATPAK_DEST}
-    sources:
-      - type: git
-        url: https://github.com/libretro/RetroArch.git
-        branch: 9b282aa742b6c3d2f2925ae5a12e2cd7c6b6ad38
-  - name: retroarch-filers-audio
-    subdir: libretro-common/audio/dsp_filters
-    make-install-args:
-      - PREFIX=${FLATPAK_DEST}
-    sources:
-      - type: git
-        url: https://github.com/libretro/RetroArch.git
-        branch: 9b282aa742b6c3d2f2925ae5a12e2cd7c6b6ad38
-  - name: retroarch-assets
-    make-install-args:
-      - PREFIX=${FLATPAK_DEST}
-    sources:
-      - type: git
-        url: https://github.com/libretro/retroarch-assets.git
-        commit: f45dd1351e6bfb9f01e12bee8d358ad22a2bb8f9
-  - name: libretro-database
-    make-install-args:
-      - PREFIX=${FLATPAK_DEST}
-    sources:
-      - type: git
-        url: https://github.com/libretro/libretro-database.git
-        commit: f3b10ec262fcbd78da3473f46d244270d12a327e
-  - name: libretro-core-info
-    make-install-args:
-      - PREFIX=${FLATPAK_DEST}
-    sources:
-      - type: git
-        url: https://github.com/libretro/libretro-core-info.git
-        commit: 06dac6318c067a6a40e2ea1e1260e74681ada844
-  - name: retroarch-joypad-autoconfig
-    make-install-args:
-      - PREFIX=${FLATPAK_DEST}
-    sources:
-      - type: git
-        url: https://github.com/libretro/retroarch-joypad-autoconfig.git
-        commit: 760b057f1865a827762a54a8a32afda2cdd9e170
-  - name: common-shaders
-    make-install-args:
-      - PREFIX=${FLATPAK_DEST}
-    sources:
-      - type: git
-        url: https://github.com/libretro/common-shaders.git
-        commit: 55e401834b732e62c34411321c4ffd82524345d4
-  - name: slang-shaders
-    make-install-args:
-      - PREFIX=${FLATPAK_DEST}
-    sources:
-      - type: git
-        url: https://github.com/libretro/slang-shaders.git
-        commit: 148c57d9747f5db124135501ac280b5ca129a83f
-  - name: glsl-shaders
-    make-install-args:
-      - PREFIX=${FLATPAK_DEST}
-    sources:
-      - type: git
-        url: https://github.com/libretro/glsl-shaders.git
-        commit: 8f6b2649489760caea8f36ec6099998854059569
-  - name: common-overlays
-    make-install-args:
-      - PREFIX=${FLATPAK_DEST}
-    sources:
-      - type: git
-        url: https://github.com/libretro/common-overlays.git
-        commit: db9744f4e58a740f0f10b04b62af347cd6f01928
+      - org.libretro.RetroArch.json
 
   # RetroArch - END
 
@@ -1033,23 +1047,21 @@ modules:
 
         # Prep the ES-DE and RetroArch config files - I will have to SED/XMLSTARLET them soon
         - rm -rf /app/share/emulationstation/resources/systems/unix/es_find_rules.xml
-        - cp es_find_rules.xml /app/share/emulationstation/resources/systems/unix/
+        - cp es-configs/es_find_rules.xml /app/share/emulationstation/resources/systems/unix/
         - rm -rf /app/share/emulationstation/resources/systems/unix/es_systems.xml
-        - cp es_systems.xml /app/share/emulationstation/resources/systems/unix/
+        - cp es-configs/es_systems.xml /app/share/emulationstation/resources/systems/unix/
         # These must be put in home folder, managed by retrodeck.sh
-        - cp es_settings.xml ${FLATPAK_DEST}/retrodeck/es_settings.xml
+        - cp es-configs/es_settings.xml ${FLATPAK_DEST}/retrodeck/es_settings.xml
 
         # Logo, res
         - rm -f /app/share/emulationstation/resources/graphics/splash.svg
-        - cp splash.svg /app/share/emulationstation/resources/graphics/splash.svg
-        - cp icon.svg /app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg
+        - cp res/splash.svg /app/share/emulationstation/resources/graphics/splash.svg
+        - cp res/icon.svg /app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg
 
         # Tools
         - mkdir -p ${FLATPAK_DEST}/retrodeck/tools/
-        - cp start-*.sh ${FLATPAK_DEST}/retrodeck/tools/
-        - cp move-roms.sh ${FLATPAK_DEST}/retrodeck/tools/
-        - cp start-yuzu.sh ${FLATPAK_DEST}/retrodeck/tools/
-        - cp tools-gamelist.xml ${FLATPAK_DEST}/retrodeck/
+        - cp tools/* ${FLATPAK_DEST}/retrodeck/tools/
+        - mv -f ${FLATPAK_DEST}/retrodeck/tools/tools-gamelist.xml ${FLATPAK_DEST}/retrodeck/
         
         - cp retrodeck.sh /app/bin/retrodeck.sh
         - chmod +x /app/bin/retrodeck.sh
@@ -1057,56 +1069,51 @@ modules:
         # Desktop entry
         - cp net.retrodeck.retrodeck.desktop /app/share/applications/net.retrodeck.retrodeck.desktop
 
-        # Steam Grids - When BoilR comes it will be deprecated
-        - mkdir -p ${FLATPAK_DEST}/retrodeck/steam/
-        - cp banner_main.png ${FLATPAK_DEST}/retrodeck/steam/
-        - cp poster_main.png ${FLATPAK_DEST}/retrodeck/steam/
-        - cp poster_main_nodecklogo.png ${FLATPAK_DEST}/retrodeck/steam/
+        # TODO: group the configs per-emu and optimize the following cps, like already done with Dolphin. Please not that some files may be renamed, check retrodeck.sh to know how (and fix it after the edit)
 
         # Configuring emulators:
         - mkdir -p ${FLATPAK_DEST}/retrodeck/emu-configs/
         # RetroArch
-        - cp retroarch* ${FLATPAK_DEST}/retrodeck/emu-configs/
+        - cp emu-configs/retroarch* ${FLATPAK_DEST}/retrodeck/emu-configs/
         # Dolphin 
-        - cp Dolphin.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
-        - cp Hotkeys.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
-        - cp GCPadNew.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
-        - cp GFX.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
-        - cp Qt.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
+        - cp emu-configs/Dolphin/* ${FLATPAK_DEST}/retrodeck/emu-configs/
         # Yuzu
-        - cp yuzu-qt-config.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
+        - cp emu-configs/yuzu-qt-config.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
         # Pcsx2
-        - cp PCSX2_ui.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
-        - cp GS.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
-        - cp PCSX2_vm.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
+        - cp emu-configs/PCSX2_ui.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
+        - cp emu-configs/GS.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
+        - cp emu-configs/PCSX2_vm.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
         # MelonDS
-        - cp melonDS.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
+        - cp emu-configs/melonDS.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
         # CITRA
-        - cp citra-qt-config.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
+        - cp emu-configs/citra-qt-config.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
         # RPCS3
-        - cp config.yml ${FLATPAK_DEST}/retrodeck/emu-configs/
+        - cp emu-configs/config.yml ${FLATPAK_DEST}/retrodeck/emu-configs/
 
         # Placing appdata
         - mkdir -p ${FLATPAK_DEST}/share/appdata
         - cp net.retrodeck.retrodeck.appdata.xml ${FLATPAK_DEST}/share/appdata
 
     sources:
-      - type: dir
-        path: es-configs
-      - type: file
-        path: retrodeck.sh
-      - type: dir
-        path: emu-configs
-      - type: dir
-        path: emu-configs/Dolphin
-      - type: dir
-        path: res
-      - type: dir
-        path: res/steam
-      - type: dir
-        path: tools
-      - type: file
-        path: net.retrodeck.retrodeck.desktop
-      - type: file
-        path: net.retrodeck.retrodeck.appdata.xml
+      - type: git
+        url: https://github.com/XargonWan/RetroDECK.git
+        branch: cooker
+      # - type: dir
+      #   path: es-configs
+      # - type: file
+      #   path: retrodeck.sh
+      # - type: dir
+      #   path: emu-configs
+      # - type: dir
+      #   path: emu-configs/Dolphin
+      # - type: dir
+      #   path: res
+      # - type: dir
+      #   path: res/steam
+      # - type: dir
+      #   path: tools
+      # - type: file
+      #   path: net.retrodeck.retrodeck.desktop
+      # - type: file
+      #   path: net.retrodeck.retrodeck.appdata.xml
         
