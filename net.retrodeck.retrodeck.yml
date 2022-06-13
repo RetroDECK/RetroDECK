@@ -66,8 +66,8 @@ modules:
   # The version number is stored in /var/conf/retrodeck/version
   # 
   # UPDATE STEPS FOR MAIN:
-  # [X] Update the VERSION variable
-  # [X] Update the appdata.xml with the version number and notes
+  # [ ] Update the VERSION variable
+  # [ ] Update the appdata.xml with the version number and notes
   #
   - name: version-initialization
     buildsystem: simple
@@ -75,7 +75,7 @@ modules:
       - |
         git checkout ${GITHUB_REF_NAME}
         mkdir -p ${FLATPAK_DEST}/retrodeck/
-        VERSION="0.4.1b"
+        VERSION="cooker"
         if [[ $VERSION == "cooker" ]];
         then
           VERSION=$(git describe --tags | tr - .)
