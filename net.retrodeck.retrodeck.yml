@@ -1061,7 +1061,7 @@ modules:
         # Tools
         - mkdir -p ${FLATPAK_DEST}/retrodeck/tools/
         - cp tools/* ${FLATPAK_DEST}/retrodeck/tools/
-        - mv -f ${FLATPAK_DEST}/retrodeck/tools/tools-gamelist.xml ${FLATPAK_DEST}/retrodeck/
+        - mv -f es-configs/tools-gamelist.xml ${FLATPAK_DEST}/retrodeck/
         
         - cp retrodeck.sh /app/bin/retrodeck.sh
         - chmod +x /app/bin/retrodeck.sh
