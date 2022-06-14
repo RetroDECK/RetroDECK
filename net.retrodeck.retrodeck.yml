@@ -4,7 +4,7 @@ runtime-version: '5.15-21.08'
 sdk: org.kde.Sdk
 # Needed for rpcs3
 sdk-extensions:
-  - org.freedesktop.Sdk.Extension.llvm13
+  - org.freedesktop.Sdk.Extension.llvm14
 # /Needed for rpcs3
 # Needed for Yuzu
 base: io.qt.qtwebengine.BaseApp
@@ -933,12 +933,12 @@ modules:
     buildsystem: cmake-ninja
     builddir: true
     build-options:
-      append-ld-library-path: /usr/lib/sdk/llvm13/lib
-      append-path: /usr/lib/sdk/llvm13/bin
-      cflags: *optflags
-      cflags-override: true
-      cxxflags: *optflags
-      cxxflags-override: true
+       append-ld-library-path: /usr/lib/sdk/llvm14/lib
+       append-path: /usr/lib/sdk/llvm14/bin
+      # cflags: *optflags
+      # cflags-override: true
+      # cxxflags: *optflags
+      # cxxflags-override: true
       env:
         AR: llvm-ar
         CC: clang
@@ -958,11 +958,9 @@ modules:
     post-install:
       - |
         set -eux;
-        sed -i 's|<id>RPCS3</id>|<id>net.rpcs3.RPCS3</id>|' ${FLATPAK_DEST}/share/metainfo/rpcs3.metainfo.xml;
         COMM_TAG="$(awk -F'[\{,]' '/version{.*}/{printf "%d.%d.%d", $2, $3, $4}' ../rpcs3/rpcs3_version.cpp)";
         COMM_COUNT="$(git rev-list --count HEAD)";
         COMM_HASH="$(git rev-parse --short=8 HEAD)";
-        sed -i 's|</component>|<content_rating type="oars-1.1"/><releases><release date="'$(git show -s --format=%cs)'" version="'"${COMM_TAG}"'-'"${COMM_COUNT}"'-'"${COMM_HASH}"'"/></releases></component>|' ${FLATPAK_DEST}/share/metainfo/rpcs3.metainfo.xml;
     sources:
       - type: git
         url: https://github.com/RPCS3/rpcs3.git
