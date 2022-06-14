@@ -928,7 +928,6 @@ modules:
   #       url: https://github.com/intel/ittapi.git
   #       dest: ittapi/ittapi
   #       disable-shallow-clone: true
-  
 
   - name: rpcs3
     buildsystem: cmake-ninja
