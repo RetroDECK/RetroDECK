@@ -4,7 +4,7 @@ runtime-version: '5.15-21.08'
 sdk: org.kde.Sdk
 # Needed for rpcs3
 sdk-extensions:
-  - org.freedesktop.Sdk.Extension.llvm14
+  - org.freedesktop.Sdk.Extension.llvm13
 # /Needed for rpcs3
 # Needed for Yuzu
 base: io.qt.qtwebengine.BaseApp
