@@ -17,7 +17,18 @@ conf_init() {
 
 conf_write() {
   # writes the variables in the retrodeck config file
-  sed -i "s%version=.*%version=$version%" $rd_conf
-  sed -i "s%rdhome=.*%rdhome=$rdhome%" $rd_conf
-  sed -i "s%rdhome=.*%rdhome=$roms_folder" $rd_conf
+
+  # TODO: this can be optimized with a while and a list of variables to check
+  if [ ! -z "$version" ] then #if the variable is not null then I update it
+    sed -i "s%version=.*%version=$version%" $rd_conf
+  fi
+
+  if [ ! -z "$rdhome" ] then
+    sed -i "s%rdhome=.*%rdhome=$rdhome%" $rd_conf
+  fi
+
+  if [ ! -z "$roms_folder" ] then
+    sed -i "s%rdhome=.*%rdhome=$roms_folder" $rd_conf
+  fi
+
 }

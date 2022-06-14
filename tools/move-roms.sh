@@ -2,7 +2,7 @@
 
 source global.sh
 
-zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="Quit" --ok-label "Continue" --text="WARNING: this script is experimental\nplease be sure you back up your data before continuing.\n\nDo you want to continue?"
+zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="Quit" --ok-label "Continue" --text="WARNING: this script is experimental\nplease be sure to backup your data before continuing.\n\nDo you want to continue?"
 if [ $? == 1 ] #cancel
 then
     exit 0

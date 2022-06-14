@@ -1,12 +1,12 @@
-name: cooker-selfhosted
+name: main-selfhosted
 
 on:
   push:
     branches:
-     - cooker*
+     - main
   pull_request: 
     branches:
-     - cooker*
+     - main
 
   workflow_dispatch:
 
@@ -44,35 +44,33 @@ jobs:
       # for main remember to change ${HOME} into ${GITHUB_WORKSPACE}
       - name: Build flatpak
         run: |
-          flatpak-builder --build-only --user --force-clean --repo=${GITHUB_WORKSPACE}/local ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
+          flatpak-builder --build-only --user --force-clean --repo=${GITHUB_WORKSPACE}/local ${GITHUB_WORKSPACE}/retrodeck-flatpak-main net.retrodeck.retrodeck.yml
 
       - name: Create Bundle
         run: |
-          flatpak-builder --user --force-clean --repo=${GITHUB_WORKSPACE}/local ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
-          flatpak build-bundle $GITHUB_WORKSPACE/local RetroDECK.flatpak net.retrodeck.retrodeck
+          flatpak-builder --user --force-clean --repo=${GITHUB_WORKSPACE}/local ${GITHUB_WORKSPACE}/retrodeck-flatpak-main net.retrodeck.retrodeck.yml
+          flatpak build-bundle ${GITHUB_WORKSPACE}/local RetroDECK.flatpak net.retrodeck.retrodeck
 
       - name: Read version from version file
         id: version
         run: echo "##[set-output name=version;]$(cat $(find . -name version))"
 
-      - name: Publish the flatpak in a new cooker release
+      - name: Publish the flatpak in a new release
         uses: ncipollo/release-action@v1
         with:
           #tag: "${{ steps.version.outputs.version }}"
           tag: "${{ steps.generating_buildid.outputs.build-id }}"
           body: |
-            # Release Notes (Cooker)
-            This is a cooker snapshot based on the commit: ${{ github.event.repository.full_name }}@${{github.sha}}.
-      
-            Cooker channel is provided for the community to test fixes and explore new functionality.
-            Please DO NOT open issues or ask support on this build.
+            # Release Notes
+
+            ( Write release notes here )
 
           artifacts: "RetroDECK.flatpak"
           allowUpdates: true
           prerelease: true
-          draft: false
+          draft: true
           token: ${{ secrets.TRIGGER_BUILD_TOKEN }}
-          repo: RetroDECK-cooker
+          repo: RetroDECK
         continue-on-error: true
 
       # In case it cannot publish the release at least it's providing the flatpak file for creating a manual release

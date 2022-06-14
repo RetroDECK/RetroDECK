@@ -63,26 +63,6 @@ dir_prep() {
     echo $symlink is now $real
 }
 
-cfg_init() {
-  # Initializing retrodeck config file
-  #rdconf=/var/config/retrodeck/retrodeck.cfg
-
-  # if I got a config file already I parse it
-  #if []
-
-  #else 
-  #  touch $rdconf
-  #fi
-
-  #$roms_folder > /var/config/retrodeck/retrodeck.cfg
-  return
-}
-
-# is_mounted() {
-#     # This script checks if the provided path in $1 is mounted
-#     mount | awk -v DIR="$1" '{if ($3 == DIR) { exit 0}} ENDFILE{exit -1}'
-# }
-
 tools_init() {
     rm -rfv /var/config/retrodeck/tools/
     mkdir -pv /var/config/retrodeck/tools/
