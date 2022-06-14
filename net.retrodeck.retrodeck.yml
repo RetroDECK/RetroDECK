@@ -879,7 +879,7 @@ modules:
   - shared-modules/glew/glew.json
 
   # llvm13 is already included in the flathub enviornment, letś see if it's working correctly as this module fails
-  
+
   # - name: rpcs3-llvm
   #   buildsystem: cmake-ninja
   #   builddir: true
@@ -928,6 +928,7 @@ modules:
   #       url: https://github.com/intel/ittapi.git
   #       dest: ittapi/ittapi
   #       disable-shallow-clone: true
+  
 
   - name: rpcs3
     buildsystem: cmake-ninja
