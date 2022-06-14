@@ -880,65 +880,65 @@ modules:
 
   # llvm13 is already included in the flathub enviornment, letś see if it's working correctly as this module fails
 
-  #  - name: rpcs3-llvm
-  #    buildsystem: cmake-ninja
-  #    builddir: true
-  #    build-options:
-  #      cflags: &optflags -O2 -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong
-  #        -grecord-gcc-switches -fasynchronous-unwind-tables -fstack-clash-protection
-  #        -fcf-protection -fno-omit-frame-pointer
-  #      cflags-override: true
-  #      cxxflags: -O2 -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong
-  #        -grecord-gcc-switches -fasynchronous-unwind-tables -fstack-clash-protection
-  #        -fcf-protection -fno-omit-frame-pointer -msse -msse2 -mcx16
-  #      cxxflags-override: true
-  #      env:
-  #        AR: llvm-ar
-  #        CC: clang
-  #        CXX: clang++
-  #        RANLIB: llvm-ranlib
-  #      ldflags: -fuse-ld=lld
-  #      prepend-ld-library-path: /usr/lib/sdk/llvm14/lib
-  #      prepend-path: /usr/lib/sdk/llvm14/bin
-  #    config-opts:
-  #      - -DCMAKE_BUILD_TYPE=Release
-  #      - -DBUILD_SHARED_LIBS=OFF
-  #      - -DLLVM_CCACHE_BUILD=ON
-  #      - -DLLVM_TARGETS_TO_BUILD='X86'
-  #      - -DLLVM_BUILD_RUNTIME=OFF
-  #      - -DLLVM_BUILD_TOOLS=OFF
-  #      - -DLLVM_INCLUDE_DOCS=OFF
-  #      - -DLLVM_INCLUDE_EXAMPLES=OFF
-  #      - -DLLVM_INCLUDE_TESTS=OFF
-  #      - -DLLVM_INCLUDE_TOOLS=OFF
-  #      - -DLLVM_INCLUDE_UTILS=OFF
-  #      - -DLLVM_USE_INTEL_JITEVENTS=ON
-  #      - -DLLVM_USE_PERF=ON
-  #      - -DLLVM_ENABLE_Z3_SOLVER=OFF
-  #      - -DCMAKE_CXX_STANDARD=17
-  #      - -DITTAPI_SOURCE_DIR=/run/build/rpcs3-llvm/ittapi
-  #      - -Wno-dev
-  #    cleanup:
-  #      - '*'
-  #    sources:
-  #      - type: git
-  #        url: https://github.com/RPCS3/llvm-mirror.git
-  #        commit: c725f494c91611018f5d830eca22c0a1662c0f31
-  #      - type: git
-  #        url: https://github.com/intel/ittapi.git
-  #        dest: ittapi/ittapi
-  #        disable-shallow-clone: true
+  - name: rpcs3-llvm
+    buildsystem: cmake-ninja
+    builddir: true
+    build-options:
+      cflags: &optflags -O2 -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong
+        -grecord-gcc-switches -fasynchronous-unwind-tables -fstack-clash-protection
+        -fcf-protection -fno-omit-frame-pointer
+      cflags-override: true
+      cxxflags: -O2 -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong
+        -grecord-gcc-switches -fasynchronous-unwind-tables -fstack-clash-protection
+        -fcf-protection -fno-omit-frame-pointer -msse -msse2 -mcx16
+      cxxflags-override: true
+      env:
+        AR: llvm-ar
+        CC: clang
+        CXX: clang++
+        RANLIB: llvm-ranlib
+      ldflags: -fuse-ld=lld
+      prepend-ld-library-path: /usr/lib/sdk/llvm13/lib
+      prepend-path: /usr/lib/sdk/llvm13/bin
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DBUILD_SHARED_LIBS=OFF
+      - -DLLVM_CCACHE_BUILD=ON
+      - -DLLVM_TARGETS_TO_BUILD='X86'
+      - -DLLVM_BUILD_RUNTIME=OFF
+      - -DLLVM_BUILD_TOOLS=OFF
+      - -DLLVM_INCLUDE_DOCS=OFF
+      - -DLLVM_INCLUDE_EXAMPLES=OFF
+      - -DLLVM_INCLUDE_TESTS=OFF
+      - -DLLVM_INCLUDE_TOOLS=OFF
+      - -DLLVM_INCLUDE_UTILS=OFF
+      - -DLLVM_USE_INTEL_JITEVENTS=ON
+      - -DLLVM_USE_PERF=ON
+      - -DLLVM_ENABLE_Z3_SOLVER=OFF
+      - -DCMAKE_CXX_STANDARD=17
+      - -DITTAPI_SOURCE_DIR=/run/build/rpcs3-llvm/ittapi
+      - -Wno-dev
+    cleanup:
+      - '*'
+    sources:
+      - type: git
+        url: https://github.com/RPCS3/llvm-mirror.git
+        commit: 509d31ad89676522f7121b3bb8688f7d29b7ee60
+      - type: git
+        url: https://github.com/intel/ittapi.git
+        dest: ittapi/ittapi
+        disable-shallow-clone: true
 
   - name: rpcs3
     buildsystem: cmake-ninja
     builddir: true
     build-options:
-       append-ld-library-path: /usr/lib/sdk/llvm14/lib
-       append-path: /usr/lib/sdk/llvm14/bin
-      # cflags: *optflags
-      # cflags-override: true
-      # cxxflags: *optflags
-      # cxxflags-override: true
+      append-ld-library-path: /usr/lib/sdk/llvm13/lib
+      append-path: /usr/lib/sdk/llvm13/bin
+      cflags: *optflags
+      cflags-override: true
+      cxxflags: *optflags
+      cxxflags-override: true
       env:
         AR: llvm-ar
         CC: clang
@@ -964,7 +964,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/RPCS3/rpcs3.git
-        commit: 8d46840e091fa8e330d505f91be45a527f529efd
+        commit: e9570d1a0045926f63ec8ea9af68f81743d4f365
 
   # RPCS3 - END
   
