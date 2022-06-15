@@ -151,6 +151,7 @@ modules:
   # ES-DE - START
   # https://gitlab.com/es-de/emulationstation-de
 
+  # Disabled because I'm using the flatpak sdk-extension
   # - name: ffmpeg
   #   config-opts:
   #   - --disable-static
