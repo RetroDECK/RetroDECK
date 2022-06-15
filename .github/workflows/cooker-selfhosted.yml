@@ -39,7 +39,7 @@ jobs:
           git submodule update
           sudo apt install -y flatpak flatpak-builder p7zip-full
           flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-          flatpak install -y org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08 io.qt.qtwebengine.BaseApp/x86_64/5.15-21.08 org.freedesktop.Sdk.Extension.llvm13 org.freedesktop.Platform.ffmpeg-full
+          flatpak install -y org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08 io.qt.qtwebengine.BaseApp/x86_64/5.15-21.08 org.freedesktop.Sdk.Extension.llvm13 org.freedesktop.Platform.ffmpeg-full/x86_64/21.08
 
       # for main remember to change ${HOME} into ${GITHUB_WORKSPACE}
       - name: Build flatpak
