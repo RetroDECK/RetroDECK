@@ -222,129 +222,128 @@ modules:
 
   # RetroArch - https://github.com/flathub/org.libretro.RetroArch
 
-  # - name: retroarch
-  #   config-opts:
-  #     - '--enable-dbus'
-  #   make-args:
-  #     - GLOBAL_CONFIG_DIR=${FLATPAK_DEST}/etc
-  #   sources:
-  #     - type: git
-  #       url: https://github.com/libretro/RetroArch.git
-  #       branch: 9b282aa742b6c3d2f2925ae5a12e2cd7c6b6ad38
-  #     - type: file
-  #       path: retroarch.cfg
-  #   post-install:
-  #     - mkdir -p ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/
-  #     - >-
-  #       mv ${FLATPAK_DEST}/share/pixmaps/retroarch.svg
-  #       ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/
-  #     - rmdir --ignore-fail-on-non-empty ${FLATPAK_DEST}/share/pixmaps/
-  #     - mkdir -p ${FLATPAK_DEST}/etc
-  #     - >-
-  #       sed s:@prefix@:${FLATPAK_DEST}:g retroarch.cfg >
-  #       ${FLATPAK_DEST}/etc/retroarch.cfg
-  #   modules:
-  #     - libpng/libpng-1.6.35.json
-  #     #nvidia-cg-toolkit/nvidia-cg-toolkit-3.1.0013.json
-  #     - shared-modules/SDL/SDL-1.2.15.json
-  #     - shared-modules/SDL/SDL_image-1.2.12.json
-  #     - shared-modules/SDL/SDL_mixer-1.2.12.json
-  #     - shared-modules/SDL/SDL_net-1.2.8.json
-  #     - shared-modules/SDL/SDL_ttf-2.0.11.json
-  #     - shared-modules/libusb/libusb.json
-  #     # certificate glu issue
-  #     #- shared-modules/gudev/gudev.json
-  #     libbz2/libbz2-1.0.8.json
-  #     xrandr/xrandr-1.5.1.json
-  #     libaio/libaio-0.3.112.json
-  #     # certificate issue, check libglu module for more info
-  #     #- shared-modules/glu/glu-9.json
-  #     libdecor/libdecor-0.1.0.json
-  # - name: retroarch-filers-video
-  #   subdir: gfx/video_filters
-  #   make-install-args:
-  #     - PREFIX=${FLATPAK_DEST}
-  #   sources:
-  #     - type: git
-  #       url: https://github.com/libretro/RetroArch.git
-  #       branch: 9b282aa742b6c3d2f2925ae5a12e2cd7c6b6ad38
-  # - name: retroarch-filers-audio
-  #   subdir: libretro-common/audio/dsp_filters
-  #   make-install-args:
-  #     - PREFIX=${FLATPAK_DEST}
-  #   sources:
-  #     - type: git
-  #       url: https://github.com/libretro/RetroArch.git
-  #       branch: 9b282aa742b6c3d2f2925ae5a12e2cd7c6b6ad38
-  # - name: retroarch-assets
-  #   make-install-args:
-  #     - PREFIX=${FLATPAK_DEST}
-  #   sources:
-  #     - type: git
-  #       url: https://github.com/libretro/retroarch-assets.git
-  #       commit: f45dd1351e6bfb9f01e12bee8d358ad22a2bb8f9
-  # - name: libretro-database
-  #   make-install-args:
-  #     - PREFIX=${FLATPAK_DEST}
-  #   sources:
-  #     - type: git
-  #       url: https://github.com/libretro/libretro-database.git
-  #       commit: f3b10ec262fcbd78da3473f46d244270d12a327e
-  # - name: libretro-core-info
-  #   make-install-args:
-  #     - PREFIX=${FLATPAK_DEST}
-  #   sources:
-  #     - type: git
-  #       url: https://github.com/libretro/libretro-core-info.git
-  #       commit: 06dac6318c067a6a40e2ea1e1260e74681ada844
-  # - name: retroarch-joypad-autoconfig
-  #   make-install-args:
-  #     - PREFIX=${FLATPAK_DEST}
-  #   sources:
-  #     - type: git
-  #       url: https://github.com/libretro/retroarch-joypad-autoconfig.git
-  #       commit: 760b057f1865a827762a54a8a32afda2cdd9e170
-  # - name: common-shaders
-  #   make-install-args:
-  #     - PREFIX=${FLATPAK_DEST}
-  #   sources:
-  #     - type: git
-  #       url: https://github.com/libretro/common-shaders.git
-  #       commit: 55e401834b732e62c34411321c4ffd82524345d4
-  # - name: slang-shaders
-  #   make-install-args:
-  #     - PREFIX=${FLATPAK_DEST}
-  #   sources:
-  #     - type: git
-  #       url: https://github.com/libretro/slang-shaders.git
-  #       commit: 148c57d9747f5db124135501ac280b5ca129a83f
-  # - name: glsl-shaders
-  #   make-install-args:
-  #     - PREFIX=${FLATPAK_DEST}
-  #   sources:
-  #     - type: git
-  #       url: https://github.com/libretro/glsl-shaders.git
-  #       commit: 8f6b2649489760caea8f36ec6099998854059569
-  # - name: common-overlays
-  #   make-install-args:
-  #     - PREFIX=${FLATPAK_DEST}
-  #   sources:
-  #     - type: git
-  #       url: https://github.com/libretro/common-overlays.git
-  #       commit: db9744f4e58a740f0f10b04b62af347cd6f01928
+  - name: retroarch
+    config-opts:
+      - '--enable-dbus'
+    make-args:
+      - GLOBAL_CONFIG_DIR=${FLATPAK_DEST}/etc
+      - type: git
+        url: https://github.com/libretro/RetroArch.git
+        branch: 9b282aa742b6c3d2f2925ae5a12e2cd7c6b6ad38
+      - type: file
+        path: retroarch.cfg
+    post-install:
+      - mkdir -p ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/
+      - >-
+        mv ${FLATPAK_DEST}/share/pixmaps/retroarch.svg
+        ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/
+      - rmdir --ignore-fail-on-non-empty ${FLATPAK_DEST}/share/pixmaps/
+      - mkdir -p ${FLATPAK_DEST}/etc
+      - >-
+        sed s:@prefix@:${FLATPAK_DEST}:g retroarch.cfg >
+        ${FLATPAK_DEST}/etc/retroarch.cfg
+    modules:
+      - libpng/libpng-1.6.35.json
+      #nvidia-cg-toolkit/nvidia-cg-toolkit-3.1.0013.json
+      - shared-modules/SDL/SDL-1.2.15.json
+      - shared-modules/SDL/SDL_image-1.2.12.json
+      - shared-modules/SDL/SDL_mixer-1.2.12.json
+      - shared-modules/SDL/SDL_net-1.2.8.json
+      - shared-modules/SDL/SDL_ttf-2.0.11.json
+      - shared-modules/libusb/libusb.json
+      # certificate glu issue
+      #- shared-modules/gudev/gudev.json
+      libbz2/libbz2-1.0.8.json
+      xrandr/xrandr-1.5.1.json
+      libaio/libaio-0.3.112.json
+      # certificate issue, check libglu module for more info
+      #- shared-modules/glu/glu-9.json
+      libdecor/libdecor-0.1.0.json
+  - name: retroarch-filers-video
+    subdir: gfx/video_filters
+    make-install-args:
+      - PREFIX=${FLATPAK_DEST}
+    sources:
+      - type: git
+        url: https://github.com/libretro/RetroArch.git
+        branch: 9b282aa742b6c3d2f2925ae5a12e2cd7c6b6ad38
+  - name: retroarch-filers-audio
+    subdir: libretro-common/audio/dsp_filters
+    make-install-args:
+      - PREFIX=${FLATPAK_DEST}
+    sources:
+      - type: git
+        url: https://github.com/libretro/RetroArch.git
+        branch: 9b282aa742b6c3d2f2925ae5a12e2cd7c6b6ad38
+  - name: retroarch-assets
+    make-install-args:
+      - PREFIX=${FLATPAK_DEST}
+    sources:
+      - type: git
+        url: https://github.com/libretro/retroarch-assets.git
+        commit: f45dd1351e6bfb9f01e12bee8d358ad22a2bb8f9
+  - name: libretro-database
+    make-install-args:
+      - PREFIX=${FLATPAK_DEST}
+    sources:
+      - type: git
+        url: https://github.com/libretro/libretro-database.git
+        commit: f3b10ec262fcbd78da3473f46d244270d12a327e
+  - name: libretro-core-info
+    make-install-args:
+      - PREFIX=${FLATPAK_DEST}
+    sources:
+      - type: git
+        url: https://github.com/libretro/libretro-core-info.git
+        commit: 06dac6318c067a6a40e2ea1e1260e74681ada844
+  - name: retroarch-joypad-autoconfig
+    make-install-args:
+      - PREFIX=${FLATPAK_DEST}
+    sources:
+      - type: git
+        url: https://github.com/libretro/retroarch-joypad-autoconfig.git
+        commit: 760b057f1865a827762a54a8a32afda2cdd9e170
+  - name: common-shaders
+    make-install-args:
+      - PREFIX=${FLATPAK_DEST}
+    sources:
+      - type: git
+        url: https://github.com/libretro/common-shaders.git
+        commit: 55e401834b732e62c34411321c4ffd82524345d4
+  - name: slang-shaders
+    make-install-args:
+      - PREFIX=${FLATPAK_DEST}
+    sources:
+      - type: git
+        url: https://github.com/libretro/slang-shaders.git
+        commit: 148c57d9747f5db124135501ac280b5ca129a83f
+  - name: glsl-shaders
+    make-install-args:
+      - PREFIX=${FLATPAK_DEST}
+    sources:
+      - type: git
+        url: https://github.com/libretro/glsl-shaders.git
+        commit: 8f6b2649489760caea8f36ec6099998854059569
+  - name: common-overlays
+    make-install-args:
+      - PREFIX=${FLATPAK_DEST}
+    sources:
+      - type: git
+        url: https://github.com/libretro/common-overlays.git
+        commit: db9744f4e58a740f0f10b04b62af347cd6f01928
 
   # RetroArch experiment: cloning the flathub repository directly and adding its manifest as module
 
-  - name: retroarch
-    buildsystem: simple
-    build-commands:
-        - echo ""
-    sources:
-      - type: git
-        url: https://github.com/flathub/org.libretro.RetroArch
-        tag: v1.10.2
-    modules:
-      - org.libretro.RetroArch.json
+  # - name: retroarch
+  #   buildsystem: simple
+  #   build-commands:
+  #       - echo ""
+  #   sources:
+  #     - type: git
+  #       url: https://github.com/flathub/org.libretro.RetroArch
+  #       tag: v1.10.2
+  #   modules:
+  #     - org.libretro.RetroArch.json
 
   # RetroArch - END
 
@@ -359,7 +358,8 @@ modules:
         url: https://buildbot.libretro.com/stable/1.10.3/linux/x86_64/RetroArch_cores.7z
         sha256: 33abf39839687f8faba202ed5dcf3a54c06266a49fad35f0521fa445523d009f
 
-  # Yuzu - https://github.com/flathub/org.yuzu_emu.yuzu
+  # Yuzu - START
+  # https://github.com/flathub/org.yuzu_emu.yuzu
 
   - name: libzip
     buildsystem: cmake-ninja
@@ -518,7 +518,7 @@ modules:
         
   # Yuzu - END
 
-  # pcsx2 - https://github.com/flathub/net.pcsx2.PCSX2
+  # PCSX2 START - https://github.com/flathub/net.pcsx2.PCSX2
 
   - name: wxWidgets
     buildsystem: cmake-ninja
@@ -633,9 +633,6 @@ modules:
       - >-
         desktop-file-edit --set-key=Exec --set-value=pcsx2
         /app/share/applications/PCSX2.desktop
-      - >-
-        install -Dm644 ../AppIcon128.png
-        /app/share/icons/hicolor/128x128/apps/PCSX2.png
     sources:
       - type: git
         url: https://github.com/PCSX2/pcsx2.git
@@ -644,7 +641,7 @@ modules:
       - type: file
         path: rd-submodules/pcsx2/AppIcon128.png
 
-  # pcsx2 - END
+  # PCSX2 - END
 
   # Dolphin - START
   # https://github.com/flathub/org.DolphinEmu.dolphin-emu
