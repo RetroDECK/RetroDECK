@@ -303,47 +303,34 @@ modules:
       - type: git
         url: https://github.com/libretro/retroarch-joypad-autoconfig.git
         commit: 760b057f1865a827762a54a8a32afda2cdd9e170
-  - name: common-shaders
-    make-install-args:
-      - PREFIX=${FLATPAK_DEST}
-    sources:
-      - type: git
-        url: https://github.com/libretro/common-shaders.git
-        commit: 55e401834b732e62c34411321c4ffd82524345d4
-  - name: slang-shaders
-    make-install-args:
-      - PREFIX=${FLATPAK_DEST}
-    sources:
-      - type: git
-        url: https://github.com/libretro/slang-shaders.git
-        commit: 148c57d9747f5db124135501ac280b5ca129a83f
-  - name: glsl-shaders
-    make-install-args:
-      - PREFIX=${FLATPAK_DEST}
-    sources:
-      - type: git
-        url: https://github.com/libretro/glsl-shaders.git
-        commit: 8f6b2649489760caea8f36ec6099998854059569
-  - name: common-overlays
-    make-install-args:
-      - PREFIX=${FLATPAK_DEST}
-    sources:
-      - type: git
-        url: https://github.com/libretro/common-overlays.git
-        commit: db9744f4e58a740f0f10b04b62af347cd6f01928
-
-  # RetroArch experiment: cloning the flathub repository directly and adding its manifest as module
-
-  # - name: retroarch
-  #   buildsystem: simple
-  #   build-commands:
-  #       - echo ""
+  # - name: common-shaders
+  #   make-install-args:
+  #     - PREFIX=${FLATPAK_DEST}
   #   sources:
   #     - type: git
-  #       url: https://github.com/flathub/org.libretro.RetroArch
-  #       tag: v1.10.2
-  #   modules:
-  #     - org.libretro.RetroArch.json
+  #       url: https://github.com/libretro/common-shaders.git
+  #       commit: 55e401834b732e62c34411321c4ffd82524345d4
+  # - name: slang-shaders
+  #   make-install-args:
+  #     - PREFIX=${FLATPAK_DEST}
+  #   sources:
+  #     - type: git
+  #       url: https://github.com/libretro/slang-shaders.git
+  #       commit: 148c57d9747f5db124135501ac280b5ca129a83f
+  # - name: glsl-shaders
+  #   make-install-args:
+  #     - PREFIX=${FLATPAK_DEST}
+  #   sources:
+  #     - type: git
+  #       url: https://github.com/libretro/glsl-shaders.git
+  #       commit: 8f6b2649489760caea8f36ec6099998854059569
+  # - name: common-overlays
+  #   make-install-args:
+  #     - PREFIX=${FLATPAK_DEST}
+  #   sources:
+  #     - type: git
+  #       url: https://github.com/libretro/common-overlays.git
+  #       commit: db9744f4e58a740f0f10b04b62af347cd6f01928
 
   # RetroArch - END
 
