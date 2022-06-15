@@ -147,7 +147,8 @@ modules:
         url: https://ftp.osuosl.org/pub/blfs/conglomeration/libgudev/libgudev-237.tar.xz
         sha256: 0d06b21170d20c93e4f0534dbb9b0a8b4f1119ffb00b4031aaeb5b9148b686aa
 
-  # ES-DE
+  # ES-DE - START
+  # https://gitlab.com/es-de/emulationstation-de
 
   - name: ffmpeg
     config-opts:
@@ -220,7 +221,8 @@ modules:
 
   # External manifests start
 
-  # RetroArch - https://github.com/flathub/org.libretro.RetroArch
+  # RetroArch - START
+  # https://github.com/flathub/org.libretro.RetroArch
 
   - name: retroarch
     config-opts:
@@ -505,7 +507,8 @@ modules:
         
   # Yuzu - END
 
-  # PCSX2 START - https://github.com/flathub/net.pcsx2.PCSX2
+  # PCSX2 - START
+  # https://github.com/flathub/net.pcsx2.PCSX2
 
   - name: wxWidgets
     buildsystem: cmake-ninja
