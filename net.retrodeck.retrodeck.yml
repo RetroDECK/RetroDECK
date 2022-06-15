@@ -340,7 +340,7 @@ modules:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
-        url: https://github.com/libretro/RetroArch.git
+        url: https://github.com/flathub/org.libretro.RetroArch
         tag: v1.10.2
     modules:
       - org.libretro.RetroArch.json
