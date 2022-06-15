@@ -336,9 +336,8 @@ modules:
   # RetroArch experiment: cloning the flathub repository directly and adding its manifest as module
 
   - name: retroarch
-    buildsystem: simple
-    build-commands:
-      - echo ""
+    make-install-args:
+      - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
         url: https://github.com/libretro/RetroArch.git
