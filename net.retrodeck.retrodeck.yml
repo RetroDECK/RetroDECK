@@ -234,7 +234,7 @@ modules:
         url: https://github.com/libretro/RetroArch.git
         branch: 9b282aa742b6c3d2f2925ae5a12e2cd7c6b6ad38
       - type: file
-        path: retroarch.cfg
+        path: rd-submodules/retroarch/retroarch.cfg
     post-install:
       - mkdir -p ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/
       - >-
@@ -246,7 +246,7 @@ modules:
         sed s:@prefix@:${FLATPAK_DEST}:g retroarch.cfg >
         ${FLATPAK_DEST}/etc/retroarch.cfg
     modules:
-      - libpng/libpng-1.6.35.json
+      - rd-submodules/retroarch/libpng/libpng-1.6.35.json
       #nvidia-cg-toolkit/nvidia-cg-toolkit-3.1.0013.json
       - shared-modules/SDL/SDL-1.2.15.json
       - shared-modules/SDL/SDL_image-1.2.12.json
@@ -256,12 +256,12 @@ modules:
       - shared-modules/libusb/libusb.json
       # certificate glu issue
       #- shared-modules/gudev/gudev.json
-      - libbz2/libbz2-1.0.8.json
-      - xrandr/xrandr-1.5.1.json
-      - libaio/libaio-0.3.112.json
+      - rd-submodules/retroarch/libbz2/libbz2-1.0.8.json
+      - rd-submodules/retroarch/xrandr/xrandr-1.5.1.json
+      - rd-submodules/retroarch/libaio/libaio-0.3.112.json
       # certificate issue, check libglu module for more info
       #- shared-modules/glu/glu-9.json
-      - libdecor/libdecor-0.1.0.json
+      - rd-submodules/retroarch/libdecor/libdecor-0.1.0.json
   - name: retroarch-filers-video
     subdir: gfx/video_filters
     make-install-args:
