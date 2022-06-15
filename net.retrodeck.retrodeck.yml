@@ -5,6 +5,7 @@ sdk: org.kde.Sdk
 # Needed for rpcs3
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.llvm13
+  - org.freedesktop.Platform.ffmpeg-full
 # /Needed for rpcs3
 # Needed for Yuzu
 base: io.qt.qtwebengine.BaseApp
@@ -148,21 +149,21 @@ modules:
 
   # ES-DE
 
-  - name: ffmpeg
-    config-opts:
-    - --disable-static
-    - --disable-programs
-    - --disable-doc
-    - --enable-gpl
-    - --enable-shared
-    - --enable-libvorbis
-    - --enable-libopus
-    - --enable-libvpx
-    - --enable-postproc
-    sources:
-    - type: git
-      url: https://github.com/FFmpeg/FFmpeg.git
-      tag: n5.0
+  # - name: ffmpeg
+  #   config-opts:
+  #   - --disable-static
+  #   - --disable-programs
+  #   - --disable-doc
+  #   - --enable-gpl
+  #   - --enable-shared
+  #   - --enable-libvorbis
+  #   - --enable-libopus
+  #   - --enable-libvpx
+  #   - --enable-postproc
+  #   sources:
+  #   - type: git
+  #     url: https://github.com/FFmpeg/FFmpeg.git
+  #     tag: n5.0
 
   - name: freeimage
     no-autogen: true
