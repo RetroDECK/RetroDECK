@@ -1058,7 +1058,7 @@ modules:
         - cp poster_main_nodecklogo.png ${FLATPAK_DEST}/retrodeck/steam/
 
         # Configuring emulators:
-        - mkdir -p ${FLATPAK_DEST}/retrodeck/emu-configs/
+        - mkdir -p ${FLATPAK_DEST}/retrodeck/emu-configs/Dolphin
         # RetroArch
         - cp retroarch* ${FLATPAK_DEST}/retrodeck/emu-configs/
         # Dolphin 
