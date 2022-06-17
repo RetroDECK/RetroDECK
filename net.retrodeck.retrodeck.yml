@@ -618,20 +618,11 @@ modules:
       - /share/pixmaps
       - /share/man
       - /share/doc
-    post-install:
-      - >-
-        desktop-file-edit --set-key=Exec --set-value=pcsx2
-        /app/share/applications/PCSX2.desktop
-      - >-
-        install -Dm644 ../AppIcon128.png
-        /app/share/icons/hicolor/128x128/apps/PCSX2.png
     sources:
       - type: git
         url: https://github.com/PCSX2/pcsx2.git
         tag: v1.7.2554
         commit: 0d1675fbaa0d40874df98eed6270efc55620271b
-      - type: file
-        path: rd-submodules/pcsx2/AppIcon128.png
 
   # pcsx2 - END
 
@@ -719,8 +710,6 @@ modules:
       # version strings must match exactly for online multiplayer
       - type: patch
         path: rd-submodules/dolphin/nodirtyversion.patch
-      - type: file
-        path: rd-submodules/dolphin/appdata.xml
       - type: script
         commands:
           - for i in {0..9}; do
