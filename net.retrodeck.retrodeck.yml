@@ -620,10 +620,6 @@ modules:
       - /share/pixmaps
       - /share/man
       - /share/doc
-    post-install:
-      - >-
-        desktop-file-edit --set-key=Exec --set-value=pcsx2
-        /app/share/applications/PCSX2.desktop
     sources:
       - type: git
         url: https://github.com/PCSX2/pcsx2.git
