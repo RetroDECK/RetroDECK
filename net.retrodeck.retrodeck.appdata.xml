@@ -14,19 +14,19 @@
   <content_rating type="oars-1.0" />
   <screenshots>
     <screenshot type="default">
-      <image type="source" width="1440" height="792">https://github.com/XargonWan/RetroDECK/blob/main/res/logo.png?raw=true</image>
+      <image>https://github.com/XargonWan/RetroDECK/blob/main/res/logo.png?raw=true</image>
     </screenshot>
     <screenshot>
-      <image type="source" width="1440" height="792">https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen02.png?raw=true</image>
+      <image>https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen02.png?raw=true</image>
     </screenshot>
     <screenshot>
-      <image type="source" width="768" height="672">https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen03.png?raw=true</image>
+      <image>https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen03.png?raw=true</image>
     </screenshot>
     <screenshot>
-      <image type="source" width="768" height="575">https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen04.png?raw=true</image>
+      <image>https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen04.png?raw=true</image>
     </screenshot>
     <screenshot>
-      <image type="source" width="768" height="480">https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen05.png?raw=true</image>
+      <image>https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen05.png?raw=true</image>
     </screenshot>
   </screenshots>
   <description>
@@ -201,7 +201,7 @@
 		<li>Tweaked RetroArch configs</li>
 		<li>Added tool for relocating ROMs location from/to internal to/from external</li>
 		<li>Added PCSX2 and Yuzu emulators (but not yet integrated in ES-DE)</li>
-		<li>Created cooker channel, more info in Discord and on https://github.com/XargonWan/RetroDECK-cooker</li>
+		<li>Created cooker channel, more info in Discord and on RetroDECK-cooker on GitHub</li>
 		<li>Cooker will auto build when a change is pushed/PRed</li>
 		<li>Same as above with main</li>
         </ul>
