@@ -12,6 +12,7 @@ git submodule update
 #sync -rav --progress --exclude={'res/screenshots/','shared-modules/','rd-submodules/retroarch','.git/','docs','retrodeck-flatpak/','retrodeck-flatpak-cooker/','.flatpak-builder/'} ~/RetroDECK/ ~/flathub/
 
 sync -rav --progress { \
+'overlays', \
 'rd-submodules', \
 'flathub.json', \
 'LICENSE', \

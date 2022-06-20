@@ -350,6 +350,7 @@ modules:
 
   # Yuzu - START
   # https://github.com/flathub/org.yuzu_emu.yuzu
+  # WHEN UPADTING: remember to update rd-submodules/yuzu contents
 
   - name: libzip
     buildsystem: cmake-ninja
@@ -634,6 +635,7 @@ modules:
 
   # Dolphin - START
   # https://github.com/flathub/org.DolphinEmu.dolphin-emu
+  # WHEN UPADTING: remember to update rd-submodules/yuzu contents
 
   # needed for the emulate bluetooth adapter feature to work
   - name: bluez
@@ -1075,6 +1077,9 @@ modules:
         - cp emu-configs/citra-qt-config.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
         # RPCS3
         - cp emu-configs/config.yml ${FLATPAK_DEST}/retrodeck/emu-configs/
+
+        # Overlays
+        - cp overlays ${FLATPAK_DEST}/retrodeck/overlays
 
         # Placing appdata
         - mkdir -p ${FLATPAK_DEST}/share/appdata
