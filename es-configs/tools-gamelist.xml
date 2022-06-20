@@ -70,4 +70,11 @@
 		<nogamecount>true</nogamecount>
 		<nomultiscrape>true</nomultiscrape>
 	</game>
+	<game>
+		<path>./overlays.sh</path>
+		<name>Overlays configuration</name>
+		<desc>Configure or disable borders and shaders.</desc>
+		<nogamecount>true</nogamecount>
+		<nomultiscrape>true</nomultiscrape>
+	</game>
 </gameList>
