@@ -1079,7 +1079,7 @@ modules:
         - cp emu-configs/config.yml ${FLATPAK_DEST}/retrodeck/emu-configs/
 
         # Overlays
-        - cp overlays ${FLATPAK_DEST}/retrodeck/overlays
+        - cp -r overlays ${FLATPAK_DEST}/retrodeck/overlays
 
         # Placing appdata
         - mkdir -p ${FLATPAK_DEST}/share/appdata
