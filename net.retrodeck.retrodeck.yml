@@ -214,7 +214,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/anthonycaccese/art-book-next-de.git
-        commit: 7fb9f567892a357651bbc6a2b6af3d1085a10ffb
+        commit: 10ff82143af870d5a5edcfb0da97c7d54bcbc317
 
 
   # External manifests start
@@ -342,7 +342,9 @@ modules:
         url: https://buildbot.libretro.com/stable/1.10.2/linux/x86_64/RetroArch_cores.7z
         sha256: 0c59f99534a1ae3a2d34b1747c40398325e53db69acfab35b99c8fa8d76430e5
 
-  # Yuzu - https://github.com/flathub/org.yuzu_emu.yuzu
+  # Yuzu - START
+  # https://github.com/flathub/org.yuzu_emu.yuzu
+  # WHEN UPADTING: remember to update rd-submodules/yuzu contents
 
   - name: libzip
     buildsystem: cmake-ninja
@@ -634,6 +636,7 @@ modules:
 
   # Dolphin - START
   # https://github.com/flathub/org.DolphinEmu.dolphin-emu
+  # WHEN UPADTING: remember to update rd-submodules/yuzu contents
 
   # needed for the emulate bluetooth adapter feature to work
   - name: bluez
@@ -1076,6 +1079,9 @@ modules:
         - cp citra-qt-config.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
         # RPCS3
         - cp config.yml ${FLATPAK_DEST}/retrodeck/emu-configs/
+
+        # Overlays
+        - cp -r overlays ${FLATPAK_DEST}/retrodeck/overlays
 
         # Placing appdata
         - mkdir -p ${FLATPAK_DEST}/share/appdata

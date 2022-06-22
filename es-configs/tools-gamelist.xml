@@ -70,4 +70,18 @@
 		<nogamecount>true</nogamecount>
 		<nomultiscrape>true</nomultiscrape>
 	</game>
+	<game>
+		<path>./overlays.sh</path>
+		<name>Overlays configuration</name>
+		<desc>Configure or disable borders and shaders.</desc>
+		<nogamecount>true</nogamecount>
+		<nomultiscrape>true</nomultiscrape>
+	</game>
+	<game>
+		<path>./clean-miximages.sh</path>
+		<name>Clean MixImages</name>
+		<desc>Clean the MixImages in order to beautify the new theme. This is needed if you got scraped data since v0.4.2 or earlier.</desc>
+		<nogamecount>true</nogamecount>
+		<nomultiscrape>true</nomultiscrape>
+	</game>
 </gameList>
