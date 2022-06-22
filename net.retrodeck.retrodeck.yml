@@ -703,7 +703,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/dolphin-emu/dolphin.git
-        commit: 8ecfa537a242de74d2e372e30d9d79b14584b2fb
+        commit: 8335ec70e5fe253eb21509408ca6b5736ed57dfc
       # detects whether dolphin is running in a flatpak sandbox
       # and makes it use xdg directories if it is.
       # prevents dolphin from attempting to write conf files
@@ -714,12 +714,19 @@ modules:
       # version strings must match exactly for online multiplayer
       - type: patch
         path: rd-submodules/dolphin/nodirtyversion.patch
-      - type: file
+      - type: script
         commands:
           - for i in {0..9}; do
           - test -S $XDG_RUNTIME_DIR/discord-ipc-$i || ln -sf {app/com.discordapp.Discord,$XDG_RUNTIME_DIR}/discord-ipc-$i;
           - done
-          - dolphin-emu "$@"
+          # use gtk3 filechooser on steamdeck
+          - bv=`cat /sys/devices/virtual/dmi/id/board_vendor`
+          - bv=$bv`cat /sys/devices/virtual/dmi/id/board_name`
+          - if [[ $bv == "ValveJupiter" ]]; then
+          -   QT_QPA_PLATFORMTHEME=gtk3 dolphin-emu "$@"
+          - else
+          -   dolphin-emu "$@"
+          - fi
         dest-filename: dolphin-emu-wrapper
 
   # Dolphin - END
