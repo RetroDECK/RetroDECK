@@ -165,6 +165,7 @@ post_update() {
     dir_prep "$rdhome/.downloaded_media" "/var/config/emulationstation/.emulationstation/downloaded_media"
     dir_prep "$rdhome/.themes" "/var/config/emulationstation/.emulationstation/themes"
     mkdir -pv $rdhome/.logs #this was added later, maybe safe to remove in a few versions
+    cp -fv /app/retrodeck/es_settings.xml /var/config/emulationstation/.emulationstation/es_settings.xml #this is resetting es_systems, now we need it but in the future I should think a better solution
     ra_init
     standalones_init
     tools_init
@@ -249,7 +250,7 @@ finit() {
     mkdir -pv $rdhome/.logs
 
     # XMLSTARLET HERE
-    cp -f /app/retrodeck/es_settings.xml /var/config/emulationstation/.emulationstation/es_settings.xml
+    cp -fv /app/retrodeck/es_settings.xml /var/config/emulationstation/.emulationstation/es_settings.xml
 
     # ES-DE preparing themes and scraped folders
     dir_prep "$rdhome/.downloaded_media" "/var/config/emulationstation/.emulationstation/downloaded_media"
