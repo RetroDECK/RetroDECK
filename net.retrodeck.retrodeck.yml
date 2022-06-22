@@ -629,8 +629,6 @@ modules:
         url: https://github.com/PCSX2/pcsx2.git
         tag: v1.7.2554
         commit: 0d1675fbaa0d40874df98eed6270efc55620271b
-      - type: file
-        path: rd-submodules/pcsx2/AppIcon128.png
 
   # pcsx2 - END
 
