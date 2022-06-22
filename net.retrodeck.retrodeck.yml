@@ -200,7 +200,7 @@ modules:
     sources:
     - type: git
       url: https://gitlab.com/es-de/emulationstation-de
-      branch: 5a76fef25ffc659f098ee65215281c51a63c3198
+      branch: 8b0a5c63367e46b95f124f5aba70abcaa3ff888a
     - type: shell
       commands:
         - sed -i 's/QUIT EMULATIONSTATION/QUIT RETRODECK/g' es-app/src/guis/GuiMenu.cpp

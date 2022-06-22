@@ -319,6 +319,24 @@
         <theme>colecovision</theme>
     </system>
     <system>
+        <name>cps</name>
+        <fullname>Capcom Play System</fullname>
+        <path>%ROMPATH%/cps</path>
+        <extension>.7z .7Z .zip .ZIP</extension>
+        <command label="MAME - Current">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mame_libretro.so %ROM%</command>
+        <command label="MAME 2010">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mame2010_libretro.so %ROM%</command>
+        <command label="MAME 2003-Plus">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mame2003_plus_libretro.so %ROM%</command>
+        <command label="MAME 2000">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mame2000_libretro.so %ROM%</command>
+        <command label="MAME (Standalone)">%STARTDIR%=~/.mame %EMULATOR_MAME% -rompath %ROMPATH%/arcade %BASENAME%</command>
+        <command label="FinalBurn Neo">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/fbneo_libretro.so %ROM%</command>
+        <command label="FB Alpha 2012">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/fbalpha2012_libretro.so %ROM%</command>
+        <command label="FB Alpha 2012 CPS-1">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/fbalpha2012_cps1_libretro.so %ROM%</command>
+        <command label="FB Alpha 2012 CPS-2">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/fbalpha2012_cps2_libretro.so %ROM%</command>
+        <command label="FB Alpha 2012 CPS-3">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/fbalpha2012_cps3_libretro.so %ROM%</command>
+        <platform>arcade</platform>
+        <theme>cps</theme>
+    </system>
+    <system>
         <name>daphne</name>
         <fullname>Daphne Arcade LaserDisc Emulator</fullname>
         <path>%ROMPATH%/daphne</path>
@@ -641,6 +659,24 @@
         <theme>mess</theme>
     </system>
     <system>
+        <name>model2</name>
+        <fullname>Sega Model 2</fullname>
+        <path>%ROMPATH%/model2</path>
+        <extension>.7z .7Z .zip .ZIP</extension>
+        <command>PLACEHOLDER %ROM%</command>
+        <platform>arcade</platform>
+        <theme>model2</theme>
+    </system>
+    <system>
+        <name>model3</name>
+        <fullname>Sega Model 3</fullname>
+        <path>%ROMPATH%/model3</path>
+        <extension>.7z .7Z .zip .ZIP</extension>
+        <command>PLACEHOLDER %ROM%</command>
+        <platform>arcade</platform>
+        <theme>model3</theme>
+    </system>
+    <system>
         <name>moonlight</name>
         <fullname>Moonlight Game Streaming</fullname>
         <path>%ROMPATH%/moonlight</path>
@@ -843,8 +879,8 @@
         <name>oric</name>
         <fullname>Tangerine Computer Systems Oric</fullname>
         <path>%ROMPATH%/oric</path>
-        <extension>.7z .7Z .zip .ZIP</extension>
-        <command>PLACEHOLDER %ROM%</command>
+        <extension>.dsk .DSK .ort .ORT .tap .TAP .wav .WAV</extension>
+        <command label="Oricutron (Standalone)">%EMULATOR_ORICUTRON% %STARTDIR%=%EMUDIR% %ROM%</command>
         <platform>oric</platform>
         <theme>oric</theme>
     </system>
@@ -906,6 +942,18 @@
         <theme>pcfx</theme>
     </system>
     <system>
+    	<name>pico8</name>
+	<fullname>PICO-8 Fantasy Console</fullname>
+	<manufacturer>Lexaloffle</manufacturer>
+	<release>2015</release>
+	<hardware>console</hardware>
+	<path>%ROMPATH%/pico8</path>
+	<extension>.p8 .P8 .png .PNG</extension>
+	<command label="PICO-8 (Standalone)">%EMULATOR_PICO-8% -desktop ~/retrodeck/screenshots -windowed 0 -root_path %ROMPATH%/pico8 -run %ROM%</command>
+	<platform>pico8</platform>
+	<theme>pico8</theme>
+    </system>
+    <system>
         <name>pokemini</name>
         <fullname>Nintendo Pokémon Mini</fullname>
         <path>%ROMPATH%/pokemini</path>
@@ -939,7 +987,8 @@
         <fullname>Sony PlayStation 3</fullname>
         <path>%ROMPATH%/ps3</path>
         <extension>.ps3 .PS3 .ps3dir .PS3DIR</extension>
-        <command label="RPCS3 (Standalone)">%EMULATOR_RPCS3% --no-gui %ROM%</command>
+        <command label="RPCS3 Shortcut (Standalone)">%ENABLESHORTCUTS% %EMULATOR_OS-SHELL% %ROM%</command>
+        <command label="RPCS3 Directory (Standalone)">%EMULATOR_RPCS3% --no-gui %ROM%</command>
         <platform>ps3</platform>
         <theme>ps3</theme>
     </system>
@@ -1247,8 +1296,8 @@
         <name>ti99</name>
         <fullname>Texas Instruments TI-99</fullname>
         <path>%ROMPATH%/ti99</path>
-        <extension>.7z .7Z .zip .ZIP</extension>
-        <command>PLACEHOLDER %ROM%</command>
+        <extension>.rpk .RPK .7z .7Z .zip .ZIP</extension>
+        <command label="MAME (Standalone)">%STARTDIR%=~/.mame %EMULATOR_MAME% -rompath %ROMPATH%/ti99 ti99_4a -ioport peb -ioport:peb:slot3 speech -cart %BASENAME%</command>
         <platform>ti99</platform>
         <theme>ti99</theme>
     </system>
@@ -1433,17 +1482,5 @@
         <command>bash %ROM%</command>
         <platform>tools</platform>
         <theme>tools</theme>
-    </system>
-    <system>
-    	<name>pico-8</name>
-	<fullname>Pico-8</fullname>
-	<manufacturer>Lexaloffle</manufacturer>
-	<release>2015</release>
-	<hardware>console</hardware>
-	<path>%ROMPATH%/pico-8</path>
-	<extension>.p8 .png</extension>
-	<command>%EMULATOR_PICO-8% -desktop ~/retrodeck/screenshots -windowed 0 -root_path %ROMPATH%/pico-8 -run %ROM%</command>
-	<platform>pico-8</platform>
-	<theme>pico-8</theme>
     </system>
 </systemList>

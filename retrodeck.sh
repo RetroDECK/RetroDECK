@@ -246,7 +246,7 @@ finit() {
     mkdir -pv $rdhome/saves
     mkdir -pv $rdhome/states
     mkdir -pv $rdhome/screenshots
-    mkdir -pv $rdhome/bios/pico-8
+    mkdir -pv $rdhome/bios/pico8
     mkdir -pv $rdhome/.logs
 
     # XMLSTARLET HERE
@@ -257,7 +257,7 @@ finit() {
     dir_prep "$rdhome/.themes" "/var/config/emulationstation/.emulationstation/themes"
 
     # PICO-8
-    dir_prep "$roms_folder/pico-8" "$rdhome/bios/pico-8/bbs/carts" #this is the folder where pico-8 is saving the carts
+    dir_prep "$roms_folder/pico8" "$rdhome/bios/pico8/bbs/carts" #this is the folder where pico-8 is saving the carts
 
     ra_init
     standalones_init
