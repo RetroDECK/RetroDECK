@@ -1051,12 +1051,6 @@ modules:
         # Desktop entry
         - cp net.retrodeck.retrodeck.desktop /app/share/applications/net.retrodeck.retrodeck.desktop
 
-        # Steam Grids - When BoilR comes it will be deprecated
-        - mkdir -p ${FLATPAK_DEST}/retrodeck/steam/
-        - cp banner_main.png ${FLATPAK_DEST}/retrodeck/steam/
-        - cp poster_main.png ${FLATPAK_DEST}/retrodeck/steam/
-        - cp poster_main_nodecklogo.png ${FLATPAK_DEST}/retrodeck/steam/
-
         # Configuring emulators:
         - mkdir -p ${FLATPAK_DEST}/retrodeck/emu-configs/Dolphin
         # RetroArch
@@ -1098,8 +1092,6 @@ modules:
         path: emu-configs/Dolphin
       - type: dir
         path: res
-      - type: dir
-        path: res/steam
       - type: dir
         path: tools
       - type: file
