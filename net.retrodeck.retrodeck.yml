@@ -66,8 +66,8 @@ modules:
   # The version number is stored in /var/conf/retrodeck/version
   # 
   # UPDATE STEPS FOR MAIN:
-  # [X] Update the VERSION variable
-  # [X] Update the appdata.xml with the version number and notes
+  # [ ] Update the VERSION variable
+  # [ ] Update the appdata.xml with the version number and notes
   #
   - name: version-initialization
     buildsystem: simple
@@ -699,7 +699,6 @@ modules:
       - /share/man
     post-install:
       - install -D dolphin-emu-wrapper /app/bin/dolphin-emu-wrapper
-      - install -Dm644 appdata.xml /app/share/appdata/dolphin-emu.appdata.xml
       - sed -i -e 's/"2048"/"512"/g' /app/share/icons/hicolor/scalable/apps/dolphin-emu.svg
       - desktop-file-edit --set-key=Exec --set-value='/app/bin/dolphin-emu-wrapper'
         /app/share/applications/dolphin-emu.desktop
@@ -718,8 +717,6 @@ modules:
       - type: patch
         path: rd-submodules/dolphin/nodirtyversion.patch
       - type: file
-        path: rd-submodules/dolphin/appdata.xml
-      - type: script
         commands:
           - for i in {0..9}; do
           - test -S $XDG_RUNTIME_DIR/discord-ipc-$i || ln -sf {app/com.discordapp.Discord,$XDG_RUNTIME_DIR}/discord-ipc-$i;
