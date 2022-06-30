@@ -216,7 +216,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/anthonycaccese/art-book-next-de.git
-        commit: d734766169491e9fc27819ef63068ce229c3fbd0
+        commit: 10ff82143af870d5a5edcfb0da97c7d54bcbc317
 
 
   # External manifests start
