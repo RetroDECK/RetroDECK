@@ -132,6 +132,10 @@ standalones_init() {
     # CITRA
     mkdir -pv /var/config/citra-emu/
     cp -fv $emuconfigs/citra-qt-config.ini /var/config/citra-emu/qt-config.ini
+    sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
+    #TODO: do the same with roms folders after new variables is pushed (check even the others qt-emu)
+    #But actually everything is always symlinked to retrodeck/roms so it might be not needed
+    #sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
 
     # RPCS3
     mkdir -pv /var/config/rpcs3/
