@@ -1067,7 +1067,7 @@ modules:
         - cp emu-configs/config.yml ${FLATPAK_DEST}/retrodeck/emu-configs/
 
         # Overlays
-        - cp -r overlays ${FLATPAK_DEST}/retrodeck/overlays
+        #- cp -r overlays ${FLATPAK_DEST}/retrodeck/overlays Disabled in 0.4.2b as it will be introduced in 0.5.0b
 
         # Placing appdata
         - mkdir -p ${FLATPAK_DEST}/share/appdata
