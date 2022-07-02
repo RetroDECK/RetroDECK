@@ -1048,7 +1048,7 @@ modules:
         # TODO: group the configs per-emu and optimize the following cps, like already done with Dolphin. Please not that some files may be renamed, check retrodeck.sh to know how (and fix it after the edit)
 
         # Configuring emulators:
-        - mkdir -p ${FLATPAK_DEST}/retrodeck/emu-configs/
+        - mkdir -p ${FLATPAK_DEST}/retrodeck/emu-configs/Dolphin
         # RetroArch
         - cp emu-configs/retroarch* ${FLATPAK_DEST}/retrodeck/emu-configs/
         # Dolphin 
