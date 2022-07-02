@@ -68,6 +68,7 @@ modules:
   # UPDATE STEPS FOR MAIN:
   # [X] Update the VERSION variable
   # [X] Update the appdata.xml with the version number and notes
+  # [X] change branch into main in retrodeck module (last one)
   #
   - name: version-initialization
     buildsystem: simple
@@ -146,7 +147,8 @@ modules:
         url: https://ftp.osuosl.org/pub/blfs/conglomeration/libgudev/libgudev-237.tar.xz
         sha256: 0d06b21170d20c93e4f0534dbb9b0a8b4f1119ffb00b4031aaeb5b9148b686aa
 
-  # ES-DE
+  # ES-DE - START
+  # https://gitlab.com/es-de/emulationstation-de
 
   - name: ffmpeg
     config-opts:
@@ -219,7 +221,8 @@ modules:
 
   # External manifests start
 
-  # RetroArch - https://github.com/flathub/org.libretro.RetroArch
+  # RetroArch - START
+  # https://github.com/flathub/org.libretro.RetroArch
 
   - name: retroarch
     config-opts:
@@ -229,29 +232,28 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/RetroArch.git
-        branch: de4e56ecf28a09057734f8624af6d62f3088734f
+        branch: 9b282aa742b6c3d2f2925ae5a12e2cd7c6b6ad38
       - type: file
         path: rd-submodules/retroarch/retroarch.cfg
     post-install:
       - mkdir -p ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/
-      - >-
-        mv ${FLATPAK_DEST}/share/pixmaps/retroarch.svg
-        ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/
+      - mv ${FLATPAK_DEST}/share/pixmaps/retroarch.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/
       - rmdir --ignore-fail-on-non-empty ${FLATPAK_DEST}/share/pixmaps/
       - mkdir -p ${FLATPAK_DEST}/etc
-      - >-
-        sed s:@prefix@:${FLATPAK_DEST}:g retroarch.cfg >
-        ${FLATPAK_DEST}/etc/retroarch.cfg
+      - sed s:@prefix@:${FLATPAK_DEST}:g retroarch.cfg > ${FLATPAK_DEST}/etc/retroarch.cfg
     modules:
-      - rd-submodules/retroarch/nvidia-cg-toolkit/nvidia-cg-toolkit-3.1.0013.json
+      - rd-submodules/retroarch/libpng/libpng-1.6.35.json
+      #nvidia-cg-toolkit/nvidia-cg-toolkit-3.1.0013.json
       - shared-modules/SDL/SDL-1.2.15.json
       - shared-modules/SDL/SDL_image-1.2.12.json
       - shared-modules/SDL/SDL_mixer-1.2.12.json
       - shared-modules/SDL/SDL_net-1.2.8.json
+      - shared-modules/SDL/SDL_ttf-2.0.11.json
       - shared-modules/libusb/libusb.json
       # certificate glu issue
       #- shared-modules/gudev/gudev.json
       - rd-submodules/retroarch/libbz2/libbz2-1.0.8.json
+      - rd-submodules/retroarch/xrandr/xrandr-1.5.1.json
       - rd-submodules/retroarch/libaio/libaio-0.3.112.json
       # certificate issue, check libglu module for more info
       #- shared-modules/glu/glu-9.json
@@ -263,7 +265,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/RetroArch.git
-        branch: de4e56ecf28a09057734f8624af6d62f3088734f
+        branch: 9b282aa742b6c3d2f2925ae5a12e2cd7c6b6ad38
   - name: retroarch-filers-audio
     subdir: libretro-common/audio/dsp_filters
     make-install-args:
@@ -271,7 +273,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/RetroArch.git
-        branch: de4e56ecf28a09057734f8624af6d62f3088734f
+        branch: 9b282aa742b6c3d2f2925ae5a12e2cd7c6b6ad38
   - name: retroarch-assets
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
@@ -285,49 +287,49 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/libretro-database.git
-        commit: 1754130f72d8c00a512797bf85442576258279e8
+        commit: f3b10ec262fcbd78da3473f46d244270d12a327e
   - name: libretro-core-info
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
         url: https://github.com/libretro/libretro-core-info.git
-        commit: 1b2472eca14a5a187ff298ace1b614fd3d47bc7c
+        commit: 06dac6318c067a6a40e2ea1e1260e74681ada844
   - name: retroarch-joypad-autoconfig
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
         url: https://github.com/libretro/retroarch-joypad-autoconfig.git
-        commit: 0eb3ad2666e6bdc2de2cde4c5d4af29b8c7f2c67
-  - name: common-shaders
-    make-install-args:
-      - PREFIX=${FLATPAK_DEST}
-    sources:
-      - type: git
-        url: https://github.com/libretro/common-shaders.git
-        commit: 55e401834b732e62c34411321c4ffd82524345d4
-  - name: slang-shaders
-    make-install-args:
-      - PREFIX=${FLATPAK_DEST}
-    sources:
-      - type: git
-        url: https://github.com/libretro/slang-shaders.git
-        commit: 77558d5f2ac807b27201fb888cbf2caee8e289fa
-  - name: glsl-shaders
-    make-install-args:
-      - PREFIX=${FLATPAK_DEST}
-    sources:
-      - type: git
-        url: https://github.com/libretro/glsl-shaders.git
-        commit: 20801b38aa2c89a2beb9f57ffbbbcea7256e2523
-  - name: common-overlays
-    make-install-args:
-      - PREFIX=${FLATPAK_DEST}
-    sources:
-      - type: git
-        url: https://github.com/libretro/common-overlays.git
-        commit: db9744f4e58a740f0f10b04b62af347cd6f01928
+        commit: 760b057f1865a827762a54a8a32afda2cdd9e170
+  # - name: common-shaders
+  #   make-install-args:
+  #     - PREFIX=${FLATPAK_DEST}
+  #   sources:
+  #     - type: git
+  #       url: https://github.com/libretro/common-shaders.git
+  #       commit: 55e401834b732e62c34411321c4ffd82524345d4
+  # - name: slang-shaders
+  #   make-install-args:
+  #     - PREFIX=${FLATPAK_DEST}
+  #   sources:
+  #     - type: git
+  #       url: https://github.com/libretro/slang-shaders.git
+  #       commit: 148c57d9747f5db124135501ac280b5ca129a83f
+  # - name: glsl-shaders
+  #   make-install-args:
+  #     - PREFIX=${FLATPAK_DEST}
+  #   sources:
+  #     - type: git
+  #       url: https://github.com/libretro/glsl-shaders.git
+  #       commit: 8f6b2649489760caea8f36ec6099998854059569
+  # - name: common-overlays
+  #   make-install-args:
+  #     - PREFIX=${FLATPAK_DEST}
+  #   sources:
+  #     - type: git
+  #       url: https://github.com/libretro/common-overlays.git
+  #       commit: db9744f4e58a740f0f10b04b62af347cd6f01928
 
   # RetroArch - END
 
@@ -339,14 +341,17 @@ modules:
         - mv ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* /app/share/libretro/cores/
     sources:
       - type: archive
-        url: https://buildbot.libretro.com/stable/1.10.2/linux/x86_64/RetroArch_cores.7z
-        sha256: 0c59f99534a1ae3a2d34b1747c40398325e53db69acfab35b99c8fa8d76430e5
+        url: https://buildbot.libretro.com/stable/1.10.3/linux/x86_64/RetroArch_cores.7z
+        sha256: 33abf39839687f8faba202ed5dcf3a54c06266a49fad35f0521fa445523d009f
 
-  # Yuzu - https://github.com/flathub/org.yuzu_emu.yuzu
+  # Yuzu - START
+  # https://github.com/flathub/org.yuzu_emu.yuzu
+  # WHEN UPADTING: remember to update rd-submodules/yuzu contents
 
   - name: libzip
     buildsystem: cmake-ninja
     config-opts:
+      - '-DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON'
       - '-DCMAKE_BUILD_TYPE=RelWithDebInfo'
     sources:
       - type: archive
@@ -374,6 +379,7 @@ modules:
   - name: fmt
     buildsystem: cmake-ninja
     config-opts:
+      - '-DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON'
       - '-DFMT_TEST=OFF'
     sources:
       - type: archive
@@ -390,8 +396,8 @@ modules:
       - '-DCMAKE_BUILD_TYPE=Release'
     sources:
       - type: archive
-        url: https://github.com/KhronosGroup/glslang/archive/11.8.0.tar.gz
-        sha256: 9e5fbe5b844d203da5e61bcd84eda76326e0ff5dc696cb862147bbe01d2febb0
+        url: https://github.com/KhronosGroup/glslang/archive/11.9.0.tar.gz
+        sha256: d5744adba19eef9ad3d73f524226b39fec559d94cb582cd442e3c5de930004b2
         x-checker-data:
           type: anitya
           stable-only: true
@@ -401,12 +407,13 @@ modules:
     buildsystem: cmake-ninja
     config-opts:
       - '-DCMAKE_BUILD_TYPE=Release'
+      - '-DCATCH_INSTALL_EXTRAS=ON'
       - '-DCATCH_BUILD_TESTING=OFF'
     builddir: true
     sources:
       - type: archive
-        url: https://github.com/catchorg/Catch2/archive/v2.13.8.tar.gz
-        sha256: b9b592bd743c09f13ee4bf35fc30eeee2748963184f6bea836b146e6cc2a585a
+        url: https://github.com/catchorg/Catch2/archive/v2.13.9.tar.gz
+        sha256: 06dbc7620e3b96c2b69d57bf337028bf245a211b3cddb843835bfe258f427a52
         x-checker-data:
           type: anitya
           stable-only: true
@@ -416,6 +423,7 @@ modules:
     buildsystem: cmake-ninja
     config-opts:
       - '-DCMAKE_BUILD_TYPE=Release'
+      - '-DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON'
       - '-DJSON_BuildTests=OFF'
     sources:
       - type: archive
@@ -423,7 +431,7 @@ modules:
         sha256: 5daca6ca216495edf89d167f808d1d03c4a4d929cef7da5e10f135ae1540c7e4
         x-checker-data:
           type: anitya
-          project-id: 141453
+          project-id: 11152
           url-template: https://github.com/nlohmann/json/archive/v$version.tar.gz
   - name: boost
     buildsystem: simple
@@ -433,13 +441,13 @@ modules:
     sources:
       - type: archive
         url: >-
-          https://boostorg.jfrog.io/artifactory/main/release/1.78.0/source/boost_1_78_0.tar.bz2
-        sha256: 8681f175d4bdb26c52222665793eef08490d7758529330f98d3b29dd0735bccc
+          https://boostorg.jfrog.io/artifactory/main/release/1.79.0/source/boost_1_79_0.tar.bz2
+        sha256: 475d589d51a7f8b3ba2ba4eda022b170e562ca3b760ee922c146b6c65856ef39
         x-checker-data:
           type: anitya
           project-id: 6845
           url-template: >-
-            https://boostorg.jfrog.io/artifactory/main/release/$version/source/boost_1_78_0.tar.bz2
+            https://boostorg.jfrog.io/artifactory/main/release/$version/source/boost_1_79_0.tar.bz2
   - name: nv-codec-headers
     make-install-args:
       - PREFIX=/app
@@ -465,8 +473,8 @@ modules:
       - '-DENABLE_COMPATIBILITY_LIST_DOWNLOAD=ON'
       - '-DYUZU_USE_QT_WEB_ENGINE=ON'
       - '-DYUZU_USE_BUNDLED_FFMPEG=ON'
-      - '-DDISPLAY_VERSION=969'
-      - '-DBUILD_TAG=mainline-969'
+      - '-DDISPLAY_VERSION=1039'
+      - '-DBUILD_TAG=mainline-1039'
       - '-DBUILD_REPOSITORY=yuzu-emu/yuzu-mainline'
     build-options:
       env:
@@ -478,24 +486,14 @@ modules:
       - /share/pixmaps
     post-install:
       - install -Dm755 ../yuzu-launcher.sh /app/bin/yuzu-launcher
-      - desktop-file-install --dir=/app/share/applications ../dist/yuzu.desktop
-      - >-
-        desktop-file-edit --set-key StartupWMClass --set-value yuzu --set-key
-        Exec --set-value yuzu-launcher /app/share/applications/yuzu.desktop
       - >-
         install -Dm644 ../dist/yuzu.svg
         /app/share/icons/hicolor/scalable/apps/yuzu.svg
-      - >-
-        mv /app/share/mime/packages/yuzu.xml
-        /app/share/mime/packages/org.yuzu_emu.yuzu.xml
-      - >-
-        sed 's/yuzu/org.yuzu_emu.yuzu/g' -i
-        /app/share/mime/packages/org.yuzu_emu.yuzu.xml
     sources:
       - type: git
         url: https://github.com/yuzu-emu/yuzu-mainline.git
-        tag: mainline-0-969
-        commit: d179e12137cd8ff88b0eade7d13de801661f869b
+        tag: mainline-0-1039
+        commit: 983afc5328725109a1cf13c61103b8a553c005d0
         disable-shallow-clone: true
         x-checker-data:
           type: git
@@ -507,7 +505,8 @@ modules:
         
   # Yuzu - END
 
-  # pcsx2 - https://github.com/flathub/net.pcsx2.PCSX2
+  # PCSX2 - START
+  # https://github.com/flathub/net.pcsx2.PCSX2
 
   - name: wxWidgets
     buildsystem: cmake-ninja
@@ -520,8 +519,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/wxWidgets/wxWidgets.git
-        tag: v3.1.5
-        commit: 9c0a8be1dc32063d91ed1901fd5fcd54f4f955a1
+        tag: v3.1.6
+        commit: 19907924842a9152b8ee5f03f117aed65193b964
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+)$
@@ -533,8 +532,8 @@ modules:
     sources:
       - type: git
         url: https://pagure.io/libaio.git
-        tag: libaio-0.3.112
-        commit: d025927efa75a0d1b46ca3a5ef331caa2f46ee0e
+        tag: libaio-0.3.113
+        commit: 1b18bfafc6a2f7b9fa2c6be77a95afed8b7be448
         x-checker-data:
           type: git
           tag-pattern: ^libaio-([\d.]+)$
@@ -621,13 +620,14 @@ modules:
     sources:
       - type: git
         url: https://github.com/PCSX2/pcsx2.git
-        tag: v1.7.2554
-        commit: 0d1675fbaa0d40874df98eed6270efc55620271b
+        tag: v1.7.2889
+        commit: a6649b2d6b558806fbe7cbaf6296014e3c5c192e
 
-  # pcsx2 - END
+  # PCSX2 - END
 
   # Dolphin - START
   # https://github.com/flathub/org.DolphinEmu.dolphin-emu
+  # WHEN UPADTING: remember to update rd-submodules/yuzu contents
 
   # needed for the emulate bluetooth adapter feature to work
   - name: bluez
@@ -696,7 +696,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/dolphin-emu/dolphin.git
-        commit: 8ecfa537a242de74d2e372e30d9d79b14584b2fb
+        commit: 8335ec70e5fe253eb21509408ca6b5736ed57dfc
       # detects whether dolphin is running in a flatpak sandbox
       # and makes it use xdg directories if it is.
       # prevents dolphin from attempting to write conf files
@@ -712,12 +712,20 @@ modules:
           - for i in {0..9}; do
           - test -S $XDG_RUNTIME_DIR/discord-ipc-$i || ln -sf {app/com.discordapp.Discord,$XDG_RUNTIME_DIR}/discord-ipc-$i;
           - done
-          - dolphin-emu "$@"
+          # use gtk3 filechooser on steamdeck
+          - bv=`cat /sys/devices/virtual/dmi/id/board_vendor`
+          - bv=$bv`cat /sys/devices/virtual/dmi/id/board_name`
+          - if [[ $bv == "ValveJupiter" ]]; then
+          -   QT_QPA_PLATFORMTHEME=gtk3 dolphin-emu "$@"
+          - else
+          -   dolphin-emu "$@"
+          - fi
         dest-filename: dolphin-emu-wrapper
 
   # Dolphin - END
 
   # XEMU - START
+  # https://github.com/flathub/app.xemu.xemu
 
   # certificate issue, check libglu module for more info
   # - name: libglu
@@ -737,6 +745,15 @@ modules:
   #         stable-only: true
   #         url-template: http://mesa.freedesktop.org/archive/glu/glu-$version.tar.xz
 
+  - name: PyYAML
+    buildsystem: simple
+    build-commands:
+      - python3 setup.py install --prefix=/app --root=/
+    sources:
+      - type: archive
+        url: https://github.com/yaml/pyyaml/archive/refs/tags/6.0.tar.gz
+        sha256: f33eaba25d8e0c1a959bbf00655198c287dfc5868f5b7b01e401eaa1796cc778
+
   - name: xemu
     buildsystem: autotools
     builddir: true
@@ -755,23 +772,20 @@ modules:
           install -Dm644 ../ui/icons/xemu_${px}x${px}.png /app/share/icons/hicolor/${px}x${px}/apps/app.xemu.xemu.png
         done
       - install -Dm644 ../ui/icons/xemu.svg /app/share/icons/hicolor/scalable/apps/app.xemu.xemu.svg
-      - desktop-file-install ../ui/xemu.desktop --dir /app/share/applications
-      - sed -i 's/^Icon=xemu/Icon=app.xemu.xemu/' /app/share/applications/xemu.desktop
       - mv qemu-system-i386 /app/bin/xemu
       - mkdir -p /app/share/licenses/xemu
       - cd .. && python3 scripts/gen-license.py > /app/share/licenses/xemu/LICENSE.txt
     sources:
       - type: git
         url: https://github.com/mborgerson/xemu.git
-        tag: gh-release/0.6.2-90-g6f507c80af
-        commit: 6f507c80af546e0f5d316622d20f78820423ce6e
+        tag: v0.7.29
+        commit: 69dcbe9b3081ee51d1468b1b7777b8b930bfba6c
         x-checker-data:
           type: json
           url: https://api.github.com/repos/mborgerson/xemu/releases/latest
           tag-query: .tag_name
           version-query: $tag | sub("^gh-release/"; "")
           timestamp-query: .published_at
-          is-main-source: true
 
   # XEMU - END
 
@@ -827,13 +841,12 @@ modules:
     sources:
       - type: git
         url: https://github.com/citra-emu/citra-nightly.git
-        tag: nightly-1762
-        commit: 1382035d4de5ada310c7f4fd00f1836b16ab74fb
+        tag: nightly-1770
+        commit: 88a475970240e1dbade1720b02f9e5338647b1b8
         disable-shallow-clone: true
         x-checker-data:
           type: git
           tag-pattern: ^(nightly-\d+)$
-          is-main-source: true
 
   # CITRA - END
   
@@ -922,11 +935,9 @@ modules:
     post-install:
       - |
         set -eux;
-        sed -i 's|<id>RPCS3</id>|<id>net.rpcs3.RPCS3</id>|' ${FLATPAK_DEST}/share/metainfo/rpcs3.metainfo.xml;
         COMM_TAG="$(awk -F'[\{,]' '/version{.*}/{printf "%d.%d.%d", $2, $3, $4}' ../rpcs3/rpcs3_version.cpp)";
         COMM_COUNT="$(git rev-list --count HEAD)";
         COMM_HASH="$(git rev-parse --short=8 HEAD)";
-        sed -i 's|</component>|<content_rating type="oars-1.1"/><releases><release date="'$(git show -s --format=%cs)'" version="'"${COMM_TAG}"'-'"${COMM_COUNT}"'-'"${COMM_HASH}"'"/></releases></component>|' ${FLATPAK_DEST}/share/metainfo/rpcs3.metainfo.xml;
     sources:
       - type: git
         url: https://github.com/RPCS3/rpcs3.git
@@ -1000,7 +1011,6 @@ modules:
         x-checker-data:
           type: git
           tag-pattern: "^v([\\d.]+)$"
-          is-main-source: true
 
   # PPSSPP - END
 
@@ -1013,23 +1023,21 @@ modules:
 
         # Prep the ES-DE and RetroArch config files - I will have to SED/XMLSTARLET them soon
         - rm -rf /app/share/emulationstation/resources/systems/unix/es_find_rules.xml
-        - cp es_find_rules.xml /app/share/emulationstation/resources/systems/unix/
+        - cp es-configs/es_find_rules.xml /app/share/emulationstation/resources/systems/unix/
         - rm -rf /app/share/emulationstation/resources/systems/unix/es_systems.xml
-        - cp es_systems.xml /app/share/emulationstation/resources/systems/unix/
+        - cp es-configs/es_systems.xml /app/share/emulationstation/resources/systems/unix/
         # These must be put in home folder, managed by retrodeck.sh
-        - cp es_settings.xml ${FLATPAK_DEST}/retrodeck/es_settings.xml
+        - cp es-configs/es_settings.xml ${FLATPAK_DEST}/retrodeck/es_settings.xml
 
         # Logo, res
         - rm -f /app/share/emulationstation/resources/graphics/splash.svg
-        - cp splash.svg /app/share/emulationstation/resources/graphics/splash.svg
-        - cp icon.svg /app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg
+        - cp res/splash.svg /app/share/emulationstation/resources/graphics/splash.svg
+        - cp res/icon.svg /app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg
 
         # Tools
         - mkdir -p ${FLATPAK_DEST}/retrodeck/tools/
-        - cp start-*.sh ${FLATPAK_DEST}/retrodeck/tools/
-        - cp move-roms.sh ${FLATPAK_DEST}/retrodeck/tools/
-        - cp start-yuzu.sh ${FLATPAK_DEST}/retrodeck/tools/
-        - cp tools-gamelist.xml ${FLATPAK_DEST}/retrodeck/
+        - cp tools/* ${FLATPAK_DEST}/retrodeck/tools/
+        - mv -f es-configs/tools-gamelist.xml ${FLATPAK_DEST}/retrodeck/
         
         - cp retrodeck.sh /app/bin/retrodeck.sh
         - chmod +x /app/bin/retrodeck.sh
@@ -1037,55 +1045,35 @@ modules:
         # Desktop entry
         - cp net.retrodeck.retrodeck.desktop /app/share/applications/net.retrodeck.retrodeck.desktop
 
-        # Steam Grids - When BoilR comes it will be deprecated
-        - mkdir -p ${FLATPAK_DEST}/retrodeck/steam/
-        - cp banner_main.png ${FLATPAK_DEST}/retrodeck/steam/
-        - cp poster_main.png ${FLATPAK_DEST}/retrodeck/steam/
-        - cp poster_main_nodecklogo.png ${FLATPAK_DEST}/retrodeck/steam/
+        # TODO: group the configs per-emu and optimize the following cps, like already done with Dolphin. Please not that some files may be renamed, check retrodeck.sh to know how (and fix it after the edit)
 
         # Configuring emulators:
         - mkdir -p ${FLATPAK_DEST}/retrodeck/emu-configs/Dolphin
         # RetroArch
-        - cp retroarch* ${FLATPAK_DEST}/retrodeck/emu-configs/
+        - cp emu-configs/retroarch* ${FLATPAK_DEST}/retrodeck/emu-configs/
         # Dolphin 
-        - cp Dolphin.ini ${FLATPAK_DEST}/retrodeck/emu-configs/Dolphin/
-        - cp Hotkeys.ini ${FLATPAK_DEST}/retrodeck/emu-configs/Dolphin/
-        - cp GCPadNew.ini ${FLATPAK_DEST}/retrodeck/emu-configs/Dolphin/
-        - cp GFX.ini ${FLATPAK_DEST}/retrodeck/emu-configs/Dolphin/
-        - cp Qt.ini ${FLATPAK_DEST}/retrodeck/emu-configs/Dolphin/
+        - cp emu-configs/Dolphin/* ${FLATPAK_DEST}/retrodeck/emu-configs/
         # Yuzu
-        - cp yuzu-qt-config.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
+        - cp emu-configs/yuzu-qt-config.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
         # Pcsx2
-        - cp PCSX2_ui.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
-        - cp GS.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
-        - cp PCSX2_vm.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
+        - cp emu-configs/PCSX2_ui.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
+        - cp emu-configs/GS.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
+        - cp emu-configs/PCSX2_vm.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
         # MelonDS
-        - cp melonDS.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
+        - cp emu-configs/melonDS.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
         # CITRA
-        - cp citra-qt-config.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
+        - cp emu-configs/citra-qt-config.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
         # RPCS3
-        - cp config.yml ${FLATPAK_DEST}/retrodeck/emu-configs/
+        - cp emu-configs/config.yml ${FLATPAK_DEST}/retrodeck/emu-configs/
+
+        # Overlays
+        #- cp -r overlays ${FLATPAK_DEST}/retrodeck/overlays Disabled in 0.4.2b as it will be introduced in 0.5.0b
 
         # Placing appdata
         - mkdir -p ${FLATPAK_DEST}/share/appdata
         - cp net.retrodeck.retrodeck.appdata.xml ${FLATPAK_DEST}/share/appdata
 
     sources:
-      - type: dir
-        path: es-configs
-      - type: file
-        path: retrodeck.sh
-      - type: dir
-        path: emu-configs
-      - type: dir
-        path: emu-configs/Dolphin
-      - type: dir
-        path: res
-      - type: dir
-        path: res/steam
-      - type: dir
-        path: tools
-      - type: file
-        path: net.retrodeck.retrodeck.desktop
-      - type: file
-        path: net.retrodeck.retrodeck.appdata.xml
+      - type: git
+        url: https://github.com/XargonWan/RetroDECK.git
+        branch: main

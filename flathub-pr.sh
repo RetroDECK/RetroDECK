@@ -7,10 +7,26 @@ cd ~/RetroDECK
 git checkout main
 git submodule init
 git submodule update
-rsync -rav --progress --exclude={'res/screenshots/','shared-modules/','rd-submodules/','.git/','docs','retrodeck-flatpak/','retrodeck-flatpak-cooker/','.flatpak-builder/'} ~/RetroDECK/ ~/flathub/
+# NOTE: the only linked submodules are: rd-submodules/retroarch
+# these must be included in the exclusion list as they must be redownloaded
+#sync -rav --progress --exclude={'res/screenshots/','shared-modules/','rd-submodules/retroarch','.git/','docs','retrodeck-flatpak/','retrodeck-flatpak-cooker/','.flatpak-builder/'} ~/RetroDECK/ ~/flathub/
+
+sync -rav --progress { \
+'overlays', \
+'rd-submodules', \
+'flathub.json', \
+'LICENSE', \
+'net.retrodeck.retrodeck.appdata.xml', \
+'net.retrodeck.retrodeck.desktop', \
+'net.retrodeck.retrodeck.yml', \
+'README.md', \
+} ~/flathub/
+
 cd ~/flathub
-rm -rf shared-submodules
-rm -rf rd-submodules
+git rm -r *
+# NOTE: be careful to remove the REAL (linked) submodules only
+rm -rf shared-modules
+rm -rf rd-submodules/retroarch
 
 # rebuilding submodules
 git config -f .gitmodules --get-regexp '^submodule\..*\.path$' |
@@ -40,7 +56,6 @@ git submodule sync;
 # Now actually pull all the modules. I used to use this...
 git submodule foreach --recursive 'git checkout $(git config -f $toplevel/.gitmodules submodule.$name.branch || echo master)';
 
-rm flathub-pr.sh
 git submodule update
 git add *
 git commit -m "Updating flathub"

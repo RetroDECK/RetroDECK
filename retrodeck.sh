@@ -139,7 +139,11 @@ standalones_init() {
     echo "Initializing CITRA"
     echo "----------------------"
     mkdir -pv /var/config/citra-emu/
-    cp -fvr $emuconfigs/citra-qt-config.ini /var/config/citra-emu/qt-config.ini
+    cp -fv $emuconfigs/citra-qt-config.ini /var/config/citra-emu/qt-config.ini
+    sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
+    #TODO: do the same with roms folders after new variables is pushed (check even the others qt-emu)
+    #But actually everything is always symlinked to retrodeck/roms so it might be not needed
+    #sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
 
     # RPCS3
     echo "----------------------"
@@ -176,6 +180,7 @@ post_update() {
     dir_prep "$rdhome/.downloaded_media" "/var/config/emulationstation/.emulationstation/downloaded_media"
     dir_prep "$rdhome/.themes" "/var/config/emulationstation/.emulationstation/themes"
     mkdir -pv $rdhome/.logs #this was added later, maybe safe to remove in a few versions
+    cp -fv /app/retrodeck/es_settings.xml /var/config/emulationstation/.emulationstation/es_settings.xml #this is resetting es_systems, now we need it but in the future I should think a better solution
     ra_init
     standalones_init
     tools_init
@@ -256,25 +261,25 @@ finit() {
     mkdir -pv $rdhome/saves
     mkdir -pv $rdhome/states
     mkdir -pv $rdhome/screenshots
-    mkdir -pv $rdhome/bios/pico-8
+    mkdir -pv $rdhome/bios/pico8
     mkdir -pv $rdhome/.logs
 
     # XMLSTARLET HERE
-    cp -f /app/retrodeck/es_settings.xml /var/config/emulationstation/.emulationstation/es_settings.xml
+    cp -fv /app/retrodeck/es_settings.xml /var/config/emulationstation/.emulationstation/es_settings.xml
 
     # ES-DE preparing themes and scraped folders
     dir_prep "$rdhome/.downloaded_media" "/var/config/emulationstation/.emulationstation/downloaded_media"
     dir_prep "$rdhome/.themes" "/var/config/emulationstation/.emulationstation/themes"
 
     # PICO-8
-    dir_prep "$roms_folder/pico-8" "$rdhome/bios/pico-8/bbs/carts" #this is the folder where pico-8 is saving the carts
+    dir_prep "$roms_folder/pico8" "$rdhome/bios/pico8/bbs/carts" #this is the folder where pico-8 is saving the carts
 
     ra_init
     standalones_init
     tools_init
     create_lock
 
-    zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --text="Initialization completed.\nplease put your roms in:\n\n$roms_folder\n\nand your bioses in\n\n$rdhome/bios\n\nThen start the program again.\nIf you wish to change the roms location, you may use the tool located the tools section of RetroDECK.\n\nIt's suggested to add RetroDECK to your Steam Library for a quick access."
+    zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --text="Initialization completed.\nplease put your roms in:\n\n$roms_folder\n\nand your bioses in\n\n$rdhome/bios\n\nThen start the program again.\nIf you wish to change the roms location, you may use the tool located the tools section of RetroDECK.\n\nIMPORTANT NOTE:\nRetroDECK must be manually added and launched from your Steam Library in order to work correctly.\nMoreover is suggested to use BoilR to automatically add the SteamGridDB images to Steam (this will be automated soon).\nhttps://github.com/PhilipK/BoilR"
     # TODO: Replace the stuff above with BoilR code when ready
 }
 
