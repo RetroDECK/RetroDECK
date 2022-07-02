@@ -48,12 +48,19 @@
       <description>
         <p><b>Emulators:</b></p>
         <ul>
+          <li>Updated all the emulators at the latest available version.</li>
           <li>DOLPHIN (SA): Fixed a bug where Dolphin couldn't be properly configured. If it's still misconfigured please run `flatpak run net.retrodeck.retrodeck --reset-sa` in order to reset all the standalone emulators, including Dolphin. </li>
+          <li>CITRA (SA): Reconfigured controls and hotkeys. </li>
+          <li>MELONDS (SA): Reconfigured controls. </li>
+          <li>GAMBATTE (LIBRETRO): Added GB colorization. </li>
+          <li>RETROARCH (LIBRETRO): Tweaked some configs and fixed some overlapping hotkeys (FPS was same as Show Menu action). </li>
         </ul>
 
         <p><b>Backend:</b></p>
         <ul>
           <li>Removed some broken tools that will be reintroduced once fixed, including the roms moving tool. </li>
+          <li>Updated ES-DE configs (es_find_rules, es_settings, es_systems). </li>
+          <li>Manifest trimmend and general code cleanup. </li>
         </ul>
 
         <p><b>Known Issues:</b></p>
