@@ -6,12 +6,12 @@ then
     exit 0
 fi
 
-border="$(zenity --list \
+emulator="$(zenity --list \
 --title "RetroDECK" \
 --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
 --text="Which emulator do you want to configure?" \
 --hide-header \
---column=Border \
+--column=emulator \
 "RetroArch" \
 "Citra" \
 "Dolphin" \
@@ -21,28 +21,28 @@ border="$(zenity --list \
 "RPCS3" \
 "Yuzu")"
 
-if [ $border == "RetroArch" ]
+if [ $emulator == "RetroArch" ]
 then
     retroarch
-elif [ $border == "Citra" ]
+elif [ $emulator == "Citra" ]
 then
     citra-qt
-elif [ $border == "Dolphin" ]
+elif [ $emulator == "Dolphin" ]
 then
     dolphin-emu
-elif [ $border == "MelonDS" ]
+elif [ $emulator == "MelonDS" ]
 then
     melonDS
-elif [ $border == "PCSX2" ]
+elif [ $emulator == "PCSX2" ]
 then
     pcsx2
-elif [ $border == "PPSSPP" ]
+elif [ $emulator == "PPSSPP" ]
 then
     PPSSPPSDL
-elif [ $border == "RPCS3" ]
+elif [ $emulator == "RPCS3" ]
 then
     rpcs3
-elif [ $border == "Yuzu" ]
+elif [ $emulator == "Yuzu" ]
 then
     yuzu
 fi

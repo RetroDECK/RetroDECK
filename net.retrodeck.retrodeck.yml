@@ -1158,6 +1158,9 @@ modules:
         
         - cp retrodeck.sh /app/bin/retrodeck.sh
         - chmod +x /app/bin/retrodeck.sh
+
+        - cp global.sh /app/bin/global.sh
+        - chmod +x /app/bin/global.sh
         
         # Desktop entry
         - cp net.retrodeck.retrodeck.desktop /app/share/applications/net.retrodeck.retrodeck.desktop
