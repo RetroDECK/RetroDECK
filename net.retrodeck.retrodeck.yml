@@ -1196,4 +1196,4 @@ modules:
     sources:
       - type: git
         url: https://github.com/XargonWan/RetroDECK.git
-        branch: main
+        branch: cooker-main-vars
