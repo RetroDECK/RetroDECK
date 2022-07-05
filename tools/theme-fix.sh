@@ -8,7 +8,7 @@ zenity \
 --title "RetroDECK" \
 --ok-label "Yes" \
 --cancel-label "No" \
---text="This tool is will clean some unuseful scraped data in order to beautify the theme.\nDo you want to delete them?"
+--text="This tool is will clean some unuseful scraped data in order to beautify the theme.\nDo you want to delete and fix it?"
 
 if [ $? == 0 ] #yes - Internal
 then
@@ -18,6 +18,8 @@ then
     find ~/retrodeck/.downloaded_media -name backcovers -type d -print0|xargs -0 rm -rfv --
     find ~/retrodeck/.downloaded_media -namephysicalmedia -type d -print0|xargs -0 rm -rfv --
     find ~/retrodeck/.downloaded_media -namescreenshots -type d -print0|xargs -0 rm -rfv --
+    rm -rf ~/retrodeck/.downloaded_media/thumbnails
+    ln -s ~/retrodeck/.downloaded_media/covers ~/retrodeck/.downloaded_media/thumbnails
 fi
 
 zenity \
@@ -26,4 +28,4 @@ zenity \
 --no-wrap \
 --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
 --title "RetroDECK" \
---text="Scraped data is now cleaned, please restart RetroDECK to reload the games list."
+--text="Scraped data is now cleaned and fixed, please restart RetroDECK to reload the games list."
