@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2022 Xargon <xargonwan@gmail.com> -->
+<component type="desktop-application">
+  <id>net.retrodeck.retrodeck</id>
+  <launchable type="desktop-id">net.retrodeck.retrodeck.desktop</launchable>
+  <name>RetroDECK</name>
+  <summary>Everything you need for emulation on Steam Deck</summary>
+  <developer_name>Xargon</developer_name>
+  <url type="homepage">https://retrodeck.net</url>
+  <url type="bugtracker">https://github.com/XargonWan/RetroDECK/issues</url>
+  <url type="help">http://discord.gg/Dz3szYsP8g</url>
+  <url type="faq">https://github.com/XargonWan/RetroDECK/wiki/FAQs---Frequently-asked-questions</url>
+  <url type="donation">https://www.patreon.com/RetroDECK</url>
+  <content_rating type="oars-1.0" />
+  <screenshots>
+    <screenshot type="default">
+      <image>https://github.com/XargonWan/RetroDECK/blob/main/res/logo.png?raw=true</image>
+    </screenshot>
+    <screenshot>
+      <image>https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen02.png?raw=true</image>
+    </screenshot>
+    <screenshot>
+      <image>https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen03.png?raw=true</image>
+    </screenshot>
+    <screenshot>
+      <image>https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen04.png?raw=true</image>
+    </screenshot>
+    <screenshot>
+      <image>https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen05.png?raw=true</image>
+    </screenshot>
+  </screenshots>
+  <description>
+  <p>
+	RetroDECK brings an environment to catalog and play your retro games directly from SteamOS and it's tailored specifically for the Steam Deck.
+	It's inspired by embedded emulation systems like AmberELEC, EmuELEC, CoreELEC, Lakka, and Batocera.</p>
+	<p>
+	Powered by EmulationStation Desktop Edition, which uses RetroArch and other standalone emulators to allow you to import and play your favorite retro (and even not-so-retro) games in a tidy environment without flooding your Steam library.
+	No other software is needed as everything it's already included!</p>
+  <p>
+  NOTE: Albeit RetroDECK could possibily work on every distro, it's supported only on Steam Deck.</p>
+  </description>
+  <project_license>GPL-3.0</project_license>
+  <metadata_license>CC0-1.0</metadata_license>
+  <releases>
+
+  <release version="0.4.3b" date="2022-05-11">
+      <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.4.2b</url>
+      <description>
+        <p><b>Emulators:</b></p>
+        <ul>
+          <li>Updated all the emulators at the latest available version.</li>
+        </ul>
+
+        <p><b>Backend:</b></p>
+        <ul>
+          <li>Manifest code cleanup.</li>
+        </ul>
+
+        <p><b>Known Issues:</b></p>
+        <ul>
+          <li>PCSX2: due to its limitation, the standalone PCSX2 doesn't have any way to set the hotkeys, so no save and load state, no quit button. In order to quit press: STEAM -> PCSX2 -> (X) CLOSE WINDOW, be aware that the state is not automatically saved</li>
+          <li>Due to a Steam limitation, external controllers and keyboard seems not to be working, expecially in the desktop mode</li>
+        </ul>
+
+        <p><b>IMPORTANT NOTE:</b>
+        At the moment the emulator configs are reset during every update, this was made because every version they may bring new configurations, please back them up if you did some manual configs.
+        </p>
+      </description>
+  </release>
+
+  <release version="0.4.2b" date="2022-05-11">
+      <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.4.2b</url>
+      <description>
+        <p><b>Emulators:</b></p>
+        <ul>
+          <li>Updated all the emulators at the latest available version.</li>
+          <li>DOLPHIN (SA): Fixed a bug where Dolphin couldn't be properly configured. If it's still misconfigured please run `flatpak run net.retrodeck.retrodeck --reset-sa` in order to reset all the standalone emulators, including Dolphin. </li>
+          <li>CITRA (SA): Reconfigured controls and hotkeys. </li>
+          <li>MELONDS (SA): Reconfigured controls. </li>
+          <li>GAMBATTE (LIBRETRO): Added GB colorization. </li>
+          <li>RETROARCH (LIBRETRO): Tweaked some configs and fixed some overlapping hotkeys (FPS was same as Show Menu action). </li>
+        </ul>
+
+        <p><b>Backend:</b></p>
+        <ul>
+          <li>Removed some broken tools that will be reintroduced once fixed, including the roms moving tool. </li>
+          <li>Updated ES-DE configs (es_find_rules, es_settings, es_systems). </li>
+          <li>Manifest trimmend and general code cleanup. </li>
+        </ul>
+
+        <p><b>Known Issues:</b></p>
+        <ul>
+          <li>PCSX2: due to its limitation, the standalone PCSX2 doesn't have any way to set the hotkeys, so no save and load state, no quit button. In order to quit press: STEAM -> PCSX2 -> (X) CLOSE WINDOW, be aware that the state is not automatically saved</li>
+          <li>Due to a Steam limitation, external controllers and keyboard seems not to be working, expecially in the desktop mode</li>
+        </ul>
+
+        <p><b>IMPORTANT NOTE:</b>
+        At the moment the emulator configs are reset during every update, this was made because every version they may bring new configurations, please back them up if you did some manual configs.
+        </p>
+      </description>
+  </release>
+
+  <release version="0.4.1b" date="2022-05-11">
+      <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.4.1b</url>
+      <description>
+        <p><b>Emulators:</b></p>
+        <ul>
+          <li>Tweaked various emulator configs</li>
+          <li>The emulators that was showing a small viewport like N64, Wii, GC, and Dreamcast are now showing a more appropriate viewport</li>
+          <li>Fixed home path in MelonDS (SA)</li>
+        </ul>
+
+        <p><b>Frontend:</b></p>
+        <ul>
+          <li>Updated ES-DE to 1.2.4</li>
+          <li>RetroDECK doesn't open ES-DE anymore during the first setup, almost everything is now automated: HURRAY!</li>
+          <li>Now a custom roms path can be selected if SD Card is selected and the SD Card is not found in the default path</li>
+        </ul>
+
+        <p><b>Backend:</b></p>
+        <ul>
+          <li>Fixed a bug where the folders where not symlinked correclty</li>
+        </ul>
+
+        <p><b>Known Issues:</b></p>
+        <ul>
+          <li>PCSX2: due to its limitation, the standalone PCSX2 doesn't have any way to set the hotkeys, so no save and load state, no quit button. In order to quit press: STEAM -> PCSX2 -> (X) CLOSE WINDOW, be aware that the state is not automatically saved</li>
+          <li>External controllers and keyboard seems not to be working, expecially in the desktop mode</li>
+          <li>Yuzu makes RetroDECK freeze in some situations, like if the rom is a bad dump</li>
+        </ul>
+
+        <p><b>IMPORTANT NOTE:</b>
+        At the moment the emulator configs are reset during every update, this was made because every version they may bring new configurations, please back them up if you did some manual configs.
+        </p>
+      </description>
+  </release>
+
+  <release version="0.4.0b" date="2022-05-26">
+      <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.4.0b</url>
+      <description>
+          <p>Emulators:</p>
+        <ul>
+          <li>Yuzu was broken: fixed</li>
+          <li>Dolphin-libretro is now the default emulator as Dolphin (Standalone) seems to be broken</li>
+        </ul>
+          <p>New Standalone emulators:</p>
+        <ul>
+          <li>RPCS3</li>
+          <li>PPSSPP</li>
+          <li>CITRA</li>
+          <li>MelonDS</li>
+          <li>PICO-8</li>
+        </ul>
+          <p>Tools:</p>
+        <ul>
+          <li>Added tools to start each standalone emulator</li>
+          <li>Added a tool to start PICO-8's SPLORE</li>
+          <li>Fixed the Move ROMs tool (probably)</li>
+        </ul>
+          <p>Frontend:</p>
+        <ul>
+          <li>Updated ES-DE to 1.2.4 and redirected to the new repo</li>
+          <li>Updated Art-Book theme to fix the mising images for n3ds and pico-8</li>
+          <li>Now The quit button is showing "Quit RetroDECK"</li>
+          <li>Added RetroDECK version in the ES-DE main menu</li>
+        </ul>
+          <p>Backend:</p>
+        <ul>
+          <li>Wrapper complete rewrite, now it's faster, tidier, solid</li>
+          <li>Wrapper: user data is now backup and moved when managing the internal folders</li>
+          <li>Introduced versioning: now the version is visible by CLI or in the options menu</li>
+          <li>Rewrote cooker.yml workflow as the old one was no more useful for the scope</li>
+          <li>Removed the bios/bios folder that in some situations is mistakenly created</li>
+          <li>Logs are now into ~/retrodeck/.logs however they must be improved</li>
+          <li>Moved the scraped data folder into ~/retrodeck/.downloaded_data for backup purposes and to avoid data loss when resetting RetroDECK</li>
+          <li>Moved themes folder in ~/retrodeck/.downloaded_data, same as above</li>
+          <li>Updated es_find_rules.xml</li>
+          <li>Updated es_systems.xml: some default emulators are changed, if you cannot load the game is maybe because of that, you can still choose the former emulator from the list</li>
+          <li>Added post-install scripts, now deleting ~/retrodeck/.log or ~/.var/app/net.retrodeck.retrodeck is no more needed (hopefully)</li>
+          <li>Added CLI arguments, run flatpak run net.retrodeck.retrodeck -h for more info</li>
+          <li>Added a CLI option to reset RetroDECK --reset</li>
+          <li>Replaced Kdialog with Zenity</li>
+          <li>Added manifest: this should fix the Discover bug</li>
+        </ul>
+          <p>Known Issues:</p>
+        <ul>
+          <li>Controller is not configured for most of the standalone emulators, I will configure them when I will get my Steam Deck (ETA mid June)</li>
+          <li>External controllers seems not to be working</li>
+          <li>Yuzu makes RetroDECK freeze in some situations, like if the rom is a bad dump</li>
+        </ul>
+        <p>
+          IMPORTANT NOTE:
+          At the moment the emulator configs are reset during every update, this was made because every version may bring new configurations, please back them up if you did some manual configs.
+        </p>
+      </description>
+    </release>
+  
+    <release version="0.3.1b" date="2022-04-26">
+      <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.3.1b</url>
+      <description>
+        <ul>
+          <li>Fixed Dolphin: now Dolphin (Standalone) is the default emulator for GC/Wii.</li>
+        </ul>
+      </description>
+    </release>
+	<release version="0.3.0b" date="2022-04-26">
+      <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.3.0b</url>
+      <description>
+        <ul>
+        <li>Migrated everything from the old domain com.xargon.retrodeck to net.retrodeck.retrodeck to be aligned with flathub standards</li>
+		<li>Fixed and enhanced all the tools</li>
+		<li>Added 'Start Yuzu' tool</li>
+		<li>Swapped a/b buttons on RetroArch</li>
+		<li>Tweaked some RetroArch configs</li>
+		<li>Fixed RetroArch Hotkeys</li>
+		<li>Added standalone PCSX2</li>
+		<li>Added standalone XEMU</li>
+		<li>Added standalone DOLPHIN</li>
+		<li>Reconfigured standalone YUZU</li>
+		<li>Updated EmulationStation Desktop Edition</li>
+		<li>Updated the default Art Book DE theme</li>
+		<li>Updated various backend scripts</li>
+        </ul>
+      </description>
+    </release>
+	
+	<release version="0.2.0b" date="2022-04-17">
+      <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.2.0b</url>
+      <description>
+        <ul>
+        <li>Migrated everything from the old building script to a full fledged yaml in order to being published on Discover</li>
+		<li>Fixed SD Card issues</li>
+		<li>Improved installer script</li>
+		<li>Tweaked RetroArch configs</li>
+		<li>Added tool for relocating ROMs location from/to internal to/from external</li>
+		<li>Added PCSX2 and Yuzu emulators (but not yet integrated in ES-DE)</li>
+		<li>Created cooker channel, more info in Discord and on RetroDECK-cooker on GitHub</li>
+		<li>Cooker will auto build when a change is pushed/PRed</li>
+		<li>Same as above with main</li>
+        </ul>
+      </description>
+  </release>
+	
+	<release version="0.1.1b" date="2022-04-03">
+      <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.1.1b</url>
+      <description>
+        <ul>
+        <li>Removed some debug stuff (press any key to continue)</li>
+        <li>Fixed ROMs folder</li>
+        <li>Fixed SD Card logic</li>
+        <li>Desktop file improved</li>
+        <li>Improved installer messages</li>
+        </ul>
+      </description>
+    </release>
+	
+	<release version="0.1.0b" date="2022-04-03">
+      <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.1.0b</url>
+      <description>
+        <ul>
+        <li>Pick up and play, just put your roms and bios in /retrodeck/roms and /retrodeck/bios folders.</li>
+        <li>SD Card support</li>
+        <li>Fancy interface provided by ES-DE and Art-Book-Next-DE</li>
+        <li>All retro systems available until PS2</li>
+        <li>Auto load/save states</li>
+        <li>Scraping</li>
+        <li>RetroAchievements (must be manually set)</li>
+        </ul>
+      </description>
+    </release>
+	
+	</releases>
+</component>
