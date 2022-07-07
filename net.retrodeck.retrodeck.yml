@@ -357,8 +357,8 @@ modules:
       - -DCMAKE_BUILD_TYPE=RelWithDebInfo
     sources:
       - type: archive
-        url: https://github.com/nih-at/libzip/archive/v1.9.2.tar.gz
-        sha256: 7f28eaec7a02ca099ea9dad88fc8023f7f6ddfca54b780040ff7fdb39d9efb3c
+        url: https://github.com/nih-at/libzip/archive/v1.8.0.tar.gz
+        sha256: 83e5d6d5dbe8f9df80aad388fa523ca3558398ed440a5afda6ef9b36b0ffdc1f
         x-checker-data:
           type: anitya
           project-id: 10649
@@ -385,8 +385,8 @@ modules:
       - -DFMT_TEST=OFF
     sources:
       - type: archive
-        url: https://github.com/fmtlib/fmt/releases/download/9.0.0/fmt-9.0.0.zip
-        sha256: fc96dd2d2fdf2bded630787adba892c23cb9e35c6fd3273c136b0c57d4651ad6
+        url: https://github.com/fmtlib/fmt/releases/download/8.1.1/fmt-8.1.1.zip
+        sha256: 23778bad8edba12d76e4075da06db591f3b0e3c6c04928ced4a7282ca3400e5d
         x-checker-data:
           type: anitya
           project-id: 11526
@@ -398,8 +398,8 @@ modules:
       - -DCMAKE_BUILD_TYPE=Release
     sources:
       - type: archive
-        url: https://github.com/KhronosGroup/glslang/archive/11.10.0.tar.gz
-        sha256: 8ffc19c435232d09299dd2c91e247292b3508c1b826a3497c60682e4bbf2d602
+        url: https://github.com/KhronosGroup/glslang/archive/11.9.0.tar.gz
+        sha256: d5744adba19eef9ad3d73f524226b39fec559d94cb582cd442e3c5de930004b2
         x-checker-data:
           type: anitya
           stable-only: true
@@ -414,8 +414,8 @@ modules:
     builddir: true
     sources:
       - type: archive
-        url: https://github.com/catchorg/Catch2/archive/v3.0.1.tar.gz
-        sha256: 8c4173c68ae7da1b5b505194a0c2d6f1b2aef4ec1e3e7463bde451f26bbaf4e7
+        url: https://github.com/catchorg/Catch2/archive/v2.13.9.tar.gz
+        sha256: 06dbc7620e3b96c2b69d57bf337028bf245a211b3cddb843835bfe258f427a52
         x-checker-data:
           type: anitya
           stable-only: true
@@ -494,8 +494,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/yuzu-emu/yuzu-mainline.git
-        tag: mainline-0-1079
-        commit: 1a4d4f2057abad4fad4d25b2e011fd2ba098a1de
+        tag: mainline-0-1039
+        commit: 983afc5328725109a1cf13c61103b8a553c005d0
         disable-shallow-clone: true
         x-checker-data:
           type: git
