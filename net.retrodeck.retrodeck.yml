@@ -494,8 +494,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/yuzu-emu/yuzu-mainline.git
-        tag: mainline-0-1079
-        commit: 1a4d4f2057abad4fad4d25b2e011fd2ba098a1de
+        tag: mainline-0-1039
+        commit: 983afc5328725109a1cf13c61103b8a553c005d0
         disable-shallow-clone: true
         x-checker-data:
           type: git
