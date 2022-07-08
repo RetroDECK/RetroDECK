@@ -68,4 +68,4 @@ git submodule deinit -f .
 git submodule update --init --recursive
 git add *
 git commit -m "Updated flathub/net.retrodeck.retrodeck from RetroDECK/main"
-git push origin master
+git push origin cooker-$(date +%d%m%y.%H%M)
