@@ -507,6 +507,41 @@ modules:
 
   # Yuzu - END
 
+  # CITRA - START
+
+  - name: citra
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DENABLE_QT_TRANSLATION=ON
+      - -DCITRA_ENABLE_COMPATIBILITY_REPORTING=ON
+      - -DENABLE_COMPATIBILITY_LIST_DOWNLOAD=ON
+      #- '-DENABLE_FFMPEG_VIDEO_DUMPER=ON'
+      # Disabled because of this: https://github.com/citra-emu/citra/issues/5949
+      - -DENABLE_FDK=ON
+    cleanup:
+      - /share/man
+      - /share/pixmaps
+    post-install:
+      - >-
+        install -Dm644 ../dist/citra.svg
+        /app/share/icons/hicolor/scalable/apps/citra.svg
+      - >-
+        install -Dm644 ../dist/icon.png
+        /app/share/icons/hicolor/512x512/apps/citra.png
+    sources:
+      - type: git
+        url: https://github.com/citra-emu/citra-nightly.git
+        tag: nightly-1772
+        commit: 355933218d00603c910cd0a9daead0b1cd72a3c3
+        disable-shallow-clone: true
+        x-checker-data:
+          type: git
+          tag-pattern: ^(nightly-\d+)$
+
+  # CITRA - END
+
   # PCSX2 - START
   # https://github.com/flathub/net.pcsx2.PCSX2
 
@@ -873,41 +908,6 @@ modules:
 
   # MELONDS - END
 
-  # CITRA - START
-  # https://github.com/flathub/org.citra_emu.citra
-
-  - name: citra
-    buildsystem: cmake-ninja
-    builddir: true
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-      - -DENABLE_QT_TRANSLATION=ON
-      - -DCITRA_ENABLE_COMPATIBILITY_REPORTING=ON
-      - -DENABLE_COMPATIBILITY_LIST_DOWNLOAD=ON
-      #- '-DENABLE_FFMPEG_VIDEO_DUMPER=ON'
-      # Disabled because of this: https://github.com/citra-emu/citra/issues/5949
-      - -DENABLE_FDK=ON
-    cleanup:
-      - /share/man
-      - /share/pixmaps
-    post-install:
-      - >-
-        install -Dm644 ../dist/citra.svg
-        /app/share/icons/hicolor/scalable/apps/citra.svg
-      - >-
-        install -Dm644 ../dist/icon.png
-        /app/share/icons/hicolor/512x512/apps/citra.png
-    sources:
-      - type: git
-        url: https://github.com/citra-emu/citra-nightly.git
-        tag: nightly-1772
-        commit: 355933218d00603c910cd0a9daead0b1cd72a3c3
-        disable-shallow-clone: true
-        x-checker-data:
-          type: git
-          tag-pattern: ^(nightly-\d+)$
-
-  # CITRA - END
   # RPCS3 - START
   # https://github.com/flathub/net.rpcs3.RPCS3
 
