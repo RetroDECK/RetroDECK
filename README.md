@@ -33,7 +33,7 @@ No partitioning or formatting is required. RetroDECK (differently from AmberELEC
 No, RetroDECK doesn't support Windows, but the project is fully open source so you can port it if you wish. As an alternative, [Retrobat](http://www.retrobat.ovh/) offers similar functionality (but may not be compatible with RetroDECK's rom paths).
 
 ## How can I install it?
-Just install it from Discover store.
+Just install it from Discover store.<br/>
 However if you want to test the cooker version you can follow the [Installation instructions](https://github.com/XargonWan/RetroDECK/wiki#installation-instructions) on the Wiki
 
 ## Can I help?
