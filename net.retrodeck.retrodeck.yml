@@ -1166,7 +1166,7 @@ modules:
         # RetroArch
       - cp emu-configs/retroarch* ${FLATPAK_DEST}/retrodeck/emu-configs/
         # Dolphin 
-      - cp emu-configs/Dolphin/* ${FLATPAK_DEST}/retrodeck/emu-configs/
+      - cp -r emu-configs/Dolphin ${FLATPAK_DEST}/retrodeck/emu-configs/Dolphin
         # Yuzu
       - cp emu-configs/yuzu-qt-config.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
         # Pcsx2
