@@ -6,6 +6,12 @@ rdhome="$HOME/retrodeck"                   # the retrodeck home, aka ~/retrodecc
 emuconfigs="/app/retrodeck/emu-configs"    # folder with all the default emulator configs
 sdcard="/run/media/mmcblk0p1"              # Steam Deck SD default path
 
+# We moved the lockfile in /var/config/retrodeck in order to solve issue #53 - Remove in a few versions
+if [ -f "$HOME/retrodeck/.lock" ]
+then
+  mv "$HOME/retrodeck/.lock" $lockfile
+fi
+
 # Functions area
 
 dir_prep() {
@@ -156,17 +162,26 @@ post_update() {
     # post update script
     echo "Executing post-update script"
 
-    # We moved the lockfile in /var/config/retrodeck in order to solve issue #53
-    if [ -f "$HOME/retrodeck/.lock" ]
+    # Unhiding downloaded media from the previous versions
+    if [ -d "$rdhome/.downloaded_media" ]
     then
-      mv "$HOME/retrodeck/.lock" $lockfile
+      mv "$rdhome/.downloaded_media" "$rdhome/downloaded_media"
     fi
 
-    # Doing the dir prep as we don't know from which version we came
-    dir_prep "$rdhome/.downloaded_media" "/var/config/emulationstation/.emulationstation/downloaded_media"
-    dir_prep "$rdhome/.themes" "/var/config/emulationstation/.emulationstation/themes"
+    # Unhiding themes folder from the previous versions
+    if [ -d "$rdhome/.themes" ]
+    then
+      mv "$rdhome/.themes" "$rdhome/themes"
+    fi
+
+    # Doing the dir prep as we don't know from which version we came - Remove in a few versions
+    dir_prep "$rdhome/downloaded_media" "/var/config/emulationstation/.emulationstation/downloaded_media"
+    dir_prep "$rdhome/themes" "/var/config/emulationstation/.emulationstation/themes"
     mkdir -pv $rdhome/.logs #this was added later, maybe safe to remove in a few versions
-    cp -fv /app/retrodeck/es_settings.xml /var/config/emulationstation/.emulationstation/es_settings.xml #this is resetting es_systems, now we need it but in the future I should think a better solution
+
+    # Resetting es_systems, now we need it but in the future I should think a better solution, maybe with sed
+    cp -fv /app/retrodeck/es_settings.xml /var/config/emulationstation/.emulationstation/es_settings.xml
+
     ra_init
     standalones_init
     tools_init
@@ -254,8 +269,8 @@ finit() {
     cp -fv /app/retrodeck/es_settings.xml /var/config/emulationstation/.emulationstation/es_settings.xml
 
     # ES-DE preparing themes and scraped folders
-    dir_prep "$rdhome/.downloaded_media" "/var/config/emulationstation/.emulationstation/downloaded_media"
-    dir_prep "$rdhome/.themes" "/var/config/emulationstation/.emulationstation/themes"
+    dir_prep "$rdhome/downloaded_media" "/var/config/emulationstation/.emulationstation/downloaded_media"
+    dir_prep "$rdhome/themes" "/var/config/emulationstation/.emulationstation/themes"
 
     # PICO-8
     dir_prep "$roms_folder/pico8" "$rdhome/bios/pico8/bbs/carts" #this is the folder where pico-8 is saving the carts
