@@ -1,5 +1,7 @@
 #!/bin/bash
 
+branch="cooker-"$(date +%d%m%y.%H%M)
+
 cd ~/gits
 rm -rf flathub
 git clone --recursive https://github.com/flathub/net.retrodeck.retrodeck.git flathub
@@ -12,6 +14,7 @@ git submodule update
 #sync -rav --progress --exclude={'res/screenshots/','shared-modules/','rd-submodules/retroarch','.git/','docs','retrodeck-flatpak/','retrodeck-flatpak-cooker/','.flatpak-builder/'} ~/RetroDECK/ ~/flathub/
 
 cd ~/gits/flathub
+git checkout -b $branch
 git rm -rf *
 git clean -fxd # restroing git index
 
@@ -68,4 +71,4 @@ git submodule deinit -f .
 git submodule update --init --recursive
 git add *
 git commit -m "Updated flathub/net.retrodeck.retrodeck from RetroDECK/main"
-git push origin cooker-$(date +%d%m%y.%H%M)
+git push origin $branch
