@@ -1,6 +1,6 @@
 #!/bin/bash
 
-lockfile="$HOME/retrodeck/.lock"           # where the lockfile is located
+lockfile="/var/config/retrodeck/.lock"      # where the lockfile is located
 version="$(cat /app/retrodeck/version)"    # version info taken from the version file
 rdhome="$HOME/retrodeck"                   # the retrodeck home, aka ~/retrodecck
 emuconfigs="/app/retrodeck/emu-configs"    # folder with all the default emulator configs
@@ -48,26 +48,6 @@ dir_prep() {
 
     echo -e "$symlink is now $real\n"
 }
-
-cfg_init() {
-  # Initializing retrodeck config file
-  #rdconf=/var/config/retrodeck/retrodeck.cfg
-
-  # if I got a config file already I parse it
-  #if []
-
-  #else 
-  #  touch $rdconf
-  #fi
-
-  #$roms_folder > /var/config/retrodeck/retrodeck.cfg
-  return
-}
-
-# is_mounted() {
-#     # This script checks if the provided path in $1 is mounted
-#     mount | awk -v DIR="$1" '{if ($3 == DIR) { exit 0}} ENDFILE{exit -1}'
-# }
 
 tools_init() {
     rm -rfv /var/config/retrodeck/tools/
@@ -176,7 +156,13 @@ post_update() {
     # post update script
     echo "Executing post-update script"
 
-    # Doing the dir prep as we don know from which version we came
+    # We moved the lockfile in /var/config/retrodeck in order to solve issue #53
+    if [ -f "$HOME/retrodeck/.lock" ]
+    then
+      mv "$HOME/retrodeck/.lock" $lockfile
+    fi
+
+    # Doing the dir prep as we don't know from which version we came
     dir_prep "$rdhome/.downloaded_media" "/var/config/emulationstation/.emulationstation/downloaded_media"
     dir_prep "$rdhome/.themes" "/var/config/emulationstation/.emulationstation/themes"
     mkdir -pv $rdhome/.logs #this was added later, maybe safe to remove in a few versions
