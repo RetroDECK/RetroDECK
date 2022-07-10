@@ -1161,24 +1161,8 @@ modules:
 
         # TODO: group the configs per-emu and optimize the following cps, like already done with Dolphin. Please not that some files may be renamed, check retrodeck.sh to know how (and fix it after the edit)
 
-        # Configuring emulators:
-      - mkdir -p ${FLATPAK_DEST}/retrodeck/emu-configs/Dolphin
-        # RetroArch
-      - cp emu-configs/retroarch* ${FLATPAK_DEST}/retrodeck/emu-configs/
-        # Dolphin 
-      - cp -r emu-configs/Dolphin ${FLATPAK_DEST}/retrodeck/emu-configs/Dolphin
-        # Yuzu
-      - cp emu-configs/yuzu-qt-config.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
-        # Pcsx2
-      - cp emu-configs/PCSX2_ui.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
-      - cp emu-configs/GS.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
-      - cp emu-configs/PCSX2_vm.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
-        # MelonDS
-      - cp emu-configs/melonDS.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
-        # CITRA
-      - cp emu-configs/citra-qt-config.ini ${FLATPAK_DEST}/retrodeck/emu-configs/
-        # RPCS3
-      - cp emu-configs/config.yml ${FLATPAK_DEST}/retrodeck/emu-configs/
+        # Initializing default emulator configs
+      - cp -r emu-configs ${FLATPAK_DEST}/retrodeck/emu-configs/
 
         # Overlays
         #- cp -r overlays ${FLATPAK_DEST}/retrodeck/overlays Disabled in 0.4.2b as it will be introduced in 0.5.0b
