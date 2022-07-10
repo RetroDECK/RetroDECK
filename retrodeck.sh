@@ -98,7 +98,7 @@ standalones_init() {
     dir_prep "$rdhome/bios/switch/registered" "/var/data/yuzu/nand/system/Contents/registered"
     # configuring Yuzu
     mkdir -pv /var/config/yuzu/
-    cp -fvr $emuconfigs/yuzu-qt-config.ini /var/config/yuzu/qt-config.ini
+    cp -fvr $emuconfigs/yuzu/* /var/config/yuzu/
     sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/yuzu/qt-config.ini
     dir_prep "$rdhome/screenshots" "/var/data/yuzu/screenshots"
 
@@ -107,7 +107,7 @@ standalones_init() {
     echo "Initializing DOLPHIN"
     echo "----------------------"
     mkdir -pv /var/config/dolphin-emu/
-    cp -fvr "$emuconfigs/Dolphin/"* /var/config/dolphin-emu/
+    cp -fvr "$emuconfigs/dolphin/"* /var/config/dolphin-emu/
     dir_prep "$rdhome/saves" "/var/data/dolphin-emu/GBA/Saves"
     dir_prep "$rdhome/saves" "/var/data/dolphin-emu/Wii"
 
