@@ -165,13 +165,13 @@ post_update() {
     # Unhiding downloaded media from the previous versions
     if [ -d "$rdhome/.downloaded_media" ]
     then
-      mv "$rdhome/.downloaded_media" "$rdhome/downloaded_media"
+      mv -fv "$rdhome/.downloaded_media" "$rdhome/downloaded_media"
     fi
 
     # Unhiding themes folder from the previous versions
     if [ -d "$rdhome/.themes" ]
     then
-      mv "$rdhome/.themes" "$rdhome/themes"
+      mv -fv "$rdhome/.themes" "$rdhome/themes"
     fi
 
     # Doing the dir prep as we don't know from which version we came - Remove in a few versions
