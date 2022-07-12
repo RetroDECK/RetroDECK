@@ -65,6 +65,11 @@
           <li>Fixed right control stick</li>
         </ul>
 
+        <b>PCSX2:</b>
+        <ul>
+          <li>Symlinked bios/pcsx folder in /bios to solve issue#63</li>
+        </ul>
+
         <b>Backend:</b>
         <ul>
           <li>Uploaded a test Steam Controller config, you can download it from community controller configs on Steam</li>
