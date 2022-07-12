@@ -68,7 +68,7 @@ modules:
   # UPDATE STEPS FOR MAIN:
   # [ ] Update the VERSION variable
   # [ ] Update the appdata.xml with the version number and notes
-  # [X] change branch into main in retrodeck module (last one)
+  # [ ] change branch into main in retrodeck module (last one)
   #
   - name: version-initialization
     buildsystem: simple
@@ -1174,4 +1174,4 @@ modules:
     sources:
       - type: git
         url: https://github.com/XargonWan/RetroDECK.git
-        branch: main
+        branch: cooker-0.4.4b
