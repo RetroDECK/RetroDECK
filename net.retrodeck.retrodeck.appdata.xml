@@ -55,6 +55,7 @@
     <release version="0.4.4b" date="2022-07-12">
       <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.4.4b</url>
       <description>
+      <p>
         <b>Yuzu:</b>
         <ul>
           <li>Disabled shader caching as it was broken</li>
@@ -87,6 +88,7 @@
         <p><b>IMPORTANT NOTE:</b>
         At the moment the emulator configs are reset during every update, this was made because every version they may bring new configurations, please back them up if you did some manual configs.
         </p>
+      <p>
       </description>
   </release>
 
