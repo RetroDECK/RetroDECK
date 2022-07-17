@@ -52,43 +52,33 @@
   <metadata_license>CC0-1.0</metadata_license>
   <releases>
 
-    <release version="0.4.4b" date="2022-07-12">
+    <release version="0.4.4b" date="2022-07-17">
       <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.4.4b</url>
       <description>
-      <p>
-        <b>Yuzu:</b>
-        <ul>
-          <li>Disabled shader caching as it was broken</li>
-          <li>Switched from vulkan to opengl as vulkan is experimental and it's not working correctly for the games majority, you can set vulkan by opening tuzu from Tools -> Start Yuzu</li>
-          <li>Edited Hotkeys (see wiki)</li>
-          <li>Increased performances</li>
-          <li>Fixed graphics and scaling</li>
-          <li>Fixed right control stick</li>
+
+        Changelog:
+         <ul>
+          <li>Yuzu: Disabled shader caching as it was broken</li>
+          <li>Yuzu: Switched from vulkan to opengl as vulkan is experimental and it's not working correctly for the games majority, you can set vulkan by opening tuzu from Tools -> Start Yuzu</li>
+          <li>Yuzu: Edited Hotkeys (see wiki)</li>
+          <li>Yuzu: Increased performances</li>
+          <li>Yuzu: Fixed graphics and scaling</li>
+          <li>Yuzu: Fixed right control stick</li>
+          <li>PCSX2: Symlinked bios/pcsx folder in /bios to solve issue#63</li>
+          <li>Backend: Uploaded a test Steam Controller config, you can download it from community controller configs on Steam</li>
+          <li>Backend: Unhidden .themes and .downloaded_media folders</li>
+          <li>Backend: Moved the lockfile in the internal folders</li>
+          <li>Backend: General code cleanup.</li>
         </ul>
 
-        <b>PCSX2:</b>
-        <ul>
-          <li>Symlinked bios/pcsx folder in /bios to solve issue#63</li>
-        </ul>
-
-        <b>Backend:</b>
-        <ul>
-          <li>Uploaded a test Steam Controller config, you can download it from community controller configs on Steam</li>
-          <li>Unhidden .themes and .downloaded_media folders</li>
-          <li>Moved the lockfile in the internal folders</li>
-          <li>General code cleanup.</li>
-        </ul>
-
-        <b>Known Issues:</b>
+        Known Issues:
         <ul>
           <li>PCSX2: due to its limitation, the standalone PCSX2 doesn't have any way to set the hotkeys, so no save and load state, no quit button. In order to quit press: STEAM -> PCSX2 -> (X) CLOSE WINDOW, be aware that the state is not automatically saved</li>
           <li>Due to a Steam limitation, external controllers and keyboard seems not to be working, expecially in the desktop mode</li>
         </ul>
 
-        <p><b>IMPORTANT NOTE:</b>
+        IMPORTANT NOTE:
         At the moment the emulator configs are reset during every update, this was made because every version they may bring new configurations, please back them up if you did some manual configs.
-        </p>
-      </p>
       </description>
   </release>
 
