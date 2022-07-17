@@ -1,6 +1,6 @@
 #!/bin/bash
 
-branch="cooker-"$(date +%d%m%y.%H%M)
+branch="main-"$(date +%d%m%y.%H%M)
 
 cd ~/gits
 rm -rf flathub
