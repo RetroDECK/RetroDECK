@@ -1,10 +1,16 @@
 #!/bin/bash
 
-lockfile="$HOME/retrodeck/.lock"           # where the lockfile is located
+lockfile="/var/config/retrodeck/.lock"      # where the lockfile is located
 version="$(cat /app/retrodeck/version)"    # version info taken from the version file
 rdhome="$HOME/retrodeck"                   # the retrodeck home, aka ~/retrodecck
 emuconfigs="/app/retrodeck/emu-configs"    # folder with all the default emulator configs
 sdcard="/run/media/mmcblk0p1"              # Steam Deck SD default path
+
+# We moved the lockfile in /var/config/retrodeck in order to solve issue #53 - Remove in a few versions
+if [ -f "$HOME/retrodeck/.lock" ]
+then
+  mv "$HOME/retrodeck/.lock" $lockfile
+fi
 
 # Functions area
 
@@ -49,26 +55,6 @@ dir_prep() {
     echo -e "$symlink is now $real\n"
 }
 
-cfg_init() {
-  # Initializing retrodeck config file
-  #rdconf=/var/config/retrodeck/retrodeck.cfg
-
-  # if I got a config file already I parse it
-  #if []
-
-  #else 
-  #  touch $rdconf
-  #fi
-
-  #$roms_folder > /var/config/retrodeck/retrodeck.cfg
-  return
-}
-
-# is_mounted() {
-#     # This script checks if the provided path in $1 is mounted
-#     mount | awk -v DIR="$1" '{if ($3 == DIR) { exit 0}} ENDFILE{exit -1}'
-# }
-
 tools_init() {
     rm -rfv /var/config/retrodeck/tools/
     mkdir -pv /var/config/retrodeck/tools/
@@ -98,7 +84,7 @@ standalones_init() {
     dir_prep "$rdhome/bios/switch/registered" "/var/data/yuzu/nand/system/Contents/registered"
     # configuring Yuzu
     mkdir -pv /var/config/yuzu/
-    cp -fvr $emuconfigs/yuzu-qt-config.ini /var/config/yuzu/qt-config.ini
+    cp -fvr $emuconfigs/yuzu/* /var/config/yuzu/
     sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/yuzu/qt-config.ini
     dir_prep "$rdhome/screenshots" "/var/data/yuzu/screenshots"
 
@@ -107,7 +93,7 @@ standalones_init() {
     echo "Initializing DOLPHIN"
     echo "----------------------"
     mkdir -pv /var/config/dolphin-emu/
-    cp -fvr "$emuconfigs/Dolphin/"* /var/config/dolphin-emu/
+    cp -fvr "$emuconfigs/dolphin/"* /var/config/dolphin-emu/
     dir_prep "$rdhome/saves" "/var/data/dolphin-emu/GBA/Saves"
     dir_prep "$rdhome/saves" "/var/data/dolphin-emu/Wii"
 
@@ -123,6 +109,7 @@ standalones_init() {
     dir_prep "$rdhome/states" "/var/config/PCSX2/sstates"
     dir_prep "$rdhome/screenshots" "/var/config/PCSX2/snaps"
     dir_prep "$rdhome/.logs" "/var/config/PCSX2/logs"
+    dir_prep "$rdhome/bios" "$rdhome/bios/pcsx2/bios"
 
     # MelonDS
     echo "----------------------"
@@ -176,11 +163,26 @@ post_update() {
     # post update script
     echo "Executing post-update script"
 
-    # Doing the dir prep as we don know from which version we came
-    dir_prep "$rdhome/.downloaded_media" "/var/config/emulationstation/.emulationstation/downloaded_media"
-    dir_prep "$rdhome/.themes" "/var/config/emulationstation/.emulationstation/themes"
+    # Unhiding downloaded media from the previous versions
+    if [ -d "$rdhome/.downloaded_media" ]
+    then
+      mv -fv "$rdhome/.downloaded_media" "$rdhome/downloaded_media"
+    fi
+
+    # Unhiding themes folder from the previous versions
+    if [ -d "$rdhome/.themes" ]
+    then
+      mv -fv "$rdhome/.themes" "$rdhome/themes"
+    fi
+
+    # Doing the dir prep as we don't know from which version we came - Remove in a few versions
+    dir_prep "$rdhome/downloaded_media" "/var/config/emulationstation/.emulationstation/downloaded_media"
+    dir_prep "$rdhome/themes" "/var/config/emulationstation/.emulationstation/themes"
     mkdir -pv $rdhome/.logs #this was added later, maybe safe to remove in a few versions
-    cp -fv /app/retrodeck/es_settings.xml /var/config/emulationstation/.emulationstation/es_settings.xml #this is resetting es_systems, now we need it but in the future I should think a better solution
+
+    # Resetting es_systems, now we need it but in the future I should think a better solution, maybe with sed
+    cp -fv /app/retrodeck/es_settings.xml /var/config/emulationstation/.emulationstation/es_settings.xml
+
     ra_init
     standalones_init
     tools_init
@@ -268,8 +270,8 @@ finit() {
     cp -fv /app/retrodeck/es_settings.xml /var/config/emulationstation/.emulationstation/es_settings.xml
 
     # ES-DE preparing themes and scraped folders
-    dir_prep "$rdhome/.downloaded_media" "/var/config/emulationstation/.emulationstation/downloaded_media"
-    dir_prep "$rdhome/.themes" "/var/config/emulationstation/.emulationstation/themes"
+    dir_prep "$rdhome/downloaded_media" "/var/config/emulationstation/.emulationstation/downloaded_media"
+    dir_prep "$rdhome/themes" "/var/config/emulationstation/.emulationstation/themes"
 
     # PICO-8
     dir_prep "$roms_folder/pico8" "$rdhome/bios/pico8/bbs/carts" #this is the folder where pico-8 is saving the carts
