@@ -79,7 +79,9 @@ modules:
         VERSION="0.5.0b-cooker"
         if [[ $VERSION == *"cooker"* ]];
         then
-          VERSION=$(git describe --tags | tr - .)
+        # Disabled until I figure it out
+        #  VERSION=$(git describe --tags | tr - .)
+          VERSION="cooker-"$(date +%d%m%y.%H%M)
         fi
         echo $VERSION >> ${FLATPAK_DEST}/retrodeck/version
         cat ${FLATPAK_DEST}/retrodeck/version
@@ -218,7 +220,7 @@ modules:
     sources:
       - type: git
         url:  https://github.com/anthonycaccese/art-book-next-retropie.git
-        commit: 9c5312084bb4b906da5b610fd50bab2afe697cac
+        commit: 53ef4aa8a23ebac7c2c473d32b189d58533429ec
 
 
   # External manifests start
@@ -1065,7 +1067,6 @@ modules:
         url: https://github.com/hrydgard/ppsspp.git
         tag: v1.12.3
         commit: ce0a45cf0fcdd5bebf32208b9998f68dfc1107b7
-        disable-submodules: true # Part of the PPSSPP Flathub Workaround
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+)$
@@ -1073,6 +1074,7 @@ modules:
   # PPSSPP Flathub Workaround - START
   # This workaround disables the PPSSPP libraries (disable-submodules: true) and install them separately
   # This is only to make it buildable by the flathub builder as normaly it seems not to be needed
+        disable-submodules: true
       - type: git
         dest: SDL/macOS
         commit: f19a1d54b8a5af6cc378ea307e0ec676922eb4cc
@@ -1152,10 +1154,13 @@ modules:
       - mkdir -p ${FLATPAK_DEST}/retrodeck/tools/
       - cp tools/* ${FLATPAK_DEST}/retrodeck/tools/
       - mv -f es-configs/tools-gamelist.xml ${FLATPAK_DEST}/retrodeck/
-
+        
       - cp retrodeck.sh /app/bin/retrodeck.sh
       - chmod +x /app/bin/retrodeck.sh
 
+      - cp global.sh /app/bin/global.sh
+      - chmod +x /app/bin/global.sh
+        
         # Desktop entry
       - cp net.retrodeck.retrodeck.desktop /app/share/applications/net.retrodeck.retrodeck.desktop
 
