@@ -38,7 +38,7 @@
 	No other software is needed as everything it's already included!</p>
   <p>
   NOTE: Albeit RetroDECK could possibily work on every distro, it's supported only on Steam Deck.</p>
-  <p><b>INSTALLATION INSTRUCTIONS:</b></p>
+  <p>INSTALLATION INSTRUCTIONS:</p>
   <ul>
     <li>Start RetroDECK from the Desktop mode (first time only)</li>
     <li>Follow the setup (read carefully!)</li>
@@ -52,11 +52,9 @@
   <metadata_license>CC0-1.0</metadata_license>
   <releases>
 
-    <release version="0.4.4b" date="2022-07-17">
+    <release version="0.4.4b" date="2022-07-18">
       <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.4.4b</url>
       <description>
-
-        <p>Changelog:</p>
          <ul>
           <li>Yuzu: Disabled shader caching as it was broken</li>
           <li>Yuzu: Switched from vulkan to opengl as vulkan is experimental and it's not working correctly for the games majority, you can set vulkan by opening tuzu from Tools -> Start Yuzu</li>
