@@ -215,13 +215,22 @@ modules:
   - name: art-book-next
     buildsystem: simple
     build-commands:
-      - mkdir -p ${FLATPAK_DEST}/share/emulationstation/themes/art-book-next-de/
-      - mv -f * ${FLATPAK_DEST}/share/emulationstation/themes/art-book-next-de/
+      - mkdir -p ${FLATPAK_DEST}/share/emulationstation/themes/art-book-next/
+      - mv -f * ${FLATPAK_DEST}/share/emulationstation/themes/art-book-next/
     sources:
       - type: git
         url:  https://github.com/anthonycaccese/art-book-next-retropie.git
-        commit: 53ef4aa8a23ebac7c2c473d32b189d58533429ec
+        commit: 6197b224b330deee5e78f9c9d9383472fd226544
 
+  - name: art-book-next-no-meta
+    buildsystem: simple
+    build-commands:
+      - mkdir -p ${FLATPAK_DEST}/share/emulationstation/themes/art-book-next-no-meta/
+      - mv -f * ${FLATPAK_DEST}/share/emulationstation/themes/art-book-next-no-meta/
+    sources:
+      - type: git
+        url:  https://github.com/anthonycaccese/art-book-next-retropie.git
+        commit: eefefb1b9f60c8b2892c5e7b1e487669974672d1
 
   # External manifests start
 
