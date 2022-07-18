@@ -14,19 +14,19 @@
   <content_rating type="oars-1.0" />
   <screenshots>
     <screenshot type="default">
-      <image type="source" width="1440" height="792">https://github.com/XargonWan/RetroDECK/blob/main/res/logo.png?raw=true</image>
+      <image>https://github.com/XargonWan/RetroDECK/blob/main/res/logo.png?raw=true</image>
     </screenshot>
     <screenshot>
-      <image type="source" width="1440" height="792">https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen02.png?raw=true</image>
+      <image>https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen02.png?raw=true</image>
     </screenshot>
     <screenshot>
-      <image type="source" width="768" height="672">https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen03.png?raw=true</image>
+      <image>https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen03.png?raw=true</image>
     </screenshot>
     <screenshot>
-      <image type="source" width="768" height="575">https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen04.png?raw=true</image>
+      <image>https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen04.png?raw=true</image>
     </screenshot>
     <screenshot>
-      <image type="source" width="768" height="480">https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen05.png?raw=true</image>
+      <image>https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen05.png?raw=true</image>
     </screenshot>
   </screenshots>
   <description>
@@ -36,10 +36,126 @@
 	<p>
 	Powered by EmulationStation Desktop Edition, which uses RetroArch and other standalone emulators to allow you to import and play your favorite retro (and even not-so-retro) games in a tidy environment without flooding your Steam library.
 	No other software is needed as everything it's already included!</p>
+  <p>
+  NOTE: Albeit RetroDECK could possibily work on every distro, it's supported only on Steam Deck.</p>
+  <p>INSTALLATION INSTRUCTIONS:</p>
+  <ul>
+    <li>Start RetroDECK from the Desktop mode (first time only)</li>
+    <li>Follow the setup (read carefully!)</li>
+    <li>Add RetroDECK to your Steam Library</li>
+    <li>[OPTIONAL] Download Steam Grids with BoilR</li>
+    <li>Always start RetroDECK from Steam Library</li>
+  </ul>
+  <p>For a better experience is suggested to use the official Steam Controller Config available under community configs in Steam</p>
   </description>
   <project_license>GPL-3.0</project_license>
   <metadata_license>CC0-1.0</metadata_license>
   <releases>
+
+    <release version="0.5.0b" date="2022-07-18">
+      <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.5.5b</url>
+      <description>
+         <ul>
+          <li>New Theme!</li>
+          <li>Updated RetroArch and its cores from 1.10.2 to 1.10.3</li>
+          <li>Added a tool to clean up the scraped data in order to make it compatible with the new Art-Book, it's suggested to run it</li>
+        </ul>
+
+        <p>Known Issues:</p>
+        <ul>
+          <li>PCSX2: due to its limitation, the standalone PCSX2 doesn't have any way to set the hotkeys, so no save and load state, no quit button. In order to quit press: STEAM -> PCSX2 -> (X) CLOSE WINDOW, be aware that the state is not automatically saved</li>
+          <li>Due to a Steam limitation, external controllers and keyboard seems not to be working, expecially in the desktop mode</li>
+        </ul>
+
+        IMPORTANT NOTE:
+        At the moment the emulator configs are reset during every update, this was made because every version they may bring new configurations, please back them up if you did some manual configs.
+      </description>
+  </release>
+
+  <release version="0.4.4b" date="2022-07-18">
+      <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.4.4b</url>
+      <description>
+         <ul>
+          <li>Yuzu: Disabled shader caching as it was broken</li>
+          <li>Yuzu: Switched from vulkan to opengl as vulkan is experimental and it's not working correctly for the games majority, you can set vulkan by opening tuzu from Tools -> Start Yuzu</li>
+          <li>Yuzu: Edited Hotkeys (see wiki)</li>
+          <li>Yuzu: Increased performances</li>
+          <li>Yuzu: Fixed graphics and scaling</li>
+          <li>Yuzu: Fixed right control stick</li>
+          <li>PCSX2: Symlinked bios/pcsx folder in /bios to solve issue#63</li>
+          <li>Backend: Uploaded a test Steam Controller config, you can download it from community controller configs on Steam</li>
+          <li>Backend: Unhidden .themes and .downloaded_media folders</li>
+          <li>Backend: Moved the lockfile in the internal folders</li>
+          <li>Backend: General code cleanup.</li>
+        </ul>
+
+        <p>Known Issues:</p>
+        <ul>
+          <li>PCSX2: due to its limitation, the standalone PCSX2 doesn't have any way to set the hotkeys, so no save and load state, no quit button. In order to quit press: STEAM -> PCSX2 -> (X) CLOSE WINDOW, be aware that the state is not automatically saved</li>
+          <li>Due to a Steam limitation, external controllers and keyboard seems not to be working, expecially in the desktop mode</li>
+        </ul>
+
+        IMPORTANT NOTE:
+        At the moment the emulator configs are reset during every update, this was made because every version they may bring new configurations, please back them up if you did some manual configs.
+      </description>
+  </release>
+
+  <release version="0.4.3b" date="2022-07-07">
+      <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.4.3b</url>
+      <description>
+        <p><b>Emulators:</b></p>
+        <ul>
+          <li>Updated all the emulators at the latest available version.</li>
+        </ul>
+
+        <p><b>Backend:</b></p>
+        <ul>
+          <li>Manifest code cleanup.</li>
+        </ul>
+
+        <p><b>Known Issues:</b></p>
+        <ul>
+          <li>PCSX2: due to its limitation, the standalone PCSX2 doesn't have any way to set the hotkeys, so no save and load state, no quit button. In order to quit press: STEAM -> PCSX2 -> (X) CLOSE WINDOW, be aware that the state is not automatically saved</li>
+          <li>Due to a Steam limitation, external controllers and keyboard seems not to be working, expecially in the desktop mode</li>
+        </ul>
+
+        <p><b>IMPORTANT NOTE:</b>
+        At the moment the emulator configs are reset during every update, this was made because every version they may bring new configurations, please back them up if you did some manual configs.
+        </p>
+      </description>
+  </release>
+
+  <release version="0.4.2b" date="2022-05-11">
+      <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.4.2b</url>
+      <description>
+        <p><b>Emulators:</b></p>
+        <ul>
+          <li>Updated all the emulators at the latest available version.</li>
+          <li>DOLPHIN (SA): Fixed a bug where Dolphin couldn't be properly configured. If it's still misconfigured please run `flatpak run net.retrodeck.retrodeck --reset-sa` in order to reset all the standalone emulators, including Dolphin. </li>
+          <li>CITRA (SA): Reconfigured controls and hotkeys. </li>
+          <li>MELONDS (SA): Reconfigured controls. </li>
+          <li>GAMBATTE (LIBRETRO): Added GB colorization. </li>
+          <li>RETROARCH (LIBRETRO): Tweaked some configs and fixed some overlapping hotkeys (FPS was same as Show Menu action). </li>
+        </ul>
+
+        <p><b>Backend:</b></p>
+        <ul>
+          <li>Removed some broken tools that will be reintroduced once fixed, including the roms moving tool. </li>
+          <li>Updated ES-DE configs (es_find_rules, es_settings, es_systems). </li>
+          <li>Manifest trimmend and general code cleanup. </li>
+        </ul>
+
+        <p><b>Known Issues:</b></p>
+        <ul>
+          <li>PCSX2: due to its limitation, the standalone PCSX2 doesn't have any way to set the hotkeys, so no save and load state, no quit button. In order to quit press: STEAM -> PCSX2 -> (X) CLOSE WINDOW, be aware that the state is not automatically saved</li>
+          <li>Due to a Steam limitation, external controllers and keyboard seems not to be working, expecially in the desktop mode</li>
+        </ul>
+
+        <p><b>IMPORTANT NOTE:</b>
+        At the moment the emulator configs are reset during every update, this was made because every version they may bring new configurations, please back them up if you did some manual configs.
+        </p>
+      </description>
+  </release>
 
   <release version="0.4.1b" date="2022-05-11">
       <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.4.1b</url>
@@ -175,7 +291,7 @@
 		<li>Tweaked RetroArch configs</li>
 		<li>Added tool for relocating ROMs location from/to internal to/from external</li>
 		<li>Added PCSX2 and Yuzu emulators (but not yet integrated in ES-DE)</li>
-		<li>Created cooker channel, more info in Discord and on https://github.com/XargonWan/RetroDECK-cooker</li>
+		<li>Created cooker channel, more info in Discord and on RetroDECK-cooker on GitHub</li>
 		<li>Cooker will auto build when a change is pushed/PRed</li>
 		<li>Same as above with main</li>
         </ul>
