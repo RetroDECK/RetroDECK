@@ -56,9 +56,10 @@
       <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.5.5b</url>
       <description>
          <ul>
-          <li>New Theme!</li>
+          <li>Theme revamp!</li>
           <li>Updated RetroArch and its cores from 1.10.2 to 1.10.3</li>
           <li>Added a tool to clean up the scraped data in order to make it compatible with the new Art-Book, it's suggested to run it</li>
+          <li>New varialbes system: now some variables such as game folder location are saved in /app/retrodeck/retrodeck.cfg.</li>
         </ul>
 
         <p>Known Issues:</p>
@@ -123,9 +124,9 @@
         At the moment the emulator configs are reset during every update, this was made because every version they may bring new configurations, please back them up if you did some manual configs.
         </p>
       </description>
-  </release>
+    </release>
 
-  <release version="0.4.2b" date="2022-05-11">
+    <release version="0.4.2b" date="2022-07-01">
       <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.4.2b</url>
       <description>
         <p><b>Emulators:</b></p>
