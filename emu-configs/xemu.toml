@@ -25,6 +25,6 @@ mem_limit = '128'
 [sys.files]
 bootrom_path = '/home/deck/retrodeck/bios/mcpx_1.0.bin'
 flashrom_path = '/home/deck/retrodeck/bios/Complex.bin'
-eeprom_path = '/home/deck/retrodeck/saves/xemu/eeprom.bin'
-hdd_path = '/home/deck/retrodeck/bios/xbox_harddisk.qcow2'
+eeprom_path = '/home/deck/retrodeck/saves/xbox-eeprom.bin'
+hdd_path = '/home/deck/retrodeck/bios/xbox_hdd.qcow2'
 
