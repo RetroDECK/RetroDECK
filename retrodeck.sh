@@ -144,6 +144,14 @@ standalones_init() {
     mkdir -pv /var/config/rpcs3/
     cp -fvr $emuconfigs/config.yml /var/config/rpcs3/
 
+    # XEMU
+    echo "----------------------"
+    echo "Initializing XEMU"
+    echo "----------------------"
+    mkdir -pv $rdhome/saves/xemu
+    cp -fv $emuconfigs/xemu.toml /var/data/xemu/xemu.toml
+    sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/data/xemu/xemu.toml
+
     # PICO-8
     # Moved PICO-8 stuff in the finit as only it knows here roms folders is
 

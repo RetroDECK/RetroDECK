@@ -19,6 +19,7 @@ emulator="$(zenity --list \
 "PCSX2" \
 "PPSSPP" \
 "RPCS3" \
+"XEMU" \
 "Yuzu")"
 
 if [ $emulator == "RetroArch" ]
@@ -45,4 +46,7 @@ then
 elif [ $emulator == "Yuzu" ]
 then
     yuzu
+elif [ $emulator == "XEMU" ]
+then
+    xemu
 fi
