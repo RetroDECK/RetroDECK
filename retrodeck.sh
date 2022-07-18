@@ -151,10 +151,13 @@ standalones_init() {
     mkdir -pv $rdhome/saves/xemu
     cp -fv $emuconfigs/xemu.toml /var/data/xemu/xemu.toml
     sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/data/xemu/xemu.toml
-    # Preparing HD dummy Image
-    wget "https://github.com/mborgerson/xemu-hdd-image/releases/latest/download/xbox_hdd.qcow2.zip" -P $rdhome/bios/
-    unzip $rdhome/bios/xbox_hdd.qcow2.zip $rdhome/bios/
-    rm -rfv $rdhome/bios/xbox_hdd.qcow2.zip
+    # Preparing HD dummy Image if the image is not found
+    if [ ! -f $rdhome/bios/xbox_hdd.qcow2 ]
+    then
+      wget "https://github.com/mborgerson/xemu-hdd-image/releases/latest/download/xbox_hdd.qcow2.zip" -P $rdhome/bios/
+      unzip $rdhome/bios/xbox_hdd.qcow2.zip $rdhome/bios/
+      rm -rfv $rdhome/bios/xbox_hdd.qcow2.zip
+    fi
 
     # PICO-8
     # Moved PICO-8 stuff in the finit as only it knows here roms folders is
