@@ -41,7 +41,7 @@ dir_prep() {
     # creating the symlink
     echo "linking $real in $symlink" #DEBUG
     mkdir -pv "$(dirname "$symlink")" # creating the full path except the last folder
-    ln -sv "$real" "$symlink"
+    ln -svf "$real" "$symlink"
 
     # moving everything from the old folder to the new one, delete the old one
     if [ -d "$symlink.old" ];
