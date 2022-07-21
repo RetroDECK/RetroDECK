@@ -167,6 +167,7 @@ standalones_init() {
     cp -fv $emuconfigs/ppssppsdl/* /var/config/ppsspp/PSP/SYSTEM/
     sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/ppsspp/PSP/SYSTEM/ppsspp.ini
 
+
     # PICO-8
     # Moved PICO-8 stuff in the finit as only it knows here roms folders is
 
@@ -176,8 +177,8 @@ ra_init() {
     dir_prep "$rdhome/bios" "/var/config/retroarch/system"
     mkdir -pv /var/config/retroarch/cores/
     cp /app/share/libretro/cores/* /var/config/retroarch/cores/
-    cp -f $emuconfigs/retroarch.cfg /var/config/retroarch/
-    cp -f $emuconfigs/retroarch-core-options.cfg /var/config/retroarch/
+    cp -fv $emuconfigs/retroarch.cfg /var/config/retroarch/
+    cp -fv $emuconfigs/retroarch-core-options.cfg /var/config/retroarch/
     #rm -rf $rdhome/bios/bios # in some situations a double bios symlink is created
     sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/retroarch/retroarch.cfg
 
@@ -187,15 +188,26 @@ ra_init() {
     echo "--------------------------------"
     if [ -d $rdhome/bios/PPSSPP/flash0/font ]
     then
-      mv -f $rdhome/bios/PPSSPP/flash0/font $rdhome/bios/PPSSPP/flash0/font.bak
+      mv -fv $rdhome/bios/PPSSPP/flash0/font $rdhome/bios/PPSSPP/flash0/font.bak
     fi
+    mkdir -p $rdhome/bios/PPSSPP
     wget "https://github.com/hrydgard/ppsspp/archive/refs/heads/master.zip" -P $rdhome/bios/PPSSPP
     unzip "$rdhome/bios/PPSSPP/master.zip" $rdhome/bios/PPSSPP/
-    rm -f "$rdhome/bios/PPSSPP/master.zip"
+    rm -fv "$rdhome/bios/PPSSPP/master.zip"
     if [ -d $rdhome/bios/PPSSPP/flash0/font.bak ]
     then
-      mv -f $rdhome/bios/PPSSPP/flash0/font.bak $rdhome/bios/PPSSPP/flash0/font
+      mv -fv $rdhome/bios/PPSSPP/flash0/font.bak $rdhome/bios/PPSSPP/flash0/font
     fi
+
+    # MSX / SVI / ColecoVision / SG-1000
+    echo "-----------------------------------------------------------"
+    echo "Initializing MSX / SVI / ColecoVision / SG-1000 LIBRETRO"
+    echo "-----------------------------------------------------------"
+    wget "http://bluemsx.msxblue.com/rel_download/blueMSXv282full.zip" -P $rdhome/bios/MSX
+    unzip "$rdhome/bios/MSX/blueMSXv282full.zip" $rdhome/bios/MSX
+    mv -rfv $rdhome/bios/MSX/Databases $rdhome/bios/Databases
+    mv -rfv $rdhome/bios/MSX/Machines $rdhome/bios/Machines
+    rm -rfv $rdhome/bios/MSX
 
 }
 
