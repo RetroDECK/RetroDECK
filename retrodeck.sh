@@ -127,9 +127,9 @@ standalones_init() {
     sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/melonDS/melonDS.ini
 
     # CITRA
-    echo "----------------------"
+    echo "------------------------"
     echo "Initializing CITRA"
-    echo "----------------------"
+    echo "------------------------"
     mkdir -pv /var/config/citra-emu/
     cp -fv $emuconfigs/citra-qt-config.ini /var/config/citra-emu/qt-config.ini
     sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
@@ -138,16 +138,16 @@ standalones_init() {
     #sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
 
     # RPCS3
-    echo "----------------------"
+    echo "------------------------"
     echo "Initializing RPCS3"
-    echo "----------------------"
+    echo "------------------------"
     mkdir -pv /var/config/rpcs3/
     cp -fvr $emuconfigs/config.yml /var/config/rpcs3/
 
     # XEMU
-    echo "----------------------"
+    echo "------------------------"
     echo "Initializing XEMU"
-    echo "----------------------"
+    echo "------------------------"
     mkdir -pv $rdhome/saves/xemu
     cp -fv $emuconfigs/xemu.toml /var/data/xemu/xemu.toml
     sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/data/xemu/xemu.toml
@@ -158,6 +158,14 @@ standalones_init() {
       unzip $rdhome/bios/xbox_hdd.qcow2.zip $rdhome/bios/
       rm -rfv $rdhome/bios/xbox_hdd.qcow2.zip
     fi
+
+    # PPSSPPSDL
+    echo "------------------------"
+    echo "Initializing PPSSPPSDL"
+    echo "------------------------"
+    mkdir -p /var/config/ppsspp/PSP/SYSTEM/
+    cp -fv $emuconfigs/ppssppsdl/* /var/config/ppsspp/PSP/SYSTEM/
+    sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/ppsspp/PSP/SYSTEM/ppsspp.ini
 
     # PICO-8
     # Moved PICO-8 stuff in the finit as only it knows here roms folders is
@@ -172,6 +180,23 @@ ra_init() {
     cp -f $emuconfigs/retroarch-core-options.cfg /var/config/retroarch/
     #rm -rf $rdhome/bios/bios # in some situations a double bios symlink is created
     sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/retroarch/retroarch.cfg
+
+    # PPSSPP
+    echo "--------------------------------"
+    echo "Initializing PPSSPP_LIBRETRO"
+    echo "--------------------------------"
+    if [ -d $rdhome/bios/PPSSPP/flash0/font ]
+    then
+      mv -f $rdhome/bios/PPSSPP/flash0/font $rdhome/bios/PPSSPP/flash0/font.bak
+    fi
+    wget "https://github.com/hrydgard/ppsspp/archive/refs/heads/master.zip" -P $rdhome/bios/PPSSPP
+    unzip "$rdhome/bios/PPSSPP/master.zip" $rdhome/bios/PPSSPP/
+    rm -f "$rdhome/bios/PPSSPP/master.zip"
+    if [ -d $rdhome/bios/PPSSPP/flash0/font.bak ]
+    then
+      mv -f $rdhome/bios/PPSSPP/flash0/font.bak $rdhome/bios/PPSSPP/flash0/font
+    fi
+
 }
 
 create_lock() {
