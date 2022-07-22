@@ -1,10 +1,15 @@
 #!/bin/bash
 
-lockfile="/var/config/retrodeck/.lock"      # where the lockfile is located
-version="$(cat /app/retrodeck/version)"    # version info taken from the version file
-rdhome="$HOME/retrodeck"                   # the retrodeck home, aka ~/retrodecck
-emuconfigs="/app/retrodeck/emu-configs"    # folder with all the default emulator configs
-sdcard="/run/media/mmcblk0p1"              # Steam Deck SD default path
+# Init default values, this may be overwritten by retrodeck.cfg as it sourced later with global.sh
+
+lockfile=lockfile="/var/config/retrodeck/.lock"            # where the lockfile is located
+emuconfigs="/app/retrodeck/emu-configs"                    # folder with all the default emulator configs
+sdcard="/run/media/mmcblk0p1"                              # Steam Deck SD default path
+rd_conf="/app/retrodeck/retrodeck.cfg"                     # RetroDECK config file path
+version="$(cat /app/retrodeck/version)"                    # version info taken from the version file
+rdhome="$HOME/retrodeck"                                   # the retrodeck home, aka ~/retrodeck
+
+source global.sh
 
 # We moved the lockfile in /var/config/retrodeck in order to solve issue #53 - Remove in a few versions
 if [ -f "$HOME/retrodeck/.lock" ]
@@ -41,7 +46,7 @@ dir_prep() {
     # creating the symlink
     echo "linking $real in $symlink" #DEBUG
     mkdir -pv "$(dirname "$symlink")" # creating the full path except the last folder
-    ln -svf "$real" "$symlink"
+    ln -sv "$real" "$symlink"
 
     # moving everything from the old folder to the new one, delete the old one
     if [ -d "$symlink.old" ];
@@ -138,6 +143,30 @@ standalones_init() {
     echo "------------------------"
     mkdir -pv /var/config/rpcs3/
     cp -fvr $emuconfigs/config.yml /var/config/rpcs3/
+
+    # XEMU
+    echo "------------------------"
+    echo "Initializing XEMU"
+    echo "------------------------"
+    mkdir -pv $rdhome/saves/xemu
+    cp -fv $emuconfigs/xemu.toml /var/data/xemu/xemu.toml
+    sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/data/xemu/xemu.toml
+    # Preparing HD dummy Image if the image is not found
+    if [ ! -f $rdhome/bios/xbox_hdd.qcow2 ]
+    then
+      wget "https://github.com/mborgerson/xemu-hdd-image/releases/latest/download/xbox_hdd.qcow2.zip" -P $rdhome/bios/
+      unzip $rdhome/bios/xbox_hdd.qcow2.zip $rdhome/bios/
+      rm -rfv $rdhome/bios/xbox_hdd.qcow2.zip
+    fi
+
+    # PPSSPPSDL
+    echo "------------------------"
+    echo "Initializing PPSSPPSDL"
+    echo "------------------------"
+    mkdir -p /var/config/ppsspp/PSP/SYSTEM/
+    cp -fv $emuconfigs/ppssppsdl/* /var/config/ppsspp/PSP/SYSTEM/
+    sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/ppsspp/PSP/SYSTEM/ppsspp.ini
+
 
     # PICO-8
     # Moved PICO-8 stuff in the finit as only it knows here roms folders is
@@ -368,7 +397,8 @@ https://retrodeck.net
       exit
       ;;
     --version*|-v*)
-      cat /var/config/retrodeck/version
+      conf_init
+      echo $version
       exit
       ;;
     --reset-ra*)
@@ -401,7 +431,9 @@ done
 if [ -f "$lockfile" ] && [ "$(cat "$lockfile")" != "$version" ]; 
 then
     echo "Lockfile version is "$(cat "$lockfile")" but the actual version is $version"
-    post_update
+    conf_init         # Initializing/reading the config file (sourced from global.sh)
+    post_update       # Executing post update script
+    conf_write        # Writing variables in the config file (sourced from global.sh)
     start_retrodeck
     exit 0
 fi
@@ -411,7 +443,9 @@ fi
 if [ ! -f "$lockfile" ];
 then
   echo "Lockfile not found"
-  finit
+  conf_init         # Initializing/reading the config file (sourced from global.sh)
+  finit             # Executing First/Force init
+  conf_write        # Writing variables in the config file (sourced from global.sh)
 	exit 0
 fi
 
