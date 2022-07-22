@@ -122,9 +122,9 @@ standalones_init() {
     sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/melonDS/melonDS.ini
 
     # CITRA
-    echo "----------------------"
+    echo "------------------------"
     echo "Initializing CITRA"
-    echo "----------------------"
+    echo "------------------------"
     mkdir -pv /var/config/citra-emu/
     cp -fv $emuconfigs/citra-qt-config.ini /var/config/citra-emu/qt-config.ini
     sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
@@ -133,9 +133,9 @@ standalones_init() {
     #sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
 
     # RPCS3
-    echo "----------------------"
+    echo "------------------------"
     echo "Initializing RPCS3"
-    echo "----------------------"
+    echo "------------------------"
     mkdir -pv /var/config/rpcs3/
     cp -fvr $emuconfigs/config.yml /var/config/rpcs3/
 
@@ -148,10 +148,38 @@ ra_init() {
     dir_prep "$rdhome/bios" "/var/config/retroarch/system"
     mkdir -pv /var/config/retroarch/cores/
     cp /app/share/libretro/cores/* /var/config/retroarch/cores/
-    cp -f $emuconfigs/retroarch.cfg /var/config/retroarch/
-    cp -f $emuconfigs/retroarch-core-options.cfg /var/config/retroarch/
+    cp -fv $emuconfigs/retroarch.cfg /var/config/retroarch/
+    cp -fv $emuconfigs/retroarch-core-options.cfg /var/config/retroarch/
     #rm -rf $rdhome/bios/bios # in some situations a double bios symlink is created
     sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/retroarch/retroarch.cfg
+
+    # PPSSPP
+    echo "--------------------------------"
+    echo "Initializing PPSSPP_LIBRETRO"
+    echo "--------------------------------"
+    if [ -d $rdhome/bios/PPSSPP/flash0/font ]
+    then
+      mv -fv $rdhome/bios/PPSSPP/flash0/font $rdhome/bios/PPSSPP/flash0/font.bak
+    fi
+    mkdir -p $rdhome/bios/PPSSPP
+    wget "https://github.com/hrydgard/ppsspp/archive/refs/heads/master.zip" -P $rdhome/bios/PPSSPP
+    unzip "$rdhome/bios/PPSSPP/master.zip" $rdhome/bios/PPSSPP/
+    rm -fv "$rdhome/bios/PPSSPP/master.zip"
+    if [ -d $rdhome/bios/PPSSPP/flash0/font.bak ]
+    then
+      mv -fv $rdhome/bios/PPSSPP/flash0/font.bak $rdhome/bios/PPSSPP/flash0/font
+    fi
+
+    # MSX / SVI / ColecoVision / SG-1000
+    echo "-----------------------------------------------------------"
+    echo "Initializing MSX / SVI / ColecoVision / SG-1000 LIBRETRO"
+    echo "-----------------------------------------------------------"
+    wget "http://bluemsx.msxblue.com/rel_download/blueMSXv282full.zip" -P $rdhome/bios/MSX
+    unzip "$rdhome/bios/MSX/blueMSXv282full.zip" $rdhome/bios/MSX
+    mv -rfv $rdhome/bios/MSX/Databases $rdhome/bios/Databases
+    mv -rfv $rdhome/bios/MSX/Machines $rdhome/bios/Machines
+    rm -rfv $rdhome/bios/MSX
+
 }
 
 create_lock() {
