@@ -1,15 +1,10 @@
 #!/bin/bash
 
-# Init default values, this may be overwritten by retrodeck.cfg as it sourced later with global.sh
-
-lockfile=lockfile="/var/config/retrodeck/.lock"            # where the lockfile is located
-emuconfigs="/app/retrodeck/emu-configs"                    # folder with all the default emulator configs
-sdcard="/run/media/mmcblk0p1"                              # Steam Deck SD default path
-rd_conf="/app/retrodeck/retrodeck.cfg"                     # RetroDECK config file path
-version="$(cat /app/retrodeck/version)"                    # version info taken from the version file
-rdhome="$HOME/retrodeck"                                   # the retrodeck home, aka ~/retrodeck
-
-source global.sh
+lockfile="/var/config/retrodeck/.lock"      # where the lockfile is located
+version="$(cat /app/retrodeck/version)"    # version info taken from the version file
+rdhome="$HOME/retrodeck"                   # the retrodeck home, aka ~/retrodecck
+emuconfigs="/app/retrodeck/emu-configs"    # folder with all the default emulator configs
+sdcard="/run/media/mmcblk0p1"              # Steam Deck SD default path
 
 # We moved the lockfile in /var/config/retrodeck in order to solve issue #53 - Remove in a few versions
 if [ -f "$HOME/retrodeck/.lock" ]
@@ -46,7 +41,7 @@ dir_prep() {
     # creating the symlink
     echo "linking $real in $symlink" #DEBUG
     mkdir -pv "$(dirname "$symlink")" # creating the full path except the last folder
-    ln -sv "$real" "$symlink"
+    ln -svf "$real" "$symlink"
 
     # moving everything from the old folder to the new one, delete the old one
     if [ -d "$symlink.old" ];
@@ -144,21 +139,6 @@ standalones_init() {
     mkdir -pv /var/config/rpcs3/
     cp -fvr $emuconfigs/config.yml /var/config/rpcs3/
 
-    # XEMU
-    echo "----------------------"
-    echo "Initializing XEMU"
-    echo "----------------------"
-    mkdir -pv $rdhome/saves/xemu
-    cp -fv $emuconfigs/xemu.toml /var/data/xemu/xemu.toml
-    sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/data/xemu/xemu.toml
-    # Preparing HD dummy Image if the image is not found
-    if [ ! -f $rdhome/bios/xbox_hdd.qcow2 ]
-    then
-      wget "https://github.com/mborgerson/xemu-hdd-image/releases/latest/download/xbox_hdd.qcow2.zip" -P $rdhome/bios/
-      unzip $rdhome/bios/xbox_hdd.qcow2.zip $rdhome/bios/
-      rm -rfv $rdhome/bios/xbox_hdd.qcow2.zip
-    fi
-
     # PICO-8
     # Moved PICO-8 stuff in the finit as only it knows here roms folders is
 
@@ -222,41 +202,71 @@ finit() {
     echo "Executing finit"
 
     # Internal or SD Card?
-    zenity --icon-name=net.retrodeck.retrodeck --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --ok-label "Internal" --cancel-label "SD Card" --text="Welcome to the first configuration of RetroDECK.\nThe setup will be quick but please READ CAREFULLY each message in order to avoid misconfigurations.\n\nWhere do you want your roms folder to be located?"
-    if [ $? == 0 ] #yes - Internal
-    then
-        roms_folder="$rdhome/roms"
-    else #no - SD Card
-        if [ -d "$sdcard" ];
+    choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
+    --ok-label "Internal" \
+    --extra-button "SD Card" \
+    --extra-button "Browse" \
+    --extra-button "Cancel" \
+    --text="Welcome to the first configuration of RetroDECK.\nThe setup will be quick but please READ CAREFULLY each message in order to avoid misconfigurations.\n\nWhere do you want your roms folder to be located?" )
+    echo "Choice is $choice"
+
+    case $choice in
+
+    "" ) # Internal (yes)
+      echo "Internal selected"
+      roms_folder="$rdhome/roms"
+      ;;
+
+    "Cancel" )
+      echo "Now quitting"
+      kill $$
+      ;;
+
+    "SD Card" )
+      echo "SD Card selected"
+      if [ ! -d "$sdcard" ] # SD Card path is not existing
+      then
+        echo "Error: SD card not found"
+        zenity --question --no-wrap \
+        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+        --title "RetroDECK" --cancel-label="Cancel" \
+        --ok-label "Browse" \
+        --text="SD Card was not find in the default location.\nPlease choose the SD Card root.\nA retrodeck/roms folder will be created starting from the directory that you selected."
+      else
+        roms_folder="$sdcard/retrodeck/roms"
+        echo "ROMs folder = $roms_folder"
+        exit 0
+      fi
+      ;;
+
+    "Browse" ) # Browse + not found fallback
+      echo "Browse"
+      path_selected=false
+      while [ $path_selected == false ]
+      do
+        sdcard="$(zenity --file-selection --title="Choose retrodeck folder location" --directory)"  
+        echo "Path choosed: $sdcard, answer=$?"
+        zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
+        --cancel-label="No" \
+        --ok-label "Yes" \
+        --text="Your rom folder will be:\n\n$sdcard/retrodeck/roms\n\nis that ok?"
+        if [ $? == 0 ] #yes
         then
-            roms_folder="$sdcard/retrodeck/roms"
+          sdselected == true
+          roms_folder="$sdcard/retrodeck/roms"
+          break
         else
-            sdselected=false
-            zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="Cancel" --ok-label "Browse" --text="SD Card was not find in the default location.\nPlease choose the SD Card root.\nA retrodeck/roms folder will be created starting from the directory that you selected."
-            if [ $? == 1 ] #cancel
-            then
-              exit 0
-            fi
-            while [ $sdselected == false ]
-            do
-              sdcard="$(zenity --file-selection --title="Choose SD Card root" --directory)"
-              echo "DEBUG: sdcard=$sdcard, answer=$?"
-              zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" --text="Your rom folder will be:\n\n$sdcard/retrodeck/roms\n\nis that ok?"
-              if [ $? == 0 ] #yes
-              then
-                sdselected == true
-                roms_folder="$sdcard/retrodeck/roms"
-                break
-              else
-                zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" --text="Do you want to quit?"
-                if [ $? == 0 ] # yes, quit
-                then
-                  exit 0
-                fi
-              fi
-            done
+          zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" --text="Do you want to quit?"
+          if [ $? == 0 ] # yes, quit
+          then
+            exit 0
+          fi
         fi
-    fi
+      done
+      ;;
+
+    esac
 
     mkdir -pv $roms_folder
 
@@ -330,8 +340,7 @@ https://retrodeck.net
       exit
       ;;
     --version*|-v*)
-      conf_init
-      echo $version
+      cat /var/config/retrodeck/version
       exit
       ;;
     --reset-ra*)
@@ -364,9 +373,7 @@ done
 if [ -f "$lockfile" ] && [ "$(cat "$lockfile")" != "$version" ]; 
 then
     echo "Lockfile version is "$(cat "$lockfile")" but the actual version is $version"
-    conf_init         # Initializing/reading the config file (sourced from global.sh)
-    post_update       # Executing post update script
-    conf_write        # Writing variables in the config file (sourced from global.sh)
+    post_update
     start_retrodeck
     exit 0
 fi
@@ -376,9 +383,7 @@ fi
 if [ ! -f "$lockfile" ];
 then
   echo "Lockfile not found"
-  conf_init         # Initializing/reading the config file (sourced from global.sh)
-  finit             # Executing First/Force init
-  conf_write        # Writing variables in the config file (sourced from global.sh)
+  finit
 	exit 0
 fi
 
