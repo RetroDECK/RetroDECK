@@ -198,6 +198,8 @@ ra_init() {
     then
       mv -fv $rdhome/bios/PPSSPP/flash0/font.bak $rdhome/bios/PPSSPP/flash0/font
     fi
+    read -p "Press enter to continue" # DEBUG
+
 
     # MSX / SVI / ColecoVision / SG-1000
     echo "-----------------------------------------------------------"
