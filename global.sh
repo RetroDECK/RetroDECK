@@ -2,7 +2,7 @@
 
 # This file is containing some global function needed for the script such as the config file tools
 
-rd_conf="/var/config/retrodeck/retrodeck.cfg"
+rd_conf="/app/retrodeck/retrodeck.cfg"
 
 conf_init() {
   # initializing and reading the retrodeck config file
