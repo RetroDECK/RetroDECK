@@ -5,11 +5,11 @@
 lockfile="/var/config/retrodeck/.lock"                     # where the lockfile is located
 emuconfigs="/app/retrodeck/emu-configs"                    # folder with all the default emulator configs
 sdcard="/run/media/mmcblk0p1"                              # Steam Deck SD default path
-rd_conf="/app/retrodeck/retrodeck.cfg"                     # RetroDECK config file path
+rd_conf="/var/config/retrodeck/retrodeck.cfg"              # RetroDECK config file path
 version="$(cat /app/retrodeck/version)"                    # version info taken from the version file
 rdhome="$HOME/retrodeck"                                   # the retrodeck home, aka ~/retrodeck
 
-source global.sh
+source /app/bin/global.sh
 
 # We moved the lockfile in /var/config/retrodeck in order to solve issue #53 - Remove in a few versions
 if [ -f "$HOME/retrodeck/.lock" ]
@@ -191,11 +191,14 @@ ra_init() {
       mv -fv $rdhome/bios/PPSSPP/flash0/font $rdhome/bios/PPSSPP/flash0/font.bak
     fi
     mkdir -p $rdhome/bios/PPSSPP
-    wget "https://github.com/hrydgard/ppsspp/archive/refs/heads/master.zip" -P $rdhome/bios/PPSSPP
-    unzip "$rdhome/bios/PPSSPP/master.zip" -d $rdhome/bios/PPSSPP/
-    mv "$rdhome/bios/PPSSPP/ppsspp-master/"* "$rdhome/bios/PPSSPP/"
-    rm -rfv "$rdhome/bios/PPSSPP/master.zip"
-    rm -rfv "$rdhome/bios/PPSSPP/ppsspp-master"
+    if [ ! -f "$rdhome/bios/PPSSPP/ppge_atlas.zim" ]
+    then
+      wget "https://github.com/hrydgard/ppsspp/archive/refs/heads/master.zip" -P $rdhome/bios/PPSSPP
+      unzip "$rdhome/bios/PPSSPP/master.zip" -d $rdhome/bios/PPSSPP/
+      mv "$rdhome/bios/PPSSPP/ppsspp-master/assets"* "$rdhome/bios/PPSSPP/"
+      rm -rfv "$rdhome/bios/PPSSPP/master.zip"
+      rm -rfv "$rdhome/bios/PPSSPP/ppsspp-master"
+    fi
     if [ -d $rdhome/bios/PPSSPP/flash0/font.bak ]
     then
       mv -fv $rdhome/bios/PPSSPP/flash0/font.bak $rdhome/bios/PPSSPP/flash0/font
@@ -256,6 +259,32 @@ start_retrodeck() {
     emulationstation --home /var/config/emulationstation
 }
 
+browse(){
+  # Function fro browsing the sd card or [ath]  
+  path_selected=false
+      while [ $path_selected == false ]
+      do
+        sdcard="$(zenity --file-selection --title="Choose retrodeck folder location" --directory)"  
+        echo "Path choosed: $sdcard, answer=$?"
+        zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
+        --cancel-label="No" \
+        --ok-label "Yes" \
+        --text="Your rom folder will be:\n\n$sdcard/retrodeck/roms\n\nis that ok?"
+        if [ $? == 0 ] #yes
+        then
+          sdselected == true
+          roms_folder="$sdcard/retrodeck/roms"
+          break
+        else
+          zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" --text="Do you want to quit?"
+          if [ $? == 0 ] # yes, quit
+          then
+            exit 0
+          fi
+        fi
+      done
+}
+
 finit() {
     # Force/First init, depending on the situation
 
@@ -293,6 +322,7 @@ finit() {
         --title "RetroDECK" --cancel-label="Cancel" \
         --ok-label "Browse" \
         --text="SD Card was not find in the default location.\nPlease choose the SD Card root.\nA retrodeck/roms folder will be created starting from the directory that you selected."
+        browse
       else
         roms_folder="$sdcard/retrodeck/roms"
         echo "ROMs folder = $roms_folder"
@@ -302,28 +332,7 @@ finit() {
 
     "Browse" ) # Browse + not found fallback
       echo "Browse"
-      path_selected=false
-      while [ $path_selected == false ]
-      do
-        sdcard="$(zenity --file-selection --title="Choose retrodeck folder location" --directory)"  
-        echo "Path choosed: $sdcard, answer=$?"
-        zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
-        --cancel-label="No" \
-        --ok-label "Yes" \
-        --text="Your rom folder will be:\n\n$sdcard/retrodeck/roms\n\nis that ok?"
-        if [ $? == 0 ] #yes
-        then
-          sdselected == true
-          roms_folder="$sdcard/retrodeck/roms"
-          break
-        else
-          zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" --text="Do you want to quit?"
-          if [ $? == 0 ] # yes, quit
-          then
-            exit 0
-          fi
-        fi
-      done
+      browse
       ;;
 
     esac
