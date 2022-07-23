@@ -192,13 +192,14 @@ ra_init() {
     fi
     mkdir -p $rdhome/bios/PPSSPP
     wget "https://github.com/hrydgard/ppsspp/archive/refs/heads/master.zip" -P $rdhome/bios/PPSSPP
-    unzip "$rdhome/bios/PPSSPP/master.zip" $rdhome/bios/PPSSPP/
-    rm -fv "$rdhome/bios/PPSSPP/master.zip"
+    unzip "$rdhome/bios/PPSSPP/master.zip" -d $rdhome/bios/PPSSPP/
+    mv "$rdhome/bios/PPSSPP/ppsspp-master/"* "$rdhome/bios/PPSSPP/"
+    rm -rfv "$rdhome/bios/PPSSPP/master.zip"
+    rm -rfv "$rdhome/bios/PPSSPP/ppsspp-master"
     if [ -d $rdhome/bios/PPSSPP/flash0/font.bak ]
     then
       mv -fv $rdhome/bios/PPSSPP/flash0/font.bak $rdhome/bios/PPSSPP/flash0/font
     fi
-    read -p "Press enter to continue" # DEBUG
 
 
     # MSX / SVI / ColecoVision / SG-1000
