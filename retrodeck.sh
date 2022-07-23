@@ -2,7 +2,7 @@
 
 # Init default values, this may be overwritten by retrodeck.cfg as it sourced later with global.sh
 
-lockfile=lockfile="/var/config/retrodeck/.lock"            # where the lockfile is located
+lockfile="/var/config/retrodeck/.lock"                     # where the lockfile is located
 emuconfigs="/app/retrodeck/emu-configs"                    # folder with all the default emulator configs
 sdcard="/run/media/mmcblk0p1"                              # Steam Deck SD default path
 rd_conf="/app/retrodeck/retrodeck.cfg"                     # RetroDECK config file path
