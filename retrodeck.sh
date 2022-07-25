@@ -191,14 +191,14 @@ ra_init() {
       mv -fv $rdhome/bios/PPSSPP/flash0/font $rdhome/bios/PPSSPP/flash0/font.bak
     fi
     mkdir -p $rdhome/bios/PPSSPP
-    if [ ! -f "$rdhome/bios/PPSSPP/ppge_atlas.zim" ]
-    then
+    #if [ ! -f "$rdhome/bios/PPSSPP/ppge_atlas.zim" ]
+    #then
       wget "https://github.com/hrydgard/ppsspp/archive/refs/heads/master.zip" -P $rdhome/bios/PPSSPP
       unzip "$rdhome/bios/PPSSPP/master.zip" -d $rdhome/bios/PPSSPP/
-      mv "$rdhome/bios/PPSSPP/ppsspp-master/assets"* "$rdhome/bios/PPSSPP/"
+      mv "$rdhome/bios/PPSSPP/ppsspp-master/assets/"* "$rdhome/bios/PPSSPP/"
       rm -rfv "$rdhome/bios/PPSSPP/master.zip"
       rm -rfv "$rdhome/bios/PPSSPP/ppsspp-master"
-    fi
+    #fi
     if [ -d $rdhome/bios/PPSSPP/flash0/font.bak ]
     then
       mv -fv $rdhome/bios/PPSSPP/flash0/font.bak $rdhome/bios/PPSSPP/flash0/font

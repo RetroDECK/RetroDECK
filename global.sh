@@ -11,7 +11,6 @@ conf_init() {
     echo "RetroDECK config file not found in $rd_conf"
     echo "Initializing"
     touch $rd_conf
-    read -p "Press enter to continue" #DEBUG
 
     # Variables to manage: adding a variable here means adding it to conf_write()
     echo "#!/bin/bash" >> $rd_conf
@@ -25,7 +24,7 @@ conf_init() {
     echo "rdhome=$rdhome" >> $rd_conf
 
     # default roms folder location (internal)
-    roms_folder="$rdhome/roms"
+    roms_folder="$roms_folder"
     echo "roms_folder=$roms_folder" >> $rd_conf    
 
 
@@ -39,7 +38,7 @@ conf_init() {
 conf_write() {
   # writes the variables in the retrodeck config file
 
-  echo "Writing the config file"
+  echo "Writing the config file: $rd_conf"
 
   # TODO: this can be optimized with a while and a list of variables to check
   if [ ! -z "$version" ] #if the variable is not null then I update it
@@ -54,7 +53,7 @@ conf_write() {
 
   if [ ! -z "$roms_folder" ]
   then
-    sed -i "s%rdhome=.*%rdhome=$roms_folder%" $rd_conf
+    sed -i "s%roms_folder=.*%roms_folder=$roms_folder%" $rd_conf
   fi
 
 }
