@@ -8,6 +8,8 @@ sdcard="/run/media/mmcblk0p1"                              # Steam Deck SD defau
 rd_conf="/var/config/retrodeck/retrodeck.cfg"              # RetroDECK config file path
 version="$(cat /app/retrodeck/version)"                    # version info taken from the version file
 rdhome="$HOME/retrodeck"                                   # the retrodeck home, aka ~/retrodeck
+media_folder="$HOME/retrodeck/downloaded_media"            # the media folder, where all the scraped data is downloaded into
+themes_folder="$HOME/retrodeck/themes"                     # the themes folder
 
 source /app/bin/global.sh
 
@@ -229,18 +231,18 @@ post_update() {
     # Unhiding downloaded media from the previous versions
     if [ -d "$rdhome/.downloaded_media" ]
     then
-      mv -fv "$rdhome/.downloaded_media" "$rdhome/downloaded_media"
+      mv -fv "$rdhome/.downloaded_media" "$media_folder"
     fi
 
     # Unhiding themes folder from the previous versions
     if [ -d "$rdhome/.themes" ]
     then
-      mv -fv "$rdhome/.themes" "$rdhome/themes"
+      mv -fv "$rdhome/.themes" "$themes_folder"
     fi
 
-    # Doing the dir prep as we don't know from which version we came - Remove in a few versions
-    dir_prep "$rdhome/downloaded_media" "/var/config/emulationstation/.emulationstation/downloaded_media"
-    dir_prep "$rdhome/themes" "/var/config/emulationstation/.emulationstation/themes"
+    # Doing the dir prep as we don't know from which version we came
+    dir_prep "$media_folder" "/var/config/emulationstation/.emulationstation/downloaded_media"
+    dir_prep "$themes_folder" "/var/config/emulationstation/.emulationstation/themes"
     mkdir -pv $rdhome/.logs #this was added later, maybe safe to remove in a few versions
 
     # Resetting es_systems, now we need it but in the future I should think a better solution, maybe with sed
@@ -260,7 +262,7 @@ start_retrodeck() {
 }
 
 browse(){
-  # Function fro browsing the sd card or [ath]  
+  # Function for browsing the sd card
   path_selected=false
       while [ $path_selected == false ]
       do
@@ -285,6 +287,41 @@ browse(){
       done
 }
 
+advanced(){
+  # function to give advanced install options
+  echo "Advaced choosed"
+
+  choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
+    --ok-label "ROMs" \
+    --extra-button "Media" \
+    --extra-button "Themes" \
+    --extra-button "Back" \
+    --text="What do you want to change?\n\nROMS folder = $roms_folder\nMedia folder (scraped data) = $media_folder\nThemes folder=$themes_folder" )
+    echo "Choice is $choice"
+
+    case $choice in
+
+    "" ) # Internal (yes)
+      echo "ROMs"
+      ;;
+
+    "Media" )
+      echo "Media"
+      ;;
+
+    "Themes" )
+      echo "Themes"
+      ;;
+
+    "Back" ) # Browse + not found fallback
+      echo "Back"
+      finit
+      ;;
+
+    esac
+}
+
 finit() {
     # Force/First init, depending on the situation
 
@@ -295,7 +332,7 @@ finit() {
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
     --ok-label "Internal" \
     --extra-button "SD Card" \
-    --extra-button "Browse" \
+    --extra-button "Advanced" \
     --extra-button "Cancel" \
     --text="Welcome to the first configuration of RetroDECK.\nThe setup will be quick but please READ CAREFULLY each message in order to avoid misconfigurations.\n\nWhere do you want your roms folder to be located?" )
     echo "Choice is $choice"
@@ -330,9 +367,9 @@ finit() {
       fi
       ;;
 
-    "Browse" ) # Browse + not found fallback
-      echo "Browse"
-      browse
+    "Advanced" ) # Browse + not found fallback
+      echo "Advanced"
+      advanced
       ;;
 
     esac

@@ -25,7 +25,15 @@ conf_init() {
 
     # default roms folder location (internal)
     roms_folder="$roms_folder"
-    echo "roms_folder=$roms_folder" >> $rd_conf    
+    echo "roms_folder=$roms_folder" >> $rd_conf
+
+    # default media folder location (internal)
+    media_folder="$media_folder"
+    echo "media_folder=$media_folder" >> $rd_conf   
+
+    # default themes folder location (internal)
+    themes_folder="$themes_folder"
+    echo "themes_folder=$themes_folder" >> $rd_conf 
 
 
   else # i just read the variables
@@ -54,6 +62,16 @@ conf_write() {
   if [ ! -z "$roms_folder" ]
   then
     sed -i "s%roms_folder=.*%roms_folder=$roms_folder%" $rd_conf
+  fi
+
+  if [ ! -z "$media_folder" ]
+  then
+    sed -i "s%media_folder=.*%media_folder=$media_folder%" $rd_conf
+  fi
+
+  if [ ! -z "$themes_folder" ]
+  then
+    sed -i "s%themes_folder=.*%themes_folder=$themes_folder%" $rd_conf
   fi
 
 }
