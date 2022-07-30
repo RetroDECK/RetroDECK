@@ -220,7 +220,7 @@ modules:
     sources:
       - type: git
         url:  https://github.com/anthonycaccese/art-book-next-retropie.git
-        commit: b9a846dcfc1811e811e2eed7853bfeddbb3ef153
+        commit: 783b53f3939e037ab20f1a53101ff673f3a45bfc
 
   - name: art-book-next-no-meta
     buildsystem: simple
@@ -230,7 +230,7 @@ modules:
     sources:
       - type: git
         url:  https://github.com/anthonycaccese/art-book-next-retropie.git
-        commit: bd4414ffcc83b5b145c3971451a04e6e7a1cbb73
+        commit: cdef6cd1469e9aa6cf1bbe77d07c2100c9f1947d
 
   # External manifests start
 
