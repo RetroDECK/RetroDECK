@@ -420,7 +420,7 @@ finit() {
     zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK" \
-    --text="Initialization completed.\nplease put your roms in:\n\n$roms_folder\n\nand your bioses in\n\n$rdhome/bios\n\nThen start the program again.\nIf you wish to change the roms location, you may use the tool located the tools section of RetroDECK.\n\nIMPORTANT NOTES:\n- RetroDECK must be manually added and launched from your Steam Library in order to work correctly.\n- It's recommended to use the 'RetroDECK Offical Controller Config' from Steam (under community layouts).\n- It's suggested to use BoilR to automatically add the SteamGridDB images to Steam (this will be automated soon).\nhttps://github.com/PhilipK/BoilR"
+    --text="Installation completed.\nPlease put your roms in:\n\n$roms_folder\n\nand your bioses in\n\n$rdhome/bios\n\nThen start the program again.\nIf you wish to change the roms location, you may use the tool located the tools section of RetroDECK.\n\nIMPORTANT NOTES:\n- RetroDECK must be manually added and launched from your Steam Library in order to work correctly.\n- It's recommended to use the 'RetroDECK Offical Controller Config' from Steam (under community layouts).\n- It's suggested to use BoilR to automatically add the SteamGridDB images to Steam (this will be automated soon).\nhttps://github.com/PhilipK/BoilR"
     # TODO: Replace the stuff above with BoilR code when ready
 }
 
@@ -437,6 +437,7 @@ flatpak run [FLATPAK-RUN-OPTION] net.retrodeck-retrodeck [ARGUMENTS]
 Arguments:
     -h, --help        Print this help
     -v, --version     Print RetroDECK version
+    --info-msg        Print paths and config informations
     --reset           Starts the initial RetroDECK installer (backup your data first!)
     --reset-ra        Resets RetroArch's config to the default values
     --reset-sa        Reset standalone emulator configs to the default values
@@ -450,7 +451,15 @@ https://retrodeck.net
       ;;
     --version*|-v*)
       conf_init
-      echo $version
+      echo "RetroDECK v$version"
+      exit
+      ;;
+    --info-msg*)
+      conf_init
+      echo "RetroDECK v$version"
+      echo "RetroDECK config file is in: $rd_conf"
+      echo "Contents:"
+      cat $rd_conf
       exit
       ;;
     --reset-ra*)
