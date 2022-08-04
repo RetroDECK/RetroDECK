@@ -220,7 +220,7 @@ modules:
     sources:
       - type: git
         url:  https://github.com/anthonycaccese/art-book-next-retropie.git
-        commit: b9a846dcfc1811e811e2eed7853bfeddbb3ef153
+        commit: 5b953838424e029e7ad534d2a20a7c7f7f5b9e8a
 
   - name: art-book-next-no-meta
     buildsystem: simple
@@ -230,7 +230,17 @@ modules:
     sources:
       - type: git
         url:  https://github.com/anthonycaccese/art-book-next-retropie.git
-        commit: bd4414ffcc83b5b145c3971451a04e6e7a1cbb73
+        commit: 3b93a8e2bea9d65aee5b0d07f07f56e76653a265
+
+  - name: art-book-next-miximage
+    buildsystem: simple
+    build-commands:
+      - mkdir -p ${FLATPAK_DEST}/share/emulationstation/themes/art-book-next-miximage/
+      - mv -f * ${FLATPAK_DEST}/share/emulationstation/themes/art-book-next-miximage/
+    sources:
+      - type: git
+        url:  https://github.com/anthonycaccese/art-book-next-retropie.git
+        commit: 87b580aceabcf53149e1398039377416bdbd056c
 
   # External manifests start
 
