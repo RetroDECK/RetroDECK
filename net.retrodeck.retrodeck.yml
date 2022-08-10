@@ -1023,6 +1023,7 @@ modules:
         commit: e9570d1a0045926f63ec8ea9af68f81743d4f365
 
   # RPCS3 - END
+
   # PRIMEHACK - START
   # https://github.com/flathub/io.github.shiiion.primehack
   # Disabled because it's overwriting Dolphin
@@ -1149,6 +1150,35 @@ modules:
         url: https://github.com/hrydgard/pspautotests.git
   # PPSSPP Flathub Workaround - END
   # PPSSPP - END
+
+  # Duckstation - START
+  # https://github.com/flathub/org.duckstation.DuckStation
+
+  - name: duckstation
+    buildsystem: cmake-ninja
+    no-make-install: true
+    builddir: true
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DUSE_EGL=ON
+      - -DUSE_SDL2=ON
+      - -DUSE_WAYLAND=ON
+      - -DUSE_X11=ON
+      - -DUSE_DRMKMS=ON
+      - -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON
+    post-install:
+      - install -m 755 -t /app/bin/ bin/duckstation-nogui bin/duckstation-qt
+      - |-
+        for px in 16 32 48 64 128 256; do
+          install -Dm644 ../extras/icons/icon-${px}px.png /app/share/icons/hicolor/${px}x${px}/apps/org.duckstation.DuckStation.png
+        done
+      - cp -r ../data/* bin/translations /app/bin
+    sources:
+      - type: git
+        url: https://github.com/stenzek/duckstation.git
+        commit: 3fb61865e505ba639609fbf16cb8bdf5c66e020c
+  
+  # Duckstation - END
 
   # External manifests end
 
