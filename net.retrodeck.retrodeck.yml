@@ -814,6 +814,8 @@ modules:
         url: https://github.com/PCSX2/pcsx2.git
         tag: v1.7.3172
         commit: 7a5f63e0f5925ff29f589883e04d3c66779f4f17  
+    # same as above
+    disable-submodules: true
 
   # PCSX2 - END
 
