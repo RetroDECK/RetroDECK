@@ -570,6 +570,7 @@ modules:
     - type: git
       url: https://github.com/Ryujinx/Ryujinx.git
       commit: 66e7fdb8710ff24bfb80c9c638ce2e6fa9563068
+    disable-submodules: true
 
   # Ryujinx - END
 
