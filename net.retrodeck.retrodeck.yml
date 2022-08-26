@@ -1,6 +1,7 @@
 app-id: net.retrodeck.retrodeck
 runtime: org.kde.Platform
-runtime-version: 5.15-21.08
+#runtime-version: 5.15-21.08
+runtime-version: 6.3 #bumped because of pcsx2-qt
 sdk: org.kde.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.llvm13    # Needed for rpcs3
@@ -721,6 +722,8 @@ modules:
       - -DDISABLE_PCSX2_WRAPPER=TRUE
       - -DDISABLE_ADVANCE_SIMD=TRUE
       - -DSDL2_API=TRUE
+      #- '-DWAYLAND_API=TRUE"' enable this if Steam Deck goes to Wayland
+      - '-DCMAKE_INTERPROCEDURAL_OPTIMIZATION=TRUE'
     cleanup:
       - /share/pixmaps
       - /share/man
@@ -728,8 +731,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/PCSX2/pcsx2.git
-        tag: v1.7.3172
-        commit: 7a5f63e0f5925ff29f589883e04d3c66779f4f17
+        tag: v1.7.3229
+        commit: e3eae7fbe83aad3952e3ed6a8e56fc016b51a9c3
 
   # PCSX2 Flathub Workaround - START
   # This workaround disables the PCSX2 libraries (disable-submodules: true) and install them separately
@@ -800,7 +803,9 @@ modules:
       - '-DDISABLE_PCSX2_WRAPPER=TRUE'
       - '-DDISABLE_ADVANCE_SIMD=TRUE'
       - '-DSDL2_API=TRUE'
+      #- '-DWAYLAND_API=TRUE"' enable this if Steam Deck goes to Wayland
       - '-DQT_BUILD=TRUE'
+      - '-DCMAKE_INTERPROCEDURAL_OPTIMIZATION=TRUE'
     cleanup:
       - /share/pixmaps
       - /share/man
@@ -812,8 +817,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/PCSX2/pcsx2.git
-        tag: v1.7.3172
-        commit: 7a5f63e0f5925ff29f589883e04d3c66779f4f17  
+        tag: v1.7.3229
+        commit: e3eae7fbe83aad3952e3ed6a8e56fc016b51a9c3  
     # same as above
     disable-submodules: true
 
