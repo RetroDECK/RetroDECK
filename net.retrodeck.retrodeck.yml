@@ -7,7 +7,8 @@ sdk-extensions:
   - org.freedesktop.Sdk.Extension.llvm13    # Needed for rpcs3
   - org.freedesktop.Sdk.Extension.dotnet6   # Needed for Ryujinx
 base: io.qt.qtwebengine.BaseApp             # Needed for Yuzu
-base-version: 5.15-21.08                    # Needed for Yuzu
+#base-version: 5.15-21.08                    # Needed for Yuzu
+base-version: 6.3
 command: retrodeck.sh
 
 finish-args:
