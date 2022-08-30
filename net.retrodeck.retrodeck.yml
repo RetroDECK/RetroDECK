@@ -1,7 +1,7 @@
 app-id: net.retrodeck.retrodeck
 runtime: org.kde.Platform
-runtime-version: 5.15-21.08
-#runtime-version: 6.3                        # bumped because of pcsx2-qt
+#runtime-version: 5.15-21.08
+runtime-version: 6.3                        # bumped because of pcsx2-qt
 sdk: org.kde.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.llvm13    # Needed for rpcs3
@@ -106,6 +106,7 @@ modules:
     cleanup: ['*']
 
   # pcsx2-qt needs QT6, maybe others, here until every qt emulator will support qt6 (not yuzu atm)
+  # from: https://github.com/flathub/org.profex_xrd.Profex
   - name: qt6-core5compat
     buildsystem: cmake-ninja
     builddir: true
