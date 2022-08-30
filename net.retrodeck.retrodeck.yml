@@ -106,7 +106,7 @@ modules:
     cleanup: ['*']
 
   # pcsx2-qt needs QT6, maybe others, here until every qt emulator will support qt6 (not yuzu atm)
-  # from: https://github.com/flathub/org.profex_xrd.Profex
+  # from: https://github.com/flathub/org.profex_xrd.Profex 
   - name: qt6-core5compat
     buildsystem: cmake-ninja
     builddir: true
