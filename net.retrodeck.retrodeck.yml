@@ -1,14 +1,15 @@
 app-id: net.retrodeck.retrodeck
 runtime: org.kde.Platform
 #runtime-version: 5.15-21.08
-runtime-version: 6.3                                     # bumped because of pcsx2-qt
+runtime-version:
+  - 5.15-21.08
+  - 6.3                                     # bumped because of pcsx2-qt
 sdk: org.kde.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.llvm13    # Needed for rpcs3
   - org.freedesktop.Sdk.Extension.dotnet6   # Needed for Ryujinx
 base: io.qt.qtwebengine.BaseApp             # Needed for Yuzu
-#base-version: 5.15-21.08                    # Needed for Yuzu
-base-version: 6.3
+base-version: 5.15-21.08                    # Needed for Yuzu
 command: retrodeck.sh
 
 finish-args:
@@ -495,8 +496,8 @@ modules:
       - -DENABLE_COMPATIBILITY_LIST_DOWNLOAD=ON
       - -DYUZU_USE_QT_WEB_ENGINE=ON
       - -DYUZU_USE_BUNDLED_FFMPEG=ON
-      - -DDISPLAY_VERSION=1039
-      - -DBUILD_TAG=mainline-1039
+      - -DDISPLAY_VERSION=1149
+      - -DBUILD_TAG=mainline-1149
       - -DBUILD_REPOSITORY=yuzu-emu/yuzu-mainline
     build-options:
       env:
@@ -514,8 +515,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/yuzu-emu/yuzu-mainline.git
-        tag: mainline-0-1148
-        commit: fb0f5137669a5a378efc31260880af22778a0351
+        tag: mainline-0-1149
+        commit: 96b400da8806d8b9e003605c3fde615737c790e2
         disable-shallow-clone: true
         x-checker-data:
           type: git

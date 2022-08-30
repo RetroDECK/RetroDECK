@@ -42,9 +42,9 @@ jobs:
           flatpak install --user -y \
           org.kde.Sdk//6.3 \
           org.kde.Platform//6.3 \
+          org.freedesktop.Platform.ffmpeg-full/x86_64/21.08 \
           io.qt.qtwebengine.BaseApp/x86_64/6.3 \
           org.freedesktop.Sdk.Extension.llvm13 \
-          org.freedesktop.Platform.ffmpeg-full/x86_64/21.08 \
           org.freedesktop.Sdk.Extension.dotnet6/x86_64/21.08
 
       - name: Build flatpak
