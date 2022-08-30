@@ -222,7 +222,7 @@ modules:
         url: https://github.com/zeux/pugixml/releases/download/v1.11.4/pugixml-1.11.4.tar.gz
         sha256: 8ddf57b65fb860416979a3f0640c2ad45ddddbbafa82508ef0a0af3ce7061716
 
-  # When updating this module remember to check those: https://gitlab.com/es-de/emulationstation-de/-/tree/stable-1.2.5/resources/systems/unix
+  # When updating this module remember to check those: https://gitlab.com/es-de/emulationstation-de/-/tree/v1.2.6/resources/systems/unix
   # But we don't include them 1:1 as RetroDECK got some specific configs in some cases
   - name: emulationstation-de
     buildsystem: cmake-ninja
@@ -232,7 +232,7 @@ modules:
     sources:
       - type: git
         url: https://gitlab.com/es-de/emulationstation-de
-        branch: 5a76fef25ffc659f098ee65215281c51a63c3198
+        branch: 18b2ee412e1bb3ea35ffd6e680ebf1dacda8e0ff
       - type: shell
         commands:
           - sed -i 's/QUIT EMULATIONSTATION/QUIT RETRODECK/g' es-app/src/guis/GuiMenu.cpp
