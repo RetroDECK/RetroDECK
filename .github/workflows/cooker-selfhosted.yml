@@ -39,7 +39,7 @@ jobs:
           git submodule update
           sudo apt install -y flatpak flatpak-builder p7zip-full
           flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-          flatpak install --user -y \
+          flatpak install --user -y --noninteractive \
           org.kde.Sdk//6.3 \
           org.kde.Platform//6.3 \
           org.freedesktop.Platform.ffmpeg-full/x86_64/21.08 \
