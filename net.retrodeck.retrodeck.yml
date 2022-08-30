@@ -112,13 +112,13 @@ modules:
     builddir: true
     sources:
       - type: archive
-        url: https://download.qt.io/official_releases/qt/6.2/6.2.4/submodules/qt5compat-everywhere-src-6.2.4.tar.xz
-        sha256: 5de2b9e25bf7de161fbb88ecdd468ed1788bc899392fc05ed80aa590ebb352fa
+        url: https://download.qt.io/official_releases/qt/6.3/6.3.0/submodules/qt5compat-everywhere-src-6.3.0.tar.xz
+        sha256: 2b199be780c50d9214512b922d94cb240b0412fd63f459e356b76102cad1713e
         x-checker-data:
           type: html
-          url: https://download.qt.io/official_releases/qt/6.2/
+          url: https://download.qt.io/official_releases/qt/6.3/
           version-pattern: '>([\d\.-]*)/<'
-          url-template: https://download.qt.io/official_releases/qt/6.2/$version/submodules/qt5compat-everywhere-src-$version.tar.xz
+          url-template: https://download.qt.io/official_releases/qt/6.3/$version/submodules/qt5compat-everywhere-src-$version.tar.xz
 
     post-install:
       - mkdir -p /app/lib/mkspecs
