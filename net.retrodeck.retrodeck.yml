@@ -121,7 +121,8 @@ modules:
           url-template: https://download.qt.io/official_releases/qt/6.2/$version/submodules/qt5compat-everywhere-src-$version.tar.xz
 
     post-install:
-      - mv -f /app/mkspecs /app/lib
+      - mkdir -p /app/lib/mkspecs
+      - cp -rf /app/mkspecs/* /app/lib/mkspecs/
       - ln -sr ${FLATPAK_DEST}/lib/${FLATPAK_ARCH}-linux-gnu/libQt*.so* -t ${FLATPAK_DEST}/lib/
       - sed -i 's/\\([0-9]\\+\\.[0-9]\\+\\)\\.[0-9]\\+ ${_Qt6.*_FIND_VERSION_EXACT}/\\1/'
         ${FLATPAK_DEST}/lib/${FLATPAK_ARCH}-linux-gnu/cmake/Qt6*/Qt6*Config.cmake
@@ -133,7 +134,9 @@ modules:
         -i ${FLATPAK_DEST}/lib/mkspecs/modules/*.pri
       - sed -e 's@$$QT_MODULE_INCLUDE_BASE/@'${FLATPAK_DEST}'/include/@g' -i ${FLATPAK_DEST}/lib/mkspecs/modules/*.pri
       - sed -e 's@$$QT_MODULE_LIB_BASE@'${FLATPAK_DEST}'/lib@g' -i ${FLATPAK_DEST}/lib/mkspecs/modules/*.pri
-
+    cleanup:
+      - /app/mkspecs
+      
   # mesa repo got a double certificate issue and gnutils cannot handle that so GLU download fails,
   # this affects even the shared-modules's glu so I have to replace it temporarly
   # more info there: https://gitlab.com/gnutls/gnutls/-/issues/1335
