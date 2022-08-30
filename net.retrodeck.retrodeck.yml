@@ -123,7 +123,7 @@ modules:
     post-install:
       - mkdir -p /app/lib/mkspecs
       - cp -R /app/mkspecs/* /app/lib/mkspecs/
-      - ln -sr ${FLATPAK_DEST}/lib/${FLATPAK_ARCH}-linux-gnu/libQt*.so* -t ${FLATPAK_DEST}/lib/
+      - ln -fsr ${FLATPAK_DEST}/lib/${FLATPAK_ARCH}-linux-gnu/libQt*.so* -t ${FLATPAK_DEST}/lib/
       - sed -i 's/\\([0-9]\\+\\.[0-9]\\+\\)\\.[0-9]\\+ ${_Qt6.*_FIND_VERSION_EXACT}/\\1/'
         ${FLATPAK_DEST}/lib/${FLATPAK_ARCH}-linux-gnu/cmake/Qt6*/Qt6*Config.cmake
       - sed -e 's@PATHS \"${CMAKE_CURRENT_LIST_DIR}/..\" NO_DEFAULT_PATH@PATHS \"${CMAKE_CURRENT_LIST_DIR}/..\"
