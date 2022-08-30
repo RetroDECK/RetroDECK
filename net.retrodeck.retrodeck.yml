@@ -121,7 +121,7 @@ modules:
           url-template: https://download.qt.io/official_releases/qt/6.2/$version/submodules/qt5compat-everywhere-src-$version.tar.xz
 
     post-install:
-      - mv /app/mkspecs /app/lib
+      - mv -f /app/mkspecs /app/lib
       - ln -sr ${FLATPAK_DEST}/lib/${FLATPAK_ARCH}-linux-gnu/libQt*.so* -t ${FLATPAK_DEST}/lib/
       - sed -i 's/\\([0-9]\\+\\.[0-9]\\+\\)\\.[0-9]\\+ ${_Qt6.*_FIND_VERSION_EXACT}/\\1/'
         ${FLATPAK_DEST}/lib/${FLATPAK_ARCH}-linux-gnu/cmake/Qt6*/Qt6*Config.cmake
