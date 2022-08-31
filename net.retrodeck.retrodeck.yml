@@ -536,10 +536,6 @@ modules:
         TITLEBARFORMATIDLE: yuzu {}
         TITLEBARFORMATRUNNING: yuzu {} | {}
         LDFLAGS: -L/app/lib -Wl,-z,relro,-z,now -Wl,--as-needed
-    build-commands:
-    - |
-      find_package(Qt6 REQUIRED COMPONENTS Core5Compat)
-      target_link_libraries(mytarget PRIVATE Qt6::Core5Compat)
     cleanup:
       - /share/man
       - /share/pixmaps
