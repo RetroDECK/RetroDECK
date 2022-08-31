@@ -821,33 +821,33 @@ modules:
         commit: e47e674cd09583ff0503f0f6defd6d23d8b718d3
   # PCSX2 Flathub Workaround - END
 
-  - name: pcsx2-qt
-    buildsystem: cmake-ninja
-    builddir: true
-    config-opts:
-      - '-DCMAKE_BUILD_TYPE=Release'
-      - '-DPACKAGE_MODE=TRUE'
-      - '-DXDG_STD=TRUE'
-      - '-DDISABLE_BUILD_DATE=TRUE'
-      - '-DDISABLE_PCSX2_WRAPPER=TRUE'
-      - '-DDISABLE_ADVANCE_SIMD=TRUE'
-      - '-DSDL2_API=TRUE'
-      #- '-DWAYLAND_API=TRUE"' enable this if Steam Deck goes to Wayland
-      - '-DQT_BUILD=TRUE'
-      - '-DCMAKE_INTERPROCEDURAL_OPTIMIZATION=TRUE'
-    cleanup:
-      - /share/pixmaps
-      - /share/man
-      - /share/doc
-    post-install:
-      - ln -s ${FLATPAK_DEST}/share/PCSX2/resources ${FLATPAK_DEST}/bin/resources
-    sources:
-      - type: git
-        url: https://github.com/PCSX2/pcsx2.git
-        tag: v1.7.3229
-        commit: e3eae7fbe83aad3952e3ed6a8e56fc016b51a9c3  
-    # same as above
-    disable-submodules: true
+  # - name: pcsx2-qt
+  #   buildsystem: cmake-ninja
+  #   builddir: true
+  #   config-opts:
+  #     - '-DCMAKE_BUILD_TYPE=Release'
+  #     - '-DPACKAGE_MODE=TRUE'
+  #     - '-DXDG_STD=TRUE'
+  #     - '-DDISABLE_BUILD_DATE=TRUE'
+  #     - '-DDISABLE_PCSX2_WRAPPER=TRUE'
+  #     - '-DDISABLE_ADVANCE_SIMD=TRUE'
+  #     - '-DSDL2_API=TRUE'
+  #     #- '-DWAYLAND_API=TRUE"' enable this if Steam Deck goes to Wayland
+  #     - '-DQT_BUILD=TRUE'
+  #     - '-DCMAKE_INTERPROCEDURAL_OPTIMIZATION=TRUE'
+  #   cleanup:
+  #     - /share/pixmaps
+  #     - /share/man
+  #     - /share/doc
+  #   post-install:
+  #     - ln -s ${FLATPAK_DEST}/share/PCSX2/resources ${FLATPAK_DEST}/bin/resources
+  #   sources:
+  #     - type: git
+  #       url: https://github.com/PCSX2/pcsx2.git
+  #       tag: v1.7.3229
+  #       commit: e3eae7fbe83aad3952e3ed6a8e56fc016b51a9c3  
+  #   # same as above
+  #   #disable-submodules: true
 
   # PCSX2 - END
 
