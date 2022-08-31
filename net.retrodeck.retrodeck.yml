@@ -107,6 +107,7 @@ modules:
 
   # pcsx2-qt needs QT6, maybe others, here until every qt emulator will support qt6 (not yuzu atm)
   # from: https://github.com/flathub/org.profex_xrd.Profex
+
   # - name: qt6-core5compat
   #   buildsystem: cmake-ninja
   #   builddir: true
@@ -119,7 +120,6 @@ modules:
   #         url: https://download.qt.io/official_releases/qt/6.2/
   #         version-pattern: '>([\d\.-]*)/<'
   #         url-template: https://download.qt.io/official_releases/qt/6.2/$version/submodules/qt5compat-everywhere-src-$version.tar.xz
-
   #   post-install:
   #     - mkdir -p /app/lib/mkspecs
   #     - cp -R /app/mkspecs/* /app/lib/mkspecs/
@@ -515,6 +515,7 @@ modules:
         x-checker-data:
           type: git
           tag-pattern: ^n([\d.]+)$
+
   - name: yuzu
     buildsystem: cmake-ninja
     builddir: true
@@ -535,6 +536,10 @@ modules:
         TITLEBARFORMATIDLE: yuzu {}
         TITLEBARFORMATRUNNING: yuzu {} | {}
         LDFLAGS: -L/app/lib -Wl,-z,relro,-z,now -Wl,--as-needed
+    build-commands:
+    - |
+      find_package(Qt6 REQUIRED COMPONENTS Core5Compat)
+      target_link_libraries(mytarget PRIVATE Qt6::Core5Compat)
     cleanup:
       - /share/man
       - /share/pixmaps
