@@ -422,14 +422,12 @@ modules:
       - '-Dbin_contrib=false'
     sources:
       - type: archive
-        url: >-
-          https://github.com/facebook/zstd/releases/download/v1.5.2/zstd-1.5.2.tar.gz
+        url: https://github.com/facebook/zstd/releases/download/v1.5.2/zstd-1.5.2.tar.gz
         sha256: 7c42d56fac126929a6a85dbc73ff1db2411d04f104fae9bdea51305663a83fd0
         x-checker-data:
           type: anitya
           project-id: 12083
-          url-template: >-
-            https://github.com/facebook/zstd/releases/download/v$version/zstd-$version.tar.gz
+          url-template: https://github.com/facebook/zstd/releases/download/v$version/zstd-$version.tar.gz
   - name: fmt
     buildsystem: cmake-ninja
     config-opts:
@@ -444,8 +442,7 @@ modules:
           project-id: 11526
           versions:
             <: 9.0.0
-          url-template: >-
-            https://github.com/fmtlib/fmt/releases/download/$version/fmt-$version.zip
+          url-template: https://github.com/fmtlib/fmt/releases/download/$version/fmt-$version.zip
   - name: glslang
     buildsystem: cmake-ninja
     config-opts:
@@ -504,8 +501,7 @@ modules:
         x-checker-data:
           type: anitya
           project-id: 6845
-          url-template: >-
-            https://boostorg.jfrog.io/artifactory/main/release/$version/source/boost_1_79_0.tar.bz2
+          url-template: https://boostorg.jfrog.io/artifactory/main/release/$version/source/boost_1_79_0.tar.bz2
   - name: nv-codec-headers
     make-install-args:
       - PREFIX=/app
@@ -629,12 +625,8 @@ modules:
       - /share/man
       - /share/pixmaps
     post-install:
-      - >-
-        install -Dm644 ../dist/citra.svg
-        /app/share/icons/hicolor/scalable/apps/citra.svg
-      - >-
-        install -Dm644 ../dist/icon.png
-        /app/share/icons/hicolor/512x512/apps/citra.png
+      - install -Dm644 ../dist/citra.svg /app/share/icons/hicolor/scalable/apps/citra.svg
+      - install -Dm644 ../dist/icon.png /app/share/icons/hicolor/512x512/apps/citra.png
     sources:
       - type: git
         url: https://github.com/citra-emu/citra-nightly.git
@@ -728,8 +720,7 @@ modules:
       - make prefix=/app install
     sources:
       - type: archive
-        url: >-
-          https://download.savannah.nongnu.org/releases/pngpp/png++-0.2.10.tar.gz
+        url: https://download.savannah.nongnu.org/releases/pngpp/png++-0.2.10.tar.gz
         sha256: 998af216ab16ebb88543fbaa2dbb9175855e944775b66f2996fc945c8444eee1
 
   - name: libpcap
@@ -849,9 +840,7 @@ modules:
       - /share/man
       - /share/doc
     post-install:
-      - >-
-        ln -s ${FLATPAK_DEST}/share/PCSX2/resources
-        ${FLATPAK_DEST}/bin/resources
+      - ln -s ${FLATPAK_DEST}/share/PCSX2/resources ${FLATPAK_DEST}/bin/resources
     sources:
       - type: git
         url: https://github.com/PCSX2/pcsx2.git
