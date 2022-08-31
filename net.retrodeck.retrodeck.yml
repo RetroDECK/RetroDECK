@@ -535,7 +535,7 @@ modules:
       - -DDISPLAY_VERSION=1150
       - -DBUILD_TAG=mainline-1150
       - -DBUILD_REPOSITORY=yuzu-emu/yuzu-mainline
-      - -DCMAKE_PREFIX_PATH=/run/build/yuzu/_flatpak_build/externals/qt5_5_15_2
+      #- -DCMAKE_PREFIX_PATH=/run/build/yuzu/_flatpak_build/externals/qt5_5_15_2
     build-options:
       env:
         TITLEBARFORMATIDLE: yuzu {}
@@ -546,9 +546,7 @@ modules:
       - /share/pixmaps
     post-install:
       - install -Dm755 ../yuzu-launcher.sh /app/bin/yuzu-launcher
-      - >-
-        install -Dm644 ../dist/yuzu.svg
-        /app/share/icons/hicolor/scalable/apps/yuzu.svg
+      - install -Dm644 ../dist/yuzu.svg /app/share/icons/hicolor/scalable/apps/yuzu.svg
     sources:
       - type: git
         url: https://github.com/yuzu-emu/yuzu-mainline.git
