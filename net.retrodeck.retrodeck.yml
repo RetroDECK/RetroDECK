@@ -88,20 +88,6 @@ modules:
         url: https://github.com/XargonWan/RetroDECK.git
         branch: cooker
 
-  - name: pcsx2-qt-appimage
-    buildsystem: simple
-    build-commands:
-      - ls -la #debug
-      - chmod +x pcsx2*.AppImage
-      - ./pcsx2*.AppImage --appimage-extract
-      - mkdir -p "${FLATPAK_DEST}/pcsx2-qt"
-      - cp -r squashfs-root/* "${FLATPAK_DEST}/pcsx2-qt"
-      - ln -s "${FLATPAK_DEST}/pcsx2-qt/bin/pcsx2-qt" "${FLATPAK_DEST}/bin/pcsx2-qt"
-    sources:
-      - type: file
-        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.3271/pcsx2-v1.7.3271-linux-AppImage-64bit-AVX2-Qt.AppImage
-        sha256: 34aca477585bf9492b8f51ae066fe52c2a321c7b5656b9b76df97d51f75e4f85
-
   - name: xmlstarlet
     config-opts:
       - --disable-static-libs
@@ -866,6 +852,19 @@ modules:
   # Inspired by:
   # https://github.com/flathub/com.zettlr.Zettlr/blob/master/com.zettlr.Zettlr.yaml
 
+  - name: pcsx2-qt-appimage
+    buildsystem: simple
+    build-commands:
+      - ls -la #debug
+      - chmod +x pcsx2*.AppImage
+      - ./pcsx2*.AppImage --appimage-extract
+      - mkdir -p "${FLATPAK_DEST}/pcsx2-qt"
+      - cp -r squashfs-root/* "${FLATPAK_DEST}/pcsx2-qt"
+      - ln -s "${FLATPAK_DEST}/pcsx2-qt/bin/pcsx2-qt" "${FLATPAK_DEST}/bin/pcsx2-qt"
+    sources:
+      - type: file
+        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.3271/pcsx2-v1.7.3271-linux-AppImage-64bit-AVX2-Qt.AppImage
+        sha256: 34aca477585bf9492b8f51ae066fe52c2a321c7b5656b9b76df97d51f75e4f85
 
   # PCSX2 - END
 
@@ -1308,6 +1307,21 @@ modules:
         commit: 3fb61865e505ba639609fbf16cb8bdf5c66e020c
   
   # Duckstation - END
+
+  # CEMU - START
+
+  - name: Cemu
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
+      - -DENABLE_VCPKG=false
+      - -DCMAKE_BUILD_TYPE=release 
+    sources:
+      - type: git
+        url: https://github.com/cemu-project/Cemu
+        commit: d8da8a54a6c08296a884b892d714cabcb7e4bdb5
+
+  # CEMU - END
 
   # External manifests end
 
