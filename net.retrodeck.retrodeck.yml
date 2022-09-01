@@ -88,6 +88,20 @@ modules:
         url: https://github.com/XargonWan/RetroDECK.git
         branch: cooker
 
+  - name: pcsx2-qt-appimage
+    buildsystem: simple
+    build-commands:
+      - ls -la #debug
+      - chmod +x pcsx2*.AppImage
+      - ./pcsx2*.AppImage --appimage-extract
+      - mkdir -p "${FLATPAK_DEST}/pcsx2-qt"
+      - cp -r squashfs-root/* "${FLATPAK_DEST}/pcsx2-qt"
+      - ln -s "${FLATPAK_DEST}/pcsx2-qt/bin/pcsx2-qt" "${FLATPAK_DEST}/bin/pcsx2-qt"
+    sources:
+      - type: file
+        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.3271/pcsx2-v1.7.3271-linux-AppImage-64bit-AVX2-Qt.AppImage
+        sha256: 34aca477585bf9492b8f51ae066fe52c2a321c7b5656b9b76df97d51f75e4f85
+
   - name: xmlstarlet
     config-opts:
       - --disable-static-libs
@@ -851,18 +865,7 @@ modules:
 
   # Inspired by:
   # https://github.com/flathub/com.zettlr.Zettlr/blob/master/com.zettlr.Zettlr.yaml
-  - name: pcsx2-qt-appimage
-    buildsystem: simple
-    build-commands:
-      - chmod +x pcsx2*.AppImage
-      - ./pcsx2*.AppImage --appimage-extract
-      - mkdir -p "${FLATPAK_DEST}/pcsx2-qt"
-      - cp -r squashfs-root/* "${FLATPAK_DEST}/pcsx2-qt"
-      - ln -s "${FLATPAK_DEST}/pcsx2-qt/bin/pcsx2-qt" "${FLATPAK_DEST}/bin/pcsx2-qt"
-    sources:
-      - type: url
-        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.3271/pcsx2-v1.7.3271-linux-AppImage-64bit-AVX2-Qt.AppImage
-        sha256: 34aca477585bf9492b8f51ae066fe52c2a321c7b5656b9b76df97d51f75e4f85
+
 
   # PCSX2 - END
 
