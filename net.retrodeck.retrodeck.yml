@@ -1315,7 +1315,10 @@ modules:
     builddir: true
     config-opts:
       - -DENABLE_VCPKG=false
-      - -DCMAKE_BUILD_TYPE=Release 
+      - -DCMAKE_BUILD_TYPE=Release
+      #- -DCMAKE_C_COMPILER=/usr/bin/gcc 
+      #- -DCMAKE_CXX_COMPILER=/usr/bin/g++
+      - -Dimgui_LINK_LIBRARIES=/app/lib/imgui
     sources:
       - type: git
         url: https://github.com/cemu-project/Cemu
