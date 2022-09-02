@@ -1522,11 +1522,12 @@
         <name>wiiu</name>
         <fullname>Nintendo Wii U</fullname>
         <path>%ROMPATH%/wiiu</path>
-        <extension>.7z .7Z .zip .ZIP</extension>
-        <command>PLACEHOLDER %ROM%</command>
+        <extension>.rpx .RPX .wua .WUA .wud .WUD .wux .WUX</extension>
+        <command label="Cemu (Standalone)">%EMULATOR_CEMU% -g %ROM%</command>
         <platform>wiiu</platform>
         <theme>wiiu</theme>
     </system>
+
     <system>
         <name>wonderswan</name>
         <fullname>Bandai WonderSwan</fullname>

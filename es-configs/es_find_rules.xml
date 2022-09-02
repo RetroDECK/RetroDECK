@@ -86,6 +86,17 @@
             <entry>~/.local/share/flatpak/exports/bin/dev.bsnes.bsnes</entry>
         </rule>
     </emulator>
+    <emulator name="CEMU">
+        <!-- Nintendo Wii U emulator Cemu -->
+        <rule type="systempath">
+            <entry>Cemu</entry>
+        </rule>
+        <rule type="staticpath">
+            <entry>~/Applications/Cemu/Cemu</entry>
+            <entry>~/.local/bin/Cemu/Cemu</entry>
+            <entry>~/bin/Cemu/Cemu</entry>
+        </rule>
+    </emulator>
     <emulator name="CITRA">
         <!-- Nintendo 3DS emulator Citra -->
         <rule type="systempath">
