@@ -179,13 +179,6 @@ modules:
         url: https://ftp.osuosl.org/pub/blfs/conglomeration/libgudev/libgudev-237.tar.xz
         sha256: 0d06b21170d20c93e4f0534dbb9b0a8b4f1119ffb00b4031aaeb5b9148b686aa
 
-  - name: imgui
-    buildsystem: cmake-ninja
-    sources:
-    - type: git
-      url: https://github.com/ocornut/imgui.git
-      commit: 60bea052a92cbb4a93b221002fdf04f0da3698e1
-
   # ES-DE - START
   # https://gitlab.com/es-de/emulationstation-de
 
@@ -803,6 +796,10 @@ modules:
         url: https://github.com/biojppm/rapidyaml.git
         commit: 213b201d264139cd1b887790197e08850af628e3
       - type: git
+        dest: 3rdparty/imgui/imgui
+        url: https://github.com/ocornut/imgui.git
+        commit: 60bea052a92cbb4a93b221002fdf04f0da3698e1
+      - type: git
         dest: 3rdparty/glslang/glslang
         url: https://github.com/KhronosGroup/glslang.git
         commit: c9706bdda0ac22b9856f1aa8261e5b9e15cd20c5
@@ -1323,6 +1320,10 @@ modules:
       - type: git
         url: https://github.com/cemu-project/Cemu
         commit: d8da8a54a6c08296a884b892d714cabcb7e4bdb5
+      - type: git
+        dest: 3rdparty/imgui/imgui
+        url: https://github.com/ocornut/imgui.git
+        commit: 60bea052a92cbb4a93b221002fdf04f0da3698e1
 
   # CEMU - END
 
