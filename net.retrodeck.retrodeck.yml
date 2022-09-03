@@ -1310,23 +1310,23 @@ modules:
 
   # CEMU - START
 
-  - name: Cemu
-    buildsystem: cmake-ninja
-    builddir: true
-    config-opts:
-      - -DENABLE_VCPKG=false
-      - -DCMAKE_BUILD_TYPE=Release
-      #- -DCMAKE_C_COMPILER=/usr/bin/gcc 
-      #- -DCMAKE_CXX_COMPILER=/usr/bin/g++
-      - -Dimgui_LINK_LIBRARIES=/app/lib/imgui
-    sources:
-      - type: git
-        url: https://github.com/cemu-project/Cemu
-        commit: d8da8a54a6c08296a884b892d714cabcb7e4bdb5
-      - type: git
-        dest: 3rdparty/imgui/imgui
-        url: https://github.com/ocornut/imgui.git
-        commit: 60bea052a92cbb4a93b221002fdf04f0da3698e1
+  # - name: Cemu
+  #   buildsystem: cmake-ninja
+  #   builddir: true
+  #   config-opts:
+  #     - -DENABLE_VCPKG=false
+  #     - -DCMAKE_BUILD_TYPE=Release
+  #     #- -DCMAKE_C_COMPILER=/usr/bin/gcc 
+  #     #- -DCMAKE_CXX_COMPILER=/usr/bin/g++
+  #     - -Dimgui_LINK_LIBRARIES=/app/lib/imgui
+  #   sources:
+  #     - type: git
+  #       url: https://github.com/cemu-project/Cemu
+  #       commit: d8da8a54a6c08296a884b892d714cabcb7e4bdb5
+  #     - type: git
+  #       dest: 3rdparty/imgui/imgui
+  #       url: https://github.com/ocornut/imgui.git
+  #       commit: 60bea052a92cbb4a93b221002fdf04f0da3698e1
 
   # CEMU - END
 
