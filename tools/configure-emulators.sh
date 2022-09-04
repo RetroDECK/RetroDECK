@@ -7,6 +7,8 @@ then
 fi
 
 emulator="$(zenity --list \
+--width=600 \
+--height=350 \
 --title "RetroDECK" \
 --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
 --text="Which emulator do you want to configure?" \
@@ -15,8 +17,10 @@ emulator="$(zenity --list \
 "RetroArch" \
 "Citra" \
 "Dolphin" \
+"Duckstation" \
 "MelonDS" \
-"PCSX2" \
+"PCSX2-QT" \
+"PCSX2 (Legacy)" \
 "PPSSPP" \
 "RPCS3" \
 "XEMU" \
@@ -31,12 +35,18 @@ then
 elif [ $emulator == "Dolphin" ]
 then
     dolphin-emu
+elif [ $emulator == "Duckstation" ]
+then
+    duckstation-qt
 elif [ $emulator == "MelonDS" ]
 then
     melonDS
-elif [ $emulator == "PCSX2" ]
+elif [ $emulator == "PCSX2 (Legacy)" ]
 then
     pcsx2
+elif [ $emulator == "pcsx2-qt" ]
+then
+    pcsx2-qt
 elif [ $emulator == "PPSSPP" ]
 then
     PPSSPPSDL
