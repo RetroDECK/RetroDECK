@@ -860,7 +860,7 @@ modules:
       - ./pcsx2*.AppImage --appimage-extract
       - mkdir -p "${FLATPAK_DEST}/pcsx2-qt"
       - cp -r squashfs-root/* "${FLATPAK_DEST}/pcsx2-qt"
-      - ln -s "${FLATPAK_DEST}/pcsx2-qt/usr/bin/pcsx2-qt" "${FLATPAK_DEST}/bin/pcsx2-qt" 
+      - ln -s "${FLATPAK_DEST}/pcsx2-qt/usr/bin/pcsx2-qt" "${FLATPAK_DEST}/bin/pcsx2-qt"
     sources:
       - type: file
         url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.3271/pcsx2-v1.7.3271-linux-AppImage-64bit-AVX2-Qt.AppImage
