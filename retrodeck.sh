@@ -171,7 +171,7 @@ standalones_init() {
     cp -fv $emuconfigs/ppssppsdl/* /var/config/ppsspp/PSP/SYSTEM/
     sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/ppsspp/PSP/SYSTEM/ppsspp.ini
 
-    # DUCKSTATION
+    # PPSSPPSDL
     echo "------------------------"
     echo "Initializing DUCKSTATION"
     echo "------------------------"
