@@ -222,6 +222,7 @@ ra_init() {
 create_lock() {
     # creating RetroDECK's lock file and writing the version number in it
     echo "$version" > "$lockfile"
+    conf_write
 }
 
 post_update() {
