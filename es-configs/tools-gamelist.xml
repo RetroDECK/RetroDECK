@@ -85,6 +85,13 @@
 		<nomultiscrape>true</nomultiscrape>
 	</game> -->
 	<game>
+		<path>./theme-fix.sh</path>
+		<name>Theme fix</name>
+		<desc>Clean some of the scraped data in order to beautify the new theme. This is needed if you got scraped data since v0.4.2 or earlier.</desc>
+		<nogamecount>true</nogamecount>
+		<nomultiscrape>true</nomultiscrape>
+	</game>
+	<game>
 		<path>./configure-emulators.sh</path>
 		<name>Configure Emulators</name>
 		<desc>Choose an emulator to configure.</desc>
@@ -98,11 +105,4 @@
 		<nogamecount>true</nogamecount>
 		<nomultiscrape>true</nomultiscrape>
 	</game>
-	<game>
-		<path>./rewind.sh</path>
-		<name>Rewind toggler</name>
-		<desc>Enable or disable the rewind function for some RetroArch cores.</desc>
-		<nogamecount>true</nogamecount>
-		<nomultiscrape>true</nomultiscrape>
-	</game>
-</gameList>
+</gameList> 
