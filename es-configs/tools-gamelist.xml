@@ -98,4 +98,11 @@
 		<nogamecount>true</nogamecount>
 		<nomultiscrape>true</nomultiscrape>
 	</game>
+	<game>
+		<path>./rewind.sh</path>
+		<name>Rewind toggler</name>
+		<desc>Enable or disable the rewind function for some RetroArch cores.</desc>
+		<nogamecount>true</nogamecount>
+		<nomultiscrape>true</nomultiscrape>
+	</game>
 </gameList>
