@@ -245,6 +245,8 @@ modules:
 
   # ES-DE Themes - START
   
+  # ES-DE Themes - START
+  
   - name: art-book-next
     buildsystem: simple
     build-commands:
@@ -253,7 +255,7 @@ modules:
     sources:
       - type: git
         url:  https://github.com/anthonycaccese/art-book-next-retropie.git
-        commit: 23932f484a9949313baf80f92b2fbca38a7a8f37
+        commit: cbd282eb05bb2deb138dad99c3420be56d35c1b8
         
   - name: alekfull-nx-light
     buildsystem: simple
@@ -263,7 +265,7 @@ modules:
     sources:
       - type: git
         url:  https://github.com/anthonycaccese/alekfull-nx-retropie.git
-        commit: 67c8c8dee086bd06bcdc6dc34bb9bef1e1c11be7
+        commit: b02be0fde13b1a9c9f09064edbb517901beb62c7
         
   - name: retrofix-revisited
     buildsystem: simple
@@ -1434,3 +1436,4 @@ modules:
       - type: git
         url: https://github.com/XargonWan/RetroDECK.git
         branch: cooker
+
