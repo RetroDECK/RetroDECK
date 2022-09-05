@@ -242,6 +242,8 @@ modules:
 
   # ES-DE - END
 
+  # ES-DE Themes - START
+  
   - name: art-book-next
     buildsystem: simple
     build-commands:
@@ -250,27 +252,29 @@ modules:
     sources:
       - type: git
         url:  https://github.com/anthonycaccese/art-book-next-retropie.git
-        commit: 5b953838424e029e7ad534d2a20a7c7f7f5b9e8a
-
-  - name: art-book-next-no-meta
+        commit: cbd282eb05bb2deb138dad99c3420be56d35c1b8
+        
+  - name: alekfull-nx-light
     buildsystem: simple
     build-commands:
-      - mkdir -p ${FLATPAK_DEST}/share/emulationstation/themes/art-book-next-no-meta/
-      - mv -f * ${FLATPAK_DEST}/share/emulationstation/themes/art-book-next-no-meta/
+      - mkdir -p ${FLATPAK_DEST}/share/emulationstation/themes/alekfull-nx-light/
+      - mv -f * ${FLATPAK_DEST}/share/emulationstation/themes/alekfull-nx-light/
     sources:
       - type: git
-        url:  https://github.com/anthonycaccese/art-book-next-retropie.git
-        commit: 3b93a8e2bea9d65aee5b0d07f07f56e76653a265
-
-  - name: art-book-next-miximage
+        url:  https://github.com/anthonycaccese/alekfull-nx-retropie.git
+        commit: b02be0fde13b1a9c9f09064edbb517901beb62c7
+        
+  - name: retrofix-revisited
     buildsystem: simple
     build-commands:
-      - mkdir -p ${FLATPAK_DEST}/share/emulationstation/themes/art-book-next-miximage/
-      - mv -f * ${FLATPAK_DEST}/share/emulationstation/themes/art-book-next-miximage/
+      - mkdir -p ${FLATPAK_DEST}/share/emulationstation/themes/retrofix-revisited/
+      - mv -f * ${FLATPAK_DEST}/share/emulationstation/themes/retrofix-revisited/
     sources:
       - type: git
-        url:  https://github.com/anthonycaccese/art-book-next-retropie.git
-        commit: 87b580aceabcf53149e1398039377416bdbd056c
+        url:  https://github.com/anthonycaccese/retrofix-revisited-retropie.git
+        commit: 6e75c9521426e69eb9abcb39d135d97a17d14568
+
+  # ES-DE Themes - END
 
   # External manifests start
 
