@@ -231,9 +231,8 @@ ra_init() {
 }
 
 create_lock() {
-    # creating RetroDECK's lock file and writing the version in the config file
-    version=$hard_version
-    touch "$lockfile"
+    # creating RetroDECK's lock file and writing the version number in it
+    echo "$version" > "$lockfile"
     conf_write
 }
 
