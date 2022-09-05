@@ -265,7 +265,7 @@ modules:
     sources:
       - type: git
         url:  https://github.com/anthonycaccese/alekfull-nx-retropie.git
-        commit: b02be0fde13b1a9c9f09064edbb517901beb62c7
+        commit: 67c8c8dee086bd06bcdc6dc34bb9bef1e1c11be7
         
   - name: retrofix-revisited
     buildsystem: simple
