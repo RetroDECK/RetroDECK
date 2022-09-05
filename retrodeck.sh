@@ -169,6 +169,14 @@ standalones_init() {
     cp -fv $emuconfigs/ppssppsdl/* /var/config/ppsspp/PSP/SYSTEM/
     sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/ppsspp/PSP/SYSTEM/ppsspp.ini
 
+    # PPSSPPSDL
+    echo "------------------------"
+    echo "Initializing DUCKSTATION"
+    echo "------------------------"
+    mkdir -p /var/config/duckstation/
+    cp -fv $emuconfigs/duckstation/* /var/config/duckstation
+    sed -i 's#/home/deck/retrodeck/bios#'$rdhome/bios'#g' /var/config/ppsspp/PSP/SYSTEM/settings.ini
+
 
     # PICO-8
     # Moved PICO-8 stuff in the finit as only it knows here roms folders is
