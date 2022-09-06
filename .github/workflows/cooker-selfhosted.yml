@@ -18,8 +18,7 @@ jobs:
     steps:
 
       - name: Remove stuck mounts
-        run: sudo umount -f /home/administrator/actions-runner/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles/*
-        continue-on-error: true
+        run: while [[ $(findmnt /home/administrator/actions-runner/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles) != "" ]]; do sudo umount /home/administrator/actions-runner/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles; done
 
       - name: Get date for artifacts
         id: date
@@ -38,7 +37,6 @@ jobs:
 
       - name: Initialize enviornment
         run: |
-          while [[ $(findmnt /home/administrator/actions-runner/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles) != "" ]]; do sudo umount /home/administrator/actions-runner/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles; done
           git pull
           git submodule init
           git submodule update
