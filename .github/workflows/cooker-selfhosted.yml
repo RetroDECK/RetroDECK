@@ -18,7 +18,7 @@ jobs:
     steps:
 
       - name: Remove stuck mounts
-        run: while [[ $(findmnt /home/administrator/actions-runner/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles) != "" ]]; do sudo umount /home/administrator/actions-runner/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles; done
+        run: umount -f /home/administrator/actions-runner/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles/*
 
       - name: Get date for artifacts
         id: date
