@@ -5,7 +5,7 @@
         <name>3do</name>
         <fullname>3DO</fullname>
         <path>%ROMPATH%/3do</path>
-        <extension>.iso .ISO .bin .BIN .chd .CHD .cue .CUE .7z .7Z .zip .ZIP</extension>
+        <extension>.iso .ISO .bin .BIN .chd .CHD .cue .CUE</extension>
         <command label="Opera">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/opera_libretro.so %ROM%</command>
         <platform>3do</platform>
         <theme>3do</theme>
