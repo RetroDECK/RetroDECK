@@ -17,6 +17,9 @@ jobs:
     runs-on: self-hosted
     steps:
 
+      - name: Remove stuck mounts
+        run: while [[ $(findmnt /home/administrator/actions-runner/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles) != "" ]]; do sudo umount /home/administrator/actions-runner/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles; done
+
       - name: Get date for artifacts
         id: date
         run: echo "::set-output name=date::$(date +'%Y%m%d_%H%M%S')"
@@ -34,7 +37,6 @@ jobs:
 
       - name: Initialize enviornment
         run: |
-          while [[ $(findmnt /home/administrator/actions-runner/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles) != "" ]]; do sudo umount /home/administrator/actions-runner/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles; done
           git pull
           git submodule init
           git submodule update
