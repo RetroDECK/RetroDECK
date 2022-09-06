@@ -100,7 +100,7 @@
     <emulator name="CITRA">
         <!-- Nintendo 3DS emulator Citra -->
         <rule type="systempath">
-            <entry>citra</entry>
+            <entry>citra-qt</entry>
             <entry>citra-emu.citra-nightly</entry>
             <entry>org.citra_emu.citra</entry>
         </rule>
