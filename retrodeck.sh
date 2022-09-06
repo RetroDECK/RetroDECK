@@ -1,7 +1,6 @@
 #!/bin/bash
 
 source /app/bin/global.sh
-#conf_init
 
 # We moved the lockfile in /var/config/retrodeck in order to solve issue #53 - Remove in a few versions
 if [ -f "$HOME/retrodeck/.lock" ]
