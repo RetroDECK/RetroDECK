@@ -2,9 +2,22 @@
 
 # This file is containing some global function needed for the script such as the config file tools
 
-rd_conf="/var/config/retrodeck/retrodeck.cfg"
+rd_conf="/var/config/retrodeck/retrodeck.cfg"                # RetroDECK config file path
 
-conf_init() {
+# if everything is working put this stuff down there
+if [ ! -f $rd_conf ]
+then
+  # Init default values, this may be overwritten by retrodeck.cfg as it sourced later with global.sh
+  lockfile="/var/config/retrodeck/.lock"                     # where the lockfile is located
+  emuconfigs="/app/retrodeck/emu-configs"                    # folder with all the default emulator configs
+  sdcard="/run/media/mmcblk0p1"                              # Steam Deck SD default path
+  rdhome="$HOME/retrodeck"                                   # the retrodeck home, aka ~/retrodeck
+  media_folder="$HOME/retrodeck/downloaded_media"            # the media folder, where all the scraped data is downloaded into
+  themes_folder="$HOME/retrodeck/themes"                     # the themes folder
+  hard_version="$(cat '/app/retrodeck/version')"             # hardcoded version (in the readonly filesystem)
+fi
+
+#conf_init() {
   # initializing and reading the retrodeck config file
   if [ ! -f $rd_conf ]
   then # I have to initialize the variables as they cannot be red from an empty config file
@@ -16,7 +29,13 @@ conf_init() {
     echo "#!/bin/bash" >> $rd_conf
     
     # version info taken from the version file
-    version="$(cat /app/retrodeck/version)" 
+    # if the version variable is not set means that is a first installation, so we populate with the hardcoded version
+    if [ -z $version ]
+    then
+      version="$hard_version"
+    #else
+    #  version="$version"
+    fi
     echo "version=$version" >> $rd_conf
     
     # the retrodeck home, aka ~/retrodeck
@@ -41,7 +60,7 @@ conf_init() {
     echo "Loading it"
     source $rd_conf
   fi
-}
+#}
 
 conf_write() {
   # writes the variables in the retrodeck config file

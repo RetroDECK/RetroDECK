@@ -1,17 +1,7 @@
 #!/bin/bash
 
-# Init default values, this may be overwritten by retrodeck.cfg as it sourced later with global.sh
-
-lockfile="/var/config/retrodeck/.lock"                     # where the lockfile is located
-emuconfigs="/app/retrodeck/emu-configs"                    # folder with all the default emulator configs
-sdcard="/run/media/mmcblk0p1"                              # Steam Deck SD default path
-rd_conf="/var/config/retrodeck/retrodeck.cfg"              # RetroDECK config file path
-version="$(cat /app/retrodeck/version)"                    # version info taken from the version file
-rdhome="$HOME/retrodeck"                                   # the retrodeck home, aka ~/retrodeck
-media_folder="$HOME/retrodeck/downloaded_media"            # the media folder, where all the scraped data is downloaded into
-themes_folder="$HOME/retrodeck/themes"                     # the themes folder
-
 source /app/bin/global.sh
+#conf_init
 
 # We moved the lockfile in /var/config/retrodeck in order to solve issue #53 - Remove in a few versions
 if [ -f "$HOME/retrodeck/.lock" ]
@@ -228,8 +218,8 @@ ra_init() {
 }
 
 create_lock() {
-    # creating RetroDECK's lock file and writing the version number in it
-    echo "$version" > "$lockfile"
+    # creating RetroDECK's lock file and writing the version in the config file
+    touch "$lockfile"
     conf_write
 }
 
@@ -438,7 +428,7 @@ finit() {
 for i in "$@"; do
   case $i in
     -h*|--help*)
-      echo "RetroDECK v""$(cat /var/config/retrodeck/version)"
+      echo "RetroDECK v""$version"
       echo "
       Usage:
 flatpak run [FLATPAK-RUN-OPTION] net.retrodeck-retrodeck [ARGUMENTS]
@@ -459,12 +449,12 @@ https://retrodeck.net
       exit
       ;;
     --version*|-v*)
-      conf_init
+      #conf_init
       echo "RetroDECK v$version"
       exit
       ;;
     --info-msg*)
-      conf_init
+      #conf_init
       echo "RetroDECK v$version"
       echo "RetroDECK config file is in: $rd_conf"
       echo "Contents:"
@@ -497,23 +487,27 @@ https://retrodeck.net
 done
 
 # UPDATE TRIGGERED
-# if lockfile exists but the version doesn't match
-if [ -f "$lockfile" ] && [ "$(cat "$lockfile")" != "$version" ]; 
+# if lockfile exists
+if [ -f "$lockfile" ]
 then
-    echo "Lockfile version is "$(cat "$lockfile")" but the actual version is $version"
-    conf_init         # Initializing/reading the config file (sourced from global.sh)
-    post_update       # Executing post update script
-    conf_write        # Writing variables in the config file (sourced from global.sh)
-    start_retrodeck
-    exit 0
-fi
 
-# LOCKFILE REMOVED
+  #conf_init             # Initializing/reading the config file (sourced from global.sh)
+
+  # ...but the version doesn't match with the config file
+  if [ "$hard_version" != "$version" ]; 
+  then
+      echo "Config file's version is "$(cat "$version")" but the actual version is $hard_version"
+      post_update       # Executing post update script
+      conf_write        # Writing variables in the config file (sourced from global.sh)
+      start_retrodeck
+      exit 0
+  fi
+
+# Else, LOCKFILE IS NOT EXISTING (WAS REMOVED)
 # if the lock file doesn't exist at all means that it's a fresh install or a triggered reset
-if [ ! -f "$lockfile" ];
-then
+else 
   echo "Lockfile not found"
-  conf_init         # Initializing/reading the config file (sourced from global.sh)
+  #conf_init         # Initializing/reading the config file (sourced from global.sh)
   finit             # Executing First/Force init
   conf_write        # Writing variables in the config file (sourced from global.sh)
 	exit 0
