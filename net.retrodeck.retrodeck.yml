@@ -61,7 +61,7 @@ modules:
   # This module is used to define the RetroDECK version
   # If the version is set as cooker it will automatically generate the version tag based on the date
   # else it will just put what is written, "v" is not needed
-  # The version number is stored in /var/conf/retrodeck/version
+  # The version number is hardcoded in /app/retrodeck/version
   # 
   # UPDATE STEPS FOR MAIN:
   # [ ] Update the VERSION variable
