@@ -98,8 +98,9 @@ standalones_init() {
     echo "Initializing PCSX2"
     echo "----------------------"
     mkdir -pv /var/config/PCSX2/inis/
-    cp -fvr $emuconfigs/PCSX2_ui.ini /var/config/PCSX2/inis/
+    cp -fvr $emuconfigs/PCSX2/* /var/config/PCSX2/inis/
     sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2_ui.ini
+    sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2.ini
     cp -fvr $emuconfigs/GS.ini /var/config/PCSX2/inis/
     cp -fvr $emuconfigs/PCSX2_vm.ini /var/config/PCSX2/inis/
     dir_prep "$rdhome/states" "/var/config/PCSX2/sstates"
