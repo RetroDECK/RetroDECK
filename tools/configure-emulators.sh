@@ -20,7 +20,7 @@ emulator="$(zenity --list \
 "Duckstation" \
 "MelonDS" \
 "PCSX2-QT" \
-"PCSX2 (Legacy)" \
+"PCSX2-Legacy" \
 "PPSSPP" \
 "RPCS3" \
 "XEMU" \
@@ -41,10 +41,10 @@ then
 elif [ $emulator == "MelonDS" ]
 then
     melonDS
-elif [ $emulator == "PCSX2 (Legacy)" ]
+elif [ $emulator == "PCSX2-Legacy" ]
 then
     pcsx2
-elif [ $emulator == "pcsx2-qt" ]
+elif [ $emulator == "PCSX2-QT" ]
 then
     pcsx2-qt
 elif [ $emulator == "PPSSPP" ]
