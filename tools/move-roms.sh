@@ -8,7 +8,7 @@ then
     exit 0
 fi
 
-conf_init
+#conf_init
 
 zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="Cancel" --ok-label "Browse" --text="The roms folder is now: $roms_folder\nplease select the new location.\nA retrodeck/roms folder will be created starting from the directory that you selected."
 if [ $? == 1 ] #cancel
