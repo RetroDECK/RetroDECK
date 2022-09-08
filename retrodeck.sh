@@ -90,8 +90,7 @@ standalones_init() {
     echo "----------------------"
     mkdir -pv /var/config/dolphin-emu/
     cp -fvr "$emuconfigs/dolphin/"* /var/config/dolphin-emu/
-    dir_prep "$rdhome/saves" "/var/data/dolphin-emu/GBA/Saves"
-    dir_prep "$rdhome/saves" "/var/data/dolphin-emu/Wii"
+    sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/dolphin-emu/Dolphin.ini
 
     # pcsx2
     echo "----------------------"
