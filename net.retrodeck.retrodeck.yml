@@ -1313,6 +1313,7 @@ modules:
   # Duckstation - END
 
   # CEMU - START
+  # temporary here: https://github.com/Eonfge/flathub/blob/8bb2905b0fefdff820a2b65dac2a7cde916d3ce5/info.cemu.Cemu.yaml
 
   - name: cemu
     buildsystem: cmake-ninja
