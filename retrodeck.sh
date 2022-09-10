@@ -216,6 +216,7 @@ ra_init() {
 
 create_lock() {
     # creating RetroDECK's lock file and writing the version in the config file
+    version=$hard_version
     touch "$lockfile"
     conf_write
 }
@@ -493,7 +494,7 @@ then
   # ...but the version doesn't match with the config file
   if [ "$hard_version" != "$version" ]; 
   then
-      echo "Config file's version is "$(cat "$version")" but the actual version is $hard_version"
+      echo "Config file's version is $version but the actual version is $hard_version"
       post_update       # Executing post update script
       conf_write        # Writing variables in the config file (sourced from global.sh)
       start_retrodeck
