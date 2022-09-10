@@ -255,7 +255,7 @@ modules:
     sources:
       - type: git
         url:  https://github.com/anthonycaccese/art-book-next-retropie.git
-        commit: cbd282eb05bb2deb138dad99c3420be56d35c1b8
+        commit: 23932f484a9949313baf80f92b2fbca38a7a8f37
         
   - name: alekfull-nx-light
     buildsystem: simple
