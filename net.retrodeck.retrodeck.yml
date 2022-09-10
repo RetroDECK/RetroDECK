@@ -1315,30 +1315,60 @@ modules:
   # CEMU - START
   # temporary here: https://github.com/Eonfge/flathub/blob/8bb2905b0fefdff820a2b65dac2a7cde916d3ce5/info.cemu.Cemu.yaml
 
-  - name: cemu
+  # Needed for imgui
+  - name: glad
     buildsystem: cmake-ninja
-    builddir: true
-    build-options:    
-      env:
-        CC: clang
-        CXX: clang++
-        AR: llvm-ar
-        RANLIB: llvm-ranlib
-      ldflags: -fuse-ld=lld
-      prepend-ld-library-path: /usr/lib/sdk/llvm13/lib
-      prepend-path: /usr/lib/sdk/llvm13/bin
     config-opts:
       - -DCMAKE_BUILD_TYPE=RelWithDebInfo
+      - -DBUILD_SHARED_LIBS=true
+      - -DGLAD_REPRODUCIBLE=true
+      - -DGLAD_INSTALL=true
+    sources:
+      - type: archive
+        url: https://github.com/Dav1dde/glad/archive/refs/tags/v0.1.36.tar.gz
+        sha256: 8470ed1b0e9fbe88e10c34770505c8a1dc8ccb78cadcf673331aaf5224f963d2
+
+  # Needed for imgui
+  - name: glfw
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
+      - -DBUILD_SHARED_LIBS=ON
+      - -DGLFW_BUILD_EXAMPLES=OFF
+      - -DGLFW_BUILD_TESTS=OFF
+      - -DGLFW_BUILD_DOCS=OFF
+    sources:
+      - type: archive
+        url: https://github.com/glfw/glfw/releases/download/3.3.2/glfw-3.3.2.zip
+        sha256: 08a33a512f29d7dbf78eab39bd7858576adcc95228c9efe8e4bc5f0f3261efc7
+    cleanup:
+      - /include
+      - /lib/pkgconfig
+
+  - name: imgui
+    buildsystem: cmake
+    sources:
+      - type: archive
+        url: https://github.com/ocornut/imgui/archive/refs/tags/v1.88.zip
+        sha256: 81087a74599e5890a07b636887cee73a7dc1a9eb9e1f19a4a0d82a76090bf4c2
+      - type: file
+        path: imguiCMakeLists.txt
+        dest-filename: CMakeLists.txt
+
+  - name: Cemu
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
       - -DENABLE_VCPKG=false
+      - -DCMAKE_BUILD_TYPE=release 
+      - -DCMAKE_C_COMPILER=/usr/bin/gcc 
+      - -DCMAKE_CXX_COMPILER=/usr/bin/g++
+      - -G Ninja
+      - -DCMAKE_MAKE_PROGRAM=/usr/bin/ninja
     sources:
       - type: git
         url: https://github.com/cemu-project/Cemu
-        tag: v2.0-1
-        commit: e5d7d5d1736019d08e1ff8d9bd2e385330c5b7de
-      - type: git
-        dest: 3rdparty/imgui/imgui
-        url: https://github.com/ocornut/imgui.git
-        commit: 60bea052a92cbb4a93b221002fdf04f0da3698e1
+        commit: d8da8a54a6c08296a884b892d714cabcb7e4bdb5
     cleanup:
       - /app/include
       - /app/lib/*.a
