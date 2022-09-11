@@ -68,6 +68,7 @@
          <ul>
           <li>IMPORTANT: Started saves migration, the saves are being moved to retrodeck/saves/systemname/emulator, so if the emulator cannot load your saves you have to move them to the new path</li>
           <li>Theme revamp and more themes available such as the old one</li>
+          <li>A custom ROMs folder can be now selected during the first setup.</li>
           <li>Updated RetroArch and its cores from 1.10.2 to 1.10.3</li>
           <li>Updated all the standalone emulators to their latrest releases</li>
           <li>Updated ES-DE to the 1.2.6</li>
