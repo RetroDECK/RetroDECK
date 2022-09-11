@@ -81,6 +81,7 @@ standalones_init() {
     dir_prep "$rdhome/bios/switch/registered" "/var/data/yuzu/nand/system/Contents/registered"
     # configuring Yuzu
     dir_prep "$rdhome/.logs/yuzu" "/var/data/yuzu/log"
+    dir_prep "$rdhome/.logs/yuzu" "/var/data/yuzu/log"
     mkdir -pv /var/config/yuzu/
     cp -fvr $emuconfigs/yuzu/* /var/config/yuzu/
     sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/yuzu/qt-config.ini
@@ -135,6 +136,7 @@ standalones_init() {
     mkdir -pv /var/config/citra-emu/
     mkdir -pv "$rdhome/saves/n3ds/citra/nand/"
     mkdir -pv "$rdhome/saves/n3ds/citra/sdmc/"
+    dir_prep "$rdhome/.logs/citra" "/var/data/citra-emu/log"
     cp -fv $emuconfigs/citra-qt-config.ini /var/config/citra-emu/qt-config.ini
     sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
     #TODO: do the same with roms folders after new variables is pushed (check even the others qt-emu)
@@ -188,7 +190,7 @@ standalones_init() {
 
 ra_init() {
     dir_prep "$rdhome/bios" "/var/config/retroarch/system"
-    dir_prep "$rdhome/.logs/retroarch" "/var/config/retroarch/logs"
+     dir_prep "$rdhome/.logs/retroarch" "/var/config/retroarch/logs"
     mkdir -pv /var/config/retroarch/cores/
     cp /app/share/libretro/cores/* /var/config/retroarch/cores/
     cp -fv $emuconfigs/retroarch.cfg /var/config/retroarch/
@@ -258,7 +260,8 @@ post_update() {
     dir_prep "$media_folder" "/var/config/emulationstation/.emulationstation/downloaded_media"
     dir_prep "$themes_folder" "/var/config/emulationstation/.emulationstation/themes"
     mkdir -pv $rdhome/.logs #this was added later, maybe safe to remove in a few versions
-    
+        
+
 
     # Resetting es_settings, now we need it but in the future I should think a better solution, maybe with sed
     cp -fv /app/retrodeck/es_settings.xml /var/config/emulationstation/.emulationstation/es_settings.xml
