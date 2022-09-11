@@ -103,6 +103,7 @@ standalones_init() {
     echo "Initializing PCSX2"
     echo "----------------------"
     mkdir -pv /var/config/PCSX2/inis/
+    mkdir -pv "$rdhome/saves/ps2/pcsx2/memcards"
     cp -fvr $emuconfigs/PCSX2/* /var/config/PCSX2/inis/
     sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2_ui.ini
     sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2.ini
@@ -116,6 +117,8 @@ standalones_init() {
     echo "Initializing MELONDS"
     echo "----------------------"
     mkdir -pv /var/config/melonDS/
+    mkdir -pv "$rdhome/saves/nds/melonds"
+    mkdir -pv "$rdhome/states/nds/melonds"
     dir_prep "$rdhome/bios" "/var/config/melonDS/bios"
     cp -fvr $emuconfigs/melonDS.ini /var/config/melonDS/
     # Replace ~/retrodeck with $rdhome as ~ cannot be understood by MelonDS
@@ -126,6 +129,8 @@ standalones_init() {
     echo "Initializing CITRA"
     echo "------------------------"
     mkdir -pv /var/config/citra-emu/
+    mkdir -pv "$rdhome/saves/n3ds/citra/nand/"
+    mkdir -pv "$rdhome/saves/n3ds/citra/sdmc/"
     cp -fv $emuconfigs/citra-qt-config.ini /var/config/citra-emu/qt-config.ini
     sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
     #TODO: do the same with roms folders after new variables is pushed (check even the others qt-emu)
