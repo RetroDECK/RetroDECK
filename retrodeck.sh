@@ -110,7 +110,7 @@ standalones_init() {
     dir_prep "$rdhome/states" "/var/config/PCSX2/sstates"
     dir_prep "$rdhome/screenshots" "/var/config/PCSX2/snaps"
     dir_prep "$rdhome/.logs" "/var/config/PCSX2/logs"
-    dir_prep "$rdhome/bios" "$rdhome/bios/pcsx2/bios"
+    dir_prep "$rdhome/bios" "$rdhome/bios/pcsx2"
 
     # MelonDS
     echo "----------------------"
