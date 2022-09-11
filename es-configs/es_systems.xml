@@ -563,8 +563,8 @@
         <fullname>Nintendo GameCube</fullname>
         <path>%ROMPATH%/gc</path>
         <extension>.gcm .GCM .iso .ISO .wbfs .WBFS .wia .WIA .ciso .CISO .gcz .GCZ .elf .ELF .dol .DOL .dff .DFF .json .JSON .rvz .RVZ .tgc .TGC .wad .WAD .m3u .M3U .7z .7Z .zip .ZIP</extension>
-        <command label="Dolphin">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/dolphin_libretro.so %ROM%</command>
         <command label="Dolphin (Standalone)">%EMULATOR_DOLPHIN% -b -e %ROM%</command>
+        <command label="Dolphin">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/dolphin_libretro.so %ROM%</command>
 <!--        <command label="PrimeHack (Standalone)">%EMULATOR_PRIMEHACK% -b -e %ROM%</command> -->
         <platform>gc</platform>
         <theme>gc</theme>
