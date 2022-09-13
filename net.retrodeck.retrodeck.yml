@@ -1028,14 +1028,14 @@ modules:
     sources:
       - type: git
         url: https://github.com/mborgerson/xemu.git
-        tag: v0.7.58
-        commit: 6f878ede01ad1992392dde22b506a3c00fab87c4
+        tag: v0.7.70
+        commit: 080022833db0896b8af4482e726200acd51507a0
         x-checker-data:
           type: json
           url: https://api.github.com/repos/mborgerson/xemu/releases/latest
           tag-query: .tag_name
-          version-query: $tag | sub("^gh-release/"; "")
           timestamp-query: .published_at
+          version-query: .tag_name
 
   # XEMU - END
 
