@@ -1217,8 +1217,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/hrydgard/ppsspp.git
-        tag: v1.12.3
-        commit: ce0a45cf0fcdd5bebf32208b9998f68dfc1107b7
+        tag: v1.13.2
+        commit: 9fe6338e3bf397f8a009a51a282c139dfa180eb6
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+)$
