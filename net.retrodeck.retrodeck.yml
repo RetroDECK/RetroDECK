@@ -766,8 +766,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/PCSX2/pcsx2.git
-        tag: v1.7.3301
-        commit: f3f495d23b5fabe8c6e7278f046a3312898e6f04
+        tag: v1.7.3229
+        commit: e3eae7fbe83aad3952e3ed6a8e56fc016b51a9c3
 
   # PCSX2 Flathub Workaround - START
   # This workaround disables the PCSX2 libraries (disable-submodules: true) and install them separately
