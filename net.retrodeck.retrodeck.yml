@@ -550,8 +550,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/yuzu-emu/yuzu-mainline.git
-        tag: mainline-0-1150
-        commit: e5774ced75e1d19c5a42cac719f7de475a3630b3
+        tag: mainline-0-1163
+        commit: f0a6d73fe2cf94ddcef54516d261c21816cd48d1
         disable-shallow-clone: true
         x-checker-data:
           type: git
@@ -613,12 +613,14 @@ modules:
   # # Ryujinx - END
 
   # CITRA - START
+  # https://github.com/flathub/org.citra_emu.citra
 
   - name: citra
     buildsystem: cmake-ninja
     builddir: true
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON
       - -DENABLE_QT_TRANSLATION=ON
       - -DCITRA_ENABLE_COMPATIBILITY_REPORTING=ON
       - -DENABLE_COMPATIBILITY_LIST_DOWNLOAD=ON
@@ -634,8 +636,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/citra-emu/citra-nightly.git
-        tag: nightly-1772
-        commit: 355933218d00603c910cd0a9daead0b1cd72a3c3
+        tag: nightly-1785
+        commit: baecc18d8c5365af0dddb231bc8c0a9c03850bf6
         disable-shallow-clone: true
         x-checker-data:
           type: git
@@ -764,8 +766,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/PCSX2/pcsx2.git
-        tag: v1.7.3229
-        commit: e3eae7fbe83aad3952e3ed6a8e56fc016b51a9c3
+        tag: v1.7.3301
+        commit: f3f495d23b5fabe8c6e7278f046a3312898e6f04
 
   # PCSX2 Flathub Workaround - START
   # This workaround disables the PCSX2 libraries (disable-submodules: true) and install them separately
@@ -855,6 +857,7 @@ modules:
 
   # Inspired by:
   # https://github.com/flathub/com.zettlr.Zettlr/blob/master/com.zettlr.Zettlr.yaml
+  # https://pcsx2.net/downloads/
 
   - name: pcsx2-qt-appimage
     buildsystem: simple
@@ -867,8 +870,8 @@ modules:
       - ln -s "${FLATPAK_DEST}/pcsx2-qt/usr/bin/pcsx2-qt" "${FLATPAK_DEST}/bin/pcsx2-qt"
     sources:
       - type: file
-        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.3300/pcsx2-v1.7.3300-linux-AppImage-64bit-AVX2-Qt.AppImage
-        sha256: 2785b1290bcbff36f1bcea66d61322975b194a383836f805daafe46aade7ce0f
+        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.3304/pcsx2-v1.7.3304-linux-AppImage-64bit-AVX2-Qt.AppImage
+        sha256: 04e56b9e6113fefce7057b2dd19f0501b79d36f31c718406bda45204a2be121a
 
   # PCSX2 - END
 
@@ -911,8 +914,8 @@ modules:
       - -Ddocumentation=disabled
     sources:
       - type: archive
-        url: https://www.freedesktop.org/software/libevdev/libevdev-1.12.1.tar.xz
-        sha256: 1dbba41bc516d3ca7abc0da5b862efe3ea8a7018fa6e9b97ce9d39401b22426c
+        url: https://www.freedesktop.org/software/libevdev/libevdev-1.13.0.tar.xz
+        sha256: 9edf2006cc86a5055279647c38ec923d11a821ee4dc2c3033e8d20e8ee237cd9
         x-checker-data:
           type: anitya
           project-id: 20540
@@ -1025,14 +1028,14 @@ modules:
     sources:
       - type: git
         url: https://github.com/mborgerson/xemu.git
-        tag: v0.7.58
-        commit: 6f878ede01ad1992392dde22b506a3c00fab87c4
+        tag: v0.7.70
+        commit: 080022833db0896b8af4482e726200acd51507a0
         x-checker-data:
           type: json
           url: https://api.github.com/repos/mborgerson/xemu/releases/latest
           tag-query: .tag_name
-          version-query: $tag | sub("^gh-release/"; "")
           timestamp-query: .published_at
+          version-query: .tag_name
 
   # XEMU - END
 
@@ -1086,8 +1089,8 @@ modules:
         CXX: clang++
         RANLIB: llvm-ranlib
       ldflags: -fuse-ld=lld
-      prepend-ld-library-path: /usr/lib/sdk/llvm13/lib
-      prepend-path: /usr/lib/sdk/llvm13/bin
+      prepend-ld-library-path: /usr/lib/sdk/llvm14/lib
+      prepend-path: /usr/lib/sdk/llvm14/bin
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
       - -DBUILD_SHARED_LIBS=OFF
@@ -1111,7 +1114,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/RPCS3/llvm-mirror.git
-        commit: 509d31ad89676522f7121b3bb8688f7d29b7ee60
+        commit: c725f494c91611018f5d830eca22c0a1662c0f31
       - type: git
         url: https://github.com/intel/ittapi.git
         dest: ittapi/ittapi
@@ -1121,8 +1124,8 @@ modules:
     buildsystem: cmake-ninja
     builddir: true
     build-options:
-      append-ld-library-path: /usr/lib/sdk/llvm13/lib
-      append-path: /usr/lib/sdk/llvm13/bin
+      append-ld-library-path: /usr/lib/sdk/llvm14/lib
+      append-path: /usr/lib/sdk/llvm14/bin
       cflags: *optflags
       cflags-override: true
       cxxflags: *optflags
@@ -1152,7 +1155,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/RPCS3/rpcs3.git
-        commit: e9570d1a0045926f63ec8ea9af68f81743d4f365
+        branch: master
+        commit: b9e20dc5c9d7776ff27923600da004a8a57bc132
 
   # RPCS3 - END
 
@@ -1217,8 +1221,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/hrydgard/ppsspp.git
-        tag: v1.12.3
-        commit: ce0a45cf0fcdd5bebf32208b9998f68dfc1107b7
+        tag: v1.13.2
+        commit: 9fe6338e3bf397f8a009a51a282c139dfa180eb6
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+)$
