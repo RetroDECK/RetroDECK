@@ -613,12 +613,14 @@ modules:
   # # Ryujinx - END
 
   # CITRA - START
+  # https://github.com/flathub/org.citra_emu.citra
 
   - name: citra
     buildsystem: cmake-ninja
     builddir: true
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON
       - -DENABLE_QT_TRANSLATION=ON
       - -DCITRA_ENABLE_COMPATIBILITY_REPORTING=ON
       - -DENABLE_COMPATIBILITY_LIST_DOWNLOAD=ON
@@ -634,8 +636,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/citra-emu/citra-nightly.git
-        tag: nightly-1772
-        commit: 355933218d00603c910cd0a9daead0b1cd72a3c3
+        tag: nightly-1785
+        commit: baecc18d8c5365af0dddb231bc8c0a9c03850bf6
         disable-shallow-clone: true
         x-checker-data:
           type: git
