@@ -550,8 +550,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/yuzu-emu/yuzu-mainline.git
-        tag: mainline-0-1150
-        commit: e5774ced75e1d19c5a42cac719f7de475a3630b3
+        tag: mainline-0-1163
+        commit: f0a6d73fe2cf94ddcef54516d261c21816cd48d1
         disable-shallow-clone: true
         x-checker-data:
           type: git
@@ -1196,7 +1196,7 @@ modules:
 
   # PRIMEHACK - END
 
-  # PPSSPP - START 
+  # PPSSPP - START
   # https://github.com/flathub/org.ppsspp.PPSSPP
 
   - name: ppsspp
