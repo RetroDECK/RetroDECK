@@ -641,8 +641,8 @@ modules:
       - disable-submodules: true # FLATHUB WORKAROUND
       - type: git
         url: https://github.com/yuzu-emu/yuzu-mainline.git
-        tag: mainline-0-1171
-        commit: 3b25d1fe22f5eee7a046432884d78b25a3950988
+        tag: mainline-0-1163
+        commit: f0a6d73fe2cf94ddcef54516d261c21816cd48d1
         disable-shallow-clone: true
         x-checker-data:
           type: git
@@ -1290,7 +1290,7 @@ modules:
 
   # PRIMEHACK - END
 
-  # PPSSPP - START 
+  # PPSSPP - START
   # https://github.com/flathub/org.ppsspp.PPSSPP
 
   - name: ppsspp
