@@ -37,6 +37,10 @@ fi
 conf_write() {
   # writes the variables in the retrodeck config file
 
+  echo "DEBUG: printing the config file content before writing it:"
+  cat $rd_conf
+  echo ""
+
   echo "Writing the config file: $rd_conf"
 
   # TODO: this can be optimized with a while and a list of variables to check
@@ -64,5 +68,9 @@ conf_write() {
   then
     sed -i "s%themes_folder=.*%themes_folder=$themes_folder%" $rd_conf
   fi
+
+  echo "DEBUG: New contents:"
+  cat $rd_conf
+  echo ""
 
 }
