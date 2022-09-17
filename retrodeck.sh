@@ -192,6 +192,7 @@ ra_init() {
     cp /app/share/libretro/cores/* /var/config/retroarch/cores/
     cp -fv $emuconfigs/retroarch.cfg /var/config/retroarch/
     cp -fv $emuconfigs/retroarch-core-options.cfg /var/config/retroarch/
+    cp -fv $emuconfigs/retroach-cores/* /var/config/retroarch/config/
     #rm -rf $rdhome/bios/bios # in some situations a double bios symlink is created
     sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/retroarch/retroarch.cfg
 
