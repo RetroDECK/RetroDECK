@@ -9,31 +9,6 @@ lockfile="/var/config/retrodeck/.lock"                     # where the lockfile 
 sdcard="/run/media/mmcblk0p1"                              # Steam Deck SD default path
 hard_version="$(cat '/app/retrodeck/version')"             # hardcoded version (in the readonly filesystem)
 
-
-# If there is no config file I initalize the file with the the default values
-if [ ! -f "$rd_conf" ]
-then
-
-  echo "RetroDECK config file not found in $rd_conf"
-  echo "Initializing"
-
-  echo "#!/bin/bash" >> $rd_conf
-  version="$hard_version"                                    # if we are here means that the we are in a new installation, so the version is valorized with the hardcoded one
-  rdhome="$HOME/retrodeck"                                   # the retrodeck home, aka ~/retrodeck
-  roms_folder="$rdhome/roms"                                 # the default roms folder path
-  media_folder="$HOME/retrodeck/downloaded_media"            # the media folder, where all the scraped data is downloaded into
-  themes_folder="$HOME/retrodeck/themes"                     # the themes folder
-
-  # writing the needed variables in the config file
-  conf_write
-
-# If the config file is existing i just read the variables (source it)
-else
-  echo "Found RetroDECK config file in $rd_conf"
-  echo "Loading it"
-  source "$rd_conf"
-fi
-
 conf_write() {
   # writes the variables in the retrodeck config file
 
@@ -74,3 +49,27 @@ conf_write() {
   echo ""
 
 }
+
+# If there is no config file I initalize the file with the the default values
+if [ ! -f "$rd_conf" ]
+then
+
+  echo "RetroDECK config file not found in $rd_conf"
+  echo "Initializing"
+
+  echo "#!/bin/bash" >> $rd_conf
+  version="$hard_version"                                    # if we are here means that the we are in a new installation, so the version is valorized with the hardcoded one
+  rdhome="$HOME/retrodeck"                                   # the retrodeck home, aka ~/retrodeck
+  roms_folder="$rdhome/roms"                                 # the default roms folder path
+  media_folder="$HOME/retrodeck/downloaded_media"            # the media folder, where all the scraped data is downloaded into
+  themes_folder="$HOME/retrodeck/themes"                     # the themes folder
+
+  # writing the needed variables in the config file
+  conf_write
+
+# If the config file is existing i just read the variables (source it)
+else
+  echo "Found RetroDECK config file in $rd_conf"
+  echo "Loading it"
+  source "$rd_conf"
+fi
