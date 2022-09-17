@@ -379,8 +379,10 @@ finit() {
         zenity --question --no-wrap \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         --title "RetroDECK" \
-        --Cancel-label "Quit" \
+        --ok-label "Quit" \
         --text="SD card was found but is not writable\nThis can happen with cards formatted on PC.\nPlease format the SD card through the Steam Deck's Game Mode and run RetroDECK again."
+        echo "Now quitting"
+        exit 0
       else
         roms_folder="$sdcard/retrodeck/roms"
         echo "ROMs folder = $roms_folder"
