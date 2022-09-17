@@ -11,7 +11,7 @@ hard_version="$(cat '/app/retrodeck/version')"             # hardcoded version (
 
 
 # If there is no config file I initalize the file with the the default values
-if [ ! -f $rd_conf ]
+if [ ! -f "$rd_conf" ]
 then
 
   echo "RetroDECK config file not found in $rd_conf"
@@ -31,14 +31,14 @@ then
 else
   echo "Found RetroDECK config file in $rd_conf"
   echo "Loading it"
-  source $rd_conf
+  source "$rd_conf"
 fi
 
 conf_write() {
   # writes the variables in the retrodeck config file
 
   echo "DEBUG: printing the config file content before writing it:"
-  cat $rd_conf
+  cat "$rd_conf"
   echo ""
 
   echo "Writing the config file: $rd_conf"
@@ -46,31 +46,31 @@ conf_write() {
   # TODO: this can be optimized with a while and a list of variables to check
   if [ ! -z "$version" ] #if the variable is not null then I update it
   then
-    sed -i "s%version=.*%version=$version%" $rd_conf
+    sed -i "s%version=.*%version=$version%" "$rd_conf"
   fi
 
   if [ ! -z "$rdhome" ]
   then
-    sed -i "s%rdhome=.*%rdhome=$rdhome%" $rd_conf
+    sed -i "s%rdhome=.*%rdhome=$rdhome%" "$rd_conf"
   fi
 
   if [ ! -z "$roms_folder" ]
   then
-    sed -i "s%roms_folder=.*%roms_folder=$roms_folder%" $rd_conf
+    sed -i "s%roms_folder=.*%roms_folder=$roms_folder%" "$rd_conf"
   fi
 
   if [ ! -z "$media_folder" ]
   then
-    sed -i "s%media_folder=.*%media_folder=$media_folder%" $rd_conf
+    sed -i "s%media_folder=.*%media_folder=$media_folder%" "$rd_conf"
   fi
 
   if [ ! -z "$themes_folder" ]
   then
-    sed -i "s%themes_folder=.*%themes_folder=$themes_folder%" $rd_conf
+    sed -i "s%themes_folder=.*%themes_folder=$themes_folder%" "$rd_conf"
   fi
 
   echo "DEBUG: New contents:"
-  cat $rd_conf
+  cat "$rd_conf"
   echo ""
 
 }
