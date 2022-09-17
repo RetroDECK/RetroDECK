@@ -376,7 +376,7 @@ finit() {
       elif [ ! -w "$sdcard" ] #SD card found but not writable
       then
         echo "Error: SD card found but not writable"
-        zenity --question --no-wrap \
+        zenity --error --no-wrap \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         --title "RetroDECK" \
         --ok-label "Quit" \
@@ -528,12 +528,25 @@ then
 
 # Else, LOCKFILE IS NOT EXISTING (WAS REMOVED)
 # if the lock file doesn't exist at all means that it's a fresh install or a triggered reset
+
 else 
-  echo "Lockfile not found"
-  #conf_init         # Initializing/reading the config file (sourced from global.sh)
-  finit             # Executing First/Force init
-  conf_write        # Writing variables in the config file (sourced from global.sh)
-	exit 0
+  if [ ! $XDG_CURRENT_DESKTOP == "KDE" ];
+  then
+    echo "No lockfile found and running in Game mode"
+        zenity --error --no-wrap \
+        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+        --title "RetroDECK" \
+        --ok-label "Quit" \
+        --text="You are running RetroDeck for the first time in Game Mode!\nPlease exit RetroDECK, switch to Desktop mode and run RetroDECK again.\nThen you will be all set!"
+        echo "Now quitting"
+        exit 0
+  else
+    echo "Lockfile not found"
+    #conf_init         # Initializing/reading the config file (sourced from global.sh)
+    finit             # Executing First/Force init
+    conf_write        # Writing variables in the config file (sourced from global.sh)
+	  exit 0
+  fi
 fi
 
 # Normal Startup
