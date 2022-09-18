@@ -491,6 +491,16 @@ finit() {
         --ok-label "Browse" \
         --text="SD Card was not find in the default location.\nPlease choose the SD Card root.\nA retrodeck/roms folder will be created starting from the directory that you selected."
         browse # Calling the browse function
+      elif [ ! -w "$sdcard" ] #SD card found but not writable
+      then
+        echo "Error: SD card found but not writable"
+        zenity --error --no-wrap \
+        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+        --title "RetroDECK" \
+        --ok-label "Quit" \
+        --text="SD card was found but is not writable\nThis can happen with cards formatted on PC.\nPlease format the SD card through the Steam Deck's Game Mode and run RetroDECK again."
+        echo "Now quitting"
+        exit 0
       else
         roms_folder="$sdcard/retrodeck/roms"    # sdcard variable is correct as its given by browse function
         echo "ROMs folder = $roms_folder"
