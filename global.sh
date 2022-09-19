@@ -61,8 +61,8 @@ then
   version="$hard_version"                                    # if we are here means that the we are in a new installation, so the version is valorized with the hardcoded one
   rdhome="$HOME/retrodeck"                                   # the retrodeck home, aka ~/retrodeck
   roms_folder="$rdhome/roms"                                 # the default roms folder path
-  media_folder="$HOME/retrodeck/downloaded_media"            # the media folder, where all the scraped data is downloaded into
-  themes_folder="$HOME/retrodeck/themes"                     # the themes folder
+  media_folder="$rdhome/retrodeck/downloaded_media"            # the media folder, where all the scraped data is downloaded into
+  themes_folder="$rdhome/retrodeck/themes"                     # the themes folder
   sdcard="$default_sd"                                       # Steam Deck SD default path
 
   # writing the needed variables in the config file
