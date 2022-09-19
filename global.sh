@@ -74,9 +74,6 @@ then
   echo "themes_folder=$themes_folder"         >> $rd_conf
   echo "sdcard=$sdcard"                       >> $rd_conf
 
-  # writing the needed variables in the config file
-  conf_write
-
 # If the config file is existing i just read the variables (source it)
 else
   echo "Found RetroDECK config file in $rd_conf"
