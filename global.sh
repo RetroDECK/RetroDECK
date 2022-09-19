@@ -63,7 +63,7 @@ then
   roms_folder="$rdhome/roms"                                 # the default roms folder path
   media_folder="$HOME/retrodeck/downloaded_media"            # the media folder, where all the scraped data is downloaded into
   themes_folder="$HOME/retrodeck/themes"                     # the themes folder
-  sdcard="$default_sd"                              # Steam Deck SD default path
+  sdcard="$default_sd"                                       # Steam Deck SD default path
 
   # writing the needed variables in the config file
   conf_write
