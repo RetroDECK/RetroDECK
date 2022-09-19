@@ -44,6 +44,11 @@ conf_write() {
     sed -i "s%themes_folder=.*%themes_folder=$themes_folder%" ""$rd_conf""
   fi
 
+  if [ ! -z "$sdcard" ]
+  then
+    sed -i "s%sdcard=.*%sdcard=$sdcard%" "$rd_conf"
+  fi
+
   echo "DEBUG: New contents:"
   cat "$rd_conf"
   echo ""
