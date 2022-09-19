@@ -373,7 +373,7 @@ finit() {
         --text="SD Card was not find in the default location.\nPlease choose the SD Card root.\nA retrodeck/roms folder will be created starting from the directory that you selected."
         browse # Calling the browse function
       else
-        roms_folder="$sdcard/retrodeck/roms"
+        roms_folder="$sdcard/retrodeck/roms"    # sdcard variable is correct as its given by browse function
         echo "ROMs folder = $roms_folder"
       fi
       ;;
