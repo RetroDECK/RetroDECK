@@ -6,7 +6,7 @@
 rd_conf="/var/config/retrodeck/retrodeck.cfg"              # RetroDECK config file path
 emuconfigs="/app/retrodeck/emu-configs"                    # folder with all the default emulator configs
 lockfile="/var/config/retrodeck/.lock"                     # where the lockfile is located
-sdcard="/run/media/mmcblk0p1"                              # Steam Deck SD default path
+default_sd="/run/media/mmcblk0p1"                          # Steam Deck SD default path
 hard_version="$(cat '/app/retrodeck/version')"             # hardcoded version (in the readonly filesystem)
 
 conf_write() {
@@ -63,6 +63,7 @@ then
   roms_folder="$rdhome/roms"                                 # the default roms folder path
   media_folder="$HOME/retrodeck/downloaded_media"            # the media folder, where all the scraped data is downloaded into
   themes_folder="$HOME/retrodeck/themes"                     # the themes folder
+  sdcard="$default_sd"                              # Steam Deck SD default path
 
   # writing the needed variables in the config file
   conf_write
