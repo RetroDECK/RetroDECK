@@ -1,7 +1,6 @@
+name: push-cooker-flathub
 
-name: PUSH-cooker-flathub
-
-on:
+#on:
 #  push:
 #    branches:
 #     - cooker*
@@ -9,30 +8,29 @@ on:
 #    branches:
 #     - cooker*
 
-  workflow_dispatch:
+#  workflow_dispatch:
+
 
 jobs:
 
   Pushing_cooker_into_flathub:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
+
       - name: Pushing
-        shell: bash
-        run: |
+        run:
+          |
           # EDITABLES:
           rd_branch="cooker"
-          gits_folder="${GITHUB_WORKSPACE}/gits" # without last /
+          gits_folder="gits" # without last /
 
           # NON-EDITABLES
           branch="$rd_branch-"$(date +%d%m%y.%H%M)
 
-          mkdir -vp $gits_folder
+          mkdir -p $gits_folder
           cd $gits_folder
-          if [ -d flathub ]; then
-            rm -rf flathub
-          fi
+          rm -rf flathub
           git clone --recursive https://github.com/flathub/net.retrodeck.retrodeck.git flathub
-          cd $gits_folder
           git clone --recursive https://github.com/XargonWan/RetroDECK RetroDECK
           cd $gits_folder/RetroDECK
           git checkout $rd_branch
@@ -58,27 +56,15 @@ jobs:
           'net.retrodeck.retrodeck.yml' \
           'README.md' \
           $gits_folder/flathub/
-
           cd $gits_folder/flathub
-          ls -la
 
-          if [ -d .git/modules ]; then
-            rm -rfv .git/modules/*
-          fi
-
+          rm -rf .git/modules/*
           # Adding the real submodules, please update this every time a submodule is added
-          
-          if [ -d shared-modules ]; then
-            git rm -rf --ignore-unmatch shared-modules
-            rm -rfv shared-modules
-          fi          
-          git submodule add https://github.com/flathub/shared-modules.git ./shared-modules
+          git rm -rf shared-modules
+          git submodule add https://github.com/flathub/shared-modules.git shared-modules
 
-          if [ -d rd-submodules/retroarch ]; then
-            git rm -rf --ignore-unmatch rd-submodules/retroarch
-            rm -rfv rd-submodules/retroarch
-          fi
-          git submodule add https://github.com/flathub/org.libretro.RetroArch.git ./rd-submodules/retroarch
+          git rm -rf rd-submodules/retroarch
+          git submodule add https://github.com/flathub/org.libretro.RetroArch.git rd-submodules/retroarch
 
           # unbinds all submodules
           git submodule deinit -f .
