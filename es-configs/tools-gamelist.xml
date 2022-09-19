@@ -70,14 +70,14 @@
 		<nogamecount>true</nogamecount>
 		<nomultiscrape>true</nomultiscrape>
 	</game>
-	<game>
+<!--	<game>
 		<path>./move-roms.sh</path>
 		<name>Move roms folder</name>
 		<desc>Move roms folder from internal to external and vice versa.</desc>
 		<nogamecount>true</nogamecount>
 		<nomultiscrape>true</nomultiscrape>
 	</game>
-<!--	<game>
+	<game>
 		<path>./overlays.sh</path>
 		<name>Overlays configuration</name>
 		<desc>Configure or disable borders and shaders.</desc>

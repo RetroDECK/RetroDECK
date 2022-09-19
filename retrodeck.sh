@@ -372,11 +372,10 @@ finit() {
         --title "RetroDECK" --cancel-label="Cancel" \
         --ok-label "Browse" \
         --text="SD Card was not find in the default location.\nPlease choose the SD Card root.\nA retrodeck/roms folder will be created starting from the directory that you selected."
-        browse
+        browse # Calling the browse function
       else
         roms_folder="$sdcard/retrodeck/roms"
         echo "ROMs folder = $roms_folder"
-        exit 0
       fi
       ;;
 
