@@ -1,6 +1,6 @@
 #!/bin/bash
 
-racfg=""
+racfg="/var/config/retroarch/retroarch.cfg"
 
 login=$(zenity --forms --title="RetroAchievements Login" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
