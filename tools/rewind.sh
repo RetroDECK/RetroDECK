@@ -1,6 +1,6 @@
 #!/bin/bash
 
-racfg=""
+racfg="/var/config/retroarch/retroarch.cfg"
 
 zenity --question \
 --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
