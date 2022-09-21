@@ -497,7 +497,7 @@ modules:
   - name: ppsspp
     buildsystem: cmake-ninja
     config-opts:
-      - -DUSE_SYSTEM_FFMPEG=ON # default: off, turn this on?
+      - -DUSE_SYSTEM_FFMPEG=OFF # default: off, turn this on?
       - -DUSE_SYSTEM_LIBZIP=ON
       - -DUSE_SYSTEM_ZSTD=ON
 
