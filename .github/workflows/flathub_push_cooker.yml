@@ -21,7 +21,7 @@ jobs:
         run: |
           # EDITABLES:
           rd_branch="cooker"
-          gits_folder="gits" # without last /
+          gits_folder="${GITHUB_WORKSPACE}/gits" # without last /
 
           # NON-EDITABLES
           branch="$rd_branch-"$(date +%d%m%y.%H%M)
