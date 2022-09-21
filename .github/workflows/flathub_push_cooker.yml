@@ -26,9 +26,11 @@ jobs:
           # NON-EDITABLES
           branch="$rd_branch-"$(date +%d%m%y.%H%M)
 
-          mkdir -p $gits_folder
+          mkdir -vp $gits_folder
           cd $gits_folder
-          rm -rf flathub
+          if [ -d flathub ]; then
+            rm -rfv flathub
+          fi
           git clone --recursive https://github.com/flathub/net.retrodeck.retrodeck.git flathub
           git clone --recursive https://github.com/XargonWan/RetroDECK RetroDECK
           cd $gits_folder/RetroDECK
