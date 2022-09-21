@@ -190,6 +190,7 @@ ra_init() {
     dir_prep "$rdhome/.logs/retroarch" "/var/config/retroarch/logs"
     mkdir -pv /var/config/retroarch/cores/
     cp /app/share/libretro/cores/* /var/config/retroarch/cores/
+    grab_extra_ra_cores
     cp -fv $emuconfigs/retroarch.cfg /var/config/retroarch/
     cp -fv $emuconfigs/retroarch-core-options.cfg /var/config/retroarch/
     #rm -rf $rdhome/bios/bios # in some situations a double bios symlink is created
@@ -227,6 +228,39 @@ ra_init() {
     mv -rfv $rdhome/bios/MSX/Databases $rdhome/bios/Databases
     mv -rfv $rdhome/bios/MSX/Machines $rdhome/bios/Machines
     rm -rfv $rdhome/bios/MSX
+
+}
+
+# This will grab any cores that were not in the "stable" pack individually from the nightly repo. It will grab cores specified in the additional_cores.cfg file or, if that file is missing or empty, download all cores that are missing
+grab_extra_ra_cores() {
+  if [ -e $additional_cores_cfg ] && [ -n $additional_cores_cfg ] # Check if additional_cores.cfg exists and is not empty
+    then
+      readarray -t cores_wanted < $additional_cores_cfg
+    else # If additional_cores.cfg is empty, build array of all missing cores by comparing contents of cores and core info directories
+      all_cores=($(ls -1 --ignore="*example*" /app/share/libretro/info | sed -e 's/\.info$//'))
+      stable_cores=($(ls -1 /app/share/libretro/cores | sed -e 's/\.so$//'))
+      cores_wanted=()
+      for i in "${all_cores[@]}"; do
+          skip=
+          for j in "${stable_cores[@]}"; do
+              [[ $i == $j ]] && { skip=1; break; }
+          done
+          [[ -n $skip ]] || cores_wanted+=("$i")
+      done
+  fi
+
+  if [ ! -z $cores_wanted ] # Only act if cores are wanted
+    then
+    mkdir $additional_cores_tmp # Creat temp downloads directory (required for unzip)
+    for a in "${cores_wanted[@]}"; do # Download and unzip every core in the cores_wanted array
+      wget -nv $ra_buildbot_path$a.so.zip -O $additional_cores_tmp/$a.so.zip
+      unzip -u $additional_cores_tmp/$a.so.zip -d /var/config/retroarch/cores/
+      rm $additional_cores_tmp/$a.so.zip
+    done
+    rmdir $additional_cores_tmp # Cleanup temp downloads directory
+    else
+      echo "No additional cores required"
+  fi
 
 }
 

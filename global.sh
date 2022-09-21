@@ -8,6 +8,9 @@ emuconfigs="/app/retrodeck/emu-configs"                    # folder with all the
 lockfile="/var/config/retrodeck/.lock"                     # where the lockfile is located
 default_sd="/run/media/mmcblk0p1"                          # Steam Deck SD default path
 hard_version="$(cat '/app/retrodeck/version')"             # hardcoded version (in the readonly filesystem)
+ra_buildbot_path="http://buildbot.libretro.com/nightly/linux/x86_64/latest/" # Path to the RetroArch core direct downloads
+additional_cores_cfg="/app/retrodeck/emu-configs/additional_cores.cfg" # File for specifying additional cores to download which may not be part of the "stable" package
+additional_cores_tmp="/var/tmp/additional_cores" # Temporary directory for additional core downloads
 
 conf_write() {
   # writes the variables in the retrodeck config file
