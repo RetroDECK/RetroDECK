@@ -32,6 +32,7 @@ jobs:
             rm -rfv flathub
           fi
           git clone --recursive https://github.com/flathub/net.retrodeck.retrodeck.git flathub
+          cd $gits_folder
           git clone --recursive https://github.com/XargonWan/RetroDECK RetroDECK
           cd $gits_folder/RetroDECK
           git checkout $rd_branch
