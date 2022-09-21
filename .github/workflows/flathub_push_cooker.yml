@@ -1,4 +1,4 @@
-name: push-cooker-flathub
+name: PUSH-cooker-flathub
 
 on:
 #  push:
@@ -16,10 +16,9 @@ jobs:
   Pushing_cooker_into_flathub:
     runs-on: self-hosted
     steps:
-
       - name: Pushing
-        run:
-          |
+        shell: bash
+        run: |
           # EDITABLES:
           rd_branch="cooker"
           gits_folder="gits" # without last /
