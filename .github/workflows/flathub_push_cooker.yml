@@ -29,7 +29,7 @@ jobs:
           mkdir -vp $gits_folder
           cd $gits_folder
           if [ -d flathub ]; then
-            rm -rfv flathub
+            rm -rf flathub
           fi
           git clone --recursive https://github.com/flathub/net.retrodeck.retrodeck.git flathub
           cd $gits_folder
@@ -63,12 +63,12 @@ jobs:
           rm -rfv .git/modules/*
           # Adding the real submodules, please update this every time a submodule is added
           if [ -d shared-modules ]; then
-            git rm -rfv shared-modules
+            git rm -rf shared-modules
           fi
           git submodule add https://github.com/flathub/shared-modules.git shared-modules
 
           if [ -d rd-submodules/retroarch ]; then
-            git rm -rfv rd-submodules/retroarch
+            git rm -rf rd-submodules/retroarch
           fi
           git submodule add https://github.com/flathub/org.libretro.RetroArch.git rd-submodules/retroarch
 
