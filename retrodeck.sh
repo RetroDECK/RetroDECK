@@ -506,6 +506,10 @@ finit() {
     #  advanced
     #;;
 
+    1 ) # X button quits
+      kill $$
+      ;;
+
     esac
 
     mkdir -pv $roms_folder
