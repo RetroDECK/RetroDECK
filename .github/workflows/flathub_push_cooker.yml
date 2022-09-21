@@ -14,7 +14,7 @@ on:
 jobs:
 
   Pushing_cooker_into_flathub:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - name: Pushing
         shell: bash
