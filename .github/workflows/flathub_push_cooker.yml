@@ -60,6 +60,8 @@ jobs:
           $gits_folder/flathub/
 
           cd $gits_folder/flathub
+          ls -la
+
           if [ -d .git/modules ]; then
             rm -rfv .git/modules/*
           fi
@@ -71,10 +73,10 @@ jobs:
           fi          
           git submodule add https://github.com/flathub/shared-modules.git shared-modules
 
-          if [ -d $gits_folder/RetroDECK/rd-submodules/retroarch ]; then
-            git rm -rf $gits_folder/RetroDECK/rd-submodules/retroarch
+          if [ -d rd-submodules/retroarch ]; then
+            git rm -rf rd-submodules/retroarch
           fi
-          git submodule add https://github.com/flathub/org.libretro.RetroArch.git $gits_folder/RetroDECK/rd-submodules/retroarch
+          git submodule add https://github.com/flathub/org.libretro.RetroArch.git rd-submodules/retroarch
 
           # unbinds all submodules
           git submodule deinit -f .
