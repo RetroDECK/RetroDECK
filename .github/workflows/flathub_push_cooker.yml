@@ -58,14 +58,18 @@ jobs:
           'net.retrodeck.retrodeck.yml' \
           'README.md' \
           $gits_folder/flathub/
-          cd $gits_folder/flathub
 
-          rm -rf .git/modules/*
+          cd $gits_folder/flathub
+          rm -rfv .git/modules/*
           # Adding the real submodules, please update this every time a submodule is added
-          git rm -rf shared-modules
+          if [ -d shared-modules ]; then
+            git rm -rfv shared-modules
+          fi
           git submodule add https://github.com/flathub/shared-modules.git shared-modules
 
-          git rm -rf rd-submodules/retroarch
+          if [ -d rd-submodules/retroarch ]; then
+            git rm -rfv rd-submodules/retroarch
+          fi
           git submodule add https://github.com/flathub/org.libretro.RetroArch.git rd-submodules/retroarch
 
           # unbinds all submodules
