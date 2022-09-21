@@ -188,6 +188,7 @@ standalones_init() {
 ra_init() {
     dir_prep "$rdhome/bios" "/var/config/retroarch/system"
     dir_prep "$rdhome/.logs/retroarch" "/var/config/retroarch/logs"
+    dir_prep "$rdhome/gamelists" "/var/config/emulationstation/.emulationstation/gamelists"
     mkdir -pv /var/config/retroarch/cores/
     cp /app/share/libretro/cores/* /var/config/retroarch/cores/
     cp -fv $emuconfigs/retroarch.cfg /var/config/retroarch/
