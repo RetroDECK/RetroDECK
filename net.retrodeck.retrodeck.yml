@@ -567,10 +567,10 @@ modules:
         dest: ext/zstd
         commit: a488ba114ec17ea1054b9057c26a046fc122b3b6
         url: https://github.com/facebook/zstd.git
-      #- type: git
-      #  dest: ffmpeg
-      #  commit: 3ad7ddb9eb2af898dce8c4b5e9a28b77b3f7ddd7
-      #  url: https://github.com/hrydgard/ppsspp-ffmpeg.git
+      - type: git
+        dest: ffmpeg
+        commit: 3ad7ddb9eb2af898dce8c4b5e9a28b77b3f7ddd7
+        url: https://github.com/hrydgard/ppsspp-ffmpeg.git
       - type: git
         dest: pspautotests
         commit: 682a4303aba63a50c91ae0fa6928c9dac8ca9b92
