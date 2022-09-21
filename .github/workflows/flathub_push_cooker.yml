@@ -63,10 +63,12 @@ jobs:
           if [ -d .git/modules ]; then
             rm -rfv .git/modules/*
           fi
+
           # Adding the real submodules, please update this every time a submodule is added
+          
           if [ -d shared-modules ]; then
             git rm -rf shared-modules
-          fi
+          fi          
           git submodule add https://github.com/flathub/shared-modules.git shared-modules
 
           if [ -d rd-submodules/retroarch ]; then
