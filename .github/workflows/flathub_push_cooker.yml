@@ -70,11 +70,13 @@ jobs:
           
           if [ -d shared-modules ]; then
             git rm -rf --ignore-unmatch shared-modules
+            rm -rfv shared-modules
           fi          
           git submodule add https://github.com/flathub/shared-modules.git ./shared-modules
 
           if [ -d rd-submodules/retroarch ]; then
             git rm -rf --ignore-unmatch rd-submodules/retroarch
+            rm -rfv rd-submodules/retroarch
           fi
           git submodule add https://github.com/flathub/org.libretro.RetroArch.git ./rd-submodules/retroarch
 
