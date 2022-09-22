@@ -187,7 +187,9 @@ ra_init() {
     dir_prep "$rdhome/bios" "/var/config/retroarch/system"
      dir_prep "$rdhome/.logs/retroarch" "/var/config/retroarch/logs"
     mkdir -pv /var/config/retroarch/cores/
+    mkdir -pv /var/config/retroarch/autoconfig/
     cp /app/share/libretro/cores/* /var/config/retroarch/cores/
+    cp -r /app/share/libretro/autoconfig/* /var/config/retroarch/autoconfig/
     cp -fv $emuconfigs/retroarch.cfg /var/config/retroarch/
     cp -fv $emuconfigs/retroarch-core-options.cfg /var/config/retroarch/
     #rm -rf $rdhome/bios/bios # in some situations a double bios symlink is created
