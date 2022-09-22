@@ -183,22 +183,11 @@ standalones_init() {
 
 }
 
-# This will grab all the updated / new controller profiles for the sdl2 input driver for RetroArch
-update_controller_profiles() {
-    mkdir -pv /var/tmp/autoconfigs/
-    wget -nv $libretro_controller_profiles -O /var/tmp/autoconfigs/retrodeck-controller-profiles.zip
-    unzip -uj /var/tmp/autoconfigs/retrodeck-controller-profiles.zip retroarch-joypad-autoconfig-master/sdl2/* -d /var/config/retroarch/autoconfig/sdl2
-    rm -r /var/tmp/autoconfigs/
-}
-
 ra_init() {
     dir_prep "$rdhome/bios" "/var/config/retroarch/system"
-    dir_prep "$rdhome/.logs/retroarch" "/var/config/retroarch/logs"
+     dir_prep "$rdhome/.logs/retroarch" "/var/config/retroarch/logs"
     mkdir -pv /var/config/retroarch/cores/
-    mkdir -pv /var/config/retroarch/autoconfig/
     cp /app/share/libretro/cores/* /var/config/retroarch/cores/
-    cp -r /app/share/libretro/autoconfig/* /var/config/retroarch/autoconfig/
-    update_controller_profiles
     cp -fv $emuconfigs/retroarch.cfg /var/config/retroarch/
     cp -fv $emuconfigs/retroarch-core-options.cfg /var/config/retroarch/
     #rm -rf $rdhome/bios/bios # in some situations a double bios symlink is created

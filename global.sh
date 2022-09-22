@@ -8,8 +8,6 @@ emuconfigs="/app/retrodeck/emu-configs"                    # folder with all the
 lockfile="/var/config/retrodeck/.lock"                     # where the lockfile is located
 default_sd="/run/media/mmcblk0p1"                          # Steam Deck SD default path
 hard_version="$(cat '/app/retrodeck/version')"             # hardcoded version (in the readonly filesystem)
-libretro_controller_profiles="https://github.com/libretro/retroarch-joypad-autoconfig/archive/refs/heads/master.zip" # Source of updated controller profiles
-
 
 conf_write() {
   # writes the variables in the retrodeck config file
