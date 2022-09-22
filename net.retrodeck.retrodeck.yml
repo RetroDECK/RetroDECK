@@ -358,7 +358,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/retroarch-joypad-autoconfig.git
-        commit: 760b057f1865a827762a54a8a32afda2cdd9e170
+        # commit: 760b057f1865a827762a54a8a32afda2cdd9e170 Unbinding this repo from a specific commit will allow the newer configs (like for the Steam Deck controller) to be built by default.
   - name: common-shaders
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
