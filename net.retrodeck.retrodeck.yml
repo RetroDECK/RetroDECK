@@ -1386,20 +1386,23 @@ modules:
     buildsystem: simple
     build-commands:
 
-        # Prep the ES-DE and RetroArch config files - I will have to SED/XMLSTARLET them soon
+      # Initializing retrodeck config folder
+      - mkdir -p /var/config/retrodeck
+
+      # Prep the ES-DE and RetroArch config files - I will have to SED/XMLSTARLET them soon
       - rm -rf /app/share/emulationstation/resources/systems/unix/es_find_rules.xml
       - cp es-configs/es_find_rules.xml /app/share/emulationstation/resources/systems/unix/
       - rm -rf /app/share/emulationstation/resources/systems/unix/es_systems.xml
       - cp es-configs/es_systems.xml /app/share/emulationstation/resources/systems/unix/
-        # These must be put in home folder, managed by retrodeck.sh
+      # These must be put in home folder, managed by retrodeck.sh
       - cp es-configs/es_settings.xml ${FLATPAK_DEST}/retrodeck/es_settings.xml
 
-        # Logo, res
+      # Logo, res
       - rm -f /app/share/emulationstation/resources/graphics/splash.svg
       - cp res/splash.svg /app/share/emulationstation/resources/graphics/splash.svg
       - cp res/icon.svg /app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg
 
-        # Tools
+      # Tools
       - mkdir -p ${FLATPAK_DEST}/retrodeck/tools/
       - cp tools/* ${FLATPAK_DEST}/retrodeck/tools/
       - mv -f es-configs/tools-gamelist.xml ${FLATPAK_DEST}/retrodeck/
@@ -1410,18 +1413,18 @@ modules:
       - cp global.sh /app/bin/global.sh
       - chmod +x /app/bin/global.sh
         
-        # Desktop entry
+      # Desktop entry
       - cp net.retrodeck.retrodeck.desktop /app/share/applications/net.retrodeck.retrodeck.desktop
 
-        # TODO: group the configs per-emu and optimize the following cps, like already done with Dolphin. Please not that some files may be renamed, check retrodeck.sh to know how (and fix it after the edit)
+      # TODO: group the configs per-emu and optimize the following cps, like already done with Dolphin. Please not that some files may be renamed, check retrodeck.sh to know how (and fix it after the edit)
 
-        # Initializing default emulator configs
+      # Initializing default emulator configs
       - cp -r emu-configs ${FLATPAK_DEST}/retrodeck/emu-configs/
 
-        # Overlays
-        #- cp -r overlays ${FLATPAK_DEST}/retrodeck/overlays Disabled in 0.4.2b as it will be introduced in 0.5.0b
+      # Overlays
+      #- cp -r overlays ${FLATPAK_DEST}/retrodeck/overlays Disabled in 0.4.2b as it will be introduced in 0.5.0b
 
-        # Placing appdata
+      # Placing appdata
       - mkdir -p ${FLATPAK_DEST}/share/appdata
       - cp net.retrodeck.retrodeck.appdata.xml ${FLATPAK_DEST}/share/appdata
 
