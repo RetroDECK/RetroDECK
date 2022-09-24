@@ -79,6 +79,9 @@ then
   echo "themes_folder=$themes_folder"         >> $rd_conf
   echo "sdcard=$sdcard"                       >> $rd_conf
 
+  echo "Setting config file permissions"
+  chmod +rwx $rd_conf
+
 # If the config file is existing i just read the variables (source it)
 else
   echo "Found RetroDECK config file in $rd_conf"
