@@ -174,7 +174,7 @@ standalones_init() {
     cp -fv $emuconfigs/ppssppsdl/* /var/config/ppsspp/PSP/SYSTEM/
     sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/ppsspp/PSP/SYSTEM/ppsspp.ini
 
-    # PPSSPPSDL
+    # DUCKSTATION
     echo "------------------------"
     echo "Initializing DUCKSTATION"
     echo "------------------------"
@@ -464,6 +464,7 @@ finit() {
     choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
     --ok-label "Cancel" \
+    --extra-button "Cancel" \
     --extra-button "Internal" \
     --extra-button "SD Card" \
     #--extra-button "Advanced" \
@@ -503,10 +504,6 @@ finit() {
     #  echo "Advanced"
     #  advanced
     #;;
-
-    1 ) # X button quits
-      kill $$
-      ;;
 
     esac
 
