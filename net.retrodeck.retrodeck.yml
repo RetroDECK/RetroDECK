@@ -635,6 +635,7 @@ modules:
       - install -Dm755 ../yuzu-launcher.sh /app/bin/yuzu-launcher
       - install -Dm644 ../dist/yuzu.svg /app/share/icons/hicolor/scalable/apps/yuzu.svg
     sources:
+      - disable-submodules: true # FLATHUB WORKAROUND
       - type: git
         url: https://github.com/yuzu-emu/yuzu-mainline.git
         tag: mainline-0-1171
