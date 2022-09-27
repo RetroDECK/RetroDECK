@@ -110,7 +110,7 @@ standalones_init() {
     cp -fvr $emuconfigs/PCSX2/* /var/config/PCSX2/inis/
     sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2_ui.ini
     sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2.ini
-    dir_prep "$rdhome/states" "/var/config/PCSX2/sstates"
+    dir_prep "$rdhome/states/ps2/pcsx2" "/var/config/PCSX2/sstates"
     dir_prep "$rdhome/screenshots" "/var/config/PCSX2/snaps"
     dir_prep "$rdhome/.logs" "/var/config/PCSX2/logs"
     dir_prep "$rdhome/bios" "$rdhome/bios/pcsx2"
@@ -268,6 +268,22 @@ post_update() {
 
     # 0.4 -> 0.5
     # Saves migration - Part 1: Standalones
+    
+    #mv -fv OLD_CITRA_SAVES ~/retrodeck/saves/n3ds/citra/nand/
+    #mv -fv OLD_CITRA_STATES ~/retrodeck/saves/n3ds/citra/sdmc/
+
+    mv -fv /home/deck/retrodeck/states/*.ml* ~/retrodeck/states/nds/melonds
+
+    #eeprom_path = '/home/deck/retrodeck/saves/xbox/xemu/xbox-eeprom.bin'
+    #SavesPath = ~/retrodeck/saves/gba
+    #WiiSDCardPath = ~/retrodeck/saves/wii/dolphin/sd.raw
+
+    mv -fv /home/deck/.var/app/net.retrodeck.retrodeck/config/PCSX2/memcards/* ~/retrodeck/saves/ps2/memcards
+
+    #SaveStates = ~/retrodeck/states/ps2/pcsx2
+    #MemoryCards = ~/retrodeck/saves/ps2/pcsx2/memcards
+
+    #ppsspp?
 
     ra_init
     standalones_init
