@@ -11,18 +11,21 @@ Core:
   Thread Scheduler Mode: Operating System
   Set DAZ and FTZ: false
   SPU Decoder: Recompiler (LLVM)
-  SPU GETLLAR polling detection: false
+  SPU Reservation Busy Waiting Percentage: 0
+  SPU GETLLAR Busy Waiting Percentage: 100
   SPU Debug: false
   MFC Debug: false
-  Preferred SPU Threads: 0
+  Preferred SPU Threads: 1
   SPU delay penalty: 3
   SPU loop detection: false
   Max SPURS Threads: 6
-  SPU Block Size: Safe
+  SPU Block Size: Mega
   Accurate GETLLAR: false
   Accurate SPU DMA: false
+  Accurate SPU Reservations: true
   Accurate Cache Line Stores: false
   Accurate RSX reservation access: false
+  RSX FIFO Accuracy: Fast
   SPU Verification: true
   SPU Cache: true
   SPU Profiler: false
@@ -53,6 +56,10 @@ Core:
   TSX Transaction First Limit: 800
   TSX Transaction Second Limit: 2000
   Clocks scale: 100
+  SPU Wake-Up Delay: 0
+  SPU Wake-Up Delay Thread Mask: 63
+  Max CPU Preempt Count: 0
+  Allow RSX CPU Preemptions: true
   Sleep Timers Accuracy: As Host
   Performance Report Threshold: 500
   Enable Performance Report: false
@@ -62,6 +69,7 @@ VFS:
   Initialize Directories: true
   Limit disk cache size: false
   Disk cache maximum size (MB): 5120
+  Empty /dev_hdd0/tmp/: true
 Video:
   Renderer: Vulkan
   Resolution: 1280x720
@@ -83,6 +91,7 @@ Video:
   Force High Precision Z buffer: false
   Strict Rendering Mode: false
   Disable ZCull Occlusion Queries: false
+  Disable Video Output: false
   Disable Vertex Cache: false
   Disable FIFO Reordering: false
   Enable Frame Skip: false
@@ -91,7 +100,7 @@ Video:
   Disable Vulkan Memory Allocator: false
   Use full RGB output range: true
   Strict Texture Flushing: false
-  Disable native float16 support: false
+  Disable native float16 support: true
   Multithreaded RSX: false
   Relaxed ZCULL Sync: false
   Enable 3D: false
@@ -120,7 +129,7 @@ Video:
     Asynchronous Texture Streaming 2: false
     Enable FidelityFX Super Resolution Upscaling: false
     FidelityFX CAS Sharpening Intensity: 50
-    Asynchronous Queue Scheduler: Safe
+    Asynchronous Queue Scheduler: Fast
   Performance Overlay:
     Enabled: false
     Enable Framerate Graph: false
@@ -159,7 +168,7 @@ Audio:
   Master Volume: 100
   Enable Buffering: true
   Desired Audio Buffer Duration: 100
-  Enable Time Stretching: false
+  Enable Time Stretching: true
   Time Stretching Threshold: 75
   Microphone Type: "Null"
   Microphone Devices: "@@@@@@@@@@@@"
@@ -189,10 +198,15 @@ Net:
   DNS address: 8.8.8.8
   IP swap list: ""
   PSN status: Disconnected
+Savestate:
+  Start Paused: false
+  Suspend Emulation Savestate Mode: true
+  Inspection Mode Savestates: false
+  Save Disc Game Data: false
 Miscellaneous:
   Automatically start games after boot: true
-  Exit RPCS3 when process finishes: false
-  Start games in fullscreen mode: false
+  Exit RPCS3 when process finishes: true
+  Start games in fullscreen mode: true
   Prevent display sleep while running games: true
   Show trophy popups: true
   Show shader compilation hint: true
@@ -200,4 +214,3 @@ Miscellaneous:
   GDB Server: 127.0.0.1:2345
   Silence All Logs: false
   Window Title Format: "FPS: %F | %R | %V | %T [%t]"
-Log: {}

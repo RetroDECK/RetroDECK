@@ -144,7 +144,8 @@ standalones_init() {
     echo "Initializing RPCS3"
     echo "------------------------"
     mkdir -pv /var/config/rpcs3/
-    cp -fvr $emuconfigs/config.yml /var/config/rpcs3/
+    cp -fvr $emuconfigs/rpcs3/* /var/config/rpcs3/
+    sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/rpcs3/vfs.yml
 
     # XEMU
     echo "------------------------"
