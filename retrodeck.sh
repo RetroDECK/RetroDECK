@@ -261,6 +261,9 @@ post_update() {
     # Resetting es_systems, now we need it but in the future I should think a better solution, maybe with sed
     cp -fv /app/retrodeck/es_settings.xml /var/config/emulationstation/.emulationstation/es_settings.xml
 
+    # 0.4 -> 0.5
+    # Saves migration - Part 1: Standalones
+
     ra_init
     standalones_init
     tools_init
