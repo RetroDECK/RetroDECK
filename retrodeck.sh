@@ -151,7 +151,7 @@ standalones_init() {
     echo "------------------------"
     echo "Initializing XEMU"
     echo "------------------------"
-    mkdir -pv $rdhome/saves/xemu
+    mkdir -pv $rdhome/saves/xbox/xemu/
     cp -fv $emuconfigs/xemu.toml /var/data/xemu/xemu.toml
     sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/data/xemu/xemu.toml
     # Preparing HD dummy Image if the image is not found
@@ -266,19 +266,14 @@ post_update() {
     # 0.4 -> 0.5
     # Saves migration - Part 1: Standalones
     
-    #mv -fv OLD_CITRA_SAVES ~/retrodeck/saves/n3ds/citra/nand/
-    #mv -fv OLD_CITRA_STATES ~/retrodeck/saves/n3ds/citra/sdmc/
+    #mv -fv OLD_CITRA_SAVES $rdhome/saves/n3ds/citra/nand/
+    #mv -fv OLD_CITRA_STATES $rdhome/saves/n3ds/citra/sdmc/
 
-    mv -fv /home/deck/retrodeck/states/*.ml* ~/retrodeck/states/nds/melonds
+    mv -fv $rdhome/states/*.ml* $rdhome/states/nds/melonds
 
-    #eeprom_path = '/home/deck/retrodeck/saves/xbox/xemu/xbox-eeprom.bin'
-    #SavesPath = ~/retrodeck/saves/gba
-    #WiiSDCardPath = ~/retrodeck/saves/wii/dolphin/sd.raw
+    mv -fv $rdhome/saves/xemu/* $rdhome/saves/xbox/xemu/
 
-    mv -fv /home/deck/.var/app/net.retrodeck.retrodeck/config/PCSX2/memcards/* ~/retrodeck/saves/ps2/memcards
-
-    #SaveStates = ~/retrodeck/states/ps2/pcsx2
-    #MemoryCards = ~/retrodeck/saves/ps2/pcsx2/memcards
+    mv -fv /var/config/PCSX2/memcards/* $rdhome/saves/ps2/memcards
 
     #ppsspp?
 
