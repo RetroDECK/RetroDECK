@@ -1,0 +1,37 @@
+#!/bin/bash
+
+THIS MUST BE PUT IN RETRODECK.SH
+mkdir -p $rdhome/roms/ps3/emudir
+mkdir -p $rdhome/roms/ps3/dump
+
+zenity: "Hey I will destroy everything in $rdhome/roms/ps3/dump"
+
+zenity: this will take a while, have a coffee
+
+rpcs3 --installpkg $rdhome/roms/ps3/dump/*
+
+for each folder in $rdhome/roms/ps3/emudir/dev_hdd0/game/
+
+    gameid=foldername
+
+    if gamename.desktop doesnt exist
+
+        gamename=we need a file with ID - names
+        echo in $rdhome/roms/ps3/$gamname.desktop EOF<<
+
+        [Desktop Entry]
+        Encoding=UTF-8
+        Version=1.0
+        Type=Application
+        Terminal=false
+        Name=$gamename
+        Exec="source global.sh && rpcs3 --no-gui $rdhome/roms/ps3/emudir/dev_hdd0/game/$gameid"
+        Icon="$rdhome/roms/ps3/emudir/dev_hdd0/game/$gameid/ICON0.PNG"
+EOF
+
+    fi
+done
+
+rm -rf $rdhome/roms/ps3/dump/*
+
+zenity: done, restart retrodeck please
