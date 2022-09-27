@@ -2,30 +2,12 @@
 
 THIS MUST BE PUT IN RETRODECK.SH
 mkdir -p $rdhome/roms/ps3/emudir
-#mkdir -p $rdhome/roms/ps3/dump cannot install in nogui
-
-#user must install via emulator
-
-source global.sh
-
-install_ps3_fw(){
-
-    # Implement a check to see if the firmware is already installed then call this function
-
-    mkdir -p $rdhome/roms/ps3/.emudir
-
-    mkdir -p $rdhome/roms/ps3/tmp
-    chmod 777 $rdhome/roms/ps3/tmp
-    wget http://dus01.ps3.update.playstation.net/update/ps3/image/us/2022_0510_95307e1b51d3bcc33a274db91488d29f/PS3UPDAT.PUP -P $rdhome/roms/ps3/tmp/
-    rpcs3 --installfw $rdhome/roms/ps3/tmp/PS3UPDAT.PUP
-    rm -rf $rdhome/roms/ps3/tmp
-}
+mkdir -p $rdhome/roms/ps3/dump
 
 zenity: "Hey I will destroy everything in $rdhome/roms/ps3/dump"
 
 zenity: this will take a while, have a coffee
 
-# this seems not to be working as rpcs3 doesn't support installation in --no-gui mode
 rpcs3 --installpkg $rdhome/roms/ps3/dump/*
 
 for each folder in $rdhome/roms/ps3/emudir/dev_hdd0/game/
@@ -43,8 +25,8 @@ for each folder in $rdhome/roms/ps3/emudir/dev_hdd0/game/
         Type=Application
         Terminal=false
         Name=$gamename
-        Exec=rpcs3 --no-gui $rdhome/roms/ps3/emudir/dev_hdd0/game/$gameid
-        Icon=$rdhome/roms/ps3/emudir/dev_hdd0/game/$gameid/ICON0.PNG
+        Exec="source global.sh && rpcs3 --no-gui $rdhome/roms/ps3/emudir/dev_hdd0/game/$gameid"
+        Icon="$rdhome/roms/ps3/emudir/dev_hdd0/game/$gameid/ICON0.PNG"
 EOF
 
     fi
