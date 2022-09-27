@@ -43,8 +43,8 @@ for each folder in $rdhome/roms/ps3/emudir/dev_hdd0/game/
         Type=Application
         Terminal=false
         Name=$gamename
-        Exec="source global.sh && rpcs3 --no-gui $rdhome/roms/ps3/emudir/dev_hdd0/game/$gameid"
-        Icon="$rdhome/roms/ps3/emudir/dev_hdd0/game/$gameid/ICON0.PNG"
+        Exec=rpcs3 --no-gui $rdhome/roms/ps3/emudir/dev_hdd0/game/$gameid
+        Icon=$rdhome/roms/ps3/emudir/dev_hdd0/game/$gameid/ICON0.PNG
 EOF
 
     fi
