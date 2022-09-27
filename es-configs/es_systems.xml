@@ -1612,7 +1612,7 @@
         <theme>zxspectrum</theme>
     </system>
     <system>
-        <name>zzztools</name>
+        <name>tools</name>
         <fullname>RetroDECK Tools</fullname>
         <path>/var/config/retrodeck/tools</path>
         <extension>.sh .SH</extension>
