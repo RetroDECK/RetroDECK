@@ -262,10 +262,6 @@ post_update() {
     # Resetting es_systems, now we need it but in the future I should think a better solution, maybe with sed
     cp -fv /app/retrodeck/es_settings.xml /var/config/emulationstation/.emulationstation/es_settings.xml
 
-    ra_init
-    standalones_init
-    tools_init
-
     # Perform save and state migration if needed
 
     versionwheresaveschanged="0.4.5b" # Hardcoded break point between unsorted and sorted saves
@@ -380,6 +376,10 @@ post_update() {
     else
       echo "Version" $version "is after the save and state organization was changed, no need to sort again"
     fi
+
+    ra_init
+    standalones_init
+    tools_init
 
     create_lock
 }
