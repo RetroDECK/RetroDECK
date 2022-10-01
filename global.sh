@@ -34,6 +34,16 @@ conf_write() {
     sed -i "s%roms_folder=.*%roms_folder=$roms_folder%" "$rd_conf"
   fi
 
+  if [ ! -z "$saves_folder" ]
+  then
+    sed -i "s%saves_folder=.*%saves_folder=$saves_folder%" "$rd_conf"
+  fi
+
+  if [ ! -z "$states_folder" ]
+  then
+    sed -i "s%states_folder=.*%states_folder=$states_folder%" "$rd_conf"
+  fi
+
   if [ ! -z "$media_folder" ]
   then
     sed -i "s%media_folder=.*%media_folder=$media_folder%" "$rd_conf"
@@ -65,6 +75,8 @@ then
   version="$hard_version"                                    # if we are here means that the we are in a new installation, so the version is valorized with the hardcoded one
   rdhome="$HOME/retrodeck"                                   # the retrodeck home, aka ~/retrodeck
   roms_folder="$rdhome/roms"                                 # the default roms folder path
+  saves_folder="$rdhome/saves"                               # the default saves folder path
+  states_folder="$rdhome/states"                             # the default states folder path
   media_folder="$rdhome/downloaded_media"                    # the media folder, where all the scraped data is downloaded into
   themes_folder="$rdhome/themes"                             # the themes folder
   sdcard="$default_sd"                                       # Steam Deck SD default path
@@ -74,6 +86,8 @@ then
   echo "version=$version"                     >> $rd_conf
   echo "rdhome=$rdhome"                       >> $rd_conf
   echo "roms_folder=$roms_folder"             >> $rd_conf
+  echo "saves_folder=$saves_folder"           >> $rd_conf
+  echo "states_folder=$states_folder"         >> $rd_conf
   echo "media_folder=$media_folder"           >> $rd_conf
   echo "themes_folder=$themes_folder"         >> $rd_conf
   echo "sdcard=$sdcard"                       >> $rd_conf
