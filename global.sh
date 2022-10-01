@@ -48,7 +48,6 @@ conf_write() {
   then
     sed -i "s%sdcard=.*%sdcard=$sdcard%" "$rd_conf"
   fi
-
   echo "DEBUG: New contents:"
   cat "$rd_conf"
   echo ""
