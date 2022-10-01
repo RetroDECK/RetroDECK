@@ -34,6 +34,16 @@ conf_write() {
     sed -i "s%roms_folder=.*%roms_folder=$roms_folder%" "$rd_conf"
   fi
 
+  if [ ! -z "$saves_folder" ]
+  then
+    sed -i "s%saves_folder=.*%saves_folder=$saves_folder%" "$rd_conf"
+  fi
+
+  if [ ! -z "$states_folder" ]
+  then
+    sed -i "s%states_folder=.*%states_folder=$states_folder%" "$rd_conf"
+  fi
+
   if [ ! -z "$media_folder" ]
   then
     sed -i "s%media_folder=.*%media_folder=$media_folder%" ""$rd_conf""
