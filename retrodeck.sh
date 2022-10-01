@@ -266,6 +266,8 @@ post_update() {
     standalones_init
     tools_init
 
+    # Perform save and state migration if needed
+
     versionwheresaveschanged="0.4.5b" # Hardcoded break point between unsorted and sorted saves
 
     if [[ $(sed -e "s/\.//g" <<< $hard_version) > $(sed -e "s/\.//g" <<< $versionwheresaveschanged) ]] && [[ ! $(sed -e "s/\.//g" <<< $hard_version) == $(sed -e "s/\.//g" <<< $version) ]]; then # Check if user is upgrading from the version where save organization was changed. Try not to reuse this, it things 0.4.5b is newer than 0.4.5
@@ -299,7 +301,7 @@ post_update() {
 
         (
         movefile() { # Take matching save and rom files and sort save into appropriate system folder
-            echo "# $filesleft files remaining..." # These lines update the Zenity progress bar
+            echo "# $filesleft $currentlybeingmoved remaining..." # These lines update the Zenity progress bar
             progress=$(( 100 - (( 100 / "$totalfiles" ) * "$filesleft" )))
             echo $progress
             filesleft=$((filesleft-1))
@@ -316,14 +318,16 @@ post_update() {
                 echo "INFO: Examining ROM file:" "$game" >> $migration_logfile
                 echo "INFO: System detected as" $systemdir >> $migration_logfile
                 sosfile=$(sed -e "s/\^/ /g" <<< "$2") # Remove whitespace placeholder from s-ave o-r s-tate file
-                sosbasename="$(basename "$save")" # Extract pure file name ie. /saves/game1.sav becomes game1
+                sospurebasename="$(basename "$sosfile")" # Extract pure file name ie. /saves/game1.sav becomes game1
                 echo "INFO: Current save or state being examined for match:" $sosfile >> $migration_logfile
                 echo "INFO: Matching save or state" $sosfile "and game" $game "found." >> $migration_logfile
                 echo "INFO: Moving save or state to" $current_dest_folder"/"$systemdir"/"$sosbasename >> $migration_logfile
                 if [[ ! -d $current_dest_folder"/"$systemdir ]]; then # If system directory doesn't exist for save yet, create it
-                    mkdir $current_dest_folder"/"$systemdir
+                    echo "WARNING: Creating missing system directory" $current_dest_folder"/"$systemdir
+                    mkdir $current_dest_folder/$systemdir
                 fi
-                mv \'$sosfile\' $current_dest_folder"/"$systemdir\/\'$sosbasename\' # Move save to appropriate system directory
+                mv "$sosfile" -t $current_dest_folder/$systemdir # Move save to appropriate system directory
+                return
             else
                 echo "WARNING: Game with name" "$(basename "$1" | sed -e "s/\^/ /g")" "already found. Skipping to next game..." >> $migration_logfile # Inform user of game being skipped due to duplicate ROM names
             fi
@@ -332,7 +336,8 @@ post_update() {
         find "$roms_folder" -mindepth 2 -maxdepth 2 -name "*\^*" -exec echo "ERROR: Game named" {} "found, please move save manually" \; >> $migration_logfile # Warn user if any of their files have the whitespace replacement character used by the script
 
         totalfiles=$totalsaves #set variables for save file migration
-        filesleft=$totalsaves 
+        filesleft=$totalsaves
+        currentlybeingmoved="saves"
         current_dest_folder=$saves_folder
 
         for i in "${allsaves[@]}"; do # For each save file, compare to every ROM file name looking for a match
@@ -346,7 +351,8 @@ post_update() {
         done
 
         totalfiles=$totalstates #set variables for state file migration
-        filesleft=$totalstates 
+        filesleft=$totalstates
+        currentlybeingmoved="states"
         current_dest_folder=$states_folder
 
         for i in "${allstates[@]}"; do # For each state file, compare to every ROM file name looking for a match
