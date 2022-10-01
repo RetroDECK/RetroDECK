@@ -1,0 +1,89 @@
+
+name: PUSH-cooker-flathub
+
+on:
+#  push:
+#    branches:
+#     - cooker*
+#  pull_request: 
+#    branches:
+#     - cooker*
+
+  workflow_dispatch:
+
+jobs:
+
+  Pushing_cooker_into_flathub:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pushing
+        shell: bash
+        run: |
+          # EDITABLES:
+          rd_branch="cooker"
+          gits_folder="${GITHUB_WORKSPACE}/gits" # without last /
+
+          # NON-EDITABLES
+          branch="$rd_branch-"$(date +%d%m%y.%H%M)
+
+          mkdir -vp $gits_folder
+          cd $gits_folder
+          if [ -d flathub ]; then
+            rm -rf flathub
+          fi
+          git clone --recursive https://github.com/flathub/net.retrodeck.retrodeck.git flathub
+          cd $gits_folder
+          git clone --recursive https://github.com/XargonWan/RetroDECK RetroDECK
+          cd $gits_folder/RetroDECK
+          git checkout $rd_branch
+          git submodule init
+          git submodule update
+          # NOTE: the only linked submodules are: rd-submodules/retroarch
+          # these must be included in the exclusion list as they must be redownloaded
+          #sync -rav --progress --exclude={'res/screenshots/','shared-modules/','rd-submodules/retroarch','.git/','docs','retrodeck-flatpak/','retrodeck-flatpak-cooker/','.flatpak-builder/'} ~/RetroDECK/ ~/flathub/
+
+          cd $gits_folder/flathub
+          git checkout -b $branch
+          git rm -rf *
+          git clean -fxd # restroing git index
+
+          # Copying only a few files as the others are cloned by git in retrodeck.sh
+          cd $gits_folder/RetroDECK
+          cp -rf \
+          'rd-submodules' \
+          'flathub.json' \
+          'LICENSE' \
+          'net.retrodeck.retrodeck.appdata.xml' \
+          'net.retrodeck.retrodeck.desktop' \
+          'net.retrodeck.retrodeck.yml' \
+          'README.md' \
+          $gits_folder/flathub/
+
+          cd $gits_folder/flathub
+          ls -la
+
+          if [ -d .git/modules ]; then
+            rm -rfv .git/modules/*
+          fi
+
+          # Adding the real submodules, please update this every time a submodule is added
+          
+          if [ -d shared-modules ]; then
+            git rm -rf --ignore-unmatch shared-modules
+            rm -rfv shared-modules
+          fi          
+          git submodule add https://github.com/flathub/shared-modules.git ./shared-modules
+
+          if [ -d rd-submodules/retroarch ]; then
+            git rm -rf --ignore-unmatch rd-submodules/retroarch
+            rm -rfv rd-submodules/retroarch
+          fi
+          git submodule add https://github.com/flathub/org.libretro.RetroArch.git ./rd-submodules/retroarch
+
+          # unbinds all submodules
+          git submodule deinit -f .
+          # checkout again
+          git submodule update --init --recursive
+          git add *
+          git commit -m "Updated flathub/net.retrodeck.retrodeck from RetroDECK/$rd_branch"
+          git push origin $branch
