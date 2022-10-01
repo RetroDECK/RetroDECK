@@ -58,7 +58,6 @@ conf_write() {
   then
     sed -i "s%sdcard=.*%sdcard=$sdcard%" "$rd_conf"
   fi
-
   echo "DEBUG: New contents:"
   cat "$rd_conf"
   echo ""
@@ -92,6 +91,9 @@ then
   echo "media_folder=$media_folder"           >> $rd_conf
   echo "themes_folder=$themes_folder"         >> $rd_conf
   echo "sdcard=$sdcard"                       >> $rd_conf
+
+  echo "Setting config file permissions"
+  chmod +rwx $rd_conf
 
 # If the config file is existing i just read the variables (source it)
 else

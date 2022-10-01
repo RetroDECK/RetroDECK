@@ -108,7 +108,7 @@ standalones_init() {
     cp -fvr $emuconfigs/PCSX2/* /var/config/PCSX2/inis/
     sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2_ui.ini
     sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2.ini
-    dir_prep "$rdhome/states" "/var/config/PCSX2/sstates"
+    dir_prep "$rdhome/states/ps2/pcsx2" "/var/config/PCSX2/sstates"
     dir_prep "$rdhome/screenshots" "/var/config/PCSX2/snaps"
     dir_prep "$rdhome/.logs" "/var/config/PCSX2/logs"
     dir_prep "$rdhome/bios" "$rdhome/bios/pcsx2"
@@ -144,13 +144,14 @@ standalones_init() {
     echo "Initializing RPCS3"
     echo "------------------------"
     mkdir -pv /var/config/rpcs3/
-    cp -fvr $emuconfigs/config.yml /var/config/rpcs3/
+    cp -fvr $emuconfigs/rpcs3/* /var/config/rpcs3/
+    sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/rpcs3/vfs.yml
 
     # XEMU
     echo "------------------------"
     echo "Initializing XEMU"
     echo "------------------------"
-    mkdir -pv $rdhome/saves/xemu
+    mkdir -pv $rdhome/saves/xbox/xemu/
     cp -fv $emuconfigs/xemu.toml /var/data/xemu/xemu.toml
     sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/data/xemu/xemu.toml
     # Preparing HD dummy Image if the image is not found
@@ -169,7 +170,7 @@ standalones_init() {
     cp -fv $emuconfigs/ppssppsdl/* /var/config/ppsspp/PSP/SYSTEM/
     sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/ppsspp/PSP/SYSTEM/ppsspp.ini
 
-    # PPSSPPSDL
+    # DUCKSTATION
     echo "------------------------"
     echo "Initializing DUCKSTATION"
     echo "------------------------"
@@ -260,6 +261,8 @@ post_update() {
     # Resetting es_systems, now we need it but in the future I should think a better solution, maybe with sed
     cp -fv /app/retrodeck/es_settings.xml /var/config/emulationstation/.emulationstation/es_settings.xml
 
+
+    # 0.4 -> 0.5
     # Perform save and state migration if needed
 
     versionwheresaveschanged="0.4.5b" # Hardcoded break point between unsorted and sorted saves
@@ -414,40 +417,40 @@ browse(){
       done
 }
 
-advanced(){
-  # function to give advanced install options
-  echo "Advaced choosed"
-
-  choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
-    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
-    --ok-label "ROMs" \
-    --extra-button "Media" \
-    --extra-button "Themes" \
-    --extra-button "Back" \
-    --text="What do you want to change?\n\nROMS folder = $roms_folder\nMedia folder (scraped data) = $media_folder\nThemes folder=$themes_folder" )
-    echo "Choice is $choice"
-
-    case $choice in
-
-    "" ) # Internal (yes)
-      echo "ROMs"
-      ;;
-
-    "Media" )
-      echo "Media"
-      ;;
-
-    "Themes" )
-      echo "Themes"
-      ;;
-
-    "Back" ) # Browse + not found fallback
-      echo "Back"
-      finit
-      ;;
-
-    esac
-}
+#advanced(){
+#  # function to give advanced install options
+#  echo "Advaced choosed"
+#
+#  choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
+#    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
+#    --ok-label "ROMs" \
+#    --extra-button "Media" \
+#    --extra-button "Themes" \
+#    --extra-button "Back" \
+#    --text="What do you want to change?\n\nROMS folder = $roms_folder\nMedia folder (scraped data) = $media_folder\nThemes folder=$themes_folder" )
+#    echo "Choice is $choice"
+#
+#    case $choice in
+#
+#    "" ) # Internal (yes)
+#      echo "ROMs"
+#      ;;
+#
+#    "Media" )
+#      echo "Media"
+#      ;;
+#
+#    "Themes" )
+#      echo "Themes"
+#      ;;
+#
+#    "Back" ) # Browse + not found fallback
+#      echo "Back"
+#      finit
+#      ;;
+#
+#    esac
+#}
 
 finit() {
     # Force/First init, depending on the situation
@@ -457,24 +460,24 @@ finit() {
     # Internal or SD Card?
     choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
-    --ok-label "Internal" \
+    --ok-label "Cancel" \
+    --extra-button "Internal" \
     --extra-button "SD Card" \
-    --extra-button "Advanced" \
-    --extra-button "Cancel" \
+    #--extra-button "Advanced" \
     --text="Welcome to the first configuration of RetroDECK.\nThe setup will be quick but please READ CAREFULLY each message in order to avoid misconfigurations.\n\nWhere do you want your roms folder to be located?" )
     echo "Choice is $choice"
 
     case $choice in
 
-    "" ) # Internal (yes)
-      echo "Internal selected"
-      roms_folder="$rdhome/roms"
-      ;;
-
-    "Cancel" )
+    "" ) # Cancel or X button quits
       echo "Now quitting"
       kill $$
-      ;;
+    ;;
+
+    "Internal" ) # Internal
+      echo "Internal selected"
+      roms_folder="$rdhome/roms"
+    ;;
 
     "SD Card" )
       echo "SD Card selected"
@@ -491,16 +494,12 @@ finit() {
         roms_folder="$sdcard/retrodeck/roms"    # sdcard variable is correct as its given by browse function
         echo "ROMs folder = $roms_folder"
       fi
-      ;;
+    ;;
 
-    "Advanced" ) # Browse + not found fallback
-      echo "Advanced"
-      advanced
-      ;;
-
-    1 ) # X button quits
-      kill $$
-      ;;
+    #"Advanced" ) # Browse + not found fallback
+    #  echo "Advanced"
+    #  advanced
+    #;;
 
     esac
 

@@ -196,7 +196,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/FFmpeg/FFmpeg.git
-        tag: n5.1
+        tag: n5.1.1
 
   - name: freeimage
     no-autogen: true
@@ -289,7 +289,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/RetroArch.git
-        branch: 9b282aa742b6c3d2f2925ae5a12e2cd7c6b6ad38
+        commit: 9586d679a8b143fbe1880dff7454fd0809262b55
       - type: file
         path: rd-submodules/retroarch/retroarch.cfg
     post-install:
@@ -322,7 +322,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/RetroArch.git
-        branch: 9b282aa742b6c3d2f2925ae5a12e2cd7c6b6ad38
+        commit: 9586d679a8b143fbe1880dff7454fd0809262b55
   - name: retroarch-filers-audio
     subdir: libretro-common/audio/dsp_filters
     make-install-args:
@@ -330,63 +330,63 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/RetroArch.git
-        branch: 9b282aa742b6c3d2f2925ae5a12e2cd7c6b6ad38
+        commit: 9586d679a8b143fbe1880dff7454fd0809262b55
   - name: retroarch-assets
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
         url: https://github.com/libretro/retroarch-assets.git
-        commit: f45dd1351e6bfb9f01e12bee8d358ad22a2bb8f9
+        commit: ee33f8ef693b42a8e23ca3fd48f43f345e7cd087
   - name: libretro-database
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
         url: https://github.com/libretro/libretro-database.git
-        commit: f3b10ec262fcbd78da3473f46d244270d12a327e
+        commit: 772011a54392aab6be1302bf1bd8aa1cc0c0c6c2
   - name: libretro-core-info
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
         url: https://github.com/libretro/libretro-core-info.git
-        commit: 06dac6318c067a6a40e2ea1e1260e74681ada844
+        commit: 0cc4912691cd1adb87168ce87b6795bdf57b2fe5
   - name: retroarch-joypad-autoconfig
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
         url: https://github.com/libretro/retroarch-joypad-autoconfig.git
-        commit: 760b057f1865a827762a54a8a32afda2cdd9e170
+        commit: a3b5067b8954f15e8e87eeed71a4262f0ea7fd1c
   - name: common-shaders
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
         url: https://github.com/libretro/common-shaders.git
-        commit: 55e401834b732e62c34411321c4ffd82524345d4
+        commit: 86cfa146a8dfddf6377ddb5dbcff552feae2e5bf
   - name: slang-shaders
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
         url: https://github.com/libretro/slang-shaders.git
-        commit: 148c57d9747f5db124135501ac280b5ca129a83f
+        commit: f8f99ee220edbf2c5df2714a73d46faea43e62e2
   - name: glsl-shaders
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
         url: https://github.com/libretro/glsl-shaders.git
-        commit: 8f6b2649489760caea8f36ec6099998854059569
+        commit: 46a00f15e09ffbd4fba46ab41f0653aeea918fd1
   - name: common-overlays
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
         url: https://github.com/libretro/common-overlays.git
-        commit: db9744f4e58a740f0f10b04b62af347cd6f01928
+        commit: e2ba730083769b45bac62d164115e7dc197c8b63
 
   # RetroArch - END
 
@@ -398,8 +398,8 @@ modules:
       - mv ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* /app/share/libretro/cores/
     sources:
       - type: archive
-        url: https://buildbot.libretro.com/stable/1.10.3/linux/x86_64/RetroArch_cores.7z
-        sha256: 33abf39839687f8faba202ed5dcf3a54c06266a49fad35f0521fa445523d009f
+        url: https://buildbot.libretro.com/stable/1.11.0/linux/x86_64/RetroArch_cores.7z
+        sha256: a443c18708b3eda12bdc3419e1aaf9d95370580a38f23d0abfa7868b84ff6fdc
 
   # PPSSPP - START
   # https://github.com/flathub/org.ppsspp.PPSSPP
@@ -407,7 +407,7 @@ modules:
   - name: ppsspp
     buildsystem: cmake-ninja
     config-opts:
-      - -DUSE_SYSTEM_FFMPEG=OFF # turn this on?
+      - -DUSE_SYSTEM_FFMPEG=OFF # default: off, turn this on?
       - -DUSE_SYSTEM_LIBZIP=ON
       - -DUSE_SYSTEM_ZSTD=ON
 
@@ -477,10 +477,10 @@ modules:
         dest: ext/zstd
         commit: a488ba114ec17ea1054b9057c26a046fc122b3b6
         url: https://github.com/facebook/zstd.git
-      #- type: git
-      #  dest: ffmpeg
-      #  commit: 3ad7ddb9eb2af898dce8c4b5e9a28b77b3f7ddd7
-      #  url: https://github.com/hrydgard/ppsspp-ffmpeg.git
+      - type: git
+        dest: ffmpeg
+        commit: 3ad7ddb9eb2af898dce8c4b5e9a28b77b3f7ddd7
+        url: https://github.com/hrydgard/ppsspp-ffmpeg.git
       - type: git
         dest: pspautotests
         commit: 682a4303aba63a50c91ae0fa6928c9dac8ca9b92
@@ -635,6 +635,7 @@ modules:
       - install -Dm755 ../yuzu-launcher.sh /app/bin/yuzu-launcher
       - install -Dm644 ../dist/yuzu.svg /app/share/icons/hicolor/scalable/apps/yuzu.svg
     sources:
+      - disable-submodules: true # FLATHUB WORKAROUND
       - type: git
         url: https://github.com/yuzu-emu/yuzu-mainline.git
         tag: mainline-0-1171
@@ -957,8 +958,8 @@ modules:
       - ln -s "${FLATPAK_DEST}/pcsx2-qt/usr/bin/pcsx2-qt" "${FLATPAK_DEST}/bin/pcsx2-qt"
     sources:
       - type: file
-        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.3325/pcsx2-v1.7.3325-linux-AppImage-64bit-AVX2-Qt.AppImage
-        sha256: 5fa89570fb68b8a729dc0589e568d3a09b2b9243d4d66a5b7086975fb02e95e4
+        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.3357/pcsx2-v1.7.3357-linux-AppImage-64bit-AVX2-Qt.AppImage
+        sha256: 07f293c1aad832f0a908c18ff94c8b545db0cb56230b4f4574ba75071bd91441
 
   # PCSX2 - END
 
@@ -1386,20 +1387,23 @@ modules:
     buildsystem: simple
     build-commands:
 
-        # Prep the ES-DE and RetroArch config files - I will have to SED/XMLSTARLET them soon
+      # Initializing retrodeck config folder
+      - mkdir -p /var/config/retrodeck
+
+      # Prep the ES-DE and RetroArch config files - I will have to SED/XMLSTARLET them soon
       - rm -rf /app/share/emulationstation/resources/systems/unix/es_find_rules.xml
       - cp es-configs/es_find_rules.xml /app/share/emulationstation/resources/systems/unix/
       - rm -rf /app/share/emulationstation/resources/systems/unix/es_systems.xml
       - cp es-configs/es_systems.xml /app/share/emulationstation/resources/systems/unix/
-        # These must be put in home folder, managed by retrodeck.sh
+      # These must be put in home folder, managed by retrodeck.sh
       - cp es-configs/es_settings.xml ${FLATPAK_DEST}/retrodeck/es_settings.xml
 
-        # Logo, res
+      # Logo, res
       - rm -f /app/share/emulationstation/resources/graphics/splash.svg
       - cp res/splash.svg /app/share/emulationstation/resources/graphics/splash.svg
       - cp res/icon.svg /app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg
 
-        # Tools
+      # Tools
       - mkdir -p ${FLATPAK_DEST}/retrodeck/tools/
       - cp tools/* ${FLATPAK_DEST}/retrodeck/tools/
       - mv -f es-configs/tools-gamelist.xml ${FLATPAK_DEST}/retrodeck/
@@ -1410,18 +1414,18 @@ modules:
       - cp global.sh /app/bin/global.sh
       - chmod +x /app/bin/global.sh
         
-        # Desktop entry
+      # Desktop entry
       - cp net.retrodeck.retrodeck.desktop /app/share/applications/net.retrodeck.retrodeck.desktop
 
-        # TODO: group the configs per-emu and optimize the following cps, like already done with Dolphin. Please not that some files may be renamed, check retrodeck.sh to know how (and fix it after the edit)
+      # TODO: group the configs per-emu and optimize the following cps, like already done with Dolphin. Please not that some files may be renamed, check retrodeck.sh to know how (and fix it after the edit)
 
-        # Initializing default emulator configs
+      # Initializing default emulator configs
       - cp -r emu-configs ${FLATPAK_DEST}/retrodeck/emu-configs/
 
-        # Overlays
-        #- cp -r overlays ${FLATPAK_DEST}/retrodeck/overlays Disabled in 0.4.2b as it will be introduced in 0.5.0b
+      # Overlays
+      #- cp -r overlays ${FLATPAK_DEST}/retrodeck/overlays Disabled in 0.4.2b as it will be introduced in 0.5.0b
 
-        # Placing appdata
+      # Placing appdata
       - mkdir -p ${FLATPAK_DEST}/share/appdata
       - cp net.retrodeck.retrodeck.appdata.xml ${FLATPAK_DEST}/share/appdata
 
