@@ -197,7 +197,7 @@
   border-radius: 20px;
   background-color: #aaa;
   overflow: hidden;
-  background: url(../../assets/img/screen-content-phone.jpg);
+  background: url(screen-content-phone.jpg);
   background-size: cover;
   background-position: center;
   z-index: -1;
