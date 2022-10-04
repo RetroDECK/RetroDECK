@@ -262,7 +262,6 @@ post_update() {
     mkdir -pv $rdhome/.logs #this was added later, maybe safe to remove in a few versions
         
 
-
     # Resetting es_settings, now we need it but in the future I should think a better solution, maybe with sed
     cp -fv /app/retrodeck/es_settings.xml /var/config/emulationstation/.emulationstation/es_settings.xml
 
