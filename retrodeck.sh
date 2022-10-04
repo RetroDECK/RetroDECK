@@ -54,9 +54,10 @@ dir_prep() {
 tools_init() {
     rm -rfv /var/config/retrodeck/tools/
     mkdir -pv /var/config/retrodeck/tools/
-    cp -r /app/retrodeck/tools/* /var/config/retrodeck/tools/
+    cp -rfv /app/retrodeck/tools/* /var/config/retrodeck/tools/
     mkdir -pv /var/config/emulationstation/.emulationstation/custom_systems/tools/
-    cp /app/retrodeck/tools-gamelist.xml /var/config/retrodeck/tools/gamelist.xml
+    rm -rfv /var/config/retrodeck/tools/gamelist.xml
+    cp -fv /app/retrodeck/tools-gamelist.xml /var/config/retrodeck/tools/gamelist.xml
 }
 
 standalones_init() {
