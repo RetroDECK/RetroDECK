@@ -290,7 +290,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/RetroArch.git
-        commit: 9586d679a8b143fbe1880dff7454fd0809262b55
+        commit: 389ef31a8f4a505f255e9bfebe882750d22ab490
       - type: file
         path: rd-submodules/retroarch/retroarch.cfg
     post-install:
@@ -323,7 +323,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/RetroArch.git
-        commit: 9586d679a8b143fbe1880dff7454fd0809262b55
+        commit: 389ef31a8f4a505f255e9bfebe882750d22ab490
   - name: retroarch-filers-audio
     subdir: libretro-common/audio/dsp_filters
     make-install-args:
@@ -331,7 +331,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/RetroArch.git
-        commit: 9586d679a8b143fbe1880dff7454fd0809262b55
+        commit: 389ef31a8f4a505f255e9bfebe882750d22ab490
   - name: retroarch-assets
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
@@ -352,7 +352,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/libretro-core-info.git
-        commit: 0cc4912691cd1adb87168ce87b6795bdf57b2fe5
+        commit: 90eff5d4e72db1b5929af7210c9b665c33034536
   - name: retroarch-joypad-autoconfig
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
@@ -399,8 +399,8 @@ modules:
       - mv ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* /app/share/libretro/cores/
     sources:
       - type: archive
-        url: https://buildbot.libretro.com/stable/1.11.0/linux/x86_64/RetroArch_cores.7z
-        sha256: a443c18708b3eda12bdc3419e1aaf9d95370580a38f23d0abfa7868b84ff6fdc
+        url: https://buildbot.libretro.com/stable/1.11.1/linux/x86_64/RetroArch_cores.7z
+        sha256: 4874460211d77aa6351398c74405fdc0953e900606e37f8ff06287c9
 
   # PPSSPP - START
   # https://github.com/flathub/org.ppsspp.PPSSPP
