@@ -1401,8 +1401,8 @@ modules:
 
       # Logo, res
       - rm -f /app/share/emulationstation/resources/graphics/splash.svg
-      - cp res/splash.svg /app/share/emulationstation/resources/graphics/splash.svg
-      - cp res/icon.svg /app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg
+      - cp -f res/splash.svg /app/share/emulationstation/resources/graphics/splash.svg
+      - cp -f res/icon.svg /app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg
 
       # Tools
       - mkdir -p ${FLATPAK_DEST}/retrodeck/tools/
