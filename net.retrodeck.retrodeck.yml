@@ -1399,9 +1399,13 @@ modules:
       # These must be put in home folder, managed by retrodeck.sh
       - cp es-configs/es_settings.xml ${FLATPAK_DEST}/retrodeck/es_settings.xml
 
-      # Logo, res
+      # Logo, res, move graphics directory to mutable space so splash can be changed after build
       - rm -f /app/share/emulationstation/resources/graphics/splash.svg
+      - mv -f -t /var/config/emulationstation /app/share/emulationstation/resources/graphics 
+      - ln -s /var/config/emulationstation/graphics /app/share/emulationstation/resources/graphics
+      - cp -f res/extra-splashes/* /app/share/emulationstation/resources/graphics/
       - cp -f res/splash.svg /app/share/emulationstation/resources/graphics/splash.svg
+      - cp -f res/splash.svg /app/share/emulationstation/resources/graphics/splash-orig.svg
       - cp -f res/icon.svg /app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg
 
       # Tools
