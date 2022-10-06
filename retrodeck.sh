@@ -464,7 +464,6 @@ finit() {
     --ok-label "Cancel" \
     --extra-button "Internal" \
     --extra-button "SD Card" \
-    # --extra-button "Advanced"
     --text="Welcome to the first configuration of RetroDECK.\nThe setup will be quick but please READ CAREFULLY each message in order to avoid misconfigurations.\n\nWhere do you want your roms folder to be located?" )
     echo "Choice is $choice"
 
