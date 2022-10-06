@@ -1,5 +1,15 @@
 #!/bin/bash
 
+# workaround to fix a bug when updating to 0.5.0b where the post update is not triggered
+# basically from 0.5 it's not reading the version from the lockfile so it doesn't know from which version it came from and the new rule of global.sh is that if version is unknown it's like a first boot
+# remove it in the future
+lockfile="/var/config/retrodeck/.lock"
+if [[ $(cat $lockfile) == *"0.4."* ]] || [[ $(cat $lockfile) == *"0.3."* ]] || [[ $(cat $lockfile) == *"0.2."* ]] || [[ $(cat $lockfile) == *"0.1."* ]]
+then
+  echo "Running version workaround"
+  version=$(cat $lockfile)
+fi
+
 source /app/bin/global.sh
 
 # We moved the lockfile in /var/config/retrodeck in order to solve issue #53 - Remove in a few versions
