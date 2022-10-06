@@ -393,7 +393,7 @@ easter_eggs() {
 
     if [[ today -eq "0401" ]]; then # An example of a one-day easter egg
       # cp -fv /app/share/emulationstation/resources/graphics/splash-aprilfools.svg /app/share/emulationstation/resources/graphics/splash.svg 
-    elif [[ today -ge "1001" && today -le "1031" ]] # An example of a multi-day easter egg
+    elif [[ today -ge "1001" && today -le "1031" ]]; then # An example of a multi-day easter egg
       # cp -fv /app/share/emulationstation/resources/graphics/splash-spookytime.svg /app/share/emulationstation/resources/graphics/splash.svg
     else # Revert to standard splash otherwise
       # cp -fv /app/share/emulationstation/resources/graphics/splash-orig.svg /app/share/emulationstation/resources/graphics/splash.svg
