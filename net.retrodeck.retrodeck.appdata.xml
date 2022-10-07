@@ -14,19 +14,25 @@
   <content_rating type="oars-1.0" />
   <screenshots>
     <screenshot type="default">
-      <image>https://github.com/XargonWan/RetroDECK/blob/main/res/logo.png?raw=true</image>
+      <image>https://github.com/XargonWan/RetroDECK/blob/cooker/res/logo.png?raw=true</image>
     </screenshot>
     <screenshot>
-      <image>https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen02.png?raw=true</image>
+      <image>https://github.com/XargonWan/RetroDECK/blob/cooker/res/screenshots/screen01.jpeg?raw=true</image>
     </screenshot>
     <screenshot>
-      <image>https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen03.png?raw=true</image>
+      <image>https://github.com/XargonWan/RetroDECK/blob/cooker/res/screenshots/screen02.jpeg?raw=true</image>
     </screenshot>
     <screenshot>
-      <image>https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen04.png?raw=true</image>
+      <image>https://github.com/XargonWan/RetroDECK/blob/cooker/res/screenshots/screen03.jpeg?raw=true</image>
     </screenshot>
     <screenshot>
-      <image>https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen05.png?raw=true</image>
+      <image>https://github.com/XargonWan/RetroDECK/blob/cooker/res/screenshots/screen04.jpeg?raw=true</image>
+    </screenshot>
+    <screenshot>
+      <image>https://github.com/XargonWan/RetroDECK/blob/cooker/res/screenshots/screen05.jpeg?raw=true</image>
+    </screenshot>
+    <screenshot>
+      <image>https://github.com/XargonWan/RetroDECK/blob/cooker/res/screenshots/screen06.jpeg?raw=true</image>
     </screenshot>
   </screenshots>
   <description>
@@ -68,7 +74,7 @@
          <ul>
           <li>IMPORTANT: Started saves migration, the saves are being moved to retrodeck/saves/systemname/emulator upon update, however if some emulators cannot load your saves you have to move them manually to the new path</li>
           <li>Theme revamp and more themes available such as the old one</li>
-          <li>Updated RetroArch and its cores from 1.10.2 to 1.11.0</li>
+          <li>Updated RetroArch and its cores from 1.10.2 to 1.11.1</li>
           <li>Updated all the standalone emulators to their latest releases</li>
           <li>Updated ES-DE to 1.2.6</li>
           <li>Removed the unavailable emulators from the ES-DE list to avoid confusion</li>

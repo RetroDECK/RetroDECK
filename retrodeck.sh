@@ -1,5 +1,15 @@
 #!/bin/bash
 
+# workaround to fix a bug when updating to 0.5.0b where the post update is not triggered
+# basically from 0.5 it's not reading the version from the lockfile so it doesn't know from which version it came from and the new rule of global.sh is that if version is unknown it's like a first boot
+# remove it in the future
+lockfile="/var/config/retrodeck/.lock"
+if [[ $(cat $lockfile) == *"0.4."* ]] || [[ $(cat $lockfile) == *"0.3."* ]] || [[ $(cat $lockfile) == *"0.2."* ]] || [[ $(cat $lockfile) == *"0.1."* ]]
+then
+  echo "Running version workaround"
+  version=$(cat $lockfile)
+fi
+
 source /app/bin/global.sh
 
 # We moved the lockfile in /var/config/retrodeck in order to solve issue #53 - Remove in a few versions
@@ -54,9 +64,10 @@ dir_prep() {
 tools_init() {
     rm -rfv /var/config/retrodeck/tools/
     mkdir -pv /var/config/retrodeck/tools/
-    cp -r /app/retrodeck/tools/* /var/config/retrodeck/tools/
+    cp -rfv /app/retrodeck/tools/* /var/config/retrodeck/tools/
     mkdir -pv /var/config/emulationstation/.emulationstation/custom_systems/tools/
-    cp /app/retrodeck/tools-gamelist.xml /var/config/retrodeck/tools/gamelist.xml
+    rm -rfv /var/config/retrodeck/tools/gamelist.xml
+    cp -fv /app/retrodeck/tools-gamelist.xml /var/config/retrodeck/tools/gamelist.xml
 }
 
 standalones_init() {
@@ -258,7 +269,7 @@ post_update() {
     mkdir -pv $rdhome/.logs #this was added later, maybe safe to remove in a few versions
     
 
-    # Resetting es_systems, now we need it but in the future I should think a better solution, maybe with sed
+    # Resetting es_settings, now we need it but in the future I should think a better solution, maybe with sed
     cp -fv /app/retrodeck/es_settings.xml /var/config/emulationstation/.emulationstation/es_settings.xml
 
 
@@ -463,7 +474,6 @@ finit() {
     --ok-label "Cancel" \
     --extra-button "Internal" \
     --extra-button "SD Card" \
-    #--extra-button "Advanced" \
     --text="Welcome to the first configuration of RetroDECK.\nThe setup will be quick but please READ CAREFULLY each message in order to avoid misconfigurations.\n\nWhere do you want your roms folder to be located?" )
     echo "Choice is $choice"
 
