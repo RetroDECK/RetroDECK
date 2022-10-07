@@ -13,6 +13,7 @@ citraconf="/var/config/citra-emu/qt-config.ini"
 melondsconf="/var/config/melonDS/melonDS.ini"
 rpcs3conf="/var/config/rpcs3/config.yml"
 yuzuconf="/var/config/yuzu/qt-config.ini"
+source $rd_conf
 
 # Dolphin config files
 
@@ -63,56 +64,108 @@ move() {
 
 }
 
-edit_setting() {
+set_setting() {
 # Function for editing settings
-# USAGE: $(edit_setting $setting_name $new_setting_value $system) (needed as different systems use different config file syntaxes)
+# USAGE: $(set_setting $setting_file $setting_name $new_setting_value $system) (needed as different systems use different config file syntax)
 
-
-}
-
-get_setting_value() {
-# Function for getting the current value of a setting from a config file
-# USAGE: $(get_setting_value $setting_name $system) (needed as different systems use different config file syntaxes)
-
-
-
-case $2 in
+case $4 in
 
     "retrodeck" )
+    
     ;;
     
     "retroarch" )
-    echo $(grep $2 $raconf | grep -o -P "(?<=$2 = \").*(?=\")")
-    ;;
-
-    "retroarch-core-configs" )
+    sed -i "s/$2 = \".*\"/$2 = \"$3\"/" $1
     ;;
 
     "dolphin" )
+    
     ;;
 
     "duckstation" )
+    
     ;;
 
     "pcsx2" )
+
     ;;
 
     "ppsspp" )
+
     ;;
 
     "rpcs3" )
+
     ;;
 
     "yuzu" )
+
     ;;
     
     "citra" )
+
     ;;
 
     "melonds" )
+
     ;;
 
     "xemu" )
+
+    ;;
+
+esac
+
+}
+
+get_setting() {
+# Function for getting the current value of a setting from a config file
+# USAGE: $(get_setting $setting_file $setting_name $system) (needed as different systems use different config file syntax)
+
+case $3 in
+
+    "retrodeck" )
+    #echo $(grep $2 $1 | grep -o -P "(?<=$2 = \").*(?=\")") 
+    ;;
+    
+    "retroarch" )
+    echo $(grep $2 $1 | grep -o -P "(?<=$2 = \").*(?=\")")
+    ;;
+
+    "dolphin" )
+    #echo $(grep $2 $1 | grep -o -P "(?<=$2 = \").*(?=\")")
+    ;;
+
+    "duckstation" )
+    #echo $(grep $2 $1 | grep -o -P "(?<=$2 = \").*(?=\")")
+    ;;
+
+    "pcsx2" )
+    #echo $(grep $2 $1 | grep -o -P "(?<=$2 = \").*(?=\")")
+    ;;
+
+    "ppsspp" )
+    #echo $(grep $2 $1 | grep -o -P "(?<=$2 = \").*(?=\")")
+    ;;
+
+    "rpcs3" )
+    #echo $(grep $2 $1 | grep -o -P "(?<=$2 = \").*(?=\")")
+    ;;
+
+    "yuzu" )
+    #echo $(grep $2 $1 | grep -o -P "(?<=$2 = \").*(?=\")")
+    ;;
+    
+    "citra" )
+    #echo $(grep $2 $1 | grep -o -P "(?<=$2 = \").*(?=\")")
+    ;;
+
+    "melonds" )
+    #echo $(grep $2 $1 | grep -o -P "(?<=$2 = \").*(?=\")")
+    ;;
+
+    "xemu" )
+    #echo $(grep $2 $1 | grep -o -P "(?<=$2 = \").*(?=\")")
     ;;
 
 esac
@@ -307,39 +360,72 @@ configurator_power_user_changes_dialog() {
     esac
 }
 
-configurator_rewind_dialog() {
-    zenity --question \
-    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK" \
-    --text="Do you want to enable the rewind function in RetroArch cores?\n\nNOTE:\nThis may impact on performances expecially on the latest systems."
+configurator_retroarch_rewind_dialog() {
+    if [[ $(get_setting $raconf rewind_enable retroarch) == "true" ]]; then
+        zenity --question \
+        --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+        --title "RetroDECK Configurator - Rewind" \
+        --text="Rewind is currently enabled. Do you want to disable it?."
 
-    if [ $? == 0 ] #yes, enable
-    then
-        sed -i 's%rewind_enable = .*%rewind_enable = "true"' $raconf
-        zenity --info \
-            --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-            --title "RetroDECK" \
-            --text="Rewind enabled\!\nYou can check on Libretro docs to see which cores supports this function."
-    else # no, disable
-        sed -i 's%rewind_enable = .*%rewind_enable = "false"' $raconf
-        zenity --info \
-            --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-            --title "RetroDECK" \
-            --text="Rewind disabled."
+        if [ $? == 0 ] 
+        then
+            set_setting $raconf rewind_enable true retroarch
+            zenity --info \
+                --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+                --title "RetroDECK Configurator - Rewind" \
+                --text="Rewind enabled\!\nYou can check on Libretro docs to see which cores supports this function."
+        else 
+            configurator_options_dialog
+        fi
+    else
+        zenity --question \
+        --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+        --title "RetroDECK Configurator - Rewind" \
+        --text="Rewind is currently disabled, do you want to enable it?\n\nNOTE:\nThis may impact performance expecially on the latest systems."
+
+        if [ $? == 0 ] 
+        then
+            set_setting $raconf rewind_enable false retroarch
+            zenity --info \
+                --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+                --title "RetroDECK Configurator - Rewind" \
+                --text="Rewind disabled."
+        else 
+            configurator_options_dialog
+        fi
     fi
+}
+
+configurator_retroarch_options_dialog() {
+    choice=$(zenity --list --title="RetroDECK Configurator Utility - RetroArch Options" --cancel-label="Back" \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --column="Choice" --column="Action" \
+    "Change Rewind Setting" "Enable or disable the Rewind function in RetroArch" )
+
+    case $choice in
+
+    "Change Rewind Setting" )
+        configurator_retroarch_rewind_dialog
+        ;;
+
+    "" ) # No selection made or Back button clicked
+        configurator_options_dialog
+        ;;
+    
+    esac
 }
 
 configurator_options_dialog() {
     choice=$(zenity --list --title="RetroDECK Configurator Utility - Change Options" --cancel-label="Back" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --column="Choice" --column="Action" \
-    "Enable-Disable Rewind" "Enable or disable Rewind function in RetroArch" \
+    "Change RetroArch Settings" "Change settings specific to RetroArch" \
     "Power User Changes" "Make changes directly in an emulator" )
 
     case $choice in
 
-    "Enable-Disable Rewind" )
-        configurator_rewind_dialog
+    "Change RetroArch Settings" )
+        configurator_retroarch_options_dialog
         ;;
 
     "Power User Changes" )
