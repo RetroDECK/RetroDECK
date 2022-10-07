@@ -251,6 +251,17 @@ post_update() {
     # post update script
     echo "Executing post-update script"
 
+    # Finding existing ROMs folder
+    if [ -d "$default_sd/retrodeck" ]
+    then
+      # ROMs on SD card
+      roms_folder="$default_sd/retrodeck/roms"
+    else
+      # ROMs on Internal
+      roms_folder="$HOME/retrodeck/roms"
+    fi
+    echo "ROMs folder found at $roms_folder"
+
     # Unhiding downloaded media from the previous versions
     if [ -d "$rdhome/.downloaded_media" ]
     then
