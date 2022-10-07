@@ -67,7 +67,8 @@ conf_write() {
 # If there is no config file I initalize the file with the the default values
 if [ ! -f "$rd_conf" ]
 then
-
+  
+  mkdir -p /var/config/retrodeck
   echo "RetroDECK config file not found in $rd_conf"
   echo "Initializing"
   
