@@ -1413,7 +1413,10 @@ modules:
 
       - cp global.sh /app/bin/global.sh
       - chmod +x /app/bin/global.sh
-        
+
+      - cp functions.sh /app/libexec/functions.sh
+      - chmod +x /app/libexec/functions.sh
+
       # Desktop entry
       - cp net.retrodeck.retrodeck.desktop /app/share/applications/net.retrodeck.retrodeck.desktop
 

@@ -1,24 +1,6 @@
 #!/bin/bash
 
-# workaround to fix a bug when updating to 0.5.0b where the post update is not triggered
-# basically from 0.5 it's not reading the version from the lockfile so it doesn't know from which version it came from and the new rule of global.sh is that if version is unknown it's like a first boot
-# remove it in the future
-lockfile="/var/config/retrodeck/.lock"
-if [[ $(cat $lockfile) == *"0.4."* ]] || [[ $(cat $lockfile) == *"0.3."* ]] || [[ $(cat $lockfile) == *"0.2."* ]] || [[ $(cat $lockfile) == *"0.1."* ]]
-then
-  echo "Running version workaround"
-  version=$(cat $lockfile)
-fi
-
-source /app/bin/global.sh
-
-# We moved the lockfile in /var/config/retrodeck in order to solve issue #53 - Remove in a few versions
-if [ -f "$HOME/retrodeck/.lock" ]
-then
-  mv "$HOME/retrodeck/.lock" $lockfile
-fi
-
-# Functions area
+# THIS IS A CENTRALIZED LOCATION FOR FUNCTIONS, WHICH CAN BE SOURCED WITHOUT RUNNING EXTRA CODE. EXISTING USE OF THESE FUNCTIONS CAN BE REFACTORED TO HERE.
 
 dir_prep() {
     # This script is creating a symlink preserving old folder contents and moving them in the new one
@@ -251,17 +233,6 @@ post_update() {
     # post update script
     echo "Executing post-update script"
 
-    # Finding existing ROMs folder
-    if [ -d "$default_sd/retrodeck" ]
-    then
-      # ROMs on SD card
-      roms_folder="$default_sd/retrodeck/roms"
-    else
-      # ROMs on Internal
-      roms_folder="$HOME/retrodeck/roms"
-    fi
-    echo "ROMs folder found at $roms_folder"
-
     # Unhiding downloaded media from the previous versions
     if [ -d "$rdhome/.downloaded_media" ]
     then
@@ -294,16 +265,18 @@ post_update() {
         save_backup_file=$rdhome/savebackup_"$(date +"%Y_%m_%d_%I_%M_%p").zip"
         state_backup_file=$rdhome/statesbackup_"$(date +"%Y_%m_%d_%I_%M_%p").zip"
 
+        # NOTE: This Zenity command may need to be one line, it broke when I pasted it into a sandbox file
+
         zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
             --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
             --title "RetroDECK" \
-            --text="You are updating to a version of RetroDECK where save file locations have changed!\n\nYour existing files will be backed up for safety and then sorted automatically.\n\nIf a file cannot be sorted automatically it will remain where it is for manual sorting.\n\nPLEASE BE PATIENT! This process can take several minutes if you have a large ROM library."
+            --text="You are updating to a version of RetroDECK where save and state file sorting has changed!\n\nYour existing saves will be backed up to $save_backup_file\n\nYour existing states will be backed up to $state_backup_file\n\nIf a save or state cannot be sorted automatically it will remain in its original directory so you can sort it manually.\n\nIf you encounter any issues, a log of the sorting process is stored at $migration_logfile\n\nPLEASE BE PATIENT! This process can take several minutes if you have a large ROM library."
 
-        allgames=($(find "$roms_folder" -maxdepth 2 -mindepth 2 ! -name "systeminfo.txt" ! -name "systems.txt" ! -name "gc" ! -name "n3ds" ! -name "nds" ! -name "wii" ! -name "xbox" ! -name "*^*" | sed -e "s/ /\^/g")) # Build an array of all games and multi-disc-game-containing folders, adding whitespace placeholder
+        allgames=($(find "$roms_folder" -maxdepth 2 -mindepth 2 ! -name "systeminfo.txt" ! -name "systems.txt" ! -name "*^*" | sed -e "s/ /\^/g")) # Build an array of all games and multi-disc-game-containing folders, adding whitespace placeholder
 
-        allsaves=($(find "$saves_folder" -mindepth 1 -maxdepth 1 -name "*.*" ! -name "gc" ! -name "n3ds" ! -name "nds" ! -name "wii" ! -name "xbox"  | sed -e "s/ /\^/g")) # Build an array of all save files, ignoring standalone emulator sub-folders, adding whitespace placeholder
+        allsaves=($(find "$saves_folder" -mindepth 1 -maxdepth 1 -name "*.*" | sed -e "s/ /\^/g")) # Build an array of all save files, ignoring standalone emulator sub-folders, adding whitespace placeholder
 
-        allstates=($(find "$states_folder" -mindepth 1 -maxdepth 1 -name "*.*" ! -name "gc" ! -name "n3ds" ! -name "nds" ! -name "wii" ! -name "xbox"  | sed -e "s/ /\^/g")) # Build an array of all state files, ignoring standalone emulator sub-folders, adding whitespace placeholder
+        allstates=($(find "$states_folder" -mindepth 1 -maxdepth 1 -name "*.*" | sed -e "s/ /\^/g")) # Build an array of all state files, ignoring standalone emulator sub-folders, adding whitespace placeholder
 
         totalsaves=${#allsaves[@]}
         totalstates=${#allstates[@]}
@@ -392,19 +365,7 @@ post_update() {
         --no-cancel \
         --auto-close
 
-        if [[ $(cat $migration_logfile | grep "ERROR" | wc -l) -eq 0 ]]; then
-          zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
-          --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-          --title "RetroDECK" \
-          --text="The migration process has sorted all of your files automatically.\n\nEverything should be working normally, if you experience any issues please check the RetroDECK wiki or contact us directly on the Discord."
-
-        else
-          cat $migration_logfile | grep "ERROR" > "$rdhome/manual_sort_needed.log"
-          zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
-          --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-          --title "RetroDECK" \
-          --text="The migration process was unable to sort $(cat $migration_logfile | grep "ERROR" | wc -l) files automatically.\n\nThese files will need to be moved manually to their new locations, find more detail on the RetroDECK wiki.\n\nA log of the files that need manual sorting can be found at $rdhome/manual_sort_needed.log"
-        fi
+        # NOTE: This Zenity command may need to be one line, it broke when I pasted it into a sandbox file
 
     else
       echo "Version" $version "is after the save and state organization was changed, no need to sort again"
@@ -495,6 +456,7 @@ finit() {
     --ok-label "Cancel" \
     --extra-button "Internal" \
     --extra-button "SD Card" \
+    #--extra-button "Advanced" \
     --text="Welcome to the first configuration of RetroDECK.\nThe setup will be quick but please READ CAREFULLY each message in order to avoid misconfigurations.\n\nWhere do you want your roms folder to be located?" )
     echo "Choice is $choice"
 
@@ -584,95 +546,62 @@ finit() {
     # TODO: Replace the stuff above with BoilR code when ready
 }
 
-# Arguments section
+conf_write() {
+  # writes the variables in the retrodeck config file
 
-for i in "$@"; do
-  case $i in
-    -h*|--help*)
-      echo "RetroDECK v""$version"
-      echo "
-      Usage:
-flatpak run [FLATPAK-RUN-OPTION] net.retrodeck-retrodeck [ARGUMENTS]
+  echo "DEBUG: printing the config file content before writing it:"
+  cat "$rd_conf"
+  echo ""
 
-Arguments:
-    -h, --help        Print this help
-    -v, --version     Print RetroDECK version
-    --info-msg        Print paths and config informations
-    --reset           Starts the initial RetroDECK installer (backup your data first!)
-    --reset-ra        Resets RetroArch's config to the default values
-    --reset-sa        Reset standalone emulator configs to the default values
-    --reset-tools     Recreate the tools section
+  echo "Writing the config file: $rd_conf"
 
-For flatpak run specific options please run: flatpak run -h
-
-https://retrodeck.net
-"
-      exit
-      ;;
-    --version*|-v*)
-      #conf_init
-      echo "RetroDECK v$version"
-      exit
-      ;;
-    --info-msg*)
-      #conf_init
-      echo "RetroDECK v$version"
-      echo "RetroDECK config file is in: $rd_conf"
-      echo "Contents:"
-      cat $rd_conf
-      exit
-      ;;
-    --reset-ra*)
-      ra_init
-      shift # past argument with no value
-      ;;
-    --reset-sa*)
-      standalones_init
-      shift # past argument with no value
-      ;;
-    --reset-tools*)
-      tools_init
-      shift # past argument with no value
-      ;;
-    --reset*)
-      rm -f "$lockfile"
-      shift # past argument with no value
-      ;;
-    -*|--*)
-      echo "Unknown option $i"
-      exit 1
-      ;;
-    *)
-      ;;
-  esac
-done
-
-# UPDATE TRIGGERED
-# if lockfile exists
-if [ -f "$lockfile" ]
-then
-
-  #conf_init             # Initializing/reading the config file (sourced from global.sh)
-
-  # ...but the version doesn't match with the config file
-  if [ "$hard_version" != "$version" ]; 
+  # TODO: this can be optimized with a while and a list of variables to check
+  if [ ! -z "$version" ] #if the variable is not null then I update it
   then
-      echo "Config file's version is $version but the actual version is $hard_version"
-      post_update       # Executing post update script
-      conf_write        # Writing variables in the config file (sourced from global.sh)
-      start_retrodeck
-      exit 0
+    sed -i "s%version=.*%version=$version%" "$rd_conf"
   fi
 
-# Else, LOCKFILE IS NOT EXISTING (WAS REMOVED)
-# if the lock file doesn't exist at all means that it's a fresh install or a triggered reset
-else 
-  echo "Lockfile not found"
-  #conf_init         # Initializing/reading the config file (sourced from global.sh)
-  finit             # Executing First/Force init
-  conf_write        # Writing variables in the config file (sourced from global.sh)
-	exit 0
-fi
+  if [ ! -z "$rdhome" ]
+  then
+    sed -i "s%rdhome=.*%rdhome=$rdhome%" "$rd_conf"
+  fi
 
-# Normal Startup
-start_retrodeck
+  if [ ! -z "$roms_folder" ]
+  then
+    sed -i "s%roms_folder=.*%roms_folder=$roms_folder%" "$rd_conf"
+  fi
+
+  if [ ! -z "$saves_folder" ]
+  then
+    sed -i "s%saves_folder=.*%saves_folder=$saves_folder%" "$rd_conf"
+  fi
+
+  if [ ! -z "$states_folder" ]
+  then
+    sed -i "s%states_folder=.*%states_folder=$states_folder%" "$rd_conf"
+  fi
+  
+  if [ ! -z "$bios_folder" ]
+  then
+    sed -i "s%bios_folder=.*%bios_folder=$bios_folder%" "$rd_conf"
+  fi
+  
+  if [ ! -z "$media_folder" ]
+  then
+    sed -i "s%media_folder=.*%media_folder=$media_folder%" "$rd_conf"
+  fi
+
+  if [ ! -z "$themes_folder" ]
+  then
+    sed -i "s%themes_folder=.*%themes_folder=$themes_folder%" "$rd_conf"
+  fi
+
+  if [ ! -z "$sdcard" ]
+  then
+    sed -i "s%sdcard=.*%sdcard=$sdcard%" "$rd_conf"
+  fi
+  echo "DEBUG: New contents:"
+  cat "$rd_conf"
+  echo ""
+
+}

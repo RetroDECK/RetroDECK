@@ -43,7 +43,12 @@ conf_write() {
   then
     sed -i "s%states_folder=.*%states_folder=$states_folder%" "$rd_conf"
   fi
-
+  
+  if [ ! -z "$bios_folder" ]
+  then
+    sed -i "s%bios_folder=.*%bios_folder=$bios_folder%" "$rd_conf"
+  fi
+  
   if [ ! -z "$media_folder" ]
   then
     sed -i "s%media_folder=.*%media_folder=$media_folder%" "$rd_conf"
@@ -80,6 +85,7 @@ then
   roms_folder="$rdhome/roms"                                 # the default roms folder path
   saves_folder="$rdhome/saves"                               # the default saves folder path
   states_folder="$rdhome/states"                             # the default states folder path
+  bios_folder="$rdhome/bios"                                 # the default bios folder
   media_folder="$rdhome/downloaded_media"                    # the media folder, where all the scraped data is downloaded into
   themes_folder="$rdhome/themes"                             # the themes folder
   sdcard="$default_sd"                                       # Steam Deck SD default path
@@ -91,6 +97,7 @@ then
   echo "roms_folder=$roms_folder"             >> $rd_conf
   echo "saves_folder=$saves_folder"           >> $rd_conf
   echo "states_folder=$states_folder"         >> $rd_conf
+  echo "bios_folder=$bios_folder"             >> $rd_conf
   echo "media_folder=$media_folder"           >> $rd_conf
   echo "themes_folder=$themes_folder"         >> $rd_conf
   echo "sdcard=$sdcard"                       >> $rd_conf
