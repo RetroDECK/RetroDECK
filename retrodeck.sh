@@ -290,11 +290,11 @@ post_update() {
             --title "RetroDECK" \
             --text="You are updating to a version of RetroDECK where save and state file sorting has changed!\n\nYour existing saves will be backed up to $save_backup_file\n\nYour existing states will be backed up to $state_backup_file\n\nIf a save or state cannot be sorted automatically it will remain in its original directory so you can sort it manually.\n\nIf you encounter any issues, a log of the sorting process is stored at $migration_logfile\n\nPLEASE BE PATIENT! This process can take several minutes if you have a large ROM library."
 
-        allgames=($(find "$roms_folder" -maxdepth 2 -mindepth 2 ! -name "systeminfo.txt" ! -name "systems.txt" ! -name "*^*" | sed -e "s/ /\^/g")) # Build an array of all games and multi-disc-game-containing folders, adding whitespace placeholder
+        allgames=($(find "$roms_folder" -maxdepth 2 -mindepth 2 ! -name "systeminfo.txt" ! -name "systems.txt" ! -name "gc" ! -name "n3ds" ! -name "nds" ! -name "wii" ! -name "xbox" ! -name "*^*" | sed -e "s/ /\^/g")) # Build an array of all games and multi-disc-game-containing folders, adding whitespace placeholder
 
-        allsaves=($(find "$saves_folder" -mindepth 1 -maxdepth 1 -name "*.*" | sed -e "s/ /\^/g")) # Build an array of all save files, ignoring standalone emulator sub-folders, adding whitespace placeholder
+        allsaves=($(find "$saves_folder" -mindepth 1 -maxdepth 1 -name "*.*" ! -name "gc" ! -name "n3ds" ! -name "nds" ! -name "wii" ! -name "xbox"  | sed -e "s/ /\^/g")) # Build an array of all save files, ignoring standalone emulator sub-folders, adding whitespace placeholder
 
-        allstates=($(find "$states_folder" -mindepth 1 -maxdepth 1 -name "*.*" | sed -e "s/ /\^/g")) # Build an array of all state files, ignoring standalone emulator sub-folders, adding whitespace placeholder
+        allstates=($(find "$states_folder" -mindepth 1 -maxdepth 1 -name "*.*" ! -name "gc" ! -name "n3ds" ! -name "nds" ! -name "wii" ! -name "xbox"  | sed -e "s/ /\^/g")) # Build an array of all state files, ignoring standalone emulator sub-folders, adding whitespace placeholder
 
         totalsaves=${#allsaves[@]}
         totalstates=${#allstates[@]}
