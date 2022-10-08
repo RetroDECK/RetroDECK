@@ -67,6 +67,7 @@ modules:
   # [ ] Update the VERSION variable
   # [ ] Update the appdata.xml with the version number and notes
   # [ ] change branch into main in retrodeck module (last one)
+  # [ ] if header (before modules) was edited, edit it even in flathub.yml
   # [ ] change the screenshots link from cooker to main
   #
   - name: version-initialization
