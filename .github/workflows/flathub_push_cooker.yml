@@ -66,9 +66,10 @@ jobs:
           | jq .name \
           )
 
-          sha=$(curl -sL https://github.com/XargonWan/RetroDECK-cooker/releases/download/$version/RetroDECK-Artifact.sha)
+          #sha=$(curl -sL https://github.com/XargonWan/RetroDECK-cooker/releases/download/$version/RetroDECK-Artifact.sha)
+          #echo $sha
+          echo $version
 
-          sha="$(cat 'RetroDECK-Artifact.sha')"
           sed -i 's#"url: https://github.com/XargonWan/RetroDECK-cooker/releases/download/__VERSION__/RetroDECK-Artifact.tar.gz"#"url: https://github.com/XargonWan/RetroDECK-cooker/releases/download/$version/RetroDECK-Artifact.tar.gz"#g' net.retrodeck.retrodeck.yml
           sed -i 's#"sha256:  __SHA__"#"sha256:  $sha"#g' net.retrodeck.retrodeck.yml
 
