@@ -69,11 +69,7 @@ jobs:
           | tr -d \" \
           )
 
-          #sha=$(curl -sL https://github.com/XargonWan/RetroDECK-cooker/releases/download/$version/RetroDECK-Artifact.sha)
-
-          #DEBUG:
-          #echo $sha
-          echo $version
+          sha=$(curl -sL https://github.com/XargonWan/RetroDECK-cooker/releases/download/$version/RetroDECK-Artifact.sha)
 
           sed -i "s#__VERSION__#$version#g" net.retrodeck.retrodeck.yml
           sed -i "s#__SHA__#$sha#g" net.retrodeck.retrodeck.yml
