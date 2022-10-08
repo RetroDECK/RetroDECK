@@ -43,6 +43,3 @@ modules:
     - type: archive
       url: https://github.com/XargonWan/RetroDECK-cooker/releases/download/__VERSION__/RetroDECK-Artifact.tar.gz
       sha256:  __SHA__
-
-# seddare version e sha
-# modificare il wf flathub-push mettendo le credential e il flathub.yml modificato

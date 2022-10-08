@@ -2,13 +2,6 @@
 name: PUSH-cooker-flathub
 
 on:
-#  push:
-#    branches:
-#     - cooker*
-#  pull_request: 
-#    branches:
-#     - cooker*
-
   workflow_dispatch:
 
 jobs:
@@ -20,11 +13,11 @@ jobs:
         shell: bash
         run: |
           # EDITABLES:
-          rd_branch="cooker"
+          rd_branch=${GITHUB_HEAD_REF}
           gits_folder="${GITHUB_WORKSPACE}/gits" # without last /
 
           # NON-EDITABLES
-          branch="$rd_branch-"$(date +%d%m%y.%H%M)
+          relname="$rd_branch-"$(date +%d%m%y.%H%M)
 
           mkdir -vp $gits_folder
           cd $gits_folder
@@ -43,47 +36,43 @@ jobs:
           #sync -rav --progress --exclude={'res/screenshots/','shared-modules/','rd-submodules/retroarch','.git/','docs','retrodeck-flatpak/','retrodeck-flatpak-cooker/','.flatpak-builder/'} ~/RetroDECK/ ~/flathub/
 
           cd $gits_folder/flathub
-          git checkout -b $branch
+          git checkout -b $relname
           git rm -rf *
           git clean -fxd # restroing git index
 
           # Copying only a few files as the others are cloned by git in retrodeck.sh
           cd $gits_folder/RetroDECK
           cp -rf \
-          'rd-submodules' \
           'flathub.json' \
           'LICENSE' \
-          'net.retrodeck.retrodeck.appdata.xml' \
-          'net.retrodeck.retrodeck.desktop' \
-          'net.retrodeck.retrodeck.yml' \
+          'flathub.yml' \
           'README.md' \
           $gits_folder/flathub/
 
           cd $gits_folder/flathub
-          ls -la
+          ls -lah
 
-          if [ -d .git/modules ]; then
-            rm -rfv .git/modules/*
-          fi
+          # manipulating manifest
+          mv flathub.yml net.retrodeck.retrodeck.yml
 
-          # Adding the real submodules, please update this every time a submodule is added
-          
-          if [ -d shared-modules ]; then
-            git rm -rf --ignore-unmatch shared-modules
-            rm -rfv shared-modules
-          fi          
-          git submodule add https://github.com/flathub/shared-modules.git ./shared-modules
+          version=$(\
+          curl -sL \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer ${{ secrets.TRIGGER_BUILD_TOKEN }}" \
+          | jq .name \
+          )
 
-          if [ -d rd-submodules/retroarch ]; then
-            git rm -rf --ignore-unmatch rd-submodules/retroarch
-            rm -rfv rd-submodules/retroarch
-          fi
-          git submodule add https://github.com/flathub/org.libretro.RetroArch.git ./rd-submodules/retroarch
+          sha=$(curl -sL https://github.com/XargonWan/RetroDECK-cooker/releases/download/$version/RetroDECK-Artifact.sha)
 
-          # unbinds all submodules
-          git submodule deinit -f .
-          # checkout again
-          git submodule update --init --recursive
+          sha="$(cat 'RetroDECK-Artifact.sha')"
+          sed -i 's#"url: https://github.com/XargonWan/RetroDECK-cooker/releases/download/__VERSION__/RetroDECK-Artifact.tar.gz"#"url: https://github.com/XargonWan/RetroDECK-cooker/releases/download/$version/RetroDECK-Artifact.tar.gz"#g' net.retrodeck.retrodeck.yml
+          sed -i 's#"sha256:  __SHA__"#"sha256:  $sha"#g' net.retrodeck.retrodeck.yml
+
+          echo -e "Resulting manifest:\n"
+          cat net.retrodeck.retrodeck.yml
+
           git add *
           git commit -m "Updated flathub/net.retrodeck.retrodeck from RetroDECK/$rd_branch"
-          git push origin $branch
+          git config --local user.name ${{ secrets.GITNAME }}
+          git config --local user.email ${{ secrets.GITMAIL }}
+          git push origin $relname
