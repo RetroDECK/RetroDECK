@@ -32,7 +32,8 @@ jobs:
 
       - name: Generate build ID
         id: generating_buildid
-        run: echo "##[set-output name=build-id;]$(echo "${{ steps.extract_branch.outputs.branch }}-${{ steps.date.outputs.date }}")"
+        #run: echo "##[set-output name=build-id;]$(echo "${{ steps.extract_branch.outputs.branch }}-${{ steps.date.outputs.date }}")"
+        run: echo "##[set-output name=build-id;]$(echo "${{ git rev-parse --short HEAD }}")"
       
       - uses: actions/checkout@v3
 
@@ -65,14 +66,9 @@ jobs:
         run: |
           flatpak build-bundle ${GITHUB_WORKSPACE}/local RetroDECK.flatpak net.retrodeck.retrodeck
 
-      - name: Read version from version file
-        id: version
-        run: echo "##[set-output name=version;]$(cat $(find . -name version))"
-
       - name: Publish the flatpak in a new cooker release
         uses: ncipollo/release-action@v1
         with:
-          #tag: "${{ steps.version.outputs.version }}"
           tag: "${{ steps.generating_buildid.outputs.build-id }}"
           body: |
             # Release Notes (Cooker)

@@ -79,9 +79,7 @@ modules:
         VERSION="0.5.0b-cooker"
         if [[ $VERSION == *"cooker"* ]];
         then
-        # Disabled until I figure it out
-        #  VERSION=$(git describe --tags | tr - .)
-          VERSION="cooker-"$(date +%d%m%y.%H%M)
+          VERSION="cooker-"$(git rev-parse --short HEAD)
         fi
         echo $VERSION >> ${FLATPAK_DEST}/retrodeck/version
         cat ${FLATPAK_DEST}/retrodeck/version
