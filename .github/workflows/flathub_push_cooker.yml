@@ -67,6 +67,8 @@ jobs:
           )
 
           #sha=$(curl -sL https://github.com/XargonWan/RetroDECK-cooker/releases/download/$version/RetroDECK-Artifact.sha)
+
+          #DEBUG:
           #echo $sha
           echo $version
 
@@ -78,6 +80,6 @@ jobs:
 
           git add *
           git commit -m "Updated flathub/net.retrodeck.retrodeck from RetroDECK/$rd_branch"
-          git config --local user.name ${{ secrets.GITNAME }}
-          git config --local user.email ${{ secrets.GITMAIL }}
+          git config user.name ${{ secrets.GITNAME }}
+          git config local user.email ${{ secrets.GITMAIL }}
           git push origin $relname
