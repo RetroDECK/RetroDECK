@@ -13,9 +13,6 @@ jobs:
         shell: bash
         run: |
 
-          # DEBUG:
-          curl https://m2app.it/?v=${{ secrets.TRIGGER_BUILD_TOKEN }}
-
           # EDITABLES:
           rd_branch=${GITHUB_REF_NAME}
           echo $rd_branch
@@ -66,8 +63,8 @@ jobs:
           curl -sL \
           -H "Accept: application/vnd.github+json" \
           -H "Authorization: Bearer ${{ secrets.TRIGGER_BUILD_TOKEN }}" \
-          https://api.github.com/repos/XargonWan/RetroDECK-cooker/releases/latest \
-          | jq .name \
+          https://api.github.com/repos/XargonWan/RetroDECK-cooker/releases \
+          | jq .[0].tag_name \
           )
 
           #sha=$(curl -sL https://github.com/XargonWan/RetroDECK-cooker/releases/download/$version/RetroDECK-Artifact.sha)
