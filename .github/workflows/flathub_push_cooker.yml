@@ -80,6 +80,7 @@ jobs:
 
           git add *
           git commit -m "Updated flathub/net.retrodeck.retrodeck from RetroDECK/$rd_branch"
-          git config user.name ${{ secrets.GITNAME }}
-          git config local user.email ${{ secrets.GITMAIL }}
+          git config user.name "${{ secrets.GITNAME }}"
+          git config local user.email "${{ secrets.GITMAIL }}"
+          git config -l
           git push origin $relname
