@@ -17,10 +17,6 @@ jobs:
           echo $rd_branch
           gits_folder="${GITHUB_WORKSPACE}/gits" # without last /
 
-          # NON-EDITABLES
-          #relname="$rd_branch-"$(date +%d%m%y.%H%M)
-          relname="cooker-"$(git rev-parse --short HEAD)
-
           mkdir -vp $gits_folder
           cd $gits_folder
           if [ -d flathub ]; then
@@ -29,6 +25,11 @@ jobs:
           git clone --recursive https://github.com/flathub/net.retrodeck.retrodeck.git flathub
           cd $gits_folder
           git clone --recursive https://github.com/XargonWan/RetroDECK RetroDECK
+
+          # NON-EDITABLES
+          #relname="$rd_branch-"$(date +%d%m%y.%H%M)
+          relname="cooker-"$(git rev-parse --short HEAD)
+
           cd $gits_folder/RetroDECK
           git checkout $rd_branch
           git submodule init
