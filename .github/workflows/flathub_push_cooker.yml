@@ -13,11 +13,13 @@ jobs:
         shell: bash
         run: |
           # EDITABLES:
-          rd_branch=${GITHUB_HEAD_REF}
+          rd_branch=${GITHUB_REF_NAME}
+          echo $rd_branch
           gits_folder="${GITHUB_WORKSPACE}/gits" # without last /
 
           # NON-EDITABLES
-          relname="$rd_branch-"$(date +%d%m%y.%H%M)
+          #relname="$rd_branch-"$(date +%d%m%y.%H%M)
+          relname="cooker-"$(git rev-parse --short HEAD)
 
           mkdir -vp $gits_folder
           cd $gits_folder
