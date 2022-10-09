@@ -82,4 +82,5 @@ jobs:
           git add *
           git commit -m "Updated flathub/net.retrodeck.retrodeck from RetroDECK/$rd_branch"
 
+          git remote -v
           git push origin $relname
