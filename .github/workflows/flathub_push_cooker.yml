@@ -59,19 +59,18 @@ jobs:
           # manipulating manifest
           mv flathub.yml net.retrodeck.retrodeck.yml
 
-          # latest release name
-          version=$(\
-          curl -sL \
-          -H "Accept: application/vnd.github+json" \
-          -H "Authorization: Bearer ${{ secrets.TRIGGER_BUILD_TOKEN }}" \
-          https://api.github.com/repos/XargonWan/RetroDECK-cooker/releases \
-          | jq .[0].tag_name \
-          | tr -d \" \
-          )
+          # Getting latest release name
+          # version=$(\
+          # curl -sL \
+          # -H "Accept: application/vnd.github+json" \
+          # -H "Authorization: Bearer ${{ secrets.TRIGGER_BUILD_TOKEN }}" \
+          # https://api.github.com/repos/XargonWan/RetroDECK-cooker/releases \
+          # | jq .[0].tag_name \
+          # | tr -d \" \
+          # )
 
-          sha=$(curl -sL https://github.com/XargonWan/RetroDECK-cooker/releases/download/$version/RetroDECK-Artifact.sha)
+          sha=$(curl -sL https://artifacts.retrodeck.net/artifacts/RetroDECK-Artifact.sha)
 
-          sed -i "s#__VERSION__#$version#g" net.retrodeck.retrodeck.yml
           sed -i "s#__SHA__#$sha#g" net.retrodeck.retrodeck.yml
 
           echo -e "Resulting manifest:\n"

@@ -41,5 +41,5 @@ modules:
       - cp -rn files/* /app
     sources:
     - type: archive
-      url: https://github.com/XargonWan/RetroDECK-cooker/releases/download/__VERSION__/RetroDECK-Artifact.tar.gz
+      url: https://artifacts.retrodeck.net/artifacts/RetroDECK-Artifact.tar.gz
       sha256:  __SHA__
