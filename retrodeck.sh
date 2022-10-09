@@ -251,6 +251,17 @@ post_update() {
     # post update script
     echo "Executing post-update script"
 
+    # Finding existing ROMs folder
+    if [ -d "$default_sd/retrodeck" ]
+    then
+      # ROMs on SD card
+      roms_folder="$default_sd/retrodeck/roms"
+    else
+      # ROMs on Internal
+      roms_folder="$HOME/retrodeck/roms"
+    fi
+    echo "ROMs folder found at $roms_folder"
+
     # Unhiding downloaded media from the previous versions
     if [ -d "$rdhome/.downloaded_media" ]
     then
@@ -283,12 +294,10 @@ post_update() {
         save_backup_file=$rdhome/savebackup_"$(date +"%Y_%m_%d_%I_%M_%p").zip"
         state_backup_file=$rdhome/statesbackup_"$(date +"%Y_%m_%d_%I_%M_%p").zip"
 
-        # NOTE: This Zenity command may need to be one line, it broke when I pasted it into a sandbox file
-
         zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
             --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
             --title "RetroDECK" \
-            --text="You are updating to a version of RetroDECK where save and state file sorting has changed!\n\nYour existing saves will be backed up to $save_backup_file\n\nYour existing states will be backed up to $state_backup_file\n\nIf a save or state cannot be sorted automatically it will remain in its original directory so you can sort it manually.\n\nIf you encounter any issues, a log of the sorting process is stored at $migration_logfile\n\nPLEASE BE PATIENT! This process can take several minutes if you have a large ROM library."
+            --text="You are updating to a version of RetroDECK where save file locations have changed!\n\nYour existing files will be backed up for safety and then sorted automatically.\n\nIf a file cannot be sorted automatically it will remain where it is for manual sorting.\n\nPLEASE BE PATIENT! This process can take several minutes if you have a large ROM library."
 
         allgames=($(find "$roms_folder" -maxdepth 2 -mindepth 2 ! -name "systeminfo.txt" ! -name "systems.txt" ! -name "gc" ! -name "n3ds" ! -name "nds" ! -name "wii" ! -name "xbox" ! -name "*^*" | sed -e "s/ /\^/g")) # Build an array of all games and multi-disc-game-containing folders, adding whitespace placeholder
 
@@ -383,7 +392,19 @@ post_update() {
         --no-cancel \
         --auto-close
 
-        # NOTE: This Zenity command may need to be one line, it broke when I pasted it into a sandbox file
+        if [[ $(cat $migration_logfile | grep "ERROR" | wc -l) -eq 0 ]]; then
+          zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
+          --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+          --title "RetroDECK" \
+          --text="The migration process has sorted all of your files automatically.\n\nEverything should be working normally, if you experience any issues please check the RetroDECK wiki or contact us directly on the Discord."
+
+        else
+          cat $migration_logfile | grep "ERROR" > "$rdhome/manual_sort_needed.log"
+          zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
+          --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+          --title "RetroDECK" \
+          --text="The migration process was unable to sort $(cat $migration_logfile | grep "ERROR" | wc -l) files automatically.\n\nThese files will need to be moved manually to their new locations, find more detail on the RetroDECK wiki.\n\nA log of the files that need manual sorting can be found at $rdhome/manual_sort_needed.log"
+        fi
 
     else
       echo "Version" $version "is after the save and state organization was changed, no need to sort again"
