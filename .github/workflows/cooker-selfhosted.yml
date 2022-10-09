@@ -32,7 +32,6 @@ jobs:
 
       - name: Generate build ID
         id: generating_buildid
-        #run: echo "##[set-output name=build-id;]$(echo "${{ steps.extract_branch.outputs.branch }}-${{ steps.date.outputs.date }}")"
         run: echo "##[set-output name=build-id;]$(echo "$( git rev-parse --short HEAD )")"
       
       - uses: actions/checkout@v3
@@ -61,6 +60,7 @@ jobs:
           tar -czf ${GITHUB_WORKSPACE}/RetroDECK-Artifact.tar.gz -C ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker .
           hash=($(sha256sum ${GITHUB_WORKSPACE}/RetroDECK-Artifact.tar.gz))
           echo $hash > ${GITHUB_WORKSPACE}/RetroDECK-Artifact.sha
+          mv -f RetroDECK-Artifact.* ${{ secrets.ARTIFACT_REPO }}
 
       - name: Create Bundle
         run: |
@@ -91,11 +91,4 @@ jobs:
         with:
           name: retrodeck-flatpak
           path: RetroDECK.flatpak
-        continue-on-error: true
-
-      - name: Upload RetroDECK-Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: retrodeck-artifact
-          path: RetroDECK-Artifact.tar.gz
         continue-on-error: true
