@@ -83,4 +83,4 @@ jobs:
           git commit -m "Updated flathub/net.retrodeck.retrodeck from RetroDECK/$rd_branch"
 
           git remote -v
-          git push https://${{ secrets.TRIGGER_BUILD_TOKEN }}@github.com/flathub/net.retrodeck.retrodeck.git $relname
+          git push --force https://${{ secrets.TRIGGER_BUILD_TOKEN }}@github.com/flathub/net.retrodeck.retrodeck.git $relname
