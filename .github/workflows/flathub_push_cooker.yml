@@ -11,6 +11,7 @@ jobs:
     steps:
       - name: Pushing
         shell: bash
+        token: ${{ secrets.TRIGGER_BUILD_TOKEN }}
         run: |
 
           # EDITABLES:
