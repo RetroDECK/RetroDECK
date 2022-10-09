@@ -76,8 +76,8 @@ jobs:
           echo -e "Resulting manifest:\n"
           cat net.retrodeck.retrodeck.yml
 
-          git config user.name "${{ secrets.GITNAME }}"
-          git config user.email "${{ secrets.GITMAIL }}"
+          git config --global user.name "${{ secrets.GITNAME }}"
+          git config --global user.email "${{ secrets.GITMAIL }}"
 
           git add *
           git commit -m "Updated flathub/net.retrodeck.retrodeck from RetroDECK/$rd_branch"
