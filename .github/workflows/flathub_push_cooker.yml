@@ -40,7 +40,13 @@ jobs:
           #sync -rav --progress --exclude={'res/screenshots/','shared-modules/','rd-submodules/retroarch','.git/','docs','retrodeck-flatpak/','retrodeck-flatpak-cooker/','.flatpak-builder/'} ~/RetroDECK/ ~/flathub/
 
           cd $gits_folder/flathub
+
+          # cleaning the branch in case of a second run
+          git branch -d $relname
+          git push origin --delete $relname
+          
           git checkout -b $relname
+
           git rm -rf *
           git clean -fxd # restroing git index
 
@@ -80,7 +86,7 @@ jobs:
           git config --global user.email "${{ secrets.GITMAIL }}"
 
           git add *
-          git commit --ff -m "Updated flathub/net.retrodeck.retrodeck from RetroDECK/$rd_branch"
+          git commit -m "Updated flathub/net.retrodeck.retrodeck from RetroDECK/$rd_branch"
 
           git remote -v
           git push --force https://${{ secrets.TRIGGER_BUILD_TOKEN }}@github.com/flathub/net.retrodeck.retrodeck.git $relname
