@@ -92,3 +92,10 @@ jobs:
           name: retrodeck-flatpak
           path: RetroDECK.flatpak
         continue-on-error: true
+
+      - name: Upload RetroDECK-Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: retrodeck-artifact
+          path: RetroDECK-Artifact.tar.gz
+        continue-on-error: true
