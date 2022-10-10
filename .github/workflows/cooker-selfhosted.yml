@@ -32,7 +32,7 @@ jobs:
 
       - name: Generate build ID
         id: generating_buildid
-        run: echo "##[set-output name=build-id;]$(echo "${{ steps.extract_branch.outputs.branch }}-${{ steps.date.outputs.date }}")"
+        run: echo "##[set-output name=build-id;]$(echo "$( git rev-parse --short HEAD )")"
       
       - uses: actions/checkout@v3
 
@@ -55,19 +55,21 @@ jobs:
         run: |
           flatpak-builder --user --force-clean --install-deps-from=flathub --install-deps-from=flathub-beta --repo=${GITHUB_WORKSPACE}/local ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
 
+      - name: Create Artifact for flathub
+        run: | 
+          tar -czf ${GITHUB_WORKSPACE}/RetroDECK-Artifact.tar.gz -C ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker .
+          hash=($(sha256sum ${GITHUB_WORKSPACE}/RetroDECK-Artifact.tar.gz))
+          echo $hash > ${GITHUB_WORKSPACE}/RetroDECK-Artifact.sha
+          mv -f RetroDECK-Artifact.* ${{ secrets.ARTIFACT_REPO }}
+        continue-on-error: true
+
       - name: Create Bundle
         run: |
-          flatpak-builder --user --force-clean --repo=${GITHUB_WORKSPACE}/local ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
-          flatpak build-bundle $GITHUB_WORKSPACE/local RetroDECK.flatpak net.retrodeck.retrodeck
-
-      - name: Read version from version file
-        id: version
-        run: echo "##[set-output name=version;]$(cat $(find . -name version))"
+          flatpak build-bundle ${GITHUB_WORKSPACE}/local RetroDECK.flatpak net.retrodeck.retrodeck
 
       - name: Publish the flatpak in a new cooker release
         uses: ncipollo/release-action@v1
         with:
-          #tag: "${{ steps.version.outputs.version }}"
           tag: "${{ steps.generating_buildid.outputs.build-id }}"
           body: |
             # Release Notes (Cooker)
@@ -76,7 +78,7 @@ jobs:
             Cooker channel is provided for the community to test fixes and explore new functionality.
             Please DO NOT open issues or ask support on this build.
 
-          artifacts: "RetroDECK.flatpak"
+          artifacts: "RetroDECK.flatpak,RetroDECK-Artifact.tar.gz"
           allowUpdates: true
           prerelease: true
           draft: false
