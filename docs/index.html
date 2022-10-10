@@ -4,20 +4,20 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>RetroDeck</title>
-    <meta name="twitter:image" content="">
-    <meta property="og:image" content="assets/img/RetroDeck%20Wallpaper_ccexpress.png">
-    <meta name="twitter:title" content="RetroDeck">
-    <meta name="description" content="RetroDeck is an easy and fancy environment for managing and launching your retro games on Steam Deck without relying on custom firmware.">
-    <meta property="og:type" content="website">
+    <title>RetroDECK</title>
+    <meta name="twitter:description" content="RetroDECK is a polished and beginner-friendly environment for playing your retro games on Steam Deck, available with just one click from the Discover app.">
+    <meta property="og:image" content="assets/img/RetroDeck%20Wallpaper.png">
+    <meta name="twitter:title" content="RetroDECK">
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:description" content="RetroDeck is an easy and fancy environment for managing and launching your retro games on Steam Deck without relying on custom firmware.">
-    <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="assets/img/RD_180x180.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="assets/img/RD_16x16.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/RD_32x32.png">
-    <link rel="icon" type="image/png" sizes="180x180" href="assets/img/RD_180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="assets/img/RD_192x192.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="assets/img/RD_512x512.png">
+    <meta property="og:type" content="website">
+    <meta name="twitter:image" content="">
+    <meta name="description" content="RetroDECK is a polished and beginner-friendly environment for playing your retro games on Steam Deck, available with just one click from the Discover app.">
+    <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="assets/img/icon_circle_2_180x180.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/img/icon_circle_16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/icon_circle_1_32x32.png">
+    <link rel="icon" type="image/png" sizes="180x180" href="assets/img/icon_circle_2_180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/img/icon_circle_3_192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="assets/img/icon_circle_4_512x512.png">
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600&amp;display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700">
@@ -31,14 +31,15 @@
     <link rel="stylesheet" href="assets/css/Highlight-Blue.css">
     <link rel="stylesheet" href="assets/css/Highlight-Clean.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.11.1/baguetteBox.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/6.4.8/swiper-bundle.min.css">
     <link rel="stylesheet" href="assets/css/Navigation-Clean.css">
-    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/Simple-Slider-Simple-Slider.css">
 </head>
 
 <body>
     <!-- Start: Navigation Clean -->
     <nav class="navbar navbar-light navbar-expand-lg sticky-top navigation-clean">
-        <div class="container"><a class="navbar-brand" href="#top"><img src="assets/img/icon128.png" style="width: 45px;"></a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+        <div class="container"><a class="navbar-brand" href="#top"><img src="assets/img/logo_unstacked.svg" style="width: 165px;"></a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navcol-1">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="#top" style="color: rgb(49,52,55);">Home</a></li>
@@ -46,34 +47,59 @@
                     <li class="nav-item"><a class="nav-link" href="https://github.com/XargonWan/RetroDECK/wiki" style="color: rgb(49,52,55);" target="_blank">wiki</a></li>
                     <li class="nav-item"><a class="nav-link" href="https://github.com/XargonWan/RetroDECK-cooker/" style="color: rgb(49,52,55);" target="_blank">cooker</a></li>
                     <li class="nav-item"><a class="nav-link" href="https://github.com/XargonWan/RetroDECK" target="_blank" style="color: rgb(49,52,55);">github</a></li>
-                    <li class="nav-item"><a class="nav-link" href="https://www.patreon.com/RetroDECK" target="_blank" style="color: rgb(49,52,55);"><strong>patreon</strong></a></li>
+                    <li class="nav-item"><a class="nav-link" href="https://www.patreon.com/RetroDECK" target="_blank" style="color: rgb(49,52,55);">patreon</a></li>
                     <li class="nav-item"><a class="nav-link" href="https://discord.gg/tbmBpJbpur" target="_blank" style="color: rgb(49,52,55);">connect with us</a></li>
                 </ul>
             </div>
         </div>
     </nav><!-- End: Navigation Clean -->
     <!-- Start: Highlight Clean -->
-    <section class="d-flex d-md-flex align-items-center align-items-md-center highlight-clean" id="top" style="height: 550px;background: #000000;">
+    <section class="d-flex d-md-flex align-items-center align-items-md-center highlight-clean" id="top" style="height: 550px;background: #111111;">
         <div class="container">
             <!-- Start: Intro -->
             <div class="intro">
-                <h2 class="text-center" style="font-size: 60px;margin-bottom: 0px;"><img class="img-fluid" src="assets/img/SSLM.png" style="margin-bottom: 25px;"></h2>
-                <p class="text-center" style="font-size: 20px;color: rgb(218,218,218);">RetroDeck is an easy and fancy environment for managing and launching your retro games on Steam Deck without relying on custom firmware. </p>
+                <h2 class="text-center" style="font-size: 60px;margin-bottom: 0px;"><img class="img-fluid" src="assets/img/logo_stacked_esde.png" style="margin-bottom: 25px;"></h2>
+                <p class="text-center" style="font-size: 20px;color: rgb(255,255,255);"><span style="color: rgb(220, 221, 222); background-color: rgba(4, 4, 5, 0.07);">RetroDECK is a polished and beginner-friendly environment for playing your retro games on Steam Deck, available with just one click from the Discover app.</span></p>
             </div><!-- End: Intro -->
             <!-- Start: Buttons -->
-            <div class="buttons" style="margin-bottom: 0px;"><a class="btn btn-secondary" role="button" target="_blank" style="color: black;background: white;border-top-left-radius: 5px;border-top-right-radius: 5px;border-bottom-right-radius: 5px;border-bottom-left-radius: 5px;" href="https://github.com/XargonWan/RetroDECK/releases"><i class="fas fa-download"></i>&nbsp;Get retrodeck</a></div><!-- End: Buttons -->
+            <div class="buttons" style="margin-bottom: 0px;"><a class="btn btn-secondary" role="button" target="_blank" style="color: black;background: white;border-top-left-radius: 5px;border-top-right-radius: 5px;border-bottom-right-radius: 5px;border-bottom-left-radius: 5px;" href="https://flathub.org/apps/details/net.retrodeck.retrodeck"><i class="fas fa-download"></i>&nbsp;Get retrodeck</a></div><!-- End: Buttons -->
         </div>
     </section><!-- End: Highlight Clean -->
-    <!-- Start: Highlight Clean -->
-    <section class="highlight-clean" style="background: linear-gradient(-95deg, #1a9fff, #946beb);">
+    <!-- Start: Lightbox Gallery -->
+    <section class="photo-gallery py-4 py-xl-5">
         <div class="container">
-            <!-- Start: Intro -->
-            <div class="intro" style="margin-bottom: 0px;">
-                <h2 class="text-center" style="color: rgb(255,255,255);">POWERED BY EMULATIONSTATION-DE<br></h2>
-                <p class="text-center" style="color: rgb(255,255,255);margin-bottom: 0px;">RetroDeck teamed up with ES-DE to bring you the best retro launcher out there!<br></p>
-            </div><!-- End: Intro -->
+            <div class="row mb-5">
+                <div class="col-md-8 col-xl-6 text-center mx-auto">
+                    <h2 style="background: linear-gradient(-95deg, #1a9fff, #946beb);-webkit-background-clip: text;-webkit-text-fill-color: transparent;">screenshots</h2>
+                </div>
+            </div><!-- Start: Photos -->
+            <div class="row g-0 justify-content-center photos" data-bss-baguettebox="">
+                <div class="col">
+                    <div class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="4000" data-bs-pause="false" data-bs-keyboard="false" data-bs-touch="false" id="carousel-1" style="overflow: hidden;border-radius: 6px;">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active"><img class="w-100 d-block" src="assets/img/screen01.jpeg" alt="Slide Image"></div>
+                            <div class="carousel-item"><img class="w-100 d-block" src="assets/img/screen02.jpeg" alt="Slide Image"></div>
+                            <div class="carousel-item"><img class="w-100 d-block" src="assets/img/screen03.jpeg" alt="Slide Image"></div>
+                            <div class="carousel-item"><img class="w-100 d-block" src="assets/img/screen04.jpeg" alt="Slide Image"></div>
+                            <div class="carousel-item"><img class="w-100 d-block" src="assets/img/screen05.jpeg" alt="Slide Image"></div>
+                            <div class="carousel-item"><img class="w-100 d-block" src="assets/img/screen06.jpeg" alt="Slide Image"></div>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- End: Photos -->
         </div>
-    </section><!-- End: Highlight Clean -->
+    </section><!-- End: Lightbox Gallery -->
+    <!-- Start: Banner Color -->
+    <section class="py-4 py-xl-5">
+        <div class="container">
+            <div class="text-white bg-primary border rounded border-0 border-primary d-flex flex-column justify-content-between align-items-center align-items-sm-center align-items-md-center flex-lg-row justify-content-lg-center justify-content-xl-center justify-content-xxl-center p-4 p-md-5" style="background: linear-gradient(-95deg, #1a9fff, #946beb);">
+                <div class="pb-2 pb-lg-1">
+                    <h2 class="fw-bold mb-2" style="color: rgb(255,255,255);text-align: center;">POWERED BY EMULATIONSTATION-DE</h2>
+                    <p class="mb-0" style="color: rgb(255,255,255);text-align: center;">RetroDECK teamed up with ES-DE to bring you the best retro launcher out there!</p>
+                </div>
+            </div>
+        </div>
+    </section><!-- End: Banner Color -->
     <!-- Start: Features Clean -->
     <section id="features" class="features-clean">
         <div class="container">
@@ -105,34 +131,31 @@
                 </div>
                 <div class="col-sm-6 col-lg-4 item"><i class="fas fa-database icon" style="background: linear-gradient(-95deg, #1a9fff, #946beb);-webkit-background-clip: text;-webkit-text-fill-color: transparent;"></i>
                     <h3 class="name"><strong>metadata</strong></h3>
-                    <p class="description">RetroDeck pulls information from your library to create a beautiful user experience!<br></p>
+                    <p class="description">RetroDECK pulls information from your library to create a beautiful user experience!<br></p>
                 </div>
                 <div class="col-sm-6 col-lg-4 item"><i class="fas fa-cloud-download-alt icon" style="background: linear-gradient(-95deg, #1a9fff, #946beb);-webkit-background-clip: text;-webkit-text-fill-color: transparent;"></i>
                     <h3 class="name"><strong>cloud saves <em>(coming soon)</em></strong></h3>
-                    <p class="description">RetroDeck will backup your progression and sync it across multiple devices. <em>(User configuration may be needed)</em><br></p>
+                    <p class="description">RetroDECK will backup your progression and sync it across multiple devices. <em>(User configuration may be needed)</em><br></p>
                 </div>
                 <div class="col-sm-6 col-lg-4 item"><i class="fas fa-medal icon" style="background: linear-gradient(-95deg, #1a9fff, #946beb);-webkit-background-clip: text;-webkit-text-fill-color: transparent;"></i>
                     <h3 class="name">Retro Achievements</h3>
-                    <p class="description">Get rewarded while you play! RetroDeck tracks your progress and awards you when you go the extra mile.</p>
+                    <p class="description">Get rewarded while you play! RetroDECK tracks your progress and awards you when you go the extra mile.</p>
                 </div>
             </div><!-- End: Features -->
         </div>
     </section><!-- End: Features Clean -->
-    <!-- Start: Lightbox Gallery -->
-    <section class="photo-gallery py-4 py-xl-5">
+    <!-- Start: Banner Color -->
+    <section class="py-4 py-xl-5">
         <div class="container">
-            <div class="row mb-5">
-                <div class="col-md-8 col-xl-6 text-center mx-auto">
-                    <h2 style="background: linear-gradient(-95deg, #1a9fff, #946beb);-webkit-background-clip: text;-webkit-text-fill-color: transparent;">screenshots</h2>
+            <div class="text-white bg-primary border rounded border-0 border-primary d-flex flex-column justify-content-between flex-lg-row p-4 p-md-5" style="background: linear-gradient(-95deg, #1a9fff, #946beb);">
+                <div class="pb-2 pb-lg-1">
+                    <h2 class="fw-bold mb-2" style="color: rgb(255,255,255);">Support us oN patreon!</h2>
+                    <p class="mb-0" style="color: rgb(255,255,255);">Help us keep our servers running by donating to our Patreon!</p>
                 </div>
-            </div><!-- Start: Photos -->
-            <div class="row gx-2 gy-2 row-cols-1 row-cols-md-2 row-cols-xl-3 photos" data-bss-baguettebox="">
-                <div class="col item"><a><img class="img-fluid" src="https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen02.png?raw=true"></a></div>
-                <div class="col item"><a><img class="img-fluid" src="https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen04.png?raw=true"></a></div>
-                <div class="col item"><a><img class="img-fluid" src="https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen05.png?raw=true"></a></div>
-            </div><!-- End: Photos -->
+                <div class="my-2"><a class="btn btn-light fs-5 py-2 px-4" role="button" href="https://www.patreon.com/RetroDECK" target="_blank">donate</a></div>
+            </div>
         </div>
-    </section><!-- End: Lightbox Gallery -->
+    </section><!-- End: Banner Color -->
     <!-- Start: Footer Basic -->
     <footer class="footer-basic">
         <!-- Start: Social Icons -->
@@ -142,8 +165,10 @@
     </footer><!-- End: Footer Basic -->
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.11.1/baguetteBox.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/6.4.8/swiper-bundle.min.js"></script>
     <script src="assets/js/Lightbox-Gallery.js"></script>
     <script src="assets/js/scroll.js"></script>
+    <script src="assets/js/Simple-Slider.js"></script>
 </body>
 
 </html>
