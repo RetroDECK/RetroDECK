@@ -78,52 +78,52 @@ set_setting() {
 case $4 in
 
     "retrodeck" )
-    
-    ;;
-    
+        sed -i "s%$2=.*%$2=$3%" $1
+        ;;
+
     "retroarch" )
-    sed -i "s/$2 = \".*\"/$2 = \"$3\"/" $1
-    ;;
+        sed -i "s%$2 = \".*\"%$2 = \"$3\"%" $1
+        ;;
 
     "dolphin" )
-    
-    ;;
+        sed -i "s%$2 = .*%$2 = $3%" $1
+        ;;
 
     "duckstation" )
-    
-    ;;
+        sed -i "s%$2 = .*%$2 = $3%" $1
+        ;;
 
     "pcsx2" )
-
-    ;;
+        sed -i "s%$2 = .*%$2 = $3%" $1
+        ;;
 
     "ppsspp" )
+        sed -i "s%$2 = .*%$2 = $3%" $1
+        ;;
 
-    ;;
-
-    "rpcs3" )
-
-    ;;
+    "rpcs3" ) # This does not currently work for settings with a $ in them
+        sed -i "s%$2: .*%$2: $3%" $1
+        ;;
 
     "yuzu" )
+        #sed -i "s%$2=.*%$2=$3%" $1
+        ;;
 
-    ;;
-    
     "citra" )
-
-    ;;
+        #sed -i "s%$2=.*%$2=$3%" $1
+        ;;
 
     "melonds" )
-
-    ;;
+        sed -i "s%$2=.*%$2=$3%" $1
+        ;;
 
     "xemu" )
+        sed -i "s%$2 = .*%$2 = $3%" $1
+        ;;
 
-    ;;
-    
     "emulationstation" )
-
-    ;;
+        sed -i "s%$2\" \" value=\".*\"%$2\" \" value=\"$3\"" $1
+        ;;
 
 esac
 
@@ -136,54 +136,54 @@ get_setting() {
 case $3 in
 
     "retrodeck" )
-    echo $(grep "$2" $1 | grep -o -P "(?<=$2=).*")
-    ;;
+        echo $(grep "$2" $1 | grep -o -P "(?<=$2=).*")
+        ;;
 
     "retroarch" )
-    echo $(grep "$2" $1 | grep -o -P "(?<=$2 = \").*(?=\")")
-    ;;
+        echo $(grep "$2" $1 | grep -o -P "(?<=$2 = \").*(?=\")")
+        ;;
 
     "dolphin" ) # Use quotes when passing setting_name, as this config file contains special characters
-    echo $(grep "$2" $1 | grep -o -P "(?<=$2 = ).*")
-    ;;
+        echo $(grep "$2" $1 | grep -o -P "(?<=$2 = ).*")
+        ;;
 
     "duckstation" )
-    echo $(grep "$2" $1 | grep -o -P "(?<=$2 = ).*")
-    ;;
+        echo $(grep "$2" $1 | grep -o -P "(?<=$2 = ).*")
+        ;;
 
     "pcsx2" )
-    echo $(grep "$2" $1 | grep -o -P "(?<=$2 = ).*")
-    ;;
+        echo $(grep "$2" $1 | grep -o -P "(?<=$2 = ).*")
+        ;;
 
-    "ppsspp" )
-    echo $(grep "$2" $1 | grep -o -P "(?<=$2 = ).*")
-    ;;
+    "ppsspp" ) # Use quotes when passing setting_name, as this config file contains spaces
+        echo $(grep "$2" $1 | grep -o -P "(?<=$2 = ).*")
+        ;;
 
     "rpcs3" ) # Use quotes when passing setting_name, as this config file contains special characters and spaces
-    echo $(grep "$2" $1 | grep -o -P "(?<=$2: ).*")
-    ;;
+        echo $(grep "$2" $1 | grep -o -P "(?<=$2: ).*")
+        ;;
 
     "yuzu" ) # Use quotes when passing setting_name, as this config file contains special characters
-    yuzu_setting=$(sed -e 's/\\/\\\\/g' <<< "$2") # Accomodate for backslashes in setting names
-    echo $(grep "$yuzu_setting" $1 | grep -o -P "(?<=$yuzu_setting=).*")
-    ;;
+        yuzu_setting=$(sed -e 's%\\%\\\\%g' <<< "$2") # Accomodate for backslashes in setting names
+        echo $(grep "$yuzu_setting" $1 | grep -o -P "(?<=$yuzu_setting=).*")
+        ;;
 
     "citra" ) # Use quotes when passing setting_name, as this config file contains special characters
-    citra_setting=$(sed -e 's/\\/\\\\/g' <<< "$2") # Accomodate for backslashes in setting names
-    echo $(grep "$citra_setting" $1 | grep -o -P "(?<=$citra_setting=).*")
-    ;;
+        citra_setting=$(sed -e 's%\\%\\\\%g' <<< "$2") # Accomodate for backslashes in setting names
+        echo $(grep "$citra_setting" $1 | grep -o -P "(?<=$citra_setting=).*")
+        ;;
 
     "melonds" )
-    echo $(grep "$2" $1 | grep -o -P "(?<=$2=).*")
-    ;;
+        echo $(grep "$2" $1 | grep -o -P "(?<=$2=).*")
+        ;;
 
     "xemu" )
-    echo $(grep "$2" $1 | grep -o -P "(?<=$2 = ).*")
-    ;;
+        echo $(grep "$2" $1 | grep -o -P "(?<=$2 = ).*")
+        ;;
 
     "emulationstation" )
-    echo $(grep "$2" $1 | grep -o -P "(?<=$2\" value=\").*(?=\")")
-    ;;
+        echo $(grep "$2" $1 | grep -o -P "(?<=$2\" value=\").*(?=\")")
+        ;;
 
 esac
 
@@ -219,9 +219,12 @@ configurator_process_complete_dialog() {
     zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator Utility - Process Complete" \
-    --text="The process of $1 is now complete.\n\nClick OK to return to the Main Menu"
+    --text="The process of $1 is now complete.\n\nYou may need to quit and restart RetroDECK for your changes to take effect\n\nClick OK to return to the Main Menu or Quit to return to RetroDECK."
     
-    configurator_welcome_dialog
+    if [ $? == 0 ] # OK button clicked
+    then
+        configurator_welcome_dialog
+    fi
 }
 
 configurator_progress_bar_dialog() {
@@ -290,6 +293,8 @@ configurator_retroachivement_dialog() {
     sed -i "s%cheevos_enable =.*%cheevos_enable = \"true\"%" $raconf
     sed -i "s%cheevos_username =.*%cheevos_username = \"$user\"%" $raconf
     sed -i "s%cheevos_password =.*%cheevos_password = \"$pass\"%" $raconf
+
+    configurator_process_complete_dialog "logging in to RetroAchievements"
 }
 
 configurator_update_dialog() {
@@ -387,10 +392,7 @@ configurator_retroarch_rewind_dialog() {
         if [ $? == 0 ] 
         then
             set_setting $raconf rewind_enable true retroarch
-            zenity --info \
-                --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-                --title "RetroDECK Configurator - Rewind" \
-                --text="Rewind enabled\!\nYou can check on Libretro docs to see which cores supports this function."
+            configurator_process_complete_dialog "enabling Rewind"
         else 
             configurator_options_dialog
         fi
@@ -403,10 +405,7 @@ configurator_retroarch_rewind_dialog() {
         if [ $? == 0 ] 
         then
             set_setting $raconf rewind_enable false retroarch
-            zenity --info \
-                --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-                --title "RetroDECK Configurator - Rewind" \
-                --text="Rewind disabled."
+            configurator_process_complete_dialog "disabling Rewind"
         else 
             configurator_options_dialog
         fi
@@ -456,15 +455,44 @@ configurator_options_dialog() {
     esac
 }
 
-configurator_migration_dialog() {
+configurator_move_dialog() {
+    choice=$(zenity --list --title="RetroDECK Configurator Utility - Move Directories" --cancel-label="Back" \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --column="Choice" --column="Action" \
+    "Move ROMs" "Move your ROMs directory to a new location" \
+    "Move BIOS" "Move your BIOS directory to a new location" \
+    "Move Downloaded Media" "Move your downloaded media directory to a new location" \
+    "Move Saves and States" "Move your save and state directories to a new location" )
+
+    case $choice in
+
+    "Move ROMs" )
+
+        ;;
+
+    "Move BIOS" )
+        ;;
+
+    "Move Downloaded Media" )
+        ;;
+
+    "Move Saves and States" )
+        ;;
+
+    "" ) # No selection made or Back button clicked
+        configurator_welcome_dialog
+        ;;
+
+    esac
 
 }
 
 configurator_welcome_dialog() {
     # Clear the variables
-    target=
-    setting=
+    source=
+    destination=
     action=
+    setting=
     setting_value=
 
     choice=$(zenity --list --title="RetroDECK Configurator Utility" --cancel-label="Quit" \
@@ -479,7 +507,7 @@ configurator_welcome_dialog() {
     case $choice in
 
     "Move Files" )
-        configurator_migration_dialog
+        configurator_move_dialog
         ;;
 
     "Change Options" )
@@ -496,6 +524,10 @@ configurator_welcome_dialog() {
 
     "Reset" )
         configurator_reset_dialog
+        ;;
+    
+    "" )
+
         ;;
     
     esac
