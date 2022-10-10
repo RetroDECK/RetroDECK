@@ -7,13 +7,20 @@ source /app/libexec/functions.sh # Source global functions
 
 # Config files for emulators with single config files
 
-raconf="/var/config/retroarch/retroarch.cfg"
-ra_core_conf="/var/config/retroarch/retroarch-core-options.cfg"
 citraconf="/var/config/citra-emu/qt-config.ini"
 melondsconf="/var/config/melonDS/melonDS.ini"
 rpcs3conf="/var/config/rpcs3/config.yml"
 yuzuconf="/var/config/yuzu/qt-config.ini"
 source $rd_conf
+
+# ES-DE config files
+
+es_settings="/var/config/emulationstation/.emulationstation/es_settings.xml"
+
+# RetroArch config files
+
+raconf="/var/config/retroarch/retroarch.cfg"
+ra_core_conf="/var/config/retroarch/retroarch-core-options.cfg"
 
 # Dolphin config files
 
@@ -113,6 +120,10 @@ case $4 in
     "xemu" )
 
     ;;
+    
+    "emulationstation" )
+
+    ;;
 
 esac
 
@@ -125,47 +136,53 @@ get_setting() {
 case $3 in
 
     "retrodeck" )
-    #echo $(grep $2 $1 | grep -o -P "(?<=$2 = \").*(?=\")") 
-    ;;
-    
-    "retroarch" )
-    echo $(grep $2 $1 | grep -o -P "(?<=$2 = \").*(?=\")")
+    echo $(grep "$2" $1 | grep -o -P "(?<=$2=).*")
     ;;
 
-    "dolphin" )
-    #echo $(grep $2 $1 | grep -o -P "(?<=$2 = \").*(?=\")")
+    "retroarch" )
+    echo $(grep "$2" $1 | grep -o -P "(?<=$2 = \").*(?=\")")
+    ;;
+
+    "dolphin" ) # Use quotes when passing setting_name, as this config file contains special characters
+    echo $(grep "$2" $1 | grep -o -P "(?<=$2 = ).*")
     ;;
 
     "duckstation" )
-    #echo $(grep $2 $1 | grep -o -P "(?<=$2 = \").*(?=\")")
+    echo $(grep "$2" $1 | grep -o -P "(?<=$2 = ).*")
     ;;
 
     "pcsx2" )
-    #echo $(grep $2 $1 | grep -o -P "(?<=$2 = \").*(?=\")")
+    echo $(grep "$2" $1 | grep -o -P "(?<=$2 = ).*")
     ;;
 
     "ppsspp" )
-    #echo $(grep $2 $1 | grep -o -P "(?<=$2 = \").*(?=\")")
+    echo $(grep "$2" $1 | grep -o -P "(?<=$2 = ).*")
     ;;
 
-    "rpcs3" )
-    #echo $(grep $2 $1 | grep -o -P "(?<=$2 = \").*(?=\")")
+    "rpcs3" ) # Use quotes when passing setting_name, as this config file contains special characters and spaces
+    echo $(grep "$2" $1 | grep -o -P "(?<=$2: ).*")
     ;;
 
-    "yuzu" )
-    #echo $(grep $2 $1 | grep -o -P "(?<=$2 = \").*(?=\")")
+    "yuzu" ) # Use quotes when passing setting_name, as this config file contains special characters
+    yuzu_setting=$(sed -e 's/\\/\\\\/g' <<< "$2") # Accomodate for backslashes in setting names
+    echo $(grep "$yuzu_setting" $1 | grep -o -P "(?<=$yuzu_setting=).*")
     ;;
-    
-    "citra" )
-    #echo $(grep $2 $1 | grep -o -P "(?<=$2 = \").*(?=\")")
+
+    "citra" ) # Use quotes when passing setting_name, as this config file contains special characters
+    citra_setting=$(sed -e 's/\\/\\\\/g' <<< "$2") # Accomodate for backslashes in setting names
+    echo $(grep "$citra_setting" $1 | grep -o -P "(?<=$citra_setting=).*")
     ;;
 
     "melonds" )
-    #echo $(grep $2 $1 | grep -o -P "(?<=$2 = \").*(?=\")")
+    echo $(grep "$2" $1 | grep -o -P "(?<=$2=).*")
     ;;
 
     "xemu" )
-    #echo $(grep $2 $1 | grep -o -P "(?<=$2 = \").*(?=\")")
+    echo $(grep "$2" $1 | grep -o -P "(?<=$2 = ).*")
+    ;;
+
+    "emulationstation" )
+    echo $(grep "$2" $1 | grep -o -P "(?<=$2\" value=\").*(?=\")")
     ;;
 
 esac
