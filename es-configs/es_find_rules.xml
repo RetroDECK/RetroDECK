@@ -51,6 +51,20 @@
             <entry>atari800-jz.atari800</entry>
         </rule>
     </emulator>
+    <emulator name="BASILISKII">
+        <!-- Macintosh 68k emulator Basilisk II -->
+        <rule type="systempath">
+            <entry>BasiliskII</entry>
+            <entry>net.cebix.basilisk</entry>
+        </rule>
+        <rule type="staticpath">
+            <entry>/var/lib/flatpak/exports/bin/net.cebix.basilisk</entry>
+            <entry>~/.local/share/flatpak/exports/bin/net.cebix.basilisk</entry>
+            <entry>~/Applications/BasiliskII-x86_64.AppImage</entry>
+            <entry>~/.local/bin/BasiliskII-x86_64.AppImage</entry>
+            <entry>~/bin/BasiliskII-x86_64.AppImage</entry>
+        </rule>
+    </emulator>
     <emulator name="BLASTEM">
         <!-- Sega Mega Drive/Genesis emulator BlastEm -->
         <rule type="systempath">
@@ -72,10 +86,21 @@
             <entry>~/.local/share/flatpak/exports/bin/dev.bsnes.bsnes</entry>
         </rule>
     </emulator>
+    <emulator name="CEMU">
+        <!-- Nintendo Wii U emulator Cemu -->
+        <rule type="systempath">
+            <entry>Cemu</entry>
+        </rule>
+        <rule type="staticpath">
+            <entry>~/Applications/Cemu/Cemu</entry>
+            <entry>~/.local/bin/Cemu/Cemu</entry>
+            <entry>~/bin/Cemu/Cemu</entry>
+        </rule>
+    </emulator>
     <emulator name="CITRA">
         <!-- Nintendo 3DS emulator Citra -->
         <rule type="systempath">
-            <entry>citra</entry>
+            <entry>citra-qt</entry>
             <entry>citra-emu.citra-nightly</entry>
             <entry>org.citra_emu.citra</entry>
         </rule>
@@ -149,6 +174,17 @@
             <entry>~/bin/duckstation-qt-x64.AppImage</entry>
         </rule>
     </emulator>
+    <emulator name="EASYRPG">
+        <!-- EasyRPG game engine -->
+        <rule type="systempath">
+            <entry>easyrpg-player</entry>
+        </rule>
+        <rule type="staticpath">
+            <entry>~/Applications/easyrpg/easyrpg-player</entry>
+            <entry>~/.local/bin/easyrpg/easyrpg-player</entry>
+            <entry>~/bin/easyrpg/easyrpg-player</entry>
+        </rule>
+    </emulator>
     <emulator name="FLYCAST">
         <!-- Sega Dreamcast emulator Flycast -->
         <rule type="systempath">
@@ -183,10 +219,43 @@
             <entry>~/bin/hypseus-singe/hypseus.bin</entry>
         </rule>
     </emulator>
+    <emulator name="LIGHTSPARK">
+        <!-- Adobe Flash player Lightspark -->
+        <rule type="systempath">
+            <entry>lightspark</entry>
+        </rule>
+        <rule type="staticpath">
+            <entry>~/Applications/lightspark/lightspark</entry>
+            <entry>~/.local/bin/lightspark/lightspark</entry>
+            <entry>~/bin/lightspark/lightspark</entry>
+        </rule>
+    </emulator>
+    <emulator name="LINAPPLE">
+        <!-- Apple II emulator LinApple -->
+        <rule type="systempath">
+            <entry>linapple</entry>
+        </rule>
+        <rule type="staticpath">
+            <entry>~/Applications/linapple/linapple</entry>
+            <entry>~/.local/bin/linapple/linapple</entry>
+            <entry>~/bin/linapple/linapple</entry>
+        </rule>
+    </emulator>
     <emulator name="MAME">
         <!-- Arcade emulator MAME -->
         <rule type="systempath">
             <entry>mame</entry>
+            <entry>org.mamedev.MAME</entry>
+        </rule>
+        <rule type="staticpath">
+            <entry>/var/lib/flatpak/exports/bin/org.mamedev.MAME</entry>
+            <entry>~/.local/share/flatpak/exports/bin/org.mamedev.MAME</entry>
+        </rule>
+    </emulator>
+    <emulator name="MEDNAFEN">
+        <!-- Multi-system emulator Mednafen -->
+        <rule type="systempath">
+            <entry>mednafen</entry>
         </rule>
     </emulator>
     <emulator name="MELONDS">
@@ -250,6 +319,17 @@
     <emulator name="PCSX2">
         <!-- Sony PlayStation 2 emulator PCSX2 -->
         <rule type="systempath">
+            <entry>pcsx2-qt</entry>
+        </rule>
+        <rule type="staticpath">
+            <entry>~/Applications/pcsx2*-Qt.AppImage</entry>
+            <entry>~/.local/bin/pcsx2*-Qt.AppImage</entry>
+            <entry>~/bin/pcsx2*-Qt.AppImage</entry>
+        </rule>
+    </emulator>
+    <emulator name="PCSX2-LEGACY">
+        <!-- Sony PlayStation 2 emulator PCSX2 (legacy) -->
+        <rule type="systempath">
             <entry>PCSX2</entry>
             <entry>pcsx2</entry>
             <entry>net.pcsx2.PCSX2</entry>
@@ -284,9 +364,10 @@
     <emulator name="PPSSPP">
         <!-- Sony PlayStation Portable emulator PPSSPP -->
         <rule type="systempath">
-            <entry>PPSSPPSDL</entry>
             <entry>ppsspp-emu.ppsspp-sdl</entry>
             <entry>org.ppsspp.PPSSPP</entry>
+            <entry>PPSSPPSDL</entry>
+            <entry>PPSSPPQt</entry>
         </rule>
         <rule type="staticpath">
             <entry>/var/lib/flatpak/exports/bin/org.ppsspp.PPSSPP</entry>
@@ -340,6 +421,17 @@
             <entry>~/.local/share/flatpak/exports/bin/com.snes9x.Snes9x</entry>
         </rule>
     </emulator>
+    <emulator name="RUFFLE">
+        <!-- Adobe Flash player Ruffle -->
+        <rule type="systempath">
+            <entry>ruffle</entry>
+        </rule>
+        <rule type="staticpath">
+            <entry>~/Applications/ruffle/ruffle</entry>
+            <entry>~/.local/bin/ruffle/ruffle</entry>
+            <entry>~/bin/ruffle/ruffle</entry>
+        </rule>
+    </emulator>
     <emulator name="RYUJINX">
         <!-- Nintendo Switch emulator Ryujinx -->
         <rule type="systempath">
@@ -354,10 +446,97 @@
             <entry>~/bin/publish/Ryujinx</entry>
         </rule>
     </emulator>
+    <emulator name="SCUMMVM">
+        <!-- ScummVM game engine -->
+        <rule type="systempath">
+            <entry>scummvm</entry>
+            <entry>org.scummvm.ScummVM</entry>
+        </rule>
+        <rule type="staticpath">
+            <entry>/var/lib/flatpak/exports/bin/org.scummvm.ScummVM</entry>
+            <entry>~/.local/share/flatpak/exports/bin/org.scummvm.ScummVM</entry>
+        </rule>
+    </emulator>
+    <emulator name="SDL2TRS">
+        <!-- Tandy TRS-80 emulator sdl2trs -->
+        <rule type="systempath">
+            <entry>sdl2trs</entry>
+        </rule>
+        <rule type="staticpath">
+            <entry>~/Applications/sdl2trs/sdl2trs</entry>
+            <entry>~/.local/bin/sdl2trs/sdl2trs</entry>
+            <entry>~/bin/sdl2trs/sdl2trs</entry>
+        </rule>
+    </emulator>
+    <emulator name="SHEEPSHAVER">
+        <!-- Macintosh PowerPC emulator SheepShaver -->
+        <rule type="systempath">
+            <entry>SheepShaver</entry>
+        </rule>
+        <rule type="staticpath">
+            <entry>~/Applications/SheepShaver-x86_64.AppImage</entry>
+            <entry>~/.local/bin/SheepShaver-x86_64.AppImage</entry>
+            <entry>~/bin/SheepShaver-x86_64.AppImage</entry>
+        </rule>
+    </emulator>
+    <emulator name="SIMCOUPE">
+        <!-- SAM Coupé emulator SimCoupé -->
+        <rule type="systempath">
+            <entry>simcoupe</entry>
+        </rule>
+        <rule type="staticpath">
+            <entry>~/Applications/simcoupe/simcoupe</entry>
+            <entry>~/.local/bin/simcoupe/simcoupe</entry>
+            <entry>~/bin/simcoupe/simcoupe</entry>
+        </rule>
+    </emulator>
+    <emulator name="SNES9X">
+        <!-- Super Nintendo emulator Snes9x -->
+        <rule type="systempath">
+            <entry>snes9x</entry>
+        </rule>
+        <rule type="staticpath">
+            <entry>/var/lib/flatpak/exports/bin/com.snes9x.Snes9x</entry>
+            <entry>~/.local/share/flatpak/exports/bin/com.snes9x.Snes9x</entry>
+        </rule>
+    </emulator>
+    <emulator name="SOLARUS">
+        <!-- Solarus game engine -->
+        <rule type="systempath">
+            <entry>solarus-run</entry>
+            <entry>solarus.run</entry>
+        </rule>
+    </emulator>
+    <emulator name="STEAM">
+        <!-- Valve Steam -->
+        <rule type="systempath">
+            <entry>steam</entry>
+        </rule>
+    </emulator>
+    <emulator name="TSUGARU">
+        <!-- Fujitsu FM Towns emulator Tsugaru -->
+        <rule type="staticpath">
+            <entry>~/Applications/tsugaru/Tsugaru_CUI</entry>
+            <entry>~/.local/bin/tsugaru/Tsugaru_CUI</entry>
+            <entry>~/bin/tsugaru/Tsugaru_CUI</entry>
+        </rule>
+    </emulator>
     <emulator name="VBA-M">
         <!-- Nintendo Game Boy Advance emulator VBA-M -->
         <rule type="systempath">
             <entry>visualboyadvance-m</entry>
+        </rule>
+    </emulator>
+    <emulator name="VITA3K">
+        <!-- Sony PlayStation Vita emulator Vita3K -->
+        <rule type="systempath">
+            <entry>vita3k</entry>
+            <entry>Vita3K</entry>
+        </rule>
+        <rule type="staticpath">
+            <entry>~/Applications/Vita3K/Vita3K</entry>
+            <entry>~/.local/bin/Vita3K/Vita3K</entry>
+            <entry>~/bin/Vita3K/Vita3K</entry>
         </rule>
     </emulator>
     <emulator name="XEMU">
@@ -372,6 +551,17 @@
             <entry>~/Applications/Xemu*.AppImage</entry>
             <entry>~/.local/bin/Xemu*.AppImage</entry>
             <entry>~/bin/Xemu*.AppImage</entry>
+        </rule>
+    </emulator>
+    <emulator name="XROAR">
+        <!-- Dragon and Tandy 8-bit computer emulator XRoar -->
+        <rule type="systempath">
+            <entry>xroar</entry>
+        </rule>
+        <rule type="staticpath">
+            <entry>~/Applications/xroar/xroar</entry>
+            <entry>~/.local/bin/xroar/xroar</entry>
+            <entry>~/bin/xroar/xroar</entry>
         </rule>
     </emulator>
     <emulator name="YUZU">

@@ -1,6 +1,13 @@
 <?xml version="1.0"?>
 <gameList>
 	<game>
+		<path>./cheevos.sh</path>
+		<name>RetroAchievements Login</name>
+		<desc>Enter your RetroAchievements account details.</desc>
+		<nogamecount>true</nogamecount>
+		<nomultiscrape>true</nomultiscrape>
+	</game>
+<!--	<game>
 		<path>./start-retroarch.sh</path>
 		<name>Start RetroArch</name>
 		<desc>Start RetroArch to manually tweak your settings.</desc>
@@ -55,7 +62,7 @@
 		<desc>Start RPCS3 to manually tweak your settings.</desc>
 		<nogamecount>true</nogamecount>
 		<nomultiscrape>true</nomultiscrape>
-	</game>
+	</game> -->
 	<game>
 		<path>./start-splore.sh</path>
 		<name>Start Splore</name>
@@ -63,4 +70,32 @@
 		<nogamecount>true</nogamecount>
 		<nomultiscrape>true</nomultiscrape>
 	</game>
-</gameList>
+<!--	<game>
+		<path>./move-roms.sh</path>
+		<name>Move roms folder</name>
+		<desc>Move roms folder from internal to external and vice versa.</desc>
+		<nogamecount>true</nogamecount>
+		<nomultiscrape>true</nomultiscrape>
+	</game>
+	<game>
+		<path>./overlays.sh</path>
+		<name>Overlays configuration</name>
+		<desc>Configure or disable borders and shaders.</desc>
+		<nogamecount>true</nogamecount>
+		<nomultiscrape>true</nomultiscrape>
+	</game> -->
+	<game>
+		<path>./configure-emulators.sh</path>
+		<name>Configure Emulators</name>
+		<desc>Choose an emulator to configure.</desc>
+		<nogamecount>true</nogamecount>
+		<nomultiscrape>true</nomultiscrape>
+	</game>
+	<game>
+		<path>./rewind.sh</path>
+		<name>Rewind toggler</name>
+		<desc>Enable or disable the rewind function for some RetroArch cores.</desc>
+		<nogamecount>true</nogamecount>
+		<nomultiscrape>true</nomultiscrape>
+	</game>
+</gameList> 

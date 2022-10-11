@@ -1,24 +1,32 @@
 #!/bin/bash
 
-branch="main-"$(date +%d%m%y.%H%M)
+# EDITABLES:
+#rd_branch="main"
+rd_branch="cooker"
+#gits_folder=~/gits
+gits_folder="/home/public-folder/gits" # without last /
 
-cd ~/gits
+# NON-EDITABLES
+branch="$rd_branch-"$(date +%d%m%y.%H%M)
+
+cd $gits_folder
 rm -rf flathub
 git clone --recursive https://github.com/flathub/net.retrodeck.retrodeck.git flathub
-cd ~/gits/RetroDECK
-git checkout main
+cd $gits_folder/RetroDECK
+git checkout $rd_branch
 git submodule init
 git submodule update
 # NOTE: the only linked submodules are: rd-submodules/retroarch
 # these must be included in the exclusion list as they must be redownloaded
 #sync -rav --progress --exclude={'res/screenshots/','shared-modules/','rd-submodules/retroarch','.git/','docs','retrodeck-flatpak/','retrodeck-flatpak-cooker/','.flatpak-builder/'} ~/RetroDECK/ ~/flathub/
 
-cd ~/gits/flathub
+cd $gits_folder/flathub
 git checkout -b $branch
 git rm -rf *
 git clean -fxd # restroing git index
 
-cd ~/gits/RetroDECK
+# Copying only a few files as the others are cloned by git in retrodeck.sh
+cd $gits_folder/RetroDECK
 cp -rf \
 'rd-submodules' \
 'flathub.json' \
@@ -27,8 +35,8 @@ cp -rf \
 'net.retrodeck.retrodeck.desktop' \
 'net.retrodeck.retrodeck.yml' \
 'README.md' \
-~/gits/flathub/
-cd ~/gits/flathub
+$gits_folder/flathub/
+cd $gits_folder/flathub
 
 # #rebuilding submodules
 # git config -f .gitmodules --get-regexp '^submodule\..*\.path$' |
@@ -70,5 +78,5 @@ git submodule deinit -f .
 # checkout again
 git submodule update --init --recursive
 git add *
-git commit -m "Updated flathub/net.retrodeck.retrodeck from RetroDECK/main"
+git commit -m "Updated flathub/net.retrodeck.retrodeck from RetroDECK/$rd_branch"
 git push origin $branch

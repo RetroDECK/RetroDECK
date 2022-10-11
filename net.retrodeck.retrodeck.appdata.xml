@@ -17,16 +17,22 @@
       <image>https://github.com/XargonWan/RetroDECK/blob/main/res/logo.png?raw=true</image>
     </screenshot>
     <screenshot>
-      <image>https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen02.png?raw=true</image>
+      <image>https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen01.jpeg?raw=true</image>
     </screenshot>
     <screenshot>
-      <image>https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen03.png?raw=true</image>
+      <image>https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen02.jpeg?raw=true</image>
     </screenshot>
     <screenshot>
-      <image>https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen04.png?raw=true</image>
+      <image>https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen03.jpeg?raw=true</image>
     </screenshot>
     <screenshot>
-      <image>https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen05.png?raw=true</image>
+      <image>https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen04.jpeg?raw=true</image>
+    </screenshot>
+    <screenshot>
+      <image>https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen05.jpeg?raw=true</image>
+    </screenshot>
+    <screenshot>
+      <image>https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen06.jpeg?raw=true</image>
     </screenshot>
   </screenshots>
   <description>
@@ -38,6 +44,7 @@
 	No other software is needed as everything it's already included!</p>
   <p>
   NOTE: Albeit RetroDECK could possibily work on every distro, it's supported only on Steam Deck.</p>
+
   <p>INSTALLATION INSTRUCTIONS:</p>
   <ul>
     <li>Start RetroDECK from the Desktop mode (first time only)</li>
@@ -47,11 +54,42 @@
     <li>Always start RetroDECK from Steam Library</li>
   </ul>
   <p>For a better experience is suggested to use the official Steam Controller Config available under community configs in Steam</p>
+
+  <p>Known Issues:</p>
+    <ul>
+      <li>PCSX2: due to its limitation, the standalone PCSX2 doesn't have any way to set the hotkeys, so no save and load state, no quit button. In order to quit press: STEAM -> PCSX2 -> (X) CLOSE WINDOW, be aware that the state is not automatically saved</li>
+      <li>As of this moment external controllers, local multiplayer in gamemode are not supported. Neither is running RetroDECK in desktop mode, we plan on adding the functionality in the future</li>
+    </ul>
+
+    IMPORTANT NOTE:
+    At the moment the emulator configs are reset during every update, this was made because every version they may bring new configurations, please back them up if you did some manual configs.
   </description>
   <project_license>GPL-3.0</project_license>
   <metadata_license>CC0-1.0</metadata_license>
-  <releases>
 
+<releases>
+
+<release version="0.5.0b" date="2022-10-11">
+    <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.5.5b</url>
+    <description>
+       <ul>
+          <li>VERY IMPORTANT: We are moving your saves! This can take time on the first boot. If you miss some saves they are not gone. Please read more in the wiki.</li>
+          <li>New Logo and Theme</li>
+          <li>Two new themes added: Alekfull-NX-Light and Retrofix-Revisited</li>
+          <li>Updated ES-DE to 1.2.6</li>
+          <li>Implemented the first steps towards a universal Emulator Configuration Tool in the TOOLS menu</li>
+          <li>Ability to log into your RetroAchievements account under the TOOLS menu for RetroArch only (supported standalones coming soon)</li>
+          <li>Updated RetroArch and all the standalone emulators</li>
+          <li>Added several free assets/fonts for RetroArch, PPSSPP, XEMU and BlueMSX</li>
+          <li>Added a new DEFAULT Emulator for the PS2: PCSX2-QT (the former PCSX2 default emulator is now called "PCSX2 (Legacy)")</li>
+          <li>Changed the DEFAULT Emulator for the PSX: Swanstation (Libretro) Core</li>
+          <li>Added a new Standalone Emulator for the PSX: Duckstation</li>
+          <li>Enhanced XEMU (XBOX) experience</li>
+          <li>And more, for the complete patch notes please check the wiki...</li>
+      </ul>
+    </description>
+</release>
+    
 <release version="0.4.5b" date="2022-07-20">
       <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.4.5b</url>
       <description>
@@ -71,6 +109,8 @@
   </release>
 
     <release version="0.4.4b" date="2022-07-18">
+
+  <release version="0.4.4b" date="2022-07-18">
       <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.4.4b</url>
       <description>
          <ul>
@@ -121,9 +161,9 @@
         At the moment the emulator configs are reset during every update, this was made because every version they may bring new configurations, please back them up if you did some manual configs.
         </p>
       </description>
-  </release>
+    </release>
 
-  <release version="0.4.2b" date="2022-05-11">
+    <release version="0.4.2b" date="2022-07-01">
       <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.4.2b</url>
       <description>
         <p><b>Emulators:</b></p>
