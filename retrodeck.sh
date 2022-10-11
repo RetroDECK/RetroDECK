@@ -114,15 +114,16 @@ standalones_init() {
     echo "----------------------"
     echo "Initializing PCSX2"
     echo "----------------------"
-    mkdir -pv /var/config/PCSX2/inis/
+    mkdir -pv "/var/config/PCSX2/inis"
     mkdir -pv "$rdhome/saves/ps2/pcsx2/memcards"
+    mkdir -pv "$rdhome/states/ps2/pcsx2"
     cp -fvr $emuconfigs/PCSX2/* /var/config/PCSX2/inis/
     sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2_ui.ini
     sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2.ini
-    dir_prep "$rdhome/states/ps2/pcsx2" "/var/config/PCSX2/sstates"
-    dir_prep "$rdhome/screenshots" "/var/config/PCSX2/snaps"
-    dir_prep "$rdhome/.logs" "/var/config/PCSX2/logs"
-    dir_prep "$rdhome/bios" "$rdhome/bios/pcsx2"
+    #dir_prep "$rdhome/states/ps2/pcsx2" "/var/config/PCSX2/sstates"
+    #dir_prep "$rdhome/screenshots" "/var/config/PCSX2/snaps"
+    #dir_prep "$rdhome/.logs" "/var/config/PCSX2/logs"
+    #dir_prep "$rdhome/bios" "$rdhome/bios/pcsx2"
 
     # MelonDS
     echo "----------------------"
