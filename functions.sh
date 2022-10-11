@@ -52,6 +52,15 @@ tools_init() {
     cp -fv /app/retrodeck/tools-gamelist.xml /var/config/retrodeck/tools/gamelist.xml
 }
 
+tools_init() {
+    rm -rfv /var/config/retrodeck/tools/
+    mkdir -pv /var/config/retrodeck/tools/
+    cp -rfv /app/retrodeck/tools/* /var/config/retrodeck/tools/
+    mkdir -pv /var/config/emulationstation/.emulationstation/custom_systems/tools/
+    rm -rfv /var/config/retrodeck/tools/gamelist.xml
+    cp -fv /app/retrodeck/tools-gamelist.xml /var/config/retrodeck/tools/gamelist.xml
+}
+
 standalones_init() {
     # This script is configuring the standalone emulators with the default files present in emuconfigs folder
     
@@ -96,15 +105,16 @@ standalones_init() {
     echo "----------------------"
     echo "Initializing PCSX2"
     echo "----------------------"
-    mkdir -pv /var/config/PCSX2/inis/
+    mkdir -pv "/var/config/PCSX2/inis"
     mkdir -pv "$rdhome/saves/ps2/pcsx2/memcards"
+    mkdir -pv "$rdhome/states/ps2/pcsx2"
     cp -fvr $emuconfigs/PCSX2/* /var/config/PCSX2/inis/
     sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2_ui.ini
     sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2.ini
-    dir_prep "$rdhome/states/ps2/pcsx2" "/var/config/PCSX2/sstates"
-    dir_prep "$rdhome/screenshots" "/var/config/PCSX2/snaps"
-    dir_prep "$rdhome/.logs" "/var/config/PCSX2/logs"
-    dir_prep "$rdhome/bios" "$rdhome/bios/pcsx2"
+    #dir_prep "$rdhome/states/ps2/pcsx2" "/var/config/PCSX2/sstates"
+    #dir_prep "$rdhome/screenshots" "/var/config/PCSX2/snaps"
+    #dir_prep "$rdhome/.logs" "/var/config/PCSX2/logs"
+    #dir_prep "$rdhome/bios" "$rdhome/bios/pcsx2"
 
     # MelonDS
     echo "----------------------"
@@ -233,6 +243,17 @@ post_update() {
     # post update script
     echo "Executing post-update script"
 
+    # Finding existing ROMs folder
+    if [ -d "$default_sd/retrodeck" ]
+    then
+      # ROMs on SD card
+      roms_folder="$default_sd/retrodeck/roms"
+    else
+      # ROMs on Internal
+      roms_folder="$HOME/retrodeck/roms"
+    fi
+    echo "ROMs folder found at $roms_folder"
+
     # Unhiding downloaded media from the previous versions
     if [ -d "$rdhome/.downloaded_media" ]
     then
@@ -258,6 +279,10 @@ post_update() {
     # 0.4 -> 0.5
     # Perform save and state migration if needed
 
+    # Moving PCSX2 Saves
+    mv -fv /var/config/PCSX2/sstates/* $rdhome/states/ps2/pcsx2
+    mv -fv /var/config/PCSX2/memcards/* $rdhome/saves/ps2/memcards
+
     versionwheresaveschanged="0.4.5b" # Hardcoded break point between unsorted and sorted saves
 
     if [[ $(sed -e "s/\.//g" <<< $hard_version) > $(sed -e "s/\.//g" <<< $versionwheresaveschanged) ]] && [[ ! $(sed -e "s/\.//g" <<< $hard_version) == $(sed -e "s/\.//g" <<< $version) ]]; then # Check if user is upgrading from the version where save organization was changed. Try not to reuse this, it things 0.4.5b is newer than 0.4.5
@@ -265,18 +290,16 @@ post_update() {
         save_backup_file=$rdhome/savebackup_"$(date +"%Y_%m_%d_%I_%M_%p").zip"
         state_backup_file=$rdhome/statesbackup_"$(date +"%Y_%m_%d_%I_%M_%p").zip"
 
-        # NOTE: This Zenity command may need to be one line, it broke when I pasted it into a sandbox file
-
         zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
             --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
             --title "RetroDECK" \
-            --text="You are updating to a version of RetroDECK where save and state file sorting has changed!\n\nYour existing saves will be backed up to $save_backup_file\n\nYour existing states will be backed up to $state_backup_file\n\nIf a save or state cannot be sorted automatically it will remain in its original directory so you can sort it manually.\n\nIf you encounter any issues, a log of the sorting process is stored at $migration_logfile\n\nPLEASE BE PATIENT! This process can take several minutes if you have a large ROM library."
+            --text="You are updating to a version of RetroDECK where save file locations have changed!\n\nYour existing files will be backed up for safety and then sorted automatically.\n\nIf a file cannot be sorted automatically it will remain where it is for manual sorting.\n\nPLEASE BE PATIENT! This process can take several minutes if you have a large ROM library."
 
-        allgames=($(find "$roms_folder" -maxdepth 2 -mindepth 2 ! -name "systeminfo.txt" ! -name "systems.txt" ! -name "*^*" | sed -e "s/ /\^/g")) # Build an array of all games and multi-disc-game-containing folders, adding whitespace placeholder
+        allgames=($(find "$roms_folder" -maxdepth 2 -mindepth 2 ! -name "systeminfo.txt" ! -name "systems.txt" ! -name "gc" ! -name "n3ds" ! -name "nds" ! -name "wii" ! -name "xbox" ! -name "*^*" | sed -e "s/ /\^/g")) # Build an array of all games and multi-disc-game-containing folders, adding whitespace placeholder
 
-        allsaves=($(find "$saves_folder" -mindepth 1 -maxdepth 1 -name "*.*" | sed -e "s/ /\^/g")) # Build an array of all save files, ignoring standalone emulator sub-folders, adding whitespace placeholder
+        allsaves=($(find "$saves_folder" -mindepth 1 -maxdepth 1 -name "*.*" ! -name "gc" ! -name "n3ds" ! -name "nds" ! -name "wii" ! -name "xbox"  | sed -e "s/ /\^/g")) # Build an array of all save files, ignoring standalone emulator sub-folders, adding whitespace placeholder
 
-        allstates=($(find "$states_folder" -mindepth 1 -maxdepth 1 -name "*.*" | sed -e "s/ /\^/g")) # Build an array of all state files, ignoring standalone emulator sub-folders, adding whitespace placeholder
+        allstates=($(find "$states_folder" -mindepth 1 -maxdepth 1 -name "*.*" ! -name "gc" ! -name "n3ds" ! -name "nds" ! -name "wii" ! -name "xbox"  | sed -e "s/ /\^/g")) # Build an array of all state files, ignoring standalone emulator sub-folders, adding whitespace placeholder
 
         totalsaves=${#allsaves[@]}
         totalstates=${#allstates[@]}
@@ -365,7 +388,19 @@ post_update() {
         --no-cancel \
         --auto-close
 
-        # NOTE: This Zenity command may need to be one line, it broke when I pasted it into a sandbox file
+        if [[ $(cat $migration_logfile | grep "ERROR" | wc -l) -eq 0 ]]; then
+          zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
+          --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+          --title "RetroDECK" \
+          --text="The migration process has sorted all of your files automatically.\n\nEverything should be working normally, if you experience any issues please check the RetroDECK wiki or contact us directly on the Discord."
+
+        else
+          cat $migration_logfile | grep "ERROR" > "$rdhome/manual_sort_needed.log"
+          zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
+          --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+          --title "RetroDECK" \
+          --text="The migration process was unable to sort $(cat $migration_logfile | grep "ERROR" | wc -l) files automatically.\n\nThese files will need to be moved manually to their new locations, find more detail on the RetroDECK wiki.\n\nA log of the files that need manual sorting can be found at $rdhome/manual_sort_needed.log"
+        fi
 
     else
       echo "Version" $version "is after the save and state organization was changed, no need to sort again"
@@ -456,7 +491,6 @@ finit() {
     --ok-label "Cancel" \
     --extra-button "Internal" \
     --extra-button "SD Card" \
-    #--extra-button "Advanced" \
     --text="Welcome to the first configuration of RetroDECK.\nThe setup will be quick but please READ CAREFULLY each message in order to avoid misconfigurations.\n\nWhere do you want your roms folder to be located?" )
     echo "Choice is $choice"
 

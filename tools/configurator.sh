@@ -40,40 +40,81 @@ pcsx2vmconf="/var/config/PCSX2/inis/PCSX2_vm.ini"
 # FUNCTION SECTION
 
 browse() {
-# Function for browsing directories, sets directory selected to variable $target for use in other functions
+    # This function browses for a directory and returns the path chosen
+    # USAGE: path_to_be_browsed_for=$(browse $source/destination_text $action_text)
 
-path_selected=false
+    path_selected=false
 
-while [ $path_selected == false ]
+    while [ $path_selected == false ]
     do
-        target="$(zenity --file-selection --title="Choose target location to $action" --directory)"  
+        target="$(zenity --file-selection --title="Choose $1 location to $2" --directory)"  
         echo "Path chosen: $target, answer=$?"
-        zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
-        --cancel-label="No" \
-        --ok-label "Yes" \
-        --text="Your new directory will be:\n\n$target\n\nis that ok?"
         if [ $? == 0 ] #yes
         then
-            path_selected == true
-            break
-        else
-            zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" --text="Do you want to quit?"
-            if [ $? == 0 ] # yes, quit
+            zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
+            --text="Directory $target chosen, is this correct?"
+            if [ $? == 0 ]
             then
-                target=
-                exit 0
+                path_selected=true
+                echo $target
+                break
+            else
+
+            fi
+            
+        else
+            zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
+            --text="No directory selected. Do you want to return to the main menu?"
+            if [ $? == 1 ]
+            then
+                configurator_welcome_dialog
             fi
         fi
     done
 }
 
-move() {
+verify_space() {
+    # Function used for verifying adequate space before moving directories around
+    # USAGE: verify_space $source_dir $dest_dir
+    # Function returns "true" if there is enough space, "false" if there is not
 
+    source_size=$(du -sk /home/deck/retrodeck | awk '{print $1}')
+    source_size=$((source_size+(source_size/10))) # Add 10% to source size for safety
+    dest_avail=$(df -k --output=avail $2 | tail -1)
+
+    if [[ $source_size -ge $dest_avail ]]; then
+        echo "false"
+    else
+        echo "true"
+    fi
+}
+
+move() {
+    # Function to move a directory from one parent to another
+    # USAGE: move $source_dir $dest_dir
+
+    if [[ verify_space $1 $2 ]]; then
+        (
+            echo "mv -v -t $2 $1"
+        ) |
+        zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+        --title "RetroDECK Configurator Utility - Move in Progress" \
+        --text="Moving directory $1 to new location of $2, please wait."
+
+    else
+        zenity --icon-name=net.retrodeck.retrodeck --error --no-wrap \
+        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+        --title "RetroDECK Configurator Utility - Move Directories" \
+        --text="The destination directory you have selected does not have enough free space for the files you are trying to move.\n\nPlease select a new destination or free up some space."
+
+        configurator_move_dialog
+    fi
 }
 
 set_setting() {
 # Function for editing settings
-# USAGE: $(set_setting $setting_file $setting_name $new_setting_value $system) (needed as different systems use different config file syntax)
+# USAGE: set_setting $setting_file $setting_name $new_setting_value $system (needed as different systems use different config file syntax)
 
 case $4 in
 
@@ -131,7 +172,7 @@ esac
 
 get_setting() {
 # Function for getting the current value of a setting from a config file
-# USAGE: $(get_setting $setting_file $setting_name $system) (needed as different systems use different config file syntax)
+# USAGE: get_setting $setting_file $setting_name $system (needed as different systems use different config file syntax)
 
 case $3 in
 
@@ -216,19 +257,17 @@ esac
 # Code for the menus should be put in reverse order, so functions for sub-menus exists before it is called by the parent menu
 
 configurator_process_complete_dialog() {
+    # This dialog shows when a process is complete.
+    # USAGE: configurator_process_complete_dialog "process text"
     zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator Utility - Process Complete" \
     --text="The process of $1 is now complete.\n\nYou may need to quit and restart RetroDECK for your changes to take effect\n\nClick OK to return to the Main Menu or Quit to return to RetroDECK."
-    
+
     if [ $? == 0 ] # OK button clicked
     then
         configurator_welcome_dialog
     fi
-}
-
-configurator_progress_bar_dialog() {
-
 }
 
 configurator_reset_dialog() {
@@ -471,6 +510,7 @@ configurator_move_dialog() {
         ;;
 
     "Move BIOS" )
+        
         ;;
 
     "Move Downloaded Media" )
