@@ -66,9 +66,9 @@ modules:
   # UPDATE STEPS FOR MAIN:
   # [ ] Update the VERSION variable
   # [ ] Update the appdata.xml with the version number and notes
+  # [ ] change branch into main in version-initialization (first one)
   # [ ] change branch into main in retrodeck module (last one)
   # [ ] if header (before modules) was edited, edit it even in flathub.yml
-  # [ ] change the screenshots link from cooker to main
   #
   - name: version-initialization
     buildsystem: simple
@@ -76,7 +76,7 @@ modules:
       - |
         git checkout ${GITHUB_REF_NAME}
         mkdir -p ${FLATPAK_DEST}/retrodeck/
-        VERSION="0.5.0b-cooker"
+        VERSION="0.6.0b-cooker"
         if [[ $VERSION == *"cooker"* ]];
         then
           VERSION="cooker-"$(git rev-parse --short HEAD)

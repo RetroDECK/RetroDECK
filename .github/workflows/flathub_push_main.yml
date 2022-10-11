@@ -1,12 +1,12 @@
 
-name: PUSH-cooker-flathub
+name: PUSH-main-flathub
 
 on:
   workflow_dispatch:
 
 jobs:
 
-  Pushing_cooker_into_flathub:
+  Pushing_main_into_flathub:
     runs-on: ubuntu-latest
     steps:
       - name: Pushing
@@ -14,7 +14,7 @@ jobs:
         run: |
 
           # EDITABLES:
-          rd_branch=${GITHUB_REF_NAME}
+          rd_branch=${GITHUB_REF_NAME} # should be main
           echo $rd_branch
           gits_folder="${GITHUB_WORKSPACE}/gits" # without last /
 
@@ -28,10 +28,6 @@ jobs:
           git clone --recursive https://github.com/XargonWan/RetroDECK RetroDECK
           cd $gits_folder/RetroDECK
 
-          # NON-EDITABLES
-          #relname="$rd_branch-"$(date +%d%m%y.%H%M)
-          relname="cooker-"$(git rev-parse --short HEAD)
-
           git checkout $rd_branch
           git submodule init
           git submodule update
@@ -41,7 +37,7 @@ jobs:
 
           cd $gits_folder/flathub
 
-          git checkout -b $relname
+          git checkout master
 
           git rm -rf *
           git clean -fxd # restroing git index
@@ -85,4 +81,4 @@ jobs:
           git commit -m "Updated flathub/net.retrodeck.retrodeck from RetroDECK/$rd_branch"
 
           git remote -v
-          git push --force https://${{ secrets.TRIGGER_BUILD_TOKEN }}@github.com/flathub/net.retrodeck.retrodeck.git $relname
+          git push --force https://${{ secrets.TRIGGER_BUILD_TOKEN }}@github.com/flathub/net.retrodeck.retrodeck.git master
