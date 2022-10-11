@@ -288,6 +288,10 @@ post_update() {
     # 0.4 -> 0.5
     # Perform save and state migration if needed
 
+    # Moving PCSX2 Saves
+    mv -fv /var/config/PCSX2/sstates/* $rdhome/states/ps2/pcsx2
+    mv -fv /var/config/PCSX2/memcards/* $rdhome/saves/ps2/memcards
+
     versionwheresaveschanged="0.4.5b" # Hardcoded break point between unsorted and sorted saves
 
     if [[ $(sed -e "s/\.//g" <<< $hard_version) > $(sed -e "s/\.//g" <<< $versionwheresaveschanged) ]] && [[ ! $(sed -e "s/\.//g" <<< $hard_version) == $(sed -e "s/\.//g" <<< $version) ]]; then # Check if user is upgrading from the version where save organization was changed. Try not to reuse this, it things 0.4.5b is newer than 0.4.5
