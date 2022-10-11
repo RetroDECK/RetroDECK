@@ -69,8 +69,17 @@
 
 <releases>
 
+  <release version="0.6.0b" date="2022-10-12">
+    <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.0b</url>
+    <description>
+       <ul>
+          <li>TBD</li>
+      </ul>
+    </description>
+</release>
+
 <release version="0.5.0b" date="2022-10-11">
-    <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.5.5b</url>
+    <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.5.0b</url>
     <description>
        <ul>
           <li>VERY IMPORTANT: We are moving your saves! This can take time on the first boot. If you miss some saves they are not gone. Please read more in the wiki.</li>

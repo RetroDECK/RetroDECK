@@ -64,11 +64,11 @@ modules:
   # The version number is hardcoded in /app/retrodeck/version
   # 
   # UPDATE STEPS FOR MAIN:
-  # [X] Update the VERSION variable
-  # [X] Update the appdata.xml with the version number and notes
-  # [X] change branch into main in version-initialization (first one)
-  # [X] change branch into main in retrodeck module (last one)
-  # [X] if header (before modules) was edited, edit it even in flathub.yml
+  # [ ] Update the VERSION variable
+  # [ ] Update the appdata.xml with the version number and notes
+  # [ ] change branch into main in version-initialization (first one)
+  # [ ] change branch into main in retrodeck module (last one)
+  # [ ] if header (before modules) was edited, edit it even in flathub.yml
   #
   - name: version-initialization
     buildsystem: simple
@@ -76,7 +76,7 @@ modules:
       - |
         git checkout ${GITHUB_REF_NAME}
         mkdir -p ${FLATPAK_DEST}/retrodeck/
-        VERSION="0.5.0b"
+        VERSION="0.6.0b-cooker"
         if [[ $VERSION == *"cooker"* ]];
         then
           VERSION="cooker-"$(git rev-parse --short HEAD)
@@ -86,7 +86,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/XargonWan/RetroDECK.git
-        branch: main
+        branch: cooker
 
   - name: xmlstarlet
     config-opts:
@@ -1432,4 +1432,4 @@ modules:
     sources:
       - type: git
         url: https://github.com/XargonWan/RetroDECK.git
-        branch: main
+        branch: cooker
