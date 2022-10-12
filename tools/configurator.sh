@@ -2,8 +2,11 @@
 
 # VARIABLES SECTION
 
-source /app/bin/global.sh # Grab global variables
-source /app/libexec/functions.sh # Source global functions
+rd_conf="retrodeck.cfg" # uncomment for standalone testing
+source functions.sh # uncomment for standalone testing
+
+#source /app/bin/global.sh # uncomment for flatpak testing
+#source /app/libexec/functions.sh # uncomment for flatpak testing
 
 # Config files for emulators with single config files
 
@@ -36,200 +39,6 @@ pcsx2conf="/var/config/PCSX2/inis/GS.ini"
 pcsx2uiconf="/var/config/PCSX2/inis/PCSX2_ui.ini"
 pcsx2vmconf="/var/config/PCSX2/inis/PCSX2_vm.ini"
 
-
-# FUNCTION SECTION
-
-browse() {
-    # This function browses for a directory and returns the path chosen
-    # USAGE: path_to_be_browsed_for=$(browse $source/destination_text $action_text)
-
-    path_selected=false
-
-    while [ $path_selected == false ]
-    do
-        target="$(zenity --file-selection --title="Choose $1 location to $2" --directory)"  
-        echo "Path chosen: $target, answer=$?"
-        if [ $? == 0 ] #yes
-        then
-            zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
-            --text="Directory $target chosen, is this correct?"
-            if [ $? == 0 ]
-            then
-                path_selected=true
-                echo $target
-                break
-            else
-
-            fi
-            
-        else
-            zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
-            --text="No directory selected. Do you want to return to the main menu?"
-            if [ $? == 1 ]
-            then
-                configurator_welcome_dialog
-            fi
-        fi
-    done
-}
-
-verify_space() {
-    # Function used for verifying adequate space before moving directories around
-    # USAGE: verify_space $source_dir $dest_dir
-    # Function returns "true" if there is enough space, "false" if there is not
-
-    source_size=$(du -sk /home/deck/retrodeck | awk '{print $1}')
-    source_size=$((source_size+(source_size/10))) # Add 10% to source size for safety
-    dest_avail=$(df -k --output=avail $2 | tail -1)
-
-    if [[ $source_size -ge $dest_avail ]]; then
-        echo "false"
-    else
-        echo "true"
-    fi
-}
-
-move() {
-    # Function to move a directory from one parent to another
-    # USAGE: move $source_dir $dest_dir
-
-    if [[ verify_space $1 $2 ]]; then
-        (
-            echo "mv -v -t $2 $1"
-        ) |
-        zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
-        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-        --title "RetroDECK Configurator Utility - Move in Progress" \
-        --text="Moving directory $1 to new location of $2, please wait."
-
-    else
-        zenity --icon-name=net.retrodeck.retrodeck --error --no-wrap \
-        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-        --title "RetroDECK Configurator Utility - Move Directories" \
-        --text="The destination directory you have selected does not have enough free space for the files you are trying to move.\n\nPlease select a new destination or free up some space."
-
-        configurator_move_dialog
-    fi
-}
-
-set_setting() {
-# Function for editing settings
-# USAGE: set_setting $setting_file $setting_name $new_setting_value $system (needed as different systems use different config file syntax)
-
-case $4 in
-
-    "retrodeck" )
-        sed -i "s%$2=.*%$2=$3%" $1
-        ;;
-
-    "retroarch" )
-        sed -i "s%$2 = \".*\"%$2 = \"$3\"%" $1
-        ;;
-
-    "dolphin" )
-        sed -i "s%$2 = .*%$2 = $3%" $1
-        ;;
-
-    "duckstation" )
-        sed -i "s%$2 = .*%$2 = $3%" $1
-        ;;
-
-    "pcsx2" )
-        sed -i "s%$2 = .*%$2 = $3%" $1
-        ;;
-
-    "ppsspp" )
-        sed -i "s%$2 = .*%$2 = $3%" $1
-        ;;
-
-    "rpcs3" ) # This does not currently work for settings with a $ in them
-        sed -i "s%$2: .*%$2: $3%" $1
-        ;;
-
-    "yuzu" )
-        #sed -i "s%$2=.*%$2=$3%" $1
-        ;;
-
-    "citra" )
-        #sed -i "s%$2=.*%$2=$3%" $1
-        ;;
-
-    "melonds" )
-        sed -i "s%$2=.*%$2=$3%" $1
-        ;;
-
-    "xemu" )
-        sed -i "s%$2 = .*%$2 = $3%" $1
-        ;;
-
-    "emulationstation" )
-        sed -i "s%$2\" \" value=\".*\"%$2\" \" value=\"$3\"" $1
-        ;;
-
-esac
-
-}
-
-get_setting() {
-# Function for getting the current value of a setting from a config file
-# USAGE: get_setting $setting_file $setting_name $system (needed as different systems use different config file syntax)
-
-case $3 in
-
-    "retrodeck" )
-        echo $(grep "$2" $1 | grep -o -P "(?<=$2=).*")
-        ;;
-
-    "retroarch" )
-        echo $(grep "$2" $1 | grep -o -P "(?<=$2 = \").*(?=\")")
-        ;;
-
-    "dolphin" ) # Use quotes when passing setting_name, as this config file contains special characters
-        echo $(grep "$2" $1 | grep -o -P "(?<=$2 = ).*")
-        ;;
-
-    "duckstation" )
-        echo $(grep "$2" $1 | grep -o -P "(?<=$2 = ).*")
-        ;;
-
-    "pcsx2" )
-        echo $(grep "$2" $1 | grep -o -P "(?<=$2 = ).*")
-        ;;
-
-    "ppsspp" ) # Use quotes when passing setting_name, as this config file contains spaces
-        echo $(grep "$2" $1 | grep -o -P "(?<=$2 = ).*")
-        ;;
-
-    "rpcs3" ) # Use quotes when passing setting_name, as this config file contains special characters and spaces
-        echo $(grep "$2" $1 | grep -o -P "(?<=$2: ).*")
-        ;;
-
-    "yuzu" ) # Use quotes when passing setting_name, as this config file contains special characters
-        yuzu_setting=$(sed -e 's%\\%\\\\%g' <<< "$2") # Accomodate for backslashes in setting names
-        echo $(grep "$yuzu_setting" $1 | grep -o -P "(?<=$yuzu_setting=).*")
-        ;;
-
-    "citra" ) # Use quotes when passing setting_name, as this config file contains special characters
-        citra_setting=$(sed -e 's%\\%\\\\%g' <<< "$2") # Accomodate for backslashes in setting names
-        echo $(grep "$citra_setting" $1 | grep -o -P "(?<=$citra_setting=).*")
-        ;;
-
-    "melonds" )
-        echo $(grep "$2" $1 | grep -o -P "(?<=$2=).*")
-        ;;
-
-    "xemu" )
-        echo $(grep "$2" $1 | grep -o -P "(?<=$2 = ).*")
-        ;;
-
-    "emulationstation" )
-        echo $(grep "$2" $1 | grep -o -P "(?<=$2\" value=\").*(?=\")")
-        ;;
-
-esac
-
-}
-
 # DIALOG SECTION
 
 # Configurator Option Tree
@@ -237,11 +46,13 @@ esac
 # Welcome
 #     - Move Directories
 #       - Migrate ROM directory
-#       - Migrate downloaded_media
 #       - Migrate BIOS directory
+#       - Migrate downloaded_media
 #     - Change Emulator Options
 #         - RetroArch
 #           - Change Rewind Setting
+#           - Enable/disable borders
+#           - Enable disable widescreen
 #     - Add or Update Files
 #       - Add specific cores
 #       - Grab all missing cores
@@ -250,70 +61,146 @@ esac
 #       - Login prompt
 #     - Reset RetroDECK
 #       - Reset RetroArch
-#       - Reset Standalone Emulators
+#       - Reset Specific Standalone Emulator
+#           - Reset Yuzu
+#           - Reset Dolphin
+#           - Reset PCSX2
+#           - Reset MelonDS
+#           - Reset Citra
+#           - Reset RPCS3
+#           - Reset XEMU
+#           - Reset PPSSPP
+#           - Reset Duckstation
+#       - Reset All Standalone Emulators
 #       - Reset Tools
 #       - Reset All
 
 # Code for the menus should be put in reverse order, so functions for sub-menus exists before it is called by the parent menu
 
-configurator_process_complete_dialog() {
-    # This dialog shows when a process is complete.
-    # USAGE: configurator_process_complete_dialog "process text"
-    zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
-    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator Utility - Process Complete" \
-    --text="The process of $1 is now complete.\n\nYou may need to quit and restart RetroDECK for your changes to take effect\n\nClick OK to return to the Main Menu or Quit to return to RetroDECK."
-
-    if [ $? == 0 ] # OK button clicked
-    then
-        configurator_welcome_dialog
-    fi
-}
+# DIALOG TREE FUNCTIONS
 
 configurator_reset_dialog() {
-    choice=$(zenity --list --title="RetroDECK Configurator Utility - Reset Options" --cancel-label="Back" \
+    choice=$(zenity --list --title="RetroDECK Configurator Utility - Reset Options" --cancel-label="Back" --width=800 --height=600 \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --column="Choice" --column="Action" \
     "Reset RetroArch" "Reset RetroArch to default settings" \
-    "Reset Standalones" "Reset standalone emulators to default settings" \
+    "Reset Specific Standalone" "Reset only one specific standalone emulator to default settings" \
+    "Reset All Standalones" "Reset all standalone emulators to default settings" \
     "Reset Tools" "Reset Tools menu entries" \
     "Reset All" "Reset RetroDECK to default settings" )
 
     case $choice in
 
     "Reset RetroArch" )
-        ra_init
+        debug_dialog "ra_init"
         configurator_process_complete_dialog "resetting RetroArch"
         ;;
 
-    "Reset Standalones" )
-        standalones_init
+    "Reset Specific Standalone" )
+        emulator_to_reset=$(zenity --list \
+        --title "RetroDECK Configurator Utility - Reset Specific Standalone Emulator" --cancel-label="Back" --width=800 --height=600 \
+        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+        --text="Which emulator do you want to reset to default?" \
+        --hide-header \
+        --column=emulator \
+        "RetroArch" \
+        "Citra" \
+        "Dolphin" \
+        "Duckstation" \
+        "MelonDS" \
+        "PCSX2" \
+        "PPSSPP" \
+        "RPCS3" \
+        "XEMU" \
+        "Yuzu")
+
+        case $emulator_to_reset in
+
+        "RetroArch" )
+            debug_dialog "ra_init"
+            configurator_process_complete_dialog "resetting $emulator_to_reset"
+            ;;
+
+        "Citra" )
+            debug_dialog "citra_init"
+            configurator_process_complete_dialog "resetting $emulator_to_reset"
+            ;;
+
+        "Dolphin" )
+            debug_dialog "dolphin_init"
+            configurator_process_complete_dialog "resetting $emulator_to_reset"
+            ;;
+
+        "Duckstation" )
+            debug_dialog "duckstation_init"
+            configurator_process_complete_dialog "resetting $emulator_to_reset"
+            ;;
+
+        "MelonDS" )
+            debug_dialog "melonds_init"
+            configurator_process_complete_dialog "resetting $emulator_to_reset"
+            ;;
+
+        "PCSX2" )
+            debug_dialog "pcsx2_init"
+            configurator_process_complete_dialog "resetting $emulator_to_reset"
+            ;;
+
+        "PPSSPP" )
+            debug_dialog "ppssppsdl_init"
+            configurator_process_complete_dialog "resetting $emulator_to_reset"
+            ;;
+
+        "RPCS3" )
+            debug_dialog "rpcs3_init"
+            configurator_process_complete_dialog "resetting $emulator_to_reset"
+            ;;
+
+        "XEMU" )
+            debug_dialog "xemu_init"
+            configurator_process_complete_dialog "resetting $emulator_to_reset"
+            ;;
+
+        "Yuzu" )
+            debug_dialog "yuzu_init"
+            configurator_process_complete_dialog "resetting $emulator_to_reset"
+            ;;
+
+        "" ) # No selection made or Back button clicked
+            configurator_reset_dialog
+            ;;
+
+        esac
+        ;;
+
+    "Reset All Standalones" )
+        debug_dialog "standalones_init"
         configurator_process_complete_dialog "resetting standalone emulators"
         ;;
 
     "Reset Tools" )
-        tools_init
+        debug_dialog "tools_init"
         configurator_process_complete_dialog "resetting the tools menu"
         ;;
 
     "Reset All" )
-        zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
+        zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --width=800 --height=600 \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         --title "RetroDECK Configurator Utility - Reset RetroDECK" \
         --text="You are resetting RetroDECK to its default state.\n\nAfter the process is complete you will need to exit RetroDECK and run it again."
-        rm -f "$lockfile"
+        debug_dialog "rm -f "$lockfile""
         configurator_process_complete_dialog "resetting RetroDECK"
         ;;
 
     "" ) # No selection made or Back button clicked
         configurator_welcome_dialog
         ;;
-    
+
     esac
 }
 
 configurator_retroachivement_dialog() {
-    login=$(zenity --forms --title="RetroDECK Configurator Utility - RetroAchievements Login" --cancel-label="Back" \
+    login=$(zenity --forms --title="RetroDECK Configurator Utility - RetroAchievements Login" --cancel-label="Back" --width=800 --height=600 \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         --text="Enter your RetroAchievements Account details.\n\nBe aware that this tool cannot verify your login details.\nFor registration and more info visit\nhttps://retroachievements.org/\n" \
         --separator="=SEP=" \
@@ -329,29 +216,32 @@ configurator_retroachivement_dialog() {
     user=${arrIN[0]}
     pass=${arrIN[1]}
 
-    sed -i "s%cheevos_enable =.*%cheevos_enable = \"true\"%" $raconf
-    sed -i "s%cheevos_username =.*%cheevos_username = \"$user\"%" $raconf
-    sed -i "s%cheevos_password =.*%cheevos_password = \"$pass\"%" $raconf
+    #sed -i "s%cheevos_enable =.*%cheevos_enable = \"true\"%" $raconf
+    #sed -i "s%cheevos_username =.*%cheevos_username = \"$user\"%" $raconf
+    #sed -i "s%cheevos_password =.*%cheevos_password = \"$pass\"%" $raconf
+
+    debug_dialog "sed -i "s%cheevos_enable =.*%cheevos_enable = \"true\"%" $raconf\n\nsed -i "s%cheevos_username =.*%cheevos_username = \"$user\"%" $raconf\n\nsed -i "s%cheevos_password =.*%cheevos_password = \"$pass\"%" $raconf"
 
     configurator_process_complete_dialog "logging in to RetroAchievements"
 }
 
 configurator_update_dialog() {
-
+    configurator_generic_dialog "This feature is not available yet"
+    configurator_welcome_dialog
 }
 
 configurator_power_user_changes_dialog() {
-    zenity --title "RetroDECK Configurator Utility - Power User Options" --question --no-wrap --cancel-label="Back" \
+    zenity --title "RetroDECK Configurator Utility - Power User Options" --question --no-wrap --cancel-label="Back" --width=800 --height=600 \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --text="Making manual changes to an emulators configuration may create serious issues,\nand some settings may be overwitten during RetroDECK updates.\n\nplease continue only if you know what you're doing.\n\nDo you want to continue?"
-    
+
     if [ $? == 1 ] # Cancel button clicked
     then
         configurator_options_dialog
     fi
 
-    emulator="$(zenity --list \
-    --title "RetroDECK Configurator Utility - Power User Options" --cancel-label="Back" \
+    emulator=$(zenity --list \
+    --title "RetroDECK Configurator Utility - Power User Options" --cancel-label="Back" --width=800 --height=600 \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --text="Which emulator do you want to configure?" \
     --hide-header \
@@ -366,7 +256,7 @@ configurator_power_user_changes_dialog() {
     "PPSSPP" \
     "RPCS3" \
     "XEMU" \
-    "Yuzu")"
+    "Yuzu")
 
     case $emulator in
 
@@ -377,43 +267,43 @@ configurator_power_user_changes_dialog() {
     "Citra" )
         citra-qt
         ;;
-    
+
     "Dolphin" )
         dolphin-emu
         ;;
-    
+
     "Duckstation" )
         duckstation-qt
         ;;
-    
+
     "MelonDS" )
         melonDS
         ;;
-    
+
     "PCSX2-QT" )
         pcsx2-qt
         ;;
-    
+
     "PCSX2-Legacy" )
         pcsx2
         ;;
-    
+
     "PPSSPP" )
         PPSSPPSDL
         ;;
-    
+
     "RPCS3" )
         rpcs3
         ;;
-    
+
     "XEMU" )
         xemu
         ;;
-    
+
     "Yuzu" )
         yuzu
         ;;
-    
+
     "" ) # No selection made or Back button clicked
         configurator_options_dialog
         ;;
@@ -423,36 +313,36 @@ configurator_power_user_changes_dialog() {
 
 configurator_retroarch_rewind_dialog() {
     if [[ $(get_setting $raconf rewind_enable retroarch) == "true" ]]; then
-        zenity --question \
+        zenity --question --width=800 --height=600 \
         --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         --title "RetroDECK Configurator - Rewind" \
         --text="Rewind is currently enabled. Do you want to disable it?."
 
-        if [ $? == 0 ] 
+        if [ $? == 0 ]
         then
-            set_setting $raconf rewind_enable true retroarch
+            debug_dialog "set_setting $raconf rewind_enable true retroarch"
             configurator_process_complete_dialog "enabling Rewind"
-        else 
+        else
             configurator_options_dialog
         fi
     else
-        zenity --question \
+        zenity --question --width=800 --height=600 \
         --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         --title "RetroDECK Configurator - Rewind" \
         --text="Rewind is currently disabled, do you want to enable it?\n\nNOTE:\nThis may impact performance expecially on the latest systems."
 
-        if [ $? == 0 ] 
+        if [ $? == 0 ]
         then
-            set_setting $raconf rewind_enable false retroarch
+            debug_dialog "set_setting $raconf rewind_enable false retroarch"
             configurator_process_complete_dialog "disabling Rewind"
-        else 
+        else
             configurator_options_dialog
         fi
     fi
 }
 
 configurator_retroarch_options_dialog() {
-    choice=$(zenity --list --title="RetroDECK Configurator Utility - RetroArch Options" --cancel-label="Back" \
+    choice=$(zenity --list --title="RetroDECK Configurator Utility - RetroArch Options" --cancel-label="Back" --width=800 --height=600 \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --column="Choice" --column="Action" \
     "Change Rewind Setting" "Enable or disable the Rewind function in RetroArch" )
@@ -466,12 +356,12 @@ configurator_retroarch_options_dialog() {
     "" ) # No selection made or Back button clicked
         configurator_options_dialog
         ;;
-    
+
     esac
 }
 
 configurator_options_dialog() {
-    choice=$(zenity --list --title="RetroDECK Configurator Utility - Change Options" --cancel-label="Back" \
+    choice=$(zenity --list --title="RetroDECK Configurator Utility - Change Options" --cancel-label="Back" --width=800 --height=600 \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --column="Choice" --column="Action" \
     "Change RetroArch Settings" "Change settings specific to RetroArch" \
@@ -490,38 +380,200 @@ configurator_options_dialog() {
     "" ) # No selection made or Back button clicked
         configurator_welcome_dialog
         ;;
-    
+
     esac
 }
 
 configurator_move_dialog() {
-    choice=$(zenity --list --title="RetroDECK Configurator Utility - Move Directories" --cancel-label="Back" \
+    choice=$(zenity --list --title="RetroDECK Configurator Utility - Move Directories" --cancel-label="Back" --width=800 --height=600 \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --column="Choice" --column="Action" \
     "Move ROMs" "Move your ROMs directory to a new location" \
     "Move BIOS" "Move your BIOS directory to a new location" \
-    "Move Downloaded Media" "Move your downloaded media directory to a new location" \
-    "Move Saves and States" "Move your save and state directories to a new location" )
+    "Move Downloaded Media" "Move your downloaded media directory to a new location" )
 
     case $choice in
 
     "Move ROMs" )
-
-        ;;
+        if [[ -d $roms_folder ]]; then
+            configurator_generic_dialog "The current ROMs folder was found at $roms_folder.\n\nPlease select the location you would like to move it."
+            destination=$(configurator_destination_choice_dialog "ROMs" "Please choose a destination for the ROMs folder.")
+            case $destination in
+            "Back" )
+                configurator_move_dialog
+            ;;
+            "Internal Storage" )
+                if [[ $roms_folder == "$rdhome/roms" ]]; then
+                    configurator_generic_dialog "The ROMs folder is already at that location, please pick a new one."
+                    configurator_move_dialog
+                else
+                    configurator_generic_dialog "Moving ROMs folder to $destination"
+                    move $roms_folder "$rdhome/roms"
+                    roms_folder="$rdhome/roms"
+                    debug_dialog "dir_prep $roms_folder "/var/config/emulationstation/ROMs""
+                    debug_dialog "conf_write"
+                    configurator_process_complete_dialog "moving the ROMs directory to internal storage"
+                fi
+            ;;
+            "SD Card" )
+                if [[ $roms_folder == "$sdcard/retrodeck/roms" ]]; then
+                    configurator_generic_dialog "The ROMs folder is already at that location, please pick a new one."
+                    configurator_move_dialog
+                else
+                    configurator_generic_dialog "Moving ROMs folder to $destination"
+                    move $roms_folder "$sdcard/retrodeck/roms"
+                    roms_folder="$sdcard/retrodeck/roms"
+                    debug_dialog "dir_prep $roms_folder "/var/config/emulationstation/ROMs""
+                    debug_dialog "conf_write"
+                    configurator_process_complete_dialog "moving the ROMs directory to SD card"
+                fi
+            ;;
+            "Custom Location" )
+                configurator_generic_dialog "Please select the custom location to move the ROMs folder to."
+                destination=$(browse "ROMs directory destination")
+                if [[ $destination == $roms_folder ]]; then
+                    configurator_generic_dialog "The ROMs folder is already at that location, please pick a new one."
+                    configurator_move_dialog
+                else
+                    configurator_generic_dialog "Moving ROMs folder from $roms_folder\n\nto $destination.\n\nClick OK to continue."
+                    move $roms_folder $destination
+                    roms_folder=$destination
+                    debug_dialog "dir_prep $roms_folder "/var/config/emulationstation/ROMs""
+                    debug_dialog "conf_write"
+                    configurator_process_complete_dialog "moving the ROMs directory to $destination"
+                fi
+            ;;
+            esac
+        else
+            configurator_generic_dialog "The ROMs folder was not found at the configured location.\n\nThis may have happened if the folder was moved manually.\n\nPlease select the current location of the ROMs folder."
+            roms_folder=$(browse "ROMs directory location")
+            conf_write
+            configurator_generic_dialog "ROMs folder now configured at $roms_folder. Please start the moving process again."
+            configurator_move_dialog
+        fi
+    ;;
 
     "Move BIOS" )
-        
-        ;;
+        if [[ -d $bios_folder ]]; then
+            configurator_generic_dialog "The current BIOS folder was found at $bios_folder.\n\nPlease select the location you would like to move it."
+            destination=$(configurator_destination_choice_dialog "BIOS" "Please choose a destination for the BIOS folder.")
+            case $destination in
+            "Back" )
+                configurator_move_dialog
+            ;;
+            "Internal Storage" )
+                if [[ $bios_folder == "$rdhome/bios" ]]; then
+                    configurator_generic_dialog "The BIOS folder is already at that location, please pick a new one."
+                    configurator_move_dialog
+                else
+                    configurator_generic_dialog "Moving BIOS folder to $destination"
+                    move $bios_folder "$rdhome/bios"
+                    bios_folder="$rdhome/bios"
+                    debug_dialog "dir_prep $bios_folder "$rdhome/bios""
+                    debug_dialog "conf_write"
+                    configurator_process_complete_dialog "moving the BIOS directory to internal storage"
+                fi
+            ;;
+            "SD Card" )
+                if [[ $bios_folder == "$sdcard/retrodeck/bios" ]]; then
+                    configurator_generic_dialog "The BIOS folder is already at that location, please pick a new one."
+                    configurator_move_dialog
+                else
+                    configurator_generic_dialog "Moving BIOS folder to $destination"
+                    move $bios_folder "$sdcard/retrodeck/bios"
+                    bios_folder="$sdcard/retrodeck/bios"
+                    debug_dialog "dir_prep $bios_folder "$rdhome/bios""
+                    debug_dialog "conf_write"
+                    configurator_process_complete_dialog "moving the BIOS directory to SD card"
+                fi
+            ;;
+            "Custom Location" )
+                configurator_generic_dialog "Please select the custom location to move the BIOS folder to."
+                destination=$(browse "BIOS directory destination")
+                if [[ $destination == $bios_folder ]]; then
+                    configurator_generic_dialog "The BIOS folder is already at that location, please pick a new one."
+                    configurator_move_dialog
+                else
+                    configurator_generic_dialog "Moving BIOS folder from $bios_folder\n\nto $destination.\n\nClick OK to continue."
+                    move $bios_folder $destination
+                    bios_folder=$destination
+                    debug_dialog "dir_prep $bios_folder "$rdhome/bios""
+                    debug_dialog "conf_write"
+                    configurator_process_complete_dialog "moving the BIOS directory to $destination"
+                fi
+            ;;
+            esac
+        else
+            configurator_generic_dialog "The BIOS folder was not found at the configured location.\n\nThis may have happened if the folder was moved manually.\n\nPlease select the current location of the BIOS folder."
+            bios_folder=$(browse "BIOS directory location")
+            conf_write
+            configurator_generic_dialog "BIOS folder now configured at $bios_folder. Please start the moving process again."
+            configurator_move_dialog
+        fi
+    ;;
 
     "Move Downloaded Media" )
-        ;;
-
-    "Move Saves and States" )
-        ;;
+        if [[ -d $media_folder ]]; then
+            configurator_generic_dialog "The current media folder was found at $media_folder.\n\nPlease select the location you would like to move it."
+            destination=$(configurator_destination_choice_dialog "Media" "Please choose a destination for the Media folder.")
+            case $destination in
+            "Back" )
+                configurator_move_dialog
+            ;;
+            "Internal Storage" )
+                if [[ $media_folder == "$rdhome/downloaded_media" ]]; then
+                    configurator_generic_dialog "The media folder is already at that location, please pick a new one."
+                    configurator_move_dialog
+                else
+                    configurator_generic_dialog "Moving media folder to $destination"
+                    move $media_folder "$rdhome/downloaded_media"
+                    media_folder="$rdhome/downloaded_media"
+                    debug_dialog "dir_prep $media_folder "$rdhome/downloaded_media""
+                    debug_dialog "conf_write"
+                    configurator_process_complete_dialog "moving the media directory to internal storage"
+                fi
+            ;;
+            "SD Card" )
+                if [[ $media_folder == "$sdcard/retrodeck/downloaded_media" ]]; then
+                    configurator_generic_dialog "The media folder is already at that location, please pick a new one."
+                    configurator_move_dialog
+                else
+                    configurator_generic_dialog "Moving media folder to $destination"
+                    move $media_folder "$sdcard/retrodeck/downloaded_media"
+                    media_folder="$sdcard/retrodeck/downloaded_media"
+                    debug_dialog "dir_prep $media_folder "$rdhome/downloaded_media""
+                    debug_dialog "conf_write"
+                    configurator_process_complete_dialog "moving the media directory to SD card"
+                fi
+            ;;
+            "Custom Location" )
+                configurator_generic_dialog "Please select the custom location to move the media folder to."
+                destination=$(browse "Media directory destination")
+                if [[ $destination == $media_folder ]]; then
+                    configurator_generic_dialog "The media folder is already at that location, please pick a new one."
+                    configurator_move_dialog
+                else
+                    configurator_generic_dialog "Moving media folder from $media_folder\n\nto $destination.\n\nClick OK to continue."
+                    move $media_folder $destination
+                    media_folder=$destination
+                    debug_dialog "dir_prep $media_folder "$rdhome/downloaded_media""
+                    debug_dialog "conf_write"
+                    configurator_process_complete_dialog "moving the media directory to $destination"
+                fi
+            ;;
+            esac
+        else
+            configurator_generic_dialog "The media folder was not found at the configured location.\n\nThis may have happened if the folder was moved manually.\n\nPlease select the current location of the media folder."
+            media_folder=$(browse "Media directory location")
+            conf_write
+            configurator_generic_dialog "Media folder now configured at $media_folder. Please start the moving process again."
+            configurator_move_dialog
+        fi
+    ;;
 
     "" ) # No selection made or Back button clicked
         configurator_welcome_dialog
-        ;;
+    ;;
 
     esac
 
@@ -535,12 +587,12 @@ configurator_welcome_dialog() {
     setting=
     setting_value=
 
-    choice=$(zenity --list --title="RetroDECK Configurator Utility" --cancel-label="Quit" \
+    choice=$(zenity --list --title="RetroDECK Configurator Utility" --cancel-label="Quit" --width=800 --height=600 \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --column="Choice" --column="Action" \
     "Move Files" "Move files between internal/SD card or to custom locations" \
     "Change Options" "Adjust how RetroDECK behaves" \
-    "Upgrade" "Upgrade parts of RetroDECK" \
+    "Update" "Update parts of RetroDECK" \
     "RetroAchivements" "Log in to RetroAchievements" \
     "Reset" "Reset parts of RetroDECK" )
 
@@ -554,7 +606,7 @@ configurator_welcome_dialog() {
         configurator_options_dialog
         ;;
 
-    "Upgrade" )
+    "Update" )
         configurator_update_dialog
         ;;
 
@@ -565,11 +617,11 @@ configurator_welcome_dialog() {
     "Reset" )
         configurator_reset_dialog
         ;;
-    
-    "" )
 
+    "Quit" )
+        exit 0
         ;;
-    
+
     esac
 }
 

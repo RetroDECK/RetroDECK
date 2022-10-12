@@ -2,9 +2,397 @@
 
 # THIS IS A CENTRALIZED LOCATION FOR FUNCTIONS, WHICH CAN BE SOURCED WITHOUT RUNNING EXTRA CODE. EXISTING USE OF THESE FUNCTIONS CAN BE REFACTORED TO HERE.
 
+# These functions are original to this file
+
+#=================
+# FUNCTION SECTION
+#=================
+
+browse() {
+    # This function browses for a directory and returns the path chosen
+    # USAGE: path_to_be_browsed_for=$(browse $action_text)
+
+    path_selected=false
+
+    while [ $path_selected == false ]
+    do
+        target="$(zenity --file-selection --title="Choose $1" --directory)"
+        if [ $? == 0 ] #yes
+        then
+            zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
+            --text="Directory $target chosen, is this correct?"
+            if [ $? == 0 ]
+            then
+                path_selected=true
+                echo $target
+                break
+            fi
+        else
+            zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
+            --text="No directory selected. Do you want to return to the main menu?"
+            if [ $? == 1 ]
+            then
+                configurator_welcome_dialog
+            fi
+        fi
+    done
+}
+
+verify_space() {
+    # Function used for verifying adequate space before moving directories around
+    # USAGE: verify_space $source_dir $dest_dir
+    # Function returns "true" if there is enough space, "false" if there is not
+
+    source_size=$(du -sk /home/deck/retrodeck | awk '{print $1}')
+    source_size=$((source_size+(source_size/10))) # Add 10% to source size for safety
+    dest_avail=$(df -k --output=avail $2 | tail -1)
+
+    if [[ $source_size -ge $dest_avail ]]; then
+        echo "false"
+    else
+        echo "true"
+    fi
+}
+
+move() {
+    # Function to move a directory from one parent to another
+    # USAGE: move $source_dir $dest_dir
+
+    if [[ $(verify_space $1 $2) ]]; then
+        (
+            if [[ ! -d $2 ]]; then # Create destination directory if it doesn't already exist
+                debug_dialog "mkdir -pv $2"
+            fi
+            debug_dialog "mv -v -t $2 $1"
+        ) |
+        zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close --width=800 --height=600 \
+        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+        --title "RetroDECK Configurator Utility - Move in Progress" \
+        --text="Moving directory $1 to new location of $2, please wait."
+
+    else
+        zenity --icon-name=net.retrodeck.retrodeck --error --no-wrap \
+        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=800 --height=600 \
+        --title "RetroDECK Configurator Utility - Move Directories" \
+        --text="The destination directory you have selected does not have enough free space for the files you are trying to move.\n\nPlease select a new destination or free up some space."
+
+        configurator_move_dialog
+    fi
+}
+
+set_setting() {
+# Function for editing settings
+# USAGE: set_setting $setting_file $setting_name $new_setting_value $system (needed as different systems use different config file syntax)
+# NOTES: Citra, Yuzu and RPCS3 have special conditions, see comments below
+
+case $4 in
+
+    "retrodeck" )
+        sed -i "s%$2=.*%$2=$3%" $1
+        ;;
+
+    "retroarch" )
+        sed -i "s%$2 = \".*\"%$2 = \"$3\"%" $1
+        ;;
+
+    "dolphin" )
+        sed -i "s%$2 = .*%$2 = $3%" $1
+        ;;
+
+    "duckstation" )
+        sed -i "s%$2 = .*%$2 = $3%" $1
+        ;;
+
+    "pcsx2" )
+        sed -i "s%$2 = .*%$2 = $3%" $1
+        ;;
+
+    "ppsspp" )
+        sed -i "s%$2 = .*%$2 = $3%" $1
+        ;;
+
+    "rpcs3" ) # This does not currently work for settings with a $ in them
+        sed -i "s%$2: .*%$2: $3%" $1
+        ;;
+
+    "yuzu" )
+        yuzu_setting=$(sed -e 's%\\%\\\\%g' <<< "$2") # Acommodate backslashes in setting name
+        sed -i "s%$yuzu_setting=.*%$yuzu_setting=$3%" $1
+        ;;
+
+    "citra" )
+        citra_setting=$(sed -e 's%\\%\\\\%g' <<< "$2") # Acommodate backslashes in setting name
+        sed -i "s%$citra_setting=.*%$citra_setting=$3%" $1
+        ;;
+
+    "melonds" )
+        sed -i "s%$2=.*%$2=$3%" $1
+        ;;
+
+    "xemu" )
+        sed -i "s%$2 = .*%$2 = $3%" $1
+        ;;
+
+    "emulationstation" )
+        sed -i "s%$2\" \" value=\".*\"%$2\" \" value=\"$3\"" $1
+        ;;
+
+esac
+}
+
+get_setting() {
+# Function for getting the current value of a setting from a config file
+# USAGE: get_setting $setting_file $setting_name $system (needed as different systems use different config file syntax)
+
+case $3 in
+
+    "retrodeck" )
+        echo $(grep "$2" $1 | grep -o -P "(?<=$2=).*")
+        ;;
+
+    "retroarch" )
+        echo $(grep "$2" $1 | grep -o -P "(?<=$2 = \").*(?=\")")
+        ;;
+
+    "dolphin" ) # Use quotes when passing setting_name, as this config file contains special characters
+        echo $(grep "$2" $1 | grep -o -P "(?<=$2 = ).*")
+        ;;
+
+    "duckstation" )
+        echo $(grep "$2" $1 | grep -o -P "(?<=$2 = ).*")
+        ;;
+
+    "pcsx2" )
+        echo $(grep "$2" $1 | grep -o -P "(?<=$2 = ).*")
+        ;;
+
+    "ppsspp" ) # Use quotes when passing setting_name, as this config file contains spaces
+        echo $(grep "$2" $1 | grep -o -P "(?<=$2 = ).*")
+        ;;
+
+    "rpcs3" ) # Use quotes when passing setting_name, as this config file contains special characters and spaces
+        echo $(grep "$2" $1 | grep -o -P "(?<=$2: ).*")
+        ;;
+
+    "yuzu" ) # Use quotes when passing setting_name, as this config file contains special characters
+        yuzu_setting=$(sed -e 's%\\%\\\\%g' <<< "$2") # Accomodate for backslashes in setting names
+        echo $(grep "$yuzu_setting" $1 | grep -o -P "(?<=$yuzu_setting=).*")
+        ;;
+
+    "citra" ) # Use quotes when passing setting_name, as this config file contains special characters
+        citra_setting=$(sed -e 's%\\%\\\\%g' <<< "$2") # Accomodate for backslashes in setting names
+        echo $(grep "$citra_setting" $1 | grep -o -P "(?<=$citra_setting=).*")
+        ;;
+
+    "melonds" )
+        echo $(grep "$2" $1 | grep -o -P "(?<=$2=).*")
+        ;;
+
+    "xemu" )
+        echo $(grep "$2" $1 | grep -o -P "(?<=$2 = ).*")
+        ;;
+
+    "emulationstation" )
+        echo $(grep "$2" $1 | grep -o -P "(?<=$2\" value=\").*(?=\")")
+        ;;
+
+esac
+}
+
+yuzu_init() {
+  echo "----------------------"
+    echo "Initializing YUZU"
+    echo "----------------------"
+    # removing dead symlinks as they were present in a past version
+    if [ -d $rdhome/bios/switch ]; then
+      find $rdhome/bios/switch -xtype l -exec rm {} \;
+    fi
+    # initializing the keys folder
+    dir_prep "$rdhome/bios/switch/keys" "/var/data/yuzu/keys"
+    # initializing the firmware folder
+    dir_prep "$rdhome/bios/switch/registered" "/var/data/yuzu/nand/system/Contents/registered"
+    # configuring Yuzu
+    dir_prep "$rdhome/.logs/yuzu" "/var/data/yuzu/log"
+    mkdir -pv /var/config/yuzu/
+    cp -fvr $emuconfigs/yuzu/* /var/config/yuzu/
+    sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/yuzu/qt-config.ini
+    dir_prep "$rdhome/screenshots" "/var/data/yuzu/screenshots"
+}
+
+dolphin_init() {
+  echo "----------------------"
+    echo "Initializing DOLPHIN"
+    echo "----------------------"
+    mkdir -pv /var/config/dolphin-emu/
+    cp -fvr "$emuconfigs/dolphin/"* /var/config/dolphin-emu/
+    sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/dolphin-emu/Dolphin.ini
+    dir_prep "$rdhome/saves/gc/dolphin/EUR" "/var/data/dolphin-emu/GC/EUR"
+    dir_prep "$rdhome/saves/gc/dolphin/USA" "/var/data/dolphin-emu/GC/USA"
+    dir_prep "$rdhome/saves/gc/dolphin/JAP" "/var/data/dolphin-emu/GC/JAP"
+    dir_prep "$rdhome/screenshots" "/var/data/dolphin-emu/ScreenShots"
+    dir_prep "$rdhome/states" "/var/data/dolphin-emu/StateSaves"
+    dir_prep "$rdhome/saves/wii/dolphin" "/var/data/dolphin-emu/Wii/"
+}
+
+pcsx2_init() {
+  echo "----------------------"
+    echo "Initializing PCSX2"
+    echo "----------------------"
+    mkdir -pv "/var/config/PCSX2/inis"
+    mkdir -pv "$rdhome/saves/ps2/pcsx2/memcards"
+    mkdir -pv "$rdhome/states/ps2/pcsx2"
+    cp -fvr $emuconfigs/PCSX2/* /var/config/PCSX2/inis/
+    sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2_ui.ini
+    sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2.ini
+}
+
+melonds_init() {
+  echo "----------------------"
+    echo "Initializing MELONDS"
+    echo "----------------------"
+    mkdir -pv /var/config/melonDS/
+    mkdir -pv "$rdhome/saves/nds/melonds"
+    mkdir -pv "$rdhome/states/nds/melonds"
+    dir_prep "$rdhome/bios" "/var/config/melonDS/bios"
+    cp -fvr $emuconfigs/melonDS.ini /var/config/melonDS/
+    # Replace ~/retrodeck with $rdhome as ~ cannot be understood by MelonDS
+    sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/melonDS/melonDS.ini
+}
+
+citra_init() {
+  echo "------------------------"
+    echo "Initializing CITRA"
+    echo "------------------------"
+    mkdir -pv /var/config/citra-emu/
+    mkdir -pv "$rdhome/saves/n3ds/citra/nand/"
+    mkdir -pv "$rdhome/saves/n3ds/citra/sdmc/"
+    dir_prep "$rdhome/.logs/citra" "/var/data/citra-emu/log"
+    cp -fv $emuconfigs/citra-qt-config.ini /var/config/citra-emu/qt-config.ini
+    sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
+    #TODO: do the same with roms folders after new variables is pushed (check even the others qt-emu)
+    #But actually everything is always symlinked to retrodeck/roms so it might be not needed
+    #sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
+}
+
+rpcs3_init() {
+  echo "------------------------"
+    echo "Initializing RPCS3"
+    echo "------------------------"
+    mkdir -pv /var/config/rpcs3/
+    cp -fvr $emuconfigs/rpcs3/* /var/config/rpcs3/
+    sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/rpcs3/vfs.yml
+}
+
+xemu_init() {
+  echo "------------------------"
+    echo "Initializing XEMU"
+    echo "------------------------"
+    mkdir -pv $rdhome/saves/xbox/xemu/
+    cp -fv $emuconfigs/xemu.toml /var/data/xemu/xemu.toml
+    sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/data/xemu/xemu.toml
+    # Preparing HD dummy Image if the image is not found
+    if [ ! -f $rdhome/bios/xbox_hdd.qcow2 ]
+    then
+      wget "https://github.com/mborgerson/xemu-hdd-image/releases/latest/download/xbox_hdd.qcow2.zip" -P $rdhome/bios/
+      unzip $rdhome/bios/xbox_hdd.qcow2.zip $rdhome/bios/
+      rm -rfv $rdhome/bios/xbox_hdd.qcow2.zip
+    fi
+}
+
+ppssppsdl_init() {
+  echo "------------------------"
+    echo "Initializing PPSSPPSDL"
+    echo "------------------------"
+    mkdir -p /var/config/ppsspp/PSP/SYSTEM/
+    cp -fv $emuconfigs/ppssppsdl/* /var/config/ppsspp/PSP/SYSTEM/
+    sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/ppsspp/PSP/SYSTEM/ppsspp.ini
+}
+
+duckstation_init() {
+  echo "------------------------"
+    echo "Initializing DUCKSTATION"
+    echo "------------------------"
+    mkdir -p /var/config/duckstation/
+    cp -fv $emuconfigs/duckstation/* /var/config/duckstation
+    sed -i 's#/home/deck/retrodeck/bios#'$rdhome/bios'#g' /var/config/ppsspp/PSP/SYSTEM/settings.ini
+}
+
+standalones_init() {
+    # This script is configuring the standalone emulators with the default files present in emuconfigs folder
+
+    echo "----------------------"
+    echo "Initializing standalone emulators"
+    echo "----------------------"
+
+    yuzu_init
+    citra_init
+    dolphin_init
+    melonds_init
+    pcsx2_init
+    ppssppsdl_init
+    rpcs3_init
+    xemu_init
+    duckstation_init
+}
+
+#=========================
+# REUSABLE DIALOGS SECTION
+#=========================
+
+debug_dialog() {
+    # This function is for displaying commands run by the Configurator without actually running them
+    # USAGE: debug_dialog "command"
+
+    zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --width=800 --height=600 \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator Utility - Debug Dialog" \
+    --text="$1"
+}
+
+configurator_process_complete_dialog() {
+    # This dialog shows when a process is complete.
+    # USAGE: configurator_process_complete_dialog "process text"
+    zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Quit" --extra-button="OK" --width=800 --height=600 \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator Utility - Process Complete" \
+    --text="The process of $1 is now complete.\n\nYou may need to quit and restart RetroDECK for your changes to take effect\n\nClick OK to return to the Main Menu or Quit to return to RetroDECK."
+
+    if [ ! $? == 0 ] # OK button clicked
+    then
+        configurator_welcome_dialog
+    fi
+}
+
+configurator_generic_dialog() {
+    # This dialog is for showing temporary messages before another process happens.
+    # USAGE: configurator_generid_dialog "info text"
+    zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --width=800 --height=600 \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator Utility" \
+    --text="$1"
+}
+
+configurator_destination_choice_dialog() {
+    # This dialog is for making things easy for new uers to move files to common locations. Gives the options for "Internal", "SD Card" and "Custom" locations.
+    # USAGE: $(configurator_destination_choice_dialog "folder being moved" "action text")
+    # This function returns one of the values: "Back" "Internal Storage" "SD Card" "Custom Location"
+    choice=$(zenity --title "RetroDECK Configurator Utility - Moving $1 folder" --info --no-wrap --ok-label="Back" --extra-button="Internal Storage" --extra-button="SD Card" --extra-button="Custom Location" --width=800 --height=600 \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --text="$2")
+
+    echo $choice
+}
+
+
+#=========================
+# LEGACY FUNCTIONS SECTION
+#=========================
+
+# These functions were pulled from retrodeck.sh or global.sh and should be consolidated eventually
+
 dir_prep() {
     # This script is creating a symlink preserving old folder contents and moving them in the new one
-    
+
     # Call me with:
     # dir prep "real dir" "symlink location"
     real="$1"
@@ -25,7 +413,7 @@ dir_prep() {
       echo "$real not found, creating it" #DEBUG
       mkdir -pv "$real"
     fi
-    
+
     # creating the symlink
     echo "linking $real in $symlink" #DEBUG
     mkdir -pv "$(dirname "$symlink")" # creating the full path except the last folder
@@ -50,141 +438,6 @@ tools_init() {
     mkdir -pv /var/config/emulationstation/.emulationstation/custom_systems/tools/
     rm -rfv /var/config/retrodeck/tools/gamelist.xml
     cp -fv /app/retrodeck/tools-gamelist.xml /var/config/retrodeck/tools/gamelist.xml
-}
-
-tools_init() {
-    rm -rfv /var/config/retrodeck/tools/
-    mkdir -pv /var/config/retrodeck/tools/
-    cp -rfv /app/retrodeck/tools/* /var/config/retrodeck/tools/
-    mkdir -pv /var/config/emulationstation/.emulationstation/custom_systems/tools/
-    rm -rfv /var/config/retrodeck/tools/gamelist.xml
-    cp -fv /app/retrodeck/tools-gamelist.xml /var/config/retrodeck/tools/gamelist.xml
-}
-
-standalones_init() {
-    # This script is configuring the standalone emulators with the default files present in emuconfigs folder
-    
-    echo "----------------------"
-    echo "Initializing standalone emulators"
-    echo "----------------------"
-
-    # Yuzu
-    echo "----------------------"
-    echo "Initializing YUZU"
-    echo "----------------------"
-    # removing dead symlinks as they were present in a past version
-    if [ -d $rdhome/bios/switch ]; then
-      find $rdhome/bios/switch -xtype l -exec rm {} \;
-    fi
-    # initializing the keys folder
-    dir_prep "$rdhome/bios/switch/keys" "/var/data/yuzu/keys"
-    # initializing the firmware folder
-    dir_prep "$rdhome/bios/switch/registered" "/var/data/yuzu/nand/system/Contents/registered"
-    # configuring Yuzu
-    dir_prep "$rdhome/.logs/yuzu" "/var/data/yuzu/log"
-    mkdir -pv /var/config/yuzu/
-    cp -fvr $emuconfigs/yuzu/* /var/config/yuzu/
-    sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/yuzu/qt-config.ini
-    dir_prep "$rdhome/screenshots" "/var/data/yuzu/screenshots"
-
-    # Dolphin
-    echo "----------------------"
-    echo "Initializing DOLPHIN"
-    echo "----------------------"
-    mkdir -pv /var/config/dolphin-emu/
-    cp -fvr "$emuconfigs/dolphin/"* /var/config/dolphin-emu/
-    sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/dolphin-emu/Dolphin.ini
-    dir_prep "$rdhome/saves/gc/dolphin/EUR" "/var/data/dolphin-emu/GC/EUR"
-    dir_prep "$rdhome/saves/gc/dolphin/USA" "/var/data/dolphin-emu/GC/USA"
-    dir_prep "$rdhome/saves/gc/dolphin/JAP" "/var/data/dolphin-emu/GC/JAP"
-    dir_prep "$rdhome/screenshots" "/var/data/dolphin-emu/ScreenShots"
-    dir_prep "$rdhome/states" "/var/data/dolphin-emu/StateSaves"
-    dir_prep "$rdhome/saves/wii/dolphin" "/var/data/dolphin-emu/Wii/"
-
-    # pcsx2
-    echo "----------------------"
-    echo "Initializing PCSX2"
-    echo "----------------------"
-    mkdir -pv "/var/config/PCSX2/inis"
-    mkdir -pv "$rdhome/saves/ps2/pcsx2/memcards"
-    mkdir -pv "$rdhome/states/ps2/pcsx2"
-    cp -fvr $emuconfigs/PCSX2/* /var/config/PCSX2/inis/
-    sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2_ui.ini
-    sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2.ini
-    #dir_prep "$rdhome/states/ps2/pcsx2" "/var/config/PCSX2/sstates"
-    #dir_prep "$rdhome/screenshots" "/var/config/PCSX2/snaps"
-    #dir_prep "$rdhome/.logs" "/var/config/PCSX2/logs"
-    #dir_prep "$rdhome/bios" "$rdhome/bios/pcsx2"
-
-    # MelonDS
-    echo "----------------------"
-    echo "Initializing MELONDS"
-    echo "----------------------"
-    mkdir -pv /var/config/melonDS/
-    mkdir -pv "$rdhome/saves/nds/melonds"
-    mkdir -pv "$rdhome/states/nds/melonds"
-    dir_prep "$rdhome/bios" "/var/config/melonDS/bios"
-    cp -fvr $emuconfigs/melonDS.ini /var/config/melonDS/
-    # Replace ~/retrodeck with $rdhome as ~ cannot be understood by MelonDS
-    sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/melonDS/melonDS.ini
-
-    # CITRA
-    echo "------------------------"
-    echo "Initializing CITRA"
-    echo "------------------------"
-    mkdir -pv /var/config/citra-emu/
-    mkdir -pv "$rdhome/saves/n3ds/citra/nand/"
-    mkdir -pv "$rdhome/saves/n3ds/citra/sdmc/"
-    dir_prep "$rdhome/.logs/citra" "/var/data/citra-emu/log"
-    cp -fv $emuconfigs/citra-qt-config.ini /var/config/citra-emu/qt-config.ini
-    sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
-    #TODO: do the same with roms folders after new variables is pushed (check even the others qt-emu)
-    #But actually everything is always symlinked to retrodeck/roms so it might be not needed
-    #sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
-
-    # RPCS3
-    echo "------------------------"
-    echo "Initializing RPCS3"
-    echo "------------------------"
-    mkdir -pv /var/config/rpcs3/
-    cp -fvr $emuconfigs/rpcs3/* /var/config/rpcs3/
-    sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/rpcs3/vfs.yml
-
-    # XEMU
-    echo "------------------------"
-    echo "Initializing XEMU"
-    echo "------------------------"
-    mkdir -pv $rdhome/saves/xbox/xemu/
-    cp -fv $emuconfigs/xemu.toml /var/data/xemu/xemu.toml
-    sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/data/xemu/xemu.toml
-    # Preparing HD dummy Image if the image is not found
-    if [ ! -f $rdhome/bios/xbox_hdd.qcow2 ]
-    then
-      wget "https://github.com/mborgerson/xemu-hdd-image/releases/latest/download/xbox_hdd.qcow2.zip" -P $rdhome/bios/
-      unzip $rdhome/bios/xbox_hdd.qcow2.zip $rdhome/bios/
-      rm -rfv $rdhome/bios/xbox_hdd.qcow2.zip
-    fi
-
-    # PPSSPPSDL
-    echo "------------------------"
-    echo "Initializing PPSSPPSDL"
-    echo "------------------------"
-    mkdir -p /var/config/ppsspp/PSP/SYSTEM/
-    cp -fv $emuconfigs/ppssppsdl/* /var/config/ppsspp/PSP/SYSTEM/
-    sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/ppsspp/PSP/SYSTEM/ppsspp.ini
-
-    # DUCKSTATION
-    echo "------------------------"
-    echo "Initializing DUCKSTATION"
-    echo "------------------------"
-    mkdir -p /var/config/duckstation/
-    cp -fv $emuconfigs/duckstation/* /var/config/duckstation
-    sed -i 's#/home/deck/retrodeck/bios#'$rdhome/bios'#g' /var/config/ppsspp/PSP/SYSTEM/settings.ini
-
-
-    # PICO-8
-    # Moved PICO-8 stuff in the finit as only it knows here roms folders is
-
 }
 
 ra_init() {
@@ -270,7 +523,7 @@ post_update() {
     dir_prep "$media_folder" "/var/config/emulationstation/.emulationstation/downloaded_media"
     dir_prep "$themes_folder" "/var/config/emulationstation/.emulationstation/themes"
     mkdir -pv $rdhome/.logs #this was added later, maybe safe to remove in a few versions
-    
+
 
     # Resetting es_settings, now we need it but in the future I should think a better solution, maybe with sed
     cp -fv /app/retrodeck/es_settings.xml /var/config/emulationstation/.emulationstation/es_settings.xml
@@ -378,7 +631,7 @@ post_update() {
             [[ -n $found ]] && movefile $j $i || echo "ERROR: No ROM match found for state file" $i | sed -e 's/\^/ /g' >> $migration_logfile # If a match is found, run movefile() otherwise warn user of stranded state file
         done
 
-        ) | 
+        ) |
         zenity --progress \
         --icon-name=net.retrodeck.retrodeck \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -424,7 +677,7 @@ browse(){
   path_selected=false
       while [ $path_selected == false ]
       do
-        sdcard="$(zenity --file-selection --title="Choose retrodeck folder location" --directory)"  
+        sdcard="$(zenity --file-selection --title="Choose retrodeck folder location" --directory)"
         echo "Path choosed: $sdcard, answer=$?"
         zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
         --cancel-label="No" \
@@ -444,41 +697,6 @@ browse(){
         fi
       done
 }
-
-#advanced(){
-#  # function to give advanced install options
-#  echo "Advaced choosed"
-#
-#  choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
-#    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
-#    --ok-label "ROMs" \
-#    --extra-button "Media" \
-#    --extra-button "Themes" \
-#    --extra-button "Back" \
-#    --text="What do you want to change?\n\nROMS folder = $roms_folder\nMedia folder (scraped data) = $media_folder\nThemes folder=$themes_folder" )
-#    echo "Choice is $choice"
-#
-#    case $choice in
-#
-#    "" ) # Internal (yes)
-#      echo "ROMs"
-#      ;;
-#
-#    "Media" )
-#      echo "Media"
-#      ;;
-#
-#    "Themes" )
-#      echo "Themes"
-#      ;;
-#
-#    "Back" ) # Browse + not found fallback
-#      echo "Back"
-#      finit
-#      ;;
-#
-#    esac
-#}
 
 finit() {
     # Force/First init, depending on the situation
@@ -540,7 +758,7 @@ finit() {
     rm -rfv /var/config/emulationstation/
     rm -rfv /var/config/retrodeck/tools/
     mkdir -pv /var/config/emulationstation/
-    
+
     # Initializing ES-DE
     # TODO: after the next update of ES-DE this will not be needed - let's test it
     emulationstation --home /var/config/emulationstation --create-system-dirs
@@ -614,12 +832,12 @@ conf_write() {
   then
     sed -i "s%states_folder=.*%states_folder=$states_folder%" "$rd_conf"
   fi
-  
+
   if [ ! -z "$bios_folder" ]
   then
     sed -i "s%bios_folder=.*%bios_folder=$bios_folder%" "$rd_conf"
   fi
-  
+
   if [ ! -z "$media_folder" ]
   then
     sed -i "s%media_folder=.*%media_folder=$media_folder%" "$rd_conf"

@@ -434,7 +434,7 @@ browse(){
       while [ $path_selected == false ]
       do
         sdcard="$(zenity --file-selection --title="Choose retrodeck folder location" --directory)"  
-        echo "Path choosed: $sdcard, answer=$?"
+        # echo "Path choosed: $sdcard, answer=$?" # This echo breaks this function, the next "if" will always be answered yes if it is here
         zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
         --cancel-label="No" \
         --ok-label "Yes" \
