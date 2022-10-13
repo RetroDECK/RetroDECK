@@ -22,7 +22,7 @@ fi
 
 dir_prep() {
     # This script is creating a symlink preserving old folder contents and moving them in the new one
-    
+
     # Call me with:
     # dir prep "real dir" "symlink location"
     real="$1"
@@ -43,7 +43,7 @@ dir_prep() {
       echo "$real not found, creating it" #DEBUG
       mkdir -pv "$real"
     fi
-    
+
     # creating the symlink
     echo "linking $real in $symlink" #DEBUG
     mkdir -pv "$(dirname "$symlink")" # creating the full path except the last folder
@@ -72,7 +72,7 @@ tools_init() {
 
 standalones_init() {
     # This script is configuring the standalone emulators with the default files present in emuconfigs folder
-    
+
     echo "----------------------"
     echo "Initializing standalone emulators"
     echo "----------------------"
@@ -279,7 +279,7 @@ post_update() {
     dir_prep "$media_folder" "/var/config/emulationstation/.emulationstation/downloaded_media"
     dir_prep "$themes_folder" "/var/config/emulationstation/.emulationstation/themes"
     mkdir -pv $rdhome/.logs #this was added later, maybe safe to remove in a few versions
-    
+
 
     # Resetting es_settings, now we need it but in the future I should think a better solution, maybe with sed
     cp -fv /app/retrodeck/es_settings.xml /var/config/emulationstation/.emulationstation/es_settings.xml
@@ -291,6 +291,11 @@ post_update() {
     # Moving PCSX2 Saves
     mv -fv /var/config/PCSX2/sstates/* $rdhome/states/ps2/pcsx2
     mv -fv /var/config/PCSX2/memcards/* $rdhome/saves/ps2/memcards
+
+    # Moving Citra saves from legacy location to 0.5.0b structure
+
+    mv -fv $rdhome/saves/Citra/* $rdhome/saves/n3ds/citra
+    rmdir $rdhome/saves/Citra # Old folder cleanup
 
     versionwheresaveschanged="0.4.5b" # Hardcoded break point between unsorted and sorted saves
 
@@ -387,7 +392,7 @@ post_update() {
             [[ -n $found ]] && movefile $j $i || echo "ERROR: No ROM match found for state file" $i | sed -e 's/\^/ /g' >> $migration_logfile # If a match is found, run movefile() otherwise warn user of stranded state file
         done
 
-        ) | 
+        ) |
         zenity --progress \
         --icon-name=net.retrodeck.retrodeck \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -433,7 +438,7 @@ browse(){
   path_selected=false
       while [ $path_selected == false ]
       do
-        sdcard="$(zenity --file-selection --title="Choose retrodeck folder location" --directory)"  
+        sdcard="$(zenity --file-selection --title="Choose retrodeck folder location" --directory)"
         # echo "Path choosed: $sdcard, answer=$?" # This echo breaks this function, the next "if" will always be answered yes if it is here
         zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
         --cancel-label="No" \
@@ -549,7 +554,7 @@ finit() {
     rm -rfv /var/config/emulationstation/
     rm -rfv /var/config/retrodeck/tools/
     mkdir -pv /var/config/emulationstation/
-    
+
     # Initializing ES-DE
     # TODO: after the next update of ES-DE this will not be needed - let's test it
     emulationstation --home /var/config/emulationstation --create-system-dirs
@@ -660,7 +665,7 @@ then
   #conf_init             # Initializing/reading the config file (sourced from global.sh)
 
   # ...but the version doesn't match with the config file
-  if [ "$hard_version" != "$version" ]; 
+  if [ "$hard_version" != "$version" ];
   then
       echo "Config file's version is $version but the actual version is $hard_version"
       post_update       # Executing post update script
@@ -671,7 +676,7 @@ then
 
 # Else, LOCKFILE IS NOT EXISTING (WAS REMOVED)
 # if the lock file doesn't exist at all means that it's a fresh install or a triggered reset
-else 
+else
   echo "Lockfile not found"
   #conf_init         # Initializing/reading the config file (sourced from global.sh)
   finit             # Executing First/Force init
