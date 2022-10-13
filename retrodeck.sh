@@ -144,6 +144,7 @@ standalones_init() {
     mkdir -pv /var/config/citra-emu/
     mkdir -pv "$rdhome/saves/n3ds/citra/nand/"
     mkdir -pv "$rdhome/saves/n3ds/citra/sdmc/"
+    dir_prep "$rdhome/bios/citra/sysdata" "/var/data/citra-emu/sysdata"
     dir_prep "$rdhome/.logs/citra" "/var/data/citra-emu/log"
     cp -fv $emuconfigs/citra-qt-config.ini /var/config/citra-emu/qt-config.ini
     sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
