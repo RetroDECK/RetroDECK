@@ -64,11 +64,11 @@ modules:
   # The version number is hardcoded in /app/retrodeck/version
   # 
   # UPDATE STEPS FOR MAIN:
-  # [X] Update the VERSION variable
-  # [X] Update the appdata.xml with the version number and notes
-  # [X] change branch into main in version-initialization (first one)
-  # [X] change branch into main in retrodeck module (last one)
-  # [X] if header (before modules) was edited, edit it even in flathub.yml
+  # [ ] Update the VERSION variable
+  # [ ] Update the appdata.xml with the version number and notes
+  # [ ] change branch into main in version-initialization (first one)
+  # [ ] change branch into main in retrodeck module (last one)
+  # [ ] if header (before modules) was edited, edit it even in flathub.yml
   #
   - name: version-initialization
     buildsystem: simple
@@ -76,7 +76,7 @@ modules:
       - |
         git checkout ${GITHUB_REF_NAME}
         mkdir -p ${FLATPAK_DEST}/retrodeck/
-        VERSION="0.5.1b"
+        VERSION="0.5.2b"
         if [[ $VERSION == *"cooker"* ]];
         then
           VERSION="cooker-"$(git rev-parse --short HEAD)
@@ -232,7 +232,7 @@ modules:
     sources:
       - type: git
         url: https://gitlab.com/es-de/emulationstation-de
-        branch: 18b2ee412e1bb3ea35ffd6e680ebf1dacda8e0ff
+        branch: f8d782f1f3b1fba8a119b793edd01f37e0258953
       - type: shell
         commands:
           - sed -i 's/QUIT EMULATIONSTATION/QUIT RETRODECK/g' es-app/src/guis/GuiMenu.cpp

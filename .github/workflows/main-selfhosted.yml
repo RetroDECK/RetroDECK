@@ -42,14 +42,13 @@ jobs:
           org.freedesktop.Sdk.Extension.llvm13 \
           org.freedesktop.Sdk.Extension.dotnet6/x86_64/21.08
 
-      # for main remember to change ${HOME} into ${GITHUB_WORKSPACE}
       - name: Build flatpak
         run: |
-          flatpak-builder --user --force-clean --install-deps-from=flathub --install-deps-from=flathub-beta --repo=${GITHUB_WORKSPACE}/local ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
+          flatpak-builder --user --force-clean --install-deps-from=flathub --install-deps-from=flathub-beta --repo=${GITHUB_WORKSPACE}/local ${GITHUB_WORKSPACE}/retrodeck-flatpak-main net.retrodeck.retrodeck.yml
 
       - name: Create Artifact for flathub
         run: | 
-          tar -czf ${GITHUB_WORKSPACE}/RetroDECK-Artifact.tar.gz -C ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker .
+          tar -czf ${GITHUB_WORKSPACE}/RetroDECK-Artifact.tar.gz -C ${GITHUB_WORKSPACE}/retrodeck-flatpak-main .
           hash=($(sha256sum ${GITHUB_WORKSPACE}/RetroDECK-Artifact.tar.gz))
           echo $hash > ${GITHUB_WORKSPACE}/RetroDECK-Artifact.sha
           mv -f RetroDECK-Artifact.* ${{ secrets.ARTIFACT_REPO }}
@@ -57,17 +56,11 @@ jobs:
 
       - name: Create Bundle
         run: |
-          flatpak-builder --user --force-clean --repo=${GITHUB_WORKSPACE}/local ${GITHUB_WORKSPACE}/retrodeck-flatpak-main net.retrodeck.retrodeck.yml
           flatpak build-bundle ${GITHUB_WORKSPACE}/local RetroDECK.flatpak net.retrodeck.retrodeck
-
-      - name: Read version from version file
-        id: version
-        run: echo "##[set-output name=version;]$(cat $(find . -name version))"
 
       - name: Publish the flatpak in a new release
         uses: ncipollo/release-action@v1
         with:
-          #tag: "${{ steps.version.outputs.version }}"
           tag: "${{ steps.generating_buildid.outputs.build-id }}"
           body: |
             # Release Notes

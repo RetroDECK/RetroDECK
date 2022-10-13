@@ -69,6 +69,18 @@
 
 <releases>
 
+<release version="0.5.2b" date="2022-10-13">
+    <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.5.2b</url>
+    <description>
+       <ul>
+          <li>VERY IMPORTANT: We are moving your saves! This can take time on the first boot. If you miss some saves they are not gone. Please read more in the wiki.</li>
+          <li>Fixed Citra save migration folder</li>
+          <li>Fixed a bug where the videos were not played correctly in some cases</li>
+          <li>Fixed the Rewind tool</li>
+      </ul>
+    </description>
+</release>
+
 <release version="0.5.1b" date="2022-10-12">
     <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.5.1b</url>
     <description>
