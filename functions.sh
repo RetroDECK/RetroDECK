@@ -199,6 +199,14 @@ case $3 in
 esac
 }
 
+disable_setting() {
+
+}
+
+enable_setting() {
+
+}
+
 yuzu_init() {
   echo "----------------------"
     echo "Initializing YUZU"
@@ -373,7 +381,7 @@ configurator_generic_dialog() {
 }
 
 configurator_destination_choice_dialog() {
-    # This dialog is for making things easy for new uers to move files to common locations. Gives the options for "Internal", "SD Card" and "Custom" locations.
+    # This dialog is for making things easy for new users to move files to common locations. Gives the options for "Internal", "SD Card" and "Custom" locations.
     # USAGE: $(configurator_destination_choice_dialog "folder being moved" "action text")
     # This function returns one of the values: "Back" "Internal Storage" "SD Card" "Custom Location"
     choice=$(zenity --title "RetroDECK Configurator Utility - Moving $1 folder" --info --no-wrap --ok-label="Back" --extra-button="Internal Storage" --extra-button="SD Card" --extra-button="Custom Location" --width=800 --height=600 \
@@ -382,7 +390,6 @@ configurator_destination_choice_dialog() {
 
     echo $choice
 }
-
 
 #=========================
 # LEGACY FUNCTIONS SECTION
