@@ -89,6 +89,9 @@ standalones_init() {
     dir_prep "$rdhome/bios/switch/keys" "/var/data/yuzu/keys"
     # initializing the firmware folder
     dir_prep "$rdhome/bios/switch/registered" "/var/data/yuzu/nand/system/Contents/registered"
+    # initializing the save folders
+    dir_prep "$rdhome/saves/switch/yuzu/nand" "/var/data/yuzu/nand"
+    dir_prep "$rdhome/saves/switch/yuzy/sdmc" "/var/data/yuzu/sdmc"
     # configuring Yuzu
     dir_prep "$rdhome/.logs/yuzu" "/var/data/yuzu/log"
     mkdir -pv /var/config/yuzu/
