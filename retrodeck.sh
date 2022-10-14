@@ -1,5 +1,15 @@
 #!/bin/bash
 
+# workaround to fix a bug when updating to 0.5.0b where the post update is not triggered
+# basically from 0.5 it's not reading the version from the lockfile so it doesn't know from which version it came from and the new rule of global.sh is that if version is unknown it's like a first boot
+# remove it in the future
+lockfile="/var/config/retrodeck/.lock"
+if [[ $(cat $lockfile) == *"0.4."* ]] || [[ $(cat $lockfile) == *"0.3."* ]] || [[ $(cat $lockfile) == *"0.2."* ]] || [[ $(cat $lockfile) == *"0.1."* ]]
+then
+  echo "Running version workaround"
+  version=$(cat $lockfile)
+fi
+
 source /app/bin/global.sh
 
 # We moved the lockfile in /var/config/retrodeck in order to solve issue #53 - Remove in a few versions
@@ -12,7 +22,7 @@ fi
 
 dir_prep() {
     # This script is creating a symlink preserving old folder contents and moving them in the new one
-    
+
     # Call me with:
     # dir prep "real dir" "symlink location"
     real="$1"
@@ -33,11 +43,11 @@ dir_prep() {
       echo "$real not found, creating it" #DEBUG
       mkdir -pv "$real"
     fi
-    
+
     # creating the symlink
     echo "linking $real in $symlink" #DEBUG
     mkdir -pv "$(dirname "$symlink")" # creating the full path except the last folder
-    ln -sv "$real" "$symlink"
+    ln -svf "$real" "$symlink"
 
     # moving everything from the old folder to the new one, delete the old one
     if [ -d "$symlink.old" ];
@@ -62,7 +72,7 @@ tools_init() {
 
 standalones_init() {
     # This script is configuring the standalone emulators with the default files present in emuconfigs folder
-    
+
     echo "----------------------"
     echo "Initializing standalone emulators"
     echo "----------------------"
@@ -104,15 +114,16 @@ standalones_init() {
     echo "----------------------"
     echo "Initializing PCSX2"
     echo "----------------------"
-    mkdir -pv /var/config/PCSX2/inis/
+    mkdir -pv "/var/config/PCSX2/inis"
     mkdir -pv "$rdhome/saves/ps2/pcsx2/memcards"
+    mkdir -pv "$rdhome/states/ps2/pcsx2"
     cp -fvr $emuconfigs/PCSX2/* /var/config/PCSX2/inis/
     sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2_ui.ini
     sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2.ini
-    dir_prep "$rdhome/states/ps2/pcsx2" "/var/config/PCSX2/sstates"
-    dir_prep "$rdhome/screenshots" "/var/config/PCSX2/snaps"
-    dir_prep "$rdhome/.logs" "/var/config/PCSX2/logs"
-    dir_prep "$rdhome/bios" "$rdhome/bios/pcsx2"
+    #dir_prep "$rdhome/states/ps2/pcsx2" "/var/config/PCSX2/sstates"
+    #dir_prep "$rdhome/screenshots" "/var/config/PCSX2/snaps"
+    #dir_prep "$rdhome/.logs" "/var/config/PCSX2/logs"
+    #dir_prep "$rdhome/bios" "$rdhome/bios/pcsx2"
 
     # MelonDS
     echo "----------------------"
@@ -241,6 +252,17 @@ post_update() {
     # post update script
     echo "Executing post-update script"
 
+    # Finding existing ROMs folder
+    if [ -d "$default_sd/retrodeck" ]
+    then
+      # ROMs on SD card
+      roms_folder="$default_sd/retrodeck/roms"
+    else
+      # ROMs on Internal
+      roms_folder="$HOME/retrodeck/roms"
+    fi
+    echo "ROMs folder found at $roms_folder"
+
     # Unhiding downloaded media from the previous versions
     if [ -d "$rdhome/.downloaded_media" ]
     then
@@ -257,7 +279,7 @@ post_update() {
     dir_prep "$media_folder" "/var/config/emulationstation/.emulationstation/downloaded_media"
     dir_prep "$themes_folder" "/var/config/emulationstation/.emulationstation/themes"
     mkdir -pv $rdhome/.logs #this was added later, maybe safe to remove in a few versions
-    
+
 
     # Resetting es_settings, now we need it but in the future I should think a better solution, maybe with sed
     cp -fv /app/retrodeck/es_settings.xml /var/config/emulationstation/.emulationstation/es_settings.xml
@@ -266,6 +288,15 @@ post_update() {
     # 0.4 -> 0.5
     # Perform save and state migration if needed
 
+    # Moving PCSX2 Saves
+    mv -fv /var/config/PCSX2/sstates/* $rdhome/states/ps2/pcsx2
+    mv -fv /var/config/PCSX2/memcards/* $rdhome/saves/ps2/memcards
+
+    # Moving Citra saves from legacy location to 0.5.0b structure
+
+    mv -fv $rdhome/saves/Citra/* $rdhome/saves/n3ds/citra
+    rmdir $rdhome/saves/Citra # Old folder cleanup
+
     versionwheresaveschanged="0.4.5b" # Hardcoded break point between unsorted and sorted saves
 
     if [[ $(sed -e "s/\.//g" <<< $hard_version) > $(sed -e "s/\.//g" <<< $versionwheresaveschanged) ]] && [[ ! $(sed -e "s/\.//g" <<< $hard_version) == $(sed -e "s/\.//g" <<< $version) ]]; then # Check if user is upgrading from the version where save organization was changed. Try not to reuse this, it things 0.4.5b is newer than 0.4.5
@@ -273,18 +304,16 @@ post_update() {
         save_backup_file=$rdhome/savebackup_"$(date +"%Y_%m_%d_%I_%M_%p").zip"
         state_backup_file=$rdhome/statesbackup_"$(date +"%Y_%m_%d_%I_%M_%p").zip"
 
-        # NOTE: This Zenity command may need to be one line, it broke when I pasted it into a sandbox file
-
         zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
             --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
             --title "RetroDECK" \
-            --text="You are updating to a version of RetroDECK where save and state file sorting has changed!\n\nYour existing saves will be backed up to $save_backup_file\n\nYour existing states will be backed up to $state_backup_file\n\nIf a save or state cannot be sorted automatically it will remain in its original directory so you can sort it manually.\n\nIf you encounter any issues, a log of the sorting process is stored at $migration_logfile\n\nPLEASE BE PATIENT! This process can take several minutes if you have a large ROM library."
+            --text="You are updating to a version of RetroDECK where save file locations have changed!\n\nYour existing files will be backed up for safety and then sorted automatically.\n\nIf a file cannot be sorted automatically it will remain where it is for manual sorting.\n\nPLEASE BE PATIENT! This process can take several minutes if you have a large ROM library."
 
-        allgames=($(find "$roms_folder" -maxdepth 2 -mindepth 2 ! -name "systeminfo.txt" ! -name "systems.txt" ! -name "*^*" | sed -e "s/ /\^/g")) # Build an array of all games and multi-disc-game-containing folders, adding whitespace placeholder
+        allgames=($(find "$roms_folder" -maxdepth 2 -mindepth 2 ! -name "systeminfo.txt" ! -name "systems.txt" ! -name "gc" ! -name "n3ds" ! -name "nds" ! -name "wii" ! -name "xbox" ! -name "*^*" | sed -e "s/ /\^/g")) # Build an array of all games and multi-disc-game-containing folders, adding whitespace placeholder
 
-        allsaves=($(find "$saves_folder" -mindepth 1 -maxdepth 1 -name "*.*" | sed -e "s/ /\^/g")) # Build an array of all save files, ignoring standalone emulator sub-folders, adding whitespace placeholder
+        allsaves=($(find "$saves_folder" -mindepth 1 -maxdepth 1 -name "*.*" ! -name "gc" ! -name "n3ds" ! -name "nds" ! -name "wii" ! -name "xbox"  | sed -e "s/ /\^/g")) # Build an array of all save files, ignoring standalone emulator sub-folders, adding whitespace placeholder
 
-        allstates=($(find "$states_folder" -mindepth 1 -maxdepth 1 -name "*.*" | sed -e "s/ /\^/g")) # Build an array of all state files, ignoring standalone emulator sub-folders, adding whitespace placeholder
+        allstates=($(find "$states_folder" -mindepth 1 -maxdepth 1 -name "*.*" ! -name "gc" ! -name "n3ds" ! -name "nds" ! -name "wii" ! -name "xbox"  | sed -e "s/ /\^/g")) # Build an array of all state files, ignoring standalone emulator sub-folders, adding whitespace placeholder
 
         totalsaves=${#allsaves[@]}
         totalstates=${#allstates[@]}
@@ -363,7 +392,7 @@ post_update() {
             [[ -n $found ]] && movefile $j $i || echo "ERROR: No ROM match found for state file" $i | sed -e 's/\^/ /g' >> $migration_logfile # If a match is found, run movefile() otherwise warn user of stranded state file
         done
 
-        ) | 
+        ) |
         zenity --progress \
         --icon-name=net.retrodeck.retrodeck \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -373,7 +402,19 @@ post_update() {
         --no-cancel \
         --auto-close
 
-        # NOTE: This Zenity command may need to be one line, it broke when I pasted it into a sandbox file
+        if [[ $(cat $migration_logfile | grep "ERROR" | wc -l) -eq 0 ]]; then
+          zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
+          --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+          --title "RetroDECK" \
+          --text="The migration process has sorted all of your files automatically.\n\nEverything should be working normally, if you experience any issues please check the RetroDECK wiki or contact us directly on the Discord."
+
+        else
+          cat $migration_logfile | grep "ERROR" > "$rdhome/manual_sort_needed.log"
+          zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
+          --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+          --title "RetroDECK" \
+          --text="The migration process was unable to sort $(cat $migration_logfile | grep "ERROR" | wc -l) files automatically.\n\nThese files will need to be moved manually to their new locations, find more detail on the RetroDECK wiki.\n\nA log of the files that need manual sorting can be found at $rdhome/manual_sort_needed.log"
+        fi
 
     else
       echo "Version" $version "is after the save and state organization was changed, no need to sort again"
@@ -397,7 +438,7 @@ browse(){
   path_selected=false
       while [ $path_selected == false ]
       do
-        sdcard="$(zenity --file-selection --title="Choose retrodeck folder location" --directory)"  
+        sdcard="$(zenity --file-selection --title="Choose retrodeck folder location" --directory)"
         echo "Path choosed: $sdcard, answer=$?"
         zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
         --cancel-label="No" \
@@ -464,7 +505,6 @@ finit() {
     --ok-label "Cancel" \
     --extra-button "Internal" \
     --extra-button "SD Card" \
-    #--extra-button "Advanced" \
     --text="Welcome to the first configuration of RetroDECK.\nThe setup will be quick but please READ CAREFULLY each message in order to avoid misconfigurations.\n\nWhere do you want your roms folder to be located?" )
     echo "Choice is $choice"
 
@@ -514,7 +554,7 @@ finit() {
     rm -rfv /var/config/emulationstation/
     rm -rfv /var/config/retrodeck/tools/
     mkdir -pv /var/config/emulationstation/
-    
+
     # Initializing ES-DE
     # TODO: after the next update of ES-DE this will not be needed - let's test it
     emulationstation --home /var/config/emulationstation --create-system-dirs
@@ -625,7 +665,7 @@ then
   #conf_init             # Initializing/reading the config file (sourced from global.sh)
 
   # ...but the version doesn't match with the config file
-  if [ "$hard_version" != "$version" ]; 
+  if [ "$hard_version" != "$version" ];
   then
       echo "Config file's version is $version but the actual version is $hard_version"
       post_update       # Executing post update script
@@ -636,7 +676,7 @@ then
 
 # Else, LOCKFILE IS NOT EXISTING (WAS REMOVED)
 # if the lock file doesn't exist at all means that it's a fresh install or a triggered reset
-if [ ! -f "$lockfile" ] && [ ! $XDG_CURRENT_DESKTOP == "KDE" ]; 
+if [ ! -f "$lockfile" ] && [ ! $XDG_CURRENT_DESKTOP == "KDE" ];
   then
     echo "No lockfile found and running in Game mode"
     zenity --error --no-wrap \
