@@ -83,7 +83,7 @@ move() {
 set_setting() {
 # Function for editing settings
 # USAGE: set_setting $setting_file $setting_name $new_setting_value $system (needed as different systems use different config file syntax)
-# NOTES: Citra, Yuzu and RPCS3 have special conditions, see comments below
+# NOTES: RPCS3 has special conditions, see comments below
 
 case $4 in
 

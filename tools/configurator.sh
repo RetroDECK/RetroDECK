@@ -216,11 +216,11 @@ configurator_retroachivement_dialog() {
     user=${arrIN[0]}
     pass=${arrIN[1]}
 
-    #sed -i "s%cheevos_enable =.*%cheevos_enable = \"true\"%" $raconf
-    #sed -i "s%cheevos_username =.*%cheevos_username = \"$user\"%" $raconf
-    #sed -i "s%cheevos_password =.*%cheevos_password = \"$pass\"%" $raconf
+    #set_setting $raconf cheevos_enable true retroarch
+    #set_setting $raconf cheevos_username $user retroarch
+    #set_setting $raconf cheevos_password $pass retroarch
 
-    debug_dialog "sed -i "s%cheevos_enable =.*%cheevos_enable = \"true\"%" $raconf\n\nsed -i "s%cheevos_username =.*%cheevos_username = \"$user\"%" $raconf\n\nsed -i "s%cheevos_password =.*%cheevos_password = \"$pass\"%" $raconf"
+    debug_dialog "set_setting $raconf cheevos_enable true retroarch\n\nset_setting $raconf cheevos_username $user retroarch\n\nset_setting $raconf cheevos_password $pass retroarch"
 
     configurator_process_complete_dialog "logging in to RetroAchievements"
 }
