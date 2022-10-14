@@ -232,7 +232,7 @@ modules:
     sources:
       - type: git
         url: https://gitlab.com/es-de/emulationstation-de
-        branch: 18b2ee412e1bb3ea35ffd6e680ebf1dacda8e0ff
+        branch: f8d782f1f3b1fba8a119b793edd01f37e0258953
       - type: shell
         commands:
           - sed -i 's/QUIT EMULATIONSTATION/QUIT RETRODECK/g' es-app/src/guis/GuiMenu.cpp
