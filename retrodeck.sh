@@ -434,9 +434,18 @@ post_update() {
       overwrite_configs=true
     fi
 
+    (
     ra_init
     standalones_init
     tools_init
+    ) |
+    zenity --progress --pulsate \
+        --icon-name=net.retrodeck.retrodeck \
+        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+        --title="Finishing upgrade" \
+        --text="Finishing upgrade, please wait." \
+        --no-cancel \
+        --auto-close
 
     create_lock
 
