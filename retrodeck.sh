@@ -206,7 +206,7 @@ ra_init() {
     mkdir -pv /var/config/retroarch/cores/
     cp /app/share/libretro/cores/* /var/config/retroarch/cores/
     cp -fv $emuconfigs/retroarch.cfg /var/config/retroarch/
-    if [[ overwrite_configs ]]; then
+    if [ $overwrite_configs = true ]; then
     cp -fv $emuconfigs/retroarch-core-options.cfg /var/config/retroarch/
     sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/retroarch/retroarch.cfg
     fi
