@@ -14,12 +14,12 @@ It's inspired by embedded emulation systems like AmberELEC, EmuELEC, CoreELEC, L
 
 Powered by [EmulationStation Desktop Edition](https://es-de.org), which uses RetroArch and other standalone emulators to allow you to import and play your favorite retro (and even not-so-retro) games in a tidy environment without flooding your Steam library.
 
-Join our [Discord](https://discord.gg/Dz3szYsP8g)!
+Visit our [website](https://retrodeck.net) and Join our [Discord](https://discord.gg/Dz3szYsP8g)!
 <p float="center">
-<img src="https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen05.png?raw=true" alt="screenshot" width="300"/>
-<img src="https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen04.png?raw=true" alt="screenshot" width="300"/><br/>
-<img src="https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen01.png?raw=true" alt="screenshot" width="300"/>
-<img src="https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen02.png?raw=true" alt="screenshot" width="300"/>
+<img src="https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen03.jpeg?raw=true" alt="screenshot" width="300"/>
+<img src="https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen04.jpeg?raw=true" alt="screenshot" width="300"/><br/>
+<img src="https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen05.jpeg?raw=true" alt="screenshot" width="300"/>
+<img src="https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen06.jpeg?raw=true" alt="screenshot" width="300"/>
 </p>
 <br/>
 

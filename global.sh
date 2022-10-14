@@ -67,12 +67,15 @@ conf_write() {
 # If there is no config file I initalize the file with the the default values
 if [ ! -f "$rd_conf" ]
 then
-
+  
+  mkdir -p /var/config/retrodeck
   echo "RetroDECK config file not found in $rd_conf"
   echo "Initializing"
-
+  
   # Initializing the variables
-  version="$hard_version"                                    # if we are here means that the we are in a new installation, so the version is valorized with the hardcoded one
+  if [ -z $version]; then
+    version="$hard_version"                                    # if we are here means that the we are in a new installation, so the version is valorized with the hardcoded one
+  fi
   rdhome="$HOME/retrodeck"                                   # the retrodeck home, aka ~/retrodeck
   roms_folder="$rdhome/roms"                                 # the default roms folder path
   saves_folder="$rdhome/saves"                               # the default saves folder path
