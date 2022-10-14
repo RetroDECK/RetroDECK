@@ -66,8 +66,9 @@ modules:
   # UPDATE STEPS FOR MAIN:
   # [ ] Update the VERSION variable
   # [ ] Update the appdata.xml with the version number and notes
+  # [ ] change branch into main in version-initialization (first one)
   # [ ] change branch into main in retrodeck module (last one)
-  # [ ] change the screenshots link from cooker to main
+  # [ ] if header (before modules) was edited, edit it even in flathub.yml
   #
   - name: version-initialization
     buildsystem: simple
@@ -75,12 +76,10 @@ modules:
       - |
         git checkout ${GITHUB_REF_NAME}
         mkdir -p ${FLATPAK_DEST}/retrodeck/
-        VERSION="0.5.0b-cooker"
+        VERSION="0.6.0b-cooker"
         if [[ $VERSION == *"cooker"* ]];
         then
-        # Disabled until I figure it out
-        #  VERSION=$(git describe --tags | tr - .)
-          VERSION="cooker-"$(date +%d%m%y.%H%M)
+          VERSION="cooker-"$(git rev-parse --short HEAD)
         fi
         echo $VERSION >> ${FLATPAK_DEST}/retrodeck/version
         cat ${FLATPAK_DEST}/retrodeck/version
@@ -233,7 +232,7 @@ modules:
     sources:
       - type: git
         url: https://gitlab.com/es-de/emulationstation-de
-        branch: 18b2ee412e1bb3ea35ffd6e680ebf1dacda8e0ff
+        branch: f8d782f1f3b1fba8a119b793edd01f37e0258953
       - type: shell
         commands:
           - sed -i 's/QUIT EMULATIONSTATION/QUIT RETRODECK/g' es-app/src/guis/GuiMenu.cpp
@@ -400,7 +399,7 @@ modules:
     sources:
       - type: archive
         url: https://buildbot.libretro.com/stable/1.11.1/linux/x86_64/RetroArch_cores.7z
-        sha256: 4874460211d77aa6351398c74405fdc0953e900606e37f8ff06287c9
+        sha256: fa98c9a5b3aab2b4808ce14726be0393cad36bd033ffe4b8378b7d5e5dede448
 
   # PPSSPP - START
   # https://github.com/flathub/org.ppsspp.PPSSPP
@@ -1401,8 +1400,8 @@ modules:
 
       # Logo, res
       - rm -f /app/share/emulationstation/resources/graphics/splash.svg
-      - cp res/splash.svg /app/share/emulationstation/resources/graphics/splash.svg
-      - cp res/icon.svg /app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg
+      - cp -f res/splash.svg /app/share/emulationstation/resources/graphics/splash.svg
+      - cp -f res/icon.svg /app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg
 
       # Tools
       - mkdir -p ${FLATPAK_DEST}/retrodeck/tools/
