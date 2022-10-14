@@ -306,10 +306,6 @@ post_update() {
     mkdir -pv $rdhome/.logs #this was added later, maybe safe to remove in a few versions
 
 
-    # Resetting es_settings, now we need it but in the future I should think a better solution, maybe with sed
-    cp -fv /app/retrodeck/es_settings.xml /var/config/emulationstation/.emulationstation/es_settings.xml
-
-
     # 0.4 -> 0.5
     # Perform save and state migration if needed
 
@@ -450,6 +446,10 @@ post_update() {
 
     if [[ $(sed -e "s/\.//g" <<< $hard_version) > $(sed -e "s/\.//g" <<< $versionwheresaveschanged) ]] && [[ ! $(sed -e "s/\.//g" <<< $version) > $(sed -e "s/\.//g" <<< $versionwheresaveschanged) ]]; then # Check if user is upgrading from the version where save organization was changed.
       overwrite_configs=true
+    fi
+
+    if [ $overwrite_configs = true ]; then
+      cp -fv /app/retrodeck/es_settings.xml /var/config/emulationstation/.emulationstation/es_settings.xml # preserve settings if not performing a major update
     fi
 
     (
