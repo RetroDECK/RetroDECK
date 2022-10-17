@@ -434,7 +434,7 @@ check_multifile_game_structure() {
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK" \
     --text="The following games were found to not have the correct folder structure:\n\n$(find $rdhome/roms -maxdepth 2 -mindepth 2 -type d ! -name "*.m3u" ! -name "*.ps3")\n\nIncorrect folder structure can result in failure to launch games or saves being in the incorrect location.\n\nPlease see the RetroDECK wiki for more details!"
-fi
+  fi
 }
 
 start_retrodeck() {
