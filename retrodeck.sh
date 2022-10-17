@@ -221,6 +221,9 @@ standalones_init() {
 ra_init() {
     dir_prep "$rdhome/bios" "/var/config/retroarch/system"
     dir_prep "$rdhome/.logs/retroarch" "/var/config/retroarch/logs"
+    mkdir -pv /var/config/retroarch/shaders/
+    cp -rfv /app/share/libretro/shaders /var/config/retroarch/
+    dir_prep "$rdhome/shaders/retroarch" "/var/config/retroarch/shaders"
     mkdir -pv /var/config/retroarch/cores/
     cp -fv /app/share/libretro/cores/* /var/config/retroarch/cores/
     if [ $overwrite_configs = true ]; then
