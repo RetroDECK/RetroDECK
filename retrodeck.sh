@@ -174,7 +174,7 @@ standalones_init() {
     if [ ! -f $rdhome/bios/xbox_hdd.qcow2 ]
     then
       wget "https://github.com/mborgerson/xemu-hdd-image/releases/latest/download/xbox_hdd.qcow2.zip" -P $rdhome/bios/
-      unzip $rdhome/bios/xbox_hdd.qcow2.zip $rdhome/bios/
+      unzip -q $rdhome/bios/xbox_hdd.qcow2.zip $rdhome/bios/
       rm -rfv $rdhome/bios/xbox_hdd.qcow2.zip
     fi
 
@@ -225,7 +225,7 @@ ra_init() {
     #if [ ! -f "$rdhome/bios/PPSSPP/ppge_atlas.zim" ]
     #then
       wget "https://github.com/hrydgard/ppsspp/archive/refs/heads/master.zip" -P $rdhome/bios/PPSSPP
-      unzip "$rdhome/bios/PPSSPP/master.zip" -d $rdhome/bios/PPSSPP/
+      unzip -q "$rdhome/bios/PPSSPP/master.zip" -d $rdhome/bios/PPSSPP/
       mv "$rdhome/bios/PPSSPP/ppsspp-master/assets/"* "$rdhome/bios/PPSSPP/"
       rm -rfv "$rdhome/bios/PPSSPP/master.zip"
       rm -rfv "$rdhome/bios/PPSSPP/ppsspp-master"
@@ -241,7 +241,7 @@ ra_init() {
     echo "Initializing MSX / SVI / ColecoVision / SG-1000 LIBRETRO"
     echo "-----------------------------------------------------------"
     wget "http://bluemsx.msxblue.com/rel_download/blueMSXv282full.zip" -P $rdhome/bios/MSX
-    unzip "$rdhome/bios/MSX/blueMSXv282full.zip" $rdhome/bios/MSX
+    unzip -q "$rdhome/bios/MSX/blueMSXv282full.zip" $rdhome/bios/MSX
     mv -rfv $rdhome/bios/MSX/Databases $rdhome/bios/Databases
     mv -rfv $rdhome/bios/MSX/Machines $rdhome/bios/Machines
     rm -rfv $rdhome/bios/MSX
@@ -427,10 +427,15 @@ post_update() {
     echo "Version" $version "is after the save and state organization was changed, no need to sort again"
   fi
 
+  (
   ra_init
   standalones_init
   tools_init
-
+  ) |
+  zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+  --title "RetroDECK Finishing Upgrade" \
+  --text="RetroDECK is finishing the upgrade process, please wait."
 
   create_lock
 }
