@@ -209,12 +209,9 @@ ra_init() {
     mkdir -pv /var/config/retroarch/cores/
     cp /app/share/libretro/cores/* /var/config/retroarch/cores/
     cp -fv $emuconfigs/retroarch.cfg /var/config/retroarch/
-    if [[ overwrite_configs ]]; then
     cp -fv $emuconfigs/retroarch-core-options.cfg /var/config/retroarch/
-    sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/retroarch/retroarch.cfg
-    fi
     #rm -rf $rdhome/bios/bios # in some situations a double bios symlink is created
-
+    sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/retroarch/retroarch.cfg
 
     # PPSSPP
     echo "--------------------------------"
@@ -298,9 +295,18 @@ post_update() {
     # 0.4 -> 0.5
     # Perform save and state migration if needed
 
+    # Moving PCSX2 Saves
+    mv -fv /var/config/PCSX2/sstates/* $rdhome/states/ps2/pcsx2
+    mv -fv /var/config/PCSX2/memcards/* $rdhome/saves/ps2/memcards
+
+    # Moving Citra saves from legacy location to 0.5.0b structure
+
+    mv -fv $rdhome/saves/Citra/* $rdhome/saves/n3ds/citra
+    rmdir $rdhome/saves/Citra # Old folder cleanup
+
     versionwheresaveschanged="0.4.5b" # Hardcoded break point between unsorted and sorted saves
 
-    if [[ $(sed -e "s/\.//g" <<< $hard_version) > $(sed -e "s/\.//g" <<< $versionwheresaveschanged) ]] && [[ ! $(sed -e "s/\.//g" <<< $version) > $(sed -e "s/\.//g" <<< $versionwheresaveschanged) ]]; then # Check if user is upgrading from the version where save organization was changed. Try not to reuse this, it things 0.4.5b is newer than 0.4.5
+    if [[ $(sed -e "s/\.//g" <<< $hard_version) > $(sed -e "s/\.//g" <<< $versionwheresaveschanged) ]] && [[ ! $(sed -e "s/\.//g" <<< $hard_version) == $(sed -e "s/\.//g" <<< $version) ]]; then # Check if user is upgrading from the version where save organization was changed. Try not to reuse this, it things 0.4.5b is newer than 0.4.5
         migration_logfile=$rdhome/.logs/savemove_"$(date +"%Y_%m_%d_%I_%M_%p").log"
         save_backup_file=$rdhome/savebackup_"$(date +"%Y_%m_%d_%I_%M_%p").zip"
         state_backup_file=$rdhome/statesbackup_"$(date +"%Y_%m_%d_%I_%M_%p").zip"
@@ -421,27 +427,6 @@ post_update() {
       echo "Version" $version "is after the save and state organization was changed, no need to sort again"
     fi
 
-    if [[ $(sed -e "s/\.//g" <<< $hard_version) > $(sed -e "s/\.//g" <<< $versionwheresaveschanged) ]] && [[ ! $(sed -e "s/\.//g" <<< $version) > $(sed -e "s/\.//g" <<< $versionwheresaveschanged) ]]; then # Check if user is upgrading from the version where save organization was changed.
-      overwrite_configs=true
-    fi
-
-    # Moving PCSX2 Saves if needed
-    if [[ -d /var/config/PCSX2 ]]; then
-      mv -fv /var/config/PCSX2/sstates/* $rdhome/states/ps2/pcsx2
-      mv -fv /var/config/PCSX2/memcards/* $rdhome/saves/ps2/memcards
-    fi
-    if [[ -d $rdhome/saves/PS2 ]] # This appears to have been a legacy location that no longer works under the new structure.
-      mv -fv $rdhome/saves/PS2/* $rdhome/saves/ps2
-      rmdir $rdhome/saves/PS2
-    fi
-
-    # Moving Citra saves from legacy location to 0.5.0b structure if needed
-    if [[ -d $rdhome/saves/Citra ]]; then
-    mv -fv $rdhome/saves/Citra/* $rdhome/saves/n3ds/citra
-    rmdir $rdhome/saves/Citra # Old folder cleanup
-    fi
-
-    (
     ra_init
     standalones_init
     tools_init
@@ -455,8 +440,6 @@ post_update() {
         --auto-close
 
     create_lock
-
-    overwrite_configs=false
 }
 
 start_retrodeck() {
