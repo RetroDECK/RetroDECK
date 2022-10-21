@@ -1102,8 +1102,8 @@
         <fullname>Sony PlayStation Portable</fullname>
         <path>%ROMPATH%/psp</path>
         <extension>.elf .ELF .iso .ISO .cso .CSO .prx .PRX .pbp .PBP .7z .7Z .zip .ZIP</extension>
-        <command label="PPSSPP (Standalone)">%EMULATOR_PPSSPP% %ROM%</command>
         <command label="PPSSPP">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/ppsspp_libretro.so %ROM%</command>
+        <command label="PPSSPP (Standalone)">%EMULATOR_PPSSPP% %ROM%</command>
         <platform>psp</platform>
         <theme>psp</theme>
     </system>
