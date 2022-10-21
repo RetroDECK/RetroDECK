@@ -76,7 +76,7 @@ modules:
       - |
         git checkout ${GITHUB_REF_NAME}
         mkdir -p ${FLATPAK_DEST}/retrodeck/
-        VERSION="0.6.0b-cooker"
+        VERSION="0.5.2b"
         if [[ $VERSION == *"cooker"* ]];
         then
           VERSION="cooker-"$(git rev-parse --short HEAD)
@@ -86,7 +86,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/XargonWan/RetroDECK.git
-        branch: cooker
+        branch: main
 
   - name: xmlstarlet
     config-opts:
@@ -587,12 +587,13 @@ modules:
     sources:
       - type: archive
         url: >-
-          https://boostorg.jfrog.io/artifactory/main/release/1.79.0/source/boost_1_79_0.tar.bz2
-        sha256: 475d589d51a7f8b3ba2ba4eda022b170e562ca3b760ee922c146b6c65856ef39
+          https://boostorg.jfrog.io/artifactory/main/release/1.80.0/source/boost_1_80_0.tar.bz2
+        sha256: 1e19565d82e43bc59209a168f5ac899d3ba471d55c7610c677d4ccf2c9c500c0
         x-checker-data:
           type: anitya
           project-id: 6845
-          url-template: https://boostorg.jfrog.io/artifactory/main/release/$version/source/boost_1_79_0.tar.bz2
+          url-template: >-
+            https://boostorg.jfrog.io/artifactory/main/release/$version/source/boost_1_80_0.tar.bz2
   - name: nv-codec-headers
     make-install-args:
       - PREFIX=/app
@@ -619,8 +620,8 @@ modules:
       - -DENABLE_COMPATIBILITY_LIST_DOWNLOAD=ON
       - -DYUZU_USE_QT_WEB_ENGINE=ON
       - -DYUZU_USE_BUNDLED_FFMPEG=ON
-      - -DDISPLAY_VERSION=1150
-      - -DBUILD_TAG=mainline-1150
+      - -DDISPLAY_VERSION=1195
+      - -DBUILD_TAG=mainline-1195
       - -DBUILD_REPOSITORY=yuzu-emu/yuzu-mainline
       #- -DCMAKE_PREFIX_PATH=/run/build/yuzu/_flatpak_build/externals/qt5_5_15_2
     build-options:
@@ -635,11 +636,11 @@ modules:
       - install -Dm755 ../yuzu-launcher.sh /app/bin/yuzu-launcher
       - install -Dm644 ../dist/yuzu.svg /app/share/icons/hicolor/scalable/apps/yuzu.svg
     sources:
-      - disable-submodules: true # FLATHUB WORKAROUND
+      #- disable-submodules: true # FLATHUB WORKAROUND
       - type: git
         url: https://github.com/yuzu-emu/yuzu-mainline.git
-        tag: mainline-0-1171
-        commit: 3b25d1fe22f5eee7a046432884d78b25a3950988
+        tag: mainline-0-1195
+        commit: 04db31a25a51f2daa296776eb4e58496ee74d49e
         disable-shallow-clone: true
         x-checker-data:
           type: git
@@ -1432,4 +1433,4 @@ modules:
     sources:
       - type: git
         url: https://github.com/XargonWan/RetroDECK.git
-        branch: cooker
+        branch: main
