@@ -264,6 +264,9 @@ post_update() {
   then
     # ROMs on SD card
     roms_folder="$default_sd/retrodeck/roms"
+    if [[ ! -L $rdhome && ! -L $rdhome/roms ]]; then # Add a roms folder symlink back to ~/retrodeck if missing, to fix things like PS2 autosaves until user migrates whole ~retrodeck directory
+      ln -s $roms_folder $rdhome/roms
+    fi
   else
     # ROMs on Internal
     roms_folder="$HOME/retrodeck/roms"
