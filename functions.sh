@@ -80,9 +80,9 @@ move() {
     fi
 }
 
-set_setting() {
+set_setting_value() {
 # Function for editing settings
-# USAGE: set_setting $setting_file $setting_name $new_setting_value $system (needed as different systems use different config file syntax)
+# USAGE: set_setting_value $setting_file $setting_name $new_setting_value $system (needed as different systems use different config file syntax)
 # NOTES: RPCS3 has special conditions, see comments below
 
 case $4 in
@@ -140,9 +140,9 @@ case $4 in
 esac
 }
 
-get_setting() {
+get_setting_value() {
 # Function for getting the current value of a setting from a config file
-# USAGE: get_setting $setting_file $setting_name $system (needed as different systems use different config file syntax)
+# USAGE: get_setting_value $setting_file $setting_name $system (needed as different systems use different config file syntax)
 
 case $3 in
 

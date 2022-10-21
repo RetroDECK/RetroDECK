@@ -216,11 +216,11 @@ configurator_retroachivement_dialog() {
     user=${arrIN[0]}
     pass=${arrIN[1]}
 
-    #set_setting $raconf cheevos_enable true retroarch
-    #set_setting $raconf cheevos_username $user retroarch
-    #set_setting $raconf cheevos_password $pass retroarch
+    #set_setting_value $raconf cheevos_enable true retroarch
+    #set_setting_value $raconf cheevos_username $user retroarch
+    #set_setting_value $raconf cheevos_password $pass retroarch
 
-    debug_dialog "set_setting $raconf cheevos_enable true retroarch\n\nset_setting $raconf cheevos_username $user retroarch\n\nset_setting $raconf cheevos_password $pass retroarch"
+    debug_dialog "set_setting_value $raconf cheevos_enable true retroarch\n\nset_setting_value $raconf cheevos_username $user retroarch\n\nset_setting_value $raconf cheevos_password $pass retroarch"
 
     configurator_process_complete_dialog "logging in to RetroAchievements"
 }
@@ -312,7 +312,7 @@ configurator_power_user_changes_dialog() {
 }
 
 configurator_retroarch_rewind_dialog() {
-    if [[ $(get_setting $raconf rewind_enable retroarch) == "true" ]]; then
+    if [[ $(get_setting_value $raconf rewind_enable retroarch) == "true" ]]; then
         zenity --question --width=800 --height=600 \
         --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         --title "RetroDECK Configurator - Rewind" \
@@ -320,7 +320,7 @@ configurator_retroarch_rewind_dialog() {
 
         if [ $? == 0 ]
         then
-            debug_dialog "set_setting $raconf rewind_enable true retroarch"
+            debug_dialog "set_setting_value $raconf rewind_enable true retroarch"
             configurator_process_complete_dialog "enabling Rewind"
         else
             configurator_options_dialog
@@ -333,7 +333,7 @@ configurator_retroarch_rewind_dialog() {
 
         if [ $? == 0 ]
         then
-            debug_dialog "set_setting $raconf rewind_enable false retroarch"
+            debug_dialog "set_setting_value $raconf rewind_enable false retroarch"
             configurator_process_complete_dialog "disabling Rewind"
         else
             configurator_options_dialog
