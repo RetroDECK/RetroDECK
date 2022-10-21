@@ -824,9 +824,9 @@
         <fullname>Nintendo 3DS</fullname>
         <path>%ROMPATH%/n3ds</path>
         <extension>.3ds .3DS .3dsx .3DSX .app .APP .axf .AXF .cci .CCI .cxi .CXI .elf .ELF .7z .7Z .zip .ZIP</extension>
+        <command label="Citra (Standalone)">%EMULATOR_CITRA% %ROM%</command>
         <command label="Citra">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/citra_libretro.so %ROM%</command>
         <command label="Citra 2018">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/citra2018_libretro.so %ROM%</command>
-        <command label="Citra (Standalone)">%EMULATOR_CITRA% %ROM%</command>
         <platform>n3ds</platform>
         <theme>n3ds</theme>
     </system>
@@ -1083,8 +1083,8 @@
         <fullname>Sony PlayStation 3</fullname>
         <path>%ROMPATH%/ps3</path>
         <extension>.desktop .ps3 .PS3 .ps3dir .PS3DIR</extension>
-        <command label="RPCS3 Shortcut (Standalone)">%ENABLESHORTCUTS% %EMULATOR_OS-SHELL% %ROM%</command>
         <command label="RPCS3 Directory (Standalone)">%EMULATOR_RPCS3% --no-gui %ROM%</command>
+        <command label="RPCS3 Shortcut (Standalone)">%ENABLESHORTCUTS% %EMULATOR_OS-SHELL% %ROM%</command>
         <platform>ps3</platform>
         <theme>ps3</theme>
     </system>
