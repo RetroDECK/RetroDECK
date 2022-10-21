@@ -599,9 +599,15 @@ finit() {
     # PICO-8
     dir_prep "$roms_folder/pico8" "$rdhome/bios/pico8/bbs/carts" #this is the folder where pico-8 is saving the carts
 
+    (
     ra_init
     standalones_init
     tools_init
+    ) |
+    zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Finishing Upgrade" \
+    --text="RetroDECK is finishing the upgrade process, please wait."
     create_lock
 
     zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
