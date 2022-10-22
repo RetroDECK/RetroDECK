@@ -76,7 +76,7 @@ modules:
       - |
         git checkout ${GITHUB_REF_NAME}
         mkdir -p ${FLATPAK_DEST}/retrodeck/
-        VERSION="0.5.2b"
+        VERSION="0.5.3b"
         if [[ $VERSION == *"cooker"* ]];
         then
           VERSION="cooker-"$(git rev-parse --short HEAD)
@@ -86,7 +86,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/XargonWan/RetroDECK.git
-        branch: main
+        branch: cooker-0.5.3b
 
   - name: xmlstarlet
     config-opts:
@@ -1433,4 +1433,4 @@ modules:
     sources:
       - type: git
         url: https://github.com/XargonWan/RetroDECK.git
-        branch: main
+        branch: cooker-0.5.3b
