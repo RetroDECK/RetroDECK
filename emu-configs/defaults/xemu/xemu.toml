@@ -1,0 +1,9 @@
+[general]
+show_welcome = false
+last_viewed_menu_index = 6
+
+[display.window]
+last_height = 885
+
+[sys.files]
+eeprom_path = '/home/deck/.var/app/app.xemu.xemu/data/xemu/xemu/eeprom.bin'

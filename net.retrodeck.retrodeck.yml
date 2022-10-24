@@ -62,7 +62,7 @@ modules:
   # If the version is set as cooker it will automatically generate the version tag based on the date
   # else it will just put what is written, "v" is not needed
   # The version number is hardcoded in /app/retrodeck/version
-  # 
+  #
   # UPDATE STEPS FOR MAIN:
   # [ ] Update the VERSION variable
   # [ ] Update the appdata.xml with the version number and notes
@@ -136,7 +136,7 @@ modules:
   #     - sed -e 's@$$QT_MODULE_LIB_BASE@'${FLATPAK_DEST}'/lib@g' -i ${FLATPAK_DEST}/lib/mkspecs/modules/*.pri
   #   cleanup:
   #     - /app/mkspecs
-      
+
   # mesa repo got a double certificate issue and gnutils cannot handle that so GLU download fails,
   # this affects even the shared-modules's glu so I have to replace it temporarly
   # more info there: https://gitlab.com/gnutls/gnutls/-/issues/1335
@@ -243,7 +243,7 @@ modules:
   # ES-DE - END
 
   # ES-DE Themes - START
-  
+
   - name: art-book-next
     buildsystem: simple
     build-commands:
@@ -253,7 +253,7 @@ modules:
       - type: git
         url:  https://github.com/anthonycaccese/art-book-next-retropie.git
         commit: 23932f484a9949313baf80f92b2fbca38a7a8f37
-        
+
   - name: alekfull-nx-light
     buildsystem: simple
     build-commands:
@@ -263,7 +263,7 @@ modules:
       - type: git
         url:  https://github.com/anthonycaccese/alekfull-nx-retropie.git
         commit: 67c8c8dee086bd06bcdc6dc34bb9bef1e1c11be7
-        
+
   - name: retrofix-revisited
     buildsystem: simple
     build-commands:
@@ -398,8 +398,8 @@ modules:
       - mv ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* /app/share/libretro/cores/
     sources:
       - type: archive
-        url: https://buildbot.libretro.com/stable/1.11.1/linux/x86_64/RetroArch_cores.7z
-        sha256: fa98c9a5b3aab2b4808ce14726be0393cad36bd033ffe4b8378b7d5e5dede448
+        url: https://buildbot.libretro.com/stable/1.12.0/linux/x86_64/RetroArch_cores.7z
+        sha256: b5c87aa3462c023fa4e1aa171d1bd4f5b0b5cf9d8e4f0a6b5606ff26b05e0059
 
   # PPSSPP - START
   # https://github.com/flathub/org.ppsspp.PPSSPP
@@ -753,7 +753,7 @@ modules:
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+)$
-    
+
   - name: libaio
     no-autogen: true
     make-install-args:
@@ -940,7 +940,7 @@ modules:
   #     - type: git
   #       url: https://github.com/PCSX2/pcsx2.git
   #       tag: v1.7.3229
-  #       commit: e3eae7fbe83aad3952e3ed6a8e56fc016b51a9c3  
+  #       commit: e3eae7fbe83aad3952e3ed6a8e56fc016b51a9c3
   #   # same as above
   #   #disable-submodules: true
 
@@ -1314,7 +1314,7 @@ modules:
       - type: git
         url: https://github.com/stenzek/duckstation.git
         commit: 3fb61865e505ba639609fbf16cb8bdf5c66e020c
-  
+
   # Duckstation - END
 
   # CEMU - START
@@ -1365,8 +1365,8 @@ modules:
 #    builddir: true
 #    config-opts:
 #      - -DENABLE_VCPKG=false
-#      - -DCMAKE_BUILD_TYPE=release 
-#      - -DCMAKE_C_COMPILER=/usr/bin/gcc 
+#      - -DCMAKE_BUILD_TYPE=release
+#      - -DCMAKE_C_COMPILER=/usr/bin/gcc
 #      - -DCMAKE_CXX_COMPILER=/usr/bin/g++
 #      - -G Ninja
 #      - -DCMAKE_MAKE_PROGRAM=/usr/bin/ninja
@@ -1408,15 +1408,13 @@ modules:
       - mkdir -p ${FLATPAK_DEST}/retrodeck/tools/
       - cp tools/* ${FLATPAK_DEST}/retrodeck/tools/
       - mv -f es-configs/tools-gamelist.xml ${FLATPAK_DEST}/retrodeck/
-        
+
       - cp retrodeck.sh /app/bin/retrodeck.sh
       - chmod +x /app/bin/retrodeck.sh
 
-      - cp global.sh /app/bin/global.sh
-      - chmod +x /app/bin/global.sh
+      - cp global.sh /app/libexec/global.sh
 
       - cp functions.sh /app/libexec/functions.sh
-      - chmod +x /app/libexec/functions.sh
 
       # Desktop entry
       - cp net.retrodeck.retrodeck.desktop /app/share/applications/net.retrodeck.retrodeck.desktop
