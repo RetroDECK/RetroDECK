@@ -69,11 +69,37 @@
 
 <releases>
 
-  <release version="0.6.0b" date="2022-10-12">
-    <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.0b</url>
+<release version="0.5.2b" date="2022-10-13">
+    <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.5.2b</url>
     <description>
        <ul>
-          <li>TBD</li>
+          <li>VERY IMPORTANT: We are moving your saves! This can take time on the first boot. If you miss some saves they are not gone. Please read more in the wiki.</li>
+          <li>Fixed Citra save migration folder</li>
+          <li>Fixed a bug where the videos were not played correctly in some cases</li>
+          <li>Fixed the Rewind tool</li>
+      </ul>
+    </description>
+</release>
+
+<release version="0.5.1b" date="2022-10-12">
+    <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.5.1b</url>
+    <description>
+       <ul>
+          <li>VERY IMPORTANT: We are moving your saves! This can take time on the first boot. If you miss some saves they are not gone. Please read more in the wiki.</li>
+          <li>Fixed a bug where Yuzu was not compiled correctly</li>
+          <li>Updated Yuzu</li>
+          <li>New Logo and Theme</li>
+          <li>Two new themes added: Alekfull-NX-Light and Retrofix-Revisited</li>
+          <li>Updated ES-DE to 1.2.6</li>
+          <li>Implemented the first steps towards a universal Emulator Configuration Tool in the TOOLS menu</li>
+          <li>Ability to log into your RetroAchievements account under the TOOLS menu for RetroArch only (supported standalones coming soon)</li>
+          <li>Updated RetroArch and all the standalone emulators</li>
+          <li>Added several free assets/fonts for RetroArch, PPSSPP, XEMU and BlueMSX</li>
+          <li>Added a new DEFAULT Emulator for the PS2: PCSX2-QT (the former PCSX2 default emulator is now called "PCSX2 (Legacy)")</li>
+          <li>Changed the DEFAULT Emulator for the PSX: Swanstation (Libretro) Core</li>
+          <li>Added a new Standalone Emulator for the PSX: Duckstation</li>
+          <li>Enhanced XEMU (XBOX) experience</li>
+          <li>And more, for the complete patch notes please check the wiki...</li>
       </ul>
     </description>
 </release>
@@ -116,8 +142,6 @@
         At the moment the emulator configs are reset during every update, this was made because every version they may bring new configurations, please back them up if you did some manual configs.
       </description>
   </release>
-
-    <release version="0.4.4b" date="2022-07-18">
 
   <release version="0.4.4b" date="2022-07-18">
       <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.4.4b</url>

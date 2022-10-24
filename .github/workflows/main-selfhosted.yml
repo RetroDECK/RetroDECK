@@ -17,18 +17,13 @@ jobs:
     runs-on: self-hosted
     steps:
 
-      - name: Get date for artifacts
-        id: date
-        run: echo "::set-output name=date::$(date +'%Y%m%d_%H%M%S')"
-
-      - name: Extract branch name
-        shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-        id: extract_branch
+      - name: Remove stuck mounts
+        run: sudo umount -f /home/administrator/actions-runner/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles/*
+        continue-on-error: true
 
       - name: Generate build ID
         id: generating_buildid
-        run: echo "##[set-output name=build-id;]$(echo "${{ steps.extract_branch.outputs.branch }}-${{ steps.date.outputs.date }}")"
+        run: echo "##[set-output name=build-id;]$(echo "$( git rev-parse --short HEAD )")"
       
       - uses: actions/checkout@v3
 
@@ -38,34 +33,42 @@ jobs:
           git submodule init
           git submodule update
           sudo apt install -y flatpak flatpak-builder p7zip-full
-          flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-          flatpak install --user -y org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08 io.qt.qtwebengine.BaseApp/x86_64/5.15-21.08 org.freedesktop.Sdk.Extension.llvm13
+          flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+          flatpak install --user -y --noninteractive \
+          org.kde.Sdk//6.3 \
+          org.kde.Platform//6.3 \
+          org.freedesktop.Platform.ffmpeg-full/x86_64/21.08 \
+          io.qt.qtwebengine.BaseApp/x86_64/6.3 \
+          org.freedesktop.Sdk.Extension.llvm13 \
+          org.freedesktop.Sdk.Extension.dotnet6/x86_64/21.08
 
-      # for main remember to change ${HOME} into ${GITHUB_WORKSPACE}
       - name: Build flatpak
         run: |
-          flatpak-builder --build-only --user --force-clean --repo=${GITHUB_WORKSPACE}/local ${GITHUB_WORKSPACE}/retrodeck-flatpak-main net.retrodeck.retrodeck.yml
+          git config --global protocol.allow always
+          flatpak-builder --user --force-clean --install-deps-from=flathub --install-deps-from=flathub-beta --repo=${GITHUB_WORKSPACE}/local ${GITHUB_WORKSPACE}/retrodeck-flatpak-main net.retrodeck.retrodeck.yml
+
+      - name: Create Artifact for flathub
+        run: | 
+          tar -czf ${GITHUB_WORKSPACE}/RetroDECK-Artifact.tar.gz -C ${GITHUB_WORKSPACE}/retrodeck-flatpak-main .
+          hash=($(sha256sum ${GITHUB_WORKSPACE}/RetroDECK-Artifact.tar.gz))
+          echo $hash > ${GITHUB_WORKSPACE}/RetroDECK-Artifact.sha
+          mv -f RetroDECK-Artifact.* ${{ secrets.ARTIFACT_REPO }}
+        continue-on-error: true
 
       - name: Create Bundle
         run: |
-          flatpak-builder --user --force-clean --repo=${GITHUB_WORKSPACE}/local ${GITHUB_WORKSPACE}/retrodeck-flatpak-main net.retrodeck.retrodeck.yml
           flatpak build-bundle ${GITHUB_WORKSPACE}/local RetroDECK.flatpak net.retrodeck.retrodeck
-
-      - name: Read version from version file
-        id: version
-        run: echo "##[set-output name=version;]$(cat $(find . -name version))"
 
       - name: Publish the flatpak in a new release
         uses: ncipollo/release-action@v1
         with:
-          #tag: "${{ steps.version.outputs.version }}"
           tag: "${{ steps.generating_buildid.outputs.build-id }}"
           body: |
             # Release Notes
 
             ( Write release notes here )
 
-          artifacts: "RetroDECK.flatpak"
+          artifacts: "RetroDECK.flatpak,RetroDECK-Artifact.tar.gz"
           allowUpdates: true
           prerelease: true
           draft: true
