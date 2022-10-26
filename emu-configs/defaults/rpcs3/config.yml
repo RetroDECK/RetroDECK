@@ -101,6 +101,7 @@ Video:
   Disable Vulkan Memory Allocator: false
   Use full RGB output range: true
   Strict Texture Flushing: false
+  Disable native float16 support: true
   Multithreaded RSX: false
   Relaxed ZCULL Sync: false
   Enable 3D: false
@@ -120,6 +121,7 @@ Video:
   DECR memory layout: false
   Allow Host GPU Labels: false
   Disable MSL Fast Math: false
+  Software VkSemaphore: false
   Vulkan:
     Adapter: llvmpipe (LLVM 14.0.6, 256 bits)
     Force FIFO present mode: false

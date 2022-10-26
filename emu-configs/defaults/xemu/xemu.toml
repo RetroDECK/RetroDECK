@@ -1,9 +1,29 @@
 [general]
 show_welcome = false
-last_viewed_menu_index = 6
+screenshot_dir = '/home/deck/retrodeck/screenshots'
+
+[input.bindings]
+port1 = '03000000de280000ff11000001000000'
+
+[display.quality]
+surface_scale = 2
 
 [display.window]
-last_height = 885
+fullscreen_on_startup = true
+startup_size = '1280x800'
+last_width = 1620
+last_height = 738
+
+[display.ui]
+fit = 'scale_16_9'
+scale = 2
+auto_scale = false
+
+[sys]
+mem_limit = '128'
 
 [sys.files]
-eeprom_path = '/home/deck/.var/app/app.xemu.xemu/data/xemu/xemu/eeprom.bin'
+bootrom_path = ''
+flashrom_path = ''
+eeprom_path = ''
+hdd_path = ''
