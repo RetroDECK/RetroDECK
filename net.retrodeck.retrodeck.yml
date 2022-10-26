@@ -86,7 +86,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/XargonWan/RetroDECK.git
-        branch: cooker-0.5.3b
+        branch: cooker
 
   - name: xmlstarlet
     config-opts:
@@ -1433,4 +1433,4 @@ modules:
     sources:
       - type: git
         url: https://github.com/XargonWan/RetroDECK.git
-        branch: cooker-0.5.3b
+        branch: cooker
