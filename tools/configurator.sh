@@ -355,253 +355,62 @@ configurator_options_dialog() {
 }
 
 configurator_move_dialog() {
-  choice=$(zenity --list --title="RetroDECK Configurator Utility - Move Directories" --cancel-label="Back" \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-  --column="Choice" --column="Action" \
-  "Move ROMs" "Move your ROMs directory to a new location" \
-  "Move BIOS" "Move your BIOS directory to a new location" \
-  "Move Downloaded Media" "Move your downloaded media directory to a new location" \
-  "Move Everything" "Move the entire RetroDECK user directory to a new location" )
-
-  case $choice in
-
-  "Move ROMs" )
-    if [[ -d $roms_folder ]]; then
-      configurator_generic_dialog "The current ROMs folder was found at $roms_folder.\n\nPlease select the location you would like to move it."
-      destination=$(configurator_destination_choice_dialog "ROMs" "Please choose a destination for the ROMs folder.")
-      case $destination in
-      "Back" )
-        configurator_move_dialog
-      ;;
-      "Internal Storage" )
-        if [[ $roms_folder == "$rdhome/roms" ]]; then
-          configurator_generic_dialog "The ROMs folder is already at that location, please pick a new one."
-          configurator_move_dialog
-        else
-          configurator_generic_dialog "Moving ROMs folder to $destination"
-          debug_dialog "move $roms_folder "$rdhome/roms""
-          roms_folder="$rdhome/roms"
-          debug_dialog "dir_prep $roms_folder "/var/config/emulationstation/ROMs""
-          debug_dialog "conf_write"
-          configurator_process_complete_dialog "moving the ROMs directory to internal storage"
-        fi
-      ;;
-      "SD Card" )
-        if [[ $roms_folder == "$sdcard/retrodeck/roms" ]]; then
-          configurator_generic_dialog "The ROMs folder is already at that location, please pick a new one."
-          configurator_move_dialog
-        else
-          configurator_generic_dialog "Moving ROMs folder to $destination"
-          debug_dialog "move $roms_folder "$sdcard/retrodeck/roms""
-          debug_dialog "ln -svf $roms_folder $rdhome/roms" # Link back to "default" location for standalone compatibilty
-          roms_folder="$sdcard/retrodeck/roms"
-          debug_dialog "dir_prep $roms_folder "/var/config/emulationstation/ROMs""
-          debug_dialog "conf_write"
-          configurator_process_complete_dialog "moving the ROMs directory to SD card"
-        fi
-      ;;
-      "Custom Location" )
-        configurator_generic_dialog "Please select the custom location to move the ROMs folder to."
-        destination=$(browse "ROMs directory destination")
-        if [[ $destination == $roms_folder ]]; then
-          configurator_generic_dialog "The ROMs folder is already at that location, please pick a new one."
-          configurator_move_dialog
-        else
-          configurator_generic_dialog "Moving ROMs folder from $roms_folder\n\nto $destination.\n\nClick OK to continue."
-          debug_dialog "move $roms_folder $destination"
-          debug_dialog "ln -svf $roms_folder $rdhome/roms" # Link back to "default" location for standalone compatibilty
-          roms_folder=$destination
-          debug_dialog "dir_prep $roms_folder "/var/config/emulationstation/ROMs""
-          debug_dialog "conf_write"
-          configurator_process_complete_dialog "moving the ROMs directory to $destination"
-        fi
-      ;;
-      esac
-    else
-      configurator_generic_dialog "The ROMs folder was not found at the configured location.\n\nThis may have happened if the folder was moved manually.\n\nPlease select the current location of the ROMs folder."
-      roms_folder=$(browse "ROMs directory location")
-      conf_write
-      configurator_generic_dialog "ROMs folder now configured at $roms_folder. Please start the moving process again."
+"Move Everything" )
+  if [[ -d $rdhome ]]; then
+    configurator_generic_dialog "This option will move the RetroDECK data folder (ROMs, saves, BIOS etc.) to a new location.\n\nPlease choose where to move the RetroDECK data folder."
+    destination=$(configurator_destination_choice_dialog "RetroDECK Data" "Please choose a destination for the RetroDECK data folder.")
+    case $destination in
+    "Back" )
       configurator_move_dialog
-    fi
-  ;;
-
-  "Move BIOS" )
-    if [[ -d $bios_folder ]]; then
-      configurator_generic_dialog "The current BIOS folder was found at $bios_folder.\n\nPlease select the location you would like to move it."
-      destination=$(configurator_destination_choice_dialog "BIOS" "Please choose a destination for the BIOS folder.")
-      case $destination in
-      "Back" )
+    ;;
+    "Internal Storage" )
+      if [[ ! -L /home/deck/retrodeck && -d /home/deck/retrodeck ]]; then
+        configurator_generic_dialog "The RetroDECK data folder is already at that location, please pick a new one."
         configurator_move_dialog
-      ;;
-      "Internal Storage" )
-        if [[ $bios_folder == "$rdhome/bios" ]]; then
-          configurator_generic_dialog "The BIOS folder is already at that location, please pick a new one."
-          configurator_move_dialog
-        else
-          configurator_generic_dialog "Moving BIOS folder to $destination"
-          move $bios_folder "$rdhome/bios"
-          bios_folder="$rdhome/bios"
-          debug_dialog "dir_prep $bios_folder "$rdhome/bios""
-          debug_dialog "conf_write"
-          configurator_process_complete_dialog "moving the BIOS directory to internal storage"
-        fi
-      ;;
-      "SD Card" )
-        if [[ $bios_folder == "$sdcard/retrodeck/bios" ]]; then
-          configurator_generic_dialog "The BIOS folder is already at that location, please pick a new one."
-          configurator_move_dialog
-        else
-          configurator_generic_dialog "Moving BIOS folder to $destination"
-          move $bios_folder "$sdcard/retrodeck/bios"
-          bios_folder="$sdcard/retrodeck/bios"
-          debug_dialog "dir_prep $bios_folder "$rdhome/bios""
-          debug_dialog "conf_write"
-          configurator_process_complete_dialog "moving the BIOS directory to SD card"
-        fi
-      ;;
-      "Custom Location" )
-        configurator_generic_dialog "Please select the custom location to move the BIOS folder to."
-        destination=$(browse "BIOS directory destination")
-        if [[ $destination == $bios_folder ]]; then
-          configurator_generic_dialog "The BIOS folder is already at that location, please pick a new one."
-          configurator_move_dialog
-        else
-          configurator_generic_dialog "Moving BIOS folder from $bios_folder\n\nto $destination.\n\nClick OK to continue."
-          move $bios_folder $destination
-          bios_folder=$destination
-          debug_dialog "dir_prep $bios_folder "$rdhome/bios""
-          debug_dialog "conf_write"
-          configurator_process_complete_dialog "moving the BIOS directory to $destination"
-        fi
-      ;;
-      esac
-    else
-      configurator_generic_dialog "The BIOS folder was not found at the configured location.\n\nThis may have happened if the folder was moved manually.\n\nPlease select the current location of the BIOS folder."
-      bios_folder=$(browse "BIOS directory location")
-      conf_write
-      configurator_generic_dialog "BIOS folder now configured at $bios_folder. Please start the moving process again."
-      configurator_move_dialog
-    fi
-  ;;
-
-  "Move Downloaded Media" )
-    if [[ -d $media_folder ]]; then
-      configurator_generic_dialog "The current media folder was found at $media_folder.\n\nPlease select the location you would like to move it."
-      destination=$(configurator_destination_choice_dialog "Media" "Please choose a destination for the Media folder.")
-      case $destination in
-      "Back" )
+      else
+        configurator_generic_dialog "Moving RetroDECK data folder to $destination"
+        debug_dialog "unlink /home/deck/retrodeck" # Remove symlink for $rdhome
+        debug_dialog "move $sdcard/retrodeck "/home/deck/""
+        debug_dialog "roms_folder="$rdhome/roms""
+        debug_dialog "dir_prep $roms_folder "/var/config/emulationstation/ROMs""
+        debug_dialog "conf_write"
+        configurator_process_complete_dialog "moving the RetroDECK data directory to internal storage"
+      fi
+    ;;
+    "SD Card" )
+      if [[ -L $rdhome && -d $sdcard/retrodeck ]]; then
+        configurator_generic_dialog "The RetroDECK data folder is already at that location, please pick a new one."
         configurator_move_dialog
-      ;;
-      "Internal Storage" )
-        if [[ $media_folder == "$rdhome/downloaded_media" ]]; then
-          configurator_generic_dialog "The media folder is already at that location, please pick a new one."
-          configurator_move_dialog
-        else
-          configurator_generic_dialog "Moving media folder to $destination"
-          debug_dialog "move $media_folder "$rdhome/downloaded_media""
-          media_folder="$rdhome/downloaded_media"
-          debug_dialog "dir_prep $media_folder "/var/config/emulationstation/.emulationstation/downloaded_media""
-          debug_dialog "conf_write"
-          configurator_process_complete_dialog "moving the media directory to internal storage"
-        fi
-      ;;
-      "SD Card" )
-        if [[ $media_folder == "$sdcard/retrodeck/downloaded_media" ]]; then
-          configurator_generic_dialog "The media folder is already at that location, please pick a new one."
-          configurator_move_dialog
-        else
-          configurator_generic_dialog "Moving media folder to $destination"
-          debug_dialog "move $media_folder "$sdcard/retrodeck/downloaded_media""
-          media_folder="$sdcard/retrodeck/downloaded_media"
-          debug_dialog "dir_prep $media_folder "/var/config/emulationstation/.emulationstation/downloaded_media""
-          debug_dialog "conf_write"
-          configurator_process_complete_dialog "moving the media directory to SD card"
-        fi
-      ;;
-      "Custom Location" )
-        configurator_generic_dialog "Please select the custom location to move the media folder to."
-        destination=$(browse "Media directory destination")
-        if [[ $destination == $media_folder ]]; then
-          configurator_generic_dialog "The media folder is already at that location, please pick a new one."
-          configurator_move_dialog
-        else
-          configurator_generic_dialog "Moving media folder from $media_folder\n\nto $destination.\n\nClick OK to continue."
-          debug_dialog "move $media_folder $destination"
-          media_folder=$destination
-          debug_dialog "dir_prep $media_folder "/var/config/emulationstation/.emulationstation/downloaded_media""
-          debug_dialog "conf_write"
-          configurator_process_complete_dialog "moving the media directory to $destination"
-        fi
-      ;;
-      esac
-    else
-      configurator_generic_dialog "The media folder was not found at the configured location.\n\nThis may have happened if the folder was moved manually.\n\nPlease select the current location of the media folder."
-      media_folder=$(browse "Media directory location")
-      conf_write
-      configurator_generic_dialog "Media folder now configured at $media_folder. Please start the moving process again."
-      configurator_move_dialog
-    fi
-  ;;
-
-  "Move Everything" )
-    if [[ -d $rdhome ]]; then
-      configurator_generic_dialog "This option will move the RetroDECK data folder (ROMs, saves, BIOS etc.) to a new location.\n\nPlease choose where to move the RetroDECK data folder."
-      destination=$(configurator_destination_choice_dialog "RetroDECK Data" "Please choose a destination for the RetroDECK data folder.")
-      case $destination in
-      "Back" )
-        configurator_move_dialog
-      ;;
-      "Internal Storage" )
-        if [[ ! -L /home/deck/retrodeck && -d /home/deck/retrodeck ]]; then
-          configurator_generic_dialog "The RetroDECK data folder is already at that location, please pick a new one."
-          configurator_move_dialog
+      else
+        if [[ ! -w $sdcard ]]; then
+          configurator_generic_dialog "The SD card was found but is not writable\nThis can happen with cards formatted on PC or for other reasons.\nPlease format the SD card through the Steam Deck's Game Mode and try the moving process again."
+          configurator_welcome_dialog
         else
           configurator_generic_dialog "Moving RetroDECK data folder to $destination"
-          debug_dialog "unlink /home/deck/retrodeck" # Remove symlink for $rdhome
-          debug_dialog "move $sdcard/retrodeck "/home/deck/""
-          debug_dialog "roms_folder="$rdhome/roms""
+          if [[ -L $rdhome/roms ]]; then # Check for ROMs symlink user may have created
+              debug dialog "unlink $rdhome/roms"
+          fi
+          debug_dialog "dir_prep "$sdcard/retrodeck" $rdhome"
+          debug_dialog "roms_folder="$sdcard/retrodeck/roms""
           debug_dialog "dir_prep $roms_folder "/var/config/emulationstation/ROMs""
           debug_dialog "conf_write"
-          configurator_process_complete_dialog "moving the RetroDECK data directory to internal storage"
+          configurator_process_complete_dialog "moving the RetroDECK data directory to SD card"
         fi
-      ;;
-      "SD Card" )
-        if [[ -L $rdhome && -d $sdcard/retrodeck ]]; then
-          configurator_generic_dialog "The RetroDECK data folder is already at that location, please pick a new one."
-          configurator_move_dialog
-        else
-          if [[ ! -w $sdcard ]]; then
-            configurator_generic_dialog "The SD card was found but is not writable\nThis can happen with cards formatted on PC or for other reasons.\nPlease format the SD card through the Steam Deck's Game Mode and try the moving process again."
-            configurator_welcome_dialog
-          else
-            configurator_generic_dialog "Moving RetroDECK data folder to $destination"
-            if [[ -L $rdhome/roms ]]; then # Check for ROMs symlink user may have created
-                debug dialog "unlink $rdhome/roms"
-            fi
-            debug_dialog "dir_prep "$sdcard/retrodeck" $rdhome"
-            debug_dialog "roms_folder="$sdcard/retrodeck/roms""
-            debug_dialog "dir_prep $roms_folder "/var/config/emulationstation/ROMs""
-            debug_dialog "conf_write"
-            configurator_process_complete_dialog "moving the RetroDECK data directory to SD card"
-          fi
-        fi
-      ;;
-      esac
-    else
-      configurator_generic_dialog "The RetroDECK data folder was not found at the expected location.\n\nThis may have happened if the folder was moved manually.\n\nPlease select the current location of the RetroDECK data folder."
-      debug_dialog "rdhome=$(browse "RetroDECK directory location")"
-      debug_dialog "conf_write"
-      configurator_generic_dialog "RetroDECK data folder now configured at $rdhome. Please start the moving process again."
+      fi
+    ;;
+
+    "Custom Location" )
+      configurator_generic_dialog "A custom location for the RetroDECK data folder is not currently supported.\nPlease choose another location."
       configurator_move_dialog
-    fi
-  ;;
-
-  "" ) # No selection made or Back button clicked
-      configurator_welcome_dialog
-  ;;
-
-  esac
+    ;;
+    esac
+  else
+    configurator_generic_dialog "The RetroDECK data folder was not found at the expected location.\n\nThis may have happened if the folder was moved manually.\n\nPlease select the current location of the RetroDECK data folder."
+    debug_dialog "rdhome=$(browse "RetroDECK directory location")"
+    debug_dialog "conf_write"
+    configurator_generic_dialog "RetroDECK data folder now configured at $rdhome. Please start the moving process again."
+    configurator_move_dialog
+  fi
 }
 
 configurator_welcome_dialog() {
