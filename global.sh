@@ -11,6 +11,36 @@ lockfile="/var/config/retrodeck/.lock"                     # where the lockfile 
 default_sd="/run/media/mmcblk0p1"                          # Steam Deck SD default path
 hard_version="$(cat '/app/retrodeck/version')"             # hardcoded version (in the readonly filesystem)
 
+# Config files for emulators with single config files
+
+citraconf="/var/config/citra-emu/qt-config.ini"
+melondsconf="/var/config/melonDS/melonDS.ini"
+rpcs3conf="/var/config/rpcs3/config.yml"
+yuzuconf="/var/config/yuzu/qt-config.ini"
+
+# ES-DE config files
+
+es_settings="/var/config/emulationstation/.emulationstation/es_settings.xml"
+
+# RetroArch config files
+
+raconf="/var/config/retroarch/retroarch.cfg"
+ra_core_conf="/var/config/retroarch/retroarch-core-options.cfg"
+
+# Dolphin config files
+
+dolphinconf="/var/config/dolphin-emu/Dolphin.ini"
+dolphingcpadconf="/var/config/dolphin-emu/GCPadNew.ini"
+dolphingfxconf="/var/config/dolphin-emu/GFX.ini"
+dolphinhkconf="/var/config/dolphin-emu/Hotkeys.ini"
+dolphinqtconf="/var/config/dolphin-emu/Qt.ini"
+
+# PCSX2 config files
+
+pcsx2conf="/var/config/PCSX2/inis/GS.ini"
+pcsx2uiconf="/var/config/PCSX2/inis/PCSX2_ui.ini"
+pcsx2vmconf="/var/config/PCSX2/inis/PCSX2_vm.ini"
+
 # If there is no config file I initalize the file with the the default values
 if [ ! -f "$rd_conf" ]
 then

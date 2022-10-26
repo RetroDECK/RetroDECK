@@ -43,7 +43,7 @@ verify_space() {
   # USAGE: verify_space $source_dir $dest_dir
   # Function returns "true" if there is enough space, "false" if there is not
 
-  source_size=$(du -sk /home/deck/retrodeck | awk '{print $1}')
+  source_size=$(du -sk $1 | awk '{print $1}')
   source_size=$((source_size+(source_size/10))) # Add 10% to source size for safety
   dest_avail=$(df -k --output=avail $2 | tail -1)
 
@@ -143,6 +143,59 @@ get_setting_name() {
   # Function for getting the setting name from a full setting line from a config file
   # USAGE: get_setting_name $setting_line $system (needed as different systems use different config file syntax)
 
+  case $2 in
+
+  "retrodeck" )
+    echo "$1" | grep -o -P ".*(?=\=)"
+    ;;
+
+  "retroarch" )
+    echo "$1" | grep -o -P ".*(?= \= )"
+    ;;
+
+  "dolphin" ) # Use quotes when passing setting_name, as this config file contains special characters
+    echo "$1" | grep -o -P ".*(?= \= )"
+    ;;
+
+  "duckstation" )
+    echo "$1" | grep -o -P ".*(?= \= )"
+    ;;
+
+  "pcsx2" )
+    echo "$1" | grep -o -P ".*(?= \= )"
+    ;;
+
+  "ppsspp" ) # Use quotes when passing setting_name, as this config file contains spaces
+    echo "$1" | grep -o -P ".*(?= \= )"
+    ;;
+
+  "rpcs3" ) # Use quotes when passing setting_name, as this config file contains special characters and spaces
+    echo "$1" | grep -o -P ".*(?=:)"
+    ;;
+
+  "yuzu" ) # Use quotes when passing setting_name, as this config file contains special characters
+    yuzu_setting=$(sed -e 's%\\%\\\\%g' <<< "$2") # Accomodate for backslashes in setting names
+    echo '$yuzu_setting' | grep -o -P ".*(?=\=)" | sed -e 's%\\\\%\\%g'
+    ;;
+
+  "citra" ) # Use quotes when passing setting_name, as this config file contains special characters
+    citra_setting=$(sed -e 's%\\%\\\\%g' <<< "$1") # Accomodate for backslashes in setting names
+    echo '$citra_setting' | grep -o -P ".*(?=\=)" | sed -e 's%\\\\%\\%g'
+    ;;
+
+  "melonds" )
+    echo "$1" | grep -o -P ".*(?=\=)"
+    ;;
+
+  "xemu" )
+    echo "$1" | grep -o -P ".*(?= \= )"
+    ;;
+
+  "emulationstation" )
+    echo '$1' | grep -o -P "(?<=name\=\").*(?=\" value)"
+    ;;
+
+esac
 }
 
 get_setting_value() {
@@ -205,11 +258,129 @@ esac
 }
 
 disable_setting() {
+  # This function will add a '#' to the beginning of a defined setting line, disabling it.
+  # USAGE: disable_setting $setting_file $setting_name $system
 
+  case $3 in
+
+  "retrodeck" )
+    sed -i "s%^$2=%#$2=%" $1
+    ;;
+
+  "retroarch" )
+    sed -i "s%^$2 = %#$2 = %" $1
+    ;;
+
+  "dolphin" )
+    sed -i "s%^$2 = %#$2 = %" $1
+    ;;
+
+  "duckstation" )
+    sed -i "s%^$2 = %#$2 = %" $1
+    ;;
+
+  "pcsx2" )
+    sed -i "s%^$2 = %#$2 = %" $1
+    ;;
+
+  "ppsspp" )
+    sed -i "s%^$2 = %#$2 = %" $1
+    ;;
+
+  "rpcs3" ) # This does not currently work for settings with a $ in them
+    sed -i "s%^$2: %#$2: %" $1
+    ;;
+
+  "yuzu" )
+    yuzu_setting=$(sed -e 's%\\%\\\\%g' <<< "$2") # Acommodate backslashes in setting name
+    sed -i "s%^$yuzu_setting=%#$yuzu_setting=%" $1
+    ;;
+
+  "citra" )
+    citra_setting=$(sed -e 's%\\%\\\\%g' <<< "$2") # Acommodate backslashes in setting name
+    sed -i "s%^$citra_setting=%#$citra_setting=%" $1
+    ;;
+
+  "melonds" )
+    sed -i "s%^$2=%#$2=%" $1
+    ;;
+
+  "xemu" )
+    sed -i "s%^$2 = %#$2 = %" $1
+    ;;
+
+esac
 }
 
 enable_setting() {
+  # This function will remove a '#' to the beginning of a defined setting line, enabling it.
+  # USAGE: enable_setting $setting_file $setting_name $system
 
+  case $3 in
+
+  "retrodeck" )
+    sed -i "s%^#$2=%$2=%" $1
+    ;;
+
+  "retroarch" )
+    sed -i "s%^#$2 = %$2 = %" $1
+    ;;
+
+  "dolphin" )
+    sed -i "s%^#$2 = %$2 = %" $1
+    ;;
+
+  "duckstation" )
+    sed -i "s%^#$2 = %$2 = %" $1
+    ;;
+
+  "pcsx2" )
+    sed -i "s%^#$2 = %$2 = %" $1
+    ;;
+
+  "ppsspp" )
+    sed -i "s%^#$2 = %$2 = %" $1
+    ;;
+
+  "rpcs3" ) # This does not currently work for settings with a $ in them
+    sed -i "s%^#$2: %$2: %" $1
+    ;;
+
+  "yuzu" )
+    yuzu_setting=$(sed -e 's%\\%\\\\%g' <<< "$2") # Acommodate backslashes in setting name
+    sed -i "s%^#$yuzu_setting=%$yuzu_setting=%" $1
+    ;;
+
+  "citra" )
+    citra_setting=$(sed -e 's%\\%\\\\%g' <<< "$2") # Acommodate backslashes in setting name
+    sed -i "s%^#$citra_setting=%$citra_setting=%" $1
+    ;;
+
+  "melonds" )
+    sed -i "s%^#$2=%$2=%" $1
+    ;;
+
+  "xemu" )
+    sed -i "s%^#$2 = %$2 = %" $1
+    ;;
+
+esac
+}
+
+disable_file() {
+  # This function adds the suffix ".disabled" to the end of a file to prevent it from being used entirely.
+  # USAGE: disable_file $file_name
+  # NOTE: $filename can be a defined variable from global.sh or must have the full path to the file
+
+  mv $(realpath $1) $(realpath $1).disabled
+}
+
+enable_file() {
+  # This function removes the suffix ".disabled" to the end of a file to allow it to be used.
+  # USAGE: enable_file $file_name
+  # NOTE: $filename can be a defined variable from global.sh or must have the full path to the file and should not have ".disabled" as a suffix
+
+  mv $(realpath $1.disabled) $(realpath $(echo $1 | sed -e 's/\.disabled//'))
 }
 
 conf_write() {
