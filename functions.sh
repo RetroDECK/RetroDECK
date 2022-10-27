@@ -175,7 +175,7 @@ get_setting_name() {
 
   "yuzu" ) # Use quotes when passing setting_name, as this config file contains special characters
     yuzu_setting_name=$(sed -e 's%\\%\\\\%g' <<< "$1") # Accomodate for backslashes in setting names
-    echo '$yuzu_setting_name' | grep -o -P ".*(?=\=)" | sed -e 's%\\\\%\\%g'
+    echo "$yuzu_setting_name" | grep -o -P ".*(?=\=)" | sed -e 's%\\\\%\\%g'
     ;;
 
   "citra" ) # Use quotes when passing setting_name, as this config file contains special characters
