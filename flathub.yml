@@ -12,7 +12,7 @@ command: retrodeck.sh
 
 finish-args:
   - --socket=x11
-  - --socket=wayland
+  #- --socket=wayland
   - --socket=pulseaudio
   - --share=ipc
   - --share=network
@@ -32,7 +32,7 @@ finish-args:
   - --allow=bluetooth
   #- --env=QT_QPA_PLATFORM=xcb #not sure if this will break something
   # rpcs3
-  - --socket=fallback-x11
+  #- --socket=fallback-x11
 
 modules:
   - name: retrodeck
