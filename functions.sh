@@ -141,7 +141,7 @@ set_setting_value() {
 
 get_setting_name() {
   # Function for getting the setting name from a full setting line from a config file
-  # USAGE: get_setting_name $setting_line $system (needed as different systems use different config file syntax)
+  # USAGE: get_setting_name $current_setting_line $current_system (needed as different systems use different config file syntax)
 
   case $2 in
 
@@ -174,13 +174,13 @@ get_setting_name() {
     ;;
 
   "yuzu" ) # Use quotes when passing setting_name, as this config file contains special characters
-    yuzu_setting=$(sed -e 's%\\%\\\\%g' <<< "$2") # Accomodate for backslashes in setting names
-    echo '$yuzu_setting' | grep -o -P ".*(?=\=)" | sed -e 's%\\\\%\\%g'
+    yuzu_setting_name=$(sed -e 's%\\%\\\\%g' <<< "$1") # Accomodate for backslashes in setting names
+    echo '$yuzu_setting_name' | grep -o -P ".*(?=\=)" | sed -e 's%\\\\%\\%g'
     ;;
 
   "citra" ) # Use quotes when passing setting_name, as this config file contains special characters
-    citra_setting=$(sed -e 's%\\%\\\\%g' <<< "$1") # Accomodate for backslashes in setting names
-    echo '$citra_setting' | grep -o -P ".*(?=\=)" | sed -e 's%\\\\%\\%g'
+    citra_setting_name=$(sed -e 's%\\%\\\\%g' <<< "$1") # Accomodate for backslashes in setting names
+    echo "$citra_setting_name" | grep -o -P ".*(?=\=)" | sed -e 's%\\\\%\\%g'
     ;;
 
   "melonds" )
@@ -205,53 +205,53 @@ get_setting_value() {
 case $3 in
 
   "retrodeck" )
-    echo $(grep "$2" $1 | grep -o -P "(?<=$2=).*")
+    echo $(grep -o -P "(?<=^$2=).*" $1)
     ;;
 
   "retroarch" )
-    echo $(grep "$2" $1 | grep -o -P "(?<=$2 = \").*(?=\")")
+    echo $(grep -o -P "(?<=^$2 = \").*(?=\")" $1)
     ;;
 
   "dolphin" ) # Use quotes when passing setting_name, as this config file contains special characters
-    echo $(grep "$2" $1 | grep -o -P "(?<=$2 = ).*")
+    echo $(grep -o -P "(?<=^$2 = ).*" $1)
     ;;
 
   "duckstation" )
-    echo $(grep "$2" $1 | grep -o -P "(?<=$2 = ).*")
+    echo $(grep -o -P "(?<=^$2 = ).*" $1)
     ;;
 
   "pcsx2" )
-    echo $(grep "$2" $1 | grep -o -P "(?<=$2 = ).*")
+    echo $(grep -o -P "(?<=^$2 = ).*" $1)
     ;;
 
   "ppsspp" ) # Use quotes when passing setting_name, as this config file contains spaces
-    echo $(grep "$2" $1 | grep -o -P "(?<=$2 = ).*")
+    echo $(grep -o -P "(?<=^$2 = ).*" $1)
     ;;
 
   "rpcs3" ) # Use quotes when passing setting_name, as this config file contains special characters and spaces
-    echo $(grep "$2" $1 | grep -o -P "(?<=$2: ).*")
+    echo $(grep -o -P "(?<=^$2: ).*" $1)
     ;;
 
   "yuzu" ) # Use quotes when passing setting_name, as this config file contains special characters
-    yuzu_setting=$(sed -e 's%\\%\\\\%g' <<< "$2") # Accomodate for backslashes in setting names
-    echo $(grep "$yuzu_setting" $1 | grep -o -P "(?<=$yuzu_setting=).*")
+    yuzu_setting_value=$(sed -e 's%\\%\\\\%g' <<< "$2") # Accomodate for backslashes in setting names
+    echo $(grep -o -P "(?<=^$yuzu_setting_value=).*" $1)
     ;;
 
   "citra" ) # Use quotes when passing setting_name, as this config file contains special characters
-    citra_setting=$(sed -e 's%\\%\\\\%g' <<< "$2") # Accomodate for backslashes in setting names
-    echo $(grep "$citra_setting" $1 | grep -o -P "(?<=$citra_setting=).*")
+    citra_setting_value=$(sed -e 's%\\%\\\\%g' <<< "$2") # Accomodate for backslashes in setting names
+    echo $(grep -o -P "(?<=^$citra_setting_value=).*" $1)
     ;;
 
   "melonds" )
-    echo $(grep "$2" $1 | grep -o -P "(?<=$2=).*")
+    echo $(grep -o -P "(?<=^$2=).*" $1)
     ;;
 
   "xemu" )
-    echo $(grep "$2" $1 | grep -o -P "(?<=$2 = ).*")
+    echo $(grep -o -P "(?<=^$2 = ).*" $1)
     ;;
 
   "emulationstation" )
-    echo $(grep "$2" $1 | grep -o -P "(?<=$2\" value=\").*(?=\")")
+    echo $(grep -o -P "(?<=^$2\" value=\").*(?=\")" $1)
     ;;
 
 esac
@@ -535,6 +535,7 @@ pcsx2_init() {
   #dir_prep "$rdhome/screenshots" "/var/config/PCSX2/snaps"
   #dir_prep "$rdhome/.logs" "/var/config/PCSX2/logs"
   #dir_prep "$rdhome/bios" "$rdhome/bios/pcsx2"
+}
 
 melonds_init() {
   echo "----------------------"
