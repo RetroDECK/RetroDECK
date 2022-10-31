@@ -38,7 +38,8 @@ jobs:
           #sync -rav --progress --exclude={'res/screenshots/','shared-modules/','rd-submodules/retroarch','.git/','docs','retrodeck-flatpak/','retrodeck-flatpak-cooker/','.flatpak-builder/'} ~/RetroDECK/ ~/flathub/
 
           cd $gits_folder/flathub
-          git checkout master
+
+          git checkout -b $relname
 
           git rm -rf *
           git clean -fxd # restroing git index

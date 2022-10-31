@@ -76,7 +76,7 @@ modules:
       - |
         git checkout ${GITHUB_REF_NAME}
         mkdir -p ${FLATPAK_DEST}/retrodeck/
-        VERSION="cooker-0.5.3b"
+        VERSION="cooker-0.5.4b"
         if [[ $VERSION == *"cooker"* ]];
         then
           VERSION="cooker-"$(git rev-parse --short HEAD)
@@ -289,7 +289,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/RetroArch.git
-        commit: 389ef31a8f4a505f255e9bfebe882750d22ab490
+        commit: 840c4481ab7cb0720025c30ea609d16e60927a02
       - type: file
         path: rd-submodules/retroarch/retroarch.cfg
     post-install:
@@ -322,7 +322,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/RetroArch.git
-        commit: 389ef31a8f4a505f255e9bfebe882750d22ab490
+        commit: 840c4481ab7cb0720025c30ea609d16e60927a02
   - name: retroarch-filers-audio
     subdir: libretro-common/audio/dsp_filters
     make-install-args:
@@ -330,7 +330,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/RetroArch.git
-        commit: 389ef31a8f4a505f255e9bfebe882750d22ab490
+        commit: 840c4481ab7cb0720025c30ea609d16e60927a02
   - name: retroarch-assets
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
@@ -344,21 +344,21 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/libretro-database.git
-        commit: 772011a54392aab6be1302bf1bd8aa1cc0c0c6c2
+        commit: bc488c79cdc36ea1076a2941f2e6e32365d5f53e
   - name: libretro-core-info
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
         url: https://github.com/libretro/libretro-core-info.git
-        commit: 90eff5d4e72db1b5929af7210c9b665c33034536
+        commit: 7744a25a0e418703e24a4bd7a2208d5a12ae8a7a
   - name: retroarch-joypad-autoconfig
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
         url: https://github.com/libretro/retroarch-joypad-autoconfig.git
-        commit: a3b5067b8954f15e8e87eeed71a4262f0ea7fd1c
+        commit: 948fff0a12e487266eebef14774f17b7b881a728
   - name: common-shaders
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
@@ -372,7 +372,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/slang-shaders.git
-        commit: f8f99ee220edbf2c5df2714a73d46faea43e62e2
+        commit: 9e89aafe0f6a63645445ca8302b88e4060274c72
   - name: glsl-shaders
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
@@ -412,79 +412,99 @@ modules:
       - -DUSE_SYSTEM_ZSTD=ON
 
       - -DUSE_WAYLAND_WSI=ON
-      - -DUSING_X11_VULKAN=ON
+      #- -DUSING_X11_VULKAN=ON
       - -DUSING_QT_UI=OFF
 
       - -DBUILD_TESTING=OFF
       - -DOpenGL_GL_PREFERENCE=GLVND
-    build-options:
-      - -DX86_64=ON
+    #build-options:
+      #- -DX86_64=ON
+
+    cleanup:
+      - /share/ppsspp/assets/lang/README.md
     sources:
       - type: git
-        url: https://github.com/hrydgard/ppsspp.git
-        tag: v1.13.2
-        commit: 9fe6338e3bf397f8a009a51a282c139dfa180eb6
+        url: &ppsspp-url https://github.com/hrydgard/ppsspp.git
+        tag: &ppsspp-tag v1.13.2
+        commit: &ppsspp-commit 9fe6338e3bf397f8a009a51a282c139dfa180eb6
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+)$
+          is-main-source: true
+
+  - name: ppsspp-localization
+    buildsystem: simple
+    build-commands:
+      - |
+        for LANG_FILE in assets/lang/*.ini; do
+          LANG_FILE_NAME="$(basename "$LANG_FILE")"
+          LANG_PREFIX="${LANG_FILE_NAME:0:2}"
+          LANG_DEST="$FLATPAK_DEST/share/locale/$LANG_PREFIX/ppsspp/$LANG_FILE_NAME";
+          ln -fsr "$LANG_DEST" "$FLATPAK_DEST/share/ppsspp/$LANG_FILE"
+          install -Dm644 "$LANG_FILE" "$LANG_DEST"
+        done
+    sources:
+      - type: shell
+        commands:
+          - cp -a $FLATPAK_DEST/share/ppsspp/assets .
 
   # PPSSPP Flathub Workaround - START
   # This workaround disables the PPSSPP libraries (disable-submodules: true) and install them separately
   # This is only to make it buildable by the flathub builder as normaly it seems not to be needed
-        disable-submodules: true
-      - type: git
-        dest: SDL/macOS
-        commit: f19a1d54b8a5af6cc378ea307e0ec676922eb4cc
-        url: https://github.com/hrydgard/ppsspp-mac-sdl
-      - type: git
-        dest: assets/debugger
-        commit: 36ad6b19b22de2075a01a4f0c765e3ef514dc38f
-        url: https://github.com/unknownbrackets/ppsspp-debugger.git
-      - type: git
-        dest: dx9sdk
-        commit: 7751cf73f5c06f1be21f5f31c3e2d9a7bacd3a93
-        url: https://github.com/hrydgard/minidx9.git
-      - type: git
-        dest: ext/SPIRV-Cross
-        commit: 9acb9ec31f5a8ef80ea6b994bb77be787b08d3d1
-        url: https://github.com/KhronosGroup/SPIRV-Cross.git
-      - type: git
-        dest: ext/armips
-        commit: 7885552b208493a6a0f21663770c446c3ba65576
-        url: https://github.com/Kingcom/armips.git
-      - type: git
-        dest: ext/discord-rpc
-        commit: 963aa9f3e5ce81a4682c6ca3d136cddda614db33
-        url: https://github.com/discordapp/discord-rpc.git
-      - type: git
-        dest: ext/glslang
-        commit: dc11adde23c455a24e13dd54de9b4ede8bdd7db8
-        url: https://github.com/hrydgard/glslang.git
-      - type: git
-        dest: ext/miniupnp
-        commit: 3a87be33e797ba947b2b2a5f8d087f6c3ff4d93e
-        url: https://github.com/hrydgard/miniupnp.git
-      - type: git
-        dest: ext/native/tools/prebuilt
-        commit: cbea79dc8fef4d9210e2bac7e7b9b5ff3388197a
-        url: https://github.com/hrydgard/ppsspp-freetype.git
-      - type: git
-        dest: ext/rapidjson
-        commit: 73063f5002612c6bf64fe24f851cd5cc0d83eef9
-        disable-submodules: true
-        url: https://github.com/Tencent/rapidjson.git
-      - type: git
-        dest: ext/zstd
-        commit: a488ba114ec17ea1054b9057c26a046fc122b3b6
-        url: https://github.com/facebook/zstd.git
-      - type: git
-        dest: ffmpeg
-        commit: 3ad7ddb9eb2af898dce8c4b5e9a28b77b3f7ddd7
-        url: https://github.com/hrydgard/ppsspp-ffmpeg.git
-      - type: git
-        dest: pspautotests
-        commit: 682a4303aba63a50c91ae0fa6928c9dac8ca9b92
-        url: https://github.com/hrydgard/pspautotests.git
+      #   disable-submodules: true
+      # - type: git
+      #   dest: SDL/macOS
+      #   commit: f19a1d54b8a5af6cc378ea307e0ec676922eb4cc
+      #   url: https://github.com/hrydgard/ppsspp-mac-sdl
+      # - type: git
+      #   dest: assets/debugger
+      #   commit: 36ad6b19b22de2075a01a4f0c765e3ef514dc38f
+      #   url: https://github.com/unknownbrackets/ppsspp-debugger.git
+      # - type: git
+      #   dest: dx9sdk
+      #   commit: 7751cf73f5c06f1be21f5f31c3e2d9a7bacd3a93
+      #   url: https://github.com/hrydgard/minidx9.git
+      # - type: git
+      #   dest: ext/SPIRV-Cross
+      #   commit: 9acb9ec31f5a8ef80ea6b994bb77be787b08d3d1
+      #   url: https://github.com/KhronosGroup/SPIRV-Cross.git
+      # - type: git
+      #   dest: ext/armips
+      #   commit: 7885552b208493a6a0f21663770c446c3ba65576
+      #   url: https://github.com/Kingcom/armips.git
+      # - type: git
+      #   dest: ext/discord-rpc
+      #   commit: 963aa9f3e5ce81a4682c6ca3d136cddda614db33
+      #   url: https://github.com/discordapp/discord-rpc.git
+      # - type: git
+      #   dest: ext/glslang
+      #   commit: dc11adde23c455a24e13dd54de9b4ede8bdd7db8
+      #   url: https://github.com/hrydgard/glslang.git
+      # - type: git
+      #   dest: ext/miniupnp
+      #   commit: 3a87be33e797ba947b2b2a5f8d087f6c3ff4d93e
+      #   url: https://github.com/hrydgard/miniupnp.git
+      # - type: git
+      #   dest: ext/native/tools/prebuilt
+      #   commit: cbea79dc8fef4d9210e2bac7e7b9b5ff3388197a
+      #   url: https://github.com/hrydgard/ppsspp-freetype.git
+      # - type: git
+      #   dest: ext/rapidjson
+      #   commit: 73063f5002612c6bf64fe24f851cd5cc0d83eef9
+      #   disable-submodules: true
+      #   url: https://github.com/Tencent/rapidjson.git
+      # - type: git
+      #   dest: ext/zstd
+      #   commit: a488ba114ec17ea1054b9057c26a046fc122b3b6
+      #   url: https://github.com/facebook/zstd.git
+      # - type: git
+      #   dest: ffmpeg
+      #   commit: 3ad7ddb9eb2af898dce8c4b5e9a28b77b3f7ddd7
+      #   url: https://github.com/hrydgard/ppsspp-ffmpeg.git
+      # - type: git
+      #   dest: pspautotests
+      #   commit: 682a4303aba63a50c91ae0fa6928c9dac8ca9b92
+      #   url: https://github.com/hrydgard/pspautotests.git
   # PPSSPP Flathub Workaround - END
   # PPSSPP - END
 
@@ -540,8 +560,8 @@ modules:
       - -DCMAKE_BUILD_TYPE=Release
     sources:
       - type: archive
-        url: https://github.com/KhronosGroup/glslang/archive/11.11.0.tar.gz
-        sha256: 26c216c3062512c018cbdd752224b8dad703b7e5bb90bf338ba2dbb5d4f11438
+        url: https://github.com/KhronosGroup/glslang/archive/11.12.0.tar.gz
+        sha256: 7795a97450fecd9779f3d821858fbc2d1a3bf1dd602617d95b685ccbcabc302f
         x-checker-data:
           type: anitya
           stable-only: true
@@ -556,8 +576,8 @@ modules:
     builddir: true
     sources:
       - type: archive
-        url: https://github.com/catchorg/Catch2/archive/v2.13.9.tar.gz
-        sha256: 06dbc7620e3b96c2b69d57bf337028bf245a211b3cddb843835bfe258f427a52
+        url: https://github.com/catchorg/Catch2/archive/v2.13.10.tar.gz
+        sha256: d54a712b7b1d7708bc7a819a8e6e47b2fde9536f487b89ccbca295072a7d9943
         x-checker-data:
           type: anitya
           stable-only: true
@@ -620,8 +640,8 @@ modules:
       - -DENABLE_COMPATIBILITY_LIST_DOWNLOAD=ON
       - -DYUZU_USE_QT_WEB_ENGINE=ON
       - -DYUZU_USE_BUNDLED_FFMPEG=ON
-      - -DDISPLAY_VERSION=1195
-      - -DBUILD_TAG=mainline-1195
+      - -DDISPLAY_VERSION=1218
+      - -DBUILD_TAG=mainline-1218
       - -DBUILD_REPOSITORY=yuzu-emu/yuzu-mainline
       #- -DCMAKE_PREFIX_PATH=/run/build/yuzu/_flatpak_build/externals/qt5_5_15_2
     build-options:
@@ -639,8 +659,8 @@ modules:
       #- disable-submodules: true # FLATHUB WORKAROUND
       - type: git
         url: https://github.com/yuzu-emu/yuzu-mainline.git
-        tag: mainline-0-1195
-        commit: 04db31a25a51f2daa296776eb4e58496ee74d49e
+        tag: mainline-0-1218
+        commit: 3fde85883904f43f2ae8aa0701250b4ea0d1c2a6
         disable-shallow-clone: true
         x-checker-data:
           type: git
@@ -734,7 +754,7 @@ modules:
 
   # CITRA - END
 
-  # PCSX2 - START
+  # PCSX2 (Deprecated)- START
   # https://github.com/flathub/net.pcsx2.PCSX2
 
   - name: wxWidgets
@@ -951,7 +971,6 @@ modules:
   - name: pcsx2-qt-appimage
     buildsystem: simple
     build-commands:
-      - ls -la #debug
       - chmod +x pcsx2*.AppImage
       - ./pcsx2*.AppImage --appimage-extract
       - mkdir -p "${FLATPAK_DEST}/pcsx2-qt"
@@ -959,8 +978,8 @@ modules:
       - ln -s "${FLATPAK_DEST}/pcsx2-qt/usr/bin/pcsx2-qt" "${FLATPAK_DEST}/bin/pcsx2-qt"
     sources:
       - type: file
-        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.3478/pcsx2-v1.7.3478-linux-AppImage-64bit-AVX2-Qt.AppImage
-        sha256: c36e22cb49656d1997255bfe9491217349c05f5179ca3b47475f7d2280588014
+        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.3501/pcsx2-v1.7.3501-linux-AppImage-64bit-AVX2-Qt.AppImage
+        sha256: 104e8dae653aeb1fa7c75a4cc0fd07038715e75c1f7d40d111428ae83279356c
 
   # PCSX2 - END
 
@@ -986,8 +1005,8 @@ modules:
       - --with-dbussessionbusdir=/app/usr/lib/system-services
     sources:
       - type: archive
-        url: https://www.kernel.org/pub/linux/bluetooth/bluez-5.64.tar.xz
-        sha256: ae437e65b6b3070c198bc5b0109fe9cdeb9eaa387380e2072f9de65fe8a1de34
+        url: https://www.kernel.org/pub/linux/bluetooth/bluez-5.65.tar.xz
+        sha256: 2565a4d48354b576e6ad92e25b54ed66808296581c8abb80587051f9993d96d4
         x-checker-data:
           type: anitya
           project-id: 10029
@@ -1035,7 +1054,14 @@ modules:
     sources:
       - type: git
         url: https://github.com/dolphin-emu/dolphin.git
-        commit: 8335ec70e5fe253eb21509408ca6b5736ed57dfc
+        commit: 48c9c224cf9f82f0f9f2690b7cc6283d7448480c
+        x-checker-data:
+          type: json
+          url: https://dolphin-emu.org/update/latest/beta
+          commit-query: .hash
+          version-query: .shortrev
+          timestamp-query: .date
+          is-main-source: true
       # detects whether dolphin is running in a flatpak sandbox
       # and makes it use xdg directories if it is.
       # prevents dolphin from attempting to write conf files
@@ -1048,17 +1074,19 @@ modules:
         path: rd-submodules/dolphin/nodirtyversion.patch
       - type: script
         commands:
-          - for i in {0..9}; do
-          - test -S $XDG_RUNTIME_DIR/discord-ipc-$i || ln -sf {app/com.discordapp.Discord,$XDG_RUNTIME_DIR}/discord-ipc-$i;
-          - done
-          # use gtk3 filechooser on steamdeck
-          - bv=`cat /sys/devices/virtual/dmi/id/board_vendor`
-          - bv=$bv`cat /sys/devices/virtual/dmi/id/board_name`
-          - if [[ $bv == "ValveJupiter" ]]; then
-          - QT_QPA_PLATFORMTHEME=gtk3 dolphin-emu "$@"
-          - else
-          - dolphin-emu "$@"
-          - fi
+          - |
+            for i in {0..9}; do
+              test -S $XDG_RUNTIME_DIR/discord-ipc-$i ||
+                ln -sf {app/com.discordapp.Discord,$XDG_RUNTIME_DIR}/discord-ipc-$i;
+            done
+            # use gtk3 filechooser on steamdeck
+            bv=`cat /sys/devices/virtual/dmi/id/board_vendor`
+            bv=$bv`cat /sys/devices/virtual/dmi/id/board_name`
+            if [[ $bv == "ValveJupiter" ]]; then
+              QT_QPA_PLATFORMTHEME=gtk3 dolphin-emu "$@"
+            else
+              dolphin-emu "$@"
+            fi
         dest-filename: dolphin-emu-wrapper
 
   # Dolphin - END
@@ -1117,8 +1145,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/mborgerson/xemu.git
-        tag: v0.7.70
-        commit: 080022833db0896b8af4482e726200acd51507a0
+        tag: v0.7.71
+        commit: 22db3304a454b2d289a9d5ea488fa3c3dec836f4
         x-checker-data:
           type: json
           url: https://api.github.com/repos/mborgerson/xemu/releases/latest
@@ -1160,62 +1188,15 @@ modules:
   #- shared-modules/glu/glu-9.json
   - shared-modules/glew/glew.json
 
-  - name: rpcs3-llvm
-    buildsystem: cmake-ninja
-    builddir: true
-    build-options:
-      cflags: &optflags -O2 -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong
-        -grecord-gcc-switches -fasynchronous-unwind-tables -fstack-clash-protection
-        -fcf-protection -fno-omit-frame-pointer
-      cflags-override: true
-      cxxflags: -O2 -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong
-        -grecord-gcc-switches -fasynchronous-unwind-tables -fstack-clash-protection
-        -fcf-protection -fno-omit-frame-pointer -msse -msse2 -mcx16
-      cxxflags-override: true
-      env:
-        AR: llvm-ar
-        CC: clang
-        CXX: clang++
-        RANLIB: llvm-ranlib
-      ldflags: -fuse-ld=lld
-      prepend-ld-library-path: /usr/lib/sdk/llvm14/lib
-      prepend-path: /usr/lib/sdk/llvm14/bin
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-      - -DBUILD_SHARED_LIBS=OFF
-      - -DLLVM_CCACHE_BUILD=ON
-      - -DLLVM_TARGETS_TO_BUILD='X86'
-      - -DLLVM_BUILD_RUNTIME=OFF
-      - -DLLVM_BUILD_TOOLS=OFF
-      - -DLLVM_INCLUDE_DOCS=OFF
-      - -DLLVM_INCLUDE_EXAMPLES=OFF
-      - -DLLVM_INCLUDE_TESTS=OFF
-      - -DLLVM_INCLUDE_TOOLS=OFF
-      - -DLLVM_INCLUDE_UTILS=OFF
-      - -DLLVM_USE_INTEL_JITEVENTS=ON
-      - -DLLVM_USE_PERF=ON
-      - -DLLVM_ENABLE_Z3_SOLVER=OFF
-      - -DCMAKE_CXX_STANDARD=17
-      - -DITTAPI_SOURCE_DIR=/run/build/rpcs3-llvm/ittapi
-      - -Wno-dev
-    cleanup:
-      - '*'
-    sources:
-      - type: git
-        url: https://github.com/RPCS3/llvm-mirror.git
-        commit: c725f494c91611018f5d830eca22c0a1662c0f31
-      - type: git
-        url: https://github.com/intel/ittapi.git
-        dest: ittapi/ittapi
-        disable-shallow-clone: true
-
   - name: rpcs3
     buildsystem: cmake-ninja
     builddir: true
     build-options:
       append-ld-library-path: /usr/lib/sdk/llvm14/lib
       append-path: /usr/lib/sdk/llvm14/bin
-      cflags: *optflags
+      cflags: &optflags -O2 -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong
+        -grecord-gcc-switches -fasynchronous-unwind-tables -fstack-clash-protection
+        -fcf-protection -fno-omit-frame-pointer
       cflags-override: true
       cxxflags: *optflags
       cxxflags-override: true
@@ -1227,13 +1208,14 @@ modules:
       ldflags: -fuse-ld=lld
     config-opts:
       - -DCMAKE_BUILD_TYPE=RelWithDebInfo
-      - -DBUILD_LLVM_SUBMODULE=OFF
+      - -DBUILD_LLVM_SUBMODULE=ON
       - -DUSE_NATIVE_INSTRUCTIONS=OFF
       - -DUSE_PRECOMPILED_HEADERS=OFF
       - -DUSE_SYSTEM_CURL=ON
       - -DUSE_SYSTEM_FFMPEG=ON
       - -DUSE_SYSTEM_LIBPNG=ON
       - -DUSE_SYSTEM_ZLIB=ON
+      - -DITTAPI_SOURCE_DIR=/run/build/rpcs3/ittapi
       - -Wno-dev
     post-install:
       - |
@@ -1244,7 +1226,14 @@ modules:
     sources:
       - type: git
         url: https://github.com/RPCS3/rpcs3.git
-        commit: 9d9e18f6147760f2502401ea0b0d4b3524f051c8
+        branch: master
+        commit: 8d5a9dc722de8e8e881adf8c7f16e76226a1dad8
+      - type: git
+        url: https://github.com/intel/ittapi.git
+        branch: master
+        commit: 2428ed97aa977c66b30940081e7d3e9b1a3c7402
+        dest: ittapi/ittapi
+        disable-shallow-clone: true
 
   # RPCS3 - END
 
@@ -1296,7 +1285,7 @@ modules:
     no-make-install: true
     builddir: true
     config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
       - -DUSE_EGL=ON
       - -DUSE_SDL2=ON
       - -DUSE_WAYLAND=ON
@@ -1304,16 +1293,24 @@ modules:
       - -DUSE_DRMKMS=ON
       - -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON
     post-install:
-      - install -m 755 -t /app/bin/ bin/duckstation-nogui bin/duckstation-qt
+      - install -m755 bin/duckstation-qt /app/bin
       - |-
-        for px in 16 32 48 64 128 256; do
-          install -Dm644 ../extras/icons/icon-${px}px.png /app/share/icons/hicolor/${px}x${px}/apps/org.duckstation.DuckStation.png
+        for image in ../*px.png; do
+          icon=${image%px*}
+          px=${icon#*-}
+          install -Dm644 $image /app/share/icons/hicolor/${px}x${px}/apps/org.duckstation.DuckStation.png
         done
       - cp -r ../data/* bin/translations /app/bin
     sources:
       - type: git
         url: https://github.com/stenzek/duckstation.git
-        commit: 3fb61865e505ba639609fbf16cb8bdf5c66e020c
+        branch: master
+        commit: 6f709468601183083b8581d4952aaba7baf77084
+        # Cloning dep/msvc/qt is only necessary for Windows
+        disable-submodules: true
+
+      - type: dir
+        path: icons
 
   # Duckstation - END
 
