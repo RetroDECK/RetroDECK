@@ -73,6 +73,7 @@
     <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.5.4b</url>
       <description>
         <ul>
+          <li>Fix: PCSX2-QT is now looking for saves in the correct directory ~/retrodeck/saves/ps2/memcards and not in ~/retrodeck/saves/ps2/pcsx2/memcards</li>
           <li>Updated RetroArch to v1.12.0</li>
           <li>Updated PPSSPP (SA) to v1.13.2</li>
           <li>Updated Yuzu to mainline-0-1218</li>
