@@ -1292,12 +1292,6 @@ modules:
       - -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON
     post-install:
       - install -m755 bin/duckstation-qt /app/bin
-      - |-
-        for image in ../*px.png; do
-          icon=${image%px*}
-          px=${icon#*-}
-          install -Dm644 $image /app/share/icons/hicolor/${px}x${px}/apps/org.duckstation.DuckStation.png
-        done
       - cp -r ../data/* bin/translations /app/bin
     sources:
       - type: git
@@ -1305,9 +1299,6 @@ modules:
         commit: 6f709468601183083b8581d4952aaba7baf77084
         # Cloning dep/msvc/qt is only necessary for Windows
         disable-submodules: true
-
-      - type: dir
-        path: icons
   
   # Duckstation - END
 
