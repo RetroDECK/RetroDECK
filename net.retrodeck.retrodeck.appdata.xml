@@ -69,14 +69,14 @@
 
 <releases>
 
-  <release version="0.5.4b" date="2022-11-01">
+  <release version="0.5.4b" date="2022-11-02">
     <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.5.4b</url>
       <description>
         <ul>
           <li>Fix: PCSX2-QT is now looking for saves in the correct directory ~/retrodeck/saves/ps2/memcards and not in ~/retrodeck/saves/ps2/pcsx2/memcards</li>
           <li>Updated RetroArch to v1.12.0</li>
           <li>Updated PPSSPP (SA) to v1.13.2</li>
-          <li>Updated Yuzu to mainline-0-1218</li>
+          <li>Updated Yuzu to mainline-0-1220</li>
           <li>Updated Citra (SA) to nightly-1802</li>
           <li>Updated PCSX2-QT to nightly v1.7.3501</li>
           <li>Updated Dolphin (SA) to latest on 31/10/2022</li>

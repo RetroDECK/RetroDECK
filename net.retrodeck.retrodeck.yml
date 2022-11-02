@@ -623,8 +623,8 @@ modules:
     sources:
       - type: git
         url: https://git.videolan.org/git/ffmpeg/nv-codec-headers.git
-        tag: n11.1.5.1
-        commit: 84483da70d903239d4536763fde8c7e6c4e80784
+        tag: n11.1.5.2
+        commit: f8ae7a49bfef2f99d2c931a791dc3863fda67bf3
         x-checker-data:
           type: git
           tag-pattern: ^n([\d.]+)$
@@ -659,8 +659,8 @@ modules:
       #- disable-submodules: true # FLATHUB WORKAROUND
       - type: git
         url: https://github.com/yuzu-emu/yuzu-mainline.git
-        tag: mainline-0-1218
-        commit: 3fde85883904f43f2ae8aa0701250b4ea0d1c2a6
+        tag: mainline-0-1220
+        commit: 4a9fe56f072dc442a31c2469d4724b38cfe806cd
         disable-shallow-clone: true
         x-checker-data:
           type: git
