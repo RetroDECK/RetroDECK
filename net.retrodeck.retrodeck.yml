@@ -658,8 +658,7 @@ modules:
   - name: Ryujinx-binary
     buildsystem: simple
     build-commands:
-      - ls -lah ./* #Debug
-      - mv publish/Ryujinx ${FLATPAK_DEST}/bin/Ryujinx
+      - mv Ryujinx ${FLATPAK_DEST}/bin/Ryujinx
       - chmod 777 ${FLATPAK_DEST}/bin/Ryujinx
     sources:
       - type: archive
@@ -1290,12 +1289,12 @@ modules:
   - name: Cemu-binary
     buildsystem: simple
     build-commands:
-      - mv Cemu*/Cemu ${FLATPAK_DEST}/bin/Cemu
+      - mv Cemu ${FLATPAK_DEST}/bin/Cemu
       - chmod 777 ${FLATPAK_DEST}/bin/Cemu
       - mkdir -p ${FLATPAK_DEST}/config/cemu
-      - mv Cemu*/gameProfiles ${FLATPAK_DEST}/config/cemu/gameProfiles
-      - mv Cemu*/resources ${FLATPAK_DEST}/config/cemu/resources
-      - mv Cemu*/shaderCache ${FLATPAK_DEST}/config/cemu/shaderCache
+      - mv gameProfiles ${FLATPAK_DEST}/config/cemu/gameProfiles
+      - mv resources ${FLATPAK_DEST}/config/cemu/resources
+      - mv shaderCache ${FLATPAK_DEST}/config/cemu/shaderCache
     sources:
       - type: archive
         url: https://github.com/cemu-project/Cemu/releases/download/v2.0-10/cemu-2.0-10-ubuntu-20.04-x64.zip
