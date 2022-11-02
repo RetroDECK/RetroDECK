@@ -2,7 +2,8 @@
     <img src="https://github.com/XargonWan/RetroDECK/blob/main/res/logo.png?raw=true" alt="RetroDECK logo" width="600"/>
 </p>
 
-![GitHub all releases](https://img.shields.io/github/downloads/XargonWan/RetroDECK/total?label=downloads)
+![Flathub](https://img.shields.io/flathub/downloads/net.retrodeck.retrodeck)
+![Flathub](https://img.shields.io/flathub/v/net.retrodeck.retrodeck)
 ![Discord](https://img.shields.io/discord/951662718102962256?label=discord)
 ![GitHub](https://img.shields.io/github/license/XargonWan/RetroDECK)
 
