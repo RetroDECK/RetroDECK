@@ -658,6 +658,7 @@ modules:
   - name: Ryujinx-binary
     buildsystem: simple
     build-commands:
+      - ls -lah ./* #Debug
       - mv publish/Ryujinx ${FLATPAK_DEST}/bin/Ryujinx
       - chmod 777 ${FLATPAK_DEST}/bin/Ryujinx
     sources:
