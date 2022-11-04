@@ -659,8 +659,8 @@ modules:
       #- disable-submodules: true # FLATHUB WORKAROUND
       - type: git
         url: https://github.com/yuzu-emu/yuzu-mainline.git
-        tag: mainline-0-1220
-        commit: 4a9fe56f072dc442a31c2469d4724b38cfe806cd
+        tag: mainline-0-1222
+        commit: 8b1216ff670089244124d0260248f2dd45a7f6ac
         disable-shallow-clone: true
         x-checker-data:
           type: git
