@@ -640,8 +640,8 @@ modules:
       - -DENABLE_COMPATIBILITY_LIST_DOWNLOAD=ON
       - -DYUZU_USE_QT_WEB_ENGINE=ON
       - -DYUZU_USE_BUNDLED_FFMPEG=ON
-      - -DDISPLAY_VERSION=1222
-      - -DBUILD_TAG=mainline-1222
+      - -DDISPLAY_VERSION=1223
+      - -DBUILD_TAG=mainline-1223
       - -DBUILD_REPOSITORY=yuzu-emu/yuzu-mainline
       #- -DCMAKE_PREFIX_PATH=/run/build/yuzu/_flatpak_build/externals/qt5_5_15_2
     build-options:
@@ -654,13 +654,12 @@ modules:
       - /share/pixmaps
     post-install:
       - install -Dm755 ../yuzu-launcher.sh /app/bin/yuzu-launcher
-      - install -Dm644 ../dist/yuzu.svg /app/share/icons/hicolor/scalable/apps/yuzu.svg
     sources:
       #- disable-submodules: true # FLATHUB WORKAROUND
       - type: git
         url: https://github.com/yuzu-emu/yuzu-mainline.git
-        tag: mainline-0-1222
-        commit: 8b1216ff670089244124d0260248f2dd45a7f6ac
+        tag: mainline-0-1223
+        commit: 08b0427377175e98ae56021dee16b2112e9a5131
         disable-shallow-clone: true
         x-checker-data:
           type: git
