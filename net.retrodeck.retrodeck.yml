@@ -23,7 +23,7 @@ finish-args:
   - --allow=multiarch
   - --talk-name=org.freedesktop.ScreenSaver
   - --talk-name=org.freedesktop.PowerManagement.Inhibit
-  - --talk-name=org.freedesktop.login1
+  - --talk-name=org.freedesktop.login1.Manager
   - --filesystem=xdg-run/app/com.discordapp.Discord:create
   # Yuzu
   # - --filesystem=home:ro # This may break Yuzu, let's see
@@ -57,6 +57,8 @@ cleanup-commands:
   - /app/cleanup-BaseApp.sh
 
 modules:
+
+  - shared-modules/libusb/libusb.json
 
   # This module is used to define the RetroDECK version
   # If the version is set as cooker it will automatically generate the version tag based on the date
@@ -306,7 +308,7 @@ modules:
       - shared-modules/SDL/SDL_mixer-1.2.12.json
       - shared-modules/SDL/SDL_net-1.2.8.json
       - shared-modules/SDL/SDL_ttf-2.0.11.json
-      - shared-modules/libusb/libusb.json
+      #- shared-modules/libusb/libusb.json moved outside
       # certificate glu issue
       #- shared-modules/gudev/gudev.json
       - rd-submodules/retroarch/libbz2/libbz2-1.0.8.json
@@ -640,8 +642,8 @@ modules:
       - -DENABLE_COMPATIBILITY_LIST_DOWNLOAD=ON
       - -DYUZU_USE_QT_WEB_ENGINE=ON
       - -DYUZU_USE_BUNDLED_FFMPEG=ON
-      - -DDISPLAY_VERSION=1223
-      - -DBUILD_TAG=mainline-1223
+      - -DDISPLAY_VERSION=1225
+      - -DBUILD_TAG=mainline-1225
       - -DBUILD_REPOSITORY=yuzu-emu/yuzu-mainline
       #- -DCMAKE_PREFIX_PATH=/run/build/yuzu/_flatpak_build/externals/qt5_5_15_2
     build-options:
@@ -658,8 +660,8 @@ modules:
       #- disable-submodules: true # FLATHUB WORKAROUND
       - type: git
         url: https://github.com/yuzu-emu/yuzu-mainline.git
-        tag: mainline-0-1223
-        commit: 08b0427377175e98ae56021dee16b2112e9a5131
+        tag: mainline-0-1225
+        commit: 05efef9ec3a831617dd83e4228e458a209b1aad2
         disable-shallow-clone: true
         x-checker-data:
           type: git
