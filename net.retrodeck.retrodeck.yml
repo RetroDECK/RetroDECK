@@ -23,7 +23,7 @@ finish-args:
   - --allow=multiarch
   - --talk-name=org.freedesktop.ScreenSaver
   - --talk-name=org.freedesktop.PowerManagement.Inhibit
-  - --talk-name=org.freedesktop.login1
+  - --talk-name=org.freedesktop.login1.Manager
   - --filesystem=xdg-run/app/com.discordapp.Discord:create
   # Yuzu
   # - --filesystem=home:ro # This may break Yuzu, let's see
@@ -58,6 +58,8 @@ cleanup-commands:
 
 modules:
 
+  - shared-modules/libusb/libusb.json
+
   # This module is used to define the RetroDECK version
   # If the version is set as cooker it will automatically generate the version tag based on the date
   # else it will just put what is written, "v" is not needed
@@ -86,7 +88,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/XargonWan/RetroDECK.git
-        branch: cooker
+        branch: cooker-0.5.4b
 
   - name: xmlstarlet
     config-opts:
@@ -306,7 +308,7 @@ modules:
       - shared-modules/SDL/SDL_mixer-1.2.12.json
       - shared-modules/SDL/SDL_net-1.2.8.json
       - shared-modules/SDL/SDL_ttf-2.0.11.json
-      - shared-modules/libusb/libusb.json
+      #- shared-modules/libusb/libusb.json moved outside
       # certificate glu issue
       #- shared-modules/gudev/gudev.json
       - rd-submodules/retroarch/libbz2/libbz2-1.0.8.json
@@ -623,8 +625,8 @@ modules:
     sources:
       - type: git
         url: https://git.videolan.org/git/ffmpeg/nv-codec-headers.git
-        tag: n11.1.5.1
-        commit: 84483da70d903239d4536763fde8c7e6c4e80784
+        tag: n11.1.5.2
+        commit: f8ae7a49bfef2f99d2c931a791dc3863fda67bf3
         x-checker-data:
           type: git
           tag-pattern: ^n([\d.]+)$
@@ -640,8 +642,8 @@ modules:
       - -DENABLE_COMPATIBILITY_LIST_DOWNLOAD=ON
       - -DYUZU_USE_QT_WEB_ENGINE=ON
       - -DYUZU_USE_BUNDLED_FFMPEG=ON
-      - -DDISPLAY_VERSION=1218
-      - -DBUILD_TAG=mainline-1218
+      - -DDISPLAY_VERSION=1225
+      - -DBUILD_TAG=mainline-1225
       - -DBUILD_REPOSITORY=yuzu-emu/yuzu-mainline
       #- -DCMAKE_PREFIX_PATH=/run/build/yuzu/_flatpak_build/externals/qt5_5_15_2
     build-options:
@@ -654,13 +656,12 @@ modules:
       - /share/pixmaps
     post-install:
       - install -Dm755 ../yuzu-launcher.sh /app/bin/yuzu-launcher
-      - install -Dm644 ../dist/yuzu.svg /app/share/icons/hicolor/scalable/apps/yuzu.svg
     sources:
       #- disable-submodules: true # FLATHUB WORKAROUND
       - type: git
         url: https://github.com/yuzu-emu/yuzu-mainline.git
-        tag: mainline-0-1218
-        commit: 3fde85883904f43f2ae8aa0701250b4ea0d1c2a6
+        tag: mainline-0-1225
+        commit: 05efef9ec3a831617dd83e4228e458a209b1aad2
         disable-shallow-clone: true
         x-checker-data:
           type: git
@@ -1226,11 +1227,9 @@ modules:
     sources:
       - type: git
         url: https://github.com/RPCS3/rpcs3.git
-        branch: master
         commit: 8d5a9dc722de8e8e881adf8c7f16e76226a1dad8
       - type: git
         url: https://github.com/intel/ittapi.git
-        branch: master
         commit: 2428ed97aa977c66b30940081e7d3e9b1a3c7402
         dest: ittapi/ittapi
         disable-shallow-clone: true
@@ -1294,23 +1293,13 @@ modules:
       - -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON
     post-install:
       - install -m755 bin/duckstation-qt /app/bin
-      - |-
-        for image in ../*px.png; do
-          icon=${image%px*}
-          px=${icon#*-}
-          install -Dm644 $image /app/share/icons/hicolor/${px}x${px}/apps/org.duckstation.DuckStation.png
-        done
       - cp -r ../data/* bin/translations /app/bin
     sources:
       - type: git
         url: https://github.com/stenzek/duckstation.git
-        branch: master
         commit: 6f709468601183083b8581d4952aaba7baf77084
         # Cloning dep/msvc/qt is only necessary for Windows
         disable-submodules: true
-
-      - type: dir
-        path: icons
 
   # Duckstation - END
 
@@ -1431,4 +1420,4 @@ modules:
     sources:
       - type: git
         url: https://github.com/XargonWan/RetroDECK.git
-        branch: cooker
+        branch: cooker-0.5.4b
