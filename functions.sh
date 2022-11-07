@@ -81,59 +81,24 @@ move() {
 
 set_setting_value() {
   # Function for editing settings
-  # USAGE: set_setting_value $setting_file $setting_name $new_setting_value $system (needed as different systems use different config file syntax)
-  # NOTES: RPCS3 has special conditions, see comments below
+  # USAGE: set_setting_value $setting_file "$setting_name" "$new_setting_value" $system $section_name(optional)
+
+  local setting_name_to_change=$(sed -e 's^\\^\\\\^g;s^`^\\`^g' <<< "$2")
+  local setting_value_to_change=$(sed -e 's^\\^\\\\^g;s^`^\\`^g' <<< "$3")
+  local current_section_name=$(sed -e 's/%/\\%/g' <<< "$5")
 
   case $4 in
 
-    "retrodeck" )
-      sed -i "s%$2=.*%$2=$3%" $1
-      ;;
-
-    "retroarch" )
-      sed -i "s%$2 = \".*\"%$2 = \"$3\"%" $1
-      ;;
-
-    "dolphin" )
-      sed -i "s%$2 = .*%$2 = $3%" $1
-      ;;
-
-    "duckstation" )
-      sed -i "s%$2 = .*%$2 = $3%" $1
-      ;;
-
-    "pcsx2" )
-      sed -i "s%$2 = .*%$2 = $3%" $1
-      ;;
-
-    "ppsspp" )
-      sed -i "s%$2 = .*%$2 = $3%" $1
-      ;;
-
-    "rpcs3" ) # This does not currently work for settings with a $ in them
-      sed -i "s%$2: .*%$2: $3%" $1
-      ;;
-
-    "yuzu" )
-      yuzu_setting=$(sed -e 's%\\%\\\\%g' <<< "$2") # Acommodate backslashes in setting name
-      sed -i "s%$yuzu_setting=.*%$yuzu_setting=$3%" $1
-      ;;
-
-    "citra" )
-      citra_setting=$(sed -e 's%\\%\\\\%g' <<< "$2") # Acommodate backslashes in setting name
-      sed -i "s%$citra_setting=.*%$citra_setting=$3%" $1
-      ;;
-
-    "melonds" )
-      sed -i "s%$2=.*%$2=$3%" $1
-      ;;
-
-    "xemu" )
-      sed -i "s%$2 = .*%$2 = $3%" $1
-      ;;
-
     "emulationstation" )
-      sed -i "s%$2\" \" value=\".*\"%$2\" \" value=\"$3\"" $1
+      sed -i "s%$setting_name_to_change\" \" value=\".*\"%$setting_name_to_change\" \" value=\"$setting_value_to_change\"" $1
+      ;;
+
+    * )
+      if [[ -z $current_section_name ]]; then
+        sed -i -E 's^\b'"$setting_name_to_change"'(\s?[=:]\s?).*^'"$setting_name_to_change"'\1'"$setting_value_to_change"'^' $1
+      else
+        sed -i -E '\^\['"$current_section_name"'\]^,\^\b'"$setting_name_to_change"'.*^s^\b'"$setting_name_to_change"'(\s?[=:]\s?).*^'"$setting_name_to_change"'\1'"$setting_value_to_change"'^' $1
+      fi
       ;;
 
   esac
@@ -141,230 +106,104 @@ set_setting_value() {
 
 get_setting_name() {
   # Function for getting the setting name from a full setting line from a config file
-  # USAGE: get_setting_name $current_setting_line $current_system (needed as different systems use different config file syntax)
+  # USAGE: get_setting_name "$current_setting_line" $system
+
+  local current_setting_line="$1"
 
   case $2 in
 
-  "retrodeck" )
-    echo "$1" | grep -o -P ".*(?=\=)"
-    ;;
-
-  "retroarch" )
-    echo "$1" | grep -o -P ".*(?= \= )"
-    ;;
-
-  "dolphin" ) # Use quotes when passing setting_name, as this config file contains special characters
-    echo "$1" | grep -o -P ".*(?= \= )"
-    ;;
-
-  "duckstation" )
-    echo "$1" | grep -o -P ".*(?= \= )"
-    ;;
-
-  "pcsx2" )
-    echo "$1" | grep -o -P ".*(?= \= )"
-    ;;
-
-  "ppsspp" ) # Use quotes when passing setting_name, as this config file contains spaces
-    echo "$1" | grep -o -P ".*(?= \= )"
-    ;;
-
-  "rpcs3" ) # Use quotes when passing setting_name, as this config file contains special characters and spaces
-    echo "$1" | grep -o -P ".*(?=:)"
-    ;;
-
-  "yuzu" ) # Use quotes when passing setting_name, as this config file contains special characters
-    yuzu_setting_name=$(sed -e 's%\\%\\\\%g' <<< "$1") # Accomodate for backslashes in setting names
-    echo "$yuzu_setting_name" | grep -o -P ".*(?=\=)" | sed -e 's%\\\\%\\%g'
-    ;;
-
-  "citra" ) # Use quotes when passing setting_name, as this config file contains special characters
-    citra_setting_name=$(sed -e 's%\\%\\\\%g' <<< "$1") # Accomodate for backslashes in setting names
-    echo "$citra_setting_name" | grep -o -P ".*(?=\=)" | sed -e 's%\\\\%\\%g'
-    ;;
-
-  "melonds" )
-    echo "$1" | grep -o -P ".*(?=\=)"
-    ;;
-
-  "xemu" )
-    echo "$1" | grep -o -P ".*(?= \= )"
-    ;;
-
   "emulationstation" )
-    echo '$1' | grep -o -P "(?<=name\=\").*(?=\" value)"
+    echo "$current_setting_line" | grep -o -P "(?<=name\=\").*(?=\" value)"
     ;;
 
-esac
+  "rpcs3" )
+    #echo "$current_setting_line" | grep -o -P "^\s*?.*?(?=\s?:\s?)" | sed -e 's%\\\\%\\%g' | sed -e 's/^[ \t]*//'
+    echo "$current_setting_line" | grep -o -P "^\s*?.*?(?=\s?:\s?)" | sed -e 's/^[ \t]*//;s^\\ ^ ^g'
+    ;;
+
+  * )
+    echo "$current_setting_line" | grep -o -P "^\s*?.*?(?=\s?=\s?)" | sed -e 's/^[ \t]*//;s^\\ ^ ^g;s^\\$^^'
+    ;;
+
+  esac
 }
 
 get_setting_value() {
 # Function for getting the current value of a setting from a config file
-# USAGE: get_setting_value $setting_file $setting_name $system (needed as different systems use different config file syntax)
+# USAGE: get_setting_value $setting_file "$setting_name" $system $section (optional)
 
-case $3 in
+  local current_setting_name="$2"
+  local current_section_name="$4"
 
-  "retrodeck" )
-    echo $(grep -o -P "(?<=^$2=).*" $1)
-    ;;
-
-  "retroarch" )
-    echo $(grep -o -P "(?<=^$2 = \").*(?=\")" $1)
-    ;;
-
-  "dolphin" ) # Use quotes when passing setting_name, as this config file contains special characters
-    echo $(grep -o -P "(?<=^$2 = ).*" $1)
-    ;;
-
-  "duckstation" )
-    echo $(grep -o -P "(?<=^$2 = ).*" $1)
-    ;;
-
-  "pcsx2" )
-    echo $(grep -o -P "(?<=^$2 = ).*" $1)
-    ;;
-
-  "ppsspp" ) # Use quotes when passing setting_name, as this config file contains spaces
-    echo $(grep -o -P "(?<=^$2 = ).*" $1)
-    ;;
-
-  "rpcs3" ) # Use quotes when passing setting_name, as this config file contains special characters and spaces
-    echo $(grep -o -P "(?<=^$2: ).*" $1)
-    ;;
-
-  "yuzu" ) # Use quotes when passing setting_name, as this config file contains special characters
-    yuzu_setting_value=$(sed -e 's%\\%\\\\%g' <<< "$2") # Accomodate for backslashes in setting names
-    echo $(grep -o -P "(?<=^$yuzu_setting_value=).*" $1)
-    ;;
-
-  "citra" ) # Use quotes when passing setting_name, as this config file contains special characters
-    citra_setting_value=$(sed -e 's%\\%\\\\%g' <<< "$2") # Accomodate for backslashes in setting names
-    echo $(grep -o -P "(?<=^$citra_setting_value=).*" $1)
-    ;;
-
-  "melonds" )
-    echo $(grep -o -P "(?<=^$2=).*" $1)
-    ;;
-
-  "xemu" )
-    echo $(grep -o -P "(?<=^$2 = ).*" $1)
-    ;;
+  case $3 in
 
   "emulationstation" )
-    echo $(grep -o -P "(?<=^$2\" value=\").*(?=\")" $1)
+    echo $(grep -o -P "(?<=^$current_setting_name\" value=\").*(?=\")" $1)
     ;;
 
-esac
+    rpcs3 )
+    if [[ -z $current_section_name ]]; then
+      sed -n -E 's^\s*\b'"$current_setting_name"'\s?:\s?(.*)^\1^p' $1
+    else
+      sed -n -E '\^\['"$current_section_name"'\]^,\^'"$current_setting_name"'^{ \^\['"$current_section_name"'\]^! { \^\b'"$current_setting_name"'^ p } }' $1 | sed -n -E 's^\s*\b.*\s?:\s?(.*)$^\1^p'
+    fi
+    ;;
+
+  * )
+    if [[ -z $current_section_name ]]; then
+      sed -n -E 's^\s*\b'"$current_setting_name"'\s?=\s?(.*)^\1^p' $1
+    else
+      sed -n -E '\^\['"$current_section_name"'\]^,\^\b'"$current_setting_name"'^{ \^\['"$current_section_name"'\]^! { \^\b'"$current_setting_name"'^ p } }' $1 | sed -n -E 's^\s*\b.*\s?=\s?(.*)^\1^p'
+    fi
+    ;;
+
+  esac
+}
+
+add_setting() {
+  # This function will add a setting line to a file. This is useful for dynamically generated config files where a setting line may not exist until the setting is changed from the default.
+  echo "WIP"
+
 }
 
 disable_setting() {
   # This function will add a '#' to the beginning of a defined setting line, disabling it.
-  # USAGE: disable_setting $setting_file $setting_name $system
+  # USAGE: disable_setting $setting_file $setting_line $system $section (optional)
+
+  local current_setting_line"$2"
+  local current_section_name="$4"
 
   case $3 in
 
-  "retrodeck" )
-    sed -i "s%^$2=%#$2=%" $1
-    ;;
+  * )
+    if [[ -z $current_section_name ]]; then
+      sed -i -E 's^(\s*?)'"$current_setting_line"'^\1#'"$current_setting_line"'^' $1
+    else
+      sed -i -E '\^\['"$current_section_name"'\]^,\^\s*?'"$current_setting_line"'^s^(\s*?)'"$current_setting_line"'^\1#'"$current_setting_line"'^' $1
+    fi
+  ;;
 
-  "retroarch" )
-    sed -i "s%^$2 = %#$2 = %" $1
-    ;;
-
-  "dolphin" )
-    sed -i "s%^$2 = %#$2 = %" $1
-    ;;
-
-  "duckstation" )
-    sed -i "s%^$2 = %#$2 = %" $1
-    ;;
-
-  "pcsx2" )
-    sed -i "s%^$2 = %#$2 = %" $1
-    ;;
-
-  "ppsspp" )
-    sed -i "s%^$2 = %#$2 = %" $1
-    ;;
-
-  "rpcs3" ) # This does not currently work for settings with a $ in them
-    sed -i "s%^$2: %#$2: %" $1
-    ;;
-
-  "yuzu" )
-    yuzu_setting=$(sed -e 's%\\%\\\\%g' <<< "$2") # Acommodate backslashes in setting name
-    sed -i "s%^$yuzu_setting=%#$yuzu_setting=%" $1
-    ;;
-
-  "citra" )
-    citra_setting=$(sed -e 's%\\%\\\\%g' <<< "$2") # Acommodate backslashes in setting name
-    sed -i "s%^$citra_setting=%#$citra_setting=%" $1
-    ;;
-
-  "melonds" )
-    sed -i "s%^$2=%#$2=%" $1
-    ;;
-
-  "xemu" )
-    sed -i "s%^$2 = %#$2 = %" $1
-    ;;
-
-esac
+  esac
 }
 
 enable_setting() {
   # This function will remove a '#' to the beginning of a defined setting line, enabling it.
-  # USAGE: enable_setting $setting_file $setting_name $system
+  # USAGE: enable_setting $setting_file $setting_line $system $section (optional)
+
+  local current_setting_line"$2"
+  local current_section_name="$4"
 
   case $3 in
 
-  "retrodeck" )
-    sed -i "s%^#$2=%$2=%" $1
-    ;;
+  * )
+    if [[ -z $current_section_name ]]; then
+      sed -i -E 's^(\s*?)#'"$current_setting_line"'^\1'"$current_setting_line"'^' $1
+    else
+      sed -i -E '\^\['"$current_section_name"'\]^,\^\s*?#'"$current_setting_line"'^s^(\s*?)#'"$current_setting_line"'^\1'"$current_setting_line"'^' $1
+    fi
+  ;;
 
-  "retroarch" )
-    sed -i "s%^#$2 = %$2 = %" $1
-    ;;
-
-  "dolphin" )
-    sed -i "s%^#$2 = %$2 = %" $1
-    ;;
-
-  "duckstation" )
-    sed -i "s%^#$2 = %$2 = %" $1
-    ;;
-
-  "pcsx2" )
-    sed -i "s%^#$2 = %$2 = %" $1
-    ;;
-
-  "ppsspp" )
-    sed -i "s%^#$2 = %$2 = %" $1
-    ;;
-
-  "rpcs3" ) # This does not currently work for settings with a $ in them
-    sed -i "s%^#$2: %$2: %" $1
-    ;;
-
-  "yuzu" )
-    yuzu_setting=$(sed -e 's%\\%\\\\%g' <<< "$2") # Acommodate backslashes in setting name
-    sed -i "s%^#$yuzu_setting=%$yuzu_setting=%" $1
-    ;;
-
-  "citra" )
-    citra_setting=$(sed -e 's%\\%\\\\%g' <<< "$2") # Acommodate backslashes in setting name
-    sed -i "s%^#$citra_setting=%$citra_setting=%" $1
-    ;;
-
-  "melonds" )
-    sed -i "s%^#$2=%$2=%" $1
-    ;;
-
-  "xemu" )
-    sed -i "s%^#$2 = %$2 = %" $1
-    ;;
-
-esac
+  esac
 }
 
 disable_file() {
@@ -381,6 +220,138 @@ enable_file() {
   # NOTE: $filename can be a defined variable from global.sh or must have the full path to the file and should not have ".disabled" as a suffix
 
   mv $(realpath $1.disabled) $(realpath $(echo $1 | sed -e 's/\.disabled//'))
+}
+
+generate_patch () {
+  # generate_patch $original_file $modified_file $patch_file $system
+
+  rm $3 # Remove old patch file (maybe change this to create a backup instead?)
+
+  while read -r current_setting_line; # Look for changes from the original file to the modified one
+  do
+
+    printf -v escaped_setting_line '%q' "$current_setting_line" # Take care of special characters before they mess with future commands
+
+    if [[ (! -z $current_setting_line) && (! $current_setting_line == "#!/bin/bash") ]]; then # Ignore empty or Bash start lines
+      if [[ $current_setting_line =~ ^\[.*\] ]]; then # Capture section header lines
+        action="section"
+        current_section=$(sed 's^[][]^^g' <<< $current_setting_line) # Remove brackets from section name
+      elif [[ (! -z $current_section) ]]; then # If line is in a section...
+        if [[ ! -z $(grep -o -P "^\s*?#.*?$" <<< "$current_setting_line") ]]; then # Check for disabled lines
+          if [[ -z $(sed -n -E '\^\['"$current_section"'\]^,\^\s*?'"$(sed -E 's/^[ \t]*//;' <<< "$escaped_setting_line")"'^{ \^\['"$current_section"'\]^! { \^\s*?'"$(sed -E 's/^[ \t]*//' <<< "$escaped_setting_line")"'^ p } }' $2) ]]; then # If disabled line is not disabled in new file...
+          action="disable_setting"
+          echo $action"^"$current_section"^"$(sed -n -E 's^\s*?#(.*?)$^\1^p' <<< $(sed -E 's/^[ \t]*//' <<< "$current_setting_line")) >> $3
+          fi
+        elif [[ ! -z $(sed -n -E '\^\['"$current_section"'\]^,\^\s*?#'"$(sed -E 's/^[ \t]*//' <<< "$escaped_setting_line")"'^{ \^\['"$current_section"'\]^! { \^\s*?#'"$(sed -E 's/^[ \t]*//;' <<< "$escaped_setting_line")"'^ p } }' $2) ]]; then # Check if line is disabled in new file
+          action="enable_setting"
+          echo $action"^"$current_section"^"$current_setting_line >> $3
+        else # Look for setting value differences
+          current_setting_name=$(get_setting_name "$escaped_setting_line" $4)
+          if [[ (-z $(sed -n -E '\^\['"$current_section"'\]^,\^\b'"$current_setting_name"'.*^{ \^\['"$current_section"'\]^! { \^\b'"$(sed -E 's/^[ \t]*//;' <<< "$escaped_setting_line")"'$^ p } }' $2)) ]]; then # If the same setting line is not found in the same section of the modified file...
+            if [[ ! -z $(sed -n -E '\^\['"$current_section"'\]^,\^\b'"$current_setting_name"'^{ \^\['"$current_section"'\]^! { \^\b'"$current_setting_name"'^ p } }' $2) ]]; then # But the setting exists in that section, only with a different value...
+              new_setting_value=$(get_setting_value $2 "$current_setting_name" $4 $current_section)
+              action="change"
+              echo $action"^"$current_section"^"$(sed -e 's%\\\\%\\%g' <<< "$current_setting_name")"^"$new_setting_value"^"$4 >> $3
+            fi
+          fi
+        fi
+      elif [[ (-z $current_section) ]]; then # If line is not in a section...
+        if [[ ! -z $(grep -o -P "^\s*?#.*?$" <<< "$current_setting_line") ]]; then # Check for disabled lines
+          if [[ -z $(grep -o -P "^\s*?$current_setting_line$" $2) ]]; then # If disabled line is not disabled in new file...
+            action="disable_setting"
+            echo $action"^"$current_section"^"$(sed -n -E 's^\s*?#(.*?)$^\1^p' <<< "$current_setting_line") >> $3
+          fi
+        elif [[ ! -z $(sed -n -E '\^\s*?#'"$(sed -E 's/^[ \t]*//' <<< "$escaped_setting_line")"'$^p' $2) ]]; then # Check if line is disabled in new file
+            action="enable_setting"
+            echo $action"^"$current_section"^"$current_setting_line >> $3
+        else # Look for setting value differences
+          if [[ (-z $(sed -n -E '\^\s*?\b'"$(sed -E 's/^[ \t]*//' <<< "$escaped_setting_line")"'$^p' $2)) ]]; then # If the same setting line is not found in the modified file...
+            current_setting_name=$(get_setting_name "$escaped_setting_line" "$4")
+            if [[ ! -z $(sed -n -E '\^\s*?\b'"$current_setting_name"'\s*?[:=]^p' $2) ]]; then # But the setting exists, only with a different value...
+              new_setting_value=$(get_setting_value $2 "$current_setting_name" $4)
+              action="change"
+              echo $action"^"$current_section"^"$(sed -e 's%\\\\%\\%g' <<< "$current_setting_name")"^"$new_setting_value"^"$4 >> $3
+            fi
+          fi
+        fi
+      fi
+    fi
+  done < $1
+
+    # Reset the variables for reuse
+    action=""
+    current_section=""
+    current_setting_name=""
+    current_setting_value=""
+
+  while read -r current_setting_line; # Look for new lines (from dynamically generated config files) in modified file compared to original
+  do
+
+    printf -v escaped_setting_line '%q' "$current_setting_line" # Take care of special characters before they mess with future commands
+
+    if [[ (! -z $current_setting_line) && (! $current_setting_line == "#!/bin/bash") ]]; then # Ignore empty or Bash start lines
+      if [[ $current_setting_line =~ ^\[.*\] ]]; then # Capture section header lines
+        action="section"
+        current_section=$(sed 's^[][]^^g' <<< $current_setting_line) # Remove brackets from section name
+      elif [[ (! -z $current_section) ]]; then
+        current_setting_name=$(get_setting_name "$escaped_setting_line" "$4")
+        if [[ -z $(sed -n -E '\^\['"$current_section"'\]^,\^\b'"$current_setting_name"'.*^{ \^\['"$current_section"'\]^! { \^\b'"$current_setting_name"'^p } }' $1 ) ]]; then # If setting name is not found in this section of the original file...
+          action="add_setting"
+          echo $action"^"$current_section"^"$current_setting_line"^^"$4 >> $3
+        fi
+      elif [[ (-z $current_section) ]]; then
+        current_setting_name=$(get_setting_name "$escaped_setting_line" "$4")
+        if [[ -z $(sed -n -E '\^\s*?\b'"$current_setting_name"'\s*?[:=]^p' $1) ]]; then # If setting name is not found in the original file...
+          action="add_setting"
+          echo $action"^"$current_section"^"$current_setting_line"^^"$4 >> $3
+        fi
+      fi
+    fi
+  done < $2
+}
+
+deploy_patch () {
+
+# This function will take an "original" file and a patch file and generate a ready to use modified file
+# USAGE: deploy_patch $original_file $patch_file $output_file
+
+cp -fv $1 $3 # Create a copy of the original file to be patched
+
+while IFS="^" read -r action current_section setting_name setting_value system_name
+do
+
+    case $action in
+
+	"disable_file" )
+        disable_file $setting_name
+	;;
+
+	"enable_file" )
+        enable_file $setting_name
+	;;
+
+	"add_setting" )
+        add_setting $3 "$setting_name" $system_name $current_section
+	;;
+
+	"disable_setting" )
+        disable_setting $3 "$setting_name" $system_name $current_section
+	;;
+
+	"enable_setting" )
+        enable_setting $3 "$setting_name" $system_name $current_section
+	;;
+
+	"change" )
+        set_setting_value $3 "$setting_name" "$setting_value" $system_name $current_section
+    ;;
+
+	* )
+	echo "Config file malformed"
+	;;
+
+    esac
+done < $2
 }
 
 conf_write() {
