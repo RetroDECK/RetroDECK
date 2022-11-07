@@ -97,7 +97,7 @@ set_setting_value() {
       if [[ -z $current_section_name ]]; then
         sed -i -E 's^\b'"$setting_name_to_change"'(\s?[=:]\s?).*^'"$setting_name_to_change"'\1'"$setting_value_to_change"'^' $1
       else
-        sed -i -E '\^\['"$current_section_name"'\]^,\^\b'"$setting_name_to_change"'.*^s^\b'"$setting_name_to_change"'(\s?[=:]\s?).*^'"$setting_name_to_change"'\1'"$setting_value_to_change"'^' $1
+        sed -i -E '\^\['"$current_section_name"'\]|\b'"$current_section"':$^,\^\b'"$setting_name_to_change"'.*^s^\b'"$setting_name_to_change"'(\s?[=:]\s?).*^'"$setting_name_to_change"'\1'"$setting_value_to_change"'^' $1
       fi
       ;;
 
@@ -145,7 +145,7 @@ get_setting_value() {
     if [[ -z $current_section_name ]]; then
       sed -n -E 's^\s*\b'"$current_setting_name"'\s?:\s?(.*)^\1^p' $1
     else
-      sed -n -E '\^\['"$current_section_name"'\]^,\^'"$current_setting_name"'^{ \^\['"$current_section_name"'\]^! { \^\b'"$current_setting_name"'^ p } }' $1 | sed -n -E 's^\s*\b.*\s?:\s?(.*)$^\1^p'
+      sed -n -E '\^\b'"$current_section"':$^,\^'"$current_setting_name"'^{ \^\b'"$current_section"':$^! { \^\b'"$current_setting_name"'^ p } }' $1 | sed -n -E 's^\s*\b.*\s?:\s?(.*)$^\1^p'
     fi
     ;;
 
@@ -162,8 +162,22 @@ get_setting_value() {
 
 add_setting() {
   # This function will add a setting line to a file. This is useful for dynamically generated config files where a setting line may not exist until the setting is changed from the default.
-  echo "WIP"
+  # USAGE: add_setting $setting_file $setting_line $system $section (optional)
 
+  local current_setting_line=$(sed -e 's^\\^\\\\^g;s^`^\\`^g' <<< "$2")
+  local current_section_name=$(sed -e 's/%/\\%/g' <<< "$4")
+
+  case $3 in
+
+  * )
+    if [[ -z $current_section_name ]]; then
+      sed -i '$ a '"$current_setting_line"'' $1
+    else
+      sed -i '/^\s*?\['"$current_section_name"'\]|\b'"$current_section"':$/a '"$current_setting_line"'' $1
+    fi
+    ;;
+
+  esac
 }
 
 disable_setting() {
@@ -179,7 +193,7 @@ disable_setting() {
     if [[ -z $current_section_name ]]; then
       sed -i -E 's^(\s*?)'"$current_setting_line"'^\1#'"$current_setting_line"'^' $1
     else
-      sed -i -E '\^\['"$current_section_name"'\]^,\^\s*?'"$current_setting_line"'^s^(\s*?)'"$current_setting_line"'^\1#'"$current_setting_line"'^' $1
+      sed -i -E '\^\['"$current_section_name"'\]|\b'"$current_section"':$^,\^\s*?'"$current_setting_line"'^s^(\s*?)'"$current_setting_line"'^\1#'"$current_setting_line"'^' $1
     fi
   ;;
 
@@ -199,7 +213,7 @@ enable_setting() {
     if [[ -z $current_section_name ]]; then
       sed -i -E 's^(\s*?)#'"$current_setting_line"'^\1'"$current_setting_line"'^' $1
     else
-      sed -i -E '\^\['"$current_section_name"'\]^,\^\s*?#'"$current_setting_line"'^s^(\s*?)#'"$current_setting_line"'^\1'"$current_setting_line"'^' $1
+      sed -i -E '\^\['"$current_section_name"'\]|\b'"$current_section"':$^,\^\s*?#'"$current_setting_line"'^s^(\s*?)#'"$current_setting_line"'^\1'"$current_setting_line"'^' $1
     fi
   ;;
 
@@ -232,23 +246,28 @@ generate_patch () {
 
     printf -v escaped_setting_line '%q' "$current_setting_line" # Take care of special characters before they mess with future commands
 
-    if [[ (! -z $current_setting_line) && (! $current_setting_line == "#!/bin/bash") ]]; then # Ignore empty or Bash start lines
-      if [[ $current_setting_line =~ ^\[.*\] ]]; then # Capture section header lines
-        action="section"
-        current_section=$(sed 's^[][]^^g' <<< $current_setting_line) # Remove brackets from section name
+    if [[ (! -z $current_setting_line) && (! $current_setting_line == "#!/bin/bash") && (! $current_setting_line == "[]") ]]; then # Ignore empty lines, empty arrays or Bash start lines
+      if [[ ! -z $(grep -o -P "^\[.+?\]$" <<< "$current_setting_line") || ! -z $(grep -o -P "^\b.+?:$" <<< "$current_setting_line") ]]; then # Capture section header lines
+        if [[ $current_setting_line =~ ^\[.+\] ]]; then # If normal section line
+          action="section"
+          current_section=$(sed 's^[][]^^g' <<< $current_setting_line) # Remove brackets from section name
+        elif [[ ! -z $(grep -o -P "^\b.+?:$" <<< "$current_setting_line") ]]; then # If RPCS3 section name
+          action="section"
+          current_section=$(sed 's^:$^^' <<< $current_setting_line) # Remove colon from section name
+        fi
       elif [[ (! -z $current_section) ]]; then # If line is in a section...
         if [[ ! -z $(grep -o -P "^\s*?#.*?$" <<< "$current_setting_line") ]]; then # Check for disabled lines
-          if [[ -z $(sed -n -E '\^\['"$current_section"'\]^,\^\s*?'"$(sed -E 's/^[ \t]*//;' <<< "$escaped_setting_line")"'^{ \^\['"$current_section"'\]^! { \^\s*?'"$(sed -E 's/^[ \t]*//' <<< "$escaped_setting_line")"'^ p } }' $2) ]]; then # If disabled line is not disabled in new file...
+          if [[ -z $(sed -n -E '\^\['"$current_section"'\]|\b'"$current_section"':$^,\^\s*?'"$(sed -E 's/^[ \t]*//;' <<< "$escaped_setting_line")"'^{ \^\['"$current_section"'\]|\b'"$current_section"':$^! { \^\s*?'"$(sed -E 's/^[ \t]*//' <<< "$escaped_setting_line")"'^ p } }' $2) ]]; then # If disabled line is not disabled in new file...
           action="disable_setting"
           echo $action"^"$current_section"^"$(sed -n -E 's^\s*?#(.*?)$^\1^p' <<< $(sed -E 's/^[ \t]*//' <<< "$current_setting_line")) >> $3
           fi
-        elif [[ ! -z $(sed -n -E '\^\['"$current_section"'\]^,\^\s*?#'"$(sed -E 's/^[ \t]*//' <<< "$escaped_setting_line")"'^{ \^\['"$current_section"'\]^! { \^\s*?#'"$(sed -E 's/^[ \t]*//;' <<< "$escaped_setting_line")"'^ p } }' $2) ]]; then # Check if line is disabled in new file
+        elif [[ ! -z $(sed -n -E '\^\['"$current_section"'\]|\b'"$current_section"':$^,\^\s*?#'"$(sed -E 's/^[ \t]*//' <<< "$escaped_setting_line")"'^{ \^\['"$current_section"'\]|\b'"$current_section"':$^! { \^\s*?#'"$(sed -E 's/^[ \t]*//;' <<< "$escaped_setting_line")"'^ p } }' $2) ]]; then # Check if line is disabled in new file
           action="enable_setting"
           echo $action"^"$current_section"^"$current_setting_line >> $3
         else # Look for setting value differences
           current_setting_name=$(get_setting_name "$escaped_setting_line" $4)
-          if [[ (-z $(sed -n -E '\^\['"$current_section"'\]^,\^\b'"$current_setting_name"'.*^{ \^\['"$current_section"'\]^! { \^\b'"$(sed -E 's/^[ \t]*//;' <<< "$escaped_setting_line")"'$^ p } }' $2)) ]]; then # If the same setting line is not found in the same section of the modified file...
-            if [[ ! -z $(sed -n -E '\^\['"$current_section"'\]^,\^\b'"$current_setting_name"'^{ \^\['"$current_section"'\]^! { \^\b'"$current_setting_name"'^ p } }' $2) ]]; then # But the setting exists in that section, only with a different value...
+          if [[ (-z $(sed -n -E '\^\['"$current_section"'\]|\b'"$current_section"':$^,\^\b'"$current_setting_name"'.*^{ \^\['"$current_section"'\]|\b'"$current_section"':$^! { \^\b'"$(sed -E 's/^[ \t]*//;' <<< "$escaped_setting_line")"'$^ p } }' $2)) ]]; then # If the same setting line is not found in the same section of the modified file...
+            if [[ ! -z $(sed -n -E '\^\['"$current_section"'\]|\b'"$current_section"':$^,\^\b'"$current_setting_name"'^{ \^\['"$current_section"'\]|\b'"$current_section"':$^! { \^\b'"$current_setting_name"'^ p } }' $2) ]]; then # But the setting exists in that section, only with a different value...
               new_setting_value=$(get_setting_value $2 "$current_setting_name" $4 $current_section)
               action="change"
               echo $action"^"$current_section"^"$(sed -e 's%\\\\%\\%g' <<< "$current_setting_name")"^"$new_setting_value"^"$4 >> $3
@@ -289,13 +308,20 @@ generate_patch () {
 
     printf -v escaped_setting_line '%q' "$current_setting_line" # Take care of special characters before they mess with future commands
 
-    if [[ (! -z $current_setting_line) && (! $current_setting_line == "#!/bin/bash") ]]; then # Ignore empty or Bash start lines
-      if [[ $current_setting_line =~ ^\[.*\] ]]; then # Capture section header lines
+    if [[ (! -z $current_setting_line) && (! $current_setting_line == "#!/bin/bash") && (! $current_setting_line == "[]") ]]; then # Ignore empty lines, empty arrays or Bash start lines
+      if [[ ! -z $(grep -o -P "^\[.+?\]$" <<< "$current_setting_line") || ! -z $(grep -o -P "^\b.+?:$" <<< "$current_setting_line") ]]; then # Capture section header lines
+      if [[ $current_setting_line =~ ^\[.+\] ]]; then # If normal section line
         action="section"
         current_section=$(sed 's^[][]^^g' <<< $current_setting_line) # Remove brackets from section name
+        echo "Section found:" "$current_section""."
+      elif [[ ! -z $(grep -o -P "^\b.+?:$" <<< "$current_setting_line") ]]; then # If RPCS3 section name
+        action="section"
+        current_section=$(sed 's^:$^^' <<< $current_setting_line) # Remove colon from section name
+        echo "Section found:" "$current_section""."
+      fi
       elif [[ (! -z $current_section) ]]; then
         current_setting_name=$(get_setting_name "$escaped_setting_line" "$4")
-        if [[ -z $(sed -n -E '\^\['"$current_section"'\]^,\^\b'"$current_setting_name"'.*^{ \^\['"$current_section"'\]^! { \^\b'"$current_setting_name"'^p } }' $1 ) ]]; then # If setting name is not found in this section of the original file...
+        if [[ -z $(sed -n -E '\^\['"$current_section"'\]|\b'"$current_section"':$^,\^\b'"$current_setting_name"'.*^{ \^\['"$current_section"'\]|\b'"$current_section"':$^! { \^\b'"$current_setting_name"'^p } }' $1 ) ]]; then # If setting name is not found in this section of the original file...
           action="add_setting"
           echo $action"^"$current_section"^"$current_setting_line"^^"$4 >> $3
         fi
