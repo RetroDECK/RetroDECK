@@ -41,6 +41,8 @@ jobs:
           io.qt.qtwebengine.BaseApp/x86_64/6.3 \
           org.freedesktop.Sdk.Extension.llvm13 \
           org.freedesktop.Sdk.Extension.dotnet6/x86_64/21.08
+          echo ${GITHUB_WORKSPACE} #DEBUG
+          df -h ${GITHUB_WORKSPACE} #DEBUG
 
       - name: Build flatpak
         run: |
