@@ -4,7 +4,7 @@ on:
   push:
     branches:
      - cooker*
-  pull_request: 
+  pull_request:
     branches:
      - cooker*
 
@@ -24,14 +24,13 @@ jobs:
       - name: Generate build ID
         id: generating_buildid
         run: echo "##[set-output name=build-id;]$(echo "$( git rev-parse --short HEAD )")"
-      
+
       - uses: actions/checkout@v3
+        with:
+          submodules: true
 
       - name: Initialize enviornment
         run: |
-          git pull
-          git submodule init
-          git submodule update
           sudo apt install -y flatpak flatpak-builder p7zip-full
           flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
           flatpak install --user -y --noninteractive \
@@ -48,7 +47,7 @@ jobs:
           flatpak-builder --user --force-clean --install-deps-from=flathub --install-deps-from=flathub-beta --repo=${GITHUB_WORKSPACE}/local ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
 
       - name: Create Artifact for flathub
-        run: | 
+        run: |
           tar -czf ${GITHUB_WORKSPACE}/RetroDECK-Artifact.tar.gz -C ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker .
           hash=($(sha256sum ${GITHUB_WORKSPACE}/RetroDECK-Artifact.tar.gz))
           echo $hash > ${GITHUB_WORKSPACE}/RetroDECK-Artifact.sha
@@ -66,7 +65,7 @@ jobs:
           body: |
             # Release Notes (Cooker)
             This is a cooker snapshot based on the commit: ${{ github.event.repository.full_name }}@${{github.sha}}.
-      
+
             Cooker channel is provided for the community to test fixes and explore new functionality.
             Please DO NOT open issues or ask support on this build.
 
