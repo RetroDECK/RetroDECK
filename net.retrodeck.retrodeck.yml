@@ -510,6 +510,11 @@ modules:
   # PPSSPP Flathub Workaround - END
   # PPSSPP - END
 
+  - name: debug-pre-yuzu
+    buildsystem: simple
+    build-commands:
+      - df -h
+
   # Yuzu - START
   # https://github.com/flathub/org.yuzu_emu.yuzu
   # WHEN UPADTING: remember to update rd-submodules/yuzu contents
