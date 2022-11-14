@@ -1073,7 +1073,7 @@
         <command label="PCSX2 (Standalone)">%EMULATOR_PCSX2% -batch %ROM%</command>
         <extension>.bin .BIN .chd .CHD .ciso .CISO .cso .CSO .dump .DUMP .elf .ELF .gz .GZ .m3u .M3U .mdf .MDF .img .IMG .iso .ISO .isz .ISZ .ngr .NRG</extension>
         <command label="PCSX2">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/pcsx2_libretro.so %ROM%</command>
-        <command label="PCSX2 Legacy (Standalone)">%EMULATOR_PCSX2-LEGACY% --nogui %ROM%</command>
+<!--        <command label="PCSX2 Legacy (Standalone)">%EMULATOR_PCSX2-LEGACY% --nogui %ROM%</command> -->
 <!--        <command label="Play! (Standalone)">%EMULATOR_PLAY!% &#45;&#45;disc %ROM%</command> -->
         <platform>ps2</platform>
         <theme>ps2</theme>
@@ -1375,7 +1375,7 @@
         <path>%ROMPATH%/switch</path>
         <extension>.nca .NCA .nro .NRO .nso .NSO .nsp .NSP .xci .XCI .7z .7Z .zip .ZIP</extension>
         <command label="Yuzu (Standalone)">%EMULATOR_YUZU% -f -g %ROM%</command>
-        <!-- <command label="Ryujinx (Standalone)">%EMULATOR_RYUJINX% %ROM%</command> -->
+        <command label="Ryujinx (Standalone)">%EMULATOR_RYUJINX% %ROM%</command>
         <platform>switch</platform>
         <theme>switch</theme>
     </system>

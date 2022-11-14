@@ -69,20 +69,23 @@
 
 <releases>
 
-  <release version="0.5.4b" date="2022-11-02">
-    <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.5.4b</url>
+  <release version="0.6.0b" date="2022-11-18">
+    <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.0b</url>
       <description>
         <ul>
+          <li>Added Cemu</li>
+          <li>Added Ryujinx</li>
           <li>Fix: PCSX2-QT is now looking for saves in the correct directory ~/retrodeck/saves/ps2/memcards and not in ~/retrodeck/saves/ps2/pcsx2/memcards</li>
           <li>Updated RetroArch to v1.12.0</li>
           <li>Updated PPSSPP (SA) to v1.13.2</li>
-          <li>Updated Yuzu to mainline-0-1222</li>
           <li>Updated Citra (SA) to nightly-1802</li>
           <li>Updated PCSX2-QT to nightly v1.7.3501</li>
           <li>Updated Dolphin (SA) to latest on 31/10/2022</li>
           <li>Updated Xemu to v0.7.71</li>
           <li>Updated RPCS3 to latest on 31/10/2022</li>
           <li>Updated Duckstation to latest on 31/10/2022</li>
+          <li>Migrated Yuzu from appimage mainline-1233</li>
+          <li>Removed old PCSX2 (non-qt)</li>
 
       </ul>
     </description>
