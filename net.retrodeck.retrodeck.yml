@@ -540,7 +540,7 @@ modules:
 
   # Dolphin - START
   # https://github.com/flathub/org.DolphinEmu.dolphin-emu
-  # WHEN UPADTING: remember to update rd-submodules/yuzu contents
+  # WHEN UPADTING: remember to update rd-submodules/dolphin contents
 
   # needed for the emulate bluetooth adapter feature to work
   - name: bluez
