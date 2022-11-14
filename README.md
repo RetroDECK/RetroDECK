@@ -34,7 +34,7 @@ No, RetroDECK doesn't support Windows, but the project is fully open source so y
 
 ## How can I install it?
 Just install it from Discover store.<br/>
-However if you want to test the cooker version you can follow the [Installation instructions](https://github.com/XargonWan/RetroDECK/wiki#installation-instructions) on the Wiki
+However if you want to test the cooker version you can follow the [Installation instructions](https://github.com/XargonWan/RetroDECK/wiki/How-to:-Getting-started) on the Wiki
 
 ## Can I help?
 Of course, any help is appreciated, and not only by programming, just check out our [Discord](https://discord.gg/Dz3szYsP8g)!

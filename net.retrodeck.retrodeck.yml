@@ -23,7 +23,7 @@ finish-args:
   - --allow=multiarch
   - --talk-name=org.freedesktop.ScreenSaver
   - --talk-name=org.freedesktop.PowerManagement.Inhibit
-  - --talk-name=org.freedesktop.login1
+  - --talk-name=org.freedesktop.login1.Manager
   - --filesystem=xdg-run/app/com.discordapp.Discord:create
   # Yuzu
   # - --filesystem=home:ro # This may break Yuzu, let's see
@@ -58,6 +58,8 @@ cleanup-commands:
 
 modules:
 
+  - shared-modules/libusb/libusb.json
+
   # This module is used to define the RetroDECK version
   # If the version is set as cooker it will automatically generate the version tag based on the date
   # else it will just put what is written, "v" is not needed
@@ -86,7 +88,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/XargonWan/RetroDECK.git
-        branch: cooker
+        branch: cooker-0.6.0b
 
   - name: xmlstarlet
     config-opts:
@@ -289,7 +291,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/RetroArch.git
-        commit: 389ef31a8f4a505f255e9bfebe882750d22ab490
+        commit: 840c4481ab7cb0720025c30ea609d16e60927a02
       - type: file
         path: rd-submodules/retroarch/retroarch.cfg
     post-install:
@@ -306,7 +308,7 @@ modules:
       - shared-modules/SDL/SDL_mixer-1.2.12.json
       - shared-modules/SDL/SDL_net-1.2.8.json
       - shared-modules/SDL/SDL_ttf-2.0.11.json
-      - shared-modules/libusb/libusb.json
+      #- shared-modules/libusb/libusb.json moved outside
       # certificate glu issue
       #- shared-modules/gudev/gudev.json
       - rd-submodules/retroarch/libbz2/libbz2-1.0.8.json
@@ -322,7 +324,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/RetroArch.git
-        commit: 389ef31a8f4a505f255e9bfebe882750d22ab490
+        commit: 840c4481ab7cb0720025c30ea609d16e60927a02
   - name: retroarch-filers-audio
     subdir: libretro-common/audio/dsp_filters
     make-install-args:
@@ -330,7 +332,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/RetroArch.git
-        commit: 389ef31a8f4a505f255e9bfebe882750d22ab490
+        commit: 840c4481ab7cb0720025c30ea609d16e60927a02
   - name: retroarch-assets
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
@@ -344,21 +346,21 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/libretro-database.git
-        commit: 772011a54392aab6be1302bf1bd8aa1cc0c0c6c2
+        commit: bc488c79cdc36ea1076a2941f2e6e32365d5f53e
   - name: libretro-core-info
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
         url: https://github.com/libretro/libretro-core-info.git
-        commit: 90eff5d4e72db1b5929af7210c9b665c33034536
+        commit: 7744a25a0e418703e24a4bd7a2208d5a12ae8a7a
   - name: retroarch-joypad-autoconfig
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
         url: https://github.com/libretro/retroarch-joypad-autoconfig.git
-        commit: a3b5067b8954f15e8e87eeed71a4262f0ea7fd1c
+        commit: 948fff0a12e487266eebef14774f17b7b881a728
   - name: common-shaders
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
@@ -372,7 +374,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/slang-shaders.git
-        commit: f8f99ee220edbf2c5df2714a73d46faea43e62e2
+        commit: 9e89aafe0f6a63645445ca8302b88e4060274c72
   - name: glsl-shaders
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
@@ -398,8 +400,8 @@ modules:
       - mv ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* /app/share/libretro/cores/
     sources:
       - type: archive
-        url: https://buildbot.libretro.com/stable/1.11.1/linux/x86_64/RetroArch_cores.7z
-        sha256: fa98c9a5b3aab2b4808ce14726be0393cad36bd033ffe4b8378b7d5e5dede448
+        url: https://buildbot.libretro.com/stable/1.12.0/linux/x86_64/RetroArch_cores.7z
+        sha256: b5c87aa3462c023fa4e1aa171d1bd4f5b0b5cf9d8e4f0a6b5606ff26b05e0059
 
   # PPSSPP - START
   # https://github.com/flathub/org.ppsspp.PPSSPP
@@ -412,293 +414,76 @@ modules:
       - -DUSE_SYSTEM_ZSTD=ON
 
       - -DUSE_WAYLAND_WSI=ON
-      - -DUSING_X11_VULKAN=ON
+      #- -DUSING_X11_VULKAN=ON
       - -DUSING_QT_UI=OFF
 
       - -DBUILD_TESTING=OFF
       - -DOpenGL_GL_PREFERENCE=GLVND
-    build-options:
-      - -DX86_64=ON
+    #build-options:
+      #- -DX86_64=ON
+
+    cleanup:
+      - /share/ppsspp/assets/lang/README.md
     sources:
       - type: git
-        url: https://github.com/hrydgard/ppsspp.git
-        tag: v1.13.2
-        commit: 9fe6338e3bf397f8a009a51a282c139dfa180eb6
+        url: &ppsspp-url https://github.com/hrydgard/ppsspp.git
+        tag: &ppsspp-tag v1.13.2
+        commit: &ppsspp-commit 9fe6338e3bf397f8a009a51a282c139dfa180eb6
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+)$
+          is-main-source: true
 
-  # PPSSPP Flathub Workaround - START
-  # This workaround disables the PPSSPP libraries (disable-submodules: true) and install them separately
-  # This is only to make it buildable by the flathub builder as normaly it seems not to be needed
-        disable-submodules: true
-      - type: git
-        dest: SDL/macOS
-        commit: f19a1d54b8a5af6cc378ea307e0ec676922eb4cc
-        url: https://github.com/hrydgard/ppsspp-mac-sdl
-      - type: git
-        dest: assets/debugger
-        commit: 36ad6b19b22de2075a01a4f0c765e3ef514dc38f
-        url: https://github.com/unknownbrackets/ppsspp-debugger.git
-      - type: git
-        dest: dx9sdk
-        commit: 7751cf73f5c06f1be21f5f31c3e2d9a7bacd3a93
-        url: https://github.com/hrydgard/minidx9.git
-      - type: git
-        dest: ext/SPIRV-Cross
-        commit: 9acb9ec31f5a8ef80ea6b994bb77be787b08d3d1
-        url: https://github.com/KhronosGroup/SPIRV-Cross.git
-      - type: git
-        dest: ext/armips
-        commit: 7885552b208493a6a0f21663770c446c3ba65576
-        url: https://github.com/Kingcom/armips.git
-      - type: git
-        dest: ext/discord-rpc
-        commit: 963aa9f3e5ce81a4682c6ca3d136cddda614db33
-        url: https://github.com/discordapp/discord-rpc.git
-      - type: git
-        dest: ext/glslang
-        commit: dc11adde23c455a24e13dd54de9b4ede8bdd7db8
-        url: https://github.com/hrydgard/glslang.git
-      - type: git
-        dest: ext/miniupnp
-        commit: 3a87be33e797ba947b2b2a5f8d087f6c3ff4d93e
-        url: https://github.com/hrydgard/miniupnp.git
-      - type: git
-        dest: ext/native/tools/prebuilt
-        commit: cbea79dc8fef4d9210e2bac7e7b9b5ff3388197a
-        url: https://github.com/hrydgard/ppsspp-freetype.git
-      - type: git
-        dest: ext/rapidjson
-        commit: 73063f5002612c6bf64fe24f851cd5cc0d83eef9
-        disable-submodules: true
-        url: https://github.com/Tencent/rapidjson.git
-      - type: git
-        dest: ext/zstd
-        commit: a488ba114ec17ea1054b9057c26a046fc122b3b6
-        url: https://github.com/facebook/zstd.git
-      - type: git
-        dest: ffmpeg
-        commit: 3ad7ddb9eb2af898dce8c4b5e9a28b77b3f7ddd7
-        url: https://github.com/hrydgard/ppsspp-ffmpeg.git
-      - type: git
-        dest: pspautotests
-        commit: 682a4303aba63a50c91ae0fa6928c9dac8ca9b92
-        url: https://github.com/hrydgard/pspautotests.git
-  # PPSSPP Flathub Workaround - END
+  - name: ppsspp-localization
+    buildsystem: simple
+    build-commands:
+      - |
+        for LANG_FILE in assets/lang/*.ini; do
+          LANG_FILE_NAME="$(basename "$LANG_FILE")"
+          LANG_PREFIX="${LANG_FILE_NAME:0:2}"
+          LANG_DEST="$FLATPAK_DEST/share/locale/$LANG_PREFIX/ppsspp/$LANG_FILE_NAME";
+          ln -fsr "$LANG_DEST" "$FLATPAK_DEST/share/ppsspp/$LANG_FILE"
+          install -Dm644 "$LANG_FILE" "$LANG_DEST"
+        done
+    sources:
+      - type: shell
+        commands:
+          - cp -a $FLATPAK_DEST/share/ppsspp/assets .
+
   # PPSSPP - END
 
   # Yuzu - START
-  # https://github.com/flathub/org.yuzu_emu.yuzu
-  # WHEN UPADTING: remember to update rd-submodules/yuzu contents
+  # https://github.com/yuzu-emu/yuzu-mainline/releases
 
-  - name: libzip
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON
-      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
-    sources:
-      - type: archive
-        url: https://github.com/nih-at/libzip/archive/v1.9.2.tar.gz
-        sha256: 7f28eaec7a02ca099ea9dad88fc8023f7f6ddfca54b780040ff7fdb39d9efb3c
-        x-checker-data:
-          type: anitya
-          project-id: 10649
-          url-template: https://github.com/nih-at/libzip/archive/v$version.tar.gz
-  - name: zstd
-    buildsystem: meson
-    subdir: build/meson
-    config-opts:
-      - '-Dbin_programs=false'
-      - '-Dbin_contrib=false'
-    sources:
-      - type: archive
-        url: https://github.com/facebook/zstd/releases/download/v1.5.2/zstd-1.5.2.tar.gz
-        sha256: 7c42d56fac126929a6a85dbc73ff1db2411d04f104fae9bdea51305663a83fd0
-        x-checker-data:
-          type: anitya
-          project-id: 12083
-          url-template: https://github.com/facebook/zstd/releases/download/v$version/zstd-$version.tar.gz
-  - name: fmt
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON
-      - -DFMT_TEST=OFF
-    sources:
-      - type: archive
-        url: https://github.com/fmtlib/fmt/releases/download/8.1.1/fmt-8.1.1.zip
-        sha256: 23778bad8edba12d76e4075da06db591f3b0e3c6c04928ced4a7282ca3400e5d
-        x-checker-data:
-          type: anitya
-          project-id: 11526
-          versions:
-            <: 9.0.0
-          url-template: https://github.com/fmtlib/fmt/releases/download/$version/fmt-$version.zip
-  - name: glslang
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-    sources:
-      - type: archive
-        url: https://github.com/KhronosGroup/glslang/archive/11.11.0.tar.gz
-        sha256: 26c216c3062512c018cbdd752224b8dad703b7e5bb90bf338ba2dbb5d4f11438
-        x-checker-data:
-          type: anitya
-          stable-only: true
-          project-id: 205796
-          url-template: https://github.com/KhronosGroup/glslang/archive/$version.tar.gz
-  - name: catch2
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-      - -DCATCH_INSTALL_EXTRAS=ON
-      - -DCATCH_BUILD_TESTING=OFF
-    builddir: true
-    sources:
-      - type: archive
-        url: https://github.com/catchorg/Catch2/archive/v2.13.9.tar.gz
-        sha256: 06dbc7620e3b96c2b69d57bf337028bf245a211b3cddb843835bfe258f427a52
-        x-checker-data:
-          type: anitya
-          stable-only: true
-          versions:
-            <: 3.0.0
-          project-id: 7680
-          url-template: https://github.com/catchorg/Catch2/archive/v$version.tar.gz
-  - name: nlohmann-json
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-      - -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON
-      - -DJSON_BuildTests=OFF
-    sources:
-      - type: archive
-        url: https://github.com/nlohmann/json/archive/v3.11.2.tar.gz
-        sha256: d69f9deb6a75e2580465c6c4c5111b89c4dc2fa94e3a85fcd2ffcd9a143d9273
-        x-checker-data:
-          type: anitya
-          project-id: 11152
-          url-template: https://github.com/nlohmann/json/archive/v$version.tar.gz
-  - name: boost
+  - name: Yuzu
     buildsystem: simple
     build-commands:
-      - ./bootstrap.sh --with-libraries=context,container,system,headers
-      - ./b2 -j $FLATPAK_BUILDER_N_JOBS install --prefix=/app
+      - chmod +x yuzu*.AppImage
+      - ./yuzu*.AppImage --appimage-extract
+      - mkdir -p "${FLATPAK_DEST}/yuzu"
+      - cp -r squashfs-root/* "${FLATPAK_DEST}/yuzu"
+      - ln -s "${FLATPAK_DEST}/yuzu/usr/bin/yuzu" "${FLATPAK_DEST}/bin/yuzu"
+    sources:
+      - type: file
+        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1233/yuzu-mainline-20221113-f8aba8b9d.AppImage
+        sha256: 77c4684d95dcaf2f116cf94f65b61c7e0d83b493245ea89aa6d3a2a5fb7eb330
+
+  # Yuzu - END
+
+  # Ryujinx - START
+  # https://ryujinx.org/download
+
+  - name: Ryujinx
+    buildsystem: simple
+    build-commands:
+      - mv Ryujinx ${FLATPAK_DEST}/bin/Ryujinx
+      - chmod 777 ${FLATPAK_DEST}/bin/Ryujinx
     sources:
       - type: archive
-        url: >-
-          https://boostorg.jfrog.io/artifactory/main/release/1.79.0/source/boost_1_79_0.tar.bz2
-        sha256: 475d589d51a7f8b3ba2ba4eda022b170e562ca3b760ee922c146b6c65856ef39
-        x-checker-data:
-          type: anitya
-          project-id: 6845
-          url-template: https://boostorg.jfrog.io/artifactory/main/release/$version/source/boost_1_79_0.tar.bz2
-  - name: nv-codec-headers
-    make-install-args:
-      - PREFIX=/app
-    no-autogen: true
-    cleanup:
-      - '*'
-    sources:
-      - type: git
-        url: https://git.videolan.org/git/ffmpeg/nv-codec-headers.git
-        tag: n11.1.5.1
-        commit: 84483da70d903239d4536763fde8c7e6c4e80784
-        x-checker-data:
-          type: git
-          tag-pattern: ^n([\d.]+)$
+        url: https://github.com/Ryujinx/release-channel-master/releases/download/1.1.335/ryujinx-1.1.335-linux_x64.tar.gz
+        sha256: 9a175bcc5ea0e67e8b8b0ff944eb1fa316e6ff6336f91b09b719b2ccac7ecee5
 
-  - name: yuzu
-    buildsystem: cmake-ninja
-    builddir: true
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
-      - -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON
-      - -DENABLE_QT_TRANSLATION=ON
-      - -DYUZU_ENABLE_COMPATIBILITY_REPORTING=ON
-      - -DENABLE_COMPATIBILITY_LIST_DOWNLOAD=ON
-      - -DYUZU_USE_QT_WEB_ENGINE=ON
-      - -DYUZU_USE_BUNDLED_FFMPEG=ON
-      - -DDISPLAY_VERSION=1150
-      - -DBUILD_TAG=mainline-1150
-      - -DBUILD_REPOSITORY=yuzu-emu/yuzu-mainline
-      #- -DCMAKE_PREFIX_PATH=/run/build/yuzu/_flatpak_build/externals/qt5_5_15_2
-    build-options:
-      env:
-        TITLEBARFORMATIDLE: yuzu {}
-        TITLEBARFORMATRUNNING: yuzu {} | {}
-        LDFLAGS: -L/app/lib -Wl,-z,relro,-z,now -Wl,--as-needed
-    cleanup:
-      - /share/man
-      - /share/pixmaps
-    post-install:
-      - install -Dm755 ../yuzu-launcher.sh /app/bin/yuzu-launcher
-      - install -Dm644 ../dist/yuzu.svg /app/share/icons/hicolor/scalable/apps/yuzu.svg
-    sources:
-      - disable-submodules: true # FLATHUB WORKAROUND
-      - type: git
-        url: https://github.com/yuzu-emu/yuzu-mainline.git
-        tag: mainline-0-1171
-        commit: 3b25d1fe22f5eee7a046432884d78b25a3950988
-        disable-shallow-clone: true
-        x-checker-data:
-          type: git
-          tag-pattern: ^(mainline-0-\d+)$
-      - type: file
-        path: rd-submodules/yuzu/yuzu-launcher.sh
-      - type: file
-        path: rd-submodules/yuzu/compatibility_list.json
-        dest: dist/compatibility_list
-
-  # # Yuzu - END
-
-  # # Ryujinx - START
-  # # https://github.com/flathub/org.ryujinx.Ryujinx
-
-  # - name: Ryujinx
-  #   buildsystem: simple
-  #   build-options:
-  #     append-path: /usr/lib/sdk/dotnet6/bin
-  #     append-ld-library-path: /usr/lib/sdk/dotnet6/lib
-  #     arch:
-  #       x86_64:
-  #         env:
-  #           RUNTIME: linux-x64
-  #     env:
-  #       PKG_CONFIG_PATH: /app/lib/pkgconfig:/app/share/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig:/usr/lib/sdk/dotnet6/lib/pkgconfig
-  #       DOTNET_CLI_TELEMETRY_OPTOUT: 'true'
-  #       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 'true'
-  #       RYUJINX_VERSION: 1.1.209
-  #       RYUJINX_TARGET_RELEASE_CHANNEL_OWNER: flathub
-  #       RYUJINX_TARGET_RELEASE_CHANNEL_REPO: org.ryujinx.Ryujinx
-  #       RYUJINX_TARGET_RELEASE_CHANNEL_NAME: master
-  #   build-commands:
-  #   - |
-  #     export RYUJINX_GIT_SHORT_HASH=$(git rev-parse --short HEAD)
-  #     sed -r --in-place "s/\%\%RYUJINX_BUILD_VERSION\%\%/$RYUJINX_VERSION/g;" Ryujinx.Common/ReleaseInformations.cs
-  #     sed -r --in-place "s/\%\%RYUJINX_BUILD_GIT_HASH\%\%/$RYUJINX_GIT_SHORT_HASH/g;" Ryujinx.Common/ReleaseInformations.cs
-  #     sed -r --in-place "s/\%\%RYUJINX_TARGET_RELEASE_CHANNEL_NAME\%\%/$RYUJINX_TARGET_RELEASE_CHANNEL_NAME/g;" Ryujinx.Common/ReleaseInformations.cs
-  #     sed -r --in-place "s/\%\%RYUJINX_TARGET_RELEASE_CHANNEL_OWNER\%\%/$RYUJINX_TARGET_RELEASE_CHANNEL_OWNER/g;" Ryujinx.Common/ReleaseInformations.cs
-  #     sed -r --in-place "s/\%\%RYUJINX_TARGET_RELEASE_CHANNEL_REPO\%\%/$RYUJINX_TARGET_RELEASE_CHANNEL_REPO/g;" Ryujinx.Common/ReleaseInformations.cs
-  #     mkdir -p /app/bin
-  #     dotnet publish -c Release -r $RUNTIME /p:DebugType=embedded Ryujinx /p:Version=$RYUJINX_VERSION /p:SourceRevisionId=$RYUJINX_GIT_SHORT_HASH /p:ExtraDefineConstants=DISABLE_UPDATER --self-contained --source nuget-sources
-  #     if [ $? -ne 0 ]; then
-  #         exit 1;
-  #     fi;
-  #     cp -r --remove-destination /run/build/Ryujinx/Ryujinx/bin/Release/net6.0/$RUNTIME/publish/* /app/bin/
-  #     mkdir -p /app/lib/ffmpeg
-  #     ln -s /usr/lib/x86_64-linux-gnu/libX11.so.6 /app/lib/libX11.so
-  #     wget https://raw.githubusercontent.com/flathub/org.ryujinx.Ryujinx/master/ryujinx-wrapper
-  #     install -Dm755 ryujinx-wrapper /app/bin/ryujinx-wrapper
-  #     install -Dm644 distribution/linux/ryujinx-logo.svg /app/share/icons/hicolor/scalable/apps/ryujinx.svg
-  #     install -Dm644 distribution/linux/ryujinx-mime.xml /app/share/mime/packages/$FLATPAK_ID.mime.xml
-  #   sources:
-  #   - rd-submodules/ryujinx/nuget_sources.json
-  #   - type: git
-  #     url: https://github.com/Ryujinx/Ryujinx.git
-  #     commit: 66e7fdb8710ff24bfb80c9c638ce2e6fa9563068
-
-  # # Ryujinx - END
+  # Ryujinx - END
 
   # CITRA - START
   # https://github.com/flathub/org.citra_emu.citra
@@ -734,223 +519,13 @@ modules:
   # CITRA - END
 
   # PCSX2 - START
-  # https://github.com/flathub/net.pcsx2.PCSX2
-
-  - name: wxWidgets
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-    cleanup:
-      - /bin
-      - /include
-      - /lib/wx/include
-    sources:
-      - type: git
-        url: https://github.com/wxWidgets/wxWidgets.git
-        tag: v3.2.0
-        commit: 5b5ec3804a31a3765d60ff351bbdf79eddb1e1f9
-        x-checker-data:
-          type: git
-          tag-pattern: ^v([\d.]+)$
-    
-  - name: libaio
-    no-autogen: true
-    make-install-args:
-      - prefix=${FLATPAK_DEST}
-    sources:
-      - type: git
-        url: https://pagure.io/libaio.git
-        tag: libaio-0.3.113
-        commit: 1b18bfafc6a2f7b9fa2c6be77a95afed8b7be448
-        x-checker-data:
-          type: git
-          tag-pattern: ^libaio-([\d.]+)$
-    cleanup:
-      - /include
-      - /lib/*.a
-
-  - name: portaudio
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-    cleanup:
-      - /include
-      - /share/doc
-      - /lib/cmake
-      - /lib/pkgconfig
-      - /lib/*.a
-    sources:
-      - type: git
-        url: https://github.com/PortAudio/portaudio.git
-        tag: v19.7.0
-        commit: 147dd722548358763a8b649b3e4b41dfffbcfbb6
-        x-checker-data:
-          type: git
-          tag-pattern: ^v([\d.]+)$
-
-  - name: soundtouch
-    buildsystem: cmake-ninja
-    sources:
-      - type: git
-        url: https://codeberg.org/soundtouch/soundtouch.git
-        tag: 2.3.1
-        commit: e1f315f5358d9db5cee35a7a2886425489fcefe8
-        x-checker-data:
-          type: git
-          tag-pattern: ^([\d.]+)$
-    cleanup:
-      - /bin
-      - /include
-      - /lib/cmake
-      - /lib/pkgconfig
-      - /share/doc
-      - /lib/*.a
-
-  - name: png++
-    disabled: true
-    buildsystem: simple
-    build-commands:
-      - make
-      - make prefix=/app install
-    sources:
-      - type: archive
-        url: https://download.savannah.nongnu.org/releases/pngpp/png++-0.2.10.tar.gz
-        sha256: 998af216ab16ebb88543fbaa2dbb9175855e944775b66f2996fc945c8444eee1
-
-  - name: libpcap
-    buildsystem: cmake-ninja
-    sources:
-      - type: git
-        url: https://github.com/the-tcpdump-group/libpcap.git
-        tag: libpcap-1.10.1
-        commit: c7642e2cc0c5bd65754685b160d25dc23c76c6bd
-        x-checker-data:
-          type: git
-          tag-pattern: ^libpcap-([\d.]+)$
-    cleanup:
-      - /bin
-      - /include
-      - /share/man
-      - /lib/pkgconfig
-      - /lib/*.a
-
-  - name: pcsx2
-    buildsystem: cmake-ninja
-    builddir: true
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-      - -DPACKAGE_MODE=TRUE
-      - -DXDG_STD=TRUE
-      - -DDISABLE_BUILD_DATE=TRUE
-      - -DDISABLE_PCSX2_WRAPPER=TRUE
-      - -DDISABLE_ADVANCE_SIMD=TRUE
-      - -DSDL2_API=TRUE
-      #- '-DWAYLAND_API=TRUE"' enable this if Steam Deck goes to Wayland
-      - '-DCMAKE_INTERPROCEDURAL_OPTIMIZATION=TRUE'
-    cleanup:
-      - /share/pixmaps
-      - /share/man
-      - /share/doc
-    sources:
-      - type: git
-        url: https://github.com/PCSX2/pcsx2.git
-        tag: v1.7.3229
-        commit: e3eae7fbe83aad3952e3ed6a8e56fc016b51a9c3
-
-  # PCSX2 Flathub Workaround - START
-  # This workaround disables the PCSX2 libraries (disable-submodules: true) and install them separately
-  # This is only to make it buildable by the flathub builder as normaly it seems not to be needed
-        disable-submodules: true
-      - type: git
-        dest: 3rdparty/xz/xz
-        url: https://github.com/PCSX2/xz.git
-        commit: 3d566cd519017eee1a400e7961ff14058dfaf33c
-      - type: git
-        dest: 3rdparty/gtest
-        url: https://github.com/google/googletest.git
-        commit: e2239ee6043f73722e7aa812a459f54a28552929
-      - type: git
-        dest: 3rdparty/fmt/fmt
-        url: https://github.com/fmtlib/fmt.git
-        commit: b6f4ceaed0a0a24ccf575fab6c56dd50ccf6f1a9
-      - type: git
-        dest: 3rdparty/libchdr/libchdr
-        url: https://github.com/rtissera/libchdr.git
-        commit: 5de1a59019815ccdbba0fe07c71b31406d023248
-      - type: git
-        dest: 3rdparty/wil
-        url: https://github.com/microsoft/wil.git
-        commit: 3018875eaa4f8e3d86cf2da97fd577bae59f3aec
-      - type: git
-        dest: 3rdparty/cubeb/cubeb
-        url: https://github.com/mozilla/cubeb.git
-        commit: 773f16b7ea308392c05be3e290163d1f636e6024
-      - type: git
-        dest: 3rdparty/rapidyaml/rapidyaml
-        url: https://github.com/biojppm/rapidyaml.git
-        commit: 213b201d264139cd1b887790197e08850af628e3
-      - type: git
-        dest: 3rdparty/imgui/imgui
-        url: https://github.com/ocornut/imgui.git
-        commit: 60bea052a92cbb4a93b221002fdf04f0da3698e1
-      - type: git
-        dest: 3rdparty/glslang/glslang
-        url: https://github.com/KhronosGroup/glslang.git
-        commit: c9706bdda0ac22b9856f1aa8261e5b9e15cd20c5
-      - type: git
-        dest: 3rdparty/vulkan-headers
-        url: https://github.com/KhronosGroup/Vulkan-Headers.git
-        commit: 52a76fd0a693708eb8c25bd0ab7a1008091f64d4
-      - type: git
-        dest: 3rdparty/sdl2/SDL
-        url: https://github.com/libsdl-org/SDL.git
-        commit: 53dea9830964eee8b5c2a7ee0a65d6e268dc78a1
-      - type: git
-        dest: 3rdparty/libzip/libzip
-        url: https://github.com/nih-at/libzip.git
-        commit: bdc03ab23b703fcc516436d6ebcbfb6ac4484033
-      - type: git
-        dest: 3rdparty/zstd/zstd
-        url: https://github.com/facebook/zstd.git
-        commit: e47e674cd09583ff0503f0f6defd6d23d8b718d3
-  # PCSX2 Flathub Workaround - END
-
-  # - name: pcsx2-qt
-  #   buildsystem: cmake-ninja
-  #   builddir: true
-  #   config-opts:
-  #     - '-DCMAKE_BUILD_TYPE=Release'
-  #     - '-DPACKAGE_MODE=TRUE'
-  #     - '-DXDG_STD=TRUE'
-  #     - '-DDISABLE_BUILD_DATE=TRUE'
-  #     - '-DDISABLE_PCSX2_WRAPPER=TRUE'
-  #     - '-DDISABLE_ADVANCE_SIMD=TRUE'
-  #     - '-DSDL2_API=TRUE'
-  #     #- '-DWAYLAND_API=TRUE"' enable this if Steam Deck goes to Wayland
-  #     - '-DQT_BUILD=TRUE'
-  #     - '-DCMAKE_INTERPROCEDURAL_OPTIMIZATION=TRUE'
-  #   cleanup:
-  #     - /share/pixmaps
-  #     - /share/man
-  #     - /share/doc
-  #   post-install:
-  #     - ln -s ${FLATPAK_DEST}/share/PCSX2/resources ${FLATPAK_DEST}/bin/resources
-  #   sources:
-  #     - type: git
-  #       url: https://github.com/PCSX2/pcsx2.git
-  #       tag: v1.7.3229
-  #       commit: e3eae7fbe83aad3952e3ed6a8e56fc016b51a9c3  
-  #   # same as above
-  #   #disable-submodules: true
-
   # Inspired by:
   # https://github.com/flathub/com.zettlr.Zettlr/blob/master/com.zettlr.Zettlr.yaml
   # https://pcsx2.net/downloads/
 
-  - name: pcsx2-qt-appimage
+  - name: pcsx2-qt
     buildsystem: simple
     build-commands:
-      - ls -la #debug
       - chmod +x pcsx2*.AppImage
       - ./pcsx2*.AppImage --appimage-extract
       - mkdir -p "${FLATPAK_DEST}/pcsx2-qt"
@@ -958,14 +533,14 @@ modules:
       - ln -s "${FLATPAK_DEST}/pcsx2-qt/usr/bin/pcsx2-qt" "${FLATPAK_DEST}/bin/pcsx2-qt"
     sources:
       - type: file
-        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.3366/pcsx2-v1.7.3366-linux-AppImage-64bit-AVX2-Qt.AppImage
-        sha256: 00790594de30929a11056b95d89650cbf523cc2bb1dc27df3a99e215722ec90c
+        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.3501/pcsx2-v1.7.3501-linux-AppImage-64bit-AVX2-Qt.AppImage
+        sha256: 104e8dae653aeb1fa7c75a4cc0fd07038715e75c1f7d40d111428ae83279356c
 
   # PCSX2 - END
 
   # Dolphin - START
   # https://github.com/flathub/org.DolphinEmu.dolphin-emu
-  # WHEN UPADTING: remember to update rd-submodules/yuzu contents
+  # WHEN UPADTING: remember to update rd-submodules/dolphin contents
 
   # needed for the emulate bluetooth adapter feature to work
   - name: bluez
@@ -985,8 +560,8 @@ modules:
       - --with-dbussessionbusdir=/app/usr/lib/system-services
     sources:
       - type: archive
-        url: https://www.kernel.org/pub/linux/bluetooth/bluez-5.64.tar.xz
-        sha256: ae437e65b6b3070c198bc5b0109fe9cdeb9eaa387380e2072f9de65fe8a1de34
+        url: https://www.kernel.org/pub/linux/bluetooth/bluez-5.65.tar.xz
+        sha256: 2565a4d48354b576e6ad92e25b54ed66808296581c8abb80587051f9993d96d4
         x-checker-data:
           type: anitya
           project-id: 10029
@@ -1034,7 +609,14 @@ modules:
     sources:
       - type: git
         url: https://github.com/dolphin-emu/dolphin.git
-        commit: 8335ec70e5fe253eb21509408ca6b5736ed57dfc
+        commit: 48c9c224cf9f82f0f9f2690b7cc6283d7448480c
+        x-checker-data:
+          type: json
+          url: https://dolphin-emu.org/update/latest/beta
+          commit-query: .hash
+          version-query: .shortrev
+          timestamp-query: .date
+          is-main-source: true
       # detects whether dolphin is running in a flatpak sandbox
       # and makes it use xdg directories if it is.
       # prevents dolphin from attempting to write conf files
@@ -1047,17 +629,19 @@ modules:
         path: rd-submodules/dolphin/nodirtyversion.patch
       - type: script
         commands:
-          - for i in {0..9}; do
-          - test -S $XDG_RUNTIME_DIR/discord-ipc-$i || ln -sf {app/com.discordapp.Discord,$XDG_RUNTIME_DIR}/discord-ipc-$i;
-          - done
-          # use gtk3 filechooser on steamdeck
-          - bv=`cat /sys/devices/virtual/dmi/id/board_vendor`
-          - bv=$bv`cat /sys/devices/virtual/dmi/id/board_name`
-          - if [[ $bv == "ValveJupiter" ]]; then
-          - QT_QPA_PLATFORMTHEME=gtk3 dolphin-emu "$@"
-          - else
-          - dolphin-emu "$@"
-          - fi
+          - |
+            for i in {0..9}; do
+              test -S $XDG_RUNTIME_DIR/discord-ipc-$i ||
+                ln -sf {app/com.discordapp.Discord,$XDG_RUNTIME_DIR}/discord-ipc-$i;
+            done
+            # use gtk3 filechooser on steamdeck
+            bv=`cat /sys/devices/virtual/dmi/id/board_vendor`
+            bv=$bv`cat /sys/devices/virtual/dmi/id/board_name`
+            if [[ $bv == "ValveJupiter" ]]; then
+              QT_QPA_PLATFORMTHEME=gtk3 dolphin-emu "$@"
+            else
+              dolphin-emu "$@"
+            fi
         dest-filename: dolphin-emu-wrapper
 
   # Dolphin - END
@@ -1116,8 +700,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/mborgerson/xemu.git
-        tag: v0.7.70
-        commit: 080022833db0896b8af4482e726200acd51507a0
+        tag: v0.7.71
+        commit: 22db3304a454b2d289a9d5ea488fa3c3dec836f4
         x-checker-data:
           type: json
           url: https://api.github.com/repos/mborgerson/xemu/releases/latest
@@ -1159,62 +743,15 @@ modules:
   #- shared-modules/glu/glu-9.json
   - shared-modules/glew/glew.json
 
-  - name: rpcs3-llvm
-    buildsystem: cmake-ninja
-    builddir: true
-    build-options:
-      cflags: &optflags -O2 -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong
-        -grecord-gcc-switches -fasynchronous-unwind-tables -fstack-clash-protection
-        -fcf-protection -fno-omit-frame-pointer
-      cflags-override: true
-      cxxflags: -O2 -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong
-        -grecord-gcc-switches -fasynchronous-unwind-tables -fstack-clash-protection
-        -fcf-protection -fno-omit-frame-pointer -msse -msse2 -mcx16
-      cxxflags-override: true
-      env:
-        AR: llvm-ar
-        CC: clang
-        CXX: clang++
-        RANLIB: llvm-ranlib
-      ldflags: -fuse-ld=lld
-      prepend-ld-library-path: /usr/lib/sdk/llvm14/lib
-      prepend-path: /usr/lib/sdk/llvm14/bin
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-      - -DBUILD_SHARED_LIBS=OFF
-      - -DLLVM_CCACHE_BUILD=ON
-      - -DLLVM_TARGETS_TO_BUILD='X86'
-      - -DLLVM_BUILD_RUNTIME=OFF
-      - -DLLVM_BUILD_TOOLS=OFF
-      - -DLLVM_INCLUDE_DOCS=OFF
-      - -DLLVM_INCLUDE_EXAMPLES=OFF
-      - -DLLVM_INCLUDE_TESTS=OFF
-      - -DLLVM_INCLUDE_TOOLS=OFF
-      - -DLLVM_INCLUDE_UTILS=OFF
-      - -DLLVM_USE_INTEL_JITEVENTS=ON
-      - -DLLVM_USE_PERF=ON
-      - -DLLVM_ENABLE_Z3_SOLVER=OFF
-      - -DCMAKE_CXX_STANDARD=17
-      - -DITTAPI_SOURCE_DIR=/run/build/rpcs3-llvm/ittapi
-      - -Wno-dev
-    cleanup:
-      - '*'
-    sources:
-      - type: git
-        url: https://github.com/RPCS3/llvm-mirror.git
-        commit: c725f494c91611018f5d830eca22c0a1662c0f31
-      - type: git
-        url: https://github.com/intel/ittapi.git
-        dest: ittapi/ittapi
-        disable-shallow-clone: true
-
   - name: rpcs3
     buildsystem: cmake-ninja
     builddir: true
     build-options:
       append-ld-library-path: /usr/lib/sdk/llvm14/lib
       append-path: /usr/lib/sdk/llvm14/bin
-      cflags: *optflags
+      cflags: &optflags -O2 -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong
+        -grecord-gcc-switches -fasynchronous-unwind-tables -fstack-clash-protection
+        -fcf-protection -fno-omit-frame-pointer
       cflags-override: true
       cxxflags: *optflags
       cxxflags-override: true
@@ -1226,13 +763,14 @@ modules:
       ldflags: -fuse-ld=lld
     config-opts:
       - -DCMAKE_BUILD_TYPE=RelWithDebInfo
-      - -DBUILD_LLVM_SUBMODULE=OFF
+      - -DBUILD_LLVM_SUBMODULE=ON
       - -DUSE_NATIVE_INSTRUCTIONS=OFF
       - -DUSE_PRECOMPILED_HEADERS=OFF
       - -DUSE_SYSTEM_CURL=ON
       - -DUSE_SYSTEM_FFMPEG=ON
       - -DUSE_SYSTEM_LIBPNG=ON
       - -DUSE_SYSTEM_ZLIB=ON
+      - -DITTAPI_SOURCE_DIR=/run/build/rpcs3/ittapi
       - -Wno-dev
     post-install:
       - |
@@ -1243,7 +781,12 @@ modules:
     sources:
       - type: git
         url: https://github.com/RPCS3/rpcs3.git
-        commit: 9d9e18f6147760f2502401ea0b0d4b3524f051c8
+        commit: 8d5a9dc722de8e8e881adf8c7f16e76226a1dad8
+      - type: git
+        url: https://github.com/intel/ittapi.git
+        commit: 2428ed97aa977c66b30940081e7d3e9b1a3c7402
+        dest: ittapi/ittapi
+        disable-shallow-clone: true
 
   # RPCS3 - END
 
@@ -1295,7 +838,7 @@ modules:
     no-make-install: true
     builddir: true
     config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
       - -DUSE_EGL=ON
       - -DUSE_SDL2=ON
       - -DUSE_WAYLAND=ON
@@ -1303,83 +846,36 @@ modules:
       - -DUSE_DRMKMS=ON
       - -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON
     post-install:
-      - install -m 755 -t /app/bin/ bin/duckstation-nogui bin/duckstation-qt
-      - |-
-        for px in 16 32 48 64 128 256; do
-          install -Dm644 ../extras/icons/icon-${px}px.png /app/share/icons/hicolor/${px}x${px}/apps/org.duckstation.DuckStation.png
-        done
+      - install -m755 bin/duckstation-qt /app/bin
       - cp -r ../data/* bin/translations /app/bin
     sources:
       - type: git
         url: https://github.com/stenzek/duckstation.git
-        commit: 3fb61865e505ba639609fbf16cb8bdf5c66e020c
+        commit: 6f709468601183083b8581d4952aaba7baf77084
+        # Cloning dep/msvc/qt is only necessary for Windows
+        disable-submodules: true
   
   # Duckstation - END
 
-  # CEMU - START
-  # temporary here: https://github.com/Eonfge/flathub/blob/8bb2905b0fefdff820a2b65dac2a7cde916d3ce5/info.cemu.Cemu.yaml
+  # Cemu - START
+  # https://github.com/cemu-project/Cemu/releases
 
-  # Needed for imgui
-#  - name: glad
-#    buildsystem: cmake-ninja
-#    config-opts:
-#      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
-#      - -DBUILD_SHARED_LIBS=true
-#      - -DGLAD_REPRODUCIBLE=true
-#      - -DGLAD_INSTALL=true
-#    sources:
-#      - type: archive
-#        url: https://github.com/Dav1dde/glad/archive/refs/tags/v0.1.36.tar.gz
-#        sha256: 8470ed1b0e9fbe88e10c34770505c8a1dc8ccb78cadcf673331aaf5224f963d2
-#
-#  # Needed for imgui
-#  - name: glfw
-#    buildsystem: cmake-ninja
-#    builddir: true
-#    config-opts:
-#      - -DBUILD_SHARED_LIBS=ON
-#      - -DGLFW_BUILD_EXAMPLES=OFF
-#      - -DGLFW_BUILD_TESTS=OFF
-#      - -DGLFW_BUILD_DOCS=OFF
-#    sources:
-#      - type: archive
-#        url: https://github.com/glfw/glfw/releases/download/3.3.2/glfw-3.3.2.zip
-#        sha256: 08a33a512f29d7dbf78eab39bd7858576adcc95228c9efe8e4bc5f0f3261efc7
-#    cleanup:
-#      - /include
-#      - /lib/pkgconfig
-#
-#  - name: imgui
-#    buildsystem: cmake
-#    sources:
-#      - type: archive
-#        url: https://github.com/ocornut/imgui/archive/refs/tags/v1.88.zip
-#        sha256: 81087a74599e5890a07b636887cee73a7dc1a9eb9e1f19a4a0d82a76090bf4c2
-#      - type: file
-#        path: imguiCMakeLists.txt
-#        dest-filename: CMakeLists.txt
-#
-#  - name: Cemu
-#    buildsystem: cmake-ninja
-#    builddir: true
-#    config-opts:
-#      - -DENABLE_VCPKG=false
-#      - -DCMAKE_BUILD_TYPE=release 
-#      - -DCMAKE_C_COMPILER=/usr/bin/gcc 
-#      - -DCMAKE_CXX_COMPILER=/usr/bin/g++
-#      - -G Ninja
-#      - -DCMAKE_MAKE_PROGRAM=/usr/bin/ninja
-#    sources:
-#      - type: git
-#        url: https://github.com/cemu-project/Cemu
-#        commit: d8da8a54a6c08296a884b892d714cabcb7e4bdb5
-#    cleanup:
-#      - /app/include
-#      - /app/lib/*.a
-#      - /app/lib/*.la
-#      - /app/lib/pkgconfig
-#
-  # CEMU - END
+  - name: Cemu-binary
+    buildsystem: simple
+    build-commands:
+      - mv Cemu ${FLATPAK_DEST}/bin/Cemu
+      - chmod 777 ${FLATPAK_DEST}/bin/Cemu
+      - mkdir -p ${FLATPAK_DEST}/config/cemu
+      - mv gameProfiles ${FLATPAK_DEST}/config/cemu/gameProfiles
+      - mv resources ${FLATPAK_DEST}/config/cemu/resources
+      - mv shaderCache ${FLATPAK_DEST}/config/cemu/shaderCache
+    sources:
+      - type: archive
+        url: https://github.com/cemu-project/Cemu/releases/download/v2.0-10/cemu-2.0-10-ubuntu-20.04-x64.zip
+        sha256: b6cb5560e9a15be5991db4ca0ce1de70d233d094e388477b05d663a542dbbd5c
+
+  # Cemu - END
+
 
   # External manifests end
 
@@ -1432,4 +928,4 @@ modules:
     sources:
       - type: git
         url: https://github.com/XargonWan/RetroDECK.git
-        branch: cooker
+        branch: cooker-0.6.0b
