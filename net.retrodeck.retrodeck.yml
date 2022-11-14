@@ -453,8 +453,7 @@ modules:
   # PPSSPP - END
 
   # Yuzu - START
-  # https://github.com/flathub/org.yuzu_emu.yuzu
-  # WHEN UPADTING: remember to update rd-submodules/yuzu contents
+  # https://github.com/yuzu-emu/yuzu-mainline/releases
 
   - name: Yuzu
     buildsystem: simple
