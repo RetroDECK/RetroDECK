@@ -76,7 +76,7 @@ modules:
       - |
         git checkout ${GITHUB_REF_NAME}
         mkdir -p ${FLATPAK_DEST}/retrodeck/
-        VERSION="0.6.0b-cooker"
+        VERSION="0.7.0b-cooker"
         if [[ $VERSION == *"cooker"* ]];
         then
           VERSION="cooker-"$(git rev-parse --short HEAD)
