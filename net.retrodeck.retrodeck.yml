@@ -538,6 +538,11 @@ modules:
 
   # PCSX2 - END
 
+  - name: debug
+    buildsystem: simple
+    build-commands:
+      - whoami
+
   # Dolphin - START
   # https://github.com/flathub/org.DolphinEmu.dolphin-emu
   # WHEN UPADTING: remember to update rd-submodules/dolphin contents
