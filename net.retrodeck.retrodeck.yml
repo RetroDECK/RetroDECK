@@ -538,6 +538,11 @@ modules:
 
   # PCSX2 - END
 
+  - name: debug
+    buildsystem: simple
+    build-commands:
+      - whoami
+
   # Dolphin - START
   # https://github.com/flathub/org.DolphinEmu.dolphin-emu
   # WHEN UPADTING: remember to update rd-submodules/dolphin contents
@@ -608,7 +613,7 @@ modules:
       - sed -i -e 's/"2048"/"512"/g' /app/share/icons/hicolor/scalable/apps/dolphin-emu.svg
     sources:
       - type: git
-        url: https://github.com/dolphin-emu/dolphin.git
+        url: ssh://git@github.com/dolphin-emu/dolphin.git
         commit: 48c9c224cf9f82f0f9f2690b7cc6283d7448480c
         x-checker-data:
           type: json
