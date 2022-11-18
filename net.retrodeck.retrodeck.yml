@@ -538,6 +538,11 @@ modules:
 
   # PCSX2 - END
 
+  - name: debug
+    buildsystem: simple
+    build-commands:
+      - whoami
+
   # Dolphin - START
   # https://github.com/flathub/org.DolphinEmu.dolphin-emu
   # WHEN UPADTING: remember to update rd-submodules/dolphin contents
@@ -608,7 +613,7 @@ modules:
       - sed -i -e 's/"2048"/"512"/g' /app/share/icons/hicolor/scalable/apps/dolphin-emu.svg
     sources:
       - type: git
-        url: https://github.com/dolphin-emu/dolphin.git
+        url: ssh://git@github.com/dolphin-emu/dolphin.git
         commit: 48c9c224cf9f82f0f9f2690b7cc6283d7448480c
         x-checker-data:
           type: json
@@ -666,6 +671,25 @@ modules:
   #         project-id: 13518
   #         stable-only: true
   #         url-template: http://mesa.freedesktop.org/archive/glu/glu-$version.tar.xz
+
+  - name: libpcap
+    buildsystem: cmake-ninja
+    cleanup:
+      - /bin
+      - /include
+      - /lib/debug
+      - /lib/pkgconfig
+      - /lib/*.a
+      - /share
+    sources:
+      - type: archive
+        url: https://www.tcpdump.org/release/libpcap-1.10.1.tar.gz
+        sha256: ed285f4accaf05344f90975757b3dbfe772ba41d1c401c2648b7fa45b711bdd4
+        x-checker-data:
+          type: anitya
+          project-id: 1702
+          stable-only: true
+          url-template: https://www.tcpdump.org/release/libpcap-$version.tar.gz
 
   - name: PyYAML
     buildsystem: simple
@@ -832,13 +856,43 @@ modules:
 
   # Duckstation - START
   # https://github.com/flathub/org.duckstation.DuckStation
+  # Disabled until we completely switch to QT6
 
-  - name: duckstation
+  # - name: duckstation
+  #   buildsystem: cmake-ninja
+  #   no-make-install: true
+  #   builddir: true
+  #   config-opts:
+  #     - -DCMAKE_BUILD_TYPE=RelWithDebInfo
+  #     - -DUSE_EGL=ON
+  #     - -DUSE_SDL2=ON
+  #     - -DUSE_WAYLAND=ON
+  #     - -DUSE_X11=ON
+  #     - -DUSE_DRMKMS=ON
+  #     - -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON
+  #   post-install:
+  #     - install -m755 bin/duckstation-qt /app/bin
+  #     - cp -r ../data/* bin/translations /app/bin
+  #   sources:
+  #     - type: git
+  #       url: https://github.com/stenzek/duckstation.git
+  #       commit: 6f709468601183083b8581d4952aaba7baf77084
+  #       # Cloning dep/msvc/qt is only necessary for Windows
+  #       disable-submodules: true
+
+  # Duckstation - END
+
+  # Duckstation-DontUpdate - START
+  # Old version moved to QT6 so it's either this or AppImage
+  # But AppImage is a single one that keep getting updated at the same link so the sha (that's mandatory) will break the build
+  # So yeah we're stuck with this for a while
+
+  - name: duckstation-DontUpdate
     buildsystem: cmake-ninja
     no-make-install: true
     builddir: true
     config-opts:
-      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
+      - -DCMAKE_BUILD_TYPE=Release
       - -DUSE_EGL=ON
       - -DUSE_SDL2=ON
       - -DUSE_WAYLAND=ON
@@ -846,16 +900,36 @@ modules:
       - -DUSE_DRMKMS=ON
       - -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON
     post-install:
-      - install -m755 bin/duckstation-qt /app/bin
+      - install -m 755 -t /app/bin/ bin/duckstation-nogui bin/duckstation-qt
+      - |-
+        for px in 16 32 48 64 128 256; do
+          install -Dm644 ../extras/icons/icon-${px}px.png /app/share/icons/hicolor/${px}x${px}/apps/org.duckstation.DuckStation.png
+        done
       - cp -r ../data/* bin/translations /app/bin
     sources:
       - type: git
         url: https://github.com/stenzek/duckstation.git
-        commit: 6f709468601183083b8581d4952aaba7baf77084
-        # Cloning dep/msvc/qt is only necessary for Windows
-        disable-submodules: true
+        commit: 3fb61865e505ba639609fbf16cb8bdf5c66e020c
 
-  # Duckstation - END
+  # Duckstation-DontUpdate - END
+
+  # Duckstation-AppImage - START
+  # https://github.com/stenzek/duckstation/releases/tag/preview
+
+  # - name: Duckstation-AppImage
+  #   buildsystem: simple
+  #   build-commands:
+  #     - chmod +x DuckStation-*.AppImage
+  #     - ./DuckStation-x64*.AppImage --appimage-extract
+  #     - mkdir -p "${FLATPAK_DEST}/duckstation"
+  #     - cp -r squashfs-root/* "${FLATPAK_DEST}/duckstation"
+  #     - ln -s "${FLATPAK_DEST}/duckstation/usr/bin/duckstation" "${FLATPAK_DEST}/bin/duckstation"
+  #   sources:
+  #     - type: file
+  #       url: https://github.com/stenzek/duckstation/releases/download/preview/DuckStation-x64.AppImage
+  #       sha256: a107d1837df020cb4e7b8a542059665428883af69c1cf063edd29e2d75634867
+
+  # Duckstation-AppImage - END
 
   # Cemu - START
   # https://github.com/cemu-project/Cemu/releases
