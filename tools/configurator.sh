@@ -355,7 +355,6 @@ configurator_options_dialog() {
 }
 
 configurator_move_dialog() {
-"Move Everything" )
   if [[ -d $rdhome ]]; then
     configurator_generic_dialog "This option will move the RetroDECK data folder (ROMs, saves, BIOS etc.) to a new location.\n\nPlease choose where to move the RetroDECK data folder."
     destination=$(configurator_destination_choice_dialog "RetroDECK Data" "Please choose a destination for the RetroDECK data folder.")

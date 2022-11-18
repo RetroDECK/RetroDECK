@@ -41,6 +41,16 @@ pcsx2conf="/var/config/PCSX2/inis/GS.ini"
 pcsx2uiconf="/var/config/PCSX2/inis/PCSX2_ui.ini"
 pcsx2vmconf="/var/config/PCSX2/inis/PCSX2_vm.ini"
 
+# PCSX2-QT config file
+
+pcsx2qtconf="/var/config/PCSX2/inis/PCSX2.ini"
+
+# We moved the lockfile in /var/config/retrodeck in order to solve issue #53 - Remove in a few versions
+if [ -f "$HOME/retrodeck/.lock" ]
+then
+  mv "$HOME/retrodeck/.lock" $lockfile
+fi
+
 # If there is no config file I initalize the file with the the default values
 if [ ! -f "$rd_conf" ]
 then
@@ -51,7 +61,7 @@ then
   # if we are here means that the we are in a new installation, so the version is valorized with the hardcoded one
   # Initializing the variables
   if [ -z $version]; then
-    if [[ $(cat $lockfile) == *"0.4."* ]] || [[ $(cat $lockfile) == *"0.3."* ]] || [[ $(cat $lockfile) == *"0.2."* ]] || [[ $(cat $lockfile) == *"0.1."* ]]; then
+    if [[ $(cat $lockfile) == *"0.4."* ]] || [[ $(cat $lockfile) == *"0.3."* ]] || [[ $(cat $lockfile) == *"0.2."* ]] || [[ $(cat $lockfile) == *"0.1."* ]]; then # If the previous version is very out of date, pre-rd_conf
       echo "Running version workaround"
       version=$(cat $lockfile)
     else

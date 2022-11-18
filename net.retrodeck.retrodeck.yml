@@ -985,6 +985,8 @@ modules:
 
       - cp functions.sh /app/libexec/functions.sh
 
+      - cp post_update.sh /app/libexec/post_update.sh
+
       # Desktop entry
       - cp net.retrodeck.retrodeck.desktop /app/share/applications/net.retrodeck.retrodeck.desktop
 
