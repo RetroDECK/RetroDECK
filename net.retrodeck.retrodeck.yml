@@ -672,6 +672,25 @@ modules:
   #         stable-only: true
   #         url-template: http://mesa.freedesktop.org/archive/glu/glu-$version.tar.xz
 
+  - name: libpcap
+    buildsystem: cmake-ninja
+    cleanup:
+      - /bin
+      - /include
+      - /lib/debug
+      - /lib/pkgconfig
+      - /lib/*.a
+      - /share
+    sources:
+      - type: archive
+        url: https://www.tcpdump.org/release/libpcap-1.10.1.tar.gz
+        sha256: ed285f4accaf05344f90975757b3dbfe772ba41d1c401c2648b7fa45b711bdd4
+        x-checker-data:
+          type: anitya
+          project-id: 1702
+          stable-only: true
+          url-template: https://www.tcpdump.org/release/libpcap-$version.tar.gz
+
   - name: PyYAML
     buildsystem: simple
     build-commands:
