@@ -1004,5 +1004,5 @@ modules:
 
     sources:
       - type: git
-        url: https://github.com/icenine451/RetroDECK.git
-        branch: cooker-configurator
+        url: https://github.com/XargonWan/RetroDECK.git
+        branch: cooker-0.6.0b
