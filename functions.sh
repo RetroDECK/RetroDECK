@@ -61,9 +61,9 @@ move() {
   if [[ $(verify_space $1 $2) ]]; then
     (
       if [[ ! -d $2 ]]; then # Create destination directory if it doesn't already exist
-        debug_dialog "mkdir -pv $2"
+        mkdir -pv $2
       fi
-      debug_dialog "mv -v -t $2 $1"
+      mv -v -t $2 $1
     ) |
     zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -759,11 +759,11 @@ old_browse(){
       zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
       --cancel-label="No" \
       --ok-label "Yes" \
-      --text="Your rom folder will be:\n\n$sdcard/retrodeck/roms\n\nis that ok?"
+      --text="Your RetroDECK data folder will be:\n\n$sdcard/retrodeck\n\nis that ok?"
       if [ $? == 0 ] #yes
       then
         path_selected == true
-        roms_folder="$sdcard/retrodeck/roms"
+        rdhome="$sdcard/retrodeck"
         break
       else
         zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" --text="Do you want to quit?"
@@ -781,7 +781,7 @@ finit() {
   echo "Executing finit"
 
   # Internal or SD Card?
-  choice=$(configurator_destination_choice_dialog "ROMs" "Welcome to the first configuration of RetroDECK.\nThe setup will be quick but please READ CAREFULLY each message in order to avoid misconfigurations.\n\nWhere do you want your roms folder to be located?" )
+  choice=$(configurator_destination_choice_dialog "RetroDECK data" "Welcome to the first configuration of RetroDECK.\nThe setup will be quick but please READ CAREFULLY each message in order to avoid misconfigurations.\n\nWhere do you want your RetroDECK data folder to be located?\n\nThis folder will contain all ROMs, BIOSs and scraped data." )
   echo "Choice is $choice"
 
   case $choice in
@@ -793,7 +793,7 @@ finit() {
 
   "Internal Storage" ) # Internal
     echo "Internal selected"
-    roms_folder="$rdhome/roms"
+    rdhome="$HOME/retrodeck"
   ;;
 
   "SD Card" )
@@ -818,12 +818,15 @@ finit() {
         echo "Now quitting"
         exit 0
     else
-      roms_folder="$sdcard/retrodeck/roms"    # sdcard variable is correct as its given by browse function
-      echo "ROMs folder = $roms_folder"
+      rdhome="$sdcard/retrodeck"
     fi
   ;;
 
   esac
+
+  if [[ ! -d /home/deck/retrodeck && ! -L /home/deck/retrodeck ]]; then # If data stored on SD card, create /home/deck/retrodeck symlink to keep things working until configs can get modified
+    dir_prep "$rdhome" "/home/deck/retrodeck"
+  fi
 
   mkdir -pv $roms_folder
 

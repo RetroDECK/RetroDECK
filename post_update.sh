@@ -5,9 +5,9 @@ post_update() {
   # post update script
   echo "Executing post-update script"
 
-  case $version in # Only run updates as needed
+  local prev_version=$(sed -e 's/[\.a-z]//g' <<< $version)
 
-  "0.5.4b" )
+  if [[ $prev_version -le "054" ]]; then
 
     # Finding existing ROMs folder
     if [ -d "$default_sd/retrodeck" ]
@@ -177,9 +177,7 @@ post_update() {
     else
       echo "Version" $version "is after the save and state organization was changed, no need to sort again"
     fi
-  ;;
-
-  esac
+  fi
 
   # These commands are run every time, for now
 

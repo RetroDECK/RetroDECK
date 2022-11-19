@@ -75,15 +75,12 @@ then
   then
       echo "Config file's version is $version but the actual version is $hard_version"
       post_update       # Executing post update script
-      start_retrodeck
-      exit 0
   fi
 # Else, LOCKFILE IS NOT EXISTING (WAS REMOVED)
 # if the lock file doesn't exist at all means that it's a fresh install or a triggered reset
 else
   echo "Lockfile not found"
   finit             # Executing First/Force init
-	exit 0
 fi
 
 # Normal Startup
