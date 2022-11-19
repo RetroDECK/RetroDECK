@@ -14,19 +14,10 @@ source /app/libexec/functions.sh # uncomment for flatpak testing
 
 # Welcome
 #     - Move Directories
-#       - Migrate ROM directory
-#       - Migrate BIOS directory
-#       - Migrate downloaded_media
 #       - Migrate everything
 #     - Change Emulator Options
 #         - RetroArch
 #           - Change Rewind Setting
-#           - Enable/disable borders
-#           - Enable disable widescreen
-#     - Add or Update Files
-#       - Add specific cores
-#       - Grab all missing cores
-#       - Update all cores to nightly
 #     - RetroAchivement login
 #       - Login prompt
 #     - Reset RetroDECK
@@ -62,7 +53,7 @@ configurator_reset_dialog() {
   case $choice in
 
   "Reset RetroArch" )
-    debug_dialog "ra_init"
+    ra_init
     configurator_process_complete_dialog "resetting RetroArch"
     ;;
 
@@ -87,52 +78,52 @@ configurator_reset_dialog() {
     case $emulator_to_reset in
 
     "RetroArch" )
-      debug_dialog "ra_init"
+      ra_init
       configurator_process_complete_dialog "resetting $emulator_to_reset"
     ;;
 
     "Citra" )
-      debug_dialog "citra_init"
+      citra_init
       configurator_process_complete_dialog "resetting $emulator_to_reset"
     ;;
 
     "Dolphin" )
-      debug_dialog "dolphin_init"
+      dolphin_init
       configurator_process_complete_dialog "resetting $emulator_to_reset"
     ;;
 
     "Duckstation" )
-      debug_dialog "duckstation_init"
+      duckstation_init
       configurator_process_complete_dialog "resetting $emulator_to_reset"
     ;;
 
     "MelonDS" )
-      debug_dialog "melonds_init"
+      melonds_init
       configurator_process_complete_dialog "resetting $emulator_to_reset"
     ;;
 
     "PCSX2" )
-      debug_dialog "pcsx2_init"
+      pcsx2_init
       configurator_process_complete_dialog "resetting $emulator_to_reset"
     ;;
 
     "PPSSPP" )
-      debug_dialog "ppssppsdl_init"
+      ppssppsdl_init
       configurator_process_complete_dialog "resetting $emulator_to_reset"
     ;;
 
     "RPCS3" )
-      debug_dialog "rpcs3_init"
+      rpcs3_init
       configurator_process_complete_dialog "resetting $emulator_to_reset"
     ;;
 
     "XEMU" )
-      debug_dialog "xemu_init"
+      xemu_init
       configurator_process_complete_dialog "resetting $emulator_to_reset"
     ;;
 
     "Yuzu" )
-      debug_dialog "yuzu_init"
+      yuzu_init
       configurator_process_complete_dialog "resetting $emulator_to_reset"
     ;;
 
@@ -144,12 +135,12 @@ configurator_reset_dialog() {
   ;;
 
 "Reset All Standalones" )
-  debug_dialog "standalones_init"
+  standalones_init
   configurator_process_complete_dialog "resetting standalone emulators"
 ;;
 
 "Reset Tools" )
-  debug_dialog "tools_init"
+  tools_init
   configurator_process_complete_dialog "resetting the tools menu"
 ;;
 
@@ -158,7 +149,7 @@ configurator_reset_dialog() {
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Configurator Utility - Reset RetroDECK" \
   --text="You are resetting RetroDECK to its default state.\n\nAfter the process is complete you will need to exit RetroDECK and run it again."
-  debug_dialog "rm -f "$lockfile""
+  rm -f "$lockfile"
   configurator_process_complete_dialog "resetting RetroDECK"
 ;;
 
@@ -170,9 +161,9 @@ configurator_reset_dialog() {
 }
 
 configurator_retroachivement_dialog() {
-  login=$(zenity --forms --title="RetroDECK Configurator Utility - RetroAchievements Login" --cancel-label="Back" \
+  login=$(zenity --forms --title="RetroDECK Configurator Utility - RetroArch RetroAchievements Login" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-  --text="Enter your RetroAchievements Account details.\n\nBe aware that this tool cannot verify your login details.\nFor registration and more info visit\nhttps://retroachievements.org/\n" \
+  --text="Enter your RetroAchievements Account details.\n\nBe aware that this tool cannot verify your login details and currently only supports logging in with RetroArch.\nFor registration and more info visit\nhttps://retroachievements.org/\n" \
   --separator="=SEP=" \
   --add-entry="Username" \
   --add-password="Password")
@@ -186,13 +177,11 @@ configurator_retroachivement_dialog() {
   user=${arrIN[0]}
   pass=${arrIN[1]}
 
-  #set_setting_value $raconf cheevos_enable true retroarch
-  #set_setting_value $raconf cheevos_username $user retroarch
-  #set_setting_value $raconf cheevos_password $pass retroarch
+  set_setting_value $raconf cheevos_enable true retroarch
+  set_setting_value $raconf cheevos_username $user retroarch
+  set_setting_value $raconf cheevos_password $pass retroarch
 
-  debug_dialog "set_setting_value $raconf cheevos_enable true retroarch\n\nset_setting_value $raconf cheevos_username $user retroarch\n\nset_setting_value $raconf cheevos_password $pass retroarch"
-
-  configurator_process_complete_dialog "logging in to RetroAchievements"
+  configurator_process_complete_dialog "logging in to RetroArch RetroAchievements"
 }
 
 configurator_update_dialog() {
@@ -290,7 +279,7 @@ configurator_retroarch_rewind_dialog() {
 
     if [ $? == 0 ]
     then
-      debug_dialog "set_setting_value $raconf rewind_enable true retroarch"
+      set_setting_value $raconf rewind_enable true retroarch
       configurator_process_complete_dialog "enabling Rewind"
     else
       configurator_options_dialog
@@ -303,7 +292,7 @@ configurator_retroarch_rewind_dialog() {
 
     if [ $? == 0 ]
     then
-      debug_dialog "set_setting_value $raconf rewind_enable false retroarch"
+      set_setting_value $raconf rewind_enable false retroarch
       configurator_process_complete_dialog "disabling Rewind"
     else
       configurator_options_dialog
@@ -368,11 +357,11 @@ configurator_move_dialog() {
         configurator_move_dialog
       else
         configurator_generic_dialog "Moving RetroDECK data folder to $destination"
-        debug_dialog "unlink /home/deck/retrodeck" # Remove symlink for $rdhome
-        debug_dialog "move $sdcard/retrodeck "/home/deck/""
-        debug_dialog "roms_folder="$rdhome/roms""
-        debug_dialog "dir_prep $roms_folder "/var/config/emulationstation/ROMs""
-        debug_dialog "conf_write"
+        unlink /home/deck/retrodeck # Remove symlink for $rdhome
+        move $sdcard/retrodeck "/home/deck/"
+        roms_folder="$rdhome/roms"
+        dir_prep $roms_folder "/var/config/emulationstation/ROMs"
+        conf_write
         configurator_process_complete_dialog "moving the RetroDECK data directory to internal storage"
       fi
     ;;
@@ -387,12 +376,12 @@ configurator_move_dialog() {
         else
           configurator_generic_dialog "Moving RetroDECK data folder to $destination"
           if [[ -L $rdhome/roms ]]; then # Check for ROMs symlink user may have created
-              debug dialog "unlink $rdhome/roms"
+              unlink $rdhome/roms
           fi
-          debug_dialog "dir_prep "$sdcard/retrodeck" $rdhome"
-          debug_dialog "roms_folder="$sdcard/retrodeck/roms""
-          debug_dialog "dir_prep $roms_folder "/var/config/emulationstation/ROMs""
-          debug_dialog "conf_write"
+          dir_prep "$sdcard/retrodeck" $rdhome
+          roms_folder="$sdcard/retrodeck/roms"
+          dir_prep $roms_folder "/var/config/emulationstation/ROMs"
+          conf_write
           configurator_process_complete_dialog "moving the RetroDECK data directory to SD card"
         fi
       fi
@@ -405,8 +394,8 @@ configurator_move_dialog() {
     esac
   else
     configurator_generic_dialog "The RetroDECK data folder was not found at the expected location.\n\nThis may have happened if the folder was moved manually.\n\nPlease select the current location of the RetroDECK data folder."
-    debug_dialog "rdhome=$(browse "RetroDECK directory location")"
-    debug_dialog "conf_write"
+    rdhome=$(browse "RetroDECK directory location")
+    conf_write
     configurator_generic_dialog "RetroDECK data folder now configured at $rdhome. Please start the moving process again."
     configurator_move_dialog
   fi
@@ -425,7 +414,6 @@ configurator_welcome_dialog() {
   --column="Choice" --column="Action" \
   "Move Files" "Move files between internal/SD card or to custom locations" \
   "Change Options" "Adjust how RetroDECK behaves" \
-  "Update" "Update parts of RetroDECK" \
   "RetroAchivements" "Log in to RetroAchievements" \
   "Reset" "Reset parts of RetroDECK" )
 
@@ -437,10 +425,6 @@ configurator_welcome_dialog() {
 
   "Change Options" )
     configurator_options_dialog
-  ;;
-
-  "Update" )
-    configurator_update_dialog
   ;;
 
   "RetroAchivements" )
