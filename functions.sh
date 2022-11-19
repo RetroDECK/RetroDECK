@@ -824,7 +824,7 @@ finit() {
 
   esac
 
-  if [[ ! -d /home/deck/retrodeck && ! -L /home/deck/retrodeck ]]; then # If data stored on SD card, create /home/deck/retrodeck symlink to keep things working until configs can get modified
+  if [[ "$rdhome" == "$sdcard/retrodeck" && ! -d /home/deck/retrodeck && ! -L /home/deck/retrodeck ]]; then # If data stored on SD card, create /home/deck/retrodeck symlink to keep things working until configs can get modified
     dir_prep "$rdhome" "/home/deck/retrodeck"
   fi
 
