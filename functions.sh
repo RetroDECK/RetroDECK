@@ -515,6 +515,7 @@ dolphin_init() {
   dir_prep "$rdhome/saves/gc/dolphin/JAP" "/var/data/dolphin-emu/GC/JAP"
   dir_prep "$rdhome/screenshots" "/var/data/dolphin-emu/ScreenShots"
   dir_prep "$rdhome/states" "/var/data/dolphin-emu/StateSaves"
+  mkdir -pv /var/data/dolphin-emu/Wii/
   dir_prep "$rdhome/saves/wii/dolphin" "/var/data/dolphin-emu/Wii/"
 }
 
@@ -730,8 +731,8 @@ ra_init() {
   echo "-----------------------------------------------------------"
   wget "http://bluemsx.msxblue.com/rel_download/blueMSXv282full.zip" -P $rdhome/bios/MSX
   unzip -q "$rdhome/bios/MSX/blueMSXv282full.zip" -d $rdhome/bios/MSX
-  mv -rfv $rdhome/bios/MSX/Databases $rdhome/bios/Databases
-  mv -rfv $rdhome/bios/MSX/Machines $rdhome/bios/Machines
+  mv -fv $rdhome/bios/MSX/Databases $rdhome/bios/Databases
+  mv -fv $rdhome/bios/MSX/Machines $rdhome/bios/Machines
   rm -rfv $rdhome/bios/MSX
 }
 
