@@ -75,7 +75,6 @@ then
   then
       echo "Config file's version is $version but the actual version is $hard_version"
       post_update       # Executing post update script
-      conf_write        # Writing variables in the config file (sourced from global.sh)
       start_retrodeck
       exit 0
   fi
@@ -84,7 +83,6 @@ then
 else
   echo "Lockfile not found"
   finit             # Executing First/Force init
-  conf_write        # Writing variables in the config file (sourced from global.sh)
 	exit 0
 fi
 

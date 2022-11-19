@@ -577,13 +577,14 @@ xemu_init() {
   echo "Initializing XEMU"
   echo "------------------------"
   mkdir -pv $rdhome/saves/xbox/xemu/
+  mkdir -pv /var/data/xemu/
   cp -fv $emuconfigs/xemu.toml /var/data/xemu/xemu.toml
   sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/data/xemu/xemu.toml
   # Preparing HD dummy Image if the image is not found
   if [ ! -f $rdhome/bios/xbox_hdd.qcow2 ]
   then
     wget "https://github.com/mborgerson/xemu-hdd-image/releases/latest/download/xbox_hdd.qcow2.zip" -P $rdhome/bios/
-    unzip -q $rdhome/bios/xbox_hdd.qcow2.zip $rdhome/bios/
+    unzip -q $rdhome/bios/xbox_hdd.qcow2.zip -d $rdhome/bios/
     rm -rfv $rdhome/bios/xbox_hdd.qcow2.zip
   fi
 }
@@ -603,7 +604,7 @@ duckstation_init() {
   echo "------------------------"
   mkdir -p /var/config/duckstation/
   cp -fv $emuconfigs/duckstation/* /var/config/duckstation
-  sed -i 's#/home/deck/retrodeck/bios#'$rdhome/bios'#g' /var/config/ppsspp/PSP/SYSTEM/settings.ini
+  sed -i 's#/home/deck/retrodeck/bios#'$rdhome/bios'#g' /var/config/duckstation/settings.ini
 }
 
 standalones_init() {
@@ -728,7 +729,7 @@ ra_init() {
   echo "Initializing MSX / SVI / ColecoVision / SG-1000 LIBRETRO"
   echo "-----------------------------------------------------------"
   wget "http://bluemsx.msxblue.com/rel_download/blueMSXv282full.zip" -P $rdhome/bios/MSX
-  unzip -q "$rdhome/bios/MSX/blueMSXv282full.zip" $rdhome/bios/MSX
+  unzip -q "$rdhome/bios/MSX/blueMSXv282full.zip" -d $rdhome/bios/MSX
   mv -rfv $rdhome/bios/MSX/Databases $rdhome/bios/Databases
   mv -rfv $rdhome/bios/MSX/Machines $rdhome/bios/Machines
   rm -rfv $rdhome/bios/MSX
@@ -868,8 +869,8 @@ finit() {
   ) |
   zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-  --title "RetroDECK Finishing Upgrade" \
-  --text="RetroDECK is finishing the upgrade process, please wait."
+  --title "RetroDECK Finishing Initialization" \
+  --text="RetroDECK is finishing the initial setup process, please wait."
   create_lock
 
   zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
