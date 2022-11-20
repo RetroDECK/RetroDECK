@@ -13,7 +13,7 @@ source /app/libexec/functions.sh # uncomment for flatpak testing
 # Configurator Option Tree
 
 # Welcome
-#     - Move Directories
+#     - Move RetroDECK data directory
 #       - Migrate everything
 #     - Change Emulator Options
 #         - RetroArch
@@ -348,23 +348,37 @@ configurator_move_dialog() {
     configurator_generic_dialog "This option will move the RetroDECK data folder (ROMs, saves, BIOS etc.) to a new location.\n\nPlease choose where to move the RetroDECK data folder."
     destination=$(configurator_destination_choice_dialog "RetroDECK Data" "Please choose a destination for the RetroDECK data folder.")
     case $destination in
+
     "Back" )
       configurator_move_dialog
     ;;
+
     "Internal Storage" )
-      if [[ ! -L /home/deck/retrodeck && -d /home/deck/retrodeck ]]; then
+      if [[ ! -L "$HOME/retrodeck" && -d "$HOME/retrodeck" ]]; then
         configurator_generic_dialog "The RetroDECK data folder is already at that location, please pick a new one."
         configurator_move_dialog
       else
         configurator_generic_dialog "Moving RetroDECK data folder to $destination"
-        unlink /home/deck/retrodeck # Remove symlink for $rdhome
-        move $sdcard/retrodeck "/home/deck/"
-        roms_folder="$rdhome/roms"
-        dir_prep $roms_folder "/var/config/emulationstation/ROMs"
-        conf_write
-        configurator_process_complete_dialog "moving the RetroDECK data directory to internal storage"
+        unlink $HOME/retrodeck # Remove symlink for $rdhome
+        move $rdhome "$HOME"
+        if [[ ! -d $rdhome && -d $HOME/retrodeck ]]; then # If the move succeeded
+          rdhome="$HOME/retrodeck"
+          roms_folder="$rdhome/roms"
+          saves_folder="$rdhome/saves"
+          states_folder="$rdhome/states"
+          bios_folder="$rdhome/bios"
+          media_folder="$rdhome/downloaded_media"
+          themes_folder="$rdhome/themes"
+          emulator_post_move
+          conf_write
+
+          configurator_process_complete_dialog "moving the RetroDECK data directory to internal storage"
+        else
+          configurator_generic_dialog "The moving process was not completed, please try again."
+        fi
       fi
     ;;
+
     "SD Card" )
       if [[ -L $rdhome && -d $sdcard/retrodeck ]]; then
         configurator_generic_dialog "The RetroDECK data folder is already at that location, please pick a new one."
@@ -374,27 +388,91 @@ configurator_move_dialog() {
           configurator_generic_dialog "The SD card was found but is not writable\nThis can happen with cards formatted on PC or for other reasons.\nPlease format the SD card through the Steam Deck's Game Mode and try the moving process again."
           configurator_welcome_dialog
         else
-          configurator_generic_dialog "Moving RetroDECK data folder to $destination"
-          if [[ -L $rdhome/roms ]]; then # Check for ROMs symlink user may have created
-              unlink $rdhome/roms
+          if [[ $(verify_space $rdhome $sdcard) == "true" ]];then
+            configurator_generic_dialog "Moving RetroDECK data folder to $destination"
+            if [[ -L $rdhome/roms ]]; then # Check for ROMs symlink user may have created
+                unlink $rdhome/roms
+            fi
+
+            (
+            dir_prep "$sdcard/retrodeck" $rdhome
+            ) |
+            zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+            --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+            --title "RetroDECK Configurator Utility - Move in Progress" \
+            --text="Moving directory $rdhome to new location of $sdcard/retrodeck, please wait."
+
+            rdhome="$sdcard/retrodeck"
+            roms_folder="$rdhome/roms"
+            saves_folder="$rdhome/saves"
+            states_folder="$rdhome/states"
+            bios_folder="$rdhome/bios"
+            media_folder="$rdhome/downloaded_media"
+            themes_folder="$rdhome/themes"
+            emulator_post_move
+            conf_write
+            configurator_process_complete_dialog "moving the RetroDECK data directory to SD card"
+          else
+            zenity --icon-name=net.retrodeck.retrodeck --error --no-wrap \
+            --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+            --title "RetroDECK Configurator Utility - Move Directories" \
+            --text="The destination directory you have selected does not have enough free space for the files you are trying to move.\n\nPlease select a new destination or free up some space."
           fi
-          dir_prep "$sdcard/retrodeck" $rdhome
-          roms_folder="$sdcard/retrodeck/roms"
-          dir_prep $roms_folder "/var/config/emulationstation/ROMs"
-          conf_write
-          configurator_process_complete_dialog "moving the RetroDECK data directory to SD card"
         fi
       fi
     ;;
 
     "Custom Location" )
-      configurator_generic_dialog "A custom location for the RetroDECK data folder is not currently supported.\nPlease choose another location."
-      configurator_move_dialog
+      configurator_generic_dialog "Select the root folder you would like to store the RetroDECK data folder in.\n\nA new folder \"retrodeck\" will be created in the destination chosen."
+      custom_dest=$(browse "RetroDECK directory location")
+      if [[ ! -w $custom_dest ]]; then
+          configurator_generic_dialog "The destination was found but is not writable\nThis can happen if RetroDECK does not have permission to write to this location. This can typically be solved through the utility Flatseal, please make the needed changes and try the moving process again."
+          configurator_welcome_dialog
+      else
+        if [[ $(verify_space $rdhome $custom_dest) ]];then
+          configurator_generic_dialog "Moving RetroDECK data folder to $custom_dest/retrodeck"
+          if [[ -L $rdhome/roms ]]; then # Check for ROMs symlink user may have created
+            unlink $rdhome/roms
+          fi
+
+          (
+          dir_prep "$custom_dest/retrodeck" $rdhome
+          ) |
+          zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+          --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+          --title "RetroDECK Configurator Utility - Move in Progress" \
+          --text="Moving directory $rdhome to new location of $custom_dest/retrodeck, please wait."
+
+          rdhome="$custom_dest/retrodeck"
+          roms_folder="$rdhome/roms"
+          saves_folder="$rdhome/saves"
+          states_folder="$rdhome/states"
+          bios_folder="$rdhome/bios"
+          media_folder="$rdhome/downloaded_media"
+          themes_folder="$rdhome/themes"
+          emulator_post_move
+          conf_write
+          configurator_process_complete_dialog "moving the RetroDECK data directory to SD card"
+        else
+          zenity --icon-name=net.retrodeck.retrodeck --error --no-wrap \
+          --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+          --title "RetroDECK Configurator Utility - Move Directories" \
+          --text="The destination directory you have selected does not have enough free space for the files you are trying to move.\n\nPlease select a new destination or free up some space."
+        fi
+      fi
     ;;
+
     esac
   else
     configurator_generic_dialog "The RetroDECK data folder was not found at the expected location.\n\nThis may have happened if the folder was moved manually.\n\nPlease select the current location of the RetroDECK data folder."
     rdhome=$(browse "RetroDECK directory location")
+    roms_folder="$rdhome/roms"
+    saves_folder="$rdhome/saves"
+    states_folder="$rdhome/states"
+    bios_folder="$rdhome/bios"
+    media_folder="$rdhome/downloaded_media"
+    themes_folder="$rdhome/themes"
+    emulator_post_move
     conf_write
     configurator_generic_dialog "RetroDECK data folder now configured at $rdhome. Please start the moving process again."
     configurator_move_dialog

@@ -58,24 +58,31 @@ move() {
   # Function to move a directory from one parent to another
   # USAGE: move $source_dir $dest_dir
 
-  if [[ $(verify_space $1 $2) ]]; then
-    (
-      if [[ ! -d $2 ]]; then # Create destination directory if it doesn't already exist
-        mkdir -pv $2
-      fi
-      mv -v -t $2 $1
-    ) |
-    zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
-    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator Utility - Move in Progress" \
-    --text="Moving directory $1 to new location of $2, please wait."
+  if [[ ! -d "$2/$(basename $1)" ]]; then
+    if [[ $(verify_space $1 $2) ]]; then
+      (
+        if [[ ! -d $2 ]]; then # Create destination directory if it doesn't already exist
+          mkdir -pv $2
+        fi
+        mv -v -t $2 $1
+      ) |
+      zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Configurator Utility - Move in Progress" \
+      --text="Moving directory $1 to new location of $2, please wait."
+    else
+      zenity --icon-name=net.retrodeck.retrodeck --error --no-wrap \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Configurator Utility - Move Directories" \
+      --text="The destination directory you have selected does not have enough free space for the files you are trying to move.\n\nPlease select a new destination or free up some space."
+
+      configurator_move_dialog
+    fi
   else
     zenity --icon-name=net.retrodeck.retrodeck --error --no-wrap \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator Utility - Move Directories" \
-    --text="The destination directory you have selected does not have enough free space for the files you are trying to move.\n\nPlease select a new destination or free up some space."
-
-    configurator_move_dialog
+    --text="The destination directory you have selected already exists.\n\nPlease select a new destination."
   fi
 }
 
@@ -609,21 +616,77 @@ duckstation_init() {
 }
 
 standalones_init() {
-    # This script is configuring the standalone emulators with the default files present in emuconfigs folder
+  # This script is configuring the standalone emulators with the default files present in emuconfigs folder
 
-    echo "----------------------"
-    echo "Initializing standalone emulators"
-    echo "----------------------"
+  echo "----------------------"
+  echo "Initializing standalone emulators"
+  echo "----------------------"
 
-    yuzu_init
-    citra_init
-    dolphin_init
-    melonds_init
-    pcsx2_init
-    ppssppsdl_init
-    rpcs3_init
-    xemu_init
-    duckstation_init
+  yuzu_init
+  citra_init
+  dolphin_init
+  melonds_init
+  pcsx2_init
+  ppssppsdl_init
+  rpcs3_init
+  xemu_init
+  duckstation_init
+}
+
+emulators_post_move() {
+  # This script will redo the symlinks for all emulators after moving the $rdhome location without resetting other options
+  # FUTURE WORK: The sed commands here should be replaced with set_setting_value and dir_prep should be replaced with changing paths in config files directly where possible
+
+  # ES section
+  dir_prep $roms_folder "/var/config/emulationstation/ROMs"
+
+  # RA section
+  dir_prep "$rdhome/bios" "/var/config/retroarch/system"
+  dir_prep "$rdhome/.logs/retroarch" "/var/config/retroarch/logs"
+  dir_prep "$rdhome/shaders/retroarch" "/var/config/retroarch/shaders"
+
+  # Yuzu section
+  dir_prep "$rdhome/bios/switch/keys" "/var/data/yuzu/keys"
+  dir_prep "$rdhome/bios/switch/registered" "/var/data/yuzu/nand/system/Contents/registered"
+  dir_prep "$rdhome/saves/switch/yuzu/nand" "/var/data/yuzu/nand"
+  dir_prep "$rdhome/saves/switch/yuzy/sdmc" "/var/data/yuzu/sdmc"
+  dir_prep "$rdhome/.logs/yuzu" "/var/data/yuzu/log"
+  dir_prep "$rdhome/screenshots" "/var/data/yuzu/screenshots"
+  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/yuzu/qt-config.ini
+
+  # Dolphin section
+  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/dolphin-emu/Dolphin.ini
+  dir_prep "$rdhome/saves/gc/dolphin/EUR" "/var/data/dolphin-emu/GC/EUR"
+  dir_prep "$rdhome/saves/gc/dolphin/USA" "/var/data/dolphin-emu/GC/USA"
+  dir_prep "$rdhome/saves/gc/dolphin/JAP" "/var/data/dolphin-emu/GC/JAP"
+  dir_prep "$rdhome/screenshots" "/var/data/dolphin-emu/ScreenShots"
+  dir_prep "$rdhome/states" "/var/data/dolphin-emu/StateSaves"
+  dir_prep "$rdhome/saves/wii/dolphin" "/var/data/dolphin-emu/Wii/"
+
+  # PCSX2 section
+  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2_ui.ini
+  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2.ini
+
+  # MelonDS section
+  dir_prep "$rdhome/bios" "/var/config/melonDS/bios"
+  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/melonDS/melonDS.ini
+
+  # Citra section
+  dir_prep "$rdhome/bios/citra/sysdata" "/var/data/citra-emu/sysdata"
+  dir_prep "$rdhome/.logs/citra" "/var/data/citra-emu/log"
+  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
+
+  # RPCS3 section
+  sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/rpcs3/vfs.yml
+
+  # XEMU section
+  sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/data/xemu/xemu.toml
+
+  # PPSSPP Standalone section
+  sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/ppsspp/PSP/SYSTEM/ppsspp.ini
+
+  # Duckstation section
+  sed -i 's#/home/deck/retrodeck/bios#'$rdhome/bios'#g' /var/config/duckstation/settings.ini
 }
 
 #=========================
@@ -750,11 +813,13 @@ start_retrodeck() {
 }
 
 old_browse() {
-  # Function for browsing the sd card
-  path_selected=false
-    while [ $path_selected == false ]
-    do
-      sdcard="$(zenity --file-selection --title="Choose SD card location" --directory)"
+# Function for browsing the sd card
+path_selected=false
+while [ $path_selected == false ]
+do
+  sdcard="$(zenity --file-selection --title="Choose RetroDECK data directory location" --directory)"
+  if [[ $? == 0 ]]; then
+    if [[ -w $sdcard ]]; then
       zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
       --cancel-label="No" \
       --ok-label "Yes" \
@@ -768,14 +833,23 @@ old_browse() {
         zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" --text="Do you want to quit?"
         if [ $? == 0 ] # yes, quit
         then
-          exit 0
+          exit 2
         fi
       fi
-    done
+    fi
+  else
+    zenity --error --no-wrap \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK" \
+    --ok-label "Quit" \
+    --text="No location was selected. Please run RetroDECK again to retry."
+    exit 2
+  fi
+done
 }
 
 finit() {
-  # Force/First init, depending on the situation
+# Force/First init, depending on the situation
 
   echo "Executing finit"
 
@@ -787,7 +861,7 @@ finit() {
 
   "" ) # Cancel or X button quits
     echo "Now quitting"
-    exit 0
+    exit 2
   ;;
 
   "Internal Storage" ) # Internal
@@ -799,6 +873,9 @@ finit() {
     bios_folder="$rdhome/bios"
     media_folder="$rdhome/downloaded_media"
     themes_folder="$rdhome/themes"
+    if [[ -L $rdhome ]]; then #Remove old symlink from existing install, if it exists
+      unlink $rdhome
+    fi
   ;;
 
   "SD Card" )
@@ -806,12 +883,15 @@ finit() {
     if [ ! -d "$sdcard" ] # SD Card path is not existing
     then
       echo "Error: SD card not found"
-      zenity --question --no-wrap \
+      zenity --error --no-wrap \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK" --cancel-label="Cancel" \
+      --title "RetroDECK" \
       --ok-label "Browse" \
-      --text="SD Card was not find in the default location.\nPlease choose the SD Card root.\nA retrodeck/roms folder will be created starting from the directory that you selected."
+      --text="SD Card was not find in the default location.\nPlease choose the SD Card root.\nA retrodeck folder will be created starting from the directory that you selected."
       rdhome=$(old_browse) # Calling the browse function
+      if [[ -z $rdhome ]]; then # If user hit the cancel button
+        exit 2
+      fi
       roms_folder="$rdhome/roms"
       saves_folder="$rdhome/saves"
       states_folder="$rdhome/states"
@@ -827,7 +907,7 @@ finit() {
         --ok-label "Quit" \
         --text="SD card was found but is not writable\nThis can happen with cards formatted on PC.\nPlease format the SD card through the Steam Deck's Game Mode and run RetroDECK again."
         echo "Now quitting"
-        exit 0
+        exit 2
     else
       rdhome="$sdcard/retrodeck"
       roms_folder="$rdhome/roms"
@@ -839,17 +919,34 @@ finit() {
     fi
   ;;
 
+  "Custom Location" )
+      echo "Custom Location selected"
+      zenity --info --no-wrap \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK" \
+      --ok-label "Browse" \
+      --text="Please choose the root folder for the RetroDECK data.\nA retrodeck folder will be created starting from the directory that you selected."
+      rdhome=$(old_browse) # Calling the browse function
+      if [[ -z $rdhome ]]; then # If user hit the cancel button
+        exit 2
+      fi
+      roms_folder="$rdhome/roms"
+      saves_folder="$rdhome/saves"
+      states_folder="$rdhome/states"
+      bios_folder="$rdhome/bios"
+      media_folder="$rdhome/downloaded_media"
+      themes_folder="$rdhome/themes"
+    ;;
+
   esac
 
-  if [[ ! "$rdhome" == "$HOME/retrodeck" && ! -d $HOME/retrodeck && ! -L $HOME/retrodeck ]]; then # If data stored on SD card, create /home/deck/retrodeck symlink to keep things working until configs can get modified
+  if [[ ! "$rdhome" == "$HOME/retrodeck" && ! -L $HOME/retrodeck ]]; then # If data stored on SD card, create /home/deck/retrodeck symlink to keep things working until configs can get modified
     echo "Symlinking retrodeck directory to home directory"
     dir_prep "$rdhome" "$HOME/retrodeck"
   fi
 
   mkdir -pv $roms_folder
 
-  # TODO: after the next update of ES-DE this will not be needed
-  #zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --text="EmulationStation will now initialize the system.\nPlease DON'T EDIT THE ROMS LOCATION, just select:\n\nCREATE DIRECTORIES\nYES\nOK\nQUIT\n\nRetroDECK will manage the rest."
   zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --text="RetroDECK will now install the needed files.\nPlease wait up to one minute,\nanother message will notify when the process will be finished.\n\nPress OK to continue."
 
   # Recreating the folder
@@ -868,8 +965,8 @@ finit() {
   # Initializing ROMs folder - Original in retrodeck home (or SD Card)
   dir_prep $roms_folder "/var/config/emulationstation/ROMs"
 
-  mkdir -pv $rdhome/saves
-  mkdir -pv $rdhome/states
+  mkdir -pv $saves_folder
+  mkdir -pv $states_folder
   mkdir -pv $rdhome/screenshots
   mkdir -pv $rdhome/bios/pico8
   mkdir -pv $rdhome/.logs
@@ -878,8 +975,8 @@ finit() {
   cp -fv /app/retrodeck/es_settings.xml /var/config/emulationstation/.emulationstation/es_settings.xml
 
   # ES-DE preparing themes and scraped folders
-  dir_prep "$rdhome/downloaded_media" "/var/config/emulationstation/.emulationstation/downloaded_media"
-  dir_prep "$rdhome/themes" "/var/config/emulationstation/.emulationstation/themes"
+  dir_prep "$media_folder" "/var/config/emulationstation/.emulationstation/downloaded_media"
+  dir_prep "$themes_folder" "/var/config/emulationstation/.emulationstation/themes"
 
   # PICO-8
   dir_prep "$roms_folder/pico8" "$rdhome/bios/pico8/bbs/carts" #this is the folder where pico-8 is saving the carts
@@ -899,6 +996,6 @@ finit() {
   zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK" \
-  --text="Installation completed.\nPlease put your roms in:\n\n$roms_folder\n\nand your bioses in\n\n$rdhome/bios\n\nThen start the program again.\nIf you wish to change the roms location, you may use the tool located the tools section of RetroDECK.\n\nIMPORTANT NOTES:\n- RetroDECK must be manually added and launched from your Steam Library in order to work correctly.\n- It's recommended to use the 'RetroDECK Offical Controller Config' from Steam (under community layouts).\n- It's suggested to use BoilR to automatically add the SteamGridDB images to Steam (this will be automated soon).\nhttps://github.com/PhilipK/BoilR"
+  --text="Installation completed.\nPlease put your roms in:\n\n$roms_folder\n\nand your bioses in\n\n$bios_folder\n\nThen start the program again.\nIf you wish to change the roms location, you may use the tool located the tools section of RetroDECK.\n\nIMPORTANT NOTES:\n- RetroDECK must be manually added and launched from your Steam Library in order to work correctly.\n- It's recommended to use the 'RetroDECK Offical Controller Config' from Steam (under community layouts).\n- It's suggested to use BoilR to automatically add the SteamGridDB images to Steam (this will be automated soon).\nhttps://github.com/PhilipK/BoilR"
   # TODO: Replace the stuff above with BoilR code when ready
 }
