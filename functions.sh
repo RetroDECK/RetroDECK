@@ -749,21 +749,20 @@ start_retrodeck() {
   emulationstation --home /var/config/emulationstation
 }
 
-old_browse(){
+old_browse() {
   # Function for browsing the sd card
   path_selected=false
     while [ $path_selected == false ]
     do
       sdcard="$(zenity --file-selection --title="Choose SD card location" --directory)"
-      echo "Path chosen: $sdcard, answer=$?"
       zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
       --cancel-label="No" \
       --ok-label "Yes" \
       --text="Your RetroDECK data folder will be:\n\n$sdcard/retrodeck\n\nis that ok?"
       if [ $? == 0 ] #yes
       then
-        path_selected == true
-        rdhome="$sdcard/retrodeck"
+        path_selected=true
+        echo "$sdcard/retrodeck"
         break
       else
         zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" --text="Do you want to quit?"
@@ -794,6 +793,12 @@ finit() {
   "Internal Storage" ) # Internal
     echo "Internal selected"
     rdhome="$HOME/retrodeck"
+    roms_folder="$rdhome/roms"
+    saves_folder="$rdhome/saves"
+    states_folder="$rdhome/states"
+    bios_folder="$rdhome/bios"
+    media_folder="$rdhome/downloaded_media"
+    themes_folder="$rdhome/themes"
   ;;
 
   "SD Card" )
@@ -806,7 +811,13 @@ finit() {
       --title "RetroDECK" --cancel-label="Cancel" \
       --ok-label "Browse" \
       --text="SD Card was not find in the default location.\nPlease choose the SD Card root.\nA retrodeck/roms folder will be created starting from the directory that you selected."
-      old_browse # Calling the browse function
+      rdhome=$(old_browse) # Calling the browse function
+      roms_folder="$rdhome/roms"
+      saves_folder="$rdhome/saves"
+      states_folder="$rdhome/states"
+      bios_folder="$rdhome/bios"
+      media_folder="$rdhome/downloaded_media"
+      themes_folder="$rdhome/themes"
     elif [ ! -w "$sdcard" ] #SD card found but not writable
       then
         echo "Error: SD card found but not writable"
@@ -819,13 +830,20 @@ finit() {
         exit 0
     else
       rdhome="$sdcard/retrodeck"
+      roms_folder="$rdhome/roms"
+      saves_folder="$rdhome/saves"
+      states_folder="$rdhome/states"
+      bios_folder="$rdhome/bios"
+      media_folder="$rdhome/downloaded_media"
+      themes_folder="$rdhome/themes"
     fi
   ;;
 
   esac
 
-  if [[ "$rdhome" == "$sdcard/retrodeck" && ! -d /home/deck/retrodeck && ! -L /home/deck/retrodeck ]]; then # If data stored on SD card, create /home/deck/retrodeck symlink to keep things working until configs can get modified
-    dir_prep "$rdhome" "/home/deck/retrodeck"
+  if [[ ! "$rdhome" == "$HOME/retrodeck" && ! -d $HOME/retrodeck && ! -L $HOME/retrodeck ]]; then # If data stored on SD card, create /home/deck/retrodeck symlink to keep things working until configs can get modified
+    echo "Symlinking retrodeck directory to home directory"
+    dir_prep "$rdhome" "$HOME/retrodeck"
   fi
 
   mkdir -pv $roms_folder
@@ -875,6 +893,7 @@ finit() {
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Finishing Initialization" \
   --text="RetroDECK is finishing the initial setup process, please wait."
+
   create_lock
 
   zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
