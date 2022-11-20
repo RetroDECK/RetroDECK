@@ -523,7 +523,7 @@ dolphin_init() {
   dir_prep "$rdhome/screenshots" "/var/data/dolphin-emu/ScreenShots"
   dir_prep "$rdhome/states" "/var/data/dolphin-emu/StateSaves"
   mkdir -pv /var/data/dolphin-emu/Wii/
-  dir_prep "$rdhome/saves/wii/dolphin" "/var/data/dolphin-emu/Wii/"
+  dir_prep "$rdhome/saves/wii/dolphin" "/var/data/dolphin-emu/Wii"
 }
 
 pcsx2_init() {
