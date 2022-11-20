@@ -779,7 +779,7 @@ ra_init() {
   #then
     wget "https://github.com/hrydgard/ppsspp/archive/refs/heads/master.zip" -P $rdhome/bios/PPSSPP
     unzip -q "$rdhome/bios/PPSSPP/master.zip" -d $rdhome/bios/PPSSPP/
-    mv "$rdhome/bios/PPSSPP/ppsspp-master/assets/"* "$rdhome/bios/PPSSPP/"
+    mv -f "$rdhome/bios/PPSSPP/ppsspp-master/assets/"* "$rdhome/bios/PPSSPP/"
     rm -rfv "$rdhome/bios/PPSSPP/master.zip"
     rm -rfv "$rdhome/bios/PPSSPP/ppsspp-master"
   #fi
@@ -794,8 +794,8 @@ ra_init() {
   echo "-----------------------------------------------------------"
   wget "http://bluemsx.msxblue.com/rel_download/blueMSXv282full.zip" -P $rdhome/bios/MSX
   unzip -q "$rdhome/bios/MSX/blueMSXv282full.zip" -d $rdhome/bios/MSX
-  mv -fv $rdhome/bios/MSX/Databases $rdhome/bios/Databases
-  mv -fv $rdhome/bios/MSX/Machines $rdhome/bios/Machines
+  mv -f $rdhome/bios/MSX/Databases $rdhome/bios/Databases
+  mv -f $rdhome/bios/MSX/Machines $rdhome/bios/Machines
   rm -rfv $rdhome/bios/MSX
 }
 
