@@ -17,7 +17,7 @@ finish-args:
   - --share=ipc
   - --share=network
   - --device=all
-  - --filesystem=~/retrodeck:create
+  - --filesystem=home # Needed to be able to relocate / remove / create symlink at ~/retrodeck
   - --filesystem=/run/media
   - --filesystem=/media
   - --allow=multiarch

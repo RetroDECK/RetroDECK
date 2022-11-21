@@ -345,7 +345,6 @@ configurator_options_dialog() {
 
 configurator_move_dialog() {
   if [[ -d $rdhome ]]; then
-    configurator_generic_dialog "This option will move the RetroDECK data folder (ROMs, saves, BIOS etc.) to a new location.\n\nPlease choose where to move the RetroDECK data folder."
     destination=$(configurator_destination_choice_dialog "RetroDECK Data" "Please choose a destination for the RetroDECK data folder.")
     case $destination in
 
@@ -369,7 +368,7 @@ configurator_move_dialog() {
           bios_folder="$rdhome/bios"
           media_folder="$rdhome/downloaded_media"
           themes_folder="$rdhome/themes"
-          emulator_post_move
+          emulators_post_move
           conf_write
 
           configurator_process_complete_dialog "moving the RetroDECK data directory to internal storage"
@@ -380,8 +379,8 @@ configurator_move_dialog() {
     ;;
 
     "SD Card" )
-      if [[ -L $rdhome && -d $sdcard/retrodeck ]]; then
-        configurator_generic_dialog "The RetroDECK data folder is already at that location, please pick a new one."
+      if [[ -L "$HOME/retrodeck" && -d $sdcard/retrodeck && "$rdhome" == "$sdcard/retrodeck" ]]; then
+        configurator_generic_dialog "The RetroDECK data folder is already configured to that location, please pick a new one."
         configurator_move_dialog
       else
         if [[ ! -w $sdcard ]]; then
@@ -390,12 +389,12 @@ configurator_move_dialog() {
         else
           if [[ $(verify_space $rdhome $sdcard) == "true" ]];then
             configurator_generic_dialog "Moving RetroDECK data folder to $destination"
-            if [[ -L $rdhome/roms ]]; then # Check for ROMs symlink user may have created
-                unlink $rdhome/roms
+            if [[ -L "$HOME/retrodeck/roms" ]]; then # Check for ROMs symlink user may have created
+                unlink "$HOME/retrodeck/roms"
             fi
 
             (
-            dir_prep "$sdcard/retrodeck" $rdhome
+            dir_prep "$sdcard/retrodeck" "$rdhome"
             ) |
             zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
             --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -409,7 +408,7 @@ configurator_move_dialog() {
             bios_folder="$rdhome/bios"
             media_folder="$rdhome/downloaded_media"
             themes_folder="$rdhome/themes"
-            emulator_post_move
+            emulators_post_move
             conf_write
             configurator_process_complete_dialog "moving the RetroDECK data directory to SD card"
           else
@@ -436,7 +435,7 @@ configurator_move_dialog() {
           fi
 
           (
-          dir_prep "$custom_dest/retrodeck" $rdhome
+          dir_prep "$custom_dest/retrodeck" "$rdhome"
           ) |
           zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
           --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -450,7 +449,7 @@ configurator_move_dialog() {
           bios_folder="$rdhome/bios"
           media_folder="$rdhome/downloaded_media"
           themes_folder="$rdhome/themes"
-          emulator_post_move
+          emulators_post_move
           conf_write
           configurator_process_complete_dialog "moving the RetroDECK data directory to SD card"
         else
@@ -498,6 +497,7 @@ configurator_welcome_dialog() {
   case $choice in
 
   "Move Files" )
+    configurator_generic_dialog "This option will move the RetroDECK data folder (ROMs, saves, BIOS etc.) to a new location.\n\nPlease choose where to move the RetroDECK data folder."
     configurator_move_dialog
   ;;
 

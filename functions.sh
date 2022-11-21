@@ -460,7 +460,7 @@ dir_prep() {
   if [ -d "$symlink" ];
   then
     echo "$symlink found" #DEBUG
-    mv -fv "$symlink" "$symlink.old"
+    mv -f "$symlink" "$symlink.old"
   fi
 
   # if the real dir doesn't exist we create it
@@ -479,7 +479,7 @@ dir_prep() {
   if [ -d "$symlink.old" ];
   then
     echo "Moving the data from $symlink.old to $real" #DEBUG
-    mv -fv "$symlink".old/* $real
+    mv -f "$symlink".old/* $real
     echo "Removing $symlink.old" #DEBUG
     rm -rf "$symlink.old"
   fi
