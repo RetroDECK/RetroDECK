@@ -379,7 +379,7 @@ configurator_move_dialog() {
     ;;
 
     "SD Card" )
-      if [[ -L "$HOME/retrodeck" && -d $sdcard/retrodeck && "$rdhome" == "$sdcard/retrodeck" ]]; then
+      if [[ -L "$HOME/retrodeck" && -d "$sdcard/retrodeck" && "$rdhome" == "$sdcard/retrodeck" ]]; then
         configurator_generic_dialog "The RetroDECK data folder is already configured to that location, please pick a new one."
         configurator_move_dialog
       else
@@ -400,6 +400,14 @@ configurator_move_dialog() {
             --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
             --title "RetroDECK Configurator Utility - Move in Progress" \
             --text="Moving directory $rdhome to new location of $sdcard/retrodeck, please wait."
+
+            if [[ -L $rdhome && ! $rdhome == "$HOME/retrodeck" ]]; then # Clean up extraneus symlinks from previous moves
+              unlink $rdhome
+            fi
+
+            if [[ ! -L "$HOME/retrodeck" ]]; then # Always link back to original directory
+              ln -svf "$sdcard/retrodeck" "$HOME/retrodeck"
+            fi
 
             rdhome="$sdcard/retrodeck"
             roms_folder="$rdhome/roms"
@@ -441,6 +449,14 @@ configurator_move_dialog() {
           --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
           --title "RetroDECK Configurator Utility - Move in Progress" \
           --text="Moving directory $rdhome to new location of $custom_dest/retrodeck, please wait."
+
+          if [[ -L $rdhome && ! $rdhome == "$HOME/retrodeck" ]]; then # Clean up extraneus symlinks from previous moves
+            unlink $rdhome
+          fi
+
+          if [[ ! -L "$HOME/retrodeck" ]]; then
+            ln -svf "$custom_dest/retrodeck" "$HOME/retrodeck"
+          fi
 
           rdhome="$custom_dest/retrodeck"
           roms_folder="$rdhome/roms"

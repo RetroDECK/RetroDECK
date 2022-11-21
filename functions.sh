@@ -243,7 +243,7 @@ enable_file() {
   mv $(realpath $1.disabled) $(realpath $(echo $1 | sed -e 's/\.disabled//'))
 }
 
-generate_patch () {
+generate_patch() {
   # generate_patch $original_file $modified_file $patch_file $system
 
   rm $3 # Remove old patch file (maybe change this to create a backup instead?)
@@ -343,7 +343,7 @@ generate_patch () {
   done < $2
 }
 
-deploy_patch () {
+deploy_patch() {
 
 # This function will take an "original" file and a patch file and generate a ready to use modified file
 # USAGE: deploy_patch $original_file $patch_file $output_file
