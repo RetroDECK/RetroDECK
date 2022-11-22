@@ -465,37 +465,31 @@ modules:
       - ln -s "${FLATPAK_DEST}/yuzu/usr/bin/yuzu" "${FLATPAK_DEST}/bin/yuzu"
     sources:
       - type: file
-        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1233/yuzu-mainline-20221113-f8aba8b9d.AppImage
-        sha256: 77c4684d95dcaf2f116cf94f65b61c7e0d83b493245ea89aa6d3a2a5fb7eb330
+        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1245/yuzu-mainline-20221121-5ad585b0f.AppImage
+        sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
 
   # Yuzu - END
 
   # Ryujinx - START
   # https://ryujinx.org/download
 
-  - name: libX11
-    #from: https://github.com/flathub/flatpak-external-data-checker/blob/6ed0a7b46cc4da2e4fc3a677cd1a078f335ff484/tests/org.x.xeyes.yml
-    sources:
-      - type: archive
-        url: http://some-incorrect.url/libX11.tar.gz
-        sha256: "0000000000000000000000000000000000000000000000000000000000000000"
-        x-checker-data:
-          type: html
-          url: https://www.x.org/releases/individual/lib/
-          version-pattern: libX11-([\d\.]+).tar.gz
-          url-template: libX11-$version.tar.gz
-          versions:
-            ==: 1.7.5
+  # - name: libX11
+  #   #from: https://github.com/flathub/flatpak-external-data-checker/blob/6ed0a7b46cc4da2e4fc3a677cd1a078f335ff484/tests/org.x.xeyes.yml
+  #   sources:
+  #     - type: archive
+  #       url: https://www.x.org/releases/individual/lib/libX11-1.8.tar.gz
+  #       sha256: 68e0a30c4248b9f41492891a4b49672c3b0c59e84c4868144f03eef01ebc5eea
 
   - name: Ryujinx
     buildsystem: simple
     build-commands:
       - mv Ryujinx ${FLATPAK_DEST}/bin/Ryujinx
       - chmod 777 ${FLATPAK_DEST}/bin/Ryujinx
+      - ln -s /usr/lib/x86_64-linux-gnu/libX11.so.6 /app/lib/libX11.so
     sources:
       - type: archive
-        url: https://github.com/Ryujinx/release-channel-master/releases/download/1.1.335/ryujinx-1.1.335-linux_x64.tar.gz
-        sha256: 9a175bcc5ea0e67e8b8b0ff944eb1fa316e6ff6336f91b09b719b2ccac7ecee5
+        url: https://github.com/Ryujinx/release-channel-master/releases/download/1.1.369/ryujinx-1.1.369-linux_x64.tar.gz
+        sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
 
   # Ryujinx - END
 
