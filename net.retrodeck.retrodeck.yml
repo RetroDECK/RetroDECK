@@ -81,7 +81,7 @@ modules:
         VERSION="0.6.0b-cooker"
         if [[ $VERSION == *"cooker"* ]];
         then
-          VERSION="cooker-"$(git rev-parse --short HEAD)
+          VERSION="$VERSION-[$(git rev-parse --short HEAD)]"
         fi
         echo $VERSION >> ${FLATPAK_DEST}/retrodeck/version
         cat ${FLATPAK_DEST}/retrodeck/version
@@ -465,23 +465,31 @@ modules:
       - ln -s "${FLATPAK_DEST}/yuzu/usr/bin/yuzu" "${FLATPAK_DEST}/bin/yuzu"
     sources:
       - type: file
-        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1233/yuzu-mainline-20221113-f8aba8b9d.AppImage
-        sha256: 77c4684d95dcaf2f116cf94f65b61c7e0d83b493245ea89aa6d3a2a5fb7eb330
+        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1245/yuzu-mainline-20221121-5ad585b0f.AppImage
+        sha256: e4d1b2fe4443326fb90f3398680c83e130ccab1f315029c1ccca8e7449235b07
 
   # Yuzu - END
 
   # Ryujinx - START
   # https://ryujinx.org/download
 
+  # - name: libX11
+  #   #from: https://github.com/flathub/flatpak-external-data-checker/blob/6ed0a7b46cc4da2e4fc3a677cd1a078f335ff484/tests/org.x.xeyes.yml
+  #   sources:
+  #     - type: archive
+  #       url: https://www.x.org/releases/individual/lib/libX11-1.8.tar.gz
+  #       sha256: 68e0a30c4248b9f41492891a4b49672c3b0c59e84c4868144f03eef01ebc5eea
+
   - name: Ryujinx
     buildsystem: simple
     build-commands:
       - mv Ryujinx ${FLATPAK_DEST}/bin/Ryujinx
       - chmod 777 ${FLATPAK_DEST}/bin/Ryujinx
+      - ln -s /usr/lib/x86_64-linux-gnu/libX11.so.6 /app/lib/libX11.so
     sources:
       - type: archive
-        url: https://github.com/Ryujinx/release-channel-master/releases/download/1.1.335/ryujinx-1.1.335-linux_x64.tar.gz
-        sha256: 9a175bcc5ea0e67e8b8b0ff944eb1fa316e6ff6336f91b09b719b2ccac7ecee5
+        url: https://github.com/Ryujinx/release-channel-master/releases/download/1.1.369/ryujinx-1.1.369-linux_x64.tar.gz
+        sha256: ef682e8ca14d46ba8ba9b4f8d3250ce4e661730d6ceee9abd9d12e4dd1d90e42
 
   # Ryujinx - END
 
@@ -815,45 +823,45 @@ modules:
 
   # RPCS3 - END
 
-  # PRIMEHACK - START
-  # https://github.com/flathub/io.github.shiiion.primehack
-  # Disabled because it's overwriting Dolphin
+  # # PRIMEHACK - START
+  # # https://github.com/flathub/io.github.shiiion.primehack
+  # # Disabled because it's overwriting Dolphin
 
-  - name: primehack
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-      - -DENABLE_ALSA=OFF
-      - -DENABLE_SDL=ON
-      - -DENABLE_EVDEV=ON
-      - -DDISTRIBUTOR=Flathub
-    cleanup:
-      - /share/man
-    post-install:
-      - install -D primehack-wrapper /app/bin/primehack-wrapper
-    sources:
-      - type: git
-        url: https://github.com/shiiion/dolphin.git
-        commit: 55330bfebbcde86c169715c25f2b693cbbe55a75
-      # detects whether dolphin is running in a flatpak sandbox
-      # and makes it use xdg directories if it is.
-      # prevents dolphin from attempting to write conf files
-      # in non-writable paths, typically happens when a user
-      # has leftover files from a previous non-flatpak install
-      - type: patch
-        path: rd-submodules/dolphin/detectflatpak.patch
-      # version strings must match exactly for online multiplayer
-      - type: patch
-        path: rd-submodules/dolphin/nodirtyversion.patch
-      - type: script
-        commands:
-          - for i in {0..9}; do
-          - test -S $XDG_RUNTIME_DIR/discord-ipc-$i || ln -sf {app/com.discordapp.Discord,$XDG_RUNTIME_DIR}/discord-ipc-$i;
-          - done
-          - dolphin-emu "$@"
-        dest-filename: primehack-wrapper
+  # - name: primehack
+  #   buildsystem: cmake-ninja
+  #   config-opts:
+  #     - -DCMAKE_BUILD_TYPE=Release
+  #     - -DENABLE_ALSA=OFF
+  #     - -DENABLE_SDL=ON
+  #     - -DENABLE_EVDEV=ON
+  #     - -DDISTRIBUTOR=Flathub
+  #   cleanup:
+  #     - /share/man
+  #   post-install:
+  #     - install -D primehack-wrapper /app/bin/primehack-wrapper
+  #   sources:
+  #     - type: git
+  #       url: https://github.com/shiiion/dolphin.git
+  #       commit: efb99ebfd20b1bc16ea3e51fec409c91e354d8c2
+  #     # detects whether dolphin is running in a flatpak sandbox
+  #     # and makes it use xdg directories if it is.
+  #     # prevents dolphin from attempting to write conf files
+  #     # in non-writable paths, typically happens when a user
+  #     # has leftover files from a previous non-flatpak install
+  #     - type: patch
+  #       path: rd-submodules/dolphin/detectflatpak.patch
+  #     # version strings must match exactly for online multiplayer
+  #     - type: patch
+  #       path: rd-submodules/dolphin/nodirtyversion.patch
+  #     - type: script
+  #       commands:
+  #         - for i in {0..9}; do
+  #         - test -S $XDG_RUNTIME_DIR/discord-ipc-$i || ln -sf {app/com.discordapp.Discord,$XDG_RUNTIME_DIR}/discord-ipc-$i;
+  #         - done
+  #         - dolphin-emu "$@"
+  #       dest-filename: primehack-wrapper
 
-  # PRIMEHACK - END
+  # # PRIMEHACK - END
 
   # Duckstation - START
   # https://github.com/flathub/org.duckstation.DuckStation
@@ -934,6 +942,19 @@ modules:
 
   # Cemu - START
   # https://github.com/cemu-project/Cemu/releases
+
+  - name: libsepol-dev
+    # from: https://github.com/flathub/com.ticktick.TickTick/blob/dc07865aca359148fbe15617db8f2d79312da898/com.ticktick.TickTick.yml
+    buildsystem: simple
+    build-commands:
+      - ar x libsepol*.deb data.tar.xz
+      - rm libsepol*.deb
+      - tar -xf data.tar.xz /
+    sources:
+        #from: https://launchpad.net/ubuntu/+source/libsepol
+      - type: file
+        url: https://launchpad.net/ubuntu/+archive/primary/+files/libsepol-dev_3.4-2_amd64.deb
+        sha256: 6cf60eb730f9a02a05a0f6e7c644347ad2948b2e1dc73750793ac58e1250d76c
 
   - name: Cemu-binary
     buildsystem: simple
