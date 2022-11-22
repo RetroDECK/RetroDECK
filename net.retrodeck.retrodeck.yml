@@ -473,6 +473,20 @@ modules:
   # Ryujinx - START
   # https://ryujinx.org/download
 
+  - name: libX11
+    #from: https://github.com/flathub/flatpak-external-data-checker/blob/6ed0a7b46cc4da2e4fc3a677cd1a078f335ff484/tests/org.x.xeyes.yml
+    sources:
+      - type: archive
+        url: http://some-incorrect.url/libX11.tar.gz
+        sha256: "0000000000000000000000000000000000000000000000000000000000000000"
+        x-checker-data:
+          type: html
+          url: https://www.x.org/releases/individual/lib/
+          version-pattern: libX11-([\d\.]+).tar.gz
+          url-template: libX11-$version.tar.gz
+          versions:
+            ==: 1.7.5
+
   - name: Ryujinx
     buildsystem: simple
     build-commands:
