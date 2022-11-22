@@ -466,7 +466,7 @@ modules:
     sources:
       - type: file
         url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1245/yuzu-mainline-20221121-5ad585b0f.AppImage
-        sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+        sha256: e4d1b2fe4443326fb90f3398680c83e130ccab1f315029c1ccca8e7449235b07
 
   # Yuzu - END
 
@@ -489,7 +489,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/Ryujinx/release-channel-master/releases/download/1.1.369/ryujinx-1.1.369-linux_x64.tar.gz
-        sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+        sha256: ef682e8ca14d46ba8ba9b4f8d3250ce4e661730d6ceee9abd9d12e4dd1d90e42
 
   # Ryujinx - END
 
