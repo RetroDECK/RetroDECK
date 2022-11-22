@@ -96,16 +96,40 @@ set_setting_value() {
 
   case $4 in
 
-    "emulationstation" )
-      sed -i "s%$setting_name_to_change\" \" value=\".*\"%$setting_name_to_change\" \" value=\"$setting_value_to_change\"" $1
+    "retrodeck" | "citra" | "melonds" | "yuzu" )
+      if [[ -z $current_section_name ]]; then
+        sed -i 's^'"$setting_name_to_change"'=.*^'"$setting_name_to_change"'='"$setting_value_to_change"'^' $1
+      else
+        sed -i '\^\['"$current_section_name"'\]^,\^'"$setting_name_to_change"'.*^s^'"$setting_name_to_change"'=.*^'"$setting_name_to_change"'='"$setting_value_to_change"'^' $1
+      fi
       ;;
 
-    * )
+    "retroarch" )
       if [[ -z $current_section_name ]]; then
-        sed -i -E 's^\b'"$setting_name_to_change"'(\s?[=:]\s?).*^'"$setting_name_to_change"'\1'"$setting_value_to_change"'^' $1
+        sed -i 's^'"$setting_name_to_change"' = \".*\"^'"$setting_name_to_change"' = \"'"$setting_value_to_change"'\"^' $1
       else
-        sed -i -E '\^\['"$current_section_name"'\]|\b'"$current_section"':$^,\^\b'"$setting_name_to_change"'.*^s^\b'"$setting_name_to_change"'(\s?[=:]\s?).*^'"$setting_name_to_change"'\1'"$setting_value_to_change"'^' $1
+        sed -i '\^\['"$current_section_name"'\]^,\^'"$setting_name_to_change"'.*^s^'"$setting_name_to_change"' = \".*\"^'"$setting_name_to_change"' = \"'"$setting_value_to_change"'\"^' $1
       fi
+      ;;
+
+    "dolphin" | "duckstation" | "pcsx2" | "ppsspp" | "xemu" )
+      if [[ -z $current_section_name ]]; then
+        sed -i 's^'"$setting_name_to_change"' =.*^'"$setting_name_to_change"' = '"$setting_value_to_change"'^' $1
+      else
+        sed -i '\^\['"$current_section_name"'\]^,\^'"$setting_name_to_change"'.*^s^'"$setting_name_to_change"' =.*^'"$setting_name_to_change"' = '"$setting_value_to_change"'^' $1
+      fi
+      ;;
+
+    "rpcs3" ) # This does not currently work for settings with a $ in them
+      if [[ -z $current_section_name ]]; then
+        sed -i 's^'"$setting_name_to_change"': .*^'"$setting_name_to_change"': '"$setting_value_to_change"'^' $1
+      else
+        sed -i '\^\['"$current_section_name"'\]^,\^'"$setting_name_to_change"'.*^s^'"$setting_name_to_change"': .*^'"$setting_name_to_change"': '"$setting_value_to_change"'^' $1
+      fi
+      ;;
+
+    "emulationstation" )
+      sed -i "s%$setting_name_to_change\" \" value=\".*\"%$setting_name_to_change\" \" value=\"$setting_value_to_change\"" $1
       ;;
 
   esac
@@ -124,7 +148,6 @@ get_setting_name() {
     ;;
 
   "rpcs3" )
-    #echo "$current_setting_line" | grep -o -P "^\s*?.*?(?=\s?:\s?)" | sed -e 's%\\\\%\\%g' | sed -e 's/^[ \t]*//'
     echo "$current_setting_line" | grep -o -P "^\s*?.*?(?=\s?:\s?)" | sed -e 's/^[ \t]*//;s^\\ ^ ^g'
     ;;
 
@@ -144,25 +167,41 @@ get_setting_value() {
 
   case $3 in
 
+  "retrodeck" | "citra" | "melonds" | "yuzu" ) # For files with this syntax - setting_name=setting_value
+    if [[ -z $current_section_name ]]; then
+      echo $(grep -o -P "(?<=^$current_setting_name=).*" $1)
+    else
+      sed -n '\^\['"$section_name"'\]^,\^'"$current_setting_name"'^{ \^\['"$section_name"'\]^! { \^'"$current_setting_name"'^ p } }' $1 | grep -o -P "(?<=^$current_setting_name=).*"
+    fi
+  ;;
+
+  "retroarch" ) # For files with this syntax - setting_name = "setting_value"
+    if [[ -z $current_section_name ]]; then
+      echo $(grep -o -P "(?<=^$current_setting_name = \").*(?=\")" $1)
+    else
+      sed -n '\^\['"$section_name"'\]^,\^'"$current_setting_name"'^{ \^\['"$section_name"'\]^! { \^'"$current_setting_name"'^ p } }' $1 | grep -o -P "(?<=^$current_setting_name = \").*(?=\")"
+    fi
+  ;;
+
+  "dolphin" | "duckstation" | "pcsx2" | "ppsspp" | "xemu" ) # For files with this syntax - setting_name = setting_value
+    if [[ -z $current_section_name ]]; then
+      echo $(grep -o -P "(?<=^$current_setting_name = ).*" $1)
+    else
+      sed -n '\^\['"$section_name"'\]^,\^'"$current_setting_name"'^{ \^\['"$section_name"'\]^! { \^'"$current_setting_name"'^ p } }' $1 | grep -o -P "(?<=^$current_setting_name = ).*"
+    fi
+  ;;
+
+  "rpcs3" ) # For files with this syntax - setting_name: setting_value
+    if [[ -z $current_section_name ]]; then
+      echo $(grep -o -P "(?<=$current_setting_name: ).*" $1)
+    else
+      sed -n '\^\['"$section_name"'\]^,\^'"$current_setting_name"'^{ \^\['"$section_name"'\]^! { \^'"$current_setting_name"'^ p } }' $1 | grep -o -P "(?<=$current_setting_name: ).*"
+    fi
+  ;;
+
   "emulationstation" )
     echo $(grep -o -P "(?<=^$current_setting_name\" value=\").*(?=\")" $1)
-    ;;
-
-    rpcs3 )
-    if [[ -z $current_section_name ]]; then
-      sed -n -E 's^\s*\b'"$current_setting_name"'\s?:\s?(.*)^\1^p' $1
-    else
-      sed -n -E '\^\b'"$current_section"':$^,\^'"$current_setting_name"'^{ \^\b'"$current_section"':$^! { \^\b'"$current_setting_name"'^ p } }' $1 | sed -n -E 's^\s*\b.*\s?:\s?(.*)$^\1^p'
-    fi
-    ;;
-
-  * )
-    if [[ -z $current_section_name ]]; then
-      sed -n -E 's^\s*\b'"$current_setting_name"'\s?=\s?(.*)^\1^p' $1
-    else
-      sed -n -E '\^\['"$current_section_name"'\]^,\^\b'"$current_setting_name"'^{ \^\['"$current_section_name"'\]^! { \^\b'"$current_setting_name"'^ p } }' $1 | sed -n -E 's^\s*\b.*\s?=\s?(.*)^\1^p'
-    fi
-    ;;
+  ;;
 
   esac
 }

@@ -168,20 +168,20 @@ configurator_retroachivement_dialog() {
   --add-entry="Username" \
   --add-password="Password")
 
-  if [ $? == 1 ] # Cancel button clicked
-  then
+  if [ $? == 0 ]; then # OK button clicked
+    arrIN=(${login//=SEP=/ })
+    user=${arrIN[0]}
+    pass=${arrIN[1]}
+
+    set_setting_value $raconf cheevos_enable true retroarch
+    set_setting_value $raconf cheevos_username $user retroarch
+    set_setting_value $raconf cheevos_password $pass retroarch
+
+    configurator_process_complete_dialog "logging in to RetroArch RetroAchievements"
+  else
     configurator_welcome_dialog
   fi
 
-  arrIN=(${login//=SEP=/ })
-  user=${arrIN[0]}
-  pass=${arrIN[1]}
-
-  set_setting_value $raconf cheevos_enable true retroarch
-  set_setting_value $raconf cheevos_username $user retroarch
-  set_setting_value $raconf cheevos_password $pass retroarch
-
-  configurator_process_complete_dialog "logging in to RetroArch RetroAchievements"
 }
 
 configurator_update_dialog() {
@@ -194,80 +194,79 @@ configurator_power_user_changes_dialog() {
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --text="Making manual changes to an emulators configuration may create serious issues,\nand some settings may be overwitten during RetroDECK updates.\n\nSome standalone emulator functions may not work properly outside of Desktop mode.\n\nPlease continue only if you know what you're doing.\n\nDo you want to continue?"
 
-  if [ $? == 1 ] # Cancel button clicked
-  then
-    configurator_options_dialog
-  fi
+  if [ $? == 0 ]; then # OK button clicked
+    emulator=$(zenity --list \
+    --title "RetroDECK Configurator Utility - Power User Options" --cancel-label="Back" \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --text="Which emulator do you want to configure?" \
+    --hide-header \
+    --column=emulator \
+    "RetroArch" \
+    "Citra" \
+    "Dolphin" \
+    "Duckstation" \
+    "MelonDS" \
+    "PCSX2-QT" \
+    "PCSX2-Legacy" \
+    "PPSSPP" \
+    "RPCS3" \
+    "XEMU" \
+    "Yuzu")
 
-  emulator=$(zenity --list \
-  --title "RetroDECK Configurator Utility - Power User Options" --cancel-label="Back" \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-  --text="Which emulator do you want to configure?" \
-  --hide-header \
-  --column=emulator \
-  "RetroArch" \
-  "Citra" \
-  "Dolphin" \
-  "Duckstation" \
-  "MelonDS" \
-  "PCSX2-QT" \
-  "PCSX2-Legacy" \
-  "PPSSPP" \
-  "RPCS3" \
-  "XEMU" \
-  "Yuzu")
+    case $emulator in
 
-  case $emulator in
-
-  "RetroArch" )
-    retroarch
-  ;;
-
-  "Citra" )
-    citra-qt
-  ;;
-
-  "Dolphin" )
-    dolphin-emu
-  ;;
-
-  "Duckstation" )
-    duckstation-qt
-  ;;
-
-  "MelonDS" )
-    melonDS
-  ;;
-
-  "PCSX2-QT" )
-    pcsx2-qt
-  ;;
-
-  "PCSX2-Legacy" )
-    pcsx2
-  ;;
-
-  "PPSSPP" )
-    PPSSPPSDL
-  ;;
-
-  "RPCS3" )
-    rpcs3
-  ;;
-
-  "XEMU" )
-    xemu
-  ;;
-
-  "Yuzu" )
-    yuzu
+    "RetroArch" )
+      retroarch
     ;;
 
-  "" ) # No selection made or Back button clicked
-    configurator_options_dialog
-  ;;
+    "Citra" )
+      citra-qt
+    ;;
 
-  esac
+    "Dolphin" )
+      dolphin-emu
+    ;;
+
+    "Duckstation" )
+      duckstation-qt
+    ;;
+
+    "MelonDS" )
+      melonDS
+    ;;
+
+    "PCSX2-QT" )
+      pcsx2-qt
+    ;;
+
+    "PCSX2-Legacy" )
+      pcsx2
+    ;;
+
+    "PPSSPP" )
+      PPSSPPSDL
+    ;;
+
+    "RPCS3" )
+      rpcs3
+    ;;
+
+    "XEMU" )
+      xemu
+    ;;
+
+    "Yuzu" )
+      yuzu
+    ;;
+
+    "" ) # No selection made or Back button clicked
+      configurator_options_dialog
+    ;;
+
+    esac
+  else
+    configurator_options_dialog
+  fi
 }
 
 configurator_retroarch_rewind_dialog() {
@@ -279,8 +278,8 @@ configurator_retroarch_rewind_dialog() {
 
     if [ $? == 0 ]
     then
-      set_setting_value $raconf rewind_enable true retroarch
-      configurator_process_complete_dialog "enabling Rewind"
+      set_setting_value $raconf "rewind_enable" "false" retroarch
+      configurator_process_complete_dialog "disabling Rewind"
     else
       configurator_options_dialog
     fi
@@ -292,8 +291,8 @@ configurator_retroarch_rewind_dialog() {
 
     if [ $? == 0 ]
     then
-      set_setting_value $raconf rewind_enable false retroarch
-      configurator_process_complete_dialog "disabling Rewind"
+      set_setting_value $raconf "rewind_enable" "true" retroarch
+      configurator_process_complete_dialog "enabling Rewind"
     else
       configurator_options_dialog
     fi
