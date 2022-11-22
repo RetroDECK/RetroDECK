@@ -81,7 +81,7 @@ modules:
         VERSION="0.6.0b-cooker"
         if [[ $VERSION == *"cooker"* ]];
         then
-          VERSION="cooker-"$(git rev-parse --short HEAD)
+          VERSION="$VERSION-[$(git rev-parse --short HEAD)]"
         fi
         echo $VERSION >> ${FLATPAK_DEST}/retrodeck/version
         cat ${FLATPAK_DEST}/retrodeck/version
