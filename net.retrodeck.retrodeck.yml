@@ -827,39 +827,39 @@ modules:
   # # https://github.com/flathub/io.github.shiiion.primehack
   # # Disabled because it's overwriting Dolphin
 
-   - name: primehack
-     buildsystem: cmake-ninja
-     config-opts:
-       - -DCMAKE_BUILD_TYPE=Release
-       - -DENABLE_ALSA=OFF
-       - -DENABLE_SDL=ON
-       - -DENABLE_EVDEV=ON
-       - -DDISTRIBUTOR=Flathub
-     cleanup:
-       - /share/man
-     post-install:
-       - install -D primehack-wrapper /app/bin/primehack-wrapper
-     sources:
-       - type: git
-         url: https://github.com/TheDrifter363/primehack.git
+  - name: primehack
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DENABLE_ALSA=OFF
+      - -DENABLE_SDL=ON
+      - -DENABLE_EVDEV=ON
+      - -DDISTRIBUTOR=Flathub
+    cleanup:
+      - /share/man
+    post-install:
+      - install -D primehack-wrapper /app/bin/primehack-wrapper
+    sources:
+      - type: git
+        url: https://github.com/TheDrifter363/primehack.git
         commit: 6295c695307a67f11ee202b05cbdd7b5c1edae5c
        # detects whether dolphin is running in a flatpak sandbox
        # and makes it use xdg directories if it is.
        # prevents dolphin from attempting to write conf files
        # in non-writable paths, typically happens when a user
        # has leftover files from a previous non-flatpak install
-       - type: patch
-         path: rd-submodules/dolphin/detectflatpak.patch
+      - type: patch
+        path: rd-submodules/dolphin/detectflatpak.patch
        # version strings must match exactly for online multiplayer
-       - type: patch
-         path: rd-submodules/dolphin/nodirtyversion.patch
-       - type: script
-         commands:
-           - for i in {0..9}; do
-           - test -S $XDG_RUNTIME_DIR/discord-ipc-$i || ln -sf {app/com.discordapp.Discord,$XDG_RUNTIME_DIR}/discord-ipc-$i;
-           - done
-           - dolphin-emu "$@"
-         dest-filename: primehack-wrapper
+      - type: patch
+        path: rd-submodules/dolphin/nodirtyversion.patch
+      - type: script
+        commands:
+          - for i in {0..9}; do
+          - test -S $XDG_RUNTIME_DIR/discord-ipc-$i || ln -sf {app/com.discordapp.Discord,$XDG_RUNTIME_DIR}/discord-ipc-$i;
+          - done
+          - dolphin-emu "$@"
+        dest-filename: primehack-wrapper
 
   # # PRIMEHACK - END
 
