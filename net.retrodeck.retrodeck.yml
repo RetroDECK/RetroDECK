@@ -465,8 +465,8 @@ modules:
       - ln -s "${FLATPAK_DEST}/yuzu/usr/bin/yuzu" "${FLATPAK_DEST}/bin/yuzu"
     sources:
       - type: file
-        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1245/yuzu-mainline-20221121-5ad585b0f.AppImage
-        sha256: e4d1b2fe4443326fb90f3398680c83e130ccab1f315029c1ccca8e7449235b07
+        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1248/yuzu-mainline-20221123-5d9bec400.AppImage
+        sha256: 16f92b054872d000959e93d889c42126241446a5fae7be44382d0bac77c5261a
 
   # Yuzu - END
 
@@ -944,19 +944,6 @@ modules:
 
   # Cemu - START
   # https://github.com/cemu-project/Cemu/releases
-
-  - name: libsepol-dev
-    # from: https://github.com/flathub/com.ticktick.TickTick/blob/dc07865aca359148fbe15617db8f2d79312da898/com.ticktick.TickTick.yml
-    buildsystem: simple
-    build-commands:
-      - ar x libsepol*.deb data.tar.zst
-      - rm libsepol*.deb
-      - tar -xf data.tar.zst -C /
-    sources:
-        #from: https://launchpad.net/ubuntu/+source/libsepol
-      - type: file
-        url: https://launchpad.net/ubuntu/+archive/primary/+files/libsepol-dev_3.4-2_amd64.deb
-        sha256: 6cf60eb730f9a02a05a0f6e7c644347ad2948b2e1dc73750793ac58e1250d76c
 
   - name: Cemu-binary
     buildsystem: simple
