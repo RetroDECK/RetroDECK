@@ -947,9 +947,9 @@ modules:
     # from: https://github.com/flathub/com.ticktick.TickTick/blob/dc07865aca359148fbe15617db8f2d79312da898/com.ticktick.TickTick.yml
     buildsystem: simple
     build-commands:
-      - ar x libsepol*.deb data.tar.xz
+      - ar x libsepol*.deb data.tar.zst
       - rm libsepol*.deb
-      - tar -xf data.tar.xz /
+      - tar -xf data.tar.zst -C /
     sources:
         #from: https://launchpad.net/ubuntu/+source/libsepol
       - type: file
