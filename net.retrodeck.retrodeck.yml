@@ -951,7 +951,7 @@ modules:
     build-commands:
       - ar x libsepol*.deb data.tar.zst
       - rm libsepol*.deb
-      - tar -xf data.tar.zst /
+      - tar -xf data.tar.zst
     sources:
         #from: https://launchpad.net/ubuntu/+source/libsepol
       - type: file
