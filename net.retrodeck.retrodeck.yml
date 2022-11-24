@@ -945,19 +945,6 @@ modules:
   # Cemu - START
   # https://github.com/cemu-project/Cemu/releases
 
-  - name: libsepol-dev
-    # from: https://github.com/flathub/com.ticktick.TickTick/blob/dc07865aca359148fbe15617db8f2d79312da898/com.ticktick.TickTick.yml
-    buildsystem: simple
-    build-commands:
-      - ar x libsepol*.deb data.tar.zst
-      - rm libsepol*.deb
-      - tar -xf data.tar.zst
-    sources:
-        #from: https://launchpad.net/ubuntu/+source/libsepol
-      - type: file
-        url: https://launchpad.net/ubuntu/+archive/primary/+files/libsepol-dev_3.4-2_amd64.deb
-        sha256: 6cf60eb730f9a02a05a0f6e7c644347ad2948b2e1dc73750793ac58e1250d76c
-
   - name: Cemu-binary
     buildsystem: simple
     build-commands:
