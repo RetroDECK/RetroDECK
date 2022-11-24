@@ -17,7 +17,7 @@ finish-args:
   - --share=ipc
   - --share=network
   - --device=all
-  - --filesystem=~/retrodeck:create
+  - --filesystem=home # Needed to be able to relocate / remove / create symlink at ~/retrodeck
   - --filesystem=/run/media
   - --filesystem=/media
   - --allow=multiarch
@@ -64,7 +64,7 @@ modules:
   # If the version is set as cooker it will automatically generate the version tag based on the date
   # else it will just put what is written, "v" is not needed
   # The version number is hardcoded in /app/retrodeck/version
-  # 
+  #
   # UPDATE STEPS FOR MAIN:
   # [ ] Update the VERSION variable
   # [ ] Update the appdata.xml with the version number and notes
@@ -138,7 +138,7 @@ modules:
   #     - sed -e 's@$$QT_MODULE_LIB_BASE@'${FLATPAK_DEST}'/lib@g' -i ${FLATPAK_DEST}/lib/mkspecs/modules/*.pri
   #   cleanup:
   #     - /app/mkspecs
-      
+
   # mesa repo got a double certificate issue and gnutils cannot handle that so GLU download fails,
   # this affects even the shared-modules's glu so I have to replace it temporarly
   # more info there: https://gitlab.com/gnutls/gnutls/-/issues/1335
@@ -245,7 +245,7 @@ modules:
   # ES-DE - END
 
   # ES-DE Themes - START
-  
+
   - name: art-book-next
     buildsystem: simple
     build-commands:
@@ -255,7 +255,7 @@ modules:
       - type: git
         url:  https://github.com/anthonycaccese/art-book-next-retropie.git
         commit: 23932f484a9949313baf80f92b2fbca38a7a8f37
-        
+
   - name: alekfull-nx-light
     buildsystem: simple
     build-commands:
@@ -265,7 +265,7 @@ modules:
       - type: git
         url:  https://github.com/anthonycaccese/alekfull-nx-retropie.git
         commit: 67c8c8dee086bd06bcdc6dc34bb9bef1e1c11be7
-        
+
   - name: retrofix-revisited
     buildsystem: simple
     build-commands:
@@ -827,41 +827,43 @@ modules:
   # # https://github.com/flathub/io.github.shiiion.primehack
   # # Disabled because it's overwriting Dolphin
 
-  # - name: primehack
-  #   buildsystem: cmake-ninja
-  #   config-opts:
-  #     - -DCMAKE_BUILD_TYPE=Release
-  #     - -DENABLE_ALSA=OFF
-  #     - -DENABLE_SDL=ON
-  #     - -DENABLE_EVDEV=ON
-  #     - -DDISTRIBUTOR=Flathub
-  #   cleanup:
-  #     - /share/man
-  #   post-install:
-  #     - install -D primehack-wrapper /app/bin/primehack-wrapper
-  #   sources:
-  #     - type: git
-  #       url: https://github.com/shiiion/dolphin.git
-  #       commit: efb99ebfd20b1bc16ea3e51fec409c91e354d8c2
-  #     # detects whether dolphin is running in a flatpak sandbox
-  #     # and makes it use xdg directories if it is.
-  #     # prevents dolphin from attempting to write conf files
-  #     # in non-writable paths, typically happens when a user
-  #     # has leftover files from a previous non-flatpak install
-  #     - type: patch
-  #       path: rd-submodules/dolphin/detectflatpak.patch
-  #     # version strings must match exactly for online multiplayer
-  #     - type: patch
-  #       path: rd-submodules/dolphin/nodirtyversion.patch
-  #     - type: script
-  #       commands:
-  #         - for i in {0..9}; do
-  #         - test -S $XDG_RUNTIME_DIR/discord-ipc-$i || ln -sf {app/com.discordapp.Discord,$XDG_RUNTIME_DIR}/discord-ipc-$i;
-  #         - done
-  #         - dolphin-emu "$@"
-  #       dest-filename: primehack-wrapper
+  - name: primehack
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DENABLE_ALSA=OFF
+      - -DENABLE_SDL=ON
+      - -DENABLE_EVDEV=ON
+      - -DDISTRIBUTOR=Flathub
+    cleanup:
+      - /share/man
+    post-install:
+      - install -D primehack-wrapper /app/bin/primehack-wrapper
+    sources:
+      - type: git
+        url: https://github.com/TheDrifter363/primehack.git
+        commit: 6295c695307a67f11ee202b05cbdd7b5c1edae5c
+       # detects whether dolphin is running in a flatpak sandbox
+       # and makes it use xdg directories if it is.
+       # prevents dolphin from attempting to write conf files
+       # in non-writable paths, typically happens when a user
+       # has leftover files from a previous non-flatpak install
+      - type: patch
+        path: rd-submodules/dolphin/detectflatpak.patch
+       # version strings must match exactly for online multiplayer
+      - type: patch
+        path: rd-submodules/dolphin/nodirtyversion.patch
+      - type: script
+        commands:
+          - for i in {0..9}; do
+          - test -S $XDG_RUNTIME_DIR/discord-ipc-$i || ln -sf {app/com.discordapp.Discord,$XDG_RUNTIME_DIR}/discord-ipc-$i;
+          - done
+          - primehack "$@"
+        dest-filename: primehack-wrapper
 
   # # PRIMEHACK - END
+
+  # # PRIMEHACK APPIMAGE START
 
   # Duckstation - START
   # https://github.com/flathub/org.duckstation.DuckStation
@@ -888,7 +890,7 @@ modules:
   #       commit: 6f709468601183083b8581d4952aaba7baf77084
   #       # Cloning dep/msvc/qt is only necessary for Windows
   #       disable-submodules: true
-  
+
   # Duckstation - END
 
   # Duckstation-DontUpdate - START
@@ -986,13 +988,16 @@ modules:
       - mkdir -p ${FLATPAK_DEST}/retrodeck/tools/
       - cp tools/* ${FLATPAK_DEST}/retrodeck/tools/
       - mv -f es-configs/tools-gamelist.xml ${FLATPAK_DEST}/retrodeck/
-        
+
       - cp retrodeck.sh /app/bin/retrodeck.sh
       - chmod +x /app/bin/retrodeck.sh
 
-      - cp global.sh /app/bin/global.sh
-      - chmod +x /app/bin/global.sh
-        
+      - cp global.sh /app/libexec/global.sh
+
+      - cp functions.sh /app/libexec/functions.sh
+
+      - cp post_update.sh /app/libexec/post_update.sh
+
       # Desktop entry
       - cp net.retrodeck.retrodeck.desktop /app/share/applications/net.retrodeck.retrodeck.desktop
 
