@@ -945,6 +945,18 @@ modules:
   # Cemu - START
   # https://github.com/cemu-project/Cemu/releases
 
+  - name: libsepol
+    buildsystem: simple
+    build-commands:
+      - |
+        cd libsepol
+        make
+        make install PREFIX=${FLATPAK_DEST}
+    sources:
+      - type: git
+        url: https://github.com/SELinuxProject/selinux.git
+        commit: 0a8c177dacdc1df96ea11bb8aa75e16c4fa82285
+
   - name: Cemu-binary
     buildsystem: simple
     build-commands:
