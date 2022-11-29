@@ -945,7 +945,8 @@ modules:
   # Cemu - START
   # https://github.com/cemu-project/Cemu/releases
 
-  - name: libsepol
+  # Yes, this is old, do not update as we need libespol.so.1
+  - name: libsepol-2.9
     buildsystem: simple
     build-commands:
       - |
@@ -955,7 +956,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/SELinuxProject/selinux.git
-        commit: 0a8c177dacdc1df96ea11bb8aa75e16c4fa82285
+        commit: 891cfee44f7af80ea87c10991058f9d5b66ae96e
 
   - name: Cemu-binary
     buildsystem: simple
