@@ -951,7 +951,7 @@ modules:
       - |
         cd libsepol
         make
-        make install PREFIX=${FLATPAK_DEST}
+        make install PREFIX=${FLATPAK_DEST} DESTDIR=${FLATPAK_DEST}
     sources:
       - type: git
         url: https://github.com/SELinuxProject/selinux.git
