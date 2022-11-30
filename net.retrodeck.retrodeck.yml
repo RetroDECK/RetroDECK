@@ -923,17 +923,6 @@ modules:
   # https://github.com/cemu-project/Cemu/releases
 
   # Yes, this is old, do not update as we need libespol.so.1
-  - name: libsepol-2.9
-    buildsystem: simple
-    build-commands:
-      - |
-        cd libsepol
-        make
-        make install PREFIX=${FLATPAK_DEST} DESTDIR=${FLATPAK_DEST}
-    sources:
-      - type: git
-        url: https://github.com/SELinuxProject/selinux.git
-        commit: 891cfee44f7af80ea87c10991058f9d5b66ae96e
 
   - name: Cemu-binary
     buildsystem: simple
@@ -952,6 +941,7 @@ modules:
   # Cemu - END
 
   # Ryujinx - START
+  # NOTE: if this module is not the last one (before RetroDECK) it will break
   # https://ryujinx.org/download
 
   - name: Ryujinx
