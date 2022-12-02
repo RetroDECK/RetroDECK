@@ -1061,6 +1061,6 @@ modules:
       url: https://github.com/Ryujinx/Ryujinx.git
       commit: b540ea80d16488d1e5b3eb6ca6b9e93cc663b06f
     - type: file
-      path: ryujinx-wrapper
+      path: rd-submodules/ryujinx/ryujinx-wrapper
 
   # Ryujinx - END
