@@ -540,7 +540,7 @@ yuzu_init() {
   dir_prep "$rdhome/bios/switch/registered" "/var/data/yuzu/nand/system/Contents/registered"
   # initializing the save folders
   dir_prep "$rdhome/saves/switch/yuzu/nand" "/var/data/yuzu/nand"
-  dir_prep "$rdhome/saves/switch/yuzy/sdmc" "/var/data/yuzu/sdmc"
+  dir_prep "$rdhome/saves/switch/yuzu/sdmc" "/var/data/yuzu/sdmc"
   # configuring Yuzu
   dir_prep "$rdhome/.logs/yuzu" "/var/data/yuzu/log"
   mkdir -pv /var/config/yuzu/
@@ -688,7 +688,7 @@ emulators_post_move() {
   dir_prep "$rdhome/bios/switch/keys" "/var/data/yuzu/keys"
   dir_prep "$rdhome/bios/switch/registered" "/var/data/yuzu/nand/system/Contents/registered"
   dir_prep "$rdhome/saves/switch/yuzu/nand" "/var/data/yuzu/nand"
-  dir_prep "$rdhome/saves/switch/yuzy/sdmc" "/var/data/yuzu/sdmc"
+  dir_prep "$rdhome/saves/switch/yuzu/sdmc" "/var/data/yuzu/sdmc"
   dir_prep "$rdhome/.logs/yuzu" "/var/data/yuzu/log"
   dir_prep "$rdhome/screenshots" "/var/data/yuzu/screenshots"
   sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/yuzu/qt-config.ini
