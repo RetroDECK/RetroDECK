@@ -285,24 +285,29 @@ modules:
 
   - name: retroarch
     config-opts:
-      - --enable-dbus
+      - '--enable-dbus'
     make-args:
       - GLOBAL_CONFIG_DIR=${FLATPAK_DEST}/etc
     sources:
       - type: git
         url: https://github.com/libretro/RetroArch.git
-        commit: 840c4481ab7cb0720025c30ea609d16e60927a02
+        commit: 0bf818af8dda4ef96993889d3ea23f2a2b054136
       - type: file
         path: rd-submodules/retroarch/retroarch.cfg
     post-install:
       - mkdir -p ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/
-      - mv ${FLATPAK_DEST}/share/pixmaps/retroarch.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/
-      - rmdir --ignore-fail-on-non-empty ${FLATPAK_DEST}/share/pixmaps/
+      - >-
+        mv ${FLATPAK_DEST}/share/pixmaps/retroarch.svg
+        ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/
+      - rmdir ${FLATPAK_DEST}/share/pixmaps/
       - mkdir -p ${FLATPAK_DEST}/etc
-      - sed s:@prefix@:${FLATPAK_DEST}:g retroarch.cfg > ${FLATPAK_DEST}/etc/retroarch.cfg
+      - >-
+        sed s:@prefix@:${FLATPAK_DEST}:g retroarch.cfg >
+        ${FLATPAK_DEST}/etc/retroarch.cfg
+      - mkdir -p ${FLATPAK_DEST}/share/appdata
     modules:
-      - rd-submodules/retroarch/libpng/libpng-1.6.35.json
-      #nvidia-cg-toolkit/nvidia-cg-toolkit-3.1.0013.json
+      - libpng/libpng-1.6.35.json
+      - nvidia-cg-toolkit/nvidia-cg-toolkit-3.1.0013.json
       - shared-modules/SDL/SDL-1.2.15.json
       - shared-modules/SDL/SDL_image-1.2.12.json
       - shared-modules/SDL/SDL_mixer-1.2.12.json
@@ -324,7 +329,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/RetroArch.git
-        commit: 840c4481ab7cb0720025c30ea609d16e60927a02
+        commit: 0bf818af8dda4ef96993889d3ea23f2a2b054136
   - name: retroarch-filers-audio
     subdir: libretro-common/audio/dsp_filters
     make-install-args:
@@ -332,35 +337,35 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/RetroArch.git
-        commit: 840c4481ab7cb0720025c30ea609d16e60927a02
+        commit: 0bf818af8dda4ef96993889d3ea23f2a2b054136
   - name: retroarch-assets
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
         url: https://github.com/libretro/retroarch-assets.git
-        commit: ee33f8ef693b42a8e23ca3fd48f43f345e7cd087
+        commit: 4ec80faf1b5439d1654f407805bb66141b880826
   - name: libretro-database
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
         url: https://github.com/libretro/libretro-database.git
-        commit: bc488c79cdc36ea1076a2941f2e6e32365d5f53e
+        commit: 7383e9587aa372fff7db38f39ca2a95d2f79e484
   - name: libretro-core-info
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
         url: https://github.com/libretro/libretro-core-info.git
-        commit: 7744a25a0e418703e24a4bd7a2208d5a12ae8a7a
+        commit: c2af17f1d04c61135dda4978e0e8034c00d4b61a
   - name: retroarch-joypad-autoconfig
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
         url: https://github.com/libretro/retroarch-joypad-autoconfig.git
-        commit: 948fff0a12e487266eebef14774f17b7b881a728
+        commit: c424e3d461bdf21b90cfc74435026b81e1cf6cf5
   - name: common-shaders
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
@@ -374,7 +379,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/slang-shaders.git
-        commit: 9e89aafe0f6a63645445ca8302b88e4060274c72
+        commit: f77f7b3e3c1dd3c454ede05db7a46c476960a814
   - name: glsl-shaders
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
@@ -388,7 +393,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/common-overlays.git
-        commit: e2ba730083769b45bac62d164115e7dc197c8b63
+        commit: b3827a2c63834ed9e1902acc7cf9019f64771ed3
 
   # RetroArch - END
 
@@ -465,8 +470,8 @@ modules:
       - ln -s "${FLATPAK_DEST}/yuzu/usr/bin/yuzu" "${FLATPAK_DEST}/bin/yuzu"
     sources:
       - type: file
-        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1255/yuzu-mainline-20221129-9034d5328.AppImage
-        sha256: efa8ee53ba17b3296a59573d4f2dd838bf6f0fd7455f58f4dbf4ad82a7585427
+        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1257/yuzu-mainline-20221201-badaf486b.AppImage
+        sha256: f245f5fe71d74611ccf77b16af470c2d7d4f17c6b647c899308c9a96ca2a042f
 
   # Yuzu - END
 
@@ -940,70 +945,6 @@ modules:
 
   # Cemu - END
 
-    # Ryujinx - START
-  # https://ryujinx.org/download
-  #
-  # THIS MUST BE AT THE END OF THE MANIFEST OR THE BINARY WILL GET CORRUPTED
-  #
-
-  - name: Ryujinx
-    buildsystem: simple
-    build-options:
-      no-debuginfo: true
-      no-debuginfo-compression: true
-      strip: false
-      arch:
-        x86_64:
-          env:
-            RUNTIME: linux-x64
-      env:
-        PKG_CONFIG_PATH: /app/lib/pkgconfig:/app/share/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig
-        DOTNET_CLI_TELEMETRY_OPTOUT: 'true'
-        DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 'true'
-        RYUJINX_VERSION: 1.1.405
-        RYUJINX_TARGET_RELEASE_CHANNEL_OWNER: flathub
-        RYUJINX_TARGET_RELEASE_CHANNEL_REPO: org.ryujinx.Ryujinx
-        RYUJINX_TARGET_RELEASE_CHANNEL_NAME: master
-    build-commands:
-    - |
-      export PATH=$PATH:/run/build/Ryujinx/dotnet-sdk
-      export RYUJINX_GIT_SHORT_HASH=$(git rev-parse --short HEAD)
-      export RUNTIME_FRAMEWORK_VERSION=$(find nuget-sources -name 'microsoft.netcore.app.host.linux-x64.*' | grep -oP '(\d.\d.\d+.nupkg)' | grep -oP '(\d.\d.\d+)')
-      sed -r --in-place "s/\%\%RYUJINX_BUILD_VERSION\%\%/$RYUJINX_VERSION/g;" Ryujinx.Common/ReleaseInformations.cs
-      sed -r --in-place "s/\%\%RYUJINX_BUILD_GIT_HASH\%\%/$RYUJINX_GIT_SHORT_HASH/g;" Ryujinx.Common/ReleaseInformations.cs
-      sed -r --in-place "s/\%\%RYUJINX_TARGET_RELEASE_CHANNEL_NAME\%\%/$RYUJINX_TARGET_RELEASE_CHANNEL_NAME/g;" Ryujinx.Common/ReleaseInformations.cs
-      sed -r --in-place "s/\%\%RYUJINX_TARGET_RELEASE_CHANNEL_OWNER\%\%/$RYUJINX_TARGET_RELEASE_CHANNEL_OWNER/g;" Ryujinx.Common/ReleaseInformations.cs
-      sed -r --in-place "s/\%\%RYUJINX_TARGET_RELEASE_CHANNEL_REPO\%\%/$RYUJINX_TARGET_RELEASE_CHANNEL_REPO/g;" Ryujinx.Common/ReleaseInformations.cs
-      mkdir -p /app/bin
-      dotnet publish -c Release -r $RUNTIME /p:DebugType=embedded Ryujinx /p:Version=$RYUJINX_VERSION /p:SourceRevisionId=$RYUJINX_GIT_SHORT_HASH /p:ExtraDefineConstants=DISABLE_UPDATER /p:RuntimeFrameworkVersion=$RUNTIME_FRAMEWORK_VERSION --self-contained --source nuget-sources
-      if [ $? -ne 0 ]; then
-          exit 1;
-      fi;
-      cp -r --remove-destination /run/build/Ryujinx/Ryujinx/bin/Release/net7.0/$RUNTIME/publish/* /app/bin/
-      mkdir -p /app/lib/ffmpeg
-      ln -s /usr/lib/x86_64-linux-gnu/libX11.so.6 /app/lib/libX11.so
-      install -Dm755 ryujinx-wrapper /app/bin/ryujinx-wrapper
-    sources:
-      - type: git
-        url: https://github.com/Ryujinx/Ryujinx.git
-        commit: 458452279cee03bfe1bbf2c3daf3fc9722b03a74
-      - type: archive
-        only-arches:
-        - x86_64
-        dest: dotnet-sdk
-        url: https://dotnetcli.blob.core.windows.net/dotnet/Sdk/7.0.100/dotnet-sdk-7.0.100-linux-x64.tar.gz
-        sha256: 5d4a58eeca1a4ab095b55e6486b1278147b0ab121ce883b2bcde3d3626c9a81c
-        x-checker-data:
-          type: html
-          url: https://dotnetcli.blob.core.windows.net/dotnet/Sdk/7.0/latest.version
-          version-pattern: ^([\d\.a-z-]+)$
-          url-template: https://dotnetcli.blob.core.windows.net/dotnet/Sdk/$version/dotnet-sdk-$version-linux-x64.tar.gz
-      - rd-submodules/ryujinx/nuget_sources.json
-      - type: file
-        path: rd-submodules/ryujinx/ryujinx-wrapper
-
-  # Ryujinx - END
-
   # External manifests end
 
   - name: retrodeck
@@ -1059,3 +1000,67 @@ modules:
       - type: git
         url: https://github.com/XargonWan/RetroDECK.git
         branch: cooker-0.6.0b
+
+  # Ryujinx - START
+  # https://github.com/flathub/org.ryujinx.Ryujinx
+  #
+  # THIS MUST BE AT THE END OF THE MANIFEST OR THE BINARY WILL GET CORRUPTED
+  #
+
+  - name: Ryujinx
+    buildsystem: simple
+    build-options:
+      no-debuginfo: true
+      no-debuginfo-compression: true
+      strip: false
+      arch:
+        x86_64:
+          env:
+            RUNTIME: linux-x64
+      env:
+        PKG_CONFIG_PATH: /app/lib/pkgconfig:/app/share/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig
+        DOTNET_CLI_TELEMETRY_OPTOUT: 'true'
+        DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 'true'
+        RYUJINX_VERSION: 1.1.410
+        RYUJINX_TARGET_RELEASE_CHANNEL_OWNER: flathub
+        RYUJINX_TARGET_RELEASE_CHANNEL_REPO: org.ryujinx.Ryujinx
+        RYUJINX_TARGET_RELEASE_CHANNEL_NAME: master
+    build-commands:
+    - |
+      export PATH=$PATH:/run/build/Ryujinx/dotnet-sdk
+      export RYUJINX_GIT_SHORT_HASH=$(git rev-parse --short HEAD)
+      export RUNTIME_FRAMEWORK_VERSION=$(find nuget-sources -name 'microsoft.netcore.app.host.linux-x64.*' | grep -oP '(\d.\d.\d+.nupkg)' | grep -oP '(\d.\d.\d+)')
+      sed -r --in-place "s/\%\%RYUJINX_BUILD_VERSION\%\%/$RYUJINX_VERSION/g;" Ryujinx.Common/ReleaseInformations.cs
+      sed -r --in-place "s/\%\%RYUJINX_BUILD_GIT_HASH\%\%/$RYUJINX_GIT_SHORT_HASH/g;" Ryujinx.Common/ReleaseInformations.cs
+      sed -r --in-place "s/\%\%RYUJINX_TARGET_RELEASE_CHANNEL_NAME\%\%/$RYUJINX_TARGET_RELEASE_CHANNEL_NAME/g;" Ryujinx.Common/ReleaseInformations.cs
+      sed -r --in-place "s/\%\%RYUJINX_TARGET_RELEASE_CHANNEL_OWNER\%\%/$RYUJINX_TARGET_RELEASE_CHANNEL_OWNER/g;" Ryujinx.Common/ReleaseInformations.cs
+      sed -r --in-place "s/\%\%RYUJINX_TARGET_RELEASE_CHANNEL_REPO\%\%/$RYUJINX_TARGET_RELEASE_CHANNEL_REPO/g;" Ryujinx.Common/ReleaseInformations.cs
+      mkdir -p /app/bin
+      dotnet publish -c Release -r $RUNTIME /p:DebugType=embedded Ryujinx /p:Version=$RYUJINX_VERSION /p:SourceRevisionId=$RYUJINX_GIT_SHORT_HASH /p:ExtraDefineConstants=DISABLE_UPDATER /p:RuntimeFrameworkVersion=$RUNTIME_FRAMEWORK_VERSION --self-contained --source nuget-sources
+      if [ $? -ne 0 ]; then
+          exit 1;
+      fi;
+      cp -r --remove-destination /run/build/Ryujinx/Ryujinx/bin/Release/net7.0/$RUNTIME/publish/* /app/bin/
+      mkdir -p /app/lib/ffmpeg
+      ln -s /usr/lib/x86_64-linux-gnu/libX11.so.6 /app/lib/libX11.so
+      install -Dm755 ryujinx-wrapper /app/bin/ryujinx-wrapper
+    sources:
+    - type: archive
+      only-arches:
+      - x86_64
+      dest: dotnet-sdk
+      url: https://dotnetcli.blob.core.windows.net/dotnet/Sdk/7.0.100/dotnet-sdk-7.0.100-linux-x64.tar.gz
+      sha256: 5d4a58eeca1a4ab095b55e6486b1278147b0ab121ce883b2bcde3d3626c9a81c
+      x-checker-data:
+        type: html
+        url: https://dotnetcli.blob.core.windows.net/dotnet/Sdk/7.0/latest.version
+        version-pattern: ^([\d\.a-z-]+)$
+        url-template: https://dotnetcli.blob.core.windows.net/dotnet/Sdk/$version/dotnet-sdk-$version-linux-x64.tar.gz
+    - rd-submodules/ryujinx/nuget_sources.json
+    - type: git
+      url: https://github.com/Ryujinx/Ryujinx.git
+      commit: b540ea80d16488d1e5b3eb6ca6b9e93cc663b06f
+    - type: file
+      path: ryujinx-wrapper
+
+  # Ryujinx - END
