@@ -799,9 +799,9 @@ ra_init() {
   dir_prep "$rdhome/shaders/retroarch" "/var/config/retroarch/shaders"
   mkdir -pv /var/config/retroarch/cores/
   cp -f /app/share/libretro/cores/* /var/config/retroarch/cores/
-  cp -fv $emuconfigs/retroarch.cfg /var/config/retroarch/
-  cp -fv $emuconfigs/retroarch-core-options.cfg /var/config/retroarch/
-  cp -rfv $emuconfigs/retroarch-core-overrides/* /var/config/retroarch/config
+  cp -fv $emuconfigs/retroarch/retroarch.cfg /var/config/retroarch/
+  cp -fv $emuconfigs/retroarch/retroarch-core-options.cfg /var/config/retroarch/
+  cp -rfv $emuconfigs/retroarch/core-overrides/* /var/config/retroarch/config
   #rm -rf $rdhome/bios/bios # in some situations a double bios symlink is created
   sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/retroarch/retroarch.cfg
 
