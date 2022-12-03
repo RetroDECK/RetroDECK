@@ -1021,7 +1021,7 @@ modules:
         PKG_CONFIG_PATH: /app/lib/pkgconfig:/app/share/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig
         DOTNET_CLI_TELEMETRY_OPTOUT: 'true'
         DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 'true'
-        RYUJINX_VERSION: 1.1.410
+        RYUJINX_VERSION: 1.1.415
         RYUJINX_TARGET_RELEASE_CHANNEL_OWNER: flathub
         RYUJINX_TARGET_RELEASE_CHANNEL_REPO: org.ryujinx.Ryujinx
         RYUJINX_TARGET_RELEASE_CHANNEL_NAME: master
@@ -1059,7 +1059,7 @@ modules:
     - rd-submodules/ryujinx/nuget_sources.json
     - type: git
       url: https://github.com/Ryujinx/Ryujinx.git
-      commit: b540ea80d16488d1e5b3eb6ca6b9e93cc663b06f
+      commit: 39ba11054bedc84de65e2a1c2944e915505d0d67
     - type: file
       path: rd-submodules/ryujinx/ryujinx-wrapper
 
