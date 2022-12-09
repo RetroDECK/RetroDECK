@@ -28,6 +28,7 @@ source /app/libexec/functions.sh # uncomment for flatpak testing
 #           - Reset PCSX2
 #           - Reset MelonDS
 #           - Reset Citra
+#           - Reset Ryujinx
 #           - Reset RPCS3
 #           - Reset XEMU
 #           - Reset PPSSPP
@@ -71,8 +72,8 @@ configurator_reset_dialog() {
     "MelonDS" \
     "PCSX2" \
     "PPSSPP" \
-    "RPCS3" \
     "Ryujinx" \
+    "RPCS3" \
     "XEMU" \
     "Yuzu")
 
