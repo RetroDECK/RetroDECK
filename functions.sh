@@ -661,7 +661,7 @@ ryujinx_init() {
   mkdir -p /var/config/Ryujinx/system
   cp -fv $emuconfigs/ryujinx/* /var/config/Ryujinx
   sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/Ryujinx/Config.json
-  ln -s $rdhome/bios/switch/keys /var/config/Ryujinx/system
+  dir_prep "$rdhome/bios/switch/keys" "/var/config/Ryujinx/system"
 }
 
 standalones_init() {
@@ -737,6 +737,10 @@ emulators_post_move() {
 
   # Duckstation section
   sed -i 's#/home/deck/retrodeck/bios#'$rdhome/bios'#g' /var/config/duckstation/settings.ini
+
+  # Ryujinx section
+  sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/Ryujinx/Config.json
+  dir_prep "$rdhome/bios/switch/keys" "/var/config/Ryujinx/system"
 }
 
 #=========================
@@ -862,8 +866,8 @@ start_retrodeck() {
   emulationstation --home /var/config/emulationstation
 }
 
-old_browse() {
-# Function for browsing the sd card
+finit_browse() {
+# Function for choosing data directory location during first/forced init
 path_selected=false
 while [ $path_selected == false ]
 do
@@ -938,7 +942,7 @@ finit() {
       --title "RetroDECK" \
       --ok-label "Browse" \
       --text="SD Card was not find in the default location.\nPlease choose the SD Card root.\nA retrodeck folder will be created starting from the directory that you selected."
-      rdhome=$(old_browse) # Calling the browse function
+      rdhome=$(finit_browse) # Calling the browse function
       if [[ -z $rdhome ]]; then # If user hit the cancel button
         exit 2
       fi
@@ -976,7 +980,7 @@ finit() {
       --title "RetroDECK" \
       --ok-label "Browse" \
       --text="Please choose the root folder for the RetroDECK data.\nA retrodeck folder will be created starting from the directory that you selected."
-      rdhome=$(old_browse) # Calling the browse function
+      rdhome=$(finit_browse) # Calling the browse function
       if [[ -z $rdhome ]]; then # If user hit the cancel button
         exit 2
       fi
