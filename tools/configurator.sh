@@ -217,6 +217,7 @@ configurator_power_user_changes_dialog() {
     "PCSX2-Legacy" \
     "PPSSPP" \
     "RPCS3" \
+    "Ryujinx" \
     "XEMU" \
     "Yuzu")
 
@@ -256,6 +257,10 @@ configurator_power_user_changes_dialog() {
 
     "RPCS3" )
       rpcs3
+    ;;
+
+    "Ryujinx" )
+      ryujinx-wrapper
     ;;
 
     "XEMU" )
