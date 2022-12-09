@@ -72,6 +72,7 @@ configurator_reset_dialog() {
     "PCSX2" \
     "PPSSPP" \
     "RPCS3" \
+    "Ryujinx" \
     "XEMU" \
     "Yuzu")
 
@@ -109,6 +110,11 @@ configurator_reset_dialog() {
 
     "PPSSPP" )
       ppssppsdl_init
+      configurator_process_complete_dialog "resetting $emulator_to_reset"
+    ;;
+
+    "Ryujinx" )
+      ryujinx_init
       configurator_process_complete_dialog "resetting $emulator_to_reset"
     ;;
 

@@ -654,12 +654,22 @@ duckstation_init() {
   sed -i 's#/home/deck/retrodeck/bios#'$rdhome/bios'#g' /var/config/duckstation/settings.ini
 }
 
+ryujinx_init() {
+  echo "------------------------"
+  echo "Initializing RYUJINX"
+  echo "------------------------"
+  mkdir -p /var/config/Ryujinx/system
+  cp -fv $emuconfigs/ryujinx/* /var/config/Ryujinx
+  sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/Ryujinx/Config.json
+  ln -s $rdhome/bios/switch/keys /var/config/Ryujinx/system
+}
+
 standalones_init() {
   # This script is configuring the standalone emulators with the default files present in emuconfigs folder
 
-  echo "----------------------"
+  echo "------------------------------------"
   echo "Initializing standalone emulators"
-  echo "----------------------"
+  echo "------------------------------------"
 
   yuzu_init
   citra_init
@@ -670,6 +680,7 @@ standalones_init() {
   rpcs3_init
   xemu_init
   duckstation_init
+  ryujinx_init
 }
 
 emulators_post_move() {
