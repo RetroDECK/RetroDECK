@@ -282,7 +282,7 @@ modules:
 
   # RetroArch - START
   # https://github.com/flathub/org.libretro.RetroArch
-
+  
   - name: retroarch
     config-opts:
       - '--enable-dbus'
@@ -291,7 +291,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/RetroArch.git
-        commit: 0bf818af8dda4ef96993889d3ea23f2a2b054136
+        commit: ad89b0c655fc1d25adfcdf40268e95c5d0391111
       - type: file
         path: rd-submodules/retroarch/retroarch.cfg
     post-install:
@@ -321,7 +321,7 @@ modules:
       - rd-submodules/retroarch/libaio/libaio-0.3.112.json
       # certificate issue, check libglu module for more info
       #- shared-modules/glu/glu-9.json
-      - rd-submodules/retroarch/libdecor/libdecor-0.1.0.json
+      - rd-submodules/retroarch/libdecor/libdecor-0.1.1.json
   - name: retroarch-filers-video
     subdir: gfx/video_filters
     make-install-args:
@@ -329,7 +329,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/RetroArch.git
-        commit: 0bf818af8dda4ef96993889d3ea23f2a2b054136
+        commit: ad89b0c655fc1d25adfcdf40268e95c5d0391111
   - name: retroarch-filers-audio
     subdir: libretro-common/audio/dsp_filters
     make-install-args:
@@ -337,7 +337,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/RetroArch.git
-        commit: 0bf818af8dda4ef96993889d3ea23f2a2b054136
+        commit: ad89b0c655fc1d25adfcdf40268e95c5d0391111
   - name: retroarch-assets
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
@@ -351,21 +351,21 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/libretro-database.git
-        commit: 7383e9587aa372fff7db38f39ca2a95d2f79e484
+        commit: 183babc61f6a7aa6077e663bb2a8bb91d11d6874
   - name: libretro-core-info
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
         url: https://github.com/libretro/libretro-core-info.git
-        commit: c2af17f1d04c61135dda4978e0e8034c00d4b61a
+        commit: 3d9b20d3711c8c2827246e3b48a503973192f080
   - name: retroarch-joypad-autoconfig
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
         url: https://github.com/libretro/retroarch-joypad-autoconfig.git
-        commit: c424e3d461bdf21b90cfc74435026b81e1cf6cf5
+        commit: dc625d5623a0e5c6999f372c99548676f9851691
   - name: common-shaders
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
@@ -379,14 +379,14 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/slang-shaders.git
-        commit: f77f7b3e3c1dd3c454ede05db7a46c476960a814
+        commit: feb1fcaee0fe5294b9885fdcc87cb16f0bac06be
   - name: glsl-shaders
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
         url: https://github.com/libretro/glsl-shaders.git
-        commit: 46a00f15e09ffbd4fba46ab41f0653aeea918fd1
+        commit: 66cd3917c3cde8c96b5492bca00c95e3e17b44b9
   - name: common-overlays
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
