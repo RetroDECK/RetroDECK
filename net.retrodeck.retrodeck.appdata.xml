@@ -76,6 +76,8 @@
           <li>Added Cemu</li>
           <li>Added Ryujinx</li>
           <li>Added Primehack</li>
+          <li>Merged all tools into single Configurator</li>
+          <li>The first install is now asking where to place the whole retrodeck folder instead of requesting the location of the ROMs folder only.</li>
           <li>Fix: PCSX2-QT is now looking for saves in the correct directory ~/retrodeck/saves/ps2/memcards and not in ~/retrodeck/saves/ps2/pcsx2/memcards</li>
           <li>Updated RetroArch to v1.14.0</li>
           <li>Updated PPSSPP (SA) to v1.13.2</li>
