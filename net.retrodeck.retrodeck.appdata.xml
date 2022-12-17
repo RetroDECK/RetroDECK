@@ -69,14 +69,15 @@
 
 <releases>
 
-  <release version="0.6.0b" date="2022-12-16">
+  <release version="0.6.0b" date="2022-12-17">
     <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.0b</url>
       <description>
         <ul>
-          <li>Added Cemu</li>
           <li>Added Ryujinx</li>
           <li>Added Primehack</li>
           <li>Merged all tools into single Configurator</li>
+          <li>The Configurator can now move the whole retrodeck folder eslewhere (not just the ROMs one)</li>
+          <li>The Configurator can now reset a single emulator, all RetroArch or all Standaloned configs (so there is no need to di it via CLI anymore</li>
           <li>The first install is now asking where to place the whole retrodeck folder instead of requesting the location of the ROMs folder only.</li>
           <li>Fix: PCSX2-QT is now looking for saves in the correct directory ~/retrodeck/saves/ps2/memcards and not in ~/retrodeck/saves/ps2/pcsx2/memcards</li>
           <li>Updated RetroArch to v1.14.0</li>
@@ -87,7 +88,7 @@
           <li>Updated Xemu to v0.7.71</li>
           <li>Updated RPCS3 to latest on 31/10/2022</li>
           <li>Updated Duckstation to latest on 31/10/2022</li>
-          <li>Migrated Yuzu from appimage mainline-1271</li>
+          <li>Migrated Yuzu from appimage mainline-1271 and reconfigured</li>
           <li>Removed old PCSX2 (non-qt)</li>
       </ul>
     </description>
