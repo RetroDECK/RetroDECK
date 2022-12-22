@@ -73,8 +73,8 @@ then
   # ...but the version doesn't match with the config file
   if [ "$hard_version" != "$version" ];
   then
-      echo "Config file's version is $version but the actual version is $hard_version"
-      post_update       # Executing post update script
+    echo "Config file's version is $version but the actual version is $hard_version"
+    post_update       # Executing post update script
   fi
 # Else, LOCKFILE IS NOT EXISTING (WAS REMOVED)
 # if the lock file doesn't exist at all means that it's a fresh install or a triggered reset
@@ -83,15 +83,11 @@ else
   finit             # Executing First/Force init
 fi
 
-# Normal Startup
-
-# Check if the retrodeck folder is existing
-if [ ! -d $rdhome ] then
-  zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-  --title "RetroDECK" \
-  --text="The retrodeck folder was not found on the previous location, please choose a new location.\nNOTE: the folder selection may work on desktop mode only."
-  configurator_destination_choice_dialog()
+# Check if SD card path has changed from SteamOS update
+if [[ ! -d $sd_card && "$(ls -A /run/media/deck/)" ]]; then
+  configurator_generic_dialog "The ROMs folder was not found in the expected location.\nThis may happen when SteamOS is updated.\n\nPlease browse to the current location of the "
 fi
+
+# Normal Startup
 
 start_retrodeck

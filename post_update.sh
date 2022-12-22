@@ -7,7 +7,7 @@ post_update() {
 
   local prev_version=$(sed -e 's/[\.a-z]//g' <<< $version)
 
-  if [[ $prev_version -le "054" ]]; then
+  if [[ $prev_version -le "054" ]]; then # If updating from prior to save sorting change
 
     # Finding existing ROMs folder
     if [ -d "$default_sd/retrodeck" ]
