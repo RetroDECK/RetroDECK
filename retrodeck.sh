@@ -84,4 +84,14 @@ else
 fi
 
 # Normal Startup
+
+# Check if the retrodeck folder is existing
+if [ ! -d $rdhome ] then
+  zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+  --title "RetroDECK" \
+  --text="The retrodeck folder was not found on the previous location, please choose a new location.\nNOTE: the folder selection may work on desktop mode only."
+  configurator_destination_choice_dialog()
+fi
+
 start_retrodeck
