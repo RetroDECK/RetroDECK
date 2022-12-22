@@ -29,10 +29,10 @@ browse() {
       fi
     else
       zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
-      --text="No directory selected. Do you want to return to the main menu?"
-      if [ $? == 1 ]
+      --text="No directory selected. Do you want to exit?"
+      if [ $? == 0 ]
       then
-        configurator_welcome_dialog
+        break
       fi
     fi
   done
