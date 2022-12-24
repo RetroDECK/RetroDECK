@@ -69,7 +69,7 @@
 
 <releases>
 
-  <release version="0.6.0b" date="2022-12-17">
+  <release version="0.6.0b" date="2022-12-24">
     <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.0b</url>
       <description>
         <ul>
@@ -80,6 +80,7 @@
           <li>The Configurator can now reset a single emulator, all RetroArch or all Standaloned configs (so there is no need to di it via CLI anymore</li>
           <li>The first install is now asking where to place the whole retrodeck folder instead of requesting the location of the ROMs folder only.</li>
           <li>Fix: PCSX2-QT is now looking for saves in the correct directory ~/retrodeck/saves/ps2/memcards and not in ~/retrodeck/saves/ps2/pcsx2/memcards</li>
+          <li>Introduced a fix if/when SteamOS will change the SDCard default location.</li>
           <li>Updated RetroArch to v1.14.0</li>
           <li>Updated PPSSPP (SA) to v1.13.2</li>
           <li>Updated Citra (SA) to nightly-1802</li>
