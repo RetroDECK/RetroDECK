@@ -41,9 +41,12 @@ jobs:
           io.qt.qtwebengine.BaseApp/x86_64/6.3 \
           org.freedesktop.Sdk.Extension.llvm13 \
           org.freedesktop.Sdk.Extension.dotnet6/x86_64/21.08
+          echo ${GITHUB_WORKSPACE} #DEBUG
+          df -h ${GITHUB_WORKSPACE} #DEBUG
 
       - name: Build flatpak
         run: |
+          git config --global protocol.file.allow always
           flatpak-builder --user --force-clean --install-deps-from=flathub --install-deps-from=flathub-beta --repo=${GITHUB_WORKSPACE}/local ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
 
       - name: Create Artifact for flathub

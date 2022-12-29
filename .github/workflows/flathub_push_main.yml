@@ -28,6 +28,8 @@ jobs:
           git clone --recursive https://github.com/XargonWan/RetroDECK RetroDECK
           cd $gits_folder/RetroDECK
 
+          relname="main-"$(git rev-parse --short HEAD)
+
           git checkout $rd_branch
           git submodule init
           git submodule update
@@ -37,7 +39,7 @@ jobs:
 
           cd $gits_folder/flathub
 
-          git checkout master
+          git checkout -b $relname
 
           git rm -rf *
           git clean -fxd # restroing git index
@@ -71,14 +73,9 @@ jobs:
 
           sed -i "s#__SHA__#$sha#g" net.retrodeck.retrodeck.yml
 
-          echo -e "Resulting manifest:\n"
-          cat net.retrodeck.retrodeck.yml
-
           git config --global user.name "${{ secrets.GITNAME }}"
           git config --global user.email "${{ secrets.GITMAIL }}"
 
           git add *
           git commit -m "Updated flathub/net.retrodeck.retrodeck from RetroDECK/$rd_branch"
-
-          git remote -v
-          git push --force https://${{ secrets.TRIGGER_BUILD_TOKEN }}@github.com/flathub/net.retrodeck.retrodeck.git master
+          git push --force https://${{ secrets.TRIGGER_BUILD_TOKEN }}@github.com/flathub/net.retrodeck.retrodeck.git $relname
