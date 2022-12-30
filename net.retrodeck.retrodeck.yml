@@ -78,7 +78,7 @@ modules:
       - |
         git checkout ${GITHUB_REF_NAME}
         mkdir -p ${FLATPAK_DEST}/retrodeck/
-        VERSION="0.6.0b-cooker"
+        VERSION="0.6.1b-cooker"
         if [[ $VERSION == *"cooker"* ]];
         then
           VERSION="$VERSION-[$(git rev-parse --short HEAD)]"
@@ -88,7 +88,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/XargonWan/RetroDECK.git
-        branch: cooker-0.6.0b
+        branch: cooker-0.6.1b
 
   - name: xmlstarlet
     config-opts:
@@ -999,7 +999,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/XargonWan/RetroDECK.git
-        branch: cooker-0.6.0b
+        branch: cooker-0.6.1b
 
   # Ryujinx - START
   # https://github.com/flathub/org.ryujinx.Ryujinx

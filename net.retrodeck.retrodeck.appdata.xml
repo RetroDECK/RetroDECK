@@ -69,6 +69,15 @@
 
 <releases>
 
+  <release version="0.6.1b" date="2022-12-30">
+    <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.1b</url>
+      <description>
+        <ul>
+          <li>FOO</li>
+      </ul>
+    </description>
+  </release>
+
   <release version="0.6.0b" date="2022-12-24">
     <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.0b</url>
       <description>
