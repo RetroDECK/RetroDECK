@@ -417,7 +417,7 @@ configurator_move_dialog() {
             fi
 
             if [[ ! -L "$HOME/retrodeck" ]]; then # Always link back to original directory
-              ln -svf "$sdcard/retrodeck" "$HOME/retrodeck"
+              ln -svf "$sdcard/retrodeck" "$HOME"
             fi
 
             rdhome="$sdcard/retrodeck"
@@ -466,7 +466,7 @@ configurator_move_dialog() {
           fi
 
           if [[ ! -L "$HOME/retrodeck" ]]; then
-            ln -svf "$custom_dest/retrodeck" "$HOME/retrodeck"
+            ln -svf "$custom_dest/retrodeck" "$HOME"
           fi
 
           rdhome="$custom_dest/retrodeck"
