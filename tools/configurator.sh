@@ -23,16 +23,17 @@ source /app/libexec/functions.sh # uncomment for flatpak testing
 #     - Reset RetroDECK
 #       - Reset RetroArch
 #       - Reset Specific Standalone Emulator
-#           - Reset Yuzu
-#           - Reset Dolphin
-#           - Reset PCSX2
-#           - Reset MelonDS
 #           - Reset Citra
+#           - Reset Dolphin
+#           - Reset Duckstation
+#           - Reset MelonDS
+#           - Reset PCSX2
+#           - Reset PPSSPP
+#           - Reset Primehack
 #           - Reset RPCS3
 #           - Reset Ryujinx
 #           - Reset XEMU
-#           - Reset PPSSPP
-#           - Reset Duckstation
+#           - Reset Yuzu
 #       - Reset All Standalone Emulators
 #       - Reset Tools
 #       - Reset All
@@ -72,6 +73,7 @@ configurator_reset_dialog() {
     "MelonDS" \
     "PCSX2" \
     "PPSSPP" \
+    "Primehack" \
     "RPCS3" \
     "Ryujinx" \
     "XEMU" \
@@ -111,6 +113,11 @@ configurator_reset_dialog() {
 
     "PPSSPP" )
       ppssppsdl_init
+      configurator_process_complete_dialog "resetting $emulator_to_reset"
+    ;;
+
+    "Primehack" )
+      primehack_init
       configurator_process_complete_dialog "resetting $emulator_to_reset"
     ;;
 
@@ -216,6 +223,7 @@ configurator_power_user_changes_dialog() {
     "PCSX2-QT" \
     "PCSX2-Legacy" \
     "PPSSPP" \
+    "Primehack" \
     "RPCS3" \
     "Ryujinx" \
     "XEMU" \
@@ -253,6 +261,10 @@ configurator_power_user_changes_dialog() {
 
     "PPSSPP" )
       PPSSPPSDL
+    ;;
+
+    "Primehack" )
+      primehack-wrapper
     ;;
 
     "RPCS3" )
@@ -417,7 +429,7 @@ configurator_move_dialog() {
             fi
 
             if [[ ! -L "$HOME/retrodeck" ]]; then # Always link back to original directory
-              ln -svf "$sdcard/retrodeck" "$HOME/retrodeck"
+              ln -svf "$sdcard/retrodeck" "$HOME"
             fi
 
             rdhome="$sdcard/retrodeck"
@@ -466,7 +478,7 @@ configurator_move_dialog() {
           fi
 
           if [[ ! -L "$HOME/retrodeck" ]]; then
-            ln -svf "$custom_dest/retrodeck" "$HOME/retrodeck"
+            ln -svf "$custom_dest/retrodeck" "$HOME"
           fi
 
           rdhome="$custom_dest/retrodeck"
