@@ -73,7 +73,9 @@
     <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.1b</url>
       <description>
         <ul>
-          <li>FOO</li>
+          <li>Removed Ryjuinx as it was broken (sorry)</li>
+          <li>Added missing Primehack config and Configurator options</li>
+          <li>Fixed a bug where the retrodeck folder was having a symlink creation issue after migration</li>
       </ul>
     </description>
   </release>
