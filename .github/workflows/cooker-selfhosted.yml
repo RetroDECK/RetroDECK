@@ -74,7 +74,7 @@ jobs:
 
           artifacts: "RetroDECK.flatpak,RetroDECK-Artifact.tar.gz"
           allowUpdates: true
-          prerelease: true
+          #prerelease: true
           draft: false
           token: ${{ secrets.TRIGGER_BUILD_TOKEN }}
           repo: RetroDECK-cooker
