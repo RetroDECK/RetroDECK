@@ -44,7 +44,7 @@ source /app/libexec/functions.sh # uncomment for flatpak testing
 
 configurator_reset_dialog() {
   choice=$(zenity --list --title="RetroDECK Configurator Utility - Reset Options" --cancel-label="Back" \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
   "Reset RetroArch" "Reset RetroArch to default settings" \
   "Reset Specific Standalone" "Reset only one specific standalone emulator to default settings" \
@@ -62,7 +62,7 @@ configurator_reset_dialog() {
   "Reset Specific Standalone" )
     emulator_to_reset=$(zenity --list \
     --title "RetroDECK Configurator Utility - Reset Specific Standalone Emulator" --cancel-label="Back" \
-    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
     --text="Which emulator do you want to reset to default?" \
     --hide-header \
     --column=emulator \
@@ -176,7 +176,7 @@ configurator_reset_dialog() {
 
 configurator_retroachivement_dialog() {
   login=$(zenity --forms --title="RetroDECK Configurator Utility - RetroArch RetroAchievements Login" --cancel-label="Back" \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --text="Enter your RetroAchievements Account details.\n\nBe aware that this tool cannot verify your login details and currently only supports logging in with RetroArch.\nFor registration and more info visit\nhttps://retroachievements.org/\n" \
   --separator="=SEP=" \
   --add-entry="Username" \
@@ -211,7 +211,7 @@ configurator_power_user_changes_dialog() {
   if [ $? == 0 ]; then # OK button clicked
     emulator=$(zenity --list \
     --title "RetroDECK Configurator Utility - Power User Options" --cancel-label="Back" \
-    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
     --text="Which emulator do you want to configure?" \
     --hide-header \
     --column=emulator \
@@ -325,7 +325,7 @@ configurator_retroarch_rewind_dialog() {
 
 configurator_retroarch_options_dialog() {
   choice=$(zenity --list --title="RetroDECK Configurator Utility - RetroArch Options" --cancel-label="Back" \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
   "Change Rewind Setting" "Enable or disable the Rewind function in RetroArch" )
 
@@ -344,7 +344,7 @@ configurator_retroarch_options_dialog() {
 
 configurator_options_dialog() {
   choice=$(zenity --list --title="RetroDECK Configurator Utility - Change Options" --cancel-label="Back" \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
   "Change RetroArch Settings" "Change settings specific to RetroArch" \
   "Power User Changes" "Make changes directly in an emulator" )
@@ -415,6 +415,7 @@ configurator_move_dialog() {
             if [[ -L "$HOME/retrodeck/roms" ]]; then # Check for ROMs symlink user may have created
                 unlink "$HOME/retrodeck/roms"
             fi
+            unlink $HOME/retrodeck # Remove symlink for $rdhome
 
             (
             dir_prep "$sdcard/retrodeck" "$rdhome"
@@ -464,6 +465,10 @@ configurator_move_dialog() {
           if [[ -L $rdhome/roms ]]; then # Check for ROMs symlink user may have created
             unlink $rdhome/roms
           fi
+          if [[ -L $rdhome && ! $rdhome == "$HOME/retrodeck" ]]; then # Clean up extraneus symlinks from previous moves
+            unlink $rdhome
+          fi
+          unlink $HOME/retrodeck # Remove symlink for $rdhome if the previous location was not internal
 
           (
           dir_prep "$custom_dest/retrodeck" "$rdhome"
@@ -472,10 +477,6 @@ configurator_move_dialog() {
           --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
           --title "RetroDECK Configurator Utility - Move in Progress" \
           --text="Moving directory $rdhome to new location of $custom_dest/retrodeck, please wait."
-
-          if [[ -L $rdhome && ! $rdhome == "$HOME/retrodeck" ]]; then # Clean up extraneus symlinks from previous moves
-            unlink $rdhome
-          fi
 
           if [[ ! -L "$HOME/retrodeck" ]]; then
             ln -svf "$custom_dest/retrodeck" "$HOME"
@@ -526,7 +527,7 @@ configurator_welcome_dialog() {
   setting_value=
 
   choice=$(zenity --list --title="RetroDECK Configurator Utility" --cancel-label="Quit" \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
   "Move Files" "Move files between internal/SD card or to custom locations" \
   "Change Options" "Adjust how RetroDECK behaves" \
