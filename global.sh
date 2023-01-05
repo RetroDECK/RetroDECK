@@ -104,12 +104,12 @@ else
   echo "Loading it"
   source "$rd_conf"
 
-  # Update SD card path if changed from SteamOS update
-  if [[ ! -d $sdcard && "$(ls -A /run/media/deck/)" ]]; then
-    prev_sd_path=$sdcard
-    configurator_generic_dialog "The SD card was not found in the expected location.\nThis may happen when SteamOS is updated.\n\nPlease browse to the current location of the SD card.\n\nIf you are not using an SD card, please click \"Cancel\"."
-    new_sd_path=$(browse "SD Card Location")
-    sed -i 's#'$prev_sd_path'#'$new_sd_path'#g' $rd_conf
+  # Verify rdhome is where it is supposed to be.
+  if [[ ! -d $rdhome ]]; then
+    prev_home_path=$rdhome
+    configurator_generic_dialog "The RetroDECK data folder was not found in the expected location.\nThis may happen when SteamOS is updated.\n\nPlease browse to the current location of the \"retrodeck\" folder."
+    new_home_path=$(browse "RetroDECK folder location")
+    sed -i 's#'$prev_home_path'#'$new_home_path'#g' $rd_conf
     source "$rd_conf"
     emulators_post_move
   fi
