@@ -69,6 +69,19 @@
 
 <releases>
 
+  <release version="0.6.1b" date="2022-12-30">
+    <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.1b</url>
+      <description>
+        <ul>
+          <li>Removed Ryjuinx as it was broken (sorry)</li>
+          <li>Yuzu updated to mainline-1301</li>
+          <li>Added missing Primehack config and Configurator options</li>
+          <li>Resized configurator windows</li>
+          <li>Fixed a bug where the retrodeck folder was having a symlink creation issue after migration</li>
+      </ul>
+    </description>
+  </release>
+
   <release version="0.6.0b" date="2022-12-24">
     <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.0b</url>
       <description>

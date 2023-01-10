@@ -565,6 +565,22 @@ dolphin_init() {
   dir_prep "$rdhome/saves/wii/dolphin" "/var/data/dolphin-emu/Wii"
 }
 
+primehack_init() {
+  echo "----------------------"
+  echo "Initializing Primehack"
+  echo "----------------------"
+  mkdir -pv /var/config/primehack/
+  cp -fvr "$emuconfigs/primehack/"* /var/config/primehack/
+  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/primehack/Dolphin.ini
+  dir_prep "$rdhome/saves/gc/primehack/EUR" "/var/data/primehack/GC/EUR"
+  dir_prep "$rdhome/saves/gc/primehack/USA" "/var/data/primehack/GC/USA"
+  dir_prep "$rdhome/saves/gc/primehack/JAP" "/var/data/primehack/GC/JAP"
+  dir_prep "$rdhome/screenshots" "/var/data/primehack/ScreenShots"
+  dir_prep "$rdhome/states" "/var/data/primehack/StateSaves"
+  mkdir -pv /var/data/primehack/Wii/
+  dir_prep "$rdhome/saves/wii/primehack" "/var/data/primehack/Wii"
+}
+
 pcsx2_init() {
   echo "----------------------"
   echo "Initializing PCSX2"
@@ -670,17 +686,17 @@ standalones_init() {
   echo "------------------------------------"
   echo "Initializing standalone emulators"
   echo "------------------------------------"
-
-  yuzu_init
   citra_init
   dolphin_init
+  duckstation_init
   melonds_init
   pcsx2_init
   ppssppsdl_init
+  primehack_init
   rpcs3_init
-  xemu_init
-  duckstation_init
   ryujinx_init
+  xemu_init
+  yuzu_init
 }
 
 emulators_post_move() {
@@ -712,6 +728,15 @@ emulators_post_move() {
   dir_prep "$rdhome/screenshots" "/var/data/dolphin-emu/ScreenShots"
   dir_prep "$rdhome/states" "/var/data/dolphin-emu/StateSaves"
   dir_prep "$rdhome/saves/wii/dolphin" "/var/data/dolphin-emu/Wii/"
+
+  # Primehack section
+  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/primehack/Dolphin.ini
+  dir_prep "$rdhome/saves/gc/primehack/EUR" "/var/data/primehack/GC/EUR"
+  dir_prep "$rdhome/saves/gc/primehack/USA" "/var/data/primehack/GC/USA"
+  dir_prep "$rdhome/saves/gc/primehack/JAP" "/var/data/primehack/GC/JAP"
+  dir_prep "$rdhome/screenshots" "/var/data/primehack/ScreenShots"
+  dir_prep "$rdhome/states" "/var/data/primehack/StateSaves"
+  dir_prep "$rdhome/saves/wii/primehack" "/var/data/primehack/Wii/"
 
   # PCSX2 section
   sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2_ui.ini

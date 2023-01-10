@@ -83,11 +83,6 @@ else
   finit             # Executing First/Force init
 fi
 
-# Check if SD card path has changed from SteamOS update
-if [[ ! -d $sd_card && "$(ls -A /run/media/deck/)" ]]; then
-  configurator_generic_dialog "The ROMs folder was not found in the expected location.\nThis may happen when SteamOS is updated.\n\nPlease browse to the current location of the "
-fi
-
 # Normal Startup
 
 start_retrodeck
