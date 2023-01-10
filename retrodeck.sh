@@ -17,9 +17,10 @@ Arguments:
     -h, --help        Print this help
     -v, --version     Print RetroDECK version
     --info-msg        Print paths and config informations
+    --configure       Starts the RetroDECK Configurator
     --reset-all       Starts the initial RetroDECK installer (backup your data first!)
     --reset-ra        Resets RetroArch's config to the default values
-    --reset-sa        Reset standalone emulator configs to the default values
+    --reset-sa        Reset all standalone emulator configs to the default values
     --reset-tools     Recreate the tools section
 
 For flatpak run specific options please run: flatpak run -h
@@ -55,6 +56,10 @@ https://retrodeck.net
       ;;
     --reset-all*)
       rm -f "$lockfile"
+      shift # past argument with no value
+      ;;
+    --configure*)
+      sh /var/config/retrodeck/tools/configurator.sh
       shift # past argument with no value
       ;;
     -*|--*)
