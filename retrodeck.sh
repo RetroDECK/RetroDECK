@@ -57,6 +57,10 @@ https://retrodeck.net
       rm -f "$lockfile"
       shift # past argument with no value
       ;;
+    --configure*)
+      sh /var/config/retrodeck/tools/configurator.sh
+      shift # past argument with no value
+      ;;
     -*|--*)
       echo "Unknown option $i"
       exit 1
