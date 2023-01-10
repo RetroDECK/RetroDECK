@@ -74,8 +74,9 @@
       <description>
         <ul>
           <li>Removed Ryjuinx as it was broken (sorry)</li>
-          <li>Yuzu updated to mainline-1295</li>
+          <li>Yuzu updated to mainline-1301</li>
           <li>Added missing Primehack config and Configurator options</li>
+          <li>Resized configurator windows</li>
           <li>Fixed a bug where the retrodeck folder was having a symlink creation issue after migration</li>
       </ul>
     </description>
