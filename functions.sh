@@ -524,8 +524,7 @@ dir_prep() {
   if [ -d "$symlink.old" ];
   then
     echo "Moving the data from $symlink.old to $real" #DEBUG
-    mv -f "$symlink".old/* $real
-    mv -f "$symlink".old/.* $real # Also move hidden files / folders
+    mv -f "$symlink.old"/{.[!.],}* $real
     echo "Removing $symlink.old" #DEBUG
     rm -rf "$symlink.old"
   fi
