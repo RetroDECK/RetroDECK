@@ -599,13 +599,14 @@ modules:
     cleanup:
       - /share/man
     post-install:
-      - install -D dolphin-emu-wrapper /app/bin/dolphin-emu-wrapper
+      - install -D -t ${FLATPAK_DEST}/bin/ dolphin-emu-wrapper
+      - install -Dm644 -t ${FLATPAK_DEST}/share/appdata/ org.DolphinEmu.dolphin-emu.appdata.xml
       - sed -i -e 's/"2048"/"512"/g' /app/share/icons/hicolor/scalable/apps/dolphin-emu.svg
     sources:
       - type: git
         url: ssh://git@github.com/dolphin-emu/dolphin.git
         #url: https://github.com/dolphin-emu/dolphin.git
-        commit: 48c9c224cf9f82f0f9f2690b7cc6283d7448480c
+        commit: 8bad821019721b9b72701b495da95656ace5fea5
         x-checker-data:
           type: json
           url: https://dolphin-emu.org/update/latest/beta
@@ -630,14 +631,7 @@ modules:
               test -S $XDG_RUNTIME_DIR/discord-ipc-$i ||
                 ln -sf {app/com.discordapp.Discord,$XDG_RUNTIME_DIR}/discord-ipc-$i;
             done
-            # use gtk3 filechooser on steamdeck
-            bv=`cat /sys/devices/virtual/dmi/id/board_vendor`
-            bv=$bv`cat /sys/devices/virtual/dmi/id/board_name`
-            if [[ $bv == "ValveJupiter" ]]; then
-              QT_QPA_PLATFORMTHEME=gtk3 dolphin-emu "$@"
-            else
-              dolphin-emu "$@"
-            fi
+            dolphin-emu "$@"
         dest-filename: dolphin-emu-wrapper
 
   # Dolphin - END

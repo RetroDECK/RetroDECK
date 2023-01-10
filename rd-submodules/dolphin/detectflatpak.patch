@@ -23,11 +23,11 @@ index 8d9dc2abb8..8a9d39a3d5 100644
 @@ -381,7 +381,7 @@ void SetUserDirectory(std::string custom_path)
      {
        user_path = home_path + "." DOLPHIN_DATA_DIR DIR_SEP;
-
+ 
 -      if (!File::Exists(user_path))
 +      if (File::Exists("/.flatpak-info") || !File::Exists(user_path))
        {
          const char* data_home = getenv("XDG_DATA_HOME");
          std::string data_path =
---
+-- 
 2.37.1
