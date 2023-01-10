@@ -457,7 +457,7 @@ configurator_move_dialog() {
       configurator_generic_dialog "Select the root folder you would like to store the RetroDECK data folder in.\n\nA new folder \"retrodeck\" will be created in the destination chosen."
       custom_dest=$(browse "RetroDECK directory location")
       if [[ ! -w $custom_dest ]]; then
-          configurator_generic_dialog "The destination was found but is not writable\nThis can happen if RetroDECK does not have permission to write to this location. This can typically be solved through the utility Flatseal, please make the needed changes and try the moving process again."
+          configurator_generic_dialog "The destination was found but is not writable\n\nThis can happen if RetroDECK does not have permission to write to this location.\n\nThis can typically be solved through the utility Flatseal, please make the needed changes and try the moving process again."
           configurator_welcome_dialog
       else
         if [[ $(verify_space $rdhome $custom_dest) ]];then
