@@ -502,6 +502,12 @@ dir_prep() {
     mv -f "$symlink" "$symlink.old"
   fi
 
+  # if the real dir is already a symlink, unlink it first
+  if [ -L "$real" ];
+  then
+    unlink "$real"
+  fi
+
   # if the real dir doesn't exist we create it
   if [ ! -d "$real" ];
   then
@@ -519,6 +525,7 @@ dir_prep() {
   then
     echo "Moving the data from $symlink.old to $real" #DEBUG
     mv -f "$symlink".old/* $real
+    mv -f "$symlink".old/.* $real # Also move hidden files / folders
     echo "Removing $symlink.old" #DEBUG
     rm -rf "$symlink.old"
   fi
