@@ -600,7 +600,6 @@ modules:
       - /share/man
     post-install:
       - install -D -t ${FLATPAK_DEST}/bin/ dolphin-emu-wrapper
-      - install -Dm644 -t ${FLATPAK_DEST}/share/appdata/ org.DolphinEmu.dolphin-emu.appdata.xml
       - sed -i -e 's/"2048"/"512"/g' /app/share/icons/hicolor/scalable/apps/dolphin-emu.svg
     sources:
       - type: git
