@@ -79,6 +79,8 @@
           <li>Add CLI option to run Configurator directly</li>
           <li>Resized configurator windows</li>
           <li>Fixed a bug where the retrodeck folder was having a symlink creation issue after migration</li>
+          <li>Fixed a bug where the hidden files were not moved during the directory preparation</li>
+          <li>Fixed a bug where the symlinks were recursively placed inside the prepeared paths</li>
       </ul>
     </description>
   </release>
