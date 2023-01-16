@@ -142,6 +142,15 @@
         <theme>astrocade</theme>
     </system>
     <system>
+        <name>arduboy</name>
+        <fullname>Arduboy</fullname>
+        <path>%ROMPATH%/arduboy</path>
+        <extension>.hex .7z .7Z .zip .ZIP</extension>
+        <command label="Arduous">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/arduous_libretro.so %ROM%</command>
+        <platform>arduboy</platform>
+        <theme>arduboy</theme>
+    </system>
+    <system>
         <name>atari2600</name>
         <fullname>Atari 2600</fullname>
         <path>%ROMPATH%/atari2600</path>
