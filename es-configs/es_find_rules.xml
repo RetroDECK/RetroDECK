@@ -345,6 +345,7 @@
             <entry>pico8</entry>
         </rule>
         <rule type="staticpath">
+            <entry>/home/deck/retrodeck/bios/pico-8/pico8</entry>
             <entry>~/retrodeck/bios/pico-8/pico8</entry>
             <entry>~/Applications/pico-8/pico8</entry>
             <entry>~/.local/bin/pico-8/pico8</entry>
