@@ -1037,16 +1037,16 @@
         <theme>pcfx</theme>
     </system>
     <system>
-    	<name>pico8</name>
-	<fullname>PICO-8 Fantasy Console</fullname>
-	<manufacturer>Lexaloffle</manufacturer>
-	<release>2015</release>
-	<hardware>console</hardware>
-	<path>%ROMPATH%/pico8</path>
-	<extension>.p8 .P8 .png .PNG</extension>
-	<command label="PICO-8 (Standalone)">%EMULATOR_PICO-8% -desktop ~/retrodeck/screenshots -windowed 0 -root_path %ROMPATH%/pico8 -run %ROM%</command>
-	<platform>pico8</platform>
-	<theme>pico8</theme>
+        <name>pico8</name>
+        <fullname>PICO-8 Fantasy Console</fullname>
+        <manufacturer>Lexaloffle</manufacturer>
+        <release>2015</release>
+        <hardware>console</hardware>
+        <path>%ROMPATH%/pico8</path>
+        <extension>.p8 .P8 .png .PNG</extension>
+        <command label="PICO-8 (Standalone)">%EMULATOR_PICO-8% -desktop ~/retrodeck/screenshots -windowed 0 -root_path %ROMPATH%/pico8 -run %ROM%</command>
+        <platform>pico8</platform>
+        <theme>pico8</theme>
     </system>
     <system>
         <name>pokemini</name>
