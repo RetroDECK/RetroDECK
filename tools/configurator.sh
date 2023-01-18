@@ -75,7 +75,6 @@ configurator_reset_dialog() {
     "PPSSPP" \
     "Primehack" \
     "RPCS3" \
-    "Ryujinx" \
     "XEMU" \
     "Yuzu")
 
@@ -123,11 +122,6 @@ configurator_reset_dialog() {
 
     "RPCS3" )
       rpcs3_init
-      configurator_process_complete_dialog "resetting $emulator_to_reset"
-    ;;
-
-    "Ryujinx" )
-      ryujinx_init
       configurator_process_complete_dialog "resetting $emulator_to_reset"
     ;;
 
@@ -220,12 +214,10 @@ configurator_power_user_changes_dialog() {
     "Dolphin" \
     "Duckstation" \
     "MelonDS" \
-    "PCSX2-QT" \
-    "PCSX2-Legacy" \
+    "PCSX2" \
     "PPSSPP" \
     "Primehack" \
     "RPCS3" \
-    "Ryujinx" \
     "XEMU" \
     "Yuzu")
 
@@ -251,12 +243,8 @@ configurator_power_user_changes_dialog() {
       melonDS
     ;;
 
-    "PCSX2-QT" )
+    "PCSX2" )
       pcsx2-qt
-    ;;
-
-    "PCSX2-Legacy" )
-      pcsx2
     ;;
 
     "PPSSPP" )
@@ -269,10 +257,6 @@ configurator_power_user_changes_dialog() {
 
     "RPCS3" )
       rpcs3
-    ;;
-
-    "Ryujinx" )
-      ryujinx-wrapper
     ;;
 
     "XEMU" )
