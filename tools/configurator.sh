@@ -394,7 +394,7 @@ configurator_move_dialog() {
           configurator_generic_dialog "The SD card was found but is not writable\nThis can happen with cards formatted on PC or for other reasons.\nPlease format the SD card through the Steam Deck's Game Mode and try the moving process again."
           configurator_welcome_dialog
         else
-          if [[ $(verify_space $rdhome $sdcard) == "true" ]];then
+          if [[ $(verify_space $rdhome $sdcard) == "true" ]]; then
             configurator_generic_dialog "Moving RetroDECK data folder to $destination"
             if [[ -L "$HOME/retrodeck/roms" ]]; then # Check for ROMs symlink user may have created
                 unlink "$HOME/retrodeck/roms"
