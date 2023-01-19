@@ -841,13 +841,14 @@ ra_init() {
   dir_prep "$rdhome/bios" "/var/config/retroarch/system"
   dir_prep "$rdhome/.logs/retroarch" "/var/config/retroarch/logs"
   mkdir -pv /var/config/retroarch/shaders/
-  cp -rfv /app/share/libretro/shaders /var/config/retroarch/
+  cp -rf /app/share/libretro/shaders /var/config/retroarch/
   dir_prep "$rdhome/shaders/retroarch" "/var/config/retroarch/shaders"
   mkdir -pv /var/config/retroarch/cores/
   cp -f /app/share/libretro/cores/* /var/config/retroarch/cores/
   cp -fv $emuconfigs/retroarch/retroarch.cfg /var/config/retroarch/
   cp -fv $emuconfigs/retroarch/retroarch-core-options.cfg /var/config/retroarch/
-  cp -rfv $emuconfigs/retroarch/core-overrides/* /var/config/retroarch/config
+  mkdir -pv /var/config/retroarch/config/
+  cp -rf $emuconfigs/retroarch/core-overrides/* /var/config/retroarch/config
   #rm -rf $rdhome/bios/bios # in some situations a double bios symlink is created
   sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/retroarch/retroarch.cfg
 

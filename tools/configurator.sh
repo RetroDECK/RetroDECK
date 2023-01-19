@@ -66,7 +66,6 @@ configurator_reset_dialog() {
     --text="Which emulator do you want to reset to default?" \
     --hide-header \
     --column=emulator \
-    "RetroArch" \
     "Citra" \
     "Dolphin" \
     "Duckstation" \
@@ -79,11 +78,6 @@ configurator_reset_dialog() {
     "Yuzu")
 
     case $emulator_to_reset in
-
-    "RetroArch" )
-      ra_init
-      configurator_process_complete_dialog "resetting $emulator_to_reset"
-    ;;
 
     "Citra" )
       citra_init
