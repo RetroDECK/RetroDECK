@@ -1008,8 +1008,8 @@ modules:
       make install
     sources:
     - type: git
-    url: https://github.com/freedesktop/xdg-utils.git
-    commit: 8ae02631a9806da11b34cd6b274af02d28aee5da
+      url: https://github.com/freedesktop/xdg-utils.git
+      commit: 8ae02631a9806da11b34cd6b274af02d28aee5da
 
   - name: Ryujinx
     buildsystem: simple
