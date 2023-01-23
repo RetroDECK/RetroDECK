@@ -181,6 +181,13 @@ modules:
         url: https://ftp.osuosl.org/pub/blfs/conglomeration/libgudev/libgudev-237.tar.xz
         sha256: 0d06b21170d20c93e4f0534dbb9b0a8b4f1119ffb00b4031aaeb5b9148b686aa
 
+  - name: mame-tools
+    buildsystem: autotools
+    sources:
+      - type: git
+        url: https://github.com/mamedev/mame.git
+        commit: 34e6ec1ef82cebf89e8a3e02109cef32dd19f2da
+
   # ES-DE - START
   # https://gitlab.com/es-de/emulationstation-de
 
