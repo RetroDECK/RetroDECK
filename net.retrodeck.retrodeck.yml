@@ -1000,6 +1000,17 @@ modules:
     # THIS MUST BE AT THE END OF THE MANIFEST OR THE BINARY WILL GET CORRUPTED
     #
 
+  - name: xdg-utils
+    buildsystem: simple
+    build-commands:
+    - |
+      ./configure --prefix=/app/bin
+      make install
+    sources:
+    - type: git
+    url: https://github.com/freedesktop/xdg-utils.git
+    commit: 8ae02631a9806da11b34cd6b274af02d28aee5da
+
   - name: Ryujinx
     buildsystem: simple
     build-options:
