@@ -231,7 +231,7 @@
     </system>
     <system>
         <name>atomiswave</name>
-        <fullname>Sammy Atomiswave</fullname>
+        <fullname>Atomiswave</fullname>
         <path>%ROMPATH%/atomiswave</path>
         <extension>.cdi .CDI .iso .ISO .elf .ELF .bin .BIN .cue .CUE .gdi .GDI .lst .LST .dat .DAT .m3u .M3U .7z .7Z .zip .ZIP</extension>
         <command label="Flycast">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/flycast_libretro.so %ROM%</command>
@@ -322,7 +322,7 @@
 -->
     <system>
         <name>colecovision</name>
-        <fullname>Coleco ColecoVision</fullname>
+        <fullname>ColecoVision</fullname>
         <path>%ROMPATH%/colecovision</path>
         <extension>.bin .BIN .cas .CAS .col .COL .cv .CV .dsk .DSK .m3u .M3U .mx1 .MX1 .mx2 .MX2 .ri .RI .rom .ROM .sc .SC .sg .SG .7z .7Z .zip .ZIP</extension>
         <command label="blueMSX">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/bluemsx_libretro.so %ROM%</command>
@@ -1472,7 +1472,7 @@
     </system>
     <system>
         <name>vectrex</name>
-        <fullname>GCE Vectrex</fullname>
+        <fullname>Vectrex</fullname>
         <path>%ROMPATH%/vectrex</path>
         <extension>.bin .BIN .vec .VEC .gam .GAM .vc .VC .7z .7Z .zip .ZIP</extension>
         <command>%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/vecx_libretro.so %ROM%</command>
