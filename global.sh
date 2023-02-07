@@ -14,6 +14,7 @@ hard_version="$(cat '/app/retrodeck/version')"             # hardcoded version (
 # Config files for emulators with single config files
 
 citraconf="/var/config/citra-emu/qt-config.ini"
+duckstationconf="/var/data/duckstation/settings.ini"
 melondsconf="/var/config/melonDS/melonDS.ini"
 rpcs3conf="/var/config/rpcs3/config.yml"
 yuzuconf="/var/config/yuzu/qt-config.ini"

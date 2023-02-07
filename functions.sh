@@ -671,9 +671,9 @@ duckstation_init() {
   echo "------------------------"
   echo "Initializing DUCKSTATION"
   echo "------------------------"
-  mkdir -p /var/config/duckstation/
-  cp -fv $emuconfigs/duckstation/* /var/config/duckstation
-  sed -i 's#/home/deck/retrodeck/bios#'$rdhome/bios'#g' /var/config/duckstation/settings.ini
+  mkdir -p /var/data/duckstation/
+  cp -fv $emuconfigs/duckstation/* /var/data/duckstation
+  sed -i 's#/home/deck/retrodeck/bios#'$rdhome/bios'#g' /var/data/duckstation/settings.ini
 }
 
 ryujinx_init() {
@@ -824,7 +824,7 @@ emulators_post_move() {
   sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/ppsspp/PSP/SYSTEM/ppsspp.ini
 
   # Duckstation section
-  sed -i 's#/home/deck/retrodeck/bios#'$rdhome/bios'#g' /var/config/duckstation/settings.ini
+  sed -i 's#/home/deck/retrodeck/bios#'$rdhome/bios'#g' /var/data/duckstation/settings.ini
 
   # Ryujinx section
   sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/Ryujinx/Config.json
