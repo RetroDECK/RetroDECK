@@ -838,6 +838,16 @@ create_lock() {
   conf_write
 }
 
+check_multifile_game_structure() {
+  folder_games=($(find $rdhome/roms -maxdepth 2 -mindepth 2 -type d ! -name "*.m3u" ! -name "*.ps3"))
+  if [[ ${#folder_games[@]} -gt 1 ]]; then
+    zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK" \
+    --text="The following games were found to not have the correct folder structure:\n\n$(find $rdhome/roms -maxdepth 2 -mindepth 2 -type d ! -name "*.m3u" ! -name "*.ps3")\n\nIncorrect folder structure can result in failure to launch games or saves being in the incorrect location.\n\nPlease see the RetroDECK wiki for more details!"
+  fi
+}
+
 easter_eggs() {
   today=$(date +"%0m%0d") # Read the current date in a format that can be calculated in ranges
 
