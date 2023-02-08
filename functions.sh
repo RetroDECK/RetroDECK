@@ -838,8 +838,27 @@ create_lock() {
   conf_write
 }
 
+easter_eggs() {
+  today=$(date +"%0m%0d") # Read the current date in a format that can be calculated in ranges
+
+  # Set Easter Egg date or ranges here, in mmdd format
+
+  if [[ today -eq "0401" ]]; then # An example of a one-day easter egg
+    echo "Today is April Fools Day!"
+    # cp -fv /app/share/emulationstation/resources/graphics/splash-aprilfools.svg /app/share/emulationstation/resources/graphics/splash.svg 
+  elif [[ today -ge "1001" && today -le "1031" ]]; then # An example of a multi-day easter egg
+    echo "Today is in the spooky month!"
+    # cp -fv /app/share/emulationstation/resources/graphics/splash-spookytime.svg /app/share/emulationstation/resources/graphics/splash.svg
+  else # Revert to standard splash otherwise
+    echo "Nothing special happening today"
+    # cp -fv /app/share/emulationstation/resources/graphics/splash-orig.svg /app/share/emulationstation/resources/graphics/splash.svg
+  fi
+}
+
 start_retrodeck() {
   # normal startup
+  echo "Checking to see if today has a surprise"
+  easter_eggs
   echo "Starting RetroDECK v$version"
   emulationstation --home /var/config/emulationstation
 }
