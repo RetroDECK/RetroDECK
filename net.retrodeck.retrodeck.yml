@@ -181,6 +181,17 @@ modules:
         url: https://ftp.osuosl.org/pub/blfs/conglomeration/libgudev/libgudev-237.tar.xz
         sha256: 0d06b21170d20c93e4f0534dbb9b0a8b4f1119ffb00b4031aaeb5b9148b686aa
 
+  - name: chdman-tool
+    buildsystem: simple
+    build-commands:
+      - cmake -B . -G Ninja
+      - cmake --build .
+      - cp chdman /app/bin
+    sources:
+      - type: git
+        url: https://github.com/CharlesThobe/chdman.git
+        commit: f7cadf1720cbeba8a14f2685830ff424a0c7f6cd
+
   # ES-DE - START
   # https://gitlab.com/es-de/emulationstation-de
 
@@ -282,7 +293,7 @@ modules:
 
   # RetroArch - START
   # https://github.com/flathub/org.libretro.RetroArch
-  
+
   - name: retroarch
     config-opts:
       - '--enable-dbus'
