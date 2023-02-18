@@ -417,7 +417,7 @@ modules:
     sources:
       - type: archive
         url: https://buildbot.libretro.com/stable/1.14.0/linux/x86_64/RetroArch_cores.7z
-        sha256: b5c87aa3462c023fa4e1aa171d1bd4f5b0b5cf9d8e4f0a6b5606ff26b05e0059
+        sha256: 59369f1ef18cdc302c38bcb270d71989cef665d71f3156a1f07486122713d030
 
   # PPSSPP - START
   # https://github.com/flathub/org.ppsspp.PPSSPP
