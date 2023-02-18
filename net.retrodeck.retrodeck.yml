@@ -765,8 +765,6 @@ modules:
       - type: git
         url: https://github.com/melonDS-emu/melonDS.git
         commit: 430de6b2702bb93faa8c2004aff3fbd084db4a1e
-      - type: file
-        path: net.kuribo64.melonDS.appdata.xml
 
   # MELONDS - END
 
