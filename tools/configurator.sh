@@ -66,7 +66,6 @@ configurator_reset_dialog() {
     --text="Which emulator do you want to reset to default?" \
     --hide-header \
     --column=emulator \
-    "RetroArch" \
     "Citra" \
     "Dolphin" \
     "Duckstation" \
@@ -75,16 +74,10 @@ configurator_reset_dialog() {
     "PPSSPP" \
     "Primehack" \
     "RPCS3" \
-    "Ryujinx" \
     "XEMU" \
     "Yuzu")
 
     case $emulator_to_reset in
-
-    "RetroArch" )
-      ra_init
-      configurator_process_complete_dialog "resetting $emulator_to_reset"
-    ;;
 
     "Citra" )
       citra_init
@@ -123,11 +116,6 @@ configurator_reset_dialog() {
 
     "RPCS3" )
       rpcs3_init
-      configurator_process_complete_dialog "resetting $emulator_to_reset"
-    ;;
-
-    "Ryujinx" )
-      ryujinx_init
       configurator_process_complete_dialog "resetting $emulator_to_reset"
     ;;
 
@@ -220,12 +208,10 @@ configurator_power_user_changes_dialog() {
     "Dolphin" \
     "Duckstation" \
     "MelonDS" \
-    "PCSX2-QT" \
-    "PCSX2-Legacy" \
+    "PCSX2" \
     "PPSSPP" \
     "Primehack" \
     "RPCS3" \
-    "Ryujinx" \
     "XEMU" \
     "Yuzu")
 
@@ -251,12 +237,8 @@ configurator_power_user_changes_dialog() {
       melonDS
     ;;
 
-    "PCSX2-QT" )
+    "PCSX2" )
       pcsx2-qt
-    ;;
-
-    "PCSX2-Legacy" )
-      pcsx2
     ;;
 
     "PPSSPP" )
@@ -269,10 +251,6 @@ configurator_power_user_changes_dialog() {
 
     "RPCS3" )
       rpcs3
-    ;;
-
-    "Ryujinx" )
-      ryujinx-wrapper
     ;;
 
     "XEMU" )
@@ -410,7 +388,7 @@ configurator_move_dialog() {
           configurator_generic_dialog "The SD card was found but is not writable\nThis can happen with cards formatted on PC or for other reasons.\nPlease format the SD card through the Steam Deck's Game Mode and try the moving process again."
           configurator_welcome_dialog
         else
-          if [[ $(verify_space $rdhome $sdcard) == "true" ]];then
+          if [[ $(verify_space $rdhome $sdcard) == "true" ]]; then
             configurator_generic_dialog "Moving RetroDECK data folder to $destination"
             if [[ -L "$HOME/retrodeck/roms" ]]; then # Check for ROMs symlink user may have created
                 unlink "$HOME/retrodeck/roms"
@@ -457,7 +435,7 @@ configurator_move_dialog() {
       configurator_generic_dialog "Select the root folder you would like to store the RetroDECK data folder in.\n\nA new folder \"retrodeck\" will be created in the destination chosen."
       custom_dest=$(browse "RetroDECK directory location")
       if [[ ! -w $custom_dest ]]; then
-          configurator_generic_dialog "The destination was found but is not writable\nThis can happen if RetroDECK does not have permission to write to this location. This can typically be solved through the utility Flatseal, please make the needed changes and try the moving process again."
+          configurator_generic_dialog "The destination was found but is not writable\n\nThis can happen if RetroDECK does not have permission to write to this location.\n\nThis can typically be solved through the utility Flatseal, please make the needed changes and try the moving process again."
           configurator_welcome_dialog
       else
         if [[ $(verify_space $rdhome $custom_dest) ]];then
@@ -465,9 +443,7 @@ configurator_move_dialog() {
           if [[ -L $rdhome/roms ]]; then # Check for ROMs symlink user may have created
             unlink $rdhome/roms
           fi
-          if [[ -L $rdhome && ! $rdhome == "$HOME/retrodeck" ]]; then # Clean up extraneus symlinks from previous moves
-            unlink $rdhome
-          fi
+
           unlink $HOME/retrodeck # Remove symlink for $rdhome if the previous location was not internal
 
           (
@@ -480,6 +456,10 @@ configurator_move_dialog() {
 
           if [[ ! -L "$HOME/retrodeck" ]]; then
             ln -svf "$custom_dest/retrodeck" "$HOME"
+          fi
+
+          if [[ -L $rdhome && ! $rdhome == "$HOME/retrodeck" ]]; then # Clean up extraneus symlinks from previous moves
+            unlink $rdhome
           fi
 
           rdhome="$custom_dest/retrodeck"

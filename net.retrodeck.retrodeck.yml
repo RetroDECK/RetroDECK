@@ -181,6 +181,17 @@ modules:
         url: https://ftp.osuosl.org/pub/blfs/conglomeration/libgudev/libgudev-237.tar.xz
         sha256: 0d06b21170d20c93e4f0534dbb9b0a8b4f1119ffb00b4031aaeb5b9148b686aa
 
+  - name: chdman-tool
+    buildsystem: simple
+    build-commands:
+      - cmake -B . -G Ninja
+      - cmake --build .
+      - cp chdman /app/bin
+    sources:
+      - type: git
+        url: https://github.com/CharlesThobe/chdman.git
+        commit: f7cadf1720cbeba8a14f2685830ff424a0c7f6cd
+
   # ES-DE - START
   # https://gitlab.com/es-de/emulationstation-de
 
@@ -282,7 +293,7 @@ modules:
 
   # RetroArch - START
   # https://github.com/flathub/org.libretro.RetroArch
-  
+
   - name: retroarch
     config-opts:
       - '--enable-dbus'
@@ -405,8 +416,8 @@ modules:
       - mv ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* /app/share/libretro/cores/
     sources:
       - type: archive
-        url: https://buildbot.libretro.com/stable/1.12.0/linux/x86_64/RetroArch_cores.7z
-        sha256: b5c87aa3462c023fa4e1aa171d1bd4f5b0b5cf9d8e4f0a6b5606ff26b05e0059
+        url: https://buildbot.libretro.com/stable/1.14.0/linux/x86_64/RetroArch_cores.7z
+        sha256: 59369f1ef18cdc302c38bcb270d71989cef665d71f3156a1f07486122713d030
 
   # PPSSPP - START
   # https://github.com/flathub/org.ppsspp.PPSSPP
@@ -424,16 +435,21 @@ modules:
 
       - -DBUILD_TESTING=OFF
       - -DOpenGL_GL_PREFERENCE=GLVND
-    #build-options:
-      #- -DX86_64=ON
-
+    build-options:
+      arch:
+        aarch64:
+          config-opts:
+            - -DUSING_EGL=ON
+            - -DUSING_GLES2=ON
+    post-install:
+      - install -Dm644 icons/icon-512.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/ppsspp.svg
     cleanup:
       - /share/ppsspp/assets/lang/README.md
     sources:
       - type: git
         url: &ppsspp-url https://github.com/hrydgard/ppsspp.git
-        tag: &ppsspp-tag v1.13.2
-        commit: &ppsspp-commit 9fe6338e3bf397f8a009a51a282c139dfa180eb6
+        tag: v1.14.4
+        commit: cd535263c1ad65fd03869591a8bd706680cbf04b
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+)$
@@ -470,8 +486,8 @@ modules:
       - ln -s "${FLATPAK_DEST}/yuzu/usr/bin/yuzu" "${FLATPAK_DEST}/bin/yuzu"
     sources:
       - type: file
-        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1301/yuzu-mainline-20230109-8c9f71e76.AppImage
-        sha256: 8dc52ddc8547b92d08cf450ce32c2f400049b7df98475a42be5012660c76743d
+        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1343/yuzu-mainline-20230217-b795f3bc1.AppImage
+        sha256: 47eb1ec3e4d7368d0eef832a7b9c378fd6a0fbaebfd7af7768d6edaf8b35f8a5
 
   # Yuzu - END
 
@@ -482,14 +498,17 @@ modules:
     buildsystem: cmake-ninja
     builddir: true
     config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-      - -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON
-      - -DENABLE_QT_TRANSLATION=ON
-      - -DCITRA_ENABLE_COMPATIBILITY_REPORTING=ON
-      - -DENABLE_COMPATIBILITY_LIST_DOWNLOAD=ON
-      #- '-DENABLE_FFMPEG_VIDEO_DUMPER=ON'
-      # Disabled because of this: https://github.com/citra-emu/citra/issues/5949
-      - -DENABLE_FDK=ON
+      - '-DCMAKE_BUILD_TYPE=Release'
+      - '-DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON'
+      - '-DENABLE_LTO=ON'
+      - '-DENABLE_QT_TRANSLATION=ON'
+      - '-DCITRA_ENABLE_COMPATIBILITY_REPORTING=ON'
+      - '-DENABLE_COMPATIBILITY_LIST_DOWNLOAD=OFF'
+      # - '-DENABLE_FFMPEG_VIDEO_DUMPER=ON'
+      # FFMPEG VIDEO DUMPER was disabled because of this: https://github.com/citra-emu/citra/issues/5949
+      - '-DUSE_SYSTEM_SDL2=ON'
+      - '-DCMAKE_POLICY_DEFAULT_CMP0069=NEW'
+      - '-DENABLE_FDK=ON'
     cleanup:
       - /share/man
       - /share/pixmaps
@@ -497,14 +516,20 @@ modules:
       - install -Dm644 ../dist/citra.svg /app/share/icons/hicolor/scalable/apps/citra.svg
       - install -Dm644 ../dist/icon.png /app/share/icons/hicolor/512x512/apps/citra.png
     sources:
-      - type: git
-        url: https://github.com/citra-emu/citra-nightly.git
-        tag: nightly-1785
-        commit: baecc18d8c5365af0dddb231bc8c0a9c03850bf6
-        disable-shallow-clone: true
+      - type: archive
+        url: >-
+          https://github.com/citra-emu/citra-nightly/releases/download/nightly-1844/citra-unified-source-20230217-cda3584.tar.xz
+        sha256: 9e0c5fcf503f5d0dbe95cc6de68c4b3c9148c07e2df892b85cc99ada8963c14e
         x-checker-data:
-          type: git
-          tag-pattern: ^(nightly-\d+)$
+          type: json
+          url: https://api.github.com/repos/citra-emu/citra-nightly/releases/latest
+          version-query: .tag_name
+          url-query: >-
+            .assets[] | .browser_download_url |
+            match("https://.+citra-unified-source-.+.xz$") | .string
+          is-main-source: true
+      - type: patch
+        path: rd-submodules/citra/unified-source-compat.patch
 
   # CITRA - END
 
@@ -523,15 +548,10 @@ modules:
       - ln -s "${FLATPAK_DEST}/pcsx2-qt/usr/bin/pcsx2-qt" "${FLATPAK_DEST}/bin/pcsx2-qt"
     sources:
       - type: file
-        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.3501/pcsx2-v1.7.3501-linux-AppImage-64bit-AVX2-Qt.AppImage
-        sha256: 104e8dae653aeb1fa7c75a4cc0fd07038715e75c1f7d40d111428ae83279356c
+        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.4108/pcsx2-v1.7.4108-linux-AppImage-64bit-Qt.AppImage
+        sha256: 31dab12f7f7d0c4a7122011c0f86f5acfe9a9018cece66b4333d230154c8b910
 
   # PCSX2 - END
-
-  - name: debug
-    buildsystem: simple
-    build-commands:
-      - whoami
 
   # Dolphin - START
   # https://github.com/flathub/org.DolphinEmu.dolphin-emu
@@ -551,12 +571,15 @@ modules:
       - --disable-a2dp
       - --disable-avrcp
       - --disable-network
+      - --disable-obex
+      - --disable-bap 
+      - --disable-mcp
       - --with-dbusconfdir=/app/etc
       - --with-dbussessionbusdir=/app/usr/lib/system-services
     sources:
       - type: archive
-        url: https://www.kernel.org/pub/linux/bluetooth/bluez-5.65.tar.xz
-        sha256: 2565a4d48354b576e6ad92e25b54ed66808296581c8abb80587051f9993d96d4
+        url: https://www.kernel.org/pub/linux/bluetooth/bluez-5.66.tar.xz
+        sha256: 39fea64b590c9492984a0c27a89fc203e1cdc74866086efb8f4698677ab2b574
         x-checker-data:
           type: anitya
           project-id: 10029
@@ -599,13 +622,13 @@ modules:
     cleanup:
       - /share/man
     post-install:
-      - install -D dolphin-emu-wrapper /app/bin/dolphin-emu-wrapper
+      - install -D -t ${FLATPAK_DEST}/bin/ dolphin-emu-wrapper
       - sed -i -e 's/"2048"/"512"/g' /app/share/icons/hicolor/scalable/apps/dolphin-emu.svg
     sources:
       - type: git
-        url: ssh://git@github.com/dolphin-emu/dolphin.git
-        #url: https://github.com/dolphin-emu/dolphin.git
-        commit: 48c9c224cf9f82f0f9f2690b7cc6283d7448480c
+        #url: ssh://git@github.com/dolphin-emu/dolphin.git
+        url: https://github.com/dolphin-emu/dolphin.git
+        commit: 46b99671d9158e0ca840c1d8ef249db0f321ced7
         x-checker-data:
           type: json
           url: https://dolphin-emu.org/update/latest/beta
@@ -630,14 +653,7 @@ modules:
               test -S $XDG_RUNTIME_DIR/discord-ipc-$i ||
                 ln -sf {app/com.discordapp.Discord,$XDG_RUNTIME_DIR}/discord-ipc-$i;
             done
-            # use gtk3 filechooser on steamdeck
-            bv=`cat /sys/devices/virtual/dmi/id/board_vendor`
-            bv=$bv`cat /sys/devices/virtual/dmi/id/board_name`
-            if [[ $bv == "ValveJupiter" ]]; then
-              QT_QPA_PLATFORMTHEME=gtk3 dolphin-emu "$@"
-            else
-              dolphin-emu "$@"
-            fi
+            dolphin-emu "$@"
         dest-filename: dolphin-emu-wrapper
 
   # Dolphin - END
@@ -674,8 +690,8 @@ modules:
       - /share
     sources:
       - type: archive
-        url: https://www.tcpdump.org/release/libpcap-1.10.1.tar.gz
-        sha256: ed285f4accaf05344f90975757b3dbfe772ba41d1c401c2648b7fa45b711bdd4
+        url: https://www.tcpdump.org/release/libpcap-1.10.3.tar.gz
+        sha256: 2a8885c403516cf7b0933ed4b14d6caa30e02052489ebd414dc75ac52e7559e6
         x-checker-data:
           type: anitya
           project-id: 1702
@@ -706,20 +722,20 @@ modules:
     post-install:
       - |-
         for px in 16 32 48 64 128 256 512; do
-          install -Dm644 ../ui/icons/xemu_${px}x${px}.png /app/share/icons/hicolor/${px}x${px}/apps/app.xemu.xemu.png
+          install -Dm644 ../ui/icons/xemu_${px}x${px}.png $FLATPAK_DEST/share/icons/hicolor/${px}x${px}/apps/app.xemu.xemu.png
         done
-      - install -Dm644 ../ui/icons/xemu.svg /app/share/icons/hicolor/scalable/apps/app.xemu.xemu.svg
-      - mv qemu-system-i386 /app/bin/xemu
-      - mkdir -p /app/share/licenses/xemu
-      - cd .. && python3 scripts/gen-license.py > /app/share/licenses/xemu/LICENSE.txt
+      - install -Dm644 ../ui/icons/xemu.svg $FLATPAK_DEST/share/icons/hicolor/scalable/apps/app.xemu.xemu.svg
+      - mv qemu-system-i386 $FLATPAK_DEST/bin/xemu
+      - mkdir -p $FLATPAK_DEST/share/licenses/xemu
+      - cd .. && python3 scripts/gen-license.py > $FLATPAK_DEST/share/licenses/xemu/LICENSE.txt
     sources:
       - type: git
-        url: https://github.com/mborgerson/xemu.git
-        tag: v0.7.71
-        commit: 22db3304a454b2d289a9d5ea488fa3c3dec836f4
+        url: https://github.com/xemu-project/xemu.git
+        tag: v0.7.84
+        commit: d8fa50e524c22f85ecb2e43108fd6a5501744351
         x-checker-data:
           type: json
-          url: https://api.github.com/repos/mborgerson/xemu/releases/latest
+          url: https://api.github.com/repos/xemu-project/xemu/releases/latest
           tag-query: .tag_name
           timestamp-query: .published_at
           version-query: .tag_name
@@ -735,7 +751,7 @@ modules:
     sources:
       - type: git
         url: https://gitlab.freedesktop.org/slirp/libslirp.git
-        tag: v4.4.0
+        tag: v4.7.0
   - name: melonds
     buildsystem: cmake-ninja
     builddir: true
@@ -743,11 +759,11 @@ modules:
       arch:
         aarch64:
           config-opts:
-            - -DENABLE_OGLRENDERER=OFF
+            - -DENABLE_LTO_RELEASE=OFF
     sources:
       - type: git
-        url: https://github.com/Arisotura/melonDS.git
-        commit: cce9de5ee1f51e906a644922b2ada6644d81287a
+        url: https://github.com/melonDS-emu/melonDS.git
+        commit: 430de6b2702bb93faa8c2004aff3fbd084db4a1e
 
   # MELONDS - END
 
@@ -788,20 +804,26 @@ modules:
       - -DITTAPI_SOURCE_DIR=/run/build/rpcs3/ittapi
       - -Wno-dev
     post-install:
-      - |
-        set -eux;
-        COMM_TAG="$(awk -F'[\{,]' '/version{.*}/{printf "%d.%d.%d", $2, $3, $4}' ../rpcs3/rpcs3_version.cpp)";
+      - |-
+        set -eux
+
+        COMM_TAG="$(awk -F'[\{,]' '/version{.*}/{printf "%d.%d.%d", $2, $3, $4}' ../rpcs3/rpcs3_version.cpp)"
         COMM_COUNT="$(git rev-list --count HEAD)";
         COMM_HASH="$(git rev-parse --short=8 HEAD)";
     sources:
       - type: git
         url: https://github.com/RPCS3/rpcs3.git
-        commit: 8d5a9dc722de8e8e881adf8c7f16e76226a1dad8
+        commit: 6b556a5206fa68e4801fca124bfc3874440e4e17
       - type: git
         url: https://github.com/intel/ittapi.git
-        commit: 2428ed97aa977c66b30940081e7d3e9b1a3c7402
+        commit: 2de8a23f6130036dcd4d1b78d05df3187951d298
         dest: ittapi/ittapi
         disable-shallow-clone: true
+      # remove git-lfs hook
+      - type: inline
+        dest: ittapi/ittapi/.git/hooks
+        dest-filename: post-checkout
+        contents:
 
   # RPCS3 - END
 

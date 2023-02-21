@@ -171,7 +171,7 @@ get_setting_value() {
     if [[ -z $current_section_name ]]; then
       echo $(grep -o -P "(?<=^$current_setting_name=).*" $1)
     else
-      sed -n '\^\['"$section_name"'\]^,\^'"$current_setting_name"'^{ \^\['"$section_name"'\]^! { \^'"$current_setting_name"'^ p } }' $1 | grep -o -P "(?<=^$current_setting_name=).*"
+      sed -n '\^\['"$current_section_name"'\]^,\^'"$current_setting_name"'^{ \^\['"$current_section_name"'\]^! { \^'"$current_setting_name"'^ p } }' $1 | grep -o -P "(?<=^$current_setting_name=).*"
     fi
   ;;
 
@@ -179,7 +179,7 @@ get_setting_value() {
     if [[ -z $current_section_name ]]; then
       echo $(grep -o -P "(?<=^$current_setting_name = \").*(?=\")" $1)
     else
-      sed -n '\^\['"$section_name"'\]^,\^'"$current_setting_name"'^{ \^\['"$section_name"'\]^! { \^'"$current_setting_name"'^ p } }' $1 | grep -o -P "(?<=^$current_setting_name = \").*(?=\")"
+      sed -n '\^\['"$current_section_name"'\]^,\^'"$current_setting_name"'^{ \^\['"$current_section_name"'\]^! { \^'"$current_setting_name"'^ p } }' $1 | grep -o -P "(?<=^$current_setting_name = \").*(?=\")"
     fi
   ;;
 
@@ -187,7 +187,7 @@ get_setting_value() {
     if [[ -z $current_section_name ]]; then
       echo $(grep -o -P "(?<=^$current_setting_name = ).*" $1)
     else
-      sed -n '\^\['"$section_name"'\]^,\^'"$current_setting_name"'^{ \^\['"$section_name"'\]^! { \^'"$current_setting_name"'^ p } }' $1 | grep -o -P "(?<=^$current_setting_name = ).*"
+      sed -n '\^\['"$current_section_name"'\]^,\^'"$current_setting_name"'^{ \^\['"$current_section_name"'\]^! { \^'"$current_setting_name"'^ p } }' $1 | grep -o -P "(?<=^$current_setting_name = ).*"
     fi
   ;;
 
@@ -195,7 +195,7 @@ get_setting_value() {
     if [[ -z $current_section_name ]]; then
       echo $(grep -o -P "(?<=$current_setting_name: ).*" $1)
     else
-      sed -n '\^\['"$section_name"'\]^,\^'"$current_setting_name"'^{ \^\['"$section_name"'\]^! { \^'"$current_setting_name"'^ p } }' $1 | grep -o -P "(?<=$current_setting_name: ).*"
+      sed -n '\^\['"$current_section_name"'\]^,\^'"$current_setting_name"'^{ \^\['"$current_section_name"'\]^! { \^'"$current_setting_name"'^ p } }' $1 | grep -o -P "(?<=$current_setting_name: ).*"
     fi
   ;;
 
@@ -219,7 +219,7 @@ add_setting() {
     if [[ -z $current_section_name ]]; then
       sed -i '$ a '"$current_setting_line"'' $1
     else
-      sed -i '/^\s*?\['"$current_section_name"'\]|\b'"$current_section"':$/a '"$current_setting_line"'' $1
+      sed -i '/^\s*?\['"$current_section_name"'\]|\b'"$current_section_name"':$/a '"$current_setting_line"'' $1
     fi
     ;;
 
@@ -239,7 +239,7 @@ disable_setting() {
     if [[ -z $current_section_name ]]; then
       sed -i -E 's^(\s*?)'"$current_setting_line"'^\1#'"$current_setting_line"'^' $1
     else
-      sed -i -E '\^\['"$current_section_name"'\]|\b'"$current_section"':$^,\^\s*?'"$current_setting_line"'^s^(\s*?)'"$current_setting_line"'^\1#'"$current_setting_line"'^' $1
+      sed -i -E '\^\['"$current_section_name"'\]|\b'"$current_section_name"':$^,\^\s*?'"$current_setting_line"'^s^(\s*?)'"$current_setting_line"'^\1#'"$current_setting_line"'^' $1
     fi
   ;;
 
@@ -259,7 +259,7 @@ enable_setting() {
     if [[ -z $current_section_name ]]; then
       sed -i -E 's^(\s*?)#'"$current_setting_line"'^\1'"$current_setting_line"'^' $1
     else
-      sed -i -E '\^\['"$current_section_name"'\]|\b'"$current_section"':$^,\^\s*?#'"$current_setting_line"'^s^(\s*?)#'"$current_setting_line"'^\1'"$current_setting_line"'^' $1
+      sed -i -E '\^\['"$current_section_name"'\]|\b'"$current_section_name"':$^,\^\s*?#'"$current_setting_line"'^s^(\s*?)#'"$current_setting_line"'^\1'"$current_setting_line"'^' $1
     fi
   ;;
 
@@ -502,6 +502,12 @@ dir_prep() {
     mv -f "$symlink" "$symlink.old"
   fi
 
+  # if the real dir is already a symlink, unlink it first
+  if [ -L "$real" ];
+  then
+    unlink "$real"
+  fi
+
   # if the real dir doesn't exist we create it
   if [ ! -d "$real" ];
   then
@@ -518,7 +524,7 @@ dir_prep() {
   if [ -d "$symlink.old" ];
   then
     echo "Moving the data from $symlink.old to $real" #DEBUG
-    mv -f "$symlink".old/* $real
+    mv -f "$symlink.old"/{.[!.],}* $real
     echo "Removing $symlink.old" #DEBUG
     rm -rf "$symlink.old"
   fi
@@ -665,9 +671,9 @@ duckstation_init() {
   echo "------------------------"
   echo "Initializing DUCKSTATION"
   echo "------------------------"
-  mkdir -p /var/config/duckstation/
-  cp -fv $emuconfigs/duckstation/* /var/config/duckstation
-  sed -i 's#/home/deck/retrodeck/bios#'$rdhome/bios'#g' /var/config/duckstation/settings.ini
+  mkdir -p /var/data/duckstation/
+  cp -fv $emuconfigs/duckstation/* /var/data/duckstation
+  sed -i 's#/home/deck/retrodeck/bios#'$rdhome/bios'#g' /var/data/duckstation/settings.ini
 }
 
 ryujinx_init() {
@@ -697,6 +703,63 @@ standalones_init() {
   ryujinx_init
   xemu_init
   yuzu_init
+}
+
+ra_init() {
+  dir_prep "$rdhome/bios" "/var/config/retroarch/system"
+  dir_prep "$rdhome/.logs/retroarch" "/var/config/retroarch/logs"
+  mkdir -pv /var/config/retroarch/shaders/
+  cp -rf /app/share/libretro/shaders /var/config/retroarch/
+  dir_prep "$rdhome/shaders/retroarch" "/var/config/retroarch/shaders"
+  mkdir -pv /var/config/retroarch/cores/
+  cp -f /app/share/libretro/cores/* /var/config/retroarch/cores/
+  cp -fv $emuconfigs/retroarch/retroarch.cfg /var/config/retroarch/
+  cp -fv $emuconfigs/retroarch/retroarch-core-options.cfg /var/config/retroarch/
+  mkdir -pv /var/config/retroarch/config/
+  cp -rf $emuconfigs/retroarch/core-overrides/* /var/config/retroarch/config
+  #rm -rf $rdhome/bios/bios # in some situations a double bios symlink is created
+  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/retroarch/retroarch.cfg
+
+  # PPSSPP
+  echo "--------------------------------"
+  echo "Initializing PPSSPP_LIBRETRO"
+  echo "--------------------------------"
+  if [ -d $rdhome/bios/PPSSPP/flash0/font ]
+  then
+    mv -fv $rdhome/bios/PPSSPP/flash0/font $rdhome/bios/PPSSPP/flash0/font.bak
+  fi
+  mkdir -p $rdhome/bios/PPSSPP
+  #if [ ! -f "$rdhome/bios/PPSSPP/ppge_atlas.zim" ]
+  #then
+    wget "https://github.com/hrydgard/ppsspp/archive/refs/heads/master.zip" -P $rdhome/bios/PPSSPP
+    unzip -q "$rdhome/bios/PPSSPP/master.zip" -d $rdhome/bios/PPSSPP/
+    mv -f "$rdhome/bios/PPSSPP/ppsspp-master/assets/"* "$rdhome/bios/PPSSPP/"
+    rm -rfv "$rdhome/bios/PPSSPP/master.zip"
+    rm -rfv "$rdhome/bios/PPSSPP/ppsspp-master"
+  #fi
+  if [ -d $rdhome/bios/PPSSPP/flash0/font.bak ]
+  then
+    mv -fv $rdhome/bios/PPSSPP/flash0/font.bak $rdhome/bios/PPSSPP/flash0/font
+  fi
+
+  # MSX / SVI / ColecoVision / SG-1000
+  echo "-----------------------------------------------------------"
+  echo "Initializing MSX / SVI / ColecoVision / SG-1000 LIBRETRO"
+  echo "-----------------------------------------------------------"
+  wget "http://bluemsx.msxblue.com/rel_download/blueMSXv282full.zip" -P $rdhome/bios/MSX
+  unzip -q "$rdhome/bios/MSX/blueMSXv282full.zip" -d $rdhome/bios/MSX
+  mv -f $rdhome/bios/MSX/Databases $rdhome/bios/Databases
+  mv -f $rdhome/bios/MSX/Machines $rdhome/bios/Machines
+  rm -rfv $rdhome/bios/MSX
+}
+
+tools_init() {
+  rm -rfv /var/config/retrodeck/tools/
+  mkdir -pv /var/config/retrodeck/tools/
+  cp -rfv /app/retrodeck/tools/* /var/config/retrodeck/tools/
+  mkdir -pv /var/config/emulationstation/.emulationstation/custom_systems/tools/
+  rm -rfv /var/config/retrodeck/tools/gamelist.xml
+  cp -fv /app/retrodeck/tools-gamelist.xml /var/config/retrodeck/tools/gamelist.xml
 }
 
 emulators_post_move() {
@@ -761,121 +824,11 @@ emulators_post_move() {
   sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/ppsspp/PSP/SYSTEM/ppsspp.ini
 
   # Duckstation section
-  sed -i 's#/home/deck/retrodeck/bios#'$rdhome/bios'#g' /var/config/duckstation/settings.ini
+  sed -i 's#/home/deck/retrodeck/bios#'$rdhome/bios'#g' /var/data/duckstation/settings.ini
 
   # Ryujinx section
   sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/Ryujinx/Config.json
   dir_prep "$rdhome/bios/switch/keys" "/var/config/Ryujinx/system"
-}
-
-#=========================
-# REUSABLE DIALOGS SECTION
-#=========================
-
-debug_dialog() {
-  # This function is for displaying commands run by the Configurator without actually running them
-  # USAGE: debug_dialog "command"
-
-  zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-  --title "RetroDECK Configurator Utility - Debug Dialog" \
-  --text="$1"
-}
-
-configurator_process_complete_dialog() {
-  # This dialog shows when a process is complete.
-  # USAGE: configurator_process_complete_dialog "process text"
-  zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Quit" --extra-button="OK" \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-  --title "RetroDECK Configurator Utility - Process Complete" \
-  --text="The process of $1 is now complete.\n\nYou may need to quit and restart RetroDECK for your changes to take effect\n\nClick OK to return to the Main Menu or Quit to return to RetroDECK."
-
-  if [ ! $? == 0 ] # OK button clicked
-  then
-      configurator_welcome_dialog
-  fi
-}
-
-configurator_generic_dialog() {
-  # This dialog is for showing temporary messages before another process happens.
-  # USAGE: configurator_generid_dialog "info text"
-  zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-  --title "RetroDECK Configurator Utility" \
-  --text="$1"
-}
-
-configurator_destination_choice_dialog() {
-  # This dialog is for making things easy for new users to move files to common locations. Gives the options for "Internal", "SD Card" and "Custom" locations.
-  # USAGE: $(configurator_destination_choice_dialog "folder being moved" "action text")
-  # This function returns one of the values: "Back" "Internal Storage" "SD Card" "Custom Location"
-  choice=$(zenity --title "RetroDECK Configurator Utility - Moving $1 folder" --info --no-wrap --ok-label="Back" --extra-button="Internal Storage" --extra-button="SD Card" --extra-button="Custom Location" \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-  --text="$2")
-
-  echo $choice
-}
-
-#=========================
-# LEGACY FUNCTIONS SECTION
-#=========================
-
-# These functions were pulled from retrodeck.sh or global.sh and should be consolidated eventually
-
-tools_init() {
-  rm -rfv /var/config/retrodeck/tools/
-  mkdir -pv /var/config/retrodeck/tools/
-  cp -rfv /app/retrodeck/tools/* /var/config/retrodeck/tools/
-  mkdir -pv /var/config/emulationstation/.emulationstation/custom_systems/tools/
-  rm -rfv /var/config/retrodeck/tools/gamelist.xml
-  cp -fv /app/retrodeck/tools-gamelist.xml /var/config/retrodeck/tools/gamelist.xml
-}
-
-ra_init() {
-  dir_prep "$rdhome/bios" "/var/config/retroarch/system"
-  dir_prep "$rdhome/.logs/retroarch" "/var/config/retroarch/logs"
-  mkdir -pv /var/config/retroarch/shaders/
-  cp -rfv /app/share/libretro/shaders /var/config/retroarch/
-  dir_prep "$rdhome/shaders/retroarch" "/var/config/retroarch/shaders"
-  mkdir -pv /var/config/retroarch/cores/
-  cp -f /app/share/libretro/cores/* /var/config/retroarch/cores/
-  cp -fv $emuconfigs/retroarch/retroarch.cfg /var/config/retroarch/
-  cp -fv $emuconfigs/retroarch/retroarch-core-options.cfg /var/config/retroarch/
-  cp -rfv $emuconfigs/retroarch/core-overrides/* /var/config/retroarch/config
-  #rm -rf $rdhome/bios/bios # in some situations a double bios symlink is created
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/retroarch/retroarch.cfg
-
-  # PPSSPP
-  echo "--------------------------------"
-  echo "Initializing PPSSPP_LIBRETRO"
-  echo "--------------------------------"
-  if [ -d $rdhome/bios/PPSSPP/flash0/font ]
-  then
-    mv -fv $rdhome/bios/PPSSPP/flash0/font $rdhome/bios/PPSSPP/flash0/font.bak
-  fi
-  mkdir -p $rdhome/bios/PPSSPP
-  #if [ ! -f "$rdhome/bios/PPSSPP/ppge_atlas.zim" ]
-  #then
-    wget "https://github.com/hrydgard/ppsspp/archive/refs/heads/master.zip" -P $rdhome/bios/PPSSPP
-    unzip -q "$rdhome/bios/PPSSPP/master.zip" -d $rdhome/bios/PPSSPP/
-    mv -f "$rdhome/bios/PPSSPP/ppsspp-master/assets/"* "$rdhome/bios/PPSSPP/"
-    rm -rfv "$rdhome/bios/PPSSPP/master.zip"
-    rm -rfv "$rdhome/bios/PPSSPP/ppsspp-master"
-  #fi
-  if [ -d $rdhome/bios/PPSSPP/flash0/font.bak ]
-  then
-    mv -fv $rdhome/bios/PPSSPP/flash0/font.bak $rdhome/bios/PPSSPP/flash0/font
-  fi
-
-  # MSX / SVI / ColecoVision / SG-1000
-  echo "-----------------------------------------------------------"
-  echo "Initializing MSX / SVI / ColecoVision / SG-1000 LIBRETRO"
-  echo "-----------------------------------------------------------"
-  wget "http://bluemsx.msxblue.com/rel_download/blueMSXv282full.zip" -P $rdhome/bios/MSX
-  unzip -q "$rdhome/bios/MSX/blueMSXv282full.zip" -d $rdhome/bios/MSX
-  mv -f $rdhome/bios/MSX/Databases $rdhome/bios/Databases
-  mv -f $rdhome/bios/MSX/Machines $rdhome/bios/Machines
-  rm -rfv $rdhome/bios/MSX
 }
 
 create_lock() {
@@ -1077,4 +1030,52 @@ finit() {
   --title "RetroDECK" \
   --text="Installation completed.\nPlease put your roms in:\n\n$roms_folder\n\nand your bioses in\n\n$bios_folder\n\nThen start the program again.\nIf you wish to change the roms location, you may use the tool located the tools section of RetroDECK.\n\nIMPORTANT NOTES:\n- RetroDECK must be manually added and launched from your Steam Library in order to work correctly.\n- It's recommended to use the 'RetroDECK Offical Controller Config' from Steam (under community layouts).\n- It's suggested to use BoilR to automatically add the SteamGridDB images to Steam (this will be automated soon).\nhttps://github.com/PhilipK/BoilR"
   # TODO: Replace the stuff above with BoilR code when ready
+}
+
+#=========================
+# REUSABLE DIALOGS SECTION
+#=========================
+
+debug_dialog() {
+  # This function is for displaying commands run by the Configurator without actually running them
+  # USAGE: debug_dialog "command"
+
+  zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+  --title "RetroDECK Configurator Utility - Debug Dialog" \
+  --text="$1"
+}
+
+configurator_process_complete_dialog() {
+  # This dialog shows when a process is complete.
+  # USAGE: configurator_process_complete_dialog "process text"
+  zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Quit" --extra-button="OK" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+  --title "RetroDECK Configurator Utility - Process Complete" \
+  --text="The process of $1 is now complete.\n\nYou may need to quit and restart RetroDECK for your changes to take effect\n\nClick OK to return to the Main Menu or Quit to return to RetroDECK."
+
+  if [ ! $? == 0 ] # OK button clicked
+  then
+      configurator_welcome_dialog
+  fi
+}
+
+configurator_generic_dialog() {
+  # This dialog is for showing temporary messages before another process happens.
+  # USAGE: configurator_generid_dialog "info text"
+  zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+  --title "RetroDECK Configurator Utility" \
+  --text="$1"
+}
+
+configurator_destination_choice_dialog() {
+  # This dialog is for making things easy for new users to move files to common locations. Gives the options for "Internal", "SD Card" and "Custom" locations.
+  # USAGE: $(configurator_destination_choice_dialog "folder being moved" "action text")
+  # This function returns one of the values: "Back" "Internal Storage" "SD Card" "Custom Location"
+  choice=$(zenity --title "RetroDECK Configurator Utility - Moving $1 folder" --info --no-wrap --ok-label="Back" --extra-button="Internal Storage" --extra-button="SD Card" --extra-button="Custom Location" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+  --text="$2")
+
+  echo $choice
 }
