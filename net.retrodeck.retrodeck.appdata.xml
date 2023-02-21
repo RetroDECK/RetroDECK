@@ -73,11 +73,11 @@
     <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.1b</url>
       <description>
         <ul>
+          <li>Updated all the emulators and cores at their latest versions (except for Duckstation)</li>
           <li>Removed Ryjuinx as it was broken (sorry)</li>
           <li>Removed deprecated emulators from Configurator (eg. Legacy PCSX2)</li>
           <li>Added CLI option to run Configurator directly</li>
           <li>Added "--configure" option to RetroDECK CLI</li>
-          <li>Yuzu updated to mainline-1301</li>
           <li>Adjusted Configurator window sizes</li>
           <li>Made file-moving code safer</li>
           <li>Fixed Primehack preconfiguration and Configurator entry</li>
