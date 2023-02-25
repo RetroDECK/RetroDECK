@@ -185,7 +185,7 @@ post_update() {
   if [[ $prev_version -le "062" ]]; then
     # In version 0.6.2b, the following changes were made that required config file updates/reset:
     # Primehack preconfiguration completely redone. "Stop emulation" hotkey set to Start+Select, Xbox and Nintendo keymap profiles were created, Xbox set as default.
-
+    rm -rf /var/config/primehack # Purge old Primehack config files. Saves are safe as they are linked into /var/data/primehack.
     primehack_init
   fi
 
