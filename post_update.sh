@@ -179,11 +179,18 @@ post_update() {
     fi
   fi
 
-  # These commands are run every time, for now
+  # Everything within the following ( <code> ) will happen behind the Zenity dialog. The save migration was a long process so it has its own individual dialogs.
 
   (
-  ra_init
-  standalones_init
+  if [[ $prev_version -le "062" ]]; then
+    # In version 0.6.2b, the following changes were made that required config file updates/reset:
+    # Primehack preconfiguration completely redone. "Stop emulation" hotkey set to Start+Select, Xbox and Nintendo keymap profiles were created, Xbox set as default.
+
+    primehack_init
+  fi
+
+  # The following commands are run every time.
+
   tools_init
   ) |
   zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
