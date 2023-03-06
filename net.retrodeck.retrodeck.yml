@@ -332,7 +332,8 @@ modules:
       - rd-submodules/retroarch/libaio/libaio-0.3.112.json
       # certificate issue, check libglu module for more info
       #- shared-modules/glu/glu-9.json
-      - rd-submodules/retroarch/libdecor/libdecor-0.1.1.json
+      # libdecor no longer needed in RetroArch 1.14
+      #- rd-submodules/retroarch/libdecor/libdecor-0.1.1.json
   - name: retroarch-filers-video
     subdir: gfx/video_filters
     make-install-args:
