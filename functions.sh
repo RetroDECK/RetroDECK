@@ -86,6 +86,49 @@ move() {
   fi
 }
 
+compress_to_chd () {
+  # Function for compressing one or more files to .chd format
+  # USAGE: compress_to_chd $full_path_to_input_file $full_path_to_output_file
+
+	echo "Compressing file $1 to $2.chd"
+	/app/bin/chdman createcd -i $1 -o $2.chd
+}
+
+validate_for_chd () {
+  # Function for validating chd compression candidates, and compresses if validation passes. Supports .cue, .iso and .gdi formats ONLY
+  # USAGE: validate_for_chd $input_file
+
+local file=$1
+	if [[ "$file" == *".cue" ]] || [[ "$file" == *".gdi" ]] || [[ "$file" == *".iso" ]]; then
+		echo ".cue/.iso/.gdi file detected"
+		local file_path=$(dirname $(realpath $file))
+		local file_base_name=$(basename $file)
+		local file_name=${file_base_name%.*}
+		if [[ "$file" == *".cue" ]]; then # Validate .cue file correctly maps existing .bin file(s)
+			local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" $file)
+			local cue_validated="false"
+			for line in $cue_bin_files
+			do
+				if [[ -f "$file_path/$line" ]]; then
+					cue_validated="true"
+				else
+					echo ".bin file NOT found at $file_path/$line"
+					echo ".cue file could not be validated. Please verify your .cue file contains the correct corresponding .bin file information and retry."
+					cue_validated="false"
+					break
+				fi
+			done
+			if [[ $cue_validated == "true" ]]; then
+				compress_to_chd "$file_path/$file_base_name" "$file_path/$file_name"
+			fi
+		else
+			compress_to_chd "$file_path/$file_base_name" "$file_path/$file_name"
+		fi
+	else
+		echo "File type not recognized. Supported file types are .cue, .gdi and .iso"
+	fi
+}
+
 set_setting_value() {
   # Function for editing settings
   # USAGE: set_setting_value $setting_file "$setting_name" "$new_setting_value" $system $section_name(optional)

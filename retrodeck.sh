@@ -18,6 +18,7 @@ Arguments:
     -v, --version     Print RetroDECK version
     --info-msg        Print paths and config informations
     --configure       Starts the RetroDECK Configurator
+    --compress <file> Compresses target file to .chd format. Supports .cue, .iso and .gdi formats.
     --reset-all       Starts the initial RetroDECK installer (backup your data first!)
     --reset-ra        Resets RetroArch's config to the default values
     --reset-sa        Reset all standalone emulator configs to the default values
@@ -42,6 +43,22 @@ https://retrodeck.net
       cat $rd_conf
       exit
       ;;
+    --compress*)
+      if [[ ! -z $2 ]]; then
+      	if [[ -f $2 ]]; then
+        	validate_for_chd $2
+        else
+        	echo "File not found, please specify the full path to the file to be compressed."
+        fi
+      else
+        echo "Please use this command format \"--compress <full path to cue/gdi/iso file>\""
+      fi      
+      shift
+      ;;
+    --configure*)
+      sh /var/config/retrodeck/tools/configurator.sh
+      shift
+      ;;
     --reset-ra*)
       ra_init
       shift # past argument with no value
@@ -56,10 +73,6 @@ https://retrodeck.net
       ;;
     --reset-all*)
       rm -f "$lockfile"
-      shift # past argument with no value
-      ;;
-    --configure*)
-      sh /var/config/retrodeck/tools/configurator.sh
       shift # past argument with no value
       ;;
     -*|--*)
