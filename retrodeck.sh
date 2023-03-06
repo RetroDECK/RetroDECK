@@ -31,12 +31,10 @@ https://retrodeck.net
       exit
       ;;
     --version*|-v*)
-      #conf_init
       echo "RetroDECK v$version"
       exit
       ;;
     --info-msg*)
-      #conf_init
       echo "RetroDECK v$version"
       echo "RetroDECK config file is in: $rd_conf"
       echo "Contents:"
@@ -53,27 +51,27 @@ https://retrodeck.net
       else
         echo "Please use this command format \"--compress <full path to cue/gdi/iso file>\""
       fi      
-      shift
+      exit
       ;;
     --configure*)
       sh /var/config/retrodeck/tools/configurator.sh
-      shift
+      exit
       ;;
     --reset-ra*)
       ra_init
-      shift # past argument with no value
+      shift # Continue launch after previous command is finished
       ;;
     --reset-sa*)
       standalones_init
-      shift # past argument with no value
+      shift # Continue launch after previous command is finished
       ;;
     --reset-tools*)
       tools_init
-      shift # past argument with no value
+      shift # Continue launch after previous command is finished
       ;;
     --reset-all*)
       rm -f "$lockfile"
-      shift # past argument with no value
+      shift # Continue launch after previous command is finished
       ;;
     -*|--*)
       echo "Unknown option $i"
