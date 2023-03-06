@@ -82,6 +82,7 @@ then
   bios_folder="$rdhome/bios"                                 # the default bios folder
   media_folder="$rdhome/downloaded_media"                    # the media folder, where all the scraped data is downloaded into
   themes_folder="$rdhome/themes"                             # the themes folder
+  logs_folder="$rdhome/.logs"                                # the logs folder
   sdcard="$default_sd"                                       # Steam Deck SD default path
 
   # Writing the variables for the first time
@@ -94,6 +95,7 @@ then
   echo "bios_folder=$bios_folder"             >> $rd_conf
   echo "media_folder=$media_folder"           >> $rd_conf
   echo "themes_folder=$themes_folder"         >> $rd_conf
+  echo "logs_folder=$logs_folder"             >> $rd_conf
   echo "sdcard=$sdcard"                       >> $rd_conf
 
   echo "Setting config file permissions"
