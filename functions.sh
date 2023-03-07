@@ -365,8 +365,8 @@ enable_file() {
   mv $(realpath $1.disabled) $(realpath $(echo $1 | sed -e 's/\.disabled//'))
 }
 
-generate_patch() {
-  # generate_patch $original_file $modified_file $patch_file $system
+generate_single_patch() {
+  # generate_single_patch $original_file $modified_file $patch_file $system
 
   rm $3 # Remove old patch file (maybe change this to create a backup instead?)
 
@@ -465,48 +465,91 @@ generate_patch() {
   done < $2
 }
 
-deploy_patch() {
+deploy_single_patch() {
 
 # This function will take an "original" file and a patch file and generate a ready to use modified file
-# USAGE: deploy_patch $original_file $patch_file $output_file
+# USAGE: deploy_single_patch $original_file $patch_file $output_file
 
 cp -fv $1 $3 # Create a copy of the original file to be patched
 
 while IFS="^" read -r action current_section setting_name setting_value system_name
 do
 
-    case $action in
+  case $action in
 
 	"disable_file" )
-        disable_file $setting_name
+    disable_file $setting_name
 	;;
 
 	"enable_file" )
-        enable_file $setting_name
+    enable_file $setting_name
 	;;
 
 	"add_setting" )
-        add_setting $3 "$setting_name" $system_name $current_section
+    add_setting $3 "$setting_name" $system_name $current_section
 	;;
 
 	"disable_setting" )
-        disable_setting $3 "$setting_name" $system_name $current_section
+    disable_setting $3 "$setting_name" $system_name $current_section
 	;;
 
 	"enable_setting" )
-        enable_setting $3 "$setting_name" $system_name $current_section
+    enable_setting $3 "$setting_name" $system_name $current_section
 	;;
 
 	"change" )
-        set_setting_value $3 "$setting_name" "$setting_value" $system_name $current_section
-    ;;
+    set_setting_value $3 "$setting_name" "$setting_value" $system_name $current_section
+  ;;
 
 	* )
-	echo "Config file malformed"
+	  echo "Config file malformed"
 	;;
 
-    esac
+  esac
 done < $2
+}
+
+deploy_multi_patch() {
+
+# This function will take a single "batch" patch file and run all patches listed in it, across multiple config files
+# USAGE: deploy_multi_patch $patch_file
+# Patch file format should be as follows, with optional entries in (). Optional settings can be left empty, but must still have ^ dividers:
+# $action^($current_section)^$setting_name^$setting_value^$system_name^($config file)
+
+while IFS="^" read -r action current_section setting_name setting_value system_name config_file
+do
+  case $action in
+
+	"disable_file" )
+    disable_file $config_file
+	;;
+
+	"enable_file" )
+    enable_file $config_file
+	;;
+
+	"add_setting" )
+    add_setting $config_file "$setting_name" $system_name $current_section
+	;;
+
+	"disable_setting" )
+    disable_setting $config_file "$setting_name" $system_name $current_section
+	;;
+
+	"enable_setting" )
+    enable_setting $config_file "$setting_name" $system_name $current_section
+	;;
+
+	"change" )
+    set_setting_value $config_file "$setting_name" "$setting_value" $system_name $current_section
+  ;;
+
+	* )
+	  echo "Config file malformed"
+	;;
+  
+  esac
+done < $1
 }
 
 conf_write() {
