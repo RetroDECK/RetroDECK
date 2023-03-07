@@ -125,6 +125,12 @@ else
   finit             # Executing First/Force init
 fi
 
+# Check if running in Desktop mode and warn if true
+
+if [[ $XDG_CURRENT_DESKTOP == "KDE" ]]; then
+	desktop_mode_warning
+fi
+
 # Normal Startup
 
 start_retrodeck

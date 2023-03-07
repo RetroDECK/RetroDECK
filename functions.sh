@@ -159,6 +159,16 @@ local file=$1
 	fi
 }
 
+desktop_mode_warning() {
+  # This function is a generic warning for issues that happen when running in desktop mode.
+  # Running in desktop mode can be verified with the following command: if [[ $XDG_CURRENT_DESKTOP == "KDE" ]]; then
+
+  zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+  --title "RetroDECK Desktop Mode Warning" \
+  --text="You appear to be running RetroDECK in the Steam Deck's Desktop mode!\n\nSome functions of RetroDECK may not work properly in Desktop mode, such as the Steam Decks normal controls.\n\nRetroDECK is best enjoyed in Game mode!"
+}
+
 set_setting_value() {
   # Function for editing settings
   # USAGE: set_setting_value $setting_file "$setting_name" "$new_setting_value" $system $section_name(optional)
