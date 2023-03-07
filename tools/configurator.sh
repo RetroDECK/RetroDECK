@@ -190,11 +190,6 @@ configurator_retroachivement_dialog() {
 
 }
 
-configurator_update_dialog() {
-  configurator_generic_dialog "This feature is not available yet"
-  configurator_welcome_dialog
-}
-
 configurator_power_user_changes_dialog() {
   zenity --title "RetroDECK Configurator Utility - Power User Options" --question --no-wrap --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -404,9 +399,37 @@ configurator_compress_games_dialog() {
   configurator_compress_single_game_dialog
 }
 
+configurator_check_multifile_game_structure() {
+  local folder_games=($(find $roms_folder -maxdepth 2 -mindepth 2 -type d ! -name "*.m3u" ! -name "*.ps3"))
+  if [[ ${#folder_games[@]} -gt 1 ]]; then
+    echo "$(find $roms_folder -maxdepth 2 -mindepth 2 -type d ! -name "*.m3u" ! -name "*.ps3")" > $logs_folder/multi_file_games_"$(date +"%Y_%m_%d_%I_%M_%p").log"
+    zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK" \
+    --text="The following games were found to have the incorrect folder structure:\n\n$(find $roms_folder -maxdepth 2 -mindepth 2 -type d ! -name "*.m3u" ! -name "*.ps3")\n\nIncorrect folder structure can result in failure to launch games or saves being in the incorrect location.\n\nPlease see the RetroDECK wiki for more details!\n\nYou can find this list of games in ~/retrodeck/.logs"
+  else
+    configurator_generic_dialog "No incorrect multi-file game folder structures found."
+  fi
+  configurator_troubleshooting_tools_dialog
+}
+
 configurator_troubleshooting_tools_dialog() {
+  choice=$(zenity --list --title="RetroDECK Configurator Utility - Change Options" --cancel-label="Back" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+  --column="Choice" --column="Action" \
+  "Multi-file game structure check" "Verify the proper structure of multi-file or multi-disc games" )
 
+  case $choice in
 
+  "Multi-file game structure check" )
+    configurator_check_multifile_game_structure
+  ;;
+
+  "" ) # No selection made or Back button clicked
+    configurator_welcome_dialog
+  ;;
+
+  esac
 }
 
 configurator_move_dialog() {
