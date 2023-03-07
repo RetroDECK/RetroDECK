@@ -41,6 +41,7 @@ https://retrodeck.net
       exit
       ;;
     --compress*)
+      read -p "RetroDECK will now attempt to compress your selected game. The original game will still exist and will need to be removed manually after the process completes. Press any key to continue..."
       if [[ ! -z $2 ]]; then
       	if [[ -f $2 ]]; then
         	validate_for_chd $2
