@@ -14,15 +14,14 @@ for i in "$@"; do
 flatpak run [FLATPAK-RUN-OPTION] net.retrodeck-retrodeck [ARGUMENTS]
 
 Arguments:
-    -h, --help        Print this help
-    -v, --version     Print RetroDECK version
-    --info-msg        Print paths and config informations
-    --configure       Starts the RetroDECK Configurator
-    --compress <file> Compresses target file to .chd format. Supports .cue, .iso and .gdi formats.
-    --reset-all       Starts the initial RetroDECK installer (backup your data first!)
-    --reset-ra        Resets RetroArch's config to the default values
-    --reset-sa        Reset all standalone emulator configs to the default values
-    --reset-tools     Recreate the tools section
+    -h, --help                    Print this help
+    -v, --version                 Print RetroDECK version
+    --info-msg                    Print paths and config informations
+    --configure                   Starts the RetroDECK Configurator
+    --compress <file>             Compresses target file to .chd format. Supports .cue, .iso and .gdi formats
+    --reset-emulator <emulator>   Reset one or more emulator configs to the default values
+    --reset-tools                 Reset the RetroDECK Tools section
+    --reset-retrodeck             Starts the initial RetroDECK installer (backup your data first!)
 
 For flatpak run specific options please run: flatpak run -h
 
@@ -57,21 +56,48 @@ https://retrodeck.net
       sh /var/config/retrodeck/tools/configurator.sh
       exit
       ;;
-    --reset-ra*)
-      ra_init
-      shift # Continue launch after previous command is finished
-      ;;
-    --reset-sa*)
-      standalones_init
-      shift # Continue launch after previous command is finished
+    --reset-emulator*)
+      echo "You are about to reset one or more RetroDECK emulators."
+      echo "Available options are: retroarch citra dolphin duckstation melonds pcsx2 ppsspp primehack rpcs3 xemu yuzu all-emulators"
+      read -p "Please enter the emulator you would like to reset: " emulator
+      if [[ "$emulator" =~ ^(retroarch|citra|dolphin|duckstation|melonds|pcsx2|ppsspp|primehack|rpcs3|xemu|yuzu|all-emulators)$ ]]; then
+        read -p "You are about to reset $emulator to default settings. Press 'y' to continue, 'n' to stop: " response
+        if [[ $response == [yY] ]]; then
+          cli_emulator_reset $emulator
+          read -p "The process has been completed, press any key to start RetroDECK."
+          shift # Continue launch after previous command is finished
+        else
+          read -p "The process has been cancelled, press any key to exit."
+          exit
+        fi
+      else
+        echo "$emulator is not a valid selection, exiting..."
+        exit
+      fi
       ;;
     --reset-tools*)
-      tools_init
-      shift # Continue launch after previous command is finished
+      echo "You are about to reset the RetroDECK tools."
+      read -p "Press 'y' to continue, 'n' to stop: " response
+      if [[ $response == [yY] ]]; then
+        tools_init
+        read -p "The process has been completed, press any key to start RetroDECK."
+        shift # Continue launch after previous command is finished
+      else
+        read -p "The process has been cancelled, press any key to exit."
+        exit
+      fi
       ;;
-    --reset-all*)
-      rm -f "$lockfile"
-      shift # Continue launch after previous command is finished
+    --reset-retrodeck*)
+      echo "You are about to reset RetroDECK completely."
+      read -p "Press 'y' to continue, 'n' to stop: " response
+      if [[ $response == [yY] ]]; then
+        rm -f "$lockfile"
+        read -p "The process has been completed, press any key to start RetroDECK."
+        shift # Continue launch after previous command is finished
+      else
+        read -p "The process has been cancelled, press any key to exit."
+        exit
+      fi
       ;;
     -*|--*)
       echo "Unknown option $i"

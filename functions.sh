@@ -858,6 +858,52 @@ ra_init() {
   rm -rfv $rdhome/bios/MSX
 }
 
+cli_emulator_reset() {
+  # This function will reset one or more emulators from the command line arguments.
+  # USAGE: cli_emulator_reset $emulator
+
+  case $1 in
+
+    "retroarch" )
+      ra_init
+    ;;
+    "citra" )
+      citra_init
+    ;;
+    "dolphin" )
+      dolphin_init
+    ;;
+    "duckstation" )
+      duckstation_init
+    ;;
+    "melonds" )
+      melonds_init
+    ;;
+    "pcsx2" )
+      pcsx2_init
+    ;;
+    "ppsspp" )
+      ppssppsdl_init
+    ;;
+    "primehack" )
+      primehack_init
+    ;;
+    "rpcs3" )
+      rpcs3_init
+    ;;
+    "xemu" )
+      xemu_init
+    ;;
+    "yuzu" )
+      yuzu_init
+    ;;
+    "all-emulators" )
+      ra_init
+      standalones_init
+    ;;
+  esac
+}
+
 tools_init() {
   rm -rfv /var/config/retrodeck/tools/
   mkdir -pv /var/config/retrodeck/tools/
