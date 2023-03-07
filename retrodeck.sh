@@ -93,7 +93,7 @@ https://retrodeck.net
       read -p "Press 'y' to continue, 'n' to stop: " response
       if [[ $response == [yY] ]]; then
         rm -f "$lockfile"
-        read -p "The process has been completed, press any key to start RetroDECK."
+        read -p "The process has been completed, press any key to start the initial RetroDECK setup process."
         shift # Continue launch after previous command is finished
       else
         read -p "The process has been cancelled, press any key to exit."
@@ -105,6 +105,7 @@ https://retrodeck.net
       exit 1
       ;;
     *)
+      echo "Please specify a valid option. Use -h for more information."
       ;;
   esac
 done
