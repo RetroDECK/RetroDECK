@@ -8,16 +8,16 @@
 # FUNCTION SECTION
 #=================
 
-browse() {
+directory_browse() {
   # This function browses for a directory and returns the path chosen
-  # USAGE: path_to_be_browsed_for=$(browse $action_text)
+  # USAGE: path_to_be_browsed_for=$(directory_browse $action_text)
 
-  path_selected=false
+  local path_selected=false
 
   while [ $path_selected == false ]
   do
-    target="$(zenity --file-selection --title="Choose $1" --directory)"
-    if [ $? == 0 ] #yes
+    local target="$(zenity --file-selection --title="Choose $1" --directory)"
+    if [ ! -z $target ] #yes
     then
       zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
       --text="Directory $target chosen, is this correct?"
@@ -29,7 +29,37 @@ browse() {
       fi
     else
       zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
-      --text="No directory selected. Do you want to exit?"
+      --text="No directory selected. Do you want to exit the selection process?"
+      if [ $? == 0 ]
+      then
+        break
+      fi
+    fi
+  done
+}
+
+file_browse() {
+  # This function browses for a file and returns the path chosen
+  # USAGE: file_to_be_browsed_for=$(file_browse $action_text)
+
+  local file_selected=false
+
+  while [ $file_selected == false ]
+  do
+    local target="$(zenity --file-selection --title="Choose $1")"
+    if [ ! -z $target ] #yes
+    then
+      zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
+      --text="File $target chosen, is this correct?"
+      if [ $? == 0 ]
+      then
+        file_selected=true
+        echo $target
+        break
+      fi
+    else
+      zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
+      --text="No file selected. Do you want to exit the selection process?"
       if [ $? == 0 ]
       then
         break
@@ -892,17 +922,17 @@ finit_browse() {
 path_selected=false
 while [ $path_selected == false ]
 do
-  sdcard="$(zenity --file-selection --title="Choose RetroDECK data directory location" --directory)"
-  if [[ $? == 0 ]]; then
-    if [[ -w $sdcard ]]; then
+  local target="$(zenity --file-selection --title="Choose RetroDECK data directory location" --directory)"
+  if [[ ! -z $target ]]; then
+    if [[ -w $target ]]; then
       zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
       --cancel-label="No" \
       --ok-label "Yes" \
-      --text="Your RetroDECK data folder will be:\n\n$sdcard/retrodeck\n\nis that ok?"
+      --text="Your RetroDECK data folder will be:\n\n$target/retrodeck\n\nis that ok?"
       if [ $? == 0 ] #yes
       then
         path_selected=true
-        echo "$sdcard/retrodeck"
+        echo "$target/retrodeck"
         break
       else
         zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" --text="Do you want to quit?"

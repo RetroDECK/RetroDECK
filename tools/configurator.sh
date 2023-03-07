@@ -13,14 +13,18 @@ source /app/libexec/functions.sh # uncomment for flatpak testing
 # Configurator Option Tree
 
 # Welcome
-#     - Move RetroDECK data directory
-#       - Migrate everything
-#     - Change Emulator Options
+#     - Move Files
+#       - Migrate Everything
+#     - Change Options
 #         - RetroArch
 #           - Change Rewind Setting
-#     - RetroAchivement login
+#     - RetroAchivement Login
 #       - Login prompt
-#     - Reset RetroDECK
+#     - Compress Games
+#       - Manual selection
+#     - Troubleshooting Tools
+#       - Multi-file game check
+#     - Reset
 #       - Reset RetroArch
 #       - Reset Specific Standalone Emulator
 #           - Reset Citra
@@ -344,6 +348,67 @@ configurator_options_dialog() {
   esac
 }
 
+configurator_compress_single_game_dialog() {
+  file_to_compress=$(file_browse "Game to compress")
+  if [[ ! -z $file_to_compress ]]; then
+    if [[ "$file_to_compress" == *".cue" ]] || [[ "$file_to_compress" == *".gdi" ]] || [[ "$file_to_compress" == *".iso" ]]; then
+      local file_path=$(dirname $(realpath $file_to_compress))
+      local file_base_name=$(basename $file_to_compress)
+      local file_name=${file_base_name%.*}
+      if [[ "$file_to_compress" == *".cue" ]]; then # Validate .cue file correctly maps existing .bin file(s)
+        local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" $file_to_compress)
+        local cue_validated="false"
+        for line in $cue_bin_files
+        do
+          if [[ -f "$file_path/$line" ]]; then
+            cue_validated="true"
+          else
+            echo ".bin file NOT found at $file_path/$line"
+            echo ".cue file could not be validated. Please verify your .cue file contains the correct corresponding .bin file information and retry."
+            cue_validated="false"
+            break
+          fi
+        done
+        if [[ $cue_validated == "true" ]]; then
+          (
+          compress_to_chd "$file_path/$file_base_name" "$file_path/$file_name"
+          ) |
+          zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+            --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+            --title "RetroDECK Configurator Utility - Compression in Progress" \
+            --text="Compressing game $file_base_name, please wait."
+        fi
+      else
+        (
+        compress_to_chd "$file_path/$file_base_name" "$file_path/$file_name"
+        ) |
+          zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+            --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+            --title "RetroDECK Configurator Utility - Compression in Progress" \
+            --text="Compressing game $file_base_name, please wait."
+      fi
+    else
+      configurator_generic_dialog "File type not recognized. Supported file types are .cue, .gdi and .iso"
+      configurator_compress_single_game_dialog
+    fi
+  else
+    configurator_generic_dialog "No file selected, returning to main menu"
+    configurator_welcome_dialog
+  fi
+}
+
+configurator_compress_games_dialog() {
+  # This is currently a placeholder for a dialog where you can compress a single game or multiple at once. Currently only the single game option is available, so is launched by default.
+  
+  configurator_generic_dialog "This utility will compress a single game into .CHD format.\n\nPlease select the game to be compressed in the next dialog: supported file types are .cue, .iso and .gdi"
+  configurator_compress_single_game_dialog
+}
+
+configurator_troubleshooting_tools_dialog() {
+
+
+}
+
 configurator_move_dialog() {
   if [[ -d $rdhome ]]; then
     destination=$(configurator_destination_choice_dialog "RetroDECK Data" "Please choose a destination for the RetroDECK data folder.")
@@ -433,7 +498,7 @@ configurator_move_dialog() {
 
     "Custom Location" )
       configurator_generic_dialog "Select the root folder you would like to store the RetroDECK data folder in.\n\nA new folder \"retrodeck\" will be created in the destination chosen."
-      custom_dest=$(browse "RetroDECK directory location")
+      custom_dest=$(directory_browse "RetroDECK directory location")
       if [[ ! -w $custom_dest ]]; then
           configurator_generic_dialog "The destination was found but is not writable\n\nThis can happen if RetroDECK does not have permission to write to this location.\n\nThis can typically be solved through the utility Flatseal, please make the needed changes and try the moving process again."
           configurator_welcome_dialog
@@ -484,7 +549,7 @@ configurator_move_dialog() {
     esac
   else
     configurator_generic_dialog "The RetroDECK data folder was not found at the expected location.\n\nThis may have happened if the folder was moved manually.\n\nPlease select the current location of the RetroDECK data folder."
-    rdhome=$(browse "RetroDECK directory location")
+    rdhome=$(directory_browse "RetroDECK directory location")
     roms_folder="$rdhome/roms"
     saves_folder="$rdhome/saves"
     states_folder="$rdhome/states"
@@ -527,6 +592,14 @@ configurator_welcome_dialog() {
 
   "RetroAchivements" )
     configurator_retroachivement_dialog
+  ;;
+
+  "Compress Games" )
+    configurator_compress_games_dialog
+  ;;
+
+  "Troubleshooting Tools" )
+    configurator_troubleshooting_tools_dialog
   ;;
 
   "Reset" )
