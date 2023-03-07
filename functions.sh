@@ -549,6 +549,11 @@ conf_write() {
     sed -i "s%themes_folder=.*%themes_folder=$themes_folder%" "$rd_conf"
   fi
 
+  if [ ! -z "$logs_folder" ]
+  then
+    sed -i "s%logs_folder=.*%logs_folder=$logs_folder%" "$rd_conf"
+  fi
+
   if [ ! -z "$sdcard" ]
   then
     sed -i "s%sdcard=.*%sdcard=$sdcard%" "$rd_conf"
@@ -622,6 +627,8 @@ yuzu_init() {
   dir_prep "$rdhome/saves/switch/yuzu/sdmc" "/var/data/yuzu/sdmc"
   # configuring Yuzu
   dir_prep "$rdhome/.logs/yuzu" "/var/data/yuzu/log"
+  # removing config directory to wipe legacy files
+  rm -rf /var/config/yuzu
   mkdir -pv /var/config/yuzu/
   cp -fvr $emuconfigs/yuzu/* /var/config/yuzu/
   sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/yuzu/qt-config.ini
@@ -632,6 +639,8 @@ dolphin_init() {
   echo "----------------------"
   echo "Initializing DOLPHIN"
   echo "----------------------"
+  # removing config directory to wipe legacy files
+  rm -rf /var/config/dolphin-emu
   mkdir -pv /var/config/dolphin-emu/
   cp -fvr "$emuconfigs/dolphin/"* /var/config/dolphin-emu/
   sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/dolphin-emu/Dolphin.ini
@@ -648,6 +657,8 @@ primehack_init() {
   echo "----------------------"
   echo "Initializing Primehack"
   echo "----------------------"
+  # removing config directory to wipe legacy files
+  rm -rf /var/config/primehack
   mkdir -pv /var/config/primehack/
   cp -fvr "$emuconfigs/primehack/"* /var/config/primehack/
   sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/primehack/Dolphin.ini
@@ -664,6 +675,8 @@ pcsx2_init() {
   echo "----------------------"
   echo "Initializing PCSX2"
   echo "----------------------"
+  # removing config directory to wipe legacy files
+  rm -rf /var/config/PCSX2
   mkdir -pv "/var/config/PCSX2/inis"
   mkdir -pv "$rdhome/saves/ps2/pcsx2/memcards"
   mkdir -pv "$rdhome/states/ps2/pcsx2"
@@ -680,6 +693,8 @@ melonds_init() {
   echo "----------------------"
   echo "Initializing MELONDS"
   echo "----------------------"
+  # removing config directory to wipe legacy files
+  rm -rf /var/config/melonDS
   mkdir -pv /var/config/melonDS/
   mkdir -pv "$rdhome/saves/nds/melonds"
   mkdir -pv "$rdhome/states/nds/melonds"
@@ -693,6 +708,8 @@ citra_init() {
   echo "------------------------"
   echo "Initializing CITRA"
   echo "------------------------"
+  # removing config directory to wipe legacy files
+  rm -rf /var/config/citra-emu
   mkdir -pv /var/config/citra-emu/
   mkdir -pv "$rdhome/saves/n3ds/citra/nand/"
   mkdir -pv "$rdhome/saves/n3ds/citra/sdmc/"
@@ -709,6 +726,8 @@ rpcs3_init() {
   echo "------------------------"
   echo "Initializing RPCS3"
   echo "------------------------"
+  # removing config directory to wipe legacy files
+  rm -rf /var/config/rpcs3
   mkdir -pv /var/config/rpcs3/
   cp -fvr $emuconfigs/rpcs3/* /var/config/rpcs3/
   sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/rpcs3/vfs.yml
@@ -719,6 +738,8 @@ xemu_init() {
   echo "Initializing XEMU"
   echo "------------------------"
   mkdir -pv $rdhome/saves/xbox/xemu/
+  # removing config directory to wipe legacy files
+  rm -rf /var/config/xemu
   mkdir -pv /var/data/xemu/
   cp -fv $emuconfigs/xemu.toml /var/data/xemu/xemu.toml
   sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/data/xemu/xemu.toml
@@ -735,6 +756,8 @@ ppssppsdl_init() {
   echo "------------------------"
   echo "Initializing PPSSPPSDL"
   echo "------------------------"
+  # removing config directory to wipe legacy files
+  rm -rf /var/config/ppsspp
   mkdir -p /var/config/ppsspp/PSP/SYSTEM/
   cp -fv $emuconfigs/ppssppsdl/* /var/config/ppsspp/PSP/SYSTEM/
   sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/ppsspp/PSP/SYSTEM/ppsspp.ini
@@ -744,6 +767,10 @@ duckstation_init() {
   echo "------------------------"
   echo "Initializing DUCKSTATION"
   echo "------------------------"
+  dir_prep "$rdhome/saves/duckstation" "/var/data/duckstation/memcards" # This was not previously included, so performing first for save data safety.
+  dir_prep "$rdhome/states/duckstation" "/var/data/duckstation/savestates" # This was not previously included, so performing first for state data safety.
+  # removing config directory to wipe legacy files
+  rm -rf /var/config/duckstation
   mkdir -p /var/data/duckstation/
   cp -fv $emuconfigs/duckstation/* /var/data/duckstation
   sed -i 's#/home/deck/retrodeck/bios#'$rdhome/bios'#g' /var/data/duckstation/settings.ini
@@ -753,6 +780,8 @@ ryujinx_init() {
   echo "------------------------"
   echo "Initializing RYUJINX"
   echo "------------------------"
+  # removing config directory to wipe legacy files
+  rm -rf /var/config/Ryujinx
   mkdir -p /var/config/Ryujinx/system
   cp -fv $emuconfigs/ryujinx/* /var/config/Ryujinx
   sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/Ryujinx/Config.json
@@ -779,6 +808,9 @@ standalones_init() {
 }
 
 ra_init() {
+  # removing config directory to wipe legacy files
+  rm -rf /var/config/retroarch
+  mkdir -p /var/config/retroarch
   dir_prep "$rdhome/bios" "/var/config/retroarch/system"
   dir_prep "$rdhome/.logs/retroarch" "/var/config/retroarch/logs"
   mkdir -pv /var/config/retroarch/shaders/
