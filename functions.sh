@@ -166,7 +166,7 @@ desktop_mode_warning() {
   zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Desktop Mode Warning" \
-  --text="You appear to be running RetroDECK in the Steam Deck's Desktop mode!\n\nSome functions of RetroDECK may not work properly in Desktop mode, such as the Steam Decks normal controls.\n\nRetroDECK is best enjoyed in Game mode!"
+  --text="You appear to be running RetroDECK in the Steam Deck's Desktop mode!\n\nSome functions of RetroDECK may not work properly in Desktop mode, such as the Steam Deck's normal controls.\n\nRetroDECK is best enjoyed in Game mode!"
 }
 
 set_setting_value() {
@@ -547,9 +547,22 @@ do
 	* )
 	  echo "Config file malformed"
 	;;
-  
+
   esac
 done < $1
+}
+
+update_rd_conf() {
+  # This function will import a default retrodeck.cfg file and update it with any current settings. This will allow us to expand the file over time while retaining current user settings.
+  # USAGE: update_rd_conf
+
+  mv -f $rd_conf $rd_conf_backup # Backup config file before update
+
+  generate_single_patch $rd_defaults $rd_conf_backup $rd_update_patch retrodeck
+  sed -i '/change^^version/d' $rd_update_patch # Remove version line from temporary patch file
+  deploy_single_patch $rd_defaults $rd_update_patch $rd_conf
+  rm -f $rd_update_patch # Cleanup temporary patch file
+  source $rd_conf # Load new config file variables
 }
 
 conf_write() {

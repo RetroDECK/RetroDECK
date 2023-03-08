@@ -197,6 +197,7 @@ post_update() {
   # The following commands are run every time.
 
   tools_init
+  update_rd_conf
   ) |
   zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
