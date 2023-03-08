@@ -10,8 +10,7 @@ source /app/libexec/functions.sh
 # Configurator Option Tree
 
 # Welcome
-#     - Move Files
-#       - Migrate Everything
+#     - Move RetroDECK
 #     - Change RetroArch Options
 #       - Enable/Disable Rewind Setting
 #       - RetroAchivement Login
