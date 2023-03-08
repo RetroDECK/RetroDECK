@@ -69,18 +69,31 @@
 
 <releases>
 
-  <release version="0.6.1b" date="2022-12-30">
+  <release version="0.6.2b" date="2023-03-08">
+    <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.2b</url>
+      <description>
+        <ul>
+          <li></li>
+      </ul>
+    </description>
+  </release>
+
+  <release version="0.6.1b" date="2023-02-21">
     <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.1b</url>
       <description>
         <ul>
+          <li>Updated all the emulators and cores at their latest versions (except for Duckstation)</li>
           <li>Removed Ryjuinx as it was broken (sorry)</li>
-          <li>Yuzu updated to mainline-1301</li>
-          <li>Added missing Primehack config and Configurator options</li>
-          <li>Add CLI option to run Configurator directly</li>
-          <li>Resized configurator windows</li>
-          <li>Fixed a bug where the retrodeck folder was having a symlink creation issue after migration</li>
+          <li>Removed deprecated emulators from Configurator (eg. Legacy PCSX2)</li>
+          <li>Added CLI option to run Configurator directly</li>
+          <li>Added "--configure" option to RetroDECK CLI</li>
+          <li>Adjusted Configurator window sizes</li>
+          <li>Made file-moving code safer</li>
+          <li>Fixed Primehack preconfiguration and Configurator entry</li>
           <li>Fixed a bug where the hidden files were not moved during the directory preparation</li>
           <li>Fixed a bug where the symlinks were recursively placed inside the prepeared paths</li>
+          <li>Fixed issue with missing symlink after RetroDECK base directory was moved somewhere else></li>
+          <li>Fixed Duckstation preconfiguration</li>
       </ul>
     </description>
   </release>

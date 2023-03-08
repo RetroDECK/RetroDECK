@@ -12,7 +12,7 @@ command: retrodeck.sh
 
 finish-args:
   - --socket=x11
-  - --socket=wayland
+  #- --socket=wayland
   - --socket=pulseaudio
   - --share=ipc
   - --share=network
@@ -32,7 +32,7 @@ finish-args:
   - --allow=bluetooth
   #- --env=QT_QPA_PLATFORM=xcb #not sure if this will break something
   # rpcs3
-  - --socket=fallback-x11
+  #- --socket=fallback-x11
 
 cleanup:
   # ES-DE
@@ -78,7 +78,7 @@ modules:
       - |
         git checkout ${GITHUB_REF_NAME}
         mkdir -p ${FLATPAK_DEST}/retrodeck/
-        VERSION="0.6.1b-cooker"
+        VERSION="cooker-0.6.2b"
         if [[ $VERSION == *"cooker"* ]];
         then
           VERSION="$VERSION-[$(git rev-parse --short HEAD)]"
@@ -88,7 +88,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/XargonWan/RetroDECK.git
-        branch: cooker-0.6.1b
+        branch: cooker-0.6.2b
 
   - name: xmlstarlet
     config-opts:
@@ -332,7 +332,8 @@ modules:
       - rd-submodules/retroarch/libaio/libaio-0.3.112.json
       # certificate issue, check libglu module for more info
       #- shared-modules/glu/glu-9.json
-      - rd-submodules/retroarch/libdecor/libdecor-0.1.1.json
+      # libdecor no longer needed in RetroArch 1.14
+      #- rd-submodules/retroarch/libdecor/libdecor-0.1.1.json
   - name: retroarch-filers-video
     subdir: gfx/video_filters
     make-install-args:
@@ -731,8 +732,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/xemu-project/xemu.git
-        tag: v0.7.84
-        commit: d8fa50e524c22f85ecb2e43108fd6a5501744351
+        tag: v0.7.85
+        commit: 065c74a00fe402f65147e9b0d1a1eeac1b4b609f
         x-checker-data:
           type: json
           url: https://api.github.com/repos/xemu-project/xemu/releases/latest
@@ -985,12 +986,11 @@ modules:
       - cp es-configs/es_settings.xml ${FLATPAK_DEST}/retrodeck/es_settings.xml
 
       # Logo, res, move graphics directory to mutable space so splash can be changed after build
-      - rm -f /app/share/emulationstation/resources/graphics/splash.svg
       - mv -f -t /var/config/emulationstation /app/share/emulationstation/resources/graphics 
       - ln -s /var/config/emulationstation/graphics /app/share/emulationstation/resources/graphics
-      - cp -f res/extra-splashes/* /app/share/emulationstation/resources/graphics/
-      - cp -f res/splash.svg /app/share/emulationstation/resources/graphics/splash.svg
-      - cp -f res/splash.svg /app/share/emulationstation/resources/graphics/splash-orig.svg
+      - cp -f res/extra-splashes/* /var/config/emulationstation/graphics
+      - cp -f res/splash.svg /var/config/emulationstation/graphics/splash.svg
+      - cp -f res/splash.svg /var/config/emulationstation/graphics/splash-orig.svg
       - cp -f res/icon.svg /app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg
 
       # Tools
@@ -1025,4 +1025,4 @@ modules:
     sources:
       - type: git
         url: https://github.com/XargonWan/RetroDECK.git
-        branch: cooker-0.6.1b
+        branch: cooker-0.6.2b
