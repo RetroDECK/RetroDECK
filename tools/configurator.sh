@@ -346,42 +346,16 @@ configurator_options_dialog() {
 configurator_compress_single_game_dialog() {
   file_to_compress=$(file_browse "Game to compress")
   if [[ ! -z $file_to_compress ]]; then
-    if [[ "$file_to_compress" == *".cue" ]] || [[ "$file_to_compress" == *".gdi" ]] || [[ "$file_to_compress" == *".iso" ]]; then
-      local file_path=$(dirname $(realpath $file_to_compress))
-      local file_base_name=$(basename $file_to_compress)
-      local file_name=${file_base_name%.*}
-      if [[ "$file_to_compress" == *".cue" ]]; then # Validate .cue file correctly maps existing .bin file(s)
-        local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" $file_to_compress)
-        local cue_validated="false"
-        for line in $cue_bin_files
-        do
-          if [[ -f "$file_path/$line" ]]; then
-            cue_validated="true"
-          else
-            echo ".bin file NOT found at $file_path/$line"
-            echo ".cue file could not be validated. Please verify your .cue file contains the correct corresponding .bin file information and retry."
-            cue_validated="false"
-            break
-          fi
-        done
-        if [[ $cue_validated == "true" ]]; then
-          (
-          compress_to_chd "$file_path/$file_base_name" "$file_path/$file_name"
-          ) |
-          zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
-            --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-            --title "RetroDECK Configurator Utility - Compression in Progress" \
-            --text="Compressing game $file_base_name, please wait."
-        fi
-      else
-        (
-        compress_to_chd "$file_path/$file_base_name" "$file_path/$file_name"
-        ) |
-          zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
-            --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-            --title "RetroDECK Configurator Utility - Compression in Progress" \
-            --text="Compressing game $file_base_name, please wait."
-      fi
+    if [[ $(validate_for_chd $file_to_compress) == "true" ]]; then
+      (
+      filename_no_path=$(basename $file_to_compress)
+      filename_no_extension=${filename_no_path%.*}
+      compress_to_chd $(dirname $(realpath $file_to_compress))/$(basename $file_to_compress) $(dirname $(realpath $file_to_compress))/$filename_no_extension
+      ) |
+      zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+        --title "RetroDECK Configurator Utility - Compression in Progress" \
+        --text="Compressing game $filename_no_path, please wait."
     else
       configurator_generic_dialog "File type not recognized. Supported file types are .cue, .gdi and .iso"
       configurator_compress_single_game_dialog

@@ -127,35 +127,40 @@ compress_to_chd () {
 validate_for_chd () {
   # Function for validating chd compression candidates, and compresses if validation passes. Supports .cue, .iso and .gdi formats ONLY
   # USAGE: validate_for_chd $input_file
-
-local file=$1
+  
+	local file=$1
+	current_run_log_file="chd_compression_"$(date +"%Y_%m_%d_%I_%M_%p").log""
+	echo "Validating file:" $file > "$logs_folder/$current_run_log_file"
 	if [[ "$file" == *".cue" ]] || [[ "$file" == *".gdi" ]] || [[ "$file" == *".iso" ]]; then
-		echo ".cue/.iso/.gdi file detected"
+		echo ".cue/.iso/.gdi file detected" >> $logs_folder/$current_run_log_file
 		local file_path=$(dirname $(realpath $file))
 		local file_base_name=$(basename $file)
 		local file_name=${file_base_name%.*}
-		if [[ "$file" == *".cue" ]]; then # Validate .cue file correctly maps existing .bin file(s)
+		echo "File base path:" $file_path >> "$logs_folder/$current_run_log_file"
+		echo "File base name:" $file_name >> "$logs_folder/$current_run_log_file"
+		if [[ "$file" == *".cue" ]]; then # Validate .cue file
 			local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" $file)
 			local cue_validated="false"
 			for line in $cue_bin_files
 			do
 				if [[ -f "$file_path/$line" ]]; then
+					echo ".bin file found at $file_path/$line" >> "$logs_folder/$current_run_log_file"
 					cue_validated="true"
 				else
-					echo ".bin file NOT found at $file_path/$line"
-					echo ".cue file could not be validated. Please verify your .cue file contains the correct corresponding .bin file information and retry."
+					echo ".bin file NOT found at $file_path/$line" >> "$logs_folder/$current_run_log_file"
+					echo ".cue file could not be validated. Please verify your .cue file contains the correct corresponding .bin file information and retry." >> "$logs_folder/$current_run_log_file"
 					cue_validated="false"
 					break
 				fi
 			done
 			if [[ $cue_validated == "true" ]]; then
-				compress_to_chd "$file_path/$file_base_name" "$file_path/$file_name"
+				echo $cue_validated
 			fi
 		else
-			compress_to_chd "$file_path/$file_base_name" "$file_path/$file_name"
+			echo $cue_validated
 		fi
 	else
-		echo "File type not recognized. Supported file types are .cue, .gdi and .iso"
+		echo "File type not recognized. Supported file types are .cue, .gdi and .iso" >> "$logs_folder/$current_run_log_file"
 	fi
 }
 

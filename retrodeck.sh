@@ -17,7 +17,7 @@ Arguments:
     -h, --help                    Print this help
     -v, --version                 Print RetroDECK version
     --info-msg                    Print paths and config informations
-    --configure                   Starts the RetroDECK Configurator
+    --configurator                Starts the RetroDECK Configurator
     --compress <file>             Compresses target file to .chd format. Supports .cue, .iso and .gdi formats
     --reset-emulator <emulator>   Reset one or more emulator configs to the default values
     --reset-tools                 Reset the RetroDECK Tools section
@@ -44,16 +44,24 @@ https://retrodeck.net
       read -p "RetroDECK will now attempt to compress your selected game. The original game will still exist and will need to be removed manually after the process completes. Press any key to continue..."
       if [[ ! -z $2 ]]; then
       	if [[ -f $2 ]]; then
-        	validate_for_chd $2
+      		current_run_log_file="chd_compression_"$(date +"%Y_%m_%d_%I_%M_%p").log""
+        	if [[ $(validate_for_chd $2) == "true" ]]; then
+        		filename_no_path=$(basename $2)
+        		filename_no_extension=${filename_no_path%.*}
+        		compress_to_chd $(dirname $(realpath $2))/$(basename $2) $(dirname $(realpath $2))/$filename_no_extension
+        	else
+        		printf "An error occured during the compression process. Please see the following log entries for details:\n\n"
+        		cat $logs_folder/$current_run_log_file
+        	fi
         else
         	echo "File not found, please specify the full path to the file to be compressed."
         fi
       else
-        echo "Please use this command format \"--compress <full path to cue/gdi/iso file>\""
-      fi      
+        echo "Please use this command format \"--compress <cue/gdi/iso file to compress>\""
+      fi 
       exit
       ;;
-    --configure*)
+    --configurator*)
       sh /var/config/retrodeck/tools/configurator.sh
       exit
       ;;
