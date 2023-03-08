@@ -1081,8 +1081,6 @@ start_retrodeck() {
   echo "Checking to see if today has a surprise..."
   easter_eggs
   # normal startup
-  echo "Checking to see if today has a surprise"
-  easter_eggs
   echo "Starting RetroDECK v$version"
   emulationstation --home /var/config/emulationstation
 }
