@@ -5,14 +5,15 @@
 source /app/libexec/functions.sh
 
 # Static variables
-rd_conf="/var/config/retrodeck/retrodeck.cfg"              # RetroDECK config file path
-rd_conf_backup="/var/config/retrodeck/retrodeck.bak"       # Backup of RetroDECK config file from update
-emuconfigs="/app/retrodeck/emu-configs"                    # folder with all the default emulator configs
-rd_defaults="$emuconfigs/defaults/retrodeck.cfg"           # A default RetroDECK config file
-rd_update_patch="/var/config/retrodeck/rd_update.patch"    # A static location for the temporary patch file used during retrodeck.cfg updates
-lockfile="/var/config/retrodeck/.lock"                     # where the lockfile is located
-default_sd="/run/media/mmcblk0p1"                          # Steam Deck SD default path
-hard_version="$(cat '/app/retrodeck/version')"             # hardcoded version (in the readonly filesystem)
+rd_conf="/var/config/retrodeck/retrodeck.cfg"                   # RetroDECK config file path
+rd_conf_backup="/var/config/retrodeck/retrodeck.bak"            # Backup of RetroDECK config file from update
+emuconfigs="/app/retrodeck/emu-configs"                         # folder with all the default emulator configs
+rd_defaults="$emuconfigs/defaults/retrodeck.cfg"                # A default RetroDECK config file
+rd_update_patch="/var/config/retrodeck/rd_update.patch"         # A static location for the temporary patch file used during retrodeck.cfg updates
+bios_checklist="/var/config/retrodeck/tools/bios_checklist.cfg" # A config file listing BIOS file information that can be verified
+lockfile="/var/config/retrodeck/.lock"                          # where the lockfile is located
+default_sd="/run/media/mmcblk0p1"                               # Steam Deck SD default path
+hard_version="$(cat '/app/retrodeck/version')"                  # hardcoded version (in the readonly filesystem)
 
 # Config files for emulators with single config files
 
