@@ -386,16 +386,49 @@ configurator_check_multifile_game_structure() {
   configurator_troubleshooting_tools_dialog
 }
 
+configurator_check_bios_files() {
+  bios_checked_list=()
+
+  while IFS="^" read -r bios_file bios_hash bios_system bios_desc
+  do
+    bios_file_found="No"
+    bios_hash_matched="No"
+    if [[ -f "$bios_folder/$bios_file" ]]; then
+      bios_file_found="Yes"
+      if [[ $(md5sum "$bios_folder/$bios_file" | awk '{ print $1 }') == "$bios_hash" ]]; then
+        bios_hash_matched="Yes"
+      fi
+    fi
+    bios_checked_list=("${bios_checked_list[@]}" "$bios_file" "$bios_system" "$bios_file_found" "$bios_hash_matched" "$bios_desc")
+  done < $bios_checklist
+
+  zenity --list --title="RetroDECK Configurator Utility - Verify BIOS Files" --cancel-label="Back" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+  --column "BIOS File Name" \
+  --column "System" \
+  --column "BIOS File Found" \
+  --column "BIOS Hash Match" \
+  --column "BIOS File Description" \
+  "${bios_checked_list[@]}"
+
+  configurator_troubleshooting_tools_dialog
+}
+
 configurator_troubleshooting_tools_dialog() {
   choice=$(zenity --list --title="RetroDECK Configurator Utility - Change Options" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
-  "Multi-file game structure check" "Verify the proper structure of multi-file or multi-disc games" )
+  "Multi-file game structure check" "Verify the proper structure of multi-file or multi-disc games" \
+  "BIOS file check" "Verify the existence and file integrity of common BIOS files" )
 
   case $choice in
 
   "Multi-file game structure check" )
     configurator_check_multifile_game_structure
+  ;;
+
+  "BIOS file check" )
+    configurator_check_bios_files
   ;;
 
   "" ) # No selection made or Back button clicked
