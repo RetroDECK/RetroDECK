@@ -564,8 +564,9 @@ update_rd_conf() {
   mv -f $rd_conf $rd_conf_backup # Backup config file before update
 
   generate_single_patch $rd_defaults $rd_conf_backup $rd_update_patch retrodeck
-  sed -i '/change^^version/d' $rd_update_patch # Remove version line from temporary patch file
+  sed -i '/change^^version/d' $rd_update_patch # Remove version line from temporary patch file, so old value isn't kept
   deploy_single_patch $rd_defaults $rd_update_patch $rd_conf
+  set_setting_value $rd_conf "version" "$hard_version" retrodeck # Set version of currently running RetroDECK to updated retrodeck.cfg
   rm -f $rd_update_patch # Cleanup temporary patch file
   source $rd_conf # Load new config file variables
 }
