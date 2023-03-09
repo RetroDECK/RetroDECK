@@ -1066,10 +1066,10 @@ modules:
       - cp retrodeck.sh /app/bin/retrodeck.sh
       - chmod +x /app/bin/retrodeck.sh
 
+      # Function libraries
+      - mkdir -p /app/libexec
       - cp global.sh /app/libexec/global.sh
-
       - cp functions.sh /app/libexec/functions.sh
-
       - cp post_update.sh /app/libexec/post_update.sh
 
       # Desktop entry

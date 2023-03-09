@@ -1062,20 +1062,24 @@ create_lock() {
 }
 
 easter_eggs() {
-  today=$(date +"%0m%0d") # Read the current date in a format that can be calculated in ranges
+  # This function will replace the RetroDECK startup splash screen with a different image if the day and time match a listing in easter_egg_checklist.cfg
+  # The easter_egg_checklist.cfg file has the current format: $start_date^$end_date^$start_time^$end_time^$splash_file
+  # Ex. The line "1001^1031^0000^2359^spooky.svg" would show the file "spooky.svg" During any time of day in the month of October
+  # The easter_egg_checklist.cfg is read in order, so lines higher in the file will have higher priority in the event of an overlap
+  # USAGE: easter_eggs
+  current_day=$(date +"%0m%0d") # Read the current date in a format that can be calculated in ranges
+  current_time=$(date +"%0H%0M") # Read the current time in a format that can be calculated in ranges
+  while IFS="^" read -r start_date end_date start_time end_time splash_file # Read Easter Egg checklist file and separate values
+  do
+    if [[ $current_day -ge "$start_date" && $current_day -le "$end_date" && $current_time -ge "$start_time" && $current_time -le "$end_time" ]]; then # If current line specified date/time matches current date/time, set $splash_file to be deployed
+      new_splash_file="$splashscreen_dir/$splash_file"
+      break
+    else # When there are no matches, the default splash screen is set to deploy
+      new_splash_file="$default_splash_file"
+    fi
+  done < $easter_egg_checklist
 
-  # Set Easter Egg date or ranges here, in mmdd format
-
-  if [[ today -eq "0401" ]]; then # An example of a one-day easter egg
-    echo "Today is April Fools Day!"
-    # cp -fv /var/config/emulationstation/graphics/splash-aprilfools.svg /var/config/emulationstation/graphics/splash.svg 
-  elif [[ today -ge "1001" && today -le "1031" ]]; then # An example of a multi-day easter egg
-    echo "Today is in the spooky month!"
-    # cp -fv /var/config/emulationstation/graphics/splash-spookytime.svg /var/config/emulationstation/graphics/splash.svg
-  else # Revert to standard splash otherwise
-    echo "Nothing special happening today"
-    # cp -fv /var/config/emulationstation/graphics/splash-orig.svg /var/config/emulationstation/graphics/splash.svg
-  fi
+  cp -fv "$new_splash_file $current_splash_file" # Deploy assigned splash screen
 }
 
 start_retrodeck() {
