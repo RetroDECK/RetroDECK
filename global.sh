@@ -5,11 +5,15 @@
 source /app/libexec/functions.sh
 
 # Static variables
-rd_conf="/var/config/retrodeck/retrodeck.cfg"              # RetroDECK config file path
-emuconfigs="/app/retrodeck/emu-configs"                    # folder with all the default emulator configs
-lockfile="/var/config/retrodeck/.lock"                     # where the lockfile is located
-default_sd="/run/media/mmcblk0p1"                          # Steam Deck SD default path
-hard_version="$(cat '/app/retrodeck/version')"             # hardcoded version (in the readonly filesystem)
+rd_conf="/var/config/retrodeck/retrodeck.cfg"                   # RetroDECK config file path
+rd_conf_backup="/var/config/retrodeck/retrodeck.bak"            # Backup of RetroDECK config file from update
+emuconfigs="/app/retrodeck/emu-configs"                         # folder with all the default emulator configs
+rd_defaults="$emuconfigs/defaults/retrodeck.cfg"                # A default RetroDECK config file
+rd_update_patch="/var/config/retrodeck/rd_update.patch"         # A static location for the temporary patch file used during retrodeck.cfg updates
+bios_checklist="/var/config/retrodeck/tools/bios_checklist.cfg" # A config file listing BIOS file information that can be verified
+lockfile="/var/config/retrodeck/.lock"                          # where the lockfile is located
+default_sd="/run/media/mmcblk0p1"                               # Steam Deck SD default path
+hard_version="$(cat '/app/retrodeck/version')"                  # hardcoded version (in the readonly filesystem)
 
 # Config files for emulators with single config files
 
@@ -72,32 +76,19 @@ then
   # Check if SD card path has changed from SteamOS update
   if [[ ! -d $default_sd && "$(ls -A /run/media/deck/)" ]]; then
     configurator_generic_dialog "The SD card was not found in the expected location.\nThis may happen when SteamOS is updated.\n\nPlease browse to the current location of the SD card.\n\nIf you are not using an SD card, please click \"Cancel\"."
-    default_sd=$(browse "SD Card Location")
+    default_sd=$(directory_browse "SD Card Location")
   fi
-
-  rdhome="$HOME/retrodeck"                                   # the retrodeck home, aka ~/retrodeck
-  roms_folder="$rdhome/roms"                                 # the default roms folder path
-  saves_folder="$rdhome/saves"                               # the default saves folder path
-  states_folder="$rdhome/states"                             # the default states folder path
-  bios_folder="$rdhome/bios"                                 # the default bios folder
-  media_folder="$rdhome/downloaded_media"                    # the media folder, where all the scraped data is downloaded into
-  themes_folder="$rdhome/themes"                             # the themes folder
-  sdcard="$default_sd"                                       # Steam Deck SD default path
-
-  # Writing the variables for the first time
-  echo '#!/bin/bash'                          >> $rd_conf
-  echo "version=$version"                     >> $rd_conf
-  echo "rdhome=$rdhome"                       >> $rd_conf
-  echo "roms_folder=$roms_folder"             >> $rd_conf
-  echo "saves_folder=$saves_folder"           >> $rd_conf
-  echo "states_folder=$states_folder"         >> $rd_conf
-  echo "bios_folder=$bios_folder"             >> $rd_conf
-  echo "media_folder=$media_folder"           >> $rd_conf
-  echo "themes_folder=$themes_folder"         >> $rd_conf
-  echo "sdcard=$sdcard"                       >> $rd_conf
+  
+  cp $rd_defaults $rd_conf # Load default settings
+  set_setting_value $rd_conf "version" "$version" retrodeck # Set current version for new installs
+  set_setting_value $rd_conf "sdcard" "$default_sd" retrodeck # Set SD card location if default path has changed
 
   echo "Setting config file permissions"
   chmod +rw $rd_conf
+  echo "RetroDECK config file initialized. Contents:"
+  echo
+  cat $rd_conf
+  source $rd_conf # Load new variables into memory
 
 # If the config file is existing i just read the variables (source it)
 else
@@ -109,7 +100,7 @@ else
   if [[ ! -d $rdhome ]]; then
     prev_home_path=$rdhome
     configurator_generic_dialog "The RetroDECK data folder was not found in the expected location.\nThis may happen when SteamOS is updated.\n\nPlease browse to the current location of the \"retrodeck\" folder."
-    new_home_path=$(browse "RetroDECK folder location")
+    new_home_path=$(directory_browse "RetroDECK folder location")
     sed -i 's#'$prev_home_path'#'$new_home_path'#g' $rd_conf
     source "$rd_conf"
     emulators_post_move

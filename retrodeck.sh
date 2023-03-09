@@ -14,14 +14,14 @@ for i in "$@"; do
 flatpak run [FLATPAK-RUN-OPTION] net.retrodeck-retrodeck [ARGUMENTS]
 
 Arguments:
-    -h, --help        Print this help
-    -v, --version     Print RetroDECK version
-    --info-msg        Print paths and config informations
-    --configure       Starts the RetroDECK Configurator
-    --reset-all       Starts the initial RetroDECK installer (backup your data first!)
-    --reset-ra        Resets RetroArch's config to the default values
-    --reset-sa        Reset all standalone emulator configs to the default values
-    --reset-tools     Recreate the tools section
+    -h, --help                    Print this help
+    -v, --version                 Print RetroDECK version
+    --info-msg                    Print paths and config informations
+    --configurator                Starts the RetroDECK Configurator
+    --compress <file>             Compresses target file to .chd format. Supports .cue, .iso and .gdi formats
+    --reset-emulator <emulator>   Reset one or more emulator configs to the default values
+    --reset-tools                 Reset the RetroDECK Tools section
+    --reset-retrodeck             Starts the initial RetroDECK installer (backup your data first!)
 
 For flatpak run specific options please run: flatpak run -h
 
@@ -30,43 +30,90 @@ https://retrodeck.net
       exit
       ;;
     --version*|-v*)
-      #conf_init
       echo "RetroDECK v$version"
       exit
       ;;
     --info-msg*)
-      #conf_init
       echo "RetroDECK v$version"
       echo "RetroDECK config file is in: $rd_conf"
       echo "Contents:"
       cat $rd_conf
       exit
       ;;
-    --reset-ra*)
-      ra_init
-      shift # past argument with no value
+    --compress*)
+      read -p "RetroDECK will now attempt to compress your selected game. The original game will still exist and will need to be removed manually after the process completes. Press any key to continue..."
+      if [[ ! -z $2 ]]; then
+      	if [[ -f $2 ]]; then
+      		current_run_log_file="chd_compression_"$(date +"%Y_%m_%d_%I_%M_%p").log""
+        	if [[ $(validate_for_chd $2) == "true" ]]; then
+        		filename_no_path=$(basename $2)
+        		filename_no_extension=${filename_no_path%.*}
+        		compress_to_chd $(dirname $(realpath $2))/$(basename $2) $(dirname $(realpath $2))/$filename_no_extension
+        	else
+        		printf "An error occured during the compression process. Please see the following log entries for details:\n\n"
+        		cat $logs_folder/$current_run_log_file
+        	fi
+        else
+        	echo "File not found, please specify the full path to the file to be compressed."
+        fi
+      else
+        echo "Please use this command format \"--compress <cue/gdi/iso file to compress>\""
+      fi 
+      exit
       ;;
-    --reset-sa*)
-      standalones_init
-      shift # past argument with no value
+    --configurator*)
+      sh /var/config/retrodeck/tools/configurator.sh
+      exit
+      ;;
+    --reset-emulator*)
+      echo "You are about to reset one or more RetroDECK emulators."
+      echo "Available options are: retroarch citra dolphin duckstation melonds pcsx2 ppsspp primehack rpcs3 xemu yuzu all-emulators"
+      read -p "Please enter the emulator you would like to reset: " emulator
+      if [[ "$emulator" =~ ^(retroarch|citra|dolphin|duckstation|melonds|pcsx2|ppsspp|primehack|rpcs3|xemu|yuzu|all-emulators)$ ]]; then
+        read -p "You are about to reset $emulator to default settings. Press 'y' to continue, 'n' to stop: " response
+        if [[ $response == [yY] ]]; then
+          cli_emulator_reset $emulator
+          read -p "The process has been completed, press any key to start RetroDECK."
+          shift # Continue launch after previous command is finished
+        else
+          read -p "The process has been cancelled, press any key to exit."
+          exit
+        fi
+      else
+        echo "$emulator is not a valid selection, exiting..."
+        exit
+      fi
       ;;
     --reset-tools*)
-      tools_init
-      shift # past argument with no value
+      echo "You are about to reset the RetroDECK tools."
+      read -p "Press 'y' to continue, 'n' to stop: " response
+      if [[ $response == [yY] ]]; then
+        tools_init
+        read -p "The process has been completed, press any key to start RetroDECK."
+        shift # Continue launch after previous command is finished
+      else
+        read -p "The process has been cancelled, press any key to exit."
+        exit
+      fi
       ;;
-    --reset-all*)
-      rm -f "$lockfile"
-      shift # past argument with no value
-      ;;
-    --configure*)
-      sh /var/config/retrodeck/tools/configurator.sh
-      shift # past argument with no value
+    --reset-retrodeck*)
+      echo "You are about to reset RetroDECK completely."
+      read -p "Press 'y' to continue, 'n' to stop: " response
+      if [[ $response == [yY] ]]; then
+        rm -f "$lockfile"
+        read -p "The process has been completed, press any key to start the initial RetroDECK setup process."
+        shift # Continue launch after previous command is finished
+      else
+        read -p "The process has been cancelled, press any key to exit."
+        exit
+      fi
       ;;
     -*|--*)
       echo "Unknown option $i"
       exit 1
       ;;
     *)
+      echo "Please specify a valid option. Use -h for more information."
       ;;
   esac
 done
@@ -86,6 +133,12 @@ then
 else
   echo "Lockfile not found"
   finit             # Executing First/Force init
+fi
+
+# Check if running in Desktop mode and warn if true
+
+if [[ $XDG_CURRENT_DESKTOP == "KDE" ]]; then
+	desktop_mode_warning
 fi
 
 # Normal Startup

@@ -2,27 +2,38 @@
 
 # VARIABLES SECTION
 
-#rd_conf="retrodeck.cfg" # uncomment for standalone testing
-#source functions.sh # uncomment for standalone testing
-
-source /app/libexec/global.sh # uncomment for flatpak testing
-source /app/libexec/functions.sh # uncomment for flatpak testing
+source /app/libexec/global.sh
+source /app/libexec/functions.sh
 
 # DIALOG SECTION
 
 # Configurator Option Tree
 
 # Welcome
-#     - Move RetroDECK data directory
-#       - Migrate everything
-#     - Change Emulator Options
-#         - RetroArch
-#           - Change Rewind Setting
-#     - RetroAchivement login
-#       - Login prompt
-#     - Reset RetroDECK
-#       - Reset RetroArch
-#       - Reset Specific Standalone Emulator
+#     - Move RetroDECK
+#     - Change RetroArch Options
+#       - Enable/Disable Rewind Setting
+#       - RetroAchivement Login
+#         - Login prompt
+#     - Change Standalone Emulator Options (Behind one-time power user warning dialog)
+#       - Launch RetroArch
+#       - Launch Citra
+#       - Launch Dolphin
+#       - Launch Duckstation
+#       - Launch MelonDS
+#       - Launch PCSX2
+#       - Launch PPSSPP
+#       - Launch Primehack
+#       - Launch RPCS3
+#       - Launch XEMU
+#       - Launch Yuzu
+#     - Compress Games
+#       - Manual single-game selection
+#     - Troubleshooting Tools
+#       - Multi-file game check
+#     - Reset
+#       - Reset Specific Emulator
+#           - Reset RetroArch
 #           - Reset Citra
 #           - Reset Dolphin
 #           - Reset Duckstation
@@ -34,7 +45,7 @@ source /app/libexec/functions.sh # uncomment for flatpak testing
 #           - Reset Ryujinx
 #           - Reset XEMU
 #           - Reset Yuzu
-#       - Reset All Standalone Emulators
+#       - Reset All Emulators
 #       - Reset Tools
 #       - Reset All
 
@@ -46,38 +57,37 @@ configurator_reset_dialog() {
   choice=$(zenity --list --title="RetroDECK Configurator Utility - Reset Options" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
-  "Reset RetroArch" "Reset RetroArch to default settings" \
-  "Reset Specific Standalone" "Reset only one specific standalone emulator to default settings" \
-  "Reset All Standalones" "Reset all standalone emulators to default settings" \
+  "Reset Specific Emulator" "Reset only one specific emulator to default settings" \
+  "Reset All Emulators" "Reset all emulators to default settings" \
   "Reset Tools" "Reset Tools menu entries" \
   "Reset All" "Reset RetroDECK to default settings" )
 
   case $choice in
 
-  "Reset RetroArch" )
-    ra_init
-    configurator_process_complete_dialog "resetting RetroArch"
-    ;;
-
-  "Reset Specific Standalone" )
+  "Reset Specific Emulator" )
     emulator_to_reset=$(zenity --list \
     --title "RetroDECK Configurator Utility - Reset Specific Standalone Emulator" --cancel-label="Back" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
     --text="Which emulator do you want to reset to default?" \
-    --hide-header \
-    --column=emulator \
-    "Citra" \
-    "Dolphin" \
-    "Duckstation" \
-    "MelonDS" \
-    "PCSX2" \
-    "PPSSPP" \
-    "Primehack" \
-    "RPCS3" \
-    "XEMU" \
-    "Yuzu")
+    --column="Emulator" --column="Action" \
+    "RetroArch" "Reset RetroArch to default settings" \
+    "Citra" "Reset Citra to default settings" \
+    "Dolphin" "Reset Dolphin to default settings" \
+    "Duckstation" "Reset Duckstation to default settings" \
+    "MelonDS" "Reset MelonDS to default settings" \
+    "PCSX2" "Reset PCSX2 to default settings" \
+    "PPSSPP" "Reset PPSSPP to default settings" \
+    "Primehack" "Reset Primehack to default settings" \
+    "RPCS3" "Reset RPCS3 to default settings" \
+    "XEMU" "Reset XEMU to default settings" \
+    "Yuzu" "Reset Yuzu to default settings" )
 
     case $emulator_to_reset in
+
+    "RetroArch" )
+      ra_init
+      configurator_process_complete_dialog "resetting $emulator_to_reset"
+    ;;
 
     "Citra" )
       citra_init
@@ -136,9 +146,10 @@ configurator_reset_dialog() {
     esac
   ;;
 
-"Reset All Standalones" )
+"Reset All Emulators" )
+  ra_init
   standalones_init
-  configurator_process_complete_dialog "resetting standalone emulators"
+  configurator_process_complete_dialog "resetting all emulators"
 ;;
 
 "Reset Tools" )
@@ -150,7 +161,7 @@ configurator_reset_dialog() {
   zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Configurator Utility - Reset RetroDECK" \
-  --text="You are resetting RetroDECK to its default state.\n\nAfter the process is complete you will need to exit RetroDECK and run it again."
+  --text="You are resetting RetroDECK to its default state.\n\nAfter the process is complete you will need to exit RetroDECK and run it again, where you will go through the initial setup process again."
   rm -f "$lockfile"
   configurator_process_complete_dialog "resetting RetroDECK"
 ;;
@@ -183,20 +194,21 @@ configurator_retroachivement_dialog() {
   else
     configurator_welcome_dialog
   fi
-
 }
 
-configurator_update_dialog() {
-  configurator_generic_dialog "This feature is not available yet"
-  configurator_welcome_dialog
+configurator_power_user_warning_dialog() {
+	zenity --title "RetroDECK Configurator Utility - Power User Options" --question --no-wrap --cancel-label="Back" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+  --text="Making manual changes to an emulators configuration may create serious issues,\nand some settings may be overwitten during RetroDECK updates.\n\nSome standalone emulator functions may not work properly outside of Desktop mode.\n\nPlease continue only if you know what you're doing.\n\nDo you want to continue?\n\nClicking Yes will set you as a Power User and you will not see this dialog again."
+
+  if [ $? == 0 ]; then # OK button clicked
+    power_user="true"
+    set_setting_value $rd_conf "power_user" "$power_user" retrodeck # Store power user variable for future checks
+  fi
 }
 
 configurator_power_user_changes_dialog() {
-  zenity --title "RetroDECK Configurator Utility - Power User Options" --question --no-wrap --cancel-label="Back" \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-  --text="Making manual changes to an emulators configuration may create serious issues,\nand some settings may be overwitten during RetroDECK updates.\n\nSome standalone emulator functions may not work properly outside of Desktop mode.\n\nPlease continue only if you know what you're doing.\n\nDo you want to continue?"
-
-  if [ $? == 0 ]; then # OK button clicked
+  if [[ $power_user == "true" ]]; then
     emulator=$(zenity --list \
     --title "RetroDECK Configurator Utility - Power User Options" --cancel-label="Back" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
@@ -262,12 +274,17 @@ configurator_power_user_changes_dialog() {
     ;;
 
     "" ) # No selection made or Back button clicked
-      configurator_options_dialog
+      configurator_welcome_dialog
     ;;
 
     esac
   else
-    configurator_options_dialog
+    configurator_power_user_warning_dialog
+    if [[ $power_user == "true" ]]; then
+    	configurator_power_user_changes_dialog
+    else
+    	configurator_welcome_dialog
+    fi
   fi
 }
 
@@ -283,7 +300,7 @@ configurator_retroarch_rewind_dialog() {
       set_setting_value $raconf "rewind_enable" "false" retroarch
       configurator_process_complete_dialog "disabling Rewind"
     else
-      configurator_options_dialog
+      configurator_retroarch_options_dialog
     fi
   else
     zenity --question \
@@ -296,7 +313,7 @@ configurator_retroarch_rewind_dialog() {
       set_setting_value $raconf "rewind_enable" "true" retroarch
       configurator_process_complete_dialog "enabling Rewind"
     else
-      configurator_options_dialog
+      configurator_retroarch_options_dialog
     fi
   fi
 }
@@ -305,12 +322,17 @@ configurator_retroarch_options_dialog() {
   choice=$(zenity --list --title="RetroDECK Configurator Utility - RetroArch Options" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
-  "Change Rewind Setting" "Enable or disable the Rewind function in RetroArch" )
+  "Change Rewind Setting" "Enable or disable the Rewind function in RetroArch." \
+  "Log in to RetroAchivements" "Log into the RetroAchievements service in RetroArch." )
 
   case $choice in
 
   "Change Rewind Setting" )
     configurator_retroarch_rewind_dialog
+  ;;
+
+  "Log in to RetroAchivements" )
+    configurator_retroachivement_dialog
   ;;
 
   "" ) # No selection made or Back button clicked
@@ -320,21 +342,93 @@ configurator_retroarch_options_dialog() {
   esac
 }
 
-configurator_options_dialog() {
+configurator_compress_single_game_dialog() {
+  file_to_compress=$(file_browse "Game to compress")
+  if [[ ! -z $file_to_compress ]]; then
+    if [[ $(validate_for_chd $file_to_compress) == "true" ]]; then
+      (
+      filename_no_path=$(basename $file_to_compress)
+      filename_no_extension=${filename_no_path%.*}
+      compress_to_chd $(dirname $(realpath $file_to_compress))/$(basename $file_to_compress) $(dirname $(realpath $file_to_compress))/$filename_no_extension
+      ) |
+      zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+        --title "RetroDECK Configurator Utility - Compression in Progress" \
+        --text="Compressing game $filename_no_path, please wait."
+    else
+      configurator_generic_dialog "File type not recognized. Supported file types are .cue, .gdi and .iso"
+      configurator_compress_single_game_dialog
+    fi
+  else
+    configurator_generic_dialog "No file selected, returning to main menu"
+    configurator_welcome_dialog
+  fi
+}
+
+configurator_compress_games_dialog() {
+  # This is currently a placeholder for a dialog where you can compress a single game or multiple at once. Currently only the single game option is available, so is launched by default.
+  
+  configurator_generic_dialog "This utility will compress a single game into .CHD format.\n\nPlease select the game to be compressed in the next dialog: supported file types are .cue, .iso and .gdi\n\nThe original game files will be untouched and will need to be removed manually."
+  configurator_compress_single_game_dialog
+}
+
+configurator_check_multifile_game_structure() {
+  local folder_games=($(find $roms_folder -maxdepth 2 -mindepth 2 -type d ! -name "*.m3u" ! -name "*.ps3"))
+  if [[ ${#folder_games[@]} -gt 1 ]]; then
+    echo "$(find $roms_folder -maxdepth 2 -mindepth 2 -type d ! -name "*.m3u" ! -name "*.ps3")" > $logs_folder/multi_file_games_"$(date +"%Y_%m_%d_%I_%M_%p").log"
+    zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK" \
+    --text="The following games were found to have the incorrect folder structure:\n\n$(find $roms_folder -maxdepth 2 -mindepth 2 -type d ! -name "*.m3u" ! -name "*.ps3")\n\nIncorrect folder structure can result in failure to launch games or saves being in the incorrect location.\n\nPlease see the RetroDECK wiki for more details!\n\nYou can find this list of games in ~/retrodeck/.logs"
+  else
+    configurator_generic_dialog "No incorrect multi-file game folder structures found."
+  fi
+  configurator_troubleshooting_tools_dialog
+}
+
+configurator_check_bios_files() {
+  bios_checked_list=()
+
+  while IFS="^" read -r bios_file bios_hash bios_system bios_desc
+  do
+    bios_file_found="No"
+    bios_hash_matched="No"
+    if [[ -f "$bios_folder/$bios_file" ]]; then
+      bios_file_found="Yes"
+      if [[ $(md5sum "$bios_folder/$bios_file" | awk '{ print $1 }') == "$bios_hash" ]]; then
+        bios_hash_matched="Yes"
+      fi
+    fi
+    bios_checked_list=("${bios_checked_list[@]}" "$bios_file" "$bios_system" "$bios_file_found" "$bios_hash_matched" "$bios_desc")
+  done < $bios_checklist
+
+  zenity --list --title="RetroDECK Configurator Utility - Verify BIOS Files" --cancel-label="Back" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+  --column "BIOS File Name" \
+  --column "System" \
+  --column "BIOS File Found" \
+  --column "BIOS Hash Match" \
+  --column "BIOS File Description" \
+  "${bios_checked_list[@]}"
+
+  configurator_troubleshooting_tools_dialog
+}
+
+configurator_troubleshooting_tools_dialog() {
   choice=$(zenity --list --title="RetroDECK Configurator Utility - Change Options" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
-  "Change RetroArch Settings" "Change settings specific to RetroArch" \
-  "Power User Changes" "Make changes directly in an emulator" )
+  "Multi-file game structure check" "Verify the proper structure of multi-file or multi-disc games" \
+  "BIOS file check" "Verify the existence and file integrity of common BIOS files" )
 
   case $choice in
 
-  "Change RetroArch Settings" )
-    configurator_retroarch_options_dialog
+  "Multi-file game structure check" )
+    configurator_check_multifile_game_structure
   ;;
 
-  "Power User Changes" )
-    configurator_power_user_changes_dialog
+  "BIOS file check" )
+    configurator_check_bios_files
   ;;
 
   "" ) # No selection made or Back button clicked
@@ -433,7 +527,7 @@ configurator_move_dialog() {
 
     "Custom Location" )
       configurator_generic_dialog "Select the root folder you would like to store the RetroDECK data folder in.\n\nA new folder \"retrodeck\" will be created in the destination chosen."
-      custom_dest=$(browse "RetroDECK directory location")
+      custom_dest=$(directory_browse "RetroDECK directory location")
       if [[ ! -w $custom_dest ]]; then
           configurator_generic_dialog "The destination was found but is not writable\n\nThis can happen if RetroDECK does not have permission to write to this location.\n\nThis can typically be solved through the utility Flatseal, please make the needed changes and try the moving process again."
           configurator_welcome_dialog
@@ -484,7 +578,7 @@ configurator_move_dialog() {
     esac
   else
     configurator_generic_dialog "The RetroDECK data folder was not found at the expected location.\n\nThis may have happened if the folder was moved manually.\n\nPlease select the current location of the RetroDECK data folder."
-    rdhome=$(browse "RetroDECK directory location")
+    rdhome=$(directory_browse "RetroDECK directory location")
     roms_folder="$rdhome/roms"
     saves_folder="$rdhome/saves"
     states_folder="$rdhome/states"
@@ -509,10 +603,12 @@ configurator_welcome_dialog() {
   choice=$(zenity --list --title="RetroDECK Configurator Utility" --cancel-label="Quit" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
-  "Move Files" "Move files between internal/SD card or to custom locations" \
-  "Change Options" "Adjust how RetroDECK behaves" \
-  "RetroAchivements" "Log in to RetroAchievements" \
-  "Reset" "Reset parts of RetroDECK" )
+  "Move Files" "Move files between internal/SD card or to custom locations." \
+  "Change RetroArch Options" "Change RetroArch presets, log into RetroAchievements etc." \
+  "Change Standalone Emulator Options" "Run emulators standalone to make advanced config changes." \
+  "Compress Games" "Compress games to CHD format for systems that support it." \
+  "Troubleshooting Tools" "Run RetroDECK troubleshooting tools for common issues." \
+  "Reset" "Reset specific parts or all of RetroDECK." )
 
   case $choice in
 
@@ -521,20 +617,24 @@ configurator_welcome_dialog() {
     configurator_move_dialog
   ;;
 
-  "Change Options" )
-    configurator_options_dialog
+  "Change RetroArch Options" )
+    configurator_retroarch_options_dialog
   ;;
 
-  "RetroAchivements" )
-    configurator_retroachivement_dialog
+  "Change Standalone Emulator Options" )
+    configurator_power_user_changes_dialog
+  ;;
+
+  "Compress Games" )
+    configurator_compress_games_dialog
+  ;;
+
+  "Troubleshooting Tools" )
+    configurator_troubleshooting_tools_dialog
   ;;
 
   "Reset" )
     configurator_reset_dialog
-  ;;
-
-  "Quit" )
-    exit 0
   ;;
 
   esac

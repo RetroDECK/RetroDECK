@@ -8,16 +8,16 @@
 # FUNCTION SECTION
 #=================
 
-browse() {
+directory_browse() {
   # This function browses for a directory and returns the path chosen
-  # USAGE: path_to_be_browsed_for=$(browse $action_text)
+  # USAGE: path_to_be_browsed_for=$(directory_browse $action_text)
 
-  path_selected=false
+  local path_selected=false
 
   while [ $path_selected == false ]
   do
-    target="$(zenity --file-selection --title="Choose $1" --directory)"
-    if [ $? == 0 ] #yes
+    local target="$(zenity --file-selection --title="Choose $1" --directory)"
+    if [ ! -z $target ] #yes
     then
       zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
       --text="Directory $target chosen, is this correct?"
@@ -29,7 +29,37 @@ browse() {
       fi
     else
       zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
-      --text="No directory selected. Do you want to exit?"
+      --text="No directory selected. Do you want to exit the selection process?"
+      if [ $? == 0 ]
+      then
+        break
+      fi
+    fi
+  done
+}
+
+file_browse() {
+  # This function browses for a file and returns the path chosen
+  # USAGE: file_to_be_browsed_for=$(file_browse $action_text)
+
+  local file_selected=false
+
+  while [ $file_selected == false ]
+  do
+    local target="$(zenity --file-selection --title="Choose $1")"
+    if [ ! -z $target ] #yes
+    then
+      zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
+      --text="File $target chosen, is this correct?"
+      if [ $? == 0 ]
+      then
+        file_selected=true
+        echo $target
+        break
+      fi
+    else
+      zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
+      --text="No file selected. Do you want to exit the selection process?"
       if [ $? == 0 ]
       then
         break
@@ -84,6 +114,64 @@ move() {
     --title "RetroDECK Configurator Utility - Move Directories" \
     --text="The destination directory you have selected already exists.\n\nPlease select a new destination."
   fi
+}
+
+compress_to_chd () {
+  # Function for compressing one or more files to .chd format
+  # USAGE: compress_to_chd $full_path_to_input_file $full_path_to_output_file
+
+	echo "Compressing file $1 to $2.chd"
+	/app/bin/chdman createcd -i $1 -o $2.chd
+}
+
+validate_for_chd () {
+  # Function for validating chd compression candidates, and compresses if validation passes. Supports .cue, .iso and .gdi formats ONLY
+  # USAGE: validate_for_chd $input_file
+
+	local file=$1
+	current_run_log_file="chd_compression_"$(date +"%Y_%m_%d_%I_%M_%p").log""
+	echo "Validating file:" $file > "$logs_folder/$current_run_log_file"
+	if [[ "$file" == *".cue" ]] || [[ "$file" == *".gdi" ]] || [[ "$file" == *".iso" ]]; then
+		echo ".cue/.iso/.gdi file detected" >> $logs_folder/$current_run_log_file
+		local file_path=$(dirname $(realpath $file))
+		local file_base_name=$(basename $file)
+		local file_name=${file_base_name%.*}
+		echo "File base path:" $file_path >> "$logs_folder/$current_run_log_file"
+		echo "File base name:" $file_name >> "$logs_folder/$current_run_log_file"
+		if [[ "$file" == *".cue" ]]; then # Validate .cue file
+			local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" $file)
+			local cue_validated="false"
+			for line in $cue_bin_files
+			do
+				if [[ -f "$file_path/$line" ]]; then
+					echo ".bin file found at $file_path/$line" >> "$logs_folder/$current_run_log_file"
+					cue_validated="true"
+				else
+					echo ".bin file NOT found at $file_path/$line" >> "$logs_folder/$current_run_log_file"
+					echo ".cue file could not be validated. Please verify your .cue file contains the correct corresponding .bin file information and retry." >> "$logs_folder/$current_run_log_file"
+					cue_validated="false"
+					break
+				fi
+			done
+			if [[ $cue_validated == "true" ]]; then
+				echo $cue_validated
+			fi
+		else
+			echo $cue_validated
+		fi
+	else
+		echo "File type not recognized. Supported file types are .cue, .gdi and .iso" >> "$logs_folder/$current_run_log_file"
+	fi
+}
+
+desktop_mode_warning() {
+  # This function is a generic warning for issues that happen when running in desktop mode.
+  # Running in desktop mode can be verified with the following command: if [[ $XDG_CURRENT_DESKTOP == "KDE" ]]; then
+
+  zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+  --title "RetroDECK Desktop Mode Warning" \
+  --text="You appear to be running RetroDECK in the Steam Deck's Desktop mode!\n\nSome functions of RetroDECK may not work properly in Desktop mode, such as the Steam Deck's normal controls.\n\nRetroDECK is best enjoyed in Game mode!"
 }
 
 set_setting_value() {
@@ -282,8 +370,8 @@ enable_file() {
   mv $(realpath $1.disabled) $(realpath $(echo $1 | sed -e 's/\.disabled//'))
 }
 
-generate_patch() {
-  # generate_patch $original_file $modified_file $patch_file $system
+generate_single_patch() {
+  # generate_single_patch $original_file $modified_file $patch_file $system
 
   rm $3 # Remove old patch file (maybe change this to create a backup instead?)
 
@@ -382,48 +470,104 @@ generate_patch() {
   done < $2
 }
 
-deploy_patch() {
+deploy_single_patch() {
 
 # This function will take an "original" file and a patch file and generate a ready to use modified file
-# USAGE: deploy_patch $original_file $patch_file $output_file
+# USAGE: deploy_single_patch $original_file $patch_file $output_file
 
 cp -fv $1 $3 # Create a copy of the original file to be patched
 
 while IFS="^" read -r action current_section setting_name setting_value system_name
 do
 
-    case $action in
+  case $action in
 
 	"disable_file" )
-        disable_file $setting_name
+    disable_file $setting_name
 	;;
 
 	"enable_file" )
-        enable_file $setting_name
+    enable_file $setting_name
 	;;
 
 	"add_setting" )
-        add_setting $3 "$setting_name" $system_name $current_section
+    add_setting $3 "$setting_name" $system_name $current_section
 	;;
 
 	"disable_setting" )
-        disable_setting $3 "$setting_name" $system_name $current_section
+    disable_setting $3 "$setting_name" $system_name $current_section
 	;;
 
 	"enable_setting" )
-        enable_setting $3 "$setting_name" $system_name $current_section
+    enable_setting $3 "$setting_name" $system_name $current_section
 	;;
 
 	"change" )
-        set_setting_value $3 "$setting_name" "$setting_value" $system_name $current_section
-    ;;
+    set_setting_value $3 "$setting_name" "$setting_value" $system_name $current_section
+  ;;
 
 	* )
-	echo "Config file malformed"
+	  echo "Config file malformed"
 	;;
 
-    esac
+  esac
 done < $2
+}
+
+deploy_multi_patch() {
+
+# This function will take a single "batch" patch file and run all patches listed in it, across multiple config files
+# USAGE: deploy_multi_patch $patch_file
+# Patch file format should be as follows, with optional entries in (). Optional settings can be left empty, but must still have ^ dividers:
+# $action^($current_section)^$setting_name^$setting_value^$system_name^($config file)
+
+while IFS="^" read -r action current_section setting_name setting_value system_name config_file
+do
+  case $action in
+
+	"disable_file" )
+    disable_file $config_file
+	;;
+
+	"enable_file" )
+    enable_file $config_file
+	;;
+
+	"add_setting" )
+    add_setting $config_file "$setting_name" $system_name $current_section
+	;;
+
+	"disable_setting" )
+    disable_setting $config_file "$setting_name" $system_name $current_section
+	;;
+
+	"enable_setting" )
+    enable_setting $config_file "$setting_name" $system_name $current_section
+	;;
+
+	"change" )
+    set_setting_value $config_file "$setting_name" "$setting_value" $system_name $current_section
+  ;;
+
+	* )
+	  echo "Config file malformed"
+	;;
+
+  esac
+done < $1
+}
+
+update_rd_conf() {
+  # This function will import a default retrodeck.cfg file and update it with any current settings. This will allow us to expand the file over time while retaining current user settings.
+  # USAGE: update_rd_conf
+
+  mv -f $rd_conf $rd_conf_backup # Backup config file before update
+
+  generate_single_patch $rd_defaults $rd_conf_backup $rd_update_patch retrodeck
+  sed -i '/change^^version/d' $rd_update_patch # Remove version line from temporary patch file
+  deploy_single_patch $rd_defaults $rd_update_patch $rd_conf
+  rm -f $rd_update_patch # Cleanup temporary patch file
+  source $rd_conf # Load new config file variables
 }
 
 conf_write() {
@@ -474,6 +618,11 @@ conf_write() {
   if [ ! -z "$themes_folder" ]
   then
     sed -i "s%themes_folder=.*%themes_folder=$themes_folder%" "$rd_conf"
+  fi
+
+  if [ ! -z "$logs_folder" ]
+  then
+    sed -i "s%logs_folder=.*%logs_folder=$logs_folder%" "$rd_conf"
   fi
 
   if [ ! -z "$sdcard" ]
@@ -549,6 +698,8 @@ yuzu_init() {
   dir_prep "$rdhome/saves/switch/yuzu/sdmc" "/var/data/yuzu/sdmc"
   # configuring Yuzu
   dir_prep "$rdhome/.logs/yuzu" "/var/data/yuzu/log"
+  # removing config directory to wipe legacy files
+  rm -rf /var/config/yuzu
   mkdir -pv /var/config/yuzu/
   cp -fvr $emuconfigs/yuzu/* /var/config/yuzu/
   sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/yuzu/qt-config.ini
@@ -559,6 +710,8 @@ dolphin_init() {
   echo "----------------------"
   echo "Initializing DOLPHIN"
   echo "----------------------"
+  # removing config directory to wipe legacy files
+  rm -rf /var/config/dolphin-emu
   mkdir -pv /var/config/dolphin-emu/
   cp -fvr "$emuconfigs/dolphin/"* /var/config/dolphin-emu/
   sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/dolphin-emu/Dolphin.ini
@@ -575,6 +728,8 @@ primehack_init() {
   echo "----------------------"
   echo "Initializing Primehack"
   echo "----------------------"
+  # removing config directory to wipe legacy files
+  rm -rf /var/config/primehack
   mkdir -pv /var/config/primehack/
   cp -fvr "$emuconfigs/primehack/"* /var/config/primehack/
   sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/primehack/Dolphin.ini
@@ -591,6 +746,8 @@ pcsx2_init() {
   echo "----------------------"
   echo "Initializing PCSX2"
   echo "----------------------"
+  # removing config directory to wipe legacy files
+  rm -rf /var/config/PCSX2
   mkdir -pv "/var/config/PCSX2/inis"
   mkdir -pv "$rdhome/saves/ps2/pcsx2/memcards"
   mkdir -pv "$rdhome/states/ps2/pcsx2"
@@ -607,6 +764,8 @@ melonds_init() {
   echo "----------------------"
   echo "Initializing MELONDS"
   echo "----------------------"
+  # removing config directory to wipe legacy files
+  rm -rf /var/config/melonDS
   mkdir -pv /var/config/melonDS/
   mkdir -pv "$rdhome/saves/nds/melonds"
   mkdir -pv "$rdhome/states/nds/melonds"
@@ -620,6 +779,8 @@ citra_init() {
   echo "------------------------"
   echo "Initializing CITRA"
   echo "------------------------"
+  # removing config directory to wipe legacy files
+  rm -rf /var/config/citra-emu
   mkdir -pv /var/config/citra-emu/
   mkdir -pv "$rdhome/saves/n3ds/citra/nand/"
   mkdir -pv "$rdhome/saves/n3ds/citra/sdmc/"
@@ -636,6 +797,8 @@ rpcs3_init() {
   echo "------------------------"
   echo "Initializing RPCS3"
   echo "------------------------"
+  # removing config directory to wipe legacy files
+  rm -rf /var/config/rpcs3
   mkdir -pv /var/config/rpcs3/
   cp -fvr $emuconfigs/rpcs3/* /var/config/rpcs3/
   sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/rpcs3/vfs.yml
@@ -646,6 +809,8 @@ xemu_init() {
   echo "Initializing XEMU"
   echo "------------------------"
   mkdir -pv $rdhome/saves/xbox/xemu/
+  # removing config directory to wipe legacy files
+  rm -rf /var/config/xemu
   mkdir -pv /var/data/xemu/
   cp -fv $emuconfigs/xemu.toml /var/data/xemu/xemu.toml
   sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/data/xemu/xemu.toml
@@ -662,6 +827,8 @@ ppssppsdl_init() {
   echo "------------------------"
   echo "Initializing PPSSPPSDL"
   echo "------------------------"
+  # removing config directory to wipe legacy files
+  rm -rf /var/config/ppsspp
   mkdir -p /var/config/ppsspp/PSP/SYSTEM/
   cp -fv $emuconfigs/ppssppsdl/* /var/config/ppsspp/PSP/SYSTEM/
   sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/ppsspp/PSP/SYSTEM/ppsspp.ini
@@ -671,6 +838,10 @@ duckstation_init() {
   echo "------------------------"
   echo "Initializing DUCKSTATION"
   echo "------------------------"
+  dir_prep "$rdhome/saves/duckstation" "/var/data/duckstation/memcards" # This was not previously included, so performing first for save data safety.
+  dir_prep "$rdhome/states/duckstation" "/var/data/duckstation/savestates" # This was not previously included, so performing first for state data safety.
+  # removing config directory to wipe legacy files
+  rm -rf /var/config/duckstation
   mkdir -p /var/data/duckstation/
   cp -fv $emuconfigs/duckstation/* /var/data/duckstation
   sed -i 's#/home/deck/retrodeck/bios#'$rdhome/bios'#g' /var/data/duckstation/settings.ini
@@ -680,6 +851,8 @@ ryujinx_init() {
   echo "------------------------"
   echo "Initializing RYUJINX"
   echo "------------------------"
+  # removing config directory to wipe legacy files
+  rm -rf /var/config/Ryujinx
   mkdir -p /var/config/Ryujinx/system
   cp -fv $emuconfigs/ryujinx/* /var/config/Ryujinx
   sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/Ryujinx/Config.json
@@ -706,6 +879,9 @@ standalones_init() {
 }
 
 ra_init() {
+  # removing config directory to wipe legacy files
+  rm -rf /var/config/retroarch
+  mkdir -p /var/config/retroarch
   dir_prep "$rdhome/bios" "/var/config/retroarch/system"
   dir_prep "$rdhome/.logs/retroarch" "/var/config/retroarch/logs"
   mkdir -pv /var/config/retroarch/shaders/
@@ -751,6 +927,52 @@ ra_init() {
   mv -f $rdhome/bios/MSX/Databases $rdhome/bios/Databases
   mv -f $rdhome/bios/MSX/Machines $rdhome/bios/Machines
   rm -rfv $rdhome/bios/MSX
+}
+
+cli_emulator_reset() {
+  # This function will reset one or more emulators from the command line arguments.
+  # USAGE: cli_emulator_reset $emulator
+
+  case $1 in
+
+    "retroarch" )
+      ra_init
+    ;;
+    "citra" )
+      citra_init
+    ;;
+    "dolphin" )
+      dolphin_init
+    ;;
+    "duckstation" )
+      duckstation_init
+    ;;
+    "melonds" )
+      melonds_init
+    ;;
+    "pcsx2" )
+      pcsx2_init
+    ;;
+    "ppsspp" )
+      ppssppsdl_init
+    ;;
+    "primehack" )
+      primehack_init
+    ;;
+    "rpcs3" )
+      rpcs3_init
+    ;;
+    "xemu" )
+      xemu_init
+    ;;
+    "yuzu" )
+      yuzu_init
+    ;;
+    "all-emulators" )
+      ra_init
+      standalones_init
+    ;;
+  esac
 }
 
 tools_init() {
@@ -838,7 +1060,26 @@ create_lock() {
   conf_write
 }
 
+easter_eggs() {
+  today=$(date +"%0m%0d") # Read the current date in a format that can be calculated in ranges
+
+  # Set Easter Egg date or ranges here, in mmdd format
+
+  if [[ today -eq "0401" ]]; then # An example of a one-day easter egg
+    echo "Today is April Fools Day!"
+    # cp -fv /var/config/emulationstation/graphics/splash-aprilfools.svg /var/config/emulationstation/graphics/splash.svg 
+  elif [[ today -ge "1001" && today -le "1031" ]]; then # An example of a multi-day easter egg
+    echo "Today is in the spooky month!"
+    # cp -fv /var/config/emulationstation/graphics/splash-spookytime.svg /var/config/emulationstation/graphics/splash.svg
+  else # Revert to standard splash otherwise
+    echo "Nothing special happening today"
+    # cp -fv /var/config/emulationstation/graphics/splash-orig.svg /var/config/emulationstation/graphics/splash.svg
+  fi
+}
+
 start_retrodeck() {
+  echo "Checking to see if today has a surprise..."
+  easter_eggs
   # normal startup
   echo "Starting RetroDECK v$version"
   emulationstation --home /var/config/emulationstation
@@ -849,17 +1090,17 @@ finit_browse() {
 path_selected=false
 while [ $path_selected == false ]
 do
-  sdcard="$(zenity --file-selection --title="Choose RetroDECK data directory location" --directory)"
-  if [[ $? == 0 ]]; then
-    if [[ -w $sdcard ]]; then
+  local target="$(zenity --file-selection --title="Choose RetroDECK data directory location" --directory)"
+  if [[ ! -z $target ]]; then
+    if [[ -w $target ]]; then
       zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
       --cancel-label="No" \
       --ok-label "Yes" \
-      --text="Your RetroDECK data folder will be:\n\n$sdcard/retrodeck\n\nis that ok?"
+      --text="Your RetroDECK data folder will be:\n\n$target/retrodeck\n\nis that ok?"
       if [ $? == 0 ] #yes
       then
         path_selected=true
-        echo "$sdcard/retrodeck"
+        echo "$target/retrodeck"
         break
       else
         zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" --text="Do you want to quit?"
