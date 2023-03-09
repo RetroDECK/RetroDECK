@@ -69,11 +69,25 @@
 
 <releases>
 
-  <release version="0.6.2b" date="2023-03-08">
+  <release version="0.6.2b" date="2023-03-09">
     <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.2b</url>
       <description>
         <ul>
-          <li></li>
+          <li>Implemented proper Primehack preconfiguration / purge stale configs</li>
+          <li>Added Xbox and Nintendo-layout controller profiles to Primehack</li>
+          <li>Stop resetting all configs after update (see post_update.sh)</li>
+          <li>Add CHD compression to CLI and Configurator</li>
+          <li>Add common BIOS file check tool to Configurator</li>
+          <li>Reworked CLI arguments</li>
+          <li>Updated shipped Duckstation config</li>
+          <li>Removed deprecated/disabled tool files</li>
+          <li>Made emulator resets more robust by purging config folders to clear legacy files</li>
+          <li>Add troubleshooting tool for checking structure of multi-file games in Configurator</li>
+          <li>Updated patching engine to accommodate "batch patches"</li>
+          <li>Implemented expanding retrodeck.cfg on update</li>
+          <li>Reworked Configurator menu flow</li>
+          <li>Set power_user variable so Configurator warning is only shown once</li>
+          <li>Implemented a basic framework for easter egg splash screens</li>
       </ul>
     </description>
   </release>
