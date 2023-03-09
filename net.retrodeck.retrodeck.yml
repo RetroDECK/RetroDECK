@@ -1071,6 +1071,8 @@ modules:
 
       - cp post_update.sh /app/libexec/post_update.sh
 
+      - cp save_migration.sh /app/libexec/save_migration.sh
+
       # Desktop entry
       - cp net.retrodeck.retrodeck.desktop /app/share/applications/net.retrodeck.retrodeck.desktop
 
