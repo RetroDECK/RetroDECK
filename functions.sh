@@ -557,6 +557,19 @@ do
 done < $1
 }
 
+check_network_connectivity() {
+  # This function will do a basic check for network availability and return "true" if it is working.
+  # USAGE: if [[ check_network_connectivity == "true" ]]; then
+
+  wget -q --spider $rd_repo
+
+  if [ $? -eq 0 ]; then
+    echo "true"
+  else
+    echo "false"
+  fi
+}
+
 update_rd_conf() {
   # This function will import a default retrodeck.cfg file and update it with any current settings. This will allow us to expand the file over time while retaining current user settings.
   # USAGE: update_rd_conf

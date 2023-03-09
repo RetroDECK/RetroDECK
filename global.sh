@@ -14,6 +14,7 @@ bios_checklist="/var/config/retrodeck/tools/bios_checklist.cfg" # A config file 
 lockfile="/var/config/retrodeck/.lock"                          # where the lockfile is located
 default_sd="/run/media/mmcblk0p1"                               # Steam Deck SD default path
 hard_version="$(cat '/app/retrodeck/version')"                  # hardcoded version (in the readonly filesystem)
+rd_repo="https://github.com/XargonWan/RetroDECK"                # The official GitHub repo of RetroDECK
 
 # Config files for emulators with single config files
 
