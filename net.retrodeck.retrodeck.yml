@@ -1039,8 +1039,8 @@ modules:
     build-commands:
 
       # Initializing retrodeck and emulationstation config folders
-      - mkdir -p /var/config/retrodeck
-      - mkdir -p /var/config/emulationstation
+      - mkdir -p ${FLATPAK_DEST}/retrodeck
+      - mkdir -p ${FLATPAK_DEST}/emulationstation
 
       # Prep the ES-DE and RetroArch config files - I will have to SED/XMLSTARLET them soon
       - rm -rf /app/share/emulationstation/resources/systems/unix/es_find_rules.xml
