@@ -1038,8 +1038,9 @@ modules:
     buildsystem: simple
     build-commands:
 
-      # Initializing retrodeck config folder
+      # Initializing retrodeck and emulationstation config folders
       - mkdir -p /var/config/retrodeck
+      - mkdir -p /var/config/emulationstation
 
       # Prep the ES-DE and RetroArch config files - I will have to SED/XMLSTARLET them soon
       - rm -rf /app/share/emulationstation/resources/systems/unix/es_find_rules.xml
