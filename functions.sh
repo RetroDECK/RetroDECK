@@ -736,6 +736,8 @@ dolphin_init() {
   dir_prep "$rdhome/states" "/var/data/dolphin-emu/StateSaves"
   mkdir -pv /var/data/dolphin-emu/Wii/
   dir_prep "$rdhome/saves/wii/dolphin" "/var/data/dolphin-emu/Wii"
+  dir_prep "$mods_folder/Dolphin" "/var/data/dolphin-emu/Load/GraphicMods/"
+  dir_prep "$texture_packs_folder/Dolphin" "/var/data/dolphin-emu/Load/Textures/"
 }
 
 primehack_init() {
@@ -754,6 +756,8 @@ primehack_init() {
   dir_prep "$rdhome/states" "/var/data/primehack/StateSaves"
   mkdir -pv /var/data/primehack/Wii/
   dir_prep "$rdhome/saves/wii/primehack" "/var/data/primehack/Wii"
+  dir_prep "$mods_folder/Primehack" "/var/data/primehack/Load/GraphicMods/"
+  dir_prep "$texture_packs_folder/Primehack" "/var/data/primehack/Load/Textures/"
 }
 
 pcsx2_init() {
@@ -1009,7 +1013,7 @@ update_splashscreens() {
 
 emulators_post_move() {
   # This script will redo the symlinks for all emulators after moving the $rdhome location without resetting other options
-  # FUTURE WORK: The sed commands here should be replaced with set_setting_value and dir_prep should be replaced with changing paths in config files directly where possible
+  # TODO: The sed commands here should be replaced with set_setting_value and dir_prep should be replaced with changing paths in config files directly where possible
 
   # ES section
   dir_prep $roms_folder "/var/config/emulationstation/ROMs"
@@ -1270,8 +1274,9 @@ finit() {
   mkdir -pv $states_folder
   mkdir -pv $rdhome/screenshots
   mkdir -pv $rdhome/bios/pico8
-  mkdir -pv $rdhome/.logs
-
+  mkdir -pv $logs_folder
+  mkdir -pv $mods_folder
+  mkdir -pv $texture_packs_folder
   # XMLSTARLET HERE
   cp -fv /app/retrodeck/es_settings.xml /var/config/emulationstation/.emulationstation/es_settings.xml
 

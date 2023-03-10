@@ -27,6 +27,17 @@ post_update() {
     dir_prep "$rdhome/saves/duckstation" "/var/data/duckstation/memcards"
     dir_prep "$rdhome/states/duckstation" "/var/data/duckstation/savestates"
   fi
+  if [[ $prev_version -le "070" ]]; then
+    # In version 0.7.0b, the following changes were made that required config file updates/reset or other changes to the filesystem:
+    # - New ~/retrodeck/mods and ~/retrodeck/texture_packs directories are added and symlinked to multiple different emulators (where supported)
+
+    mkdir -p "$mods_folder"
+    mkdir -p "$texture_packs_folder"
+    dir_prep "$mods_folder/Primehack" "/var/data/primehack/Load/GraphicMods/"
+    dir_prep "$texture_packs_folder/Primehack" "/var/data/primehack/Load/Textures/"
+    dir_prep "$mods_folder/Dolphin" "/var/data/dolphin-emu/Load/GraphicMods/"
+    dir_prep "$texture_packs_folder/Dolphin" "/var/data/dolphin-emu/Load/Textures/"
+  fi
 
   # The following commands are run every time.
 
