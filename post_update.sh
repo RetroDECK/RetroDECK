@@ -31,6 +31,7 @@ post_update() {
   # The following commands are run every time.
 
   tools_init
+  update_splashscreens
   update_rd_conf
   ) |
   zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \

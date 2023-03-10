@@ -1038,9 +1038,8 @@ modules:
     buildsystem: simple
     build-commands:
 
-      # Initializing retrodeck and emulationstation config folders
+      # Initializing RO retrodeck config folder
       - mkdir -p ${FLATPAK_DEST}/retrodeck
-      - mkdir -p ${FLATPAK_DEST}/emulationstation
 
       # Prep the ES-DE and RetroArch config files - I will have to SED/XMLSTARLET them soon
       - rm -rf /app/share/emulationstation/resources/systems/unix/es_find_rules.xml
@@ -1050,12 +1049,11 @@ modules:
       # These must be put in home folder, managed by retrodeck.sh
       - cp es-configs/es_settings.xml ${FLATPAK_DEST}/retrodeck/es_settings.xml
 
-      # Logo, res, move graphics directory to mutable space so splash can be changed after build
-      - mv -f -t ${FLATPAK_DEST}/emulationstation /app/share/emulationstation/resources/graphics 
-      - ln -s ${FLATPAK_DEST}/emulationstation/graphics /app/share/emulationstation/resources/graphics
-      - cp -f res/extra-splashes/* ${FLATPAK_DEST}/emulationstation/graphics
-      - cp -f res/splash.svg ${FLATPAK_DEST}/emulationstation/graphics/splash.svg
-      - cp -f res/splash.svg ${FLATPAK_DEST}/emulationstation/graphics/splash-orig.svg
+      # Logo, res, move graphics directory away from default location so splash can be changed after build
+      - mv -f -t ${FLATPAK_DEST}/retrodeck /app/share/emulationstation/resources/graphics
+      - cp -f res/splash.svg ${FLATPAK_DEST}/retrodeck/graphics/splash.svg
+      - cp -f res/splash.svg ${FLATPAK_DEST}/retrodeck/graphics/splash-orig.svg
+      - cp -rf res/extra-splashes/ ${FLATPAK_DEST}/retrodeck/graphics
       - cp -f res/icon.svg /app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg
 
       # Tools
@@ -1071,7 +1069,6 @@ modules:
       - cp global.sh /app/libexec/global.sh
       - cp functions.sh /app/libexec/functions.sh
       - cp post_update.sh /app/libexec/post_update.sh
-
       - cp save_migration.sh /app/libexec/save_migration.sh
 
       # Desktop entry

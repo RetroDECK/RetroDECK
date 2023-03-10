@@ -998,6 +998,15 @@ tools_init() {
   cp -fv /app/retrodeck/tools-gamelist.xml /var/config/retrodeck/tools/gamelist.xml
 }
 
+update_splashscreens() {
+  # This script will purge any existing ES graphics and reload them from RO space into somewhere ES will look for it
+  # USAGE: update_splashscreens
+
+  rm -rf /var/config/emulationstation/.emulationstation/resources/graphics
+  mkdir -p /var/config/emulationstation/.emulationstation/resources/graphics
+  cp -rf /app/retrodeck/graphics/* /var/config/emulationstation/.emulationstation/resources/graphics
+}
+
 emulators_post_move() {
   # This script will redo the symlinks for all emulators after moving the $rdhome location without resetting other options
   # FUTURE WORK: The sed commands here should be replaced with set_setting_value and dir_prep should be replaced with changing paths in config files directly where possible
@@ -1077,7 +1086,7 @@ create_lock() {
 easter_eggs() {
   # This function will replace the RetroDECK startup splash screen with a different image if the day and time match a listing in easter_egg_checklist.cfg
   # The easter_egg_checklist.cfg file has the current format: $start_date^$end_date^$start_time^$end_time^$splash_file
-  # Ex. The line "1001^1031^0000^2359^spooky.svg" would show the file "spooky.svg" During any time of day in the month of October
+  # Ex. The line "1001^1031^0000^2359^spooky.svg" would show the file "spooky.svg" during any time of day in the month of October
   # The easter_egg_checklist.cfg is read in order, so lines higher in the file will have higher priority in the event of an overlap
   # USAGE: easter_eggs
   current_day=$(date +"%0m%0d") # Read the current date in a format that can be calculated in ranges
@@ -1092,7 +1101,7 @@ easter_eggs() {
     fi
   done < $easter_egg_checklist
 
-  cp -fv "$new_splash_file $current_splash_file" # Deploy assigned splash screen
+  cp -fv "$new_splash_file" "$current_splash_file" # Deploy assigned splash screen
 }
 
 start_retrodeck() {
@@ -1248,6 +1257,7 @@ finit() {
   # Initializing ES-DE
   # TODO: after the next update of ES-DE this will not be needed - let's test it
   emulationstation --home /var/config/emulationstation --create-system-dirs
+  update_splashscreens
 
   mkdir -pv /var/config/retrodeck/tools/
 
