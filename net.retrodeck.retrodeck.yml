@@ -192,6 +192,17 @@ modules:
         url: https://github.com/CharlesThobe/chdman.git
         commit: f7cadf1720cbeba8a14f2685830ff424a0c7f6cd
 
+  - name: rclone
+    buildsystem: simple
+    build-commands:
+      - unzip rclone-current-linux-amd64.zip
+      - cd rclone-*-linux-amd64
+      - cp rclone ${FLATPAK_DEST}/bin/
+    sources:
+      - type: archive
+        url: https://github.com/rclone/rclone/releases/download/v1.61.1/rclone-v1.61.1-linux-amd64.zip
+        sha256: 6d6455e1cb69eb0615a52cc046a296395e44d50c0f32627ba8590c677ddf50a9
+
   # ES-DE - START
   # https://gitlab.com/es-de/emulationstation-de
 
