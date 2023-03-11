@@ -54,6 +54,14 @@ pcsx2vmconf="/var/config/PCSX2/inis/PCSX2_vm.ini"
 
 pcsx2qtconf="/var/config/PCSX2/inis/PCSX2.ini"
 
+# Primehack config files
+
+primehackconf="/var/config/primehack/Dolphin.ini"
+primehackgcpadconf="/var/config/primehack/GCPadNew.ini"
+primehackgfxconf="/var/config/primehack/GFX.ini"
+primehackhkconf="/var/config/primehack/Hotkeys.ini"
+primehackqtconf="/var/config/primehack/Qt.ini"
+
 # We moved the lockfile in /var/config/retrodeck in order to solve issue #53 - Remove in a few versions
 if [ -f "$HOME/retrodeck/.lock" ]
 then
@@ -82,7 +90,7 @@ then
     configurator_generic_dialog "The SD card was not found in the expected location.\nThis may happen when SteamOS is updated.\n\nPlease browse to the current location of the SD card.\n\nIf you are not using an SD card, please click \"Cancel\"."
     default_sd=$(directory_browse "SD Card Location")
   fi
-  
+
   cp $rd_defaults $rd_conf # Load default settings
   set_setting_value $rd_conf "version" "$version" retrodeck # Set current version for new installs
   set_setting_value $rd_conf "sdcard" "$default_sd" retrodeck # Set SD card location if default path has changed

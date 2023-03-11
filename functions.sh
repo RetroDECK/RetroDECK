@@ -200,7 +200,7 @@ set_setting_value() {
       fi
       ;;
 
-    "dolphin" | "duckstation" | "pcsx2" | "ppsspp" | "xemu" )
+    "dolphin" | "duckstation" | "pcsx2" | "ppsspp" | "primehack" | "xemu" )
       if [[ -z $current_section_name ]]; then
         sed -i 's^'"$setting_name_to_change"' =.*^'"$setting_name_to_change"' = '"$setting_value_to_change"'^' $1
       else
@@ -271,7 +271,7 @@ get_setting_value() {
     fi
   ;;
 
-  "dolphin" | "duckstation" | "pcsx2" | "ppsspp" | "xemu" ) # For files with this syntax - setting_name = setting_value
+  "dolphin" | "duckstation" | "pcsx2" | "ppsspp" | "primehack" | "xemu" ) # For files with this syntax - setting_name = setting_value
     if [[ -z $current_section_name ]]; then
       echo $(grep -o -P "(?<=^$current_setting_name = ).*" $1)
     else
