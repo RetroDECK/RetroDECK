@@ -164,16 +164,6 @@ validate_for_chd () {
 	fi
 }
 
-desktop_mode_warning() {
-  # This function is a generic warning for issues that happen when running in desktop mode.
-  # Running in desktop mode can be verified with the following command: if [[ $XDG_CURRENT_DESKTOP == "KDE" ]]; then
-
-  zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-  --title "RetroDECK Desktop Mode Warning" \
-  --text="You appear to be running RetroDECK in the Steam Deck's Desktop mode!\n\nSome functions of RetroDECK may not work properly in Desktop mode, such as the Steam Deck's normal controls.\n\nRetroDECK is best enjoyed in Game mode!"
-}
-
 set_setting_value() {
   # Function for editing settings
   # USAGE: set_setting_value $setting_file "$setting_name" "$new_setting_value" $system $section_name(optional)
@@ -954,7 +944,11 @@ cli_emulator_reset() {
   case $1 in
 
     "retroarch" )
-      ra_init
+      if [[ check_network_connectivity == "true" ]]; then
+        ra_init
+      else
+        printf "You do not appear to be connected to a network with internet access.\n\nThe RetroArch reset process requires some files from the internet to function properly.\n\nPlease retry this process once a network connection is available.\n"
+      fi
     ;;
     "citra" )
       citra_init
@@ -981,14 +975,22 @@ cli_emulator_reset() {
       rpcs3_init
     ;;
     "xemu" )
-      xemu_init
+      if [[ check_network_connectivity == "true" ]]; then
+        xemu_init
+      else
+        printf "You do not appear to be connected to a network with internet access.\n\nThe Xemu reset process requires some files from the internet to function properly.\n\nPlease retry this process once a network connection is available.\n"
+      fi
     ;;
     "yuzu" )
       yuzu_init
     ;;
     "all-emulators" )
-      ra_init
-      standalones_init
+      if [[ check_network_connectivity == "true" ]]; then
+        ra_init
+        standalones_init
+      else
+        printf "You do not appear to be connected to a network with internet access.\n\nThe all-emulator reset process requires some files from the internet to function properly.\n\nPlease retry this process once a network connection is available.\n"
+      fi
     ;;
   esac
 }
@@ -1509,7 +1511,7 @@ configurator_process_complete_dialog() {
 
 configurator_generic_dialog() {
   # This dialog is for showing temporary messages before another process happens.
-  # USAGE: configurator_generid_dialog "info text"
+  # USAGE: configurator_generic_dialog "info text"
   zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Configurator Utility" \
@@ -1525,4 +1527,14 @@ configurator_destination_choice_dialog() {
   --text="$2")
 
   echo $choice
+}
+
+desktop_mode_warning() {
+  # This function is a generic warning for issues that happen when running in desktop mode.
+  # Running in desktop mode can be verified with the following command: if [[ $XDG_CURRENT_DESKTOP == "KDE" ]]; then
+
+  zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+  --title "RetroDECK Desktop Mode Warning" \
+  --text="You appear to be running RetroDECK in the Steam Deck's Desktop mode!\n\nSome functions of RetroDECK may not work properly in Desktop mode, such as the Steam Deck's normal controls.\n\nRetroDECK is best enjoyed in Game mode!"
 }

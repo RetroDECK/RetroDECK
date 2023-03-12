@@ -85,8 +85,13 @@ configurator_reset_dialog() {
     case $emulator_to_reset in
 
     "RetroArch" )
-      ra_init
-      configurator_process_complete_dialog "resetting $emulator_to_reset"
+      if [[ check_network_connectivity == "true" ]]; then
+        ra_init
+        configurator_process_complete_dialog "resetting $emulator_to_reset"
+      else
+        configurator_generic_dialog "You do not appear to be connected to a network with internet access.\n\nThe RetroArch reset process requires some files from the internet to function properly.\n\nPlease retry this process once a network connection is available."
+        configurator_reset_dialog
+      fi
     ;;
 
     "Citra" )
@@ -130,8 +135,13 @@ configurator_reset_dialog() {
     ;;
 
     "XEMU" )
-      xemu_init
-      configurator_process_complete_dialog "resetting $emulator_to_reset"
+      if [[ check_network_connectivity == "true" ]]; then
+        xemu_init
+        configurator_process_complete_dialog "resetting $emulator_to_reset"
+      else
+        configurator_generic_dialog "You do not appear to be connected to a network with internet access.\n\nThe Xemu reset process requires some files from the internet to function properly.\n\nPlease retry this process once a network connection is available."
+        configurator_reset_dialog
+      fi
     ;;
 
     "Yuzu" )
@@ -147,9 +157,15 @@ configurator_reset_dialog() {
   ;;
 
 "Reset All Emulators" )
-  ra_init
-  standalones_init
-  configurator_process_complete_dialog "resetting all emulators"
+
+  if [[ check_network_connectivity == "true" ]]; then
+    ra_init
+    standalones_init
+    configurator_process_complete_dialog "resetting all emulators"
+  else
+    configurator_generic_dialog "You do not appear to be connected to a network with internet access.\n\nThe all-emulator reset process requires some files from the internet to function properly.\n\nPlease retry this process once a network connection is available."
+    configurator_reset_dialog
+  fi
 ;;
 
 "Reset Tools" )
@@ -367,7 +383,7 @@ configurator_compress_single_game_dialog() {
 
 configurator_compress_games_dialog() {
   # This is currently a placeholder for a dialog where you can compress a single game or multiple at once. Currently only the single game option is available, so is launched by default.
-  
+
   configurator_generic_dialog "This utility will compress a single game into .CHD format.\n\nPlease select the game to be compressed in the next dialog: supported file types are .cue, .iso and .gdi\n\nThe original game files will be untouched and will need to be removed manually."
   configurator_compress_single_game_dialog
 }
@@ -594,11 +610,7 @@ configurator_move_dialog() {
 
 configurator_welcome_dialog() {
   # Clear the variables
-  source=
   destination=
-  action=
-  setting=
-  setting_value=
 
   choice=$(zenity --list --title="RetroDECK Configurator Utility" --cancel-label="Quit" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \

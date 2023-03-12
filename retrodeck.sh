@@ -58,7 +58,7 @@ https://retrodeck.net
         fi
       else
         echo "Please use this command format \"--compress <cue/gdi/iso file to compress>\""
-      fi 
+      fi
       exit
       ;;
     --configurator*)
@@ -132,7 +132,12 @@ then
 # if the lock file doesn't exist at all means that it's a fresh install or a triggered reset
 else
   echo "Lockfile not found"
-  finit             # Executing First/Force init
+  if [[ check_network_connectivity == "true" ]]; then
+    finit             # Executing First/Force init
+  else
+    configurator_generic_dialog "You do not appear to be connected to a network with internet access.\n\nThe initial RetroDECK setup requires some files from the internet to function properly.\n\nPlease retry this process once a network connection is available."
+    exit 1
+  fi
 fi
 
 # Check if running in Desktop mode and warn if true
