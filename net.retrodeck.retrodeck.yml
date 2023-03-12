@@ -195,8 +195,6 @@ modules:
   - name: rclone
     buildsystem: simple
     build-commands:
-      - unzip rclone-current-linux-amd64.zip
-      - cd rclone-*-linux-amd64
       - cp rclone ${FLATPAK_DEST}/bin/
     sources:
       - type: archive
