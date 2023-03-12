@@ -1,7 +1,5 @@
 #!/bin/bash
 
-source /app/libexec/save_migration.sh
-
 post_update() {
 
   # post update script
@@ -20,7 +18,7 @@ post_update() {
     # In version 0.6.2b, the following changes were made that required config file updates/reset:
     # - Primehack preconfiguration completely redone. "Stop emulation" hotkey set to Start+Select, Xbox and Nintendo keymap profiles were created, Xbox set as default.
     # - Duckstation save and state locations were dir_prep'd to the rdhome/save and /state folders, which was not previously done. Much safer now!
-    
+
     rm -rf /var/config/primehack # Purge old Primehack config files. Saves are safe as they are linked into /var/data/primehack.
     primehack_init
 

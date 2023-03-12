@@ -584,7 +584,7 @@ modules:
       - --disable-avrcp
       - --disable-network
       - --disable-obex
-      - --disable-bap 
+      - --disable-bap
       - --disable-mcp
       - --with-dbusconfdir=/app/etc
       - --with-dbussessionbusdir=/app/usr/lib/system-services
@@ -1080,7 +1080,6 @@ modules:
       - cp global.sh /app/libexec/global.sh
       - cp functions.sh /app/libexec/functions.sh
       - cp post_update.sh /app/libexec/post_update.sh
-      - cp save_migration.sh /app/libexec/save_migration.sh
 
       # Desktop entry
       - cp net.retrodeck.retrodeck.desktop /app/share/applications/net.retrodeck.retrodeck.desktop
