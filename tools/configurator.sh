@@ -387,19 +387,22 @@ configurator_check_multifile_game_structure() {
 }
 
 configurator_check_bios_files_basic() {
+  configurator_generic_dialog "This check will look for BIOS files that RetroDECK has identified as working.\n\nThere may be additional BIOS files that will function with the emulators that are not checked.\n\nSome more advanced emulators such as Yuzu will have additional methods for verifiying the BIOS files are in working order."
   bios_checked_list=()
 
-  while IFS="^" read -r bios_file bios_hash bios_system bios_desc
+  while IFS="^" read -r bios_file bios_subdir bios_hash bios_system bios_desc
   do
     bios_file_found="No"
     bios_hash_matched="No"
-    if [[ -f "$bios_folder/$bios_file" ]]; then
+    if [[ -f "$bios_dir/$bios_subdir$bios_file" ]]; then
       bios_file_found="Yes"
-      if [[ $(md5sum "$bios_folder/$bios_file" | awk '{ print $1 }') == "$bios_hash" ]]; then
+      if [[ $bios_hash == "Unknown" ]]; then
+        bios_hash_matched="Unknown"
+      elif [[ $(md5sum "$bios_dir/$bios_subdir$bios_file" | awk '{ print $1 }') == "$bios_hash" ]]; then
         bios_hash_matched="Yes"
       fi
     fi
-    if [[ $bios_file_found == "Yes" && $bios_hash_matched == "Yes" && ! " ${bios_checked_list[*]} " =~ " ${bios_system} " ]]; then
+    if [[ $bios_file_found == "Yes" && ($bios_hash_matched == "Yes" || $bios_hash_matched == "Unknown") && ! " ${bios_checked_list[*]} " =~ " ${bios_system} " ]]; then
       bios_checked_list=("${bios_checked_list[@]}" "$bios_system" )
     fi
   done < $bios_checklist
@@ -411,15 +414,18 @@ configurator_check_bios_files_basic() {
 }
 
 configurator_check_bios_files_advanced() {
+  configurator_generic_dialog "This check will look for BIOS files that RetroDECK has identified as working.\n\nThere may be additional BIOS files that will function with the emulators that are not checked.\n\nSome more advanced emulators such as Yuzu will have additional methods for verifiying the BIOS files are in working order."
   bios_checked_list=()
 
-  while IFS="^" read -r bios_file bios_hash bios_system bios_desc
+  while IFS="^" read -r bios_file bios_subdir bios_hash bios_system bios_desc
   do
     bios_file_found="No"
     bios_hash_matched="No"
-    if [[ -f "$bios_folder/$bios_file" ]]; then
+    if [[ -f "$bios_dir/$bios_subdir$bios_file" ]]; then
       bios_file_found="Yes"
-      if [[ $(md5sum "$bios_folder/$bios_file" | awk '{ print $1 }') == "$bios_hash" ]]; then
+      if [[ $bios_hash == "Unknown" ]]; then
+        bios_hash_matched="Unknown"
+      elif [[ $(md5sum "$bios_dir/$bios_subdir$bios_file" | awk '{ print $1 }') == "$bios_hash" ]]; then
         bios_hash_matched="Yes"
       fi
     fi
