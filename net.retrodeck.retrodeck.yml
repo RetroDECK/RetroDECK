@@ -326,8 +326,8 @@ modules:
         ${FLATPAK_DEST}/etc/retroarch.cfg
       - mkdir -p ${FLATPAK_DEST}/share/appdata
     modules:
-      - rd-submodules/retroarch/libpng/libpng-1.6.35.json
-      - rd-submodules/retroarch/nvidia-cg-toolkit/nvidia-cg-toolkit-3.1.0013.json
+      - rd-submodules/retroarch/modules/libpng/libpng-1.6.35.json
+      - rd-submodules/retroarch/modules/nvidia-cg-toolkit/nvidia-cg-toolkit-3.1.0013.json
       - shared-modules/SDL/SDL-1.2.15.json
       - shared-modules/SDL/SDL_image-1.2.12.json
       - shared-modules/SDL/SDL_mixer-1.2.12.json
@@ -336,13 +336,12 @@ modules:
       #- shared-modules/libusb/libusb.json moved outside
       # certificate glu issue
       #- shared-modules/gudev/gudev.json
-      - rd-submodules/retroarch/libbz2/libbz2-1.0.8.json
-      - rd-submodules/retroarch/xrandr/xrandr-1.5.1.json
-      - rd-submodules/retroarch/libaio/libaio-0.3.112.json
+      - rd-submodules/retroarch/modules/libbz2/libbz2-1.0.8.json
+      - rd-submodules/retroarch/modules/xrandr/xrandr-1.5.1.json
+      - rd-submodules/retroarch/modules/libaio/libaio-0.3.112.json
       # certificate issue, check libglu module for more info
       #- shared-modules/glu/glu-9.json
-      # libdecor no longer needed in RetroArch 1.14
-      #- rd-submodules/retroarch/libdecor/libdecor-0.1.1.json
+      - shared-modules/libdecor/libdecor-0.1.1.json
   - name: retroarch-filers-video
     subdir: gfx/video_filters
     make-install-args:
