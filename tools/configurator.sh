@@ -197,95 +197,95 @@ configurator_retroachivement_dialog() {
 }
 
 configurator_power_user_warning_dialog() {
-	zenity --title "RetroDECK Configurator Utility - Power User Options" --question --no-wrap --cancel-label="Back" \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-  --text="Making manual changes to an emulators configuration may create serious issues,\nand some settings may be overwitten during RetroDECK updates.\n\nSome standalone emulator functions may not work properly outside of Desktop mode.\n\nPlease continue only if you know what you're doing.\n\nDo you want to continue?\n\nClicking Yes will set you as a Power User and you will not see this dialog again."
-
-  if [ $? == 0 ]; then # OK button clicked
-    power_user="true"
-    set_setting_value $rd_conf "power_user" "$power_user" retrodeck # Store power user variable for future checks
+  if [[ $power_user_warning == "true" ]]; then
+    choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="Never show this again" \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Desktop Mode Warning" \
+    --text="Making manual changes to an emulators configuration may create serious issues,\nand some settings may be overwitten during RetroDECK updates.\n\nSome standalone emulator functions may not work properly outside of Desktop mode.\n\nPlease continue only if you know what you're doing.\n\nDo you want to continue?")
+  fi
+  rc=$? # Capture return code, as "Yes" button has no text value
+  if [[ $rc == "0" ]]; then # If user clicked "Yes"
+    configurator_power_user_changes_dialog
+  else # If any button other than "Yes" was clicked
+    if [[ $choice == "No" ]]; then
+      configurator_welcome_dialog
+    elif [[ $choice == "Never show this again" ]]; then
+      set_setting_value $rd_conf "power_user_warning" "false" retrodeck # Store desktop mode warning variable for future checks
+      configurator_power_user_changes_dialog
+    fi
   fi
 }
 
 configurator_power_user_changes_dialog() {
-  if [[ $power_user == "true" ]]; then
-    emulator=$(zenity --list \
-    --title "RetroDECK Configurator Utility - Power User Options" --cancel-label="Back" \
-    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
-    --text="Which emulator do you want to configure?" \
-    --hide-header \
-    --column=emulator \
-    "RetroArch" \
-    "Citra" \
-    "Dolphin" \
-    "Duckstation" \
-    "MelonDS" \
-    "PCSX2" \
-    "PPSSPP" \
-    "Primehack" \
-    "RPCS3" \
-    "XEMU" \
-    "Yuzu")
+  emulator=$(zenity --list \
+  --title "RetroDECK Configurator Utility - Power User Options" --cancel-label="Back" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+  --text="Which emulator do you want to configure?" \
+  --hide-header \
+  --column=emulator \
+  "RetroArch" \
+  "Citra" \
+  "Dolphin" \
+  "Duckstation" \
+  "MelonDS" \
+  "PCSX2" \
+  "PPSSPP" \
+  "Primehack" \
+  "RPCS3" \
+  "XEMU" \
+  "Yuzu")
 
-    case $emulator in
+  case $emulator in
 
-    "RetroArch" )
-      retroarch
-    ;;
+  "RetroArch" )
+    retroarch
+  ;;
 
-    "Citra" )
-      citra-qt
-    ;;
+  "Citra" )
+    citra-qt
+  ;;
 
-    "Dolphin" )
-      dolphin-emu
-    ;;
+  "Dolphin" )
+    dolphin-emu
+  ;;
 
-    "Duckstation" )
-      duckstation-qt
-    ;;
+  "Duckstation" )
+    duckstation-qt
+  ;;
 
-    "MelonDS" )
-      melonDS
-    ;;
+  "MelonDS" )
+    melonDS
+  ;;
 
-    "PCSX2" )
-      pcsx2-qt
-    ;;
+  "PCSX2" )
+    pcsx2-qt
+  ;;
 
-    "PPSSPP" )
-      PPSSPPSDL
-    ;;
+  "PPSSPP" )
+    PPSSPPSDL
+  ;;
 
-    "Primehack" )
-      primehack-wrapper
-    ;;
+  "Primehack" )
+    primehack-wrapper
+  ;;
 
-    "RPCS3" )
-      rpcs3
-    ;;
+  "RPCS3" )
+    rpcs3
+  ;;
 
-    "XEMU" )
-      xemu
-    ;;
+  "XEMU" )
+    xemu
+  ;;
 
-    "Yuzu" )
-      yuzu
-    ;;
+  "Yuzu" )
+    yuzu
+  ;;
 
-    "" ) # No selection made or Back button clicked
-      configurator_welcome_dialog
-    ;;
+  "" ) # No selection made or Back button clicked
+    configurator_welcome_dialog
+  ;;
 
-    esac
-  else
-    configurator_power_user_warning_dialog
-    if [[ $power_user == "true" ]]; then
-    	configurator_power_user_changes_dialog
-    else
-    	configurator_welcome_dialog
-    fi
-  fi
+  esac
 }
 
 configurator_retroarch_rewind_dialog() {
@@ -367,7 +367,7 @@ configurator_compress_single_game_dialog() {
 
 configurator_compress_games_dialog() {
   # This is currently a placeholder for a dialog where you can compress a single game or multiple at once. Currently only the single game option is available, so is launched by default.
-  
+
   configurator_generic_dialog "This utility will compress a single game into .CHD format.\n\nPlease select the game to be compressed in the next dialog: supported file types are .cue, .iso and .gdi\n\nThe original game files will be untouched and will need to be removed manually."
   configurator_compress_single_game_dialog
 }
@@ -386,16 +386,46 @@ configurator_check_multifile_game_structure() {
   configurator_troubleshooting_tools_dialog
 }
 
-configurator_check_bios_files() {
+configurator_check_bios_files_basic() {
+  configurator_generic_dialog "This check will look for BIOS files that RetroDECK has identified as working.\n\nThere may be additional BIOS files that will function with the emulators that are not checked.\n\nSome more advanced emulators such as Yuzu will have additional methods for verifiying the BIOS files are in working order."
   bios_checked_list=()
 
-  while IFS="^" read -r bios_file bios_hash bios_system bios_desc
+  while IFS="^" read -r bios_file bios_subdir bios_hash bios_system bios_desc
   do
     bios_file_found="No"
     bios_hash_matched="No"
-    if [[ -f "$bios_folder/$bios_file" ]]; then
+    if [[ -f "$bios_dir/$bios_subdir$bios_file" ]]; then
       bios_file_found="Yes"
-      if [[ $(md5sum "$bios_folder/$bios_file" | awk '{ print $1 }') == "$bios_hash" ]]; then
+      if [[ $bios_hash == "Unknown" ]]; then
+        bios_hash_matched="Unknown"
+      elif [[ $(md5sum "$bios_dir/$bios_subdir$bios_file" | awk '{ print $1 }') == "$bios_hash" ]]; then
+        bios_hash_matched="Yes"
+      fi
+    fi
+    if [[ $bios_file_found == "Yes" && ($bios_hash_matched == "Yes" || $bios_hash_matched == "Unknown") && ! " ${bios_checked_list[*]} " =~ " ${bios_system} " ]]; then
+      bios_checked_list=("${bios_checked_list[@]}" "$bios_system" )
+    fi
+  done < $bios_checklist
+  systems_with_bios=${bios_checked_list[@]}
+
+  configurator_generic_dialog "The following systems have been found to have at least one valid BIOS file.\n\n$systems_with_bios\n\nFor more information on the BIOS files found please use the Advanced check tool."
+
+  configurator_troubleshooting_tools_dialog
+}
+
+configurator_check_bios_files_advanced() {
+  configurator_generic_dialog "This check will look for BIOS files that RetroDECK has identified as working.\n\nThere may be additional BIOS files that will function with the emulators that are not checked.\n\nSome more advanced emulators such as Yuzu will have additional methods for verifiying the BIOS files are in working order."
+  bios_checked_list=()
+
+  while IFS="^" read -r bios_file bios_subdir bios_hash bios_system bios_desc
+  do
+    bios_file_found="No"
+    bios_hash_matched="No"
+    if [[ -f "$bios_dir/$bios_subdir$bios_file" ]]; then
+      bios_file_found="Yes"
+      if [[ $bios_hash == "Unknown" ]]; then
+        bios_hash_matched="Unknown"
+      elif [[ $(md5sum "$bios_dir/$bios_subdir$bios_file" | awk '{ print $1 }') == "$bios_hash" ]]; then
         bios_hash_matched="Yes"
       fi
     fi
@@ -419,7 +449,8 @@ configurator_troubleshooting_tools_dialog() {
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
   "Multi-file game structure check" "Verify the proper structure of multi-file or multi-disc games" \
-  "BIOS file check" "Verify the existence and file integrity of common BIOS files" )
+  "Basic BIOS file check" "Show a list of systems that BIOS files are found for" \
+  "Advanced BIOS file check" "Show advanced information about common BIOS files" )
 
   case $choice in
 
@@ -427,8 +458,12 @@ configurator_troubleshooting_tools_dialog() {
     configurator_check_multifile_game_structure
   ;;
 
-  "BIOS file check" )
-    configurator_check_bios_files
+  "Basic BIOS file check" )
+    configurator_check_bios_files_basic
+  ;;
+
+  "Advanced BIOS file check" )
+    configurator_check_bios_files_advanced
   ;;
 
   "" ) # No selection made or Back button clicked
@@ -622,7 +657,7 @@ configurator_welcome_dialog() {
   ;;
 
   "Change Standalone Emulator Options" )
-    configurator_power_user_changes_dialog
+    configurator_power_user_warning_dialog
   ;;
 
   "Compress Games" )

@@ -135,11 +135,9 @@ else
   finit             # Executing First/Force init
 fi
 
-# Check if running in Desktop mode and warn if true
+# Check if running in Desktop mode and warn if true, unless desktop_mode_warning=false in retrodeck.cfg
 
-if [[ $XDG_CURRENT_DESKTOP == "KDE" ]]; then
-	desktop_mode_warning
-fi
+desktop_mode_warning
 
 # Normal Startup
 
