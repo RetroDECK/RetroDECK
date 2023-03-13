@@ -1,6 +1,8 @@
 [submodule "shared-modules"]
 	path = shared-modules
 	url = https://github.com/flathub/shared-modules.git
+	ignore = dirty
 [submodule "rd-submodules/retroarch"]
 	path = rd-submodules/retroarch
 	url = https://github.com/flathub/org.libretro.RetroArch.git
+	ignore = dirty
