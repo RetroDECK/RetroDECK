@@ -597,6 +597,27 @@ update_rd_conf() {
   source $rd_conf # Load new config file variables
 }
 
+resolve_preset_conflicts() {
+  # This function will resolve conflicts between setting presets. ie. borders and widescreen cannot both be enabled at the same time.
+  # The function will read the $section_that_was_just_enabled and $section_to_check_for_conflicts
+  # If a conflict is found (where two conflicting settings are both enabled) the $section_to_check_for_conflicts entry will be disabled
+  # USAGE: resolve_preset_conflict "$section_that_was_just_enabled" "$section_to_check_for_conflicts" "system"
+
+  local section_being_enabled=$1
+  local section_to_check_for_conflicts=$2
+  local system=$3
+  local enabled_section_results=$(sed -n '/\['"$section_being_enabled"'\]/, /\[/{ /\['"$section_being_enabled"'\]/! { /\[/! p } }' $rd_conf | sed '/^$/d')
+
+  while IFS= read -r config_line
+    do
+      system_name=$(get_setting_name "$config_line" $system)
+      system_value=$(get_setting_value $rd_conf "$system_name" $system $section_being_enabled)
+      if [[ $system_value == "true" && $(get_setting_value $rd_conf "$(get_setting_name "$config_line" $system)" $system $section_to_check_for_conflicts) == "true" ]]; then
+        set_setting_value $rd_conf $system_name "false" retrodeck $section_to_check_for_conflicts
+      fi
+  done < <(printf '%s\n' "$enabled_section_results")
+}
+
 conf_write() {
   # writes the variables in the retrodeck config file
 
