@@ -164,6 +164,29 @@ validate_for_chd () {
 	fi
 }
 
+desktop_mode_warning() {
+  # This function is a generic warning for issues that happen when running in desktop mode.
+  # Running in desktop mode can be verified with the following command: if [[ ! $XDG_CURRENT_DESKTOP == "gamescope" ]]; then
+  # This function will check if desktop mode is currently being used and if the warning has not been disabled, and show it if needed.
+
+  if [[ ! $XDG_CURRENT_DESKTOP == "gamescope" ]]; then
+    if [[ $desktop_mode_warning == "true" ]]; then
+      choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="Never show this again" \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Desktop Mode Warning" \
+      --text="You appear to be running RetroDECK in the Steam Deck's Desktop mode!\n\nSome functions of RetroDECK may not work properly in Desktop mode, such as the Steam Deck's normal controls.\n\nRetroDECK is best enjoyed in Game mode!\n\nDo you still want to proceed?")
+    fi
+  fi
+  rc=$? # Capture return code, as "Yes" button has no text value
+  if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
+    if [[ $choice == "No" ]]; then
+      exit 1
+    elif [[ $choice == "Never show this again" ]]; then
+      set_setting_value $rd_conf "desktop_mode_warning" "false" retrodeck # Store desktop mode warning variable for future checks
+    fi
+  fi
+}
+
 set_setting_value() {
   # Function for editing settings
   # USAGE: set_setting_value $setting_file "$setting_name" "$new_setting_value" $system $section_name(optional)
