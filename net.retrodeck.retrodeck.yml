@@ -494,7 +494,7 @@ modules:
   # CITRA - START
   # https://github.com/flathub/org.citra_emu.citra
 
-  - shared-modules/SDL2/SDL2-2.26.1-with-libdecor.json
+  - shared-modules/SDL2/SDL2-with-libdecor.json
 
   - name: citra
     buildsystem: cmake-ninja
