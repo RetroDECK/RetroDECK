@@ -367,7 +367,7 @@ configurator_compress_single_game_dialog() {
 
 configurator_compress_games_dialog() {
   # This is currently a placeholder for a dialog where you can compress a single game or multiple at once. Currently only the single game option is available, so is launched by default.
-  
+
   configurator_generic_dialog "This utility will compress a single game into .CHD format.\n\nPlease select the game to be compressed in the next dialog: supported file types are .cue, .iso and .gdi\n\nThe original game files will be untouched and will need to be removed manually."
   configurator_compress_single_game_dialog
 }
@@ -386,7 +386,31 @@ configurator_check_multifile_game_structure() {
   configurator_troubleshooting_tools_dialog
 }
 
-configurator_check_bios_files() {
+configurator_check_bios_files_basic() {
+  bios_checked_list=()
+
+  while IFS="^" read -r bios_file bios_hash bios_system bios_desc
+  do
+    bios_file_found="No"
+    bios_hash_matched="No"
+    if [[ -f "$bios_folder/$bios_file" ]]; then
+      bios_file_found="Yes"
+      if [[ $(md5sum "$bios_folder/$bios_file" | awk '{ print $1 }') == "$bios_hash" ]]; then
+        bios_hash_matched="Yes"
+      fi
+    fi
+    if [[ $bios_file_found == "Yes" && $bios_hash_matched == "Yes" && ! " ${bios_checked_list[*]} " =~ " ${bios_system} " ]]; then
+      bios_checked_list=("${bios_checked_list[@]}" "$bios_system" )
+    fi
+  done < $bios_checklist
+  systems_with_bios=${bios_checked_list[@]}
+
+  configurator_generic_dialog "The following systems have been found to have at least one valid BIOS file.\n\n$systems_with_bios\n\nFor more information on the BIOS files found please use the Advanced check tool."
+
+  configurator_troubleshooting_tools_dialog
+}
+
+configurator_check_bios_files_advanced() {
   bios_checked_list=()
 
   while IFS="^" read -r bios_file bios_hash bios_system bios_desc
@@ -419,7 +443,8 @@ configurator_troubleshooting_tools_dialog() {
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
   "Multi-file game structure check" "Verify the proper structure of multi-file or multi-disc games" \
-  "BIOS file check" "Verify the existence and file integrity of common BIOS files" )
+  "Basic BIOS file check" "Show a list of systems that BIOS files are found for" \
+  "Advanced BIOS file check" "Show advanced information about common BIOS files" )
 
   case $choice in
 
@@ -427,8 +452,12 @@ configurator_troubleshooting_tools_dialog() {
     configurator_check_multifile_game_structure
   ;;
 
-  "BIOS file check" )
-    configurator_check_bios_files
+  "Basic BIOS file check" )
+    configurator_check_bios_files_basic
+  ;;
+
+  "Advanced BIOS file check" )
+    configurator_check_bios_files_advanced
   ;;
 
   "" ) # No selection made or Back button clicked
