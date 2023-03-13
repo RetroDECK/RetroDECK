@@ -197,95 +197,95 @@ configurator_retroachivement_dialog() {
 }
 
 configurator_power_user_warning_dialog() {
-	zenity --title "RetroDECK Configurator Utility - Power User Options" --question --no-wrap --cancel-label="Back" \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-  --text="Making manual changes to an emulators configuration may create serious issues,\nand some settings may be overwitten during RetroDECK updates.\n\nSome standalone emulator functions may not work properly outside of Desktop mode.\n\nPlease continue only if you know what you're doing.\n\nDo you want to continue?\n\nClicking Yes will set you as a Power User and you will not see this dialog again."
-
-  if [ $? == 0 ]; then # OK button clicked
-    power_user="true"
-    set_setting_value $rd_conf "power_user" "$power_user" retrodeck # Store power user variable for future checks
+  if [[ $power_user_warning == "true" ]]; then
+    choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="Never show this again" \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Desktop Mode Warning" \
+    --text="Making manual changes to an emulators configuration may create serious issues,\nand some settings may be overwitten during RetroDECK updates.\n\nSome standalone emulator functions may not work properly outside of Desktop mode.\n\nPlease continue only if you know what you're doing.\n\nDo you want to continue?")
+  fi
+  rc=$? # Capture return code, as "Yes" button has no text value
+  if [[ $rc == "0" ]]; then # If user clicked "Yes"
+    configurator_power_user_changes_dialog
+  else # If any button other than "Yes" was clicked
+    if [[ $choice == "No" ]]; then
+      configurator_welcome_dialog
+    elif [[ $choice == "Never show this again" ]]; then
+      set_setting_value $rd_conf "power_user_warning" "false" retrodeck # Store desktop mode warning variable for future checks
+      configurator_power_user_changes_dialog
+    fi
   fi
 }
 
 configurator_power_user_changes_dialog() {
-  if [[ $power_user == "true" ]]; then
-    emulator=$(zenity --list \
-    --title "RetroDECK Configurator Utility - Power User Options" --cancel-label="Back" \
-    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
-    --text="Which emulator do you want to configure?" \
-    --hide-header \
-    --column=emulator \
-    "RetroArch" \
-    "Citra" \
-    "Dolphin" \
-    "Duckstation" \
-    "MelonDS" \
-    "PCSX2" \
-    "PPSSPP" \
-    "Primehack" \
-    "RPCS3" \
-    "XEMU" \
-    "Yuzu")
+  emulator=$(zenity --list \
+  --title "RetroDECK Configurator Utility - Power User Options" --cancel-label="Back" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+  --text="Which emulator do you want to configure?" \
+  --hide-header \
+  --column=emulator \
+  "RetroArch" \
+  "Citra" \
+  "Dolphin" \
+  "Duckstation" \
+  "MelonDS" \
+  "PCSX2" \
+  "PPSSPP" \
+  "Primehack" \
+  "RPCS3" \
+  "XEMU" \
+  "Yuzu")
 
-    case $emulator in
+  case $emulator in
 
-    "RetroArch" )
-      retroarch
-    ;;
+  "RetroArch" )
+    retroarch
+  ;;
 
-    "Citra" )
-      citra-qt
-    ;;
+  "Citra" )
+    citra-qt
+  ;;
 
-    "Dolphin" )
-      dolphin-emu
-    ;;
+  "Dolphin" )
+    dolphin-emu
+  ;;
 
-    "Duckstation" )
-      duckstation-qt
-    ;;
+  "Duckstation" )
+    duckstation-qt
+  ;;
 
-    "MelonDS" )
-      melonDS
-    ;;
+  "MelonDS" )
+    melonDS
+  ;;
 
-    "PCSX2" )
-      pcsx2-qt
-    ;;
+  "PCSX2" )
+    pcsx2-qt
+  ;;
 
-    "PPSSPP" )
-      PPSSPPSDL
-    ;;
+  "PPSSPP" )
+    PPSSPPSDL
+  ;;
 
-    "Primehack" )
-      primehack-wrapper
-    ;;
+  "Primehack" )
+    primehack-wrapper
+  ;;
 
-    "RPCS3" )
-      rpcs3
-    ;;
+  "RPCS3" )
+    rpcs3
+  ;;
 
-    "XEMU" )
-      xemu
-    ;;
+  "XEMU" )
+    xemu
+  ;;
 
-    "Yuzu" )
-      yuzu
-    ;;
+  "Yuzu" )
+    yuzu
+  ;;
 
-    "" ) # No selection made or Back button clicked
-      configurator_welcome_dialog
-    ;;
+  "" ) # No selection made or Back button clicked
+    configurator_welcome_dialog
+  ;;
 
-    esac
-  else
-    configurator_power_user_warning_dialog
-    if [[ $power_user == "true" ]]; then
-    	configurator_power_user_changes_dialog
-    else
-    	configurator_welcome_dialog
-    fi
-  fi
+  esac
 }
 
 configurator_retroarch_rewind_dialog() {
@@ -651,7 +651,7 @@ configurator_welcome_dialog() {
   ;;
 
   "Change Standalone Emulator Options" )
-    configurator_power_user_changes_dialog
+    configurator_power_user_warning_dialog
   ;;
 
   "Compress Games" )
