@@ -73,21 +73,21 @@
     <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.2b</url>
       <description>
         <ul>
-          <li>Implemented proper Primehack preconfiguration / purge stale configs</li>
-          <li>Added Xbox and Nintendo-layout controller profiles to Primehack</li>
-          <li>Stop resetting all configs after update (see post_update.sh)</li>
-          <li>Add CHD compression to CLI and Configurator</li>
-          <li>Add common BIOS file check tool to Configurator</li>
-          <li>Reworked CLI arguments</li>
-          <li>Updated shipped Duckstation config</li>
-          <li>Removed deprecated/disabled tool files</li>
-          <li>Made emulator resets more robust by purging config folders to clear legacy files</li>
-          <li>Add troubleshooting tool for checking structure of multi-file games in Configurator</li>
-          <li>Updated patching engine to accommodate "batch patches"</li>
-          <li>Implemented expanding retrodeck.cfg on update</li>
-          <li>Reworked Configurator menu flow</li>
-          <li>Set power_user variable so Configurator warning is only shown once</li>
-          <li>Implemented a basic framework for easter egg splash screens</li>
+          <li>Persistent configurations when updating RetroDECK, this means your custom configurations should be saved across future versions. (We also laid groundwork for dynamic persistent configurations, more on that in a future update. This is the reason why it has taken quite long to fix this).</li>
+          <li>Added Primehack controller profiles for both Xbox and Nintendo button layouts</li>
+          <li>Added a warning when running RetroDECK in desktop mode, as not all controls will work properly.</li>
+          <li>Added CLI for CHD compression (chdman) of single games</li>
+          <li>Reworked CLI commands and added safety y/n confirmations for the reset arguments.</li>
+          <li>New structure for more easy access to various tools</li>
+          <li>The power user prompt only needs to be answered once</li>
+          <li>Added tool to do CHD compression (chdman) of single games (multi-game batch compression coming in a future update)</li>
+          <li>Added tool to check for common BIOS files</li>
+          <li>Added tool to check for common multi-file game structure issues</li>
+          <li>Fixed Primehack initial configuration as it was broken (will automatically reset the emulator just this once)</li>
+          <li>Fixed Duckstation initial configuration as it was broken (will require user-performed reset just this once)</li>
+          <li>Fixed a bug that made the Dolphin RetroArch core not working properly (the standalone version of Dolphin always worked and is the default)</li>
+          <li>Various backend fixes</li>
+          <li>Updated all Emulators, RetroArch and libreretro cores. (PLEASE NOTE! ES-DE was not updated to version 2.0, this will be done in the next version of RetroDECK as we need more time to work on the new theme format).</li>
       </ul>
     </description>
   </release>
