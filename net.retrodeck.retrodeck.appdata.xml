@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright 2022 Xargon <xargonwan@gmail.com> -->
+<!-- Copyright 2022 Xargon <xargonwan@gmail.com> and the RetroDECK Team-->
 <component type="desktop-application">
   <id>net.retrodeck.retrodeck</id>
   <launchable type="desktop-id">net.retrodeck.retrodeck.desktop</launchable>
@@ -60,9 +60,6 @@
       <li>PCSX2: due to its limitation, the standalone PCSX2 doesn't have any way to set the hotkeys, so no save and load state, no quit button. In order to quit press: STEAM -> PCSX2 -> (X) CLOSE WINDOW, be aware that the state is not automatically saved</li>
       <li>As of this moment external controllers, local multiplayer in gamemode are not supported. Neither is running RetroDECK in desktop mode, we plan on adding the functionality in the future</li>
     </ul>
-
-    IMPORTANT NOTE:
-    At the moment the emulator configs are reset during every update, this was made because every version they may bring new configurations, please back them up if you did some manual configs.
   </description>
   <project_license>GPL-3.0</project_license>
   <metadata_license>CC0-1.0</metadata_license>
