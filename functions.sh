@@ -1319,10 +1319,8 @@ finit() {
   mkdir -pv $saves_folder
   mkdir -pv $states_folder
   mkdir -pv $rdhome/screenshots
-  mkdir -pv $rdhome/bios/pico8
-  mkdir -pv $logs_folder
-  mkdir -pv $mods_folder
-  mkdir -pv $texture_packs_folder
+  mkdir -pv $rdhome/.logs
+
   # XMLSTARLET HERE
   cp -fv /app/retrodeck/es_settings.xml /var/config/emulationstation/.emulationstation/es_settings.xml
 
@@ -1331,7 +1329,9 @@ finit() {
   dir_prep "$themes_folder" "/var/config/emulationstation/.emulationstation/themes"
 
   # PICO-8
-  dir_prep "$roms_folder/pico8" "$rdhome/bios/pico8/bbs/carts" #this is the folder where pico-8 is saving the carts
+  dir_prep "$bios_folder/pico-8" "~/.lexaloffle/pico-8" # Store binary and config files together. The .lexaloffle directory is a hard-coded location for the PICO-8 config file, cannot be changed
+  dir_prep "$roms_folder/pico8" "$bios_folder/pico-8/carts" # Symlink default game location to RD roms for cleanliness (this location is overridden anyway by the --root_path launch argument anyway)
+  dir_prep "$bios_folder/pico-8/cdata" "$saves_folder/pico-8" # PICO-8 saves folder
 
   (
   ra_init

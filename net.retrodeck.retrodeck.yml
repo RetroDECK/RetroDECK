@@ -58,7 +58,7 @@ cleanup-commands:
 
 modules:
 
-  - shared-modules/libusb/libusb.json
+  - rd-submodules/shared-modules/libusb/libusb.json
 
   # This module is used to define the RetroDECK version
   # If the version is set as cooker it will automatically generate the version tag based on the date
@@ -311,7 +311,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/RetroArch.git
-        commit: ad89b0c655fc1d25adfcdf40268e95c5d0391111
+        commit: 938ab716bd290b0f469068500966a834b5782929
       - type: file
         path: rd-submodules/retroarch/retroarch.cfg
     post-install:
@@ -328,20 +328,20 @@ modules:
     modules:
       - rd-submodules/retroarch/modules/libpng/libpng-1.6.35.json
       - rd-submodules/retroarch/modules/nvidia-cg-toolkit/nvidia-cg-toolkit-3.1.0013.json
-      - shared-modules/SDL/SDL-1.2.15.json
-      - shared-modules/SDL/SDL_image-1.2.12.json
-      - shared-modules/SDL/SDL_mixer-1.2.12.json
-      - shared-modules/SDL/SDL_net-1.2.8.json
-      - shared-modules/SDL/SDL_ttf-2.0.11.json
-      #- shared-modules/libusb/libusb.json moved outside
+      - rd-submodules/shared-modules/SDL/SDL-1.2.15.json
+      - rd-submodules/shared-modules/SDL/SDL_image-1.2.12.json
+      - rd-submodules/shared-modules/SDL/SDL_mixer-1.2.12.json
+      - rd-submodules/shared-modules/SDL/SDL_net-1.2.8.json
+      - rd-submodules/shared-modules/SDL/SDL_ttf-2.0.11.json
+      #- rd-submodules/shared-modules/libusb/libusb.json moved outside
       # certificate glu issue
-      #- shared-modules/gudev/gudev.json
+      #- rd-submodules/shared-modules/gudev/gudev.json
       - rd-submodules/retroarch/modules/libbz2/libbz2-1.0.8.json
       - rd-submodules/retroarch/modules/xrandr/xrandr-1.5.1.json
       - rd-submodules/retroarch/modules/libaio/libaio-0.3.112.json
       # certificate issue, check libglu module for more info
-      #- shared-modules/glu/glu-9.json
-      - shared-modules/libdecor/libdecor-0.1.1.json
+      #- rd-submodules/shared-modules/glu/glu-9.json
+      - rd-submodules/shared-modules/libdecor/libdecor-0.1.1.json
   - name: retroarch-filers-video
     subdir: gfx/video_filters
     make-install-args:
@@ -349,7 +349,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/RetroArch.git
-        commit: ad89b0c655fc1d25adfcdf40268e95c5d0391111
+        commit: 938ab716bd290b0f469068500966a834b5782929
   - name: retroarch-filers-audio
     subdir: libretro-common/audio/dsp_filters
     make-install-args:
@@ -357,7 +357,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/RetroArch.git
-        commit: ad89b0c655fc1d25adfcdf40268e95c5d0391111
+        commit: 938ab716bd290b0f469068500966a834b5782929
   - name: retroarch-assets
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
@@ -371,21 +371,21 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/libretro-database.git
-        commit: 183babc61f6a7aa6077e663bb2a8bb91d11d6874
+        commit: 6a8d65d2bc1b7ffa7accb882e80c0a77b931bcc6
   - name: libretro-core-info
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
         url: https://github.com/libretro/libretro-core-info.git
-        commit: 3d9b20d3711c8c2827246e3b48a503973192f080
+        commit: eb7e3ff064c3fdaae46b89c9da9f49e15a8e9c2b
   - name: retroarch-joypad-autoconfig
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
         url: https://github.com/libretro/retroarch-joypad-autoconfig.git
-        commit: dc625d5623a0e5c6999f372c99548676f9851691
+        commit: 8ec6304a14bd37cf927ebe7555a274ac4fefeb69
   - name: common-shaders
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
@@ -399,14 +399,14 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/slang-shaders.git
-        commit: feb1fcaee0fe5294b9885fdcc87cb16f0bac06be
+        commit: 8b35477a934739b1db193f22e7057754e7a87381
   - name: glsl-shaders
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
         url: https://github.com/libretro/glsl-shaders.git
-        commit: 66cd3917c3cde8c96b5492bca00c95e3e17b44b9
+        commit: 799aa9e4d567db0874111d2aed9c9b9058a19641
   - name: common-overlays
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
@@ -425,8 +425,8 @@ modules:
       - mv ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* /app/share/libretro/cores/
     sources:
       - type: archive
-        url: https://buildbot.libretro.com/stable/1.14.0/linux/x86_64/RetroArch_cores.7z
-        sha256: 59369f1ef18cdc302c38bcb270d71989cef665d71f3156a1f07486122713d030
+        url: https://buildbot.libretro.com/stable/1.15.0/linux/x86_64/RetroArch_cores.7z
+        sha256: 1fdec5c2cbabea4f194ede4a1fb0dd1d17e14e64bf7ef705e3ad763592411073
 
   # PPSSPP - START
   # https://github.com/flathub/org.ppsspp.PPSSPP
@@ -495,13 +495,15 @@ modules:
       - ln -s "${FLATPAK_DEST}/yuzu/usr/bin/yuzu" "${FLATPAK_DEST}/bin/yuzu"
     sources:
       - type: file
-        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1343/yuzu-mainline-20230217-b795f3bc1.AppImage
-        sha256: 47eb1ec3e4d7368d0eef832a7b9c378fd6a0fbaebfd7af7768d6edaf8b35f8a5
+        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1369/yuzu-mainline-20230312-54c359d1e.AppImage
+        sha256: 219874f72ea09856c8f1349d7bf744ecbd2823a469bd29f036b386924f5c5a97
 
   # Yuzu - END
 
   # CITRA - START
   # https://github.com/flathub/org.citra_emu.citra
+
+  - rd-submodules/shared-modules/SDL2/SDL2-with-libdecor.json
 
   - name: citra
     buildsystem: cmake-ninja
@@ -527,8 +529,8 @@ modules:
     sources:
       - type: archive
         url: >-
-          https://github.com/citra-emu/citra-nightly/releases/download/nightly-1844/citra-unified-source-20230217-cda3584.tar.xz
-        sha256: 9e0c5fcf503f5d0dbe95cc6de68c4b3c9148c07e2df892b85cc99ada8963c14e
+          https://github.com/citra-emu/citra-nightly/releases/download/nightly-1854/citra-unified-source-20230312-2cbf6fb.tar.xz
+        sha256: 018cb7dce3aa29a548a6e4cbad65d97babd98d2cdd1a4848a7c95c117f92fdf5
         x-checker-data:
           type: json
           url: https://api.github.com/repos/citra-emu/citra-nightly/releases/latest
@@ -557,8 +559,8 @@ modules:
       - ln -s "${FLATPAK_DEST}/pcsx2-qt/usr/bin/pcsx2-qt" "${FLATPAK_DEST}/bin/pcsx2-qt"
     sources:
       - type: file
-        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.4108/pcsx2-v1.7.4108-linux-AppImage-64bit-Qt.AppImage
-        sha256: 31dab12f7f7d0c4a7122011c0f86f5acfe9a9018cece66b4333d230154c8b910
+        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.4225/pcsx2-v1.7.4225-linux-AppImage-64bit-Qt.AppImage
+        sha256: e8ed326851941b212193c2bd193ca87efdcc70c18971f45749273a32893fec68
 
   # PCSX2 - END
 
@@ -780,8 +782,8 @@ modules:
   # https://github.com/flathub/net.rpcs3.RPCS3
 
   # glu issue, check libglu module for more info
-  #- shared-modules/glu/glu-9.json
-  - shared-modules/glew/glew.json
+  #- rd-submodules/shared-modules/glu/glu-9.json
+  - rd-submodules/shared-modules/glew/glew.json
 
   - name: rpcs3
     buildsystem: cmake-ninja
@@ -822,7 +824,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/RPCS3/rpcs3.git
-        commit: 6b556a5206fa68e4801fca124bfc3874440e4e17
+        commit: cf5346c263111760752cabb94767c07c501207c4
       - type: git
         url: https://github.com/intel/ittapi.git
         commit: 2de8a23f6130036dcd4d1b78d05df3187951d298
@@ -854,8 +856,8 @@ modules:
       - install -D primehack-wrapper /app/bin/primehack-wrapper
     sources:
       - type: git
-        url: https://github.com/TheDrifter363/primehack.git
-        commit: 6295c695307a67f11ee202b05cbdd7b5c1edae5c
+        url: https://github.com/shiiion/dolphin.git
+        commit: efb99ebfd20b1bc16ea3e51fec409c91e354d8c2
        # detects whether dolphin is running in a flatpak sandbox
        # and makes it use xdg directories if it is.
        # prevents dolphin from attempting to write conf files
