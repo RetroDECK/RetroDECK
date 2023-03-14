@@ -3,7 +3,7 @@
 <component type="desktop-application">
   <id>net.retrodeck.retrodeck</id>
   <launchable type="desktop-id">net.retrodeck.retrodeck.desktop</launchable>
-  <name>RetroDECK</name>
+  <name>RetroDECK</name> 
   <summary>Your one in all application for emulation and retro gaming on the Steam Deck and more!</summary> 
   <developer_name>RetroDECK Team</developer_name>
   <url type="homepage">https://retrodeck.net</url>
