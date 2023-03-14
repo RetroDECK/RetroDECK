@@ -58,7 +58,7 @@ cleanup-commands:
 
 modules:
 
-  - shared-modules/libusb/libusb.json
+  - rd-submodules/shared-modules/libusb/libusb.json
 
   # This module is used to define the RetroDECK version
   # If the version is set as cooker it will automatically generate the version tag based on the date
@@ -319,20 +319,20 @@ modules:
     modules:
       - rd-submodules/retroarch/modules/libpng/libpng-1.6.35.json
       - rd-submodules/retroarch/modules/nvidia-cg-toolkit/nvidia-cg-toolkit-3.1.0013.json
-      - shared-modules/SDL/SDL-1.2.15.json
-      - shared-modules/SDL/SDL_image-1.2.12.json
-      - shared-modules/SDL/SDL_mixer-1.2.12.json
-      - shared-modules/SDL/SDL_net-1.2.8.json
-      - shared-modules/SDL/SDL_ttf-2.0.11.json
-      #- shared-modules/libusb/libusb.json moved outside
+      - rd-submodules/shared-modules/SDL/SDL-1.2.15.json
+      - rd-submodules/shared-modules/SDL/SDL_image-1.2.12.json
+      - rd-submodules/shared-modules/SDL/SDL_mixer-1.2.12.json
+      - rd-submodules/shared-modules/SDL/SDL_net-1.2.8.json
+      - rd-submodules/shared-modules/SDL/SDL_ttf-2.0.11.json
+      #- rd-submodules/shared-modules/libusb/libusb.json moved outside
       # certificate glu issue
-      #- shared-modules/gudev/gudev.json
+      #- rd-submodules/shared-modules/gudev/gudev.json
       - rd-submodules/retroarch/modules/libbz2/libbz2-1.0.8.json
       - rd-submodules/retroarch/modules/xrandr/xrandr-1.5.1.json
       - rd-submodules/retroarch/modules/libaio/libaio-0.3.112.json
       # certificate issue, check libglu module for more info
-      #- shared-modules/glu/glu-9.json
-      - shared-modules/libdecor/libdecor-0.1.1.json
+      #- rd-submodules/shared-modules/glu/glu-9.json
+      - rd-submodules/shared-modules/libdecor/libdecor-0.1.1.json
   - name: retroarch-filers-video
     subdir: gfx/video_filters
     make-install-args:
@@ -494,7 +494,7 @@ modules:
   # CITRA - START
   # https://github.com/flathub/org.citra_emu.citra
 
-  - shared-modules/SDL2/SDL2-with-libdecor.json
+  - rd-submodules/shared-modules/SDL2/SDL2-with-libdecor.json
 
   - name: citra
     buildsystem: cmake-ninja
@@ -773,8 +773,8 @@ modules:
   # https://github.com/flathub/net.rpcs3.RPCS3
 
   # glu issue, check libglu module for more info
-  #- shared-modules/glu/glu-9.json
-  - shared-modules/glew/glew.json
+  #- rd-submodules/shared-modules/glu/glu-9.json
+  - rd-submodules/shared-modules/glew/glew.json
 
   - name: rpcs3
     buildsystem: cmake-ninja
