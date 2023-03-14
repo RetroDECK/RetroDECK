@@ -381,6 +381,62 @@ configurator_compress_single_game_dialog() {
   fi
 }
 
+configurator_compress_multi_game_dialog() {
+# This dialog will display any games it finds to be compressable, from the systems listed under each compression type in compression_targets.cfg
+# USAGE: configurator_compress_multi_game_dialog $compression_type
+  
+  local compression_format=$1
+  local compressable_game=""
+  local compressable_games_for_selection=()
+  local all_compressable_games=()
+  local compressable_systems_for_selection=$(sed -n '/\['"$compression_format"'\]/, /\[/{ /\['"$compression_format"'\]/! { /\[/! p } }' $compression_targets | sed '/^$/d')
+
+  while IFS= read -r system # Find and validate all games that are able to be compressed with this compression type
+  do
+    if [[ $compression_format == "chd" ]]; then
+      compression_candidates=$(find "$roms_folder/$system" -type f \( -name "*.cue" -o -name "*.iso" -o -name "*.gdi" \) ! -path "*.m3u*")
+    fi
+    while IFS= read -r game
+    do
+        if [[ $(validate_for_chd "$game") == "true" ]]; then
+          all_compressable_games=("${all_compressable_games[@]}" $game)
+          compressable_games_for_selection=("${compressable_games_for_selection[@]}" "false" "${game#$roms_folder}" $game)
+        fi
+    done < <(printf '%s\n' "$compression_candidates")
+  done < <(printf '%s\n' "$compressable_systems_list")
+
+  choice=$(zenity \
+      --list --width=1200 --height=720 \
+      --checklist --hide-column=3 --ok-label="Compress Selected" --extra-button="Compress All" \
+      --separator="," --print-column=3 \
+      --text="Choose which games to compress:" \
+      --column "Compress?" \
+      --column "Game" \
+      --column "Game Full Path" \
+      "${compressable_games_for_selection[@]}")
+
+  local rc=$?
+  if [[ $rc == "0" && ! -z $choice ]]; then # User clicked "Compress Selected" with at least one game selected
+    IFS="," read -ra games_to_compress <<< "$choice"
+    for game in "${games_to_compress[@]}"; do
+      local filename_no_path=$(basename $game)
+      local filename_no_extension=${filename_no_path%.*}
+      compress_to_chd $(dirname $(realpath $game))/$(basename $game) $(dirname $(realpath $game))/$filename_no_extension
+    done
+  else
+    if [[ ! -z $choice ]]; then # Games were selected to be compressed
+      #echo "Compressing all games"
+      for game in "${all_compressable_games[@]}"; do
+      local filename_no_path=$(basename $game)
+      local filename_no_extension=${filename_no_path%.*}
+      compress_to_chd $(dirname $(realpath $game))/$(basename $game) $(dirname $(realpath $game))/$filename_no_extension
+    done
+    else
+      echo "No games being compressed"
+    fi
+  fi
+}
+
 configurator_compress_games_dialog() {
   # This is currently a placeholder for a dialog where you can compress a single game or multiple at once. Currently only the single game option is available, so is launched by default.
 
