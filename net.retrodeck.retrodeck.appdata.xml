@@ -4,8 +4,8 @@
   <id>net.retrodeck.retrodeck</id>
   <launchable type="desktop-id">net.retrodeck.retrodeck.desktop</launchable>
   <name>RetroDECK</name>
-  <summary>Everything you need for emulation on Steam Deck</summary>
-  <developer_name>Xargon</developer_name>
+  <summary>Your one in all application for emulation and retro gaming on the Steam Deck and more!</summary> 
+  <developer_name>RetroDECK Team</developer_name>
   <url type="homepage">https://retrodeck.net</url>
   <url type="bugtracker">https://github.com/XargonWan/RetroDECK/issues</url>
   <url type="help">http://discord.gg/Dz3szYsP8g</url>
