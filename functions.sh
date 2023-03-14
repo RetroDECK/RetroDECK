@@ -157,6 +157,7 @@ validate_for_chd () {
 				echo $cue_validated
 			fi
 		else
+      $cue_validated="true"
 			echo $cue_validated
 		fi
 	else
@@ -1319,7 +1320,9 @@ finit() {
   mkdir -pv $saves_folder
   mkdir -pv $states_folder
   mkdir -pv $rdhome/screenshots
-  mkdir -pv $rdhome/.logs
+  mkdir -pv $logs_folder
+  mkdir -pv $mods_folder
+  mkdir -pv $texture_packs_folder
 
   # XMLSTARLET HERE
   cp -fv /app/retrodeck/es_settings.xml /var/config/emulationstation/.emulationstation/es_settings.xml
