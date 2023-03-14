@@ -129,7 +129,8 @@ validate_for_chd () {
   # USAGE: validate_for_chd $input_file
 
 	local file=$1
-	current_run_log_file="chd_compression_"$(date +"%Y_%m_%d_%I_%M_%p").log""
+  local file_validated="false"
+	current_run_log_file="chd_compression_$(basename $file).log"
 	echo "Validating file:" $file > "$logs_folder/$current_run_log_file"
 	if [[ "$file" == *".cue" ]] || [[ "$file" == *".gdi" ]] || [[ "$file" == *".iso" ]]; then
 		echo ".cue/.iso/.gdi file detected" >> $logs_folder/$current_run_log_file
@@ -140,24 +141,24 @@ validate_for_chd () {
 		echo "File base name:" $file_name >> "$logs_folder/$current_run_log_file"
 		if [[ "$file" == *".cue" ]]; then # Validate .cue file
 			local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" $file)
-			local cue_validated="false"
 			for line in $cue_bin_files
 			do
 				if [[ -f "$file_path/$line" ]]; then
 					echo ".bin file found at $file_path/$line" >> "$logs_folder/$current_run_log_file"
-					cue_validated="true"
+					file_validated="true"
 				else
 					echo ".bin file NOT found at $file_path/$line" >> "$logs_folder/$current_run_log_file"
 					echo ".cue file could not be validated. Please verify your .cue file contains the correct corresponding .bin file information and retry." >> "$logs_folder/$current_run_log_file"
-					cue_validated="false"
+					file_validated="false"
 					break
 				fi
 			done
-			if [[ $cue_validated == "true" ]]; then
-				echo $cue_validated
+			if [[ $file_validated == "true" ]]; then
+				echo $file_validated
 			fi
-		else
-			echo $cue_validated
+		else # If file is a .iso or .gdi
+      file_validated="true"
+			echo $file_validated
 		fi
 	else
 		echo "File type not recognized. Supported file types are .cue, .gdi and .iso" >> "$logs_folder/$current_run_log_file"
