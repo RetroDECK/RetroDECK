@@ -629,7 +629,6 @@ update_rd_conf() {
   deploy_single_patch $rd_defaults $rd_update_patch $rd_conf
   set_setting_value $rd_conf "version" "$hard_version" retrodeck # Set version of currently running RetroDECK to updated retrodeck.cfg
   rm -f $rd_update_patch # Cleanup temporary patch file
-  source $rd_conf # Load new config file variables
 }
 
 conf_write() {
