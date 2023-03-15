@@ -73,9 +73,9 @@ verify_space() {
   # USAGE: verify_space $source_dir $dest_dir
   # Function returns "true" if there is enough space, "false" if there is not
 
-  source_size=$(du -sk $1 | awk '{print $1}')
+  source_size=$(du -sk "$1" | awk '{print $1}')
   source_size=$((source_size+(source_size/10))) # Add 10% to source size for safety
-  dest_avail=$(df -k --output=avail $2 | tail -1)
+  dest_avail=$(df -k --output=avail "$2" | tail -1)
 
   if [[ $source_size -ge $dest_avail ]]; then
     echo "false"
@@ -88,13 +88,13 @@ move() {
   # Function to move a directory from one parent to another
   # USAGE: move $source_dir $dest_dir
 
-  if [[ ! -d "$2/$(basename $1)" ]]; then
-    if [[ $(verify_space $1 $2) ]]; then
+  if [[ ! -d "$2/$(basename "$1")" ]]; then
+    if [[ $(verify_space "$1" "$2") ]]; then
       (
-        if [[ ! -d $2 ]]; then # Create destination directory if it doesn't already exist
-          mkdir -pv $2
+        if [[ ! -d "$2" ]]; then # Create destination directory if it doesn't already exist
+          mkdir -pv "$2"
         fi
-        mv -v -t $2 $1
+        mv -v -t "$2" "$1"
       ) |
       zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -121,28 +121,30 @@ compress_to_chd () {
   # USAGE: compress_to_chd $full_path_to_input_file $full_path_to_output_file
 
 	echo "Compressing file $1 to $2.chd"
-	/app/bin/chdman createcd -i $1 -o $2.chd
+	/app/bin/chdman createcd -i "$1" -o "$2".chd
 }
 
 validate_for_chd () {
   # Function for validating chd compression candidates, and compresses if validation passes. Supports .cue, .iso and .gdi formats ONLY
   # USAGE: validate_for_chd $input_file
 
-	local file=$1
+	local file="$1"
   local file_validated="false"
-	current_run_log_file="chd_compression_$(basename $file).log"
-	echo "Validating file:" $file > "$logs_folder/$current_run_log_file"
+	current_run_log_file="chd_compression_$(basename "$file").log"
+	echo "Validating file:" "$file" > "$logs_folder/$current_run_log_file"
 	if [[ "$file" == *".cue" ]] || [[ "$file" == *".gdi" ]] || [[ "$file" == *".iso" ]]; then
-		echo ".cue/.iso/.gdi file detected" >> $logs_folder/$current_run_log_file
-		local file_path=$(dirname $(realpath $file))
-		local file_base_name=$(basename $file)
+		echo ".cue/.iso/.gdi file detected" >> "$logs_folder/$current_run_log_file"
+		local file_path=$(dirname "$(realpath "$file")")
+		local file_base_name=$(basename "$file")
 		local file_name=${file_base_name%.*}
-		echo "File base path:" $file_path >> "$logs_folder/$current_run_log_file"
-		echo "File base name:" $file_name >> "$logs_folder/$current_run_log_file"
 		if [[ "$file" == *".cue" ]]; then # Validate .cue file
-			local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" $file)
-			for line in $cue_bin_files
+			echo "Validating .cue associated .bin files" >> "$logs_folder/$current_run_log_file"
+			local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" "$file")
+			echo "Associated bin files read:" >> "$logs_folder/$current_run_log_file"
+			printf '%s\n' "$cue_bin_files" >> "$logs_folder/$current_run_log_file"
+			while IFS= read -r line
 			do
+				echo "looking for $file_path/$line" >> "$logs_folder/$current_run_log_file"
 				if [[ -f "$file_path/$line" ]]; then
 					echo ".bin file found at $file_path/$line" >> "$logs_folder/$current_run_log_file"
 					file_validated="true"
@@ -152,7 +154,7 @@ validate_for_chd () {
 					file_validated="false"
 					break
 				fi
-			done
+			done < <(printf '%s\n' "$cue_bin_files")
 			if [[ $file_validated == "true" ]]; then
 				echo $file_validated
 			fi
@@ -162,6 +164,51 @@ validate_for_chd () {
 		fi
 	else
 		echo "File type not recognized. Supported file types are .cue, .gdi and .iso" >> "$logs_folder/$current_run_log_file"
+	fi
+}
+
+cli_compress_file() {
+	# This function will compress a single file passed from the CLI arguments
+  # USAGE: cli_compress_file $full_file_path
+  local file="$1"
+  echo "Looking for" "$file"
+  current_run_log_file="chd_compression_$(basename "$file").log"
+	if [[ ! -z "$file" ]]; then
+		if [[ -f "$file" ]]; then
+			if [[ $(validate_for_chd "$file") == "true" ]]; then
+        read -p "RetroDECK will now attempt to compress your selected game. Press Enter key to continue..."
+				read -p "Do you want to have the original file removed after compression is complete? Please answer y/n and press Enter: " post_compression_cleanup
+				local filename_no_path=$(basename "$file")
+        local filename_no_extension="${filename_no_path%.*}"
+        local source_file=$(dirname "$(realpath "$file")")"/"$(basename "$file")
+        local dest_file=$(dirname "$(realpath "$file")")"/""$filename_no_extension"
+        echo "Compressing $filename_no_path"
+        compress_to_chd "$source_file" "$dest_file"
+				if [[ $post_compression_cleanup == [yY] ]]; then # Remove file(s) if requested
+					if [[ "$file" == *".cue" ]]; then
+            local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" "$file")
+            local file_path=$(dirname "$(realpath "$file")")
+            while IFS= read -r line
+						do # Remove associated .bin files
+              echo "Removing file "$line""
+              rm -f "$file_path/$line"
+            done < <(printf '%s\n' "$cue_bin_files") # Remove original .cue file
+            echo "Removing file "$filename_no_path""
+            rm -f $(realpath "$file")
+          else
+            echo "Removing file "$filename_no_path""
+            rm -f $(realpath "$file")
+          fi
+				fi
+			else
+				printf "An error occured during the compression process. Please see the following log entries for details:\n\n"
+				cat "$logs_folder/$current_run_log_file"
+			fi
+		else
+			echo "File not found, please specify the full path to the file to be compressed."
+		fi
+	else
+		echo "Please use this command format \"--compress <cue/gdi/iso file to compress>\""
 	fi
 }
 
@@ -803,9 +850,6 @@ citra_init() {
   dir_prep "$rdhome/.logs/citra" "/var/data/citra-emu/log"
   cp -fv $emuconfigs/citra-qt-config.ini /var/config/citra-emu/qt-config.ini
   sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
-  #TODO: do the same with roms folders after new variables is pushed (check even the others qt-emu)
-  #But actually everything is always symlinked to retrodeck/roms so it might be not needed
-  #sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
 }
 
 rpcs3_init() {
