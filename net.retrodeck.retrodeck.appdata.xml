@@ -37,36 +37,51 @@
   </screenshots>
   <description>
   <p>
-	RetroDECK brings an environment to catalog and play your retro games directly from SteamOS and it's tailored specifically for the Steam Deck.
-	It's inspired by embedded emulation systems like AmberELEC, EmuELEC, CoreELEC, Lakka, and Batocera.</p>
-	<p>
-	Powered by EmulationStation Desktop Edition, which uses RetroArch and other standalone emulators to allow you to import and play your favorite retro (and even not-so-retro) games in a tidy environment without flooding your Steam library.
-	No other software is needed as everything it's already included!</p>
+  What is Retrodeck?</br>
+  RetroDECK is an emulation and retro gaming solution to catalog and play your game collection directly from Linux in one unified application. 
+  It's inspired by other embedded emulation systems like AmberELEC, EmuELEC, CoreELEC, Lakka, and Batocera.
+  RetroDECK is powered by EmulationStation Desktop Edition, that uses RetroArch and other standalone emulators to allow you to import and play your favorite games in a tidy environment.
+  No other software is needed as everything it's already included in one package!
+  </p>
   <p>
-  NOTE: Albeit RetroDECK could possibily work on every distro, it's supported only on Steam Deck.</p>
+  BETA NOTICE: RetroDECK is still in Beta and the team is actively developing and adding more features. 
+  </p>
+  <p>About the Beta:</br>
+  The primary focus during the beta period is on SteamOS and the Steam Deck but we hope to expand to more devices and general Linux desktop in the future (NOTE: It can be run on Linux desktop right now but there will be some manual configurations needed for input, storage location and other tiny hickups).
+  </p>
+  <p>
+  NOTE: Albeit RetroDECK could possibily work on every distro, it's supported only on Steam Deck.
+  </p>
+  
 
-  <p>INSTALLATION INSTRUCTIONS:</p>
+  <p>INSTALLATION INSTRUCTIONS FOR THE STEAM DECK:</p>
   <ul>
-    <li>Start RetroDECK from the Desktop mode (first time only)</li>
-    <li>Follow the setup (read carefully!)</li>
-    <li>Add RetroDECK to your Steam Library</li>
-    <li>[OPTIONAL] Download Steam Grids with BoilR</li>
-    <li>Always start RetroDECK from Steam Library</li>
+    <li>1. Start RetroDECK from the Desktop mode (only needed for the initial first time configuration)</li>
+    <li>2. Add RetroDECK to your Steam Library by pressing "Add a non-steam game to my library"</li>
+    <li>3. Download the offical RetroDECK controller profile from Steam</li>
+    <li>4. [OPTIONAL] Download Steam Grids graphics for RetroDECK with BoilR</li>
   </ul>
-  <p>For a better experience is suggested to use the official Steam Controller Config available under community configs in Steam</p>
-
-  <p>Known Issues:</p>
-    <ul>
-      <li>PCSX2: due to its limitation, the standalone PCSX2 doesn't have any way to set the hotkeys, so no save and load state, no quit button. In order to quit press: STEAM -> PCSX2 -> (X) CLOSE WINDOW, be aware that the state is not automatically saved</li>
-      <li>As of this moment external controllers, local multiplayer in gamemode are not supported. Neither is running RetroDECK in desktop mode, we plan on adding the functionality in the future</li>
-    </ul>
+  <p>
+  For more detailed information check our wiki:</br>
+  https://github.com/XargonWan/RetroDECK/wiki
+  </p>
+  <p>
+  If you want to sponsor the project:</br>
+  https://www.patreon.com/RetroDECK
+  </p>
+  <p>
+    If you want to join the RetroDECK community check our:</br>
+    Discord: 
+    Reddit:
+  </p>
+  <p>If you want to help out with the project join the "i-want-to-help" channel on our Discord.</p>
   </description>
   <project_license>GPL-3.0</project_license>
   <metadata_license>CC0-1.0</metadata_license>
 
 <releases>
 
-  <release version="0.6.2b" date="2023-03-14">
+  <release version="0.6.2b" date="2023-03-15">
     <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.2b</url>
       <description>
         <ul>
