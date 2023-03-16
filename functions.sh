@@ -781,7 +781,7 @@ dolphin_init() {
   dir_prep "$rdhome/saves/gc/dolphin/USA" "/var/data/dolphin-emu/GC/USA"
   dir_prep "$rdhome/saves/gc/dolphin/JAP" "/var/data/dolphin-emu/GC/JAP"
   dir_prep "$rdhome/screenshots" "/var/data/dolphin-emu/ScreenShots"
-  dir_prep "$rdhome/states" "/var/data/dolphin-emu/StateSaves"
+  dir_prep "$rdhome/states/dolphin" "/var/data/dolphin-emu/StateSaves"
   mkdir -pv /var/data/dolphin-emu/Wii/
   dir_prep "$rdhome/saves/wii/dolphin" "/var/data/dolphin-emu/Wii"
 }
@@ -799,7 +799,7 @@ primehack_init() {
   dir_prep "$rdhome/saves/gc/primehack/USA" "/var/data/primehack/GC/USA"
   dir_prep "$rdhome/saves/gc/primehack/JAP" "/var/data/primehack/GC/JAP"
   dir_prep "$rdhome/screenshots" "/var/data/primehack/ScreenShots"
-  dir_prep "$rdhome/states" "/var/data/primehack/StateSaves"
+  dir_prep "$rdhome/states/primehack" "/var/data/primehack/StateSaves"
   mkdir -pv /var/data/primehack/Wii/
   dir_prep "$rdhome/saves/wii/primehack" "/var/data/primehack/Wii"
 }
@@ -1070,7 +1070,7 @@ emulators_post_move() {
   dir_prep "$rdhome/saves/gc/dolphin/USA" "/var/data/dolphin-emu/GC/USA"
   dir_prep "$rdhome/saves/gc/dolphin/JAP" "/var/data/dolphin-emu/GC/JAP"
   dir_prep "$rdhome/screenshots" "/var/data/dolphin-emu/ScreenShots"
-  dir_prep "$rdhome/states" "/var/data/dolphin-emu/StateSaves"
+  dir_prep "$rdhome/states/dolphin" "/var/data/dolphin-emu/StateSaves"
   dir_prep "$rdhome/saves/wii/dolphin" "/var/data/dolphin-emu/Wii/"
 
   # Primehack section
@@ -1079,7 +1079,7 @@ emulators_post_move() {
   dir_prep "$rdhome/saves/gc/primehack/USA" "/var/data/primehack/GC/USA"
   dir_prep "$rdhome/saves/gc/primehack/JAP" "/var/data/primehack/GC/JAP"
   dir_prep "$rdhome/screenshots" "/var/data/primehack/ScreenShots"
-  dir_prep "$rdhome/states" "/var/data/primehack/StateSaves"
+  dir_prep "$rdhome/states/primehack" "/var/data/primehack/StateSaves"
   dir_prep "$rdhome/saves/wii/primehack" "/var/data/primehack/Wii/"
 
   # PCSX2 section

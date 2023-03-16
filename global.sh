@@ -54,6 +54,14 @@ pcsx2vmconf="/var/config/PCSX2/inis/PCSX2_vm.ini"
 
 pcsx2qtconf="/var/config/PCSX2/inis/PCSX2.ini"
 
+# Primehack config files
+
+primehackconf="/var/config/primehack/Dolphin.ini"
+primehackgcpadconf="/var/config/primehack/GCPadNew.ini"
+primehackgfxconf="/var/config/primehack/GFX.ini"
+primehackhkconf="/var/config/primehack/Hotkeys.ini"
+primehackqtconf="/var/config/primehack/Qt.ini"
+
 # We moved the lockfile in /var/config/retrodeck in order to solve issue #53 - Remove in a few versions
 if [ -f "$HOME/retrodeck/.lock" ]
 then
