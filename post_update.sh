@@ -45,6 +45,7 @@ post_update() {
   if [[ $prev_version -le "070" ]]; then
     # In version 0.7.0b, the following changes were made that required config file updates/reset or other changes to the filesystem:
     # - New ~/retrodeck/mods and ~/retrodeck/texture_packs directories are added and symlinked to multiple different emulators (where supported)
+    # - Expose ES-DE gamelists folder to user at ~/retrodeck/gamelists
 
     mkdir -p "$mods_folder"
     mkdir -p "$texture_packs_folder"
@@ -52,6 +53,8 @@ post_update() {
     dir_prep "$texture_packs_folder/Primehack" "/var/data/primehack/Load/Textures/"
     dir_prep "$mods_folder/Dolphin" "/var/data/dolphin-emu/Load/GraphicMods/"
     dir_prep "$texture_packs_folder/Dolphin" "/var/data/dolphin-emu/Load/Textures/"
+
+    dir_prep "$rdhome/gamelists" "/var/config/emulationstation/.emulationstation/gamelists"
   fi
 
   # The following commands are run every time.

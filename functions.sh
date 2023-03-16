@@ -1370,9 +1370,10 @@ finit() {
   # XMLSTARLET HERE
   cp -fv /app/retrodeck/es_settings.xml /var/config/emulationstation/.emulationstation/es_settings.xml
 
-  # ES-DE preparing themes and scraped folders
+  # ES-DE preparing user-exposed folders
   dir_prep "$media_folder" "/var/config/emulationstation/.emulationstation/downloaded_media"
   dir_prep "$themes_folder" "/var/config/emulationstation/.emulationstation/themes"
+  dir_prep "$rdhome/gamelists" "/var/config/emulationstation/.emulationstation/gamelists"
 
   # PICO-8
   dir_prep "$bios_folder/pico-8" "$HOME/.lexaloffle/pico-8" # Store binary and config files together. The .lexaloffle directory is a hard-coded location for the PICO-8 config file, cannot be changed
