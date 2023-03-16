@@ -1399,8 +1399,6 @@ finit() {
   # TODO: Replace the stuff above with BoilR code when ready
 }
 
-#!/bin/bash
-
 save_migration() {
   # Finding existing ROMs folder
   if [ -d "$default_sd/retrodeck" ]
