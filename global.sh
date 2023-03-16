@@ -5,19 +5,20 @@
 source /app/libexec/functions.sh
 
 # Static variables
-rd_conf="/var/config/retrodeck/retrodeck.cfg"                                     # RetroDECK config file path
-rd_conf_backup="/var/config/retrodeck/retrodeck.bak"                              # Backup of RetroDECK config file from update
-emuconfigs="/app/retrodeck/emu-configs"                                           # folder with all the default emulator configs
-rd_defaults="$emuconfigs/defaults/retrodeck.cfg"                                  # A default RetroDECK config file
-rd_update_patch="/var/config/retrodeck/rd_update.patch"                           # A static location for the temporary patch file used during retrodeck.cfg updates
-bios_checklist="/var/config/retrodeck/tools/bios_checklist.cfg"                   # A config file listing BIOS file information that can be verified
-easter_egg_checklist="/var/config/retrodeck/tools/easter_egg_checklist.cfg"       # A config file listing days and times when special splash screens should show up
-splashscreen_dir="/var/config/emulationstation/graphics/extra-splashes"           # The default location of extra splash screens
-current_splash_file="/var/config/emulationstation/graphics/splash.svg"            # The active splash file that will be shown on boot
-default_splash_file="/var/config/emulationstation/graphics/splash-orig.svg"       # The default RetroDECK splash screen
-lockfile="/var/config/retrodeck/.lock"                                            # where the lockfile is located
-default_sd="/run/media/mmcblk0p1"                                                 # Steam Deck SD default path
-hard_version="$(cat '/app/retrodeck/version')"                                    # hardcoded version (in the readonly filesystem)
+rd_conf="/var/config/retrodeck/retrodeck.cfg"                                                                 # RetroDECK config file path
+rd_conf_backup="/var/config/retrodeck/retrodeck.bak"                                                          # Backup of RetroDECK config file from update
+emuconfigs="/app/retrodeck/emu-configs"                                                                       # folder with all the default emulator configs
+rd_defaults="$emuconfigs/defaults/retrodeck/retrodeck.cfg"                                                    # A default RetroDECK config file
+rd_update_patch="/var/config/retrodeck/rd_update.patch"                                                       # A static location for the temporary patch file used during retrodeck.cfg updates
+bios_checklist="$emuconfigs/defaults/retrodeck/bios_checklist.cfg"                                               # A config file listing BIOS file information that can be verified
+compression_targets="$emuconfigs/defaults/retrodeck/compression_targets.cfg"                                  # A config file containing supported compression types per system
+easter_egg_checklist="$emuconfigs/defaults/retrodeck/easter_egg_checklist.cfg"                                   # A config file listing days and times when special splash screens should show up
+splashscreen_dir="/var/config/emulationstation/.emulationstation/resources/graphics/extra-splashes"           # The default location of extra splash screens
+current_splash_file="/var/config/emulationstation/.emulationstation/resources/graphics/splash.svg"            # The active splash file that will be shown on boot
+default_splash_file="/var/config/emulationstation/.emulationstation/resources/graphics/splash-orig.svg"       # The default RetroDECK splash screen
+lockfile="/var/config/retrodeck/.lock"                                                                        # where the lockfile is located
+default_sd="/run/media/mmcblk0p1"                                                                             # Steam Deck SD default path
+hard_version="$(cat '/app/retrodeck/version')"                                                                # hardcoded version (in the readonly filesystem)
 
 # Config files for emulators with single config files
 
