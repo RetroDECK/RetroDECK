@@ -642,6 +642,7 @@ update_rd_conf() {
   deploy_single_patch $rd_defaults $rd_update_patch $rd_conf
   set_setting_value $rd_conf "version" "$hard_version" retrodeck # Set version of currently running RetroDECK to updated retrodeck.cfg
   rm -f $rd_update_patch # Cleanup temporary patch file
+  source $rd_conf
 }
 
 resolve_preset_conflicts() {
@@ -1616,14 +1617,4 @@ configurator_destination_choice_dialog() {
   --text="$2")
 
   echo $choice
-}
-
-desktop_mode_warning() {
-  # This function is a generic warning for issues that happen when running in desktop mode.
-  # Running in desktop mode can be verified with the following command: if [[ $XDG_CURRENT_DESKTOP == "KDE" ]]; then
-
-  zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-  --title "RetroDECK Desktop Mode Warning" \
-  --text="You appear to be running RetroDECK in the Steam Deck's Desktop mode!\n\nSome functions of RetroDECK may not work properly in Desktop mode, such as the Steam Deck's normal controls.\n\nRetroDECK is best enjoyed in Game mode!"
 }

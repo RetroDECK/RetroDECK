@@ -67,6 +67,5 @@ post_update() {
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Finishing Upgrade" \
   --text="RetroDECK is finishing the upgrade process, please wait."
-  source $rd_conf # Load new config file variables
   create_lock
 }

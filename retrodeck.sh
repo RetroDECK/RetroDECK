@@ -123,8 +123,6 @@ else
   fi
 fi
 
-source $rd_conf # Load latest variable values
-
 # Check if running in Desktop mode and warn if true, unless desktop_mode_warning=false in retrodeck.cfg
 
 desktop_mode_warning
