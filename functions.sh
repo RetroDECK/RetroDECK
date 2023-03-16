@@ -629,7 +629,6 @@ update_rd_conf() {
   deploy_single_patch $rd_defaults $rd_update_patch $rd_conf
   set_setting_value $rd_conf "version" "$hard_version" retrodeck # Set version of currently running RetroDECK to updated retrodeck.cfg
   rm -f $rd_update_patch # Cleanup temporary patch file
-  source $rd_conf # Load new config file variables
 }
 
 conf_write() {
@@ -1314,7 +1313,7 @@ finit() {
   dir_prep "$themes_folder" "/var/config/emulationstation/.emulationstation/themes"
 
   # PICO-8
-  dir_prep "$bios_folder/pico-8" "~/.lexaloffle/pico-8" # Store binary and config files together. The .lexaloffle directory is a hard-coded location for the PICO-8 config file, cannot be changed
+  dir_prep "$bios_folder/pico-8" "$HOME/.lexaloffle/pico-8" # Store binary and config files together. The .lexaloffle directory is a hard-coded location for the PICO-8 config file, cannot be changed
   dir_prep "$roms_folder/pico8" "$bios_folder/pico-8/carts" # Symlink default game location to RD roms for cleanliness (this location is overridden anyway by the --root_path launch argument anyway)
   dir_prep "$bios_folder/pico-8/cdata" "$saves_folder/pico-8" # PICO-8 saves folder
 
