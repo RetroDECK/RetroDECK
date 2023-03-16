@@ -223,14 +223,14 @@ desktop_mode_warning() {
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Desktop Mode Warning" \
       --text="You appear to be running RetroDECK in the Steam Deck's Desktop mode!\n\nSome functions of RetroDECK may not work properly in Desktop mode, such as the Steam Deck's normal controls.\n\nRetroDECK is best enjoyed in Game mode!\n\nDo you still want to proceed?")
-    fi
-  fi
-  rc=$? # Capture return code, as "Yes" button has no text value
-  if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
-    if [[ $choice == "No" ]]; then
-      exit 1
-    elif [[ $choice == "Never show this again" ]]; then
-      set_setting_value $rd_conf "desktop_mode_warning" "false" retrodeck # Store desktop mode warning variable for future checks
+      rc=$? # Capture return code, as "Yes" button has no text value
+      if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
+        if [[ $choice == "No" ]]; then
+          exit 1
+        elif [[ $choice == "Never show this again" ]]; then
+          set_setting_value $rd_conf "desktop_mode_warning" "false" retrodeck # Store desktop mode warning variable for future checks
+        fi
+      fi
     fi
   fi
 }
