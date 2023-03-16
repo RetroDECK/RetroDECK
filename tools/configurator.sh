@@ -322,7 +322,7 @@ configurator_retroarch_rewind_dialog() {
     zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - Rewind" \
-    --text="Rewind is currently disabled, do you want to enable it?\n\nNOTE:\nThis may impact performance expecially on the latest systems."
+    --text="Rewind is currently disabled, do you want to enable it?\n\nNOTE:\nThis may impact performance on some more demanding systems."
 
     if [ $? == 0 ]
     then
@@ -339,7 +339,7 @@ configurator_retroarch_options_dialog() {
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
   "Change Rewind Setting" "Enable or disable the Rewind function in RetroArch." \
-  "Log in to RetroAchivements" "Log into the RetroAchievements service in RetroArch." )
+  "RetroAchievements Login" "Log into the RetroAchievements service in RetroArch." )
 
   case $choice in
 
@@ -347,7 +347,7 @@ configurator_retroarch_options_dialog() {
     configurator_retroarch_rewind_dialog
   ;;
 
-  "Log in to RetroAchivements" )
+  "RetroAchievements Login" )
     configurator_retroachivement_dialog
   ;;
 
@@ -803,18 +803,15 @@ configurator_move_dialog() {
 }
 
 configurator_welcome_dialog() {
-  # Clear the variables
-  destination=
-
   choice=$(zenity --list --title="RetroDECK Configurator Utility" --cancel-label="Quit" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
-  "Move Files" "Move files between internal/SD card or to custom locations." \
-  "Change RetroArch Options" "Change RetroArch presets, log into RetroAchievements etc." \
-  "Change Standalone Emulator Options" "Run emulators standalone to make advanced config changes." \
-  "Compress Games" "Compress games to CHD format for systems that support it." \
-  "Troubleshooting Tools" "Run RetroDECK troubleshooting tools for common issues." \
-  "Reset" "Reset specific parts or all of RetroDECK." )
+  "Move Files" "Move files between internal/SD card or to custom locations" \
+  "RetroArch Presets" "Change RetroArch presets, log into RetroAchievements etc" \
+  "Emulator Options" "Launch and configure each emulators settings (for advanced users)" \
+  "Compress Games" "Compress games to CHD format for systems that support it" \
+  "Troubleshooting Tools" "Run RetroDECK troubleshooting tools for common issues" \
+  "Reset" "Reset specific parts or all of RetroDECK" )
 
   case $choice in
 
@@ -823,11 +820,11 @@ configurator_welcome_dialog() {
     configurator_move_dialog
   ;;
 
-  "Change RetroArch Options" )
+  "RetroArch Presets" )
     configurator_retroarch_options_dialog
   ;;
 
-  "Change Standalone Emulator Options" )
+  "Emulator Options" )
     configurator_power_user_warning_dialog
   ;;
 
