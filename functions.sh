@@ -247,38 +247,38 @@ set_setting_value() {
 
     "retrodeck" | "citra" | "melonds" | "yuzu" )
       if [[ -z $current_section_name ]]; then
-        sed -i 's^'"$setting_name_to_change"'=.*^'"$setting_name_to_change"'='"$setting_value_to_change"'^' $1
+        sed -i 's^\^'"$setting_name_to_change"'=.*^'"$setting_name_to_change"'='"$setting_value_to_change"'^' $1
       else
-        sed -i '\^\['"$current_section_name"'\]^,\^'"$setting_name_to_change"'.*^s^'"$setting_name_to_change"'=.*^'"$setting_name_to_change"'='"$setting_value_to_change"'^' $1
+        sed -i '\^\['"$current_section_name"'\]^,\^\^'"$setting_name_to_change"'.*^s^\^'"$setting_name_to_change"'=.*^'"$setting_name_to_change"'='"$setting_value_to_change"'^' $1
       fi
       ;;
 
     "retroarch" )
       if [[ -z $current_section_name ]]; then
-        sed -i 's^'"$setting_name_to_change"' = \".*\"^'"$setting_name_to_change"' = \"'"$setting_value_to_change"'\"^' $1
+        sed -i 's^\^'"$setting_name_to_change"' = \".*\"^'"$setting_name_to_change"' = \"'"$setting_value_to_change"'\"^' $1
       else
-        sed -i '\^\['"$current_section_name"'\]^,\^'"$setting_name_to_change"'.*^s^'"$setting_name_to_change"' = \".*\"^'"$setting_name_to_change"' = \"'"$setting_value_to_change"'\"^' $1
+        sed -i '\^\['"$current_section_name"'\]^,\^\^'"$setting_name_to_change"'.*^s^\^'"$setting_name_to_change"' = \".*\"^'"$setting_name_to_change"' = \"'"$setting_value_to_change"'\"^' $1
       fi
       ;;
 
     "dolphin" | "duckstation" | "pcsx2" | "ppsspp" | "primehack" | "xemu" )
       if [[ -z $current_section_name ]]; then
-        sed -i 's^'"$setting_name_to_change"' =.*^'"$setting_name_to_change"' = '"$setting_value_to_change"'^' $1
+        sed -i 's^\^'"$setting_name_to_change"' =.*^'"$setting_name_to_change"' = '"$setting_value_to_change"'^' $1
       else
-        sed -i '\^\['"$current_section_name"'\]^,\^'"$setting_name_to_change"'.*^s^'"$setting_name_to_change"' =.*^'"$setting_name_to_change"' = '"$setting_value_to_change"'^' $1
+        sed -i '\^\['"$current_section_name"'\]^,\^\^'"$setting_name_to_change"'.*^s^\^'"$setting_name_to_change"' =.*^'"$setting_name_to_change"' = '"$setting_value_to_change"'^' $1
       fi
       ;;
 
     "rpcs3" ) # This does not currently work for settings with a $ in them
       if [[ -z $current_section_name ]]; then
-        sed -i 's^'"$setting_name_to_change"': .*^'"$setting_name_to_change"': '"$setting_value_to_change"'^' $1
+        sed -i 's^\^'"$setting_name_to_change"': .*^'"$setting_name_to_change"': '"$setting_value_to_change"'^' $1
       else
-        sed -i '\^\['"$current_section_name"'\]^,\^'"$setting_name_to_change"'.*^s^'"$setting_name_to_change"': .*^'"$setting_name_to_change"': '"$setting_value_to_change"'^' $1
+        sed -i '\^\['"$current_section_name"'\]^,\^\^'"$setting_name_to_change"'.*^s^\^'"$setting_name_to_change"': .*^'"$setting_name_to_change"': '"$setting_value_to_change"'^' $1
       fi
       ;;
 
     "emulationstation" )
-      sed -i "s%$setting_name_to_change\" \" value=\".*\"%$setting_name_to_change\" \" value=\"$setting_value_to_change\"" $1
+      sed -i "s%^$setting_name_to_change\" \" value=\".*\"%$setting_name_to_change\" \" value=\"$setting_value_to_change\"" $1
       ;;
 
   esac
@@ -320,7 +320,7 @@ get_setting_value() {
     if [[ -z $current_section_name ]]; then
       echo $(grep -o -P "(?<=^$current_setting_name=).*" $1)
     else
-      sed -n '\^\['"$current_section_name"'\]^,\^'"$current_setting_name"'^{ \^\['"$current_section_name"'\]^! { \^'"$current_setting_name"'^ p } }' $1 | grep -o -P "(?<=^$current_setting_name=).*"
+      sed -n '\^\['"$current_section_name"'\]^,\^\^'"$current_setting_name"'^{ \^\['"$current_section_name"'\]^! { \^\^'"$current_setting_name"'^ p } }' $1 | grep -o -P "(?<=^$current_setting_name=).*"
     fi
   ;;
 
@@ -328,7 +328,7 @@ get_setting_value() {
     if [[ -z $current_section_name ]]; then
       echo $(grep -o -P "(?<=^$current_setting_name = \").*(?=\")" $1)
     else
-      sed -n '\^\['"$current_section_name"'\]^,\^'"$current_setting_name"'^{ \^\['"$current_section_name"'\]^! { \^'"$current_setting_name"'^ p } }' $1 | grep -o -P "(?<=^$current_setting_name = \").*(?=\")"
+      sed -n '\^\['"$current_section_name"'\]^,\^\^'"$current_setting_name"'^{ \^\['"$current_section_name"'\]^! { \^\^'"$current_setting_name"'^ p } }' $1 | grep -o -P "(?<=^$current_setting_name = \").*(?=\")"
     fi
   ;;
 
@@ -336,7 +336,7 @@ get_setting_value() {
     if [[ -z $current_section_name ]]; then
       echo $(grep -o -P "(?<=^$current_setting_name = ).*" $1)
     else
-      sed -n '\^\['"$current_section_name"'\]^,\^'"$current_setting_name"'^{ \^\['"$current_section_name"'\]^! { \^'"$current_setting_name"'^ p } }' $1 | grep -o -P "(?<=^$current_setting_name = ).*"
+      sed -n '\^\['"$current_section_name"'\]^,\^\^'"$current_setting_name"'^{ \^\['"$current_section_name"'\]^! { \^\^'"$current_setting_name"'^ p } }' $1 | grep -o -P "(?<=^$current_setting_name = ).*"
     fi
   ;;
 
@@ -344,7 +344,7 @@ get_setting_value() {
     if [[ -z $current_section_name ]]; then
       echo $(grep -o -P "(?<=$current_setting_name: ).*" $1)
     else
-      sed -n '\^\['"$current_section_name"'\]^,\^'"$current_setting_name"'^{ \^\['"$current_section_name"'\]^! { \^'"$current_setting_name"'^ p } }' $1 | grep -o -P "(?<=$current_setting_name: ).*"
+      sed -n '\^\['"$current_section_name"'\]^,\^\^'"$current_setting_name"'^{ \^\['"$current_section_name"'\]^! { \^\^'"$current_setting_name"'^ p } }' $1 | grep -o -P "(?<=$current_setting_name: ).*"
     fi
   ;;
 
