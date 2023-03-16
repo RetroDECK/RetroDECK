@@ -11,11 +11,12 @@ source /app/libexec/functions.sh
 
 # Welcome
 #     - Move RetroDECK
-#     - Change RetroArch Options
-#       - Enable/Disable Rewind Setting
+#     - RetroArch Presets
+#       - Change Rewind Setting
+#         - Enable/Disable Rewind
 #       - RetroAchivement Login
 #         - Login prompt
-#     - Change Standalone Emulator Options (Behind one-time power user warning dialog)
+#     - Emulator Options (Behind one-time power user warning dialog)
 #       - Launch RetroArch
 #       - Launch Citra
 #       - Launch Dolphin
@@ -27,10 +28,13 @@ source /app/libexec/functions.sh
 #       - Launch RPCS3
 #       - Launch XEMU
 #       - Launch Yuzu
-#     - Compress Games
-#       - Manual single-game selection
-#     - Troubleshooting Tools
+#     - Tools and Troubleshooting
 #       - Multi-file game check
+#       - Basic BIOS file check
+#       - Advanced BIOS file check
+#       - Compress Games
+#         - Manual single-game selection
+#         - Multi-file compression (CHD)
 #     - Reset
 #       - Reset Specific Emulator
 #           - Reset RetroArch
@@ -234,9 +238,9 @@ configurator_power_user_warning_dialog() {
 
 configurator_power_user_changes_dialog() {
   emulator=$(zenity --list \
-  --title "RetroDECK Configurator Utility - Power User Options" --cancel-label="Back" \
+  --title "RetroDECK Configurator Utility - Emulator Options" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
-  --text="Which emulator do you want to configure?" \
+  --text="Which emulator do you want to launch?" \
   --hide-header \
   --column=emulator \
   "RetroArch" \
@@ -625,7 +629,8 @@ configurator_troubleshooting_tools_dialog() {
   --column="Choice" --column="Action" \
   "Multi-file game structure check" "Verify the proper structure of multi-file or multi-disc games" \
   "Basic BIOS file check" "Show a list of systems that BIOS files are found for" \
-  "Advanced BIOS file check" "Show advanced information about common BIOS files" )
+  "Advanced BIOS file check" "Show advanced information about common BIOS files" \
+  "Compress Games" "Compress games to CHD format for systems that support it" )
 
   case $choice in
 
@@ -639,6 +644,10 @@ configurator_troubleshooting_tools_dialog() {
 
   "Advanced BIOS file check" )
     configurator_check_bios_files_advanced
+  ;;
+
+  "Compress Games" )
+    configurator_compress_games_dialog
   ;;
 
   "" ) # No selection made or Back button clicked
@@ -806,16 +815,15 @@ configurator_welcome_dialog() {
   choice=$(zenity --list --title="RetroDECK Configurator Utility" --cancel-label="Quit" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
-  "Move Files" "Move files between internal/SD card or to custom locations" \
-  "RetroArch Presets" "Change RetroArch presets, log into RetroAchievements etc" \
+  "Move RetroDECK" "Move RetroDECK files between internal/SD card or to a custom location" \
+  "RetroArch Presets" "Change RetroArch presets, log into RetroAchievements etc." \
   "Emulator Options" "Launch and configure each emulators settings (for advanced users)" \
-  "Compress Games" "Compress games to CHD format for systems that support it" \
-  "Troubleshooting Tools" "Run RetroDECK troubleshooting tools for common issues" \
+  "Tools and Troubleshooting" "Run RetroDECK troubleshooting tools for common issues" \
   "Reset" "Reset specific parts or all of RetroDECK" )
 
   case $choice in
 
-  "Move Files" )
+  "Move RetroDECK" )
     configurator_generic_dialog "This option will move the RetroDECK data folder (ROMs, saves, BIOS etc.) to a new location.\n\nPlease choose where to move the RetroDECK data folder."
     configurator_move_dialog
   ;;
@@ -828,11 +836,7 @@ configurator_welcome_dialog() {
     configurator_power_user_warning_dialog
   ;;
 
-  "Compress Games" )
-    configurator_compress_games_dialog
-  ;;
-
-  "Troubleshooting Tools" )
+  "Tools and Troubleshooting" )
     configurator_troubleshooting_tools_dialog
   ;;
 
