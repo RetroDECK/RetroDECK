@@ -37,7 +37,7 @@ jobs:
         run: |
           appdata="https://raw.githubusercontent.com/XargonWan/RetroDECK/main/net.retrodeck.retrodeck.appdata.xml"
           export REL_VER=$(curl -s $appdata | xmlstarlet sel -t -v "//release/@version" | head -1)
-          EXPORT REL_DESC="$(curl -s $appdata | xmlstarlet sel -t -m "//release[1]" -v "description" -n | sed '1,2d;$d;s/^ */- /;/^- $/d')"
+          export REL_DESC="$(curl -s $appdata | xmlstarlet sel -t -m "//release[1]" -v "description" -n | sed '1,2d;$d;s/^ */- /;/^- $/d')"
 
       - name: Publish the flatpak in a new release
         uses: ncipollo/release-action@v1
