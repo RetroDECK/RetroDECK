@@ -36,17 +36,17 @@ jobs:
         id: version
         run: |
           appdata="https://raw.githubusercontent.com/XargonWan/RetroDECK/main/net.retrodeck.retrodeck.appdata.xml"
-          version=$(curl -s $appdata | xmlstarlet sel -t -v "//release/@version" | head -1)
-          description="$(curl -s $appdata | xmlstarlet sel -t -m "//release[1]" -v "description" -n | sed '1,2d;$d;s/^ */- /;/^- $/d')"
+          export REL_VER=$(curl -s $appdata | xmlstarlet sel -t -v "//release/@version" | head -1)
+          EXPORT REL_DESC="$(curl -s $appdata | xmlstarlet sel -t -m "//release[1]" -v "description" -n | sed '1,2d;$d;s/^ */- /;/^- $/d')"
 
       - name: Publish the flatpak in a new release
         uses: ncipollo/release-action@v1
         with:
-          tag: "${{ steps.version.version }}"
+          tag: "${{ steps.version.REL_VER }}"
           body: |
             # Release Notes
 
-            "${{ steps.version.description }}"
+            "${{ steps.version.REL_DESC }}"
 
           #artifacts: "RetroDECK.flatpak,RetroDECK-Artifact.tar.gz"
           allowUpdates: true
