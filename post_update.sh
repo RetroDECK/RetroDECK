@@ -53,6 +53,8 @@ post_update() {
     dir_prep "$texture_packs_folder/Primehack" "/var/data/primehack/Load/Textures/"
     dir_prep "$mods_folder/Dolphin" "/var/data/dolphin-emu/Load/GraphicMods/"
     dir_prep "$texture_packs_folder/Dolphin" "/var/data/dolphin-emu/Load/Textures/"
+    dir_prep "$mods_folder/Citra" "/var/data/citra-emu/load/mods/"
+    dir_prep "$texture_packs_folder/Citra" "/var/data/citra-emu/load/textures/"
 
     dir_prep "$rdhome/gamelists" "/var/config/emulationstation/.emulationstation/gamelists"
   fi

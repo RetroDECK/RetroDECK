@@ -888,6 +888,8 @@ citra_init() {
   dir_prep "$rdhome/.logs/citra" "/var/data/citra-emu/log"
   cp -fv $emuconfigs/citra-qt-config.ini /var/config/citra-emu/qt-config.ini
   sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
+  dir_prep "$mods_folder/Citra" "/var/data/citra-emu/load/mods/"
+  dir_prep "$texture_packs_folder/Citra" "/var/data/citra-emu/load/textures/"
 }
 
 rpcs3_init() {
