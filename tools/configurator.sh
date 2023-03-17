@@ -804,6 +804,61 @@ configurator_move_dialog() {
   fi
 }
 
+configurator_retrodeck_multiuser_dialog() {
+  if [[ $(get_setting_value $rd_conf "multi_user" retrodeck) == "true" ]]; then
+    zenity --question \
+    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator - RetroDECK Multi-user Support" \
+    --text="Multi-user support is current enabled. Do you want to disable it?\n\nIf there are more than one user configured,\nyou will be given a choice of which to use as the single RetroDECK user.\n\nAll existing saves will be retained in the \"retrodeck/multi-user-data\" folder."
+
+    if [ $? == 0 ] # User clicked "Yes"
+    then # Load full userlist for selection
+      full_userlist=()
+      while IFS= read -r user
+      do
+      full_userlist=("${full_userlist[@]}" "$user")
+      done < <(cat "$rd_userlist")
+
+      single_user=$(zenity \
+        --list --width=1200 --height=720 \
+        --ok-label="Select User" \
+        --text="Choose the current user:" \
+        --column "Steam Username" --print-column=1 \
+        "${full_userlist[@]}")
+
+      if [[ ! -z $single_user ]]; then # Single user was selected
+        unlink "$saves_folder"
+        unlink "$states_folder"
+        mkdir  "$saves_folder"
+        mkdir  "$states_folder"
+        cp -r "$multi_user_data_folder/$single_user/saves/." "$saves_folder"
+        cp -r "$multi_user_data_folder/$single_user/states/." "$states_folder"
+        set_setting_value $rd_conf "multi_user" "false" retrodeck
+        configurator_process_complete_dialog "disabling multi-user support"
+      else
+        configurator_generic_dialog "No single user was selected, please try the process again."
+        configurator_retrodeck_multiuser_dialog
+      fi
+    else
+      configurator_developer_dialog
+    fi
+  else
+    zenity --question \
+    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator - RetroDECK Multi-user support" \
+    --text="Multi-user support is current disabled. Do you want to enable it?\n\nThe current users saves and states will be backed up and then moved to the \"retrodeck/multi-user-data\" folder.\nAdditional users will automatically be stored in their own folder here as they are added."
+
+    if [ $? == 0 ]
+    then
+      set_setting_value $rd_conf "multi_user" "true" retrodeck
+      load_current_user_saves_and_states
+      configurator_process_complete_dialog "enabling multi-user support"
+    else
+      configurator_retroarch_options_dialog
+    fi
+  fi
+}
+
 configurator_developer_dialog() {
   choice=$(zenity --list --title="RetroDECK Configurator Utility - Change Options" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
@@ -813,7 +868,7 @@ configurator_developer_dialog() {
   case $choice in
 
   "Change Multi-user mode" )
-    echo "TODO: Multi-user mode menu"
+    configurator_retrodeck_multiuser_dialog
   ;;
 
   "" ) # No selection made or Back button clicked

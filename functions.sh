@@ -666,6 +666,123 @@ resolve_preset_conflicts() {
   done < <(printf '%s\n' "$enabled_section_results")
 }
 
+multi_user_set_default_dialog() {
+  chosen_user="$1"
+  choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="No and don't ask again" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+  --title "RetroDECK Default User" \
+  --text="Would you like to set $chosen_user as the default user?\n\nIf the current user cannot be determined from the system, the default will be used.\nThis normally only happens in Desktop Mode.\n\nIf you would like to be asked which user is playing every time, click \"No and don't ask again\"")
+  rc=$? # Capture return code, as "Yes" button has no text value
+  if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
+    if [[ $choice == "No and don't ask again" ]]; then
+      set_setting_value $rd_conf "ask_default_user" "false" retrodeck
+    fi
+  else # User clicked "Yes"
+    set_setting_value $rd_conf "default_user" "$chosen_user" retrodeck
+  fi
+}
+
+load_current_user_saves_and_states() {
+  if [[ $(get_setting_value $rd_conf "multi_user" retrodeck) == "true" ]]; then # If multi-user environment is enabled in rd_conf
+    if [[ -f "$rd_userlist" ]]; then # If userlist already exists
+      if [[ ! -z $SteamAppUser ]]; then # If running in Game Mode and this variable exists
+        if [[ -z $(grep "$SteamAppUser" "$rd_userlist") ]]; then # If the user was not found in a list of known users
+          add_setting $rd_userlist $SteamAppUser retrodeck # Add the user to the list
+          unlink "$saves_folder"
+          unlink "$states_folder"
+          dir_prep "$multi_user_data_folder/$SteamAppUser/saves" "$saves_folder"
+          dir_prep "$multi_user_data_folder/$SteamAppUser/states" "$states_folder"
+        else # User was found on the list
+          if [[ -L "$saves_folder" ]]; then # and saves folder was already a symlink
+            ln -sfT "$multi_user_data_folder/$SteamAppUser/saves" "$saves_folder"
+          else # If saves folder was not a symlink (user may have disabled multi_user before and is renabling it now)
+            dir_prep "$multi_user_data_folder/$SteamAppUser/saves" "$saves_folder"
+          fi
+          if [[ -L "$states_folder" ]]; then # and saves folder was already a symlink
+            ln -sfT "$multi_user_data_folder/$SteamAppUser/states" "$states_folder"
+          else # If saves folder was not a symlink (user may have disabled multi_user before and is renabling it now)
+            dir_prep "$multi_user_data_folder/$SteamAppUser/states" "$states_folder"
+          fi
+        fi
+      else # Unable to find Steam user ID
+        if [[ $(cat "$rd_userlist" | sed '/^\s*$/d' | wc -l) -gt 1 ]]; then # If there is more than one user on the list...
+          if [[ -z $default_user ]]; then # And a default user is not set
+            configurator_generic_dialog "The current user could not be determined from the system, and there are multiple users registered.\n\nPlease select which user is currently playing in the next dialog."
+            SteamAppUser=$(multi_user_choose_current_user_dialog)
+            if [[ ! -z $SteamAppUser ]]; then # User was chosen from dialog
+              if [[ -L "$saves_folder" ]]; then # and saves folder was already a symlink
+                ln -sfT "$multi_user_data_folder/$SteamAppUser/saves" "$saves_folder"
+              else # If saves folder was not a symlink (user may have disabled multi_user before and is renabling it now)
+                dir_prep "$multi_user_data_folder/$SteamAppUser/saves" "$saves_folder"
+              fi
+              if [[ -L "$states_folder" ]]; then # and saves folder was already a symlink
+                ln -sfT "$multi_user_data_folder/$SteamAppUser/states" "$states_folder"
+              else # If saves folder was not a symlink (user may have disabled multi_user before and is renabling it now)
+                dir_prep "$multi_user_data_folder/$SteamAppUser/states" "$states_folder"
+              fi
+            else
+              configurator_generic_dialog "No user was chosen, RetroDECK will launch with the files from the user who played most recently."
+            fi
+          else # The default user is set
+            if [[ ! -z $(ls -1 $multi_user_data_folder | grep "$default_user") ]]; then # Confirm user data folder exists
+              SteamAppUser=$default_user
+              if [[ -L "$saves_folder" ]]; then # and saves folder was already a symlink
+                ln -sfT "$multi_user_data_folder/$SteamAppUser/saves" "$saves_folder"
+              else # If saves folder was not a symlink (user may have disabled multi_user before and is renabling it now)
+                dir_prep "$multi_user_data_folder/$SteamAppUser/saves" "$saves_folder"
+              fi
+              if [[ -L "$states_folder" ]]; then # and saves folder was already a symlink
+                ln -sfT "$multi_user_data_folder/$SteamAppUser/states" "$states_folder"
+              else # If saves folder was not a symlink (user may have disabled multi_user before and is renabling it now)
+                dir_prep "$multi_user_data_folder/$SteamAppUser/states" "$states_folder"
+              fi
+            else
+              echo "Default user $default_user has no data folder, something has gone horribly wrong."
+            fi
+          fi
+        else # If there is only 1 user in the userlist, default to that user
+          SteamAppUser=$(cat "$rd_userlist" | sed '/^\s*$/d')
+          if [[ -L "$saves_folder" ]]; then # and saves folder was already a symlink
+            ln -sfT "$multi_user_data_folder/$SteamAppUser/saves" "$saves_folder"
+          else # If saves folder was not a symlink (user may have disabled multi_user before and is renabling it now)
+            dir_prep "$multi_user_data_folder/$SteamAppUser/saves" "$saves_folder"
+          fi
+          if [[ -L "$states_folder" ]]; then # and saves folder was already a symlink
+            ln -sfT "$multi_user_data_folder/$SteamAppUser/states" "$states_folder"
+          else # If saves folder was not a symlink (user may have disabled multi_user before and is renabling it now)
+            dir_prep "$multi_user_data_folder/$SteamAppUser/states" "$states_folder"
+          fi
+        fi
+      fi
+    else # If the userlist file doesn't exist yet, create it and add the current user
+      if [[ ! -z $SteamAppUser ]]; then
+        dir_prep "$multi_user_data_folder/$SteamAppUser/saves" "$saves_folder"
+        dir_prep "$multi_user_data_folder/$SteamAppUser/states" "$states_folder"
+      else # If running in Desktop mode for the first time
+        configurator_generic_dialog "The current user could not be determined from the system and there is no existing userlist.\n\nPlease enter the Steam account username (not profile name) into the next dialog, or run RetroDECK in game mode."
+        if zenity --entry \
+          --title="Specify Steam username" \
+          --text="Enter Steam username:"
+        then # User clicked "OK"
+          SteamAppUser=$?
+          if [[ ! -z $SteamAppUser ]]; then
+            dir_prep "$multi_user_data_folder/$SteamAppUser/saves" "$saves_folder"
+            dir_prep "$multi_user_data_folder/$SteamAppUser/states" "$states_folder"
+          else # But dialog box was blank
+            configurator_generic_dialog "No username was entered, so multi-user data folder cannot be created.\n\nDisabling multi-user mode, please try the process again."
+            set_setting_value $rd_conf "multi_user" "false" retrodeck
+          fi
+        else # User clicked "Cancel"
+          configurator_generic_dialog "Cancelling multi-user mode activation."
+          set_setting_value $rd_conf "multi_user" "false" retrodeck
+        fi
+      fi
+    fi
+  else
+    configurator_generic_dialog "Multi-user mode is not currently enabled"
+  fi
+}
+
 conf_write() {
   # writes the variables in the retrodeck config file
 
