@@ -39,17 +39,15 @@ jobs:
           REL_VER=$(curl -s $appdata | xmlstarlet sel -t -v "//release/@version" | head -1)
           DES="$(curl -s $appdata | xmlstarlet sel -t -m "//release[1]" -v "description" -n | sed '1,2d;$d;s/^ */- /;/^- $/d')"
           echo "REL_VER=$REL_VER" >> $GITHUB_ENV
-          #REL_DES=$(echo "$DES" | sed ':a;N;$!ba;s/\n/\\n/g')
-          #echo "REL_DES=$REL_DES" >> $GITHUB_ENV
+          echo -e "# Release Notes\n" >> "body.md" 
           echo "$DES" >> "body.md" 
 
       - name: Publish the flatpak in a new release
         uses: ncipollo/release-action@v1
         env:
           REL_VER: ${{ env.REL_VER }}
-          REL_DES: ${{ env.REL_DES }}
         with:
-          tag: "$REL_VER"
+          tag: ${{ env.REL_VER }}
           bodyFile: "body.md"
           #artifacts: "RetroDECK.flatpak,RetroDECK-Artifact.tar.gz"
           allowUpdates: true
