@@ -312,7 +312,7 @@ configurator_retroarch_rewind_dialog() {
   if [[ $(get_setting_value $raconf rewind_enable retroarch) == "true" ]]; then
     zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - Rewind" \
+    --title "RetroDECK Configurator - RetroArch Rewind" \
     --text="Rewind is currently enabled. Do you want to disable it?."
 
     if [ $? == 0 ]
@@ -325,7 +325,7 @@ configurator_retroarch_rewind_dialog() {
   else
     zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - Rewind" \
+    --title "RetroDECK Configurator - RetroArch Rewind" \
     --text="Rewind is currently disabled, do you want to enable it?\n\nNOTE:\nThis may impact performance on some more demanding systems."
 
     if [ $? == 0 ]
@@ -811,15 +811,44 @@ configurator_move_dialog() {
   fi
 }
 
+configurator_developer_dialog() {
+  choice=$(zenity --list --title="RetroDECK Configurator Utility - Change Options" --cancel-label="Back" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+  --column="Choice" --column="Action" \
+  "Change Multi-user mode" "Enable or disable multi-user save/states support" )
+
+  case $choice in
+
+  "Change Multi-user mode" )
+    echo "TODO: Multi-user mode menu"
+  ;;
+
+  "" ) # No selection made or Back button clicked
+    configurator_welcome_dialog
+  ;;
+  esac
+}
+
 configurator_welcome_dialog() {
+  if [[ $developer_options == "true" ]]; then
+    welcome_menu_options=("Move RetroDECK" "Move RetroDECK files between internal/SD card or to a custom location" \
+    "RetroArch Presets" "Change RetroArch presets, log into RetroAchievements etc." \
+    "Emulator Options" "Launch and configure each emulators settings (for advanced users)" \
+    "Tools and Troubleshooting" "Run RetroDECK troubleshooting tools for common issues" \
+    "Reset" "Reset specific parts or all of RetroDECK" \
+    "Developer Options" "Welcome to the DANGER ZONE")
+  else
+    welcome_menu_options=("Move RetroDECK" "Move RetroDECK files between internal/SD card or to a custom location" \
+    "RetroArch Presets" "Change RetroArch presets, log into RetroAchievements etc." \
+    "Emulator Options" "Launch and configure each emulators settings (for advanced users)" \
+    "Tools and Troubleshooting" "Run RetroDECK troubleshooting tools for common issues" \
+    "Reset" "Reset specific parts or all of RetroDECK" )
+  fi
+
   choice=$(zenity --list --title="RetroDECK Configurator Utility" --cancel-label="Quit" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
-  "Move RetroDECK" "Move RetroDECK files between internal/SD card or to a custom location" \
-  "RetroArch Presets" "Change RetroArch presets, log into RetroAchievements etc." \
-  "Emulator Options" "Launch and configure each emulators settings (for advanced users)" \
-  "Tools and Troubleshooting" "Run RetroDECK troubleshooting tools for common issues" \
-  "Reset" "Reset specific parts or all of RetroDECK" )
+  "${welcome_menu_options[@]}")
 
   case $choice in
 
@@ -842,6 +871,10 @@ configurator_welcome_dialog() {
 
   "Reset" )
     configurator_reset_dialog
+  ;;
+
+  "Developer Options" )
+    configurator_developer_dialog
   ;;
 
   esac
