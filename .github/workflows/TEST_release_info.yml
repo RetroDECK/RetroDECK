@@ -48,6 +48,7 @@ jobs:
           REL_VER: ${{ env.REL_VER }}
         with:
           tag: ${{ env.REL_VER }}
+          name: "RetroDECK v${{ env.REL_VER }}"
           bodyFile: "body.md"
           #artifacts: "RetroDECK.flatpak,RetroDECK-Artifact.tar.gz"
           allowUpdates: true
