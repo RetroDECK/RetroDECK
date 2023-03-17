@@ -800,6 +800,7 @@ yuzu_init() {
   cp -fvr $emuconfigs/yuzu/* /var/config/yuzu/
   sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/yuzu/qt-config.ini
   dir_prep "$rdhome/screenshots" "/var/data/yuzu/screenshots"
+  dir_prep "$mods_folder/Yuzu" "/var/data/yuzu/load"
 }
 
 dolphin_init() {
