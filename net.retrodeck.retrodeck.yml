@@ -847,8 +847,8 @@ modules:
       - install -D primehack-wrapper /app/bin/primehack-wrapper
     sources:
       - type: git
-        url: https://github.com/shiiion/dolphin.git
-        commit: efb99ebfd20b1bc16ea3e51fec409c91e354d8c2
+        url: https://github.com/TheDrifter363/primehack.git
+        commit: 6295c695307a67f11ee202b05cbdd7b5c1edae5c
        # detects whether dolphin is running in a flatpak sandbox
        # and makes it use xdg directories if it is.
        # prevents dolphin from attempting to write conf files
