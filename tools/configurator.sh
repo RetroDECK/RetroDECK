@@ -50,8 +50,7 @@ source /app/libexec/functions.sh
 #           - Reset XEMU
 #           - Reset Yuzu
 #       - Reset All Emulators
-#       - Reset Tools
-#       - Reset All
+#       - Reset RetroDECK
 
 # Code for the menus should be put in reverse order, so functions for sub-menus exists before it is called by the parent menu
 
@@ -63,8 +62,7 @@ configurator_reset_dialog() {
   --column="Choice" --column="Action" \
   "Reset Specific Emulator" "Reset only one specific emulator to default settings" \
   "Reset All Emulators" "Reset all emulators to default settings" \
-  "Reset Tools" "Reset Tools menu entries" \
-  "Reset All" "Reset RetroDECK to default settings" )
+  "Reset RetroDECK" "Reset RetroDECK to default settings" )
 
   case $choice in
 
@@ -172,12 +170,7 @@ configurator_reset_dialog() {
   fi
 ;;
 
-"Reset Tools" )
-  tools_init
-  configurator_process_complete_dialog "resetting the tools menu"
-;;
-
-"Reset All" )
+"Reset RetroDECK" )
   zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Configurator Utility - Reset RetroDECK" \
