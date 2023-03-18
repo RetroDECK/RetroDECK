@@ -78,7 +78,7 @@ modules:
       - |
         git checkout ${GITHUB_REF_NAME}
         mkdir -p ${FLATPAK_DEST}/retrodeck/
-        VERSION="0.6.2b"
+        VERSION="cooker-0.6.3b"
         if [[ $VERSION == *"cooker"* ]];
         then
           VERSION="$VERSION-[$(git rev-parse --short HEAD)]"
@@ -417,7 +417,7 @@ modules:
     sources:
       - type: archive
         url: https://buildbot.libretro.com/stable/1.15.0/linux/x86_64/RetroArch_cores.7z
-        sha256: 1fdec5c2cbabea4f194ede4a1fb0dd1d17e14e64bf7ef705e3ad763592411073
+        sha256: 2230bc38eaf87406efd0c2b7bdd1cf9e813ba113505600f14a7ef9eb06f8c7c0
 
   # PPSSPP - START
   # https://github.com/flathub/org.ppsspp.PPSSPP
@@ -1091,4 +1091,4 @@ modules:
     sources:
       - type: git
         url: https://github.com/XargonWan/RetroDECK.git
-        branch: main
+        branch: cooker-0.6.3b
