@@ -11,11 +11,12 @@ source /app/libexec/functions.sh
 
 # Welcome
 #     - Move RetroDECK
-#     - Change RetroArch Options
-#       - Enable/Disable Rewind Setting
+#     - RetroArch Presets
+#       - Change Rewind Setting
+#         - Enable/Disable Rewind
 #       - RetroAchivement Login
 #         - Login prompt
-#     - Change Standalone Emulator Options (Behind one-time power user warning dialog)
+#     - Emulator Options (Behind one-time power user warning dialog)
 #       - Launch RetroArch
 #       - Launch Citra
 #       - Launch Dolphin
@@ -27,10 +28,13 @@ source /app/libexec/functions.sh
 #       - Launch RPCS3
 #       - Launch XEMU
 #       - Launch Yuzu
-#     - Compress Games
-#       - Manual single-game selection
-#     - Troubleshooting Tools
+#     - Tools and Troubleshooting
 #       - Multi-file game check
+#       - Basic BIOS file check
+#       - Advanced BIOS file check
+#       - Compress Games
+#         - Manual single-game selection
+#         - Multi-file compression (CHD)
 #     - Reset
 #       - Reset Specific Emulator
 #           - Reset RetroArch
@@ -218,9 +222,9 @@ configurator_power_user_warning_dialog() {
 
 configurator_power_user_changes_dialog() {
   emulator=$(zenity --list \
-  --title "RetroDECK Configurator Utility - Power User Options" --cancel-label="Back" \
+  --title "RetroDECK Configurator Utility - Emulator Options" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
-  --text="Which emulator do you want to configure?" \
+  --text="Which emulator do you want to launch?" \
   --hide-header \
   --column=emulator \
   "RetroArch" \
@@ -306,7 +310,7 @@ configurator_retroarch_rewind_dialog() {
     zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - Rewind" \
-    --text="Rewind is currently disabled, do you want to enable it?\n\nNOTE:\nThis may impact performance expecially on the latest systems."
+    --text="Rewind is currently disabled, do you want to enable it?\n\nNOTE:\nThis may impact performance on some more demanding systems."
 
     if [ $? == 0 ]
     then
@@ -323,7 +327,7 @@ configurator_retroarch_options_dialog() {
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
   "Change Rewind Setting" "Enable or disable the Rewind function in RetroArch." \
-  "Log in to RetroAchivements" "Log into the RetroAchievements service in RetroArch." )
+  "RetroAchievements Login" "Log into the RetroAchievements service in RetroArch." )
 
   case $choice in
 
@@ -331,7 +335,7 @@ configurator_retroarch_options_dialog() {
     configurator_retroarch_rewind_dialog
   ;;
 
-  "Log in to RetroAchivements" )
+  "RetroAchievements Login" )
     configurator_retroachivement_dialog
   ;;
 
@@ -343,21 +347,42 @@ configurator_retroarch_options_dialog() {
 }
 
 configurator_compress_single_game_dialog() {
-  file_to_compress=$(file_browse "Game to compress")
-  if [[ ! -z $file_to_compress ]]; then
-    if [[ $(validate_for_chd $file_to_compress) == "true" ]]; then
+  local file=$(file_browse "Game to compress")
+  if [[ ! -z "$file" ]]; then
+    if [[ $(validate_for_chd "$file") == "true" ]]; then
+      local post_compression_cleanup=$(configurator_compression_cleanup_dialog)
+      local filename_no_path=$(basename "$file")
+      local filename_no_extension="${filename_no_path%.*}"
+      local source_file=$(dirname "$(realpath "$file")")"/"$(basename "$file")
+      local dest_file=$(dirname "$(realpath "$file")")"/""$filename_no_extension"
       (
-      filename_no_path=$(basename $file_to_compress)
-      filename_no_extension=${filename_no_path%.*}
-      compress_to_chd $(dirname $(realpath $file_to_compress))/$(basename $file_to_compress) $(dirname $(realpath $file_to_compress))/$filename_no_extension
+      echo "# Compressing $filename_no_path, please wait..."
+      compress_to_chd "$source_file" "$dest_file"
+      if [[ $post_compression_cleanup == "true" ]]; then # Remove file(s) if requested
+        if [[ "$file" == *".cue" ]]; then
+          local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" "$file")
+          local file_path=$(dirname "$(realpath "$file")")
+          while IFS= read -r line
+          do
+            echo "# Removing file $line"
+            rm -f "$file_path/$line"
+          done < <(printf '%s\n' "$cue_bin_files")
+          echo "# Removing file $filename_no_path"
+          rm -f "$file"
+        else
+          echo "# Removing file $filename_no_path"
+          rm -f "$file"
+        fi
+      fi
       ) |
       zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
-        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-        --title "RetroDECK Configurator Utility - Compression in Progress" \
-        --text="Compressing game $filename_no_path, please wait."
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Configurator Utility - Compression in Progress"
+      configurator_generic_dialog "The compression process is complete!"
+      configurator_compress_games_dialog
     else
       configurator_generic_dialog "File type not recognized. Supported file types are .cue, .gdi and .iso"
-      configurator_compress_single_game_dialog
+      configurator_compress_games_dialog
     fi
   else
     configurator_generic_dialog "No file selected, returning to main menu"
@@ -365,11 +390,149 @@ configurator_compress_single_game_dialog() {
   fi
 }
 
-configurator_compress_games_dialog() {
-  # This is currently a placeholder for a dialog where you can compress a single game or multiple at once. Currently only the single game option is available, so is launched by default.
+configurator_compress_multi_game_dialog() {
+  # This dialog will display any games it finds to be compressable, from the systems listed under each compression type in
+  local compression_format=$1
+  local compressable_game=""
+  local compressable_games_list=()
+  local all_compressable_games=()
+  local compressable_systems_list=$(sed -n '/\['"$compression_format"'\]/, /\[/{ /\['"$compression_format"'\]/! { /\[/! p } }' $compression_targets | sed '/^$/d')
 
-  configurator_generic_dialog "This utility will compress a single game into .CHD format.\n\nPlease select the game to be compressed in the next dialog: supported file types are .cue, .iso and .gdi\n\nThe original game files will be untouched and will need to be removed manually."
-  configurator_compress_single_game_dialog
+  while IFS= read -r system # Find and validate all games that are able to be compressed with this compression type
+  do
+    if [[ $compression_format == "chd" ]]; then
+      compression_candidates=$(find "$roms_folder/$system" -type f \( -name "*.cue" -o -name "*.iso" -o -name "*.gdi" \) ! -path "*.m3u*")
+    # TODO: Add ZIP file compression search here
+    fi
+    while IFS= read -r game
+    do
+      if [[ $(validate_for_chd "$game") == "true" ]]; then
+        all_compressable_games=("${all_compressable_games[@]}" "$game")
+        compressable_games_list=("${compressable_games_list[@]}" "false" "${game#$roms_folder}" "$game")
+      fi
+    done < <(printf '%s\n' "$compression_candidates")
+  done < <(printf '%s\n' "$compressable_systems_list")
+
+  choice=$(zenity \
+      --list --width=1200 --height=720 \
+      --checklist --hide-column=3 --ok-label="Compress Selected" --extra-button="Compress All" \
+      --separator="," --print-column=3 \
+      --text="Choose which games to compress:" \
+      --column "Compress?" \
+      --column "Game" \
+      --column "Game Full Path" \
+      "${compressable_games_list[@]}")
+
+  local rc=$?
+  if [[ $rc == "0" && ! -z $choice ]]; then # User clicked "Compress Selected" with at least one game selected
+    local post_compression_cleanup=$(configurator_compression_cleanup_dialog)
+    IFS="," read -ra games_to_compress <<< "$choice"
+    (
+    for file in "${games_to_compress[@]}"; do
+      local filename_no_path=$(basename "$file")
+      local filename_no_extension="${filename_no_path%.*}"
+      local source_file=$(dirname "$(realpath "$file")")"/"$(basename "$file")
+      local dest_file=$(dirname "$(realpath "$file")")"/""$filename_no_extension"
+      echo "# Compressing $filename_no_path" # Update Zenity dialog text
+      compress_to_chd "$source_file" "$dest_file"
+      if [[ $post_compression_cleanup == "true" ]]; then # Remove file(s) if requested
+        if [[ "$file" == *".cue" ]]; then
+          local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" "$file")
+          local file_path=$(dirname "$(realpath "$file")")
+          while IFS= read -r line
+          do
+            echo "# Removing file $line"
+            rm -f "$file_path/$line"
+          done < <(printf '%s\n' "$cue_bin_files")
+          echo "# Removing file $filename_no_path"
+          rm -f $(realpath "$file")
+        else
+          echo "# Removing file $filename_no_path"
+          rm -f "$(realpath "$file")"
+        fi
+      fi
+    done
+    ) |
+    zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Configurator Utility - Compression in Progress"
+  else
+    if [[ ! -z $choice ]]; then # User clicked "Compress All"
+      local post_compression_cleanup=$(configurator_compression_cleanup_dialog)
+      (
+      for file in "${all_compressable_games[@]}"; do
+        local filename_no_path=$(basename "$file")
+        local filename_no_extension="${filename_no_path%.*}"
+        local source_file=$(dirname "$(realpath "$file")")"/"$(basename "$file")
+        local dest_file=$(dirname "$(realpath "$file")")"/""$filename_no_extension"
+        echo "# Compressing $filename_no_path" # Update Zenity dialog text
+        compress_to_chd "$source_file" "$dest_file"
+        if [[ $post_compression_cleanup == "true" ]]; then # Remove file(s) if requested
+          if [[ "$file" == *".cue" ]]; then
+            local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" "$file")
+            local file_path=$(dirname "$(realpath "$file")")
+            while IFS= read -r line
+            do
+              echo "# Removing file $line"
+              rm -f "$file_path/$line"
+            done < <(printf '%s\n' "$cue_bin_files")
+            echo "# Removing file $filename_no_path"
+            rm -f $(realpath "$file")
+          else
+            echo "# Removing file $filename_no_path"
+            rm -f $(realpath "$file")
+          fi
+        fi
+      done
+    ) |
+    zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator Utility - Compression in Progress"
+    configurator_generic_dialog "The compression process is complete!"
+    configurator_compress_games_dialog
+    else
+      configurator_compress_games_dialog
+    fi
+  fi
+}
+
+configurator_compression_cleanup_dialog() {
+  zenity --icon-name=net.retrodeck.retrodeck --question --no-wrap --cancel-label="No" --ok-label="Yes" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+  --title "RetroDECK Compression Cleanup" \
+  --text="Do you want to remove old files after they are compressed?\n\nClicking \"No\" will leave all files behind which will need to be cleaned up manually and may result in game duplicates showing in the RetroDECK library."
+  local rc=$? # Capture return code, as "Yes" button has no text value
+  if [[ $rc == "0" ]]; then # If user clicked "Yes"
+    echo "true"
+  else # If "No" was clicked
+    echo "false"
+  fi
+}
+
+configurator_compress_games_dialog() {
+  choice=$(zenity --list --title="RetroDECK Configurator Utility - Change Options" --cancel-label="Back" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+  --column="Choice" --column="Action" \
+  "Compress Single Game" "Compress a single game into a compatible format" \
+  "Compress Multiple Games - CHD" "Compress one or more games compatible with the CHD format" )
+
+  case $choice in
+
+  "Compress Single Game" )
+    configurator_compress_single_game_dialog
+  ;;
+
+  "Compress Multiple Games - CHD" )
+    configurator_compress_multi_game_dialog "chd"
+  ;;
+
+  # TODO: Add ZIP compression option
+
+  "" ) # No selection made or Back button clicked
+    configurator_welcome_dialog
+  ;;
+
+  esac
 }
 
 configurator_check_multifile_game_structure() {
@@ -450,7 +613,8 @@ configurator_troubleshooting_tools_dialog() {
   --column="Choice" --column="Action" \
   "Multi-file game structure check" "Verify the proper structure of multi-file or multi-disc games" \
   "Basic BIOS file check" "Show a list of systems that BIOS files are found for" \
-  "Advanced BIOS file check" "Show advanced information about common BIOS files" )
+  "Advanced BIOS file check" "Show advanced information about common BIOS files" \
+  "Compress Games" "Compress games to CHD format for systems that support it" )
 
   case $choice in
 
@@ -464,6 +628,10 @@ configurator_troubleshooting_tools_dialog() {
 
   "Advanced BIOS file check" )
     configurator_check_bios_files_advanced
+  ;;
+
+  "Compress Games" )
+    configurator_compress_games_dialog
   ;;
 
   "" ) # No selection made or Back button clicked
@@ -628,43 +796,31 @@ configurator_move_dialog() {
 }
 
 configurator_welcome_dialog() {
-  # Clear the variables
-  source=
-  destination=
-  action=
-  setting=
-  setting_value=
-
   choice=$(zenity --list --title="RetroDECK Configurator Utility" --cancel-label="Quit" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
-  "Move Files" "Move files between internal/SD card or to custom locations." \
-  "Change RetroArch Options" "Change RetroArch presets, log into RetroAchievements etc." \
-  "Change Standalone Emulator Options" "Run emulators standalone to make advanced config changes." \
-  "Compress Games" "Compress games to CHD format for systems that support it." \
-  "Troubleshooting Tools" "Run RetroDECK troubleshooting tools for common issues." \
-  "Reset" "Reset specific parts or all of RetroDECK." )
+  "Move RetroDECK" "Move RetroDECK files between internal/SD card or to a custom location" \
+  "RetroArch Presets" "Change RetroArch presets, log into RetroAchievements etc." \
+  "Emulator Options" "Launch and configure each emulators settings (for advanced users)" \
+  "Tools and Troubleshooting" "Run RetroDECK troubleshooting tools for common issues" \
+  "Reset" "Reset specific parts or all of RetroDECK" )
 
   case $choice in
 
-  "Move Files" )
+  "Move RetroDECK" )
     configurator_generic_dialog "This option will move the RetroDECK data folder (ROMs, saves, BIOS etc.) to a new location.\n\nPlease choose where to move the RetroDECK data folder."
     configurator_move_dialog
   ;;
 
-  "Change RetroArch Options" )
+  "RetroArch Presets" )
     configurator_retroarch_options_dialog
   ;;
 
-  "Change Standalone Emulator Options" )
+  "Emulator Options" )
     configurator_power_user_warning_dialog
   ;;
 
-  "Compress Games" )
-    configurator_compress_games_dialog
-  ;;
-
-  "Troubleshooting Tools" )
+  "Tools and Troubleshooting" )
     configurator_troubleshooting_tools_dialog
   ;;
 
