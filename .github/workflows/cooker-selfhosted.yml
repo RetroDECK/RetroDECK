@@ -32,7 +32,7 @@ jobs:
           git pull
           git submodule init
           git submodule update
-          sudo apt install -y flatpak flatpak-builder p7zip-full
+          sudo apt install -y flatpak flatpak-builder p7zip-full xmlstarlet bzip2
           flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
           flatpak install --user -y --noninteractive \
           org.kde.Sdk//6.3 \
