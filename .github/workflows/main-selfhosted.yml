@@ -17,9 +17,9 @@ jobs:
     runs-on: self-hosted
     steps:
 
-      - name: Remove stuck mounts
-        run: sudo umount -f /home/administrator/actions-runner/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles/*
-        continue-on-error: true
+      # - name: Remove stuck mounts
+      #   run: sudo umount -f /home/administrator/actions-runner/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles/*
+      #   continue-on-error: true
 
       - name: Generate build ID
         id: generating_buildid
