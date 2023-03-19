@@ -630,8 +630,8 @@ modules:
       - type: git
         # Sometimes Dolphin or its submodules clone are failing in https so it must done in ssh
         # fatal: remote transport reported error
-        url: ssh://git@github.com/dolphin-emu/dolphin.git
-        #url: https://github.com/dolphin-emu/dolphin.git
+        # url: ssh://git@github.com/dolphin-emu/dolphin.git
+        url: https://github.com/dolphin-emu/dolphin.git
         commit: 46b99671d9158e0ca840c1d8ef249db0f321ced7
         x-checker-data:
           type: json
