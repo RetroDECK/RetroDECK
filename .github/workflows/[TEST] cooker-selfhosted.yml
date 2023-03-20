@@ -1,4 +1,4 @@
-name: cooker-selfhosted
+name: test-version-tag
 
 on:
   push:
