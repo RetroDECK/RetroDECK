@@ -165,8 +165,9 @@ configurator_reset_dialog() {
   zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Configurator Utility - Reset RetroDECK" \
-  --text="You are resetting RetroDECK to its default state.\n\nAfter the process is complete you will need to exit RetroDECK and run it again, where you will go through the initial setup process again."
+  --text="You are resetting RetroDECK to its default state.\n\nAfter the process is complete you will need to exit RetroDECK and run it again, where you will go through the initial setup process."
   rm -f "$lockfile"
+  rm -f "$rd_conf"
   configurator_process_complete_dialog "resetting RetroDECK"
 ;;
 
