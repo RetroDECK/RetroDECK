@@ -61,13 +61,10 @@ jobs:
         run: |
           flatpak build-bundle ${GITHUB_WORKSPACE}/local RetroDECK.flatpak net.retrodeck.retrodeck
 
-      - name: Set environment variable with current branch name
-        run: echo "GITHUB_REF_SLUG=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
-
       - name: Publish the flatpak in a new cooker release
         uses: ncipollo/release-action@v1
         with:
-          tag: "${{ env.GITHUB_REF_SLUG }}-${{ steps.generating_buildid.outputs.build-id }}"
+          tag: "${{ steps.generating_buildid.outputs.build-id }}"
           body: |
             # Release Notes (Cooker)
             This is a cooker snapshot based on the commit: ${{ github.event.repository.full_name }}@${{github.sha}}.
