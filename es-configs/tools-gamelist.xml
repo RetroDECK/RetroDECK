@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <gameList>
 	<game>
-		<path>./configurator.sh</path>
+		<path>/app/bin/configurator.sh</path>
 		<name>RetroDECK Configurator</name>
 		<desc>Change settings, move folders and more!</desc>
 		<nogamecount>true</nogamecount>
 		<nomultiscrape>true</nomultiscrape>
 	</game>
-</gameList> 
+</gameList>

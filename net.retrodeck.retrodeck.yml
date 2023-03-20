@@ -574,7 +574,7 @@ modules:
       - --disable-avrcp
       - --disable-network
       - --disable-obex
-      - --disable-bap 
+      - --disable-bap
       - --disable-mcp
       - --with-dbusconfdir=/app/etc
       - --with-dbussessionbusdir=/app/usr/lib/system-services
@@ -1054,7 +1054,7 @@ modules:
       - cp es-configs/es_settings.xml ${FLATPAK_DEST}/retrodeck/es_settings.xml
 
       # Logo, res, move graphics directory to mutable space so splash can be changed after build
-      - mv -f -t ${FLATPAK_DEST}/emulationstation /app/share/emulationstation/resources/graphics 
+      - mv -f -t ${FLATPAK_DEST}/emulationstation /app/share/emulationstation/resources/graphics
       - ln -s ${FLATPAK_DEST}/emulationstation/graphics /app/share/emulationstation/resources/graphics
       - cp -f res/extra-splashes/* ${FLATPAK_DEST}/emulationstation/graphics
       - cp -f res/splash.svg ${FLATPAK_DEST}/emulationstation/graphics/splash.svg
@@ -1062,12 +1062,13 @@ modules:
       - cp -f res/icon.svg /app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg
 
       # Tools
-      - mkdir -p ${FLATPAK_DEST}/retrodeck/tools/
-      - cp tools/* ${FLATPAK_DEST}/retrodeck/tools/
       - mv -f es-configs/tools-gamelist.xml ${FLATPAK_DEST}/retrodeck/
 
+      # Launchable scripts
       - cp retrodeck.sh /app/bin/retrodeck.sh
       - chmod +x /app/bin/retrodeck.sh
+      - cp tools/configurator.sh /app/bin/configurator.sh
+      - chmod +x /app/bin/configurator.sh
 
       # Function libraries
       - mkdir -p /app/libexec

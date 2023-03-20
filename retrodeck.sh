@@ -45,7 +45,7 @@ https://retrodeck.net
       exit
       ;;
     --configurator*)
-      sh /var/config/retrodeck/tools/configurator.sh
+      sh /app/bin/configurator.sh
       exit
       ;;
     --reset-emulator*)
