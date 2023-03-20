@@ -340,7 +340,7 @@ configurator_retroarch_options_dialog() {
   ;;
 
   "" ) # No selection made or Back button clicked
-    configurator_options_dialog
+    configurator_welcome_dialog
   ;;
 
   esac
