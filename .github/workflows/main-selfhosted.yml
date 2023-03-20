@@ -17,9 +17,9 @@ jobs:
     runs-on: self-hosted
     steps:
 
-      - name: Remove stuck mounts
-        run: sudo umount -f /home/administrator/actions-runner/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles/*
-        continue-on-error: true
+      # - name: Remove stuck mounts
+      #   run: sudo umount -f /home/administrator/actions-runner/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles/*
+      #   continue-on-error: true
 
       - name: Generate build ID
         id: generating_buildid
@@ -32,7 +32,7 @@ jobs:
           git pull
           git submodule init
           git submodule update
-          sudo apt install -y flatpak flatpak-builder p7zip-full
+          sudo apt install -y flatpak flatpak-builder p7zip-full xmlstarlet bzip2
           flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
           flatpak install --user -y --noninteractive \
           org.kde.Sdk//6.3 \
@@ -59,19 +59,27 @@ jobs:
         run: |
           flatpak build-bundle ${GITHUB_WORKSPACE}/local RetroDECK.flatpak net.retrodeck.retrodeck
 
+      - name: Getting version info
+        id: version
+        run: |
+          appdata="https://raw.githubusercontent.com/XargonWan/RetroDECK/main/net.retrodeck.retrodeck.appdata.xml"
+          REL_VER=$(curl -s $appdata | xmlstarlet sel -t -v "//release/@version" | head -1)
+          DES="$(curl -s $appdata | xmlstarlet sel -t -m "//release[1]" -v "description" -n | sed '1,2d;$d;s/^ */- /;/^- $/d')"
+          echo "REL_VER=$REL_VER" >> $GITHUB_ENV
+          echo -e "# Release Notes\n" >> "body.md"
+          echo "$DES" >> "body.md"
+
       - name: Publish the flatpak in a new release
         uses: ncipollo/release-action@v1
+        env:
+          REL_VER: ${{ env.REL_VER }}
         with:
-          tag: "${{ steps.generating_buildid.outputs.build-id }}"
-          body: |
-            # Release Notes
-
-            ( Write release notes here )
-
+          tag: ${{ env.REL_VER }}
+          name: "RetroDECK v${{ env.REL_VER }}"
+          bodyFile: "body.md"
           artifacts: "RetroDECK.flatpak,RetroDECK-Artifact.tar.gz"
           allowUpdates: true
           prerelease: true
-          draft: true
           token: ${{ secrets.TRIGGER_BUILD_TOKEN }}
           repo: RetroDECK
         continue-on-error: true
