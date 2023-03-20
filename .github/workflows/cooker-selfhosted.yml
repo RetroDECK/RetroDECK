@@ -64,7 +64,7 @@ jobs:
       - name: Publish the flatpak in a new cooker release
         uses: ncipollo/release-action@v1
         with:
-          tag: "${{ steps.generating_buildid.outputs.build-id }}"
+          tag: "${{ basename(github.ref) }}-${{ steps.generating_buildid.outputs.build-id }}"
           body: |
             # Release Notes (Cooker)
             This is a cooker snapshot based on the commit: ${{ github.event.repository.full_name }}@${{github.sha}}.
