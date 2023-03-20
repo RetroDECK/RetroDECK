@@ -96,7 +96,10 @@ https://retrodeck.net
       exit 1
       ;;
     *)
-      echo "Please specify a valid option. Use -h for more information."
+      validate_input "$i"
+      if [[ ! $input_validated == "true" ]]; then
+        echo "Please specify a valid option. Use -h for more information."
+      fi
       ;;
   esac
 done

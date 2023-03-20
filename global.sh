@@ -13,6 +13,7 @@ rd_update_patch="/var/config/retrodeck/rd_update.patch"                         
 bios_checklist="$emuconfigs/defaults/retrodeck/bios_checklist.cfg"                                            # A config file listing BIOS file information that can be verified
 compression_targets="$emuconfigs/defaults/retrodeck/compression_targets.cfg"                                  # A config file containing supported compression types per system
 easter_egg_checklist="$emuconfigs/defaults/retrodeck/easter_egg_checklist.cfg"                                # A config file listing days and times when special splash screens should show up
+input_validation="$emuconfigs/defaults/retrodeck/input_validation.cfg"                                        # List of valid CLI inputs
 splashscreen_dir="/var/config/emulationstation/.emulationstation/resources/graphics/extra-splashes"           # The default location of extra splash screens
 current_splash_file="/var/config/emulationstation/.emulationstation/resources/graphics/splash.svg"            # The active splash file that will be shown on boot
 default_splash_file="/var/config/emulationstation/.emulationstation/resources/graphics/splash-orig.svg"       # The default RetroDECK splash screen

@@ -631,6 +631,17 @@ check_network_connectivity() {
   fi
 }
 
+validate_input() {
+  while IFS="^" read -r input action
+  do
+    if [[ "$input" == "$1" ]]; then
+      # $action line must be completely literal in the $input_validation file. No shell expansion or extra characters.
+      $action
+      input_validated="true"
+    fi
+  done < $input_validation
+}
+
 update_rd_conf() {
   # This function will import a default retrodeck.cfg file and update it with any current settings. This will allow us to expand the file over time while retaining current user settings.
   # USAGE: update_rd_conf
