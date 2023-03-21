@@ -203,12 +203,18 @@ post_update() {
     # In version 0.6.2b, the following changes were made that required config file updates/reset:
     # - Put Dolphin and Primehack save states in different folders inside $rd_home/states
     # - Fix symlink to hard-coded PICO-8 config folder (dir_prep doesn't like ~)
+    # - Overwrite Citra and Yuzu configs, as controller mapping was broken due to emulator updates.
     
     dir_prep "$rdhome/states/dolphin" "/var/data/dolphin-emu/StateSaves"
     dir_prep "$rdhome/states/primehack" "/var/data/primehack/StateSaves"
 
     rm -rf "$HOME/~/" # Remove old incorrect location from 0.6.2b
     dir_prep "$bios_folder/pico-8" "$HOME/.lexaloffle/pico-8" # Store binary and config files together. The .lexaloffle directory is a hard-coded location for the PICO-8 config file, cannot be changed
+
+    cp -fv $emuconfigs/citra/qt-config.ini /var/config/citra-emu/qt-config.ini
+    sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
+    cp -fvr $emuconfigs/yuzu/* /var/config/yuzu/
+    sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/yuzu/qt-config.ini
   fi
 
   # The following commands are run every time.
