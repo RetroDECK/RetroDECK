@@ -82,7 +82,8 @@ jobs:
           bodyFile: "body.md"
           artifacts: "RetroDECK.flatpak,RetroDECK-Artifact.tar.gz"
           allowUpdates: true
-          prerelease: true
+          #prerelease: true
+          makeLatest: true
           token: ${{ secrets.TRIGGER_BUILD_TOKEN }}
           repo: RetroDECK
         continue-on-error: true
