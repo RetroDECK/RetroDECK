@@ -17,9 +17,9 @@ jobs:
     runs-on: self-hosted
     steps:
 
-      - name: Remove stuck mounts
-        run: sudo umount -f /home/administrator/actions-runner/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles/*
-        continue-on-error: true
+      # - name: Remove stuck mounts
+      #   run: sudo umount -f /home/administrator/actions-runner/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles/*
+      #   continue-on-error: true
 
       - name: Generate build ID
         id: generating_buildid
@@ -32,7 +32,7 @@ jobs:
           git pull
           git submodule init
           git submodule update
-          sudo apt install -y flatpak flatpak-builder p7zip-full
+          sudo apt install -y flatpak flatpak-builder p7zip-full xmlstarlet bzip2
           flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
           flatpak install --user -y --noninteractive \
           org.kde.Sdk//6.3 \
@@ -47,24 +47,29 @@ jobs:
       - name: Build flatpak
         run: |
           git config --global protocol.file.allow always
+          mkdir -vp ${GITHUB_WORKSPACE}/local
+          mkdir -vp ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker
           flatpak-builder --user --force-clean --install-deps-from=flathub --install-deps-from=flathub-beta --repo=${GITHUB_WORKSPACE}/local ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
 
       - name: Create Artifact for flathub
         run: | 
-          tar -czf ${GITHUB_WORKSPACE}/RetroDECK-Artifact.tar.gz -C ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker .
-          hash=($(sha256sum ${GITHUB_WORKSPACE}/RetroDECK-Artifact.tar.gz))
-          echo $hash > ${GITHUB_WORKSPACE}/RetroDECK-Artifact.sha
-          mv -f RetroDECK-Artifact.* ${{ secrets.ARTIFACT_REPO }}
+          tar -czf ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.tar.gz -C ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker .
+          hash=($(sha256sum ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.tar.gz))
+          echo $hash > ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.sha
+          mv -f RetroDECK-Artifact-cooker.* ${{ secrets.ARTIFACT_REPO }}
         continue-on-error: true
 
       - name: Create Bundle
         run: |
           flatpak build-bundle ${GITHUB_WORKSPACE}/local RetroDECK.flatpak net.retrodeck.retrodeck
 
+      - name: Set environment variable with current branch name
+        run: echo "GITHUB_REF_SLUG=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
+
       - name: Publish the flatpak in a new cooker release
         uses: ncipollo/release-action@v1
         with:
-          tag: "${{ steps.generating_buildid.outputs.build-id }}"
+          tag: "${{ env.GITHUB_REF_SLUG }}-${{ steps.generating_buildid.outputs.build-id }}"
           body: |
             # Release Notes (Cooker)
             This is a cooker snapshot based on the commit: ${{ github.event.repository.full_name }}@${{github.sha}}.

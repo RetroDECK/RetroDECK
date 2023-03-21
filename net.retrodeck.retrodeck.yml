@@ -66,11 +66,11 @@ modules:
   # The version number is hardcoded in /app/retrodeck/version
   #
   # UPDATE STEPS FOR MAIN:
-  # [ ] Update the VERSION variable
-  # [ ] Update the appdata.xml with the version number and notes
-  # [ ] change branch into main in version-initialization (first one)
-  # [ ] change branch into main in retrodeck module (last one)
-  # [ ] if header (before modules) was edited, edit it even in flathub.yml
+  # [X] Update the VERSION variable
+  # [X] Update the appdata.xml with the version number and notes
+  # [X] change branch into main in version-initialization (first one)
+  # [X] change branch into main in retrodeck module (last one)
+  # [X] if header (before modules) was edited, edit it even in flathub.yml
   #
   - name: version-initialization
     buildsystem: simple
@@ -78,7 +78,7 @@ modules:
       - |
         git checkout ${GITHUB_REF_NAME}
         mkdir -p ${FLATPAK_DEST}/retrodeck/
-        VERSION="cooker-0.6.2b"
+        VERSION="cooker-0.6.3b"
         if [[ $VERSION == *"cooker"* ]];
         then
           VERSION="$VERSION-[$(git rev-parse --short HEAD)]"
@@ -88,7 +88,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/XargonWan/RetroDECK.git
-        branch: cooker-0.6.2b
+        branch: cooker-0.6.3b
 
   - name: xmlstarlet
     config-opts:
@@ -426,7 +426,7 @@ modules:
     sources:
       - type: archive
         url: https://buildbot.libretro.com/stable/1.15.0/linux/x86_64/RetroArch_cores.7z
-        sha256: 1fdec5c2cbabea4f194ede4a1fb0dd1d17e14e64bf7ef705e3ad763592411073
+        sha256: 2230bc38eaf87406efd0c2b7bdd1cf9e813ba113505600f14a7ef9eb06f8c7c0
 
   # PPSSPP - START
   # https://github.com/flathub/org.ppsspp.PPSSPP
@@ -637,7 +637,9 @@ modules:
       - sed -i -e 's/"2048"/"512"/g' /app/share/icons/hicolor/scalable/apps/dolphin-emu.svg
     sources:
       - type: git
-        #url: ssh://git@github.com/dolphin-emu/dolphin.git
+        # Sometimes Dolphin or its submodules clone are failing in https so it must done in ssh
+        # fatal: remote transport reported error
+        # url: ssh://git@github.com/dolphin-emu/dolphin.git
         url: https://github.com/dolphin-emu/dolphin.git
         commit: 46b99671d9158e0ca840c1d8ef249db0f321ced7
         x-checker-data:
@@ -856,8 +858,8 @@ modules:
       - install -D primehack-wrapper /app/bin/primehack-wrapper
     sources:
       - type: git
-        url: https://github.com/shiiion/dolphin.git
-        commit: efb99ebfd20b1bc16ea3e51fec409c91e354d8c2
+        url: https://github.com/TheDrifter363/primehack.git
+        commit: 6295c695307a67f11ee202b05cbdd7b5c1edae5c
        # detects whether dolphin is running in a flatpak sandbox
        # and makes it use xdg directories if it is.
        # prevents dolphin from attempting to write conf files
@@ -1067,12 +1069,13 @@ modules:
       - cp -f res/icon.svg /app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg
 
       # Tools
-      - mkdir -p ${FLATPAK_DEST}/retrodeck/tools/
-      - cp tools/* ${FLATPAK_DEST}/retrodeck/tools/
       - mv -f es-configs/tools-gamelist.xml ${FLATPAK_DEST}/retrodeck/
 
+      # Launchable scripts
       - cp retrodeck.sh /app/bin/retrodeck.sh
       - chmod +x /app/bin/retrodeck.sh
+      - cp tools/configurator.sh /app/bin/configurator.sh
+      - chmod +x /app/bin/configurator.sh
 
       # Function libraries
       - mkdir -p /app/libexec
@@ -1098,4 +1101,4 @@ modules:
     sources:
       - type: git
         url: https://github.com/XargonWan/RetroDECK.git
-        branch: cooker-0.6.2b
+        branch: cooker-0.6.3b
