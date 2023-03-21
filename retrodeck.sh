@@ -45,7 +45,7 @@ https://retrodeck.net
       exit
       ;;
     --configurator*)
-      sh /var/config/retrodeck/tools/configurator.sh
+      sh /app/bin/configurator.sh
       exit
       ;;
     --reset-emulator*)
@@ -53,7 +53,7 @@ https://retrodeck.net
       echo "Available options are: retroarch citra dolphin duckstation melonds pcsx2 ppsspp primehack rpcs3 xemu yuzu all-emulators"
       read -p "Please enter the emulator you would like to reset: " emulator
       if [[ "$emulator" =~ ^(retroarch|citra|dolphin|duckstation|melonds|pcsx2|ppsspp|primehack|rpcs3|xemu|yuzu|all-emulators)$ ]]; then
-        read -p "You are about to reset $emulator to default settings. Press 'y' to continue, 'n' to stop: " response
+        read -p "You are about to reset $emulator to default settings. Enter 'y' to continue, 'n' to stop: " response
         if [[ $response == [yY] ]]; then
           cli_emulator_reset $emulator
           read -p "The process has been completed, press Enter key to start RetroDECK."
@@ -69,7 +69,7 @@ https://retrodeck.net
       ;;
     --reset-tools*)
       echo "You are about to reset the RetroDECK tools."
-      read -p "Press 'y' to continue, 'n' to stop: " response
+      read -p "Enter 'y' to continue, 'n' to stop: " response
       if [[ $response == [yY] ]]; then
         tools_init
         read -p "The process has been completed, press Enter key to start RetroDECK."
@@ -81,9 +81,10 @@ https://retrodeck.net
       ;;
     --reset-retrodeck*)
       echo "You are about to reset RetroDECK completely!"
-      read -p "Press 'y' to continue, 'n' to stop: " response
+      read -p "Enter 'y' to continue, 'n' to stop: " response
       if [[ $response == [yY] ]]; then
         rm -f "$lockfile"
+        rm -f "$rd_conf"
         read -p "The process has been completed, press Enter key to start the initial RetroDECK setup process."
         shift # Continue launch after previous command is finished
       else
