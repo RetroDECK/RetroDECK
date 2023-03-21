@@ -44,7 +44,9 @@ jobs:
 
       - name: Build flatpak
         run: |
-          git config --global protocol.allow always
+          git config --global protocol.file.allow always
+          mkdir -vp ${GITHUB_WORKSPACE}/local
+          mkdir -vp ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker
           flatpak-builder --user --force-clean --install-deps-from=flathub --install-deps-from=flathub-beta --repo=${GITHUB_WORKSPACE}/local ${GITHUB_WORKSPACE}/retrodeck-flatpak-main net.retrodeck.retrodeck.yml
 
       - name: Create Artifact for flathub
