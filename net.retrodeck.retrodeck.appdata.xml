@@ -66,6 +66,20 @@
    <project_license>GPL-3.0</project_license>
    <metadata_license>CC0-1.0</metadata_license>
    <releases>
+      <release version="0.6.3b" date="2023-03-21">
+         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.3b</url>
+         <description>
+            <ul>
+               <li>Added support support for multiple file compression via CLI.</li>
+               <li>Added support support for multiple file compression in the Configurator.</li>
+               <li>Fixed some missing layout changes.</li>
+               <li>Removed the reset tools command.</li>
+               <li>Fixed a bug in the compression tool with certain filenames with spaces.</li>
+               <li>Fixed a manifest bug that caused a conflict between Dolphin and Primehack in certain scenarios.</li>
+               <li>Shipped a new configuration to account for the config format changes made by Yuzu and Citra in the latest updates.</li>
+            </ul>
+         </description>
+      </release>
       <release version="0.6.2b" date="2023-03-15">
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.2b</url>
          <description>
