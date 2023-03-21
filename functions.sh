@@ -868,7 +868,7 @@ xemu_init() {
   echo "------------------------"
   mkdir -pv $rdhome/saves/xbox/xemu/
   # removing config directory to wipe legacy files
-  rm -rf /var/config/xemu
+  rm -rf /var/data/xemu
   mkdir -pv /var/data/xemu/
   cp -fv $emuconfigs/xemu.toml /var/data/xemu/xemu.toml
   sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/data/xemu/xemu.toml
