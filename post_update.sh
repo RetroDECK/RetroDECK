@@ -212,9 +212,9 @@ post_update() {
     dir_prep "$bios_folder/pico-8" "$HOME/.lexaloffle/pico-8" # Store binary and config files together. The .lexaloffle directory is a hard-coded location for the PICO-8 config file, cannot be changed
 
     cp -fv $emuconfigs/citra/qt-config.ini /var/config/citra-emu/qt-config.ini
-    sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
+    sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
     cp -fvr $emuconfigs/yuzu/* /var/config/yuzu/
-    sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/yuzu/qt-config.ini
+    sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/yuzu/qt-config.ini
   fi
 
   # The following commands are run every time.
