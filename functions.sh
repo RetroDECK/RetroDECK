@@ -869,9 +869,10 @@ xemu_init() {
   mkdir -pv $rdhome/saves/xbox/xemu/
   # removing config directory to wipe legacy files
   rm -rf /var/config/xemu
-  mkdir -pv /var/data/xemu/
-  cp -fv $emuconfigs/xemu.toml /var/data/xemu/xemu.toml
-  sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/data/xemu/xemu.toml
+  rm -rf /var/data/xemu
+  dir_prep "/var/config/xemu" "/var/data/xemu" # Creating config folder in /var/config for consistentcy and linking back to original location where emulator will look
+  cp -fv $emuconfigs/xemu.toml /var/config/xemu/xemu.toml
+  sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/xemu/xemu.toml
   # Preparing HD dummy Image if the image is not found
   if [ ! -f $rdhome/bios/xbox_hdd.qcow2 ]
   then
