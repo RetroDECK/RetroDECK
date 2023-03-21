@@ -36,14 +36,15 @@
       </screenshot>
    </screenshots>
    <description>
-      <p>What is Retrodeck?
-  RetroDECK is an emulation and retro gaming solution to catalog and play your game collection directly from Linux in one unified application.
+      <p>What is Retrodeck?</p>
+      <p>RetroDECK is an emulation and retro gaming solution to catalog and play your game collection directly from Linux in one unified application.
   It's inspired by other embedded emulation systems like AmberELEC, EmuELEC, CoreELEC, Lakka, and Batocera.
   RetroDECK is powered by EmulationStation Desktop Edition, that uses RetroArch and other standalone emulators to allow you to import and play your favorite games in a tidy environment.
   No other software is needed as everything it's already included in one package!</p>
       <p>BETA NOTICE: RetroDECK is still in Beta and the team is actively developing and adding more features.</p>
       <p>About the Beta:
-  The primary focus during the beta period is on SteamOS and the Steam Deck but we hope to expand to more devices and general Linux desktop in the future (NOTE: It can be run on Linux desktop right now but there will be some manual configurations needed for input, storage location and other tiny hickups).</p>
+  The primary focus during the beta period is on SteamOS and the Steam Deck but we hope to expand to more devices and general Linux desktop in the future</p>
+      <p>NOTE: It can be run on Linux desktop right now but there will be some manual configurations needed for input, storage location and other tiny hickups.</p>
       <p>NOTE: Albeit RetroDECK could possibily work on every distro, it's supported only on Steam Deck.</p>
       <p>
          INSTALLATION INSTRUCTIONS FOR THE STEAM DECK:
@@ -54,13 +55,13 @@
             <li>4. [OPTIONAL] Download Steam Grids graphics for RetroDECK with BoilR</li>
          </ul>
       </p>
-      <p>For more detailed information check our wiki:
-  https://github.com/XargonWan/RetroDECK/wiki</p>
-      <p>If you want to sponsor the project:
-  https://www.patreon.com/RetroDECK</p>
-      <p>If you want to join the RetroDECK community check our:
-    Discord: https://discord.gg/Dz3szYsP8g
-    Reddit: https://www.reddit.com/r/RetroDECK/</p>
+      <p>For more detailed information check our wiki:</p>
+      <p>https://github.com/XargonWan/RetroDECK/wiki</p>
+      <p>If you want to sponsor the project:</p>
+      <p>https://www.patreon.com/RetroDECK</p>
+      <p>If you want to join the RetroDECK community check our:</p>
+      <p>Discord: https://discord.gg/Dz3szYsP8g</p>
+      <p>Reddit: https://www.reddit.com/r/RetroDECK/</p>
       <p>If you want to help out with the project join the "i-want-to-help" channel on our Discord.</p>
    </description>
    <project_license>GPL-3.0</project_license>
