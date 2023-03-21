@@ -763,7 +763,7 @@ yuzu_init() {
   rm -rf /var/config/yuzu
   mkdir -pv /var/config/yuzu/
   cp -fvr $emuconfigs/yuzu/* /var/config/yuzu/
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/yuzu/qt-config.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/yuzu/qt-config.ini
   dir_prep "$rdhome/screenshots" "/var/data/yuzu/screenshots"
 }
 
@@ -775,7 +775,7 @@ dolphin_init() {
   rm -rf /var/config/dolphin-emu
   mkdir -pv /var/config/dolphin-emu/
   cp -fvr "$emuconfigs/dolphin/"* /var/config/dolphin-emu/
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/dolphin-emu/Dolphin.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/dolphin-emu/Dolphin.ini
   dir_prep "$rdhome/saves/gc/dolphin/EUR" "/var/data/dolphin-emu/GC/EUR"
   dir_prep "$rdhome/saves/gc/dolphin/USA" "/var/data/dolphin-emu/GC/USA"
   dir_prep "$rdhome/saves/gc/dolphin/JAP" "/var/data/dolphin-emu/GC/JAP"
@@ -793,7 +793,7 @@ primehack_init() {
   rm -rf /var/config/primehack
   mkdir -pv /var/config/primehack/
   cp -fvr "$emuconfigs/primehack/"* /var/config/primehack/
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/primehack/Dolphin.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/primehack/Dolphin.ini
   dir_prep "$rdhome/saves/gc/primehack/EUR" "/var/data/primehack/GC/EUR"
   dir_prep "$rdhome/saves/gc/primehack/USA" "/var/data/primehack/GC/USA"
   dir_prep "$rdhome/saves/gc/primehack/JAP" "/var/data/primehack/GC/JAP"
@@ -813,8 +813,8 @@ pcsx2_init() {
   mkdir -pv "$rdhome/saves/ps2/pcsx2/memcards"
   mkdir -pv "$rdhome/states/ps2/pcsx2"
   cp -fvr $emuconfigs/PCSX2/* /var/config/PCSX2/inis/
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2_ui.ini
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2_ui.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2.ini
   #dir_prep "$rdhome/states/ps2/pcsx2" "/var/config/PCSX2/sstates"
   #dir_prep "$rdhome/screenshots" "/var/config/PCSX2/snaps"
   #dir_prep "$rdhome/.logs" "/var/config/PCSX2/logs"
@@ -832,8 +832,7 @@ melonds_init() {
   mkdir -pv "$rdhome/states/nds/melonds"
   dir_prep "$rdhome/bios" "/var/config/melonDS/bios"
   cp -fvr $emuconfigs/melonDS.ini /var/config/melonDS/
-  # Replace ~/retrodeck with $rdhome as ~ cannot be understood by MelonDS
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/melonDS/melonDS.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/melonDS/melonDS.ini
 }
 
 citra_init() {
@@ -848,7 +847,7 @@ citra_init() {
   dir_prep "$rdhome/bios/citra/sysdata" "/var/data/citra-emu/sysdata"
   dir_prep "$rdhome/.logs/citra" "/var/data/citra-emu/log"
   cp -fv $emuconfigs/citra/qt-config.ini /var/config/citra-emu/qt-config.ini
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
 }
 
 rpcs3_init() {
@@ -953,7 +952,7 @@ ra_init() {
   mkdir -pv /var/config/retroarch/config/
   cp -rf $emuconfigs/retroarch/core-overrides/* /var/config/retroarch/config
   #rm -rf $rdhome/bios/bios # in some situations a double bios symlink is created
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/retroarch/retroarch.cfg
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/retroarch/retroarch.cfg
 
   # PPSSPP
   echo "--------------------------------"
@@ -1054,6 +1053,7 @@ emulators_post_move() {
   dir_prep "$rdhome/bios" "/var/config/retroarch/system"
   dir_prep "$rdhome/.logs/retroarch" "/var/config/retroarch/logs"
   dir_prep "$rdhome/shaders/retroarch" "/var/config/retroarch/shaders"
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/retroarch/retroarch.cfg
 
   # Yuzu section
   dir_prep "$rdhome/bios/switch/keys" "/var/data/yuzu/keys"
@@ -1062,10 +1062,10 @@ emulators_post_move() {
   dir_prep "$rdhome/saves/switch/yuzu/sdmc" "/var/data/yuzu/sdmc"
   dir_prep "$rdhome/.logs/yuzu" "/var/data/yuzu/log"
   dir_prep "$rdhome/screenshots" "/var/data/yuzu/screenshots"
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/yuzu/qt-config.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/yuzu/qt-config.ini
 
   # Dolphin section
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/dolphin-emu/Dolphin.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/dolphin-emu/Dolphin.ini
   dir_prep "$rdhome/saves/gc/dolphin/EUR" "/var/data/dolphin-emu/GC/EUR"
   dir_prep "$rdhome/saves/gc/dolphin/USA" "/var/data/dolphin-emu/GC/USA"
   dir_prep "$rdhome/saves/gc/dolphin/JAP" "/var/data/dolphin-emu/GC/JAP"
@@ -1074,7 +1074,7 @@ emulators_post_move() {
   dir_prep "$rdhome/saves/wii/dolphin" "/var/data/dolphin-emu/Wii/"
 
   # Primehack section
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/primehack/Dolphin.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/primehack/Dolphin.ini
   dir_prep "$rdhome/saves/gc/primehack/EUR" "/var/data/primehack/GC/EUR"
   dir_prep "$rdhome/saves/gc/primehack/USA" "/var/data/primehack/GC/USA"
   dir_prep "$rdhome/saves/gc/primehack/JAP" "/var/data/primehack/GC/JAP"
@@ -1083,17 +1083,17 @@ emulators_post_move() {
   dir_prep "$rdhome/saves/wii/primehack" "/var/data/primehack/Wii/"
 
   # PCSX2 section
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2_ui.ini
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2_ui.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2.ini
 
   # MelonDS section
   dir_prep "$rdhome/bios" "/var/config/melonDS/bios"
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/melonDS/melonDS.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/melonDS/melonDS.ini
 
   # Citra section
   dir_prep "$rdhome/bios/citra/sysdata" "/var/data/citra-emu/sysdata"
   dir_prep "$rdhome/.logs/citra" "/var/data/citra-emu/log"
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
 
   # RPCS3 section
   sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/rpcs3/vfs.yml
