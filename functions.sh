@@ -1278,14 +1278,11 @@ finit() {
 
   # Recreating the folder
   rm -rfv /var/config/emulationstation/
-  rm -rfv /var/config/retrodeck/tools/
   mkdir -pv /var/config/emulationstation/
 
   # Initializing ES-DE
   # TODO: after the next update of ES-DE this will not be needed - let's test it
   emulationstation --home /var/config/emulationstation --create-system-dirs
-
-  mkdir -pv /var/config/retrodeck/tools/
 
   #zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --text="RetroDECK will now install the needed files.\nPlease wait up to one minute,\nanother message will notify when the process will be finished.\n\nPress OK to continue."
 

@@ -216,6 +216,9 @@ post_update() {
     sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
     cp -fvr $emuconfigs/yuzu/* /var/config/yuzu/
     sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/yuzu/qt-config.ini
+
+    # Remove unneeded tools folder, as location has changed to RO space
+    rm -rfv /var/config/retrodeck/tools/
   fi
 
   # The following commands are run every time.
