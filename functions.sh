@@ -1033,15 +1033,6 @@ cli_emulator_reset() {
   esac
 }
 
-tools_init() {
-  rm -rfv /var/config/retrodeck/tools/
-  mkdir -pv /var/config/retrodeck/tools/
-  cp -rfv /app/retrodeck/tools/* /var/config/retrodeck/tools/
-  mkdir -pv /var/config/emulationstation/.emulationstation/custom_systems/tools/
-  rm -rfv /var/config/retrodeck/tools/gamelist.xml
-  cp -fv /app/retrodeck/tools-gamelist.xml /var/config/retrodeck/tools/gamelist.xml
-}
-
 emulators_post_move() {
   # This script will redo the symlinks for all emulators after moving the $rdhome location without resetting other options
   # FUTURE WORK: The sed commands here should be replaced with set_setting_value and dir_prep should be replaced with changing paths in config files directly where possible
@@ -1321,7 +1312,6 @@ finit() {
   (
   ra_init
   standalones_init
-  tools_init
   ) |
   zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \

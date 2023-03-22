@@ -20,7 +20,6 @@ Arguments:
     --configurator                Starts the RetroDECK Configurator
     --compress <file>             Compresses target file to .chd format. Supports .cue, .iso and .gdi formats
     --reset-emulator <emulator>   Reset one or more emulator configs to the default values
-    --reset-tools                 Reset the RetroDECK Tools section
     --reset-retrodeck             Starts the initial RetroDECK installer (backup your data first!)
 
 For flatpak run specific options please run: flatpak run -h
@@ -64,18 +63,6 @@ https://retrodeck.net
         fi
       else
         echo "$emulator is not a valid selection, exiting..."
-        exit
-      fi
-      ;;
-    --reset-tools*)
-      echo "You are about to reset the RetroDECK tools."
-      read -p "Enter 'y' to continue, 'n' to stop: " response
-      if [[ $response == [yY] ]]; then
-        tools_init
-        read -p "The process has been completed, press Enter key to start RetroDECK."
-        shift # Continue launch after previous command is finished
-      else
-        read -p "The process has been cancelled, press Enter key to exit."
         exit
       fi
       ;;

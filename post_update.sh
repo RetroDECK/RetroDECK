@@ -209,6 +209,7 @@ post_update() {
     dir_prep "$rdhome/states/primehack" "/var/data/primehack/StateSaves"
 
     rm -rf "$HOME/~/" # Remove old incorrect location from 0.6.2b
+    rm -f "$HOME/.lexaloffle/pico-8" # Remove old symlink to prevent recursion
     dir_prep "$bios_folder/pico-8" "$HOME/.lexaloffle/pico-8" # Store binary and config files together. The .lexaloffle directory is a hard-coded location for the PICO-8 config file, cannot be changed
 
     cp -fv $emuconfigs/citra/qt-config.ini /var/config/citra-emu/qt-config.ini
@@ -219,7 +220,6 @@ post_update() {
 
   # The following commands are run every time.
 
-  tools_init
   update_rd_conf
   ) |
   zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \

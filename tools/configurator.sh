@@ -50,7 +50,6 @@ source /app/libexec/functions.sh
 #           - Reset XEMU
 #           - Reset Yuzu
 #       - Reset All Emulators
-#       - Reset Tools
 #       - Reset All
 
 # Code for the menus should be put in reverse order, so functions for sub-menus exists before it is called by the parent menu
@@ -63,7 +62,6 @@ configurator_reset_dialog() {
   --column="Choice" --column="Action" \
   "Reset Specific Emulator" "Reset only one specific emulator to default settings" \
   "Reset All Emulators" "Reset all emulators to default settings" \
-  "Reset Tools" "Reset Tools menu entries" \
   "Reset All" "Reset RetroDECK to default settings" )
 
   case $choice in
@@ -154,11 +152,6 @@ configurator_reset_dialog() {
   ra_init
   standalones_init
   configurator_process_complete_dialog "resetting all emulators"
-;;
-
-"Reset Tools" )
-  tools_init
-  configurator_process_complete_dialog "resetting the tools menu"
 ;;
 
 "Reset All" )
@@ -558,11 +551,11 @@ configurator_check_bios_files_basic() {
   do
     bios_file_found="No"
     bios_hash_matched="No"
-    if [[ -f "$bios_dir/$bios_subdir$bios_file" ]]; then
+    if [[ -f "$bios_folder/$bios_subdir$bios_file" ]]; then
       bios_file_found="Yes"
       if [[ $bios_hash == "Unknown" ]]; then
         bios_hash_matched="Unknown"
-      elif [[ $(md5sum "$bios_dir/$bios_subdir$bios_file" | awk '{ print $1 }') == "$bios_hash" ]]; then
+      elif [[ $(md5sum "$bios_folder/$bios_subdir$bios_file" | awk '{ print $1 }') == "$bios_hash" ]]; then
         bios_hash_matched="Yes"
       fi
     fi
@@ -585,11 +578,11 @@ configurator_check_bios_files_advanced() {
   do
     bios_file_found="No"
     bios_hash_matched="No"
-    if [[ -f "$bios_dir/$bios_subdir$bios_file" ]]; then
+    if [[ -f "$bios_folder/$bios_subdir$bios_file" ]]; then
       bios_file_found="Yes"
       if [[ $bios_hash == "Unknown" ]]; then
         bios_hash_matched="Unknown"
-      elif [[ $(md5sum "$bios_dir/$bios_subdir$bios_file" | awk '{ print $1 }') == "$bios_hash" ]]; then
+      elif [[ $(md5sum "$bios_folder/$bios_subdir$bios_file" | awk '{ print $1 }') == "$bios_hash" ]]; then
         bios_hash_matched="Yes"
       fi
     fi
