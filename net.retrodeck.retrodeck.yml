@@ -1066,10 +1066,10 @@ modules:
       - chmod +x /app/bin/retrodeck.sh
 
       # Tools
-      - mkdir -p /app/bin/tools
-      - cp tools/configurator.sh /app/bin/tools/configurator.sh
-      - chmod +x /app/bin/configurator.sh
-      - cp es-configs/tools-gamelist.xml /app/bin/tools/tools-gamelist.xml
+      - mkdir -p /app/tools
+      - cp tools/configurator.sh /app/tools/configurator.sh
+      - chmod +x /app/tools/configurator.sh
+      - cp es-configs/tools-gamelist.xml /app/tools/tools-gamelist.xml
 
       # Function libraries
       - mkdir -p /app/libexec
