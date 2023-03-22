@@ -705,6 +705,13 @@ dir_prep() {
 
   echo -e "\n[DIR PREP]\nMoving $symlink in $real" #DEBUG
 
+   # if the symlink dir is already a symlink, unlink it first, to prevent recursion
+  if [ -L "$symlink" ];
+  then
+    echo "$symlink is already a symlink, unlinking to prevent recursives" #DEBUG
+    unlink "$symlink"
+  fi
+
   # if the dest dir exists we want to backup it
   if [ -d "$symlink" ];
   then
@@ -715,6 +722,7 @@ dir_prep() {
   # if the real dir is already a symlink, unlink it first
   if [ -L "$real" ];
   then
+    echo "$real is already a symlink, unlinking to prevent recursives" #DEBUG
     unlink "$real"
   fi
 
