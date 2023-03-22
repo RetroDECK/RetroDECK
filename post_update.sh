@@ -211,11 +211,15 @@ post_update() {
     rm -rf "$HOME/~/" # Remove old incorrect location from 0.6.2b
     rm -f "$HOME/.lexaloffle/pico-8" # Remove old symlink to prevent recursion
     dir_prep "$bios_folder/pico-8" "$HOME/.lexaloffle/pico-8" # Store binary and config files together. The .lexaloffle directory is a hard-coded location for the PICO-8 config file, cannot be changed
+    dir_prep "$saves_folder/pico-8" "$bios_folder/pico-8/cdata" # PICO-8 saves folder structure was backwards, fixing for consistency.
 
     cp -fv $emuconfigs/citra/qt-config.ini /var/config/citra-emu/qt-config.ini
     sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
     cp -fvr $emuconfigs/yuzu/* /var/config/yuzu/
     sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/yuzu/qt-config.ini
+
+    # Remove unneeded tools folder, as location has changed to RO space
+    rm -rfv /var/config/retrodeck/tools/
   fi
 
   # The following commands are run every time.

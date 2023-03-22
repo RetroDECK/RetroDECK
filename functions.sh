@@ -705,6 +705,13 @@ dir_prep() {
 
   echo -e "\n[DIR PREP]\nMoving $symlink in $real" #DEBUG
 
+   # if the symlink dir is already a symlink, unlink it first, to prevent recursion
+  if [ -L "$symlink" ];
+  then
+    echo "$symlink is already a symlink, unlinking to prevent recursives" #DEBUG
+    unlink "$symlink"
+  fi
+
   # if the dest dir exists we want to backup it
   if [ -d "$symlink" ];
   then
@@ -715,6 +722,7 @@ dir_prep() {
   # if the real dir is already a symlink, unlink it first
   if [ -L "$real" ];
   then
+    echo "$real is already a symlink, unlinking to prevent recursives" #DEBUG
     unlink "$real"
   fi
 
@@ -1278,14 +1286,11 @@ finit() {
 
   # Recreating the folder
   rm -rfv /var/config/emulationstation/
-  rm -rfv /var/config/retrodeck/tools/
   mkdir -pv /var/config/emulationstation/
 
   # Initializing ES-DE
   # TODO: after the next update of ES-DE this will not be needed - let's test it
   emulationstation --home /var/config/emulationstation --create-system-dirs
-
-  mkdir -pv /var/config/retrodeck/tools/
 
   #zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --text="RetroDECK will now install the needed files.\nPlease wait up to one minute,\nanother message will notify when the process will be finished.\n\nPress OK to continue."
 
@@ -1307,7 +1312,7 @@ finit() {
   # PICO-8
   dir_prep "$bios_folder/pico-8" "$HOME/.lexaloffle/pico-8" # Store binary and config files together. The .lexaloffle directory is a hard-coded location for the PICO-8 config file, cannot be changed
   dir_prep "$roms_folder/pico8" "$bios_folder/pico-8/carts" # Symlink default game location to RD roms for cleanliness (this location is overridden anyway by the --root_path launch argument anyway)
-  dir_prep "$bios_folder/pico-8/cdata" "$saves_folder/pico-8" # PICO-8 saves folder
+  dir_prep "$saves_folder/pico-8" "$bios_folder/pico-8/cdata"  # PICO-8 saves folder
 
   (
   ra_init
