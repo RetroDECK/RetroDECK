@@ -1379,3 +1379,17 @@ configurator_destination_choice_dialog() {
 
   echo $choice
 }
+
+configurator_reset_confirmation_dialog() {
+  # This dialog provides a confirmation for any reset functions, before the reset is actually performed.
+  # USAGE: $(configurator_reset_confirmation_dialog "emulator being reset" "action text")
+  # This function will return a "true" if the user clicks Confirm, and "false" if they click Cancel.
+  choice=$(zenity --title "RetroDECK Configurator Utility - Reset $1" --question --no-wrap --cancel-label="Cancel" --ok-label="Confirm" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+  --text="$2")
+  if [[ $? == "0" ]]; then
+    echo "true"
+  else
+    echo "false"
+  fi
+}
