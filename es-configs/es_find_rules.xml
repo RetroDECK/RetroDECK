@@ -327,18 +327,6 @@
             <entry>~/bin/pcsx2*-Qt.AppImage</entry>
         </rule>
     </emulator>
-    <emulator name="PCSX2-LEGACY">
-        <!-- Sony PlayStation 2 emulator PCSX2 (legacy) -->
-        <rule type="systempath">
-            <entry>PCSX2</entry>
-            <entry>pcsx2</entry>
-            <entry>net.pcsx2.PCSX2</entry>
-        </rule>
-        <rule type="staticpath">
-            <entry>/var/lib/flatpak/exports/bin/net.pcsx2.PCSX2</entry>
-            <entry>~/.local/share/flatpak/exports/bin/net.pcsx2.PCSX2</entry>
-        </rule>
-    </emulator>
     <emulator name="PICO-8">
         <!-- PICO-8 Fantasy Console (game engine) -->
         <rule type="systempath">

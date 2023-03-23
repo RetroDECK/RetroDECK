@@ -868,6 +868,13 @@ dir_prep() {
 
   echo -e "\n[DIR PREP]\nMoving $symlink in $real" #DEBUG
 
+   # if the symlink dir is already a symlink, unlink it first, to prevent recursion
+  if [ -L "$symlink" ];
+  then
+    echo "$symlink is already a symlink, unlinking to prevent recursives" #DEBUG
+    unlink "$symlink"
+  fi
+
   # if the dest dir exists we want to backup it
   if [ -d "$symlink" ];
   then
@@ -878,6 +885,7 @@ dir_prep() {
   # if the real dir is already a symlink, unlink it first
   if [ -L "$real" ];
   then
+    echo "$real is already a symlink, unlinking to prevent recursives" #DEBUG
     unlink "$real"
   fi
 
@@ -926,7 +934,7 @@ yuzu_init() {
   rm -rf /var/config/yuzu
   mkdir -pv /var/config/yuzu/
   cp -fvr $emuconfigs/yuzu/* /var/config/yuzu/
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/yuzu/qt-config.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/yuzu/qt-config.ini
   dir_prep "$rdhome/screenshots" "/var/data/yuzu/screenshots"
   dir_prep "$mods_folder/Yuzu" "/var/data/yuzu/load"
 }
@@ -939,7 +947,7 @@ dolphin_init() {
   rm -rf /var/config/dolphin-emu
   mkdir -pv /var/config/dolphin-emu/
   cp -fvr "$emuconfigs/dolphin/"* /var/config/dolphin-emu/
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/dolphin-emu/Dolphin.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/dolphin-emu/Dolphin.ini
   dir_prep "$rdhome/saves/gc/dolphin/EUR" "/var/data/dolphin-emu/GC/EUR"
   dir_prep "$rdhome/saves/gc/dolphin/USA" "/var/data/dolphin-emu/GC/USA"
   dir_prep "$rdhome/saves/gc/dolphin/JAP" "/var/data/dolphin-emu/GC/JAP"
@@ -959,7 +967,7 @@ primehack_init() {
   rm -rf /var/config/primehack
   mkdir -pv /var/config/primehack/
   cp -fvr "$emuconfigs/primehack/"* /var/config/primehack/
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/primehack/Dolphin.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/primehack/Dolphin.ini
   dir_prep "$rdhome/saves/gc/primehack/EUR" "/var/data/primehack/GC/EUR"
   dir_prep "$rdhome/saves/gc/primehack/USA" "/var/data/primehack/GC/USA"
   dir_prep "$rdhome/saves/gc/primehack/JAP" "/var/data/primehack/GC/JAP"
@@ -981,8 +989,8 @@ pcsx2_init() {
   mkdir -pv "$rdhome/saves/ps2/pcsx2/memcards"
   mkdir -pv "$rdhome/states/ps2/pcsx2"
   cp -fvr $emuconfigs/PCSX2/* /var/config/PCSX2/inis/
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2_ui.ini
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2_ui.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2.ini
   #dir_prep "$rdhome/states/ps2/pcsx2" "/var/config/PCSX2/sstates"
   #dir_prep "$rdhome/screenshots" "/var/config/PCSX2/snaps"
   #dir_prep "$rdhome/.logs" "/var/config/PCSX2/logs"
@@ -1000,8 +1008,7 @@ melonds_init() {
   mkdir -pv "$rdhome/states/nds/melonds"
   dir_prep "$rdhome/bios" "/var/config/melonDS/bios"
   cp -fvr $emuconfigs/melonDS.ini /var/config/melonDS/
-  # Replace ~/retrodeck with $rdhome as ~ cannot be understood by MelonDS
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/melonDS/melonDS.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/melonDS/melonDS.ini
 }
 
 citra_init() {
@@ -1016,7 +1023,7 @@ citra_init() {
   dir_prep "$rdhome/bios/citra/sysdata" "/var/data/citra-emu/sysdata"
   dir_prep "$rdhome/.logs/citra" "/var/data/citra-emu/log"
   cp -fv $emuconfigs/citra/qt-config.ini /var/config/citra-emu/qt-config.ini
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
   dir_prep "$mods_folder/Citra" "/var/data/citra-emu/load/mods/"
   dir_prep "$texture_packs_folder/Citra" "/var/data/citra-emu/load/textures/"
 }
@@ -1039,9 +1046,10 @@ xemu_init() {
   mkdir -pv $rdhome/saves/xbox/xemu/
   # removing config directory to wipe legacy files
   rm -rf /var/config/xemu
-  mkdir -pv /var/data/xemu/
-  cp -fv $emuconfigs/xemu.toml /var/data/xemu/xemu.toml
-  sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/data/xemu/xemu.toml
+  rm -rf /var/data/xemu
+  dir_prep "/var/config/xemu" "/var/data/xemu" # Creating config folder in /var/config for consistentcy and linking back to original location where emulator will look
+  cp -fv $emuconfigs/xemu.toml /var/config/xemu/xemu.toml
+  sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/xemu/xemu.toml
   # Preparing HD dummy Image if the image is not found
   if [ ! -f $rdhome/bios/xbox_hdd.qcow2 ]
   then
@@ -1122,7 +1130,7 @@ ra_init() {
   mkdir -pv /var/config/retroarch/config/
   cp -rf $emuconfigs/retroarch/core-overrides/* /var/config/retroarch/config
   #rm -rf $rdhome/bios/bios # in some situations a double bios symlink is created
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/retroarch/retroarch.cfg
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/retroarch/retroarch.cfg
 
   # PPSSPP
   echo "--------------------------------"
@@ -1215,15 +1223,6 @@ cli_emulator_reset() {
   esac
 }
 
-tools_init() {
-  rm -rfv /var/config/retrodeck/tools/
-  mkdir -pv /var/config/retrodeck/tools/
-  cp -rfv /app/retrodeck/tools/* /var/config/retrodeck/tools/
-  mkdir -pv /var/config/emulationstation/.emulationstation/custom_systems/tools/
-  rm -rfv /var/config/retrodeck/tools/gamelist.xml
-  cp -fv /app/retrodeck/tools-gamelist.xml /var/config/retrodeck/tools/gamelist.xml
-}
-
 update_splashscreens() {
   # This script will purge any existing ES graphics and reload them from RO space into somewhere ES will look for it
   # USAGE: update_splashscreens
@@ -1244,6 +1243,7 @@ emulators_post_move() {
   dir_prep "$rdhome/bios" "/var/config/retroarch/system"
   dir_prep "$rdhome/.logs/retroarch" "/var/config/retroarch/logs"
   dir_prep "$rdhome/shaders/retroarch" "/var/config/retroarch/shaders"
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/retroarch/retroarch.cfg
 
   # Yuzu section
   dir_prep "$rdhome/bios/switch/keys" "/var/data/yuzu/keys"
@@ -1252,10 +1252,10 @@ emulators_post_move() {
   dir_prep "$rdhome/saves/switch/yuzu/sdmc" "/var/data/yuzu/sdmc"
   dir_prep "$rdhome/.logs/yuzu" "/var/data/yuzu/log"
   dir_prep "$rdhome/screenshots" "/var/data/yuzu/screenshots"
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/yuzu/qt-config.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/yuzu/qt-config.ini
 
   # Dolphin section
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/dolphin-emu/Dolphin.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/dolphin-emu/Dolphin.ini
   dir_prep "$rdhome/saves/gc/dolphin/EUR" "/var/data/dolphin-emu/GC/EUR"
   dir_prep "$rdhome/saves/gc/dolphin/USA" "/var/data/dolphin-emu/GC/USA"
   dir_prep "$rdhome/saves/gc/dolphin/JAP" "/var/data/dolphin-emu/GC/JAP"
@@ -1264,7 +1264,7 @@ emulators_post_move() {
   dir_prep "$rdhome/saves/wii/dolphin" "/var/data/dolphin-emu/Wii/"
 
   # Primehack section
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/primehack/Dolphin.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/primehack/Dolphin.ini
   dir_prep "$rdhome/saves/gc/primehack/EUR" "/var/data/primehack/GC/EUR"
   dir_prep "$rdhome/saves/gc/primehack/USA" "/var/data/primehack/GC/USA"
   dir_prep "$rdhome/saves/gc/primehack/JAP" "/var/data/primehack/GC/JAP"
@@ -1273,17 +1273,17 @@ emulators_post_move() {
   dir_prep "$rdhome/saves/wii/primehack" "/var/data/primehack/Wii/"
 
   # PCSX2 section
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2_ui.ini
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2_ui.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2.ini
 
   # MelonDS section
   dir_prep "$rdhome/bios" "/var/config/melonDS/bios"
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/melonDS/melonDS.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/melonDS/melonDS.ini
 
   # Citra section
   dir_prep "$rdhome/bios/citra/sysdata" "/var/data/citra-emu/sysdata"
   dir_prep "$rdhome/.logs/citra" "/var/data/citra-emu/log"
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
 
   # RPCS3 section
   sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/rpcs3/vfs.yml
@@ -1477,15 +1477,12 @@ finit() {
 
   # Recreating the folder
   rm -rfv /var/config/emulationstation/
-  rm -rfv /var/config/retrodeck/tools/
   mkdir -pv /var/config/emulationstation/
 
   # Initializing ES-DE
   # TODO: after the next update of ES-DE this will not be needed - let's test it
   emulationstation --home /var/config/emulationstation --create-system-dirs
   update_splashscreens
-
-  mkdir -pv /var/config/retrodeck/tools/
 
   #zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --text="RetroDECK will now install the needed files.\nPlease wait up to one minute,\nanother message will notify when the process will be finished.\n\nPress OK to continue."
 
@@ -1510,12 +1507,11 @@ finit() {
   # PICO-8
   dir_prep "$bios_folder/pico-8" "$HOME/.lexaloffle/pico-8" # Store binary and config files together. The .lexaloffle directory is a hard-coded location for the PICO-8 config file, cannot be changed
   dir_prep "$roms_folder/pico8" "$bios_folder/pico-8/carts" # Symlink default game location to RD roms for cleanliness (this location is overridden anyway by the --root_path launch argument anyway)
-  dir_prep "$bios_folder/pico-8/cdata" "$saves_folder/pico-8" # PICO-8 saves folder
+  dir_prep "$saves_folder/pico-8" "$bios_folder/pico-8/cdata"  # PICO-8 saves folder
 
   (
   ra_init
   standalones_init
-  tools_init
   ) |
   zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -1748,4 +1744,18 @@ configurator_destination_choice_dialog() {
   --text="$2")
 
   echo $choice
+}
+
+configurator_reset_confirmation_dialog() {
+  # This dialog provides a confirmation for any reset functions, before the reset is actually performed.
+  # USAGE: $(configurator_reset_confirmation_dialog "emulator being reset" "action text")
+  # This function will return a "true" if the user clicks Confirm, and "false" if they click Cancel.
+  choice=$(zenity --title "RetroDECK Configurator Utility - Reset $1" --question --no-wrap --cancel-label="Cancel" --ok-label="Confirm" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+  --text="$2")
+  if [[ $? == "0" ]]; then
+    echo "true"
+  else
+    echo "false"
+  fi
 }

@@ -824,7 +824,7 @@
         <fullname>Nintendo 3DS</fullname>
         <path>%ROMPATH%/n3ds</path>
         <extension>.3ds .3DS .3dsx .3DSX .app .APP .axf .AXF .cci .CCI .cxi .CXI .elf .ELF .7z .7Z .zip .ZIP</extension>
-        <command label="Citra (Standalone)">%EMULATOR_CITRA% -f %ROM%</command>
+        <command label="Citra (Standalone)">%EMULATOR_CITRA% %ROM%</command>
         <command label="Citra">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/citra_libretro.so %ROM%</command>
         <command label="Citra 2018">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/citra2018_libretro.so %ROM%</command>
         <platform>n3ds</platform>
@@ -1071,7 +1071,6 @@
         <command label="PCSX2 (Standalone)">%EMULATOR_PCSX2% -batch %ROM%</command>
         <extension>.bin .BIN .chd .CHD .ciso .CISO .cso .CSO .dump .DUMP .elf .ELF .gz .GZ .m3u .M3U .mdf .MDF .img .IMG .iso .ISO .isz .ISZ .ngr .NRG</extension>
         <command label="PCSX2">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/pcsx2_libretro.so %ROM%</command>
-<!--        <command label="PCSX2 Legacy (Standalone)">%EMULATOR_PCSX2-LEGACY% -REMOVEME-nogui %ROM%</command> -->
 <!--        <command label="Play! (Standalone)">%EMULATOR_PLAY!% &#45;&#45;disc %ROM%</command> -->
         <platform>ps2</platform>
         <theme>ps2</theme>
@@ -1614,7 +1613,7 @@
     <system>
         <name>tools</name>
         <fullname>RetroDECK Tools</fullname>
-        <path>/var/config/retrodeck/tools</path>
+        <path>/app/tools</path>
         <extension>.sh .SH</extension>
         <command>bash %ROM%</command>
         <platform>tools</platform>

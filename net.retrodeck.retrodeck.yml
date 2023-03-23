@@ -1068,14 +1068,15 @@ modules:
       - cp -rf res/extra-splashes/ ${FLATPAK_DEST}/retrodeck/graphics
       - cp -f res/icon.svg /app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg
 
-      # Tools
-      - mv -f es-configs/tools-gamelist.xml ${FLATPAK_DEST}/retrodeck/
-
-      # Launchable scripts
+      # RetroDECK core script
       - cp retrodeck.sh /app/bin/retrodeck.sh
       - chmod +x /app/bin/retrodeck.sh
-      - cp tools/configurator.sh /app/bin/configurator.sh
-      - chmod +x /app/bin/configurator.sh
+
+      # Tools
+      - mkdir -p /app/tools
+      - cp tools/configurator.sh /app/tools/configurator.sh
+      - chmod +x /app/tools/configurator.sh
+      - cp es-configs/tools-gamelist.xml /app/tools/gamelist.xml
 
       # Function libraries
       - mkdir -p /app/libexec
