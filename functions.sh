@@ -47,14 +47,14 @@ file_browse() {
   while [ $file_selected == false ]
   do
     local target="$(zenity --file-selection --title="Choose $1")"
-    if [ ! -z $target ] #yes
+    if [ ! -z "$target" ] #yes
     then
       zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
       --text="File $target chosen, is this correct?"
       if [ $? == 0 ]
       then
         file_selected=true
-        echo $target
+        echo "$target"
         break
       fi
     else
@@ -129,15 +129,16 @@ validate_for_chd () {
   # USAGE: validate_for_chd $input_file
 
 	local file="$1"
+  local normalized_filename=$(echo "$file" | tr '[:upper:]' '[:lower:]')
   local file_validated="false"
 	current_run_log_file="chd_compression_$(basename "$file").log"
 	echo "Validating file:" "$file" > "$logs_folder/$current_run_log_file"
-	if [[ "$file" == *".cue" ]] || [[ "$file" == *".gdi" ]] || [[ "$file" == *".iso" ]]; then
+	if [[ "$normalized_filename" == *".cue" ]] || [[ "$normalized_filename" == *".gdi" ]] || [[ "$normalized_filename" == *".iso" ]]; then
 		echo ".cue/.iso/.gdi file detected" >> "$logs_folder/$current_run_log_file"
 		local file_path=$(dirname "$(realpath "$file")")
 		local file_base_name=$(basename "$file")
 		local file_name=${file_base_name%.*}
-		if [[ "$file" == *".cue" ]]; then # Validate .cue file
+		if [[ "$normalized_filename" == *".cue" ]]; then # Validate .cue file
 			echo "Validating .cue associated .bin files" >> "$logs_folder/$current_run_log_file"
 			local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" "$file")
 			echo "Associated bin files read:" >> "$logs_folder/$current_run_log_file"
