@@ -62,7 +62,7 @@ configurator_reset_dialog() {
   --column="Choice" --column="Action" \
   "Reset Specific Emulator" "Reset only one specific emulator to default settings" \
   "Reset All Emulators" "Reset all emulators to default settings" \
-  "Reset All" "Reset RetroDECK to default settings" )
+  "Reset RetroDECK" "Reset RetroDECK to default settings" )
 
   case $choice in
 
@@ -87,58 +87,113 @@ configurator_reset_dialog() {
     case $emulator_to_reset in
 
     "RetroArch" )
-      ra_init
-      configurator_process_complete_dialog "resetting $emulator_to_reset"
+      if [[ $(configurator_reset_confirmation_dialog "RetroArch" "Are you sure you want to reset the RetroArch emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
+        ra_init
+        configurator_process_complete_dialog "resetting $emulator_to_reset"
+      else
+        configurator_generic_dialog "Reset process cancelled."
+        configurator_reset_dialog
+      fi
     ;;
 
     "Citra" )
-      citra_init
-      configurator_process_complete_dialog "resetting $emulator_to_reset"
+      if [[ $(configurator_reset_confirmation_dialog "Citra" "Are you sure you want to reset the Citra emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
+        citra_init
+        configurator_process_complete_dialog "resetting $emulator_to_reset"
+      else
+        configurator_generic_dialog "Reset process cancelled."
+        configurator_reset_dialog
+      fi
     ;;
 
     "Dolphin" )
-      dolphin_init
-      configurator_process_complete_dialog "resetting $emulator_to_reset"
+      if [[ $(configurator_reset_confirmation_dialog "Dolphin" "Are you sure you want to reset the Dolphin emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
+        dolphin_init
+        configurator_process_complete_dialog "resetting $emulator_to_reset"
+      else
+        configurator_generic_dialog "Reset process cancelled."
+        configurator_reset_dialog
+      fi
     ;;
 
     "Duckstation" )
-      duckstation_init
-      configurator_process_complete_dialog "resetting $emulator_to_reset"
+      if [[ $(configurator_reset_confirmation_dialog "Duckstation" "Are you sure you want to reset the Duckstation emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
+        duckstation_init
+        configurator_process_complete_dialog "resetting $emulator_to_reset"
+      else
+        configurator_generic_dialog "Reset process cancelled."
+        configurator_reset_dialog
+      fi
     ;;
 
     "MelonDS" )
-      melonds_init
-      configurator_process_complete_dialog "resetting $emulator_to_reset"
+      if [[ $(configurator_reset_confirmation_dialog "MelonDS" "Are you sure you want to reset the MelonDS emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
+        melonds_init
+        configurator_process_complete_dialog "resetting $emulator_to_reset"
+      else
+        configurator_generic_dialog "Reset process cancelled."
+        configurator_reset_dialog
+      fi
     ;;
 
     "PCSX2" )
-      pcsx2_init
-      configurator_process_complete_dialog "resetting $emulator_to_reset"
+      if [[ $(configurator_reset_confirmation_dialog "PCSX2" "Are you sure you want to reset the PCSX2 emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
+        pcsx2_init
+        configurator_process_complete_dialog "resetting $emulator_to_reset"
+      else
+        configurator_generic_dialog "Reset process cancelled."
+        configurator_reset_dialog
+      fi
     ;;
 
     "PPSSPP" )
-      ppssppsdl_init
-      configurator_process_complete_dialog "resetting $emulator_to_reset"
+      if [[ $(configurator_reset_confirmation_dialog "PPSSPP" "Are you sure you want to reset the PPSSPP emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
+        ppssppsdl_init
+        configurator_process_complete_dialog "resetting $emulator_to_reset"
+      else
+        configurator_generic_dialog "Reset process cancelled."
+        configurator_reset_dialog
+      fi
     ;;
 
     "Primehack" )
-      primehack_init
-      configurator_process_complete_dialog "resetting $emulator_to_reset"
+      if [[ $(configurator_reset_confirmation_dialog "Primehack" "Are you sure you want to reset the Primehack emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
+        primehack_init
+        configurator_process_complete_dialog "resetting $emulator_to_reset"
+      else
+        configurator_generic_dialog "Reset process cancelled."
+        configurator_reset_dialog
+      fi
     ;;
 
     "RPCS3" )
-      rpcs3_init
-      configurator_process_complete_dialog "resetting $emulator_to_reset"
+      if [[ $(configurator_reset_confirmation_dialog "RPCS3" "Are you sure you want to reset the RPCS3 emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
+        rpcs3_init
+        configurator_process_complete_dialog "resetting $emulator_to_reset"
+      else
+        configurator_generic_dialog "Reset process cancelled."
+        configurator_reset_dialog
+      fi
     ;;
 
     "XEMU" )
-      xemu_init
-      configurator_process_complete_dialog "resetting $emulator_to_reset"
+      if [[ $(configurator_reset_confirmation_dialog "XEMU" "Are you sure you want to reset the XEMU emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
+        xemu_init
+        configurator_process_complete_dialog "resetting $emulator_to_reset"
+      else
+        configurator_generic_dialog "Reset process cancelled."
+        configurator_reset_dialog
+      fi
     ;;
 
     "Yuzu" )
-      yuzu_init
-      configurator_process_complete_dialog "resetting $emulator_to_reset"
+      if [[ $(configurator_reset_confirmation_dialog "Yuzu" "Are you sure you want to reset the Yuzu emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
+        yuzu_init
+        configurator_process_complete_dialog "resetting $emulator_to_reset"
+      else
+        configurator_generic_dialog "Reset process cancelled."
+        configurator_reset_dialog
+      fi
     ;;
 
     "" ) # No selection made or Back button clicked
@@ -149,19 +204,29 @@ configurator_reset_dialog() {
   ;;
 
 "Reset All Emulators" )
-  ra_init
-  standalones_init
-  configurator_process_complete_dialog "resetting all emulators"
+  if [[ $(configurator_reset_confirmation_dialog "all emulators" "Are you sure you want to reset all emulators to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
+    ra_init
+    standalones_init
+    configurator_process_complete_dialog "resetting all emulators"
+  else
+    configurator_generic_dialog "Reset process cancelled."
+    configurator_reset_dialog
+  fi
 ;;
 
-"Reset All" )
-  zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-  --title "RetroDECK Configurator Utility - Reset RetroDECK" \
-  --text="You are resetting RetroDECK to its default state.\n\nAfter the process is complete you will need to exit RetroDECK and run it again, where you will go through the initial setup process."
-  rm -f "$lockfile"
-  rm -f "$rd_conf"
-  configurator_process_complete_dialog "resetting RetroDECK"
+"Reset RetroDECK" )
+  if [[ $(configurator_reset_confirmation_dialog "RetroDECK" "Are you sure you want to reset RetroDECK entirely?\n\nThis process cannot be undone.") == "true" ]]; then
+    zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator Utility - Reset RetroDECK" \
+    --text="You are resetting RetroDECK to its default state.\n\nAfter the process is complete you will need to exit RetroDECK and run it again, where you will go through the initial setup process."
+    rm -f "$lockfile"
+    rm -f "$rd_conf"
+    configurator_process_complete_dialog "resetting RetroDECK"
+  else
+    configurator_generic_dialog "Reset process cancelled."
+    configurator_reset_dialog
+  fi
 ;;
 
 "" ) # No selection made or Back button clicked
@@ -605,12 +670,18 @@ configurator_troubleshooting_tools_dialog() {
   choice=$(zenity --list --title="RetroDECK Configurator Utility - Change Options" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
+  "Move RetroDECK" "Move RetroDECK files between internal/SD card or to a custom location" \
   "Multi-file game structure check" "Verify the proper structure of multi-file or multi-disc games" \
   "Basic BIOS file check" "Show a list of systems that BIOS files are found for" \
   "Advanced BIOS file check" "Show advanced information about common BIOS files" \
   "Compress Games" "Compress games to CHD format for systems that support it" )
 
   case $choice in
+
+  "Move RetroDECK" )
+    configurator_generic_dialog "This option will move the RetroDECK data folder (ROMs, saves, BIOS etc.) to a new location.\n\nPlease choose where to move the RetroDECK data folder."
+    configurator_move_dialog
+  ;;
 
   "Multi-file game structure check" )
     configurator_check_multifile_game_structure
@@ -793,18 +864,12 @@ configurator_welcome_dialog() {
   choice=$(zenity --list --title="RetroDECK Configurator Utility" --cancel-label="Quit" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
-  "Move RetroDECK" "Move RetroDECK files between internal/SD card or to a custom location" \
   "RetroArch Presets" "Change RetroArch presets, log into RetroAchievements etc." \
   "Emulator Options" "Launch and configure each emulators settings (for advanced users)" \
-  "Tools and Troubleshooting" "Run RetroDECK troubleshooting tools for common issues" \
+  "Tools and Troubleshooting" "Move RetroDECK to a new location, compress games and perform basic troubleshooting" \
   "Reset" "Reset specific parts or all of RetroDECK" )
 
   case $choice in
-
-  "Move RetroDECK" )
-    configurator_generic_dialog "This option will move the RetroDECK data folder (ROMs, saves, BIOS etc.) to a new location.\n\nPlease choose where to move the RetroDECK data folder."
-    configurator_move_dialog
-  ;;
 
   "RetroArch Presets" )
     configurator_retroarch_options_dialog
