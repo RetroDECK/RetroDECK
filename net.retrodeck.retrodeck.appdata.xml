@@ -70,11 +70,11 @@
          <description>
             <p>New features - General:</p>
             <ul>
-               <li>Added support support for multiple file compression via CLI.</li>
+               <li>Added support for multiple file compression via CLI.</li>
             </ul>
             <p>RetroDECK Configurator:</p>
             <ul>
-               <li>Added support support for multiple file compression in the Configurator.</li>
+               <li>Added support for multiple file compression in the Configurator.</li>
                <li>Added safety y/n prompts to the reset functions.</li>
                <li>Fixed some missing layout changes.</li>
                <li>Renamed "Reset All" to "Reset RetroDECK".</li>
