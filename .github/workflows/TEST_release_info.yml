@@ -32,6 +32,10 @@ jobs:
           git submodule update
           sudo apt install -y flatpak flatpak-builder p7zip-full xmlstarlet
 
+      - name: Validating the appdata
+        run: appstream-util validate "net.retrodeck.retrodeck.appdata.xml"
+        continue-on-error: true
+
       - name: Getting version info
         id: version
         run: |
