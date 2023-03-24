@@ -380,7 +380,7 @@ disable_setting() {
   # This function will add a '#' to the beginning of a defined setting line, disabling it.
   # USAGE: disable_setting $setting_file $setting_line $system $section (optional)
 
-  local current_setting_line"$2"
+  local current_setting_line="$2"
   local current_section_name="$4"
 
   case $3 in
@@ -400,7 +400,7 @@ enable_setting() {
   # This function will remove a '#' to the beginning of a defined setting line, enabling it.
   # USAGE: enable_setting $setting_file $setting_line $system $section (optional)
 
-  local current_setting_line"$2"
+  local current_setting_line="$2"
   local current_section_name="$4"
 
   case $3 in
@@ -545,27 +545,27 @@ do
   case $action in
 
 	"disable_file" )
-    disable_file $setting_name
+    eval disable_file "$setting_name"
 	;;
 
 	"enable_file" )
-    enable_file $setting_name
+    eval enable_file "$setting_name"
 	;;
 
 	"add_setting" )
-    add_setting $3 "$setting_name" $system_name $current_section
+    eval add_setting $3 "$setting_name" $system_name $current_section
 	;;
 
 	"disable_setting" )
-    disable_setting $3 "$setting_name" $system_name $current_section
+    eval disable_setting $3 "$setting_name" $system_name $current_section
 	;;
 
 	"enable_setting" )
-    enable_setting $3 "$setting_name" $system_name $current_section
+    eval enable_setting $3 "$setting_name" $system_name $current_section
 	;;
 
 	"change" )
-    set_setting_value $3 "$setting_name" "$setting_value" $system_name $current_section
+    eval set_setting_value $3 "$setting_name" "$setting_value" $system_name $current_section
   ;;
 
 	* )
@@ -588,27 +588,27 @@ do
   case $action in
 
 	"disable_file" )
-    disable_file $config_file
+    eval disable_file "$config_file"
 	;;
 
 	"enable_file" )
-    enable_file $config_file
+    eval enable_file "$config_file"
 	;;
 
 	"add_setting" )
-    add_setting $config_file "$setting_name" $system_name $current_section
+    eval add_setting "$config_file" "$setting_name" $system_name $current_section
 	;;
 
 	"disable_setting" )
-    disable_setting $config_file "$setting_name" $system_name $current_section
+    eval disable_setting "$config_file" "$setting_name" $system_name $current_section
 	;;
 
 	"enable_setting" )
-    enable_setting $config_file "$setting_name" $system_name $current_section
+    eval enable_setting "$config_file" "$setting_name" $system_name $current_section
 	;;
 
 	"change" )
-    set_setting_value $config_file "$setting_name" "$setting_value" $system_name $current_section
+    eval set_setting_value "$config_file" "$setting_name" "$setting_value" $system_name $current_section
   ;;
 
 	* )
@@ -636,8 +636,7 @@ validate_input() {
   while IFS="^" read -r input action
   do
     if [[ "$input" == "$1" ]]; then
-      # $action line must be completely literal in the $input_validation file. No shell expansion or extra characters.
-      $action
+      eval "$action"
       input_validated="true"
     fi
   done < $input_validation
@@ -694,105 +693,261 @@ multi_user_set_default_dialog() {
   fi
 }
 
-load_current_user_saves_and_states() {
-  if [[ $(get_setting_value $rd_conf "multi_user" retrodeck) == "true" ]]; then # If multi-user environment is enabled in rd_conf
-    if [[ -f "$rd_userlist" ]]; then # If userlist already exists
+multi_user_choose_current_user_dialog() {
+full_userlist=()
+while IFS= read -r user
+do
+full_userlist=("${full_userlist[@]}" "$user")
+done < <(ls -1 "$multi_user_data_folder")
+
+chosen_user=$(zenity \
+  --list --width=1200 --height=720 \
+  --ok-label="Select User" \
+  --text="Choose the current user:" \
+  --column "Steam Username" --print-column=1 \
+  "${full_userlist[@]}")
+
+if [[ ! -z $chosen_user && -z $default_user && $ask_default_user == "true" ]]; then
+  multi_user_set_default_dialog "$chosen_user"
+fi
+echo "$chosen_user"
+}
+
+multi_user_enable_multi_user_mode() {
+  if [[ -z "$SteamAppUser" ]]; then
+    configurator_generic_dialog "The Steam username of the current user could not be determined from the system.\n\nThis can happen when running in Desktop mode.\n\nYou will be asked to specify the Steam username (not profile name) of the current user in the next dialog."
+  fi
+  if [[ -d "$multi_user_data_folder" && $(ls -1 "$multi_user_data_folder" | wc -l) -gt 0 ]]; then # If multi-user data folder exists from prior use and is not empty
+    if [[ -d "$multi_user_data_folder/$SteamAppUser" ]]; then # Current user has an existing save folder
+      configurator_generic_dialog "The current user $SteamAppUser has an existing folder in the multi-user data folder.\n\nThe saves here are likely older than the ones currently used by RetroDECK.\n\nThe old saves will be backed up to $backups_folder and the current saves will be loaded into the multi-user data folder."
+      mkdir -p "$backups_folder"
+      tar -C "$multi_user_data_folder" -cahf "$backups_folder/multi-user-backup_$SteamAppUser_$(date +"%Y_%m_%d").zip" "$SteamAppUser"
+      rm -rf "$multi_user_data_folder/$SteamAppUser" # Remove stale data after backup
+    fi
+  fi
+  set_setting_value $rd_conf "multi_user_mode" "true" retrodeck
+  multi_user_determine_current_user
+  if [[ -d "$multi_user_data_folder/$SteamAppUser" ]]; then
+    configurator_process_complete_dialog "enabling multi-user support"
+  else
+    configurator_generic_dialog "It looks like something went wrong while enabling multi-user mode."
+  fi
+}
+
+multi_user_disable_multi_user_mode() {
+  if [[ $(ls -1 "$multi_user_data_folder" | wc -l) -gt 1 ]]; then
+    full_userlist=()
+    while IFS= read -r user
+    do
+    full_userlist=("${full_userlist[@]}" "$user")
+    done < <(ls -1 "$multi_user_data_folder")
+
+    single_user=$(zenity \
+      --list --width=1200 --height=720 \
+      --ok-label="Select User" \
+      --text="Choose the current user:" \
+      --column "Steam Username" --print-column=1 \
+      "${full_userlist[@]}")
+
+    if [[ ! -z "$single_user" ]]; then # Single user was selected
+      multi_user_return_to_single_user "$single_user"
+      set_setting_value $rd_conf "multi_user_mode" "false" retrodeck
+      configurator_process_complete_dialog "disabling multi-user support"
+    else
+      configurator_generic_dialog "No single user was selected, please try the process again."
+      configurator_retrodeck_multiuser_dialog
+    fi
+  else # There is only one multi-user-data folder
+    single_user=$(ls -1 "$multi_user_data_folder")
+    multi_user_return_to_single_user "$single_user"
+    set_setting_value $rd_conf "multi_user_mode" "false" retrodeck
+    configurator_process_complete_dialog "disabling multi-user support"
+  fi
+}
+
+multi_user_determine_current_user() {
+  if [[ $(get_setting_value $rd_conf "multi_user_mode" retrodeck) == "true" ]]; then # If multi-user environment is enabled in rd_conf
+    if [[ -d "$multi_user_data_folder" ]]; then # If current user already has a multi-user-data folder
       if [[ ! -z $SteamAppUser ]]; then # If running in Game Mode and this variable exists
-        if [[ -z $(grep "$SteamAppUser" "$rd_userlist") ]]; then # If the user was not found in a list of known users
-          add_setting $rd_userlist $SteamAppUser retrodeck # Add the user to the list
-          unlink "$saves_folder"
-          unlink "$states_folder"
-          dir_prep "$multi_user_data_folder/$SteamAppUser/saves" "$saves_folder"
-          dir_prep "$multi_user_data_folder/$SteamAppUser/states" "$states_folder"
-        else # User was found on the list
-          if [[ -L "$saves_folder" ]]; then # and saves folder was already a symlink
-            ln -sfT "$multi_user_data_folder/$SteamAppUser/saves" "$saves_folder"
-          else # If saves folder was not a symlink (user may have disabled multi_user before and is renabling it now)
-            dir_prep "$multi_user_data_folder/$SteamAppUser/saves" "$saves_folder"
-          fi
-          if [[ -L "$states_folder" ]]; then # and saves folder was already a symlink
-            ln -sfT "$multi_user_data_folder/$SteamAppUser/states" "$states_folder"
-          else # If saves folder was not a symlink (user may have disabled multi_user before and is renabling it now)
-            dir_prep "$multi_user_data_folder/$SteamAppUser/states" "$states_folder"
-          fi
+        if [[ -z $(ls -1 "$multi_user_data_folder" | grep "$SteamAppUser") ]]; then
+          echo "Didn't find user data folder, adding."
+          multi_user_setup_new_user
+        else # User data folder was found
+          echo "Found existing user data, linking files"
+          multi_user_link_current_user_files
         fi
       else # Unable to find Steam user ID
-        if [[ $(cat "$rd_userlist" | sed '/^\s*$/d' | wc -l) -gt 1 ]]; then # If there is more than one user on the list...
+        if [[ $(ls -1 "$multi_user_data_folder" | wc -l) -gt 1 ]]; then # If there is more than one user data folder...
           if [[ -z $default_user ]]; then # And a default user is not set
             configurator_generic_dialog "The current user could not be determined from the system, and there are multiple users registered.\n\nPlease select which user is currently playing in the next dialog."
             SteamAppUser=$(multi_user_choose_current_user_dialog)
             if [[ ! -z $SteamAppUser ]]; then # User was chosen from dialog
-              if [[ -L "$saves_folder" ]]; then # and saves folder was already a symlink
-                ln -sfT "$multi_user_data_folder/$SteamAppUser/saves" "$saves_folder"
-              else # If saves folder was not a symlink (user may have disabled multi_user before and is renabling it now)
-                dir_prep "$multi_user_data_folder/$SteamAppUser/saves" "$saves_folder"
-              fi
-              if [[ -L "$states_folder" ]]; then # and saves folder was already a symlink
-                ln -sfT "$multi_user_data_folder/$SteamAppUser/states" "$states_folder"
-              else # If saves folder was not a symlink (user may have disabled multi_user before and is renabling it now)
-                dir_prep "$multi_user_data_folder/$SteamAppUser/states" "$states_folder"
-              fi
+              multi_user_link_current_user_files
             else
               configurator_generic_dialog "No user was chosen, RetroDECK will launch with the files from the user who played most recently."
             fi
           else # The default user is set
             if [[ ! -z $(ls -1 $multi_user_data_folder | grep "$default_user") ]]; then # Confirm user data folder exists
               SteamAppUser=$default_user
-              if [[ -L "$saves_folder" ]]; then # and saves folder was already a symlink
-                ln -sfT "$multi_user_data_folder/$SteamAppUser/saves" "$saves_folder"
-              else # If saves folder was not a symlink (user may have disabled multi_user before and is renabling it now)
-                dir_prep "$multi_user_data_folder/$SteamAppUser/saves" "$saves_folder"
-              fi
-              if [[ -L "$states_folder" ]]; then # and saves folder was already a symlink
-                ln -sfT "$multi_user_data_folder/$SteamAppUser/states" "$states_folder"
-              else # If saves folder was not a symlink (user may have disabled multi_user before and is renabling it now)
-                dir_prep "$multi_user_data_folder/$SteamAppUser/states" "$states_folder"
-              fi
+              multi_user_link_current_user_files
             else
-              echo "Default user $default_user has no data folder, something has gone horribly wrong."
+              echo "Default user $default_user has no data folder, something may have gone horribly wrong. Setting up as a new user."
+              multi_user_setup_new_user
             fi
           fi
-        else # If there is only 1 user in the userlist, default to that user
-          SteamAppUser=$(cat "$rd_userlist" | sed '/^\s*$/d')
-          if [[ -L "$saves_folder" ]]; then # and saves folder was already a symlink
-            ln -sfT "$multi_user_data_folder/$SteamAppUser/saves" "$saves_folder"
-          else # If saves folder was not a symlink (user may have disabled multi_user before and is renabling it now)
-            dir_prep "$multi_user_data_folder/$SteamAppUser/saves" "$saves_folder"
-          fi
-          if [[ -L "$states_folder" ]]; then # and saves folder was already a symlink
-            ln -sfT "$multi_user_data_folder/$SteamAppUser/states" "$states_folder"
-          else # If saves folder was not a symlink (user may have disabled multi_user before and is renabling it now)
-            dir_prep "$multi_user_data_folder/$SteamAppUser/states" "$states_folder"
-          fi
+        else # If there is only 1 user data folder, default to that user
+          SteamAppUser=$(ls -1 $multi_user_data_folder)
+          multi_user_link_current_user_files
         fi
       fi
-    else # If the userlist file doesn't exist yet, create it and add the current user
-      if [[ ! -z $SteamAppUser ]]; then
-        dir_prep "$multi_user_data_folder/$SteamAppUser/saves" "$saves_folder"
-        dir_prep "$multi_user_data_folder/$SteamAppUser/states" "$states_folder"
+    else # If the multi-user-data folder doesn't exist yet, create it and add the current user
+      if [[ ! -z "$SteamAppUser" ]]; then
+        multi_user_setup_new_user
       else # If running in Desktop mode for the first time
         configurator_generic_dialog "The current user could not be determined from the system and there is no existing userlist.\n\nPlease enter the Steam account username (not profile name) into the next dialog, or run RetroDECK in game mode."
         if zenity --entry \
           --title="Specify Steam username" \
           --text="Enter Steam username:"
         then # User clicked "OK"
-          SteamAppUser=$?
-          if [[ ! -z $SteamAppUser ]]; then
-            dir_prep "$multi_user_data_folder/$SteamAppUser/saves" "$saves_folder"
-            dir_prep "$multi_user_data_folder/$SteamAppUser/states" "$states_folder"
+          SteamAppUser="$?"
+          if [[ ! -z "$SteamAppUser" ]]; then
+            multi_user_setup_new_user
           else # But dialog box was blank
             configurator_generic_dialog "No username was entered, so multi-user data folder cannot be created.\n\nDisabling multi-user mode, please try the process again."
-            set_setting_value $rd_conf "multi_user" "false" retrodeck
+            set_setting_value $rd_conf "multi_user_mode" "false" retrodeck
           fi
         else # User clicked "Cancel"
           configurator_generic_dialog "Cancelling multi-user mode activation."
-          set_setting_value $rd_conf "multi_user" "false" retrodeck
+          set_setting_value $rd_conf "multi_user_mode" "false" retrodeck
         fi
       fi
     fi
   else
     configurator_generic_dialog "Multi-user mode is not currently enabled"
   fi
+}
+
+multi_user_return_to_single_user() {
+  single_user="$1"
+  echo "Returning to single-user mode for $single_user"
+  unlink "$saves_folder"
+  unlink "$states_folder"
+  unlink "$rd_conf"
+  mv -f "$multi_user_data_folder/$SteamAppUser/config/retrodeck/retrodeck.cfg" "$rd_conf"
+  mkdir -p "$saves_folder"
+  mkdir -p "$states_folder"
+  mv -f "$multi_user_data_folder/$single_user/saves"/{.[!.],}* "$saves_folder"
+  mv -f "$multi_user_data_folder/$single_user/states"/{.[!.],}* "$states_folder"
+  for emu_conf in $(find "$multi_user_data_folder/$single_user/config" -mindepth 1 -maxdepth 1 -type d -printf '%f\n')
+  do
+    if [[ ! -z $(grep "^$emu_conf$" "$multi_user_emulator_config_dirs") ]]; then
+      unlink "/var/config/$emu_conf"
+      mkdir -p "/var/config/$emu_conf"
+      mv -f "$multi_user_data_folder/$single_user/config/$emu_conf"/{.[!.],}* "/var/config/$emu_conf"
+    fi
+  done
+  rm -r "$multi_user_data_folder/$single_user" # Should be empty, omitting -f for safety
+}
+
+multi_user_setup_new_user() {
+  unlink "$saves_folder"
+  unlink "$states_folder"
+  dir_prep "$multi_user_data_folder/$SteamAppUser/saves" "$saves_folder"
+  dir_prep "$multi_user_data_folder/$SteamAppUser/states" "$states_folder"
+  dir_prep "$multi_user_data_folder/$SteamAppUser/screenshots" "$screenshots_folder"
+  mkdir -p "$multi_user_data_folder/$SteamAppUser/config/retrodeck"
+  cp "$multi_user_data_folder/$SteamAppUser/config/retrodeck/retrodeck.cfg" "$rd_conf" # Copy existing $rd_conf so new user can have their own presets
+  for emu_conf in $(find "/var/config" -mindepth 1 -maxdepth 1 -type l -printf '%f\n') # For all the config folders already linked to a different user
+  do
+    if [[ ! -z $(grep "^$emu_conf$" "$multi_user_emulator_config_dirs") ]]; then
+      multi_user_selective_emu_init "$emu_conf"
+      dir_prep "$multi_user_data_folder/$SteamAppUser/config/$emu_conf" "/var/config/$emu_conf"
+    fi
+  done
+  for emu_conf in $(find "/var/config" -mindepth 1 -maxdepth 1 -type d -printf '%f\n') # For all the currently non-linked config folders, like from a newly-added emulator
+  do
+    if [[ ! -z $(grep "^$emu_conf$" "$multi_user_emulator_config_dirs") ]]; then
+      dir_prep "$multi_user_data_folder/$SteamAppUser/config/$emu_conf" "/var/config/$emu_conf"
+    fi
+  done
+}
+
+multi_user_link_current_user_files() {
+  ln -sfT "$multi_user_data_folder/$SteamAppUser/saves" "$saves_folder"
+  ln -sfT "$multi_user_data_folder/$SteamAppUser/states" "$states_folder"
+  ln -sfT "$multi_user_data_folder/$SteamAppUser/screenshots" "$screenshots_folder"
+  ln -sfT "$multi_user_data_folder/$SteamAppUser/config/retrodeck/retrodeck.cfg" "$rd_conf" # Linking personal $rd_conf for per-user settings
+  for emu_conf in $(find "/var/config" -mindepth 1 -maxdepth 1 -type d -printf '%f\n') # Find any new emulator config folders from last time this user played
+  do
+    if [[ ! -z $(grep "^$emu_conf$" "$multi_user_emulator_config_dirs") ]]; then
+      dir_prep "$multi_user_data_folder/$SteamAppUser/config/$emu_conf" "/var/config/$emu_conf"
+    fi
+  done
+  for emu_conf in $(find "/var/config" -mindepth 1 -maxdepth 1 -type l -printf '%f\n')
+  do
+    if [[ ! -z $(grep "^$emu_conf$" "$multi_user_emulator_config_dirs") ]]; then
+      if [[ -d "$multi_user_data_folder/$SteamAppUser/config/$emu_conf" ]]; then # If the current user already has a config folder for this emulator
+        ln -sfT "$multi_user_data_folder/$SteamAppUser/config/$emu_conf" "retrodeck/config/$emu_conf"
+      else # If the current user doesn't have a config folder for this emulator, init it and then link it
+        multi_user_selective_emu_init "$emu_conf"
+        dir_prep "$multi_user_data_folder/$SteamAppUser/config/$emu_conf" "/var/config/$emu_conf"
+      fi
+    fi
+  done
+}
+
+multi_user_selective_emu_init() {
+ case "$1" in
+
+  "citra-emu")
+    citra_init
+  ;;
+
+  "dolphin-emu")
+    dolphin_init
+  ;;
+
+  "duckstation")
+    duckstation_init
+  ;;
+
+  "melonDS")
+    melonds_init
+  ;;
+
+  "PCSX2")
+    pcsx2_init
+  ;;
+
+  "ppsspp")
+    ppssppsdl_init
+  ;;
+
+  "primehack")
+    primehack_init
+  ;;
+
+  "retroarch")
+    ra_init
+  ;;
+
+  "rpcs3")
+    rpcs3_init
+  ;;
+
+  "Ryujinx")
+    ryujinx_init
+  ;;
+
+  "xemu")
+    xemu_init
+  ;;
+
+  "yuzu")
+    yuzu_init
+  ;;
+
+ esac
 }
 
 conf_write() {
@@ -919,25 +1074,24 @@ yuzu_init() {
   echo "Initializing YUZU"
   echo "----------------------"
   # removing dead symlinks as they were present in a past version
-  if [ -d $rdhome/bios/switch ]; then
-    find $rdhome/bios/switch -xtype l -exec rm {} \;
+  if [ -d $bios_folder/switch ]; then
+    find $bios_folder/switch -xtype l -exec rm {} \;
   fi
   # initializing the keys folder
-  dir_prep "$rdhome/bios/switch/keys" "/var/data/yuzu/keys"
+  dir_prep "$bios_folder/switch/keys" "/var/data/yuzu/keys"
   # initializing the firmware folder
-  dir_prep "$rdhome/bios/switch/registered" "/var/data/yuzu/nand/system/Contents/registered"
+  dir_prep "$bios_folder/switch/registered" "/var/data/yuzu/nand/system/Contents/registered"
   # initializing the save folders
-  dir_prep "$rdhome/saves/switch/yuzu/nand" "/var/data/yuzu/nand"
-  dir_prep "$rdhome/saves/switch/yuzu/sdmc" "/var/data/yuzu/sdmc"
+  dir_prep "$saves_folder/switch/yuzu/nand" "/var/data/yuzu/nand"
+  dir_prep "$saves_folder/switch/yuzu/sdmc" "/var/data/yuzu/sdmc"
   # configuring Yuzu
-  dir_prep "$rdhome/.logs/yuzu" "/var/data/yuzu/log"
+  dir_prep "$logs_folder/yuzu" "/var/data/yuzu/log"
   # removing config directory to wipe legacy files
   rm -rf /var/config/yuzu
   mkdir -pv /var/config/yuzu/
   cp -fvr $emuconfigs/yuzu/* /var/config/yuzu/
   sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/yuzu/qt-config.ini
-  dir_prep "$rdhome/screenshots" "/var/data/yuzu/screenshots"
-  dir_prep "$mods_folder/Yuzu" "/var/data/yuzu/load"
+  dir_prep "$screenshots_folder" "/var/data/yuzu/screenshots"
 }
 
 dolphin_init() {
@@ -949,15 +1103,13 @@ dolphin_init() {
   mkdir -pv /var/config/dolphin-emu/
   cp -fvr "$emuconfigs/dolphin/"* /var/config/dolphin-emu/
   sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/dolphin-emu/Dolphin.ini
-  dir_prep "$rdhome/saves/gc/dolphin/EUR" "/var/data/dolphin-emu/GC/EUR"
-  dir_prep "$rdhome/saves/gc/dolphin/USA" "/var/data/dolphin-emu/GC/USA"
-  dir_prep "$rdhome/saves/gc/dolphin/JAP" "/var/data/dolphin-emu/GC/JAP"
-  dir_prep "$rdhome/screenshots" "/var/data/dolphin-emu/ScreenShots"
-  dir_prep "$rdhome/states/dolphin" "/var/data/dolphin-emu/StateSaves"
+  dir_prep "$saves_folder/gc/dolphin/EUR" "/var/data/dolphin-emu/GC/EUR"
+  dir_prep "$saves_folder/gc/dolphin/USA" "/var/data/dolphin-emu/GC/USA"
+  dir_prep "$saves_folder/gc/dolphin/JAP" "/var/data/dolphin-emu/GC/JAP"
+  dir_prep "$screenshots_folder" "/var/data/dolphin-emu/ScreenShots"
+  dir_prep "$states_folder/dolphin" "/var/data/dolphin-emu/StateSaves"
   mkdir -pv /var/data/dolphin-emu/Wii/
-  dir_prep "$rdhome/saves/wii/dolphin" "/var/data/dolphin-emu/Wii"
-  dir_prep "$mods_folder/Dolphin" "/var/data/dolphin-emu/Load/GraphicMods/"
-  dir_prep "$texture_packs_folder/Dolphin" "/var/data/dolphin-emu/Load/Textures/"
+  dir_prep "$saves_folder/wii/dolphin" "/var/data/dolphin-emu/Wii"
 }
 
 primehack_init() {
@@ -969,15 +1121,13 @@ primehack_init() {
   mkdir -pv /var/config/primehack/
   cp -fvr "$emuconfigs/primehack/"* /var/config/primehack/
   sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/primehack/Dolphin.ini
-  dir_prep "$rdhome/saves/gc/primehack/EUR" "/var/data/primehack/GC/EUR"
-  dir_prep "$rdhome/saves/gc/primehack/USA" "/var/data/primehack/GC/USA"
-  dir_prep "$rdhome/saves/gc/primehack/JAP" "/var/data/primehack/GC/JAP"
-  dir_prep "$rdhome/screenshots" "/var/data/primehack/ScreenShots"
-  dir_prep "$rdhome/states/primehack" "/var/data/primehack/StateSaves"
+  dir_prep "$saves_folder/gc/primehack/EUR" "/var/data/primehack/GC/EUR"
+  dir_prep "$saves_folder/gc/primehack/USA" "/var/data/primehack/GC/USA"
+  dir_prep "$saves_folder/gc/primehack/JAP" "/var/data/primehack/GC/JAP"
+  dir_prep "$screenshots_folder" "/var/data/primehack/ScreenShots"
+  dir_prep "$states_folder/primehack" "/var/data/primehack/StateSaves"
   mkdir -pv /var/data/primehack/Wii/
-  dir_prep "$rdhome/saves/wii/primehack" "/var/data/primehack/Wii"
-  dir_prep "$mods_folder/Primehack" "/var/data/primehack/Load/GraphicMods/"
-  dir_prep "$texture_packs_folder/Primehack" "/var/data/primehack/Load/Textures/"
+  dir_prep "$saves_folder/wii/primehack" "/var/data/primehack/Wii"
 }
 
 pcsx2_init() {
@@ -987,8 +1137,8 @@ pcsx2_init() {
   # removing config directory to wipe legacy files
   rm -rf /var/config/PCSX2
   mkdir -pv "/var/config/PCSX2/inis"
-  mkdir -pv "$rdhome/saves/ps2/pcsx2/memcards"
-  mkdir -pv "$rdhome/states/ps2/pcsx2"
+  mkdir -pv "$saves_folder/ps2/pcsx2/memcards"
+  mkdir -pv "$states_folder/ps2/pcsx2"
   cp -fvr $emuconfigs/PCSX2/* /var/config/PCSX2/inis/
   sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2_ui.ini
   sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2.ini
@@ -1005,9 +1155,9 @@ melonds_init() {
   # removing config directory to wipe legacy files
   rm -rf /var/config/melonDS
   mkdir -pv /var/config/melonDS/
-  mkdir -pv "$rdhome/saves/nds/melonds"
-  mkdir -pv "$rdhome/states/nds/melonds"
-  dir_prep "$rdhome/bios" "/var/config/melonDS/bios"
+  mkdir -pv "$saves_folder/nds/melonds"
+  mkdir -pv "$states_folder/nds/melonds"
+  dir_prep "$bios_folder" "/var/config/melonDS/bios"
   cp -fvr $emuconfigs/melonDS.ini /var/config/melonDS/
   sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/melonDS/melonDS.ini
 }
@@ -1019,14 +1169,12 @@ citra_init() {
   # removing config directory to wipe legacy files
   rm -rf /var/config/citra-emu
   mkdir -pv /var/config/citra-emu/
-  mkdir -pv "$rdhome/saves/n3ds/citra/nand/"
-  mkdir -pv "$rdhome/saves/n3ds/citra/sdmc/"
-  dir_prep "$rdhome/bios/citra/sysdata" "/var/data/citra-emu/sysdata"
-  dir_prep "$rdhome/.logs/citra" "/var/data/citra-emu/log"
+  mkdir -pv "$saves_folder/n3ds/citra/nand/"
+  mkdir -pv "$saves_folder/n3ds/citra/sdmc/"
+  dir_prep "$bios_folder/citra/sysdata" "/var/data/citra-emu/sysdata"
+  dir_prep "$logs_folder/citra" "/var/data/citra-emu/log"
   cp -fv $emuconfigs/citra/qt-config.ini /var/config/citra-emu/qt-config.ini
   sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
-  dir_prep "$mods_folder/Citra" "/var/data/citra-emu/load/mods/"
-  dir_prep "$texture_packs_folder/Citra" "/var/data/citra-emu/load/textures/"
 }
 
 rpcs3_init() {
@@ -1044,7 +1192,7 @@ xemu_init() {
   echo "------------------------"
   echo "Initializing XEMU"
   echo "------------------------"
-  mkdir -pv $rdhome/saves/xbox/xemu/
+  mkdir -pv $saves_folder/xbox/xemu/
   # removing config directory to wipe legacy files
   rm -rf /var/config/xemu
   rm -rf /var/data/xemu
@@ -1052,11 +1200,11 @@ xemu_init() {
   cp -fv $emuconfigs/xemu.toml /var/config/xemu/xemu.toml
   sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/xemu/xemu.toml
   # Preparing HD dummy Image if the image is not found
-  if [ ! -f $rdhome/bios/xbox_hdd.qcow2 ]
+  if [ ! -f $bios_folder/xbox_hdd.qcow2 ]
   then
-    wget "https://github.com/mborgerson/xemu-hdd-image/releases/latest/download/xbox_hdd.qcow2.zip" -P $rdhome/bios/
-    unzip -q $rdhome/bios/xbox_hdd.qcow2.zip -d $rdhome/bios/
-    rm -rfv $rdhome/bios/xbox_hdd.qcow2.zip
+    wget "https://github.com/mborgerson/xemu-hdd-image/releases/latest/download/xbox_hdd.qcow2.zip" -P $bios_folder/
+    unzip -q $bios_folder/xbox_hdd.qcow2.zip -d $bios_folder/
+    rm -rfv $bios_folder/xbox_hdd.qcow2.zip
   fi
 }
 
@@ -1075,13 +1223,13 @@ duckstation_init() {
   echo "------------------------"
   echo "Initializing DUCKSTATION"
   echo "------------------------"
-  dir_prep "$rdhome/saves/duckstation" "/var/data/duckstation/memcards" # This was not previously included, so performing first for save data safety.
-  dir_prep "$rdhome/states/duckstation" "/var/data/duckstation/savestates" # This was not previously included, so performing first for state data safety.
+  dir_prep "$saves_folder/duckstation" "/var/data/duckstation/memcards" # This was not previously included, so performing first for save data safety.
+  dir_prep "$states_folder/duckstation" "/var/data/duckstation/savestates" # This was not previously included, so performing first for state data safety.
   # removing config directory to wipe legacy files
   rm -rf /var/config/duckstation
   mkdir -p /var/data/duckstation/
   cp -fv $emuconfigs/duckstation/* /var/data/duckstation
-  sed -i 's#/home/deck/retrodeck/bios#'$rdhome/bios'#g' /var/data/duckstation/settings.ini
+  sed -i 's#/home/deck/retrodeck/bios#'$bios_folder'#g' /var/data/duckstation/settings.ini
 }
 
 ryujinx_init() {
@@ -1093,7 +1241,7 @@ ryujinx_init() {
   mkdir -p /var/config/Ryujinx/system
   cp -fv $emuconfigs/ryujinx/* /var/config/Ryujinx
   sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/Ryujinx/Config.json
-  dir_prep "$rdhome/bios/switch/keys" "/var/config/Ryujinx/system"
+  dir_prep "$bios_folder/switch/keys" "/var/config/Ryujinx/system"
 }
 
 standalones_init() {
@@ -1116,54 +1264,58 @@ standalones_init() {
 }
 
 ra_init() {
-  # removing config directory to wipe legacy files
-  rm -rf /var/config/retroarch
-  mkdir -p /var/config/retroarch
-  dir_prep "$rdhome/bios" "/var/config/retroarch/system"
-  dir_prep "$rdhome/.logs/retroarch" "/var/config/retroarch/logs"
-  mkdir -pv /var/config/retroarch/shaders/
-  cp -rf /app/share/libretro/shaders /var/config/retroarch/
-  dir_prep "$rdhome/shaders/retroarch" "/var/config/retroarch/shaders"
-  mkdir -pv /var/config/retroarch/cores/
-  cp -f /app/share/libretro/cores/* /var/config/retroarch/cores/
-  cp -fv $emuconfigs/retroarch/retroarch.cfg /var/config/retroarch/
-  cp -fv $emuconfigs/retroarch/retroarch-core-options.cfg /var/config/retroarch/
-  mkdir -pv /var/config/retroarch/config/
-  cp -rf $emuconfigs/retroarch/core-overrides/* /var/config/retroarch/config
-  #rm -rf $rdhome/bios/bios # in some situations a double bios symlink is created
-  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/retroarch/retroarch.cfg
+  if [[ $multi_user_mode == "true" ]]; then
+    # TODO: Put multi-user specific init here
+  else # TODO: Put single-user specific init here
+    # removing config directory to wipe legacy files
+    rm -rf /var/config/retroarch
+    mkdir -p /var/config/retroarch
+    dir_prep "$bios_folder" "/var/config/retroarch/system"
+    dir_prep "$logs_folder/retroarch" "/var/config/retroarch/logs"
+    mkdir -pv /var/config/retroarch/shaders/
+    cp -rf /app/share/libretro/shaders /var/config/retroarch/
+    dir_prep "$rdhome/shaders/retroarch" "/var/config/retroarch/shaders"
+    mkdir -pv /var/config/retroarch/cores/
+    cp -f /app/share/libretro/cores/* /var/config/retroarch/cores/
+    cp -fv $emuconfigs/retroarch/retroarch.cfg /var/config/retroarch/
+    cp -fv $emuconfigs/retroarch/retroarch-core-options.cfg /var/config/retroarch/
+    mkdir -pv /var/config/retroarch/config/
+    cp -rf $emuconfigs/retroarch/core-overrides/* /var/config/retroarch/config
+    #rm -rf $rdhome/bios/bios # in some situations a double bios symlink is created
+    sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/retroarch/retroarch.cfg
 
-  # PPSSPP
-  echo "--------------------------------"
-  echo "Initializing PPSSPP_LIBRETRO"
-  echo "--------------------------------"
-  if [ -d $rdhome/bios/PPSSPP/flash0/font ]
-  then
-    mv -fv $rdhome/bios/PPSSPP/flash0/font $rdhome/bios/PPSSPP/flash0/font.bak
-  fi
-  mkdir -p $rdhome/bios/PPSSPP
-  #if [ ! -f "$rdhome/bios/PPSSPP/ppge_atlas.zim" ]
-  #then
-    wget "https://github.com/hrydgard/ppsspp/archive/refs/heads/master.zip" -P $rdhome/bios/PPSSPP
-    unzip -q "$rdhome/bios/PPSSPP/master.zip" -d $rdhome/bios/PPSSPP/
-    mv -f "$rdhome/bios/PPSSPP/ppsspp-master/assets/"* "$rdhome/bios/PPSSPP/"
-    rm -rfv "$rdhome/bios/PPSSPP/master.zip"
-    rm -rfv "$rdhome/bios/PPSSPP/ppsspp-master"
-  #fi
-  if [ -d $rdhome/bios/PPSSPP/flash0/font.bak ]
-  then
-    mv -fv $rdhome/bios/PPSSPP/flash0/font.bak $rdhome/bios/PPSSPP/flash0/font
-  fi
+    # PPSSPP
+    echo "--------------------------------"
+    echo "Initializing PPSSPP_LIBRETRO"
+    echo "--------------------------------"
+    if [ -d $bios_folder/PPSSPP/flash0/font ]
+    then
+      mv -fv $bios_folder/PPSSPP/flash0/font $bios_folder/PPSSPP/flash0/font.bak
+    fi
+    mkdir -p $bios_folder/PPSSPP
+    #if [ ! -f "$rdhome/bios/PPSSPP/ppge_atlas.zim" ]
+    #then
+      wget "https://github.com/hrydgard/ppsspp/archive/refs/heads/master.zip" -P $bios_folder/PPSSPP
+      unzip -q "$bios_folder/PPSSPP/master.zip" -d $bios_folder/PPSSPP/
+      mv -f "$bios_folder/PPSSPP/ppsspp-master/assets/"* "$bios_folder/PPSSPP/"
+      rm -rfv "$bios_folder/PPSSPP/master.zip"
+      rm -rfv "$bios_folder/PPSSPP/ppsspp-master"
+    #fi
+    if [ -d $bios_folder/PPSSPP/flash0/font.bak ]
+    then
+      mv -fv $bios_folder/PPSSPP/flash0/font.bak $bios_folder/PPSSPP/flash0/font
+    fi
 
-  # MSX / SVI / ColecoVision / SG-1000
-  echo "-----------------------------------------------------------"
-  echo "Initializing MSX / SVI / ColecoVision / SG-1000 LIBRETRO"
-  echo "-----------------------------------------------------------"
-  wget "http://bluemsx.msxblue.com/rel_download/blueMSXv282full.zip" -P $rdhome/bios/MSX
-  unzip -q "$rdhome/bios/MSX/blueMSXv282full.zip" -d $rdhome/bios/MSX
-  mv -f $rdhome/bios/MSX/Databases $rdhome/bios/Databases
-  mv -f $rdhome/bios/MSX/Machines $rdhome/bios/Machines
-  rm -rfv $rdhome/bios/MSX
+    # MSX / SVI / ColecoVision / SG-1000
+    echo "-----------------------------------------------------------"
+    echo "Initializing MSX / SVI / ColecoVision / SG-1000 LIBRETRO"
+    echo "-----------------------------------------------------------"
+    wget "http://bluemsx.msxblue.com/rel_download/blueMSXv282full.zip" -P $bios_folder/MSX
+    unzip -q "$bios_folder/MSX/blueMSXv282full.zip" -d $bios_folder/MSX
+    mv -f $bios_folder/MSX/Databases $bios_folder/Databases
+    mv -f $bios_folder/MSX/Machines $bios_folder/Machines
+    rm -rfv $bios_folder/MSX
+  fi
 }
 
 cli_emulator_reset() {
@@ -1241,49 +1393,49 @@ emulators_post_move() {
   dir_prep $roms_folder "/var/config/emulationstation/ROMs"
 
   # RA section
-  dir_prep "$rdhome/bios" "/var/config/retroarch/system"
-  dir_prep "$rdhome/.logs/retroarch" "/var/config/retroarch/logs"
+  dir_prep "$bios_folder" "/var/config/retroarch/system"
+  dir_prep "$logs_folder/retroarch" "/var/config/retroarch/logs"
   dir_prep "$rdhome/shaders/retroarch" "/var/config/retroarch/shaders"
   sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/retroarch/retroarch.cfg
 
   # Yuzu section
-  dir_prep "$rdhome/bios/switch/keys" "/var/data/yuzu/keys"
-  dir_prep "$rdhome/bios/switch/registered" "/var/data/yuzu/nand/system/Contents/registered"
-  dir_prep "$rdhome/saves/switch/yuzu/nand" "/var/data/yuzu/nand"
-  dir_prep "$rdhome/saves/switch/yuzu/sdmc" "/var/data/yuzu/sdmc"
-  dir_prep "$rdhome/.logs/yuzu" "/var/data/yuzu/log"
-  dir_prep "$rdhome/screenshots" "/var/data/yuzu/screenshots"
+  dir_prep "$bios_folder/switch/keys" "/var/data/yuzu/keys"
+  dir_prep "$bios_folder/switch/registered" "/var/data/yuzu/nand/system/Contents/registered"
+  dir_prep "$saves_folder/switch/yuzu/nand" "/var/data/yuzu/nand"
+  dir_prep "$saves_folder/switch/yuzu/sdmc" "/var/data/yuzu/sdmc"
+  dir_prep "$logs_folder/yuzu" "/var/data/yuzu/log"
+  dir_prep "$screenshots_folder" "/var/data/yuzu/screenshots"
   sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/yuzu/qt-config.ini
 
   # Dolphin section
   sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/dolphin-emu/Dolphin.ini
-  dir_prep "$rdhome/saves/gc/dolphin/EUR" "/var/data/dolphin-emu/GC/EUR"
-  dir_prep "$rdhome/saves/gc/dolphin/USA" "/var/data/dolphin-emu/GC/USA"
-  dir_prep "$rdhome/saves/gc/dolphin/JAP" "/var/data/dolphin-emu/GC/JAP"
-  dir_prep "$rdhome/screenshots" "/var/data/dolphin-emu/ScreenShots"
-  dir_prep "$rdhome/states/dolphin" "/var/data/dolphin-emu/StateSaves"
-  dir_prep "$rdhome/saves/wii/dolphin" "/var/data/dolphin-emu/Wii/"
+  dir_prep "$saves_folder/gc/dolphin/EUR" "/var/data/dolphin-emu/GC/EUR"
+  dir_prep "$saves_folder/gc/dolphin/USA" "/var/data/dolphin-emu/GC/USA"
+  dir_prep "$saves_folder/gc/dolphin/JAP" "/var/data/dolphin-emu/GC/JAP"
+  dir_prep "$screenshots_folder" "/var/data/dolphin-emu/ScreenShots"
+  dir_prep "$states_folder/dolphin" "/var/data/dolphin-emu/StateSaves"
+  dir_prep "$saves_folder/wii/dolphin" "/var/data/dolphin-emu/Wii/"
 
   # Primehack section
   sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/primehack/Dolphin.ini
-  dir_prep "$rdhome/saves/gc/primehack/EUR" "/var/data/primehack/GC/EUR"
-  dir_prep "$rdhome/saves/gc/primehack/USA" "/var/data/primehack/GC/USA"
-  dir_prep "$rdhome/saves/gc/primehack/JAP" "/var/data/primehack/GC/JAP"
-  dir_prep "$rdhome/screenshots" "/var/data/primehack/ScreenShots"
-  dir_prep "$rdhome/states/primehack" "/var/data/primehack/StateSaves"
-  dir_prep "$rdhome/saves/wii/primehack" "/var/data/primehack/Wii/"
+  dir_prep "$saves_folder/gc/primehack/EUR" "/var/data/primehack/GC/EUR"
+  dir_prep "$saves_folder/gc/primehack/USA" "/var/data/primehack/GC/USA"
+  dir_prep "$saves_folder/gc/primehack/JAP" "/var/data/primehack/GC/JAP"
+  dir_prep "$screenshots_folder" "/var/data/primehack/ScreenShots"
+  dir_prep "$states_folder/primehack" "/var/data/primehack/StateSaves"
+  dir_prep "$saves_folder/wii/primehack" "/var/data/primehack/Wii/"
 
   # PCSX2 section
   sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2_ui.ini
   sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2.ini
 
   # MelonDS section
-  dir_prep "$rdhome/bios" "/var/config/melonDS/bios"
+  dir_prep "$bios_folder" "/var/config/melonDS/bios"
   sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/melonDS/melonDS.ini
 
   # Citra section
-  dir_prep "$rdhome/bios/citra/sysdata" "/var/data/citra-emu/sysdata"
-  dir_prep "$rdhome/.logs/citra" "/var/data/citra-emu/log"
+  dir_prep "$bios_folder/citra/sysdata" "/var/data/citra-emu/sysdata"
+  dir_prep "$logs_folder/citra" "/var/data/citra-emu/log"
   sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
 
   # RPCS3 section
@@ -1296,11 +1448,11 @@ emulators_post_move() {
   sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/ppsspp/PSP/SYSTEM/ppsspp.ini
 
   # Duckstation section
-  sed -i 's#/home/deck/retrodeck/bios#'$rdhome/bios'#g' /var/data/duckstation/settings.ini
+  sed -i 's#/home/deck/retrodeck/bios#'$bios_folder'#g' /var/data/duckstation/settings.ini
 
   # Ryujinx section
   sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/Ryujinx/Config.json
-  dir_prep "$rdhome/bios/switch/keys" "/var/config/Ryujinx/system"
+  dir_prep "$bios_folder/switch/keys" "/var/config/Ryujinx/system"
 }
 
 create_lock() {
@@ -1345,8 +1497,8 @@ path_selected=false
 while [ $path_selected == false ]
 do
   local target="$(zenity --file-selection --title="Choose RetroDECK data directory location" --directory)"
-  if [[ ! -z $target ]]; then
-    if [[ -w $target ]]; then
+  if [[ ! -z "$target" ]]; then
+    if [[ -w "$target" ]]; then
       zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
       --cancel-label="No" \
       --ok-label "Yes" \
@@ -1492,7 +1644,7 @@ finit() {
 
   mkdir -pv $saves_folder
   mkdir -pv $states_folder
-  mkdir -pv $rdhome/screenshots
+  mkdir -pv $screenshots_folder
   mkdir -pv $logs_folder
   mkdir -pv $mods_folder
   mkdir -pv $texture_packs_folder
