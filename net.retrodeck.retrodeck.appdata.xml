@@ -66,17 +66,31 @@
    <project_license>GPL-3.0</project_license>
    <metadata_license>CC0-1.0</metadata_license>
    <releases>
-      <release version="0.6.3b" date="2023-03-22">
+      <release version="0.6.3b" date="2023-03-24">
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.3b</url>
          <description>
+            <p>New features - General:</p>
             <ul>
                <li>Added support support for multiple file compression via CLI.</li>
+            </ul>
+            <p>RetroDECK Configurator:</p>
+            <ul>
                <li>Added support support for multiple file compression in the Configurator.</li>
+               <li>Added safety y/n prompts to the reset functions.</li>
                <li>Fixed some missing layout changes.</li>
-               <li>Removed the reset tools command.</li>
+               <li>Renamed "Reset All" to "Reset RetroDECK".</li>
+               <li>Moved configurator into the RO partition for futher enhancements.</li>
+            </ul>
+            <p>Bug fixes and other changes:</p>
+            <ul>
                <li>Fixed a bug in the compression tool with certain filenames with spaces.</li>
+               <li>Fixed a bug where some folders were recursively symlinked.</li>
+               <li>Fixed a bug where some emulator configs were not correctly deployed.</li>
+               <li>Fixed the Configurator BIOS tool looking in the wrong location (Thanks sofauxboho for the report!).</li>
                <li>Fixed a manifest bug that caused a conflict between Dolphin and Primehack in certain scenarios.</li>
-               <li>Shipped a new configuration to account for the config format changes made by Yuzu and Citra in the latest updates.</li>
+               <li>Implemented new configurations for Yuzu and Citra thanks to the big config file changes in the latest emulator updates in both emulators.</li>
+               <li>Removed leftover files from Legacy PCSX2.</li>
+               <li>Removed the legacy "Reset Tools" command from Configurator and CLI.</li>
             </ul>
          </description>
       </release>

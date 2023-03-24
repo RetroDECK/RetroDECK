@@ -530,6 +530,8 @@ configurator_compress_multi_game_dialog() {
     zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Configurator Utility - Compression in Progress"
+      configurator_generic_dialog "The compression process is complete!"
+      configurator_compress_games_dialog
   else
     if [[ ! -z $choice ]]; then # User clicked "Compress All"
       local post_compression_cleanup=$(configurator_compression_cleanup_dialog)
