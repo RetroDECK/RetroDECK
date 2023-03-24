@@ -47,14 +47,14 @@ file_browse() {
   while [ $file_selected == false ]
   do
     local target="$(zenity --file-selection --title="Choose $1")"
-    if [ ! -z $target ] #yes
+    if [ ! -z "$target" ] #yes
     then
       zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
       --text="File $target chosen, is this correct?"
       if [ $? == 0 ]
       then
         file_selected=true
-        echo $target
+        echo "$target"
         break
       fi
     else
@@ -73,9 +73,9 @@ verify_space() {
   # USAGE: verify_space $source_dir $dest_dir
   # Function returns "true" if there is enough space, "false" if there is not
 
-  source_size=$(du -sk $1 | awk '{print $1}')
+  source_size=$(du -sk "$1" | awk '{print $1}')
   source_size=$((source_size+(source_size/10))) # Add 10% to source size for safety
-  dest_avail=$(df -k --output=avail $2 | tail -1)
+  dest_avail=$(df -k --output=avail "$2" | tail -1)
 
   if [[ $source_size -ge $dest_avail ]]; then
     echo "false"
@@ -88,13 +88,13 @@ move() {
   # Function to move a directory from one parent to another
   # USAGE: move $source_dir $dest_dir
 
-  if [[ ! -d "$2/$(basename $1)" ]]; then
-    if [[ $(verify_space $1 $2) ]]; then
+  if [[ ! -d "$2/$(basename "$1")" ]]; then
+    if [[ $(verify_space "$1" "$2") ]]; then
       (
-        if [[ ! -d $2 ]]; then # Create destination directory if it doesn't already exist
-          mkdir -pv $2
+        if [[ ! -d "$2" ]]; then # Create destination directory if it doesn't already exist
+          mkdir -pv "$2"
         fi
-        mv -v -t $2 $1
+        mv -v -t "$2" "$1"
       ) |
       zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -121,46 +121,95 @@ compress_to_chd () {
   # USAGE: compress_to_chd $full_path_to_input_file $full_path_to_output_file
 
 	echo "Compressing file $1 to $2.chd"
-	/app/bin/chdman createcd -i $1 -o $2.chd
+	/app/bin/chdman createcd -i "$1" -o "$2".chd
 }
 
 validate_for_chd () {
   # Function for validating chd compression candidates, and compresses if validation passes. Supports .cue, .iso and .gdi formats ONLY
   # USAGE: validate_for_chd $input_file
 
-	local file=$1
-	current_run_log_file="chd_compression_"$(date +"%Y_%m_%d_%I_%M_%p").log""
-	echo "Validating file:" $file > "$logs_folder/$current_run_log_file"
-	if [[ "$file" == *".cue" ]] || [[ "$file" == *".gdi" ]] || [[ "$file" == *".iso" ]]; then
-		echo ".cue/.iso/.gdi file detected" >> $logs_folder/$current_run_log_file
-		local file_path=$(dirname $(realpath $file))
-		local file_base_name=$(basename $file)
+	local file="$1"
+  local normalized_filename=$(echo "$file" | tr '[:upper:]' '[:lower:]')
+  local file_validated="false"
+	current_run_log_file="chd_compression_$(basename "$file").log"
+	echo "Validating file:" "$file" > "$logs_folder/$current_run_log_file"
+	if [[ "$normalized_filename" == *".cue" ]] || [[ "$normalized_filename" == *".gdi" ]] || [[ "$normalized_filename" == *".iso" ]]; then
+		echo ".cue/.iso/.gdi file detected" >> "$logs_folder/$current_run_log_file"
+		local file_path=$(dirname "$(realpath "$file")")
+		local file_base_name=$(basename "$file")
 		local file_name=${file_base_name%.*}
-		echo "File base path:" $file_path >> "$logs_folder/$current_run_log_file"
-		echo "File base name:" $file_name >> "$logs_folder/$current_run_log_file"
-		if [[ "$file" == *".cue" ]]; then # Validate .cue file
-			local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" $file)
-			local cue_validated="false"
-			for line in $cue_bin_files
+		if [[ "$normalized_filename" == *".cue" ]]; then # Validate .cue file
+			echo "Validating .cue associated .bin files" >> "$logs_folder/$current_run_log_file"
+			local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" "$file")
+			echo "Associated bin files read:" >> "$logs_folder/$current_run_log_file"
+			printf '%s\n' "$cue_bin_files" >> "$logs_folder/$current_run_log_file"
+			while IFS= read -r line
 			do
+				echo "looking for $file_path/$line" >> "$logs_folder/$current_run_log_file"
 				if [[ -f "$file_path/$line" ]]; then
 					echo ".bin file found at $file_path/$line" >> "$logs_folder/$current_run_log_file"
-					cue_validated="true"
+					file_validated="true"
 				else
 					echo ".bin file NOT found at $file_path/$line" >> "$logs_folder/$current_run_log_file"
 					echo ".cue file could not be validated. Please verify your .cue file contains the correct corresponding .bin file information and retry." >> "$logs_folder/$current_run_log_file"
-					cue_validated="false"
+					file_validated="false"
 					break
 				fi
-			done
-			if [[ $cue_validated == "true" ]]; then
-				echo $cue_validated
+			done < <(printf '%s\n' "$cue_bin_files")
+			if [[ $file_validated == "true" ]]; then
+				echo $file_validated
 			fi
-		else
-			echo $cue_validated
+		else # If file is a .iso or .gdi
+      file_validated="true"
+			echo $file_validated
 		fi
 	else
 		echo "File type not recognized. Supported file types are .cue, .gdi and .iso" >> "$logs_folder/$current_run_log_file"
+	fi
+}
+
+cli_compress_file() {
+	# This function will compress a single file passed from the CLI arguments
+  # USAGE: cli_compress_file $full_file_path
+  local file="$1"
+  echo "Looking for" "$file"
+  current_run_log_file="chd_compression_$(basename "$file").log"
+	if [[ ! -z "$file" ]]; then
+		if [[ -f "$file" ]]; then
+			if [[ $(validate_for_chd "$file") == "true" ]]; then
+        read -p "RetroDECK will now attempt to compress your selected game. Press Enter key to continue..."
+				read -p "Do you want to have the original file removed after compression is complete? Please answer y/n and press Enter: " post_compression_cleanup
+				local filename_no_path=$(basename "$file")
+        local filename_no_extension="${filename_no_path%.*}"
+        local source_file=$(dirname "$(realpath "$file")")"/"$(basename "$file")
+        local dest_file=$(dirname "$(realpath "$file")")"/""$filename_no_extension"
+        echo "Compressing $filename_no_path"
+        compress_to_chd "$source_file" "$dest_file"
+				if [[ $post_compression_cleanup == [yY] ]]; then # Remove file(s) if requested
+					if [[ "$file" == *".cue" ]]; then
+            local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" "$file")
+            local file_path=$(dirname "$(realpath "$file")")
+            while IFS= read -r line
+						do # Remove associated .bin files
+              echo "Removing file "$line""
+              rm -f "$file_path/$line"
+            done < <(printf '%s\n' "$cue_bin_files") # Remove original .cue file
+            echo "Removing file "$filename_no_path""
+            rm -f $(realpath "$file")
+          else
+            echo "Removing file "$filename_no_path""
+            rm -f $(realpath "$file")
+          fi
+				fi
+			else
+				printf "An error occured during the compression process. Please see the following log entries for details:\n\n"
+				cat "$logs_folder/$current_run_log_file"
+			fi
+		else
+			echo "File not found, please specify the full path to the file to be compressed."
+		fi
+	else
+		echo "Please use this command format \"--compress <cue/gdi/iso file to compress>\""
 	fi
 }
 
@@ -581,7 +630,6 @@ update_rd_conf() {
   deploy_single_patch $rd_defaults $rd_update_patch $rd_conf
   set_setting_value $rd_conf "version" "$hard_version" retrodeck # Set version of currently running RetroDECK to updated retrodeck.cfg
   rm -f $rd_update_patch # Cleanup temporary patch file
-  source $rd_conf # Load new config file variables
 }
 
 conf_write() {
@@ -658,6 +706,13 @@ dir_prep() {
 
   echo -e "\n[DIR PREP]\nMoving $symlink in $real" #DEBUG
 
+   # if the symlink dir is already a symlink, unlink it first, to prevent recursion
+  if [ -L "$symlink" ];
+  then
+    echo "$symlink is already a symlink, unlinking to prevent recursives" #DEBUG
+    unlink "$symlink"
+  fi
+
   # if the dest dir exists we want to backup it
   if [ -d "$symlink" ];
   then
@@ -668,6 +723,7 @@ dir_prep() {
   # if the real dir is already a symlink, unlink it first
   if [ -L "$real" ];
   then
+    echo "$real is already a symlink, unlinking to prevent recursives" #DEBUG
     unlink "$real"
   fi
 
@@ -716,7 +772,7 @@ yuzu_init() {
   rm -rf /var/config/yuzu
   mkdir -pv /var/config/yuzu/
   cp -fvr $emuconfigs/yuzu/* /var/config/yuzu/
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/yuzu/qt-config.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/yuzu/qt-config.ini
   dir_prep "$rdhome/screenshots" "/var/data/yuzu/screenshots"
 }
 
@@ -728,12 +784,12 @@ dolphin_init() {
   rm -rf /var/config/dolphin-emu
   mkdir -pv /var/config/dolphin-emu/
   cp -fvr "$emuconfigs/dolphin/"* /var/config/dolphin-emu/
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/dolphin-emu/Dolphin.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/dolphin-emu/Dolphin.ini
   dir_prep "$rdhome/saves/gc/dolphin/EUR" "/var/data/dolphin-emu/GC/EUR"
   dir_prep "$rdhome/saves/gc/dolphin/USA" "/var/data/dolphin-emu/GC/USA"
   dir_prep "$rdhome/saves/gc/dolphin/JAP" "/var/data/dolphin-emu/GC/JAP"
   dir_prep "$rdhome/screenshots" "/var/data/dolphin-emu/ScreenShots"
-  dir_prep "$rdhome/states" "/var/data/dolphin-emu/StateSaves"
+  dir_prep "$rdhome/states/dolphin" "/var/data/dolphin-emu/StateSaves"
   mkdir -pv /var/data/dolphin-emu/Wii/
   dir_prep "$rdhome/saves/wii/dolphin" "/var/data/dolphin-emu/Wii"
 }
@@ -746,12 +802,12 @@ primehack_init() {
   rm -rf /var/config/primehack
   mkdir -pv /var/config/primehack/
   cp -fvr "$emuconfigs/primehack/"* /var/config/primehack/
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/primehack/Dolphin.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/primehack/Dolphin.ini
   dir_prep "$rdhome/saves/gc/primehack/EUR" "/var/data/primehack/GC/EUR"
   dir_prep "$rdhome/saves/gc/primehack/USA" "/var/data/primehack/GC/USA"
   dir_prep "$rdhome/saves/gc/primehack/JAP" "/var/data/primehack/GC/JAP"
   dir_prep "$rdhome/screenshots" "/var/data/primehack/ScreenShots"
-  dir_prep "$rdhome/states" "/var/data/primehack/StateSaves"
+  dir_prep "$rdhome/states/primehack" "/var/data/primehack/StateSaves"
   mkdir -pv /var/data/primehack/Wii/
   dir_prep "$rdhome/saves/wii/primehack" "/var/data/primehack/Wii"
 }
@@ -766,8 +822,8 @@ pcsx2_init() {
   mkdir -pv "$rdhome/saves/ps2/pcsx2/memcards"
   mkdir -pv "$rdhome/states/ps2/pcsx2"
   cp -fvr $emuconfigs/PCSX2/* /var/config/PCSX2/inis/
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2_ui.ini
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2_ui.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2.ini
   #dir_prep "$rdhome/states/ps2/pcsx2" "/var/config/PCSX2/sstates"
   #dir_prep "$rdhome/screenshots" "/var/config/PCSX2/snaps"
   #dir_prep "$rdhome/.logs" "/var/config/PCSX2/logs"
@@ -785,8 +841,7 @@ melonds_init() {
   mkdir -pv "$rdhome/states/nds/melonds"
   dir_prep "$rdhome/bios" "/var/config/melonDS/bios"
   cp -fvr $emuconfigs/melonDS.ini /var/config/melonDS/
-  # Replace ~/retrodeck with $rdhome as ~ cannot be understood by MelonDS
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/melonDS/melonDS.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/melonDS/melonDS.ini
 }
 
 citra_init() {
@@ -800,11 +855,8 @@ citra_init() {
   mkdir -pv "$rdhome/saves/n3ds/citra/sdmc/"
   dir_prep "$rdhome/bios/citra/sysdata" "/var/data/citra-emu/sysdata"
   dir_prep "$rdhome/.logs/citra" "/var/data/citra-emu/log"
-  cp -fv $emuconfigs/citra-qt-config.ini /var/config/citra-emu/qt-config.ini
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
-  #TODO: do the same with roms folders after new variables is pushed (check even the others qt-emu)
-  #But actually everything is always symlinked to retrodeck/roms so it might be not needed
-  #sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
+  cp -fv $emuconfigs/citra/qt-config.ini /var/config/citra-emu/qt-config.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
 }
 
 rpcs3_init() {
@@ -825,9 +877,10 @@ xemu_init() {
   mkdir -pv $rdhome/saves/xbox/xemu/
   # removing config directory to wipe legacy files
   rm -rf /var/config/xemu
-  mkdir -pv /var/data/xemu/
-  cp -fv $emuconfigs/xemu.toml /var/data/xemu/xemu.toml
-  sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/data/xemu/xemu.toml
+  rm -rf /var/data/xemu
+  dir_prep "/var/config/xemu" "/var/data/xemu" # Creating config folder in /var/config for consistentcy and linking back to original location where emulator will look
+  cp -fv $emuconfigs/xemu.toml /var/config/xemu/xemu.toml
+  sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/xemu/xemu.toml
   # Preparing HD dummy Image if the image is not found
   if [ ! -f $rdhome/bios/xbox_hdd.qcow2 ]
   then
@@ -908,7 +961,7 @@ ra_init() {
   mkdir -pv /var/config/retroarch/config/
   cp -rf $emuconfigs/retroarch/core-overrides/* /var/config/retroarch/config
   #rm -rf $rdhome/bios/bios # in some situations a double bios symlink is created
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/retroarch/retroarch.cfg
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/retroarch/retroarch.cfg
 
   # PPSSPP
   echo "--------------------------------"
@@ -989,15 +1042,6 @@ cli_emulator_reset() {
   esac
 }
 
-tools_init() {
-  rm -rfv /var/config/retrodeck/tools/
-  mkdir -pv /var/config/retrodeck/tools/
-  cp -rfv /app/retrodeck/tools/* /var/config/retrodeck/tools/
-  mkdir -pv /var/config/emulationstation/.emulationstation/custom_systems/tools/
-  rm -rfv /var/config/retrodeck/tools/gamelist.xml
-  cp -fv /app/retrodeck/tools-gamelist.xml /var/config/retrodeck/tools/gamelist.xml
-}
-
 emulators_post_move() {
   # This script will redo the symlinks for all emulators after moving the $rdhome location without resetting other options
   # FUTURE WORK: The sed commands here should be replaced with set_setting_value and dir_prep should be replaced with changing paths in config files directly where possible
@@ -1009,6 +1053,7 @@ emulators_post_move() {
   dir_prep "$rdhome/bios" "/var/config/retroarch/system"
   dir_prep "$rdhome/.logs/retroarch" "/var/config/retroarch/logs"
   dir_prep "$rdhome/shaders/retroarch" "/var/config/retroarch/shaders"
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/retroarch/retroarch.cfg
 
   # Yuzu section
   dir_prep "$rdhome/bios/switch/keys" "/var/data/yuzu/keys"
@@ -1017,38 +1062,38 @@ emulators_post_move() {
   dir_prep "$rdhome/saves/switch/yuzu/sdmc" "/var/data/yuzu/sdmc"
   dir_prep "$rdhome/.logs/yuzu" "/var/data/yuzu/log"
   dir_prep "$rdhome/screenshots" "/var/data/yuzu/screenshots"
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/yuzu/qt-config.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/yuzu/qt-config.ini
 
   # Dolphin section
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/dolphin-emu/Dolphin.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/dolphin-emu/Dolphin.ini
   dir_prep "$rdhome/saves/gc/dolphin/EUR" "/var/data/dolphin-emu/GC/EUR"
   dir_prep "$rdhome/saves/gc/dolphin/USA" "/var/data/dolphin-emu/GC/USA"
   dir_prep "$rdhome/saves/gc/dolphin/JAP" "/var/data/dolphin-emu/GC/JAP"
   dir_prep "$rdhome/screenshots" "/var/data/dolphin-emu/ScreenShots"
-  dir_prep "$rdhome/states" "/var/data/dolphin-emu/StateSaves"
+  dir_prep "$rdhome/states/dolphin" "/var/data/dolphin-emu/StateSaves"
   dir_prep "$rdhome/saves/wii/dolphin" "/var/data/dolphin-emu/Wii/"
 
   # Primehack section
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/primehack/Dolphin.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/primehack/Dolphin.ini
   dir_prep "$rdhome/saves/gc/primehack/EUR" "/var/data/primehack/GC/EUR"
   dir_prep "$rdhome/saves/gc/primehack/USA" "/var/data/primehack/GC/USA"
   dir_prep "$rdhome/saves/gc/primehack/JAP" "/var/data/primehack/GC/JAP"
   dir_prep "$rdhome/screenshots" "/var/data/primehack/ScreenShots"
-  dir_prep "$rdhome/states" "/var/data/primehack/StateSaves"
+  dir_prep "$rdhome/states/primehack" "/var/data/primehack/StateSaves"
   dir_prep "$rdhome/saves/wii/primehack" "/var/data/primehack/Wii/"
 
   # PCSX2 section
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2_ui.ini
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2_ui.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2.ini
 
   # MelonDS section
   dir_prep "$rdhome/bios" "/var/config/melonDS/bios"
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/melonDS/melonDS.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/melonDS/melonDS.ini
 
   # Citra section
   dir_prep "$rdhome/bios/citra/sysdata" "/var/data/citra-emu/sysdata"
   dir_prep "$rdhome/.logs/citra" "/var/data/citra-emu/log"
-  sed -i 's#~/retrodeck#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
 
   # RPCS3 section
   sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/rpcs3/vfs.yml
@@ -1242,14 +1287,11 @@ finit() {
 
   # Recreating the folder
   rm -rfv /var/config/emulationstation/
-  rm -rfv /var/config/retrodeck/tools/
   mkdir -pv /var/config/emulationstation/
 
   # Initializing ES-DE
   # TODO: after the next update of ES-DE this will not be needed - let's test it
   emulationstation --home /var/config/emulationstation --create-system-dirs
-
-  mkdir -pv /var/config/retrodeck/tools/
 
   #zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --text="RetroDECK will now install the needed files.\nPlease wait up to one minute,\nanother message will notify when the process will be finished.\n\nPress OK to continue."
 
@@ -1269,14 +1311,13 @@ finit() {
   dir_prep "$themes_folder" "/var/config/emulationstation/.emulationstation/themes"
 
   # PICO-8
-  dir_prep "$bios_folder/pico-8" "~/.lexaloffle/pico-8" # Store binary and config files together. The .lexaloffle directory is a hard-coded location for the PICO-8 config file, cannot be changed
+  dir_prep "$bios_folder/pico-8" "$HOME/.lexaloffle/pico-8" # Store binary and config files together. The .lexaloffle directory is a hard-coded location for the PICO-8 config file, cannot be changed
   dir_prep "$roms_folder/pico8" "$bios_folder/pico-8/carts" # Symlink default game location to RD roms for cleanliness (this location is overridden anyway by the --root_path launch argument anyway)
-  dir_prep "$bios_folder/pico-8/cdata" "$saves_folder/pico-8" # PICO-8 saves folder
+  dir_prep "$saves_folder/pico-8" "$bios_folder/pico-8/cdata"  # PICO-8 saves folder
 
   (
   ra_init
   standalones_init
-  tools_init
   ) |
   zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -1338,4 +1379,18 @@ configurator_destination_choice_dialog() {
   --text="$2")
 
   echo $choice
+}
+
+configurator_reset_confirmation_dialog() {
+  # This dialog provides a confirmation for any reset functions, before the reset is actually performed.
+  # USAGE: $(configurator_reset_confirmation_dialog "emulator being reset" "action text")
+  # This function will return a "true" if the user clicks Confirm, and "false" if they click Cancel.
+  choice=$(zenity --title "RetroDECK Configurator Utility - Reset $1" --question --no-wrap --cancel-label="Cancel" --ok-label="Confirm" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+  --text="$2")
+  if [[ $? == "0" ]]; then
+    echo "true"
+  else
+    echo "false"
+  fi
 }

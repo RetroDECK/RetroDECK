@@ -17,6 +17,7 @@ jobs:
     runs-on: self-hosted
     steps:
 
+      # Circumventing this bug: https://github.com/flatpak/flatpak-builder/issues/317
       - name: Remove stuck mounts
         run: sudo umount -f /home/ubuntu/actions-runner/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles/*
         continue-on-error: true
@@ -80,7 +81,8 @@ jobs:
           artifacts: "RetroDECK.flatpak,RetroDECK-Artifact.tar.gz"
           allowUpdates: true
           #prerelease: true
-          draft: false
+          makeLatest: true
+          #draft: true
           token: ${{ secrets.TRIGGER_BUILD_TOKEN }}
           repo: RetroDECK-cooker
         continue-on-error: true
