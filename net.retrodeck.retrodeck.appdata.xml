@@ -69,20 +69,13 @@
       <release version="0.6.3b" date="2023-03-24">
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.3b</url>
          <description>
-            <p>New features - General:</p>
             <ul>
                <li>Added support support for multiple file compression via CLI.</li>
-            </ul>
-            <p>RetroDECK Configurator:</p>
-            <ul>
                <li>Added support support for multiple file compression in the Configurator.</li>
                <li>Added safety y/n prompts to the reset functions.</li>
                <li>Fixed some missing layout changes.</li>
                <li>Renamed "Reset All" to "Reset RetroDECK".</li>
                <li>Moved configurator into the RO partition for futher enhancements.</li>
-            </ul>
-            <p>Bug fixes and other changes:</p>
-            <ul>
                <li>Fixed a bug in the compression tool with certain filenames with spaces.</li>
                <li>Fixed a bug where some folders were recursively symlinked.</li>
                <li>Fixed a bug where some emulator configs were not correctly deployed.</li>
