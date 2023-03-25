@@ -66,11 +66,11 @@ modules:
   # The version number is hardcoded in /app/retrodeck/version
   #
   # UPDATE STEPS FOR MAIN:
-  # [X] Update the VERSION variable
-  # [X] Update the appdata.xml with the version number and notes
-  # [X] change branch into main in version-initialization (first one)
-  # [X] change branch into main in retrodeck module (last one)
-  # [X] if header (before modules) was edited, edit it even in flathub.yml
+  # [ ] Update the VERSION variable
+  # [ ] Update the appdata.xml with the version number and notes
+  # [ ] change branch into main in version-initialization (first one)
+  # [ ] change branch into main in retrodeck module (last one)
+  # [ ] if header (before modules) was edited, edit it even in flathub.yml
   #
   - name: version-initialization
     buildsystem: simple
@@ -78,7 +78,7 @@ modules:
       - |
         git checkout ${GITHUB_REF_NAME}
         mkdir -p ${FLATPAK_DEST}/retrodeck/
-        VERSION="0.6.3b"
+        VERSION="cooker-0.6.4b"
         if [[ $VERSION == *"cooker"* ]];
         then
           VERSION="$VERSION-[$(git rev-parse --short HEAD)]"
@@ -88,7 +88,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/XargonWan/RetroDECK.git
-        branch: main
+        branch: cooker-0.6.4b
 
   - name: xmlstarlet
     config-opts:
@@ -239,13 +239,15 @@ modules:
   # But we don't include them 1:1 as RetroDECK got some specific configs in some cases
   - name: emulationstation-de
     buildsystem: cmake-ninja
+    config-opts:
+      - DRETRODECK=on
     cleanup:
       - es-app
       - es-core
     sources:
       - type: git
         url: https://gitlab.com/es-de/emulationstation-de
-        branch: f8d782f1f3b1fba8a119b793edd01f37e0258953
+        branch: 608d8a3c09abc5db398cdadc09e18fd2dfbaf570
       - type: shell
         commands:
           - sed -i 's/QUIT EMULATIONSTATION/QUIT RETRODECK/g' es-app/src/guis/GuiMenu.cpp
@@ -265,7 +267,7 @@ modules:
     sources:
       - type: git
         url:  https://github.com/anthonycaccese/art-book-next-retropie.git
-        commit: 23932f484a9949313baf80f92b2fbca38a7a8f37
+        commit: 5b2e44ab18007e42b581df57bd5d2a82255b9c14
 
   - name: alekfull-nx-light
     buildsystem: simple
@@ -275,7 +277,7 @@ modules:
     sources:
       - type: git
         url:  https://github.com/anthonycaccese/alekfull-nx-retropie.git
-        commit: 67c8c8dee086bd06bcdc6dc34bb9bef1e1c11be7
+        commit: 8d9aa2a992ab31cbe6dc3dc1c155dfb78e7a9732
 
   - name: retrofix-revisited
     buildsystem: simple
@@ -285,7 +287,17 @@ modules:
     sources:
       - type: git
         url:  https://github.com/anthonycaccese/retrofix-revisited-retropie.git
-        commit: 6e75c9521426e69eb9abcb39d135d97a17d14568
+        commit: 07207d20d2b617af336dcf829ae9fb901cc1ce94
+
+  - name: nso-menu-interpreted
+    buildsystem: simple
+    build-commands:
+      - mkdir -p ${FLATPAK_DEST}/share/emulationstation/themes/nso-menu-interpreted/
+      - mv -f * ${FLATPAK_DEST}/share/emulationstation/themes/nso-menu-interpreted/
+    sources:
+      - type: git
+        url:  https://github.com/anthonycaccese/nso-menu-interpreted-es-de.git
+        commit: f129c2d88e060a6c5d7643de5aeb02a0cc013de3
 
   # ES-DE Themes - END
 
@@ -1095,4 +1107,4 @@ modules:
     sources:
       - type: git
         url: https://github.com/XargonWan/RetroDECK.git
-        branch: main
+        branch: cooker-0.6.4b
