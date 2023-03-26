@@ -632,6 +632,17 @@ check_network_connectivity() {
   fi
 }
 
+check_for_version_update() {
+  # This function will perform a basic online version check and alert the user if there is a new version available.
+
+  local current_version=$(sed -e 's/[\.a-z]//g' <<< $version)
+  local online_version=$(curl --silent "https://api.github.com/repos/XargonWan/$update_repo/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | sed -e 's/[\.a-z]//g')
+
+  if [[ $current_version -le $online_version ]]; then
+    echo "There is a new version online!"
+  fi
+}
+
 validate_input() {
   while IFS="^" read -r input action
   do
