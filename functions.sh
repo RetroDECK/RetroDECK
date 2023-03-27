@@ -635,11 +635,44 @@ check_network_connectivity() {
 check_for_version_update() {
   # This function will perform a basic online version check and alert the user if there is a new version available.
 
-  local current_version=$(sed -e 's/[\.a-z]//g' <<< $version)
-  local online_version=$(curl --silent "https://api.github.com/repos/XargonWan/$update_repo/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | sed -e 's/[\.a-z]//g')
+  local online_version=$(curl --silent "https://api.github.com/repos/XargonWan/$update_repo/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
 
-  if [[ $current_version -le $online_version ]]; then
-    echo "There is a new version online!"
+  if [[ ! "$update_ignore" == "$online_version" ]]
+    if [[ "$update_repo" == "RetroDECK" ]] && [[ $(sed -e 's/[\.a-z]//g' <<< $version) -le $(sed -e 's/[\.a-z]//g' <<< $online_version) ]]; then
+      choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="Ignore this version" \
+        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+        --title "RetroDECK Update Available" \
+        --text="There is a new version of RetroDECK available!\n\nIf you would like to update to the new version now, click \"Yes\". If you would like to skip reminders about this version, click \"Ignore this version\".\nYou will be reminded again at the next version update.\n\nIf you would like to disable these update notifications entirely, disable Online Update Checks in the Configurator.")
+      rc=$? # Capture return code, as "Yes" button has no text value
+      if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
+        if [[ $choice == "Ignore this version" ]]; then
+          set_setting_value $rd_conf "update_ignore" "$online_version" retrodeck # Store version to ignore for future checks
+        fi
+      else # User clicked "Yes"
+        configurator_generic_dialog "The update process may take several minutes.\n\nAfter the update is complete, RetroDECK will close. When you run it again you will be using the latest version."
+        flatpak-spawn --host flatpak update --noninteractive -y net.retrodeck.retrodeck
+        exit 1
+      fi
+    elif [[ "$update_repo" == "RetroDECK-cooker" ]] && [[ ! $current_version == $online_version ]]; then
+      choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="Ignore this version" \
+        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+        --title "RetroDECK Update Available" \
+        --text="There is a more recent build of the RetroDECK cooker branch. Would you like to update to it? If you would like to skip reminders about this version, click \"Ignore this version\". You will be reminded again at the next version update.\n\nIf you would like to disable these update notifications entirely, disable Online Update Checks in the Configurator.")
+      rc=$? # Capture return code, as "Yes" button has no text value
+      if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
+        if [[ $choice == "Ignore this version" ]]; then
+          set_setting_value $rd_conf "update_ignore" "$online_version" retrodeck # Store version to ignore for future checks.
+        fi
+      else # User clicked "Yes"
+        configurator_generic_dialog "The update process may take several minutes.\n\nAfter the update is complete, RetroDECK will close. When you run it again you will be using the latest version."
+        local latest_cooker_download=$(curl --silent https://api.github.com/repos/XargonWan/$update_repo/releases/latest | grep '"browser_download_url":' | sed -E 's/.*"([^"]+)".*/\1/')
+        mkdir -p "$rdhome/RetroDECK_Updates"
+        wget -P "$rdhome/RetroDECK_Updates" $latest_cooker_download
+        flatpak-spawn --host flatpak install --user --bundle --noninteractive -y "$rdhome/RetroDECK_Updates/RetroDECK.flatpak"
+        rm -f "$rdhome/RetroDECK_Updates" # Cleanup old bundles to save space
+        exit 1
+      fi
+    fi
   fi
 }
 
@@ -1897,6 +1930,20 @@ configurator_generic_dialog() {
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Configurator Utility" \
   --text="$1"
+}
+
+configurator_generic_question_dialog() {
+  # This dialog provides a generic dialog for getting a response from a user.
+  # USAGE: $(configurator_generic_question_dialog "title text" "action text")
+  # This function will return a "true" if the user clicks "Yes", and "false" if they click "No".
+  choice=$(zenity --title "RetroDECK - $1" --question --no-wrap --cancel-label="No" --ok-label="Yes" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+  --text="$2")
+  if [[ $? == "0" ]]; then
+    echo "true"
+  else
+    echo "false"
+  fi
 }
 
 configurator_destination_choice_dialog() {

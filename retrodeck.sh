@@ -118,6 +118,11 @@ fi
 
 desktop_mode_warning
 
+# Check if there is a new version of RetroDECK available, if update_check=true in retrodeck.cfg and there is network connectivity available.
+if [[ check_network_connectivity == "true" ]] && [[ $update_check == "true" ]]; then
+  check_for_version_update
+fi
+
 # Normal Startup
 
 start_retrodeck

@@ -286,6 +286,7 @@ configurator_power_user_warning_dialog() {
       configurator_welcome_dialog
     elif [[ $choice == "Never show this again" ]]; then
       set_setting_value $rd_conf "power_user_warning" "false" retrodeck # Store desktop mode warning variable for future checks
+      source $rd_conf
       configurator_power_user_changes_dialog
     fi
   fi
@@ -874,6 +875,62 @@ configurator_move_dialog() {
   fi
 }
 
+configurator_online_update_setting_dialog() {
+  if [[ $(get_setting_value $rd_conf "update_check" retrodeck) == "true" ]]; then
+    zenity --question \
+    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator - RetroDECK Online Update Check" \
+    --text="Online update checks for RetroDECK are currently enabled.\n\nDo you want to disable them?"
+
+    if [ $? == 0 ] # User clicked "Yes"
+    then
+      set_setting_value $rd_conf "update_check" "false" retrodeck
+    else # User clicked "Cancel"
+      configurator_developer_dialog
+    fi
+  else
+    zenity --question \
+    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator - RetroDECK Online Update Check" \
+    --text="Online update checks for RetroDECK are currently disabled.\n\nDo you want to enable them?"
+
+    if [ $? == 0 ] # User clicked "Yes"
+    then
+      set_setting_value $rd_conf "update_check" "true" retrodeck
+    else # User clicked "Cancel"
+      configurator_developer_dialog
+    fi
+  fi
+}
+
+configurator_online_update_setting_dialog() {
+  if [[ $(get_setting_value $rd_conf "update_repo" retrodeck) == "RetroDECK" ]]; then
+    zenity --question \
+    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator - RetroDECK Change Update Branch" \
+    --text="You are currently on the production branch of RetroDECK updates. Would you like to switch to the cooker branch?\n\nAfter installing a cooker build, you may need to remove the \"stable\" branch install of RetroDECK to avoid overlap."
+
+    if [ $? == 0 ] # User clicked "Yes"
+    then
+      set_setting_value $rd_conf "update_repo" "RetroDECK-cooker" retrodeck
+    else # User clicked "Cancel"
+      configurator_developer_dialog
+    fi
+  else
+    zenity --question \
+    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator - RetroDECK Change Update Branch" \
+    --text="You are currently on the cooker branch of RetroDECK updates. Would you like to switch to the production branch?\n\n"
+
+    if [ $? == 0 ] # User clicked "Yes"
+    then
+      set_setting_value $rd_conf "update_repo" "RetroDECK" retrodeck
+    else # User clicked "Cancel"
+      configurator_developer_dialog
+    fi
+  fi
+}
+
 configurator_retrodeck_multiuser_dialog() {
   if [[ $(get_setting_value $rd_conf "multi_user_mode" retrodeck) == "true" ]]; then
     zenity --question \
@@ -906,11 +963,21 @@ configurator_developer_dialog() {
   choice=$(zenity --list --title="RetroDECK Configurator Utility - Change Options" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
-  "Change Multi-user mode" "Enable or disable multi-user support" )
+  "Change Multi-user mode" "Enable or disable multi-user support" \
+  "Change Update Channel" "Change between normal and cooker builds" \
+  "Change Update Check Setting" "Enable or disable online checks for new versions of RetroDECK" )
 
   case $choice in
 
   "Change Multi-user mode" )
+    configurator_retrodeck_multiuser_dialog
+  ;;
+
+  "Change Update Channel" )
+    configurator_retrodeck_multiuser_dialog
+  ;;
+
+  "Change Update Check Setting" )
     configurator_retrodeck_multiuser_dialog
   ;;
 
