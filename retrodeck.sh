@@ -18,7 +18,8 @@ Arguments:
     -v, --version                 Print RetroDECK version
     --info-msg                    Print paths and config informations
     --configurator                Starts the RetroDECK Configurator
-    --compress <file>             Compresses target file to .chd format. Supports .cue, .iso and .gdi formats
+    --compress-one <file>         Compresses target file to a compatible format
+    --compress-all <format>       Compresses all supported games into compatible format. Available formats are \"chd\", \"zip\", \"rvz\" and \"all\".
     --reset-emulator <emulator>   Reset one or more emulator configs to the default values
     --reset-retrodeck             Starts the initial RetroDECK installer (backup your data first!)
 
@@ -39,9 +40,12 @@ https://retrodeck.net
       cat $rd_conf
       exit
       ;;
-    --compress*)
-      cli_compress_file "$2"
+    --compress-one*)
+      cli_compress_single_game "$2"
       exit
+      ;;
+    --compress-all*)
+      cli_compress_all_games "$2"
       ;;
     --configurator*)
       sh /app/tools/configurator.sh

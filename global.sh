@@ -12,6 +12,7 @@ rd_defaults="$emuconfigs/defaults/retrodeck/retrodeck.cfg"                      
 rd_update_patch="/var/config/retrodeck/rd_update.patch"                                                       # A static location for the temporary patch file used during retrodeck.cfg updates
 bios_checklist="$emuconfigs/defaults/retrodeck/bios_checklist.cfg"                                            # A config file listing BIOS file information that can be verified
 compression_targets="$emuconfigs/defaults/retrodeck/compression_targets.cfg"                                  # A config file containing supported compression types per system
+zip_compressable_extensions="$emuconfigs/defaults/retrodeck/zip_compressable_extensions.cfg"                  # A config file containing every file extension that is allowed to be compressed to .zip format, because there are a lot!
 easter_egg_checklist="$emuconfigs/defaults/retrodeck/easter_egg_checklist.cfg"                                # A config file listing days and times when special splash screens should show up
 input_validation="$emuconfigs/defaults/retrodeck/input_validation.cfg"                                        # List of valid CLI inputs
 splashscreen_dir="/var/config/emulationstation/.emulationstation/resources/graphics/extra-splashes"           # The default location of extra splash screens
