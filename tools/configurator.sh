@@ -982,7 +982,7 @@ configurator_online_update_setting_dialog() {
   fi
 }
 
-configurator_online_update_setting_dialog() {
+configurator_online_update_channel_dialog() {
   if [[ $(get_setting_value $rd_conf "update_repo" retrodeck) == "RetroDECK" ]]; then
     zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -999,7 +999,7 @@ configurator_online_update_setting_dialog() {
     zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - RetroDECK Change Update Branch" \
-    --text="You are currently on the cooker branch of RetroDECK updates. Would you like to switch to the production branch?\n\n"
+    --text="You are currently on the cooker branch of RetroDECK updates. Would you like to switch to the production branch?\n\nAfter installing a production build, you may need to remove the \"cooker\" branch install of RetroDECK to avoid overlap."
 
     if [ $? == 0 ] # User clicked "Yes"
     then
@@ -1029,10 +1029,10 @@ configurator_retrodeck_multiuser_dialog() {
     --title "RetroDECK Configurator - RetroDECK Multi-user support" \
     --text="Multi-user support is current disabled. Do you want to enable it?\n\nThe current users saves and states will be backed up and then moved to the \"retrodeck/multi-user-data\" folder.\nAdditional users will automatically be stored in their own folder here as they are added."
 
-    if [ $? == 0 ] # User clicked "Yes"
+    if [ $? == 0 ]
     then
       multi_user_enable_multi_user_mode
-    else # User clicked "Cancel"
+    else
       configurator_developer_dialog
     fi
   fi
@@ -1053,11 +1053,11 @@ configurator_developer_dialog() {
   ;;
 
   "Change Update Channel" )
-    configurator_retrodeck_multiuser_dialog
+    configurator_online_update_channel_dialog
   ;;
 
   "Change Update Check Setting" )
-    configurator_retrodeck_multiuser_dialog
+    configurator_online_update_setting_dialog
   ;;
 
   "" ) # No selection made or Back button clicked

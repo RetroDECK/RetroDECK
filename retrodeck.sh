@@ -118,6 +118,10 @@ else
   fi
 fi
 
+if [[ $multi_user_mode == "true" ]]; then
+  multi_user_determine_current_user
+fi
+
 # Check if running in Desktop mode and warn if true, unless desktop_mode_warning=false in retrodeck.cfg
 
 desktop_mode_warning
