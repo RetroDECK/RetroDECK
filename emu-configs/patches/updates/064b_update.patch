@@ -1,0 +1,6 @@
+# Primehack Changes: Assign audio output, change AR to "Force 16:9"
+change^DSP^Backend^Pulse^primehack^$primehackconf
+change^Settings^AspectRatio^1^primehack^$primehackgfxconf
+# Update "ask on quit" and "save on quit" on supported emulators (PCSX2, Duckstation)
+change^UI^ConfirmShutdown^false^pcsx2^$pcsx2qtconf
+change^Main^ConfirmPowerOff^false^duckstation^$duckstationconf
