@@ -259,41 +259,41 @@ modules:
 
   # ES-DE Themes - START
 
-  - name: art-book-next
+  - name: art-book-next-es-de
     buildsystem: simple
     build-commands:
-      - mkdir -p ${FLATPAK_DEST}/share/emulationstation/themes/art-book-next/
-      - mv -f * ${FLATPAK_DEST}/share/emulationstation/themes/art-book-next/
+      - mkdir -p ${FLATPAK_DEST}/share/emulationstation/themes/art-book-next-es-de/
+      - mv -f * ${FLATPAK_DEST}/share/emulationstation/themes/art-book-next-es-de/
     sources:
       - type: git
-        url:  https://github.com/anthonycaccese/art-book-next-retropie.git
-        commit: 5b2e44ab18007e42b581df57bd5d2a82255b9c14
+        url:  https://github.com/anthonycaccese/art-book-next-es-de.git
+        commit: a0dc0cccaa3f1475feb58e551fe732d982e161c0
 
-  - name: alekfull-nx-light
+  - name: alekfull-nx-es-de
     buildsystem: simple
     build-commands:
-      - mkdir -p ${FLATPAK_DEST}/share/emulationstation/themes/alekfull-nx-light/
-      - mv -f * ${FLATPAK_DEST}/share/emulationstation/themes/alekfull-nx-light/
+      - mkdir -p ${FLATPAK_DEST}/share/emulationstation/themes/alekfull-nx-es-de/
+      - mv -f * ${FLATPAK_DEST}/share/emulationstation/themes/alekfull-nx-es-de/
     sources:
       - type: git
-        url:  https://github.com/anthonycaccese/alekfull-nx-retropie.git
-        commit: 8d9aa2a992ab31cbe6dc3dc1c155dfb78e7a9732
+        url:  https://github.com/anthonycaccese/alekfull-nx-es-de.git
+        commit: 5011e5dca75663ff18602f3af9d17e9e880880ef
 
-  - name: retrofix-revisited
+  - name: retrofix-revisited-es-de
     buildsystem: simple
     build-commands:
-      - mkdir -p ${FLATPAK_DEST}/share/emulationstation/themes/retrofix-revisited/
-      - mv -f * ${FLATPAK_DEST}/share/emulationstation/themes/retrofix-revisited/
+      - mkdir -p ${FLATPAK_DEST}/share/emulationstation/themes/retrofix-revisited-es-de/
+      - mv -f * ${FLATPAK_DEST}/share/emulationstation/themes/retrofix-revisited-es-de/
     sources:
       - type: git
-        url:  https://github.com/anthonycaccese/retrofix-revisited-retropie.git
-        commit: 07207d20d2b617af336dcf829ae9fb901cc1ce94
+        url:  https://github.com/anthonycaccese/retrofix-revisited-es-de.git
+        commit: 23b80225078d2a3723039a8e94b6147c84065028
 
-  - name: nso-menu-interpreted
+  - name: nso-menu-interpreted-es-de
     buildsystem: simple
     build-commands:
-      - mkdir -p ${FLATPAK_DEST}/share/emulationstation/themes/nso-menu-interpreted/
-      - mv -f * ${FLATPAK_DEST}/share/emulationstation/themes/nso-menu-interpreted/
+      - mkdir -p ${FLATPAK_DEST}/share/emulationstation/themes/nso-menu-interpreted-es-de/
+      - mv -f * ${FLATPAK_DEST}/share/emulationstation/themes/nso-menu-interpreted-es-de/
     sources:
       - type: git
         url:  https://github.com/anthonycaccese/nso-menu-interpreted-es-de.git
