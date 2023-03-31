@@ -649,8 +649,12 @@ do
     eval set_setting_value $3 "$setting_name" "$setting_value" $system_name $current_section
   ;;
 
+  *"#"* )
+	  # Comment line in patch file
+	;;
+
 	* )
-	  echo "Config file malformed"
+	  echo "Config line malformed: $action"
 	;;
 
   esac
@@ -692,8 +696,12 @@ do
     eval set_setting_value "$config_file" "$setting_name" "$setting_value" $system_name $current_section
   ;;
 
+  *"#"* )
+	  # Comment line in patch file
+	;;
+
 	* )
-	  echo "Config file malformed"
+	  echo "Config line malformed: $action"
 	;;
 
   esac
@@ -1866,11 +1874,14 @@ finit() {
 
   mkdir -pv $roms_folder
 
-  zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --text="RetroDECK will now install the needed files.\nPlease wait up to one minute,\nanother message will notify when the process will be finished.\n\nPress OK to continue."
+  zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
+  --text="RetroDECK will now install the needed files, which can take up to one minute.\nRetroDECK will start once the process is completed.\n\nPress OK to continue."
 
+  (
   # Recreating the folder
-  rm -rfv /var/config/emulationstation/
-  mkdir -pv /var/config/emulationstation/
+  rm -rf /var/config/emulationstation/
+  mkdir -p /var/config/emulationstation/
 
   # Initializing ES-DE
   # TODO: after the next update of ES-DE this will not be needed - let's test it
@@ -1902,7 +1913,6 @@ finit() {
   dir_prep "$roms_folder/pico8" "$bios_folder/pico-8/carts" # Symlink default game location to RD roms for cleanliness (this location is overridden anyway by the --root_path launch argument anyway)
   dir_prep "$saves_folder/pico-8" "$bios_folder/pico-8/cdata"  # PICO-8 saves folder
 
-  (
   ra_init
   standalones_init
   ) |
@@ -1912,12 +1922,6 @@ finit() {
   --text="RetroDECK is finishing the initial setup process, please wait."
 
   create_lock
-
-  zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-  --title "RetroDECK" \
-  --text="Installation completed.\nPlease put your roms in:\n\n$roms_folder\n\nand your bioses in\n\n$bios_folder\n\nThen start the program again.\nIf you wish to change the roms location, you may use the tool located the tools section of RetroDECK.\n\nIMPORTANT NOTES:\n- RetroDECK must be manually added and launched from your Steam Library in order to work correctly.\n- It's recommended to use the 'RetroDECK Offical Controller Config' from Steam (under community layouts).\n- It's suggested to use BoilR to automatically add the SteamGridDB images to Steam (this will be automated soon).\nhttps://github.com/PhilipK/BoilR"
-  # TODO: Replace the stuff above with BoilR code when ready
 }
 
 save_migration() {
