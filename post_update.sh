@@ -200,7 +200,7 @@ post_update() {
     dir_prep "$bios_folder/pico-8/cdata" "$saves_folder/pico-8" # PICO-8 saves folder
   fi
   if [[ $prev_version -le "063" ]]; then
-    # In version 0.6.2b, the following changes were made that required config file updates/reset:
+    # In version 0.6.3b, the following changes were made that required config file updates/reset:
     # - Put Dolphin and Primehack save states in different folders inside $rd_home/states
     # - Fix symlink to hard-coded PICO-8 config folder (dir_prep doesn't like ~)
     # - Overwrite Citra and Yuzu configs, as controller mapping was broken due to emulator updates.
@@ -220,6 +220,14 @@ post_update() {
 
     # Remove unneeded tools folder, as location has changed to RO space
     rm -rfv /var/config/retrodeck/tools/
+  fi
+  if [[ $prev_version -le "064" ]]; then
+    # In version 0.6.4b, the following changes were made:
+    # Changed settings in Primehack: The audio output was not selected by default, default AR was also incorrect.
+    # Changed settings in Duckstation and PCSX2: The "ask on exit" was disabled and "save on exit" was enabled.
+    # The default configs have been updated for new installs and resets, a patch was created to address existing installs.
+
+    deploy_multi_patch "emu-configs/patches/updates/064b_update.patch"
   fi
 
   # The following commands are run every time.
