@@ -498,8 +498,8 @@ modules:
       - ln -s "${FLATPAK_DEST}/yuzu/usr/bin/yuzu" "${FLATPAK_DEST}/bin/yuzu"
     sources:
       - type: file
-        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1369/yuzu-mainline-20230312-54c359d1e.AppImage
-        sha256: 219874f72ea09856c8f1349d7bf744ecbd2823a469bd29f036b386924f5c5a97
+        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1388/yuzu-mainline-20230330-03db6543e.AppImage
+        sha256: aca7c691f74b0cf74c1801d9960266bc1ce818bca9c242945b95545d22b04d80
 
   # Yuzu - END
 
@@ -532,8 +532,8 @@ modules:
     sources:
       - type: archive
         url: >-
-          https://github.com/citra-emu/citra-nightly/releases/download/nightly-1854/citra-unified-source-20230312-2cbf6fb.tar.xz
-        sha256: 018cb7dce3aa29a548a6e4cbad65d97babd98d2cdd1a4848a7c95c117f92fdf5
+          https://github.com/citra-emu/citra-nightly/releases/download/nightly-1872/citra-unified-source-20230330-f96047f.tar.xz
+        sha256: 3c49b691d46a1253df7477d1e9d771b7d15b967459851c096150e9952e160bfa
         x-checker-data:
           type: json
           url: https://api.github.com/repos/citra-emu/citra-nightly/releases/latest
@@ -562,8 +562,8 @@ modules:
       - ln -s "${FLATPAK_DEST}/pcsx2-qt/usr/bin/pcsx2-qt" "${FLATPAK_DEST}/bin/pcsx2-qt"
     sources:
       - type: file
-        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.4225/pcsx2-v1.7.4225-linux-AppImage-64bit-Qt.AppImage
-        sha256: e8ed326851941b212193c2bd193ca87efdcc70c18971f45749273a32893fec68
+        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.4303/pcsx2-v1.7.4303-linux-AppImage-64bit-Qt.AppImage
+        sha256: 5680bcc510f0898e6078c60ef2ef1d987b8414e1296c5ff88bd87933e4a314b3
 
   # PCSX2 - END
 
@@ -747,8 +747,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/xemu-project/xemu.git
-        tag: v0.7.85
-        commit: 065c74a00fe402f65147e9b0d1a1eeac1b4b609f
+        tag: v0.7.86
+        commit: 4a99fd0f1855fc52e15885812abd3ee4bb2b3847
         x-checker-data:
           type: json
           url: https://api.github.com/repos/xemu-project/xemu/releases/latest
@@ -829,10 +829,12 @@ modules:
     sources:
       - type: git
         url: https://github.com/RPCS3/rpcs3.git
-        commit: cf5346c263111760752cabb94767c07c501207c4
+        branch: master
+        commit: 0c051a83a70ff548b750a92489350cfbb0c1881c
       - type: git
         url: https://github.com/intel/ittapi.git
-        commit: 2de8a23f6130036dcd4d1b78d05df3187951d298
+        branch: master
+        commit: 4a3762fbc517475bfb0586efc513e51c164108c9
         dest: ittapi/ittapi
         disable-shallow-clone: true
       # remove git-lfs hook
