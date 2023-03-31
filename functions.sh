@@ -224,14 +224,14 @@ desktop_mode_warning() {
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Desktop Mode Warning" \
       --text="You appear to be running RetroDECK in the Steam Deck's Desktop mode!\n\nSome functions of RetroDECK may not work properly in Desktop mode, such as the Steam Deck's normal controls.\n\nRetroDECK is best enjoyed in Game mode!\n\nDo you still want to proceed?")
-    fi
-  fi
-  rc=$? # Capture return code, as "Yes" button has no text value
-  if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
-    if [[ $choice == "No" ]]; then
-      exit 1
-    elif [[ $choice == "Never show this again" ]]; then
-      set_setting_value $rd_conf "desktop_mode_warning" "false" retrodeck # Store desktop mode warning variable for future checks
+      rc=$? # Capture return code, as "Yes" button has no text value
+      if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
+        if [[ $choice == "No" ]]; then
+          exit 1
+        elif [[ $choice == "Never show this again" ]]; then
+          set_setting_value $rd_conf "desktop_mode_warning" "false" retrodeck # Store desktop mode warning variable for future checks
+        fi
+      fi
     fi
   fi
 }
@@ -248,38 +248,38 @@ set_setting_value() {
 
     "retrodeck" | "citra" | "melonds" | "yuzu" )
       if [[ -z $current_section_name ]]; then
-        sed -i 's^'"$setting_name_to_change"'=.*^'"$setting_name_to_change"'='"$setting_value_to_change"'^' $1
+        sed -i 's^\^'"$setting_name_to_change"'=.*^'"$setting_name_to_change"'='"$setting_value_to_change"'^' $1
       else
-        sed -i '\^\['"$current_section_name"'\]^,\^'"$setting_name_to_change"'.*^s^'"$setting_name_to_change"'=.*^'"$setting_name_to_change"'='"$setting_value_to_change"'^' $1
+        sed -i '\^\['"$current_section_name"'\]^,\^\^'"$setting_name_to_change"'.*^s^\^'"$setting_name_to_change"'=.*^'"$setting_name_to_change"'='"$setting_value_to_change"'^' $1
       fi
       ;;
 
     "retroarch" )
       if [[ -z $current_section_name ]]; then
-        sed -i 's^'"$setting_name_to_change"' = \".*\"^'"$setting_name_to_change"' = \"'"$setting_value_to_change"'\"^' $1
+        sed -i 's^\^'"$setting_name_to_change"' = \".*\"^'"$setting_name_to_change"' = \"'"$setting_value_to_change"'\"^' $1
       else
-        sed -i '\^\['"$current_section_name"'\]^,\^'"$setting_name_to_change"'.*^s^'"$setting_name_to_change"' = \".*\"^'"$setting_name_to_change"' = \"'"$setting_value_to_change"'\"^' $1
+        sed -i '\^\['"$current_section_name"'\]^,\^\^'"$setting_name_to_change"'.*^s^\^'"$setting_name_to_change"' = \".*\"^'"$setting_name_to_change"' = \"'"$setting_value_to_change"'\"^' $1
       fi
       ;;
 
-    "dolphin" | "duckstation" | "pcsx2" | "ppsspp" | "xemu" )
+    "dolphin" | "duckstation" | "pcsx2" | "ppsspp" | "primehack" | "xemu" )
       if [[ -z $current_section_name ]]; then
-        sed -i 's^'"$setting_name_to_change"' =.*^'"$setting_name_to_change"' = '"$setting_value_to_change"'^' $1
+        sed -i 's^\^'"$setting_name_to_change"' =.*^'"$setting_name_to_change"' = '"$setting_value_to_change"'^' $1
       else
-        sed -i '\^\['"$current_section_name"'\]^,\^'"$setting_name_to_change"'.*^s^'"$setting_name_to_change"' =.*^'"$setting_name_to_change"' = '"$setting_value_to_change"'^' $1
+        sed -i '\^\['"$current_section_name"'\]^,\^\^'"$setting_name_to_change"'.*^s^\^'"$setting_name_to_change"' =.*^'"$setting_name_to_change"' = '"$setting_value_to_change"'^' $1
       fi
       ;;
 
     "rpcs3" ) # This does not currently work for settings with a $ in them
       if [[ -z $current_section_name ]]; then
-        sed -i 's^'"$setting_name_to_change"': .*^'"$setting_name_to_change"': '"$setting_value_to_change"'^' $1
+        sed -i 's^\^'"$setting_name_to_change"': .*^'"$setting_name_to_change"': '"$setting_value_to_change"'^' $1
       else
-        sed -i '\^\['"$current_section_name"'\]^,\^'"$setting_name_to_change"'.*^s^'"$setting_name_to_change"': .*^'"$setting_name_to_change"': '"$setting_value_to_change"'^' $1
+        sed -i '\^\['"$current_section_name"'\]^,\^\^'"$setting_name_to_change"'.*^s^\^'"$setting_name_to_change"': .*^'"$setting_name_to_change"': '"$setting_value_to_change"'^' $1
       fi
       ;;
 
     "emulationstation" )
-      sed -i "s%$setting_name_to_change\" \" value=\".*\"%$setting_name_to_change\" \" value=\"$setting_value_to_change\"" $1
+      sed -i "s%^$setting_name_to_change\" \" value=\".*\"%$setting_name_to_change\" \" value=\"$setting_value_to_change\"" $1
       ;;
 
   esac
@@ -321,7 +321,7 @@ get_setting_value() {
     if [[ -z $current_section_name ]]; then
       echo $(grep -o -P "(?<=^$current_setting_name=).*" $1)
     else
-      sed -n '\^\['"$current_section_name"'\]^,\^'"$current_setting_name"'^{ \^\['"$current_section_name"'\]^! { \^'"$current_setting_name"'^ p } }' $1 | grep -o -P "(?<=^$current_setting_name=).*"
+      sed -n '\^\['"$current_section_name"'\]^,\^\^'"$current_setting_name"'^{ \^\['"$current_section_name"'\]^! { \^\^'"$current_setting_name"'^ p } }' $1 | grep -o -P "(?<=^$current_setting_name=).*"
     fi
   ;;
 
@@ -329,15 +329,15 @@ get_setting_value() {
     if [[ -z $current_section_name ]]; then
       echo $(grep -o -P "(?<=^$current_setting_name = \").*(?=\")" $1)
     else
-      sed -n '\^\['"$current_section_name"'\]^,\^'"$current_setting_name"'^{ \^\['"$current_section_name"'\]^! { \^'"$current_setting_name"'^ p } }' $1 | grep -o -P "(?<=^$current_setting_name = \").*(?=\")"
+      sed -n '\^\['"$current_section_name"'\]^,\^\^'"$current_setting_name"'^{ \^\['"$current_section_name"'\]^! { \^\^'"$current_setting_name"'^ p } }' $1 | grep -o -P "(?<=^$current_setting_name = \").*(?=\")"
     fi
   ;;
 
-  "dolphin" | "duckstation" | "pcsx2" | "ppsspp" | "xemu" ) # For files with this syntax - setting_name = setting_value
+  "dolphin" | "duckstation" | "pcsx2" | "ppsspp" | "primehack" | "xemu" ) # For files with this syntax - setting_name = setting_value
     if [[ -z $current_section_name ]]; then
       echo $(grep -o -P "(?<=^$current_setting_name = ).*" $1)
     else
-      sed -n '\^\['"$current_section_name"'\]^,\^'"$current_setting_name"'^{ \^\['"$current_section_name"'\]^! { \^'"$current_setting_name"'^ p } }' $1 | grep -o -P "(?<=^$current_setting_name = ).*"
+      sed -n '\^\['"$current_section_name"'\]^,\^\^'"$current_setting_name"'^{ \^\['"$current_section_name"'\]^! { \^\^'"$current_setting_name"'^ p } }' $1 | grep -o -P "(?<=^$current_setting_name = ).*"
     fi
   ;;
 
@@ -345,7 +345,7 @@ get_setting_value() {
     if [[ -z $current_section_name ]]; then
       echo $(grep -o -P "(?<=$current_setting_name: ).*" $1)
     else
-      sed -n '\^\['"$current_section_name"'\]^,\^'"$current_setting_name"'^{ \^\['"$current_section_name"'\]^! { \^'"$current_setting_name"'^ p } }' $1 | grep -o -P "(?<=$current_setting_name: ).*"
+      sed -n '\^\['"$current_section_name"'\]^,\^\^'"$current_setting_name"'^{ \^\['"$current_section_name"'\]^! { \^\^'"$current_setting_name"'^ p } }' $1 | grep -o -P "(?<=$current_setting_name: ).*"
     fi
   ;;
 
@@ -380,7 +380,7 @@ disable_setting() {
   # This function will add a '#' to the beginning of a defined setting line, disabling it.
   # USAGE: disable_setting $setting_file $setting_line $system $section (optional)
 
-  local current_setting_line"$2"
+  local current_setting_line="$2"
   local current_section_name="$4"
 
   case $3 in
@@ -400,7 +400,7 @@ enable_setting() {
   # This function will remove a '#' to the beginning of a defined setting line, enabling it.
   # USAGE: enable_setting $setting_file $setting_line $system $section (optional)
 
-  local current_setting_line"$2"
+  local current_setting_line="$2"
   local current_section_name="$4"
 
   case $3 in
@@ -545,31 +545,35 @@ do
   case $action in
 
 	"disable_file" )
-    disable_file $setting_name
+    eval disable_file $setting_name
 	;;
 
 	"enable_file" )
-    enable_file $setting_name
+    eval enable_file $setting_name
 	;;
 
 	"add_setting" )
-    add_setting $3 "$setting_name" $system_name $current_section
+    eval add_setting $3 "$setting_name" $system_name $current_section
 	;;
 
 	"disable_setting" )
-    disable_setting $3 "$setting_name" $system_name $current_section
+    eval disable_setting $3 "$setting_name" $system_name $current_section
 	;;
 
 	"enable_setting" )
-    enable_setting $3 "$setting_name" $system_name $current_section
+    eval enable_setting $3 "$setting_name" $system_name $current_section
 	;;
 
 	"change" )
-    set_setting_value $3 "$setting_name" "$setting_value" $system_name $current_section
+    eval set_setting_value $3 "$setting_name" "$setting_value" $system_name $current_section
   ;;
 
+  *"#"* )
+	  # Comment line in patch file
+	;;
+
 	* )
-	  echo "Config file malformed"
+	  echo "Config line malformed: $action"
 	;;
 
   esac
@@ -588,31 +592,35 @@ do
   case $action in
 
 	"disable_file" )
-    disable_file $config_file
+    eval disable_file $config_file
 	;;
 
 	"enable_file" )
-    enable_file $config_file
+    eval enable_file $config_file
 	;;
 
 	"add_setting" )
-    add_setting $config_file "$setting_name" $system_name $current_section
+    eval add_setting $config_file "$setting_name" $system_name $current_section
 	;;
 
 	"disable_setting" )
-    disable_setting $config_file "$setting_name" $system_name $current_section
+    eval disable_setting $config_file "$setting_name" $system_name $current_section
 	;;
 
 	"enable_setting" )
-    enable_setting $config_file "$setting_name" $system_name $current_section
+    eval enable_setting $config_file "$setting_name" $system_name $current_section
 	;;
 
 	"change" )
-    set_setting_value $config_file "$setting_name" "$setting_value" $system_name $current_section
+    eval set_setting_value $config_file "$setting_name" "$setting_value" $system_name $current_section
   ;;
 
+  *"#"* )
+	  # Comment line in patch file
+	;;
+
 	* )
-	  echo "Config file malformed"
+	  echo "Config line malformed: $action"
 	;;
 
   esac
