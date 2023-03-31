@@ -1044,7 +1044,8 @@ configurator_developer_dialog() {
   --column="Choice" --column="Action" \
   "Change Multi-user mode" "Enable or disable multi-user support" \
   "Change Update Channel" "Change between normal and cooker builds" \
-  "Change Update Check Setting" "Enable or disable online checks for new versions of RetroDECK" )
+  "Change Update Check Setting" "Enable or disable online checks for new versions of RetroDECK" \
+  "Browse the Wiki" "Browse the RetroDECK wiki online" )
 
   case $choice in
 
@@ -1058,6 +1059,10 @@ configurator_developer_dialog() {
 
   "Change Update Check Setting" )
     configurator_online_update_setting_dialog
+  ;;
+
+  "Browse the Wiki" )
+    xdg-open "https://github.com/XargonWan/RetroDECK/wiki"
   ;;
 
   "" ) # No selection made or Back button clicked
