@@ -829,11 +829,9 @@ modules:
     sources:
       - type: git
         url: https://github.com/RPCS3/rpcs3.git
-        branch: master
-        commit: 0c051a83a70ff548b750a92489350cfbb0c1881c
+        commit: 3e556c710b3256d23b9e524e44d45ba8bbf63814
       - type: git
         url: https://github.com/intel/ittapi.git
-        branch: master
         commit: 4a3762fbc517475bfb0586efc513e51c164108c9
         dest: ittapi/ittapi
         disable-shallow-clone: true
