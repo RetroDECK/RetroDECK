@@ -104,7 +104,31 @@ then
   if [ "$hard_version" != "$version" ];
   then
     echo "Config file's version is $version but the actual version is $hard_version"
-    post_update       # Executing post update script
+    
+    if grep -qF "cooker" <<< $hard_version; then # If newly-installed version is a "cooker" build
+      cooker_base_version=$(echo $hard_version | cut -d'-' -f2 | sed 's/\([0-9]\.[0-9][a-z]\).*/\1/')
+      choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Upgrade" --extra-button="Don't Upgrade" --extra-button="Fresh Install" \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Cooker Upgrade" \
+      --text="You appear to be upgrading to a \"cooker\" build of RetroDECK.\n\nWould you like to perform the standard post-update process, skip the post-update process or remove ALL existing RetroDECK data to start from a fresh install?")
+      rc=$? # Capture return code, as "Yes" button has no text value
+      if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
+        if [[ $choice == "Don't Upgrade" ]]; then # If user wants to bypass the post_update.sh process this time.
+          echo "Skipping upgrade process for cooker build, updating stored version in retrodeck.cfg"
+          set_setting_value $rd_conf "version" "$hard_version" retrodeck # Set version of currently running RetroDECK to updated retrodeck.cfg
+        elif [[ $choice == "Fresh Install" ]]; then # Remove all RetroDECK data and start a fresh install
+          echo "Removing RetroDECK data and starting fresh"
+          rm -rf /var
+          rm -rf "$HOME/retrodeck"
+          finit
+        fi
+      else
+        echo "Performing normal upgrade process for version" $cooker_base_version
+        version=$cooker_base_version # Temporarily assign cooker base version to $version so update script can read it properly.
+        post_update
+      fi
+    else # If newly-installed version is a normal build.
+      post_update       # Executing post update script
   fi
 # Else, LOCKFILE IS NOT EXISTING (WAS REMOVED)
 # if the lock file doesn't exist at all means that it's a fresh install or a triggered reset
