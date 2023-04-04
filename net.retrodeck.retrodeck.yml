@@ -66,11 +66,11 @@ modules:
   # The version number is hardcoded in /app/retrodeck/version
   #
   # UPDATE STEPS FOR MAIN:
-  # [X] Update the VERSION variable
-  # [X] Update the appdata.xml with the version number and notes
-  # [X] change branch into main in version-initialization (first one)
-  # [X] change branch into main in retrodeck module (last one)
-  # [X] if header (before modules) was edited, edit it even in flathub.yml
+  # [ ] Update the VERSION variable
+  # [ ] Update the appdata.xml with the version number and notes
+  # [ ] change branch into main in version-initialization (first one)
+  # [ ] change branch into main in retrodeck module (last one)
+  # [ ] if header (before modules) was edited, edit it even in flathub.yml
   #
   - name: version-initialization
     buildsystem: simple
@@ -78,7 +78,7 @@ modules:
       - |
         git checkout ${GITHUB_REF_NAME}
         mkdir -p ${FLATPAK_DEST}/retrodeck/
-        VERSION="0.6.3b"
+        VERSION="cooker-0.6.4b"
         if [[ $VERSION == *"cooker"* ]];
         then
           VERSION="$VERSION-[$(git rev-parse --short HEAD)]"
@@ -88,7 +88,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/XargonWan/RetroDECK.git
-        branch: main
+        branch: cooker-0.6.4b
 
   - name: xmlstarlet
     config-opts:
@@ -239,13 +239,15 @@ modules:
   # But we don't include them 1:1 as RetroDECK got some specific configs in some cases
   - name: emulationstation-de
     buildsystem: cmake-ninja
+    config-opts:
+      - DRETRODECK=on
     cleanup:
       - es-app
       - es-core
     sources:
       - type: git
         url: https://gitlab.com/es-de/emulationstation-de
-        branch: f8d782f1f3b1fba8a119b793edd01f37e0258953
+        branch: 608d8a3c09abc5db398cdadc09e18fd2dfbaf570
       - type: shell
         commands:
           - sed -i 's/QUIT EMULATIONSTATION/QUIT RETRODECK/g' es-app/src/guis/GuiMenu.cpp
@@ -257,35 +259,45 @@ modules:
 
   # ES-DE Themes - START
 
-  - name: art-book-next
+  - name: art-book-next-es-de
     buildsystem: simple
     build-commands:
-      - mkdir -p ${FLATPAK_DEST}/share/emulationstation/themes/art-book-next/
-      - mv -f * ${FLATPAK_DEST}/share/emulationstation/themes/art-book-next/
+      - mkdir -p ${FLATPAK_DEST}/share/emulationstation/themes/art-book-next-es-de/
+      - mv -f * ${FLATPAK_DEST}/share/emulationstation/themes/art-book-next-es-de/
     sources:
       - type: git
-        url:  https://github.com/anthonycaccese/art-book-next-retropie.git
-        commit: 23932f484a9949313baf80f92b2fbca38a7a8f37
+        url:  https://github.com/anthonycaccese/art-book-next-es-de.git
+        commit: a0dc0cccaa3f1475feb58e551fe732d982e161c0
 
-  - name: alekfull-nx-light
+  - name: alekfull-nx-es-de
     buildsystem: simple
     build-commands:
-      - mkdir -p ${FLATPAK_DEST}/share/emulationstation/themes/alekfull-nx-light/
-      - mv -f * ${FLATPAK_DEST}/share/emulationstation/themes/alekfull-nx-light/
+      - mkdir -p ${FLATPAK_DEST}/share/emulationstation/themes/alekfull-nx-es-de/
+      - mv -f * ${FLATPAK_DEST}/share/emulationstation/themes/alekfull-nx-es-de/
     sources:
       - type: git
-        url:  https://github.com/anthonycaccese/alekfull-nx-retropie.git
-        commit: 67c8c8dee086bd06bcdc6dc34bb9bef1e1c11be7
+        url:  https://github.com/anthonycaccese/alekfull-nx-es-de.git
+        commit: 5011e5dca75663ff18602f3af9d17e9e880880ef
 
-  - name: retrofix-revisited
+  - name: retrofix-revisited-es-de
     buildsystem: simple
     build-commands:
-      - mkdir -p ${FLATPAK_DEST}/share/emulationstation/themes/retrofix-revisited/
-      - mv -f * ${FLATPAK_DEST}/share/emulationstation/themes/retrofix-revisited/
+      - mkdir -p ${FLATPAK_DEST}/share/emulationstation/themes/retrofix-revisited-es-de/
+      - mv -f * ${FLATPAK_DEST}/share/emulationstation/themes/retrofix-revisited-es-de/
     sources:
       - type: git
-        url:  https://github.com/anthonycaccese/retrofix-revisited-retropie.git
-        commit: 6e75c9521426e69eb9abcb39d135d97a17d14568
+        url:  https://github.com/anthonycaccese/retrofix-revisited-es-de.git
+        commit: 23b80225078d2a3723039a8e94b6147c84065028
+
+  - name: nso-menu-interpreted-es-de
+    buildsystem: simple
+    build-commands:
+      - mkdir -p ${FLATPAK_DEST}/share/emulationstation/themes/nso-menu-interpreted-es-de/
+      - mv -f * ${FLATPAK_DEST}/share/emulationstation/themes/nso-menu-interpreted-es-de/
+    sources:
+      - type: git
+        url:  https://github.com/anthonycaccese/nso-menu-interpreted-es-de.git
+        commit: f129c2d88e060a6c5d7643de5aeb02a0cc013de3
 
   # ES-DE Themes - END
 
@@ -486,8 +498,8 @@ modules:
       - ln -s "${FLATPAK_DEST}/yuzu/usr/bin/yuzu" "${FLATPAK_DEST}/bin/yuzu"
     sources:
       - type: file
-        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1369/yuzu-mainline-20230312-54c359d1e.AppImage
-        sha256: 219874f72ea09856c8f1349d7bf744ecbd2823a469bd29f036b386924f5c5a97
+        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1388/yuzu-mainline-20230330-03db6543e.AppImage
+        sha256: aca7c691f74b0cf74c1801d9960266bc1ce818bca9c242945b95545d22b04d80
 
   # Yuzu - END
 
@@ -520,8 +532,8 @@ modules:
     sources:
       - type: archive
         url: >-
-          https://github.com/citra-emu/citra-nightly/releases/download/nightly-1854/citra-unified-source-20230312-2cbf6fb.tar.xz
-        sha256: 018cb7dce3aa29a548a6e4cbad65d97babd98d2cdd1a4848a7c95c117f92fdf5
+          https://github.com/citra-emu/citra-nightly/releases/download/nightly-1872/citra-unified-source-20230330-f96047f.tar.xz
+        sha256: 3c49b691d46a1253df7477d1e9d771b7d15b967459851c096150e9952e160bfa
         x-checker-data:
           type: json
           url: https://api.github.com/repos/citra-emu/citra-nightly/releases/latest
@@ -550,8 +562,8 @@ modules:
       - ln -s "${FLATPAK_DEST}/pcsx2-qt/usr/bin/pcsx2-qt" "${FLATPAK_DEST}/bin/pcsx2-qt"
     sources:
       - type: file
-        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.4225/pcsx2-v1.7.4225-linux-AppImage-64bit-Qt.AppImage
-        sha256: e8ed326851941b212193c2bd193ca87efdcc70c18971f45749273a32893fec68
+        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.4303/pcsx2-v1.7.4303-linux-AppImage-64bit-Qt.AppImage
+        sha256: 5680bcc510f0898e6078c60ef2ef1d987b8414e1296c5ff88bd87933e4a314b3
 
   # PCSX2 - END
 
@@ -735,8 +747,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/xemu-project/xemu.git
-        tag: v0.7.85
-        commit: 065c74a00fe402f65147e9b0d1a1eeac1b4b609f
+        tag: v0.7.86
+        commit: 4a99fd0f1855fc52e15885812abd3ee4bb2b3847
         x-checker-data:
           type: json
           url: https://api.github.com/repos/xemu-project/xemu/releases/latest
@@ -817,10 +829,10 @@ modules:
     sources:
       - type: git
         url: https://github.com/RPCS3/rpcs3.git
-        commit: cf5346c263111760752cabb94767c07c501207c4
+        commit: 3e556c710b3256d23b9e524e44d45ba8bbf63814
       - type: git
         url: https://github.com/intel/ittapi.git
-        commit: 2de8a23f6130036dcd4d1b78d05df3187951d298
+        commit: 4a3762fbc517475bfb0586efc513e51c164108c9
         dest: ittapi/ittapi
         disable-shallow-clone: true
       # remove git-lfs hook
@@ -1095,4 +1107,4 @@ modules:
     sources:
       - type: git
         url: https://github.com/XargonWan/RetroDECK.git
-        branch: main
+        branch: cooker-0.6.4b
