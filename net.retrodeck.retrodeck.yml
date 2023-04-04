@@ -202,6 +202,15 @@ modules:
         url: https://github.com/rclone/rclone/releases/download/v1.61.1/rclone-v1.61.1-linux-amd64.zip
         sha256: 6d6455e1cb69eb0615a52cc046a296395e44d50c0f32627ba8590c677ddf50a9
 
+  - name: jq
+    buildsystem: simple
+    build-commands:
+      - cp jq-linux64 ${FLATPAK_DEST}/bin/jq
+    sources:
+      - type: file
+        url: https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
+        sha256: af986793a515d500ab2d35f8d2aecd656e764504b789b66d7e1a0b727a124c44
+
   # ES-DE - START
   # https://gitlab.com/es-de/emulationstation-de
 
