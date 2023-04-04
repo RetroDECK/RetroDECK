@@ -88,7 +88,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/XargonWan/RetroDECK.git
-        branch: 0.6.4b
+        branch: main
 
   - name: xmlstarlet
     config-opts:
@@ -1107,4 +1107,4 @@ modules:
     sources:
       - type: git
         url: https://github.com/XargonWan/RetroDECK.git
-        branch: 0.6.4b
+        branch: main
