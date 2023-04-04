@@ -760,6 +760,62 @@ configurator_check_bios_files_advanced() {
   configurator_tools_and_troubleshooting_dialog
 }
 
+configurator_online_theme_downloader() {
+  local online_themes=()
+  local local_themes=()
+  readarray -t online_themes < <(curl -s $es_themes_list | jq -r '.themeSets[] | "\(.name)\n\(.url)"')
+
+  for (( i=0; i<${#online_themes[@]}; i+=2 )); do
+    local name=${online_themes[$i]}
+    local url=${online_themes[$i+1]}
+
+    if [[ -d "$themes_folder/$(basename "$url" .git)" ]] || [[ -d "$rd_es_themes/$(basename "$url" .git)" ]]; then
+      local_themes=("${local_themes[@]}" "true" "$name" "$url")
+    else
+      local_themes=("${local_themes[@]}" "false" "$name" "$url")
+    fi
+  done
+
+  choice=$(zenity \
+  --list --width=1200 --height=720 \
+  --checklist --hide-column=3 --ok-label="Download/Update Themes" \
+  --separator="," --print-column=3 \
+  --text="Choose which themes to download:" \
+  --column "Downloaded" \
+  --column "Theme" \
+  --column "Theme URL" \
+  "${local_themes[@]}")
+
+  local rc=$?
+  if [[ $rc == "0" && ! -z $choice ]]; then
+    (
+    IFS="," read -ra chosen_themes <<< "$choice"
+    for theme in "${chosen_themes[@]}"; do
+      if [[ ! -d "$themes_folder/$(basename $theme .git)" ]] && [[ ! -d "$rd_es_themes/$(basename $theme .git)" ]]; then
+        echo "# Downloading $(basename "$theme" .git)"
+        git clone -q "$theme" "$themes_folder/$(basename $theme .git)"
+      elif [[ -d "$themes_folder/$(basename $theme .git)" ]] && [[ ! -d "$rd_es_themes/$(basename $theme .git)" ]]; then
+        cd "$themes_folder/$(basename $theme .git)"
+        echo "# Checking $(basename $theme .git) for updates"
+        git pull -fq
+        cd "$rdhome"
+      fi
+    done
+    ) |
+    zenity --progress --pulsate \
+    --icon-name=net.retrodeck.retrodeck \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title="Downloading Themes" \
+    --no-cancel \
+    --auto-close
+
+    configurator_generic_dialog "The theme downloads and updates have been completed.\n\nYou may need to exit RetroDECK and start it again for the new themes to be available."
+    configurator_tools_and_troubleshooting_dialog
+  else
+    configurator_tools_and_troubleshooting_dialog
+  fi
+}
+
 configurator_tools_and_troubleshooting_dialog() {
   choice=$(zenity --list --title="RetroDECK Configurator Utility - Change Options" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
@@ -768,7 +824,8 @@ configurator_tools_and_troubleshooting_dialog() {
   "Multi-file game structure check" "Verify the proper structure of multi-file or multi-disc games" \
   "Basic BIOS file check" "Show a list of systems that BIOS files are found for" \
   "Advanced BIOS file check" "Show advanced information about common BIOS files" \
-  "Compress Games" "Compress games to CHD format for systems that support it" )
+  "Compress Games" "Compress games to CHD format for systems that support it" \
+  "Download/Update Themes" "Download new themes for RetroDECK or update existing ones" )
 
   case $choice in
 
@@ -791,6 +848,10 @@ configurator_tools_and_troubleshooting_dialog() {
 
   "Compress Games" )
     configurator_compress_games_dialog
+  ;;
+
+  "Download/Update Themes" )
+    configurator_online_theme_downloader
   ;;
 
   "" ) # No selection made or Back button clicked

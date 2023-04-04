@@ -21,10 +21,12 @@ default_splash_file="/var/config/emulationstation/.emulationstation/resources/gr
 multi_user_data_folder="$rdhome/multi-user-data"                                                              # The default location of multi-user environment profiles
 multi_user_emulator_config_dirs="$emuconfigs/defaults/retrodeck//multi_user_emulator_config_dirs.cfg"         # A list of emulator config folders that can be safely linked/unlinked entirely in multi-user mode
 backups_folder="$rdhome/backups"                                                                              # A standard location for backup file storage
+rd_es_themes="/app/share/emulationstation/themes"                                                             # The directory where themes packaged with RetroDECK are stored
 lockfile="/var/config/retrodeck/.lock"                                                                        # where the lockfile is located
 default_sd="/run/media/mmcblk0p1"                                                                             # Steam Deck SD default path
 hard_version="$(cat '/app/retrodeck/version')"                                                                # hardcoded version (in the readonly filesystem)
 rd_repo="https://github.com/XargonWan/RetroDECK"                                                              # The URL of the main RetroDECK GitHub repo
+es_themes_list="https://gitlab.com/es-de/themes/themes-list/-/raw/master/themes.json"                         # The URL of the ES-DE 2.0 themes list
 
 # Config files for emulators with single config files
 
