@@ -964,22 +964,172 @@ modules:
 
   # Cemu - START
   # https://github.com/cemu-project/Cemu/releases
+  # https://github.com/flathub/info.cemu.Cemu
 
-  # Yes, this is old, do not update as we need libespol.so.1
+  - name: boost
+    buildsystem: simple
+    build-commands:
+      - ./bootstrap.sh --prefix=${FLATPAK_DEST} --with-toolset=gcc --with-libraries=filesystem,system,program_options,nowide
+      - ./b2 install variant=release link=shared runtime-link=shared cxxflags="$CXXFLAGS"
+        linkflags="$LDFLAGS" -j ${FLATPAK_BUILDER_N_JOBS}
+    cleanup:
+      - /include
+      - /lib/cmake
+    sources:
+      - type: archive
+        url: https://boostorg.jfrog.io/artifactory/main/release/1.81.0/source/boost_1_81_0.tar.bz2
+        sha256: 71feeed900fbccca04a3b4f2f84a7c217186f28a940ed8b7ed4725986baf99fa
+        x-checker-data:
+          type: anitya
+          project-id: 6845
+          stable-only: true
+          url-template: https://boostorg.jfrog.io/artifactory/main/release/$version/source/boost_${major}_${minor}_$patch.tar.bz2
 
-  #- name: Cemu-binary
-  #  buildsystem: simple
-  #  build-commands:
-  #    - mv Cemu ${FLATPAK_DEST}/bin/Cemu
-  #    - chmod 777 ${FLATPAK_DEST}/bin/Cemu
-  #    - mkdir -p ${FLATPAK_DEST}/config/cemu
-  #    - mv gameProfiles ${FLATPAK_DEST}/config/cemu/gameProfiles
-  #    - mv resources ${FLATPAK_DEST}/config/cemu/resources
-  #    - mv shaderCache ${FLATPAK_DEST}/config/cemu/shaderCache
-  #  sources:
-  #    - type: archive
-  #      url: https://github.com/cemu-project/Cemu/releases/download/v2.0-10/cemu-2.0-10-ubuntu-20.04-x64.zip
-  #      sha256: b6cb5560e9a15be5991db4ca0ce1de70d233d094e388477b05d663a542dbbd5c
+  - name: libzip
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DBUILD_DOC=OFF
+      - -DBUILD_EXAMPLES=OFF
+      - -DBUILD_REGRESS=OFF
+      - -DBUILD_TOOLS=OFF
+    cleanup:
+      - /bin
+      - /include
+      - /lib/cmake
+      - /lib/pkgconfig
+    sources:
+      - type: archive
+        url: https://libzip.org/download/libzip-1.9.2.tar.xz
+        sha256: c93e9852b7b2dc931197831438fee5295976ee0ba24f8524a8907be5c2ba5937
+        x-checker-data:
+          type: anitya
+          project-id: 10649
+          url-template: https://libzip.org/download/libzip-$version.tar.xz
+
+  - name: glslang
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DENABLE_CTEST=OFF
+    cleanup:
+      - /include
+      - /lib/cmake
+    sources:
+      - type: archive
+        url: https://github.com/KhronosGroup/glslang/archive/12.1.0.tar.gz
+        sha256: 1515e840881d1128fb6d831308433f731808f818f2103881162f3ffd47b15cd5
+        x-checker-data:
+          type: anitya
+          stable-only: true
+          project-id: 205796
+          url-template: https://github.com/KhronosGroup/glslang/archive/$version.tar.gz
+
+  - name: rapidjson
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DRAPIDJSON_BUILD_DOC=OFF
+      - -DRAPIDJSON_BUILD_EXAMPLES=OFF
+      - -DRAPIDJSON_BUILD_TESTS=OFF
+      - -DRAPIDJSON_BUILD_THIRDPARTY_GTEST=OFF
+    cleanup:
+      - /include
+      - /lib/cmake
+      - /lib/pkgconfig
+      - /share/doc
+    sources:
+      - type: archive
+        url: https://github.com/Tencent/rapidjson/archive/refs/tags/v1.1.0.tar.gz
+        sha256: bf7ced29704a1e696fbccf2a2b4ea068e7774fa37f6d7dd4039d0787f8bed98e
+        x-checker-data:
+          type: anitya
+          project-id: 7422
+          stable-only: true
+          url-template: https://github.com/Tencent/rapidjson/archive/refs/tags/v$version.tar.gz
+
+  - name: glm
+    buildsystem: cmake-ninja
+    cleanup: ['*']
+    no-make-install: true
+    post-install:
+      - install -d ${FLATPAK_DEST}/include
+      - cp -R glm ${FLATPAK_DEST}/include
+      - cp -R cmake/glm ${FLATPAK_DEST}/lib/cmake
+    sources:
+      - type: archive
+        url: https://github.com/g-truc/glm/releases/download/0.9.9.8/glm-0.9.9.8.zip
+        sha256: 37e2a3d62ea3322e43593c34bae29f57e3e251ea89f4067506c94043769ade4c
+
+  - name: fmt
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DFMT_TEST=Off
+    cleanup:
+      - '*'
+    sources:
+      - type: archive
+        url: https://github.com/fmtlib/fmt/archive/9.1.0.tar.gz
+        sha256: 5dea48d1fcddc3ec571ce2058e13910a0d4a6bab4cc09a809d8b1dd1c88ae6f2
+        x-checker-data:
+          type: anitya
+          project-id: 11526
+          url-template: https://github.com/fmtlib/fmt/archive/$version.tar.gz
+
+  - name: wxwidgets
+    buildsystem: autotools
+    config-opts:
+      - --with-gtk=3
+      - --disable-sdltest
+      - --enable-shared
+      - --with-opengl
+      - --with-sdl
+      - --with-libiconv=/usr
+    cleanup:
+      - /bin
+      - /include
+      - /lib/cmake
+      - /lib/wx
+      - /share
+    sources:
+      - type: git
+        url: https://github.com/wxWidgets/wxWidgets
+        tag: v3.2.2.1
+        commit: a812fffda3fe686c94e24bff27e8effd96e4de64
+        x-checker-data:
+          type: anitya
+          project-id: 5150
+          stable-only: true
+          tag-template: v$version
+
+  - name: Cemu
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DPORTABLE=false
+      - -DENABLE_VCPKG=false
+    env:
+      - LC_ALL=C
+    sources:
+      - type: git
+        url: https://github.com/cemu-project/Cemu
+        # TODO: Update tag pattern on next stable ^v([\d.]+)$
+        x-checker-data:
+          type: git
+          tag-pattern: ^v([\d.]+-\d+)$
+        tag: v2.0-32
+        commit: 59f6fe6e2f5a55b5ade567389683e44d09ea0f8d
+      - type: script
+        commands:
+          - |
+            for d in DiscordCanary Discord; do
+              for i in {0..9}; do
+                test -S $XDG_RUNTIME_DIR/discord-ipc-$i ||
+                  ln -sf {app/com.discordapp.$d,$XDG_RUNTIME_DIR}/discord-ipc-$i;
+              done
+            done
+            Cemu_relwithdebinfo "$@"
+        dest-filename: Cemu-wrapper
+    post-install:
+      - install -Dm644 -t ${FLATPAK_DEST}/share/icons/hicolor/128x128/apps/ dist/linux/info.cemu.Cemu.png
+      - install -D -t ${FLATPAK_DEST}/bin/ bin/Cemu_relwithdebinfo Cemu-wrapper
 
   # Cemu - END
 
