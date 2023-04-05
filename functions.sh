@@ -310,7 +310,7 @@ desktop_mode_warning() {
         if [[ $choice == "No" ]]; then
           exit 1
         elif [[ $choice == "Never show this again" ]]; then
-          set_setting_value $rd_conf "desktop_mode_warning" "false" retrodeck # Store desktop mode warning variable for future checks
+          set_setting_value $rd_conf "desktop_mode_warning" "false" retrodeck  "options" # Store desktop mode warning variable for future checks
         fi
       fi
     fi
@@ -735,7 +735,7 @@ check_for_version_update() {
       rc=$? # Capture return code, as "Yes" button has no text value
       if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
         if [[ $choice == "Ignore this version" ]]; then
-          set_setting_value $rd_conf "update_ignore" "$online_version" retrodeck # Store version to ignore for future checks
+          set_setting_value $rd_conf "update_ignore" "$online_version" retrodeck "options" # Store version to ignore for future checks
         fi
       else # User clicked "Yes"
         configurator_generic_dialog "The update process may take several minutes.\n\nAfter the update is complete, RetroDECK will close. When you run it again you will be using the latest version."
@@ -750,7 +750,7 @@ check_for_version_update() {
       rc=$? # Capture return code, as "Yes" button has no text value
       if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
         if [[ $choice == "Ignore this version" ]]; then
-          set_setting_value $rd_conf "update_ignore" "$online_version" retrodeck # Store version to ignore for future checks.
+          set_setting_value $rd_conf "update_ignore" "$online_version" retrodeck "options" # Store version to ignore for future checks.
         fi
       else # User clicked "Yes"
         configurator_generic_dialog "The update process may take several minutes.\n\nAfter the update is complete, RetroDECK will close. When you run it again you will be using the latest version."
@@ -819,10 +819,10 @@ multi_user_set_default_dialog() {
   rc=$? # Capture return code, as "Yes" button has no text value
   if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
     if [[ $choice == "No and don't ask again" ]]; then
-      set_setting_value $rd_conf "ask_default_user" "false" retrodeck
+      set_setting_value $rd_conf "ask_default_user" "false" retrodeck "options"
     fi
   else # User clicked "Yes"
-    set_setting_value $rd_conf "default_user" "$chosen_user" retrodeck
+    set_setting_value $rd_conf "default_user" "$chosen_user" retrodeck "options"
   fi
 }
 
@@ -858,7 +858,7 @@ multi_user_enable_multi_user_mode() {
       rm -rf "$multi_user_data_folder/$SteamAppUser" # Remove stale data after backup
     fi
   fi
-  set_setting_value $rd_conf "multi_user_mode" "true" retrodeck
+  set_setting_value $rd_conf "multi_user_mode" "true" retrodeck "options"
   multi_user_determine_current_user
   if [[ -d "$multi_user_data_folder/$SteamAppUser" ]]; then
     configurator_process_complete_dialog "enabling multi-user support"
@@ -884,7 +884,7 @@ multi_user_disable_multi_user_mode() {
 
     if [[ ! -z "$single_user" ]]; then # Single user was selected
       multi_user_return_to_single_user "$single_user"
-      set_setting_value $rd_conf "multi_user_mode" "false" retrodeck
+      set_setting_value $rd_conf "multi_user_mode" "false" retrodeck "options"
       configurator_process_complete_dialog "disabling multi-user support"
     else
       configurator_generic_dialog "No single user was selected, please try the process again."
@@ -893,13 +893,13 @@ multi_user_disable_multi_user_mode() {
   else
     single_user=$(ls -1 "$multi_user_data_folder")
     multi_user_return_to_single_user "$single_user"
-    set_setting_value $rd_conf "multi_user_mode" "false" retrodeck
+    set_setting_value $rd_conf "multi_user_mode" "false" retrodeck "options"
     configurator_process_complete_dialog "disabling multi-user support"
   fi
 }
 
 multi_user_determine_current_user() {
-  if [[ $(get_setting_value $rd_conf "multi_user_mode" retrodeck) == "true" ]]; then # If multi-user environment is enabled in rd_conf
+  if [[ $(get_setting_value $rd_conf "multi_user_mode" retrodeck "options") == "true" ]]; then # If multi-user environment is enabled in rd_conf
     if [[ -d "$multi_user_data_folder" ]]; then
       if [[ ! -z $SteamAppUser ]]; then # If running in Game Mode and this variable exists
         if [[ -z $(ls -1 "$multi_user_data_folder" | grep "$SteamAppUser") ]]; then
@@ -944,11 +944,11 @@ multi_user_determine_current_user() {
             multi_user_setup_new_user
           else # But dialog box was blank
             configurator_generic_dialog "No username was entered, so multi-user data folder cannot be created.\n\nDisabling multi-user mode, please try the process again."
-            set_setting_value $rd_conf "multi_user_mode" "false" retrodeck
+            set_setting_value $rd_conf "multi_user_mode" "false" retrodeck "options"
           fi
         else # User clicked "Cancel"
           configurator_generic_dialog "Cancelling multi-user mode activation."
-          set_setting_value $rd_conf "multi_user_mode" "false" retrodeck
+          set_setting_value $rd_conf "multi_user_mode" "false" retrodeck "options"
         fi
       fi
     fi

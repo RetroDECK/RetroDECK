@@ -102,7 +102,7 @@ then
 
   cp $rd_defaults $rd_conf # Load default settings
   set_setting_value $rd_conf "version" "$version" retrodeck # Set current version for new installs
-  set_setting_value $rd_conf "sdcard" "$default_sd" retrodeck # Set SD card location if default path has changed
+  set_setting_value $rd_conf "sdcard" "$default_sd" retrodeck "paths" # Set SD card location if default path has changed
 
   echo "Setting config file permissions"
   chmod +rw $rd_conf

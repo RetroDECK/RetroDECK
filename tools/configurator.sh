@@ -285,7 +285,7 @@ configurator_power_user_warning_dialog() {
     if [[ $choice == "No" ]]; then
       configurator_welcome_dialog
     elif [[ $choice == "Never show this again" ]]; then
-      set_setting_value $rd_conf "power_user_warning" "false" retrodeck # Store desktop mode warning variable for future checks
+      set_setting_value $rd_conf "power_user_warning" "false" retrodeck "options" # Store desktop mode warning variable for future checks
       source $rd_conf
       configurator_power_user_changes_dialog
     fi
@@ -867,7 +867,7 @@ configurator_move_dialog() {
     case $destination in
 
     "Back" )
-      configurator_move_dialog
+      configurator_tools_and_troubleshooting_dialog
     ;;
 
     "Internal Storage" )
@@ -1016,7 +1016,7 @@ configurator_move_dialog() {
 }
 
 configurator_online_update_setting_dialog() {
-  if [[ $(get_setting_value $rd_conf "update_check" retrodeck) == "true" ]]; then
+  if [[ $(get_setting_value $rd_conf "update_check" retrodeck "options") == "true" ]]; then
     zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - RetroDECK Online Update Check" \
@@ -1024,7 +1024,7 @@ configurator_online_update_setting_dialog() {
 
     if [ $? == 0 ] # User clicked "Yes"
     then
-      set_setting_value $rd_conf "update_check" "false" retrodeck
+      set_setting_value $rd_conf "update_check" "false" retrodeck "options"
     else # User clicked "Cancel"
       configurator_developer_dialog
     fi
@@ -1036,7 +1036,7 @@ configurator_online_update_setting_dialog() {
 
     if [ $? == 0 ] # User clicked "Yes"
     then
-      set_setting_value $rd_conf "update_check" "true" retrodeck
+      set_setting_value $rd_conf "update_check" "true" retrodeck "options"
     else # User clicked "Cancel"
       configurator_developer_dialog
     fi
@@ -1044,7 +1044,7 @@ configurator_online_update_setting_dialog() {
 }
 
 configurator_online_update_channel_dialog() {
-  if [[ $(get_setting_value $rd_conf "update_repo" retrodeck) == "RetroDECK" ]]; then
+  if [[ $(get_setting_value $rd_conf "update_repo" retrodeck "options") == "RetroDECK" ]]; then
     zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - RetroDECK Change Update Branch" \
@@ -1052,7 +1052,7 @@ configurator_online_update_channel_dialog() {
 
     if [ $? == 0 ] # User clicked "Yes"
     then
-      set_setting_value $rd_conf "update_repo" "RetroDECK-cooker" retrodeck
+      set_setting_value $rd_conf "update_repo" "RetroDECK-cooker" retrodeck "options"
     else # User clicked "Cancel"
       configurator_developer_dialog
     fi
@@ -1064,7 +1064,7 @@ configurator_online_update_channel_dialog() {
 
     if [ $? == 0 ] # User clicked "Yes"
     then
-      set_setting_value $rd_conf "update_repo" "RetroDECK" retrodeck
+      set_setting_value $rd_conf "update_repo" "RetroDECK" retrodeck "options"
     else # User clicked "Cancel"
       configurator_developer_dialog
     fi
@@ -1072,7 +1072,7 @@ configurator_online_update_channel_dialog() {
 }
 
 configurator_retrodeck_multiuser_dialog() {
-  if [[ $(get_setting_value $rd_conf "multi_user_mode" retrodeck) == "true" ]]; then
+  if [[ $(get_setting_value $rd_conf "multi_user_mode" retrodeck "options") == "true" ]]; then
     zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - RetroDECK Multi-user Support" \

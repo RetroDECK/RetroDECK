@@ -65,6 +65,7 @@ post_update() {
     # In version 0.7.0b, the following changes were made that required config file updates/reset or other changes to the filesystem:
     # - New ~/retrodeck/mods and ~/retrodeck/texture_packs directories are added and symlinked to multiple different emulators (where supported)
     # - Expose ES-DE gamelists folder to user at ~/retrodeck/gamelists
+    # - Add new sections [paths] and [options] headers to retrodeck.cfg
 
     mkdir -p "$mods_folder"
     mkdir -p "$texture_packs_folder"
@@ -77,6 +78,10 @@ post_update() {
     dir_prep "$mods_folder/Yuzu" "/var/data/yuzu/load"
 
     dir_prep "$rdhome/gamelists" "/var/config/emulationstation/.emulationstation/gamelists"
+
+    sed -i '/version=.*/G' $rd_conf
+    sed -i '3i [paths]' $rd_conf
+    sed -i '/^power_user=.*/i [options]' $rd_conf
   fi
 
   # The following commands are run every time.
