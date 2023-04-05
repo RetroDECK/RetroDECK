@@ -1104,67 +1104,24 @@ multi_user_selective_emu_init() {
 }
 
 conf_write() {
-  # writes the variables in the retrodeck config file
+  # This function will update the RetroDECK config file with matching variables from memory
+  # USAGE: conf_write
 
-  echo "DEBUG: printing the config file content before writing it:"
-  cat "$rd_conf"
-  echo ""
-
-  echo "Writing the config file: $rd_conf"
-
-  # TODO: this can be optimized with a while and a list of variables to check
-  if [ ! -z "$version" ] #if the variable is not null then I update it
-  then
-    sed -i "s%version=.*%version=$version%" "$rd_conf"
-  fi
-
-  if [ ! -z "$rdhome" ]
-  then
-    sed -i "s%rdhome=.*%rdhome=$rdhome%" "$rd_conf"
-  fi
-
-  if [ ! -z "$roms_folder" ]
-  then
-    sed -i "s%roms_folder=.*%roms_folder=$roms_folder%" "$rd_conf"
-  fi
-
-  if [ ! -z "$saves_folder" ]
-  then
-    sed -i "s%saves_folder=.*%saves_folder=$saves_folder%" "$rd_conf"
-  fi
-
-  if [ ! -z "$states_folder" ]
-  then
-    sed -i "s%states_folder=.*%states_folder=$states_folder%" "$rd_conf"
-  fi
-
-  if [ ! -z "$bios_folder" ]
-  then
-    sed -i "s%bios_folder=.*%bios_folder=$bios_folder%" "$rd_conf"
-  fi
-
-  if [ ! -z "$media_folder" ]
-  then
-    sed -i "s%media_folder=.*%media_folder=$media_folder%" "$rd_conf"
-  fi
-
-  if [ ! -z "$themes_folder" ]
-  then
-    sed -i "s%themes_folder=.*%themes_folder=$themes_folder%" "$rd_conf"
-  fi
-
-  if [ ! -z "$logs_folder" ]
-  then
-    sed -i "s%logs_folder=.*%logs_folder=$logs_folder%" "$rd_conf"
-  fi
-
-  if [ ! -z "$sdcard" ]
-  then
-    sed -i "s%sdcard=.*%sdcard=$sdcard%" "$rd_conf"
-  fi
-  echo "DEBUG: New contents:"
-  cat "$rd_conf"
-  echo ""
+  while IFS= read -r current_setting_line # Read the existing retrodeck.cfg
+  do
+    if [[ (! -z "$current_setting_line") && (! "$current_setting_line" == "#!/bin/bash") && (! "$current_setting_line" == "[]") ]]; then # If the line has a valid entry in it
+      if [[ ! -z $(grep -o -P "^\[.+?\]$" <<< "$current_setting_line") ]]; then # If the line is a section header
+        current_section=$(sed 's^[][]^^g' <<< $current_setting_line) # Remove brackets from section name
+      else
+        current_setting_name=$(get_setting_name "$current_setting_line" "retrodeck") # Read the variable name from the current line
+        current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "$current_section") # Read the variables value from retrodeck.cfg
+        memory_setting_value=$(eval "echo \$${current_setting_name}") # Read the variable names' value from memory
+        if [[ ! "$current_setting_value" == "$memory_setting_value" ]]; then # If the values are different...
+          set_setting_value "$rd_conf" "$current_setting_name" "$memory_setting_value" "retrodeck" "$current_section" # Update the value in retrodeck.cfg
+        fi
+      fi
+    fi
+  done < $rd_conf
 }
 
 dir_prep() {
