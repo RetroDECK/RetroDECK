@@ -71,6 +71,7 @@
             <p>Bug fixes and other changes</p>
             <ul>
                <li>Rolled back to latest working Yuzu</li>
+               <li>Fixed an issue where the default theme was not loaded</li>
             </ul>
          </description>
       </release>
