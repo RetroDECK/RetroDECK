@@ -68,7 +68,7 @@
       <release version="0.6.5b" date="2023-04-06">
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.5b</url>
          <description>
-            <p>Bug fixes and other changes</p>
+            <p>Bug fixes and other changes:</p>
             <ul>
                <li>Rolled back to latest working Yuzu</li>
                <li>Fixed an issue where the default theme was not loaded</li>
@@ -78,14 +78,14 @@
       <release version="0.6.4b" date="2023-04-04">
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.4b</url>
          <description>
-            <p>New features - General</p>
+            <p>New features - General:</p>
             <ul>
                <li>Updated to ES-DE 2.0</li>
                <li>Added the NSO Menu Interpreted theme</li>
                <li>Updated all included themes</li>
                <li>Updated the Emulators/RetroArch + cores</li>
             </ul>
-            <p>Bug fixes and other changes</p>
+            <p>Bug fixes and other changes:</p>
             <ul>
                <li>Fixed an audio issue in the Primehack configuration</li>
                <li>Various backend fixes</li>
