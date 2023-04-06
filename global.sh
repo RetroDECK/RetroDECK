@@ -33,8 +33,9 @@ es_themes_list="https://gitlab.com/es-de/themes/themes-list/-/raw/master/themes.
 citraconf="/var/config/citra-emu/qt-config.ini"
 duckstationconf="/var/data/duckstation/settings.ini"
 melondsconf="/var/config/melonDS/melonDS.ini"
-rpcs3conf="/var/config/rpcs3/config.yml"
 yuzuconf="/var/config/yuzu/qt-config.ini"
+xemuconf="/var/config/xemu/xemu.toml"
+ppssppconf="/var/config/ppsspp/PSP/SYSTEM/ppsspp.ini"
 
 # ES-DE config files
 
@@ -70,6 +71,11 @@ primehackgcpadconf="/var/config/primehack/GCPadNew.ini"
 primehackgfxconf="/var/config/primehack/GFX.ini"
 primehackhkconf="/var/config/primehack/Hotkeys.ini"
 primehackqtconf="/var/config/primehack/Qt.ini"
+
+# RPCS3 config files
+
+rpcs3conf="/var/config/rpcs3/config.yml"
+rpcs3vfsconf="/var/config/rpcs3/vfs.yml"
 
 # We moved the lockfile in /var/config/retrodeck in order to solve issue #53 - Remove in a few versions
 if [ -f "$HOME/retrodeck/.lock" ]

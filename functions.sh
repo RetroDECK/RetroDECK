@@ -1592,7 +1592,6 @@ update_splashscreens() {
 
 emulators_post_move() {
   # This script will redo the symlinks for all emulators after moving the $rdhome location without resetting other options
-  # TODO: The sed commands here should be replaced with set_setting_value and dir_prep should be replaced with changing paths in config files directly where possible
 
   # ES section
   dir_prep $roms_folder "/var/config/emulationstation/ROMs"
@@ -1601,7 +1600,9 @@ emulators_post_move() {
   dir_prep "$bios_folder" "/var/config/retroarch/system"
   dir_prep "$logs_folder/retroarch" "/var/config/retroarch/logs"
   dir_prep "$rdhome/shaders/retroarch" "/var/config/retroarch/shaders"
-  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/retroarch/retroarch.cfg
+  set_setting_value "$raconf" "savefile_directory" "$saves_folder" "retroarch"
+  set_setting_value "$raconf" "savestate_directory" "$states_folder" "retroarch"
+  set_setting_value "$raconf" "screenshot_directory" "$screenshots_folder" "retroarch"
 
   # Yuzu section
   dir_prep "$bios_folder/switch/keys" "/var/data/yuzu/keys"
@@ -1610,54 +1611,77 @@ emulators_post_move() {
   dir_prep "$saves_folder/switch/yuzu/sdmc" "/var/data/yuzu/sdmc"
   dir_prep "$logs_folder/yuzu" "/var/data/yuzu/log"
   dir_prep "$screenshots_folder" "/var/data/yuzu/screenshots"
-  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/yuzu/qt-config.ini
+  set_setting_value "$yuzuconf" "nand_directory" "$saves_folder/switch/yuzu/nand" "yuzu" "Data%20Storage"
+  set_setting_value "$yuzuconf" "sdmc_directory" "$saves_folder/switch/yuzu/sdmc" "yuzu" "Data%20Storage"
+  set_setting_value "$yuzuconf" "Paths\gamedirs\4\path" "$roms_folder/switch" "yuzu" "UI"
+  set_setting_value "$yuzuconf" "Screenshots\screenshot_path" "$screenshots_folder" "yuzu" "UI"
 
   # Dolphin section
-  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/dolphin-emu/Dolphin.ini
   dir_prep "$saves_folder/gc/dolphin/EUR" "/var/data/dolphin-emu/GC/EUR"
   dir_prep "$saves_folder/gc/dolphin/USA" "/var/data/dolphin-emu/GC/USA"
   dir_prep "$saves_folder/gc/dolphin/JAP" "/var/data/dolphin-emu/GC/JAP"
   dir_prep "$screenshots_folder" "/var/data/dolphin-emu/ScreenShots"
   dir_prep "$states_folder/dolphin" "/var/data/dolphin-emu/StateSaves"
   dir_prep "$saves_folder/wii/dolphin" "/var/data/dolphin-emu/Wii/"
+  set_setting_value "$dolphinconf" "BIOS" "$bios_folder" "dolphin" "GBA"
+  set_setting_value "$dolphinconf" "SavesPath" "$saves_folder/gba" "dolphin" "GBA"
+  set_setting_value "$dolphinconf" "ISOPath0" "$roms_folder/wii" "dolphin" "General"
+  set_setting_value "$dolphinconf" "ISOPath1" "$roms_folder/gc" "dolphin" "General"
+  set_setting_value "$dolphinconf" "WiiSDCardPath" "$saves_folder/wii/dolphin/sd.raw" "dolphin" "General"
 
   # Primehack section
-  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/primehack/Dolphin.ini
   dir_prep "$saves_folder/gc/primehack/EUR" "/var/data/primehack/GC/EUR"
   dir_prep "$saves_folder/gc/primehack/USA" "/var/data/primehack/GC/USA"
   dir_prep "$saves_folder/gc/primehack/JAP" "/var/data/primehack/GC/JAP"
   dir_prep "$screenshots_folder" "/var/data/primehack/ScreenShots"
   dir_prep "$states_folder/primehack" "/var/data/primehack/StateSaves"
   dir_prep "$saves_folder/wii/primehack" "/var/data/primehack/Wii/"
+  set_setting_value "$primehackconf" "ISOPath0" "$roms_folder/gc" "primehack" "General"
 
   # PCSX2 section
-  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2_ui.ini
-  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/PCSX2/inis/PCSX2.ini
+  set_setting_value "$pcsx2conf" "Bios" "$bios_folder" "pcsx2" "Folders"
+  set_setting_value "$pcsx2conf" "Snapshots" "$screenshots_folder" "pcsx2" "Folders"
+  set_setting_value "$pcsx2conf" "SaveStates" "$states_folder/ps2/pcsx2" "pcsx2" "Folders"
+  set_setting_value "$pcsx2conf" "MemoryCards" "$saves_folder/ps2/pcsx2/memcards" "pcsx2" "Folders"
+  set_setting_value "$pcsx2conf" "RecursivePaths" "$roms_folder/ps2" "pcsx2" "GameList"
 
   # MelonDS section
   dir_prep "$bios_folder" "/var/config/melonDS/bios"
-  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/melonDS/melonDS.ini
+  set_setting_value "$melondsconf" "BIOS9Path" "$bios_folder/bios9.bin" "melonds"
+  set_setting_value "$melondsconf" "BIOS7Path" "$bios_folder/bios7.bin" "melonds"
+  set_setting_value "$melondsconf" "FirmwarePath" "$bios_folder/firmware.bin" "melonds"
+  set_setting_value "$melondsconf" "SaveFilePath" "$saves_folder/nds/melonds" "melonds"
+  set_setting_value "$melondsconf" "SavestatePath" "$states_folder/nds/melonds" "melonds"
 
   # Citra section
   dir_prep "$bios_folder/citra/sysdata" "/var/data/citra-emu/sysdata"
   dir_prep "$logs_folder/citra" "/var/data/citra-emu/log"
-  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
+  set_setting_value "$citraconf" "nand_directory" "$saves_folder/n3ds/citra/nand/" "citra" "Data%20Storage"
+  set_setting_value "$citraconf" "sdmc_directory" "$saves_folder/n3ds/citra/sdmc/" "citra" "Data%20Storage"
+  set_setting_value "$citraconf" "Paths\gamedirs\3\path" "$roms_folder/n3ds" "citra" "UI"
+  set_setting_value "$citraconf" "Paths\screenshotPath" "$screenshots_folder" "citra" "UI"
 
   # RPCS3 section
-  sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/rpcs3/vfs.yml
+  # This is an unfortunate one-off because set_setting_value does not currently support settings with $ in the name.
+  sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$roms_folder/ps3/emudir"'^' $rpcs3vfsconf
 
   # XEMU section
-  sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/data/xemu/xemu.toml
+  set_setting_value "$xemuconf" "screenshot_dir" "'$screenshots_folder'" "xemu" "General"
+  set_setting_value "$xemuconf" "bootrom_path" "'$bios_folder/mcpx_1.0.bin'" "xemu" "sys.files"
+  set_setting_value "$xemuconf" "flashrom_path" "'$bios_folder/Complex.bin'" "xemu" "sys.files"
+  set_setting_value "$xemuconf" "eeprom_path" "$saves_folder/xbox/xemu/xbox-eeprom.bin" "xemu" "sys.files"
+  set_setting_value "$xemuconf" "hdd_path" "'$bios_folder/xbox_hdd.qcow2'" "xemu" "sys.files"
 
   # PPSSPP Standalone section
-  sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/ppsspp/PSP/SYSTEM/ppsspp.ini
+  set_setting_value "$ppssppconf" "CurrentDirectory" "$roms_folder/psp" "ppsspp" "General"
 
   # Duckstation section
-  sed -i 's#/home/deck/retrodeck/bios#'$bios_folder'#g' /var/data/duckstation/settings.ini
+  set_setting_value "$duckstationconf" "SearchDirectory" "$bios_folder" "duckstation" "BIOS"
 
   # Ryujinx section
-  sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/Ryujinx/Config.json
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/Ryujinx/Config.json
   dir_prep "$bios_folder/switch/keys" "/var/config/Ryujinx/system"
+
 }
 
 create_lock() {
