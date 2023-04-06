@@ -229,6 +229,12 @@ post_update() {
 
     deploy_multi_patch "emu-configs/patches/updates/064b_update.patch"
   fi
+  if [[ $prev_version -le "065" ]]; then
+    # In version 0.6.5b, the following changes were made:
+    # Change Yuzu GPU accuracy to normal for better performance
+
+    set_setting_value $yuzuconf "gpu_accuracy" "0" "yuzu" "Renderer"
+  fi
 
   # The following commands are run every time.
 
