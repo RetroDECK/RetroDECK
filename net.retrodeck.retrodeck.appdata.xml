@@ -72,6 +72,7 @@
             <ul>
                <li>Rolled back to latest working Yuzu</li>
                <li>Fixed an issue where the default theme was not loaded</li>
+               <li>Removed unavailable emulators entries</li>
             </ul>
          </description>
       </release>
