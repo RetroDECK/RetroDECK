@@ -5,28 +5,28 @@
 source /app/libexec/functions.sh
 
 # Static variables
-rd_conf="/var/config/retrodeck/retrodeck.cfg"                                                                 # RetroDECK config file path
-rd_conf_backup="/var/config/retrodeck/retrodeck.bak"                                                          # Backup of RetroDECK config file from update
-emuconfigs="/app/retrodeck/emu-configs"                                                                       # folder with all the default emulator configs
-rd_defaults="$emuconfigs/defaults/retrodeck/retrodeck.cfg"                                                    # A default RetroDECK config file
-rd_update_patch="/var/config/retrodeck/rd_update.patch"                                                       # A static location for the temporary patch file used during retrodeck.cfg updates
-bios_checklist="$emuconfigs/defaults/retrodeck/bios_checklist.cfg"                                            # A config file listing BIOS file information that can be verified
-compression_targets="$emuconfigs/defaults/retrodeck/compression_targets.cfg"                                  # A config file containing supported compression types per system
-zip_compressable_extensions="$emuconfigs/defaults/retrodeck/zip_compressable_extensions.cfg"                  # A config file containing every file extension that is allowed to be compressed to .zip format, because there are a lot!
-easter_egg_checklist="$emuconfigs/defaults/retrodeck/easter_egg_checklist.cfg"                                # A config file listing days and times when special splash screens should show up
-input_validation="$emuconfigs/defaults/retrodeck/input_validation.cfg"                                        # List of valid CLI inputs
-splashscreen_dir="/var/config/emulationstation/.emulationstation/resources/graphics/extra-splashes"           # The default location of extra splash screens
-current_splash_file="/var/config/emulationstation/.emulationstation/resources/graphics/splash.svg"            # The active splash file that will be shown on boot
-default_splash_file="/var/config/emulationstation/.emulationstation/resources/graphics/splash-orig.svg"       # The default RetroDECK splash screen
-multi_user_data_folder="$rdhome/multi-user-data"                                                              # The default location of multi-user environment profiles
-multi_user_emulator_config_dirs="$emuconfigs/defaults/retrodeck//multi_user_emulator_config_dirs.cfg"         # A list of emulator config folders that can be safely linked/unlinked entirely in multi-user mode
-backups_folder="$rdhome/backups"                                                                              # A standard location for backup file storage
-rd_es_themes="/app/share/emulationstation/themes"                                                             # The directory where themes packaged with RetroDECK are stored
-lockfile="/var/config/retrodeck/.lock"                                                                        # where the lockfile is located
-default_sd="/run/media/mmcblk0p1"                                                                             # Steam Deck SD default path
-hard_version="$(cat '/app/retrodeck/version')"                                                                # hardcoded version (in the readonly filesystem)
-rd_repo="https://github.com/XargonWan/RetroDECK"                                                              # The URL of the main RetroDECK GitHub repo
-es_themes_list="https://gitlab.com/es-de/themes/themes-list/-/raw/master/themes.json"                         # The URL of the ES-DE 2.0 themes list
+rd_conf="/var/config/retrodeck/retrodeck.cfg"                                                                         # RetroDECK config file path
+rd_conf_backup="/var/config/retrodeck/retrodeck.bak"                                                                  # Backup of RetroDECK config file from update
+emuconfigs="/app/retrodeck/emu-configs"                                                                               # folder with all the default emulator configs
+rd_defaults="$emuconfigs/defaults/retrodeck/retrodeck.cfg"                                                            # A default RetroDECK config file
+rd_update_patch="/var/config/retrodeck/rd_update.patch"                                                               # A static location for the temporary patch file used during retrodeck.cfg updates
+bios_checklist="$emuconfigs/defaults/retrodeck/reference_lists/bios_checklist.cfg"                                    # A config file listing BIOS file information that can be verified
+compression_targets="$emuconfigs/defaults/retrodeck/reference_lists/compression_targets.cfg"                          # A config file containing supported compression types per system
+zip_compressable_extensions="$emuconfigs/defaults/retrodeck/reference_lists/zip_compressable_extensions.cfg"          # A config file containing every file extension that is allowed to be compressed to .zip format, because there are a lot!
+easter_egg_checklist="$emuconfigs/defaults/retrodeck/reference_lists/easter_egg_checklist.cfg"                        # A config file listing days and times when special splash screens should show up
+input_validation="$emuconfigs/defaults/retrodeck/reference_lists/input_validation.cfg"                                # List of valid CLI inputs
+splashscreen_dir="/var/config/emulationstation/.emulationstation/resources/graphics/extra-splashes"                   # The default location of extra splash screens
+current_splash_file="/var/config/emulationstation/.emulationstation/resources/graphics/splash.svg"                    # The active splash file that will be shown on boot
+default_splash_file="/var/config/emulationstation/.emulationstation/resources/graphics/splash-orig.svg"               # The default RetroDECK splash screen
+multi_user_data_folder="$rdhome/multi-user-data"                                                                      # The default location of multi-user environment profiles
+multi_user_emulator_config_dirs="$emuconfigs/defaults/retrodeck/reference_lists/multi_user_emulator_config_dirs.cfg"  # A list of emulator config folders that can be safely linked/unlinked entirely in multi-user mode
+backups_folder="$rdhome/backups"                                                                                      # A standard location for backup file storage
+rd_es_themes="/app/share/emulationstation/themes"                                                                     # The directory where themes packaged with RetroDECK are stored
+lockfile="/var/config/retrodeck/.lock"                                                                                # where the lockfile is located
+default_sd="/run/media/mmcblk0p1"                                                                                     # Steam Deck SD default path
+hard_version="$(cat '/app/retrodeck/version')"                                                                        # hardcoded version (in the readonly filesystem)
+rd_repo="https://github.com/XargonWan/RetroDECK"                                                                      # The URL of the main RetroDECK GitHub repo
+es_themes_list="https://gitlab.com/es-de/themes/themes-list/-/raw/master/themes.json"                                 # The URL of the ES-DE 2.0 themes list
 
 # Config files for emulators with single config files
 
