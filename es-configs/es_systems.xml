@@ -244,7 +244,7 @@
         <path>%ROMPATH%/atarixe</path>
         <extension>.a52 .A52 .atr .ATR .atx .ATX .bin .BIN .cas .CAS .cdm .CDM .xex .XEX .xfd .XFD .7z .7Z .zip .ZIP</extension>
         <command label="Atari800">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/atari800_libretro.so %ROM%</command>
-        <command label="Atari800 (Standalone)">%EMULATOR_ATARI800% %ROM%</command>
+        <!-- <command label="Atari800 (Standalone)">%EMULATOR_ATARI800% %ROM%</command> -->
         <platform>atarixe</platform>
         <theme>atarixe</theme>
     </system>
@@ -254,7 +254,7 @@
         <path>%ROMPATH%/atomiswave</path>
         <extension>.bin .BIN .cdi .CDI .cue .CUE .dat .DAT .elf .ELF .gdi .GDI .iso .ISO .lst .LST .m3u .M3U .7z .7Z .zip .ZIP</extension>
         <command label="Flycast">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/flycast_libretro.so %ROM%</command>
-        <command label="Flycast (Standalone)">%EMULATOR_FLYCAST% %ROM%</command>
+        <!-- <command label="Flycast (Standalone)">%EMULATOR_FLYCAST% %ROM%</command> -->
         <platform>arcade</platform>
         <theme>atomiswave</theme>
     </system>
@@ -435,6 +435,7 @@
         <theme>crvision</theme>
     </system>
 -->
+<!--
     <system>
         <name>daphne</name>
         <fullname>Daphne Arcade LaserDisc Emulator</fullname>
@@ -445,13 +446,14 @@
         <platform>daphne</platform>
         <theme>daphne</theme>
     </system>
+-->
     <system>
         <name>doom</name>
         <fullname>Doom</fullname>
         <path>%ROMPATH%/doom</path>
         <extension>.desktop .iwad .IWAD .pk4 .PK4 .pwad .PWAD .sh .wad .WAD</extension>
         <command label="PrBoom">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/prboom_libretro.so %ROM%</command>
-        <command label="PrBoom+ (Standalone)">%EMULATOR_PRBOOM-PLUS% -iwad %ROM%</command>
+        <!-- <command label="PrBoom+ (Standalone)">%EMULATOR_PRBOOM-PLUS% -iwad %ROM%</command> -->
         <command label="Boom 3">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/boom3_libretro.so %ROM%</command>
         <command label="Boom 3 xp">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/boom3_xp_libretro.so %ROM%</command>
         <command label="Shortcut or script">%ENABLESHORTCUTS% %EMULATOR_OS-SHELL% %ROM%</command>
@@ -489,8 +491,8 @@
         <path>%ROMPATH%/dreamcast</path>
         <extension>.chd .CHD .cdi .CDI .iso .ISO .elf .ELF .cue .CUE .gdi .GDI .lst .LST .dat .DAT .m3u .M3U .7z .7Z .zip .ZIP</extension>
         <command label="Flycast">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/flycast_libretro.so %ROM%</command>
-        <command label="Flycast (Standalone)">%EMULATOR_FLYCAST% %ROM%</command>
-        <command label="Redream (Standalone)">%EMULATOR_REDREAM% %ROM%</command>
+        <!-- <command label="Flycast (Standalone)">%EMULATOR_FLYCAST% %ROM%</command> -->
+        <!-- <command label="Redream (Standalone)">%EMULATOR_REDREAM% %ROM%</command> -->
         <platform>dreamcast</platform>
         <theme>dreamcast</theme>
     </system>
@@ -500,7 +502,7 @@
         <path>%ROMPATH%/easyrpg</path>
         <extension>.easyrpg .zip .ZIP</extension>
         <command label="EasyRPG">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/easyrpg_libretro.so %ROM%</command>
-<!--        <command label="EasyRPG Player (Standalone)">%STARTDIR%=%GAMEENTRYDIR% %EMULATOR_EASYRPG%</command> -->
+        <!-- <command label="EasyRPG Player (Standalone)">%STARTDIR%=%GAMEENTRYDIR% %EMULATOR_EASYRPG%</command> -->
         <platform>easyrpg</platform>
         <theme>easyrpg</theme>
     </system>
@@ -570,6 +572,7 @@
         <theme>flash</theme>
     </system>
 -->
+<!--
     <system>
         <name>fmtowns</name>
         <fullname>Fujitsu FM Towns</fullname>
@@ -629,9 +632,9 @@
         <command label="Mesen-S">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mesen-s_libretro.so %ROM%</command>
         <command label="bsnes">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/bsnes_libretro.so %ROM%</command>
         <command label="mGBA">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mgba_libretro.so %ROM%</command>
-        <command label="mGBA (Standalone)">%EMULATOR_MGBA% -f %ROM%</command>
+        <!-- <command label="mGBA (Standalone)">%EMULATOR_MGBA% -f %ROM%</command> -->
         <command label="VBA-M">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/vbam_libretro.so %ROM%</command>
-        <command label="VBA-M (Standalone)">%EMULATOR_VBA-M% -f %ROM%</command>
+        <!-- <command label="VBA-M (Standalone)">%EMULATOR_VBA-M% -f %ROM%</command> -->
         <platform>gb</platform>
         <theme>gb</theme>
     </system>
@@ -641,9 +644,9 @@
         <path>%ROMPATH%/gba</path>
         <extension>.agb .AGB .bin .BIN .cgb .CGB .dmg .DMG .gb .GB .gba .GBA .gbc .GBC .sgb .SGB .7z .7Z .zip .ZIP</extension>
         <command label="mGBA">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mgba_libretro.so %ROM%</command>
-        <command label="mGBA (Standalone)">%EMULATOR_MGBA% -f %ROM%</command>
+        <!-- <command label="mGBA (Standalone)">%EMULATOR_MGBA% -f %ROM%</command> -->
         <command label="VBA-M">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/vbam_libretro.so %ROM%</command>
-        <command label="VBA-M (Standalone)">%EMULATOR_VBA-M% -f %ROM%</command>
+        <!-- <command label="VBA-M (Standalone)">%EMULATOR_VBA-M% -f %ROM%</command> -->
         <command label="VBA Next">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/vba_next_libretro.so %ROM%</command>
         <command label="gpSP">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/gpsp_libretro.so %ROM%</command>
         <platform>gba</platform>
@@ -663,9 +666,9 @@
         <command label="Mesen-S">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mesen-s_libretro.so %ROM%</command>
         <command label="bsnes">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/bsnes_libretro.so %ROM%</command>
         <command label="mGBA">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mgba_libretro.so %ROM%</command>
-        <command label="mGBA (Standalone)">%EMULATOR_MGBA% -f %ROM%</command>
+        <!-- <command label="mGBA (Standalone)">%EMULATOR_MGBA% -f %ROM%</command> -->
         <command label="VBA-M">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/vbam_libretro.so %ROM%</command>
-        <command label="VBA-M (Standalone)">%EMULATOR_VBA-M% -f %ROM%</command>
+        <!-- <command label="VBA-M (Standalone)">%EMULATOR_VBA-M% -f %ROM%</command> -->
         <platform>gbc</platform>
         <theme>gbc</theme>
     </system>
@@ -1017,7 +1020,7 @@
         <path>%ROMPATH%/naomi</path>
         <extension>.cdi .CDI .iso .ISO .elf .ELF .bin .BIN .cue .CUE .gdi .GDI .lst .LST .dat .DAT .m3u .M3U .7z .7Z .zip .ZIP</extension>
         <command label="Flycast">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/flycast_libretro.so %ROM%</command>
-        <command label="Flycast (Standalone)">%EMULATOR_FLYCAST% %ROM%</command>
+        <!--  <command label="Flycast (Standalone)">%EMULATOR_FLYCAST% %ROM%</command> -->
         <platform>arcade</platform>
         <theme>naomi</theme>
     </system>
@@ -1027,7 +1030,7 @@
         <path>%ROMPATH%/naomigd</path>
         <extension>.cdi .CDI .iso .ISO .elf .ELF .bin .BIN .cue .CUE .gdi .GDI .lst .LST .dat .DAT .m3u .M3U .7z .7Z .zip .ZIP</extension>
         <command label="Flycast">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/flycast_libretro.so %ROM%</command>
-        <command label="Flycast (Standalone)">%EMULATOR_FLYCAST% %ROM%</command>
+        <!-- <command label="Flycast (Standalone)">%EMULATOR_FLYCAST% %ROM%</command> -->
         <platform>arcade</platform>
         <theme>naomigd</theme>
     </system>
@@ -1086,7 +1089,7 @@
         <extension>.fds .FDS .nes .NES .unf .UNF .unif .UNIF .7z .7Z .zip .ZIP</extension>
         <command label="Mesen">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mesen_libretro.so %ROM%</command>
         <command label="Nestopia UE">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/nestopia_libretro.so %ROM%</command>
-        <command label="Nestopia UE (Standalone)">%EMULATOR_NESTOPIA-UE% --fullscreen %ROM%</command>
+        <!-- <command label="Nestopia UE (Standalone)">%EMULATOR_NESTOPIA-UE% &ndash;&ndashfullscreen %ROM%</command> -->
         <command label="FCEUmm">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/fceumm_libretro.so %ROM%</command>
         <command label="QuickNES">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/quicknes_libretro.so %ROM%</command>
         <!-- <command label="puNES (Standalone)">%EMULATOR_PUNES% -u yes %ROM%</command> -->
@@ -1209,7 +1212,7 @@
         <path>%ROMPATH%/pcfx</path>
         <extension>.ccd .CCD .chd .CHD .cue CUE .m3u .M3U .toc .TOC .7z .7Z .zip .ZIP</extension>
         <command label="Beetle PC-FX">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mednafen_pcfx_libretro.so %ROM%</command>
-        <command label="Mednafen (Standalone)">%EMULATOR_MEDNAFEN% -force_module pcfx %ROM%</command>
+        <!-- <command label="Mednafen (Standalone)">%EMULATOR_MEDNAFEN% -force_module pcfx %ROM%</command> -->
         <platform>pcfx</platform>
         <theme>pcfx</theme>
     </system>
@@ -1350,11 +1353,11 @@
         <extension>.bml .BML .bs .BS .fig .FIG .sfc .SFC .smc .SMC .swc .SWC .st .ST .7z .7Z .zip .ZIP</extension>
         <command label="Snes9x - Current">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/snes9x_libretro.so %ROM%</command>
         <command label="Snes9x 2010">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/snes9x2010_libretro.so %ROM%</command>
-        <command label="Snes9x (Standalone)">%EMULATOR_SNES9X% %ROM%</command>
+        <!--<command label="Snes9x (Standalone)">%EMULATOR_SNES9X% %ROM%</command> -->
         <command label="bsnes">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/bsnes_libretro.so %ROM%</command>
         <command label="bsnes-hd">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/bsnes_hd_beta_libretro.so %ROM%</command>
         <command label="bsnes-mercury Accuracy">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/bsnes_mercury_accuracy_libretro.so %ROM%</command>
-        <command label="bsnes (Standalone)">%EMULATOR_BSNES% --fullscreen %ROM%</command>
+        <!--<command label="bsnes (Standalone)">%EMULATOR_BSNES% &ndash;&ndashfullscreen %ROM%</command> -->
         <command label="Mesen-S">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mesen-s_libretro.so %ROM%</command>
         <platform>satellaview</platform>
         <theme>satellaview</theme>
