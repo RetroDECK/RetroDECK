@@ -290,36 +290,6 @@ modules:
         url:  https://github.com/anthonycaccese/art-book-next-es-de.git
         commit: a0dc0cccaa3f1475feb58e551fe732d982e161c0
 
-  - name: alekfull-nx-es-de
-    buildsystem: simple
-    build-commands:
-      - mkdir -p ${FLATPAK_DEST}/share/emulationstation/themes/alekfull-nx-es-de/
-      - mv -f * ${FLATPAK_DEST}/share/emulationstation/themes/alekfull-nx-es-de/
-    sources:
-      - type: git
-        url:  https://github.com/anthonycaccese/alekfull-nx-es-de.git
-        commit: 5011e5dca75663ff18602f3af9d17e9e880880ef
-
-  - name: retrofix-revisited-es-de
-    buildsystem: simple
-    build-commands:
-      - mkdir -p ${FLATPAK_DEST}/share/emulationstation/themes/retrofix-revisited-es-de/
-      - mv -f * ${FLATPAK_DEST}/share/emulationstation/themes/retrofix-revisited-es-de/
-    sources:
-      - type: git
-        url:  https://github.com/anthonycaccese/retrofix-revisited-es-de.git
-        commit: 23b80225078d2a3723039a8e94b6147c84065028
-
-  - name: nso-menu-interpreted-es-de
-    buildsystem: simple
-    build-commands:
-      - mkdir -p ${FLATPAK_DEST}/share/emulationstation/themes/nso-menu-interpreted-es-de/
-      - mv -f * ${FLATPAK_DEST}/share/emulationstation/themes/nso-menu-interpreted-es-de/
-    sources:
-      - type: git
-        url:  https://github.com/anthonycaccese/nso-menu-interpreted-es-de.git
-        commit: f129c2d88e060a6c5d7643de5aeb02a0cc013de3
-
   # ES-DE Themes - END
 
   # External manifests start
