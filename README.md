@@ -9,7 +9,7 @@
 
 # RetroDECK
 
-**RetroDECK** brings an environment to catalog and play your retro games directly from SteamOS and it's tailored specifically for the **Steam Deck**.
+**RetroDECK** brings an environment to catalog and play your retro games directly on your **Steam Deck**.
 
 It's inspired by embedded emulation systems like AmberELEC, EmuELEC, CoreELEC, Lakka, and Batocera.
 
