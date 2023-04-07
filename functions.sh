@@ -1679,9 +1679,13 @@ emulators_post_move() {
   set_setting_value "$duckstationconf" "SearchDirectory" "$bios_folder" "duckstation" "BIOS"
 
   # Ryujinx section
-  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/Ryujinx/Config.json
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/Ryujinx/Config.json # This is an unfortunate one-off because set_setting_value does not currently support JSON
   dir_prep "$bios_folder/switch/keys" "/var/config/Ryujinx/system"
 
+  # PICO-8 section
+  dir_prep "$bios_folder/pico-8" "$HOME/.lexaloffle/pico-8" # Store binary and config files together. The .lexaloffle directory is a hard-coded location for the PICO-8 config file, cannot be changed
+  dir_prep "$roms_folder/pico8" "$bios_folder/pico-8/carts"
+  dir_prep "$saves_folder/pico-8" "$bios_folder/pico-8/cdata"
 }
 
 create_lock() {
