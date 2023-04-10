@@ -1716,6 +1716,11 @@ easter_eggs() {
   cp -fv "$new_splash_file" "$current_splash_file" # Deploy assigned splash screen
 }
 
+tools_init() {
+  mkdir -pv /var/config/emulationstation/.emulationstation/gamelists/tools/
+  cp -fv /app/retrodeck/tools-gamelist.xml /var/config/emulationstation/.emulationstation/gamelists/tools/gamelist.xml
+}
+
 start_retrodeck() {
   echo "Checking to see if today has a surprise..."
   easter_eggs

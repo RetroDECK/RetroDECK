@@ -36,7 +36,7 @@ post_update() {
     # - Put Dolphin and Primehack save states in different folders inside $rd_home/states
     # - Fix symlink to hard-coded PICO-8 config folder (dir_prep doesn't like ~)
     # - Overwrite Citra and Yuzu configs, as controller mapping was broken due to emulator updates.
-    
+
     dir_prep "$rdhome/states/dolphin" "/var/data/dolphin-emu/StateSaves"
     dir_prep "$rdhome/states/primehack" "/var/data/primehack/StateSaves"
 
@@ -95,6 +95,7 @@ post_update() {
 
   # The following commands are run every time.
 
+  tools_init
   update_splashscreens
   update_rd_conf
   ) |

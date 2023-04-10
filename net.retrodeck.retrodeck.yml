@@ -77,7 +77,7 @@ modules:
     buildsystem: simple
     build-commands:
       - |
-      
+
         VERSION="0.6.5b"
 
         git checkout ${GITHUB_REF_NAME}
@@ -1080,7 +1080,7 @@ modules:
       - mkdir -p /app/tools
       - cp tools/configurator.sh /app/tools/configurator.sh
       - chmod +x /app/tools/configurator.sh
-      - cp es-configs/tools-gamelist.xml /app/tools/gamelist.xml
+      - cp es-configs/tools-gamelist.xml /app/retrodeck/tools-gamelist.xml
 
       # Function libraries
       - mkdir -p /app/libexec
