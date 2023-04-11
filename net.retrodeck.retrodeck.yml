@@ -1107,8 +1107,9 @@ modules:
     config-opts:
       - -DPORTABLE=false
       - -DENABLE_VCPKG=false
-    env:
-      - LC_ALL=C
+    build-options:
+      env:
+        - LC_ALL=C
     sources:
       - type: git
         url: https://github.com/cemu-project/Cemu
