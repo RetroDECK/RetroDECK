@@ -40,7 +40,6 @@ cleanup:
   - /include
   - /share/ffmpeg
   - /lib/cmake
-  #- /lib/debug
   - /lib/pkgconfig
   # Yuzu
   - /include
@@ -53,6 +52,9 @@ cleanup:
   - /src
   - '*.a'
   - '*.la'
+  # XMLSTARLET
+  - /lib/debug
+  - /share/runtime
 cleanup-commands:
   # Yuzu
   - /app/cleanup-BaseApp.sh
@@ -108,7 +110,6 @@ modules:
           - autoreconf -vfi
     post-install:
       - ln -s "xml" "${FLATPAK_DEST}/bin/xmlstarlet" ||:
-    cleanup: ['*']
 
   # pcsx2-qt needs QT6, maybe others, here until every qt emulator will support qt6 (not yuzu atm)
   # from: https://github.com/flathub/org.profex_xrd.Profex
