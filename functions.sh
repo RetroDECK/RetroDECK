@@ -944,7 +944,7 @@ cemu_init() {
   cp -fvr "$emuconfigs/cemu/"* /var/config/Cemu/
   sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/Cemu/settings.xml
   #TODO
-  #dir_prep "$rdhome/saves/wiiu/cemu" "/var/data/dolphin-emu/GC/EUR"
+  dir_prep "$rdhome/saves/wiiu/cemu" "$rdhome/bios/cemu/usr/save"
   #dir_prep "$rdhome/screenshots" "/var/data/dolphin-emu/ScreenShots"
   #dir_prep "$rdhome/states/cemu" "/var/data/dolphin-emu/StateSaves"
 }
@@ -1141,7 +1141,7 @@ emulators_post_move() {
   # Cemu section
   sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/Cemu/settings.xml
   #TODO
-  #dir_prep "$rdhome/saves/wiiu/cemu" "/var/data/dolphin-emu/GC/EUR"
+  dir_prep "$rdhome/saves/wiiu/cemu" "$rdhome/bios/cemu/usr/save"
   #dir_prep "$rdhome/screenshots" "/var/data/dolphin-emu/ScreenShots"
   #dir_prep "$rdhome/states/cemu" "/var/data/dolphin-emu/StateSaves"
 }
