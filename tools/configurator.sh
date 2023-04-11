@@ -730,7 +730,7 @@ configurator_check_bios_files_basic() {
 }
 
 configurator_check_bios_files_advanced() {
-  configurator_generic_dialog "This check will look for BIOS files that RetroDECK has identified as working.\n\nThere may be additional BIOS files that will function with the emulators that are not checked.\n\nSome more advanced emulators such as Yuzu will have additional methods for verifiying the BIOS files are in working order."
+  configurator_generic_dialog "This check will look for BIOS files that RetroDECK has identified as working.\n\nNot all BIOS files are required for games to work, please check the BIOS description for more information on its purpose.\n\nThere may be additional BIOS files that will function with the emulators that are not checked.\n\nSome more advanced emulators such as Yuzu will have additional methods for verifiying the BIOS files are in working order."
   bios_checked_list=()
 
   while IFS="^" read -r bios_file bios_subdir bios_hash bios_system bios_desc
