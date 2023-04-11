@@ -85,7 +85,7 @@
         </Notification>
     </Graphic>
     <Audio>
-        <api>0</api>
+        <api>3</api>
         <delay>2</delay>
         <TVChannels>1</TVChannels>
         <PadChannels>1</PadChannels>
@@ -93,9 +93,9 @@
         <TVVolume>50</TVVolume>
         <PadVolume>0</PadVolume>
         <InputVolume>50</InputVolume>
-        <TVDevice>default</TVDevice>
-        <PadDevice></PadDevice>
-        <InputDevice></InputDevice>
+        <TVDevice>alsa_output.pci-0000_04_00.5-platform-acp5x_mach.0.HiFi__hw_acp5x_1__sink</TVDevice>
+        <PadDevice>alsa_output.pci-0000_04_00.5-platform-acp5x_mach.0.HiFi__hw_acp5x_1__sink</PadDevice>
+        <InputDevice>filter-chain-source</InputDevice>
     </Audio>
     <Account>
         <PersistentId>2147483649</PersistentId>
@@ -103,7 +103,7 @@
         <ActiveService>0</ActiveService>
     </Account>
     <Debug>
-        <CrashDumpUnix>0</CrashDumpUnix>
+        <CrashDumpUnix>1</CrashDumpUnix>
         <GDBPort>1337</GDBPort>
     </Debug>
     <Input>
