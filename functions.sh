@@ -359,8 +359,8 @@ set_setting_value() {
       fi
       ;;
 
-    "emulationstation" )
-      sed -i "s%^$setting_name_to_change\" \" value=\".*\"%$setting_name_to_change\" \" value=\"$setting_value_to_change\"" $1
+    "es_settings" )
+      sed -i 's^'"$setting_name_to_change"'" value=".*"^'"$setting_name_to_change"'" value="'"$setting_value_to_change"'"^' $1
       ;;
 
   esac
@@ -374,8 +374,8 @@ get_setting_name() {
 
   case $2 in
 
-  "emulationstation" )
-    echo "$current_setting_line" | grep -o -P "(?<=name\=\").*(?=\" value)"
+  "es_settings" )
+    echo ''"$current_setting_line"'' | grep -o -P '(?<=name\=\").*(?=\" value)'
     ;;
 
   "rpcs3" )
@@ -430,8 +430,8 @@ get_setting_value() {
     fi
   ;;
 
-  "emulationstation" )
-    echo $(grep -o -P "(?<=^$current_setting_name\" value=\").*(?=\")" $1)
+  "es_settings" )
+    echo $(grep -o -P "(?<=$current_setting_name\" value=\").*(?=\")" $1)
   ;;
 
   esac
