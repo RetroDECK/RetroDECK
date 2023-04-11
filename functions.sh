@@ -934,12 +934,28 @@ ryujinx_init() {
   dir_prep "$rdhome/bios/switch/keys" "/var/config/Ryujinx/system"
 }
 
+cemu_init() {
+  echo "----------------------"
+  echo "Initializing CEMU"
+  echo "----------------------"
+  # removing config directory to wipe legacy files
+  rm -rf /var/config/Cemu
+  mkdir -pv /var/config/Cemu/
+  cp -fvr "$emuconfigs/cemu/"* /var/config/Cemu/
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/Cemu/settings.xml
+  #TODO
+  #dir_prep "$rdhome/saves/wiiu/cemu" "/var/data/dolphin-emu/GC/EUR"
+  #dir_prep "$rdhome/screenshots" "/var/data/dolphin-emu/ScreenShots"
+  #dir_prep "$rdhome/states/cemu" "/var/data/dolphin-emu/StateSaves"
+}
+
 standalones_init() {
   # This script is configuring the standalone emulators with the default files present in emuconfigs folder
 
   echo "------------------------------------"
   echo "Initializing standalone emulators"
   echo "------------------------------------"
+  cemu_init
   citra_init
   dolphin_init
   duckstation_init
@@ -1012,6 +1028,9 @@ cli_emulator_reset() {
 
     "retroarch" )
       ra_init
+    ;;
+    "cemu" )
+      cemu_init
     ;;
     "citra" )
       citra_init
@@ -1118,6 +1137,13 @@ emulators_post_move() {
   # Ryujinx section
   sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/Ryujinx/Config.json
   dir_prep "$rdhome/bios/switch/keys" "/var/config/Ryujinx/system"
+
+  # Cemu section
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/Cemu/settings.xml
+  #TODO
+  #dir_prep "$rdhome/saves/wiiu/cemu" "/var/data/dolphin-emu/GC/EUR"
+  #dir_prep "$rdhome/screenshots" "/var/data/dolphin-emu/ScreenShots"
+  #dir_prep "$rdhome/states/cemu" "/var/data/dolphin-emu/StateSaves"
 }
 
 create_lock() {
