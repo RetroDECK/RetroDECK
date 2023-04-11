@@ -4,7 +4,7 @@
    <id>net.retrodeck.retrodeck</id>
    <launchable type="desktop-id">net.retrodeck.retrodeck.desktop</launchable>
    <name>RetroDECK</name>
-   <summary>Your one in all application for emulation and retro gaming on the Steam Deck and more!</summary>
+   <summary>RetroDECK brings an environment to catalog and play your retro games directly on your Steam Deck.</summary>
    <developer_name>RetroDECK Team</developer_name>
    <url type="homepage">https://retrodeck.net</url>
    <url type="bugtracker">https://github.com/XargonWan/RetroDECK/issues</url>
@@ -65,6 +65,19 @@
    <project_license>GPL-3.0</project_license>
    <metadata_license>CC0-1.0</metadata_license>
    <releases>
+      <release version="0.7.0b" date="2023-04-11">
+         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.4b</url>
+         <description>
+            <p>New features - General:</p>
+            <ul>
+               <li>Added CEMU, WiiU Emulator</li>
+            </ul>
+            <p>Bug fixes and other changes:</p>
+            <ul>
+               <li>PLACEHOLDER</li>
+            </ul>
+         </description>
+      </release>
       <release version="0.6.5b" date="2023-04-07">
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.5b</url>
          <description>

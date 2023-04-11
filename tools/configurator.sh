@@ -17,6 +17,7 @@ source /app/libexec/functions.sh
 #         - Login prompt
 #     - Emulator Options (Behind one-time power user warning dialog)
 #       - Launch RetroArch
+#       - Launch Cemu
 #       - Launch Citra
 #       - Launch Dolphin
 #       - Launch Duckstation
@@ -38,6 +39,7 @@ source /app/libexec/functions.sh
 #     - Reset
 #       - Reset Specific Emulator
 #           - Reset RetroArch
+#           - Reset Cemu
 #           - Reset Citra
 #           - Reset Dolphin
 #           - Reset Duckstation
@@ -70,6 +72,7 @@ configurator_reset_dialog() {
     --text="Which emulator do you want to reset to default?" \
     --column="Emulator" --column="Action" \
     "RetroArch" "Reset RetroArch to default settings" \
+    "Cemu" "Reset Cemu to default settings" \
     "Citra" "Reset Citra to default settings" \
     "Dolphin" "Reset Dolphin to default settings" \
     "Duckstation" "Reset Duckstation to default settings" \
@@ -92,6 +95,16 @@ configurator_reset_dialog() {
           configurator_generic_dialog "You do not appear to be connected to a network with internet access.\n\nThe RetroArch reset process requires some files from the internet to function properly.\n\nPlease retry this process once a network connection is available."
           configurator_reset_dialog
         fi
+      else
+        configurator_generic_dialog "Reset process cancelled."
+        configurator_reset_dialog
+      fi
+    ;;
+
+    "Cemu" )
+      if [[ $(configurator_reset_confirmation_dialog "Cemu" "Are you sure you want to reset the Cemu emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
+        cemu_init
+        configurator_process_complete_dialog "resetting $emulator_to_reset"
       else
         configurator_generic_dialog "Reset process cancelled."
         configurator_reset_dialog
@@ -300,6 +313,7 @@ configurator_power_user_changes_dialog() {
   --hide-header \
   --column=emulator \
   "RetroArch" \
+  "Cemu" \
   "Citra" \
   "Dolphin" \
   "Duckstation" \
@@ -315,6 +329,10 @@ configurator_power_user_changes_dialog() {
 
   "RetroArch" )
     retroarch
+  ;;
+
+  "Cemu" )
+    Cemu-wrapper
   ;;
 
   "Citra" )

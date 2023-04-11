@@ -1446,12 +1446,43 @@ ryujinx_init() {
   dir_prep "$bios_folder/switch/keys" "/var/config/Ryujinx/system"
 }
 
+cemu_init() {
+  echo "----------------------"
+  echo "Initializing CEMU"
+  echo "----------------------"
+  # removing config directory to wipe legacy files
+  rm -rf /var/config/Cemu
+  mkdir -pv /var/config/Cemu/
+  cp -fvr "$emuconfigs/cemu/"* /var/config/Cemu/
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/Cemu/settings.xml
+  #TODO
+  dir_prep "$rdhome/saves/wiiu/cemu" "$rdhome/bios/cemu/usr/save"
+  #dir_prep "$rdhome/screenshots" "/var/data/dolphin-emu/ScreenShots"
+  #dir_prep "$rdhome/states/cemu" "/var/data/dolphin-emu/StateSaves"
+}
+
+cemu_init() {
+  echo "----------------------"
+  echo "Initializing CEMU"
+  echo "----------------------"
+  # removing config directory to wipe legacy files
+  rm -rf /var/config/Cemu
+  mkdir -pv /var/config/Cemu/
+  cp -fvr "$emuconfigs/cemu/"* /var/config/Cemu/
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/Cemu/settings.xml
+  #TODO
+  dir_prep "$rdhome/saves/wiiu/cemu" "$rdhome/bios/cemu/usr/save"
+  #dir_prep "$rdhome/screenshots" "/var/data/dolphin-emu/ScreenShots"
+  #dir_prep "$rdhome/states/cemu" "/var/data/dolphin-emu/StateSaves"
+}
+
 standalones_init() {
   # This script is configuring the standalone emulators with the default files present in emuconfigs folder
 
   echo "------------------------------------"
   echo "Initializing standalone emulators"
   echo "------------------------------------"
+  cemu_init
   citra_init
   dolphin_init
   duckstation_init
@@ -1535,6 +1566,9 @@ cli_emulator_reset() {
       else
         printf "You do not appear to be connected to a network with internet access.\n\nThe RetroArch reset process requires some files from the internet to function properly.\n\nPlease retry this process once a network connection is available.\n"
       fi
+    ;;
+    "cemu" )
+      cemu_init
     ;;
     "citra" )
       citra_init
@@ -1686,6 +1720,13 @@ emulators_post_move() {
   dir_prep "$bios_folder/pico-8" "$HOME/.lexaloffle/pico-8" # Store binary and config files together. The .lexaloffle directory is a hard-coded location for the PICO-8 config file, cannot be changed
   dir_prep "$roms_folder/pico8" "$bios_folder/pico-8/carts"
   dir_prep "$saves_folder/pico-8" "$bios_folder/pico-8/cdata"
+
+  # Cemu section
+  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/Cemu/settings.xml
+  #TODO
+  dir_prep "$rdhome/saves/wiiu/cemu" "$rdhome/bios/cemu/usr/save"
+  #dir_prep "$rdhome/screenshots" "/var/data/dolphin-emu/ScreenShots"
+  #dir_prep "$rdhome/states/cemu" "/var/data/dolphin-emu/StateSaves"
 }
 
 create_lock() {
