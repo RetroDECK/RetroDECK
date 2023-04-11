@@ -1760,7 +1760,7 @@
         <platform>wii</platform>
         <theme>wii</theme>
     </system>
-<!-- 
+
     <system>
         <name>wiiu</name>
         <fullname>Nintendo Wii U</fullname>
@@ -1770,7 +1770,7 @@
         <platform>wiiu</platform>
         <theme>wiiu</theme>
     </system>
--->
+
     <system>
         <name>wonderswan</name>
         <fullname>Bandai WonderSwan</fullname>
