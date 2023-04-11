@@ -53,9 +53,9 @@ https://retrodeck.net
       ;;
     --reset-emulator*)
       echo "You are about to reset one or more RetroDECK emulators."
-      echo "Available options are: retroarch citra dolphin duckstation melonds pcsx2 ppsspp primehack rpcs3 xemu yuzu all-emulators"
+      echo "Available options are: retroarch cemu citra dolphin duckstation melonds pcsx2 ppsspp primehack rpcs3 xemu yuzu all-emulators"
       read -p "Please enter the emulator you would like to reset: " emulator
-      if [[ "$emulator" =~ ^(retroarch|citra|dolphin|duckstation|melonds|pcsx2|ppsspp|primehack|rpcs3|xemu|yuzu|all-emulators)$ ]]; then
+      if [[ "$emulator" =~ ^(retroarch|cemu|citra|dolphin|duckstation|melonds|pcsx2|ppsspp|primehack|rpcs3|xemu|yuzu|all-emulators)$ ]]; then
         read -p "You are about to reset $emulator to default settings. Enter 'y' to continue, 'n' to stop: " response
         if [[ $response == [yY] ]]; then
           cli_emulator_reset $emulator

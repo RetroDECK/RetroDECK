@@ -1056,6 +1056,10 @@ multi_user_link_current_user_files() {
 multi_user_selective_emu_init() {
  case "$1" in
 
+  "Cemu")
+    cemu_init
+  ;;
+  
   "citra-emu")
     citra_init
   ;;
@@ -1444,21 +1448,6 @@ ryujinx_init() {
     sed -i 's#/home/deck/retrodeck#'$rdhome'#g' /var/config/Ryujinx/Config.json
   fi
   dir_prep "$bios_folder/switch/keys" "/var/config/Ryujinx/system"
-}
-
-cemu_init() {
-  echo "----------------------"
-  echo "Initializing CEMU"
-  echo "----------------------"
-  # removing config directory to wipe legacy files
-  rm -rf /var/config/Cemu
-  mkdir -pv /var/config/Cemu/
-  cp -fvr "$emuconfigs/cemu/"* /var/config/Cemu/
-  sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/Cemu/settings.xml
-  #TODO
-  dir_prep "$rdhome/saves/wiiu/cemu" "$rdhome/bios/cemu/usr/save"
-  #dir_prep "$rdhome/screenshots" "/var/data/dolphin-emu/ScreenShots"
-  #dir_prep "$rdhome/states/cemu" "/var/data/dolphin-emu/StateSaves"
 }
 
 cemu_init() {
@@ -1947,6 +1936,7 @@ finit() {
   # Add packaged extras, after the ROMS folder has been initialized
   cp /app/retrodeck/extras/doom1.wad "$roms_folder/doom/doom1.wad" # No -f in case the user already has it
 
+  tools_init
   ra_init
   standalones_init
   ) |
