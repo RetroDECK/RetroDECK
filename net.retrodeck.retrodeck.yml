@@ -272,10 +272,11 @@ modules:
         branch: 608d8a3c09abc5db398cdadc09e18fd2dfbaf570
       - type: shell
         commands:
-          - sed -i 's/QUIT EMULATIONSTATION/QUIT RETRODECK/g' es-app/src/guis/GuiMenu.cpp
           - sed -i 's#"EMULATIONSTATION-DE  V" + Utils::String::toUpper(PROGRAM_VERSION_STRING)#"RetroDECK
             v'$(cat ${FLATPAK_DEST}/retrodeck/version)', ES-DE  v" + Utils::String::toUpper(PROGRAM_VERSION_STRING)#g'
             es-app/src/guis/GuiMenu.cpp
+      - type: patch
+        path: rd-submodules/es-de/es-de-retrodeck-mods.patch
 
   # ES-DE - END
 

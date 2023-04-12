@@ -1,0 +1,40 @@
+diff -au1r emulationstation-de/es-app/src/guis/GuiMenu.cpp emulationstation-de/es-app/src/guis/GuiMenu.cpp
+--- emulationstation-de/es-app/src/guis/GuiMenu.cpp	2023-04-12 09:08:12.394935336 -0400
++++ emulationstation-de/es-app/src/guis/GuiMenu.cpp	2023-04-12 10:08:50.433350606 -0400
+@@ -66,2 +66,4 @@
+ 
++    addEntry("RETRODECK CONFIGURATOR", 0x777777FF, true, [this] { openRetroDeckConfigurator(); });
++
+     if (!Settings::getInstance()->getBool("ForceKiosk") &&
+@@ -69,3 +71,3 @@
+ #if defined(__APPLE__)
+-        addEntry("QUIT EMULATIONSTATION", 0x777777FF, false, [this] { openQuitMenu(); });
++        addEntry("QUIT RETRODECK", 0x777777FF, false, [this] { openQuitMenu(); });
+ #else
+@@ -74,3 +76,3 @@
+         else
+-            addEntry("QUIT EMULATIONSTATION", 0x777777FF, false, [this] { openQuitMenu(); });
++            addEntry("QUIT RETRODECK", 0x777777FF, false, [this] { openQuitMenu(); });
+ #endif
+@@ -1704,2 +1706,9 @@
+ 
++void GuiMenu::openRetroDeckConfigurator()
++{
++    // Launch the configurator.sh script
++    int result = system("/app/tools/configurator.sh");
++    // You can add any checks for the script's outcome here.
++}
++
+ void GuiMenu::openQuitMenu()
+@@ -1732,3 +1741,3 @@
+         });
+-        auto quitText = std::make_shared<TextComponent>("QUIT EMULATIONSTATION",
++        auto quitText = std::make_shared<TextComponent>("QUIT RETRODECK",
+                                                         Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+diff -au1r emulationstation-de/es-app/src/guis/GuiMenu.h emulationstation-de/es-app/src/guis/GuiMenu.h
+--- emulationstation-de/es-app/src/guis/GuiMenu.h	2023-04-12 09:08:12.394935336 -0400
++++ emulationstation-de/es-app/src/guis/GuiMenu.h	2023-04-12 09:33:25.023871033 -0400
+@@ -46,2 +46,3 @@
+     void openOtherOptions();
++    void openRetroDeckConfigurator();
+     void openQuitMenu();
