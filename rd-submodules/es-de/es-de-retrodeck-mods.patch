@@ -1,0 +1,50 @@
+diff -au1r emulationstation-de/es-app/src/guis/GuiMenu.cpp emulationstation-de-patched/es-app/src/guis/GuiMenu.cpp
+--- emulationstation-de/es-app/src/guis/GuiMenu.cpp	2023-04-12 09:08:12.394935336 -0400
++++ emulationstation-de-patched/es-app/src/guis/GuiMenu.cpp	2023-04-12 16:18:59.249278398 -0400
+@@ -10,2 +10,3 @@
+ #include "guis/GuiMenu.h"
++#include "utils/PlatformUtil.h"
+ 
+@@ -66,2 +67,4 @@
+ 
++    addEntry("RETRODECK CONFIGURATOR", 0x777777FF, false, [this] { openRetroDeckConfigurator(); });
++
+     if (!Settings::getInstance()->getBool("ForceKiosk") &&
+@@ -69,3 +72,3 @@
+ #if defined(__APPLE__)
+-        addEntry("QUIT EMULATIONSTATION", 0x777777FF, false, [this] { openQuitMenu(); });
++        addEntry("QUIT RETRODECK", 0x777777FF, false, [this] { openQuitMenu(); });
+ #else
+@@ -74,3 +77,3 @@
+         else
+-            addEntry("QUIT EMULATIONSTATION", 0x777777FF, false, [this] { openQuitMenu(); });
++            addEntry("QUIT RETRODECK", 0x777777FF, false, [this] { openQuitMenu(); });
+ #endif
+@@ -1704,2 +1707,15 @@
+ 
++void GuiMenu::openRetroDeckConfigurator()
++{
++    // Launch the configurator.sh script
++    std::string command;
++    std::string startDirectory;
++    bool runInBackground;
++    command = "bash /app/tools/configurator.sh";
++    startDirectory = "/app/tools";
++    runInBackground = false;
++    int result = Utils::Platform::launchGameUnix(command, startDirectory, runInBackground);
++    // You can add any checks for the script's outcome here.
++}
++
+ void GuiMenu::openQuitMenu()
+@@ -1732,3 +1748,3 @@
+         });
+-        auto quitText = std::make_shared<TextComponent>("QUIT EMULATIONSTATION",
++        auto quitText = std::make_shared<TextComponent>("QUIT RETRODECK",
+                                                         Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+diff -au1r emulationstation-de/es-app/src/guis/GuiMenu.h emulationstation-de-patched/es-app/src/guis/GuiMenu.h
+--- emulationstation-de/es-app/src/guis/GuiMenu.h	2023-04-12 09:08:12.394935336 -0400
++++ emulationstation-de-patched/es-app/src/guis/GuiMenu.h	2023-04-12 09:33:25.023871033 -0400
+@@ -46,2 +46,3 @@
+     void openOtherOptions();
++    void openRetroDeckConfigurator();
+     void openQuitMenu();

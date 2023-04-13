@@ -42,6 +42,7 @@ jobs:
           io.qt.qtwebengine.BaseApp/x86_64/6.3 \
           org.freedesktop.Sdk.Extension.llvm13 \
           org.freedesktop.Sdk.Extension.dotnet6/x86_64/21.08
+          sh automation_tools/update_sha.sh # Run SHA placehold replacement script for dynamic archives
 
       - name: Build flatpak
         run: |

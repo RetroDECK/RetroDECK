@@ -18,7 +18,8 @@ Arguments:
     -v, --version                 Print RetroDECK version
     --info-msg                    Print paths and config informations
     --configurator                Starts the RetroDECK Configurator
-    --compress <file>             Compresses target file to .chd format. Supports .cue, .iso and .gdi formats
+    --compress-one <file>         Compresses target file to a compatible format
+    --compress-all <format>       Compresses all supported games into compatible format. Available formats are \"chd\", \"zip\", \"rvz\" and \"all\".
     --reset-emulator <emulator>   Reset one or more emulator configs to the default values
     --reset-retrodeck             Starts the initial RetroDECK installer (backup your data first!)
 
@@ -39,9 +40,12 @@ https://retrodeck.net
       cat $rd_conf
       exit
       ;;
-    --compress*)
-      cli_compress_file "$2"
+    --compress-one*)
+      cli_compress_single_game "$2"
       exit
+      ;;
+    --compress-all*)
+      cli_compress_all_games "$2"
       ;;
     --configurator*)
       sh /app/tools/configurator.sh
@@ -49,9 +53,9 @@ https://retrodeck.net
       ;;
     --reset-emulator*)
       echo "You are about to reset one or more RetroDECK emulators."
-      echo "Available options are: retroarch citra dolphin duckstation melonds pcsx2 ppsspp primehack rpcs3 xemu yuzu all-emulators"
+      echo "Available options are: retroarch cemu citra dolphin duckstation melonds pcsx2 ppsspp primehack rpcs3 xemu yuzu all-emulators"
       read -p "Please enter the emulator you would like to reset: " emulator
-      if [[ "$emulator" =~ ^(retroarch|citra|dolphin|duckstation|melonds|pcsx2|ppsspp|primehack|rpcs3|xemu|yuzu|all-emulators)$ ]]; then
+      if [[ "$emulator" =~ ^(retroarch|cemu|citra|dolphin|duckstation|melonds|pcsx2|ppsspp|primehack|rpcs3|xemu|yuzu|all-emulators)$ ]]; then
         read -p "You are about to reset $emulator to default settings. Enter 'y' to continue, 'n' to stop: " response
         if [[ $response == [yY] ]]; then
           cli_emulator_reset $emulator
@@ -84,7 +88,10 @@ https://retrodeck.net
       exit 1
       ;;
     *)
-      echo "Please specify a valid option. Use -h for more information."
+      validate_input "$i"
+      if [[ ! $input_validated == "true" ]]; then
+        echo "Please specify a valid option. Use -h for more information."
+      fi
       ;;
   esac
 done
@@ -97,20 +104,56 @@ then
   if [ "$hard_version" != "$version" ];
   then
     echo "Config file's version is $version but the actual version is $hard_version"
-    post_update       # Executing post update script
+    
+    if grep -qF "cooker" <<< $hard_version; then # If newly-installed version is a "cooker" build
+      cooker_base_version=$(echo $hard_version | cut -d'-' -f2 | sed 's/\([0-9]\.[0-9][a-z]\).*/\1/')
+      choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Upgrade" --extra-button="Don't Upgrade" --extra-button="Fresh Install" \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Cooker Upgrade" \
+      --text="You appear to be upgrading to a \"cooker\" build of RetroDECK.\n\nWould you like to perform the standard post-update process, skip the post-update process or remove ALL existing RetroDECK data to start from a fresh install?")
+      rc=$? # Capture return code, as "Yes" button has no text value
+      if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
+        if [[ $choice == "Don't Upgrade" ]]; then # If user wants to bypass the post_update.sh process this time.
+          echo "Skipping upgrade process for cooker build, updating stored version in retrodeck.cfg"
+          set_setting_value $rd_conf "version" "$hard_version" retrodeck # Set version of currently running RetroDECK to updated retrodeck.cfg
+        elif [[ $choice == "Fresh Install" ]]; then # Remove all RetroDECK data and start a fresh install
+          echo "Removing RetroDECK data and starting fresh"
+          rm -rf /var
+          rm -rf "$HOME/retrodeck"
+          finit
+        fi
+      else
+        echo "Performing normal upgrade process for version" $cooker_base_version
+        version=$cooker_base_version # Temporarily assign cooker base version to $version so update script can read it properly.
+        post_update
+      fi
+    else # If newly-installed version is a normal build.
+      post_update       # Executing post update script
   fi
 # Else, LOCKFILE IS NOT EXISTING (WAS REMOVED)
 # if the lock file doesn't exist at all means that it's a fresh install or a triggered reset
 else
   echo "Lockfile not found"
-  finit             # Executing First/Force init
+  if [[ check_network_connectivity == "true" ]]; then
+    finit             # Executing First/Force init
+  else
+    configurator_generic_dialog "You do not appear to be connected to a network with internet access.\n\nThe initial RetroDECK setup requires some files from the internet to function properly.\n\nPlease retry this process once a network connection is available."
+    exit 1
+  fi
 fi
 
-source $rd_conf # Load latest variable values
+if [[ $multi_user_mode == "true" ]]; then
+  multi_user_determine_current_user
+fi
 
 # Check if running in Desktop mode and warn if true, unless desktop_mode_warning=false in retrodeck.cfg
 
 desktop_mode_warning
+
+# Check if there is a new version of RetroDECK available, if update_check=true in retrodeck.cfg and there is network connectivity available.
+if [[ check_network_connectivity == "true" ]] && [[ $update_check == "true" ]]; then
+  check_for_version_update
+fi
 
 # Normal Startup
 

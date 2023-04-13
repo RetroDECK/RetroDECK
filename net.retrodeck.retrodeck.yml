@@ -24,6 +24,7 @@ finish-args:
   - --talk-name=org.freedesktop.ScreenSaver
   - --talk-name=org.freedesktop.PowerManagement.Inhibit
   - --talk-name=org.freedesktop.login1.Manager
+  - --talk-name=org.freedesktop.Flatpak
   - --filesystem=xdg-run/app/com.discordapp.Discord:create
   # Yuzu
   # - --filesystem=home:ro # This may break Yuzu, let's see
@@ -39,7 +40,6 @@ cleanup:
   - /include
   - /share/ffmpeg
   - /lib/cmake
-  #- /lib/debug
   - /lib/pkgconfig
   # Yuzu
   - /include
@@ -52,6 +52,9 @@ cleanup:
   - /src
   - '*.a'
   - '*.la'
+  # XMLSTARLET
+  - /lib/debug
+  - /share/runtime
 cleanup-commands:
   # Yuzu
   - /app/cleanup-BaseApp.sh
@@ -107,7 +110,6 @@ modules:
           - autoreconf -vfi
     post-install:
       - ln -s "xml" "${FLATPAK_DEST}/bin/xmlstarlet" ||:
-    cleanup: ['*']
 
   # pcsx2-qt needs QT6, maybe others, here until every qt emulator will support qt6 (not yuzu atm)
   # from: https://github.com/flathub/org.profex_xrd.Profex
@@ -194,6 +196,24 @@ modules:
         url: https://github.com/CharlesThobe/chdman.git
         commit: f7cadf1720cbeba8a14f2685830ff424a0c7f6cd
 
+  - name: rclone
+    buildsystem: simple
+    build-commands:
+      - cp rclone ${FLATPAK_DEST}/bin/
+    sources:
+      - type: archive
+        url: https://github.com/rclone/rclone/releases/download/v1.61.1/rclone-v1.61.1-linux-amd64.zip
+        sha256: 6d6455e1cb69eb0615a52cc046a296395e44d50c0f32627ba8590c677ddf50a9
+
+  - name: jq
+    buildsystem: simple
+    build-commands:
+      - cp jq-linux64 ${FLATPAK_DEST}/bin/jq
+    sources:
+      - type: file
+        url: https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
+        sha256: af986793a515d500ab2d35f8d2aecd656e764504b789b66d7e1a0b727a124c44
+
   # ES-DE - START
   # https://gitlab.com/es-de/emulationstation-de
 
@@ -252,10 +272,11 @@ modules:
         branch: 608d8a3c09abc5db398cdadc09e18fd2dfbaf570
       - type: shell
         commands:
-          - sed -i 's/QUIT EMULATIONSTATION/QUIT RETRODECK/g' es-app/src/guis/GuiMenu.cpp
           - sed -i 's#"EMULATIONSTATION-DE  V" + Utils::String::toUpper(PROGRAM_VERSION_STRING)#"RetroDECK
             v'$(cat ${FLATPAK_DEST}/retrodeck/version)', ES-DE  v" + Utils::String::toUpper(PROGRAM_VERSION_STRING)#g'
             es-app/src/guis/GuiMenu.cpp
+      - type: patch
+        path: rd-submodules/es-de/es-de-retrodeck-mods.patch
 
   # ES-DE - END
 
@@ -270,36 +291,6 @@ modules:
       - type: git
         url:  https://github.com/anthonycaccese/art-book-next-es-de.git
         commit: a0dc0cccaa3f1475feb58e551fe732d982e161c0
-
-  - name: alekfull-nx-es-de
-    buildsystem: simple
-    build-commands:
-      - mkdir -p ${FLATPAK_DEST}/share/emulationstation/themes/alekfull-nx-es-de/
-      - mv -f * ${FLATPAK_DEST}/share/emulationstation/themes/alekfull-nx-es-de/
-    sources:
-      - type: git
-        url:  https://github.com/anthonycaccese/alekfull-nx-es-de.git
-        commit: 5011e5dca75663ff18602f3af9d17e9e880880ef
-
-  - name: retrofix-revisited-es-de
-    buildsystem: simple
-    build-commands:
-      - mkdir -p ${FLATPAK_DEST}/share/emulationstation/themes/retrofix-revisited-es-de/
-      - mv -f * ${FLATPAK_DEST}/share/emulationstation/themes/retrofix-revisited-es-de/
-    sources:
-      - type: git
-        url:  https://github.com/anthonycaccese/retrofix-revisited-es-de.git
-        commit: 23b80225078d2a3723039a8e94b6147c84065028
-
-  - name: nso-menu-interpreted-es-de
-    buildsystem: simple
-    build-commands:
-      - mkdir -p ${FLATPAK_DEST}/share/emulationstation/themes/nso-menu-interpreted-es-de/
-      - mv -f * ${FLATPAK_DEST}/share/emulationstation/themes/nso-menu-interpreted-es-de/
-    sources:
-      - type: git
-        url:  https://github.com/anthonycaccese/nso-menu-interpreted-es-de.git
-        commit: f129c2d88e060a6c5d7643de5aeb02a0cc013de3
 
   # ES-DE Themes - END
 
@@ -432,6 +423,16 @@ modules:
       - type: archive
         url: https://buildbot.libretro.com/stable/1.15.0/linux/x86_64/RetroArch_cores.7z
         sha256: 2230bc38eaf87406efd0c2b7bdd1cf9e813ba113505600f14a7ef9eb06f8c7c0
+
+  - name: doom-shareware
+    buildsystem: simple
+    build-commands:
+    - mkdir -p ${FLATPAK_DEST}/retrodeck/extras
+    - cp doom1.wad ${FLATPAK_DEST}/retrodeck/extras/
+    sources:
+      - type: archive
+        url: https://buildbot.libretro.com/assets/cores/DOOM/Doom%20%28Shareware%29.zip
+        sha256: DOOMSHAPLACEHOLDER
 
   # PPSSPP - START
   # https://github.com/flathub/org.ppsspp.PPSSPP
@@ -1107,8 +1108,9 @@ modules:
     config-opts:
       - -DPORTABLE=false
       - -DENABLE_VCPKG=false
-    env:
-      - LC_ALL=C
+    build-options:
+      env:
+        - LC_ALL=C
     sources:
       - type: git
         url: https://github.com/cemu-project/Cemu
@@ -1152,15 +1154,14 @@ modules:
 
   # Ryujinx - END
 
-  # External manifests end
+    # External manifests end
 
   - name: retrodeck
     buildsystem: simple
     build-commands:
 
-      # Initializing retrodeck and emulationstation config folders
+      # Initializing RO retrodeck config folder
       - mkdir -p ${FLATPAK_DEST}/retrodeck
-      - mkdir -p ${FLATPAK_DEST}/emulationstation
 
       # Prep the ES-DE and RetroArch config files - I will have to SED/XMLSTARLET them soon
       - rm -rf /app/share/emulationstation/resources/systems/unix/es_find_rules.xml
@@ -1170,12 +1171,11 @@ modules:
       # These must be put in home folder, managed by retrodeck.sh
       - cp es-configs/es_settings.xml ${FLATPAK_DEST}/retrodeck/es_settings.xml
 
-      # Logo, res, move graphics directory to mutable space so splash can be changed after build
-      - mv -f -t ${FLATPAK_DEST}/emulationstation /app/share/emulationstation/resources/graphics
-      - ln -s ${FLATPAK_DEST}/emulationstation/graphics /app/share/emulationstation/resources/graphics
-      - cp -f res/extra-splashes/* ${FLATPAK_DEST}/emulationstation/graphics
-      - cp -f res/splash.svg ${FLATPAK_DEST}/emulationstation/graphics/splash.svg
-      - cp -f res/splash.svg ${FLATPAK_DEST}/emulationstation/graphics/splash-orig.svg
+      # Logo, res, move graphics directory away from default location so splash can be changed after build
+      - mv -f -t ${FLATPAK_DEST}/retrodeck /app/share/emulationstation/resources/graphics
+      - cp -f res/splash.svg ${FLATPAK_DEST}/retrodeck/graphics/splash.svg
+      - cp -f res/splash.svg ${FLATPAK_DEST}/retrodeck/graphics/splash-orig.svg
+      - cp -rf res/extra-splashes/ ${FLATPAK_DEST}/retrodeck/graphics
       - cp -f res/icon.svg /app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg
 
       # RetroDECK core script
@@ -1186,7 +1186,7 @@ modules:
       - mkdir -p /app/tools
       - cp tools/configurator.sh /app/tools/configurator.sh
       - chmod +x /app/tools/configurator.sh
-      - cp es-configs/tools-gamelist.xml /app/tools/gamelist.xml
+      - cp es-configs/tools-gamelist.xml /app/retrodeck/tools-gamelist.xml
 
       # Function libraries
       - mkdir -p /app/libexec
