@@ -25,3 +25,5 @@ do
     /bin/sed -i 's^'"$placeholder"'^'"$hash"'^' $rd_manifest
   fi
 done < "$sha_update_list"
+
+echo "Done updating manifest hashes."
