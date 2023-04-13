@@ -1,3 +1,0 @@
-# The proper format for this file is
-# URL^PLACEHOLDERTEXT
-https://buildbot.libretro.com/assets/cores/DOOM/Doom%20%28Shareware%29.zip^DOOMSHAPLACEHOLDER
