@@ -19,4 +19,4 @@ do
   echo "URL to hash: $url"
   hash=$(curl -sL "$url" | sha256sum | cut -d ' ' -f1)
   sed -i 's^'"$placeholder"'^'"$hash"'^' $rd_manifest
-done < $sha_update_list
+done < <(cat "$sha_update_list")
