@@ -71,6 +71,7 @@
             <p>New features - General:</p>
             <ul>
                <li>Added CEMU, WiiU Emulator</li>
+               <li>Dolphin (Standalone) is now default for GameCube and Wii</li>
             </ul>
             <p>Bug fixes and other changes:</p>
             <ul>
