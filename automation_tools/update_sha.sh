@@ -15,8 +15,10 @@ echo
 
 while IFS="^" read -r url placeholder
 do
+  echo
   echo "Placeholder text: $placeholder"
   echo "URL to hash: $url"
+  echo
   hash=$(curl -sL "$url" | sha256sum | cut -d ' ' -f1)
   sed -i 's^'"$placeholder"'^'"$hash"'^' $rd_manifest
 done < <(cat "$sha_update_list")
