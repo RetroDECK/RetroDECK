@@ -4,7 +4,7 @@
 # sh automation_tools/update_sha.sh
 
 rd_manifest=${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml
-sha_update_list=${GITHUB_WORKSPACE}/automation_tools/sha_to_update.cfg
+sha_update_list=${GITHUB_WORKSPACE}/automation_tools/sha_update_list.cfg
 
 while IFS="^" read -r url placeholder
 do
