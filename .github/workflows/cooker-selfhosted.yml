@@ -44,7 +44,7 @@ jobs:
           org.freedesktop.Sdk.Extension.dotnet6/x86_64/21.08
           echo ${GITHUB_WORKSPACE} #DEBUG
           df -h ${GITHUB_WORKSPACE} #DEBUG
-          bash ${GITHUB_WORKSPACE}/automation_tools/update_sha.sh # Run SHA placehold replacement script for dynamic archives
+          /bin/bash ${GITHUB_WORKSPACE}/automation_tools/update_sha.sh # Run SHA placehold replacement script for dynamic archives
 
       - name: Build flatpak
         run: |
