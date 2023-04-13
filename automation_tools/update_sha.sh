@@ -9,6 +9,9 @@ sha_update_list=${GITHUB_WORKSPACE}/automation_tools/sha_update_list.cfg
 echo "Manifest location: $rd_manifest"
 echo "Hash update list location: $sha_update_list"
 echo
+echo "Update list contents:"
+cat "$sha_update_list"
+echo
 
 while IFS="^" read -r url placeholder
 do
