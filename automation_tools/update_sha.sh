@@ -15,11 +15,13 @@ echo
 
 while IFS="^" read -r url placeholder
 do
-  echo
-  echo "Placeholder text: $placeholder"
-  echo "URL to hash: $url"
-  echo
-  hash=$(curl -sL "$url" | sha256sum | cut -d ' ' -f1)
-  echo "Hash found: $hash"
-  sed -i 's^'"$placeholder"'^'"$hash"'^' $rd_manifest
+  if [[ ! $url == "#"* ]]; then
+    echo
+    echo "Placeholder text: $placeholder"
+    echo "URL to hash: $url"
+    echo
+    hash=$(curl -sL "$url" | sha256sum | cut -d ' ' -f1)
+    echo "Hash found: $hash"
+    /bin/sed -i 's^'"$placeholder"'^'"$hash"'^' $rd_manifest
+  fi
 done < "$sha_update_list"
