@@ -710,7 +710,7 @@ done < $1
 
 check_network_connectivity() {
   # This function will do a basic check for network availability and return "true" if it is working.
-  # USAGE: if [[ check_network_connectivity == "true" ]]; then
+  # USAGE: if [[ $(check_network_connectivity) == "true" ]]; then
 
   wget -q --spider $rd_repo
 
@@ -1550,7 +1550,7 @@ cli_emulator_reset() {
   case $1 in
 
     "retroarch" )
-      if [[ check_network_connectivity == "true" ]]; then
+      if [[ $(check_network_connectivity) == "true" ]]; then
         ra_init
       else
         printf "You do not appear to be connected to a network with internet access.\n\nThe RetroArch reset process requires some files from the internet to function properly.\n\nPlease retry this process once a network connection is available.\n"
@@ -1584,7 +1584,7 @@ cli_emulator_reset() {
       rpcs3_init
     ;;
     "xemu" )
-      if [[ check_network_connectivity == "true" ]]; then
+      if [[ $(check_network_connectivity) == "true" ]]; then
         xemu_init
       else
         printf "You do not appear to be connected to a network with internet access.\n\nThe Xemu reset process requires some files from the internet to function properly.\n\nPlease retry this process once a network connection is available.\n"
@@ -1594,7 +1594,7 @@ cli_emulator_reset() {
       yuzu_init
     ;;
     "all-emulators" )
-      if [[ check_network_connectivity == "true" ]]; then
+      if [[ $(check_network_connectivity) == "true" ]]; then
         ra_init
         standalones_init
       else

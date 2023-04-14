@@ -88,7 +88,7 @@ configurator_reset_dialog() {
 
     "RetroArch" )
       if [[ $(configurator_reset_confirmation_dialog "RetroArch" "Are you sure you want to reset the RetroArch emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
-        if [[ check_network_connectivity == "true" ]]; then
+        if [[ $(check_network_connectivity) == "true" ]]; then
           ra_init
           configurator_process_complete_dialog "resetting $emulator_to_reset"
         else
@@ -193,7 +193,7 @@ configurator_reset_dialog() {
 
     "XEMU" )
       if [[ $(configurator_reset_confirmation_dialog "XEMU" "Are you sure you want to reset the XEMU emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
-        if [[ check_network_connectivity == "true" ]]; then
+        if [[ $(check_network_connectivity) == "true" ]]; then
           xemu_init
           configurator_process_complete_dialog "resetting $emulator_to_reset"
         else
@@ -225,7 +225,7 @@ configurator_reset_dialog() {
 
 "Reset All Emulators" )
   if [[ $(configurator_reset_confirmation_dialog "all emulators" "Are you sure you want to reset all emulators to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
-    if [[ check_network_connectivity == "true" ]]; then
+    if [[ $(check_network_connectivity) == "true" ]]; then
       ra_init
       standalones_init
       configurator_process_complete_dialog "resetting all emulators"
