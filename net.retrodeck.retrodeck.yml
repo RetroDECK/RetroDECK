@@ -1144,9 +1144,12 @@ modules:
     buildsystem: simple
     build-commands:
       - |
+        ls -lah #DEBUG
         mv publish ${FLATPAK_DEST}/ryujinx
+        ls -lah ${FLATPAK_DEST} #DEBUG
         ln -s ${FLATPAK_DEST}/ryujinx/Ryujinx /app/bin/Ryujinx
-        # chmod +x /app/bin/Ryujinx
+        ls -lah ${FLATPAK_DEST}/ryujinx/Ryujinx #DEBUG
+        ls -lah /app/bin/Ryujinx #DEBUG
     sources:
       - type: file
         url: https://github.com/Ryujinx/release-channel-master/releases/download/1.1.685/ryujinx-1.1.685-linux_x64.tar.gz
