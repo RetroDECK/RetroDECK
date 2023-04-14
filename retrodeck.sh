@@ -129,6 +129,7 @@ then
       fi
     else # If newly-installed version is a normal build.
       post_update       # Executing post update script
+    fi
   fi
 # Else, LOCKFILE IS NOT EXISTING (WAS REMOVED)
 # if the lock file doesn't exist at all means that it's a fresh install or a triggered reset
