@@ -1154,7 +1154,7 @@ modules:
 
   # Ryujinx - END
 
-    # External manifests end
+  # External manifests end
 
   - name: retrodeck
     buildsystem: simple
