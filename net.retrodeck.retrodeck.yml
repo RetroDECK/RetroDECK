@@ -74,6 +74,7 @@ modules:
   # [ ] change branch into main in version-initialization (first one)
   # [ ] change branch into main in retrodeck module (last one)
   # [ ] if header (before modules) was edited, edit it even in flathub.yml
+  # [ ] Vita3K: update branch to main (and remember to download it the first time)
   #
   - name: version-initialization
     buildsystem: simple
@@ -1144,9 +1145,9 @@ modules:
     buildsystem: simple
     build-commands:
       - |
-        mv publish ${FLATPAK_DEST}/ryujinx
-        ln -s ${FLATPAK_DEST}/ryujinx/Ryujinx /app/bin/Ryujinx
-        # chmod +x /app/bin/Ryujinx
+        tar -zxvf ryujinx-1.1.685-linux_x64.tar.gz
+        mv -v publish ${FLATPAK_DEST}/ryujinx
+        ln -sv ${FLATPAK_DEST}/ryujinx/Ryujinx ${FLATPAK_DEST}/bin/Ryujinx
     sources:
       - type: file
         url: https://github.com/Ryujinx/release-channel-master/releases/download/1.1.685/ryujinx-1.1.685-linux_x64.tar.gz
@@ -1154,7 +1155,29 @@ modules:
 
   # Ryujinx - END
 
-    # External manifests end
+  # Vita3K - START
+  # NOTE: this is a continuos release, it's provided but not supported
+  # to update this module:
+  # wget https://github.com/Vita3K/Vita3K/releases/download/continuous/ubuntu-latest.zip -O rd-submodules/vita3k/vita3k-14-01-23.zip
+  # sha256sum rd-submodules/vita3k/vita3k*.zip
+  # change url and sha
+  # check the branch in the url
+
+  - name: Vita3K
+    buildsystem: simple
+    build-commands:
+      - |
+        mkdir -p ${FLATPAK_DEST}/vita3k
+        cp -r * ${FLATPAK_DEST}/vita3k
+        ln -s ${FLATPAK_DEST}/Vita3K /app/bin/Vita3K
+    sources:
+    - type: archive
+      url: https://github.com/XargonWan/RetroDECK/raw/cooker-0.7.0b/rd-submodules/vita3k/vita3k-14-01-23.zip
+      sha256: f814fa5efba6037cef629f7a796dec7ee3d5b9808532230a93b1b8c42981b53b
+
+  # Vita3K - END
+
+  # External manifests end
 
   - name: retrodeck
     buildsystem: simple
