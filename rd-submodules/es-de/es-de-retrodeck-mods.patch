@@ -4,9 +4,9 @@ diff -au1r emulationstation-de/es-app/src/guis/GuiMenu.cpp emulationstation-de-p
 @@ -10,2 +10,3 @@
  #include "guis/GuiMenu.h"
 +#include "utils/PlatformUtil.h"
- 
+
 @@ -66,2 +67,4 @@
- 
+
 +    addEntry("RETRODECK CONFIGURATOR", 0x777777FF, false, [this] { openRetroDeckConfigurator(); });
 +
      if (!Settings::getInstance()->getBool("ForceKiosk") &&
@@ -21,7 +21,7 @@ diff -au1r emulationstation-de/es-app/src/guis/GuiMenu.cpp emulationstation-de-p
 +            addEntry("QUIT RETRODECK", 0x777777FF, false, [this] { openQuitMenu(); });
  #endif
 @@ -1704,2 +1707,15 @@
- 
+
 +void GuiMenu::openRetroDeckConfigurator()
 +{
 +    // Launch the configurator.sh script

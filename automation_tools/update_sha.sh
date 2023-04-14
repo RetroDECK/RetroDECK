@@ -15,7 +15,7 @@ echo
 
 while IFS="^" read -r url placeholder
 do
-  if [[ ! $url == "#"* ]]; then
+  if [[ ! "$url" == "#"* ]] && [[ ! -z "$url" ]]; then
     echo
     echo "Placeholder text: $placeholder"
     echo "URL to hash: $url"

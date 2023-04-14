@@ -425,15 +425,15 @@ modules:
         url: https://buildbot.libretro.com/stable/1.15.0/linux/x86_64/RetroArch_cores.7z
         sha256: 2230bc38eaf87406efd0c2b7bdd1cf9e813ba113505600f14a7ef9eb06f8c7c0
 
-  # - name: doom-shareware
-  #   buildsystem: simple
-  #   build-commands:
-  #   - mkdir -p ${FLATPAK_DEST}/retrodeck/extras
-  #   - cp doom1.wad ${FLATPAK_DEST}/retrodeck/extras/
-  #   sources:
-  #     - type: archive
-  #       url: https://buildbot.libretro.com/assets/cores/DOOM/Doom%20%28Shareware%29.zip
-  #       sha256: DOOMSHAPLACEHOLDER
+  - name: doom-shareware
+    buildsystem: simple
+    build-commands:
+    - mkdir -p ${FLATPAK_DEST}/retrodeck/extras
+    - cp doom1.wad ${FLATPAK_DEST}/retrodeck/extras/
+    sources:
+      - type: archive
+        url: https://buildbot.libretro.com/assets/cores/DOOM/Doom%20%28Shareware%29.zip
+        sha256: DOOMSHAPLACEHOLDER
 
   # PPSSPP - START
   # https://github.com/flathub/org.ppsspp.PPSSPP
