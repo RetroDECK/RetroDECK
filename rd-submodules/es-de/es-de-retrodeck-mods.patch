@@ -1,12 +1,12 @@
-diff -au1r emulationstation-de/es-app/src/guis/GuiMenu.cpp emulationstation-de-patched/es-app/src/guis/GuiMenu.cpp
+diff -au1r emulationstation-de/es-app/src/guis/GuiMenu.cpp emulationstation-de/es-app/src/guis/GuiMenu.cpp
 --- emulationstation-de/es-app/src/guis/GuiMenu.cpp	2023-04-12 09:08:12.394935336 -0400
-+++ emulationstation-de-patched/es-app/src/guis/GuiMenu.cpp	2023-04-12 16:18:59.249278398 -0400
++++ emulationstation-de/es-app/src/guis/GuiMenu.cpp	2023-04-12 16:25:04.618753274 -0400
 @@ -10,2 +10,3 @@
  #include "guis/GuiMenu.h"
 +#include "utils/PlatformUtil.h"
-
+ 
 @@ -66,2 +67,4 @@
-
+ 
 +    addEntry("RETRODECK CONFIGURATOR", 0x777777FF, false, [this] { openRetroDeckConfigurator(); });
 +
      if (!Settings::getInstance()->getBool("ForceKiosk") &&
@@ -21,7 +21,7 @@ diff -au1r emulationstation-de/es-app/src/guis/GuiMenu.cpp emulationstation-de-p
 +            addEntry("QUIT RETRODECK", 0x777777FF, false, [this] { openQuitMenu(); });
  #endif
 @@ -1704,2 +1707,15 @@
-
+ 
 +void GuiMenu::openRetroDeckConfigurator()
 +{
 +    // Launch the configurator.sh script
@@ -41,10 +41,18 @@ diff -au1r emulationstation-de/es-app/src/guis/GuiMenu.cpp emulationstation-de-p
 -        auto quitText = std::make_shared<TextComponent>("QUIT EMULATIONSTATION",
 +        auto quitText = std::make_shared<TextComponent>("QUIT RETRODECK",
                                                          Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
-diff -au1r emulationstation-de/es-app/src/guis/GuiMenu.h emulationstation-de-patched/es-app/src/guis/GuiMenu.h
+diff -au1r emulationstation-de/es-app/src/guis/GuiMenu.h emulationstation-de/es-app/src/guis/GuiMenu.h
 --- emulationstation-de/es-app/src/guis/GuiMenu.h	2023-04-12 09:08:12.394935336 -0400
-+++ emulationstation-de-patched/es-app/src/guis/GuiMenu.h	2023-04-12 09:33:25.023871033 -0400
++++ emulationstation-de/es-app/src/guis/GuiMenu.h	2023-04-12 09:33:25.023871033 -0400
 @@ -46,2 +46,3 @@
      void openOtherOptions();
 +    void openRetroDeckConfigurator();
      void openQuitMenu();
+diff -au1r emulationstation-de/es-core/src/Window.cpp emulationstation-de/es-core/src/Window.cpp
+--- emulationstation-de/es-core/src/Window.cpp	2023-04-12 09:08:12.398268670 -0400
++++ emulationstation-de/es-core/src/Window.cpp	2023-04-14 11:03:48.261309278 -0400
+@@ -179,3 +179,3 @@
+     progressBarRect.barPosY += borderThickness;
+-    progressBarRect.color = 0x79010FFF;
++    progressBarRect.color = 0xC858E6FF;
+     mProgressBarRectangles.emplace_back(progressBarRect);
