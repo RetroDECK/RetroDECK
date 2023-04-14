@@ -1169,7 +1169,8 @@ modules:
       - |
         mkdir -p ${FLATPAK_DEST}/vita3k
         cp -r * ${FLATPAK_DEST}/vita3k
-        ln -s ${FLATPAK_DEST}/Vita3K /app/bin/Vita3K
+        chmod +x ${FLATPAK_DEST}/vita3k/Vita3K
+        ln -s ${FLATPAK_DEST}/vita3k/Vita3K /app/bin/Vita3K
     sources:
     - type: archive
       url: https://github.com/XargonWan/RetroDECK/raw/cooker-0.7.0b/rd-submodules/vita3k/vita3k-14-01-23.zip
