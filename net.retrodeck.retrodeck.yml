@@ -74,6 +74,7 @@ modules:
   # [ ] change branch into main in version-initialization (first one)
   # [ ] change branch into main in retrodeck module (last one)
   # [ ] if header (before modules) was edited, edit it even in flathub.yml
+  # [ ] Vita3K: update branch to main (and remember to download it the first time)
   #
   - name: version-initialization
     buildsystem: simple
