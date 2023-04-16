@@ -1226,8 +1226,9 @@ modules:
       # Initializing default emulator configs
       - cp -r emu-configs ${FLATPAK_DEST}/retrodeck/emu-configs/
 
-      # Overlays
-      #- cp -r overlays ${FLATPAK_DEST}/retrodeck/overlays Disabled in 0.4.2b as it will be introduced in 0.5.0b
+      # PICO-8 wrapper
+      - cp ${FLATPAK_DEST}/retrodeck/emu-configs/pico-8/pico8-wrapper.sh /app/bin/pico8
+      - chmod +x /app/bin/pico8
 
       # Placing appdata
       - mkdir -p ${FLATPAK_DEST}/share/appdata
