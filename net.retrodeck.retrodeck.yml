@@ -1173,8 +1173,8 @@ modules:
         ln -s ${FLATPAK_DEST}/vita3k/Vita3K /app/bin/Vita3K
     sources:
     - type: archive
-      url: https://github.com/XargonWan/RetroDECK/raw/cooker-0.7.0b/rd-submodules/vita3k/vita3k-14-01-23.zip
-      sha256: f814fa5efba6037cef629f7a796dec7ee3d5b9808532230a93b1b8c42981b53b
+      url: https://github.com/Vita3K/Vita3K/releases/download/continuous/ubuntu-latest.zip
+      sha256: VITASHAPLACEHOLDER
 
   # Vita3K - END
 
@@ -1226,8 +1226,9 @@ modules:
       # Initializing default emulator configs
       - cp -r emu-configs ${FLATPAK_DEST}/retrodeck/emu-configs/
 
-      # Overlays
-      #- cp -r overlays ${FLATPAK_DEST}/retrodeck/overlays Disabled in 0.4.2b as it will be introduced in 0.5.0b
+      # PICO-8 wrapper
+      - cp ${FLATPAK_DEST}/retrodeck/emu-configs/pico-8/pico8-wrapper.sh /app/bin/pico8
+      - chmod +x /app/bin/pico8
 
       # Placing appdata
       - mkdir -p ${FLATPAK_DEST}/share/appdata
