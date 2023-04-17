@@ -1194,6 +1194,7 @@ modules:
       - cp es-configs/es_systems.xml /app/share/emulationstation/resources/systems/unix/
       # These must be put in home folder, managed by retrodeck.sh
       - cp es-configs/es_settings.xml ${FLATPAK_DEST}/retrodeck/es_settings.xml
+      - cp -rt ${FLATPAK_DEST}/retrodeck/rd_prepacks/ es-configs/rd_prepacks/*
 
       # Logo, res, move graphics directory away from default location so splash can be changed after build
       - mv -f -t ${FLATPAK_DEST}/retrodeck /app/share/emulationstation/resources/graphics
