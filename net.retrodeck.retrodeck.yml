@@ -1,13 +1,13 @@
 app-id: net.retrodeck.retrodeck
 runtime: org.kde.Platform
-runtime-version: 5.15-21.08
+runtime-version: 5.15-22.08
 #runtime-version: 6.3                        # bumped because of pcsx2-qt
 sdk: org.kde.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.llvm14    # Needed for rpcs3
   #- org.freedesktop.Sdk.Extension.dotnet6   # Needed for Ryujinx - Removed, check if it's not breaking something else
 base: io.qt.qtwebengine.BaseApp             # Needed for Yuzu
-base-version: 5.15-21.08                    # Needed for Yuzu
+base-version: 5.15-22.08                    # Needed for Yuzu
 command: retrodeck.sh
 
 finish-args:
