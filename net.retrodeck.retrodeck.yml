@@ -922,47 +922,47 @@ modules:
   # But AppImage is a single one that keep getting updated at the same link so the sha (that's mandatory) will break the build
   # So yeah we're stuck with this for a while
 
-  - name: duckstation-DontUpdate
-    buildsystem: cmake-ninja
-    no-make-install: true
-    builddir: true
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-      - -DUSE_EGL=ON
-      - -DUSE_SDL2=ON
-      - -DUSE_WAYLAND=ON
-      - -DUSE_X11=ON
-      - -DUSE_DRMKMS=ON
-      - -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON
-    post-install:
-      - install -m 755 -t /app/bin/ bin/duckstation-nogui bin/duckstation-qt
-      - |-
-        for px in 16 32 48 64 128 256; do
-          install -Dm644 ../extras/icons/icon-${px}px.png /app/share/icons/hicolor/${px}x${px}/apps/org.duckstation.DuckStation.png
-        done
-      - cp -r ../data/* bin/translations /app/bin
-    sources:
-      - type: git
-        url: https://github.com/stenzek/duckstation.git
-        commit: 3fb61865e505ba639609fbf16cb8bdf5c66e020c
+  # - name: duckstation-DontUpdate
+  #   buildsystem: cmake-ninja
+  #   no-make-install: true
+  #   builddir: true
+  #   config-opts:
+  #     - -DCMAKE_BUILD_TYPE=Release
+  #     - -DUSE_EGL=ON
+  #     - -DUSE_SDL2=ON
+  #     - -DUSE_WAYLAND=ON
+  #     - -DUSE_X11=ON
+  #     - -DUSE_DRMKMS=ON
+  #     - -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON
+  #   post-install:
+  #     - install -m 755 -t /app/bin/ bin/duckstation-nogui bin/duckstation-qt
+  #     - |-
+  #       for px in 16 32 48 64 128 256; do
+  #         install -Dm644 ../extras/icons/icon-${px}px.png /app/share/icons/hicolor/${px}x${px}/apps/org.duckstation.DuckStation.png
+  #       done
+  #     - cp -r ../data/* bin/translations /app/bin
+  #   sources:
+  #     - type: git
+  #       url: https://github.com/stenzek/duckstation.git
+  #       commit: 3fb61865e505ba639609fbf16cb8bdf5c66e020c
 
   # Duckstation-DontUpdate - END
 
   # Duckstation-AppImage - START
   # https://github.com/stenzek/duckstation/releases/tag/preview
 
-  # - name: Duckstation-AppImage
-  #   buildsystem: simple
-  #   build-commands:
-  #     - chmod +x DuckStation-*.AppImage
-  #     - ./DuckStation-x64*.AppImage --appimage-extract
-  #     - mkdir -p "${FLATPAK_DEST}/duckstation"
-  #     - cp -r squashfs-root/* "${FLATPAK_DEST}/duckstation"
-  #     - ln -s "${FLATPAK_DEST}/duckstation/usr/bin/duckstation" "${FLATPAK_DEST}/bin/duckstation"
-  #   sources:
-  #     - type: file
-  #       url: https://github.com/stenzek/duckstation/releases/download/preview/DuckStation-x64.AppImage
-  #       sha256: a107d1837df020cb4e7b8a542059665428883af69c1cf063edd29e2d75634867
+  - name: Duckstation-AppImage
+    buildsystem: simple
+    build-commands:
+      - chmod +x DuckStation-*.AppImage
+      - ./DuckStation-x64*.AppImage --appimage-extract
+      - mkdir -p "${FLATPAK_DEST}/duckstation"
+      - cp -r squashfs-root/* "${FLATPAK_DEST}/duckstation"
+      - ln -s "${FLATPAK_DEST}/duckstation/usr/bin/duckstation" "${FLATPAK_DEST}/bin/duckstation"
+    sources:
+      - type: file
+        url: https://github.com/stenzek/duckstation/releases/download/preview/DuckStation-x64.AppImage
+        sha256: DUCKSTATIONSHAPLACEHOLDER
 
   # Duckstation-AppImage - END
 
