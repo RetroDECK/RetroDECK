@@ -1611,6 +1611,14 @@ prepare_emulator() {
   fi
 }
 
+update_rpcs3_firmware() {
+  mkdir -p "$roms_folder/ps3/tmp"
+  chmod 777 "$roms_folder/ps3/tmp"
+  wget "$rpcs3_firmware" -P "$roms_folder/ps3/tmp/"
+  rpcs3 --installfw "$roms_folder/ps3/tmp/PS3UPDAT.PUP"
+  rm -rf "$roms_folder/ps3/tmp"
+}
+
 create_lock() {
   # creating RetroDECK's lock file and writing the version in the config file
   version=$hard_version
@@ -1787,6 +1795,8 @@ finit() {
 
   mkdir -pv $roms_folder
 
+  local rpcs_firmware_install=$(configurator_generic_question_dialog "RPCS3 Firmware Install" "Would you like to install the latest PS3 firmware for the RPCS3 emulator?\n\nThis process will take several minutes and requires network access.\nIf you do not plan to emulate PS3 games this can be skipped, and can always be done later through the Configurator.\n\nIf you click Yes, RPCS3 will be launched at the end of the RetroDECK setup process.\nOnce the firmware is installed, please close the emulator to finish the process.")
+
   zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
   --text="RetroDECK will now install the needed files, which can take up to one minute.\nRetroDECK will start once the process is completed.\n\nPress OK to continue."
@@ -1835,6 +1845,9 @@ finit() {
 
   tools_init
   prepare_emulator "reset" "all"
+  if [[ $rpcs_firmware_install == "true" ]]; then
+    update_rpcs3_firmware
+  fi
   ) |
   zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \

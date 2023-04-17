@@ -28,6 +28,7 @@ hard_version="$(cat '/app/retrodeck/version')"                                  
 rd_repo="https://github.com/XargonWan/RetroDECK"                                                                      # The URL of the main RetroDECK GitHub repo
 es_themes_list="https://gitlab.com/es-de/themes/themes-list/-/raw/master/themes.json"                                 # The URL of the ES-DE 2.0 themes list
 remote_network_target="https://one.one.one.one"                                                                       # The URL of a common internet target for testing network access
+rpcs3_firmware="http://dus01.ps3.update.playstation.net/update/ps3/image/us/2023_0228_05fe32f5dc8c78acbcd84d36ee7fdc5b/PS3UPDAT.PUP"
 
 # Config files for emulators with single config files
 

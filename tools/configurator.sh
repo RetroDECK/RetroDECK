@@ -36,6 +36,8 @@ source /app/libexec/functions.sh
 #       - Compress Games
 #         - Manual single-game selection
 #         - Multi-file compression (CHD)
+#       - Download ES themes
+#       - Download PS3 firmware
 #     - Reset
 #       - Reset Specific Emulator
 #           - Reset RetroArch
@@ -89,7 +91,7 @@ configurator_reset_dialog() {
     "RetroArch" | "XEMU" ) # Emulators that require network access
       if [[ $(configurator_reset_confirmation_dialog "$emulator_to_reset" "Are you sure you want to reset the $emulator_to_reset emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
         if [[ $(check_network_connectivity) == "true" ]]; then
-          prepare_emulator "reset" "$emulator_to_reset"
+          prepare_emulator "reset" "$emulator_to_reset" "configurator"
           configurator_process_complete_dialog "resetting $emulator_to_reset"
         else
           configurator_generic_dialog "You do not appear to be connected to a network with internet access.\n\nThe $emulator_to_reset reset process requires some files from the internet to function properly.\n\nPlease retry this process once a network connection is available."
@@ -101,19 +103,9 @@ configurator_reset_dialog() {
       fi
     ;;
 
-    "Cemu" | "Citra" | "Dolphin" | "Duckstation" | "MelonDS" | "PCSX2" | "PPSSPP" | "Primehack" | "Ryujinx" | "Yuzu" )
+    "Cemu" | "Citra" | "Dolphin" | "Duckstation" | "MelonDS" | "PCSX2" | "PPSSPP" | "Primehack" | "RPCS3" | "Ryujinx" | "Yuzu" )
       if [[ $(configurator_reset_confirmation_dialog "$emulator_to_reset" "Are you sure you want to reset the $emulator_to_reset emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
-        prepare_emulator "reset" "$emulator_to_reset"
-        configurator_process_complete_dialog "resetting $emulator_to_reset"
-      else
-        configurator_generic_dialog "Reset process cancelled."
-        configurator_reset_dialog
-      fi
-    ;;
-
-    "RPCS3" )
-      if [[ $(configurator_reset_confirmation_dialog "RPCS3" "Are you sure you want to reset the RPCS3 emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
-        rpcs3_init
+        prepare_emulator "reset" "$emulator_to_reset" "configurator"
         configurator_process_complete_dialog "resetting $emulator_to_reset"
       else
         configurator_generic_dialog "Reset process cancelled."
@@ -131,8 +123,7 @@ configurator_reset_dialog() {
 "Reset All Emulators" )
   if [[ $(configurator_reset_confirmation_dialog "all emulators" "Are you sure you want to reset all emulators to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
     if [[ $(check_network_connectivity) == "true" ]]; then
-      ra_init
-      standalones_init
+      prepare_emulator "reset" "all"
       configurator_process_complete_dialog "resetting all emulators"
     else
       configurator_generic_dialog "You do not appear to be connected to a network with internet access.\n\nThe all-emulator reset process requires some files from the internet to function properly.\n\nPlease retry this process once a network connection is available."
@@ -739,6 +730,19 @@ configurator_online_theme_downloader() {
   fi
 }
 
+configurator_rpcs3_firmware_updater() {
+  configurator_generic_dialog "This tool will download firmware required by RPCS3 to emulate PS3 games.\n\nThe process will take several minutes, and the emulator will launch to finish the installation.\nPlease close RPCS3 manually once the installation is complete."
+  (
+    update_rpcs3_firmware
+  ) |
+    zenity --progress --pulsate \
+    --icon-name=net.retrodeck.retrodeck \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title="Downloading PS3 Firmware" \
+    --no-cancel \
+    --auto-close
+}
+
 configurator_tools_and_troubleshooting_dialog() {
   choice=$(zenity --list --title="RetroDECK Configurator Utility - Change Options" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
@@ -748,7 +752,8 @@ configurator_tools_and_troubleshooting_dialog() {
   "Basic BIOS file check" "Show a list of systems that BIOS files are found for" \
   "Advanced BIOS file check" "Show advanced information about common BIOS files" \
   "Compress Games" "Compress games to CHD format for systems that support it" \
-  "Download/Update Themes" "Download new themes for RetroDECK or update existing ones" )
+  "Download/Update Themes" "Download new themes for RetroDECK or update existing ones" \
+  "Download PS3 Firmware" "Download PS3 firmware for use with the RPCS3 emulator" )
 
   case $choice in
 
@@ -774,7 +779,21 @@ configurator_tools_and_troubleshooting_dialog() {
   ;;
 
   "Download/Update Themes" )
-    configurator_online_theme_downloader
+    if [[ $(check_network_connectivity) == "true" ]]; then
+      configurator_online_theme_downloader
+    else
+      configurator_generic_dialog "You do not appear to currently have Internet access, which is required by this tool. Please try again when network access has been restored."
+      configurator_tools_and_troubleshooting_dialog
+    fi
+  ;;
+
+  "Download PS3 Firmware" )
+    if [[ $(check_network_connectivity) == "true" ]]; then
+      configurator_rpcs3_firmware_updater
+    else
+      configurator_generic_dialog "You do not appear to currently have Internet access, which is required by this tool. Please try again when network access has been restored."
+      configurator_tools_and_troubleshooting_dialog
+    fi
   ;;
 
   "" ) # No selection made or Back button clicked
