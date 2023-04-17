@@ -86,13 +86,13 @@ configurator_reset_dialog() {
 
     case $emulator_to_reset in
 
-    "RetroArch" )
-      if [[ $(configurator_reset_confirmation_dialog "RetroArch" "Are you sure you want to reset the RetroArch emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
+    "RetroArch" | "XEMU" ) # Emulators that require network access
+      if [[ $(configurator_reset_confirmation_dialog "$emulator_to_reset" "Are you sure you want to reset the $emulator_to_reset emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
         if [[ $(check_network_connectivity) == "true" ]]; then
-          ra_init
+          prepare_emulator "reset" "$emulator_to_reset"
           configurator_process_complete_dialog "resetting $emulator_to_reset"
         else
-          configurator_generic_dialog "You do not appear to be connected to a network with internet access.\n\nThe RetroArch reset process requires some files from the internet to function properly.\n\nPlease retry this process once a network connection is available."
+          configurator_generic_dialog "You do not appear to be connected to a network with internet access.\n\nThe $emulator_to_reset reset process requires some files from the internet to function properly.\n\nPlease retry this process once a network connection is available."
           configurator_reset_dialog
         fi
       else
@@ -101,79 +101,9 @@ configurator_reset_dialog() {
       fi
     ;;
 
-    "Cemu" )
-      if [[ $(configurator_reset_confirmation_dialog "Cemu" "Are you sure you want to reset the Cemu emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
-        cemu_init
-        configurator_process_complete_dialog "resetting $emulator_to_reset"
-      else
-        configurator_generic_dialog "Reset process cancelled."
-        configurator_reset_dialog
-      fi
-    ;;
-
-    "Citra" )
-      if [[ $(configurator_reset_confirmation_dialog "Citra" "Are you sure you want to reset the Citra emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
-        citra_init
-        configurator_process_complete_dialog "resetting $emulator_to_reset"
-      else
-        configurator_generic_dialog "Reset process cancelled."
-        configurator_reset_dialog
-      fi
-    ;;
-
-    "Dolphin" )
-      if [[ $(configurator_reset_confirmation_dialog "Dolphin" "Are you sure you want to reset the Dolphin emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
-        dolphin_init
-        configurator_process_complete_dialog "resetting $emulator_to_reset"
-      else
-        configurator_generic_dialog "Reset process cancelled."
-        configurator_reset_dialog
-      fi
-    ;;
-
-    "Duckstation" )
-      if [[ $(configurator_reset_confirmation_dialog "Duckstation" "Are you sure you want to reset the Duckstation emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
-        duckstation_init
-        configurator_process_complete_dialog "resetting $emulator_to_reset"
-      else
-        configurator_generic_dialog "Reset process cancelled."
-        configurator_reset_dialog
-      fi
-    ;;
-
-    "MelonDS" )
-      if [[ $(configurator_reset_confirmation_dialog "MelonDS" "Are you sure you want to reset the MelonDS emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
-        melonds_init
-        configurator_process_complete_dialog "resetting $emulator_to_reset"
-      else
-        configurator_generic_dialog "Reset process cancelled."
-        configurator_reset_dialog
-      fi
-    ;;
-
-    "PCSX2" )
-      if [[ $(configurator_reset_confirmation_dialog "PCSX2" "Are you sure you want to reset the PCSX2 emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
-        pcsx2_init
-        configurator_process_complete_dialog "resetting $emulator_to_reset"
-      else
-        configurator_generic_dialog "Reset process cancelled."
-        configurator_reset_dialog
-      fi
-    ;;
-
-    "PPSSPP" )
-      if [[ $(configurator_reset_confirmation_dialog "PPSSPP" "Are you sure you want to reset the PPSSPP emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
-        ppssppsdl_init
-        configurator_process_complete_dialog "resetting $emulator_to_reset"
-      else
-        configurator_generic_dialog "Reset process cancelled."
-        configurator_reset_dialog
-      fi
-    ;;
-
-    "Primehack" )
-      if [[ $(configurator_reset_confirmation_dialog "Primehack" "Are you sure you want to reset the Primehack emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
-        primehack_init
+    "Cemu" | "Citra" | "Dolphin" | "Duckstation" | "MelonDS" | "PCSX2" | "PPSSPP" | "Primehack" | "Ryujinx" | "Yuzu" )
+      if [[ $(configurator_reset_confirmation_dialog "$emulator_to_reset" "Are you sure you want to reset the $emulator_to_reset emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
+        prepare_emulator "reset" "$emulator_to_reset"
         configurator_process_complete_dialog "resetting $emulator_to_reset"
       else
         configurator_generic_dialog "Reset process cancelled."
@@ -184,31 +114,6 @@ configurator_reset_dialog() {
     "RPCS3" )
       if [[ $(configurator_reset_confirmation_dialog "RPCS3" "Are you sure you want to reset the RPCS3 emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
         rpcs3_init
-        configurator_process_complete_dialog "resetting $emulator_to_reset"
-      else
-        configurator_generic_dialog "Reset process cancelled."
-        configurator_reset_dialog
-      fi
-    ;;
-
-    "XEMU" )
-      if [[ $(configurator_reset_confirmation_dialog "XEMU" "Are you sure you want to reset the XEMU emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
-        if [[ $(check_network_connectivity) == "true" ]]; then
-          xemu_init
-          configurator_process_complete_dialog "resetting $emulator_to_reset"
-        else
-          configurator_generic_dialog "You do not appear to be connected to a network with internet access.\n\nThe Xemu reset process requires some files from the internet to function properly.\n\nPlease retry this process once a network connection is available."
-          configurator_reset_dialog
-        fi
-      else
-        configurator_generic_dialog "Reset process cancelled."
-        configurator_reset_dialog
-      fi
-    ;;
-
-    "Yuzu" )
-      if [[ $(configurator_reset_confirmation_dialog "Yuzu" "Are you sure you want to reset the Yuzu emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
-        yuzu_init
         configurator_process_complete_dialog "resetting $emulator_to_reset"
       else
         configurator_generic_dialog "Reset process cancelled."

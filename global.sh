@@ -27,15 +27,18 @@ default_sd="/run/media/mmcblk0p1"                                               
 hard_version="$(cat '/app/retrodeck/version')"                                                                        # hardcoded version (in the readonly filesystem)
 rd_repo="https://github.com/XargonWan/RetroDECK"                                                                      # The URL of the main RetroDECK GitHub repo
 es_themes_list="https://gitlab.com/es-de/themes/themes-list/-/raw/master/themes.json"                                 # The URL of the ES-DE 2.0 themes list
+remote_network_target="https://one.one.one.one"                                                                       # The URL of a common internet target for testing network access
 
 # Config files for emulators with single config files
 
+cemuconf="/var/config/Cemu/settings.xml"
 citraconf="/var/config/citra-emu/qt-config.ini"
 duckstationconf="/var/data/duckstation/settings.ini"
 melondsconf="/var/config/melonDS/melonDS.ini"
-yuzuconf="/var/config/yuzu/qt-config.ini"
-xemuconf="/var/config/xemu/xemu.toml"
 ppssppconf="/var/config/ppsspp/PSP/SYSTEM/ppsspp.ini"
+ryujinxconf="/var/config/Ryujinx/Config.json"
+xemuconf="/var/config/xemu/xemu.toml"
+yuzuconf="/var/config/yuzu/qt-config.ini"
 
 # ES-DE config files
 

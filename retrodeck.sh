@@ -58,7 +58,7 @@ https://retrodeck.net
       if [[ "$emulator" =~ ^(retroarch|cemu|citra|dolphin|duckstation|melonds|pcsx2|ppsspp|primehack|rpcs3|xemu|yuzu|all-emulators)$ ]]; then
         read -p "You are about to reset $emulator to default settings. Enter 'y' to continue, 'n' to stop: " response
         if [[ $response == [yY] ]]; then
-          cli_emulator_reset $emulator
+          prepare_emulator "reset" "$emulator" "cli"
           read -p "The process has been completed, press Enter key to start RetroDECK."
           shift # Continue launch after previous command is finished
         else

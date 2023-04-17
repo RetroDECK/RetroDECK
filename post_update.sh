@@ -21,7 +21,7 @@ post_update() {
     # - Fix PICO-8 folder structure. ROM and save folders are now sane and binary files will go into ~/retrodeck/bios/pico-8/
 
     rm -rf /var/config/primehack # Purge old Primehack config files. Saves are safe as they are linked into /var/data/primehack.
-    primehack_init
+    prepare_emulator "reset" "primehack"
 
     dir_prep "$rdhome/saves/duckstation" "/var/data/duckstation/memcards"
     dir_prep "$rdhome/states/duckstation" "/var/data/duckstation/savestates"
