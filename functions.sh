@@ -1302,13 +1302,13 @@ melonds_init() {
   if [[ $multi_user_mode == "true" ]]; then
     rm -rf "$multi_user_data_folder/$SteamAppUser/config/melonDS"
     mkdir -pv "$multi_user_data_folder/$SteamAppUser/config/melonDS/"
-    cp -fvr $emuconfigs/melonDS.ini "$multi_user_data_folder/$SteamAppUser/config/melonDS/"
+    cp -fvr $emuconfigs/melonds/melonDS.ini "$multi_user_data_folder/$SteamAppUser/config/melonDS/"
     sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "$multi_user_data_folder/$SteamAppUser/config/melonDS/melonDS.ini"
     dir_prep "$multi_user_data_folder/$SteamAppUser/config/melonDS" "/var/config/melonDS"
   else
     rm -rf /var/config/melonDS
     mkdir -pv /var/config/melonDS/
-    cp -fvr $emuconfigs/melonDS.ini /var/config/melonDS/
+    cp -fvr $emuconfigs/melonds/melonDS.ini /var/config/melonDS/
     sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/melonDS/melonDS.ini
   fi
   # removing config directory to wipe legacy files
@@ -1370,7 +1370,7 @@ xemu_init() {
     mkdir -pv "$multi_user_data_folder/$SteamAppUser/config/xemu/"
     dir_prep "$multi_user_data_folder/$SteamAppUser/config/xemu" "/var/config/xemu" # Creating config folder in /var/config for consistentcy and linking back to original location where emulator will look
     dir_prep "$multi_user_data_folder/$SteamAppUser/config/xemu" "/var/data/xemu"
-    cp -fv $emuconfigs/xemu.toml "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml"
+    cp -fv $emuconfigs/xemu/* "$multi_user_data_folder/$SteamAppUser/config/xemu"
     sed -i 's#/home/deck/retrodeck#'$rdhome'#g' "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml"
   else
     # removing config directory to wipe legacy files

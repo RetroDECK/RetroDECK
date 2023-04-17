@@ -1,6 +1,6 @@
 [general]
 show_welcome = false
-screenshot_dir = '/home/deck/retrodeck/screenshots'
+screenshot_dir = 'RETRODECKHOMEDIR/screenshots'
 
 [input.bindings]
 port1 = '03000000de280000ff11000001000000'
