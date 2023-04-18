@@ -966,7 +966,7 @@ modules:
       - ./DuckStation-x64*.AppImage --appimage-extract
       - mkdir -p "${FLATPAK_DEST}/duckstation"
       - cp -r squashfs-root/* "${FLATPAK_DEST}/duckstation"
-      - ln -s "${FLATPAK_DEST}/duckstation/usr/bin/duckstation" "${FLATPAK_DEST}/bin/duckstation"
+      - ln -s "${FLATPAK_DEST}/duckstation/usr/bin/duckstation-qt" "${FLATPAK_DEST}/bin/duckstation-qt"
     sources:
       - type: file
         url: https://github.com/stenzek/duckstation/releases/download/preview/DuckStation-x64.AppImage
