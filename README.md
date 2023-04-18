@@ -9,7 +9,15 @@
 
 # RetroDECK on your device!
 
-**RetroDECK** in application that brings a sandbox environment to catalog and play your retro games directly on your:
+You can visit our:<br/>
+[Website](https://retrodeck.net) <br/>
+[Wiki](https://github.com/XargonWan/RetroDECK/wiki) <br/>
+[Discord](https://discord.gg/Dz3szYsP8g)
+
+## What is RetroDECK?
+RetroDECK is a [EmulationStation Desktop Edition](https://es-de.org) powered application that builds in a variety of emulators and other software that allows you to play your favorite retro (and even not-so-retro) games in a tidy contained sandbox environment. It's inspired by embedded emulation systems like AmberELEC, EmuELEC, CoreELEC, Lakka, and Batocera.
+
+RetroDECK supports the following devices: 
 <br/><br/>
 **Steam Deck**
 <br/>
@@ -17,11 +25,6 @@
 <br/>
 **Other SteamOS devices** (after the BETA period)
 
-It's inspired by embedded emulation systems like AmberELEC, EmuELEC, CoreELEC, Lakka, and Batocera.
-
-Powered by [EmulationStation Desktop Edition](https://es-de.org), which uses RetroArch and other standalone emulators to allow you to import and play your favorite retro (and even not-so-retro) games in a tidy contained environment.
-
-Visit our [website](https://retrodeck.net) and Join our [Discord](https://discord.gg/Dz3szYsP8g)!
 <p float="center">
 <img src="https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen03.jpeg?raw=true" alt="screenshot" width="300"/>
 <img src="https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen04.jpeg?raw=true" alt="screenshot" width="300"/><br/>
