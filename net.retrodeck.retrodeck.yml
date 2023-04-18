@@ -1238,6 +1238,9 @@ modules:
       - cp ${FLATPAK_DEST}/retrodeck/emu-configs/pico-8/pico8-wrapper.sh /app/bin/pico8
       - chmod +x /app/bin/pico8
 
+      # Needed for ffmpeg (RPCS3)
+      - mkdir -p ${FLATPAK_DEST}/lib/ffmpeg
+
       # Placing appdata
       - mkdir -p ${FLATPAK_DEST}/share/appdata
       - cp net.retrodeck.retrodeck.appdata.xml ${FLATPAK_DEST}/share/appdata
