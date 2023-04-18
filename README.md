@@ -15,7 +15,7 @@
 <br/>
 **Linux Desktop** (after the BETA period)
 <br/>
-**SteamOS Device** (after the BETA period)
+**Other SteamOS devices** (after the BETA period)
 
 It's inspired by embedded emulation systems like AmberELEC, EmuELEC, CoreELEC, Lakka, and Batocera.
 
