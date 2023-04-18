@@ -4,6 +4,14 @@ on:
   push:
     branches:
      - main
+    paths:
+     - '.github/workflows/**'
+     - 'emu-configs/**'
+     - 'es-configs/**'
+     - 'rd-submodules/**'
+     - '*.sh'
+     - 'net.retrodeck.retrodeck.yml'
+     - 'net.retrodeck.retrodeck.appdata.xml'
   pull_request: 
     branches:
      - main
