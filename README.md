@@ -51,8 +51,7 @@ No, RetroDECK doesn't support Windows, but the project is fully open source so y
 As an alternative you could try [Retrobat](http://www.retrobat.ovh/) that offers similar functionality.
 
 ## Do you support the Linux Desktop?
-We do plan to support Linux Desktop in the future. But during the BETA we are focusing on the Steam Deck.
-You can still run it but you might need to do some configurations by yourself.
+We do plan to support Linux Desktop in the future. But during the BETA we are focusing on the Steam Deck. Technically it is working, but the user experience might not be that great (it could contain desktop specific bugs and other issues). If you want to try it make sure that your distribution has native flatpak support else, you might need to install it.
 
 ## Do you support other SteamOS based devices?
 We do plan to support other SteamOS based devices in the future. But during the BETA we are focusing on the Steam Deck.
