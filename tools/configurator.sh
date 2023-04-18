@@ -38,6 +38,7 @@ source /app/libexec/functions.sh
 #         - Multi-file compression (CHD)
 #       - Download ES themes
 #       - Download PS3 firmware
+#       - Backup RetroDECK userdata
 #     - Reset
 #       - Reset Specific Emulator
 #           - Reset RetroArch
@@ -753,7 +754,8 @@ configurator_tools_and_troubleshooting_dialog() {
   "Advanced BIOS file check" "Show advanced information about common BIOS files" \
   "Compress Games" "Compress games to CHD format for systems that support it" \
   "Download/Update Themes" "Download new themes for RetroDECK or update existing ones" \
-  "Download PS3 Firmware" "Download PS3 firmware for use with the RPCS3 emulator" )
+  "Download PS3 Firmware" "Download PS3 firmware for use with the RPCS3 emulator" \
+  "Backup RetroDECK Userdata" "Compress important RetroDECK user data folders" )
 
   case $choice in
 
@@ -794,6 +796,23 @@ configurator_tools_and_troubleshooting_dialog() {
       configurator_generic_dialog "You do not appear to currently have Internet access, which is required by this tool. Please try again when network access has been restored."
       configurator_tools_and_troubleshooting_dialog
     fi
+  ;;
+
+  "Backup RetroDECK Userdata" )
+    configurator_generic_dialog "This tool will compress important RetroDECK userdata (basically everything except the ROMs folder) into a zip file.\n\nThis process can take several minutes, and the resulting zip file can be found in the ~/retrodeck/backups folder."
+    (
+      backup_retrodeck_userdata
+    ) |
+    zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+            --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+            --title "RetroDECK Configurator Utility - Backup in Progress" \
+            --text="Backing up RetroDECK userdata, please wait..."
+    if [[ -f $backups_folder/$(date +"%0m%0d")_retrodeck_userdata.zip ]]; then
+      configurator_generic_dialog "The backup process is now complete."
+    else
+      configurator_generic_dialog "The backup process could not be completed,\nplease check the logs folder for more information."
+    fi
+    configurator_tools_and_troubleshooting_dialog
   ;;
 
   "" ) # No selection made or Back button clicked
