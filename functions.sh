@@ -991,6 +991,7 @@ multi_user_return_to_single_user() {
 }
 
 multi_user_setup_new_user() {
+  # TODO: RPCS3 one-offs
   echo "Setting up new user"
   unlink "$saves_folder"
   unlink "$states_folder"
@@ -1002,20 +1003,21 @@ multi_user_setup_new_user() {
   ln -sfT "$multi_user_data_folder/$SteamAppUser/config/retrodeck/retrodeck.cfg" "$rd_conf"
   mkdir -p "$multi_user_data_folder/$SteamAppUser/config/retroarch"
   if [[ ! -L "/var/config/retroarch/retroarch.cfg" ]]; then
-    cp "/var/config/retroarch/retroarch.cfg" "$multi_user_data_folder/$SteamAppUser/config/retroarch/retroarch.cfg"
-    cp "/var/config/retroarch/retroarch-core-options.cfg" "$multi_user_data_folder/$SteamAppUser/config/retroarch/retroarch-core-options.cfg"
+    mv "/var/config/retroarch/retroarch.cfg" "$multi_user_data_folder/$SteamAppUser/config/retroarch/retroarch.cfg"
+    mv "/var/config/retroarch/retroarch-core-options.cfg" "$multi_user_data_folder/$SteamAppUser/config/retroarch/retroarch-core-options.cfg"
   else
     cp "$emuconfigs/retroarch/retroarch.cfg" "$multi_user_data_folder/$SteamAppUser/config/retroarch/retroarch.cfg"
     cp "$emuconfigs/retroarch/retroarch-core-options.cfg" "$multi_user_data_folder/$SteamAppUser/config/retroarch/retroarch-core-options.cfg"
-    sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "$multi_user_data_folder/$SteamAppUser/config/retroarch/retroarch.cfg"
+    set_setting_value "$raconf" "savefile_directory" "$saves_folder" "retroarch"
+    set_setting_value "$raconf" "savestate_directory" "$states_folder" "retroarch"
+    set_setting_value "$raconf" "screenshot_directory" "$screenshots_folder" "retroarch"
   fi
-  rm -f "/var/config/retroarch/retroarch.cfg"
-  rm -f "/var/config/retroarch/retroarch-core-options.cfg"
   ln -sfT "$multi_user_data_folder/$SteamAppUser/config/retroarch/retroarch.cfg" "/var/config/retroarch/retroarch.cfg"
   ln -sfT "$multi_user_data_folder/$SteamAppUser/config/retroarch/retroarch-core-options.cfg" "/var/config/retroarch/retroarch-core-options.cfg"
   for emu_conf in $(find "/var/config" -mindepth 1 -maxdepth 1 -type l -printf '%f\n') # For all the config folders already linked to a different user
   do
     if [[ ! -z $(grep "^$emu_conf$" "$multi_user_emulator_config_dirs") ]]; then
+      unlink "/var/config/$emu_conf"
       prepare_emulator "reset" "$emu_conf"
     fi
   done
@@ -1160,19 +1162,25 @@ prepare_emulator() {
           cp -fv $emuconfigs/retroarch/retroarch.cfg "$multi_user_data_folder/$SteamAppUser/config/retroarch/"
           cp -fv $emuconfigs/retroarch/retroarch-core-options.cfg "$multi_user_data_folder/$SteamAppUser/config/retroarch/"
         else
-          # removing config directory to wipe legacy files
           rm -rf /var/config/retroarch
-          mkdir -pv /var/config/retroarch/config/
+          mkdir -p /var/config/retroarch
+          dir_prep "$bios_folder" "/var/config/retroarch/system"
+          dir_prep "$logs_folder/retroarch" "/var/config/retroarch/logs"
+          mkdir -pv /var/config/retroarch/shaders/
+          cp -rf /app/share/libretro/shaders /var/config/retroarch/
+          dir_prep "$rdhome/shaders/retroarch" "/var/config/retroarch/shaders"
+          mkdir -pv /var/config/retroarch/cores/
+          cp -f /app/share/libretro/cores/* /var/config/retroarch/cores/
           cp -fv $emuconfigs/retroarch/retroarch.cfg /var/config/retroarch/
           cp -fv $emuconfigs/retroarch/retroarch-core-options.cfg /var/config/retroarch/
+          mkdir -pv /var/config/retroarch/config/
+          cp -rf $emuconfigs/retroarch/core-overrides/* /var/config/retroarch/config
+          dir_prep "$borders_folder" "/var/config/retroarch/borders"
+          cp -rt "/var/config/retroarch/borders/" "/app/retrodeck/emu-configs/retroarch/borders/*"
+          set_setting_value "$raconf" "savefile_directory" "$saves_folder" "retroarch"
+          set_setting_value "$raconf" "savestate_directory" "$states_folder" "retroarch"
+          set_setting_value "$raconf" "screenshot_directory" "$screenshots_folder" "retroarch"
         fi
-        mkdir -pv /var/config/retroarch/shaders/
-        cp -rf /app/share/libretro/shaders /var/config/retroarch/
-        mkdir -pv /var/config/retroarch/cores/
-        cp -f /app/share/libretro/cores/* /var/config/retroarch/cores/
-        cp -rf $emuconfigs/retroarch/core-overrides/* /var/config/retroarch/config
-        dir_prep "$borders_folder" "/var/config/retroarch/borders"
-        cp -rt "/var/config/retroarch/borders/" "/app/retrodeck/emu-configs/retroarch/borders/*"
 
         # PPSSPP
         echo "--------------------------------"
@@ -1208,30 +1216,21 @@ prepare_emulator() {
         fi
       fi
     fi
-    if [[ "$action" == "reset" ]] || [[ "$action" == "postmove" ]]; then # Run commands that apply to both resets and moves
-      if [[ $multi_user_mode == "true" ]]; then
-        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/retroarch/retroarch.cfg" "savefile_directory" "$saves_folder" "retroarch"
-        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/retroarch/retroarch.cfg" "savestate_directory" "$states_folder" "retroarch"
-        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/retroarch/retroarch.cfg" "screenshot_directory" "$screenshots_folder" "retroarch"
-      else
-        set_setting_value "$raconf" "savefile_directory" "$saves_folder" "retroarch"
-        set_setting_value "$raconf" "savestate_directory" "$states_folder" "retroarch"
-        set_setting_value "$raconf" "screenshot_directory" "$screenshots_folder" "retroarch"
-      fi
+    if [[ "$action" == "postmove" ]]; then # Run only post-move commands
       dir_prep "$bios_folder" "/var/config/retroarch/system"
       dir_prep "$logs_folder/retroarch" "/var/config/retroarch/logs"
       dir_prep "$rdhome/shaders/retroarch" "/var/config/retroarch/shaders"
+      set_setting_value "$raconf" "savefile_directory" "$saves_folder" "retroarch"
+      set_setting_value "$raconf" "savestate_directory" "$states_folder" "retroarch"
+      set_setting_value "$raconf" "screenshot_directory" "$screenshots_folder" "retroarch"
     fi
-    # if [[ "$action" == "postmove" ]]; then # Run only post-move commands
-
-    # fi
   fi
+  
   if [[ "$emulator" =~ ^(cemu|Cemu|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       echo "----------------------"
       echo "Initializing CEMU"
       echo "----------------------"
-      # removing config directory to wipe legacy files
       rm -rf /var/config/Cemu
       mkdir -pv /var/config/Cemu/
       cp -fvr "$emuconfigs/cemu/"* /var/config/Cemu/
@@ -1248,212 +1247,246 @@ prepare_emulator() {
       
     # fi
   fi
+  
   if [[ "$emulator" =~ ^(citra|citra-emu|Citra|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       echo "------------------------"
       echo "Initializing CITRA"
       echo "------------------------"
-      if [[ $multi_user_mode == "true" ]]; then
+      if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/citra-emu"
         mkdir -p "$multi_user_data_folder/$SteamAppUser/config/citra-emu"
         cp -fv $emuconfigs/citra/qt-config.ini "$multi_user_data_folder/$SteamAppUser/config/citra-emu/qt-config.ini"
-        sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "$multi_user_data_folder/$SteamAppUser/config/citra-emu/qt-config.ini"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/citra-emu/qt-config.ini" "nand_directory" "$saves_folder/n3ds/citra/nand/" "citra" "Data%20Storage"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/citra-emu/qt-config.ini" "sdmc_directory" "$saves_folder/n3ds/citra/sdmc/" "citra" "Data%20Storage"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/citra-emu/qt-config.ini" "Paths\gamedirs\3\path" "$roms_folder/n3ds" "citra" "UI"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/citra-emu/qt-config.ini" "Paths\screenshotPath" "$screenshots_folder" "citra" "UI"
         dir_prep "$multi_user_data_folder/$SteamAppUser/config/citra-emu" "/var/config/citra-emu"
-      else
-        # removing config directory to wipe legacy files
+      else # Single-user actions
         rm -rf /var/config/citra-emu
         mkdir -pv /var/config/citra-emu/
         cp -fv $emuconfigs/citra/qt-config.ini /var/config/citra-emu/qt-config.ini
+        set_setting_value "$citraconf" "nand_directory" "$saves_folder/n3ds/citra/nand/" "citra" "Data%20Storage"
+        set_setting_value "$citraconf" "sdmc_directory" "$saves_folder/n3ds/citra/sdmc/" "citra" "Data%20Storage"
+        set_setting_value "$citraconf" "Paths\gamedirs\3\path" "$roms_folder/n3ds" "citra" "UI"
+        set_setting_value "$citraconf" "Paths\screenshotPath" "$screenshots_folder" "citra" "UI"
       fi
+      # Shared actions
       mkdir -pv "$saves_folder/n3ds/citra/nand/"
       mkdir -pv "$saves_folder/n3ds/citra/sdmc/"
-    fi
-    if [[ "$action" == "reset" ]] || [[ "$action" == "postmove" ]]; then # Run commands that apply to both resets and moves
       dir_prep "$bios_folder/citra/sysdata" "/var/data/citra-emu/sysdata"
       dir_prep "$logs_folder/citra" "/var/data/citra-emu/log"
+    fi
+    if [[ "$action" == "postmove" ]]; then # Run only post-move commands
+      dir_prep "$rdhome/bios/citra/sysdata" "/var/data/citra-emu/sysdata"
+      dir_prep "$rdhome/.logs/citra" "/var/data/citra-emu/log"
       set_setting_value "$citraconf" "nand_directory" "$saves_folder/n3ds/citra/nand/" "citra" "Data%20Storage"
       set_setting_value "$citraconf" "sdmc_directory" "$saves_folder/n3ds/citra/sdmc/" "citra" "Data%20Storage"
       set_setting_value "$citraconf" "Paths\gamedirs\3\path" "$roms_folder/n3ds" "citra" "UI"
       set_setting_value "$citraconf" "Paths\screenshotPath" "$screenshots_folder" "citra" "UI"
     fi
-    # if [[ "$action" == "postmove" ]]; then # Run only post-move commands
-      
-    # fi
   fi
+  
   if [[ "$emulator" =~ ^(dolphin|dolphin-emu|Dolphin|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       echo "----------------------"
       echo "Initializing DOLPHIN"
       echo "----------------------"
-      if [[ $multi_user_mode == "true" ]]; then
+      if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/dolphin-emu"
         mkdir -p "$multi_user_data_folder/$SteamAppUser/config/dolphin-emu"
         cp -fvr $emuconfigs/dolphin/* "$multi_user_data_folder/$SteamAppUser/config/dolphin-emu/"
-        sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "$multi_user_data_folder/$SteamAppUser/config/dolphin-emu/Dolphin.ini"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/dolphin-emu/Dolphin.ini" "BIOS" "$bios_folder" "dolphin" "GBA"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/dolphin-emu/Dolphin.ini" "SavesPath" "$saves_folder/gba" "dolphin" "GBA"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/dolphin-emu/Dolphin.ini" "ISOPath0" "$roms_folder/wii" "dolphin" "General"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/dolphin-emu/Dolphin.ini" "ISOPath1" "$roms_folder/gc" "dolphin" "General"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/dolphin-emu/Dolphin.ini" "WiiSDCardPath" "$saves_folder/wii/dolphin/sd.raw" "dolphin" "General"
         dir_prep "$multi_user_data_folder/$SteamAppUser/config/dolphin-emu" "/var/config/dolphin-emu"
-      else
-        # removing config directory to wipe legacy files
+      else # Single-user actions
         rm -rf /var/config/dolphin-emu
         mkdir -pv /var/config/dolphin-emu/
         cp -fvr "$emuconfigs/dolphin/"* /var/config/dolphin-emu/
-      fi  
+        set_setting_value "$dolphinconf" "BIOS" "$bios_folder" "dolphin" "GBA"
+        set_setting_value "$dolphinconf" "SavesPath" "$saves_folder/gba" "dolphin" "GBA"
+        set_setting_value "$dolphinconf" "ISOPath0" "$roms_folder/wii" "dolphin" "General"
+        set_setting_value "$dolphinconf" "ISOPath1" "$roms_folder/gc" "dolphin" "General"
+        set_setting_value "$dolphinconf" "WiiSDCardPath" "$saves_folder/wii/dolphin/sd.raw" "dolphin" "General"
+      fi # Shared actions
+      dir_prep "$saves_folder/gc/dolphin/EUR" "/var/data/dolphin-emu/GC/EUR" # TODO: Multi-user one-off
+      dir_prep "$saves_folder/gc/dolphin/USA" "/var/data/dolphin-emu/GC/USA" # TODO: Multi-user one-off
+      dir_prep "$saves_folder/gc/dolphin/JAP" "/var/data/dolphin-emu/GC/JAP" # TODO: Multi-user one-off
+      dir_prep "$screenshots_folder" "/var/data/dolphin-emu/ScreenShots"
+      dir_prep "$states_folder/dolphin" "/var/data/dolphin-emu/StateSaves"
+      dir_prep "$saves_folder/wii/dolphin" "/var/data/dolphin-emu/Wii" 
     fi
-    if [[ "$action" == "reset" ]] || [[ "$action" == "postmove" ]]; then # Run commands that apply to both resets and moves
+    if [[ "$action" == "postmove" ]]; then # Run only post-move commands
       dir_prep "$saves_folder/gc/dolphin/EUR" "/var/data/dolphin-emu/GC/EUR"
       dir_prep "$saves_folder/gc/dolphin/USA" "/var/data/dolphin-emu/GC/USA"
       dir_prep "$saves_folder/gc/dolphin/JAP" "/var/data/dolphin-emu/GC/JAP"
       dir_prep "$screenshots_folder" "/var/data/dolphin-emu/ScreenShots"
       dir_prep "$states_folder/dolphin" "/var/data/dolphin-emu/StateSaves"
-      mkdir -pv /var/data/dolphin-emu/Wii/
-      dir_prep "$saves_folder/wii/dolphin" "/var/data/dolphin-emu/Wii"
+      dir_prep "$saves_folder/wii/dolphin" "/var/data/dolphin-emu/Wii" 
       set_setting_value "$dolphinconf" "BIOS" "$bios_folder" "dolphin" "GBA"
       set_setting_value "$dolphinconf" "SavesPath" "$saves_folder/gba" "dolphin" "GBA"
       set_setting_value "$dolphinconf" "ISOPath0" "$roms_folder/wii" "dolphin" "General"
       set_setting_value "$dolphinconf" "ISOPath1" "$roms_folder/gc" "dolphin" "General"
       set_setting_value "$dolphinconf" "WiiSDCardPath" "$saves_folder/wii/dolphin/sd.raw" "dolphin" "General"
     fi
-    # if [[ "$action" == "postmove" ]]; then # Run only post-move commands
-      
-    # fi
   fi
+  
   if [[ "$emulator" =~ ^(duckstation|Duckstation|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       echo "------------------------"
       echo "Initializing DUCKSTATION"
       echo "------------------------"
-      if [[ $multi_user_mode == "true" ]]; then
+      if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/duckstation"
         mkdir -p "$multi_user_data_folder/$SteamAppUser/data/duckstation/"
         cp -fv $emuconfigs/duckstation/* "$multi_user_data_folder/$SteamAppUser/data/duckstation"
-        sed -i 's#/home/deck/retrodeck/bios#'$bios_folder'#g' "$multi_user_data_folder/$SteamAppUser/data/duckstation/settings.ini"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/data/duckstation/settings.ini" "SearchDirectory" "$bios_folder" "duckstation" "BIOS"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/data/duckstation/settings.ini" "Card1Path" "$saves_folder/duckstation/shared_card_1.mcd" "duckstation" "MemoryCards"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/data/duckstation/settings.ini" "Card2Path" "$saves_folder/duckstation/shared_card_2.mcd" "duckstation" "MemoryCards"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/data/duckstation/settings.ini" "Directory" "$saves_folder/duckstation" "duckstation" "MemoryCards"
         dir_prep "$multi_user_data_folder/$SteamAppUser/config/duckstation" "/var/config/duckstation"
-      else
-        # removing config directory to wipe legacy files
+      else # Single-user actions
         rm -rf /var/config/duckstation
         mkdir -p /var/data/duckstation/
         cp -fv $emuconfigs/duckstation/* /var/data/duckstation
+        set_setting_value "$duckstationconf" "SearchDirectory" "$bios_folder" "duckstation" "BIOS"
+        set_setting_value "$duckstationconf" "Card1Path" "$saves_folder/duckstation/shared_card_1.mcd" "duckstation" "MemoryCards"
+        set_setting_value "$duckstationconf" "Card2Path" "$saves_folder/duckstation/shared_card_2.mcd" "duckstation" "MemoryCards"
+        set_setting_value "$duckstationconf" "Directory" "$saves_folder/duckstation" "duckstation" "MemoryCards"
       fi
-      dir_prep "$states_folder/duckstation" "/var/data/duckstation/savestates"
+      dir_prep "$saves_folder/duckstation" "/var/data/duckstation/memcards" # TODO: This shouldn't be needed anymore, verify
+      dir_prep "$states_folder/duckstation" "/var/data/duckstation/savestates" # TODO: This shouldn't be needed anymore, verify
     fi
-    if [[ "$action" == "reset" ]] || [[ "$action" == "postmove" ]]; then # Run commands that apply to both resets and moves
+    if [[ "$action" == "postmove" ]]; then # Run only post-move commands
       set_setting_value "$duckstationconf" "SearchDirectory" "$bios_folder" "duckstation" "BIOS"
       set_setting_value "$duckstationconf" "Card1Path" "$saves_folder/duckstation/shared_card_1.mcd" "duckstation" "MemoryCards"
       set_setting_value "$duckstationconf" "Card2Path" "$saves_folder/duckstation/shared_card_2.mcd" "duckstation" "MemoryCards"
       set_setting_value "$duckstationconf" "Directory" "$saves_folder/duckstation" "duckstation" "MemoryCards"
     fi
-    # if [[ "$action" == "postmove" ]]; then # Run only post-move commands
-      
-    # fi
   fi
+  
   if [[ "$emulator" =~ ^(melonds|melonDS|MelonDS|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       echo "----------------------"
       echo "Initializing MELONDS"
       echo "----------------------"
-      if [[ $multi_user_mode == "true" ]]; then
+      if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/melonDS"
         mkdir -pv "$multi_user_data_folder/$SteamAppUser/config/melonDS/"
         cp -fvr $emuconfigs/melonDS.ini "$multi_user_data_folder/$SteamAppUser/config/melonDS/"
-        sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "$multi_user_data_folder/$SteamAppUser/config/melonDS/melonDS.ini"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/melonDS/melonDS.ini" "BIOS9Path" "$bios_folder/bios9.bin" "melonds"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/melonDS/melonDS.ini" "BIOS7Path" "$bios_folder/bios7.bin" "melonds"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/melonDS/melonDS.ini" "FirmwarePath" "$bios_folder/firmware.bin" "melonds"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/melonDS/melonDS.ini" "SaveFilePath" "$saves_folder/nds/melonds" "melonds"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/melonDS/melonDS.ini" "SavestatePath" "$states_folder/nds/melonds" "melonds"
         dir_prep "$multi_user_data_folder/$SteamAppUser/config/melonDS" "/var/config/melonDS"
-      else
+      else # Single-user actions
         rm -rf /var/config/melonDS
         mkdir -pv /var/config/melonDS/
         cp -fvr $emuconfigs/melonDS.ini /var/config/melonDS/
-        sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/melonDS/melonDS.ini
+        set_setting_value "$melondsconf" "BIOS9Path" "$bios_folder/bios9.bin" "melonds"
+        set_setting_value "$melondsconf" "BIOS7Path" "$bios_folder/bios7.bin" "melonds"
+        set_setting_value "$melondsconf" "FirmwarePath" "$bios_folder/firmware.bin" "melonds"
+        set_setting_value "$melondsconf" "SaveFilePath" "$saves_folder/nds/melonds" "melonds"
+        set_setting_value "$melondsconf" "SavestatePath" "$states_folder/nds/melonds" "melonds"
       fi
-      # removing config directory to wipe legacy files
+      # Shared actions
       mkdir -pv "$saves_folder/nds/melonds"
       mkdir -pv "$states_folder/nds/melonds"
+      dir_prep "$bios_folder" "/var/config/melonDS/bios"
     fi
-    if [[ "$action" == "reset" ]] || [[ "$action" == "postmove" ]]; then # Run commands that apply to both resets and moves
+    if [[ "$action" == "postmove" ]]; then # Run only post-move commands
+      dir_prep "$bios_folder" "/var/config/melonDS/bios"
       set_setting_value "$melondsconf" "BIOS9Path" "$bios_folder/bios9.bin" "melonds"
       set_setting_value "$melondsconf" "BIOS7Path" "$bios_folder/bios7.bin" "melonds"
       set_setting_value "$melondsconf" "FirmwarePath" "$bios_folder/firmware.bin" "melonds"
       set_setting_value "$melondsconf" "SaveFilePath" "$saves_folder/nds/melonds" "melonds"
       set_setting_value "$melondsconf" "SavestatePath" "$states_folder/nds/melonds" "melonds"
-      dir_prep "$bios_folder" "/var/config/melonDS/bios"
     fi
-    # if [[ "$action" == "postmove" ]]; then # Run only post-move commands
-
-    # fi
   fi
+  
   if [[ "$emulator" =~ ^(pcsx2|PCSX2|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       echo "----------------------"
       echo "Initializing PCSX2"
       echo "----------------------"
-      if [[ $multi_user_mode == "true" ]]; then
+      if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/PCSX2"
         mkdir -p "$multi_user_data_folder/$SteamAppUser/config/PCSX2/inis"
         cp -fvr $emuconfigs/PCSX2/* "$multi_user_data_folder/$SteamAppUser/config/PCSX2/inis/"
-        sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "$multi_user_data_folder/$SteamAppUser/config/PCSX2/inis/PCSX2_ui.ini"
-        sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "$multi_user_data_folder/$SteamAppUser/config/PCSX2/inis/PCSX2.ini"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/PCSX2/inis/PCSX2.ini" "Bios" "$bios_folder" "pcsx2" "Folders"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/PCSX2/inis/PCSX2.ini" "Snapshots" "$screenshots_folder" "pcsx2" "Folders"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/PCSX2/inis/PCSX2.ini" "SaveStates" "$states_folder/ps2/pcsx2" "pcsx2" "Folders"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/PCSX2/inis/PCSX2.ini" "MemoryCards" "$saves_folder/ps2/pcsx2/memcards" "pcsx2" "Folders"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/PCSX2/inis/PCSX2.ini" "RecursivePaths" "$roms_folder/ps2" "pcsx2" "GameList"
         dir_prep "$multi_user_data_folder/$SteamAppUser/config/PCSX2" "/var/config/PCSX2"
-      else
-        # removing config directory to wipe legacy files
+      else # Single-user actions
         rm -rf /var/config/PCSX2
         mkdir -pv "/var/config/PCSX2/inis"
         cp -fvr $emuconfigs/PCSX2/* /var/config/PCSX2/inis/
+        set_setting_value "$pcsx2conf" "Bios" "$bios_folder" "pcsx2" "Folders"
+        set_setting_value "$pcsx2conf" "Snapshots" "$screenshots_folder" "pcsx2" "Folders"
+        set_setting_value "$pcsx2conf" "SaveStates" "$states_folder/ps2/pcsx2" "pcsx2" "Folders"
+        set_setting_value "$pcsx2conf" "MemoryCards" "$saves_folder/ps2/pcsx2/memcards" "pcsx2" "Folders"
+        set_setting_value "$pcsx2conf" "RecursivePaths" "$roms_folder/ps2" "pcsx2" "GameList"
       fi
+      # Shared actions
       mkdir -pv "$saves_folder/ps2/pcsx2/memcards"
       mkdir -pv "$states_folder/ps2/pcsx2"
     fi
-    if [[ "$action" == "reset" ]] || [[ "$action" == "postmove" ]]; then # Run commands that apply to both resets and moves
+    if [[ "$action" == "postmove" ]]; then # Run only post-move commands
       set_setting_value "$pcsx2conf" "Bios" "$bios_folder" "pcsx2" "Folders"
       set_setting_value "$pcsx2conf" "Snapshots" "$screenshots_folder" "pcsx2" "Folders"
       set_setting_value "$pcsx2conf" "SaveStates" "$states_folder/ps2/pcsx2" "pcsx2" "Folders"
       set_setting_value "$pcsx2conf" "MemoryCards" "$saves_folder/ps2/pcsx2/memcards" "pcsx2" "Folders"
       set_setting_value "$pcsx2conf" "RecursivePaths" "$roms_folder/ps2" "pcsx2" "GameList"
     fi
-    # if [[ "$action" == "postmove" ]]; then # Run only post-move commands
-
-    # fi
   fi
+  
   if [[ "$emulator" =~ ^(ppsspp|PPSSPP|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       echo "------------------------"
       echo "Initializing PPSSPPSDL"
       echo "------------------------"
-      if [[ $multi_user_mode == "true" ]]; then
+      if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/ppsspp"
         mkdir -p "$multi_user_data_folder/$SteamAppUser/config/ppsspp/PSP/SYSTEM/"
         cp -fv $emuconfigs/ppssppsdl/* "$multi_user_data_folder/$SteamAppUser/config/ppsspp/PSP/SYSTEM/"
-        sed -i 's#/home/deck/retrodeck#'$rdhome'#g' "$multi_user_data_folder/$SteamAppUser/config/ppsspp/PSP/SYSTEM/ppsspp.ini"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/ppsspp/PSP/SYSTEM/ppsspp.ini" "CurrentDirectory" "$roms_folder/psp" "ppsspp" "General"
         dir_prep "$multi_user_data_folder/$SteamAppUser/config/ppsspp" "/var/config/ppsspp"
-      else
-        # removing config directory to wipe legacy files
+      else # Single-user actions
         rm -rf /var/config/ppsspp
         mkdir -p /var/config/ppsspp/PSP/SYSTEM/
         cp -fv $emuconfigs/ppssppsdl/* /var/config/ppsspp/PSP/SYSTEM/
+        set_setting_value "$ppssppconf" "CurrentDirectory" "$roms_folder/psp" "ppsspp" "General"
       fi
     fi
-    if [[ "$action" == "reset" ]] || [[ "$action" == "postmove" ]]; then # Run commands that apply to both resets and moves
+    if [[ "$action" == "postmove" ]]; then # Run only post-move commands
       set_setting_value "$ppssppconf" "CurrentDirectory" "$roms_folder/psp" "ppsspp" "General"
     fi
-    # if [[ "$action" == "postmove" ]]; then # Run only post-move commands
-
-    # fi
   fi
+  
   if [[ "$emulator" =~ ^(primehack|Primehack|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       echo "----------------------"
       echo "Initializing Primehack"
       echo "----------------------"
-      if [[ $multi_user_mode == "true" ]]; then
+      if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/primehack"
         mkdir -p "$multi_user_data_folder/$SteamAppUser/config/primehack"
         cp -fvr $emuconfigs/primehack/* "$multi_user_data_folder/$SteamAppUser/config/primehack/"
-        sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "$multi_user_data_folder/$SteamAppUser/config/primehack/Dolphin.ini"
+        set_setting_value ""$multi_user_data_folder/$SteamAppUser/config/primehack/Dolphin.ini"" "ISOPath0" "$roms_folder/gc" "primehack" "General"
         dir_prep "$multi_user_data_folder/$SteamAppUser/config/primehack" "/var/config/primehack"
-      else
-        # removing config directory to wipe legacy files
+      else # Single-user actions
         rm -rf /var/config/primehack
         mkdir -pv /var/config/primehack/
         cp -fvr "$emuconfigs/primehack/"* /var/config/primehack/
+        set_setting_value "$primehackconf" "ISOPath0" "$roms_folder/gc" "primehack" "General"
       fi
-    fi
-    if [[ "$action" == "reset" ]] || [[ "$action" == "postmove" ]]; then # Run commands that apply to both resets and moves
+      # Shared actions
       dir_prep "$saves_folder/gc/primehack/EUR" "/var/data/primehack/GC/EUR"
       dir_prep "$saves_folder/gc/primehack/USA" "/var/data/primehack/GC/USA"
       dir_prep "$saves_folder/gc/primehack/JAP" "/var/data/primehack/GC/JAP"
@@ -1461,87 +1494,108 @@ prepare_emulator() {
       dir_prep "$states_folder/primehack" "/var/data/primehack/StateSaves"
       mkdir -pv /var/data/primehack/Wii/
       dir_prep "$saves_folder/wii/primehack" "/var/data/primehack/Wii"
+    fi
+    if [[ "$action" == "postmove" ]]; then # Run only post-move commands
+      dir_prep "$saves_folder/gc/primehack/EUR" "/var/data/primehack/GC/EUR"
+      dir_prep "$saves_folder/gc/primehack/USA" "/var/data/primehack/GC/USA"
+      dir_prep "$saves_folder/gc/primehack/JAP" "/var/data/primehack/GC/JAP"
+      dir_prep "$screenshots_folder" "/var/data/primehack/ScreenShots"
+      dir_prep "$states_folder/primehack" "/var/data/primehack/StateSaves"
+      dir_prep "$saves_folder/wii/primehack" "/var/data/primehack/Wii/"
       set_setting_value "$primehackconf" "ISOPath0" "$roms_folder/gc" "primehack" "General"
     fi
-    # if [[ "$action" == "postmove" ]]; then # Run only post-move commands
-
-    # fi
   fi
+  
   if [[ "$emulator" =~ ^(rpcs3|RPCS3|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       echo "------------------------"
       echo "Initializing RPCS3"
       echo "------------------------"
-      if [[ $multi_user_mode == "true" ]]; then
+      if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/rpcs3"
         mkdir -pv "$multi_user_data_folder/$SteamAppUser/config/rpcs3/"
-        cp -fvr $emuconfigs/rpcs3/* "$multi_user_data_folder/$SteamAppUser/config/rpcs3/"
-        sed -i 's#/home/deck/retrodeck#'$rdhome'#g' "$multi_user_data_folder/$SteamAppUser/config/rpcs3/vfs.yml"
+        cp -fr $emuconfigs/rpcs3/* "$multi_user_data_folder/$SteamAppUser/config/rpcs3/"
+        # This is an unfortunate one-off because set_setting_value does not currently support settings with $ in the name.
+        sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$bios_folder/ps3/emudir"'^' "$multi_user_data_folder/$SteamAppUser/config/rpcs3/vfs.yml"
         dir_prep "$multi_user_data_folder/$SteamAppUser/config/rpcs3" "/var/config/rpcs3"
-      else
-        # removing config directory to wipe legacy files
+      else # Single-user actions
         rm -rf /var/config/rpcs3
         mkdir -pv /var/config/rpcs3/
-        cp -fvr $emuconfigs/rpcs3/* /var/config/rpcs3/
+        cp -fr $emuconfigs/rpcs3/* /var/config/rpcs3/
+        # This is an unfortunate one-off because set_setting_value does not currently support settings with $ in the name.
+        sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$bios_folder/ps3/emudir"'^' $rpcs3vfsconf
       fi
-    fi
-    if [[ "$action" == "reset" ]] || [[ "$action" == "postmove" ]]; then # Run commands that apply to both resets and moves
-      # This is an unfortunate one-off because set_setting_value does not currently support settings with $ in the name.
-      sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$roms_folder/ps3/emudir"'^' $rpcs3vfsconf
-    fi
-    # if [[ "$action" == "postmove" ]]; then # Run only post-move commands
-      
-    # fi
-  fi
-  if [[ "$emulator" =~ ^(ryujunx|Ryujinx|all)$ ]]; then
-    if [[ "$action" == "reset" ]]; then # Run reset-only commands
-      echo "------------------------"
-      echo "Initializing RYUJINX"
-      echo "------------------------"
-      if [[ $multi_user_mode == "true" ]]; then
-        rm -rf "$multi_user_data_folder/$SteamAppUser/config/Ryujinx"
-        mkdir -p "$multi_user_data_folder/$SteamAppUser/config/Ryujinx/system"
-        cp -fv $emuconfigs/ryujinx/* "$multi_user_data_folder/$SteamAppUser/config/Ryujinx"
-        sed -i 's#/home/deck/retrodeck#'$rdhome'#g' "$multi_user_data_folder/$SteamAppUser/config/Ryujinx/Config.json"
-        dir_prep "$multi_user_data_folder/$SteamAppUser/config/Ryujinx" "/var/config/Ryujinx"
-      else
-        # removing config directory to wipe legacy files
-        rm -rf /var/config/Ryujinx
-        mkdir -p /var/config/Ryujinx/system
-        cp -fv $emuconfigs/ryujinx/* /var/config/Ryujinx
-        sed -i 's#/home/deck/retrodeck#'$rdhome'#g' "$ryujinxconf"
-      fi
-    fi
-    if [[ "$action" == "reset" ]] || [[ "$action" == "postmove" ]]; then # Run commands that apply to both resets and moves
-      dir_prep "$bios_folder/switch/keys" "/var/config/Ryujinx/system"
+      # Shared actions
+      mkdir -p "$bios_folder/rpcs3/emudir/dev_hdd0"
+      mkdir -p "$bios_folder/rpcs3/emudir/dev_hdd1"
+      mkdir -p "$bios_folder/rpcs3/emudir/dev_flash"
+      mkdir -p "$bios_folder/rpcs3/emudir/dev_flash2"
+      mkdir -p "$bios_folder/rpcs3/emudir/dev_flash3"
+      mkdir -p "$bios_folder/rpcs3/emudir/dev_bdvd"
     fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
-      sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "$ryujinxconf" # This is an unfortunate one-off because set_setting_value does not currently support JSON
+      # This is an unfortunate one-off because set_setting_value does not currently support settings with $ in the name.
+      sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$bios_folder/ps3/emudir"'^' $rpcs3vfsconf
     fi
   fi
+  
+  # if [[ "$emulator" =~ ^(ryujunx|Ryujinx|all)$ ]]; then
+  #   if [[ "$action" == "reset" ]]; then # Run reset-only commands
+  #     echo "------------------------"
+  #     echo "Initializing RYUJINX"
+  #     echo "------------------------"
+  #     if [[ $multi_user_mode == "true" ]]; then
+  #       rm -rf "$multi_user_data_folder/$SteamAppUser/config/Ryujinx"
+  #       mkdir -p "$multi_user_data_folder/$SteamAppUser/config/Ryujinx/system"
+  #       cp -fv $emuconfigs/ryujinx/* "$multi_user_data_folder/$SteamAppUser/config/Ryujinx"
+  #       sed -i 's#/home/deck/retrodeck#'$rdhome'#g' "$multi_user_data_folder/$SteamAppUser/config/Ryujinx/Config.json"
+  #       dir_prep "$multi_user_data_folder/$SteamAppUser/config/Ryujinx" "/var/config/Ryujinx"
+  #     else
+  #       # removing config directory to wipe legacy files
+  #       rm -rf /var/config/Ryujinx
+  #       mkdir -p /var/config/Ryujinx/system
+  #       cp -fv $emuconfigs/ryujinx/* /var/config/Ryujinx
+  #       sed -i 's#/home/deck/retrodeck#'$rdhome'#g' "$ryujinxconf"
+  #     fi
+  #   fi
+  #   if [[ "$action" == "reset" ]] || [[ "$action" == "postmove" ]]; then # Run commands that apply to both resets and moves
+  #     dir_prep "$bios_folder/switch/keys" "/var/config/Ryujinx/system"
+  #   fi
+  #   if [[ "$action" == "postmove" ]]; then # Run only post-move commands
+  #     sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "$ryujinxconf" # This is an unfortunate one-off because set_setting_value does not currently support JSON
+  #   fi
+  # fi
+  
   if [[ "$emulator" =~ ^(xemu|XEMU|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       if [[ $(check_network_connectivity) == "true" ]]; then
         echo "------------------------"
         echo "Initializing XEMU"
         echo "------------------------"
-        if [[ $multi_user_mode == "true" ]]; then
+        if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
           rm -rf /var/config/xemu
           rm -rf /var/data/xemu
           rm -rf "$multi_user_data_folder/$SteamAppUser/config/xemu"
           mkdir -pv "$multi_user_data_folder/$SteamAppUser/config/xemu/"
+          cp -fv $emuconfigs/xemu.toml "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml"
+          set_setting_value "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml" "screenshot_dir" "'$screenshots_folder'" "xemu" "General"
+          set_setting_value "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml" "bootrom_path" "'$bios_folder/mcpx_1.0.bin'" "xemu" "sys.files"
+          set_setting_value "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml" "flashrom_path" "'$bios_folder/Complex.bin'" "xemu" "sys.files"
+          set_setting_value "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml" "eeprom_path" "$saves_folder/xbox/xemu/xbox-eeprom.bin" "xemu" "sys.files"
+          set_setting_value "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml" "hdd_path" "'$bios_folder/xbox_hdd.qcow2'" "xemu" "sys.files"
           dir_prep "$multi_user_data_folder/$SteamAppUser/config/xemu" "/var/config/xemu" # Creating config folder in /var/config for consistentcy and linking back to original location where emulator will look
           dir_prep "$multi_user_data_folder/$SteamAppUser/config/xemu" "/var/data/xemu"
-          cp -fv $emuconfigs/xemu.toml "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml"
-          sed -i 's#/home/deck/retrodeck#'$rdhome'#g' "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml"
-        else
-          # removing config directory to wipe legacy files
+        else # Single-user actions
           rm -rf /var/config/xemu
           rm -rf /var/data/xemu
           dir_prep "/var/config/xemu" "/var/data/xemu" # Creating config folder in /var/config for consistentcy and linking back to original location where emulator will look
           cp -fv $emuconfigs/xemu.toml "$xemuconf"
-          sed -i 's#/home/deck/retrodeck#'$rdhome'#g' "$xemuconf"
-        fi
+          set_setting_value "$xemuconf" "screenshot_dir" "'$screenshots_folder'" "xemu" "General"
+          set_setting_value "$xemuconf" "bootrom_path" "'$bios_folder/mcpx_1.0.bin'" "xemu" "sys.files"
+          set_setting_value "$xemuconf" "flashrom_path" "'$bios_folder/Complex.bin'" "xemu" "sys.files"
+          set_setting_value "$xemuconf" "eeprom_path" "$saves_folder/xbox/xemu/xbox-eeprom.bin" "xemu" "sys.files"
+          set_setting_value "$xemuconf" "hdd_path" "'$bios_folder/xbox_hdd.qcow2'" "xemu" "sys.files"
+        fi # Shared actions
         mkdir -pv $saves_folder/xbox/xemu/
         # Preparing HD dummy Image if the image is not found
         if [ ! -f $bios_folder/xbox_hdd.qcow2 ]
@@ -1556,9 +1610,6 @@ prepare_emulator() {
         fi
       fi
     fi
-    if [[ "$action" == "reset" ]] || [[ "$action" == "postmove" ]]; then # Run commands that apply to both resets and moves
-      
-    fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
       set_setting_value "$xemuconf" "screenshot_dir" "'$screenshots_folder'" "xemu" "General"
       set_setting_value "$xemuconf" "bootrom_path" "'$bios_folder/mcpx_1.0.bin'" "xemu" "sys.files"
@@ -1567,42 +1618,49 @@ prepare_emulator() {
       set_setting_value "$xemuconf" "hdd_path" "'$bios_folder/xbox_hdd.qcow2'" "xemu" "sys.files"
     fi
   fi
+  
   if [[ "$emulator" =~ ^(yuzu|Yuzu|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       echo "----------------------"
       echo "Initializing YUZU"
       echo "----------------------"
-      if [[ $multi_user_mode == "true" ]]; then
+      if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/yuzu"
         mkdir -p "$multi_user_data_folder/$SteamAppUser/config/yuzu"
         cp -fvr $emuconfigs/yuzu/* "$multi_user_data_folder/$SteamAppUser/config/yuzu/"
-        sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "$multi_user_data_folder/$SteamAppUser/config/yuzu/qt-config.ini"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/yuzu/qt-config.ini" "nand_directory" "$saves_folder/switch/yuzu/nand" "yuzu" "Data%20Storage"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/yuzu/qt-config.ini" "sdmc_directory" "$saves_folder/switch/yuzu/sdmc" "yuzu" "Data%20Storage"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/yuzu/qt-config.ini" "Paths\gamedirs\4\path" "$roms_folder/switch" "yuzu" "UI"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/yuzu/qt-config.ini" "Screenshots\screenshot_path" "$screenshots_folder" "yuzu" "UI"
         dir_prep "$multi_user_data_folder/$SteamAppUser/config/yuzu" "/var/config/yuzu"
-      else
+      else # Single-user actions
         rm -rf /var/config/yuzu
         mkdir -pv /var/config/yuzu/
         cp -fvr $emuconfigs/yuzu/* /var/config/yuzu/
-        sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "$yuzuconf"
+        set_setting_value "$yuzuconf" "nand_directory" "$saves_folder/switch/yuzu/nand" "yuzu" "Data%20Storage"
+        set_setting_value "$yuzuconf" "sdmc_directory" "$saves_folder/switch/yuzu/sdmc" "yuzu" "Data%20Storage"
+        set_setting_value "$yuzuconf" "Paths\gamedirs\4\path" "$roms_folder/switch" "yuzu" "UI"
+        set_setting_value "$yuzuconf" "Screenshots\screenshot_path" "$screenshots_folder" "yuzu" "UI"
       fi
+      # Shared actions
+      dir_prep "$saves_folder/switch/yuzu/nand" "/var/data/yuzu/nand"
+      dir_prep "$saves_folder/switch/yuzu/sdmc" "/var/data/yuzu/sdmc"
+      dir_prep "$bios_folder/switch/keys" "/var/data/yuzu/keys"
+      dir_prep "$bios_folder/switch/registered" "/var/data/yuzu/nand/system/Contents/registered"
+      dir_prep "$logs_folder/yuzu" "/var/data/yuzu/log"
+      dir_prep "$screenshots_folder" "/var/data/yuzu/screenshots"
       # removing dead symlinks as they were present in a past version
       if [ -d $bios_folder/switch ]; then
         find $bios_folder/switch -xtype l -exec rm {} \;
       fi
     fi
-    if [[ "$action" == "reset" ]] || [[ "$action" == "postmove" ]]; then # Run commands that apply to both resets and moves
-      # initializing the keys folder
+    if [[ "$action" == "postmove" ]]; then # Run only post-move commands
       dir_prep "$bios_folder/switch/keys" "/var/data/yuzu/keys"
-      # initializing the firmware folder
       dir_prep "$bios_folder/switch/registered" "/var/data/yuzu/nand/system/Contents/registered"
-      # initializing the save folders
       dir_prep "$saves_folder/switch/yuzu/nand" "/var/data/yuzu/nand"
       dir_prep "$saves_folder/switch/yuzu/sdmc" "/var/data/yuzu/sdmc"
-      # configuring Yuzu
       dir_prep "$logs_folder/yuzu" "/var/data/yuzu/log"
-      # removing config directory to wipe legacy files
       dir_prep "$screenshots_folder" "/var/data/yuzu/screenshots"
-    fi
-    if [[ "$action" == "postmove" ]]; then # Run only post-move commands
       set_setting_value "$yuzuconf" "nand_directory" "$saves_folder/switch/yuzu/nand" "yuzu" "Data%20Storage"
       set_setting_value "$yuzuconf" "sdmc_directory" "$saves_folder/switch/yuzu/sdmc" "yuzu" "Data%20Storage"
       set_setting_value "$yuzuconf" "Paths\gamedirs\4\path" "$roms_folder/switch" "yuzu" "UI"
