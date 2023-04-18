@@ -33,10 +33,8 @@ Visit our [website](https://retrodeck.net) and Join our [Discord](https://discor
 ### RetroDECK is tailored to the Steam Deck during the BETA period.
 The goal is that all the configurations are ready out-of-the-box and optimized towards the Steam Deck. Just put your `ROMS` & `BIOS` in the corresponding folders and start playing.
 
-### How can I install it?
-On the Steam Deck go into desktop mode and open the Discover
-<br/>
-Read more on the guide here: [Installation instructions](https://github.com/XargonWan/RetroDECK/wiki/How-to:-Getting-started) on the Wiki
+### How do I install RetroDECK?
+Read and follow the guide here: [Installation instructions](https://github.com/XargonWan/RetroDECK/wiki/How-to:-Getting-started) on the Wiki
 
 # Short FAQ
 
