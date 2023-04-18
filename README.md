@@ -40,8 +40,9 @@ Please read the [Wiki](https://github.com/XargonWan/RetroDECK/wiki) for even mor
 ## Do I have to partition or format my disk/sdcard to install it?
 No, partitioning or formatting is note needed at all. RetroDECK (differently from AmberELEC, Batocera and others) comes as a flatpak: just install it as any other application and launch it from your desktop or Steam library. 
 
-## Is it available on Windows?
-No, RetroDECK doesn't support Windows, but the project is fully open source so you can port it if you wish. As an alternative, [Retrobat](http://www.retrobat.ovh/) offers similar functionality (but may not be compatible with RetroDECK's rom paths).
+## Do you support Windows?
+No, RetroDECK doesn't support Windows, but the project is fully open source so you can port it if you wish. 
+As an alternative, [Retrobat](http://www.retrobat.ovh/) offers similar functionality (but may not be compatible with RetroDECK's rom paths).
 
 ## Do you support the Linux Desktop?
 RetroDECK does work if you do some input changes on the Linux Desktop but is not officially supported during the BETA period and there could be other issues. But we do plan to support it in the future.
@@ -64,7 +65,6 @@ Yes! Everybody is welcome to contribute in any way possible if it is personal ti
 - By joining the ✨-new-helpers-start-here channel on [Discord](discord.gg/Dz3szYsP8g) and keeping an eye on the [issues](https://github.com/XargonWan/RetroDECK/issues) tab as well as the [Roadmap](https://github.com/XargonWan/RetroDECK/milestones) tab, you can be up to speed on the latest developments on RetroDECK.
 - We have a [Patreon](https://www.patreon.com/RetroDECK) page if you want to help us keep our build servers running or just buy us a beverage
 
-###### The Steam Deck logo is a registered trademark of Valve Corporation. This project is in no way officially affiliated with Valve.
-<br/>
+###### The Steam Deck logo is a registered trademark of Valve Corporation. This project is in no way officially affiliated with Valve.<br/>
 
-###### All trademarks, logos and brand names are the property of their respective owners. All company, product and service names used in this project are for identification purposes only. Use of these names, trademarks and brands does not imply endorsement.*
+###### All trademarks, logos and brand names are the property of their respective owners. All company, product and service names used in this project are for identification purposes only. Use of these names, trademarks and brands does not imply endorsement.
