@@ -31,27 +31,29 @@ Visit our [website](https://retrodeck.net) and Join our [Discord](https://discor
 <br/>
 
 ### RetroDECK is tailored to the Steam Deck during the BETA period.
-The goal is that all the configurations are ready to go and tweaked to get the best graphics and performance on the Deck without having the hassle of choosing, installing and configuring tons of emulators: just put your ROMS & BIOSes in the corresponding folders and start your games.
+The goal is that all the configurations are ready out-of-the-box and optimized towards the Steam Deck. Just put your `ROMS` & `BIOS` in the corresponding folders and start playing.
 
 # Short FAQ
 
 Please read the [Wiki](https://github.com/XargonWan/RetroDECK/wiki) for even more information.
 
 ## Do I have to partition or format my disk/sdcard to install it?
-No, partitioning or formatting is note needed at all. RetroDECK (differently from AmberELEC, Batocera and others) comes as a flatpak: just install it as any other application and launch it from your desktop or Steam library. 
+No, partitioning or formatting is note needed at all. RetroDECK (differently from AmberELEC, Batocera and others) comes as a flatpak. Just install it as any other application and launch it from your desktop and/or Steam library. 
 
 ## Do you support Windows?
 No, RetroDECK doesn't support Windows, but the project is fully open source so you can port it if you wish. 
-As an alternative, [Retrobat](http://www.retrobat.ovh/) offers similar functionality (but may not be compatible with RetroDECK's rom paths).
+As an alternative you could try [Retrobat](http://www.retrobat.ovh/) that offers similar functionality.
 
 ## Do you support the Linux Desktop?
-RetroDECK does work if you do some input changes on the Linux Desktop but is not officially supported during the BETA period and there could be other issues. But we do plan to support it in the future.
+We do plan to support Linux Desktop in the future. But during the BETA we are focusing on the Steam Deck.
+You can still run it but you might need to do some configurations by yourself.
 
 ## Do you support other SteamOS based devices?
-We do plan to support other SteamOS devices in the future.
+We do plan to support other SteamOS based devices in the future. But during the BETA we are focusing on the Steam Deck.
+You can still run it but you might need to do some configurations by yourself.
 
 ## How can I install it?
-Just install it from Discover store on the Steam Decks desktop mode or for the the Linux desktop download it from your normal software channel.
+On the Steam Deck go into desktop mode and open the Discover
 <br/>
 Read more on the guide here: [Installation instructions](https://github.com/XargonWan/RetroDECK/wiki/How-to:-Getting-started) on the Wiki
 
