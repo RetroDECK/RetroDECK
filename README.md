@@ -66,4 +66,5 @@ Yes! Everybody is welcome to contribute in any way possible if it is personal ti
 
 ###### The Steam Deck logo is a registered trademark of Valve Corporation. This project is in no way officially affiliated with Valve.
 <br/>
+
 ###### All trademarks, logos and brand names are the property of their respective owners. All company, product and service names used in this project are for identification purposes only. Use of these names, trademarks and brands does not imply endorsement.*
