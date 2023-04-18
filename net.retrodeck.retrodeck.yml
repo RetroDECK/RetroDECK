@@ -1219,8 +1219,9 @@ modules:
       - cp functions.sh /app/libexec/functions.sh
       - cp post_update.sh /app/libexec/post_update.sh
 
-      # Desktop entry
+      # Desktop entries
       - cp net.retrodeck.retrodeck.desktop /app/share/applications/net.retrodeck.retrodeck.desktop
+      - cp net.retrodeck.retrodeck.Configurator.desktop /app/share/applications/net.retrodeck.retrodeck.Configurator.desktop
 
       # TODO: group the configs per-emu and optimize the following cps, like already done with Dolphin. Please not that some files may be renamed, check retrodeck.sh to know how (and fix it after the edit)
 

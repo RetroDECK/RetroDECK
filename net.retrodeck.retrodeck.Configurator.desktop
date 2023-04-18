@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=RetroDECK Configurator
+GenericName=RetroDECK Configuration Utility
+Type=Application
+Comment=A handy tool to change common RetroDECK settings
+Icon=net.retrodeck.retrodeck
+Exec=flatpak run net.retrodeck.retrodeck --configurator
+Terminal=false
+StartupNotify=false
+Keywords=multi;engine;emulator;standalone;steam;deck
+Categories=Game;Emulator;
