@@ -31,7 +31,7 @@ Visit our [website](https://retrodeck.net) and Join our [Discord](https://discor
 <br/>
 
 ### RetroDECK is tailored to the Steam Deck during the BETA period.
-The goal is tha tall the configurations are ready to go and tweaked to get the best graphics and performance on the Deck without having the hassle of choosing, installing and configuring tons of emulators: just put your ROMS & BIOSes in the corresponding folders and start your games.
+The goal is that all the configurations are ready to go and tweaked to get the best graphics and performance on the Deck without having the hassle of choosing, installing and configuring tons of emulators: just put your ROMS & BIOSes in the corresponding folders and start your games.
 
 # Short FAQ
 
