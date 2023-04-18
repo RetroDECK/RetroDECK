@@ -38,7 +38,7 @@ The goal is that all the configurations are ready out-of-the-box and optimized t
 Please read the [Wiki](https://github.com/XargonWan/RetroDECK/wiki) for even more information.
 
 ## Do I have to partition or format my disk/sdcard to install it?
-No, partitioning or formatting is note needed at all. RetroDECK (differently from AmberELEC, Batocera and others) comes as a flatpak. Just install it as any other application and launch it from your desktop and/or Steam library. 
+No, partitioning or formatting is not needed at all. RetroDECK (differently from AmberELEC, Batocera and others) comes as a flatpak. Just install it as any other application and launch it from your desktop and/or Steam library. 
 
 ## Do you support Windows?
 No, RetroDECK doesn't support Windows, but the project is fully open source so you can port it if you wish. 
