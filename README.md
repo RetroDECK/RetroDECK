@@ -53,7 +53,7 @@ We do plan to support other SteamOS devices in the future.
 ## How can I install it?
 Just install it from Discover store on the Steam Decks desktop mode or for the the Linux desktop download it from your normal software channel.
 <br/>
-However if you want to test the cooker version you can follow the [Installation instructions](https://github.com/XargonWan/RetroDECK/wiki/How-to:-Getting-started) on the Wiki
+Read more on the guide here: [Installation instructions](https://github.com/XargonWan/RetroDECK/wiki/How-to:-Getting-started) on the Wiki
 
 ## Can I contribute to the project?
 Yes! Everybody is welcome to contribute in any way possible if it is personal time or funds, just check out our [Discord](https://discord.gg/Dz3szYsP8g)!
