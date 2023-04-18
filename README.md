@@ -7,7 +7,7 @@
 ![Discord](https://img.shields.io/discord/951662718102962256?label=discord)
 ![GitHub](https://img.shields.io/github/license/XargonWan/RetroDECK)
 
-# RetroDECK on the Steam Deck
+# RetroDECK on your device!
 
 **RetroDECK** in application that brings a sandbox environment to catalog and play your retro games directly on your:
 <br/><br/>
