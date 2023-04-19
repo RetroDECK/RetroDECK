@@ -1,3 +1,10 @@
+diff -au1r emulationstation-de/CMake/Packages/FindFFmpeg.cmake emulationstation-de/CMake/Packages/FindFFmpeg.cmake
+--- emulationstation-de/CMake/Packages/FindFFmpeg.cmake	2023-04-12 09:08:12.384935336 -0400
++++ emulationstation-de/CMake/Packages/FindFFmpeg.cmake	2023-04-19 08:33:48.816378155 -0400
+@@ -29,2 +29,3 @@
+         /usr/freeware/include
++        /app/lib/ffmpeg
+         NO_DEFAULT_PATH
 diff -au1r emulationstation-de/es-app/src/guis/GuiMenu.cpp emulationstation-de/es-app/src/guis/GuiMenu.cpp
 --- emulationstation-de/es-app/src/guis/GuiMenu.cpp	2023-04-12 09:08:12.394935336 -0400
 +++ emulationstation-de/es-app/src/guis/GuiMenu.cpp	2023-04-12 16:25:04.618753274 -0400
