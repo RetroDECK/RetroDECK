@@ -36,6 +36,9 @@ source /app/libexec/functions.sh
 #       - Compress Games
 #         - Manual single-game selection
 #         - Multi-file compression (CHD)
+#       - Download ES themes
+#       - Download PS3 firmware
+#       - Backup RetroDECK userdata
 #     - Reset
 #       - Reset Specific Emulator
 #           - Reset RetroArch
@@ -86,13 +89,13 @@ configurator_reset_dialog() {
 
     case $emulator_to_reset in
 
-    "RetroArch" )
-      if [[ $(configurator_reset_confirmation_dialog "RetroArch" "Are you sure you want to reset the RetroArch emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
+    "RetroArch" | "XEMU" ) # Emulators that require network access
+      if [[ $(configurator_reset_confirmation_dialog "$emulator_to_reset" "Are you sure you want to reset the $emulator_to_reset emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
         if [[ $(check_network_connectivity) == "true" ]]; then
-          ra_init
+          prepare_emulator "reset" "$emulator_to_reset" "configurator"
           configurator_process_complete_dialog "resetting $emulator_to_reset"
         else
-          configurator_generic_dialog "You do not appear to be connected to a network with internet access.\n\nThe RetroArch reset process requires some files from the internet to function properly.\n\nPlease retry this process once a network connection is available."
+          configurator_generic_dialog "You do not appear to be connected to a network with internet access.\n\nThe $emulator_to_reset reset process requires some files from the internet to function properly.\n\nPlease retry this process once a network connection is available."
           configurator_reset_dialog
         fi
       else
@@ -101,114 +104,9 @@ configurator_reset_dialog() {
       fi
     ;;
 
-    "Cemu" )
-      if [[ $(configurator_reset_confirmation_dialog "Cemu" "Are you sure you want to reset the Cemu emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
-        cemu_init
-        configurator_process_complete_dialog "resetting $emulator_to_reset"
-      else
-        configurator_generic_dialog "Reset process cancelled."
-        configurator_reset_dialog
-      fi
-    ;;
-
-    "Citra" )
-      if [[ $(configurator_reset_confirmation_dialog "Citra" "Are you sure you want to reset the Citra emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
-        citra_init
-        configurator_process_complete_dialog "resetting $emulator_to_reset"
-      else
-        configurator_generic_dialog "Reset process cancelled."
-        configurator_reset_dialog
-      fi
-    ;;
-
-    "Dolphin" )
-      if [[ $(configurator_reset_confirmation_dialog "Dolphin" "Are you sure you want to reset the Dolphin emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
-        dolphin_init
-        configurator_process_complete_dialog "resetting $emulator_to_reset"
-      else
-        configurator_generic_dialog "Reset process cancelled."
-        configurator_reset_dialog
-      fi
-    ;;
-
-    "Duckstation" )
-      if [[ $(configurator_reset_confirmation_dialog "Duckstation" "Are you sure you want to reset the Duckstation emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
-        duckstation_init
-        configurator_process_complete_dialog "resetting $emulator_to_reset"
-      else
-        configurator_generic_dialog "Reset process cancelled."
-        configurator_reset_dialog
-      fi
-    ;;
-
-    "MelonDS" )
-      if [[ $(configurator_reset_confirmation_dialog "MelonDS" "Are you sure you want to reset the MelonDS emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
-        melonds_init
-        configurator_process_complete_dialog "resetting $emulator_to_reset"
-      else
-        configurator_generic_dialog "Reset process cancelled."
-        configurator_reset_dialog
-      fi
-    ;;
-
-    "PCSX2" )
-      if [[ $(configurator_reset_confirmation_dialog "PCSX2" "Are you sure you want to reset the PCSX2 emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
-        pcsx2_init
-        configurator_process_complete_dialog "resetting $emulator_to_reset"
-      else
-        configurator_generic_dialog "Reset process cancelled."
-        configurator_reset_dialog
-      fi
-    ;;
-
-    "PPSSPP" )
-      if [[ $(configurator_reset_confirmation_dialog "PPSSPP" "Are you sure you want to reset the PPSSPP emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
-        ppssppsdl_init
-        configurator_process_complete_dialog "resetting $emulator_to_reset"
-      else
-        configurator_generic_dialog "Reset process cancelled."
-        configurator_reset_dialog
-      fi
-    ;;
-
-    "Primehack" )
-      if [[ $(configurator_reset_confirmation_dialog "Primehack" "Are you sure you want to reset the Primehack emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
-        primehack_init
-        configurator_process_complete_dialog "resetting $emulator_to_reset"
-      else
-        configurator_generic_dialog "Reset process cancelled."
-        configurator_reset_dialog
-      fi
-    ;;
-
-    "RPCS3" )
-      if [[ $(configurator_reset_confirmation_dialog "RPCS3" "Are you sure you want to reset the RPCS3 emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
-        rpcs3_init
-        configurator_process_complete_dialog "resetting $emulator_to_reset"
-      else
-        configurator_generic_dialog "Reset process cancelled."
-        configurator_reset_dialog
-      fi
-    ;;
-
-    "XEMU" )
-      if [[ $(configurator_reset_confirmation_dialog "XEMU" "Are you sure you want to reset the XEMU emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
-        if [[ $(check_network_connectivity) == "true" ]]; then
-          xemu_init
-          configurator_process_complete_dialog "resetting $emulator_to_reset"
-        else
-          configurator_generic_dialog "You do not appear to be connected to a network with internet access.\n\nThe Xemu reset process requires some files from the internet to function properly.\n\nPlease retry this process once a network connection is available."
-          configurator_reset_dialog
-        fi
-      else
-        configurator_generic_dialog "Reset process cancelled."
-        configurator_reset_dialog
-      fi
-    ;;
-
-    "Yuzu" )
-      if [[ $(configurator_reset_confirmation_dialog "Yuzu" "Are you sure you want to reset the Yuzu emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
-        yuzu_init
+    "Cemu" | "Citra" | "Dolphin" | "Duckstation" | "MelonDS" | "PCSX2" | "PPSSPP" | "Primehack" | "RPCS3" | "Ryujinx" | "Yuzu" )
+      if [[ $(configurator_reset_confirmation_dialog "$emulator_to_reset" "Are you sure you want to reset the $emulator_to_reset emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
+        prepare_emulator "reset" "$emulator_to_reset" "configurator"
         configurator_process_complete_dialog "resetting $emulator_to_reset"
       else
         configurator_generic_dialog "Reset process cancelled."
@@ -226,8 +124,7 @@ configurator_reset_dialog() {
 "Reset All Emulators" )
   if [[ $(configurator_reset_confirmation_dialog "all emulators" "Are you sure you want to reset all emulators to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
     if [[ $(check_network_connectivity) == "true" ]]; then
-      ra_init
-      standalones_init
+      prepare_emulator "reset" "all"
       configurator_process_complete_dialog "resetting all emulators"
     else
       configurator_generic_dialog "You do not appear to be connected to a network with internet access.\n\nThe all-emulator reset process requires some files from the internet to function properly.\n\nPlease retry this process once a network connection is available."
@@ -299,7 +196,7 @@ configurator_power_user_warning_dialog() {
       configurator_welcome_dialog
     elif [[ $choice == "Never show this again" ]]; then
       set_setting_value $rd_conf "power_user_warning" "false" retrodeck "options" # Store desktop mode warning variable for future checks
-      source $rd_conf
+      conf_read
       configurator_power_user_changes_dialog
     fi
   fi
@@ -834,6 +731,19 @@ configurator_online_theme_downloader() {
   fi
 }
 
+configurator_rpcs3_firmware_updater() {
+  configurator_generic_dialog "This tool will download firmware required by RPCS3 to emulate PS3 games.\n\nThe process will take several minutes, and the emulator will launch to finish the installation.\nPlease close RPCS3 manually once the installation is complete."
+  (
+    update_rpcs3_firmware
+  ) |
+    zenity --progress --pulsate \
+    --icon-name=net.retrodeck.retrodeck \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title="Downloading PS3 Firmware" \
+    --no-cancel \
+    --auto-close
+}
+
 configurator_tools_and_troubleshooting_dialog() {
   choice=$(zenity --list --title="RetroDECK Configurator Utility - Change Options" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
@@ -843,13 +753,15 @@ configurator_tools_and_troubleshooting_dialog() {
   "Basic BIOS file check" "Show a list of systems that BIOS files are found for" \
   "Advanced BIOS file check" "Show advanced information about common BIOS files" \
   "Compress Games" "Compress games to CHD format for systems that support it" \
-  "Download/Update Themes" "Download new themes for RetroDECK or update existing ones" )
+  "Download/Update Themes" "Download new themes for RetroDECK or update existing ones" \
+  "Download PS3 Firmware" "Download PS3 firmware for use with the RPCS3 emulator" \
+  "Backup RetroDECK Userdata" "Compress important RetroDECK user data folders" )
 
   case $choice in
 
   "Move RetroDECK" )
     configurator_generic_dialog "This option will move the RetroDECK data folder (ROMs, saves, BIOS etc.) to a new location.\n\nPlease choose where to move the RetroDECK data folder."
-    configurator_move_dialog
+    configurator_move_retrodeck_dialog
   ;;
 
   "Multi-file game structure check" )
@@ -869,7 +781,38 @@ configurator_tools_and_troubleshooting_dialog() {
   ;;
 
   "Download/Update Themes" )
-    configurator_online_theme_downloader
+    if [[ $(check_network_connectivity) == "true" ]]; then
+      configurator_online_theme_downloader
+    else
+      configurator_generic_dialog "You do not appear to currently have Internet access, which is required by this tool. Please try again when network access has been restored."
+      configurator_tools_and_troubleshooting_dialog
+    fi
+  ;;
+
+  "Download PS3 Firmware" )
+    if [[ $(check_network_connectivity) == "true" ]]; then
+      configurator_rpcs3_firmware_updater
+    else
+      configurator_generic_dialog "You do not appear to currently have Internet access, which is required by this tool. Please try again when network access has been restored."
+      configurator_tools_and_troubleshooting_dialog
+    fi
+  ;;
+
+  "Backup RetroDECK Userdata" )
+    configurator_generic_dialog "This tool will compress important RetroDECK userdata (basically everything except the ROMs folder) into a zip file.\n\nThis process can take several minutes, and the resulting zip file can be found in the ~/retrodeck/backups folder."
+    (
+      backup_retrodeck_userdata
+    ) |
+    zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+            --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+            --title "RetroDECK Configurator Utility - Backup in Progress" \
+            --text="Backing up RetroDECK userdata, please wait..."
+    if [[ -f $backups_folder/$(date +"%0m%0d")_retrodeck_userdata.zip ]]; then
+      configurator_generic_dialog "The backup process is now complete."
+    else
+      configurator_generic_dialog "The backup process could not be completed,\nplease check the logs folder for more information."
+    fi
+    configurator_tools_and_troubleshooting_dialog
   ;;
 
   "" ) # No selection made or Back button clicked
@@ -879,7 +822,7 @@ configurator_tools_and_troubleshooting_dialog() {
   esac
 }
 
-configurator_move_dialog() {
+configurator_move_retrodeck_dialog() {
   if [[ -d $rdhome ]]; then
     destination=$(configurator_destination_choice_dialog "RetroDECK Data" "Please choose a destination for the RetroDECK data folder.")
     case $destination in
@@ -891,11 +834,11 @@ configurator_move_dialog() {
     "Internal Storage" )
       if [[ ! -L "$HOME/retrodeck" && -d "$HOME/retrodeck" ]]; then
         configurator_generic_dialog "The RetroDECK data folder is already at that location, please pick a new one."
-        configurator_move_dialog
+        configurator_move_retrodeck_dialog
       else
         configurator_generic_dialog "Moving RetroDECK data folder to $destination"
         unlink $HOME/retrodeck # Remove symlink for $rdhome
-        move $rdhome "$HOME"
+        #move $rdhome "$HOME"
         if [[ ! -d $rdhome && -d $HOME/retrodeck ]]; then # If the move succeeded
           rdhome="$HOME/retrodeck"
           roms_folder="$rdhome/roms"
@@ -904,7 +847,7 @@ configurator_move_dialog() {
           bios_folder="$rdhome/bios"
           media_folder="$rdhome/downloaded_media"
           themes_folder="$rdhome/themes"
-          emulators_post_move
+          prepare_emulator "all" "postmove"
           conf_write
 
           configurator_process_complete_dialog "moving the RetroDECK data directory to internal storage"
@@ -917,7 +860,7 @@ configurator_move_dialog() {
     "SD Card" )
       if [[ -L "$HOME/retrodeck" && -d "$sdcard/retrodeck" && "$rdhome" == "$sdcard/retrodeck" ]]; then
         configurator_generic_dialog "The RetroDECK data folder is already configured to that location, please pick a new one."
-        configurator_move_dialog
+        configurator_move_retrodeck_dialog
       else
         if [[ ! -w $sdcard ]]; then
           configurator_generic_dialog "The SD card was found but is not writable\nThis can happen with cards formatted on PC or for other reasons.\nPlease format the SD card through the Steam Deck's Game Mode and try the moving process again."
@@ -953,7 +896,7 @@ configurator_move_dialog() {
             bios_folder="$rdhome/bios"
             media_folder="$rdhome/downloaded_media"
             themes_folder="$rdhome/themes"
-            emulators_post_move
+            prepare_emulator "all" "postmove"
             conf_write
             configurator_process_complete_dialog "moving the RetroDECK data directory to SD card"
           else
@@ -1004,7 +947,7 @@ configurator_move_dialog() {
           bios_folder="$rdhome/bios"
           media_folder="$rdhome/downloaded_media"
           themes_folder="$rdhome/themes"
-          emulators_post_move
+          prepare_emulator "all" "postmove"
           conf_write
           configurator_process_complete_dialog "moving the RetroDECK data directory to SD card"
         else
@@ -1029,7 +972,7 @@ configurator_move_dialog() {
     emulator_post_move
     conf_write
     configurator_generic_dialog "RetroDECK data folder now configured at $rdhome. Please start the moving process again."
-    configurator_move_dialog
+    configurator_move_retrodeck_dialog
   fi
 }
 

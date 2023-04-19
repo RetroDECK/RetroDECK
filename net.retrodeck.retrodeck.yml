@@ -1202,6 +1202,7 @@ modules:
       - cp es-configs/es_systems.xml /app/share/emulationstation/resources/systems/unix/
       # These must be put in home folder, managed by retrodeck.sh
       - cp es-configs/es_settings.xml ${FLATPAK_DEST}/retrodeck/es_settings.xml
+      - cp -rt ${FLATPAK_DEST}/retrodeck/rd_prepacks/ es-configs/rd_prepacks/*
 
       # Logo, res, move graphics directory away from default location so splash can be changed after build
       - mv -f -t ${FLATPAK_DEST}/retrodeck /app/share/emulationstation/resources/graphics
@@ -1226,8 +1227,9 @@ modules:
       - cp functions.sh /app/libexec/functions.sh
       - cp post_update.sh /app/libexec/post_update.sh
 
-      # Desktop entry
+      # Desktop entries
       - cp net.retrodeck.retrodeck.desktop /app/share/applications/net.retrodeck.retrodeck.desktop
+      - cp net.retrodeck.retrodeck.Configurator.desktop /app/share/applications/net.retrodeck.retrodeck.Configurator.desktop
 
       # TODO: group the configs per-emu and optimize the following cps, like already done with Dolphin. Please not that some files may be renamed, check retrodeck.sh to know how (and fix it after the edit)
 

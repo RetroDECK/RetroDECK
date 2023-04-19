@@ -58,7 +58,7 @@ https://retrodeck.net
       if [[ "$emulator" =~ ^(retroarch|cemu|citra|dolphin|duckstation|melonds|pcsx2|ppsspp|primehack|rpcs3|xemu|yuzu|all-emulators)$ ]]; then
         read -p "You are about to reset $emulator to default settings. Enter 'y' to continue, 'n' to stop: " response
         if [[ $response == [yY] ]]; then
-          cli_emulator_reset $emulator
+          prepare_emulator "reset" "$emulator" "cli"
           read -p "The process has been completed, press Enter key to start RetroDECK."
           shift # Continue launch after previous command is finished
         else
@@ -106,6 +106,8 @@ then
     echo "Config file's version is $version but the actual version is $hard_version"
     
     if grep -qF "cooker" <<< $hard_version; then # If newly-installed version is a "cooker" build
+      set_setting_value $rd_conf "update_repo" "RetroDECK-cooker" retrodeck "options"
+      set_setting_value $rd_conf "update_check" "true" retrodeck "options"
       cooker_base_version=$(echo $hard_version | cut -d'-' -f2 | sed 's/\([0-9]\.[0-9][a-z]\).*/\1/')
       choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Upgrade" --extra-button="Don't Upgrade" --extra-button="Fresh Install" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -128,6 +130,10 @@ then
         post_update
       fi
     else # If newly-installed version is a normal build.
+      grep -qF "cooker" <<< $version; then # If previously installed version was a cooker build
+        set_setting_value $rd_conf "update_repo" "RetroDECK" retrodeck "options"
+        set_setting_value $rd_conf "update_check" "false" retrodeck "options"
+      fi
       post_update       # Executing post update script
     fi
   fi

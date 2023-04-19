@@ -43,7 +43,7 @@ jobs:
           org.freedesktop.Sdk.Extension.llvm13 \
           org.freedesktop.Sdk.Extension.dotnet6/x86_64/22.08 \
           runtime/org.freedesktop.Platform.ffmpeg-full/x86_64/22.08
-          sh ${GITHUB_WORKSPACE}/automation_tools/update_sha.sh # Run SHA placehold replacement script for dynamic archives
+          /bin/bash ${GITHUB_WORKSPACE}/automation_tools/pre_build_automation.sh # Run pre-build automation tasks
 
       - name: Build flatpak
         run: |

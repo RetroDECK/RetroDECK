@@ -27,15 +27,19 @@ default_sd="/run/media/mmcblk0p1"                                               
 hard_version="$(cat '/app/retrodeck/version')"                                                                        # hardcoded version (in the readonly filesystem)
 rd_repo="https://github.com/XargonWan/RetroDECK"                                                                      # The URL of the main RetroDECK GitHub repo
 es_themes_list="https://gitlab.com/es-de/themes/themes-list/-/raw/master/themes.json"                                 # The URL of the ES-DE 2.0 themes list
+remote_network_target="https://one.one.one.one"                                                                       # The URL of a common internet target for testing network access
+rpcs3_firmware="http://dus01.ps3.update.playstation.net/update/ps3/image/us/2023_0228_05fe32f5dc8c78acbcd84d36ee7fdc5b/PS3UPDAT.PUP"
 
 # Config files for emulators with single config files
 
+cemuconf="/var/config/Cemu/settings.xml"
 citraconf="/var/config/citra-emu/qt-config.ini"
 duckstationconf="/var/data/duckstation/settings.ini"
 melondsconf="/var/config/melonDS/melonDS.ini"
-yuzuconf="/var/config/yuzu/qt-config.ini"
-xemuconf="/var/config/xemu/xemu.toml"
 ppssppconf="/var/config/ppsspp/PSP/SYSTEM/ppsspp.ini"
+ryujinxconf="/var/config/Ryujinx/Config.json"
+xemuconf="/var/config/xemu/xemu.toml"
+yuzuconf="/var/config/yuzu/qt-config.ini"
 
 # ES-DE config files
 
@@ -115,13 +119,13 @@ then
   echo "RetroDECK config file initialized. Contents:"
   echo
   cat $rd_conf
-  source $rd_conf # Load new variables into memory
+  conf_read # Load new variables into memory
 
-# If the config file is existing i just read the variables (source it)
+# If the config file is existing i just read the variables
 else
   echo "Found RetroDECK config file in $rd_conf"
   echo "Loading it"
-  source "$rd_conf"
+  conf_read
 
   # Verify rdhome is where it is supposed to be.
   if [[ ! -d $rdhome ]]; then
@@ -129,7 +133,7 @@ else
     configurator_generic_dialog "The RetroDECK data folder was not found in the expected location.\nThis may happen when SteamOS is updated.\n\nPlease browse to the current location of the \"retrodeck\" folder."
     new_home_path=$(directory_browse "RetroDECK folder location")
     sed -i 's#'$prev_home_path'#'$new_home_path'#g' $rd_conf
-    source "$rd_conf"
-    emulators_post_move
+    conf_read
+    prepare_emulator "all" "postmove"
   fi
 fi

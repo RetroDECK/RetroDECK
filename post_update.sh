@@ -21,7 +21,7 @@ post_update() {
     # - Fix PICO-8 folder structure. ROM and save folders are now sane and binary files will go into ~/retrodeck/bios/pico-8/
 
     rm -rf /var/config/primehack # Purge old Primehack config files. Saves are safe as they are linked into /var/data/primehack.
-    primehack_init
+    prepare_emulator "reset" "primehack"
 
     dir_prep "$rdhome/saves/duckstation" "/var/data/duckstation/memcards"
     dir_prep "$rdhome/states/duckstation" "/var/data/duckstation/savestates"
@@ -88,9 +88,13 @@ post_update() {
 
     sed -i '/version=.*/G' $rd_conf
     sed -i '3i [paths]' $rd_conf
-    sed -i '/^power_user=.*/i [options]' $rd_conf
+    sed -i '/^power_user_warning=.*/i [options]' $rd_conf
 
     cp /app/retrodeck/extras/doom1.wad "$roms_folder/doom/doom1.wad" # No -f in case the user already has it
+    mkdir -p "/var/config/emulationstation/.emulationstation/gamelists/doom"
+    cp "/app/retrodeck/rd_prepacks/doom/gamelist.xml" "/var/config/emulationstation/.emulationstation/gamelists/doom/gamelist.xml"
+    mkdir -p "$media_folder/doom"
+    unzip -q "/app/retrodeck/rd_prepacks/doom/doom.zip" -d "$media_folder/doom/"
   fi
 
   # The following commands are run every time.
