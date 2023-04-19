@@ -130,7 +130,7 @@ then
         post_update
       fi
     else # If newly-installed version is a normal build.
-      grep -qF "cooker" <<< $version; then # If previously installed version was a cooker build
+      if grep -qF "cooker" <<< $version; then # If previously installed version was a cooker build
         set_setting_value $rd_conf "update_repo" "RetroDECK" retrodeck "options"
         set_setting_value $rd_conf "update_check" "false" retrodeck "options"
       fi
