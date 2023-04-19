@@ -1,6 +1,6 @@
 [general]
 show_welcome = false
-screenshot_dir = '/home/deck/retrodeck/screenshots'
+screenshot_dir = 'RETRODECKHOMEDIR/screenshots'
 
 [input.bindings]
 port1 = '03000000de280000ff11000001000000'
@@ -23,7 +23,7 @@ auto_scale = false
 mem_limit = '128'
 
 [sys.files]
-bootrom_path = '/home/deck/retrodeck/bios/mcpx_1.0.bin'
-flashrom_path = '/home/deck/retrodeck/bios/Complex.bin'
-eeprom_path = '/home/deck/retrodeck/saves/xbox/xemu/xbox-eeprom.bin'
-hdd_path = '/home/deck/retrodeck/bios/xbox_hdd.qcow2'
+bootrom_path = 'RETRODECKHOMEDIR/bios/mcpx_1.0.bin'
+flashrom_path = 'RETRODECKHOMEDIR/bios/Complex.bin'
+eeprom_path = 'RETRODECKHOMEDIR/saves/xbox/xemu/xbox-eeprom.bin'
+hdd_path = 'RETRODECKHOMEDIR/bios/xbox_hdd.qcow2'

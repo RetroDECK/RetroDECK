@@ -56,7 +56,7 @@
     "sort_ascending": false
   },
   "game_dirs": [
-    "/home/deck/retrodeck/roms/switch"
+    "RETRODECKHOMEDIR/roms/switch"
   ],
   "language_code": "en_US",
   "enable_custom_theme": false,

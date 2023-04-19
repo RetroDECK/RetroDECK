@@ -1,13 +1,20 @@
 app-id: net.retrodeck.retrodeck
 runtime: org.kde.Platform
-runtime-version: 5.15-21.08
+runtime-version: 5.15-22.08
 #runtime-version: 6.3                        # bumped because of pcsx2-qt
 sdk: org.kde.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.llvm14    # Needed for rpcs3
   #- org.freedesktop.Sdk.Extension.dotnet6   # Needed for Ryujinx - Removed, check if it's not breaking something else
 base: io.qt.qtwebengine.BaseApp             # Needed for Yuzu
-base-version: 5.15-21.08                    # Needed for Yuzu
+base-version: 5.15-22.08                    # Needed for Yuzu
+add-extensions:
+  org.freedesktop.Platform.ffmpeg-full:
+    directory: lib/ffmpeg
+    add-ld-path: .
+    version: '22.08'
+    autodownload: true
+    autodelete: false
 command: retrodeck.sh
 
 finish-args:
@@ -218,6 +225,7 @@ modules:
   # ES-DE - START
   # https://gitlab.com/es-de/emulationstation-de
 
+  #This is disabled because we added the extension (line 11), check if the videos are ok.
   - name: ffmpeg
     config-opts:
       - --disable-static
@@ -922,47 +930,47 @@ modules:
   # But AppImage is a single one that keep getting updated at the same link so the sha (that's mandatory) will break the build
   # So yeah we're stuck with this for a while
 
-  - name: duckstation-DontUpdate
-    buildsystem: cmake-ninja
-    no-make-install: true
-    builddir: true
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-      - -DUSE_EGL=ON
-      - -DUSE_SDL2=ON
-      - -DUSE_WAYLAND=ON
-      - -DUSE_X11=ON
-      - -DUSE_DRMKMS=ON
-      - -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON
-    post-install:
-      - install -m 755 -t /app/bin/ bin/duckstation-nogui bin/duckstation-qt
-      - |-
-        for px in 16 32 48 64 128 256; do
-          install -Dm644 ../extras/icons/icon-${px}px.png /app/share/icons/hicolor/${px}x${px}/apps/org.duckstation.DuckStation.png
-        done
-      - cp -r ../data/* bin/translations /app/bin
-    sources:
-      - type: git
-        url: https://github.com/stenzek/duckstation.git
-        commit: 3fb61865e505ba639609fbf16cb8bdf5c66e020c
+  # - name: duckstation-DontUpdate
+  #   buildsystem: cmake-ninja
+  #   no-make-install: true
+  #   builddir: true
+  #   config-opts:
+  #     - -DCMAKE_BUILD_TYPE=Release
+  #     - -DUSE_EGL=ON
+  #     - -DUSE_SDL2=ON
+  #     - -DUSE_WAYLAND=ON
+  #     - -DUSE_X11=ON
+  #     - -DUSE_DRMKMS=ON
+  #     - -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON
+  #   post-install:
+  #     - install -m 755 -t /app/bin/ bin/duckstation-nogui bin/duckstation-qt
+  #     - |-
+  #       for px in 16 32 48 64 128 256; do
+  #         install -Dm644 ../extras/icons/icon-${px}px.png /app/share/icons/hicolor/${px}x${px}/apps/org.duckstation.DuckStation.png
+  #       done
+  #     - cp -r ../data/* bin/translations /app/bin
+  #   sources:
+  #     - type: git
+  #       url: https://github.com/stenzek/duckstation.git
+  #       commit: 3fb61865e505ba639609fbf16cb8bdf5c66e020c
 
   # Duckstation-DontUpdate - END
 
   # Duckstation-AppImage - START
   # https://github.com/stenzek/duckstation/releases/tag/preview
 
-  # - name: Duckstation-AppImage
-  #   buildsystem: simple
-  #   build-commands:
-  #     - chmod +x DuckStation-*.AppImage
-  #     - ./DuckStation-x64*.AppImage --appimage-extract
-  #     - mkdir -p "${FLATPAK_DEST}/duckstation"
-  #     - cp -r squashfs-root/* "${FLATPAK_DEST}/duckstation"
-  #     - ln -s "${FLATPAK_DEST}/duckstation/usr/bin/duckstation" "${FLATPAK_DEST}/bin/duckstation"
-  #   sources:
-  #     - type: file
-  #       url: https://github.com/stenzek/duckstation/releases/download/preview/DuckStation-x64.AppImage
-  #       sha256: a107d1837df020cb4e7b8a542059665428883af69c1cf063edd29e2d75634867
+  - name: Duckstation-AppImage
+    buildsystem: simple
+    build-commands:
+      - chmod +x DuckStation-*.AppImage
+      - ./DuckStation-x64*.AppImage --appimage-extract
+      - mkdir -p "${FLATPAK_DEST}/duckstation"
+      - cp -r squashfs-root/* "${FLATPAK_DEST}/duckstation"
+      - ln -s "${FLATPAK_DEST}/duckstation/usr/bin/duckstation-qt" "${FLATPAK_DEST}/bin/duckstation-qt"
+    sources:
+      - type: file
+        url: https://github.com/stenzek/duckstation/releases/download/preview/DuckStation-x64.AppImage
+        sha256: DUCKSTATIONSHAPLACEHOLDER
 
   # Duckstation-AppImage - END
 
@@ -1231,6 +1239,9 @@ modules:
       # PICO-8 wrapper
       - cp ${FLATPAK_DEST}/retrodeck/emu-configs/pico-8/pico8-wrapper.sh /app/bin/pico8
       - chmod +x /app/bin/pico8
+
+      # Needed for ffmpeg (RPCS3)
+      - mkdir -p ${FLATPAK_DEST}/lib/ffmpeg
 
       # Placing appdata
       - mkdir -p ${FLATPAK_DEST}/share/appdata

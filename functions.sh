@@ -1245,7 +1245,7 @@ prepare_emulator() {
         rm -rfv "$bios_folder/PPSSPP/ppsspp-master"
         if [ -d $bios_folder/PPSSPP/flash0/font.bak ]
         then
-          mv -fv $bios_folder/PPSSPP/flash0/font.bak $bios_folder/PPSSPP/flash0/font
+          mv -f $bios_folder/PPSSPP/flash0/font.bak $bios_folder/PPSSPP/flash0/font
         fi
 
         # MSX / SVI / ColecoVision / SG-1000
@@ -1256,7 +1256,7 @@ prepare_emulator() {
         unzip -q "$bios_folder/MSX/blueMSXv282full.zip" -d $bios_folder/MSX
         mv -f $bios_folder/MSX/Databases $bios_folder/Databases
         mv -f $bios_folder/MSX/Machines $bios_folder/Machines
-        rm -rfv $bios_folder/MSX
+        rm -rf $bios_folder/MSX
       else
         if [[ "$call_source" == "cli" ]]; then
           printf "You do not appear to be connected to a network with internet access.\n\nThe RetroArch reset process requires some files from the internet to function properly.\n\nPlease retry this process once a network connection is available.\n"
@@ -1280,7 +1280,7 @@ prepare_emulator() {
       echo "----------------------"
       rm -rf /var/config/Cemu
       mkdir -pv /var/config/Cemu/
-      cp -fvr "$emuconfigs/cemu/"* /var/config/Cemu/
+      cp -fr "$emuconfigs/cemu/"* /var/config/Cemu/
       #TODO : set_setting_value for Cemu and multi_user
       sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/Cemu/settings.xml
       dir_prep "$rdhome/saves/wiiu/cemu" "$rdhome/bios/cemu/usr/save"
@@ -1312,7 +1312,7 @@ prepare_emulator() {
       else # Single-user actions
         rm -rf /var/config/citra-emu
         mkdir -pv /var/config/citra-emu/
-        cp -fv $emuconfigs/citra/qt-config.ini /var/config/citra-emu/qt-config.ini
+        cp -f $emuconfigs/citra/qt-config.ini /var/config/citra-emu/qt-config.ini
         set_setting_value "$citraconf" "nand_directory" "$saves_folder/n3ds/citra/nand/" "citra" "Data%20Storage"
         set_setting_value "$citraconf" "sdmc_directory" "$saves_folder/n3ds/citra/sdmc/" "citra" "Data%20Storage"
         set_setting_value "$citraconf" "Paths\gamedirs\3\path" "$roms_folder/n3ds" "citra" "UI"
@@ -1423,7 +1423,7 @@ prepare_emulator() {
       if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/melonDS"
         mkdir -pv "$multi_user_data_folder/$SteamAppUser/config/melonDS/"
-        cp -fvr $emuconfigs/melonDS.ini "$multi_user_data_folder/$SteamAppUser/config/melonDS/"
+        cp -fvr $emuconfigs/melonds/melonDS.ini "$multi_user_data_folder/$SteamAppUser/config/melonDS/"
         set_setting_value "$multi_user_data_folder/$SteamAppUser/config/melonDS/melonDS.ini" "BIOS9Path" "$bios_folder/bios9.bin" "melonds"
         set_setting_value "$multi_user_data_folder/$SteamAppUser/config/melonDS/melonDS.ini" "BIOS7Path" "$bios_folder/bios7.bin" "melonds"
         set_setting_value "$multi_user_data_folder/$SteamAppUser/config/melonDS/melonDS.ini" "FirmwarePath" "$bios_folder/firmware.bin" "melonds"
@@ -1433,7 +1433,7 @@ prepare_emulator() {
       else # Single-user actions
         rm -rf /var/config/melonDS
         mkdir -pv /var/config/melonDS/
-        cp -fvr $emuconfigs/melonDS.ini /var/config/melonDS/
+        cp -fvr $emuconfigs/melonds/melonDS.ini /var/config/melonDS/
         set_setting_value "$melondsconf" "BIOS9Path" "$bios_folder/bios9.bin" "melonds"
         set_setting_value "$melondsconf" "BIOS7Path" "$bios_folder/bios7.bin" "melonds"
         set_setting_value "$melondsconf" "FirmwarePath" "$bios_folder/firmware.bin" "melonds"
@@ -1624,7 +1624,7 @@ prepare_emulator() {
           rm -rf /var/data/xemu
           rm -rf "$multi_user_data_folder/$SteamAppUser/config/xemu"
           mkdir -pv "$multi_user_data_folder/$SteamAppUser/config/xemu/"
-          cp -fv $emuconfigs/xemu.toml "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml"
+          cp -fv $emuconfigs/xemu/xemu.toml "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml"
           set_setting_value "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml" "screenshot_dir" "'$screenshots_folder'" "xemu" "General"
           set_setting_value "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml" "bootrom_path" "'$bios_folder/mcpx_1.0.bin'" "xemu" "sys.files"
           set_setting_value "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml" "flashrom_path" "'$bios_folder/Complex.bin'" "xemu" "sys.files"
@@ -1636,7 +1636,7 @@ prepare_emulator() {
           rm -rf /var/config/xemu
           rm -rf /var/data/xemu
           dir_prep "/var/config/xemu" "/var/data/xemu" # Creating config folder in /var/config for consistentcy and linking back to original location where emulator will look
-          cp -fv $emuconfigs/xemu.toml "$xemuconf"
+          cp -fv $emuconfigs/xemu/xemu.toml "$xemuconf"
           set_setting_value "$xemuconf" "screenshot_dir" "'$screenshots_folder'" "xemu" "General"
           set_setting_value "$xemuconf" "bootrom_path" "'$bios_folder/mcpx_1.0.bin'" "xemu" "sys.files"
           set_setting_value "$xemuconf" "flashrom_path" "'$bios_folder/Complex.bin'" "xemu" "sys.files"
