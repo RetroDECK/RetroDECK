@@ -786,7 +786,7 @@ update_rd_conf() {
   deploy_single_patch $rd_defaults $rd_update_patch $rd_conf
   set_setting_value $rd_conf "version" "$hard_version" retrodeck # Set version of currently running RetroDECK to updated retrodeck.cfg
   rm -f $rd_update_patch # Cleanup temporary patch file
-  source $rd_conf
+  conf_read
 }
 
 resolve_preset_conflicts() {
@@ -1076,6 +1076,24 @@ conf_write() {
   done < $rd_conf
 }
 
+conf_read() {
+  # This function will read the RetroDECK config file into memory
+  # USAGE: conf_read
+
+  while IFS= read -r current_setting_line # Read the existing retrodeck.cfg
+  do
+    if [[ (! -z "$current_setting_line") && (! "$current_setting_line" == "#!/bin/bash") && (! "$current_setting_line" == "[]") ]]; then # If the line has a valid entry in it
+      if [[ ! -z $(grep -o -P "^\[.+?\]$" <<< "$current_setting_line") ]]; then # If the line is a section header
+        current_section=$(sed 's^[][]^^g' <<< $current_setting_line) # Remove brackets from section name
+      else
+        local current_setting_name=$(get_setting_name "$current_setting_line" "retrodeck") # Read the variable name from the current line
+        local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "$current_section") # Read the variables value from retrodeck.cfg
+        eval "$current_setting_name=$current_setting_value" # Write the current setting name and value to memory
+      fi
+    fi
+  done < $rd_conf
+}
+
 dir_prep() {
   # This script is creating a symlink preserving old folder contents and moving them in the new one
 
@@ -1131,6 +1149,19 @@ dir_prep() {
   echo -e "$symlink is now $real\n"
 }
 
+consolidate_retrodeck_folders() {
+  # This script will find folders that may have been moved out of the main RetroDECK folder individually and move them home
+  # USAGE: consolidate_retrodeck_folders
+
+  while read -r path; do
+  if realpath "$path" | grep -q "^$main_path/"; then
+    echo "$path is a subfolder of $main_path"
+  else
+    echo "$path is not a subfolder of $main_path"
+  fi
+  done < <(grep -v '^\s*$' $rd_conf | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
+}
+
 update_splashscreens() {
   # This script will purge any existing ES graphics and reload them from RO space into somewhere ES will look for it
   # USAGE: update_splashscreens
@@ -1152,6 +1183,22 @@ prepare_emulator() {
   action="$1"
   emulator="$2"
   call_source="$3"
+
+  if [[ "$emulator" == "retrodeck" ]]; then # For use after RetroDECK is consolidated and moved
+    if [[ "$action" == "postmove" ]]; then
+      roms_folder=$rdhome/roms
+      saves_folder=$rdhome/saves
+      states_folder=$rdhome/states
+      bios_folder=$rdhome/bios
+      media_folder=$rdhome/downloaded_media
+      themes_folder=$rdhome/themes
+      logs_folder=$rdhome/.logs
+      screenshots_folder=$rdhome/screenshots
+      mods_folder=$rdhome/mods
+      texture_packs_folder=$rdhome/texture_packs
+      borders_folder=$rdhome/borders
+    fi
+  fi
 
   if [[ "$emulator" =~ ^(retroarch|RetroArch|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
@@ -2149,7 +2196,12 @@ configurator_destination_choice_dialog() {
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --text="$2")
 
-  echo $choice
+  local rc=$?
+  if [[ $rc == "0" ]] && [[ -z "$choice" ]]; then
+    echo "Back"
+  else
+    echo $choice
+  fi
 }
 
 configurator_reset_confirmation_dialog() {

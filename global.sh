@@ -119,13 +119,13 @@ then
   echo "RetroDECK config file initialized. Contents:"
   echo
   cat $rd_conf
-  source $rd_conf # Load new variables into memory
+  conf_read # Load new variables into memory
 
-# If the config file is existing i just read the variables (source it)
+# If the config file is existing i just read the variables
 else
   echo "Found RetroDECK config file in $rd_conf"
   echo "Loading it"
-  source "$rd_conf"
+  conf_read
 
   # Verify rdhome is where it is supposed to be.
   if [[ ! -d $rdhome ]]; then
@@ -133,7 +133,7 @@ else
     configurator_generic_dialog "The RetroDECK data folder was not found in the expected location.\nThis may happen when SteamOS is updated.\n\nPlease browse to the current location of the \"retrodeck\" folder."
     new_home_path=$(directory_browse "RetroDECK folder location")
     sed -i 's#'$prev_home_path'#'$new_home_path'#g' $rd_conf
-    source "$rd_conf"
-    emulators_post_move
+    conf_read
+    prepare_emulator "all" "postmove"
   fi
 fi

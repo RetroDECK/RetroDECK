@@ -196,7 +196,7 @@ configurator_power_user_warning_dialog() {
       configurator_welcome_dialog
     elif [[ $choice == "Never show this again" ]]; then
       set_setting_value $rd_conf "power_user_warning" "false" retrodeck "options" # Store desktop mode warning variable for future checks
-      source $rd_conf
+      conf_read
       configurator_power_user_changes_dialog
     fi
   fi
@@ -761,7 +761,7 @@ configurator_tools_and_troubleshooting_dialog() {
 
   "Move RetroDECK" )
     configurator_generic_dialog "This option will move the RetroDECK data folder (ROMs, saves, BIOS etc.) to a new location.\n\nPlease choose where to move the RetroDECK data folder."
-    configurator_move_dialog
+    configurator_move_retrodeck_dialog
   ;;
 
   "Multi-file game structure check" )
@@ -822,7 +822,7 @@ configurator_tools_and_troubleshooting_dialog() {
   esac
 }
 
-configurator_move_dialog() {
+configurator_move_retrodeck_dialog() {
   if [[ -d $rdhome ]]; then
     destination=$(configurator_destination_choice_dialog "RetroDECK Data" "Please choose a destination for the RetroDECK data folder.")
     case $destination in
@@ -834,11 +834,11 @@ configurator_move_dialog() {
     "Internal Storage" )
       if [[ ! -L "$HOME/retrodeck" && -d "$HOME/retrodeck" ]]; then
         configurator_generic_dialog "The RetroDECK data folder is already at that location, please pick a new one."
-        configurator_move_dialog
+        configurator_move_retrodeck_dialog
       else
         configurator_generic_dialog "Moving RetroDECK data folder to $destination"
         unlink $HOME/retrodeck # Remove symlink for $rdhome
-        move $rdhome "$HOME"
+        #move $rdhome "$HOME"
         if [[ ! -d $rdhome && -d $HOME/retrodeck ]]; then # If the move succeeded
           rdhome="$HOME/retrodeck"
           roms_folder="$rdhome/roms"
@@ -847,7 +847,7 @@ configurator_move_dialog() {
           bios_folder="$rdhome/bios"
           media_folder="$rdhome/downloaded_media"
           themes_folder="$rdhome/themes"
-          emulators_post_move
+          prepare_emulator "all" "postmove"
           conf_write
 
           configurator_process_complete_dialog "moving the RetroDECK data directory to internal storage"
@@ -860,7 +860,7 @@ configurator_move_dialog() {
     "SD Card" )
       if [[ -L "$HOME/retrodeck" && -d "$sdcard/retrodeck" && "$rdhome" == "$sdcard/retrodeck" ]]; then
         configurator_generic_dialog "The RetroDECK data folder is already configured to that location, please pick a new one."
-        configurator_move_dialog
+        configurator_move_retrodeck_dialog
       else
         if [[ ! -w $sdcard ]]; then
           configurator_generic_dialog "The SD card was found but is not writable\nThis can happen with cards formatted on PC or for other reasons.\nPlease format the SD card through the Steam Deck's Game Mode and try the moving process again."
@@ -896,7 +896,7 @@ configurator_move_dialog() {
             bios_folder="$rdhome/bios"
             media_folder="$rdhome/downloaded_media"
             themes_folder="$rdhome/themes"
-            emulators_post_move
+            prepare_emulator "all" "postmove"
             conf_write
             configurator_process_complete_dialog "moving the RetroDECK data directory to SD card"
           else
@@ -947,7 +947,7 @@ configurator_move_dialog() {
           bios_folder="$rdhome/bios"
           media_folder="$rdhome/downloaded_media"
           themes_folder="$rdhome/themes"
-          emulators_post_move
+          prepare_emulator "all" "postmove"
           conf_write
           configurator_process_complete_dialog "moving the RetroDECK data directory to SD card"
         else
@@ -972,7 +972,7 @@ configurator_move_dialog() {
     emulator_post_move
     conf_write
     configurator_generic_dialog "RetroDECK data folder now configured at $rdhome. Please start the moving process again."
-    configurator_move_dialog
+    configurator_move_retrodeck_dialog
   fi
 }
 
