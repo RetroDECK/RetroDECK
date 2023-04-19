@@ -1743,17 +1743,21 @@ easter_eggs() {
   # USAGE: easter_eggs
   current_day=$(date +"%0m%0d") # Read the current date in a format that can be calculated in ranges
   current_time=$(date +"%0H%0M") # Read the current time in a format that can be calculated in ranges
-  while IFS="^" read -r start_date end_date start_time end_time splash_file # Read Easter Egg checklist file and separate values
-  do
-    if [[ $current_day -ge "$start_date" && $current_day -le "$end_date" && $current_time -ge "$start_time" && $current_time -le "$end_time" ]]; then # If current line specified date/time matches current date/time, set $splash_file to be deployed
-      new_splash_file="$splashscreen_dir/$splash_file"
-      break
-    else # When there are no matches, the default splash screen is set to deploy
-      new_splash_file="$default_splash_file"
-    fi
-  done < $easter_egg_checklist
+  if [[ ! -z $(cat $easter_egg_checklist) ]]; then
+    while IFS="^" read -r start_date end_date start_time end_time splash_file # Read Easter Egg checklist file and separate values
+    do
+      if [[ $current_day -ge "$start_date" && $current_day -le "$end_date" && $current_time -ge "$start_time" && $current_time -le "$end_time" ]]; then # If current line specified date/time matches current date/time, set $splash_file to be deployed
+        new_splash_file="$splashscreen_dir/$splash_file"
+        break
+      else # When there are no matches, the default splash screen is set to deploy
+        new_splash_file="$default_splash_file"
+      fi
+    done < $easter_egg_checklist
+  else
+    new_splash_file="$default_splash_file"
+  fi
 
-  cp -fv "$new_splash_file" "$current_splash_file" # Deploy assigned splash screen
+  cp -f "$new_splash_file" "$current_splash_file" # Deploy assigned splash screen
 }
 
 tools_init() {
