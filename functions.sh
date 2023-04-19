@@ -1061,7 +1061,7 @@ conf_write() {
 
   while IFS= read -r current_setting_line # Read the existing retrodeck.cfg
   do
-    if [[ (! -z "$current_setting_line") && (! "$current_setting_line" == "#!/bin/bash") && (! "$current_setting_line" == "[]") ]]; then # If the line has a valid entry in it
+    if [[ (! -z "$current_setting_line") && (! "$current_setting_line" == "#"*) && (! "$current_setting_line" == "[]") ]]; then # If the line has a valid entry in it
       if [[ ! -z $(grep -o -P "^\[.+?\]$" <<< "$current_setting_line") ]]; then # If the line is a section header
         current_section=$(sed 's^[][]^^g' <<< $current_setting_line) # Remove brackets from section name
       else
@@ -1082,7 +1082,7 @@ conf_read() {
 
   while IFS= read -r current_setting_line # Read the existing retrodeck.cfg
   do
-    if [[ (! -z "$current_setting_line") && (! "$current_setting_line" == "#!/bin/bash") && (! "$current_setting_line" == "[]") ]]; then # If the line has a valid entry in it
+    if [[ (! -z "$current_setting_line") && (! "$current_setting_line" == "#"*) && (! "$current_setting_line" == "[]") ]]; then # If the line has a valid entry in it
       if [[ ! -z $(grep -o -P "^\[.+?\]$" <<< "$current_setting_line") ]]; then # If the line is a section header
         current_section=$(sed 's^[][]^^g' <<< $current_setting_line) # Remove brackets from section name
       else
@@ -1169,6 +1169,18 @@ update_splashscreens() {
   rm -rf /var/config/emulationstation/.emulationstation/resources/graphics
   mkdir -p /var/config/emulationstation/.emulationstation/resources/graphics
   cp -rf /app/retrodeck/graphics/* /var/config/emulationstation/.emulationstation/resources/graphics
+}
+
+deploy_helper_files() {
+
+while IFS='^' read -r file dest
+do
+    if [[ ! "$file" == "#"* ]] && [[ ! -z "$file" ]]; then
+    eval current_dest="$dest"
+    cp -f "$helper_files_folder/$file" "$current_dest/$file"
+  fi
+
+done < "$helper_files_list"
 }
 
 prepare_emulator() {
