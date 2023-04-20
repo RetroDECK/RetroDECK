@@ -1220,6 +1220,8 @@ modules:
       - cp tools/configurator.sh /app/tools/configurator.sh
       - chmod +x /app/tools/configurator.sh
       - cp es-configs/tools-gamelist.xml /app/retrodeck/tools-gamelist.xml
+      - cp tools/retrodeck_function_wrapper.sh /app/tools/retrodeck_function_wrapper.sh
+      - chmod +x /app/tools/retrodeck_function_wrapper.sh
 
       # Function libraries
       - mkdir -p /app/libexec

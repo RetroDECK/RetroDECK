@@ -116,6 +116,11 @@ then
   set_setting_value $rd_conf "version" "$version" retrodeck # Set current version for new installs
   set_setting_value $rd_conf "sdcard" "$default_sd" retrodeck "paths" # Set SD card location if default path has changed
 
+  if grep -qF "cooker" <<< $hard_version; then # If newly-installed version is a "cooker" build
+    set_setting_value $rd_conf "update_repo" "RetroDECK-cooker" retrodeck "options"
+    set_setting_value $rd_conf "update_check" "true" retrodeck "options"
+  fi
+
   echo "Setting config file permissions"
   chmod +rw $rd_conf
   echo "RetroDECK config file initialized. Contents:"
@@ -127,6 +132,12 @@ then
 else
   echo "Found RetroDECK config file in $rd_conf"
   echo "Loading it"
+
+  if grep -qF "cooker" <<< $hard_version; then # If newly-installed version is a "cooker" build
+    set_setting_value $rd_conf "update_repo" "RetroDECK-cooker" retrodeck "options"
+    set_setting_value $rd_conf "update_check" "true" retrodeck "options"
+  fi
+
   conf_read
 
   # Verify rdhome is where it is supposed to be.

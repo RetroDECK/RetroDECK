@@ -99,7 +99,7 @@ move() {
       zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Configurator Utility - Move in Progress" \
-      --text="Moving directory $1 to new location of $2, please wait."
+      --text="Moving directory $(basename "$1") to new location of $2, please wait."
     else
       zenity --icon-name=net.retrodeck.retrodeck --error --no-wrap \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -779,14 +779,11 @@ update_rd_conf() {
   # This function will import a default retrodeck.cfg file and update it with any current settings. This will allow us to expand the file over time while retaining current user settings.
   # USAGE: update_rd_conf
 
+  conf_read # Read current settings into memory
   mv -f $rd_conf $rd_conf_backup # Backup config file before update
-
-  generate_single_patch $rd_defaults $rd_conf_backup $rd_update_patch retrodeck
-  sed -i '/change^^version/d' $rd_update_patch # Remove version line from temporary patch file, so old value isn't kept
-  deploy_single_patch $rd_defaults $rd_update_patch $rd_conf
-  set_setting_value $rd_conf "version" "$hard_version" retrodeck # Set version of currently running RetroDECK to updated retrodeck.cfg
-  rm -f $rd_update_patch # Cleanup temporary patch file
-  conf_read
+  cp $rd_defaults $rd_conf # Copy defaults file into place
+  conf_write # Write old values into new default file
+  conf_read # Read all settings into memory
 }
 
 resolve_preset_conflicts() {
@@ -1172,15 +1169,17 @@ update_splashscreens() {
 }
 
 deploy_helper_files() {
+  # This script will distribute helper documentation files throughout the filesystem according to the $helper_files_list
+  # USAGE: deploy_helper_files
 
-while IFS='^' read -r file dest
-do
-    if [[ ! "$file" == "#"* ]] && [[ ! -z "$file" ]]; then
-    eval current_dest="$dest"
-    cp -f "$helper_files_folder/$file" "$current_dest/$file"
-  fi
+  while IFS='^' read -r file dest
+  do
+      if [[ ! "$file" == "#"* ]] && [[ ! -z "$file" ]]; then
+      eval current_dest="$dest"
+      cp -f "$helper_files_folder/$file" "$current_dest/$file"
+    fi
 
-done < "$helper_files_list"
+  done < "$helper_files_list"
 }
 
 prepare_emulator() {
@@ -1966,7 +1965,7 @@ finit() {
   mkdir -p "/var/config/emulationstation/.emulationstation/gamelists/doom"
   cp "/app/retrodeck/rd_prepacks/doom/gamelist.xml" "/var/config/emulationstation/.emulationstation/gamelists/doom/gamelist.xml"
   mkdir -p "$media_folder/doom"
-  unzip -q "/app/retrodeck/rd_prepacks/doom/doom.zip" -d "$media_folder/doom/"
+  unzip -oq "/app/retrodeck/rd_prepacks/doom/doom.zip" -d "$media_folder/doom/"
 
   tools_init
   prepare_emulator "reset" "all"
