@@ -8,13 +8,13 @@ sdk-extensions:
   #- org.freedesktop.Sdk.Extension.dotnet6   # Needed for Ryujinx - Removed, check if it's not breaking something else
 base: io.qt.qtwebengine.BaseApp             # Needed for Yuzu
 base-version: 5.15-22.08                    # Needed for Yuzu
-add-extensions:
-  org.freedesktop.Platform.ffmpeg-full:
-    directory: lib/ffmpeg
-    add-ld-path: .
-    version: '22.08'
-    autodownload: true
-    autodelete: false
+# add-extensions:
+#   org.freedesktop.Platform.ffmpeg-full:
+#     directory: lib/ffmpeg
+#     add-ld-path: .
+#     version: '22.08'
+#     autodownload: true
+#     autodelete: false
 command: retrodeck.sh
 
 finish-args:
@@ -826,7 +826,8 @@ modules:
       - -DUSE_NATIVE_INSTRUCTIONS=OFF
       - -DUSE_PRECOMPILED_HEADERS=OFF
       - -DUSE_SYSTEM_CURL=ON
-      - -DUSE_SYSTEM_FFMPEG=ON
+      # Disabled this to force RPCS3 to use our built FFMPEG
+      - -DUSE_SYSTEM_FFMPEG=OFF
       - -DUSE_SYSTEM_LIBPNG=ON
       - -DUSE_SYSTEM_ZLIB=ON
       - -DITTAPI_SOURCE_DIR=/run/build/rpcs3/ittapi
