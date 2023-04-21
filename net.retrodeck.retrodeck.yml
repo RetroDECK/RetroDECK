@@ -81,7 +81,6 @@ modules:
   # [ ] change branch into main in version-initialization (first one)
   # [ ] change branch into main in retrodeck module (last one)
   # [ ] if header (before modules) was edited, edit it even in flathub.yml
-  # [ ] Vita3K: update branch to main (and remember to download it the first time)
   #
   - name: version-initialization
     buildsystem: simple
@@ -1165,6 +1164,7 @@ modules:
   # Ryujinx Appimage - END
 
   # Vita3K - START
+  # Very broken, disabled
   # NOTE: this is a continuos release, it's provided but not supported
   # to update this module:
   # wget https://github.com/Vita3K/Vita3K/releases/download/continuous/ubuntu-latest.zip -O rd-submodules/vita3k/vita3k-14-01-23.zip
@@ -1172,18 +1172,18 @@ modules:
   # change url and sha
   # check the branch in the url
 
-  - name: Vita3K
-    buildsystem: simple
-    build-commands:
-      - |
-        mkdir -p ${FLATPAK_DEST}/vita3k
-        cp -r * ${FLATPAK_DEST}/vita3k
-        chmod +x ${FLATPAK_DEST}/vita3k/Vita3K
-        ln -s ${FLATPAK_DEST}/vita3k/Vita3K /app/bin/Vita3K
-    sources:
-    - type: archive
-      url: https://github.com/Vita3K/Vita3K/releases/download/continuous/ubuntu-latest.zip
-      sha256: VITASHAPLACEHOLDER
+  # - name: Vita3K
+  #   buildsystem: simple
+  #   build-commands:
+  #     - |
+  #       mkdir -p ${FLATPAK_DEST}/vita3k
+  #       cp -r * ${FLATPAK_DEST}/vita3k
+  #       chmod +x ${FLATPAK_DEST}/vita3k/Vita3K
+  #       ln -s ${FLATPAK_DEST}/vita3k/Vita3K /app/bin/Vita3K
+  #   sources:
+  #   - type: archive
+  #     url: https://github.com/Vita3K/Vita3K/releases/download/continuous/ubuntu-latest.zip
+  #     sha256: VITASHAPLACEHOLDER
 
   # Vita3K - END
 
