@@ -213,6 +213,15 @@ modules:
         url: https://github.com/rclone/rclone/releases/download/v1.61.1/rclone-v1.61.1-linux-amd64.zip
         sha256: 6d6455e1cb69eb0615a52cc046a296395e44d50c0f32627ba8590c677ddf50a9
 
+  - name: rsync
+    buildsystem: simple
+    build-commands:
+      - cp local/bin/rsync ${FLATPAK_DEST}/bin/
+    sources:
+      - type: archive
+        url: https://download.samba.org/pub/rsync/binaries/ubuntu-22.04-x86_64/rsync-3.2.7.tar.gz
+        sha256: dd2b74396c6e8d6a2d7af94cd97fad5788d888e722bc9780de1590f37a1920d6
+
   - name: jq
     buildsystem: simple
     build-commands:
