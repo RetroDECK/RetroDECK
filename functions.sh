@@ -746,7 +746,7 @@ check_for_version_update() {
       choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="Ignore this version" \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         --title "RetroDECK Update Available" \
-        --text="There is a more recent build of the RetroDECK cooker branch. Would you like to update to it? If you would like to skip reminders about this version, click \"Ignore this version\". You will be reminded again at the next version update.\n\nIf you would like to disable these update notifications entirely, disable Online Update Checks in the Configurator.")
+        --text="There is a more recent build of the RetroDECK cooker branch. Would you like to update to it?\nIf you would like to skip reminders about this version, click \"Ignore this version\".\nYou will be reminded again at the next version update.\n\nIf you would like to disable these update notifications entirely, disable Online Update Checks in the Configurator.")
       rc=$? # Capture return code, as "Yes" button has no text value
       if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
         if [[ $choice == "Ignore this version" ]]; then
