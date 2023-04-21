@@ -693,6 +693,16 @@ modules:
             dolphin-emu "$@"
         dest-filename: dolphin-emu-wrapper
 
+  - name: universal_dynamic_input
+    buildsystem: simple
+    build-commands:
+      - mkdir -p ${FLATPAKD_DEST}/retrodeck/extras/UniversalDynamicInput
+      - cp -r * ${FLATPAKD_DEST}/retrodeck/extras/UniversalDynamicInput/
+    sources:
+      - type: git
+        url: https://github.com/Venomalia/UniversalDynamicInput.git
+        commit: UNIVERSALDYNAMICINPUTCOMMITPLACEHOLDER
+
   # Dolphin - END
 
   # XEMU - START
