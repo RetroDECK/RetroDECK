@@ -1,4 +1,4 @@
-$(EmulatorDir): RETRODECKHOMEDIR/bios/rpcs3/emudir/
+$(EmulatorDir): RETRODECKHOMEDIR/bios/rpcs3/
 /dev_hdd0/: $(EmulatorDir)dev_hdd0/
 /dev_hdd1/: $(EmulatorDir)dev_hdd1/
 /dev_flash/: $(EmulatorDir)dev_flash/

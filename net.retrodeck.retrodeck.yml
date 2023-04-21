@@ -221,6 +221,15 @@ modules:
       - type: file
         url: https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
         sha256: af986793a515d500ab2d35f8d2aecd656e764504b789b66d7e1a0b727a124c44
+  
+  - name: yq
+    buildsystem: simple
+    build-commands:
+      - cp yq_linux_amd64 ${FLATPAK_DEST}/bin/yq
+    sources:
+      - type: file
+        url: https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_amd64
+        sha256: 4ee662847c588c3ef2fec8bfb304e8739e3dbaba87ccb9a608d691c88f5b64dc
 
   # ES-DE - START
   # https://gitlab.com/es-de/emulationstation-de

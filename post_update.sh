@@ -73,6 +73,7 @@ post_update() {
     # - Expose ES-DE gamelists folder to user at ~/retrodeck/gamelists
     # - Add new sections [paths] and [options] headers to retrodeck.cfg
     # - Prepackaged DOOM!
+    # - Update RPCS3 vfs file contents. migrate from old location if needed
 
     mkdir -p "$mods_folder"
     mkdir -p "$texture_packs_folder"
@@ -91,6 +92,24 @@ post_update() {
     cp -f "/app/retrodeck/rd_prepacks/doom/gamelist.xml" "/var/config/emulationstation/.emulationstation/gamelists/doom/gamelist.xml"
     mkdir -p "$media_folder/doom"
     unzip -oq "/app/retrodeck/rd_prepacks/doom/doom.zip" -d "$media_folder/doom/"
+
+    cp -f $emuconfigs/rpcs3/vfs.yml /var/config/rpcs3/vfs.yml
+    sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$bios_folder/rpcs3"'^' "$rpcs3vfsconf"
+    set_setting_value "$rpcs3vfsconf" "/games/" "$roms_folder/ps3" "rpcs3"
+    if [[ -d "$roms_folder/ps3/emudir" ]]; then # The old location exists, meaning the emulator was run at least once.
+      mkdir "$bios_folder/rpcs3"
+      mv "$roms_folder/ps3/emudir/*" "$bios_folder/rpcs3/"
+      rm "$roms_folder/ps3/emudir"
+      configurator_generic_dialog "As part of this update and due to a RPCS3 config upgrade, the files that used to exist at\n\n~/retrodeck/roms/ps3/emudir\n\nare now located at\n\n~/retrodeck/bios/rpcs3.\nYour existing files have been moved automatically."
+    fi
+    mkdir -p "$bios_folder/rpcs3/dev_hdd0"
+    mkdir -p "$bios_folder/rpcs3/dev_hdd1"
+    mkdir -p "$bios_folder/rpcs3/dev_flash"
+    mkdir -p "$bios_folder/rpcs3/dev_flash2"
+    mkdir -p "$bios_folder/rpcs3/dev_flash3"
+    mkdir -p "$bios_folder/rpcs3/dev_bdvd"
+    mkdir -p "$bios_folder/rpcs3/dev_usb000"
+    dir_prep "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata" "$saves_folder/ps3/rpcs3"
   fi
 
   # The following commands are run every time.
