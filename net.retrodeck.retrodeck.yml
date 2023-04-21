@@ -696,8 +696,8 @@ modules:
   - name: universal_dynamic_input
     buildsystem: simple
     build-commands:
-      - mkdir -p ${FLATPAKD_DEST}/retrodeck/extras/UniversalDynamicInput
-      - cp -r * ${FLATPAKD_DEST}/retrodeck/extras/UniversalDynamicInput/
+      - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/DynamicInputTextures
+      - cp -r * ${FLATPAK_DEST}/retrodeck/extras/DynamicInputTextures/
     sources:
       - type: git
         url: https://github.com/Venomalia/UniversalDynamicInput.git
