@@ -1574,7 +1574,7 @@ prepare_emulator() {
         mkdir -pv "$multi_user_data_folder/$SteamAppUser/config/rpcs3/"
         cp -fr $emuconfigs/rpcs3/* "$multi_user_data_folder/$SteamAppUser/config/rpcs3/"
         # This is an unfortunate one-off because set_setting_value does not currently support settings with $ in the name.
-        sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$bios_folder/rpcs3/emudir"'^' "$multi_user_data_folder/$SteamAppUser/config/rpcs3/vfs.yml"
+        sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$bios_folder/rpcs3"'^' "$multi_user_data_folder/$SteamAppUser/config/rpcs3/vfs.yml"
         set_setting_value "$multi_user_data_folder/$SteamAppUser/config/rpcs3/vfs.yml" "/games/" "$roms_folder/ps3" "rpcs3"
         dir_prep "$multi_user_data_folder/$SteamAppUser/config/rpcs3" "/var/config/rpcs3"
       else # Single-user actions
@@ -1582,22 +1582,22 @@ prepare_emulator() {
         mkdir -pv /var/config/rpcs3/
         cp -fr $emuconfigs/rpcs3/* /var/config/rpcs3/
         # This is an unfortunate one-off because set_setting_value does not currently support settings with $ in the name.
-        sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$bios_folder/rpcs3/emudir"'^' "$rpcs3vfsconf"
+        sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$bios_folder/rpcs3"'^' "$rpcs3vfsconf"
         set_setting_value "$rpcs3vfsconf" "/games/" "$roms_folder/ps3" "rpcs3"
-        dir_prep "$bios_folder/rpcs3/emudir/dev_hdd0/00000001/savedata" "$saves_folder/ps3/rpcs3"
+        dir_prep "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata" "$saves_folder/ps3/rpcs3"
       fi
       # Shared actions
-      mkdir -p "$bios_folder/rpcs3/emudir/dev_hdd0"
-      mkdir -p "$bios_folder/rpcs3/emudir/dev_hdd1"
-      mkdir -p "$bios_folder/rpcs3/emudir/dev_flash"
-      mkdir -p "$bios_folder/rpcs3/emudir/dev_flash2"
-      mkdir -p "$bios_folder/rpcs3/emudir/dev_flash3"
-      mkdir -p "$bios_folder/rpcs3/emudir/dev_bdvd"
-      mkdir -p "$bios_folder/rpcs3/emudir/dev_usb000"
+      mkdir -p "$bios_folder/rpcs3/dev_hdd0"
+      mkdir -p "$bios_folder/rpcs3/dev_hdd1"
+      mkdir -p "$bios_folder/rpcs3/dev_flash"
+      mkdir -p "$bios_folder/rpcs3/dev_flash2"
+      mkdir -p "$bios_folder/rpcs3/dev_flash3"
+      mkdir -p "$bios_folder/rpcs3/dev_bdvd"
+      mkdir -p "$bios_folder/rpcs3/dev_usb000"
     fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
       # This is an unfortunate one-off because set_setting_value does not currently support settings with $ in the name.
-      sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$bios_folder/rpcs3/emudir"'^' "$rpcs3vfsconf"
+      sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$bios_folder/rpcs3"'^' "$rpcs3vfsconf"
       set_setting_value "$rpcs3vfsconf" "/games/" "$roms_folder/ps3" "rpcs3"
     fi
   fi
