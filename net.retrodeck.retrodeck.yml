@@ -71,14 +71,45 @@ modules:
   # MAME - Start
 
   - name: mame
-    buildsystem: make
+    buildsystem: simple
     build-options:
       no-debuginfo: true
       strip: true
-      cflags: -Wno-error=restrict USE_SYSTEM_LIB_FLAC=1 SDL_INI_PATH='$$HOME/.APP_NAME;/app/share/APP_NAME/ini' LDOPTS=-Wl,-s
+    build-commands:
+      - make
+          -j ${FLATPAK_BUILDER_N_JOBS}
+          CFLAGS+=-Wno-error=restrict
+          USE_SYSTEM_LIB_FLAC=1
+          SDL_INI_PATH='$$HOME/.APP_NAME;/app/share/APP_NAME/ini'
+          LDOPTS=-Wl,-s
+      - install -Dm 0755 mame ${FLATPAK_DEST}/bin/mame
+      - cp uismall.bdf ${FLATPAK_DEST}/bin/
+      - mkdir -p ${FLATPAK_DEST}/share/mame/
+      - cp -r artwork/ ${FLATPAK_DEST}/share/mame/
+      - cp -r bgfx/ ${FLATPAK_DEST}/share/mame/
+      - cp -r ctrlr/ ${FLATPAK_DEST}/share/mame/
+      - mkdir -p ${FLATPAK_DEST}/share/mame/docs/
+      - cp -r docs/legal/ ${FLATPAK_DEST}/share/mame/docs/
+      - cp -r docs/man/ ${FLATPAK_DEST}/share/mame/docs
+      - cp -r hash/ ${FLATPAK_DEST}/share/mame/
+      - cp -r hlsl/ ${FLATPAK_DEST}/share/mame/
+      - cp -r ini/ ${FLATPAK_DEST}/share/mame/
+      #- install -Dm 0644 mame.ini ${FLATPAK_DEST}/share/mame/ini/mame.ini
+      - cp -r language/ ${FLATPAK_DEST}/share/mame/
+      - cp -r plugins/ ${FLATPAK_DEST}/share/mame/
+      - cp -r roms/ ${FLATPAK_DEST}/share/mame/
+      - cp -r samples/ ${FLATPAK_DEST}/share/mame/
     sources:
       - type: archive
         url: https://github.com/mamedev/mame/archive/refs/tags/mame0253.tar.gz
         sha256: 52065a1ae0db365a9aa35d62bafb226edc546ad993d6c75327e166596f25e4e4
+      # - type: file
+      #   path: mame.ini
+      # - type: patch
+      #   path: floppy.patch
+      # - type: patch
+      #   path: sound.patch
+      # - type: patch
+      #   path: ym3802.patch
 
   # MAME - End
