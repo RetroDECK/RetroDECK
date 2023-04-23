@@ -71,7 +71,7 @@ modules:
   # MAME - Start
 
   - name: mame
-    buildsystem: cmake
+    buildsystem: make
     build-options:
       no-debuginfo: true
       strip: true
