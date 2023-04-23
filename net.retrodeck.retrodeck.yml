@@ -111,7 +111,7 @@ modules:
   - name: glu
     buildsystem: meson
     config-opts:
-      - --disable-static"
+      - --disable-static
     cleanup:
       - /include
       - /lib/debug
