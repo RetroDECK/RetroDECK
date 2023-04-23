@@ -110,6 +110,8 @@ modules:
   # more info there: https://gitlab.com/gnutls/gnutls/-/issues/1335
   - name: glu
     buildsystem: meson
+    config-opts:
+      - --disable-static"
     cleanup:
       - /include
       - /lib/debug
