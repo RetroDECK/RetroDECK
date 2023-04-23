@@ -1,0 +1,13 @@
+diff --git a/src/devices/machine/ym3802.cpp b/src/devices/machine/ym3802.cpp
+index 4a8f6a7ffae..d1bf2b961f6 100644
+--- a/src/devices/machine/ym3802.cpp
++++ b/src/devices/machine/ym3802.cpp
+@@ -45,7 +45,7 @@ void ym3802_device::device_start()
+ 
+ void ym3802_device::device_reset()
+ {
+-	m_reg.clear();
++	m_reg.assign(REG_MAX, 0);
+ 	reset_irq(0xff);
+ 	transmit_register_reset();
+ 	receive_register_reset();
