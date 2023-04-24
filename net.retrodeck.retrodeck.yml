@@ -233,8 +233,8 @@ modules:
   # But we don't include them 1:1 as RetroDECK got some specific configs in some cases
   - name: emulationstation-de
     buildsystem: cmake-ninja
-    build-options:
-      - DRETRODECK=on
+    config-opts:
+      - -DRETRODECK=on
     cleanup:
       - es-app
       - es-core
