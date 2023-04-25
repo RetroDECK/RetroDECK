@@ -1074,6 +1074,7 @@ modules:
       - cp -f res/splash.svg ${FLATPAK_DEST}/retrodeck/graphics/splash-orig.svg
       - cp -rf res/extra-splashes/ ${FLATPAK_DEST}/retrodeck/graphics
       - cp -f res/icon.svg /app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg
+      - mv -f -t ${FLATPAK_DEST}/retrodeck res/binding-icons
 
       # RetroDECK core script
       - cp retrodeck.sh /app/bin/retrodeck.sh

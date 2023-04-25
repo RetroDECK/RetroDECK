@@ -1850,10 +1850,10 @@ finit() {
   echo "Executing finit"
 
   # Internal or SD Card?
-  choice=$(configurator_destination_choice_dialog "RetroDECK data" "Welcome to the first configuration of RetroDECK.\nThe setup will be quick but please READ CAREFULLY each message in order to avoid misconfigurations.\n\nWhere do you want your RetroDECK data folder to be located?\n\nThis folder will contain all ROMs, BIOSs and scraped data." )
-  echo "Choice is $choice"
+  local finit_dest_choice=$(configurator_destination_choice_dialog "RetroDECK data" "Welcome to the first configuration of RetroDECK.\nThe setup will be quick but please READ CAREFULLY each message in order to avoid misconfigurations.\n\nWhere do you want your RetroDECK data folder to be located?\n\nThis folder will contain all ROMs, BIOSs and scraped data." )
+  echo "Choice is $finit_dest_choice"
 
-  case $choice in
+  case $finit_dest_choice in
 
   "" ) # Cancel or X button quits
     echo "Now quitting"
@@ -1916,7 +1916,20 @@ finit() {
 
   conf_write # Write the new values to retrodeck.cfg
 
-  local rpcs_firmware_install=$(configurator_generic_question_dialog "RPCS3 Firmware Install" "Would you like to install the latest PS3 firmware for the RPCS3 emulator?\n\nThis process will take several minutes and requires network access.\nIf you do not plan to emulate PS3 games this can be skipped, and can always be done later through the Configurator.\n\nIf you click Yes, RPCS3 will be launched at the end of the RetroDECK setup process.\nOnce the firmware is installed, please close the emulator to finish the process.")
+  local finit_options_choices=$(zenity \
+  --list --width=1200 --height=720 \
+  --checklist --hide-column=4 --ok-label="Confirm Selections" --extra-button="Enable All" \
+  --separator=" " --print-column=4 \
+  --text="Choose which options to enable:" \
+  --column "Enabled?" \
+  --column "Option" \
+  --column "Description" \
+  --column "option_flag" \
+  "${finit_options_list[@]}")
+
+  if [[ "$finit_options_choices" =~ (rpcs3_firmware|Enable All) ]]; then # Additional information on the firmware install process, as the emulator needs to be manually closed
+    configurator_generic_dialog "RPCS3 Firmware Install" "You have chosen to install the RPCS3 firmware during the RetroDECK first setup.\n\nThis process will take several minutes and requires network access.\n\nRPCS3 will be launched automatically at the end of the RetroDECK setup process.\nOnce the firmware is installed, please close the emulator to finish the process.")
+  fi
 
   zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
@@ -1926,12 +1939,18 @@ finit() {
   prepare_emulator "reset" "all"
   tools_init
   
-  if [[ $rpcs_firmware_install == "true" ]]; then
+  # Optional actions based on user choices
+  if [[ "$finit_options_choices" =~ (rpcs3_firmware|Enable All) ]]; then
     update_rpcs3_firmware
+  fi
+  if [[ "$finit_options_choices" =~ (rd_controller_profile|Enable All) ]]; then
+    rsync -a "/app/retrodeck/binding-icons/" "$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/"
+    # TODO move controller profile file to where it needs to go
   fi
 
   # Add packaged extras, after the ROMS folder has been initialized
   cp /app/retrodeck/extras/doom1.wad "$roms_folder/doom/doom1.wad" # No -f in case the user already has it
+
   ) |
   zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
