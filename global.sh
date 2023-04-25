@@ -112,7 +112,7 @@ then
     default_sd=$(directory_browse "SD Card Location")
   fi
 
-  cp $rd_defaults $rd_conf # Load default settings
+  cp $rd_defaults $rd_conf # Load default settings file
   set_setting_value $rd_conf "version" "$version" retrodeck # Set current version for new installs
   set_setting_value $rd_conf "sdcard" "$default_sd" retrodeck "paths" # Set SD card location if default path has changed
 
@@ -147,8 +147,10 @@ else
     prev_home_path=$rdhome
     configurator_generic_dialog "The RetroDECK data folder was not found in the expected location.\nThis may happen when SteamOS is updated.\n\nPlease browse to the current location of the \"retrodeck\" folder."
     new_home_path=$(directory_browse "RetroDECK folder location")
-    sed -i 's#'$prev_home_path'#'$new_home_path'#g' $rd_conf
+    set_setting_value $rd_conf "rdhome" "$new_home_path" retrodeck "paths"
     conf_read
+    prepare_emulator "retrodeck" "postmove"
     prepare_emulator "all" "postmove"
+    conf_write
   fi
 fi
