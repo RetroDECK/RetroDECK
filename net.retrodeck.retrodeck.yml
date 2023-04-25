@@ -1,25 +1,17 @@
 app-id: net.retrodeck.retrodeck
 runtime: org.kde.Platform
 runtime-version: 5.15-22.08
-#runtime-version: 6.3                        # bumped because of pcsx2-qt
 sdk: org.kde.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.llvm14    # Needed for rpcs3
   #- org.freedesktop.Sdk.Extension.dotnet6   # Needed for Ryujinx - Removed, check if it's not breaking something else
 base: io.qt.qtwebengine.BaseApp             # Needed for Yuzu
 base-version: 5.15-22.08                    # Needed for Yuzu
-# add-extensions:
-#   org.freedesktop.Platform.ffmpeg-full:
-#     directory: lib/ffmpeg
-#     add-ld-path: .
-#     version: '22.08'
-#     autodownload: true
-#     autodelete: false
 command: retrodeck.sh
 
 finish-args:
-  - --socket=x11
-  #- --socket=wayland
+  - --socket=fallback-x11
+  - --socket=wayland
   - --socket=pulseaudio
   - --share=ipc
   - --share=network
@@ -33,14 +25,9 @@ finish-args:
   - --talk-name=org.freedesktop.login1.Manager
   - --talk-name=org.freedesktop.Flatpak
   - --filesystem=xdg-run/app/com.discordapp.Discord:create
-  # Yuzu
-  # - --filesystem=home:ro # This may break Yuzu, let's see
-  # - --filesystem=/run/media:ro
   # Dolphin
   - --allow=bluetooth
   #- --env=QT_QPA_PLATFORM=xcb #not sure if this will break something
-  # rpcs3
-  #- --socket=fallback-x11
 
 cleanup:
   # ES-DE
@@ -80,8 +67,7 @@ modules:
   # [ ] Update the appdata.xml with the version number and notes
   # [ ] change branch into main in version-initialization (first one)
   # [ ] change branch into main in retrodeck module (last one)
-  # [ ] if header (before modules) was edited, edit it even in flathub.yml
-  # [ ] Vita3K: update branch to main (and remember to download it the first time)
+  # [ ] >>>>> if header (before modules) was edited, edit it even in flathub.yml
   #
   - name: version-initialization
     buildsystem: simple
@@ -118,38 +104,6 @@ modules:
           - autoreconf -vfi
     post-install:
       - ln -s "xml" "${FLATPAK_DEST}/bin/xmlstarlet" ||:
-
-  # pcsx2-qt needs QT6, maybe others, here until every qt emulator will support qt6 (not yuzu atm)
-  # from: https://github.com/flathub/org.profex_xrd.Profex
-
-  # - name: qt6-core5compat
-  #   buildsystem: cmake-ninja
-  #   builddir: true
-  #   sources:
-  #     - type: archive
-  #       url: https://download.qt.io/official_releases/qt/6.2/6.2.4/submodules/qt5compat-everywhere-src-6.2.4.tar.xz
-  #       sha256: 5de2b9e25bf7de161fbb88ecdd468ed1788bc899392fc05ed80aa590ebb352fa
-  #       x-checker-data:
-  #         type: html
-  #         url: https://download.qt.io/official_releases/qt/6.2/
-  #         version-pattern: '>([\d\.-]*)/<'
-  #         url-template: https://download.qt.io/official_releases/qt/6.2/$version/submodules/qt5compat-everywhere-src-$version.tar.xz
-  #   post-install:
-  #     - mkdir -p /app/lib/mkspecs
-  #     - cp -R /app/mkspecs/* /app/lib/mkspecs/
-  #     - ln -fsr ${FLATPAK_DEST}/lib/${FLATPAK_ARCH}-linux-gnu/libQt*.so* -t ${FLATPAK_DEST}/lib/
-  #     - sed -i 's/\\([0-9]\\+\\.[0-9]\\+\\)\\.[0-9]\\+ ${_Qt6.*_FIND_VERSION_EXACT}/\\1/'
-  #       ${FLATPAK_DEST}/lib/${FLATPAK_ARCH}-linux-gnu/cmake/Qt6*/Qt6*Config.cmake
-  #     - sed -e 's@PATHS \"${CMAKE_CURRENT_LIST_DIR}/..\" NO_DEFAULT_PATH@PATHS \"${CMAKE_CURRENT_LIST_DIR}/..\"
-  #       \"/usr/lib/${CMAKE_CXX_LIBRARY_ARCHITECTURE}/cmake/\" NO_DEFAULT_PATH@' -i
-  #       ${FLATPAK_DEST}/lib/${FLATPAK_ARCH}-linux-gnu/cmake/Qt6*/Qt6*Config.cmake
-  #     - sed -e 's@\\($$QT_MODULE_BIN_BASE\\)@\\1 '${FLATPAK_DEST}'/bin @' -i ${FLATPAK_DEST}/lib/mkspecs/modules/*.pri
-  #     - sed -e 's@\\($$QT_MODULE_INCLUDE_BASE \\)@\\1'${FLATPAK_DEST}'/include @'
-  #       -i ${FLATPAK_DEST}/lib/mkspecs/modules/*.pri
-  #     - sed -e 's@$$QT_MODULE_INCLUDE_BASE/@'${FLATPAK_DEST}'/include/@g' -i ${FLATPAK_DEST}/lib/mkspecs/modules/*.pri
-  #     - sed -e 's@$$QT_MODULE_LIB_BASE@'${FLATPAK_DEST}'/lib@g' -i ${FLATPAK_DEST}/lib/mkspecs/modules/*.pri
-  #   cleanup:
-  #     - /app/mkspecs
 
   # mesa repo got a double certificate issue and gnutils cannot handle that so GLU download fails,
   # this affects even the shared-modules's glu so I have to replace it temporarly
@@ -289,7 +243,7 @@ modules:
   - name: emulationstation-de
     buildsystem: cmake-ninja
     config-opts:
-      - DRETRODECK=on
+      - -DRETRODECK=on
     cleanup:
       - es-app
       - es-core
@@ -334,7 +288,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/RetroArch.git
-        commit: 938ab716bd290b0f469068500966a834b5782929
+        commit: 6616b807edea5b56683e9fbca8b003b436c22b13
       - type: file
         path: rd-submodules/retroarch/retroarch.cfg
     post-install:
@@ -372,7 +326,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/RetroArch.git
-        commit: 938ab716bd290b0f469068500966a834b5782929
+        commit: 6616b807edea5b56683e9fbca8b003b436c22b13
   - name: retroarch-filers-audio
     subdir: libretro-common/audio/dsp_filters
     make-install-args:
@@ -380,7 +334,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/RetroArch.git
-        commit: 938ab716bd290b0f469068500966a834b5782929
+        commit: 6616b807edea5b56683e9fbca8b003b436c22b13
   - name: retroarch-assets
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
@@ -717,24 +671,6 @@ modules:
   # XEMU - START
   # https://github.com/flathub/app.xemu.xemu
 
-  # certificate issue, check libglu module for more info
-  # - name: libglu
-  #   buildsystem: meson
-  #   cleanup:
-  #     - /include
-  #     - /lib/debug
-  #     - /lib/pkgconfig
-  #     - /lib/*.a
-  #   sources:
-  #     - type: archive
-  #       url: http://mesa.freedesktop.org/archive/glu/glu-9.0.2.tar.xz
-  #       sha256: 6e7280ff585c6a1d9dfcdf2fca489251634b3377bfc33c29e4002466a38d02d4
-  #       x-checker-data:
-  #         type: anitya
-  #         project-id: 13518
-  #         stable-only: true
-  #         url-template: http://mesa.freedesktop.org/archive/glu/glu-$version.tar.xz
-
   - name: libpcap
     buildsystem: cmake-ninja
     cleanup:
@@ -923,67 +859,6 @@ modules:
         dest-filename: primehack-wrapper
 
   # # PRIMEHACK - END
-
-  # # PRIMEHACK APPIMAGE START
-
-  # Duckstation - START
-  # https://github.com/flathub/org.duckstation.DuckStation
-  # Disabled until we completely switch to QT6
-
-  # - name: duckstation
-  #   buildsystem: cmake-ninja
-  #   no-make-install: true
-  #   builddir: true
-  #   config-opts:
-  #     - -DCMAKE_BUILD_TYPE=RelWithDebInfo
-  #     - -DUSE_EGL=ON
-  #     - -DUSE_SDL2=ON
-  #     - -DUSE_WAYLAND=ON
-  #     - -DUSE_X11=ON
-  #     - -DUSE_DRMKMS=ON
-  #     - -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON
-  #   post-install:
-  #     - install -m755 bin/duckstation-qt /app/bin
-  #     - cp -r ../data/* bin/translations /app/bin
-  #   sources:
-  #     - type: git
-  #       url: https://github.com/stenzek/duckstation.git
-  #       commit: 6f709468601183083b8581d4952aaba7baf77084
-  #       # Cloning dep/msvc/qt is only necessary for Windows
-  #       disable-submodules: true
-
-  # Duckstation - END
-
-  # Duckstation-DontUpdate - START
-  # Old version moved to QT6 so it's either this or AppImage
-  # But AppImage is a single one that keep getting updated at the same link so the sha (that's mandatory) will break the build
-  # So yeah we're stuck with this for a while
-
-  # - name: duckstation-DontUpdate
-  #   buildsystem: cmake-ninja
-  #   no-make-install: true
-  #   builddir: true
-  #   config-opts:
-  #     - -DCMAKE_BUILD_TYPE=Release
-  #     - -DUSE_EGL=ON
-  #     - -DUSE_SDL2=ON
-  #     - -DUSE_WAYLAND=ON
-  #     - -DUSE_X11=ON
-  #     - -DUSE_DRMKMS=ON
-  #     - -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON
-  #   post-install:
-  #     - install -m 755 -t /app/bin/ bin/duckstation-nogui bin/duckstation-qt
-  #     - |-
-  #       for px in 16 32 48 64 128 256; do
-  #         install -Dm644 ../extras/icons/icon-${px}px.png /app/share/icons/hicolor/${px}x${px}/apps/org.duckstation.DuckStation.png
-  #       done
-  #     - cp -r ../data/* bin/translations /app/bin
-  #   sources:
-  #     - type: git
-  #       url: https://github.com/stenzek/duckstation.git
-  #       commit: 3fb61865e505ba639609fbf16cb8bdf5c66e020c
-
-  # Duckstation-DontUpdate - END
 
   # Duckstation-AppImage - START
   # https://github.com/stenzek/duckstation/releases/tag/preview
@@ -1174,46 +1049,6 @@ modules:
       - install -D -t ${FLATPAK_DEST}/bin/ bin/Cemu_relwithdebinfo Cemu-wrapper
 
   # Cemu - END
-
-  # Ryujinx Appimage - START
-  # https://ryujinx.org/download
-
-  # - name: Ryujinx
-  #   buildsystem: simple
-  #   build-commands:
-  #     - |
-  #       tar -zxvf ryujinx-1.1.685-linux_x64.tar.gz
-  #       mv -v publish ${FLATPAK_DEST}/ryujinx
-  #       ln -sv ${FLATPAK_DEST}/ryujinx/Ryujinx ${FLATPAK_DEST}/bin/Ryujinx
-  #   sources:
-  #     - type: file
-  #       url: https://github.com/Ryujinx/release-channel-master/releases/download/1.1.685/ryujinx-1.1.685-linux_x64.tar.gz
-  #       sha256: bc4d7076106d7aa59c3a3ea22b83c553e5fa1a897815831adcf18cc13d729e15
-
-  # Ryujinx Appimage - END
-
-  # Vita3K - START
-  # NOTE: this is a continuos release, it's provided but not supported
-  # to update this module:
-  # wget https://github.com/Vita3K/Vita3K/releases/download/continuous/ubuntu-latest.zip -O rd-submodules/vita3k/vita3k-14-01-23.zip
-  # sha256sum rd-submodules/vita3k/vita3k*.zip
-  # change url and sha
-  # check the branch in the url
-
-  - name: Vita3K
-    buildsystem: simple
-    build-commands:
-      - |
-        mkdir -p ${FLATPAK_DEST}/vita3k
-        cp -r * ${FLATPAK_DEST}/vita3k
-        chmod +x ${FLATPAK_DEST}/vita3k/Vita3K
-        ln -s ${FLATPAK_DEST}/vita3k/Vita3K /app/bin/Vita3K
-    sources:
-    - type: archive
-      url: https://github.com/Vita3K/Vita3K/releases/download/continuous/ubuntu-latest.zip
-      sha256: VITASHAPLACEHOLDER
-
-  # Vita3K - END
 
   # External manifests end
 
