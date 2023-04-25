@@ -45,9 +45,9 @@ post_update() {
     dir_prep "$bios_folder/pico-8" "$HOME/.lexaloffle/pico-8" # Store binary and config files together. The .lexaloffle directory is a hard-coded location for the PICO-8 config file, cannot be changed
     dir_prep "$saves_folder/pico-8" "$bios_folder/pico-8/cdata" # PICO-8 saves folder structure was backwards, fixing for consistency.
 
-    cp -fv $emuconfigs/citra/qt-config.ini /var/config/citra-emu/qt-config.ini
+    cp -f $emuconfigs/citra/qt-config.ini /var/config/citra-emu/qt-config.ini
     sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
-    cp -fvr $emuconfigs/yuzu/* /var/config/yuzu/
+    cp -fr $emuconfigs/yuzu/* /var/config/yuzu/
     sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/yuzu/qt-config.ini
 
     # Remove unneeded tools folder, as location has changed to RO space
@@ -74,6 +74,8 @@ post_update() {
     # - Add new sections [paths] and [options] headers to retrodeck.cfg
     # - Prepackaged DOOM!
     # - Update RPCS3 vfs file contents. migrate from old location if needed
+    # - Disable ESDE update checks for existing installs
+    # - Notify user of default PSX core change
 
     mkdir -p "$mods_folder"
     mkdir -p "$texture_packs_folder"
@@ -87,7 +89,7 @@ post_update() {
 
     dir_prep "$rdhome/gamelists" "/var/config/emulationstation/.emulationstation/gamelists"
 
-    cp /app/retrodeck/extras/doom1.wad "$roms_folder/doom/doom1.wad" # No -f in case the user already has it
+    cp "/app/retrodeck/extras/doom1.wad" "$roms_folder/doom/doom1.wad" # No -f in case the user already has it
     mkdir -p "/var/config/emulationstation/.emulationstation/gamelists/doom"
     cp -f "/app/retrodeck/rd_prepacks/doom/gamelist.xml" "/var/config/emulationstation/.emulationstation/gamelists/doom/gamelist.xml"
     mkdir -p "$media_folder/doom"
@@ -110,9 +112,17 @@ post_update() {
     mkdir -p "$bios_folder/rpcs3/dev_bdvd"
     mkdir -p "$bios_folder/rpcs3/dev_usb000"
     dir_prep "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata" "$saves_folder/ps3/rpcs3"
+
+    set_setting_value $es_settings "ApplicationUpdaterFrequency" "never" "es_settings"
+
+    configurator_generic_dialog "As part of this update, the default PSX emulator has changed!\n\nIf you are currently playing PSX games and have not changed the default emulator on your own, you will need to switch back to the previous default emulator (Swanstation) for your existing saves to work.\nIf you have changed the default emulator yourself, please change it again to your previous choice.\n\nSee the wiki or Discord if you have more questions on this change!"
   fi
 
   # The following commands are run every time.
+
+  if [[ -d "/var/data/dolphin-emu/Load/DynamicInputTextures" ]]; then # Refresh installed textures if they have been enabled
+    rsync -a "/app/retrodeck/extras/DynamicInputTextures/" "/var/data/dolphin-emu/Load/DynamicInputTextures/"
+  fi
 
   tools_init
   update_splashscreens

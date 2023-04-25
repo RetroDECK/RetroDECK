@@ -88,31 +88,23 @@ move() {
   # Function to move a directory from one parent to another
   # USAGE: move $source_dir $dest_dir
 
-  if [[ ! -d "$2/$(basename "$1")" ]]; then
-    if [[ $(verify_space "$1" "$2") ]]; then
-      (
-        if [[ ! -d "$2" ]]; then # Create destination directory if it doesn't already exist
-          mkdir -pv "$2"
-        fi
-        mv -v -t "$2" "$1"
-      ) |
-      zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
-      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Configurator Utility - Move in Progress" \
-      --text="Moving directory $(basename "$1") to new location of $2, please wait."
-    else
-      zenity --icon-name=net.retrodeck.retrodeck --error --no-wrap \
-      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Configurator Utility - Move Directories" \
-      --text="The destination directory you have selected does not have enough free space for the files you are trying to move.\n\nPlease select a new destination or free up some space."
+  source_dir="$(echo $1 | sed 's![^/]$!&/!')" # Add trailing slash if it is missing
+  dest_dir="$(echo $2 | sed 's![^/]$!&/!')" # Add trailing slash if it is missing
 
-      configurator_move_dialog
-    fi
-  else
+  (
+    rsync -a --remove-source-files --ignore-existing --mkpath "$source_dir" "$dest_dir" # Copy files but don't overwrite conflicts
+    find "$source_dir" -type d -empty -delete # Cleanup empty folders that were left behind
+  ) |
+  zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+  --title "RetroDECK Configurator Utility - Move in Progress" \
+  --text="Moving directory $(basename "$1") to new location of $2, please wait."
+
+  if [[ -d "$source_dir" ]]; then # Some conflicting files remain
     zenity --icon-name=net.retrodeck.retrodeck --error --no-wrap \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator Utility - Move Directories" \
-    --text="The destination directory you have selected already exists.\n\nPlease select a new destination."
+    --text="There were some conflicting files that were not moved.\n\nAll files that could be moved are in the new location,\nany files that already existed at the new location have not been moved and will need to be handled manually."
   fi
 }
 
@@ -1060,11 +1052,11 @@ conf_write() {
   do
     if [[ (! -z "$current_setting_line") && (! "$current_setting_line" == "#"*) && (! "$current_setting_line" == "[]") ]]; then # If the line has a valid entry in it
       if [[ ! -z $(grep -o -P "^\[.+?\]$" <<< "$current_setting_line") ]]; then # If the line is a section header
-        current_section=$(sed 's^[][]^^g' <<< $current_setting_line) # Remove brackets from section name
+        local current_section=$(sed 's^[][]^^g' <<< $current_setting_line) # Remove brackets from section name
       else
-        current_setting_name=$(get_setting_name "$current_setting_line" "retrodeck") # Read the variable name from the current line
-        current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "$current_section") # Read the variables value from retrodeck.cfg
-        memory_setting_value=$(eval "echo \$${current_setting_name}") # Read the variable names' value from memory
+        local current_setting_name=$(get_setting_name "$current_setting_line" "retrodeck") # Read the variable name from the current line
+        local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "$current_section") # Read the variables value from retrodeck.cfg
+        local memory_setting_value=$(eval "echo \$${current_setting_name}") # Read the variable names' value from memory
         if [[ ! "$current_setting_value" == "$memory_setting_value" ]]; then # If the values are different...
           set_setting_value "$rd_conf" "$current_setting_name" "$memory_setting_value" "retrodeck" "$current_section" # Update the value in retrodeck.cfg
         fi
@@ -1081,7 +1073,7 @@ conf_read() {
   do
     if [[ (! -z "$current_setting_line") && (! "$current_setting_line" == "#"*) && (! "$current_setting_line" == "[]") ]]; then # If the line has a valid entry in it
       if [[ ! -z $(grep -o -P "^\[.+?\]$" <<< "$current_setting_line") ]]; then # If the line is a section header
-        current_section=$(sed 's^[][]^^g' <<< $current_setting_line) # Remove brackets from section name
+        local current_section=$(sed 's^[][]^^g' <<< $current_setting_line) # Remove brackets from section name
       else
         local current_setting_name=$(get_setting_name "$current_setting_line" "retrodeck") # Read the variable name from the current line
         local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "$current_section") # Read the variables value from retrodeck.cfg
@@ -1146,19 +1138,6 @@ dir_prep() {
   echo -e "$symlink is now $real\n"
 }
 
-consolidate_retrodeck_folders() {
-  # This script will find folders that may have been moved out of the main RetroDECK folder individually and move them home
-  # USAGE: consolidate_retrodeck_folders
-
-  while read -r path; do
-  if realpath "$path" | grep -q "^$main_path/"; then
-    echo "$path is a subfolder of $main_path"
-  else
-    echo "$path is not a subfolder of $main_path"
-  fi
-  done < <(grep -v '^\s*$' $rd_conf | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
-}
-
 update_splashscreens() {
   # This script will purge any existing ES graphics and reload them from RO space into somewhere ES will look for it
   # USAGE: update_splashscreens
@@ -1195,19 +1174,52 @@ prepare_emulator() {
   emulator="$2"
   call_source="$3"
 
-  if [[ "$emulator" == "retrodeck" ]]; then # For use after RetroDECK is consolidated and moved
+  if [[ "$emulator" == "retrodeck" ]]; then
+    if [[ "$action" == "reset" ]]; then # Update the paths of all folders in retrodeck.cfg and create them
+        while read -r config_line; do
+          local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
+          if [[ ! $current_setting_name =~ (rdhome|sdcard) ]]; then # Ignore these locations
+            eval "$current_setting_name=$rdhome/$(basename $current_setting_value)"
+            mkdir "$rdhome/$(basename $current_setting_value)"
+          fi
+        done < <(grep -v '^\s*$' $rd_conf | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
+    fi
+    if [[ "$action" == "postmove" ]]; then # Update the paths of any folders that came with the retrodeck folder during a move
+      while read -r config_line; do
+        local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
+        if [[ ! $current_setting_name =~ (rdhome|sdcard) ]]; then # Ignore these locations
+          local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
+          if [[ -d "$rdhome/$(basename $current_setting_value)" ]]; then # If the folder exists at the new ~/retrodeck location
+              eval "$current_setting_name=$rdhome/$(basename $current_setting_value)"
+          fi
+        fi
+      done < <(grep -v '^\s*$' $rd_conf | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
+    fi
+  fi
+
+  if [[ "$emulator" =~ ^(emulationstation|all)$ ]]; then # For use after ESDE-related folders are moved or a reset
+    if [[ "$action" == "reset" ]]; then
+      rm -rf /var/config/emulationstation/
+      mkdir -p /var/config/emulationstation/
+      emulationstation --home /var/config/emulationstation --create-system-dirs
+      update_splashscreens
+      dir_prep "$roms_folder" "/var/config/emulationstation/ROMs"
+      dir_prep "$media_folder" "/var/config/emulationstation/.emulationstation/downloaded_media"
+      dir_prep "$themes_folder" "/var/config/emulationstation/.emulationstation/themes"
+      dir_prep "$rdhome/gamelists" "/var/config/emulationstation/.emulationstation/gamelists"
+      cp -f /app/retrodeck/es_settings.xml /var/config/emulationstation/.emulationstation/es_settings.xml
+      
+      # RetroDECK prepack metadata
+      mkdir -p "/var/config/emulationstation/.emulationstation/gamelists/doom"
+      cp "/app/retrodeck/rd_prepacks/doom/gamelist.xml" "/var/config/emulationstation/.emulationstation/gamelists/doom/gamelist.xml"
+      mkdir -p "$media_folder/doom"
+      unzip -oq "/app/retrodeck/rd_prepacks/doom/doom.zip" -d "$media_folder/doom/"
+    fi
     if [[ "$action" == "postmove" ]]; then
-      roms_folder=$rdhome/roms
-      saves_folder=$rdhome/saves
-      states_folder=$rdhome/states
-      bios_folder=$rdhome/bios
-      media_folder=$rdhome/downloaded_media
-      themes_folder=$rdhome/themes
-      logs_folder=$rdhome/.logs
-      screenshots_folder=$rdhome/screenshots
-      mods_folder=$rdhome/mods
-      texture_packs_folder=$rdhome/texture_packs
-      borders_folder=$rdhome/borders
+      dir_prep "$roms_folder" "/var/config/emulationstation/ROMs"
+      dir_prep "$media_folder" "/var/config/emulationstation/.emulationstation/downloaded_media"
+      dir_prep "$themes_folder" "/var/config/emulationstation/.emulationstation/themes"
+      dir_prep "$rdhome/gamelists" "/var/config/emulationstation/.emulationstation/gamelists"
     fi
   fi
 
@@ -1503,6 +1515,14 @@ prepare_emulator() {
       set_setting_value "$pcsx2conf" "RecursivePaths" "$roms_folder/ps2" "pcsx2" "GameList"
     fi
   fi
+
+  if [[ "$emulator" =~ ^(pico8|pico-8|all)$ ]]; then
+    if [[ ("$action" == "reset") || ("$action" == "postmove") ]]; then
+      dir_prep "$bios_folder/pico-8" "$HOME/.lexaloffle/pico-8" # Store binary and config files together. The .lexaloffle directory is a hard-coded location for the PICO-8 config file, cannot be changed
+      dir_prep "$roms_folder/pico8" "$bios_folder/pico-8/carts" # Symlink default game location to RD roms for cleanliness (this location is overridden anyway by the --root_path launch argument anyway)
+      dir_prep "$saves_folder/pico-8" "$bios_folder/pico-8/cdata"  # PICO-8 saves folder
+    fi
+  fi
   
   if [[ "$emulator" =~ ^(ppsspp|PPSSPP|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
@@ -1782,8 +1802,7 @@ tools_init() {
 }
 
 start_retrodeck() {
-  echo "Checking to see if today has a surprise..."
-  easter_eggs
+  easter_eggs # Check if today has a surprise splashscreen and load it if so
   # normal startup
   echo "Starting RetroDECK v$version"
   emulationstation --home /var/config/emulationstation
@@ -1831,10 +1850,10 @@ finit() {
   echo "Executing finit"
 
   # Internal or SD Card?
-  choice=$(configurator_destination_choice_dialog "RetroDECK data" "Welcome to the first configuration of RetroDECK.\nThe setup will be quick but please READ CAREFULLY each message in order to avoid misconfigurations.\n\nWhere do you want your RetroDECK data folder to be located?\n\nThis folder will contain all ROMs, BIOSs and scraped data." )
-  echo "Choice is $choice"
+  local finit_dest_choice=$(configurator_destination_choice_dialog "RetroDECK data" "Welcome to the first configuration of RetroDECK.\nThe setup will be quick but please READ CAREFULLY each message in order to avoid misconfigurations.\n\nWhere do you want your RetroDECK data folder to be located?\n\nThis folder will contain all ROMs, BIOSs and scraped data." )
+  echo "Choice is $finit_dest_choice"
 
-  case $choice in
+  case $finit_dest_choice in
 
   "" ) # Cancel or X button quits
     echo "Now quitting"
@@ -1844,12 +1863,6 @@ finit() {
   "Internal Storage" ) # Internal
     echo "Internal selected"
     rdhome="$HOME/retrodeck"
-    roms_folder="$rdhome/roms"
-    saves_folder="$rdhome/saves"
-    states_folder="$rdhome/states"
-    bios_folder="$rdhome/bios"
-    media_folder="$rdhome/downloaded_media"
-    themes_folder="$rdhome/themes"
     if [[ -L $rdhome ]]; then #Remove old symlink from existing install, if it exists
       unlink $rdhome
     fi
@@ -1869,12 +1882,6 @@ finit() {
       if [[ -z $rdhome ]]; then # If user hit the cancel button
         exit 2
       fi
-      roms_folder="$rdhome/roms"
-      saves_folder="$rdhome/saves"
-      states_folder="$rdhome/states"
-      bios_folder="$rdhome/bios"
-      media_folder="$rdhome/downloaded_media"
-      themes_folder="$rdhome/themes"
     elif [ ! -w "$sdcard" ] #SD card found but not writable
       then
         echo "Error: SD card found but not writable"
@@ -1887,12 +1894,6 @@ finit() {
         exit 2
     else
       rdhome="$sdcard/retrodeck"
-      roms_folder="$rdhome/roms"
-      saves_folder="$rdhome/saves"
-      states_folder="$rdhome/states"
-      bios_folder="$rdhome/bios"
-      media_folder="$rdhome/downloaded_media"
-      themes_folder="$rdhome/themes"
     fi
   ;;
 
@@ -1907,76 +1908,49 @@ finit() {
       if [[ -z $rdhome ]]; then # If user hit the cancel button
         exit 2
       fi
-      roms_folder="$rdhome/roms"
-      saves_folder="$rdhome/saves"
-      states_folder="$rdhome/states"
-      bios_folder="$rdhome/bios"
-      media_folder="$rdhome/downloaded_media"
-      themes_folder="$rdhome/themes"
     ;;
 
   esac
 
-  if [[ ! "$rdhome" == "$HOME/retrodeck" && ! -L $HOME/retrodeck ]]; then # If data stored on SD card, create /home/deck/retrodeck symlink to keep things working until configs can get modified
-    echo "Symlinking retrodeck directory to home directory"
-    dir_prep "$rdhome" "$HOME/retrodeck"
+  prepare_emulator "reset" "retrodeck" # Parse the [paths] section of retrodeck.cfg and set the value of / create all needed folders
+
+  conf_write # Write the new values to retrodeck.cfg
+
+  local finit_options_choices=$(zenity \
+  --list --width=1200 --height=720 \
+  --checklist --hide-column=4 --ok-label="Confirm Selections" --extra-button="Enable All" \
+  --separator=" " --print-column=4 \
+  --text="Choose which options to enable:" \
+  --column "Enabled?" \
+  --column "Option" \
+  --column "Description" \
+  --column "option_flag" \
+  "${finit_options_list[@]}")
+
+  if [[ "$finit_options_choices" =~ (rpcs3_firmware|Enable All) ]]; then # Additional information on the firmware install process, as the emulator needs to be manually closed
+    configurator_generic_dialog "RPCS3 Firmware Install" "You have chosen to install the RPCS3 firmware during the RetroDECK first setup.\n\nThis process will take several minutes and requires network access.\n\nRPCS3 will be launched automatically at the end of the RetroDECK setup process.\nOnce the firmware is installed, please close the emulator to finish the process.")
   fi
-
-  mkdir -pv $roms_folder
-
-  local rpcs_firmware_install=$(configurator_generic_question_dialog "RPCS3 Firmware Install" "Would you like to install the latest PS3 firmware for the RPCS3 emulator?\n\nThis process will take several minutes and requires network access.\nIf you do not plan to emulate PS3 games this can be skipped, and can always be done later through the Configurator.\n\nIf you click Yes, RPCS3 will be launched at the end of the RetroDECK setup process.\nOnce the firmware is installed, please close the emulator to finish the process.")
 
   zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
   --text="RetroDECK will now install the needed files, which can take up to one minute.\nRetroDECK will start once the process is completed.\n\nPress OK to continue."
 
   (
-  # Recreating the folder
-  rm -rf /var/config/emulationstation/
-  mkdir -p /var/config/emulationstation/
-
-  # Initializing ES-DE
-  # TODO: after the next update of ES-DE this will not be needed - let's test it
-  emulationstation --home /var/config/emulationstation --create-system-dirs
-  update_splashscreens
-
-  # Initializing ROMs folder - Original in retrodeck home (or SD Card)
-  dir_prep $roms_folder "/var/config/emulationstation/ROMs"
-
-  mkdir -pv $saves_folder
-  mkdir -pv $states_folder
-  mkdir -pv $screenshots_folder
-  mkdir -pv $logs_folder
-  mkdir -pv $mods_folder
-  mkdir -pv $texture_packs_folder
-
-  # XMLSTARLET HERE
-  cp -fv /app/retrodeck/es_settings.xml /var/config/emulationstation/.emulationstation/es_settings.xml
-
-  # ES-DE preparing user-exposed folders
-  dir_prep "$media_folder" "/var/config/emulationstation/.emulationstation/downloaded_media"
-  dir_prep "$themes_folder" "/var/config/emulationstation/.emulationstation/themes"
-  dir_prep "$rdhome/gamelists" "/var/config/emulationstation/.emulationstation/gamelists"
-
-  # PICO-8
-  dir_prep "$bios_folder/pico-8" "$HOME/.lexaloffle/pico-8" # Store binary and config files together. The .lexaloffle directory is a hard-coded location for the PICO-8 config file, cannot be changed
-  dir_prep "$roms_folder/pico8" "$bios_folder/pico-8/carts" # Symlink default game location to RD roms for cleanliness (this location is overridden anyway by the --root_path launch argument anyway)
-  dir_prep "$saves_folder/pico-8" "$bios_folder/pico-8/cdata"  # PICO-8 saves folder
+  prepare_emulator "reset" "all"
+  tools_init
+  
+  # Optional actions based on user choices
+  if [[ "$finit_options_choices" =~ (rpcs3_firmware|Enable All) ]]; then
+    update_rpcs3_firmware
+  fi
+  if [[ "$finit_options_choices" =~ (rd_controller_profile|Enable All) ]]; then
+    rsync -a "/app/retrodeck/binding-icons/" "$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/"
+    # TODO move controller profile file to where it needs to go
+  fi
 
   # Add packaged extras, after the ROMS folder has been initialized
   cp /app/retrodeck/extras/doom1.wad "$roms_folder/doom/doom1.wad" # No -f in case the user already has it
 
-  # RetroDECK prepack metadata
-  mkdir -p "/var/config/emulationstation/.emulationstation/gamelists/doom"
-  cp "/app/retrodeck/rd_prepacks/doom/gamelist.xml" "/var/config/emulationstation/.emulationstation/gamelists/doom/gamelist.xml"
-  mkdir -p "$media_folder/doom"
-  unzip -oq "/app/retrodeck/rd_prepacks/doom/doom.zip" -d "$media_folder/doom/"
-
-  tools_init
-  prepare_emulator "reset" "all"
-  if [[ $rpcs_firmware_install == "true" ]]; then
-    update_rpcs3_firmware
-  fi
   ) |
   zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -2235,5 +2209,82 @@ configurator_reset_confirmation_dialog() {
     echo "true"
   else
     echo "false"
+  fi
+}
+
+configurator_move_folder_dialog() {
+  # This dialog will take a folder variable name from retrodeck.cfg and move it to a new location. The variable will be updated in retrodeck.cfg as well as any emulator configs where it occurs.
+  # USAGE: configurator_move_folder_dialog "folder_variable_name"
+  local rd_dir_name="$1" # The folder variable name from retrodeck.cfg
+  local dir_to_move="$(get_setting_value "$rd_conf" "$rd_dir_name" "retrodeck" "paths")/" # The path of that folder variable
+  local source_root="$(echo $dir_to_move | sed -e 's/\(.*\)\/retrodeck\/.*/\1/')" # The root path of the folder, excluding retrodeck/<folder name>. So /home/deck/retrodeck/roms becomes /home/deck
+  if [[ ! "$rd_dir_name" == "rdhome" ]]; then # If a sub-folder is being moved, find it's path without the source_root. So /home/deck/retrodeck/roms becomes retrodeck/roms
+    local rd_dir_path="$(echo "$dir_to_move" | sed "s/.*\(retrodeck\/.*\)/\1/; s/\/$//")"
+  else # Otherwise just set the retrodeck root folder
+    local rd_dir_path="$(basename $dir_to_move)"
+  fi
+
+  if [[ -d "$dir_to_move" ]]; then # If the directory selected to move already exists at the expected location pulled from retrodeck.cfg
+    choice=$(configurator_destination_choice_dialog "RetroDECK Data" "Please choose a destination for the $(basename $dir_to_move) folder.")
+    case $choice in
+
+    "Internal Storage" | "SD Card" | "Custom Location" ) # If the user picks a location
+      if [[ "$choice" == "Internal Storage" ]]; then # If the user wants to move the folder to internal storage, set the destination target as HOME
+        local dest_root="$HOME"
+      elif [[ "$choice" == "SD Card" ]]; then # If the user wants to move the folder to the predefined SD card location, set the target as sdcard from retrodeck.cfg
+        local dest_root="$sdcard"
+      else
+        configurator_generic_dialog "Select the parent folder you would like to store the $(basename $dir_to_move) folder in."
+        local dest_root=$(directory_browse "RetroDECK directory location") # Set the destination root as the selected custom location
+      fi
+
+      if [[ (! -z "$dest_root") && ( -w "$dest_root") ]]; then # If user picked a destination and it is writable
+        if [[ (-d "$dest_root/$rd_dir_path") && (! -L "$dest_root/$rd_dir_path") && (! $rd_dir_name == "rdhome") ]] || [[ "$(realpath $dir_to_move)" == "$dest_root/$rd_dir_path" ]]; then # If the user is trying to move the folder to where it already is (excluding symlinks that will be unlinked)
+          configurator_generic_dialog "The $(basename $dir_to_move) folder is already at that location, please pick a new one."
+          configurator_move_folder_dialog "$rd_dir_name"
+        else
+          if [[ $(verify_space "$(echo $dir_to_move | sed 's/\/$//')" "$dest_root") ]]; then # Make sure there is enough space at the destination
+            configurator_generic_dialog "Moving $(basename $dir_to_move) folder to $choice"
+            unlink "$dest_root/$rd_dir_path" # In case there is already a symlink at the picked destination
+            move "$dir_to_move" "$dest_root/$rd_dir_path"
+            if [[ -d "$dest_root/$rd_dir_path" ]]; then # If the move succeeded
+              eval "$rd_dir_name"="$dest_root/$rd_dir_path" # Set the new path for that folder variable in retrodeck.cfg
+              if [[ "$rd_dir_name" == "rdhome" ]]; then # If the whole retrodeck folder was moved...
+                prepare_emulator "postmove" "retrodeck"
+              fi
+              prepare_emulator "postmove" "all" # Update all the appropriate emulator path settings
+              conf_write # Write the settings to retrodeck.cfg
+              if [[ -z $(ls -1 "$source_root/retrodeck") ]]; then # Cleanup empty old_path/retrodeck folder if it was left behind
+                rmdir "$source_root/retrodeck"
+              fi
+              configurator_process_complete_dialog "moving the RetroDECK data directory to internal storage"
+            else
+              configurator_generic_dialog "The moving process was not completed, please try again."
+            fi
+          else # If there isn't enough space in the picked destination
+            zenity --icon-name=net.retrodeck.retrodeck --error --no-wrap \
+            --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+            --title "RetroDECK Configurator Utility - Move Directories" \
+            --text="The destination directory you have selected does not have enough free space for the files you are trying to move.\n\nPlease select a new destination or free up some space."
+          fi
+        fi
+      else # If the user didn't pick any custom destination, or the destination picked is unwritable
+        if [[ ! -z "$dest_root" ]]; then
+          configurator_generic_dialog "No destination was chosen, so no files have been moved."
+        else
+          configurator_generic_dialog "The chosen destination is not writable.\nNo files have been moved.\n\nThis can happen when trying to select a location that RetroDECK does not have permission to write.\nThis can normally be fixed by adding the desired path to the RetroDECK permissions with Flatseal."
+        fi
+      fi
+    ;;
+
+    esac
+  else # The folder to move was not found at the path pulled from retrodeck.cfg and it needs to be reconfigured manually.
+    configurator_generic_dialog "The $(basename $dir_to_move) folder was not found at the expected location.\n\nThis may have happened if the folder was moved manually.\n\nPlease select the current location of the folder."
+    dir_to_move=$(directory_browse "RetroDECK $(basename $dir_to_move) directory location")
+    eval "$rd_dir_name"="$dir_to_move"
+    prepare_emulator "postmove" "all"
+    conf_write
+    configurator_generic_dialog "RetroDECK $(basename $dir_to_move) folder now configured at\n$dir_to_move."
+    configurator_move_folder_dialog "$rd_dir_name"
   fi
 }

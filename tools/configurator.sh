@@ -15,6 +15,8 @@ source /app/libexec/functions.sh
 #         - Enable/Disable Rewind
 #       - RetroAchivement Login
 #         - Login prompt
+#     - Dolphin Presets
+#       - Enable/Disable Custom Input Textures
 #     - Emulator Options (Behind one-time power user warning dialog)
 #       - Launch RetroArch
 #       - Launch Cemu
@@ -29,7 +31,7 @@ source /app/libexec/functions.sh
 #       - Launch XEMU
 #       - Launch Yuzu
 #     - Tools and Troubleshooting
-#       - Move RetroDECK
+#       - Move RetroDECK or subfolders
 #       - Multi-file game check
 #       - Basic BIOS file check
 #       - Advanced BIOS file check
@@ -291,7 +293,7 @@ configurator_retroarch_rewind_dialog() {
       set_setting_value $raconf "rewind_enable" "false" retroarch
       configurator_process_complete_dialog "disabling Rewind"
     else
-      configurator_retroarch_options_dialog
+      configurator_retroarch_presets_dialog
     fi
   else
     zenity --question \
@@ -304,12 +306,12 @@ configurator_retroarch_rewind_dialog() {
       set_setting_value $raconf "rewind_enable" "true" retroarch
       configurator_process_complete_dialog "enabling Rewind"
     else
-      configurator_retroarch_options_dialog
+      configurator_retroarch_presets_dialog
     fi
   fi
 }
 
-configurator_retroarch_options_dialog() {
+configurator_retroarch_presets_dialog() {
   choice=$(zenity --list --title="RetroDECK Configurator Utility - RetroArch Options" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
@@ -331,6 +333,63 @@ configurator_retroarch_options_dialog() {
   ;;
 
   esac
+}
+
+configurator_dolphin_presets_dialog() {
+  choice=$(zenity --list --title="RetroDECK Configurator Utility - Dolphin Options" --cancel-label="Back" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+  --column="Choice" --column="Action" \
+  "Change Custom Input Textures Setting" "Enable or disable custom input textures for supported games in Dolphin." )
+
+  case $choice in
+
+  "Change Custom Input Textures Setting" )
+    configurator_dolphin_input_textures_dialog
+  ;;
+
+  "" ) # No selection made or Back button clicked
+    configurator_welcome_dialog
+  ;;
+
+  esac
+}
+
+configurator_dolphin_input_textures_dialog() {
+  if [[ -d "/var/data/dolphin-emu/Load/DynamicInputTextures" ]]; then
+    zenity --question \
+    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator - Dolphin Custom Input Textures" \
+    --text="Custom input textures are currently enabled. Do you want to disable them?."
+
+    if [ $? == 0 ]
+    then
+      set_setting_value $dolphingfxconf "HiresTextures" "False" dolphin
+      rm -rf "/var/data/dolphin-emu/Load/DynamicInputTextures"
+      configurator_process_complete_dialog "disabling Dolphin custom input textures"
+    else
+      configurator_dolphin_presets_dialog
+    fi
+  else
+    zenity --question \
+    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator - Dolphin Custom Input Textures" \
+    --text="Custom input textures are currently disabled. Do you want to enable them?.\n\nThis process may take several minutes to complete."
+
+    if [ $? == 0 ]
+    then
+      set_setting_value $dolphingfxconf "HiresTextures" "True" dolphin
+      (
+        mkdir "/var/data/dolphin-emu/Load/DynamicInputTextures"
+        cp -rf "/app/retrodeck/extras/DynamicInputTextures/*" "/var/data/dolphin-emu/Load/DynamicInputTextures/"
+      ) |
+      zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Configurator Utility - Dolphin Custom Input Textures Install"
+      configurator_process_complete_dialog "enabling Dolphin custom input textures"
+    else
+      configurator_dolphin_presets_dialog
+    fi
+  fi
 }
 
 configurator_compress_single_game_dialog() {
@@ -748,7 +807,7 @@ configurator_tools_and_troubleshooting_dialog() {
   choice=$(zenity --list --title="RetroDECK Configurator Utility - Change Options" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
-  "Move RetroDECK" "Move RetroDECK files between internal/SD card or to a custom location" \
+  "Move RetroDECK Folders" "Move RetroDECK folders between internal/SD card or to a custom location" \
   "Multi-file game structure check" "Verify the proper structure of multi-file or multi-disc games" \
   "Basic BIOS file check" "Show a list of systems that BIOS files are found for" \
   "Advanced BIOS file check" "Show advanced information about common BIOS files" \
@@ -759,9 +818,8 @@ configurator_tools_and_troubleshooting_dialog() {
 
   case $choice in
 
-  "Move RetroDECK" )
-    configurator_generic_dialog "This option will move the RetroDECK data folder (ROMs, saves, BIOS etc.) to a new location.\n\nPlease choose where to move the RetroDECK data folder."
-    configurator_move_retrodeck_dialog
+  "Move RetroDECK Folders" )
+    configurator_move_dialog
   ;;
 
   "Multi-file game structure check" )
@@ -822,158 +880,66 @@ configurator_tools_and_troubleshooting_dialog() {
   esac
 }
 
-configurator_move_retrodeck_dialog() {
-  if [[ -d $rdhome ]]; then
-    destination=$(configurator_destination_choice_dialog "RetroDECK Data" "Please choose a destination for the RetroDECK data folder.")
-    case $destination in
+configurator_move_dialog() {
+  choice=$(zenity --list --title="RetroDECK Configurator Utility - Move RetroDECK Folders" --cancel-label="Back" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+  --column="Choice" --column="Action" \
+  "Move all of RetroDECK" "Move the entire retrodeck folder to a new location" \
+  "Move ROMs folder" "Move only the ROMs folder to a new location" \
+  "Move BIOS folder" "Move only the BIOS folder to a new location" \
+  "Move Downloaded Media folder" "Move only the Downloaded Media folder to a new location" \
+  "Move Saves folder" "Move only the Saves folder to a new location" \
+  "Move States folder" "Move only the States folder to a new location" \
+  "Move Themes folder" "Move only the Themes folder to a new location" \
+  "Move Screenshots folder" "Move only the Screenshots folder to a new location" \
+  "Move Mods folder" "Move only the Mods folder to a new location" \
+  "Move Texture Packs folder" "Move only the Texture Packs folder to a new location" )
 
-    "Back" )
-      configurator_tools_and_troubleshooting_dialog
-    ;;
+  case $choice in
 
-    "Internal Storage" )
-      if [[ ! -L "$HOME/retrodeck" && -d "$HOME/retrodeck" ]]; then
-        configurator_generic_dialog "The RetroDECK data folder is already at that location, please pick a new one."
-        configurator_move_retrodeck_dialog
-      else
-        configurator_generic_dialog "Moving RetroDECK data folder to $destination"
-        unlink $HOME/retrodeck # Remove symlink for $rdhome
-        #move $rdhome "$HOME"
-        if [[ ! -d $rdhome && -d $HOME/retrodeck ]]; then # If the move succeeded
-          rdhome="$HOME/retrodeck"
-          roms_folder="$rdhome/roms"
-          saves_folder="$rdhome/saves"
-          states_folder="$rdhome/states"
-          bios_folder="$rdhome/bios"
-          media_folder="$rdhome/downloaded_media"
-          themes_folder="$rdhome/themes"
-          prepare_emulator "all" "postmove"
-          conf_write
+  "Move all of RetroDECK" )
+    configurator_move_folder_dialog "rdhome"
+  ;;
 
-          configurator_process_complete_dialog "moving the RetroDECK data directory to internal storage"
-        else
-          configurator_generic_dialog "The moving process was not completed, please try again."
-        fi
-      fi
-    ;;
+  "Move ROMs folder" )
+    configurator_move_folder_dialog "roms_folder"
+  ;;
 
-    "SD Card" )
-      if [[ -L "$HOME/retrodeck" && -d "$sdcard/retrodeck" && "$rdhome" == "$sdcard/retrodeck" ]]; then
-        configurator_generic_dialog "The RetroDECK data folder is already configured to that location, please pick a new one."
-        configurator_move_retrodeck_dialog
-      else
-        if [[ ! -w $sdcard ]]; then
-          configurator_generic_dialog "The SD card was found but is not writable\nThis can happen with cards formatted on PC or for other reasons.\nPlease format the SD card through the Steam Deck's Game Mode and try the moving process again."
-          configurator_welcome_dialog
-        else
-          if [[ $(verify_space $rdhome $sdcard) == "true" ]]; then
-            configurator_generic_dialog "Moving RetroDECK data folder to $destination"
-            if [[ -L "$HOME/retrodeck/roms" ]]; then # Check for ROMs symlink user may have created
-                unlink "$HOME/retrodeck/roms"
-            fi
-            unlink $HOME/retrodeck # Remove symlink for $rdhome
+  "Move BIOS folder" )
+    configurator_move_folder_dialog "bios_folder"
+  ;;
 
-            (
-            dir_prep "$sdcard/retrodeck" "$rdhome"
-            ) |
-            zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
-            --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-            --title "RetroDECK Configurator Utility - Move in Progress" \
-            --text="Moving directory $rdhome to new location of $sdcard/retrodeck, please wait."
+  "Move Downloaded Media folder" )
+    configurator_move_folder_dialog "media_folder"
+  ;;
 
-            if [[ -L $rdhome && ! $rdhome == "$HOME/retrodeck" ]]; then # Clean up extraneus symlinks from previous moves
-              unlink $rdhome
-            fi
+  "Move Saves folder" )
+    configurator_move_folder_dialog "saves_folder"
+  ;;
 
-            if [[ ! -L "$HOME/retrodeck" ]]; then # Always link back to original directory
-              ln -svf "$sdcard/retrodeck" "$HOME"
-            fi
+  "Move States folder" )
+    configurator_move_folder_dialog "states_folder"
+  ;;
 
-            rdhome="$sdcard/retrodeck"
-            roms_folder="$rdhome/roms"
-            saves_folder="$rdhome/saves"
-            states_folder="$rdhome/states"
-            bios_folder="$rdhome/bios"
-            media_folder="$rdhome/downloaded_media"
-            themes_folder="$rdhome/themes"
-            prepare_emulator "all" "postmove"
-            conf_write
-            configurator_process_complete_dialog "moving the RetroDECK data directory to SD card"
-          else
-            zenity --icon-name=net.retrodeck.retrodeck --error --no-wrap \
-            --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-            --title "RetroDECK Configurator Utility - Move Directories" \
-            --text="The destination directory you have selected does not have enough free space for the files you are trying to move.\n\nPlease select a new destination or free up some space."
-          fi
-        fi
-      fi
-    ;;
+  "Move Themes folder" )
+    configurator_move_folder_dialog "themes_folder"
+  ;;
+  
+  "Move Screenshots folder" )
+    configurator_move_folder_dialog "screenshots_folder"
+  ;;
 
-    "Custom Location" )
-      configurator_generic_dialog "Select the root folder you would like to store the RetroDECK data folder in.\n\nA new folder \"retrodeck\" will be created in the destination chosen."
-      custom_dest=$(directory_browse "RetroDECK directory location")
-      if [[ ! -w $custom_dest ]]; then
-          configurator_generic_dialog "The destination was found but is not writable\n\nThis can happen if RetroDECK does not have permission to write to this location.\n\nThis can typically be solved through the utility Flatseal, please make the needed changes and try the moving process again."
-          configurator_welcome_dialog
-      else
-        if [[ $(verify_space $rdhome $custom_dest) ]];then
-          configurator_generic_dialog "Moving RetroDECK data folder to $custom_dest/retrodeck"
-          if [[ -L $rdhome/roms ]]; then # Check for ROMs symlink user may have created
-            unlink $rdhome/roms
-          fi
+  "Move Mods folder" )
+    configurator_move_folder_dialog "mods_folder"
+  ;;
 
-          unlink $HOME/retrodeck # Remove symlink for $rdhome if the previous location was not internal
+  "Move Texture Packs folder" )
+    configurator_move_folder_dialog "texture_packs_folder"
+  ;;
 
-          (
-          dir_prep "$custom_dest/retrodeck" "$rdhome"
-          ) |
-          zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
-          --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-          --title "RetroDECK Configurator Utility - Move in Progress" \
-          --text="Moving directory $rdhome to new location of $custom_dest/retrodeck, please wait."
+  esac
 
-          if [[ ! -L "$HOME/retrodeck" ]]; then
-            ln -svf "$custom_dest/retrodeck" "$HOME"
-          fi
-
-          if [[ -L $rdhome && ! $rdhome == "$HOME/retrodeck" ]]; then # Clean up extraneus symlinks from previous moves
-            unlink $rdhome
-          fi
-
-          rdhome="$custom_dest/retrodeck"
-          roms_folder="$rdhome/roms"
-          saves_folder="$rdhome/saves"
-          states_folder="$rdhome/states"
-          bios_folder="$rdhome/bios"
-          media_folder="$rdhome/downloaded_media"
-          themes_folder="$rdhome/themes"
-          prepare_emulator "all" "postmove"
-          conf_write
-          configurator_process_complete_dialog "moving the RetroDECK data directory to SD card"
-        else
-          zenity --icon-name=net.retrodeck.retrodeck --error --no-wrap \
-          --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-          --title "RetroDECK Configurator Utility - Move Directories" \
-          --text="The destination directory you have selected does not have enough free space for the files you are trying to move.\n\nPlease select a new destination or free up some space."
-        fi
-      fi
-    ;;
-
-    esac
-  else
-    configurator_generic_dialog "The RetroDECK data folder was not found at the expected location.\n\nThis may have happened if the folder was moved manually.\n\nPlease select the current location of the RetroDECK data folder."
-    rdhome=$(directory_browse "RetroDECK directory location")
-    roms_folder="$rdhome/roms"
-    saves_folder="$rdhome/saves"
-    states_folder="$rdhome/states"
-    bios_folder="$rdhome/bios"
-    media_folder="$rdhome/downloaded_media"
-    themes_folder="$rdhome/themes"
-    emulator_post_move
-    conf_write
-    configurator_generic_dialog "RetroDECK data folder now configured at $rdhome. Please start the moving process again."
-    configurator_move_retrodeck_dialog
-  fi
+  configurator_tools_and_troubleshooting_dialog
 }
 
 configurator_online_update_setting_dialog() {
@@ -1115,7 +1081,11 @@ configurator_welcome_dialog() {
   case $choice in
 
   "RetroArch Presets" )
-    configurator_retroarch_options_dialog
+    configurator_retroarch_presets_dialog
+  ;;
+
+  "Dolphin Presets" )
+    configurator_dolphin_presets_dialog
   ;;
 
   "Emulator Options" )

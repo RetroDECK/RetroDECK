@@ -32,6 +32,12 @@ helper_files_folder="$emuconfigs/defaults/retrodeck/helper_files"               
 helper_files_list="$emuconfigs/defaults/retrodeck/reference_lists/helper_files_list.cfg"                              # The list of files to be deployed and where they go
 rpcs3_firmware="http://dus01.ps3.update.playstation.net/update/ps3/image/us/2023_0228_05fe32f5dc8c78acbcd84d36ee7fdc5b/PS3UPDAT.PUP"
 
+# Options list for users to pick from during finit
+# Syntax is "enabled_by_default" "Option name" "Option description" "option_flag_to_be_checked_for"
+
+finit_options_list=("false" "RPCS3 Firmware Install" "Install firmware needed for PS3 emulation during first install" "rpcs3_firmware" \
+                    "false" "RetroDECK Controller Profile" "Install custom RetroDECK controller profile (stored in shared Steam directory)" "rd_controller_profile")
+
 # Config files for emulators with single config files
 
 cemuconf="/var/config/Cemu/settings.xml"
@@ -112,7 +118,7 @@ then
     default_sd=$(directory_browse "SD Card Location")
   fi
 
-  cp $rd_defaults $rd_conf # Load default settings
+  cp $rd_defaults $rd_conf # Load default settings file
   set_setting_value $rd_conf "version" "$version" retrodeck # Set current version for new installs
   set_setting_value $rd_conf "sdcard" "$default_sd" retrodeck "paths" # Set SD card location if default path has changed
 
@@ -147,8 +153,10 @@ else
     prev_home_path=$rdhome
     configurator_generic_dialog "The RetroDECK data folder was not found in the expected location.\nThis may happen when SteamOS is updated.\n\nPlease browse to the current location of the \"retrodeck\" folder."
     new_home_path=$(directory_browse "RetroDECK folder location")
-    sed -i 's#'$prev_home_path'#'$new_home_path'#g' $rd_conf
+    set_setting_value $rd_conf "rdhome" "$new_home_path" retrodeck "paths"
     conf_read
+    prepare_emulator "retrodeck" "postmove"
     prepare_emulator "all" "postmove"
+    conf_write
   fi
 fi

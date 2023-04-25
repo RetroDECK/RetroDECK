@@ -167,6 +167,15 @@ modules:
         url: https://github.com/rclone/rclone/releases/download/v1.61.1/rclone-v1.61.1-linux-amd64.zip
         sha256: 6d6455e1cb69eb0615a52cc046a296395e44d50c0f32627ba8590c677ddf50a9
 
+  - name: rsync
+    buildsystem: simple
+    build-commands:
+      - cp local/bin/rsync ${FLATPAK_DEST}/bin/
+    sources:
+      - type: archive
+        url: https://download.samba.org/pub/rsync/binaries/ubuntu-22.04-x86_64/rsync-3.2.7.tar.gz
+        sha256: dd2b74396c6e8d6a2d7af94cd97fad5788d888e722bc9780de1590f37a1920d6
+
   - name: jq
     buildsystem: simple
     build-commands:
@@ -647,6 +656,16 @@ modules:
             dolphin-emu "$@"
         dest-filename: dolphin-emu-wrapper
 
+  - name: universal_dynamic_input
+    buildsystem: simple
+    build-commands:
+      - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/DynamicInputTextures
+      - cp -r * ${FLATPAK_DEST}/retrodeck/extras/DynamicInputTextures/
+    sources:
+      - type: git
+        url: https://github.com/Venomalia/UniversalDynamicInput.git
+        commit: UNIVERSALDYNAMICINPUTCOMMITPLACEHOLDER
+
   # Dolphin - END
 
   # XEMU - START
@@ -1055,6 +1074,7 @@ modules:
       - cp -f res/splash.svg ${FLATPAK_DEST}/retrodeck/graphics/splash-orig.svg
       - cp -rf res/extra-splashes/ ${FLATPAK_DEST}/retrodeck/graphics
       - cp -f res/icon.svg /app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg
+      - mv -f -t ${FLATPAK_DEST}/retrodeck res/binding-icons
 
       # RetroDECK core script
       - cp retrodeck.sh /app/bin/retrodeck.sh
