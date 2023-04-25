@@ -2288,3 +2288,15 @@ configurator_move_folder_dialog() {
     configurator_move_folder_dialog "$rd_dir_name"
   fi
 }
+
+changelog_dialog() {
+  # This function will pull the changelog notes from the version it is passed (which must match the appdata version tag) from the net.retrodeck.retrodeck.appdata.xml file
+  # USAGE: changelog_dialog "version"
+
+  changelog=$(xmlstarlet sel -t -m "//release[@version='$1']/description" -v . -n $rd_appdata | tr -s '\n' | sed 's/^\s*//')
+
+  zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+  --title "RetroDECK Changelogs" \
+  --text="Welcome to RetroDECK version $1!\n\nHere are the changes that were made in this version:\n$changelog"
+}

@@ -132,5 +132,7 @@ post_update() {
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Finishing Upgrade" \
   --text="RetroDECK is finishing the upgrade process, please wait."
+  
+  changelog_dialog "$version"
   create_lock
 }
