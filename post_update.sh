@@ -75,6 +75,7 @@ post_update() {
     # - Prepackaged DOOM!
     # - Update RPCS3 vfs file contents. migrate from old location if needed
     # - Disable ESDE update checks for existing installs
+    # - Notify user of default PSX core change
 
     mkdir -p "$mods_folder"
     mkdir -p "$texture_packs_folder"
@@ -113,6 +114,8 @@ post_update() {
     dir_prep "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata" "$saves_folder/ps3/rpcs3"
 
     set_setting_value $es_settings "ApplicationUpdaterFrequency" "never" "es_settings"
+
+    configurator_generic_dialog "As part of this update, the default PSX emulator has changed!\n\nIf you are currently playing PSX games and have not changed the default emulator on your own, you will need to switch back to the previous default emulator (Swanstation) for your existing saves to work.\nIf you have changed the default emulator yourself, please change it again to your previous choice.\n\nSee the wiki or Discord if you have more questions on this change!"
   fi
 
   # The following commands are run every time.
