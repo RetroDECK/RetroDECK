@@ -723,7 +723,7 @@ check_for_version_update() {
       choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="Ignore this version" \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         --title "RetroDECK Update Available" \
-        --text="There is a new version of RetroDECK available!\n\nIf you would like to update to the new version now, click \"Yes\". If you would like to skip reminders about this version, click \"Ignore this version\".\nYou will be reminded again at the next version update.\n\nIf you would like to disable these update notifications entirely, disable Online Update Checks in the Configurator.")
+        --text="There is a new version of RetroDECK available!\n\nIf you would like to update to the new version now, click \"Yes\".\nIf you would like to skip reminders about this version, click \"Ignore this version\".\nYou will be reminded again at the next version update.\n\nIf you would like to disable these update notifications entirely, disable Online Update Checks in the Configurator.")
       rc=$? # Capture return code, as "Yes" button has no text value
       if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
         if [[ $choice == "Ignore this version" ]]; then
@@ -731,7 +731,14 @@ check_for_version_update() {
         fi
       else # User clicked "Yes"
         configurator_generic_dialog "The update process may take several minutes.\n\nAfter the update is complete, RetroDECK will close. When you run it again you will be using the latest version."
+        (
         flatpak-spawn --host flatpak update --noninteractive -y net.retrodeck.retrodeck
+        ) |
+        zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+        --title "RetroDECK Updater" \
+        --text="RetroDECK is updating to the latest version, please wait."
+        configurator_generic_dialog "The update process is now complete!\n\nPlease restart RetroDECK to keep the fun going."
         exit 1
       fi
     elif [[ "$update_repo" == "RetroDECK-cooker" ]] && [[ ! $current_version == $online_version ]]; then
@@ -746,11 +753,18 @@ check_for_version_update() {
         fi
       else # User clicked "Yes"
         configurator_generic_dialog "The update process may take several minutes.\n\nAfter the update is complete, RetroDECK will close. When you run it again you will be using the latest version."
+        (
         local latest_cooker_download=$(curl --silent https://api.github.com/repos/XargonWan/$update_repo/releases/latest | grep '"browser_download_url":' | sed -E 's/.*"([^"]+)".*/\1/')
         mkdir -p "$rdhome/RetroDECK_Updates"
         wget -P "$rdhome/RetroDECK_Updates" $latest_cooker_download
         flatpak-spawn --host flatpak install --user --bundle --noninteractive -y "$rdhome/RetroDECK_Updates/RetroDECK.flatpak"
         rm -f "$rdhome/RetroDECK_Updates" # Cleanup old bundles to save space
+        ) |
+        zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+        --title "RetroDECK Updater" \
+        --text="RetroDECK is updating to the latest version, please wait."
+        configurator_generic_dialog "The update process is now complete!\n\nPlease restart RetroDECK to keep the fun going."
         exit 1
       fi
     fi
@@ -1179,6 +1193,7 @@ prepare_emulator() {
         while read -r config_line; do
           local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
           if [[ ! $current_setting_name =~ (rdhome|sdcard) ]]; then # Ignore these locations
+            local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
             eval "$current_setting_name=$rdhome/$(basename $current_setting_value)"
             mkdir "$rdhome/$(basename $current_setting_value)"
           fi
@@ -1925,10 +1940,10 @@ finit() {
   --column "Option" \
   --column "Description" \
   --column "option_flag" \
-  "${finit_options_list[@]}")
+  "${finit_options_list[@]}" )
 
   if [[ "$finit_options_choices" =~ (rpcs3_firmware|Enable All) ]]; then # Additional information on the firmware install process, as the emulator needs to be manually closed
-    configurator_generic_dialog "RPCS3 Firmware Install" "You have chosen to install the RPCS3 firmware during the RetroDECK first setup.\n\nThis process will take several minutes and requires network access.\n\nRPCS3 will be launched automatically at the end of the RetroDECK setup process.\nOnce the firmware is installed, please close the emulator to finish the process.")
+    configurator_generic_dialog "RPCS3 Firmware Install" "You have chosen to install the RPCS3 firmware during the RetroDECK first setup.\n\nThis process will take several minutes and requires network access.\n\nRPCS3 will be launched automatically at the end of the RetroDECK setup process.\nOnce the firmware is installed, please close the emulator to finish the process."
   fi
 
   zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
