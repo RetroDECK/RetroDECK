@@ -9,7 +9,10 @@
 
 # RetroDECK on your device!
 
-**RetroDECK** brings an environment to catalog and play your retro games directly from SteamOS and it's tailored specifically for the **Steam Deck**.
+You can visit our:<br/>
+[Website](https://retrodeck.net) <br/>
+[Wiki](https://github.com/XargonWan/RetroDECK/wiki) <br/>
+[Discord](https://discord.gg/Dz3szYsP8g)
 
 ## What is RetroDECK?
 RetroDECK is a [EmulationStation Desktop Edition](https://es-de.org) powered application that builds in a variety of emulators and other software that allows you to play your favorite retro (and even not-so-retro) games in a tidy contained sandbox environment. It's inspired by embedded emulation systems like AmberELEC, EmuELEC, CoreELEC, Lakka, and Batocera.
@@ -45,7 +48,7 @@ No, partitioning or formatting is not needed at all. RetroDECK (differently from
 
 ## Do you support Windows?
 No, RetroDECK doesn't support Windows, but the project is fully open source so you can port it if you wish. 
-As an alternative you could try [Retrobat](http://www.retrobat.ovh/) that offers similar functionality.
+As an alternative you could try [Retrobat](https://www.retrobat.org/) that offers similar functionality.
 
 ## Do you support the Linux Desktop?
 We do plan to support Linux Desktop in the future. But during the BETA we are focusing on the Steam Deck. Technically it is working, but the user experience might not be that great (it could contain desktop specific bugs and other issues). If you want to try it make sure that your distribution has native flatpak support else, you might need to install it.

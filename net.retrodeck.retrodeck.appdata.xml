@@ -77,9 +77,9 @@
             <ul>
                <li>PLACEHOLDER</li>
             </ul>
-        </description>
+         </description>
       </release>
-      <release version="0.6.6b" date="2023-04-24">
+      <release version="0.6.6b" date="2023-04-26">
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.6b</url>
          <description>
             <p>Bug fixes:</p>
