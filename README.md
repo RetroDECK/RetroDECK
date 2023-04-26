@@ -48,7 +48,7 @@ No, partitioning or formatting is not needed at all. RetroDECK (differently from
 
 ## Do you support Windows?
 No, RetroDECK doesn't support Windows, but the project is fully open source so you can port it if you wish. 
-As an alternative you could try [Retrobat](http://www.retrobat.ovh/) that offers similar functionality.
+As an alternative you could try [Retrobat](https://www.retrobat.org/) that offers similar functionality.
 
 ## Do you support the Linux Desktop?
 We do plan to support Linux Desktop in the future. But during the BETA we are focusing on the Steam Deck. Technically it is working, but the user experience might not be that great (it could contain desktop specific bugs and other issues). If you want to try it make sure that your distribution has native flatpak support else, you might need to install it.
