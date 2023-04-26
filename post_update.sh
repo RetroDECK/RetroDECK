@@ -121,8 +121,6 @@ post_update() {
       rsync -a "/app/retrodeck/binding-icons/" "$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/"
       cp -f "$emuconfigs/retrodeck/defaults/RetroDECK_controller_config.vdf" "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"
     fi
-
-    configurator_generic_dialog "As part of this update, the default PSX emulator has changed!\n\nIf you are currently playing PSX games and have not changed the default emulator on your own, you will need to switch back to the previous default emulator (Swanstation) for your existing saves to work.\nIf you have changed the default emulator yourself, please change it again to your previous choice.\n\nSee the wiki or Discord if you have more questions on this change!"
   fi
 
   # The following commands are run every time.
