@@ -65,6 +65,16 @@
    <project_license>GPL-3.0</project_license>
    <metadata_license>CC0-1.0</metadata_license>
    <releases>
+      <release version="0.6.6b" date="2023-04-24">
+         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.6b</url>
+         <description>
+            <p>Bug fixes:</p>
+            <ul>
+               <li>Fixed ES-DE that was showing the update notification</li>
+               <li>PSX: Swanstation is back as default emulator</li>
+            </ul>
+         </description>
+      </release>
       <release version="0.6.5b" date="2023-04-07">
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.5b</url>
          <description>
