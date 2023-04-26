@@ -1960,7 +1960,7 @@ finit() {
   fi
   if [[ "$finit_options_choices" =~ (rd_controller_profile|Enable All) ]]; then
     rsync -a "/app/retrodeck/binding-icons/" "$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/"
-    # TODO move controller profile file to where it needs to go
+    cp -f "$emuconfigs/retrodeck/defaults/RetroDECK_controller_config.vdf" "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"
   fi
 
   # Add packaged extras, after the ROMS folder has been initialized
