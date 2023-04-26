@@ -76,7 +76,6 @@ post_update() {
     # - Update RPCS3 vfs file contents. migrate from old location if needed
     # - Disable ESDE update checks for existing installs
     # - Offer user option of installing custom controller config
-    # - Notify user of default PSX core change
 
     mkdir -p "$mods_folder"
     mkdir -p "$texture_packs_folder"
