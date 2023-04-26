@@ -1195,7 +1195,7 @@ prepare_emulator() {
           if [[ ! $current_setting_name =~ (rdhome|sdcard) ]]; then # Ignore these locations
             local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
             eval "$current_setting_name=$rdhome/$(basename $current_setting_value)"
-            mkdir "$rdhome/$(basename $current_setting_value)"
+            mkdir -p "$rdhome/$(basename $current_setting_value)"
           fi
         done < <(grep -v '^\s*$' $rd_conf | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
     fi
@@ -1870,7 +1870,8 @@ finit() {
 
   case $finit_dest_choice in
 
-  "" ) # Cancel or X button quits
+  "Back" | "" ) # Back or X button quits
+    rm -f "$rd_conf" # Cleanup unfinished retrodeck.cfg if first install is interrupted
     echo "Now quitting"
     exit 2
   ;;
@@ -1895,6 +1896,7 @@ finit() {
       --text="SD Card was not find in the default location.\nPlease choose the SD Card root.\nA retrodeck folder will be created starting from the directory that you selected."
       rdhome=$(finit_browse) # Calling the browse function
       if [[ -z $rdhome ]]; then # If user hit the cancel button
+        rm -f "$rd_conf" # Cleanup unfinished retrodeck.cfg if first install is interrupted
         exit 2
       fi
     elif [ ! -w "$sdcard" ] #SD card found but not writable
@@ -1905,6 +1907,7 @@ finit() {
         --title "RetroDECK" \
         --ok-label "Quit" \
         --text="SD card was found but is not writable\nThis can happen with cards formatted on PC.\nPlease format the SD card through the Steam Deck's Game Mode and run RetroDECK again."
+        rm -f "$rd_conf" # Cleanup unfinished retrodeck.cfg if first install is interrupted
         echo "Now quitting"
         exit 2
     else
@@ -1921,6 +1924,7 @@ finit() {
       --text="Please choose the root folder for the RetroDECK data.\nA retrodeck folder will be created starting from the directory that you selected."
       rdhome=$(finit_browse) # Calling the browse function
       if [[ -z $rdhome ]]; then # If user hit the cancel button
+        rm -f "$rd_conf" # Cleanup unfinished retrodeck.cfg if first install is interrupted
         exit 2
       fi
     ;;
