@@ -75,6 +75,7 @@ post_update() {
     # - Prepackaged DOOM!
     # - Update RPCS3 vfs file contents. migrate from old location if needed
     # - Disable ESDE update checks for existing installs
+    # - Move Duckstation saves and states to new locations
     # - Offer user option of installing custom controller config
 
     mkdir -p "$mods_folder"
@@ -114,6 +115,14 @@ post_update() {
     dir_prep "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata" "$saves_folder/ps3/rpcs3"
 
     set_setting_value $es_settings "ApplicationUpdaterFrequency" "never" "es_settings"
+
+    mkdir -p "$saves_folder/psx/duckstation/memcards"
+    mv "$saves_folder/duckstation/*" "$saves_folder/psx/duckstation/memcards/"
+    rmdir "$saves_folder/duckstation" # File-safe folder cleanup
+    mkdir -p "$states_folder/psx"
+    mv -t "$states_folder/psx/" "$states_folder/duckstation"
+    unlink "/var/data/duckstation/savestates"
+    dir_prep "$states_folder/psx/duckstation" "/var/data/duckstation/savestates"
 
     configurator_generic_dialog "As part of this update, we are offering a new official RetroDECK controller profile!\nIt is an optional component that helps you get the most out of RetroDECK with a new in-game radial menu for unified hotkeys across emulators.\n\nThe files need to be installed outside of the normal ~/retrodeck folder, so we wanted your permission before proceeding.\nIf you decide to not install the profile now, it can always be done later through the Configurator.\n\nThe files will be installed at the following shared Steam locations:\n\n$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/\n$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"
     if [[ $(configurator_generic_question_dialog "RetroDECK Official Controller Profile" "Would you like to install the official RetroDECK controller profile?") == "true" ]]; then
