@@ -1223,12 +1223,6 @@ prepare_emulator() {
       dir_prep "$themes_folder" "/var/config/emulationstation/.emulationstation/themes"
       dir_prep "$rdhome/gamelists" "/var/config/emulationstation/.emulationstation/gamelists"
       cp -f /app/retrodeck/es_settings.xml /var/config/emulationstation/.emulationstation/es_settings.xml
-      
-      # RetroDECK prepack metadata
-      mkdir -p "/var/config/emulationstation/.emulationstation/gamelists/doom"
-      cp "/app/retrodeck/rd_prepacks/doom/gamelist.xml" "/var/config/emulationstation/.emulationstation/gamelists/doom/gamelist.xml"
-      mkdir -p "$media_folder/doom"
-      unzip -oq "/app/retrodeck/rd_prepacks/doom/doom.zip" -d "$media_folder/doom/"
     fi
     if [[ "$action" == "postmove" ]]; then
       dir_prep "$roms_folder" "/var/config/emulationstation/ROMs"
@@ -1261,7 +1255,7 @@ prepare_emulator() {
           mkdir -pv /var/config/retroarch/config/
           cp -rf $emuconfigs/retroarch/core-overrides/* /var/config/retroarch/config
           dir_prep "$borders_folder" "/var/config/retroarch/borders"
-          cp -rt "/var/config/retroarch/borders/" "/app/retrodeck/emu-configs/retroarch/borders/*"
+          cp -rt /var/config/retroarch/borders/ /app/retrodeck/emu-configs/retroarch/borders/*
           set_setting_value "$raconf" "savefile_directory" "$saves_folder" "retroarch"
           set_setting_value "$raconf" "savestate_directory" "$states_folder" "retroarch"
           set_setting_value "$raconf" "screenshot_directory" "$screenshots_folder" "retroarch"
@@ -1429,27 +1423,28 @@ prepare_emulator() {
         mkdir -p "$multi_user_data_folder/$SteamAppUser/data/duckstation/"
         cp -fv $emuconfigs/duckstation/* "$multi_user_data_folder/$SteamAppUser/data/duckstation"
         set_setting_value "$multi_user_data_folder/$SteamAppUser/data/duckstation/settings.ini" "SearchDirectory" "$bios_folder" "duckstation" "BIOS"
-        set_setting_value "$multi_user_data_folder/$SteamAppUser/data/duckstation/settings.ini" "Card1Path" "$saves_folder/duckstation/shared_card_1.mcd" "duckstation" "MemoryCards"
-        set_setting_value "$multi_user_data_folder/$SteamAppUser/data/duckstation/settings.ini" "Card2Path" "$saves_folder/duckstation/shared_card_2.mcd" "duckstation" "MemoryCards"
-        set_setting_value "$multi_user_data_folder/$SteamAppUser/data/duckstation/settings.ini" "Directory" "$saves_folder/duckstation" "duckstation" "MemoryCards"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/data/duckstation/settings.ini" "Card1Path" "$saves_folder/psx/duckstation/memcards/shared_card_1.mcd" "duckstation" "MemoryCards"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/data/duckstation/settings.ini" "Card2Path" "$saves_folder/psx/duckstation/memcards/shared_card_2.mcd" "duckstation" "MemoryCards"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/data/duckstation/settings.ini" "Directory" "$saves_folder/psx/duckstation/memcards" "duckstation" "MemoryCards"
         dir_prep "$multi_user_data_folder/$SteamAppUser/config/duckstation" "/var/config/duckstation"
       else # Single-user actions
         rm -rf /var/config/duckstation
         mkdir -p /var/data/duckstation/
         cp -fv $emuconfigs/duckstation/* /var/data/duckstation
         set_setting_value "$duckstationconf" "SearchDirectory" "$bios_folder" "duckstation" "BIOS"
-        set_setting_value "$duckstationconf" "Card1Path" "$saves_folder/duckstation/shared_card_1.mcd" "duckstation" "MemoryCards"
-        set_setting_value "$duckstationconf" "Card2Path" "$saves_folder/duckstation/shared_card_2.mcd" "duckstation" "MemoryCards"
-        set_setting_value "$duckstationconf" "Directory" "$saves_folder/duckstation" "duckstation" "MemoryCards"
+        set_setting_value "$duckstationconf" "Card1Path" "$saves_folder/psx/duckstation/memcards/shared_card_1.mcd" "duckstation" "MemoryCards"
+        set_setting_value "$duckstationconf" "Card2Path" "$saves_folder/psx/duckstation/memcards/shared_card_2.mcd" "duckstation" "MemoryCards"
+        set_setting_value "$duckstationconf" "Directory" "$saves_folder/psx/duckstation/memcards" "duckstation" "MemoryCards"
       fi
-      dir_prep "$saves_folder/duckstation" "/var/data/duckstation/memcards" # TODO: This shouldn't be needed anymore, verify
-      dir_prep "$states_folder/duckstation" "/var/data/duckstation/savestates" # TODO: This shouldn't be needed anymore, verify
+      dir_prep "$saves_folder/psx/duckstation/memcards" "/var/data/duckstation/memcards" # TODO: This shouldn't be needed anymore, verify
+      dir_prep "$states_folder/psx/duckstation" "/var/data/duckstation/savestates" # This is hard-coded in Duckstation, always needed
     fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
       set_setting_value "$duckstationconf" "SearchDirectory" "$bios_folder" "duckstation" "BIOS"
-      set_setting_value "$duckstationconf" "Card1Path" "$saves_folder/duckstation/shared_card_1.mcd" "duckstation" "MemoryCards"
-      set_setting_value "$duckstationconf" "Card2Path" "$saves_folder/duckstation/shared_card_2.mcd" "duckstation" "MemoryCards"
-      set_setting_value "$duckstationconf" "Directory" "$saves_folder/duckstation" "duckstation" "MemoryCards"
+      set_setting_value "$duckstationconf" "Card1Path" "$saves_folder/psx/duckstation/memcards/shared_card_1.mcd" "duckstation" "MemoryCards"
+      set_setting_value "$duckstationconf" "Card2Path" "$saves_folder/psx/duckstation/memcards/shared_card_2.mcd" "duckstation" "MemoryCards"
+      set_setting_value "$duckstationconf" "Directory" "$saves_folder/psx/duckstation/memcards" "duckstation" "MemoryCards"
+      dir_prep "$states_folder/psx/duckstation" "/var/data/duckstation/savestates" # This is hard-coded in Duckstation, always needed
     fi
   fi
   
@@ -1609,16 +1604,16 @@ prepare_emulator() {
         mkdir -pv "$multi_user_data_folder/$SteamAppUser/config/rpcs3/"
         cp -fr $emuconfigs/rpcs3/* "$multi_user_data_folder/$SteamAppUser/config/rpcs3/"
         # This is an unfortunate one-off because set_setting_value does not currently support settings with $ in the name.
-        sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$bios_folder/rpcs3"'^' "$multi_user_data_folder/$SteamAppUser/config/rpcs3/vfs.yml"
-        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/rpcs3/vfs.yml" "/games/" "$roms_folder/ps3" "rpcs3"
+        sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$bios_folder/rpcs3/"'^' "$multi_user_data_folder/$SteamAppUser/config/rpcs3/vfs.yml"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/rpcs3/vfs.yml" "/games/" "$roms_folder/ps3/" "rpcs3"
         dir_prep "$multi_user_data_folder/$SteamAppUser/config/rpcs3" "/var/config/rpcs3"
       else # Single-user actions
         rm -rf /var/config/rpcs3
         mkdir -pv /var/config/rpcs3/
         cp -fr $emuconfigs/rpcs3/* /var/config/rpcs3/
         # This is an unfortunate one-off because set_setting_value does not currently support settings with $ in the name.
-        sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$bios_folder/rpcs3"'^' "$rpcs3vfsconf"
-        set_setting_value "$rpcs3vfsconf" "/games/" "$roms_folder/ps3" "rpcs3"
+        sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$bios_folder/rpcs3/"'^' "$rpcs3vfsconf"
+        set_setting_value "$rpcs3vfsconf" "/games/" "$roms_folder/ps3/" "rpcs3"
         dir_prep "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata" "$saves_folder/ps3/rpcs3"
       fi
       # Shared actions
@@ -1768,9 +1763,15 @@ prepare_emulator() {
 }
 
 update_rpcs3_firmware() {
+  (
   mkdir -p "$roms_folder/ps3/tmp"
   chmod 777 "$roms_folder/ps3/tmp"
   wget "$rpcs3_firmware" -P "$roms_folder/ps3/tmp/"
+  ) |
+  zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+  --title "RetroDECK RPCS3 Firmware Download" \
+  --text="RetroDECK downloading the RPCS3 firmware, please wait."
   rpcs3 --installfw "$roms_folder/ps3/tmp/PS3UPDAT.PUP"
   rm -rf "$roms_folder/ps3/tmp"
 }
@@ -1809,11 +1810,6 @@ easter_eggs() {
   fi
 
   cp -f "$new_splash_file" "$current_splash_file" # Deploy assigned splash screen
-}
-
-tools_init() {
-  mkdir -pv /var/config/emulationstation/.emulationstation/gamelists/tools/
-  cp -fv /app/retrodeck/tools-gamelist.xml /var/config/emulationstation/.emulationstation/gamelists/tools/gamelist.xml
 }
 
 start_retrodeck() {
@@ -1857,6 +1853,29 @@ do
     exit 2
   fi
 done
+}
+
+finit_user_options_dialog() {
+  finit_available_options=()
+
+  while IFS="^" read -r enabled option_name option_desc option_tag
+  do
+    finit_available_options=("${finit_available_options[@]}" "$enabled" "$option_name" "$option_desc" "$option_tag")
+  done < $finit_options_list
+
+
+  local choices=$(zenity \
+  --list --width=1200 --height=720 \
+  --checklist --hide-column=4 --ok-label="Confirm Selections" --extra-button="Enable All" \
+  --separator=" " --print-column=4 \
+  --text="Choose which options to enable:" \
+  --column "Enabled?" \
+  --column "Option" \
+  --column "Description" \
+  --column "option_flag" \
+  "${finit_available_options[@]}")
+
+  echo "${choices[*]}"
 }
 
 finit() {
@@ -1935,40 +1954,37 @@ finit() {
 
   conf_write # Write the new values to retrodeck.cfg
 
-  local finit_options_choices=$(zenity \
-  --list --width=1200 --height=720 \
-  --checklist --hide-column=4 --ok-label="Confirm Selections" --extra-button="Enable All" \
-  --separator=" " --print-column=4 \
-  --text="Choose which options to enable:" \
-  --column "Enabled?" \
-  --column "Option" \
-  --column "Description" \
-  --column "option_flag" \
-  "${finit_options_list[@]}" )
+  configurator_generic_dialog "RetroDECK Initial Setup" "The next dialog will be a list of optional actions to take during the initial setup.\n\nIf you choose to not do any of these now, they can be done later through the Configurator."
+  local finit_options_choices=$(finit_user_options_dialog)
 
   if [[ "$finit_options_choices" =~ (rpcs3_firmware|Enable All) ]]; then # Additional information on the firmware install process, as the emulator needs to be manually closed
     configurator_generic_dialog "RPCS3 Firmware Install" "You have chosen to install the RPCS3 firmware during the RetroDECK first setup.\n\nThis process will take several minutes and requires network access.\n\nRPCS3 will be launched automatically at the end of the RetroDECK setup process.\nOnce the firmware is installed, please close the emulator to finish the process."
   fi
-
+  
   zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
   --text="RetroDECK will now install the needed files, which can take up to one minute.\nRetroDECK will start once the process is completed.\n\nPress OK to continue."
 
   (
   prepare_emulator "reset" "all"
-  tools_init
   
   # Optional actions based on user choices
   if [[ "$finit_options_choices" =~ (rpcs3_firmware|Enable All) ]]; then
-    update_rpcs3_firmware
+    if [[ $(check_network_connectivity) == "true" ]]; then
+      update_rpcs3_firmware
+    fi
   fi
   if [[ "$finit_options_choices" =~ (rd_controller_profile|Enable All) ]]; then
     rsync -a "/app/retrodeck/binding-icons/" "$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/"
     cp -f "$emuconfigs/retrodeck/defaults/RetroDECK_controller_config.vdf" "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"
   fi
-
-  # Add packaged extras, after the ROMS folder has been initialized
-  cp /app/retrodeck/extras/doom1.wad "$roms_folder/doom/doom1.wad" # No -f in case the user already has it
+  if [[ "$finit_options_choices" =~ (rd_prepacks|Enable All) ]]; then 
+    cp /app/retrodeck/extras/doom1.wad "$roms_folder/doom/doom1.wad" # No -f in case the user already has it
+    mkdir -p "/var/config/emulationstation/.emulationstation/gamelists/doom"
+    cp "/app/retrodeck/rd_prepacks/doom/gamelist.xml" "/var/config/emulationstation/.emulationstation/gamelists/doom/gamelist.xml"
+    mkdir -p "$media_folder/doom"
+    unzip -oq "/app/retrodeck/rd_prepacks/doom/doom.zip" -d "$media_folder/doom/"
+  fi
 
   ) |
   zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
@@ -2312,7 +2328,7 @@ changelog_dialog() {
   # This function will pull the changelog notes from the version it is passed (which must match the appdata version tag) from the net.retrodeck.retrodeck.appdata.xml file
   # USAGE: changelog_dialog "version"
 
-  changelog=$(xmlstarlet sel -t -m "//release[@version='$1']/description" -v . -n $rd_appdata | tr -s '\n' | sed 's/^\s*//')
+  changelog=$(xml sel -t -m "//release[@version='$1']/description" -v . -n $rd_appdata | tr -s '\n' | sed 's/^\s*//')
 
   zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \

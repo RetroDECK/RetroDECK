@@ -75,6 +75,8 @@ post_update() {
     # - Prepackaged DOOM!
     # - Update RPCS3 vfs file contents. migrate from old location if needed
     # - Disable ESDE update checks for existing installs
+    # - Move Duckstation saves and states to new locations
+    # - Clean up legacy tools files (Configurator is now accessible through the main ES-DE menu)
     # - Offer user option of installing custom controller config
 
     mkdir -p "$mods_folder"
@@ -89,20 +91,22 @@ post_update() {
 
     dir_prep "$rdhome/gamelists" "/var/config/emulationstation/.emulationstation/gamelists"
 
-    cp "/app/retrodeck/extras/doom1.wad" "$roms_folder/doom/doom1.wad" # No -f in case the user already has it
-    mkdir -p "/var/config/emulationstation/.emulationstation/gamelists/doom"
-    cp -f "/app/retrodeck/rd_prepacks/doom/gamelist.xml" "/var/config/emulationstation/.emulationstation/gamelists/doom/gamelist.xml"
-    mkdir -p "$media_folder/doom"
-    unzip -oq "/app/retrodeck/rd_prepacks/doom/doom.zip" -d "$media_folder/doom/"
+    if [[ $(configurator_generic_question_dialog "RetroDECK DOOM Addition" "RetroDECK now runs DOOM!\n\nIf you would like to have this classic game added to your library, smash that Yes button!") == "true" ]]; then
+      cp "/app/retrodeck/extras/doom1.wad" "$roms_folder/doom/doom1.wad" # No -f in case the user already has it
+      mkdir -p "/var/config/emulationstation/.emulationstation/gamelists/doom"
+      cp -f "/app/retrodeck/rd_prepacks/doom/gamelist.xml" "/var/config/emulationstation/.emulationstation/gamelists/doom/gamelist.xml"
+      mkdir -p "$media_folder/doom"
+      unzip -oq "/app/retrodeck/rd_prepacks/doom/doom.zip" -d "$media_folder/doom/"
+    fi
 
     cp -f $emuconfigs/rpcs3/vfs.yml /var/config/rpcs3/vfs.yml
-    sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$bios_folder/rpcs3"'^' "$rpcs3vfsconf"
-    set_setting_value "$rpcs3vfsconf" "/games/" "$roms_folder/ps3" "rpcs3"
+    sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$bios_folder/rpcs3/"'^' "$rpcs3vfsconf"
+    set_setting_value "$rpcs3vfsconf" "/games/" "$roms_folder/ps3/" "rpcs3"
     if [[ -d "$roms_folder/ps3/emudir" ]]; then # The old location exists, meaning the emulator was run at least once.
       mkdir "$bios_folder/rpcs3"
       mv "$roms_folder/ps3/emudir/*" "$bios_folder/rpcs3/"
       rm "$roms_folder/ps3/emudir"
-      configurator_generic_dialog "As part of this update and due to a RPCS3 config upgrade, the files that used to exist at\n\n~/retrodeck/roms/ps3/emudir\n\nare now located at\n\n~/retrodeck/bios/rpcs3.\nYour existing files have been moved automatically."
+      configurator_generic_dialog "RetroDECK 0.7.0b Upgrade" "As part of this update and due to a RPCS3 config upgrade, the files that used to exist at\n\n~/retrodeck/roms/ps3/emudir\n\nare now located at\n\n~/retrodeck/bios/rpcs3.\nYour existing files have been moved automatically."
     fi
     mkdir -p "$bios_folder/rpcs3/dev_hdd0"
     mkdir -p "$bios_folder/rpcs3/dev_hdd1"
@@ -115,7 +119,25 @@ post_update() {
 
     set_setting_value $es_settings "ApplicationUpdaterFrequency" "never" "es_settings"
 
-    configurator_generic_dialog "As part of this update, we are offering a new official RetroDECK controller profile!\nIt is an optional component that helps you get the most out of RetroDECK with a new in-game radial menu for unified hotkeys across emulators.\n\nThe files need to be installed outside of the normal ~/retrodeck folder, so we wanted your permission before proceeding.\nIf you decide to not install the profile now, it can always be done later through the Configurator.\n\nThe files will be installed at the following shared Steam locations:\n\n$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/\n$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"
+    if [[ -f "$saves_folder/duckstation/shared_card_1.mcd" || -f "$saves_folder/duckstation/shared_card_2.mcd" ]]; then
+      configurator_generic_dialog "RetroDECK 0.7.0b Upgrade" "As part of this update, the location of saves and states for Duckstation has been changed.\n\nYour files will be moved automatically, and can now be found at\n\n~.../saves/psx/duckstation/memcards/\nand\n~.../states/psx/duckstation/"
+    fi
+    mkdir -p "$saves_folder/psx/duckstation/memcards"
+    mv "$saves_folder/duckstation/*" "$saves_folder/psx/duckstation/memcards/"
+    rmdir "$saves_folder/duckstation" # File-safe folder cleanup
+    unlink "/var/data/duckstation/memcards"
+    set_setting_value "$duckstationconf" "Card1Path" "$saves_folder/psx/duckstation/memcards/shared_card_1.mcd" "duckstation" "MemoryCards"
+    set_setting_value "$duckstationconf" "Card2Path" "$saves_folder/psx/duckstation/memcards/shared_card_2.mcd" "duckstation" "MemoryCards"
+    set_setting_value "$duckstationconf" "Directory" "$saves_folder/psx/duckstation/memcards" "duckstation" "MemoryCards"
+    mkdir -p "$states_folder/psx"
+    mv -t "$states_folder/psx/" "$states_folder/duckstation"
+    unlink "/var/data/duckstation/savestates"
+    dir_prep "$states_folder/psx/duckstation" "/var/data/duckstation/savestates"
+
+    rm -rf /var/config/retrodeck/tools
+    rm -rf /var/config/emulationstation/.emulationstation/gamelists/tools/
+
+    configurator_generic_dialog "RetroDECK 0.7.0b Upgrade" "As part of this update, we are offering a new official RetroDECK controller profile!\nIt is an optional component that helps you get the most out of RetroDECK with a new in-game radial menu for unified hotkeys across emulators.\n\nThe files need to be installed outside of the normal ~/retrodeck folder, so we wanted your permission before proceeding.\nIf you decide to not install the profile now, it can always be done later through the Configurator.\n\nThe files will be installed at the following shared Steam locations:\n\n$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/\n$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"
     if [[ $(configurator_generic_question_dialog "RetroDECK Official Controller Profile" "Would you like to install the official RetroDECK controller profile?") == "true" ]]; then
       rsync -a "/app/retrodeck/binding-icons/" "$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/"
       cp -f "$emuconfigs/retrodeck/defaults/RetroDECK_controller_config.vdf" "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"
@@ -128,7 +150,6 @@ post_update() {
     rsync -a "/app/retrodeck/extras/DynamicInputTextures/" "/var/data/dolphin-emu/Load/DynamicInputTextures/"
   fi
 
-  tools_init
   update_splashscreens
   update_rd_conf
   ) |
