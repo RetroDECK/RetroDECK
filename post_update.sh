@@ -96,8 +96,8 @@ post_update() {
     unzip -oq "/app/retrodeck/rd_prepacks/doom/doom.zip" -d "$media_folder/doom/"
 
     cp -f $emuconfigs/rpcs3/vfs.yml /var/config/rpcs3/vfs.yml
-    sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$bios_folder/rpcs3"'^' "$rpcs3vfsconf"
-    set_setting_value "$rpcs3vfsconf" "/games/" "$roms_folder/ps3" "rpcs3"
+    sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$bios_folder/rpcs3/"'^' "$rpcs3vfsconf"
+    set_setting_value "$rpcs3vfsconf" "/games/" "$roms_folder/ps3/" "rpcs3"
     if [[ -d "$roms_folder/ps3/emudir" ]]; then # The old location exists, meaning the emulator was run at least once.
       mkdir "$bios_folder/rpcs3"
       mv "$roms_folder/ps3/emudir/*" "$bios_folder/rpcs3/"

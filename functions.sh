@@ -1609,16 +1609,16 @@ prepare_emulator() {
         mkdir -pv "$multi_user_data_folder/$SteamAppUser/config/rpcs3/"
         cp -fr $emuconfigs/rpcs3/* "$multi_user_data_folder/$SteamAppUser/config/rpcs3/"
         # This is an unfortunate one-off because set_setting_value does not currently support settings with $ in the name.
-        sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$bios_folder/rpcs3"'^' "$multi_user_data_folder/$SteamAppUser/config/rpcs3/vfs.yml"
-        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/rpcs3/vfs.yml" "/games/" "$roms_folder/ps3" "rpcs3"
+        sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$bios_folder/rpcs3/"'^' "$multi_user_data_folder/$SteamAppUser/config/rpcs3/vfs.yml"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/rpcs3/vfs.yml" "/games/" "$roms_folder/ps3/" "rpcs3"
         dir_prep "$multi_user_data_folder/$SteamAppUser/config/rpcs3" "/var/config/rpcs3"
       else # Single-user actions
         rm -rf /var/config/rpcs3
         mkdir -pv /var/config/rpcs3/
         cp -fr $emuconfigs/rpcs3/* /var/config/rpcs3/
         # This is an unfortunate one-off because set_setting_value does not currently support settings with $ in the name.
-        sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$bios_folder/rpcs3"'^' "$rpcs3vfsconf"
-        set_setting_value "$rpcs3vfsconf" "/games/" "$roms_folder/ps3" "rpcs3"
+        sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$bios_folder/rpcs3/"'^' "$rpcs3vfsconf"
+        set_setting_value "$rpcs3vfsconf" "/games/" "$roms_folder/ps3/" "rpcs3"
         dir_prep "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata" "$saves_folder/ps3/rpcs3"
       fi
       # Shared actions
@@ -2312,7 +2312,7 @@ changelog_dialog() {
   # This function will pull the changelog notes from the version it is passed (which must match the appdata version tag) from the net.retrodeck.retrodeck.appdata.xml file
   # USAGE: changelog_dialog "version"
 
-  changelog=$(xmlstarlet sel -t -m "//release[@version='$1']/description" -v . -n $rd_appdata | tr -s '\n' | sed 's/^\s*//')
+  changelog=$(xml sel -t -m "//release[@version='$1']/description" -v . -n $rd_appdata | tr -s '\n' | sed 's/^\s*//')
 
   zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
