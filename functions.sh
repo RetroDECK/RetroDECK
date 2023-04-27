@@ -1223,12 +1223,6 @@ prepare_emulator() {
       dir_prep "$themes_folder" "/var/config/emulationstation/.emulationstation/themes"
       dir_prep "$rdhome/gamelists" "/var/config/emulationstation/.emulationstation/gamelists"
       cp -f /app/retrodeck/es_settings.xml /var/config/emulationstation/.emulationstation/es_settings.xml
-      
-      # RetroDECK prepack metadata
-      mkdir -p "/var/config/emulationstation/.emulationstation/gamelists/doom"
-      cp "/app/retrodeck/rd_prepacks/doom/gamelist.xml" "/var/config/emulationstation/.emulationstation/gamelists/doom/gamelist.xml"
-      mkdir -p "$media_folder/doom"
-      unzip -oq "/app/retrodeck/rd_prepacks/doom/doom.zip" -d "$media_folder/doom/"
     fi
     if [[ "$action" == "postmove" ]]; then
       dir_prep "$roms_folder" "/var/config/emulationstation/ROMs"
@@ -1443,13 +1437,14 @@ prepare_emulator() {
         set_setting_value "$duckstationconf" "Directory" "$saves_folder/psx/duckstation/memcards" "duckstation" "MemoryCards"
       fi
       dir_prep "$saves_folder/psx/duckstation/memcards" "/var/data/duckstation/memcards" # TODO: This shouldn't be needed anymore, verify
-      dir_prep "$states_folder/psx/duckstation" "/var/data/duckstation/savestates"
+      dir_prep "$states_folder/psx/duckstation" "/var/data/duckstation/savestates" # This is hard-coded in Duckstation, always needed
     fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
       set_setting_value "$duckstationconf" "SearchDirectory" "$bios_folder" "duckstation" "BIOS"
       set_setting_value "$duckstationconf" "Card1Path" "$saves_folder/psx/duckstation/memcards/shared_card_1.mcd" "duckstation" "MemoryCards"
       set_setting_value "$duckstationconf" "Card2Path" "$saves_folder/psx/duckstation/memcards/shared_card_2.mcd" "duckstation" "MemoryCards"
       set_setting_value "$duckstationconf" "Directory" "$saves_folder/psx/duckstation/memcards" "duckstation" "MemoryCards"
+      dir_prep "$states_folder/psx/duckstation" "/var/data/duckstation/savestates" # This is hard-coded in Duckstation, always needed
     fi
   fi
   
@@ -1768,9 +1763,15 @@ prepare_emulator() {
 }
 
 update_rpcs3_firmware() {
+  (
   mkdir -p "$roms_folder/ps3/tmp"
   chmod 777 "$roms_folder/ps3/tmp"
   wget "$rpcs3_firmware" -P "$roms_folder/ps3/tmp/"
+  ) |
+  zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+  --title "RetroDECK RPCS3 Firmware Download" \
+  --text="RetroDECK downloading the RPCS3 firmware, please wait."
   rpcs3 --installfw "$roms_folder/ps3/tmp/PS3UPDAT.PUP"
   rm -rf "$roms_folder/ps3/tmp"
 }
@@ -1854,6 +1855,29 @@ do
 done
 }
 
+finit_user_options_dialog() {
+  finit_available_options=()
+
+  while IFS="^" read -r enabled option_name option_desc option_tag
+  do
+    finit_available_options=("${finit_available_options[@]}" "$enabled" "$option_name" "$option_desc" "$option_tag")
+  done < $finit_options_list
+
+
+  local choices=$(zenity \
+  --list --width=1200 --height=720 \
+  --checklist --hide-column=4 --ok-label="Confirm Selections" --extra-button="Enable All" \
+  --separator=" " --print-column=4 \
+  --text="Choose which options to enable:" \
+  --column "Enabled?" \
+  --column "Option" \
+  --column "Description" \
+  --column "option_flag" \
+  "${finit_available_options[@]}")
+
+  echo "${choices[*]}"
+}
+
 finit() {
 # Force/First init, depending on the situation
 
@@ -1930,21 +1954,13 @@ finit() {
 
   conf_write # Write the new values to retrodeck.cfg
 
-  local finit_options_choices=$(zenity \
-  --list --width=1200 --height=720 \
-  --checklist --hide-column=4 --ok-label="Confirm Selections" --extra-button="Enable All" \
-  --separator=" " --print-column=4 \
-  --text="Choose which options to enable:" \
-  --column "Enabled?" \
-  --column "Option" \
-  --column "Description" \
-  --column "option_flag" \
-  "${finit_options_list[@]}" )
+  configurator_generic_dialog "RetroDECK Initial Setup" "The next dialog will be a list of optional actions to take during the initial setup.\n\nIf you choose to not do any of these now, they can be done later through the Configurator."
+  local finit_options_choices=$(finit_user_options_dialog)
 
   if [[ "$finit_options_choices" =~ (rpcs3_firmware|Enable All) ]]; then # Additional information on the firmware install process, as the emulator needs to be manually closed
     configurator_generic_dialog "RPCS3 Firmware Install" "You have chosen to install the RPCS3 firmware during the RetroDECK first setup.\n\nThis process will take several minutes and requires network access.\n\nRPCS3 will be launched automatically at the end of the RetroDECK setup process.\nOnce the firmware is installed, please close the emulator to finish the process."
   fi
-
+  
   zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
   --text="RetroDECK will now install the needed files, which can take up to one minute.\nRetroDECK will start once the process is completed.\n\nPress OK to continue."
@@ -1954,15 +1970,21 @@ finit() {
   
   # Optional actions based on user choices
   if [[ "$finit_options_choices" =~ (rpcs3_firmware|Enable All) ]]; then
-    update_rpcs3_firmware
+    if [[ $(check_network_connectivity) == "true" ]]; then
+      update_rpcs3_firmware
+    fi
   fi
   if [[ "$finit_options_choices" =~ (rd_controller_profile|Enable All) ]]; then
     rsync -a "/app/retrodeck/binding-icons/" "$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/"
     cp -f "$emuconfigs/retrodeck/defaults/RetroDECK_controller_config.vdf" "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"
   fi
-
-  # Add packaged extras, after the ROMS folder has been initialized
-  cp /app/retrodeck/extras/doom1.wad "$roms_folder/doom/doom1.wad" # No -f in case the user already has it
+  if [[ "$finit_options_choices" =~ (rd_prepacks|Enable All) ]]; then 
+    cp /app/retrodeck/extras/doom1.wad "$roms_folder/doom/doom1.wad" # No -f in case the user already has it
+    mkdir -p "/var/config/emulationstation/.emulationstation/gamelists/doom"
+    cp "/app/retrodeck/rd_prepacks/doom/gamelist.xml" "/var/config/emulationstation/.emulationstation/gamelists/doom/gamelist.xml"
+    mkdir -p "$media_folder/doom"
+    unzip -oq "/app/retrodeck/rd_prepacks/doom/doom.zip" -d "$media_folder/doom/"
+  fi
 
   ) |
   zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
