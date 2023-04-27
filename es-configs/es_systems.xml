@@ -1827,7 +1827,7 @@
         <name>xbox360</name>
         <fullname>Microsoft Xbox 360</fullname>
         <path>%ROMPATH%/xbox360</path>
-        <extension>.iso .ISO .xex .XEX</extension>
+        <extension>. .iso .ISO .xex .XEX</extension>
         <command>PLACEHOLDER %ROM%</command>
         <platform>xbox360</platform>
         <theme>xbox360</theme>
