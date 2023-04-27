@@ -1,3 +1,8 @@
+  sdk-extensions:
+  #- org.freedesktop.Sdk.Extension.dotnet6   # Needed for Ryujinx - Removed, check if it's not breaking something else
+  finish-args:
+  #- --env=QT_QPA_PLATFORM=xcb #not sure if this will break something
+  
   # pcsx2-qt needs QT6, maybe others, here until every qt emulator will support qt6 (not yuzu atm)
   # from: https://github.com/flathub/org.profex_xrd.Profex
 

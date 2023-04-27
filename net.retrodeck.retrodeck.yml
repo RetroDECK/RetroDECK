@@ -4,7 +4,6 @@ runtime-version: 5.15-22.08
 sdk: org.kde.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.llvm14    # Needed for rpcs3
-  #- org.freedesktop.Sdk.Extension.dotnet6   # Needed for Ryujinx - Removed, check if it's not breaking something else
 base: io.qt.qtwebengine.BaseApp             # Needed for Yuzu
 base-version: 5.15-22.08                    # Needed for Yuzu
 command: retrodeck.sh
@@ -27,7 +26,6 @@ finish-args:
   - --filesystem=xdg-run/app/com.discordapp.Discord:create
   # Dolphin
   - --allow=bluetooth
-  #- --env=QT_QPA_PLATFORM=xcb #not sure if this will break something
 
 cleanup:
   # ES-DE
