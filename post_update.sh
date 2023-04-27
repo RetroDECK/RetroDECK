@@ -76,6 +76,7 @@ post_update() {
     # - Update RPCS3 vfs file contents. migrate from old location if needed
     # - Disable ESDE update checks for existing installs
     # - Move Duckstation saves and states to new locations
+    # - Clean up legacy tools files (Configurator is now accessible through the main ES-DE menu)
     # - Offer user option of installing custom controller config
 
     mkdir -p "$mods_folder"
@@ -124,6 +125,9 @@ post_update() {
     unlink "/var/data/duckstation/savestates"
     dir_prep "$states_folder/psx/duckstation" "/var/data/duckstation/savestates"
 
+    rm -rf /var/config/retrodeck/tools
+    rm -rf /var/config/emulationstation/.emulationstation/gamelists/tools/
+
     configurator_generic_dialog "As part of this update, we are offering a new official RetroDECK controller profile!\nIt is an optional component that helps you get the most out of RetroDECK with a new in-game radial menu for unified hotkeys across emulators.\n\nThe files need to be installed outside of the normal ~/retrodeck folder, so we wanted your permission before proceeding.\nIf you decide to not install the profile now, it can always be done later through the Configurator.\n\nThe files will be installed at the following shared Steam locations:\n\n$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/\n$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"
     if [[ $(configurator_generic_question_dialog "RetroDECK Official Controller Profile" "Would you like to install the official RetroDECK controller profile?") == "true" ]]; then
       rsync -a "/app/retrodeck/binding-icons/" "$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/"
@@ -137,7 +141,6 @@ post_update() {
     rsync -a "/app/retrodeck/extras/DynamicInputTextures/" "/var/data/dolphin-emu/Load/DynamicInputTextures/"
   fi
 
-  tools_init
   update_splashscreens
   update_rd_conf
   ) |

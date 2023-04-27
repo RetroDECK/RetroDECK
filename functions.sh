@@ -1811,11 +1811,6 @@ easter_eggs() {
   cp -f "$new_splash_file" "$current_splash_file" # Deploy assigned splash screen
 }
 
-tools_init() {
-  mkdir -pv /var/config/emulationstation/.emulationstation/gamelists/tools/
-  cp -fv /app/retrodeck/tools-gamelist.xml /var/config/emulationstation/.emulationstation/gamelists/tools/gamelist.xml
-}
-
 start_retrodeck() {
   easter_eggs # Check if today has a surprise splashscreen and load it if so
   # normal startup
@@ -1956,7 +1951,6 @@ finit() {
 
   (
   prepare_emulator "reset" "all"
-  tools_init
   
   # Optional actions based on user choices
   if [[ "$finit_options_choices" =~ (rpcs3_firmware|Enable All) ]]; then
