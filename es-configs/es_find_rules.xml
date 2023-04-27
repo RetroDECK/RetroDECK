@@ -137,6 +137,14 @@
             <entry>~/bin/cpcemu/cpcemu</entry>
         </rule>
     </emulator>
+    <emulator name="CSPECT">
+        <!-- Sinclair ZX Spectrum Next emulator #CSpect -->
+        <rule type="staticpath">
+            <entry>~/Applications/CSpect/CSpect.exe</entry>
+            <entry>~/.local/bin/CSpect/CSpect.exe</entry>
+            <entry>~/bin/CSpect/CSpect.exe</entry>
+        </rule>
+    </emulator>
     <emulator name="DESMUME">
         <!-- Nintendo DS emulator DeSmuME -->
         <rule type="systempath">

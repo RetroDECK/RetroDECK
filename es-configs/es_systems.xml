@@ -999,7 +999,10 @@
         <extension>.bin .BIN .d64 .D64 .n64 .N64 .ndd .NDD .u1 .U1 .v64 .V64 .z64 .Z64 .7z .7Z .zip .ZIP</extension>
         <command label="Mupen64Plus-Next">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mupen64plus_next_libretro.so %ROM%</command>
 <!--        <command label="Mupen64Plus (Standalone)">%EMULATOR_MUPEN64PLUS% &#45;&#45;nogui %ROM%</command> -->
-        <command label="ParaLLEl N64">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/parallel_n64_libretro.so %ROM%</command>
+<!--        <command label="ParaLLEl N64">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/parallel_n64_libretro.so %ROM%</command> -->
+<!--        <command label="simple64 (Standalone)">%EMULATOR_SIMPLE64% &ndash;&ndash;nogui %ROM%</command> -->
+<!--        <command label="Rosalie's Mupen GUI (Standalone)">%EMULATOR_ROSALIES-MUPEN-GUI% &ndash;&ndash;nogui -q %ROM%</command> -->
+<!--        <command label="ares (Standalone)">%EMULATOR_ARES% &ndash;&ndash;fullscreen &ndash;&ndash;system "Nintendo 64" %ROM%</command> -->
         <platform>n64</platform>
         <theme>n64</theme>
     </system>
@@ -1178,7 +1181,7 @@
         <path>%ROMPATH%/pc98</path>
         <extension>.2hd .2HD .88d .88D .98d .98D .d88 .D88 .d98 .D98 .cmd .CMD .dup .DUP .fdd .FDD .fdi .FDI .hdd .HDD .hdi .HDI .hdm .HDM .hdn .HDN .m3u .M3U .nhd .NHD .tfd .TFD .thd .THD . xdf .XDF .7z .7Z .zip .ZIP</extension>
         <command label="Neko Project II Kai">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/np2kai_libretro.so %ROM%</command>
-        <command label="Neko Project II">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/nekop2_libretro.so %ROM%</command>
+        <command label="Neko Project II">%STARTDIR%=%GAMEDIR% %EMULATOR_RETROARCH% -L %CORE_RETROARCH%/nekop2_libretro.so %ROM%</command>
         <platform>pc98</platform>
         <theme>pc98</theme>
     </system>
@@ -1248,10 +1251,11 @@
         <name>ps2</name>
         <fullname>Sony PlayStation 2</fullname>
         <path>%ROMPATH%/ps2</path>
+        <command label="PCSX2 (Standalone)">%EMULATOR_PCSX2% -batch %ROM%</command>
         <extension>.bin .BIN .chd .CHD .ciso .CISO .cso .CSO .dump .DUMP .elf .ELF .gz .GZ .m3u .M3U .mdf .MDF .img .IMG .iso .ISO .isz .ISZ .ngr .NRG</extension>
-	<command label="PCSX2 (Standalone)">%EMULATOR_PCSX2% -batch %ROM%</command>
+        <command label="LRPS2">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/pcsx2_libretro.so %ROM%</command>
         <command label="PCSX2">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/pcsx2_libretro.so %ROM%</command>
-        <!-- <command label="Play! (Standalone)">%EMULATOR_PLAY!% &ndash;&ndash;disc %ROM%</command> -->
+        <!-- <command label="Play! (Standalone)">%EMULATOR_PLAY!% &ndash;&ndashdisc %ROM%</command> -->
         <platform>ps2</platform>
         <theme>ps2</theme>
     </system>
@@ -1754,13 +1758,12 @@
         <fullname>Nintendo Wii</fullname>
         <path>%ROMPATH%/wii</path>
         <extension>.ciso .CISO .dff .DFF .dol .DOL .elf .ELF .gcm .GCM .gcz .GCZ .iso .ISO .json .JSON .m3u .M3U .rvz .RVZ .tgc .TGC .wad .WAD .wbfs .WBFS .wia .WIA .7z .7Z .zip .ZIP</extension>
-        <command label="Dolphin (Standalone)">%INJECT%=%BASENAME%.esprefix %EMULATOR_DOLPHIN% -b -e %ROM%</command>
+	<command label="Dolphin (Standalone)">%INJECT%=%BASENAME%.esprefix %EMULATOR_DOLPHIN% -b -e %ROM%</command>
         <command label="Dolphin">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/dolphin_libretro.so %ROM%</command>
         <command label="PrimeHack (Standalone)">%INJECT%=%BASENAME%.esprefix %EMULATOR_PRIMEHACK% -b -e %ROM%</command>
         <platform>wii</platform>
         <theme>wii</theme>
     </system>
-
     <system>
         <name>wiiu</name>
         <fullname>Nintendo Wii U</fullname>
@@ -1770,7 +1773,6 @@
         <platform>wiiu</platform>
         <theme>wiiu</theme>
     </system>
-
     <system>
         <name>wonderswan</name>
         <fullname>Bandai WonderSwan</fullname>
@@ -1820,6 +1822,7 @@
         <platform>xbox</platform>
         <theme>xbox</theme>
     </system>
+<!--
     <system>
         <name>xbox360</name>
         <fullname>Microsoft Xbox 360</fullname>
@@ -1829,6 +1832,7 @@
         <platform>xbox360</platform>
         <theme>xbox360</theme>
     </system>
+-->
 <!--
     <system>
         <name>zmachine</name>
