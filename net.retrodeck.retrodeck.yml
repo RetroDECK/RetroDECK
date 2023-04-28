@@ -245,7 +245,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libgit2/libgit2.git
-        branch: maint/v0.27
+        tag: v1.6.3
 
   # When updating this module remember to check those:
   # https://gitlab.com/es-de/emulationstation-de/-/blob/[VERSION]/resources/systems/unix/es_find_rules.xml
