@@ -91,12 +91,8 @@ post_update() {
 
     dir_prep "$rdhome/gamelists" "/var/config/emulationstation/.emulationstation/gamelists"
 
-    if [[ $(configurator_generic_question_dialog "RetroDECK DOOM Addition" "RetroDECK now runs DOOM!\n\nIf you would like to have this classic game added to your library, smash that Yes button!") == "true" ]]; then
-      cp "/app/retrodeck/extras/doom1.wad" "$roms_folder/doom/doom1.wad" # No -f in case the user already has it
-      mkdir -p "/var/config/emulationstation/.emulationstation/gamelists/doom"
-      cp -f "/app/retrodeck/rd_prepacks/doom/gamelist.xml" "/var/config/emulationstation/.emulationstation/gamelists/doom/gamelist.xml"
-      mkdir -p "$media_folder/doom"
-      unzip -oq "/app/retrodeck/rd_prepacks/doom/doom.zip" -d "$media_folder/doom/"
+    if [[ $(configurator_generic_question_dialog "RetroDECK Starter Pack" "The RetroDECK creators have put together a collection of classic retro games you might enjoy!\n\nWould you like to have them automatically added to your library?\n\nThis can always be done later through the Configurator.") == "true" ]]; then
+      install_retrodeck_starterpack
     fi
 
     cp -f $emuconfigs/rpcs3/vfs.yml /var/config/rpcs3/vfs.yml
@@ -139,8 +135,7 @@ post_update() {
 
     configurator_generic_dialog "RetroDECK 0.7.0b Upgrade" "As part of this update, we are offering a new official RetroDECK controller profile!\nIt is an optional component that helps you get the most out of RetroDECK with a new in-game radial menu for unified hotkeys across emulators.\n\nThe files need to be installed outside of the normal ~/retrodeck folder, so we wanted your permission before proceeding.\nIf you decide to not install the profile now, it can always be done later through the Configurator.\n\nThe files will be installed at the following shared Steam locations:\n\n$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/\n$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"
     if [[ $(configurator_generic_question_dialog "RetroDECK Official Controller Profile" "Would you like to install the official RetroDECK controller profile?") == "true" ]]; then
-      rsync -a "/app/retrodeck/binding-icons/" "$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/"
-      cp -f "$emuconfigs/retrodeck/defaults/RetroDECK_controller_config.vdf" "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"
+      install_retrodeck_controller_profile
     fi
   fi
 

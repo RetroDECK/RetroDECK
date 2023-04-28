@@ -813,9 +813,9 @@ configurator_tools_and_troubleshooting_dialog() {
   "Basic BIOS file check" "Show a list of systems that BIOS files are found for" \
   "Advanced BIOS file check" "Show advanced information about common BIOS files" \
   "Compress Games" "Compress games to CHD format for systems that support it" \
-  "Download/Update Themes" "Download new themes for RetroDECK or update existing ones" \
   "Download PS3 Firmware" "Download PS3 firmware for use with the RPCS3 emulator" \
   "Install RetroDECK controller profile" "Install the custom RetroDECK controller profile and required icons" \
+  "Install RetroDECK Starter Pack" "Install a small selection of classic games the RetroDECK creators picked themselves!" \
   "Backup RetroDECK Userdata" "Compress important RetroDECK user data folders" )
 
   case $choice in
@@ -840,15 +840,6 @@ configurator_tools_and_troubleshooting_dialog() {
     configurator_compress_games_dialog
   ;;
 
-  "Download/Update Themes" )
-    if [[ $(check_network_connectivity) == "true" ]]; then
-      configurator_online_theme_downloader
-    else
-      configurator_generic_dialog "You do not appear to currently have Internet access, which is required by this tool. Please try again when network access has been restored."
-      configurator_tools_and_troubleshooting_dialog
-    fi
-  ;;
-
   "Download PS3 Firmware" )
     if [[ $(check_network_connectivity) == "true" ]]; then
       configurator_rpcs3_firmware_updater
@@ -861,10 +852,15 @@ configurator_tools_and_troubleshooting_dialog() {
   "Install RetroDECK controller profile" )
     configurator_generic_dialog "Starting with version 0.7.0b, we are offering a new official RetroDECK controller profile!\nIt is an optional component that helps you get the most out of RetroDECK with a new in-game radial menu for unified hotkeys across emulators.\n\nThe files need to be installed outside of the normal ~/retrodeck folder, so we wanted your permission before proceeding.\n\nThe files will be installed at the following shared Steam locations:\n\n$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/\n$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"
     if [[ $(configurator_generic_question_dialog "RetroDECK Official Controller Profile" "Would you like to install the official RetroDECK controller profile?") == "true" ]]; then
-      rsync -a "/app/retrodeck/binding-icons/" "$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/"
-      cp -f "$emuconfigs/retrodeck/defaults/RetroDECK_controller_config.vdf" "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"
+      install_retrodeck_controller_profile
     fi
     configurator_generic_dialog "The RetroDECK controller profile install is complete.\nSee the Wiki for more details on how to use it to its fullest potential!"
+    configurator_tools_and_troubleshooting_dialog
+  ;;
+
+  "Install RetroDECK Starter Pack" )
+    install_retrodeck_starterpack
+    configurator_generic_dialog "RetroDECK Configurator - Install RetroDECK Starter Pack" "The RetroDECK starter pack has been installed. We hope you enjoy it!"
     configurator_tools_and_troubleshooting_dialog
   ;;
 
