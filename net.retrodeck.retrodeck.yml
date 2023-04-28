@@ -236,18 +236,16 @@ modules:
         url: https://github.com/zeux/pugixml/releases/download/v1.11.4/pugixml-1.11.4.tar.gz
         sha256: 8ddf57b65fb860416979a3f0640c2ad45ddddbbafa82508ef0a0af3ce7061716
 
-  - name: libgit2-glib
-    buildsystem: meson
+  - name: libgit2
+    buildsystem: cmake-ninja
     config-opts:
-      - -Dssh=false
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DBUILD_SHARED_LIBS:BOOL=ON
+      - -DTHREADSAFE=ON
     sources:
-      - type: archive
-        url: https://download.gnome.org/sources/libgit2-glib/1.1/libgit2-glib-1.1.0.tar.xz
-        sha256: c38dd7575daf8141e1e422333a575faf65f3c9210c08e83e981b88dd41bf1ef3
-        x-checker-data:
-          type: gnome
-          name: libgit2-glib
-          stable-only: true
+      - type: git
+        url: https://github.com/libgit2/libgit2.git
+        tag: v1.6.3
 
   # When updating this module remember to check those:
   # https://gitlab.com/es-de/emulationstation-de/-/blob/[VERSION]/resources/systems/unix/es_find_rules.xml
