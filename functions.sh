@@ -1394,17 +1394,17 @@ prepare_emulator() {
         set_setting_value "$dolphinconf" "ISOPath1" "$roms_folder/gc" "dolphin" "General"
         set_setting_value "$dolphinconf" "WiiSDCardPath" "$saves_folder/wii/dolphin/sd.raw" "dolphin" "General"
       fi # Shared actions
-      dir_prep "$saves_folder/gc/dolphin/EUR" "/var/data/dolphin-emu/GC/EUR" # TODO: Multi-user one-off
-      dir_prep "$saves_folder/gc/dolphin/USA" "/var/data/dolphin-emu/GC/USA" # TODO: Multi-user one-off
-      dir_prep "$saves_folder/gc/dolphin/JAP" "/var/data/dolphin-emu/GC/JAP" # TODO: Multi-user one-off
+      dir_prep "$saves_folder/gc/dolphin/EU" "/var/data/dolphin-emu/GC/EUR" # TODO: Multi-user one-off
+      dir_prep "$saves_folder/gc/dolphin/US" "/var/data/dolphin-emu/GC/USA" # TODO: Multi-user one-off
+      dir_prep "$saves_folder/gc/dolphin/JP" "/var/data/dolphin-emu/GC/JAP" # TODO: Multi-user one-off
       dir_prep "$screenshots_folder" "/var/data/dolphin-emu/ScreenShots"
       dir_prep "$states_folder/dolphin" "/var/data/dolphin-emu/StateSaves"
       dir_prep "$saves_folder/wii/dolphin" "/var/data/dolphin-emu/Wii" 
     fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
-      dir_prep "$saves_folder/gc/dolphin/EUR" "/var/data/dolphin-emu/GC/EUR"
-      dir_prep "$saves_folder/gc/dolphin/USA" "/var/data/dolphin-emu/GC/USA"
-      dir_prep "$saves_folder/gc/dolphin/JAP" "/var/data/dolphin-emu/GC/JAP"
+      dir_prep "$saves_folder/gc/dolphin/EU" "/var/data/dolphin-emu/GC/EUR"
+      dir_prep "$saves_folder/gc/dolphin/US" "/var/data/dolphin-emu/GC/USA"
+      dir_prep "$saves_folder/gc/dolphin/JP" "/var/data/dolphin-emu/GC/JAP"
       dir_prep "$screenshots_folder" "/var/data/dolphin-emu/ScreenShots"
       dir_prep "$states_folder/dolphin" "/var/data/dolphin-emu/StateSaves"
       dir_prep "$saves_folder/wii/dolphin" "/var/data/dolphin-emu/Wii" 
@@ -1578,18 +1578,18 @@ prepare_emulator() {
         set_setting_value "$primehackconf" "ISOPath0" "$roms_folder/gc" "primehack" "General"
       fi
       # Shared actions
-      dir_prep "$saves_folder/gc/primehack/EUR" "/var/data/primehack/GC/EUR"
-      dir_prep "$saves_folder/gc/primehack/USA" "/var/data/primehack/GC/USA"
-      dir_prep "$saves_folder/gc/primehack/JAP" "/var/data/primehack/GC/JAP"
+      dir_prep "$saves_folder/gc/primehack/EU" "/var/data/primehack/GC/EUR"
+      dir_prep "$saves_folder/gc/primehack/US" "/var/data/primehack/GC/USA"
+      dir_prep "$saves_folder/gc/primehack/JP" "/var/data/primehack/GC/JAP"
       dir_prep "$screenshots_folder" "/var/data/primehack/ScreenShots"
       dir_prep "$states_folder/primehack" "/var/data/primehack/StateSaves"
       mkdir -pv /var/data/primehack/Wii/
       dir_prep "$saves_folder/wii/primehack" "/var/data/primehack/Wii"
     fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
-      dir_prep "$saves_folder/gc/primehack/EUR" "/var/data/primehack/GC/EUR"
-      dir_prep "$saves_folder/gc/primehack/USA" "/var/data/primehack/GC/USA"
-      dir_prep "$saves_folder/gc/primehack/JAP" "/var/data/primehack/GC/JAP"
+      dir_prep "$saves_folder/gc/primehack/EU" "/var/data/primehack/GC/EUR"
+      dir_prep "$saves_folder/gc/primehack/US" "/var/data/primehack/GC/USA"
+      dir_prep "$saves_folder/gc/primehack/JP" "/var/data/primehack/GC/JAP"
       dir_prep "$screenshots_folder" "/var/data/primehack/ScreenShots"
       dir_prep "$states_folder/primehack" "/var/data/primehack/StateSaves"
       dir_prep "$saves_folder/wii/primehack" "/var/data/primehack/Wii/"

@@ -77,6 +77,7 @@ post_update() {
     # - Disable ESDE update checks for existing installs
     # - Move Duckstation saves and states to new locations
     # - Clean up legacy tools files (Configurator is now accessible through the main ES-DE menu)
+    # - Move Dolphin and Primehack save folder names
     # - Offer user option of installing custom controller config
 
     mkdir -p "$mods_folder"
@@ -132,6 +133,19 @@ post_update() {
 
     rm -rf /var/config/retrodeck/tools
     rm -rf /var/config/emulationstation/.emulationstation/gamelists/tools/
+
+    mv "$saves_folder/gc/dolphin/EUR" "$saves_folder/gc/dolphin/EU"
+    mv "$saves_folder/gc/dolphin/USA" "$saves_folder/gc/dolphin/US"
+    mv "$saves_folder/gc/dolphin/JAP" "$saves_folder/gc/dolphin/JP"
+    dir_prep "$saves_folder/gc/dolphin/EU" "/var/data/dolphin-emu/GC/EUR"
+    dir_prep "$saves_folder/gc/dolphin/US" "/var/data/dolphin-emu/GC/USA"
+    dir_prep "$saves_folder/gc/dolphin/JP" "/var/data/dolphin-emu/GC/JAP"
+    mv "$saves_folder/gc/primehack/EUR" "$saves_folder/gc/primehack/EU"
+    mv "$saves_folder/gc/primehack/USA" "$saves_folder/gc/primehack/US"
+    mv "$saves_folder/gc/primehack/JAP" "$saves_folder/gc/primehack/JP"
+    dir_prep "$saves_folder/gc/primehack/EU" "/var/data/primehack/GC/EUR"
+    dir_prep "$saves_folder/gc/primehack/US" "/var/data/primehack/GC/USA"
+    dir_prep "$saves_folder/gc/primehack/JP" "/var/data/primehack/GC/JAP"
 
     configurator_generic_dialog "RetroDECK 0.7.0b Upgrade" "As part of this update, we are offering a new official RetroDECK controller profile!\nIt is an optional component that helps you get the most out of RetroDECK with a new in-game radial menu for unified hotkeys across emulators.\n\nThe files need to be installed outside of the normal ~/retrodeck folder, so we wanted your permission before proceeding.\nIf you decide to not install the profile now, it can always be done later through the Configurator.\n\nThe files will be installed at the following shared Steam locations:\n\n$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/\n$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"
     if [[ $(configurator_generic_question_dialog "RetroDECK Official Controller Profile" "Would you like to install the official RetroDECK controller profile?") == "true" ]]; then
