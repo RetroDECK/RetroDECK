@@ -325,6 +325,9 @@ set_setting_value() {
       else
         sed -i '\^\['"$current_section_name"'\]^,\^\^'"$setting_name_to_change"'.*^s^\^'"$setting_name_to_change"'=.*^'"$setting_name_to_change"'='"$setting_value_to_change"'^' $1
       fi
+      if [[ "$4" == "retrodeck" ]]; then # If a RetroDECK setting is being changed, also write it to memory for immediate use
+        eval "$setting_name_to_change=$setting_value_to_change"
+      fi
       ;;
 
     "retroarch" )
@@ -758,7 +761,7 @@ check_for_version_update() {
         mkdir -p "$rdhome/RetroDECK_Updates"
         wget -P "$rdhome/RetroDECK_Updates" $latest_cooker_download
         flatpak-spawn --host flatpak install --user --bundle --noninteractive -y "$rdhome/RetroDECK_Updates/RetroDECK.flatpak"
-        rm -f "$rdhome/RetroDECK_Updates" # Cleanup old bundles to save space
+        rm -rf "$rdhome/RetroDECK_Updates" # Cleanup old bundles to save space
         ) |
         zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -1780,6 +1783,28 @@ backup_retrodeck_userdata() {
   zip -rq9 "$backups_folder/$(date +"%0m%0d")_retrodeck_userdata.zip" "$saves_folder" "$states_folder" "$bios_folder" "$media_folder" "$themes_folder" "$logs_folder" "$screenshots_folder" "$mods_folder" "$texture_packs_folder" "$borders_folder" > $logs_folder/$(date +"%0m%0d")_backup_log.log
 }
 
+install_retrodeck_starterpack() {
+  # This function will install the roms, gamelists and metadata for the RetroDECK Starter Pack, a curated selection of games the creators of RetroDECK enjoy.
+  # USAGE: install_retrodeck_starterpack
+  
+  ## DOOM section ##
+  cp /app/retrodeck/extras/doom1.wad "$roms_folder/doom/doom1.wad" # No -f in case the user already has it
+  mkdir -p "/var/config/emulationstation/.emulationstation/gamelists/doom"
+  if [[ ! -f "/var/config/emulationstation/.emulationstation/gamelists/doom/gamelist.xml" ]]; then # Don't overwrite an existing gamelist
+    cp "/app/retrodeck/rd_prepacks/doom/gamelist.xml" "/var/config/emulationstation/.emulationstation/gamelists/doom/gamelist.xml"
+  fi
+  mkdir -p "$media_folder/doom"
+  unzip -oq "/app/retrodeck/rd_prepacks/doom/doom.zip" -d "$media_folder/doom/"
+}
+
+install_retrodeck_controller_profile() {
+  # This function will install the needed files for the custom RetroDECK controller profile
+  # NOTE: These files need to be stored in shared locations for Steam, outside of the normal RetroDECK folders and should always be an optional user choice
+  # USAGE: install_retrodeck_controller_profile
+  rsync -a "/app/retrodeck/binding-icons/" "$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/"
+  cp -f "$emuconfigs/defaults/retrodeck/RetroDECK_controller_config.vdf" "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"
+}
+
 create_lock() {
   # creating RetroDECK's lock file and writing the version in the config file
   version=$hard_version
@@ -1975,15 +2000,10 @@ finit() {
     fi
   fi
   if [[ "$finit_options_choices" =~ (rd_controller_profile|Enable All) ]]; then
-    rsync -a "/app/retrodeck/binding-icons/" "$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/"
-    cp -f "$emuconfigs/defaults/retrodeck/RetroDECK_controller_config.vdf" "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"
+    install_retrodeck_controller_profile
   fi
   if [[ "$finit_options_choices" =~ (rd_prepacks|Enable All) ]]; then 
-    cp /app/retrodeck/extras/doom1.wad "$roms_folder/doom/doom1.wad" # No -f in case the user already has it
-    mkdir -p "/var/config/emulationstation/.emulationstation/gamelists/doom"
-    cp "/app/retrodeck/rd_prepacks/doom/gamelist.xml" "/var/config/emulationstation/.emulationstation/gamelists/doom/gamelist.xml"
-    mkdir -p "$media_folder/doom"
-    unzip -oq "/app/retrodeck/rd_prepacks/doom/doom.zip" -d "$media_folder/doom/"
+    install_retrodeck_starterpack
   fi
 
   ) |
