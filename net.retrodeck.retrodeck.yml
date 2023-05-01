@@ -165,14 +165,24 @@ modules:
         url: https://github.com/rclone/rclone/releases/download/v1.61.1/rclone-v1.61.1-linux-amd64.zip
         sha256: 6d6455e1cb69eb0615a52cc046a296395e44d50c0f32627ba8590c677ddf50a9
 
+  # Source: https://github.com/flathub/com.valvesoftware.Steam.Utility.steamtinkerlaunch/blob/129c9192f874405d21612d95f9749dc2bcaf8cea/modules/rsync.yml#L5
   - name: rsync
-    buildsystem: simple
-    build-commands:
-      - cp local/bin/rsync ${FLATPAK_DEST}/bin/
+    no-autogen: true
+    config-opts:
+      - --prefix=${FLATPAK_DEST}
+      - --with-included-popt
+      - --with-included-zlib
+      - --disable-debug
+      - --disable-xxhash # Unable to meet dependency -- rsync refuses to see the required xxhash.h file
     sources:
       - type: archive
-        url: https://download.samba.org/pub/rsync/binaries/ubuntu-22.04-x86_64/rsync-3.2.7.tar.gz
-        sha256: dd2b74396c6e8d6a2d7af94cd97fad5788d888e722bc9780de1590f37a1920d6
+        url: https://download.samba.org/pub/rsync/src/rsync-3.2.7.tar.gz
+        sha256: 4e7d9d3f6ed10878c58c5fb724a67dacf4b6aac7340b13e488fb2dc41346f2bb
+        x-checker-data:
+          type: anitya
+          project-id: 4217
+          stable-only: true
+          url-template: https://download.samba.org/pub/rsync/src/rsync-$version.tar.gz
 
   - name: jq
     buildsystem: simple
@@ -260,7 +270,7 @@ modules:
     sources:
       - type: git
         url: https://gitlab.com/es-de/emulationstation-de
-        branch: 9bcc112f7c7efd3216bd3f12370f55fdee011bd4
+        branch: 7a1e420c9df3b801a65e9bcdc0ac92e2d708836e
       - type: shell
         commands:
           - sed -i 's#"EMULATIONSTATION-DE  V" + Utils::String::toUpper(PROGRAM_VERSION_STRING)#"RetroDECK
@@ -431,12 +441,11 @@ modules:
   - name: ppsspp
     buildsystem: cmake-ninja
     config-opts:
-      - -DUSE_SYSTEM_FFMPEG=OFF # default: off, turn this on?
+      - -DUSE_SYSTEM_FFMPEG=OFF
       - -DUSE_SYSTEM_LIBZIP=ON
       - -DUSE_SYSTEM_ZSTD=ON
 
       - -DUSE_WAYLAND_WSI=ON
-      #- -DUSING_X11_VULKAN=ON
       - -DUSING_QT_UI=OFF
 
       - -DBUILD_TESTING=OFF
@@ -454,11 +463,12 @@ modules:
     sources:
       - type: git
         url: &ppsspp-url https://github.com/hrydgard/ppsspp.git
-        tag: v1.14.4
-        commit: cd535263c1ad65fd03869591a8bd706680cbf04b
+        tag: v1.15
+        commit: 4a9227504219bbc64e444ba7f0e306746e5a806d
         x-checker-data:
-          type: git
-          tag-pattern: ^v([\d.]+)$
+          type: anitya
+          project-id: 12295
+          tag-template: 'v$version'
           is-main-source: true
 
   - name: ppsspp-localization
