@@ -325,6 +325,9 @@ set_setting_value() {
       else
         sed -i '\^\['"$current_section_name"'\]^,\^\^'"$setting_name_to_change"'.*^s^\^'"$setting_name_to_change"'=.*^'"$setting_name_to_change"'='"$setting_value_to_change"'^' $1
       fi
+      if [[ "$4" == "retrodeck" ]]; then # If a RetroDECK setting is being changed, also write it to memory for immediate use
+        eval "$setting_name_to_change=$setting_value_to_change"
+      fi
       ;;
 
     "retroarch" )
@@ -758,7 +761,7 @@ check_for_version_update() {
         mkdir -p "$rdhome/RetroDECK_Updates"
         wget -P "$rdhome/RetroDECK_Updates" $latest_cooker_download
         flatpak-spawn --host flatpak install --user --bundle --noninteractive -y "$rdhome/RetroDECK_Updates/RetroDECK.flatpak"
-        rm -f "$rdhome/RetroDECK_Updates" # Cleanup old bundles to save space
+        rm -rf "$rdhome/RetroDECK_Updates" # Cleanup old bundles to save space
         ) |
         zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
