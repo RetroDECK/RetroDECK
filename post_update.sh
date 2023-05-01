@@ -158,6 +158,9 @@ post_update() {
   if [[ -d "/var/data/dolphin-emu/Load/DynamicInputTextures" ]]; then # Refresh installed textures if they have been enabled
     rsync -a "/app/retrodeck/extras/DynamicInputTextures/" "/var/data/dolphin-emu/Load/DynamicInputTextures/"
   fi
+  if [[ -d "/var/data/primehack/Load/DynamicInputTextures" ]]; then # Refresh installed textures if they have been enabled
+    rsync -a "/app/retrodeck/extras/DynamicInputTextures/" "/var/data/primehack/Load/DynamicInputTextures/"
+  fi
 
   update_splashscreens
   update_rd_conf
