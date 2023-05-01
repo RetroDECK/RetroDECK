@@ -441,12 +441,11 @@ modules:
   - name: ppsspp
     buildsystem: cmake-ninja
     config-opts:
-      - -DUSE_SYSTEM_FFMPEG=OFF # default: off, turn this on?
+      - -DUSE_SYSTEM_FFMPEG=OFF
       - -DUSE_SYSTEM_LIBZIP=ON
       - -DUSE_SYSTEM_ZSTD=ON
 
       - -DUSE_WAYLAND_WSI=ON
-      #- -DUSING_X11_VULKAN=ON
       - -DUSING_QT_UI=OFF
 
       - -DBUILD_TESTING=OFF
@@ -464,11 +463,12 @@ modules:
     sources:
       - type: git
         url: &ppsspp-url https://github.com/hrydgard/ppsspp.git
-        tag: v1.14.4
-        commit: cd535263c1ad65fd03869591a8bd706680cbf04b
+        tag: v1.15
+        commit: 4a9227504219bbc64e444ba7f0e306746e5a806d
         x-checker-data:
-          type: git
-          tag-pattern: ^v([\d.]+)$
+          type: anitya
+          project-id: 12295
+          tag-template: 'v$version'
           is-main-source: true
 
   - name: ppsspp-localization
