@@ -17,6 +17,8 @@ source /app/libexec/functions.sh
 #         - Login prompt
 #     - Dolphin Presets
 #       - Enable/Disable Custom Input Textures
+#     - Primehack Presets
+#       - Enable/Disable Custom Input Textures
 #     - Emulator Options (Behind one-time power user warning dialog)
 #       - Launch RetroArch
 #       - Launch Cemu
@@ -337,7 +339,7 @@ configurator_retroarch_presets_dialog() {
 }
 
 configurator_dolphin_presets_dialog() {
-  choice=$(zenity --list --title="RetroDECK Configurator Utility - Dolphin Options" --cancel-label="Back" \
+  choice=$(zenity --list --title="RetroDECK Configurator Utility - Dolphin Presets" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
   "Change Custom Input Textures Setting" "Enable or disable custom input textures for supported games in Dolphin." )
@@ -389,6 +391,63 @@ configurator_dolphin_input_textures_dialog() {
       configurator_process_complete_dialog "enabling Dolphin custom input textures"
     else
       configurator_dolphin_presets_dialog
+    fi
+  fi
+}
+
+configurator_primehack_presets_dialog() {
+  choice=$(zenity --list --title="RetroDECK Configurator Utility - Primehack Presets" --cancel-label="Back" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+  --column="Choice" --column="Action" \
+  "Change Custom Input Textures Setting" "Enable or disable custom input textures for supported games in Primehack." )
+
+  case $choice in
+
+  "Change Custom Input Textures Setting" )
+    configurator_primehack_input_textures_dialog
+  ;;
+
+  "" ) # No selection made or Back button clicked
+    configurator_welcome_dialog
+  ;;
+
+  esac
+}
+
+configurator_primehack_input_textures_dialog() {
+  if [[ -d "/var/data/primehack/Load/DynamicInputTextures" ]]; then
+    zenity --question \
+    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator - Dolphin Custom Input Textures" \
+    --text="Custom input textures are currently enabled. Do you want to disable them?."
+
+    if [ $? == 0 ]
+    then
+      set_setting_value $primehackgfxconf "HiresTextures" "False" primehack
+      rm -rf "/var/data/primehack/Load/DynamicInputTextures"
+      configurator_process_complete_dialog "disabling Primehack custom input textures"
+    else
+      configurator_primehack_presets_dialog
+    fi
+  else
+    zenity --question \
+    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator - Primehack Custom Input Textures" \
+    --text="Custom input textures are currently disabled. Do you want to enable them?.\n\nThis process may take several minutes to complete."
+
+    if [ $? == 0 ]
+    then
+      set_setting_value $primehackgfxconf "HiresTextures" "True" primehack
+      (
+        mkdir "/var/data/primehack/Load/DynamicInputTextures"
+        cp -rf "/app/retrodeck/extras/DynamicInputTextures/*" "/var/data/primehack/Load/DynamicInputTextures/"
+      ) |
+      zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Configurator Utility - Primehack Custom Input Textures Install"
+      configurator_process_complete_dialog "enabling Primehack custom input textures"
+    else
+      configurator_primehack_presets_dialog
     fi
   fi
 }
@@ -1070,12 +1129,16 @@ configurator_developer_dialog() {
 configurator_welcome_dialog() {
   if [[ $developer_options == "true" ]]; then
     welcome_menu_options=("RetroArch Presets" "Change RetroArch presets, log into RetroAchievements etc." \
+    "Dolphin Presets" "Change available Dolphin presets" \
+    "Primehack Presets" "Change available Primehack presets" \
     "Emulator Options" "Launch and configure each emulators settings (for advanced users)" \
     "Tools and Troubleshooting" "Move RetroDECK to a new location, compress games and perform basic troubleshooting" \
     "Reset" "Reset specific parts or all of RetroDECK" \
     "Developer Options" "Welcome to the DANGER ZONE")
   else
     welcome_menu_options=("RetroArch Presets" "Change RetroArch presets, log into RetroAchievements etc." \
+    "Dolphin Presets" "Change available Dolphin presets" \
+    "Primehack Presets" "Change available Primehack presets" \
     "Emulator Options" "Launch and configure each emulators settings (for advanced users)" \
     "Tools and Troubleshooting" "Move RetroDECK to a new location, compress games and perform basic troubleshooting" \
     "Reset" "Reset specific parts or all of RetroDECK" )
@@ -1094,6 +1157,10 @@ configurator_welcome_dialog() {
 
   "Dolphin Presets" )
     configurator_dolphin_presets_dialog
+  ;;
+
+  "Primehack Presets" )
+    configurator_primehack_presets_dialog
   ;;
 
   "Emulator Options" )

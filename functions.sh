@@ -1358,10 +1358,14 @@ prepare_emulator() {
       mkdir -pv "$saves_folder/n3ds/citra/sdmc/"
       dir_prep "$bios_folder/citra/sysdata" "/var/data/citra-emu/sysdata"
       dir_prep "$logs_folder/citra" "/var/data/citra-emu/log"
+      dir_prep "$mods_folder/Citra" "/var/data/citra-emu/load/mods"
+      dir_prep "$texture_packs_folder/Citra" "/var/data/citra-emu/load/textures"
     fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
       dir_prep "$rdhome/bios/citra/sysdata" "/var/data/citra-emu/sysdata"
       dir_prep "$rdhome/.logs/citra" "/var/data/citra-emu/log"
+      dir_prep "$mods_folder/Citra" "/var/data/citra-emu/load/mods"
+      dir_prep "$texture_packs_folder/Citra" "/var/data/citra-emu/load/textures"
       set_setting_value "$citraconf" "nand_directory" "$saves_folder/n3ds/citra/nand/" "citra" "Data%20Storage"
       set_setting_value "$citraconf" "sdmc_directory" "$saves_folder/n3ds/citra/sdmc/" "citra" "Data%20Storage"
       set_setting_value "$citraconf" "Paths\gamedirs\3\path" "$roms_folder/n3ds" "citra" "UI"
@@ -1394,20 +1398,24 @@ prepare_emulator() {
         set_setting_value "$dolphinconf" "ISOPath1" "$roms_folder/gc" "dolphin" "General"
         set_setting_value "$dolphinconf" "WiiSDCardPath" "$saves_folder/wii/dolphin/sd.raw" "dolphin" "General"
       fi # Shared actions
-      dir_prep "$saves_folder/gc/dolphin/EUR" "/var/data/dolphin-emu/GC/EUR" # TODO: Multi-user one-off
-      dir_prep "$saves_folder/gc/dolphin/USA" "/var/data/dolphin-emu/GC/USA" # TODO: Multi-user one-off
-      dir_prep "$saves_folder/gc/dolphin/JAP" "/var/data/dolphin-emu/GC/JAP" # TODO: Multi-user one-off
+      dir_prep "$saves_folder/gc/dolphin/EU" "/var/data/dolphin-emu/GC/EUR" # TODO: Multi-user one-off
+      dir_prep "$saves_folder/gc/dolphin/US" "/var/data/dolphin-emu/GC/USA" # TODO: Multi-user one-off
+      dir_prep "$saves_folder/gc/dolphin/JP" "/var/data/dolphin-emu/GC/JAP" # TODO: Multi-user one-off
       dir_prep "$screenshots_folder" "/var/data/dolphin-emu/ScreenShots"
       dir_prep "$states_folder/dolphin" "/var/data/dolphin-emu/StateSaves"
-      dir_prep "$saves_folder/wii/dolphin" "/var/data/dolphin-emu/Wii" 
+      dir_prep "$saves_folder/wii/dolphin" "/var/data/dolphin-emu/Wii"
+      dir_prep "$mods_folder/Dolphin" "/var/data/dolphin-emu/Load/GraphicMods"
+      dir_prep "$texture_packs_folder/Dolphin" "/var/data/dolphin-emu/Load/Textures"
     fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
-      dir_prep "$saves_folder/gc/dolphin/EUR" "/var/data/dolphin-emu/GC/EUR"
-      dir_prep "$saves_folder/gc/dolphin/USA" "/var/data/dolphin-emu/GC/USA"
-      dir_prep "$saves_folder/gc/dolphin/JAP" "/var/data/dolphin-emu/GC/JAP"
+      dir_prep "$saves_folder/gc/dolphin/EU" "/var/data/dolphin-emu/GC/EUR"
+      dir_prep "$saves_folder/gc/dolphin/US" "/var/data/dolphin-emu/GC/USA"
+      dir_prep "$saves_folder/gc/dolphin/JP" "/var/data/dolphin-emu/GC/JAP"
       dir_prep "$screenshots_folder" "/var/data/dolphin-emu/ScreenShots"
       dir_prep "$states_folder/dolphin" "/var/data/dolphin-emu/StateSaves"
-      dir_prep "$saves_folder/wii/dolphin" "/var/data/dolphin-emu/Wii" 
+      dir_prep "$saves_folder/wii/dolphin" "/var/data/dolphin-emu/Wii"
+      dir_prep "$mods_folder/Dolphin" "/var/data/dolphin-emu/Load/GraphicMods"
+      dir_prep "$texture_packs_folder/Dolphin" "/var/data/dolphin-emu/Load/Textures"
       set_setting_value "$dolphinconf" "BIOS" "$bios_folder" "dolphin" "GBA"
       set_setting_value "$dolphinconf" "SavesPath" "$saves_folder/gba" "dolphin" "GBA"
       set_setting_value "$dolphinconf" "ISOPath0" "$roms_folder/wii" "dolphin" "General"
@@ -1578,21 +1586,25 @@ prepare_emulator() {
         set_setting_value "$primehackconf" "ISOPath0" "$roms_folder/gc" "primehack" "General"
       fi
       # Shared actions
-      dir_prep "$saves_folder/gc/primehack/EUR" "/var/data/primehack/GC/EUR"
-      dir_prep "$saves_folder/gc/primehack/USA" "/var/data/primehack/GC/USA"
-      dir_prep "$saves_folder/gc/primehack/JAP" "/var/data/primehack/GC/JAP"
+      dir_prep "$saves_folder/gc/primehack/EU" "/var/data/primehack/GC/EUR"
+      dir_prep "$saves_folder/gc/primehack/US" "/var/data/primehack/GC/USA"
+      dir_prep "$saves_folder/gc/primehack/JP" "/var/data/primehack/GC/JAP"
       dir_prep "$screenshots_folder" "/var/data/primehack/ScreenShots"
       dir_prep "$states_folder/primehack" "/var/data/primehack/StateSaves"
       mkdir -pv /var/data/primehack/Wii/
       dir_prep "$saves_folder/wii/primehack" "/var/data/primehack/Wii"
+      dir_prep "$mods_folder/Primehack" "/var/data/primehack/Load/GraphicMods"
+      dir_prep "$texture_packs_folder/Primehack" "/var/data/primehack/Load/Textures"
     fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
-      dir_prep "$saves_folder/gc/primehack/EUR" "/var/data/primehack/GC/EUR"
-      dir_prep "$saves_folder/gc/primehack/USA" "/var/data/primehack/GC/USA"
-      dir_prep "$saves_folder/gc/primehack/JAP" "/var/data/primehack/GC/JAP"
+      dir_prep "$saves_folder/gc/primehack/EU" "/var/data/primehack/GC/EUR"
+      dir_prep "$saves_folder/gc/primehack/US" "/var/data/primehack/GC/USA"
+      dir_prep "$saves_folder/gc/primehack/JP" "/var/data/primehack/GC/JAP"
       dir_prep "$screenshots_folder" "/var/data/primehack/ScreenShots"
       dir_prep "$states_folder/primehack" "/var/data/primehack/StateSaves"
       dir_prep "$saves_folder/wii/primehack" "/var/data/primehack/Wii/"
+      dir_prep "$mods_folder/Primehack" "/var/data/primehack/Load/GraphicMods"
+      dir_prep "$texture_packs_folder/Primehack" "/var/data/primehack/Load/Textures"
       set_setting_value "$primehackconf" "ISOPath0" "$roms_folder/gc" "primehack" "General"
     fi
   fi
@@ -1745,6 +1757,7 @@ prepare_emulator() {
       dir_prep "$bios_folder/switch/registered" "/var/data/yuzu/nand/system/Contents/registered"
       dir_prep "$logs_folder/yuzu" "/var/data/yuzu/log"
       dir_prep "$screenshots_folder" "/var/data/yuzu/screenshots"
+      dir_prep "$mods_folder/Yuzu" "/var/data/yuzu/load"
       # removing dead symlinks as they were present in a past version
       if [ -d $bios_folder/switch ]; then
         find $bios_folder/switch -xtype l -exec rm {} \;
@@ -1757,6 +1770,7 @@ prepare_emulator() {
       dir_prep "$saves_folder/switch/yuzu/sdmc" "/var/data/yuzu/sdmc"
       dir_prep "$logs_folder/yuzu" "/var/data/yuzu/log"
       dir_prep "$screenshots_folder" "/var/data/yuzu/screenshots"
+      dir_prep "$mods_folder/Yuzu" "/var/data/yuzu/load"
       set_setting_value "$yuzuconf" "nand_directory" "$saves_folder/switch/yuzu/nand" "yuzu" "Data%20Storage"
       set_setting_value "$yuzuconf" "sdmc_directory" "$saves_folder/switch/yuzu/sdmc" "yuzu" "Data%20Storage"
       set_setting_value "$yuzuconf" "Paths\gamedirs\4\path" "$roms_folder/switch" "yuzu" "UI"
