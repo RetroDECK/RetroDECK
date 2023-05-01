@@ -1802,7 +1802,7 @@ install_retrodeck_controller_profile() {
   # NOTE: These files need to be stored in shared locations for Steam, outside of the normal RetroDECK folders and should always be an optional user choice
   # USAGE: install_retrodeck_controller_profile
   rsync -a "/app/retrodeck/binding-icons/" "$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/"
-  cp -f "$emuconfigs/retrodeck/defaults/RetroDECK_controller_config.vdf" "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"
+  cp -f "$emuconfigs/defaults/retrodeck/RetroDECK_controller_config.vdf" "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"
 }
 
 create_lock() {

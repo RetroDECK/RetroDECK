@@ -1863,7 +1863,7 @@
         <platform>zxspectrum</platform>
         <theme>zxspectrum</theme>
     </system>
-    <system>
+    <!-- <system>
         <name>tools</name>
         <fullname>RetroDECK Tools</fullname>
         <path>/app/tools</path>
@@ -1871,5 +1871,5 @@
         <command>bash %ROM%</command>
         <platform>tools</platform>
         <theme>tools</theme>
-    </system>
+    </system> -->
 </systemList>
