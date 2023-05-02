@@ -145,7 +145,7 @@ else
   if [[ $(check_network_connectivity) == "true" ]]; then
     finit             # Executing First/Force init
   else
-    configurator_generic_dialog "You do not appear to be connected to a network with internet access.\n\nThe initial RetroDECK setup requires some files from the internet to function properly.\n\nPlease retry this process once a network connection is available."
+    configurator_generic_dialog "RetroDECK Setup" "You do not appear to be connected to a network with internet access.\n\nThe initial RetroDECK setup requires some files from the internet to function properly.\n\nPlease retry this process once a network connection is available."
     exit 1
   fi
 fi

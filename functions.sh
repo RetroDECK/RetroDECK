@@ -733,7 +733,7 @@ check_for_version_update() {
           set_setting_value $rd_conf "update_ignore" "$online_version" retrodeck "options" # Store version to ignore for future checks
         fi
       else # User clicked "Yes"
-        configurator_generic_dialog "The update process may take several minutes.\n\nAfter the update is complete, RetroDECK will close. When you run it again you will be using the latest version."
+        configurator_generic_dialog "RetroDECK Online Update" "The update process may take several minutes.\n\nAfter the update is complete, RetroDECK will close. When you run it again you will be using the latest version."
         (
         flatpak-spawn --host flatpak update --noninteractive -y net.retrodeck.retrodeck
         ) |
@@ -741,7 +741,7 @@ check_for_version_update() {
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         --title "RetroDECK Updater" \
         --text="RetroDECK is updating to the latest version, please wait."
-        configurator_generic_dialog "The update process is now complete!\n\nPlease restart RetroDECK to keep the fun going."
+        configurator_generic_dialog "RetroDECK Online Update" "The update process is now complete!\n\nPlease restart RetroDECK to keep the fun going."
         exit 1
       fi
     elif [[ "$update_repo" == "RetroDECK-cooker" ]] && [[ ! $current_version == $online_version ]]; then
@@ -755,7 +755,7 @@ check_for_version_update() {
           set_setting_value $rd_conf "update_ignore" "$online_version" retrodeck "options" # Store version to ignore for future checks.
         fi
       else # User clicked "Yes"
-        configurator_generic_dialog "The update process may take several minutes.\n\nAfter the update is complete, RetroDECK will close. When you run it again you will be using the latest version."
+        configurator_generic_dialog "RetroDECK Online Update" "The update process may take several minutes.\n\nAfter the update is complete, RetroDECK will close. When you run it again you will be using the latest version."
         (
         local latest_cooker_download=$(curl --silent https://api.github.com/repos/XargonWan/$update_repo/releases/latest | grep '"browser_download_url":' | sed -E 's/.*"([^"]+)".*/\1/')
         mkdir -p "$rdhome/RetroDECK_Updates"
@@ -767,7 +767,7 @@ check_for_version_update() {
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         --title "RetroDECK Updater" \
         --text="RetroDECK is updating to the latest version, please wait."
-        configurator_generic_dialog "The update process is now complete!\n\nPlease restart RetroDECK to keep the fun going."
+        configurator_generic_dialog "RetroDECK Online Update" "The update process is now complete!\n\nPlease restart RetroDECK to keep the fun going."
         exit 1
       fi
     fi
@@ -854,11 +854,11 @@ echo "$chosen_user"
 
 multi_user_enable_multi_user_mode() {
   if [[ -z "$SteamAppUser" ]]; then
-    configurator_generic_dialog "The Steam username of the current user could not be determined from the system.\n\nThis can happen when running in Desktop mode.\n\nYou will be asked to specify the Steam username (not profile name) of the current user in the next dialog."
+    configurator_generic_dialog "RetroDECK Multi-User Mode" "The Steam username of the current user could not be determined from the system.\n\nThis can happen when running in Desktop mode.\n\nYou will be asked to specify the Steam username (not profile name) of the current user in the next dialog."
   fi
   if [[ -d "$multi_user_data_folder" && $(ls -1 "$multi_user_data_folder" | wc -l) -gt 0 ]]; then # If multi-user data folder exists from prior use and is not empty
     if [[ -d "$multi_user_data_folder/$SteamAppUser" ]]; then # Current user has an existing save folder
-      configurator_generic_dialog "The current user $SteamAppUser has an existing folder in the multi-user data folder.\n\nThe saves here are likely older than the ones currently used by RetroDECK.\n\nThe old saves will be backed up to $backups_folder and the current saves will be loaded into the multi-user data folder."
+      configurator_generic_dialog "RetroDECK Multi-User Mode" "The current user $SteamAppUser has an existing folder in the multi-user data folder.\n\nThe saves here are likely older than the ones currently used by RetroDECK.\n\nThe old saves will be backed up to $backups_folder and the current saves will be loaded into the multi-user data folder."
       mkdir -p "$backups_folder"
       tar -C "$multi_user_data_folder" -cahf "$backups_folder/multi-user-backup_$SteamAppUser_$(date +"%Y_%m_%d").zip" "$SteamAppUser"
       rm -rf "$multi_user_data_folder/$SteamAppUser" # Remove stale data after backup
@@ -869,7 +869,7 @@ multi_user_enable_multi_user_mode() {
   if [[ -d "$multi_user_data_folder/$SteamAppUser" ]]; then
     configurator_process_complete_dialog "enabling multi-user support"
   else
-    configurator_generic_dialog "It looks like something went wrong while enabling multi-user mode."
+    configurator_generic_dialog "RetroDECK Multi-User Mode" "It looks like something went wrong while enabling multi-user mode."
   fi
 }
 
@@ -893,7 +893,7 @@ multi_user_disable_multi_user_mode() {
       set_setting_value $rd_conf "multi_user_mode" "false" retrodeck "options"
       configurator_process_complete_dialog "disabling multi-user support"
     else
-      configurator_generic_dialog "No single user was selected, please try the process again."
+      configurator_generic_dialog "RetroDECK Multi-User Mode" "No single user was selected, please try the process again."
       configurator_retrodeck_multiuser_dialog
     fi
   else
@@ -916,12 +916,12 @@ multi_user_determine_current_user() {
       else # Unable to find Steam user ID
         if [[ $(ls -1 "$multi_user_data_folder" | wc -l) -gt 1 ]]; then
           if [[ -z $default_user ]]; then # And a default user is not set
-            configurator_generic_dialog "The current user could not be determined from the system, and there are multiple users registered.\n\nPlease select which user is currently playing in the next dialog."
+            configurator_generic_dialog "RetroDECK Multi-User Mode" "The current user could not be determined from the system, and there are multiple users registered.\n\nPlease select which user is currently playing in the next dialog."
             SteamAppUser=$(multi_user_choose_current_user_dialog)
             if [[ ! -z $SteamAppUser ]]; then # User was chosen from dialog
               multi_user_link_current_user_files
             else
-              configurator_generic_dialog "No user was chosen, RetroDECK will launch with the files from the user who played most recently."
+              configurator_generic_dialog "RetroDECK Multi-User Mode" "No user was chosen, RetroDECK will launch with the files from the user who played most recently."
             fi
           else # The default user is set
             if [[ ! -z $(ls -1 $multi_user_data_folder | grep "$default_user") ]]; then # Confirm user data folder exists
@@ -940,7 +940,7 @@ multi_user_determine_current_user() {
       if [[ ! -z "$SteamAppUser" ]]; then
         multi_user_setup_new_user
       else # If running in Desktop mode for the first time
-        configurator_generic_dialog "The current user could not be determined from the system and there is no existing userlist.\n\nPlease enter the Steam account username (not profile name) into the next dialog, or run RetroDECK in game mode."
+        configurator_generic_dialog "RetroDECK Multi-User Mode" "The current user could not be determined from the system and there is no existing userlist.\n\nPlease enter the Steam account username (not profile name) into the next dialog, or run RetroDECK in game mode."
         if zenity --entry \
           --title="Specify Steam username" \
           --text="Enter Steam username:"
@@ -949,17 +949,17 @@ multi_user_determine_current_user() {
           if [[ ! -z "$SteamAppUser" ]]; then
             multi_user_setup_new_user
           else # But dialog box was blank
-            configurator_generic_dialog "No username was entered, so multi-user data folder cannot be created.\n\nDisabling multi-user mode, please try the process again."
+            configurator_generic_dialog "RetroDECK Multi-User Mode" "No username was entered, so multi-user data folder cannot be created.\n\nDisabling multi-user mode, please try the process again."
             set_setting_value $rd_conf "multi_user_mode" "false" retrodeck "options"
           fi
         else # User clicked "Cancel"
-          configurator_generic_dialog "Cancelling multi-user mode activation."
+          configurator_generic_dialog "RetroDECK Multi-User Mode" "Cancelling multi-user mode activation."
           set_setting_value $rd_conf "multi_user_mode" "false" retrodeck "options"
         fi
       fi
     fi
   else
-    configurator_generic_dialog "Multi-user mode is not currently enabled"
+    configurator_generic_dialog "RetroDECK Multi-User Mode" "Multi-user mode is not currently enabled"
   fi
 }
 
@@ -2230,11 +2230,11 @@ configurator_process_complete_dialog() {
 
 configurator_generic_dialog() {
   # This dialog is for showing temporary messages before another process happens.
-  # USAGE: configurator_generic_dialog "info text"
+  # USAGE: configurator_generic_dialog "title text" "info text"
   zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-  --title "RetroDECK Configurator Utility" \
-  --text="$1"
+  --title "$1" \
+  --text="$2"
 }
 
 configurator_generic_question_dialog() {
@@ -2303,17 +2303,17 @@ configurator_move_folder_dialog() {
       elif [[ "$choice" == "SD Card" ]]; then # If the user wants to move the folder to the predefined SD card location, set the target as sdcard from retrodeck.cfg
         local dest_root="$sdcard"
       else
-        configurator_generic_dialog "Select the parent folder you would like to store the $(basename $dir_to_move) folder in."
+        configurator_generic_dialog "RetroDECK Configurator - Move Folder" "Select the parent folder you would like to store the $(basename $dir_to_move) folder in."
         local dest_root=$(directory_browse "RetroDECK directory location") # Set the destination root as the selected custom location
       fi
 
       if [[ (! -z "$dest_root") && ( -w "$dest_root") ]]; then # If user picked a destination and it is writable
         if [[ (-d "$dest_root/$rd_dir_path") && (! -L "$dest_root/$rd_dir_path") && (! $rd_dir_name == "rdhome") ]] || [[ "$(realpath $dir_to_move)" == "$dest_root/$rd_dir_path" ]]; then # If the user is trying to move the folder to where it already is (excluding symlinks that will be unlinked)
-          configurator_generic_dialog "The $(basename $dir_to_move) folder is already at that location, please pick a new one."
+          configurator_generic_dialog "RetroDECK Configurator - Move Folder" "The $(basename $dir_to_move) folder is already at that location, please pick a new one."
           configurator_move_folder_dialog "$rd_dir_name"
         else
           if [[ $(verify_space "$(echo $dir_to_move | sed 's/\/$//')" "$dest_root") ]]; then # Make sure there is enough space at the destination
-            configurator_generic_dialog "Moving $(basename $dir_to_move) folder to $choice"
+            configurator_generic_dialog "RetroDECK Configurator - Move Folder" "Moving $(basename $dir_to_move) folder to $choice"
             unlink "$dest_root/$rd_dir_path" # In case there is already a symlink at the picked destination
             move "$dir_to_move" "$dest_root/$rd_dir_path"
             if [[ -d "$dest_root/$rd_dir_path" ]]; then # If the move succeeded
@@ -2328,7 +2328,7 @@ configurator_move_folder_dialog() {
               fi
               configurator_process_complete_dialog "moving the RetroDECK data directory to internal storage"
             else
-              configurator_generic_dialog "The moving process was not completed, please try again."
+              configurator_generic_dialog "RetroDECK Configurator - Move Folder" "The moving process was not completed, please try again."
             fi
           else # If there isn't enough space in the picked destination
             zenity --icon-name=net.retrodeck.retrodeck --error --no-wrap \
@@ -2339,21 +2339,21 @@ configurator_move_folder_dialog() {
         fi
       else # If the user didn't pick any custom destination, or the destination picked is unwritable
         if [[ ! -z "$dest_root" ]]; then
-          configurator_generic_dialog "No destination was chosen, so no files have been moved."
+          configurator_generic_dialog "RetroDECK Configurator - Move Folder" "No destination was chosen, so no files have been moved."
         else
-          configurator_generic_dialog "The chosen destination is not writable.\nNo files have been moved.\n\nThis can happen when trying to select a location that RetroDECK does not have permission to write.\nThis can normally be fixed by adding the desired path to the RetroDECK permissions with Flatseal."
+          configurator_generic_dialog "RetroDECK Configurator - Move Folder" "The chosen destination is not writable.\nNo files have been moved.\n\nThis can happen when trying to select a location that RetroDECK does not have permission to write.\nThis can normally be fixed by adding the desired path to the RetroDECK permissions with Flatseal."
         fi
       fi
     ;;
 
     esac
   else # The folder to move was not found at the path pulled from retrodeck.cfg and it needs to be reconfigured manually.
-    configurator_generic_dialog "The $(basename $dir_to_move) folder was not found at the expected location.\n\nThis may have happened if the folder was moved manually.\n\nPlease select the current location of the folder."
+    configurator_generic_dialog "RetroDECK Configurator - Move Folder" "The $(basename $dir_to_move) folder was not found at the expected location.\n\nThis may have happened if the folder was moved manually.\n\nPlease select the current location of the folder."
     dir_to_move=$(directory_browse "RetroDECK $(basename $dir_to_move) directory location")
     eval "$rd_dir_name"="$dir_to_move"
     prepare_emulator "postmove" "all"
     conf_write
-    configurator_generic_dialog "RetroDECK $(basename $dir_to_move) folder now configured at\n$dir_to_move."
+    configurator_generic_dialog "RetroDECK Configurator - Move Folder" "RetroDECK $(basename $dir_to_move) folder now configured at\n$dir_to_move."
     configurator_move_folder_dialog "$rd_dir_name"
   fi
 }

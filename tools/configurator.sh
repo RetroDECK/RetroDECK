@@ -100,11 +100,11 @@ configurator_reset_dialog() {
           prepare_emulator "reset" "$emulator_to_reset" "configurator"
           configurator_process_complete_dialog "resetting $emulator_to_reset"
         else
-          configurator_generic_dialog "You do not appear to be connected to a network with internet access.\n\nThe $emulator_to_reset reset process requires some files from the internet to function properly.\n\nPlease retry this process once a network connection is available."
+          configurator_generic_dialog "RetroDeck Configurator - Reset" "You do not appear to be connected to a network with internet access.\n\nThe $emulator_to_reset reset process requires some files from the internet to function properly.\n\nPlease retry this process once a network connection is available."
           configurator_reset_dialog
         fi
       else
-        configurator_generic_dialog "Reset process cancelled."
+        configurator_generic_dialog "RetroDeck Configurator - Reset" "Reset process cancelled."
         configurator_reset_dialog
       fi
     ;;
@@ -114,7 +114,7 @@ configurator_reset_dialog() {
         prepare_emulator "reset" "$emulator_to_reset" "configurator"
         configurator_process_complete_dialog "resetting $emulator_to_reset"
       else
-        configurator_generic_dialog "Reset process cancelled."
+        configurator_generic_dialog "RetroDeck Configurator - Reset" "Reset process cancelled."
         configurator_reset_dialog
       fi
     ;;
@@ -132,11 +132,11 @@ configurator_reset_dialog() {
       prepare_emulator "reset" "all"
       configurator_process_complete_dialog "resetting all emulators"
     else
-      configurator_generic_dialog "You do not appear to be connected to a network with internet access.\n\nThe all-emulator reset process requires some files from the internet to function properly.\n\nPlease retry this process once a network connection is available."
+      configurator_generic_dialog "RetroDeck Configurator - Reset" "You do not appear to be connected to a network with internet access.\n\nThe all-emulator reset process requires some files from the internet to function properly.\n\nPlease retry this process once a network connection is available."
       configurator_reset_dialog
     fi
   else
-    configurator_generic_dialog "Reset process cancelled."
+    configurator_generic_dialog "RetroDeck Configurator - Reset" "Reset process cancelled."
     configurator_reset_dialog
   fi
 ;;
@@ -151,7 +151,7 @@ configurator_reset_dialog() {
     rm -f "$rd_conf"
     configurator_process_complete_dialog "resetting RetroDECK"
   else
-    configurator_generic_dialog "Reset process cancelled."
+    configurator_generic_dialog "RetroDeck Configurator - Reset" "Reset process cancelled."
     configurator_reset_dialog
   fi
 ;;
@@ -488,15 +488,15 @@ configurator_compress_single_game_dialog() {
       zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Configurator Utility - Compression in Progress"
-      configurator_generic_dialog "The compression process is complete!"
+      configurator_generic_dialog "RetroDECK Configurator - ROM Compressor" "The compression process is complete!"
       configurator_compress_games_dialog
 
     else
-      configurator_generic_dialog "The selected file does not have any compatible compressed format."
+      configurator_generic_dialog "RetroDECK Configurator - ROM Compressor" "The selected file does not have any compatible compressed format."
       configurator_compress_games_dialog
     fi
   else
-    configurator_generic_dialog "No file selected, returning to main menu"
+    configurator_generic_dialog "RetroDECK Configurator - ROM Compressor" "No file selected, returning to main menu"
     configurator_welcome_dialog
   fi
 }
@@ -601,7 +601,7 @@ configurator_compress_some_games_dialog() {
     zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Configurator Utility - Compression in Progress"
-      configurator_generic_dialog "The compression process is complete!"
+      configurator_generic_dialog "RetroDECK Configurator - ROM Compressor" "The compression process is complete!"
       configurator_compress_games_dialog
   else
     configurator_compress_games_dialog
@@ -658,10 +658,10 @@ configurator_compress_all_games_dialog() {
     zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator Utility - Compression in Progress"
-    configurator_generic_dialog "The compression process is complete!"
+    configurator_generic_dialog "RetroDECK Configurator - ROM Compressor" "The compression process is complete!"
     configurator_compress_games_dialog
   else
-    configurator_generic_dialog "There were no games found that could be compressed."
+    configurator_generic_dialog "RetroDECK Configurator - ROM Compressor" "There were no games found that could be compressed."
   fi
 }
 
@@ -731,13 +731,13 @@ configurator_check_multifile_game_structure() {
     --title "RetroDECK" \
     --text="The following games were found to have the incorrect folder structure:\n\n$(find $roms_folder -maxdepth 2 -mindepth 2 -type d ! -name "*.m3u" ! -name "*.ps3")\n\nIncorrect folder structure can result in failure to launch games or saves being in the incorrect location.\n\nPlease see the RetroDECK wiki for more details!\n\nYou can find this list of games in ~/retrodeck/.logs"
   else
-    configurator_generic_dialog "No incorrect multi-file game folder structures found."
+    configurator_generic_dialog "RetroDECK Configurator - Multi-file Game Structure" "No incorrect multi-file game folder structures found."
   fi
   configurator_tools_and_troubleshooting_dialog
 }
 
 configurator_check_bios_files_basic() {
-  configurator_generic_dialog "This check will look for BIOS files that RetroDECK has identified as working.\n\nThere may be additional BIOS files that will function with the emulators that are not checked.\n\nSome more advanced emulators such as Yuzu will have additional methods for verifiying the BIOS files are in working order."
+  configurator_generic_dialog "RetroDECK Configurator - Basic BIOS Check" "This check will look for BIOS files that RetroDECK has identified as working.\n\nThere may be additional BIOS files that will function with the emulators that are not checked.\n\nSome more advanced emulators such as Yuzu will have additional methods for verifiying the BIOS files are in working order."
   bios_checked_list=()
 
   while IFS="^" read -r bios_file bios_subdir bios_hash bios_system bios_desc
@@ -758,13 +758,13 @@ configurator_check_bios_files_basic() {
   done < $bios_checklist
   systems_with_bios=${bios_checked_list[@]}
 
-  configurator_generic_dialog "The following systems have been found to have at least one valid BIOS file.\n\n$systems_with_bios\n\nFor more information on the BIOS files found please use the Advanced check tool."
+  configurator_generic_dialog "RetroDECK Configurator - Basic BIOS Check" "The following systems have been found to have at least one valid BIOS file.\n\n$systems_with_bios\n\nFor more information on the BIOS files found please use the Advanced check tool."
 
   configurator_tools_and_troubleshooting_dialog
 }
 
 configurator_check_bios_files_advanced() {
-  configurator_generic_dialog "This check will look for BIOS files that RetroDECK has identified as working.\n\nNot all BIOS files are required for games to work, please check the BIOS description for more information on its purpose.\n\nThere may be additional BIOS files that will function with the emulators that are not checked.\n\nSome more advanced emulators such as Yuzu will have additional methods for verifiying the BIOS files are in working order."
+  configurator_generic_dialog "RetroDECK Configurator - Advanced BIOS Check" "This check will look for BIOS files that RetroDECK has identified as working.\n\nNot all BIOS files are required for games to work, please check the BIOS description for more information on its purpose.\n\nThere may be additional BIOS files that will function with the emulators that are not checked.\n\nSome more advanced emulators such as Yuzu will have additional methods for verifiying the BIOS files are in working order."
   bios_checked_list=()
 
   while IFS="^" read -r bios_file bios_subdir bios_hash bios_system bios_desc
@@ -843,7 +843,7 @@ configurator_online_theme_downloader() {
     --no-cancel \
     --auto-close
 
-    configurator_generic_dialog "The theme downloads and updates have been completed.\n\nYou may need to exit RetroDECK and start it again for the new themes to be available."
+    configurator_generic_dialog "RetroDECK Configurator - Online Theme Downloader" "The theme downloads and updates have been completed.\n\nYou may need to exit RetroDECK and start it again for the new themes to be available."
     configurator_tools_and_troubleshooting_dialog
   else
     configurator_tools_and_troubleshooting_dialog
@@ -851,7 +851,7 @@ configurator_online_theme_downloader() {
 }
 
 configurator_rpcs3_firmware_updater() {
-  configurator_generic_dialog "This tool will download firmware required by RPCS3 to emulate PS3 games.\n\nThe process will take several minutes, and the emulator will launch to finish the installation.\nPlease close RPCS3 manually once the installation is complete."
+  configurator_generic_dialog "RetroDECK Configurator - RPCS3 Firmware Update" "This tool will download firmware required by RPCS3 to emulate PS3 games.\n\nThe process will take several minutes, and the emulator will launch to finish the installation.\nPlease close RPCS3 manually once the installation is complete."
   (
     update_rpcs3_firmware
   ) |
@@ -903,17 +903,17 @@ configurator_tools_and_troubleshooting_dialog() {
     if [[ $(check_network_connectivity) == "true" ]]; then
       configurator_rpcs3_firmware_updater
     else
-      configurator_generic_dialog "You do not appear to currently have Internet access, which is required by this tool. Please try again when network access has been restored."
+      configurator_generic_dialog "RetroDECK Configurator - RPCS3 Firmware Update" "You do not appear to currently have Internet access, which is required by this tool. Please try again when network access has been restored."
       configurator_tools_and_troubleshooting_dialog
     fi
   ;;
 
   "Install RetroDECK controller profile" )
-    configurator_generic_dialog "Starting with version 0.7.0b, we are offering a new official RetroDECK controller profile!\nIt is an optional component that helps you get the most out of RetroDECK with a new in-game radial menu for unified hotkeys across emulators.\n\nThe files need to be installed outside of the normal ~/retrodeck folder, so we wanted your permission before proceeding.\n\nThe files will be installed at the following shared Steam locations:\n\n$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/\n$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"
+    configurator_generic_dialog "RetroDECK Configurator - Custom Controller Profile" "Starting with version 0.7.0b, we are offering a new official RetroDECK controller profile!\nIt is an optional component that helps you get the most out of RetroDECK with a new in-game radial menu for unified hotkeys across emulators.\n\nThe files need to be installed outside of the normal ~/retrodeck folder, so we wanted your permission before proceeding.\n\nThe files will be installed at the following shared Steam locations:\n\n$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/\n$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"
     if [[ $(configurator_generic_question_dialog "RetroDECK Official Controller Profile" "Would you like to install the official RetroDECK controller profile?") == "true" ]]; then
       install_retrodeck_controller_profile
     fi
-    configurator_generic_dialog "The RetroDECK controller profile install is complete.\nSee the Wiki for more details on how to use it to its fullest potential!"
+    configurator_generic_dialog "RetroDECK Configurator - Custom Controller Profile" "The RetroDECK controller profile install is complete.\nSee the Wiki for more details on how to use it to its fullest potential!"
     configurator_tools_and_troubleshooting_dialog
   ;;
 
@@ -924,7 +924,7 @@ configurator_tools_and_troubleshooting_dialog() {
   ;;
 
   "Backup RetroDECK Userdata" )
-    configurator_generic_dialog "This tool will compress important RetroDECK userdata (basically everything except the ROMs folder) into a zip file.\n\nThis process can take several minutes, and the resulting zip file can be found in the ~/retrodeck/backups folder."
+    configurator_generic_dialog "RetroDECK Configurator - Userdata Backup" "This tool will compress important RetroDECK userdata (basically everything except the ROMs folder) into a zip file.\n\nThis process can take several minutes, and the resulting zip file can be found in the ~/retrodeck/backups folder."
     (
       backup_retrodeck_userdata
     ) |
@@ -933,9 +933,9 @@ configurator_tools_and_troubleshooting_dialog() {
             --title "RetroDECK Configurator Utility - Backup in Progress" \
             --text="Backing up RetroDECK userdata, please wait..."
     if [[ -f $backups_folder/$(date +"%0m%0d")_retrodeck_userdata.zip ]]; then
-      configurator_generic_dialog "The backup process is now complete."
+      configurator_generic_dialog "RetroDECK Configurator - Userdata Backup" "The backup process is now complete."
     else
-      configurator_generic_dialog "The backup process could not be completed,\nplease check the logs folder for more information."
+      configurator_generic_dialog "RetroDECK Configurator - Userdata Backup" "The backup process could not be completed,\nplease check the logs folder for more information."
     fi
     configurator_tools_and_troubleshooting_dialog
   ;;
@@ -1176,7 +1176,7 @@ configurator_welcome_dialog() {
   ;;
 
   "Developer Options" )
-    configurator_generic_dialog "The following features and options are potentially VERY DANGEROUS for your RetroDECK install!\n\nThey should be considered the bleeding-edge of upcoming RetroDECK features, and never used when you have important saves/states/roms that are not backed up!\n\nYOU HAVE BEEN WARNED!"
+    configurator_generic_dialog "RetroDECK Configurator - Developer Options" "The following features and options are potentially VERY DANGEROUS for your RetroDECK install!\n\nThey should be considered the bleeding-edge of upcoming RetroDECK features, and never used when you have important saves/states/roms that are not backed up!\n\nYOU HAVE BEEN WARNED!"
     configurator_developer_dialog
   ;;
 
