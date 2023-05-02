@@ -1256,7 +1256,7 @@ prepare_emulator() {
           cp -fv $emuconfigs/retroarch/retroarch.cfg /var/config/retroarch/
           cp -fv $emuconfigs/retroarch/retroarch-core-options.cfg /var/config/retroarch/
           mkdir -pv /var/config/retroarch/config/
-          cp -rf $emuconfigs/retroarch/core-overrides/* /var/config/retroarch/config
+          cp -rf "$emuconfigs/retroarch/core-overrides/"* /var/config/retroarch/config
           dir_prep "$borders_folder" "/var/config/retroarch/borders"
           cp -rt /var/config/retroarch/borders/ /app/retrodeck/emu-configs/retroarch/borders/*
           set_setting_value "$raconf" "savefile_directory" "$saves_folder" "retroarch"
@@ -1381,7 +1381,7 @@ prepare_emulator() {
       if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/dolphin-emu"
         mkdir -p "$multi_user_data_folder/$SteamAppUser/config/dolphin-emu"
-        cp -fvr $emuconfigs/dolphin/* "$multi_user_data_folder/$SteamAppUser/config/dolphin-emu/"
+        cp -fvr "$emuconfigs/dolphin/"* "$multi_user_data_folder/$SteamAppUser/config/dolphin-emu/"
         set_setting_value "$multi_user_data_folder/$SteamAppUser/config/dolphin-emu/Dolphin.ini" "BIOS" "$bios_folder" "dolphin" "GBA"
         set_setting_value "$multi_user_data_folder/$SteamAppUser/config/dolphin-emu/Dolphin.ini" "SavesPath" "$saves_folder/gba" "dolphin" "GBA"
         set_setting_value "$multi_user_data_folder/$SteamAppUser/config/dolphin-emu/Dolphin.ini" "ISOPath0" "$roms_folder/wii" "dolphin" "General"
@@ -1432,7 +1432,7 @@ prepare_emulator() {
       if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/duckstation"
         mkdir -p "$multi_user_data_folder/$SteamAppUser/data/duckstation/"
-        cp -fv $emuconfigs/duckstation/* "$multi_user_data_folder/$SteamAppUser/data/duckstation"
+        cp -fv "$emuconfigs/duckstation/"* "$multi_user_data_folder/$SteamAppUser/data/duckstation"
         set_setting_value "$multi_user_data_folder/$SteamAppUser/data/duckstation/settings.ini" "SearchDirectory" "$bios_folder" "duckstation" "BIOS"
         set_setting_value "$multi_user_data_folder/$SteamAppUser/data/duckstation/settings.ini" "Card1Path" "$saves_folder/psx/duckstation/memcards/shared_card_1.mcd" "duckstation" "MemoryCards"
         set_setting_value "$multi_user_data_folder/$SteamAppUser/data/duckstation/settings.ini" "Card2Path" "$saves_folder/psx/duckstation/memcards/shared_card_2.mcd" "duckstation" "MemoryCards"
@@ -1441,7 +1441,7 @@ prepare_emulator() {
       else # Single-user actions
         rm -rf /var/config/duckstation
         mkdir -p /var/data/duckstation/
-        cp -fv $emuconfigs/duckstation/* /var/data/duckstation
+        cp -fv "$emuconfigs/duckstation/"* /var/data/duckstation
         set_setting_value "$duckstationconf" "SearchDirectory" "$bios_folder" "duckstation" "BIOS"
         set_setting_value "$duckstationconf" "Card1Path" "$saves_folder/psx/duckstation/memcards/shared_card_1.mcd" "duckstation" "MemoryCards"
         set_setting_value "$duckstationconf" "Card2Path" "$saves_folder/psx/duckstation/memcards/shared_card_2.mcd" "duckstation" "MemoryCards"
@@ -1507,7 +1507,7 @@ prepare_emulator() {
       if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/PCSX2"
         mkdir -p "$multi_user_data_folder/$SteamAppUser/config/PCSX2/inis"
-        cp -fvr $emuconfigs/PCSX2/* "$multi_user_data_folder/$SteamAppUser/config/PCSX2/inis/"
+        cp -fvr "$emuconfigs/PCSX2/"* "$multi_user_data_folder/$SteamAppUser/config/PCSX2/inis/"
         set_setting_value "$multi_user_data_folder/$SteamAppUser/config/PCSX2/inis/PCSX2.ini" "Bios" "$bios_folder" "pcsx2" "Folders"
         set_setting_value "$multi_user_data_folder/$SteamAppUser/config/PCSX2/inis/PCSX2.ini" "Snapshots" "$screenshots_folder" "pcsx2" "Folders"
         set_setting_value "$multi_user_data_folder/$SteamAppUser/config/PCSX2/inis/PCSX2.ini" "SaveStates" "$states_folder/ps2/pcsx2" "pcsx2" "Folders"
@@ -1517,7 +1517,7 @@ prepare_emulator() {
       else # Single-user actions
         rm -rf /var/config/PCSX2
         mkdir -pv "/var/config/PCSX2/inis"
-        cp -fvr $emuconfigs/PCSX2/* /var/config/PCSX2/inis/
+        cp -fvr "$emuconfigs/PCSX2/"* /var/config/PCSX2/inis/
         set_setting_value "$pcsx2conf" "Bios" "$bios_folder" "pcsx2" "Folders"
         set_setting_value "$pcsx2conf" "Snapshots" "$screenshots_folder" "pcsx2" "Folders"
         set_setting_value "$pcsx2conf" "SaveStates" "$states_folder/ps2/pcsx2" "pcsx2" "Folders"
@@ -1553,13 +1553,13 @@ prepare_emulator() {
       if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/ppsspp"
         mkdir -p "$multi_user_data_folder/$SteamAppUser/config/ppsspp/PSP/SYSTEM/"
-        cp -fv $emuconfigs/ppssppsdl/* "$multi_user_data_folder/$SteamAppUser/config/ppsspp/PSP/SYSTEM/"
+        cp -fv "$emuconfigs/ppssppsdl/"* "$multi_user_data_folder/$SteamAppUser/config/ppsspp/PSP/SYSTEM/"
         set_setting_value "$multi_user_data_folder/$SteamAppUser/config/ppsspp/PSP/SYSTEM/ppsspp.ini" "CurrentDirectory" "$roms_folder/psp" "ppsspp" "General"
         dir_prep "$multi_user_data_folder/$SteamAppUser/config/ppsspp" "/var/config/ppsspp"
       else # Single-user actions
         rm -rf /var/config/ppsspp
         mkdir -p /var/config/ppsspp/PSP/SYSTEM/
-        cp -fv $emuconfigs/ppssppsdl/* /var/config/ppsspp/PSP/SYSTEM/
+        cp -fv "$emuconfigs/ppssppsdl/"* /var/config/ppsspp/PSP/SYSTEM/
         set_setting_value "$ppssppconf" "CurrentDirectory" "$roms_folder/psp" "ppsspp" "General"
       fi
     fi
@@ -1576,7 +1576,7 @@ prepare_emulator() {
       if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/primehack"
         mkdir -p "$multi_user_data_folder/$SteamAppUser/config/primehack"
-        cp -fvr $emuconfigs/primehack/* "$multi_user_data_folder/$SteamAppUser/config/primehack/"
+        cp -fvr "$emuconfigs/primehack/"* "$multi_user_data_folder/$SteamAppUser/config/primehack/"
         set_setting_value ""$multi_user_data_folder/$SteamAppUser/config/primehack/Dolphin.ini"" "ISOPath0" "$roms_folder/gc" "primehack" "General"
         dir_prep "$multi_user_data_folder/$SteamAppUser/config/primehack" "/var/config/primehack"
       else # Single-user actions
@@ -1617,7 +1617,7 @@ prepare_emulator() {
       if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/rpcs3"
         mkdir -pv "$multi_user_data_folder/$SteamAppUser/config/rpcs3/"
-        cp -fr $emuconfigs/rpcs3/* "$multi_user_data_folder/$SteamAppUser/config/rpcs3/"
+        cp -fr "$emuconfigs/rpcs3/"* "$multi_user_data_folder/$SteamAppUser/config/rpcs3/"
         # This is an unfortunate one-off because set_setting_value does not currently support settings with $ in the name.
         sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$bios_folder/rpcs3/"'^' "$multi_user_data_folder/$SteamAppUser/config/rpcs3/vfs.yml"
         set_setting_value "$multi_user_data_folder/$SteamAppUser/config/rpcs3/vfs.yml" "/games/" "$roms_folder/ps3/" "rpcs3"
@@ -1625,7 +1625,7 @@ prepare_emulator() {
       else # Single-user actions
         rm -rf /var/config/rpcs3
         mkdir -pv /var/config/rpcs3/
-        cp -fr $emuconfigs/rpcs3/* /var/config/rpcs3/
+        cp -fr "$emuconfigs/rpcs3/"* /var/config/rpcs3/
         # This is an unfortunate one-off because set_setting_value does not currently support settings with $ in the name.
         sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$bios_folder/rpcs3/"'^' "$rpcs3vfsconf"
         set_setting_value "$rpcs3vfsconf" "/games/" "$roms_folder/ps3/" "rpcs3"
@@ -1735,7 +1735,7 @@ prepare_emulator() {
       if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/yuzu"
         mkdir -p "$multi_user_data_folder/$SteamAppUser/config/yuzu"
-        cp -fvr $emuconfigs/yuzu/* "$multi_user_data_folder/$SteamAppUser/config/yuzu/"
+        cp -fvr "$emuconfigs/yuzu/"* "$multi_user_data_folder/$SteamAppUser/config/yuzu/"
         set_setting_value "$multi_user_data_folder/$SteamAppUser/config/yuzu/qt-config.ini" "nand_directory" "$saves_folder/switch/yuzu/nand" "yuzu" "Data%20Storage"
         set_setting_value "$multi_user_data_folder/$SteamAppUser/config/yuzu/qt-config.ini" "sdmc_directory" "$saves_folder/switch/yuzu/sdmc" "yuzu" "Data%20Storage"
         set_setting_value "$multi_user_data_folder/$SteamAppUser/config/yuzu/qt-config.ini" "Paths\gamedirs\4\path" "$roms_folder/switch" "yuzu" "UI"
@@ -1744,7 +1744,7 @@ prepare_emulator() {
       else # Single-user actions
         rm -rf /var/config/yuzu
         mkdir -pv /var/config/yuzu/
-        cp -fvr $emuconfigs/yuzu/* /var/config/yuzu/
+        cp -fvr "$emuconfigs/yuzu/"* /var/config/yuzu/
         set_setting_value "$yuzuconf" "nand_directory" "$saves_folder/switch/yuzu/nand" "yuzu" "Data%20Storage"
         set_setting_value "$yuzuconf" "sdmc_directory" "$saves_folder/switch/yuzu/sdmc" "yuzu" "Data%20Storage"
         set_setting_value "$yuzuconf" "Paths\gamedirs\4\path" "$roms_folder/switch" "yuzu" "UI"

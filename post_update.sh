@@ -45,9 +45,9 @@ post_update() {
     dir_prep "$bios_folder/pico-8" "$HOME/.lexaloffle/pico-8" # Store binary and config files together. The .lexaloffle directory is a hard-coded location for the PICO-8 config file, cannot be changed
     dir_prep "$saves_folder/pico-8" "$bios_folder/pico-8/cdata" # PICO-8 saves folder structure was backwards, fixing for consistency.
 
-    cp -f $emuconfigs/citra/qt-config.ini /var/config/citra-emu/qt-config.ini
+    cp -f "$emuconfigs/citra/qt-config.ini" /var/config/citra-emu/qt-config.ini
     sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
-    cp -fr $emuconfigs/yuzu/* /var/config/yuzu/
+    cp -fr "$emuconfigs/yuzu/"* /var/config/yuzu/
     sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/yuzu/qt-config.ini
 
     # Remove unneeded tools folder, as location has changed to RO space
@@ -101,7 +101,7 @@ post_update() {
     set_setting_value "$rpcs3vfsconf" "/games/" "$roms_folder/ps3/" "rpcs3"
     if [[ -d "$roms_folder/ps3/emudir" ]]; then # The old location exists, meaning the emulator was run at least once.
       mkdir "$bios_folder/rpcs3"
-      mv "$roms_folder/ps3/emudir/*" "$bios_folder/rpcs3/"
+      mv "$roms_folder/ps3/emudir/"* "$bios_folder/rpcs3/"
       rm "$roms_folder/ps3/emudir"
       configurator_generic_dialog "RetroDECK 0.7.0b Upgrade" "As part of this update and due to a RPCS3 config upgrade, the files that used to exist at\n\n~/retrodeck/roms/ps3/emudir\n\nare now located at\n\n~/retrodeck/bios/rpcs3.\nYour existing files have been moved automatically."
     fi
@@ -120,7 +120,7 @@ post_update() {
       configurator_generic_dialog "RetroDECK 0.7.0b Upgrade" "As part of this update, the location of saves and states for Duckstation has been changed.\n\nYour files will be moved automatically, and can now be found at\n\n~.../saves/psx/duckstation/memcards/\nand\n~.../states/psx/duckstation/"
     fi
     mkdir -p "$saves_folder/psx/duckstation/memcards"
-    mv "$saves_folder/duckstation/*" "$saves_folder/psx/duckstation/memcards/"
+    mv "$saves_folder/duckstation/"* "$saves_folder/psx/duckstation/memcards/"
     rmdir "$saves_folder/duckstation" # File-safe folder cleanup
     unlink "/var/data/duckstation/memcards"
     set_setting_value "$duckstationconf" "Card1Path" "$saves_folder/psx/duckstation/memcards/shared_card_1.mcd" "duckstation" "MemoryCards"
