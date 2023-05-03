@@ -1,18 +1,18 @@
 "controller_mappings"
 {
 	"version"		"3"
-	"revision"		"1423"
-	"title"		"RetroDECK - Official Layout v.0.7"
+	"revision"		"1482"
+	"title"		"RetroDECK official layout v.0.7"
 	"description"		"The Official RetroDECK Layout"
 	"creator"		"76561197985498748"
 	"progenitor"		""
 	"url"		"autosave:///home/deck/.local/share/Steam/steamapps/common/Steam Controller Configs/25233020/config/retrodeck/controller_neptune.vdf"
-	"export_type"		"personal_cloud"
+	"export_type"		"template"
 	"controller_type"		"controller_neptune"
 	"controller_caps"		"23117823"
 	"major_revision"		"0"
 	"minor_revision"		"0"
-	"Timestamp"		"-593495904"
+	"Timestamp"		"-608407264"
 	"actions"
 	{
 		"Default"
@@ -5595,8 +5595,8 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press LEFT_ALT, Freelook, RD-preferences-system-search.png, "
-							"binding"		"key_press Y, Freelook, RD-preferences-system-search.png, "
+							"binding"		"key_press LEFT_ALT, Freelook Mode - Toggle, RD-preferences-system-search.png, "
+							"binding"		"key_press F, Freelook Mode - Toggle, RD-preferences-system-search.png, "
 						}
 					}
 				}
@@ -5648,6 +5648,23 @@
 						{
 							"binding"		"key_press LEFT_ALT, Wiimote - Sideways Mode, RD-emblem-encrypted-locked.png, #232323 #48B119"
 							"binding"		"key_press X, Wiimote - Sideways Mode, RD-emblem-encrypted-locked.png, #232323 #48B119"
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"touch_menu_button_6"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press LEFT_ALT, Reset Freelook Camera, RD-preferences-system-search.png, #232323 #AD0000"
+							"binding"		"key_press R, Reset Freelook Camera, RD-preferences-system-search.png, #232323 #AD0000"
 						}
 					}
 				}
@@ -7127,23 +7144,6 @@
 				{
 				}
 			}
-			"touch_menu_button_3"
-			{
-				"activators"
-				{
-					"Full_Press"
-					{
-						"bindings"
-						{
-							"binding"		"key_press LEFT_ALT, Swap Dual-Screenlayout, RD-preferences-system-windows-actions.png, #232323 #FFFFFF"
-							"binding"		"key_press 0, Swap Dual-Screenlayout, RD-preferences-system-windows-actions.png, #232323 #FFFFFF"
-						}
-					}
-				}
-				"disabled_activators"
-				{
-				}
-			}
 		}
 		"settings"
 		{
@@ -7873,12 +7873,8 @@
 					{
 						"bindings"
 						{
-							"binding"		"xinput_button RSTICK_RIGHT, , "
-						}
-						"settings"
-						{
-							"repeat_rate"		"1000"
-							"interruptable"		"0"
+							"binding"		"key_press LEFT_SHIFT, , "
+							"binding"		"key_press D, , "
 						}
 					}
 				}
@@ -7894,12 +7890,8 @@
 					{
 						"bindings"
 						{
-							"binding"		"xinput_button RSTICK_LEFT, , "
-						}
-						"settings"
-						{
-							"repeat_rate"		"1000"
-							"interruptable"		"0"
+							"binding"		"key_press LEFT_SHIFT, , "
+							"binding"		"key_press A, , "
 						}
 					}
 				}
@@ -7971,40 +7963,6 @@
 				{
 				}
 			}
-			"dpad_east"
-			{
-				"activators"
-				{
-					"Full_Press"
-					{
-						"bindings"
-						{
-							"binding"		"key_press LEFT_SHIFT, , "
-							"binding"		"key_press D, , "
-						}
-					}
-				}
-				"disabled_activators"
-				{
-				}
-			}
-			"dpad_west"
-			{
-				"activators"
-				{
-					"Full_Press"
-					{
-						"bindings"
-						{
-							"binding"		"key_press LEFT_SHIFT, , "
-							"binding"		"key_press A, , "
-						}
-					}
-				}
-				"disabled_activators"
-				{
-				}
-			}
 			"click"
 			{
 				"activators"
@@ -8026,6 +7984,16 @@
 		"settings"
 		{
 			"requires_click"		"0"
+		}
+	}
+	"group"
+	{
+		"id"		"221"
+		"mode"		"reference"
+		"description"		""
+		"settings"
+		{
+			"referenced_mode"		"33"
 		}
 	}
 	"group"
@@ -10556,7 +10524,8 @@
 			"0"		"button_diamond active"
 			"1"		"left_trackpad inactive"
 			"11"		"left_trackpad inactive"
-			"33"		"left_trackpad active"
+			"33"		"left_trackpad inactive"
+			"221"		"left_trackpad active"
 			"2"		"right_trackpad inactive"
 			"6"		"right_trackpad inactive"
 			"10"		"right_trackpad inactive"
