@@ -82,6 +82,7 @@ modules:
         fi
         echo $VERSION >> ${FLATPAK_DEST}/retrodeck/version
         cat ${FLATPAK_DEST}/retrodeck/version
+        echo "Version is $VERSION"
     sources:
       - type: git
         url: https://github.com/XargonWan/RetroDECK.git
