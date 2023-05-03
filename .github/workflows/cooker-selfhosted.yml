@@ -41,6 +41,7 @@ jobs:
           result=$capitalized_word1$capitalized_word2
           echo $result >> ${GITHUB_WORKSPACE}/buildid
           echo "buildid=$result" >> $GITHUB_ENV
+          echo "VersionID is $result"
 
       - name: Initialize environment
         run: |
