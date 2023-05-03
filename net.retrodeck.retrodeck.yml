@@ -78,7 +78,7 @@ modules:
         mkdir -p ${FLATPAK_DEST}/retrodeck/
         if [[ $VERSION == *"cooker"* ]];
         then
-          VERSION="$VERSION-[$(git rev-parse --short HEAD)]"
+          VERSION="$VERSION[$echo ./buildid]"
         fi
         echo $VERSION >> ${FLATPAK_DEST}/retrodeck/version
         cat ${FLATPAK_DEST}/retrodeck/version
