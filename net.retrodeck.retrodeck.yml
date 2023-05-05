@@ -78,10 +78,11 @@ modules:
         mkdir -p ${FLATPAK_DEST}/retrodeck/
         if [[ $VERSION == *"cooker"* ]];
         then
-          VERSION="$VERSION-[$(git rev-parse --short HEAD)]"
+          VERSION="$VERSION[$(cat ./buildid)]"
         fi
         echo $VERSION >> ${FLATPAK_DEST}/retrodeck/version
         cat ${FLATPAK_DEST}/retrodeck/version
+        echo "Version is $VERSION"
     sources:
       - type: git
         url: https://github.com/XargonWan/RetroDECK.git
@@ -566,8 +567,8 @@ modules:
       - ln -s "${FLATPAK_DEST}/pcsx2-qt/usr/bin/pcsx2-qt" "${FLATPAK_DEST}/bin/pcsx2-qt"
     sources:
       - type: file
-        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.4303/pcsx2-v1.7.4303-linux-AppImage-64bit-Qt.AppImage
-        sha256: 5680bcc510f0898e6078c60ef2ef1d987b8414e1296c5ff88bd87933e4a314b3
+        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.4466/pcsx2-v1.7.4466-linux-AppImage-64bit-Qt.AppImage
+        sha256: 5747fc3760d2064bbd8b4b1d463984381bf206e30631502b765d71b7fce94459
 
   # PCSX2 - END
 

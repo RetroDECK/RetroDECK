@@ -29,12 +29,21 @@ jobs:
       - name: Remove stuck mounts
         run: sudo umount -f /home/ubuntu/actions-runner/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles/*
         continue-on-error: true
+    
+      - uses: actions/checkout@v3
 
       - name: Generate build ID
-        id: generating_buildid
-        run: echo "##[set-output name=build-id;]$(echo "$( git rev-parse --short HEAD )")"
-      
-      - uses: actions/checkout@v3
+        run: |
+          word1=$(curl -s https://random-word-api.herokuapp.com/word?length=5 | tr -d '[]"')
+          capitalized_word1="$(tr '[:lower:]' '[:upper:]' <<< ${word1:0:1})${word1:1}"
+          word2=$(curl -s https://random-word-api.herokuapp.com/word?length=5 | tr -d '[]"')
+          capitalized_word2="$(tr '[:lower:]' '[:upper:]' <<< ${word2:0:1})${word2:1}"
+          result=$capitalized_word1$capitalized_word2
+          echo $result >> ${GITHUB_WORKSPACE}/buildid
+          ls -lah ${GITHUB_WORKSPACE}         # DEBUG
+          cat ${GITHUB_WORKSPACE}/buildid     # DEBUG
+          echo "buildid=$result" >> $GITHUB_ENV
+          echo "VersionID is $result"
 
       - name: Initialize environment
         run: |
@@ -78,7 +87,7 @@ jobs:
       - name: Publish the flatpak in a new cooker release
         uses: ncipollo/release-action@v1
         with:
-          tag: "${{ env.GITHUB_REF_SLUG }}-${{ steps.generating_buildid.outputs.build-id }}"
+          tag: "${{ env.GITHUB_REF_SLUG }}-${{ env.buildid }}"
           body: |
             # Release Notes (Cooker)
             This is a cooker snapshot based on the commit: ${{ github.event.repository.full_name }}@${{github.sha}}.
