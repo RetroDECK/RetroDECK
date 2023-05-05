@@ -70,6 +70,7 @@ post_update() {
   if [[ $prev_version -le "070" ]]; then
     # In version 0.7.0b, the following changes were made that required config file updates/reset or other changes to the filesystem:
     # - Update retrodeck.cfg and set new paths to $rdhome by default
+    # - Update PCSX2 and Duckstation configs to latest templates (to accomadate RetroAchievements feature)
     # - New ~/retrodeck/mods and ~/retrodeck/texture_packs directories are added and symlinked to multiple different emulators (where supported)
     # - Expose ES-DE gamelists folder to user at ~/retrodeck/gamelists
     # - Update RPCS3 vfs file contents. migrate from old location if needed
@@ -84,6 +85,15 @@ post_update() {
     set_setting_value $rd_conf "texture_packs_folder" "$rdhome/texture_packs"
     set_setting_value $rd_conf "borders_folder" "$rdhome/borders"
     conf_read
+
+    mv -f "$pcsx2qtconf" "$pcsx2qtconf.bak"
+    generate_single_patch "$emuconfigs/PCSX2/PCSX2.ini" "$pcsx2qtconf.bak" "/var/config/PCSX2/inis/PCSX2-cheevos-upgrade.patch" pcsx2
+    deploy_single_patch "$emuconfigs/PCSX2/PCSX2.ini" "/var/config/PCSX2/inis/PCSX2-cheevos-upgrade.patch" "$pcsx2qtconf"
+    rm -f "/var/config/PCSX2/inis/PCSX2-cheevos-upgrade.patch"
+    mv -f "$duckstationconf" "$duckstationconf.bak"
+    generate_single_patch "$emuconfigs/duckstation/settings.ini" "$duckstationconf.bak" "/var/data/duckstation/duckstation-cheevos-upgrade.patch" pcsx2
+    deploy_single_patch "$emuconfigs/duckstation/settings.ini" "/var/data/duckstation/duckstation-cheevos-upgrade.patch" "$duckstationconf"
+    rm -f "/var/data/duckstation/duckstation-cheevos-upgrade.patch"
 
     mkdir -p "$mods_folder"
     mkdir -p "$texture_packs_folder"
