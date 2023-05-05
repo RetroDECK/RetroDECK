@@ -53,6 +53,15 @@ do
       appimagehash=$(curl -sL "$appimageurl" | sha256sum | cut -d ' ' -f1)
       echo "AppImage hash found: $appimagehash"
       /bin/sed -i 's^'"HASHFOR$placeholder"'^'"$appimagehash"'^' $rd_manifest
+    elif [[ "$action" == "outside_info" ]]; then
+      if [[ "$url" = \$* ]]; then # If value is a reference to a variable name
+        eval url="$url"
+      fi
+      echo
+      echo "Placeholder text: $placeholder"
+      echo "Information being injected: $(cat $url)"
+      echo
+      /bin/sed -i 's^'"$placeholder"'^'"$(cat $url)"'^' $rd_manifest
     fi
   fi
 done < "$automation_task_list"

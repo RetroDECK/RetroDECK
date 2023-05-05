@@ -323,7 +323,7 @@ set_setting_value() {
       if [[ -z $current_section_name ]]; then
         sed -i 's^\^'"$setting_name_to_change"'=.*^'"$setting_name_to_change"'='"$setting_value_to_change"'^' $1
       else
-        sed -i '\^\['"$current_section_name"'\]^,\^\^'"$setting_name_to_change"'.*^s^\^'"$setting_name_to_change"'=.*^'"$setting_name_to_change"'='"$setting_value_to_change"'^' $1
+        sed -i '\^\['"$current_section_name"'\]^,\^\^'"$setting_name_to_change"'=^s^\^'"$setting_name_to_change"'=.*^'"$setting_name_to_change"'='"$setting_value_to_change"'^' $1
       fi
       if [[ "$4" == "retrodeck" ]]; then # If a RetroDECK setting is being changed, also write it to memory for immediate use
         eval "$setting_name_to_change=$setting_value_to_change"
@@ -334,7 +334,7 @@ set_setting_value() {
       if [[ -z $current_section_name ]]; then
         sed -i 's^\^'"$setting_name_to_change"' = \".*\"^'"$setting_name_to_change"' = \"'"$setting_value_to_change"'\"^' $1
       else
-        sed -i '\^\['"$current_section_name"'\]^,\^\^'"$setting_name_to_change"'.*^s^\^'"$setting_name_to_change"' = \".*\"^'"$setting_name_to_change"' = \"'"$setting_value_to_change"'\"^' $1
+        sed -i '\^\['"$current_section_name"'\]^,\^\^'"$setting_name_to_change"' = ^s^\^'"$setting_name_to_change"' = \".*\"^'"$setting_name_to_change"' = \"'"$setting_value_to_change"'\"^' $1
       fi
       ;;
 
@@ -342,7 +342,7 @@ set_setting_value() {
       if [[ -z $current_section_name ]]; then
         sed -i 's^\^'"$setting_name_to_change"' =.*^'"$setting_name_to_change"' = '"$setting_value_to_change"'^' $1
       else
-        sed -i '\^\['"$current_section_name"'\]^,\^\^'"$setting_name_to_change"'.*^s^\^'"$setting_name_to_change"' =.*^'"$setting_name_to_change"' = '"$setting_value_to_change"'^' $1
+        sed -i '\^\['"$current_section_name"'\]^,\^\^'"$setting_name_to_change"' =^s^\^'"$setting_name_to_change"' =.*^'"$setting_name_to_change"' = '"$setting_value_to_change"'^' $1
       fi
       ;;
 
@@ -432,9 +432,9 @@ get_setting_value() {
   esac
 }
 
-add_setting() {
+add_setting_line() {
   # This function will add a setting line to a file. This is useful for dynamically generated config files where a setting line may not exist until the setting is changed from the default.
-  # USAGE: add_setting $setting_file $setting_line $system $section (optional)
+  # USAGE: add_setting_line $setting_file $setting_line $system $section (optional)
 
   local current_setting_line=$(sed -e 's^\\^\\\\^g;s^`^\\`^g' <<< "$2")
   local current_section_name=$(sed -e 's/%/\\%/g' <<< "$4")
@@ -443,7 +443,11 @@ add_setting() {
 
   * )
     if [[ -z $current_section_name ]]; then
-      sed -i '$ a '"$current_setting_line"'' $1
+      if [[ -f "$1" ]]; then
+        sed -i '$ a '"$current_setting_line"'' $1
+      else # If the file doesn't exist, sed add doesn't work for the first line
+        echo "$current_setting_line" > $1
+      fi
     else
       sed -i '/^\s*?\['"$current_section_name"'\]|\b'"$current_section_name"':$/a '"$current_setting_line"'' $1
     fi
@@ -511,12 +515,17 @@ enable_file() {
 generate_single_patch() {
   # generate_single_patch $original_file $modified_file $patch_file $system
 
-  rm $3 # Remove old patch file (maybe change this to create a backup instead?)
+  local original_file="$1"
+  local modified_file="$2"
+  local patch_file="$3"
+  local system="$4"
+
+  rm "$patch_file" # Remove old patch file (maybe change this to create a backup instead?)
 
   while read -r current_setting_line; # Look for changes from the original file to the modified one
   do
-
     printf -v escaped_setting_line '%q' "$current_setting_line" # Take care of special characters before they mess with future commands
+    escaped_setting_line=$(sed -E 's^\+^\\+^g' <<< "$escaped_setting_line") # Need to escape plus signs as well
 
     if [[ (! -z $current_setting_line) && (! $current_setting_line == "#!/bin/bash") && (! $current_setting_line == "[]") ]]; then # Ignore empty lines, empty arrays or Bash start lines
       if [[ ! -z $(grep -o -P "^\[.+?\]$" <<< "$current_setting_line") || ! -z $(grep -o -P "^\b.+?:$" <<< "$current_setting_line") ]]; then # Capture section header lines
@@ -529,45 +538,45 @@ generate_single_patch() {
         fi
       elif [[ (! -z $current_section) ]]; then # If line is in a section...
         if [[ ! -z $(grep -o -P "^\s*?#.*?$" <<< "$current_setting_line") ]]; then # Check for disabled lines
-          if [[ -z $(sed -n -E '\^\['"$current_section"'\]|\b'"$current_section"':$^,\^\s*?'"$(sed -E 's/^[ \t]*//;' <<< "$escaped_setting_line")"'^{ \^\['"$current_section"'\]|\b'"$current_section"':$^! { \^\s*?'"$(sed -E 's/^[ \t]*//' <<< "$escaped_setting_line")"'^ p } }' $2) ]]; then # If disabled line is not disabled in new file...
+          if [[ -z $(sed -n -E '\^\['"$current_section"'\]|\b'"$current_section"':$^,\^\s*?'"$(sed -E 's/^[ \t]*//;' <<< "$escaped_setting_line")"'^{ \^\['"$current_section"'\]|\b'"$current_section"':$^! { \^\s*?'"$(sed -E 's/^[ \t]*//' <<< "$escaped_setting_line")"'^ p } }' "$modified_file") ]]; then # If disabled line is not disabled in new file...
           action="disable_setting"
-          echo $action"^"$current_section"^"$(sed -n -E 's^\s*?#(.*?)$^\1^p' <<< $(sed -E 's/^[ \t]*//' <<< "$current_setting_line")) >> $3
+          echo $action"^"$current_section"^"$(sed -n -E 's^\s*?#(.*?)$^\1^p' <<< $(sed -E 's/^[ \t]*//' <<< "$current_setting_line")) >> "$patch_file"
           fi
-        elif [[ ! -z $(sed -n -E '\^\['"$current_section"'\]|\b'"$current_section"':$^,\^\s*?#'"$(sed -E 's/^[ \t]*//' <<< "$escaped_setting_line")"'^{ \^\['"$current_section"'\]|\b'"$current_section"':$^! { \^\s*?#'"$(sed -E 's/^[ \t]*//;' <<< "$escaped_setting_line")"'^ p } }' $2) ]]; then # Check if line is disabled in new file
+        elif [[ ! -z $(sed -n -E '\^\['"$current_section"'\]|\b'"$current_section"':$^,\^\s*?#'"$(sed -E 's/^[ \t]*//' <<< "$escaped_setting_line")"'^{ \^\['"$current_section"'\]|\b'"$current_section"':$^! { \^\s*?#'"$(sed -E 's/^[ \t]*//;' <<< "$escaped_setting_line")"'^ p } }' "$modified_file") ]]; then # Check if line is disabled in new file
           action="enable_setting"
-          echo $action"^"$current_section"^"$current_setting_line >> $3
+          echo $action"^"$current_section"^"$current_setting_line >> "$patch_file"
         else # Look for setting value differences
-          current_setting_name=$(get_setting_name "$escaped_setting_line" $4)
-          if [[ (-z $(sed -n -E '\^\['"$current_section"'\]|\b'"$current_section"':$^,\^\b'"$current_setting_name"'.*^{ \^\['"$current_section"'\]|\b'"$current_section"':$^! { \^\b'"$(sed -E 's/^[ \t]*//;' <<< "$escaped_setting_line")"'$^ p } }' $2)) ]]; then # If the same setting line is not found in the same section of the modified file...
-            if [[ ! -z $(sed -n -E '\^\['"$current_section"'\]|\b'"$current_section"':$^,\^\b'"$current_setting_name"'^{ \^\['"$current_section"'\]|\b'"$current_section"':$^! { \^\b'"$current_setting_name"'^ p } }' $2) ]]; then # But the setting exists in that section, only with a different value...
-              new_setting_value=$(get_setting_value $2 "$current_setting_name" $4 $current_section)
+          current_setting_name=$(get_setting_name "$escaped_setting_line" "$system")
+          if [[ (-z $(sed -n -E '\^\['"$current_section"'\]|\b'"$current_section"':$^,\^\b'"$current_setting_name"'\s*?[:=]^{ \^\['"$current_section"'\]|\b'"$current_section"':$^! { \^\b'"$(sed -E 's/^[ \t]*//;' <<< "$escaped_setting_line")"'$^ p } }' "$modified_file")) ]]; then # If the same setting line is not found in the same section of the modified file...
+            if [[ ! -z $(sed -n -E '\^\['"$current_section"'\]|\b'"$current_section"':$^,\^\b'"$current_setting_name"'\s*?[:=]^{ \^\['"$current_section"'\]|\b'"$current_section"':$^! { \^\b'"$current_setting_name"'\s*?[:=]^ p } }' "$modified_file") ]]; then # But the setting exists in that section, only with a different value...
+              new_setting_value=$(get_setting_value $2 "$current_setting_name" "$system" $current_section)
               action="change"
-              echo $action"^"$current_section"^"$(sed -e 's%\\\\%\\%g' <<< "$current_setting_name")"^"$new_setting_value"^"$4 >> $3
+              echo $action"^"$current_section"^"$(sed -e 's%\\\\%\\%g' <<< "$current_setting_name")"^"$new_setting_value"^"$system >> "$patch_file"
             fi
           fi
         fi
-      elif [[ (-z $current_section) ]]; then # If line is not in a section...
+      elif [[ -z "$current_section" ]]; then # If line is not in a section...
         if [[ ! -z $(grep -o -P "^\s*?#.*?$" <<< "$current_setting_line") ]]; then # Check for disabled lines
-          if [[ -z $(grep -o -P "^\s*?$current_setting_line$" $2) ]]; then # If disabled line is not disabled in new file...
+          if [[ -z $(grep -o -P "^\s*?$current_setting_line$" "$modified_file") ]]; then # If disabled line is not disabled in new file...
             action="disable_setting"
-            echo $action"^"$current_section"^"$(sed -n -E 's^\s*?#(.*?)$^\1^p' <<< "$current_setting_line") >> $3
+            echo $action"^"$current_section"^"$(sed -n -E 's^\s*?#(.*?)$^\1^p' <<< "$current_setting_line") >> "$patch_file"
           fi
-        elif [[ ! -z $(sed -n -E '\^\s*?#'"$(sed -E 's/^[ \t]*//' <<< "$escaped_setting_line")"'$^p' $2) ]]; then # Check if line is disabled in new file
+        elif [[ ! -z $(sed -n -E '\^\s*?#'"$(sed -E 's/^[ \t]*//' <<< "$escaped_setting_line")"'$^p' "$modified_file") ]]; then # Check if line is disabled in new file
             action="enable_setting"
-            echo $action"^"$current_section"^"$current_setting_line >> $3
+            echo $action"^"$current_section"^"$current_setting_line >> "$patch_file"
         else # Look for setting value differences
-          if [[ (-z $(sed -n -E '\^\s*?\b'"$(sed -E 's/^[ \t]*//' <<< "$escaped_setting_line")"'$^p' $2)) ]]; then # If the same setting line is not found in the modified file...
-            current_setting_name=$(get_setting_name "$escaped_setting_line" "$4")
-            if [[ ! -z $(sed -n -E '\^\s*?\b'"$current_setting_name"'\s*?[:=]^p' $2) ]]; then # But the setting exists, only with a different value...
-              new_setting_value=$(get_setting_value $2 "$current_setting_name" $4)
+          if [[ (-z $(sed -n -E '\^\s*?\b'"$(sed -E 's/^[ \t]*//' <<< "$escaped_setting_line")"'$^p' "$modified_file")) ]]; then # If the same setting line is not found in the modified file...
+            current_setting_name=$(get_setting_name "$escaped_setting_line" "$system")
+            if [[ ! -z $(sed -n -E '\^\s*?\b'"$current_setting_name"'\s*?[:=]^p' "$modified_file") ]]; then # But the setting exists, only with a different value...
+              new_setting_value=$(get_setting_value $2 "$current_setting_name" "$system")
               action="change"
-              echo $action"^"$current_section"^"$(sed -e 's%\\\\%\\%g' <<< "$current_setting_name")"^"$new_setting_value"^"$4 >> $3
+              echo $action"^"$current_section"^"$(sed -e 's%\\\\%\\%g' <<< "$current_setting_name")"^"$new_setting_value"^"$system >> "$patch_file"
             fi
           fi
         fi
       fi
     fi
-  done < $1
+  done < "$original_file"
 
     # Reset the variables for reuse
     action=""
@@ -585,27 +594,25 @@ generate_single_patch() {
       if [[ $current_setting_line =~ ^\[.+\] ]]; then # If normal section line
         action="section"
         current_section=$(sed 's^[][]^^g' <<< $current_setting_line) # Remove brackets from section name
-        echo "Section found:" "$current_section""."
       elif [[ ! -z $(grep -o -P "^\b.+?:$" <<< "$current_setting_line") ]]; then # If RPCS3 section name
         action="section"
         current_section=$(sed 's^:$^^' <<< $current_setting_line) # Remove colon from section name
-        echo "Section found:" "$current_section""."
       fi
       elif [[ (! -z $current_section) ]]; then
         current_setting_name=$(get_setting_name "$escaped_setting_line" "$4")
         if [[ -z $(sed -n -E '\^\['"$current_section"'\]|\b'"$current_section"':$^,\^\b'"$current_setting_name"'.*^{ \^\['"$current_section"'\]|\b'"$current_section"':$^! { \^\b'"$current_setting_name"'^p } }' $1 ) ]]; then # If setting name is not found in this section of the original file...
-          action="add_setting"
+          action="add_setting_line" # TODO: This should include the previous line, so that new lines can be inserted in the correct place rather than at the end.
           echo $action"^"$current_section"^"$current_setting_line"^^"$4 >> $3
         fi
       elif [[ (-z $current_section) ]]; then
         current_setting_name=$(get_setting_name "$escaped_setting_line" "$4")
         if [[ -z $(sed -n -E '\^\s*?\b'"$current_setting_name"'\s*?[:=]^p' $1) ]]; then # If setting name is not found in the original file...
-          action="add_setting"
+          action="add_setting_line" # TODO: This should include the previous line, so that new lines can be inserted in the correct place rather than at the end.
           echo $action"^"$current_section"^"$current_setting_line"^^"$4 >> $3
         fi
       fi
     fi
-  done < $2
+  done < "$modified_file"
 }
 
 deploy_single_patch() {
@@ -628,8 +635,8 @@ do
     eval enable_file "$setting_name"
 	;;
 
-	"add_setting" )
-    eval add_setting $3 "$setting_name" $system_name $current_section
+	"add_setting_line" )
+    eval add_setting_line $3 "$setting_name" $system_name $current_section
 	;;
 
 	"disable_setting" )
@@ -641,7 +648,10 @@ do
 	;;
 
 	"change" )
-    eval set_setting_value $3 "$setting_name" "$setting_value" $system_name $current_section
+    if [[ "$setting_value" = \$* ]]; then # If patch setting value is a reference to an internal variable name
+      eval setting_value="$setting_value"
+    fi
+    set_setting_value $3 "$setting_name" "$setting_value" $system_name $current_section
   ;;
 
   *"#"* )
@@ -675,8 +685,8 @@ do
     eval enable_file "$config_file"
 	;;
 
-	"add_setting" )
-    eval add_setting "$config_file" "$setting_name" $system_name $current_section
+	"add_setting_line" )
+    eval add_setting_line "$config_file" "$setting_name" $system_name $current_section
 	;;
 
 	"disable_setting" )
@@ -688,7 +698,10 @@ do
 	;;
 
 	"change" )
-    eval set_setting_value "$config_file" "$setting_name" "$setting_value" $system_name $current_section
+    if [[ "$setting_value" = \$* ]]; then # If patch setting value is a reference to an internal variable name
+      eval setting_value="$setting_value"
+    fi
+    set_setting_value "$config_file" "$setting_name" "$setting_value" $system_name $current_section
   ;;
 
   *"#"* )
@@ -733,7 +746,7 @@ check_for_version_update() {
           set_setting_value $rd_conf "update_ignore" "$online_version" retrodeck "options" # Store version to ignore for future checks
         fi
       else # User clicked "Yes"
-        configurator_generic_dialog "The update process may take several minutes.\n\nAfter the update is complete, RetroDECK will close. When you run it again you will be using the latest version."
+        configurator_generic_dialog "RetroDECK Online Update" "The update process may take several minutes.\n\nAfter the update is complete, RetroDECK will close. When you run it again you will be using the latest version."
         (
         flatpak-spawn --host flatpak update --noninteractive -y net.retrodeck.retrodeck
         ) |
@@ -741,7 +754,7 @@ check_for_version_update() {
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         --title "RetroDECK Updater" \
         --text="RetroDECK is updating to the latest version, please wait."
-        configurator_generic_dialog "The update process is now complete!\n\nPlease restart RetroDECK to keep the fun going."
+        configurator_generic_dialog "RetroDECK Online Update" "The update process is now complete!\n\nPlease restart RetroDECK to keep the fun going."
         exit 1
       fi
     elif [[ "$update_repo" == "RetroDECK-cooker" ]] && [[ ! $current_version == $online_version ]]; then
@@ -755,7 +768,7 @@ check_for_version_update() {
           set_setting_value $rd_conf "update_ignore" "$online_version" retrodeck "options" # Store version to ignore for future checks.
         fi
       else # User clicked "Yes"
-        configurator_generic_dialog "The update process may take several minutes.\n\nAfter the update is complete, RetroDECK will close. When you run it again you will be using the latest version."
+        configurator_generic_dialog "RetroDECK Online Update" "The update process may take several minutes.\n\nAfter the update is complete, RetroDECK will close. When you run it again you will be using the latest version."
         (
         local latest_cooker_download=$(curl --silent https://api.github.com/repos/XargonWan/$update_repo/releases/latest | grep '"browser_download_url":' | sed -E 's/.*"([^"]+)".*/\1/')
         mkdir -p "$rdhome/RetroDECK_Updates"
@@ -767,7 +780,7 @@ check_for_version_update() {
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         --title "RetroDECK Updater" \
         --text="RetroDECK is updating to the latest version, please wait."
-        configurator_generic_dialog "The update process is now complete!\n\nPlease restart RetroDECK to keep the fun going."
+        configurator_generic_dialog "RetroDECK Online Update" "The update process is now complete!\n\nPlease restart RetroDECK to keep the fun going."
         exit 1
       fi
     fi
@@ -788,10 +801,21 @@ update_rd_conf() {
   # This function will import a default retrodeck.cfg file and update it with any current settings. This will allow us to expand the file over time while retaining current user settings.
   # USAGE: update_rd_conf
 
+  # STAGE 1: For current files that haven't been broken into sections yet, where every setting name is unique
+
   conf_read # Read current settings into memory
   mv -f $rd_conf $rd_conf_backup # Backup config file before update
   cp $rd_defaults $rd_conf # Copy defaults file into place
   conf_write # Write old values into new default file
+
+  # STAGE 2: To handle feature sections that use duplicate setting names
+
+  mv -f $rd_conf $rd_conf_backup # Backup config file agiain before update but after Stage 1 expansion
+  generate_single_patch $rd_defaults $rd_conf_backup $rd_update_patch retrodeck # Create a patch file for differences between defaults and current user settings
+  sed -i '/change^^version/d' $rd_update_patch # Remove version line from temporary patch file
+  deploy_single_patch $rd_defaults $rd_update_patch $rd_conf # Re-apply user settings to defaults file
+  set_setting_value $rd_conf "version" "$hard_version" retrodeck # Set version of currently running RetroDECK to updated retrodeck.cfg
+  rm -f $rd_update_patch # Cleanup temporary patch file
   conf_read # Read all settings into memory
 }
 
@@ -854,11 +878,11 @@ echo "$chosen_user"
 
 multi_user_enable_multi_user_mode() {
   if [[ -z "$SteamAppUser" ]]; then
-    configurator_generic_dialog "The Steam username of the current user could not be determined from the system.\n\nThis can happen when running in Desktop mode.\n\nYou will be asked to specify the Steam username (not profile name) of the current user in the next dialog."
+    configurator_generic_dialog "RetroDECK Multi-User Mode" "The Steam username of the current user could not be determined from the system.\n\nThis can happen when running in Desktop mode.\n\nYou will be asked to specify the Steam username (not profile name) of the current user in the next dialog."
   fi
   if [[ -d "$multi_user_data_folder" && $(ls -1 "$multi_user_data_folder" | wc -l) -gt 0 ]]; then # If multi-user data folder exists from prior use and is not empty
     if [[ -d "$multi_user_data_folder/$SteamAppUser" ]]; then # Current user has an existing save folder
-      configurator_generic_dialog "The current user $SteamAppUser has an existing folder in the multi-user data folder.\n\nThe saves here are likely older than the ones currently used by RetroDECK.\n\nThe old saves will be backed up to $backups_folder and the current saves will be loaded into the multi-user data folder."
+      configurator_generic_dialog "RetroDECK Multi-User Mode" "The current user $SteamAppUser has an existing folder in the multi-user data folder.\n\nThe saves here are likely older than the ones currently used by RetroDECK.\n\nThe old saves will be backed up to $backups_folder and the current saves will be loaded into the multi-user data folder."
       mkdir -p "$backups_folder"
       tar -C "$multi_user_data_folder" -cahf "$backups_folder/multi-user-backup_$SteamAppUser_$(date +"%Y_%m_%d").zip" "$SteamAppUser"
       rm -rf "$multi_user_data_folder/$SteamAppUser" # Remove stale data after backup
@@ -869,7 +893,7 @@ multi_user_enable_multi_user_mode() {
   if [[ -d "$multi_user_data_folder/$SteamAppUser" ]]; then
     configurator_process_complete_dialog "enabling multi-user support"
   else
-    configurator_generic_dialog "It looks like something went wrong while enabling multi-user mode."
+    configurator_generic_dialog "RetroDECK Multi-User Mode" "It looks like something went wrong while enabling multi-user mode."
   fi
 }
 
@@ -893,7 +917,7 @@ multi_user_disable_multi_user_mode() {
       set_setting_value $rd_conf "multi_user_mode" "false" retrodeck "options"
       configurator_process_complete_dialog "disabling multi-user support"
     else
-      configurator_generic_dialog "No single user was selected, please try the process again."
+      configurator_generic_dialog "RetroDECK Multi-User Mode" "No single user was selected, please try the process again."
       configurator_retrodeck_multiuser_dialog
     fi
   else
@@ -916,12 +940,12 @@ multi_user_determine_current_user() {
       else # Unable to find Steam user ID
         if [[ $(ls -1 "$multi_user_data_folder" | wc -l) -gt 1 ]]; then
           if [[ -z $default_user ]]; then # And a default user is not set
-            configurator_generic_dialog "The current user could not be determined from the system, and there are multiple users registered.\n\nPlease select which user is currently playing in the next dialog."
+            configurator_generic_dialog "RetroDECK Multi-User Mode" "The current user could not be determined from the system, and there are multiple users registered.\n\nPlease select which user is currently playing in the next dialog."
             SteamAppUser=$(multi_user_choose_current_user_dialog)
             if [[ ! -z $SteamAppUser ]]; then # User was chosen from dialog
               multi_user_link_current_user_files
             else
-              configurator_generic_dialog "No user was chosen, RetroDECK will launch with the files from the user who played most recently."
+              configurator_generic_dialog "RetroDECK Multi-User Mode" "No user was chosen, RetroDECK will launch with the files from the user who played most recently."
             fi
           else # The default user is set
             if [[ ! -z $(ls -1 $multi_user_data_folder | grep "$default_user") ]]; then # Confirm user data folder exists
@@ -940,7 +964,7 @@ multi_user_determine_current_user() {
       if [[ ! -z "$SteamAppUser" ]]; then
         multi_user_setup_new_user
       else # If running in Desktop mode for the first time
-        configurator_generic_dialog "The current user could not be determined from the system and there is no existing userlist.\n\nPlease enter the Steam account username (not profile name) into the next dialog, or run RetroDECK in game mode."
+        configurator_generic_dialog "RetroDECK Multi-User Mode" "The current user could not be determined from the system and there is no existing userlist.\n\nPlease enter the Steam account username (not profile name) into the next dialog, or run RetroDECK in game mode."
         if zenity --entry \
           --title="Specify Steam username" \
           --text="Enter Steam username:"
@@ -949,17 +973,17 @@ multi_user_determine_current_user() {
           if [[ ! -z "$SteamAppUser" ]]; then
             multi_user_setup_new_user
           else # But dialog box was blank
-            configurator_generic_dialog "No username was entered, so multi-user data folder cannot be created.\n\nDisabling multi-user mode, please try the process again."
+            configurator_generic_dialog "RetroDECK Multi-User Mode" "No username was entered, so multi-user data folder cannot be created.\n\nDisabling multi-user mode, please try the process again."
             set_setting_value $rd_conf "multi_user_mode" "false" retrodeck "options"
           fi
         else # User clicked "Cancel"
-          configurator_generic_dialog "Cancelling multi-user mode activation."
+          configurator_generic_dialog "RetroDECK Multi-User Mode" "Cancelling multi-user mode activation."
           set_setting_value $rd_conf "multi_user_mode" "false" retrodeck "options"
         fi
       fi
     fi
   else
-    configurator_generic_dialog "Multi-user mode is not currently enabled"
+    configurator_generic_dialog "RetroDECK Multi-User Mode" "Multi-user mode is not currently enabled"
   fi
 }
 
@@ -1071,11 +1095,13 @@ conf_write() {
       if [[ ! -z $(grep -o -P "^\[.+?\]$" <<< "$current_setting_line") ]]; then # If the line is a section header
         local current_section=$(sed 's^[][]^^g' <<< $current_setting_line) # Remove brackets from section name
       else
-        local current_setting_name=$(get_setting_name "$current_setting_line" "retrodeck") # Read the variable name from the current line
-        local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "$current_section") # Read the variables value from retrodeck.cfg
-        local memory_setting_value=$(eval "echo \$${current_setting_name}") # Read the variable names' value from memory
-        if [[ ! "$current_setting_value" == "$memory_setting_value" ]]; then # If the values are different...
-          set_setting_value "$rd_conf" "$current_setting_name" "$memory_setting_value" "retrodeck" "$current_section" # Update the value in retrodeck.cfg
+        if [[ "$current_section" == "" || "$current_section" == "paths" || "$current_section" == "options" ]]; then
+          local current_setting_name=$(get_setting_name "$current_setting_line" "retrodeck") # Read the variable name from the current line
+          local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "$current_section") # Read the variables value from retrodeck.cfg
+          local memory_setting_value=$(eval "echo \$${current_setting_name}") # Read the variable names' value from memory
+          if [[ ! "$current_setting_value" == "$memory_setting_value" && ! -z "$memory_setting_value" ]]; then # If the values are different...
+            set_setting_value "$rd_conf" "$current_setting_name" "$memory_setting_value" "retrodeck" "$current_section" # Update the value in retrodeck.cfg
+          fi
         fi
       fi
     fi
@@ -1092,9 +1118,11 @@ conf_read() {
       if [[ ! -z $(grep -o -P "^\[.+?\]$" <<< "$current_setting_line") ]]; then # If the line is a section header
         local current_section=$(sed 's^[][]^^g' <<< $current_setting_line) # Remove brackets from section name
       else
-        local current_setting_name=$(get_setting_name "$current_setting_line" "retrodeck") # Read the variable name from the current line
-        local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "$current_section") # Read the variables value from retrodeck.cfg
-        eval "$current_setting_name=$current_setting_value" # Write the current setting name and value to memory
+        if [[ "$current_section" == "" || "$current_section" == "paths" || "$current_section" == "options" ]]; then
+          local current_setting_name=$(get_setting_name "$current_setting_line" "retrodeck") # Read the variable name from the current line
+          local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "$current_section") # Read the variables value from retrodeck.cfg
+          eval "$current_setting_name=$current_setting_value" # Write the current setting name and value to memory
+        fi
       fi
     fi
   done < $rd_conf
@@ -1256,7 +1284,7 @@ prepare_emulator() {
           cp -fv $emuconfigs/retroarch/retroarch.cfg /var/config/retroarch/
           cp -fv $emuconfigs/retroarch/retroarch-core-options.cfg /var/config/retroarch/
           mkdir -pv /var/config/retroarch/config/
-          cp -rf $emuconfigs/retroarch/core-overrides/* /var/config/retroarch/config
+          cp -rf "$emuconfigs/retroarch/core-overrides/"* /var/config/retroarch/config
           dir_prep "$borders_folder" "/var/config/retroarch/borders"
           cp -rt /var/config/retroarch/borders/ /app/retrodeck/emu-configs/retroarch/borders/*
           set_setting_value "$raconf" "savefile_directory" "$saves_folder" "retroarch"
@@ -1381,7 +1409,7 @@ prepare_emulator() {
       if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/dolphin-emu"
         mkdir -p "$multi_user_data_folder/$SteamAppUser/config/dolphin-emu"
-        cp -fvr $emuconfigs/dolphin/* "$multi_user_data_folder/$SteamAppUser/config/dolphin-emu/"
+        cp -fvr "$emuconfigs/dolphin/"* "$multi_user_data_folder/$SteamAppUser/config/dolphin-emu/"
         set_setting_value "$multi_user_data_folder/$SteamAppUser/config/dolphin-emu/Dolphin.ini" "BIOS" "$bios_folder" "dolphin" "GBA"
         set_setting_value "$multi_user_data_folder/$SteamAppUser/config/dolphin-emu/Dolphin.ini" "SavesPath" "$saves_folder/gba" "dolphin" "GBA"
         set_setting_value "$multi_user_data_folder/$SteamAppUser/config/dolphin-emu/Dolphin.ini" "ISOPath0" "$roms_folder/wii" "dolphin" "General"
@@ -1432,7 +1460,7 @@ prepare_emulator() {
       if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/duckstation"
         mkdir -p "$multi_user_data_folder/$SteamAppUser/data/duckstation/"
-        cp -fv $emuconfigs/duckstation/* "$multi_user_data_folder/$SteamAppUser/data/duckstation"
+        cp -fv "$emuconfigs/duckstation/"* "$multi_user_data_folder/$SteamAppUser/data/duckstation"
         set_setting_value "$multi_user_data_folder/$SteamAppUser/data/duckstation/settings.ini" "SearchDirectory" "$bios_folder" "duckstation" "BIOS"
         set_setting_value "$multi_user_data_folder/$SteamAppUser/data/duckstation/settings.ini" "Card1Path" "$saves_folder/psx/duckstation/memcards/shared_card_1.mcd" "duckstation" "MemoryCards"
         set_setting_value "$multi_user_data_folder/$SteamAppUser/data/duckstation/settings.ini" "Card2Path" "$saves_folder/psx/duckstation/memcards/shared_card_2.mcd" "duckstation" "MemoryCards"
@@ -1441,7 +1469,7 @@ prepare_emulator() {
       else # Single-user actions
         rm -rf /var/config/duckstation
         mkdir -p /var/data/duckstation/
-        cp -fv $emuconfigs/duckstation/* /var/data/duckstation
+        cp -fv "$emuconfigs/duckstation/"* /var/data/duckstation
         set_setting_value "$duckstationconf" "SearchDirectory" "$bios_folder" "duckstation" "BIOS"
         set_setting_value "$duckstationconf" "Card1Path" "$saves_folder/psx/duckstation/memcards/shared_card_1.mcd" "duckstation" "MemoryCards"
         set_setting_value "$duckstationconf" "Card2Path" "$saves_folder/psx/duckstation/memcards/shared_card_2.mcd" "duckstation" "MemoryCards"
@@ -1507,7 +1535,7 @@ prepare_emulator() {
       if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/PCSX2"
         mkdir -p "$multi_user_data_folder/$SteamAppUser/config/PCSX2/inis"
-        cp -fvr $emuconfigs/PCSX2/* "$multi_user_data_folder/$SteamAppUser/config/PCSX2/inis/"
+        cp -fvr "$emuconfigs/PCSX2/"* "$multi_user_data_folder/$SteamAppUser/config/PCSX2/inis/"
         set_setting_value "$multi_user_data_folder/$SteamAppUser/config/PCSX2/inis/PCSX2.ini" "Bios" "$bios_folder" "pcsx2" "Folders"
         set_setting_value "$multi_user_data_folder/$SteamAppUser/config/PCSX2/inis/PCSX2.ini" "Snapshots" "$screenshots_folder" "pcsx2" "Folders"
         set_setting_value "$multi_user_data_folder/$SteamAppUser/config/PCSX2/inis/PCSX2.ini" "SaveStates" "$states_folder/ps2/pcsx2" "pcsx2" "Folders"
@@ -1517,7 +1545,7 @@ prepare_emulator() {
       else # Single-user actions
         rm -rf /var/config/PCSX2
         mkdir -pv "/var/config/PCSX2/inis"
-        cp -fvr $emuconfigs/PCSX2/* /var/config/PCSX2/inis/
+        cp -fvr "$emuconfigs/PCSX2/"* /var/config/PCSX2/inis/
         set_setting_value "$pcsx2conf" "Bios" "$bios_folder" "pcsx2" "Folders"
         set_setting_value "$pcsx2conf" "Snapshots" "$screenshots_folder" "pcsx2" "Folders"
         set_setting_value "$pcsx2conf" "SaveStates" "$states_folder/ps2/pcsx2" "pcsx2" "Folders"
@@ -1553,13 +1581,13 @@ prepare_emulator() {
       if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/ppsspp"
         mkdir -p "$multi_user_data_folder/$SteamAppUser/config/ppsspp/PSP/SYSTEM/"
-        cp -fv $emuconfigs/ppssppsdl/* "$multi_user_data_folder/$SteamAppUser/config/ppsspp/PSP/SYSTEM/"
+        cp -fv "$emuconfigs/ppssppsdl/"* "$multi_user_data_folder/$SteamAppUser/config/ppsspp/PSP/SYSTEM/"
         set_setting_value "$multi_user_data_folder/$SteamAppUser/config/ppsspp/PSP/SYSTEM/ppsspp.ini" "CurrentDirectory" "$roms_folder/psp" "ppsspp" "General"
         dir_prep "$multi_user_data_folder/$SteamAppUser/config/ppsspp" "/var/config/ppsspp"
       else # Single-user actions
         rm -rf /var/config/ppsspp
         mkdir -p /var/config/ppsspp/PSP/SYSTEM/
-        cp -fv $emuconfigs/ppssppsdl/* /var/config/ppsspp/PSP/SYSTEM/
+        cp -fv "$emuconfigs/ppssppsdl/"* /var/config/ppsspp/PSP/SYSTEM/
         set_setting_value "$ppssppconf" "CurrentDirectory" "$roms_folder/psp" "ppsspp" "General"
       fi
     fi
@@ -1576,7 +1604,7 @@ prepare_emulator() {
       if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/primehack"
         mkdir -p "$multi_user_data_folder/$SteamAppUser/config/primehack"
-        cp -fvr $emuconfigs/primehack/* "$multi_user_data_folder/$SteamAppUser/config/primehack/"
+        cp -fvr "$emuconfigs/primehack/"* "$multi_user_data_folder/$SteamAppUser/config/primehack/"
         set_setting_value ""$multi_user_data_folder/$SteamAppUser/config/primehack/Dolphin.ini"" "ISOPath0" "$roms_folder/gc" "primehack" "General"
         dir_prep "$multi_user_data_folder/$SteamAppUser/config/primehack" "/var/config/primehack"
       else # Single-user actions
@@ -1617,7 +1645,7 @@ prepare_emulator() {
       if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/rpcs3"
         mkdir -pv "$multi_user_data_folder/$SteamAppUser/config/rpcs3/"
-        cp -fr $emuconfigs/rpcs3/* "$multi_user_data_folder/$SteamAppUser/config/rpcs3/"
+        cp -fr "$emuconfigs/rpcs3/"* "$multi_user_data_folder/$SteamAppUser/config/rpcs3/"
         # This is an unfortunate one-off because set_setting_value does not currently support settings with $ in the name.
         sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$bios_folder/rpcs3/"'^' "$multi_user_data_folder/$SteamAppUser/config/rpcs3/vfs.yml"
         set_setting_value "$multi_user_data_folder/$SteamAppUser/config/rpcs3/vfs.yml" "/games/" "$roms_folder/ps3/" "rpcs3"
@@ -1625,7 +1653,7 @@ prepare_emulator() {
       else # Single-user actions
         rm -rf /var/config/rpcs3
         mkdir -pv /var/config/rpcs3/
-        cp -fr $emuconfigs/rpcs3/* /var/config/rpcs3/
+        cp -fr "$emuconfigs/rpcs3/"* /var/config/rpcs3/
         # This is an unfortunate one-off because set_setting_value does not currently support settings with $ in the name.
         sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$bios_folder/rpcs3/"'^' "$rpcs3vfsconf"
         set_setting_value "$rpcs3vfsconf" "/games/" "$roms_folder/ps3/" "rpcs3"
@@ -1735,7 +1763,7 @@ prepare_emulator() {
       if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/yuzu"
         mkdir -p "$multi_user_data_folder/$SteamAppUser/config/yuzu"
-        cp -fvr $emuconfigs/yuzu/* "$multi_user_data_folder/$SteamAppUser/config/yuzu/"
+        cp -fvr "$emuconfigs/yuzu/"* "$multi_user_data_folder/$SteamAppUser/config/yuzu/"
         set_setting_value "$multi_user_data_folder/$SteamAppUser/config/yuzu/qt-config.ini" "nand_directory" "$saves_folder/switch/yuzu/nand" "yuzu" "Data%20Storage"
         set_setting_value "$multi_user_data_folder/$SteamAppUser/config/yuzu/qt-config.ini" "sdmc_directory" "$saves_folder/switch/yuzu/sdmc" "yuzu" "Data%20Storage"
         set_setting_value "$multi_user_data_folder/$SteamAppUser/config/yuzu/qt-config.ini" "Paths\gamedirs\4\path" "$roms_folder/switch" "yuzu" "UI"
@@ -1744,7 +1772,7 @@ prepare_emulator() {
       else # Single-user actions
         rm -rf /var/config/yuzu
         mkdir -pv /var/config/yuzu/
-        cp -fvr $emuconfigs/yuzu/* /var/config/yuzu/
+        cp -fvr "$emuconfigs/yuzu/"* /var/config/yuzu/
         set_setting_value "$yuzuconf" "nand_directory" "$saves_folder/switch/yuzu/nand" "yuzu" "Data%20Storage"
         set_setting_value "$yuzuconf" "sdmc_directory" "$saves_folder/switch/yuzu/sdmc" "yuzu" "Data%20Storage"
         set_setting_value "$yuzuconf" "Paths\gamedirs\4\path" "$roms_folder/switch" "yuzu" "UI"
@@ -1814,9 +1842,11 @@ install_retrodeck_starterpack() {
 install_retrodeck_controller_profile() {
   # This function will install the needed files for the custom RetroDECK controller profile
   # NOTE: These files need to be stored in shared locations for Steam, outside of the normal RetroDECK folders and should always be an optional user choice
+  # BIGGER NOTE: As part of this process, all emulators have their configs hard-reset to match the controller mappings of the profile
   # USAGE: install_retrodeck_controller_profile
   rsync -a "/app/retrodeck/binding-icons/" "$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/"
   cp -f "$emuconfigs/defaults/retrodeck/RetroDECK_controller_config.vdf" "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"
+  prepare_emulator "all" "reset"
 }
 
 create_lock() {
@@ -2230,11 +2260,11 @@ configurator_process_complete_dialog() {
 
 configurator_generic_dialog() {
   # This dialog is for showing temporary messages before another process happens.
-  # USAGE: configurator_generic_dialog "info text"
+  # USAGE: configurator_generic_dialog "title text" "info text"
   zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-  --title "RetroDECK Configurator Utility" \
-  --text="$1"
+  --title "$1" \
+  --text="$2"
 }
 
 configurator_generic_question_dialog() {
@@ -2303,17 +2333,17 @@ configurator_move_folder_dialog() {
       elif [[ "$choice" == "SD Card" ]]; then # If the user wants to move the folder to the predefined SD card location, set the target as sdcard from retrodeck.cfg
         local dest_root="$sdcard"
       else
-        configurator_generic_dialog "Select the parent folder you would like to store the $(basename $dir_to_move) folder in."
+        configurator_generic_dialog "RetroDECK Configurator - Move Folder" "Select the parent folder you would like to store the $(basename $dir_to_move) folder in."
         local dest_root=$(directory_browse "RetroDECK directory location") # Set the destination root as the selected custom location
       fi
 
       if [[ (! -z "$dest_root") && ( -w "$dest_root") ]]; then # If user picked a destination and it is writable
         if [[ (-d "$dest_root/$rd_dir_path") && (! -L "$dest_root/$rd_dir_path") && (! $rd_dir_name == "rdhome") ]] || [[ "$(realpath $dir_to_move)" == "$dest_root/$rd_dir_path" ]]; then # If the user is trying to move the folder to where it already is (excluding symlinks that will be unlinked)
-          configurator_generic_dialog "The $(basename $dir_to_move) folder is already at that location, please pick a new one."
+          configurator_generic_dialog "RetroDECK Configurator - Move Folder" "The $(basename $dir_to_move) folder is already at that location, please pick a new one."
           configurator_move_folder_dialog "$rd_dir_name"
         else
           if [[ $(verify_space "$(echo $dir_to_move | sed 's/\/$//')" "$dest_root") ]]; then # Make sure there is enough space at the destination
-            configurator_generic_dialog "Moving $(basename $dir_to_move) folder to $choice"
+            configurator_generic_dialog "RetroDECK Configurator - Move Folder" "Moving $(basename $dir_to_move) folder to $choice"
             unlink "$dest_root/$rd_dir_path" # In case there is already a symlink at the picked destination
             move "$dir_to_move" "$dest_root/$rd_dir_path"
             if [[ -d "$dest_root/$rd_dir_path" ]]; then # If the move succeeded
@@ -2328,7 +2358,7 @@ configurator_move_folder_dialog() {
               fi
               configurator_process_complete_dialog "moving the RetroDECK data directory to internal storage"
             else
-              configurator_generic_dialog "The moving process was not completed, please try again."
+              configurator_generic_dialog "RetroDECK Configurator - Move Folder" "The moving process was not completed, please try again."
             fi
           else # If there isn't enough space in the picked destination
             zenity --icon-name=net.retrodeck.retrodeck --error --no-wrap \
@@ -2339,21 +2369,21 @@ configurator_move_folder_dialog() {
         fi
       else # If the user didn't pick any custom destination, or the destination picked is unwritable
         if [[ ! -z "$dest_root" ]]; then
-          configurator_generic_dialog "No destination was chosen, so no files have been moved."
+          configurator_generic_dialog "RetroDECK Configurator - Move Folder" "No destination was chosen, so no files have been moved."
         else
-          configurator_generic_dialog "The chosen destination is not writable.\nNo files have been moved.\n\nThis can happen when trying to select a location that RetroDECK does not have permission to write.\nThis can normally be fixed by adding the desired path to the RetroDECK permissions with Flatseal."
+          configurator_generic_dialog "RetroDECK Configurator - Move Folder" "The chosen destination is not writable.\nNo files have been moved.\n\nThis can happen when trying to select a location that RetroDECK does not have permission to write.\nThis can normally be fixed by adding the desired path to the RetroDECK permissions with Flatseal."
         fi
       fi
     ;;
 
     esac
   else # The folder to move was not found at the path pulled from retrodeck.cfg and it needs to be reconfigured manually.
-    configurator_generic_dialog "The $(basename $dir_to_move) folder was not found at the expected location.\n\nThis may have happened if the folder was moved manually.\n\nPlease select the current location of the folder."
+    configurator_generic_dialog "RetroDECK Configurator - Move Folder" "The $(basename $dir_to_move) folder was not found at the expected location.\n\nThis may have happened if the folder was moved manually.\n\nPlease select the current location of the folder."
     dir_to_move=$(directory_browse "RetroDECK $(basename $dir_to_move) directory location")
     eval "$rd_dir_name"="$dir_to_move"
     prepare_emulator "postmove" "all"
     conf_write
-    configurator_generic_dialog "RetroDECK $(basename $dir_to_move) folder now configured at\n$dir_to_move."
+    configurator_generic_dialog "RetroDECK Configurator - Move Folder" "RetroDECK $(basename $dir_to_move) folder now configured at\n$dir_to_move."
     configurator_move_folder_dialog "$rd_dir_name"
   fi
 }

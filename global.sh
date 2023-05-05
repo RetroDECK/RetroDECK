@@ -109,7 +109,7 @@ if [[ ! -f "$rd_conf" ]]; then
 
   # Check if SD card path has changed from SteamOS update
   if [[ ! -d $default_sd && "$(ls -A /run/media/deck/)" ]]; then
-    configurator_generic_dialog "The SD card was not found in the expected location.\nThis may happen when SteamOS is updated.\n\nPlease browse to the current location of the SD card.\n\nIf you are not using an SD card, please click \"Cancel\"."
+    configurator_generic_dialog "RetroDECK Setup" "The SD card was not found in the expected location.\nThis may happen when SteamOS is updated.\n\nPlease browse to the current location of the SD card.\n\nIf you are not using an SD card, please click \"Cancel\"."
     default_sd=$(directory_browse "SD Card Location")
   fi
 
@@ -146,7 +146,7 @@ else
   # Verify rdhome is where it is supposed to be.
   if [[ ! -d $rdhome ]]; then
     prev_home_path=$rdhome
-    configurator_generic_dialog "The RetroDECK data folder was not found in the expected location.\nThis may happen when SteamOS is updated.\n\nPlease browse to the current location of the \"retrodeck\" folder."
+    configurator_generic_dialog "RetroDECK Setup" "The RetroDECK data folder was not found in the expected location.\nThis may happen when SteamOS is updated.\n\nPlease browse to the current location of the \"retrodeck\" folder."
     new_home_path=$(directory_browse "RetroDECK folder location")
     set_setting_value $rd_conf "rdhome" "$new_home_path" retrodeck "paths"
     conf_read
