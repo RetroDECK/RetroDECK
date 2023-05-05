@@ -736,35 +736,8 @@ configurator_check_multifile_game_structure() {
   configurator_tools_and_troubleshooting_dialog
 }
 
-configurator_check_bios_files_basic() {
-  configurator_generic_dialog "RetroDECK Configurator - Basic BIOS Check" "This check will look for BIOS files that RetroDECK has identified as working.\n\nThere may be additional BIOS files that will function with the emulators that are not checked.\n\nSome more advanced emulators such as Yuzu will have additional methods for verifiying the BIOS files are in working order."
-  bios_checked_list=()
-
-  while IFS="^" read -r bios_file bios_subdir bios_hash bios_system bios_desc
-  do
-    bios_file_found="No"
-    bios_hash_matched="No"
-    if [[ -f "$bios_folder/$bios_subdir$bios_file" ]]; then
-      bios_file_found="Yes"
-      if [[ $bios_hash == "Unknown" ]]; then
-        bios_hash_matched="Unknown"
-      elif [[ $(md5sum "$bios_folder/$bios_subdir$bios_file" | awk '{ print $1 }') == "$bios_hash" ]]; then
-        bios_hash_matched="Yes"
-      fi
-    fi
-    if [[ $bios_file_found == "Yes" && ($bios_hash_matched == "Yes" || $bios_hash_matched == "Unknown") && ! " ${bios_checked_list[*]} " =~ " ${bios_system} " ]]; then
-      bios_checked_list=("${bios_checked_list[@]}" "$bios_system" )
-    fi
-  done < $bios_checklist
-  systems_with_bios=${bios_checked_list[@]}
-
-  configurator_generic_dialog "RetroDECK Configurator - Basic BIOS Check" "The following systems have been found to have at least one valid BIOS file.\n\n$systems_with_bios\n\nFor more information on the BIOS files found please use the Advanced check tool."
-
-  configurator_tools_and_troubleshooting_dialog
-}
-
-configurator_check_bios_files_advanced() {
-  configurator_generic_dialog "RetroDECK Configurator - Advanced BIOS Check" "This check will look for BIOS files that RetroDECK has identified as working.\n\nNot all BIOS files are required for games to work, please check the BIOS description for more information on its purpose.\n\nThere may be additional BIOS files that will function with the emulators that are not checked.\n\nSome more advanced emulators such as Yuzu will have additional methods for verifiying the BIOS files are in working order."
+configurator_check_bios_files() {
+  configurator_generic_dialog "RetroDECK Configurator - BIOS File Check" "This check will look for BIOS files that RetroDECK has identified as working.\n\nNot all BIOS files are required for games to work, please check the BIOS description for more information on its purpose.\n\nThere may be additional BIOS files that will function with the emulators that are not checked.\n\nSome more advanced emulators such as Yuzu will have additional methods for verifiying the BIOS files are in working order."
   bios_checked_list=()
 
   while IFS="^" read -r bios_file bios_subdir bios_hash bios_system bios_desc
@@ -869,8 +842,7 @@ configurator_tools_and_troubleshooting_dialog() {
   --column="Choice" --column="Action" \
   "Move RetroDECK Folders" "Move RetroDECK folders between internal/SD card or to a custom location" \
   "Multi-file game structure check" "Verify the proper structure of multi-file or multi-disc games" \
-  "Basic BIOS file check" "Show a list of systems that BIOS files are found for" \
-  "Advanced BIOS file check" "Show advanced information about common BIOS files" \
+  "BIOS file check" "Show information about common BIOS files" \
   "Compress Games" "Compress games to CHD format for systems that support it" \
   "Download PS3 Firmware" "Download PS3 firmware for use with the RPCS3 emulator" \
   "Install RetroDECK controller profile" "Install the custom RetroDECK controller profile and required icons" \
@@ -887,12 +859,8 @@ configurator_tools_and_troubleshooting_dialog() {
     configurator_check_multifile_game_structure
   ;;
 
-  "Basic BIOS file check" )
-    configurator_check_bios_files_basic
-  ;;
-
-  "Advanced BIOS file check" )
-    configurator_check_bios_files_advanced
+  "BIOS file check" )
+    configurator_check_bios_files
   ;;
 
   "Compress Games" )

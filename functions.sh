@@ -432,9 +432,9 @@ get_setting_value() {
   esac
 }
 
-add_setting() {
+add_setting_line() {
   # This function will add a setting line to a file. This is useful for dynamically generated config files where a setting line may not exist until the setting is changed from the default.
-  # USAGE: add_setting $setting_file $setting_line $system $section (optional)
+  # USAGE: add_setting_line $setting_file $setting_line $system $section (optional)
 
   local current_setting_line=$(sed -e 's^\\^\\\\^g;s^`^\\`^g' <<< "$2")
   local current_section_name=$(sed -e 's/%/\\%/g' <<< "$4")
@@ -443,7 +443,11 @@ add_setting() {
 
   * )
     if [[ -z $current_section_name ]]; then
-      sed -i '$ a '"$current_setting_line"'' $1
+      if [[ -f "$1" ]]; then
+        sed -i '$ a '"$current_setting_line"'' $1
+      else # If the file doesn't exist, sed add doesn't work for the first line
+        echo "$current_setting_line" > $1
+      fi
     else
       sed -i '/^\s*?\['"$current_section_name"'\]|\b'"$current_section_name"':$/a '"$current_setting_line"'' $1
     fi
@@ -511,12 +515,17 @@ enable_file() {
 generate_single_patch() {
   # generate_single_patch $original_file $modified_file $patch_file $system
 
-  rm $3 # Remove old patch file (maybe change this to create a backup instead?)
+  local original_file="$1"
+  local modified_file="$2"
+  local patch_file="$3"
+  local system="$4"
+
+  rm "$patch_file" # Remove old patch file (maybe change this to create a backup instead?)
 
   while read -r current_setting_line; # Look for changes from the original file to the modified one
   do
-
     printf -v escaped_setting_line '%q' "$current_setting_line" # Take care of special characters before they mess with future commands
+    escaped_setting_line=$(sed -E 's^\+^\\+^g' <<< "$escaped_setting_line") # Need to escape plus signs as well
 
     if [[ (! -z $current_setting_line) && (! $current_setting_line == "#!/bin/bash") && (! $current_setting_line == "[]") ]]; then # Ignore empty lines, empty arrays or Bash start lines
       if [[ ! -z $(grep -o -P "^\[.+?\]$" <<< "$current_setting_line") || ! -z $(grep -o -P "^\b.+?:$" <<< "$current_setting_line") ]]; then # Capture section header lines
@@ -529,45 +538,45 @@ generate_single_patch() {
         fi
       elif [[ (! -z $current_section) ]]; then # If line is in a section...
         if [[ ! -z $(grep -o -P "^\s*?#.*?$" <<< "$current_setting_line") ]]; then # Check for disabled lines
-          if [[ -z $(sed -n -E '\^\['"$current_section"'\]|\b'"$current_section"':$^,\^\s*?'"$(sed -E 's/^[ \t]*//;' <<< "$escaped_setting_line")"'^{ \^\['"$current_section"'\]|\b'"$current_section"':$^! { \^\s*?'"$(sed -E 's/^[ \t]*//' <<< "$escaped_setting_line")"'^ p } }' $2) ]]; then # If disabled line is not disabled in new file...
+          if [[ -z $(sed -n -E '\^\['"$current_section"'\]|\b'"$current_section"':$^,\^\s*?'"$(sed -E 's/^[ \t]*//;' <<< "$escaped_setting_line")"'^{ \^\['"$current_section"'\]|\b'"$current_section"':$^! { \^\s*?'"$(sed -E 's/^[ \t]*//' <<< "$escaped_setting_line")"'^ p } }' "$modified_file") ]]; then # If disabled line is not disabled in new file...
           action="disable_setting"
-          echo $action"^"$current_section"^"$(sed -n -E 's^\s*?#(.*?)$^\1^p' <<< $(sed -E 's/^[ \t]*//' <<< "$current_setting_line")) >> $3
+          echo $action"^"$current_section"^"$(sed -n -E 's^\s*?#(.*?)$^\1^p' <<< $(sed -E 's/^[ \t]*//' <<< "$current_setting_line")) >> "$patch_file"
           fi
-        elif [[ ! -z $(sed -n -E '\^\['"$current_section"'\]|\b'"$current_section"':$^,\^\s*?#'"$(sed -E 's/^[ \t]*//' <<< "$escaped_setting_line")"'^{ \^\['"$current_section"'\]|\b'"$current_section"':$^! { \^\s*?#'"$(sed -E 's/^[ \t]*//;' <<< "$escaped_setting_line")"'^ p } }' $2) ]]; then # Check if line is disabled in new file
+        elif [[ ! -z $(sed -n -E '\^\['"$current_section"'\]|\b'"$current_section"':$^,\^\s*?#'"$(sed -E 's/^[ \t]*//' <<< "$escaped_setting_line")"'^{ \^\['"$current_section"'\]|\b'"$current_section"':$^! { \^\s*?#'"$(sed -E 's/^[ \t]*//;' <<< "$escaped_setting_line")"'^ p } }' "$modified_file") ]]; then # Check if line is disabled in new file
           action="enable_setting"
-          echo $action"^"$current_section"^"$current_setting_line >> $3
+          echo $action"^"$current_section"^"$current_setting_line >> "$patch_file"
         else # Look for setting value differences
-          current_setting_name=$(get_setting_name "$escaped_setting_line" $4)
-          if [[ (-z $(sed -n -E '\^\['"$current_section"'\]|\b'"$current_section"':$^,\^\b'"$current_setting_name"'.*^{ \^\['"$current_section"'\]|\b'"$current_section"':$^! { \^\b'"$(sed -E 's/^[ \t]*//;' <<< "$escaped_setting_line")"'$^ p } }' $2)) ]]; then # If the same setting line is not found in the same section of the modified file...
-            if [[ ! -z $(sed -n -E '\^\['"$current_section"'\]|\b'"$current_section"':$^,\^\b'"$current_setting_name"'^{ \^\['"$current_section"'\]|\b'"$current_section"':$^! { \^\b'"$current_setting_name"'^ p } }' $2) ]]; then # But the setting exists in that section, only with a different value...
-              new_setting_value=$(get_setting_value $2 "$current_setting_name" $4 $current_section)
+          current_setting_name=$(get_setting_name "$escaped_setting_line" "$system")
+          if [[ (-z $(sed -n -E '\^\['"$current_section"'\]|\b'"$current_section"':$^,\^\b'"$current_setting_name"'\s*?[:=]^{ \^\['"$current_section"'\]|\b'"$current_section"':$^! { \^\b'"$(sed -E 's/^[ \t]*//;' <<< "$escaped_setting_line")"'$^ p } }' "$modified_file")) ]]; then # If the same setting line is not found in the same section of the modified file...
+            if [[ ! -z $(sed -n -E '\^\['"$current_section"'\]|\b'"$current_section"':$^,\^\b'"$current_setting_name"'\s*?[:=]^{ \^\['"$current_section"'\]|\b'"$current_section"':$^! { \^\b'"$current_setting_name"'\s*?[:=]^ p } }' "$modified_file") ]]; then # But the setting exists in that section, only with a different value...
+              new_setting_value=$(get_setting_value $2 "$current_setting_name" "$system" $current_section)
               action="change"
-              echo $action"^"$current_section"^"$(sed -e 's%\\\\%\\%g' <<< "$current_setting_name")"^"$new_setting_value"^"$4 >> $3
+              echo $action"^"$current_section"^"$(sed -e 's%\\\\%\\%g' <<< "$current_setting_name")"^"$new_setting_value"^"$system >> "$patch_file"
             fi
           fi
         fi
-      elif [[ (-z $current_section) ]]; then # If line is not in a section...
+      elif [[ -z "$current_section" ]]; then # If line is not in a section...
         if [[ ! -z $(grep -o -P "^\s*?#.*?$" <<< "$current_setting_line") ]]; then # Check for disabled lines
-          if [[ -z $(grep -o -P "^\s*?$current_setting_line$" $2) ]]; then # If disabled line is not disabled in new file...
+          if [[ -z $(grep -o -P "^\s*?$current_setting_line$" "$modified_file") ]]; then # If disabled line is not disabled in new file...
             action="disable_setting"
-            echo $action"^"$current_section"^"$(sed -n -E 's^\s*?#(.*?)$^\1^p' <<< "$current_setting_line") >> $3
+            echo $action"^"$current_section"^"$(sed -n -E 's^\s*?#(.*?)$^\1^p' <<< "$current_setting_line") >> "$patch_file"
           fi
-        elif [[ ! -z $(sed -n -E '\^\s*?#'"$(sed -E 's/^[ \t]*//' <<< "$escaped_setting_line")"'$^p' $2) ]]; then # Check if line is disabled in new file
+        elif [[ ! -z $(sed -n -E '\^\s*?#'"$(sed -E 's/^[ \t]*//' <<< "$escaped_setting_line")"'$^p' "$modified_file") ]]; then # Check if line is disabled in new file
             action="enable_setting"
-            echo $action"^"$current_section"^"$current_setting_line >> $3
+            echo $action"^"$current_section"^"$current_setting_line >> "$patch_file"
         else # Look for setting value differences
-          if [[ (-z $(sed -n -E '\^\s*?\b'"$(sed -E 's/^[ \t]*//' <<< "$escaped_setting_line")"'$^p' $2)) ]]; then # If the same setting line is not found in the modified file...
-            current_setting_name=$(get_setting_name "$escaped_setting_line" "$4")
-            if [[ ! -z $(sed -n -E '\^\s*?\b'"$current_setting_name"'\s*?[:=]^p' $2) ]]; then # But the setting exists, only with a different value...
-              new_setting_value=$(get_setting_value $2 "$current_setting_name" $4)
+          if [[ (-z $(sed -n -E '\^\s*?\b'"$(sed -E 's/^[ \t]*//' <<< "$escaped_setting_line")"'$^p' "$modified_file")) ]]; then # If the same setting line is not found in the modified file...
+            current_setting_name=$(get_setting_name "$escaped_setting_line" "$system")
+            if [[ ! -z $(sed -n -E '\^\s*?\b'"$current_setting_name"'\s*?[:=]^p' "$modified_file") ]]; then # But the setting exists, only with a different value...
+              new_setting_value=$(get_setting_value $2 "$current_setting_name" "$system")
               action="change"
-              echo $action"^"$current_section"^"$(sed -e 's%\\\\%\\%g' <<< "$current_setting_name")"^"$new_setting_value"^"$4 >> $3
+              echo $action"^"$current_section"^"$(sed -e 's%\\\\%\\%g' <<< "$current_setting_name")"^"$new_setting_value"^"$system >> "$patch_file"
             fi
           fi
         fi
       fi
     fi
-  done < $1
+  done < "$original_file"
 
     # Reset the variables for reuse
     action=""
@@ -585,27 +594,25 @@ generate_single_patch() {
       if [[ $current_setting_line =~ ^\[.+\] ]]; then # If normal section line
         action="section"
         current_section=$(sed 's^[][]^^g' <<< $current_setting_line) # Remove brackets from section name
-        echo "Section found:" "$current_section""."
       elif [[ ! -z $(grep -o -P "^\b.+?:$" <<< "$current_setting_line") ]]; then # If RPCS3 section name
         action="section"
         current_section=$(sed 's^:$^^' <<< $current_setting_line) # Remove colon from section name
-        echo "Section found:" "$current_section""."
       fi
       elif [[ (! -z $current_section) ]]; then
         current_setting_name=$(get_setting_name "$escaped_setting_line" "$4")
         if [[ -z $(sed -n -E '\^\['"$current_section"'\]|\b'"$current_section"':$^,\^\b'"$current_setting_name"'.*^{ \^\['"$current_section"'\]|\b'"$current_section"':$^! { \^\b'"$current_setting_name"'^p } }' $1 ) ]]; then # If setting name is not found in this section of the original file...
-          action="add_setting"
+          action="add_setting_line" # TODO: This should include the previous line, so that new lines can be inserted in the correct place rather than at the end.
           echo $action"^"$current_section"^"$current_setting_line"^^"$4 >> $3
         fi
       elif [[ (-z $current_section) ]]; then
         current_setting_name=$(get_setting_name "$escaped_setting_line" "$4")
         if [[ -z $(sed -n -E '\^\s*?\b'"$current_setting_name"'\s*?[:=]^p' $1) ]]; then # If setting name is not found in the original file...
-          action="add_setting"
+          action="add_setting_line" # TODO: This should include the previous line, so that new lines can be inserted in the correct place rather than at the end.
           echo $action"^"$current_section"^"$current_setting_line"^^"$4 >> $3
         fi
       fi
     fi
-  done < $2
+  done < "$modified_file"
 }
 
 deploy_single_patch() {
@@ -628,8 +635,8 @@ do
     eval enable_file "$setting_name"
 	;;
 
-	"add_setting" )
-    eval add_setting $3 "$setting_name" $system_name $current_section
+	"add_setting_line" )
+    eval add_setting_line $3 "$setting_name" $system_name $current_section
 	;;
 
 	"disable_setting" )
@@ -641,7 +648,10 @@ do
 	;;
 
 	"change" )
-    eval set_setting_value $3 "$setting_name" "$setting_value" $system_name $current_section
+    if [[ "$setting_value" = \$* ]]; then # If patch setting value is a reference to an internal variable name
+      eval setting_value="$setting_value"
+    fi
+    set_setting_value $3 "$setting_name" "$setting_value" $system_name $current_section
   ;;
 
   *"#"* )
@@ -675,8 +685,8 @@ do
     eval enable_file "$config_file"
 	;;
 
-	"add_setting" )
-    eval add_setting "$config_file" "$setting_name" $system_name $current_section
+	"add_setting_line" )
+    eval add_setting_line "$config_file" "$setting_name" $system_name $current_section
 	;;
 
 	"disable_setting" )
@@ -688,7 +698,10 @@ do
 	;;
 
 	"change" )
-    eval set_setting_value "$config_file" "$setting_name" "$setting_value" $system_name $current_section
+    if [[ "$setting_value" = \$* ]]; then # If patch setting value is a reference to an internal variable name
+      eval setting_value="$setting_value"
+    fi
+    set_setting_value "$config_file" "$setting_name" "$setting_value" $system_name $current_section
   ;;
 
   *"#"* )
@@ -788,10 +801,21 @@ update_rd_conf() {
   # This function will import a default retrodeck.cfg file and update it with any current settings. This will allow us to expand the file over time while retaining current user settings.
   # USAGE: update_rd_conf
 
+  # STAGE 1: For current files that haven't been broken into sections yet, where every setting name is unique
+
   conf_read # Read current settings into memory
   mv -f $rd_conf $rd_conf_backup # Backup config file before update
   cp $rd_defaults $rd_conf # Copy defaults file into place
   conf_write # Write old values into new default file
+
+  # STAGE 2: To handle feature sections that use duplicate setting names
+
+  mv -f $rd_conf $rd_conf_backup # Backup config file agiain before update but after Stage 1 expansion
+  generate_single_patch $rd_defaults $rd_conf_backup $rd_update_patch retrodeck # Create a patch file for differences between defaults and current user settings
+  sed -i '/change^^version/d' $rd_update_patch # Remove version line from temporary patch file
+  deploy_single_patch $rd_defaults $rd_update_patch $rd_conf # Re-apply user settings to defaults file
+  set_setting_value $rd_conf "version" "$hard_version" retrodeck # Set version of currently running RetroDECK to updated retrodeck.cfg
+  rm -f $rd_update_patch # Cleanup temporary patch file
   conf_read # Read all settings into memory
 }
 
@@ -1071,11 +1095,13 @@ conf_write() {
       if [[ ! -z $(grep -o -P "^\[.+?\]$" <<< "$current_setting_line") ]]; then # If the line is a section header
         local current_section=$(sed 's^[][]^^g' <<< $current_setting_line) # Remove brackets from section name
       else
-        local current_setting_name=$(get_setting_name "$current_setting_line" "retrodeck") # Read the variable name from the current line
-        local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "$current_section") # Read the variables value from retrodeck.cfg
-        local memory_setting_value=$(eval "echo \$${current_setting_name}") # Read the variable names' value from memory
-        if [[ ! "$current_setting_value" == "$memory_setting_value" ]]; then # If the values are different...
-          set_setting_value "$rd_conf" "$current_setting_name" "$memory_setting_value" "retrodeck" "$current_section" # Update the value in retrodeck.cfg
+        if [[ "$current_section" == "" || "$current_section" == "paths" || "$current_section" == "options" ]]; then
+          local current_setting_name=$(get_setting_name "$current_setting_line" "retrodeck") # Read the variable name from the current line
+          local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "$current_section") # Read the variables value from retrodeck.cfg
+          local memory_setting_value=$(eval "echo \$${current_setting_name}") # Read the variable names' value from memory
+          if [[ ! "$current_setting_value" == "$memory_setting_value" && ! -z "$memory_setting_value" ]]; then # If the values are different...
+            set_setting_value "$rd_conf" "$current_setting_name" "$memory_setting_value" "retrodeck" "$current_section" # Update the value in retrodeck.cfg
+          fi
         fi
       fi
     fi
@@ -1092,9 +1118,11 @@ conf_read() {
       if [[ ! -z $(grep -o -P "^\[.+?\]$" <<< "$current_setting_line") ]]; then # If the line is a section header
         local current_section=$(sed 's^[][]^^g' <<< $current_setting_line) # Remove brackets from section name
       else
-        local current_setting_name=$(get_setting_name "$current_setting_line" "retrodeck") # Read the variable name from the current line
-        local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "$current_section") # Read the variables value from retrodeck.cfg
-        eval "$current_setting_name=$current_setting_value" # Write the current setting name and value to memory
+        if [[ "$current_section" == "" || "$current_section" == "paths" || "$current_section" == "options" ]]; then
+          local current_setting_name=$(get_setting_name "$current_setting_line" "retrodeck") # Read the variable name from the current line
+          local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "$current_section") # Read the variables value from retrodeck.cfg
+          eval "$current_setting_name=$current_setting_value" # Write the current setting name and value to memory
+        fi
       fi
     fi
   done < $rd_conf
@@ -1814,9 +1842,11 @@ install_retrodeck_starterpack() {
 install_retrodeck_controller_profile() {
   # This function will install the needed files for the custom RetroDECK controller profile
   # NOTE: These files need to be stored in shared locations for Steam, outside of the normal RetroDECK folders and should always be an optional user choice
+  # BIGGER NOTE: As part of this process, all emulators have their configs hard-reset to match the controller mappings of the profile
   # USAGE: install_retrodeck_controller_profile
   rsync -a "/app/retrodeck/binding-icons/" "$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/"
   cp -f "$emuconfigs/defaults/retrodeck/RetroDECK_controller_config.vdf" "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"
+  prepare_emulator "all" "reset"
 }
 
 create_lock() {

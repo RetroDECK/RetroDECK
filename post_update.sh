@@ -69,19 +69,26 @@ post_update() {
   fi
   if [[ $prev_version -le "070" ]]; then
     # In version 0.7.0b, the following changes were made that required config file updates/reset or other changes to the filesystem:
+    # - Update retrodeck.cfg and set new paths to $rdhome by default
     # - New ~/retrodeck/mods and ~/retrodeck/texture_packs directories are added and symlinked to multiple different emulators (where supported)
     # - Expose ES-DE gamelists folder to user at ~/retrodeck/gamelists
-    # - Add new sections [paths] and [options] headers to retrodeck.cfg
-    # - Prepackaged DOOM!
     # - Update RPCS3 vfs file contents. migrate from old location if needed
     # - Disable ESDE update checks for existing installs
     # - Move Duckstation saves and states to new locations
     # - Clean up legacy tools files (Configurator is now accessible through the main ES-DE menu)
     # - Move Dolphin and Primehack save folder names
-    # - Offer user option of installing custom controller config
+
+    update_rd_conf # Expand retrodeck.cfg to latest template
+    set_setting_value $rd_conf "screenshots_folder" "$rdhome/screenshots"
+    set_setting_value $rd_conf "mods_folder" "$rdhome/mods"
+    set_setting_value $rd_conf "texture_packs_folder" "$rdhome/texture_packs"
+    set_setting_value $rd_conf "borders_folder" "$rdhome/borders"
+    conf_read
 
     mkdir -p "$mods_folder"
     mkdir -p "$texture_packs_folder"
+    mkdir -p "$borders_folder"
+
     dir_prep "$mods_folder/Primehack" "/var/data/primehack/Load/GraphicMods"
     dir_prep "$texture_packs_folder/Primehack" "/var/data/primehack/Load/Textures"
     dir_prep "$mods_folder/Dolphin" "/var/data/dolphin-emu/Load/GraphicMods"
@@ -146,11 +153,6 @@ post_update() {
     dir_prep "$saves_folder/gc/primehack/EU" "/var/data/primehack/GC/EUR"
     dir_prep "$saves_folder/gc/primehack/US" "/var/data/primehack/GC/USA"
     dir_prep "$saves_folder/gc/primehack/JP" "/var/data/primehack/GC/JAP"
-
-    configurator_generic_dialog "RetroDECK 0.7.0b Upgrade" "As part of this update, we are offering a new official RetroDECK controller profile!\nIt is an optional component that helps you get the most out of RetroDECK with a new in-game radial menu for unified hotkeys across emulators.\n\nThe files need to be installed outside of the normal ~/retrodeck folder, so we wanted your permission before proceeding.\nIf you decide to not install the profile now, it can always be done later through the Configurator.\n\nThe files will be installed at the following shared Steam locations:\n\n$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/\n$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"
-    if [[ $(configurator_generic_question_dialog "RetroDECK Official Controller Profile" "Would you like to install the official RetroDECK controller profile?") == "true" ]]; then
-      install_retrodeck_controller_profile
-    fi
   fi
 
   # The following commands are run every time.
@@ -163,7 +165,6 @@ post_update() {
   fi
 
   update_splashscreens
-  update_rd_conf
   ) |
   zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
