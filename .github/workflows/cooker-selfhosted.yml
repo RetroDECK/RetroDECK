@@ -39,7 +39,7 @@ jobs:
           word2=$(curl -s https://random-word-api.herokuapp.com/word?length=5 | tr -d '[]"')
           capitalized_word2="$(tr '[:lower:]' '[:upper:]' <<< ${word2:0:1})${word2:1}"
           result=$capitalized_word1$capitalized_word2
-          echo $result >> ${GITHUB_WORKSPACE}/buildid
+          echo $result > ${GITHUB_WORKSPACE}/buildid
           ls -lah ${GITHUB_WORKSPACE}         # DEBUG
           cat ${GITHUB_WORKSPACE}/buildid     # DEBUG
           echo "buildid=$result" >> $GITHUB_ENV
