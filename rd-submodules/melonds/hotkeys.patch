@@ -1,0 +1,18 @@
+diff -au1r melonDS/src/frontend/qt_sdl/main.cpp melonDS/src/frontend/qt_sdl/main.cpp
+--- melonDS/src/frontend/qt_sdl/main.cpp	2023-05-06 17:27:24.822375255 +0200
++++ melonDS/src/frontend/qt_sdl/main.cpp	2023-05-06 17:47:19.587498189 +0200
+@@ -1467,3 +1467,3 @@
+             actSaveState[0] = submenu->addAction("File...");
+-            actSaveState[0]->setShortcut(QKeySequence(Qt::ShiftModifier | Qt::Key_F9));
++            actSaveState[0]->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_S));
+             actSaveState[0]->setData(QVariant(0));
+@@ -1483,3 +1483,3 @@
+             actLoadState[0] = submenu->addAction("File...");
+-            actLoadState[0]->setShortcut(QKeySequence(Qt::Key_F9));
++            actLoadState[0]->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_A));
+             actLoadState[0]->setData(QVariant(0));
+@@ -1489,3 +1489,3 @@
+         actUndoStateLoad = menu->addAction("Undo state load");
+-        actUndoStateLoad->setShortcut(QKeySequence(Qt::Key_F12));
++        actUndoStateLoad->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_8));
+         connect(actUndoStateLoad, &QAction::triggered, this, &MainWindow::onUndoStateLoad);
