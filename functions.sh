@@ -159,25 +159,29 @@ validate_for_chd() {
 		local file_base_name=$(basename "$file")
 		local file_name=${file_base_name%.*}
 		if [[ "$normalized_filename" == *".cue" ]]; then # Validate .cue file
-			echo "Validating .cue associated .bin files" >> "$logs_folder/$chd_validation_log_file"
-			local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" "$file")
-			echo "Associated bin files read:" >> "$logs_folder/$chd_validation_log_file"
-			printf '%s\n' "$cue_bin_files" >> "$logs_folder/$chd_validation_log_file"
-			if [[ ! -z "$cue_bin_files" ]]; then
-        while IFS= read -r line
-        do
-          echo "looking for $file_path/$line" >> "$logs_folder/$chd_validation_log_file"
-          if [[ -f "$file_path/$line" ]]; then
-            echo ".bin file found at $file_path/$line" >> "$logs_folder/$chd_validation_log_file"
-            file_validated="true"
-          else
-            echo ".bin file NOT found at $file_path/$line" >> "$logs_folder/$chd_validation_log_file"
-            echo ".cue file could not be validated. Please verify your .cue file contains the correct corresponding .bin file information and retry." >> "$logs_folder/$chd_validation_log_file"
-            file_validated="false"
-            break
-          fi
-        done < <(printf '%s\n' "$cue_bin_files")
-			fi
+			if [[ ! "$file_path" == *"dreamcast"* ]]; then # .bin/.cue compression may not work for Dreamcast, only GDI or ISO # TODO: verify
+        echo "Validating .cue associated .bin files" >> "$logs_folder/$chd_validation_log_file"
+        local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" "$file")
+        echo "Associated bin files read:" >> "$logs_folder/$chd_validation_log_file"
+        printf '%s\n' "$cue_bin_files" >> "$logs_folder/$chd_validation_log_file"
+        if [[ ! -z "$cue_bin_files" ]]; then
+          while IFS= read -r line
+          do
+            echo "looking for $file_path/$line" >> "$logs_folder/$chd_validation_log_file"
+            if [[ -f "$file_path/$line" ]]; then
+              echo ".bin file found at $file_path/$line" >> "$logs_folder/$chd_validation_log_file"
+              file_validated="true"
+            else
+              echo ".bin file NOT found at $file_path/$line" >> "$logs_folder/$chd_validation_log_file"
+              echo ".cue file could not be validated. Please verify your .cue file contains the correct corresponding .bin file information and retry." >> "$logs_folder/$chd_validation_log_file"
+              file_validated="false"
+              break
+            fi
+          done < <(printf '%s\n' "$cue_bin_files")
+        fi
+      else
+        echo ".cue files not compatible with Dreamcast CHD compression" >> "$logs_folder/$chd_validation_log_file"
+      fi
       echo $file_validated
 		else # If file is a .iso or .gdi
       file_validated="true"
@@ -290,6 +294,7 @@ desktop_mode_warning() {
   # This function is a generic warning for issues that happen when running in desktop mode.
   # Running in desktop mode can be verified with the following command: if [[ ! $XDG_CURRENT_DESKTOP == "gamescope" ]]; then
   # This function will check if desktop mode is currently being used and if the warning has not been disabled, and show it if needed.
+  # USAGE: desktop_mode_warning
 
   if [[ ! $XDG_CURRENT_DESKTOP == "gamescope" ]]; then
     if [[ $desktop_mode_warning == "true" ]]; then
@@ -302,8 +307,26 @@ desktop_mode_warning() {
         if [[ $choice == "No" ]]; then
           exit 1
         elif [[ $choice == "Never show this again" ]]; then
-          set_setting_value $rd_conf "desktop_mode_warning" "false" retrodeck  "options" # Store desktop mode warning variable for future checks
+          set_setting_value $rd_conf "desktop_mode_warning" "false" retrodeck "options" # Store desktop mode warning variable for future checks
         fi
+      fi
+    fi
+  fi
+}
+
+low_space_warning() {
+  # This function will verify that the drive with the $HOME path on it has at least 10% space free, so the user can be warned before it fills up
+  # USAGE: low_space_warning
+
+  if [[ $low_space_warning == "true" ]]; then
+    local used_percent=$(df --output=pcent "$HOME" | tail -1 | tr -d " " | tr -d "%")
+    if [[ "$used_percent" -ge 90 && -d "$HOME/retrodeck" ]]; then # If there is any RetroDECK data on the main drive to move
+      choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK" --extra-button="Never show this again" \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Low Space Warning" \
+      --text="Your main drive is over 90% full!\n\nIf your drive fills completely this can lead to data loss or system crash.\n\nPlease consider moving some RetroDECK folders to other storage locations using the Configurator.")
+      if [[ $choice == "Never show this again" ]]; then
+          set_setting_value $rd_conf "low_space_warning" "false" retrodeck "options" # Store low space warning variable for future checks
       fi
     fi
   fi
@@ -2562,6 +2585,8 @@ get_cheevos_token_dialog() {
     echo "failed"
   fi
 }
+
+
 
 change_preset_dialog() {
   # This function will build a list of all systems compatible with a given preset, their current enable/disabled state and allow the user to change one or more

@@ -154,9 +154,10 @@ if [[ $multi_user_mode == "true" ]]; then
   multi_user_determine_current_user
 fi
 
-# Check if running in Desktop mode and warn if true, unless desktop_mode_warning=false in retrodeck.cfg
+# Run optional startup checks
 
 desktop_mode_warning
+low_space_warning
 
 # Check if there is a new version of RetroDECK available, if update_check=true in retrodeck.cfg and there is network connectivity available.
 if [[ $(check_network_connectivity) == "true" ]] && [[ $update_check == "true" ]]; then
