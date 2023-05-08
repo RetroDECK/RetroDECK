@@ -456,6 +456,46 @@ add_setting_line() {
   esac
 }
 
+add_setting() {
+  # This function will add a setting name and value to a file. This is useful for dynamically generated config files like Retroarch override files.
+  # USAGE: add_setting $setting_file $setting_name $setting_value $system $section (optional)
+
+  local current_setting_name=$(sed -e 's^\\^\\\\^g;s^`^\\`^g' <<< "$2")
+  local current_setting_value=$(sed -e 's^\\^\\\\^g;s^`^\\`^g' <<< "$3")
+  local current_section_name=$(sed -e 's/%/\\%/g' <<< "$5")
+
+  case $4 in
+
+  "retroarch" )
+    if [[ -z $current_section_name ]]; then
+      sed -i '$ a '"$current_setting_name"' = "'"$current_setting_value"'"' $1
+    else
+      sed -i '/^\s*?\['"$current_section_name"'\]|\b'"$current_section_name"':$/a '"$current_setting_name"' = "'"$current_setting_value"'"' $1
+    fi
+    ;;
+
+  esac
+}
+
+delete_setting() {
+  # This function will delete a setting line from a file. This is useful for dynamically generated config files like Retroarch override files
+  # USAGE: delete_setting $setting_file $setting_name $system $section (optional)
+
+  local current_setting_name=$(sed -e 's^\\^\\\\^g;s^`^\\`^g' <<< "$2")
+  local current_section_name=$(sed -e 's/%/\\%/g' <<< "$4")
+
+  case $3 in
+
+  "retroarch" )
+    if [[ -z $current_section_name ]]; then
+      sed -i '\^'"$current_setting_name"'^d' "$1"
+      sed -i '/^$/d' "$1" # Cleanup empty lines left behind
+    fi
+    ;;
+
+  esac
+}
+
 disable_setting() {
   # This function will add a '#' to the beginning of a defined setting line, disabling it.
   # USAGE: disable_setting $setting_file $setting_line $system $section (optional)
@@ -510,6 +550,91 @@ enable_file() {
   # NOTE: $filename can be a defined variable from global.sh or must have the full path to the file and should not have ".disabled" as a suffix
 
   mv $(realpath $1.disabled) $(realpath $(echo $1 | sed -e 's/\.disabled//'))
+}
+
+build_preset_config(){
+  local system_being_changed="$1"
+  shift
+  local presets_being_changed="$*"
+  for preset in $presets_being_changed
+  do
+    current_preset="$preset"
+    local preset_section=$(sed -n '/\['"$current_preset"'\]/, /\[/{ /\['"$current_preset"'\]/! { /\[/! p } }' $rd_conf | sed '/^$/d')
+    while IFS= read -r system_line
+    do
+      local read_system_name=$(get_setting_name "$system_line")
+      if [[ "$read_system_name" == "$system_being_changed" ]]; then
+        local read_system_enabled=$(get_setting_value "$rd_conf" "$read_system_name" "retrodeck" "$current_preset")
+        while IFS='^' read -r action read_preset read_setting_name new_setting_value section
+        do
+          case "$action" in
+
+          "config_file_format" )
+            local read_config_format="$read_preset"
+          ;;
+
+          "target_file" )
+            if [[ "$read_preset" = \$* ]]; then
+              eval read_preset=$read_preset
+            fi
+            local read_target_file="$read_preset"
+          ;;
+
+          "defaults_file" )
+            if [[ "$read_preset" = \$* ]]; then
+              eval read_preset=$read_preset
+            fi
+            local read_defaults_file="$read_preset"
+          ;;
+
+          "change" )
+            if [[ "$read_preset" == "$current_preset" ]]; then
+              if [[ "$read_system_enabled" == "true" ]]; then
+                if [[ "$new_setting_value" = \$* ]]; then
+                  eval new_setting_value=$new_setting_value
+                fi
+                if [[ "$read_config_format" == "retroarch" ]]; then # Generate the override file
+                  if [[ -z $(grep "$read_setting_name" "$read_target_file") ]]; then
+                    if [[ ! -f "$read_target_file" ]]; then
+                      mkdir -p "$(realpath $(dirname "$read_target_file"))"
+                      echo "$read_setting_name = ""$new_setting_value""" > "$read_target_file"
+                    else
+                      add_setting "$read_target_file" "$read_setting_name" "$new_setting_value" "$read_config_format" "$section"
+                    fi
+                  else
+                    set_setting_value "$read_target_file" "$read_setting_name" "$new_setting_value" "$read_config_format" "$section"
+                  fi
+                else
+                  set_setting_value "$read_target_file" "$read_setting_name" "$new_setting_value" "$read_config_format" "$section"
+                fi
+              else
+                if [[ "$read_config_format" == "retroarch" ]]; then
+                  if [[ -f "$read_target_file" ]]; then
+                    delete_setting "$read_target_file" "$read_setting_name" "$read_config_format" "$section"
+                    if [[ -z $(cat "$read_target_file") ]]; then # If the override file is empty
+                      rm -f "$read_target_file"
+                    fi
+                    if [[ -z $(ls -1 $(dirname "$read_target_file")) ]]; then # If the override folder is empty
+                      rmdir "$(dirname $read_target_file)"
+                    fi
+                  fi
+                else
+                  local default_setting_value=$(get_setting_value "$read_defaults_file" "$read_setting_name" "$read_config_format" "$section")
+                  set_setting_value "$read_target_file" "$read_setting_name" "$default_setting_value" "$read_config_format" "$section"
+                fi
+              fi
+            fi
+          ;;
+
+          * )
+            echo "Other data: $action $read_preset $read_setting_name $new_setting_value $section" # DEBUG
+          ;;
+
+          esac
+        done < <(eval cat "$presets_reference_lists_dir/$read_system_name"_presets.cfg)
+      fi
+    done < <(printf '%s\n' "$preset_section")
+  done
 }
 
 generate_single_patch() {
@@ -808,7 +933,7 @@ update_rd_conf() {
   cp $rd_defaults $rd_conf # Copy defaults file into place
   conf_write # Write old values into new default file
 
-  # STAGE 2: To handle feature sections that use duplicate setting names
+  # STAGE 2: To handle presets sections that use duplicate setting names
 
   mv -f $rd_conf $rd_conf_backup # Backup config file agiain before update but after Stage 1 expansion
   generate_single_patch $rd_defaults $rd_conf_backup $rd_update_patch retrodeck # Create a patch file for differences between defaults and current user settings
@@ -2390,12 +2515,114 @@ configurator_move_folder_dialog() {
 
 changelog_dialog() {
   # This function will pull the changelog notes from the version it is passed (which must match the appdata version tag) from the net.retrodeck.retrodeck.appdata.xml file
+  # The function also accepts "all" as a version, and will print the entire changelog
   # USAGE: changelog_dialog "version"
 
-  changelog=$(xml sel -t -m "//release[@version='$1']/description" -v . -n $rd_appdata | tr -s '\n' | sed 's/^\s*//')
+  if [[ "$1" == "all" ]]; then
+    xmlstarlet sel -t -m "//release" -v "concat('RetroDECK version: ', @version)" -n -v "description" -n $rd_appdata | awk '{$1=$1;print}' | sed -e '/./b' -e :n -e 'N;s/\n$//;tn' > "/var/config/retrodeck/changelog.txt"
 
-  zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-  --title "RetroDECK Changelogs" \
-  --text="Welcome to RetroDECK version $1!\n\nHere are the changes that were made in this version:\n$changelog"
+    zenity --icon-name=net.retrodeck.retrodeck --text-info --width=1200 --height=720 \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Changelogs" \
+    --filename="/var/config/retrodeck/changelog.txt"
+  else
+    local version_changelog=$(xml sel -t -m "//release[@version='$1']/description" -v . -n $rd_appdata | tr -s '\n' | sed 's/^\s*//')
+
+    zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Changelogs" \
+    --text="In RetroDECK version $1, the following changes were made:\n$version_changelog"
+    fi
+}
+
+get_cheevos_token_dialog() {
+  # This function will return a RetroAchvievements token from a valid username and password, will return "login failed" otherwise
+  # USAGE: get_cheevos_token_dialog
+
+  local cheevos_info=$(zenity --forms --title="Cheevos" \
+  --text="Username and password." \
+  --separator="^" \
+  --add-entry="Username" \
+  --add-password="Password")
+
+  IFS='^' read -r cheevos_username cheevos_password < <(printf '%s\n' "$cheevos_info")
+  cheevos_token=$(curl --silent --data "r=login&u=$cheevos_username&p=$cheevos_password" $RA_API_URL | jq .Token | tr -d '"')
+  if [[ ! "$cheevos_token" == "null" ]]; then
+    echo "$cheevos_username,$cheevos_token"
+  else
+    echo "failed"
+  fi
+}
+
+change_preset_dialog() {
+  # This function will build a list of all systems compatible with a given preset, their current enable/disabled state and allow the user to change one or more
+  # USAGE: change_preset_dialog "$preset"
+
+  local preset="$1"
+  pretty_preset_name=${preset//_/ } # Preset name prettification
+  pretty_preset_name=$(echo $pretty_preset_name | awk '{for(i=1;i<=NF;i++){$i=toupper(substr($i,1,1))substr($i,2)}}1') # Preset name prettification
+  local current_preset_settings=()
+  local current_enabled_systems=()
+  local current_disabled_systems=()
+  local changed_systems=()
+  local changed_presets=()
+  local section_results=$(sed -n '/\['"$preset"'\]/, /\[/{ /\['"$preset"'\]/! { /\[/! p } }' $rd_conf | sed '/^$/d')
+
+  while IFS= read -r config_line
+    do
+      system_name=$(get_setting_name "$config_line" "retrodeck")
+      all_systems=("${all_systems[@]}" "$system_name")
+      system_value=$(get_setting_value "$rd_conf" "$system_name" "retrodeck" "$preset")
+      if [[ "$system_value" == "true" ]]; then
+        current_enabled_systems=("${current_enabled_systems[@]}" "$system_name")
+      elif [[ "$system_value" == "false" ]]; then
+        current_disabled_systems=("${current_disabled_systems[@]}" "$system_name")
+      fi
+      current_preset_settings=("${current_preset_settings[@]}" "$system_value" "$system_name")
+  done < <(printf '%s\n' "$section_results")
+
+  choice=$(zenity \
+    --list --width=1200 --height=720 \
+    --checklist \
+    --separator="," \
+    --text="Enable $pretty_preset_name:" \
+    --column "Enabled" \
+    --column "Emulator" \
+    "${current_preset_settings[@]}")
+
+  local rc=$?
+
+  if [[ ! -z $choice || "$rc" == 0 ]]; then
+    IFS="," read -ra choices <<< "$choice"
+    for emulator in "${all_systems[@]}"; do
+      if [[ " ${choices[*]} " =~ " ${emulator} " && ! " ${current_enabled_systems[*]} " =~ " ${emulator} " ]]; then
+        changed_systems=("${changed_systems[@]}" "$emulator")
+        if [[ ! " ${changed_presets[*]} " =~ " ${preset} " ]]; then
+          changed_presets=("${changed_presets[@]}" "$preset")
+        fi
+        set_setting_value "$rd_conf" "$emulator" "true" "retrodeck" "$preset"
+        # Check for conflicting presets for this system
+        while IFS=: read -r preset_being_checked known_incompatible_preset; do
+          if [[ "$preset" == "$preset_being_checked" ]]; then
+            if [[ $(get_setting_value "$rd_conf" "$emulator" "retrodeck" "$known_incompatible_preset") == "true" ]]; then
+              changed_presets=("${changed_presets[@]}" "$known_incompatible_preset")
+              set_setting_value "$rd_conf" "$emulator" "false" "retrodeck" "$known_incompatible_preset"
+            fi
+          fi
+        done < "$incompatible_presets_reference_list"
+      fi
+      if [[ ! " ${choices[*]} " =~ " ${emulator} " && ! " ${current_disabled_systems[*]} " =~ " ${emulator} " ]]; then
+        changed_systems=("${changed_systems[@]}" "$emulator")
+        if [[ ! " ${changed_presets[*]} " =~ " ${preset} " ]]; then
+          changed_presets=("${changed_presets[@]}" "$preset")
+        fi
+        set_setting_value "$rd_conf" "$emulator" "false" "retrodeck" "$preset"
+      fi
+    done
+    for emulator in "${changed_systems[@]}"; do
+      build_preset_config $emulator ${changed_presets[*]}
+    done
+  else
+    echo "No choices made"
+  fi
 }

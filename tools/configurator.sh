@@ -10,11 +10,13 @@ source /app/libexec/functions.sh
 # Configurator Option Tree
 
 # Welcome
+#     - RetroDECK Presets
+#       - Enable/Disable borders
+#       - Enable/Disable widescreen
+#       - Log in to RetroAchievements
 #     - RetroArch Presets
 #       - Change Rewind Setting
 #         - Enable/Disable Rewind
-#       - RetroAchivement Login
-#         - Login prompt
 #     - Dolphin Presets
 #       - Enable/Disable Custom Input Textures
 #     - Primehack Presets
@@ -35,14 +37,13 @@ source /app/libexec/functions.sh
 #     - Tools and Troubleshooting
 #       - Move RetroDECK or subfolders
 #       - Multi-file game check
-#       - Basic BIOS file check
-#       - Advanced BIOS file check
+#       - BIOS file check
 #       - Compress Games
 #         - Manual single-game selection
-#         - Multi-file compression (CHD)
-#       - Download ES themes
+#         - Multi-file compression
 #       - Download PS3 firmware
 #       - Install RetroDECK controller profile
+#       - Install RetroDECK Starter Pack
 #       - Backup RetroDECK userdata
 #     - Reset
 #       - Reset Specific Emulator
@@ -60,6 +61,15 @@ source /app/libexec/functions.sh
 #           - Reset Yuzu
 #       - Reset All Emulators
 #       - Reset RetroDECK
+#     - About RetroDECK
+#       - Version History
+#         - Full changelog
+#         - Version-specific changelogs
+#     - Developer Options (Hidden)
+#       - Change Multi-user mode
+#       - Change Update channel
+#       - Change Update check setting
+#       - Browse the wiki
 
 # DIALOG TREE FUNCTIONS
 
@@ -284,6 +294,50 @@ configurator_power_user_changes_dialog() {
   esac
 }
 
+configurator_retrodeck_presets_dialog() {
+  choice=$(zenity --list --title="RetroDECK Configurator Utility - RetroDECK Presets" --cancel-label="Back" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+  --column="Choice" --column="Action" \
+  "Enable/Disable Borders" "Enable or disable borders in supported systems" \
+  "Enable/Disable Widescreen" "Enable or disable widescreen in supported systems" \
+  "RetroAchievements Login" "Log into the RetroAchievements service in supported emulators" \
+  "RetroAchievements Hardcore Mode" "Enable RetroAchievements hardcore mode (no cheats, rewind, save states etc.) in supported emulators" )
+
+  case $choice in
+
+  "Enable/Disable Borders" )
+    change_preset_dialog "borders"
+    configurator_retrodeck_presets_dialog
+  ;;
+
+  "Enable/Disable Widescreen" )
+    change_preset_dialog "widescreen"
+    configurator_retrodeck_presets_dialog
+  ;;
+
+  "RetroAchievements Login" )
+    cheevos_response=$(get_cheevos_token_dialog)
+    if [[ ! "$cheevos_response" == "failed" ]]; then
+      IFS=',' read -r cheevos_username cheevos_token < <(printf '%s\n' "$cheevos_response")
+      change_preset "cheevos"
+    else
+      configurator_generic_dialog "RetroDECK Configurator Utility - RetroDECK Presets" "RetroAchievements login failed, please verify your username and password and try the process again."
+    fi
+    configurator_retrodeck_presets_dialog
+  ;;
+
+  "RetroAchievements Hardcore Mode" )
+    change_preset_dialog "cheevos_hardcore"
+    configurator_retrodeck_presets_dialog
+  ;;
+
+  "" ) # No selection made or Back button clicked
+    configurator_welcome_dialog
+  ;;
+
+  esac
+}
+
 configurator_retroarch_rewind_dialog() {
   if [[ $(get_setting_value $raconf rewind_enable retroarch) == "true" ]]; then
     zenity --question \
@@ -318,17 +372,12 @@ configurator_retroarch_presets_dialog() {
   choice=$(zenity --list --title="RetroDECK Configurator Utility - RetroArch Options" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
-  "Change Rewind Setting" "Enable or disable the Rewind function in RetroArch." \
-  "RetroAchievements Login" "Log into the RetroAchievements service in RetroArch." )
+  "Change Rewind Setting" "Enable or disable the Rewind function in RetroArch." )
 
   case $choice in
 
   "Change Rewind Setting" )
     configurator_retroarch_rewind_dialog
-  ;;
-
-  "RetroAchievements Login" )
-    configurator_retroachivement_dialog
   ;;
 
   "" ) # No selection made or Back button clicked
@@ -1061,10 +1110,59 @@ configurator_retrodeck_multiuser_dialog() {
   fi
 }
 
-configurator_developer_dialog() {
-  choice=$(zenity --list --title="RetroDECK Configurator Utility - Change Options" --cancel-label="Back" \
+configurator_version_history_dialog() {
+  local version_array=($(xmlstarlet sel -t -v '//component/releases/release/@version' -n $rd_appdata))
+  local all_versions_list=()
+
+  for rd_version in ${version_array[*]}; do
+    all_versions_list=("${all_versions_list[@]}" "RetroDECK $rd_version Changelog" "View the changes specific to version $rd_version")
+  done
+  
+  choice=$(zenity --list --title="RetroDECK Configurator Utility - RetroDECK Version History" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
-  --column="Choice" --column="Action" \
+  --column="Choice" --column="Description" \
+  "Full RetroDECK Changelog" "View the list of all changes that have ever been made to RetroDECK" \
+  "${all_versions_list[@]}")
+
+  case $choice in
+
+  "Full RetroDECK Changelog" )
+    changelog_dialog "all"
+  ;;
+
+  "RetroDECK"*"Changelog" )
+    local version=$(echo "$choice" | sed 's/^RetroDECK \(.*\) Changelog$/\1/')
+    changelog_dialog "$version"
+  ;;
+
+  esac
+
+  configurator_about_retrodeck_dialog
+}
+
+configurator_about_retrodeck_dialog() {
+  choice=$(zenity --list --title="RetroDECK Configurator Utility - About RetroDECK" --cancel-label="Back" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+  --column="Choice" --column="Description" \
+  "Version History" "View the version changelogs for RetroDECK" )
+
+  case $choice in
+
+  "Version History" )
+    configurator_version_history_dialog
+  ;;
+
+  "" ) # No selection made or Back button clicked
+    configurator_welcome_dialog
+  ;;
+
+  esac
+}
+
+configurator_developer_dialog() {
+  choice=$(zenity --list --title="RetroDECK Configurator Utility - Developer Options" --cancel-label="Back" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+  --column="Choice" --column="Description" \
   "Change Multi-user mode" "Enable or disable multi-user support" \
   "Change Update Channel" "Change between normal and cooker builds" \
   "Change Update Check Setting" "Enable or disable online checks for new versions of RetroDECK" \
@@ -1096,20 +1194,24 @@ configurator_developer_dialog() {
 
 configurator_welcome_dialog() {
   if [[ $developer_options == "true" ]]; then
-    welcome_menu_options=("RetroArch Presets" "Change RetroArch presets, log into RetroAchievements etc." \
+    welcome_menu_options=("RetroDECK Presets" "Change RetroDECK presets, log into RetroAchievements etc." \
+    "RetroArch Presets" "Change available RetroArch presets" \
     "Dolphin Presets" "Change available Dolphin presets" \
     "Primehack Presets" "Change available Primehack presets" \
     "Emulator Options" "Launch and configure each emulators settings (for advanced users)" \
     "Tools and Troubleshooting" "Move RetroDECK to a new location, compress games and perform basic troubleshooting" \
     "Reset" "Reset specific parts or all of RetroDECK" \
+    "About RetroDECK" "Show additional information about RetroDECK" \
     "Developer Options" "Welcome to the DANGER ZONE")
   else
-    welcome_menu_options=("RetroArch Presets" "Change RetroArch presets, log into RetroAchievements etc." \
+    welcome_menu_options=("RetroDECK Presets" "Change RetroDECK presets, log into RetroAchievements etc." \
+    "RetroArch Presets" "Change available RetroArch presets" \
     "Dolphin Presets" "Change available Dolphin presets" \
     "Primehack Presets" "Change available Primehack presets" \
     "Emulator Options" "Launch and configure each emulators settings (for advanced users)" \
     "Tools and Troubleshooting" "Move RetroDECK to a new location, compress games and perform basic troubleshooting" \
-    "Reset" "Reset specific parts or all of RetroDECK" )
+    "Reset" "Reset specific parts or all of RetroDECK" \
+    "About RetroDECK" "Show additional information about RetroDECK")
   fi
 
   choice=$(zenity --list --title="RetroDECK Configurator Utility" --cancel-label="Quit" \
@@ -1118,6 +1220,10 @@ configurator_welcome_dialog() {
   "${welcome_menu_options[@]}")
 
   case $choice in
+
+  "RetroDECK Presets" )
+    configurator_retrodeck_presets_dialog
+  ;;
 
   "RetroArch Presets" )
     configurator_retroarch_presets_dialog
@@ -1141,6 +1247,10 @@ configurator_welcome_dialog() {
 
   "Reset" )
     configurator_reset_dialog
+  ;;
+
+  "About RetroDECK" )
+    configurator_about_retrodeck_dialog
   ;;
 
   "Developer Options" )

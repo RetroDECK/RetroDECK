@@ -33,6 +33,9 @@ helper_files_folder="$emuconfigs/defaults/retrodeck/helper_files"               
 helper_files_list="$emuconfigs/defaults/retrodeck/reference_lists/helper_files_list.cfg"                              # The list of files to be deployed and where they go
 rd_appdata="/app/share/appdata/net.retrodeck.retrodeck.appdata.xml"                                                   # The shipped appdata XML file for this version
 rpcs3_firmware="http://dus01.ps3.update.playstation.net/update/ps3/image/us/2023_0228_05fe32f5dc8c78acbcd84d36ee7fdc5b/PS3UPDAT.PUP"
+RA_API_URL="https://retroachievements.org/dorequest.php"                                                              # API URL for RetroAchievements.org
+presets_reference_lists_dir="$emuconfigs/defaults/retrodeck/reference_lists/presets"
+incompatible_presets_reference_list="$emuconfigs/defaults/retrodeck/reference_lists/incompatible_presets.cfg"
 
 # Config files for emulators with single config files
 
