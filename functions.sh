@@ -553,6 +553,9 @@ enable_file() {
 }
 
 build_preset_config(){
+  # This function will apply one or more presets for a given system, as listed in retrodeck.cfg
+  # USAGE: build_preset_config "system name" "preset class 1" "preset class 2" "preset class 3"
+  
   local system_being_changed="$1"
   shift
   local presets_being_changed="$*"
@@ -593,7 +596,7 @@ build_preset_config(){
                 if [[ "$new_setting_value" = \$* ]]; then
                   eval new_setting_value=$new_setting_value
                 fi
-                if [[ "$read_config_format" == "retroarch" ]]; then # Generate the override file
+                if [[ "$read_config_format" == "retroarch" ]]; then # If this is a RetroArch core, generate the override file
                   if [[ -z $(grep "$read_setting_name" "$read_target_file") ]]; then
                     if [[ ! -f "$read_target_file" ]]; then
                       mkdir -p "$(realpath $(dirname "$read_target_file"))"
@@ -605,6 +608,9 @@ build_preset_config(){
                     set_setting_value "$read_target_file" "$read_setting_name" "$new_setting_value" "$read_config_format" "$section"
                   fi
                 else
+                  if [[ "$read_config_format" == "retroarch-all" ]]; then
+                    read_config_format="retroarch"
+                  fi
                   set_setting_value "$read_target_file" "$read_setting_name" "$new_setting_value" "$read_config_format" "$section"
                 fi
               else
@@ -619,6 +625,9 @@ build_preset_config(){
                     fi
                   fi
                 else
+                  if [[ "$read_config_format" == "retroarch-all" ]]; then
+                    read_config_format="retroarch"
+                  fi
                   local default_setting_value=$(get_setting_value "$read_defaults_file" "$read_setting_name" "$read_config_format" "$section")
                   set_setting_value "$read_target_file" "$read_setting_name" "$default_setting_value" "$read_config_format" "$section"
                 fi
@@ -631,7 +640,7 @@ build_preset_config(){
           ;;
 
           esac
-        done < <(eval cat "$presets_reference_lists_dir/$read_system_name"_presets.cfg)
+        done < <(eval cat "$presets_dir/$read_system_name"_presets.cfg)
       fi
     done < <(printf '%s\n' "$preset_section")
   done
