@@ -348,7 +348,7 @@ set_setting_value() {
       else
         sed -i '\^\['"$current_section_name"'\]^,\^\^'"$setting_name_to_change"'=^s^\^'"$setting_name_to_change"'=.*^'"$setting_name_to_change"'='"$setting_value_to_change"'^' $1
       fi
-      if [[ "$4" == "retrodeck" ]]; then # If a RetroDECK setting is being changed, also write it to memory for immediate use
+      if [[ "$4" == "retrodeck" && ("$current_section_name" == "" || "$current_section_name" == "paths" || "$current_section_name" == "options") ]]; then # If a RetroDECK setting is being changed, also write it to memory for immediate use
         eval "$setting_name_to_change=$setting_value_to_change"
       fi
       ;;
@@ -663,7 +663,7 @@ build_preset_config(){
           ;;
 
           esac
-        done < <(eval cat "$presets_dir/$read_system_name"_presets.cfg)
+        done < <(cat "$presets_dir/$read_system_name"_presets.cfg)
       fi
     done < <(printf '%s\n' "$preset_section")
   done
@@ -793,15 +793,15 @@ do
 	;;
 
 	"add_setting_line" )
-    eval add_setting_line $3 "$setting_name" $system_name $current_section
+    add_setting_line $3 "$setting_name" $system_name $current_section
 	;;
 
 	"disable_setting" )
-    eval disable_setting $3 "$setting_name" $system_name $current_section
+    disable_setting $3 "$setting_name" $system_name $current_section
 	;;
 
 	"enable_setting" )
-    eval enable_setting $3 "$setting_name" $system_name $current_section
+    enable_setting $3 "$setting_name" $system_name $current_section
 	;;
 
 	"change" )
@@ -835,23 +835,38 @@ do
   case $action in
 
 	"disable_file" )
-    eval disable_file "$config_file"
+    if [[ "$config_file" = \$* ]]; then # If patch setting value is a reference to an internal variable name
+      eval config_file="$config_file"
+    fi
+    disable_file "$config_file"
 	;;
 
 	"enable_file" )
-    eval enable_file "$config_file"
+    if [[ "$config_file" = \$* ]]; then # If patch setting value is a reference to an internal variable name
+      eval config_file="$config_file"
+    fi
+    enable_file "$config_file"
 	;;
 
 	"add_setting_line" )
-    eval add_setting_line "$config_file" "$setting_name" $system_name $current_section
+    if [[ "$config_file" = \$* ]]; then # If patch setting value is a reference to an internal variable name
+      eval config_file="$config_file"
+    fi
+    add_setting_line "$config_file" "$setting_name" $system_name $current_section
 	;;
 
 	"disable_setting" )
-    eval disable_setting "$config_file" "$setting_name" $system_name $current_section
+    if [[ "$config_file" = \$* ]]; then # If patch setting value is a reference to an internal variable name
+      eval config_file="$config_file"
+    fi
+    disable_setting "$config_file" "$setting_name" $system_name $current_section
 	;;
 
 	"enable_setting" )
-    eval enable_setting "$config_file" "$setting_name" $system_name $current_section
+    if [[ "$config_file" = \$* ]]; then # If patch setting value is a reference to an internal variable name
+      eval config_file="$config_file"
+    fi
+    enable_setting "$config_file" "$setting_name" $system_name $current_section
 	;;
 
 	"change" )
