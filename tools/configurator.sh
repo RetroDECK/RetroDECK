@@ -457,6 +457,8 @@ configurator_open_emulator_dialog() {
   ;;
 
   esac
+
+  configurator_open_emulator_dialog
 }
 
 configurator_retrodeck_tools_dialog() {
@@ -1010,6 +1012,7 @@ configurator_about_retrodeck_dialog() {
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Credits" \
     --filename="$emuconfigs/defaults/retrodeck/reference_lists/retrodeck_credits.txt"
+    configurator_about_retrodeck_dialog
   ;;
 
   "" ) # No selection made or Back button clicked

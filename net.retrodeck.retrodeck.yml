@@ -425,6 +425,15 @@ modules:
       - type: archive
         url: https://buildbot.libretro.com/stable/1.15.0/linux/x86_64/RetroArch_cores.7z
         sha256: 2230bc38eaf87406efd0c2b7bdd1cf9e813ba113505600f14a7ef9eb06f8c7c0
+    
+  - name: retroarch-sameduck-core
+    buildsystem: simple
+    build-commands:
+      - mv sameduck_libretro.so /app/share/libretro/cores/sameduck_libretro.so
+    sources:
+      - type: archive
+        url: https://buildbot.libretro.com/nightly/linux/x86_64/latest/sameduck_libretro.so.zip
+        sha256: SAMEDUCKSHAPLACEHOLDER
 
   - name: doom-shareware
     buildsystem: simple
