@@ -123,8 +123,6 @@ if [[ ! -f "$rd_conf" ]]; then
   if grep -qF "cooker" <<< $hard_version; then # If newly-installed version is a "cooker" build
     set_setting_value $rd_conf "update_repo" "RetroDECK-cooker" retrodeck "options"
     set_setting_value $rd_conf "update_check" "true" retrodeck "options"
-    update_ignore=$(curl --silent "https://api.github.com/repos/XargonWan/$update_repo/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
-    set_setting_value $rd_conf "update_ignore" "$update_ignore" retrodeck "options" # Store the latest online version to ignore for future checks, as internal version and online tag version may not match up.
   fi
 
   echo "Setting config file permissions"

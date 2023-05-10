@@ -98,16 +98,12 @@ done
 
 # UPDATE TRIGGERED
 # if lockfile exists
-if [ -f "$lockfile" ]
-then
+if [ -f "$lockfile" ]; then
   # ...but the version doesn't match with the config file
-  if [ "$hard_version" != "$version" ];
-  then
+  if [ "$hard_version" != "$version" ]; then
     echo "Config file's version is $version but the actual version is $hard_version"
     if grep -qF "cooker" <<< $hard_version; then # If newly-installed version is a "cooker" build
       cooker_base_version=$(echo $hard_version | cut -d'-' -f2)
-      update_ignore=$(curl --silent "https://api.github.com/repos/XargonWan/$update_repo/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
-      set_setting_value $rd_conf "update_ignore" "$update_ignore" retrodeck "options" # Store the latest online version to ignore for future checks, as internal version and online tag version may not match up.
       choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Upgrade" --extra-button="Don't Upgrade" --extra-button="Fresh Install" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Cooker Upgrade" \
@@ -131,6 +127,8 @@ then
       fi
     else # If newly-installed version is a normal build.
       if grep -qF "cooker" <<< $version; then # If previously installed version was a cooker build
+        cooker_base_version=$(echo $version | cut -d'-' -f2)
+        version=$cooker_base_version # Temporarily assign cooker base version to $version so update script can read it properly.
         set_setting_value $rd_conf "update_repo" "RetroDECK" retrodeck "options"
         set_setting_value $rd_conf "update_check" "false" retrodeck "options"
         set_setting_value $rd_conf "update_ignore" "" retrodeck "options"

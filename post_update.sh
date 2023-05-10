@@ -181,6 +181,7 @@ post_update() {
   --title "RetroDECK Finishing Upgrade" \
   --text="RetroDECK is finishing the upgrade process, please wait."
   
+  version=$hard_version
+  conf_write
   changelog_dialog "$version"
-  create_lock
 }
