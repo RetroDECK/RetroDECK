@@ -290,48 +290,6 @@ cli_compress_all_games() {
   done < <(printf '%s\n' "$compressable_systems_list")
 }
 
-desktop_mode_warning() {
-  # This function is a generic warning for issues that happen when running in desktop mode.
-  # Running in desktop mode can be verified with the following command: if [[ ! $XDG_CURRENT_DESKTOP == "gamescope" ]]; then
-  # This function will check if desktop mode is currently being used and if the warning has not been disabled, and show it if needed.
-  # USAGE: desktop_mode_warning
-
-  if [[ ! $XDG_CURRENT_DESKTOP == "gamescope" ]]; then
-    if [[ $desktop_mode_warning == "true" ]]; then
-      choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="Never show this again" \
-      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Desktop Mode Warning" \
-      --text="You appear to be running RetroDECK in the Steam Deck's Desktop mode!\n\nSome functions of RetroDECK may not work properly in Desktop mode, such as the Steam Deck's normal controls.\n\nRetroDECK is best enjoyed in Game mode!\n\nDo you still want to proceed?")
-      rc=$? # Capture return code, as "Yes" button has no text value
-      if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
-        if [[ $choice == "No" ]]; then
-          exit 1
-        elif [[ $choice == "Never show this again" ]]; then
-          set_setting_value $rd_conf "desktop_mode_warning" "false" retrodeck "options" # Store desktop mode warning variable for future checks
-        fi
-      fi
-    fi
-  fi
-}
-
-low_space_warning() {
-  # This function will verify that the drive with the $HOME path on it has at least 10% space free, so the user can be warned before it fills up
-  # USAGE: low_space_warning
-
-  if [[ $low_space_warning == "true" ]]; then
-    local used_percent=$(df --output=pcent "$HOME" | tail -1 | tr -d " " | tr -d "%")
-    if [[ "$used_percent" -ge 90 && -d "$HOME/retrodeck" ]]; then # If there is any RetroDECK data on the main drive to move
-      choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK" --extra-button="Never show this again" \
-      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Low Space Warning" \
-      --text="Your main drive is over 90% full!\n\nIf your drive fills completely this can lead to data loss or system crash.\n\nPlease consider moving some RetroDECK folders to other storage locations using the Configurator.")
-      if [[ $choice == "Never show this again" ]]; then
-          set_setting_value $rd_conf "low_space_warning" "false" retrodeck "options" # Store low space warning variable for future checks
-      fi
-    fi
-  fi
-}
-
 set_setting_value() {
   # Function for editing settings
   # USAGE: set_setting_value $setting_file "$setting_name" "$new_setting_value" $system $section_name(optional)
@@ -895,6 +853,17 @@ check_network_connectivity() {
   wget -q --spider "$remote_network_target"
 
   if [ $? -eq 0 ]; then
+    echo "true"
+  else
+    echo "false"
+  fi
+}
+
+check_desktop_mode() {
+  # This function will do a basic check of if we are running in Steam Deck game mode or not, and return "true" if we are outside of game mode
+  # USAGE: if [[ $(check_desktop_mode) == "true" ]]; then
+
+  if [[ ! $XDG_CURRENT_DESKTOP == "gamescope" ]]; then
     echo "true"
   else
     echo "false"
@@ -2676,5 +2645,45 @@ change_preset_dialog() {
     done
   else
     echo "No choices made"
+  fi
+}
+
+desktop_mode_warning() {
+  # This function is a generic warning for issues that happen when running in desktop mode.
+  # Running in desktop mode can be verified with the following command: if [[ ! $XDG_CURRENT_DESKTOP == "gamescope" ]]; then
+  # This function will check if desktop mode is currently being used and if the warning has not been disabled, and show it if needed.
+  # USAGE: desktop_mode_warning
+
+  if [[ $(check_desktop_mode) == "true" && $desktop_mode_warning == "true" ]]; then
+    choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="Never show this again" \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Desktop Mode Warning" \
+    --text="You appear to be running RetroDECK in the Steam Deck's Desktop mode!\n\nSome functions of RetroDECK may not work properly in Desktop mode, such as the Steam Deck's normal controls.\n\nRetroDECK is best enjoyed in Game mode!\n\nDo you still want to proceed?")
+    rc=$? # Capture return code, as "Yes" button has no text value
+    if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
+      if [[ $choice == "No" ]]; then
+        exit 1
+      elif [[ $choice == "Never show this again" ]]; then
+        set_setting_value $rd_conf "desktop_mode_warning" "false" retrodeck "options" # Store desktop mode warning variable for future checks
+      fi
+    fi
+  fi
+}
+
+low_space_warning() {
+  # This function will verify that the drive with the $HOME path on it has at least 10% space free, so the user can be warned before it fills up
+  # USAGE: low_space_warning
+
+  if [[ $low_space_warning == "true" ]]; then
+    local used_percent=$(df --output=pcent "$HOME" | tail -1 | tr -d " " | tr -d "%")
+    if [[ "$used_percent" -ge 90 && -d "$HOME/retrodeck" ]]; then # If there is any RetroDECK data on the main drive to move
+      choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK" --extra-button="Never show this again" \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Low Space Warning" \
+      --text="Your main drive is over 90% full!\n\nIf your drive fills completely this can lead to data loss or system crash.\n\nPlease consider moving some RetroDECK folders to other storage locations using the Configurator.")
+      if [[ $choice == "Never show this again" ]]; then
+          set_setting_value $rd_conf "low_space_warning" "false" retrodeck "options" # Store low space warning variable for future checks
+      fi
+    fi
   fi
 }
