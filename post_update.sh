@@ -79,6 +79,7 @@ post_update() {
     # - Clean up legacy tools files (Configurator is now accessible through the main ES-DE menu)
     # - Move Dolphin and Primehack save folder names
     # - Move PPSSPP saves/states to appropriate folders
+    # - Set ESDE user themes folder directly
 
     update_rd_conf # Expand retrodeck.cfg to latest template
     set_setting_value $rd_conf "screenshots_folder" "$rdhome/screenshots"
@@ -167,6 +168,9 @@ post_update() {
 
     dir_prep "$saves_folder/PSP/PPSSPP-SA" "/var/config/ppsspp/PSP/SAVEDATA"
     dir_prep "$states_folder/PSP/PPSSPP-SA" "/var/config/ppsspp/PSP/PPSSPP_STATE"
+
+    set_setting_value "es_settings.xml" "UserThemeDirectory" "$themes_folder" "es_settings"
+    unlink "/var/config/emulationstation/.emulationstation/themes"
   fi
 
   # The following commands are run every time.

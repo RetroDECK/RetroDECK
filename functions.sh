@@ -1423,15 +1423,15 @@ prepare_emulator() {
       update_splashscreens
       dir_prep "$roms_folder" "/var/config/emulationstation/ROMs"
       dir_prep "$media_folder" "/var/config/emulationstation/.emulationstation/downloaded_media"
-      dir_prep "$themes_folder" "/var/config/emulationstation/.emulationstation/themes"
       dir_prep "$rdhome/gamelists" "/var/config/emulationstation/.emulationstation/gamelists"
       cp -f /app/retrodeck/es_settings.xml /var/config/emulationstation/.emulationstation/es_settings.xml
+      set_setting_value "es_settings.xml" "UserThemeDirectory" "$themes_folder" "es_settings"
     fi
     if [[ "$action" == "postmove" ]]; then
       dir_prep "$roms_folder" "/var/config/emulationstation/ROMs"
       dir_prep "$media_folder" "/var/config/emulationstation/.emulationstation/downloaded_media"
-      dir_prep "$themes_folder" "/var/config/emulationstation/.emulationstation/themes"
       dir_prep "$rdhome/gamelists" "/var/config/emulationstation/.emulationstation/gamelists"
+      set_setting_value "es_settings.xml" "UserThemeDirectory" "$themes_folder" "es_settings"
     fi
   fi
 
