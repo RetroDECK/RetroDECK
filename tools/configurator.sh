@@ -457,6 +457,8 @@ configurator_open_emulator_dialog() {
   ;;
 
   esac
+
+  configurator_open_emulator_dialog
 }
 
 configurator_retrodeck_tools_dialog() {
