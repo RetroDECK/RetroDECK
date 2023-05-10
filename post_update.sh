@@ -78,6 +78,7 @@ post_update() {
     # - Move Duckstation saves and states to new locations
     # - Clean up legacy tools files (Configurator is now accessible through the main ES-DE menu)
     # - Move Dolphin and Primehack save folder names
+    # - Move PPSSPP saves/states to appropriate folders
 
     update_rd_conf # Expand retrodeck.cfg to latest template
     set_setting_value $rd_conf "screenshots_folder" "$rdhome/screenshots"
@@ -163,6 +164,9 @@ post_update() {
     dir_prep "$saves_folder/gc/primehack/EU" "/var/data/primehack/GC/EUR"
     dir_prep "$saves_folder/gc/primehack/US" "/var/data/primehack/GC/USA"
     dir_prep "$saves_folder/gc/primehack/JP" "/var/data/primehack/GC/JAP"
+
+    dir_prep "$saves_folder/PSP/PPSSPP-SA" "/var/config/ppsspp/PSP/SAVEDATA"
+    dir_prep "$states_folder/PSP/PPSSPP-SA" "/var/config/ppsspp/PSP/PPSSPP_STATE"
   fi
 
   # The following commands are run every time.

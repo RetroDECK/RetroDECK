@@ -1762,9 +1762,14 @@ prepare_emulator() {
         cp -fv "$emuconfigs/ppssppsdl/"* /var/config/ppsspp/PSP/SYSTEM/
         set_setting_value "$ppssppconf" "CurrentDirectory" "$roms_folder/psp" "ppsspp" "General"
       fi
+      # Shared actions
+      dir_prep "$saves_folder/PSP/PPSSPP-SA" "/var/config/ppsspp/PSP/SAVEDATA"
+      dir_prep "$states_folder/PSP/PPSSPP-SA" "/var/config/ppsspp/PSP/PPSSPP_STATE"
     fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
       set_setting_value "$ppssppconf" "CurrentDirectory" "$roms_folder/psp" "ppsspp" "General"
+      dir_prep "$saves_folder/PSP/PPSSPP-SA" "/var/config/ppsspp/PSP/SAVEDATA"
+      dir_prep "$states_folder/PSP/PPSSPP-SA" "/var/config/ppsspp/PSP/PPSSPP_STATE"
     fi
   fi
   
