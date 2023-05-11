@@ -1424,8 +1424,8 @@ prepare_emulator() {
           cp -fv $emuconfigs/retroarch/retroarch.cfg /var/config/retroarch/
           cp -fv $emuconfigs/retroarch/retroarch-core-options.cfg /var/config/retroarch/
           rsync -a --mkpath "$emuconfigs/retroarch/core-overrides/" "/var/config/retroarch/config/"
-          dir_prep "$borders_folder" "/var/config/retroarch/borders"
-          rsync -a --mkpath "/app/retrodeck/emu-configs/retroarch/borders/" "/var/config/retroarch/borders/"
+          dir_prep "$borders_folder" "/var/config/retroarch/overlays/borders"
+          rsync -a --mkpath "/app/retrodeck/emu-configs/retroarch/borders/" "/var/config/retroarch/overlays/borders/"
           set_setting_value "$raconf" "savefile_directory" "$saves_folder" "retroarch"
           set_setting_value "$raconf" "savestate_directory" "$states_folder" "retroarch"
           set_setting_value "$raconf" "screenshot_directory" "$screenshots_folder" "retroarch"
