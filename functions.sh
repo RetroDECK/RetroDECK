@@ -1420,14 +1420,12 @@ prepare_emulator() {
           mkdir -pv /var/config/retroarch/shaders/
           cp -rf /app/share/libretro/shaders /var/config/retroarch/
           dir_prep "$rdhome/shaders/retroarch" "/var/config/retroarch/shaders"
-          mkdir -pv /var/config/retroarch/cores/
-          cp -f /app/share/libretro/cores/* /var/config/retroarch/cores/
+          rsync -a --mkpath "/app/share/libretro/cores/" "/var/config/retroarch/cores/"
           cp -fv $emuconfigs/retroarch/retroarch.cfg /var/config/retroarch/
           cp -fv $emuconfigs/retroarch/retroarch-core-options.cfg /var/config/retroarch/
-          mkdir -pv /var/config/retroarch/config/
-          cp -rf "$emuconfigs/retroarch/core-overrides/"* /var/config/retroarch/config
+          rsync -a --mkpath "$emuconfigs/retroarch/core-overrides/" "/var/config/retroarch/config/"
           dir_prep "$borders_folder" "/var/config/retroarch/borders"
-          cp -rt /var/config/retroarch/borders/ /app/retrodeck/emu-configs/retroarch/borders/*
+          rsync -a --mkpath "/app/retrodeck/emu-configs/retroarch/borders/" "/var/config/retroarch/borders/"
           set_setting_value "$raconf" "savefile_directory" "$saves_folder" "retroarch"
           set_setting_value "$raconf" "savestate_directory" "$states_folder" "retroarch"
           set_setting_value "$raconf" "screenshot_directory" "$screenshots_folder" "retroarch"
@@ -1990,9 +1988,13 @@ install_retrodeck_controller_profile() {
   # NOTE: These files need to be stored in shared locations for Steam, outside of the normal RetroDECK folders and should always be an optional user choice
   # BIGGER NOTE: As part of this process, all emulators have their configs hard-reset to match the controller mappings of the profile
   # USAGE: install_retrodeck_controller_profile
-  rsync -a "/app/retrodeck/binding-icons/" "$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/"
-  cp -f "$emuconfigs/defaults/retrodeck/RetroDECK_controller_config.vdf" "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"
-  prepare_emulator "all" "reset"
+  if [[ -d "$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/" && -d "$HOME/.steam/steam/controller_base/templates/" ]]; then
+    rsync -a "/app/retrodeck/binding-icons/" "$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/"
+    cp -f "$emuconfigs/defaults/retrodeck/RetroDECK_controller_config.vdf" "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"
+    prepare_emulator "all" "reset"
+  else
+    configurator_generic_dialog "RetroDECK Controller Profile Install" "The target directories for the controller profile do not exist.\n\nThis may happen if you do not have Steam installed or the location is does not have permission to be read."
+  fi
 }
 
 create_lock() {

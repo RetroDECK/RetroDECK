@@ -113,7 +113,7 @@ post_update() {
     dir_prep "$rdhome/gamelists" "/var/config/emulationstation/.emulationstation/gamelists"
 
     dir_prep "$borders_folder" "/var/config/retroarch/borders"
-    cp -rt /var/config/retroarch/borders/ /app/retrodeck/emu-configs/retroarch/borders/*
+    rsync -a "/app/retrodeck/emu-configs/retroarch/borders/" "/var/config/retroarch/borders"
 
     if [[ $(configurator_generic_question_dialog "RetroDECK Starter Pack" "The RetroDECK creators have put together a collection of classic retro games you might enjoy!\n\nWould you like to have them automatically added to your library?\n\nThis can always be done later through the Configurator.") == "true" ]]; then
       install_retrodeck_starterpack
