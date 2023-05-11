@@ -173,7 +173,11 @@ post_update() {
     dir_prep "$saves_folder/PSP/PPSSPP-SA" "/var/config/ppsspp/PSP/SAVEDATA"
     dir_prep "$states_folder/PSP/PPSSPP-SA" "/var/config/ppsspp/PSP/PPSSPP_STATE"
 
-    set_setting_value "es_settings.xml" "UserThemeDirectory" "$themes_folder" "es_settings"
+    set_setting_value "$es_settings" "ROMDirectory" "$roms_folder" "es_settings"
+    set_setting_value "$es_settings" "MediaDirectory" "$media_folder" "es_settings"
+    set_setting_value "$es_settings" "UserThemeDirectory" "$themes_folder" "es_settings"
+    unlink "/var/config/emulationstation/ROMs"
+    unlink "/var/config/emulationstation/.emulationstation/downloaded_media"
     unlink "/var/config/emulationstation/.emulationstation/themes"
   fi
 
