@@ -2,7 +2,7 @@ config_file_format^retroarch # This is the config file format, used in functions
 target_file^$examplefile # This is the target file that should be updated. This will be the actively-used config file by whatever emulator is being set up. This can be a variable name as well!
 defaults_file^$emuconfigs/retroarch/retroarch.cfg # This is the file that is referenced when presets are disabled. This should be the "shipped" config file for this emulator
 change^cheevos^Enabled^true^Cheevos # This is a preset configuration line. The syntax is <action>^<preset name (as defined in retrodeck.cfg)>^<setting name>^<setting value when enabled>^<setting section in emulator config file, if there is one>
-change^borders^overlay_file^/var/config/retroarch/borders/snes.cfg # This is another preset configuration line, for the preset section called "borders" in retrodeck.cfg. Also, there is no defined "setting section" on this line
+change^borders^overlay_file^/var/config/retroarch/overlays/borders/snes.cfg # This is another preset configuration line, for the preset section called "borders" in retrodeck.cfg. Also, there is no defined "setting section" on this line
 
 
 OTHER NOTES:

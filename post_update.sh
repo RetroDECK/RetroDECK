@@ -73,6 +73,7 @@ post_update() {
     # - Update PCSX2 and Duckstation configs to latest templates (to accomadate RetroAchievements feature)
     # - New ~/retrodeck/mods and ~/retrodeck/texture_packs directories are added and symlinked to multiple different emulators (where supported)
     # - Expose ES-DE gamelists folder to user at ~/retrodeck/gamelists
+    # - Copy new borders into RA config location
     # - Update RPCS3 vfs file contents. migrate from old location if needed
     # - Disable ESDE update checks for existing installs
     # - Move Duckstation saves and states to new locations
@@ -110,6 +111,9 @@ post_update() {
     dir_prep "$mods_folder/Yuzu" "/var/data/yuzu/load"
 
     dir_prep "$rdhome/gamelists" "/var/config/emulationstation/.emulationstation/gamelists"
+
+    dir_prep "$borders_folder" "/var/config/retroarch/overlays/borders"
+    rsync -a "/app/retrodeck/emu-configs/retroarch/borders/" "/var/config/retroarch/overlays/borders"
 
     if [[ $(configurator_generic_question_dialog "RetroDECK Starter Pack" "The RetroDECK creators have put together a collection of classic retro games you might enjoy!\n\nWould you like to have them automatically added to your library?\n\nThis can always be done later through the Configurator.") == "true" ]]; then
       install_retrodeck_starterpack
