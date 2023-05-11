@@ -34,7 +34,7 @@ source /app/libexec/functions.sh
 #       - RPCS3
 #       - XEMU
 #       - Yuzu
-#     - RetroDECK Tools
+#     - RetroDECK: Tools
 #       - RetroDECK: Move Tool
 #         - Move all of RetroDECK
 #         - Move ROMs folder
@@ -56,7 +56,7 @@ source /app/libexec/functions.sh
 #       - Install: RetroDECK Controller Profile
 #       - Install: RetroDECK Starter Pack
 #       - Install: PS3 firmware
-#     - RetroDECK Troubleshooting
+#     - RetroDECK: Troubleshooting
 #       - Backup: RetroDECK Userdata
 #       - Check & Verify: BIOS
 #       - Check & Verify: Multi-file structure
@@ -76,7 +76,7 @@ source /app/libexec/functions.sh
 #           - Reset Yuzu
 #         - Reset All Emulators
 #         - Reset RetroDECK
-#     - About RetroDECK
+#     - RetroDECK: About
 #       - RetroDECK Version History
 #         - Full changelog
 #         - Version-specific changelogs
@@ -93,16 +93,16 @@ configurator_welcome_dialog() {
   if [[ $developer_options == "true" ]]; then
     welcome_menu_options=("Presets & Settings" "Here you find various presets, tweaks and settings to customize your RetroDECK experience" \
     "Open Emulator" "Launch and configure each emulators settings (for advanced users)" \
-    "RetroDECK Tools" "Compress games, move RetroDECK and install optional features" \
-    "RetroDECK Troubleshooting" "Backup data, perform BIOS / multi-disc file checks checks and emulator resets" \
-    "About RetroDECK" "Show additional information about RetroDECK" \
+    "RetroDECK: Tools" "Compress games, move RetroDECK and install optional features" \
+    "RetroDECK: Troubleshooting" "Backup data, perform BIOS / multi-disc file checks checks and emulator resets" \
+    "RetroDECK: About" "Show additional information about RetroDECK" \
     "Developer Options" "Welcome to the DANGER ZONE")
   else
     welcome_menu_options=("Presets & Settings" "Here you find various presets, tweaks and settings to customize your RetroDECK experience" \
     "Open Emulator" "Launch and configure each emulators settings (for advanced users)" \
-    "RetroDECK Tools" "Compress games, move RetroDECK and install optional features" \
-    "RetroDECK Troubleshooting" "Backup data, perform BIOS / multi-disc file checks checks and emulator resets" \
-    "About RetroDECK" "Show additional information about RetroDECK" )
+    "RetroDECK: Tools" "Compress games, move RetroDECK and install optional features" \
+    "RetroDECK: Troubleshooting" "Backup data, perform BIOS / multi-disc file checks checks and emulator resets" \
+    "RetroDECK: About" "Show additional information about RetroDECK" )
   fi
 
   choice=$(zenity --list --title="RetroDECK Configurator Utility" --cancel-label="Quit" \
@@ -120,21 +120,28 @@ configurator_welcome_dialog() {
     configurator_power_user_warning_dialog
   ;;
 
-  "RetroDECK Tools" )
+  "RetroDECK: Tools" )
     configurator_retrodeck_tools_dialog
   ;;
 
-  "RetroDECK Troubleshooting" )
+  "RetroDECK: Troubleshooting" )
     configurator_retrodeck_troubleshooting_dialog
   ;;
 
-  "About RetroDECK" )
+  "RetroDECK: About" )
     configurator_about_retrodeck_dialog
   ;;
 
   "Developer Options" )
     configurator_generic_dialog "RetroDECK Configurator - Developer Options" "The following features and options are potentially VERY DANGEROUS for your RetroDECK install!\n\nThey should be considered the bleeding-edge of upcoming RetroDECK features, and never used when you have important saves/states/roms that are not backed up!\n\nYOU HAVE BEEN WARNED!"
     configurator_developer_dialog
+  ;;
+
+  "" )
+    if [[ $(check_desktop_mode) == "true" ]]; then
+      launch_rd_after_exit=$(configurator_generic_question_dialog "RetroDECK Configurator" "Would you like to launch RetroDECK after closing the Configurator?")
+    fi
+    exit 1
   ;;
 
   esac
@@ -244,7 +251,7 @@ configurator_retroarch_rewind_dialog() {
       set_setting_value "$raconf" "rewind_enable" "false" retroarch
       configurator_process_complete_dialog "disabling Rewind"
     else
-      configurator_retroarch_presets_dialog
+      configurator_retroarch_presets_and_settings_dialog
     fi
   else
     zenity --question \
@@ -257,12 +264,12 @@ configurator_retroarch_rewind_dialog() {
       set_setting_value "$raconf" "rewind_enable" "true" retroarch
       configurator_process_complete_dialog "enabling Rewind"
     else
-      configurator_retroarch_presets_dialog
+      configurator_retroarch_presets_and_settings_dialog
     fi
   fi
 }
 
-configurator_wii_and_gamecube_presets_dialog() {
+configurator_wii_and_gamecube_presets_and_settings_dialog() {
   choice=$(zenity --list --title="RetroDECK Configurator Utility - Wii & GameCube: Presets & Settings" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
@@ -299,7 +306,7 @@ configurator_dolphin_input_textures_dialog() {
       rm -rf "/var/data/dolphin-emu/Load/DynamicInputTextures"
       configurator_process_complete_dialog "disabling Dolphin custom input textures"
     else
-      configurator_wii_and_gamecube_presets_dialog
+      configurator_wii_and_gamecube_presets_and_settings_dialog
     fi
   else
     zenity --question \
@@ -319,7 +326,7 @@ configurator_dolphin_input_textures_dialog() {
       --title "RetroDECK Configurator Utility - Dolphin Custom Input Textures Install"
       configurator_process_complete_dialog "enabling Dolphin custom input textures"
     else
-      configurator_wii_and_gamecube_presets_dialog
+      configurator_wii_and_gamecube_presets_and_settings_dialog
     fi
   fi
 }
@@ -337,7 +344,7 @@ configurator_primehack_input_textures_dialog() {
       rm -rf "/var/data/primehack/Load/DynamicInputTextures"
       configurator_process_complete_dialog "disabling Primehack custom input textures"
     else
-      configurator_wii_and_gamecube_presets_dialog
+      configurator_wii_and_gamecube_presets_and_settings_dialog
     fi
   else
     zenity --question \
@@ -357,7 +364,7 @@ configurator_primehack_input_textures_dialog() {
       --title "RetroDECK Configurator Utility - Primehack Custom Input Textures Install"
       configurator_process_complete_dialog "enabling Primehack custom input textures"
     else
-      configurator_wii_and_gamecube_presets_dialog
+      configurator_wii_and_gamecube_presets_and_settings_dialog
     fi
   fi
 }
@@ -400,7 +407,7 @@ configurator_open_emulator_dialog() {
   "Primehack" "Open the Metroid Prime emulator Primehack" \
   "RPCS3" "Open the PS3 emulator RPCS3" \
   "XEMU" "Open the Xbox emulator XEMU" \
-  "Yuzu" "Open the switch emulator Yuzu" )
+  "Yuzu" "Open the Switch emulator Yuzu" )
 
   case $emulator in
 
@@ -462,7 +469,7 @@ configurator_open_emulator_dialog() {
 }
 
 configurator_retrodeck_tools_dialog() {
-  choice=$(zenity --list --title="RetroDECK Configurator Utility - RetroDECK Tools" --cancel-label="Back" \
+  choice=$(zenity --list --title="RetroDECK Configurator Utility - RetroDECK: Tools" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
   "RetroDECK: Move Tool" "Move RetroDECK folders between internal/SD card or to a custom location" \
@@ -803,7 +810,7 @@ configurator_compression_cleanup_dialog() {
 }
 
 configurator_retrodeck_troubleshooting_dialog() {
-  choice=$(zenity --list --title="RetroDECK Configurator Utility - RetroDECK Troubleshooting" --cancel-label="Back" \
+  choice=$(zenity --list --title="RetroDECK Configurator Utility - RetroDECK: Troubleshooting" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
   "Backup: RetroDECK Userdata" "Compress and backup important RetroDECK user data folders" \
@@ -995,7 +1002,7 @@ configurator_reset_dialog() {
 }
 
 configurator_about_retrodeck_dialog() {
-  choice=$(zenity --list --title="RetroDECK Configurator Utility - About RetroDECK" --cancel-label="Back" \
+  choice=$(zenity --list --title="RetroDECK Configurator Utility - RetroDECK: About" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Description" \
   "Version History" "View the version changelogs for RetroDECK" \
@@ -1168,6 +1175,16 @@ configurator_online_update_setting_dialog() {
     fi
   fi
 }
+
+# Functions to run at exit, without keeping Configurator running in background
+
+launch_retrodeck_after_configurator_close() {
+  if [[ $launch_rd_after_exit == "true" ]]; then
+    start_retrodeck
+  fi
+}
+
+trap 'launch_retrodeck_after_configurator_close' EXIT
 
 # START THE CONFIGURATOR
 
