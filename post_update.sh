@@ -199,5 +199,10 @@ post_update() {
   
   version=$hard_version
   conf_write
-  changelog_dialog "$version"
+
+  if grep -qF "cooker" <<< $hard_version; then
+    changelog_dialog "$(echo $version | cut -d'-' -f2)"
+  else
+    changelog_dialog "$version"
+  fi
 }
