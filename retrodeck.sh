@@ -1,7 +1,6 @@
 #!/bin/bash
 
 source /app/libexec/global.sh
-source /app/libexec/post_update.sh
 
 # Arguments section
 

@@ -1125,9 +1125,7 @@ modules:
 
       # Function libraries
       - mkdir -p /app/libexec
-      - cp global.sh /app/libexec/global.sh
-      - cp functions.sh /app/libexec/functions.sh
-      - cp post_update.sh /app/libexec/post_update.sh
+      - cp -r functions/* "/app/libexec/"
 
       # Desktop entries
       - cp net.retrodeck.retrodeck.desktop /app/share/applications/net.retrodeck.retrodeck.desktop
