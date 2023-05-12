@@ -828,8 +828,8 @@ modules:
     buildsystem: cmake-ninja
     builddir: true
     build-options:
-      append-ld-library-path: /usr/lib/sdk/llvm16/lib
-      append-path: /usr/lib/sdk/llvm16/bin
+      append-ld-library-path: /usr/lib/sdk/llvm14/lib
+      append-path: /usr/lib/sdk/llvm14/bin
       cflags: &optflags -O2 -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong
         -grecord-gcc-switches -fasynchronous-unwind-tables -fstack-clash-protection
         -fcf-protection -fno-omit-frame-pointer
@@ -844,19 +844,17 @@ modules:
       ldflags: -fuse-ld=lld
     config-opts:
       - -DCMAKE_BUILD_TYPE=RelWithDebInfo
-      - -DBUILD_LLVM=OFF
+      - -DBUILD_LLVM_SUBMODULE=ON
       - -DUSE_NATIVE_INSTRUCTIONS=OFF
       - -DUSE_PRECOMPILED_HEADERS=OFF
-      - -DUSE_SDL=ON
       - -DUSE_SYSTEM_CURL=ON
       # Disabled this to force RPCS3 to use our built FFMPEG
       - -DUSE_SYSTEM_FFMPEG=OFF
       - -DUSE_SYSTEM_LIBPNG=ON
-      - -DUSE_SYSTEM_SDL=ON
       - -DUSE_SYSTEM_ZLIB=ON
+      - -DITTAPI_SOURCE_DIR=/run/build/rpcs3/ittapi
       - -Wno-dev
     post-install:
-      - cp /usr/lib/sdk/llvm16/lib/libLLVM-16.so /app/lib/
       - |-
         set -eux
 
@@ -866,8 +864,17 @@ modules:
     sources:
       - type: git
         url: https://github.com/RPCS3/rpcs3.git
-        branch: master
-        commit: db7f84f9f8682abb20e145849fbbdcef7e13f0c2
+        commit: 3e556c710b3256d23b9e524e44d45ba8bbf63814
+      - type: git
+        url: https://github.com/intel/ittapi.git
+        commit: 4a3762fbc517475bfb0586efc513e51c164108c9
+        dest: ittapi/ittapi
+        disable-shallow-clone: true
+      # remove git-lfs hook
+      - type: inline
+        dest: ittapi/ittapi/.git/hooks
+        dest-filename: post-checkout
+        contents:
 
   # RPCS3 - END
 
