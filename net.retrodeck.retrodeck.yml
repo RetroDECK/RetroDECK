@@ -203,6 +203,24 @@ modules:
         url: https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_amd64
         sha256: 4ee662847c588c3ef2fec8bfb304e8739e3dbaba87ccb9a608d691c88f5b64dc
 
+  - name: glslang
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DENABLE_CTEST=OFF
+    cleanup:
+      - /include
+      - /lib/cmake
+    sources:
+      - type: archive
+        url: https://github.com/KhronosGroup/glslang/archive/12.1.0.tar.gz
+        sha256: 1515e840881d1128fb6d831308433f731808f818f2103881162f3ffd47b15cd5
+        x-checker-data:
+          type: anitya
+          stable-only: true
+          project-id: 205796
+          url-template: https://github.com/KhronosGroup/glslang/archive/$version.tar.gz
+
   # ES-DE - START
   # https://gitlab.com/es-de/emulationstation-de
 
@@ -241,11 +259,19 @@ modules:
   - name: pugixml
     buildsystem: cmake-ninja
     config-opts:
-      - -DBUILD_SHARED_LIBS=on .
+      - -DBUILD_SHARED_LIBS=ON
+    cleanup:
+      - /include
+      - /lib/cmake
+      - /lib/pkgconfig
     sources:
       - type: archive
-        url: https://github.com/zeux/pugixml/releases/download/v1.11.4/pugixml-1.11.4.tar.gz
-        sha256: 8ddf57b65fb860416979a3f0640c2ad45ddddbbafa82508ef0a0af3ce7061716
+        url: https://github.com/zeux/pugixml/releases/download/v1.13/pugixml-1.13.tar.gz
+        sha256: 40c0b3914ec131485640fa57e55bf1136446026b41db91c1bef678186a12abbe
+        x-checker-data:
+          type: anitya
+          project-id: 3728
+          url-template: https://github.com/zeux/pugixml/releases/download/v$version/pugixml-$version.tar.gz
 
   - name: libgit2
     buildsystem: cmake-ninja
@@ -473,12 +499,12 @@ modules:
     sources:
       - type: git
         url: &ppsspp-url https://github.com/hrydgard/ppsspp.git
-        tag: v1.15
-        commit: 4a9227504219bbc64e444ba7f0e306746e5a806d
+        tag: v1.15.3
+        commit: 6d619201bdd6d46a3e3d4b2a82a00148eb9ebc5a
         x-checker-data:
           type: anitya
           project-id: 12295
-          tag-template: 'v$version'
+          tag-template: v$version
           is-main-source: true
 
   - name: ppsspp-localization
@@ -512,8 +538,8 @@ modules:
       - ln -s "${FLATPAK_DEST}/yuzu/usr/bin/yuzu" "${FLATPAK_DEST}/bin/yuzu"
     sources:
       - type: file
-        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1369/yuzu-mainline-20230312-54c359d1e.AppImage
-        sha256: 219874f72ea09856c8f1349d7bf744ecbd2823a469bd29f036b386924f5c5a97
+        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1428/yuzu-mainline-20230511-b64a27db8.AppImage
+        sha256: 5bc747165f6ab83c5a3d2b12fe83ba77c0227c2609ee8e19d9b684ec911bec55
 
   # Yuzu - END
 
@@ -521,6 +547,8 @@ modules:
   # https://github.com/flathub/org.citra_emu.citra
 
   - rd-submodules/shared-modules/SDL2/SDL2-with-libdecor.json
+
+  - rd-submodules/shared-modules/SDL2/SDL2-2.26.1-with-libdecor.json
 
   - name: citra
     buildsystem: cmake-ninja
@@ -546,8 +574,8 @@ modules:
     sources:
       - type: archive
         url: >-
-          https://github.com/citra-emu/citra-nightly/releases/download/nightly-1872/citra-unified-source-20230330-f96047f.tar.xz
-        sha256: 3c49b691d46a1253df7477d1e9d771b7d15b967459851c096150e9952e160bfa
+          https://github.com/citra-emu/citra-nightly/releases/download/nightly-1898/citra-unified-source-20230504-70335a7.tar.xz
+        sha256: b320585bd8c4c075f63d3d9c74b830718e58fcf04d987a5dcead402a72abf753
         x-checker-data:
           type: json
           url: https://api.github.com/repos/citra-emu/citra-nightly/releases/latest
@@ -576,8 +604,8 @@ modules:
       - ln -s "${FLATPAK_DEST}/pcsx2-qt/usr/bin/pcsx2-qt" "${FLATPAK_DEST}/bin/pcsx2-qt"
     sources:
       - type: file
-        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.4466/pcsx2-v1.7.4466-linux-AppImage-64bit-Qt.AppImage
-        sha256: 5747fc3760d2064bbd8b4b1d463984381bf206e30631502b765d71b7fce94459
+        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.4490/pcsx2-v1.7.4490-linux-AppImage-64bit-Qt.AppImage
+        sha256: 8580855b5b4a71e188e09ba1e44bfee981b6e642b14058bdce0b6c645c0313d3
 
   # PCSX2 - END
 
@@ -712,8 +740,8 @@ modules:
       - /share
     sources:
       - type: archive
-        url: https://www.tcpdump.org/release/libpcap-1.10.3.tar.gz
-        sha256: 2a8885c403516cf7b0933ed4b14d6caa30e02052489ebd414dc75ac52e7559e6
+        url: https://www.tcpdump.org/release/libpcap-1.10.4.tar.gz
+        sha256: ed19a0383fad72e3ad435fd239d7cd80d64916b87269550159d20e47160ebe5f
         x-checker-data:
           type: anitya
           project-id: 1702
@@ -753,8 +781,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/xemu-project/xemu.git
-        tag: v0.7.86
-        commit: 4a99fd0f1855fc52e15885812abd3ee4bb2b3847
+        tag: v0.7.88
+        commit: 9e1f5f2f19a8b0e880e034d455b359d426f6d386
         x-checker-data:
           type: json
           url: https://api.github.com/repos/xemu-project/xemu/releases/latest
@@ -802,8 +830,8 @@ modules:
     buildsystem: cmake-ninja
     builddir: true
     build-options:
-      append-ld-library-path: /usr/lib/sdk/llvm14/lib
-      append-path: /usr/lib/sdk/llvm14/bin
+      append-ld-library-path: /usr/lib/sdk/llvm16/lib
+      append-path: /usr/lib/sdk/llvm16/bin
       cflags: &optflags -O2 -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong
         -grecord-gcc-switches -fasynchronous-unwind-tables -fstack-clash-protection
         -fcf-protection -fno-omit-frame-pointer
@@ -818,17 +846,19 @@ modules:
       ldflags: -fuse-ld=lld
     config-opts:
       - -DCMAKE_BUILD_TYPE=RelWithDebInfo
-      - -DBUILD_LLVM_SUBMODULE=ON
+      - -DBUILD_LLVM=OFF
       - -DUSE_NATIVE_INSTRUCTIONS=OFF
       - -DUSE_PRECOMPILED_HEADERS=OFF
+      - -DUSE_SDL=ON
       - -DUSE_SYSTEM_CURL=ON
       # Disabled this to force RPCS3 to use our built FFMPEG
       - -DUSE_SYSTEM_FFMPEG=OFF
       - -DUSE_SYSTEM_LIBPNG=ON
+      - -DUSE_SYSTEM_SDL=ON
       - -DUSE_SYSTEM_ZLIB=ON
-      - -DITTAPI_SOURCE_DIR=/run/build/rpcs3/ittapi
       - -Wno-dev
     post-install:
+      - cp /usr/lib/sdk/llvm16/lib/libLLVM-16.so /app/lib/
       - |-
         set -eux
 
@@ -838,17 +868,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/RPCS3/rpcs3.git
-        commit: 3e556c710b3256d23b9e524e44d45ba8bbf63814
-      - type: git
-        url: https://github.com/intel/ittapi.git
-        commit: 4a3762fbc517475bfb0586efc513e51c164108c9
-        dest: ittapi/ittapi
-        disable-shallow-clone: true
-      # remove git-lfs hook
-      - type: inline
-        dest: ittapi/ittapi/.git/hooks
-        dest-filename: post-checkout
-        contents:
+        branch: master
+        commit: db7f84f9f8682abb20e145849fbbdcef7e13f0c2
 
   # RPCS3 - END
 
@@ -925,8 +946,8 @@ modules:
       - /lib/cmake
     sources:
       - type: archive
-        url: https://boostorg.jfrog.io/artifactory/main/release/1.81.0/source/boost_1_81_0.tar.bz2
-        sha256: 71feeed900fbccca04a3b4f2f84a7c217186f28a940ed8b7ed4725986baf99fa
+        url: https://boostorg.jfrog.io/artifactory/main/release/1.82.0/source/boost_1_82_0.tar.bz2
+        sha256: a6e1ab9b0860e6a2881dd7b21fe9f737a095e5f33a3a874afc6a345228597ee6
         x-checker-data:
           type: anitya
           project-id: 6845
@@ -953,24 +974,6 @@ modules:
           type: anitya
           project-id: 10649
           url-template: https://libzip.org/download/libzip-$version.tar.xz
-
-  - name: glslang
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-      - -DENABLE_CTEST=OFF
-    cleanup:
-      - /include
-      - /lib/cmake
-    sources:
-      - type: archive
-        url: https://github.com/KhronosGroup/glslang/archive/12.1.0.tar.gz
-        sha256: 1515e840881d1128fb6d831308433f731808f818f2103881162f3ffd47b15cd5
-        x-checker-data:
-          type: anitya
-          stable-only: true
-          project-id: 205796
-          url-template: https://github.com/KhronosGroup/glslang/archive/$version.tar.gz
 
   - name: rapidjson
     buildsystem: cmake-ninja
@@ -1023,14 +1026,7 @@ modules:
           url-template: https://github.com/fmtlib/fmt/archive/$version.tar.gz
 
   - name: wxwidgets
-    buildsystem: autotools
-    config-opts:
-      - --with-gtk=3
-      - --disable-sdltest
-      - --enable-shared
-      - --with-opengl
-      - --with-sdl
-      - --with-libiconv=/usr
+    buildsystem: cmake-ninja
     cleanup:
       - /bin
       - /include
@@ -1063,8 +1059,8 @@ modules:
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+-\d+)$
-        tag: v2.0-32
-        commit: 59f6fe6e2f5a55b5ade567389683e44d09ea0f8d
+        tag: v2.0-39
+        commit: eda4cf4b241d56c5c16f6aa4d135b8a269676a76
       - type: script
         commands:
           - |
