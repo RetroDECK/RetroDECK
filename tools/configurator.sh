@@ -3,7 +3,6 @@
 # VARIABLES SECTION
 
 source /app/libexec/global.sh
-source /app/libexec/functions.sh
 
 # DIALOG SECTION
 

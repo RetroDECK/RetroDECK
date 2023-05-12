@@ -74,6 +74,7 @@ post_update() {
     # - New ~/retrodeck/mods and ~/retrodeck/texture_packs directories are added and symlinked to multiple different emulators (where supported)
     # - Expose ES-DE gamelists folder to user at ~/retrodeck/gamelists
     # - Copy new borders into RA config location
+    # - Copy new RetroArch control remaps into RA config location
     # - Update RPCS3 vfs file contents. migrate from old location if needed
     # - Disable ESDE update checks for existing installs
     # - Move Duckstation saves and states to new locations
@@ -114,6 +115,8 @@ post_update() {
 
     dir_prep "$borders_folder" "/var/config/retroarch/overlays/borders"
     rsync -a "/app/retrodeck/emu-configs/retroarch/borders/" "/var/config/retroarch/overlays/borders"
+
+    rsync -a --mkpath "$emuconfigs/defaults/retrodeck/presets/remaps/" "/var/config/retroarch/config/remaps/"
 
     if [[ $(configurator_generic_question_dialog "RetroDECK Starter Pack" "The RetroDECK creators have put together a collection of classic retro games you might enjoy!\n\nWould you like to have them automatically added to your library?\n\nThis can always be done later through the Configurator.") == "true" ]]; then
       install_retrodeck_starterpack
@@ -196,7 +199,7 @@ post_update() {
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Finishing Upgrade" \
   --text="RetroDECK is finishing the upgrade process, please wait."
-  
+
   version=$hard_version
   conf_write
 
