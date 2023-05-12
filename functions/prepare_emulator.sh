@@ -8,7 +8,7 @@ prepare_emulator() {
   # An emulator can be called by name, by parent folder name in the /var/config root or use the option "all" to perform the action on all emulators equally
   # The function will also behave differently depending on if the initial request was from the Configurator, the CLI interface or a normal function call if needed
   # USAGE: prepare_emulator "$action" "$emulator" "$call_source(optional)"
-  
+
   action="$1"
   emulator="$2"
   call_source="$3"
@@ -77,6 +77,7 @@ prepare_emulator() {
           cp -fv $emuconfigs/retroarch/retroarch.cfg /var/config/retroarch/
           cp -fv $emuconfigs/retroarch/retroarch-core-options.cfg /var/config/retroarch/
           rsync -a --mkpath "$emuconfigs/retroarch/core-overrides/" "/var/config/retroarch/config/"
+          rsync -a --mkpath "$emuconfigs/defaults/retrodeck/presets/remaps/" "/var/config/retroarch/config/remaps/"
           dir_prep "$borders_folder" "/var/config/retroarch/overlays/borders"
           rsync -a --mkpath "/app/retrodeck/emu-configs/retroarch/borders/" "/var/config/retroarch/overlays/borders/"
           set_setting_value "$raconf" "savefile_directory" "$saves_folder" "retroarch"
@@ -127,7 +128,7 @@ prepare_emulator() {
       set_setting_value "$raconf" "screenshot_directory" "$screenshots_folder" "retroarch"
     fi
   fi
-  
+
   if [[ "$emulator" =~ ^(cemu|Cemu|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       echo "----------------------"
@@ -146,10 +147,10 @@ prepare_emulator() {
       dir_prep "$rdhome/saves/wiiu/cemu" "$rdhome/bios/cemu/usr/save"
     fi
     # if [[ "$action" == "postmove" ]]; then # Run only post-move commands
-      
+
     # fi
   fi
-  
+
   if [[ "$emulator" =~ ^(citra|citra-emu|Citra|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       echo "------------------------"
@@ -192,7 +193,7 @@ prepare_emulator() {
       set_setting_value "$citraconf" "Paths\screenshotPath" "$screenshots_folder" "citra" "UI"
     fi
   fi
-  
+
   if [[ "$emulator" =~ ^(dolphin|dolphin-emu|Dolphin|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       echo "----------------------"
@@ -243,7 +244,7 @@ prepare_emulator() {
       set_setting_value "$dolphinconf" "WiiSDCardPath" "$saves_folder/wii/dolphin/sd.raw" "dolphin" "General"
     fi
   fi
-  
+
   if [[ "$emulator" =~ ^(duckstation|Duckstation|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       echo "------------------------"
@@ -278,7 +279,7 @@ prepare_emulator() {
       dir_prep "$states_folder/psx/duckstation" "/var/data/duckstation/savestates" # This is hard-coded in Duckstation, always needed
     fi
   fi
-  
+
   if [[ "$emulator" =~ ^(melonds|melonDS|MelonDS|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       echo "----------------------"
@@ -318,7 +319,7 @@ prepare_emulator() {
       set_setting_value "$melondsconf" "SavestatePath" "$states_folder/nds/melonds" "melonds"
     fi
   fi
-  
+
   if [[ "$emulator" =~ ^(pcsx2|PCSX2|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       echo "----------------------"
@@ -364,7 +365,7 @@ prepare_emulator() {
       dir_prep "$saves_folder/pico-8" "$bios_folder/pico-8/cdata"  # PICO-8 saves folder
     fi
   fi
-  
+
   if [[ "$emulator" =~ ^(ppsspp|PPSSPP|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       echo "------------------------"
@@ -392,7 +393,7 @@ prepare_emulator() {
       dir_prep "$states_folder/PSP/PPSSPP-SA" "/var/config/ppsspp/PSP/PPSSPP_STATE"
     fi
   fi
-  
+
   if [[ "$emulator" =~ ^(primehack|Primehack|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       echo "----------------------"
@@ -433,7 +434,7 @@ prepare_emulator() {
       set_setting_value "$primehackconf" "ISOPath0" "$roms_folder/gc" "primehack" "General"
     fi
   fi
-  
+
   if [[ "$emulator" =~ ^(rpcs3|RPCS3|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       echo "------------------------"
@@ -471,7 +472,7 @@ prepare_emulator() {
       set_setting_value "$rpcs3vfsconf" "/games/" "$roms_folder/ps3" "rpcs3"
     fi
   fi
-  
+
   # if [[ "$emulator" =~ ^(ryujunx|Ryujinx|all)$ ]]; then
   #   if [[ "$action" == "reset" ]]; then # Run reset-only commands
   #     echo "------------------------"
@@ -498,7 +499,7 @@ prepare_emulator() {
   #     sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "$ryujinxconf" # This is an unfortunate one-off because set_setting_value does not currently support JSON
   #   fi
   # fi
-  
+
   if [[ "$emulator" =~ ^(xemu|XEMU|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       if [[ $(check_network_connectivity) == "true" ]]; then
@@ -551,7 +552,7 @@ prepare_emulator() {
       set_setting_value "$xemuconf" "hdd_path" "'$bios_folder/xbox_hdd.qcow2'" "xemu" "sys.files"
     fi
   fi
-  
+
   if [[ "$emulator" =~ ^(yuzu|Yuzu|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       echo "----------------------"
