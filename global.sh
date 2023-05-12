@@ -67,13 +67,10 @@ dolphinqtconf="/var/config/dolphin-emu/Qt.ini"
 
 # PCSX2 config files
 
-pcsx2conf="/var/config/PCSX2/inis/GS.ini"
-pcsx2uiconf="/var/config/PCSX2/inis/PCSX2_ui.ini"
-pcsx2vmconf="/var/config/PCSX2/inis/PCSX2_vm.ini"
-
-# PCSX2-QT config file
-
-pcsx2qtconf="/var/config/PCSX2/inis/PCSX2.ini"
+pcsx2conf="/var/config/PCSX2/inis/PCSX2.ini"
+pcsx2gsconf="/var/config/PCSX2/inis/GS.ini" # This file should be deprecated since moving to PCSX2-QT
+pcsx2uiconf="/var/config/PCSX2/inis/PCSX2_ui.ini" # This file should be deprecated since moving to PCSX2-QT
+pcsx2vmconf="/var/config/PCSX2/inis/PCSX2_vm.ini" # This file should be deprecated since moving to PCSX2-QT
 
 # Primehack config files
 
