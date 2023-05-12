@@ -189,6 +189,7 @@ modules:
     buildsystem: simple
     build-commands:
       - cp jq-linux64 ${FLATPAK_DEST}/bin/jq
+      - chmod +x ${FLATPAK_DEST}/bin/jq
     sources:
       - type: file
         url: https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
@@ -198,6 +199,7 @@ modules:
     buildsystem: simple
     build-commands:
       - cp yq_linux_amd64 ${FLATPAK_DEST}/bin/yq
+      - chmod +x ${FLATPAK_DEST}/bin/yq
     sources:
       - type: file
         url: https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_amd64

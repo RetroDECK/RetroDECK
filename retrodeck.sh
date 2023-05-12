@@ -48,6 +48,7 @@ https://retrodeck.net
       cli_compress_all_games "$2"
       ;;
     --configurator*)
+      launched_from_cli="true"
       sh /app/tools/configurator.sh
       exit
       ;;

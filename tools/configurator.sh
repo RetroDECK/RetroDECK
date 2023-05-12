@@ -138,7 +138,8 @@ configurator_welcome_dialog() {
   ;;
 
   "" )
-    if [[ $(check_desktop_mode) == "true" ]]; then
+    if [[ $(check_desktop_mode) == "true" && "$launched_from_cli" == "true" ]]; then
+      launched_from_cli="false"
       launch_rd_after_exit=$(configurator_generic_question_dialog "RetroDECK Configurator" "Would you like to launch RetroDECK after closing the Configurator?")
     fi
     exit 1
@@ -198,9 +199,10 @@ configurator_global_presets_and_settings_dialog() {
   ;;
 
   "RetroAchievements Login" )
-    cheevos_response=$(get_cheevos_token_dialog)
-    if [[ ! "$cheevos_response" == "failed" ]]; then
-      IFS=',' read -r cheevos_username cheevos_token < <(printf '%s\n' "$cheevos_response")
+    local cheevos_creds=$(get_cheevos_token_dialog)
+    if [[ ! "$cheevos_creds" == "failed" ]]; then
+      configurator_generic_dialog "RetroDECK Configurator Utility - RetroAchievements" "RetroAchievements login successful, please select systems you would like to enable achievements for in the next dialog."
+      IFS=',' read -r cheevos_username cheevos_token < <(printf '%s\n' "$cheevos_creds")
       change_preset_dialog "cheevos"
     else
       configurator_generic_dialog "RetroDECK Configurator Utility - RetroAchievements" "RetroAchievements login failed, please verify your username and password and try the process again."

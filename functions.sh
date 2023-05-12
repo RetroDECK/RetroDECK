@@ -2569,8 +2569,10 @@ get_cheevos_token_dialog() {
   --add-password="Password")
 
   IFS='^' read -r cheevos_username cheevos_password < <(printf '%s\n' "$cheevos_info")
-  cheevos_token=$(curl --silent --data "r=login&u=$cheevos_username&p=$cheevos_password" $RA_API_URL | jq .Token | tr -d '"')
-  if [[ ! "$cheevos_token" == "null" ]]; then
+  local cheevos_response=$(curl --silent --data "r=login&u=$cheevos_username&p=$cheevos_password" $RA_API_URL)
+  local cheevos_success=$(echo $cheevos_response | jq .Success | tr -d '"')
+  local cheevos_token=$(echo $cheevos_response | jq .Token | tr -d '"')
+  if [[ "$cheevos_success" == "true" ]]; then
     echo "$cheevos_username,$cheevos_token"
   else
     echo "failed"
