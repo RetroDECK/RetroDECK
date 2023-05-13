@@ -50,7 +50,7 @@ incompatible_presets_reference_list="$emuconfigs/defaults/retrodeck/reference_li
 
 cemuconf="/var/config/Cemu/settings.xml"
 citraconf="/var/config/citra-emu/qt-config.ini"
-duckstationconf="/var/data/duckstation/settings.ini"
+duckstationconf="/var/config/duckstation/settings.ini"
 melondsconf="/var/config/melonDS/melonDS.ini"
 ppssppconf="/var/config/ppsspp/PSP/SYSTEM/ppsspp.ini"
 ryujinxconf="/var/config/Ryujinx/Config.json"

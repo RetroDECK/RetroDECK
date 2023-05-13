@@ -190,8 +190,9 @@ get_cheevos_token_dialog() {
   local cheevos_response=$(curl --silent --data "r=login&u=$cheevos_username&p=$cheevos_password" $RA_API_URL)
   local cheevos_success=$(echo $cheevos_response | jq .Success | tr -d '"')
   local cheevos_token=$(echo $cheevos_response | jq .Token | tr -d '"')
+  local cheevos_login_timestamp=$(date +%s)
   if [[ "$cheevos_success" == "true" ]]; then
-    echo "$cheevos_username,$cheevos_token"
+    echo "$cheevos_username,$cheevos_token,$cheevos_login_timestamp"
   else
     echo "failed"
   fi

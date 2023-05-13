@@ -95,9 +95,9 @@ post_update() {
     deploy_single_patch "$emuconfigs/PCSX2/PCSX2.ini" "/var/config/PCSX2/inis/PCSX2-cheevos-upgrade.patch" "$pcsx2qtconf"
     rm -f "/var/config/PCSX2/inis/PCSX2-cheevos-upgrade.patch"
     mv -f "$duckstationconf" "$duckstationconf.bak"
-    generate_single_patch "$emuconfigs/duckstation/settings.ini" "$duckstationconf.bak" "/var/data/duckstation/duckstation-cheevos-upgrade.patch" pcsx2
-    deploy_single_patch "$emuconfigs/duckstation/settings.ini" "/var/data/duckstation/duckstation-cheevos-upgrade.patch" "$duckstationconf"
-    rm -f "/var/data/duckstation/duckstation-cheevos-upgrade.patch"
+    generate_single_patch "$emuconfigs/duckstation/settings.ini" "$duckstationconf.bak" "/var/config/duckstation/duckstation-cheevos-upgrade.patch" pcsx2
+    deploy_single_patch "$emuconfigs/duckstation/settings.ini" "/var/config/duckstation/duckstation-cheevos-upgrade.patch" "$duckstationconf"
+    rm -f "/var/config/duckstation/duckstation-cheevos-upgrade.patch"
 
     mkdir -p "$mods_folder"
     mkdir -p "$texture_packs_folder"
@@ -155,7 +155,7 @@ post_update() {
     mkdir -p "$states_folder/psx"
     mv -t "$states_folder/psx/" "$states_folder/duckstation"
     unlink "/var/data/duckstation/savestates"
-    dir_prep "$states_folder/psx/duckstation" "/var/data/duckstation/savestates"
+    dir_prep "$states_folder/psx/duckstation" "/var/config/duckstation/savestates"
 
     rm -rf /var/config/retrodeck/tools
     rm -rf /var/config/emulationstation/.emulationstation/gamelists/tools/

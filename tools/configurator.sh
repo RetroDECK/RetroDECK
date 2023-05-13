@@ -183,7 +183,8 @@ configurator_global_presets_and_settings_dialog() {
   "Enable/Disable Borders" "Enable or disable borders in supported systems" \
   "Enable/Disable Widescreen" "Enable or disable widescreen in supported systems" \
   "RetroAchievements Login" "Log into the RetroAchievements service in supported systems" \
-  "RetroAchievements Hardcore Mode" "Enable RetroAchievements hardcore mode (no cheats, rewind, save states etc.) in supported emulators" )
+  "RetroAchievements Hardcore Mode" "Enable RetroAchievements hardcore mode (no cheats, rewind, save states etc.) in supported emulators" \
+  "Nintendo Button Layout" "Enable or disable Nintendo button layout (swapped A/B and X/Y) in supported systems" )
 
   case $choice in
 
@@ -201,7 +202,7 @@ configurator_global_presets_and_settings_dialog() {
     local cheevos_creds=$(get_cheevos_token_dialog)
     if [[ ! "$cheevos_creds" == "failed" ]]; then
       configurator_generic_dialog "RetroDECK Configurator Utility - RetroAchievements" "RetroAchievements login successful, please select systems you would like to enable achievements for in the next dialog."
-      IFS=',' read -r cheevos_username cheevos_token < <(printf '%s\n' "$cheevos_creds")
+      IFS=',' read -r cheevos_username cheevos_token cheevos_login_timestamp < <(printf '%s\n' "$cheevos_creds")
       change_preset_dialog "cheevos"
     else
       configurator_generic_dialog "RetroDECK Configurator Utility - RetroAchievements" "RetroAchievements login failed, please verify your username and password and try the process again."
@@ -211,6 +212,11 @@ configurator_global_presets_and_settings_dialog() {
 
   "RetroAchievements Hardcore Mode" )
     change_preset_dialog "cheevos_hardcore"
+    configurator_global_presets_and_settings_dialog
+  ;;
+
+  "Nintendo Button Layout" )
+    change_preset_dialog "nintendo_button_layout"
     configurator_global_presets_and_settings_dialog
   ;;
 
@@ -575,7 +581,7 @@ configurator_retrodeck_move_tool_dialog() {
   "Move Themes folder" )
     configurator_move_folder_dialog "themes_folder"
   ;;
-  
+
   "Move Screenshots folder" )
     configurator_move_folder_dialog "screenshots_folder"
   ;;
@@ -968,7 +974,13 @@ configurator_reset_dialog() {
 "Reset All Emulators" )
   if [[ $(configurator_reset_confirmation_dialog "all emulators" "Are you sure you want to reset all emulators to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
     if [[ $(check_network_connectivity) == "true" ]]; then
+      (
       prepare_emulator "reset" "all"
+      ) |
+      zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Finishing Initialization" \
+      --text="RetroDECK is finishing the reset process, please wait."
       configurator_process_complete_dialog "resetting all emulators"
     else
       configurator_generic_dialog "RetroDeck Configurator - RetroDECK: Reset" "You do not appear to be connected to a network with internet access.\n\nThe all-emulator reset process requires some files from the internet to function properly.\n\nPlease retry this process once a network connection is available."
@@ -1037,7 +1049,7 @@ configurator_version_history_dialog() {
   for rd_version in ${version_array[*]}; do
     all_versions_list=("${all_versions_list[@]}" "RetroDECK $rd_version Changelog" "View the changes specific to version $rd_version")
   done
-  
+
   choice=$(zenity --list --title="RetroDECK Configurator Utility - RetroDECK Version History" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Description" \
