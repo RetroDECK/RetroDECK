@@ -261,22 +261,22 @@ prepare_emulator() {
         dir_prep "$multi_user_data_folder/$SteamAppUser/config/duckstation" "/var/config/duckstation"
       else # Single-user actions
         rm -rf /var/config/duckstation
-        mkdir -p /var/data/duckstation/
-        cp -fv "$emuconfigs/duckstation/"* /var/data/duckstation
+        mkdir -p /var/config/duckstation/
+        cp -fv "$emuconfigs/duckstation/"* /var/config/duckstation
         set_setting_value "$duckstationconf" "SearchDirectory" "$bios_folder" "duckstation" "BIOS"
         set_setting_value "$duckstationconf" "Card1Path" "$saves_folder/psx/duckstation/memcards/shared_card_1.mcd" "duckstation" "MemoryCards"
         set_setting_value "$duckstationconf" "Card2Path" "$saves_folder/psx/duckstation/memcards/shared_card_2.mcd" "duckstation" "MemoryCards"
         set_setting_value "$duckstationconf" "Directory" "$saves_folder/psx/duckstation/memcards" "duckstation" "MemoryCards"
       fi
-      dir_prep "$saves_folder/psx/duckstation/memcards" "/var/data/duckstation/memcards" # TODO: This shouldn't be needed anymore, verify
-      dir_prep "$states_folder/psx/duckstation" "/var/data/duckstation/savestates" # This is hard-coded in Duckstation, always needed
+      dir_prep "$saves_folder/psx/duckstation/memcards" "/var/config/duckstation/memcards" # TODO: This shouldn't be needed anymore, verify
+      dir_prep "$states_folder/psx/duckstation" "/var/config/duckstation/savestates" # This is hard-coded in Duckstation, always needed
     fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
       set_setting_value "$duckstationconf" "SearchDirectory" "$bios_folder" "duckstation" "BIOS"
       set_setting_value "$duckstationconf" "Card1Path" "$saves_folder/psx/duckstation/memcards/shared_card_1.mcd" "duckstation" "MemoryCards"
       set_setting_value "$duckstationconf" "Card2Path" "$saves_folder/psx/duckstation/memcards/shared_card_2.mcd" "duckstation" "MemoryCards"
       set_setting_value "$duckstationconf" "Directory" "$saves_folder/psx/duckstation/memcards" "duckstation" "MemoryCards"
-      dir_prep "$states_folder/psx/duckstation" "/var/data/duckstation/savestates" # This is hard-coded in Duckstation, always needed
+      dir_prep "$states_folder/psx/duckstation" "/var/config/duckstation/savestates" # This is hard-coded in Duckstation, always needed
     fi
   fi
 
