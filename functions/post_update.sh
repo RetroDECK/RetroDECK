@@ -90,9 +90,9 @@ post_update() {
     set_setting_value $rd_conf "borders_folder" "$rdhome/borders"
     conf_read
 
-    mv -f "$pcsx2qtconf" "$pcsx2qtconf.bak"
-    generate_single_patch "$emuconfigs/PCSX2/PCSX2.ini" "$pcsx2qtconf.bak" "/var/config/PCSX2/inis/PCSX2-cheevos-upgrade.patch" pcsx2
-    deploy_single_patch "$emuconfigs/PCSX2/PCSX2.ini" "/var/config/PCSX2/inis/PCSX2-cheevos-upgrade.patch" "$pcsx2qtconf"
+    mv -f "$pcsx2conf" "$pcsx2conf.bak"
+    generate_single_patch "$emuconfigs/PCSX2/PCSX2.ini" "$pcsx2conf.bak" "/var/config/PCSX2/inis/PCSX2-cheevos-upgrade.patch" pcsx2
+    deploy_single_patch "$emuconfigs/PCSX2/PCSX2.ini" "/var/config/PCSX2/inis/PCSX2-cheevos-upgrade.patch" "$pcsx2conf"
     rm -f "/var/config/PCSX2/inis/PCSX2-cheevos-upgrade.patch"
     mv -f "$duckstationconf" "$duckstationconf.bak"
     generate_single_patch "$emuconfigs/duckstation/settings.ini" "$duckstationconf.bak" "/var/config/duckstation/duckstation-cheevos-upgrade.patch" pcsx2
@@ -152,6 +152,7 @@ post_update() {
     set_setting_value "$duckstationconf" "Card1Path" "$saves_folder/psx/duckstation/memcards/shared_card_1.mcd" "duckstation" "MemoryCards"
     set_setting_value "$duckstationconf" "Card2Path" "$saves_folder/psx/duckstation/memcards/shared_card_2.mcd" "duckstation" "MemoryCards"
     set_setting_value "$duckstationconf" "Directory" "$saves_folder/psx/duckstation/memcards" "duckstation" "MemoryCards"
+    set_setting_value "$duckstationconf" "RecursivePaths" "$roms_folder/psx" "duckstation" "GameList"
     mkdir -p "$states_folder/psx"
     mv -t "$states_folder/psx/" "$states_folder/duckstation"
     unlink "/var/data/duckstation/savestates"

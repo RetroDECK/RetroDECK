@@ -1269,7 +1269,7 @@
         <platform>ps3</platform>
         <theme>ps3</theme>
     </system>
-    <system>
+    <!-- <system>
         <name>ps4</name>
         <fullname>Sony PlayStation 4</fullname>
         <path>%ROMPATH%/ps4</path>
@@ -1277,7 +1277,7 @@
         <command>PLACEHOLDER %ROM%</command>
         <platform>ps4</platform>
         <theme>ps4</theme>
-    </system>
+    </system> -->
     <system>
         <name>psp</name>
         <fullname>Sony PlayStation Portable</fullname>
