@@ -137,10 +137,6 @@ configurator_welcome_dialog() {
   ;;
 
   "" )
-    if [[ $(check_desktop_mode) == "true" && "$launched_from_cli" == "true" ]]; then
-      launched_from_cli="false"
-      launch_rd_after_exit=$(configurator_generic_question_dialog "RetroDECK Configurator" "Would you like to launch RetroDECK after closing the Configurator?")
-    fi
     exit 1
   ;;
 
@@ -1085,7 +1081,8 @@ configurator_developer_dialog() {
   "Change Multi-user mode" "Enable or disable multi-user support" \
   "Change Update Channel" "Change between normal and cooker builds" \
   "Change Update Check Setting" "Enable or disable online checks for new versions of RetroDECK" \
-  "Browse the Wiki" "Browse the RetroDECK wiki online" )
+  "Browse the Wiki" "Browse the RetroDECK wiki online" \
+  "USB Import" "Prepare a USB device for ROMs or import an existing collection" )
 
   case $choice in
 
@@ -1103,6 +1100,10 @@ configurator_developer_dialog() {
 
   "Browse the Wiki" )
     xdg-open "https://github.com/XargonWan/RetroDECK/wiki"
+  ;;
+
+  "USB Import" )
+    configurator_usb_import_dialog
   ;;
 
   "" ) # No selection made or Back button clicked
@@ -1195,11 +1196,102 @@ configurator_online_update_setting_dialog() {
   fi
 }
 
+configurator_usb_import_dialog() {
+  choice=$(zenity --list --title="RetroDECK Configurator Utility - Developer Options" --cancel-label="Back" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+  --column="Choice" --column="Description" \
+  "Prepare USB device" "Create ROM folders on a selected USB device" \
+  "Import from USB" "Import collection from a previously prepared device" )
+
+  case $choice in
+
+  "Prepare USB device" )
+    external_devices=()
+
+    while read -r size device_path; do
+      device_name=$(basename "$device_path")
+      external_devices=("${external_devices[@]}" "$device_name" "$size" "$device_path")
+    done < <(df --output=size,target | grep media | grep -v $default_sd | awk '{$1=$1;print}')
+
+    if [[ "${#external_devices[@]}" -gt 0 ]]; then
+      choice=$(zenity --list --title="RetroDECK Configurator Utility - USB Migration Tool" --cancel-label="Back" \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+      --hide-column=3 --print-column=3 \
+      --column "Device Name" \
+      --column "Device Size" \
+      --column "path" \
+      "${external_devices[@]}")
+
+      if [[ ! -z "$choice" ]]; then
+        emulationstation --home "$choice" --create-system-dirs
+        rm -rf "$choice/.emulationstation" # Cleanup unnecessary folder
+      fi
+    else
+      configurator_generic_dialog "RetroDeck Configurator - USB Import" "There were no USB devices found."
+    fi
+    configurator_usb_import_dialog
+  ;;
+
+  "Import from USB" )
+    external_devices=()
+
+    while read -r size device_path; do
+      if [[ -d "$device_path/ROMs" ]]; then
+        device_name=$(basename "$device_path")
+        external_devices=("${external_devices[@]}" "$device_name" "$size" "$device_path")
+      fi
+    done < <(df --output=size,target | grep media | grep -v $default_sd | awk '{$1=$1;print}')
+
+    if [[ "${#external_devices[@]}" -gt 0 ]]; then
+      choice=$(zenity --list --title="RetroDECK Configurator Utility - USB Migration Tool" --cancel-label="Back" \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+      --hide-column=3 --print-column=3 \
+      --column "Device Name" \
+      --column "Device Size" \
+      --column "path" \
+      "${external_devices[@]}")
+
+      if [[ ! -z "$choice" ]]; then
+        if [[ $(verify_space "$choice/ROMs" "$roms_folder") == "false" ]];
+          if [[ $(configurator_generic_question_dialog "RetroDECK Configurator Utility - USB Migration Tool" "You MAY not have enough free space to import this ROM library.\n\nThis utility only imports new additions from the USB device, so if there are a lot of the same ROMs in both locations you are likely going to be fine\nbut we are not able to verify how much data will be transferred before it happens.\n\nIf you are unsure, please verify your available free space before continuing.\n\nDo you want to continue now?") == "true" ]]; then
+            (
+            rsync -a --mkpath "$choice/ROMs/"* "$roms_folder"
+            ) |
+            zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
+            --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+            --title "RetroDECK Configurator Utility - USB Import In Progress"
+            configurator_generic_dialog "RetroDECK Configurator - USB Migration Tool" "The import process is complete!"
+          fi
+        else
+          (
+          rsync -a --mkpath "$choice/ROMs/"* "$roms_folder"
+          ) |
+          zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
+          --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+          --title "RetroDECK Configurator Utility - USB Import In Progress"
+          configurator_generic_dialog "RetroDECK Configurator - USB Migration Tool" "The import process is complete!"
+        fi
+      fi
+    else
+      configurator_generic_dialog "RetroDeck Configurator - USB Import" "There were no USB devices found with an importable folder."
+    fi
+    configurator_usb_import_dialog
+  ;;
+
+  "" ) # No selection made or Back button clicked
+    configurator_developer_dialog
+  ;;
+  esac
+
+}
+
 # Functions to run at exit, without keeping Configurator running in background
 
 launch_retrodeck_after_configurator_close() {
-  if [[ $launch_rd_after_exit == "true" ]]; then
-    start_retrodeck
+  if [[ $(check_desktop_mode) == "true" && "$launched_from_cli" == "true" ]]; then
+      if [[ $(configurator_generic_question_dialog "RetroDECK Configurator" "Would you like to launch RetroDECK after closing the Configurator?") == "true" ]]; then
+        start_retrodeck
+      fi
   fi
 }
 
