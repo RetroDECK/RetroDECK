@@ -90,9 +90,9 @@ post_update() {
     set_setting_value $rd_conf "borders_folder" "$rdhome/borders"
     conf_read
 
-    mv -f "$pcsx2qtconf" "$pcsx2qtconf.bak"
-    generate_single_patch "$emuconfigs/PCSX2/PCSX2.ini" "$pcsx2qtconf.bak" "/var/config/PCSX2/inis/PCSX2-cheevos-upgrade.patch" pcsx2
-    deploy_single_patch "$emuconfigs/PCSX2/PCSX2.ini" "/var/config/PCSX2/inis/PCSX2-cheevos-upgrade.patch" "$pcsx2qtconf"
+    mv -f "$pcsx2conf" "$pcsx2conf.bak"
+    generate_single_patch "$emuconfigs/PCSX2/PCSX2.ini" "$pcsx2conf.bak" "/var/config/PCSX2/inis/PCSX2-cheevos-upgrade.patch" pcsx2
+    deploy_single_patch "$emuconfigs/PCSX2/PCSX2.ini" "/var/config/PCSX2/inis/PCSX2-cheevos-upgrade.patch" "$pcsx2conf"
     rm -f "/var/config/PCSX2/inis/PCSX2-cheevos-upgrade.patch"
     mv -f "$duckstationconf" "$duckstationconf.bak"
     generate_single_patch "$emuconfigs/duckstation/settings.ini" "$duckstationconf.bak" "/var/config/duckstation/duckstation-cheevos-upgrade.patch" pcsx2
