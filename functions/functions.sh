@@ -238,6 +238,14 @@ backup_retrodeck_userdata() {
   zip -rq9 "$backups_folder/$(date +"%0m%0d")_retrodeck_userdata.zip" "$saves_folder" "$states_folder" "$bios_folder" "$media_folder" "$themes_folder" "$logs_folder" "$screenshots_folder" "$mods_folder" "$texture_packs_folder" "$borders_folder" > $logs_folder/$(date +"%0m%0d")_backup_log.log
 }
 
+make_name_pretty() {
+  # This function will take an internal system name (like "gbc") and return a pretty version for user display ("Nintendo GameBoy Color")
+  # USAGE: make_name_pretty "system name"
+  local system=$(grep "$1^" "$pretty_system_names_reference_list")
+  IFS='^' read -r internal_name pretty_name < <(echo "$system")
+  echo "$pretty_name"
+}
+
 finit_browse() {
 # Function for choosing data directory location during first/forced init
 path_selected=false

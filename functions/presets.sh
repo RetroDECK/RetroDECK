@@ -24,16 +24,18 @@ change_preset_dialog() {
       elif [[ "$system_value" == "false" ]]; then
         current_disabled_systems=("${current_disabled_systems[@]}" "$system_name")
       fi
-      current_preset_settings=("${current_preset_settings[@]}" "$system_value" "$system_name")
+      current_preset_settings=("${current_preset_settings[@]}" "$system_value" "$(make_name_pretty $system_name)" "$system_name")
   done < <(printf '%s\n' "$section_results")
 
   choice=$(zenity \
     --list --width=1200 --height=720 \
     --checklist \
     --separator="," \
+    --hide-column=3 --print-column=3 \
     --text="Enable $pretty_preset_name:" \
     --column "Enabled" \
     --column "Emulator" \
+    --column "internal_system_name" \
     "${current_preset_settings[@]}")
 
   local rc=$?
