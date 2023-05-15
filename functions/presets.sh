@@ -101,9 +101,8 @@ build_preset_config(){
   local system_being_changed="$1"
   shift
   local presets_being_changed="$*"
-  for preset in $presets_being_changed
+  for current_preset in $presets_being_changed
   do
-    current_preset="$preset"
     local preset_section=$(sed -n '/\['"$current_preset"'\]/, /\[/{ /\['"$current_preset"'\]/! { /\[/! p } }' $rd_conf | sed '/^$/d')
     while IFS= read -r system_line
     do

@@ -183,6 +183,7 @@ configurator_global_presets_and_settings_dialog() {
   "Enable/Disable Borders" "Enable or disable borders in supported systems" \
   "Enable/Disable Widescreen" "Enable or disable widescreen in supported systems" \
   "RetroAchievements Login" "Log into the RetroAchievements service in supported systems" \
+  "RetroAchievements Logout" "Disable RetroAchievements service in supported systems" \
   "RetroAchievements Hardcore Mode" "Enable RetroAchievements hardcore mode (no cheats, rewind, save states etc.) in supported emulators" \
   "Nintendo Button Layout" "Enable or disable Nintendo button layout (swapped A/B and X/Y) in supported systems" )
 
@@ -207,6 +208,11 @@ configurator_global_presets_and_settings_dialog() {
     else
       configurator_generic_dialog "RetroDECK Configurator Utility - RetroAchievements" "RetroAchievements login failed, please verify your username and password and try the process again."
     fi
+    configurator_global_presets_and_settings_dialog
+  ;;
+
+  "RetroAchievements Logout" ) # This is a workaround to allow disabling cheevos without having to enter login credentials
+    change_preset_dialog "cheevos"
     configurator_global_presets_and_settings_dialog
   ;;
 

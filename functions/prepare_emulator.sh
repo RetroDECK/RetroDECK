@@ -83,6 +83,7 @@ prepare_emulator() {
           set_setting_value "$raconf" "savefile_directory" "$saves_folder" "retroarch"
           set_setting_value "$raconf" "savestate_directory" "$states_folder" "retroarch"
           set_setting_value "$raconf" "screenshot_directory" "$screenshots_folder" "retroarch"
+          set_setting_value "$raconf" "log_dir" "$logs_folder" "retroarch"
         fi
 
         # PPSSPP
@@ -126,6 +127,7 @@ prepare_emulator() {
       set_setting_value "$raconf" "savefile_directory" "$saves_folder" "retroarch"
       set_setting_value "$raconf" "savestate_directory" "$states_folder" "retroarch"
       set_setting_value "$raconf" "screenshot_directory" "$screenshots_folder" "retroarch"
+      set_setting_value "$raconf" "log_dir" "$logs_folder" "retroarch"
     fi
   fi
 
