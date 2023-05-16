@@ -8,4 +8,4 @@ change^borders^overlay_file^/var/config/retroarch/overlays/borders/snes.cfg # Th
 OTHER NOTES:
 - The name of the presets configuration file for any given system MUST be <system name>_presets.cfg
 - The <system name> is whatever name is given to this system in retrodeck.cfg, it is not tied to the actual emulator name.
-- Whatever name is given to a system in retrodeck.cfg is how it will appear in the dialogs, so make it look nice. It also must match exactly in any preset sections it appears in!
+- The name given to the system in retrodeck.cfg will be translated to a "nice looking" format for user dialogs through the file at emu-configs/defaults/retrodeck/reference_lists/pretty_system_names.cfg but will be used internally as-is

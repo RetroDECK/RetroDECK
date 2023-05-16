@@ -136,21 +136,28 @@ prepare_emulator() {
       echo "----------------------"
       echo "Initializing CEMU"
       echo "----------------------"
-      rm -rf /var/config/Cemu
-      mkdir -pv /var/config/Cemu/
-      cp -fr "$emuconfigs/cemu/"* /var/config/Cemu/
-      #TODO : set_setting_value for Cemu and multi_user
-      sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/Cemu/settings.xml
-      dir_prep "$rdhome/saves/wiiu/cemu" "$rdhome/bios/cemu/usr/save"
+      if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
+        rm -rf "$multi_user_data_folder/$SteamAppUser/config/Cemu"
+        mkdir -p "$multi_user_data_folder/$SteamAppUser/config/Cemu"
+        cp -fr "$emuconfigs/cemu/"* "$multi_user_data_folder/$SteamAppUser/config/Cemu/"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/Cemu/settings.ini" "mlc_path" "$bios_folder/cemu" "cemu"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/Cemu/settings.ini" "Entry" "$roms_folder/wiiu" "cemu" "GamePaths"
+        dir_prep "$multi_user_data_folder/$SteamAppUser/config/Cemu" "/var/config/Cemu"
+      else
+        rm -rf /var/config/Cemu
+        mkdir -pv /var/config/Cemu/
+        cp -fr "$emuconfigs/cemu/"* /var/config/Cemu/
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/Cemu/settings.ini" "mlc_path" "$bios_folder/cemu" "cemu"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/Cemu/settings.ini" "Entry" "$roms_folder/wiiu" "cemu" "GamePaths"
+      fi
+      # Shared actions
+      dir_prep "$saves_folder/wiiu/cemu" "$bios_folder/cemu/usr/save"
     fi
-    if [[ "$action" == "reset" ]] || [[ "$action" == "postmove" ]]; then # Run commands that apply to both resets and moves
-      #TODO : set_setting_value for Cemu and multi_user
-      sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/Cemu/settings.xml
-      dir_prep "$rdhome/saves/wiiu/cemu" "$rdhome/bios/cemu/usr/save"
+    if [[ "$action" == "postmove" ]]; then # Run commands that apply to both resets and moves
+      set_setting_value "$cemuconf" "mlc_path" "$bios_folder/cemu" "cemu"
+      set_setting_value "$cemuconf" "Entry" "$roms_folder/wiiu" "cemu" "GamePaths"
+      dir_prep "$saves_folder/wiiu/cemu" "$bios_folder/cemu/usr/save"
     fi
-    # if [[ "$action" == "postmove" ]]; then # Run only post-move commands
-
-    # fi
   fi
 
   if [[ "$emulator" =~ ^(citra|citra-emu|Citra|all)$ ]]; then

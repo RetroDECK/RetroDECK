@@ -49,7 +49,6 @@ pretty_system_names_reference_list="$emuconfigs/defaults/retrodeck/reference_lis
 
 # Config files for emulators with single config files
 
-cemuconf="/var/config/Cemu/settings.xml"
 citraconf="/var/config/citra-emu/qt-config.ini"
 duckstationconf="/var/config/duckstation/settings.ini"
 melondsconf="/var/config/melonDS/melonDS.ini"
@@ -66,6 +65,11 @@ es_settings="/var/config/emulationstation/.emulationstation/es_settings.xml"
 
 raconf="/var/config/retroarch/retroarch.cfg"
 ra_core_conf="/var/config/retroarch/retroarch-core-options.cfg"
+
+# CEMU config files
+
+cemuconf="/var/config/Cemu/settings.xml"
+cemucontrollerconf="/var/config/Cemu/controllerProfiles/controller0.xml"
 
 # Dolphin config files
 

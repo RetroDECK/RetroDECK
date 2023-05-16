@@ -119,15 +119,15 @@ build_preset_config() {
                   eval new_setting_value=$new_setting_value
                 fi
                 if [[ "$read_config_format" == "retroarch" ]]; then # If this is a RetroArch core, generate the override file
-                  if [[ -z $(grep "$read_setting_name" "$read_target_file") ]]; then
-                    if [[ ! -f "$read_target_file" ]]; then
-                      mkdir -p "$(realpath $(dirname "$read_target_file"))"
-                      echo "$read_setting_name = ""$new_setting_value""" > "$read_target_file"
-                    else
-                      add_setting "$read_target_file" "$read_setting_name" "$new_setting_value" "$read_config_format" "$section"
-                    fi
+                  if [[ ! -f "$read_target_file" ]]; then
+                    mkdir -p "$(realpath "$(dirname "$read_target_file")")"
+                    echo "$read_setting_name = \""$new_setting_value"\"" > "$read_target_file"
                   else
-                    set_setting_value "$read_target_file" "$read_setting_name" "$new_setting_value" "$read_config_format" "$section"
+                    if [[ -z $(grep "$read_setting_name" "$read_target_file") ]]; then
+                      add_setting "$read_target_file" "$read_setting_name" "$new_setting_value" "$read_config_format" "$section"
+                    else
+                      set_setting_value "$read_target_file" "$read_setting_name" "$new_setting_value" "$read_config_format" "$section"
+                    fi                    
                   fi
                 else
                   if [[ "$read_config_format" == "retroarch-all" ]]; then
@@ -142,8 +142,8 @@ build_preset_config() {
                     if [[ -z $(cat "$read_target_file") ]]; then # If the override file is empty
                       rm -f "$read_target_file"
                     fi
-                    if [[ -z $(ls -1 $(dirname "$read_target_file")) ]]; then # If the override folder is empty
-                      rmdir "$(dirname $read_target_file)"
+                    if [[ -z $(ls -1 "$(dirname "$read_target_file")") ]]; then # If the override folder is empty
+                      rmdir "$(realpath "$(dirname "$read_target_file")")"
                     fi
                   fi
                 else
