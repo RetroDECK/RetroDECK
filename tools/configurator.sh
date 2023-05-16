@@ -1252,7 +1252,7 @@ configurator_usb_import_dialog() {
       "${external_devices[@]}")
 
       if [[ ! -z "$choice" ]]; then
-        if [[ $(verify_space "$choice/ROMs" "$roms_folder") == "false" ]];
+        if [[ $(verify_space "$choice/ROMs" "$roms_folder") == "false" ]]; then
           if [[ $(configurator_generic_question_dialog "RetroDECK Configurator Utility - USB Migration Tool" "You MAY not have enough free space to import this ROM library.\n\nThis utility only imports new additions from the USB device, so if there are a lot of the same ROMs in both locations you are likely going to be fine\nbut we are not able to verify how much data will be transferred before it happens.\n\nIf you are unsure, please verify your available free space before continuing.\n\nDo you want to continue now?") == "true" ]]; then
             (
             rsync -a --mkpath "$choice/ROMs/"* "$roms_folder"

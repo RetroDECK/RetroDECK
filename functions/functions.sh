@@ -120,11 +120,8 @@ update_rd_conf() {
   set_setting_value $rd_conf "version" "$hard_version" retrodeck # Set version of currently running RetroDECK to updated retrodeck.cfg
   rm -f $rd_update_patch # Cleanup temporary patch file
   conf_read # Read all settings into memory
-}
 
-conf_write() {
-  # This function will update the RetroDECK config file with matching variables from memory
-  # USAGE: conf_write
+  # STAGE 3: Eliminate any preset incompatibility with existing user settings and new defaults
 
   while IFS= read -r current_setting_line # Read the existing retrodeck.cfg
   do
@@ -132,12 +129,18 @@ conf_write() {
       if [[ ! -z $(grep -o -P "^\[.+?\]$" <<< "$current_setting_line") ]]; then # If the line is a section header
         local current_section=$(sed 's^[][]^^g' <<< $current_setting_line) # Remove brackets from section name
       else
-        if [[ "$current_section" == "" || "$current_section" == "paths" || "$current_section" == "options" ]]; then
-          local current_setting_name=$(get_setting_name "$current_setting_line" "retrodeck") # Read the variable name from the current line
-          local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "$current_section") # Read the variables value from retrodeck.cfg
-          local memory_setting_value=$(eval "echo \$${current_setting_name}") # Read the variable names' value from memory
-          if [[ ! "$current_setting_value" == "$memory_setting_value" && ! -z "$memory_setting_value" ]]; then # If the values are different...
-            set_setting_value "$rd_conf" "$current_setting_name" "$memory_setting_value" "retrodeck" "$current_section" # Update the value in retrodeck.cfg
+        if [[ ! ("$current_section" == "" || "$current_section" == "paths" || "$current_section" == "options" || "$current_section" == "cheevos" || "$current_section" == "cheevos_hardcore") ]]; then
+          local system_name=$(get_setting_name "$current_setting_line" "retrodeck") # Read the variable name from the current line
+          local system_enabled=$(get_setting_value "$rd_conf" "$system_name" "retrodeck" "$current_section") # Read the variables value from active retrodeck.cfg
+          local default_setting=$(get_setting_value "$rd_defaults" "$system_name" "retrodeck" "$current_section") # Read the variable value from the retrodeck defaults
+          if [[ "$system_enabled" == "true" ]]; then
+            while IFS=: read -r preset_being_checked known_incompatible_preset; do
+              if [[ "$current_section" == "$preset_being_checked" ]]; then
+                if [[ $(get_setting_value "$rd_conf" "$system_name" "retrodeck" "$known_incompatible_preset") == "true" ]]; then
+                  set_setting_value "$rd_conf" "$system_name" "false" "retrodeck" "$current_section"
+                fi
+              fi
+            done < "$incompatible_presets_reference_list"
           fi
         fi
       fi
@@ -159,6 +162,29 @@ conf_read() {
           local current_setting_name=$(get_setting_name "$current_setting_line" "retrodeck") # Read the variable name from the current line
           local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "$current_section") # Read the variables value from retrodeck.cfg
           eval "$current_setting_name=$current_setting_value" # Write the current setting name and value to memory
+        fi
+      fi
+    fi
+  done < $rd_conf
+}
+
+conf_write() {
+  # This function will update the RetroDECK config file with matching variables from memory
+  # USAGE: conf_write
+
+  while IFS= read -r current_setting_line # Read the existing retrodeck.cfg
+  do
+    if [[ (! -z "$current_setting_line") && (! "$current_setting_line" == "#"*) && (! "$current_setting_line" == "[]") ]]; then # If the line has a valid entry in it
+      if [[ ! -z $(grep -o -P "^\[.+?\]$" <<< "$current_setting_line") ]]; then # If the line is a section header
+        local current_section=$(sed 's^[][]^^g' <<< $current_setting_line) # Remove brackets from section name
+      else
+        if [[ "$current_section" == "" || "$current_section" == "paths" || "$current_section" == "options" ]]; then
+          local current_setting_name=$(get_setting_name "$current_setting_line" "retrodeck") # Read the variable name from the current line
+          local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "$current_section") # Read the variables value from retrodeck.cfg
+          local memory_setting_value=$(eval "echo \$${current_setting_name}") # Read the variable names' value from memory
+          if [[ ! "$current_setting_value" == "$memory_setting_value" && ! -z "$memory_setting_value" ]]; then # If the values are different...
+            set_setting_value "$rd_conf" "$current_setting_name" "$memory_setting_value" "retrodeck" "$current_section" # Update the value in retrodeck.cfg
+          fi
         fi
       fi
     fi
@@ -394,6 +420,7 @@ finit() {
 
   (
   prepare_emulator "reset" "all"
+  build_retrodeck_current_presets
   
   # Optional actions based on user choices
   if [[ "$finit_options_choices" =~ (rpcs3_firmware|Enable All) ]]; then
