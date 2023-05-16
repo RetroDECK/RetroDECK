@@ -11,11 +11,11 @@ source /app/libexec/global.sh
 # Welcome
 #     - Presets & Settings
 #       - Global: Presets & Settings
-#         - Enable/Disable borders
 #         - Enable/Disable widescreen
 #         - Log in to RetroAchievements
 #         - Enable/Disable RetroAchievements Hardcore Mode
 #       - RetroArch: Presets & Settings
+#         - Enable/Disable borders
 #         - Enable/Disable Rewind Setting
 #       - Wii & GameCube: Presets & Settings
 #         - Dolphin Textures: Universal Dynamic Input
@@ -176,7 +176,6 @@ configurator_global_presets_and_settings_dialog() {
   choice=$(zenity --list --title="RetroDECK Configurator Utility - Global: Presets & Settings" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
-  "Enable/Disable Borders" "Enable or disable borders in supported systems" \
   "Enable/Disable Widescreen" "Enable or disable widescreen in supported systems" \
   "RetroAchievements Login" "Log into the RetroAchievements service in supported systems" \
   "RetroAchievements Logout" "Disable RetroAchievements service in supported systems" \
@@ -184,11 +183,6 @@ configurator_global_presets_and_settings_dialog() {
   "Nintendo Button Layout" "Enable or disable Nintendo button layout (swapped A/B and X/Y) in supported systems" )
 
   case $choice in
-
-  "Enable/Disable Borders" )
-    change_preset_dialog "borders"
-    configurator_global_presets_and_settings_dialog
-  ;;
 
   "Enable/Disable Widescreen" )
     change_preset_dialog "widescreen"
@@ -233,9 +227,15 @@ configurator_retroarch_presets_and_settings_dialog() {
   choice=$(zenity --list --title="RetroDECK Configurator Utility - RetroArch: Presets & Settings" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
+  "Enable/Disable Borders" "Enable or disable borders in supported systems" \
   "Enable/Disable Rewind" "Enable or disable the Rewind function in RetroArch." )
 
   case $choice in
+
+  "Enable/Disable Borders" )
+    change_preset_dialog "borders"
+    configurator_retroarch_presets_and_settings_dialog
+  ;;
 
   "Enable/Disable Rewind" )
     configurator_retroarch_rewind_dialog
