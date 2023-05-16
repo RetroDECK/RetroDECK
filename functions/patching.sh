@@ -151,12 +151,12 @@ add_setting_line() {
   * )
     if [[ -z $current_section_name ]]; then
       if [[ -f "$1" ]]; then
-        sed -i '$ a '"$current_setting_line"'' $1
+        sed -i '$ a '"$current_setting_line"'' "$1"
       else # If the file doesn't exist, sed add doesn't work for the first line
         echo "$current_setting_line" > $1
       fi
     else
-      sed -i '/^\s*?\['"$current_section_name"'\]|\b'"$current_section_name"':$/a '"$current_setting_line"'' $1
+      sed -i '/^\s*?\['"$current_section_name"'\]|\b'"$current_section_name"':$/a '"$current_setting_line"'' "$1"
     fi
     ;;
 
@@ -175,9 +175,9 @@ add_setting() {
 
   "retroarch" )
     if [[ -z $current_section_name ]]; then
-      sed -i '$ a '"$current_setting_name"' = "'"$current_setting_value"'"' $1
+      sed -i '$ a '"$current_setting_name"' = "'"$current_setting_value"'"' "$1"
     else
-      sed -i '/^\s*?\['"$current_section_name"'\]|\b'"$current_section_name"':$/a '"$current_setting_name"' = "'"$current_setting_value"'"' $1
+      sed -i '/^\s*?\['"$current_section_name"'\]|\b'"$current_section_name"':$/a '"$current_setting_name"' = "'"$current_setting_value"'"' "$1"
     fi
     ;;
 
@@ -214,9 +214,9 @@ disable_setting() {
 
   * )
     if [[ -z $current_section_name ]]; then
-      sed -i -E 's^(\s*?)'"$current_setting_line"'^\1#'"$current_setting_line"'^' $1
+      sed -i -E 's^(\s*?)'"$current_setting_line"'^\1#'"$current_setting_line"'^' "$1"
     else
-      sed -i -E '\^\['"$current_section_name"'\]|\b'"$current_section_name"':$^,\^\s*?'"$current_setting_line"'^s^(\s*?)'"$current_setting_line"'^\1#'"$current_setting_line"'^' $1
+      sed -i -E '\^\['"$current_section_name"'\]|\b'"$current_section_name"':$^,\^\s*?'"$current_setting_line"'^s^(\s*?)'"$current_setting_line"'^\1#'"$current_setting_line"'^' "$1"
     fi
   ;;
 
@@ -234,9 +234,9 @@ enable_setting() {
 
   * )
     if [[ -z $current_section_name ]]; then
-      sed -i -E 's^(\s*?)#'"$current_setting_line"'^\1'"$current_setting_line"'^' $1
+      sed -i -E 's^(\s*?)#'"$current_setting_line"'^\1'"$current_setting_line"'^' "$1"
     else
-      sed -i -E '\^\['"$current_section_name"'\]|\b'"$current_section_name"':$^,\^\s*?#'"$current_setting_line"'^s^(\s*?)#'"$current_setting_line"'^\1'"$current_setting_line"'^' $1
+      sed -i -E '\^\['"$current_section_name"'\]|\b'"$current_section_name"':$^,\^\s*?#'"$current_setting_line"'^s^(\s*?)#'"$current_setting_line"'^\1'"$current_setting_line"'^' "$1"
     fi
   ;;
 
@@ -248,7 +248,7 @@ disable_file() {
   # USAGE: disable_file $file_name
   # NOTE: $filename can be a defined variable from global.sh or must have the full path to the file
 
-  mv $(realpath $1) $(realpath $1).disabled
+  mv "$(realpath "$1")" "$(realpath "$1")".disabled
 }
 
 enable_file() {
@@ -256,7 +256,7 @@ enable_file() {
   # USAGE: enable_file $file_name
   # NOTE: $filename can be a defined variable from global.sh or must have the full path to the file and should not have ".disabled" as a suffix
 
-  mv $(realpath $1.disabled) $(realpath $(echo $1 | sed -e 's/\.disabled//'))
+  mv "$(realpath "$1".disabled)" "$(realpath "$(echo "$1" | sed -e 's/\.disabled//')")"
 }
 
 generate_single_patch() {
