@@ -75,28 +75,7 @@ change_preset_dialog() {
   fi
 }
 
-resolve_preset_conflicts() {
-  # This function will resolve conflicts between setting presets. ie. borders and widescreen cannot both be enabled at the same time.
-  # The function will read the $section_that_was_just_enabled and $section_to_check_for_conflicts
-  # If a conflict is found (where two conflicting settings are both enabled) the $section_to_check_for_conflicts entry will be disabled
-  # USAGE: resolve_preset_conflict "$section_that_was_just_enabled" "$section_to_check_for_conflicts" "system"
-
-  local section_being_enabled=$1
-  local section_to_check_for_conflicts=$2
-  local system=$3
-  local enabled_section_results=$(sed -n '/\['"$section_being_enabled"'\]/, /\[/{ /\['"$section_being_enabled"'\]/! { /\[/! p } }' $rd_conf | sed '/^$/d')
-
-  while IFS= read -r config_line
-    do
-      system_name=$(get_setting_name "$config_line" $system)
-      system_value=$(get_setting_value $rd_conf "$system_name" $system $section_being_enabled)
-      if [[ $system_value == "true" && $(get_setting_value $rd_conf "$(get_setting_name "$config_line" $system)" $system $section_to_check_for_conflicts) == "true" ]]; then
-        set_setting_value $rd_conf $system_name "false" retrodeck $section_to_check_for_conflicts
-      fi
-  done < <(printf '%s\n' "$enabled_section_results")
-}
-
-build_preset_config(){
+build_preset_config() {
   # This function will apply one or more presets for a given system, as listed in retrodeck.cfg
   # USAGE: build_preset_config "system name" "preset class 1" "preset class 2" "preset class 3"
   
@@ -183,7 +162,7 @@ build_preset_config(){
               if [[ "$read_system_enabled" == "true" ]]; then
                 enable_file "$read_setting_name"
               else
-                diable_file "$read_setting_name"
+                disable_file "$read_setting_name"
               fi
             fi
           ;;
@@ -197,4 +176,27 @@ build_preset_config(){
       fi
     done < <(printf '%s\n' "$preset_section")
   done
+}
+
+build_retrodeck_current_presets() {
+  # This function will read the presets sections of the retrodeck.cfg file and build the default state
+  # This can also be used to build the "current" state post-update after adding new systems
+  # USAGE: build_retrodeck_current_presets
+
+  while IFS= read -r current_setting_line # Read the existing retrodeck.cfg
+  do
+    if [[ (! -z "$current_setting_line") && (! "$current_setting_line" == "#"*) && (! "$current_setting_line" == "[]") ]]; then # If the line has a valid entry in it
+      if [[ ! -z $(grep -o -P "^\[.+?\]$" <<< "$current_setting_line") ]]; then # If the line is a section header
+        local current_section=$(sed 's^[][]^^g' <<< $current_setting_line) # Remove brackets from section name
+      else
+        if [[ ! ("$current_section" == "" || "$current_section" == "paths" || "$current_section" == "options" || "$current_section" == "cheevos" || "$current_section" == "cheevos_hardcore") ]]; then
+          local system_name=$(get_setting_name "$current_setting_line" "retrodeck") # Read the variable name from the current line
+          local system_enabled=$(get_setting_value "$rd_conf" "$system_name" "retrodeck" "$current_section") # Read the variables value from active retrodeck.cfg
+          if [[ "$system_enabled" == "true" ]]; then
+            build_preset_config "$system_name" "$current_section"
+          fi
+        fi
+      fi
+    fi
+  done < $rd_conf
 }

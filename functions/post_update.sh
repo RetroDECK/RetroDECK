@@ -70,7 +70,7 @@ post_update() {
   if [[ $prev_version -le "070" ]]; then
     # In version 0.7.0b, the following changes were made that required config file updates/reset or other changes to the filesystem:
     # - Update retrodeck.cfg and set new paths to $rdhome by default
-    # - Update PCSX2 and Duckstation configs to latest templates (to accomadate RetroAchievements feature)
+    # - Update PCSX2 and Duckstation configs to latest templates (to accomadate RetroAchievements feature) and move Duckstation config folder from /var/data to /var/config
     # - New ~/retrodeck/mods and ~/retrodeck/texture_packs directories are added and symlinked to multiple different emulators (where supported)
     # - Expose ES-DE gamelists folder to user at ~/retrodeck/gamelists
     # - Copy new borders into RA config location
@@ -94,6 +94,7 @@ post_update() {
     generate_single_patch "$emuconfigs/PCSX2/PCSX2.ini" "$pcsx2conf.bak" "/var/config/PCSX2/inis/PCSX2-cheevos-upgrade.patch" pcsx2
     deploy_single_patch "$emuconfigs/PCSX2/PCSX2.ini" "/var/config/PCSX2/inis/PCSX2-cheevos-upgrade.patch" "$pcsx2conf"
     rm -f "/var/config/PCSX2/inis/PCSX2-cheevos-upgrade.patch"
+    dir_prep "/var/config/duckstation" "/var/data/duckstation"
     mv -f "$duckstationconf" "$duckstationconf.bak"
     generate_single_patch "$emuconfigs/duckstation/settings.ini" "$duckstationconf.bak" "/var/config/duckstation/duckstation-cheevos-upgrade.patch" pcsx2
     deploy_single_patch "$emuconfigs/duckstation/settings.ini" "/var/config/duckstation/duckstation-cheevos-upgrade.patch" "$duckstationconf"
@@ -118,9 +119,9 @@ post_update() {
 
     rsync -a --mkpath "$emuconfigs/defaults/retrodeck/presets/remaps/" "/var/config/retroarch/config/remaps/"
 
-    if [[ $(configurator_generic_question_dialog "RetroDECK Starter Pack" "The RetroDECK creators have put together a collection of classic retro games you might enjoy!\n\nWould you like to have them automatically added to your library?\n\nThis can always be done later through the Configurator.") == "true" ]]; then
-      install_retrodeck_starterpack
-    fi
+    # if [[ $(configurator_generic_question_dialog "RetroDECK Starter Pack" "The RetroDECK creators have put together a collection of classic retro games you might enjoy!\n\nWould you like to have them automatically added to your library?\n\nThis can always be done later through the Configurator.") == "true" ]]; then
+    #   install_retrodeck_starterpack
+    # fi
 
     cp -f $emuconfigs/rpcs3/vfs.yml /var/config/rpcs3/vfs.yml
     sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$bios_folder/rpcs3/"'^' "$rpcs3vfsconf"
@@ -148,14 +149,14 @@ post_update() {
     mkdir -p "$saves_folder/psx/duckstation/memcards"
     mv "$saves_folder/duckstation/"* "$saves_folder/psx/duckstation/memcards/"
     rmdir "$saves_folder/duckstation" # File-safe folder cleanup
-    unlink "/var/data/duckstation/memcards"
+    unlink "/var/config/duckstation/memcards"
     set_setting_value "$duckstationconf" "Card1Path" "$saves_folder/psx/duckstation/memcards/shared_card_1.mcd" "duckstation" "MemoryCards"
     set_setting_value "$duckstationconf" "Card2Path" "$saves_folder/psx/duckstation/memcards/shared_card_2.mcd" "duckstation" "MemoryCards"
     set_setting_value "$duckstationconf" "Directory" "$saves_folder/psx/duckstation/memcards" "duckstation" "MemoryCards"
     set_setting_value "$duckstationconf" "RecursivePaths" "$roms_folder/psx" "duckstation" "GameList"
     mkdir -p "$states_folder/psx"
     mv -t "$states_folder/psx/" "$states_folder/duckstation"
-    unlink "/var/data/duckstation/savestates"
+    unlink "/var/config/duckstation/savestates"
     dir_prep "$states_folder/psx/duckstation" "/var/config/duckstation/savestates"
 
     rm -rf /var/config/retrodeck/tools
@@ -195,6 +196,7 @@ post_update() {
   fi
 
   update_splashscreens
+  build_retrodeck_current_presets
   ) |
   zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
