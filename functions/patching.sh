@@ -45,6 +45,14 @@ set_setting_value() {
       fi
       ;;
 
+    "cemu" )
+      if [[ -z "$current_section_name" ]]; then
+        xml ed -L -u "//$setting_name_to_change" -v "$setting_value_to_change" "$1"
+      else
+        xml ed -L -u "//$current_section_name/$setting_name_to_change" -v "$setting_value_to_change" "$1"
+      fi
+      ;;
+
     "es_settings" )
       sed -i 's^'"$setting_name_to_change"'" value=".*"^'"$setting_name_to_change"'" value="'"$setting_value_to_change"'"^' $1
       ;;
@@ -113,6 +121,14 @@ get_setting_value() {
       echo $(grep -o -P "(?<=$current_setting_name: ).*" $1)
     else
       sed -n '\^\['"$current_section_name"'\]^,\^\^'"$current_setting_name"'^{ \^\['"$current_section_name"'\]^! { \^\^'"$current_setting_name"'^ p } }' $1 | grep -o -P "(?<=$current_setting_name: ).*"
+    fi
+  ;;
+
+  "cemu" )
+    if [[ -z "$current_section_name" ]]; then
+      echo $(xml sel -t -v "//$current_setting_name" $1)
+    else
+      echo $(xml sel -t -v "//$current_section_name/$current_setting_name" $1)
     fi
   ;;
 

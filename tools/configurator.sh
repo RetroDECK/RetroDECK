@@ -1045,7 +1045,7 @@ configurator_about_retrodeck_dialog() {
 }
 
 configurator_version_history_dialog() {
-  local version_array=($(xmlstarlet sel -t -v '//component/releases/release/@version' -n $rd_appdata))
+  local version_array=($(xml sel -t -v '//component/releases/release/@version' -n $rd_appdata))
   local all_versions_list=()
 
   for rd_version in ${version_array[*]}; do

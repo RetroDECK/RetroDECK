@@ -82,6 +82,8 @@ post_update() {
     # - Move Dolphin and Primehack save folder names
     # - Move PPSSPP saves/states to appropriate folders
     # - Set ESDE user themes folder directly
+    # - Disable auto-save/load in RA / PCSX2 / Duckstation for proper preset functionality
+    # - Init Cemu as it is a new emulator
 
     update_rd_conf # Expand retrodeck.cfg to latest template
     set_setting_value $rd_conf "screenshots_folder" "$rdhome/screenshots"
@@ -184,6 +186,13 @@ post_update() {
     unlink "/var/config/emulationstation/ROMs"
     unlink "/var/config/emulationstation/.emulationstation/downloaded_media"
     unlink "/var/config/emulationstation/.emulationstation/themes"
+
+    set_setting_value "$raconf" "savestate_auto_load" "false" "retroarch"
+    set_setting_value "$raconf" "savestate_auto_save" "false" "retroarch"
+    set_setting_value "$pcsx2conf" "SaveStateOnShutdown" "false" "pcsx2" "EmuCore"
+    set_setting_value "$duckstationconf" "SaveStateOnExit" "false" "duckstation" "Main"
+
+    prepare_emulator "reset" "cemu"
   fi
 
   # The following commands are run every time.
