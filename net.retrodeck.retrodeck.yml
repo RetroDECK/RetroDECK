@@ -467,7 +467,7 @@ modules:
     buildsystem: simple
     build-commands:
     - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/PPSSPP
-    - mv -f "ppsspp-master/assets/"* "${FLATPAK_DEST}/retrodeck/extras/PPSSPP/"
+    - mv -f assets/* ${FLATPAK_DEST}/retrodeck/extras/PPSSPP/
     sources:
       - type: archive
         url: https://github.com/hrydgard/ppsspp/archive/refs/heads/master.zip
@@ -483,6 +483,7 @@ modules:
       - type: archive
         url: http://bluemsx.msxblue.com/rel_download/blueMSXv282full.zip
         sha256: MSXBIOSHASHPLACEHOLDER
+        strip-components: 0
   
   - name: doom-shareware
     buildsystem: simple
