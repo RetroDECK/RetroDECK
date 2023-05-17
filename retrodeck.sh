@@ -140,12 +140,7 @@ if [ -f "$lockfile" ]; then
 # if the lock file doesn't exist at all means that it's a fresh install or a triggered reset
 else
   echo "Lockfile not found"
-  if [[ $(check_network_connectivity) == "true" ]]; then
-    finit             # Executing First/Force init
-  else
-    configurator_generic_dialog "RetroDECK Setup" "You do not appear to be connected to a network with internet access.\n\nThe initial RetroDECK setup requires some files from the internet to function properly.\n\nPlease retry this process once a network connection is available."
-    exit 1
-  fi
+  finit             # Executing First/Force init
 fi
 
 if [[ $multi_user_mode == "true" ]]; then

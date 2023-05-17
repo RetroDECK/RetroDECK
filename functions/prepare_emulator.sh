@@ -59,66 +59,52 @@ prepare_emulator() {
 
   if [[ "$emulator" =~ ^(retroarch|RetroArch|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
-      if [[ $(check_network_connectivity) == "true" ]]; then
-        if [[ $multi_user_mode == "true" ]]; then
-          rm -rf "$multi_user_data_folder/$SteamAppUser/config/retroarch"
-          mkdir -p "$multi_user_data_folder/$SteamAppUser/config/retroarch"
-          cp -fv $emuconfigs/retroarch/retroarch.cfg "$multi_user_data_folder/$SteamAppUser/config/retroarch/"
-          cp -fv $emuconfigs/retroarch/retroarch-core-options.cfg "$multi_user_data_folder/$SteamAppUser/config/retroarch/"
-        else
-          rm -rf /var/config/retroarch
-          mkdir -p /var/config/retroarch
-          dir_prep "$bios_folder" "/var/config/retroarch/system"
-          dir_prep "$logs_folder/retroarch" "/var/config/retroarch/logs"
-          mkdir -pv /var/config/retroarch/shaders/
-          cp -rf /app/share/libretro/shaders /var/config/retroarch/
-          dir_prep "$rdhome/shaders/retroarch" "/var/config/retroarch/shaders"
-          rsync -a --mkpath "/app/share/libretro/cores/" "/var/config/retroarch/cores/"
-          cp -fv $emuconfigs/retroarch/retroarch.cfg /var/config/retroarch/
-          cp -fv $emuconfigs/retroarch/retroarch-core-options.cfg /var/config/retroarch/
-          rsync -a --mkpath "$emuconfigs/retroarch/core-overrides/" "/var/config/retroarch/config/"
-          rsync -a --mkpath "$emuconfigs/defaults/retrodeck/presets/remaps/" "/var/config/retroarch/config/remaps/"
-          dir_prep "$borders_folder" "/var/config/retroarch/overlays/borders"
-          rsync -a --mkpath "/app/retrodeck/emu-configs/retroarch/borders/" "/var/config/retroarch/overlays/borders/"
-          set_setting_value "$raconf" "savefile_directory" "$saves_folder" "retroarch"
-          set_setting_value "$raconf" "savestate_directory" "$states_folder" "retroarch"
-          set_setting_value "$raconf" "screenshot_directory" "$screenshots_folder" "retroarch"
-          set_setting_value "$raconf" "log_dir" "$logs_folder" "retroarch"
-        fi
-
-        # PPSSPP
-        echo "--------------------------------"
-        echo "Initializing PPSSPP_LIBRETRO"
-        echo "--------------------------------"
-        if [ -d $bios_folder/PPSSPP/flash0/font ]
-        then
-          mv -fv $bios_folder/PPSSPP/flash0/font $bios_folder/PPSSPP/flash0/font.bak
-        fi
-        mkdir -p $bios_folder/PPSSPP
-        wget "https://github.com/hrydgard/ppsspp/archive/refs/heads/master.zip" -P $bios_folder/PPSSPP
-        unzip -q "$bios_folder/PPSSPP/master.zip" -d $bios_folder/PPSSPP/
-        mv -f "$bios_folder/PPSSPP/ppsspp-master/assets/"* "$bios_folder/PPSSPP/"
-        rm -rfv "$bios_folder/PPSSPP/master.zip"
-        rm -rfv "$bios_folder/PPSSPP/ppsspp-master"
-        if [ -d $bios_folder/PPSSPP/flash0/font.bak ]
-        then
-          mv -f $bios_folder/PPSSPP/flash0/font.bak $bios_folder/PPSSPP/flash0/font
-        fi
-
-        # MSX / SVI / ColecoVision / SG-1000
-        echo "-----------------------------------------------------------"
-        echo "Initializing MSX / SVI / ColecoVision / SG-1000 LIBRETRO"
-        echo "-----------------------------------------------------------"
-        wget "http://bluemsx.msxblue.com/rel_download/blueMSXv282full.zip" -P $bios_folder/MSX
-        unzip -q "$bios_folder/MSX/blueMSXv282full.zip" -d $bios_folder/MSX
-        mv -f $bios_folder/MSX/Databases $bios_folder/Databases
-        mv -f $bios_folder/MSX/Machines $bios_folder/Machines
-        rm -rf $bios_folder/MSX
+      if [[ $multi_user_mode == "true" ]]; then
+        rm -rf "$multi_user_data_folder/$SteamAppUser/config/retroarch"
+        mkdir -p "$multi_user_data_folder/$SteamAppUser/config/retroarch"
+        cp -fv $emuconfigs/retroarch/retroarch.cfg "$multi_user_data_folder/$SteamAppUser/config/retroarch/"
+        cp -fv $emuconfigs/retroarch/retroarch-core-options.cfg "$multi_user_data_folder/$SteamAppUser/config/retroarch/"
       else
-        if [[ "$call_source" == "cli" ]]; then
-          printf "You do not appear to be connected to a network with internet access.\n\nThe RetroArch reset process requires some files from the internet to function properly.\n\nPlease retry this process once a network connection is available.\n"
-        fi
+        rm -rf /var/config/retroarch
+        mkdir -p /var/config/retroarch
+        dir_prep "$bios_folder" "/var/config/retroarch/system"
+        dir_prep "$logs_folder/retroarch" "/var/config/retroarch/logs"
+        mkdir -pv /var/config/retroarch/shaders/
+        cp -rf /app/share/libretro/shaders /var/config/retroarch/
+        dir_prep "$rdhome/shaders/retroarch" "/var/config/retroarch/shaders"
+        rsync -a --mkpath "/app/share/libretro/cores/" "/var/config/retroarch/cores/"
+        cp -fv $emuconfigs/retroarch/retroarch.cfg /var/config/retroarch/
+        cp -fv $emuconfigs/retroarch/retroarch-core-options.cfg /var/config/retroarch/
+        rsync -a --mkpath "$emuconfigs/retroarch/core-overrides/" "/var/config/retroarch/config/"
+        rsync -a --mkpath "$emuconfigs/defaults/retrodeck/presets/remaps/" "/var/config/retroarch/config/remaps/"
+        dir_prep "$borders_folder" "/var/config/retroarch/overlays/borders"
+        rsync -a --mkpath "/app/retrodeck/emu-configs/retroarch/borders/" "/var/config/retroarch/overlays/borders/"
+        set_setting_value "$raconf" "savefile_directory" "$saves_folder" "retroarch"
+        set_setting_value "$raconf" "savestate_directory" "$states_folder" "retroarch"
+        set_setting_value "$raconf" "screenshot_directory" "$screenshots_folder" "retroarch"
+        set_setting_value "$raconf" "log_dir" "$logs_folder" "retroarch"
       fi
+
+      # PPSSPP
+      echo "--------------------------------"
+      echo "Initializing PPSSPP_LIBRETRO"
+      echo "--------------------------------"
+      if [ -d $bios_folder/PPSSPP/flash0/font ]
+      then
+        mv -fv $bios_folder/PPSSPP/flash0/font $bios_folder/PPSSPP/flash0/font.bak
+      fi
+      cp -rf "/app/retrodeck/extras/PPSSPP" "$bios_folder/PPSSPP"
+      if [ -d $bios_folder/PPSSPP/flash0/font.bak ]
+      then
+        mv -f $bios_folder/PPSSPP/flash0/font.bak $bios_folder/PPSSPP/flash0/font
+      fi
+
+      # MSX / SVI / ColecoVision / SG-1000
+      echo "-----------------------------------------------------------"
+      echo "Initializing MSX / SVI / ColecoVision / SG-1000 LIBRETRO"
+      echo "-----------------------------------------------------------"
+      cp -rf "/app/retrodeck/extras/MSX/Databases" "$bios_folder/Databases"
+      cp -rf "/app/retrodeck/extras/MSX/Machines" "$bios_folder/Machines"
     fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
       dir_prep "$bios_folder" "/var/config/retroarch/system"
@@ -147,8 +133,8 @@ prepare_emulator() {
         rm -rf /var/config/Cemu
         mkdir -pv /var/config/Cemu/
         cp -fr "$emuconfigs/cemu/"* /var/config/Cemu/
-        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/Cemu/settings.ini" "mlc_path" "$bios_folder/cemu" "cemu"
-        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/Cemu/settings.ini" "Entry" "$roms_folder/wiiu" "cemu" "GamePaths"
+        set_setting_value "$cemuconf" "mlc_path" "$bios_folder/cemu" "cemu"
+        set_setting_value "$cemuconf" "Entry" "$roms_folder/wiiu" "cemu" "GamePaths"
       fi
       # Shared actions
       dir_prep "$saves_folder/wiiu/cemu" "$bios_folder/cemu/usr/save"
@@ -514,46 +500,38 @@ prepare_emulator() {
 
   if [[ "$emulator" =~ ^(xemu|XEMU|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
-      if [[ $(check_network_connectivity) == "true" ]]; then
-        echo "------------------------"
-        echo "Initializing XEMU"
-        echo "------------------------"
-        if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
-          rm -rf /var/config/xemu
-          rm -rf /var/data/xemu
-          rm -rf "$multi_user_data_folder/$SteamAppUser/config/xemu"
-          mkdir -pv "$multi_user_data_folder/$SteamAppUser/config/xemu/"
-          cp -fv $emuconfigs/xemu/xemu.toml "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml"
-          set_setting_value "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml" "screenshot_dir" "'$screenshots_folder'" "xemu" "General"
-          set_setting_value "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml" "bootrom_path" "'$bios_folder/mcpx_1.0.bin'" "xemu" "sys.files"
-          set_setting_value "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml" "flashrom_path" "'$bios_folder/Complex.bin'" "xemu" "sys.files"
-          set_setting_value "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml" "eeprom_path" "$saves_folder/xbox/xemu/xbox-eeprom.bin" "xemu" "sys.files"
-          set_setting_value "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml" "hdd_path" "'$bios_folder/xbox_hdd.qcow2'" "xemu" "sys.files"
-          dir_prep "$multi_user_data_folder/$SteamAppUser/config/xemu" "/var/config/xemu" # Creating config folder in /var/config for consistentcy and linking back to original location where emulator will look
-          dir_prep "$multi_user_data_folder/$SteamAppUser/config/xemu" "/var/data/xemu"
-        else # Single-user actions
-          rm -rf /var/config/xemu
-          rm -rf /var/data/xemu
-          dir_prep "/var/config/xemu" "/var/data/xemu" # Creating config folder in /var/config for consistentcy and linking back to original location where emulator will look
-          cp -fv $emuconfigs/xemu/xemu.toml "$xemuconf"
-          set_setting_value "$xemuconf" "screenshot_dir" "'$screenshots_folder'" "xemu" "General"
-          set_setting_value "$xemuconf" "bootrom_path" "'$bios_folder/mcpx_1.0.bin'" "xemu" "sys.files"
-          set_setting_value "$xemuconf" "flashrom_path" "'$bios_folder/Complex.bin'" "xemu" "sys.files"
-          set_setting_value "$xemuconf" "eeprom_path" "$saves_folder/xbox/xemu/xbox-eeprom.bin" "xemu" "sys.files"
-          set_setting_value "$xemuconf" "hdd_path" "'$bios_folder/xbox_hdd.qcow2'" "xemu" "sys.files"
-        fi # Shared actions
-        mkdir -pv $saves_folder/xbox/xemu/
-        # Preparing HD dummy Image if the image is not found
-        if [ ! -f $bios_folder/xbox_hdd.qcow2 ]
-        then
-          wget "https://github.com/mborgerson/xemu-hdd-image/releases/latest/download/xbox_hdd.qcow2.zip" -P $bios_folder/
-          unzip -q $bios_folder/xbox_hdd.qcow2.zip -d $bios_folder/
-          rm -rfv $bios_folder/xbox_hdd.qcow2.zip
-        fi
-      else
-        if [[ "$call_source" == "cli" ]]; then
-          printf "You do not appear to be connected to a network with internet access.\n\nThe Xemu reset process requires some files from the internet to function properly.\n\nPlease retry this process once a network connection is available.\n"
-        fi
+      echo "------------------------"
+      echo "Initializing XEMU"
+      echo "------------------------"
+      if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
+        rm -rf /var/config/xemu
+        rm -rf /var/data/xemu
+        rm -rf "$multi_user_data_folder/$SteamAppUser/config/xemu"
+        mkdir -pv "$multi_user_data_folder/$SteamAppUser/config/xemu/"
+        cp -fv $emuconfigs/xemu/xemu.toml "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml" "screenshot_dir" "'$screenshots_folder'" "xemu" "General"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml" "bootrom_path" "'$bios_folder/mcpx_1.0.bin'" "xemu" "sys.files"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml" "flashrom_path" "'$bios_folder/Complex.bin'" "xemu" "sys.files"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml" "eeprom_path" "$saves_folder/xbox/xemu/xbox-eeprom.bin" "xemu" "sys.files"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml" "hdd_path" "'$bios_folder/xbox_hdd.qcow2'" "xemu" "sys.files"
+        dir_prep "$multi_user_data_folder/$SteamAppUser/config/xemu" "/var/config/xemu" # Creating config folder in /var/config for consistentcy and linking back to original location where emulator will look
+        dir_prep "$multi_user_data_folder/$SteamAppUser/config/xemu" "/var/data/xemu"
+      else # Single-user actions
+        rm -rf /var/config/xemu
+        rm -rf /var/data/xemu
+        dir_prep "/var/config/xemu" "/var/data/xemu" # Creating config folder in /var/config for consistentcy and linking back to original location where emulator will look
+        cp -fv $emuconfigs/xemu/xemu.toml "$xemuconf"
+        set_setting_value "$xemuconf" "screenshot_dir" "'$screenshots_folder'" "xemu" "General"
+        set_setting_value "$xemuconf" "bootrom_path" "'$bios_folder/mcpx_1.0.bin'" "xemu" "sys.files"
+        set_setting_value "$xemuconf" "flashrom_path" "'$bios_folder/Complex.bin'" "xemu" "sys.files"
+        set_setting_value "$xemuconf" "eeprom_path" "$saves_folder/xbox/xemu/xbox-eeprom.bin" "xemu" "sys.files"
+        set_setting_value "$xemuconf" "hdd_path" "'$bios_folder/xbox_hdd.qcow2'" "xemu" "sys.files"
+      fi # Shared actions
+      mkdir -pv $saves_folder/xbox/xemu/
+      # Preparing HD dummy Image if the image is not found
+      if [ ! -f $bios_folder/xbox_hdd.qcow2 ]
+      then
+        cp -f "/app/retrodeck/extras/XEMU/xbox_hdd.qcow2" "$bios_folder/xbox_hdd.qcow2"
       fi
     fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands

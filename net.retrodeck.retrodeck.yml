@@ -463,6 +463,27 @@ modules:
         url: https://buildbot.libretro.com/nightly/linux/x86_64/latest/sameduck_libretro.so.zip
         sha256: SAMEDUCKSHAPLACEHOLDER
 
+  - name: ppsspp-bios
+    buildsystem: simple
+    build-commands:
+    - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/PPSSPP
+    - mv -f "ppsspp-master/assets/"* "${FLATPAK_DEST}/retrodeck/extras/PPSSPP/"
+    sources:
+      - type: archive
+        url: https://github.com/hrydgard/ppsspp/archive/refs/heads/master.zip
+        sha256: PPSSPPBIOSHASHPLACEHOLDER
+
+  - name: msx-bios
+    buildsystem: simple
+    build-commands:
+    - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/MSX
+    - mv -f Databases ${FLATPAK_DEST}/retrodeck/extras/MSX/Databases
+    - mv -f Machines ${FLATPAK_DEST}/retrodeck/extras/MSX/Machines
+    sources:
+      - type: archive
+        url: http://bluemsx.msxblue.com/rel_download/blueMSXv282full.zip
+        sha256: MSXBIOSHASHPLACEHOLDER
+  
   - name: doom-shareware
     buildsystem: simple
     build-commands:
@@ -789,6 +810,16 @@ modules:
           tag-query: .tag_name
           timestamp-query: .published_at
           version-query: .tag_name
+
+  - name: xemu-dummy-hdd
+    buildsystem: simple
+    build-commands:
+    - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/XEMU
+    - mv -f "xbox_hdd.qcow2" "${FLATPAK_DEST}/retrodeck/extras/XEMU/xbox_hdd.qcow2"
+    sources:
+      - type: archive
+        url: https://github.com/mborgerson/xemu-hdd-image/releases/latest/download/xbox_hdd.qcow2.zip
+        sha256: XEMUHDDHASHPLACEHOLDER
 
   # XEMU - END
 

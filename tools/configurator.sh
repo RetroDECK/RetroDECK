@@ -943,13 +943,8 @@ configurator_reset_dialog() {
 
     "RetroArch" | "XEMU" ) # Emulators that require network access
       if [[ $(configurator_reset_confirmation_dialog "$emulator_to_reset" "Are you sure you want to reset the $emulator_to_reset emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
-        if [[ $(check_network_connectivity) == "true" ]]; then
-          prepare_emulator "reset" "$emulator_to_reset" "configurator"
-          configurator_process_complete_dialog "resetting $emulator_to_reset"
-        else
-          configurator_generic_dialog "RetroDeck Configurator - RetroDECK: Reset" "You do not appear to be connected to a network with internet access.\n\nThe $emulator_to_reset reset process requires some files from the internet to function properly.\n\nPlease retry this process once a network connection is available."
-          configurator_reset_dialog
-        fi
+        prepare_emulator "reset" "$emulator_to_reset" "configurator"
+        configurator_process_complete_dialog "resetting $emulator_to_reset"
       else
         configurator_generic_dialog "RetroDeck Configurator - RetroDECK: Reset" "Reset process cancelled."
         configurator_reset_dialog
@@ -975,19 +970,14 @@ configurator_reset_dialog() {
 
 "Reset All Emulators" )
   if [[ $(configurator_reset_confirmation_dialog "all emulators" "Are you sure you want to reset all emulators to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
-    if [[ $(check_network_connectivity) == "true" ]]; then
-      (
-      prepare_emulator "reset" "all"
-      ) |
-      zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
-      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Finishing Initialization" \
-      --text="RetroDECK is finishing the reset process, please wait."
-      configurator_process_complete_dialog "resetting all emulators"
-    else
-      configurator_generic_dialog "RetroDeck Configurator - RetroDECK: Reset" "You do not appear to be connected to a network with internet access.\n\nThe all-emulator reset process requires some files from the internet to function properly.\n\nPlease retry this process once a network connection is available."
-      configurator_reset_dialog
-    fi
+    (
+    prepare_emulator "reset" "all"
+    ) |
+    zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Finishing Initialization" \
+    --text="RetroDECK is finishing the reset process, please wait."
+    configurator_process_complete_dialog "resetting all emulators"
   else
     configurator_generic_dialog "RetroDeck Configurator - RetroDECK: Reset" "Reset process cancelled."
     configurator_reset_dialog
