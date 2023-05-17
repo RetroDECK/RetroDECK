@@ -182,6 +182,7 @@ post_update() {
 
     set_setting_value "$es_settings" "ROMDirectory" "$roms_folder" "es_settings"
     set_setting_value "$es_settings" "MediaDirectory" "$media_folder" "es_settings"
+    sed -i '$ a <string name="UserThemeDirectory" value="" />' "$es_settings" # Add new default line to existing file
     set_setting_value "$es_settings" "UserThemeDirectory" "$themes_folder" "es_settings"
     unlink "/var/config/emulationstation/ROMs"
     unlink "/var/config/emulationstation/.emulationstation/downloaded_media"
@@ -191,6 +192,7 @@ post_update() {
     set_setting_value "$raconf" "savestate_auto_save" "false" "retroarch"
     set_setting_value "$pcsx2conf" "SaveStateOnShutdown" "false" "pcsx2" "EmuCore"
     set_setting_value "$duckstationconf" "SaveStateOnExit" "false" "duckstation" "Main"
+    set_setting_value "$duckstationconf" "Enabled" "false" "duckstation" "Cheevos"
 
     prepare_emulator "reset" "cemu"
   fi
