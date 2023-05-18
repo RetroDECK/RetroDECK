@@ -2,7 +2,7 @@
 
 set_setting_value() {
   # Function for editing settings
-  # USAGE: set_setting_value $setting_file "$setting_name" "$new_setting_value" $system $section_name(optional)
+  # USAGE: set_setting_value "$setting_file" "$setting_name" "$new_setting_value" "$system" "$section_name(optional)"
 
   local setting_name_to_change=$(sed -e 's^\\^\\\\^g;s^`^\\`^g' <<< "$2")
   local setting_value_to_change=$(sed -e 's^\\^\\\\^g;s^`^\\`^g' <<< "$3")

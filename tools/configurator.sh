@@ -12,7 +12,8 @@ source /app/libexec/global.sh
 #     - Presets & Settings
 #       - Global: Presets & Settings
 #         - Enable/Disable widescreen
-#         - Log in to RetroAchievements
+#         - RetroAchievements Login
+#         - RetroAchievements Logout
 #         - Enable/Disable RetroAchievements Hardcore Mode
 #       - RetroArch: Presets & Settings
 #         - Enable/Disable borders
@@ -53,7 +54,6 @@ source /app/libexec/global.sh
 #         - Compress Multiple Games - All Formats
 #         - Compress All Games
 #       - Install: RetroDECK Controller Profile
-#       - Install: RetroDECK Starter Pack
 #       - Install: PS3 firmware
 #     - RetroDECK: Troubleshooting
 #       - Backup: RetroDECK Userdata
@@ -85,6 +85,8 @@ source /app/libexec/global.sh
 #       - Change Update channel
 #       - Change Update check setting
 #       - Browse the wiki
+#       - USB Import tool
+#       - Install: RetroDECK Starter Pack
 
 # DIALOG TREE FUNCTIONS
 
@@ -178,7 +180,7 @@ configurator_global_presets_and_settings_dialog() {
   --column="Choice" --column="Action" \
   "Enable/Disable Widescreen" "Enable or disable widescreen in supported systems" \
   "RetroAchievements Login" "Log into the RetroAchievements service in supported systems" \
-  "RetroAchievements Logout" "Disable RetroAchievements service in supported systems" \
+  "RetroAchievements Logout" "Disable RetroAchievements service in ALL supported systems" \
   "RetroAchievements Hardcore Mode" "Enable RetroAchievements hardcore mode (no cheats, rewind, save states etc.) in supported emulators" \
   "Nintendo Button Layout" "Enable or disable Nintendo button layout (swapped A/B and X/Y) in supported systems" )
 
@@ -202,7 +204,12 @@ configurator_global_presets_and_settings_dialog() {
   ;;
 
   "RetroAchievements Logout" ) # This is a workaround to allow disabling cheevos without having to enter login credentials
-    change_preset_dialog "cheevos"
+    local cheevos_emulators=$(sed -n '/\[cheevos\]/, /\[/{ /\[cheevos\]/! { /\[/! p } }' $rd_conf | sed '/^$/d')
+    for emulator in $cheevos_emulators; do
+      set_setting_value "$rdconf" "$emulator" "false" "retrodeck" "cheevos"
+      build_preset_config "$emulator" "cheevos"
+    done
+    configurator_generic_dialog "RetroDECK Configurator Utility - RetroAchievements" "RetroAchievements has been disabled in all supported systems."
     configurator_global_presets_and_settings_dialog
   ;;
 
@@ -484,7 +491,6 @@ configurator_retrodeck_tools_dialog() {
   "RetroDECK: Move Tool" "Move RetroDECK folders between internal/SD card or to a custom location" \
   "RetroDECK: Compression Tool" "Compress games for systems that support it" \
   "Install: RetroDECK Controller Profile" "Install the optional custom RetroDECK controller profile" \
-  "Install: RetroDECK Starter Pack" "Install the optional RetroDECK starter pack" \
   "Install: PS3 Firmware" "Download and install PS3 firmware for use with the RPCS3 emulator" )
 
   case $choice in
@@ -503,13 +509,6 @@ configurator_retrodeck_tools_dialog() {
     if [[ $(configurator_generic_question_dialog "Install: RetroDECK Controller Profile" "Would you like to install the official RetroDECK controller profile?") == "true" ]]; then
       install_retrodeck_controller_profile
       configurator_generic_dialog "RetroDECK Configurator - Install: RetroDECK Controller Profile" "The RetroDECK controller profile install is complete.\nSee the Wiki for more details on how to use it to its fullest potential!"
-    fi
-    configurator_retrodeck_tools_dialog
-  ;;
-
-  "Install: RetroDECK Starter Pack" )
-    if [[ $(configurator_generic_question_dialog "Install: RetroDECK Starter Pack" "The RetroDECK creators have put together a collection of classic retro games you might enjoy!\n\nWould you like to have them automatically added to your library?") == "true" ]]; then
-      install_retrodeck_starterpack
     fi
     configurator_retrodeck_tools_dialog
   ;;
@@ -1072,7 +1071,8 @@ configurator_developer_dialog() {
   "Change Update Channel" "Change between normal and cooker builds" \
   "Change Update Check Setting" "Enable or disable online checks for new versions of RetroDECK" \
   "Browse the Wiki" "Browse the RetroDECK wiki online" \
-  "USB Import" "Prepare a USB device for ROMs or import an existing collection" )
+  "USB Import" "Prepare a USB device for ROMs or import an existing collection" \
+  "Install RetroDECK Starter Pack" "Install the optional RetroDECK starter pack" )
 
   case $choice in
 
@@ -1094,6 +1094,13 @@ configurator_developer_dialog() {
 
   "USB Import" )
     configurator_usb_import_dialog
+  ;;
+
+  "Install RetroDECK Starter Pack" )
+    if [[ $(configurator_generic_question_dialog "Install: RetroDECK Starter Pack" "The RetroDECK creators have put together a collection of classic retro games you might enjoy!\n\nWould you like to have them automatically added to your library?") == "true" ]]; then
+      install_retrodeck_starterpack
+    fi
+    configurator_developer_dialog
   ;;
 
   "" ) # No selection made or Back button clicked
@@ -1288,5 +1295,9 @@ launch_retrodeck_after_configurator_close() {
 trap 'launch_retrodeck_after_configurator_close' EXIT
 
 # START THE CONFIGURATOR
+
+if [[ "$1" == "cli" ]]; then
+  launched_from_cli="true"
+fi
 
 configurator_welcome_dialog

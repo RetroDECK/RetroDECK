@@ -113,6 +113,12 @@ post_update() {
     dir_prep "$mods_folder/Citra" "/var/data/citra-emu/load/mods"
     dir_prep "$texture_packs_folder/Citra" "/var/data/citra-emu/load/textures"
     dir_prep "$mods_folder/Yuzu" "/var/data/yuzu/load"
+    dir_prep "$texture_packs_folder/RetroArch-Mesen" "/var/config/retroarch/system/HdPacks"
+    dir_prep "$texture_packs_folder/PPSSPP" "/var/config/ppsspp/PSP/TEXTURES"
+    dir_prep "$texture_packs_folder/PCSX2" "/var/config/PCSX2/textures"
+    dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/cache" "/var/config/retroarch/system/Mupen64Plus/cache"
+    dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/hires_texture" "/var/config/retroarch/system/Mupen64Plus/hires_texture"
+    dir_prep "$texture_packs_folder/Duckstation" "/var/config/duckstation/textures"
 
     dir_prep "$rdhome/gamelists" "/var/config/emulationstation/.emulationstation/gamelists"
 
