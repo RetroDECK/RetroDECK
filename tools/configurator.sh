@@ -1289,22 +1289,6 @@ configurator_usb_import_dialog() {
 
 }
 
-# Functions to run at exit, without keeping Configurator running in background
-
-launch_retrodeck_after_configurator_close() {
-  if [[ $(check_desktop_mode) == "true" && "$launched_from_cli" == "true" ]]; then
-      if [[ $(configurator_generic_question_dialog "RetroDECK Configurator" "Would you like to launch RetroDECK after closing the Configurator?") == "true" ]]; then
-        start_retrodeck
-      fi
-  fi
-}
-
-trap 'launch_retrodeck_after_configurator_close' EXIT
-
 # START THE CONFIGURATOR
-
-if [[ "$1" == "cli" ]]; then
-  launched_from_cli="true"
-fi
 
 configurator_welcome_dialog
