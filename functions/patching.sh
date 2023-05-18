@@ -267,7 +267,9 @@ generate_single_patch() {
   local patch_file="$3"
   local system="$4"
 
-  rm "$patch_file" # Remove old patch file (maybe change this to create a backup instead?)
+  if [[ -f "$patch_file" ]]; then
+    rm "$patch_file" # Remove old patch file (maybe change this to create a backup instead?)
+  fi
 
   while read -r current_setting_line; # Look for changes from the original file to the modified one
   do
