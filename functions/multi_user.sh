@@ -161,10 +161,10 @@ multi_user_return_to_single_user() {
   mv -f "$multi_user_data_folder/$SteamAppUser/config/retroarch/retroarch-core-options.cfg" "/var/config/retroarch/retroarch-core-options.cfg"
   # XEMU one-offs, because it stores its config in /var/data, not /var/config like everything else
   unlink "/var/config/xemu"
-  unlink "/var/data/xemu"
+  unlink "/var/data/xemu/xemu"
   mkdir -p "/var/config/xemu"
   mv -f "$multi_user_data_folder/$single_user/config/xemu"/{.[!.],}* "/var/config/xemu"
-  dir_prep "/var/config/xemu" "/var/data/xemu"
+  dir_prep "/var/config/xemu" "/var/data/xemu/xemu"
   mkdir -p "$saves_folder"
   mkdir -p "$states_folder"
   mv -f "$multi_user_data_folder/$single_user/saves"/{.[!.],}* "$saves_folder"
