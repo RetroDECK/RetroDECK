@@ -82,7 +82,9 @@ post_update() {
     # - Move Dolphin and Primehack save folder names
     # - Move PPSSPP saves/states to appropriate folders
     # - Set ESDE user themes folder directly
-    # - Disable auto-save/load in RA / PCSX2 / Duckstation for proper preset functionality
+    # - Disable auto-save/load in existing RA / PCSX2 / Duckstation installs for proper preset functionality
+    # - Disable ask-on-exit in existing Citra / Dolphin / Duckstation / Primehack installs for proper preset functionality
+    # - Disable auto-load-state in existing PPSSPP installs for proper preset functionality
     # - Init Cemu as it is a new emulator
 
     update_rd_conf # Expand retrodeck.cfg to latest template
@@ -199,6 +201,14 @@ post_update() {
     set_setting_value "$pcsx2conf" "SaveStateOnShutdown" "false" "pcsx2" "EmuCore"
     set_setting_value "$duckstationconf" "SaveStateOnExit" "false" "duckstation" "Main"
     set_setting_value "$duckstationconf" "Enabled" "false" "duckstation" "Cheevos"
+
+    set_setting_value "$citraconf" "confirmClose" "false" "citra" "UI"
+    set_setting_value "$citraconf" "confirmClose\default" "false" "citra" "UI"
+    set_setting_value "$dolphinconf" "ConfirmStop" "False" "dolphin" "Interface"
+    set_setting_value "$duckstationconf" "ConfirmPowerOff" "false" "duckstation" "Main"
+    set_setting_value "$primehackconf" "ConfirmStop" "False" "primehack" "Interface"
+    
+    set_setting_value "$ppssppconf" "AutoLoadSaveState" "0" "ppsspp" "General"
 
     prepare_emulator "reset" "cemu"
   fi

@@ -52,7 +52,6 @@ pretty_system_names_reference_list="$emuconfigs/defaults/retrodeck/reference_lis
 citraconf="/var/config/citra-emu/qt-config.ini"
 duckstationconf="/var/config/duckstation/settings.ini"
 melondsconf="/var/config/melonDS/melonDS.ini"
-ppssppconf="/var/config/ppsspp/PSP/SYSTEM/ppsspp.ini"
 ryujinxconf="/var/config/Ryujinx/Config.json"
 xemuconf="/var/config/xemu/xemu.toml"
 yuzuconf="/var/config/yuzu/qt-config.ini"
@@ -85,6 +84,11 @@ pcsx2conf="/var/config/PCSX2/inis/PCSX2.ini"
 pcsx2gsconf="/var/config/PCSX2/inis/GS.ini" # This file should be deprecated since moving to PCSX2-QT
 pcsx2uiconf="/var/config/PCSX2/inis/PCSX2_ui.ini" # This file should be deprecated since moving to PCSX2-QT
 pcsx2vmconf="/var/config/PCSX2/inis/PCSX2_vm.ini" # This file should be deprecated since moving to PCSX2-QT
+
+# PPSSPPDL config files
+
+ppssppconf="/var/config/ppsspp/PSP/SYSTEM/ppsspp.ini"
+ppssppcontrolsconf="/var/config/ppsspp/PSP/SYSTEM/controls.ini"
 
 # Primehack config files
 

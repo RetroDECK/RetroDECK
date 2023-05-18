@@ -11,7 +11,8 @@ source /app/libexec/global.sh
 # Welcome
 #     - Presets & Settings
 #       - Global: Presets & Settings
-#         - Enable/Disable widescreen
+#         - Enable/Disable Widescreen
+#         - Enable/Disable Ask-To-Exit
 #         - RetroAchievements Login
 #         - RetroAchievements Logout
 #         - Enable/Disable RetroAchievements Hardcore Mode
@@ -179,6 +180,7 @@ configurator_global_presets_and_settings_dialog() {
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
   "Enable/Disable Widescreen" "Enable or disable widescreen in supported systems" \
+  "Enable/Disable Ask-to-Exit" "Enable or disable emulators confirming when quitting in supported systems" \
   "RetroAchievements Login" "Log into the RetroAchievements service in supported systems" \
   "RetroAchievements Logout" "Disable RetroAchievements service in ALL supported systems" \
   "RetroAchievements Hardcore Mode" "Enable RetroAchievements hardcore mode (no cheats, rewind, save states etc.) in supported emulators" \
@@ -188,6 +190,11 @@ configurator_global_presets_and_settings_dialog() {
 
   "Enable/Disable Widescreen" )
     change_preset_dialog "widescreen"
+    configurator_global_presets_and_settings_dialog
+  ;;
+
+  "Enable/Disable Ask-to-Exit" )
+    change_preset_dialog "ask_to_exit"
     configurator_global_presets_and_settings_dialog
   ;;
 
