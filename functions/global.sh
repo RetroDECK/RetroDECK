@@ -138,6 +138,7 @@ if [[ ! -f "$rd_conf" ]]; then
   if grep -qF "cooker" <<< $hard_version; then # If newly-installed version is a "cooker" build
     set_setting_value $rd_conf "update_repo" "RetroDECK-cooker" retrodeck "options"
     set_setting_value $rd_conf "update_check" "true" retrodeck "options"
+    set_setting_value $rd_conf "developer_options" "true" retrodeck "options"
   fi
 
   echo "Setting config file permissions"
@@ -155,6 +156,7 @@ else
   if grep -qF "cooker" <<< $hard_version; then # If newly-installed version is a "cooker" build
     set_setting_value $rd_conf "update_repo" "RetroDECK-cooker" retrodeck "options"
     set_setting_value $rd_conf "update_check" "true" retrodeck "options"
+    set_setting_value $rd_conf "developer_options" "true" retrodeck "options"
   fi
 
   conf_read

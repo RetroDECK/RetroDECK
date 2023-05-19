@@ -107,6 +107,9 @@ if [ -f "$lockfile" ]; then
     echo "Config file's version is $version but the actual version is $hard_version"
     if grep -qF "cooker" <<< $hard_version; then # If newly-installed version is a "cooker" build
       configurator_generic_dialog "RetroDECK Cooker Warning" "RUNNING COOKER VERSIONS OF RETRODECK CAN BE EXTREMELY DANGEROUS AND ALL OF YOUR RETRODECK DATA\n(INCLUDING BIOS FILES, BORDERS, DOWNLOADED MEDIA, GAMELISTS, MODS, ROMS, SAVES, STATES, SCREENSHOTS, TEXTURE PACKS AND THEMES)\nARE AT RISK BY CONTINUING!"
+      set_setting_value $rd_conf "update_repo" "RetroDECK-cooker" retrodeck "options"
+      set_setting_value $rd_conf "update_check" "true" retrodeck "options"
+      set_setting_value $rd_conf "developer_options" "true" retrodeck "options"
       cooker_base_version=$(echo $hard_version | cut -d'-' -f2)
       choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Upgrade" --extra-button="Don't Upgrade" --extra-button="Full Wipe and Fresh Install" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -145,6 +148,7 @@ if [ -f "$lockfile" ]; then
         set_setting_value $rd_conf "update_repo" "RetroDECK" retrodeck "options"
         set_setting_value $rd_conf "update_check" "false" retrodeck "options"
         set_setting_value $rd_conf "update_ignore" "" retrodeck "options"
+        set_setting_value $rd_conf "developer_options" "false" retrodeck "options"
       fi
       post_update       # Executing post update script
     fi
