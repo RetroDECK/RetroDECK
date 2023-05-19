@@ -1097,6 +1097,7 @@ configurator_developer_dialog() {
 
   "Browse the Wiki" )
     xdg-open "https://github.com/XargonWan/RetroDECK/wiki"
+    configurator_developer_dialog
   ;;
 
   "USB Import" )
