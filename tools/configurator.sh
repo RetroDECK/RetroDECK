@@ -17,6 +17,7 @@ source /app/libexec/global.sh
 #         - RetroAchievements: Logout
 #         - RetroAchievements: Hardcore Mode
 #         - Swap A/B and X/Y Buttons
+#         - RetroDECK: Change Update Check Setting
 #       - RetroArch: Presets & Settings
 #         - Borders: Enable/Disable
 #         - Rewind: Enable/Disable
@@ -85,7 +86,6 @@ source /app/libexec/global.sh
 #     - Developer Options (Hidden)
 #       - Change Multi-user mode
 #       - Change Update channel
-#       - Change Update check setting
 #       - Browse the wiki
 #       - USB Import tool
 #       - Install: RetroDECK Starter Pack
@@ -180,21 +180,22 @@ configurator_global_presets_and_settings_dialog() {
   choice=$(zenity --list --title="RetroDECK Configurator Utility - Global: Presets & Settings" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
-  "Enable/Disable Widescreen" "Enable or disable widescreen in supported systems" \
-  "Enable/Disable Ask-to-Exit" "Enable or disable emulators confirming when quitting in supported systems" \
+  "Widescreen: Enable/Disable" "Enable or disable widescreen in supported systems" \
+  "Ask-to-Exit: Enable/Disable" "Enable or disable emulators confirming when quitting in supported systems" \
   "RetroAchievements: Login" "Log into the RetroAchievements service in supported systems" \
   "RetroAchievements: Logout" "Disable RetroAchievements service in ALL supported systems" \
   "RetroAchievements: Hardcore Mode" "Enable RetroAchievements hardcore mode (no cheats, rewind, save states etc.) in supported emulators" \
-  "Swap A/B and X/Y Buttons" "Enable or disable a swapped A/B and X/Y button layout in supported systems" )
+  "Swap A/B and X/Y Buttons" "Enable or disable a swapped A/B and X/Y button layout in supported systems" \
+  "RetroDECK: Change Update Check Setting" "Enable or disable online checks for new versions of RetroDECK" )
 
   case $choice in
 
-  "Enable/Disable Widescreen" )
+  "Widescreen: Enable/Disable" )
     change_preset_dialog "widescreen"
     configurator_global_presets_and_settings_dialog
   ;;
 
-  "Enable/Disable Ask-to-Exit" )
+  "Ask-to-Exit: Enable/Disable" )
     change_preset_dialog "ask_to_exit"
     configurator_global_presets_and_settings_dialog
   ;;
@@ -231,11 +232,43 @@ configurator_global_presets_and_settings_dialog() {
     configurator_global_presets_and_settings_dialog
   ;;
 
+  "RetroDECK: Change Update Check Setting" )
+    configurator_online_update_setting_dialog
+  ;;
+
   "" ) # No selection made or Back button clicked
     configurator_presets_and_settings_dialog
   ;;
 
   esac
+}
+
+configurator_online_update_setting_dialog() {
+  if [[ $(get_setting_value $rd_conf "update_check" retrodeck "options") == "true" ]]; then
+    zenity --question \
+    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator - RetroDECK Online Update Check" \
+    --text="Online update checks for RetroDECK are currently enabled.\n\nDo you want to disable them?"
+
+    if [ $? == 0 ] # User clicked "Yes"
+    then
+      set_setting_value $rd_conf "update_check" "false" retrodeck "options"
+    else # User clicked "Cancel"
+      configurator_global_presets_and_settings_dialog
+    fi
+  else
+    zenity --question \
+    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator - RetroDECK Online Update Check" \
+    --text="Online update checks for RetroDECK are currently disabled.\n\nDo you want to enable them?"
+
+    if [ $? == 0 ] # User clicked "Yes"
+    then
+      set_setting_value $rd_conf "update_check" "true" retrodeck "options"
+    else # User clicked "Cancel"
+      configurator_global_presets_and_settings_dialog
+    fi
+  fi
 }
 
 configurator_retroarch_presets_and_settings_dialog() {
@@ -1077,7 +1110,6 @@ configurator_developer_dialog() {
   --column="Choice" --column="Description" \
   "Change Multi-user mode" "Enable or disable multi-user support" \
   "Change Update Channel" "Change between normal and cooker builds" \
-  "Change Update Check Setting" "Enable or disable online checks for new versions of RetroDECK" \
   "Browse the Wiki" "Browse the RetroDECK wiki online" \
   "USB Import" "Prepare a USB device for ROMs or import an existing collection" \
   "Install RetroDECK Starter Pack" "Install the optional RetroDECK starter pack" )
@@ -1090,10 +1122,6 @@ configurator_developer_dialog() {
 
   "Change Update Channel" )
     configurator_online_update_channel_dialog
-  ;;
-
-  "Change Update Check Setting" )
-    configurator_online_update_setting_dialog
   ;;
 
   "Browse the Wiki" )
@@ -1168,34 +1196,6 @@ configurator_online_update_channel_dialog() {
     if [ $? == 0 ] # User clicked "Yes"
     then
       set_setting_value $rd_conf "update_repo" "RetroDECK" retrodeck "options"
-    else # User clicked "Cancel"
-      configurator_developer_dialog
-    fi
-  fi
-}
-
-configurator_online_update_setting_dialog() {
-  if [[ $(get_setting_value $rd_conf "update_check" retrodeck "options") == "true" ]]; then
-    zenity --question \
-    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - RetroDECK Online Update Check" \
-    --text="Online update checks for RetroDECK are currently enabled.\n\nDo you want to disable them?"
-
-    if [ $? == 0 ] # User clicked "Yes"
-    then
-      set_setting_value $rd_conf "update_check" "false" retrodeck "options"
-    else # User clicked "Cancel"
-      configurator_developer_dialog
-    fi
-  else
-    zenity --question \
-    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - RetroDECK Online Update Check" \
-    --text="Online update checks for RetroDECK are currently disabled.\n\nDo you want to enable them?"
-
-    if [ $? == 0 ] # User clicked "Yes"
-    then
-      set_setting_value $rd_conf "update_check" "true" retrodeck "options"
     else # User clicked "Cancel"
       configurator_developer_dialog
     fi
