@@ -11,14 +11,16 @@ source /app/libexec/global.sh
 # Welcome
 #     - Presets & Settings
 #       - Global: Presets & Settings
-#         - Enable/Disable Widescreen
-#         - Enable/Disable Ask-To-Exit
-#         - RetroAchievements Login
-#         - RetroAchievements Logout
-#         - Enable/Disable RetroAchievements Hardcore Mode
+#         - Widescreen: Enable/Disable
+#         - Ask-To-Exit: Enable/Disable
+#         - RetroAchievements: Login
+#         - RetroAchievements: Logout
+#         - RetroAchievements: Hardcore Mode
+#         - Swap A/B and X/Y Buttons
+#         - RetroDECK: Change Update Check Setting
 #       - RetroArch: Presets & Settings
-#         - Enable/Disable borders
-#         - Enable/Disable Rewind Setting
+#         - Borders: Enable/Disable
+#         - Rewind: Enable/Disable
 #       - Wii & GameCube: Presets & Settings
 #         - Dolphin Textures: Universal Dynamic Input
 #         - Primehack Textures: Universal Dynamic Input
@@ -35,8 +37,8 @@ source /app/libexec/global.sh
 #       - RPCS3
 #       - XEMU
 #       - Yuzu
-#     - RetroDECK: Tools
-#       - RetroDECK: Move Tool
+#     - Tools
+#       - Tool: Move Folders
 #         - Move all of RetroDECK
 #         - Move ROMs folder
 #         - Move BIOS folder
@@ -47,16 +49,16 @@ source /app/libexec/global.sh
 #         - Move Screenshots folder
 #         - Move Mods folder
 #         - Move Texture Packs folder
-#       - RetroDECK: Compression Tool
+#       - Tool: Compress Games
 #         - Compress Single Game
 #         - Compress Multiple Games - CHD
 #         - Compress Multiple Games - ZIP
 #         - Compress Multiple Games - RVZ
 #         - Compress Multiple Games - All Formats
 #         - Compress All Games
-#       - Install: RetroDECK Controller Profile
+#       - Install: RetroDECK SD Controller Profile
 #       - Install: PS3 firmware
-#     - RetroDECK: Troubleshooting
+#     - Troubleshooting
 #       - Backup: RetroDECK Userdata
 #       - Check & Verify: BIOS
 #       - Check & Verify: Multi-file structure
@@ -84,7 +86,6 @@ source /app/libexec/global.sh
 #     - Developer Options (Hidden)
 #       - Change Multi-user mode
 #       - Change Update channel
-#       - Change Update check setting
 #       - Browse the wiki
 #       - USB Import tool
 #       - Install: RetroDECK Starter Pack
@@ -179,26 +180,27 @@ configurator_global_presets_and_settings_dialog() {
   choice=$(zenity --list --title="RetroDECK Configurator Utility - Global: Presets & Settings" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
-  "Enable/Disable Widescreen" "Enable or disable widescreen in supported systems" \
-  "Enable/Disable Ask-to-Exit" "Enable or disable emulators confirming when quitting in supported systems" \
-  "RetroAchievements Login" "Log into the RetroAchievements service in supported systems" \
-  "RetroAchievements Logout" "Disable RetroAchievements service in ALL supported systems" \
-  "RetroAchievements Hardcore Mode" "Enable RetroAchievements hardcore mode (no cheats, rewind, save states etc.) in supported emulators" \
-  "Nintendo Button Layout" "Enable or disable Nintendo button layout (swapped A/B and X/Y) in supported systems" )
+  "Widescreen: Enable/Disable" "Enable or disable widescreen in supported systems" \
+  "Ask-to-Exit: Enable/Disable" "Enable or disable emulators confirming when quitting in supported systems" \
+  "RetroAchievements: Login" "Log into the RetroAchievements service in supported systems" \
+  "RetroAchievements: Logout" "Disable RetroAchievements service in ALL supported systems" \
+  "RetroAchievements: Hardcore Mode" "Enable RetroAchievements hardcore mode (no cheats, rewind, save states etc.) in supported emulators" \
+  "Swap A/B and X/Y Buttons" "Enable or disable a swapped A/B and X/Y button layout in supported systems" \
+  "RetroDECK: Change Update Check Setting" "Enable or disable online checks for new versions of RetroDECK" )
 
   case $choice in
 
-  "Enable/Disable Widescreen" )
+  "Widescreen: Enable/Disable" )
     change_preset_dialog "widescreen"
     configurator_global_presets_and_settings_dialog
   ;;
 
-  "Enable/Disable Ask-to-Exit" )
+  "Ask-to-Exit: Enable/Disable" )
     change_preset_dialog "ask_to_exit"
     configurator_global_presets_and_settings_dialog
   ;;
 
-  "RetroAchievements Login" )
+  "RetroAchievements: Login" )
     local cheevos_creds=$(get_cheevos_token_dialog)
     if [[ ! "$cheevos_creds" == "failed" ]]; then
       configurator_generic_dialog "RetroDECK Configurator Utility - RetroAchievements" "RetroAchievements login successful, please select systems you would like to enable achievements for in the next dialog."
@@ -210,7 +212,7 @@ configurator_global_presets_and_settings_dialog() {
     configurator_global_presets_and_settings_dialog
   ;;
 
-  "RetroAchievements Logout" ) # This is a workaround to allow disabling cheevos without having to enter login credentials
+  "RetroAchievements: Logout" ) # This is a workaround to allow disabling cheevos without having to enter login credentials
     local cheevos_emulators=$(sed -n '/\[cheevos\]/, /\[/{ /\[cheevos\]/! { /\[/! p } }' $rd_conf | sed '/^$/d')
     for emulator in $cheevos_emulators; do
       set_setting_value "$rdconf" "$emulator" "false" "retrodeck" "cheevos"
@@ -220,14 +222,18 @@ configurator_global_presets_and_settings_dialog() {
     configurator_global_presets_and_settings_dialog
   ;;
 
-  "RetroAchievements Hardcore Mode" )
+  "RetroAchievements: Hardcore Mode" )
     change_preset_dialog "cheevos_hardcore"
     configurator_global_presets_and_settings_dialog
   ;;
 
-  "Nintendo Button Layout" )
+  "Swap A/B and X/Y Buttons" )
     change_preset_dialog "nintendo_button_layout"
     configurator_global_presets_and_settings_dialog
+  ;;
+
+  "RetroDECK: Change Update Check Setting" )
+    configurator_online_update_setting_dialog
   ;;
 
   "" ) # No selection made or Back button clicked
@@ -237,21 +243,49 @@ configurator_global_presets_and_settings_dialog() {
   esac
 }
 
+configurator_online_update_setting_dialog() {
+  if [[ $(get_setting_value $rd_conf "update_check" retrodeck "options") == "true" ]]; then
+    zenity --question \
+    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator - RetroDECK Online Update Check" \
+    --text="Online update checks for RetroDECK are currently enabled.\n\nDo you want to disable them?"
+
+    if [ $? == 0 ] # User clicked "Yes"
+    then
+      set_setting_value $rd_conf "update_check" "false" retrodeck "options"
+    else # User clicked "Cancel"
+      configurator_global_presets_and_settings_dialog
+    fi
+  else
+    zenity --question \
+    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator - RetroDECK Online Update Check" \
+    --text="Online update checks for RetroDECK are currently disabled.\n\nDo you want to enable them?"
+
+    if [ $? == 0 ] # User clicked "Yes"
+    then
+      set_setting_value $rd_conf "update_check" "true" retrodeck "options"
+    else # User clicked "Cancel"
+      configurator_global_presets_and_settings_dialog
+    fi
+  fi
+}
+
 configurator_retroarch_presets_and_settings_dialog() {
   choice=$(zenity --list --title="RetroDECK Configurator Utility - RetroArch: Presets & Settings" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
-  "Enable/Disable Borders" "Enable or disable borders in supported systems" \
-  "Enable/Disable Rewind" "Enable or disable the Rewind function in RetroArch." )
+  "Borders: Enable/Disable" "Enable or disable borders in supported systems" \
+  "Rewind: Enable/Disable" "Enable or disable the Rewind function in RetroArch." )
 
   case $choice in
 
-  "Enable/Disable Borders" )
+  "Borders: Enable/Disable" )
     change_preset_dialog "borders"
     configurator_retroarch_presets_and_settings_dialog
   ;;
 
-  "Enable/Disable Rewind" )
+  "Rewind: Enable/Disable" )
     configurator_retroarch_rewind_dialog
   ;;
 
@@ -495,23 +529,23 @@ configurator_retrodeck_tools_dialog() {
   choice=$(zenity --list --title="RetroDECK Configurator Utility - RetroDECK: Tools" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
-  "RetroDECK: Move Tool" "Move RetroDECK folders between internal/SD card or to a custom location" \
-  "RetroDECK: Compression Tool" "Compress games for systems that support it" \
-  "Install: RetroDECK Controller Profile" "Install the optional custom RetroDECK controller profile" \
+  "Tool: Move Folders" "Move RetroDECK folders between internal/SD card or to a custom location" \
+  "Tool: Compress Games" "Compress games for systems that support it" \
+  "Install: RetroDECK SD Controller Profile" "Install the custom RetroDECK controller layout for the Steam Deck" \
   "Install: PS3 Firmware" "Download and install PS3 firmware for use with the RPCS3 emulator" )
 
   case $choice in
 
-  "RetroDECK: Move Tool" )
+  "Tool: Move Folders" )
     configurator_retrodeck_move_tool_dialog
   ;;
 
-  "RetroDECK: Compression Tool" )
+  "Tool: Compress Games" )
     configurator_generic_dialog "RetroDECK Configurator - Compression Tool" "Depending on your library and compression choices, the process can sometimes take a long time.\nPlease be patient once it is started!"
     configurator_compression_tool_dialog
   ;;
 
-  "Install: RetroDECK Controller Profile" )
+  "Install: RetroDECK SD Controller Profile" )
     configurator_generic_dialog "RetroDECK Configurator - Install: RetroDECK Controller Profile" "We are now offering a new official RetroDECK controller profile!\nIt is an optional component that helps you get the most out of RetroDECK with a new in-game radial menu for unified hotkeys across emulators.\n\nThe files need to be installed outside of the normal ~/retrodeck folder, so we wanted your permission before proceeding.\n\nThe files will be installed at the following shared Steam locations:\n\n$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/\n$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"
     if [[ $(configurator_generic_question_dialog "Install: RetroDECK Controller Profile" "Would you like to install the official RetroDECK controller profile?") == "true" ]]; then
       install_retrodeck_controller_profile
@@ -1076,7 +1110,6 @@ configurator_developer_dialog() {
   --column="Choice" --column="Description" \
   "Change Multi-user mode" "Enable or disable multi-user support" \
   "Change Update Channel" "Change between normal and cooker builds" \
-  "Change Update Check Setting" "Enable or disable online checks for new versions of RetroDECK" \
   "Browse the Wiki" "Browse the RetroDECK wiki online" \
   "USB Import" "Prepare a USB device for ROMs or import an existing collection" \
   "Install RetroDECK Starter Pack" "Install the optional RetroDECK starter pack" )
@@ -1091,12 +1124,9 @@ configurator_developer_dialog() {
     configurator_online_update_channel_dialog
   ;;
 
-  "Change Update Check Setting" )
-    configurator_online_update_setting_dialog
-  ;;
-
   "Browse the Wiki" )
     xdg-open "https://github.com/XargonWan/RetroDECK/wiki"
+    configurator_developer_dialog
   ;;
 
   "USB Import" )
@@ -1166,34 +1196,6 @@ configurator_online_update_channel_dialog() {
     if [ $? == 0 ] # User clicked "Yes"
     then
       set_setting_value $rd_conf "update_repo" "RetroDECK" retrodeck "options"
-    else # User clicked "Cancel"
-      configurator_developer_dialog
-    fi
-  fi
-}
-
-configurator_online_update_setting_dialog() {
-  if [[ $(get_setting_value $rd_conf "update_check" retrodeck "options") == "true" ]]; then
-    zenity --question \
-    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - RetroDECK Online Update Check" \
-    --text="Online update checks for RetroDECK are currently enabled.\n\nDo you want to disable them?"
-
-    if [ $? == 0 ] # User clicked "Yes"
-    then
-      set_setting_value $rd_conf "update_check" "false" retrodeck "options"
-    else # User clicked "Cancel"
-      configurator_developer_dialog
-    fi
-  else
-    zenity --question \
-    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - RetroDECK Online Update Check" \
-    --text="Online update checks for RetroDECK are currently disabled.\n\nDo you want to enable them?"
-
-    if [ $? == 0 ] # User clicked "Yes"
-    then
-      set_setting_value $rd_conf "update_check" "true" retrodeck "options"
     else # User clicked "Cancel"
       configurator_developer_dialog
     fi
