@@ -214,7 +214,8 @@ configurator_global_presets_and_settings_dialog() {
 
   "RetroAchievements: Logout" ) # This is a workaround to allow disabling cheevos without having to enter login credentials
     local cheevos_emulators=$(sed -n '/\[cheevos\]/, /\[/{ /\[cheevos\]/! { /\[/! p } }' $rd_conf | sed '/^$/d')
-    for emulator in $cheevos_emulators; do
+    for setting_line in $cheevos_emulators; do
+      emulator=$(get_setting_name "$setting_line" "retrodeck")
       set_setting_value "$rdconf" "$emulator" "false" "retrodeck" "cheevos"
       build_preset_config "$emulator" "cheevos"
     done

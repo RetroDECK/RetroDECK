@@ -95,7 +95,12 @@ build_preset_config() {
           case "$action" in
 
           "config_file_format" )
-            local read_config_format="$read_preset"
+            if [[ "$read_preset" == "retroarch-all" ]]; then
+              local retroarch_all="true"
+              local read_config_format="retroarch"
+            else
+              local read_config_format="$read_preset"
+            fi
           ;;
 
           "target_file" )
@@ -118,7 +123,7 @@ build_preset_config() {
                 if [[ "$new_setting_value" = \$* ]]; then
                   eval new_setting_value=$new_setting_value
                 fi
-                if [[ "$read_config_format" == "retroarch" ]]; then # If this is a RetroArch core, generate the override file
+                if [[ "$read_config_format" == "retroarch" && ! "$retroarch_all" == "true" ]]; then # If this is a RetroArch core, generate the override file
                   if [[ ! -f "$read_target_file" ]]; then
                     mkdir -p "$(realpath "$(dirname "$read_target_file")")"
                     echo "$read_setting_name = \""$new_setting_value"\"" > "$read_target_file"
@@ -130,13 +135,10 @@ build_preset_config() {
                     fi                    
                   fi
                 else
-                  if [[ "$read_config_format" == "retroarch-all" ]]; then
-                    read_config_format="retroarch"
-                  fi
                   set_setting_value "$read_target_file" "$read_setting_name" "$new_setting_value" "$read_config_format" "$section"
                 fi
               else
-                if [[ "$read_config_format" == "retroarch" ]]; then
+                if [[ "$read_config_format" == "retroarch" && ! "$retroarch_all" == "true" ]]; then
                   if [[ -f "$read_target_file" ]]; then
                     delete_setting "$read_target_file" "$read_setting_name" "$read_config_format" "$section"
                     if [[ -z $(cat "$read_target_file") ]]; then # If the override file is empty
@@ -147,9 +149,6 @@ build_preset_config() {
                     fi
                   fi
                 else
-                  if [[ "$read_config_format" == "retroarch-all" ]]; then
-                    read_config_format="retroarch"
-                  fi
                   local default_setting_value=$(get_setting_value "$read_defaults_file" "$read_setting_name" "$read_config_format" "$section")
                   set_setting_value "$read_target_file" "$read_setting_name" "$default_setting_value" "$read_config_format" "$section"
                 fi
