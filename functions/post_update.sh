@@ -82,7 +82,9 @@ post_update() {
     # - Move Dolphin and Primehack save folder names
     # - Move PPSSPP saves/states to appropriate folders
     # - Set ESDE user themes folder directly
-    # - Disable auto-save/load in RA / PCSX2 / Duckstation for proper preset functionality
+    # - Disable auto-save/load in existing RA / PCSX2 / Duckstation installs for proper preset functionality
+    # - Disable ask-on-exit in existing Citra / Dolphin / Duckstation / Primehack installs for proper preset functionality
+    # - Disable auto-load-state in existing PPSSPP installs for proper preset functionality
     # - Init Cemu as it is a new emulator
 
     update_rd_conf # Expand retrodeck.cfg to latest template
@@ -113,6 +115,12 @@ post_update() {
     dir_prep "$mods_folder/Citra" "/var/data/citra-emu/load/mods"
     dir_prep "$texture_packs_folder/Citra" "/var/data/citra-emu/load/textures"
     dir_prep "$mods_folder/Yuzu" "/var/data/yuzu/load"
+    dir_prep "$texture_packs_folder/RetroArch-Mesen" "/var/config/retroarch/system/HdPacks"
+    dir_prep "$texture_packs_folder/PPSSPP" "/var/config/ppsspp/PSP/TEXTURES"
+    dir_prep "$texture_packs_folder/PCSX2" "/var/config/PCSX2/textures"
+    dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/cache" "/var/config/retroarch/system/Mupen64Plus/cache"
+    dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/hires_texture" "/var/config/retroarch/system/Mupen64Plus/hires_texture"
+    dir_prep "$texture_packs_folder/Duckstation" "/var/config/duckstation/textures"
 
     dir_prep "$rdhome/gamelists" "/var/config/emulationstation/.emulationstation/gamelists"
 
@@ -193,6 +201,14 @@ post_update() {
     set_setting_value "$pcsx2conf" "SaveStateOnShutdown" "false" "pcsx2" "EmuCore"
     set_setting_value "$duckstationconf" "SaveStateOnExit" "false" "duckstation" "Main"
     set_setting_value "$duckstationconf" "Enabled" "false" "duckstation" "Cheevos"
+
+    set_setting_value "$citraconf" "confirmClose" "false" "citra" "UI"
+    set_setting_value "$citraconf" "confirmClose\default" "false" "citra" "UI"
+    set_setting_value "$dolphinconf" "ConfirmStop" "False" "dolphin" "Interface"
+    set_setting_value "$duckstationconf" "ConfirmPowerOff" "false" "duckstation" "Main"
+    set_setting_value "$primehackconf" "ConfirmStop" "False" "primehack" "Interface"
+    
+    set_setting_value "$ppssppconf" "AutoLoadSaveState" "0" "ppsspp" "General"
 
     prepare_emulator "reset" "cemu"
   fi

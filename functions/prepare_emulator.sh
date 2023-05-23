@@ -59,12 +59,12 @@ prepare_emulator() {
 
   if [[ "$emulator" =~ ^(retroarch|RetroArch|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
-      if [[ $multi_user_mode == "true" ]]; then
+      if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/retroarch"
         mkdir -p "$multi_user_data_folder/$SteamAppUser/config/retroarch"
         cp -fv $emuconfigs/retroarch/retroarch.cfg "$multi_user_data_folder/$SteamAppUser/config/retroarch/"
         cp -fv $emuconfigs/retroarch/retroarch-core-options.cfg "$multi_user_data_folder/$SteamAppUser/config/retroarch/"
-      else
+      else # Single-user actions
         rm -rf /var/config/retroarch
         mkdir -p /var/config/retroarch
         dir_prep "$bios_folder" "/var/config/retroarch/system"
@@ -84,6 +84,7 @@ prepare_emulator() {
         set_setting_value "$raconf" "screenshot_directory" "$screenshots_folder" "retroarch"
         set_setting_value "$raconf" "log_dir" "$logs_folder" "retroarch"
       fi
+      # Shared actions
 
       # PPSSPP
       echo "--------------------------------"
@@ -105,11 +106,18 @@ prepare_emulator() {
       echo "-----------------------------------------------------------"
       cp -rf "/app/retrodeck/extras/MSX/Databases" "$bios_folder/Databases"
       cp -rf "/app/retrodeck/extras/MSX/Machines" "$bios_folder/Machines"
+    
+      dir_prep "$texture_packs_folder/RetroArch-Mesen" "/var/config/retroarch/system/HdPacks"
+      dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/cache" "/var/config/retroarch/system/Mupen64Plus/cache"
+      dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/hires_texture" "/var/config/retroarch/system/Mupen64Plus/hires_texture"
     fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
       dir_prep "$bios_folder" "/var/config/retroarch/system"
       dir_prep "$logs_folder/retroarch" "/var/config/retroarch/logs"
       dir_prep "$rdhome/shaders/retroarch" "/var/config/retroarch/shaders"
+      dir_prep "$texture_packs_folder/RetroArch-Mesen" "/var/config/retroarch/system/HdPacks"
+      dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/cache" "/var/config/retroarch/system/Mupen64Plus/cache"
+      dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/hires_texture" "/var/config/retroarch/system/Mupen64Plus/hires_texture"
       set_setting_value "$raconf" "savefile_directory" "$saves_folder" "retroarch"
       set_setting_value "$raconf" "savestate_directory" "$states_folder" "retroarch"
       set_setting_value "$raconf" "screenshot_directory" "$screenshots_folder" "retroarch"
@@ -213,7 +221,8 @@ prepare_emulator() {
         set_setting_value "$dolphinconf" "ISOPath0" "$roms_folder/wii" "dolphin" "General"
         set_setting_value "$dolphinconf" "ISOPath1" "$roms_folder/gc" "dolphin" "General"
         set_setting_value "$dolphinconf" "WiiSDCardPath" "$saves_folder/wii/dolphin/sd.raw" "dolphin" "General"
-      fi # Shared actions
+      fi
+      # Shared actions
       dir_prep "$saves_folder/gc/dolphin/EU" "/var/data/dolphin-emu/GC/EUR" # TODO: Multi-user one-off
       dir_prep "$saves_folder/gc/dolphin/US" "/var/data/dolphin-emu/GC/USA" # TODO: Multi-user one-off
       dir_prep "$saves_folder/gc/dolphin/JP" "/var/data/dolphin-emu/GC/JAP" # TODO: Multi-user one-off
@@ -265,8 +274,9 @@ prepare_emulator() {
         set_setting_value "$duckstationconf" "Directory" "$saves_folder/psx/duckstation/memcards" "duckstation" "MemoryCards"
         set_setting_value "$duckstationconf" "RecursivePaths" "$roms_folder/psx" "duckstation" "GameList"
       fi
-      dir_prep "$saves_folder/psx/duckstation/memcards" "/var/config/duckstation/memcards" # TODO: This shouldn't be needed anymore, verify
+      # Shared actions
       dir_prep "$states_folder/psx/duckstation" "/var/config/duckstation/savestates" # This is hard-coded in Duckstation, always needed
+      dir_prep "$texture_packs_folder/Duckstation" "/var/config/duckstation/textures"
     fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
       set_setting_value "$duckstationconf" "SearchDirectory" "$bios_folder" "duckstation" "BIOS"
@@ -275,6 +285,7 @@ prepare_emulator() {
       set_setting_value "$duckstationconf" "Directory" "$saves_folder/psx/duckstation/memcards" "duckstation" "MemoryCards"
       set_setting_value "$duckstationconf" "RecursivePaths" "$roms_folder/psx" "duckstation" "GameList"
       dir_prep "$states_folder/psx/duckstation" "/var/config/duckstation/savestates" # This is hard-coded in Duckstation, always needed
+      dir_prep "$texture_packs_folder/Duckstation" "/var/config/duckstation/textures"
     fi
   fi
 
@@ -346,6 +357,7 @@ prepare_emulator() {
       # Shared actions
       mkdir -pv "$saves_folder/ps2/pcsx2/memcards"
       mkdir -pv "$states_folder/ps2/pcsx2"
+      dir_prep "$texture_packs_folder/PCSX2" "/var/config/PCSX2/textures"
     fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
       set_setting_value "$pcsx2conf" "Bios" "$bios_folder" "pcsx2" "Folders"
@@ -353,6 +365,7 @@ prepare_emulator() {
       set_setting_value "$pcsx2conf" "SaveStates" "$states_folder/ps2/pcsx2" "pcsx2" "Folders"
       set_setting_value "$pcsx2conf" "MemoryCards" "$saves_folder/ps2/pcsx2/memcards" "pcsx2" "Folders"
       set_setting_value "$pcsx2conf" "RecursivePaths" "$roms_folder/ps2" "pcsx2" "GameList"
+      dir_prep "$texture_packs_folder/PCSX2" "/var/config/PCSX2/textures"
     fi
   fi
 
@@ -384,11 +397,13 @@ prepare_emulator() {
       # Shared actions
       dir_prep "$saves_folder/PSP/PPSSPP-SA" "/var/config/ppsspp/PSP/SAVEDATA"
       dir_prep "$states_folder/PSP/PPSSPP-SA" "/var/config/ppsspp/PSP/PPSSPP_STATE"
+      dir_prep "$texture_packs_folder/PPSSPP" "/var/config/ppsspp/PSP/TEXTURES"
     fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
       set_setting_value "$ppssppconf" "CurrentDirectory" "$roms_folder/psp" "ppsspp" "General"
       dir_prep "$saves_folder/PSP/PPSSPP-SA" "/var/config/ppsspp/PSP/SAVEDATA"
       dir_prep "$states_folder/PSP/PPSSPP-SA" "/var/config/ppsspp/PSP/PPSSPP_STATE"
+      dir_prep "$texture_packs_folder/PPSSPP" "/var/config/ppsspp/PSP/TEXTURES"
     fi
   fi
 
@@ -515,11 +530,11 @@ prepare_emulator() {
         set_setting_value "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml" "eeprom_path" "$saves_folder/xbox/xemu/xbox-eeprom.bin" "xemu" "sys.files"
         set_setting_value "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml" "hdd_path" "'$bios_folder/xbox_hdd.qcow2'" "xemu" "sys.files"
         dir_prep "$multi_user_data_folder/$SteamAppUser/config/xemu" "/var/config/xemu" # Creating config folder in /var/config for consistentcy and linking back to original location where emulator will look
-        dir_prep "$multi_user_data_folder/$SteamAppUser/config/xemu" "/var/data/xemu"
+        dir_prep "$multi_user_data_folder/$SteamAppUser/config/xemu" "/var/data/xemu/xemu"
       else # Single-user actions
         rm -rf /var/config/xemu
         rm -rf /var/data/xemu
-        dir_prep "/var/config/xemu" "/var/data/xemu" # Creating config folder in /var/config for consistentcy and linking back to original location where emulator will look
+        dir_prep "/var/config/xemu" "/var/data/xemu/xemu" # Creating config folder in /var/config for consistentcy and linking back to original location where emulator will look
         cp -fv $emuconfigs/xemu/xemu.toml "$xemuconf"
         set_setting_value "$xemuconf" "screenshot_dir" "'$screenshots_folder'" "xemu" "General"
         set_setting_value "$xemuconf" "bootrom_path" "'$bios_folder/mcpx_1.0.bin'" "xemu" "sys.files"
