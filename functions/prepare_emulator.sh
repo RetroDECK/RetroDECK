@@ -108,16 +108,16 @@ prepare_emulator() {
       cp -rf "/app/retrodeck/extras/MSX/Machines" "$bios_folder/Machines"
     
       dir_prep "$texture_packs_folder/RetroArch-Mesen" "/var/config/retroarch/system/HdPacks"
-      dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/cache" "/var/config/retroarch/system/Mupen64Plus/cache"
-      dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/hires_texture" "/var/config/retroarch/system/Mupen64Plus/hires_texture"
+      dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/cache" "/var/config/retroarch/system/Mupen64plus/cache"
+      dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/hires_texture" "/var/config/retroarch/system/Mupen64plus/hires_texture"
     fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
       dir_prep "$bios_folder" "/var/config/retroarch/system"
       dir_prep "$logs_folder/retroarch" "/var/config/retroarch/logs"
       dir_prep "$rdhome/shaders/retroarch" "/var/config/retroarch/shaders"
       dir_prep "$texture_packs_folder/RetroArch-Mesen" "/var/config/retroarch/system/HdPacks"
-      dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/cache" "/var/config/retroarch/system/Mupen64Plus/cache"
-      dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/hires_texture" "/var/config/retroarch/system/Mupen64Plus/hires_texture"
+      dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/cache" "/var/config/retroarch/system/Mupen64plus/cache"
+      dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/hires_texture" "/var/config/retroarch/system/Mupen64plus/hires_texture"
       set_setting_value "$raconf" "savefile_directory" "$saves_folder" "retroarch"
       set_setting_value "$raconf" "savestate_directory" "$states_folder" "retroarch"
       set_setting_value "$raconf" "screenshot_directory" "$screenshots_folder" "retroarch"
