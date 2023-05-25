@@ -360,7 +360,7 @@ configurator_dolphin_input_textures_dialog() {
 
     if [ $? == 0 ]
     then
-      set_setting_value $dolphingfxconf "HiresTextures" "False" dolphin
+      # set_setting_value $dolphingfxconf "HiresTextures" "False" dolphin # TODO: Break out a preset for texture packs so this can be enabled and disabled independently.
       rm -rf "/var/data/dolphin-emu/Load/DynamicInputTextures"
       configurator_process_complete_dialog "disabling Dolphin custom input textures"
     else
@@ -398,7 +398,7 @@ configurator_primehack_input_textures_dialog() {
 
     if [ $? == 0 ]
     then
-      set_setting_value $primehackgfxconf "HiresTextures" "False" primehack
+      # set_setting_value $primehackgfxconf "HiresTextures" "False" primehack # TODO: Break out a preset for texture packs so this can be enabled and disabled independently.
       rm -rf "/var/data/primehack/Load/DynamicInputTextures"
       configurator_process_complete_dialog "disabling Primehack custom input textures"
     else
