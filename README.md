@@ -64,7 +64,7 @@ Yes! Everybody is welcome to contribute in any way possible if it is personal ti
 - You can just help by helping others in the support or guide people on various social media and communication platforms.
 - You can also help by just finding and testing the best configurations for the emulators and the roms.
 - Or just help us by doing bug reports on all the issues you find (please check old issues first before submitting a new one).
-- By joining the ✨-new-helpers-start-here channel on [Discord](discord.gg/Dz3szYsP8g) and keeping an eye on the [issues](https://github.com/XargonWan/RetroDECK/issues) tab as well as the [Roadmap](https://github.com/XargonWan/RetroDECK/milestones) tab, you can be up to speed on the latest developments on RetroDECK.
+- By joining the ✨-new-helpers-start-here channel on [Discord](https://discord.gg/sYPezmEn) and keeping an eye on the [issues](https://github.com/XargonWan/RetroDECK/issues) tab as well as the [Roadmap](https://github.com/XargonWan/RetroDECK/milestones) tab, you can be up to speed on the latest developments on RetroDECK.
 - We have a [Patreon](https://www.patreon.com/RetroDECK) page if you want to help us keep our build servers running or just buy us a beverage
 
 ###### The Steam Deck logo is a registered trademark of Valve Corporation. This project is in no way officially affiliated with Valve.<br/>
