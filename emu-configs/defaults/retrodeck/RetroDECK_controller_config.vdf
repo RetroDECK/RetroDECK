@@ -1,10 +1,10 @@
 "controller_mappings"
 {
 	"version"		"3"
-	"revision"		"1540"
+	"revision"		"1556"
 	"title"		"RetroDECK: Official Layout - v.0.7b"
-	"description"		"The Official RetroDECK Layout."
-	"creator"		"76561197985498748"
+	"description"		"The Official RetroDECK Layout"
+	"creator"		""
 	"progenitor"		""
 	"url"		"autosave:///home/deck/.local/share/Steam/steamapps/common/Steam Controller Configs/25233020/config/retrodeck/controller_neptune.vdf"
 	"export_type"		"template"
@@ -12,7 +12,7 @@
 	"controller_caps"		"23117823"
 	"major_revision"		"0"
 	"minor_revision"		"0"
-	"Timestamp"		"-879036768"
+	"Timestamp"		"-999421760"
 	"actions"
 	{
 		"Default"
@@ -1097,7 +1097,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 3 1 1, Quick - Menu, RD-org.xfce.session.png, #232323 #FFFFFF"
+							"binding"		"controller_action CHANGE_PRESET 3 1 1, Quick, RD-org.xfce.session.png, #232323 #FFFFFF"
 						}
 					}
 				}
@@ -1113,7 +1113,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 4 1 1, State - Menu, RD-folder-blue-games.png, "
+							"binding"		"controller_action CHANGE_PRESET 4 1 1, State, RD-folder-blue-games.png, "
 						}
 					}
 				}
@@ -1129,7 +1129,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 5 1 1, Speed / Frames - Menu, RD-supertuxkart.png, "
+							"binding"		"controller_action CHANGE_PRESET 5 1 1, Speed & Frames, RD-supertuxkart.png, "
 						}
 					}
 				}
@@ -1145,7 +1145,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 6 1 1, Display / Graphics - Menu, RD-preferences-desktop-display.png, "
+							"binding"		"controller_action CHANGE_PRESET 6 1 1, Display & Graphics, RD-preferences-desktop-display.png, "
 						}
 					}
 				}
@@ -1161,7 +1161,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 7 1 1, General Hotkeys - Menu, RD-io.github.antimicrox.antimicrox.png, "
+							"binding"		"controller_action CHANGE_PRESET 7 1 1, General, RD-io.github.antimicrox.antimicrox.png, "
 						}
 					}
 				}
@@ -1177,7 +1177,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 9 1 1, Emulators: Specific Features - Menu, RD-folder-applications.png, "
+							"binding"		"controller_action CHANGE_PRESET 9 1 1, Specific, RD-folder-applications.png, "
 						}
 					}
 				}
@@ -1193,7 +1193,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 8 1 1, Steam Deck - Menu, RD-steam.png, "
+							"binding"		"controller_action CHANGE_PRESET 8 1 1, Steam Deck, RD-steam.png, "
 						}
 					}
 				}
@@ -3739,22 +3739,6 @@
 				{
 				}
 			}
-			"touch_menu_button_4"
-			{
-				"activators"
-				{
-					"Full_Press"
-					{
-						"bindings"
-						{
-							"binding"		"controller_action toggle_magnifier, Steam Zoom, RD-edit-find.png, "
-						}
-					}
-				}
-				"disabled_activators"
-				{
-				}
-			}
 			"touch_menu_button_5"
 			{
 				"activators"
@@ -4191,7 +4175,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 10 1 1, MAME - Menu, RD-emblem-favorite.png, "
+							"binding"		"controller_action CHANGE_PRESET 10 1 1, MAME, RD-emblem-favorite.png, "
 						}
 					}
 				}
@@ -4207,7 +4191,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 11 1 1, RetroArch - Menu, RD-retroarch.png, "
+							"binding"		"controller_action CHANGE_PRESET 11 1 1, RetroArch, RD-retroarch.png, "
 						}
 					}
 				}
@@ -4223,7 +4207,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 12 1 1, Gamecube / Wii - Menu, RD-tesseract.png, "
+							"binding"		"controller_action CHANGE_PRESET 12 1 1, Gamecube & Wii, RD-tesseract.png, "
 						}
 					}
 				}
@@ -4239,7 +4223,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 13 1 1, DS - Menu, RD-preferences-tweaks-shadows.png, "
+							"binding"		"controller_action CHANGE_PRESET 13 1 1, NDS, RD-preferences-tweaks-shadows.png, "
 						}
 					}
 				}
@@ -4255,7 +4239,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 15 1 1, 3DS - Menu, RD-preferences-system-windows-actions.png, "
+							"binding"		"controller_action CHANGE_PRESET 15 1 1, 3DS, RD-preferences-system-windows-actions.png, "
 						}
 					}
 				}
@@ -4271,7 +4255,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 16 1 1, Switch - Menu, RD-playonlinux.png, "
+							"binding"		"controller_action CHANGE_PRESET 16 1 1, Switch, RD-playonlinux.png, "
 						}
 					}
 				}
