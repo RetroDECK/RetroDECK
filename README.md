@@ -12,7 +12,7 @@
 You can visit our:<br/>
 [Website](https://retrodeck.net) <br/>
 [Wiki](https://github.com/XargonWan/RetroDECK/wiki) <br/>
-[Discord](https://discord.gg/Dz3szYsP8g)
+[Discord](https://discord.gg/Dz3szYsP8g)<br/>
 [Subreddit](https://www.reddit.com/r/retrodeck)
 
 ## What is RetroDECK?
