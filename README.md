@@ -9,23 +9,6 @@
 
 # RetroDECK on your device!
 
-You can visit our:<br/>
-[Website](https://retrodeck.net) <br/>
-[Wiki](https://github.com/XargonWan/RetroDECK/wiki) <br/>
-[Discord](https://discord.gg/Dz3szYsP8g)<br/>
-[Subreddit](https://www.reddit.com/r/retrodeck)
-
-## What is RetroDECK?
-RetroDECK is a [EmulationStation Desktop Edition](https://es-de.org) powered application that builds in a variety of emulators and other software that allows you to play your favorite retro (and even not-so-retro) games in a tidy contained sandbox environment. It's inspired by embedded emulation systems like AmberELEC, EmuELEC, CoreELEC, Lakka, and Batocera.
-
-RetroDECK supports the following devices: 
-<br/><br/>
-**Steam Deck**
-<br/>
-**Linux Desktop** (after the BETA period)
-<br/>
-**Other SteamOS devices** (after the BETA period)
-
 <p float="center">
 <img src="https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen03.jpeg?raw=true" alt="screenshot" width="300"/>
 <img src="https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen04.jpeg?raw=true" alt="screenshot" width="300"/><br/>
@@ -33,6 +16,31 @@ RetroDECK supports the following devices:
 <img src="https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen06.jpeg?raw=true" alt="screenshot" width="300"/>
 </p>
 <br/>
+
+## What is RetroDECK?
+RetroDECK is a [EmulationStation Desktop Edition](https://es-de.org) powered application that builds in a variety of emulators and other software that allows you to play your favorite retro (and even not-so-retro) games in a tidy contained flatpak sandbox environment. It's inspired by embedded emulation systems like AmberELEC, EmuELEC, CoreELEC, Lakka, and Batocera.
+
+### RetroDECK supports the following devices: 
+**Steam Deck**
+<br/>
+<br/>
+**Linux Desktop** (after the BETA period)
+<br/>
+<br/>
+**Other SteamOS devices** (after the BETA period)
+<br/>
+<br/>
+**Note:**<br/>
+You can get it to run on other Linux devices or Linux Desktop today, it is not just as seamless as we want it to be and does not live up to our higher standards.<br/> 
+You will need to manually configure the input to match your device and might need to tweak more settings if you try it on a none Steam Deck device.
+
+
+## The RetroDECK community:
+[Website](https://retrodeck.net) <br/>
+[Wiki](https://github.com/XargonWan/RetroDECK/wiki) <br/>
+[Discord](https://discord.gg/Dz3szYsP8g)<br/>
+[Subreddit](https://www.reddit.com/r/retrodeck)
+
 
 ### RetroDECK is tailored to the Steam Deck during the BETA period.
 The goal is that all the configurations are ready out-of-the-box and optimized towards the Steam Deck. Just put your `ROMS` & `BIOS` in the corresponding folders and start playing.
