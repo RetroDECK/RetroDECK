@@ -1,18 +1,18 @@
 "controller_mappings"
 {
 	"version"		"3"
-	"revision"		"1556"
-	"title"		"RetroDECK: Official Layout - v.0.7b"
-	"description"		"The Official RetroDECK Layout"
+	"revision"		"1581"
+	"title"		"RetroDECK: Official Layout - v0.7b"
+	"description"		"The Official RetroDECK Layout""
 	"creator"		""
 	"progenitor"		""
-	"url"		"autosave:///home/deck/.local/share/Steam/steamapps/common/Steam Controller Configs/25233020/config/retrodeck/controller_neptune.vdf"
-	"export_type"		"template"
+	"url"		""
+	"export_type"		"personal_cloud"
 	"controller_type"		"controller_neptune"
 	"controller_caps"		"23117823"
 	"major_revision"		"0"
 	"minor_revision"		"0"
-	"Timestamp"		"-999421760"
+	"Timestamp"		"-1230584288"
 	"actions"
 	{
 		"Default"
@@ -706,14 +706,6 @@
 						{
 							"binding"		"key_press LEFT_CONTROL, FULLSCREEN TOGGLE, , "
 							"binding"		"key_press RETURN, FULLSCREEN TOGGLE, , "
-						}
-					}
-					"Full_Press"
-					{
-						"bindings"
-						{
-							"binding"		"key_press LEFT_ALT, , "
-							"binding"		"key_press RETURN, , "
 						}
 					}
 				}
@@ -1559,14 +1551,6 @@
 						{
 							"binding"		"key_press LEFT_CONTROL, Fullscreen On/Off, RD-zoom-fit-best.png, #232323 #FFFFFF"
 							"binding"		"key_press RETURN, Fullscreen On/Off, RD-zoom-fit-best.png, #232323 #FFFFFF"
-						}
-					}
-					"Full_Press"
-					{
-						"bindings"
-						{
-							"binding"		"key_press LEFT_ALT, , "
-							"binding"		"key_press RETURN, , "
 						}
 					}
 				}
@@ -2748,14 +2732,6 @@
 							"binding"		"key_press RETURN, Fullscreen On/Off, RD-zoom-fit-best.png, "
 						}
 					}
-					"Full_Press"
-					{
-						"bindings"
-						{
-							"binding"		"key_press LEFT_ALT, , "
-							"binding"		"key_press RETURN, , "
-						}
-					}
 				}
 				"disabled_activators"
 				{
@@ -2803,8 +2779,8 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press LEFT_ALT, Change Dual-Screenlayout, RD-preferences-system-windows-actions.png, "
-							"binding"		"key_press 0, Change Dual-Screenlayout, RD-preferences-system-windows-actions.png, "
+							"binding"		"key_press LEFT_CONTROL, Change Dual-Screenlayout, RD-preferences-system-windows-actions.png, "
+							"binding"		"key_press L, Change Dual-Screenlayout, RD-preferences-system-windows-actions.png, "
 						}
 					}
 				}
@@ -3183,8 +3159,8 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press LEFT_CONTROL, Open Menu, RD-preferences-desktop-icons.png, "
-							"binding"		"key_press M, Open Menu, RD-preferences-desktop-icons.png, "
+							"binding"		"key_press LEFT_CONTROL, Exit / Quit Emulator, RD-process-stop.png, "
+							"binding"		"key_press ESCAPE, Exit / Quit Emulator, RD-process-stop.png, "
 						}
 					}
 				}
@@ -3200,8 +3176,8 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press LEFT_CONTROL, Exit / Quit Emulator, RD-process-stop.png, "
-							"binding"		"key_press ESCAPE, Exit / Quit Emulator, RD-process-stop.png, "
+							"binding"		"key_press LEFT_CONTROL, Open Menu, RD-preferences-desktop-icons.png, "
+							"binding"		"key_press M, Open Menu, RD-preferences-desktop-icons.png, "
 						}
 					}
 				}
@@ -3748,7 +3724,7 @@
 						"bindings"
 						{
 							"binding"		"key_press LEFT_ALT, ALT + F4, RD-F4.png, "
-							"binding"		"controller_action empty_sub_command, ALT + F4, RD-F4.png, "
+							"binding"		"key_press F4, ALT + F4, RD-F4.png, "
 						}
 					}
 				}
