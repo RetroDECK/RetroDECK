@@ -75,6 +75,7 @@ post_update() {
     # - Expose ES-DE gamelists folder to user at ~/retrodeck/gamelists
     # - Copy new borders into RA config location
     # - Copy new RetroArch control remaps into RA config location
+    # - Add shipped Amiga bios if it doesn't already exist
     # - Update RPCS3 vfs file contents. migrate from old location if needed
     # - Disable ESDE update checks for existing installs
     # - Move Duckstation saves and states to new locations
@@ -129,9 +130,9 @@ post_update() {
 
     rsync -a --mkpath "$emuconfigs/defaults/retrodeck/presets/remaps/" "/var/config/retroarch/config/remaps/"
 
-    # if [[ $(configurator_generic_question_dialog "RetroDECK Starter Pack" "The RetroDECK creators have put together a collection of classic retro games you might enjoy!\n\nWould you like to have them automatically added to your library?\n\nThis can always be done later through the Configurator.") == "true" ]]; then
-    #   install_retrodeck_starterpack
-    # fi
+    if [[ ! -f "$bios_folder/capsimg.so" ]]; then
+      cp -f "/app/retrodeck/extras/Amiga/capsimg.so" "$bios_folder/capsimg.so"
+    fi
 
     cp -f $emuconfigs/rpcs3/vfs.yml /var/config/rpcs3/vfs.yml
     sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$bios_folder/rpcs3/"'^' "$rpcs3vfsconf"

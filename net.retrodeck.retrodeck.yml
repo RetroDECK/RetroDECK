@@ -485,15 +485,16 @@ modules:
         sha256: MSXBIOSHASHPLACEHOLDER
         strip-components: 0
   
-  - name: doom-shareware
+  - name: amiga-bios
     buildsystem: simple
     build-commands:
-    - mkdir -p ${FLATPAK_DEST}/retrodeck/extras
-    - cp doom1.wad ${FLATPAK_DEST}/retrodeck/extras/
+    - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/Amiga
+    - cp -f Linux/x86-64/capsimg.so ${FLATPAK_DEST}/retrodeck/extras/Amiga/capsimg.so
     sources:
       - type: archive
-        url: https://buildbot.libretro.com/assets/cores/DOOM/Doom%20%28Shareware%29.zip
-        sha256: DOOMSHAPLACEHOLDER
+        url: https://github.com/rsn8887/capsimg/releases/download/1.1/Capsimg_for_Retroarch.zip
+        sha256: 16c1b511b8e1374a2b6461a66bb6f07b7d2627eb4e941fd1497a432330acaad1
+        strip-components: 0
 
   # PPSSPP - START
   # https://github.com/flathub/org.ppsspp.PPSSPP
