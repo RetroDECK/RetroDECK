@@ -17,7 +17,6 @@ source /app/libexec/global.sh
 #         - RetroAchievements: Logout
 #         - RetroAchievements: Hardcore Mode
 #         - Swap A/B and X/Y Buttons
-#         - RetroDECK: Change Update Check Setting
 #       - RetroArch: Presets & Settings
 #         - Borders: Enable/Disable
 #         - Rewind: Enable/Disable
@@ -58,6 +57,7 @@ source /app/libexec/global.sh
 #         - Compress All Games
 #       - Install: RetroDECK SD Controller Profile
 #       - Install: PS3 firmware
+#       - RetroDECK: Change Update Setting
 #     - Troubleshooting
 #       - Backup: RetroDECK Userdata
 #       - Check & Verify: BIOS
@@ -185,8 +185,7 @@ configurator_global_presets_and_settings_dialog() {
   "RetroAchievements: Login" "Log into the RetroAchievements service in supported systems" \
   "RetroAchievements: Logout" "Disable RetroAchievements service in ALL supported systems" \
   "RetroAchievements: Hardcore Mode" "Enable RetroAchievements hardcore mode (no cheats, rewind, save states etc.) in supported emulators" \
-  "Swap A/B and X/Y Buttons" "Enable or disable a swapped A/B and X/Y button layout in supported systems" \
-  "RetroDECK: Change Update Check Setting" "Enable or disable online checks for new versions of RetroDECK" )
+  "Swap A/B and X/Y Buttons" "Enable or disable a swapped A/B and X/Y button layout in supported systems" )
 
   case $choice in
 
@@ -233,43 +232,11 @@ configurator_global_presets_and_settings_dialog() {
     configurator_global_presets_and_settings_dialog
   ;;
 
-  "RetroDECK: Change Update Check Setting" )
-    configurator_online_update_setting_dialog
-  ;;
-
   "" ) # No selection made or Back button clicked
     configurator_presets_and_settings_dialog
   ;;
 
   esac
-}
-
-configurator_online_update_setting_dialog() {
-  if [[ $(get_setting_value $rd_conf "update_check" retrodeck "options") == "true" ]]; then
-    zenity --question \
-    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - RetroDECK Online Update Check" \
-    --text="Online update checks for RetroDECK are currently enabled.\n\nDo you want to disable them?"
-
-    if [ $? == 0 ] # User clicked "Yes"
-    then
-      set_setting_value $rd_conf "update_check" "false" retrodeck "options"
-    else # User clicked "Cancel"
-      configurator_global_presets_and_settings_dialog
-    fi
-  else
-    zenity --question \
-    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - RetroDECK Online Update Check" \
-    --text="Online update checks for RetroDECK are currently disabled.\n\nDo you want to enable them?"
-
-    if [ $? == 0 ] # User clicked "Yes"
-    then
-      set_setting_value $rd_conf "update_check" "true" retrodeck "options"
-    else # User clicked "Cancel"
-      configurator_global_presets_and_settings_dialog
-    fi
-  fi
 }
 
 configurator_retroarch_presets_and_settings_dialog() {
@@ -533,7 +500,8 @@ configurator_retrodeck_tools_dialog() {
   "Tool: Move Folders" "Move RetroDECK folders between internal/SD card or to a custom location" \
   "Tool: Compress Games" "Compress games for systems that support it" \
   "Install: RetroDECK SD Controller Profile" "Install the custom RetroDECK controller layout for the Steam Deck" \
-  "Install: PS3 Firmware" "Download and install PS3 firmware for use with the RPCS3 emulator" )
+  "Install: PS3 Firmware" "Download and install PS3 firmware for use with the RPCS3 emulator" \
+  "RetroDECK: Change Update Setting" "Enable or disable online checks for new versions of RetroDECK" )
 
   case $choice in
 
@@ -571,6 +539,10 @@ configurator_retrodeck_tools_dialog() {
       configurator_generic_dialog "RetroDECK Configurator - Install: PS3 Firmware" "You do not appear to currently have Internet access, which is required by this tool. Please try again when network access has been restored."
       configurator_retrodeck_tools_dialog
     fi
+  ;;
+
+  "RetroDECK: Change Update Check Setting" )
+    configurator_online_update_setting_dialog
   ;;
 
   "" ) # No selection made or Back button clicked
@@ -856,6 +828,34 @@ configurator_compression_cleanup_dialog() {
     echo "true"
   else # If "No" was clicked
     echo "false"
+  fi
+}
+
+configurator_online_update_setting_dialog() {
+  if [[ $(get_setting_value $rd_conf "update_check" retrodeck "options") == "true" ]]; then
+    zenity --question \
+    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator - RetroDECK Online Update Check" \
+    --text="Online update checks for RetroDECK are currently enabled.\n\nDo you want to disable them?"
+
+    if [ $? == 0 ] # User clicked "Yes"
+    then
+      set_setting_value $rd_conf "update_check" "false" retrodeck "options"
+    else # User clicked "Cancel"
+      configurator_retrodeck_tools_dialog
+    fi
+  else
+    zenity --question \
+    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator - RetroDECK Online Update Check" \
+    --text="Online update checks for RetroDECK are currently disabled.\n\nDo you want to enable them?"
+
+    if [ $? == 0 ] # User clicked "Yes"
+    then
+      set_setting_value $rd_conf "update_check" "true" retrodeck "options"
+    else # User clicked "Cancel"
+      configurator_retrodeck_tools_dialog
+    fi
   fi
 }
 

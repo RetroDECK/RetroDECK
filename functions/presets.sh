@@ -41,6 +41,7 @@ change_preset_dialog() {
   local rc=$?
 
   if [[ ! -z $choice || "$rc" == 0 ]]; then
+    (
     IFS="," read -ra choices <<< "$choice"
     for emulator in "${all_systems[@]}"; do
       if [[ " ${choices[*]} " =~ " ${emulator} " && ! " ${current_enabled_systems[*]} " =~ " ${emulator} " ]]; then
@@ -70,6 +71,11 @@ change_preset_dialog() {
     for emulator in "${changed_systems[@]}"; do
       build_preset_config $emulator ${changed_presets[*]}
     done
+    ) |
+    zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator Utility - Presets Configuration" \
+    --text="Setting up your presets, please wait..."
   else
     echo "No choices made"
   fi
