@@ -13,6 +13,7 @@ You can visit our:<br/>
 [Website](https://retrodeck.net) <br/>
 [Wiki](https://github.com/XargonWan/RetroDECK/wiki) <br/>
 [Discord](https://discord.gg/Dz3szYsP8g)
+[Subreddit](https://www.reddit.com/r/retrodeck)
 
 ## What is RetroDECK?
 RetroDECK is a [EmulationStation Desktop Edition](https://es-de.org) powered application that builds in a variety of emulators and other software that allows you to play your favorite retro (and even not-so-retro) games in a tidy contained sandbox environment. It's inspired by embedded emulation systems like AmberELEC, EmuELEC, CoreELEC, Lakka, and Batocera.
