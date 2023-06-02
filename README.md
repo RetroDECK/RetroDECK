@@ -35,18 +35,18 @@ You can get it to run on other Linux devices or Linux Desktop today, it is not j
 You will need to manually configure the input to match your device and might need to tweak more settings if you try it on a none Steam Deck device.
 
 
+### RetroDECK is tailored to the Steam Deck during the BETA period.
+The goal is that all the configurations are ready out-of-the-box and optimized towards the Steam Deck. Just put your `ROMS` & `BIOS` in the corresponding folders and start playing.
+
+### How do I install RetroDECK?
+Read and follow the guide here: [Installation instructions](https://github.com/XargonWan/RetroDECK/wiki/How-to:-Getting-started) on the Wiki
+
 ## The RetroDECK community:
 [Website](https://retrodeck.net) <br/>
 [Wiki](https://github.com/XargonWan/RetroDECK/wiki) <br/>
 [Discord](https://discord.gg/Dz3szYsP8g)<br/>
 [Subreddit](https://www.reddit.com/r/retrodeck)
 
-
-### RetroDECK is tailored to the Steam Deck during the BETA period.
-The goal is that all the configurations are ready out-of-the-box and optimized towards the Steam Deck. Just put your `ROMS` & `BIOS` in the corresponding folders and start playing.
-
-### How do I install RetroDECK?
-Read and follow the guide here: [Installation instructions](https://github.com/XargonWan/RetroDECK/wiki/How-to:-Getting-started) on the Wiki
 
 # Short FAQ
 
