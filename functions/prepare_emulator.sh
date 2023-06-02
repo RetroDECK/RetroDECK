@@ -106,6 +106,12 @@ prepare_emulator() {
       echo "-----------------------------------------------------------"
       cp -rf "/app/retrodeck/extras/MSX/Databases" "$bios_folder/Databases"
       cp -rf "/app/retrodeck/extras/MSX/Machines" "$bios_folder/Machines"
+
+      # AMIGA
+      echo "-----------------------------------------------------------"
+      echo "Initializing AMIGA LIBRETRO"
+      echo "-----------------------------------------------------------"
+      cp -f "/app/retrodeck/extras/Amiga/capsimg.so" "$bios_folder/capsimg.so"
     
       dir_prep "$texture_packs_folder/RetroArch-Mesen" "/var/config/retroarch/system/HdPacks"
       dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/cache" "/var/config/retroarch/system/Mupen64plus/cache"

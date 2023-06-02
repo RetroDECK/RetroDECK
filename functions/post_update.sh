@@ -75,6 +75,7 @@ post_update() {
     # - Expose ES-DE gamelists folder to user at ~/retrodeck/gamelists
     # - Copy new borders into RA config location
     # - Copy new RetroArch control remaps into RA config location
+    # - Add shipped Amiga bios if it doesn't already exist
     # - Update RPCS3 vfs file contents. migrate from old location if needed
     # - Disable ESDE update checks for existing installs
     # - Move Duckstation saves and states to new locations
@@ -129,9 +130,9 @@ post_update() {
 
     rsync -a --mkpath "$emuconfigs/defaults/retrodeck/presets/remaps/" "/var/config/retroarch/config/remaps/"
 
-    # if [[ $(configurator_generic_question_dialog "RetroDECK Starter Pack" "The RetroDECK creators have put together a collection of classic retro games you might enjoy!\n\nWould you like to have them automatically added to your library?\n\nThis can always be done later through the Configurator.") == "true" ]]; then
-    #   install_retrodeck_starterpack
-    # fi
+    if [[ ! -f "$bios_folder/capsimg.so" ]]; then
+      cp -f "/app/retrodeck/extras/Amiga/capsimg.so" "$bios_folder/capsimg.so"
+    fi
 
     cp -f $emuconfigs/rpcs3/vfs.yml /var/config/rpcs3/vfs.yml
     sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$bios_folder/rpcs3/"'^' "$rpcs3vfsconf"
@@ -211,6 +212,11 @@ post_update() {
     set_setting_value "$ppssppconf" "AutoLoadSaveState" "0" "ppsspp" "General"
 
     prepare_emulator "reset" "cemu"
+
+    configurator_generic_dialog "RetroDECK 0.7.0b Upgrade" "As part of this update, we are offering a new official RetroDECK controller profile!\nIt is an optional component that helps you get the most out of RetroDECK with a new in-game radial menu for unified hotkeys across emulators.\n\nThe files need to be installed outside of the normal ~/retrodeck folder AND REQUIRES A FULL RESET OF ALL EMULATORS, so we wanted your permission before proceeding.\nIf you decide to not install the profile now, it can always be done later through the Configurator.\n\nAny custom changes you have made to the emulator configurations will be reset if you choose to proceed!"
+    if [[ $(configurator_generic_question_dialog "RetroDECK Official Controller Profile" "Would you like to install the official RetroDECK controller profile?") == "true" ]]; then
+      install_retrodeck_controller_profile
+    fi
   fi
 
   # The following commands are run every time.
