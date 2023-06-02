@@ -4,9 +4,9 @@ check_network_connectivity() {
   # This function will do a basic check for network availability and return "true" if it is working.
   # USAGE: if [[ $(check_network_connectivity) == "true" ]]; then
 
-  wget -q --spider "$remote_network_target"
+  local response=$(wget --spider -t 1 $remote_network_target)
 
-  if [ $? -eq 0 ]; then
+  if [[ ! -z $(echo "$response" | grep "HTTP response 200") ]]; then
     echo "true"
   else
     echo "false"
