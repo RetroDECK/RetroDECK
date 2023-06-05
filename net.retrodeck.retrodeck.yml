@@ -72,7 +72,7 @@ modules:
     build-commands:
       - |
 
-        VERSION="cooker-0.7.0b"
+        VERSION=$(git rev-parse --abbrev-ref HEAD)
 
         git checkout ${GITHUB_REF_NAME}
         mkdir -p ${FLATPAK_DEST}/retrodeck/
