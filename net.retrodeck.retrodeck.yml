@@ -26,6 +26,10 @@ finish-args:
   - --filesystem=xdg-run/app/com.discordapp.Discord:create
   # Dolphin
   - --allow=bluetooth
+  # PPSSPP
+  # I disabled these as I don't know what they're doing:
+  #- --env=SDL_VIDEO_X11_WMCLASS=net.retrodeck.retrodeck
+  #- --env=SDL_VIDEO_WAYLAND_WMCLASS=net.retrodeck.retrodeck
 
 cleanup:
   # ES-DE
@@ -524,8 +528,8 @@ modules:
     sources:
       - type: git
         url: &ppsspp-url https://github.com/hrydgard/ppsspp.git
-        tag: v1.15.3
-        commit: 6d619201bdd6d46a3e3d4b2a82a00148eb9ebc5a
+        tag: v1.15.4
+        commit: 9a80120dc09997e40c0a73fda05c3e07a347259f
         x-checker-data:
           type: anitya
           project-id: 12295
