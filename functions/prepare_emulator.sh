@@ -545,7 +545,7 @@ prepare_emulator() {
         set_setting_value "$xemuconf" "screenshot_dir" "'$screenshots_folder'" "xemu" "General"
         set_setting_value "$xemuconf" "bootrom_path" "'$bios_folder/mcpx_1.0.bin'" "xemu" "sys.files"
         set_setting_value "$xemuconf" "flashrom_path" "'$bios_folder/Complex.bin'" "xemu" "sys.files"
-        set_setting_value "$xemuconf" "eeprom_path" "$saves_folder/xbox/xemu/xbox-eeprom.bin" "xemu" "sys.files"
+        set_setting_value "$xemuconf" "eeprom_path" "'$saves_folder/xbox/xemu/xbox-eeprom.bin'" "xemu" "sys.files"
         set_setting_value "$xemuconf" "hdd_path" "'$bios_folder/xbox_hdd.qcow2'" "xemu" "sys.files"
       fi # Shared actions
       mkdir -pv $saves_folder/xbox/xemu/
@@ -559,7 +559,7 @@ prepare_emulator() {
       set_setting_value "$xemuconf" "screenshot_dir" "'$screenshots_folder'" "xemu" "General"
       set_setting_value "$xemuconf" "bootrom_path" "'$bios_folder/mcpx_1.0.bin'" "xemu" "sys.files"
       set_setting_value "$xemuconf" "flashrom_path" "'$bios_folder/Complex.bin'" "xemu" "sys.files"
-      set_setting_value "$xemuconf" "eeprom_path" "$saves_folder/xbox/xemu/xbox-eeprom.bin" "xemu" "sys.files"
+      set_setting_value "$xemuconf" "eeprom_path" "'$saves_folder/xbox/xemu/xbox-eeprom.bin'" "xemu" "sys.files"
       set_setting_value "$xemuconf" "hdd_path" "'$bios_folder/xbox_hdd.qcow2'" "xemu" "sys.files"
     fi
   fi
