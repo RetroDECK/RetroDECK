@@ -170,8 +170,10 @@ desktop_mode_warning
 low_space_warning
 
 # Check if there is a new version of RetroDECK available, if update_check=true in retrodeck.cfg and there is network connectivity available.
-if [[ $(check_network_connectivity) == "true" ]] && [[ $update_check == "true" ]]; then
-  check_for_version_update
+if [[ $update_check == "true" ]]; then
+  if [[ $(check_network_connectivity) == "true" ]]; then
+    check_for_version_update
+  fi
 fi
 
 # Normal Startup
