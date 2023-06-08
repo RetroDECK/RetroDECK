@@ -27,9 +27,9 @@ finish-args:
   # Dolphin
   - --allow=bluetooth
   # PPSSPP
-  # I disabled these as I don't know what they're doing:
-  #- --env=SDL_VIDEO_X11_WMCLASS=net.retrodeck.retrodeck
-  #- --env=SDL_VIDEO_WAYLAND_WMCLASS=net.retrodeck.retrodeck
+  # It allows an SDL application to specify its window class, which can be useful for window managers and desktop environments to identify and group similar windows
+  - --env=SDL_VIDEO_X11_WMCLASS=net.retrodeck.retrodeck
+  - --env=SDL_VIDEO_WAYLAND_WMCLASS=net.retrodeck.retrodeck
 
 cleanup:
   # ES-DE
@@ -567,8 +567,8 @@ modules:
       - ln -s "${FLATPAK_DEST}/yuzu/usr/bin/yuzu" "${FLATPAK_DEST}/bin/yuzu"
     sources:
       - type: file
-        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1440/yuzu-mainline-20230521-f82efe9f6.AppImage
-        sha256: 7a18690ada3536be78f627425a884a6cc9b74f4b1e296a2de35f6f10a76336d8
+        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1461/yuzu-mainline-20230606-238e46ec9.AppImage
+        sha256: 4b565923b5cabcde28788151ba4f3e392275386cd8b5ff246cc43a619607a290
 
   # Yuzu - END
 
