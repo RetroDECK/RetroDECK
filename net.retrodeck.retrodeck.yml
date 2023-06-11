@@ -567,12 +567,13 @@ modules:
       - ln -s "${FLATPAK_DEST}/yuzu/usr/bin/yuzu" "${FLATPAK_DEST}/bin/yuzu"
     sources:
       - type: file
-        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1461/yuzu-mainline-20230606-238e46ec9.AppImage
-        sha256: 4b565923b5cabcde28788151ba4f3e392275386cd8b5ff246cc43a619607a290
+        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1465/yuzu-mainline-20230611-b9fc07fc0.AppImage
+        sha256: 3a5c90947d0e5ca839921a4b77ec11b71176dcd4fb6f64c81757af1ba0f6f4d3
 
   # Yuzu - END
 
   # CITRA - START
+  # DO NOT UPDATE! WENT ON QT6
   # https://github.com/flathub/org.citra_emu.citra
 
   - rd-submodules/shared-modules/SDL2/SDL2-with-libdecor.json
@@ -631,8 +632,8 @@ modules:
       - ln -s "${FLATPAK_DEST}/pcsx2-qt/usr/bin/pcsx2-qt" "${FLATPAK_DEST}/bin/pcsx2-qt"
     sources:
       - type: file
-        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.4490/pcsx2-v1.7.4490-linux-AppImage-64bit-Qt.AppImage
-        sha256: 8580855b5b4a71e188e09ba1e44bfee981b6e642b14058bdce0b6c645c0313d3
+        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.4570/pcsx2-v1.7.4570-linux-AppImage-64bit-Qt.AppImage
+        sha256: fab77713f37140451d37b237092df479fa61325a97c038fad5a9c687f1e5f2b1
 
   # PCSX2 - END
 
@@ -809,8 +810,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/xemu-project/xemu.git
-        tag: v0.7.88
-        commit: 9e1f5f2f19a8b0e880e034d455b359d426f6d386
+        tag: v0.7.92
+        commit: d557a294feb3ecae8ec22adca0909e2d3adcc459
         x-checker-data:
           type: json
           url: https://api.github.com/repos/xemu-project/xemu/releases/latest
@@ -868,8 +869,8 @@ modules:
     buildsystem: cmake-ninja
     builddir: true
     build-options:
-      append-ld-library-path: /usr/lib/sdk/llvm14/lib
-      append-path: /usr/lib/sdk/llvm14/bin
+      append-ld-library-path: /usr/lib/sdk/llvm16/lib
+      append-path: /usr/lib/sdk/llvm16/bin
       cflags: &optflags -O2 -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong
         -grecord-gcc-switches -fasynchronous-unwind-tables -fstack-clash-protection
         -fcf-protection -fno-omit-frame-pointer
@@ -884,17 +885,20 @@ modules:
       ldflags: -fuse-ld=lld
     config-opts:
       - -DCMAKE_BUILD_TYPE=RelWithDebInfo
-      - -DBUILD_LLVM_SUBMODULE=ON
+      #- -DBUILD_LLVM_SUBMODULE=ON this was replaced by the fllowing:
+      - -DBUILD_LLVM=OFF
       - -DUSE_NATIVE_INSTRUCTIONS=OFF
       - -DUSE_PRECOMPILED_HEADERS=OFF
+      - -DUSE_SDL=ON
       - -DUSE_SYSTEM_CURL=ON
       # Disabled this to force RPCS3 to use our built FFMPEG
       - -DUSE_SYSTEM_FFMPEG=OFF
       - -DUSE_SYSTEM_LIBPNG=ON
+      - -DUSE_SYSTEM_SDL=ON
       - -DUSE_SYSTEM_ZLIB=ON
-      - -DITTAPI_SOURCE_DIR=/run/build/rpcs3/ittapi
       - -Wno-dev
     post-install:
+      - cp /usr/lib/sdk/llvm16/lib/libLLVM-16.so /app/lib/
       - |-
         set -eux
 
@@ -904,17 +908,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/RPCS3/rpcs3.git
-        commit: 3e556c710b3256d23b9e524e44d45ba8bbf63814
-      - type: git
-        url: https://github.com/intel/ittapi.git
-        commit: 4a3762fbc517475bfb0586efc513e51c164108c9
-        dest: ittapi/ittapi
-        disable-shallow-clone: true
-      # remove git-lfs hook
-      - type: inline
-        dest: ittapi/ittapi/.git/hooks
-        dest-filename: post-checkout
-        contents:
+        branch: master
+        commit: c0e97b4e962196b5d937cfe423b31b14a1f9ed90
 
   # RPCS3 - END
 
