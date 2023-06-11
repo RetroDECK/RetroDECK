@@ -1,9 +1,9 @@
 "controller_mappings"
 {
 	"version"		"3"
-	"revision"		"1581"
+	"revision"		"1596"
 	"title"		"RetroDECK: Official Layout - v0.7b"
-	"description"		"The Official RetroDECK Layout""
+	"description"		"The Official RetroDECK Layout"
 	"creator"		""
 	"progenitor"		""
 	"url"		""
@@ -12,7 +12,7 @@
 	"controller_caps"		"23117823"
 	"major_revision"		"0"
 	"minor_revision"		"0"
-	"Timestamp"		"-1230584288"
+	"Timestamp"		"-1230453184"
 	"actions"
 	{
 		"Default"
@@ -1431,7 +1431,7 @@
 						"bindings"
 						{
 							"binding"		"key_press LEFT_CONTROL, Exit / Quit Emulator, RD-process-stop.png, "
-							"binding"		"key_press ESCAPE, Exit / Quit Emulator, RD-process-stop.png, "
+							"binding"		"key_press Q, Exit / Quit Emulator, RD-process-stop.png, "
 						}
 					}
 				}
@@ -3160,7 +3160,7 @@
 						"bindings"
 						{
 							"binding"		"key_press LEFT_CONTROL, Exit / Quit Emulator, RD-process-stop.png, "
-							"binding"		"key_press ESCAPE, Exit / Quit Emulator, RD-process-stop.png, "
+							"binding"		"key_press Q, Exit / Quit Emulator, RD-process-stop.png, "
 						}
 					}
 				}
@@ -3715,7 +3715,7 @@
 				{
 				}
 			}
-			"touch_menu_button_5"
+			"touch_menu_button_4"
 			{
 				"activators"
 				{
@@ -3732,7 +3732,7 @@
 				{
 				}
 			}
-			"touch_menu_button_6"
+			"touch_menu_button_5"
 			{
 				"activators"
 				{
@@ -3748,7 +3748,7 @@
 				{
 				}
 			}
-			"touch_menu_button_7"
+			"touch_menu_button_6"
 			{
 				"activators"
 				{
@@ -3764,7 +3764,7 @@
 				{
 				}
 			}
-			"touch_menu_button_8"
+			"touch_menu_button_7"
 			{
 				"activators"
 				{
@@ -8291,7 +8291,7 @@
 						"bindings"
 						{
 							"binding"		"key_press LEFT_CONTROL, EXIT EMULATOR, , "
-							"binding"		"key_press ESCAPE, EXIT EMULATOR, , "
+							"binding"		"key_press Q, EXIT EMULATOR, , "
 						}
 					}
 				}
