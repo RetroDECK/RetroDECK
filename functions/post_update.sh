@@ -209,14 +209,14 @@ post_update() {
     set_setting_value "$dolphinconf" "ConfirmStop" "False" "dolphin" "Interface"
     set_setting_value "$duckstationconf" "ConfirmPowerOff" "false" "duckstation" "Main"
     set_setting_value "$primehackconf" "ConfirmStop" "False" "primehack" "Interface"
-    
+
     set_setting_value "$ppssppconf" "AutoLoadSaveState" "0" "ppsspp" "General"
 
     prepare_emulator "reset" "cemu"
 
     prepare_emulator "reset" "pico8"
 
-    configurator_generic_dialog "RetroDECK 0.7.0b Upgrade" "As part of this update, we are offering a new official RetroDECK controller profile!\nIt is an optional component that helps you get the most out of RetroDECK with a new in-game radial menu for unified hotkeys across emulators.\n\nThe files need to be installed outside of the normal ~/retrodeck folder AND REQUIRES A FULL RESET OF ALL EMULATORS, so we wanted your permission before proceeding.\nIf you decide to not install the profile now, it can always be done later through the Configurator.\n\nAny custom changes you have made to the emulator configurations will be reset if you choose to proceed!"
+    configurator_generic_dialog "RetroDECK 0.7.0b Upgrade" "Would you like to install the official controller profile?\n(this will reset your custom emulator settings)\n\nAfter installation you can enable it from from Controller Settings -> Templates."
     if [[ $(configurator_generic_question_dialog "RetroDECK Official Controller Profile" "Would you like to install the official RetroDECK controller profile?") == "true" ]]; then
       install_retrodeck_controller_profile
       prepare_emulator "reset" "all"

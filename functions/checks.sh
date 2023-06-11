@@ -37,7 +37,7 @@ check_for_version_update() {
         choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="Ignore this version" \
           --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
           --title "RetroDECK Update Available" \
-          --text="There is a new version of RetroDECK available!\nYou are running version $hard_version, the latest is $online_version.\n\nIf you would like to update to the new version now, click \"Yes\".\nIf you would like to skip reminders about this version, click \"Ignore this version\".\nYou will be reminded again at the next version update.\n\nIf you would like to disable these update notifications entirely, disable Online Update Checks in the Configurator.")
+          --text="There is a new version of RetroDECK on the stable release channel $online_version. Would you like to update to it?\n\n(depending on your internet speed this could takes several minutes).")
         rc=$? # Capture return code, as "Yes" button has no text value
         if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
           if [[ $choice == "Ignore this version" ]]; then
@@ -51,7 +51,7 @@ check_for_version_update() {
           zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
           --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
           --title "RetroDECK Updater" \
-          --text="RetroDECK is updating to the latest version, please wait."
+          --text="Upgrade in process please wait (this could takes several minutes)."
           configurator_generic_dialog "RetroDECK Online Update" "The update process is now complete!\n\nPlease restart RetroDECK to keep the fun going."
           exit 1
         fi
