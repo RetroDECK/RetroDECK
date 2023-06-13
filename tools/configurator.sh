@@ -541,7 +541,7 @@ configurator_retrodeck_tools_dialog() {
     fi
   ;;
 
-  "RetroDECK: Change Update Check Setting" )
+  "RetroDECK: Change Update Setting" )
     configurator_online_update_setting_dialog
   ;;
 
