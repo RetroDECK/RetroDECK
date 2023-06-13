@@ -5,18 +5,24 @@ check_network_connectivity() {
   # USAGE: if [[ $(check_network_connectivity) == "true" ]]; then
 
   (
-  local response=$(wget --spider -t 1 $remote_network_target)
+  local response=
+
+  if [[ ! -z $(wget --spider -t 1 $remote_network_target_1 | grep "HTTP response 200") ]]; then
+    local network_connnected="true"
+  elif [[ ! -z $(wget --spider -t 1 $remote_network_target_2 | grep "HTTP response 200") ]]; then
+    local network_connnected="true"
+  elif [[ ! -z $(wget --spider -t 1 $remote_network_target_3 | grep "HTTP response 200") ]]; then
+    local network_connnected="true"
+  else
+    local network_connnected="false"
+  fi
   ) |
   zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Network Check" \
   --text="Verifying network connectivity..."
 
-  if [[ ! -z $(echo "$response" | grep "HTTP response 200") ]]; then
-    echo "true"
-  else
-    echo "false"
-  fi
+  echo "$network_connected" 
 }
 
 check_desktop_mode() {
