@@ -4,7 +4,13 @@ check_network_connectivity() {
   # This function will do a basic check for network availability and return "true" if it is working.
   # USAGE: if [[ $(check_network_connectivity) == "true" ]]; then
 
+  (
   local response=$(wget --spider -t 1 $remote_network_target)
+  ) |
+  zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+  --title "RetroDECK Network Check" \
+  --text="Verifying network connectivity..."
 
   if [[ ! -z $(echo "$response" | grep "HTTP response 200") ]]; then
     echo "true"
