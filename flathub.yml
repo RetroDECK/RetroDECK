@@ -31,30 +31,6 @@ finish-args:
   - --env=SDL_VIDEO_X11_WMCLASS=net.retrodeck.retrodeck
   - --env=SDL_VIDEO_WAYLAND_WMCLASS=net.retrodeck.retrodeck
 
-cleanup:
-  # ES-DE
-  - /include
-  - /share/ffmpeg
-  - /lib/cmake
-  - /lib/pkgconfig
-  # Yuzu
-  - /include
-  - /bin/glslangValidator
-  - /bin/zip*
-  - /bin/zstd*
-  - /lib/pkg-config
-  - /share/doc
-  - /share/man
-  - /src
-  - '*.a'
-  - '*.la'
-  # XMLSTARLET
-  - /lib/debug
-  - /share/runtime
-cleanup-commands:
-  # Yuzu
-  - /app/cleanup-BaseApp.sh
-
 modules:
   - name: retrodeck
     buildsystem: simple
