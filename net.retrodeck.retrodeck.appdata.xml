@@ -66,7 +66,7 @@
    <metadata_license>CC0-1.0</metadata_license>
    <releases>
       <release version="0.7.0b" date="2023-04-11">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.4b</url>
+         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.7.0b</url>
          <description>
             <p>New - System features:</p>
             <ul>
@@ -83,7 +83,7 @@
                <li>Added a global preset to enable/disable Widescreen in all supported emulators, globally or per core/emulator.</li>
                <li>Added a global preset to enable/disable Ask-to-Exit prompts in all supported emulators.</li>
                <li>Added a preset to enable/disable Pegasus and NyNy77 Borders for RetroArch, globally or per core.</li>
-               <li>Added an option to install Venomalia's Universial Dynamic Input Textures for Dolphin https://github.com/Venomalia/UniversalDynamicInput</li>
+               <li>Added an option to install Venomalia's Universial Dynamic Input Textures for Dolphin.</li>
                <li>Added an RetroDECK: About section</li>
                <li>Added an option to install the RetroDECK Steam Deck controller profile</li>
                <li>Added an “RetroDECK: Auto Updates” function that enables or disables auto updates on RetroDECK launch.</li>

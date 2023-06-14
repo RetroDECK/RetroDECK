@@ -66,7 +66,7 @@ modules:
   #
   # UPDATE STEPS FOR MAIN:
   # [X] Update the VERSION variable
-  # [ ] Update the appdata.xml with the version number and notes
+  # [X] Update the appdata.xml with the version number and notes
   # [X] change branch into main in version-initialization (first one)
   # [X] change branch into main in retrodeck module (last one)
   # [X] if header (before modules) was edited, edit it even in flathub.yml
