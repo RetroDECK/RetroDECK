@@ -68,14 +68,53 @@
       <release version="0.7.0b" date="2023-04-11">
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.4b</url>
          <description>
-            <p>New features - General:</p>
+            <p>New - System features:</p>
             <ul>
-               <li>Added CEMU, WiiU Emulator</li>
-               <li>Dolphin (Standalone) is now default for GameCube and Wii</li>
+               <li>The Configurator has a new home inside the ES-DE main menu and thus the tools menu has been removed.</li>
+               <li>The Configurator also has a .deskop icon for ease of access for both Steam Deck desktop mode and Linux Desktop users.</li>
+               <li>Added RetroDECK auto updates on launch, this can be disabled from the Configurator this works in Game Mode for the Steam Deck.</li>
             </ul>
-            <p>Bug fixes and other changes:</p>
+            <p>New RetroDECK Configurator features:</p>
             <ul>
-               <li>PLACEHOLDER</li>
+               <li>The Configurator has a new structure, with more menus and options.</li>
+               <li>The compression tool has been updated to allow for even more formats such as .zip in addition to the standard disc-based formats for certain systems.</li>
+               <li>The compression tool has been updated to have an even stronger verification before a compression job starts.</li>
+               <li>Added a global preset to swap A/B and X/Y in all supported emulators (aka N layout).</li>
+               <li>Added a global preset to enable/disable Widescreen in all supported emulators, globally or per core/emulator.</li>
+               <li>Added a global preset to enable/disable Ask-to-Exit prompts in all supported emulators.</li>
+               <li>Added a preset to enable/disable Pegasus and NyNy77 Borders for RetroArch, globally or per core.</li>
+               <li>Added an option to install Venomalia's Universial Dynamic Input Textures for Dolphin https://github.com/Venomalia/UniversalDynamicInput</li>
+               <li>Added an RetroDECK: About section</li>
+               <li>Added an option to install the RetroDECK Steam Deck controller profile</li>
+               <li>Added an “RetroDECK: Auto Updates” function that enables or disables auto updates on RetroDECK launch.</li>
+               <li>Added a Semi-automated RPCS3 firmware installer.</li>
+               <li>The Move Folder tool has been greatly expanded</li>
+               <li>You can now move the entire folder or different folders as you choose. (WARNING! Please do not try to move the data to more exotic locations).</li>
+               <li>The basic BIOS checker has been removed.</li>
+               <li>The BIOS checker has been updated to look for over 120+ BIOS.</li>
+               <li>RetroAchivements Login: Now logs into all supported emulators/cores at once.</li>
+               <li>RetroAchivements Logout: Now logs out of all supported emulators/cores at once.</li>
+               <li>Added RetroAchivements: Hardcore Mode, that lets you toggle hardcore mode for supported emulators/cores with a logged in RetroAchivements account.</li>
+            </ul>
+            <p>Updates:</p>
+            <ul>
+               <li>Updated ES-DE to the latest version.</li>
+               <li>Updated RetroArch and the cores to latest versions.</li>
+               <li>Updated all standalone emulators and to their latest versions.</li>
+            </ul>
+            <p>Bugfixes and other changes:</p>
+            <ul>
+               <li>Dolphin/Primehack Wii Mote controls have been redesigned for the Steam Deck to allow both for touch input or right radial as pointer and R2 emulates the Wii Remote Shake needed for certain games.</li>
+               <li>Updated the RPCS3 to run better and with a better configuration. Read more on the wiki on how to install DLC and patches.</li>
+               <li>RPCS3 and Duckstations save files where in the wrong directory. They have been moved to fit the overall inside the RetroDECK Framework. If you have any issues, contact us on discord or add them on github.</li>
+               <li>We made a unique PICO-8 wrapper that makes it runs better in a flatpak environment.</li>
+               <li>Fixed an avcodec issue that caused some roms for certain emulators to break.</li>
+               <li>Changed the ES-DE progress bar color</li>
+               <li>Changed how Yuzu builds are handled and should allow for better Yuzu updates.</li>
+               <li>Added a low space warning on launch.</li>
+               <li>Various backend improvements and fixes.</li>
+               <li>Added the foss Capsimg BIOS for the Amiga RetroArch core.</li>
+               <li>Implemented ES-DE's experimental theme downloader. For fresh new installs we only now ship one theme: ArtBookNext (as all other themes can be downloaded from the interface).</li>
             </ul>
          </description>
       </release>
