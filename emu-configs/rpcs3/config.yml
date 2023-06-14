@@ -75,8 +75,10 @@ Video:
   Resolution: 1280x720
   Aspect ratio: 16:9
   Frame limit: Auto
+  Second Frame Limit: 0
   MSAA: Auto
   Shader Mode: Async Shader Recompiler
+  Shader Precision: High
   Write Color Buffers: false
   Write Depth Buffer: false
   Read Color Buffers: false
@@ -100,7 +102,6 @@ Video:
   Disable Vulkan Memory Allocator: false
   Use full RGB output range: true
   Strict Texture Flushing: false
-  Disable native float16 support: true
   Multithreaded RSX: false
   Relaxed ZCULL Sync: false
   Enable 3D: false
@@ -120,14 +121,13 @@ Video:
   DECR memory layout: false
   Allow Host GPU Labels: false
   Disable MSL Fast Math: false
-  Software VkSemaphore: false
+  Output Scaling Mode: Bilinear
   Vulkan:
-    Adapter: llvmpipe (LLVM 12.0.1, 256 bits)
+    Adapter: AMD RADV VANGOGH
     Force FIFO present mode: false
     Force primitive restart flag: false
-    Force Disable Exclusive Fullscreen Mode: false
+    Exclusive Fullscreen Mode: Automatic
     Asynchronous Texture Streaming 2: false
-    Enable FidelityFX Super Resolution Upscaling: false
     FidelityFX CAS Sharpening Intensity: 50
     Asynchronous Queue Scheduler: Fast
   Performance Overlay:
@@ -152,51 +152,58 @@ Video:
     Body Background (hex): "#002339FF"
     Title Color (hex): "#F26C24FF"
     Title Background (hex): "#00000000"
-  Shader Compilation Hint:
-    Position X (px): 20
-    Position Y (px): 690
   Shader Loading Dialog:
     Allow custom background: true
     Darkening effect strength: 30
     Blur effect strength: 0
 Audio:
   Renderer: Cubeb
-  Audio provider: CellAudio
+  Audio Provider: CellAudio
+  RSXAudio Avport: HDMI 0
   Dump to file: false
   Convert to 16 bit: false
-  Audio Channels: Downmix to Stereo
+  Audio Format: Stereo
+  Audio Formats: 0
+  Audio Device: "@@@default@@@"
   Master Volume: 100
   Enable Buffering: true
   Desired Audio Buffer Duration: 100
   Enable Time Stretching: true
+  Disable Sampling Skip: false
   Time Stretching Threshold: 75
   Microphone Type: "Null"
   Microphone Devices: "@@@@@@@@@@@@"
   Music Handler: Qt
 Input/Output:
-  Keyboard: "Null"
+  Keyboard: Basic
   Mouse: Basic
   Camera: "Null"
   Camera type: Unknown
   Camera flip: None
   Camera ID: Default
-  Move: "Null"
+  Move: Mouse
   Buzz emulated controller: "Null"
   Turntable emulated controller: "Null"
   GHLtar emulated controller: "Null"
   Pad handler mode: Single-threaded
   Pad handler sleep (microseconds): 1000
+  Background input enabled: true
+  Show move cursor: false
 System:
   License Area: SCEE
   Language: English (US)
   Keyboard Type: English keyboard (US standard)
   Enter button assignment: Enter with cross
   Console time offset (s): 0
+  PSID high: 0
+  PSID low: 0
 Net:
   Internet enabled: Disconnected
   IP address: 0.0.0.0
+  Bind address: 0.0.0.0
   DNS address: 8.8.8.8
   IP swap list: ""
+  UPNP Enabled: false
   PSN status: Disconnected
 Savestate:
   Start Paused: false
@@ -214,3 +221,5 @@ Miscellaneous:
   GDB Server: 127.0.0.1:2345
   Silence All Logs: false
   Window Title Format: "FPS: %F | %R | %V | %T [%t]"
+  Pause Emulation During Home Menu: true
+Log: {}

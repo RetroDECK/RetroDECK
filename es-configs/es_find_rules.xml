@@ -100,6 +100,7 @@
     <emulator name="CEMU">
         <!-- Nintendo Wii U emulator Cemu -->
         <rule type="systempath">
+            <entry>Cemu-wrapper</entry>
             <entry>cemu</entry>
             <entry>Cemu</entry>
         </rule>
@@ -134,6 +135,14 @@
             <entry>~/Applications/cpcemu/cpcemu</entry>
             <entry>~/.local/bin/cpcemu/cpcemu</entry>
             <entry>~/bin/cpcemu/cpcemu</entry>
+        </rule>
+    </emulator>
+    <emulator name="CSPECT">
+        <!-- Sinclair ZX Spectrum Next emulator #CSpect -->
+        <rule type="staticpath">
+            <entry>~/Applications/CSpect/CSpect.exe</entry>
+            <entry>~/.local/bin/CSpect/CSpect.exe</entry>
+            <entry>~/bin/CSpect/CSpect.exe</entry>
         </rule>
     </emulator>
     <emulator name="DESMUME">

@@ -1,18 +1,16 @@
 app-id: net.retrodeck.retrodeck
 runtime: org.kde.Platform
-runtime-version: 5.15-21.08
-#runtime-version: 6.3                        # bumped because of pcsx2-qt
+runtime-version: 5.15-22.08
 sdk: org.kde.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.llvm14    # Needed for rpcs3
-  #- org.freedesktop.Sdk.Extension.dotnet6   # Needed for Ryujinx - Removed, check if it's not breaking something else
 base: io.qt.qtwebengine.BaseApp             # Needed for Yuzu
-base-version: 5.15-21.08                    # Needed for Yuzu
+base-version: 5.15-22.08                    # Needed for Yuzu
 command: retrodeck.sh
 
 finish-args:
-  - --socket=x11
-  #- --socket=wayland
+  - --socket=fallback-x11
+  - --socket=wayland
   - --socket=pulseaudio
   - --share=ipc
   - --share=network
@@ -24,22 +22,20 @@ finish-args:
   - --talk-name=org.freedesktop.ScreenSaver
   - --talk-name=org.freedesktop.PowerManagement.Inhibit
   - --talk-name=org.freedesktop.login1.Manager
+  - --talk-name=org.freedesktop.Flatpak
   - --filesystem=xdg-run/app/com.discordapp.Discord:create
-  # Yuzu
-  # - --filesystem=home:ro # This may break Yuzu, let's see
-  # - --filesystem=/run/media:ro
   # Dolphin
   - --allow=bluetooth
-  #- --env=QT_QPA_PLATFORM=xcb #not sure if this will break something
-  # rpcs3
-  #- --socket=fallback-x11
+  # PPSSPP
+  # It allows an SDL application to specify its window class, which can be useful for window managers and desktop environments to identify and group similar windows
+  - --env=SDL_VIDEO_X11_WMCLASS=net.retrodeck.retrodeck
+  - --env=SDL_VIDEO_WAYLAND_WMCLASS=net.retrodeck.retrodeck
 
 cleanup:
   # ES-DE
   - /include
   - /share/ffmpeg
   - /lib/cmake
-  #- /lib/debug
   - /lib/pkgconfig
   # Yuzu
   - /include
@@ -52,6 +48,9 @@ cleanup:
   - /src
   - '*.a'
   - '*.la'
+  # XMLSTARLET
+  - /lib/debug
+  - /share/runtime
 cleanup-commands:
   # Yuzu
   - /app/cleanup-BaseApp.sh
@@ -66,31 +65,32 @@ modules:
   # The version number is hardcoded in /app/retrodeck/version
   #
   # UPDATE STEPS FOR MAIN:
-  # [X] Update the VERSION variable
-  # [X] Update the appdata.xml with the version number and notes
-  # [X] change branch into main in version-initialization (first one)
-  # [X] change branch into main in retrodeck module (last one)
-  # [X] if header (before modules) was edited, edit it even in flathub.yml
+  # [ ] Update the VERSION variable
+  # [ ] Update the appdata.xml with the version number and notes
+  # [ ] change branch into main in version-initialization (first one)
+  # [ ] change branch into main in retrodeck module (last one)
+  # [ ] >>>>> if header (before modules) was edited, edit it even in flathub.yml
   #
   - name: version-initialization
     buildsystem: simple
     build-commands:
       - |
-      
-        VERSION="0.6.6b"
+
+        VERSION=$(git rev-parse --abbrev-ref HEAD)
 
         git checkout ${GITHUB_REF_NAME}
         mkdir -p ${FLATPAK_DEST}/retrodeck/
         if [[ $VERSION == *"cooker"* ]];
         then
-          VERSION="$VERSION-[$(git rev-parse --short HEAD)]"
+          VERSION="$VERSION-VERSIONPLACEHOLDER"
         fi
         echo $VERSION >> ${FLATPAK_DEST}/retrodeck/version
         cat ${FLATPAK_DEST}/retrodeck/version
+        echo "Version is $VERSION"
     sources:
       - type: git
         url: https://github.com/XargonWan/RetroDECK.git
-        branch: main
+        branch: cooker-0.7.0b
 
   - name: xmlstarlet
     config-opts:
@@ -107,39 +107,6 @@ modules:
           - autoreconf -vfi
     post-install:
       - ln -s "xml" "${FLATPAK_DEST}/bin/xmlstarlet" ||:
-    cleanup: ['*']
-
-  # pcsx2-qt needs QT6, maybe others, here until every qt emulator will support qt6 (not yuzu atm)
-  # from: https://github.com/flathub/org.profex_xrd.Profex
-
-  # - name: qt6-core5compat
-  #   buildsystem: cmake-ninja
-  #   builddir: true
-  #   sources:
-  #     - type: archive
-  #       url: https://download.qt.io/official_releases/qt/6.2/6.2.4/submodules/qt5compat-everywhere-src-6.2.4.tar.xz
-  #       sha256: 5de2b9e25bf7de161fbb88ecdd468ed1788bc899392fc05ed80aa590ebb352fa
-  #       x-checker-data:
-  #         type: html
-  #         url: https://download.qt.io/official_releases/qt/6.2/
-  #         version-pattern: '>([\d\.-]*)/<'
-  #         url-template: https://download.qt.io/official_releases/qt/6.2/$version/submodules/qt5compat-everywhere-src-$version.tar.xz
-  #   post-install:
-  #     - mkdir -p /app/lib/mkspecs
-  #     - cp -R /app/mkspecs/* /app/lib/mkspecs/
-  #     - ln -fsr ${FLATPAK_DEST}/lib/${FLATPAK_ARCH}-linux-gnu/libQt*.so* -t ${FLATPAK_DEST}/lib/
-  #     - sed -i 's/\\([0-9]\\+\\.[0-9]\\+\\)\\.[0-9]\\+ ${_Qt6.*_FIND_VERSION_EXACT}/\\1/'
-  #       ${FLATPAK_DEST}/lib/${FLATPAK_ARCH}-linux-gnu/cmake/Qt6*/Qt6*Config.cmake
-  #     - sed -e 's@PATHS \"${CMAKE_CURRENT_LIST_DIR}/..\" NO_DEFAULT_PATH@PATHS \"${CMAKE_CURRENT_LIST_DIR}/..\"
-  #       \"/usr/lib/${CMAKE_CXX_LIBRARY_ARCHITECTURE}/cmake/\" NO_DEFAULT_PATH@' -i
-  #       ${FLATPAK_DEST}/lib/${FLATPAK_ARCH}-linux-gnu/cmake/Qt6*/Qt6*Config.cmake
-  #     - sed -e 's@\\($$QT_MODULE_BIN_BASE\\)@\\1 '${FLATPAK_DEST}'/bin @' -i ${FLATPAK_DEST}/lib/mkspecs/modules/*.pri
-  #     - sed -e 's@\\($$QT_MODULE_INCLUDE_BASE \\)@\\1'${FLATPAK_DEST}'/include @'
-  #       -i ${FLATPAK_DEST}/lib/mkspecs/modules/*.pri
-  #     - sed -e 's@$$QT_MODULE_INCLUDE_BASE/@'${FLATPAK_DEST}'/include/@g' -i ${FLATPAK_DEST}/lib/mkspecs/modules/*.pri
-  #     - sed -e 's@$$QT_MODULE_LIB_BASE@'${FLATPAK_DEST}'/lib@g' -i ${FLATPAK_DEST}/lib/mkspecs/modules/*.pri
-  #   cleanup:
-  #     - /app/mkspecs
 
   # mesa repo got a double certificate issue and gnutils cannot handle that so GLU download fails,
   # this affects even the shared-modules's glu so I have to replace it temporarly
@@ -194,9 +161,76 @@ modules:
         url: https://github.com/CharlesThobe/chdman.git
         commit: f7cadf1720cbeba8a14f2685830ff424a0c7f6cd
 
+  - name: rclone
+    buildsystem: simple
+    build-commands:
+      - cp rclone ${FLATPAK_DEST}/bin/
+    sources:
+      - type: archive
+        url: https://github.com/rclone/rclone/releases/download/v1.61.1/rclone-v1.61.1-linux-amd64.zip
+        sha256: 6d6455e1cb69eb0615a52cc046a296395e44d50c0f32627ba8590c677ddf50a9
+
+  # Source: https://github.com/flathub/com.valvesoftware.Steam.Utility.steamtinkerlaunch/blob/129c9192f874405d21612d95f9749dc2bcaf8cea/modules/rsync.yml#L5
+  - name: rsync
+    no-autogen: true
+    config-opts:
+      - --prefix=${FLATPAK_DEST}
+      - --with-included-popt
+      - --with-included-zlib
+      - --disable-debug
+      - --disable-xxhash # Unable to meet dependency -- rsync refuses to see the required xxhash.h file
+    sources:
+      - type: archive
+        url: https://download.samba.org/pub/rsync/src/rsync-3.2.7.tar.gz
+        sha256: 4e7d9d3f6ed10878c58c5fb724a67dacf4b6aac7340b13e488fb2dc41346f2bb
+        x-checker-data:
+          type: anitya
+          project-id: 4217
+          stable-only: true
+          url-template: https://download.samba.org/pub/rsync/src/rsync-$version.tar.gz
+
+  - name: jq
+    buildsystem: simple
+    build-commands:
+      - cp jq-linux64 ${FLATPAK_DEST}/bin/jq
+      - chmod +x ${FLATPAK_DEST}/bin/jq
+    sources:
+      - type: file
+        url: https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
+        sha256: af986793a515d500ab2d35f8d2aecd656e764504b789b66d7e1a0b727a124c44
+  
+  - name: yq
+    buildsystem: simple
+    build-commands:
+      - cp yq_linux_amd64 ${FLATPAK_DEST}/bin/yq
+      - chmod +x ${FLATPAK_DEST}/bin/yq
+    sources:
+      - type: file
+        url: https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_amd64
+        sha256: 4ee662847c588c3ef2fec8bfb304e8739e3dbaba87ccb9a608d691c88f5b64dc
+
+  - name: glslang
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DENABLE_CTEST=OFF
+    cleanup:
+      - /include
+      - /lib/cmake
+    sources:
+      - type: archive
+        url: https://github.com/KhronosGroup/glslang/archive/12.1.0.tar.gz
+        sha256: 1515e840881d1128fb6d831308433f731808f818f2103881162f3ffd47b15cd5
+        x-checker-data:
+          type: anitya
+          stable-only: true
+          project-id: 205796
+          url-template: https://github.com/KhronosGroup/glslang/archive/$version.tar.gz
+
   # ES-DE - START
   # https://gitlab.com/es-de/emulationstation-de
 
+  #This is disabled because we added the extension (line 11), check if the videos are ok.
   - name: ffmpeg
     config-opts:
       - --disable-static
@@ -231,13 +265,33 @@ modules:
   - name: pugixml
     buildsystem: cmake-ninja
     config-opts:
-      - -DBUILD_SHARED_LIBS=on .
+      - -DBUILD_SHARED_LIBS=ON
+    cleanup:
+      - /include
+      - /lib/cmake
+      - /lib/pkgconfig
     sources:
       - type: archive
-        url: https://github.com/zeux/pugixml/releases/download/v1.11.4/pugixml-1.11.4.tar.gz
-        sha256: 8ddf57b65fb860416979a3f0640c2ad45ddddbbafa82508ef0a0af3ce7061716
+        url: https://github.com/zeux/pugixml/releases/download/v1.13/pugixml-1.13.tar.gz
+        sha256: 40c0b3914ec131485640fa57e55bf1136446026b41db91c1bef678186a12abbe
+        x-checker-data:
+          type: anitya
+          project-id: 3728
+          url-template: https://github.com/zeux/pugixml/releases/download/v$version/pugixml-$version.tar.gz
 
-  # When updating this module remember to check those: https://gitlab.com/es-de/emulationstation-de/-/tree/v1.2.6/resources/systems/unix
+  - name: libgit2
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DBUILD_SHARED_LIBS:BOOL=ON
+      - -DTHREADSAFE=ON
+    sources:
+      - type: git
+        url: https://github.com/libgit2/libgit2.git
+        tag: v1.6.3
+
+  # When updating this module remember to check those:
+  # https://gitlab.com/es-de/emulationstation-de/-/blob/[VERSION]/resources/systems/unix/es_find_rules.xml
   # But we don't include them 1:1 as RetroDECK got some specific configs in some cases
   - name: emulationstation-de
     buildsystem: cmake-ninja
@@ -249,13 +303,14 @@ modules:
     sources:
       - type: git
         url: https://gitlab.com/es-de/emulationstation-de
-        branch: 608d8a3c09abc5db398cdadc09e18fd2dfbaf570
+        branch: 7a1e420c9df3b801a65e9bcdc0ac92e2d708836e
       - type: shell
         commands:
-          - sed -i 's/QUIT EMULATIONSTATION/QUIT RETRODECK/g' es-app/src/guis/GuiMenu.cpp
           - sed -i 's#"EMULATIONSTATION-DE  V" + Utils::String::toUpper(PROGRAM_VERSION_STRING)#"RetroDECK
             v'$(cat ${FLATPAK_DEST}/retrodeck/version)', ES-DE  v" + Utils::String::toUpper(PROGRAM_VERSION_STRING)#g'
             es-app/src/guis/GuiMenu.cpp
+      - type: patch
+        path: rd-submodules/es-de/es-de-retrodeck-mods.patch
 
   # ES-DE - END
 
@@ -270,36 +325,6 @@ modules:
       - type: git
         url:  https://github.com/anthonycaccese/art-book-next-es-de.git
         commit: a0dc0cccaa3f1475feb58e551fe732d982e161c0
-
-  - name: alekfull-nx-es-de
-    buildsystem: simple
-    build-commands:
-      - mkdir -p ${FLATPAK_DEST}/share/emulationstation/themes/alekfull-nx-es-de/
-      - mv -f * ${FLATPAK_DEST}/share/emulationstation/themes/alekfull-nx-es-de/
-    sources:
-      - type: git
-        url:  https://github.com/anthonycaccese/alekfull-nx-es-de.git
-        commit: 5011e5dca75663ff18602f3af9d17e9e880880ef
-
-  - name: retrofix-revisited-es-de
-    buildsystem: simple
-    build-commands:
-      - mkdir -p ${FLATPAK_DEST}/share/emulationstation/themes/retrofix-revisited-es-de/
-      - mv -f * ${FLATPAK_DEST}/share/emulationstation/themes/retrofix-revisited-es-de/
-    sources:
-      - type: git
-        url:  https://github.com/anthonycaccese/retrofix-revisited-es-de.git
-        commit: 23b80225078d2a3723039a8e94b6147c84065028
-
-  - name: nso-menu-interpreted-es-de
-    buildsystem: simple
-    build-commands:
-      - mkdir -p ${FLATPAK_DEST}/share/emulationstation/themes/nso-menu-interpreted-es-de/
-      - mv -f * ${FLATPAK_DEST}/share/emulationstation/themes/nso-menu-interpreted-es-de/
-    sources:
-      - type: git
-        url:  https://github.com/anthonycaccese/nso-menu-interpreted-es-de.git
-        commit: f129c2d88e060a6c5d7643de5aeb02a0cc013de3
 
   # ES-DE Themes - END
 
@@ -316,7 +341,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/RetroArch.git
-        commit: 938ab716bd290b0f469068500966a834b5782929
+        commit: 6616b807edea5b56683e9fbca8b003b436c22b13
       - type: file
         path: rd-submodules/retroarch/retroarch.cfg
     post-install:
@@ -354,7 +379,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/RetroArch.git
-        commit: 938ab716bd290b0f469068500966a834b5782929
+        commit: 6616b807edea5b56683e9fbca8b003b436c22b13
   - name: retroarch-filers-audio
     subdir: libretro-common/audio/dsp_filters
     make-install-args:
@@ -362,7 +387,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/RetroArch.git
-        commit: 938ab716bd290b0f469068500966a834b5782929
+        commit: 6616b807edea5b56683e9fbca8b003b436c22b13
   - name: retroarch-assets
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
@@ -432,6 +457,48 @@ modules:
       - type: archive
         url: https://buildbot.libretro.com/stable/1.15.0/linux/x86_64/RetroArch_cores.7z
         sha256: 2230bc38eaf87406efd0c2b7bdd1cf9e813ba113505600f14a7ef9eb06f8c7c0
+    
+  - name: retroarch-sameduck-core
+    buildsystem: simple
+    build-commands:
+      - mv sameduck_libretro.so /app/share/libretro/cores/sameduck_libretro.so
+    sources:
+      - type: archive
+        url: https://buildbot.libretro.com/nightly/linux/x86_64/latest/sameduck_libretro.so.zip
+        sha256: SAMEDUCKSHAPLACEHOLDER
+
+  - name: ppsspp-bios
+    buildsystem: simple
+    build-commands:
+    - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/PPSSPP
+    - mv -f assets/* ${FLATPAK_DEST}/retrodeck/extras/PPSSPP/
+    sources:
+      - type: archive
+        url: https://github.com/hrydgard/ppsspp/archive/refs/heads/master.zip
+        sha256: PPSSPPBIOSHASHPLACEHOLDER
+
+  - name: msx-bios
+    buildsystem: simple
+    build-commands:
+    - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/MSX
+    - mv -f Databases ${FLATPAK_DEST}/retrodeck/extras/MSX/Databases
+    - mv -f Machines ${FLATPAK_DEST}/retrodeck/extras/MSX/Machines
+    sources:
+      - type: archive
+        url: http://bluemsx.msxblue.com/rel_download/blueMSXv282full.zip
+        sha256: MSXBIOSHASHPLACEHOLDER
+        strip-components: 0
+  
+  - name: amiga-bios
+    buildsystem: simple
+    build-commands:
+    - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/Amiga
+    - cp -f Linux/x86-64/capsimg.so ${FLATPAK_DEST}/retrodeck/extras/Amiga/capsimg.so
+    sources:
+      - type: archive
+        url: https://github.com/rsn8887/capsimg/releases/download/1.1/Capsimg_for_Retroarch.zip
+        sha256: 16c1b511b8e1374a2b6461a66bb6f07b7d2627eb4e941fd1497a432330acaad1
+        strip-components: 0
 
   # PPSSPP - START
   # https://github.com/flathub/org.ppsspp.PPSSPP
@@ -439,12 +506,11 @@ modules:
   - name: ppsspp
     buildsystem: cmake-ninja
     config-opts:
-      - -DUSE_SYSTEM_FFMPEG=OFF # default: off, turn this on?
+      - -DUSE_SYSTEM_FFMPEG=OFF
       - -DUSE_SYSTEM_LIBZIP=ON
       - -DUSE_SYSTEM_ZSTD=ON
 
       - -DUSE_WAYLAND_WSI=ON
-      #- -DUSING_X11_VULKAN=ON
       - -DUSING_QT_UI=OFF
 
       - -DBUILD_TESTING=OFF
@@ -462,11 +528,12 @@ modules:
     sources:
       - type: git
         url: &ppsspp-url https://github.com/hrydgard/ppsspp.git
-        tag: v1.14.4
-        commit: cd535263c1ad65fd03869591a8bd706680cbf04b
+        tag: v1.15.4
+        commit: 9a80120dc09997e40c0a73fda05c3e07a347259f
         x-checker-data:
-          type: git
-          tag-pattern: ^v([\d.]+)$
+          type: anitya
+          project-id: 12295
+          tag-template: v$version
           is-main-source: true
 
   - name: ppsspp-localization
@@ -500,12 +567,13 @@ modules:
       - ln -s "${FLATPAK_DEST}/yuzu/usr/bin/yuzu" "${FLATPAK_DEST}/bin/yuzu"
     sources:
       - type: file
-        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1369/yuzu-mainline-20230312-54c359d1e.AppImage
-        sha256: 219874f72ea09856c8f1349d7bf744ecbd2823a469bd29f036b386924f5c5a97
+        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1465/yuzu-mainline-20230611-b9fc07fc0.AppImage
+        sha256: 3a5c90947d0e5ca839921a4b77ec11b71176dcd4fb6f64c81757af1ba0f6f4d3
 
   # Yuzu - END
 
   # CITRA - START
+  # DO NOT UPDATE! WENT ON QT6
   # https://github.com/flathub/org.citra_emu.citra
 
   - rd-submodules/shared-modules/SDL2/SDL2-with-libdecor.json
@@ -534,8 +602,8 @@ modules:
     sources:
       - type: archive
         url: >-
-          https://github.com/citra-emu/citra-nightly/releases/download/nightly-1872/citra-unified-source-20230330-f96047f.tar.xz
-        sha256: 3c49b691d46a1253df7477d1e9d771b7d15b967459851c096150e9952e160bfa
+          https://github.com/citra-emu/citra-nightly/releases/download/nightly-1898/citra-unified-source-20230504-70335a7.tar.xz
+        sha256: b320585bd8c4c075f63d3d9c74b830718e58fcf04d987a5dcead402a72abf753
         x-checker-data:
           type: json
           url: https://api.github.com/repos/citra-emu/citra-nightly/releases/latest
@@ -564,14 +632,15 @@ modules:
       - ln -s "${FLATPAK_DEST}/pcsx2-qt/usr/bin/pcsx2-qt" "${FLATPAK_DEST}/bin/pcsx2-qt"
     sources:
       - type: file
-        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.4303/pcsx2-v1.7.4303-linux-AppImage-64bit-Qt.AppImage
-        sha256: 5680bcc510f0898e6078c60ef2ef1d987b8414e1296c5ff88bd87933e4a314b3
+        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.4570/pcsx2-v1.7.4570-linux-AppImage-64bit-Qt.AppImage
+        sha256: fab77713f37140451d37b237092df479fa61325a97c038fad5a9c687f1e5f2b1
 
   # PCSX2 - END
 
   # Dolphin - START
   # https://github.com/flathub/org.DolphinEmu.dolphin-emu
   # WHEN UPADTING: remember to update rd-submodules/dolphin contents
+  # NOTE: this is the last QT5 build, do not update until we don't fully switch to QT6!
 
   # needed for the emulate bluetooth adapter feature to work
   - name: bluez
@@ -674,28 +743,20 @@ modules:
             dolphin-emu "$@"
         dest-filename: dolphin-emu-wrapper
 
+  - name: universal_dynamic_input
+    buildsystem: simple
+    build-commands:
+      - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/DynamicInputTextures
+      - cp -r * ${FLATPAK_DEST}/retrodeck/extras/DynamicInputTextures/
+    sources:
+      - type: git
+        url: https://github.com/Venomalia/UniversalDynamicInput.git
+        commit: UNIVERSALDYNAMICINPUTCOMMITPLACEHOLDER
+
   # Dolphin - END
 
   # XEMU - START
   # https://github.com/flathub/app.xemu.xemu
-
-  # certificate issue, check libglu module for more info
-  # - name: libglu
-  #   buildsystem: meson
-  #   cleanup:
-  #     - /include
-  #     - /lib/debug
-  #     - /lib/pkgconfig
-  #     - /lib/*.a
-  #   sources:
-  #     - type: archive
-  #       url: http://mesa.freedesktop.org/archive/glu/glu-9.0.2.tar.xz
-  #       sha256: 6e7280ff585c6a1d9dfcdf2fca489251634b3377bfc33c29e4002466a38d02d4
-  #       x-checker-data:
-  #         type: anitya
-  #         project-id: 13518
-  #         stable-only: true
-  #         url-template: http://mesa.freedesktop.org/archive/glu/glu-$version.tar.xz
 
   - name: libpcap
     buildsystem: cmake-ninja
@@ -708,8 +769,8 @@ modules:
       - /share
     sources:
       - type: archive
-        url: https://www.tcpdump.org/release/libpcap-1.10.3.tar.gz
-        sha256: 2a8885c403516cf7b0933ed4b14d6caa30e02052489ebd414dc75ac52e7559e6
+        url: https://www.tcpdump.org/release/libpcap-1.10.4.tar.gz
+        sha256: ed19a0383fad72e3ad435fd239d7cd80d64916b87269550159d20e47160ebe5f
         x-checker-data:
           type: anitya
           project-id: 1702
@@ -749,14 +810,24 @@ modules:
     sources:
       - type: git
         url: https://github.com/xemu-project/xemu.git
-        tag: v0.7.86
-        commit: 4a99fd0f1855fc52e15885812abd3ee4bb2b3847
+        tag: v0.7.92
+        commit: d557a294feb3ecae8ec22adca0909e2d3adcc459
         x-checker-data:
           type: json
           url: https://api.github.com/repos/xemu-project/xemu/releases/latest
           tag-query: .tag_name
           timestamp-query: .published_at
           version-query: .tag_name
+
+  - name: xemu-dummy-hdd
+    buildsystem: simple
+    build-commands:
+    - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/XEMU
+    - mv -f "xbox_hdd.qcow2" "${FLATPAK_DEST}/retrodeck/extras/XEMU/xbox_hdd.qcow2"
+    sources:
+      - type: archive
+        url: https://github.com/mborgerson/xemu-hdd-image/releases/latest/download/xbox_hdd.qcow2.zip
+        sha256: XEMUHDDHASHPLACEHOLDER
 
   # XEMU - END
 
@@ -782,6 +853,8 @@ modules:
       - type: git
         url: https://github.com/melonDS-emu/melonDS.git
         commit: 430de6b2702bb93faa8c2004aff3fbd084db4a1e
+      - type: patch
+        path: rd-submodules/melonds/hotkeys.patch
 
   # MELONDS - END
 
@@ -796,8 +869,8 @@ modules:
     buildsystem: cmake-ninja
     builddir: true
     build-options:
-      append-ld-library-path: /usr/lib/sdk/llvm14/lib
-      append-path: /usr/lib/sdk/llvm14/bin
+      append-ld-library-path: /usr/lib/sdk/llvm16/lib
+      append-path: /usr/lib/sdk/llvm16/bin
       cflags: &optflags -O2 -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong
         -grecord-gcc-switches -fasynchronous-unwind-tables -fstack-clash-protection
         -fcf-protection -fno-omit-frame-pointer
@@ -812,16 +885,20 @@ modules:
       ldflags: -fuse-ld=lld
     config-opts:
       - -DCMAKE_BUILD_TYPE=RelWithDebInfo
-      - -DBUILD_LLVM_SUBMODULE=ON
+      #- -DBUILD_LLVM_SUBMODULE=ON this was replaced by the fllowing:
+      - -DBUILD_LLVM=OFF
       - -DUSE_NATIVE_INSTRUCTIONS=OFF
       - -DUSE_PRECOMPILED_HEADERS=OFF
+      - -DUSE_SDL=ON
       - -DUSE_SYSTEM_CURL=ON
-      - -DUSE_SYSTEM_FFMPEG=ON
+      # Disabled this to force RPCS3 to use our built FFMPEG
+      - -DUSE_SYSTEM_FFMPEG=OFF
       - -DUSE_SYSTEM_LIBPNG=ON
+      - -DUSE_SYSTEM_SDL=ON
       - -DUSE_SYSTEM_ZLIB=ON
-      - -DITTAPI_SOURCE_DIR=/run/build/rpcs3/ittapi
       - -Wno-dev
     post-install:
+      - cp /usr/lib/sdk/llvm16/lib/libLLVM-16.so /app/lib/
       - |-
         set -eux
 
@@ -831,17 +908,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/RPCS3/rpcs3.git
-        commit: 3e556c710b3256d23b9e524e44d45ba8bbf63814
-      - type: git
-        url: https://github.com/intel/ittapi.git
-        commit: 4a3762fbc517475bfb0586efc513e51c164108c9
-        dest: ittapi/ittapi
-        disable-shallow-clone: true
-      # remove git-lfs hook
-      - type: inline
-        dest: ittapi/ittapi/.git/hooks
-        dest-filename: post-checkout
-        contents:
+        commit: 5d7e75c5d8c7492ae655ea38bb7ead4b868a2f17
 
   # RPCS3 - END
 
@@ -885,169 +952,170 @@ modules:
 
   # # PRIMEHACK - END
 
-  # # PRIMEHACK APPIMAGE START
-
-  # Duckstation - START
-  # https://github.com/flathub/org.duckstation.DuckStation
-  # Disabled until we completely switch to QT6
-
-  # - name: duckstation
-  #   buildsystem: cmake-ninja
-  #   no-make-install: true
-  #   builddir: true
-  #   config-opts:
-  #     - -DCMAKE_BUILD_TYPE=RelWithDebInfo
-  #     - -DUSE_EGL=ON
-  #     - -DUSE_SDL2=ON
-  #     - -DUSE_WAYLAND=ON
-  #     - -DUSE_X11=ON
-  #     - -DUSE_DRMKMS=ON
-  #     - -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON
-  #   post-install:
-  #     - install -m755 bin/duckstation-qt /app/bin
-  #     - cp -r ../data/* bin/translations /app/bin
-  #   sources:
-  #     - type: git
-  #       url: https://github.com/stenzek/duckstation.git
-  #       commit: 6f709468601183083b8581d4952aaba7baf77084
-  #       # Cloning dep/msvc/qt is only necessary for Windows
-  #       disable-submodules: true
-
-  # Duckstation - END
-
-  # Duckstation-DontUpdate - START
-  # Old version moved to QT6 so it's either this or AppImage
-  # But AppImage is a single one that keep getting updated at the same link so the sha (that's mandatory) will break the build
-  # So yeah we're stuck with this for a while
-
-  - name: duckstation-DontUpdate
-    buildsystem: cmake-ninja
-    no-make-install: true
-    builddir: true
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-      - -DUSE_EGL=ON
-      - -DUSE_SDL2=ON
-      - -DUSE_WAYLAND=ON
-      - -DUSE_X11=ON
-      - -DUSE_DRMKMS=ON
-      - -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON
-    post-install:
-      - install -m 755 -t /app/bin/ bin/duckstation-nogui bin/duckstation-qt
-      - |-
-        for px in 16 32 48 64 128 256; do
-          install -Dm644 ../extras/icons/icon-${px}px.png /app/share/icons/hicolor/${px}x${px}/apps/org.duckstation.DuckStation.png
-        done
-      - cp -r ../data/* bin/translations /app/bin
-    sources:
-      - type: git
-        url: https://github.com/stenzek/duckstation.git
-        commit: 3fb61865e505ba639609fbf16cb8bdf5c66e020c
-
-  # Duckstation-DontUpdate - END
-
   # Duckstation-AppImage - START
   # https://github.com/stenzek/duckstation/releases/tag/preview
 
-  # - name: Duckstation-AppImage
-  #   buildsystem: simple
-  #   build-commands:
-  #     - chmod +x DuckStation-*.AppImage
-  #     - ./DuckStation-x64*.AppImage --appimage-extract
-  #     - mkdir -p "${FLATPAK_DEST}/duckstation"
-  #     - cp -r squashfs-root/* "${FLATPAK_DEST}/duckstation"
-  #     - ln -s "${FLATPAK_DEST}/duckstation/usr/bin/duckstation" "${FLATPAK_DEST}/bin/duckstation"
-  #   sources:
-  #     - type: file
-  #       url: https://github.com/stenzek/duckstation/releases/download/preview/DuckStation-x64.AppImage
-  #       sha256: a107d1837df020cb4e7b8a542059665428883af69c1cf063edd29e2d75634867
+  - name: Duckstation-AppImage
+    buildsystem: simple
+    build-commands:
+      - chmod +x DuckStation-*.AppImage
+      - ./DuckStation-x64*.AppImage --appimage-extract
+      - mkdir -p "${FLATPAK_DEST}/duckstation"
+      - cp -r squashfs-root/* "${FLATPAK_DEST}/duckstation"
+      - ln -s "${FLATPAK_DEST}/duckstation/usr/bin/duckstation-qt" "${FLATPAK_DEST}/bin/duckstation-qt"
+    sources:
+      - type: file
+        url: https://github.com/stenzek/duckstation/releases/download/preview/DuckStation-x64.AppImage
+        sha256: DUCKSTATIONSHAPLACEHOLDER
 
   # Duckstation-AppImage - END
 
   # Cemu - START
   # https://github.com/cemu-project/Cemu/releases
+  # https://github.com/flathub/info.cemu.Cemu
 
-  # Yes, this is old, do not update as we need libespol.so.1
+  - name: boost
+    buildsystem: simple
+    build-commands:
+      - ./bootstrap.sh --prefix=${FLATPAK_DEST} --with-toolset=gcc --with-libraries=filesystem,system,program_options,nowide
+      - ./b2 install variant=release link=shared runtime-link=shared cxxflags="$CXXFLAGS"
+        linkflags="$LDFLAGS" -j ${FLATPAK_BUILDER_N_JOBS}
+    cleanup:
+      - /include
+      - /lib/cmake
+    sources:
+      - type: archive
+        url: https://boostorg.jfrog.io/artifactory/main/release/1.82.0/source/boost_1_82_0.tar.bz2
+        sha256: a6e1ab9b0860e6a2881dd7b21fe9f737a095e5f33a3a874afc6a345228597ee6
+        x-checker-data:
+          type: anitya
+          project-id: 6845
+          stable-only: true
+          url-template: https://boostorg.jfrog.io/artifactory/main/release/$version/source/boost_${major}_${minor}_$patch.tar.bz2
 
-  #- name: Cemu-binary
-  #  buildsystem: simple
-  #  build-commands:
-  #    - mv Cemu ${FLATPAK_DEST}/bin/Cemu
-  #    - chmod 777 ${FLATPAK_DEST}/bin/Cemu
-  #    - mkdir -p ${FLATPAK_DEST}/config/cemu
-  #    - mv gameProfiles ${FLATPAK_DEST}/config/cemu/gameProfiles
-  #    - mv resources ${FLATPAK_DEST}/config/cemu/resources
-  #    - mv shaderCache ${FLATPAK_DEST}/config/cemu/shaderCache
-  #  sources:
-  #    - type: archive
-  #      url: https://github.com/cemu-project/Cemu/releases/download/v2.0-10/cemu-2.0-10-ubuntu-20.04-x64.zip
-  #      sha256: b6cb5560e9a15be5991db4ca0ce1de70d233d094e388477b05d663a542dbbd5c
+  - name: libzip
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DBUILD_DOC=OFF
+      - -DBUILD_EXAMPLES=OFF
+      - -DBUILD_REGRESS=OFF
+      - -DBUILD_TOOLS=OFF
+    cleanup:
+      - /bin
+      - /include
+      - /lib/cmake
+      - /lib/pkgconfig
+    sources:
+      - type: archive
+        url: https://libzip.org/download/libzip-1.9.2.tar.xz
+        sha256: c93e9852b7b2dc931197831438fee5295976ee0ba24f8524a8907be5c2ba5937
+        x-checker-data:
+          type: anitya
+          project-id: 10649
+          url-template: https://libzip.org/download/libzip-$version.tar.xz
+
+  - name: rapidjson
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DRAPIDJSON_BUILD_DOC=OFF
+      - -DRAPIDJSON_BUILD_EXAMPLES=OFF
+      - -DRAPIDJSON_BUILD_TESTS=OFF
+      - -DRAPIDJSON_BUILD_THIRDPARTY_GTEST=OFF
+    cleanup:
+      - /include
+      - /lib/cmake
+      - /lib/pkgconfig
+      - /share/doc
+    sources:
+      - type: archive
+        url: https://github.com/Tencent/rapidjson/archive/refs/tags/v1.1.0.tar.gz
+        sha256: bf7ced29704a1e696fbccf2a2b4ea068e7774fa37f6d7dd4039d0787f8bed98e
+        x-checker-data:
+          type: anitya
+          project-id: 7422
+          stable-only: true
+          url-template: https://github.com/Tencent/rapidjson/archive/refs/tags/v$version.tar.gz
+
+  - name: glm
+    buildsystem: cmake-ninja
+    cleanup: ['*']
+    no-make-install: true
+    post-install:
+      - install -d ${FLATPAK_DEST}/include
+      - cp -R glm ${FLATPAK_DEST}/include
+      - cp -R cmake/glm ${FLATPAK_DEST}/lib/cmake
+    sources:
+      - type: archive
+        url: https://github.com/g-truc/glm/releases/download/0.9.9.8/glm-0.9.9.8.zip
+        sha256: 37e2a3d62ea3322e43593c34bae29f57e3e251ea89f4067506c94043769ade4c
+
+  - name: fmt
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DFMT_TEST=Off
+    cleanup:
+      - '*'
+    sources:
+      - type: archive
+        url: https://github.com/fmtlib/fmt/archive/9.1.0.tar.gz
+        sha256: 5dea48d1fcddc3ec571ce2058e13910a0d4a6bab4cc09a809d8b1dd1c88ae6f2
+        x-checker-data:
+          type: anitya
+          project-id: 11526
+          url-template: https://github.com/fmtlib/fmt/archive/$version.tar.gz
+
+  - name: wxwidgets
+    buildsystem: cmake-ninja
+    cleanup:
+      - /bin
+      - /include
+      - /lib/cmake
+      - /lib/wx
+      - /share
+    sources:
+      - type: git
+        url: https://github.com/wxWidgets/wxWidgets
+        tag: v3.2.2.1
+        commit: a812fffda3fe686c94e24bff27e8effd96e4de64
+        x-checker-data:
+          type: anitya
+          project-id: 5150
+          stable-only: true
+          tag-template: v$version
+
+  - name: Cemu
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DPORTABLE=false
+      - -DENABLE_VCPKG=false
+    build-options:
+      env:
+        - LC_ALL=C
+    sources:
+      - type: git
+        url: https://github.com/cemu-project/Cemu
+        # TODO: Update tag pattern on next stable ^v([\d.]+)$
+        x-checker-data:
+          type: git
+          tag-pattern: ^v([\d.]+-\d+)$
+        tag: v2.0-39
+        commit: eda4cf4b241d56c5c16f6aa4d135b8a269676a76
+      - type: script
+        commands:
+          - |
+            for d in DiscordCanary Discord; do
+              for i in {0..9}; do
+                test -S $XDG_RUNTIME_DIR/discord-ipc-$i ||
+                  ln -sf {app/com.discordapp.$d,$XDG_RUNTIME_DIR}/discord-ipc-$i;
+              done
+            done
+            Cemu_relwithdebinfo "$@"
+        dest-filename: Cemu-wrapper
+    post-install:
+      - install -Dm644 -t ${FLATPAK_DEST}/share/icons/hicolor/128x128/apps/ dist/linux/info.cemu.Cemu.png
+      - install -D -t ${FLATPAK_DEST}/bin/ bin/Cemu_relwithdebinfo Cemu-wrapper
 
   # Cemu - END
-
-  # Ryujinx - START
-  # https://github.com/flathub/org.ryujinx.Ryujinx
-  #
-  # THIS MUST BE AT THE END OF THE MANIFEST OR THE BINARY WILL GET CORRUPTED
-  #
-
-  # - name: Ryujinx
-  #   buildsystem: simple
-  #   build-options:
-  #     no-debuginfo: true
-  #     no-debuginfo-compression: true
-  #     strip: false
-  #     arch:
-  #       x86_64:
-  #         env:
-  #           RUNTIME: linux-x64
-  #     env:
-  #       PKG_CONFIG_PATH: /app/lib/pkgconfig:/app/share/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig
-  #       DOTNET_CLI_TELEMETRY_OPTOUT: 'true'
-  #       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 'true'
-  #       RYUJINX_VERSION: 1.1.500
-  #       RYUJINX_TARGET_RELEASE_CHANNEL_OWNER: flathub
-  #       RYUJINX_TARGET_RELEASE_CHANNEL_REPO: org.ryujinx.Ryujinx
-  #       RYUJINX_TARGET_RELEASE_CHANNEL_NAME: master
-  #   build-commands:
-  #   - |
-  #     export PATH=$PATH:/run/build/Ryujinx/dotnet-sdk
-  #     export RYUJINX_GIT_SHORT_HASH=$(git rev-parse --short HEAD)
-  #     export RUNTIME_FRAMEWORK_VERSION=$(find nuget-sources -name 'microsoft.netcore.app.host.linux-x64.*' | grep -oP '(\d.\d.\d+.nupkg)' | grep -oP '(\d.\d.\d+)')
-  #     sed -r --in-place "s/\%\%RYUJINX_BUILD_VERSION\%\%/$RYUJINX_VERSION/g;" Ryujinx.Common/ReleaseInformations.cs
-  #     sed -r --in-place "s/\%\%RYUJINX_BUILD_GIT_HASH\%\%/$RYUJINX_GIT_SHORT_HASH/g;" Ryujinx.Common/ReleaseInformations.cs
-  #     sed -r --in-place "s/\%\%RYUJINX_TARGET_RELEASE_CHANNEL_NAME\%\%/$RYUJINX_TARGET_RELEASE_CHANNEL_NAME/g;" Ryujinx.Common/ReleaseInformations.cs
-  #     sed -r --in-place "s/\%\%RYUJINX_TARGET_RELEASE_CHANNEL_OWNER\%\%/$RYUJINX_TARGET_RELEASE_CHANNEL_OWNER/g;" Ryujinx.Common/ReleaseInformations.cs
-  #     sed -r --in-place "s/\%\%RYUJINX_TARGET_RELEASE_CHANNEL_REPO\%\%/$RYUJINX_TARGET_RELEASE_CHANNEL_REPO/g;" Ryujinx.Common/ReleaseInformations.cs
-  #     mkdir -p /app/bin
-  #     dotnet publish -c Release -r $RUNTIME /p:DebugType=embedded Ryujinx /p:Version=$RYUJINX_VERSION /p:SourceRevisionId=$RYUJINX_GIT_SHORT_HASH /p:ExtraDefineConstants=DISABLE_UPDATER /p:RuntimeFrameworkVersion=$RUNTIME_FRAMEWORK_VERSION --self-contained --source nuget-sources
-  #     if [ $? -ne 0 ]; then
-  #         exit 1;
-  #     fi;
-  #     cp -r --remove-destination /run/build/Ryujinx/Ryujinx/bin/Release/net7.0/$RUNTIME/publish/* /app/bin/
-  #     mkdir -p /app/lib/ffmpeg
-  #     ln -s /usr/lib/x86_64-linux-gnu/libX11.so.6 /app/lib/libX11.so
-  #     install -Dm755 ryujinx-wrapper /app/bin/ryujinx-wrapper
-  #   sources:
-  #     - type: git
-  #       url: https://github.com/Ryujinx/Ryujinx.git
-  #       commit: 2b23463daa01226c5569d8e61d1d0959570354cf
-  #     - type: archive
-  #       only-arches:
-  #       - x86_64
-  #       dest: dotnet-sdk
-  #       url: https://dotnetcli.blob.core.windows.net/dotnet/Sdk/7.0.101/dotnet-sdk-7.0.101-linux-x64.tar.gz
-  #       sha256: 454e2da3d02c74c2f6d2446c94fd9075f8db80ff6c9b9d41d5e470683e16a1d5
-  #       x-checker-data:
-  #         type: html
-  #         url: https://dotnetcli.blob.core.windows.net/dotnet/Sdk/7.0/latest.version
-  #         version-pattern: ^([\d\.a-z-]+)$
-  #         url-template: https://dotnetcli.blob.core.windows.net/dotnet/Sdk/$version/dotnet-sdk-$version-linux-x64.tar.gz
-  #     - rd-submodules/ryujinx/nuget_sources.json
-  #     - type: file
-  #       path: rd-submodules/ryujinx/ryujinx-wrapper
-
-  # Ryujinx - END
 
   # External manifests end
 
@@ -1055,9 +1123,8 @@ modules:
     buildsystem: simple
     build-commands:
 
-      # Initializing retrodeck and emulationstation config folders
+      # Initializing RO retrodeck config folder
       - mkdir -p ${FLATPAK_DEST}/retrodeck
-      - mkdir -p ${FLATPAK_DEST}/emulationstation
 
       # Prep the ES-DE and RetroArch config files - I will have to SED/XMLSTARLET them soon
       - rm -rf /app/share/emulationstation/resources/systems/unix/es_find_rules.xml
@@ -1066,14 +1133,15 @@ modules:
       - cp es-configs/es_systems.xml /app/share/emulationstation/resources/systems/unix/
       # These must be put in home folder, managed by retrodeck.sh
       - cp es-configs/es_settings.xml ${FLATPAK_DEST}/retrodeck/es_settings.xml
+      - mv -f -t ${FLATPAK_DEST}/retrodeck es-configs/rd_prepacks
 
-      # Logo, res, move graphics directory to mutable space so splash can be changed after build
-      - mv -f -t ${FLATPAK_DEST}/emulationstation /app/share/emulationstation/resources/graphics
-      - ln -s ${FLATPAK_DEST}/emulationstation/graphics /app/share/emulationstation/resources/graphics
-      - cp -f res/extra-splashes/* ${FLATPAK_DEST}/emulationstation/graphics
-      - cp -f res/splash.svg ${FLATPAK_DEST}/emulationstation/graphics/splash.svg
-      - cp -f res/splash.svg ${FLATPAK_DEST}/emulationstation/graphics/splash-orig.svg
+      # Logo, res, move graphics directory away from default location so splash can be changed after build
+      - mv -f -t ${FLATPAK_DEST}/retrodeck /app/share/emulationstation/resources/graphics
+      - cp -f res/splash.svg ${FLATPAK_DEST}/retrodeck/graphics/splash.svg
+      - cp -f res/splash.svg ${FLATPAK_DEST}/retrodeck/graphics/splash-orig.svg
+      - cp -rf res/extra-splashes/ ${FLATPAK_DEST}/retrodeck/graphics
       - cp -f res/icon.svg /app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg
+      - mv -f -t ${FLATPAK_DEST}/retrodeck res/binding-icons
 
       # RetroDECK core script
       - cp retrodeck.sh /app/bin/retrodeck.sh
@@ -1083,24 +1151,29 @@ modules:
       - mkdir -p /app/tools
       - cp tools/configurator.sh /app/tools/configurator.sh
       - chmod +x /app/tools/configurator.sh
-      - cp es-configs/tools-gamelist.xml /app/tools/gamelist.xml
+      #- cp es-configs/tools-gamelist.xml /app/retrodeck/tools-gamelist.xml
+      - cp tools/retrodeck_function_wrapper.sh /app/tools/retrodeck_function_wrapper.sh
+      - chmod +x /app/tools/retrodeck_function_wrapper.sh
 
       # Function libraries
       - mkdir -p /app/libexec
-      - cp global.sh /app/libexec/global.sh
-      - cp functions.sh /app/libexec/functions.sh
-      - cp post_update.sh /app/libexec/post_update.sh
+      - cp -r functions/* "/app/libexec/"
 
-      # Desktop entry
+      # Desktop entries
       - cp net.retrodeck.retrodeck.desktop /app/share/applications/net.retrodeck.retrodeck.desktop
+      - cp net.retrodeck.retrodeck.Configurator.desktop /app/share/applications/net.retrodeck.retrodeck.Configurator.desktop
 
       # TODO: group the configs per-emu and optimize the following cps, like already done with Dolphin. Please not that some files may be renamed, check retrodeck.sh to know how (and fix it after the edit)
 
       # Initializing default emulator configs
       - cp -r emu-configs ${FLATPAK_DEST}/retrodeck/emu-configs/
 
-      # Overlays
-      #- cp -r overlays ${FLATPAK_DEST}/retrodeck/overlays Disabled in 0.4.2b as it will be introduced in 0.5.0b
+      # PICO-8 wrapper
+      - cp ${FLATPAK_DEST}/retrodeck/emu-configs/pico-8/pico8-wrapper.sh /app/bin/pico8
+      - chmod +x /app/bin/pico8
+
+      # Needed for ffmpeg (RPCS3)
+      - mkdir -p ${FLATPAK_DEST}/lib/ffmpeg
 
       # Placing appdata
       - mkdir -p ${FLATPAK_DEST}/share/appdata
@@ -1109,4 +1182,4 @@ modules:
     sources:
       - type: git
         url: https://github.com/XargonWan/RetroDECK.git
-        branch: main
+        branch: cooker-0.7.0b

@@ -4,6 +4,14 @@ on:
   push:
     branches:
      - cooker*
+    paths:
+     - '.github/workflows/**'
+     - 'emu-configs/**'
+     - 'es-configs/**'
+     - 'rd-submodules/**'
+     - '*.sh'
+     - 'net.retrodeck.retrodeck.yml'
+     - 'net.retrodeck.retrodeck.appdata.xml'
   pull_request: 
     branches:
      - cooker*
@@ -21,14 +29,23 @@ jobs:
       - name: Remove stuck mounts
         run: sudo umount -f /home/ubuntu/actions-runner/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles/*
         continue-on-error: true
-
-      - name: Generate build ID
-        id: generating_buildid
-        run: echo "##[set-output name=build-id;]$(echo "$( git rev-parse --short HEAD )")"
-      
+    
       - uses: actions/checkout@v3
 
-      - name: Initialize enviornment
+      - name: Generate build ID
+        run: |
+          word1=$(shuf -n 1 ${GITHUB_WORKSPACE}/automation_tools/codename_wordlist.txt)
+          capitalized_word1="$(tr '[:lower:]' '[:upper:]' <<< ${word1:0:1})${word1:1}"
+          word2=$(shuf -n 1 ${GITHUB_WORKSPACE}/automation_tools/codename_wordlist.txt)
+          capitalized_word2="$(tr '[:lower:]' '[:upper:]' <<< ${word2:0:1})${word2:1}"
+          result=$capitalized_word1$capitalized_word2
+          echo $result > ${GITHUB_WORKSPACE}/buildid
+          ls -lah ${GITHUB_WORKSPACE}         # DEBUG
+          cat ${GITHUB_WORKSPACE}/buildid     # DEBUG
+          echo "buildid=$result" >> $GITHUB_ENV
+          echo "VersionID is $result"
+
+      - name: Initialize environment
         run: |
           git pull
           git submodule init
@@ -38,12 +55,12 @@ jobs:
           flatpak install --user -y --noninteractive \
           org.kde.Sdk//6.3 \
           org.kde.Platform//6.3 \
-          org.freedesktop.Platform.ffmpeg-full/x86_64/21.08 \
+          org.freedesktop.Platform.ffmpeg-full/x86_64/22.08 \
           io.qt.qtwebengine.BaseApp/x86_64/6.3 \
           org.freedesktop.Sdk.Extension.llvm13 \
-          org.freedesktop.Sdk.Extension.dotnet6/x86_64/21.08
-          echo ${GITHUB_WORKSPACE} #DEBUG
-          df -h ${GITHUB_WORKSPACE} #DEBUG
+          org.freedesktop.Sdk.Extension.dotnet6/x86_64/22.08 \
+          runtime/org.freedesktop.Platform.ffmpeg-full/x86_64/22.08
+          /bin/bash ${GITHUB_WORKSPACE}/automation_tools/pre_build_automation.sh # Run pre-build automation tasks
 
       - name: Build flatpak
         run: |
@@ -70,7 +87,7 @@ jobs:
       - name: Publish the flatpak in a new cooker release
         uses: ncipollo/release-action@v1
         with:
-          tag: "${{ env.GITHUB_REF_SLUG }}-${{ steps.generating_buildid.outputs.build-id }}"
+          tag: "${{ env.GITHUB_REF_SLUG }}-${{ env.buildid }}"
           body: |
             # Release Notes (Cooker)
             This is a cooker snapshot based on the commit: ${{ github.event.repository.full_name }}@${{github.sha}}.

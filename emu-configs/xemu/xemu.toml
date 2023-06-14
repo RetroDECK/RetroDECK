@@ -1,0 +1,29 @@
+[general]
+show_welcome = false
+screenshot_dir = 'RETRODECKHOMEDIR/screenshots'
+
+[input.bindings]
+port1 = '03000000de280000ff11000001000000'
+
+[display.quality]
+surface_scale = 2
+
+[display.window]
+fullscreen_on_startup = true
+startup_size = '1280x800'
+last_width = 1620
+last_height = 738
+
+[display.ui]
+fit = 'scale_16_9'
+scale = 2
+auto_scale = false
+
+[sys]
+mem_limit = '128'
+
+[sys.files]
+bootrom_path = 'RETRODECKHOMEDIR/bios/mcpx_1.0.bin'
+flashrom_path = 'RETRODECKHOMEDIR/bios/Complex.bin'
+eeprom_path = 'RETRODECKHOMEDIR/saves/xbox/xemu/xbox-eeprom.bin'
+hdd_path = 'RETRODECKHOMEDIR/bios/xbox_hdd.qcow2'

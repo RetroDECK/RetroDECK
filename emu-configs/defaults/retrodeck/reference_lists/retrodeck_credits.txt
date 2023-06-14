@@ -1,0 +1,65 @@
+Credits & The Team
+
+This is the page where we try to introduce the team and thank everyone who have contributed to the project so far.
+If you feel you have contributed to the project but lacks mention, please contact us on discord!
+
+The Team
+XargonWan
+RetroDECK project founder and also one of the founding members of AmberELEC
+
+IceNine451
+Creator of the RetroDECK configurator and various awesome features.
+
+Lazorne
+Community management/outreach, testing, documentation, feature suggestions and some design.
+
+
+Collaborators
+Niroku / Atari
+Helps with community management, is also part of Batocera
+
+Leon Styhre
+Maker of EmulationStation Desktop Edition
+
+anthonycaccese
+Theme creator for ES-DE and AmberELEC
+
+
+Additional credits
+RavenKilit
+Did some code and testning, contributed to AmberELEC
+
+MorGuux
+Made the RetroDECK steamdb graphics for the old logo
+
+Pixelguin
+Made the new logo and steamdb graphics
+
+teotwaki
+Generous cloud hosting sponsor
+
+Gabeboii
+Webmaster
+
+Draco
+Server Administration
+
+ItzSelenux
+Maker of pixelitos
+
+Kenny.nl
+The Kenny.nl project provides several free game assets under open licenses.
+
+
+Special Thanks
+
+We want give special thanks to:
+
+    Our Patreons that keeps the build servers running and provide feedback.
+    All related emulation projects.
+    All people that have put both time and money into emulation projects.
+    All the users who help others with support, guidance and good spirit.
+    All the users who help with testing and reporting issues.
+    All the community creators who creates various art and assets for the community.
+
+You are the ones that makes this project possible.
