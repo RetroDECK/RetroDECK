@@ -22,7 +22,6 @@ finish-args:
   - --talk-name=org.freedesktop.ScreenSaver
   - --talk-name=org.freedesktop.PowerManagement.Inhibit
   - --talk-name=org.freedesktop.login1.Manager
-  - --talk-name=org.freedesktop.Flatpak
   - --filesystem=xdg-run/app/com.discordapp.Discord:create
   # Dolphin
   - --allow=bluetooth
