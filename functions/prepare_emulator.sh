@@ -72,13 +72,13 @@ prepare_emulator() {
         mkdir -pv /var/config/retroarch/shaders/
         cp -rf /app/share/libretro/shaders /var/config/retroarch/
         dir_prep "$rdhome/shaders/retroarch" "/var/config/retroarch/shaders"
-        rsync -a --mkpath "/app/share/libretro/cores/" "/var/config/retroarch/cores/"
+        rsync -rlD --mkpath "/app/share/libretro/cores/" "/var/config/retroarch/cores/"
         cp -fv $emuconfigs/retroarch/retroarch.cfg /var/config/retroarch/
         cp -fv $emuconfigs/retroarch/retroarch-core-options.cfg /var/config/retroarch/
-        rsync -a --mkpath "$emuconfigs/retroarch/core-overrides/" "/var/config/retroarch/config/"
-        rsync -a --mkpath "$emuconfigs/defaults/retrodeck/presets/remaps/" "/var/config/retroarch/config/remaps/"
+        rsync -rlD --mkpath "$emuconfigs/retroarch/core-overrides/" "/var/config/retroarch/config/"
+        rsync -rlD --mkpath "$emuconfigs/defaults/retrodeck/presets/remaps/" "/var/config/retroarch/config/remaps/"
         dir_prep "$borders_folder" "/var/config/retroarch/overlays/borders"
-        rsync -a --mkpath "/app/retrodeck/emu-configs/retroarch/borders/" "/var/config/retroarch/overlays/borders/"
+        rsync -rlD --mkpath "/app/retrodeck/emu-configs/retroarch/borders/" "/var/config/retroarch/overlays/borders/"
         set_setting_value "$raconf" "savefile_directory" "$saves_folder" "retroarch"
         set_setting_value "$raconf" "savestate_directory" "$states_folder" "retroarch"
         set_setting_value "$raconf" "screenshot_directory" "$screenshots_folder" "retroarch"
