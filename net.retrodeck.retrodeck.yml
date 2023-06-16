@@ -22,7 +22,7 @@ finish-args:
   - --talk-name=org.freedesktop.ScreenSaver
   - --talk-name=org.freedesktop.PowerManagement.Inhibit
   - --talk-name=org.freedesktop.login1.Manager
-  - --talk-name=org.freedesktop.Flatpak
+  - --talk-name=org.freedesktop.portal.Flatpak.UpdateMonitor
   - --filesystem=xdg-run/app/com.discordapp.Discord:create
   # Dolphin
   - --allow=bluetooth
@@ -69,7 +69,7 @@ modules:
   # [ ] Update the appdata.xml with the version number and notes
   # [ ] change branch into main in version-initialization (first one)
   # [ ] change branch into main in retrodeck module (last one)
-  # [ ] >>>>> if header (before modules) was edited, edit it even in flathub.yml
+  # [ ] if header (before modules) was edited, edit it even in flathub.yml
   #
   - name: version-initialization
     buildsystem: simple
@@ -90,7 +90,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/XargonWan/RetroDECK.git
-        branch: cooker-0.7.0b
+        branch: cooker-0.7.1b
 
   - name: xmlstarlet
     config-opts:
@@ -1182,4 +1182,4 @@ modules:
     sources:
       - type: git
         url: https://github.com/XargonWan/RetroDECK.git
-        branch: cooker-0.7.0b
+        branch: cooker-0.7.1b
