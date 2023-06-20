@@ -1,8 +1,8 @@
 "controller_mappings"
 {
 	"version"		"3"
-	"revision"		"1596"
-	"title"		"RetroDECK: Official Layout - v0.7b"
+	"revision"		"1662"
+	"title"		"RetroDECK: Official Layout - v0.7.1b"
 	"description"		"The Official RetroDECK Layout"
 	"creator"		""
 	"progenitor"		""
@@ -12,7 +12,7 @@
 	"controller_caps"		"23117823"
 	"major_revision"		"0"
 	"minor_revision"		"0"
-	"Timestamp"		"-1230453184"
+	"Timestamp"		"-915384448"
 	"actions"
 	{
 		"Default"
@@ -721,8 +721,8 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press LEFT_CONTROL, FULLSCREEN OFF, , "
-							"binding"		"key_press O, FULLSCREEN OFF, , "
+							"binding"		"key_press LEFT_CONTROL, Open Menu, , "
+							"binding"		"key_press M, Open Menu, , "
 						}
 					}
 				}
@@ -829,6 +829,40 @@
 		"description"		""
 		"inputs"
 		{
+			"dpad_north"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press LEFT_CONTROL, Increase Emulation Speed, , "
+							"binding"		"key_press 1, Increase Emulation Speed, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"dpad_south"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press LEFT_CONTROL, Decrease Emulation Speed, , "
+							"binding"		"key_press 2, Decrease Emulation Speed, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
 			"dpad_east"
 			{
 				"activators"
@@ -1551,23 +1585,6 @@
 						{
 							"binding"		"key_press LEFT_CONTROL, Fullscreen On/Off, RD-zoom-fit-best.png, #232323 #FFFFFF"
 							"binding"		"key_press RETURN, Fullscreen On/Off, RD-zoom-fit-best.png, #232323 #FFFFFF"
-						}
-					}
-				}
-				"disabled_activators"
-				{
-				}
-			}
-			"touch_menu_button_9"
-			{
-				"activators"
-				{
-					"Full_Press"
-					{
-						"bindings"
-						{
-							"binding"		"key_press LEFT_CONTROL, Fullscreen Off, RD-zoom-fit-best.png, #232323 #AD0000"
-							"binding"		"key_press N, Fullscreen Off, RD-zoom-fit-best.png, #232323 #AD0000"
 						}
 					}
 				}
@@ -2730,23 +2747,6 @@
 						{
 							"binding"		"key_press LEFT_CONTROL, Fullscreen On/Off, RD-zoom-fit-best.png, "
 							"binding"		"key_press RETURN, Fullscreen On/Off, RD-zoom-fit-best.png, "
-						}
-					}
-				}
-				"disabled_activators"
-				{
-				}
-			}
-			"touch_menu_button_5"
-			{
-				"activators"
-				{
-					"Full_Press"
-					{
-						"bindings"
-						{
-							"binding"		"key_press LEFT_CONTROL, Fullscreen Off, RD-zoom-fit-best.png, #232323 #AD0000"
-							"binding"		"key_press N, Fullscreen Off, RD-zoom-fit-best.png, #232323 #AD0000"
 						}
 					}
 				}
@@ -8038,7 +8038,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press T, , "
+							"binding"		"xinput_button B, , "
 						}
 					}
 				}
@@ -8054,7 +8054,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press Y, , "
+							"binding"		"xinput_button A, , "
 						}
 					}
 				}
@@ -8151,6 +8151,13 @@
 							"binding"		"xinput_button select, , "
 						}
 					}
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"controller_action CHANGE_PRESET 2 1 1, , "
+						}
+					}
 				}
 				"disabled_activators"
 				{
@@ -8196,7 +8203,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press T, , "
+							"binding"		"xinput_button B, , "
 						}
 					}
 				}
@@ -8212,7 +8219,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press Y, , "
+							"binding"		"xinput_button A, , "
 						}
 					}
 				}
@@ -8303,12 +8310,18 @@
 			{
 				"activators"
 				{
+					"release"
+					{
+						"bindings"
+						{
+							"binding"		"controller_action CHANGE_PRESET 1 1 1, , "
+						}
+					}
 					"Full_Press"
 					{
 						"bindings"
 						{
-							"binding"		"key_press LEFT_CONTROL, OPEN MENU, , "
-							"binding"		"key_press M, OPEN MENU, , "
+							"binding"		"xinput_button SELECT, , "
 						}
 					}
 				}
@@ -8480,7 +8493,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press T, , "
+							"binding"		"xinput_button B, , "
 						}
 					}
 				}
@@ -8496,7 +8509,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press Y, , "
+							"binding"		"xinput_button A, , "
 						}
 					}
 				}
@@ -8638,7 +8651,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press T, , "
+							"binding"		"xinput_button B, , "
 						}
 					}
 				}
@@ -8654,7 +8667,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press Y, , "
+							"binding"		"xinput_button A, , "
 						}
 					}
 				}
@@ -8796,7 +8809,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press T, , "
+							"binding"		"xinput_button B, , "
 						}
 					}
 				}
@@ -8812,7 +8825,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press Y, , "
+							"binding"		"xinput_button A, , "
 						}
 					}
 				}
@@ -8954,7 +8967,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press T, , "
+							"binding"		"xinput_button B, , "
 						}
 					}
 				}
@@ -8970,7 +8983,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press Y, , "
+							"binding"		"xinput_button A, , "
 						}
 					}
 				}
@@ -9112,7 +9125,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press T, , "
+							"binding"		"xinput_button B, , "
 						}
 					}
 				}
@@ -9128,7 +9141,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press Y, , "
+							"binding"		"xinput_button A, , "
 						}
 					}
 				}
@@ -9270,7 +9283,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press T, , "
+							"binding"		"xinput_button B, , "
 						}
 					}
 				}
@@ -9286,7 +9299,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press Y, , "
+							"binding"		"xinput_button A, , "
 						}
 					}
 				}
@@ -9428,7 +9441,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press T, , "
+							"binding"		"xinput_button B, , "
 						}
 					}
 				}
@@ -9444,7 +9457,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press Y, , "
+							"binding"		"xinput_button A, , "
 						}
 					}
 				}
@@ -9586,7 +9599,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press T, , "
+							"binding"		"xinput_button B, , "
 						}
 					}
 				}
@@ -9602,7 +9615,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press Y, , "
+							"binding"		"xinput_button A, , "
 						}
 					}
 				}
@@ -9744,7 +9757,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press T, , "
+							"binding"		"xinput_button B, , "
 						}
 					}
 				}
@@ -9760,7 +9773,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press Y, , "
+							"binding"		"xinput_button A, , "
 						}
 					}
 				}
@@ -9902,7 +9915,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press T, , "
+							"binding"		"xinput_button B, , "
 						}
 					}
 				}
@@ -9918,7 +9931,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press Y, , "
+							"binding"		"xinput_button A, , "
 						}
 					}
 				}
@@ -10060,7 +10073,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press T, , "
+							"binding"		"xinput_button B, , "
 						}
 					}
 				}
@@ -10076,7 +10089,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press Y, , "
+							"binding"		"xinput_button A, , "
 						}
 					}
 				}
@@ -10218,7 +10231,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press T, , "
+							"binding"		"xinput_button B, , "
 						}
 					}
 				}
@@ -10234,7 +10247,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press Y, , "
+							"binding"		"xinput_button A, , "
 						}
 					}
 				}
@@ -10376,7 +10389,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press T, , "
+							"binding"		"xinput_button B, , "
 						}
 					}
 				}
@@ -10392,7 +10405,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press Y, , "
+							"binding"		"xinput_button A, , "
 						}
 					}
 				}
