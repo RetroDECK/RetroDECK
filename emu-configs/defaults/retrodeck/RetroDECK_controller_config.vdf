@@ -1,7 +1,7 @@
 "controller_mappings"
 {
 	"version"		"3"
-	"revision"		"1662"
+	"revision"		"1691"
 	"title"		"RetroDECK: Official Layout - v0.7.1b"
 	"description"		"The Official RetroDECK Layout"
 	"creator"		""
@@ -12,7 +12,7 @@
 	"controller_caps"		"23117823"
 	"major_revision"		"0"
 	"minor_revision"		"0"
-	"Timestamp"		"-915384448"
+	"Timestamp"		"-913215520"
 	"actions"
 	{
 		"Default"
@@ -7990,7 +7990,14 @@
 					{
 						"bindings"
 						{
-							"binding"		"xinput_button select, , "
+							"binding"		"xinput_button SELECT, , "
+						}
+					}
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"controller_action CHANGE_PRESET 2 1 1, , "
 						}
 					}
 				}
@@ -8448,6 +8455,13 @@
 							"binding"		"xinput_button select, , "
 						}
 					}
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"controller_action CHANGE_PRESET 2 1 1, , "
+						}
+					}
 				}
 				"disabled_activators"
 				{
@@ -8604,6 +8618,13 @@
 						"bindings"
 						{
 							"binding"		"xinput_button select, , "
+						}
+					}
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"controller_action CHANGE_PRESET 2 1 1, , "
 						}
 					}
 				}
@@ -8764,6 +8785,13 @@
 							"binding"		"xinput_button select, , "
 						}
 					}
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"controller_action CHANGE_PRESET 2 1 1, , "
+						}
+					}
 				}
 				"disabled_activators"
 				{
@@ -8920,6 +8948,13 @@
 						"bindings"
 						{
 							"binding"		"xinput_button select, , "
+						}
+					}
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"controller_action CHANGE_PRESET 2 1 1, , "
 						}
 					}
 				}
@@ -9080,6 +9115,13 @@
 							"binding"		"xinput_button select, , "
 						}
 					}
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"controller_action CHANGE_PRESET 2 1 1, , "
+						}
+					}
 				}
 				"disabled_activators"
 				{
@@ -9236,6 +9278,13 @@
 						"bindings"
 						{
 							"binding"		"xinput_button select, , "
+						}
+					}
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"controller_action CHANGE_PRESET 2 1 1, , "
 						}
 					}
 				}
@@ -9396,6 +9445,13 @@
 							"binding"		"xinput_button select, , "
 						}
 					}
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"controller_action CHANGE_PRESET 2 1 1, , "
+						}
+					}
 				}
 				"disabled_activators"
 				{
@@ -9552,6 +9608,13 @@
 						"bindings"
 						{
 							"binding"		"xinput_button select, , "
+						}
+					}
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"controller_action CHANGE_PRESET 2 1 1, , "
 						}
 					}
 				}
@@ -9712,6 +9775,13 @@
 							"binding"		"xinput_button select, , "
 						}
 					}
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"controller_action CHANGE_PRESET 2 1 1, , "
+						}
+					}
 				}
 				"disabled_activators"
 				{
@@ -9868,6 +9938,13 @@
 						"bindings"
 						{
 							"binding"		"xinput_button select, , "
+						}
+					}
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"controller_action CHANGE_PRESET 2 1 1, , "
 						}
 					}
 				}
@@ -10028,6 +10105,13 @@
 							"binding"		"xinput_button select, , "
 						}
 					}
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"controller_action CHANGE_PRESET 2 1 1, , "
+						}
+					}
 				}
 				"disabled_activators"
 				{
@@ -10186,6 +10270,13 @@
 							"binding"		"xinput_button select, , "
 						}
 					}
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"controller_action CHANGE_PRESET 2 1 1, , "
+						}
+					}
 				}
 				"disabled_activators"
 				{
@@ -10342,6 +10433,13 @@
 						"bindings"
 						{
 							"binding"		"xinput_button select, , "
+						}
+					}
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"controller_action CHANGE_PRESET 2 1 1, , "
 						}
 					}
 				}
