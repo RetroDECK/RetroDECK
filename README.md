@@ -22,25 +22,31 @@ RetroDECK is a [EmulationStation Desktop Edition](https://es-de.org) powered app
 
 You can also check out our: [Flathub Page](https://flathub.org/apps/net.retrodeck.retrodeck)<br/>
 
-### RetroDECK supports the following devices: 
-**Steam Deck**
-<br/>
-<br/>
-**Linux Desktop** (after the BETA period)
-<br/>
-<br/>
-**Other SteamOS devices** (after the BETA period)
-<br/>
-<br/>
-**Note:**<br/>
-You can get it to run on other Linux devices or Linux Desktop today, it is not just as seamless as we want it to be and does not live up to our higher standards.<br/> 
-You will need to manually configure the input to match your device and might need to tweak more settings if you try it on a none Steam Deck device.
+## RetroDECK officially supports the following devices/systems:
 
+**Note:**
+<br>
+You can get it to run on other Linux based devices or Linux Desktop today, it is not just as seamless as we want it to be and does not live up to our higher standards.<br/> 
+You will need to manually configure the input to match your device and might need to tweak more settings if you try it on a none Steam Deck device. There might also be some hardware specific bugs. 
 
-### RetroDECK is tailored to the Steam Deck during the BETA period.
-The goal is that all the configurations are ready out-of-the-box and optimized towards the Steam Deck. Just put your `ROMS` & `BIOS` in the corresponding folders and start playing.
+### Steam Deck
 
-### How do I install RetroDECK?
+Supported from the start and RetroDECK is tailored to the Steam Deck during the BETA period. The goal is that all the configurations are ready out-of-the-box and optimized towards the Steam Deck.
+
+### Linux Desktop
+
+It semi-works today but most inputs are configured for the Steam Deck during the beta period. We will have a bigger desktop focus after the beta period is over and there can be desktop specific bugs.
+
+### Other SteamOS devices
+After the BETA period.
+
+### Windows/MacOS
+Not supported and not planned.
+
+### Android/IOS
+Not supported and not planned.
+
+## How do I install RetroDECK?
 Read and follow the guide here: [Installation instructions](https://github.com/XargonWan/RetroDECK/wiki/How-to:-Getting-started) on the Wiki
 
 ## The RetroDECK community:
