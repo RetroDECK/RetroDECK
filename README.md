@@ -38,6 +38,9 @@ We do plan to support other SteamOS based devices in the future. But during the 
 You can get it to run on other Linux based devices it is not just as seamless as we want it to be and does not live up to our higher standards.<br/> 
 You will need to manually configure the input to match your device and might need to tweak more settings if you try it on a none Steam Deck device. There might also be some hardware specific bugs. 
 
+
+## Do you have any plans for other systems? 
+
 ### Windows
 Not supported and not planned.
 As an alternative you could try [Retrobat](https://www.retrobat.org/) that offers similar functionality.
