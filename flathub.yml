@@ -4,7 +4,6 @@ runtime-version: 5.15-22.08
 sdk: org.kde.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.llvm14    # Needed for rpcs3
-  #- org.freedesktop.Sdk.Extension.dotnet6   # Needed for Ryujinx - Removed, check if it's not breaking something else
 base: io.qt.qtwebengine.BaseApp             # Needed for Yuzu
 base-version: 5.15-22.08                    # Needed for Yuzu
 command: retrodeck.sh
@@ -23,11 +22,13 @@ finish-args:
   - --talk-name=org.freedesktop.ScreenSaver
   - --talk-name=org.freedesktop.PowerManagement.Inhibit
   - --talk-name=org.freedesktop.login1.Manager
-  - --talk-name=org.freedesktop.Flatpak
   - --filesystem=xdg-run/app/com.discordapp.Discord:create
   # Dolphin
   - --allow=bluetooth
-  #- --env=QT_QPA_PLATFORM=xcb #not sure if this will break something
+  # PPSSPP
+  # It allows an SDL application to specify its window class, which can be useful for window managers and desktop environments to identify and group similar windows
+  - --env=SDL_VIDEO_X11_WMCLASS=net.retrodeck.retrodeck
+  - --env=SDL_VIDEO_WAYLAND_WMCLASS=net.retrodeck.retrodeck
 
 modules:
   - name: retrodeck
