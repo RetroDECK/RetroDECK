@@ -31,7 +31,7 @@ Supported from the start and RetroDECK is tailored to the Steam Deck during the 
 ### Linux Desktop
 Technically it is working, but the user experience might not be that great it could contain desktop specific bugs and other issues. <br/> 
 You will also need to manually configure the input to match your desktop and might need to tweak more settings. If you want to try it make sure that your distribution has native flatpak support else, you will need to install it. <br/> 
-We will have a bigger desktop focus after the beta period is over.
+We will start to tackle desktop bugs and have a bigger desktop focus after the beta period is over.
 
 ### Other SteamOS or Linux handheld gaming devices with flatpak support
 We do plan to support other SteamOS based devices in the future. But during the BETA we are focusing on the Steam Deck.<br/> 
