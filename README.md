@@ -26,11 +26,11 @@ You can also check out our: [Flathub Page](https://flathub.org/apps/net.retrodec
 
 ### Steam Deck
 
-Supported from the start and RetroDECK is tailored to the Steam Deck during the BETA period. The goal is that all the configurations are ready out-of-the-box and optimized towards the Steam Deck.
+Supported from the start and RetroDECK is tailored to the Steam Deck during the beta period. The goal is that all the configurations are ready out-of-the-box and optimized towards the Steam Deck.
 
 ### Linux Desktop
 Technically it is working, but the user experience might not be that great it could contain desktop specific bugs and other issues. <br/> 
-You will also need to manually configure the input to match your desktop and might need to tweak more settings. If you want to try it make sure that your distribution has native flatpak support else, you might need to install it. <br/> 
+You will also need to manually configure the input to match your desktop and might need to tweak more settings. If you want to try it make sure that your distribution has native flatpak support else, you will need to install it. <br/> 
 We will have a bigger desktop focus after the beta period is over.
 
 ### Other SteamOS or Linux handheld gaming devices with flatpak support
