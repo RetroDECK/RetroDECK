@@ -37,7 +37,7 @@ Supported from the start and RetroDECK is tailored to the Steam Deck during the 
 
 It semi-works today but most inputs are configured for the Steam Deck during the beta period. We will have a bigger desktop focus after the beta period is over and there can be desktop specific bugs.
 
-### Other SteamOS devices
+### Other SteamOS or Linux handheld gaming devices with flatpak support
 After the BETA period.
 
 ### Windows/MacOS
