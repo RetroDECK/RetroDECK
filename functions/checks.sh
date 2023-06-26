@@ -38,26 +38,34 @@ check_for_version_update() {
 
     if [[ ! "$update_ignore" == "$online_version" ]]; then
       if [[ "$update_repo" == "RetroDECK" ]] && [[ $(sed -e 's/[\.a-z]//g' <<< $version) -le $(sed -e 's/[\.a-z]//g' <<< $online_version) ]]; then
-        choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="Ignore this version" \
-          --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-          --title "RetroDECK Update Available" \
-          --text="There is a new version of RetroDECK on the stable release channel $online_version. Would you like to update to it?\n\n(depending on your internet speed this could takes several minutes).")
-        rc=$? # Capture return code, as "Yes" button has no text value
-        if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
-          if [[ $choice == "Ignore this version" ]]; then
-            set_setting_value $rd_conf "update_ignore" "$online_version" retrodeck "options" # Store version to ignore for future checks
-          fi
-        else # User clicked "Yes"
-          configurator_generic_dialog "RetroDECK Online Update" "The update process may take several minutes.\n\nAfter the update is complete, RetroDECK will close. When you run it again you will be using the latest version."
-          (
-          flatpak-spawn --host flatpak update --noninteractive -y net.retrodeck.retrodeck
-          ) |
-          zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
-          --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-          --title "RetroDECK Updater" \
-          --text="Upgrade in process please wait (this could takes several minutes)."
-          configurator_generic_dialog "RetroDECK Online Update" "The update process is now complete!\n\nPlease restart RetroDECK to keep the fun going."
-          exit 1
+        # choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="Ignore this version" \
+        #   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+        #   --title "RetroDECK Update Available" \
+        #   --text="There is a new version of RetroDECK on the stable release channel $online_version. Would you like to update to it?\n\n(depending on your internet speed this could takes several minutes).")
+        # rc=$? # Capture return code, as "Yes" button has no text value
+        # if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
+        #   if [[ $choice == "Ignore this version" ]]; then
+        #     set_setting_value $rd_conf "update_ignore" "$online_version" retrodeck "options" # Store version to ignore for future checks
+        #   fi
+        # else # User clicked "Yes"
+        #   configurator_generic_dialog "RetroDECK Online Update" "The update process may take several minutes.\n\nAfter the update is complete, RetroDECK will close. When you run it again you will be using the latest version."
+        #   (
+        #   flatpak-spawn --host flatpak update --noninteractive -y net.retrodeck.retrodeck
+        #   ) |
+        #   zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+        #   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+        #   --title "RetroDECK Updater" \
+        #   --text="Upgrade in process please wait (this could takes several minutes)."
+        #   configurator_generic_dialog "RetroDECK Online Update" "The update process is now complete!\n\nPlease restart RetroDECK to keep the fun going."
+        #   exit 1
+        # fi
+        choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK" --extra-button="Ignore this version" \
+        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+        --title "RetroDECK Update Available" \
+        --text="There is a new version of RetroDECK on the stable release channel $online_version. Please update through the Discover app!\n\nIf you would like to ignore this version and recieve a notification at the NEXT version,\nclick the \"Ignore this version\" button.")
+        rc=$? # Capture return code, as "OK" button has no text value
+        if [[ $rc == "1" ]]; then # If any button other than "OK" was clicked
+          set_setting_value $rd_conf "update_ignore" "$online_version" retrodeck "options" # Store version to ignore for future checks
         fi
       elif [[ "$update_repo" == "RetroDECK-cooker" ]] && [[ ! $version == $online_version ]]; then
         choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="Ignore this version" \
