@@ -1,7 +1,7 @@
 "controller_mappings"
 {
 	"version"		"3"
-	"revision"		"1691"
+	"revision"		"1702"
 	"title"		"RetroDECK: Official Layout - v0.7.1b"
 	"description"		"The Official RetroDECK Layout"
 	"creator"		""
@@ -12,7 +12,7 @@
 	"controller_caps"		"23117823"
 	"major_revision"		"0"
 	"minor_revision"		"0"
-	"Timestamp"		"-913215520"
+	"Timestamp"		"-1030266496"
 	"actions"
 	{
 		"Default"
@@ -4151,7 +4151,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 10 1 1, MAME, RD-emblem-favorite.png, "
+							"binding"		"controller_action CHANGE_PRESET 10 1 1, MAME, RD-mame.png, "
 						}
 					}
 				}
@@ -4183,7 +4183,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 12 1 1, Gamecube & Wii, RD-tesseract.png, "
+							"binding"		"controller_action CHANGE_PRESET 12 1 1, Gamecube & Wii, RD-dolphin.png, "
 						}
 					}
 				}
@@ -4199,7 +4199,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 13 1 1, NDS, RD-preferences-tweaks-shadows.png, "
+							"binding"		"controller_action CHANGE_PRESET 13 1 1, NDS, RD-melonds.png, "
 						}
 					}
 				}
@@ -4215,7 +4215,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 15 1 1, 3DS, RD-preferences-system-windows-actions.png, "
+							"binding"		"controller_action CHANGE_PRESET 15 1 1, 3DS, RD-citra.png, "
 						}
 					}
 				}
@@ -4231,7 +4231,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 16 1 1, Switch, RD-playonlinux.png, "
+							"binding"		"controller_action CHANGE_PRESET 16 1 1, Switch, RD-ryujinx.png, "
 						}
 					}
 				}
@@ -6556,7 +6556,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"xinput_button DPAD_UP, Konami Deck, RD-octopi.png, #232323 #FFFFFF"
+							"binding"		"xinput_button DPAD_UP, Konami Deck, RD-retrodeck-compact.png, "
 						}
 					}
 					"Full_Press"
@@ -6635,8 +6635,8 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press 3, Here be dragons!, RD-tools-check-spelling.png, "
-							"binding"		"key_press 2, Here be dragons!, RD-tools-check-spelling.png, "
+							"binding"		"key_press 3, Here be dragons!, RD-vcmi.png, "
+							"binding"		"key_press 2, Here be dragons!, RD-vcmi.png, "
 						}
 					}
 					"Full_Press"
@@ -6673,7 +6673,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press I, You can do it!, RD-preferences-desktop-emoticons.png, "
+							"binding"		"key_press I, You can do it!, RD-gzdoom.png, "
 						}
 					}
 					"Full_Press"
