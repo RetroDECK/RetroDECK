@@ -91,6 +91,8 @@ jobs:
           body: |
             # Release Notes (Cooker)
             This is a cooker snapshot based on the commit: ${{ github.event.repository.full_name }}@${{github.sha}}.
+
+            For the full release note for this build please refer to the channel [#BETA-TESTING](https://discord.gg/qQcrFvaA2C) on our Discord server.
       
             Cooker channel is provided for the community to test fixes and explore new functionality.
             Please DO NOT open issues or ask support on this build.
