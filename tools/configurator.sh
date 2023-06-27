@@ -344,7 +344,7 @@ configurator_dolphin_input_textures_dialog() {
       set_setting_value $dolphingfxconf "HiresTextures" "True" dolphin
       (
         mkdir "/var/data/dolphin-emu/Load/DynamicInputTextures"
-        rsync -rlD "/app/retrodeck/extras/DynamicInputTextures/" "/var/data/dolphin-emu/Load/DynamicInputTextures/"
+        rsync -rlD --mkpath "/app/retrodeck/extras/DynamicInputTextures/" "/var/data/dolphin-emu/Load/DynamicInputTextures/"
       ) |
       zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -382,7 +382,7 @@ configurator_primehack_input_textures_dialog() {
       set_setting_value $primehackgfxconf "HiresTextures" "True" primehack
       (
         mkdir "/var/data/primehack/Load/DynamicInputTextures"
-        rsync -rlD "/app/retrodeck/extras/DynamicInputTextures/" "/var/data/primehack/Load/DynamicInputTextures/"
+        rsync -rlD --mkpath "/app/retrodeck/extras/DynamicInputTextures/" "/var/data/primehack/Load/DynamicInputTextures/"
       ) |
       zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
