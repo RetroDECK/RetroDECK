@@ -567,8 +567,8 @@ modules:
       - ln -s "${FLATPAK_DEST}/yuzu/usr/bin/yuzu" "${FLATPAK_DEST}/bin/yuzu"
     sources:
       - type: file
-        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1465/yuzu-mainline-20230611-b9fc07fc0.AppImage
-        sha256: 3a5c90947d0e5ca839921a4b77ec11b71176dcd4fb6f64c81757af1ba0f6f4d3
+        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1495/yuzu-mainline-20230713-523db3ac6.AppImage
+        sha256: 1eb43101835c37888f427efa94f0c2e9b8ebfd3181f480fa914fd15041dc4c2f
 
   # Yuzu - END
 
