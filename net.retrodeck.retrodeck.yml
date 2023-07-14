@@ -1004,8 +1004,8 @@ modules:
       - /lib/pkgconfig
     sources:
       - type: archive
-        url: https://libzip.org/download/libzip-1.9.2.tar.xz
-        sha256: c93e9852b7b2dc931197831438fee5295976ee0ba24f8524a8907be5c2ba5937
+        url: https://libzip.org/download/libzip-1.10.0.tar.xz
+        sha256: cd2a7ac9f1fb5bfa6218272d9929955dc7237515bba6e14b5ad0e1d1e2212b43
         x-checker-data:
           type: anitya
           project-id: 10649
@@ -1060,9 +1060,9 @@ modules:
           type: anitya
           project-id: 11526
           url-template: https://github.com/fmtlib/fmt/archive/$version.tar.gz
+          versions: {<: '10.0'}
 
   - name: wxwidgets
-    buildsystem: cmake-ninja
     cleanup:
       - /bin
       - /include
@@ -1070,15 +1070,14 @@ modules:
       - /lib/wx
       - /share
     sources:
-      - type: git
-        url: https://github.com/wxWidgets/wxWidgets
-        tag: v3.2.2.1
-        commit: a812fffda3fe686c94e24bff27e8effd96e4de64
+      - type: archive
+        url: https://github.com/wxWidgets/wxWidgets/releases/download/v3.2.2.1/wxWidgets-3.2.2.1.tar.bz2
+        sha256: dffcb6be71296fff4b7f8840eb1b510178f57aa2eb236b20da41182009242c02
         x-checker-data:
           type: anitya
           project-id: 5150
           stable-only: true
-          tag-template: v$version
+          url-template: https://github.com/wxWidgets/wxWidgets/releases/download/v$version/wxWidgets-$version.tar.bz2
 
   - name: Cemu
     buildsystem: cmake-ninja
@@ -1095,8 +1094,12 @@ modules:
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+-\d+)$
-        tag: v2.0-39
-        commit: eda4cf4b241d56c5c16f6aa4d135b8a269676a76
+        tag: v2.0-44
+        commit: f1c200a01675714e51548137f2365ab2a1a9977b
+      - type: shell
+        commands:
+          - sed "s/set(EXPERIMENTAL_VERSION.*/set(EXPERIMENTAL_VERSION \"$(git describe
+            --tag | sed "s/v2.0-//")\" CACHE STRING \"\")/g" -i CMakeLists.txt
       - type: script
         commands:
           - |
@@ -1108,7 +1111,33 @@ modules:
             done
             Cemu_relwithdebinfo "$@"
         dest-filename: Cemu-wrapper
+      - type: script
+        dest-filename: dev_release_metainfo.py
+        commands:
+          - |
+            import os
+            import xml.etree.ElementTree as ET
+            meta_file = os.environ.get('AS_META_FILE')
+            version = os.environ.get('AS_META_VERSION')
+            release_type = os.environ.get('AS_META_TYPE')
+            release_date = os.environ.get('AS_META_DATE')
+            release_url = os.environ.get('AS_META_URL')
+            tree = ET.parse(meta_file)
+            root = tree.getroot()
+            el_releases = root.find('releases')
+            for el_release in el_releases:
+              el_releases.remove(el_release)
+            el_release = ET.SubElement(el_releases, 'release')
+            el_url = ET.SubElement(el_release, 'url')
+            el_url.text = release_url
+            el_release.attrib['type'] = release_type
+            el_release.attrib['date'] = release_date
+            el_release.attrib['version'] = version
+            ET.indent(tree, space='  ', level=0)
+            tree.write(meta_file, encoding='utf8')
     post-install:
+      - cp -r bin/gameProfiles ${FLATPAK_DEST}/share/Cemu/
+      - cp -r bin/resources ${FLATPAK_DEST}/share/Cemu/
       - install -Dm644 -t ${FLATPAK_DEST}/share/icons/hicolor/128x128/apps/ dist/linux/info.cemu.Cemu.png
       - install -D -t ${FLATPAK_DEST}/bin/ bin/Cemu_relwithdebinfo Cemu-wrapper
 
