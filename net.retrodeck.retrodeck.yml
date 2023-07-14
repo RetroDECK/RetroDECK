@@ -290,6 +290,21 @@ modules:
         url: https://github.com/libgit2/libgit2.git
         tag: v1.6.3
 
+  - name: libpoppler-glib
+    buildsystem: cmake-ninja
+    config-opts:
+      - '-DENABLE_BOOST=OFF'
+    sources:
+      - type: archive
+        url: >-
+          https://gitlab.freedesktop.org/poppler/poppler/-/archive/poppler-22.11.0/poppler-poppler-22.11.0.tar.bz2
+        sha256: b8f618d5c62030034d5c8da4d3f6a740260b7620b9a31021679ce1914d327f81
+    cleanup:
+      - /lib/pkgconfig
+      - /include
+      - '*.a'
+      - '*.la'
+
   # When updating this module remember to check those:
   # https://gitlab.com/es-de/emulationstation-de/-/blob/[VERSION]/resources/systems/unix/es_find_rules.xml
   # But we don't include them 1:1 as RetroDECK got some specific configs in some cases
