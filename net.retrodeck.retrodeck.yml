@@ -293,11 +293,10 @@ modules:
   - name: libpoppler-glib
     buildsystem: cmake-ninja
     config-opts:
-      - '-DENABLE_BOOST=OFF'
+      - -DENABLE_BOOST=OFF
     sources:
       - type: archive
-        url: >-
-          https://gitlab.freedesktop.org/poppler/poppler/-/archive/poppler-22.11.0/poppler-poppler-22.11.0.tar.bz2
+        url: https://gitlab.freedesktop.org/poppler/poppler/-/archive/poppler-22.11.0/poppler-poppler-22.11.0.tar.bz2
         sha256: b8f618d5c62030034d5c8da4d3f6a740260b7620b9a31021679ce1914d327f81
     cleanup:
       - /lib/pkgconfig
