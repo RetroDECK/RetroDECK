@@ -592,6 +592,7 @@ modules:
       # FFMPEG VIDEO DUMPER was disabled because of this: https://github.com/citra-emu/citra/issues/5949
       - '-DUSE_SYSTEM_SDL2=ON'
       - '-DCMAKE_POLICY_DEFAULT_CMP0069=NEW'
+      - '-DENABLE_FDK=ON'
     cleanup:
       - /share/man
       - /share/pixmaps
@@ -601,8 +602,8 @@ modules:
     sources:
       - type: archive
         url: >-
-          https://github.com/citra-emu/citra-nightly/releases/download/nightly-1940/citra-unified-source-20230704-df9cc1b.tar.xz
-        sha256: d63dc8d57b44eebca6abec9839ce67ba7d614e7a8bb62cecbf3c9b0768a0b713
+          https://github.com/citra-emu/citra-nightly/releases/download/nightly-1898/citra-unified-source-20230504-70335a7.tar.xz
+        sha256: b320585bd8c4c075f63d3d9c74b830718e58fcf04d987a5dcead402a72abf753
         x-checker-data:
           type: json
           url: https://api.github.com/repos/citra-emu/citra-nightly/releases/latest
@@ -611,6 +612,9 @@ modules:
             .assets[] | .browser_download_url |
             match("https://.+citra-unified-source-.+.xz$") | .string
           is-main-source: true
+      - type: patch
+        path: rd-submodules/citra/unified-source-compat.patch
+
 
   # CITRA - END
 
