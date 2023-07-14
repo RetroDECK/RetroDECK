@@ -860,7 +860,7 @@ modules:
 
   # glu issue, check libglu module for more info
   #- rd-submodules/shared-modules/glu/glu-9.json
-  - rd-submodules/shared-modules/glew/glew.json
+  - rd-submodules/shared-modules/glew/glew.json # RPCS3 is not using this anymore, what about the other emu? Can we remove it?
 
   - name: rpcs3
     buildsystem: cmake-ninja
@@ -905,7 +905,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/RPCS3/rpcs3.git
-        commit: 5d7e75c5d8c7492ae655ea38bb7ead4b868a2f17
+        commit: a828c214b5c0b87b81fcd13ff3c1e952c9a5d6dd
 
   # RPCS3 - END
 
