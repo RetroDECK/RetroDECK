@@ -324,8 +324,8 @@ modules:
           - sed -i 's#"EMULATIONSTATION-DE  V" + Utils::String::toUpper(PROGRAM_VERSION_STRING)#"RetroDECK
             v'$(cat ${FLATPAK_DEST}/retrodeck/version)', ES-DE  v" + Utils::String::toUpper(PROGRAM_VERSION_STRING)#g'
             es-app/src/guis/GuiMenu.cpp
-      - type: patch
-        path: rd-submodules/es-de/es-de-retrodeck-mods.patch
+      #- type: patch
+      #  path: rd-submodules/es-de/es-de-retrodeck-mods.patch
 
   # ES-DE - END
 
