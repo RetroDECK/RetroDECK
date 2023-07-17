@@ -1,27 +1,27 @@
 diff -au1r emulationstation-de/es-app/src/guis/GuiMenu.cpp emulationstation-de/es-app/src/guis/GuiMenu.cpp
---- emulationstation-de/es-app/src/guis/GuiMenu.cpp	2023-04-12 09:08:12.394935336 -0400
-+++ emulationstation-de/es-app/src/guis/GuiMenu.cpp	2023-04-12 16:25:04.618753274 -0400
+--- emulationstation-de/es-app/src/guis/GuiMenu.cpp	2023-07-14 08:44:25.788696841 -0400
++++ emulationstation-de/es-app/src/guis/GuiMenu.cpp	2023-07-14 08:48:23.574196859 -0400
 @@ -10,2 +10,3 @@
  #include "guis/GuiMenu.h"
 +#include "utils/PlatformUtil.h"
- 
-@@ -66,2 +67,4 @@
- 
-+    addEntry("RETRODECK CONFIGURATOR", 0x777777FF, false, [this] { openRetroDeckConfigurator(); });
+
+@@ -67,2 +68,4 @@
+
++    addEntry("RETRODECK CONFIGURATOR", mMenuColorPrimary, false, [this] { openRetroDeckConfigurator(); });
 +
      if (!Settings::getInstance()->getBool("ForceKiosk") &&
-@@ -69,3 +72,3 @@
+@@ -70,3 +73,3 @@
  #if defined(__APPLE__)
--        addEntry("QUIT EMULATIONSTATION", 0x777777FF, false, [this] { openQuitMenu(); });
-+        addEntry("QUIT RETRODECK", 0x777777FF, false, [this] { openQuitMenu(); });
+-        addEntry("QUIT EMULATIONSTATION", mMenuColorPrimary, false, [this] { openQuitMenu(); });
++        addEntry("QUIT RETRODECK", mMenuColorPrimary, false, [this] { openQuitMenu(); });
  #else
-@@ -74,3 +77,3 @@
+@@ -75,3 +78,3 @@
          else
--            addEntry("QUIT EMULATIONSTATION", 0x777777FF, false, [this] { openQuitMenu(); });
-+            addEntry("QUIT RETRODECK", 0x777777FF, false, [this] { openQuitMenu(); });
+-            addEntry("QUIT EMULATIONSTATION", mMenuColorPrimary, false, [this] { openQuitMenu(); });
++            addEntry("QUIT RETRODECK", mMenuColorPrimary, false, [this] { openQuitMenu(); });
  #endif
-@@ -1704,2 +1707,15 @@
- 
+@@ -1729,2 +1732,15 @@
+
 +void GuiMenu::openRetroDeckConfigurator()
 +{
 +    // Launch the configurator.sh script
@@ -36,22 +36,22 @@ diff -au1r emulationstation-de/es-app/src/guis/GuiMenu.cpp emulationstation-de/e
 +}
 +
  void GuiMenu::openQuitMenu()
-@@ -1732,3 +1748,3 @@
-         });
--        auto quitText = std::make_shared<TextComponent>("QUIT EMULATIONSTATION",
-+        auto quitText = std::make_shared<TextComponent>("QUIT RETRODECK",
-                                                         Font::get(FONT_SIZE_MEDIUM), 0x777777FF);
+@@ -1758,3 +1774,3 @@
+         auto quitText = std::make_shared<TextComponent>(
+-            "QUIT EMULATIONSTATION", Font::get(FONT_SIZE_MEDIUM), mMenuColorPrimary);
++            "QUIT RETRODECK", Font::get(FONT_SIZE_MEDIUM), mMenuColorPrimary);
+         quitText->setSelectable(true);
 diff -au1r emulationstation-de/es-app/src/guis/GuiMenu.h emulationstation-de/es-app/src/guis/GuiMenu.h
---- emulationstation-de/es-app/src/guis/GuiMenu.h	2023-04-12 09:08:12.394935336 -0400
-+++ emulationstation-de/es-app/src/guis/GuiMenu.h	2023-04-12 09:33:25.023871033 -0400
+--- emulationstation-de/es-app/src/guis/GuiMenu.h	2023-07-14 08:44:25.788696841 -0400
++++ emulationstation-de/es-app/src/guis/GuiMenu.h	2023-07-14 08:49:05.851991859 -0400
 @@ -46,2 +46,3 @@
      void openOtherOptions();
 +    void openRetroDeckConfigurator();
      void openQuitMenu();
 diff -au1r emulationstation-de/es-app/src/views/ViewController.cpp emulationstation-de/es-app/src/views/ViewController.cpp
---- emulationstation-de/es-app/src/views/ViewController.cpp	2023-06-26 09:37:59.297437013 -0400
-+++ emulationstation-de/es-app/src/views/ViewController.cpp	2023-06-26 09:38:18.410322017 -0400
-@@ -85,9 +85,7 @@
+--- emulationstation-de/es-app/src/views/ViewController.cpp	2023-07-14 08:44:25.788696841 -0400
++++ emulationstation-de/es-app/src/views/ViewController.cpp	2023-07-17 09:58:26.862373622 -0400
+@@ -164,9 +164,7 @@
  {
 -    mNoGamesErrorMessage = "NO GAME FILES WERE FOUND. EITHER PLACE YOUR GAMES IN "
 -                           "THE CURRENTLY CONFIGURED ROM DIRECTORY OR CHANGE "
@@ -65,8 +65,8 @@ diff -au1r emulationstation-de/es-app/src/views/ViewController.cpp emulationstat
 +                           "SYSTEM SUBFOLDER IN THE CONFIGURED ROM DIRECTORY "
 +                           "AND RUN RETRODECK AGAIN TO SCAN YOUR LIBRARY.\n"
 +                           "THE CURRENTLY CONFIGURED ROM DIRECTORY IS:\n";
- 
-@@ -100,90 +98,3 @@
+
+@@ -179,90 +177,3 @@
      mNoGamesMessageBox = new GuiMsgBox(
 -        HelpStyle(), mNoGamesErrorMessage + mRomDirectory, "CHANGE ROM DIRECTORY",
 -        [this] {
@@ -158,11 +158,16 @@ diff -au1r emulationstation-de/es-app/src/views/ViewController.cpp emulationstat
 -        "QUIT",
 +        HelpStyle(), mNoGamesErrorMessage + mRomDirectory, "QUIT",
          [] {
+@@ -272,3 +183,3 @@
+         },
+-        true, false,
++        "", nullptr, "", nullptr, true, false,
+         (mRenderer->getIsVerticalOrientation() ?
 diff -au1r emulationstation-de/es-core/src/Window.cpp emulationstation-de/es-core/src/Window.cpp
---- emulationstation-de/es-core/src/Window.cpp	2023-04-12 09:08:12.398268670 -0400
-+++ emulationstation-de/es-core/src/Window.cpp	2023-04-14 11:03:48.261309278 -0400
-@@ -179,3 +179,3 @@
-     progressBarRect.barPosY += borderThickness;
--    progressBarRect.color = 0x79010FFF;
+--- emulationstation-de/es-core/src/Window.cpp	2023-07-14 08:44:25.805371841 -0400
++++ emulationstation-de/es-core/src/Window.cpp	2023-07-14 08:52:32.335181878 -0400
+@@ -165,3 +165,3 @@
+     progressBarRect.barPosY = mSplashTextPositions.y + (progressBarRect.barHeight * 2.0f);
+-    progressBarRect.color = 0x777777FF;
 +    progressBarRect.color = 0xC858E6FF;
      mProgressBarRectangles.emplace_back(progressBarRect);
