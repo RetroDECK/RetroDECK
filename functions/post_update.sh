@@ -222,6 +222,12 @@ post_update() {
       prepare_emulator "reset" "all"
     fi
   fi
+  if [[ $prev_version -le "071" ]]; then
+    # In version 0.7.1b, the following changes were made that required config file updates/reset or other changes to the filesystem:
+    # - Force update PPSSPP standalone keybinds for L/R.
+    set_setting_value "$ppssppcontrolsconf" "L" "1-45,10-193" "ppsspp" "ControlMapping"
+    set_setting_value "$ppssppcontrolsconf" "R" "1-51,10-192" "ppsspp" "ControlMapping"
+  fi
 
   # The following commands are run every time.
 
