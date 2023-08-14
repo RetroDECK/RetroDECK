@@ -876,6 +876,7 @@ modules:
   # MELONDS - END
 
   # RPCS3 - START
+  # DO NOT UPDATE! WENT ON QT6
   # https://github.com/flathub/net.rpcs3.RPCS3
 
   # glu issue, check libglu module for more info
@@ -925,7 +926,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/RPCS3/rpcs3.git
-        commit: 0e23b89352b52c703a94a79c4ee22722870a1f5e
+        commit: a828c214b5c0b87b81fcd13ff3c1e952c9a5d6dd
 
   # RPCS3 - END
 
