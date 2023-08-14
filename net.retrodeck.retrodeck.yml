@@ -648,15 +648,15 @@ modules:
       - ln -s "${FLATPAK_DEST}/pcsx2-qt/usr/bin/pcsx2-qt" "${FLATPAK_DEST}/bin/pcsx2-qt"
     sources:
       - type: file
-        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.4729/pcsx2-v1.7.4729-linux-appimage-x64-Qt.AppImage
-        sha256: 2e0571926ac6253b7ebaea45c36b3ebd19c2923075c3e76c6b4936c0190867e4
+        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.4916/pcsx2-v1.7.4916-linux-appimage-x64-Qt.AppImage
+        sha256: 870a9d198d5f05a1ecf3e98110fe24beacf72eb45077ee31d1200c36930b3d9c
 
   # PCSX2 - END
 
   # Dolphin - START
+  # DO NOT UPDATE! WENT ON QT6
   # https://github.com/flathub/org.DolphinEmu.dolphin-emu
   # WHEN UPADTING: remember to update rd-submodules/dolphin contents
-  # NOTE: this is the last QT5 build, do not update until we don't fully switch to QT6!
 
   # needed for the emulate bluetooth adapter feature to work
   - name: bluez
