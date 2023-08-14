@@ -7997,7 +7997,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, , "
 						}
 					}
 				}
@@ -8077,7 +8077,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, Hotkey, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, Hotkey, , "
 						}
 						"settings"
 						{
@@ -8097,7 +8097,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, Hotkey, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, Hotkey, , "
 						}
 					}
 				}
@@ -8162,7 +8162,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, , "
 						}
 					}
 				}
@@ -8242,7 +8242,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, Hotkey, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, Hotkey, , "
 						}
 						"settings"
 						{
@@ -8262,7 +8262,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, Hotkey, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, Hotkey, , "
 						}
 					}
 				}
@@ -8459,7 +8459,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, , "
 						}
 					}
 				}
@@ -8539,7 +8539,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, Hotkey, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, Hotkey, , "
 						}
 						"settings"
 						{
@@ -8559,7 +8559,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, Hotkey, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, Hotkey, , "
 						}
 					}
 				}
@@ -8624,7 +8624,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, , "
 						}
 					}
 				}
@@ -8704,7 +8704,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, Hotkey, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, Hotkey, , "
 						}
 						"settings"
 						{
@@ -8724,7 +8724,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, Hotkey, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, Hotkey, , "
 						}
 					}
 				}
@@ -8789,7 +8789,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, , "
 						}
 					}
 				}
@@ -8869,7 +8869,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, Hotkey, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, Hotkey, , "
 						}
 						"settings"
 						{
@@ -8889,7 +8889,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, Hotkey, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, Hotkey, , "
 						}
 					}
 				}
@@ -8954,7 +8954,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, , "
 						}
 					}
 				}
@@ -9034,7 +9034,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, Hotkey, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, Hotkey, , "
 						}
 						"settings"
 						{
@@ -9054,7 +9054,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, Hotkey, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, Hotkey, , "
 						}
 					}
 				}
@@ -9119,7 +9119,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, , "
 						}
 					}
 				}
@@ -9199,7 +9199,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, Hotkey, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, Hotkey, , "
 						}
 						"settings"
 						{
@@ -9219,7 +9219,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, Hotkey, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, Hotkey, , "
 						}
 					}
 				}
@@ -9284,7 +9284,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, , "
 						}
 					}
 				}
@@ -9364,7 +9364,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, Hotkey, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, Hotkey, , "
 						}
 						"settings"
 						{
@@ -9384,7 +9384,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, Hotkey, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, Hotkey, , "
 						}
 					}
 				}
@@ -9449,7 +9449,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, , "
 						}
 					}
 				}
@@ -9529,7 +9529,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, Hotkey, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, Hotkey, , "
 						}
 						"settings"
 						{
@@ -9549,7 +9549,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, Hotkey, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, Hotkey, , "
 						}
 					}
 				}
@@ -9614,7 +9614,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, , "
 						}
 					}
 				}
@@ -9694,7 +9694,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, Hotkey, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, Hotkey, , "
 						}
 						"settings"
 						{
@@ -9714,7 +9714,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, Hotkey, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, Hotkey, , "
 						}
 					}
 				}
@@ -9779,7 +9779,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, , "
 						}
 					}
 				}
@@ -9859,7 +9859,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, Hotkey, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, Hotkey, , "
 						}
 						"settings"
 						{
@@ -9879,7 +9879,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, Hotkey, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, Hotkey, , "
 						}
 					}
 				}
@@ -9944,7 +9944,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, , "
 						}
 					}
 				}
@@ -10024,7 +10024,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, Hotkey, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, Hotkey, , "
 						}
 						"settings"
 						{
@@ -10044,7 +10044,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, Hotkey, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, Hotkey, , "
 						}
 					}
 				}
@@ -10109,7 +10109,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, , "
 						}
 					}
 				}
@@ -10189,7 +10189,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, Hotkey, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, Hotkey, , "
 						}
 						"settings"
 						{
@@ -10209,7 +10209,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, Hotkey, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, Hotkey, , "
 						}
 					}
 				}
@@ -10274,7 +10274,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, , "
 						}
 					}
 				}
@@ -10354,7 +10354,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, Hotkey, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, Hotkey, , "
 						}
 						"settings"
 						{
@@ -10374,7 +10374,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, Hotkey, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, Hotkey, , "
 						}
 					}
 				}
@@ -10439,7 +10439,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, , "
 						}
 					}
 				}
@@ -10519,7 +10519,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, Hotkey, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, Hotkey, , "
 						}
 						"settings"
 						{
@@ -10539,7 +10539,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 2 1 1, Hotkey, , "
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, Hotkey, , "
 						}
 					}
 				}
