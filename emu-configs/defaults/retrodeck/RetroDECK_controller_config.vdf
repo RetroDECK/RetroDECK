@@ -1,7 +1,7 @@
 "controller_mappings"
 {
 	"version"		"3"
-	"revision"		"1702"
+	"revision"		"1706"
 	"title"		"RetroDECK: Official Layout - v0.7.1b"
 	"description"		"The Official RetroDECK Layout"
 	"creator"		""
@@ -12,7 +12,7 @@
 	"controller_caps"		"23117823"
 	"major_revision"		"0"
 	"minor_revision"		"0"
-	"Timestamp"		"-1030266496"
+	"Timestamp"		"-918096944"
 	"actions"
 	{
 		"Default"
@@ -1107,7 +1107,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 14 1 1, RetroDECK, RD-icon_circle_2_180x180.png, "
+							"binding"		"controller_action CHANGE_PRESET 14 0 1, RetroDECK, RD-icon_circle_2_180x180.png, "
 						}
 					}
 				}
@@ -1123,7 +1123,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 3 1 1, Quick, RD-org.xfce.session.png, #232323 #FFFFFF"
+							"binding"		"controller_action CHANGE_PRESET 3 0 1, Quick, RD-org.xfce.session.png, "
 						}
 					}
 				}
@@ -1139,7 +1139,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 4 1 1, State, RD-folder-blue-games.png, "
+							"binding"		"controller_action CHANGE_PRESET 4 0 1, State, RD-folder-blue-games.png, "
 						}
 					}
 				}
@@ -1155,7 +1155,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 5 1 1, Speed & Frames, RD-supertuxkart.png, "
+							"binding"		"controller_action CHANGE_PRESET 5 0 1, Speed & Frames, RD-supertuxkart.png, "
 						}
 					}
 				}
@@ -1171,7 +1171,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 6 1 1, Display & Graphics, RD-preferences-desktop-display.png, "
+							"binding"		"controller_action CHANGE_PRESET 6 0 1, Display & Graphics, RD-preferences-desktop-display.png, "
 						}
 					}
 				}
@@ -1187,7 +1187,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 7 1 1, General, RD-io.github.antimicrox.antimicrox.png, "
+							"binding"		"controller_action CHANGE_PRESET 7 0 1, General, RD-io.github.antimicrox.antimicrox.png, "
 						}
 					}
 				}
@@ -1203,7 +1203,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 9 1 1, Specific, RD-folder-applications.png, "
+							"binding"		"controller_action CHANGE_PRESET 9 0 1, Specific, RD-folder-applications.png, "
 						}
 					}
 				}
@@ -1219,7 +1219,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 8 1 1, Steam Deck, RD-steam.png, "
+							"binding"		"controller_action CHANGE_PRESET 8 0 1, Steam Deck, RD-steam.png, "
 						}
 					}
 				}
@@ -1448,7 +1448,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 1 1 1, Back, RD-edit-undo-red.png, #232323 #FFFFFF"
+							"binding"		"controller_action CHANGE_PRESET 1 0 1, Back, RD-edit-undo-red.png, #232323 #FFFFFF"
 						}
 					}
 				}
@@ -1731,7 +1731,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 1 1 1, Back, RD-edit-undo-red.png, "
+							"binding"		"controller_action CHANGE_PRESET 1 0 1, Back, RD-edit-undo-red.png, "
 						}
 					}
 				}
@@ -2196,7 +2196,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 1 1 1, Back, RD-edit-undo-red.png, "
+							"binding"		"controller_action CHANGE_PRESET 1 0 1, Back, RD-edit-undo-red.png, "
 						}
 					}
 				}
@@ -2678,7 +2678,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 1 1 1, Back, RD-edit-undo-red.png, "
+							"binding"		"controller_action CHANGE_PRESET 1 0 1, Back, RD-edit-undo-red.png, "
 						}
 					}
 				}
@@ -3143,7 +3143,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 1 1 1, Back, RD-edit-undo-red.png, "
+							"binding"		"controller_action CHANGE_PRESET 1 0 1, Back, RD-edit-undo-red.png, "
 						}
 					}
 				}
@@ -3659,7 +3659,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 1 1 1, Back, RD-edit-undo-red.png, "
+							"binding"		"controller_action CHANGE_PRESET 1 0 1, Back, RD-edit-undo-red.png, "
 						}
 					}
 				}
@@ -4135,7 +4135,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 1 1 1, Back, RD-edit-undo-red.png, "
+							"binding"		"controller_action CHANGE_PRESET 1 0 1, Back, RD-edit-undo-red.png, "
 						}
 					}
 				}
@@ -4151,7 +4151,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 10 1 1, MAME, RD-mame.png, "
+							"binding"		"controller_action CHANGE_PRESET 10 0 1, MAME, RD-mame.png, "
 						}
 					}
 				}
@@ -4167,7 +4167,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 11 1 1, RetroArch, RD-retroarch.png, "
+							"binding"		"controller_action CHANGE_PRESET 11 0 1, RetroArch, RD-retroarch.png, "
 						}
 					}
 				}
@@ -4183,7 +4183,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 12 1 1, Gamecube & Wii, RD-dolphin.png, "
+							"binding"		"controller_action CHANGE_PRESET 12 0 1, Gamecube & Wii, RD-dolphin.png, "
 						}
 					}
 				}
@@ -4199,7 +4199,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 13 1 1, NDS, RD-melonds.png, "
+							"binding"		"controller_action CHANGE_PRESET 13 0 1, NDS, RD-melonds.png, "
 						}
 					}
 				}
@@ -4215,7 +4215,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 15 1 1, 3DS, RD-citra.png, "
+							"binding"		"controller_action CHANGE_PRESET 15 0 1, 3DS, RD-citra.png, "
 						}
 					}
 				}
@@ -4231,7 +4231,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 16 1 1, Switch, RD-ryujinx.png, "
+							"binding"		"controller_action CHANGE_PRESET 16 0 1, Switch, RD-ryujinx.png, "
 						}
 					}
 				}
@@ -4594,7 +4594,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 9 1 1, Back, RD-edit-undo-red.png, "
+							"binding"		"controller_action CHANGE_PRESET 9 0 1, Back, RD-edit-undo-red.png, "
 						}
 					}
 				}
@@ -5002,7 +5002,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 9 1 1, Back, RD-edit-undo-red.png, "
+							"binding"		"controller_action CHANGE_PRESET 9 0 1, Back, RD-edit-undo-red.png, "
 						}
 					}
 				}
@@ -5524,7 +5524,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 9 1 1, Back, RD-edit-undo-red.png, "
+							"binding"		"controller_action CHANGE_PRESET 9 0 1, Back, RD-edit-undo-red.png, "
 						}
 					}
 				}
@@ -5989,7 +5989,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 9 1 1, Back, RD-edit-undo-red.png, "
+							"binding"		"controller_action CHANGE_PRESET 9 0 1, Back, RD-edit-undo-red.png, "
 						}
 					}
 				}
@@ -6540,7 +6540,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 1 1 1, Back, RD-edit-undo-red.png, "
+							"binding"		"controller_action CHANGE_PRESET 1 0 1, Back, RD-edit-undo-red.png, "
 						}
 					}
 				}
@@ -7064,7 +7064,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 9 1 1, Back, RD-edit-undo-red.png, "
+							"binding"		"controller_action CHANGE_PRESET 9 0 1, Back, RD-edit-undo-red.png, "
 						}
 					}
 				}
@@ -7461,7 +7461,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 9 1 1, Back, RD-edit-undo-red.png, "
+							"binding"		"controller_action CHANGE_PRESET 9 0 1, Back, RD-edit-undo-red.png, "
 						}
 					}
 				}
@@ -8321,7 +8321,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 1 1 1, , "
+							"binding"		"controller_action CHANGE_PRESET 1 0 1, , "
 						}
 					}
 					"Full_Press"
@@ -8378,7 +8378,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 1 1 1, , "
+							"binding"		"controller_action CHANGE_PRESET 1 0 1, , "
 						}
 					}
 				}
@@ -8394,7 +8394,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 1 1 1, , "
+							"binding"		"controller_action CHANGE_PRESET 1 0 1, , "
 						}
 					}
 				}
