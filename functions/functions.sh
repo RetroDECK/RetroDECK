@@ -261,6 +261,7 @@ update_rpcs3_firmware() {
 }
 
 backup_retrodeck_userdata() {
+  mkdir -p "$backups_folder"
   zip -rq9 "$backups_folder/$(date +"%0m%0d")_retrodeck_userdata.zip" "$saves_folder" "$states_folder" "$bios_folder" "$media_folder" "$themes_folder" "$logs_folder" "$screenshots_folder" "$mods_folder" "$texture_packs_folder" "$borders_folder" > $logs_folder/$(date +"%0m%0d")_backup_log.log
 }
 
