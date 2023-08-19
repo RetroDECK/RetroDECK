@@ -55,9 +55,11 @@ Not supported and not planned.
 Read and follow the guide here: [Installation instructions](https://github.com/XargonWan/RetroDECK/wiki/How-to:-Getting-started) on the Wiki
 
 ## The RetroDECK community:
+
 [Website](https://retrodeck.net) <br/>
 [Wiki](https://github.com/XargonWan/RetroDECK/wiki) <br/>
 [Discord](https://discord.gg/Dz3szYsP8g)<br/>
+[Lemmy](https://lemmy.zip/c/retrodeck)<br/>
 [Subreddit](https://www.reddit.com/r/retrodeck)
 
 
