@@ -65,12 +65,44 @@
    <project_license>GPL-3.0</project_license>
    <metadata_license>CC0-1.0</metadata_license>
    <releases>
-      <release version="0.7.1b" date="2023-06-16">
+      <release version="0.7.1b" date="2023-08-21">
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.7.1b</url>
          <description>
+            <p>Information:</p>
+            <ul>
+               <li>Steam Deck users update RetroDECK from Discover in Desktop Mode.</li>
+               <li>Don't forget to reapply the latest controller layout: Go into the Templates tab and reapply the new profile ending with 0.7.1b (there is no need to reinstall the entire layout from the Configurator).</li>
+            </ul>
             <p>Bug fixes:</p>
             <ul>
-               <li>PLACEHOLDER</li>
+               <li>Fixed an issue to make sure the RD controller layout file at update with each RD update.</li>
+               <li>Fixed an issue with PPSSPP that made "L" and "R" incorrectly bound.</li>
+               <li>Fixed an issue in the Configurator that prevented the Yuzu preset for swapping A/B X/Y from working.</li>
+               <li>Fixed an notification issues on the latest SteamOS Beta releases.</li>
+               <li>Fixed an rsync permissions issue in the RetroDECK Framework.</li>
+               <li>Updated Yuzu presets to handle new config syntax in the RetroDECK Framework.</li>
+               <li>Changed auto-update to notification only, until permissions error can be worked out.</li>
+               <li>Added some new pixelart icons by ItzSelenux (pixelitos-icon-theme)</li>
+            </ul>
+            <p>Steam Deck - Global Controller Layout Changes:</p>
+            <ul>
+               <li>Select is now a hotkey trigger while pressing it down, L4 and R4 are still triggers as well.</li>
+               <li>The RetroArch combo of Select + Start = Quit now works on many SA-Emulators.</li>
+               <li>Open Menu is removed from Select.</li>
+               <li>R5 = A button (this allows for great Wii controls on the right touchpad and pressing down the R5 for A).</li>
+               <li>L5 = B button.</li>
+            </ul>
+            <p>Steam Deck - Global Hotkey Changes:</p>
+            <ul>
+               <li>Open Menu is on Y.</li>
+               <li>Increase Emulation Speed is on Dpad-UP.</li>
+               <li>Decrease Emulation Speed is on Dpad-Down.</li>
+               <li>Fullscreen OFF command is removed (as emulators have migrated to toggle).</li>
+            </ul>
+            <p>Known issues:</p>
+            <ul>
+               <li>The built in auto-updater is not working (we are working on it). Discover is ok.</li>
+               <li>Some emulators don't have hotkey support or have bugs affecting their hotkeys.</li>
             </ul>
          </description>
       </release>
