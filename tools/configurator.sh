@@ -344,7 +344,7 @@ configurator_dolphin_input_textures_dialog() {
       set_setting_value $dolphingfxconf "HiresTextures" "True" dolphin
       (
         mkdir "/var/data/dolphin-emu/Load/DynamicInputTextures"
-        rsync -a "/app/retrodeck/extras/DynamicInputTextures/" "/var/data/dolphin-emu/Load/DynamicInputTextures/"
+        rsync -rlD --mkpath "/app/retrodeck/extras/DynamicInputTextures/" "/var/data/dolphin-emu/Load/DynamicInputTextures/"
       ) |
       zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -382,7 +382,7 @@ configurator_primehack_input_textures_dialog() {
       set_setting_value $primehackgfxconf "HiresTextures" "True" primehack
       (
         mkdir "/var/data/primehack/Load/DynamicInputTextures"
-        rsync -a "/app/retrodeck/extras/DynamicInputTextures/" "/var/data/primehack/Load/DynamicInputTextures/"
+        rsync -rlD --mkpath "/app/retrodeck/extras/DynamicInputTextures/" "/var/data/primehack/Load/DynamicInputTextures/"
       ) |
       zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -879,7 +879,7 @@ configurator_retrodeck_troubleshooting_dialog() {
             --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
             --title "RetroDECK Configurator Utility - Backup in Progress" \
             --text="Backing up RetroDECK userdata, please wait..."
-    if [[ -f $backups_folder/$(date +"%0m%0d")_retrodeck_userdata.zip ]]; then
+    if [[ -f "$backups_folder/$(date +"%0m%0d")_retrodeck_userdata.zip" ]]; then
       configurator_generic_dialog "RetroDECK Configurator - Backup: RetroDECK Userdata" "The backup process is now complete."
     else
       configurator_generic_dialog "RetroDECK Configurator - Backup: RetroDECK Userdata" "The backup process could not be completed,\nplease check the logs folder for more information."

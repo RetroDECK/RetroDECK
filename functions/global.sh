@@ -25,21 +25,19 @@ zip_compressable_extensions="$emuconfigs/defaults/retrodeck/reference_lists/zip_
 easter_egg_checklist="$emuconfigs/defaults/retrodeck/reference_lists/easter_egg_checklist.cfg"                        # A config file listing days and times when special splash screens should show up
 input_validation="$emuconfigs/defaults/retrodeck/reference_lists/input_validation.cfg"                                # A config file listing valid CLI inputs
 finit_options_list="$emuconfigs/defaults/retrodeck/reference_lists/finit_options_list.cfg"                            # A config file listing available optional installs during finit
-splashscreen_dir="/var/config/emulationstation/.emulationstation/resources/graphics/extra-splashes"                   # The default location of extra splash screens
+splashscreen_dir="/var/config/emulationstation/.emulationstation/resources/graphics/extra_splashes"                   # The default location of extra splash screens
 current_splash_file="/var/config/emulationstation/.emulationstation/resources/graphics/splash.svg"                    # The active splash file that will be shown on boot
 default_splash_file="/var/config/emulationstation/.emulationstation/resources/graphics/splash-orig.svg"               # The default RetroDECK splash screen
-multi_user_data_folder="$rdhome/multi-user-data"                                                                      # The default location of multi-user environment profiles
 multi_user_emulator_config_dirs="$emuconfigs/defaults/retrodeck/reference_lists/multi_user_emulator_config_dirs.cfg"  # A list of emulator config folders that can be safely linked/unlinked entirely in multi-user mode
-backups_folder="$rdhome/backups"                                                                                      # A standard location for backup file storage
 rd_es_themes="/app/share/emulationstation/themes"                                                                     # The directory where themes packaged with RetroDECK are stored
 lockfile="/var/config/retrodeck/.lock"                                                                                # where the lockfile is located
 default_sd="/run/media/mmcblk0p1"                                                                                     # Steam Deck SD default path
 hard_version="$(cat '/app/retrodeck/version')"                                                                        # hardcoded version (in the readonly filesystem)
 rd_repo="https://github.com/XargonWan/RetroDECK"                                                                      # The URL of the main RetroDECK GitHub repo
 es_themes_list="https://gitlab.com/es-de/themes/themes-list/-/raw/master/themes.json"                                 # The URL of the ES-DE 2.0 themes list
-remote_network_target_1="https://flathub.org"                                                                           # The URL of a common internet target for testing network access
-remote_network_target_2="$rd_repo"                                                                           # The URL of a common internet target for testing network access
-remote_network_target_3="https://one.one.one.one"                                                                           # The URL of a common internet target for testing network access
+remote_network_target_1="https://flathub.org"                                                                         # The URL of a common internet target for testing network access
+remote_network_target_2="$rd_repo"                                                                                    # The URL of a common internet target for testing network access
+remote_network_target_3="https://one.one.one.one"                                                                     # The URL of a common internet target for testing network access
 helper_files_folder="$emuconfigs/defaults/retrodeck/helper_files"                                                     # The parent folder of RetroDECK documentation files for deployment
 helper_files_list="$emuconfigs/defaults/retrodeck/reference_lists/helper_files_list.cfg"                              # The list of files to be deployed and where they go
 rd_appdata="/app/share/appdata/net.retrodeck.retrodeck.appdata.xml"                                                   # The shipped appdata XML file for this version
@@ -174,4 +172,8 @@ else
     prepare_emulator "all" "postmove"
     conf_write
   fi
+
+  # Static variables dependent on $rd_conf values, need to be set after reading $rd_conf
+  backups_folder="$rdhome/backups"                                                                                      # A standard location for backup file storage
+  multi_user_data_folder="$rdhome/multi-user-data"                                                                      # The default location of multi-user environment profiles
 fi

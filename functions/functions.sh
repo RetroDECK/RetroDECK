@@ -261,6 +261,7 @@ update_rpcs3_firmware() {
 }
 
 backup_retrodeck_userdata() {
+  mkdir -p "$backups_folder"
   zip -rq9 "$backups_folder/$(date +"%0m%0d")_retrodeck_userdata.zip" "$saves_folder" "$states_folder" "$bios_folder" "$media_folder" "$themes_folder" "$logs_folder" "$screenshots_folder" "$mods_folder" "$texture_packs_folder" "$borders_folder" > $logs_folder/$(date +"%0m%0d")_backup_log.log
 }
 
@@ -464,7 +465,7 @@ install_retrodeck_controller_profile() {
   # BIGGER NOTE: As part of this process, all emulators will need to have their configs hard-reset to match the controller mappings of the profile
   # USAGE: install_retrodeck_controller_profile
   if [[ -d "$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/" && -d "$HOME/.steam/steam/controller_base/templates/" ]]; then
-    rsync -a "/app/retrodeck/binding-icons/" "$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/"
+    rsync -rlD --mkpath "/app/retrodeck/binding_icons/" "$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/"
     cp -f "$emuconfigs/defaults/retrodeck/RetroDECK_controller_config.vdf" "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"
   else
     configurator_generic_dialog "RetroDECK Controller Profile Install" "The target directories for the controller profile do not exist.\n\nThis may happen if you do not have Steam installed or the location is does not have permission to be read."
@@ -483,8 +484,7 @@ update_splashscreens() {
   # USAGE: update_splashscreens
 
   rm -rf /var/config/emulationstation/.emulationstation/resources/graphics
-  mkdir -p /var/config/emulationstation/.emulationstation/resources/graphics
-  cp -rf /app/retrodeck/graphics/* /var/config/emulationstation/.emulationstation/resources/graphics
+  rsync -rlD --mkpath "/app/retrodeck/graphics/" "/var/config/emulationstation/.emulationstation/resources/graphics/"
 }
 
 deploy_helper_files() {

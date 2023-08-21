@@ -127,9 +127,9 @@ post_update() {
     dir_prep "$rdhome/gamelists" "/var/config/emulationstation/.emulationstation/gamelists"
 
     dir_prep "$borders_folder" "/var/config/retroarch/overlays/borders"
-    rsync -a "/app/retrodeck/emu-configs/retroarch/borders/" "/var/config/retroarch/overlays/borders"
+    rsync -rlD --mkpath "/app/retrodeck/emu-configs/retroarch/borders/" "/var/config/retroarch/overlays/borders/"
 
-    rsync -a --mkpath "$emuconfigs/defaults/retrodeck/presets/remaps/" "/var/config/retroarch/config/remaps/"
+    rsync -rlD --mkpath "$emuconfigs/defaults/retrodeck/presets/remaps/" "/var/config/retroarch/config/remaps/"
 
     if [[ ! -f "$bios_folder/capsimg.so" ]]; then
       cp -f "/app/retrodeck/extras/Amiga/capsimg.so" "$bios_folder/capsimg.so"
@@ -222,14 +222,25 @@ post_update() {
       prepare_emulator "reset" "all"
     fi
   fi
+  if [[ $prev_version -le "071" ]]; then
+    # In version 0.7.1b, the following changes were made that required config file updates/reset or other changes to the filesystem:
+    # - Force update PPSSPP standalone keybinds for L/R.
+    set_setting_value "$ppssppcontrolsconf" "L" "1-45,10-193" "ppsspp" "ControlMapping"
+    set_setting_value "$ppssppcontrolsconf" "R" "1-51,10-192" "ppsspp" "ControlMapping"
+  fi
 
   # The following commands are run every time.
 
   if [[ -d "/var/data/dolphin-emu/Load/DynamicInputTextures" ]]; then # Refresh installed textures if they have been enabled
-    rsync -a "/app/retrodeck/extras/DynamicInputTextures/" "/var/data/dolphin-emu/Load/DynamicInputTextures/"
+    rsync -rlD --mkpath "/app/retrodeck/extras/DynamicInputTextures/" "/var/data/dolphin-emu/Load/DynamicInputTextures/"
   fi
   if [[ -d "/var/data/primehack/Load/DynamicInputTextures" ]]; then # Refresh installed textures if they have been enabled
-    rsync -a "/app/retrodeck/extras/DynamicInputTextures/" "/var/data/primehack/Load/DynamicInputTextures/"
+    rsync -rlD --mkpath "/app/retrodeck/extras/DynamicInputTextures/" "/var/data/primehack/Load/DynamicInputTextures/"
+  fi
+
+  if [[ -f "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf" ]]; then # If RetroDECK controller profile has been previously installed
+    cp -f "$emuconfigs/defaults/retrodeck/RetroDECK_controller_config.vdf" "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"
+    rsync -rlD --mkpath "/app/retrodeck/binding_icons/" "$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/"
   fi
 
   update_splashscreens
