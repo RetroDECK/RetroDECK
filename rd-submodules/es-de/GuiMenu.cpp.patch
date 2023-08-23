@@ -24,15 +24,15 @@ diff -au1r emulationstation-de/es-app/src/guis/GuiMenu.cpp emulationstation-de/e
 @@ -1910 +1912,14 @@
  }
 +
-++void GuiMenu::openRetroDeckConfigurator()
-++{
-++    // Launch the configurator.sh script
-++    std::string command;
-++    std::string startDirectory;
-++    bool runInBackground;
-++    command = "bash /app/tools/configurator.sh";
-++    startDirectory = "/app/tools";
-++    runInBackground = false;
-++    int result = Utils::Platform::launchGameUnix(command, startDirectory, runInBackground);
-++    // You can add any checks for the script's outcome here.
-++}
++void GuiMenu::openRetroDeckConfigurator()
++{
++    // Launch the configurator.sh script
++    std::string command;
++    std::string startDirectory;
++    bool runInBackground;
++    command = "bash /app/tools/configurator.sh";
++    startDirectory = "/app/tools";
++    runInBackground = false;
++    int result = Utils::Platform::launchGameUnix(command, startDirectory, runInBackground);
++    // You can add any checks for the script's outcome here.
++}
