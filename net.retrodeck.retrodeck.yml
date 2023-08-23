@@ -340,7 +340,7 @@ modules:
     sources:
       - type: git
         url:  https://github.com/anthonycaccese/art-book-next-es-de.git
-        commit: a0dc0cccaa3f1475feb58e551fe732d982e161c0
+        commit: 4fe896af7447404f6ea083335cd661c91b0f7860
 
   # ES-DE Themes - END
 
