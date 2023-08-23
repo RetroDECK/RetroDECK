@@ -326,7 +326,13 @@ modules:
             v'$(cat ${FLATPAK_DEST}/retrodeck/version)', ES-DE  v" + Utils::String::toUpper(PROGRAM_VERSION_STRING)#g'
             es-app/src/guis/GuiMenu.cpp
       - type: patch
-        path: rd-submodules/es-de/es-de-retrodeck-mods.patch
+        path: rd-submodules/es-de/GuiMenu.cpp.patch
+      - type: patch
+        path: rd-submodules/es-de/GuiMenu.h.patch
+      - type: patch
+        path: rd-submodules/es-de/ViewController.cpp.patch
+      - type: patch
+        path: rd-submodules/es-de/Window.cpp.patch
 
   # ES-DE - END
 
