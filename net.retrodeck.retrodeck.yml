@@ -1,15 +1,11 @@
 app-id: net.retrodeck.retrodeck
-#runtime: org.kde.Platform
-runtime: org.freedesktop.Platform
-#runtime-version: 5.15-22.08
-runtime-version: '22.08'
-#sdk: org.kde.Sdk
-sdk: org.freedesktop.Sdk
+runtime: org.kde.Platform
+runtime-version: 5.15-22.08
+sdk: org.kde.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.llvm14    # Needed for rpcs3
 base: io.qt.qtwebengine.BaseApp             # Needed for Yuzu
-#base-version: 5.15-22.08                    # Needed for Yuzu
-base-version: '22.08'
+base-version: 5.15-22.08                    # Needed for Yuzu
 command: retrodeck.sh
 
 finish-args:
