@@ -53,11 +53,6 @@ jobs:
           runtime/org.freedesktop.Platform.ffmpeg-full/x86_64/22.08
           /bin/bash ${GITHUB_WORKSPACE}/automation_tools/pre_build_automation.sh # Run pre-build automation tasks
 
-      - name: Setting branch in the manifest
-        run: |
-          sed -i "s/branch: THISBRANCH/branch: $(git rev-parse --abbrev-ref HEAD)/g" net.retrodeck.retrodeck.yml
-          echo "Branch name is: $(git rev-parse --abbrev-ref HEAD)"  
-
       - name: Read manifest content
         id: read_manifest
         run: echo "::set-output name=file_content::$(cat net.retrodeck.retrodeck.yml)"
