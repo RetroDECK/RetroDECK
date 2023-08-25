@@ -76,7 +76,7 @@ modules:
     build-commands:
       - |
 
-        VERSION=$(git rev-parse --abbrev-ref HEAD)
+        VERSION=THISBRANCH
 
         git checkout ${GITHUB_REF_NAME}
         mkdir -p ${FLATPAK_DEST}/retrodeck/

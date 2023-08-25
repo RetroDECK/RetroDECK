@@ -53,10 +53,19 @@ jobs:
           runtime/org.freedesktop.Platform.ffmpeg-full/x86_64/22.08
           /bin/bash ${GITHUB_WORKSPACE}/automation_tools/pre_build_automation.sh # Run pre-build automation tasks
 
-      - name: Setting branch in the manifest
+      - name: Read manifest content
+        id: read_manifest
+        run: echo "::set-output name=file_content::$(cat net.retrodeck.retrodeck.yml)"
+        
+      - name: Check VERSION
+        id: check_version_string
         run: |
-          sed -i "s/branch: THISBRANCH/branch: $(git rev-parse --abbrev-ref HEAD)/g" net.retrodeck.retrodeck.yml
-          echo "Branch name is: $(git rev-parse --abbrev-ref HEAD)"
+          if [[ "${{ steps.read_file.outputs.file_content }}" == *"VERSION=THISBRANCH"* ]]; then
+            echo "Version string is present, proceeding."
+          else
+            echo "Error: You forgot to specify the version."
+            exit 1
+          fi
 
       - name: Build flatpak
         run: |
