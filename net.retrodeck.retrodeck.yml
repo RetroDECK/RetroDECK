@@ -66,6 +66,7 @@ modules:
   # The version number is hardcoded in /app/retrodeck/version
   #
   # UPDATE STEPS FOR MAIN:
+  # [ ] Update the VERSION variable
   # [ ] Update the appdata.xml with the version number and notes
   # [ ] change branch into main in version-initialization (first one)
   # [ ] change branch into main in retrodeck module (last one)
