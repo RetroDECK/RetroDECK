@@ -2,6 +2,7 @@ project = 'RetroDECK'
 author = 'RetroDECK Team'
 
 extensions = [
+    'sphinx_rtd_theme',
     'sphinx.ext.autodoc',
     'sphinx.ext.doctest',
     'sphinx.ext.intersphinx',
