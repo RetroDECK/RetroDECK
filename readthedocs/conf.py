@@ -13,13 +13,9 @@ extensions = [
 ]
 
 templates_path = ['_templates']
-
 source_suffix = '.rst'
-
 master_doc = 'index'
-
-language = None
-
+language = 'English'
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
-
 pygments_style = None
+html_theme = "sphinx_rtd_theme"
