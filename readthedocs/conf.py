@@ -11,11 +11,9 @@ extensions = [
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
     'sphinx_rtd_theme',
+    'myst_parser',
 ]
 
-source_suffix = '.rst'
-master_doc = 'index'
 language = 'English'
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
-pygments_style = None
 html_theme = "sphinx_rtd_theme"
