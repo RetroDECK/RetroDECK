@@ -1,0 +1,29 @@
+name: Update-ReadTheDocs
+
+on:
+  push:
+    branches:
+     - main
+    paths:
+     - 'wiki'
+  pull_request: 
+    branches:
+     - main
+    paths:
+     - 'wiki'
+  workflow_dispatch:
+
+
+jobs:
+
+  Job1_-_Building_P1:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Update wiki submodule
+        id: update
+        run: |
+          git submodule update --remote wiki
+          git add wiki
+          git commit -m "Updating wiki [skip ci]"
+          git push
