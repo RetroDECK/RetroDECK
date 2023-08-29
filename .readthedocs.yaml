@@ -29,7 +29,3 @@ formats:
 python:
    install:
     - requirements: wiki-rtd/requirements.txt
-
-# submodules:
-#   include: [wiki-rtd]
-#   recursive: true
