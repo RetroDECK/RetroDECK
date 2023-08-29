@@ -32,4 +32,4 @@ python:
 
 submodules:
   include: [wiki]
-  recursive: false
+  recursive: true
