@@ -25,4 +25,5 @@ source_suffix = [".md", ".html", ".rst"]
 # source_suffix = '.rst'
 
 # The master toctree document.
-master_doc = "Home"
+#master_doc = "Home"
+master_doc = 'index'
