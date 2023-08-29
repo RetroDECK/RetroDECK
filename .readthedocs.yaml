@@ -31,5 +31,5 @@ python:
     - requirements: wiki/requirements.txt
 
 submodules:
-  include: []
+  include: [wiki]
   recursive: true
