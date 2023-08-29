@@ -29,3 +29,7 @@ formats:
 python:
    install:
     - requirements: wiki/requirements.txt
+
+submodules:
+  include: [wiki]
+  recursive: false
