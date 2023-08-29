@@ -22,10 +22,10 @@ jobs:
 
       - uses: actions/checkout@v3
 
-      - name: Update wiki submodule
+      - name: Update wiki
         id: update
         run: |
-          git submodule update --remote wiki
-          git add wiki
-          git commit -m "Updating wiki [skip ci]"
+          git checkout https://github.com/XargonWan/RetroDECK.wiki.git tmp/wiki
+          cp -rf tmp/wiki/* wiki
+          git commit -m "Updating wiki"
           git push
