@@ -1,17 +1,18 @@
 name: Update-ReadTheDocs
 
 on:
-  push:
-    branches:
-     - main
-    paths:
-     - 'wiki'
-  pull_request: 
-    branches:
-     - main
-    paths:
-     - 'wiki'
-  workflow_dispatch:
+  gollum
+  # push:
+  #   branches:
+  #    - main
+  #   paths:
+  #    - 'wiki'
+  # pull_request: 
+  #   branches:
+  #    - main
+  #   paths:
+  #    - 'wiki'
+  # workflow_dispatch:
 
 
 jobs:
