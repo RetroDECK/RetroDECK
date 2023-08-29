@@ -28,5 +28,7 @@ jobs:
         run: |
           git checkout https://github.com/XargonWan/RetroDECK.wiki-rtd.git tmp/wiki-rtd
           cp -rf tmp/wiki-rtd/* wiki-rtd
+          rm wiki-rtd/index.md
+          mv wiki-rtd/Home.md wiki-rtd/index.md
           git commit -m "Updating wiki-rtd"
           git push
