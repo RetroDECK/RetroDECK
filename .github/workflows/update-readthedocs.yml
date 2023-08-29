@@ -6,12 +6,12 @@ on:
   #   branches:
   #    - main
   #   paths:
-  #    - 'wiki-rdd'
+  #    - 'wiki-rtd'
   # pull_request: 
   #   branches:
   #    - main
   #   paths:
-  #    - 'wiki-rdd'
+  #    - 'wiki-rtd'
   # workflow_dispatch:
 
 
@@ -23,10 +23,10 @@ jobs:
 
       - uses: actions/checkout@v3
 
-      - name: Update ReadTheDocs wiki-rdd
-        id: wiki-rdd-update
+      - name: Update ReadTheDocs wiki-rtd
+        id: wiki-rtd-update
         run: |
-          git checkout https://github.com/XargonWan/RetroDECK.wiki-rdd.git tmp/wiki-rdd
-          cp -rf tmp/wiki-rdd/* wiki-rdd
-          git commit -m "Updating wiki-rdd"
+          git checkout https://github.com/XargonWan/RetroDECK.wiki-rtd.git tmp/wiki-rtd
+          cp -rf tmp/wiki-rtd/* wiki-rtd
+          git commit -m "Updating wiki-rtd"
           git push
