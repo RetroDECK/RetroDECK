@@ -125,6 +125,7 @@ jobs:
           # Set the output variable
           echo "::set-output name=commits::$COMMITS"
         id: commits
+        continue-on-error: true
 
       - name: Publish the flatpak in a new cooker release
         uses: ncipollo/release-action@v1
