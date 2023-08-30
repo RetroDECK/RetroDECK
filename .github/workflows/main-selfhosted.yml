@@ -43,11 +43,6 @@ jobs:
       - name: Run pre-build automation tasks
         run : "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/pre_build_automation.sh"
 
-      - name: Set branch in the manifest
-        run: |
-          sed -i "s/branch: THISBRANCH/branch: $(git rev-parse --abbrev-ref HEAD)/g" net.retrodeck.retrodeck.yml
-          echo "Branch name is: $(git rev-parse --abbrev-ref HEAD)"  
-
       - name: Read manifest content
         id: read_manifest
         run: echo "::set-output name=file_content::$(cat net.retrodeck.retrodeck.yml)"
@@ -55,7 +50,7 @@ jobs:
       - name: Check VERSION
         id: check_version_string
         run: |
-          if [[ "${{ steps.read_file.outputs.file_content }}" == *"VERSION=THISBRANCH"* ]]; then
+          if [[ "${{ steps.read_file.outputs.file_content }}" == *"VERSION=THISBRANCH"* ]] || [[ "${{ steps.read_file.outputs.file_content }}" == *"VERSION=main"* ]]; then
             echo "Version string is present, proceeding."
           else
             echo "Error: You forgot to specify the version."
