@@ -28,13 +28,7 @@ echo
 while IFS="^" read -r action placeholder url branch
 do
   if [[ ! $action == "#"* ]] && [[ ! -z "$action" ]]; then
-    if [[ "$action" == "branch" ]]; then
-      echo
-      echo "Placeholder text: $placeholder"
-      echo "Current branch:" "$current_branch"
-      echo
-      /bin/sed -i 's^'"$placeholder"'^'"$current_branch"'^g' $rd_manifest
-    elif [[ "$action" == "hash" ]]; then
+    if [[ "$action" == "hash" ]]; then
       echo
       echo "Placeholder text: $placeholder"
       echo "URL to hash: $url"
