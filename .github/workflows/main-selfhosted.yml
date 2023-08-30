@@ -30,28 +30,23 @@ jobs:
         run: sudo umount -f /home/ubuntu/actions-runner/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles/*
         continue-on-error: true
 
-      - name: Generate build ID
-        id: generating_buildid
-        run: echo "##[set-output name=build-id;]$(echo "$( git rev-parse --short HEAD )")"
-      
-      - uses: actions/checkout@v3
+      - name: Clone RetroDECK repo
+        uses: actions/checkout@v3
+        with:
+          submodules: 'true'
 
-      - name: Initialize enviornment
+      - name: Initialize Flatpak environment
         run: |
-          git pull
-          git submodule init
-          git submodule update
           sudo apt install -y flatpak flatpak-builder p7zip-full xmlstarlet bzip2
           flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-          flatpak install --user -y --noninteractive \
-          org.kde.Sdk//6.3 \
-          org.kde.Platform//6.3 \
-          org.freedesktop.Platform.ffmpeg-full/x86_64/22.08 \
-          io.qt.qtwebengine.BaseApp/x86_64/6.3 \
-          org.freedesktop.Sdk.Extension.llvm13 \
-          org.freedesktop.Sdk.Extension.dotnet6/x86_64/22.08 \
-          runtime/org.freedesktop.Platform.ffmpeg-full/x86_64/22.08
-          /bin/bash ${GITHUB_WORKSPACE}/automation_tools/pre_build_automation.sh # Run pre-build automation tasks
+
+      - name: Run pre-build automation tasks
+        run : "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/pre_build_automation.sh"
+
+      - name: Set branch in the manifest
+        run: |
+          sed -i "s/branch: THISBRANCH/branch: $(git rev-parse --abbrev-ref HEAD)/g" net.retrodeck.retrodeck.yml
+          echo "Branch name is: $(git rev-parse --abbrev-ref HEAD)"  
 
       - name: Read manifest content
         id: read_manifest
@@ -72,7 +67,13 @@ jobs:
           git config --global protocol.file.allow always
           mkdir -vp ${GITHUB_WORKSPACE}/local
           mkdir -vp ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker
-          flatpak-builder --user --force-clean --install-deps-from=flathub --install-deps-from=flathub-beta --repo=${GITHUB_WORKSPACE}/local ${GITHUB_WORKSPACE}/retrodeck-flatpak-main net.retrodeck.retrodeck.yml
+          flatpak-builder --user --force-clean \
+            --install-deps-from=flathub \
+            --install-deps-from=flathub-beta \
+            --repo=${GITHUB_WORKSPACE}/local \
+            --disable-download \
+            ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker \
+            net.retrodeck.retrodeck.yml
 
       - name: Create Artifact for flathub
         run: | 
@@ -106,7 +107,6 @@ jobs:
           bodyFile: "body.md"
           artifacts: "RetroDECK.flatpak,RetroDECK-Artifact.tar.gz"
           allowUpdates: true
-          #prerelease: true
           makeLatest: true
           token: ${{ secrets.TRIGGER_BUILD_TOKEN }}
           repo: RetroDECK
