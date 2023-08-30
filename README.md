@@ -6,6 +6,8 @@
 ![Flathub](https://img.shields.io/flathub/v/net.retrodeck.retrodeck)
 ![Discord](https://img.shields.io/discord/951662718102962256?label=discord)
 ![GitHub](https://img.shields.io/github/license/XargonWan/RetroDECK)
+[![Documentation Status](https://readthedocs.org/projects/retrodeck/badge/?version=latest)](https://retrodeck.readthedocs.io/en/latest/?badge=latest)
+
 
 # RetroDECK on your device!
 
