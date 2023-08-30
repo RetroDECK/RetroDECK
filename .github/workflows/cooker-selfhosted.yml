@@ -59,12 +59,47 @@ jobs:
           sed -i "s/THISBRANCH/$(git rev-parse --abbrev-ref HEAD)/g" net.retrodeck.retrodeck.yml
           echo "Branch name is: $(git rev-parse --abbrev-ref HEAD)"
 
+      - name: "Build flatpak: download only"
+        id: "flatpak-download"
+        run: |
+          git config --global protocol.file.allow always
+          mkdir -vp ${GITHUB_WORKSPACE}/local
+          mkdir -vp ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker
+          flatpak-builder --user --force-clean \
+            --install-deps-from=flathub \
+            --install-deps-from=flathub-beta \
+            --repo=${GITHUB_WORKSPACE}/local \
+            --download-only \
+            ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker \
+            net.retrodeck.retrodeck.yml
+
+      # Sometimes flatpak download fails, in this case it tries a second time
+      - name: "Build flatpak: download only (retry)"
+        if: steps.flatpak-download.outcome == 'failure'
+        run: |
+          git config --global protocol.file.allow always
+          mkdir -vp ${GITHUB_WORKSPACE}/local
+          mkdir -vp ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker
+          flatpak-builder --user --force-clean \
+            --install-deps-from=flathub \
+            --install-deps-from=flathub-beta \
+            --repo=${GITHUB_WORKSPACE}/local \
+            --download-only \
+            ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker \
+            net.retrodeck.retrodeck.yml
+
       - name: Build flatpak
         run: |
           git config --global protocol.file.allow always
           mkdir -vp ${GITHUB_WORKSPACE}/local
           mkdir -vp ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker
-          flatpak-builder --user --force-clean --install-deps-from=flathub --install-deps-from=flathub-beta --repo=${GITHUB_WORKSPACE}/local ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
+          flatpak-builder --user --force-clean \
+            --install-deps-from=flathub \
+            --install-deps-from=flathub-beta \
+            --repo=${GITHUB_WORKSPACE}/local \
+            --disable-download \
+            ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker \
+            net.retrodeck.retrodeck.yml
 
       - name: Create Artifact for flathub
         run: | 
