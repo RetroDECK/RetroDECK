@@ -81,6 +81,16 @@ jobs:
       - name: Set environment variable with current branch name
         run: echo "GITHUB_REF_SLUG=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
 
+      - name: Get commits since last release
+        run: |
+          # Get the latest release tag
+          LATEST_TAG=$(git describe --tags --abbrev=0)
+          # Get all commits since the latest release tag
+          COMMITS=$(git log $LATEST_TAG..HEAD --pretty=format:"- %s")
+          # Set the output variable
+          echo "::set-output name=commits::$COMMITS"
+        id: commits
+
       - name: Publish the flatpak in a new cooker release
         uses: ncipollo/release-action@v1
         with:
@@ -88,6 +98,9 @@ jobs:
           body: |
             # Release Notes (Cooker)
             This is a cooker snapshot based on the commit: ${{ github.event.repository.full_name }}@${{github.sha}}.
+
+            ## Commits since last release
+            ${{ steps.commits.outputs.commits }}
 
             For the full release note for this build please refer to the channel [#BETA-TESTING](https://discord.gg/qQcrFvaA2C) on our Discord server.
       
