@@ -32,7 +32,10 @@ jobs:
         run: sudo umount -f /home/ubuntu/actions-runner/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles/*
         continue-on-error: true
     
-      - uses: actions/checkout@v3
+      - name: Clone RetroDECK repo
+        uses: actions/checkout@v3
+        with:
+          submodules: 'true'
 
       - name: Generate cooker build ID
         run: |
@@ -58,6 +61,35 @@ jobs:
         run: |
           sed -i "s/THISBRANCH/$(git rev-parse --abbrev-ref HEAD)/g" net.retrodeck.retrodeck.yml
           echo "Branch name is: $(git rev-parse --abbrev-ref HEAD)"
+
+      - name: "Build flatpak: download only"
+        id: "flatpak-download"
+        run: |
+          git config --global protocol.file.allow always
+          mkdir -vp ${GITHUB_WORKSPACE}/local
+          mkdir -vp ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker
+          flatpak-builder --user --force-clean \
+            --install-deps-from=flathub \
+            --install-deps-from=flathub-beta \
+            --repo=${GITHUB_WORKSPACE}/local \
+            --download-only \
+            ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker \
+            net.retrodeck.retrodeck.yml
+
+      # Sometimes flatpak download fails, in this case it tries a second time
+      - name: "Build flatpak: download only (retry)"
+        if: steps.flatpak-download.outcome == 'failure'
+        run: |
+          git config --global protocol.file.allow always
+          mkdir -vp ${GITHUB_WORKSPACE}/local
+          mkdir -vp ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker
+          flatpak-builder --user --force-clean \
+            --install-deps-from=flathub \
+            --install-deps-from=flathub-beta \
+            --repo=${GITHUB_WORKSPACE}/local \
+            --download-only \
+            ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker \
+            net.retrodeck.retrodeck.yml
 
       - name: Build flatpak
         run: |
