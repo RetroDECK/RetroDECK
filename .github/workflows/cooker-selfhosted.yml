@@ -30,7 +30,10 @@ jobs:
         run: sudo umount -f /home/ubuntu/actions-runner/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles/*
         continue-on-error: true
     
-      - uses: actions/checkout@v3
+      - name: Clone RetroDECK repo
+        uses: actions/checkout@v3
+        with:
+          submodules: 'true'
 
       - name: Generate build ID
         run: |
@@ -40,29 +43,18 @@ jobs:
           capitalized_word2="$(tr '[:lower:]' '[:upper:]' <<< ${word2:0:1})${word2:1}"
           result=$capitalized_word1$capitalized_word2
           echo $result > ${GITHUB_WORKSPACE}/buildid
-          ls -lah ${GITHUB_WORKSPACE}         # DEBUG
-          cat ${GITHUB_WORKSPACE}/buildid     # DEBUG
           echo "buildid=$result" >> $GITHUB_ENV
           echo "VersionID is $result"
 
-      - name: Initialize environment
+      - name: Initialize Flatpak environment
         run: |
-          git pull
-          git submodule init
-          git submodule update
           sudo apt install -y flatpak flatpak-builder p7zip-full xmlstarlet bzip2
           flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-          flatpak install --user -y --noninteractive \
-          org.kde.Sdk//6.3 \
-          org.kde.Platform//6.3 \
-          org.freedesktop.Platform.ffmpeg-full/x86_64/22.08 \
-          io.qt.qtwebengine.BaseApp/x86_64/6.3 \
-          org.freedesktop.Sdk.Extension.llvm13 \
-          org.freedesktop.Sdk.Extension.dotnet6/x86_64/22.08 \
-          runtime/org.freedesktop.Platform.ffmpeg-full/x86_64/22.08
-          /bin/bash ${GITHUB_WORKSPACE}/automation_tools/pre_build_automation.sh # Run pre-build automation tasks
 
-      - name: Setting branch in the manifest
+      - name: Run pre-build automation tasks
+        run : "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/pre_build_automation.sh"
+
+      - name: Set branch in the manifest
         run: |
           sed -i "s/THISBRANCH/$(git rev-parse --abbrev-ref HEAD)/g" net.retrodeck.retrodeck.yml
           echo "Branch name is: $(git rev-parse --abbrev-ref HEAD)"
@@ -84,7 +76,7 @@ jobs:
 
       - name: Create Bundle
         run: |
-          flatpak build-bundle ${GITHUB_WORKSPACE}/local RetroDECK.flatpak net.retrodeck.retrodeck
+          flatpak build-bundle ${GITHUB_WORKSPACE}/local RetroDECK-cooker.flatpak net.retrodeck.retrodeck
 
       - name: Set environment variable with current branch name
         run: echo "GITHUB_REF_SLUG=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
@@ -102,19 +94,17 @@ jobs:
             Cooker channel is provided for the community to test fixes and explore new functionality.
             Please DO NOT open issues or ask support on this build.
 
-          artifacts: "RetroDECK.flatpak,RetroDECK-Artifact.tar.gz"
+          artifacts: "RetroDECK-cooker.flatpak,RetroDECK-Artifact.tar.gz"
           allowUpdates: true
-          #prerelease: true
           makeLatest: true
-          #draft: true
           token: ${{ secrets.TRIGGER_BUILD_TOKEN }}
           repo: RetroDECK-cooker
         continue-on-error: true
 
       # In case it cannot publish the release at least it's providing the flatpak file for creating a manual release
-      - name: Upload RetroDECK.flatpak
+      - name: Upload RetroDECK-cooker.flatpak
         uses: actions/upload-artifact@v3
         with:
           name: retrodeck-flatpak
-          path: RetroDECK.flatpak
+          path: RetroDECK-cooker.flatpak
         continue-on-error: true
