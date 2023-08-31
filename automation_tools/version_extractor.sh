@@ -1,5 +1,9 @@
 #!/bin/bash
 
+appdata="net.retrodeck.retrodeck.appdata.xml"
+manifest="net.retrodeck.retrodeck.yml"
+manifest_content=$(cat "$manifest")
+
 fetch_repo_version(){
     # Getting latest RetroDECK release info
     LATEST_RELEASE=$(curl -s "https://api.github.com/repos/XargonWan/RetroDECK/releases/latest")
