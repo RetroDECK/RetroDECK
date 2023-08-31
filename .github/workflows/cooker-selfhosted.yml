@@ -37,6 +37,9 @@ jobs:
         with:
           submodules: 'true'
 
+      - name: "Install dependencies"
+        run: "automation_tools/install_dependencies.sh"    
+
       - name: Generate cooker build ID
         run: |
           word1=$(shuf -n 1 ${GITHUB_WORKSPACE}/automation_tools/codename_wordlist.txt)
@@ -48,14 +51,14 @@ jobs:
           echo "buildid=$result" >> $GITHUB_ENV
           echo "VersionID is $result"
 
-      - name: "Install dependencies"
-        run: "automation_tools/install_dependencies.sh"
-
       - name: Run pre-build automation tasks
         run : "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/pre_build_automation.sh"
 
       - name: "Adding flatpak portal for automated updates (cooker only)"
         run: sed -i '/finish-args:/a \ \ - --talk-name=org.freedesktop.Flatpak' net.retrodeck.retrodeck.yml
+
+      - name: "Updating release notes in appdata"
+        run: "automation_tools/appdata_management.sh"
 
       - name: "Build flatpak: download only"
         id: "flatpak-download"
