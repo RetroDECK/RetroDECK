@@ -1,6 +1,8 @@
 #!/bin/bash
 # This script is used to check that the versions are correct and topping the pipeline if something is wrong.
-# This is designed to be run on main pipeline to check that everything is in order before building RetroDECK.
+# This is designed to be run on the main pipeline to check that everything is in order before building RetroDECK.
+
+source automation_tools/version_extractor.sh
 
 # Set the file paths
 appdata="net.retrodeck.retrodeck.appdata.xml"
@@ -30,33 +32,32 @@ compare_versions() {
     return 0  # Versions are equal
 }
 
-# Getting latest RetroDECK release info
-LATEST_RELEASE=$(curl -s "https://api.github.com/repos/XargonWan/RetroDECK/releases/latest")
-# Extracting tag name from the latest release
-repo_version=$(echo "$LATEST_RELEASE" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
-# Printing results
+repo_version=$(fetch_repo_version)
 echo -e "Online repository:\t$repo_version"
 
-# Extract the version from the net.retrodeck.retrodeck.appdata.xml file
-appdata_version=$(grep -oPm1 "(?<=<release version=\")[^\"]+" "$appdata")
-echo -e "appdata.yml:\t\t$appdata_version"
+manifest_version=$(fetch_manifest_version)
+echo -e "Manifest:\t\t$manifest_version"
 
-# Use awk to extract the value of the first iteration of VERSION variable
-manifest_version=$(echo "$manifest_content" | awk '/VERSION=/ && !/#/ { sub(/.*VERSION=/, ""); sub(/#.*/, ""); print; exit }')
-# Trim leading and trailing whitespace
-manifest_version=$(echo "$manifest_version" | awk '{$1=$1;print}')
-echo -e "manifest.xml:\t\t$manifest_version"
+appdata_version=$(fetch_appdata_version)
+echo -e "Appdata:\t\t$appdata_version"
 
-echo ""
+# Additional checks
+if [[ "$manifest_version" == "main" || "$manifest_version" == "THISBRANCH" ]]; then
+    echo "Manifest version cannot be 'main' or 'THISBRANCH'. Please fix it."
+    exit 1
+fi
 
-compare_versions "$manifest_version" "$appdata_version"
+if [[ "$appdata_version" != "$manifest_version" ]]; then
+    echo "Appdata version is not equal to manifest version. Please fix it."
+    exit 1
+fi
+
+compare_versions "$repo_version" "$manifest_version"
 result=$?
 
 if [ "$result" -eq 1 ]; then
-    echo "Manifest version is greater than appdata version. Please fix it."
-elif [ "$result" -eq 2 ]; then
-    echo "Appdata version is greater than manifest version. Please fix it."
+    echo "Repository version is less than manifest version. Please fix it."
     exit 1
-else
-    echo "The versions in the manifest and in the appdata are equal. Well done, you didnt forget the patch notes (probably)!"
 fi
+
+echo "All checks passed. Well done!"
