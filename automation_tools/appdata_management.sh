@@ -58,61 +58,25 @@ version_number="${version_number%% -*}"                # Remove text after " - "
 # Extract sections from the latest version notes
 sections=$(echo "$latest_version_notes" | awk '/##/ { print; }')
 
-# # Create a formatted section list
-# section_list=""
-# current_section=""
-# while IFS= read -r line; do
-#     if [[ "$line" == "##"* ]]; then
-#         if [ -n "$current_section" ]; then
-#             section_list+="</ul>"
-#         fi
-#         section_name="${line##*# }"
-#         section_list+="<p>${section_name}</p><ul>"
-#     elif [[ "$line" == "- "* ]]; then
-#         entry="${line#*- }"
-#         section_list+="<li>${entry}</li>"
-#     fi
-# done <<< "$sections"
-
-# if [ -n "$current_section" ]; then
-#     section_list+="</ul>"
-# fi
-
-altered_sections=""
+# Create a formatted section list
+section_list=""
 current_section=""
-in_list=0
-
-IFS=$'\n'
-for line in $sections; do
-    if [[ $line =~ ^##\ (.+) ]]; then
+while IFS= read -r line; do
+    if [[ "$line" == "##"* ]]; then
         if [ -n "$current_section" ]; then
-            if [ $in_list -eq 1 ]; then
-                altered_sections+="</ul>\n"
-                in_list=0
-            fi
-            altered_sections+="</ul>\n"
+            section_list+="</ul>"
         fi
-        current_section="${BASH_REMATCH[1]}"
-        altered_sections+="<p>$current_section</p>\n<ul>\n"
-    elif [[ $line =~ ^-\ (.+) ]]; then
-        if [ $in_list -eq 0 ]; then
-            in_list=1
-            altered_sections+="<ul>\n"
-        fi
-        list_item="${BASH_REMATCH[1]}"
-        altered_sections+="<li>$list_item</li>\n"
-    elif [ -z "$line" ]; then
-        if [ $in_list -eq 1 ]; then
-            in_list=0
-            altered_sections+="</ul>\n"
-        fi
+        section_name="${line##*# }"
+        section_list+="<p>${section_name}</p><ul>"
+    elif [[ "$line" == "- "* ]]; then
+        entry="${line#*- }"
+        section_list+="<li>${entry}</li>"
     fi
-done
-if [ $in_list -eq 1 ]; then
-    altered_sections+="</ul>\n"
-fi
+done <<< "$sections"
 
-echo -e "$altered_sections"
+if [ -n "$current_section" ]; then
+    section_list+="</ul>"
+fi
 
 # Replace RELEASE_NOTES_PLACEHOLDER with the actual release notes
 release_description="${release_snippet/RELEASE_NOTES_PLACEHOLDER/$section_list}"
