@@ -47,8 +47,8 @@ jobs:
         id: read_manifest
         run: echo "::set-output name=file_content::$(cat net.retrodeck.retrodeck.yml)"
 
-      - name: "Updating release notes in appdata"
-        run: "automation_tools/appdata_management.sh"
+      # - name: "Updating release notes in appdata"
+      #   run: "automation_tools/appdata_management.sh"
         
       - name: Check versions (main only)
         id: check_version_string

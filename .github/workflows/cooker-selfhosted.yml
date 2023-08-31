@@ -57,8 +57,8 @@ jobs:
       - name: "Adding flatpak portal for automated updates (cooker only)"
         run: sed -i '/finish-args:/a \ \ - --talk-name=org.freedesktop.Flatpak' net.retrodeck.retrodeck.yml
 
-      - name: "Updating release notes in appdata"
-        run: "automation_tools/appdata_management.sh"
+      # - name: "Updating release notes in appdata"
+      #   run: "automation_tools/appdata_management.sh"
 
       - name: "Build flatpak: download only"
         id: "flatpak-download"
