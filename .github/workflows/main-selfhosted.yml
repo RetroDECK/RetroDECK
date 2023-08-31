@@ -47,15 +47,9 @@ jobs:
         id: read_manifest
         run: echo "::set-output name=file_content::$(cat net.retrodeck.retrodeck.yml)"
         
-      - name: Check VERSION
+      - name: Check versions (main only)
         id: check_version_string
-        run: |
-          if [[ "${{ steps.read_file.outputs.file_content }}" == *"VERSION=THISBRANCH"* ]] || [[ "${{ steps.read_file.outputs.file_content }}" == *"VERSION=main"* ]]; then
-            echo "Version string is present, proceeding."
-          else
-            echo "Error: You forgot to specify the version."
-            exit 1
-          fi
+        run: "automation_tools/version_checker.sh"
 
       - name: "Build flatpak: download only"
         id: "flatpak-download"
