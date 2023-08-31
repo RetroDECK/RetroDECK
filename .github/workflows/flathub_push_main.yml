@@ -1,5 +1,5 @@
 
-name: PUSH-main-flathub
+name: "Push main on Flathub"
 
 on:
   workflow_dispatch:

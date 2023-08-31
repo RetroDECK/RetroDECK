@@ -1,4 +1,4 @@
-name: main-selfhosted
+name: "Build main"
 
 on:
   push:

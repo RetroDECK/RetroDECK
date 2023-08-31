@@ -1,4 +1,4 @@
-name: cooker-selfhosted
+name: "Build cooker"
 
 on:
   push:
