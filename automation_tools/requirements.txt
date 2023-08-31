@@ -1,0 +1,1 @@
+flatpak flatpak-builder p7zip-full xmlstarlet bzip2 curl

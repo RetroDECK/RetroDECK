@@ -39,7 +39,7 @@ jobs:
 
       - name: Initialize Flatpak environment
         run: |
-          sudo apt install -y flatpak flatpak-builder p7zip-full xmlstarlet bzip2
+          sudo apt install -y $(cat 'automation_tools/requirements.txt')
           flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
       - name: Run pre-build automation tasks
