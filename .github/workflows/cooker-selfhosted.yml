@@ -56,11 +56,8 @@ jobs:
       - name: Run pre-build automation tasks
         run : "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/pre_build_automation.sh"
 
-      # remove me when the automations tool substitution can do this
-      # - name: Set branch in the manifest
-      #   run: |
-      #     sed -i "s/THISBRANCH/$(git rev-parse --abbrev-ref HEAD)/g" net.retrodeck.retrodeck.yml
-      #     echo "Branch name is: $(git rev-parse --abbrev-ref HEAD)"
+      - name: "Adding flatpak portal for automated updates (cooker only)"
+        run: sed -i '/finish-args:/a \ \ - --talk-name=org.freedesktop.Flatpak' net.retrodeck.retrodeck.yml
 
       - name: "Build flatpak: download only"
         id: "flatpak-download"
