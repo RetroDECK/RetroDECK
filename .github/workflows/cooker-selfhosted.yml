@@ -73,6 +73,7 @@ jobs:
             --download-only \
             ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker \
             net.retrodeck.retrodeck.yml
+        continue-on-error: true
 
       # Sometimes flatpak download fails, in this case it tries a second time
       - name: "Build flatpak: download only (retry)"
