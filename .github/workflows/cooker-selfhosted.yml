@@ -6,10 +6,10 @@ on:
      - cooker*
     paths:
      - '.github/workflows/**'
-     - 'automation_tools'
+     - 'automation_tools/**'
      - 'emu-configs/**'
      - 'es-configs/**'
-     - 'functions'
+     - 'functions/**'
      - 'rd-submodules/**'
      - '*.sh'
      - 'net.retrodeck.retrodeck.yml'
