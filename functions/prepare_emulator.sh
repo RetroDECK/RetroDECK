@@ -15,14 +15,14 @@ prepare_emulator() {
 
   if [[ "$emulator" == "retrodeck" ]]; then
     if [[ "$action" == "reset" ]]; then # Update the paths of all folders in retrodeck.cfg and create them
-        while read -r config_line; do
-          local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
-          if [[ ! $current_setting_name =~ (rdhome|sdcard) ]]; then # Ignore these locations
-            local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
-            eval "$current_setting_name=$rdhome/$(basename $current_setting_value)"
-            mkdir -p "$rdhome/$(basename $current_setting_value)"
-          fi
-        done < <(grep -v '^\s*$' $rd_conf | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
+      while read -r config_line; do
+        local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
+        if [[ ! $current_setting_name =~ (rdhome|sdcard) ]]; then # Ignore these locations
+          local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
+          eval "$current_setting_name=$rdhome/$(basename $current_setting_value)"
+          mkdir -p "$rdhome/$(basename $current_setting_value)"
+        fi
+      done < <(grep -v '^\s*$' $rd_conf | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
     fi
     if [[ "$action" == "postmove" ]]; then # Update the paths of any folders that came with the retrodeck folder during a move
       while read -r config_line; do
@@ -616,4 +616,7 @@ prepare_emulator() {
       set_setting_value "$yuzuconf" "Screenshots\screenshot_path" "$screenshots_folder" "yuzu" "UI"
     fi
   fi
+
+  # Update presets for all emulators after any reset or move
+  build_retrodeck_current_presets
 }
