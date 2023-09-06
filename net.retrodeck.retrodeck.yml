@@ -1202,7 +1202,6 @@ modules:
       - mkdir -p /app/tools
       - cp tools/configurator.sh /app/tools/configurator.sh
       - chmod +x /app/tools/configurator.sh
-      #- cp es-configs/tools-gamelist.xml /app/retrodeck/tools-gamelist.xml
       - cp tools/retrodeck_function_wrapper.sh /app/tools/retrodeck_function_wrapper.sh
       - chmod +x /app/tools/retrodeck_function_wrapper.sh
 
@@ -1213,8 +1212,6 @@ modules:
       # Desktop entries
       - cp net.retrodeck.retrodeck.desktop /app/share/applications/net.retrodeck.retrodeck.desktop
       - cp net.retrodeck.retrodeck.Configurator.desktop /app/share/applications/net.retrodeck.retrodeck.Configurator.desktop
-
-      # TODO: group the configs per-emu and optimize the following cps, like already done with Dolphin. Please not that some files may be renamed, check retrodeck.sh to know how (and fix it after the edit)
 
       # Initializing default emulator configs
       - cp -r emu-configs ${FLATPAK_DEST}/retrodeck/emu-configs/
