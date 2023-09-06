@@ -54,14 +54,14 @@ jobs:
       - name: Run pre-build automation tasks
         run : "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/pre_build_automation.sh"
 
-      - name: "[DEBUG] Outputting manifest"
-        run: cat net.retrodeck.retrodeck.yml
-
       - name: "Adding flatpak portal for automated updates (cooker only)"
         run: sed -i '/finish-args:/a \ \ - --talk-name=org.freedesktop.Flatpak' net.retrodeck.retrodeck.yml
 
       # - name: "Updating release notes in appdata"
       #   run: "automation_tools/appdata_management.sh"
+
+      - name: "[DEBUG] Outputting manifest"
+        run: cat net.retrodeck.retrodeck.yml
 
       - name: "Build flatpak: download only"
         id: "flatpak-download"
