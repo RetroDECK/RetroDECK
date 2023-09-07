@@ -618,5 +618,7 @@ prepare_emulator() {
   fi
 
   # Update presets for all emulators after any reset or move
-  build_retrodeck_current_presets
+  if [[ ! "$emulator" == "retrodeck" ]]; then
+    build_retrodeck_current_presets
+  fi
 }
