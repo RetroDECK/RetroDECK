@@ -116,6 +116,29 @@ prepare_emulator() {
       dir_prep "$texture_packs_folder/RetroArch-Mesen" "/var/config/retroarch/system/HdPacks"
       dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/cache" "/var/config/retroarch/system/Mupen64plus/cache"
       dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/hires_texture" "/var/config/retroarch/system/Mupen64plus/hires_texture"
+    
+      # Reset default preset settings
+      set_setting_value "$rd_conf" "retroarch" "$(get_setting_value "$rd_defaults" "retroarch" "retrodeck" "cheevos")" "retrodeck" "cheevos"
+      set_setting_value "$rd_conf" "retroarch" "$(get_setting_value "$rd_defaults" "retroarch" "retrodeck" "cheevos_hardcore")" "retrodeck" "cheevos_hardcore"
+      set_setting_value "$rd_conf" "gb" "$(get_setting_value "$rd_defaults" "gb" "retrodeck" "borders")" "retrodeck" "borders"
+      set_setting_value "$rd_conf" "gba" "$(get_setting_value "$rd_defaults" "gba" "retrodeck" "borders")" "retrodeck" "borders"
+      set_setting_value "$rd_conf" "gbc" "$(get_setting_value "$rd_defaults" "gbc" "retrodeck" "borders")" "retrodeck" "borders"
+      set_setting_value "$rd_conf" "genesis" "$(get_setting_value "$rd_defaults" "genesis" "retrodeck" "borders")" "retrodeck" "borders"
+      set_setting_value "$rd_conf" "gg" "$(get_setting_value "$rd_defaults" "gg" "retrodeck" "borders")" "retrodeck" "borders"
+      set_setting_value "$rd_conf" "n64" "$(get_setting_value "$rd_defaults" "n64" "retrodeck" "borders")" "retrodeck" "borders"
+      set_setting_value "$rd_conf" "psx_ra" "$(get_setting_value "$rd_defaults" "psx_ra" "retrodeck" "borders")" "retrodeck" "borders"
+      set_setting_value "$rd_conf" "snes" "$(get_setting_value "$rd_defaults" "snes" "retrodeck" "borders")" "retrodeck" "borders"
+      set_setting_value "$rd_conf" "genesis" "$(get_setting_value "$rd_defaults" "genesis" "retrodeck" "widescreen")" "retrodeck" "widescreen"
+      set_setting_value "$rd_conf" "n64" "$(get_setting_value "$rd_defaults" "n64" "retrodeck" "widescreen")" "retrodeck" "widescreen"
+      set_setting_value "$rd_conf" "psx_ra" "$(get_setting_value "$rd_defaults" "psx_ra" "retrodeck" "widescreen")" "retrodeck" "widescreen"
+      set_setting_value "$rd_conf" "snes" "$(get_setting_value "$rd_defaults" "snes" "retrodeck" "widescreen")" "retrodeck" "widescreen"
+      set_setting_value "$rd_conf" "gb" "$(get_setting_value "$rd_defaults" "gb" "retrodeck" "nintendo_button_layout")" "retrodeck" "nintendo_button_layout"
+      set_setting_value "$rd_conf" "gba" "$(get_setting_value "$rd_defaults" "gba" "retrodeck" "nintendo_button_layout")" "retrodeck" "nintendo_button_layout"
+      set_setting_value "$rd_conf" "gbc" "$(get_setting_value "$rd_defaults" "gbc" "retrodeck" "nintendo_button_layout")" "retrodeck" "nintendo_button_layout"
+      set_setting_value "$rd_conf" "n64" "$(get_setting_value "$rd_defaults" "gb" "retrodeck" "nintendo_button_layout")" "retrodeck" "nintendo_button_layout"
+      set_setting_value "$rd_conf" "snes" "$(get_setting_value "$rd_defaults" "gba" "retrodeck" "nintendo_button_layout")" "retrodeck" "nintendo_button_layout"
+      set_setting_value "$rd_conf" "retroarch" "$(get_setting_value "$rd_defaults" "retroarch" "retrodeck" "savestate_auto_load")" "retrodeck" "savestate_auto_load"
+      set_setting_value "$rd_conf" "retroarch" "$(get_setting_value "$rd_defaults" "retroarch" "retrodeck" "savestate_auto_save")" "retrodeck" "savestate_auto_save"
     fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
       dir_prep "$bios_folder" "/var/config/retroarch/system"
@@ -190,6 +213,10 @@ prepare_emulator() {
       dir_prep "$logs_folder/citra" "/var/data/citra-emu/log"
       dir_prep "$mods_folder/Citra" "/var/data/citra-emu/load/mods"
       dir_prep "$texture_packs_folder/Citra" "/var/data/citra-emu/load/textures"
+
+      # Reset default preset settings
+      set_setting_value "$rd_conf" "citra" "$(get_setting_value "$rd_defaults" "citra" "retrodeck" "nintendo_button_layout")" "retrodeck" "nintendo_button_layout"
+      set_setting_value "$rd_conf" "citra" "$(get_setting_value "$rd_defaults" "citra" "retrodeck" "ask_to_exit")" "retrodeck" "ask_to_exit"
     fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
       dir_prep "$rdhome/bios/citra/sysdata" "/var/data/citra-emu/sysdata"
@@ -237,6 +264,9 @@ prepare_emulator() {
       dir_prep "$saves_folder/wii/dolphin" "/var/data/dolphin-emu/Wii"
       dir_prep "$mods_folder/Dolphin" "/var/data/dolphin-emu/Load/GraphicMods"
       dir_prep "$texture_packs_folder/Dolphin" "/var/data/dolphin-emu/Load/Textures"
+
+      # Reset default preset settings
+      set_setting_value "$rd_conf" "dolphin" "$(get_setting_value "$rd_defaults" "dolphin" "retrodeck" "ask_to_exit")" "retrodeck" "ask_to_exit"
     fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
       dir_prep "$saves_folder/gc/dolphin/EU" "/var/data/dolphin-emu/GC/EUR"
@@ -283,6 +313,12 @@ prepare_emulator() {
       # Shared actions
       dir_prep "$states_folder/psx/duckstation" "/var/config/duckstation/savestates" # This is hard-coded in Duckstation, always needed
       dir_prep "$texture_packs_folder/Duckstation" "/var/config/duckstation/textures"
+
+      # Reset default preset settings
+      set_setting_value "$rd_conf" "duckstation" "$(get_setting_value "$rd_defaults" "duckstation" "retrodeck" "cheevos")" "retrodeck" "cheevos"
+      set_setting_value "$rd_conf" "duckstation" "$(get_setting_value "$rd_defaults" "duckstation" "retrodeck" "cheevos_hardcore")" "retrodeck" "cheevos_hardcore"
+      set_setting_value "$rd_conf" "duckstation" "$(get_setting_value "$rd_defaults" "duckstation" "retrodeck" "savestate_auto_save")" "retrodeck" "savestate_auto_save"
+      set_setting_value "$rd_conf" "duckstation" "$(get_setting_value "$rd_defaults" "duckstation" "retrodeck" "ask_to_exit")" "retrodeck" "ask_to_exit"
     fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
       set_setting_value "$duckstationconf" "SearchDirectory" "$bios_folder" "duckstation" "BIOS"
@@ -364,6 +400,12 @@ prepare_emulator() {
       mkdir -pv "$saves_folder/ps2/pcsx2/memcards"
       mkdir -pv "$states_folder/ps2/pcsx2"
       dir_prep "$texture_packs_folder/PCSX2" "/var/config/PCSX2/textures"
+
+      # Reset default preset settings
+      set_setting_value "$rd_conf" "pcsx2" "$(get_setting_value "$rd_defaults" "pcsx2" "retrodeck" "cheevos")" "retrodeck" "cheevos"
+      set_setting_value "$rd_conf" "pcsx2" "$(get_setting_value "$rd_defaults" "pcsx2" "retrodeck" "cheevos_hardcore")" "retrodeck" "cheevos_hardcore"
+      set_setting_value "$rd_conf" "pcsx2" "$(get_setting_value "$rd_defaults" "pcsx2" "retrodeck" "savestate_auto_save")" "retrodeck" "savestate_auto_save"
+      set_setting_value "$rd_conf" "pcsx2" "$(get_setting_value "$rd_defaults" "pcsx2" "retrodeck" "ask_to_exit")" "retrodeck" "ask_to_exit"
     fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
       set_setting_value "$pcsx2conf" "Bios" "$bios_folder" "pcsx2" "Folders"
@@ -442,6 +484,9 @@ prepare_emulator() {
       dir_prep "$saves_folder/wii/primehack" "/var/data/primehack/Wii"
       dir_prep "$mods_folder/Primehack" "/var/data/primehack/Load/GraphicMods"
       dir_prep "$texture_packs_folder/Primehack" "/var/data/primehack/Load/Textures"
+
+      # Reset default preset settings
+      set_setting_value "$rd_conf" "primehack" "$(get_setting_value "$rd_defaults" "primehack" "retrodeck" "ask_to_exit")" "retrodeck" "ask_to_exit"
     fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
       dir_prep "$saves_folder/gc/primehack/EU" "/var/data/primehack/GC/EUR"
@@ -601,6 +646,10 @@ prepare_emulator() {
       if [ -d $bios_folder/switch ]; then
         find $bios_folder/switch -xtype l -exec rm {} \;
       fi
+
+      # Reset default preset settings
+      set_setting_value "$rd_conf" "yuzu" "$(get_setting_value "$rd_defaults" "yuzu" "retrodeck" "nintendo_button_layout")" "retrodeck" "nintendo_button_layout"
+      set_setting_value "$rd_conf" "yuzu" "$(get_setting_value "$rd_defaults" "yuzu" "retrodeck" "ask_to_exit")" "retrodeck" "ask_to_exit"
     fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
       dir_prep "$bios_folder/switch/keys" "/var/data/yuzu/keys"
