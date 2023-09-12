@@ -244,6 +244,7 @@ post_update() {
   fi
 
   update_splashscreens
+  deploy_helper_files
   build_retrodeck_current_presets
   ) |
   zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
