@@ -1,0 +1,10 @@
+- Extract any mod files from compressed .zip or any other format into folders.
+
+- Go into mods folders, they contain folders that are all named by GAME_ID. ~/retrodeck/mods/dolphin/
+
+- Move the mods into the right folder: ~/retrodeck/mods/dolphin/<GAME_ID>
+
+Related wiki article can be found here:
+https://github.com/XargonWan/RetroDECK/wiki/Dolphin-and-Primehack%3A-Mods
+
+The RetroDECK Team
