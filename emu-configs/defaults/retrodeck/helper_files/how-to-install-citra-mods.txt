@@ -1,0 +1,19 @@
+There are two ways of adding mods into Citra
+
+From Citra
+- Extract any mod from compressed .zip or any other format to folders.
+- Open up Citra inside RetroDECK Configurator by pressing Open Emulator - Citra.
+- Right click on the game you want to add mods into.
+- Click on Open Mods Location.
+- Paste the mod files inside that directory, each folder is stored by the TITLLEID of the game.
+- Quit Citra
+
+From the mod folder directly
+- Extract any mod files from compressed .zip or any other format into folders.
+- Go into ~/retrodeck/mods/citra/. The folders are all named by TITLEID.
+- Past the mods into the right ~/retrodeck/mods/yuzu/<TITLEID> folder.
+
+Related wiki article can be found here:
+https://github.com/XargonWan/RetroDECK/wiki/Citra%3A-Mods#citra---3ds
+
+The RetroDECK Team
