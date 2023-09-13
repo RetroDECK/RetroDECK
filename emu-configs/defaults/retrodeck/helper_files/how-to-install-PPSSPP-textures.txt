@@ -1,0 +1,26 @@
+PPSSPP - PSP
+
+The directory '~/retrodeck/texture_packs/ppsspp/' corresponds to the '/PSP/TEXTURES/' folder in PPSSPP.
+
+Please note that some texture packs may be designed for a specific version or region of the game. Ensure you have the correct ROM and textures for it.
+
+Also, keep in mind that 'TITLEID' is different for every game.
+
+To enable Custom Textures, follow these steps:
+
+1. Open up PPSSPP inside RetroDECK Configurator by pressing 'Open Emulator' - 'PPSSPP'.
+2. Press 'Settings' -> 'Tools' -> 'Developer Tools'.
+3. Set 'Replace Textures' to On.
+
+To add texture packs, you'll need the texture pack files. On the Steam Deck, this could be easier to do in Desktop Mode.
+
+For adding textures:
+
+1. Extract any texture pack files from compressed .zip or any other format into folders.
+2. Go into '~/retrodeck/texture_packs/ppsspp/'. The folders are all named by 'TITLEID'.
+3. Paste the textures into the correct '~/retrodeck/texture_packs/ppsspp/<TITLEID>' folder.
+
+Related wiki article can be found here:
+https://github.com/XargonWan/RetroDECK/wiki/PPSSPP%3A-Texture-Packs
+
+The RetroDECK Team
