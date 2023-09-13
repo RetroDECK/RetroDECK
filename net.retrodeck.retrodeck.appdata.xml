@@ -74,6 +74,7 @@
                <li>Redone the patches for ES-DE</li>
                <li>Updated theme</li>
                <li>Changelog is now scrollable</li>
+               <li>Added helper files in the mods folders to instruct the users on the procedures to follow</li>
             </ul>
          </description>
       </release>
