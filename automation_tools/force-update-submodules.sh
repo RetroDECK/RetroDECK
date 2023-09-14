@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Don't use this script lightly
+
 git submodule deinit --all
 rm rd-submodules/retroarch
 git rm -rf --cached rd-submodules/retroarch

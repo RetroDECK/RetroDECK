@@ -507,6 +507,18 @@
         <theme>easyrpg</theme>
     </system>
     <system>
+        <name>emulators</name>
+        <fullname>Emulators</fullname>
+        <path>%ROMPATH%/emulators</path>
+        <extension>.AppImage .desktop .sh</extension>
+        <command label="Suspend ES-DE">%ENABLESHORTCUTS% %EMULATOR_OS-SHELL% %ROM%</command>
+        <command label="Keep ES-DE running">%RUNINBACKGROUND% %ENABLESHORTCUTS% %EMULATOR_OS-SHELL% %ROM%</command>
+        <command label="AppImage (Suspend ES-DE)">%EMULATOR_OS-SHELL% -c "%ROM%"</command>
+        <command label="AppImage (Keep ES-DE running)">%RUNINBACKGROUND% %EMULATOR_OS-SHELL% -c "%ROM%"</command>
+        <platform>pcwindows</platform>
+        <theme>emulators</theme>
+    </system>
+    <system>
         <name>famicom</name>
         <fullname>Nintendo Family Computer</fullname>
         <path>%ROMPATH%/famicom</path>
@@ -583,6 +595,17 @@
         <theme>fmtowns</theme>
     </system>
 -->
+<!--
+    <system>
+        <name>fpinball</name>
+        <fullname>Future Pinball</fullname>
+        <path>%ROMPATH%/fpinball</path>
+        <extension>.fpt .FPT</extension>
+        <command label="Future Pinball (Standalone)">PLACEHOLDER %ROM%</command>
+        <platform>fpinball</platform>
+        <theme>fpinball</theme>
+    </system>
+-->
     <system>
         <name>gameandwatch</name>
         <fullname>Nintendo Game and Watch</fullname>
@@ -614,6 +637,7 @@
         <command label="Genesis Plus GX Wide">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/genesis_plus_gx_wide_libretro.so %ROM%</command>
         <command label="Gearsystem">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/gearsystem_libretro.so %ROM%</command>
         <command label="SMS Plus GX">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/smsplus_libretro.so %ROM%</command>
+<!--	<command label="PicoDrive">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/picodrive_libretro.so %ROM%</command> -->
 <!--        <command label="Mednafen (Standalone)">%EMULATOR_MEDNAFEN% -force_module gg %ROM%</command> -->
         <platform>gamegear</platform>
         <theme>gamegear</theme>
@@ -699,6 +723,17 @@
         <platform>genesis</platform>
         <theme>genesis</theme>
     </system>
+<!--
+    <system>
+        <name>gmaster</name>
+        <fullname>Hartung Game Master</fullname>
+        <path>%ROMPATH%/gmaster</path>
+        <extension>.bin .BIN .7z .7Z .zip .ZIP</extension>
+        <command label="MAME (Standalone)">%STARTDIR%=~/.mame %EMULATOR_MAME% -rompath %GAMEDIR%\;%ROMPATH%/gmaster gmaster -cart %ROM%</command>
+        <platform>gmaster</platform>
+        <theme>gmaster</theme>
+    </system>
+-->
     <system>
         <name>gx4000</name>
         <fullname>Amstrad GX4000</fullname>
@@ -750,6 +785,17 @@
         <platform>lcdgames, gameandwatch</platform>
         <theme>lcdgames</theme>
     </system>
+<!--
+    <system>
+        <name>lowresnx</name>
+        <fullname>LowRes NX Fantasy Console</fullname>
+        <path>%ROMPATH%/lowresnx</path>
+        <extension>.nx .NX</extension>
+        <command label="LowRes NX">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/lowresnx_libretro.so %ROM%</command>
+        <platform>lowresnx</platform>
+        <theme>lowresnx</theme>
+    </system>
+-->
     <system>
         <name>lutro</name>
         <fullname>Lutro Game Engine</fullname>
@@ -1242,8 +1288,9 @@
         <name>ports</name>
         <fullname>Ports</fullname>
         <path>%ROMPATH%/ports</path>
-        <extension>.desktop .sh</extension>
-        <command label="Various">%ENABLESHORTCUTS% %EMULATOR_OS-SHELL% %ROM%</command>
+        <extension>.AppImage .desktop .sh</extension>
+        <command label="Shortcut or script">%ENABLESHORTCUTS% %EMULATOR_OS-SHELL% %ROM%</command>
+        <command label="AppImage">%EMULATOR_OS-SHELL% -c "%ROM%"</command>
         <platform>pc, pcwindows</platform>
         <theme>ports</theme>
     </system>
@@ -1269,7 +1316,8 @@
         <platform>ps3</platform>
         <theme>ps3</theme>
     </system>
-    <!-- <system>
+<!--
+    <system>
         <name>ps4</name>
         <fullname>Sony PlayStation 4</fullname>
         <path>%ROMPATH%/ps4</path>
@@ -1277,7 +1325,8 @@
         <command>PLACEHOLDER %ROM%</command>
         <platform>ps4</platform>
         <theme>ps4</theme>
-    </system> -->
+    </system>
+ -->
     <system>
         <name>psp</name>
         <fullname>Sony PlayStation Portable</fullname>
@@ -1402,6 +1451,17 @@
         <platform>scummvm</platform>
         <theme>scummvm</theme>
     </system>
+<!--
+    <system>
+        <name>scv</name>
+        <fullname>Epoch Super Cassette Vision</fullname>
+        <path>%ROMPATH%/scv</path>
+        <extension>.0 .bin .BIN .7z .7Z .zip .ZIP</extension>
+        <command label="MAME (Standalone)">%STARTDIR%=~/.mame %EMULATOR_MAME% -rompath %GAMEDIR%\;%ROMPATH%/scv scv -cart %ROM%</command>
+        <platform>scv</platform>
+        <theme>scv</theme>
+    </system>
+-->
     <system>
         <name>sega32x</name>
         <fullname>Sega Mega Drive 32X</fullname>
@@ -1735,6 +1795,17 @@
     </system>
 <!--
     <system>
+        <name>vpinball</name>
+        <fullname>Visual Pinball</fullname>
+        <path>%ROMPATH%/vpinball</path>
+        <extension>.vpt .VPT .vpx .VPX</extension>
+        <command label="Visual Pinball (Standalone)">PLACEHOLDER %ROM%</command>
+        <platform>vpinball</platform>
+        <theme>vpinball</theme>
+    </system>
+-->
+<!--
+    <system>
         <name>vsmile</name>
         <fullname>VTech V.Smile</fullname>
         <path>%ROMPATH%/vsmile</path>
@@ -1810,6 +1881,7 @@
         <path>%ROMPATH%/x68000</path>
         <extension>.dim .DIM .img .IMG .d88 .D88 .88d .88D .hdm .HDM .dup .DUP .2hd .2HD .xdf .XDF .hdf .HDF .cmd .CMD .m3u .M3U .7z .7Z .zip .ZIP</extension>
         <command label="PX68k">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/px68k_libretro.so %ROM%</command>
+	<!-- <command label="MAME (Standalone)">%STARTDIR%=~/.mame %EMULATOR_MAME% -rompath %GAMEDIR%\;%ROMPATH%/x68000 x68000 -flop1 %ROM%</command> -->
         <platform>x68000</platform>
         <theme>x68000</theme>
     </system>
@@ -1853,6 +1925,18 @@
         <platform>zx81</platform>
         <theme>zx81</theme>
     </system>
+<!--
+    <system>
+        <name>zxnext</name>
+        <fullname>Sinclair ZX Spectrum Next</fullname>
+        <path>%ROMPATH%/zxnext</path>
+        <extension>.nex .NEX .sna .SNA</extension>
+        <command label="#CSpect (Standalone)">%STARTDIR%=%GAMEDIR% MONO_IOMAP=all mono %EMULATOR_CSPECT% -fullscreen -s28 -vsync -60 -analytics -tv -zxnext -mmc=./ %ROM%</command>
+        <command label="ZEsarUX (Standalone)">%STARTDIR%=%EMUDIR% %EMULATOR_ZESARUX% &ndash;&ndash;machine tbblue &ndash;&ndash;realvideo &ndash;&ndash;enabletimexvideo &ndash;&ndash;tbblue-fast-boot-mode &ndash;&ndash;enable-esxdos-handler &ndash;&ndash;esxdos-root-dir %GAMEDIR% %ROM%</command>
+        <platform>zxnext</platform>
+        <theme>zxnext</theme>
+    </system>
+-->
     <system>
         <name>zxspectrum</name>
         <fullname>Sinclair ZX Spectrum</fullname>
@@ -1863,13 +1947,4 @@
         <platform>zxspectrum</platform>
         <theme>zxspectrum</theme>
     </system>
-    <!-- <system>
-        <name>tools</name>
-        <fullname>RetroDECK Tools</fullname>
-        <path>/app/tools</path>
-        <extension>.sh .SH</extension>
-        <command>bash %ROM%</command>
-        <platform>tools</platform>
-        <theme>tools</theme>
-    </system> -->
 </systemList>

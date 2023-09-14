@@ -65,13 +65,61 @@
    <project_license>GPL-3.0</project_license>
    <metadata_license>CC0-1.0</metadata_license>
    <releases>
-      <release version="0.7.1b" date="2023-06-16">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.7.1b</url>
+      <release version="0.7.2b" date="2023-08-16">
+         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.7.2b</url>
          <description>
             <p>Bug fixes:</p>
             <ul>
-               <li>PLACEHOLDER</li>
+               <li>Updated ES-DE to 2.1.1</li>
+               <li>Redone the patches for ES-DE</li>
+               <li>Updated theme</li>
+               <li>Changelog is now scrollable</li>
+               <li>Added helper files in the mods folders to instruct the users on the procedures to follow</li>
             </ul>
+         </description>
+      </release>
+      <release version="0.7.1b" date="2023-08-16">
+         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.7.1b</url>
+         <description>
+            <p>Information:</p>
+            <ul>
+                <li>Steam Deck users update RetroDECK from <i>Discover</i> in Desktop Mode.</li>
+                <li>Don't forget to reapply the latest controller layout: Go into the <i>Templates</i> tab and reapply the new profile ending with 0.7.1b (there is no need to reinstall the entire layout from the Configurator).</li>
+            </ul>
+            <p>Bug fixes and other changes:</p>
+            <ul>
+                <li>Fixed an issue to make sure the RD controller layout file at update with each RD update.</li>
+                <li>Fixed an issue with PPSSPP that made <i>L</i> and <i>R</i> incorrectly bound.</li>
+                <li>Fixed an issue in the Configurator that prevented the Yuzu preset for swapping A/B X/Y from working.</li>
+                <li>Fixed a notification issue on the latest SteamOS Beta releases.</li>
+                <li>Fixed an rsync permissions issue in the RetroDECK Framework.</li>
+                <li>Updated Yuzu presets to handle new config syntax in the RetroDECK Framework.</li>
+                <li>Changed auto-update to notification only, until permissions error can be worked out.</li>
+                <li>Added some new pixelart icons by ItzSelenux (pixelitos-icon-theme)</li>
+            </ul>
+            <p>Updates:</p>
+            <p>All Emulators and ES-DE have been updated</p>
+            <p>Steam Deck - Global Controller Layout:</p>
+            <p>We have done some changes based on community feedback</p>
+            <ul>
+                <li><i>Select</i> is now a hotkey trigger while pressing it down, <i>L4</i> and <i>R4</i> are still triggers as well.</li>
+                <li>The RetroArch combo of <i>Select</i> + <i>Start</i> = <i>Quit</i> now works on many SA-Emulators.</li>
+                <li><i>Open Menu</i> is removed from <i>Select</i>.</li>
+                <li><i>R5</i> = <i>A</i> button (this allows for great Wii controls on the right touchpad and pressing down the <i>R5</i> for A).</li>
+                <li><i>L5</i> = <i>B</i> button.</li>
+            </ul>
+            <p>Global hotkey changes:</p>
+            <ul>
+                <li><i>Open Menu</i> is on <i>Y</i>.</li>
+                <li><i>Increase Emulation Speed</i> is on <i>Dpad-UP</i>.</li>
+                <li><i>Decrease Emulation Speed</i> is on <i>Dpad-Down</i>.</li>
+                <li><i>Fullscreen OFF</i> command is removed (as emulators have migrated to toggle).</li>
+            </ul>
+            <p>Known issues:</p>
+            <ul>
+                <li>The built-in auto-updater is not working (we are working on it). Discover is ok.</li>
+                <li>Some emulators don't have hotkey support or have bugs affecting their hotkeys.</li>
+            </ul>            
          </description>
       </release>
       <release version="0.7.0b" date="2023-06-15">

@@ -1,0 +1,25 @@
+There are two ways of adding mods into Yuzu
+
+From Yuzu directly
+- Extract any mod files from compressed .zip or any other format to folders.
+- Open up Yuzu inside RetroDECK Configurator by pressing Open Emulator - Yuzu.
+- Right click on the game you want to add mods into.
+- Click on Open Mod Data Destination.
+- Paste the mod folders inside that directory.
+- Right clicking on the game and selecting Properties.
+- Enable the mods you want to enable by pressing the checkboxes in the Add-Ons tab and press OK.
+- Quit Yuzu
+
+From the mods/yuzu folder
+- Extract any mod files from compressed .zip or any other format into folders.
+- Go into ~/retrodeck/mods/yuzu/ and file the right folder for the game you want to add mods to. The folders are all named by TITLEID.
+- Move those folders into ~/retrodeck/mods/yuzu/<TITLEID>
+- Open up Yuzu inside RetroDECK Configurator by pressing Open Emulator - Yuzu.
+- Right clicking on the game and selecting Properties.
+- Enable the mods you want to enable by pressing the checkboxes in the Add-Ons tab and press OK.
+- Quit Yuzu
+
+Related wiki article can be found here:
+https://github.com/XargonWan/RetroDECK/wiki/Yuzu%3A-Mods
+
+The RetroDECK Team

@@ -1,4 +1,4 @@
-name: cooker-selfhosted
+name: "Build cooker"
 
 on:
   push:
@@ -6,8 +6,10 @@ on:
      - cooker*
     paths:
      - '.github/workflows/**'
+     - 'automation_tools/**'
      - 'emu-configs/**'
      - 'es-configs/**'
+     - 'functions/**'
      - 'rd-submodules/**'
      - '*.sh'
      - 'net.retrodeck.retrodeck.yml'
@@ -30,9 +32,15 @@ jobs:
         run: sudo umount -f /home/ubuntu/actions-runner/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles/*
         continue-on-error: true
     
-      - uses: actions/checkout@v3
+      - name: Clone RetroDECK repo
+        uses: actions/checkout@v3
+        with:
+          submodules: 'true'
 
-      - name: Generate build ID
+      - name: "Install dependencies"
+        run: "automation_tools/install_dependencies.sh"    
+
+      - name: Generate cooker build ID
         run: |
           word1=$(shuf -n 1 ${GITHUB_WORKSPACE}/automation_tools/codename_wordlist.txt)
           capitalized_word1="$(tr '[:lower:]' '[:upper:]' <<< ${word1:0:1})${word1:1}"
@@ -40,34 +48,63 @@ jobs:
           capitalized_word2="$(tr '[:lower:]' '[:upper:]' <<< ${word2:0:1})${word2:1}"
           result=$capitalized_word1$capitalized_word2
           echo $result > ${GITHUB_WORKSPACE}/buildid
-          ls -lah ${GITHUB_WORKSPACE}         # DEBUG
-          cat ${GITHUB_WORKSPACE}/buildid     # DEBUG
           echo "buildid=$result" >> $GITHUB_ENV
           echo "VersionID is $result"
 
-      - name: Initialize environment
+      - name: Run pre-build automation tasks
+        run : "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/pre_build_automation.sh"
+
+      - name: "Adding flatpak portal for automated updates (cooker only)"
+        run: sed -i '/finish-args:/a \ \ - --talk-name=org.freedesktop.Flatpak' net.retrodeck.retrodeck.yml
+
+      # - name: "Updating release notes in appdata"
+      #   run: "automation_tools/appdata_management.sh"
+
+      - name: "[DEBUG] Outputting manifest"
+        run: cat net.retrodeck.retrodeck.yml
+
+      - name: "Build flatpak: download only"
+        id: "flatpak-download"
         run: |
-          git pull
-          git submodule init
-          git submodule update
-          sudo apt install -y flatpak flatpak-builder p7zip-full xmlstarlet bzip2
-          flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-          flatpak install --user -y --noninteractive \
-          org.kde.Sdk//6.3 \
-          org.kde.Platform//6.3 \
-          org.freedesktop.Platform.ffmpeg-full/x86_64/22.08 \
-          io.qt.qtwebengine.BaseApp/x86_64/6.3 \
-          org.freedesktop.Sdk.Extension.llvm13 \
-          org.freedesktop.Sdk.Extension.dotnet6/x86_64/22.08 \
-          runtime/org.freedesktop.Platform.ffmpeg-full/x86_64/22.08
-          /bin/bash ${GITHUB_WORKSPACE}/automation_tools/pre_build_automation.sh # Run pre-build automation tasks
+          git config --global protocol.file.allow always
+          mkdir -vp ${GITHUB_WORKSPACE}/local
+          mkdir -vp ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker
+          flatpak-builder --user --force-clean \
+            --install-deps-from=flathub \
+            --install-deps-from=flathub-beta \
+            --repo=${GITHUB_WORKSPACE}/local \
+            --download-only \
+            ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker \
+            net.retrodeck.retrodeck.yml
+        continue-on-error: true
+
+      # Sometimes flatpak download fails, in this case it tries a second time
+      - name: "Build flatpak: download only (retry)"
+        if: steps.flatpak-download.outcome == 'failure'
+        run: |
+          git config --global protocol.file.allow always
+          mkdir -vp ${GITHUB_WORKSPACE}/local
+          mkdir -vp ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker
+          flatpak-builder --user --force-clean \
+            --install-deps-from=flathub \
+            --install-deps-from=flathub-beta \
+            --repo=${GITHUB_WORKSPACE}/local \
+            --download-only \
+            ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker \
+            net.retrodeck.retrodeck.yml
 
       - name: Build flatpak
         run: |
           git config --global protocol.file.allow always
           mkdir -vp ${GITHUB_WORKSPACE}/local
           mkdir -vp ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker
-          flatpak-builder --user --force-clean --install-deps-from=flathub --install-deps-from=flathub-beta --repo=${GITHUB_WORKSPACE}/local ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
+          flatpak-builder --user --force-clean \
+            --install-deps-from=flathub \
+            --install-deps-from=flathub-beta \
+            --repo=${GITHUB_WORKSPACE}/local \
+            --disable-download \
+            ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker \
+            net.retrodeck.retrodeck.yml
 
       - name: Create Artifact for flathub
         run: | 
@@ -79,10 +116,21 @@ jobs:
 
       - name: Create Bundle
         run: |
-          flatpak build-bundle ${GITHUB_WORKSPACE}/local RetroDECK.flatpak net.retrodeck.retrodeck
+          flatpak build-bundle ${GITHUB_WORKSPACE}/local RetroDECK-cooker.flatpak net.retrodeck.retrodeck
 
       - name: Set environment variable with current branch name
         run: echo "GITHUB_REF_SLUG=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
+
+      - name: Get commits since last release
+        run: |
+          # Get the latest release tag
+          LATEST_TAG=$(git describe --tags --abbrev=0)
+          # Get all commits since the latest release tag
+          COMMITS=$(git log $LATEST_TAG..HEAD --pretty=format:"- %s")
+          # Set the output variable
+          echo "::set-output name=commits::$COMMITS"
+        id: commits
+        continue-on-error: true
 
       - name: Publish the flatpak in a new cooker release
         uses: ncipollo/release-action@v1
@@ -92,24 +140,25 @@ jobs:
             # Release Notes (Cooker)
             This is a cooker snapshot based on the commit: ${{ github.event.repository.full_name }}@${{github.sha}}.
 
+            ## Commits since last release
+            ${{ steps.commits.outputs.commits }}
+
             For the full release note for this build please refer to the channel [#BETA-TESTING](https://discord.gg/qQcrFvaA2C) on our Discord server.
       
             Cooker channel is provided for the community to test fixes and explore new functionality.
             Please DO NOT open issues or ask support on this build.
 
-          artifacts: "RetroDECK.flatpak,RetroDECK-Artifact.tar.gz"
+          artifacts: "RetroDECK-cooker.flatpak,RetroDECK-Artifact.tar.gz"
           allowUpdates: true
-          #prerelease: true
           makeLatest: true
-          #draft: true
           token: ${{ secrets.TRIGGER_BUILD_TOKEN }}
           repo: RetroDECK-cooker
         continue-on-error: true
 
       # In case it cannot publish the release at least it's providing the flatpak file for creating a manual release
-      - name: Upload RetroDECK.flatpak
+      - name: Upload RetroDECK-cooker.flatpak
         uses: actions/upload-artifact@v3
         with:
           name: retrodeck-flatpak
-          path: RetroDECK.flatpak
+          path: RetroDECK-cooker.flatpak
         continue-on-error: true

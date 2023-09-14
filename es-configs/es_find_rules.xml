@@ -15,16 +15,17 @@
             <entry>RetroArch-Linux-x86_64.AppImage</entry>
         </rule>
         <rule type="staticpath">
-            <entry>/var/lib/flatpak/exports/bin/org.libretro.RetroArch</entry>
-            <entry>~/.local/share/flatpak/exports/bin/org.libretro.RetroArch</entry>
             <entry>~/Applications/RetroArch-Linux*.AppImage</entry>
+            <entry>~/.local/share/applications/RetroArch-Linux*.AppImage</entry>
             <entry>~/.local/bin/RetroArch-Linux*.AppImage</entry>
             <entry>~/bin/RetroArch-Linux*.AppImage</entry>
+            <entry>/var/lib/flatpak/exports/bin/org.libretro.RetroArch</entry>
+            <entry>~/.local/share/flatpak/exports/bin/org.libretro.RetroArch</entry>
         </rule>
     </emulator>
     <core name="RETROARCH">
         <rule type="corepath">
-	    <!-- FlatPak RetroDECK -->
+	    <!-- Flatpak RetroDECK -->
             <entry>/app/share/libretro/cores</entry>
             <!-- Snap package -->
             <entry>~/snap/retroarch/current/.config/retroarch/cores</entry>
@@ -69,11 +70,12 @@
             <entry>net.cebix.basilisk</entry>
         </rule>
         <rule type="staticpath">
-            <entry>/var/lib/flatpak/exports/bin/net.cebix.basilisk</entry>
-            <entry>~/.local/share/flatpak/exports/bin/net.cebix.basilisk</entry>
             <entry>~/Applications/BasiliskII*.AppImage</entry>
+            <entry>~/.local/share/applications/BasiliskII*.AppImage</entry>
             <entry>~/.local/bin/BasiliskII*.AppImage</entry>
             <entry>~/bin/BasiliskII*.AppImage</entry>
+            <entry>/var/lib/flatpak/exports/bin/net.cebix.basilisk</entry>
+            <entry>~/.local/share/flatpak/exports/bin/net.cebix.basilisk</entry>
         </rule>
     </emulator>
     <emulator name="BLASTEM">
@@ -106,9 +108,11 @@
         </rule>
         <rule type="staticpath">
             <entry>~/Applications/Cemu*.AppImage</entry>
+            <entry>~/.local/share/applications/Cemu*.AppImage</entry>
             <entry>~/.local/bin/Cemu*.AppImage</entry>
             <entry>~/bin/Cemu*.AppImage</entry>
             <entry>~/Applications/Cemu/Cemu</entry>
+            <entry>~/.local/share/applications/Cemu/Cemu</entry>
             <entry>~/.local/bin/Cemu/Cemu</entry>
             <entry>~/bin/Cemu/Cemu</entry>
         </rule>
@@ -122,6 +126,10 @@
             <entry>org.citra_emu.citra</entry>
         </rule>
         <rule type="staticpath">
+            <entry>~/Applications/citra*.AppImage</entry>
+            <entry>~/.local/share/applications/citra*.AppImage</entry>
+            <entry>~/.local/bin/citra*.AppImage</entry>
+            <entry>~/bin/citra*.AppImage</entry>
             <entry>/var/lib/flatpak/exports/bin/org.citra_emu.citra</entry>
             <entry>~/.local/share/flatpak/exports/bin/org.citra_emu.citra</entry>
         </rule>
@@ -133,6 +141,7 @@
         </rule>
         <rule type="staticpath">
             <entry>~/Applications/cpcemu/cpcemu</entry>
+            <entry>~/.local/share/applications/cpcemu/cpcemu</entry>
             <entry>~/.local/bin/cpcemu/cpcemu</entry>
             <entry>~/bin/cpcemu/cpcemu</entry>
         </rule>
@@ -141,6 +150,7 @@
         <!-- Sinclair ZX Spectrum Next emulator #CSpect -->
         <rule type="staticpath">
             <entry>~/Applications/CSpect/CSpect.exe</entry>
+            <entry>~/.local/share/applications/CSpect/CSpect.exe</entry>
             <entry>~/.local/bin/CSpect/CSpect.exe</entry>
             <entry>~/bin/CSpect/CSpect.exe</entry>
         </rule>
@@ -163,11 +173,12 @@
             <entry>org.DolphinEmu.dolphin-emu</entry>
         </rule>
         <rule type="staticpath">
-            <entry>/var/lib/flatpak/exports/bin/org.DolphinEmu.dolphin-emu</entry>
-            <entry>~/.local/share/flatpak/exports/bin/org.DolphinEmu.dolphin-emu</entry>
             <entry>~/Applications/Dolphin_Emulator*.AppImage</entry>
+            <entry>~/.local/share/applications/Dolphin_Emulator*.AppImage</entry>
             <entry>~/.local/bin/Dolphin_Emulator*.AppImage</entry>
             <entry>~/bin/Dolphin_Emulator*.AppImage</entry>
+            <entry>/var/lib/flatpak/exports/bin/org.DolphinEmu.dolphin-emu</entry>
+            <entry>~/.local/share/flatpak/exports/bin/org.DolphinEmu.dolphin-emu</entry>
         </rule>
     </emulator>
     <emulator name="DOSBOX-STAGING">
@@ -200,14 +211,16 @@
             <entry>org.duckstation.DuckStation</entry>
         </rule>
         <rule type="staticpath">
-            <entry>/var/lib/flatpak/exports/bin/org.duckstation.DuckStation</entry>
-            <entry>~/.local/share/flatpak/exports/bin/org.duckstation.DuckStation</entry>
             <entry>~/Applications/duckstation-nogui*.AppImage</entry>
+            <entry>~/.local/share/applications/duckstation-nogui*.AppImage</entry>
             <entry>~/.local/bin/duckstation-nogui*.AppImage</entry>
             <entry>~/bin/duckstation-nogui*.AppImage</entry>
             <entry>~/Applications/duckstation-qt*.AppImage</entry>
+            <entry>~/.local/share/applications/duckstation-qt*.AppImage</entry>
             <entry>~/.local/bin/duckstation-qt*.AppImage</entry>
             <entry>~/bin/duckstation-qt*.AppImage</entry>
+            <entry>/var/lib/flatpak/exports/bin/org.duckstation.DuckStation</entry>
+            <entry>~/.local/share/flatpak/exports/bin/org.duckstation.DuckStation</entry>
         </rule>
     </emulator>
     <emulator name="EASYRPG">
@@ -217,6 +230,7 @@
         </rule>
         <rule type="staticpath">
             <entry>~/Applications/easyrpg/easyrpg-player</entry>
+            <entry>~/.local/share/applications/easyrpg/easyrpg-player</entry>
             <entry>~/.local/bin/easyrpg/easyrpg-player</entry>
             <entry>~/bin/easyrpg/easyrpg-player</entry>
         </rule>
@@ -228,6 +242,7 @@
         </rule>
         <rule type="staticpath">
             <entry>~/Applications/fbneo/fbneo</entry>
+            <entry>~/.local/share/applications/fbneo/fbneo</entry>
             <entry>~/.local/bin/fbneo/fbneo</entry>
             <entry>~/bin/fbneo/fbneo</entry>
         </rule>
@@ -239,11 +254,12 @@
             <entry>org.flycast.Flycast</entry>
         </rule>
         <rule type="staticpath">
-            <entry>/var/lib/flatpak/exports/bin/org.flycast.Flycast</entry>
-            <entry>~/.local/share/flatpak/exports/bin/org.flycast.Flycast</entry>
             <entry>~/Applications/flycast*.AppImage</entry>
+            <entry>~/.local/share/applications/flycast*.AppImage</entry>
             <entry>~/.local/bin/flycast*.AppImage</entry>
             <entry>~/bin/flycast*.AppImage</entry>
+            <entry>/var/lib/flatpak/exports/bin/org.flycast.Flycast</entry>
+            <entry>~/.local/share/flatpak/exports/bin/org.flycast.Flycast</entry>
         </rule>
     </emulator>
     <emulator name="FS-UAE">
@@ -275,11 +291,12 @@
             <entry>gargoyle</entry>
         </rule>
         <rule type="staticpath">
-            <entry>/var/lib/flatpak/exports/bin/io.github.garglk.Gargoyle</entry>
-            <entry>~/.local/share/flatpak/exports/bin/io.github.garglk.Gargoyle</entry>
             <entry>~/Applications/Gargoyle*.AppImage</entry>
+            <entry>~/.local/share/applications/Gargoyle*.AppImage</entry>
             <entry>~/.local/bin/Gargoyle*.AppImage</entry>
             <entry>~/bin/Gargoyle*.AppImage</entry>
+            <entry>/var/lib/flatpak/exports/bin/io.github.garglk.Gargoyle</entry>
+            <entry>~/.local/share/flatpak/exports/bin/io.github.garglk.Gargoyle</entry>
         </rule>
     </emulator>
     <emulator name="GEARBOY">
@@ -289,6 +306,7 @@
         </rule>
         <rule type="staticpath">
             <entry>~/Applications/gearboy/gearboy</entry>
+            <entry>~/.local/share/applications/gearboy/gearboy</entry>
             <entry>~/.local/bin/gearboy/gearboy</entry>
             <entry>~/bin/gearboy/gearboy</entry>
         </rule>
@@ -297,6 +315,7 @@
         <!-- Atari 2600 emulator Gopher2600 -->
         <rule type="staticpath">
             <entry>~/Applications/gopher2600/gopher2600_linux_amd64</entry>
+            <entry>~/.local/share/applications/gopher2600/gopher2600_linux_amd64</entry>
             <entry>~/.local/bin/gopher2600/gopher2600_linux_amd64</entry>
             <entry>~/bin/gopher2600/gopher2600_linux_amd64</entry>
         </rule>
@@ -318,6 +337,7 @@
         </rule>
         <rule type="staticpath">
             <entry>~/Applications/hypseus-singe/hypseus.bin</entry>
+            <entry>~/.local/share/applications/hypseus-singe/hypseus.bin</entry>
             <entry>~/.local/bin/hypseus-singe/hypseus.bin</entry>
             <entry>~/bin/hypseus-singe/hypseus.bin</entry>
         </rule>
@@ -329,6 +349,7 @@
         </rule>
         <rule type="staticpath">
             <entry>~/Applications/lightspark/lightspark</entry>
+            <entry>~/.local/share/applications/lightspark/lightspark</entry>
             <entry>~/.local/bin/lightspark/lightspark</entry>
             <entry>~/bin/lightspark/lightspark</entry>
         </rule>
@@ -340,6 +361,7 @@
         </rule>
         <rule type="staticpath">
             <entry>~/Applications/linapple/linapple</entry>
+            <entry>~/.local/share/applications/linapple/linapple</entry>
             <entry>~/.local/bin/linapple/linapple</entry>
             <entry>~/bin/linapple/linapple</entry>
         </rule>
@@ -385,11 +407,12 @@
             <entry>io.mgba.mGBA</entry>
         </rule>
         <rule type="staticpath">
-            <entry>/var/lib/flatpak/exports/bin/io.mgba.mGBA</entry>
-            <entry>~/.local/share/flatpak/exports/bin/io.mgba.mGBA</entry>
             <entry>~/Applications/mGBA*.AppImage</entry>
+            <entry>~/.local/share/applications/mGBA*.AppImage</entry>
             <entry>~/.local/bin/mGBA*.AppImage</entry>
             <entry>~/bin/mGBA*.AppImage</entry>
+            <entry>/var/lib/flatpak/exports/bin/io.mgba.mGBA</entry>
+            <entry>~/.local/share/flatpak/exports/bin/io.mgba.mGBA</entry>
         </rule>
     </emulator>
     <emulator name="MUPEN64PLUS">
@@ -430,6 +453,7 @@
         </rule>
         <rule type="staticpath">
             <entry>~/Applications/oricutron/Oricutron</entry>
+            <entry>~/.local/share/applications/oricutron/Oricutron</entry>
             <entry>~/.local/bin/oricutron/Oricutron</entry>
             <entry>~/bin/oricutron/Oricutron</entry>
         </rule>
@@ -463,8 +487,8 @@
             <entry>pico8</entry>
         </rule>
         <rule type="staticpath">
-            <entry>~/retrodeck/bios/pico-8/pico8</entry>
             <entry>~/Applications/pico-8/pico8</entry>
+            <entry>~/.local/share/applications/pico-8/pico8</entry>
             <entry>~/.local/bin/pico-8/pico8</entry>
             <entry>~/bin/pico-8/pico8</entry>
         </rule>
@@ -472,11 +496,12 @@
     <emulator name="PLAY!">
         <!-- Sony PlayStation 2 emulator Play! -->
         <rule type="staticpath">
-            <entry>/var/lib/flatpak/exports/bin/org.purei.Play</entry>
-            <entry>~/.local/share/flatpak/exports/bin/org.purei.Play</entry>
             <entry>~/Applications/Play!*.AppImage</entry>
+            <entry>~/.local/share/applications/Play!*.AppImage</entry>
             <entry>~/.local/bin/Play!*.AppImage</entry>
             <entry>~/bin/Play!*.AppImage</entry>
+            <entry>/var/lib/flatpak/exports/bin/org.purei.Play</entry>
+            <entry>~/.local/share/flatpak/exports/bin/org.purei.Play</entry>
         </rule>
     </emulator>
     <emulator name="PPSSPP">
@@ -516,6 +541,7 @@
         </rule>
         <rule type="staticpath">
             <entry>~/Applications/punes/punes</entry>
+            <entry>~/.local/share/applications/punes/punes</entry>
             <entry>~/.local/bin/punes/punes</entry>
             <entry>~/bin/punes/punes</entry>
         </rule>
@@ -527,6 +553,7 @@
         </rule>
         <rule type="staticpath">
             <entry>~/Applications/redream/redream</entry>
+            <entry>~/.local/share/applications/redream/redream</entry>
             <entry>~/.local/bin/redream/redream</entry>
             <entry>~/bin/redream/redream</entry>
         </rule>
@@ -538,11 +565,12 @@
             <entry>com.github.Rosalie241.RMG</entry>
         </rule>
         <rule type="staticpath">
-            <entry>/var/lib/flatpak/exports/bin/com.github.Rosalie241.RMG</entry>
-            <entry>~/.local/share/flatpak/exports/bin/com.github.Rosalie241.RMG</entry>
             <entry>~/Applications/RMG*.AppImage</entry>
+            <entry>~/.local/share/applications/RMG*.AppImage</entry>
             <entry>~/.local/bin/RMG*.AppImage</entry>
             <entry>~/bin/RMG*.AppImage</entry>
+            <entry>/var/lib/flatpak/exports/bin/com.github.Rosalie241.RMG</entry>
+            <entry>~/.local/share/flatpak/exports/bin/com.github.Rosalie241.RMG</entry>
         </rule>
     </emulator>
     <emulator name="RPCS3">
@@ -553,11 +581,12 @@
             <entry>net.rpcs3.RPCS3</entry>
         </rule>
         <rule type="staticpath">
-            <entry>/var/lib/flatpak/exports/bin/net.rpcs3.RPCS3</entry>
-            <entry>~/.local/share/flatpak/exports/bin/net.rpcs3.RPCS3</entry>
             <entry>~/Applications/rpcs3*.AppImage</entry>
+            <entry>~/.local/share/applications/rpcs3*.AppImage</entry>
             <entry>~/.local/bin/rpcs3*.AppImage</entry>
             <entry>~/bin/rpcs3*.AppImage</entry>
+            <entry>/var/lib/flatpak/exports/bin/net.rpcs3.RPCS3</entry>
+            <entry>~/.local/share/flatpak/exports/bin/net.rpcs3.RPCS3</entry>
         </rule>
     </emulator>
     <emulator name="RUFFLE">
@@ -567,6 +596,7 @@
         </rule>
         <rule type="staticpath">
             <entry>~/Applications/ruffle/ruffle</entry>
+            <entry>~/.local/share/applications/ruffle/ruffle</entry>
             <entry>~/.local/bin/ruffle/ruffle</entry>
             <entry>~/bin/ruffle/ruffle</entry>
         </rule>
@@ -582,9 +612,11 @@
             <entry>/var/lib/flatpak/exports/bin/org.ryujinx.Ryujinx</entry>
             <entry>~/.local/share/flatpak/exports/bin/org.ryujinx.Ryujinx</entry>
             <entry>~/Applications/publish/Ryujinx</entry>
+            <entry>~/.local/share/applications/publish/Ryujinx</entry>
             <entry>~/.local/bin/publish/Ryujinx</entry>
             <entry>~/bin/publish/Ryujinx</entry>
             <entry>~/Applications/publish/Ryujinx.Ava</entry>
+            <entry>~/.local/share/applications/publish/Ryujinx.Ava</entry>
             <entry>~/.local/bin/publish/Ryujinx.Ava</entry>
             <entry>~/bin/publish/Ryujinx.Ava</entry>
         </rule>
@@ -618,6 +650,7 @@
         </rule>
         <rule type="staticpath">
             <entry>~/Applications/sdl2trs/sdl2trs</entry>
+            <entry>~/.local/share/applications/sdl2trs/sdl2trs</entry>
             <entry>~/.local/bin/sdl2trs/sdl2trs</entry>
             <entry>~/bin/sdl2trs/sdl2trs</entry>
         </rule>
@@ -629,6 +662,7 @@
         </rule>
         <rule type="staticpath">
             <entry>~/Applications/SheepShaver*.AppImage</entry>
+            <entry>~/.local/share/applications/SheepShaver*.AppImage</entry>
             <entry>~/.local/bin/SheepShaver*.AppImage</entry>
             <entry>~/bin/SheepShaver*.AppImage</entry>
         </rule>
@@ -640,6 +674,7 @@
         </rule>
         <rule type="staticpath">
             <entry>~/Applications/simcoupe/simcoupe</entry>
+            <entry>~/.local/share/applications/simcoupe/simcoupe</entry>
             <entry>~/.local/bin/simcoupe/simcoupe</entry>
             <entry>~/bin/simcoupe/simcoupe</entry>
         </rule>
@@ -701,6 +736,7 @@
         </rule>
         <rule type="staticpath">
             <entry>~/Applications/Supermodel/supermodel</entry>
+            <entry>~/.local/share/applications/Supermodel/supermodel</entry>
             <entry>~/.local/bin/Supermodel/supermodel</entry>
             <entry>~/bin/Supermodel/supermodel</entry>
         </rule>
@@ -712,6 +748,7 @@
         </rule>
         <rule type="staticpath">
             <entry>~/Applications/dolphin-emu-triforce*.AppImage</entry>
+            <entry>~/.local/share/applications/dolphin-emu-triforce*.AppImage</entry>
             <entry>~/.local/bin/dolphin-emu-triforce*.AppImage</entry>
             <entry>~/bin/dolphin-emu-triforce*.AppImage</entry>
         </rule>
@@ -720,6 +757,7 @@
         <!-- Fujitsu FM Towns emulator Tsugaru -->
         <rule type="staticpath">
             <entry>~/Applications/tsugaru/Tsugaru_CUI</entry>
+            <entry>~/.local/share/applications/tsugaru/Tsugaru_CUI</entry>
             <entry>~/.local/bin/tsugaru/Tsugaru_CUI</entry>
             <entry>~/bin/tsugaru/Tsugaru_CUI</entry>
         </rule>
@@ -761,6 +799,7 @@
         </rule>
         <rule type="staticpath">
             <entry>~/Applications/Vita3K/Vita3K</entry>
+            <entry>~/.local/share/applications/Vita3K/Vita3K</entry>
             <entry>~/.local/bin/Vita3K/Vita3K</entry>
             <entry>~/bin/Vita3K/Vita3K</entry>
         </rule>
@@ -772,11 +811,12 @@
             <entry>app.xemu.xemu</entry>
         </rule>
         <rule type="staticpath">
-            <entry>/var/lib/flatpak/exports/bin/app.xemu.xemu</entry>
-            <entry>~/.local/share/flatpak/exports/bin/app.xemu.xemu</entry>
             <entry>~/Applications/xemu*.AppImage</entry>
+            <entry>~/.local/share/applications/xemu*.AppImage</entry>
             <entry>~/.local/bin/xemu*.AppImage</entry>
             <entry>~/bin/xemu*.AppImage</entry>
+            <entry>/var/lib/flatpak/exports/bin/app.xemu.xemu</entry>
+            <entry>~/.local/share/flatpak/exports/bin/app.xemu.xemu</entry>
         </rule>
     </emulator>
     <emulator name="XROAR">
@@ -786,6 +826,7 @@
         </rule>
         <rule type="staticpath">
             <entry>~/Applications/xroar/xroar</entry>
+            <entry>~/.local/share/applications/xroar/xroar</entry>
             <entry>~/.local/bin/xroar/xroar</entry>
             <entry>~/bin/xroar/xroar</entry>
         </rule>
@@ -797,11 +838,24 @@
             <entry>org.yuzu_emu.yuzu</entry>
         </rule>
         <rule type="staticpath">
-            <entry>/var/lib/flatpak/exports/bin/org.yuzu_emu.yuzu</entry>
-            <entry>~/.local/share/flatpak/exports/bin/org.yuzu_emu.yuzu</entry>
             <entry>~/Applications/yuzu*.AppImage</entry>
+            <entry>~/.local/share/applications/yuzu*.AppImage</entry>
             <entry>~/.local/bin/yuzu*.AppImage</entry>
             <entry>~/bin/yuzu*.AppImage</entry>
+            <entry>/var/lib/flatpak/exports/bin/org.yuzu_emu.yuzu</entry>
+            <entry>~/.local/share/flatpak/exports/bin/org.yuzu_emu.yuzu</entry>
+        </rule>
+    </emulator>
+    <emulator name="ZESARUX">
+        <!-- Sinclair ZX Spectrum emulator ZEsarUX -->
+        <rule type="systempath">
+            <entry>zesarux</entry>
+        </rule>
+        <rule type="staticpath">
+            <entry>~/Applications/ZEsarUX/zesarux</entry>
+            <entry>~/.local/share/applications/ZEsarUX/zesarux</entry>
+            <entry>~/.local/bin/ZEsarUX/zesarux</entry>
+            <entry>~/bin/ZEsarUX/zesarux</entry>
         </rule>
     </emulator>
 </ruleList>
