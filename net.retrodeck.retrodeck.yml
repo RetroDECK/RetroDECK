@@ -1169,6 +1169,7 @@ modules:
   # Cemu - END
 
   # Ryujinx - START
+  # https://github.com/flathub/org.ryujinx.Ryujinx
 
   - name: Ryujinx
     buildsystem: simple
@@ -1184,7 +1185,7 @@ modules:
         PKG_CONFIG_PATH: /app/lib/pkgconfig:/app/share/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig
         DOTNET_CLI_TELEMETRY_OPTOUT: 'true'
         DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 'true'
-        RYUJINX_VERSION: 1.1.1000
+        RYUJINX_VERSION: 1.1.1014
         RYUJINX_TARGET_RELEASE_CHANNEL_OWNER: flathub
         RYUJINX_TARGET_RELEASE_CHANNEL_REPO: org.ryujinx.Ryujinx
         RYUJINX_TARGET_RELEASE_CHANNEL_NAME: master
@@ -1213,8 +1214,8 @@ modules:
       only-arches:
       - x86_64
       dest: dotnet-sdk
-      url: https://dotnetcli.azureedge.net/dotnet/Sdk/7.0.400/dotnet-sdk-7.0.400-linux-x64.tar.gz
-      sha256: 35b5df21e609e4fb8cfe331999d32dc636e7ef5fc712c8e2694318e826a81746
+      url: https://dotnetcli.azureedge.net/dotnet/Sdk/7.0.401/dotnet-sdk-7.0.400-linux-x64.tar.gz
+      sha256: 4634fa4da7ae4e3dadb83e320a87fb26f0cb12a7ca02bf9f10e6c3c1c91d645c
       x-checker-data:
         type: rotating-url
         url: https://aka.ms/dotnet/7.0/dotnet-sdk-linux-x64.tar.gz
@@ -1222,7 +1223,7 @@ modules:
     - rd-submodules/ryujinx/nuget_sources.json
     - type: git
       url: https://github.com/Ryujinx/Ryujinx.git
-      commit: cd7b52f995690505cdb0bc65d06236c18dd06b89
+      commit: 7ccff037e87f82f3461f3e1422235e29800eaa2f
     - type: file
       path: rd-submodules/ryujinx/ryujinx-wrapper
 
