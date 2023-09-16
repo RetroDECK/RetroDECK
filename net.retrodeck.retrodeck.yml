@@ -1205,6 +1205,7 @@ modules:
           exit 1;
       fi;
       cp -r --remove-destination /run/build/Ryujinx/src/Ryujinx/bin/Release/net7.0/$RUNTIME/publish/* /app/bin/
+      chmod +x /app/bin/Ryujinx.sh
       mkdir -p /app/lib/ffmpeg
       ln -s /usr/lib/x86_64-linux-gnu/libX11.so.6 /app/lib/libX11.so
       install -Dm755 ryujinx-wrapper /app/bin/ryujinx-wrapper
