@@ -8,6 +8,15 @@ base: io.qt.qtwebengine.BaseApp             # Needed for Yuzu
 base-version: 5.15-22.08                    # Needed for Yuzu
 command: retrodeck.sh
 
+add-extensions:
+  org.ppsspp.PPSSPP.Locale:
+    directory: share/locale
+    bundle: true
+    no-autodownload: false
+    subdirectories: false
+    autodelete: true
+    locale-subset: true
+
 finish-args:
   - --socket=fallback-x11
   - --socket=wayland
@@ -548,8 +557,8 @@ modules:
     sources:
       - type: git
         url: &ppsspp-url https://github.com/hrydgard/ppsspp.git
-        tag: v1.15.4
-        commit: 9a80120dc09997e40c0a73fda05c3e07a347259f
+        tag: v1.16.1
+        commit: 961e0068f7b859b56fecfaaceddea74b355ee1ba
         x-checker-data:
           type: anitya
           project-id: 12295
