@@ -4,6 +4,7 @@ on:
   push:
     branches:
      - cooker*
+     - feat*
     paths:
      - '.github/workflows/**'
      - 'automation_tools/**'
@@ -132,13 +133,34 @@ jobs:
         id: commits
         continue-on-error: true
 
+      - name: "Get tag name (cooker only)"
+        uses: ncipollo/release-action@v1
+        id: tag
+
+      - name: "Set tag name (cooker only)"
+        run: |
+          if $ { { startsWith(steps.tag.outputs.tag, 'feat/') }}; then
+            echo "TAG_NAME=feature:$ { { replace(steps.tag.outputs.tag, 'feat/', '') }}" >> $GITHUB_ENV
+          else
+            echo "TAG_NAME=$ { { steps.tag.outputs.tag }}" >> $GITHUB_ENV
+          fi
+
+      - name: "Set makeLatest (cooker only)"
+        run: |
+          if $ { { contains(env.TAG_NAME, 'feature:') }}; then
+            echo "MAKE_LATEST=false" >> $GITHUB_ENV
+          else
+            echo "MAKE_LATEST=true" >> $GITHUB_ENV
+          fi
+
       - name: Publish the flatpak in a new cooker release
         uses: ncipollo/release-action@v1
         with:
-          tag: "${{ env.GITHUB_REF_SLUG }}-${{ env.buildid }}"
+          tag: "${{env.TAG_NAME}}"
           body: |
             # Release Notes (Cooker)
             This is a cooker snapshot based on the commit: ${{ github.event.repository.full_name }}@${{github.sha}}.
+            ${{env.TAG_NAME}}
 
             ## Commits since last release
             ${{ steps.commits.outputs.commits }}
@@ -150,7 +172,7 @@ jobs:
 
           artifacts: "RetroDECK-cooker.flatpak,RetroDECK-Artifact.tar.gz"
           allowUpdates: true
-          makeLatest: true
+          makeLatest: ${{env.MAKE_LATEST}} # if it's a feat branch is not considered the latest build
           token: ${{ secrets.TRIGGER_BUILD_TOKEN }}
           repo: RetroDECK-cooker
         continue-on-error: true
