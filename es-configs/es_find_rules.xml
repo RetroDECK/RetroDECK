@@ -604,21 +604,16 @@
     <emulator name="RYUJINX">
         <!-- Nintendo Switch emulator Ryujinx -->
         <rule type="systempath">
-            <entry>Ryujinx</entry>
-            <entry>Ryujinx.Ava</entry>
+            <entry>Ryujinx.sh</entry>
             <entry>org.ryujinx.Ryujinx</entry>
         </rule>
         <rule type="staticpath">
             <entry>/var/lib/flatpak/exports/bin/org.ryujinx.Ryujinx</entry>
             <entry>~/.local/share/flatpak/exports/bin/org.ryujinx.Ryujinx</entry>
-            <entry>~/Applications/publish/Ryujinx</entry>
-            <entry>~/.local/share/applications/publish/Ryujinx</entry>
-            <entry>~/.local/bin/publish/Ryujinx</entry>
-            <entry>~/bin/publish/Ryujinx</entry>
-            <entry>~/Applications/publish/Ryujinx.Ava</entry>
-            <entry>~/.local/share/applications/publish/Ryujinx.Ava</entry>
-            <entry>~/.local/bin/publish/Ryujinx.Ava</entry>
-            <entry>~/bin/publish/Ryujinx.Ava</entry>
+            <entry>~/Applications/publish/Ryujinx.sh</entry>
+            <entry>~/.local/share/applications/publish/Ryujinx.sh</entry>
+            <entry>~/.local/bin/publish/Ryujinx.sh</entry>
+            <entry>~/bin/publish/Ryujinx.sh</entry>
         </rule>
     </emulator>
     <emulator name="SAMEBOY">
