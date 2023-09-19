@@ -557,8 +557,8 @@ modules:
     sources:
       - type: git
         url: &ppsspp-url https://github.com/hrydgard/ppsspp.git
-        tag: v1.16.1
-        commit: 961e0068f7b859b56fecfaaceddea74b355ee1ba
+        tag: v1.16.2
+        commit: 4f8db4c61728109d953650223e3146a35497ad08
         x-checker-data:
           type: anitya
           project-id: 12295
