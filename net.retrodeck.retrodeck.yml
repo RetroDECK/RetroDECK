@@ -366,11 +366,13 @@ modules:
     config-opts:
       - '--enable-dbus'
     make-args:
-      - GLOBAL_CONFIG_DIR=${FLATPAK_DEST}/etc
+      - 'GLOBAL_CONFIG_DIR=${FLATPAK_DEST}/etc'
+      - HAVE_TRANSLATE=1
+      - HAVE_ACCESSIBILITY=1
     sources:
       - type: git
-        url: https://github.com/libretro/RetroArch.git
-        commit: 6616b807edea5b56683e9fbca8b003b436c22b13
+        url: 'https://github.com/libretro/RetroArch.git'
+        commit: 712b9350a5c2b1b9129d939a2ae622093dfabd04
       - type: file
         path: rd-submodules/retroarch/retroarch.cfg
     post-install:
@@ -383,7 +385,6 @@ modules:
       - >-
         sed s:@prefix@:${FLATPAK_DEST}:g retroarch.cfg >
         ${FLATPAK_DEST}/etc/retroarch.cfg
-      - mkdir -p ${FLATPAK_DEST}/share/appdata
     modules:
       - rd-submodules/retroarch/modules/libpng/libpng-1.6.35.json
       - rd-submodules/retroarch/modules/nvidia-cg-toolkit/nvidia-cg-toolkit-3.1.0013.json
@@ -407,44 +408,44 @@ modules:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
-        url: https://github.com/libretro/RetroArch.git
-        commit: 6616b807edea5b56683e9fbca8b003b436c22b13
+        url: 'https://github.com/libretro/RetroArch.git'
+        commit: 712b9350a5c2b1b9129d939a2ae622093dfabd04
   - name: retroarch-filers-audio
     subdir: libretro-common/audio/dsp_filters
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
-        url: https://github.com/libretro/RetroArch.git
-        commit: 6616b807edea5b56683e9fbca8b003b436c22b13
+        url: 'https://github.com/libretro/RetroArch.git'
+        commit: 712b9350a5c2b1b9129d939a2ae622093dfabd04
   - name: retroarch-assets
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
-        url: https://github.com/libretro/retroarch-assets.git
-        commit: 4ec80faf1b5439d1654f407805bb66141b880826
+        url: 'https://github.com/libretro/retroarch-assets.git'
+        commit: 7b735ef18bcc6508b1c9a626eb237779ff787179
   - name: libretro-database
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
-        url: https://github.com/libretro/libretro-database.git
-        commit: 6a8d65d2bc1b7ffa7accb882e80c0a77b931bcc6
+        url: 'https://github.com/libretro/libretro-database.git'
+        commit: e3b5cb00da4f3ab99491bf67c19630ffa7ee19f2
   - name: libretro-core-info
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
-        url: https://github.com/libretro/libretro-core-info.git
-        commit: eb7e3ff064c3fdaae46b89c9da9f49e15a8e9c2b
+        url: 'https://github.com/libretro/libretro-core-info.git'
+        commit: dacae85b406131feb12395a415fdf57fc4745201
   - name: retroarch-joypad-autoconfig
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
-        url: https://github.com/libretro/retroarch-joypad-autoconfig.git
-        commit: 8ec6304a14bd37cf927ebe7555a274ac4fefeb69
+        url: 'https://github.com/libretro/retroarch-joypad-autoconfig.git'
+        commit: 5666e46bb89caf4e9af358fdb97a2b384cb62f36
   - name: common-shaders
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
@@ -457,22 +458,22 @@ modules:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
-        url: https://github.com/libretro/slang-shaders.git
-        commit: 8b35477a934739b1db193f22e7057754e7a87381
+        url: 'https://github.com/libretro/slang-shaders.git'
+        commit: 9266fa24b64b274fd429b73469ded3561de7b8f4
   - name: glsl-shaders
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
-        url: https://github.com/libretro/glsl-shaders.git
-        commit: 799aa9e4d567db0874111d2aed9c9b9058a19641
+        url: 'https://github.com/libretro/glsl-shaders.git'
+        commit: c26b9e1913eda8c25d6cd218818745a3b451f982
   - name: common-overlays
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
-        url: https://github.com/libretro/common-overlays.git
-        commit: b3827a2c63834ed9e1902acc7cf9019f64771ed3
+        url: 'https://github.com/libretro/common-overlays.git'
+        commit: 115d8670c2e032e4a41ba45f766f5cfd9dae28b8
 
   # RetroArch - END
 
@@ -557,13 +558,14 @@ modules:
     sources:
       - type: git
         url: &ppsspp-url https://github.com/hrydgard/ppsspp.git
-        tag: v1.16.2
-        commit: 4f8db4c61728109d953650223e3146a35497ad08
+        tag: v1.16.3
+        commit: a9b6421dfde68be9d065b51e9d519699ce2e9053
         x-checker-data:
-          type: anitya
-          project-id: 12295
-          tag-template: v$version
-          is-main-source: true
+          type: json
+          url: https://api.github.com/repos/hrydgard/ppsspp/releases/latest
+          version-query: .tag_name | sub("^v"; "")
+          tag-query: .tag_name
+          timestamp-query: .published_at
 
   - name: ppsspp-localization
     buildsystem: simple
