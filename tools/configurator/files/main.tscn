@@ -1,0 +1,76 @@
+[gd_scene load_steps=6 format=3 uid="uid://qk2gw74anwlq"]
+
+[ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
+[ext_resource type="Script" path="res://main.gd" id="1_obpq7"]
+[ext_resource type="Script" path="res://Button.gd" id="3_aenvv"]
+[ext_resource type="Script" path="res://Button2.gd" id="4_u2f14"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_b77hh"]
+font_size = 24
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_obpq7")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.20871, 0.20871, 0.20871, 1)
+
+[node name="Icon" type="Sprite2D" parent="."]
+position = Vector2(76, 66)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("1_axfei")
+
+[node name="TitleText" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -208.5
+offset_top = 50.0
+offset_right = 208.5
+offset_bottom = 87.0
+grow_horizontal = 2
+text = "Welcome to RetroDECK configurator"
+label_settings = SubResource("LabelSettings_b77hh")
+horizontal_alignment = 1
+
+[node name="VBoxContainerButtons" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -70.5
+offset_top = -33.0
+offset_right = 70.5
+offset_bottom = 33.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button" type="Button" parent="VBoxContainerButtons"]
+layout_mode = 2
+size_flags_horizontal = 4
+focus_neighbor_top = NodePath("../Button2")
+focus_neighbor_bottom = NodePath("../Button2")
+text = "Hardcoded script"
+script = ExtResource("3_aenvv")
+
+[node name="Button2" type="Button" parent="VBoxContainerButtons"]
+layout_mode = 2
+size_flags_horizontal = 4
+focus_neighbor_top = NodePath("../Button")
+focus_neighbor_bottom = NodePath("../Button")
+text = "External script"
+script = ExtResource("4_u2f14")
