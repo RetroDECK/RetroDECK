@@ -4,3 +4,6 @@
 [submodule "rd-submodules/shared-modules"]
 	path = rd-submodules/shared-modules
 	url = https://github.com/flathub/shared-modules.git
+[submodule "tools/configurator/files"]
+	path = tools/configurator/files
+	url = git@github.com:WallK/RetroDECK_Configurator_Godot.git
