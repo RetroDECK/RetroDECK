@@ -217,6 +217,7 @@ modules:
         url: https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_amd64
         sha256: 4ee662847c588c3ef2fec8bfb304e8739e3dbaba87ccb9a608d691c88f5b64dc
 
+  # used by: CEMU, ???
   - name: glslang
     buildsystem: cmake-ninja
     config-opts:
@@ -227,8 +228,8 @@ modules:
       - /lib/cmake
     sources:
       - type: archive
-        url: https://github.com/KhronosGroup/glslang/archive/12.3.1.tar.gz
-        sha256: a57836a583b3044087ac51bb0d5d2d803ff84591d55f89087fc29ace42a8b9a8
+        url: https://github.com/KhronosGroup/glslang/archive/13.0.0.tar.gz
+        sha256: bcda732434f829aa74414ea0e06d329ec8ac28637c38a0de45e17c8fd25a4715
         x-checker-data:
           type: anitya
           stable-only: true
@@ -1017,8 +1018,8 @@ modules:
       - /lib/cmake
     sources:
       - type: archive
-        url: https://boostorg.jfrog.io/artifactory/main/release/1.82.0/source/boost_1_82_0.tar.bz2
-        sha256: a6e1ab9b0860e6a2881dd7b21fe9f737a095e5f33a3a874afc6a345228597ee6
+        url: https://boostorg.jfrog.io/artifactory/main/release/1.83.0/source/boost_1_83_0.tar.bz2
+        sha256: 6478edfe2f3305127cffe8caf73ea0176c53769f4bf1585be237eb30798c3b8e
         x-checker-data:
           type: anitya
           project-id: 6845
@@ -1039,8 +1040,10 @@ modules:
       - /lib/pkgconfig
     sources:
       - type: archive
-        url: https://libzip.org/download/libzip-1.10.0.tar.xz
-        sha256: cd2a7ac9f1fb5bfa6218272d9929955dc7237515bba6e14b5ad0e1d1e2212b43
+        url: https://libzip.org/download/libzip-1.10.1.tar.xz
+        mirror-urls:
+          - https://github.com/nih-at/libzip/releases/download/v1.10.1/libzip-1.10.1.tar.xz
+        sha256: dc3c8d5b4c8bbd09626864f6bcf93de701540f761d76b85d7c7d710f4bd90318
         x-checker-data:
           type: anitya
           project-id: 10649
@@ -1129,8 +1132,8 @@ modules:
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+-\d+)$
-        tag: v2.0-46
-        commit: a17111e6b0e4802044c90f4bedd66478de689070
+        tag: v2.0-51
+        commit: 1d398551e25a35054ef51780a60756c3015ec312
       - type: shell
         commands:
           - sed "s/set(EXPERIMENTAL_VERSION.*/set(EXPERIMENTAL_VERSION \"$(git describe
