@@ -485,8 +485,8 @@ modules:
       - mv ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* /app/share/libretro/cores/
     sources:
       - type: archive
-        url: https://buildbot.libretro.com/stable/1.15.0/linux/x86_64/RetroArch_cores.7z
-        sha256: 2230bc38eaf87406efd0c2b7bdd1cf9e813ba113505600f14a7ef9eb06f8c7c0
+        url: https://buildbot.libretro.com/stable/1.16.0/linux/x86_64/RetroArch_cores.7z
+        sha256: 421c25f22dbe5d96d9ee4d3eecf25f395f60a360412dc2cf829b26bfe67869fd
     
   - name: retroarch-sameduck-core
     buildsystem: simple
