@@ -71,6 +71,12 @@ script = ExtResource("3_aenvv")
 layout_mode = 2
 size_flags_horizontal = 4
 focus_neighbor_top = NodePath("../Button")
-focus_neighbor_bottom = NodePath("../Button")
+focus_neighbor_bottom = NodePath("../CheckButton")
 text = "External script"
 script = ExtResource("4_u2f14")
+
+[node name="CheckButton" type="CheckButton" parent="VBoxContainerButtons"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../Button2")
+focus_neighbor_bottom = NodePath("../Button")
+text = "Hardcore mode"
