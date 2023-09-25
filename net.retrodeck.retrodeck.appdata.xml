@@ -65,16 +65,17 @@
    <project_license>GPL-3.0</project_license>
    <metadata_license>CC0-1.0</metadata_license>
    <releases>
-      <release version="0.7.2b" date="2023-08-16">
+      <release version="0.7.2b" date="2023-09-25">
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.7.2b</url>
          <description>
-            <p>Bug fixes:</p>
+            <p>Changelog:</p>
             <ul>
                <li>Updated ES-DE to 2.1.1</li>
                <li>Redone the patches for ES-DE</li>
-               <li>Updated theme</li>
-               <li>Changelog is now scrollable</li>
+               <li>Updated default theme</li>
+               <li>Changelog is now scrollable in the Configurator</li>
                <li>Added helper files in the mods folders to instruct the users on the procedures to follow</li>
+               <li>Updated all the updateable emulators</li>
             </ul>
          </description>
       </release>
