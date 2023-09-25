@@ -945,9 +945,8 @@ modules:
 
   # RPCS3 - END
 
-  # # PRIMEHACK - START
-  # # https://github.com/flathub/io.github.shiiion.primehack
-  # # Disabled because it's overwriting Dolphin
+  # PRIMEHACK - START
+  # https://github.com/flathub/io.github.shiiion.primehack
 
   - name: primehack
     buildsystem: cmake-ninja
