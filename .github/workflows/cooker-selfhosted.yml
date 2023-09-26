@@ -55,7 +55,7 @@ jobs:
         run : "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/pre_build_automation.sh"
 
       - name: "Adding flatpak portal for automated updates (cooker only)"
-        run: sed -i '/finish-args:/a \ \ - --talk-name=org.freedesktop.Flatpak' net.retrodeck.retrodeck.yml
+        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/cooker-flatpak-portal-add.sh"
 
       # - name: "Updating release notes in appdata"
       #   run: "automation_tools/appdata_management.sh"
