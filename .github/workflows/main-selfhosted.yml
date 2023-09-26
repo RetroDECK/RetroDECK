@@ -52,50 +52,23 @@ jobs:
         
       - name: Check versions (main only)
         id: check_version_string
-        run: "automation_tools/version_checker.sh"
+        run: "automation_tools/main_version_checker.sh"
+
+      - name: "[DEBUG] Outputting manifest"
+        run: cat net.retrodeck.retrodeck.yml
 
       - name: "Build flatpak: download only"
         id: "flatpak-download"
-        run: |
-          git config --global protocol.file.allow always
-          mkdir -vp ${GITHUB_WORKSPACE}/local
-          mkdir -vp ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker
-          flatpak-builder --user --force-clean \
-            --install-deps-from=flathub \
-            --install-deps-from=flathub-beta \
-            --repo=${GITHUB_WORKSPACE}/local \
-            --download-only \
-            ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker \
-            net.retrodeck.retrodeck.yml
+        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
         continue-on-error: true
 
       # Sometimes flatpak download fails, in this case it tries a second time
       - name: "Build flatpak: download only (retry)"
         if: steps.flatpak-download.outcome == 'failure'
-        run: |
-          git config --global protocol.file.allow always
-          mkdir -vp ${GITHUB_WORKSPACE}/local
-          mkdir -vp ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker
-          flatpak-builder --user --force-clean \
-            --install-deps-from=flathub \
-            --install-deps-from=flathub-beta \
-            --repo=${GITHUB_WORKSPACE}/local \
-            --download-only \
-            ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker \
-            net.retrodeck.retrodeck.yml
+        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
 
       - name: Build flatpak
-        run: |
-          git config --global protocol.file.allow always
-          mkdir -vp ${GITHUB_WORKSPACE}/local
-          mkdir -vp ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker
-          flatpak-builder --user --force-clean \
-            --install-deps-from=flathub \
-            --install-deps-from=flathub-beta \
-            --repo=${GITHUB_WORKSPACE}/local \
-            --disable-download \
-            ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker \
-            net.retrodeck.retrodeck.yml
+        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_only.sh"
 
       - name: Create Artifact for flathub
         run: | 
@@ -106,8 +79,7 @@ jobs:
         continue-on-error: true
 
       - name: Create Bundle
-        run: |
-          flatpak build-bundle ${GITHUB_WORKSPACE}/local RetroDECK.flatpak net.retrodeck.retrodeck
+        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_bundle.sh"
 
       - name: Getting version info
         id: version
