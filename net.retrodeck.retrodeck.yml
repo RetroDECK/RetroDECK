@@ -67,6 +67,7 @@ cleanup-commands:
 
 modules:
 
+  # dependency of: CEMU
   - rd-submodules/shared-modules/libusb/libusb.json
 
   # This module is used to define the RetroDECK version
@@ -119,6 +120,7 @@ modules:
   # mesa repo got a double certificate issue and gnutils cannot handle that so GLU download fails,
   # this affects even the shared-modules's glu so I have to replace it temporarly
   # more info there: https://gitlab.com/gnutls/gnutls/-/issues/1335
+  # dependency of: CEMU
   - name: glu
     buildsystem: meson
     cleanup:
@@ -217,7 +219,7 @@ modules:
         url: https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_amd64
         sha256: 4ee662847c588c3ef2fec8bfb304e8739e3dbaba87ccb9a608d691c88f5b64dc
 
-  # used by: CEMU, ???
+  # dependency of: CEMU (13.0.0)
   - name: glslang
     buildsystem: cmake-ninja
     config-opts:
@@ -271,6 +273,7 @@ modules:
           - sed -i 's|-o root -g root ||' ./Makefile.gnu
           - sed -i 's|/usr|/app|' ./Makefile.gnu
 
+  # dependency of: CEMU
   - name: pugixml
     buildsystem: cmake-ninja
     config-opts:
@@ -400,7 +403,7 @@ modules:
       - rd-submodules/retroarch/modules/libbz2/libbz2-1.0.8.json
       - rd-submodules/retroarch/modules/xrandr/xrandr-1.5.1.json
       - rd-submodules/retroarch/modules/libaio/libaio-0.3.112.json
-      # certificate issue, check libglu module for more info
+      # certificate issue, check glu module for more info
       #- rd-submodules/shared-modules/glu/glu-9.json
       - rd-submodules/shared-modules/libdecor/libdecor-0.1.1.json
   - name: retroarch-filers-video
@@ -895,9 +898,11 @@ modules:
   # DO NOT UPDATE! WENT ON QT6
   # https://github.com/flathub/net.rpcs3.RPCS3
 
-  # glu issue, check libglu module for more info
+  # glu issue, check glu module for more info
   #- rd-submodules/shared-modules/glu/glu-9.json
-  - rd-submodules/shared-modules/glew/glew.json # RPCS3 is not using this anymore, what about the other emu? Can we remove it?
+
+  # dependency of: CEMU
+  - rd-submodules/shared-modules/glew/glew.json
 
   - name: rpcs3
     buildsystem: cmake-ninja
@@ -1004,8 +1009,21 @@ modules:
   # Duckstation-AppImage - END
 
   # Cemu - START
+  # LATEST BUILD BEFORE RUNTIME 23.08
   # https://github.com/cemu-project/Cemu/releases
   # https://github.com/flathub/info.cemu.Cemu
+
+  - name: hidapi
+    buildsystem: cmake-ninja
+    sources:
+      - type: archive
+        url: https://github.com/libusb/hidapi/archive/refs/tags/hidapi-0.14.0.tar.gz
+        sha256: a5714234abe6e1f53647dd8cba7d69f65f71c558b7896ed218864ffcf405bcbd
+        x-checker-data:
+          type: anitya
+          project-id: 5594
+          stable-only: true
+          url-template: https://github.com/libusb/hidapi/archive/refs/tags/hidapi-$version.tar.gz
 
   - name: boost
     buildsystem: simple
@@ -1132,8 +1150,8 @@ modules:
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+-\d+)$
-        tag: v2.0-51
-        commit: 1d398551e25a35054ef51780a60756c3015ec312
+        tag: v2.0-47
+        commit: 85aa4f095b119e98620451a0c19c80f656d944a6
       - type: shell
         commands:
           - sed "s/set(EXPERIMENTAL_VERSION.*/set(EXPERIMENTAL_VERSION \"$(git describe
