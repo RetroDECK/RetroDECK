@@ -85,6 +85,7 @@
             <ul>
                <li>PPSSPP now have Retroachievements, but it is right now not configurable in the configurator (as it works a bit different the other emulators), we hope to have a solution for it at a later date. You can still login / logout / enable hardcore mode normally from the PPSSPP interface.</li>
                <li>Quitting the RetroArch GB core with the radial function makes the core swap the palette.</li>
+               <li>Borders sometimes are disappearing, a possible workaround is to reset RetroArch from the configurator.</li>
             </ul>
          </description>
       </release>
