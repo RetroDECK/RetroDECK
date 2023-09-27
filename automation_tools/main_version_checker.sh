@@ -1,5 +1,5 @@
 #!/bin/bash
-# This script is used to check that the versions are correct and topping the pipeline if something is wrong.
+# This script is used to check that the versions are correct and stopping the pipeline if something is wrong.
 # This is designed to be run on the main pipeline to check that everything is in order before building RetroDECK.
 
 source automation_tools/version_extractor.sh

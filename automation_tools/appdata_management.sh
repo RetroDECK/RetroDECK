@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# THIS SCRIPT IS BROKEN HENCE DISABLED FTM
+# This script is getting the latest release notes from the wiki and add them to the appdata
+
 source automation_tools/version_extractor.sh
 
 # Fetch appdata version

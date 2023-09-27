@@ -65,16 +65,27 @@
    <project_license>GPL-3.0</project_license>
    <metadata_license>CC0-1.0</metadata_license>
    <releases>
-      <release version="0.7.2b" date="2023-08-16">
+      <release version="0.7.2b" date="2023-09-26">
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.7.2b</url>
          <description>
-            <p>Bug fixes:</p>
+            <p>Updates:</p>
             <ul>
-               <li>Updated ES-DE to 2.1.1</li>
-               <li>Redone the patches for ES-DE</li>
-               <li>Updated theme</li>
-               <li>Changelog is now scrollable</li>
-               <li>Added helper files in the mods folders to instruct the users on the procedures to follow</li>
+               <li>All Emulators, ES-DE and the included theme have been updated.</li>
+            </ul>
+            <p>Bugfixes and other changes:</p>
+            <ul>
+               <li>Added helper .txt files to the mod and texture pack folders.</li>
+               <li>The builtin changelog is now scrollable.</li>
+               <li>The loading bar color is after much debate once again red.</li>
+               <li>Gameboy Advanced and Game Gear integer scaling changes based on feedback.</li>
+               <li>Optimized and retooled the patching process for ES-DE.</li>
+               <li>Various fixes and optimizations to the RetroDECK build process.</li>
+            </ul>
+            <p>Known issues:</p>
+            <ul>
+               <li>PPSSPP now have Retroachievements, but it is right now not configurable in the configurator (as it works a bit different the other emulators), we hope to have a solution for it at a later date. You can still login / logout / enable hardcore mode normally from the PPSSPP interface.</li>
+               <li>Quitting the RetroArch GB core with the radial function makes the core swap the palette.</li>
+               <li>Borders sometimes are disappearing, a possible workaround is to reset RetroArch from the configurator.</li>
             </ul>
          </description>
       </release>

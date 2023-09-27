@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# This script is intended to gather version information from various sources:
+# RetroDECK repository
+# Appdata.xml file
+# Manifest YAML file
+# It consists of three functions, each responsible for retrieving a specific version-related data.
+
 appdata="net.retrodeck.retrodeck.appdata.xml"
 manifest="net.retrodeck.retrodeck.yml"
 manifest_content=$(cat "$manifest")
