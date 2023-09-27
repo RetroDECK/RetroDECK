@@ -34,6 +34,7 @@ source /app/libexec/global.sh
 #       - PPSSPP
 #       - Primehack
 #       - RPCS3
+#       - Ryujinx
 #       - XEMU
 #       - Yuzu
 #     - Tools
@@ -74,6 +75,7 @@ source /app/libexec/global.sh
 #           - Reset PPSSPP
 #           - Reset Primehack
 #           - Reset RPCS3
+#           - Reset Ryujinx
 #           - Reset XEMU
 #           - Reset Yuzu
 #         - Reset All Emulators
@@ -431,10 +433,9 @@ configurator_open_emulator_dialog() {
   "PPSSPP" "Open the PSP emulator PPSSPP" \
   "Primehack" "Open the Metroid Prime emulator Primehack" \
   "RPCS3" "Open the PS3 emulator RPCS3" \
+  "Ryujinx" "Open the Switch emulator Ryujinx" \
   "XEMU" "Open the Xbox emulator XEMU" \
-  "Yuzu" "Open the Switch emulator Yuzu" \
-  "Ryujinx" "Open the Switch emulator Ryujinx"
-  )
+  "Yuzu" "Open the Switch emulator Yuzu")
 
   case $emulator in
 
@@ -476,6 +477,10 @@ configurator_open_emulator_dialog() {
 
   "RPCS3" )
     rpcs3
+  ;;
+
+  "Ryujinx" )
+    ryujinx-wrapper
   ;;
 
   "XEMU" )
@@ -979,6 +984,7 @@ configurator_reset_dialog() {
     "PPSSPP" "Reset the PSP emulator PPSSPP to default settings" \
     "Primehack" "Reset the Metroid Prime emulator Primehack to default settings" \
     "RPCS3" "Reset the PS3 emulator RPCS3 to default settings" \
+    "Ryujinx" "Reset the Switch emulator Ryujinx to default settings" \
     "XEMU" "Reset the XBOX emulator XEMU to default settings" \
     "Yuzu" "Reset the Switch emulator Yuzu to default settings" )
 
