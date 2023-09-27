@@ -83,7 +83,8 @@ check_for_version_update() {
           local latest_cooker_download=$(curl --silent https://api.github.com/repos/XargonWan/$update_repo/releases/latest | grep '"browser_download_url":' | sed -E 's/.*"([^"]+)".*/\1/')
           mkdir -p "$rdhome/RetroDECK_Updates"
           wget -P "$rdhome/RetroDECK_Updates" $latest_cooker_download
-          flatpak-spawn --host flatpak install --user --bundle --noninteractive -y "$rdhome/RetroDECK_Updates/RetroDECK.flatpak"
+          flatpak-spawn --host flatpak remove --noninteractive -y net.retrodeck.retrodeck # Remove current version before installing new one, to avoid duplicates
+          flatpak-spawn --host flatpak install --user --bundle --noninteractive -y "$rdhome/RetroDECK_Updates/RetroDECK-cooker.flatpak"
           rm -rf "$rdhome/RetroDECK_Updates" # Cleanup old bundles to save space
           ) |
           zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \

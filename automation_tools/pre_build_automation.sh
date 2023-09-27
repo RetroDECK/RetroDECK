@@ -15,6 +15,7 @@
 
 rd_manifest=${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml
 automation_task_list=${GITHUB_WORKSPACE}/automation_tools/automation_task_list.cfg
+current_branch=$(git rev-parse --abbrev-ref HEAD)
 
 echo "Manifest location: $rd_manifest"
 echo "Automation task list location: $automation_task_list"
@@ -23,10 +24,17 @@ echo "Task list contents:"
 cat "$automation_task_list"
 echo
 
+# Update all collected information
 while IFS="^" read -r action placeholder url branch
 do
   if [[ ! $action == "#"* ]] && [[ ! -z "$action" ]]; then
-    if [[ "$action" == "hash" ]]; then
+    if [[ "$action" == "branch" ]]; then
+      echo
+      echo "Placeholder text: $placeholder"
+      echo "Current branch:" "$current_branch"
+      echo
+      /bin/sed -i 's^'"$placeholder"'^'"$current_branch"'^g' $rd_manifest
+    elif [[ "$action" == "hash" ]]; then
       echo
       echo "Placeholder text: $placeholder"
       echo "URL to hash: $url"

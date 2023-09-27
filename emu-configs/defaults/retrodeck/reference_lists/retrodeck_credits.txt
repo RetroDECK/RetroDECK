@@ -13,11 +13,14 @@ Creator of the RetroDECK configurator and various awesome features.
 Lazorne
 Community management/outreach, testing, documentation, feature suggestions and some design.
 
+dottormac
+Beta Tester
+
+LX32
+Junior code contributor, Beta Tester
+
 
 Collaborators
-Niroku / Atari
-Helps with community management, is also part of Batocera
-
 Leon Styhre
 Maker of EmulationStation Desktop Edition
 
@@ -27,7 +30,7 @@ Theme creator for ES-DE and AmberELEC
 
 Additional credits
 RavenKilit
-Did some code and testning, contributed to AmberELEC
+Former Beta Tester and AmberELEC contributor
 
 MorGuux
 Made the RetroDECK steamdb graphics for the old logo
@@ -38,11 +41,14 @@ Made the new logo and steamdb graphics
 teotwaki
 Generous cloud hosting sponsor
 
+Niroku / Atari
+Helps with community management, is also part of Batocera
+
 Gabeboii
 Webmaster
 
 Draco
-Server Administration
+Former server admiistrator and code consultant
 
 ItzSelenux
 Maker of pixelitos
@@ -56,7 +62,7 @@ Special Thanks
 We want give special thanks to:
 
     Our Patreons that keeps the build servers running and provide feedback.
-    All related emulation projects.
+    All related emulation projects, such as Batocera and AmberELEC where we are taking our inspiration.
     All people that have put both time and money into emulation projects.
     All the users who help others with support, guidance and good spirit.
     All the users who help with testing and reporting issues.

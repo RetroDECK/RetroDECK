@@ -1,56 +1,6 @@
-diff -au1r emulationstation-de/es-app/src/guis/GuiMenu.cpp emulationstation-de/es-app/src/guis/GuiMenu.cpp
---- emulationstation-de/es-app/src/guis/GuiMenu.cpp	2023-07-14 08:44:25.788696841 -0400
-+++ emulationstation-de/es-app/src/guis/GuiMenu.cpp	2023-07-14 08:48:23.574196859 -0400
-@@ -10,2 +10,3 @@
- #include "guis/GuiMenu.h"
-+#include "utils/PlatformUtil.h"
-
-@@ -67,2 +68,4 @@
-
-+    addEntry("RETRODECK CONFIGURATOR", mMenuColorPrimary, false, [this] { openRetroDeckConfigurator(); });
-+
-     if (!Settings::getInstance()->getBool("ForceKiosk") &&
-@@ -70,3 +73,3 @@
- #if defined(__APPLE__)
--        addEntry("QUIT EMULATIONSTATION", mMenuColorPrimary, false, [this] { openQuitMenu(); });
-+        addEntry("QUIT RETRODECK", mMenuColorPrimary, false, [this] { openQuitMenu(); });
- #else
-@@ -75,3 +78,3 @@
-         else
--            addEntry("QUIT EMULATIONSTATION", mMenuColorPrimary, false, [this] { openQuitMenu(); });
-+            addEntry("QUIT RETRODECK", mMenuColorPrimary, false, [this] { openQuitMenu(); });
- #endif
-@@ -1729,2 +1732,15 @@
-
-+void GuiMenu::openRetroDeckConfigurator()
-+{
-+    // Launch the configurator.sh script
-+    std::string command;
-+    std::string startDirectory;
-+    bool runInBackground;
-+    command = "bash /app/tools/configurator.sh";
-+    startDirectory = "/app/tools";
-+    runInBackground = false;
-+    int result = Utils::Platform::launchGameUnix(command, startDirectory, runInBackground);
-+    // You can add any checks for the script's outcome here.
-+}
-+
- void GuiMenu::openQuitMenu()
-@@ -1758,3 +1774,3 @@
-         auto quitText = std::make_shared<TextComponent>(
--            "QUIT EMULATIONSTATION", Font::get(FONT_SIZE_MEDIUM), mMenuColorPrimary);
-+            "QUIT RETRODECK", Font::get(FONT_SIZE_MEDIUM), mMenuColorPrimary);
-         quitText->setSelectable(true);
-diff -au1r emulationstation-de/es-app/src/guis/GuiMenu.h emulationstation-de/es-app/src/guis/GuiMenu.h
---- emulationstation-de/es-app/src/guis/GuiMenu.h	2023-07-14 08:44:25.788696841 -0400
-+++ emulationstation-de/es-app/src/guis/GuiMenu.h	2023-07-14 08:49:05.851991859 -0400
-@@ -46,2 +46,3 @@
-     void openOtherOptions();
-+    void openRetroDeckConfigurator();
-     void openQuitMenu();
 diff -au1r emulationstation-de/es-app/src/views/ViewController.cpp emulationstation-de/es-app/src/views/ViewController.cpp
---- emulationstation-de/es-app/src/views/ViewController.cpp	2023-07-14 08:44:25.788696841 -0400
-+++ emulationstation-de/es-app/src/views/ViewController.cpp	2023-07-17 09:58:26.862373622 -0400
+--- emulationstation-de/es-app/src/views/ViewController.cpp	2023-08-23 13:12:15.625292630 +0200
++++ emulationstation-de/es-app/src/views/ViewController.cpp	2023-08-23 14:29:23.547223951 +0200
 @@ -164,9 +164,7 @@
  {
 -    mNoGamesErrorMessage = "NO GAME FILES WERE FOUND. EITHER PLACE YOUR GAMES IN "
@@ -65,7 +15,7 @@ diff -au1r emulationstation-de/es-app/src/views/ViewController.cpp emulationstat
 +                           "SYSTEM SUBFOLDER IN THE CONFIGURED ROM DIRECTORY "
 +                           "AND RUN RETRODECK AGAIN TO SCAN YOUR LIBRARY.\n"
 +                           "THE CURRENTLY CONFIGURED ROM DIRECTORY IS:\n";
-
+ 
 @@ -179,90 +177,3 @@
      mNoGamesMessageBox = new GuiMsgBox(
 -        HelpStyle(), mNoGamesErrorMessage + mRomDirectory, "CHANGE ROM DIRECTORY",
@@ -163,11 +113,6 @@ diff -au1r emulationstation-de/es-app/src/views/ViewController.cpp emulationstat
 -        true, false,
 +        "", nullptr, "", nullptr, true, false,
          (mRenderer->getIsVerticalOrientation() ?
-diff -au1r emulationstation-de/es-core/src/Window.cpp emulationstation-de/es-core/src/Window.cpp
---- emulationstation-de/es-core/src/Window.cpp	2023-07-14 08:44:25.805371841 -0400
-+++ emulationstation-de/es-core/src/Window.cpp	2023-07-14 08:52:32.335181878 -0400
-@@ -165,3 +165,3 @@
-     progressBarRect.barPosY = mSplashTextPositions.y + (progressBarRect.barHeight * 2.0f);
--    progressBarRect.color = 0x777777FF;
-+    progressBarRect.color = 0xC858E6FF;
-     mProgressBarRectangles.emplace_back(progressBarRect);
+@@ -1446 +1357,2 @@
+ }
++

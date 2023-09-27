@@ -1,0 +1,26 @@
+PCSX2 - Playstation 2
+
+The directory '~/retrodeck/texture_packs/PCSX2/' corresponds to the '/PCSX2/textures/' folder in PCSX2.
+
+Please note that some texture packs may be designed for a specific version or region of a game. Ensure you have the correct game and textures for it.
+
+Also, keep in mind that 'TITLEID' is different for every game.
+
+To enable Custom Textures, follow these steps:
+
+1. Open up PCSX2 inside RetroDECK Configurator by pressing 'Open Emulator' - 'PCSX2'.
+2. Press 'Settings' -> 'Graphics'.
+3. Set 'Load Textures' and 'Async Texture Loading' to On.
+
+To add texture packs, you'll need the texture pack files. On the Steam Deck, this could be easier to do in Desktop Mode.
+
+For direct texture folder:
+
+1. Extract any texture pack files from compressed .zip or any other format into folders.
+2. Go into '~/retrodeck/texture_packs/PCSX2/'. The folders are all named by 'TITLEID'.
+3. Move textures into the correct '~/retrodeck/texture_packs/PCSX2/<TITLEID>' folder.
+
+Related wiki article can be found here:
+https://github.com/XargonWan/RetroDECK/wiki/PCSX2%3A-Texture-Packs
+
+The RetroDECK Team

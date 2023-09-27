@@ -8,6 +8,15 @@ base: io.qt.qtwebengine.BaseApp             # Needed for Yuzu
 base-version: 5.15-22.08                    # Needed for Yuzu
 command: retrodeck.sh
 
+add-extensions:
+  org.ppsspp.PPSSPP.Locale:
+    directory: share/locale
+    bundle: true
+    no-autodownload: false
+    subdirectories: false
+    autodelete: true
+    locale-subset: true
+
 finish-args:
   - --socket=fallback-x11
   - --socket=wayland
@@ -15,7 +24,7 @@ finish-args:
   - --share=ipc
   - --share=network
   - --device=all
-  - --filesystem=home # Needed to be able to relocate / remove / create symlink at ~/retrodeck
+  - --filesystem=home
   - --filesystem=/run/media
   - --filesystem=/media
   - --allow=multiarch
@@ -58,6 +67,7 @@ cleanup-commands:
 
 modules:
 
+  # dependency of: CEMU
   - rd-submodules/shared-modules/libusb/libusb.json
 
   # This module is used to define the RetroDECK version
@@ -66,18 +76,16 @@ modules:
   # The version number is hardcoded in /app/retrodeck/version
   #
   # UPDATE STEPS FOR MAIN:
-  # [X] Update the VERSION variable
+  # [X] Update the VERSION variable on line containing "VERSION=THISBRANCH"
   # [X] Update the appdata.xml with the version number and notes
-  # [X] change branch into main in version-initialization (first one)
-  # [X] change branch into main in retrodeck module (last one)
-  # [X] if header (before modules) was edited, edit it even in flathub.yml
   #
   - name: version-initialization
     buildsystem: simple
     build-commands:
       - |
 
-        VERSION=0.7.1b
+        # on main please update this with the version variable, eg: VERSION='0.7.0b'
+        VERSION=0.7.2b
 
         git checkout ${GITHUB_REF_NAME}
         mkdir -p ${FLATPAK_DEST}/retrodeck/
@@ -91,7 +99,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/XargonWan/RetroDECK.git
-        branch: main
+        branch: THISBRANCH
 
   - name: xmlstarlet
     config-opts:
@@ -112,6 +120,7 @@ modules:
   # mesa repo got a double certificate issue and gnutils cannot handle that so GLU download fails,
   # this affects even the shared-modules's glu so I have to replace it temporarly
   # more info there: https://gitlab.com/gnutls/gnutls/-/issues/1335
+  # dependency of: CEMU
   - name: glu
     buildsystem: meson
     cleanup:
@@ -210,6 +219,7 @@ modules:
         url: https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_amd64
         sha256: 4ee662847c588c3ef2fec8bfb304e8739e3dbaba87ccb9a608d691c88f5b64dc
 
+  # dependency of: CEMU (13.0.0)
   - name: glslang
     buildsystem: cmake-ninja
     config-opts:
@@ -220,8 +230,8 @@ modules:
       - /lib/cmake
     sources:
       - type: archive
-        url: https://github.com/KhronosGroup/glslang/archive/12.3.1.tar.gz
-        sha256: a57836a583b3044087ac51bb0d5d2d803ff84591d55f89087fc29ace42a8b9a8
+        url: https://github.com/KhronosGroup/glslang/archive/13.0.0.tar.gz
+        sha256: bcda732434f829aa74414ea0e06d329ec8ac28637c38a0de45e17c8fd25a4715
         x-checker-data:
           type: anitya
           stable-only: true
@@ -263,6 +273,7 @@ modules:
           - sed -i 's|-o root -g root ||' ./Makefile.gnu
           - sed -i 's|/usr|/app|' ./Makefile.gnu
 
+  # dependency of: CEMU
   - name: pugixml
     buildsystem: cmake-ninja
     config-opts:
@@ -326,7 +337,13 @@ modules:
             v'$(cat ${FLATPAK_DEST}/retrodeck/version)', ES-DE  v" + Utils::String::toUpper(PROGRAM_VERSION_STRING)#g'
             es-app/src/guis/GuiMenu.cpp
       - type: patch
-        path: rd-submodules/es-de/es-de-retrodeck-mods.patch
+        path: rd-submodules/es-de/GuiMenu.cpp.patch
+      - type: patch
+        path: rd-submodules/es-de/GuiMenu.h.patch
+      - type: patch
+        path: rd-submodules/es-de/ViewController.cpp.patch
+      - type: patch
+        path: rd-submodules/es-de/Window.cpp.patch
 
   # ES-DE - END
 
@@ -340,7 +357,7 @@ modules:
     sources:
       - type: git
         url:  https://github.com/anthonycaccese/art-book-next-es-de.git
-        commit: a0dc0cccaa3f1475feb58e551fe732d982e161c0
+        commit: 4fe896af7447404f6ea083335cd661c91b0f7860
 
   # ES-DE Themes - END
 
@@ -353,11 +370,13 @@ modules:
     config-opts:
       - '--enable-dbus'
     make-args:
-      - GLOBAL_CONFIG_DIR=${FLATPAK_DEST}/etc
+      - 'GLOBAL_CONFIG_DIR=${FLATPAK_DEST}/etc'
+      - HAVE_TRANSLATE=1
+      - HAVE_ACCESSIBILITY=1
     sources:
       - type: git
-        url: https://github.com/libretro/RetroArch.git
-        commit: 6616b807edea5b56683e9fbca8b003b436c22b13
+        url: 'https://github.com/libretro/RetroArch.git'
+        commit: 712b9350a5c2b1b9129d939a2ae622093dfabd04
       - type: file
         path: rd-submodules/retroarch/retroarch.cfg
     post-install:
@@ -370,7 +389,6 @@ modules:
       - >-
         sed s:@prefix@:${FLATPAK_DEST}:g retroarch.cfg >
         ${FLATPAK_DEST}/etc/retroarch.cfg
-      - mkdir -p ${FLATPAK_DEST}/share/appdata
     modules:
       - rd-submodules/retroarch/modules/libpng/libpng-1.6.35.json
       - rd-submodules/retroarch/modules/nvidia-cg-toolkit/nvidia-cg-toolkit-3.1.0013.json
@@ -385,7 +403,7 @@ modules:
       - rd-submodules/retroarch/modules/libbz2/libbz2-1.0.8.json
       - rd-submodules/retroarch/modules/xrandr/xrandr-1.5.1.json
       - rd-submodules/retroarch/modules/libaio/libaio-0.3.112.json
-      # certificate issue, check libglu module for more info
+      # certificate issue, check glu module for more info
       #- rd-submodules/shared-modules/glu/glu-9.json
       - rd-submodules/shared-modules/libdecor/libdecor-0.1.1.json
   - name: retroarch-filers-video
@@ -394,44 +412,44 @@ modules:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
-        url: https://github.com/libretro/RetroArch.git
-        commit: 6616b807edea5b56683e9fbca8b003b436c22b13
+        url: 'https://github.com/libretro/RetroArch.git'
+        commit: 712b9350a5c2b1b9129d939a2ae622093dfabd04
   - name: retroarch-filers-audio
     subdir: libretro-common/audio/dsp_filters
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
-        url: https://github.com/libretro/RetroArch.git
-        commit: 6616b807edea5b56683e9fbca8b003b436c22b13
+        url: 'https://github.com/libretro/RetroArch.git'
+        commit: 712b9350a5c2b1b9129d939a2ae622093dfabd04
   - name: retroarch-assets
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
-        url: https://github.com/libretro/retroarch-assets.git
-        commit: 4ec80faf1b5439d1654f407805bb66141b880826
+        url: 'https://github.com/libretro/retroarch-assets.git'
+        commit: 7b735ef18bcc6508b1c9a626eb237779ff787179
   - name: libretro-database
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
-        url: https://github.com/libretro/libretro-database.git
-        commit: 6a8d65d2bc1b7ffa7accb882e80c0a77b931bcc6
+        url: 'https://github.com/libretro/libretro-database.git'
+        commit: e3b5cb00da4f3ab99491bf67c19630ffa7ee19f2
   - name: libretro-core-info
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
-        url: https://github.com/libretro/libretro-core-info.git
-        commit: eb7e3ff064c3fdaae46b89c9da9f49e15a8e9c2b
+        url: 'https://github.com/libretro/libretro-core-info.git'
+        commit: dacae85b406131feb12395a415fdf57fc4745201
   - name: retroarch-joypad-autoconfig
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
-        url: https://github.com/libretro/retroarch-joypad-autoconfig.git
-        commit: 8ec6304a14bd37cf927ebe7555a274ac4fefeb69
+        url: 'https://github.com/libretro/retroarch-joypad-autoconfig.git'
+        commit: 5666e46bb89caf4e9af358fdb97a2b384cb62f36
   - name: common-shaders
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
@@ -444,22 +462,22 @@ modules:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
-        url: https://github.com/libretro/slang-shaders.git
-        commit: 8b35477a934739b1db193f22e7057754e7a87381
+        url: 'https://github.com/libretro/slang-shaders.git'
+        commit: 9266fa24b64b274fd429b73469ded3561de7b8f4
   - name: glsl-shaders
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
-        url: https://github.com/libretro/glsl-shaders.git
-        commit: 799aa9e4d567db0874111d2aed9c9b9058a19641
+        url: 'https://github.com/libretro/glsl-shaders.git'
+        commit: c26b9e1913eda8c25d6cd218818745a3b451f982
   - name: common-overlays
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
-        url: https://github.com/libretro/common-overlays.git
-        commit: b3827a2c63834ed9e1902acc7cf9019f64771ed3
+        url: 'https://github.com/libretro/common-overlays.git'
+        commit: 115d8670c2e032e4a41ba45f766f5cfd9dae28b8
 
   # RetroArch - END
 
@@ -471,8 +489,8 @@ modules:
       - mv ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* /app/share/libretro/cores/
     sources:
       - type: archive
-        url: https://buildbot.libretro.com/stable/1.15.0/linux/x86_64/RetroArch_cores.7z
-        sha256: 2230bc38eaf87406efd0c2b7bdd1cf9e813ba113505600f14a7ef9eb06f8c7c0
+        url: https://buildbot.libretro.com/stable/1.16.0/linux/x86_64/RetroArch_cores.7z
+        sha256: e4f7c9843ba827812088b3d1c7d745e802d7691180eb789ba5a37732461f2a06
     
   - name: retroarch-sameduck-core
     buildsystem: simple
@@ -544,13 +562,14 @@ modules:
     sources:
       - type: git
         url: &ppsspp-url https://github.com/hrydgard/ppsspp.git
-        tag: v1.15.4
-        commit: 9a80120dc09997e40c0a73fda05c3e07a347259f
+        tag: v1.16.3
+        commit: a9b6421dfde68be9d065b51e9d519699ce2e9053
         x-checker-data:
-          type: anitya
-          project-id: 12295
-          tag-template: v$version
-          is-main-source: true
+          type: json
+          url: https://api.github.com/repos/hrydgard/ppsspp/releases/latest
+          version-query: .tag_name | sub("^v"; "")
+          tag-query: .tag_name
+          timestamp-query: .published_at
 
   - name: ppsspp-localization
     buildsystem: simple
@@ -583,8 +602,8 @@ modules:
       - ln -s "${FLATPAK_DEST}/yuzu/usr/bin/yuzu" "${FLATPAK_DEST}/bin/yuzu"
     sources:
       - type: file
-        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1522/yuzu-mainline-20230813-3ea669b08.AppImage
-        sha256: d1c5217f96c7ce66b6ebc8db835daad801de7e8ca7df1c35ae62920aa55c04da
+        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1567/yuzu-mainline-20230923-ace91dd0c.AppImage
+        sha256: 965bdfa63e713a0672fb5a037ecb527b4860600c6a2526f7c053bfe082b5a9d8
 
   # Yuzu - END
 
@@ -649,8 +668,8 @@ modules:
       - ln -s "${FLATPAK_DEST}/pcsx2-qt/usr/bin/pcsx2-qt" "${FLATPAK_DEST}/bin/pcsx2-qt"
     sources:
       - type: file
-        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.4916/pcsx2-v1.7.4916-linux-appimage-x64-Qt.AppImage
-        sha256: 870a9d198d5f05a1ecf3e98110fe24beacf72eb45077ee31d1200c36930b3d9c
+        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.5059/pcsx2-v1.7.5059-linux-appimage-x64-Qt.AppImage
+        sha256: a51addc9bd15b77e842160acecb1f18486f8a024e5e73e8aea5de71de2b164c7
 
   # PCSX2 - END
 
@@ -879,9 +898,11 @@ modules:
   # DO NOT UPDATE! WENT ON QT6
   # https://github.com/flathub/net.rpcs3.RPCS3
 
-  # glu issue, check libglu module for more info
+  # glu issue, check glu module for more info
   #- rd-submodules/shared-modules/glu/glu-9.json
-  - rd-submodules/shared-modules/glew/glew.json # RPCS3 is not using this anymore, what about the other emu? Can we remove it?
+
+  # dependency of: CEMU
+  - rd-submodules/shared-modules/glew/glew.json
 
   - name: rpcs3
     buildsystem: cmake-ninja
@@ -930,9 +951,8 @@ modules:
 
   # RPCS3 - END
 
-  # # PRIMEHACK - START
-  # # https://github.com/flathub/io.github.shiiion.primehack
-  # # Disabled because it's overwriting Dolphin
+  # PRIMEHACK - START
+  # https://github.com/flathub/io.github.shiiion.primehack
 
   - name: primehack
     buildsystem: cmake-ninja
@@ -989,8 +1009,21 @@ modules:
   # Duckstation-AppImage - END
 
   # Cemu - START
+  # LATEST BUILD BEFORE RUNTIME 23.08
   # https://github.com/cemu-project/Cemu/releases
   # https://github.com/flathub/info.cemu.Cemu
+
+  - name: hidapi
+    buildsystem: cmake-ninja
+    sources:
+      - type: archive
+        url: https://github.com/libusb/hidapi/archive/refs/tags/hidapi-0.14.0.tar.gz
+        sha256: a5714234abe6e1f53647dd8cba7d69f65f71c558b7896ed218864ffcf405bcbd
+        x-checker-data:
+          type: anitya
+          project-id: 5594
+          stable-only: true
+          url-template: https://github.com/libusb/hidapi/archive/refs/tags/hidapi-$version.tar.gz
 
   - name: boost
     buildsystem: simple
@@ -1003,8 +1036,8 @@ modules:
       - /lib/cmake
     sources:
       - type: archive
-        url: https://boostorg.jfrog.io/artifactory/main/release/1.82.0/source/boost_1_82_0.tar.bz2
-        sha256: a6e1ab9b0860e6a2881dd7b21fe9f737a095e5f33a3a874afc6a345228597ee6
+        url: https://boostorg.jfrog.io/artifactory/main/release/1.83.0/source/boost_1_83_0.tar.bz2
+        sha256: 6478edfe2f3305127cffe8caf73ea0176c53769f4bf1585be237eb30798c3b8e
         x-checker-data:
           type: anitya
           project-id: 6845
@@ -1025,8 +1058,10 @@ modules:
       - /lib/pkgconfig
     sources:
       - type: archive
-        url: https://libzip.org/download/libzip-1.10.0.tar.xz
-        sha256: cd2a7ac9f1fb5bfa6218272d9929955dc7237515bba6e14b5ad0e1d1e2212b43
+        url: https://libzip.org/download/libzip-1.10.1.tar.xz
+        mirror-urls:
+          - https://github.com/nih-at/libzip/releases/download/v1.10.1/libzip-1.10.1.tar.xz
+        sha256: dc3c8d5b4c8bbd09626864f6bcf93de701540f761d76b85d7c7d710f4bd90318
         x-checker-data:
           type: anitya
           project-id: 10649
@@ -1115,8 +1150,8 @@ modules:
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+-\d+)$
-        tag: v2.0-46
-        commit: a17111e6b0e4802044c90f4bedd66478de689070
+        tag: v2.0-47
+        commit: 85aa4f095b119e98620451a0c19c80f656d944a6
       - type: shell
         commands:
           - sed "s/set(EXPERIMENTAL_VERSION.*/set(EXPERIMENTAL_VERSION \"$(git describe
@@ -1198,7 +1233,6 @@ modules:
       - mkdir -p /app/tools
       - cp tools/configurator.sh /app/tools/configurator.sh
       - chmod +x /app/tools/configurator.sh
-      #- cp es-configs/tools-gamelist.xml /app/retrodeck/tools-gamelist.xml
       - cp tools/retrodeck_function_wrapper.sh /app/tools/retrodeck_function_wrapper.sh
       - chmod +x /app/tools/retrodeck_function_wrapper.sh
 
@@ -1209,8 +1243,6 @@ modules:
       # Desktop entries
       - cp net.retrodeck.retrodeck.desktop /app/share/applications/net.retrodeck.retrodeck.desktop
       - cp net.retrodeck.retrodeck.Configurator.desktop /app/share/applications/net.retrodeck.retrodeck.Configurator.desktop
-
-      # TODO: group the configs per-emu and optimize the following cps, like already done with Dolphin. Please not that some files may be renamed, check retrodeck.sh to know how (and fix it after the edit)
 
       # Initializing default emulator configs
       - cp -r emu-configs ${FLATPAK_DEST}/retrodeck/emu-configs/
@@ -1229,4 +1261,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/XargonWan/RetroDECK.git
+<<<<<<< HEAD
         branch: main
+=======
+        branch: THISBRANCH
+>>>>>>> cooker-0.7.2b
