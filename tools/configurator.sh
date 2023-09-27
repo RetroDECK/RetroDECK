@@ -432,7 +432,9 @@ configurator_open_emulator_dialog() {
   "Primehack" "Open the Metroid Prime emulator Primehack" \
   "RPCS3" "Open the PS3 emulator RPCS3" \
   "XEMU" "Open the Xbox emulator XEMU" \
-  "Yuzu" "Open the Switch emulator Yuzu" )
+  "Yuzu" "Open the Switch emulator Yuzu" \
+  "Ryujinx" "Open the Switch emulator Ryujinx"
+  )
 
   case $emulator in
 
