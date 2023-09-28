@@ -15,4 +15,5 @@ retrodeck-flatpak-cooker/
 retrodeck-flatpak/
 backup
 .old
+tmp
 .godot

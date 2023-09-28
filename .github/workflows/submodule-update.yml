@@ -1,0 +1,57 @@
+name: Sunday Submodule Update
+
+on:
+  # At 4:00 (CET)
+  schedule:
+    - cron: '0 2 * * 0'
+  workflow_dispatch:
+
+jobs:
+  update_submodules:
+    name: Update submodules and create PR
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout repo with submodules
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.REPO_TOKEN }}
+          submodules: recursive
+
+      - name: Fetch all remote branches
+        run: git fetch --all
+
+      - name: List cooker branches by date
+        id: list_branches
+        run: |
+          BRANCHES=$(git for-each-ref --sort=-committerdate refs/remotes/origin/cooker* --format='%(refname)') echo “::set-output name=branches::$BRANCHES”
+
+      - name: Select target branch
+        id: select_branch
+        run: |
+          TARGET_BRANCH=(echo{{ steps.list_branches.outputs.branches }} | head -n 1)
+          echo “::set-output name=target_branch::$TARGET_BRANCH”
+          git checkout $TARGET_BRANCH
+          echo "Working on $TARGET_BRANCH"
+
+      - name: Update submodules with command
+        run: git submodule update --remote --merge --recursive
+
+      - name: Configure Git credentials
+        run: |
+          git config --global user.name 'GitHub bot'
+          git config --global user.email 'bot@noreply.github.com'
+
+      - name: Commit and push changes
+        run: |
+          git commit -am "Sunday submodule update"
+          git push origin HEAD:submodule-update
+
+      - name: Create PR
+        uses: repo-sync/pull-request@v2
+        with:
+          github_token: ${{ secrets.REPO_TOKEN }}
+          pr_title: "Sunday submodule update"
+          pr_body: "This PR updates the submodules to the latest commit on their remote repositories."
+          source_branch: "submodule-update"
+          destination_branch: "cooker*"
