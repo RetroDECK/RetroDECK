@@ -1,4 +1,4 @@
-name: "Build cooker"
+name: "[Cooker] build of ${{ github.ref }}"
 
 on:
   push:
