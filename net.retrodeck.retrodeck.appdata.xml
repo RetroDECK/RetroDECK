@@ -85,7 +85,6 @@
             <ul>
                <li>Added helper .txt files to the mod and texture pack folders.</li>
                <li>The builtin changelog is now scrollable.</li>
-               <li>The loading bar color is after much debate once again red.</li>
                <li>Gameboy Advanced and Game Gear integer scaling changes based on feedback.</li>
                <li>Optimized and retooled the patching process for ES-DE.</li>
                <li>Various fixes and optimizations to the RetroDECK build process.</li>
