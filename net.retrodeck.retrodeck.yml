@@ -76,8 +76,8 @@ modules:
   # The version number is hardcoded in /app/retrodeck/version
   #
   # UPDATE STEPS FOR MAIN:
-  # [ ] Update the VERSION variable on line containing "VERSION=THISBRANCH"
-  # [ ] Update the appdata.xml with the version number and notes
+  # [X] Update the VERSION variable on line containing "VERSION=THISBRANCH"
+  # [X] Update the appdata.xml with the version number and notes
   #
   - name: version-initialization
     buildsystem: simple

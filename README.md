@@ -24,31 +24,35 @@ RetroDECK is a [EmulationStation Desktop Edition](https://es-de.org) powered app
 
 You can also check out our: [Flathub Page](https://flathub.org/apps/net.retrodeck.retrodeck)<br/>
 
-### RetroDECK supports the following devices: 
-**Steam Deck**
-<br/>
-<br/>
-**Linux Desktop** (after the BETA period)
-<br/>
-<br/>
-**Other SteamOS devices** (after the BETA period)
-<br/>
-<br/>
-**Note:**<br/>
-You can get it to run on other Linux devices or Linux Desktop today, it is not just as seamless as we want it to be and does not live up to our higher standards.<br/> 
-You will need to manually configure the input to match your device and might need to tweak more settings if you try it on a none Steam Deck device.
+## What devices/systems does RetroDECK support: 
+
+### Steam Deck
+
+Supported from the start and RetroDECK is tailored to the Steam Deck during the beta period. The goal is that all the configurations are ready out-of-the-box and optimized towards the Steam Deck.
+
+### Linux Desktop
+Technically it is working, but the user experience might not be that great it could contain desktop specific bugs and other issues.
+You will also need to manually configure the input to match your desktop and might need to tweak more settings. If you want to try it make sure that your distribution has flatpak support (else you will need to install it).<br>
+We will start to have a bigger desktop focus after the beta period is over.
+
+### Other SteamOS or Linux handheld gaming devices with flatpak support
+We do plan to support other SteamOS based devices in the future. But during the BETA we are focusing on the Steam Deck.<br/> 
+You can get it to run on other Linux based devices it is not just as seamless as we want it to be and does not live up to our higher standards.<br/> 
+You will need to manually configure the input to match your device and might need to tweak more settings if you try it on a none Steam Deck device. There might also be some hardware specific bugs. 
 
 
-### RetroDECK is tailored to the Steam Deck during the BETA period.
-The goal is that all the configurations are ready out-of-the-box and optimized towards the Steam Deck. Just put your `ROMS` & `BIOS` in the corresponding folders and start playing.
+## Do you have any plans for other systems? 
+RetroDECK does not have plans to support Windows, macOS, Android, or iOS.<br>For similar functionality on Windows you could explore [Retrobat](https://www.retrobat.org/) as an alternative.
 
-### How do I install RetroDECK?
+## How do I install RetroDECK?
 Read and follow the guide here: [Installation instructions](https://github.com/XargonWan/RetroDECK/wiki/How-to:-Getting-started) on the Wiki
 
 ## The RetroDECK community:
+
 [Website](https://retrodeck.net) <br/>
 [Wiki](https://github.com/XargonWan/RetroDECK/wiki) <br/>
 [Discord](https://discord.gg/Dz3szYsP8g)<br/>
+[Lemmy](https://lemmy.zip/c/retrodeck)<br/>
 [Subreddit](https://www.reddit.com/r/retrodeck)
 
 
@@ -58,17 +62,6 @@ Please read the [Wiki](https://github.com/XargonWan/RetroDECK/wiki) for even mor
 
 ## Do I have to partition or format my disk/sdcard to install it?
 No, partitioning or formatting is not needed at all. RetroDECK (differently from AmberELEC, Batocera and others) comes as a flatpak. Just install it as any other application and launch it from your desktop and/or Steam library. 
-
-## Do you support Windows?
-No, RetroDECK doesn't support Windows, but the project is fully open source so you can port it if you wish. 
-As an alternative you could try [Retrobat](https://www.retrobat.org/) that offers similar functionality.
-
-## Do you support the Linux Desktop?
-We do plan to support Linux Desktop in the future. But during the BETA we are focusing on the Steam Deck. Technically it is working, but the user experience might not be that great (it could contain desktop specific bugs and other issues). If you want to try it make sure that your distribution has native flatpak support else, you might need to install it.
-
-## Do you support other SteamOS based devices?
-We do plan to support other SteamOS based devices in the future. But during the BETA we are focusing on the Steam Deck.
-You can still run it but you might need to do some configurations by yourself.
 
 ## Can I contribute to the project?
 Yes! Everybody is welcome to contribute in any way possible if it is personal time or funds, just check out our [Discord](https://discord.gg/Dz3szYsP8g)!
