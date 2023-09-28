@@ -83,6 +83,7 @@ source /app/libexec/global.sh
 #         - Full changelog
 #         - Version-specific changelogs
 #       - RetroDECK Credits
+#     - Add to Steam
 #     - Developer Options (Hidden)
 #       - Change Multi-user mode
 #       - Change Update channel
@@ -99,13 +100,15 @@ configurator_welcome_dialog() {
     "RetroDECK: Tools" "Compress games, move RetroDECK and install optional features" \
     "RetroDECK: Troubleshooting" "Backup data, perform BIOS / multi-disc file checks checks and emulator resets" \
     "RetroDECK: About" "Show additional information about RetroDECK" \
+    "Add to Steam" "Add to Steam all the favorite games, it will not remove added games" \
     "Developer Options" "Welcome to the DANGER ZONE")
   else
     welcome_menu_options=("Presets & Settings" "Here you find various presets, tweaks and settings to customize your RetroDECK experience" \
     "Open Emulator" "Launch and configure each emulators settings (for advanced users)" \
     "RetroDECK: Tools" "Compress games, move RetroDECK and install optional features" \
     "RetroDECK: Troubleshooting" "Backup data, perform BIOS / multi-disc file checks checks and emulator resets" \
-    "RetroDECK: About" "Show additional information about RetroDECK" )
+    "RetroDECK: About" "Show additional information about RetroDECK" \
+    "Add to Steam" "Add to Steam all the favorite games, it will not remove added games")
   fi
 
   choice=$(zenity --list --title="RetroDECK Configurator Utility" --cancel-label="Quit" \
@@ -133,6 +136,10 @@ configurator_welcome_dialog() {
 
   "RetroDECK: About" )
     configurator_about_retrodeck_dialog
+  ;;
+
+  "Add to Steam" )
+    configurator_add_steam
   ;;
 
   "Developer Options" )
@@ -1073,6 +1080,11 @@ configurator_about_retrodeck_dialog() {
   ;;
 
   esac
+}
+
+configurator_add_steam() {
+    python3 /app/tools/Lutris/shortcut.py
+    configurator_welcome_dialog
 }
 
 configurator_version_history_dialog() {
