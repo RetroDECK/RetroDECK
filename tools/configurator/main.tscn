@@ -1,12 +1,20 @@
-[gd_scene load_steps=6 format=3 uid="uid://qk2gw74anwlq"]
+[gd_scene load_steps=9 format=3 uid="uid://qk2gw74anwlq"]
 
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
 [ext_resource type="Script" path="res://main.gd" id="1_obpq7"]
 [ext_resource type="Script" path="res://Button.gd" id="3_aenvv"]
 [ext_resource type="Script" path="res://Button2.gd" id="4_u2f14"]
+[ext_resource type="Script" path="res://ProgressButton.gd" id="5_slq0p"]
+[ext_resource type="Script" path="res://ProgressBar.gd" id="6_cx658"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_b77hh"]
 font_size = 24
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xyjyy"]
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -52,31 +60,55 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -70.5
-offset_top = -33.0
-offset_right = 70.5
-offset_bottom = 33.0
+offset_left = -74.0
+offset_top = -66.0
+offset_right = 273.0
+offset_bottom = 66.0
 grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Button" type="Button" parent="VBoxContainerButtons"]
+custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
-size_flags_horizontal = 4
-focus_neighbor_top = NodePath("../Button2")
+size_flags_horizontal = 0
+focus_neighbor_top = NodePath("../HBoxContainerProgress/ProgressButton")
 focus_neighbor_bottom = NodePath("../Button2")
 text = "Hardcoded script"
 script = ExtResource("3_aenvv")
 
 [node name="Button2" type="Button" parent="VBoxContainerButtons"]
+custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
-size_flags_horizontal = 4
+size_flags_horizontal = 0
 focus_neighbor_top = NodePath("../Button")
-focus_neighbor_bottom = NodePath("../CheckButton")
+focus_neighbor_bottom = NodePath("../HBoxContainerProgress/ProgressButton")
 text = "External script"
 script = ExtResource("4_u2f14")
 
-[node name="CheckButton" type="CheckButton" parent="VBoxContainerButtons"]
+[node name="HBoxContainerProgress" type="HBoxContainer" parent="VBoxContainerButtons"]
 layout_mode = 2
-focus_neighbor_top = NodePath("../Button2")
-focus_neighbor_bottom = NodePath("../Button")
-text = "Hardcore mode"
+
+[node name="ProgressButton" type="Button" parent="VBoxContainerButtons/HBoxContainerProgress"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+focus_neighbor_top = NodePath("../../Button2")
+focus_neighbor_bottom = NodePath("../../Button")
+text = "Start progress"
+script = ExtResource("5_slq0p")
+
+[node name="CheckButton" type="CheckButton" parent="VBoxContainerButtons/HBoxContainerProgress"]
+layout_mode = 2
+text = "Make progress red"
+
+[node name="ProgressBar" type="ProgressBar" parent="VBoxContainerButtons"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 1
+size_flags_stretch_ratio = 8.13
+theme_override_styles/fill = SubResource("StyleBoxFlat_xyjyy")
+step = 1.0
+value = 25.0
+script = ExtResource("6_cx658")
+
+[connection signal="toggled" from="VBoxContainerButtons/HBoxContainerProgress/CheckButton" to="VBoxContainerButtons/ProgressBar" method="_on_check_button_toggled"]
