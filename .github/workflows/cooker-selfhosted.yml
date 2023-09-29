@@ -64,18 +64,18 @@ jobs:
       - name: "[DEBUG] Outputting manifest"
         run: cat net.retrodeck.retrodeck.yml
 
-      - name: "Build flatpak: download only"
-        id: "flatpak-download"
-        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
-        continue-on-error: true
+      # - name: "Build flatpak: download only"
+      #   id: "flatpak-download"
+      #   run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
+      #   continue-on-error: true
 
       # Sometimes flatpak download fails, in this case it tries a second time
-      - name: "Build flatpak: download only (retry)"
-        if: steps.flatpak-download.outcome == 'failure'
-        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
+      # - name: "Build flatpak: download only (retry)"
+      #   if: steps.flatpak-download.outcome == 'failure'
+      #   run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
 
-      - name: Build flatpak
-        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_only.sh"
+      # - name: Build flatpak
+      #   run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_only.sh"
 
       - name: Create Artifact for flathub
         run: | 
