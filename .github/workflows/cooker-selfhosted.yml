@@ -52,30 +52,30 @@ jobs:
           echo "buildid=$result" >> $GITHUB_ENV
           echo "VersionID is $result"
 
-      # - name: Run pre-build automation tasks
-      #   run : "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/pre_build_automation.sh"
+      - name: Run pre-build automation tasks
+        run : "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/pre_build_automation.sh"
 
       - name: "Adding flatpak portal for automated updates (cooker only)"
         run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/cooker_flatpak_portal_add.sh"
 
-      # - name: "Updating release notes in appdata"
-      #   run: "automation_tools/appdata_management.sh"
+      - name: "Updating release notes in appdata"
+        run: "automation_tools/appdata_management.sh"
 
       - name: "[DEBUG] Outputting manifest"
         run: cat net.retrodeck.retrodeck.yml
 
-      # - name: "Build flatpak: download only"
-      #   id: "flatpak-download"
-      #   run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
-      #   continue-on-error: true
+      - name: "Build flatpak: download only"
+        id: "flatpak-download"
+        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
+        continue-on-error: true
 
       # Sometimes flatpak download fails, in this case it tries a second time
-      # - name: "Build flatpak: download only (retry)"
-      #   if: steps.flatpak-download.outcome == 'failure'
-      #   run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
+      - name: "Build flatpak: download only (retry)"
+        if: steps.flatpak-download.outcome == 'failure'
+        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
 
-      # - name: Build flatpak
-      #   run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_only.sh"
+      - name: Build flatpak
+        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_only.sh"
 
       - name: Create Artifact for flathub
         run: | 
@@ -85,8 +85,8 @@ jobs:
           mv -f RetroDECK-Artifact-cooker.* ${{ secrets.ARTIFACT_REPO }}
         continue-on-error: true
 
-      # - name: Create Bundle
-      #   run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_bundle.sh"
+      - name: Create Bundle
+        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_bundle.sh"
 
       - name: Set environment variable with current branch name
         run: echo "GITHUB_REF_SLUG=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
