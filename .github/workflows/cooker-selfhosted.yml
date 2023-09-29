@@ -1,4 +1,4 @@
-name: "[Cooker] build of ${{ github.ref }}"
+name: "Build cooker"
 
 on:
   push:
@@ -146,4 +146,4 @@ jobs:
           name: retrodeck-flatpak
           path: RetroDECK-cooker.flatpak
         continue-on-error: true
-        
+
