@@ -102,9 +102,10 @@ jobs:
         id: commits
         continue-on-error: true
 
-      - name: "Get tag name (cooker only)"
-        uses: ncipollo/release-action@v1
-        id: tag
+      # what was this?
+      # - name: "Get tag name (cooker only)"
+      #   uses: ncipollo/release-action@v1
+      #   id: tag
 
       - name: "Set tag name (cooker only)"
         run: |
