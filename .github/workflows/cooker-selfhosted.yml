@@ -122,7 +122,7 @@ jobs:
           body: |
             # Release Notes (Cooker)
             This is a cooker snapshot based on the commit: ${{ github.event.repository.full_name }}@${{github.sha}}.
-            On branch [${{env.BRANCH_NAME}}](https://github.com/XargonWan/RetroDECK/tree/${{env.BRANCH_NAME}})
+            On branch [${{env.BRANCH_NAME}}](https://github.com/XargonWan/RetroDECK/tree/${{env.BRANCH_NAME}}).
 
             ## Commits since last release
             ${{ steps.commits.outputs.commits }}
