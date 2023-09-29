@@ -146,3 +146,4 @@ jobs:
           name: retrodeck-flatpak
           path: RetroDECK-cooker.flatpak
         continue-on-error: true
+        
