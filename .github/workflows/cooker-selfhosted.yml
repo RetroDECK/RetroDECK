@@ -106,18 +106,10 @@ jobs:
         id: branch_name
         run: echo "BRANCH_NAME=$(echo $GITHUB_REF | sed 's|refs/heads/||')" >> $GITHUB_ENV
 
-      - name: "Set TAG_NAME based on branch name (cooker only)"
-        run: |
-          if [[ $BRANCH_NAME == 'feat/'* ]]; then
-            echo "TAG_NAME=feature:${BRANCH_NAME/feat\//}" >> $GITHUB_ENV
-          else
-            echo "TAG_NAME=${BRANCH_NAME}" >> $GITHUB_ENV
-          fi
-
       # if it's a feature branch it will not marked as "latest" cooker version
       - name: "Set makeLatest (cooker only)"
         run: |
-          if [[ "$TAG_NAME" == 'feature:'* ]]; then
+          if [[ "$BRANCH_NAME" == 'feat/'* ]]; then
             echo "MAKE_LATEST=false" >> $GITHUB_ENV
           else
             echo "MAKE_LATEST=true" >> $GITHUB_ENV
