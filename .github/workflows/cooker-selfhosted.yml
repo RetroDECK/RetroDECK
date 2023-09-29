@@ -52,8 +52,8 @@ jobs:
           echo "buildid=$result" >> $GITHUB_ENV
           echo "VersionID is $result"
 
-      - name: Run pre-build automation tasks
-        run : "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/pre_build_automation.sh"
+      # - name: Run pre-build automation tasks
+      #   run : "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/pre_build_automation.sh"
 
       - name: "Adding flatpak portal for automated updates (cooker only)"
         run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/cooker_flatpak_portal_add.sh"
