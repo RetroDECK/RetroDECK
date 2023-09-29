@@ -113,17 +113,15 @@ jobs:
           else
             echo "TAG_NAME=${BRANCH_NAME}" >> $GITHUB_ENV
           fi
-        shell: /usr/bin/bash -e {0}
 
       # if it's a feature branch it will not marked as "latest" cooker version
       - name: "Set makeLatest (cooker only)"
         run: |
-          if $ { { contains(env.TAG_NAME, 'feature:') }}; then
+          if [[ "$TAG_NAME" == 'feature:'* ]]; then
             echo "MAKE_LATEST=false" >> $GITHUB_ENV
           else
             echo "MAKE_LATEST=true" >> $GITHUB_ENV
           fi
-        shell: /usr/bin/bash -e {0}
 
       - name: Publish the flatpak in a new cooker release
         uses: ncipollo/release-action@v1
