@@ -102,18 +102,18 @@ jobs:
         id: commits
         continue-on-error: true
 
-      # what was this?
-      # - name: "Get tag name (cooker only)"
-      #   uses: ncipollo/release-action@v1
-      #   id: tag
+      - name: Get branch name
+        id: branch_name
+        run: echo "BRANCH_NAME=$(echo $GITHUB_REF | sed 's|refs/heads/||')" >> $GITHUB_ENV
 
-      - name: "Set tag name (cooker only)"
+      - name: "Set TAG_NAME based on branch name (cooker only)"
         run: |
-          if $ { { startsWith(steps.tag.outputs.tag, 'feat/') }}; then
-            echo "TAG_NAME=feature:$ { { replace(steps.tag.outputs.tag, 'feat/', '') }}" >> $GITHUB_ENV
+          if [[ $BRANCH_NAME == 'feat/'* ]]; then
+            echo "TAG_NAME=feature:${BRANCH_NAME/feat\//}" >> $GITHUB_ENV
           else
-            echo "TAG_NAME=$ { { steps.tag.outputs.tag }}" >> $GITHUB_ENV
+            echo "TAG_NAME=${BRANCH_NAME}" >> $GITHUB_ENV
           fi
+        shell: /usr/bin/bash -e {0}
 
       - name: "Set makeLatest (cooker only)"
         run: |
