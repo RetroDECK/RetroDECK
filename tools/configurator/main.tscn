@@ -194,10 +194,10 @@ text = "Advanced"
 
 [node name="cheevos_container" type="VBoxContainer" parent="MarginContainer/TabContainer/General"]
 layout_mode = 0
-offset_left = 18.0
-offset_top = 239.0
-offset_right = 337.0
-offset_bottom = 536.0
+offset_left = 496.0
+offset_top = 13.0
+offset_right = 944.0
+offset_bottom = 275.0
 
 [node name="cheevos" type="CheckButton" parent="MarginContainer/TabContainer/General/cheevos_container"]
 layout_mode = 2
@@ -262,6 +262,60 @@ text = "Logout"
 layout_mode = 2
 disabled = true
 text = "Show Throphies"
+
+[node name="netplay_container" type="VBoxContainer" parent="MarginContainer/TabContainer/General"]
+layout_mode = 0
+offset_left = 498.0
+offset_top = 323.0
+offset_right = 942.0
+offset_bottom = 495.0
+
+[node name="netplay" type="Label" parent="MarginContainer/TabContainer/General/netplay_container"]
+layout_mode = 2
+text = "Netplay"
+
+[node name="cheevos_separator" type="HSeparator" parent="MarginContainer/TabContainer/General/netplay_container"]
+layout_mode = 2
+
+[node name="netplay_id" type="Label" parent="MarginContainer/TabContainer/General/netplay_container"]
+layout_mode = 2
+text = "Netplay ID:"
+
+[node name="netplay_id" type="LineEdit" parent="MarginContainer/TabContainer/General/netplay_container/netplay_id"]
+layout_mode = 2
+offset_left = 116.0
+offset_top = 1.0
+offset_right = 318.0
+offset_bottom = 35.0
+text = "RetroDECK"
+placeholder_text = "RetroDECK"
+
+[node name="netplay_address" type="Label" parent="MarginContainer/TabContainer/General/netplay_container"]
+layout_mode = 2
+text = "Address:"
+
+[node name="netplay_address" type="LineEdit" parent="MarginContainer/TabContainer/General/netplay_container/netplay_address"]
+layout_mode = 2
+offset_left = 116.0
+offset_top = 1.0
+offset_right = 318.0
+offset_bottom = 35.0
+text = "127.0.0.1"
+placeholder_text = "127.0.0.1"
+
+[node name="netplay_join_disconnect" type="HBoxContainer" parent="MarginContainer/TabContainer/General/netplay_container"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+
+[node name="netplay_join" type="Button" parent="MarginContainer/TabContainer/General/netplay_container/netplay_join_disconnect"]
+layout_mode = 2
+text = "Join"
+
+[node name="netplay_disconnect" type="Button" parent="MarginContainer/TabContainer/General/netplay_container/netplay_join_disconnect"]
+layout_mode = 2
+disabled = true
+text = "Disconnect"
 
 [node name="Graphics" type="TabBar" parent="MarginContainer/TabContainer"]
 visible = false
