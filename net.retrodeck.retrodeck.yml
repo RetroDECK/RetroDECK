@@ -490,7 +490,7 @@ modules:
     sources:
       - type: archive
         url: https://buildbot.libretro.com/stable/1.16.0/linux/x86_64/RetroArch_cores.7z
-        sha256: e4f7c9843ba827812088b3d1c7d745e802d7691180eb789ba5a37732461f2a06
+        sha256: 2b5566e851e04104fb96b11d342be048e1e68c1da989b97defd20880621e9872
     
   - name: retroarch-sameduck-core
     buildsystem: simple
