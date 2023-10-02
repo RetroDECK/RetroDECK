@@ -1293,10 +1293,8 @@ modules:
 
       # Tools
       - mkdir -p /app/tools
-      - cp tools/configurator.sh /app/tools/configurator.sh
-      - chmod +x /app/tools/configurator.sh
-      - cp tools/retrodeck_function_wrapper.sh /app/tools/retrodeck_function_wrapper.sh
-      - chmod +x /app/tools/retrodeck_function_wrapper.sh
+      - cp -r tools/** /app/tools
+      - find /app/tools -name '*.py|*.sh' -exec chmod +x {} \;
 
       # Function libraries
       - mkdir -p /app/libexec
