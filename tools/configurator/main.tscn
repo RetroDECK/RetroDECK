@@ -1,11 +1,13 @@
-[gd_scene load_steps=9 format=3 uid="uid://qk2gw74anwlq"]
+[gd_scene load_steps=11 format=3 uid="uid://qk2gw74anwlq"]
 
+[ext_resource type="Theme" uid="uid://yqkvsb5q7pab" path="res://res/pixel_ui_theme/PixelTheme.tres" id="1_36ht7"]
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
 [ext_resource type="Script" path="res://main.gd" id="1_obpq7"]
 [ext_resource type="Script" path="res://Button.gd" id="3_aenvv"]
 [ext_resource type="Script" path="res://Button2.gd" id="4_u2f14"]
 [ext_resource type="Script" path="res://ProgressButton.gd" id="5_slq0p"]
 [ext_resource type="Script" path="res://ProgressBar.gd" id="6_cx658"]
+[ext_resource type="Theme" uid="uid://wdhwb87x2roh" path="res://res/pixel_ui_theme/PixelTheme_sky.tres" id="9_pqk3q"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_b77hh"]
 font_size = 24
@@ -23,23 +25,25 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_36ht7")
 script = ExtResource("1_obpq7")
 
 [node name="Background" type="ColorRect" parent="."]
-layout_mode = 1
-anchors_preset = 15
+layout_mode = 2
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.20871, 0.20871, 0.20871, 1)
+color = Color(0.0117647, 0.0117647, 0.0666667, 1)
 
 [node name="Icon" type="Sprite2D" parent="."]
+visible = false
 position = Vector2(76, 66)
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("1_axfei")
 
 [node name="TitleText" type="Label" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -54,6 +58,7 @@ label_settings = SubResource("LabelSettings_b77hh")
 horizontal_alignment = 1
 
 [node name="VBoxContainerButtons" type="VBoxContainer" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -110,5 +115,152 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_xyjyy")
 step = 1.0
 value = 25.0
 script = ExtResource("6_cx658")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 0
+offset_right = 958.0
+offset_bottom = 541.0
+
+[node name="TabContainer" type="TabContainer" parent="MarginContainer"]
+layout_mode = 2
+theme = ExtResource("1_36ht7")
+
+[node name="General" type="TabBar" parent="MarginContainer/TabContainer"]
+layout_mode = 2
+theme = ExtResource("1_36ht7")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/TabContainer/General"]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 19.0
+offset_right = 336.0
+offset_bottom = 178.0
+
+[node name="resume" type="CheckButton" parent="MarginContainer/TabContainer/General/VBoxContainer"]
+layout_mode = 2
+button_pressed = true
+text = "Quick Resume"
+
+[node name="Button" type="Button" parent="MarginContainer/TabContainer/General/VBoxContainer/resume"]
+layout_mode = 0
+offset_left = 328.0
+offset_right = 404.0
+offset_bottom = 29.0
+theme = ExtResource("9_pqk3q")
+disabled = true
+text = "Advanced"
+
+[node name="rewind" type="CheckButton" parent="MarginContainer/TabContainer/General/VBoxContainer"]
+layout_mode = 2
+text = "Rewind"
+
+[node name="Button" type="Button" parent="MarginContainer/TabContainer/General/VBoxContainer/rewind"]
+layout_mode = 0
+offset_left = 328.0
+offset_right = 404.0
+offset_bottom = 29.0
+theme = ExtResource("9_pqk3q")
+disabled = true
+text = "Advanced"
+
+[node name="quitconfirm" type="CheckButton" parent="MarginContainer/TabContainer/General/VBoxContainer"]
+layout_mode = 2
+button_pressed = true
+text = "Quit Confirmation
+"
+
+[node name="Button" type="Button" parent="MarginContainer/TabContainer/General/VBoxContainer/quitconfirm"]
+layout_mode = 0
+offset_left = 328.0
+offset_right = 404.0
+offset_bottom = 29.0
+theme = ExtResource("9_pqk3q")
+disabled = true
+text = "Advanced"
+
+[node name="cheats" type="CheckButton" parent="MarginContainer/TabContainer/General/VBoxContainer"]
+layout_mode = 2
+disabled = true
+text = "Cheats (coming soon)"
+
+[node name="Button" type="Button" parent="MarginContainer/TabContainer/General/VBoxContainer/cheats"]
+layout_mode = 0
+offset_left = 328.0
+offset_right = 404.0
+offset_bottom = 29.0
+theme = ExtResource("9_pqk3q")
+disabled = true
+text = "Advanced"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/TabContainer/General"]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 199.0
+offset_right = 339.0
+offset_bottom = 385.0
+
+[node name="cheevos" type="CheckButton" parent="MarginContainer/TabContainer/General/VBoxContainer2"]
+layout_mode = 2
+text = "Retro Achievements"
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/TabContainer/General/VBoxContainer2"]
+layout_mode = 2
+
+[node name="cheevos_username_lab" type="Label" parent="MarginContainer/TabContainer/General/VBoxContainer2"]
+layout_mode = 2
+text = "Username:"
+
+[node name="cheevos_username" type="LineEdit" parent="MarginContainer/TabContainer/General/VBoxContainer2/cheevos_username_lab"]
+layout_mode = 2
+offset_left = 116.0
+offset_top = 1.0
+offset_right = 439.0
+offset_bottom = 35.0
+text = "username"
+placeholder_text = "username"
+
+[node name="cheevos_pass_lab" type="Label" parent="MarginContainer/TabContainer/General/VBoxContainer2"]
+layout_mode = 2
+text = "Password:"
+
+[node name="cheevos_pass" type="LineEdit" parent="MarginContainer/TabContainer/General/VBoxContainer2/cheevos_pass_lab"]
+layout_mode = 2
+offset_left = 116.0
+offset_top = 1.0
+offset_right = 439.0
+offset_bottom = 35.0
+text = "password"
+placeholder_text = "password"
+secret = true
+secret_character = "*"
+
+[node name="cheevos_show" type="Button" parent="MarginContainer/TabContainer/General/VBoxContainer2"]
+layout_mode = 2
+disabled = true
+text = "Show Achievements"
+
+[node name="Graphics" type="TabBar" parent="MarginContainer/TabContainer"]
+visible = false
+layout_mode = 2
+theme = ExtResource("1_36ht7")
+
+[node name="Controls" type="TabBar" parent="MarginContainer/TabContainer"]
+visible = false
+layout_mode = 2
+theme = ExtResource("1_36ht7")
+
+[node name="Troubleshooting" type="TabBar" parent="MarginContainer/TabContainer"]
+visible = false
+layout_mode = 2
+theme = ExtResource("1_36ht7")
+
+[node name="About" type="TabBar" parent="MarginContainer/TabContainer"]
+visible = false
+layout_mode = 2
+theme = ExtResource("1_36ht7")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="MarginContainer/TabContainer"]
+visible = false
+color = Color(0.713726, 0.776471, 1, 1)
 
 [connection signal="toggled" from="VBoxContainerButtons/HBoxContainerProgress/CheckButton" to="VBoxContainerButtons/ProgressBar" method="_on_check_button_toggled"]
