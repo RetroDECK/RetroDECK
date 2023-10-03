@@ -247,7 +247,7 @@ text = "Advanced"
 [node name="cheevos_hardcore" type="CheckButton" parent="MarginContainer/TabContainer/General/cheevos_container"]
 layout_mode = 2
 disabled = true
-text = "Hardcore Mode (soon)"
+text = "Hardcore Mode (coming soon)"
 
 [node name="cheevos_loginout_container" type="HBoxContainer" parent="MarginContainer/TabContainer/General/cheevos_container"]
 layout_mode = 2
@@ -270,9 +270,9 @@ text = "Show Throphies"
 
 [node name="netplay_container" type="VBoxContainer" parent="MarginContainer/TabContainer/General"]
 layout_mode = 0
-offset_left = 498.0
+offset_left = 512.0
 offset_top = 323.0
-offset_right = 942.0
+offset_right = 922.0
 offset_bottom = 495.0
 
 [node name="netplay" type="Label" parent="MarginContainer/TabContainer/General/netplay_container"]
@@ -288,9 +288,9 @@ text = "Netplay ID:"
 
 [node name="netplay_id" type="LineEdit" parent="MarginContainer/TabContainer/General/netplay_container/netplay_id"]
 layout_mode = 2
-offset_left = 116.0
+offset_left = 171.0
 offset_top = 1.0
-offset_right = 318.0
+offset_right = 427.0
 offset_bottom = 35.0
 text = "RetroDECK"
 placeholder_text = "RetroDECK"
@@ -301,9 +301,9 @@ text = "Address:"
 
 [node name="netplay_address" type="LineEdit" parent="MarginContainer/TabContainer/General/netplay_container/netplay_address"]
 layout_mode = 2
-offset_left = 116.0
+offset_left = 172.0
 offset_top = 1.0
-offset_right = 318.0
+offset_right = 426.0
 offset_bottom = 35.0
 text = "127.0.0.1"
 placeholder_text = "127.0.0.1"
@@ -313,14 +313,9 @@ layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 
-[node name="netplay_join" type="Button" parent="MarginContainer/TabContainer/General/netplay_container/netplay_join_disconnect"]
+[node name="netplay_connect_disconnect" type="Button" parent="MarginContainer/TabContainer/General/netplay_container/netplay_join_disconnect"]
 layout_mode = 2
-text = "Join"
-
-[node name="netplay_disconnect" type="Button" parent="MarginContainer/TabContainer/General/netplay_container/netplay_join_disconnect"]
-layout_mode = 2
-disabled = true
-text = "Disconnect"
+text = "Connect"
 
 [node name="system_container" type="VBoxContainer" parent="MarginContainer/TabContainer/General"]
 layout_mode = 2
@@ -350,6 +345,7 @@ text = "Multi-User Mode"
 
 [node name="multi_user" type="OptionButton" parent="MarginContainer/TabContainer/General/system_container/multi_user_container"]
 layout_mode = 2
+size_flags_horizontal = 10
 item_count = 3
 selected = 0
 popup/item_0/text = "Off"
@@ -370,11 +366,11 @@ layout_mode = 2
 text = "|| ------( )--------"
 
 [node name="Graphics" type="TabBar" parent="MarginContainer/TabContainer"]
-visible = false
 layout_mode = 2
 theme = ExtResource("1_36ht7")
 
 [node name="decorations_container" type="VBoxContainer" parent="MarginContainer/TabContainer/Graphics"]
+layout_mode = 0
 offset_left = 24.0
 offset_top = 69.0
 offset_right = 324.0
@@ -387,21 +383,9 @@ text = "Decorations"
 [node name="decorations_separator" type="HSeparator" parent="MarginContainer/TabContainer/Graphics/decorations_container"]
 layout_mode = 2
 
-[node name="wide_screen" type="CheckButton" parent="MarginContainer/TabContainer/Graphics/decorations_container"]
-layout_mode = 2
-button_pressed = true
-text = "Wide Screen"
-
-[node name="wide_screen_advanced" type="Button" parent="MarginContainer/TabContainer/Graphics/decorations_container/wide_screen"]
-layout_mode = 0
-offset_left = 328.0
-offset_right = 404.0
-offset_bottom = 29.0
-disabled = true
-text = "Advanced"
-
 [node name="borders" type="CheckButton" parent="MarginContainer/TabContainer/Graphics/decorations_container"]
 layout_mode = 2
+button_pressed = true
 text = "Borders"
 
 [node name="borders_advance" type="Button" parent="MarginContainer/TabContainer/Graphics/decorations_container/borders"]
@@ -412,10 +396,23 @@ offset_bottom = 29.0
 disabled = true
 text = "Advanced"
 
+[node name="wide_screen" type="CheckButton" parent="MarginContainer/TabContainer/Graphics/decorations_container"]
+layout_mode = 2
+text = "Wide Screen"
+
+[node name="wide_screen_advanced" type="Button" parent="MarginContainer/TabContainer/Graphics/decorations_container/wide_screen"]
+layout_mode = 0
+offset_left = 328.0
+offset_right = 404.0
+offset_bottom = 29.0
+disabled = true
+text = "Advanced"
+
 [node name="shaders" type="CheckButton" parent="MarginContainer/TabContainer/Graphics/decorations_container"]
 layout_mode = 2
+disabled = true
 button_pressed = true
-text = "Shaders
+text = "Shaders (coming soon)
 "
 
 [node name="shaders_button" type="Button" parent="MarginContainer/TabContainer/Graphics/decorations_container/shaders"]
@@ -427,6 +424,7 @@ disabled = true
 text = "Advanced"
 
 [node name="extra_container" type="VBoxContainer" parent="MarginContainer/TabContainer/Graphics"]
+layout_mode = 0
 offset_left = 24.0
 offset_top = 269.0
 offset_right = 335.0
@@ -441,6 +439,7 @@ layout_mode = 2
 
 [node name="wide_screen" type="CheckButton" parent="MarginContainer/TabContainer/Graphics/extra_container"]
 layout_mode = 2
+disabled = true
 button_pressed = true
 text = "Mods"
 
@@ -455,7 +454,7 @@ text = "Advanced"
 [node name="borders" type="CheckButton" parent="MarginContainer/TabContainer/Graphics/extra_container"]
 layout_mode = 2
 disabled = true
-text = "TATE Mode (Coming soon)"
+text = "TATE Mode (coming soon)"
 
 [node name="Controls" type="TabBar" parent="MarginContainer/TabContainer"]
 visible = false
@@ -463,9 +462,10 @@ layout_mode = 2
 theme = ExtResource("1_36ht7")
 
 [node name="buttons_container" type="VBoxContainer" parent="MarginContainer/TabContainer/Controls"]
+layout_mode = 0
 offset_left = 24.0
 offset_top = 69.0
-offset_right = 602.0
+offset_right = 470.0
 offset_bottom = 306.0
 
 [node name="decorations_label" type="Label" parent="MarginContainer/TabContainer/Controls/buttons_container"]
@@ -480,12 +480,11 @@ layout_mode = 2
 
 [node name="wide_screen" type="Label" parent="MarginContainer/TabContainer/Controls/buttons_container/HBoxContainer"]
 layout_mode = 2
-text = "Install/Update Steam 
-Controller Profile"
+text = "Steam Controller Profile"
 
 [node name="wide_screen_advanced" type="Button" parent="MarginContainer/TabContainer/Controls/buttons_container/HBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 8
+size_flags_horizontal = 10
 size_flags_vertical = 4
 text = "Install"
 
@@ -498,7 +497,8 @@ text = "Button Layout"
 
 [node name="borders" type="OptionButton" parent="MarginContainer/TabContainer/Controls/buttons_container/HBoxContainer2"]
 layout_mode = 2
-size_flags_horizontal = 8
+size_flags_horizontal = 10
+size_flags_vertical = 4
 item_count = 2
 selected = 0
 popup/item_0/text = "Classic"
@@ -508,8 +508,9 @@ popup/item_1/id = 1
 
 [node name="shaders" type="CheckButton" parent="MarginContainer/TabContainer/Controls/buttons_container"]
 layout_mode = 2
+disabled = true
 button_pressed = true
-text = "Hotkey Activation Sound
+text = "Hotkey Activation Sound (coming soon)
 "
 
 [node name="Tools" type="TabBar" parent="MarginContainer/TabContainer"]
@@ -518,6 +519,7 @@ layout_mode = 2
 theme = ExtResource("1_36ht7")
 
 [node name="tools" type="VBoxContainer" parent="MarginContainer/TabContainer/Tools"]
+layout_mode = 0
 offset_left = 16.0
 offset_top = 69.0
 offset_right = 437.0
@@ -555,6 +557,7 @@ text = "Show Favorites as Steam Games
 "
 
 [node name="tools_2" type="VBoxContainer" parent="MarginContainer/TabContainer/Tools"]
+layout_mode = 0
 offset_left = 473.0
 offset_top = 312.0
 offset_right = 944.0
@@ -593,6 +596,7 @@ disabled = true
 text = "Move User Files"
 
 [node name="game_control_container2" type="VBoxContainer" parent="MarginContainer/TabContainer/Tools"]
+layout_mode = 0
 offset_left = 469.0
 offset_top = 69.0
 offset_right = 942.0
@@ -634,6 +638,7 @@ layout_mode = 2
 theme = ExtResource("1_36ht7")
 
 [node name="game_control_container" type="VBoxContainer" parent="MarginContainer/TabContainer/Troubleshooting"]
+layout_mode = 0
 offset_left = 16.0
 offset_top = 61.0
 offset_right = 417.0
@@ -656,6 +661,7 @@ disabled = true
 text = "Show Logs"
 
 [node name="game_control_container2" type="VBoxContainer" parent="MarginContainer/TabContainer/Troubleshooting"]
+layout_mode = 0
 offset_left = 16.0
 offset_top = 197.0
 offset_right = 419.0
@@ -681,6 +687,7 @@ layout_mode = 2
 text = "Full RetroDECK Reset"
 
 [node name="About" type="TabBar" parent="MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
 theme = ExtResource("1_36ht7")
 
