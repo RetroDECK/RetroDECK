@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://qk2gw74anwlq"]
+[gd_scene load_steps=12 format=3 uid="uid://qk2gw74anwlq"]
 
 [ext_resource type="Theme" uid="uid://yqkvsb5q7pab" path="res://res/pixel_ui_theme/PixelTheme.tres" id="1_36ht7"]
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://Button2.gd" id="4_u2f14"]
 [ext_resource type="Script" path="res://ProgressButton.gd" id="5_slq0p"]
 [ext_resource type="Script" path="res://ProgressBar.gd" id="6_cx658"]
+[ext_resource type="Texture2D" uid="uid://dodf3rp1jsch0" path="res://res/Rekku/Rekku-test.png" id="8_buwjd"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_b77hh"]
 font_size = 24
@@ -17,12 +18,23 @@ corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
+[sub_resource type="SpriteFrames" id="SpriteFrames_84sjc"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8_buwjd")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
 [node name="Control" type="Control"]
 layout_mode = 3
-anchors_preset = 15
 anchor_right = 1.0
-anchor_bottom = 1.0
-offset_bottom = 15.0
+anchor_bottom = 1.085
+offset_right = 23.0
+offset_bottom = -58.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_36ht7")
@@ -30,7 +42,8 @@ script = ExtResource("1_obpq7")
 
 [node name="Background" type="ColorRect" parent="."]
 visible = false
-layout_mode = 2
+layout_mode = 1
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
@@ -118,7 +131,8 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_bottom = 4.0
+offset_right = -63.0
+offset_bottom = -41.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -131,26 +145,35 @@ visible = false
 layout_mode = 2
 theme = ExtResource("1_36ht7")
 
-[node name="game_control_container" type="VBoxContainer" parent="MarginContainer/TabContainer/General"]
-layout_mode = 0
-offset_left = 16.0
-offset_top = 19.0
-offset_right = 336.0
-offset_bottom = 178.0
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/TabContainer/General"]
+layout_mode = 2
+offset_left = 9.0
+offset_top = 11.0
+offset_right = 667.0
+offset_bottom = 475.0
 
-[node name="game_control_label" type="Label" parent="MarginContainer/TabContainer/General/game_control_container"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/TabContainer/General/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 2
+theme_override_constants/separation = 64
+
+[node name="game_control_container" type="VBoxContainer" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="game_control_label" type="Label" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/game_control_container"]
 layout_mode = 2
 text = "Game Control"
 
-[node name="game_control_label2" type="HSeparator" parent="MarginContainer/TabContainer/General/game_control_container"]
+[node name="game_control_label2" type="HSeparator" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/game_control_container"]
 layout_mode = 2
 
-[node name="resume" type="CheckButton" parent="MarginContainer/TabContainer/General/game_control_container"]
+[node name="resume" type="CheckButton" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/game_control_container"]
 layout_mode = 2
 button_pressed = true
 text = "Quick Resume"
 
-[node name="Button" type="Button" parent="MarginContainer/TabContainer/General/game_control_container/resume"]
+[node name="Button" type="Button" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/game_control_container/resume"]
 layout_mode = 0
 offset_left = 328.0
 offset_right = 404.0
@@ -158,11 +181,11 @@ offset_bottom = 29.0
 disabled = true
 text = "Advanced"
 
-[node name="rewind" type="CheckButton" parent="MarginContainer/TabContainer/General/game_control_container"]
+[node name="rewind" type="CheckButton" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/game_control_container"]
 layout_mode = 2
 text = "Rewind"
 
-[node name="Button" type="Button" parent="MarginContainer/TabContainer/General/game_control_container/rewind"]
+[node name="Button" type="Button" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/game_control_container/rewind"]
 layout_mode = 0
 offset_left = 328.0
 offset_right = 404.0
@@ -170,13 +193,13 @@ offset_bottom = 29.0
 disabled = true
 text = "Advanced"
 
-[node name="quitconfirm" type="CheckButton" parent="MarginContainer/TabContainer/General/game_control_container"]
+[node name="quitconfirm" type="CheckButton" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/game_control_container"]
 layout_mode = 2
 button_pressed = true
 text = "Quit Confirmation
 "
 
-[node name="Button" type="Button" parent="MarginContainer/TabContainer/General/game_control_container/quitconfirm"]
+[node name="Button" type="Button" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/game_control_container/quitconfirm"]
 layout_mode = 0
 offset_left = 328.0
 offset_right = 404.0
@@ -184,12 +207,12 @@ offset_bottom = 29.0
 disabled = true
 text = "Advanced"
 
-[node name="cheats" type="CheckButton" parent="MarginContainer/TabContainer/General/game_control_container"]
+[node name="cheats" type="CheckButton" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/game_control_container"]
 layout_mode = 2
 disabled = true
 text = "Cheats (coming soon)"
 
-[node name="Button" type="Button" parent="MarginContainer/TabContainer/General/game_control_container/cheats"]
+[node name="Button" type="Button" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/game_control_container/cheats"]
 layout_mode = 0
 offset_left = 328.0
 offset_right = 404.0
@@ -197,25 +220,21 @@ offset_bottom = 29.0
 disabled = true
 text = "Advanced"
 
-[node name="cheevos_container" type="VBoxContainer" parent="MarginContainer/TabContainer/General"]
-layout_mode = 0
-offset_left = 496.0
-offset_top = 13.0
-offset_right = 944.0
-offset_bottom = 275.0
+[node name="cheevos_container" type="VBoxContainer" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer"]
+layout_mode = 2
 
-[node name="cheevos" type="CheckButton" parent="MarginContainer/TabContainer/General/cheevos_container"]
+[node name="cheevos" type="CheckButton" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/cheevos_container"]
 layout_mode = 2
 text = "Retro Achievements"
 
-[node name="cheevos_separator" type="HSeparator" parent="MarginContainer/TabContainer/General/cheevos_container"]
+[node name="cheevos_separator" type="HSeparator" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/cheevos_container"]
 layout_mode = 2
 
-[node name="cheevos_username_lab" type="Label" parent="MarginContainer/TabContainer/General/cheevos_container"]
+[node name="cheevos_username_lab" type="Label" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/cheevos_container"]
 layout_mode = 2
 text = "Username:"
 
-[node name="cheevos_username" type="LineEdit" parent="MarginContainer/TabContainer/General/cheevos_container/cheevos_username_lab"]
+[node name="cheevos_username" type="LineEdit" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/cheevos_container/cheevos_username_lab"]
 layout_mode = 2
 offset_left = 116.0
 offset_top = 1.0
@@ -224,11 +243,11 @@ offset_bottom = 35.0
 text = "username"
 placeholder_text = "username"
 
-[node name="cheevos_pass_lab" type="Label" parent="MarginContainer/TabContainer/General/cheevos_container"]
+[node name="cheevos_pass_lab" type="Label" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/cheevos_container"]
 layout_mode = 2
 text = "Password:"
 
-[node name="cheevos_pass" type="LineEdit" parent="MarginContainer/TabContainer/General/cheevos_container/cheevos_pass_lab"]
+[node name="cheevos_pass" type="LineEdit" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/cheevos_container/cheevos_pass_lab"]
 layout_mode = 2
 offset_left = 116.0
 offset_top = 1.0
@@ -239,54 +258,53 @@ placeholder_text = "password"
 secret = true
 secret_character = "*"
 
-[node name="cheevos_advanced" type="Button" parent="MarginContainer/TabContainer/General/cheevos_container"]
+[node name="cheevos_advanced" type="Button" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/cheevos_container"]
 layout_mode = 2
 disabled = true
 text = "Advanced"
 
-[node name="cheevos_hardcore" type="CheckButton" parent="MarginContainer/TabContainer/General/cheevos_container"]
+[node name="cheevos_hardcore" type="CheckButton" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/cheevos_container"]
 layout_mode = 2
 disabled = true
 text = "Hardcore Mode (coming soon)"
 
-[node name="cheevos_loginout_container" type="HBoxContainer" parent="MarginContainer/TabContainer/General/cheevos_container"]
+[node name="cheevos_loginout_container" type="HBoxContainer" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/cheevos_container"]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 
-[node name="cheevos_login" type="Button" parent="MarginContainer/TabContainer/General/cheevos_container/cheevos_loginout_container"]
+[node name="cheevos_login" type="Button" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/cheevos_container/cheevos_loginout_container"]
 layout_mode = 2
 text = "Login"
 
-[node name="cheevos_logout" type="Button" parent="MarginContainer/TabContainer/General/cheevos_container/cheevos_loginout_container"]
+[node name="cheevos_logout" type="Button" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/cheevos_container/cheevos_loginout_container"]
 layout_mode = 2
 disabled = true
 text = "Logout"
 
-[node name="cheevos_show" type="Button" parent="MarginContainer/TabContainer/General/cheevos_container"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/cheevos_container/cheevos_loginout_container"]
+layout_mode = 2
+
+[node name="cheevos_show" type="Button" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/cheevos_container"]
 layout_mode = 2
 disabled = true
 text = "Show Throphies"
 
-[node name="netplay_container" type="VBoxContainer" parent="MarginContainer/TabContainer/General"]
-layout_mode = 0
-offset_left = 512.0
-offset_top = 323.0
-offset_right = 922.0
-offset_bottom = 495.0
+[node name="netplay_container" type="VBoxContainer" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer"]
+layout_mode = 2
 
-[node name="netplay" type="Label" parent="MarginContainer/TabContainer/General/netplay_container"]
+[node name="netplay" type="Label" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/netplay_container"]
 layout_mode = 2
 text = "Netplay"
 
-[node name="cheevos_separator" type="HSeparator" parent="MarginContainer/TabContainer/General/netplay_container"]
+[node name="cheevos_separator" type="HSeparator" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/netplay_container"]
 layout_mode = 2
 
-[node name="netplay_id" type="Label" parent="MarginContainer/TabContainer/General/netplay_container"]
+[node name="netplay_id" type="Label" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/netplay_container"]
 layout_mode = 2
 text = "Netplay ID:"
 
-[node name="netplay_id" type="LineEdit" parent="MarginContainer/TabContainer/General/netplay_container/netplay_id"]
+[node name="netplay_id" type="LineEdit" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/netplay_container/netplay_id"]
 layout_mode = 2
 offset_left = 171.0
 offset_top = 1.0
@@ -295,11 +313,11 @@ offset_bottom = 35.0
 text = "RetroDECK"
 placeholder_text = "RetroDECK"
 
-[node name="netplay_address" type="Label" parent="MarginContainer/TabContainer/General/netplay_container"]
+[node name="netplay_address" type="Label" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/netplay_container"]
 layout_mode = 2
 text = "Address:"
 
-[node name="netplay_address" type="LineEdit" parent="MarginContainer/TabContainer/General/netplay_container/netplay_address"]
+[node name="netplay_address" type="LineEdit" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/netplay_container/netplay_address"]
 layout_mode = 2
 offset_left = 172.0
 offset_top = 1.0
@@ -308,42 +326,38 @@ offset_bottom = 35.0
 text = "127.0.0.1"
 placeholder_text = "127.0.0.1"
 
-[node name="netplay_join_disconnect" type="HBoxContainer" parent="MarginContainer/TabContainer/General/netplay_container"]
+[node name="netplay_join_disconnect" type="HBoxContainer" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/netplay_container"]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 
-[node name="netplay_connect_disconnect" type="Button" parent="MarginContainer/TabContainer/General/netplay_container/netplay_join_disconnect"]
+[node name="netplay_connect_disconnect" type="Button" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/netplay_container/netplay_join_disconnect"]
 layout_mode = 2
 text = "Connect"
 
-[node name="system_container" type="VBoxContainer" parent="MarginContainer/TabContainer/General"]
+[node name="system_container" type="VBoxContainer" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer"]
 layout_mode = 2
-offset_left = 16.0
-offset_top = 246.0
-offset_right = 444.0
-offset_bottom = 488.0
 
-[node name="system_label" type="Label" parent="MarginContainer/TabContainer/General/system_container"]
+[node name="system_label" type="Label" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/system_container"]
 layout_mode = 2
 text = "System"
 
-[node name="system_line" type="HSeparator" parent="MarginContainer/TabContainer/General/system_container"]
+[node name="system_line" type="HSeparator" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/system_container"]
 layout_mode = 2
 
-[node name="update_notification" type="CheckButton" parent="MarginContainer/TabContainer/General/system_container"]
+[node name="update_notification" type="CheckButton" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/system_container"]
 layout_mode = 2
 button_pressed = true
 text = "Update Notification"
 
-[node name="multi_user_container" type="HBoxContainer" parent="MarginContainer/TabContainer/General/system_container"]
+[node name="multi_user_container" type="HBoxContainer" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/system_container"]
 layout_mode = 2
 
-[node name="multi_user_label" type="Label" parent="MarginContainer/TabContainer/General/system_container/multi_user_container"]
+[node name="multi_user_label" type="Label" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/system_container/multi_user_container"]
 layout_mode = 2
 text = "Multi-User Mode"
 
-[node name="multi_user" type="OptionButton" parent="MarginContainer/TabContainer/General/system_container/multi_user_container"]
+[node name="multi_user" type="OptionButton" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/system_container/multi_user_container"]
 layout_mode = 2
 size_flags_horizontal = 10
 item_count = 3
@@ -355,26 +369,27 @@ popup/item_1/id = 1
 popup/item_2/text = "Custom Users"
 popup/item_2/id = 2
 
-[node name="menu_music" type="CheckButton" parent="MarginContainer/TabContainer/General/system_container"]
+[node name="menu_music" type="CheckButton" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/system_container"]
 layout_mode = 2
 button_pressed = true
 text = "Menu music
 "
 
-[node name="fancy_audio_player_here" type="Label" parent="MarginContainer/TabContainer/General/system_container"]
+[node name="fancy_audio_player_here" type="Label" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/system_container"]
 layout_mode = 2
 text = "|| ------( )--------"
 
 [node name="Graphics" type="TabBar" parent="MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
 theme = ExtResource("1_36ht7")
 
 [node name="decorations_container" type="VBoxContainer" parent="MarginContainer/TabContainer/Graphics"]
-layout_mode = 0
+layout_mode = 2
 offset_left = 24.0
 offset_top = 69.0
-offset_right = 324.0
-offset_bottom = 306.0
+offset_right = 330.0
+offset_bottom = 223.0
 
 [node name="decorations_label" type="Label" parent="MarginContainer/TabContainer/Graphics/decorations_container"]
 layout_mode = 2
@@ -424,11 +439,11 @@ disabled = true
 text = "Advanced"
 
 [node name="extra_container" type="VBoxContainer" parent="MarginContainer/TabContainer/Graphics"]
-layout_mode = 0
+layout_mode = 2
 offset_left = 24.0
 offset_top = 269.0
-offset_right = 335.0
-offset_bottom = 499.0
+offset_right = 330.0
+offset_bottom = 384.0
 
 [node name="decorations_label" type="Label" parent="MarginContainer/TabContainer/Graphics/extra_container"]
 layout_mode = 2
@@ -455,6 +470,11 @@ text = "Advanced"
 layout_mode = 2
 disabled = true
 text = "TATE Mode (coming soon)"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/TabContainer/Graphics"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
 
 [node name="Controls" type="TabBar" parent="MarginContainer/TabContainer"]
 visible = false
@@ -518,119 +538,123 @@ visible = false
 layout_mode = 2
 theme = ExtResource("1_36ht7")
 
-[node name="tools" type="VBoxContainer" parent="MarginContainer/TabContainer/Tools"]
-layout_mode = 0
-offset_left = 16.0
-offset_top = 69.0
-offset_right = 437.0
-offset_bottom = 517.0
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/TabContainer/Tools"]
+layout_mode = 2
+offset_left = 27.0
+offset_top = 22.0
+offset_right = 670.0
+offset_bottom = 485.0
 
-[node name="game_control_label" type="Label" parent="MarginContainer/TabContainer/Tools/tools"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/TabContainer/Tools/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 36
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="game_control_label" type="Label" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Scan"
+
+[node name="game_control_label2" type="HSeparator" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="resume" type="Button" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+disabled = true
+text = "PlayStation 3 Games"
+
+[node name="resume3" type="Button" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+disabled = true
+text = "ScummVM Games"
+
+[node name="resume5" type="Button" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Multi-File Structure"
+
+[node name="resume6" type="Button" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+disabled = true
+text = "3DS Game Decrypter"
+
+[node name="resume7" type="Button" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "BIOS"
+
+[node name="tools" type="VBoxContainer" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="game_control_label" type="Label" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/tools"]
 layout_mode = 2
 text = "General Tools"
 
-[node name="game_control_label2" type="HSeparator" parent="MarginContainer/TabContainer/Tools/tools"]
+[node name="game_control_label2" type="HSeparator" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/tools"]
 layout_mode = 2
 
-[node name="resume" type="Button" parent="MarginContainer/TabContainer/Tools/tools"]
+[node name="resume" type="Button" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/tools"]
 layout_mode = 2
 text = "Open Emulator..."
 
-[node name="resume2" type="Button" parent="MarginContainer/TabContainer/Tools/tools"]
+[node name="resume2" type="Button" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/tools"]
 layout_mode = 2
 disabled = true
 text = "Install RetroDECK Steam Grids"
 
-[node name="resume4" type="Button" parent="MarginContainer/TabContainer/Tools/tools"]
+[node name="resume4" type="Button" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/tools"]
 layout_mode = 2
 text = "Install PS3 Firmware"
 
-[node name="rewind" type="CheckButton" parent="MarginContainer/TabContainer/Tools/tools"]
+[node name="rewind" type="CheckButton" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/tools"]
 layout_mode = 2
 disabled = true
 text = "Saves Sync (coming soon)"
 
-[node name="quitconfirm" type="CheckButton" parent="MarginContainer/TabContainer/Tools/tools"]
+[node name="quitconfirm" type="CheckButton" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/tools"]
 layout_mode = 2
 toggle_mode = false
 text = "Show Favorites as Steam Games
 "
 
-[node name="tools_2" type="VBoxContainer" parent="MarginContainer/TabContainer/Tools"]
-layout_mode = 0
-offset_left = 473.0
-offset_top = 312.0
-offset_right = 944.0
-offset_bottom = 550.0
+[node name="tools_2" type="VBoxContainer" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer"]
+layout_mode = 2
 
-[node name="game_control_label" type="Label" parent="MarginContainer/TabContainer/Tools/tools_2"]
+[node name="game_control_label" type="Label" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/tools_2"]
 layout_mode = 2
 text = "File Maniuplation"
 
-[node name="game_control_label2" type="HSeparator" parent="MarginContainer/TabContainer/Tools/tools_2"]
+[node name="game_control_label2" type="HSeparator" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/tools_2"]
 layout_mode = 2
 
-[node name="resume3" type="Button" parent="MarginContainer/TabContainer/Tools/tools_2"]
+[node name="resume3" type="Button" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/tools_2"]
 layout_mode = 2
 disabled = true
 text = "Start FTP Server"
 
-[node name="resume5" type="Button" parent="MarginContainer/TabContainer/Tools/tools_2"]
+[node name="resume5" type="Button" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/tools_2"]
 layout_mode = 2
 disabled = true
 text = "USB Transfer Tool"
 
-[node name="resume6" type="Button" parent="MarginContainer/TabContainer/Tools/tools_2"]
+[node name="resume6" type="Button" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/tools_2"]
 layout_mode = 2
 disabled = true
 text = "Backup User Data"
 
-[node name="resume7" type="Button" parent="MarginContainer/TabContainer/Tools/tools_2"]
+[node name="resume7" type="Button" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/tools_2"]
 layout_mode = 2
 disabled = true
 text = "Compress Games"
 
-[node name="resume8" type="Button" parent="MarginContainer/TabContainer/Tools/tools_2"]
+[node name="resume8" type="Button" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/tools_2"]
 layout_mode = 2
 disabled = true
 text = "Move User Files"
 
-[node name="game_control_container2" type="VBoxContainer" parent="MarginContainer/TabContainer/Tools"]
-layout_mode = 0
-offset_left = 469.0
-offset_top = 69.0
-offset_right = 942.0
-offset_bottom = 517.0
-
-[node name="game_control_label" type="Label" parent="MarginContainer/TabContainer/Tools/game_control_container2"]
+[node name="game_control_container2" type="VBoxContainer" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer"]
 layout_mode = 2
-text = "Scan"
-
-[node name="game_control_label2" type="HSeparator" parent="MarginContainer/TabContainer/Tools/game_control_container2"]
-layout_mode = 2
-
-[node name="resume" type="Button" parent="MarginContainer/TabContainer/Tools/game_control_container2"]
-layout_mode = 2
-disabled = true
-text = "PlayStation 3 Games"
-
-[node name="resume3" type="Button" parent="MarginContainer/TabContainer/Tools/game_control_container2"]
-layout_mode = 2
-disabled = true
-text = "ScummVM Games"
-
-[node name="resume5" type="Button" parent="MarginContainer/TabContainer/Tools/game_control_container2"]
-layout_mode = 2
-text = "Multi-File Structure"
-
-[node name="resume6" type="Button" parent="MarginContainer/TabContainer/Tools/game_control_container2"]
-layout_mode = 2
-disabled = true
-text = "3DS Game Decrypter"
-
-[node name="resume7" type="Button" parent="MarginContainer/TabContainer/Tools/game_control_container2"]
-layout_mode = 2
-text = "BIOS"
 
 [node name="Troubleshooting" type="TabBar" parent="MarginContainer/TabContainer"]
 visible = false
@@ -687,29 +711,28 @@ layout_mode = 2
 text = "Full RetroDECK Reset"
 
 [node name="About" type="TabBar" parent="MarginContainer/TabContainer"]
-visible = false
 layout_mode = 2
 theme = ExtResource("1_36ht7")
 
 [node name="Icon" type="Sprite2D" parent="MarginContainer/TabContainer/About"]
-position = Vector2(102, 146.5)
+position = Vector2(87, 129)
 scale = Vector2(0.515625, 0.503906)
 texture = ExtResource("1_axfei")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/TabContainer/About"]
 layout_mode = 0
-offset_left = 279.0
-offset_top = 86.0
-offset_right = 726.0
-offset_bottom = 167.0
+offset_left = 195.0
+offset_top = 104.0
+offset_right = 642.0
+offset_bottom = 185.0
 theme_override_font_sizes/normal_font_size = 80
 text = "About RetroDECK"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/TabContainer/About"]
 layout_mode = 0
-offset_left = 328.0
-offset_top = 177.0
-offset_right = 721.0
+offset_left = 193.0
+offset_top = 204.0
+offset_right = 642.0
 offset_bottom = 520.0
 
 [node name="Button" type="Button" parent="MarginContainer/TabContainer/About/VBoxContainer"]
@@ -732,5 +755,20 @@ text = "We can add: Info, links, licence, donation"
 [node name="CanvasModulate" type="CanvasModulate" parent="MarginContainer/TabContainer"]
 visible = false
 color = Color(0.713726, 0.776471, 1, 1)
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+layout_mode = 2
+offset_left = 724.0
+offset_top = 70.0
+offset_right = 912.0
+offset_bottom = 154.0
+text = "Rekku:
+
+This is a sample text"
+
+[node name="Rekku" type="AnimatedSprite2D" parent="."]
+position = Vector2(857, 422)
+scale = Vector2(0.292969, 0.292969)
+sprite_frames = SubResource("SpriteFrames_84sjc")
 
 [connection signal="toggled" from="VBoxContainerButtons/HBoxContainerProgress/CheckButton" to="VBoxContainerButtons/ProgressBar" method="_on_check_button_toggled"]
