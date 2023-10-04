@@ -249,7 +249,7 @@ def addToSteam():
                 elif tag.tag=="altemulator":
                     altemulator=tag.text
                     
-            if favorite=="true" and altemulator="":
+            if favorite=="true" and altemulator=="":
                 games.append((name,command_list_default[system]+" "+roms_folder+"/"+system+path[1:]))
                 
     create_shortcut(games)
