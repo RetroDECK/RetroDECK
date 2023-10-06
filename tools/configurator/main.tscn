@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://qk2gw74anwlq"]
+[gd_scene load_steps=27 format=3 uid="uid://qk2gw74anwlq"]
 
 [ext_resource type="Theme" uid="uid://yqkvsb5q7pab" path="res://res/pixel_ui_theme/PixelTheme.tres" id="1_36ht7"]
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
@@ -9,8 +9,18 @@
 [ext_resource type="Script" path="res://ProgressButton.gd" id="5_slq0p"]
 [ext_resource type="Script" path="res://ProgressBar.gd" id="6_cx658"]
 [ext_resource type="Texture2D" uid="uid://dodf3rp1jsch0" path="res://res/Rekku/Rekku-test.png" id="8_buwjd"]
+[ext_resource type="Texture2D" uid="uid://cor8ep0fkqm08" path="res://res/Rekku/base.png" id="9_brsrf"]
 [ext_resource type="Texture2D" uid="uid://dk06chom6og5v" path="res://res/Rekku/Rekku-test-blink-1.png" id="10_isj0s"]
+[ext_resource type="Texture2D" uid="uid://cavtn1rljc5oe" path="res://res/Rekku/eyes-open.png" id="10_y6gkh"]
 [ext_resource type="Texture2D" uid="uid://br3yihb1iqfdv" path="res://res/Rekku/Rekku-test-blink-2.png" id="11_5b0sa"]
+[ext_resource type="Texture2D" uid="uid://cv7nckloqhn5m" path="res://res/Rekku/blink1.png" id="11_6deod"]
+[ext_resource type="Texture2D" uid="uid://cpnri25riict1" path="res://res/Rekku/Rekku-test-A-smile.png" id="12_eunnh"]
+[ext_resource type="Texture2D" uid="uid://by0oj188x350g" path="res://res/Rekku/blink2.png" id="12_ro20g"]
+[ext_resource type="Texture2D" uid="uid://diechf8qyjlli" path="res://res/Rekku/Rekku-test-U.png" id="13_sf6m0"]
+[ext_resource type="Texture2D" uid="uid://ciwghjy0ahxk6" path="res://res/Rekku/mouth-A.png" id="13_xj3b3"]
+[ext_resource type="Texture2D" uid="uid://cojwokqhpqsdx" path="res://res/Rekku/Rekku-test-O.png" id="14_8nil3"]
+[ext_resource type="Texture2D" uid="uid://kx8eypf4ffvu" path="res://res/Rekku/mouth-base.png" id="14_lnkoa"]
+[ext_resource type="Texture2D" uid="uid://b6gl8sltbak7v" path="res://res/Rekku/mouth-O.png" id="15_1sikj"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_b77hh"]
 font_size = 24
@@ -20,6 +30,52 @@ corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_trwmf"]
+animations = [{
+"frames": [{
+"duration": 40.0,
+"texture": ExtResource("10_y6gkh")
+}, {
+"duration": 0.15,
+"texture": ExtResource("11_6deod")
+}, {
+"duration": 0.15,
+"texture": ExtResource("12_ro20g")
+}],
+"loop": true,
+"name": &"blink",
+"speed": 5.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_p8gbs"]
+animations = [{
+"frames": [{
+"duration": 15.0,
+"texture": ExtResource("14_lnkoa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_xj3b3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_lnkoa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_lnkoa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_1sikj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_xj3b3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_lnkoa")
+}],
+"loop": true,
+"name": &"speech",
+"speed": 5.0
+}]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_84sjc"]
 animations = [{
@@ -34,7 +90,30 @@ animations = [{
 "texture": ExtResource("11_5b0sa")
 }],
 "loop": true,
-"name": &"default",
+"name": &"blink",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8_buwjd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_eunnh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_sf6m0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_eunnh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_8nil3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_sf6m0")
+}],
+"loop": true,
+"name": &"speak",
 "speed": 5.0
 }]
 
@@ -157,7 +236,6 @@ layout_mode = 2
 theme = ExtResource("1_36ht7")
 
 [node name="General" type="TabBar" parent="MarginContainer/TabContainer"]
-visible = false
 layout_mode = 2
 theme = ExtResource("1_36ht7")
 
@@ -721,6 +799,7 @@ layout_mode = 2
 text = "Full RetroDECK Reset"
 
 [node name="About" type="TabBar" parent="MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
 theme = ExtResource("1_36ht7")
 
@@ -816,15 +895,33 @@ offset_right = 603.0
 offset_bottom = 121.0
 text = "Rekku:
 
-When \"Quick Resume\" enabled, a savestate is created upon quit and it will be loaded once the game is started.
+When \"Quick Resume\" is enabled, a savestate is created upon quit and it will be loaded once the game is started.
 This is mot working on the following systems: Switch, WiiU."
 scroll_following = true
 
-[node name="Rekku" type="AnimatedSprite2D" parent="."]
+[node name="Rekku" type="Sprite2D" parent="."]
+position = Vector2(1105, 630)
+scale = Vector2(0.292969, 0.292969)
+texture = ExtResource("9_brsrf")
+
+[node name="blink" type="AnimatedSprite2D" parent="Rekku"]
+sprite_frames = SubResource("SpriteFrames_trwmf")
+animation = &"blink"
+autoplay = "blink"
+frame_progress = 0.385046
+
+[node name="speech" type="AnimatedSprite2D" parent="Rekku"]
+sprite_frames = SubResource("SpriteFrames_p8gbs")
+animation = &"speech"
+frame_progress = 0.737702
+
+[node name="Rekku-old" type="AnimatedSprite2D" parent="."]
+visible = false
 position = Vector2(1105, 630)
 scale = Vector2(0.292969, 0.292969)
 sprite_frames = SubResource("SpriteFrames_84sjc")
-autoplay = "default"
-frame_progress = 0.36357
+animation = &"blink"
+autoplay = "blink"
+frame_progress = 0.385046
 
 [connection signal="toggled" from="VBoxContainerButtons/HBoxContainerProgress/CheckButton" to="VBoxContainerButtons/ProgressBar" method="_on_check_button_toggled"]
