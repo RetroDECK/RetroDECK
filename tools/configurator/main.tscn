@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://qk2gw74anwlq"]
+[gd_scene load_steps=15 format=3 uid="uid://qk2gw74anwlq"]
 
 [ext_resource type="Theme" uid="uid://yqkvsb5q7pab" path="res://res/pixel_ui_theme/PixelTheme.tres" id="1_36ht7"]
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
@@ -9,6 +9,8 @@
 [ext_resource type="Script" path="res://ProgressButton.gd" id="5_slq0p"]
 [ext_resource type="Script" path="res://ProgressBar.gd" id="6_cx658"]
 [ext_resource type="Texture2D" uid="uid://dodf3rp1jsch0" path="res://res/Rekku/Rekku-test.png" id="8_buwjd"]
+[ext_resource type="Texture2D" uid="uid://dk06chom6og5v" path="res://res/Rekku/Rekku-test-blink-1.png" id="10_isj0s"]
+[ext_resource type="Texture2D" uid="uid://br3yihb1iqfdv" path="res://res/Rekku/Rekku-test-blink-2.png" id="11_5b0sa"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_b77hh"]
 font_size = 24
@@ -22,8 +24,14 @@ corner_radius_bottom_left = 5
 [sub_resource type="SpriteFrames" id="SpriteFrames_84sjc"]
 animations = [{
 "frames": [{
-"duration": 1.0,
+"duration": 40.0,
 "texture": ExtResource("8_buwjd")
+}, {
+"duration": 0.15,
+"texture": ExtResource("10_isj0s")
+}, {
+"duration": 0.15,
+"texture": ExtResource("11_5b0sa")
 }],
 "loop": true,
 "name": &"default",
@@ -157,7 +165,7 @@ layout_mode = 2
 offset_left = 9.0
 offset_top = 11.0
 offset_right = 750.0
-offset_bottom = 457.0
+offset_bottom = 460.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/TabContainer/General/ScrollContainer"]
 layout_mode = 2
@@ -351,6 +359,12 @@ layout_mode = 2
 layout_mode = 2
 button_pressed = true
 text = "Update Notification"
+
+[node name="update_notification2" type="CheckButton" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/system_container"]
+layout_mode = 2
+disabled = true
+button_pressed = true
+text = "Show Easter Eggs (coming soon)"
 
 [node name="multi_user_container" type="HBoxContainer" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/system_container"]
 layout_mode = 2
@@ -718,25 +732,25 @@ layout_mode = 2
 theme = ExtResource("1_36ht7")
 
 [node name="Icon" type="Sprite2D" parent="MarginContainer/TabContainer/About"]
-position = Vector2(87, 129)
+position = Vector2(152, 83.5)
 scale = Vector2(0.515625, 0.503906)
 texture = ExtResource("1_axfei")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/TabContainer/About"]
 layout_mode = 0
-offset_left = 195.0
-offset_top = 104.0
-offset_right = 642.0
-offset_bottom = 185.0
+offset_left = 260.0
+offset_top = 58.5
+offset_right = 707.0
+offset_bottom = 139.5
 theme_override_font_sizes/normal_font_size = 80
 text = "About RetroDECK"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/TabContainer/About"]
 layout_mode = 0
-offset_left = 193.0
-offset_top = 204.0
-offset_right = 642.0
-offset_bottom = 520.0
+offset_left = 258.0
+offset_top = 158.5
+offset_right = 707.0
+offset_bottom = 474.5
 
 [node name="Button" type="Button" parent="MarginContainer/TabContainer/About/VBoxContainer"]
 layout_mode = 2
@@ -788,5 +802,6 @@ scroll_active = false
 position = Vector2(1105, 630)
 scale = Vector2(0.292969, 0.292969)
 sprite_frames = SubResource("SpriteFrames_84sjc")
+frame_progress = 0.326699
 
 [connection signal="toggled" from="VBoxContainerButtons/HBoxContainerProgress/CheckButton" to="VBoxContainerButtons/ProgressBar" method="_on_check_button_toggled"]
