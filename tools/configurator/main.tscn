@@ -780,7 +780,7 @@ offset_right = 603.0
 offset_bottom = 121.0
 text = "Rekku:
 
-When \"Quick Resume\" is a savestate is create upon quit and it will be loaded once the game is started.
+When \"Quick Resume\" enabled, a savestate is created upon quit and it will be loaded once the game is started.
 This is mot working on the following systems: Switch, WiiU."
 scroll_active = false
 
