@@ -802,6 +802,7 @@ scroll_active = false
 position = Vector2(1105, 630)
 scale = Vector2(0.292969, 0.292969)
 sprite_frames = SubResource("SpriteFrames_84sjc")
-frame_progress = 0.326699
+autoplay = "default"
+frame_progress = 0.36357
 
 [connection signal="toggled" from="VBoxContainerButtons/HBoxContainerProgress/CheckButton" to="VBoxContainerButtons/ProgressBar" method="_on_check_button_toggled"]
