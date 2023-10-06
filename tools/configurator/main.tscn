@@ -1,9 +1,10 @@
-[gd_scene load_steps=12 format=3 uid="uid://qk2gw74anwlq"]
+[gd_scene load_steps=13 format=3 uid="uid://qk2gw74anwlq"]
 
 [ext_resource type="Theme" uid="uid://yqkvsb5q7pab" path="res://res/pixel_ui_theme/PixelTheme.tres" id="1_36ht7"]
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
 [ext_resource type="Script" path="res://main.gd" id="1_obpq7"]
 [ext_resource type="Script" path="res://Button.gd" id="3_aenvv"]
+[ext_resource type="AudioStream" uid="uid://dig4pco500pyt" path="res://res/configurator.mp3" id="3_xivj6"]
 [ext_resource type="Script" path="res://Button2.gd" id="4_u2f14"]
 [ext_resource type="Script" path="res://ProgressButton.gd" id="5_slq0p"]
 [ext_resource type="Script" path="res://ProgressBar.gd" id="6_cx658"]
@@ -33,12 +34,17 @@ animations = [{
 layout_mode = 3
 anchor_right = 1.0
 anchor_bottom = 1.085
-offset_right = 23.0
-offset_bottom = -58.0
+offset_right = -3.0
+offset_bottom = -62.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_36ht7")
 script = ExtResource("1_obpq7")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_xivj6")
+volume_db = -11.243
+autoplay = true
 
 [node name="Background" type="ColorRect" parent="."]
 visible = false
@@ -131,8 +137,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -63.0
-offset_bottom = -41.0
+offset_left = 134.0
+offset_top = 151.0
+offset_right = -153.0
+offset_bottom = -126.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -141,7 +149,6 @@ layout_mode = 2
 theme = ExtResource("1_36ht7")
 
 [node name="General" type="TabBar" parent="MarginContainer/TabContainer"]
-visible = false
 layout_mode = 2
 theme = ExtResource("1_36ht7")
 
@@ -149,8 +156,8 @@ theme = ExtResource("1_36ht7")
 layout_mode = 2
 offset_left = 9.0
 offset_top = 11.0
-offset_right = 667.0
-offset_bottom = 475.0
+offset_right = 750.0
+offset_bottom = 457.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/TabContainer/General/ScrollContainer"]
 layout_mode = 2
@@ -168,55 +175,49 @@ text = "Game Control"
 [node name="game_control_label2" type="HSeparator" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/game_control_container"]
 layout_mode = 2
 
-[node name="resume" type="CheckButton" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/game_control_container"]
+[node name="GridContainer" type="GridContainer" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/game_control_container"]
 layout_mode = 2
+columns = 2
+
+[node name="resume" type="CheckButton" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 128
 button_pressed = true
 text = "Quick Resume"
 
-[node name="Button" type="Button" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/game_control_container/resume"]
-layout_mode = 0
-offset_left = 328.0
-offset_right = 404.0
-offset_bottom = 29.0
+[node name="Button" type="Button" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
+layout_mode = 2
 disabled = true
 text = "Advanced"
 
-[node name="rewind" type="CheckButton" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/game_control_container"]
+[node name="rewind" type="CheckButton" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
 layout_mode = 2
+theme_override_constants/h_separation = 256
 text = "Rewind"
 
-[node name="Button" type="Button" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/game_control_container/rewind"]
-layout_mode = 0
-offset_left = 328.0
-offset_right = 404.0
-offset_bottom = 29.0
+[node name="Button2" type="Button" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
+layout_mode = 2
 disabled = true
 text = "Advanced"
 
-[node name="quitconfirm" type="CheckButton" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/game_control_container"]
+[node name="quitconfirm" type="CheckButton" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
 layout_mode = 2
 button_pressed = true
 text = "Quit Confirmation
 "
 
-[node name="Button" type="Button" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/game_control_container/quitconfirm"]
-layout_mode = 0
-offset_left = 328.0
-offset_right = 404.0
-offset_bottom = 29.0
+[node name="Button3" type="Button" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
+layout_mode = 2
 disabled = true
 text = "Advanced"
 
-[node name="cheats" type="CheckButton" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/game_control_container"]
+[node name="cheats" type="CheckButton" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
 layout_mode = 2
 disabled = true
 text = "Cheats (coming soon)"
 
-[node name="Button" type="Button" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/game_control_container/cheats"]
-layout_mode = 0
-offset_left = 328.0
-offset_right = 404.0
-offset_bottom = 29.0
+[node name="Button4" type="Button" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
+layout_mode = 2
 disabled = true
 text = "Advanced"
 
@@ -238,7 +239,7 @@ text = "Username:"
 layout_mode = 2
 offset_left = 116.0
 offset_top = 1.0
-offset_right = 318.0
+offset_right = 349.0
 offset_bottom = 35.0
 text = "username"
 placeholder_text = "username"
@@ -251,7 +252,7 @@ text = "Password:"
 layout_mode = 2
 offset_left = 116.0
 offset_top = 1.0
-offset_right = 318.0
+offset_right = 349.0
 offset_bottom = 35.0
 text = "password"
 placeholder_text = "password"
@@ -260,6 +261,7 @@ secret_character = "*"
 
 [node name="cheevos_advanced" type="Button" parent="MarginContainer/TabContainer/General/ScrollContainer/VBoxContainer/cheevos_container"]
 layout_mode = 2
+size_flags_horizontal = 0
 disabled = true
 text = "Advanced"
 
@@ -711,6 +713,7 @@ layout_mode = 2
 text = "Full RetroDECK Reset"
 
 [node name="About" type="TabBar" parent="MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
 theme = ExtResource("1_36ht7")
 
@@ -756,18 +759,33 @@ text = "We can add: Info, links, licence, donation"
 visible = false
 color = Color(0.713726, 0.776471, 1, 1)
 
-[node name="RichTextLabel" type="RichTextLabel" parent="."]
+[node name="Background2" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 318.0
+offset_top = 664.0
+offset_right = -340.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.133333, 0.0470588, 0.188235, 1)
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Background2"]
 layout_mode = 2
-offset_left = 724.0
-offset_top = 70.0
-offset_right = 912.0
-offset_bottom = 154.0
+offset_left = 10.0
+offset_top = 9.0
+offset_right = 603.0
+offset_bottom = 121.0
 text = "Rekku:
 
-This is a sample text"
+When \"Quick Resume\" is a savestate is create upon quit and it will be loaded once the game is started.
+This is mot working on the following systems: Switch, WiiU."
+scroll_active = false
 
 [node name="Rekku" type="AnimatedSprite2D" parent="."]
-position = Vector2(857, 422)
+position = Vector2(1105, 630)
 scale = Vector2(0.292969, 0.292969)
 sprite_frames = SubResource("SpriteFrames_84sjc")
 
