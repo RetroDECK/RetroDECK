@@ -841,6 +841,12 @@
             <entry>~/.local/share/flatpak/exports/bin/org.yuzu_emu.yuzu</entry>
         </rule>
     </emulator>
+    <emulator name="YUZU-CUSTOM">
+        <!-- Nintendo Switch emulator Yuzu Custom provided by the user -->
+        <rule type="staticpath">
+            <entry>~/retrodeck/customs/yuzu/yuzu*.AppImage</entry>
+        </rule>
+    </emulator>
     <emulator name="ZESARUX">
         <!-- Sinclair ZX Spectrum emulator ZEsarUX -->
         <rule type="systempath">

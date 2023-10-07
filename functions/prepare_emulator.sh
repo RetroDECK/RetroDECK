@@ -642,6 +642,7 @@ prepare_emulator() {
       dir_prep "$logs_folder/yuzu" "/var/data/yuzu/log"
       dir_prep "$screenshots_folder" "/var/data/yuzu/screenshots"
       dir_prep "$mods_folder/Yuzu" "/var/data/yuzu/load"
+      mkdir -pv "$rdhome/customs/yuzu"
       # removing dead symlinks as they were present in a past version
       if [ -d $bios_folder/switch ]; then
         find $bios_folder/switch -xtype l -exec rm {} \;

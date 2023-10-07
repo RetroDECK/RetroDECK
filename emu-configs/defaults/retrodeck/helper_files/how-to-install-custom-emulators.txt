@@ -1,0 +1,15 @@
+There is the possibility to provide custom emutlators provided by the user.
+
+At the moment the only one available is Yuzu.
+Create a folder named "yuzu" lowercase and place there your AppImage, so the path should be:
+retrodeck/customs/yuzu/yuzu*.AppImage
+
+WARNINGS on custom emulators:
+- Custom emulators are self managed: means that RetroDECK Team is not supporting nor troubleshooting them.
+- Custom emulators could potentially break other included emulators configs: use them at your own risk.
+- Remember to make the binary executable, otherwise they won't be launched.
+
+Related wiki article can be found here:
+---
+
+The RetroDECK Team
