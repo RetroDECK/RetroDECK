@@ -1272,14 +1272,16 @@ modules:
       # Creating an empty symlink that will point to Vita3K binary
       - ln -s /var/data/Vita3K/Vita3K ${FLATPAK_DEST}/Vita3K
       # Copying the user icon
-      - mv -f -t ${FLATPAK_DEST}/retrodeck/retrodeck.png ${FLATPAK_DEST}/retrodeck
-      # preparing the vita3k zip for later
       - mkdir -p ${FLATPAK_DEST}/retrodeck
+      - cp retrodeck.png ${FLATPAK_DEST}/retrodeck
+      # preparing the vita3k zip for later
       - mv ubuntu-latest.zip ${FLATPAK_DEST}/retrodeck/vita3k.zip
     sources:
       - type: file
         url: https://github.com/Vita3K/Vita3K/releases/download/continuous/ubuntu-latest.zip
         sha256: VITA3KSHAPLACEHOLDER
+      - type: file
+        path: res/retrodeck.png
 
   # Vita3K - END
 
