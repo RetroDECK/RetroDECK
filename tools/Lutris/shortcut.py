@@ -1,4 +1,4 @@
-"""Export RetroDECK favorites games to steam shortcuts"""
+"""Sync RetroDECK favorites games with steam shortcuts"""
 import binascii
 import os
 import re
@@ -286,11 +286,28 @@ def create_shortcut(games, launch_config_name=None):
     else:
         shortcuts = []
 
+    old_shortcuts=[]
+    for shortcut in shortcuts:
+        if "net.retrodeck.retrodeck" in shortcut["Exe"]:
+            keep=False
+            for game in games:
+                gameid=generate_shortcut_id(game[0])
+                if gameid==shortcut["appid"]:
+                    shortcut["Exe"]=game[1]
+                    game[0]="###"
+                    keep=True
+                    break
+            if keep:
+                old_shortcuts.append(shortcut)
+        else:
+            old_shortcuts.append(shortcut)
+
     new_shortcuts=[]
     for game in games:
-        new_shortcuts=new_shortcuts+ [generate_shortcut(game, launch_config_name)]
+        if not game[0]=="###":
+            new_shortcuts=new_shortcuts+[generate_shortcut(game, launch_config_name)]
 
-    shortcuts = list(shortcuts) + new_shortcuts
+    shortcuts = list(old_shortcuts) + list(new_shortcuts)
 
     updated_shortcuts = {
         'shortcuts': {
@@ -324,8 +341,8 @@ def search_recursive_in_steam_dirs(path_suffix):
 
 def generate_shortcut(game, launch_config_name):
     return {
-        'appid': generate_shortcut_id(game),
-        'AppName': f'{game[0]}',
+        'appid': generate_shortcut_id(game[0]),
+        'appname': f'{game[0]}',
         'Exe': f'{game[1]}',
         'StartDir': f'{os.path.expanduser("~")}',
         'icon': "",
@@ -339,13 +356,13 @@ def generate_shortcut(game, launch_config_name):
         'LastPlayTime': 0,
     }
 
-def generate_preliminary_id(game):
-    unique_id = ''.join(["RetroDECK", game[0]])
+def generate_preliminary_id(name):
+    unique_id = ''.join(["RetroDECK", name])
     top = binascii.crc32(str.encode(unique_id, 'utf-8')) | 0x80000000
     return (top << 32) | 0x02000000
 
-def generate_shortcut_id(game):
-    return (generate_preliminary_id(game) >> 32) - 0x100000000
+def generate_shortcut_id(name):
+    return (generate_preliminary_id(name) >> 32) - 0x100000000
 
 def addToSteam():
     print("Open RetroDECK config file: {}".format(os.path.expanduser("~/.var/app/net.retrodeck.retrodeck/config/retrodeck/retrodeck.cfg")))
@@ -398,21 +415,20 @@ def addToSteam():
                             
                     if favorite=="true" and altemulator=="":
                         print("Find favorite game: {}".format(name))
-                        games.append((name,command_list_default[system]+" "+roms_folder+"/"+system+path[1:]))
+                        games.append([name,command_list_default[system]+" "+roms_folder+"/"+system+path[1:]])
                     elif favorite=="true":
                         print("Find favorite game with alternative emulator: {}, {}".format(name,altemulator))
                         if ("neogeocd" in system) and altemulator=="FinalBurn Neo":
-                            games.append((name,alt_command_list[altemulator+" neogeocd"]+" "+roms_folder+"/"+system+path[1:]))
+                            games.append([name,alt_command_list[altemulator+" neogeocd"]+" "+roms_folder+"/"+system+path[1:]])
                             print(alt_command_list[altemulator+" neogeocd"]+" "+roms_folder+"/"+system+path[1:])
                         elif system=="pico8" and altemulator=="PICO-8 Splore (Standalone)":
-                            games.append((name,alt_command_list[altemulator]))
+                            games.append([name,alt_command_list[altemulator]])
                             print(alt_command_list[altemulator])
                         else:
-                            games.append((name,alt_command_list[altemulator]+" "+roms_folder+"/"+system+path[1:]))
+                            games.append([name,alt_command_list[altemulator]+" "+roms_folder+"/"+system+path[1:]])
                             print(alt_command_list[altemulator]+" "+roms_folder+"/"+system+path[1:])
                 
     create_shortcut(games)
 
 if __name__=="__main__":
     addToSteam()
-    #create_shortcut([sys.argv[1],sys.argv[2]])
