@@ -136,7 +136,8 @@ command_list_default={
 "wii": "flatpak run --command=dolphin-emu-wrapper net.retrodeck.retrodeck -b -e",
 "xbox": "flatpak run --command=xemu net.retrodeck.retrodeck -dvd_path",
 "ps3": "flatpak run --command=pcsx3 net.retrodeck.retrodeck --no-gui",
-"psp": "flatpak run --command=PPSSPPSDL net.retrodeck.retrodeck"
+"psp": "flatpak run --command=PPSSPPSDL net.retrodeck.retrodeck",
+"pico8": "flatpak run --command=pico8 net.retrodeck.retrodeck -desktop_path ~/retrodeck/screenshots -root_path {GAMEDIR} -run"
 }
 
 #"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
@@ -354,6 +355,8 @@ def addToSteam():
             roms_folder=line[12:-1]
     fl.close()
     games=[]
+
+    command_list_default["pico8"]=command_list_default["pico8"].replace("{GAMEDIR}",roms_folder+"/pico8")
 
     for system in os.listdir(rdhome+"/gamelists/"):
         print("Start parsing system: {}".format(system))
