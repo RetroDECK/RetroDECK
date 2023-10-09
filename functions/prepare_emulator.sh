@@ -667,6 +667,25 @@ prepare_emulator() {
     fi
   fi
 
+  if [[ "$emulator" =~ ^(vita3k|Vita3K|all)$ ]]; then
+    # TODO: do a proper script
+    # This is just a placeholder script to test the emulator's flow
+    echo "----------------------"
+    echo "Initializing Vita3K"
+    echo "----------------------"
+
+    # copying config file
+    rm -rf /var/config/Vita3K
+    mkdir -pv /var/config/Vita3K
+    cp -fvr "$emuconfigs/vita3k/config.yml" /var/config/Vita3K
+
+    # copying vita user config
+    cp -fvr "$emuconfigs/ux0/"** "$bios_folder/Vita3K/Vita3K"
+
+    # prep saves folder
+    dir_prep "$saves_folder/psvita/vita3k" "$bios_folder/Vita3K/Vita3K/ux0/user/00/savedata"
+  fi
+
   # Update presets for all emulators after any reset or move
   if [[ ! "$emulator" == "retrodeck" ]]; then
     build_retrodeck_current_presets
