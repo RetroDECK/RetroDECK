@@ -1337,7 +1337,7 @@
         <platform>psp</platform>
         <theme>psp</theme>
     </system>
-<!--
+
     <system>
         <name>psvita</name>
         <fullname>Sony PlayStation Vita</fullname>
@@ -1347,7 +1347,7 @@
         <platform>psvita</platform>
         <theme>psvita</theme>
     </system>
--->
+
     <system>
         <name>psx</name>
         <fullname>Sony PlayStation</fullname>

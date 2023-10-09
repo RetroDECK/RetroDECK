@@ -35,6 +35,7 @@ source /app/libexec/global.sh
 #       - Primehack
 #       - RPCS3
 #       - Ryujinx
+#       - Vita3K
 #       - XEMU
 #       - Yuzu
 #     - Tools
@@ -441,6 +442,7 @@ configurator_open_emulator_dialog() {
   "Primehack" "Open the Metroid Prime emulator Primehack" \
   "RPCS3" "Open the PS3 emulator RPCS3" \
   "Ryujinx" "Open the Switch emulator Ryujinx" \
+  "Vita3K" "Open the PSVita emulator Vita3K" \
   "XEMU" "Open the Xbox emulator XEMU" \
   "Yuzu" "Open the Switch emulator Yuzu")
 
@@ -488,6 +490,10 @@ configurator_open_emulator_dialog() {
 
   "Ryujinx" )
     ryujinx-wrapper
+  ;;
+
+  "Vita3K" )
+    Vita3K
   ;;
 
   "XEMU" )
