@@ -141,6 +141,41 @@ command_list_default={
 }
 
 alt_command_list={
+"PUAE": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/puae_libretro.so",
+"Caprice32": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/cap32_libretro.so",
+"MAME - CURRENT": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/mame_libretro.so",
+"Stella": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/stella_libretro.so",
+"a5200": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/a5200_libretro.so",
+"Atari800": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/atari800_libretro.so",
+"Handy": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/handy_libretro.so",
+"VICE x64sc Accurate": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/vice_x64sc_libretro.so",
+"SAME CDi": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/same_cdi_libretro.so",
+"blueMSX": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/bluemsx_libretro.so",
+"MAME - CURRENT": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/mame_libretro.so",
+"PrBoom": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/prboom_libretro.so",
+"DOSBox-Pure": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/dosbox_pure_libretro.so",
+"Mesen": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/mesen_libretro.so",
+"Genesis Plus GX": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/genesis_plus_gx_libretro.so",
+"Gamebatte": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/gambatte_libretro.so",
+"mGBA": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/mgba_libretro.so",
+"ParaLLEI N64": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/parallel_n64_libretro.so",
+"DeSmuME": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/desmume_libretro.so",
+"NeoCD": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/neocd_libretro.so",
+"Beetle NeoPop": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/mednafen_ngp_libretro.so",
+"Neko Project II Kai": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/np2kai_libretro.so",
+"Beetle PCE": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/mednafen_pce_libretro.so",
+"Swanstation": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/swanstation_libretro.so",
+"TyrQuake": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/tyrquake_libretro.so",
+"Beetle Saturn": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/mednafen_saturn_libretro.so",
+"Snes 9x - Current": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/snes9x_libretro.so",
+"Beetle SuperGrafx": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/mednafen_supergrafx_libretro.so",
+"Yuzu (Standalone)": "flatpak run --command=yuzu net.retrodeck.retrodeck -f -g",
+"Citra (Standalone)": "flatpak run --command=citra net.retrodeck.retrodeck",
+"PCSX2 (Standalone)": "flatpak run --command=pcsx2-qt net.retrodeck.retrodeck -batch",
+"Dolphin (Standalone)": "flatpak run --command=dolphin-emu-wrapper net.retrodeck.retrodeck -b -e",
+"RPCS3 Directory (Standalone)": "flatpak run --command=pcsx3 net.retrodeck.retrodeck --no-gui",
+"PPSSPP (Standalone)": "flatpak run --command=PPSSPPSDL net.retrodeck.retrodeck",
+"PICO-8 (Standalone)": "flatpak run --command=pico8 net.retrodeck.retrodeck -desktop_path ~/retrodeck/screenshots -root_path {GAMEDIR} -run",
 "PUAE 2021": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/puae2021_libretro.so",
 "CrocoDS": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/crocods_libretro.so",
 "CPCemu (Standalone)": "NYI", #NYI
@@ -330,33 +365,53 @@ def addToSteam():
 
     for system in os.listdir(rdhome+"/gamelists/"):
         print("Start parsing system: {}".format(system))
-        tree=ET.parse(rdhome+"/gamelists/"+system+"/gamelist.xml")
-        root=tree.getroot()
         
-        for game in root:
-            path=""
-            name=""
-            favorite=""
-            altemulator=""
-            for tag in game:
-                if tag.tag=="path":
-                    path=tag.text
-                elif tag.tag=="name":
-                    name=tag.text
-                elif tag.tag=="favorite":
-                    favorite=tag.text
-                elif tag.tag=="altemulator":
-                    altemulator=tag.text
-                    
-            if favorite=="true" and altemulator=="":
-                print("Find favorite game: {}".format(name))
-                games.append((name,command_list_default[system]+" "+roms_folder+"/"+system+path[1:]))
-            elif favorite=="true":
-                print("Find favorite game with alternative emulator: {}, {}".format(name,altemulator))
-                games.append((name,alt_command_list[altemulator+(" neogeocd" if ("neogeocd" in system) else "")]+((" "+roms_folder+"/"+system+path[1:]) if not (system=="pico8") else "")))
-                print(alt_command_list[altemulator+(" neogeocd" if ("neogeocd" in system) else "")]+((" "+roms_folder+"/"+system+path[1:]) if not (system=="pico8") else ""))
+        f=open(rdhome+"/gamelists/"+system+"/gamelist.xml","r")
+        f.readline()
+        parser=ET.XMLParser()
+        parser.feed(b'<root>')
+        parser.feed(f.read())
+        parser.feed(b'</root>')
+        root=parser.close()
+        f.close()
+        
+        globalAltEmu=""
+        for subroot in root:
+            if subroot.tag=="alternativeEmulator":
+                for alt in subroot:
+                    globalAltEmu=alt.text
+            else:
+                for game in subroot:
+                    path=""
+                    name=""
+                    favorite=""
+                    altemulator=globalAltEmu
+                    for tag in game:    
+                        if tag.tag=="path":
+                            path=tag.text
+                        elif tag.tag=="name":
+                            name=tag.text
+                        elif tag.tag=="favorite":
+                            favorite=tag.text
+                        elif tag.tag=="altemulator":
+                            altemulator=tag.text
+                            
+                    if favorite=="true" and altemulator=="":
+                        print("Find favorite game: {}".format(name))
+                        games.append((name,command_list_default[system]+" "+roms_folder+"/"+system+path[1:]))
+                    elif favorite=="true":
+                        print("Find favorite game with alternative emulator: {}, {}".format(name,altemulator))
+                        if ("neogeocd" in system) and altemulator=="FinalBurn Neo":
+                            games.append((name,alt_command_list[altemulator+" neogeocd"]+" "+roms_folder+"/"+system+path[1:]))
+                            print(alt_command_list[altemulator+" neogeocd"]+" "+roms_folder+"/"+system+path[1:])
+                        elif system=="pico8" and altemulator=="PICO-8 Splore (Standalone)":
+                            games.append((name,alt_command_list[altemulator]))
+                            print(alt_command_list[altemulator])
+                        else:
+                            games.append((name,alt_command_list[altemulator]+" "+roms_folder+"/"+system+path[1:]))
+                            print(alt_command_list[altemulator]+" "+roms_folder+"/"+system+path[1:])
                 
-    #create_shortcut(games)
+    create_shortcut(games)
 
 if __name__=="__main__":
     addToSteam()
