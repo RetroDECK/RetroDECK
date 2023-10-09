@@ -140,26 +140,24 @@ command_list_default={
 "pico8": "flatpak run --command=pico8 net.retrodeck.retrodeck -desktop_path ~/retrodeck/screenshots -root_path {GAMEDIR} -run"
 }
 
-#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
-
 alt_command_list={
 "PUAE 2021": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/puae2021_libretro.so",
 "CrocoDS": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/crocods_libretro.so",
-"CPCemu (Standalone)": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
+"CPCemu (Standalone)": "NYI", #NYI
 "MAME 2010": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/mame2010_libretro.so",
 "MAME 2003-Plus": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/mame2003_plus_libretro.so",
 "MAME 2000": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/mame2000_libretro.so",
-"MAME (Standalone)": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
+"MAME (Standalone)": "NYI", #NYI
 "FinalBurn Neo": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/fbneo_libretro.so",
-"FinalBurn Neo (Standalone)": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
+"FinalBurn Neo (Standalone)": "NYI", #NYI
 "FB Alpha 2012": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/fbalpha2012_libretro.so",
 "Flycast": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/flycast_libretro.so",
-"Flycast (Standalone)": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
+"Flycast (Standalone)": "NYI", #NYI
 "Kronos": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/kronos_libretro.so",
-"Supermodel (Standalone)": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
-"Supermodel [Fullscreen] (Standalone)": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
-"Shortcut or script": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
-"Atari800 (Standalone)": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
+"Supermodel (Standalone)": "NYI", #NYI
+"Supermodel [Fullscreen] (Standalone)": "NYI", #NYI
+"Shortcut or script": "TODO: I have to catch how it works", #TODO
+"Atari800 (Standalone)": "NYI", #NYI
 "Stella 2014": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/stella2014_libretro.so",
 "Atari800": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/atari800_libretro.so",
 "Beetle Lynx": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/mednafen_lynx_libretro.so",
@@ -176,9 +174,9 @@ alt_command_list={
 "Boom 3 xp": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/boom3_libretro_xp.so",
 "DOSBox-Core": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/dosbox_core_libretro.so",
 "DOSBox-SVN": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/dosbox_svn_libretro.so",
-"Keep ES-DE running": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
-"AppImage (Suspend ES-DE)": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
-"AppImage (Keep ES-DE running)": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
+"Keep ES-DE running": "TODO: I have to catch how it works", #TODO
+"AppImage (Suspend ES-DE)": "TODO: I have to catch how it works", #TODO
+"AppImage (Keep ES-DE running)": "TODO: I have to catch how it works", #TODO
 "Nestopia UE": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/nestopia_libretro.so",
 "FCEUmm": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/fceumm_libretro.so",
 "QuickNES": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/quicknes_libretro.so",
@@ -195,7 +193,7 @@ alt_command_list={
 "VBA Next": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/vba_next_libretro.so",
 "gpSP": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/gpsp_libretro.so",
 "Dolphin": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/dolphin_libretro.so",
-"PrimeHack (Standalone)": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
+"PrimeHack (Standalone)": "flatpak run --command=primehack-wrapper net.retrodeck.retrodeck -b -e",
 "PicoDrive": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/picodrive_libretro.so",
 "BlastEm": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/blastem_libretro.so",
 "CrocoDS": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/crocods_libretro.so",
@@ -205,21 +203,21 @@ alt_command_list={
 "Mupen64Plus-Next": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/mupen64plus_next_libretro.so",
 "DeSmuME 2015": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/desmume2015_libretro.so",
 "melonDS": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/melonds_libretro.so",
-"melonDS (Standalone)": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
+"melonDS (Standalone)": "flatpak run --command=melonDS net.retrodeck.retrodeck",
 "FinalBurn Neo neogeocd": "flatpak run --command=retroarch net.retrodeck.retrodeck --subsystem neocd -L /var/config/retroarch/cores/fbneo_libretro.so",
 "RACE": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/race_libretro.so",
 "Neko Project II": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/nekop2_libretro.so",
 "Beetle PCE FAST": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/mednafen_pce_fast_libretro.so",
-"PICO-8 Splore (Standalone)": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
-"AppImage": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
+"PICO-8 Splore (Standalone)": "flatpak run --command=pico8 net.retrodeck.retrodeck -desktop_path ~/retrodeck/screenshots -root_path {GAMEDIR} -splore",
+"AppImage": "TODO: I have to catch how it works", #TODO
 "LRPS2": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/pcsx2_libretro.so",
 "PCSX2": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/pcsx2_libretro.so",
-"RPCS3 Shortcut (Standalone)": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
+"RPCS3 Shortcut (Standalone)": "TODO: I have to catch how it works", #TODO
 "PPSSPP": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/ppsspp_libretro.so",
 "Beetle PSX": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/mednafen_psx_libretro.so",
 "Beetle PSX HW": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/mednafen_psx_hw_libretro.so",
 "PCSX ReARMed": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/pcsx_rearmed_libretro.so",
-"DuckStation (Standalone)": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
+"DuckStation (Standalone)": "flatpak run --command=duckstation-qt net.retrodeck.retrodeck -batch",
 "vitaQuake 2": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/vitaquake2_libretro.so",
 "vitaQuake 2 [Rogue]": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/vitaquake2-rogue_libretro.so",
 "vitaQuake 2 [Xatrix]": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/vitaquake2-xatrix_libretro.so",
@@ -231,36 +229,7 @@ alt_command_list={
 "bsnes-hd": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/bsnes_hd_beta_libretro.so",
 "bsnes-mercury Accuracy": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/bsnes_mercury_accuracy_libretro.so",
 "Beetle Supafaust": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/mednafen_supafaust_libretro.so",
-"Beetle PCE": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/mednafen_pce_libretro.so",
-"Ryujinx (Standalone)": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
-"alt": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
-"alt": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
-"alt": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
-"alt": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
-"alt": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
-"alt": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
-"alt": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
-"alt": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
-"alt": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
-"alt": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
-"alt": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
-"alt": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
-"alt": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
-"alt": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
-"alt": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
-"alt": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
-"alt": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
-"alt": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
-"alt": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
-"alt": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
-"alt": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
-"alt": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
-"alt": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
-"alt": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
-"alt": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
-"alt": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
-"alt": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
-"alt": " ",#"flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/.so",
+"Beetle PCE": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/mednafen_pce_libretro.so"
 }
 
 STEAM_DATA_DIRS = (
@@ -355,8 +324,9 @@ def addToSteam():
             roms_folder=line[12:-1]
     fl.close()
     games=[]
-
+    
     command_list_default["pico8"]=command_list_default["pico8"].replace("{GAMEDIR}",roms_folder+"/pico8")
+    alt_command_list["PICO-8 Splore (Standalone)"]=alt_command_list["PICO-8 Splore (Standalone)"].replace("{GAMEDIR}",roms_folder+"/pico8")
 
     for system in os.listdir(rdhome+"/gamelists/"):
         print("Start parsing system: {}".format(system))
@@ -383,9 +353,10 @@ def addToSteam():
                 games.append((name,command_list_default[system]+" "+roms_folder+"/"+system+path[1:]))
             elif favorite=="true":
                 print("Find favorite game with alternative emulator: {}, {}".format(name,altemulator))
-                games.append((name,alt_command_list[altemulator+(" neogeocd" if ("neogeocd" in system) else "")]+" "+roms_folder+"/"+system+path[1:]))
+                games.append((name,alt_command_list[altemulator+(" neogeocd" if ("neogeocd" in system) else "")]+((" "+roms_folder+"/"+system+path[1:]) if not (system=="pico8") else "")))
+                print(alt_command_list[altemulator+(" neogeocd" if ("neogeocd" in system) else "")]+((" "+roms_folder+"/"+system+path[1:]) if not (system=="pico8") else ""))
                 
-    create_shortcut(games)
+    #create_shortcut(games)
 
 if __name__=="__main__":
     addToSteam()
