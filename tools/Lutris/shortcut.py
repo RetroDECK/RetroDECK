@@ -302,6 +302,8 @@ def generate_shortcut_id(game):
     return (generate_preliminary_id(game) >> 32) - 0x100000000
 
 def addToSteam():
+    print("Open RetroDECK config file: {}".format(os.path.expanduser("~/.var/app/net.retrodeck.retrodeck/config/retrodeck/retrodeck.cfg")))
+
     fl=open(os.path.expanduser("~/.var/app/net.retrodeck.retrodeck/config/retrodeck/retrodeck.cfg"),"r")
     lines=fl.readlines()
     for line in lines:
@@ -313,6 +315,7 @@ def addToSteam():
     games=[]
 
     for system in os.listdir(rdhome+"/gamelists/"):
+        print("Start parsing system: {}".format(system))
         tree=ET.parse(rdhome+"/gamelists/"+system+"/gamelist.xml")
         root=tree.getroot()
         
@@ -332,8 +335,10 @@ def addToSteam():
                     altemulator=tag.text
                     
             if favorite=="true" and altemulator=="":
+                print("Find favorite game: {}".format(name))
                 games.append((name,command_list_default[system]+" "+roms_folder+"/"+system+path[1:]))
             elif favorite=="true":
+                print("Find favorite game with alternative emulator: {}, {}".format(name,altemulator))
                 games.append((name,alt_command_list[altemulator]+" "+roms_folder+"/"+system+path[1:]))
                 
     create_shortcut(games)
