@@ -1262,21 +1262,9 @@ modules:
   # Ryujinx - END
 
   # Vita3K - START
-
-  - name: Vita3K
-    buildsystem: simple
-    build-commands:
-      - |
-        mkdir -p ${FLATPAK_DEST}/vita3k
-        cp -r * ${FLATPAK_DEST}/vita3k
-        chmod +x ${FLATPAK_DEST}/vita3k/Vita3K
-        rm -f ${FLATPAK_DEST}/vita3k/update-vita3k.sh
-        ln -s ${FLATPAK_DEST}/vita3k/Vita3K /app/bin/Vita3K
-    sources:
-    - type: archive
-      url: https://github.com/Vita3K/Vita3K/releases/download/continuous/ubuntu-latest.zip
-      sha256: VITASHAPLACEHOLDER
-
+  # Vita3K is writing some files in its own directory
+  # So that is placed in /var/data/Vita3K and not in the readonly filesystem
+  # It is installed by the wrapper.
   # Vita3K - END
 
   # External manifests end
@@ -1335,6 +1323,11 @@ modules:
       # Placing appdata
       - mkdir -p ${FLATPAK_DEST}/share/appdata
       - cp net.retrodeck.retrodeck.appdata.xml ${FLATPAK_DEST}/share/appdata
+
+      # Vita3K
+      # Creating an empty symlink that will point to Vita3K binary
+      - ln -s -f ${FLATPAK_DEST}/Vita3K /var/data/Vita3K/Vita3K
+      - mv -f -t ${FLATPAK_DEST}/retrodeck/retrodeck.png ${FLATPAK_DEST}/retrodeck
 
     sources:
       - type: git
