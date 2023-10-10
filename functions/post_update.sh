@@ -239,7 +239,7 @@ post_update() {
   fi
 
   if [[ -f "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf" ]]; then # If RetroDECK controller profile has been previously installed
-    cp -f "$emuconfigs/defaults/retrodeck/RetroDECK_controller_config.vdf" "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"
+    cp -f "$emuconfigs/defaults/retrodeck/controller_configs/*.vdf" "$HOME/.steam/steam/controller_base/templates"
     rsync -rlD --mkpath "/app/retrodeck/binding_icons/" "$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/"
   fi
 
