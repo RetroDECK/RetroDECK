@@ -8,7 +8,7 @@
 
 ## RetroDECK: General information
 - [How to: Manage your games[(How-to-Manage-your-games.md)]
-- [Emulators: What's included?[(Emulators-What's-included?.md)]
+- [Emulators: What's included?[(Emulators-What's-included.md)]
 - [Emulators: BIOS and Firmware[(Emulators-BIOS-and-Firmware.md)]
 - [Emulators: Different controller layouts[(Emulators-Diffrent-controller-layouts.md)]
 - [Emulators: Supported folders and files[(Emulators-Supported-folders-and-files.md)]
@@ -23,7 +23,7 @@
 - [Development: General notes[(Development-General-notes.md)]
 - [Known Issues[(Known-Issues.md)]
 - [Version history: Patch Notes[(Version-history-Patch-Notes.md)]
-- [How can I help with testing?[(How-can-I-help-with-testing?.md)]
+- [How can I help with testing?[(How-can-I-help-with-testing.md)]
 
 
 ## Emulator Guides:
