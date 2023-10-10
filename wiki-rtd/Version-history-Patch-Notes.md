@@ -375,7 +375,7 @@ These emulators are updated to the latest version available on 31/10/2022.
 ### General information
 
 
-[I see ~ refereed in documentation and examples, what does it mean?](https://github.com/XargonWan/RetroDECK/wiki/FAQs:-Frequently-asked-questions#i-see--refereed-in-documentation-and-examples-what-does-it-mean)
+[I see ~ refereed in documentation and examples, what does it mean?](https://github.com/XargonWan/RetroDECK/wiki/FAQs-Frequently-asked-questions#i-see--refereed-in-documentation-and-examples-what-does-it-mean)
 
 **Saves = game saves and save states**<br>
 The word "saves" is used to reference both save files and save state files in this wiki article. Both files are treated in the same manner, the only difference is that saves are located at. 

@@ -311,7 +311,7 @@ Example of a launch script to launch to launch a Wii game called Baloon World:
 <details><summary>Click here to see the answer</summary>
 If you previously installed from outside of Discover, you can find the instructions here to
  
-[install from discover](https://github.com/XargonWan/RetroDECK/wiki/Steam-Deck:-Installation-and-updates) 
+[install from discover](https://github.com/XargonWan/RetroDECK/wiki/Steam-Deck-Installation-and-updates) 
 
 or here 
 
@@ -349,7 +349,7 @@ The ES-DE interface allows you to change emulators for systems that has many dif
 Some emulators needs BIOS and/or firmware files, first you can check if you got the [needed ones](https://github.com/XargonWan/RetroDECK/wiki/BIOS-&-Firmware).<br/>
 
 Then you can check if your got a bad dump by comparing your hash with the ones of the official lists on the internet, such as [no-intro](https://datomatic.no-intro.org/index.php?page=search&s=64) or even [RetroAchievements](https://retroachievements.org) if your game is supported.<br/>
-Moreover please mind that some emulator require very specific roms, please [read here](https://github.com/XargonWan/RetroDECK/wiki/How-to:-Manage-your-games#special-roms-formats).
+Moreover please mind that some emulator require very specific roms, please [read here](https://github.com/XargonWan/RetroDECK/wiki/How-to-Manage-your-games#special-roms-formats).
 If it still not working you are welcome to ask for support on our [Discord Server](discord.gg/Dz3szYsP8g). 
 
 </details>

@@ -6,7 +6,7 @@ There is a guide on how to install several of them under [Steam Deck: Optimizati
 
 # Steam Deck specific recommendations 
 
-For general Linux Desktop recommendations go to [Linux Desktop: Software recommendations](https://github.com/XargonWan/RetroDECK/wiki/Linux-Desktop:-Software-recommendations) as many of them also work on the Steam Deck.
+For general Linux Desktop recommendations go to [Linux Desktop: Software recommendations](https://github.com/XargonWan/RetroDECK/wiki/Linux-Desktop-Software-recommendations) as many of them also work on the Steam Deck.
 
 ## CryoUtilities
 Scripts and utilities to improve performance and manage storage on the Steam Deck.

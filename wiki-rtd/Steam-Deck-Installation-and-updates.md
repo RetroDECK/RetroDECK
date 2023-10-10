@@ -44,7 +44,7 @@
 - Go into `Controller Layouts` and press `Templates`
 - Add the layout for RetroDECK  called `RetroDECK: Official Layout` with a version number.
 - You can now use RetroDECK and it's ready to populate with ROMS.
-- If you are unsure on how to add ROMS and BIOS to RetroDECK follow the [Getting Started Guide ](https://github.com/XargonWan/RetroDECK/wiki/How-to:-Getting-started) from Step 2 and onward on how to add them.
+- If you are unsure on how to add ROMS and BIOS to RetroDECK follow the [Getting Started Guide ](https://github.com/XargonWan/RetroDECK/wiki/How-to-Getting-started) from Step 2 and onward on how to add them.
 
 
 ### Step 4 (Optional): Extras
