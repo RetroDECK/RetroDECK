@@ -1091,7 +1091,7 @@ configurator_about_retrodeck_dialog() {
 }
 
 configurator_add_steam() {
-    python3 /app/tools/Lutris/shortcut.py
+    python3 /app/libexec/steam-sync/steam-sync.py
     configurator_welcome_dialog
 }
 

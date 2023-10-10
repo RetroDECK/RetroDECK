@@ -1299,7 +1299,7 @@ modules:
 
       # Function libraries
       - mkdir -p /app/libexec
-      - cp -r functions/* "/app/libexec/"
+      - cp -r functions/** "/app/libexec/"
 
       # Desktop entries
       - cp net.retrodeck.retrodeck.desktop /app/share/applications/net.retrodeck.retrodeck.desktop
