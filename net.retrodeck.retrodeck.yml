@@ -1270,7 +1270,7 @@ modules:
     buildsystem: simple
     build-commands:
       # Creating an empty symlink that will point to Vita3K binary
-      - ln -s /var/data/Vita3K/Vita3K ${FLATPAK_DEST}/Vita3K
+      - ln -s /var/data/Vita3K/Vita3K ${FLATPAK_DEST}/bin/Vita3K
       # Copying the user icon
       - mkdir -p ${FLATPAK_DEST}/retrodeck
       - cp retrodeck.png ${FLATPAK_DEST}/retrodeck
