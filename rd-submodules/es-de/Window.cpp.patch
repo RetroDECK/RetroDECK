@@ -1,0 +1,9 @@
+diff -au1r emulationstation-de/es-core/src/Window.cpp emulationstation-de/es-core/src/Window.cpp
+--- emulationstation-de/es-core/src/Window.cpp	2023-08-29 14:14:17.208301836 +0200
++++ emulationstation-de/es-core/src/Window.cpp	2023-08-29 14:12:37.307334069 +0200
+
+@@ -181,3 +181,3 @@
+     progressBarRect.barPosY += borderThickness;
+-    progressBarRect.color = 0x79010FFF;
++    progressBarRect.color = 0xC858E6FF;
+     mProgressBarRectangles.emplace_back(progressBarRect);

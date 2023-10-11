@@ -1,0 +1,62 @@
+name: TEST_release_info
+
+on:
+  push:
+    branches:
+     - main
+    paths:
+      - .github/workflows/TEST_release_info.yml
+  pull_request: 
+    branches:
+     - main
+
+  workflow_dispatch:
+
+
+jobs:
+
+  Building_RetroDECK:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Generate build ID
+        id: generating_buildid
+        run: echo "##[set-output name=build-id;]$(echo "$( git rev-parse --short HEAD )")"
+      
+      - uses: actions/checkout@v3
+
+      - name: Initialize enviornment
+        run: |
+          git pull
+          git submodule init
+          git submodule update
+          sudo apt install -y flatpak flatpak-builder p7zip-full xmlstarlet appstream-util
+
+      - name: Validating the appdata
+        run: appstream-util validate "net.retrodeck.retrodeck.appdata.xml"
+        continue-on-error: true
+
+      - name: Getting version info
+        id: version
+        run: |
+          appdata="https://raw.githubusercontent.com/XargonWan/RetroDECK/main/net.retrodeck.retrodeck.appdata.xml"
+          REL_VER=$(curl -s $appdata | xmlstarlet sel -t -v "//release/@version" | head -1)
+          DES="$(curl -s $appdata | xmlstarlet sel -t -m "//release[1]" -v "description" -n | sed '1,2d;$d;s/^ */- /;/^- $/d')"
+          echo "REL_VER=$REL_VER" >> $GITHUB_ENV
+          echo -e "# Release Notes\n" >> "body.md"
+          echo "$DES" >> "body.md"
+
+      - name: Publish the flatpak in a new release
+        uses: ncipollo/release-action@v1
+        env:
+          REL_VER: ${{ env.REL_VER }}
+        with:
+          tag: ${{ env.REL_VER }}
+          name: "RetroDECK v${{ env.REL_VER }}"
+          bodyFile: "body.md"
+          #artifacts: "RetroDECK.flatpak,RetroDECK-Artifact.tar.gz"
+          allowUpdates: true
+          draft: true
+          token: ${{ secrets.TRIGGER_BUILD_TOKEN }}
+          repo: RetroDECK
+        #continue-on-error: true

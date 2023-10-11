@@ -1,0 +1,10 @@
+diff -au1r emulationstation-de/es-app/src/guis/GuiMenu.h emulationstation-de/es-app/src/guis/GuiMenu.h
+--- emulationstation-de/es-app/src/guis/GuiMenu.h	2023-08-23 13:12:15.617292576 +0200
++++ emulationstation-de/es-app/src/guis/GuiMenu.h	2023-08-23 13:50:20.978700234 +0200
+@@ -46,2 +46,3 @@
+     void openOtherOptions();
++    void openRetroDeckConfigurator();
+     void openQuitMenu();
+@@ -54 +55,2 @@
+ #endif // ES_APP_GUIS_GUI_MENU_H
++

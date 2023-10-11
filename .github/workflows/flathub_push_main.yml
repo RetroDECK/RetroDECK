@@ -1,5 +1,5 @@
 
-name: PUSH-main-flathub
+name: "Push main on Flathub"
 
 on:
   workflow_dispatch:
@@ -9,6 +9,7 @@ jobs:
   Pushing_main_into_flathub:
     runs-on: ubuntu-latest
     steps:
+
       - name: Pushing
         shell: bash
         run: |
@@ -47,17 +48,35 @@ jobs:
           # Copying only a few files as the others are cloned by git in retrodeck.sh
           cd $gits_folder/RetroDECK
           cp -rf \
-          'flathub.json' \
           'LICENSE' \
-          'flathub.yml' \
           'README.md' \
           $gits_folder/flathub/
 
           cd $gits_folder/flathub
           ls -lah
 
-          # manipulating manifest
-          mv flathub.yml net.retrodeck.retrodeck.yml
+          # Creating the manifest for flathub
+          manifest='net.retrodeck.retrodeck.yml'
+          sed -n '/cleanup/q;p' $gits_folder/RetroDECK/net.retrodeck.retrodeck.yml > $manifest
+          sed -i '/^[[:space:]]*#/d' $manifest
+          sed -i 's/[[:space:]]*#.*$//' $manifest
+          cat << EOF >> $manifest
+          modules:
+            - name: retrodeck
+              buildsystem: simple
+              build-commands:
+                - cp -rn files/* /app
+              sources:
+              - type: archive
+                url: https://artifacts.retrodeck.net/artifacts/RetroDECK-Artifact.tar.gz
+                sha256:  __SHA__
+          EOF
+
+          cat << EOF >> flathub.json
+          {
+            "only-arches": ["x86_64"]
+          }
+          EOF
 
           # Getting latest release name
           # version=$(\

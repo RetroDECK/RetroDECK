@@ -507,6 +507,18 @@
         <theme>easyrpg</theme>
     </system>
     <system>
+        <name>emulators</name>
+        <fullname>Emulators</fullname>
+        <path>%ROMPATH%/emulators</path>
+        <extension>.AppImage .desktop .sh</extension>
+        <command label="Suspend ES-DE">%ENABLESHORTCUTS% %EMULATOR_OS-SHELL% %ROM%</command>
+        <command label="Keep ES-DE running">%RUNINBACKGROUND% %ENABLESHORTCUTS% %EMULATOR_OS-SHELL% %ROM%</command>
+        <command label="AppImage (Suspend ES-DE)">%EMULATOR_OS-SHELL% -c "%ROM%"</command>
+        <command label="AppImage (Keep ES-DE running)">%RUNINBACKGROUND% %EMULATOR_OS-SHELL% -c "%ROM%"</command>
+        <platform>pcwindows</platform>
+        <theme>emulators</theme>
+    </system>
+    <system>
         <name>famicom</name>
         <fullname>Nintendo Family Computer</fullname>
         <path>%ROMPATH%/famicom</path>
@@ -583,6 +595,17 @@
         <theme>fmtowns</theme>
     </system>
 -->
+<!--
+    <system>
+        <name>fpinball</name>
+        <fullname>Future Pinball</fullname>
+        <path>%ROMPATH%/fpinball</path>
+        <extension>.fpt .FPT</extension>
+        <command label="Future Pinball (Standalone)">PLACEHOLDER %ROM%</command>
+        <platform>fpinball</platform>
+        <theme>fpinball</theme>
+    </system>
+-->
     <system>
         <name>gameandwatch</name>
         <fullname>Nintendo Game and Watch</fullname>
@@ -614,6 +637,7 @@
         <command label="Genesis Plus GX Wide">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/genesis_plus_gx_wide_libretro.so %ROM%</command>
         <command label="Gearsystem">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/gearsystem_libretro.so %ROM%</command>
         <command label="SMS Plus GX">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/smsplus_libretro.so %ROM%</command>
+<!--	<command label="PicoDrive">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/picodrive_libretro.so %ROM%</command> -->
 <!--        <command label="Mednafen (Standalone)">%EMULATOR_MEDNAFEN% -force_module gg %ROM%</command> -->
         <platform>gamegear</platform>
         <theme>gamegear</theme>
@@ -699,6 +723,17 @@
         <platform>genesis</platform>
         <theme>genesis</theme>
     </system>
+<!--
+    <system>
+        <name>gmaster</name>
+        <fullname>Hartung Game Master</fullname>
+        <path>%ROMPATH%/gmaster</path>
+        <extension>.bin .BIN .7z .7Z .zip .ZIP</extension>
+        <command label="MAME (Standalone)">%STARTDIR%=~/.mame %EMULATOR_MAME% -rompath %GAMEDIR%\;%ROMPATH%/gmaster gmaster -cart %ROM%</command>
+        <platform>gmaster</platform>
+        <theme>gmaster</theme>
+    </system>
+-->
     <system>
         <name>gx4000</name>
         <fullname>Amstrad GX4000</fullname>
@@ -750,6 +785,17 @@
         <platform>lcdgames, gameandwatch</platform>
         <theme>lcdgames</theme>
     </system>
+<!--
+    <system>
+        <name>lowresnx</name>
+        <fullname>LowRes NX Fantasy Console</fullname>
+        <path>%ROMPATH%/lowresnx</path>
+        <extension>.nx .NX</extension>
+        <command label="LowRes NX">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/lowresnx_libretro.so %ROM%</command>
+        <platform>lowresnx</platform>
+        <theme>lowresnx</theme>
+    </system>
+-->
     <system>
         <name>lutro</name>
         <fullname>Lutro Game Engine</fullname>
@@ -999,7 +1045,10 @@
         <extension>.bin .BIN .d64 .D64 .n64 .N64 .ndd .NDD .u1 .U1 .v64 .V64 .z64 .Z64 .7z .7Z .zip .ZIP</extension>
         <command label="Mupen64Plus-Next">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mupen64plus_next_libretro.so %ROM%</command>
 <!--        <command label="Mupen64Plus (Standalone)">%EMULATOR_MUPEN64PLUS% &#45;&#45;nogui %ROM%</command> -->
-        <command label="ParaLLEl N64">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/parallel_n64_libretro.so %ROM%</command>
+<!--        <command label="ParaLLEl N64">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/parallel_n64_libretro.so %ROM%</command> -->
+<!--        <command label="simple64 (Standalone)">%EMULATOR_SIMPLE64% &ndash;&ndash;nogui %ROM%</command> -->
+<!--        <command label="Rosalie's Mupen GUI (Standalone)">%EMULATOR_ROSALIES-MUPEN-GUI% &ndash;&ndash;nogui -q %ROM%</command> -->
+<!--        <command label="ares (Standalone)">%EMULATOR_ARES% &ndash;&ndash;fullscreen &ndash;&ndash;system "Nintendo 64" %ROM%</command> -->
         <platform>n64</platform>
         <theme>n64</theme>
     </system>
@@ -1178,7 +1227,7 @@
         <path>%ROMPATH%/pc98</path>
         <extension>.2hd .2HD .88d .88D .98d .98D .d88 .D88 .d98 .D98 .cmd .CMD .dup .DUP .fdd .FDD .fdi .FDI .hdd .HDD .hdi .HDI .hdm .HDM .hdn .HDN .m3u .M3U .nhd .NHD .tfd .TFD .thd .THD . xdf .XDF .7z .7Z .zip .ZIP</extension>
         <command label="Neko Project II Kai">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/np2kai_libretro.so %ROM%</command>
-        <command label="Neko Project II">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/nekop2_libretro.so %ROM%</command>
+        <command label="Neko Project II">%STARTDIR%=%GAMEDIR% %EMULATOR_RETROARCH% -L %CORE_RETROARCH%/nekop2_libretro.so %ROM%</command>
         <platform>pc98</platform>
         <theme>pc98</theme>
     </system>
@@ -1239,8 +1288,9 @@
         <name>ports</name>
         <fullname>Ports</fullname>
         <path>%ROMPATH%/ports</path>
-        <extension>.desktop .sh</extension>
-        <command label="Various">%ENABLESHORTCUTS% %EMULATOR_OS-SHELL% %ROM%</command>
+        <extension>.AppImage .desktop .sh</extension>
+        <command label="Shortcut or script">%ENABLESHORTCUTS% %EMULATOR_OS-SHELL% %ROM%</command>
+        <command label="AppImage">%EMULATOR_OS-SHELL% -c "%ROM%"</command>
         <platform>pc, pcwindows</platform>
         <theme>ports</theme>
     </system>
@@ -1248,10 +1298,11 @@
         <name>ps2</name>
         <fullname>Sony PlayStation 2</fullname>
         <path>%ROMPATH%/ps2</path>
+        <command label="PCSX2 (Standalone)">%EMULATOR_PCSX2% -batch %ROM%</command>
         <extension>.bin .BIN .chd .CHD .ciso .CISO .cso .CSO .dump .DUMP .elf .ELF .gz .GZ .m3u .M3U .mdf .MDF .img .IMG .iso .ISO .isz .ISZ .ngr .NRG</extension>
-	<command label="PCSX2 (Standalone)">%EMULATOR_PCSX2% -batch %ROM%</command>
+        <command label="LRPS2">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/pcsx2_libretro.so %ROM%</command>
         <command label="PCSX2">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/pcsx2_libretro.so %ROM%</command>
-        <!-- <command label="Play! (Standalone)">%EMULATOR_PLAY!% &ndash;&ndash;disc %ROM%</command> -->
+        <!-- <command label="Play! (Standalone)">%EMULATOR_PLAY!% &ndash;&ndashdisc %ROM%</command> -->
         <platform>ps2</platform>
         <theme>ps2</theme>
     </system>
@@ -1265,6 +1316,7 @@
         <platform>ps3</platform>
         <theme>ps3</theme>
     </system>
+<!--
     <system>
         <name>ps4</name>
         <fullname>Sony PlayStation 4</fullname>
@@ -1274,13 +1326,14 @@
         <platform>ps4</platform>
         <theme>ps4</theme>
     </system>
+ -->
     <system>
         <name>psp</name>
         <fullname>Sony PlayStation Portable</fullname>
         <path>%ROMPATH%/psp</path>
         <extension>.elf .ELF .iso .ISO .cso .CSO .prx .PRX .pbp .PBP .7z .7Z .zip .ZIP</extension>
-        <command label="PPSSPP">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/ppsspp_libretro.so %ROM%</command>
         <command label="PPSSPP (Standalone)">%EMULATOR_PPSSPP% %ROM%</command>
+        <command label="PPSSPP">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/ppsspp_libretro.so %ROM%</command>
         <platform>psp</platform>
         <theme>psp</theme>
     </system>
@@ -1300,10 +1353,10 @@
         <fullname>Sony PlayStation</fullname>
         <path>%ROMPATH%/psx</path>
         <extension>.bin .BIN .cbn .CBN .ccd .CCD .chd .CHD .cue .CUE .ecm .ECM .exe .EXE .img .IMG .iso .ISO .m3u .M3U .mdf .MDF .mds .MDS .minipsf .MINIPSF .pbp .PBP .psexe .PSEXE .psf .PSF .toc .TOC .z .Z .znx .ZNX .7z .7Z .zip .ZIP</extension>
+        <command label="SwanStation">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/swanstation_libretro.so %ROM%</command>
         <command label="Beetle PSX">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mednafen_psx_libretro.so %ROM%</command>
         <command label="Beetle PSX HW">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mednafen_psx_hw_libretro.so %ROM%</command>
         <command label="PCSX ReARMed">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/pcsx_rearmed_libretro.so %ROM%</command>
-        <command label="SwanStation">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/swanstation_libretro.so %ROM%</command>
         <command label="DuckStation (Standalone)">%EMULATOR_DUCKSTATION% -batch %ROM%</command>
         <!-- <command label="Mednafen (Standalone)">%EMULATOR_MEDNAFEN% -force_module psx %ROM%</command> -->
         <platform>psx</platform>
@@ -1398,6 +1451,17 @@
         <platform>scummvm</platform>
         <theme>scummvm</theme>
     </system>
+<!--
+    <system>
+        <name>scv</name>
+        <fullname>Epoch Super Cassette Vision</fullname>
+        <path>%ROMPATH%/scv</path>
+        <extension>.0 .bin .BIN .7z .7Z .zip .ZIP</extension>
+        <command label="MAME (Standalone)">%STARTDIR%=~/.mame %EMULATOR_MAME% -rompath %GAMEDIR%\;%ROMPATH%/scv scv -cart %ROM%</command>
+        <platform>scv</platform>
+        <theme>scv</theme>
+    </system>
+-->
     <system>
         <name>sega32x</name>
         <fullname>Sega Mega Drive 32X</fullname>
@@ -1592,7 +1656,8 @@
         <path>%ROMPATH%/switch</path>
         <extension>.nca .NCA .nro .NRO .nso .NSO .nsp .NSP .xci .XCI</extension>
         <command label="Yuzu (Standalone)">%INJECT%=%BASENAME%.esprefix %EMULATOR_YUZU% -f -g %ROM%</command>
-        <!-- <command label="Ryujinx (Standalone)">%EMULATOR_RYUJINX% %ROM%</command> -->
+        <command label="Ryujinx (Standalone)">%EMULATOR_RYUJINX% %ROM%</command>
+        <command label="Yuzu (User provided)">%INJECT%=%BASENAME%.esprefix %EMULATOR_YUZU-CUSTOM% -f -g %ROM%</command>
         <platform>switch</platform>
         <theme>switch</theme>
     </system>
@@ -1731,6 +1796,17 @@
     </system>
 <!--
     <system>
+        <name>vpinball</name>
+        <fullname>Visual Pinball</fullname>
+        <path>%ROMPATH%/vpinball</path>
+        <extension>.vpt .VPT .vpx .VPX</extension>
+        <command label="Visual Pinball (Standalone)">PLACEHOLDER %ROM%</command>
+        <platform>vpinball</platform>
+        <theme>vpinball</theme>
+    </system>
+-->
+<!--
+    <system>
         <name>vsmile</name>
         <fullname>VTech V.Smile</fullname>
         <path>%ROMPATH%/vsmile</path>
@@ -1754,13 +1830,12 @@
         <fullname>Nintendo Wii</fullname>
         <path>%ROMPATH%/wii</path>
         <extension>.ciso .CISO .dff .DFF .dol .DOL .elf .ELF .gcm .GCM .gcz .GCZ .iso .ISO .json .JSON .m3u .M3U .rvz .RVZ .tgc .TGC .wad .WAD .wbfs .WBFS .wia .WIA .7z .7Z .zip .ZIP</extension>
-        <command label="Dolphin (Standalone)">%INJECT%=%BASENAME%.esprefix %EMULATOR_DOLPHIN% -b -e %ROM%</command>
+	<command label="Dolphin (Standalone)">%INJECT%=%BASENAME%.esprefix %EMULATOR_DOLPHIN% -b -e %ROM%</command>
         <command label="Dolphin">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/dolphin_libretro.so %ROM%</command>
         <command label="PrimeHack (Standalone)">%INJECT%=%BASENAME%.esprefix %EMULATOR_PRIMEHACK% -b -e %ROM%</command>
         <platform>wii</platform>
         <theme>wii</theme>
     </system>
-
     <system>
         <name>wiiu</name>
         <fullname>Nintendo Wii U</fullname>
@@ -1770,7 +1845,6 @@
         <platform>wiiu</platform>
         <theme>wiiu</theme>
     </system>
-
     <system>
         <name>wonderswan</name>
         <fullname>Bandai WonderSwan</fullname>
@@ -1808,6 +1882,7 @@
         <path>%ROMPATH%/x68000</path>
         <extension>.dim .DIM .img .IMG .d88 .D88 .88d .88D .hdm .HDM .dup .DUP .2hd .2HD .xdf .XDF .hdf .HDF .cmd .CMD .m3u .M3U .7z .7Z .zip .ZIP</extension>
         <command label="PX68k">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/px68k_libretro.so %ROM%</command>
+	<!-- <command label="MAME (Standalone)">%STARTDIR%=~/.mame %EMULATOR_MAME% -rompath %GAMEDIR%\;%ROMPATH%/x68000 x68000 -flop1 %ROM%</command> -->
         <platform>x68000</platform>
         <theme>x68000</theme>
     </system>
@@ -1820,15 +1895,17 @@
         <platform>xbox</platform>
         <theme>xbox</theme>
     </system>
+<!--
     <system>
         <name>xbox360</name>
         <fullname>Microsoft Xbox 360</fullname>
         <path>%ROMPATH%/xbox360</path>
-        <extension>.iso .ISO .xex .XEX</extension>
+        <extension>. .iso .ISO .xex .XEX</extension>
         <command>PLACEHOLDER %ROM%</command>
         <platform>xbox360</platform>
         <theme>xbox360</theme>
     </system>
+-->
 <!--
     <system>
         <name>zmachine</name>
@@ -1849,6 +1926,18 @@
         <platform>zx81</platform>
         <theme>zx81</theme>
     </system>
+<!--
+    <system>
+        <name>zxnext</name>
+        <fullname>Sinclair ZX Spectrum Next</fullname>
+        <path>%ROMPATH%/zxnext</path>
+        <extension>.nex .NEX .sna .SNA</extension>
+        <command label="#CSpect (Standalone)">%STARTDIR%=%GAMEDIR% MONO_IOMAP=all mono %EMULATOR_CSPECT% -fullscreen -s28 -vsync -60 -analytics -tv -zxnext -mmc=./ %ROM%</command>
+        <command label="ZEsarUX (Standalone)">%STARTDIR%=%EMUDIR% %EMULATOR_ZESARUX% &ndash;&ndash;machine tbblue &ndash;&ndash;realvideo &ndash;&ndash;enabletimexvideo &ndash;&ndash;tbblue-fast-boot-mode &ndash;&ndash;enable-esxdos-handler &ndash;&ndash;esxdos-root-dir %GAMEDIR% %ROM%</command>
+        <platform>zxnext</platform>
+        <theme>zxnext</theme>
+    </system>
+-->
     <system>
         <name>zxspectrum</name>
         <fullname>Sinclair ZX Spectrum</fullname>
@@ -1858,14 +1947,5 @@
         <!-- <command label="Fuse (Standalone)">%EMULATOR_FUSE% %ROM%</command> -->
         <platform>zxspectrum</platform>
         <theme>zxspectrum</theme>
-    </system>
-    <system>
-        <name>tools</name>
-        <fullname>RetroDECK Tools</fullname>
-        <path>/app/tools</path>
-        <extension>.sh .SH</extension>
-        <command>bash %ROM%</command>
-        <platform>tools</platform>
-        <theme>tools</theme>
     </system>
 </systemList>

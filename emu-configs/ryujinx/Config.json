@@ -1,14 +1,17 @@
 {
-  "version": 42,
+  "version": 48,
   "enable_file_log": true,
   "backend_threading": "Auto",
   "res_scale": 1,
   "res_scale_custom": 1,
   "max_anisotropy": -1,
   "aspect_ratio": "Fixed16x9",
+  "anti_aliasing": "None",
+  "scaling_filter": "Bilinear",
+  "scaling_filter_level": 80,
   "graphics_shaders_dump_path": "",
   "logging_enable_debug": false,
-  "logging_enable_stub": true,
+  "logging_enable_stub": false,
   "logging_enable_info": true,
   "logging_enable_warn": true,
   "logging_enable_error": true,
@@ -21,20 +24,21 @@
   "system_region": "Europe",
   "system_time_zone": "UTC",
   "system_time_offset": 0,
-  "docked_mode": true,
+  "docked_mode": false,
   "enable_discord_integration": true,
-  "check_updates_on_start": true,
-  "show_confirm_exit": true,
-  "hide_cursor_on_idle": false,
+  "check_updates_on_start": false,
+  "show_confirm_exit": false,
+  "hide_cursor": 2,
   "enable_vsync": true,
   "enable_shader_cache": true,
   "enable_texture_recompression": false,
   "enable_macro_hle": true,
+  "enable_color_space_passthrough": false,
   "enable_ptc": true,
   "enable_internet_access": false,
   "enable_fs_integrity_checks": true,
   "fs_global_access_log_mode": 0,
-  "audio_backend": "SDL2",
+  "audio_backend": "OpenAl",
   "audio_volume": 1,
   "memory_manager_mode": "HostMappedUnsafe",
   "expand_ram": false,
@@ -58,6 +62,21 @@
   "game_dirs": [
     "RETRODECKHOMEDIR/roms/switch"
   ],
+  "shown_file_types": {
+    "nsp": true,
+    "pfs0": true,
+    "xci": true,
+    "nca": true,
+    "nro": true,
+    "nso": true
+  },
+  "window_startup": {
+    "window_size_width": 1280,
+    "window_size_height": 800,
+    "window_position_x": 0,
+    "window_position_y": 0,
+    "window_maximized": true
+  },
   "language_code": "en_US",
   "enable_custom_theme": false,
   "custom_theme_path": "",
@@ -67,12 +86,12 @@
   "grid_size": 2,
   "application_sort": 0,
   "is_ascending_order": true,
-  "start_fullscreen": false,
+  "start_fullscreen": true,
   "show_console": true,
   "enable_keyboard": false,
   "enable_mouse": false,
   "hotkeys": {
-    "toggle_vsync": "Tab",
+    "toggle_vsync": "F1",
     "screenshot": "F8",
     "show_ui": "F4",
     "pause": "F5",
@@ -104,12 +123,12 @@
       "deadzone_right": 0,
       "range_left": 1,
       "range_right": 1,
-      "trigger_threshold": 0,
+      "trigger_threshold": 0.5,
       "motion": {
         "motion_backend": "GamepadDriver",
         "sensitivity": 100,
         "gyro_deadzone": 1,
-        "enable_motion": false
+        "enable_motion": true
       },
       "rumble": {
         "strong_rumble": 1,
@@ -133,18 +152,20 @@
         "button_zr": "RightTrigger",
         "button_sl": "Unbound",
         "button_sr": "Unbound",
-        "button_x": "X",
+        "button_x": "Y",
         "button_b": "A",
-        "button_y": "Y",
+        "button_y": "X",
         "button_a": "B"
       },
       "version": 1,
       "backend": "GamepadSDL2",
       "id": "0-f6790003-28de-0000-ff11-000001000000",
-      "controller_type": "JoyconPair",
-      "player_index": "Player1"
+      "controller_type": "Handheld",
+      "player_index": "Handheld"
     }
   ],
   "graphics_backend": "Vulkan",
-  "preferred_gpu": "0x1002_0x163F"
+  "preferred_gpu": "0x1002_0x163F",
+  "multiplayer_lan_interface_id": "0",
+  "use_hypervisor": true
 }

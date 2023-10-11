@@ -1,0 +1,28 @@
+The ~/retrodeck/texture_packs/duckstaiton/ represents the /duckstation/textures/ folder in Duckstation.
+
+Note:
+Some texture packs could made for a specific version or region of a game. Make sure you have the right game and textures for it.
+
+Note:
+TITLEID is different for every game.
+
+Enable Custom Textures
+- Open up Duckstation inside RetroDECK Configurator by pressing Open Emulator - Duckstation.
+- Go to Settings -> Advanced -> Tweaks/Hacks
+- Enable VRAM Write Texture Replacement and set it to On.
+- Preload Texture Replacements and set it to On.
+
+How do I add texture packs?
+Requirements: Texture pack files
+
+NOTE: On the Steam Deck this could be easier to do in Desktop Mode.
+
+Texture folder directly
+- Extract any texture pack files from compressed .zip or any other format into folders.
+- Go into ~/retrodeck/texture_packs/duckstation/. The folders are all named by TITLEID.
+- Move textures into the right ~/retrodeck/texture_packs/duckstation/<TITLEID> folder.
+
+Related wiki article can be found here:
+https://github.com/XargonWan/RetroDECK/wiki/Duckstation%3A-Texture-Packs
+
+The RetroDECK Team

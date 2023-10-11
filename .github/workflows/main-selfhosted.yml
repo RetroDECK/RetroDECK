@@ -1,9 +1,19 @@
-name: main-selfhosted
+name: "Build main"
 
 on:
   push:
     branches:
      - main
+    paths:
+     - '.github/workflows/**'
+     - 'automation_tools/**'
+     - 'emu-configs/**'
+     - 'es-configs/**'
+     - 'functions/**'
+     - 'rd-submodules/**'
+     - '*.sh'
+     - 'net.retrodeck.retrodeck.yml'
+     - 'net.retrodeck.retrodeck.appdata.xml'
   pull_request: 
     branches:
      - main
@@ -22,35 +32,43 @@ jobs:
         run: sudo umount -f /home/ubuntu/actions-runner/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles/*
         continue-on-error: true
 
-      - name: Generate build ID
-        id: generating_buildid
-        run: echo "##[set-output name=build-id;]$(echo "$( git rev-parse --short HEAD )")"
-      
-      - uses: actions/checkout@v3
+      - name: Clone RetroDECK repo
+        uses: actions/checkout@v3
+        with:
+          submodules: 'true'
 
-      - name: Initialize enviornment
-        run: |
-          git pull
-          git submodule init
-          git submodule update
-          sudo apt install -y flatpak flatpak-builder p7zip-full xmlstarlet bzip2
-          flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-          flatpak install --user -y --noninteractive \
-          org.kde.Sdk//6.3 \
-          org.kde.Platform//6.3 \
-          org.freedesktop.Platform.ffmpeg-full/x86_64/22.08 \
-          io.qt.qtwebengine.BaseApp/x86_64/6.3 \
-          org.freedesktop.Sdk.Extension.llvm13 \
-          org.freedesktop.Sdk.Extension.dotnet6/x86_64/22.08 \
-          runtime/org.freedesktop.Platform.ffmpeg-full/x86_64/22.08
-          /bin/bash ${GITHUB_WORKSPACE}/automation_tools/pre_build_automation.sh # Run pre-build automation tasks
+      - name: "Install dependencies"
+        run: "automation_tools/install_dependencies.sh"
+
+      - name: Run pre-build automation tasks
+        run : "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/pre_build_automation.sh"
+
+      - name: Read manifest content
+        id: read_manifest
+        run: echo "::set-output name=file_content::$(cat net.retrodeck.retrodeck.yml)"
+
+      # - name: "Updating release notes in appdata"
+      #   run: "automation_tools/appdata_management.sh"
+        
+      - name: Check versions (main only)
+        id: check_version_string
+        run: "automation_tools/main_version_checker.sh"
+
+      - name: "[DEBUG] Outputting manifest"
+        run: cat net.retrodeck.retrodeck.yml
+
+      - name: "Build flatpak: download only"
+        id: "flatpak-download"
+        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
+        continue-on-error: true
+
+      # Sometimes flatpak download fails, in this case it tries a second time
+      - name: "Build flatpak: download only (retry)"
+        if: steps.flatpak-download.outcome == 'failure'
+        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
 
       - name: Build flatpak
-        run: |
-          git config --global protocol.file.allow always
-          mkdir -vp ${GITHUB_WORKSPACE}/local
-          mkdir -vp ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker
-          flatpak-builder --user --force-clean --install-deps-from=flathub --install-deps-from=flathub-beta --repo=${GITHUB_WORKSPACE}/local ${GITHUB_WORKSPACE}/retrodeck-flatpak-main net.retrodeck.retrodeck.yml
+        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_only.sh"
 
       - name: Create Artifact for flathub
         run: | 
@@ -61,8 +79,7 @@ jobs:
         continue-on-error: true
 
       - name: Create Bundle
-        run: |
-          flatpak build-bundle ${GITHUB_WORKSPACE}/local RetroDECK.flatpak net.retrodeck.retrodeck
+        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_bundle.sh"
 
       - name: Getting version info
         id: version
@@ -84,7 +101,6 @@ jobs:
           bodyFile: "body.md"
           artifacts: "RetroDECK.flatpak,RetroDECK-Artifact.tar.gz"
           allowUpdates: true
-          #prerelease: true
           makeLatest: true
           token: ${{ secrets.TRIGGER_BUILD_TOKEN }}
           repo: RetroDECK

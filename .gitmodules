@@ -4,3 +4,6 @@
 [submodule "rd-submodules/shared-modules"]
 	path = rd-submodules/shared-modules
 	url = https://github.com/flathub/shared-modules.git
+[submodule "rd-submodules/ryujinx"]
+	path = rd-submodules/ryujinx
+	url = https://github.com/flathub/org.ryujinx.Ryujinx

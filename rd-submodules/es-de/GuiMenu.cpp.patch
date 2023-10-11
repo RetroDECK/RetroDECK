@@ -1,0 +1,38 @@
+diff -au1r emulationstation-de/es-app/src/guis/GuiMenu.cpp emulationstation-de/es-app/src/guis/GuiMenu.cpp
+--- emulationstation-de/es-app/src/guis/GuiMenu.cpp	2023-08-23 13:12:15.617292576 +0200
++++ emulationstation-de/es-app/src/guis/GuiMenu.cpp	2023-08-23 13:44:10.736412006 +0200
+@@ -67,2 +67,4 @@
+ 
++    addEntry("RETRODECK CONFIGURATOR", mMenuColorPrimary, false, [this] { openRetroDeckConfigurator(); });
++
+     if (!Settings::getInstance()->getBool("ForceKiosk") &&
+@@ -70,3 +72,3 @@
+ #if defined(__APPLE__)
+-        addEntry("QUIT EMULATIONSTATION", mMenuColorPrimary, false, [this] { openQuitMenu(); });
++        addEntry("QUIT RETRODECK", mMenuColorPrimary, false, [this] { openQuitMenu(); });
+ #else
+@@ -75,3 +77,3 @@
+         else
+-            addEntry("QUIT EMULATIONSTATION", mMenuColorPrimary, false, [this] { openQuitMenu(); });
++            addEntry("QUIT RETRODECK", mMenuColorPrimary, false, [this] { openQuitMenu(); });
+ #endif
+@@ -1758,3 +1760,3 @@
+         auto quitText = std::make_shared<TextComponent>(
+-            "QUIT EMULATIONSTATION", Font::get(FONT_SIZE_MEDIUM), mMenuColorPrimary);
++            "QUIT RETRODECK", Font::get(FONT_SIZE_MEDIUM), mMenuColorPrimary);
+         quitText->setSelectable(true);
+@@ -1910 +1912,14 @@
+ }
++
++void GuiMenu::openRetroDeckConfigurator()
++{
++    // Launch the configurator.sh script
++    std::string command;
++    std::string startDirectory;
++    bool runInBackground;
++    command = "bash /app/tools/configurator.sh";
++    startDirectory = "/app/tools";
++    runInBackground = false;
++    int result = Utils::Platform::launchGameUnix(command, startDirectory, runInBackground);
++    // You can add any checks for the script's outcome here.
++}

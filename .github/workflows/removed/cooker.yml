@@ -1,0 +1,205 @@
+name: cooker
+
+on:
+  # push:
+  #   branches:
+  #    - cooker*
+  # pull_request: 
+  #   branches:
+  #    - cooker*
+
+  workflow_dispatch:
+
+
+jobs:
+
+  Job1_-_Building_P1:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Get date for artifacts
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y%m%d_%H%M%S')"
+
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+
+      - name: Generate build ID
+        id: generating_buildid
+        run: echo "##[set-output name=build-id;]$(echo "${{ steps.extract_branch.outputs.branch }}-${{ steps.date.outputs.date }}")"
+      
+      - uses: actions/checkout@v3
+
+      - name: Download global cache
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: cooker.yml
+          name: global-cache
+          search_artifacts: true
+          skip_unpack: true
+        continue-on-error: true
+
+      - name: Extract global cache
+        run: |
+          tar --skip-old-files -xzvf retrodeck-cooker.tar.gz
+          rm -f retrodeck-cooker.tar.gz
+        continue-on-error: true
+
+      - name: DEBUG
+        run: |
+          echo "Listing folder $PWD contents"
+          ls -lna
+          echo "Checking for version file"
+          find ~ -iname version
+          cat $(find ~ -iname version)
+
+      - name: Initialize enviornment
+        run: |
+          git pull
+          git submodule init
+          git submodule update
+          sudo add-apt-repository ppa:alexlarsson/flatpak
+          sudo apt-get update
+          sudo apt install flatpak flatpak-builder p7zip-full
+          sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+          sudo flatpak install -y org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08 io.qt.qtwebengine.BaseApp/x86_64/5.15-21.08 org.freedesktop.Sdk.Extension.llvm13
+
+      - name: Buld part 1 - Until melonds
+        run: |
+          sudo flatpak-builder --build-only --stop-at=melonds --user --force-clean --repo=${GITHUB_WORKSPACE}/local retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
+
+      - name: Compress cache
+        run: |
+          touch retrodeck-cooker.tar.gz
+          rm -rf .flatpak-builder/build/*-{2,3,4,5,6}
+          find .flatpak-builder/build -xtype l -exec rm {} \; # removing dead symlinks
+          tar --ignore-failed-read -czvf retrodeck-cooker.tar.gz retrodeck-flatpak-cooker .flatpak-builder/build
+
+      - name: Upload build specific cache
+        uses: actions/upload-artifact@v3
+        with:
+          name: "${{ steps.generating_buildid.outputs.build-id }}"
+          path: retrodeck-cooker.tar.gz
+
+      # this is done to speed up the things now, it may be removed later
+      - name: Compress global cache
+        run: |
+          touch retrodeck-cooker.tar.gz
+          rm -rf .flatpak-builder/build/*-{2,3,4,5,6}
+          find .flatpak-builder/build -xtype l -exec rm {} \; # removing dead symlinks
+          tar --ignore-failed-read -czvf retrodeck-cooker.tar.gz retrodeck-flatpak-cooker .flatpak-builder/build
+        continue-on-error: true
+
+      - name: Upload global cache
+        uses: actions/upload-artifact@v3
+        with:
+          name: global-cache
+          path: retrodeck-cooker.tar.gz RetroDECK.flatpak
+        continue-on-error: true
+
+    outputs:
+      buildID: "${{ steps.generating_buildid.outputs.build-id }}"
+
+  Job2_-_Build_P2_and_publish:
+    runs-on: ubuntu-latest
+    needs: [Job1_-_Building_P1]
+    steps:
+
+      - uses: actions/checkout@v3
+
+      - name: Download build specific cache
+        uses: actions/download-artifact@v2
+        with:
+          name: ${{ needs.Job1_-_Building_P1.outputs.buildID }}
+      
+      - name: Extract cache
+        run: |
+          tar --skip-old-files -xzvf retrodeck-cooker.tar.gz
+          rm -f retrodeck-cooker.tar.gz
+
+      - name: DEBUG
+        run: |
+          echo "Listing folder $PWD contents"
+          ls -lna
+          echo "Checking for version file"
+          find ~ -iname version
+          cat $(find ~ -iname version)
+
+      - name: Initialize enviornment
+        run: |
+          git pull
+          git submodule init
+          git submodule update
+          sudo add-apt-repository ppa:alexlarsson/flatpak
+          sudo apt-get update
+          sudo apt install flatpak flatpak-builder p7zip-full
+          sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+          sudo flatpak install -y org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08 io.qt.qtwebengine.BaseApp/x86_64/5.15-21.08 org.freedesktop.Sdk.Extension.llvm13
+
+      - name: Create Bundle
+        run: |
+          sudo flatpak-builder --user --force-clean --repo=${GITHUB_WORKSPACE}/local retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
+          sudo flatpak build-bundle $GITHUB_WORKSPACE/local RetroDECK.flatpak net.retrodeck.retrodeck
+
+      - name: Get date for artifacts
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y%m%d_%H%M')"
+
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+
+      - name: Read version from version file
+        id: version
+        run: echo "##[set-output name=version;]$(cat $(find . -name version))"
+
+      - name: DEBUG - Print version name
+        shell: bash
+        run: |
+          echo "DEBUG: printing version from version file"
+          echo "${{ steps.version.outputs.version }}"
+
+      - name: Publish the flatpak in a new cooker release
+        uses: ncipollo/release-action@v1
+        with:
+          #tag: "${{ steps.version.outputs.version }}"
+          tag: "${{ steps.extract_branch.outputs.branch }}-${{ steps.date.outputs.date }}"
+          body: |
+            # Release Notes (Cooker)
+            This is a cooker snapshot based on the commit: ${{ github.event.repository.full_name }}@${{github.sha}}.
+      
+            Cooker channel is provided for the community to test fixes and explore new functionality.
+            Please DO NOT open issues or ask support on this build.
+
+          artifacts: "RetroDECK.flatpak"
+          allowUpdates: true
+          prerelease: true
+          draft: false
+          token: ${{ secrets.TRIGGER_BUILD_TOKEN }}
+          repo: RetroDECK-cooker
+        continue-on-error: true
+
+      - name: Compress global cache
+        run: |
+          touch retrodeck-cooker.tar.gz
+          rm -rf .flatpak-builder/build/*-{2,3,4,5,6}
+          find .flatpak-builder/build -xtype l -exec rm {} \; # removing dead symlinks
+          tar --ignore-failed-read -czvf retrodeck-cooker.tar.gz retrodeck-flatpak-cooker .flatpak-builder/build
+        continue-on-error: true
+
+      - name: Upload global cache
+        uses: actions/upload-artifact@v3
+        with:
+          name: global-cache
+          path: retrodeck-cooker.tar.gz RetroDECK.flatpak
+        continue-on-error: true
+
+      - name: Upload RetroDECK.flatpak
+        uses: actions/upload-artifact@v3
+        with:
+          name: retrodeck-flatpak
+          path: RetroDECK.flatpak
+        continue-on-error: true
