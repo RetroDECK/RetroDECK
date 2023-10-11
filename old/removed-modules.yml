@@ -128,27 +128,3 @@
   #       sha256: bc4d7076106d7aa59c3a3ea22b83c553e5fa1a897815831adcf18cc13d729e15
 
   # Ryujinx Appimage - END
-
-  # Vita3K - START
-  # Very broken, disabled
-  # NOTE: this is a continuos release, it's provided but not supported
-  # to update this module:
-  # wget https://github.com/Vita3K/Vita3K/releases/download/continuous/ubuntu-latest.zip -O rd-submodules/vita3k/vita3k-14-01-23.zip
-  # sha256sum rd-submodules/vita3k/vita3k*.zip
-  # change url and sha
-  # check the branch in the url
-
-  # - name: Vita3K
-  #   buildsystem: simple
-  #   build-commands:
-  #     - |
-  #       mkdir -p ${FLATPAK_DEST}/vita3k
-  #       cp -r * ${FLATPAK_DEST}/vita3k
-  #       chmod +x ${FLATPAK_DEST}/vita3k/Vita3K
-  #       ln -s ${FLATPAK_DEST}/vita3k/Vita3K /app/bin/Vita3K
-  #   sources:
-  #   - type: archive
-  #     url: https://github.com/Vita3K/Vita3K/releases/download/continuous/ubuntu-latest.zip
-  #     sha256: VITASHAPLACEHOLDER
-
-  # Vita3K - END
