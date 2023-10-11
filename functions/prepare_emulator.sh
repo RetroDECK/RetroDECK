@@ -674,13 +674,23 @@ prepare_emulator() {
     echo "Initializing Vita3K"
     echo "----------------------"
 
+    # extracting the emulator
+    # NOTE: the emulator is writing in "." so it must be placed in the rw filesystem. A symlink of the binary is already placed in /app/bin/Vita3K
+    rm -rf "/var/data/Vita3K"
+    mkdir -p "/var/data/Vita3K"
+    unzip "/app/retrodeck/vita3k.zip" -d "/var/data/Vita3K"
+    chmod +x "/var/data/Vita3K/Vita3K"
+    rm -f "/var/data/Vita3K/update-vita3k.sh"
+
     # copying config file
-    rm -rf /var/config/Vita3K
-    mkdir -pv /var/config/Vita3K
-    cp -fvr "$emuconfigs/vita3k/config.yml" /var/config/Vita3K
+    rm -rf "/var/config/Vita3K"
+    mkdir -pv "/var/config/Vita3K"
+    cp -fvr "$emuconfigs/vita3k/config.yml" "/var/config/Vita3K"
+    # TODO: this step is to be done properly: Replacing RETRODECKHOMEDIR placeholder
+    sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "/var/config/Vita3K/config.yml"
 
     # copying vita user config
-    cp -fvr "$emuconfigs/ux0/"** "$bios_folder/Vita3K/Vita3K"
+    cp -fvr "$emuconfigs/vita3k/ux0/"** "$bios_folder/Vita3K/Vita3K"
 
     # prep saves folder
     dir_prep "$saves_folder/psvita/vita3k" "$bios_folder/Vita3K/Vita3K/ux0/user/00/savedata"
