@@ -70,6 +70,9 @@ jobs:
         continue-on-error: true
 
       # Sometimes flatpak download fails, in this case it tries a second time
+      - name: Run pre-build automation tasks (retry)
+        if: steps.flatpak-download.outcome == 'failure'
+        run : "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/pre_build_automation.sh"
       - name: "Build flatpak: download only (retry)"
         if: steps.flatpak-download.outcome == 'failure'
         run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
