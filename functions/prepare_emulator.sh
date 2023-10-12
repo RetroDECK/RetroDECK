@@ -683,17 +683,23 @@ prepare_emulator() {
     rm -f "/var/data/Vita3K/update-vita3k.sh"
 
     # copying config file
-    rm -rf "/var/config/Vita3K"
-    mkdir -pv "/var/config/Vita3K"
-    cp -fvr "$emuconfigs/vita3k/config.yml" "/var/config/Vita3K"
+    cp -fvr "$emuconfigs/vita3k/config.yml" "/var/data/Vita3K"
     # TODO: this step is to be done properly: Replacing RETRODECKHOMEDIR placeholder
     sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "/var/config/Vita3K/config.yml"
 
     # copying vita user config
-    cp -fvr "$emuconfigs/vita3k/ux0/"** "$bios_folder/Vita3K/Vita3K"
+    cp -fvr "$emuconfigs/vita3k/ux0" "$bios_folder/Vita3K/Vita3K"
 
     # prep saves folder
     dir_prep "$saves_folder/psvita/vita3k" "$bios_folder/Vita3K/Vita3K/ux0/user/00/savedata"
+
+    # Installing firmware
+    # TODO: at the moment this is here instead of a tool because it seems like it cannot run without Firmware
+    curl "http://dus01.psv.update.playstation.net/update/psv/image/2022_0209/rel_f2c7b12fe85496ec88a0391b514d6e3b/PSVUPDAT.PUP" -po /tmp/PSVUPDAT.PUP
+    curl "http://dus01.psp2.update.playstation.net/update/psp2/image/2019_0924/sd_8b5f60b56c3da8365b973dba570c53a5/PSP2UPDAT.PUP?dest=us" -po /tmp/PSP2UPDAT.PUP
+    Vita3K --firmware /tmp/PSVUPDAT.PUP
+    Vita3K --firmware /tmp/PSP2UPDAT.PUP
+
   fi
 
   # Update presets for all emulators after any reset or move
