@@ -241,7 +241,7 @@ modules:
           url-template: https://github.com/KhronosGroup/glslang/archive/$version.tar.gz
 
   # enables motion controls on non-wii controllers (switch, ps4, etc)
-  # deèendency of: DOLPHIN, RPCS3
+  # dependency of: DOLPHIN, RPCS3
   # TODO: requires a udev rule enabling Motion Sensors access
   - name: libevdev
     buildsystem: meson
@@ -257,6 +257,29 @@ modules:
           project-id: 20540
           stable-only: true
           url-template: https://www.freedesktop.org/software/libevdev/libevdev-$version.tar.xz
+
+  # dependency of: CITRA, CEMU
+  - name: rapidjson
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DRAPIDJSON_BUILD_DOC=OFF
+      - -DRAPIDJSON_BUILD_EXAMPLES=OFF
+      - -DRAPIDJSON_BUILD_TESTS=OFF
+      - -DRAPIDJSON_BUILD_THIRDPARTY_GTEST=OFF
+    cleanup:
+      - /include
+      - /lib/cmake
+      - /lib/pkgconfig
+      - /share/doc
+    sources:
+      - type: archive
+        url: https://github.com/Tencent/rapidjson/archive/refs/tags/v1.1.0.tar.gz
+        sha256: bf7ced29704a1e696fbccf2a2b4ea068e7774fa37f6d7dd4039d0787f8bed98e
+        x-checker-data:
+          type: anitya
+          project-id: 7422
+          stable-only: true
+          url-template: https://github.com/Tencent/rapidjson/archive/refs/tags/v$version.tar.gz
           
   # dependency of: CEMU, RPCS3
   - rd-submodules/shared-modules/glew/glew.json
@@ -680,8 +703,6 @@ modules:
       - type: file
         path: rd-submodules/citra/citra-launcher.sh
 
-
-
   # CITRA - END
 
   # PCSX2 - START
@@ -1041,28 +1062,6 @@ modules:
           type: anitya
           project-id: 10649
           url-template: https://libzip.org/download/libzip-$version.tar.xz
-
-  - name: rapidjson
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DRAPIDJSON_BUILD_DOC=OFF
-      - -DRAPIDJSON_BUILD_EXAMPLES=OFF
-      - -DRAPIDJSON_BUILD_TESTS=OFF
-      - -DRAPIDJSON_BUILD_THIRDPARTY_GTEST=OFF
-    cleanup:
-      - /include
-      - /lib/cmake
-      - /lib/pkgconfig
-      - /share/doc
-    sources:
-      - type: archive
-        url: https://github.com/Tencent/rapidjson/archive/refs/tags/v1.1.0.tar.gz
-        sha256: bf7ced29704a1e696fbccf2a2b4ea068e7774fa37f6d7dd4039d0787f8bed98e
-        x-checker-data:
-          type: anitya
-          project-id: 7422
-          stable-only: true
-          url-template: https://github.com/Tencent/rapidjson/archive/refs/tags/v$version.tar.gz
 
   - name: glm
     buildsystem: cmake-ninja
