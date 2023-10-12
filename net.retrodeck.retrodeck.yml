@@ -3,9 +3,9 @@ runtime: org.kde.Platform
 runtime-version: "6.5"
 sdk: org.kde.Sdk
 sdk-extensions:
-  - org.freedesktop.Sdk.Extension.llvm14    # Needed for rpcs3
-base: io.qt.qtwebengine.BaseApp             # Needed for Yuzu
-base-version: "6.5"                         # Needed for Yuzu
+  - org.freedesktop.Sdk.Extension.llvm14      # Needed for rpcs3
+# base: io.qt.qtwebengine.BaseApp             # Needed for Yuzu - Disabled as we're using AppImage for Yuzu
+# base-version: "6.5"                         # Needed for Yuzu - Disabled as we're using AppImage for Yuzu
 command: retrodeck.sh
 
 add-extensions:
@@ -122,7 +122,7 @@ modules:
   # mesa repo got a double certificate issue and gnutils cannot handle that so GLU download fails,
   # this affects even the shared-modules's glu so I have to replace it temporarly
   # more info there: https://gitlab.com/gnutls/gnutls/-/issues/1335
-  # dependency of: CEMU
+  # dependency of: RETROARCH, CEMU, RPCS3
   - name: glu
     buildsystem: meson
     cleanup:
@@ -239,6 +239,27 @@ modules:
           stable-only: true
           project-id: 205796
           url-template: https://github.com/KhronosGroup/glslang/archive/$version.tar.gz
+
+  # enables motion controls on non-wii controllers (switch, ps4, etc)
+  # deèendency of: DOLPHIN, RPCS3
+  # TODO: requires a udev rule enabling Motion Sensors access
+  - name: libevdev
+    buildsystem: meson
+    config-opts:
+      - -Dtests=disabled
+      - -Ddocumentation=disabled
+    sources:
+      - type: archive
+        url: https://www.freedesktop.org/software/libevdev/libevdev-1.13.1.tar.xz
+        sha256: 06a77bf2ac5c993305882bc1641017f5bec1592d6d1b64787bad492ab34f2f36
+        x-checker-data:
+          type: anitya
+          project-id: 20540
+          stable-only: true
+          url-template: https://www.freedesktop.org/software/libevdev/libevdev-$version.tar.xz
+          
+  # dependency of: CEMU, RPCS3
+  - rd-submodules/shared-modules/glew/glew.json
 
   # ES-DE - START
   # https://gitlab.com/es-de/emulationstation-de
@@ -684,26 +705,8 @@ modules:
   # PCSX2 - END
 
   # Dolphin - START
-  # DO NOT UPDATE! WENT ON QT6
   # https://github.com/flathub/org.DolphinEmu.dolphin-emu
   # WHEN UPADTING: remember to update rd-submodules/dolphin contents
-
-  # enables motion controls on non-wii controllers (switch, ps4, etc)
-  # TODO: requires a udev rule enabling Motion Sensors access
-  - name: libevdev
-    buildsystem: meson
-    config-opts:
-      - -Dtests=disabled
-      - -Ddocumentation=disabled
-    sources:
-      - type: archive
-        url: https://www.freedesktop.org/software/libevdev/libevdev-1.13.1.tar.xz
-        sha256: 06a77bf2ac5c993305882bc1641017f5bec1592d6d1b64787bad492ab34f2f36
-        x-checker-data:
-          type: anitya
-          project-id: 20540
-          stable-only: true
-          url-template: https://www.freedesktop.org/software/libevdev/libevdev-$version.tar.xz
 
   # needed for screensaver inhibition
   - name: xdg-screensaver-shim
@@ -876,14 +879,7 @@ modules:
   # MELONDS - END
 
   # RPCS3 - START
-  # DO NOT UPDATE! WENT ON QT6
   # https://github.com/flathub/net.rpcs3.RPCS3
-
-  # glu issue, check glu module for more info
-  #- rd-submodules/shared-modules/glu/glu-9.json
-
-  # dependency of: CEMU
-  - rd-submodules/shared-modules/glew/glew.json
 
   - name: rpcs3
     buildsystem: cmake-ninja
@@ -905,14 +901,12 @@ modules:
       ldflags: -fuse-ld=lld
     config-opts:
       - -DCMAKE_BUILD_TYPE=RelWithDebInfo
-      #- -DBUILD_LLVM_SUBMODULE=ON this was replaced by the fllowing:
       - -DBUILD_LLVM=OFF
       - -DUSE_NATIVE_INSTRUCTIONS=OFF
       - -DUSE_PRECOMPILED_HEADERS=OFF
       - -DUSE_SDL=ON
       - -DUSE_SYSTEM_CURL=ON
-      # Disabled this to force RPCS3 to use our built FFMPEG
-      - -DUSE_SYSTEM_FFMPEG=OFF
+      - -DUSE_SYSTEM_FFMPEG=OFF # Disabled this to force RPCS3 to use our built FFMPEG
       - -DUSE_SYSTEM_LIBPNG=ON
       - -DUSE_SYSTEM_SDL=ON
       - -DUSE_SYSTEM_ZLIB=ON
@@ -921,14 +915,14 @@ modules:
       - cp /usr/lib/sdk/llvm16/lib/libLLVM-16.so /app/lib/
       - |-
         set -eux
-
         COMM_TAG="$(awk -F'[\{,]' '/version{.*}/{printf "%d.%d.%d", $2, $3, $4}' ../rpcs3/rpcs3_version.cpp)"
         COMM_COUNT="$(git rev-list --count HEAD)";
         COMM_HASH="$(git rev-parse --short=8 HEAD)";
     sources:
       - type: git
         url: https://github.com/RPCS3/rpcs3.git
-        commit: a828c214b5c0b87b81fcd13ff3c1e952c9a5d6dd
+        branch: master
+        commit: 75d239356a773b8211354049477d79006597505e
 
   # RPCS3 - END
 
