@@ -882,7 +882,7 @@ modules:
       - type: git
         url: https://gitlab.freedesktop.org/slirp/libslirp.git
         tag: v4.7.0
-        
+
   - name: melonds
     buildsystem: cmake-ninja
     builddir: true
@@ -1007,7 +1007,6 @@ modules:
   # Duckstation-AppImage - END
 
   # Cemu - START
-  # LATEST BUILD BEFORE RUNTIME 23.08
   # https://github.com/cemu-project/Cemu/releases
   # https://github.com/flathub/info.cemu.Cemu
 
