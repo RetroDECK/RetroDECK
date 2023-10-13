@@ -667,14 +667,15 @@ prepare_emulator() {
     fi
   fi
 
-    if [[ "$emulator" =~ ^(mame|MAME|all)$ ]]; then
+  if [[ "$emulator" =~ ^(mame|MAME|all)$ ]]; then
     # TODO: do a proper script
     # This is just a placeholder script to test the emulator's flow
     echo "----------------------"
     echo "Initializing MAME"
     echo "----------------------"
 
-    # TODO: something
+    mkdir -p "/var/config/mame"
+    mkdir -p "$emuconfigs/mame/**" "/var/config/mame"
 
   fi
 
