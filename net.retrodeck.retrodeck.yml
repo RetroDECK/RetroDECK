@@ -1263,6 +1263,7 @@ modules:
 
   # MAME - Start
   # https://github.com/flathub/org.mamedev.MAME
+  # -j was ${FLATPAK_BUILDER_N_JOBS} but it's making the server crash
 
   - name: mame
     buildsystem: simple
@@ -1271,7 +1272,7 @@ modules:
       strip: true
     build-commands:
       - make
-          -j ${FLATPAK_BUILDER_N_JOBS}
+          -j 1
           CFLAGS+=-Wno-error=restrict
           USE_SYSTEM_LIB_FLAC=1
           SDL_INI_PATH='$$HOME/.APP_NAME;/app/share/APP_NAME/ini'
