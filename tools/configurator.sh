@@ -29,6 +29,7 @@ source /app/libexec/global.sh
 #       - Citra
 #       - Dolphin
 #       - Duckstation
+#       - MAME
 #       - MelonDS
 #       - PCSX2
 #       - PPSSPP
@@ -435,6 +436,7 @@ configurator_open_emulator_dialog() {
   "Citra" "Open the N3DS emulator Citra" \
   "Dolphin" "Open the Wii & GC emulator Dolphin" \
   "Duckstation" "Open the PSX emulator Duckstation" \
+  "MAME" "Open the Multiple Arcade Machine Emulator emulator MAME" \
   "MelonDS" "Open the NDS emulator MelonDS" \
   "PCSX2" "Open the PS2 emulator PSXC2" \
   "PPSSPP" "Open the PSP emulator PPSSPP" \
@@ -464,6 +466,10 @@ configurator_open_emulator_dialog() {
 
   "Duckstation" )
     duckstation-qt
+  ;;
+
+  "MAME" )
+    mame
   ;;
 
   "MelonDS" )
