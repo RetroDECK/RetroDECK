@@ -685,7 +685,7 @@ prepare_emulator() {
     # copying config file
     cp -fvr "$emuconfigs/vita3k/config.yml" "/var/data/Vita3K"
     # TODO: this step is to be done properly: Replacing RETRODECKHOMEDIR placeholder
-    sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "/var/config/Vita3K/config.yml"
+    sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "/var/data/Vita3K/config.yml"
 
     # copying vita user config
     cp -fvr "$emuconfigs/vita3k/ux0" "$bios_folder/Vita3K/Vita3K"
