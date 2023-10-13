@@ -61,9 +61,9 @@ cleanup:
   # XMLSTARLET
   - /lib/debug
   - /share/runtime
-cleanup-commands:
+#cleanup-commands:
   # Yuzu
-  - /app/cleanup-BaseApp.sh
+  #- /app/cleanup-BaseApp.sh
 
 modules:
 
