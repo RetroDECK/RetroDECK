@@ -4,7 +4,7 @@
 
 git config --global protocol.file.allow always
 
-if [ "${GITHUB_REF##*/}" = "main" ]; then
+if [[ "${GITHUB_REF##*/}" == "main" ]]; then
     BUNDLE_NAME="RetroDECK.flatpak"
     FOLDER=retrodeck-flatpak-cooker
 else
@@ -12,13 +12,12 @@ else
     FOLDER=retrodeck-flatpak-cooker
 fi
 
-mkdir -vp ${GITHUB_WORKSPACE}/local
-mkdir -vp ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker
+mkdir -vp "${GITHUB_WORKSPACE}"/{local,retrodeck-flatpak-cooker}
 
 flatpak-builder --user --force-clean \
     --install-deps-from=flathub \
     --install-deps-from=flathub-beta \
-    --repo=${GITHUB_WORKSPACE}/local \
+    --repo="${GITHUB_WORKSPACE}/local" \
     --download-only \
-    ${GITHUB_WORKSPACE}/"$FOLDER" \
+    "${GITHUB_WORKSPACE}/${FOLDER}" \
     net.retrodeck.retrodeck.yml
