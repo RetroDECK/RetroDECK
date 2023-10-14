@@ -13,63 +13,81 @@
 #     the URL that would be used in the above example is "PLACEHOLDERTEXT" and the hash placeholder text would be "HASHPLACEHOLDERTEXT"
 #     The "HASH" prefix of the placeholder text is hardcoded in the script
 
-rd_manifest=${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml
-automation_task_list=${GITHUB_WORKSPACE}/automation_tools/automation_task_list.cfg
-current_branch=$(git rev-parse --abbrev-ref HEAD)
+# Heredocs are indented with TABS not SPACES - if you use spaces they won't work while indented
 
-echo "Manifest location: $rd_manifest"
-echo "Automation task list location: $automation_task_list"
-echo
-echo "Task list contents:"
-cat "$automation_task_list"
-echo
+main() {
+    rd_manifest="${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml"
+    automation_task_list="${GITHUB_WORKSPACE}/automation_tools/automation_task_list.cfg"
+    current_branch="$(git rev-parse --abbrev-ref HEAD)"
 
-# Update all collected information
-while IFS="^" read -r action placeholder url branch
-do
-  if [[ ! $action == "#"* ]] && [[ ! -z "$action" ]]; then
-    if [[ "$action" == "branch" ]]; then
-      echo
-      echo "Placeholder text: $placeholder"
-      echo "Current branch:" "$current_branch"
-      echo
-      /bin/sed -i 's^'"$placeholder"'^'"$current_branch"'^g' $rd_manifest
-    elif [[ "$action" == "hash" ]]; then
-      echo
-      echo "Placeholder text: $placeholder"
-      echo "URL to hash: $url"
-      echo
-      hash=$(curl -sL "$url" | sha256sum | cut -d ' ' -f1)
-      echo "Hash found: $hash"
-      /bin/sed -i 's^'"$placeholder"'^'"$hash"'^' $rd_manifest
-    elif [[ "$action" == "latestcommit" ]]; then
-      echo
-      echo "Placeholder text: $placeholder"
-      echo "Repo to get latest commit from: $url branch: $branch"
-      echo
-      commit=$(git ls-remote "$url" "$branch" | cut -f1)
-      echo "Commit found: $commit"
-      /bin/sed -i 's^'"$placeholder"'^'"$commit"'^' $rd_manifest
-    elif [[ "$action" == "latestappimage" ]]; then
-      echo
-      echo "Placeholder text: $placeholder"
-      echo "Repo to look for AppImage releases: $url"
-      echo
-      appimageurl=$(curl -s "$url" | grep browser_download_url | grep "\.AppImage\"" | cut -d : -f 2,3 | tr -d \" | sed -n 1p | tr -d ' ')
-      echo "AppImage URL found: $appimageurl"
-      /bin/sed -i 's^'"$placeholder"'^'"$appimageurl"'^' $rd_manifest
-      appimagehash=$(curl -sL "$appimageurl" | sha256sum | cut -d ' ' -f1)
-      echo "AppImage hash found: $appimagehash"
-      /bin/sed -i 's^'"HASHFOR$placeholder"'^'"$appimagehash"'^' $rd_manifest
-    elif [[ "$action" == "outside_info" ]]; then
-      if [[ "$url" = \$* ]]; then # If value is a reference to a variable name
-        eval url="$url"
-      fi
-      echo
-      echo "Placeholder text: $placeholder"
-      echo "Information being injected: $(cat $url)"
-      echo
-      /bin/sed -i 's^'"$placeholder"'^'"$(cat $url)"'^' $rd_manifest
-    fi
-  fi
-done < "$automation_task_list"
+    cat <<-_EOF_
+	Manifest location: ${rd_manifest}
+	Automation task list location: ${automation_task_list}
+
+	Task list contents:
+	$(cat "${automation_task_list}")
+
+	_EOF_
+
+    # Update all collected information
+    while IFS="^" read -r action placeholder url branch; do
+        if [[ ! $action == "#"* ]] && [[ ! -z "$action" ]]; then
+            case $action in
+                "branch")
+                    cat <<-_EOF_
+
+					Placeholder text: ${placeholder}
+					Current branch:   ${current_branch}
+
+					_EOF_
+                    /bin/sed -i 's^'"$placeholder"'^'"$current_branch"'^g' $rd_manifest
+                    ;;
+                "hash")
+                    cat <<-_EOF_
+					Placeholder text: ${placeholder}
+					URL to hash: ${url}
+
+					Hash found: $(curl -sL "$url" | sha256sum | cut -d ' ' -f1)
+					_EOF_
+                    /bin/sed -i 's^'"$placeholder"'^'"$hash"'^' $rd_manifest
+                    ;;
+                "latestcommit")
+                    cat <<-_EOF_
+					Placeholder text: ${placeholder}
+					Repo to get latest commit from: ${url} branch: ${branch}
+
+					Commit found: =$(git ls-remote "$url" "$branch" | cut -f1)
+					_EOF_
+                    /bin/sed -i 's^'"$placeholder"'^'"$commit"'^' $rd_manifest
+                    ;;
+                "latestappimage")
+                    cat <<-_EOF_
+
+					Placeholder text: ${placeholder}
+					Repo to look for AppImage releases: ${url}
+
+					AppImage URL found: $(curl -s "$url" | grep browser_download_url | grep "\.AppImage\"" | cut -d : -f 2,3 | tr -d \" | sed -n 1p | tr -d ' ')"
+					_EOF_
+                    /bin/sed -i 's^'"$placeholder"'^'"$appimageurl"'^' $rd_manifest
+                    cat <<-_EOF_
+					AppImage hash found: $(curl -sL "$appimageurl" | sha256sum | cut -d ' ' -f1)
+					_EOF_
+                    /bin/sed -i 's^'"HASHFOR$placeholder"'^'"$appimagehash"'^' $rd_manifest
+                    ;;
+                "outside_info")
+                    if [[ "$url" = \$* ]]; then # If value is a reference to a variable name
+                        eval url="$url"
+                    fi
+                    cat <<-_EOF_
+
+					Placeholder text: ${placeholder}
+					Information being injected: $(cat ${url})
+
+					_EOF_
+                    /bin/sed -i 's^'"$placeholder"'^'"$(cat $url)"'^' $rd_manifest
+                    ;;
+            esac
+        fi
+    done < "$automation_task_list"
+}
+main "$@
