@@ -1262,50 +1262,23 @@ modules:
   # Ryujinx - END
 
   # MAME - Start
-  # https://github.com/flathub/org.mamedev.MAME
-  # -j was ${FLATPAK_BUILDER_N_JOBS} but it's making the server crash
+  # https://sdlmame.wallyweek.org/download/
 
   - name: mame
     buildsystem: simple
-    build-options:
-      no-debuginfo: true
-      strip: true
     build-commands:
-      - make
-          -j 1
-          CFLAGS+=-Wno-error=restrict
-          USE_SYSTEM_LIB_FLAC=1
-          SDL_INI_PATH='$$HOME/.APP_NAME;/app/share/APP_NAME/ini'
-          LDOPTS=-Wl,-s
-      - install -Dm 0755 mame ${FLATPAK_DEST}/bin/mame
-      - cp uismall.bdf ${FLATPAK_DEST}/bin/
-      - mkdir -p ${FLATPAK_DEST}/share/mame/
-      - cp -r artwork/ ${FLATPAK_DEST}/share/mame/
-      - cp -r bgfx/ ${FLATPAK_DEST}/share/mame/
-      - cp -r ctrlr/ ${FLATPAK_DEST}/share/mame/
-      - mkdir -p ${FLATPAK_DEST}/share/mame/docs/
-      - cp -r docs/legal/ ${FLATPAK_DEST}/share/mame/docs/
-      - cp -r docs/man/ ${FLATPAK_DEST}/share/mame/docs
-      - cp -r hash/ ${FLATPAK_DEST}/share/mame/
-      - cp -r hlsl/ ${FLATPAK_DEST}/share/mame/
-      - cp -r ini/ ${FLATPAK_DEST}/share/mame/
-      - install -Dm 0644 mame.ini ${FLATPAK_DEST}/share/mame/ini/mame.ini
-      - cp -r language/ ${FLATPAK_DEST}/share/mame/
-      - cp -r plugins/ ${FLATPAK_DEST}/share/mame/
-      - cp -r roms/ ${FLATPAK_DEST}/share/mame/
-      - cp -r samples/ ${FLATPAK_DEST}/share/mame/
+      - ar xv mame*.deb
+      - tar xvf control.tar.zst
+      - tar xvf data.tar.zst
+      - cp -r etc ${FLATPAK_DEST}
+      - cp -r usr ${FLATPAK_DEST}
+      - mkdir -p ${FLATPAK_DEST}/bin
+      - ln -s ${FLATPAK_DEST}/usr/games/mame ${FLATPAK_DEST}/bin/mame
+      - chmod +x ${FLATPAK_DEST}/bin/mame
     sources:
-      - type: archive
-        url: https://github.com/mamedev/mame/archive/refs/tags/mame0259.tar.gz
-        sha256: 46baf431079a3373ffe8d984b3ba5d62ad5b1d5e356d1f60cf60f6ad03d4cec6
       - type: file
-        path: rd-submodules/mame/mame.ini
-      - type: patch
-        path: rd-submodules/mame/floppy.patch
-      - type: patch
-        path: rd-submodules/mame/sound.patch
-      - type: patch
-        path: rd-submodules/mame/ym3802.patch
+        url: "https://launchpad.net/~c.falco/+archive/mame/+files/mame_0.258+dfsg.1-0ubuntu1~ppa1~lunar1_amd64.deb"
+        sha256: f464a000b286cccc78b3792909edcbdda0f4c8315532f75a108eb07752bc805f
 
   # MAME - End
 
