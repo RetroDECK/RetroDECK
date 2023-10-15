@@ -27,6 +27,7 @@ finish-args:
   - --filesystem=home
   - --filesystem=/run/media
   - --filesystem=/media
+  - --filesystem=home/.var/app/com.valvesoftware.Steam
   - --allow=multiarch
   - --talk-name=org.freedesktop.ScreenSaver
   - --talk-name=org.freedesktop.PowerManagement.Inhibit
@@ -1320,7 +1321,7 @@ modules:
 
       # Function libraries
       - mkdir -p /app/libexec
-      - cp -r functions/* "/app/libexec/"
+      - cp -r functions/** "/app/libexec/"
 
       # Desktop entries
       - cp net.retrodeck.retrodeck.desktop /app/share/applications/net.retrodeck.retrodeck.desktop

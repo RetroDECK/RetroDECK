@@ -17,3 +17,7 @@ backup
 .old
 tmp
 .godot
+
+# Python #
+##########
+__pycache__
