@@ -81,19 +81,19 @@
         <platform>android</platform>
         <theme>android</theme>
     </system>
-<!--
+
     <system>
         <name>apple2</name>
         <fullname>Apple II</fullname>
         <path>%ROMPATH%/apple2</path>
         <extension>.do .DO .dsk .DSK .nib .NIB .po .PO</extension>
-        <command label="LinApple (Standalone)">%EMULATOR_LINAPPLE% -f -b &ndash;&ndash;d1 %ROM%</command>
-        <command label="Mednafen (Standalone)">%EMULATOR_MEDNAFEN% -force_module apple2 %ROM%</command>
+        <!-- <command label="LinApple (Standalone)">%EMULATOR_LINAPPLE% -f -b &ndash;&ndash;d1 %ROM%</command> -->
+        <!-- <command label="Mednafen (Standalone)">%EMULATOR_MEDNAFEN% -force_module apple2 %ROM%</command> -->
         <command label="MAME (Standalone)">%STARTDIR%=~/.mame %EMULATOR_MAME% -rompath %GAMEDIR%\;%ROMPATH%/apple2 apple2e -flop1 %ROM%</command>
         <platform>apple2</platform>
         <theme>apple2</theme>
     </system>
--->
+
     <system>
         <name>apple2gs</name>
         <fullname>Apple IIGS</fullname>
@@ -125,7 +125,7 @@
         <platform>arcade</platform>
         <theme>arcade</theme>
     </system>
-<!--
+
     <system>
         <name>arcadia</name>
         <fullname>Emerson Arcadia 2001</fullname>
@@ -135,7 +135,7 @@
         <platform>arcadia</platform>
         <theme>arcadia</theme>
     </system>
--->
+
     <system>
         <name>arduboy</name>
         <fullname>Arduboy Miniature Game System</fullname>
@@ -204,7 +204,7 @@
         <path>%ROMPATH%/atarijaguar</path>
         <extension>.abs .ABS .bin .BIN .cdi .CDI .cof .COF .cue .CUE .j64 .J64 .jag .JAG .prg .PRG .rom .ROM .7z .7Z .zip .ZIP</extension>
         <command label="Virtual Jaguar">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/virtualjaguar_libretro.so %ROM%</command>
-        <!-- <command label="MAME (Standalone)">%STARTDIR%=~/.mame %EMULATOR_MAME% -rompath %GAMEDIR%\;%ROMPATH%/atarijaguar jaguar -cart %ROM%</command> -->
+        <command label="MAME (Standalone)">%STARTDIR%=~/.mame %EMULATOR_MAME% -rompath %GAMEDIR%\;%ROMPATH%/atarijaguar jaguar -cart %ROM%</command>
         <platform>atarijaguar, atarijaguarcd</platform>
         <theme>atarijaguar</theme>
     </system>
@@ -258,7 +258,7 @@
         <platform>arcade</platform>
         <theme>atomiswave</theme>
     </system>
-<!--
+
     <system>
         <name>bbcmicro</name>
         <fullname>Acorn Computers BBC Micro</fullname>
@@ -268,7 +268,7 @@
         <platform>bbcmicro</platform>
         <theme>bbcmicro</theme>
     </system>
--->
+
     <system>
         <name>c64</name>
         <fullname>Commodore 64</fullname>
@@ -330,7 +330,7 @@
         <platform>channelf</platform>
         <theme>channelf</theme>
     </system>
-<!--
+
     <system>
         <name>coco</name>
         <fullname>Tandy Color Computer</fullname>
@@ -341,7 +341,7 @@
         <platform>coco</platform>
         <theme>coco</theme>
     </system>
--->
+
     <system>
         <name>colecovision</name>
         <fullname>Coleco ColecoVision</fullname>
@@ -363,7 +363,7 @@
         <command label="MAME 2010">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mame2010_libretro.so %ROM%</command>
         <command label="MAME 2003-Plus">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mame2003_plus_libretro.so %ROM%</command>
         <command label="MAME 2000">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mame2000_libretro.so %ROM%</command>
-        <!-- <command label="MAME (Standalone)">%STARTDIR%=~/.mame %EMULATOR_MAME% -rompath %GAMEDIR%\;%ROMPATH%/cps %BASENAME%</command> -->
+        <command label="MAME (Standalone)">%STARTDIR%=~/.mame %EMULATOR_MAME% -rompath %GAMEDIR%\;%ROMPATH%/cps %BASENAME%</command>
         <command label="FinalBurn Neo">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/fbneo_libretro.so %ROM%</command>
         <!-- <command label="FinalBurn Neo (Standalone)">%EMULATOR_FINALBURN-NEO% -fullscreen %BASENAME%</command> -->
         <command label="FB Alpha 2012">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/fbalpha2012_libretro.so %ROM%</command>
@@ -382,7 +382,7 @@
         <command label="MAME 2010">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mame2010_libretro.so %ROM%</command>
         <command label="MAME 2003-Plus">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mame2003_plus_libretro.so %ROM%</command>
         <command label="MAME 2000">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mame2000_libretro.so %ROM%</command>
-        <!-- <command label="MAME (Standalone)">%STARTDIR%=~/.mame %EMULATOR_MAME% -rompath %GAMEDIR%\;%ROMPATH%/cps1 %BASENAME%</command> -->
+        <command label="MAME (Standalone)">%STARTDIR%=~/.mame %EMULATOR_MAME% -rompath %GAMEDIR%\;%ROMPATH%/cps1 %BASENAME%</command>
         <command label="FinalBurn Neo">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/fbneo_libretro.so %ROM%</command>
         <!-- <command label="FinalBurn Neo (Standalone)">%EMULATOR_FINALBURN-NEO% -fullscreen %BASENAME%</command> -->
         <command label="FB Alpha 2012">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/fbalpha2012_libretro.so %ROM%</command>
@@ -399,7 +399,7 @@
         <command label="MAME 2010">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mame2010_libretro.so %ROM%</command>
         <command label="MAME 2003-Plus">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mame2003_plus_libretro.so %ROM%</command>
         <command label="MAME 2000">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mame2000_libretro.so %ROM%</command>
-        <!-- <command label="MAME (Standalone)">%STARTDIR%=~/.mame %EMULATOR_MAME% -rompath %GAMEDIR%\;%ROMPATH%/cps2 %BASENAME%</command> -->
+        <command label="MAME (Standalone)">%STARTDIR%=~/.mame %EMULATOR_MAME% -rompath %GAMEDIR%\;%ROMPATH%/cps2 %BASENAME%</command>
         <command label="FinalBurn Neo">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/fbneo_libretro.so %ROM%</command>
         <!-- <command label="FinalBurn Neo (Standalone)">%EMULATOR_FINALBURN-NEO% -fullscreen %BASENAME%</command> -->
         <command label="FB Alpha 2012">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/fbalpha2012_libretro.so %ROM%</command>
@@ -416,7 +416,7 @@
         <command label="MAME 2010">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mame2010_libretro.so %ROM%</command>
         <command label="MAME 2003-Plus">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mame2003_plus_libretro.so %ROM%</command>
         <command label="MAME 2000">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mame2000_libretro.so %ROM%</command>
-        <!-- <command label="MAME (Standalone)">%STARTDIR%=~/.mame %EMULATOR_MAME% -rompath %GAMEDIR%\;%ROMPATH%/cps3 %BASENAME%</command> -->
+        <command label="MAME (Standalone)">%STARTDIR%=~/.mame %EMULATOR_MAME% -rompath %GAMEDIR%\;%ROMPATH%/cps3 %BASENAME%</command>
         <command label="FinalBurn Neo">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/fbneo_libretro.so %ROM%</command>
         <!-- <command label="FinalBurn Neo (Standalone)">%EMULATOR_FINALBURN-NEO% -fullscreen %BASENAME%</command> -->
         <command label="FB Alpha 2012">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/fbalpha2012_libretro.so %ROM%</command>
@@ -424,7 +424,7 @@
         <platform>arcade</platform>
         <theme>cps3</theme>
     </system>
-<!--
+
     <system>
         <name>crvision</name>
         <fullname>VTech CreatiVision</fullname>
@@ -434,7 +434,7 @@
         <platform>crvision</platform>
         <theme>crvision</theme>
     </system>
--->
+
 <!--
     <system>
         <name>daphne</name>
@@ -612,12 +612,12 @@
         <path>%ROMPATH%/gameandwatch</path>
         <extension>.mgw .MGW .7z .7Z .zip .ZIP</extension>
         <!-- <command label="MAME Local Artwork (Standalone)">%STARTDIR%=~/.mame %EMULATOR_MAME% -artpath %ROMPATH%/gameandwatch/artwork -rompath %GAMEDIR%\;%ROMPATH%/gameandwatch %BASENAME%</command> -->
-        <!-- <command label="MAME (Standalone)">%STARTDIR%=~/.mame %EMULATOR_MAME% -rompath %GAMEDIR%\;%ROMPATH%/gameandwatch %BASENAME%</command> -->
+        <command label="MAME (Standalone)">%STARTDIR%=~/.mame %EMULATOR_MAME% -rompath %GAMEDIR%\;%ROMPATH%/gameandwatch %BASENAME%</command>
         <command label="Handheld Electronic (GW)">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/gw_libretro.so %ROM%</command>
         <platform>gameandwatch</platform>
         <theme>gameandwatch</theme>
     </system>
-<!--
+
     <system>
         <name>gamecom</name>
         <fullname>Tiger Electronics Game.com</fullname>
@@ -627,7 +627,7 @@
         <platform>gamecom</platform>
         <theme>gamecom</theme>
     </system>
--->
+
     <system>
         <name>gamegear</name>
         <fullname>Sega Game Gear</fullname>
@@ -723,7 +723,7 @@
         <platform>genesis</platform>
         <theme>genesis</theme>
     </system>
-<!--
+
     <system>
         <name>gmaster</name>
         <fullname>Hartung Game Master</fullname>
@@ -733,7 +733,7 @@
         <platform>gmaster</platform>
         <theme>gmaster</theme>
     </system>
--->
+
     <system>
         <name>gx4000</name>
         <fullname>Amstrad GX4000</fullname>
@@ -741,7 +741,7 @@
         <extension>.bin .BIN .cdt .CDT .cpr .CPR .dsk .DSK .kcr .KCR .m3u .M3U .sna .SNA .tap .TAR .voc .VOC .7z .7Z .zip .ZIP</extension>
         <command label="Caprice32">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/cap32_libretro.so %ROM%</command>
         <command label="CrocoDS">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/crocods_libretro.so %ROM%</command>
-        <!-- <command label="MAME (Standalone)">%STARTDIR%=~/.mame %EMULATOR_MAME% -rompath %GAMEDIR%\;%ROMPATH%/gx4000 gx4000 -cart %ROM%</command> -->
+        <command label="MAME (Standalone)">%STARTDIR%=~/.mame %EMULATOR_MAME% -rompath %GAMEDIR%\;%ROMPATH%/gx4000 gx4000 -cart %ROM%</command>
         <platform>gx4000</platform>
         <theme>gx4000</theme>
     </system>
@@ -780,7 +780,7 @@
         <path>%ROMPATH%/lcdgames</path>
         <extension>.mgw .MGW .7z .7Z .zip .ZIP</extension>
         <!-- <command label="MAME Local Artwork (Standalone)">%STARTDIR%=~/.mame %EMULATOR_MAME% -artpath %ROMPATH%/lcdgames/artwork -rompath %GAMEDIR%\;%ROMPATH%/lcdgames %BASENAME%</command> -->
-        <!-- <command label="MAME (Standalone)">%STARTDIR%=~/.mame %EMULATOR_MAME% -rompath %GAMEDIR%\;%ROMPATH%/lcdgames %BASENAME%</command> -->
+        <command label="MAME (Standalone)">%STARTDIR%=~/.mame %EMULATOR_MAME% -rompath %GAMEDIR%\;%ROMPATH%/lcdgames %BASENAME%</command>
         <command label="Handheld Electronic (GW)">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/gw_libretro.so %ROM%</command>
         <platform>lcdgames, gameandwatch</platform>
         <theme>lcdgames</theme>
@@ -814,7 +814,7 @@
         <command label="MAME 2010">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mame2010_libretro.so %ROM%</command>
         <command label="MAME 2003-Plus">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mame2003_plus_libretro.so %ROM%</command>
         <command label="MAME 2000">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mame2000_libretro.so %ROM%</command>
-        <!-- <command label="MAME (Standalone)">%STARTDIR%=~/.mame %EMULATOR_MAME% -rompath %GAMEDIR%\;%ROMPATH%/mame %BASENAME%</command> -->
+        <command label="MAME (Standalone)">%STARTDIR%=~/.mame %EMULATOR_MAME% -rompath %GAMEDIR%\;%ROMPATH%/mame %BASENAME%</command>
         <command label="FinalBurn Neo">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/fbneo_libretro.so %ROM%</command>
         <!-- <command label="FinalBurn Neo (Standalone)">%EMULATOR_FINALBURN-NEO% -fullscreen %BASENAME%</command> -->
         <command label="FB Alpha 2012">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/fbalpha2012_libretro.so %ROM%</command>
@@ -923,7 +923,7 @@
         <path>%ROMPATH%/model2</path>
         <extension>.7z .7Z .zip .ZIP</extension>
         <command label="MAME - Current">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mame_libretro.so %ROM%</command>
-        <!-- <command label="MAME (Standalone)">%STARTDIR%=~/.mame %EMULATOR_MAME% -rompath %GAMEDIR%\;%ROMPATH%/model2 %BASENAME%</command> -->
+        <command label="MAME (Standalone)">%STARTDIR%=~/.mame %EMULATOR_MAME% -rompath %GAMEDIR%\;%ROMPATH%/model2 %BASENAME%</command>
         <platform>arcade</platform>
         <theme>model2</theme>
     </system>
@@ -1103,7 +1103,7 @@
         <extension>.7z .7Z .zip .ZIP</extension>
         <command label="FinalBurn Neo">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/fbneo_libretro.so %ROM%</command>
         <!-- <command label="FinalBurn Neo (Standalone)">%EMULATOR_FINALBURN-NEO% -fullscreen %BASENAME%</command> -->
-        <!-- <command label="MAME (Standalone)">%STARTDIR%=~/.mame %EMULATOR_MAME% -rompath %GAMEDIR%\;%ROMPATH%/neogeo %BASENAME%</command> -->
+        <command label="MAME (Standalone)">%STARTDIR%=~/.mame %EMULATOR_MAME% -rompath %GAMEDIR%\;%ROMPATH%/neogeo %BASENAME%</command>
         <platform>neogeo</platform>
         <theme>neogeo</theme>
     </system>
@@ -1115,7 +1115,7 @@
         <command label="NeoCD">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/neocd_libretro.so %ROM%</command>
         <command label="FinalBurn Neo">%EMULATOR_RETROARCH% --subsystem neocd -L %CORE_RETROARCH%/fbneo_libretro.so %ROM%</command>
         <!-- <command label="FinalBurn Neo (Standalone)">%EMULATOR_FINALBURN-NEO% neocdz -fullscreen -cd %ROM%</command> -->
-        <!-- <command label="MAME (Standalone)">%STARTDIR%=~/.mame %EMULATOR_MAME% -rompath %GAMEDIR%\;%ROMPATH%/neogeocd neocdz -cdrm %ROM%</command> -->
+        <command label="MAME (Standalone)">%STARTDIR%=~/.mame %EMULATOR_MAME% -rompath %GAMEDIR%\;%ROMPATH%/neogeocd neocdz -cdrm %ROM%</command>
         <platform>neogeocd</platform>
         <theme>neogeocd</theme>
     </system>
@@ -1127,7 +1127,7 @@
         <command label="NeoCD">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/neocd_libretro.so %ROM%</command>
         <command label="FinalBurn Neo">%EMULATOR_RETROARCH% --subsystem neocd -L %CORE_RETROARCH%/fbneo_libretro.so %ROM%</command>
         <!-- <command label="FinalBurn Neo (Standalone)">%EMULATOR_FINALBURN-NEO% neocdz -fullscreen -cd %ROM%</command> -->
-        <!-- <command label="MAME (Standalone)">%STARTDIR%=~/.mame %EMULATOR_MAME% -rompath %GAMEDIR%\;%ROMPATH%/neogeocdjp neocdz -cdrm %ROM%</command> -->
+        <command label="MAME (Standalone)">%STARTDIR%=~/.mame %EMULATOR_MAME% -rompath %GAMEDIR%\;%ROMPATH%/neogeocdjp neocdz -cdrm %ROM%</command>
         <platform>neogeocd</platform>
         <theme>neogeocdjp</theme>
     </system>
@@ -1362,7 +1362,7 @@
         <platform>psx</platform>
         <theme>psx</theme>
     </system>
-<!--
+
     <system>
         <name>pv1000</name>
         <fullname>Casio PV-1000</fullname>
@@ -1372,7 +1372,7 @@
         <platform>pv1000</platform>
         <theme>pv1000</theme>
     </system>
--->
+
     <system>
         <name>quake</name>
         <fullname>Quake</fullname>
@@ -1451,7 +1451,7 @@
         <platform>scummvm</platform>
         <theme>scummvm</theme>
     </system>
-<!--
+
     <system>
         <name>scv</name>
         <fullname>Epoch Super Cassette Vision</fullname>
@@ -1461,7 +1461,7 @@
         <platform>scv</platform>
         <theme>scv</theme>
     </system>
--->
+
     <system>
         <name>sega32x</name>
         <fullname>Sega Mega Drive 32X</fullname>
@@ -1705,7 +1705,7 @@
         <platform>pcenginecd</platform>
         <theme>tg-cd</theme>
     </system>
-<!--
+
     <system>
         <name>ti99</name>
         <fullname>Texas Instruments TI-99</fullname>
@@ -1715,7 +1715,7 @@
         <platform>ti99</platform>
         <theme>ti99</theme>
     </system>
--->
+
     <system>
         <name>tic80</name>
         <fullname>TIC-80 Game Engine</fullname>
@@ -1805,7 +1805,7 @@
         <theme>vpinball</theme>
     </system>
 -->
-<!--
+
     <system>
         <name>vsmile</name>
         <fullname>VTech V.Smile</fullname>
@@ -1815,7 +1815,7 @@
         <platform>vsmile</platform>
         <theme>vsmile</theme>
     </system>
--->
+
     <system>
         <name>wasm4</name>
         <fullname>WASM-4 Fantasy Console</fullname>
@@ -1882,7 +1882,7 @@
         <path>%ROMPATH%/x68000</path>
         <extension>.dim .DIM .img .IMG .d88 .D88 .88d .88D .hdm .HDM .dup .DUP .2hd .2HD .xdf .XDF .hdf .HDF .cmd .CMD .m3u .M3U .7z .7Z .zip .ZIP</extension>
         <command label="PX68k">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/px68k_libretro.so %ROM%</command>
-	<!-- <command label="MAME (Standalone)">%STARTDIR%=~/.mame %EMULATOR_MAME% -rompath %GAMEDIR%\;%ROMPATH%/x68000 x68000 -flop1 %ROM%</command> -->
+	    <command label="MAME (Standalone)">%STARTDIR%=~/.mame %EMULATOR_MAME% -rompath %GAMEDIR%\;%ROMPATH%/x68000 x68000 -flop1 %ROM%</command>
         <platform>x68000</platform>
         <theme>x68000</theme>
     </system>

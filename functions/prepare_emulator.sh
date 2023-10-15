@@ -702,6 +702,18 @@ prepare_emulator() {
 
   fi
 
+  if [[ "$emulator" =~ ^(mame|MAME|all)$ ]]; then
+    # TODO: do a proper script
+    # This is just a placeholder script to test the emulator's flow
+    echo "----------------------"
+    echo "Initializing MAME"
+    echo "----------------------"
+
+    mkdir -p "/var/config/mame"
+    mkdir -p "$emuconfigs/mame/**" "/var/config/mame"
+
+  fi
+
   # Update presets for all emulators after any reset or move
   if [[ ! "$emulator" == "retrodeck" ]]; then
     build_retrodeck_current_presets
