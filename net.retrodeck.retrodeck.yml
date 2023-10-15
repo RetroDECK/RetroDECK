@@ -1,11 +1,11 @@
 app-id: net.retrodeck.retrodeck
 runtime: org.kde.Platform
-runtime-version: 5.15-22.08
+runtime-version: "6.5"
 sdk: org.kde.Sdk
 sdk-extensions:
-  - org.freedesktop.Sdk.Extension.llvm14    # Needed for rpcs3
-base: io.qt.qtwebengine.BaseApp             # Needed for Yuzu
-base-version: 5.15-22.08                    # Needed for Yuzu
+  - org.freedesktop.Sdk.Extension.llvm14      # Needed for rpcs3
+# base: io.qt.qtwebengine.BaseApp             # Needed for Yuzu - Disabled as we're using AppImage for Yuzu
+# base-version: "6.5"                         # Needed for Yuzu - Disabled as we're using AppImage for Yuzu
 command: retrodeck.sh
 
 add-extensions:
@@ -61,13 +61,13 @@ cleanup:
   # XMLSTARLET
   - /lib/debug
   - /share/runtime
-cleanup-commands:
+#cleanup-commands:
   # Yuzu
-  - /app/cleanup-BaseApp.sh
+  #- /app/cleanup-BaseApp.sh
 
 modules:
 
-  # dependency of: CEMU
+  # dependency of: CEMU, CITRA, DOLPHIN
   - rd-submodules/shared-modules/libusb/libusb.json
 
   # This module is used to define the RetroDECK version
@@ -76,8 +76,8 @@ modules:
   # The version number is hardcoded in /app/retrodeck/version
   #
   # UPDATE STEPS FOR MAIN:
-  # [X] Update the VERSION variable on line containing "VERSION=THISBRANCH"
-  # [X] Update the appdata.xml with the version number and notes
+  # [ ] Update the VERSION variable on line containing "VERSION=THISBRANCH"
+  # [ ] Update the appdata.xml with the version number and notes
   #
   - name: version-initialization
     buildsystem: simple
@@ -85,6 +85,7 @@ modules:
       - |
 
         # on main please update this with the version variable, eg: VERSION='0.7.0b'
+        # on cooker will be THISBRANCH
         VERSION=THISBRANCH
 
         git checkout ${GITHUB_REF_NAME}
@@ -120,7 +121,7 @@ modules:
   # mesa repo got a double certificate issue and gnutils cannot handle that so GLU download fails,
   # this affects even the shared-modules's glu so I have to replace it temporarly
   # more info there: https://gitlab.com/gnutls/gnutls/-/issues/1335
-  # dependency of: CEMU
+  # dependency of: RETROARCH, CEMU, RPCS3
   - name: glu
     buildsystem: meson
     cleanup:
@@ -219,7 +220,7 @@ modules:
         url: https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_amd64
         sha256: 4ee662847c588c3ef2fec8bfb304e8739e3dbaba87ccb9a608d691c88f5b64dc
 
-  # dependency of: CEMU (13.0.0)
+  # dependency of: CEMU, CITRA <-(13.0.0)
   - name: glslang
     buildsystem: cmake-ninja
     config-opts:
@@ -237,6 +238,50 @@ modules:
           stable-only: true
           project-id: 205796
           url-template: https://github.com/KhronosGroup/glslang/archive/$version.tar.gz
+
+  # enables motion controls on non-wii controllers (switch, ps4, etc)
+  # dependency of: DOLPHIN, RPCS3
+  # TODO: requires a udev rule enabling Motion Sensors access
+  - name: libevdev
+    buildsystem: meson
+    config-opts:
+      - -Dtests=disabled
+      - -Ddocumentation=disabled
+    sources:
+      - type: archive
+        url: https://www.freedesktop.org/software/libevdev/libevdev-1.13.1.tar.xz
+        sha256: 06a77bf2ac5c993305882bc1641017f5bec1592d6d1b64787bad492ab34f2f36
+        x-checker-data:
+          type: anitya
+          project-id: 20540
+          stable-only: true
+          url-template: https://www.freedesktop.org/software/libevdev/libevdev-$version.tar.xz
+
+  # dependency of: CITRA, CEMU
+  - name: rapidjson
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DRAPIDJSON_BUILD_DOC=OFF
+      - -DRAPIDJSON_BUILD_EXAMPLES=OFF
+      - -DRAPIDJSON_BUILD_TESTS=OFF
+      - -DRAPIDJSON_BUILD_THIRDPARTY_GTEST=OFF
+    cleanup:
+      - /include
+      - /lib/cmake
+      - /lib/pkgconfig
+      - /share/doc
+    sources:
+      - type: archive
+        url: https://github.com/Tencent/rapidjson/archive/refs/tags/v1.1.0.tar.gz
+        sha256: bf7ced29704a1e696fbccf2a2b4ea068e7774fa37f6d7dd4039d0787f8bed98e
+        x-checker-data:
+          type: anitya
+          project-id: 7422
+          stable-only: true
+          url-template: https://github.com/Tencent/rapidjson/archive/refs/tags/v$version.tar.gz
+          
+  # dependency of: CEMU, RPCS3
+  - rd-submodules/shared-modules/glew/glew.json
 
   # ES-DE - START
   # https://gitlab.com/es-de/emulationstation-de
@@ -608,7 +653,6 @@ modules:
   # Yuzu - END
 
   # CITRA - START
-  # DO NOT UPDATE! WENT ON QT6
   # https://github.com/flathub/org.citra_emu.citra
 
   - rd-submodules/shared-modules/SDL2/SDL2-with-libdecor.json
@@ -618,27 +662,33 @@ modules:
     builddir: true
     config-opts:
       - '-DCMAKE_BUILD_TYPE=Release'
-      - '-DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON'
-      - '-DENABLE_LTO=ON'
       - '-DENABLE_QT_TRANSLATION=ON'
       - '-DCITRA_ENABLE_COMPATIBILITY_REPORTING=ON'
+      - '-DUSE_DISCORD_PRESENCE=ON'
       - '-DENABLE_COMPATIBILITY_LIST_DOWNLOAD=OFF'
-      # - '-DENABLE_FFMPEG_VIDEO_DUMPER=ON'
-      # FFMPEG VIDEO DUMPER was disabled because of this: https://github.com/citra-emu/citra/issues/5949
       - '-DUSE_SYSTEM_SDL2=ON'
-      - '-DCMAKE_POLICY_DEFAULT_CMP0069=NEW'
-      - '-DENABLE_FDK=ON'
     cleanup:
       - /share/man
       - /share/pixmaps
     post-install:
-      - install -Dm644 ../dist/citra.svg /app/share/icons/hicolor/scalable/apps/citra.svg
-      - install -Dm644 ../dist/icon.png /app/share/icons/hicolor/512x512/apps/citra.png
+      - install -Dm755 ../citra-launcher.sh /app/bin/citra-launcher
+      - >-
+        install -Dm644 ../org.citra_emu.citra.svg
+        /app/share/icons/hicolor/scalable/apps/citra.svg
+      - >-
+        install -Dm644 ../dist/icon.png
+        /app/share/icons/hicolor/512x512/apps/citra.png
+      - >-
+        mv /app/share/mime/packages/citra.xml
+        /app/share/mime/packages/org.citra_emu.citra.xml
+      - >-
+        sed 's/citra/org.citra_emu.citra/g' -i
+        /app/share/mime/packages/org.citra_emu.citra.xml
     sources:
       - type: archive
         url: >-
-          https://github.com/citra-emu/citra-nightly/releases/download/nightly-1898/citra-unified-source-20230504-70335a7.tar.xz
-        sha256: b320585bd8c4c075f63d3d9c74b830718e58fcf04d987a5dcead402a72abf753
+          https://github.com/citra-emu/citra-nightly/releases/download/nightly-2009/citra-unified-source-20231012-40ba522.tar.xz
+        sha256: 927739892fff5d1b325b07182ab29a7355f58866debe60da1d6620680773ac97
         x-checker-data:
           type: json
           url: https://api.github.com/repos/citra-emu/citra-nightly/releases/latest
@@ -647,9 +697,10 @@ modules:
             .assets[] | .browser_download_url |
             match("https://.+citra-unified-source-.+.xz$") | .string
           is-main-source: true
-      - type: patch
-        path: rd-submodules/citra/unified-source-compat.patch
-
+      - type: file
+        path: rd-submodules/citra/org.citra_emu.citra.svg
+      - type: file
+        path: rd-submodules/citra/citra-launcher.sh
 
   # CITRA - END
 
@@ -674,55 +725,8 @@ modules:
   # PCSX2 - END
 
   # Dolphin - START
-  # DO NOT UPDATE! WENT ON QT6
   # https://github.com/flathub/org.DolphinEmu.dolphin-emu
   # WHEN UPADTING: remember to update rd-submodules/dolphin contents
-
-  # needed for the emulate bluetooth adapter feature to work
-  - name: bluez
-    config-opts:
-      - --enable-library
-      - --disable-manpages
-      - --disable-udev
-      - --disable-tools
-      - --disable-cups
-      - --disable-monitor
-      - --disable-client
-      - --disable-systemd
-      - --disable-a2dp
-      - --disable-avrcp
-      - --disable-network
-      - --disable-obex
-      - --disable-bap
-      - --disable-mcp
-      - --with-dbusconfdir=/app/etc
-      - --with-dbussessionbusdir=/app/usr/lib/system-services
-    sources:
-      - type: archive
-        url: https://www.kernel.org/pub/linux/bluetooth/bluez-5.66.tar.xz
-        sha256: 39fea64b590c9492984a0c27a89fc203e1cdc74866086efb8f4698677ab2b574
-        x-checker-data:
-          type: anitya
-          project-id: 10029
-          stable-only: true
-          url-template: https://www.kernel.org/pub/linux/bluetooth/bluez-$version.tar.xz
-
-  # enables motion controls on non-wii controllers (switch, ps4, etc)
-  # requires a udev rule enabling Motion Sensors access
-  - name: libevdev
-    buildsystem: meson
-    config-opts:
-      - -Dtests=disabled
-      - -Ddocumentation=disabled
-    sources:
-      - type: archive
-        url: https://www.freedesktop.org/software/libevdev/libevdev-1.13.0.tar.xz
-        sha256: 9edf2006cc86a5055279647c38ec923d11a821ee4dc2c3033e8d20e8ee237cd9
-        x-checker-data:
-          type: anitya
-          project-id: 20540
-          stable-only: true
-          url-template: https://www.freedesktop.org/software/libevdev/libevdev-$version.tar.xz
 
   # needed for screensaver inhibition
   - name: xdg-screensaver-shim
@@ -751,7 +755,7 @@ modules:
         # fatal: remote transport reported error
         # url: ssh://git@github.com/dolphin-emu/dolphin.git
         url: https://github.com/dolphin-emu/dolphin.git
-        commit: 46b99671d9158e0ca840c1d8ef249db0f321ced7
+        commit: 032c77b462a220016f23c5079e71bb23e0ad2adf
         x-checker-data:
           type: json
           url: https://dolphin-emu.org/update/latest/beta
@@ -877,9 +881,12 @@ modules:
       - type: git
         url: https://gitlab.freedesktop.org/slirp/libslirp.git
         tag: v4.7.0
+
   - name: melonds
     buildsystem: cmake-ninja
     builddir: true
+    config-opts:
+      - -DUSE_QT6=ON
     build-options:
       arch:
         aarch64:
@@ -895,14 +902,7 @@ modules:
   # MELONDS - END
 
   # RPCS3 - START
-  # DO NOT UPDATE! WENT ON QT6
   # https://github.com/flathub/net.rpcs3.RPCS3
-
-  # glu issue, check glu module for more info
-  #- rd-submodules/shared-modules/glu/glu-9.json
-
-  # dependency of: CEMU
-  - rd-submodules/shared-modules/glew/glew.json
 
   - name: rpcs3
     buildsystem: cmake-ninja
@@ -924,14 +924,12 @@ modules:
       ldflags: -fuse-ld=lld
     config-opts:
       - -DCMAKE_BUILD_TYPE=RelWithDebInfo
-      #- -DBUILD_LLVM_SUBMODULE=ON this was replaced by the fllowing:
       - -DBUILD_LLVM=OFF
       - -DUSE_NATIVE_INSTRUCTIONS=OFF
       - -DUSE_PRECOMPILED_HEADERS=OFF
       - -DUSE_SDL=ON
       - -DUSE_SYSTEM_CURL=ON
-      # Disabled this to force RPCS3 to use our built FFMPEG
-      - -DUSE_SYSTEM_FFMPEG=OFF
+      - -DUSE_SYSTEM_FFMPEG=OFF # Disabled this to force RPCS3 to use our built FFMPEG
       - -DUSE_SYSTEM_LIBPNG=ON
       - -DUSE_SYSTEM_SDL=ON
       - -DUSE_SYSTEM_ZLIB=ON
@@ -940,14 +938,13 @@ modules:
       - cp /usr/lib/sdk/llvm16/lib/libLLVM-16.so /app/lib/
       - |-
         set -eux
-
         COMM_TAG="$(awk -F'[\{,]' '/version{.*}/{printf "%d.%d.%d", $2, $3, $4}' ../rpcs3/rpcs3_version.cpp)"
         COMM_COUNT="$(git rev-list --count HEAD)";
         COMM_HASH="$(git rev-parse --short=8 HEAD)";
     sources:
       - type: git
         url: https://github.com/RPCS3/rpcs3.git
-        commit: a828c214b5c0b87b81fcd13ff3c1e952c9a5d6dd
+        commit: 75d239356a773b8211354049477d79006597505e
 
   # RPCS3 - END
 
@@ -962,24 +959,27 @@ modules:
       - -DENABLE_SDL=ON
       - -DENABLE_EVDEV=ON
       - -DDISTRIBUTOR=Flathub
+      - -DQT_DIR=
     cleanup:
       - /share/man
     post-install:
       - install -D primehack-wrapper /app/bin/primehack-wrapper
     sources:
       - type: git
-        url: https://github.com/TheDrifter363/primehack.git
-        commit: 6295c695307a67f11ee202b05cbdd7b5c1edae5c
+        url: https://github.com/XargonWan/primehack
+        commit: af7710ef7b04a632b4294eae5e0eff8fe9c4d1f8
+        #url: https://github.com/TheDrifter363/primehack.git
+        #commit: 6295c695307a67f11ee202b05cbdd7b5c1edae5c
        # detects whether dolphin is running in a flatpak sandbox
        # and makes it use xdg directories if it is.
        # prevents dolphin from attempting to write conf files
        # in non-writable paths, typically happens when a user
        # has leftover files from a previous non-flatpak install
       - type: patch
-        path: rd-submodules/dolphin/detectflatpak.patch
+        path: rd-submodules/primehack/detectflatpak.patch
        # version strings must match exactly for online multiplayer
       - type: patch
-        path: rd-submodules/dolphin/nodirtyversion.patch
+        path: rd-submodules/primehack/nodirtyversion.patch
       - type: script
         commands:
           - for i in {0..9}; do
@@ -1009,7 +1009,6 @@ modules:
   # Duckstation-AppImage - END
 
   # Cemu - START
-  # LATEST BUILD BEFORE RUNTIME 23.08
   # https://github.com/cemu-project/Cemu/releases
   # https://github.com/flathub/info.cemu.Cemu
 
@@ -1066,28 +1065,6 @@ modules:
           type: anitya
           project-id: 10649
           url-template: https://libzip.org/download/libzip-$version.tar.xz
-
-  - name: rapidjson
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DRAPIDJSON_BUILD_DOC=OFF
-      - -DRAPIDJSON_BUILD_EXAMPLES=OFF
-      - -DRAPIDJSON_BUILD_TESTS=OFF
-      - -DRAPIDJSON_BUILD_THIRDPARTY_GTEST=OFF
-    cleanup:
-      - /include
-      - /lib/cmake
-      - /lib/pkgconfig
-      - /share/doc
-    sources:
-      - type: archive
-        url: https://github.com/Tencent/rapidjson/archive/refs/tags/v1.1.0.tar.gz
-        sha256: bf7ced29704a1e696fbccf2a2b4ea068e7774fa37f6d7dd4039d0787f8bed98e
-        x-checker-data:
-          type: anitya
-          project-id: 7422
-          stable-only: true
-          url-template: https://github.com/Tencent/rapidjson/archive/refs/tags/v$version.tar.gz
 
   - name: glm
     buildsystem: cmake-ninja
