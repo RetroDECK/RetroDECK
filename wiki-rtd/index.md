@@ -149,11 +149,3 @@ Yes! Everybody is welcome to contribute in any way possible if it is personal ti
 - Engage with the rest of the community.
 
 - Help us make RetroDECK better.
-
-.. toctree::
-   :hidden:
-   :maxdepth: 1
-
-   introducing/Switch:-Yuzu.md
-   introducing/history
-   changelog/index
