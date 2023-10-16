@@ -1266,21 +1266,22 @@ modules:
   # MAME - Start
   # https://sdlmame.wallyweek.org/download/
 
-  # - name: mame
-  #   buildsystem: simple
-  #   build-commands:
-  #     - ar xv mame*.deb
-  #     - tar xvf control.tar.zst
-  #     - tar xvf data.tar.zst
-  #     - cp -r etc ${FLATPAK_DEST}
-  #     - cp -r usr ${FLATPAK_DEST}
-  #     - mkdir -p ${FLATPAK_DEST}/bin
-  #     - ln -s ${FLATPAK_DEST}/usr/games/mame ${FLATPAK_DEST}/bin/mame
-  #     - chmod +x ${FLATPAK_DEST}/bin/mame
-  #   sources:
-  #     - type: file
-  #       url: "https://launchpad.net/~c.falco/+archive/mame/+files/mame_0.258+dfsg.1-0ubuntu1~ppa1~lunar1_amd64.deb"
-  #       sha256: f464a000b286cccc78b3792909edcbdda0f4c8315532f75a108eb07752bc805f
+  - name: mame
+    buildsystem: simple
+    build-commands:
+      - ar xv mame*.deb
+      - tar xvf control.tar.zst
+      - tar xvf data.tar.zst
+      - rm -rf usr/share/[applications,docs,games]
+      - cp -r etc ${FLATPAK_DEST}
+      - cp -r usr ${FLATPAK_DEST}
+      - mkdir -p ${FLATPAK_DEST}/bin
+      - ln -s ${FLATPAK_DEST}/usr/games/mame ${FLATPAK_DEST}/bin/mame
+      - chmod +x ${FLATPAK_DEST}/bin/mame
+    sources:
+      - type: file
+        url: "https://launchpad.net/~c.falco/+archive/mame/+files/mame_0.258+dfsg.1-0ubuntu1~ppa1~lunar1_amd64.deb"
+        sha256: f464a000b286cccc78b3792909edcbdda0f4c8315532f75a108eb07752bc805f
 
   # MAME - End
 
