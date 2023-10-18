@@ -1270,6 +1270,7 @@ modules:
       - ar xv mame*.deb
       - tar xvf control.tar.zst
       - tar xvf data.tar.zst
+      - rm -rf usr/share/[applications,docs,games]
       - cp -r etc ${FLATPAK_DEST}
       - cp -r usr ${FLATPAK_DEST}
       - mkdir -p ${FLATPAK_DEST}/bin
