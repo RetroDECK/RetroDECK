@@ -1263,6 +1263,13 @@ modules:
 
   # Vita3K - END
 
+  - name: solarus
+    buildsystem: cmake-ninja     
+    sources:
+      - type: git
+        url: https://gitlab.com/solarus-games/solarus.git
+        branch: e50f4e2723a8f777c54eb4fb46b567bf60c33723
+
   # External manifests end
 
   - name: retrodeck
