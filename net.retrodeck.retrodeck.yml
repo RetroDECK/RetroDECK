@@ -1308,6 +1308,8 @@ modules:
   - name: solarus
     buildsystem: cmake-ninja
     builddir: true
+    config-opts:
+      - -DSOLARUS_GUI=OFF
     sources:
       - type: git
         url: https://gitlab.com/solarus-games/solarus.git
