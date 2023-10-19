@@ -1265,29 +1265,54 @@ modules:
   # Vita3K - END
 
   # SOLARUS - START
-  # https://gitlab.com/solarus-games/solarus.git
+  # https://github.com/flathub/org.solarus_games.solarus.Launcher
 
-  - name: libmodplug
-    rm-configure: true
+  - name: luajit
+    no-autogen: true
+    cleanup:
+      - /bin
+      - /lib/*.a
+      - /include
+      - /lib/pkgconfig
+      - /share/man
     sources:
       - type: archive
-        url: https://downloads.sourceforge.net/sourceforge/modplug-xmms/libmodplug/0.8.9.0/libmodplug-0.8.9.0.tar.gz
-        sha256: 457ca5a6c179656d66c01505c0d95fafaead4329b9dbaa0f997d00a3508ad9de
+        url: https://luajit.org/download/LuaJIT-2.0.5.tar.gz
+        sha256: 874b1f8297c697821f561f9b73b57ffd419ed8f4278c82e05b48806d30c1e979
+      - type: shell
+        commands:
+          - sed -i 's|/usr/local|/app|' ./Makefile
+
+  - name: libmodplug
+    cleanup:
+      - /include
+    sources:
+      - type: archive
+        url: https://download.sourceforge.net/project/modplug-xmms/libmodplug/0.8.9.0/libmodplug-0.8.9.0.tar.gz
+        sha512: 880e10154fd367ee24ace53ca7e32a5c1fee7dfff1f934e6499944c12779427da63e2f55f8d6ce25db0a42a5b4424053bf64305b31dbfc4ef6a8909924d655fd
+
+  - name: physfs
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DPHYSFS_BUILD_TEST=OFF
+    sources:
+      - type: archive
+        url: https://icculus.org/physfs/downloads/physfs-3.0.2.tar.bz2
+        sha256: 304df76206d633df5360e738b138c94e82ccf086e50ba84f456d3f8432f9f863
+        size: 194888
         x-checker-data:
           type: anitya
-          project-id: 5669
-          url-template: https://downloads.sourceforge.net/sourceforge/modplug-xmms/libmodplug/$version/libmodplug-$version.tar.gz
-      - type: script
-        commands:
-          - autoreconf -fiv
-        dest-filename: autogen.sh
+          project-id: 3631
+          url-template: https://icculus.org/physfs/downloads/physfs-$version.tar.bz2
 
   - name: solarus
-    buildsystem: cmake-ninja     
+    buildsystem: cmake-ninja
+    builddir: true
     sources:
       - type: git
         url: https://gitlab.com/solarus-games/solarus.git
-        branch: e50f4e2723a8f777c54eb4fb46b567bf60c33723
+        tag: v1.6.5
+        commit: 3aec70b0556a8d7aed7903d1a3e4d9a18c5d1649
 
   # SOLARUS - END
 
