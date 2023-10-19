@@ -280,6 +280,20 @@ modules:
           project-id: 7422
           stable-only: true
           url-template: https://github.com/Tencent/rapidjson/archive/refs/tags/v$version.tar.gz
+
+  # dependency of: CEMU, SOLARUS
+  - name: glm
+    buildsystem: cmake-ninja
+    cleanup: ['*']
+    no-make-install: true
+    post-install:
+      - install -d ${FLATPAK_DEST}/include
+      - cp -R glm ${FLATPAK_DEST}/include
+      - cp -R cmake/glm ${FLATPAK_DEST}/lib/cmake
+    sources:
+      - type: archive
+        url: https://github.com/g-truc/glm/releases/download/0.9.9.8/glm-0.9.9.8.zip
+        sha256: 37e2a3d62ea3322e43593c34bae29f57e3e251ea89f4067506c94043769ade4c
           
   # dependency of: CEMU, RPCS3
   - rd-submodules/shared-modules/glew/glew.json
@@ -1067,19 +1081,6 @@ modules:
           project-id: 10649
           url-template: https://libzip.org/download/libzip-$version.tar.xz
 
-  - name: glm
-    buildsystem: cmake-ninja
-    cleanup: ['*']
-    no-make-install: true
-    post-install:
-      - install -d ${FLATPAK_DEST}/include
-      - cp -R glm ${FLATPAK_DEST}/include
-      - cp -R cmake/glm ${FLATPAK_DEST}/lib/cmake
-    sources:
-      - type: archive
-        url: https://github.com/g-truc/glm/releases/download/0.9.9.8/glm-0.9.9.8.zip
-        sha256: 37e2a3d62ea3322e43593c34bae29f57e3e251ea89f4067506c94043769ade4c
-
   - name: fmt
     buildsystem: cmake-ninja
     config-opts:
@@ -1263,12 +1264,32 @@ modules:
 
   # Vita3K - END
 
+  # SOLARUS - START
+  # https://gitlab.com/solarus-games/solarus.git
+
+  - name: libmodplug
+    rm-configure: true
+    sources:
+      - type: archive
+        url: https://downloads.sourceforge.net/sourceforge/modplug-xmms/libmodplug/0.8.9.0/libmodplug-0.8.9.0.tar.gz
+        sha256: 457ca5a6c179656d66c01505c0d95fafaead4329b9dbaa0f997d00a3508ad9de
+        x-checker-data:
+          type: anitya
+          project-id: 5669
+          url-template: https://downloads.sourceforge.net/sourceforge/modplug-xmms/libmodplug/$version/libmodplug-$version.tar.gz
+      - type: script
+        commands:
+          - autoreconf -fiv
+        dest-filename: autogen.sh
+
   - name: solarus
     buildsystem: cmake-ninja     
     sources:
       - type: git
         url: https://gitlab.com/solarus-games/solarus.git
         branch: e50f4e2723a8f777c54eb4fb46b567bf60c33723
+
+  # SOLARUS - END
 
   # External manifests end
 
