@@ -39,7 +39,7 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("13_xj3b3")
 }, {
-"duration": 1.0,
+"duration": 0.5,
 "texture": ExtResource("14_lnkoa")
 }, {
 "duration": 1.0,
@@ -69,6 +69,13 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_36ht7")
 script = ExtResource("1_obpq7")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 126.0
+offset_top = 66.0
+offset_right = 1127.0
+offset_bottom = 621.0
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_xivj6")
@@ -100,7 +107,7 @@ theme = ExtResource("1_36ht7")
 layout_mode = 2
 offset_left = 21.0
 offset_top = 23.0
-offset_right = 750.0
+offset_right = 745.0
 offset_bottom = 436.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/TabContainer/System/ScrollContainer"]
@@ -174,7 +181,7 @@ theme = ExtResource("1_36ht7")
 layout_mode = 2
 offset_left = 32.0
 offset_top = 23.0
-offset_right = 685.0
+offset_right = 748.0
 offset_bottom = 455.0
 size_flags_vertical = 3
 
@@ -257,48 +264,49 @@ disabled = true
 text = "TATE Mode (coming soon)"
 
 [node name="Controls" type="TabBar" parent="MarginContainer/TabContainer"]
-visible = false
 layout_mode = 2
 theme = ExtResource("1_36ht7")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/TabContainer/Controls"]
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/TabContainer/Controls"]
 layout_mode = 0
-offset_left = 28.0
-offset_top = 23.0
-offset_right = 637.0
-offset_bottom = 445.0
+offset_left = 17.0
+offset_right = 751.0
+offset_bottom = 494.0
 
-[node name="buttons_container" type="VBoxContainer" parent="MarginContainer/TabContainer/Controls/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/TabContainer/Controls/ScrollContainer"]
 layout_mode = 2
 
-[node name="decorations_label" type="Label" parent="MarginContainer/TabContainer/Controls/VBoxContainer/buttons_container"]
+[node name="buttons_container" type="VBoxContainer" parent="MarginContainer/TabContainer/Controls/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="decorations_label" type="Label" parent="MarginContainer/TabContainer/Controls/ScrollContainer/VBoxContainer/buttons_container"]
 layout_mode = 2
 text = "Controls"
 
-[node name="decorations_separator" type="HSeparator" parent="MarginContainer/TabContainer/Controls/VBoxContainer/buttons_container"]
+[node name="decorations_separator" type="HSeparator" parent="MarginContainer/TabContainer/Controls/ScrollContainer/VBoxContainer/buttons_container"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/TabContainer/Controls/VBoxContainer/buttons_container"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/TabContainer/Controls/ScrollContainer/VBoxContainer/buttons_container"]
 layout_mode = 2
 
-[node name="wide_screen" type="Label" parent="MarginContainer/TabContainer/Controls/VBoxContainer/buttons_container/HBoxContainer"]
+[node name="wide_screen" type="Label" parent="MarginContainer/TabContainer/Controls/ScrollContainer/VBoxContainer/buttons_container/HBoxContainer"]
 layout_mode = 2
-text = "Steam Controller Profile"
+text = "Steam: Controller Templates"
 
-[node name="wide_screen_advanced" type="Button" parent="MarginContainer/TabContainer/Controls/VBoxContainer/buttons_container/HBoxContainer"]
+[node name="wide_screen_advanced" type="Button" parent="MarginContainer/TabContainer/Controls/ScrollContainer/VBoxContainer/buttons_container/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 4
 text = "Install"
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/TabContainer/Controls/VBoxContainer/buttons_container"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/TabContainer/Controls/ScrollContainer/VBoxContainer/buttons_container"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MarginContainer/TabContainer/Controls/VBoxContainer/buttons_container/HBoxContainer2"]
+[node name="Label" type="Label" parent="MarginContainer/TabContainer/Controls/ScrollContainer/VBoxContainer/buttons_container/HBoxContainer2"]
 layout_mode = 2
 text = "Button Layout"
 
-[node name="borders" type="OptionButton" parent="MarginContainer/TabContainer/Controls/VBoxContainer/buttons_container/HBoxContainer2"]
+[node name="borders" type="OptionButton" parent="MarginContainer/TabContainer/Controls/ScrollContainer/VBoxContainer/buttons_container/HBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 4
@@ -309,7 +317,7 @@ popup/item_0/id = 0
 popup/item_1/text = "Nintendo"
 popup/item_1/id = 1
 
-[node name="shaders" type="CheckButton" parent="MarginContainer/TabContainer/Controls/VBoxContainer/buttons_container"]
+[node name="shaders" type="CheckButton" parent="MarginContainer/TabContainer/Controls/ScrollContainer/VBoxContainer/buttons_container"]
 layout_mode = 2
 disabled = true
 button_pressed = true
@@ -325,8 +333,8 @@ theme = ExtResource("1_36ht7")
 layout_mode = 2
 offset_left = 27.0
 offset_top = 22.0
-offset_right = 670.0
-offset_bottom = 494.0
+offset_right = 748.0
+offset_bottom = 470.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/TabContainer/Tools/ScrollContainer"]
 layout_mode = 2
@@ -430,16 +438,15 @@ text = "Move User Files"
 layout_mode = 2
 
 [node name="Network" type="TabBar" parent="MarginContainer/TabContainer"]
-visible = false
 layout_mode = 2
 theme = ExtResource("1_36ht7")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/TabContainer/Network"]
 layout_mode = 2
 offset_left = 21.0
-offset_top = 23.0
+offset_top = 8.0
 offset_right = 750.0
-offset_bottom = 432.0
+offset_bottom = 464.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/TabContainer/Network/ScrollContainer"]
 layout_mode = 2
@@ -637,6 +644,7 @@ layout_mode = 2
 text = "Full RetroDECK Reset"
 
 [node name="Configurator" type="TabBar" parent="MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
 theme = ExtResource("1_36ht7")
 
@@ -784,10 +792,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 318.0
-offset_top = 590.0
-offset_right = -340.0
-offset_bottom = -90.0
+offset_left = 376.0
+offset_top = 612.0
+offset_right = -282.0
+offset_bottom = -68.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.133333, 0.0470588, 0.188235, 1)
@@ -806,7 +814,7 @@ scroll_following = true
 script = ExtResource("5_cprkf")
 
 [node name="Rekku" type="Sprite2D" parent="."]
-position = Vector2(1105, 556)
+position = Vector2(1125, 586)
 scale = Vector2(0.292969, 0.292969)
 texture = ExtResource("9_brsrf")
 
@@ -814,12 +822,12 @@ texture = ExtResource("9_brsrf")
 sprite_frames = SubResource("SpriteFrames_trwmf")
 animation = &"blink"
 autoplay = "blink"
-frame_progress = 0.385046
+frame_progress = 0.299789
 
 [node name="speech" type="AnimatedSprite2D" parent="Rekku"]
 sprite_frames = SubResource("SpriteFrames_p8gbs")
 animation = &"speech"
-frame_progress = 0.737702
+frame_progress = 0.664627
 
 [node name="coltroller_guide" type="PanelContainer" parent="."]
 layout_mode = 0
