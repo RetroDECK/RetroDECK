@@ -1585,7 +1585,7 @@
         <platform>snes</platform>
         <theme>snesna</theme>
     </system>
-<!--
+
     <system>
         <name>solarus</name>
         <fullname>Solarus Game Engine</fullname>
@@ -1595,7 +1595,7 @@
         <platform>solarus</platform>
         <theme>solarus</theme>
     </system>
--->
+
     <system>
         <name>spectravideo</name>
         <fullname>Spectravideo</fullname>
