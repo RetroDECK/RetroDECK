@@ -401,7 +401,7 @@
         <!--<command label="Flycast (Standalone)">%EMULATOR_FLYCAST% %ROM%</command>-->
         <command label="Kronos">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/kronos_libretro.so %ROM%</command>
         <!--<command label="Mednafen [Sega Saturn] (Standalone)">%EMULATOR_MEDNAFEN% -force_module ss %ROM%</command>-->
-        <!--<command label="Play! (Standalone)">%EMULATOR_PLAY!% --disc %ROM%</command>-->
+        <!--<command label="Play! (Standalone)">%EMULATOR_PLAY!% &ndash;&ndash;disc %ROM%</command>-->
         <command label="RPCS3 Shortcut (Standalone)">%ENABLESHORTCUTS% %EMULATOR_OS-SHELL% %ROM%</command>
         <!--<command label="Triforce (Standalone)">%INJECT%=%BASENAME%.esprefix %EMULATOR_TRIFORCE% -b -e %ROM%</command>-->
         <command label="xemu (Standalone)">%INJECT%=%BASENAME%.esprefix %EMULATOR_XEMU% -dvd_path %ROM%</command>
@@ -597,7 +597,7 @@
         <path>%ROMPATH%/famicom</path>
         <extension>.3dsen .3DSEN .fds .FDS .nes .NES .unf .UNF .unif .UNIF .7z .7Z .zip .ZIP</extension>
         <command label="Mesen">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mesen_libretro.so %ROM%</command>
-        <!--<command label="Mesen (Standalone)">%EMULATOR_MESEN% --fullscreen %ROM%</command>-->
+        <!--<command label="Mesen (Standalone)">%EMULATOR_MESEN% &ndash;&ndash;fullscreen %ROM%</command>-->
         <command label="Nestopia UE">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/nestopia_libretro.so %ROM%</command>
         <!-- <command label="Nestopia UE (Standalone)">%EMULATOR_NESTOPIA-UE% &ndash;&ndash;fullscreen %ROM%</command> -->
         <command label="FCEUmm">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/fceumm_libretro.so %ROM%</command>
@@ -638,7 +638,7 @@
         <path>%ROMPATH%/fds</path>
         <extension>.nes .NES .fds .FDS .unf .UNF .UNIF .UNIF .7z .7Z .zip .ZIP</extension>
         <command label="Mesen">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mesen_libretro.so %ROM%</command>
-        <!--<command label="Mesen (Standalone)">%EMULATOR_MESEN% --fullscreen %ROM%</command>-->
+        <!--<command label="Mesen (Standalone)">%EMULATOR_MESEN% &ndash;&ndash;fullscreen %ROM%</command>-->
         <command label="Nestopia UE">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/nestopia_libretro.so %ROM%</command>
         <!-- <command label="Nestopia UE (Standalone)">%EMULATOR_NESTOPIA-UE% &ndash;&ndash;fullscreen %ROM%</command> -->
         <command label="FCEUmm">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/fceumm_libretro.so %ROM%</command>
@@ -744,7 +744,7 @@
         <command label="SMS Plus GX">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/smsplus_libretro.so %ROM%</command>
 	<!--<command label="PicoDrive">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/picodrive_libretro.so %ROM%</command> -->
 	<!--<command label="Mednafen (Standalone)">%EMULATOR_MEDNAFEN% -force_module gg %ROM%</command> -->
-	<!--<command label="ares (Standalone)">%EMULATOR_ARES% --fullscreen --system "Game Gear" %ROM%</command>-->
+	<!--<command label="ares (Standalone)">%EMULATOR_ARES% &ndash;&ndash;fullscreen &ndash;&ndash;system "Game Gear" %ROM%</command>-->
         <platform>gamegear</platform>
         <theme>gamegear</theme>
     </system>
@@ -760,7 +760,7 @@
         <!-- <command label="Gearboy (Standalone)">%EMULATOR_GEARBOY% %ROM%</command> -->
         <command label="TGB Dual">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/tgbdual_libretro.so %ROM%</command>
         <command label="Mesen-S">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mesen-s_libretro.so %ROM%</command>
-        <!--<command label="Mesen (Standalone)">%EMULATOR_MESEN% --fullscreen %ROM%</command>-->
+        <!--<command label="Mesen (Standalone)">%EMULATOR_MESEN% &ndash;&ndash;fullscreen %ROM%</command>-->
         <command label="bsnes">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/bsnes_libretro.so %ROM%</command>
         <command label="mGBA">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mgba_libretro.so %ROM%</command>
         <!-- <command label="mGBA (Standalone)">%EMULATOR_MGBA% -f %ROM%</command> -->
@@ -780,7 +780,7 @@
         <!-- <command label="VBA-M (Standalone)">%EMULATOR_VBA-M% -f %ROM%</command> -->
         <command label="VBA Next">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/vba_next_libretro.so %ROM%</command>
         <command label="gpSP">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/gpsp_libretro.so %ROM%</command>
-        <!--<command label="ares (Standalone)">%EMULATOR_ARES% --fullscreen --system "Game Boy Advance" %ROM%</command>-->
+        <!--<command label="ares (Standalone)">%EMULATOR_ARES% &ndash;&ndash;fullscreen &ndash;&ndash;system "Game Boy Advance" %ROM%</command>-->
         <!--<command label="SkyEmu (Standalone)">%EMULATOR_SKYEMU% %ROM%</command>-->
         <platform>gba</platform>
         <theme>gba</theme>
@@ -797,7 +797,7 @@
         <!-- <command label="Gearboy (Standalone)">%EMULATOR_GEARBOY% %ROM%</command> -->
         <command label="TGB Dual">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/tgbdual_libretro.so %ROM%</command>
         <command label="Mesen-S">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mesen-s_libretro.so %ROM%</command>
-        <!--<command label="Mesen (Standalone)">%EMULATOR_MESEN% --fullscreen %ROM%</command>-->
+        <!--<command label="Mesen (Standalone)">%EMULATOR_MESEN% &ndash;&ndash;fullscreen %ROM%</command>-->
         <command label="bsnes">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/bsnes_libretro.so %ROM%</command>
         <command label="mGBA">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mgba_libretro.so %ROM%</command>
         <!-- <command label="mGBA (Standalone)">%EMULATOR_MGBA% -f %ROM%</command> -->
@@ -1266,9 +1266,9 @@
         <path>%ROMPATH%/nes</path>
         <extension>.fds .FDS .nes .NES .unf .UNF .unif .UNIF .7z .7Z .zip .ZIP</extension>
         <command label="Mesen">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mesen_libretro.so %ROM%</command>
-        <!<command label="Mesen (Standalone)">%EMULATOR_MESEN% --fullscreen %ROM%</command>-->
+        <!--<command label="Mesen (Standalone)">%EMULATOR_MESEN% &ndash;&ndash;fullscreen %ROM%</command>-->
         <command label="Nestopia UE">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/nestopia_libretro.so %ROM%</command>
-        <!-- <command label="Nestopia UE (Standalone)">%EMULATOR_NESTOPIA-UE% &ndash;&ndashfullscreen %ROM%</command> -->
+        <!-- <command label="Nestopia UE (Standalone)">%EMULATOR_NESTOPIA-UE% &ndash;&ndash;fullscreen %ROM%</command> -->
         <command label="FCEUmm">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/fceumm_libretro.so %ROM%</command>
         <command label="QuickNES">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/quicknes_libretro.so %ROM%</command>
         <!-- <command label="puNES (Standalone)">%EMULATOR_PUNES% -u yes %ROM%</command> -->
@@ -1284,10 +1284,10 @@
         <fullname>Nokia N-Gage</fullname>
         <path>%ROMPATH%/ngage</path>
         <extension>.ngage .zip .ZIP</extension>
-        <command label="EKA2L1 [Mounted] (Standalone)">%EMULATOR_EKA2L1% --fullscreen --device RH-29 --mount %ROM% --run "%BASENAME%"</command>
-        <command label="EKA2L1 [Installed] (Standalone)">%EMULATOR_EKA2L1% --fullscreen --device RH-29 --run "%BASENAME%"</command>
-        <command label="EKA2L1 [Mounted] (Wine)">%STARTDIR%=%EMUDIR% %PRECOMMAND_WINE% %EMULATOR_EKA2L1-WINDOWS% --fullscreen --device RH-29 --mount %ROM% --run "%BASENAME%"</command>
-        <command label="EKA2L1 [Installed] (Wine)">%STARTDIR%=%EMUDIR% %PRECOMMAND_WINE% %EMULATOR_EKA2L1-WINDOWS% --fullscreen --device RH-29 --run "%BASENAME%"</command>
+        <command label="EKA2L1 [Mounted] (Standalone)">%EMULATOR_EKA2L1% &ndash;&ndash;fullscreen &ndash;&ndash;device RH-29 &ndash;&ndash;mount %ROM% &ndash;&ndash;run "%BASENAME%"</command>
+        <command label="EKA2L1 [Installed] (Standalone)">%EMULATOR_EKA2L1% &ndash;&ndash;fullscreen &ndash;&ndash;device RH-29 &ndash;&ndash;run "%BASENAME%"</command>
+        <command label="EKA2L1 [Mounted] (Wine)">%STARTDIR%=%EMUDIR% %PRECOMMAND_WINE% %EMULATOR_EKA2L1-WINDOWS% &ndash;&ndash;fullscreen &ndash;&ndash;device RH-29 &ndash;&ndash;mount %ROM% &ndash;&ndash;run "%BASENAME%"</command>
+        <command label="EKA2L1 [Installed] (Wine)">%STARTDIR%=%EMUDIR% %PRECOMMAND_WINE% %EMULATOR_EKA2L1-WINDOWS% &ndash;&ndash;fullscreen &ndash;&ndash;device RH-29 &ndash;&ndash;run "%BASENAME%"</command>
         <platform>ngage</platform>
         <theme>ngage</theme>
     </system>
@@ -1457,8 +1457,8 @@
 	<command label="PCSX2 (Standalone)">%EMULATOR_PCSX2% -batch %ROM%</command>
         <command label="LRPS2">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/pcsx2_libretro.so %ROM%</command>
         <command label="PCSX2">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/pcsx2_libretro.so %ROM%</command>
-        <!--<command label="PCSX2 Legacy (Standalone)">%EMULATOR_PCSX2-LEGACY% --nogui %ROM%</command>-->
-        <!--<command label="Play! (Standalone)">%EMULATOR_PLAY!% --disc %ROM%</command>-->
+        <!--<command label="PCSX2 Legacy (Standalone)">%EMULATOR_PCSX2-LEGACY% &ndash;&ndash;nogui %ROM%</command>-->
+        <!--<command label="Play! (Standalone)">%EMULATOR_PLAY!% &ndash;&ndash;disc %ROM%</command>-->
         <platform>ps2</platform>
         <theme>ps2</theme>
     </system>
@@ -1568,8 +1568,8 @@
         <command label="bsnes-mercury Accuracy">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/bsnes_mercury_accuracy_libretro.so %ROM%</command>
         <!--<command label="bsnes (Standalone)">%EMULATOR_BSNES% &ndash;&ndashfullscreen %ROM%</command> -->
         <command label="Mesen-S">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mesen-s_libretro.so %ROM%</command>
-        <!--<command label="Mesen (Standalone)">%EMULATOR_MESEN% --fullscreen %ROM%</command>-->
-        <!--<command label="ares (Standalone)">%EMULATOR_ARES% --fullscreen --system "Super Famicom" %ROM%</command>-->
+        <!--<command label="Mesen (Standalone)">%EMULATOR_MESEN% &ndash;&ndash;fullscreen %ROM%</command>-->
+        <!--<command label="ares (Standalone)">%EMULATOR_ARES% &ndash;&ndash;fullscreen &ndash;&ndash;system "Super Famicom" %ROM%</command>-->
         <platform>satellaview</platform>
         <theme>satellaview</theme>
     </system>
