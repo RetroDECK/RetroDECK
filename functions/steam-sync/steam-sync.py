@@ -414,20 +414,23 @@ def addToSteam():
                         elif tag.tag=="altemulator":
                             altemulator=tag.text
                             
-                    if favorite=="true" and altemulator=="":
-                        print("Find favorite game: {}".format(name))
-                        games.append([name,command_list_default[system]+" '"+roms_folder+"/"+system+path[1:]+"'"])
-                    elif favorite=="true":
-                        print("Find favorite game with alternative emulator: {}, {}".format(name,altemulator))
-                        if ("neogeocd" in system) and altemulator=="FinalBurn Neo":
-                            games.append([name,alt_command_list[altemulator+" neogeocd"]+" '"+roms_folder+"/"+system+path[1:]+"'"])
-                            print(alt_command_list[altemulator+" neogeocd"]+" '"+roms_folder+"/"+system+path[1:]+"'")
-                        elif system=="pico8" and altemulator=="PICO-8 Splore (Standalone)":
-                            games.append([name,alt_command_list[altemulator]])
-                            print(alt_command_list[altemulator])
+                    if favorite=="true" and os.path.exists(roms_folder+"/"+system+path[1:]):
+                        if altemulator=="":
+                            print("\tFind favorite game: {}".format(name))
+                            games.append([name,command_list_default[system]+" "+roms_folder+"/"+system+path[1:]])
                         else:
-                            games.append([name,alt_command_list[altemulator]+" '"+roms_folder+"/"+system+path[1:]+"'"])
-                            print(alt_command_list[altemulator]+" '"+roms_folder+"/"+system+path[1:]+"'")
+                            print("\tFind favorite game with alternative emulator: {}, {}".format(name,altemulator))
+                            if ("neogeocd" in system) and altemulator=="FinalBurn Neo":
+                                games.append([name,alt_command_list[altemulator+" neogeocd"]+" "+roms_folder+"/"+system+path[1:]])
+                                print("\t{}".format(alt_command_list[altemulator+" neogeocd"]+" "+roms_folder+"/"+system+path[1:]))
+                            elif system=="pico8" and altemulator=="PICO-8 Splore (Standalone)":
+                                games.append([name,alt_command_list[altemulator]])
+                                print("\t{}".format(alt_command_list[altemulator]))
+                            else:
+                                games.append([name,alt_command_list[altemulator]+" "+roms_folder+"/"+system+path[1:]])
+                                print("\t{}".format(alt_command_list[altemulator]+" "+roms_folder+"/"+system+path[1:]))
+                    elif favorite=="true":
+                        print("\tGame {} ignored, file not found".format(name))
                 
     create_shortcut(games)
 
