@@ -23,10 +23,17 @@ Instead of having several different software on your system for a variety of emu
 
 RetroDECK is a [EmulationStation Desktop Edition](https://es-de.org) (ES-DE) powered flatpak application that builds in a variety of emulators and other software that allows you to play your favorite retro (and even not-so-retro) games in one complete package. 
 
-It's inspired by embedded emulation systems like AmberELEC, EmuELEC, CoreELEC, Lakka, and Batocera. 
-The RetroDECK team consists of several veterans for some of the projects mentioned. 
+It's inspired by embedded emulation systems like:
 
-RetroDECK adds the `RetroDECK Framework` and the `RetroDECK Configurator` on top of the emulators and ES-DE interface that allows deeper integrations between emulators and easier exposure to a variety of features that you otherwise need to set per emulator basis to create a uniformity between them. 
+- AmberELEC
+- EmuELEC
+- CoreELEC
+- Lakka
+- Batocera
+
+The RetroDECK team consists of several veterans for some of the projects mentioned above. 
+
+RetroDECK also adds the `RetroDECK Framework` and the `RetroDECK Configurator` on top of the emulators and ES-DE interface that allows deeper integrations between emulators and easier exposure to a variety of features that you otherwise need to set per emulator basis to create a uniformity between them. 
 
 For the long term vision and support you can check out the following wiki page:
 
