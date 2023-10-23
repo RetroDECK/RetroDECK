@@ -77,8 +77,3 @@ Please check out the [Wiki](https://github.com/XargonWan/RetroDECK/wiki) for eve
 
 ## The FAQ
 The RetroDECK [FAQ](https://github.com/XargonWan/RetroDECK/wiki/FAQs%3A-Frequently-asked-questions) on the wiki has a vast variety of questions and awnsers. 
-
-
-###### The Steam Deck logo is a registered trademark of Valve Corporation. This project is in no way officially affiliated with Valve.<br/>
-
-###### All trademarks, logos and brand names are the property of their respective owners. All company, product and service names used in this project are for identification purposes only. Use of these names, trademarks and brands does not imply endorsement.
