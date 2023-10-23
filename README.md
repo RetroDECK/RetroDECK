@@ -87,4 +87,4 @@ Please check out the [Wiki](https://github.com/XargonWan/RetroDECK/wiki) for eve
 The RetroDECK [FAQ](https://github.com/XargonWan/RetroDECK/wiki/FAQs%3A-Frequently-asked-questions) on the wiki has a vast variety of questions and awnsers. 
 
 # How to get support? 
-Use the supports channels on ![Discord](https://img.shields.io/discord/951662718102962256?label=discord)
+Use the supports channels on [Discord](https://discord.gg/Dz3szYsP8g). 
