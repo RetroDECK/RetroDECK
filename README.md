@@ -45,7 +45,7 @@ You will need to manually configure the input to match your device and might nee
 RetroDECK does not have plans to support Windows, macOS, Android, or iOS.<br>For similar functionality on Windows you could explore [Retrobat](https://www.retrobat.org/) as an alternative.
 
 ## How do I install RetroDECK?
-Read and follow the guide here: [Installation instructions](https://github.com/XargonWan/RetroDECK/wiki/How-to:-Getting-started) on the Wiki
+Read and follow the guide here: [How to: Start using RetroDECK](https://github.com/XargonWan/RetroDECK/wiki/How-to%3A-Start-using-RetroDECK) on the Wiki
 
 ## The RetroDECK community:
 
