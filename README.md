@@ -20,6 +20,7 @@
 
 # What is RetroDECK?
 Instead of having several different software on your system for a variety of emulators and frontends you only need to have one: RetroDECK.
+
 RetroDECK is a [EmulationStation Desktop Edition](https://es-de.org) (ES-DE) powered flatpak application that builds in a variety of emulators and other software that allows you to play your favorite retro (and even not-so-retro) games in one complete package. 
 
 It's inspired by embedded emulation systems like AmberELEC, EmuELEC, CoreELEC, Lakka, and Batocera. 
