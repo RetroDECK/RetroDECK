@@ -40,20 +40,6 @@ For the long term vision and support you can check out the following wiki page:
 [Lemmy](https://lemmy.zip/c/retrodeck)<br/>
 [Subreddit](https://www.reddit.com/r/retrodeck)
 
-## Is RetroDECK in Beta?
-Yes, here you can read more about the beta period:
-
-[RetroDECK: Beta period](https://github.com/XargonWan/RetroDECK/wiki/RetroDECK%3A-Beta-period)
-
-
-### Can I contribute to the project?
-
-Yes, off course! <br>
-Read up here on how to help out, there is something for everyone:
-
-[How to: Contribute to RetroDECK](https://github.com/XargonWan/RetroDECK/wiki/How-to%3A-Contribute-to-RetroDECK)
-
-
 # How do I start using RetroDECK?
 
 We have an in depth How To on how to get started over here: 
@@ -70,6 +56,20 @@ RetroDECK currently supports:
 For more information read up here:
 
 [Supported Systems](https://github.com/XargonWan/RetroDECK/wiki/RetroDECK%3A-Supported-Systems)
+
+
+## Is RetroDECK in Beta?
+Yes, here you can read more about the beta period:
+
+[RetroDECK: Beta period](https://github.com/XargonWan/RetroDECK/wiki/RetroDECK%3A-Beta-period)
+
+
+## Can I contribute to the project?
+
+Yes, off course! <br>
+Read up here on how to help out, there is something for everyone:
+
+[How to: Contribute to RetroDECK](https://github.com/XargonWan/RetroDECK/wiki/How-to%3A-Contribute-to-RetroDECK)
 
 
 # The RetroDECK Wiki
