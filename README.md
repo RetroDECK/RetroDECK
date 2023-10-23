@@ -35,7 +35,7 @@ The RetroDECK team consists of several veterans from some of the projects mentio
 
 RetroDECK also adds the `RetroDECK Framework` and the `RetroDECK Configurator` on top of the emulators and ES-DE interface that allows deeper integrations between emulators and easier exposure to a variety of features that you otherwise need to set per emulator basis to create a uniformity between them. 
 
-For the long term vision and support you can check out the following wiki page:
+For our long term vision you can check out the following wiki page:
 
 [RetroDECK: Visions and Goals](https://github.com/XargonWan/RetroDECK/wiki/RetroDECK%3A-Visions-and-Goals)
 
@@ -85,3 +85,6 @@ Please check out the [Wiki](https://github.com/XargonWan/RetroDECK/wiki) for eve
 
 ## The FAQ
 The RetroDECK [FAQ](https://github.com/XargonWan/RetroDECK/wiki/FAQs%3A-Frequently-asked-questions) on the wiki has a vast variety of questions and awnsers. 
+
+# How to get support? 
+Use the supports channels on ![Discord](https://img.shields.io/discord/951662718102962256?label=discord)
