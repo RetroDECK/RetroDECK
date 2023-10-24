@@ -31,9 +31,9 @@ It's inspired by embedded emulation systems like:
 - Lakka
 - Batocera
 
-The RetroDECK team consists of several veterans from some of the projects mentioned above as well as a bunch of other talented other individuals.
+The RetroDECK team consists of several veterans from some of the projects mentioned above as well as a bunch of other talented individuals.
 
-RetroDECK also adds the `RetroDECK Framework` and the `RetroDECK Configurator` on top of the emulators and ES-DE interface that allows deeper integrations between emulators and easier exposure to a variety of features that you otherwise need to set per emulator basis to create a uniformity between them. 
+RetroDECK also adds the `RetroDECK Framework` and the `RetroDECK Configurator` on top of the emulators and ES-DE frontend that allows deeper integrations between emulators and easier exposure to a variety of features that you otherwise need to set per emulator basis to create a uniformity between them. 
 
 For our long term vision you can check out the following wiki page:
 
