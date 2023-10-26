@@ -1,6 +1,22 @@
---- /tmp/emulationstation-de/es-app/src/views/ViewController.cpp	2023-10-21 19:46:36.202758979 +0200
-+++ ./patches-tmp/ViewController.cpp	2023-10-21 22:21:04.737925284 +0200
-@@ -195,96 +195,5 @@
+diff -au1r emulationstation-de/es-app/src/views/ViewController.cpp emulationstation-de/es-app/src/views/ViewController.cpp
+--- emulationstation-de/es-app/src/views/ViewController.cpp	2023-10-24 13:44:56.767947794 -0400
++++ emulationstation-de/es-app/src/views/ViewController.cpp	2023-10-24 14:07:45.665387904 -0400
+@@ -180,9 +180,7 @@
+ {
+-    mNoGamesErrorMessage = "NO GAME FILES WERE FOUND. EITHER PLACE YOUR GAMES IN "
+-                           "THE CURRENTLY CONFIGURED ROM DIRECTORY OR CHANGE "
+-                           "ITS PATH USING THE BUTTON BELOW. OPTIONALLY THE ROM "
+-                           "DIRECTORY STRUCTURE CAN BE GENERATED WHICH WILL "
+-                           "CREATE A TEXT FILE FOR EACH SYSTEM PROVIDING SOME "
+-                           "INFORMATION SUCH AS THE SUPPORTED FILE EXTENSIONS.\n"
+-                           "THIS IS THE CURRENTLY CONFIGURED ROM DIRECTORY:\n";
++    mNoGamesErrorMessage = "RETRODECK COULD NOT FIND ANY ROM FILES. "
++                           "PLEASE PLACE YOUR ROM FILES INTO THE APPROPRIATE "
++                           "SYSTEM SUBFOLDER IN THE CONFIGURED ROM DIRECTORY "
++                           "AND RUN RETRODECK AGAIN TO SCAN YOUR LIBRARY.\n"
++                           "THE CURRENTLY CONFIGURED ROM DIRECTORY IS:\n";
+ 
+@@ -195,91 +193,3 @@
      mNoGamesMessageBox = new GuiMsgBox(
 -        HelpStyle(), mNoGamesErrorMessage + mRomDirectory, "CHANGE ROM DIRECTORY",
 -        [this] {
@@ -93,9 +109,3 @@
 -        "QUIT",
 +        HelpStyle(), mNoGamesErrorMessage + mRomDirectory, "QUIT",
          [] {
--            SDL_Event quit;
--            quit.type = SDL_QUIT;
--            SDL_PushEvent(&quit);
--        },
-+        },    
-         nullptr, true, false,
