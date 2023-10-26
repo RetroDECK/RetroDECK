@@ -9,7 +9,7 @@ For the Steam Deck the `roms` folder location depends on where you choose to ins
 It's either on the internal storage: `~/retrodeck/roms` or the SDCard: `<sdcard>/retrodeck/roms`<br>
 
 
-[What does ~ mean?](https://github.com/XargonWan/RetroDECK/wiki/FAQs:-Frequently-asked-questions#i-see--refereed-in-documentation-and-examples-what-does-it-mean)
+[What does ~ mean?](https://github.com/XargonWan/RetroDECK/wiki/FAQs-Frequently-asked-questions#i-see--refereed-in-documentation-and-examples-what-does-it-mean)
 
 # 3DO
 - **Roms path:**<br>  ~/retrodeck/roms/3do

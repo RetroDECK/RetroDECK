@@ -1,5 +1,5 @@
 # Supported extensions
-In order to check which file extensions are supported check the page [Emulators: Folders & File extensions](https://github.com/XargonWan/RetroDECK/wiki/Emulators:-Folders-&-File-extensions)
+In order to check which file extensions are supported check the page [Emulators: Folders & File extensions](https://github.com/XargonWan/RetroDECK/wiki/Emulators-Folders-&-File-extensions)
 
 ## Special ROMs formats
 Some emulators are working only with specific rips, here is what I gather.

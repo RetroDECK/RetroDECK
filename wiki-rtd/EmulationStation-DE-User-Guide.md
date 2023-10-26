@@ -27,7 +27,7 @@ These are mostly technical settings.<br>
 These are the buttons mappings automatically applied by ES-DE.<br>
 [General navigation](https://gitlab.com/es-de/emulationstation-de/-/blob/master/USERGUIDE.md#general-navigation)
 If you are using the Steam Deck look at RetroDECKs hotkeys:
-[Steam Deck: Hotkeys ](https://github.com/XargonWan/RetroDECK/wiki/Steam-Deck:-Hotkeys)
+[Steam Deck: Hotkeys ](https://github.com/XargonWan/RetroDECK/wiki/Steam-Deck-Hotkeys)
 
 ### Sound Settings
 Various sound settings.<br>

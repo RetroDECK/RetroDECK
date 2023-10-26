@@ -19,9 +19,9 @@ If you find a theme you would like to use that is not in the `Theme Downloader` 
 
 ## FAQs: Frequently asked questions on Themes
 
-["Why does the theme I am using not work?" or "Why does the layout look broken?" (black screen with blue text)](https://github.com/XargonWan/RetroDECK/wiki/FAQs:-Frequently-asked-questions#why-does-the-theme-i-am-using-not-work-or-why-does-the-layout-look-broken-black-screen-with-blue-text)
+["Why does the theme I am using not work?" or "Why does the layout look broken?" (black screen with blue text)](https://github.com/XargonWan/RetroDECK/wiki/FAQs-Frequently-asked-questions#why-does-the-theme-i-am-using-not-work-or-why-does-the-layout-look-broken-black-screen-with-blue-text)
 
-[Why does the theme layout look squished?](https://github.com/XargonWan/RetroDECK/wiki/FAQs:-Frequently-asked-questions#why-does-the-theme-layout-look-squished)
+[Why does the theme layout look squished?](https://github.com/XargonWan/RetroDECK/wiki/FAQs-Frequently-asked-questions#why-does-the-theme-layout-look-squished)
 
 # RetroDECK: Included Theme
 
