@@ -1,6 +1,6 @@
 diff -au1r emulationstation-de/es-app/src/views/ViewController.cpp emulationstation-de/es-app/src/views/ViewController.cpp
---- emulationstation-de/es-app/src/views/ViewController.cpp	2023-10-24 13:44:56.767947794 -0400
-+++ emulationstation-de/es-app/src/views/ViewController.cpp	2023-10-24 14:07:45.665387904 -0400
+--- emulationstation-de/es-app/src/views/ViewController.cpp	2023-10-26 11:47:39.831667627 -0400
++++ emulationstation-de/es-app/src/views/ViewController.cpp	2023-10-26 11:52:14.945822651 -0400
 @@ -180,9 +180,7 @@
  {
 -    mNoGamesErrorMessage = "NO GAME FILES WERE FOUND. EITHER PLACE YOUR GAMES IN "
@@ -109,3 +109,8 @@ diff -au1r emulationstation-de/es-app/src/views/ViewController.cpp emulationstat
 -        "QUIT",
 +        HelpStyle(), mNoGamesErrorMessage + mRomDirectory, "QUIT",
          [] {
+@@ -289,3 +199,3 @@
+         },
+-        nullptr, true, false,
++        "", nullptr, "", nullptr, nullptr, true, true,
+         (mRenderer->getIsVerticalOrientation() ?
