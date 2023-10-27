@@ -376,7 +376,7 @@ modules:
     sources:
       - type: git
         url: https://gitlab.com/es-de/emulationstation-de
-        branch: 2de8282f6a5feaf86424b1175154c5fc2585f70a
+        branch: 2055b30836476f7cbdde9d94e43e451487537962
       - type: shell
         commands:
           - sed -i 's#"EMULATIONSTATION-DE  V" + Utils::String::toUpper(PROGRAM_VERSION_STRING)#"RetroDECK
