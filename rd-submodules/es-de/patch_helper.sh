@@ -24,4 +24,4 @@ diff -au1r /tmp/emulationstation-de/es-app/src/guis/GuiMenu.h           ./patche
 diff -au1r /tmp/emulationstation-de/es-app/src/views/ViewController.cpp ./patches-tmp/ViewController.cpp    > ViewController.cpp.patch            
 diff -au1r /tmp/emulationstation-de/es-core/src/Window.cpp              ./patches-tmp/Window.cpp            > Window.cpp.patch
 
-#rm -rf patches-tmp
+rm -rf patches-tmp
