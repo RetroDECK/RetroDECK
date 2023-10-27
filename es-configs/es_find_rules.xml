@@ -24,6 +24,7 @@
     </emulator>
     <core name="RETROARCH">
         <rule type="corepath">
+            <entry>/app/share/libretro/cores</entry> <!-- RetroDECK -->
             <!-- Non-portable AppImage and compiled from source -->
             <entry>~/.config/retroarch/cores</entry>
             <!-- Portable AppImage -->
@@ -135,6 +136,7 @@
     <emulator name="CEMU">
         <!-- Nintendo Wii U emulator Cemu -->
         <rule type="systempath">
+            <entry>Cemu-wrapper</entry> <!-- RetroDECK -->
             <entry>cemu</entry>
             <entry>Cemu</entry>
         </rule>
@@ -154,6 +156,7 @@
     <emulator name="CITRA">
         <!-- Nintendo 3DS emulator Citra -->
         <rule type="systempath">
+            <entry>citra-qt</entry> <!-- RetroDECK -->
             <entry>citra</entry>
             <entry>citra-emu.citra-nightly</entry>
             <entry>org.citra_emu.citra</entry>
