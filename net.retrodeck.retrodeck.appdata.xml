@@ -65,6 +65,22 @@
    <project_license>GPL-3.0</project_license>
    <metadata_license>CC0-1.0</metadata_license>
    <releases>
+      <release version="0.7.3b" date="2023-10-22">
+         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.7.3b</url>
+         <description>
+            <p>Updates:</p>
+            <ul>
+               <li>ES-DE has been updated to 2.2.0</li>
+               <li>All emulators update</li>
+            </ul>
+            <p>Known issues:</p>
+            <ul>
+               <li>PPSSPP now have Retroachievements, but it is right now not configurable in the configurator (as it works a bit different the other emulators), we hope to have a solution for it at a later date. You can still login / logout / enable hardcore mode normally from the PPSSPP interface.</li>
+               <li>Quitting the RetroArch GB core with the radial function makes the core swap the palette.</li>
+               <li>Borders sometimes are disappearing, a possible workaround is to reset RetroArch from the configurator.</li>
+            </ul>
+         </description>
+      </release>
       <release version="0.7.2b" date="2023-09-27">
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.7.2b</url>
          <description>

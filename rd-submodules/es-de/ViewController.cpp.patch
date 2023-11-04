@@ -1,22 +1,22 @@
 diff -au1r emulationstation-de/es-app/src/views/ViewController.cpp emulationstation-de/es-app/src/views/ViewController.cpp
---- emulationstation-de/es-app/src/views/ViewController.cpp	2023-10-24 13:44:56.767947794 -0400
-+++ emulationstation-de/es-app/src/views/ViewController.cpp	2023-10-24 14:07:45.665387904 -0400
-@@ -180,9 +180,7 @@
+--- emulationstation-de/es-app/src/views/ViewController.cpp	2023-11-04 17:32:01.356656877 +0100
++++ emulationstation-de/es-app/src/views/ViewController.cpp	2023-11-04 17:38:58.132211437 +0100
+@@ -180,7 +180,9 @@
  {
--    mNoGamesErrorMessage = "NO GAME FILES WERE FOUND. EITHER PLACE YOUR GAMES IN "
--                           "THE CURRENTLY CONFIGURED ROM DIRECTORY OR CHANGE "
--                           "ITS PATH USING THE BUTTON BELOW. OPTIONALLY THE ROM "
--                           "DIRECTORY STRUCTURE CAN BE GENERATED WHICH WILL "
--                           "CREATE A TEXT FILE FOR EACH SYSTEM PROVIDING SOME "
--                           "INFORMATION SUCH AS THE SUPPORTED FILE EXTENSIONS.\n"
--                           "THIS IS THE CURRENTLY CONFIGURED ROM DIRECTORY:\n";
-+    mNoGamesErrorMessage = "RETRODECK COULD NOT FIND ANY ROM FILES. "
-+                           "PLEASE PLACE YOUR ROM FILES INTO THE APPROPRIATE "
-+                           "SYSTEM SUBFOLDER IN THE CONFIGURED ROM DIRECTORY "
-+                           "AND RUN RETRODECK AGAIN TO SCAN YOUR LIBRARY.\n"
-+                           "THE CURRENTLY CONFIGURED ROM DIRECTORY IS:\n";
- 
-@@ -195,91 +193,3 @@
+-    mNoGamesErrorMessage = "RETRODECK COULD NOT FIND ANY ROM FILES. "
+-                           "PLEASE PLACE YOUR ROM FILES INTO THE APPROPRIATE "
+-                           "SYSTEM SUBFOLDER IN THE CONFIGURED ROM DIRECTORY "
+-                           "AND RUN RETRODECK AGAIN TO SCAN YOUR LIBRARY.\n"
+-                           "THE CURRENTLY CONFIGURED ROM DIRECTORY IS:\n";
++    mNoGamesErrorMessage = "NO GAME FILES WERE FOUND. EITHER PLACE YOUR GAMES IN "
++                           "THE CURRENTLY CONFIGURED ROM DIRECTORY OR CHANGE "
++                           "ITS PATH USING THE BUTTON BELOW. OPTIONALLY THE ROM "
++                           "DIRECTORY STRUCTURE CAN BE GENERATED WHICH WILL "
++                           "CREATE A TEXT FILE FOR EACH SYSTEM PROVIDING SOME "
++                           "INFORMATION SUCH AS THE SUPPORTED FILE EXTENSIONS.\n"
++                           "THIS IS THE CURRENTLY CONFIGURED ROM DIRECTORY:\n";
+
+@@ -193,91 +195,3 @@
      mNoGamesMessageBox = new GuiMsgBox(
 -        HelpStyle(), mNoGamesErrorMessage + mRomDirectory, "CHANGE ROM DIRECTORY",
 -        [this] {
@@ -104,7 +104,7 @@ diff -au1r emulationstation-de/es-app/src/views/ViewController.cpp emulationstat
 -                                                       nullptr, true));
 -                    }
 -                },
--                "CANCEL", nullptr, "", nullptr, nullptr, true));
+-                "CANCEL", nullptr, "", nullptr, nullptr, false));
 -        },
 -        "QUIT",
 +        HelpStyle(), mNoGamesErrorMessage + mRomDirectory, "QUIT",
