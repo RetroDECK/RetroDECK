@@ -337,7 +337,7 @@ modules:
           - sed -i 's|-o root -g root ||' ./Makefile.gnu
           - sed -i 's|/usr|/app|' ./Makefile.gnu
 
-  # dependency of: CEMU
+  # dependency of: CEMU, ES-DE
   - name: pugixml
     buildsystem: cmake-ninja
     config-opts:
@@ -348,8 +348,8 @@ modules:
       - /lib/pkgconfig
     sources:
       - type: archive
-        url: https://github.com/zeux/pugixml/releases/download/v1.13/pugixml-1.13.tar.gz
-        sha256: 40c0b3914ec131485640fa57e55bf1136446026b41db91c1bef678186a12abbe
+        url: https://github.com/zeux/pugixml/releases/download/v1.14/pugixml-1.14.tar.gz
+        sha256: 2f10e276870c64b1db6809050a75e11a897a8d7456c4be5c6b2e35a11168a015
         x-checker-data:
           type: anitya
           project-id: 3728
