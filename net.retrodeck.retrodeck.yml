@@ -661,6 +661,9 @@ modules:
     builddir: true
     config-opts:
       - '-DCMAKE_BUILD_TYPE=Release'
+      - '-DCMAKE_C_COMPILER=clang'
+      - '-DCMAKE_CXX_COMPILER=clang++'
+      - '-DCMAKE_LINKER=lld'
       - '-DENABLE_QT_TRANSLATION=ON'
       - '-DCITRA_ENABLE_COMPATIBILITY_REPORTING=ON'
       - '-DUSE_DISCORD_PRESENCE=ON'
@@ -686,8 +689,8 @@ modules:
     sources:
       - type: archive
         url: >-
-          https://github.com/citra-emu/citra-nightly/releases/download/nightly-2009/citra-unified-source-20231012-40ba522.tar.xz
-        sha256: 927739892fff5d1b325b07182ab29a7355f58866debe60da1d6620680773ac97
+          https://github.com/citra-emu/citra-nightly/releases/download/nightly-2024/citra-unified-source-20231103-b10f3d9.tar.xz
+        sha256: 303cf9ab674fb7ee3a448c575de994e66bbca83cea26b8ef54d82b4af6e8264a
         x-checker-data:
           type: json
           url: https://api.github.com/repos/citra-emu/citra-nightly/releases/latest
