@@ -3,7 +3,7 @@ runtime: org.kde.Platform
 runtime-version: "6.5"
 sdk: org.kde.Sdk
 sdk-extensions:
-  - org.freedesktop.Sdk.Extension.llvm17      # Needed for rpcs3 (llvm15) but llvm17 for CITRA
+  - org.freedesktop.Sdk.Extension.llvm16      # Needed for rpcs3 (llvm15) but llvm16 for CITRA
 # base: io.qt.qtwebengine.BaseApp             # Needed for Yuzu - Disabled as we're using AppImage for Yuzu
 # base-version: "6.5"                         # Needed for Yuzu - Disabled as we're using AppImage for Yuzu
 command: retrodeck.sh
@@ -697,8 +697,8 @@ modules:
         GITHUB_ACTIONS: '1'
         GITHUB_REPOSITORY: citra-emu/citra-nightly
         GITHUB_REF_NAME: nightly-2025
-      append-path: /usr/lib/sdk/llvm17/bin
-      prepend-ld-library-path: /usr/lib/sdk/llvm17/lib
+      append-path: /usr/lib/sdk/llvm16/bin
+      prepend-ld-library-path: /usr/lib/sdk/llvm16/lib
       cflags: '-Wno-unused-command-line-argument'
       cxxflags: '-Wno-unused-command-line-argument'
     config-opts:
