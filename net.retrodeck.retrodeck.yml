@@ -3,7 +3,7 @@ runtime: org.kde.Platform
 runtime-version: "6.5"
 sdk: org.kde.Sdk
 sdk-extensions:
-  - org.freedesktop.Sdk.Extension.llvm14      # Needed for rpcs3
+  - org.freedesktop.Sdk.Extension.llvm17      # Needed for rpcs3 (llvm15) but llvm17 for CITRA
 # base: io.qt.qtwebengine.BaseApp             # Needed for Yuzu - Disabled as we're using AppImage for Yuzu
 # base-version: "6.5"                         # Needed for Yuzu - Disabled as we're using AppImage for Yuzu
 command: retrodeck.sh
@@ -244,10 +244,10 @@ modules:
       - /lib/cmake
     sources:
       - type: archive
-        #url: https://github.com/KhronosGroup/glslang/archive/13.1.1.tar.gz
-        #sha256: 1c4d0a5a38c8aaf89a2d7e6093be734320599f5a6775b2726beeb05b0c054e66
-        url: https://github.com/KhronosGroup/glslang/archive/13.0.0.tar.gz
-        sha256: bcda732434f829aa74414ea0e06d329ec8ac28637c38a0de45e17c8fd25a4715
+        url: https://github.com/KhronosGroup/glslang/archive/13.1.1.tar.gz
+        sha256: 1c4d0a5a38c8aaf89a2d7e6093be734320599f5a6775b2726beeb05b0c054e66
+        # url: https://github.com/KhronosGroup/glslang/archive/13.0.0.tar.gz
+        # sha256: bcda732434f829aa74414ea0e06d329ec8ac28637c38a0de45e17c8fd25a4715
         x-checker-data:
           type: anitya
           stable-only: true
@@ -686,9 +686,21 @@ modules:
 
   - rd-submodules/shared-modules/SDL2/SDL2-with-libdecor.json
 
+  - rd-submodules/shared-modules/SDL2/SDL2-with-libdecor.json
+
   - name: citra
     buildsystem: cmake-ninja
     builddir: true
+    build-options:
+      env:
+        CI: '1'
+        GITHUB_ACTIONS: '1'
+        GITHUB_REPOSITORY: citra-emu/citra-nightly
+        GITHUB_REF_NAME: nightly-2025
+      append-path: /usr/lib/sdk/llvm17/bin
+      prepend-ld-library-path: /usr/lib/sdk/llvm17/lib
+      cflags: '-Wno-unused-command-line-argument'
+      cxxflags: '-Wno-unused-command-line-argument'
     config-opts:
       - '-DCMAKE_BUILD_TYPE=Release'
       - '-DCMAKE_C_COMPILER=clang'
@@ -719,8 +731,8 @@ modules:
     sources:
       - type: archive
         url: >-
-          https://github.com/citra-emu/citra-nightly/releases/download/nightly-2024/citra-unified-source-20231103-b10f3d9.tar.xz
-        sha256: 303cf9ab674fb7ee3a448c575de994e66bbca83cea26b8ef54d82b4af6e8264a
+          https://github.com/citra-emu/citra-nightly/releases/download/nightly-2025/citra-unified-source-20231105-998b9a9.tar.xz
+        sha256: ebf52af66c6ef729688a29d093d9139baa76973b698c0630a295f38d126cf118
         x-checker-data:
           type: json
           url: https://api.github.com/repos/citra-emu/citra-nightly/releases/latest
