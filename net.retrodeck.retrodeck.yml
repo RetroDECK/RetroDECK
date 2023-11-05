@@ -589,10 +589,8 @@ modules:
       - -DUSE_SYSTEM_FFMPEG=OFF
       - -DUSE_SYSTEM_LIBZIP=ON
       - -DUSE_SYSTEM_ZSTD=ON
-
       - -DUSE_WAYLAND_WSI=ON
       - -DUSING_QT_UI=OFF
-
       - -DBUILD_TESTING=OFF
       - -DOpenGL_GL_PREFERENCE=GLVND
     build-options:
@@ -608,8 +606,8 @@ modules:
     sources:
       - type: git
         url: &ppsspp-url https://github.com/hrydgard/ppsspp.git
-        tag: v1.16.3
-        commit: a9b6421dfde68be9d065b51e9d519699ce2e9053
+        tag: v1.16.6
+        commit: ba0ce344937d17e177ec8656ab957f6b82facdda
         x-checker-data:
           type: json
           url: https://api.github.com/repos/hrydgard/ppsspp/releases/latest
