@@ -675,7 +675,7 @@ modules:
     sources:
       - type: file
         url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1610/yuzu-mainline-20231104-a1ef67221.AppImage
-        sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+        sha256: 22ed30bd95e1549ac9f54e36544fa05c284378d594d11d788f84212dbb70dbff
 
   # Yuzu - END
 
