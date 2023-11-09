@@ -1278,7 +1278,7 @@ modules:
       - chmod +x ${FLATPAK_DEST}/bin/mame
     sources:
       - type: file
-        url: "https://launchpad.net/~c.falco/+archive/mame/+files/mame_0.258+dfsg.1-0ubuntu1~ppa1~lunar1_amd64.deb"
+        url: https://launchpad.net/~c.falco/+archive/mame/+files/mame_0.258+dfsg.1-0ubuntu1~ppa1~lunar1_amd64.deb
         sha256: f464a000b286cccc78b3792909edcbdda0f4c8315532f75a108eb07752bc805f
 
   # MAME - End
