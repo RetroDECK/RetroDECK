@@ -501,6 +501,26 @@
 				{
 				}
 			}
+			"click"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"mouse_button RIGHT, , "
+						}
+						"settings"
+						{
+							"haptic_intensity"		"0"
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
 		}
 	}
 	"group"
@@ -698,8 +718,114 @@
 		"inputs"
 		{
 		}
-		"gameactions"
+	}
+	"group"
+	{
+		"id"		"25"
+		"mode"		"mouse_joystick"
+		"name"		""
+		"description"		""
+		"inputs"
 		{
+			"click"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"xinput_button JOYSTICK_RIGHT, , "
+						}
+						"settings"
+						{
+							"haptic_intensity"		"1"
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+		}
+	}
+	"group"
+	{
+		"id"		"26"
+		"mode"		"dpad"
+		"name"		""
+		"description"		""
+		"inputs"
+		{
+			"dpad_north"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press LEFT_CONTROL, Swap Screens, , "
+							"binding"		"key_press TAB, Swap Screens, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"dpad_south"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press ESCAPE, Escape, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"dpad_east"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press RETURN, Enter, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"click"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"mouse_button RIGHT, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+		}
+		"settings"
+		{
+			"requires_click"		"0"
 		}
 	}
 	"group"
@@ -897,39 +1023,6 @@
 				{
 				}
 			}
-			"button_back_left"
-			{
-				"activators"
-				{
-					"Full_Press"
-					{
-						"bindings"
-						{
-							"binding"		"key_press LEFT_CONTROL, Swap Screens, , "
-							"binding"		"key_press TAB, Swap Screens, , "
-						}
-					}
-				}
-				"disabled_activators"
-				{
-				}
-			}
-			"button_back_right"
-			{
-				"activators"
-				{
-					"Full_Press"
-					{
-						"bindings"
-						{
-							"binding"		"key_press ESCAPE, Escape, , "
-						}
-					}
-				}
-				"disabled_activators"
-				{
-				}
-			}
 		}
 	}
 	"preset"
@@ -943,7 +1036,8 @@
 			"1"		"left_trackpad active"
 			"2"		"right_trackpad inactive"
 			"6"		"right_trackpad inactive"
-			"19"		"right_trackpad active"
+			"19"		"right_trackpad inactive"
+			"25"		"right_trackpad active"
 			"3"		"joystick active"
 			"4"		"left_trigger active"
 			"5"		"right_trigger active"
@@ -961,7 +1055,8 @@
 			"12"		"left_trackpad active"
 			"13"		"right_trackpad inactive"
 			"20"		"right_trackpad active"
-			"14"		"joystick active"
+			"14"		"joystick inactive"
+			"26"		"joystick active"
 			"15"		"left_trigger active"
 			"16"		"right_trigger active"
 		}
