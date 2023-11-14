@@ -65,6 +65,20 @@
    <project_license>GPL-3.0</project_license>
    <metadata_license>CC0-1.0</metadata_license>
    <releases>
+      <release version="0.7.3b" date="2023-11-14">
+         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.7.3b</url>
+         <description>
+            <p>Updates:</p>
+            <ul>
+               <li>All standalone emulators</li>
+               <li>EmulationStation Desktop Edition (ES-DE)</li>
+            </ul>
+            <p>Known issues:</p>
+            <ul>
+               <li>Please check the know issues in the Wiki under General Infomration.</li>
+            </ul>
+         </description>
+      </release>
       <release version="0.7.2b" date="2023-09-27">
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.7.2b</url>
          <description>

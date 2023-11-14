@@ -13,7 +13,7 @@ This increases the VRAM to 4GB in the BIOS, this can give you improvements in ce
 * Save and Exit
 
 ## Setup a sudo password
-[What is sudo?](https://github.com/XargonWan/RetroDECK/wiki/FAQs:-Frequently-asked-questions#what-is-sudo)
+[What is sudo?](https://github.com/XargonWan/RetroDECK/wiki/FAQs-Frequently-asked-questions#what-is-sudo)
 
 This is a requirement for many optimizations and solutions, it also makes your Deck safer.
 It enables you to run commands/applications heighten sudo privileges.

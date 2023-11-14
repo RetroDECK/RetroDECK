@@ -40,7 +40,7 @@ RetroDECK does not have plans to support Windows, macOS, Android, or iOS.<br>For
 
 ## How do I start using RetroDECK?
 
-Please read the [How to: Getting started](https://github.com/XargonWan/RetroDECK/wiki/How-to:-Getting-started)
+Please read the [How to: Getting started](https://github.com/XargonWan/RetroDECK/wiki/How-to-Getting-started)
 
 ## RetroDECK is currently in in BETA and is not a full release.
 
@@ -49,8 +49,8 @@ Please read the [How to: Getting started](https://github.com/XargonWan/RetroDECK
 - RetroDECK is missing some minor and major; emulators, features and configurations. The goal is to have them added over time.<br>
  Please check the [[RetroDECK: Known Issues]] page and the [Issue tracker](https://github.com/XargonWan/RetroDECK/issues) for more information. 
 
-- RetroDECK during the BETA period supports the Steam Deck and the Linux Desktop. The full release should have better Linux Desktop support to make it as easy to handle as when you install it on a Steam Deck [FAQs: General questions](https://github.com/XargonWan/RetroDECK/wiki/FAQs:-Frequently-asked-questions#general-questions). 
-- The "b" in the versioning stands for BETA but RetroDECK is perfectly fine for daily use even during the beta phase, albeit some features are missing. To see what features are missing check the: [[RetroDECK: Known Issues]].  
+- RetroDECK during the BETA period only supports the Steam Deck, but for the full release we should have full Linux Desktop support read more at [FAQs: General questions](https://github.com/XargonWan/RetroDECK/wiki/FAQs-Frequently-asked-questions#general-questions).
+- The "b" in the versioning stands for BETA but RetroDECK is perfectly fine for daily use even during the beta phase, albeit some features are missing. To see what features are missing check the: [Known Issues page](https://github.com/XargonWan/RetroDECK/wiki/Known-Issues).  
 
 ## The RetroDECK community:
 
