@@ -14,7 +14,7 @@
 	"minor_revision"		"0"
 	"Timestamp"		"-643537072"
 	"actions"
-	{
+{
 		"Default"
 		{
 			"title"		"RetroDECK - Set"
@@ -27,9 +27,6 @@
 		}
 	}
 	"action_layers"
-	{
-	}
-	"localization"
 	{
 	}
 	"group"
@@ -781,6 +778,115 @@
 	}
 	"group"
 	{
+		"id"		"19"
+		"mode"		"dpad"
+		"name"		""
+		"description"		""
+		"inputs"
+		{
+			"dpad_north"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press LEFT_CONTROL, Swap Screens, , "
+							"binding"		"key_press TAB, Swap Screens, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"dpad_south"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press ESCAPE, Escape, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"dpad_east"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press RETURN, Enter, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"click"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"mouse_button RIGHT, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+		}
+		"settings"
+		{
+			"requires_click"		"0"
+		}
+	}
+	"group"
+	{
+		"id"		"20"
+		"mode"		"joystick_mouse"
+		"name"		""
+		"description"		""
+		"inputs"
+		{
+			"click"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"mouse_button LEFT, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+		}
+		"settings"
+		{
+			"output_joystick"		"2"
+		}
+	}
+	"group"
+	{
 		"id"		"7"
 		"mode"		"switches"
 		"name"		""
@@ -1057,10 +1163,12 @@
 		{
 			"11"		"switch active"
 			"12"		"button_diamond active"
-			"13"		"joystick active"
+			"13"		"joystick inactive"
+			"19"		"joystick active"
 			"14"		"left_trigger active"
 			"15"		"right_trigger active"
-			"16"		"right_joystick active"
+			"16"		"right_joystick inactive"
+			"20"		"right_joystick active"
 			"17"		"dpad active"
 		}
 	}

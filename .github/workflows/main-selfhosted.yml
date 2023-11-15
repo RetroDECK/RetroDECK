@@ -76,7 +76,6 @@ jobs:
           hash=($(sha256sum ${GITHUB_WORKSPACE}/RetroDECK-Artifact.tar.gz))
           echo $hash > ${GITHUB_WORKSPACE}/RetroDECK-Artifact.sha
           mv -f RetroDECK-Artifact.* ${{ secrets.ARTIFACT_REPO }}
-        continue-on-error: true
 
       - name: Create Bundle
         run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_bundle.sh"
