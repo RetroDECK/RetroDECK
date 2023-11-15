@@ -47,7 +47,7 @@ Please read the [How to: Getting started](https://github.com/XargonWan/RetroDECK
 - What does "currently in beta" mean?, It means that the software is still under heavy development and big updates can be made that change, add, or remove features.
 
 - RetroDECK is missing some minor and major; emulators, features and configurations. The goal is to have them added over time.<br>
- Please check the [Known Issues](https://github.com/XargonWan/RetroDECK/wiki/Known-Issues) page and the [Issue tracker](https://github.com/XargonWan/RetroDECK/issues) for more information. 
+ Please check the [[RetroDECK: Known Issues]] page and the [Issue tracker](https://github.com/XargonWan/RetroDECK/issues) for more information. 
 
 - RetroDECK during the BETA period only supports the Steam Deck, but for the full release we should have full Linux Desktop support read more at [FAQs: General questions](https://github.com/XargonWan/RetroDECK/wiki/FAQs-Frequently-asked-questions#general-questions).
 - The "b" in the versioning stands for BETA but RetroDECK is perfectly fine for daily use even during the beta phase, albeit some features are missing. To see what features are missing check the: [Known Issues page](https://github.com/XargonWan/RetroDECK/wiki/Known-Issues).  
@@ -80,13 +80,13 @@ The long term vision and goals of the project is an all-in-one application to ma
 
 - Should have an easy way to mange external controllers and other inputs.
 
-- Should support a majority of all supported Emulators in ES-DE
+- Should support a majority of all supported Emulators in ES-DE, so at least you have one good option per system.
 
-- Should in the long run support applications outside of the scope of ES-DE
+- Should in the long run support applications outside of the scope of ES-DE via a ports manager.
 
 - Should be plug and play and fill the need for a portable retro gaming solution that you can bring on the go to a friend’s/family/others house. Just dock into the TV and get going!
 
-- Should fully support Steam Deck, SteamOS based devices and the Linux Desktop.
+- Should fully support Steam Deck, Linux Desktop, other SteamOS or Linux based devices.
 
 - AND MORE
 

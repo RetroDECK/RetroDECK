@@ -17,6 +17,7 @@ backup
 .old
 tmp
 .godot
+rd-submodules/es-de/patches-tmp
 
 # Python #
 ##########
