@@ -2,8 +2,10 @@
 
 # This is building the bundle RetroDECK.flatpak after the download and build steps are done
 
-if [ "${GITHUB_REF##*/}" = "main" ]; then
-    flatpak build-bundle ${GITHUB_WORKSPACE}/local RetroDECK.flatpak net.retrodeck.retrodeck
+if [[ "${GITHUB_REF##*/}" == "main" ]]; then
+    flatpak = "RetroDECK.flatpak"
 else
-    flatpak build-bundle ${GITHUB_WORKSPACE}/local RetroDECK-cooker.flatpak net.retrodeck.retrodeck
+    flatpak = "RetroDECK-cooker.flatpak"
 fi
+
+flatpak build-bundle "${GITHUB_WORKSPACE}/local" "${flatpak}" net.retrodeck.retrodeck
