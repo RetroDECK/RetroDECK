@@ -1334,6 +1334,7 @@ modules:
       # Desktop entries
       - cp net.retrodeck.retrodeck.desktop /app/share/applications/net.retrodeck.retrodeck.desktop
       - cp net.retrodeck.retrodeck.Configurator.desktop /app/share/applications/net.retrodeck.retrodeck.Configurator.desktop
+      - chmod +x net.retrodeck.retrodeck*desktop
 
       # Initializing default emulator configs
       - cp -r emu-configs ${FLATPAK_DEST}/retrodeck/emu-configs/
@@ -1348,6 +1349,10 @@ modules:
       # Placing appdata
       - mkdir -p ${FLATPAK_DEST}/share/appdata
       - cp net.retrodeck.retrodeck.appdata.xml ${FLATPAK_DEST}/share/appdata
+
+      # Creating symlinks for a prettier access
+      - ln -s /app/bin/retrodeck.sh /app/bin/retrodeck
+      - ln -s /app/tools/configurator.sh /app/bin/configurator
 
     sources:
       - type: git

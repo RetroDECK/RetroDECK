@@ -4,7 +4,7 @@
    <id>net.retrodeck.retrodeck</id>
    <launchable type="desktop-id">net.retrodeck.retrodeck.desktop</launchable>
    <name>RetroDECK</name>
-   <summary>RetroDECK brings an environment to catalog and play your retro games directly on your Steam Deck.</summary>
+   <summary>RetroDECK brings an environment to catalog and play your retro games directly on your Steam Deck</summary>
    <developer_name>RetroDECK Team</developer_name>
    <url type="homepage">https://retrodeck.net</url>
    <url type="bugtracker">https://github.com/XargonWan/RetroDECK/issues</url>
