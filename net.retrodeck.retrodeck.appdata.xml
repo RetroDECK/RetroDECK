@@ -74,6 +74,19 @@
             </ul>
          </description>
       </release>
+      <release version="0.7.4b" date="2023-11-17">
+         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.7.4b</url>
+         <description>
+            <p>Hotfix:</p>
+            <ul>
+               <li>Fixed a bug where the system folders were not correctly generated</li>
+            </ul>
+            <p>Known issues:</p>
+            <ul>
+               <li>Please check the know issues in the Wiki under General Infomration.</li>
+            </ul>
+         </description>
+      </release>
       <release version="0.7.3b" date="2023-11-14">
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.7.3b</url>
          <description>
