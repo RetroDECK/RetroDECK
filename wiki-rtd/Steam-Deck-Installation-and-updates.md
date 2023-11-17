@@ -67,3 +67,44 @@ This feature can be turned off inside the `RetroDECK Configurator`.
 - Click on the updates tab.
 - If there are any updates available it will be shown here.
 - Click on the `Update` or `Update all` buttons.
+
+
+
+# How do I move my installation to a new Steam Deck?
+
+**Note:** depending on how comfortable you are using the Steam Deck controller to navigate the desktop environment, this may be easier to do with a connected mouse and keyboard.
+
+The general process is as follows:
+1. Put the Steam Deck into Desktop Mode `Steam button` > `Power` > `Switch to Desktop`.
+2. Back up existing RetroDECK files.
+3. Install RetroDECK on your new Steam Deck [from the Discover store](#step-2-install-from-discover).
+4. Before starting RetroDECK, restore files that were backed up in Step 1.
+5. Start RetroDECK.
+
+### Step 1: Back up your existing files
+You will need to backup two directories: the main `retrodeck` folders and a hidden `net.retrodeck.retrodeck` folder.
+
+- First put the Steam Deck into Desktop Mode `Steam button` > `Power` > `Switch to Desktop`.
+- Main `retrodeck` folder
+    - Open the Dolphin File Manager (the folder icon in the taskbar).
+    - Navigate to `/home/retrodeck/`. This folder should contain sub-folders such as `bios`, `roms`, and `saves`.
+    - Copy all contents of this directory to a folder on another device, such as a thumb drive, microSD Card, or NAS
+- Hidden `net.retrodeck.retrodeck` folder
+    - Return to `home`
+    - Find the "hamburger" menu button (three horizontal lines in the top-right). Open the menu and select `Show Hidden Files`. If on a keyboard, you can type `Ctrl+H`.
+    - Navigate to `home/.var/app/net.retrodeck.retrodeck/`. Again, copy all contents of this directory to a folder another device, such as a thumb drive, microSD Card, or NAS.
+- Ensure that you are keeping your backups of these two directories in two separate folders.
+
+### Step 2: Install RetroDECK on your new Steam Deck
+- Follow steps 1 and 2 of the [standard installation guide](#step-2-install-from-discover).
+- Stop after Step 2.
+- **Do not open RetroDECK yet!**
+
+### Step 3: Restore your backed up files
+- Restore your backed up contents of `retrodeck` to `/home/retrodeck/` on the new device.
+- Restore your backed up contents of `net.retrodeck.retrodeck` to `home/.var/app/net.retrodeck.retrodeck/` on the new device.
+- In both cases, you can safely overwrite all existing files.
+
+### Step 4: Return to Game Mode and launch RetroDECK
+- Launch RetroDECK from Game Mode and continue with steps 3 and 4 of the [standard installation guide](#step-4-optional-extras).
+- Don't forget to install the official controller profile!
