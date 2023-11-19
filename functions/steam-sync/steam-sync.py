@@ -287,6 +287,10 @@ def create_shortcut(games, launch_config_name=None):
     else:
         shortcuts = []
 
+    if ".var/app/com.valvesoftware.Steam" in shortcut_path:
+        for game in games:
+            game[1]="flatpak-spawn --host "+game[1]
+    
     old_shortcuts=[]
     for shortcut in shortcuts:
         if "net.retrodeck.retrodeck" in shortcut["Exe"]:
