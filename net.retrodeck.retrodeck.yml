@@ -1357,7 +1357,7 @@ modules:
       - ln -s /app/tools/configurator.sh /app/bin/configurator
 
       # DOOM/WOLF parsers
-      - cp emu-configs/parsers/*.sh ${FLATPAK_DEST}/bin
+      - cp emu-configs/gzdoom/*.sh ${FLATPAK_DEST}/bin
 
     sources:
       - type: git

@@ -710,7 +710,19 @@ prepare_emulator() {
     echo "----------------------"
 
     mkdir -p "/var/config/mame"
-    mkdir -p "$emuconfigs/mame/**" "/var/config/mame"
+    cp -fvr "$emuconfigs/mame/**" "/var/config/mame"
+
+  fi
+
+  if [[ "$emulator" =~ ^(gzdoom|GZDOOM|all)$ ]]; then
+    # TODO: do a proper script
+    # This is just a placeholder script to test the emulator's flow
+    echo "----------------------"
+    echo "Initializing GZDOOM"
+    echo "----------------------"
+
+    mkdir -p "/var/config/gzdoom"
+    cp -fvr "$emuconfigs/gzdoom/gzdoom.ini" "/var/config/gzdoom"
 
   fi
 

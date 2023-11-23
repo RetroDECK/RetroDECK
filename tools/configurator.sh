@@ -72,6 +72,7 @@ source /app/libexec/global.sh
 #           - Reset Citra
 #           - Reset Dolphin
 #           - Reset Duckstation
+#           - Reset GZDoom
 #           - Reset MelonDS
 #           - Reset PCSX2
 #           - Reset PPSSPP

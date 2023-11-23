@@ -3,7 +3,7 @@
 input_file="$1"
 params=""
 LOG_FILE="$rdhome/.logs/gzdoom.log"
-command='gzdoom +fluid_patchset /app/share/sounds/sf2/gzdoom.sf2 $params >> "$LOG_FILE" 2>&1'
+command="gzdoom +fluid_patchset /app/share/sounds/sf2/gzdoom.sf2 -config /var/config/gzdoom/gzdoom.ini $params >> "$LOG_FILE" 2>&1"
 
 # Function to log messages
 log() {
@@ -16,8 +16,13 @@ log() {
 # Check if the file is .wad or .WAD
 if [[ $input_file =~ \.wad$ || $input_file =~ \.WAD$ ]]; then
     log "Processing file: $input_file"
-    exec $command
-    log "Command executed with parameters: retroarch -L /app/share/libretro/cores/gzdoom_libretro.so $params"
+    # Execute the command and check for success
+    if exec "$command"; then
+        log "Command executed successfully"
+    else
+        log "Error executing command"
+    fi
+
 # Check if the file is .doom
 elif [[ $input_file =~ \.doom$ ]]; then
     log "Processing file: $input_file"
@@ -25,8 +30,16 @@ elif [[ $input_file =~ \.doom$ ]]; then
         params+="-file $line "
         log "Added -file $line to parameters"
     done < "$input_file"
-    exec $command
-    log "Command executed with parameters: retroarch -L /app/share/libretro/cores/gzdoom_libretro.so -file $params"
+    # Execute the command and check for success
+    if exec "$command"; then
+        log "Command executed successfully"
+        log "Expanded command:"
+        log "$command"
+    else
+        log "Error executing command"
+        log "Expanded command:"
+        log "$command"
+    fi
 else
     echo "Unsupported file format. Please provide a .wad, .WAD, or .doom file."
     log "Unsupported file format: $input_file"
