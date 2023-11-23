@@ -1,9 +1,9 @@
 "controller_mappings"
 {
 	"version"		"3"
-	"revision"		"79"
+	"revision"		"93"
 	"title"		"RetroDECK: Official Layout - Xbox One/S/X"
-	"description"		""
+	"description"		"RetroDECK: Xbox One/S/X"
 	"creator"		""
 	"progenitor"		""
 	"url"		""
@@ -27,9 +27,6 @@
 		}
 	}
 	"action_layers"
-	{
-	}
-	"localization"
 	{
 	}
 	"group"
@@ -781,6 +778,129 @@
 	}
 	"group"
 	{
+		"id"		"17"
+		"mode"		"dpad"
+		"name"		""
+		"description"		""
+		"inputs"
+		{
+		}
+		"settings"
+		{
+			"requires_click"		"0"
+		}
+	}
+	"group"
+	{
+		"id"		"18"
+		"mode"		"joystick_mouse"
+		"name"		""
+		"description"		""
+		"inputs"
+		{
+			"click"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"mouse_button LEFT, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+		}
+		"settings"
+		{
+			"output_joystick"		"2"
+		}
+	}
+	"group"
+	{
+		"id"		"19"
+		"mode"		"dpad"
+		"name"		""
+		"description"		""
+		"inputs"
+		{
+			"dpad_north"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press LEFT_CONTROL, Swap Screens, , "
+							"binding"		"key_press TAB, Swap Screens, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"dpad_south"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press ESCAPE, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"dpad_east"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press RETURN, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"click"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"mouse_button RIGHT, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+		}
+		"settings"
+		{
+			"requires_click"		"0"
+		}
+	}
+	"group"
+	{
 		"id"		"7"
 		"mode"		"switches"
 		"name"		""
@@ -1127,10 +1247,13 @@
 		{
 			"10"		"switch active"
 			"11"		"button_diamond active"
-			"12"		"joystick active"
+			"12"		"joystick inactive"
+			"19"		"joystick active"
 			"13"		"left_trigger active"
 			"14"		"right_trigger active"
-			"15"		"right_joystick active"
+			"15"		"right_joystick inactive"
+			"17"		"right_joystick inactive"
+			"18"		"right_joystick active"
 			"16"		"dpad active"
 		}
 	}
