@@ -1290,6 +1290,8 @@ modules:
         tag: v1.6.5
         commit: 3aec70b0556a8d7aed7903d1a3e4d9a18c5d1649
 
+  - rd-submodules/shared-modules/gzdoom/gzdoom.json
+
   # SOLARUS - END
 
   # External manifests end
@@ -1353,6 +1355,9 @@ modules:
       # Creating symlinks for a prettier access
       - ln -s /app/bin/retrodeck.sh /app/bin/retrodeck
       - ln -s /app/tools/configurator.sh /app/bin/configurator
+
+      # DOOM/WOLF parsers
+      - cp emu-configs/parsers/*.sh ${FLATPAK_DEST}/bin
 
     sources:
       - type: git
