@@ -1356,8 +1356,9 @@ modules:
       - ln -s /app/bin/retrodeck.sh /app/bin/retrodeck
       - ln -s /app/tools/configurator.sh /app/bin/configurator
 
-      # DOOM/WOLF parsers
-      - cp emu-configs/gzdoom/*.sh ${FLATPAK_DEST}/bin
+      # GZDOOM wrapper
+      - cp emu-configs/gzdoom/gzdoom.sh ${FLATPAK_DEST}/bin/gzdoom.sh
+      - chmod +x ${FLATPAK_DEST}/bin/gzdoom.sh
 
     sources:
       - type: git

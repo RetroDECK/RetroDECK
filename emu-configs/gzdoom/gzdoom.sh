@@ -1,46 +1,18 @@
 #!/bin/bash
 
-input_file="$1"
-params=""
 LOG_FILE="$rdhome/.logs/gzdoom.log"
-command="gzdoom +fluid_patchset /app/share/sounds/sf2/gzdoom.sf2 -config /var/config/gzdoom/gzdoom.ini $params >> "$LOG_FILE" 2>&1"
 
-# Function to log messages
-log() {
-    local message="$1"
-    local timestamp="$(date '+%Y-%m-%d %H:%M:%S')"
-    echo "$timestamp - $message" >> "$LOG_FILE"
-    echo "$timestamp - $message"
-}
+# List of IWAD files
+IWAD_FILES=("DOOM1.WAD" "DOOM.WAD" "DOOM2.WAD" "DOOM2F.WAD" "DOOM64.WAD" "TNT.WAD"
+            "PLUTONIA.WAD" "HERETIC1.WAD" "HERETIC.WAD" "HEXEN.WAD" "HEXDD.WAD"
+            "STRIFE0.WAD" "STRIFE1.WAD" "VOICES.WAD" "CHEX.WAD"
+            "CHEX3.WAD" "HACX.WAD" "freedoom1.wad" "freedoom2.wad" "freedm.wad") # unlicenced iwads
 
-# Check if the file is .wad or .WAD
-if [[ $input_file =~ \.wad$ || $input_file =~ \.WAD$ ]]; then
-    log "Processing file: $input_file"
-    # Execute the command and check for success
-    if exec "$command"; then
-        log "Command executed successfully"
-    else
-        log "Error executing command"
-    fi
+# Convert file name to uppercase for case-insensitive comparison
+provided_file=$(echo "$1" | tr '[:lower:]' '[:upper:]')
 
-# Check if the file is .doom
-elif [[ $input_file =~ \.doom$ ]]; then
-    log "Processing file: $input_file"
-    while IFS= read -r line; do
-        params+="-file $line "
-        log "Added -file $line to parameters"
-    done < "$input_file"
-    # Execute the command and check for success
-    if exec "$command"; then
-        log "Command executed successfully"
-        log "Expanded command:"
-        log "$command"
-    else
-        log "Error executing command"
-        log "Expanded command:"
-        log "$command"
-    fi
+if [[ " ${IWAD_FILES[@]} " =~ " $provided_file " ]]; then
+    gzdoom +fluid_patchset /app/share/sounds/sf2/gzdoom.sf2 -config /var/config/gzdoom/gzdoom.ini -iwad "$1" >> "$LOG_FILE" 2>&1
 else
-    echo "Unsupported file format. Please provide a .wad, .WAD, or .doom file."
-    log "Unsupported file format: $input_file"
+    gzdoom +fluid_patchset /app/share/sounds/sf2/gzdoom.sf2 -config /var/config/gzdoom/gzdoom.ini -file "$1" >> "$LOG_FILE" 2>&1
 fi
