@@ -511,7 +511,7 @@
         <name>doom</name>
         <fullname>Doom</fullname>
         <path>%ROMPATH%/doom</path>
-        <extension>.desktop .iwad .IWAD .pk4 .PK4 .pwad .PWAD .sh .wad .WAD</extension>
+        <extension>.desktop .iwad .IWAD .pk4 .PK4 .pk3 .PK3 .pwad .PWAD .sh .wad .WAD</extension>
         <command label="GZDoom (Standalone)">gzdoom.sh %ROM%</command>
         <command label="PrBoom">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/prboom_libretro.so %ROM%</command>
         <!-- <command label="PrBoom+ (Standalone)">%EMULATOR_PRBOOM-PLUS% -iwad %ROM%</command> -->
