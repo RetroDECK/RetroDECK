@@ -34,4 +34,4 @@ fi
 shopt -u nocasematch   # Disable case-insensitive matching after use
 
 echo "Found $type: $1, loading it." | tee -a "$LOG_FILE"
-gzdoom +fluid_patchset /app/share/sounds/sf2/gzdoom.sf2 -config /var/config/gzdoom/gzdoom.ini -$type "$1" | tee -a "$LOG_FILE"
+gzdoom -config /var/config/gzdoom/gzdoom.ini -$type "$1" | tee -a "$LOG_FILE"
