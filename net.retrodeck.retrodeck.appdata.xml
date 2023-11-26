@@ -68,9 +68,28 @@
       <release version="0.8.0b" date="2023-09-28">
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.8.0b</url>
          <description>
-            <p>News:</p>
+            <p>Changes:</p>
             <ul>
-               <li>Welcome to cooker 0.8.0b!</li>
+               <li>Added new system: SOLARUS</li>
+               <li>Added new engine: GZDOOM</li>
+               <li>Quit button after emulators reset should act as an actual full quit button</li>
+            </ul>
+            <p>Fixes:</p>
+            <ul>
+               <li>GZDOOM: now the controller should work properly</li>
+               <li>GZDOOM: can automatically detect if the loaded file is a WAD or an IWAD</li>
+            </ul>
+            <p>Issues:</p>
+            <ul>
+               <li>VITA3K is not working, waiting for external fixes</li>
+               <li>MAME (standalone) is not working, more enhancements needed</li>
+            </ul>
+            <p>Missing:</p>
+            <ul>
+               <li>GZDOOM: .doom files parser</li>
+               <li>GZDOOM: hotkeys</li>
+               <li>SOLARUS: hotkeys</li>
+               <li>A proper reset script for the new emulators, now it's just a draft</li>
             </ul>
          </description>
       </release>
@@ -83,7 +102,7 @@
             </ul>
             <p>Known issues:</p>
             <ul>
-               <li>Please check the know issues in the Wiki under General Infomration.</li>
+               <li>Please check the know issues in the Wiki under General Infomration</li>
             </ul>
          </description>
       </release>
@@ -97,7 +116,7 @@
             </ul>
             <p>Known issues:</p>
             <ul>
-               <li>Please check the know issues in the Wiki under General Infomration.</li>
+               <li>Please check the know issues in the Wiki under General Infomration</li>
             </ul>
          </description>
       </release>
