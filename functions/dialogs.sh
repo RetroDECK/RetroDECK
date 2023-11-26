@@ -16,11 +16,14 @@ configurator_process_complete_dialog() {
   zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Quit" --extra-button="OK" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Configurator Utility - Process Complete" \
-  --text="The process of $1 is now complete.\n\nYou may need to quit and restart RetroDECK for your changes to take effect\n\nClick OK to return to the Main Menu or Quit to return to RetroDECK."
+  --text="The process of $1 is now complete.\n\nYou may need to quit and restart RetroDECK for your changes to take effect\n\nClick OK to return to the Main Menu or Quit to quit RetroDECK."
 
   if [ ! $? == 0 ] # OK button clicked
   then
       configurator_welcome_dialog
+  elif [ ! $? == 1 ] # Quit button clicked
+      pkill -f retrodeck
+      pkill -f emulationstation
   fi
 }
 
