@@ -1,17 +1,24 @@
-# Welcome to MkDocs
+<p float="center">
+    <img src="https://github.com/XargonWan/RetroDECK/blob/main/res/logo.png?raw=true" alt="RetroDECK logo" width="400"/>
+</p>
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+# Please use this wiki:
 
-## Commands
+We are in the process of migrating to MKDocs, but most information is still here:
+https://github.com/XargonWan/RetroDECK/wiki
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
+# Welcome to the **RetroDECK wiki**!
 
-## Project layout
+🏗️ This wiki is currently under construction 🏗️
 
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+![Flathub](https://img.shields.io/flathub/downloads/net.retrodeck.retrodeck)
+![Flathub](https://img.shields.io/flathub/v/net.retrodeck.retrodeck)
+![Discord](https://img.shields.io/discord/951662718102962256?label=discord)
+![GitHub](https://img.shields.io/github/license/XargonWan/RetroDECK)
+
+### The RetroDECK community:
+
+[Website](https://retrodeck.net) <br/>
+[Discord](https://discord.gg/Dz3szYsP8g)<br/>
+[Lemmy](https://lemmy.zip/c/retrodeck)<br/>
+[Subreddit](https://www.reddit.com/r/retrodeck)<br/>
