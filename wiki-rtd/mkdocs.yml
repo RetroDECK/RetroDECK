@@ -1,4 +1,5 @@
 site_name: RetroDECK Wiki
+site_url:
 nav:
   - Home: index.md
   - What is RetroDECK?: wiki_general/what-is-retrodeck.md
