@@ -1,8 +1,3 @@
-# Credits & The Team
-
-This is the page where we try to introduce the team and thank everyone who have contributed to the project so far.<br>
-If you feel you have contributed to the project but lacks mention, please contact us on discord! <br>
-
 # The Team
 
 ## Community Management
@@ -56,9 +51,7 @@ Does bleeding edge cooker testing (lives in the danger zone), some feature sugge
 2nd Commander of the "Italian Pizza Legion" in the internal pizza war (might be a spy for the Nordic Cult or Muricans).
 </details>
 
-# Collaborators
-
-## The ES-DE Group
+## Collaborators: The ES-DE Group
 
 ### [Leon Styhre](https://gitlab.com/leonstyhre)
 Maker of EmulationStation Desktop Edition
@@ -78,7 +71,7 @@ Helps with community management, is also part of [Batocera](https://batocera.org
 ### [Zurdi](https://github.com/zurdi15)
 Creator of RomM and other projects.
 
-# Additional credits
+## Additional credits
 
 ### [lilbud](https://github.com/lilbud)
 Have done some themes for ES-DE.
@@ -104,7 +97,7 @@ Server Administration
 ### [ItzSelenux](https://github.com/ItzSelenux)
 Maker of [pixelitos](https://github.com/ItzSelenux/pixelitos-icon-theme)
 
-# Special Thanks
+## Special Thanks
  We want give special thanks to:
 
 - Our Patreons and doners that keeps the build servers running and provide feedback.

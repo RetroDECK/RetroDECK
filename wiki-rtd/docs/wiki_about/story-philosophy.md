@@ -1,6 +1,6 @@
 # RetroDECK ‐ Story & Philosophy
 
-# How RetroDECK was born?
+## How RetroDECK was born?
 Let's take a step back.
 
 RetroDECK was born on March 4th 2022 in Kyoto, Japan, with the name of [351EDECK](https://imgur.com/a/tGC9ZGO) because I am also one of the founding members of 351ELEC, now [AmberELEC](https://amberelec.org/).
@@ -13,9 +13,9 @@ However I had bad feedbacks from the community because someone was feeling unsaf
 
 Valve suggests the flatpak technology to port the applications on Steam Deck so, I decided to follow their guidelines, and I created the RetroDECK that you know today, starting from a Manjaro virtual machine as a development environment because I didn't have a Steam Deck yet.
 
--Xargon
+// Xargon
 
-# RetroDECK Philosophy
+## What is RetroDECK's philosophy?
 Emulation is a global multi-generational effort of development that has lasted for decades, motivated by the pure love for video game preservation for current and future generations. RetroDECK depends on the constant development of all our dependencies (the emulators, front-end, various assets, etc…). It would be unfair to both the hard work that has been done in those projects and to the entire open-source community if we said otherwise or tried to take credit, conceal, or obscure it for our own gain.
 
 We always strive to have the best possible relationship with the teams that generously provide and develop the third-party software we are depending on now and in the future. Everyone that works on RetroDECK is immensely grateful for the global collective effort and work that has been done. Without these projects and those passionate people RetroDECK would not be possible.
@@ -24,3 +24,4 @@ We also want to add a word for the developers of the third-party projects: Pleas
 
 You can find more about our dependencies on the wiki and how to donate to them or us under the donations page on this wiki.
 
+// The RetroDECK Team

@@ -1,15 +1,19 @@
 site_name: RetroDECK Wiki
 nav:
   - Home: index.md
-  - General Information:
+  - General Information 📰:
     - What is RetroDECK?: wiki_general/what-is-retrodeck.md
     - What is included in RetroDECK?: wiki_general/what-is-included.md
     - The RetroDECK Beta: wiki_general/beta-period.md
 
-  - About RetroDECK:
-    - Visions & Goals: wiki_about/visions-and-goals.md
-    - Story & Philosophy: wiki_about/story-philosophy.md
+  - About RetroDECK 📖:
     - The Team & Credits: wiki_about/team-credits.md
+    - Story & Philosophy: wiki_about/story-philosophy.md
+    - Visions & Goals: wiki_about/visions-and-goals.md
     - Donations & Licenses: wiki_about/donations- licenses.md
+
+  - FAQ and How-to's ❔:
+    - FAQ - Frequently Asked Questions: wiki_faq_howto/faq.md
+
 
 theme: readthedocs
