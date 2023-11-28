@@ -24,12 +24,6 @@ RetroDECK also adds the `RetroDECK Framework` and the `RetroDECK Configurator` o
 * Presets that can be acitivated to configure things over many emulators in one go like: RetroAchievements, Borders, Widescreen Mode, Swaping A/B X/Y for Nintendo Games.
 * Easier management of `mods` `roms` `texture_packs` `scraped media` `screenshots` `saves / states` `gamelists` and more.
 
-**For more information about the beta you can check here:**<br>
-[[RetroDECK: Beta period]]
-
-**For more information about know issues and missing features you can check here:**<br>
-[[RetroDECK: Known Issues]]
-
 
 ## Inspiration for RetroDECK and goals
 It's inspired by embedded emulation systems like:
@@ -42,21 +36,3 @@ It's inspired by embedded emulation systems like:
 
 
 The RetroDECK team consists of several veterans from some of the projects mentioned above as well as a bunch of other talented other individuals.
-
-**For our long term vision you can check out the following wiki page:**<br>
-[[RetroDECK: Visions and Goals]]
-
-### The Story & Philosophy of RetroDECK
-If you want to know the history of RetroDECK, there is a short write-up here:
-
-[[Misc: RetroDECK ‐ Story & Philosophy]]
-
-# The FAQ
-The FAQ answers a lot of deeper questions on different topics for example:
-
-- How is RetroDECK is different from other projects?
-- What is a flatpak?
-
-Check it out here:
-
-[[FAQs: Frequently asked questions]]

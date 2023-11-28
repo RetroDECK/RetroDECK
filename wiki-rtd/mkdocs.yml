@@ -3,5 +3,7 @@ nav:
   - Home: index.md
   - About RetroDECK:
     - What is RetroDECK?: wiki_about/what-is-retrodeck.md
+    - What is included?: wiki_about/what-is-included.md
     - Visions & Goals: wiki_about/visions-and-goals.md
+    - Beta Period: wiki_about/beta-period.md
 theme: readthedocs
