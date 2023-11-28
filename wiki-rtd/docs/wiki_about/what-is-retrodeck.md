@@ -14,15 +14,19 @@ By being one application RetroDECK can put all important files in one location  
 ## What else?
 RetroDECK also adds the `RetroDECK Framework` and the `RetroDECK Configurator` on top of the emulators and ES-DE interface that allows deeper integrations between emulators and easier exposure to a variety of features that you otherwise need to set per emulator basis to create a uniformity between them.
 
-**We ship:**
+**What can the RetroDECK Framework do?**
 
-* Tools for compressing games.
-* Tools for file management.
-* Tools for troubleshooting (BIOS Checker, Multi-File Structure Checker, Partial or full reset of functions)
-* Tools for auto installing some BIOSes
-* Prebuilt Steam Input profiles.
-* Presets that can be acitivated to configure things over many emulators in one go like: RetroAchievements, Borders, Widescreen Mode, Swaping A/B X/Y for Nintendo Games.
-* Easier management of `mods` `roms` `texture_packs` `scraped media` `screenshots` `saves / states` `gamelists` and more.
+It can help with:
+
+- Compressing games.
+- File management.
+- Tools for troubleshooting (BIOS Checker, Multi-File Structure Checker, Partial or full reset of functions)
+- Auto installing some BIOSes
+- Install prebuilt Steam Input profiles for devices like the Steam Deck and external controllers.
+- Easier management of `mods` `roms` `texture_packs` `scraped media` `screenshots` `saves / states` `gamelists` and more.
+- Give access to global presets that can be acitivated to configure things over many emulators in one go like: `RetroAchievements`
+  `Borders` `Widescreen Mode` `Swaping A/B X/Y for Nintendo Games`
+
 
 
 ## Inspiration for RetroDECK and goals
