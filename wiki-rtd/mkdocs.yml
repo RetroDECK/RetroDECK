@@ -1,6 +1,7 @@
 site_name: RetroDECK Wiki
-site_url:
 nav:
   - Home: index.md
-  - What is RetroDECK?: wiki_general/what-is-retrodeck.md
+  - About RetroDECK:
+    - What is RetroDECK?: wiki_about/what-is-retrodeck.md
+    - Visions & Goals: wiki_about/visions-and-goals.md
 theme: readthedocs

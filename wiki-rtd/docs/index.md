@@ -2,10 +2,11 @@
     <img src="https://github.com/XargonWan/RetroDECK/blob/main/res/logo.png?raw=true" alt="RetroDECK logo" width="400"/>
 </p>
 
+
 # Please use this wiki:
 
-We are in the process of migrating to MKDocs, but most information is still here:
-https://github.com/XargonWan/RetroDECK/wiki
+We are in the process of migrating to MKDocs, but most information is still here:<br>
+[Old Wiki](https://github.com/XargonWan/RetroDECK/wiki)
 
 # Welcome to the **RetroDECK wiki**!
 
