@@ -20,9 +20,10 @@ nav:
   - Community 💬:
     - Discord: wiki_community/discord.md
     - Lemmy/Reddit: wiki_community/lemmy-reddit.md
-
-  - Helping out 🫶:
     - How to Contribute to RetroDECK?: wiki_helping/contibute-rd
     - How to help out with testing?: wiki_helping/testing-rd.md
 
+  - Development🔎:
+    - Current Version: wiki_rd_versions/version_0.7b/0.7.4b/
+    - Version History (Patchnotes): wiki_rd_versions/version-history.md
 theme: readthedocs
