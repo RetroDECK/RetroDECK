@@ -8,11 +8,7 @@ nav:
     - The RetroDECK Beta: wiki_general/beta-period.md
     - Known Issues: wiki_general/known-issues.md
 
-  - About RetroDECK 📖:
-    - The Team & Credits: wiki_about/team-credits.md
-    - Story & Philosophy: wiki_about/story-philosophy.md
-    - Visions & Goals: wiki_about/visions-and-goals.md
-    - Donations & Licenses: wiki_about/donations- licenses.md
+
 
   - FAQ and How-to's ❔:
     - FAQ - Frequently Asked Questions: wiki_faq_howto/faq.md
@@ -26,4 +22,10 @@ nav:
   - Development🔎:
     - Current Version: wiki_rd_versions/version_0.7b/0.7.4b/
     - Version History (Patchnotes): wiki_rd_versions/version-history.md
+
+  - About RetroDECK 📖:
+    - The Team & Credits: wiki_about/team-credits.md
+    - Story & Philosophy: wiki_about/story-philosophy.md
+    - Visions & Goals: wiki_about/visions-and-goals.md
+    - Donations & Licenses: wiki_about/donations- licenses.md
 theme: readthedocs

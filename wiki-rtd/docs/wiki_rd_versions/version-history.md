@@ -1,24 +1,24 @@
 # RetroDECK Versions
 
 ## Version 0.7b
-- [0.7.4b](/wiki_rd_versions/version_0.7b/0.7.4b/)
-- [0.7.3b](/wiki_rd_versions/version_0.7b/0.7.3b/)
-- [0.7.2b](/wiki_rd_versions/version_0.7b/0.7.2b/)
-- [0.7.1b](/wiki_rd_versions/version_0.7b/0.7.1b/)
-- [0.7.0b](/wiki_rd_versions/version_0.7b/0.7.0b/)
+- [0.7.4b](version_0.7b/0.7.4b.md)
+- [0.7.3b](version_0.7b/0.7.3b.md)
+- [0.7.2b](version_0.7b/0.7.2b.md)
+- [0.7.1b](version_0.7b/0.7.1b.md)
+- [0.7.0b](version_0.7b/0.7.0b.md)
 
 ## Version 0.6b
-- [0.6.6b](/wiki_rd_versions/version_0.6b/0.6.6b/)
-- [0.6.5b](/wiki_rd_versions/version_0.6b/0.6.5b/)
-- [0.6.4b](/wiki_rd_versions/version_0.6b/0.6.4b/)
-- [0.6.3b](/wiki_rd_versions/version_0.6b/0.6.3b/)
-- [0.6.2b](/wiki_rd_versions/version_0.6b/0.6.2b/)
-- [0.6.1b](/wiki_rd_versions/version_0.6b/0.6.1b/)
-- [0.6.0b](/wiki_rd_versions/version_0.6b/0.6.0b/)
+- [0.6.6b](version_0.6b/0.6.6b.md)
+- [0.6.5b](version_0.6b/0.6.5b.md)
+- [0.6.4b](version_0.6b/0.6.4b.md)
+- [0.6.3b](version_0.6b/0.6.3b.md)
+- [0.6.2b](version_0.6b/0.6.2b.md)
+- [0.6.1b](version_0.6b/0.6.1b.md)
+- [0.6.0b](version_0.6b/0.6.0b.md)
 
 ## Version 0.5b
 
-- [0.5.3b](/wiki_rd_versions/version_0.5b/0.5.3b/)
-- [0.5.2b](/wiki_rd_versions/version_0.5b/0.5.2b/)
-- [0.5.1b](/wiki_rd_versions/version_0.5b/0.5.1b/)
-- [0.5.0b](/wiki_rd_versions/version_0.5b/0.5.0b/)
+- [0.5.3b](version_0.5b/0.5.3b.md)
+- [0.5.2b](version_0.5b/0.5.2b.md)
+- [0.5.1b](version_0.5b/0.5.1b.md)
+- [0.5.0b](version_0.5b/0.5.0b.md)
