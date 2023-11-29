@@ -1,4 +1,6 @@
 site_name: RetroDECK Wiki
+site_description: The Official RetroDECK Wiki
+navigation_depth: 5
 nav:
   - Wiki Home 🏠: index.md
   - General Information 📰:
@@ -18,6 +20,12 @@ nav:
   - FAQ and How-to's ❔:
     - FAQ - Frequently Asked Questions: wiki_faq_howto/faq.md
     - Move RetroDECK to a new device: wiki_faq_howto/howto-move-retrodeck.md
+
+  - Controllers and Input 🎮:
+    - About Steam Input: wiki_controllers/about-steam-input.md
+    - Button Prompts in Games: wiki_controllers/diffrent-game-inputs.md
+    - Steam Deck - Controls: wiki_controllers/controls-steamdeck.md
+    - Playstation Controllers: wiki_controllers/controllers-playstation.md
 
   - Development🔎:
     - Current Version: wiki_rd_versions/version_0.7b/0.7.4b/
