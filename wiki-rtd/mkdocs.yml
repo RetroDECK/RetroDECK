@@ -6,6 +6,7 @@ nav:
     - What is included in RetroDECK?: wiki_general/what-is-included.md
     - Supported Systems: wiki_general/supported-systems.md
     - The RetroDECK Beta: wiki_general/beta-period.md
+    - Known Issues: wiki_general/known-issues.md
 
   - About RetroDECK 📖:
     - The Team & Credits: wiki_about/team-credits.md
@@ -16,5 +17,11 @@ nav:
   - FAQ and How-to's ❔:
     - FAQ - Frequently Asked Questions: wiki_faq_howto/faq.md
 
+  - Community 💬:
+    - Community Rules: wiki_community/community-rules.md
+
+  - Helping out 🫶:
+    - How to Contribute to RetroDECK?: wiki_helping/contibute-rd
+    - How to help out with testing?: wiki_helping/testing-rd.md
 
 theme: readthedocs

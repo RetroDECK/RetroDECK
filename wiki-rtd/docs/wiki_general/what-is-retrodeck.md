@@ -26,17 +26,3 @@ It can help with:
 - Easier management of `mods` `roms` `texture_packs` `scraped media` `screenshots` `saves / states` `gamelists` and more.
 - Give access to global presets that can be acitivated to configure things over many emulators in one go like: `RetroAchievements`
   `Borders` `Widescreen Mode` `Swaping A/B X/Y for Nintendo Games`
-
-
-
-## Inspiration for RetroDECK and goals
-It's inspired by embedded emulation systems like:
-
-- AmberELEC
-- EmuELEC
-- CoreELEC
-- Lakka
-- Batocera
-
-
-The RetroDECK team consists of several veterans from some of the projects mentioned above as well as a bunch of other talented other individuals.
