@@ -85,57 +85,10 @@ A flatpak is generated from a manifest file. A software called  flatpak-builder 
 You can find out manifest here:  https://github.com/XargonWan/RetroDECK/blob/main/net.retrodeck.retrodeck.yml
 </details>
 
-#### Will you make a snap version of RetroDECK?
-<details><summary>Click here to see the answer</summary>
-
-Right now RetroDECK's main focus is flatpak. If the demand is very high for a snap version we might look into it post the launch of version 1.0.
-</details>
-
-#### Will you make a appimage version of RetroDECK?
-<details><summary>Click here to see the answer</summary>
-
-No, that is not within the scope of the project.
-</details>
 
 <br>
 
-## Supported Devices / OS
-
-### Will you support the general Linux desktop and not only the Steam Deck?
-<details><summary>Click here to see the answer</summary>
-
-We do support the Linux Desktop and technically it is working, but the user experience might not be as great as we want it to be. RetroDECK could contain desktop specific bugs and other issues.
-You will also need to manually configure the input to match your desktop and might need to tweak more settings.
-</details>
-
-
-### Will you support other SteamOS or Linux handheld gaming devices?
-<details><summary>Click here to see the answer</summary>
-
-
-We do plan to support other SteamOS based devices in the future. But during the BETA we are focusing on the Steam Deck and Linux Desktop.
-You can get it to run on other Linux based gaming devices it is not just as seamless as we want it to be and does not live up to our higher standards.
-You will need to manually configure the input to match your device and might need to tweak more settings if you try it on a none Steam Deck device. There might also be some hardware specific bugs.
-</details>
-
-### Will you support Windows or Windows based devices like the ROG Ally?
-<details><summary>Click here to see the answer</summary>
-No, RetroDECK doesn't support Windows currently and there are no plans to do so.
-As an alternative you could try https://www.retrobat.ovh that offers similar functionality in a Windows environment.
-How ever if you install a Linux distribution on your device instead you can try out RetroDECK.
-</details>
-
-### Will you support MacOS?
-<details><summary>Click here to see the answer</summary>
-Not supported and not planned.
-</details>
-
-### Will you support Android/IOS or ARM devices.
-<details><summary>Click here to see the answer</summary>
-Not supported, ES-DE does support the ARM emulators but it is a very different landscape. Maybe one day in the far future, but it would need to be a different experience as the emulators and other systems would not be the same.
-</details>
-
-<br>
+<!--  -->
 
 ## Using RetroDECK
 
