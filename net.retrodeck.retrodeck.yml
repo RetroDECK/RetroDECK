@@ -1311,8 +1311,20 @@ modules:
       - chmod +x ${FLATPAK_DEST}/bin/mame
     sources:
       - type: file
-        url: https://launchpad.net/~c.falco/+archive/mame/+files/mame_0.258+dfsg.1-0ubuntu1~ppa1~lunar1_amd64.deb
-        sha256: f464a000b286cccc78b3792909edcbdda0f4c8315532f75a108eb07752bc805f
+        url: http://de.archive.ubuntu.com/ubuntu/pool/universe/m/mame/mame_0.242+dfsg.1-1_amd64.deb
+        sha256: e3d785d26dfb477519608d63114882487f8c5eb7382eb252784ed7515e2ef281
+
+  - name: mame-data
+    buildsystem: simple
+    build-commands:
+      - ar xv mame*.deb
+      - tar xvf control.tar.zst
+      - tar xvf data.tar.zst
+      - cp -r usr ${FLATPAK_DEST}
+    sources:
+      - type: file
+        url: http://ge.archive.ubuntu.com/ubuntu/pool/universe/m/mame/mame-data_0.242+dfsg.1-1_all.deb
+        sha256: c1a560f41f2ddff03810f121825b9a2d1ca615899d07a57a9a8fa62506de7d27
 
   # MAME - End
 
