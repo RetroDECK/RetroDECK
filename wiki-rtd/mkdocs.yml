@@ -1,6 +1,6 @@
 site_name: RetroDECK Wiki
 nav:
-  - Home: index.md
+  - Wiki Home 🏠: index.md
   - General Information 📰:
     - What is RetroDECK?: wiki_general/what-is-retrodeck.md
     - What is included in RetroDECK?: wiki_general/what-is-included.md
@@ -8,16 +8,15 @@ nav:
     - The RetroDECK Beta: wiki_general/beta-period.md
     - Known Issues: wiki_general/known-issues.md
 
-
-
-  - FAQ and How-to's ❔:
-    - FAQ - Frequently Asked Questions: wiki_faq_howto/faq.md
-
-  - Community 💬:
+  - Community & Helping ❤️:
     - Discord: wiki_community/discord.md
     - Lemmy/Reddit: wiki_community/lemmy-reddit.md
     - How to Contribute to RetroDECK?: wiki_helping/contibute-rd
     - How to help out with testing?: wiki_helping/testing-rd.md
+
+  - FAQ and How-to's ❔:
+    - FAQ - Frequently Asked Questions: wiki_faq_howto/faq.md
+    - Move RetroDECK to a new device: wiki_faq_howto/howto-move-retrodeck.md
 
   - Development🔎:
     - Current Version: wiki_rd_versions/version_0.7b/0.7.4b/
