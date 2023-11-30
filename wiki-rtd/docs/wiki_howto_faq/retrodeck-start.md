@@ -17,12 +17,12 @@ Only install RetroDECK from the official channels via flathub!
 ### Steam Deck - Installation<br>
 Read and follow the following guide
 
-[Steam Deck - Installation and Updates](wiki_devices/steamdeck/steamdeck-start.md)
+[Steam Deck - Installation and Updates](/wiki_devices/steamdeck/steamdeck-start)
 
 ### Linux Desktop - Installation<br>
 Read and follow the:
 
-[Linux Desktop - Installation and Updates](wiki_devices/linux_desktop/linux-install.md)
+[Linux Desktop - Installation and Updates](/wiki_devices/linux_desktop/linux-install)
 
 
 ### Other SteamOS / Linux gaming devices - Installation<br>
@@ -34,7 +34,7 @@ Read and follow the:
 **NOTE:** On the Steam Deck this step needs to be done in Desktop Mode
 
 ### Information
-Read up on [BIOS & Firmware](https://github.com/XargonWan/RetroDECK/wiki/BIOS-and-Firmware)
+Read up on [Manage your BIOS/Firmware](/wiki_howto_faq/bios-firmware)
 
 * The BIOS & Firmware files go into the `~/retrodeck/bios/` directory <br>
 
@@ -68,7 +68,7 @@ The roms folder where ever you choose.
 
 ### Let's get started on ROMs:
 
-Read up on [ES-DE Folders and Files](wiki_emulationStation_de/esde-folders-files) to see what folder each system has or read the readme file in each systems folder under `~/retrodeck/roms/`
+Read up on [ES-DE Folders and Files](/wiki_emulationStation_de/esde-folders-files) to see what folder each system has or read the readme file in each systems folder under `~/retrodeck/roms/`
 
 * Put the corresponding roms inside the corresponding system folder
 
