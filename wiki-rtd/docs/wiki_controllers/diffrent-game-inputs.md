@@ -1,9 +1,11 @@
 # Different button prompts in games
 
-Depending on what system you are playing the button prompt inputs might not correspond to the one you have on your physical controller.
+Depending on what system you are playing the button prompt inputs might not correspond to the one you have on your physical controller or device you have in your hand.
 
 ## Xbox Games
-The Xbox layout is used by Xbox controllers and is also used by devices like the `Steam Deck` `Rog Alley` and other `Genric` third party PC controllers.
+The Xbox layout is used by `Xbox Controllers`.<br>
+Is also used by devices like the `Steam Deck` `Rog Alley`.<br>
+It is used by a lot of  `Genric` third party `PC controllers` and `Xbox Clone Controllers`.
 
 **Xbox - Button Layout:**<br>
 
@@ -19,7 +21,8 @@ The Xbox layout is used by Xbox controllers and is also used by devices like the
 So if you are emulating a Xbox game that calls for the button `B` to be pressed it corresponds to the right button.
 
 ## Nintendo Games
-The Nintendo layout is used by Nintendo controllers and could also be used by other `Genric` third party Nintendo Clone controllers.
+The Nintendo layout is used by `Nintendo Controllers`..<br>
+It  could also be used by other `Genric` third party `Nintendo Clone Controllers`.
 
 **Nintendo - Button Layout**<br>
 
@@ -35,7 +38,8 @@ The Nintendo layout is used by Nintendo controllers and could also be used by ot
 So if you are emulating a Nintendo game that calls for the button `A` to be pressed it corresponds to the right button.
 
 ## Sony PlayStation Games
-The Playstation layout is used by Playstation controllers and could also be used by other `Genric` third party Playstation Clone controllers.
+The Playstation layout is used by `Playstation Controllers`. <br>
+It could also be used by other `Genric` third party `Playstation Clone Controllers`.
 
 **Playstation - Button Layout**<br>
 
