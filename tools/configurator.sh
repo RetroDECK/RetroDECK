@@ -999,6 +999,8 @@ configurator_reset_dialog() {
     "Citra" "Reset the N3DS emulator Citra to default settings" \
     "Dolphin" "Reset the Wii/GameCube emulator Dolphin to default settings" \
     "Duckstation" "Reset the PSX emulator Duckstation to default settings" \
+    "GZDoom" "Reset the GZDoom Doom engine to default settings" \
+    "MAME" "Reset the Multiple Arcade Machine Emulator (MAME) to default settings" \
     "MelonDS" "Reset the NDS emulator MelonDS to default settings" \
     "PCSX2" "Reset the PS2 emulator PCSX2 to default settings" \
     "PPSSPP" "Reset the PSP emulator PPSSPP to default settings" \
