@@ -12,8 +12,8 @@ nav:
     - Known Issues: wiki_general/known-issues.md
 
   - FAQ and Guides ❔:
-    - FAQ - Frequently Asked Questions: wiki_faq_howto/faq.md
-    - Move RetroDECK to a new device: wiki_faq_howto/howto-move-retrodeck.md
+    - FAQ - Frequently Asked Questions: wiki_faq_guide/faq.md
+    - Move RetroDECK to a new device: wiki_faq_guide/move-retrodeck.md
 
   - Steam Deck:
     - Install RetroDECK on Steam Deck: wiki_devices/steamdeck/steamdeck-start.md
@@ -34,8 +34,8 @@ nav:
   - Community and Helping ❤️:
     - Discord: wiki_community/discord.md
     - Lemmy/Reddit: wiki_community/lemmy-reddit.md
-    - How to Contribute to RetroDECK?: wiki_helping/contibute-rd
-    - How to help out with testing?: wiki_helping/testing-rd.md
+    - How to Contribute to RetroDECK?: wiki_community/contibute-rd
+    - How to help out with testing?: wiki_community/testing-rd.md
 
   - About RetroDECK 📖:
     - The Team & Credits: wiki_about/team-credits.md

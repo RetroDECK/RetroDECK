@@ -1,7 +1,7 @@
 # How do I install RetroDECK on the Steam Deck?
 
 ### Do you want to move RetroDECK from a old Steam Deck to a new Steam Deck?
-Read up here: [[How to: Move RetroDECK to a new device]]
+Read up here: [How to: Move RetroDECK to a new device](/wiki_faq_guide/move-retrodeck)
 
 ## Quickstart guide
 
