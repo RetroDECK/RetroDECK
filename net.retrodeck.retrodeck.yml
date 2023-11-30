@@ -1303,12 +1303,11 @@ modules:
       - ar xv mame*.deb
       - tar xvf control.tar.zst
       - tar xvf data.tar.zst
-      - rm -rf usr/share/[applications,docs,games]
       - cp -r etc ${FLATPAK_DEST}
-      - cp -r usr ${FLATPAK_DEST}
       - mkdir -p ${FLATPAK_DEST}/bin
-      - ln -s ${FLATPAK_DEST}/usr/games/mame ${FLATPAK_DEST}/bin/mame
+      - cp -r usr/games/mame ${FLATPAK_DEST}/bin
       - chmod +x ${FLATPAK_DEST}/bin/mame
+      - cp -r usr/share ${FLATPAK_DEST}
     sources:
       - type: file
         url: http://de.archive.ubuntu.com/ubuntu/pool/universe/m/mame/mame_0.242+dfsg.1-1_amd64.deb
@@ -1320,7 +1319,7 @@ modules:
       - ar xv mame*.deb
       - tar xvf control.tar.zst
       - tar xvf data.tar.zst
-      - cp -r usr ${FLATPAK_DEST}
+      - cp -r usr/share ${FLATPAK_DEST}
     sources:
       - type: file
         url: http://ge.archive.ubuntu.com/ubuntu/pool/universe/m/mame/mame-data_0.242+dfsg.1-1_all.deb
