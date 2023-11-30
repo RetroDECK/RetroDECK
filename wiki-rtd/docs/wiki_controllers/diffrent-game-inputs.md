@@ -9,10 +9,10 @@ The Xbox layout is used by Xbox controllers and is also used by devices like the
 
 | Button Placement  | Button |
 | :---              | :---:  |
-| Top               |  `Y`   |
-| Left              |  `X`   |
-| Right             |  `B`   |
-| Bottom            |  `A`   |
+| North             |  `Y`   |
+| West              |  `X`   |
+| East              |  `B`   |
+| South             |  `A`   |
 
 
 **Example:**<br>
@@ -25,10 +25,10 @@ The Nintendo layout is used by Nintendo controllers and could also be used by ot
 
 | Button Placement  | Button |
 | :---              | :---:  |
-| Top               |  `X`   |
-| Left              |  `Y`   |
-| Right             |  `A`   |
-| Bottom            |  `B`   |
+| North             |  `X`   |
+| West              |  `Y`   |
+| East              |  `A`   |
+| South             |  `B`   |
 
 
 **Example:**<br>
@@ -41,10 +41,10 @@ The Playstation layout is used by Playstation controllers and could also be used
 
 | Button Placement  | Button      |
 | :---              | :---:       |
-| Top               |  `Triangle` |
-| Left              |  `Square`   |
-| Right             |  `Circle`   |
-| Bottom            |  `X`        |
+| North             |  `Triangle` |
+| West              |  `Square`   |
+| East              |  `Circle`   |
+| South             |  `X`        |
 
 **Example:**
 
