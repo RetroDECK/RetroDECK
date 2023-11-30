@@ -18,6 +18,7 @@ backup
 tmp
 .godot
 rd-submodules/es-de/patches-tmp*
+.local/
 
 # Python #
 ##########

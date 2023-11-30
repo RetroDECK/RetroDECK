@@ -6,7 +6,7 @@ git config --global protocol.file.allow always
 
 if [[ "${GITHUB_REF##*/}" == "main" ]]; then
     BUNDLE_NAME="RetroDECK.flatpak"
-    FOLDER=retrodeck-flatpak-cooker
+    FOLDER=retrodeck-flatpak
 else
     BUNDLE_NAME="RetroDECK-cooker.flatpak"
     FOLDER=retrodeck-flatpak-cooker
