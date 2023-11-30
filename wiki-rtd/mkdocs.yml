@@ -14,9 +14,17 @@ nav:
   - FAQ and Guides ❔:
     - FAQ - Frequently Asked Questions: wiki_faq_guide/faq.md
     - Move RetroDECK to a new device: wiki_faq_guide/move-retrodeck.md
+    - Add RetroDECK to Steam: wiki_faq_guide/add-to-steam.md
+    - Enable Controllers in Steam: wiki_faq_guide/enable-controllers-steam.md
 
   - Steam Deck:
-    - Install RetroDECK on Steam Deck: wiki_devices/steamdeck/steamdeck-start.md
+    - Steam Deck - Installation and Updates: wiki_devices/steamdeck/steamdeck-start.md
+    - Steam Deck - Optimizations: wiki_devices/steamdeck/steamdeck-optimize.md
+    - Steam Deck - Software Recommendations: wiki_devices/steamdeck/steamdeck-software.md
+
+  - Linux Desktop:
+    - Linux Desktop - Installation and Updates: wiki_devices/linux_desktop/linux-install.md
+    - Linux Desktop - Software Recommendations: wiki_devices/linux_desktop/linux-software.md
 
   - Controllers and Input 🎮:
     - RetroDECK with Steam Input: wiki_controllers/about-steam-input.md
