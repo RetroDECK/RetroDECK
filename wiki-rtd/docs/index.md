@@ -19,7 +19,8 @@ We are in the process of migrating to MKDocs, but most information is still here
 
 ### The RetroDECK community:
 
+[Github](https://github.com/XargonWan/) <br/>
 [Website](https://retrodeck.net) <br/>
 [Discord](https://discord.gg/Dz3szYsP8g)<br/>
 [Lemmy](https://lemmy.zip/c/retrodeck)<br/>
-[Subreddit](https://www.reddit.com/r/retrodeck)<br/>
+[Reddit](https://www.reddit.com/r/retrodeck)<br/>
