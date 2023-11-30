@@ -11,7 +11,7 @@
 ![Discord](https://img.shields.io/discord/951662718102962256?label=discord)
 ![GitHub](https://img.shields.io/github/license/XargonWan/RetroDECK)
 
-### RetroDECK links
+### RetroDECK on
 [Flathub](https://flathub.org/apps/net.retrodeck.retrodeck)<br>
 [Github](https://github.com/XargonWan/) <br/>
 
