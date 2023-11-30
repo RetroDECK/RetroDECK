@@ -27,8 +27,9 @@ nav:
     - Linux Desktop - Software Recommendations: wiki_devices/linux_desktop/linux-software.md
 
   - Mod Guides:
-    - Linux Desktop - Installation and Updates: wiki_devices/linux_desktop/linux-install.md
-    - Linux Desktop - Software Recommendations: wiki_devices/linux_desktop/linux-software.md
+    - Mods - Citra: wiki_mods/citra-mods.md
+    - Mods - Dolphin/Primehack: wiki_mods/dolphin-prime-mods.md
+    - Mods - Yuzu: wiki_mods/yuzu-mods.md
 
   - Texture Pack Guides:
     - Texture Packs - Citra: wiki_texture_packs/citra-tp.md
