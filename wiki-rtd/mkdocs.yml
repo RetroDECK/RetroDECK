@@ -21,6 +21,7 @@ nav:
     - Steam Deck - Installation and Updates: wiki_devices/steamdeck/steamdeck-start.md
     - Steam Deck - Optimizations: wiki_devices/steamdeck/steamdeck-optimize.md
     - Steam Deck - Software Recommendations: wiki_devices/steamdeck/steamdeck-software.md
+    - Steam Deck - Controls: wiki_controllers/controls-steamdeck.md
 
   - Linux Desktop:
     - Linux Desktop - Installation and Updates: wiki_devices/linux_desktop/linux-install.md
@@ -52,8 +53,8 @@ nav:
   - Controllers and Input 🎮:
     - RetroDECK with Steam Input: wiki_controllers/about-steam-input.md
     - Button Prompts in Games: wiki_controllers/diffrent-game-inputs.md
-    - Steam Deck Controls: wiki_controllers/controls-steamdeck.md
-    - Playstation Controllers (WIP): wiki_controllers/controllers-playstation.md
+    - Steam Deck - Controls: wiki_controllers/controls-steamdeck.md
+    - Playstation - Controllers (WIP): wiki_controllers/controllers-playstation.md
 
   - Development🔎:
     - Current Version: wiki_rd_versions/version_0.7b/0.7.4b/
