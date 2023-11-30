@@ -26,6 +26,10 @@ nav:
     - Linux Desktop - Installation and Updates: wiki_devices/linux_desktop/linux-install.md
     - Linux Desktop - Software Recommendations: wiki_devices/linux_desktop/linux-software.md
 
+  - EmulationStation-DE Guides:
+    - ES-DE User Guide: wiki_emulationStation_de/esde-guide.md
+    - ES-DE Themes: wiki_emulationStation_de/esde-themes.md
+
   - Emulator Guides:
     - RPCS3: wiki_emulator_guides/rpcs3-guide.md
     - Yuzu: wiki_emulator_guides/yuzu-guide.md
