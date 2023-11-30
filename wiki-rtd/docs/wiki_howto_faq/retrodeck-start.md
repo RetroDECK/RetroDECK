@@ -97,11 +97,20 @@ The NES column should now be shown with our `ExampleNESGame.nes` from `Step 3`
 # Step 5: Making the games "pretty" with videos, images and art.
 
 Do the following:
-1. Make an account on https://www.screenscraper.fr/
-2. Read up on scraping on the [ES-DE Guide](https://github.com/XargonWan/RetroDECK/wiki/EmulationStation-DE:-User-Guide#scraping-and-editing-roms-metadata-images-etc)
-3. Login to your screenscraper account inside RetroDECK and start scraping.
-4. Look at your nice pretty games.
+
+1. Make an account on [Screenscraper](https://www.screenscraper.fr/)
+2. Read up on scraping and the various settings that exist for it in the [ES-DE User Guide](wiki_emulationStation_de/esde-guide.md)
+3. Login to your screenscraper account inside RetroDECK.
+4. Setup the scraping how you want it.
+5. Start scraping.
+6. Look at your nice pretty games.
 
 # Step 6: EmulationStation-DE Themes
-You can download more themes for ES-DE's built in theme downloader in `UI Settings > Theme Downloader` and switch between them via `UI Settings > Theme Set` .
+You can download more themes for ES-DE's frontend with the built in theme downloader you can find it in:
+
+`UI Settings > Theme Downloader`
+
+Switch between them and in:
+
+`UI Settings > Theme Set`
 
