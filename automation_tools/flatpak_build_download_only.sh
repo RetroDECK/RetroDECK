@@ -17,7 +17,7 @@ mkdir -vp "${GITHUB_WORKSPACE}"/{local,retrodeck-flatpak-cooker}
 flatpak-builder --user --force-clean \
     --install-deps-from=flathub \
     --install-deps-from=flathub-beta \
-    --repo="${GITHUB_WORKSPACE}/local" \
+    --repo="${GITHUB_WORKSPACE}/.local" \
     --download-only \
     "${GITHUB_WORKSPACE}/${FOLDER}" \
     net.retrodeck.retrodeck.yml
