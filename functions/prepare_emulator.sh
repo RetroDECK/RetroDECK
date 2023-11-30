@@ -19,7 +19,7 @@ prepare_emulator() {
         local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
         if [[ ! $current_setting_name =~ (rdhome|sdcard) ]]; then # Ignore these locations
           local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
-          eval "$current_setting_name=$rdhome/$(basename $current_setting_value)"
+          declare -g "$current_setting_name=$rdhome/$(basename $current_setting_value)"
           mkdir -p "$rdhome/$(basename $current_setting_value)"
         fi
       done < <(grep -v '^\s*$' $rd_conf | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
@@ -30,7 +30,7 @@ prepare_emulator() {
         if [[ ! $current_setting_name =~ (rdhome|sdcard) ]]; then # Ignore these locations
           local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
           if [[ -d "$rdhome/$(basename $current_setting_value)" ]]; then # If the folder exists at the new ~/retrodeck location
-              eval "$current_setting_name=$rdhome/$(basename $current_setting_value)"
+              declare -g "$current_setting_name=$rdhome/$(basename $current_setting_value)"
           fi
         fi
       done < <(grep -v '^\s*$' $rd_conf | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
