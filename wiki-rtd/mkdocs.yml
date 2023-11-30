@@ -26,6 +26,10 @@ nav:
     - Linux Desktop - Installation and Updates: wiki_devices/linux_desktop/linux-install.md
     - Linux Desktop - Software Recommendations: wiki_devices/linux_desktop/linux-software.md
 
+  - Emulator Guides:
+    - RPCS3: wiki_emulator_guides/rpcs3-guide.md
+    - Yuzu: wiki_emulator_guides/yuzu-guide.md
+
   - Mod Guides:
     - Mods - Citra: wiki_mods/citra-mods.md
     - Mods - Dolphin/Primehack: wiki_mods/dolphin-prime-mods.md
@@ -39,10 +43,6 @@ nav:
     - Texture Packs - PPSSPP: wiki_texture_packs/ppsspp-tp.md
     - Texture Packs - RetroArch Mesen: wiki_texture_packs/retroarch-mesen-tp.md
     - Texture Packs - RetroArch Mupen64Plus: wiki_texture_packs/retroarch-mupen64plus-tp.md
-
-  - Emulator Guides:
-    - RPCS3: wiki_emulator_guides/rpcs3-guide.md
-    - Yuzu: wiki_emulator_guides/yuzu-guide.md
 
   - Controllers and Input 🎮:
     - RetroDECK with Steam Input: wiki_controllers/about-steam-input.md
