@@ -10,14 +10,9 @@ Read up here: [[How to: Move RetroDECK to a new device]]
 ## What do I need?
 You need to meet the following prerequisites before you start following this guide:
 
-* You need to have a device to install RetroDECK on (we currently only support the Steam Deck).
-* Read up on the FAQs pages: <br>
-[Do you include any games, firmware or BIOS?](https://github.com/XargonWan/RetroDECK/wiki/FAQs:-Frequently-asked-questions#do-you-include-any-games-firmware-or-bios)<br>
-[Where can I get them?](https://github.com/XargonWan/RetroDECK/wiki/FAQs:-Frequently-asked-questions#can-you-at-least-point-me-towards-where-i-can-get-them)<br>
-[What does ~ mean?](https://github.com/XargonWan/RetroDECK/wiki/FAQs:-Frequently-asked-questions#i-see--refereed-in-documentation-and-examples-what-does-it-mean)
+* You need to have a device to install RetroDECK on.
 * Have related BIOS & Firmware ready
-* Have backup rom files of the games you want to play ready
-
+* Have game backups of various formats ready that you want to play
 
 
 # Step 1: Installation & Configuration
@@ -77,14 +72,15 @@ The roms folder where ever you choose.
 
 ## Let's get started on ROMs:
 
-Read up on [Emulators: Folders & File extensions](https://github.com/XargonWan/RetroDECK/wiki/Emulators:-Folders-&-File-extensions) to see what folder each system has.
+Read up on [ES-DE Folders and Files](wiki_emulationStation_de/esde-folders-files) to see what folder each system has or read the readme file in each systems folder under `~/retrodeck/roms/`
+
 * Put the corresponding roms inside the corresponding system folder
 
 **Example:**<br>
 You have an example NES game called `ExampleNESGame.nes` <br>
 You have to put that game into the `/retrodeck/roms/nes` folder.
 
-# Step 4: Playing the ROMs
+# Step 4: Playing the Games
 
 ## Steam Deck - Gamemode
 Return to gamemode on the Steam Deck and start up RetroDECK. Now the systems you put rom files for should be shown and be able to be played.
@@ -106,16 +102,6 @@ Do the following:
 3. Login to your screenscraper account inside RetroDECK and start scraping.
 4. Look at your nice pretty games.
 
-Also read:
-* [I got some weird error message about quota after scraping in a foreign language from screenscraper.fr](https://github.com/XargonWan/RetroDECK/wiki/FAQs:-Frequently-asked-questions#i-got-some-weird-error-message-about-quota-after-scraping-in-a-foreign-language-from-screenscraperfr)
-* [My system storage ran out after scraping!](https://github.com/XargonWan/RetroDECK/wiki/FAQs:-Frequently-asked-questions#my-system-storage-ran-out-after-scraping)
-
-# Step 6: Themes
-RetroDECK comes with several themes built in for the ES-DE interface.
-
-## How to switch between themes?
-* On the Steam Deck: you can switch between them by pressing the `☰` button to open the menu and then navigate to `UI Settings > Theme Set` to select the theme you want to use.
-
-## How to add more themes?
-[More information on themes and how to add more](https://github.com/XargonWan/RetroDECK/wiki/EmulationStation-DE:-Themes)
+# Step 6: EmulationStation-DE Themes
+You can download more themes for ES-DE's built in theme downloader in `UI Settings > Theme Downloader` and switch between them via `UI Settings > Theme Set` .
 
