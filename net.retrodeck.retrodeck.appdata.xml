@@ -65,6 +65,15 @@
    <project_license>GPL-3.0</project_license>
    <metadata_license>CC0-1.0</metadata_license>
    <releases>
+      <release version="0.7.5b" date="2023-11-30">
+         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.7.5b</url>
+         <description>
+            <p>Notice:</p>
+            <ul>
+               <li>Welcome to cooker-0.7.5b</li>
+            </ul>
+         </description>
+      </release>
       <release version="0.7.4b" date="2023-11-18">
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.7.4b</url>
          <description>
