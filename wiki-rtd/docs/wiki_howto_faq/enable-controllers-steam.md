@@ -32,7 +32,7 @@ Open up Steam
 ### Prerequisites
 
 * You need to have enabled controller input in Steam (above).
-* You need to have added RetroDECK to Steam, more info here: [Add RetroDECK to Steam](/wiki_faq_guide/add-to-steam/)
+* You need to have added RetroDECK to Steam, more info here: [Add RetroDECK to Steam](../wiki_howto_faq/add-to-steam.md)
 * You need to have the controller or controllers plugged in / connected for the `Controller Icon` to show up next to the Cog icon in each game and
 
 ### Controller Settings
@@ -41,4 +41,4 @@ Open up Steam
 2. Make sure you have a controller plugged in / connected
 3. Click on the new `Controller Icon 🎮` next to the ⚙️ icon on the right side of the Steam window.
 4. By pressing on it you will open the `Steam Input` window wher you can customize the controllers inputs / download community templates / enable the RetroDECK templates for your controller.
-5. Read more information here: [RetroDECK with Steam Input](/wiki_controllers/about-steam-input/) and the `Controllers and Input 🎮` section on this wiki.
+5. Read more information here: [RetroDECK with Steam Input](../wiki_controllers/about-steam-input.md) and the `Controllers and Input 🎮` section on this wiki.

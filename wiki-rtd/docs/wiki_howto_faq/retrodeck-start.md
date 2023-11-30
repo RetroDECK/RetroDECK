@@ -17,12 +17,12 @@ Only install RetroDECK from the official channels via flathub!
 ### Steam Deck - Installation<br>
 Read and follow the following guide
 
-[Steam Deck - Installation and Updates](/wiki_devices/steamdeck/steamdeck-start)
+[Steam Deck - Installation and Updates](../wiki_devices/steamdeck/steamdeck-start.md)
 
 ### Linux Desktop - Installation<br>
 Read and follow the:
 
-[Linux Desktop - Installation and Updates](/wiki_devices/linux_desktop/linux-install)
+[Linux Desktop - Installation and Updates](../wiki_devices/linux_desktop/linux-install.md)
 
 
 ### Other SteamOS / Linux gaming devices - Installation<br>
@@ -34,7 +34,7 @@ Read and follow the:
 **NOTE:** On the Steam Deck this step needs to be done in Desktop Mode
 
 ### Information
-Read up on [Manage your BIOS/Firmware](/wiki_howto_faq/bios-firmware)
+Read up on [Manage your BIOS/Firmware](../wiki_howto_faq/bios-firmware.md)
 
 * The BIOS & Firmware files go into the `~/retrodeck/bios/` directory <br>
 
@@ -68,7 +68,7 @@ The roms folder where ever you choose.
 
 ### Let's get started on ROMs:
 
-Read up on [ES-DE Folders and Files](/wiki_emulationStation_de/esde-folders-files) to see what folder each system has or read the readme file in each systems folder under `~/retrodeck/roms/`
+Read up on [ES-DE Folders and Files](../wiki_emulationStation_de/esde-folders-files.md) to see what folder each system has or read the readme file in each systems folder under `~/retrodeck/roms/`
 
 * Put the corresponding roms inside the corresponding system folder
 
@@ -95,7 +95,7 @@ The NES column should now be shown with our `ExampleNESGame.nes` from `Step 3`
 Do the following:
 
 1. Make an account on [Screenscraper](https://www.screenscraper.fr/)
-2. Read up on scraping and the various settings that exist for it in the [ES-DE User Guide](wiki_emulationStation_de/esde-guide.md)
+2. Read up on scraping and the various settings that exist for it in the [ES-DE User Guide](../wiki_emulationStation_de/esde-guide.md)
 3. Login to your screenscraper account inside RetroDECK.
 4. Setup the scraping how you want it.
 5. Start scraping.

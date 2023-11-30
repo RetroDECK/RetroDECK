@@ -44,8 +44,8 @@ Yes! Everybody is welcome to contribute in any way possible if it is personal ti
 - Help us make RetroDECK better.
 
 ### Testers:
-- Help us test cooker builds and submit bugs and feedback. For how to test them you can check out here: [[How to: Help out with testing cooker builds]]
-
+- Help us test cooker builds and submit bugs and feedback.
+-
 - Help us make RetroDECK better.
 
 ### Everyone:

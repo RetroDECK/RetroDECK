@@ -60,7 +60,7 @@ nav:
     - Playstation - Controllers (WIP): wiki_controllers/controllers-playstation.md
 
   - Development 🖥️:
-    - Current Version: wiki_rd_versions/version_0.7b/0.7.4b/
+    - Current Version: wiki_rd_versions/version_0.7b/0.7.4b.md
     - Version History (Patchnotes): wiki_rd_versions/version-history.md
     - Folders and Filepaths: wiki_development/folders-filepaths.md
     - CLI Guide: wiki_development/cli-guide.md
@@ -69,7 +69,7 @@ nav:
   - Community and Helping Out ❤️:
     - Discord: wiki_community/discord.md
     - Lemmy/Reddit: wiki_community/lemmy-reddit.md
-    - How to Contribute to RetroDECK?: wiki_community/contibute-rd
+    - How to Contribute to RetroDECK?: wiki_community/contibute-rd.md
     - How to help out with testing?: wiki_community/testing-rd.md
 
   - About RetroDECK 📖:

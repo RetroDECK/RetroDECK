@@ -2,7 +2,7 @@
 
 # Supported file extensions for each emulator
 For a detalied list of which file extensions are supported and where to put the roms check this page:
-[ES-DE: Folders and Files](/esde-folders-files/esde-folders-files.md)
+[ES-DE: Folders and Files](../wiki_emulationStation_de/esde-folders-files.md)
 
 # Multidisk/file games: Directory interpreted as files
 You can put all the game files inside a sub-folder in order to keep you game list clean, these folder will be seen as the game itself from RetroDECK and not as an actual folder, more info [here](https://gitlab.com/es-de/emulationstation-de/-/blob/master/USERGUIDE.md#directories-interpreted-as-files) on the official ES-DE Documentation. The folder needs to have the corresponding .m3u file and the folder needs to be renamed to the exact filename of the .m3u

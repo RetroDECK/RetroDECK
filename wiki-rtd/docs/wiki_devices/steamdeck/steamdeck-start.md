@@ -15,10 +15,10 @@
 - Launch RetroDECK and enjoy
 
 ## Other quick tips
-- Read up on the [Steam Deck - Controls](/wiki_controllers/controls-steamdeck) to ease your navigation.
-- Read up on the [EmulationStation DE: User Guide](/wiki_emulationStation_de/esde-guide)
-- Check out our other software recommendations for the Steam Deck [Steam Deck - Software Recommendations](/wiki_devices/steamdeck/steamdeck-software).
-- Check various optional optimizations that can make some emulators run even better [Steam Deck - Optimizations](/wiki_devices/steamdeck/steamdeck-optimize).
+- Read up on the [Steam Deck - Controls](../../wiki_controllers/controls-steamdeck.md) to ease your navigation.
+- Read up on the [EmulationStation DE: User Guide](../../wiki_emulationStation_de/esde-guide.md)
+- Check out our other software recommendations for the Steam Deck [Steam Deck - Software Recommendations](../../wiki_devices/steamdeck/steamdeck-software.md).
+- Check various optional optimizations that can make some emulators run even better [Steam Deck - Optimizations](../../wiki_devices/steamdeck/steamdeck-optimize.md).
 
 
 ## Full step by step guide
@@ -44,14 +44,14 @@
 - Go into `Controller Layouts` and press `Templates`
 - Add the layout for RetroDECK  called `RetroDECK: Official Layout` with a version number.
 - You can now use RetroDECK and it's ready to populate with ROMS.
-- If you are unsure on how to add ROMS and BIOS to RetroDECK follow the [How-to - Start using RetroDECK](/wiki_howto_faq/retrodeck-start)
+- If you are unsure on how to add ROMS and BIOS to RetroDECK follow the [How-to - Start using RetroDECK](../../wiki_howto_faq/retrodeck-start.md)
 
 ### Step 4 (Optional): Extras
 - Get RetroDECK Steam Grid art with BoilR or add it manually from [SteamgridDB](https://www.steamgriddb.com/search/grids?term=RetroDeck) for the Steam Grid.
-- Read up on the [Steam Deck - Controls](/wiki_controllers/controls-steamdeck) to ease your navigation.
-- Read up on the [EmulationStation DE: User Guide](/wiki_emulationStation_de/esde-guide).
-- Check out our other software recommendations for the Steam Deck [Steam Deck - Software Recommendations](/wiki_devices/steamdeck/steamdeck-software).
-- Check various optional optimizations that can make some emulators run even better [Steam Deck - Optimizations](/wiki_devices/steamdeck/steamdeck-optimize).
+- Read up on the [Steam Deck - Controls](../../wiki_controllers/controls-steamdeck.md) to ease your navigation.
+- Read up on the [EmulationStation DE: User Guide](../../wiki_emulationStation_de/esde-guide.md)
+- Check out our other software recommendations for the Steam Deck [Steam Deck - Software Recommendations](../../wiki_devices/steamdeck/steamdeck-software.md).
+- Check various optional optimizations that can make some emulators run even better [Steam Deck - Optimizations](../../wiki_devices/steamdeck/steamdeck-optimize.md).
 
 
 ## How do I update RetroDECK on the Steam Deck?
@@ -66,5 +66,5 @@
 
 ### Decky: AutoFlatpaks
 If you have Decky installed and the AutoFlatpaks plugin. You can update RetroDECK from gamemode. <br>
-Read more here: [Steam Deck - Software Recommendations](/wiki_devices/steamdeck/steamdeck-software).
+Read more here: [Steam Deck - Software Recommendations](../../wiki_devices/steamdeck/steamdeck-software.md).
 
