@@ -18,10 +18,9 @@ configurator_process_complete_dialog() {
   --title "RetroDECK Configurator Utility - Process Complete" \
   --text="The process of $1 is now complete.\n\nYou may need to quit and restart RetroDECK for your changes to take effect\n\nClick OK to return to the Main Menu or Quit to quit RetroDECK."
 
-  if [ ! $? == 0 ] # OK button clicked
-  then
+  if [ ! $? == 0 ]; then # OK button clicked
       configurator_welcome_dialog
-  elif [ ! $? == 1 ] # Quit button clicked
+  elif [ ! $? == 1 ]; then # Quit button clicked
       pkill -f retrodeck
       pkill -f emulationstation
   fi
