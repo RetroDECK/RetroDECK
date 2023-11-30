@@ -29,6 +29,7 @@ nav:
   - EmulationStation-DE Guides:
     - ES-DE User Guide: wiki_emulationStation_de/esde-guide.md
     - ES-DE Themes: wiki_emulationStation_de/esde-themes.md
+    - ES-DE Folders and Files: wiki_emulationStation_de/esde-folders-files.md
 
   - Emulator Guides:
     - RPCS3: wiki_emulator_guides/rpcs3-guide.md
@@ -61,7 +62,7 @@ nav:
     - CLI Guide: wiki_development/cli-guide.md
     - Development Notes: wiki_development/general-development.md
 
-  - Community and Helping ❤️:
+  - Community and Helping Out ❤️:
     - Discord: wiki_community/discord.md
     - Lemmy/Reddit: wiki_community/lemmy-reddit.md
     - How to Contribute to RetroDECK?: wiki_community/contibute-rd
