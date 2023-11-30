@@ -9,13 +9,13 @@ nav:
     - Supported Systems: wiki_general/supported-systems.md
     - RetroDECK Configurator: wiki_general/configurator.md
     - The RetroDECK Beta: wiki_general/beta-period.md
+    - FAQ - Frequently Asked Questions: wiki_howto_faq/faq.md
     - Known Issues: wiki_general/known-issues.md
 
-  - FAQ and Guides ❔:
-    - FAQ - Frequently Asked Questions: wiki_faq_guide/faq.md
-    - Move RetroDECK to a new device: wiki_faq_guide/move-retrodeck.md
-    - Add RetroDECK to Steam: wiki_faq_guide/add-to-steam.md
-    - Enable Controllers in Steam: wiki_faq_guide/enable-controllers-steam.md
+  - How-to's ❔:
+    - How-to - Move RetroDECK to a new device: wiki_howto_faq/move-retrodeck.md
+    - How-to - Add RetroDECK to Steam: wiki_howto_faq/add-to-steam.md
+    - How-to - Enable Controllers in Steam: wiki_howto_faq/enable-controllers-steam.md
 
   - Steam Deck:
     - Steam Deck - Installation and Updates: wiki_devices/steamdeck/steamdeck-start.md
