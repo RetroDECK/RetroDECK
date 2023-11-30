@@ -41,8 +41,8 @@ nav:
     - Texture Packs - RetroArch Mupen64Plus: wiki_texture_packs/retroarch-mupen64plus-tp.md
 
   - Emulator Guides:
-    - Linux Desktop - Installation and Updates: wiki_devices/linux_desktop/linux-install.md
-    - Linux Desktop - Software Recommendations: wiki_devices/linux_desktop/linux-software.md
+    - RPCS3: wiki_emulator_guides/rpcs3-guide.md
+    - Yuzu: wiki_emulator_guides/yuzu-guide.md
 
   - Controllers and Input 🎮:
     - RetroDECK with Steam Input: wiki_controllers/about-steam-input.md
