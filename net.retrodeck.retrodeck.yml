@@ -385,8 +385,10 @@ modules:
       - -DENABLE_BOOST=OFF
     sources:
       - type: archive
-        url: https://gitlab.freedesktop.org/poppler/poppler/-/archive/poppler-22.11.0/poppler-poppler-22.11.0.tar.bz2
-        sha256: b8f618d5c62030034d5c8da4d3f6a740260b7620b9a31021679ce1914d327f81
+        # original link not working, found a mirror
+        url: https://poppler.freedesktop.org/poppler-23.11.0.tar.xz
+        #url: https://gitlab.freedesktop.org/poppler/poppler/-/archive/poppler-22.11.0/poppler-poppler-22.11.0.tar.bz2
+        sha256: f99cca6799cb9cb6c92fc1e0eb78547b611cb733750ab7cb047cb0e6c246539c
     cleanup:
       - /lib/pkgconfig
       - /include
