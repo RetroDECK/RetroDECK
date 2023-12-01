@@ -400,9 +400,9 @@ modules:
     sources:
       - type: archive
         # original link not working, found a mirror
-        url: https://poppler.freedesktop.org/poppler-23.11.0.tar.xz
+        url: https://poppler.freedesktop.org/poppler-22.11.0.tar.xz
         #url: https://gitlab.freedesktop.org/poppler/poppler/-/archive/poppler-22.11.0/poppler-poppler-22.11.0.tar.bz2
-        sha256: f99cca6799cb9cb6c92fc1e0eb78547b611cb733750ab7cb047cb0e6c246539c
+        sha256: 093ba9844ed774285517361c15e21a31ba4df278a499263d4403cca74f2da828
     cleanup:
       - /lib/pkgconfig
       - /include
