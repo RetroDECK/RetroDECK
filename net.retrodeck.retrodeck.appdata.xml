@@ -68,9 +68,11 @@
       <release version="0.7.5b" date="2023-11-30">
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.7.5b</url>
          <description>
-            <p>Notice:</p>
+            <p>Bug fixes and other changes:</p>
             <ul>
-               <li>Welcome to cooker-0.7.5b</li>
+               <li>Framework: Fixed the SD card path resolution for SteamOS 3.5</li>
+               <li>RetroArch: added nightly cores, stable cores have priority over them</li>
+               <li>PS3: RPCS3 Shortcut (Standalone) is now the default emulator</li>
             </ul>
          </description>
       </release>
