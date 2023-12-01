@@ -22,7 +22,7 @@ git submodule update
 install `flatpak flatpak-builder p7zip-full` with your distro's package manager, then:
 
 ```
-flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+flatpak remote-add --if-not-exists Flathub https://flathub.org/repo/flathub.flatpakrepo
 flatpak install --user -y org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08 io.qt.qtwebengine.BaseApp/x86_64/5.15-21.08 org.freedesktop.Sdk.Extension.llvm13 org.freedesktop.Platform.ffmpeg-full/x86_64/21.08
 ```
 

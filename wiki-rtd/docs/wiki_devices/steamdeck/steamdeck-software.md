@@ -11,7 +11,7 @@ _Made by CryoByte33_
 
 ## Discover Overlay
 If you use Discord this is a program that adds Discord integration into the Steam Deck's gamemode UI.
-It's already in on flathub and downloadable in Discover. Note that you need to install and login to Discord as well.
+It's already in on Flathub and downloadable in Discover. Note that you need to install and login to Discord as well.
 
 _Made by trigg_
 

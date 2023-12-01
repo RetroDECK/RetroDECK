@@ -19,7 +19,7 @@ https://flatpak.org/setup/
 
 ## From the terminal
 
-- Run the following command `flatpak install flathub net.retrodeck.retrodeck`
+- Run the following command `flatpak install Flathub net.retrodeck.retrodeck`
 
 
 # First Run - Quick Start

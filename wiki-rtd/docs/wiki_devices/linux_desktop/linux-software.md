@@ -4,7 +4,7 @@ The following software works great with the Linux Desktop and might enhance your
 
 ## Flips
 Flips is a software that let you patch romhacks IPS & BPS files onto the rom files.
-It's already on flathub.
+It's already on Flathub.
 
 _Made by Alcaro_
 
@@ -12,7 +12,7 @@ _Made by Alcaro_
 
 ## BoilR
 
-BoilR will show games from other games platforms in your Steam library. It uses the Steam 3rd party shortcuts feature and does not require you to set up anything. You can also use BoilR to manually and automatically download custom art from SteamGridDB. It's already in flathub.
+BoilR will show games from other games platforms in your Steam library. It uses the Steam 3rd party shortcuts feature and does not require you to set up anything. You can also use BoilR to manually and automatically download custom art from SteamGridDB. It's already in Flathub.
 
 _Made by Philipk_
 
@@ -20,7 +20,7 @@ _Made by Philipk_
 
 ## JRomManager
 A Mame and Retrogaming Rom Manager. <br>
-This more complex application allows you to manage and verify your roms via .dat files. It's already in on flathub and downloadable in Discover.
+This more complex application allows you to manage and verify your roms via .dat files. It's already in on Flathub and downloadable in Discover.
 
 _Made by optyfr_
 

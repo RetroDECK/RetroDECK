@@ -51,14 +51,14 @@ Where the argument `--reset-all` replaced `[ARGUMENTS]` and `[FLATPAK-RUN-OPTION
 
 # General flatpak commands
 
-If you want to check RetroDECK's flathub page [click here](https://flathub.org/apps/details/net.retrodeck.retrodeck)<br>
+If you want to check RetroDECK's Flathub page [click here](https://flathub.org/apps/details/net.retrodeck.retrodeck)<br>
 Here follows some general flatpak commands that could be useful: <br>
 
 
 ## Install RetroDECK from CLI
 
 If you want to install RetroDECK from CLI type:<br>
-`flatpak install flathub net.retrodeck.retrodeck`
+`flatpak install Flathub net.retrodeck.retrodeck`
 
 NOTE! This will work on the Steam Deck out of the box.<br>
 But on the Linux desktop you need to check your distribution if it ships with both Flatpak and Flathub integration installed, if not you may need to install it. Check your distributions or flathubs documentation on how to install it on your desktop.

@@ -2,11 +2,16 @@
 
 RetroDECK currently supports two systems:
 
+- Steam Deck itself
+- Other SteamOS devices
 - The Linux Desktop
-- SteamOS devices like the Steam Deck.
 
 ## Steam Deck LCD/OLED
-Supported from the start and RetroDECK is tailored to the Steam Deck.
+Supported from the beginning. RetroDECK is tailored to the Steam Deck.
+
+## Other SteamOS devices
+Hence there are no any other devices that are coming with SteamOS at the moment of writing, it's in the plan of Valve to distribute this OS and make it available to the hardware manifacturers and users.
+We plan to fully support the OS itself, about the single hardware it will be decided case by case.
 
 ## Linux Desktop
 It is working, but the user experience might not be that great it as we want it to be just yet.

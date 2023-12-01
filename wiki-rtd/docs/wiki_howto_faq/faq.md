@@ -77,7 +77,7 @@ For purchased titles we recommend that you use your own game backups and look in
 
 #### How is a flatpak made?
 <details><summary>Click here to see the answer</summary>
-A flatpak is generated from a manifest file. A software called  flatpak-builder reads the  manifest, then starts downloading dependencies and starts building the software. After the build process is done it generates the software in a .flatpak file. This file can then be hosted on flathub or distributed on the web.
+A flatpak is generated from a manifest file. A software called  flatpak-builder reads the  manifest, then starts downloading dependencies and starts building the software. After the build process is done it generates the software in a .flatpak file. This file can then be hosted on Flathub or distributed on the web.
 </details>
 
 #### How does the RetroDECK flatpak manifest look like?
@@ -349,7 +349,7 @@ No, but RetroDECK had some dialog before the project started with some of the Ba
 
 - EmuDeck is a shell script that you download and run. The script downloads & configures all the separate emulators & plugins for you from various sources for various operative systems.
 
-- RetroDECK is an all-in-one application that already provides everything you need without to many extra steps for the user.It is on flathub and thus allows the users to update the application via standard safe operative system update methods.
+- RetroDECK is an all-in-one application that already provides everything you need without to many extra steps for the user.It is on Flathub and thus allows the users to update the application via standard safe operative system update methods.
 You can see RetroDECK as the in between of EmuDeck and Batocera. We hope that one day we can offer a complete Batocera-like experience right inside your operative system.
 
 </details>

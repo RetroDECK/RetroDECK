@@ -25,7 +25,7 @@ After that you can keep following following the installation guide [[Steam Deck:
 
 ### Linux Desktop
 1. Back up existing the RetroDECK `~/retrodeck` folder .
-2. On the new PC install RetroDECK from flathub via your application manager.
+2. On the new PC install RetroDECK from Flathub via your application manager.
 3. Do not launch RetroDECK on your new device until you have copied over the backed up folders.
 4. Copy over the backup folder to the same location (or new) on the new device.
 5. Launch RetroDECK on the new device and point towards the `~/retrodeck` location during installation.

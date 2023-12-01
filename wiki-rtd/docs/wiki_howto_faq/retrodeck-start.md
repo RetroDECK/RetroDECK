@@ -12,7 +12,7 @@ You need to meet the following prerequisites before you start following this gui
 * Have game backups of various formats ready that you want to play
 
 ## Step 1: Installation & Configuration
-Only install RetroDECK from the official channels via flathub!
+Only install RetroDECK from the official channels via Flathub!
 
 ### Steam Deck - Installation<br>
 Read and follow the following guide
