@@ -6,7 +6,7 @@ RetroDECK is nothing without our dependencies without them this project and many
 We are trying to list current and future software we want to include in RetroDECK. More things will be added all the time. There are even more emulators, software, front-ends, and assets out there that are not part of the RetroDECK project for various other systems. This is not a complete list of all Emulators or Frontends for the entire internet.
 
 ## RetroDECK
-<img src="/wiki_images/logos/rd-logo-box.png" width="550">
+<img src="../../wiki_images/logos/rd-logo-box.png" width="550">
 
 By donating to RetroDECK you support this project and the vision of a unified packaged retro experience.
 
@@ -53,7 +53,7 @@ By donating to RetroDECK you support this project and the vision of a unified pa
 
 ### EmulationStation Desktop Edition (ES-DE)
 
-<img src="/wiki_images/logos/es-de-logo.png" width="150">
+<img src="../../wiki_images/logos/es-de-logo.png" width="150">
 
 EmulationStation Desktop Edition (ES-DE) is a frontend for browsing and launching games from your multi-platform game collection.
 
@@ -75,7 +75,7 @@ EmulationStation Desktop Edition (ES-DE) is a frontend for browsing and launchin
 
 ### LibreRetro - RetroArch
 
-<img src="https://docs.libretro.com/image/branding/invader.png" width="150">
+<img src="../../wiki_images/logos/retroarch-logo.png" width="150">
 
 The LibreRetro Team makes RetroArch, Libretro and Lakka
 
@@ -95,7 +95,7 @@ The LibreRetro Team makes RetroArch, Libretro and Lakka
 [Licenses](https://docs.libretro.com/development/licenses/)
 
 ### MAME
-<img src="/wiki_images/logos/mame-logo.png" width="180">
+<img src="../../wiki_images/logos/mame-logo.png" width="180">
 
 
 MAME is a multi-purpose emulation framework.
@@ -115,7 +115,7 @@ We have not found a donation link to this project at this time or the project do
 
 ### RPCS3
 
-<img src="https://avatars.githubusercontent.com/u/8070735?s=200&v=4" width="150">
+<img src="../../wiki_images/logos/rpcs3-logo.png" width="150">
 
 The world's first free and open-source PlayStation 3 emulator/debugger, written in C++ for Windows, Linux, macOS and FreeBSD.
 
@@ -132,7 +132,7 @@ Before donating check the current status on their Patreon.
 ### Duckstation
 
 
-<img src="/wiki_images/logos/duckstation-logo.png" width="150">
+<img src="../../wiki_images/logos/duckstation-logo.png" width="150">
 
 DuckStation is an simulator/emulator of the Sony PlayStation(TM) console, focusing on playability, speed, and long-term maintainability. The goal is to be as accurate as possible while maintaining performance suitable for low-end devices. "Hack" options are discouraged, the default configuration should support all playable games with only some of the enhancements having compatibility issues.
 
@@ -145,7 +145,7 @@ We have not found a donation link to this project at this time or the project do
 
 ### PPSSPP
 
-<img src="/wiki_images/logos/ppsspp-logo.png" width="150">
+<img src="../../wiki_images/logos/ppsspp-logo.png" width="150">
 
 PPSSPP can run your PSP games on your PC or Android phone in full HD resolution or even higher. It can also upscale textures to make them sharper, and you can enable post-processing shaders to adjust color and brightness the way you like, and other effects.
 
@@ -157,7 +157,7 @@ PPSSPP can run your PSP games on your PC or Android phone in full HD resolution 
 
 ### PCSX2
 
-<img src="/wiki_images/logos/pcsx2-logo.png" width="180">
+<img src="../../wiki_images/logos/pcsx2-logo.png" width="180">
 
 PCSX2 is a free and open-source PlayStation 2 (PS2) emulator. Its purpose is to emulate the PS2's hardware and this allows you to play PS2 games on your PC, with many additional features and benefits.
 
@@ -170,7 +170,7 @@ PCSX2 is a free and open-source PlayStation 2 (PS2) emulator. Its purpose is to 
 
 ### Vita3K
 
-<img src="/wiki_images/logos/vita3k-logo.png" width="150">
+<img src="../../wiki_images/logos/vita3k-logo.png" width="150">
 
 Vita3K is an experimental PlayStation Vita emulator for Windows, Linux, macOS and Android.
 
@@ -187,7 +187,7 @@ Vita3K is an experimental PlayStation Vita emulator for Windows, Linux, macOS an
 
 ### Dolphin
 
-<img src="/wiki_images/logos/dolphin-logo.png" width="150">
+<img src="../../wiki_images/logos/dolphin-logo.png" width="150">
 
 Dolphin is an emulator for two recent Nintendo video game consoles: the GameCube and the Wii. It allows PC gamers to enjoy games for these two consoles in full HD (1080p) with several enhancements: compatibility with all PC controllers, turbo speed, networked multiplayer, and even more!
 
@@ -199,7 +199,7 @@ We have not found a donation link to this project at this time or the project do
 
 ### Primehack
 
-<img src="/wiki_images/logos/primehack-logo.png" width="150">
+<img src="../../wiki_images/logos/primehack-logo.png" width="150">
 
 PrimeHack is a modified version of [Dolphin-Emu](https://github.com/dolphin-emu/dolphin) solely for playing Metroid Prime Trilogy for Wii with keyboard and mouse on a PC.
 
@@ -211,7 +211,7 @@ We have not found a donation link to this project at this time or the project do
 
 ### Yuzu
 
-<img src="/wiki_images/logos//yuzu-logo.svg" width="150">
+<img src="../../wiki_images/logos//yuzu-logo.svg" width="150">
 
 Yuzu is the world's most popular, open-source, Nintendo Switch emulator — started by the creators of Citra.
 
@@ -223,7 +223,7 @@ Yuzu is the world's most popular, open-source, Nintendo Switch emulator — star
 
 ### Citra
 
-<img src="/wiki_images/logos/citra-logo.svg" width="150">
+<img src="../../wiki_images/logos/citra-logo.svg" width="150">
 
 Citra is the world's most popular, open-source, Nintendo 3DS emulator.
 It is written in C++ with portability in mind and builds are actively maintained for Windows, Linux, Android and macOS.
@@ -236,7 +236,7 @@ It is written in C++ with portability in mind and builds are actively maintained
 
 ### Ryujinx
 
-<img src="/wiki_images/logos/ryujinx-logo.svg" width="150">
+<img src="../../wiki_images/logos/ryujinx-logo.svg" width="150">
 
 
 Ryujinx is an open-source Nintendo Switch emulator, created by gdkchan, written in C#. This emulator aims at providing excellent accuracy and performance, a user-friendly interface and consistent builds. It was written from scratch and development on the project began in September 2017.
@@ -249,7 +249,7 @@ Ryujinx is an open-source Nintendo Switch emulator, created by gdkchan, written 
 
 ### melonDS
 
-<img src="/wiki_images/logos/melonds-logo.svg" width="150">
+<img src="../../wiki_images/logos/melonds-logo.svg" width="150">
 
 
 melonDS aims at providing fast and accurate Nintendo DS emulation. While it is still a work in progress, it has a pretty solid set of features:
@@ -266,7 +266,7 @@ melonDS aims at providing fast and accurate Nintendo DS emulation. While it is s
 
 ### Cemu
 
-<img src="/wiki_images/logos/cemu-logo.png" width="150">
+<img src="../../wiki_images/logos/cemu-logo.png" width="150">
 
 Cemu, a Wii U emulator that is able to run most Wii U games and homebrew in a playable state. It's written in C/C++ and is being actively developed with new features and fixes to increase compatibility, convenience and usability.
 
@@ -280,7 +280,7 @@ Cemu, a Wii U emulator that is able to run most Wii U games and homebrew in a pl
 
 ### Xenia
 
-<img src="/wiki_images/logos/xenia-logo.png" width="150">
+<img src="../../wiki_images/logos/xenia-logo.png" width="150">
 
 Xenia is an experimental emulator for the Xbox 360.
 
@@ -292,7 +292,7 @@ Xenia is an experimental emulator for the Xbox 360.
 
 ### Xemu
 
-<img src="/wiki_images/logos/xemu-logo.png" width="150">
+<img src="../../wiki_images/logos/xemu-logo.png" width="150">
 
 A free and open-source application that emulates the original Microsoft Xbox game console, enabling people to play their original Xbox games on Windows, macOS, and Linux systems.
 
@@ -308,7 +308,7 @@ A free and open-source application that emulates the original Microsoft Xbox gam
 
 ### OpenBOR
 
-<img src="/wiki_images/logos/openbor-logo.svg" width="150">
+<img src="../../wiki_images/logos/openbor-logo.svg" width="150">
 
 
 OpenBOR is a royalty free sprite-based side scrolling gaming engine. From humble beginnings in 2004, it has since grown into the most versatile, easy to use, and powerful engine of its type you will find anywhere.
@@ -321,7 +321,7 @@ We have not found a donation link to this project at this time or the project do
 
 ### GZDoom
 
-<img src="/wiki_images/logos/gzdoom-logo.png" width="150">
+<img src="../../wiki_images/logos/gzdoom-logo.png" width="150">
 
 GZDoom is a feature centric port for all Doom engine games, based on ZDoom, adding an OpenGL renderer and powerful scripting capabilities
 
@@ -334,7 +334,7 @@ We have not found a donation link to this project at this time or the project do
 ### ScummVM
 
 
-<img src="/wiki_images/logos/scummvm-logo.svg" width="150">
+<img src="../../wiki_images/logos/scummvm-logo.svg" width="150">
 
 
 ScummVM allows you to play classic graphic point-and-click adventure games, text adventure games, and RPGs, as long as you already have the game data files. ScummVM replaces the executable files shipped with the games, which means you can now play your favorite games on all your favorite devices.
@@ -348,7 +348,7 @@ ScummVM allows you to play classic graphic point-and-click adventure games, text
 
 ### Solarus
 
-<img src="/wiki_images/logos/solarus-logo.svg" width="150">
+<img src="../../wiki_images/logos/solarus-logo.svg" width="150">
 
 Solarus is a free and open-source 2D game engine written in C++, that can run games scripted in Lua. It has been designed with 16-bit classic Action-RPGs in mind, and is available on a wide range of platforms.
 
@@ -360,7 +360,7 @@ Solarus is a free and open-source 2D game engine written in C++, that can run ga
 
 ### IKEMEN Go
 
-<img src="/wiki_images/logos/ikemen-go-logo.png" width="150">
+<img src="../../wiki_images/logos/ikemen-go-logo.png" width="150">
 
 IKEMEN Go is a remake of the IKEMEN (open source fighting games engine that supports M.U.G.E.N resources) in Google’s Programming Language “Go”.
 
@@ -375,7 +375,7 @@ We have not found a donation link to this project at this time or the project do
 
 ### Kenny.nl
 
-<img src="/wiki_images/logos/kennynl-logo.png" width="150">
+<img src="../../wiki_images/logos/kennynl-logo.png" width="150">
 
 Over the last couple of years Kenny.nl have released [30,000+](https://kenney.nl/assets) images, audio files and 3D models for anyone to use in any kind of project, all dedicated to the public domain. Thanks to your donation Kenny.nl can create even more content and support developers, students and teachers all over the world.
 
