@@ -45,9 +45,9 @@ prepare_emulator() {
       set_setting_value "$es_settings" "ROMDirectory" "$roms_folder" "es_settings"
       set_setting_value "$es_settings" "MediaDirectory" "$media_folder" "es_settings"
       set_setting_value "$es_settings" "UserThemeDirectory" "$themes_folder" "es_settings"
+      dir_prep "$rdhome/gamelists" "/var/config/emulationstation/.emulationstation/gamelists"
       emulationstation --home /var/config/emulationstation --create-system-dirs
       update_splashscreens
-      dir_prep "$rdhome/gamelists" "/var/config/emulationstation/.emulationstation/gamelists"
     fi
     if [[ "$action" == "postmove" ]]; then
       set_setting_value "$es_settings" "ROMDirectory" "$roms_folder" "es_settings"
