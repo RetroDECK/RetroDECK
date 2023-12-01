@@ -4,6 +4,3 @@
 [submodule "rd-submodules/shared-modules"]
 	path = rd-submodules/shared-modules
 	url = https://github.com/flathub/shared-modules.git
-[submodule "shared-modules"]
-	path = shared-modules
-	url = https://github.com/flathub/shared-modules.git
