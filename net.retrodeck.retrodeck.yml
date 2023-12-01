@@ -560,11 +560,22 @@ modules:
   # RetroArch - END
 
   # Not part of the offical RetroArch manifest
+  # retroarch-cores-nightly must be earlier than retroarch-cores as it will overwrite this cores with the stable ones
+  - name: retroarch-cores-nightly
+    buildsystem: simple
+    build-commands:
+      - mkdir -p /app/share/libretro/cores/
+      - mv -f ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* /app/share/libretro/cores/
+    sources:
+      - type: archive
+        url: https://buildbot.libretro.com/nightly/linux/x86_64/RetroArch_cores.7z
+        sha256: RANIGHTLYCORESPLACEHOLDER
+
   - name: retroarch-cores
     buildsystem: simple
     build-commands:
       - mkdir -p /app/share/libretro/cores/
-      - mv ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* /app/share/libretro/cores/
+      - mv -f ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* /app/share/libretro/cores/
     sources:
       - type: archive
         url: https://buildbot.libretro.com/stable/1.16.0/linux/x86_64/RetroArch_cores.7z
