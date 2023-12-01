@@ -17,4 +17,10 @@ backup
 .old
 tmp
 .godot
-rd-submodules/es-de/patches-tmp
+rd-submodules/es-de/patches-tmp*
+.local/
+buildid
+
+# Python #
+##########
+__pycache__
