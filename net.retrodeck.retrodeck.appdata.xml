@@ -74,6 +74,8 @@
                <li>RetroArch: added nightly cores, stable cores have priority over them</li>
                <li>PS3: RPCS3 Shortcut (Standalone) is now the default emulator</li>
                <li>Added the possibility to reset ES-DE configs via Configurator and CLI</li>
+               <li>Dolphin (SA): fixed GC buttons layout. Now R1 is Z and L2/R2 are L/R</li>
+               <li>CEMU: tweaked audio config to choose the correct output device when docked</li>
             </ul>
          </description>
       </release>
@@ -85,8 +87,6 @@
                <li>Fixed a bug where the system folders were not correctly generated</li>
                <li>Fixed a bug where the RetroDECK Configurator desktop file was not opening the Configurator from Desktop Mode</li>
                <li>Fixed a bug where the theme was not showing correctly</li>
-               <li>Fixed GC buttons layout: now R1 is Z and L2/R2 are L/R</li>
-               <li>Tweaked some CEMU audio config to choose the correct output device when docked</li>
                <li>Added retrodeck and configurator commands to be called from the shell or bash inside flatpak</li>
             </ul>
             <p>Known issues:</p>
