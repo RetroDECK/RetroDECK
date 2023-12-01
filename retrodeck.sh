@@ -20,6 +20,7 @@ Arguments:
     --compress-one <file>         Compresses target file to a compatible format
     --compress-all <format>       Compresses all supported games into compatible format. Available formats are \"chd\", \"zip\", \"rvz\" and \"all\".
     --reset-emulator <emulator>   Reset one or more emulator configs to the default values
+    --reset-emulationstation      Reset EmulationStation DE to default settings
     --reset-retrodeck             Starts the initial RetroDECK installer (backup your data first!)
 
 For flatpak run specific options please run: flatpak run -h
@@ -70,6 +71,18 @@ https://retrodeck.net
         fi
       else
         echo "$emulator is not a valid selection, exiting..."
+        exit
+      fi
+      ;;
+    --reset-emulationstation*)
+      echo "You are about to reset EmulationStation DE to default settings. Your scraped media, downloaded themes and gamelists will remain untouched."
+      read -p "Enter 'y' to continue, 'n' to stop: " response
+      if [[ $response == [yY] ]]; then
+        prepare_emulator "reset" "emulationstation" "cli"
+        read -p "The process has been completed, press Enter key to start RetroDECK."
+        shift # Continue launch after previous command is finished
+      else
+        read -p "The process has been cancelled, press Enter key to exit."
         exit
       fi
       ;;
