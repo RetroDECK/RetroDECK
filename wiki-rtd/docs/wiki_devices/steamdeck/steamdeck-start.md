@@ -57,7 +57,7 @@
 ## How do I update RetroDECK on the Steam Deck?
 
 
-### From Desktop Mode:
+### From Desktop Mode
 - Put the Steam Deck into Desktop Mode `Steam button` > `Power` > `Switch to Desktop`
 - Open the Discover application.
 - Click on the updates tab.

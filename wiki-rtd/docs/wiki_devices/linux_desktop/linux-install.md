@@ -10,8 +10,6 @@ https://flatpak.org/setup/
 
 3. We currently recommend that you add and launch RetroDECK from Steam so you can utilize the Steam Input feature to change various aspects of the external controllers. We will be looking into other alternative solutions later for those that don't want to use Steam.
 
-# Installation
-
 ## From the Desktop GUI
 
 - Go into your flatpak supported software manager in your desktop environment, this is different depending on what desktop you use. Example: for GNOME is often `GNOME Software` and for KDE it is `KDE Discover`.
@@ -22,7 +20,7 @@ https://flatpak.org/setup/
 - Run the following command `flatpak install Flathub net.retrodeck.retrodeck`
 
 
-# First Run - Quick Start
+## First Run - Quick Start
 
 - Start RetroDECK for the first time
 - Choose where RetroDECK should create the `roms` folders `Internal`, `SDCard` or `Custom`.
@@ -38,7 +36,7 @@ You can follow a more in depth guide here: [[Linux Desktop: Add RetroDECK to Ste
 - Read up on the [[EmulationStation DE: User Guide]]
 - Check out other recommended software [[Linux Desktop: Software recommendations]]
 
-# Updates
+## Updates
 
 Updates to RetroDECK is handled automatically via your software manager when there is a new version released.
 
