@@ -6,10 +6,11 @@ site_description: The Official RetroDECK Wiki
 # Copyright
 copyright: "&copy; 2023 RetroDECK Team"
 
-# Configuration
+# Theme Configuration
 theme:
   name: "material"
   language: "en"
+  logo: wiki_icons/retrodeck/rd_icon_circle_32x32.png
   features:
     - toc.integrate
     - navigation.prune
@@ -27,7 +28,7 @@ plugins:
        pagination: false
        pagination: false
 
-# Sidebar
+# Sidebar Navigation
 
 nav:
   - Wiki Home 🏠: index.md
