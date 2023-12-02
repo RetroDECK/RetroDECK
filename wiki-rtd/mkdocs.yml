@@ -1,8 +1,8 @@
 site_name: RetroDECK Wiki
 site_description: The Official RetroDECK Wiki
-navigation_depth: 5
 nav:
   - Wiki Home 🏠: index.md
+  - Blog: blog/index.md
   - General Information 📰:
     - What is RetroDECK?: wiki_general/what-is-retrodeck.md
     - What is included in RetroDECK?: wiki_general/what-is-included.md
@@ -77,4 +77,14 @@ nav:
     - Story & Philosophy: wiki_about/story-philosophy.md
     - Visions & Goals: wiki_about/visions-and-goals.md
     - Donations & Licenses: wiki_about/donations- licenses.md
-theme: readthedocs
+
+theme: material
+plugins:
+    - blog:
+       enabled: true
+       post_url_date_format: yyyy/MM/dd
+       post_date_format: full
+       blog_toc: true
+       archive: true
+       pagination: false
+features:
