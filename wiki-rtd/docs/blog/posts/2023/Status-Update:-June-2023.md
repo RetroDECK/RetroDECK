@@ -15,15 +15,17 @@ Github link if you don't know what the project is: [https://github.com/XargonWan
 
 With 0.7b and summer just around the corner we in the team thought this month we should focus more on a mix of topics.
 
+<!-- more -->
+
 # Read First – Important Changes in 0.7b!
 
-&#x200B;
+
 
 * `PCSX2-SA` latest updates are not compatible with old save states. Please make sure you do an in-game save to your virtual memory card before upgrading.
 * The following emulators have changed as the defaults and now run the stand-alone version: `Dolphin`, `Citra`, `PPSSPP`.If you have saves states or just want to go back to the `RetroArch` versions, you can always switch back by pressing: `Other Settings` – `Alternative Emulators` in the main interface and set them there.
 * If you decide to install the new `RetroDECK Controller Layout` for the Steam Deck, it will wipe your custom configurations and emulator settings. That’s because all the configs need to be updated and changed to be compatible. The choice is yours (you can always install it later via the Configurator if you change your mind).
 
-&#x200B;
+
 
 # What are the upsides of RetroDECKs all-in-one approach?
 
@@ -35,7 +37,7 @@ Quite many actually!
 * We can expose various hidden/hard to find emulation features and allow the users to customize various experiences directly inside the application itself without needing to go into the Steam Deck’s desktop environment.
 * We are leveraging the power of compiling these emulators ourselves (where possible) to make a more complete unified experience a reality with custom patches.
 
-&#x200B;
+
 
 **What are the downsides of this approach?**
 
@@ -44,7 +46,7 @@ Quite many actually!
 * Emulator updates need to be in point releases and not daily, since we can’t update emulators inside an existing flatpak. As we apply the RetroDECK Framework on top of the emulators, we sometimes need to do some tinkering before we can release a new version. But you can expect semi-frequent emulator-update point releases, historically we have been fast if we feel the need to get something out quickly. Major new updates that add features to the RetroDECK application itself will take more time.
    * *There has been some issues with Yuzu in the past, but we have redone our entire Yuzu pipeline for 0.7b s it should allow for faster updates.*
 
-&#x200B;
+
 
 # What is RetroDECK's vision and design philosophy?
 
@@ -58,7 +60,7 @@ Quite many actually!
 * We want to make the emulation available for everyone; from the casual to the power user. Keep it simple, everything in one application and download it like any other software. Only one thing to update.
 * Prioritize security and keep everything contained as much as possible.
 
-&#x200B;
+
 
 **How does this vision effect design?**
 
@@ -78,17 +80,17 @@ Just look our wiki under mods/texture packs and look forward to 0.7b.
 
 [https://github.com/XargonWan/RetroDECK/wiki](https://github.com/XargonWan/RetroDECK/wiki)
 
-&#x200B;
+
 
 Another example is (as others have done) move `gamelists` to under the retrodeck folder. This is a safer way of doing it and it's easier for the users to take backups.
 
-&#x200B;
+
 
 **What to expect in the future?**
 
 You can expect most of the standard stuff like that you can except from an emulation solution in the future:
 
-&#x200B;
+
 
 * Cloud-sync
 * USB and FTP file transfer
@@ -106,7 +108,7 @@ The RetroDECK framework is a complete system that applies and adds features, fix
 
 This is also one of the reasons we needed to restructure save file folders in the past updates as well.
 
-&#x200B;
+
 
 **What does the RetroDECK Framework allow you to do?**
 
@@ -114,7 +116,7 @@ It allows us to ship deeper choices, customization, apply settings globally, cre
 
 But what truly excites us in the team is the more advanced big features that we have not seen anyone else do on SteamOS or other operative systems.
 
-&#x200B;
+
 
 **Some light examples in 0.7b of the framework is:**
 
@@ -124,14 +126,14 @@ But what truly excites us in the team is the more advanced big features that we 
 
 Please be careful when moving data to exotic locations don't be like Mr.Angry:
 
-&#x200B;
 
-&#x200B;
+
+
 
 * Log in/logout/hardcore mode for RetroAchivements hardcore mode for all supported emulators.
 * Apply Borders, Shaders and Widescreen mode per emulator / core or globally.
 
-&#x200B;
+
 
 **Note:**
 
@@ -141,19 +143,19 @@ RetroDECK will offer full user choice and not a blanket all or nothing. You coul
 
 Here is one example:
 
-&#x200B;
+
 
 Think about configurations for emulators. How most other solutions are handling changes or updates is just a blanket call all-or-nothing. Either you accept the changes and remove everything you have done or keep your changes without getting the updates.
 
 What we are building with the framework is a system to inject point changes into configurations.
 
-&#x200B;
+
 
 *So instead of doing the crude way others are doing:*
 
 Force replace in `config.xml` old with new `config.xml` yes or no?
 
-&#x200B;
+
 
 ***What our goal is and what we are building:***
 
@@ -167,13 +169,13 @@ So we can compare changes between the new `config.xml` and the old, then inject 
 
 So we hope in the future to be able to save even more custom configs even with the emulator updates. We also hope to make configuring emulators easier... more on that in a future development update after the summer.
 
-&#x200B;
+
 
 **Another big example:**
 
 If you read the recent article, we in the RetroDECK team are happy to unveil the `RetroDECK: Multiuser Mode`. This is only the first one of the big features we have planned for future updates and stands as an example of the complicated features we can accomplish. There is even more crazy stuff in development for the future big releases then this, so consider this a taste of things to come. It will not be ready for 0.7b but can be enabled with CLI commands for testing.
 
-&#x200B;
+
 
 See the following Q&A:
 
@@ -185,49 +187,49 @@ First read here:
 
 This is for testing only in 0.7b!
 
-&#x200B;
+
 
 **What does Multiuser Mode mean?**
 
 It creates a new directory structure `retrodeck/multi-user-data/<username>` and allows multiple users to use RetroDECK from one device.
 
-&#x200B;
+
 
 **Wait... what.. how?! What about saves?! Configurations?! Custom settings?!**
 
 They are all saved per user if you enable it. You, your sister, brother, child, husband, wife, dog, cat could all have their separate saves, states and custom emulator settings just for themselves when they select their own profile.
 
-&#x200B;
+
 
 **Does it support the Steam Deck’s multiple users in Game Mode? Will RetroDECK hook those Steam Users into the enabled Multiuser system?**
 
 Yes, that is the intent and should work, so you can log into your Steam Deck profile and have your RetroDECK saves/configs.
 
-&#x200B;
+
 
 **What about a Linux Desktop PC that don't have Steam installed?**
 
 We also support locally created “RetroDECK Users” so, for those Linux Desktop users in the future that don’t use Steam and just want RetroDECK on their device.
 
-&#x200B;
+
 
 **What happens if I disable multiuser mode?**
 
 You chose one profile as the primary user and the other data still exists under `retrodeck/multi-user-data/<username>`. No data is lost until you delete it manually.
 
-&#x200B;
+
 
 **What happens if I re-enable multiuser mode?**
 
 If you have had multiuser mode enabled and disable it, then re-enable it and have not deleted any `retrodeck/multi-user-data/` everything should work as it did before.
 
-&#x200B;
+
 
 **Will there be an easy way transfer/export/import a user profile, like press a button and my can export to my profile (saves, configurations, with/without roms) to my friend's device on something like a USB or other media?**
 
 Not for 0.7b but hopefully for the next major update 0.8b.
 
-&#x200B;
+
 
 # Other things
 
@@ -243,11 +245,11 @@ Or as another:
 
 *“Aozora is just a tiny Japanese banks name! This is clearly just an update to pay some of our dept to the community off! Stop with that horizon nonsense mumbo jumbo!”*
 
-&#x200B;
+
 
 **What are some examples I can help out with with?**
 
-&#x200B;
+
 
 **Artist/Creators:**
 
@@ -260,7 +262,7 @@ Or as another:
 * Create instruction videos.
 * Help us make RetroDECK better.
 
-&#x200B;
+
 
 **Developers:**
 
@@ -269,14 +271,14 @@ Or as another:
 * Help us get releases out faster.
 * Help us make RetroDECK better.
 
-&#x200B;
+
 
 **Testers:**
 
 * Help us test cooker builds and submit bugs and feedback.
 * Help us make RetroDECK better.
 
-&#x200B;
+
 
 **Everyone:**
 
@@ -285,13 +287,13 @@ Or as another:
 * Engage with the rest of the community.
 * Help us make RetroDECK better.
 
-&#x200B;
+
 
 **Summer Period**
 
 As the summer period arrives there will be a holiday break on these kind of development posts until after the summer. Some parts of the team is also going on vacation, you can still except semi regular emulator updates and bug fixes as usual in 0.7.X releases (but no major 0.8b - Bonsai Banana version in the middle of the summer!).
 
-&#x200B;
+
 
 **End Quote**
 

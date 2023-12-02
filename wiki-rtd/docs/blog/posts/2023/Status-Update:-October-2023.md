@@ -14,7 +14,7 @@ GitHub link if you do not know what the project is: [https://github.com/XargonWa
 
 We hope that everyone is ready for a tiny spooky October status update.
 
-
+<!-- more -->
 
 # We begin with thanking all kind emulator developers.
 

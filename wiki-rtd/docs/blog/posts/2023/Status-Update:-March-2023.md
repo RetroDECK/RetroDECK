@@ -16,6 +16,8 @@ We in the team thought we could give you a quick status update on how developmen
 
 First of we are working out some bugs and issues with Duckstation and Primehack, the later will have a totally from the ground up redone configuration for a more optimized experience.
 
+<!-- more -->
+
 RetroDECK is also moving to another cloud provider for our buildserver and website, sponsored by one generous community member (THANKS!).
 
 Another recent breakthrough was getting chdman the compression tool for disc based games running inside a flatpak (sandbox environment). It should be accessible later in a future version via CLI and we will check if it's possible to a build in GUI for it later in the future.

@@ -16,7 +16,7 @@ If you don’t know what RetroDECK is or want more information check out the wik
 
 It is the end of November and we want to give you a status update on  how things are going with RetroDECK. First off development is going  steady, and we have a lot of features in the pipeline but also some IRL  things that slow us down a bit (work, new baby etc…). But let us talk  about what we are working on and answer some questions.
 
-
+<!-- more -->
 
 **Note:**
 

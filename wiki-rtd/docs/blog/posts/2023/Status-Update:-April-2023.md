@@ -9,7 +9,6 @@ Hello community!
 We in the team thought we could give you a quick status update on how development is going.
 
 
-
 **Status update 2023-04:**
 
 Controls, Controls, Controls!
@@ -18,7 +17,7 @@ Right now we are working on a huge overhaul of the Steam Deck's input profile  f
 
 The team have painstakingly made a huge map (excel) with all the emulators hotkeys, how they can be mapped and in the end classified as important, semi-important och not important.
 
-
+<!-- more -->
 
 *The thoughts so far:*
 

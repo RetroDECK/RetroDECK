@@ -16,6 +16,8 @@ We in the team thought we could give you a quick status update on how developmen
 
 As a continuation of last months post, some parts of the team have been working on hotkeys and controls (in fact since October 2022 [https://github.com/XargonWan/RetroDECK/issues/194](https://github.com/XargonWan/RetroDECK/issues/194)).
 
+<!-- more -->
+
 *This is only one part of the 0.7b update.*
 
 

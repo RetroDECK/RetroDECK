@@ -27,6 +27,8 @@ plugins:
        archive: true
        pagination: false
        pagination: false
+       post_excerpt: required
+       post_excerpt_separator: <!-- more -->
 
 # Sidebar Navigation
 
