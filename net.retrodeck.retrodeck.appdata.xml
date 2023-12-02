@@ -86,7 +86,6 @@
             </ul>
             <p>Missing:</p>
             <ul>
-               <li>GZDOOM: .doom files parser</li>
                <li>GZDOOM: hotkeys</li>
                <li>SOLARUS: hotkeys</li>
                <li>A proper reset script for the new emulators, now it's just a draft</li>
