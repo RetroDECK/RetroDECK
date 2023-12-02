@@ -73,6 +73,7 @@
                <li>Framework: Fixed the SD card path resolution for SteamOS 3.5</li>
                <li>RetroArch: added nightly cores, stable cores have priority over them</li>
                <li>PS3: RPCS3 Shortcut (Standalone) is now the default emulator</li>
+               <li>Added the possibility to reset ES-DE configs via Configurator and CLI</li>
             </ul>
          </description>
       </release>
