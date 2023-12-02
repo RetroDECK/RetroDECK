@@ -1,2 +1,2 @@
-# RetroDECK Blog 📝
+# The RetroDECK Blog 📝
 
