@@ -11,9 +11,9 @@ theme:
   name: "material"
   language: "en"
   features:
-    - navigation.tabs
+    - toc.integrate
   palette:
-    scheme: slate
+    scheme: default
     primary: "deep purple"
     accent: "white"
 plugins:
