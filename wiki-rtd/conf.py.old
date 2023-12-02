@@ -12,11 +12,12 @@ extensions = [
     # 'sphinx.ext.viewcode',
     # 'sphinx_rtd_theme',
     'myst_parser',
+    'mkdocs-material'
 ]
 
 language = 'English'
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
-html_theme = "material"
+html_theme = "sphinx_rtd_theme"
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
