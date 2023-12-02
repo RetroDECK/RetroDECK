@@ -11,7 +11,7 @@ Supported from the beginning. RetroDECK is tailored to the Steam Deck.
 
 ## Other SteamOS devices
 Hence there are no any other devices that are coming with SteamOS at the moment of writing, it's in the plan of Valve to distribute this OS and make it available to the hardware manifacturers and users.
-We plan to fully support the OS itself, about the single hardware it will be decided case by case.
+We plan to fully support the OS itself, about the single hardware it will be decided case by case basis on what level of support we can offer.
 
 ## Linux Desktop
 It is working, but the user experience might not be that great it as we want it to be just yet.
@@ -21,7 +21,7 @@ You will also need to manually configure the input to match your desktop and mig
 
 ### Will you support Windows or Windows based devices like the ROG Ally?
 No, RetroDECK doesn't support Windows currently and there are no plans to do so.
-As an alternative you could try https://www.retrobat.ovh that offers similar functionality in a Windows environment.
+As an alternative you could try [RetroBat](https://www.retrobat.ovh) that offers similar functionality in a Windows environment.
 How ever if you install a Linux distribution on your device instead you can try out RetroDECK.
 
 ### Will you support ARM devices like Android/IOS/MacOS.
