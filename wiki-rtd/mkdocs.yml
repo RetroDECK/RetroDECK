@@ -11,9 +11,9 @@ theme:
   name: "material"
   language: "en"
   features:
-    - navigation.sections
+    - navigation.tabs
   palette:
-    scheme: default
+    scheme: slate
     primary: "deep purple"
     accent: "white"
 plugins:
