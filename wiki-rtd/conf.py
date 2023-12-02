@@ -16,7 +16,7 @@ extensions = [
 
 language = 'English'
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
-html_theme = "sphinx_rtd_theme"
+html_theme = "material"
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
