@@ -2,6 +2,8 @@
 date: 2023-03-05
 ---
 
+**Please note that this was written for Lemmy/Reddit and copied over to the new RetroDECK Wiki**
+
 Hello community!
 
 As we just recently got co-ownership this subreddit (thus making this our official subreddit).

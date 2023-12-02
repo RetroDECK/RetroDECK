@@ -3,6 +3,8 @@ date: 2023-09-14
 ---
 
 
+**Please note that this was written for Lemmy/Reddit and copied over to the new RetroDECK Wiki**
+
 Hello community!
 
 

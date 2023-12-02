@@ -1,6 +1,9 @@
 ---
 date: 2023-10-13
 ---
+
+**Please note that this was written for Lemmy/Reddit and copied over to the new RetroDECK Wiki**
+
 Hello community!
 
 We in the team thought we could give you a quick status update on how development is going.
