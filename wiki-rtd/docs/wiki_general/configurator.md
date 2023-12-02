@@ -2,13 +2,11 @@
 
 The `RetroDECK Configurator` is a unique multi-use toolbox that exists within RetroDECK to manage/configure/change/reset/edit many aspect of the application and built around the `RetroDECK Framework`.
 
-The`RetroDECK Configurator` can be found:
+The `RetroDECK Configurator` can be called:
 
-* In the main menu inside the ES-DE interface
-
-* From CLI
-
-* From the `.desktop` desktop shortcut.
+* By the main menu inside the ES-DE interface (`START` > `RetroDECK Configurator``)
+* From the `RetroDECK Configurator.desktop` desktop shortcut, available in your application menu.
+* From CLI by calling `flatpak run net.retrodeck.retrodeck --configurator`
 
 What follows are the commands you can use inside the Configurator (more commands will be added during development).
 
@@ -61,39 +59,20 @@ Enable / Disable Venomalias's Universal Dynamic Input Texture for Primehack.
 ## Open Emulator
 Here you launch and configure each emulators settings, the option you choose will open that emulators GUI. For documentation on how to change the settings of each emulators settings please check the website of each emulator.
 
-(Please note that several  emulators where not designed with controller input in mind for handling the applications GUI, just the games. So you might need to use other inputs like the Steam Decks touchscreen or a mouse and key board to navigate properly).
+(Please note that most of the emulator interfaces where not designed with controller input in mind for handling the applications GUI, just the games. So you might need to use other inputs like the Steam Decks touchscreen or a mouse and key board to navigate properly).
 
-The options are the following:
+From this entry you can run the emualtor itself such as:
 
-### RetroArch
-Opens RetroArch
-
-### Citra
-Opens Citra
-
-### Dolphin
-Opens Dolphin
-
-### Duckstation
-Opens Duckstation
-
-### MelonDS
-Opens MelonDS
-
-### PCSX2
-Opens PCSX2
-
-### PPSSPP
-Opens PPSSPP
-
-### RPCS3
-Opens RPCS3
-
-### XEMU
-Opens XEMU
-
-### Yuzu
-Opens Yuzu
+- RetroArch
+- Citra
+- Dolphin
+- Duckstation
+- MelonDS
+- PCSX2
+- PPSSPP
+- RPCS3
+- XEMU
+- Yuzu
 
 ## RetroDECK: Tools
 
@@ -114,9 +93,9 @@ You can choose either a single game or many.
 This option installs the Steam Deck controller profile to RetroDECK it also resets all emulators configurations to input the correct bindings.
 
 ### Install: PS3 Firmware
-This option downloads and installs the latest PS3 firmware. You will have to press OK to install it.
+This option downloads and installs the latest PS3 firmware. A the end of the download, RPCS3 will open requesting the user to install it. Just press OK.
 
-### RetroDECK: Change update settings
+### RetroDECK: Change update settings (cooker only)
 This option lets you turn on or off automatic updates on launch.
 
 ## RetroDECK: Troubleshooting
@@ -141,8 +120,7 @@ Resets all the emulators at once
 
 #### Reset RetroDECK
 Resets the entirety of RetroDECK.
-
-⚠️ WARNING! BACK UP YOUR DATA BEFORE RUNNING THIS! ⚠️
+> ⚠️ WARNING! BACK UP YOUR DATA BEFORE RUNNING THIS! ⚠️
 
 ## RetroDECK: About
 This menu contains information about RetroDECK

@@ -13,3 +13,6 @@ It means that the software is still under heavy development and big updates can 
 - RetroDECK is perfectly fine for daily use even during the beta phase and the core application should seen be stable. We still consider it beta since the want to add more features before a stable release. There are also experimental features that could be unstable but those are exclusive to the cooker builds or have to be enabled from commandline by testers.
 
 - RetroDECK will still keep developing post the stable release.
+
+# So what's the difference betwen this beta and the cooker version?
+Since the beta is the actual mainline that is in fact the stable channel, the cooker version is the unstable, under development branch. More on that in the [FAQs](#what-is-retrodeck-cooker).
