@@ -1,4 +1,4 @@
-<img src="../wiki_images/logos/rd-stacked-esde-logo.png" width="500">
+<img src="wiki_images/logos/rd-stacked-esde-logo.png" width="500">
 
 ![Flathub](https://img.shields.io/flathub/downloads/net.retrodeck.retrodeck)
 ![Flathub](https://img.shields.io/flathub/v/net.retrodeck.retrodeck)
