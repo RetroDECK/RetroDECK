@@ -12,6 +12,7 @@ theme:
   language: "en"
   features:
     - toc.integrate
+    - navigation.prune
   palette:
     scheme: default
     primary: "deep purple"
