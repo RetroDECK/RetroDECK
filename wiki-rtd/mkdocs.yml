@@ -25,6 +25,7 @@ plugins:
        post_date_format: full
        blog_toc: true
        archive: true
+       archive_date_format: yyyy
        pagination: false
        pagination: false
        post_excerpt: required
