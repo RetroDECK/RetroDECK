@@ -14,7 +14,7 @@ theme:
     - toc.integrate
     - navigation.prune
   palette:
-    scheme: default
+    scheme: slate
     primary: "deep purple"
     accent: "white"
 plugins:

@@ -1,13 +1,11 @@
-<p float="center">
-    <img src="https://github.com/XargonWan/RetroDECK/blob/main/res/logo.png?raw=true" alt="RetroDECK logo" width="400"/>
-</p>
+<img src="../../wiki_images/logos/rd-stacked-esde-logo.png" width="500">
 
 ![Flathub](https://img.shields.io/flathub/downloads/net.retrodeck.retrodeck)
 ![Flathub](https://img.shields.io/flathub/v/net.retrodeck.retrodeck)
 ![Discord](https://img.shields.io/discord/951662718102962256?label=discord)
 ![GitHub](https://img.shields.io/github/license/XargonWan/RetroDECK)
 
-# Welcome to the RetroDECK wiki!
+## Welcome to the RetroDECK wiki!
 
 🏗️ This wiki is currently under construction 🏗️
 
