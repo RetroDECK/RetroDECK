@@ -5,7 +5,7 @@
 ### [Lazorne](https://github.com/Lazorne)
 Community management/outreach, testing, documentation, feature suggestions, does controllers and some design.
 
-<details><summary>.</summary>
+<details><summary> </summary>
 Internal meme lord and leader of the "Nordic Pizza Heresy Cult". Instigator of the internal pizza war and "Banana Warlock".
 </details>
 
@@ -14,14 +14,14 @@ Internal meme lord and leader of the "Nordic Pizza Heresy Cult". Instigator of t
 ### [XargonWan](https://github.com/XargonWan)
 RetroDECK project founder and also one of the founding members of [AmberELEC](https://amberelec.org/).
 
-<details><summary>.</summary>
+<details><summary> </summary>
 General of the "Italian Pizza Legion" in the internal pizza war.
 </details>
 
 ### [IceNine451](https://github.com/icenine451)
 Creator of the `RetroDECK configurator`, the `RetroDECK Framework` and various cool things.
 
-<details><summary>.</summary>
+<details><summary> </summary>
 Freedom loving leader of the "Murican Cheese Crust Patriots" in the internal pizza war.
 </details>
 
@@ -29,7 +29,7 @@ Freedom loving leader of the "Murican Cheese Crust Patriots" in the internal piz
 Develops various new features, functions and tools.
 
 
-<details><summary>.</summary>
+<details><summary> </summary>
 1st Commander of the "Italian Pizza Legion" in the internal pizza war.
 </details>
 
@@ -38,7 +38,7 @@ Develops various new features, functions and tools.
 Checks GODOT and other things.
 
 
-<details><summary>.</summary>
+<details><summary> </summary>
 Pizza vigilante
 </details>
 
@@ -47,7 +47,7 @@ Pizza vigilante
 ### [dottormac](https://github.com/redeemer666)
 Does bleeding edge cooker testing (lives in the danger zone), some feature suggestions and design.
 
-<details><summary>.</summary>
+<details><summary> </summary>
 2nd Commander of the "Italian Pizza Legion" in the internal pizza war (might be a spy for the Nordic Cult or Muricans).
 </details>
 
