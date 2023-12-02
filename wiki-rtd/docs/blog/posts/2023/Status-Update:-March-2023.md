@@ -12,7 +12,7 @@ We in the team thought we could give you a quick status update on how developmen
 
 
 
-**Status update 2023-03:**
+# Status update 2023-03:
 
 First of we are working out some bugs and issues with Duckstation and Primehack, the later will have a totally from the ground up redone configuration for a more optimized experience.
 

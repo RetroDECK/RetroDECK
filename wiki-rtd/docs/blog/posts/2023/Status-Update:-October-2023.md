@@ -8,8 +8,6 @@ Hello community!
 
 We in the team thought we could give you a quick status update on how development is going.
 
-GitHub link if you do not know what the project is: [https://github.com/XargonWan/RetroDECK](https://github.com/XargonWan/RetroDECK)
-
 # Status update 2023-10:
 
 We hope that everyone is ready for a tiny spooky October status update.

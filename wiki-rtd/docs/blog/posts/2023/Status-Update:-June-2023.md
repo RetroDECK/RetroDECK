@@ -11,13 +11,13 @@ We in the team thought we could give you a quick status update on how developmen
 Github link if you don't know what the project is: [https://github.com/XargonWan/RetroDECK](https://github.com/XargonWan/RetroDECK)
 
 
-**Status update 2023-06:**
+# Status update 2023-06:
 
 With 0.7b and summer just around the corner we in the team thought this month we should focus more on a mix of topics.
 
 <!-- more -->
 
-# Read First – Important Changes in 0.7b!
+### Read First – Important Changes in 0.7b!
 
 
 

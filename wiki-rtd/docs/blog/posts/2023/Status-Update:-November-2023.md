@@ -8,11 +8,9 @@ Hello community!
 
 We in the team thought we could give you a quick status update on how development is going.
 
-If you don’t know what RetroDECK is or want more information check out the wiki over at our Github:
+If you don’t know what RetroDECK is or want more information check out the wiki.
 
-[RetroDECK Wiki Link](https://github.com/XargonWan/RetroDECK/wiki)
-
-# Status update:
+# Status update 2023-11:
 
 It is the end of November and we want to give you a status update on  how things are going with RetroDECK. First off development is going  steady, and we have a lot of features in the pipeline but also some IRL  things that slow us down a bit (work, new baby etc…). But let us talk  about what we are working on and answer some questions.
 

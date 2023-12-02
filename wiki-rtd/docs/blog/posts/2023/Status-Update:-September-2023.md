@@ -6,19 +6,13 @@ date: 2023-09-14
 **Please note that this was written for Lemmy/Reddit and copied over to the new RetroDECK Wiki**
 
 Hello community!
-
-
 We in the team thought we could give you a quick status update on how development is going.
-
-GitHub link if you do not know what the project is: [https://github.com/XargonWan/RetroDECK](https://github.com/XargonWan/RetroDECK)
-
 
 
 # Status update 2023-09:
 
-
-
 We hope that everyone had a good summer and that you are ready for a tiny status update with a plethora of mixed topics.
+
 But before we get into what we are working on we want to make a short statement.
 
 <!-- more -->

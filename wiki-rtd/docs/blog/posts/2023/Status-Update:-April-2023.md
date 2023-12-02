@@ -9,11 +9,11 @@ Hello community!
 We in the team thought we could give you a quick status update on how development is going.
 
 
-**Status update 2023-04:**
+# Status update 2023-04:
 
 Controls, Controls, Controls!
 
-Right now we are working on a huge overhaul of the Steam Deck's input profile  for GameMode that should feature a more uniform hotkey configuration for version v0.7b across most emulators.
+Right now we are working on a huge overhaul of the Steam Deck's input profile for GameMode that should feature a more uniform hotkey configuration for version v0.7b across most emulators.
 
 The team have painstakingly made a huge map (excel) with all the emulators hotkeys, how they can be mapped and in the end classified as important, semi-important och not important.
 

@@ -10,11 +10,11 @@ We in the team thought we could give you a quick status update on how developmen
 
 **NOTE: This is still work in progress**
 
-**Status update 2023-05:**
+# Status update 2023-05:
 
 *Controls for everything everywhere all at once.*
 
-As a continuation of last months post, some parts of the team have been working on hotkeys and controls (in fact since October 2022 [https://github.com/XargonWan/RetroDECK/issues/194](https://github.com/XargonWan/RetroDECK/issues/194)).
+As a continuation of last months post, some parts of the team have been working on hotkeys and controls (in fact since October 2022 [GitHub: Issue 194](https://github.com/XargonWan/RetroDECK/issues/194)).
 
 <!-- more -->
 
