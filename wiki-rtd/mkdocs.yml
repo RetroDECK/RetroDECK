@@ -12,7 +12,6 @@ theme:
   language: "en"
   logo: wiki_icons/retrodeck/rd_icon_circle_32x32.png
   features:
-    - toc.integrate
     - navigation.prune
   palette:
     scheme: slate
