@@ -60,7 +60,7 @@ nav:
     - Linux Desktop - Installation and Updates: wiki_devices/linux_desktop/linux-install.md
     - Linux Desktop - Software Recommendations: wiki_devices/linux_desktop/linux-software.md
 
-  - EmulationStation-DE Guides 📘:
+  - EmulationStation-DE Guide 📘:
     - ES-DE User Guide: wiki_emulationStation_de/esde-guide.md
     - ES-DE Themes: wiki_emulationStation_de/esde-themes.md
     - ES-DE Folders and Files: wiki_emulationStation_de/esde-folders-files.md
@@ -83,7 +83,7 @@ nav:
     - Texture Packs - RetroArch Mesen: wiki_texture_packs/retroarch-mesen-tp.md
     - Texture Packs - RetroArch Mupen64Plus: wiki_texture_packs/retroarch-mupen64plus-tp.md
 
-  - Controllers and Input 🎮:
+  - Controllers & Input 🎮:
     - RetroDECK with Steam Input: wiki_controllers/about-steam-input.md
     - Button Prompts in Games: wiki_controllers/diffrent-game-inputs.md
     - Steam Deck - Controls: wiki_controllers/controls-steamdeck.md
@@ -96,7 +96,7 @@ nav:
     - CLI Guide: wiki_development/cli-guide.md
     - Development Notes: wiki_development/general-development.md
 
-  - Community and Helping Out ❤️:
+  - Community & Helping Out ❤️:
     - Discord: wiki_community/discord.md
     - Lemmy/Reddit: wiki_community/lemmy-reddit.md
     - How to Contribute to RetroDECK?: wiki_community/contibute-rd.md
