@@ -75,11 +75,11 @@ There are two primary folders:
 <br>
 
 ### Is there a way to reset RetroDECK?
- Yes, you can reset various parts of the software using the RetroDECK configurator under the option reset.
+Yes, you can reset various parts of the software using the RetroDECK Configurator's reset functions.
+Read more on `RetroDECK Configurator 🛠️`
 
-Or you can use CLI arguments in the terminal.
-
-Chec
+Or if you want to reset from CLI you can read up on:
+`Development 🖥️` - `CLI Guide`
 
 
  <br>
