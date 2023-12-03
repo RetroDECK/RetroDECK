@@ -47,7 +47,7 @@ By donating to RetroDECK you support this project and the vision of a unified pa
 #### Licenses
 [Licenses](https://github.com/XargonWan/RetroDECK/blob/main/LICENSE)
 
-
+---
 
 ## Frontend
 
@@ -69,7 +69,7 @@ EmulationStation Desktop Edition (ES-DE) is a frontend for browsing and launchin
 
 [Licenses](https://gitlab.com/es-de/emulationstation-de/-/tree/master/licenses)
 
-
+---
 
 ## Emulators: Multi-system
 
@@ -110,6 +110,8 @@ We have not found a donation link to this project at this time or the project do
 [Copy License](https://github.com/mamedev/mame/blob/master/COPYING)
 
 [Licenses](https://github.com/mamedev/mame#license)
+
+---
 
 ## Emulators: Sony
 
@@ -181,7 +183,7 @@ Vita3K is an experimental PlayStation Vita emulator for Windows, Linux, macOS an
 #### Licenses
 [Licenses](https://github.com/Vita3K/Vita3K/blob/master/COPYING.txt)
 
-
+---
 
 ## Emulators: Nintendo
 
@@ -276,6 +278,8 @@ Cemu, a Wii U emulator that is able to run most Wii U games and homebrew in a pl
 #### Licenses
 [Licenses](https://github.com/cemu-project/Cemu/blob/main/LICENSE.txt)
 
+---
+
 ## Emulators: Microsoft
 
 ### Xenia
@@ -302,7 +306,7 @@ A free and open-source application that emulates the original Microsoft Xbox gam
 #### Licenses
 [Licenses](https://github.com/xemu-project/xemu/tree/master/licenses)
 
-
+---
 
 ## Software
 
@@ -370,6 +374,7 @@ We have not found a donation link to this project at this time or the project do
 #### Licenses
 [Licenses](https://github.com/ikemen-engine/Ikemen-GO/blob/master/License.txt)
 
+---
 
 ## Art and Assets
 
@@ -387,6 +392,7 @@ Over the last couple of years Kenny.nl have released [30,000+](https://kenney.nl
 #### Licenses
 CC0 & CC1
 
+---
 
 ## Other Licenses
 Here we showcase the licenses of projects / functions we might use in part, got inspired by the code/solutions or want to give special credit.
