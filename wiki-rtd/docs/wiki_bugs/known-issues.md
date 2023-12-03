@@ -1,6 +1,6 @@
 # Known issues
 What follows is a list of knows issues.
-For a list of reported bugs please check here on github: [RetroDECK issues](https://github.com/XargonWan/RetroDECK/issues?q=is%3Aissue+is%3Aopen+label%3A%22Bug+%F0%9F%95%B7%EF%B8%8F%22)
+For a list of reported bugs please check here on github: [RetroDECK issues](https://github.com/XargonWan/RetroDECK/issues/)
 
 ## Big issues
 - `RetroArch: ScummVM` Does not work. RetroArch forgot or removed the ScummVM core on the 16.00 release on their build server. This has been reported to LibreRetro by the RetroDECK team on 18-11-23.
