@@ -6,7 +6,7 @@
 
 ## How to Report?
 
-You can submit an bugs and issues on:
+You can submit bugs and issues on:
 
 - On [Github issues](https://github.com/XargonWan/RetroDECK/issues/)
 - On [Discord](https://discord.gg/Dz3szYsP8g) in the `🤝-community-support` or `🆘-support channels`
