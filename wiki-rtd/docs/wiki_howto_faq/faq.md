@@ -127,12 +127,12 @@ Put the Steam Deck into Desktop Mode `Steam button`  `Power`  `Switch to Desktop
 * Go into Discover
 * Press the `Installed` tab and find RetroDECK
 * Press the `Uninstall` button
-* Manually backup then remove the `~\RetroDECK`` folder. Warning! Make a backup your data roms/bios/saves etc if you want to save them else they will be gone.
+* Manually backup then remove the `~\retrodeck` folder. Warning! Make a backup your data roms/bios/saves etc if you want to save them else they will be gone.
 
 <br>
 
 ### Does uninstalling RetroDECK remove my roms, bios and saves?
- No, as long as you don't manually don't delete the ~\RetroDECK folder and it's content your data is safe. You could uninstall RetroDECK and install it again and keep going.
+No, as long as you don't manually don't delete the `~\retrodeck` folder and it's content your data is safe. You could uninstall RetroDECK and install it again and keep going.
 
 <br>
 
@@ -147,23 +147,12 @@ Put the Steam Deck into Desktop Mode `Steam button`  `Power`  `Switch to Desktop
 <br>
 
 ### Can I add a single game to my Steam Library or with Steam Rom Manager?
- We are working on this feature. Meanwhile you can achieve this manually.
+We are working on this feature. Meanwhile you can achieve this manually.
 Example of a launch script to launch to launch a Wii game called Baloon World:
 
  ```
  flatpak run --command=dolphin-emu-wrapper net.retrodeck.retrodeck -e "/run/media/mmcblk0p1/retrodeck/roms/wii/Baloon World.rvz" -b
  ```
-
-<br>
-
-### If I installed RetroDECK from outside of discover, do I need to uninstall the application to update?
- If you previously installed from outside of Discover, you can find the instructions here to
-
- [install from discover](https://github.com/XargonWan/RetroDECK/wiki/Steam-Deck:-Installation-and-updates)
-
- or here
-
- [to install .flatpak file](https://github.com/XargonWan/RetroDECK/wiki/Developer-notes#managing-retrodeck-flatpak-file).
 
 <br>
 
@@ -173,7 +162,13 @@ However you can run this to fix it: `flatpak remote-delete retrodeck-origin`
 
 <br>
 
-## Feature Requests& & Bug Reports
+## Feature Requests & Bug Reports
+
+<br>
+
+### How to report bugs?
+
+Check `Bugs & Issues 🐜` - `Reporting bugs and issues`
 
 <br>
 
@@ -198,39 +193,39 @@ However you can run this to fix it: `flatpak remote-delete retrodeck-origin`
 <br>
 
 ### What does the "b" stand for in the versioning number?
- It stands for Beta.
+It stands for Beta.
 
 <br>
 
 ### How do I update RetroDECK?
- Updates to RetroDECK is handled automatically via your software manager when there is a new version released.
+Updates to RetroDECK is handled automatically via your software manager when there is a new version released.
 
- Or if you want to update from the terminal you can type:
+Or if you want to update from the terminal you can type:
 `flatpak update`
 
 <br>
 
 ### How do I update a specific emulator in RetroDECK?
- You can't in a easy way do that without breaking several things. RetroDECK builds many emulators and add RetroDECK specific features on top of them and makes it into one application. That said we are looking into a custom emulator installation for those that have payed early access versions like Yuzu (that installation will still be more limited then the one we ship with RetroDECK and might have less features then normal Yuzu in term of hotkey support and other things).
+You can't in a easy way do that without breaking several things. RetroDECK builds many emulators and add RetroDECK specific features on top of them and makes it into one application. That said we are looking into a custom emulator installation for those that have payed early access versions like Yuzu (that installation will still beore limited then the one we ship with RetroDECK and might have less features then normal Yuzu in term of hotkey support and other things).
 
 <br>
 
 ### Do you only ship stable versions of the emulators or nightly versions?
- RetroDECK ship the version that is the best for running the games on a case by case basis.
+RetroDECK ship the version that is the best for running the games on a case by case basis.
 
- For example: many bleeding edge emulators like Yuzu or RPCS3 it's nightly we ship, but for things like RetroArch it is stable releases.
- Even if it is a nightly version we want to make sure that the version we ship is works.
+For example: many bleeding edge emulators like Yuzu or RPCS3 it's nightly we ship, but for things like RetroArch it is stable releases.
+Even if it is a nightly version we want to make sure that the version we ship is works.
 
 <br>
 
 ### When does the next version of RetroDECK come out?
- When it's ready.
+When it's ready.
 
 #### When does the version after the upcoming version come out?
- After the upcoming version.
+After the upcoming version.
 
 #### When does the version 1.0 of RetroDECK come out?
- In the future.
+In the future.
 
 <br>
 
@@ -239,26 +234,26 @@ However you can run this to fix it: `flatpak remote-delete retrodeck-origin`
 ## Documentation & Wiki
 
 ### What is sudo?
- The command stands for "superuser do" and in the windows world it is called "run as administrator".
+The command stands for "superuser do" and in the windows world it is called "run as administrator".
 Su in "sudo" refers to the "superuser" or in the windows called the "administrator".
 
 <br>
 
 ### Whats the meaning of the ~ character mean in documentation and examples?
- The tilde character ~  is the a short way of saying the logged in users home directory in the UNIX world.
+The tilde character ~  is the a short way of saying the logged in users home directory in the UNIX world.
  So for example the Steam Deck
 ```~ = /home/deck```
- Read more on [Wikipedia](https://en.wikipedia.org/wiki/Home_directory)
+Read more on [Wikipedia](https://en.wikipedia.org/wiki/Home_directory)
 
 <br>
 
 ### Whats the meaning of the SA acronym in documentation and examples?
- SA means Standalone and the emulator is not inside RetroArch/LibRetro but a separate program launched within RetroDECK.
+SA means Standalone and the emulator is not inside RetroArch/LibRetro but a separate program launched within RetroDECK.
 
 <br>
 
 ### Whats the meaning of the CLI acronym in documentation and examples?
- CLI stands for command-line interface and is often refereed commands you can run in the the Linux Terminal
+CLI stands for command-line interface and is often refereed commands you can run in the the Linux Terminal
 
 <br>
 
@@ -267,27 +262,27 @@ Su in "sudo" refers to the "superuser" or in the windows called the "administrat
 <br>
 
 ### Are you related to EmuDeck?
- No, the two projects are not related.
+No, the two projects are not related.
 
 <br>
 
 #### So what's the difference between RetroDECK and EmuDeck?
- Apart of that from the user point of view EmuDeck and RetroDECK may sound similar but technically they're completely different.
+Apart of that from the user point of view EmuDeck and RetroDECK may sound similar but technically they're completely different.
 
- EmuDeck is a shell script that you run in the Steam Decks desktop mode that downloads and configures all the separate emulators & plugins for you from various sources using a built in electron based gui.
+EmuDeck is a shell script that you run in the Steam Decks desktop mode that downloads and configures all the separate emulators & plugins for you from various sources using a built in electron based gui.
 
- RetroDECK is an all-in-one application contained in a sandboxed environment called "flatpak", that is downloaded from Discover (Flathub). This is Valves and other Linux desktops recommended way of distributing applications on the Steam Deck and Linux desktop in a safe way. It grantees for example even if Valve makes major changes to the file system in a SteamOS update, RetroDECK and it’s configurations will not be touched and will be safe.
+RetroDECK is an all-in-one application contained in a sandboxed environment called "flatpak", that is downloaded from Discover (Flathub). This is Valves and other Linux desktops recommended way of distributing applications on the Steam Deck and Linux desktop in a safe way. It grantees for example even if Valve makes major changes to the file system in a SteamOS update, RetroDECK and it’s configurations will not be touched and will be safe.
 
- RetroDECK only writes in these two folders: `~/retrodeck` for roms/configurations/bios etc.. And an hidden flatpak folder located in `~/.var/net.retrodeck.retrodeck`.
+RetroDECK only writes in these two folders: `~/retrodeck` for roms/configurations/bios etc.. And an hidden flatpak folder located in `~/.var/net.retrodeck.retrodeck`.
 
- As everything is contained within those two folders it will not have conflict if you decide to install an emulator from another source like Yuzu or RetroArch with your RetroDECK setup. Even if you uninstall RetroDECK all your roms/bios/saves/etc.. are safe until you remove the `~/retrodeck` folder. So if you for some reason don't like the application after playing for a while you can easily move out your important files after an uninstall (or you can just reinstall RetroDECK again and start where you left off).
+As everything is contained within those two folders it will not have conflict if you decide to install an emulator from another source like Yuzu or RetroArch with your RetroDECK setup. Even if you uninstall RetroDECK all your roms/bios/saves/etc.. are safe until you remove the `~/retrodeck` folder. So if you for some reason don't like the application after playing for a while you can easily move out your important files after an uninstall (or you can just reinstall RetroDECK again and start where you left off).
 
- This approach of everything is in a all-in-one package will also allow RetroDECK to do tighter integrations with each bundled emulator in the future and expose all those settings when you are inside RetroDECK, so you do not need to go into Steam Decks desktop mode to do changes and tweaks. All things should be, in the long term, inside the application itself and you can already see a part of that inside the RetroDECK Configurator in the Tools menu.
+This approach of everything is in a all-in-one package will also allow RetroDECK to do tighter integrations with each bundled emulator in the future and expose all those settings when you are inside RetroDECK, so you do not need to go into Steam Decks desktop mode to do changes and tweaks. All things should be, in the long term, inside the application itself and you can already see a part of that inside the RetroDECK Configurator in the Tools menu.
 
 <br>
 
 #### Can I install RetroDECK if I have EmuDeck already?
- Yes, as RetroDECK is completely standalone.
+Yes, as RetroDECK is completely standalone.
 
 <br>
 
@@ -312,7 +307,7 @@ You can see RetroDECK as the in between of EmuDeck and Batocera. We hope that on
 <br>
 
 ### What is your relationship with EmulationStation Desktop Edition (ES-DE)?
- ES-DE and RetroDECK are separate projects, but we collaborate to give the best possible user experience.
+ S-DE and RetroDECK are separate projects, but we collaborate to give the best possible user experience.
 We have a unique partnership where inside the ES-DE code is a section just for RetroDECK specific features. 
 [Read more on ES-DE FAQs](https://gitlab.com/es-de/emulationstation-de/-/blob/master/FAQ.md#what-is-the-relationship-between-es-de-and-retrodeck)
 
@@ -335,24 +330,22 @@ Read more on [wikipedia](https://en.wikipedia.org/wiki/Read-only_memory)
 <br>
 
 ### Game X/Y/Z is not working or showing black screen
- Some emulators needs BIOS and/or firmware files, first you can check if you got the [needed ones](https://github.com/XargonWan/RetroDECK/wiki/BIOS-&-Firmware).<br/
-
- Then you can check if your got a bad dump by comparing your hash with the ones of the official lists on the internet, such as [no-intro](https://datomatic.no-intro.org/index.php?page=search&s=64) or even [RetroAchievements](https://retroachievements.org) if your game is supported.<br/
- Moreover please mind that some emulator require very specific roms, please [read here](https://github.com/XargonWan/RetroDECK/wiki/How-to:-Manage-your-games#special-roms-formats).
- If it still not working you are welcome to ask for support on our [Discord Server](discord.gg/Dz3szYsP8g).
+- Some emulators needs BIOS and/or firmware files, first you can check if you got the `How-to's 💬` - `How to: Manage BIOS and Firmware`.<br/
+- You could have bad backups compare them on a database site for example [no-intro](https://datomatic.no-intro.org/index.php?page=search&s=64) or even [RetroAchievements](https://retroachievements.org) if your game is supported.<br/
+- Moreover please mind that some emulator require very specific roms `How-to's 💬` - `How to: Manage your Games`
 
 <br>
 
 ### PS2 games are not working or buggy in the RetroArch Core.
  It's a known issue with if you are using the libretro core but you can use the the standalone pcsx2 emulator to solve this issue.
- Be sure to check that the bios files are in the correct folder. Read more on the [Emulators: BIOS and Firmware](https://github.com/XargonWan/RetroDECK/wiki/Emulators%3A-BIOS-and-Firmware)#  page on this wiki.
+ Be sure to check that the bios files are in the correct folder. Read more on the `How-to's 💬` - `How to: Manage BIOS and Firmware`
 
 <br>
 
 ### I configured RetroArch but the configuration was not saved.
  Configuring RetroArch can be dangerous for an inexperienced user, so RetroDECK is set to don't save the RetroArch configuration upon exiting.<br/
  The configuration must be saved willingly by going to: `Main Menu` -  `Configuration File` - `Save Current Configuration`.<br/
- If you find some better configurations however, you may contribute by sharing it on the #💙-i-want-to-help channel on our [Discord Server](discord.gg/Dz3szYsP8g) that may be included in the next version.
+ If you find some better configurations however, you may contribute by sharing it on the `💙-i-want-to-help` channel on our [Discord Server](discord.gg/Dz3szYsP8g) that may be included in the next version.
 
 <br>
 
@@ -367,7 +360,7 @@ Read more on [wikipedia](https://en.wikipedia.org/wiki/Read-only_memory)
 
 ### Can I launch RetroDECK from inside of the Steam Decks gamemode?
  Yes, RetroDECK currently only supports Steam Deck's gamemode as it relies on Steam Controller configs.
- To add it into Steam please check the second step of [[Steam Deck: Installation and updates]].
+ To add it into Steam please check the second step of `Steam Deck 🕹️` - `Steam Deck - Installation and Updates`.
 
 <br>
 
