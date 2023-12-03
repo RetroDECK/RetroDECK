@@ -39,15 +39,13 @@ nav:
     - What is RetroDECK?: wiki_general/what-is-retrodeck.md
     - What is included in RetroDECK?: wiki_general/what-is-included.md
     - Supported Devices: wiki_general/supported-devices.md
-    - RetroDECK Configurator: wiki_general/configurator.md
-    - The RetroDECK Beta: wiki_general/beta-period.md
+    - The RetroDECK Beta: wiki_general/beta-period.md'
+
+  - RetroDECK Configurator 🛠️: wiki_general/configurator.md
 
   - FAQ ❔:  wiki_howto_faq/faq.md
 
-## Things Xargon broke
-  - Bugs & Issues 🐜:
-    - Reporting: wiki_bugs/report-bugs.md
-    - Known Issues: wiki_bugs/known-issues.md
+
 
   - How-to's 💬:
     - How-to - Start using RetroDECK: wiki_howto_faq/retrodeck-start.md
@@ -96,6 +94,16 @@ nav:
     - Steam Deck - Controls: wiki_controllers/controls-steamdeck.md
     - Playstation - Controllers (WIP): wiki_controllers/controllers-playstation.md
 
+  - Community & Helping Out ❤️:
+    - Discord: wiki_community/discord.md
+    - Lemmy/Reddit: wiki_community/lemmy-reddit.md
+    - How to Contribute to RetroDECK?: wiki_community/contibute-rd.md
+    - How to help out with testing?: wiki_community/testing-rd.md
+
+  - Bugs & Issues 🐜:
+    - Reporting: wiki_bugs/report-bugs.md
+    - Known Issues: wiki_bugs/known-issues.md
+
   - Development 🖥️:
     - Current Version: wiki_rd_versions/version_0.7b/0.7.4b.md
     - Version History (Patchnotes): wiki_rd_versions/version-history.md
@@ -103,11 +111,7 @@ nav:
     - CLI Guide: wiki_development/cli-guide.md
     - Development Notes: wiki_development/general-development.md
 
-  - Community & Helping Out ❤️:
-    - Discord: wiki_community/discord.md
-    - Lemmy/Reddit: wiki_community/lemmy-reddit.md
-    - How to Contribute to RetroDECK?: wiki_community/contibute-rd.md
-    - How to help out with testing?: wiki_community/testing-rd.md
+
 
   - About RetroDECK 📖:
     - The Team & Credits: wiki_about/team-credits.md

@@ -5,6 +5,9 @@ What follows is questions and answers to a variety of topics.
 
 ## General Questions
 
+### What does the "b" stand for in the versioning number?
+It stands for Beta.
+
 <br>
 
 ### What is RetroDECK cooker?
@@ -20,58 +23,30 @@ What follows is questions and answers to a variety of topics.
 <br>
 
 ### What emulators and software is included in RetroDECK?
- RetroDECK comes with:
- * Emulationstation Desktop Edition - RetroDECK version
- * The RetroDECK Framework
- * The RetroDECK Configurator
- * For emulators and other software check the RetroDECK: What's included? section of this wiki.
-
- We plan to have support for all of the the different systems ES-DE support in the long term. But the goal is only to have the best emulator per system and not every emulator in existence.
+Check `General Information 📰` - `RetroDECK: What's included?`
 
 <br>
 
 ### Does RetroDECK include any games?
- No games are included in RetroDECK currently.
+No games are included in RetroDECK.
 
 <br>
 
-### Will you include Open Source games in the future as default?
- We are looking into a ports downloader for a future update.
+### Will you include Open Source games in the future?
+We are looking into a ports downloader for a future update.
 
 <br>
 
 ### Does RetroDECK include any Firmware or BIOS?
- RetroDECK only includes those BIOS and Firmware that are Open Source. All others can never be done for legal reasons.
+RetroDECK only includes those BIOS and Firmware that are Open Source. All others can never be done for legal reasons.
 
 #### Can you at least point me towards where I find none Open Source: Games, Firmeware or BIOS?
- For purchased titles we recommend that you use your own game backups and look into how to extract the Firmware or BIOS from your own consoles.
+For purchased titles we recommend that you use your own game backups and look into how to extract the Firmware or BIOS from your own consoles.
 
 <br>
 
 
-
-## Flatpak Questions
-
-<br>
-
-### Retrodeck is a flatpak, what is it?
- [Flaptak](https://docs.flatpak.org/en/latest/introduction.html) is like sandboxed application, with its own read only filesystem that is different from your computer's filesystem. That's why flatpak is safer than installing something directly in your filesystem as everything it needs is contained within the flatpak.
-
-
-#### How is a flatpak made?
- A flatpak is generated from a manifest file. A software called  flatpak-builder reads the  manifest, then starts downloading dependencies and starts building the software. After the build process is done it generates the software in a .flatpak file. This file can then be hosted on Flathub or distributed on the web.
-
-
-#### How does the RetroDECK flatpak manifest look like?
- You can find out manifest here:  https://github.com/XargonWan/RetroDECK/blob/main/net.retrodeck.retrodeck.yml
-
-<br>
-
-
-
-## Using RetroDECK
-
-<br>
+## RetroDECK Usage Questions
 
 ### Do I have to partition or format my disk/sdcard to install RetroDECK?
  No, partitioning or formatting is not needed at all. RetroDECK (differently from AmberELEC, Batocera and others) comes as a flatpak. Just install it as any other application and launch it from your desktop and/or Steam library.
@@ -162,9 +137,9 @@ However you can run this to fix it: `flatpak remote-delete retrodeck-origin`
 
 <br>
 
-## Feature Requests & Bug Reports
 
-<br>
+
+## Feature Requests & Bug Reports
 
 ### How to report bugs?
 
@@ -188,14 +163,13 @@ Check `Bugs & Issues 🐜` - `Reporting bugs and issues`
 
 <br>
 
+
+
 ## Updating RetroDECK
 
 <br>
 
-### What does the "b" stand for in the versioning number?
-It stands for Beta.
 
-<br>
 
 ### How do I update RetroDECK?
 Updates to RetroDECK is handled automatically via your software manager when there is a new version released.
@@ -313,9 +287,24 @@ We have a unique partnership where inside the ES-DE code is a section just for R
 
 <br>
 
-## Emulation & Games
+
+## Flatpak Questions
+
+### Retrodeck is a flatpak, what is it?
+ [Flaptak](https://docs.flatpak.org/en/latest/introduction.html) is like sandboxed application, with its own read only filesystem that is different from your computer's filesystem. That's why flatpak is safer than installing something directly in your filesystem as everything it needs is contained within the flatpak.
+
+
+#### How is a flatpak made?
+ A flatpak is generated from a manifest file. A software called  flatpak-builder reads the  manifest, then starts downloading dependencies and starts building the software. After the build process is done it generates the software in a .flatpak file. This file can then be hosted on Flathub or distributed on the web.
+
+
+#### How does the RetroDECK flatpak manifest look like?
+ You can find out manifest here:  https://github.com/XargonWan/RetroDECK/blob/main/net.retrodeck.retrodeck.yml
 
 <br>
+
+
+## Emulation & Games
 
 ### Why are games call ROMs?
  ROM stands for "Read Only Memory" and was a common method to store games.
@@ -384,9 +373,9 @@ Read more on [wikipedia](https://en.wikipedia.org/wiki/Read-only_memory)
 
 <br>
 
-## Emulationstation-DE: Themes
 
-<br>
+
+## Emulationstation-DE: Themes
 
 ### How can I add more themes?
  ES-DE comes with a built in Theme Downloader `UI Settings  Theme Downloader`. But you can also add themes manually in the: `~/retrodeck/themes` folder.
@@ -418,9 +407,9 @@ Read more on [wikipedia](https://en.wikipedia.org/wiki/Read-only_memory)
 
 <br>
 
-## Emulationstation-DE: Scraping
 
-<br>
+
+## Emulationstation-DE: Scraping
 
 ### Can I manually add custom game images/videos/media for games that I can not scrape?
  Yes, check the file structure over at Emulationstation DE's user guide on gitlab.
