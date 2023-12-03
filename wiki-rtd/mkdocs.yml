@@ -41,10 +41,11 @@ nav:
     - Supported Devices: wiki_general/supported-devices.md
     - RetroDECK Configurator: wiki_general/configurator.md
     - The RetroDECK Beta: wiki_general/beta-period.md
-    - FAQ - Frequently Asked Questions: wiki_howto_faq/faq.md
     - Known Issues: wiki_general/known-issues.md
 
-  - How-to's ❔:
+  - FAQ ❔:  wiki_howto_faq/faq.md
+
+  - How-to's 💬:
     - How-to - Start using RetroDECK: wiki_howto_faq/retrodeck-start.md
     - How-to - Manage your Games: wiki_howto_faq/games-management.md
     - How-to - Manage your BIOS/Firmware: wiki_howto_faq/bios-firmware.md

@@ -137,7 +137,7 @@ Put the Steam Deck into Desktop Mode `Steam button`  `Power`  `Switch to Desktop
 <br>
 
 ### How can I move RetroDECK do a different device like Steam Deck OLED or a new Linux PC?
- Yes, check over at [[How to: Move RetroDECK to a new device]]
+ Yes, check over at [[How to: Move RetroDECK to a new device](../wiki_howto_faq/retrodeck-move.md)
 
 <br>
 
@@ -412,7 +412,7 @@ Read more on [wikipedia](https://en.wikipedia.org/wiki/Read-only_memory)
 
  * ES-DE uses a unique theme engine so themes are not directly portable from Batocera.
 
- * Please see ES-DE's [User Guide](https://gitlab.com/es-de/emulationstation-de/-/blob/master/USERGUIDE.md#themes) for more details.
+ * Please see ES-DE's EmulationStation-DE Guide 📘 for more details.
 
  <br>
 
