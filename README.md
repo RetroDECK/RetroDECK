@@ -19,25 +19,36 @@
 [![Documentation Status](https://readthedocs.org/projects/retrodeck/badge/?version=latest)](https://retrodeck.readthedocs.io/en/latest/?badge=latest)
 
 # What is RetroDECK?
-Instead of having several different software on your system for a variety of emulators and frontends you only need to have one: RetroDECK.
 
-RetroDECK is a [EmulationStation Desktop Edition](https://es-de.org) (ES-DE) powered flatpak application that builds in a variety of emulators and other software that allows you to play your favorite retro (and even not-so-retro) games in one complete package. 
+Instead of having several different software on your system for a variety of emulators and frontends you only need one: RetroDECK.
+RetroDECK is a [EmulationStation Desktop Edition](https://es-de.org) (ES-DE) powered [Flatpak application](https://flathub.org/apps/net.retrodeck.retrodeck) that thanks to its `RetroDECK Framework` it builds-in and manage a variety of emulators and other software that allows you to play your favorite retro (and even not-so-retro) games in one complete package.
 
-It's inspired by embedded emulation systems like:
+## So what does that mean?
+It means that RetroDECK provides all the emulators, systems and a frontend. RetroDECK configures them for you and put them into one application you can download from Flathub. <br>
+By being one application RetroDECK can put all important files in one location for all the emulators, instead of having them spread out over your entire system and even add features on top to orchestrate them seamlessly.
 
-- AmberELEC
-- EmuELEC
-- CoreELEC
-- Lakka
-- Batocera
+## The RetroDECK Framework
+As previously mentioned, RetroDECK also adds the `RetroDECK Framework` on top of the emulators and ES-DE interface that allows deeper integrations between emulators and easier exposure to a variety of features that you otherwise need to set per emulator basis to create a uniformity between them.
 
-The RetroDECK team consists of several veterans from some of the projects mentioned above as well as a bunch of other talented individuals.
+The `RetroDECK Configurator` is a `Utility` that some parts of exposes the `RetroDECK Framework` to the RetroDECK users.
 
-RetroDECK also adds the `RetroDECK Framework` and the `RetroDECK Configurator` on top of the emulators and ES-DE frontend that allows deeper integrations between emulators and easier exposure to a variety of features that you otherwise need to set per emulator basis to create a uniformity between them. 
+**What can the RetroDECK Framework and by extent the RetroDECK Configurator do?**
+
+It can help with:
+
+- Compressing games
+- Easier `Texture Pack` and `Mod` management
+- File management
+- Tools for troubleshooting (BIOS Checker, Multi-File Structure Checker, Partial or full reset of functions)
+- Auto installing some free BIOSes
+- Install prebuilt Steam Input profiles for devices like the Steam Deck and external controllers
+- Easier management of `mods`, `roms`, `texture_packs`, `scraped media`, `screenshots`, `saves / states` `gamelists` and more
+- Give access to global presets that can be acitivated to configure things over many emulators in one go like: `RetroAchievements`
+  `Borders` `Widescreen Mode` `Swaping A/B X/Y for Nintendo Games`
+
 
 For our long term vision you can check out the following wiki page:
-
-[RetroDECK: Visions and Goals](https://github.com/XargonWan/RetroDECK/wiki/RetroDECK%3A-Visions-and-Goals)
+[RetroDECK: Visions and Goals](https://retrodeck.readthedocs.io/en/latest/wiki_about/visions-and-goals/)
 
 ### The RetroDECK community:
 
@@ -51,7 +62,7 @@ For our long term vision you can check out the following wiki page:
 
 We have an in depth How To on how to get started over here: 
 
-[How to: Start using RetroDECK](https://github.com/XargonWan/RetroDECK/wiki/How-to%3A-Start-using-RetroDECK)
+[How to: Start using RetroDECK](https://retrodeck.readthedocs.io/en/latest/wiki_howto_faq/retrodeck-start/)
 
 ## What devices/systems does RetroDECK support: 
 
@@ -62,13 +73,13 @@ RetroDECK currently supports:
 
 For more information read up here:
 
-[Supported Systems](https://github.com/XargonWan/RetroDECK/wiki/RetroDECK%3A-Supported-Systems)
+[Supported Systems](https://retrodeck.readthedocs.io/en/latest/wiki_general/supported-devices/)
 
 
 ## Is RetroDECK in Beta?
 Yes, here you can read more about the beta period:
 
-[RetroDECK: Beta period](https://github.com/XargonWan/RetroDECK/wiki/RetroDECK%3A-Beta-period)
+[RetroDECK: Beta period](https://retrodeck.readthedocs.io/en/latest/wiki_general/beta-period/)
 
 
 ## Can I contribute to the project?
@@ -76,15 +87,15 @@ Yes, here you can read more about the beta period:
 Yes, off course! <br>
 Read up here on how to help out, there is something for everyone:
 
-[How to: Contribute to RetroDECK](https://github.com/XargonWan/RetroDECK/wiki/How-to%3A-Contribute-to-RetroDECK)
+[How to: Contribute to RetroDECK](https://retrodeck.readthedocs.io/en/latest/wiki_community/contibute-rd/)
 
 
 # The RetroDECK Wiki
 
-Please check out the [Wiki](https://github.com/XargonWan/RetroDECK/wiki) for even more information.
+Please check out the [Wiki](https://retrodeck.readthedocs.io/en/latest/) for even more information.
 
 ## The FAQ
-The RetroDECK [FAQ](https://github.com/XargonWan/RetroDECK/wiki/FAQs%3A-Frequently-asked-questions) on the wiki has a vast variety of questions and awnsers. 
+The RetroDECK [FAQ](https://retrodeck.readthedocs.io/en/latest/wiki_howto_faq/faq/) on the wiki has a vast variety of questions and awnsers. 
 
 # How to get support? 
 Use the supports channels on [Discord](https://discord.gg/Dz3szYsP8g). 
