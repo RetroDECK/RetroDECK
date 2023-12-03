@@ -7,11 +7,6 @@ What follows is questions and answers to a variety of topics.
 
 <br>
 
-### What is the scope of this project?
- Read the "Whats the long term vision and goals" on the Home page of this wiki.
-
-<br>
-
 ### What is RetroDECK cooker?
  Cooker is a bleeding edge snapshot of the current commits, the action of uploading code to GitHub is called commit.
  As you can understand, the code may not be always reviewed and so the cooker it's unstable by its nature,  it's just suggested to testers or developer to try bleeding edge function or to contribute.
@@ -53,6 +48,8 @@ What follows is questions and answers to a variety of topics.
 
 <br>
 
+
+
 ## Flatpak Questions
 
 <br>
@@ -70,6 +67,8 @@ What follows is questions and answers to a variety of topics.
 
 <br>
 
+
+
 ## Using RetroDECK
 
 <br>
@@ -78,6 +77,22 @@ What follows is questions and answers to a variety of topics.
  No, partitioning or formatting is not needed at all. RetroDECK (differently from AmberELEC, Batocera and others) comes as a flatpak. Just install it as any other application and launch it from your desktop and/or Steam library.
 
 <br>
+
+### Where is RetroDECK installed?
+
+There are two primary folders:
+
+`~/retrodeck`
+
+- The location of this folder is where you set it during installation.
+- This cointains all of the userdata that the users put into RetroDECK like: ROMs, Mods, Texturepacks, Downloaded Content, Themes etc.
+- The folder is not deleted during a uninstallation of RetroDECK and must be manually deleted, as all the users valuble files are there.
+
+`~/.var/app/net.retrodeck.retrodeck/`
+
+- This is the main flatpak folder, under the hidden `./var/app/` folder you need to show hidden folders and files to see it.
+- This cointains all of the emulators, emulationstation and other settings that make RetroDECK work.
+- During uninstallation this folder is removed.
 
 ### Can I move the ROMs folder to another place?
  Yes, you can do so inside the configurator and the `Move RetroDECK` option.
@@ -218,6 +233,8 @@ However you can run this to fix it: `flatpak remote-delete retrodeck-origin`
  In the future.
 
 <br>
+
+
 
 ## Documentation & Wiki
 
