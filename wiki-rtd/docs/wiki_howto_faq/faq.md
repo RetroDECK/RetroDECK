@@ -77,20 +77,10 @@ There are two primary folders:
 ### Is there a way to reset RetroDECK?
  Yes, you can reset various parts of the software using the RetroDECK configurator under the option reset.
 
- Or you can use CLI arguments in the terminal.
+Or you can use CLI arguments in the terminal.
 
- Resets the whole RetroDECK at factory defaults:
- ```bash
- flatpak run net.retrodeck.retrodeck --reset-all
- ```
- Resets RetroArch configs at factory defaults:
- ```bash
- flatpak run net.retrodeck.retrodeck --reset-ra
- ```
- Resets all the standalone emulators configs at factory defaults:
- ```bash
- flatpak run net.retrodeck.retrodeck --reset-sa
- ```
+Chec
+
 
  <br>
 
@@ -434,7 +424,7 @@ The service is down, check [Screenscraper]](https://www.screenscraper.fr/) when 
 <br>
 
 ### Can I only scrape one game or can I narrow down the scraping method?
-Yes, check the [[EmulationStation DE: User Guide]] for more details.
+Yes, check the `EmulationStation-DE Guide 📘`  for more details.
 
 <br>
 
