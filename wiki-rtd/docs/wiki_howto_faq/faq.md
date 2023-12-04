@@ -5,6 +5,9 @@ What follows is questions and answers to a variety of topics.
 
 ## General Questions
 
+
+<img src="../../wiki_icons/retrodeck/rd_icon_circle_192x192.png">
+
 ### What does the "b" stand for in the versioning number?
 It stands for Beta.
 
