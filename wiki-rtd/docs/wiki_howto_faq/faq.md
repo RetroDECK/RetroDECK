@@ -335,6 +335,9 @@ Read more on [wikipedia](https://en.wikipedia.org/wiki/Read-only_memory)
 
 ## Emulation on the Steam Deck
 
+
+<img src="../..//wiki_images/graphics/steamdeck/rd_sd_screen6.jpeg" width="500">
+
 <br>
 
 ### Can I launch RetroDECK from inside of the Steam Decks gamemode?
@@ -366,11 +369,16 @@ Read more on [wikipedia](https://en.wikipedia.org/wiki/Read-only_memory)
 
 
 ## Emulationstation-DE: Themes
+<img src="https://gitlab.com/es-de/themes/themes-list/-/raw/master/screenshots/adroit-es-de/adroit-es-de_02.jpg" width="500">
 
 ### How can I add more themes?
  ES-DE comes with a built in Theme Downloader `UI Settings  Theme Downloader`. But you can also add themes manually in the: `~/retrodeck/themes` folder.
 
 <br>
+
+### Is there a list of themes?
+
+Yes, check here: [ES-DE: Themes List](https://gitlab.com/es-de/themes/themes-list).
 
 ### How do you switch between themes inside of RetroDECK?
  You can switch between them by open the menu and then navigate to `UI Settings  Theme Set` to select the theme you want to use.
@@ -400,6 +408,8 @@ Read more on [wikipedia](https://en.wikipedia.org/wiki/Read-only_memory)
 
 
 ## Emulationstation-DE: Scraping
+
+<img src="https://gitlab.com/es-de/emulationstation-de/-/raw/master/images/es-de_scraper_running.png" width="500">
 
 ### Can I manually add custom game images/videos/media for games that I can not scrape?
  Yes, check the file structure over at Emulationstation DE's user guide on gitlab.
@@ -442,6 +452,8 @@ Yes, check the `EmulationStation-DE Guide 📘`  for more details.
 [Screenscraper](https://www.screenscraper.fr/) offers different types of donations that can increase your speed with extra threads.
 
 <br>
+
+
 
 ### My systems storage ran out after scraping...
  You can clean out images and videos that takes a lot of space under: `~/retrodeck/downloaded_media`.
