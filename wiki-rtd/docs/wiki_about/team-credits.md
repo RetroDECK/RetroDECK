@@ -6,7 +6,7 @@
 Community management/outreach, testing, documentation, feature suggestions, does controllers and some design.
 
 <details><summary> </summary>
-Internal `Lord of Memes`, `Banana Warlock` and leader of the `NPC (The Nordic Pizza Cult)` also called by the others as `The Pizza Heresy Cult`. Instigator of the internal pizza war.
+Internal Lord of Memes, Banana Warlock and Cult leader of the NPC (The Nordic Pizza Cult) also called by the others as "The Pizza Heresy Cult" or "Harbingers of Pizza Chaos". Instigator of the internal pizza war.
 </details>
 
 ## Developers
@@ -15,14 +15,14 @@ Internal `Lord of Memes`, `Banana Warlock` and leader of the `NPC (The Nordic Pi
 RetroDECK project founder and also one of the founding members of [AmberELEC](https://amberelec.org/).
 
 <details><summary> </summary>
-General of the `IPL (Italian Pizza Legion)` in the internal pizza war.
+Grand General of the IPL (Italian Pizza Legion) in the internal pizza war.
 </details>
 
 ### [IceNine451](https://github.com/icenine451)
 Creator of the `RetroDECK configurator`, the `RetroDECK Framework` and various cool things.
 
 <details><summary> </summary>
-Freedom loving leader of the `MCCP (Murican Cheese Crust Patriots)` in the internal pizza war.
+Freedom loving leader of the MCCP (Murican Cheese Crust Patriots) in the internal pizza war.
 </details>
 
 ### [Lx32](https://github.com/Lx32)
@@ -30,7 +30,7 @@ Develops various new features, functions and tools.
 
 
 <details><summary> </summary>
-1st Commander of the `IPL (Italian Pizza Legion)` in the internal pizza war.
+1st Commander of the IPL (Italian Pizza Legion) in the internal pizza war.
 </details>
 
 
@@ -48,7 +48,7 @@ Pizza Mercenary
 Does bleeding edge cooker testing (lives in the danger zone), some feature suggestions and design.
 
 <details><summary> </summary>
-2nd Commander of the `IPL (Italian Pizza Legion)` in the internal pizza war (might be a spy for the `NPC` or `MCCP`).
+2nd Commander of the IPL (Italian Pizza Legion)"" in the internal pizza war (might be a spy for the NPC or MCCP).
 </details>
 
 ## Collaborators: The ES-DE Group
