@@ -102,7 +102,7 @@ No, as long as you don't manually don't delete the `~\retrodeck` folder and it's
 <br>
 
 ### How can I move RetroDECK do a different device like Steam Deck OLED or a new Linux PC?
- Yes, check over at [[How to: Move RetroDECK to a new device](../wiki_howto_faq/retrodeck-move.md)
+ Yes, check over at [How to: Move RetroDECK to a new device](../wiki_howto_faq/retrodeck-move.md)
 
 <br>
 
@@ -154,12 +154,11 @@ Check `Bugs & Issues 🐜` - `Reporting bugs and issues`
 <br>
 
 
-
 ## Updating RetroDECK
 
+<img src="../../wiki_images/logos/discover-logo.png">
+
 <br>
-
-
 
 ### How do I update RetroDECK?
 Updates to RetroDECK is handled automatically via your software manager when there is a new version released.
@@ -197,6 +196,10 @@ In the future.
 
 ## Documentation & Wiki
 
+<img src="../../wiki_images/logos/mkdocs-material-logo.svg" width="150">
+
+<br>
+
 ### What is sudo?
 The command stands for "superuser do" and in the windows world it is called "run as administrator".
 Su in "sudo" refers to the "superuser" or in the windows called the "administrator".
@@ -221,7 +224,16 @@ CLI stands for command-line interface and is often refereed commands you can run
 
 <br>
 
-## About Other Emulation Solutions
+
+
+## Other Emulation Solutions
+
+<img src="../../wiki_images/logos/batocera-logo.png" width="300">
+
+<br>
+
+### Are you related anyway to Batocera?
+ No, but RetroDECK had some dialog before the project started with some of the Batocera crew if there where any plans to start a Batocera non-OS application (there where no plans at that moment and their focus is to make the best retro gaming operative system). RetroDECK and Batocera also have good dialog together with representatives of each projects inside the internal development channels.
 
 <br>
 
@@ -251,14 +263,10 @@ Yes, as RetroDECK is completely standalone.
 <br>
 
 #### Why create RetroDECK when EmuDeck and other solutions exists?
- RetroDECK is older then EmuDeck, EmuDeck was created later.
+RetroDECK is older then EmuDeck, EmuDeck was created later.
 
 <br>
 
-### Are you related anyway to Batocera?
- No, but RetroDECK had some dialog before the project started with some of the Batocera crew if there where any plans to start a Batocera non-OS application (there where no plans at that moment and their focus is to make the best retro gaming operative system). RetroDECK and Batocera also have good dialog together with representatives of each projects inside the internal development channels.
-
-<br>
 
 ### Batocera or EmuDeck or RetroDECK I still don't get it?
  - Batocera is a retro emulation operative system that you need to boot into separately (like from an SDCard) or replace your current OS.  For the Steam Deck you lose access to the SteamOS features and your emulation gaming is separate from your SteamOS gamemode gaming. That said; Batocera has many years of development time, is a great mature OS with a lot of features.
@@ -280,6 +288,8 @@ We have a unique partnership where inside the ES-DE code is a section just for R
 
 ## Flatpak Questions
 
+<img src="../../wiki_images/logos/flatpak-logo.png" width="150">
+
 ### Retrodeck is a flatpak, what is it?
  [Flaptak](https://docs.flatpak.org/en/latest/introduction.html) is like sandboxed application, with its own read only filesystem that is different from your computer's filesystem. That's why flatpak is safer than installing something directly in your filesystem as everything it needs is contained within the flatpak.
 
@@ -295,6 +305,8 @@ We have a unique partnership where inside the ES-DE code is a section just for R
 
 
 ## Emulation & Games
+
+<img src="../../wiki_images/logos/retroarch-logo.png" width="150">
 
 ### Why are games call ROMs?
  ROM stands for "Read Only Memory" and was a common method to store games.
@@ -336,7 +348,7 @@ Read more on [wikipedia](https://en.wikipedia.org/wiki/Read-only_memory)
 ## Emulation on the Steam Deck
 
 
-<img src="../..//wiki_images/graphics/steamdeck/rd_sd_screen6.jpeg" width="500">
+<img src="../..//wiki_images/graphics/steamdeck/rd_sd_screen6.jpeg" width="300">
 
 <br>
 
