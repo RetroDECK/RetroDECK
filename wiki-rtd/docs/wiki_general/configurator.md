@@ -1,5 +1,7 @@
 # The RetroDECK Configurator
 
+**Please note that we are going to rebuild the configurator into a controller friendly GODOT application and that the current version is not the final design.**
+
 <img src="../../wiki_images/graphics/configurator/configurator.png" width="500">
 
 The `RetroDECK Configurator` is a unique multi-use utility that exists within RetroDECK to manage many aspect of the application and exposes functions from the `RetroDECK Framework` to the user.
