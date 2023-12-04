@@ -2,6 +2,7 @@
 
 ## General information
 We plan to add more emulators and functions over course of the development cycle. The goal is to support all of the systems ES-DE supports and ship the best emulator for that systems. We don't have any plans to ship all emulators in existence for each system but virtually only the best one per-system (this is more theoretical than practical) to avoid confusion and the user being loss in the choice.
+In some cases we might ship more then one Emulator if the feature set is vastly diffrent or the user demand is high.
 
 ## Systems
 
@@ -13,12 +14,12 @@ Is a powerful Utility that can be use to change/modify and manipulate various as
 
 ## Emulators
 
-### RetroArch##
+### RetroArch
 RetroDECK ships will all cores under the stable branch of RetroArch.
 If there is no stable version of a core the nightly version will be used instead.
 
-## Standalone Emulators
-The following standalone emulators are included:
+### Standalone Emulators
+The following standalone emulators are currently included:
 
 - Yuzu (Switch)
 - Citra (3DS)
@@ -30,16 +31,5 @@ The following standalone emulators are included:
 - MelondDS (DS)
 - RPCS3 (PS3)
 - PPSSPP (PSP)
-
-These are in the process of being added:
-
-- GZDoom (Doom engine)
-- MAME (Standalone)
-- Ryujinx (Switch)
-- Solarus (engine)
-- Vita3K (PSVita)
-- OpenBOR (engine)
-- IkemenGO (engine)
-- ScummVM (Standalone)
 
 

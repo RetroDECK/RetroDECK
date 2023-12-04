@@ -11,6 +11,7 @@ Expect major bugs and data loss: be warned.
 ## Build instructions
 
 If you want to build the RetroDECK flatpak on your machine for developing or just testing purposes:
+
 ```
 cd ~
 git clone --recursive https://github.com/XargonWan/RetroDECK.git
@@ -27,12 +28,14 @@ flatpak install --user -y org.kde.Sdk//5.15-21.08 org.kde.Platform//5.15-21.08 i
 ```
 
 To build the stable release:
+
 ```
 flatpak-builder --user --install --install-deps-from=flathub --install-deps-from=flathub-beta --force-clean --repo=local ~/RetroDECK/retrodeck-main ~/RetroDECK/net.retrodeck.retrodeck.yml
 flatpak build-bundle local ~/RetroDECK.flatpak net.retrodeck.retrodeck
 ```
 
 Or alternatively, to build the cooker (experimental) release:
+
 ```
 git checkout cooker
 flatpak-builder --user --install --force-clean --repo=local ~/RetroDECK/retrodeck-cooker ~/RetroDECK/net.retrodeck.retrodeck.yml
@@ -43,16 +46,19 @@ flatpak build-bundle local ~/RetroDECK.flatpak net.retrodeck.retrodeck
 It's possible to enter in a sort of debug mode, it's actually the flatpak shell.
 
 Enter in the flatpak shell:
+
 ```
 flatpak run --command=bash net.retrodeck.retrodeck
 ```
 
 Launch ES-DE in debug mode:
+
 ```
 emulationstation --debug --home /var/config/emulationstation
 ```
 
 Launch an emulator in debug mode:
+
 ```
 ls /app/bin
 ```
@@ -81,16 +87,19 @@ NOTE: this will not be needed after v`0.4.0b`.
 ## Managing RetroDECK flatpak file
 
 Install RetroDECK from flatpak file:
+
 ```
 flatpak install RetroDECK.flatpak
 ```
 
 Run RetroDECK:
+
 ```
 flatpak run net.retrodeck.retrodeck
 ```
 
 Uninstall RetroDECK:
+
 ```
 flatpak uninstall net.retrodeck.retrodeck
 ```
