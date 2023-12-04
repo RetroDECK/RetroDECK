@@ -1,5 +1,7 @@
 # The RetroDECK Configurator
 
+<img src="../../wiki_images/graphics/configurator/configurator.png" width="500">
+
 The `RetroDECK Configurator` is a unique multi-use utility that exists within RetroDECK to manage many aspect of the application and exposes functions from the `RetroDECK Framework` to the user.
 
 The `RetroDECK Configurator` can be opened from:
@@ -168,8 +170,8 @@ Resets all the emulators at once
 <br>
 
 #### Reset RetroDECK
-Resets the entirety of RetroDECK.
-> ⚠️ WARNING! BACK UP YOUR DATA BEFORE RUNNING THIS! ⚠️
+Resets the entirety of RetroDECK.<br>
+`⚠️ WARNING! BACK UP YOUR DATA BEFORE RUNNING THIS! ⚠️`
 
 <br>
 
