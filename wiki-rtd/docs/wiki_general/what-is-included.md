@@ -15,9 +15,11 @@ Is a powerful Utility that can be use to change/modify and manipulate various as
 
 ### RetroArch##
 RetroDECK ships will all cores under the stable branch of RetroArch.
+If there is no stable version of a core the nightly version will be used instead.
 
 ## Standalone Emulators
-The following standalone emulators are included
+The following standalone emulators are included:
+
 - Yuzu (Switch)
 - Citra (3DS)
 - PCSX2 (PS2)
@@ -29,12 +31,15 @@ The following standalone emulators are included
 - RPCS3 (PS3)
 - PPSSPP (PSP)
 
-These instead are being added soon:
+These are in the process of being added:
+
 - GZDoom (Doom engine)
 - MAME (Standalone)
 - Ryujinx (Switch)
 - Solarus (engine)
 - Vita3K (PSVita)
-
+- OpenBOR (engine)
+- IkemenGO (engine)
+- ScummVM (Standalone)
 
 
