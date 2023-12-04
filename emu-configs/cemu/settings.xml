@@ -7,6 +7,7 @@
     <language>0</language>
     <use_discord_presence>true</use_discord_presence>
     <fullscreen_menubar>false</fullscreen_menubar>
+    <feral_gamemode>false</feral_gamemode>
     <check_update>false</check_update>
     <save_screenshot>true</save_screenshot>
     <vk_warning>false</vk_warning>
