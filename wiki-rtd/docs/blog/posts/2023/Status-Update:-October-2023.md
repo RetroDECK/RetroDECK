@@ -14,7 +14,7 @@ We hope that everyone is ready for a tiny spooky October status update.
 
 <!-- more -->
 
-# We begin with thanking all kind emulator developers.
+## We begin with thanking all kind emulator developers.
 
 We had some issues with certain emulators caused by the recent QT6 migration and the addition of new emulators (more on that next month).
 
@@ -32,15 +32,15 @@ Thank you all!
 
 
 
-# What are you working on?
+## What are you working on?
 
 
 
-# Adding individual ROMS to Steam and launch them with RetroDECK
+## Adding individual ROMS to Steam and launch them with RetroDECK
 
 More development has been going on into this and how it will work in its first iteration is that the games you flag as your favorites can be added to Steam with a tool in the Configurator.
 
-# External Controllers – Button Combo Hotkeys
+## External Controllers – Button Combo Hotkeys
 
 We will ship various Steam Input templates that allows you to use the button bound hotkey combos to do various emulator functions like (Save State, Load State, Quit etc..) for a variety of controllers from 0.8b. All you will need to is plug in / connect your controller, go into Steam Controller setting and choose the RetroDECK template for your controller.
 
@@ -89,7 +89,7 @@ Right touchpad click = left click
 
 
 
-# Turning the Configurator into a Godot application
+## Turning the Configurator into a Godot application
 
 We are working on turning the configurator into a Godot application. This will allow you to use all the functions with a controller in a Retro Inspired interface that is already working. The interface should be scalable for both TV’s, Monitors and Steam Deck Screen. We are also looking into changing toggle the font to OpenDyslexic so it can be easier to read for those who need it. This might not be done for 0.8b as it’s quite a big project (it will ready when it’s ready).
 
@@ -97,7 +97,7 @@ If you are working with UI/UX design and/or have experience with Godot and want 
 
 
 
-# Rekku, the RetroDECK mascot.
+## Rekku, the RetroDECK mascot.
 
 Some parts of the team also really wanted a mascot so that will also be a part of the new Configurator. It’s a animated cyborg-cat-like-humanoid that guides you to the various functions in the Configurator. Right now, we only have AI generated concepts of the mascot for reference but if you are an artist and want to help us design the mascot, please contact us on discord.
 
@@ -122,15 +122,7 @@ Q: I hate mascots with a burning passion, can I turn it off in the configurator?
 A: You’re a meanie, but yes!
 
 
-
-# Concepts of the Configurator with Rekku:
-
-Everything here is just concepts and might not reflect the final design.
-
-<img src="../wiki_images/concepts/GODOT_configurator.png" width="500">
-<img src="../wiki_images/concepts/rekku.png" width="500">
-
-# That is all for this month!
+## That is all for this month!
 
 A minor patch 0.7.3b will be out later with Emulator updates. But the main feature will be ES-DE 2.2, so we will release it when the ES-DE team are ready, and we can implement it asap.
 
