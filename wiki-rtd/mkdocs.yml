@@ -107,6 +107,7 @@ nav:
   - Development 🖥️:
     - Current Version: wiki_rd_versions/version_0.7b/0.7.4b.md
     - Version History (Patchnotes): wiki_rd_versions/version-history.md
+    - What are you working on?: wiki_development/what-are-you-working.on.md
     - Folders and Filepaths: wiki_development/folders-filepaths.md
     - CLI Guide: wiki_development/cli-guide.md
     - Development Notes: wiki_development/general-development.md
