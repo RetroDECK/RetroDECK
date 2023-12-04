@@ -10,7 +10,7 @@ Conservative purists of pure Italian Pizza Force.
 ## The Murican Cheese Crust Patriots - MCCP
 Patriotic Americans that try to crush the opposition with infinite pepperoni and cheese.
 
-*"The Italian American imigrants took Pizza to the US and made it better thanks to freedom. Are we not free to put as much pepperoni as we want? How about Mozzarella or bread sticks is there a upper limit? We say no there is not! The symbol of new found freedom of the Italian Americans is not the cheese filled crusts? Things they where never allowed to make when they where not...free."*.
+*"The Italian American imigrants took Pizza to the US and made it better thanks to freedom. Are we not free to put as much pepperoni as we want? How about Mozzarella or bread sticks is there a upper limit? We say no there is not! The symbol of new found freedom of the Italian Americans is not the cheese filled crusts? All of these inovations where made thanks to being free."*.
 
 ## The Nordic Pizza Cult - NPC
 Label as Heretics by the others for their dark pizza magicks.
