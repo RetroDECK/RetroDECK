@@ -419,7 +419,7 @@ You can pay them to get a bit more daily quota and show your support or just wai
 <br>
 
 ### The Scraper said: The Server or Service is down?
-The service is down, check [Screenscraper]](https://www.screenscraper.fr/) when they get back up.
+The service is down, check [Screenscraper](https://www.screenscraper.fr/) when they get back up.
 
 <br>
 
