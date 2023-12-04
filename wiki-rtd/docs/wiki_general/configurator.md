@@ -6,11 +6,19 @@ The `RetroDECK Configurator` is a unique multi-use utility that exists within Re
 
 The `RetroDECK Configurator` can be opened from:
 
-* The main menu inside the ES-DE interface and choose `RetroDECK Configurator`.
+- The main menu inside the ES-DE interface and choose `RetroDECK Configurator`.
+
+<img src="../../wiki_images/graphics/configurator/configurator-esde.png" width="500">
+
 * From the `RetroDECK Configurator.desktop` desktop shortcut, available in your application menu.
+
+<img src="../../wiki_images/graphics/configurator/configurator-kde.png" width="500">
+
 * From CLI by calling `flatpak run net.retrodeck.retrodeck --configurator`
 
 What follows are the commands you can use inside the Configurator (more commands will be added during development).
+
+
 
 ## Presets & Settings
 In this menu you can set various presets.
