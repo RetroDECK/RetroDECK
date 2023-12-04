@@ -1,6 +1,6 @@
 # The RetroDECK Configurator
 
-The `RetroDECK Configurator` is a unique multi-use toolbox that exists within RetroDECK to manage/configure/change/reset/edit many aspect of the application and built around the `RetroDECK Framework`.
+The `RetroDECK Configurator` is a unique multi-use utility that exists within RetroDECK to manage many aspect of the application and exposes functions from the `RetroDECK Framework` to the user.
 
 The `RetroDECK Configurator` can be opened from:
 
