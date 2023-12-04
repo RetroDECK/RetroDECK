@@ -28,7 +28,7 @@ Check `General Information 📰` - `RetroDECK: What's included?`
 <br>
 
 ### Does RetroDECK include any games?
-No games are included in RetroDECK.
+No games are included in RetroDECK at this momment.
 
 <br>
 
@@ -44,6 +44,18 @@ RetroDECK only includes those BIOS and Firmware that are Open Source. All others
 For purchased titles we recommend that you use your own game backups and look into how to extract the Firmware or BIOS from your own consoles.
 
 <br>
+
+### When does the next version of RetroDECK come out?
+When it's ready.
+
+#### When does the version after the upcoming version come out?
+After the upcoming version.
+
+#### When does the version 1.0 of RetroDECK come out?
+In the future.
+
+<br>
+
 
 
 ## RetroDECK Usage Questions
@@ -181,16 +193,6 @@ Even if it is a nightly version we want to make sure that the version we ship is
 
 <br>
 
-### When does the next version of RetroDECK come out?
-When it's ready.
-
-#### When does the version after the upcoming version come out?
-After the upcoming version.
-
-#### When does the version 1.0 of RetroDECK come out?
-In the future.
-
-<br>
 
 
 
