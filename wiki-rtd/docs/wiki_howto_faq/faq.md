@@ -413,7 +413,7 @@ Read more on [wikipedia](https://en.wikipedia.org/wiki/Read-only_memory)
 <br>
 
 ### I got some weird error message about quota after scraping!
-The error message mentions something about quota. You have a quota limit on how much you can scrape each day from [Screenscraper.fr ](https://www.screenscraper.fr/) where each item you scrape counts as 1 quota of the daily total.
+The error message mentions something about quota. You have a quota limit on how much you can scrape each day from [Screenscraper](https://www.screenscraper.fr/) where each item you scrape counts as 1 quota of the daily total.
 You can pay them to get a bit more daily quota and show your support or just wait 24 hours.
 
 <br>
@@ -439,7 +439,7 @@ Yes, check the `EmulationStation-DE Guide 📘`  for more details.
 <br>
 
 ### The scraping is very slow...
-[Screenscraper]](https://www.screenscraper.fr/) offers different types of donations that can increase your speed with extra threads.
+[Screenscraper](https://www.screenscraper.fr/) offers different types of donations that can increase your speed with extra threads.
 
 <br>
 
