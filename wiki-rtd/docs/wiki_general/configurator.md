@@ -2,9 +2,9 @@
 
 The `RetroDECK Configurator` is a unique multi-use toolbox that exists within RetroDECK to manage/configure/change/reset/edit many aspect of the application and built around the `RetroDECK Framework`.
 
-The `RetroDECK Configurator` can be called:
+The `RetroDECK Configurator` can be opened from:
 
-* By the main menu inside the ES-DE interface (`START` > `RetroDECK Configurator``)
+* The main menu inside the ES-DE interface and choose `RetroDECK Configurator`.
 * From the `RetroDECK Configurator.desktop` desktop shortcut, available in your application menu.
 * From CLI by calling `flatpak run net.retrodeck.retrodeck --configurator`
 
