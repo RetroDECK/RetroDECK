@@ -111,6 +111,18 @@ We have not found a donation link to this project at this time or the project do
 
 [Licenses](https://github.com/mamedev/mame#license)
 
+### ares
+<img src="../../wiki_images/logos/ares-logo.png" width="180">
+
+ares is a cross-platform, open source, multi-system emulator, focusing on accuracy and preservation.
+
+#### Where to donate / support the project?
+We have not found a donation link to this project at this time or the project does not support donations.
+
+#### License
+
+[Licenses](https://github.com/ares-emulator/ares/blob/master/LICENSE)
+
 ---
 
 ## Emulators: Sony
