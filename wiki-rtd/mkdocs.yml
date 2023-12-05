@@ -18,6 +18,7 @@ theme:
     primary: "deep purple"
     accent: "white"
 plugins:
+   - search:
    - blog:
        enabled: true
        post_url_date_format: yyyy/MM/dd
