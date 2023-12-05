@@ -1,6 +1,6 @@
 # Nintendo Controllers
 
-**Note these inputs are part of the upcomming 0.8b update.**
+**Note these inputs are part of the upcoming 0.8b update.**
 
 Steam Input and RetroDECK have support for the following controllers:
 

@@ -1,26 +1,13 @@
-# Playstation Controllers
+# Generic Controllers
 
 **Note these inputs are part of the upcoming 0.8b update.**
 
-Steam Input have support for the following controllers:
-
-## Playstation 3
-* The Dualshock 3
-* The Sixaxis
-
-## Playstation 4
-* The Dualshock 4 v1
-* The Dualshock 4 v2
-
-## Playstation 5
-* The DualSense
+Generic Controllers is a broad category that encompasses the vast majority of 3rd party controllers.
+This guide assumes that they have a similar layout as an Xbox 360 Controller.
 
 ### What are the Official profiles called?
 
-- Playstation 3: `RetroDECK: Official Layout - PS3`
-- Playstation 4: `RetroDECK: Official Layout - PS4`
-- Playstation 5: `RetroDECK: Official Layout - PS5`
-
+- Generic: `RetroDECK: Official Layout - Generic`
 
 ## Global Hotkeys: Playstation Button Combos
 
@@ -36,10 +23,10 @@ What follows is a list of hotkeys:
 
 | Function                 | Button / Combination|  Command      | Emulator Support     |    Comment |
 | :---                    | :---:               | :---:                 |       :---:          |  :---:     |
-| Pause / Resume          |   `SELECT + Cross`          |   `CTRL + P`          | `RetroArch` `Citra` `Dolphin/Primehack` `Duckstation` `MelonDS` `PCSX2`  `Yuzu`             |            |
-| Take Screenshot         |   `SELECT + Circle`          |   `CTRL + X`          | `RetroArch` `Citra` `Dolphin/Primehack` `Duckstation` `PCSX2`   `Yuzu`           |            |
-| Fullscreen Toggle      |   `SELECT + Square`          |   `CTRL + ENTER`      | `Citra` `Dolphin/Primehack` `Duckstation` `MelonDS` `PCSX2`  `Yuzu`             |            |
-| Open Menu               |  `SELECT + Triangle`         |   `CTRL + M`          | `RetroArch` `Duckstation` `PCSX2`  `Yuzu`                        |
+| Pause / Resume          |   `SELECT + A`          |   `CTRL + P`          | `RetroArch` `Citra` `Dolphin/Primehack` `Duckstation` `MelonDS` `PCSX2`  `Yuzu`             |            |
+| Take Screenshot         |   `SELECT + B`          |   `CTRL + X`          | `RetroArch` `Citra` `Dolphin/Primehack` `Duckstation` `PCSX2`   `Yuzu`           |            |
+| Fullscreen Toggle      |   `SELECT + X`          |   `CTRL + ENTER`      | `Citra` `Dolphin/Primehack` `Duckstation` `MelonDS` `PCSX2`  `Yuzu`             |            |
+| Open Menu               |  `SELECT + Y`         |   `CTRL + M`          | `RetroArch` `Duckstation` `PCSX2`  `Yuzu`                        |
 | Quit Emulator           |  `SELECT + Start`       |   `CTRL + Q`          |`RetroArch` `Citra` `Dolphin/Primehack` `Duckstation` `PCSX2`   `Yuzu`                                   |            | |
 | Previous State Slot     |  `SELECT + D-Pad Left`  |   `CTRL + J`          | `RetroArch` `Dolphin/Primehack` `Duckstation` `PCSX2`|                    |            |
 | Next State Slot         |  `SELECT + D-Pad Right` |   `CTRL + K`          | `RetroArch` `Dolphin/Primehack` `Duckstation` `PCSX2`|
