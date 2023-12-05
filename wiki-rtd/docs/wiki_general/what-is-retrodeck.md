@@ -11,7 +11,7 @@ By being one application RetroDECK can put all important files in one location f
 ## The RetroDECK Framework
 As previously mentioned, RetroDECK also adds the `RetroDECK Framework` on top of the emulators and ES-DE interface that allows deeper integrations between emulators and easier exposure to a variety of features that you otherwise need to set per emulator basis to create a uniformity between them.
 
-The `RetroDECK Configurator` is a `Utility` that some parts of exposes the `RetroDECK Framework` to the RetroDECK users.
+The `RetroDECK Configurator` is the `Utility` that exposes some parts of the `RetroDECK Framework` to the RetroDECK users.
 
 **What can the RetroDECK Framework and by extent the RetroDECK Configurator do?**
 
