@@ -2,7 +2,7 @@
 
 ## Before you report:
 - Check [Github issues](https://github.com/XargonWan/RetroDECK/issues/) on reported issues.
-- Check the [Known Issues](../wiki_bugs/known-issues/).
+- Check the [Known Issues](../wiki_bugs/known-issues.md).
 
 ## How to Report?
 
