@@ -9,7 +9,7 @@ This guide assumes that they have a similar layout as an Xbox 360 Controller.
 
 - Generic: `RetroDECK: Official Layout - Generic`
 
-## Global Hotkeys: Playstation Button Combos
+## Global Hotkeys: Generic Button Combos
 
 The global hotkeys are activated by pressing the `SELECT`  button and holding it while pressing the corresponding other button input.
 What follows is a list of hotkeys:

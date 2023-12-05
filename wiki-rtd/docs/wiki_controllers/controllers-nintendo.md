@@ -12,7 +12,7 @@ Steam Input and RetroDECK have support for the following controllers:
 
 - Switch Pro: `RetroDECK: Official Layout - Switch Pro`
 
-## Global Hotkeys: Playstation Button Combos
+## Global Hotkeys: Nintendo Button Combos
 
 The global hotkeys are activated by pressing the `SELECT`  button and holding it while pressing the corresponding other button input.
 What follows is a list of hotkeys:

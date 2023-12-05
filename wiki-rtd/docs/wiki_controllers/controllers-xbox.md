@@ -20,7 +20,7 @@ Only a few minor changes where made between the generations.
 - Xbox 360: `RetroDECK: Official Layout - Xbox 360`
 - Xbox One / S / X: `RetroDECK: Official Layout -  Xbox One/S/X`
 
-## Global Hotkeys: Playstation Button Combos
+## Global Hotkeys: Xbox Button Combos
 
 The global hotkeys are activated by pressing the `SELECT`  button and holding it while pressing the corresponding other button input.
 What follows is a list of hotkeys:
