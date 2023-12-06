@@ -6,7 +6,7 @@
 Community management/outreach, testing, documentation, feature suggestions, does controllers and some design.
 
 <details><summary> </summary>
-Internal Lord of Memes, Banana Warlock and Cult leader of the NPC (The Nordic Pizza Cult) also called by the others as "The Pizza Heresy Cult" or "Harbingers of Pizza Chaos". Instigator of the internal pizza war.
+Meme Lord of the Wiki and also the cult leader of the NPC (The Nordic Pizza Cult) also called by the others as "The Pizza Heresy Cult" or "Harbingers of Pizza Chaos". Instigator of the internal pizza war.
 </details>
 
 ## Developers
