@@ -24,7 +24,6 @@
 ## Where to put the games?
 Vita3K games should be put into the `retrodeck/roms/psvita/` directory.<br>
 The supported formats are `pkg`, `zip`, `vpk`. <br>
-The `zRIF` format is also used during installation.<br>
 
 ## Does Vita3K require BIOS or Firmware?
 Yes, it requires two firmwares.
@@ -42,11 +41,15 @@ Download the firmwares from
 
 Open Vita3K from the Configurator and press `File - Install Firmware` to install the downloaded firmware.
 
+## Licence Files or Keys
+
+Licence files `.bin` `.rif` or a licence keys called a `zRif` are required for many games.
+They need to be installed by pressing `File - Install Licence` then either `Select work.bin / rif` for the files or `Enter zRif` to input the key.
+
 ## How to: Get games to show up inside the ES-DE interface
 
 **Example:** <br>
 In this example we got a game we want to add: `WipEout 2048`
-
 
 - Install a game opening the Vita3K emulator via Configurator, the supported formats are `pkg`, `zip`, `vpk`.
 - Upon installation the `zRIF` may be asked, it's different for each game, you can find it via web search by searching for example `WipEout 2048 (EU) zRIF`.
