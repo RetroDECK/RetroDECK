@@ -43,7 +43,7 @@ Open Vita3K from the Configurator and press `File - Install Firmware` to install
 
 ## Licence Files and Keys
 
-Licence files `.bin` `.rif` or a licence keys called a `zRif` are required for many games.<br>
+Licence files `.bin` `.rif` or licence keys called a `zRif` are required for many games.<br>
 They need to be installed by pressing `File - Install Licence` then either `Select work.bin / rif` for the files or `Enter zRif` to input the key.
 
 ## How to: Get games to show up inside the ES-DE interface
