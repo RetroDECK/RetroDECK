@@ -1,32 +1,62 @@
 # Guide: ScummVM
 
-Create a **.scummvm** file in each game directory and launch that.
-
-The **.scummvm** file must be named using the correct **Game Short Name** and it must also contain this short name as a single string/word. You can find the complete list of supported ScummVM games with their corresponding short names [here](https:/www.scummvm.org/compatibility).<br><br>
-An example setup could look like the following:
-
-```
-retrodeck/roms/scummvm/Beneath a Steel Sky/sky.scummvm
-retrodeck/roms/scummvm/Flight of the Amazon Queen/queen.scummvm
-```
-<br>
-After the **.scummvm** file is created, you have to edit it by writing inside the shortname of the game.
-
-```
-cat sky.scummvm 
-sky
-```
-To clarify, the **sky.scummvm** file should contain just the single word `sky` and likewise the **queen.scummvm** file should only contain the word `queen` instead of **queen:queen** or **sky:sky**.<br><br>
-In order to avoid having to display each game as a directory inside the game list (that needs to be entered each time you want to launch a game) you can optionally interpret each game directory as a file. Make sure to read the Directories interpreted as files section here to understand how this functionality works, but essentially the following would be the setup required for our example:
-
-```
-retrodeck/roms/scummvm/sky.scummvm/sky.scummvm
-retrodeck/roms/scummvm/queen.scummvm/queen.scummvm
-```
-<br>
-In this case the two entries sky and queen will show up inside the game list and these will be handled like any other game files and can be part of automatic and custom collections for instance.
-<br><br>
+<img src="../../wiki_images/logos/scummvm-logo.svg" width="150">
 
 ---
 
-**NOTE:** This guide is taken from [the official ES-DE Documentation](https://gitlab.com/es-de/emulationstation-de/-/blob/master/USERGUIDE.md#scummvm) please check it for more information.
+### ScummVM Links:
+[ScummVM Guides](https://docs.scummvm.org/en/v2.7.1/)
+
+[ScummVM Game Compatibility and ID List](https://www.scummvm.org/compatibility)
+
+[ScummVM Wiki](https://wiki.scummvm.org/index.php?title=Main_Page)
+
+[ScummVM Github](https://github.com/scummvm/scummvm)
+
+[ScummVM Webpage](https://www.scummvm.org/)
+
+<br>
+
+---
+
+## Where to put the games?
+ScummVM games should be put into the `retrodeck/roms/scummvm/` directory.<br>
+
+## Does ScummVM require BIOS or Firmware?
+No
+
+<br>
+
+## How to: Get games to show up inside the ES-DE interface
+
+In this example we got a game we want to add the game: `Beneath a Steel Sky`
+
+### Step one: Add the game
+
+Move the unzipped directories into the `retrodeck/roms/scummvm/` folder.<br>
+The result should be: `retrodeck/roms/scummvm/Beneath a Steel Sky/`
+
+### Step two: Check the ScummVM ID of the game
+
+<img src="../../wiki_images/emulators/scummvm/scummvm-sky.png">
+
+<br>
+
+Go into [ScummVM Game Compatibility and ID List](https://www.scummvm.org/compatibility)<br>
+Search for `Beneath a Steel Sky` make a note of the ScummVM ID in this case called: `sky`
+
+### Step three: Create the ScummVM file
+- The `.scummvm` file starts as a empty textfile that needs to be created in in each game you want to adds directory.<br>
+- It should be named `<ScummVM_ID>.scummvm` <br>
+- In our example the file will be called `sky.scummvm` and should be created in `retrodeck/roms/scummvm/Beneath a Steel Sky/`
+
+<br>
+
+The end result should look like:<br>
+`retrodeck/roms/scummvm/Beneath a Steel Sky/sky.scummvm`
+
+### Step four open the .scummvm file and add the <ScummVM_ID>
+Open up the empty `sky.scummvm` and just type in the `<ScummVM_ID>` in the first row of the empty file and save in this case `sky`. Make sure you don't add any spaces or linebreaks and the file should just contain the word `sky`.
+
+### The game should now run
+The game should now be added to the ES-DE interface from the `retrodeck/roms/scummvm/Beneath a Steel Sky/sky.scummvm` file you just created and can be played.
