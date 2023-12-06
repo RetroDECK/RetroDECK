@@ -2,8 +2,8 @@
 
 **Note these inputs are part of the upcoming 0.8b update.**
 
-Generic Controllers is a broad category that encompasses the vast majority of 3rd party controllers.
-This guide assumes that they have a similar layout as an Xbox 360 Controller.
+Generic Controllers is a broad category that encompasses the vast majority of third party controllers.
+This guide assumes that they have a similar layout as an Xbox Controller.
 
 ### What are the Official profiles called?
 
