@@ -35,7 +35,7 @@ Yes, it requires two firmwares.
 The firmware and font firmware can be downloaded and installed from the Configurator.
 
 You can also install them manually:<br>
-Download the firmware from
+Download the firmwares from
 
 - [Sony PSVita Firmware](https://www.playstation.com/en-us/support/hardware/psvita/system-software/)
 - [Sony PSVita Firmware Font Package](https://dus01.psp2.update.playstation.net/update/psp2/image/2022_0209/sd_59dcf059d3328fb67be7e51f8aa33418/PSP2UPDAT.PUP?dest=usand)
