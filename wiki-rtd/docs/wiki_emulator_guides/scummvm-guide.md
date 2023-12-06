@@ -10,10 +10,14 @@ retrodeck/roms/scummvm/Beneath a Steel Sky/sky.scummvm
 retrodeck/roms/scummvm/Flight of the Amazon Queen/queen.scummvm
 ```
 <br>
-To clarify, the **sky.scummvm** file should contain just the single word sky and likewise the **queen.scummvm** file should only contain the word queen instead of **queen:queen** or **sky:sky**.
-In order to avoid having to display each game as a directory inside the game list (that needs to be entered each time you want to launch a game).
-<br><br>
-You can optionally interpret each game directory as a file. Make sure to read the Directories interpreted as files section here to understand how this functionality works, but essentially the following would be the setup required for our example:
+After the **.scummvm** file is created, you have to edit it by writing inside the shortname of the game.
+
+```
+cat sky.scummvm 
+sky
+```
+To clarify, the **sky.scummvm** file should contain just the single word `sky` and likewise the **queen.scummvm** file should only contain the word `queen` instead of **queen:queen** or **sky:sky**.<br><br>
+In order to avoid having to display each game as a directory inside the game list (that needs to be entered each time you want to launch a game) you can optionally interpret each game directory as a file. Make sure to read the Directories interpreted as files section here to understand how this functionality works, but essentially the following would be the setup required for our example:
 
 ```
 retrodeck/roms/scummvm/sky.scummvm/sky.scummvm
