@@ -38,7 +38,7 @@ The directory tree should look like this example:
     └── fd0d23003ea5602c24ac4e41101c16fd.nca
 ```
 
-You can find a complete guide in the [Yuzu official wiki](https://yuzu-emu.org/help/quickstart/#downloading-and-installing-yuzu) on how to extract the BIOS from your Switch.
+You can find a complete guide in the Yuzu Wiki (link above) on how to extract the BIOS from your Switch.
 
 ## How do I install DLC and Updates?
 
