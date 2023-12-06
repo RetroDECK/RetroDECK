@@ -29,8 +29,8 @@ The `zRIF` format is also used during installation.<br>
 ## Does Vita3K require BIOS or Firmware?
 Yes, it requires two firmwares.
 
-- The firmware: `PSVUPDAT.PUP`
-- The font firmware: `PSP2UPDAT.PUP`
+- The Firmware: `PSVUPDAT.PUP`
+- The Firmware Font Package: `PSP2UPDAT.PUP`
 
 The firmware and font firmware can be downloaded and installed from the Configurator.
 
@@ -38,7 +38,7 @@ You can also install them manually:<br>
 Download the firmware from
 
 - [Sony PSVita Firmware](https://www.playstation.com/en-us/support/hardware/psvita/system-software/)
-- [Sony PSVita Font Firmware](https://dus01.psp2.update.playstation.net/update/psp2/image/2022_0209/sd_59dcf059d3328fb67be7e51f8aa33418/PSP2UPDAT.PUP?dest=usand)
+- [Sony PSVita Firmware Font Package](https://dus01.psp2.update.playstation.net/update/psp2/image/2022_0209/sd_59dcf059d3328fb67be7e51f8aa33418/PSP2UPDAT.PUP?dest=usand)
 
 Open Vita3K from the Configurator and press `File - Install Firmware` to install the downloaded firmware.
 
