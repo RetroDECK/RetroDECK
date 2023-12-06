@@ -1,6 +1,38 @@
 # Guide: Vita3K
 
-Please note that the PSVita support is still experimental and it will be available starting from RetroDECK 0.8.0b, and for the way Vita3K is actually working the automation is limited.
+**Please note that the PSVita support is still experimental and it will be available starting from RetroDECK 0.8.0b**
+
+<img src="../../wiki_images/logos/vita3k-logo.png" width="150">
+
+---
+
+### Vita3K Links:
+[Vita3K Quickstart Guide](https://vita3k.org/quickstart.html)
+
+[Vita3K Game Compatibility and ID List](https://vita3k.org/compatibility.html?lang=en)
+
+[Vita3K Homebrew Compatibility and ID List](https://vita3k.org/compatibility-homebrew.html)
+
+[Vita3K Wiki](https://github.com/Vita3K/Vita3K/wiki)
+
+[Vita3K Github](https://github.com/Vita3K/Vita3K)
+
+[Vita3K Webpage](https://vita3k.org/)
+
+---
+
+## Where to put the games?
+Vita3K games should be put into the `retrodeck/roms/psvita/` directory.<br>
+The supported formats are `pkg`, `zip`, `vpk`. <br>
+The `zRIF` format is also used during installation.<br>
+
+## Does Vita3K require BIOS or Firmware?
+Yes.
+Download the firmware from [Sony PSVita Software](https://www.playstation.com/en-us/support/hardware/psvita/system-software/).
+
+Open Vita3K from the Configurator and press `File > Install Firmware` to install the downloaded firmware.
+
+## How to: Get games to show up inside the ES-DE interface
 In order to install a PSVita games is needed to:
 
 - Install a game opening the Vita3K emulator via Configurator, the supported formats are `pkg`, `zip`, `vpk`.
