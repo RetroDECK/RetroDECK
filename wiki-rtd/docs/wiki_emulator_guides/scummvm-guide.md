@@ -15,8 +15,6 @@
 
 [ScummVM Webpage](https://www.scummvm.org/)
 
-<br>
-
 ---
 
 ## Where to put the games?
@@ -25,38 +23,33 @@ ScummVM games should be put into the `retrodeck/roms/scummvm/` directory.<br>
 ## Does ScummVM require BIOS or Firmware?
 No
 
-<br>
-
 ## How to: Get games to show up inside the ES-DE interface
 
+**Example:** <br>
 In this example we got a game we want to add the game: `Beneath a Steel Sky`
 
-### Step one: Add the game
+### Step 1: Add the game
 
 Move the unzipped directories into the `retrodeck/roms/scummvm/` folder.<br>
 The result should be: `retrodeck/roms/scummvm/Beneath a Steel Sky/`
 
-### Step two: Check the ScummVM ID of the game
+### Step 2: Check the ScummVM ID of the game
 
 <img src="../../wiki_images/emulators/scummvm/scummvm-sky.png">
-
-<br>
 
 Go into [ScummVM Game Compatibility and ID List](https://www.scummvm.org/compatibility)<br>
 Search for `Beneath a Steel Sky` make a note of the ScummVM ID in this case called: `sky`
 
-### Step three: Create the ScummVM file
+### Step 3: Create the ScummVM file
 - The `.scummvm` file starts as a empty textfile that needs to be created in in each game you want to adds directory.<br>
 - It should be named `<ScummVM_ID>.scummvm` <br>
 - In our example the file will be called `sky.scummvm` and should be created in `retrodeck/roms/scummvm/Beneath a Steel Sky/`
 
-<br>
-
 The end result should look like:<br>
 `retrodeck/roms/scummvm/Beneath a Steel Sky/sky.scummvm`
 
-### Step four open the .scummvm file and add the <ScummVM_ID>
+### Step 4: open the .scummvm file and add the <ScummVM_ID>
 Open up the empty `sky.scummvm` and just type in the `<ScummVM_ID>` in the first row of the empty file and save in this case `sky`. Make sure you don't add any spaces or linebreaks and the file should just contain the word `sky`.
 
-### The game should now run
+### Step 5: The game should now run
 The game should now be added to the ES-DE interface from the `retrodeck/roms/scummvm/Beneath a Steel Sky/sky.scummvm` file you just created and can be played.
