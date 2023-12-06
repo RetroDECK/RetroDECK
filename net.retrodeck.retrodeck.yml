@@ -1228,20 +1228,17 @@ modules:
   # Cemu - END
 
   # Vita3K - START
-  # Vita3K is writing some files in its own directory
-  # So that is placed in /var/data/Vita3K and not in the readonly filesystem
-  # This module is just fetching the file so it will be unique for this build
 
   - name: vita3k
     buildsystem: simple
-    build-commands:
-      # Creating an empty symlink that will point to Vita3K binary
-      - ln -s /var/data/Vita3K/Vita3K ${FLATPAK_DEST}/bin/Vita3K
+    build-commands:    
       # Copying the user icon
       - mkdir -p ${FLATPAK_DEST}/retrodeck
       - cp retrodeck.png ${FLATPAK_DEST}/retrodeck
-      # preparing the vita3k zip for later
-      - mv ubuntu-latest.zip ${FLATPAK_DEST}/retrodeck/vita3k.zip
+      - unzip "ubuntu-latest.zip" -d "${FLATPAK_DEST}/bin/Vita3K"
+      - chmod +x ""${FLATPAK_DEST}/bin/Vita3K/Vita3K"
+      - rm -f "${FLATPAK_DEST}/bin/Vita3K/update-vita3k.sh"
+      - ln -s ${FLATPAK_DEST}/bin/Vita3K/Vita3K ${FLATPAK_DEST}/bin/Vita3K
     sources:
       - type: file
         url: https://github.com/Vita3K/Vita3K/releases/download/continuous/ubuntu-latest.zip
