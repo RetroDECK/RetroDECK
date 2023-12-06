@@ -48,7 +48,7 @@ Search for `Beneath a Steel Sky` make a note of the ScummVM ID in this case call
 The end result should look like:<br>
 `retrodeck/roms/scummvm/Beneath a Steel Sky/sky.scummvm`
 
-### Step 4: open the .scummvm file and add the <ScummVM_ID>
+### Step 4: open the .scummvm file and add the ScummVM_ID
 Open up the empty `sky.scummvm` and just type in the `<ScummVM_ID>` in the first row of the empty file and save in this case `sky`. Make sure you don't add any spaces or linebreaks and the file should just contain the word `sky`.
 
 ### Step 5: The game should now run
