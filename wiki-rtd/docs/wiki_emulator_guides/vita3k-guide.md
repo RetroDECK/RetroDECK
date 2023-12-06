@@ -27,10 +27,20 @@ The supported formats are `pkg`, `zip`, `vpk`. <br>
 The `zRIF` format is also used during installation.<br>
 
 ## Does Vita3K require BIOS or Firmware?
-Yes, the firmware can be installed from the Configurator or during first setup of RetroDECK.
+Yes, it requires two firmwares.
 
-You can also install it manually:<br>
-Download the firmware from [Sony PSVita Software](https://www.playstation.com/en-us/support/hardware/psvita/system-software/) and open Vita3K from the Configurator and press `File - Install Firmware` to install the downloaded firmware.
+- The firmware: `PSVUPDAT.PUP`
+- The font firmware: `PSP2UPDAT.PUP`
+
+The firmware and font firmware can be downloaded and installed from the Configurator.
+
+You can also install them manually:<br>
+Download the firmware from
+
+- [Sony PSVita Firmware](https://www.playstation.com/en-us/support/hardware/psvita/system-software/)
+- [Sony PSVita Font Firmware](https://dus01.psp2.update.playstation.net/update/psp2/image/2022_0209/sd_59dcf059d3328fb67be7e51f8aa33418/PSP2UPDAT.PUP?dest=usand)
+
+Open Vita3K from the Configurator and press `File - Install Firmware` to install the downloaded firmware.
 
 ## How to: Get games to show up inside the ES-DE interface
 
