@@ -14,10 +14,10 @@
 Switch games should be put into the `retrodeck/roms/switch/` directory.<br>
 The games can come in many different formats: `XCI` `NSP` `NCA` `NSO` `NRO`.
 
-# Does Yuzu require BIOS or Firmware?
+## Does Yuzu require BIOS or Firmware?
 Yes, `prod.keys` `title.keys` and `nca` files.
 
-## Where do I put the BIOS and firmware files?
+### Where do I put the BIOS and firmware files?
 Yuzu needs the key files `prod.keys`, `title.keys` and the firmware files in the following directories:
 
 **Yuzu keys:** `~/retrodeck/bios/switch/keys`
@@ -40,7 +40,7 @@ The directory tree should look like this example:
 
 You can find a complete guide in the [Yuzu official wiki](https://yuzu-emu.org/help/quickstart/#downloading-and-installing-yuzu) on how to extract the BIOS from your Switch.
 
-# How do I install DLC and Updates?
+## How do I install DLC and Updates?
 
 **Requirements:** Patch or DLC files <br>
 
@@ -55,7 +55,7 @@ You can find a complete guide in the [Yuzu official wiki](https://yuzu-emu.org/h
 7. Quit Yuzu
 8. Start up RetroDECK and select the game you want to play. <br>
 
-# How do I add shader caches?
+## How do I add shader caches?
 
 **Requirements:** Shader cache files <br>
 
@@ -68,8 +68,6 @@ You can find a complete guide in the [Yuzu official wiki](https://yuzu-emu.org/h
 5. Paste the files inside that directory.
 6. Start up RetroDECK and select the game. <br>
 
-# How do I add mods?
-Check the Mods: Yuzu section on this wiki
-
-[[Mods: Switch ‐ Yuzu]]
+## How do I add mods?
+Check: `Mod Guides ⚙️` - `Mods: Yuzu - Switch`
 
