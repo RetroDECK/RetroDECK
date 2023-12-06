@@ -26,7 +26,7 @@ No
 ## How to: Get games to show up inside the ES-DE interface
 
 **Example:** <br>
-In this example we got a game we want to add the game: `Beneath a Steel Sky`
+In this example we got a game we want to add: `Beneath a Steel Sky`
 
 ### Step 1: Add the game
 
