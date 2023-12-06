@@ -1,5 +1,9 @@
 # Guide: Yuzu - Switch
 
+<img src="../../wiki_images/logos//yuzu-logo.svg" width="150">
+
+---
+
 ### Yuzu Links:
 [Yuzu Quickstart Guide](https://yuzu-emu.org/help/quickstart/)
 
@@ -9,6 +13,7 @@
 
 [Yuzu Webpage](https://yuzu-emu.org/)
 
+---
 
 ## Where to put the games?
 Switch games should be put into the `retrodeck/roms/switch/` directory.<br>

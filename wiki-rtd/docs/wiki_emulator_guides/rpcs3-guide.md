@@ -1,5 +1,9 @@
 # Guide: RPCS3 - Playstation 3
 
+<img src="../../wiki_images/logos/rpcs3-logo.png" width="150">
+
+---
+
 ### RPCS3 Links:
 
 [RPCS3 Quickstart Guide](https://rpcs3.net/quickstart)
@@ -9,6 +13,8 @@
 [RPCS3 Github](https://github.com/RPCS3/rpcs3)
 
 [RPCS3 Webpage](https://rpcs3.net/)
+
+---
 
 ## Where to put the games?
 PS3 games comes either as a Blu-ray rip directory (folder) with a bunch of different files or a digital PSN title that needs to be installed (see guide on this page).
