@@ -40,16 +40,16 @@ The result should be: `retrodeck/roms/scummvm/Beneath a Steel Sky/`
 Go into [ScummVM Game Compatibility and ID List](https://www.scummvm.org/compatibility)<br>
 Search for `Beneath a Steel Sky` make a note of the ScummVM ID in this case called: `sky`
 
-### Step 3: Create the ScummVM file
-- The `.scummvm` file starts as a empty textfile that needs to be created in in each game you want to adds directory.<br>
-- It should be named `<ScummVM_ID>.scummvm` <br>
+### Step 3: Create the .scummvm file
+- The `.scummvm` file starts as a empty textfile that needs to be created in each game you want to adds directory.
+- It should be named `<ScummVM_ID>.scummvm`
 - In our example the file will be called `sky.scummvm` and should be created in `retrodeck/roms/scummvm/Beneath a Steel Sky/`
 
 The end result should look like:<br>
 `retrodeck/roms/scummvm/Beneath a Steel Sky/sky.scummvm`
 
 ### Step 4: Open the .scummvm file and add the ScummVM_ID
-Open up the empty `sky.scummvm` and just type in the `<ScummVM_ID>` in the first row of the empty file and save in this case `sky`. Make sure you don't add any spaces or linebreaks and the file should just contain the word `sky`.
+Open up the empty `sky.scummvm` file and just type in the `<ScummVM_ID>` in the first row of the file and save in this example `sky`. Make sure you don't add any spaces or linebreaks and the file should just contain the word `sky`.
 
 ### Step 5: The game should now run
-The game should now be added to the ES-DE interface from the `retrodeck/roms/scummvm/Beneath a Steel Sky/sky.scummvm` file you just created and can be played.
+The game should now be added to the ES-DE interface from the `retrodeck/roms/scummvm/Beneath a Steel Sky/sky.scummvm` file you just created and can be played after you reload RetroDECK from the Configurator or re-launch the application.
