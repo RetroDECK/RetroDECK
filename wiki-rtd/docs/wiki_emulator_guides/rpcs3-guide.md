@@ -1,19 +1,19 @@
 # Guide: RPCS3 - Playstation 3
 
+### RPCS3 Links:
+
+[RPCS3 Quickstart Guide](https://rpcs3.net/quickstart)
+
+[RPCS3 Wiki](https://wiki.rpcs3.net/index.php?title=Main_Page)
+
+[RPCS3 Github](https://github.com/RPCS3/rpcs3)
+
+[RPCS3 Webpage](https://rpcs3.net/)
+
 ## Where to put the games?
 PS3 games comes either as a Blu-ray rip directory (folder) with a bunch of different files or a digital PSN title that needs to be installed (see guide on this page).
 
 PS3 games should be put under the `retrodeck/roms/ps3/` directory.
-
-### Official RPCS3 guide and wiki:
-
-**Guide:**
-
-https://rpcs3.net/quickstart
-
-**Wiki:**
-
-https://wiki.rpcs3.net/index.php?title=Main_Page
 
 ## Does RPCS3 require BIOS or Firmware?
 Yes, the `PS3UPDAT.PUP` firmware
@@ -37,8 +37,6 @@ There are two ways to install the firmware:
 4. In the file browser navigate and select the file `PS3UPDAT.PUP` file.
 5. The firmware should now be installed.
 
-
-
 ## How to: Get games to show up inside the ES-DE interface
 
 There are two methods of adding the games
@@ -46,7 +44,7 @@ There are two methods of adding the games
 Read more here:<br>
 https://gitlab.com/es-de/emulationstation-de/-/blob/master/USERGUIDE.md#sony-playstation-3
 
-### Method 1: Game shortcuts .desktop files
+### Method 1: Game shortcuts .desktop files (recommended)
 
 This method can be used for all types rips/dumps both directories and .iso files.
 

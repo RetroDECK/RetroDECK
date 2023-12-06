@@ -68,7 +68,7 @@ nav:
   - EmulationStation-DE Guide 📘:
     - ES-DE User Guide: wiki_emulationStation_de/esde-guide.md
     - ES-DE Themes: wiki_emulationStation_de/esde-themes.md
-    - ES-DE Folders and Files: wiki_emulationStation_de/esde-folders-files.md
+    - ES-DE Folders and Files (WIP): wiki_emulationStation_de/esde-folders-files.md
 
   - Emulator Guides 📙:
     - RPCS3: wiki_emulator_guides/rpcs3-guide.md
@@ -76,6 +76,7 @@ nav:
     - Cemu (WIP): wiki_emulator_guides/cemu-guide.md
     - Citra (WIP): wiki_emulator_guides/citra-guide.md
     - Dolphin / Primehack (WIP): wiki_emulator_guides/dolphin-primehack-guide.md
+    - Duckstation (WIP): wiki_emulator_guides/duckstation-guide.md
     - GZDoom (WIP): wiki_emulator_guides/gzdoom-guide.md
     - IkemenGO - M.U.G.E.N (WIP): wiki_emulator_guides/ikemengo-guide.md
     - MAME (WIP): wiki_emulator_guides/mame-guide.md
