@@ -41,9 +41,9 @@ Download the firmwares from
 
 Open Vita3K from the Configurator and press `File - Install Firmware` to install the downloaded firmware.
 
-## Licence Files or Keys
+## Licence Files and Keys
 
-Licence files `.bin` `.rif` or a licence keys called a `zRif` are required for many games.
+Licence files `.bin` `.rif` or a licence keys called a `zRif` are required for many games.<br>
 They need to be installed by pressing `File - Install Licence` then either `Select work.bin / rif` for the files or `Enter zRif` to input the key.
 
 ## How to: Get games to show up inside the ES-DE interface
@@ -51,9 +51,20 @@ They need to be installed by pressing `File - Install Licence` then either `Sele
 **Example:** <br>
 In this example we got a game we want to add: `WipEout 2048`
 
-- Install a game opening the Vita3K emulator via Configurator, the supported formats are `pkg`, `zip`, `vpk`.
-- Upon installation the `zRIF` may be asked, it's different for each game, you can find it via web search by searching for example `WipEout 2048 (EU) zRIF`.
-- Install DLCs and patches in the same way.
+### Step 1: Install the Game
+Open the Vita3K emulator via Configurator and press `File` and either `Install .pkg` or `Install .zip, .vpk` depending on what game file you have.
+
+In our example `WipEout 2048` is a `.pkg` file so we chose the `Install .pkg` option and navigate to the file to install it.
+
+#### Step 1b: Add Licences (not always needed)
+During installation the Vita3K could call for a Licence File or Key. <br>
+Either add the `.bin` or `.rif` files or input the `zRif` key in the prompt.
+Check more above in the **Licence Files and Keys** section.
+
+#### Step 1c: Install any DLCs or patches
+Install the patches and DLC the same way as the game by repeating Step 1 to 1b for the filetype the patch/DLC is in `pkg`, `zip`, `vpk`.
+
+### Step 2: Create the .psvita file
 - Create an empty file in `retrodeck/roms/psvita/gamename.psvita`, please mind the `.psvita` extension.<br>
 For example: `roms/psvita/WipEout 2048 (EU).psvita.`
 - Edit the empty file adding the game `Title ID` (more below).
