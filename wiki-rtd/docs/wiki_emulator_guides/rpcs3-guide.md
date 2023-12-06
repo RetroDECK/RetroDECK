@@ -58,10 +58,10 @@ This method can be used for all types rips/dumps both directories and .iso files
 2. Click File -> Add Game -> Browse to game you want to add.
 3. The game will now show up in the RPCS3 game list.
 4. Rightclick on that list.
-5. This will create a shortcut to the game.
+5. This will create a shortcut to the game on your Desktop.
 6. Move that shortcut into the roms/ps3 folder.
 
-### Method 2: Directories as .pd3 files
+### Method 2: Directories as .ps3 files
 This method can only be used directory type game dumps.
 To get the games to show up you need to rename the directory to end with a `.ps3` file extension.
 
