@@ -30,7 +30,7 @@ In this example we got a game we want to add: `Beneath a Steel Sky`
 
 ### Step 1: Add the game
 
-Move the unzipped directories into the `retrodeck/roms/scummvm/` folder.<br>
+Move the uncompressed game into the `retrodeck/roms/scummvm/` folder.<br>
 The result should be: `retrodeck/roms/scummvm/Beneath a Steel Sky/`
 
 ### Step 2: Check the ScummVM ID of the game

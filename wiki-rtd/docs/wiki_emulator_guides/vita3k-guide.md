@@ -33,7 +33,10 @@ You can also install it manually:<br>
 Download the firmware from [Sony PSVita Software](https://www.playstation.com/en-us/support/hardware/psvita/system-software/) and open Vita3K from the Configurator and press `File - Install Firmware` to install the downloaded firmware.
 
 ## How to: Get games to show up inside the ES-DE interface
-In order to install a PSVita games is needed to:
+
+**Example:** <br>
+In this example we got a game we want to add: `WipEout 2048`
+
 
 - Install a game opening the Vita3K emulator via Configurator, the supported formats are `pkg`, `zip`, `vpk`.
 - Upon installation the `zRIF` may be asked, it's different for each game, you can find it via web search by searching for example `WipEout 2048 (EU) zRIF`.
