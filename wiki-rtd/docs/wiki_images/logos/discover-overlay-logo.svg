@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="256"
+   height="256"
+   viewBox="0 0 67.733332 67.733336"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   sodipodi:docname="discover-overlay.svg"
+   inkscape:export-filename="/home/voidbtw/Documents/Pictures/discover_icons/Discover/discover-overlay.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#d8d8d8"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="true"
+     units="px"
+     inkscape:zoom="2.8284271"
+     inkscape:cx="195.6918"
+     inkscape:cy="183.14066"
+     inkscape:window-width="1920"
+     inkscape:window-height="1011"
+     inkscape:window-x="0"
+     inkscape:window-y="32"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid824"
+       empspacing="1" />
+  </sodipodi:namedview>
+  <defs
+     id="defs2">
+    <clipPath
+       id="clip0">
+      <rect
+         width="71"
+         height="55"
+         fill="#ffffff"
+         id="rect2714"
+         x="0"
+         y="0" />
+    </clipPath>
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <ellipse
+       style="fill:#00674f;fill-opacity:1;stroke:#003529;stroke-width:5.21024;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="circle1882"
+       cx="33.866665"
+       cy="33.866665"
+       rx="31.261547"
+       ry="31.261549" />
+    <ellipse
+       style="fill:none;fill-opacity:1;stroke:#00b281;stroke-width:4.51556;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="circle1070"
+       cx="33.866665"
+       cy="33.866665"
+       rx="27.09334"
+       ry="27.093344" />
+    <path
+       d="m 46.062931,38.104225 a 4.7699219,4.7699219 0 0 1 4.77204,4.769924 v 1.946992 a 5.8324971,5.8324971 0 0 1 -1.08802,3.391332 c -3.278928,4.587524 -8.634216,6.859016 -15.887725,6.859016 -7.257745,0 -12.608798,-2.273612 -15.879238,-6.865376 a 5.8324971,5.8324971 0 0 1 -1.081662,-3.382848 v -1.951236 a 4.7699219,4.7699219 0 0 1 4.769922,-4.772044 H 46.060811 Z M 33.859226,12.661814 a 10.604541,10.604541 0 1 1 0,21.20908 10.604541,10.604541 0 0 1 0,-21.20908 z"
+       fill="#212121"
+       id="path828"
+       style="fill:#ffffff;fill-opacity:1;stroke-width:2.1209" />
+  </g>
+</svg>
