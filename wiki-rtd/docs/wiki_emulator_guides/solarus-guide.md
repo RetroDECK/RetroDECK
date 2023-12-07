@@ -1,5 +1,7 @@
 # Guide: Solarus
 
+<img src="../../wiki_images/logos/solarus-logo.svg" width="150">
+
 WIP
 
 ## Where to put the games
