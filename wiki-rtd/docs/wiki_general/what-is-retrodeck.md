@@ -5,7 +5,8 @@ Instead of having several different software on your system for a variety of emu
 RetroDECK is a [EmulationStation Desktop Edition](https://es-de.org) (ES-DE) powered [Flatpak application](https://flathub.org/apps/net.retrodeck.retrodeck) that thanks to its `RetroDECK Framework` it builds-in and manage a variety of emulators and other software that allows you to play your favorite retro (and even not-so-retro) games in one complete package.
 
 ### So what does that mean?
-It means that RetroDECK provides all the emulators, systems and a frontend. RetroDECK configures them for you and put them into one application you can download from Flathub. <br>
+It means that RetroDECK provides all the emulators, systems and a frontend. RetroDECK configures them for you and put them into one application you can download from Flathub.
+
 By being one application RetroDECK can put all important files in one location for all the emulators, instead of having them spread out over your entire system and even add features on top to orchestrate them seamlessly.
 
 ## The RetroDECK Framework
