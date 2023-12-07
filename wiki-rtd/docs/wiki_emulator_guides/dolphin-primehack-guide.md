@@ -1,5 +1,7 @@
 # Guide: Dolphin / Primehack
 
+<img src="../../wiki_images/logos/dolphin-logo.png" width="150">  <img src="../../wiki_images/logos/primehack-logo.png" width="150">
+
 WIP
 
 ## Where to put the games
