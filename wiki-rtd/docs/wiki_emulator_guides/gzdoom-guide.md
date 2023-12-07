@@ -1,5 +1,7 @@
 # Guide: GZDoom
 
+<img src="../../wiki_images/logos/gzdoom-logo.png" width="150">
+
 WIP
 
 ## Where to put the games
