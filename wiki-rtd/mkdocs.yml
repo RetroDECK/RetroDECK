@@ -19,6 +19,13 @@ theme:
     accent: "white"
 plugins:
    - search:
+   - rss:
+      match_path: blog/posts/.* 
+      date_from_meta:
+        as_creation: date
+      categories:
+        - categories
+        - tags 
    - blog:
        enabled: true
        post_url_date_format: yyyy/MM/dd
