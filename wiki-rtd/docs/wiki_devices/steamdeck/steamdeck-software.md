@@ -1,8 +1,5 @@
 # Steam Deck specific recommendations
 The following software works great with the Steam Deck and might enhance your RetroDECK experience.
-For general Linux Desktop recommendations go to [EmulationStation DE: User Guide](../../wiki-rtd/docs/wiki_devices/linux_desktop/linux-software.md) as many of them also work on the Steam Deck.
-
-
 
 ## CryoUtilities
 
