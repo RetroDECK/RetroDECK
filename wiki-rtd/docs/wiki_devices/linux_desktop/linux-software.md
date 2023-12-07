@@ -24,6 +24,9 @@ _Made by Philipk_
 [BoilR](https://flathub.org/apps/details/io.github.philipk.boilr)
 
 ## JRomManager
+
+<img src="../../../wiki_images/logos/jrommanager-logo.png" width="150">
+
 A Mame and Retrogaming Rom Manager. <br>
 This more complex application allows you to manage and verify your roms via .dat files. It's already in on Flathub and downloadable in Discover.
 
