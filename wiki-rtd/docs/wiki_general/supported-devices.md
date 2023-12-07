@@ -21,8 +21,11 @@ You will also need to manually configure the input to match your desktop and mig
 ## Q&A Supported Systems
 
 ### Will you support Windows or Windows based devices like the ROG Ally?
+
+<img src="../../../wiki_images/logos/retrobat-logo.png" width="150">
+
 No, RetroDECK doesn't support Windows currently and there are no plans to do so.
-As an alternative you could try [RetroBat](https://www.retrobat.ovh) that offers similar functionality in a Windows environment.
+As an alternative you could try [RetroBat](https://www.retrobat.org/) that offers similar functionality in a Windows environment.
 How ever if you install a Linux distribution on your device instead you can try out RetroDECK.
 
 ### Will you support ARM devices like iOS or MacOS?
