@@ -1,5 +1,7 @@
 # What is RetroDECK?
 
+<img src="../../wiki_images/logos/rd-stacked-esde-logo.png" width="400">
+
 Instead of having several different software on your system for a variety of emulators and frontends you only need one: RetroDECK.
 
 RetroDECK is a [EmulationStation Desktop Edition](https://es-de.org) (ES-DE) powered [Flatpak application](https://flathub.org/apps/net.retrodeck.retrodeck) that thanks to its `RetroDECK Framework` it builds-in and manage a variety of emulators and other software that allows you to play your favorite retro (and even not-so-retro) games in one complete package.
