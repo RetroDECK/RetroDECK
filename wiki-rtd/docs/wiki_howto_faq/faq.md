@@ -1,5 +1,3 @@
-<img src="../../wiki_images/logos/rd-unstacked-logo.svg">
-
 # FAQs: Frequently asked questions
 
 What follows is questions and answers to a variety of topics.
