@@ -35,6 +35,6 @@ No, we believe that is not really possible to bundle and preconfigure emulators 
 ### Will you support other distribution methods usch as Snap or AppImage?
 It's not in our roadmap yet as now the entire buildsystem is based on the flatpak-build that builds the software via the flatpak manifest.
 In the past we evaluated to migrate to **Buildstream** (or similar solutions) and build on to multiple output formats.
-But the team is not large enough to migrate and maintain other distribution methods, so we prefer to focus our effort on Flatpak only.
-If someone with knowlage and the passion wishes to help us with this we are open to discuss it at least.
 
+But the team is not large enough to migrate and maintain other distribution methods, so we prefer to focus our effort on Flatpak only.
+If someone with the knowlage and passion wishes to help us with migrating to a solution and help us maintain it, we are open for discussion it at least.
