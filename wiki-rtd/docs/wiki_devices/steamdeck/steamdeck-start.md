@@ -1,5 +1,7 @@
 # How do I install RetroDECK on the Steam Deck?
 
+<img src="../../../wiki_images/logos/steam-deck-logo.png" width="150">
+
 ## Quickstart guide
 
 - Put the Steam Deck into Desktop Mode `Steam button` > `Power` > `Switch to Desktop`

@@ -1,10 +1,12 @@
 # How do I install RetroDECK on the Linux Desktop?
 
+<img src="../../../wiki_images/logos/linux-tux-logo.svg" width="150">
+
 ## Prerequisites
 
 1. You need to have flatpak support installed on your Linux desktop. <br>
 Follow the official flatpak guides on how to install it for your distribution:<br>
-https://flatpak.org/setup/
+[Flatpak Setup Guide](https://flatpak.org/setup/)
 
 2. We recommend that you have the `steam-devices` and/or `game-devices-udev` package installed as it comes with udev rules for many different controllers. You will have to check your distribution on how to install it.
 
@@ -22,19 +24,15 @@ https://flatpak.org/setup/
 
 ## First Run - Quick Start
 
-- Start RetroDECK for the first time
-- Choose where RetroDECK should create the `roms` folders `Internal`, `SDCard` or `Custom`.
-- Put the BIOS inside `~/retrodeck/bios/` for more information read: [[Emulators: BIOS and Firmware]]
-- Put the ROMS inside `~/retrodeck/roms/` folder.
-- Add RetroDECK to Steam with  `Add non Steam game to My library` or with the software BoilR (Recommended).
-You can follow a more in depth guide here: [[Linux Desktop: Add RetroDECK to Steam]].
-- In Steam go to the `Settings` tab to go into the `Steam Settings`, press `Controller`, enable all Steam Inputs.  You can follow a more in depth guide here: [[Linux Desktop: Enable Controllers in Steam]]
-- Connect your controller to your Desktop.
-- Launch RetroDECK from Steam and enjoy
+1. Start RetroDECK for the first time
+2. Choose where RetroDECK should create the `roms` folders `Internal`, `SDCard` or `Custom`.
+3. Put the BIOS inside `~/retrodeck/bios/` for more information read
+4. Put the ROMS inside `~/retrodeck/roms/` folder.<
 
-### Other quick tips:
-- Read up on the [[EmulationStation DE: User Guide]]
-- Check out other recommended software [[Linux Desktop: Software recommendations]]
+5. Add RetroDECK to Steam [How-to - Add RetroDECK to Steam](../../wiki_howto_faq/add-to-steam.md)
+6. Make sure you have enabled controller support in Steam [How-to - Enable Controllers in Steam ](../wiki_howto_faq/add-to-steam.md)
+7. Connect your controller to your Desktop.
+8. Launch RetroDECK from Steam and enjoy
 
 ## Updates
 
