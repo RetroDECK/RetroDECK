@@ -1,16 +1,21 @@
 # RetroDECK: What's included?
 
-## General information
-We plan to add more emulators and functions over course of the development cycle. The goal is to support all of the systems ES-DE supports and ship the best emulator for that systems. We don't have any plans to ship all emulators in existence for each system but virtually only the best one per-system (this is more theoretical than practical) to avoid confusion and the user being loss in the choice.
-In some cases we might ship more then one Emulator if the feature set is vastly diffrent or the user demand is high.
+What follows is a list of features currently included in RetroDECK
 
-## Systems
-
-### Emulationstation Desktop Edition (ES-DE)- RetroDECK Version
-Emulationstation Desktop Edition (ES-DE) is the base frontend for RetroDECK. RetroDECK comes with specific tweaks to the ES-DE standard setup to enable RetroDECK unique functions like the `RetroDECK Framework` and `RetroDECK Configurator`. These tweaks are possible thanks to a collaborations with the ES-DE project and the RetroDECK project.
+## Features
 
 ### The RetroDECK Configurator
-Is a powerful Utility that can be use to change/modify and manipulate various aspects of RetroDECK.
+Is a powerful Utility that can be use to change/modify and manipulate various aspects of RetroDECK using the `RetroDECK Framework` more information in the
+`RetroDECK Configurator 🛠️` section.
+
+## Frontend
+
+### Emulationstation Desktop Edition (ES-DE) - RetroDECK Edition
+
+ES-DE is the base frontend for RetroDECK.<br>
+RetroDECK comes with specific tweaks to the ES-DE standard setup to enable RetroDECK unique functions like the `RetroDECK Framework` and `RetroDECK Configurator`.
+
+These tweaks are possible thanks to a collaborations with the ES-DE project and the RetroDECK project.
 
 ## Emulators
 
@@ -37,9 +42,7 @@ The following standalone emulators are currently included:
 RetroDECK includes the following themes.
 
 **Note:**<br>
-More themes can be easily added check: `EmulationStation-DE Guide 📘` - `ES-DE Themes` for details.
-
-
+More themes can be easily be added, check: `EmulationStation-DE Guide 📘` - `ES-DE Themes` for details.
 
 ### Art Book Next
 
@@ -59,3 +62,12 @@ More themes can be easily added check: `EmulationStation-DE Guide 📘` - `ES-DE
 |----|----|
 | ![rd-theme-ArtBookNext-SystemView](https://gitlab.com/es-de/themes/themes-list/-/raw/master/screenshots/modern-es-de/modern-es-de_01.jpg) | ![rd-theme-ArtBookNext-GamelistView](https://gitlab.com/es-de/themes/themes-list/-/raw/master/screenshots/modern-es-de/modern-es-de_02.jpg) |
 
+## Missing Features
+We plan to add more emulators, systems and functions over course of the development cycle. <br>
+The goal is to support almost all of the systems ES-DE supports and ship the best emulator or program for that system.
+
+We don't have any plans to ship all emulators or programs in existence for each system but virtually only the **"best once"** per-system.
+In some cases we might ship more then one Emulator if the feature set is vastly diffrent or the user demand is high.
+
+For the latest things The RetroDECK Team is working on check: <br>
+`Development 🖥️` - `What are you working on?` and `Version History (Patchnotes)`
