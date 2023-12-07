@@ -1,11 +1,12 @@
+<img src="../../wiki_images/logos/rd-unstacked-logo.svg">
+
 # FAQs: Frequently asked questions
 
 What follows is questions and answers to a variety of topics.
 
 
 ## General Questions
-
-
+<br>
 <img src="../../wiki_icons/retrodeck/rd_icon_circle_192x192.png">
 
 ### What does the "b" stand for in the versioning number?
@@ -62,6 +63,8 @@ In the future.
 
 
 ## RetroDECK Usage Questions
+
+
 
 ### Do I have to partition or format my disk/sdcard to install RetroDECK?
  No, partitioning or formatting is not needed at all. RetroDECK (differently from AmberELEC, Batocera and others) comes as a flatpak. Just install it as any other application and launch it from your desktop and/or Steam library.
