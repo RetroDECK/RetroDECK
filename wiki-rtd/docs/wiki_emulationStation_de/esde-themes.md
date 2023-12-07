@@ -21,25 +21,3 @@ Go into `Main Menu` - `UI Settings` - `Theme Downloader` from there you can down
 
 ### From the Internet
 If you find a theme you would like to use that is not in the `Theme Downloader` please download it and place it in `~/retrodeck/themes` (make sure the theme has its own folder in that directory).
-
-## RetroDECK: Included Themes
-
-### Art Book Next
-
-| System View | Gamelist View |
-|----|----|
-| ![rd-theme-ArtBookNext-SystemView](https://gitlab.com/es-de/themes/themes-list/-/raw/master/screenshots/art-book-next-es-de/art-book-next-es-de_01.jpg) | ![rd-theme-ArtBookNext-GamelistView](https://gitlab.com/es-de/themes/themes-list/-/raw/master/screenshots/art-book-next-es-de/art-book-next-es-de_04.jpg) |
-
-### Slate
-
-| System View | Gamelist View |
-|----|----|
-| ![rd-theme-ArtBookNext-SystemView](https://gitlab.com/es-de/themes/themes-list/-/raw/master/screenshots/slate-es-de/slate-es-de_01.jpg) | ![rd-theme-ArtBookNext-GamelistView](https://gitlab.com/es-de/themes/themes-list/-/raw/master/screenshots/slate-es-de/slate-es-de_04.jpg) |
-
-### Modern
-
-| System View | Gamelist View |
-|----|----|
-| ![rd-theme-ArtBookNext-SystemView](https://gitlab.com/es-de/themes/themes-list/-/raw/master/screenshots/modern-es-de/modern-es-de_01.jpg) | ![rd-theme-ArtBookNext-GamelistView](https://gitlab.com/es-de/themes/themes-list/-/raw/master/screenshots/modern-es-de/modern-es-de_02.jpg) |
-
-

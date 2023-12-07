@@ -6,7 +6,7 @@ In some cases we might ship more then one Emulator if the feature set is vastly 
 
 ## Systems
 
-### Emulationstation Desktop Edition - RetroDECK Version
+### Emulationstation Desktop Edition (ES-DE)- RetroDECK Version
 Emulationstation Desktop Edition (ES-DE) is the base frontend for RetroDECK. RetroDECK comes with specific tweaks to the ES-DE standard setup to enable RetroDECK unique functions like the `RetroDECK Framework` and `RetroDECK Configurator`. These tweaks are possible thanks to a collaborations with the ES-DE project and the RetroDECK project.
 
 ### The RetroDECK Configurator
@@ -32,4 +32,30 @@ The following standalone emulators are currently included:
 - RPCS3 (PS3)
 - PPSSPP (PSP)
 
+## RetroDECK: Included ES-DE Themes
+
+RetroDECK includes the following themes.
+
+**Note:**<br>
+More themes can be easily added check: `EmulationStation-DE Guide 📘` - `ES-DE Themes` for details.
+
+
+
+### Art Book Next
+
+| System View | Gamelist View |
+|----|----|
+| ![rd-theme-ArtBookNext-SystemView](https://gitlab.com/es-de/themes/themes-list/-/raw/master/screenshots/art-book-next-es-de/art-book-next-es-de_01.jpg) | ![rd-theme-ArtBookNext-GamelistView](https://gitlab.com/es-de/themes/themes-list/-/raw/master/screenshots/art-book-next-es-de/art-book-next-es-de_04.jpg) |
+
+### Slate
+
+| System View | Gamelist View |
+|----|----|
+| ![rd-theme-ArtBookNext-SystemView](https://gitlab.com/es-de/themes/themes-list/-/raw/master/screenshots/slate-es-de/slate-es-de_01.jpg) | ![rd-theme-ArtBookNext-GamelistView](https://gitlab.com/es-de/themes/themes-list/-/raw/master/screenshots/slate-es-de/slate-es-de_04.jpg) |
+
+### Modern
+
+| System View | Gamelist View |
+|----|----|
+| ![rd-theme-ArtBookNext-SystemView](https://gitlab.com/es-de/themes/themes-list/-/raw/master/screenshots/modern-es-de/modern-es-de_01.jpg) | ![rd-theme-ArtBookNext-GamelistView](https://gitlab.com/es-de/themes/themes-list/-/raw/master/screenshots/modern-es-de/modern-es-de_02.jpg) |
 
