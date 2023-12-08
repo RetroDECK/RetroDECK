@@ -1236,7 +1236,7 @@ modules:
       - mkdir -p ${FLATPAK_DEST}/retrodeck
       - cp retrodeck.png ${FLATPAK_DEST}/retrodeck
       - unzip "ubuntu-latest.zip" -d "${FLATPAK_DEST}/bin/Vita3K"
-      - chmod +x ""${FLATPAK_DEST}/bin/Vita3K/Vita3K"
+      - chmod +x "${FLATPAK_DEST}/bin/Vita3K/Vita3K"
       - rm -f "${FLATPAK_DEST}/bin/Vita3K/update-vita3k.sh"
       - ln -s ${FLATPAK_DEST}/bin/Vita3K/Vita3K ${FLATPAK_DEST}/bin/Vita3K
     sources:
