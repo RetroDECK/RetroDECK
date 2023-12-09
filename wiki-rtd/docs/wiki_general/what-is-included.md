@@ -26,16 +26,17 @@ If there is no stable version of a core the nightly version will be used instead
 ### Standalone Emulators
 The following standalone emulators are currently included:
 
-- Yuzu (Switch)
-- Citra (3DS)
-- PCSX2 (PS2)
 - Cemu (WiiU)
+- Citra (3DS)
 - Dolphin (GameCube/Wii)
-- Primehack (Metroid Prime - Dolphin Fork)
-- Xemu (XBOX)
+- Duckstation (PSX)
 - MelondDS (DS)
-- RPCS3 (PS3)
+- PCSX2 (PS2)
 - PPSSPP (PSP)
+- Primehack (Metroid Prime - Dolphin Fork)
+- RPCS3 (PS3)
+- Xemu (XBOX)
+- Yuzu (Switch)
 
 ## RetroDECK: Included ES-DE Themes
 
