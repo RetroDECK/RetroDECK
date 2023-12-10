@@ -21,5 +21,5 @@ Some articles are marked with WIP (Work in Progress).
 
 ### Other links
 [Website](https://retrodeck.net) <br/>
-[Flathub](https://flathub.org/apps/net.retrodeck.retrodeck)<br>
 [Github](https://github.com/XargonWan/) <br/>
+[Flathub](https://flathub.org/apps/net.retrodeck.retrodeck)<br>
