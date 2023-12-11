@@ -426,6 +426,6 @@ The Steam Deck logo and Steam Deck device is a registered trademark of Valve Cor
 
 ### Other Trademarks
 
-All trademarks, logos and brand names are the property of their respective owners. All company, product and service names used in this project are for identification purposes only. Use of these names, trademarks and brands does not imply endorsement.
+All trademarks, logos, controller images and brand names are the property of their respective owners. All company, product and service names used in this project are for identification purposes only. Use of these names, trademarks and brands does not imply endorsement.
 
 
