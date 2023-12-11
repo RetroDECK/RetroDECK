@@ -2,23 +2,26 @@
 
 **Note these inputs are part of the upcoming 0.8b update.**
 
-Steam Input have support for the following controllers:
-
 ## Xbox 360
-- Xbox 360 Controller
 
+Supported by Steam Input
 
-## Xbox One / S / X
+<img src="../../wiki_images/controllers/xbox-360.jpg" width="350">
+
+## Xbox Wireless Controller
+
+Supported by Steam Input
+
+<img src="../../wiki_images/controllers/xbox-wireless.jpg" width="350">
+
 - Xbox One
 - Xbox Series S and X
 
-The One / S / X controller registers as the same in Steam Input.
-Only a few minor changes where made between the generations.
 
 ### What are the Official profiles called?
 
 - Xbox 360: `RetroDECK: Official Layout - Xbox 360`
-- Xbox One / S / X: `RetroDECK: Official Layout -  Xbox One/S/X`
+- Xbox Wireless Controller: `RetroDECK: Official Layout -  Xbox Wireless`
 
 ## Global Hotkeys: Xbox Button Combos
 
