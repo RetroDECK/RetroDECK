@@ -3,7 +3,7 @@
 Special Controllers is a broad category that encompasses the vast majority of third and first party controllers that don't fit anywhere else.
 They might have been made for a single game.
 
-## LEGO Dimensions - LEGO ToyPad
+## LEGO ToyPad
 
 <img src="../../wiki_images/controllers/lego-toypad.jpg" width="250">
 
@@ -28,7 +28,7 @@ echo 'SUBSYSTEM=="usb", ATTRS{idVendor}=="0e6f", ATTRS{idProduct}=="0241", MODE=
 sudo udevadm control --reload-rules
 ```
 
-## Skylanders - Portal of Power
+## Portal of Power
 
 <img src="../../wiki_images/controllers/skylanders-portal.jpg" width="250">
 
