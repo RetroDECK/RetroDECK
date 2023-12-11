@@ -37,7 +37,7 @@ set_setting_value() {
       fi
       ;;
 
-    "rpcs3" ) # This does not currently work for settings with a $ in them
+    "rpcs3" | "vita3k" ) # This does not currently work for settings with a $ in them
       if [[ -z $current_section_name ]]; then
         sed -i 's^\^'"$setting_name_to_change"': .*^'"$setting_name_to_change"': '"$setting_value_to_change"'^' "$1"
       else
@@ -72,7 +72,7 @@ get_setting_name() {
     echo ''"$current_setting_line"'' | grep -o -P '(?<=name\=\").*(?=\" value)'
     ;;
 
-  "rpcs3" )
+  "rpcs3" | "vita3k" )
     echo "$current_setting_line" | grep -o -P "^\s*?.*?(?=\s?:\s?)" | sed -e 's/^[ \t]*//;s^\\ ^ ^g'
     ;;
 
@@ -116,7 +116,7 @@ get_setting_value() {
     fi
   ;;
 
-  "rpcs3" ) # For files with this syntax - setting_name: setting_value
+  "rpcs3" | "vita3k" ) # For files with this syntax - setting_name: setting_value
     if [[ -z $current_section_name ]]; then
       echo $(grep -o -P "(?<=$current_setting_name: ).*" "$1")
     else

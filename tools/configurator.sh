@@ -79,6 +79,7 @@ source /app/libexec/global.sh
 #           - Reset Primehack
 #           - Reset RPCS3
 #           - Reset Ryujinx
+#           - Reset Vita3k
 #           - Reset XEMU
 #           - Reset Yuzu
 #         - Reset All Emulators
@@ -1009,17 +1010,23 @@ configurator_reset_dialog() {
     "Primehack" "Reset the Metroid Prime emulator Primehack to default settings" \
     "RPCS3" "Reset the PS3 emulator RPCS3 to default settings" \
     "Ryujinx" "Reset the Switch emulator Ryujinx to default settings" \
+    "Vita3k" "Reset the PS Vita emulator Vita3k to default settings" \
     "XEMU" "Reset the XBOX emulator XEMU to default settings" \
     "Yuzu" "Reset the Switch emulator Yuzu to default settings" )
 
     case $emulator_to_reset in
 
-    "RetroArch" | "XEMU" ) # Emulators that require network access
-      if [[ $(configurator_reset_confirmation_dialog "$emulator_to_reset" "Are you sure you want to reset the $emulator_to_reset emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
-        prepare_emulator "reset" "$emulator_to_reset" "configurator"
-        configurator_process_complete_dialog "resetting $emulator_to_reset"
+    "RetroArch" | "Vita3k" | "XEMU" ) # Emulators that require network access
+      if [[ $(check_network_connectivity) == "true" ]]; then
+        if [[ $(configurator_reset_confirmation_dialog "$emulator_to_reset" "Are you sure you want to reset the $emulator_to_reset emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
+          prepare_emulator "reset" "$emulator_to_reset" "configurator"
+          configurator_process_complete_dialog "resetting $emulator_to_reset"
+        else
+          configurator_generic_dialog "RetroDeck Configurator - RetroDECK: Reset" "Reset process cancelled."
+          configurator_reset_dialog
+        fi
       else
-        configurator_generic_dialog "RetroDeck Configurator - RetroDECK: Reset" "Reset process cancelled."
+        configurator_generic_dialog "RetroDeck Configurator - RetroDECK: Reset" "Resetting this emulator requires active network access.\nPlease try again when you are connected to an Internet-capable network.\n\nReset process cancelled."
         configurator_reset_dialog
       fi
     ;;
@@ -1042,17 +1049,22 @@ configurator_reset_dialog() {
   ;;
 
 "Reset All Emulators" )
-  if [[ $(configurator_reset_confirmation_dialog "all emulators" "Are you sure you want to reset all emulators to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
-    (
-    prepare_emulator "reset" "all"
-    ) |
-    zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
-    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Finishing Initialization" \
-    --text="RetroDECK is finishing the reset process, please wait."
-    configurator_process_complete_dialog "resetting all emulators"
+  if [[ $(check_network_connectivity) == "true" ]]; then
+    if [[ $(configurator_reset_confirmation_dialog "all emulators" "Are you sure you want to reset all emulators to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
+      (
+      prepare_emulator "reset" "all"
+      ) |
+      zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Finishing Initialization" \
+      --text="RetroDECK is finishing the reset process, please wait."
+      configurator_process_complete_dialog "resetting all emulators"
+    else
+      configurator_generic_dialog "RetroDeck Configurator - RetroDECK: Reset" "Reset process cancelled."
+      configurator_reset_dialog
+    fi
   else
-    configurator_generic_dialog "RetroDeck Configurator - RetroDECK: Reset" "Reset process cancelled."
+    configurator_generic_dialog "RetroDeck Configurator - RetroDECK: Reset" "Resetting all emulators requires active network access.\nPlease try again when you are connected to an Internet-capable network.\n\nReset process cancelled."
     configurator_reset_dialog
   fi
 ;;
