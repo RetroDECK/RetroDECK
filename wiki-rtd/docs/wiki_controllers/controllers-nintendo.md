@@ -8,11 +8,11 @@ Supported by Steam Input
 
 <img src="../../wiki_images/controllers/switch-pro.jpg" width="350">
 
-### What are the Official - Switch Pro profile called?
+### What is the Official - Switch Pro RetroDECK profile called?
 
 - Switch Pro: `RetroDECK: Official Layout - Switch Pro`
 
-## Global Hotkeys: Nintendo Button Combos
+### Switch Pro - Global Hotkeys: Nintendo Button Combos
 
 The global hotkeys are activated by pressing the `SELECT`  button and holding it while pressing the corresponding other button input.
 What follows is a list of hotkeys:
