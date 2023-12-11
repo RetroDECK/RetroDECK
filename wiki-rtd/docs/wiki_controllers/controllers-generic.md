@@ -2,7 +2,9 @@
 
 **Note these inputs are part of the upcoming 0.8b update.**
 
-Generic Controllers is a broad category that encompasses the vast majority of third party controllers.
+<img src="../../wiki_images/controllers/xiaomi-controller.jpg" width="250">
+
+Generic Controllers is a broad category that encompasses the vast majority of third party controllers.<br>
 This guide assumes that they have a similar layout as an Xbox Controller.
 
 ### What are the Official profiles called?
