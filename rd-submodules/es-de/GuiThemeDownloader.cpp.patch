@@ -1,0 +1,10 @@
+diff -au1r emulationstation-de/es-app/src/guis/GuiThemeDownloader.cpp emulationstation-de/es-app/src/guis/GuiThemeDownloader.cpp
+--- emulationstation-de/es-app/src/guis/GuiThemeDownloader.cpp	2023-11-03 16:25:01.115126901 +0100
++++ emulationstation-de/es-app/src/guis/GuiThemeDownloader.cpp	2023-11-03 16:26:18.882607724 +0100
+@@ -602,4 +602,4 @@
+                 getHelpStyle(),
+-                "IT SEEMS AS IF YOU'RE NOT RUNNING THE LATEST ES-DE RELEASE, PLEASE UPGRADE BEFORE "
+-                "PROCEEDING AS THESE THEMES MAY NOT BE COMPATIBLE WITH YOUR VERSION",
++                "ES-DE THEME ENGINE WAS UPDATED UPSTREAM. THESE THEMES MAY NOT BE COMPATIBLE WITH THE CURRENT RETRODECK VERSION."
++                "CHECK IF A NEW RETRODECK UPDATE IS AVAILABLE, ELSE PLEASE WAIT FOR IT OR PROCEED AT YOUR OWN RISK.",
+                 "OK", [] { return; }, "", nullptr, "", nullptr, nullptr, true));

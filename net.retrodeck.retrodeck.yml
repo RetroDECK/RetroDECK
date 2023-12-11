@@ -3,7 +3,7 @@ runtime: org.kde.Platform
 runtime-version: "6.5"
 sdk: org.kde.Sdk
 sdk-extensions:
-  - org.freedesktop.Sdk.Extension.llvm14      # Needed for rpcs3
+  - org.freedesktop.Sdk.Extension.llvm16      # Needed for rpcs3 (llvm15) but llvm16 for CITRA
 # base: io.qt.qtwebengine.BaseApp             # Needed for Yuzu - Disabled as we're using AppImage for Yuzu
 # base-version: "6.5"                         # Needed for Yuzu - Disabled as we're using AppImage for Yuzu
 command: retrodeck.sh
@@ -41,6 +41,8 @@ finish-args:
   # It allows an SDL application to specify its window class, which can be useful for window managers and desktop environments to identify and group similar windows
   - --env=SDL_VIDEO_X11_WMCLASS=net.retrodeck.retrodeck
   - --env=SDL_VIDEO_WAYLAND_WMCLASS=net.retrodeck.retrodeck
+  # XEMU - Fixes issues with openSUSE systems, QEMU_AUDIO_DRV is defined as "pa" causing xemu to not launch
+  - --unset-env=QEMU_AUDIO_DRV
 
 cleanup:
   # ES-DE
@@ -85,7 +87,7 @@ modules:
     build-commands:
       - |
 
-        # on main please update this with the version variable, eg: VERSION='0.7.0b'
+        # on main please update this with the version variable, eg: VERSION='0.7.4b'
         # on cooker will be THISBRANCH
         VERSION=THISBRANCH
 
@@ -120,10 +122,10 @@ modules:
       - ln -s "xml" "${FLATPAK_DEST}/bin/xmlstarlet" ||:
 
   # mesa repo got a double certificate issue and gnutils cannot handle that so GLU download fails,
-  # this affects even the shared-modules's glu so I have to replace it temporarly
+  # this affects even the shared-modules's libglu so I have to replace it temporarly
   # more info there: https://gitlab.com/gnutls/gnutls/-/issues/1335
-  # dependency of: RETROARCH, CEMU, RPCS3
-  - name: glu
+  # dependency of: RETROARCH, CEMU, RPCS3, XEMU
+  - name: libglu
     buildsystem: meson
     cleanup:
       - /include
@@ -132,8 +134,16 @@ modules:
       - /lib/*.a
     sources:
       - type: archive
-        url: https://ftp.osuosl.org/pub/blfs/conglomeration/glu/glu-9.0.2.tar.xz
-        sha256: 6e7280ff585c6a1d9dfcdf2fca489251634b3377bfc33c29e4002466a38d02d4
+        url: https://ftp.osuosl.org/pub/blfs/conglomeration/glu/glu-9.0.3.tar.xz
+        sha256: bd43fe12f374b1192eb15fe20e45ff456b9bc26ab57f0eee919f96ca0f8a330f
+      # - type: archive
+      #   url: https://mesa.freedesktop.org/archive/glu/glu-9.0.3.tar.xz
+      #   sha256: bd43fe12f374b1192eb15fe20e45ff456b9bc26ab57f0eee919f96ca0f8a330f
+      #   x-checker-data:
+      #     type: anitya
+      #     project-id: 13518
+      #     stable-only: true
+      #     url-template: https://mesa.freedesktop.org/archive/glu/glu-$version.tar.xz
 
   - name: libgudev
     buildsystem: meson
@@ -221,24 +231,36 @@ modules:
         url: https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_amd64
         sha256: 4ee662847c588c3ef2fec8bfb304e8739e3dbaba87ccb9a608d691c88f5b64dc
 
-  # dependency of: CEMU, CITRA <-(13.0.0)
+  # dependency of: CEMU (13.1.1), CITRA (13.0.0)
   - name: glslang
     buildsystem: cmake-ninja
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
       - -DENABLE_CTEST=OFF
+      # TODO: Does Cemu benefit from SPIRV-Tools-opt
+      - -DENABLE_OPT=OFF
     cleanup:
       - /include
       - /lib/cmake
     sources:
       - type: archive
-        url: https://github.com/KhronosGroup/glslang/archive/13.0.0.tar.gz
-        sha256: bcda732434f829aa74414ea0e06d329ec8ac28637c38a0de45e17c8fd25a4715
+        url: https://github.com/KhronosGroup/glslang/archive/13.1.1.tar.gz
+        sha256: 1c4d0a5a38c8aaf89a2d7e6093be734320599f5a6775b2726beeb05b0c054e66
+        # url: https://github.com/KhronosGroup/glslang/archive/13.0.0.tar.gz
+        # sha256: bcda732434f829aa74414ea0e06d329ec8ac28637c38a0de45e17c8fd25a4715
         x-checker-data:
           type: anitya
           stable-only: true
           project-id: 205796
           url-template: https://github.com/KhronosGroup/glslang/archive/$version.tar.gz
+      # - type: git
+      #   url: https://github.com/KhronosGroup/SPIRV-Tools.git
+      #   tag: sdk-1.3.261.1
+      #   dest: External/spirv-tools
+      # - type: git
+      #   url: https://github.com/KhronosGroup/SPIRV-Headers.git
+      #   tag: sdk-1.3.261.1
+      #   dest: External/spirv-tools/external/spirv-headers
 
   # enables motion controls on non-wii controllers (switch, ps4, etc)
   # dependency of: DOLPHIN, RPCS3
@@ -294,9 +316,35 @@ modules:
       - type: archive
         url: https://github.com/g-truc/glm/releases/download/0.9.9.8/glm-0.9.9.8.zip
         sha256: 37e2a3d62ea3322e43593c34bae29f57e3e251ea89f4067506c94043769ade4c
+        
+  # dependency of: CEMU, ES-DE
+  - name: pugixml
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DBUILD_SHARED_LIBS=ON
+    cleanup:
+      - /include
+      - /lib/cmake
+      - /lib/pkgconfig
+    sources:
+      - type: archive
+        url: https://github.com/zeux/pugixml/releases/download/v1.14/pugixml-1.14.tar.gz
+        sha256: 2f10e276870c64b1db6809050a75e11a897a8d7456c4be5c6b2e35a11168a015
+        x-checker-data:
+          type: anitya
+          project-id: 3728
+          url-template: https://github.com/zeux/pugixml/releases/download/v$version/pugixml-$version.tar.gz
           
   # dependency of: CEMU, RPCS3
   - rd-submodules/shared-modules/glew/glew.json
+
+  # dependency of: XEMU, MelonDS
+  - name: libslirp
+    buildsystem: meson
+    sources:
+      - type: git
+        url: https://gitlab.freedesktop.org/slirp/libslirp.git
+        tag: v4.7.0
 
   # ES-DE - START
   # https://gitlab.com/es-de/emulationstation-de
@@ -333,24 +381,6 @@ modules:
           - sed -i 's|-o root -g root ||' ./Makefile.gnu
           - sed -i 's|/usr|/app|' ./Makefile.gnu
 
-  # dependency of: CEMU
-  - name: pugixml
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DBUILD_SHARED_LIBS=ON
-    cleanup:
-      - /include
-      - /lib/cmake
-      - /lib/pkgconfig
-    sources:
-      - type: archive
-        url: https://github.com/zeux/pugixml/releases/download/v1.13/pugixml-1.13.tar.gz
-        sha256: 40c0b3914ec131485640fa57e55bf1136446026b41db91c1bef678186a12abbe
-        x-checker-data:
-          type: anitya
-          project-id: 3728
-          url-template: https://github.com/zeux/pugixml/releases/download/v$version/pugixml-$version.tar.gz
-
   - name: libgit2
     buildsystem: cmake-ninja
     config-opts:
@@ -369,8 +399,10 @@ modules:
       - -DENABLE_BOOST=OFF
     sources:
       - type: archive
-        url: https://gitlab.freedesktop.org/poppler/poppler/-/archive/poppler-22.11.0/poppler-poppler-22.11.0.tar.bz2
-        sha256: b8f618d5c62030034d5c8da4d3f6a740260b7620b9a31021679ce1914d327f81
+        # original link not working, found a mirror
+        url: https://poppler.freedesktop.org/poppler-22.11.0.tar.xz
+        #url: https://gitlab.freedesktop.org/poppler/poppler/-/archive/poppler-22.11.0/poppler-poppler-22.11.0.tar.bz2
+        sha256: 093ba9844ed774285517361c15e21a31ba4df278a499263d4403cca74f2da828
     cleanup:
       - /lib/pkgconfig
       - /include
@@ -390,7 +422,7 @@ modules:
     sources:
       - type: git
         url: https://gitlab.com/es-de/emulationstation-de
-        branch: 5545187d82fabf93256b7d176f39a0a98bcd6c54
+        branch: 77bf5ed8a03c5d065512cded36e4fb3bea90f4df
       - type: shell
         commands:
           - sed -i 's#"EMULATIONSTATION-DE  V" + Utils::String::toUpper(PROGRAM_VERSION_STRING)#"RetroDECK
@@ -542,11 +574,22 @@ modules:
   # RetroArch - END
 
   # Not part of the offical RetroArch manifest
+  # retroarch-cores-nightly must be earlier than retroarch-cores as it will overwrite this cores with the stable ones
+  - name: retroarch-cores-nightly
+    buildsystem: simple
+    build-commands:
+      - mkdir -p /app/share/libretro/cores/
+      - mv -f ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* /app/share/libretro/cores/
+    sources:
+      - type: archive
+        url: https://buildbot.libretro.com/nightly/linux/x86_64/RetroArch_cores.7z
+        sha256: RANIGHTLYCORESPLACEHOLDER
+
   - name: retroarch-cores
     buildsystem: simple
     build-commands:
       - mkdir -p /app/share/libretro/cores/
-      - mv ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* /app/share/libretro/cores/
+      - mv -f ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* /app/share/libretro/cores/
     sources:
       - type: archive
         url: https://buildbot.libretro.com/stable/1.16.0/linux/x86_64/RetroArch_cores.7z
@@ -603,10 +646,8 @@ modules:
       - -DUSE_SYSTEM_FFMPEG=OFF
       - -DUSE_SYSTEM_LIBZIP=ON
       - -DUSE_SYSTEM_ZSTD=ON
-
       - -DUSE_WAYLAND_WSI=ON
       - -DUSING_QT_UI=OFF
-
       - -DBUILD_TESTING=OFF
       - -DOpenGL_GL_PREFERENCE=GLVND
     build-options:
@@ -622,8 +663,8 @@ modules:
     sources:
       - type: git
         url: &ppsspp-url https://github.com/hrydgard/ppsspp.git
-        tag: v1.16.3
-        commit: a9b6421dfde68be9d065b51e9d519699ce2e9053
+        tag: v1.16.6
+        commit: ba0ce344937d17e177ec8656ab957f6b82facdda
         x-checker-data:
           type: json
           url: https://api.github.com/repos/hrydgard/ppsspp/releases/latest
@@ -662,8 +703,8 @@ modules:
       - ln -s "${FLATPAK_DEST}/yuzu/usr/bin/yuzu" "${FLATPAK_DEST}/bin/yuzu"
     sources:
       - type: file
-        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1567/yuzu-mainline-20230923-ace91dd0c.AppImage
-        sha256: 965bdfa63e713a0672fb5a037ecb527b4860600c6a2526f7c053bfe082b5a9d8
+        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1618/yuzu-mainline-20231112-3cff94a38.AppImage
+        sha256: 4e92d6daeb1f288ca18950ed47b068fb971766ee386b012b9400b5caecad4246
 
   # Yuzu - END
 
@@ -672,11 +713,26 @@ modules:
 
   - rd-submodules/shared-modules/SDL2/SDL2-with-libdecor.json
 
+  - rd-submodules/shared-modules/SDL2/SDL2-with-libdecor.json
+
   - name: citra
     buildsystem: cmake-ninja
     builddir: true
+    build-options:
+      env:
+        CI: '1'
+        GITHUB_ACTIONS: '1'
+        GITHUB_REPOSITORY: citra-emu/citra-nightly
+        GITHUB_REF_NAME: nightly-2025
+      append-path: /usr/lib/sdk/llvm16/bin
+      prepend-ld-library-path: /usr/lib/sdk/llvm16/lib
+      cflags: '-Wno-unused-command-line-argument'
+      cxxflags: '-Wno-unused-command-line-argument'
     config-opts:
       - '-DCMAKE_BUILD_TYPE=Release'
+      - '-DCMAKE_C_COMPILER=clang'
+      - '-DCMAKE_CXX_COMPILER=clang++'
+      - '-DCMAKE_LINKER=lld'
       - '-DENABLE_QT_TRANSLATION=ON'
       - '-DCITRA_ENABLE_COMPATIBILITY_REPORTING=ON'
       - '-DUSE_DISCORD_PRESENCE=ON'
@@ -702,8 +758,8 @@ modules:
     sources:
       - type: archive
         url: >-
-          https://github.com/citra-emu/citra-nightly/releases/download/nightly-2009/citra-unified-source-20231012-40ba522.tar.xz
-        sha256: 927739892fff5d1b325b07182ab29a7355f58866debe60da1d6620680773ac97
+          https://github.com/citra-emu/citra-nightly/releases/download/nightly-2025/citra-unified-source-20231105-998b9a9.tar.xz
+        sha256: ebf52af66c6ef729688a29d093d9139baa76973b698c0630a295f38d126cf118
         x-checker-data:
           type: json
           url: https://api.github.com/repos/citra-emu/citra-nightly/releases/latest
@@ -734,8 +790,8 @@ modules:
       - ln -s "${FLATPAK_DEST}/pcsx2-qt/usr/bin/pcsx2-qt" "${FLATPAK_DEST}/bin/pcsx2-qt"
     sources:
       - type: file
-        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.5059/pcsx2-v1.7.5059-linux-appimage-x64-Qt.AppImage
-        sha256: a51addc9bd15b77e842160acecb1f18486f8a024e5e73e8aea5de71de2b164c7
+        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.5186/pcsx2-v1.7.5186-linux-appimage-x64-Qt.AppImage
+        sha256: 9fd8108c11fd273a4a0c801a6ee2da802643966e61e0a53528f7dd023ece55dd
 
   # PCSX2 - END
 
@@ -865,8 +921,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/xemu-project/xemu.git
-        tag: v0.7.98
-        commit: 7bfb7c85378f64f93556c365ea0cc18cb2181dc8
+        tag: v0.7.116
+        commit: b3fc80b3a83fa99aeb541a0c665cfb596cedd71c
         x-checker-data:
           type: json
           url: https://api.github.com/repos/xemu-project/xemu/releases/latest
@@ -889,13 +945,6 @@ modules:
   # MELONDS - START
   # https://github.com/flathub/net.kuribo64.melonDS
   # ちっちゃい、かわいい！
-
-  - name: libslirp
-    buildsystem: meson
-    sources:
-      - type: git
-        url: https://gitlab.freedesktop.org/slirp/libslirp.git
-        tag: v4.7.0
 
   - name: melonds
     buildsystem: cmake-ninja
@@ -1129,8 +1178,8 @@ modules:
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+-\d+)$
-        tag: v2.0-47
-        commit: 85aa4f095b119e98620451a0c19c80f656d944a6
+        tag: v2.0-59
+        commit: f3c95f72e74d8a5f5873061fbb994643c63ec9c5
       - type: shell
         commands:
           - sed "s/set(EXPERIMENTAL_VERSION.*/set(EXPERIMENTAL_VERSION \"$(git describe
@@ -1178,83 +1227,18 @@ modules:
 
   # Cemu - END
 
-  # Ryujinx - START
-  # https://github.com/flathub/org.ryujinx.Ryujinx
-
-  - name: Ryujinx
-    buildsystem: simple
-    build-options:
-      no-debuginfo: true
-      no-debuginfo-compression: true
-      strip: false
-      arch:
-        x86_64:
-          env:
-            RUNTIME: linux-x64
-      env:
-        PKG_CONFIG_PATH: /app/lib/pkgconfig:/app/share/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig
-        DOTNET_CLI_TELEMETRY_OPTOUT: 'true'
-        DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 'true'
-        RYUJINX_VERSION: 1.1.1014
-        RYUJINX_TARGET_RELEASE_CHANNEL_OWNER: flathub
-        RYUJINX_TARGET_RELEASE_CHANNEL_REPO: org.ryujinx.Ryujinx
-        RYUJINX_TARGET_RELEASE_CHANNEL_NAME: master
-    build-commands:
-    - |
-      export PATH=$PATH:/run/build/Ryujinx/dotnet-sdk
-      export RYUJINX_GIT_SHORT_HASH=$(git rev-parse --short HEAD)
-      export RUNTIME_FRAMEWORK_VERSION=$(find nuget-sources -name 'microsoft.netcore.app.host.linux-x64.*' | grep -oP '(\d.\d.\d+.nupkg)' | grep -oP '(\d.\d.\d+)')
-      sed -r --in-place "s/\%\%RYUJINX_BUILD_VERSION\%\%/$RYUJINX_VERSION/g;" src/Ryujinx.Common/ReleaseInformation.cs
-      sed -r --in-place "s/\%\%RYUJINX_BUILD_GIT_HASH\%\%/$RYUJINX_GIT_SHORT_HASH/g;" src/Ryujinx.Common/ReleaseInformation.cs
-      sed -r --in-place "s/\%\%RYUJINX_TARGET_RELEASE_CHANNEL_NAME\%\%/$RYUJINX_TARGET_RELEASE_CHANNEL_NAME/g;" src/Ryujinx.Common/ReleaseInformation.cs
-      sed -r --in-place "s/\%\%RYUJINX_TARGET_RELEASE_CHANNEL_OWNER\%\%/$RYUJINX_TARGET_RELEASE_CHANNEL_OWNER/g;" src/Ryujinx.Common/ReleaseInformation.cs
-      sed -r --in-place "s/\%\%RYUJINX_TARGET_RELEASE_CHANNEL_REPO\%\%/$RYUJINX_TARGET_RELEASE_CHANNEL_REPO/g;" src/Ryujinx.Common/ReleaseInformation.cs
-      mkdir -p /app/bin
-      dotnet publish -c Release -r $RUNTIME /p:DebugType=embedded src/Ryujinx /p:Version=$RYUJINX_VERSION /p:SourceRevisionId=$RYUJINX_GIT_SHORT_HASH /p:ExtraDefineConstants="DISABLE_UPDATER%2CFORCE_EXTERNAL_BASE_DIR" /p:RuntimeFrameworkVersion=$RUNTIME_FRAMEWORK_VERSION --self-contained --source nuget-sources
-      if [ $? -ne 0 ]; then
-          exit 1;
-      fi;
-      cp -r --remove-destination /run/build/Ryujinx/src/Ryujinx/bin/Release/net7.0/$RUNTIME/publish/* /app/bin/
-      chmod +x /app/bin/Ryujinx.sh
-      mkdir -p /app/lib/ffmpeg
-      ln -s /usr/lib/x86_64-linux-gnu/libX11.so.6 /app/lib/libX11.so
-      install -Dm755 ryujinx-wrapper /app/bin/ryujinx-wrapper
-      install -Dm644 distribution/misc/Logo.svg /app/share/icons/hicolor/scalable/apps/ryujinx.svg
-    sources:
-    - type: archive
-      only-arches:
-      - x86_64
-      dest: dotnet-sdk
-      url: https://dotnetcli.azureedge.net/dotnet/Sdk/7.0.401/dotnet-sdk-7.0.401-linux-x64.tar.gz
-      sha256: 4634fa4da7ae4e3dadb83e320a87fb26f0cb12a7ca02bf9f10e6c3c1c91d645c
-      x-checker-data:
-        type: rotating-url
-        url: https://aka.ms/dotnet/7.0/dotnet-sdk-linux-x64.tar.gz
-        pattern: https://dotnetcli.azureedge.net/dotnet/Sdk/^([\d\.a-z-]+)$/dotnet-sdk-^([\d\.a-z-]+)$-linux-x64.tar.gz
-    - rd-submodules/ryujinx/nuget_sources.json
-    - type: git
-      url: https://github.com/Ryujinx/Ryujinx.git
-      commit: 7ccff037e87f82f3461f3e1422235e29800eaa2f
-    - type: file
-      path: rd-submodules/ryujinx/ryujinx-wrapper
-
-  # Ryujinx - END
-
   # Vita3K - START
-  # Vita3K is writing some files in its own directory
-  # So that is placed in /var/data/Vita3K and not in the readonly filesystem
-  # This module is just fetching the file so it will be unique for this build
 
   - name: vita3k
     buildsystem: simple
-    build-commands:
-      # Creating an empty symlink that will point to Vita3K binary
-      - ln -s /var/data/Vita3K/Vita3K ${FLATPAK_DEST}/bin/Vita3K
+    build-commands:    
       # Copying the user icon
       - mkdir -p ${FLATPAK_DEST}/retrodeck
       - cp retrodeck.png ${FLATPAK_DEST}/retrodeck
-      # preparing the vita3k zip for later
-      - mv ubuntu-latest.zip ${FLATPAK_DEST}/retrodeck/vita3k.zip
+      - unzip "ubuntu-latest.zip" -d "${FLATPAK_DEST}/share/Vita3K"
+      - chmod +x "${FLATPAK_DEST}/share/Vita3K/Vita3K"
+      - rm -f "${FLATPAK_DEST}/share/Vita3K/update-vita3k.sh"
+      - ln -s ${FLATPAK_DEST}/share/Vita3K/Vita3K ${FLATPAK_DEST}/bin/Vita3K
     sources:
       - type: file
         url: https://github.com/Vita3K/Vita3K/releases/download/continuous/ubuntu-latest.zip
@@ -1316,7 +1300,42 @@ modules:
         tag: v1.6.5
         commit: 3aec70b0556a8d7aed7903d1a3e4d9a18c5d1649
 
+  - rd-submodules/shared-modules/gzdoom/gzdoom.json
+
   # SOLARUS - END
+  
+  # MAME - Start
+  # https://sdlmame.wallyweek.org/download/
+
+  - name: mame
+    buildsystem: simple
+    build-commands:
+      - ar xv mame*.deb
+      - tar xvf control.tar.zst
+      - tar xvf data.tar.zst
+      - cp -r etc ${FLATPAK_DEST}
+      - mkdir -p ${FLATPAK_DEST}/bin
+      - cp -r usr/games/mame ${FLATPAK_DEST}/bin
+      - chmod +x ${FLATPAK_DEST}/bin/mame
+      - cp -r usr/share ${FLATPAK_DEST}
+    sources:
+      - type: file
+        url: http://de.archive.ubuntu.com/ubuntu/pool/universe/m/mame/mame_0.242+dfsg.1-1_amd64.deb
+        sha256: e3d785d26dfb477519608d63114882487f8c5eb7382eb252784ed7515e2ef281
+
+  - name: mame-data
+    buildsystem: simple
+    build-commands:
+      - ar xv mame*.deb
+      - tar xvf control.tar.zst
+      - tar xvf data.tar.zst
+      - cp -r usr/share ${FLATPAK_DEST}
+    sources:
+      - type: file
+        url: http://ge.archive.ubuntu.com/ubuntu/pool/universe/m/mame/mame-data_0.242+dfsg.1-1_all.deb
+        sha256: c1a560f41f2ddff03810f121825b9a2d1ca615899d07a57a9a8fa62506de7d27
+
+  # MAME - End
 
   # External manifests end
 
@@ -1360,6 +1379,7 @@ modules:
       # Desktop entries
       - cp net.retrodeck.retrodeck.desktop /app/share/applications/net.retrodeck.retrodeck.desktop
       - cp net.retrodeck.retrodeck.Configurator.desktop /app/share/applications/net.retrodeck.retrodeck.Configurator.desktop
+      - chmod +x net.retrodeck.retrodeck*desktop
 
       # Initializing default emulator configs
       - cp -r emu-configs ${FLATPAK_DEST}/retrodeck/emu-configs/
@@ -1374,6 +1394,14 @@ modules:
       # Placing appdata
       - mkdir -p ${FLATPAK_DEST}/share/appdata
       - cp net.retrodeck.retrodeck.appdata.xml ${FLATPAK_DEST}/share/appdata
+
+      # Creating symlinks for a prettier access
+      - ln -s /app/bin/retrodeck.sh /app/bin/retrodeck
+      - ln -s /app/tools/configurator.sh /app/bin/configurator
+
+      # GZDOOM wrapper
+      - cp emu-configs/gzdoom/gzdoom.sh ${FLATPAK_DEST}/bin/gzdoom.sh
+      - chmod +x ${FLATPAK_DEST}/bin/gzdoom.sh
 
     sources:
       - type: git

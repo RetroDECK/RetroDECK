@@ -72,6 +72,7 @@ source /app/libexec/global.sh
 #           - Reset Citra
 #           - Reset Dolphin
 #           - Reset Duckstation
+#           - Reset GZDoom
 #           - Reset MelonDS
 #           - Reset PCSX2
 #           - Reset PPSSPP
@@ -82,6 +83,7 @@ source /app/libexec/global.sh
 #           - Reset XEMU
 #           - Reset Yuzu
 #         - Reset All Emulators
+#         - Reset EmulationStation DE
 #         - Reset RetroDECK
 #     - RetroDECK: About
 #       - RetroDECK Version History
@@ -984,6 +986,7 @@ configurator_reset_dialog() {
   --column="Choice" --column="Action" \
   "Reset Specific Emulator" "Reset only one specific emulator to default settings" \
   "Reset All Emulators" "Reset all emulators to default settings" \
+  "Reset EmulationStation DE" "Reset the ES-DE frontend" \
   "Reset RetroDECK" "Reset RetroDECK to default settings" )
 
   case $choice in
@@ -999,6 +1002,8 @@ configurator_reset_dialog() {
     "Citra" "Reset the N3DS emulator Citra to default settings" \
     "Dolphin" "Reset the Wii/GameCube emulator Dolphin to default settings" \
     "Duckstation" "Reset the PSX emulator Duckstation to default settings" \
+    "GZDoom" "Reset the GZDoom Doom engine to default settings" \
+    "MAME" "Reset the Multiple Arcade Machine Emulator (MAME) to default settings" \
     "MelonDS" "Reset the NDS emulator MelonDS to default settings" \
     "PCSX2" "Reset the PS2 emulator PCSX2 to default settings" \
     "PPSSPP" "Reset the PSP emulator PPSSPP to default settings" \
@@ -1060,6 +1065,20 @@ configurator_reset_dialog() {
     fi
   else
     configurator_generic_dialog "RetroDeck Configurator - RetroDECK: Reset" "Resetting all emulators requires active network access.\nPlease try again when you are connected to an Internet-capable network.\n\nReset process cancelled."
+    configurator_reset_dialog
+  fi
+;;
+
+"Reset EmulationStation DE" )
+  if [[ $(configurator_reset_confirmation_dialog "EmulationStation DE" "Are you sure you want to reset EmulationStation DE to default settings?\n\nYour scraped media, downloaded themes and gamelists will not be touched.\n\nThis process cannot be undone.") == "true" ]]; then
+    zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator Utility - Reset EmulationStation DE" \
+    --text="You are resetting EmulationStation DE to its default settings.\n\nAfter the process is complete you will need to exit RetroDECK and run it again."
+    prepare_emulator "reset" "emulationstation" "configurator"
+    configurator_process_complete_dialog "resetting EmulationStation DE"
+  else
+    configurator_generic_dialog "RetroDeck Configurator - EmulationStation DE: Reset" "Reset process cancelled."
     configurator_reset_dialog
   fi
 ;;

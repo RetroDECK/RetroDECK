@@ -19,7 +19,7 @@ prepare_emulator() {
         local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
         if [[ ! $current_setting_name =~ (rdhome|sdcard) ]]; then # Ignore these locations
           local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
-          eval "$current_setting_name=$rdhome/$(basename $current_setting_value)"
+          declare -g "$current_setting_name=$rdhome/$(basename $current_setting_value)"
           mkdir -p "$rdhome/$(basename $current_setting_value)"
         fi
       done < <(grep -v '^\s*$' $rd_conf | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
@@ -30,7 +30,7 @@ prepare_emulator() {
         if [[ ! $current_setting_name =~ (rdhome|sdcard) ]]; then # Ignore these locations
           local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
           if [[ -d "$rdhome/$(basename $current_setting_value)" ]]; then # If the folder exists at the new ~/retrodeck location
-              eval "$current_setting_name=$rdhome/$(basename $current_setting_value)"
+              declare -g "$current_setting_name=$rdhome/$(basename $current_setting_value)"
           fi
         fi
       done < <(grep -v '^\s*$' $rd_conf | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
@@ -45,9 +45,9 @@ prepare_emulator() {
       set_setting_value "$es_settings" "ROMDirectory" "$roms_folder" "es_settings"
       set_setting_value "$es_settings" "MediaDirectory" "$media_folder" "es_settings"
       set_setting_value "$es_settings" "UserThemeDirectory" "$themes_folder" "es_settings"
+      dir_prep "$rdhome/gamelists" "/var/config/emulationstation/.emulationstation/gamelists"
       emulationstation --home /var/config/emulationstation --create-system-dirs
       update_splashscreens
-      dir_prep "$rdhome/gamelists" "/var/config/emulationstation/.emulationstation/gamelists"
     fi
     if [[ "$action" == "postmove" ]]; then
       set_setting_value "$es_settings" "ROMDirectory" "$roms_folder" "es_settings"
@@ -708,7 +708,24 @@ prepare_emulator() {
     echo "----------------------"
 
     mkdir -p "/var/config/mame"
-    mkdir -p "$emuconfigs/mame/**" "/var/config/mame"
+    cp -fvr "$emuconfigs/mame/**" "/var/config/mame"
+
+  fi
+
+  if [[ "$emulator" =~ ^(gzdoom|GZDOOM|all)$ ]]; then
+    # TODO: do a proper script
+    # This is just a placeholder script to test the emulator's flow
+    echo "----------------------"
+    echo "Initializing GZDOOM"
+    echo "----------------------"
+
+    mkdir -p "/var/config/gzdoom"
+    mkdir -p "/var/data/gzdoom"
+    cp -fvr "$emuconfigs/gzdoom/gzdoom.ini" "/var/config/gzdoom"
+    cp -fvr "$emuconfigs/gzdoom/gzdoom.pk3" "/var/data/gzdoom"
+
+    sed -i 's#RETRODECKROMSDIR#'$roms_folder'#g' "/var/config/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON
+    sed -i 's#RETRODECKSAVESDIR#'$saves_folder'#g' "/var/config/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON
 
   fi
 

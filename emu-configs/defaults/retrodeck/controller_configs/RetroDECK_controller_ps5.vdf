@@ -540,7 +540,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"mouse_button RIGHT, , "
+							"binding"		"mouse_button LEFT, , "
 						}
 						"settings"
 						{
@@ -570,7 +570,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"mouse_button LEFT, , "
+							"binding"		"mouse_button RIGHT, , "
 						}
 						"settings"
 						{
@@ -678,7 +678,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"mouse_button LEFT, , "
+							"binding"		"mouse_button RIGHT, , "
 						}
 						"settings"
 						{
@@ -708,7 +708,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"mouse_button RIGHT, , "
+							"binding"		"mouse_button LEFT, , "
 						}
 						"settings"
 						{
@@ -738,8 +738,8 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press LEFT_CONTROL, Swap Screens, , "
-							"binding"		"key_press TAB, Swap Screens, , "
+							"binding"		"mouse_button RIGHT, Swap Screens, , "
+							"binding"		"controller_action empty_sub_command, Swap Screens, , "
 						}
 						"settings"
 						{
@@ -839,7 +839,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press ESCAPE, Escape, , "
+							"binding"		"mouse_button LEFT, Escape, , "
 						}
 					}
 				}
@@ -946,6 +946,175 @@
 		{
 			"requires_click"		"0"
 			"haptic_intensity_override"		"0"
+		}
+	}
+	"group"
+	{
+		"id"		"40"
+		"mode"		"absolute_mouse"
+		"name"		""
+		"description"		""
+		"inputs"
+		{
+			"click"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"mouse_button MIDDLE, , "
+						}
+						"settings"
+						{
+							"haptic_intensity"		"1"
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+		}
+	}
+	"group"
+	{
+		"id"		"41"
+		"mode"		"absolute_mouse"
+		"name"		""
+		"description"		""
+		"inputs"
+		{
+			"click"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"mouse_button MIDDLE, , "
+						}
+						"settings"
+						{
+							"haptic_intensity"		"1"
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+		}
+	}
+	"group"
+	{
+		"id"		"42"
+		"mode"		"dpad"
+		"name"		""
+		"description"		""
+		"inputs"
+		{
+			"dpad_north"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press LEFT_CONTROL, Swap Screens, , "
+							"binding"		"key_press TAB, Swap Screens, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"dpad_south"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press ESCAPE, Escape, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"dpad_east"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press RETURN, Enter, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"click"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"mouse_button RIGHT, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+		}
+		"settings"
+		{
+			"requires_click"		"0"
+		}
+	}
+	"group"
+	{
+		"id"		"43"
+		"mode"		"joystick_mouse"
+		"name"		""
+		"description"		""
+		"inputs"
+		{
+			"click"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"mouse_button LEFT, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+		}
+		"settings"
+		{
+			"output_joystick"		"2"
 		}
 	}
 	"group"
@@ -1229,6 +1398,7 @@
 			"5"		"right_trigger active"
 			"8"		"right_joystick active"
 			"9"		"dpad active"
+			"41"		"center_trackpad active"
 		}
 	}
 	"preset"
@@ -1241,11 +1411,14 @@
 			"30"		"button_diamond active"
 			"31"		"left_trackpad active"
 			"32"		"right_trackpad active"
-			"33"		"joystick active"
+			"33"		"joystick inactive"
+			"42"		"joystick active"
 			"34"		"left_trigger active"
 			"35"		"right_trigger active"
-			"36"		"right_joystick active"
+			"36"		"right_joystick inactive"
+			"43"		"right_joystick active"
 			"37"		"dpad active"
+			"40"		"center_trackpad active"
 		}
 	}
 	"settings"
