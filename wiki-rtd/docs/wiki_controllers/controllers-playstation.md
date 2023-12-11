@@ -4,23 +4,24 @@
 
 Steam Input have support for the following controllers:
 
-## Playstation 3
-* The Dualshock 3
-* The Sixaxis
+## Playstation 3 - Dualshock 3 / Sixaxis
 
-## Playstation 4
-* The Dualshock 4 v1
-* The Dualshock 4 v2
+<img src="../../wiki_images/controllers/ps3-dualshock3.jpg" width="250">
 
-## Playstation 5
-* The DualSense
+## Playstation 4 - Dualshock 4
 
-### What are the Official profiles called?
 
-- Playstation 3: `RetroDECK: Official Layout - PS3`
-- Playstation 4: `RetroDECK: Official Layout - PS4`
-- Playstation 5: `RetroDECK: Official Layout - PS5`
+<img src="../../wiki_images/controllers/ps4-dualshock4.jpg" width="250">
 
+## Playstation 5 - DualSense
+
+<img src="../../wiki_images/controllers/ps5-dualsense.png" width="250">
+
+## What are the Official profiles called?
+
+- Playstation 3 - Dualshock 3 / Sixaxis: `RetroDECK: Official Layout - PS3`
+- Playstation 4 - Dualshock 4: `RetroDECK: Official Layout - PS4`
+- Playstation 5 - DualSense: `RetroDECK: Official Layout - PS5`
 
 ## Global Hotkeys: Playstation Button Combos
 
