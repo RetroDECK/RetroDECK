@@ -70,9 +70,13 @@ This hotkey work for RetroArch, MAME, FBNEO and other arcade systems.
 | :---                    | :---:                    |       :---:          |  :---:     |
 | Insert Credit           |  `SELECT`                |     `RetroArch`  `MAME` `FBNeo`     |            |
 
-## Official GameCube Controller Adapter for Wii U
+## GameCube Controller Adapter for Wii U
 
 <img src="../../wiki_images/controllers/wiiu-gcpad-adapter.jpg" width="350">
 
 WIP
+
+## Wii Mote
+
+## Wii U GamePad
 
