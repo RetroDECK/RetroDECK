@@ -34,6 +34,7 @@ To get the latest updates first:
 - Multiuser mode
 - Adding RetroDECK games as Steam Entries
 - Configurator GODOT version
+- Disable/Enable - Quick Resume: Auto Save / Auto Load
 
 ## Wiki
 
