@@ -76,7 +76,7 @@ This hotkey work for RetroArch, MAME, FBNEO and other arcade systems.
 
 WIP
 
-## Wii Remote (Wii Mote)
+## Wii Remote (Wiimote)
 
 <img src="../../wiki_images/controllers/wii-mote.jpg" width="250">
 
