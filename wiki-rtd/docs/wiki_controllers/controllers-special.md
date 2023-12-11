@@ -43,3 +43,7 @@ The RetroDECK Team don't own this game nor its hardware for a proper testing, pl
 <img src="../../wiki_images/controllers/dk-bongos.jpg" width="250">
 
 WIP
+
+## Taiko Drum & Bachi
+
+<img src="../../wiki_images/controllers/taiko-drum-bachi.jpg" width="250">
