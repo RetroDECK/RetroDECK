@@ -20,4 +20,4 @@ The LEGO Toypad is used for the game LEGO Dimensions for the:
 
 The Skylanders Portal of Power is used for the Skylanders game Series.
 
-### ### How to configure
+### How to configure
