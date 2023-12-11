@@ -81,3 +81,13 @@ This hotkey work for RetroArch, MAME, FBNEO and other arcade systems.
 | :---                    | :---:                    |       :---:          |  :---:     |
 | Insert Credit           |  `SELECT`                |     `RetroArch`  `MAME` `FBNeo`     |            |
 
+### PS4 Dualshock 4 and PS5 DualSense: Additional Hotkeys
+
+The touchpads acts as a mouse and can be used to navigate mouse based inputs.
+
+| Function                 | Button / Combination     | Emulator Support     |    Comment |
+| :---                    | :---:                    |       :---:          |  :---:     |
+| Full Touchpad          |             |      |         The entire touchpad acts a mouse   |
+| Right Touchpad Click         |  `Left Mouse Click`                |      |         |
+| Center Touchpad Click         |  `Center Mouse Click`                |      |         |
+| Left Touchpad Click         |  `Right Mouse Click`                |      |         |
