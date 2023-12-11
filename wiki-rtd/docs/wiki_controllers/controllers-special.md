@@ -37,3 +37,9 @@ The Skylanders Portal of Power is used for the Skylanders game Series.
 ### How to configure
 The Skylanders Portal of Power should work very similarly to the LEGO Dimensions ToyPad, however the udev rule might be different.
 The RetroDECK Team don't own this game nor its hardware for a proper testing, please report back if you wish to test it.
+
+## DK Bongos
+
+<img src="../../wiki_images/controllers/dk-bongos.jpg" width="250">
+
+WIP
