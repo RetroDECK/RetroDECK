@@ -46,4 +46,6 @@ WIP
 
 ## Taiko Drum & Bachi
 
+WIP
+
 <img src="../../wiki_images/controllers/taiko-drum-bachi.jpg" width="250">
