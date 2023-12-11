@@ -116,6 +116,7 @@ nav:
 
   - Controllers & Input 🎮:
     - RetroDECK with Steam Input: wiki_controllers/about-steam-input.md
+    - RetroDECK and Udev Rules: wiki_controllers/about-udev.md
     - Button Prompts in Games: wiki_controllers/diffrent-game-inputs.md
     - Steam Deck - Controls: wiki_controllers/controls-steamdeck.md
     - Playstation - Controllers (WIP): wiki_controllers/controllers-playstation.md
