@@ -5,7 +5,7 @@ They might have been made for a single game.
 
 ## LEGO Dimensions - LEGO ToyPad
 
-<img src="../../wiki_images/controllers/lego-toypad.jpg" width="350">
+<img src="../../wiki_images/controllers/lego-toypad.jpg" width="250">
 
 The LEGO Toypad is used for the game LEGO Dimensions for the following platforms:
 
@@ -30,7 +30,7 @@ sudo udevadm control --reload-rules
 
 ## Skylanders - Portal of Power
 
-<img src="../../wiki_images/controllers/skylanders-portal.jpg" width="350">
+<img src="../../wiki_images/controllers/skylanders-portal.jpg" width="250">
 
 The Skylanders Portal of Power is used for the Skylanders game Series.
 

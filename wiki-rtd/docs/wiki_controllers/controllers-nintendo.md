@@ -6,7 +6,7 @@
 
 Supported by Steam Input
 
-<img src="../../wiki_images/controllers/switch-pro.jpg" width="350">
+<img src="../../wiki_images/controllers/switch-pro.jpg" width="250">
 
 ### What is the Official - Switch Pro RetroDECK profile called?
 
@@ -72,19 +72,19 @@ This hotkey work for RetroArch, MAME, FBNEO and other arcade systems.
 
 ## GameCube Controller Adapter for Wii U
 
-<img src="../../wiki_images/controllers/wiiu-gcpad-adapter.jpg" width="350">
+<img src="../../wiki_images/controllers/wiiu-gcpad-adapter.jpg" width="250">
 
 WIP
 
 ## Wii Remote (Wii Mote)
 
-<img src="../../wiki_images/controllers/wii-mote.jpg" width="350">
+<img src="../../wiki_images/controllers/wii-mote.jpg" width="250">
 
 WIP
 
 ## Wii U GamePad
 
 
-<img src="../../wiki_images/controllers/wii-u-gamepad.webp" width="350">
+<img src="../../wiki_images/controllers/wii-u-gamepad.webp" width="250">
 
 WIP
