@@ -53,6 +53,12 @@ This folder is the only flatpak folder that is editable user side, it's mapped a
 ### data/
 Some emulators, like yuzu, needs this path, here for example is even symlinked the yuzu keys and firmware folder.
 
+### emu-configs/defaults/
+Is where are the standard configurations are for the emulators
+
+### emu-configs/defaults/retrodeck/controller_configs
+Where the Steam Input .vdf files are located
+
 ### /var/lib/flatpak/app/net.retrodeck.retrodeck/current/active/files/
 Non-flatpak path: this folders contain file such as the .desktop, icons, etc.
 
