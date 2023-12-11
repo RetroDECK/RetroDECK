@@ -1,14 +1,14 @@
 # Nintendo Controllers
 
-**Note these inputs are part of the upcoming 0.8b update.**
+**Note some these inputs are part of the upcoming 0.8b update.**
 
-Steam Input and RetroDECK have support for the following controllers:
+## Switch Pro
 
-## Switch
-- Switch Pro
+Supported by Steam Input
 
+<img src="../../wiki_images/controllers/switch-pro.jpg" width="350">
 
-### What are the Official profiles called?
+### What are the Official - Switch Pro profile called?
 
 - Switch Pro: `RetroDECK: Official Layout - Switch Pro`
 
@@ -76,7 +76,15 @@ This hotkey work for RetroArch, MAME, FBNEO and other arcade systems.
 
 WIP
 
-## Wii Mote
+## Wii Remote
+
+<img src="../../wiki_images/controllers/wii-mote.jpg" width="350">
+
+WIP
 
 ## Wii U GamePad
 
+
+<img src="../../wiki_images/controllers/wii-u-gamepad.webp" width="350">
+
+WIP
