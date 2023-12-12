@@ -1145,7 +1145,8 @@ modules:
           url-template: https://github.com/fmtlib/fmt/archive/$version.tar.gz
           versions: {<: '10.0'}
 
-  - name: wxwidgets
+  - name: wxWidgets
+    buildsystem: cmake-ninja
     cleanup:
       - /bin
       - /include
@@ -1154,13 +1155,14 @@ modules:
       - /share
     sources:
       - type: archive
-        url: https://github.com/wxWidgets/wxWidgets/releases/download/v3.2.2.1/wxWidgets-3.2.2.1.tar.bz2
-        sha256: dffcb6be71296fff4b7f8840eb1b510178f57aa2eb236b20da41182009242c02
+        url: https://github.com/wxWidgets/wxWidgets/releases/download/v3.2.4/wxWidgets-3.2.4.tar.bz2
+        sha256: 0640e1ab716db5af2ecb7389dbef6138d7679261fbff730d23845ba838ca133e
         x-checker-data:
           type: anitya
           project-id: 5150
           stable-only: true
           url-template: https://github.com/wxWidgets/wxWidgets/releases/download/v$version/wxWidgets-$version.tar.bz2
+          versions: {'!=': 3.2.4-with-msvs2012-fix}
 
   - name: Cemu
     buildsystem: cmake-ninja
@@ -1177,8 +1179,8 @@ modules:
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+-\d+)$
-        tag: v2.0-59
-        commit: f3c95f72e74d8a5f5873061fbb994643c63ec9c5
+        tag: v2.0-61
+        commit: b6aaf6633063be47d89a8216e269e32aec5a4b49
       - type: shell
         commands:
           - sed "s/set(EXPERIMENTAL_VERSION.*/set(EXPERIMENTAL_VERSION \"$(git describe
