@@ -4,20 +4,17 @@
 
 #git submodule deinit --all
 
-rm rd-submodules/retroarch
+rm -rf rd-submodules/retroarch
 git rm -rf --cached rd-submodules/retroarch
 rm -rf .git/modules/rd-submodules/retroarch
 
-rm rd-submodules/ryujinx
+rm -rf rd-submodules/ryujinx
 git rm -rf --cached rd-submodules/ryujinx
 rm -rf .git/modules/rd-submodules/ryujinx
 
 rm -rf rd-submodules/shared-modules
 git rm -rf --cached rd-submodules/shared-modules
 rm -rf .git/modules/rd-submodules/shared-modules
-
-git submodule foreach --recursive git reset --hard
-git submodule foreach --recursive git clean -xdf
 
 git submodule add https://github.com/flathub/shared-modules.git rd-submodules/shared-modules
 git submodule add https://github.com/flathub/org.libretro.RetroArch.git rd-submodules/retroarch
