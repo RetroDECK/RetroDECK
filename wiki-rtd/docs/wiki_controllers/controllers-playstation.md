@@ -6,12 +6,12 @@ Steam Input have support for the following controllers:
 
 ## Playstation 3 - Dualshock 3 / Sixaxis
 
-<img src="../../wiki_images/controllers/ps3-dualshock3.jpg" width="250">
+<img src="../../wiki_images/controllers/ps3-dualshock3.png" width="250">
 
 ## Playstation 4 - Dualshock 4
 
 
-<img src="../../wiki_images/controllers/ps4-dualshock4.jpg" width="250">
+<img src="../../wiki_images/controllers/ps4-dualshock4.png" width="250">
 
 ## Playstation 5 - DualSense
 

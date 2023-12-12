@@ -6,6 +6,6 @@ Steam Input have support for the following controllers:
 
 ## Steam Controller - Gordon
 
-<img src="../../wiki_images/controllers/steam-controller-gordon.jpg" width="250">
+<img src="../../wiki_images/controllers/steam-controller-gordon.png" width="250">
 
 WIP

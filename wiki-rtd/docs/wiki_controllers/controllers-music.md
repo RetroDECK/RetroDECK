@@ -5,20 +5,20 @@ Is is a broad category that encompasses the vast majority of third and first par
 
 
 ## Rockband & Guitar Hero Instruments
-<img src="../../wiki_images/controllers/guitar-hero-guitars.jpg" width="350">
-<img src="../../wiki_images/controllers/rockband-drums.jpg" width="153">
+<img src="../../wiki_images/controllers/guitar-hero-guitars.png" width="350">
+<img src="../../wiki_images/controllers/rockband-drums.png" width="153">
 
 WIP
 
 ## DJ Hero Turntable
 
-<img src="../../wiki_images/controllers/dj-hero-turntable.jpg" width="250">
+<img src="../../wiki_images/controllers/dj-hero-turntable.png" width="250">
 
 WIP
 
 ## DK Bongos
 
-<img src="../../wiki_images/controllers/dk-bongos.jpg" width="250">
+<img src="../../wiki_images/controllers/dk-bongos.png" width="250">
 
 WIP
 
@@ -26,4 +26,4 @@ WIP
 
 WIP
 
-<img src="../../wiki_images/controllers/taiko-drum-bachi.jpg" width="250">
+<img src="../../wiki_images/controllers/taiko-drum-bachi.png" width="250">

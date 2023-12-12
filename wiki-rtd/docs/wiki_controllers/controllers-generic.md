@@ -2,7 +2,7 @@
 
 **Note these inputs are part of the upcoming 0.8b update.**
 
-<img src="../../wiki_images/controllers/xiaomi-controller.jpg" width="250">
+<img src="../../wiki_images/controllers/xiaomi-controller.png" width="250">
 
 Generic Controllers is a broad category that encompasses the vast majority of third party controllers.<br>
 This guide assumes that they have a similar layout as an Xbox Controller.

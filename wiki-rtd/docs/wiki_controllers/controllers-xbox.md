@@ -6,13 +6,13 @@
 
 Supported by Steam Input
 
-<img src="../../wiki_images/controllers/xbox-360.jpg" width="250">
+<img src="../../wiki_images/controllers/xbox-360.png" width="250">
 
 ## Xbox Wireless Controller
 
 Supported by Steam Input
 
-<img src="../../wiki_images/controllers/xbox-wireless.jpg" width="250">
+<img src="../../wiki_images/controllers/xbox-wireless.png" width="250">
 
 - Xbox One
 - Xbox Series S and X
