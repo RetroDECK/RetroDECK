@@ -45,10 +45,10 @@ It could also be used by other `Genric` third party `Playstation Clone Controlle
 
 | Button Placement  | Button      | Name |
 | :---              | :---:       |:---: |
-| North             |  <img src="../../wiki_icons/playstation/playstation-triangle.svg" width="20"> |Triangle |
-| West              |  <img src="../../wiki_icons/playstation/playstation-square.svg" width="20">   |Square |
-| East              |  <img src="../../wiki_icons/playstation/playstation-circle.svg" width="20">   |Circle |
-| South             |  <img src="../../wiki_icons/playstation/playstation-cross.svg" width="20">    |Cross |
+| North             |  <img src="../../wiki_icons/playstation/playstation-triangle.png" width="20"> |Triangle |
+| West              |  <img src="../../wiki_icons/playstation/playstation-square.png" width="20">   |Square |
+| East              |  <img src="../../wiki_icons/playstation/playstation-circle.png" width="20">   |Circle |
+| South             |  <img src="../../wiki_icons/playstation/playstation-cross.png" width="20">    |Cross |
 
 **Example:**
 
