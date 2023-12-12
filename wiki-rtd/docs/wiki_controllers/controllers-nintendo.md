@@ -70,6 +70,12 @@ This hotkey work for RetroArch, MAME, FBNEO and other arcade systems.
 | :---                    | :---:                    |       :---:          |  :---:     |
 | Insert Credit           |  `SELECT`                |     `RetroArch`  `MAME` `FBNeo`     |            |
 
+## Joy-Con
+
+<img src="../../wiki_images/controllers/joy-con.jpg" width="250">
+
+WIP
+
 ## GameCube Controller Adapter for Wii U
 
 <img src="../../wiki_images/controllers/wiiu-gcpad-adapter.jpg" width="250">
