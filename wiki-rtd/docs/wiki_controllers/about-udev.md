@@ -4,9 +4,11 @@ udev is a device manager for the Linux kernel that gives the system access to va
 
 udev rules are used to allow and manage the access to a specific devices, so without a proper udev rule some devices such as custom controller could not be used by RetroDECK nor by Steam or any other part of the system.
 
-- Setting an udev rule needs administrator root access with sudo.
-- The udev rule must be added when the RetroDECK or any other software that you want access to the device is not running.
-- For SteamOS or other immutable systems udev rules might or might not persistent persit over SteamOS updates (we can't say for certain).
+Read more on:
+
+- [Debian Wiki](https://wiki.debian.org/udev)
+- [Arch Wiki](https://wiki.archlinux.org/title/udev)
+- [Wikipedia](https://en.wikipedia.org/wiki/Udev)
 
 ## Important directories
 
@@ -48,3 +50,16 @@ The following project is an effort to combine all game devices into one package 
 **Batocera udev**
 The Batocera project has also combined a list of other controllers that might be missing from the two projects above.
 [Batocera - Controllers])https://github.com/batocera-linux/batocera.linux/tree/master/package/batocera/controllers)
+
+## Quick tips on udev installation
+
+- Installing a udev rule needs administrator root access with sudo and the rules should be put in either the `/etc/udev/rules.d/` or `/run/udev/rules.d` example from above.
+    - You can copy the `.rules` from terminal into the directory either from terminal or with sudo access file browser.
+    - The rules should be in the `.rules` file format and should be extracted from any `.zip` `.7z` `.tar` or any other compressed format.
+- The udev rule should be added when the RetroDECK or any other software that you want access to the device is not running.
+    - After a rule is added you will need to either reload the `udevadm` from terminal by issuing the following command: `sudo udevadm control --reload-rules` or just reboot the system.
+- For SteamOS or other immutable systems udev rules might or might not persistent persist over SteamOS updates (we can't say for certain).
+
+
+
+
