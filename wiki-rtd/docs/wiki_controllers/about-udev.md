@@ -51,8 +51,8 @@ The following project is an effort to combine all game devices into one package 
 
 **Batocera udev**
 
-The Batocera project has also combined a list of other controllers that might be missing from the two projects above.
-[Batocera - Controllers github])https://github.com/batocera-linux/batocera.linux/tree/master/package/batocera/controllers)
+The Batocera project has also combined a list of other controllers that might be missing from the two projects above.<br>
+[Batocera - Controllers github](https://github.com/batocera-linux/batocera.linux/tree/master/package/batocera/controllers)
 
 ## Quick tips on udev installation
 
