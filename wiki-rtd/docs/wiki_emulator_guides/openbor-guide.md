@@ -14,8 +14,13 @@ OpenBOR games should be put under the `retrodeck/roms/openbor/` directory.
 The Open Beats of Rage (OpenBOR) game engine is available on Windows and Linux. Unfortunately the macOS ports seems to have been abandoned.
 These games are often but not always distributed together with the game engine as specific engine versions may be required for some games. The setup is slightly different between Windows and Linux so they are described separately here.
 
-On Linux you need to supply your own game engine binary as few (if any) games are distributed with the Linux release of OpenBOR. Download the .7z archive from the https://github.com/DCurrent/openbor repository. The file you want is OpenBOR_3.0_6391.AppImage which is located inside the LINUX/OpenBOR folder. If you need an older engine for some specific game, then you may need to download an earlier release instead.
-Copy this file to the game directory and make it executable using the command chmod +x OpenBOR_3.0_6391.AppImage
+On Linux you need to supply your own game engine binary as few (if any) games are distributed with the Linux release of OpenBOR. <br>
+Download the .7z archive from the [OpenBOR Github](https://github.com/DCurrent/openbor) repository.
+
+The file you want is `OpenBOR<Versionnumber>.AppImage` which is located inside the LINUX/OpenBOR folder. If you need an older engine for some specific game, then you may need to download an earlier release instead.
+
+Copy this file to the game directory and make it executable using the command chmod +x `OpenBOR<Versionnumber>.AppImage`
+
 Using the same game example as for the Windows instructions above, the directory structure should look like the following:
 
 ```
