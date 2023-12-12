@@ -70,28 +70,24 @@ This hotkey work for RetroArch, MAME, FBNEO and other arcade systems.
 | :---                    | :---:                    |       :---:          |  :---:     |
 | Insert Credit           |  `Select`                |     `RetroArch`  `MAME` `FBNeo`    |            |
 
+## Steam Input - Radial Menu System
 
-# Steam Deck - Radial Menu System
-
-What follows is a breakdown of the Radial System that you access on the `Left Touchpad`.
-
-### Is there a quick way to go back to the top of the radial menu system?
+#### Is there a quick way to go back to the top of the radial menu system?
 Yes, just press  on the `HK` trigger buttons: `L4` or `R4` or `Select`
 
-## Radial Menu System
+### Radial Menus
+What follows is a breakdown of the Radial System that you access on the `Left Touchpad`.
+
 `Radial Button` Shows what the hotkey does. <br>
 `Keyboard Command` Shows what is being sent to the emulator.<br>
 `Emulator Support` Shows what emulators support the command. <br>
 `Comment` Just extra comments. <br>
 
-**NOTE:**
 
-Like everything in RetroDECK we plan to make revisions and updates of the menus. We hope with time be able to add more emulators and even better art.
-
-## Main Menu
+#### Main Menu
 The `Main Menu` gives you access to all the menus bellow.
 
-## Quick
+#### Quick Menu
 The `Quick Menu` or `Quick Access Menu` Menu is the most populated menu. It features "best of" options from other menus.
 
 | Radial Button           | Keyboard Command     |  Emulator Support     |    Comment |
@@ -107,7 +103,7 @@ The `Quick Menu` or `Quick Access Menu` Menu is the most populated menu. It feat
 | Restart / Reset         |   `CTRL + R`         |`RetroArch` `Citra` `Dolphin/Primehack` `Duckstation` `MelonDS` `PCSX2`  `Yuzu`                                   |            |
 | Escape                  |   `ESC`              |       `PPSSPP`              |            |
 
-## State
+#### State Menu
 The `State Menu` is the menu where you handle anything to do with saving and loading states.
 
 
@@ -121,7 +117,7 @@ The `State Menu` is the menu where you handle anything to do with saving and loa
 | Undo Save State         |   `Ctrl + 9`         |  `Dolphin/Primehack` `Duckstation`                   |            |
 
 
-## Speed / Frames
+#### Speed / Frames Menu
 The `Speed / Frames Menu` is where you find anything related to: emulation speed, frame limits, fast forwarding and rewinding.
 
 | Radial Button           | Keyboard Command     |  Emulator Support     |    Comment |
@@ -135,7 +131,7 @@ The `Speed / Frames Menu` is where you find anything related to: emulation speed
 | Frame limit On/Off     |   `CTRL + Z`          | `PCSX2`  `Yuzu`                       |            |
 
 
-## Display / Graphics
+#### Display / Graphics Menu
 The `Display / Graphics Menu` is where you find anything related to: up-scaling/resolution scaling, widescreen or change aspect ratio, fullscreen, swap or change dual screen layout.
 
 | Radial Button                    | Keyboard Command |  Emulator Support     |    Comment |
@@ -147,7 +143,7 @@ The `Display / Graphics Menu` is where you find anything related to: up-scaling/
 | Swap Screens                     |   `Ctrl + Tab`   |`Citra` `MelonDS`  `Cemu`                        |    |
 | Change Dual Screens Layout       |   `Ctrl + L`     |   `Citra`|                    |        |
 
-## General
+#### General Menu
 The `General Menu` or `General Emulation Menu` is where you find various global generic emulation hotkeys: Quit/Exit, Restart, Take Screenshot, Change CD, Pause, Turbo Input, Cheats and Video Recording.
 
 | Radial Button           | Keyboard Command     |  Emulator Support     |    Comment |
@@ -162,7 +158,7 @@ The `General Menu` or `General Emulation Menu` is where you find various global 
 | Turbo On/Off            |   `Ctrl + T`         | `Duckstation`                       |            |
 | Video Recording On/Off  |   `Ctrl + V`         |`RetroArch` `Dolphin/Primehack`  `PCSX2`                       |            |
 
-## Steam Deck
+#### Steam Deck Menu
 The `Steam Deck Menu` is where you find Steam Deck specific functions and general computer hotkeys: Steam Screenshot, Show Steam Deck Keyboard, Escape, Alt + F4, Tab, Enter and F1. Some of these could also be useful inside the various PC emulation emulators.
 
 
@@ -177,11 +173,11 @@ The `Steam Deck Menu` is where you find Steam Deck specific functions and genera
 | Show Steam Deck Keyboard|   `none`             |                       |            |
 
 
-## Specific
+#### Emulator Specific Menu
 
-The `Specific Menu` or `Specific Emulator Hotkeys Menu` opens up several system/emulator specific sub-menus. Here you will find hotkeys not so commonly used but could be good to have easy access to:
+The `Specific Menu` or ` Emulator Specific Menu` opens up several system/emulator specific sub-menus. Here you will find hotkeys not so commonly used but could be good to have easy access to:
 
-### Switch
+##### Switch Menu
 The `Switch Menu` here you find hotkeys related to Switch emulation: Change GPU Accuracy, Change Docked/Undocked Mode, Add/Remove Amiibo
 
 | Radial Button           | Keyboard Command     |  Emulator Support     |    Comment |
@@ -190,7 +186,7 @@ The `Switch Menu` here you find hotkeys related to Switch emulation: Change GPU 
 | Load / Remove Amiibo    |   `Alt + M`          |   `Yuzu`              |            |
 | Docked / Undocked Mode  |   `Alt + D`          |   `Yuzu`              |            |
 
-### MAME
+##### MAME Menu
 The `MAME Menu` here find hotkeys related to the MAME standalone emulator: Servicemode and buttons 1-4, Insert None Bills (not credits that is Select) and tilt.
 
 **MAME SUPPORT IS NOT IN YET WILL BE IN A LATER UPDATE**
@@ -205,7 +201,7 @@ The `MAME Menu` here find hotkeys related to the MAME standalone emulator: Servi
 | Insert Bill / Note      |   `Alt + 5`          |    `MAME`                  |            |
 | Tilt                    |   `Alt + 6`          |     `MAME`                  |            |
 
-### RetroArch
+##### RetroArch Menu
 The `RetroArch Menu` here you find hotkeys related to the RetroArch emulator: RetroArch Cheat Mangement, AI Service and Netplay Host.
 
 
@@ -217,7 +213,7 @@ The `RetroArch Menu` here you find hotkeys related to the RetroArch emulator: Re
 | AI Service On/Off       |   `Ctrl + I`         | `RetroArch`                      |            |
 | Netplay Host On/Off     |   `Ctrl + H`         |  `RetroArch`                     |            |
 
-### Gamecube / Wii
+##### Gamecube / Wii Menu
 The `Gamecube / Wii Menu` here you find hotkeys related to the Dolphin standalone emulator: Golf Mode, Freelook Mode On/Off/Reset, Wii Sync Button and Wii Mote Sideways / Upright.
 
 
@@ -231,7 +227,7 @@ The `Gamecube / Wii Menu` here you find hotkeys related to the Dolphin standalon
 | Wiimote Sideways        |   `Alt + X`          | `Dolphin/Primehack`                      |            |
 
 
-### NDS
+##### NDS Menu
 The `NDS Menu` here you find hotkeys related to the MelonDS standalone emulator: Send Close/Open Lid, Send Play Microphone and Sunlight + / -.
 
 
@@ -242,10 +238,12 @@ The `NDS Menu` here you find hotkeys related to the MelonDS standalone emulator:
 | Play Microphone         |   `Alt + P`          |`MelonDS`                      |            |
 | Close/Open Lid          |   `Alt + L`          | `MelonDS`                       |            |
 
-### 3DS
+##### 3DS Menu
 The `3DS Menu` here you find hotkeys related to the Citra standalone emulator: Load and Remove Amiibo
 
 | Radial Button           | Keyboard Command     | Emulator Support     |    Comment |
 | :---                    | :---:                |      :---:           |  :---:     |
 | Load Amiibo             |   `Alt + M`          |`Citra`               |            |
 | Remove Amiibo           |   `Alt + N`          |`Citra`               |            |
+
+
