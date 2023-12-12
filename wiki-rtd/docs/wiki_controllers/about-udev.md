@@ -2,6 +2,12 @@
 
 udev is a device manager for the Linux kernel that gives the system access to various running hardware via device `.rules` files also known as `udev rules`.
 
+udev rules are used to allow and manage the access to a specific devices, so without a proper udev rule some devices such as custom controller could not be used by RetroDECK nor by Steam or any other part of the system.
+
+- Setting an udev rule needs administrator root access with sudo.
+- The udev rule must be added when the RetroDECK or any other software that you want access to the device is not running.
+- For SteamOS or other immutable systems udev rules might or might not persistent persit over SteamOS updates (we can't say for certain).
+
 ## Important directories
 
 `/lib/udev/rules.d/`<br>
@@ -30,14 +36,15 @@ SUBSYSTEM=="input", ATTRS{name}=="8Bitdo FC30 GamePad", ENV{ID_INPUT_JOYSTICK}="
 SUBSYSTEM=="input", ATTRS{name}=="8Bitdo FC30 II", ENV{ID_INPUT_JOYSTICK}="1", TAG+="uaccess"
 ```
 
-## Adding Controllers
-For these controllers to being recognized but the system and so by RetroDECK is needed to set their own udev rule on SteamOS.
+## Controller udev projects
+**Valve's - Steam Devices**:
+The Steam Devices package is usually installed when you install Steam on your system, it contains rules for the most common controllers. <br>
+[steam-devices](https://github.com/ValveSoftware/steam-devices)
 
-Udev rules are used to allow and manage the access to a specific third party usb device, so without a proper udev rule some devices such as the following ones could not be used by RetroDECK nor by the system.
+**Game Devices udev**
+The following project is an effort to combine all game devices into one package but it is still early and several are missing.<br>
+[game-devices-udev](https://codeberg.org/fabiscafe/game-devices-udev)
 
-Some notes on the udev rules:
-- Setting an udev rule needs root access.
-- The udev rule must be added when the emulator is not running, if it's running it must be restarted to acknowledge the change.
-- The udev rules seems to be persistent even after a SteamOS update.
-
-> **NOTE:** If running other Linux distributions the procedure might have some difference, please refer to a proper documentation or a web search.
+**Batocera udev**
+The Batocera project has also combined a list of other controllers that might be missing from the two projects above.
+[Batocera - Controllers])https://github.com/batocera-linux/batocera.linux/tree/master/package/batocera/controllers)
