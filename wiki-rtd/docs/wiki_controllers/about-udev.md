@@ -55,9 +55,17 @@ The Batocera project has also combined a list of other controllers that might be
 
 ## Quick tips on udev installation
 
-- Installing a udev rule needs administrator root access with sudo and the rules should be put in either the `/etc/udev/rules.d/` or `/run/udev/rules.d` example from above.
-    - You can copy the `.rules` from terminal into the directory either from terminal or with sudo access file browser.
-    - The rules should be in the `.rules` file format and should be extracted from any `.zip` `.7z` `.tar` or any other compressed format.
+### Administrator sudo access is needed
+
+Installing a udev rule needs administrator root access with sudo and the rules should be put in either the `/etc/udev/rules.d/` or `/run/udev/rules.d` example from above.
+
+- You can copy the `.rules` from terminal into the directory either from terminal or with a file browser.
+- The rules should be in the `.rules` file format and should be extracted from any `.zip` `.7z` `.tar` or any other compressed format.
+
+### Reboot or reload rules
+After a rule is added you will need to either reload the `udevadm` from terminal by issuing the following command: `sudo udevadm control --reload-rules` or just reboot the system.
+
 - The udev rule should be added when the RetroDECK or any other software that you want access to the device is not running.
-    - After a rule is added you will need to either reload the `udevadm` from terminal by issuing the following command: `sudo udevadm control --reload-rules` or just reboot the system.
-- For SteamOS or other immutable systems udev rules might or might not persistent persist over SteamOS updates (we can't say for certain).
+
+### SteamOS or immutable systems
+For SteamOS or other immutable systems udev rules might or might not persistent persist over SteamOS updates (we can't say for certain).
