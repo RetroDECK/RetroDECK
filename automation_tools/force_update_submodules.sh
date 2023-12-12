@@ -2,7 +2,7 @@
 
 # WARNING: DANGEROUS! Don't use this script lightly
 
-#git submodule deinit --all
+git submodule deinit -f --all
 
 rm -rf rd-submodules/retroarch
 git rm -rf --cached rd-submodules/retroarch
@@ -15,6 +15,8 @@ rm -rf .git/modules/rd-submodules/ryujinx
 rm -rf rd-submodules/shared-modules
 git rm -rf --cached rd-submodules/shared-modules
 rm -rf .git/modules/rd-submodules/shared-modules
+
+rm .gitmodules
 
 git submodule add https://github.com/flathub/shared-modules.git rd-submodules/shared-modules
 git submodule add https://github.com/flathub/org.libretro.RetroArch.git rd-submodules/retroarch
