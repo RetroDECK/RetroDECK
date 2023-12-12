@@ -33,7 +33,7 @@ Using the same game example as for the Windows instructions above, the directory
 /ROMs/openbor/D&D - K&D - The Endless Quest LNS/OpenBOR.exe
 ```
 
-You can delete the OpenBOR.exe file since you don't need it, and it's recommended to rename the OpenBOR_3.0_6391.AppImage file to the name of the game, such as:
+You can delete the OpenBOR.exe file since you don't need it, and it's recommended to rename the `OpenBOR<Versionnumber>.AppImage` file to the name of the game, such as:
 
 `~/ROMs/openbor/D&D - K&D - The Endless Quest LNS/The Endless Quest.AppImage`
 
