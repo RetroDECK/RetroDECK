@@ -12,13 +12,11 @@ Read more on:
 
 ## Important directories
 
-`/lib/udev/rules.d/`<br>
-
+### /lib/udev/rules.d/
 This directory contains the default `.rules file` shipped by your system. <br>
 They should not be edited.
 
-`/etc/udev/rules.d/` or `/run/udev/rules.d` (depending on the system) <br>
-
+### /etc/udev/rules.d/ or /run/udev/rules.d (depending on the system)
 This directory contains custom `.rules file` additions to those shipped in `/lib/udev/rules.d/` and the administrator can add more rules into this directory.
 
 If a  `.rules file` exist for the same device under `/lib/udev/rules.d/` and `/etc/udev/rules.d/` the `/etc` version will always take preset over the `lib` version.
