@@ -11,7 +11,7 @@ Yes! Everybody is welcome to contribute in any way possible if it is personal ti
 
 - Or just help us by doing bug reports on all the issues you find (please check old issues first before submitting a new one).
 
-- You can also choose do donate to the project over at [Donations & Licenses 🎁](../wiki_about/donations- licenses.md).
+- You can also choose do donate to the project over at [Donations & Licenses 🎁](../wiki_about/donations-licenses.md).
 
 ## Any specific examples of what you need help with?
 
