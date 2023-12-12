@@ -28,9 +28,19 @@ Directly connecting the ToyPad to the Steam Deck it's not working as the Steam D
 
 ### Portal of Power
 
-<img src="../../wiki_images/controllers/skylanders-portal.png" width="250">
+<img src="../../wiki_images/controllers/portal-of-power.png" width="250">
 
-Skylanders Portal of Power is used for the Skylanders game Series.
+The Portal of Power is used for the Skylanders game Series.
+
+#### How to configure
+WIP
+
+
+### Traptanium Portal
+
+<img src="../../wiki_images/controllers/traptanium-portal.png" width="250">
+
+The Traptanium Portal is used for the game Skylanders: Trap Team.
 
 #### How to configure
 WIP
