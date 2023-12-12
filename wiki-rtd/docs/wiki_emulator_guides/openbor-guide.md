@@ -18,20 +18,22 @@ On Linux you need to supply your own game engine binary as few (if any) games ar
 Copy this file to the game directory and make it executable using the command chmod +x OpenBOR_3.0_6391.AppImage
 Using the same game example as for the Windows instructions above, the directory structure should look like the following:
 
-- /ROMs/openbor/D&D - K&D - The Endless Quest LNS/
-- /ROMs/openbor/D&D - K&D - The Endless Quest LNS/Logs/
-- /ROMs/openbor/D&D - K&D - The Endless Quest LNS/Paks/
-- /ROMs/openbor/D&D - K&D - The Endless Quest LNS/Saves/
-- /ROMs/openbor/D&D - K&D - The Endless Quest LNS/ScreenShots/
-- /ROMs/openbor/D&D - K&D - The Endless Quest LNS/OpenBOR_3.0_6391.AppImage
-- /ROMs/openbor/D&D - K&D - The Endless Quest LNS/OpenBOR.exe
+```
+/ROMs/openbor/D&D - K&D - The Endless Quest LNS/
+/ROMs/openbor/D&D - K&D - The Endless Quest LNS/Logs/
+/ROMs/openbor/D&D - K&D - The Endless Quest LNS/Paks/
+/ROMs/openbor/D&D - K&D - The Endless Quest LNS/Saves/
+/ROMs/openbor/D&D - K&D - The Endless Quest LNS/ScreenShots/
+/ROMs/openbor/D&D - K&D - The Endless Quest LNS/OpenBOR_3.0_6391.AppImage
+/ROMs/openbor/D&D - K&D - The Endless Quest LNS/OpenBOR.exe
+```
 
 You can delete the OpenBOR.exe file since you don't need it, and it's recommended to rename the OpenBOR_3.0_6391.AppImage file to the name of the game, such as:
 
-~/ROMs/openbor/D&D - K&D - The Endless Quest LNS/The Endless Quest.AppImage
+`~/ROMs/openbor/D&D - K&D - The Endless Quest LNS/The Endless Quest.AppImage`
 
 Starting ES-DE and launching the game should now work fine, but a further improvement is to use the directories interpreted as files functionality to display the game as a single entry instead of a directory. To accomplish this, simply rename the game directory to the same name as the .AppImage file, such as:
 
-~/ROMs/openbor/The Endless Quest.AppImage/The Endless Quest.AppImage
+`~/ROMs/openbor/The Endless Quest.AppImage/The Endless Quest.AppImage`
 
 Doing this will make the game show up as if it was a single file inside ES-DE and it can be included in automatic collections, custom collections and so on.
