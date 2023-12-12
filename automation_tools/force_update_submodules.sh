@@ -17,7 +17,7 @@ git submodule foreach --recursive git reset --hard
 git submodule foreach --recursive git clean -xdf
 git submodule init
 git submodule add https://github.com/flathub/shared-modules.git rd-submodules/shared-modules
-git submodule add https://github.com/flathub/org.libretro.RetroArch rd-submodules/retroarch
+git submodule add https://github.com/flathub/shared-modules.git rd-submodules/retroarch
 git submodule add https://github.com/flathub/org.ryujinx.Ryujinx rd-submodules/ryujinx
 
 git submodule update --remote --merge --recursive
