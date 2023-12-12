@@ -10,7 +10,7 @@
         <platform>3do</platform>
         <theme>3do</theme>
     </system>
-<!--
+
     <system>
         <name>adam</name>
         <fullname>Coleco Adam</fullname>
@@ -23,7 +23,7 @@
         <platform>adam</platform>
         <theme>adam</theme>
     </system>
--->
+
 <!--
     <system>
         <name>ags</name>
@@ -153,7 +153,7 @@
         <platform>arcadia</platform>
         <theme>arcadia</theme>
     </system>
-<!--
+
     <system>
         <name>archimedes</name>
         <fullname>Acorn Archimedes</fullname>
@@ -166,7 +166,7 @@
         <platform>archimedes</platform>
         <theme>archimedes</theme>
     </system>
--->
+
     <system>
         <name>arduboy</name>
         <fullname>Arduboy Miniature Game System</fullname>
@@ -567,7 +567,7 @@
         <platform>easyrpg</platform>
         <theme>easyrpg</theme>
     </system>
-<!--
+
     <system>
         <name>electron</name>
         <fullname>Acorn Electron</fullname>
@@ -579,7 +579,7 @@
         <platform>electron</platform>
         <theme>electron</theme>
     </system>
--->
+
 <!--
     <system>
         <name>emulators</name>
@@ -662,7 +662,7 @@
         <theme>flash</theme>
     </system>
 -->
-<!--
+
     <system>
         <name>fm7</name>
         <fullname>Fujitsu FM-7</fullname>
@@ -677,7 +677,7 @@
         <platform>fm7</platform>
         <theme>fm7</theme>
     </system>
--->
+
 
     <system>
         <name>fmtowns</name>
@@ -896,7 +896,7 @@
         <!--<command label="Hypseus [Daphne] (Standalone)">%EMULATOR_HYPSEUS-SINGE% %BASENAME% vldp -framefile %GAMEDIR%/%BASENAME%.txt %INJECT%=%BASENAME%.commands</command>-->
         <!--<command label="Hypseus [Singe] (Standalone)">%EMULATOR_HYPSEUS-SINGE% singe vldp -framefile %GAMEDIR%/%BASENAME%.txt -script %GAMEDIR%/%BASENAME%.singe %INJECT%=%BASENAME%.commands</command>-->
         <command label="MAME - Current">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mame_libretro.so %ROM%</command>
-        <!--<command label="MAME (Standalone)">%STARTDIR%=~/.mame %EMULATOR_MAME% -rompath %GAMEDIR%\;%ROMPATH%/laserdisc %BASENAME%</command>-->
+        <command label="MAME (Standalone)">%STARTDIR%=~/.mame %EMULATOR_MAME% -rompath %GAMEDIR%\;%ROMPATH%/laserdisc %BASENAME%</command>
         <platform>daphne, arcade</platform>
         <theme>laserdisc</theme>
     </system>
