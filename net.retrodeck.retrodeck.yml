@@ -1,11 +1,11 @@
 app-id: net.retrodeck.retrodeck
 runtime: org.kde.Platform
-runtime-version: "6.6"
+runtime-version: "6.5"
 sdk: org.kde.Sdk
 sdk-extensions:
-  - org.freedesktop.Sdk.Extension.llvm17      # Needed for rpcs3 (llvm17) but llvm16 for CITRA
+  - org.freedesktop.Sdk.Extension.llvm16      # Needed for rpcs3 (llvm15) but llvm16 for CITRA
 # base: io.qt.qtwebengine.BaseApp             # Needed for Yuzu - Disabled as we're using AppImage for Yuzu
-# base-version: "6.6"                         # Needed for Yuzu - Disabled as we're using AppImage for Yuzu
+# base-version: "6.5"                         # Needed for Yuzu - Disabled as we're using AppImage for Yuzu
 command: retrodeck.sh
 
 add-extensions:
@@ -364,7 +364,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/FFmpeg/FFmpeg.git
-        tag: n6.1
+        tag: n5.1.1
 
   - name: freeimage
     no-autogen: true
@@ -703,8 +703,8 @@ modules:
       - ln -s "${FLATPAK_DEST}/yuzu/usr/bin/yuzu" "${FLATPAK_DEST}/bin/yuzu"
     sources:
       - type: file
-        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1618/yuzu-mainline-20231112-3cff94a38.AppImage
-        sha256: 4e92d6daeb1f288ca18950ed47b068fb971766ee386b012b9400b5caecad4246
+        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1648/yuzu-mainline-20231211-14c24e64e.AppImage
+        sha256: d40f61c2abf8ddd0bb53098e2d9edf0c47e1cfd89e50cf5856b8cc27dbb25bd6
 
   # Yuzu - END
 
@@ -790,8 +790,8 @@ modules:
       - ln -s "${FLATPAK_DEST}/pcsx2-qt/usr/bin/pcsx2-qt" "${FLATPAK_DEST}/bin/pcsx2-qt"
     sources:
       - type: file
-        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.5186/pcsx2-v1.7.5186-linux-appimage-x64-Qt.AppImage
-        sha256: 9fd8108c11fd273a4a0c801a6ee2da802643966e61e0a53528f7dd023ece55dd
+        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.5284/pcsx2-v1.7.5284-linux-appimage-x64-Qt.AppImage
+        sha256: b3cb23e07435f7efe7145cddd0cf4d473cc65eee8feae436b8a718fc3017721a
 
   # PCSX2 - END
 
@@ -972,8 +972,8 @@ modules:
     buildsystem: cmake-ninja
     builddir: true
     build-options:
-      append-ld-library-path: /usr/lib/sdk/llvm17/lib
-      append-path: /usr/lib/sdk/llvm17/bin
+      append-ld-library-path: /usr/lib/sdk/llvm16/lib
+      append-path: /usr/lib/sdk/llvm16/bin
       cflags: &optflags -O2 -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong
         -grecord-gcc-switches -fasynchronous-unwind-tables -fstack-clash-protection
         -fcf-protection -fno-omit-frame-pointer
@@ -999,7 +999,7 @@ modules:
       - -DUSE_SYSTEM_ZLIB=ON
       - -Wno-dev
     post-install:
-      - cp /usr/lib/sdk/llvm17/lib/libLLVM-17.so /app/lib/
+      - cp /usr/lib/sdk/llvm16/lib/libLLVM-16.so /app/lib/
       - |-
         set -eux
         COMM_TAG="$(awk -F'[\{,]' '/version{.*}/{printf "%d.%d.%d", $2, $3, $4}' ../rpcs3/rpcs3_version.cpp)"
@@ -1008,7 +1008,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/RPCS3/rpcs3.git
-        commit: ab6bcd32a99eaf7eac37de303ff2cfd71ebee799
+        commit: f9d213650cfe4733937c43d93de91a17f8582820
 
   # RPCS3 - END
 
@@ -1146,7 +1146,8 @@ modules:
           url-template: https://github.com/fmtlib/fmt/archive/$version.tar.gz
           versions: {<: '10.0'}
 
-  - name: wxwidgets
+  - name: wxWidgets
+    buildsystem: cmake-ninja
     cleanup:
       - /bin
       - /include
@@ -1155,13 +1156,14 @@ modules:
       - /share
     sources:
       - type: archive
-        url: https://github.com/wxWidgets/wxWidgets/releases/download/v3.2.2.1/wxWidgets-3.2.2.1.tar.bz2
-        sha256: dffcb6be71296fff4b7f8840eb1b510178f57aa2eb236b20da41182009242c02
+        url: https://github.com/wxWidgets/wxWidgets/releases/download/v3.2.4/wxWidgets-3.2.4.tar.bz2
+        sha256: 0640e1ab716db5af2ecb7389dbef6138d7679261fbff730d23845ba838ca133e
         x-checker-data:
           type: anitya
           project-id: 5150
           stable-only: true
           url-template: https://github.com/wxWidgets/wxWidgets/releases/download/v$version/wxWidgets-$version.tar.bz2
+          versions: {'!=': 3.2.4-with-msvs2012-fix}
 
   - name: Cemu
     buildsystem: cmake-ninja
@@ -1178,8 +1180,8 @@ modules:
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+-\d+)$
-        tag: v2.0-59
-        commit: f3c95f72e74d8a5f5873061fbb994643c63ec9c5
+        tag: v2.0-61
+        commit: b6aaf6633063be47d89a8216e269e32aec5a4b49
       - type: shell
         commands:
           - sed "s/set(EXPERIMENTAL_VERSION.*/set(EXPERIMENTAL_VERSION \"$(git describe

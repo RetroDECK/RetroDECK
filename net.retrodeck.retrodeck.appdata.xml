@@ -92,11 +92,12 @@
             </ul>
          </description>
       </release>
-      <release version="0.7.5b" date="2023-11-30">
+      <release version="0.7.5b" date="2023-12-12">
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.7.5b</url>
          <description>
             <p>Bug fixes and other changes:</p>
             <ul>
+               <li>RetroDECK Team wishes you happy holidays with a festive loading screen!</li>
                <li>Framework: Fixed the SD card path resolution for SteamOS 3.5</li>
                <li>Configurator: Added the possibility to reset ES-DE configs via Configurator and CLI</li>
                <li>RetroArch: added nightly cores, stable cores have priority over them</li>
@@ -104,6 +105,10 @@
                <li>RPCS3: tweaked confing to improve performance</li>
                <li>Dolphin (SA): fixed GC buttons layout. Now R1 is Z and L2/R2 are L/R</li>
                <li>CEMU: tweaked audio config to choose the correct output device when docked</li>
+            </ul>
+            <p>Updates:</p>
+            <ul>
+               <li>All standalone emulators to their latest versions (prior to llvm17 and 6.6 framework updates)</li>
             </ul>
          </description>
       </release>
