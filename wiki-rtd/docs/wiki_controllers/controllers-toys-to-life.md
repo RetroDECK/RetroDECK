@@ -44,3 +44,13 @@ The Traptanium Portal is used for the game Skylanders: Trap Team.
 
 #### How to configure
 WIP
+
+## Disney Infinity
+
+### The Disney Infinity Base
+
+<img src="../../wiki_images/controllers/disney-infinity-base.png" width="250">
+
+#### How to configure
+WIP
+
