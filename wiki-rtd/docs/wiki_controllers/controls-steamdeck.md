@@ -8,6 +8,7 @@
 
 ## Enable the Layout
 Be sure to have the `RetroDECK: Official Controller Layout` activated from the `Templates`.
+
 - Add the Official Layout under `Controller Settings` -> `Controller Layouts` -> `Templates` in the Steam Deck called `RetroDECK: Official Layout` with a version number and apply.
 
 ## Global Hotkeys: Button Combos
@@ -67,7 +68,7 @@ This hotkey work for RetroArch, MAME, FBNEO and other arcade systems.
 
 | Function                 | Button / Combination     | Emulator Support     |    Comment |
 | :---                    | :---:                    |       :---:          |  :---:     |
-| Insert Credit           |  `Select`                |     `RetroArch`      |            |
+| Insert Credit           |  `Select`                |     `RetroArch`  `MAME` `FBNeo`    |            |
 
 
 # Steam Deck - Radial Menu System
