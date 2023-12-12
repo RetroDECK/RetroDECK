@@ -9,12 +9,12 @@ It is used by a lot of  `Genric` third party `PC controllers` and `Xbox Clone Co
 
 **Xbox - Button Layout:**<br>
 
-| Button Placement  | Button |
-| :---              | :---:  |
-| North             |  `Y`   |
-| West              |  `X`   |
-| East              |  `B`   |
-| South             |  `A`   |
+| Button Placement  | Button |Name |
+| :---              | :---:  |:---: |
+| North             |  <img src="../../wiki_icons/kenneynl-input-pixel16×/tile_0007.png" width="30">   |Y |
+| West              |  <img src="../../wiki_icons/kenneynl-input-pixel16×/tile_0006.png" width="30">    |X |
+| East              |  <img src="../../wiki_icons/kenneynl-input-pixel16×/tile_0005.png" width="30">  |B |
+| South             |  <img src="../../wiki_icons/kenneynl-input-pixel16×/tile_0004.png" width="30">   |A |
 
 
 **Example:**<br>
@@ -26,12 +26,12 @@ It  could also be used by other `Genric` third party `Nintendo Clone Controllers
 
 **Nintendo - Button Layout**<br>
 
-| Button Placement  | Button |
-| :---              | :---:  |
-| North             |  `X`   |
-| West              |  `Y`   |
-| East              |  `A`   |
-| South             |  `B`   |
+| Button Placement  | Button |Name |
+| :---              | :---:  |:---: |
+| North             |  <img src="../../wiki_icons/kenneynl-input-pixel16×/tile_0006.png" width="30">   |X |
+| West              |  <img src="../../wiki_icons/kenneynl-input-pixel16×/tile_0007.png" width="30">   |Y |
+| East              |  <img src="../../wiki_icons/kenneynl-input-pixel16×/tile_0004.png" width="30">   |A |
+| South             |  <img src="../../wiki_icons/kenneynl-input-pixel16×/tile_0005.png" width="30">   |B |
 
 
 **Example:**<br>
@@ -43,12 +43,12 @@ It could also be used by other `Genric` third party `Playstation Clone Controlle
 
 **Playstation - Button Layout**<br>
 
-| Button Placement  | Button      |
-| :---              | :---:       |
-| North             |  `Triangle` |
-| West              |  `Square`   |
-| East              |  `Circle`   |
-| South             |  `X`        |
+| Button Placement  | Button      | Name |
+| :---              | :---:       |:---: |
+| North             |  <img src="../../wiki_icons/playstation/playstation-triangle.svg" width="20"> |Triangle |
+| West              |  <img src="../../wiki_icons/playstation/playstation-square.svg" width="20">   |Square |
+| East              |  <img src="../../wiki_icons/playstation/playstation-circle.svg" width="20">   |Circle |
+| South             |  <img src="../../wiki_icons/playstation/playstation-cross.svg" width="20">    |Cross |
 
 **Example:**
 
