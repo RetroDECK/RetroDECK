@@ -56,6 +56,11 @@ If you are emulating a PlayStation game that calls for the button `Square` to be
 
 **Regional differences:**
 
-Depending on the region of your Playstation game, the buttons `Circle` and `Cross` switches the meaning for confirm and cancel (they are still at the same physical location). But it is good to keep in mind if you are used to exiting out of menus with a certain button and wondering why it works in some games while others not. <br>
-In games from the EU/US `Cross` is confirm while in Japan `Cross` is cancel.
+
+In games from the EU/US `Cross` is confirm while in Japan `Cross` is cancel:
+
+Depending on the region of your Playstation game, the buttons `Circle` and `Cross` switches the meaning for confirm and cancel (they are still at the same physical location).
+
+But it is good to keep in mind if you are used to exiting out of menus with a certain button and wondering why it works in some games while others not.
+
 
