@@ -11,9 +11,7 @@ Yes! Everybody is welcome to contribute in any way possible if it is personal ti
 
 - Or just help us by doing bug reports on all the issues you find (please check old issues first before submitting a new one).
 
-- By joining the ✨-new-helpers-start-here channel on [Discord](discord.gg/Dz3szYsP8g) and keeping an eye on the [issues](https://github.com/XargonWan/RetroDECK/issues) tab as well as the [Roadmap](https://github.com/XargonWan/RetroDECK/milestones) tab, you can be up to speed on the latest developments on RetroDECK.
-
-- We have a [Patreon](https://www.patreon.com/RetroDECK) page if you want to help us keep our build servers running or just buy us a beverage.
+- You can also choose do donate to the project over at [Donations & Licenses 🎁](../wiki_about/donations- licenses.md).
 
 ## Any specific examples of what you need help with?
 
