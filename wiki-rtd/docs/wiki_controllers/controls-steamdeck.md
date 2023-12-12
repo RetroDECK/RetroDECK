@@ -1,5 +1,9 @@
 # RetroDECK: Steam Deck - Official Layout
 
+
+<img src="../../wiki_images/graphics/steamdeck/rd_sd_screen1.jpeg" width="350">
+
+
 ### What's the latest version of the Steam Deck layout?
 
 **0.7.1b**
