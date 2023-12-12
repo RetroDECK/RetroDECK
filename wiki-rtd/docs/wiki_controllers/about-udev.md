@@ -39,17 +39,20 @@ SUBSYSTEM=="input", ATTRS{name}=="8Bitdo FC30 II", ENV{ID_INPUT_JOYSTICK}="1", T
 ```
 
 ## Controller udev projects
-**Valve's - Steam Devices**:
+**Valve's - Steam Devices**
+
 The Steam Devices package is usually installed when you install Steam on your system, it contains rules for the most common controllers. <br>
-[steam-devices](https://github.com/ValveSoftware/steam-devices)
+[steam-devices github](https://github.com/ValveSoftware/steam-devices)
 
 **Game Devices udev**
+
 The following project is an effort to combine all game devices into one package but it is still early and several are missing.<br>
-[game-devices-udev](https://codeberg.org/fabiscafe/game-devices-udev)
+[game-devices-udev codeberg](https://codeberg.org/fabiscafe/game-devices-udev)
 
 **Batocera udev**
+
 The Batocera project has also combined a list of other controllers that might be missing from the two projects above.
-[Batocera - Controllers])https://github.com/batocera-linux/batocera.linux/tree/master/package/batocera/controllers)
+[Batocera - Controllers github])https://github.com/batocera-linux/batocera.linux/tree/master/package/batocera/controllers)
 
 ## Quick tips on udev installation
 
