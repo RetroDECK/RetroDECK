@@ -4,7 +4,8 @@
 
 **0.7.1b**
 
-**NOTE** that the layout do not always update with each minor patch. Generally only the big version numbers comes with profile changes.
+The layout versioning do not always update with each minor patch. <br>
+Generally only the major versions comes with profile changes.
 
 ## Enable the Layout
 Be sure to have the `RetroDECK: Official Controller Layout` activated from the `Templates`.
