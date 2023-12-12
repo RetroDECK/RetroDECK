@@ -14,7 +14,8 @@ Read more on:
 
 `/lib/udev/rules.d/`<br>
 
-This directory contains the default `.rules file` shipped by your system. They should generally not be edited.
+This directory contains the default `.rules file` shipped by your system. <br>
+They should not be edited.
 
 `/etc/udev/rules.d/` or `/run/udev/rules.d` (depending on the system) <br>
 
