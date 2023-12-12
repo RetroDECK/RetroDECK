@@ -65,11 +65,12 @@
    <project_license>GPL-3.0</project_license>
    <metadata_license>CC0-1.0</metadata_license>
    <releases>
-      <release version="0.7.5b" date="2023-11-30">
+      <release version="0.7.5b" date="2023-12-12">
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.7.5b</url>
          <description>
             <p>Bug fixes and other changes:</p>
             <ul>
+               <li>RetroDECK Team wishes you happy holidays with a festive loading screen!</li>
                <li>Framework: Fixed the SD card path resolution for SteamOS 3.5</li>
                <li>Configurator: Added the possibility to reset ES-DE configs via Configurator and CLI</li>
                <li>RetroArch: added nightly cores, stable cores have priority over them</li>
