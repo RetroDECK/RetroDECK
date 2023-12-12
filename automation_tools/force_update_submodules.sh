@@ -18,6 +18,8 @@ rm -rf .git/modules/rd-submodules/shared-modules
 
 rm .gitmodules
 
+# Do a commit here before giving the next commands
+
 git submodule add https://github.com/flathub/shared-modules.git rd-submodules/shared-modules
 git submodule add https://github.com/flathub/org.libretro.RetroArch.git rd-submodules/retroarch
 git submodule add https://github.com/flathub/org.ryujinx.Ryujinx rd-submodules/ryujinx
