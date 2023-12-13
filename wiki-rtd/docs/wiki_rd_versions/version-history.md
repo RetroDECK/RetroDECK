@@ -1,6 +1,7 @@
 # RetroDECK Versions
 
 ## Version 0.7b
+- [0.7.5b](version_0.7b/0.7.5b.md)
 - [0.7.4b](version_0.7b/0.7.4b.md)
 - [0.7.3b](version_0.7b/0.7.3b.md)
 - [0.7.2b](version_0.7b/0.7.2b.md)
