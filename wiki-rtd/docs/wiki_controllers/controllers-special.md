@@ -3,7 +3,7 @@
 Special Controllers is a broad category that encompasses the vast majority of third and first party controllers that don't fit anywhere else. <br>
 They might have been made for a single game.
 
-## Steel Battalion
+## The Steel Battalion Cockpit
 
 <img src="../../wiki_images/controllers/steel-battalion.png" width="250">
 
