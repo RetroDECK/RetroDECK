@@ -115,20 +115,22 @@ nav:
     - Texture Packs - RetroArch Mupen64Plus: wiki_texture_packs/retroarch-mupen64plus-tp.md
 
   - Controllers & Input 🎮:
+    - Different Button Prompts in Games: wiki_controllers/diffrent-game-inputs.md
     - RetroDECK with Steam Input: wiki_controllers/about-steam-input.md
     - RetroDECK and Udev Rules: wiki_controllers/about-udev.md
-    - Button Prompts in Games: wiki_controllers/diffrent-game-inputs.md
-    - Steam Deck - Controls: wiki_controllers/controls-steamdeck.md
-    - Playstation - Controllers (WIP): wiki_controllers/controllers-playstation.md
-    - Xbox - Controllers (WIP): wiki_controllers/controllers-xbox.md
-    - Nintendo - Controllers (WIP): wiki_controllers/controllers-nintendo.md
-    - Valve - Steam Controller (WIP): wiki_controllers/controllers-steam.md
+    - Arcade - Controllers (WIP): wiki_controllers/controllers-arcade.md
+    - Flight - Controllers (WIP): wiki_controllers/controllers-flight.md
     - Generic - Controllers (WIP): wiki_controllers/controllers-generic.md
     - Lightguns - Controllers (WIP): wiki_controllers/controllers-lightguns.md
     - Music / Rhythm - Controllers (WIP): wiki_controllers/controllers-music.md
+    - Nintendo - Controllers (WIP): wiki_controllers/controllers-nintendo.md
+    - Playstation - Controllers (WIP): wiki_controllers/controllers-playstation.md
     - Racing - Controllers (WIP): wiki_controllers/controllers-racing.md
+    - Steam Deck - Controls: wiki_controllers/controls-steamdeck.md
+    - Special - Controllers (WIP): wiki_controllers/controllers-special.md
+    - Valve - Steam Controller (WIP): wiki_controllers/controllers-steam.md
     - Toys-to-life - Controllers (WIP): wiki_controllers/controllers-toys-to-life.md
-    - Special- Controllers (WIP): wiki_controllers/controllers-special.md
+    - Xbox - Controllers (WIP): wiki_controllers/controllers-xbox.md
 
   - Community & Helping Out ❤️:
     - Discord: wiki_community/discord.md
