@@ -18,12 +18,12 @@ If you have a Flight Controller that did not work on Linux but have found a way 
 
 The [OverSteer Project](https://github.com/berarma/oversteer) is trying to manage support multiple Steering Wheels on Linux. It is still in the early stages of development.
 
-```
-Oversteer manages steering wheels on Linux using the features provided by the loaded modules. It doesn't provide hardware support, you'll still need a driver module that enables the hardware on Linux.
+Oversteer manages steering wheels on Linux using the features provided by the loaded modules.
+It doesn't provide hardware support, you'll still need a driver module that enables the hardware on Linux.
+
 Most wheels will work but won't have FFB without specific drivers that support that feature.
 
 
-```
 
 ## Steering Wheels, Pedals and Gear Shifters
 
