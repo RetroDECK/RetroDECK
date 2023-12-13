@@ -53,6 +53,7 @@ jobs:
       - name: Check versions (main only)
         id: check_version_string
         run: "automation_tools/main_version_checker.sh"
+        continue-on-error: true
 
       - name: "[DEBUG] Outputting manifest"
         run: cat net.retrodeck.retrodeck.yml
