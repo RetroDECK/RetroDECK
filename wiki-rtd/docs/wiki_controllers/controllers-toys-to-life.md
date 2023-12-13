@@ -22,7 +22,7 @@ Just connect the ToyPad to a USB port before starting the game.
 
 **Special Notes on the Steam Deck**
 
-The ToyPad must be connected to an alimented hub such as the a USB port of the Steam Dock. <br>
+The ToyPad must be connected to an powered USB-hub such as the a USB port of the Steam Dock. <br>
 Directly connecting the ToyPad to the Steam Deck it's not working as the Steam Deck can not give the ToyPad enought power output.
 
 ## Skylanders
