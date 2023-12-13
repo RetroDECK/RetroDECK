@@ -86,9 +86,9 @@ modules:
     build-commands:
       - |
 
-        # on main please update this with the version variable, eg: VERSION='0.7.5b'
+        # on main please update this with the version variable, eg: VERSION="0.7.5b"
         # on cooker will be THISBRANCH
-        VERSION='0.7.5b'
+        VERSION="0.7.5b"
 
 
         git checkout ${GITHUB_REF_NAME}
