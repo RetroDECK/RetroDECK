@@ -8,7 +8,8 @@ A few of them also require Windows only software to configure various inputs and
 If you own a Flight Controller the best solution is just to try it on Linux via the Steam Deck Dock or a Linux PC and see if it works as expected.
 
 If you have a Flight Controller that did not work on Linux but have found a way to make it work:<br>
-Please contribute udev rules to the [game-devices-udev codeberg](https://codeberg.org/fabiscafe/game-devices-udev) project or inform the RetroDECK team on how you got it working on discord.
+- Please try to contribute udev rules to the [game-devices-udev codeberg](https://codeberg.org/fabiscafe/game-devices-udev)
+- (Optional) Inform the RetroDECK team on how you got it working on discord.
 
 ## Flight Sticks - Arcade
 
