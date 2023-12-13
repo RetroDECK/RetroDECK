@@ -91,6 +91,6 @@ WIP
 ## Wii U GamePad
 
 
-<img src="../../wiki_images/controllers/wii-u-gamepad.webp" width="250">
+<img src="../../wiki_images/controllers/wii-u-gamepad.png" width="250">
 
 WIP
