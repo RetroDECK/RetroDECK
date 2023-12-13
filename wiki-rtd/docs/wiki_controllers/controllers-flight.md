@@ -5,7 +5,8 @@ Flight Controllers is a broad category that encompasses the vast majority of thi
 Some of them might lack Linux drivers or udev rules entirely with others there is a community effort to make them work under Linux.<br>
 A few of them also require Windows only software to configure various inputs and buttons.<br>
 
-If you own a Flight Controller the best solution is just to try it on Linux via the Steam Deck Dock or a Linux PC and see if it works as expected.
+If you own a Flight Controller the best solution is just to try it on Linux via the Steam Deck Dock or a Linux PC and see if it works as expected.<br>
+If it does work on Linux and it supports xinput, we see no reason why it should not work on RetroDECK.
 
 If you have a Flight Controller that did not work on Linux but have found a way to make it work:<br>
 - Please try to contribute udev rules to the [game-devices-udev codeberg](https://codeberg.org/fabiscafe/game-devices-udev)
