@@ -9,6 +9,7 @@ If you own a Flight Controller the best solution is just to try it on Linux via 
 If it does work on Linux and it supports xinput, we see no reason why it should not work on RetroDECK.
 
 If you have a Flight Controller that did not work on Linux but have found a way to make it work:<br>
+
 - Please try to contribute udev rules to the [game-devices-udev codeberg](https://codeberg.org/fabiscafe/game-devices-udev)
 - (Optional) Inform the RetroDECK team on how you got it working on discord.
 
