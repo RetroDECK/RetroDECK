@@ -4,8 +4,9 @@ Arcade Controllers is a broad category that encompasses the vast majority of thi
 
 As long as you can connect the arcade solution to USB and it works with xinput it should work with RetroDECK.
 
-But just to be safe it is better before you buy anything to double check if there is Linux support for it.
-Wireless Fight Sticks can be a hit or miss depending on supported software.
+**Always check for Linux Support**<br>
+Just to be safe it is better before you buy anything to double check if there is Linux support for it.
+Wireless Fight Sticks can be a hit or miss depending on if they require external configuration software.
 
 
 ## Fight Sticks
@@ -19,7 +20,7 @@ Many USB Fight Sticks work nativly on Linux without much of a configuration. The
 
 <img src="../../wiki_images/controllers/arcade-x-arcade.png" width="250">
 
-Several suppliers have made Two Player Fight Sticks Solutions for versus and co-op gameplay like the X-Arcade shown here with a trackball.
+Several suppliers have made Two Player Fight Sticks Solutions for versus and co-op gameplay.
 
 ## Arcade Machines - DIY
 
