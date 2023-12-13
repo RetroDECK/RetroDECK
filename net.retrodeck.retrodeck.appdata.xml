@@ -75,7 +75,6 @@
                <li>Configurator: Added the possibility to reset ES-DE configs via Configurator and CLI</li>
                <li>RetroArch: Borders/Overlays are now disabled by default on fresh installs to prevent screen burn-in</li>
                <li>RetroArch: added nightly cores, stable cores have priority over them</li>
-               <li>PS3: RPCS3 Shortcut (Standalone) is now the default emulator</li>
                <li>RPCS3: tweaked confing to improve performance</li>
                <li>Dolphin (SA): fixed GC buttons layout. Now R1 is Z and L2/R2 are L/R</li>
                <li>CEMU: tweaked audio config to choose the correct output device when docked</li>
