@@ -21,7 +21,7 @@ It is used by a lot of  `Genric` third party `PC controllers` and `Xbox Clone Co
 So if you are emulating a Xbox game that calls for the button `B` to be pressed it corresponds to the right button.
 
 ## Nintendo Games
-The Nintendo layout is used by `Nintendo Controllers`..<br>
+The Nintendo layout is used by `Nintendo Controllers`.<br>
 It  could also be used by other `Genric` third party `Nintendo Clone Controllers`.
 
 **Nintendo - Button Layout**<br>

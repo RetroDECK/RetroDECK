@@ -27,7 +27,8 @@ Several suppliers have made Two Player Fight Sticks Solutions for versus and co-
 <img src="../../wiki_images/controllers/arcade-set.png" width="250">
 <img src="../../wiki_images/controllers/arcade-trackball.png" width="250">
 
-There are several predone kits to make your own PC connected Arcade Machine. They use standard USB interface to connect ot the PC and many times the same connector board as in the standalone Fight Sticks while the trackballs has a seperate USB connection that simulates a mouse.
+There are several predone kits to make your own PC connected Arcade Machine. <br>
+They a majorty of them use a standard USB interface to connect to the PC and many times the same connector board as in the standalone Fight Sticks while the trackballs has a seperate USB connection that simulates a mouse.
 
 There should not be any major issues connecting these with RetroDECK except maybe a controller remapping.
 
