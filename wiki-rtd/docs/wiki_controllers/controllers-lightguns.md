@@ -58,6 +58,8 @@ WIP
 
 ## GunCon or G-Con
 
+<img src="../../wiki_images/logos/guncon-logo.png" width="250">
+
 The GunCon, known as the G-Con in Europe, is a family of gun peripherals designed by Namco for the PlayStation consoles.
 
 ### ConCon 1 and 2
