@@ -13,6 +13,9 @@ If you have a Flight Controller that did not work on Linux but have found a way 
 - Please try to contribute udev rules to the [game-devices-udev codeberg](https://codeberg.org/fabiscafe/game-devices-udev)
 - (Optional) Inform the RetroDECK team on how you got it working on discord.
 
+**Always check for Linux Support**<br>
+Just to be safe, it is better before you buy anything to double check if there is Linux support for it.
+
 ## Flight Sticks - Arcade
 
 <img src="../../wiki_images/controllers/flightstick-arcade.png" width="250">

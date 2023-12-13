@@ -2,10 +2,10 @@
 
 Arcade Controllers is a broad category that encompasses the vast majority of third party controllers that are used for playing arcade games, arcade style games or fighting games. <br>
 
-As long as you can connect the arcade solution to USB and it works with xinput it should work with RetroDECK.
+As long as you can connect the arcade solution to USB, it has working udev/drivers and xinput then it should work with RetroDECK.
 
 **Always check for Linux Support**<br>
-Just to be safe it is better before you buy anything to double check if there is Linux support for it.
+Just to be safe, it is better before you buy anything to double check if there is Linux support for it.
 Wireless Fight Sticks can be a hit or miss depending on if they require external configuration software.
 
 
