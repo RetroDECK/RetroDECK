@@ -1308,34 +1308,52 @@ modules:
   
   # MAME - Start
   # https://sdlmame.wallyweek.org/download/
+  # To enable the debugger try: QT_HOME='/usr'
 
   - name: mame
     buildsystem: simple
+    build-options:
+      no-debuginfo: true
+      strip: true
     build-commands:
-      - ar xv mame*.deb
-      - tar xvf control.tar.zst
-      - tar xvf data.tar.zst
-      - cp -r etc ${FLATPAK_DEST}
-      - mkdir -p ${FLATPAK_DEST}/bin
-      - cp -r usr/games/mame ${FLATPAK_DEST}/bin
-      - chmod +x ${FLATPAK_DEST}/bin/mame
-      - cp -r usr/share ${FLATPAK_DEST}
+      - make
+          -j ${FLATPAK_BUILDER_N_JOBS}
+          CFLAGS+=-Wno-error=restrict
+          USE_QTDEBUG=0 
+          USE_WAYLAND=1
+          USE_SYSTEM_LIB_FLAC=1
+          SDL_INI_PATH='$$HOME/.APP_NAME;/app/share/APP_NAME/ini'
+          LDOPTS=-Wl,-s
+      - install -Dm 0755 mame ${FLATPAK_DEST}/bin/mame
+      - cp COPYING ${FLATPAK_DEST}/bin/
+      - cp uismall.bdf ${FLATPAK_DEST}/bin/
+      - mkdir -p ${FLATPAK_DEST}/share/mame/
+      - cp -r artwork/ ${FLATPAK_DEST}/share/mame/
+      - cp -r bgfx/ ${FLATPAK_DEST}/share/mame/
+      - cp -r ctrlr/ ${FLATPAK_DEST}/share/mame/
+      - mkdir -p ${FLATPAK_DEST}/share/mame/docs/
+      - cp -r docs/legal/ ${FLATPAK_DEST}/share/mame/docs/
+      - cp -r docs/man/ ${FLATPAK_DEST}/share/mame/docs
+      - cp -r hash/ ${FLATPAK_DEST}/share/mame/
+      - cp -r hlsl/ ${FLATPAK_DEST}/share/mame/
+      - cp -r ini/ ${FLATPAK_DEST}/share/mame/
+      - install -Dm 0644 mame.ini ${FLATPAK_DEST}/share/mame/ini/mame.ini
+      - cp -r language/ ${FLATPAK_DEST}/share/mame/
+      - cp -r plugins/ ${FLATPAK_DEST}/share/mame/
+      - cp -r roms/ ${FLATPAK_DEST}/share/mame/
+      - cp -r samples/ ${FLATPAK_DEST}/share/mame/
     sources:
+      - type: archive
+        url: https://github.com/mamedev/mame/archive/refs/tags/mame0261.tar.gz
+        sha256: 51d5ce1563897709ceb7a924c31a70cc5ff2bec466aab8d0cc9ff3cc72b38899
       - type: file
-        url: http://de.archive.ubuntu.com/ubuntu/pool/universe/m/mame/mame_0.242+dfsg.1-1_amd64.deb
-        sha256: e3d785d26dfb477519608d63114882487f8c5eb7382eb252784ed7515e2ef281
-
-  - name: mame-data
-    buildsystem: simple
-    build-commands:
-      - ar xv mame*.deb
-      - tar xvf control.tar.zst
-      - tar xvf data.tar.zst
-      - cp -r usr/share ${FLATPAK_DEST}
-    sources:
-      - type: file
-        url: http://ge.archive.ubuntu.com/ubuntu/pool/universe/m/mame/mame-data_0.242+dfsg.1-1_all.deb
-        sha256: c1a560f41f2ddff03810f121825b9a2d1ca615899d07a57a9a8fa62506de7d27
+        path: rd-submodules/mame/mame.ini
+      - type: patch
+        path: rd-submodules/mame/floppy.patch
+      - type: patch
+        path: rd-submodules/mame/sound.patch
+      - type: patch
+        path: rd-submodules/mame/ym3802.patch
 
   # MAME - End
 
