@@ -182,15 +182,25 @@ Or if you want to update from the terminal you can type:
 <br>
 
 ### How do I update a specific emulator in RetroDECK?
-You can't in a easy way do that without breaking several things. RetroDECK builds many emulators and add RetroDECK specific features on top of them and makes it into one application. That said we are looking into a custom emulator installation for those that have payed early access versions like Yuzu (that installation will still beore limited then the one we ship with RetroDECK and might have less features then normal Yuzu in term of hotkey support and other things).
+You can't in a easy way do that without breaking several things. RetroDECK builds many emulators and add RetroDECK specific features on top of them and makes it into one application as is the goal of the project.
+
+But that said we are looking into a allowing a limited scrope of custom emulator installation for those that have early access versions that are payed like Yuzu and the users really want to add in.
+
+The custom installation will still be more limited then the one we ship with RetroDECK by default and might have less features then normal Yuzu in term of hotkey support and other things that the user will need to configure manually.
 
 <br>
 
 ### Do you only ship stable versions of the emulators or nightly versions?
-RetroDECK ship the version that is the best for running the games on a case by case basis.
+RetroDECK ships with the version that is the best for running the games on a case-by-case basis.
 
-For example: many bleeding edge emulators like Yuzu or RPCS3 it's nightly we ship, but for things like RetroArch it is stable releases.
-Even if it is a nightly version we want to make sure that the version we ship is works.
+For all  bleeding edge emulators like Yuzu or RPCS3 it's nightly version we ship.
+
+But for things like RetroArch it is only the stable release of the application we ship.
+When it comes to RetroArch Cores they always use their stable version, but if there is no stable version of a core within a stable release of RetroArch the nightly version of that core will be used instead.
+
+Even before we release a new update for RetroDECK the nightly versions of the emulators will be tested to make sure they work and no major issues are known to exist in them.
+
+There have been instances where the nightly version of a emulator have been completly broken and we want to avoid to ship that with RetroDECK.
 
 <br>
 
