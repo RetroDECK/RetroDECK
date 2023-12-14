@@ -403,10 +403,12 @@ Every time it would requiring a different number of button presses depending on 
 
 This type of contextual navigation feels very weird in practice, especially when you have to press the up button twice to get to the bottom of a list in some lists but more times in others depending on the button layout.
 
-The solution we opted for instead:
+The solution we opted for instead is:
 
-- The shoulder buttons `L1` and `R1` will always jump six rows.
-- The triggers `L2` and `R2` will jump to the top or bottom of the grid.
+- `L1` or `Page Up` Jumps up 6 rows in menus and 10 rows in gamelists.
+- `R1` or `Page Down` Jumps down 6 rows in menus and 10 rows in gamelists.
+- `L2` or `Home` Jumps to the top of the menu or gamelist.
+- `R2` or `End` Jumps to the bottom of the menu or gamelist.
 
 
 ## Emulationstation-DE: Themes
