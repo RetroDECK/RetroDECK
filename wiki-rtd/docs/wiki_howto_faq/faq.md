@@ -3,8 +3,8 @@
 What follows is questions and answers to a variety of topics.
 
 
-## General Questions
-<br>
+## RetroDECK: General Questions
+
 <img src="../../wiki_icons/retrodeck/rd_icon_circle_192x192.png">
 
 ### What does the "b" stand for in the versioning number?
@@ -25,7 +25,7 @@ It stands for Beta.
 <br>
 
 ### What emulators and software is included in RetroDECK?
-Check `General Information 📰` - `RetroDECK: What's included?`
+Check: [RetroDECK: What's included?](../wiki_general/what-is-included.md)
 
 <br>
 
@@ -60,9 +60,7 @@ In the future.
 
 
 
-## RetroDECK Usage Questions
-
-
+## RetroDECK: Usage Questions
 
 ### Do I have to partition or format my disk/sdcard to install RetroDECK?
  No, partitioning or formatting is not needed at all. RetroDECK (differently from AmberELEC, Batocera and others) comes as a flatpak. Just install it as any other application and launch it from your desktop and/or Steam library.
@@ -91,11 +89,11 @@ There are two primary folders:
 <br>
 
 ### Is there a way to reset RetroDECK?
-Yes, you can reset various parts of the software using the RetroDECK Configurator's reset functions.
-Read more on `RetroDECK Configurator 🛠️`
+Yes, you can reset various parts of the software using the RetroDECK Configurator's reset functions.<br>
+Read more on: [RetroDECK Configurator 🛠️](../wiki_general/configurator.md)
 
-Or if you want to reset from CLI you can read up on:
-`Development 🖥️` - `CLI Guide`
+Or if you want to reset from CLI you can read up on:<br>
+`Development 🖥️` - [CLI Guide](../wiki_development/cli-guide.md)
 
 
  <br>
@@ -149,12 +147,11 @@ However you can run this to fix it: `flatpak remote-delete retrodeck-origin`
 
 ### How to report bugs?
 
-Check `Bugs & Issues 🐜` - `Reporting bugs and issues`
-
+Check [Reporting bugs and issues](../wiki_bugs/report-bugs.md)
 <br>
 
 ### Will you implement X/Y/Z emulator?
- Our goal is to implement and configure a selection of the best emulators for each system. If your favorite system is not integrated you can request its integration by opening an issue on this github page.
+ Our goal is to implement and configure a selection of the best emulators for each system supported by ES-DE. If your favorite system is not integrated you can request its integration by opening an issue on this github page.
 
 <br>
 
@@ -170,7 +167,7 @@ Check `Bugs & Issues 🐜` - `Reporting bugs and issues`
 <br>
 
 
-## Updating RetroDECK
+## RetroDECK: Updating
 
 <img src="../../wiki_images/logos/discover-logo.png">
 
@@ -213,9 +210,11 @@ Su in "sudo" refers to the "superuser" or in the windows called the "administrat
 <br>
 
 ### Whats the meaning of the ~ character mean in documentation and examples?
-The tilde character ~  is the a short way of saying the logged in users home directory in the UNIX world.
- So for example the Steam Deck
-```~ = /home/deck```
+The tilde character ~  is the a short way of saying the logged in users home directory in the UNIX world.<br>
+So for example the Steam Deck:<br>
+
+`~ = /home/deck`
+
 Read more on [Wikipedia](https://en.wikipedia.org/wiki/Home_directory)
 
 <br>
