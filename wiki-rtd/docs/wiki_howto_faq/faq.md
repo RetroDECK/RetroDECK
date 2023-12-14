@@ -393,10 +393,21 @@ Read more on [wikipedia](https://en.wikipedia.org/wiki/Read-only_memory)
 
 [Source](https://gitlab.com/es-de/emulationstation-de/-/blob/master/FAQ.md#why-cant-i-press-the-up-button-in-menus-to-jump-to-the-bottom-row-and-vice-versa)
 
-Menus in ES-DE are not lists but grids, sometimes there is only a list but sometimes there are buttons beneath the list. <br>
-Enabling the up and down buttons to wrap around would therefore not work consistently as it would sometimes jump to the last row of the list and sometimes to a button, requiring a different number of button presses depending on the menu layout. <br>
-This type of contextual navigation feels very weird in practice, especially when you have to press the up button twice to get to the bottom of a list. <br>
-The solution is instead to use the shoulder buttons (which will jump six rows), or the trigger buttons (which will jump to the first and last row). These buttons work consistently throughout the application and avoid the strange side effects just mentioned.
+Why this does not work is that menus in ES-DE are not lists but grids.
+
+A grid can not only contain selectable rows with text but also other features like buttons. <br>
+For example in one part of the interface there could just be a list of roms but in another there could be various button elements as in the scraping menu.
+
+Enabling the up and down buttons to wrap around would therefore not work consistently as it would sometimes jump to the last row of the grid or to a button seemingly at random depending on the layout of the grid. <br>
+Every time it would requiring a different number of button presses depending on the grid layout.
+
+This type of contextual navigation feels very weird in practice, especially when you have to press the up button twice to get to the bottom of a list in some lists but more times in others depending on the button layout.
+
+The solution we opted for instead:
+
+- The shoulder buttons `L1` and `R1` will always jump six rows.
+- The triggers `L2` and `R2` will jump to the top or bottom of the grid.
+
 
 ## Emulationstation-DE: Themes
 
