@@ -34,11 +34,12 @@ We are working on implementing all of these features over the big releases. Some
 * Better External controller support.
 * Better gyro support.
 * Dynamic external display resolution support for borders and viewports.
-* All Systems supported by ES-DE so there at least is one emulator per system.
+* All Emulators supported by ES-DE so there at least is one per system in RetroDECK.
+* A Ports Downloader for additional systems and features.
 * A rebuilt Configurator that is a Godot application that support controller navigation.
 * A rebuilt First Run installer in Godot.
 * Better art: Mascot, Easter Eggs, Logos.
-* A profile system and multi-user system.
+* A multi-user system with user profiles.
 
 
 
