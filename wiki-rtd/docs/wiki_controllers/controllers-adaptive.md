@@ -4,7 +4,7 @@ Adaptive Controllers is a small category of specialized controllers that are des
 
 They can be customized to fit the players needs with swapable inputs from various sources controlled by the main hub of the adaptive controller.
 
-You can also sometimes expand to more inputs as well by connecting other controller types like Flight Stick.
+You can also sometimes expand to more inputs as well by connecting other controller types like a Flight Stick.
 
 ## Xbox Adaptive Controller (XAC)
 
