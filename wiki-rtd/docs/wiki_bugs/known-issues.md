@@ -21,7 +21,7 @@ The plan is to map as much as we can into the RetroDECK Hotkey System below. We 
 * `RPCS3` hotkeys/shortcuts do not work and they are a new experimental feature. To exit you have to shut down RPCS3 from the `Switch Window` inside the Steam Deck interface.
 * `CEMU` has almost no hotkey support.
 * `XEMU` has no hotkey support.
-*  `Citra` is the only dual-screen emulator that allows a hotkey for changing the screen layout, others: `MelonDS`, `RetroArch`, `Cemu` has no hotkey for it.
+* `Citra` is the only dual-screen emulator that allows a hotkey for changing the screen layout, others: `MelonDS`, `RetroArch`, `Cemu` has no hotkey for it.
 
 # Missing Features
 We are working on implementing all of these features over the big releases. Some will take longer time then others and we will also add more things to this list when needed.
