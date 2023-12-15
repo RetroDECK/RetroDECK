@@ -55,7 +55,7 @@ jobs:
         run: "automation_tools/main_version_checker.sh"
 
       - name: Validate Manifest (main only)
-        id: check_version_string
+        id: validate_manifest
         run: "automation_tools/manifest-validation.sh"
 
       - name: "[DEBUG] Outputting manifest"
