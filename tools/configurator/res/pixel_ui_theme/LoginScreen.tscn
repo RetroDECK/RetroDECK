@@ -1,12 +1,14 @@
 [gd_scene load_steps=2 format=3 uid="uid://df1jvroo4xcx4"]
 
-[ext_resource type="Theme" uid="uid://dnpvxewkoebee" path="res://pixel_ui_theme/PixelTheme.tres" id="1"]
+[ext_resource type="Theme" uid="uid://dnpvxewkoebee" path="res://res/pixel_ui_theme/PixelTheme_leather.tres" id="1"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme = ExtResource("1")
 
 [node name="Panel" type="Panel" parent="."]

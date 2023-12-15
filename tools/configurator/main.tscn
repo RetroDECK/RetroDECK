@@ -1,6 +1,5 @@
 [gd_scene load_steps=15 format=3 uid="uid://qk2gw74anwlq"]
 
-[ext_resource type="Theme" uid="uid://yqkvsb5q7pab" path="res://res/pixel_ui_theme/PixelTheme.tres" id="1_36ht7"]
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
 [ext_resource type="Script" path="res://main.gd" id="1_obpq7"]
 [ext_resource type="AudioStream" uid="uid://dig4pco500pyt" path="res://res/configurator.mp3" id="3_xivj6"]
@@ -67,7 +66,6 @@ offset_right = -3.0
 offset_bottom = -62.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("1_36ht7")
 script = ExtResource("1_obpq7")
 
 [node name="Panel" type="Panel" parent="."]
@@ -95,13 +93,10 @@ grow_vertical = 2
 
 [node name="TabContainer" type="TabContainer" parent="MarginContainer"]
 layout_mode = 2
-theme = ExtResource("1_36ht7")
 tab_alignment = 1
 
 [node name="System" type="TabBar" parent="MarginContainer/TabContainer"]
-visible = false
 layout_mode = 2
-theme = ExtResource("1_36ht7")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/TabContainer/System"]
 layout_mode = 2
@@ -175,7 +170,6 @@ text = "Advanced"
 [node name="Graphics" type="TabBar" parent="MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
-theme = ExtResource("1_36ht7")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/TabContainer/Graphics"]
 layout_mode = 2
@@ -264,8 +258,8 @@ disabled = true
 text = "TATE Mode (coming soon)"
 
 [node name="Controls" type="TabBar" parent="MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
-theme = ExtResource("1_36ht7")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/TabContainer/Controls"]
 layout_mode = 0
@@ -327,7 +321,6 @@ text = "Hotkey Activation Sound (coming soon)
 [node name="Tools" type="TabBar" parent="MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
-theme = ExtResource("1_36ht7")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/TabContainer/Tools"]
 layout_mode = 2
@@ -438,8 +431,8 @@ text = "Move User Files"
 layout_mode = 2
 
 [node name="Network" type="TabBar" parent="MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
-theme = ExtResource("1_36ht7")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/TabContainer/Network"]
 layout_mode = 2
@@ -592,7 +585,6 @@ text = "Start FTP Server"
 [node name="Troubleshoot" type="TabBar" parent="MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
-theme = ExtResource("1_36ht7")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/TabContainer/Troubleshoot"]
 layout_mode = 0
@@ -646,7 +638,6 @@ text = "Full RetroDECK Reset"
 [node name="Configurator" type="TabBar" parent="MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
-theme = ExtResource("1_36ht7")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/TabContainer/Configurator"]
 layout_mode = 2
@@ -714,7 +705,6 @@ text = "|| ------( )--------"
 [node name="About" type="TabBar" parent="MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
-theme = ExtResource("1_36ht7")
 
 [node name="Icon" type="Sprite2D" parent="MarginContainer/TabContainer/About"]
 visible = false
