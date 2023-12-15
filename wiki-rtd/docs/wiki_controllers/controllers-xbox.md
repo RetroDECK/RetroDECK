@@ -2,6 +2,11 @@
 
 **Note these inputs are part of the upcoming 0.8b update.**
 
+#### The xone Project
+[The xone Project](https://github.com/medusalix/xone) <br>
+Has firmwares, udev rules and drivers might be needed to get it to run on your distribution to get the wireless connections working.<br>
+This should not needed for the Steam Deck, SteamOS and most gaming focus Linux distroes has it included.
+
 ## Xbox 360
 
 Supported by Steam Input
@@ -16,6 +21,7 @@ Supported by Steam Input
 
 - Xbox One
 - Xbox Series S and X
+
 
 
 ### What are the Official profiles called?
