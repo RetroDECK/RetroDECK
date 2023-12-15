@@ -13,21 +13,16 @@ Supported by Steam Input
 
 <img src="../../wiki_images/controllers/xbox-360.png" width="250">
 
-## Xbox Wireless Controller
+## Xbox One/S/X - Xbox Wireless Controller
 
 Supported by Steam Input
 
 <img src="../../wiki_images/controllers/xbox-wireless.png" width="250">
 
-- Xbox One
-- Xbox Series S and X
+## What are the Official profiles called?
 
-
-
-### What are the Official profiles called?
-
-- Xbox 360: `RetroDECK: Official Layout - Xbox 360`
-- Xbox Wireless Controller: `RetroDECK: Official Layout -  Xbox Wireless`
+- Xbox 360: `RetroDECK: Xbox 360  - <Version Number>`
+- Xbox Wireless Controller: `RetroDECK: Xbox Wireless  - <Version Number>`
 
 ## Global Hotkeys: Xbox Button Combos
 

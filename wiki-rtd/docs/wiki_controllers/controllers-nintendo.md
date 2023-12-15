@@ -8,9 +8,9 @@ Supported by Steam Input
 
 <img src="../../wiki_images/controllers/switch-pro.png" width="250">
 
-### What is the Official - Switch Pro RetroDECK profile called?
+## What is the Official - Switch Pro RetroDECK profile called?
 
-- Switch Pro: `RetroDECK: Official Layout - Switch Pro`
+- Switch Pro: `RetroDECK: Switch Pro - <Version Number>`
 
 ### Switch Pro - Global Hotkeys: Nintendo Button Combos
 
