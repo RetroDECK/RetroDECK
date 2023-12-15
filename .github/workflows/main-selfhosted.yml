@@ -54,7 +54,7 @@ jobs:
         id: check_version_string
         run: "automation_tools/main_version_checker.sh"
 
-      - name: Check versions (main only)
+      - name: Validate Manifest (main only)
         id: check_version_string
         run: "automation_tools/manifest-validation.sh"
 
