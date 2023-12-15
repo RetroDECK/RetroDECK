@@ -1,2 +1,2 @@
-sphinx_rtd_theme
-myst-parser
+mkdocs-material
+mkdocs-rss-plugin

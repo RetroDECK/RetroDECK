@@ -29,11 +29,14 @@ source /app/libexec/global.sh
 #       - Citra
 #       - Dolphin
 #       - Duckstation
+#       - MAME
 #       - MelonDS
 #       - PCSX2
 #       - PPSSPP
 #       - Primehack
 #       - RPCS3
+#       - Ryujinx
+#       - Vita3K
 #       - XEMU
 #       - Yuzu
 #     - Tools
@@ -74,6 +77,7 @@ source /app/libexec/global.sh
 #           - Reset PPSSPP
 #           - Reset Primehack
 #           - Reset RPCS3
+#           - Reset Ryujinx
 #           - Reset XEMU
 #           - Reset Yuzu
 #         - Reset All Emulators
@@ -84,6 +88,7 @@ source /app/libexec/global.sh
 #         - Full changelog
 #         - Version-specific changelogs
 #       - RetroDECK Credits
+#     - Add to Steam
 #     - Developer Options (Hidden)
 #       - Change Multi-user mode
 #       - Change Update channel
@@ -100,13 +105,15 @@ configurator_welcome_dialog() {
     "RetroDECK: Tools" "Compress games, move RetroDECK and install optional features" \
     "RetroDECK: Troubleshooting" "Backup data, perform BIOS / multi-disc file checks checks and emulator resets" \
     "RetroDECK: About" "Show additional information about RetroDECK" \
+    "Sync with Steam" "Sync with Steam all the favorites games" \
     "Developer Options" "Welcome to the DANGER ZONE")
   else
     welcome_menu_options=("Presets & Settings" "Here you find various presets, tweaks and settings to customize your RetroDECK experience" \
     "Open Emulator" "Launch and configure each emulators settings (for advanced users)" \
     "RetroDECK: Tools" "Compress games, move RetroDECK and install optional features" \
     "RetroDECK: Troubleshooting" "Backup data, perform BIOS / multi-disc file checks checks and emulator resets" \
-    "RetroDECK: About" "Show additional information about RetroDECK" )
+    "RetroDECK: About" "Show additional information about RetroDECK" \
+    "Add to Steam" "Add to Steam all the favorite games, it will not remove added games")
   fi
 
   choice=$(zenity --list --title="RetroDECK Configurator Utility" --cancel-label="Quit" \
@@ -134,6 +141,10 @@ configurator_welcome_dialog() {
 
   "RetroDECK: About" )
     configurator_about_retrodeck_dialog
+  ;;
+
+  "Sync with Steam" )
+    configurator_add_steam
   ;;
 
   "Developer Options" )
@@ -427,13 +438,16 @@ configurator_open_emulator_dialog() {
   "Citra" "Open the N3DS emulator Citra" \
   "Dolphin" "Open the Wii & GC emulator Dolphin" \
   "Duckstation" "Open the PSX emulator Duckstation" \
+  "MAME" "Open the Multiple Arcade Machine Emulator emulator MAME" \
   "MelonDS" "Open the NDS emulator MelonDS" \
   "PCSX2" "Open the PS2 emulator PSXC2" \
   "PPSSPP" "Open the PSP emulator PPSSPP" \
   "Primehack" "Open the Metroid Prime emulator Primehack" \
   "RPCS3" "Open the PS3 emulator RPCS3" \
+  "Ryujinx" "Open the Switch emulator Ryujinx" \
+  "Vita3K" "Open the PSVita emulator Vita3K" \
   "XEMU" "Open the Xbox emulator XEMU" \
-  "Yuzu" "Open the Switch emulator Yuzu" )
+  "Yuzu" "Open the Switch emulator Yuzu")
 
   case $emulator in
 
@@ -457,6 +471,10 @@ configurator_open_emulator_dialog() {
     duckstation-qt
   ;;
 
+  "MAME" )
+    mame
+  ;;
+
   "MelonDS" )
     melonDS
   ;;
@@ -475,6 +493,14 @@ configurator_open_emulator_dialog() {
 
   "RPCS3" )
     rpcs3
+  ;;
+
+  "Ryujinx" )
+    ryujinx-wrapper
+  ;;
+
+  "Vita3K" )
+    Vita3K
   ;;
 
   "XEMU" )
@@ -516,7 +542,7 @@ configurator_retrodeck_tools_dialog() {
   ;;
 
   "Install: RetroDECK SD Controller Profile" )
-    configurator_generic_dialog "RetroDECK Configurator - Install: RetroDECK Controller Profile" "We are now offering a new official RetroDECK controller profile!\nIt is an optional component that helps you get the most out of RetroDECK with a new in-game radial menu for unified hotkeys across emulators.\n\nThe files need to be installed outside of the normal ~/retrodeck folder, so we wanted your permission before proceeding.\n\nThe files will be installed at the following shared Steam locations:\n\n$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/\n$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"
+    configurator_generic_dialog "RetroDECK Configurator - Install: RetroDECK Controller Profile" "We are now offering a new official RetroDECK controller profile!\nIt is an optional component that helps you get the most out of RetroDECK with a new in-game radial menu for unified hotkeys across emulators.\n\nThe files need to be installed outside of the normal ~/retrodeck folder, so we wanted your permission before proceeding.\n\nThe files will be installed at the following shared Steam locations:\n\n$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/\n$HOME/.steam/steam/controller_base/templates"
     if [[ $(configurator_generic_question_dialog "Install: RetroDECK Controller Profile" "Would you like to install the official RetroDECK controller profile?") == "true" ]]; then
       install_retrodeck_controller_profile
       configurator_generic_dialog "RetroDECK Configurator - Install: RetroDECK Controller Profile" "The RetroDECK controller profile install is complete.\nSee the Wiki for more details on how to use it to its fullest potential!"
@@ -979,6 +1005,7 @@ configurator_reset_dialog() {
     "PPSSPP" "Reset the PSP emulator PPSSPP to default settings" \
     "Primehack" "Reset the Metroid Prime emulator Primehack to default settings" \
     "RPCS3" "Reset the PS3 emulator RPCS3 to default settings" \
+    "Ryujinx" "Reset the Switch emulator Ryujinx to default settings" \
     "XEMU" "Reset the XBOX emulator XEMU to default settings" \
     "Yuzu" "Reset the Switch emulator Yuzu to default settings" )
 
@@ -1089,6 +1116,11 @@ configurator_about_retrodeck_dialog() {
   ;;
 
   esac
+}
+
+configurator_add_steam() {
+    python3 /app/libexec/steam-sync/steam-sync.py
+    configurator_welcome_dialog
 }
 
 configurator_version_history_dialog() {

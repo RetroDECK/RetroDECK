@@ -27,6 +27,7 @@ finish-args:
   - --filesystem=home
   - --filesystem=/run/media
   - --filesystem=/media
+  - --filesystem=home/.var/app/com.valvesoftware.Steam
   - --allow=multiarch
   - --talk-name=org.freedesktop.ScreenSaver
   - --talk-name=org.freedesktop.PowerManagement.Inhibit
@@ -89,7 +90,6 @@ modules:
         # on main please update this with the version variable, eg: VERSI0N='0.7.5b'
         # on cooker will be THISBRANCH
         VERSION="0.7.5b"
-
 
         git checkout ${GITHUB_REF_NAME}
         mkdir -p ${FLATPAK_DEST}/retrodeck/
@@ -303,6 +303,20 @@ modules:
           stable-only: true
           url-template: https://github.com/Tencent/rapidjson/archive/refs/tags/v$version.tar.gz
 
+  # dependency of: CEMU, SOLARUS
+  - name: glm
+    buildsystem: cmake-ninja
+    cleanup: ['*']
+    no-make-install: true
+    post-install:
+      - install -d ${FLATPAK_DEST}/include
+      - cp -R glm ${FLATPAK_DEST}/include
+      - cp -R cmake/glm ${FLATPAK_DEST}/lib/cmake
+    sources:
+      - type: archive
+        url: https://github.com/g-truc/glm/releases/download/0.9.9.8/glm-0.9.9.8.zip
+        sha256: 37e2a3d62ea3322e43593c34bae29f57e3e251ea89f4067506c94043769ade4c
+        
   # dependency of: CEMU, ES-DE
   - name: pugixml
     buildsystem: cmake-ninja
@@ -1116,19 +1130,6 @@ modules:
           project-id: 10649
           url-template: https://libzip.org/download/libzip-$version.tar.xz
 
-  - name: glm
-    buildsystem: cmake-ninja
-    cleanup: ['*']
-    no-make-install: true
-    post-install:
-      - install -d ${FLATPAK_DEST}/include
-      - cp -R glm ${FLATPAK_DEST}/include
-      - cp -R cmake/glm ${FLATPAK_DEST}/lib/cmake
-    sources:
-      - type: archive
-        url: https://github.com/g-truc/glm/releases/download/0.9.9.8/glm-0.9.9.8.zip
-        sha256: 37e2a3d62ea3322e43593c34bae29f57e3e251ea89f4067506c94043769ade4c
-
   - name: fmt
     buildsystem: cmake-ninja
     config-opts:
@@ -1228,6 +1229,84 @@ modules:
 
   # Cemu - END
 
+  # Vita3K - START
+  # Vita3K is writing some files in its own directory
+  # So that is placed in /var/data/Vita3K and not in the readonly filesystem
+  # This module is just fetching the file so it will be unique for this build
+
+  - name: vita3k
+    buildsystem: simple
+    build-commands:
+      # Creating an empty symlink that will point to Vita3K binary
+      - ln -s /var/data/Vita3K/Vita3K ${FLATPAK_DEST}/bin/Vita3K
+      # Copying the user icon
+      - mkdir -p ${FLATPAK_DEST}/retrodeck
+      - cp retrodeck.png ${FLATPAK_DEST}/retrodeck
+      # preparing the vita3k zip for later
+      - mv ubuntu-latest.zip ${FLATPAK_DEST}/retrodeck/vita3k.zip
+    sources:
+      - type: file
+        url: https://github.com/Vita3K/Vita3K/releases/download/continuous/ubuntu-latest.zip
+        sha256: VITA3KSHAPLACEHOLDER
+      - type: file
+        path: res/retrodeck.png
+
+  # Vita3K - END
+
+  # SOLARUS - START
+  # https://github.com/flathub/org.solarus_games.solarus.Launcher
+
+  - name: luajit
+    no-autogen: true
+    cleanup:
+      - /bin
+      - /lib/*.a
+      - /include
+      - /lib/pkgconfig
+      - /share/man
+    sources:
+      - type: archive
+        url: https://luajit.org/download/LuaJIT-2.0.5.tar.gz
+        sha256: 874b1f8297c697821f561f9b73b57ffd419ed8f4278c82e05b48806d30c1e979
+      - type: shell
+        commands:
+          - sed -i 's|/usr/local|/app|' ./Makefile
+
+  - name: libmodplug
+    cleanup:
+      - /include
+    sources:
+      - type: archive
+        url: https://download.sourceforge.net/project/modplug-xmms/libmodplug/0.8.9.0/libmodplug-0.8.9.0.tar.gz
+        sha512: 880e10154fd367ee24ace53ca7e32a5c1fee7dfff1f934e6499944c12779427da63e2f55f8d6ce25db0a42a5b4424053bf64305b31dbfc4ef6a8909924d655fd
+
+  - name: physfs
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DPHYSFS_BUILD_TEST=OFF
+    sources:
+      - type: archive
+        url: https://icculus.org/physfs/downloads/physfs-3.0.2.tar.bz2
+        sha256: 304df76206d633df5360e738b138c94e82ccf086e50ba84f456d3f8432f9f863
+        size: 194888
+        x-checker-data:
+          type: anitya
+          project-id: 3631
+          url-template: https://icculus.org/physfs/downloads/physfs-$version.tar.bz2
+
+  - name: solarus
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
+      - -DSOLARUS_GUI=OFF
+    sources:
+      - type: git
+        url: https://gitlab.com/solarus-games/solarus.git
+        tag: v1.6.5
+        commit: 3aec70b0556a8d7aed7903d1a3e4d9a18c5d1649
+
+  # SOLARUS - END
+
   # External manifests end
 
   - name: retrodeck
@@ -1260,14 +1339,12 @@ modules:
 
       # Tools
       - mkdir -p /app/tools
-      - cp tools/configurator.sh /app/tools/configurator.sh
-      - chmod +x /app/tools/configurator.sh
-      - cp tools/retrodeck_function_wrapper.sh /app/tools/retrodeck_function_wrapper.sh
-      - chmod +x /app/tools/retrodeck_function_wrapper.sh
+      - cp -r tools/** /app/tools
+      - find /app/tools -name '*.py|*.sh' -exec chmod +x {} \;
 
       # Function libraries
       - mkdir -p /app/libexec
-      - cp -r functions/* "/app/libexec/"
+      - cp -r functions/** "/app/libexec/"
 
       # Desktop entries
       - cp net.retrodeck.retrodeck.desktop /app/share/applications/net.retrodeck.retrodeck.desktop

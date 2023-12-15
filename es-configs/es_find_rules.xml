@@ -721,21 +721,16 @@
     <emulator name="RYUJINX">
         <!-- Nintendo Switch emulator Ryujinx -->
         <rule type="systempath">
-            <entry>Ryujinx</entry>
-            <entry>Ryujinx.Ava</entry>
+            <entry>Ryujinx.sh</entry>
             <entry>org.ryujinx.Ryujinx</entry>
         </rule>
         <rule type="staticpath">
             <entry>/var/lib/flatpak/exports/bin/org.ryujinx.Ryujinx</entry>
             <entry>~/.local/share/flatpak/exports/bin/org.ryujinx.Ryujinx</entry>
-            <entry>~/Applications/publish/Ryujinx</entry>
-            <entry>~/.local/share/applications/publish/Ryujinx</entry>
-            <entry>~/.local/bin/publish/Ryujinx</entry>
-            <entry>~/bin/publish/Ryujinx</entry>
-            <entry>~/Applications/publish/Ryujinx.Ava</entry>
-            <entry>~/.local/share/applications/publish/Ryujinx.Ava</entry>
-            <entry>~/.local/bin/publish/Ryujinx.Ava</entry>
-            <entry>~/bin/publish/Ryujinx.Ava</entry>
+            <entry>~/Applications/publish/Ryujinx.sh</entry>
+            <entry>~/.local/share/applications/publish/Ryujinx.sh</entry>
+            <entry>~/.local/bin/publish/Ryujinx.sh</entry>
+            <entry>~/bin/publish/Ryujinx.sh</entry>
         </rule>
     </emulator>
     <emulator name="SAMEBOY">
@@ -1023,6 +1018,12 @@
             <entry>~/bin/yuzu*.AppImage</entry>
             <entry>/var/lib/flatpak/exports/bin/org.yuzu_emu.yuzu</entry>
             <entry>~/.local/share/flatpak/exports/bin/org.yuzu_emu.yuzu</entry>
+        </rule>
+    </emulator>
+    <emulator name="YUZU-CUSTOM">
+        <!-- Nintendo Switch emulator Yuzu Custom provided by the user -->
+        <rule type="staticpath">
+            <entry>~/retrodeck/customs/yuzu/yuzu*.AppImage</entry>
         </rule>
     </emulator>
     <emulator name="ZESARUX">
