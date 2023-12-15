@@ -10,14 +10,16 @@ You can also sometimes expand to more inputs as well by connecting other control
 
 <img src="../../wiki_images/controllers/xbox-adaptive.png" width="250">
 
-The Linux Kernel has had XAC support since version 3.17.
+[Microsoft XAC Website](https://www.xbox.com/en-US/accessories/controllers/xbox-adaptive-controller)
 
+> When everybody plays, we all win.
 
 ### The xone Project
 [The xone Project](https://github.com/medusalix/xone) <br>
 Has firmwares, udev rules and drivers might be needed to get it to run on your distribution to get the wireless connections working.
 
 ### How to configure?
+The Linux Kernel has had XAC support since version 3.17.<br>
 As the XAC outputs standard xinput we don't see any reason why this should not work with RetroDECK.
 
 None of the team owns a XAC we would love to hear from your experiences using it with RetroDECK. <br>
