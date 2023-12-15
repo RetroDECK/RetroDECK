@@ -34,7 +34,7 @@ finish-args:
   - --talk-name=org.freedesktop.login1.Manager
   - --talk-name=org.freedesktop.portal.Flatpak.UpdateMonitor
   - --filesystem=xdg-run/app/com.discordapp.Discord:create
-  #- --filesystem=xdg-config/gtk-3.0:ro #not needed as we got --filesystem=home
+  - --filesystem=xdg-config/gtk-3.0:ro
   # Dolphin
   - --allow=bluetooth
   # PPSSPP
