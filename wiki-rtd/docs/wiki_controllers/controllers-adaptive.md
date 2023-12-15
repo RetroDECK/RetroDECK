@@ -22,7 +22,7 @@ Has firmwares, udev rules and drivers might be needed to get it to run on your d
 The Linux Kernel has had XAC support since version 3.17.<br>
 As the XAC outputs standard xinput we don't see any reason why this should not work with RetroDECK.
 
-None of the team owns a XAC we would love to hear from your experiences using it with RetroDECK. <br>
+None on the RetroDECK Team owns a XAC, but we would love to hear from your experiences using it with RetroDECK. <br>
 
 If there is something we in the team can help you with, maybe we can design a better general Steam Input profile for the XAC or any other feedback feel free to contact us on Discord.
 
