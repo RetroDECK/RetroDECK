@@ -669,31 +669,32 @@ prepare_emulator() {
 
   if [[ "$emulator" =~ ^(vita3k|Vita3K|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
-    echo "----------------------"
-    echo "Initializing Vita3K"
-    echo "----------------------"
-    if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
-      echo "Figure out what Vita3k needs for multi-user"
-    else # Single-user actions
-      # NOTE: the emulator is writing in "." so it must be placed in the rw filesystem. A symlink of the binary is already placed in /app/bin/Vita3K
-      rm -rf "/var/data/Vita3K"
-      mkdir -p "/var/data/Vita3K"
-      unzip "/app/retrodeck/vita3k.zip" -d "/var/data/Vita3K"
-      chmod +x "/var/data/Vita3K/Vita3K"
-      rm -f "/var/data/Vita3K/update-vita3k.sh"
-      cp -fvr "$emuconfigs/vita3k/config.yml" "/var/data/Vita3K" # Emulator config
-      cp -fvr "$emuconfigs/vita3k/ux0" "$bios_folder/Vita3K/Vita3K" # User config
-      set_setting_value "$vita3kconf" "pref-path" "$rdhome/bios/Vita3K/Vita3K/" "vita3k"
-    fi
-    # Shared actions
-    dir_prep "$saves_folder/psvita/vita3k" "$bios_folder/Vita3K/Vita3K/ux0/user/00/savedata" # Multi-user safe?
+      echo "----------------------"
+      echo "Initializing Vita3K"
+      echo "----------------------"
+      if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
+        echo "Figure out what Vita3k needs for multi-user"
+      else # Single-user actions
+        # NOTE: the emulator is writing in "." so it must be placed in the rw filesystem. A symlink of the binary is already placed in /app/bin/Vita3K
+        rm -rf "/var/data/Vita3K"
+        mkdir -p "/var/data/Vita3K"
+        unzip "/app/retrodeck/vita3k.zip" -d "/var/data/Vita3K"
+        chmod +x "/var/data/Vita3K/Vita3K"
+        rm -f "/var/data/Vita3K/update-vita3k.sh"
+        cp -fvr "$emuconfigs/vita3k/config.yml" "/var/data/Vita3K" # Emulator config
+        cp -fvr "$emuconfigs/vita3k/ux0" "$bios_folder/Vita3K/Vita3K" # User config
+        set_setting_value "$vita3kconf" "pref-path" "$rdhome/bios/Vita3K/Vita3K/" "vita3k"
+      fi
+      # Shared actions
+      dir_prep "$saves_folder/psvita/vita3k" "$bios_folder/Vita3K/Vita3K/ux0/user/00/savedata" # Multi-user safe?
 
-    # Installing firmware
-    # TODO: at the moment this is here instead of a tool because it seems like it cannot run without Firmware
-    curl "http://dus01.psv.update.playstation.net/update/psv/image/2022_0209/rel_f2c7b12fe85496ec88a0391b514d6e3b/PSVUPDAT.PUP" -po /tmp/PSVUPDAT.PUP
-    curl "http://dus01.psp2.update.playstation.net/update/psp2/image/2019_0924/sd_8b5f60b56c3da8365b973dba570c53a5/PSP2UPDAT.PUP?dest=us" -po /tmp/PSP2UPDAT.PUP
-    Vita3K --firmware /tmp/PSVUPDAT.PUP
-    Vita3K --firmware /tmp/PSP2UPDAT.PUP
+      # Installing firmware
+      # TODO: at the moment this is here instead of a tool because it seems like it cannot run without Firmware
+      curl "http://dus01.psv.update.playstation.net/update/psv/image/2022_0209/rel_f2c7b12fe85496ec88a0391b514d6e3b/PSVUPDAT.PUP" -po /tmp/PSVUPDAT.PUP
+      curl "http://dus01.psp2.update.playstation.net/update/psp2/image/2019_0924/sd_8b5f60b56c3da8365b973dba570c53a5/PSP2UPDAT.PUP?dest=us" -po /tmp/PSP2UPDAT.PUP
+      Vita3K --firmware /tmp/PSVUPDAT.PUP
+      Vita3K --firmware /tmp/PSP2UPDAT.PUP
+    fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
       dir_prep "$saves_folder/psvita/vita3k" "$bios_folder/Vita3K/Vita3K/ux0/user/00/savedata" # Multi-user safe?
       set_setting_value "$vita3kconf" "pref-path" "$rdhome/bios/Vita3K/Vita3K/" "vita3k"
@@ -709,7 +710,6 @@ prepare_emulator() {
 
     mkdir -p "/var/config/mame"
     cp -fvr "$emuconfigs/mame/**" "/var/config/mame"
-
   fi
 
   if [[ "$emulator" =~ ^(gzdoom|GZDOOM|all)$ ]]; then
@@ -726,7 +726,6 @@ prepare_emulator() {
 
     sed -i 's#RETRODECKROMSDIR#'$roms_folder'#g' "/var/config/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON
     sed -i 's#RETRODECKSAVESDIR#'$saves_folder'#g' "/var/config/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON
-
   fi
 
   # Update presets for all emulators after any reset or move
