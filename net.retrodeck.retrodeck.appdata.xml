@@ -65,12 +65,39 @@
    <project_license>GPL-3.0</project_license>
    <metadata_license>CC0-1.0</metadata_license>
    <releases>
-      <release version="0.8.0b" date="2023-09-28">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.8.0b</url>
+      <release version="0.7.5b" date="2023-12-14">
+         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.7.5b</url>
          <description>
-            <p>News:</p>
+            <p>Bug fixes and other changes:</p>
             <ul>
-               <li>Welcome to cooker 0.8.0b!</li>
+               <li>RetroDECK Team wishes you happy holidays with a festive loading screen!</li>
+               <li>Framework: Fixed the SD card path resolution for SteamOS 3.5</li>
+               <li>Configurator: Added the possibility to reset ES-DE configs via Configurator and CLI</li>
+               <li>RetroArch: Borders/Overlays are now disabled by default on fresh installs to prevent screen burn-in</li>
+               <li>RetroArch: added nightly cores, stable cores have priority over them</li>
+               <li>RPCS3: tweaked confing to improve performance</li>
+               <li>Dolphin (SA): fixed GC buttons layout. Now R1 is Z and L2/R2 are L/R</li>
+               <li>CEMU: tweaked audio config to choose the correct output device when docked</li>
+            </ul>
+            <p>Updates:</p>
+            <ul>
+               <li>All standalone emulators to their latest versions (prior to llvm17 and 6.6 framework updates)</li>
+            </ul>
+         </description>
+      </release>
+      <release version="0.7.4b" date="2023-11-18">
+         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.7.4b</url>
+         <description>
+            <p>Hotfix:</p>
+            <ul>
+               <li>Fixed a bug where the system folders were not correctly generated</li>
+               <li>Fixed a bug where the RetroDECK Configurator desktop file was not opening the Configurator from Desktop Mode</li>
+               <li>Fixed a bug where the theme was not showing correctly</li>
+               <li>Added retrodeck and configurator commands to be called from the shell or bash inside flatpak</li>
+            </ul>
+            <p>Known issues:</p>
+            <ul>
+               <li>Please check the know issues in the Wiki under General Infomration.</li>
             </ul>
          </description>
       </release>

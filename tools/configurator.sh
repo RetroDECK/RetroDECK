@@ -81,6 +81,7 @@ source /app/libexec/global.sh
 #           - Reset XEMU
 #           - Reset Yuzu
 #         - Reset All Emulators
+#         - Reset EmulationStation DE
 #         - Reset RetroDECK
 #     - RetroDECK: About
 #       - RetroDECK Version History
@@ -983,6 +984,7 @@ configurator_reset_dialog() {
   --column="Choice" --column="Action" \
   "Reset Specific Emulator" "Reset only one specific emulator to default settings" \
   "Reset All Emulators" "Reset all emulators to default settings" \
+  "Reset EmulationStation DE" "Reset the ES-DE frontend" \
   "Reset RetroDECK" "Reset RetroDECK to default settings" )
 
   case $choice in
@@ -1048,6 +1050,20 @@ configurator_reset_dialog() {
     configurator_process_complete_dialog "resetting all emulators"
   else
     configurator_generic_dialog "RetroDeck Configurator - RetroDECK: Reset" "Reset process cancelled."
+    configurator_reset_dialog
+  fi
+;;
+
+"Reset EmulationStation DE" )
+  if [[ $(configurator_reset_confirmation_dialog "EmulationStation DE" "Are you sure you want to reset EmulationStation DE to default settings?\n\nYour scraped media, downloaded themes and gamelists will not be touched.\n\nThis process cannot be undone.") == "true" ]]; then
+    zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator Utility - Reset EmulationStation DE" \
+    --text="You are resetting EmulationStation DE to its default settings.\n\nAfter the process is complete you will need to exit RetroDECK and run it again."
+    prepare_emulator "reset" "emulationstation" "configurator"
+    configurator_process_complete_dialog "resetting EmulationStation DE"
+  else
+    configurator_generic_dialog "RetroDeck Configurator - EmulationStation DE: Reset" "Reset process cancelled."
     configurator_reset_dialog
   fi
 ;;

@@ -34,7 +34,7 @@ finish-args:
   - --talk-name=org.freedesktop.login1.Manager
   - --talk-name=org.freedesktop.portal.Flatpak.UpdateMonitor
   - --filesystem=xdg-run/app/com.discordapp.Discord:create
-  - --filesystem=xdg-config/gtk-3.0:ro
+  #- --filesystem=xdg-config/gtk-3.0:ro #not needed as we got --filesystem=home
   # Dolphin
   - --allow=bluetooth
   # PPSSPP
@@ -87,9 +87,9 @@ modules:
     build-commands:
       - |
 
-        # on main please update this with the version variable, eg: VERSION='0.7.3b'
+        # on main please update this with the version variable, eg: VERSION='0.7.4b'
         # on cooker will be THISBRANCH
-        VERSION=0.7.3b
+        VERSION=THISBRANCH
 
         git checkout ${GITHUB_REF_NAME}
         mkdir -p ${FLATPAK_DEST}/retrodeck/
@@ -399,8 +399,10 @@ modules:
       - -DENABLE_BOOST=OFF
     sources:
       - type: archive
-        url: https://gitlab.freedesktop.org/poppler/poppler/-/archive/poppler-22.11.0/poppler-poppler-22.11.0.tar.bz2
-        sha256: b8f618d5c62030034d5c8da4d3f6a740260b7620b9a31021679ce1914d327f81
+        # original link not working, found a mirror
+        url: https://poppler.freedesktop.org/poppler-22.11.0.tar.xz
+        #url: https://gitlab.freedesktop.org/poppler/poppler/-/archive/poppler-22.11.0/poppler-poppler-22.11.0.tar.bz2
+        sha256: 093ba9844ed774285517361c15e21a31ba4df278a499263d4403cca74f2da828
     cleanup:
       - /lib/pkgconfig
       - /include
@@ -572,11 +574,22 @@ modules:
   # RetroArch - END
 
   # Not part of the offical RetroArch manifest
+  # retroarch-cores-nightly must be earlier than retroarch-cores as it will overwrite this cores with the stable ones
+  - name: retroarch-cores-nightly
+    buildsystem: simple
+    build-commands:
+      - mkdir -p /app/share/libretro/cores/
+      - mv -f ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* /app/share/libretro/cores/
+    sources:
+      - type: archive
+        url: https://buildbot.libretro.com/nightly/linux/x86_64/RetroArch_cores.7z
+        sha256: RANIGHTLYCORESPLACEHOLDER
+
   - name: retroarch-cores
     buildsystem: simple
     build-commands:
       - mkdir -p /app/share/libretro/cores/
-      - mv ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* /app/share/libretro/cores/
+      - mv -f ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* /app/share/libretro/cores/
     sources:
       - type: archive
         url: https://buildbot.libretro.com/stable/1.16.0/linux/x86_64/RetroArch_cores.7z
@@ -690,8 +703,8 @@ modules:
       - ln -s "${FLATPAK_DEST}/yuzu/usr/bin/yuzu" "${FLATPAK_DEST}/bin/yuzu"
     sources:
       - type: file
-        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1618/yuzu-mainline-20231112-3cff94a38.AppImage
-        sha256: 4e92d6daeb1f288ca18950ed47b068fb971766ee386b012b9400b5caecad4246
+        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1648/yuzu-mainline-20231211-14c24e64e.AppImage
+        sha256: d40f61c2abf8ddd0bb53098e2d9edf0c47e1cfd89e50cf5856b8cc27dbb25bd6
 
   # Yuzu - END
 
@@ -777,8 +790,8 @@ modules:
       - ln -s "${FLATPAK_DEST}/pcsx2-qt/usr/bin/pcsx2-qt" "${FLATPAK_DEST}/bin/pcsx2-qt"
     sources:
       - type: file
-        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.5186/pcsx2-v1.7.5186-linux-appimage-x64-Qt.AppImage
-        sha256: 9fd8108c11fd273a4a0c801a6ee2da802643966e61e0a53528f7dd023ece55dd
+        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.5284/pcsx2-v1.7.5284-linux-appimage-x64-Qt.AppImage
+        sha256: b3cb23e07435f7efe7145cddd0cf4d473cc65eee8feae436b8a718fc3017721a
 
   # PCSX2 - END
 
@@ -995,7 +1008,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/RPCS3/rpcs3.git
-        commit: 75d239356a773b8211354049477d79006597505e
+        commit: f9d213650cfe4733937c43d93de91a17f8582820
 
   # RPCS3 - END
 
@@ -1133,7 +1146,8 @@ modules:
           url-template: https://github.com/fmtlib/fmt/archive/$version.tar.gz
           versions: {<: '10.0'}
 
-  - name: wxwidgets
+  - name: wxWidgets
+    buildsystem: cmake-ninja
     cleanup:
       - /bin
       - /include
@@ -1142,13 +1156,14 @@ modules:
       - /share
     sources:
       - type: archive
-        url: https://github.com/wxWidgets/wxWidgets/releases/download/v3.2.2.1/wxWidgets-3.2.2.1.tar.bz2
-        sha256: dffcb6be71296fff4b7f8840eb1b510178f57aa2eb236b20da41182009242c02
+        url: https://github.com/wxWidgets/wxWidgets/releases/download/v3.2.4/wxWidgets-3.2.4.tar.bz2
+        sha256: 0640e1ab716db5af2ecb7389dbef6138d7679261fbff730d23845ba838ca133e
         x-checker-data:
           type: anitya
           project-id: 5150
           stable-only: true
           url-template: https://github.com/wxWidgets/wxWidgets/releases/download/v$version/wxWidgets-$version.tar.bz2
+          versions: {'!=': 3.2.4-with-msvs2012-fix}
 
   - name: Cemu
     buildsystem: cmake-ninja
@@ -1165,8 +1180,8 @@ modules:
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+-\d+)$
-        tag: v2.0-59
-        commit: f3c95f72e74d8a5f5873061fbb994643c63ec9c5
+        tag: v2.0-61
+        commit: b6aaf6633063be47d89a8216e269e32aec5a4b49
       - type: shell
         commands:
           - sed "s/set(EXPERIMENTAL_VERSION.*/set(EXPERIMENTAL_VERSION \"$(git describe

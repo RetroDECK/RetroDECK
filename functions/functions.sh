@@ -9,14 +9,14 @@ directory_browse() {
   while [ $path_selected == false ]
   do
     local target="$(zenity --file-selection --title="Choose $1" --directory)"
-    if [ ! -z $target ] #yes
+    if [ ! -z "$target" ] #yes
     then
       zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
       --text="Directory $target chosen, is this correct?"
       if [ $? == 0 ]
       then
         path_selected=true
-        echo $target
+        echo "$target"
         break
       fi
     else
@@ -161,7 +161,7 @@ conf_read() {
         if [[ "$current_section" == "" || "$current_section" == "paths" || "$current_section" == "options" ]]; then
           local current_setting_name=$(get_setting_name "$current_setting_line" "retrodeck") # Read the variable name from the current line
           local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "$current_section") # Read the variables value from retrodeck.cfg
-          eval "$current_setting_name=$current_setting_value" # Write the current setting name and value to memory
+          declare -g "$current_setting_name=$current_setting_value" # Write the current setting name and value to memory
         fi
       fi
     fi
@@ -341,7 +341,7 @@ finit() {
   local finit_dest_choice=$(configurator_destination_choice_dialog "RetroDECK data" "Welcome to the first configuration of RetroDECK.\nThe setup will be quick but please READ CAREFULLY each message in order to avoid misconfigurations.\n\nWhere do you want your RetroDECK data folder to be located?\n\nThis folder will contain all ROMs, BIOSs and scraped data." )
   echo "Choice is $finit_dest_choice"
 
-  case $finit_dest_choice in
+  case "$finit_dest_choice" in
 
   "Back" | "" ) # Back or X button quits
     rm -f "$rd_conf" # Cleanup unfinished retrodeck.cfg if first install is interrupted
@@ -352,8 +352,8 @@ finit() {
   "Internal Storage" ) # Internal
     echo "Internal selected"
     rdhome="$HOME/retrodeck"
-    if [[ -L $rdhome ]]; then #Remove old symlink from existing install, if it exists
-      unlink $rdhome
+    if [[ -L "$rdhome" ]]; then #Remove old symlink from existing install, if it exists
+      unlink "$rdhome"
     fi
   ;;
 
@@ -366,9 +366,9 @@ finit() {
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK" \
       --ok-label "Browse" \
-      --text="SD Card was not find in the default location.\nPlease choose the SD Card root.\nA retrodeck folder will be created starting from the directory that you selected."
-      rdhome=$(finit_browse) # Calling the browse function
-      if [[ -z $rdhome ]]; then # If user hit the cancel button
+      --text="SD Card was not found in the default location.\nPlease choose the SD Card root.\nA retrodeck folder will be created starting from the directory that you selected."
+      rdhome="$(finit_browse)" # Calling the browse function
+      if [[ -z "$rdhome" ]]; then # If user hit the cancel button
         rm -f "$rd_conf" # Cleanup unfinished retrodeck.cfg if first install is interrupted
         exit 2
       fi
@@ -395,8 +395,8 @@ finit() {
       --title "RetroDECK" \
       --ok-label "Browse" \
       --text="Please choose the root folder for the RetroDECK data.\nA retrodeck folder will be created starting from the directory that you selected."
-      rdhome=$(finit_browse) # Calling the browse function
-      if [[ -z $rdhome ]]; then # If user hit the cancel button
+      rdhome="$(finit_browse)" # Calling the browse function
+      if [[ -z "$rdhome" ]]; then # If user hit the cancel button
         rm -f "$rd_conf" # Cleanup unfinished retrodeck.cfg if first install is interrupted
         exit 2
       fi
@@ -414,7 +414,7 @@ finit() {
   if [[ "$finit_options_choices" =~ (rpcs3_firmware|Enable All) ]]; then # Additional information on the firmware install process, as the emulator needs to be manually closed
     configurator_generic_dialog "RPCS3 Firmware Install" "You have chosen to install the RPCS3 firmware during the RetroDECK first setup.\n\nThis process will take several minutes and requires network access.\n\nRPCS3 will be launched automatically at the end of the RetroDECK setup process.\nOnce the firmware is installed, please close the emulator to finish the process."
   fi
-  
+
   zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
   --text="RetroDECK will now install the needed files, which can take up to one minute.\nRetroDECK will start once the process is completed.\n\nPress OK to continue."
@@ -423,7 +423,7 @@ finit() {
   prepare_emulator "reset" "all"
   build_retrodeck_current_presets
   deploy_helper_files
-  
+
   # Optional actions based on user choices
   if [[ "$finit_options_choices" =~ (rpcs3_firmware|Enable All) ]]; then
     if [[ $(check_network_connectivity) == "true" ]]; then
@@ -433,7 +433,7 @@ finit() {
   if [[ "$finit_options_choices" =~ (rd_controller_profile|Enable All) ]]; then
     install_retrodeck_controller_profile
   fi
-  if [[ "$finit_options_choices" =~ (rd_prepacks|Enable All) ]]; then 
+  if [[ "$finit_options_choices" =~ (rd_prepacks|Enable All) ]]; then
     install_retrodeck_starterpack
   fi
 
@@ -449,7 +449,7 @@ finit() {
 install_retrodeck_starterpack() {
   # This function will install the roms, gamelists and metadata for the RetroDECK Starter Pack, a curated selection of games the creators of RetroDECK enjoy.
   # USAGE: install_retrodeck_starterpack
-  
+
   ## DOOM section ##
   cp /app/retrodeck/extras/doom1.wad "$roms_folder/doom/doom1.wad" # No -f in case the user already has it
   mkdir -p "/var/config/emulationstation/.emulationstation/gamelists/doom"

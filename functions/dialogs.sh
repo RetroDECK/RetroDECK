@@ -113,7 +113,7 @@ configurator_move_folder_dialog() {
             unlink "$dest_root/$rd_dir_path" # In case there is already a symlink at the picked destination
             move "$dir_to_move" "$dest_root/$rd_dir_path"
             if [[ -d "$dest_root/$rd_dir_path" ]]; then # If the move succeeded
-              eval "$rd_dir_name"="$dest_root/$rd_dir_path" # Set the new path for that folder variable in retrodeck.cfg
+              declare -g "$rd_dir_name=$dest_root/$rd_dir_path" # Set the new path for that folder variable in retrodeck.cfg
               if [[ "$rd_dir_name" == "rdhome" ]]; then # If the whole retrodeck folder was moved...
                 prepare_emulator "postmove" "retrodeck"
               fi
@@ -146,7 +146,7 @@ configurator_move_folder_dialog() {
   else # The folder to move was not found at the path pulled from retrodeck.cfg and it needs to be reconfigured manually.
     configurator_generic_dialog "RetroDECK Configurator - Move Folder" "The $(basename $dir_to_move) folder was not found at the expected location.\n\nThis may have happened if the folder was moved manually.\n\nPlease select the current location of the folder."
     dir_to_move=$(directory_browse "RetroDECK $(basename $dir_to_move) directory location")
-    eval "$rd_dir_name"="$dir_to_move"
+    declare -g "$rd_dir_name=$dir_to_move"
     prepare_emulator "postmove" "all"
     conf_write
     configurator_generic_dialog "RetroDECK Configurator - Move Folder" "RetroDECK $(basename $dir_to_move) folder now configured at\n$dir_to_move."
