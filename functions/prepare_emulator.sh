@@ -710,6 +710,9 @@ prepare_emulator() {
 
     mkdir -p "/var/config/mame"
     cp -fvr "$emuconfigs/mame/**" "/var/config/mame"
+    sed -i 's#RETRODECKROMSDIR#'$roms_folder'#g' "/var/config/gzdoom/*.ini"
+    sed -i 's#RETRODECKHOMESDIR#'$rdhome'#g' "/var/config/gzdoom/*.ini"
+
   fi
 
   if [[ "$emulator" =~ ^(gzdoom|GZDOOM|all)$ ]]; then
