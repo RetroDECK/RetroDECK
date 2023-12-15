@@ -29,6 +29,6 @@ fetch_manifest_version(){
     # Use awk to extract the value of the first iteration of VERSION variable
     manifest_version=$(echo "$manifest_content" | awk '/VERSION=/ && !/#/ { sub(/.*VERSION=/, ""); sub(/#.*/, ""); print; exit }')
     # Trim leading and trailing whitespace
-    manifest_version=$(echo "$manifest_version" | awk '{$1=$1;print}')
+    manifest_version=$(echo "$manifest_version" | awk '{gsub(/[^0-9.a-zA-Z]/,""); print}')
     echo "$manifest_version"
 }

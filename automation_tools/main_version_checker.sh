@@ -7,7 +7,6 @@ source automation_tools/version_extractor.sh
 # Set the file paths
 appdata="net.retrodeck.retrodeck.appdata.xml"
 manifest="net.retrodeck.retrodeck.yml"
-manifest_content=$(cat "$manifest")
 
 compare_versions() {
     local manifest_version_cleaned=$(echo "$1" | sed 's/[a-zA-Z]//g')
