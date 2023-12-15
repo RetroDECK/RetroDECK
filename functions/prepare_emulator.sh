@@ -19,7 +19,7 @@ prepare_emulator() {
         local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
         if [[ ! $current_setting_name =~ (rdhome|sdcard) ]]; then # Ignore these locations
           local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
-          eval "$current_setting_name=$rdhome/$(basename $current_setting_value)"
+          declare -g "$current_setting_name=$rdhome/$(basename $current_setting_value)"
           mkdir -p "$rdhome/$(basename $current_setting_value)"
         fi
       done < <(grep -v '^\s*$' $rd_conf | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
@@ -30,7 +30,7 @@ prepare_emulator() {
         if [[ ! $current_setting_name =~ (rdhome|sdcard) ]]; then # Ignore these locations
           local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
           if [[ -d "$rdhome/$(basename $current_setting_value)" ]]; then # If the folder exists at the new ~/retrodeck location
-              eval "$current_setting_name=$rdhome/$(basename $current_setting_value)"
+              declare -g "$current_setting_name=$rdhome/$(basename $current_setting_value)"
           fi
         fi
       done < <(grep -v '^\s*$' $rd_conf | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
@@ -45,9 +45,9 @@ prepare_emulator() {
       set_setting_value "$es_settings" "ROMDirectory" "$roms_folder" "es_settings"
       set_setting_value "$es_settings" "MediaDirectory" "$media_folder" "es_settings"
       set_setting_value "$es_settings" "UserThemeDirectory" "$themes_folder" "es_settings"
+      dir_prep "$rdhome/gamelists" "/var/config/emulationstation/.emulationstation/gamelists"
       emulationstation --home /var/config/emulationstation --create-system-dirs
       update_splashscreens
-      dir_prep "$rdhome/gamelists" "/var/config/emulationstation/.emulationstation/gamelists"
     fi
     if [[ "$action" == "postmove" ]]; then
       set_setting_value "$es_settings" "ROMDirectory" "$roms_folder" "es_settings"
@@ -539,32 +539,32 @@ prepare_emulator() {
     fi
   fi
 
-  # if [[ "$emulator" =~ ^(ryujunx|Ryujinx|all)$ ]]; then
-  #   if [[ "$action" == "reset" ]]; then # Run reset-only commands
-  #     echo "------------------------"
-  #     echo "Initializing RYUJINX"
-  #     echo "------------------------"
-  #     if [[ $multi_user_mode == "true" ]]; then
-  #       rm -rf "$multi_user_data_folder/$SteamAppUser/config/Ryujinx"
-  #       mkdir -p "$multi_user_data_folder/$SteamAppUser/config/Ryujinx/system"
-  #       cp -fv $emuconfigs/ryujinx/* "$multi_user_data_folder/$SteamAppUser/config/Ryujinx"
-  #       sed -i 's#/home/deck/retrodeck#'$rdhome'#g' "$multi_user_data_folder/$SteamAppUser/config/Ryujinx/Config.json"
-  #       dir_prep "$multi_user_data_folder/$SteamAppUser/config/Ryujinx" "/var/config/Ryujinx"
-  #     else
-  #       # removing config directory to wipe legacy files
-  #       rm -rf /var/config/Ryujinx
-  #       mkdir -p /var/config/Ryujinx/system
-  #       cp -fv $emuconfigs/ryujinx/* /var/config/Ryujinx
-  #       sed -i 's#/home/deck/retrodeck#'$rdhome'#g' "$ryujinxconf"
-  #     fi
-  #   fi
-  #   if [[ "$action" == "reset" ]] || [[ "$action" == "postmove" ]]; then # Run commands that apply to both resets and moves
-  #     dir_prep "$bios_folder/switch/keys" "/var/config/Ryujinx/system"
-  #   fi
-  #   if [[ "$action" == "postmove" ]]; then # Run only post-move commands
-  #     sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "$ryujinxconf" # This is an unfortunate one-off because set_setting_value does not currently support JSON
-  #   fi
-  # fi
+  if [[ "$emulator" =~ ^(ryujunx|Ryujinx|all)$ ]]; then
+    if [[ "$action" == "reset" ]]; then # Run reset-only commands
+      echo "------------------------"
+      echo "Initializing RYUJINX"
+      echo "------------------------"
+      if [[ $multi_user_mode == "true" ]]; then
+        rm -rf "$multi_user_data_folder/$SteamAppUser/config/Ryujinx"
+        mkdir -p "$multi_user_data_folder/$SteamAppUser/config/Ryujinx/system"
+        cp -fv $emuconfigs/ryujinx/* "$multi_user_data_folder/$SteamAppUser/config/Ryujinx"
+        sed -i 's#/home/deck/retrodeck#'$rdhome'#g' "$multi_user_data_folder/$SteamAppUser/config/Ryujinx/Config.json"
+        dir_prep "$multi_user_data_folder/$SteamAppUser/config/Ryujinx" "/var/config/Ryujinx"
+      else
+        # removing config directory to wipe legacy files
+        rm -rf /var/config/Ryujinx
+        mkdir -p /var/config/Ryujinx/system
+        cp -fv $emuconfigs/ryujinx/* /var/config/Ryujinx
+        sed -i 's#/home/deck/retrodeck#'$rdhome'#g' "$ryujinxconf"
+      fi
+    fi
+    if [[ "$action" == "reset" ]] || [[ "$action" == "postmove" ]]; then # Run commands that apply to both resets and moves
+      dir_prep "$bios_folder/switch/keys" "/var/config/Ryujinx/system"
+    fi
+    if [[ "$action" == "postmove" ]]; then # Run only post-move commands
+      sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "$ryujinxconf" # This is an unfortunate one-off because set_setting_value does not currently support JSON
+    fi
+  fi
 
   if [[ "$emulator" =~ ^(xemu|XEMU|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
@@ -642,6 +642,7 @@ prepare_emulator() {
       dir_prep "$logs_folder/yuzu" "/var/data/yuzu/log"
       dir_prep "$screenshots_folder" "/var/data/yuzu/screenshots"
       dir_prep "$mods_folder/Yuzu" "/var/data/yuzu/load"
+      mkdir -pv "$rdhome/customs/yuzu"
       # removing dead symlinks as they were present in a past version
       if [ -d $bios_folder/switch ]; then
         find $bios_folder/switch -xtype l -exec rm {} \;
@@ -664,6 +665,68 @@ prepare_emulator() {
       set_setting_value "$yuzuconf" "Paths\gamedirs\4\path" "$roms_folder/switch" "yuzu" "UI"
       set_setting_value "$yuzuconf" "Screenshots\screenshot_path" "$screenshots_folder" "yuzu" "UI"
     fi
+  fi
+
+  if [[ "$emulator" =~ ^(vita3k|Vita3K|all)$ ]]; then
+    if [[ "$action" == "reset" ]]; then # Run reset-only commands
+    echo "----------------------"
+    echo "Initializing Vita3K"
+    echo "----------------------"
+    if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
+      echo "Figure out what Vita3k needs for multi-user"
+    else # Single-user actions
+      # NOTE: the emulator is writing in "." so it must be placed in the rw filesystem. A symlink of the binary is already placed in /app/bin/Vita3K
+      rm -rf "/var/data/Vita3K"
+      mkdir -p "/var/data/Vita3K"
+      unzip "/app/retrodeck/vita3k.zip" -d "/var/data/Vita3K"
+      chmod +x "/var/data/Vita3K/Vita3K"
+      rm -f "/var/data/Vita3K/update-vita3k.sh"
+      cp -fvr "$emuconfigs/vita3k/config.yml" "/var/data/Vita3K" # Emulator config
+      cp -fvr "$emuconfigs/vita3k/ux0" "$bios_folder/Vita3K/Vita3K" # User config
+      set_setting_value "$vita3kconf" "pref-path" "$rdhome/bios/Vita3K/Vita3K/" "vita3k"
+    fi
+    # Shared actions
+    dir_prep "$saves_folder/psvita/vita3k" "$bios_folder/Vita3K/Vita3K/ux0/user/00/savedata" # Multi-user safe?
+
+    # Installing firmware
+    # TODO: at the moment this is here instead of a tool because it seems like it cannot run without Firmware
+    curl "http://dus01.psv.update.playstation.net/update/psv/image/2022_0209/rel_f2c7b12fe85496ec88a0391b514d6e3b/PSVUPDAT.PUP" -po /tmp/PSVUPDAT.PUP
+    curl "http://dus01.psp2.update.playstation.net/update/psp2/image/2019_0924/sd_8b5f60b56c3da8365b973dba570c53a5/PSP2UPDAT.PUP?dest=us" -po /tmp/PSP2UPDAT.PUP
+    Vita3K --firmware /tmp/PSVUPDAT.PUP
+    Vita3K --firmware /tmp/PSP2UPDAT.PUP
+    if [[ "$action" == "postmove" ]]; then # Run only post-move commands
+      dir_prep "$saves_folder/psvita/vita3k" "$bios_folder/Vita3K/Vita3K/ux0/user/00/savedata" # Multi-user safe?
+      set_setting_value "$vita3kconf" "pref-path" "$rdhome/bios/Vita3K/Vita3K/" "vita3k"
+    fi
+  fi
+
+  if [[ "$emulator" =~ ^(mame|MAME|all)$ ]]; then
+    # TODO: do a proper script
+    # This is just a placeholder script to test the emulator's flow
+    echo "----------------------"
+    echo "Initializing MAME"
+    echo "----------------------"
+
+    mkdir -p "/var/config/mame"
+    cp -fvr "$emuconfigs/mame/**" "/var/config/mame"
+
+  fi
+
+  if [[ "$emulator" =~ ^(gzdoom|GZDOOM|all)$ ]]; then
+    # TODO: do a proper script
+    # This is just a placeholder script to test the emulator's flow
+    echo "----------------------"
+    echo "Initializing GZDOOM"
+    echo "----------------------"
+
+    mkdir -p "/var/config/gzdoom"
+    mkdir -p "/var/data/gzdoom"
+    cp -fvr "$emuconfigs/gzdoom/gzdoom.ini" "/var/config/gzdoom"
+    cp -fvr "$emuconfigs/gzdoom/gzdoom.pk3" "/var/data/gzdoom"
+
+    sed -i 's#RETRODECKROMSDIR#'$roms_folder'#g' "/var/config/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON
+    sed -i 's#RETRODECKSAVESDIR#'$saves_folder'#g' "/var/config/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON
+
   fi
 
   # Update presets for all emulators after any reset or move

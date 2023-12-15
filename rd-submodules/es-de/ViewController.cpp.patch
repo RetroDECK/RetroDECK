@@ -1,22 +1,7 @@
 diff -au1r emulationstation-de/es-app/src/views/ViewController.cpp emulationstation-de/es-app/src/views/ViewController.cpp
---- emulationstation-de/es-app/src/views/ViewController.cpp	2023-08-23 13:12:15.625292630 +0200
-+++ emulationstation-de/es-app/src/views/ViewController.cpp	2023-08-23 14:29:23.547223951 +0200
-@@ -164,9 +164,7 @@
- {
--    mNoGamesErrorMessage = "NO GAME FILES WERE FOUND. EITHER PLACE YOUR GAMES IN "
--                           "THE CURRENTLY CONFIGURED ROM DIRECTORY OR CHANGE "
--                           "ITS PATH USING THE BUTTON BELOW. OPTIONALLY THE ROM "
--                           "DIRECTORY STRUCTURE CAN BE GENERATED WHICH WILL "
--                           "CREATE A TEXT FILE FOR EACH SYSTEM PROVIDING SOME "
--                           "INFORMATION SUCH AS THE SUPPORTED FILE EXTENSIONS.\n"
--                           "THIS IS THE CURRENTLY CONFIGURED ROM DIRECTORY:\n";
-+    mNoGamesErrorMessage = "RETRODECK COULD NOT FIND ANY ROM FILES. "
-+                           "PLEASE PLACE YOUR ROM FILES INTO THE APPROPRIATE "
-+                           "SYSTEM SUBFOLDER IN THE CONFIGURED ROM DIRECTORY "
-+                           "AND RUN RETRODECK AGAIN TO SCAN YOUR LIBRARY.\n"
-+                           "THE CURRENTLY CONFIGURED ROM DIRECTORY IS:\n";
- 
-@@ -179,90 +177,3 @@
+--- emulationstation-de/es-app/src/views/ViewController.cpp	2023-11-04 15:09:24.332178777 -0400
++++ emulationstation-de/es-app/src/views/ViewController.cpp	2023-11-04 15:13:59.015780009 -0400
+@@ -195,91 +195,3 @@
      mNoGamesMessageBox = new GuiMsgBox(
 -        HelpStyle(), mNoGamesErrorMessage + mRomDirectory, "CHANGE ROM DIRECTORY",
 -        [this] {
@@ -29,22 +14,24 @@ diff -au1r emulationstation-de/es-app/src/views/ViewController.cpp emulationstat
 -            if (Settings::getInstance()->getBool("VirtualKeyboard")) {
 -                mWindow->pushGui(new GuiTextEditKeyboardPopup(
 -                    HelpStyle(), 0.0f, "ENTER ROM DIRECTORY PATH", currentROMDirectory,
--                    [this](const std::string& newROMDirectory) {
--                        Settings::getInstance()->setString("ROMDirectory",
--                                                           Utils::String::trim(newROMDirectory));
--                        Settings::getInstance()->saveFile();
+-                    [this, currentROMDirectory](const std::string& newROMDirectory) {
+-                        if (currentROMDirectory != newROMDirectory) {
+-                            Settings::getInstance()->setString(
+-                                "ROMDirectory", Utils::String::trim(newROMDirectory));
+-                            Settings::getInstance()->saveFile();
 -#if defined(_WIN64)
--                        mRomDirectory =
--                            Utils::String::replace(FileData::getROMDirectory(), "/", "\\");
+-                            mRomDirectory =
+-                                Utils::String::replace(FileData::getROMDirectory(), "/", "\\");
 -#else
--                        mRomDirectory = FileData::getROMDirectory();
+-                            mRomDirectory = FileData::getROMDirectory();
 -#endif
--                        mNoGamesMessageBox->changeText(mNoGamesErrorMessage + mRomDirectory);
--                        mWindow->pushGui(new GuiMsgBox(HelpStyle(),
--                                                       "ROM DIRECTORY SETTING SAVED, RESTART\n"
--                                                       "THE APPLICATION TO RESCAN THE SYSTEMS",
--                                                       "OK", nullptr, "", nullptr, "", nullptr,
--                                                       true, true));
+-                            mNoGamesMessageBox->changeText(mNoGamesErrorMessage + mRomDirectory);
+-                            mWindow->pushGui(new GuiMsgBox(HelpStyle(),
+-                                                           "ROM DIRECTORY SETTING SAVED, RESTART\n"
+-                                                           "THE APPLICATION TO RESCAN THE SYSTEMS",
+-                                                           "OK", nullptr, "", nullptr, "", nullptr,
+-                                                           nullptr, true, true));
+-                        }
 -                    },
 -                    false, "SAVE", "SAVE CHANGES?", "Currently configured path:",
 -                    currentROMDirectory, "LOAD CURRENTLY CONFIGURED PATH",
@@ -68,7 +55,7 @@ diff -au1r emulationstation-de/es-app/src/views/ViewController.cpp emulationstat
 -                                                       "ROM DIRECTORY SETTING SAVED, RESTART\n"
 -                                                       "THE APPLICATION TO RESCAN THE SYSTEMS",
 -                                                       "OK", nullptr, "", nullptr, "", nullptr,
--                                                       true));
+-                                                       nullptr, true));
 -                    },
 -                    false, "SAVE", "SAVE CHANGES?", "Currently configured path:",
 -                    currentROMDirectory, "LOAD CURRENTLY CONFIGURED PATH",
@@ -82,9 +69,8 @@ diff -au1r emulationstation-de/es-app/src/views/ViewController.cpp emulationstat
 -                "THIS WILL CREATE DIRECTORIES FOR ALL THE\n"
 -                "GAME SYSTEMS DEFINED IN es_systems.xml\n\n"
 -                "THIS MAY CREATE A LOT OF FOLDERS SO IT'S\n"
--                "ADVICED TO REMOVE THE ONES YOU DON'T NEED\n\n"
--                "PROCEED?",
--                "YES",
+-                "ADVICED TO REMOVE THE ONES YOU DON'T NEED",
+-                "PROCEED",
 -                [this] {
 -                    if (!SystemData::createSystemDirectories()) {
 -                        mWindow->pushGui(new GuiMsgBox(HelpStyle(),
@@ -92,7 +78,7 @@ diff -au1r emulationstation-de/es-app/src/views/ViewController.cpp emulationstat
 -                                                       "GENERATED, EXIT THE APPLICATION AND PLACE\n"
 -                                                       "YOUR GAMES IN THE NEWLY CREATED FOLDERS",
 -                                                       "OK", nullptr, "", nullptr, "", nullptr,
--                                                       true));
+-                                                       nullptr, true));
 -                    }
 -                    else {
 -                        mWindow->pushGui(new GuiMsgBox(HelpStyle(),
@@ -100,19 +86,16 @@ diff -au1r emulationstation-de/es-app/src/views/ViewController.cpp emulationstat
 -                                                       "PERMISSION PROBLEMS OR DISK FULL?\n\n"
 -                                                       "SEE THE LOG FILE FOR MORE DETAILS",
 -                                                       "OK", nullptr, "", nullptr, "", nullptr,
--                                                       true));
+-                                                       nullptr, true));
 -                    }
 -                },
--                "NO", nullptr, "", nullptr, true));
+-                "CANCEL", nullptr, "", nullptr, nullptr, false));
 -        },
 -        "QUIT",
 +        HelpStyle(), mNoGamesErrorMessage + mRomDirectory, "QUIT",
          [] {
-@@ -272,3 +183,3 @@
+@@ -289,3 +201,3 @@
          },
--        true, false,
-+        "", nullptr, "", nullptr, true, false,
+-        nullptr, true, false,
++        "", nullptr, "", nullptr, nullptr, true, true,
          (mRenderer->getIsVerticalOrientation() ?
-@@ -1446 +1357,2 @@
- }
-+

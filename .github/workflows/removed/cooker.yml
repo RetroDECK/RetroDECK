@@ -68,7 +68,7 @@ jobs:
 
       - name: Buld part 1 - Until melonds
         run: |
-          sudo flatpak-builder --build-only --stop-at=melonds --user --force-clean --repo=${GITHUB_WORKSPACE}/local retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
+          sudo flatpak-builder --build-only --stop-at=melonds --user --force-clean --repo=${GITHUB_WORKSPACE}/.local retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
 
       - name: Compress cache
         run: |
@@ -140,8 +140,8 @@ jobs:
 
       - name: Create Bundle
         run: |
-          sudo flatpak-builder --user --force-clean --repo=${GITHUB_WORKSPACE}/local retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
-          sudo flatpak build-bundle $GITHUB_WORKSPACE/local RetroDECK.flatpak net.retrodeck.retrodeck
+          sudo flatpak-builder --user --force-clean --repo=${GITHUB_WORKSPACE}/.local retrodeck-flatpak-cooker net.retrodeck.retrodeck.yml
+          sudo flatpak build-bundle $GITHUB_WORKSPACE/.local RetroDECK.flatpak net.retrodeck.retrodeck
 
       - name: Get date for artifacts
         id: date

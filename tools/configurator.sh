@@ -29,11 +29,14 @@ source /app/libexec/global.sh
 #       - Citra
 #       - Dolphin
 #       - Duckstation
+#       - MAME
 #       - MelonDS
 #       - PCSX2
 #       - PPSSPP
 #       - Primehack
 #       - RPCS3
+#       - Ryujinx
+#       - Vita3K
 #       - XEMU
 #       - Yuzu
 #     - Tools
@@ -69,20 +72,25 @@ source /app/libexec/global.sh
 #           - Reset Citra
 #           - Reset Dolphin
 #           - Reset Duckstation
+#           - Reset GZDoom
 #           - Reset MelonDS
 #           - Reset PCSX2
 #           - Reset PPSSPP
 #           - Reset Primehack
 #           - Reset RPCS3
+#           - Reset Ryujinx
+#           - Reset Vita3k
 #           - Reset XEMU
 #           - Reset Yuzu
 #         - Reset All Emulators
+#         - Reset EmulationStation DE
 #         - Reset RetroDECK
 #     - RetroDECK: About
 #       - RetroDECK Version History
 #         - Full changelog
 #         - Version-specific changelogs
 #       - RetroDECK Credits
+#     - Add to Steam
 #     - Developer Options (Hidden)
 #       - Change Multi-user mode
 #       - Change Update channel
@@ -99,13 +107,15 @@ configurator_welcome_dialog() {
     "RetroDECK: Tools" "Compress games, move RetroDECK and install optional features" \
     "RetroDECK: Troubleshooting" "Backup data, perform BIOS / multi-disc file checks checks and emulator resets" \
     "RetroDECK: About" "Show additional information about RetroDECK" \
+    "Sync with Steam" "Sync with Steam all the favorites games" \
     "Developer Options" "Welcome to the DANGER ZONE")
   else
     welcome_menu_options=("Presets & Settings" "Here you find various presets, tweaks and settings to customize your RetroDECK experience" \
     "Open Emulator" "Launch and configure each emulators settings (for advanced users)" \
     "RetroDECK: Tools" "Compress games, move RetroDECK and install optional features" \
     "RetroDECK: Troubleshooting" "Backup data, perform BIOS / multi-disc file checks checks and emulator resets" \
-    "RetroDECK: About" "Show additional information about RetroDECK" )
+    "RetroDECK: About" "Show additional information about RetroDECK" \
+    "Add to Steam" "Add to Steam all the favorite games, it will not remove added games")
   fi
 
   choice=$(zenity --list --title="RetroDECK Configurator Utility" --cancel-label="Quit" \
@@ -133,6 +143,10 @@ configurator_welcome_dialog() {
 
   "RetroDECK: About" )
     configurator_about_retrodeck_dialog
+  ;;
+
+  "Sync with Steam" )
+    configurator_add_steam
   ;;
 
   "Developer Options" )
@@ -426,13 +440,16 @@ configurator_open_emulator_dialog() {
   "Citra" "Open the N3DS emulator Citra" \
   "Dolphin" "Open the Wii & GC emulator Dolphin" \
   "Duckstation" "Open the PSX emulator Duckstation" \
+  "MAME" "Open the Multiple Arcade Machine Emulator emulator MAME" \
   "MelonDS" "Open the NDS emulator MelonDS" \
   "PCSX2" "Open the PS2 emulator PSXC2" \
   "PPSSPP" "Open the PSP emulator PPSSPP" \
   "Primehack" "Open the Metroid Prime emulator Primehack" \
   "RPCS3" "Open the PS3 emulator RPCS3" \
+  "Ryujinx" "Open the Switch emulator Ryujinx" \
+  "Vita3K" "Open the PSVita emulator Vita3K" \
   "XEMU" "Open the Xbox emulator XEMU" \
-  "Yuzu" "Open the Switch emulator Yuzu" )
+  "Yuzu" "Open the Switch emulator Yuzu")
 
   case $emulator in
 
@@ -456,6 +473,10 @@ configurator_open_emulator_dialog() {
     duckstation-qt
   ;;
 
+  "MAME" )
+    mame
+  ;;
+
   "MelonDS" )
     melonDS
   ;;
@@ -474,6 +495,14 @@ configurator_open_emulator_dialog() {
 
   "RPCS3" )
     rpcs3
+  ;;
+
+  "Ryujinx" )
+    ryujinx-wrapper
+  ;;
+
+  "Vita3K" )
+    Vita3K
   ;;
 
   "XEMU" )
@@ -515,7 +544,7 @@ configurator_retrodeck_tools_dialog() {
   ;;
 
   "Install: RetroDECK SD Controller Profile" )
-    configurator_generic_dialog "RetroDECK Configurator - Install: RetroDECK Controller Profile" "We are now offering a new official RetroDECK controller profile!\nIt is an optional component that helps you get the most out of RetroDECK with a new in-game radial menu for unified hotkeys across emulators.\n\nThe files need to be installed outside of the normal ~/retrodeck folder, so we wanted your permission before proceeding.\n\nThe files will be installed at the following shared Steam locations:\n\n$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/\n$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"
+    configurator_generic_dialog "RetroDECK Configurator - Install: RetroDECK Controller Profile" "We are now offering a new official RetroDECK controller profile!\nIt is an optional component that helps you get the most out of RetroDECK with a new in-game radial menu for unified hotkeys across emulators.\n\nThe files need to be installed outside of the normal ~/retrodeck folder, so we wanted your permission before proceeding.\n\nThe files will be installed at the following shared Steam locations:\n\n$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/\n$HOME/.steam/steam/controller_base/templates"
     if [[ $(configurator_generic_question_dialog "Install: RetroDECK Controller Profile" "Would you like to install the official RetroDECK controller profile?") == "true" ]]; then
       install_retrodeck_controller_profile
       configurator_generic_dialog "RetroDECK Configurator - Install: RetroDECK Controller Profile" "The RetroDECK controller profile install is complete.\nSee the Wiki for more details on how to use it to its fullest potential!"
@@ -957,6 +986,7 @@ configurator_reset_dialog() {
   --column="Choice" --column="Action" \
   "Reset Specific Emulator" "Reset only one specific emulator to default settings" \
   "Reset All Emulators" "Reset all emulators to default settings" \
+  "Reset EmulationStation DE" "Reset the ES-DE frontend" \
   "Reset RetroDECK" "Reset RetroDECK to default settings" )
 
   case $choice in
@@ -972,22 +1002,31 @@ configurator_reset_dialog() {
     "Citra" "Reset the N3DS emulator Citra to default settings" \
     "Dolphin" "Reset the Wii/GameCube emulator Dolphin to default settings" \
     "Duckstation" "Reset the PSX emulator Duckstation to default settings" \
+    "GZDoom" "Reset the GZDoom Doom engine to default settings" \
+    "MAME" "Reset the Multiple Arcade Machine Emulator (MAME) to default settings" \
     "MelonDS" "Reset the NDS emulator MelonDS to default settings" \
     "PCSX2" "Reset the PS2 emulator PCSX2 to default settings" \
     "PPSSPP" "Reset the PSP emulator PPSSPP to default settings" \
     "Primehack" "Reset the Metroid Prime emulator Primehack to default settings" \
     "RPCS3" "Reset the PS3 emulator RPCS3 to default settings" \
+    "Ryujinx" "Reset the Switch emulator Ryujinx to default settings" \
+    "Vita3k" "Reset the PS Vita emulator Vita3k to default settings" \
     "XEMU" "Reset the XBOX emulator XEMU to default settings" \
     "Yuzu" "Reset the Switch emulator Yuzu to default settings" )
 
     case $emulator_to_reset in
 
-    "RetroArch" | "XEMU" ) # Emulators that require network access
-      if [[ $(configurator_reset_confirmation_dialog "$emulator_to_reset" "Are you sure you want to reset the $emulator_to_reset emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
-        prepare_emulator "reset" "$emulator_to_reset" "configurator"
-        configurator_process_complete_dialog "resetting $emulator_to_reset"
+    "RetroArch" | "Vita3k" | "XEMU" ) # Emulators that require network access
+      if [[ $(check_network_connectivity) == "true" ]]; then
+        if [[ $(configurator_reset_confirmation_dialog "$emulator_to_reset" "Are you sure you want to reset the $emulator_to_reset emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
+          prepare_emulator "reset" "$emulator_to_reset" "configurator"
+          configurator_process_complete_dialog "resetting $emulator_to_reset"
+        else
+          configurator_generic_dialog "RetroDeck Configurator - RetroDECK: Reset" "Reset process cancelled."
+          configurator_reset_dialog
+        fi
       else
-        configurator_generic_dialog "RetroDeck Configurator - RetroDECK: Reset" "Reset process cancelled."
+        configurator_generic_dialog "RetroDeck Configurator - RetroDECK: Reset" "Resetting this emulator requires active network access.\nPlease try again when you are connected to an Internet-capable network.\n\nReset process cancelled."
         configurator_reset_dialog
       fi
     ;;
@@ -1010,17 +1049,36 @@ configurator_reset_dialog() {
   ;;
 
 "Reset All Emulators" )
-  if [[ $(configurator_reset_confirmation_dialog "all emulators" "Are you sure you want to reset all emulators to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
-    (
-    prepare_emulator "reset" "all"
-    ) |
-    zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
-    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Finishing Initialization" \
-    --text="RetroDECK is finishing the reset process, please wait."
-    configurator_process_complete_dialog "resetting all emulators"
+  if [[ $(check_network_connectivity) == "true" ]]; then
+    if [[ $(configurator_reset_confirmation_dialog "all emulators" "Are you sure you want to reset all emulators to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
+      (
+      prepare_emulator "reset" "all"
+      ) |
+      zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Finishing Initialization" \
+      --text="RetroDECK is finishing the reset process, please wait."
+      configurator_process_complete_dialog "resetting all emulators"
+    else
+      configurator_generic_dialog "RetroDeck Configurator - RetroDECK: Reset" "Reset process cancelled."
+      configurator_reset_dialog
+    fi
   else
-    configurator_generic_dialog "RetroDeck Configurator - RetroDECK: Reset" "Reset process cancelled."
+    configurator_generic_dialog "RetroDeck Configurator - RetroDECK: Reset" "Resetting all emulators requires active network access.\nPlease try again when you are connected to an Internet-capable network.\n\nReset process cancelled."
+    configurator_reset_dialog
+  fi
+;;
+
+"Reset EmulationStation DE" )
+  if [[ $(configurator_reset_confirmation_dialog "EmulationStation DE" "Are you sure you want to reset EmulationStation DE to default settings?\n\nYour scraped media, downloaded themes and gamelists will not be touched.\n\nThis process cannot be undone.") == "true" ]]; then
+    zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator Utility - Reset EmulationStation DE" \
+    --text="You are resetting EmulationStation DE to its default settings.\n\nAfter the process is complete you will need to exit RetroDECK and run it again."
+    prepare_emulator "reset" "emulationstation" "configurator"
+    configurator_process_complete_dialog "resetting EmulationStation DE"
+  else
+    configurator_generic_dialog "RetroDeck Configurator - EmulationStation DE: Reset" "Reset process cancelled."
     configurator_reset_dialog
   fi
 ;;
@@ -1073,6 +1131,11 @@ configurator_about_retrodeck_dialog() {
   ;;
 
   esac
+}
+
+configurator_add_steam() {
+    python3 /app/libexec/steam-sync/steam-sync.py
+    configurator_welcome_dialog
 }
 
 configurator_version_history_dialog() {

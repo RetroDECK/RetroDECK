@@ -1,8 +1,8 @@
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 9af66009a1..2acd3bed9a 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -149,7 +149,7 @@ if(GIT_FOUND)
+diff --git a/CMake/ScmRevGen.cmake b/CMake/ScmRevGen.cmake
+index aacf7491ce..503791cda8 100644
+--- a/CMake/ScmRevGen.cmake
++++ b/CMake/ScmRevGen.cmake
+@@ -7,7 +7,7 @@ if(GIT_FOUND)
        OUTPUT_VARIABLE DOLPHIN_WC_REVISION
        OUTPUT_STRIP_TRAILING_WHITESPACE)
    # defines DOLPHIN_WC_DESCRIBE

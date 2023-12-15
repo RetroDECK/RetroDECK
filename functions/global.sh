@@ -103,6 +103,11 @@ primehackqtconf="/var/config/primehack/Qt.ini"
 rpcs3conf="/var/config/rpcs3/config.yml"
 rpcs3vfsconf="/var/config/rpcs3/vfs.yml"
 
+# Vita3k config files
+
+vita3kconf="/var/data/Vita3K/config.yml"
+vita3kusrconfdir="$bios_folder/Vita3K/Vita3K"
+
 # We moved the lockfile in /var/config/retrodeck in order to solve issue #53 - Remove in a few versions
 if [ -f "$HOME/retrodeck/.lock" ]
 then
@@ -126,9 +131,13 @@ if [[ ! -f "$rd_conf" ]]; then
   fi
 
   # Check if SD card path has changed from SteamOS update
-  if [[ ! -d $default_sd && "$(ls -A /run/media/deck/)" ]]; then
-    configurator_generic_dialog "RetroDECK Setup" "The SD card was not found in the expected location.\nThis may happen when SteamOS is updated.\n\nPlease browse to the current location of the SD card.\n\nIf you are not using an SD card, please click \"Cancel\"."
-    default_sd=$(directory_browse "SD Card Location")
+  if [[ ! -d "$default_sd" && "$(ls -A /run/media/deck/)" ]]; then
+    if [[ $(find media/deck/* -maxdepth 0 -type d -print | wc -l) -eq 1 ]]; then # If there is only one SD card found in the new Steam OS 3.5 location, assign it as the default
+      default_sd="$(find media/deck/* -maxdepth 0 -type d -print)"
+    else # If the default legacy path cannot be found, and there are multiple entries in the new Steam OS 3.5 SD card path, let the user pick which one to use
+      configurator_generic_dialog "RetroDECK Setup" "The SD card was not found in the expected location.\nThis may happen when SteamOS is updated.\n\nPlease browse to the current location of the SD card.\n\nIf you are not using an SD card, please click \"Cancel\"."
+      default_sd="$(directory_browse "SD Card Location")"
+    fi
   fi
 
   cp $rd_defaults $rd_conf # Load default settings file

@@ -229,6 +229,11 @@ post_update() {
     set_setting_value "$ppssppcontrolsconf" "R" "1-51,10-192" "ppsspp" "ControlMapping"
   fi
 
+  if [[ $prev_version -le "073" ]]; then
+    # In version 0.7.3b, there was a bug that prevented the correct creations of the roms/system folders, so we force recreate them.
+    emulationstation --home /var/config/emulationstation --create-system-dirs
+  fi
+
   # The following commands are run every time.
 
   if [[ -d "/var/data/dolphin-emu/Load/DynamicInputTextures" ]]; then # Refresh installed textures if they have been enabled
@@ -239,8 +244,7 @@ post_update() {
   fi
 
   if [[ -f "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf" ]]; then # If RetroDECK controller profile has been previously installed
-    cp -f "$emuconfigs/defaults/retrodeck/RetroDECK_controller_config.vdf" "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"
-    rsync -rlD --mkpath "/app/retrodeck/binding_icons/" "$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/"
+    install_retrodeck_controller_profile
   fi
 
   update_splashscreens

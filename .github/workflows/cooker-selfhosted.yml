@@ -4,6 +4,7 @@ on:
   push:
     branches:
      - cooker*
+     - feat*
     paths:
      - '.github/workflows/**'
      - 'automation_tools/**'
@@ -41,15 +42,7 @@ jobs:
         run: "automation_tools/install_dependencies.sh"    
 
       - name: Generate cooker build ID
-        run: |
-          word1=$(shuf -n 1 ${GITHUB_WORKSPACE}/automation_tools/codename_wordlist.txt)
-          capitalized_word1="$(tr '[:lower:]' '[:upper:]' <<< ${word1:0:1})${word1:1}"
-          word2=$(shuf -n 1 ${GITHUB_WORKSPACE}/automation_tools/codename_wordlist.txt)
-          capitalized_word2="$(tr '[:lower:]' '[:upper:]' <<< ${word2:0:1})${word2:1}"
-          result=$capitalized_word1$capitalized_word2
-          echo $result > ${GITHUB_WORKSPACE}/buildid
-          echo "buildid=$result" >> $GITHUB_ENV
-          echo "VersionID is $result"
+        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/cooker_build_id.sh"
 
       - name: Run pre-build automation tasks
         run : "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/pre_build_automation.sh"
@@ -57,8 +50,8 @@ jobs:
       - name: "Adding flatpak portal for automated updates (cooker only)"
         run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/cooker_flatpak_portal_add.sh"
 
-      # - name: "Updating release notes in appdata"
-      #   run: "automation_tools/appdata_management.sh"
+      - name: "Updating release notes in appdata"
+        run: "automation_tools/appdata_management.sh"
 
       - name: "[DEBUG] Outputting manifest"
         run: cat net.retrodeck.retrodeck.yml
@@ -69,6 +62,9 @@ jobs:
         continue-on-error: true
 
       # Sometimes flatpak download fails, in this case it tries a second time
+      - name: Run pre-build automation tasks (retry)
+        if: steps.flatpak-download.outcome == 'failure'
+        run : "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/pre_build_automation.sh"
       - name: "Build flatpak: download only (retry)"
         if: steps.flatpak-download.outcome == 'failure'
         run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
@@ -101,13 +97,27 @@ jobs:
         id: commits
         continue-on-error: true
 
+      - name: Get branch name
+        id: branch_name
+        run: echo "BRANCH_NAME=$(echo $GITHUB_REF | sed 's|refs/heads/||')" >> $GITHUB_ENV
+
+      # if it's a feature branch it will not marked as "latest" cooker version
+      - name: "Set makeLatest (cooker only)"
+        run: |
+          if [[ "$BRANCH_NAME" == 'feat/'* ]]; then
+            echo "MAKE_LATEST=false" >> $GITHUB_ENV
+          else
+            echo "MAKE_LATEST=true" >> $GITHUB_ENV
+          fi
+
       - name: Publish the flatpak in a new cooker release
         uses: ncipollo/release-action@v1
         with:
-          tag: "${{ env.GITHUB_REF_SLUG }}-${{ env.buildid }}"
+          tag: "${{env.BRANCH_NAME}}-${{ env.buildid }}"
           body: |
             # Release Notes (Cooker)
             This is a cooker snapshot based on the commit: ${{ github.event.repository.full_name }}@${{github.sha}}.
+            On branch [${{env.BRANCH_NAME}}](https://github.com/XargonWan/RetroDECK/tree/${{env.BRANCH_NAME}}).
 
             ## Commits since last release
             ${{ steps.commits.outputs.commits }}
@@ -119,7 +129,7 @@ jobs:
 
           artifacts: "RetroDECK-cooker.flatpak,RetroDECK-Artifact.tar.gz"
           allowUpdates: true
-          makeLatest: true
+          makeLatest: ${{env.MAKE_LATEST}} # if it's a feat branch is not considered the latest build
           token: ${{ secrets.TRIGGER_BUILD_TOKEN }}
           repo: RetroDECK-cooker
         continue-on-error: true
@@ -131,3 +141,4 @@ jobs:
           name: retrodeck-flatpak
           path: RetroDECK-cooker.flatpak
         continue-on-error: true
+
