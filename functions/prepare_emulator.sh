@@ -708,10 +708,12 @@ prepare_emulator() {
     echo "Initializing MAME"
     echo "----------------------"
 
+    mkdir -p $saves_folder/mame-sa
     mkdir -p "/var/config/mame"
     cp -fvr "$emuconfigs/mame/**" "/var/config/mame"
     sed -i 's#RETRODECKROMSDIR#'$roms_folder'#g' "/var/config/gzdoom/*.ini"
     sed -i 's#RETRODECKHOMESDIR#'$rdhome'#g' "/var/config/gzdoom/*.ini"
+    sed -i 's#RETRODECKSAVESDIR#'$rdhome'#g' "/var/config/gzdoom/*.ini"
 
   fi
 
