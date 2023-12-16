@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source functions/functions.sh
+
 debug_dialog() {
   # This function is for displaying commands run by the Configurator without actually running them
   # USAGE: debug_dialog "command"
@@ -21,8 +23,7 @@ configurator_process_complete_dialog() {
   if [ ! $? == 0 ]; then # OK button clicked
       configurator_welcome_dialog
   elif [ ! $? == 1 ]; then # Quit button clicked
-      pkill -f retrodeck
-      pkill -f emulationstation
+      quit_retrodeck
   fi
 }
 

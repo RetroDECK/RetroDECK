@@ -72,23 +72,26 @@
             <ul>
                <li>Added new system: SOLARUS</li>
                <li>Added new engine: GZDOOM</li>
+               <li>Added new emulator: Vita3K</li>
+               <li>Added new emulator: MAME (Standalone)</li>
                <li>Quit button after emulators reset should act as an actual full quit button</li>
+               <li>Created a quit_retrodeck function to ease the quit in the scripts.</li>
             </ul>
             <p>Fixes:</p>
             <ul>
-               <li>GZDOOM: now the controller should work properly</li>
-               <li>GZDOOM: can automatically detect if the loaded file is a WAD or an IWAD</li>
+               <li>MAME (Standalone) paths should be fixed</li>
             </ul>
             <p>Issues:</p>
             <ul>
-               <li>VITA3K is not working, waiting for external fixes</li>
-               <li>MAME (standalone) is not working, more enhancements needed</li>
+               <li>GZDOOM: the controller for player 2+ is not correctly configured</li>
+               <li>GZDOOM: .doom parser got some issues</li>
             </ul>
             <p>Missing:</p>
             <ul>
                <li>GZDOOM: hotkeys</li>
                <li>SOLARUS: hotkeys</li>
-               <li>A proper reset script for the new emulators, now it's just a draft</li>
+               <li>MAME (Standalone): hotkeys</li>
+               <li>A proper reset script for the new emulators, now it's just a draft (only Vita3K is done)</li>
             </ul>
          </description>
       </release>

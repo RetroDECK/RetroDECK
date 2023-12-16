@@ -294,7 +294,7 @@ do
         zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" --text="Do you want to quit?"
         if [ $? == 0 ] # yes, quit
         then
-          exit 2
+          quit_retrodeck
         fi
       fi
     fi
@@ -304,7 +304,7 @@ do
     --title "RetroDECK" \
     --ok-label "Quit" \
     --text="No location was selected. Please run RetroDECK again to retry."
-    exit 2
+    quit_retrodeck
   fi
 done
 }
@@ -346,7 +346,7 @@ finit() {
   "Back" | "" ) # Back or X button quits
     rm -f "$rd_conf" # Cleanup unfinished retrodeck.cfg if first install is interrupted
     echo "Now quitting"
-    exit 2
+    quit_retrodeck
   ;;
 
   "Internal Storage" ) # Internal
@@ -382,7 +382,7 @@ finit() {
         --text="SD card was found but is not writable\nThis can happen with cards formatted on PC.\nPlease format the SD card through the Steam Deck's Game Mode and run RetroDECK again."
         rm -f "$rd_conf" # Cleanup unfinished retrodeck.cfg if first install is interrupted
         echo "Now quitting"
-        exit 2
+        quit_retrodeck
     else
       rdhome="$sdcard/retrodeck"
     fi
@@ -525,6 +525,11 @@ easter_eggs() {
   fi
 
   cp -f "$new_splash_file" "$current_splash_file" # Deploy assigned splash screen
+}
+
+quit_retrodeck() {
+  pkill -f retrodeck
+  pkill -f emulationstation
 }
 
 start_retrodeck() {
