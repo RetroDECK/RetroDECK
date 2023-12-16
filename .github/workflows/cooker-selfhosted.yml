@@ -73,8 +73,8 @@ jobs:
           echo "Recalculating hashes and retrying download..."
           rm -f "{GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml"
           cp "${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml.bak" "${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml"
-          ls -lah "/bin/bash ${GITHUB_WORKSPACE}" # DEBUG
-          ls -lah "/bin/bash ${GITHUB_WORKSPACE}/automation_tools" # DEBUG
+          ls -lah "${GITHUB_WORKSPACE}" # DEBUG
+          ls -lah "${GITHUB_WORKSPACE}/automation_tools" # DEBUG
           "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/pre_build_automation.sh"
           "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
 
