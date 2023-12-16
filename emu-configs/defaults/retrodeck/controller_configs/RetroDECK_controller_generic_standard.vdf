@@ -1,18 +1,18 @@
 "controller_mappings"
 {
 	"version"		"3"
-	"revision"		"84"
-	"title"		"RetroDECK: Xbox 360"
-	"description"		"RetroDECK: Xbox 360 - v.1b"
+	"revision"		"94"
+	"title"		"RetroDECK: Generic - Standard"
+	"description"		"RetroDECK: Generic - Standard - v.1b"
 	"creator"		""
 	"progenitor"		""
 	"url"		""
 	"export_type"		""
-	"controller_type"		"controller_xbox360"
-	"controller_caps"		"1590271"
+	"controller_type"		"controller_generic"
+	"controller_caps"		"1573887"
 	"major_revision"		"0"
 	"minor_revision"		"0"
-	"Timestamp"		"-1069299824"
+	"Timestamp"		"-1092650192"
 	"actions"
 	{
 		"Default"
@@ -792,7 +792,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"mouse_button LEFT, , "
+							"binding"		"mouse_button LEFT, Left Click, , "
 						}
 					}
 				}
@@ -887,7 +887,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"mouse_button RIGHT, , "
+							"binding"		"mouse_button RIGHT, Right Click, , "
 						}
 					}
 				}

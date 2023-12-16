@@ -1,18 +1,18 @@
 "controller_mappings"
 {
 	"version"		"3"
-	"revision"		"84"
-	"title"		"RetroDECK: Xbox 360"
-	"description"		"RetroDECK: Xbox 360 - v.1b"
+	"revision"		"83"
+	"title"		"RetroDECK: Switch Pro"
+	"description"		"RetroDECK: Switch - Pro - v.1b"
 	"creator"		""
 	"progenitor"		""
 	"url"		""
-	"export_type"		""
-	"controller_type"		"controller_xbox360"
-	"controller_caps"		"1590271"
+	"export_type"		"personal_local"
+	"controller_type"		"controller_switch_pro"
+	"controller_caps"		"77087743"
 	"major_revision"		"0"
 	"minor_revision"		"0"
-	"Timestamp"		"-1069299824"
+	"Timestamp"		"-936017792"
 	"actions"
 	{
 		"Default"
@@ -37,22 +37,6 @@
 		"description"		""
 		"inputs"
 		{
-			"button_a"
-			{
-				"activators"
-				{
-					"Full_Press"
-					{
-						"bindings"
-						{
-							"binding"		"xinput_button A, , "
-						}
-					}
-				}
-				"disabled_activators"
-				{
-				}
-			}
 			"button_b"
 			{
 				"activators"
@@ -69,7 +53,7 @@
 				{
 				}
 			}
-			"button_x"
+			"button_a"
 			{
 				"activators"
 				{
@@ -77,7 +61,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"xinput_button X, , "
+							"binding"		"xinput_button A, , "
 						}
 					}
 				}
@@ -94,6 +78,22 @@
 						"bindings"
 						{
 							"binding"		"xinput_button Y, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"button_x"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"xinput_button X, , "
 						}
 					}
 				}
@@ -475,6 +475,84 @@
 	"group"
 	{
 		"id"		"12"
+		"mode"		"four_buttons"
+		"name"		""
+		"description"		""
+		"inputs"
+		{
+			"button_b"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press LEFT_CONTROL, Pause / Resume, , "
+							"binding"		"key_press P, Pause / Resume, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"button_a"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press LEFT_CONTROL, Take Screenshot, , "
+							"binding"		"key_press X, Take Screenshot, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"button_y"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press LEFT_CONTROL, Fullscreen Toggle, , "
+							"binding"		"key_press RETURN, Fullscreen Toggle, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"button_x"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press LEFT_CONTROL, Open Menu, , "
+							"binding"		"key_press M, Open Menu, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+		}
+	}
+	"group"
+	{
+		"id"		"13"
 		"mode"		"joystick_move"
 		"name"		""
 		"description"		""
@@ -505,85 +583,7 @@
 	}
 	"group"
 	{
-		"id"		"11"
-		"mode"		"four_buttons"
-		"name"		""
-		"description"		""
-		"inputs"
-		{
-			"button_a"
-			{
-				"activators"
-				{
-					"Full_Press"
-					{
-						"bindings"
-						{
-							"binding"		"key_press LEFT_CONTROL, Pause / Resume, , "
-							"binding"		"key_press P, Pause / Resume, , "
-						}
-					}
-				}
-				"disabled_activators"
-				{
-				}
-			}
-			"button_b"
-			{
-				"activators"
-				{
-					"Full_Press"
-					{
-						"bindings"
-						{
-							"binding"		"key_press LEFT_CONTROL, Take Screenshot, , "
-							"binding"		"key_press X, Take Screenshot, , "
-						}
-					}
-				}
-				"disabled_activators"
-				{
-				}
-			}
-			"button_x"
-			{
-				"activators"
-				{
-					"Full_Press"
-					{
-						"bindings"
-						{
-							"binding"		"key_press LEFT_CONTROL, Fullscreen Toggle, , "
-							"binding"		"key_press RETURN, Fullscreen Toggle, , "
-						}
-					}
-				}
-				"disabled_activators"
-				{
-				}
-			}
-			"button_y"
-			{
-				"activators"
-				{
-					"Full_Press"
-					{
-						"bindings"
-						{
-							"binding"		"key_press LEFT_CONTROL, Open Menu, , "
-							"binding"		"key_press M, Open Menu, , "
-						}
-					}
-				}
-				"disabled_activators"
-				{
-				}
-			}
-		}
-	}
-	"group"
-	{
-		"id"		"13"
+		"id"		"14"
 		"mode"		"trigger"
 		"name"		""
 		"description"		""
@@ -618,7 +618,7 @@
 	}
 	"group"
 	{
-		"id"		"14"
+		"id"		"15"
 		"mode"		"trigger"
 		"name"		""
 		"description"		""
@@ -653,7 +653,7 @@
 	}
 	"group"
 	{
-		"id"		"15"
+		"id"		"16"
 		"mode"		"joystick_move"
 		"name"		""
 		"description"		""
@@ -679,7 +679,7 @@
 	}
 	"group"
 	{
-		"id"		"16"
+		"id"		"17"
 		"mode"		"dpad"
 		"name"		""
 		"description"		""
@@ -778,37 +778,7 @@
 	}
 	"group"
 	{
-		"id"		"17"
-		"mode"		"joystick_mouse"
-		"name"		""
-		"description"		""
-		"inputs"
-		{
-			"click"
-			{
-				"activators"
-				{
-					"Full_Press"
-					{
-						"bindings"
-						{
-							"binding"		"mouse_button LEFT, , "
-						}
-					}
-				}
-				"disabled_activators"
-				{
-				}
-			}
-		}
-		"settings"
-		{
-			"output_joystick"		"2"
-		}
-	}
-	"group"
-	{
-		"id"		"18"
+		"id"		"19"
 		"mode"		"dpad"
 		"name"		""
 		"description"		""
@@ -903,13 +873,13 @@
 	}
 	"group"
 	{
-		"id"		"10"
-		"mode"		"switches"
+		"id"		"20"
+		"mode"		"joystick_mouse"
 		"name"		""
 		"description"		""
 		"inputs"
 		{
-			"button_escape"
+			"click"
 			{
 				"activators"
 				{
@@ -917,8 +887,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press LEFT_CONTROL, Quit Emulator, , "
-							"binding"		"key_press Q, Quit Emulator, , "
+							"binding"		"mouse_button LEFT, Left Click, , "
 						}
 					}
 				}
@@ -926,95 +895,10 @@
 				{
 				}
 			}
-			"button_menu"
-			{
-				"activators"
-				{
-					"release"
-					{
-						"bindings"
-						{
-							"binding"		"controller_action CHANGE_PRESET 1 0 1, RetroDECK - Set, , "
-						}
-					}
-					"Full_Press"
-					{
-						"bindings"
-						{
-							"binding"		"xinput_button SELECT, , "
-						}
-					}
-				}
-				"disabled_activators"
-				{
-				}
-			}
-			"left_bumper"
-			{
-				"activators"
-				{
-					"Full_Press"
-					{
-						"bindings"
-						{
-							"binding"		"key_press LEFT_CONTROL, Load State, , "
-							"binding"		"key_press A, Load State, , "
-						}
-					}
-				}
-				"disabled_activators"
-				{
-				}
-			}
-			"right_bumper"
-			{
-				"activators"
-				{
-					"Full_Press"
-					{
-						"bindings"
-						{
-							"binding"		"key_press LEFT_CONTROL, Save State, , "
-							"binding"		"key_press S, Save State, , "
-						}
-					}
-				}
-				"disabled_activators"
-				{
-				}
-			}
-			"button_back_left"
-			{
-				"activators"
-				{
-					"Full_Press"
-					{
-						"bindings"
-						{
-							"binding"		"xinput_button a, , "
-						}
-					}
-				}
-				"disabled_activators"
-				{
-				}
-			}
-			"button_back_right"
-			{
-				"activators"
-				{
-					"Full_Press"
-					{
-						"bindings"
-						{
-							"binding"		"xinput_button x, , "
-						}
-					}
-				}
-				"disabled_activators"
-				{
-				}
-			}
+		}
+		"settings"
+		{
+			"output_joystick"		"2"
 		}
 	}
 	"group"
@@ -1049,13 +933,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"xinput_button select, , "
-						}
-					}
-					"Full_Press"
-					{
-						"bindings"
-						{
+							"binding"		"xinput_button SELECT, , "
 							"binding"		"controller_action CHANGE_PRESET 2 0 1, , "
 						}
 					}
@@ -1128,6 +1006,154 @@
 				{
 				}
 			}
+			"button_capture"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"controller_action SCREENSHOT, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+		}
+	}
+	"group"
+	{
+		"id"		"11"
+		"mode"		"switches"
+		"name"		""
+		"description"		""
+		"inputs"
+		{
+			"button_escape"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press LEFT_CONTROL, Quit Emulator, , "
+							"binding"		"key_press Q, Quit Emulator, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"button_menu"
+			{
+				"activators"
+				{
+					"release"
+					{
+						"bindings"
+						{
+							"binding"		"controller_action CHANGE_PRESET 1 0 1, , "
+						}
+					}
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"xinput_button SELECT, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"left_bumper"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press LEFT_CONTROL, Load State, , "
+							"binding"		"key_press A, Load State, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"right_bumper"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press RIGHT_CONTROL, Save State, , "
+							"binding"		"key_press S, Save State, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"button_back_left"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"xinput_button a, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"button_back_right"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"xinput_button x, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"button_capture"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"controller_action SCREENSHOT, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
 		}
 	}
 	"preset"
@@ -1151,15 +1177,15 @@
 		"name"		"Preset_1000001"
 		"group_source_bindings"
 		{
-			"10"		"switch active"
-			"11"		"button_diamond active"
-			"12"		"joystick inactive"
-			"18"		"joystick active"
-			"13"		"left_trigger active"
-			"14"		"right_trigger active"
-			"15"		"right_joystick inactive"
-			"17"		"right_joystick active"
-			"16"		"dpad active"
+			"11"		"switch active"
+			"12"		"button_diamond active"
+			"13"		"joystick inactive"
+			"19"		"joystick active"
+			"14"		"left_trigger active"
+			"15"		"right_trigger active"
+			"16"		"right_joystick inactive"
+			"20"		"right_joystick active"
+			"17"		"dpad active"
 		}
 	}
 	"settings"
