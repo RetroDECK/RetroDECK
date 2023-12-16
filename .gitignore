@@ -19,6 +19,7 @@ tmp
 .godot
 .local/
 buildid
+*.bak
 
 # Python #
 ##########
