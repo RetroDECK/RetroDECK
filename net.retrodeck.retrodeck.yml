@@ -1309,6 +1309,7 @@ modules:
   # MAME - Start
   # https://sdlmame.wallyweek.org/download/
   # To enable the debugger try: QT_HOME='/usr'
+  # -j ${FLATPAK_BUILDER_N_JOBS} <- previously
 
   - name: mame
     buildsystem: simple
@@ -1317,7 +1318,7 @@ modules:
       strip: true
     build-commands:
       - make
-          -j ${FLATPAK_BUILDER_N_JOBS}
+          -j nproc
           CFLAGS+=-Wno-error=restrict
           USE_QTDEBUG=0 
           USE_WAYLAND=1
