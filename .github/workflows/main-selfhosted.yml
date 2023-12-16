@@ -65,7 +65,12 @@ jobs:
       # Sometimes flatpak download fails, in this case it tries a second time
       - name: "Build flatpak: download only (retry)"
         if: steps.flatpak-download.outcome == 'failure'
-        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
+        run: |
+          echo "Download failed, maybe some hash changed since the build start."
+          git checkout -- net.retrodeck.retrodeck.yml
+          echo "Recalculating hashes and retrying download..."
+          "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/pre_build_automation.sh"
+          "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
 
       - name: Build flatpak
         run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_only.sh"
