@@ -1318,7 +1318,7 @@ modules:
       strip: true
     build-commands:
       - make
-          -j nproc
+          -j echo $(nproc)
           CFLAGS+=-Wno-error=restrict
           USE_QTDEBUG=0 
           USE_WAYLAND=1
