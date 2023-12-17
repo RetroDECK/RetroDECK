@@ -29,7 +29,7 @@ extension="${filename##*.}"  # Extracts the file extension
 if [ "$extension" == "doom" ]; then
     map_file="$1"
     iwad="-iwad $(head -n 1 "$map_file")"
-    file="-file $(tail -n +2 "$map_file" | sed 's/.*/-file &/')"
+    file="$(tail -n +2 "$map_file" | sed 's/.*/-file &/')"
 
     echo "Found a .doom file: $1, parsing it." | tee -a "$LOG_FILE"
     echo "Calling GZDoom with: \"$iwad $file\"." | tee -a "$LOG_FILE"
@@ -44,5 +44,5 @@ else
     shopt -u nocasematch   # Disable case-insensitive matching after use
 
     echo "Found $type: $1, loading it." | tee -a "$LOG_FILE"
-    gzdoom -config /var/config/gzdoom/gzdoom.ini -$type "$1" | tee -a "$LOG_FILE"
+    gzdoom -config /var/config/gzdoom/gzdoom.ini $iwad $file | tee -a "$LOG_FILE"
 fi
