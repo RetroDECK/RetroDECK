@@ -33,16 +33,17 @@ if [ "$extension" == "doom" ]; then
 
     echo "Found a .doom file: $1, parsing it." | tee -a "$LOG_FILE"
     echo "Calling GZDoom with: \"$iwad $file\"." | tee -a "$LOG_FILE"
-    gzdoom -config /var/config/gzdoom/gzdoom.ini $iwad $file | tee -a "$LOG_FILE"
 else
     shopt -s nocasematch   # Enable case-insensitive matching
     if [[ "${IWAD_FILES[@]}" =~ "$filename" ]]; then
         type="iwad"
+        iwad="-iwad $1"
     else
         type="file"
+        file="-file $1"
     fi
     shopt -u nocasematch   # Disable case-insensitive matching after use
-
     echo "Found $type: $1, loading it." | tee -a "$LOG_FILE"
-    gzdoom -config /var/config/gzdoom/gzdoom.ini $iwad $file | tee -a "$LOG_FILE"
 fi
+
+gzdoom -config /var/config/gzdoom/gzdoom.ini $iwad $file | tee -a "$LOG_FILE"
