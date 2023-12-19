@@ -68,7 +68,10 @@ else
     # Check if the .doom file exists
     if [[ ! -e "$doom_file" ]]; then
         log "Error: .doom file not found - $doom_file"
-        zenity --error --text="Error: .doom file not found - $doom_file"
+        zenity --error --no-wrap \
+	    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+	    --title "RetroDECK" \
+	    --text="File \"$doom_file\" not found. Quitting."
         exit 1
     fi
 
@@ -82,7 +85,10 @@ else
         # If the file is not found, exit with an error
         if [[ -z "$found_file" ]]; then
             log "Error: File not found - $line"
-            zenity --error --text="Error: File not found - $line"
+            zenity --error --no-wrap \
+	    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+	    --title "RetroDECK" \
+	    --text="File \"$doom_file\" not found. Quitting."
             exit 1
         fi
 
@@ -100,6 +106,3 @@ else
     # Execute the command
     eval "$command"
 fi
-
-# Ask if you wish to get a more in-depth explanation
-echo "Do you wish me to explain more?"
