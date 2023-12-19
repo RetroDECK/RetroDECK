@@ -11,15 +11,20 @@ IWAD_FILES=("DOOM1.WAD" "DOOM.WAD" "DOOM2.WAD" "DOOM2F.WAD" "DOOM64.WAD" "TNT.WA
 # Function to log messages to terminal and a log file
 log() {
     local message="$1"
-    echo "$(date +"[%Y-%m-%d %H:%M:%S]"): $message"
-    echo "$(date +"[%Y-%m-%d %H:%M:%S]"): $message" >> "$rdhome/.logs/gzdoom.log"
+    local logfile="$rdhome/.logs/gzdoom.log"
+    local timestamp="$(date +[%Y-%m-%d\ %H:%M:%S])"
+
+    echo "$timestamp $message" | tee -a "$logfile"
 }
+
 
 # Function to check if a file is an IWAD
 is_iwad() {
     local file="$1"
+    local lowercase_file="$(basename "${file,,}")"
+    
     for iwad in "${IWAD_FILES[@]}"; do
-        if [[ "${iwad,,}" == "$(basename "${file,,}")" ]]; then
+        if [[ "${iwad,,}" == "$lowercase_file" ]]; then
             echo "true"
             return
         fi
@@ -38,13 +43,14 @@ search_file_recursive() {
         found_file="$directory/$file"
     else
         # Search recursively
-        found_file=$(find "$directory" -type f -name "$file" | head -n 1)
+        local lowercase_file="$(echo "$file" | tr '[:upper:]' '[:lower:]')"
+        found_file=$(find "$directory" -type f -iname "$lowercase_file" | head -n 1)
     fi
-
     echo "$found_file"
 }
 
 # Main script
+log "[INFO] RetroDECK GZDOOM wrapper init"
 
 # Check if $1 is not a .doom file
 if [[ "${1##*.}" != "doom" ]]; then
@@ -56,7 +62,8 @@ if [[ "${1##*.}" != "doom" ]]; then
     fi
 
     # Log the command
-    log "Command: $command"
+    log "[INFO] Loading: \"$1\""
+    log "[INFO] Executing command \"$command\""
 
     # Execute the command
     eval "$command"
@@ -64,10 +71,11 @@ if [[ "${1##*.}" != "doom" ]]; then
 # Check if $1 is a .doom file
 else
     doom_file="$1"
+    log "[INFO] Found a doom file: \"$1\""
 
     # Check if the .doom file exists
     if [[ ! -e "$doom_file" ]]; then
-        log "Error: .doom file not found - $doom_file"
+        log "[Error] doom file not found in \"$doom_file\""
         zenity --error --no-wrap \
 	    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
 	    --title "RetroDECK" \
@@ -84,24 +92,26 @@ else
 
         # If the file is not found, exit with an error
         if [[ -z "$found_file" ]]; then
-            log "Error: File not found - $line"
+            log "[ERROR] File not found in \"$line\""
             zenity --error --no-wrap \
-	    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-	    --title "RetroDECK" \
-	    --text="File \"$doom_file\" not found. Quitting."
+                --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+                --title "RetroDECK" \
+                --text="File \"$doom_file\" not found. Quitting."
             exit 1
         fi
 
         # Check if the file is an IWAD
         if [[ $(is_iwad "$found_file") == "true" ]]; then
             command+=" -iwad $found_file"
+            log "[INFO] Appending the param \"-iwad $found_file\""
         else
             command+=" -file $found_file"
+            log "[INFO] Appending the param \"-file $found_file\""
         fi
     done < "$doom_file"
 
     # Log the command
-    log "Command: $command"
+    log "[INFO] Executing command \"$command\""
 
     # Execute the command
     eval "$command"
