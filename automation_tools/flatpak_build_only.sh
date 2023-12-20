@@ -13,9 +13,12 @@ else
 fi
 
 if [ $PERSISTENCE==true ]; then
-    mkdir -p "$HOME/cooker-persistent"
+
     GITHUB_WORKSPACE_BACKUP="$GITHUB_WORKSPACE"
     GITHUB_WORKSPACE="$HOME/cooker-persistent"
+
+    mkdir -vp ${GITHUB_WORKSPACE}/.local
+    mkdir -vp ${GITHUB_WORKSPACE}/"$FOLDER"
 
     flatpak-builder --user --force-clean \
     --install-deps-from=flathub \
