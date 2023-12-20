@@ -1,4 +1,7 @@
-name: "Build cooker"
+name: "Build cooker (persistent)"
+
+env:
+  PERSISTENCE: true
 
 on:
   push:

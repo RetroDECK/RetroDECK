@@ -12,6 +12,12 @@ else
     FOLDER=retrodeck-flatpak-cooker
 fi
 
+if [ $PERSISTENCE==true ]; then
+    mkdir -p "$HOME/cooker-persistent"
+    GITHUB_WORKSPACE_BACKUP="$GITHUB_WORKSPACE"
+    GITHUB_WORKSPACE="$HOME/cooker-persistent"
+fi
+
 mkdir -vp "${GITHUB_WORKSPACE}"/{local,retrodeck-flatpak-cooker}
 
 flatpak-builder --user --force-clean \
@@ -21,3 +27,7 @@ flatpak-builder --user --force-clean \
     --download-only \
     "${GITHUB_WORKSPACE}/${FOLDER}" \
     net.retrodeck.retrodeck.yml
+
+if [ $PERSISTENCE==true ]; then
+    GITHUB_WORKSPACE="$GITHUB_WORKSPACE_BACKUP"
+fi

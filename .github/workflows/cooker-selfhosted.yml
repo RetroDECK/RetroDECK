@@ -1,23 +1,23 @@
 name: "Build cooker"
 
 on:
-  push:
-    branches:
-     - cooker*
-     - feat*
-    paths:
-     - '.github/workflows/**'
-     - 'automation_tools/**'
-     - 'emu-configs/**'
-     - 'es-configs/**'
-     - 'functions/**'
-     - 'rd-submodules/**'
-     - '*.sh'
-     - 'net.retrodeck.retrodeck.yml'
-     - 'net.retrodeck.retrodeck.appdata.xml'
-  pull_request: 
-    branches:
-     - cooker*
+  # push:
+  #   branches:
+  #    - cooker*
+  #    - feat*
+  #   paths:
+  #    - '.github/workflows/**'
+  #    - 'automation_tools/**'
+  #    - 'emu-configs/**'
+  #    - 'es-configs/**'
+  #    - 'functions/**'
+  #    - 'rd-submodules/**'
+  #    - '*.sh'
+  #    - 'net.retrodeck.retrodeck.yml'
+  #    - 'net.retrodeck.retrodeck.appdata.xml'
+  # pull_request: 
+  #   branches:
+  #    - cooker*
 
   workflow_dispatch:
 
