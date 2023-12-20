@@ -23,8 +23,8 @@ if [ $PERSISTENCE==true ]; then
     --install-deps-from=flathub-beta \
     --repo="${GITHUB_WORKSPACE}/.local" \
     --download-only \
-    "${GITHUB_WORKSPACE_BACKUP}/${FOLDER}" \
-    net.retrodeck.retrodeck.yml
+    "${GITHUB_WORKSPACE}/${FOLDER}" \
+    "${GITHUB_WORKSPACE_BACKUP}/${FOLDER}"/net.retrodeck.retrodeck.yml
 
     GITHUB_WORKSPACE="$GITHUB_WORKSPACE_BACKUP"
 

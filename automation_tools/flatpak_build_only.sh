@@ -23,10 +23,10 @@ if [ $PERSISTENCE==true ]; then
     flatpak-builder --user --force-clean \
     --install-deps-from=flathub \
     --install-deps-from=flathub-beta \
-    --repo=${GITHUB_WORKSPACE}/.local \
+    --repo="${GITHUB_WORKSPACE}/.local" \
     --disable-download \
-    ${GITHUB_WORKSPACE_BACKUP}/"$FOLDER" \
-    net.retrodeck.retrodeck.yml
+    "${GITHUB_WORKSPACE}/${FOLDER}" \
+    "${GITHUB_WORKSPACE_BACKUP}/${FOLDER}"/net.retrodeck.retrodeck.yml
 
     GITHUB_WORKSPACE="$GITHUB_WORKSPACE_BACKUP"
 
