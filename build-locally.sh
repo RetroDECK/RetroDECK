@@ -1,5 +1,6 @@
 #!/bin/bash
 
+export PERSISTENCE=false # as local build persistency is only managed by user
 export GITHUB_WORKSPACE="."
 cp net.retrodeck.retrodeck.appdata.xml net.retrodeck.retrodeck.appdata.xml.bak
 cp net.retrodeck.retrodeck.yml net.retrodeck.retrodeck.yml.bak
