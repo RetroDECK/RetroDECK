@@ -20,7 +20,7 @@ if [ $PERSISTENCE==true ]; then
     mkdir -vp ${GITHUB_WORKSPACE}/.local
     mkdir -vp ${GITHUB_WORKSPACE}/"$FOLDER"
 
-    flatpak-builder --user --force-clean \
+    flatpak-builder --user \
     --install-deps-from=flathub \
     --install-deps-from=flathub-beta \
     --repo="${GITHUB_WORKSPACE}/.local" \
