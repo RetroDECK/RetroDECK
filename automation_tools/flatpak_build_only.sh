@@ -2,7 +2,7 @@
 
 # This script is downloading the needed files to prepare the manifest build
 
-git config --global protocol.file.allow always
+git config protocol.file.allow always
 
 if [ "${GITHUB_REF##*/}" = "main" ]; then
     BUNDLE_NAME="RetroDECK.flatpak"
