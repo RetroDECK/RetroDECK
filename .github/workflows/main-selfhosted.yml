@@ -60,7 +60,7 @@ jobs:
 
       - name: Validate Manifest (main only)
         id: validate_manifest
-        run: "automation_tools/manifest-validation.sh"
+        run: "automation_tools/manifest_validation.sh"
 
       - name: "[DEBUG] Outputting manifest"
         run: cat net.retrodeck.retrodeck.yml
