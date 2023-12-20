@@ -130,6 +130,7 @@ layout_mode = 2
 theme_override_constants/h_separation = 128
 button_pressed = true
 text = "Quick Resume"
+metadata/description = "This is a test description set to this element"
 
 [node name="Button" type="Button" parent="MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
 layout_mode = 2
@@ -140,6 +141,7 @@ text = "Advanced"
 layout_mode = 2
 theme_override_constants/h_separation = 256
 text = "Rewind"
+metadata/description = "This is another description. Very long text anyone? Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
 
 [node name="Button2" type="Button" parent="MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
 layout_mode = 2

@@ -1,18 +1,13 @@
 extends RichTextLabel
 
-var selected_element
+@onready var helper_text_node = self
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
-	# Get a reference to the helper_text node
-	var helper_text_node = $bubble/helper_text
-	
-	# Ensure that the helper_text node exists before trying to access it
-	if helper_text_node != null:
-		# Set the text of the helper_text node only if the element is selected and has the 'description' variable
-		if selected_element != null and selected_element.has("description"):
-			helper_text_node.text = selected_element.description
-		else:
-			helper_text_node.text = ""
+	# Connect the signal that gets fired on every focus change
+	get_viewport().connect("gui_focus_changed", _on_focus_changed)
+
+func _on_focus_changed(selected_element:Control) -> void:
+	if selected_element != null and selected_element.has_meta("description"):
+		helper_text_node.text = selected_element.get_meta("description")
 	else:
-		print("Error: helper_text node not found!")
+		helper_text_node.text = "Hey, there's no description"
