@@ -1,8 +1,9 @@
-[gd_scene load_steps=14 format=3 uid="uid://61f6m4r1mpan"]
+[gd_scene load_steps=16 format=3 uid="uid://61f6m4r1mpan"]
 
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
 [ext_resource type="Script" path="res://main.gd" id="1_obpq7"]
 [ext_resource type="AudioStream" uid="uid://dig4pco500pyt" path="res://res/configurator.mp3" id="3_xivj6"]
+[ext_resource type="Texture2D" uid="uid://dx0u5hiwxfgu5" path="res://res/pixel_ui_theme/8x8_ui_elements.png" id="4_2tuu4"]
 [ext_resource type="Script" path="res://helper_text.gd" id="5_cprkf"]
 [ext_resource type="Texture2D" uid="uid://cor8ep0fkqm08" path="res://res/Rekku/base.png" id="9_brsrf"]
 [ext_resource type="Texture2D" uid="uid://cavtn1rljc5oe" path="res://res/Rekku/eyes-open.png" id="10_y6gkh"]
@@ -11,6 +12,15 @@
 [ext_resource type="Texture2D" uid="uid://ciwghjy0ahxk6" path="res://res/Rekku/mouth-A.png" id="13_xj3b3"]
 [ext_resource type="Texture2D" uid="uid://kx8eypf4ffvu" path="res://res/Rekku/mouth-base.png" id="14_lnkoa"]
 [ext_resource type="Texture2D" uid="uid://b6gl8sltbak7v" path="res://res/Rekku/mouth-O.png" id="15_1sikj"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_rf0rc"]
+texture = ExtResource("4_2tuu4")
+texture_margin_left = 6.0
+texture_margin_top = 6.0
+texture_margin_right = 6.0
+texture_margin_bottom = 6.0
+region_rect = Rect2(0, 8, 16, 16)
+modulate_color = Color(0.65098, 0.403922, 0.819608, 1)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_trwmf"]
 animations = [{
@@ -779,48 +789,6 @@ position = Vector2(998, 212)
 scale = Vector2(0.507812, 0.507812)
 texture = ExtResource("1_axfei")
 
-[node name="bubble" type="ColorRect" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 376.0
-offset_top = 612.0
-offset_right = -282.0
-offset_bottom = -68.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.133333, 0.0470588, 0.188235, 1)
-
-[node name="helper_text" type="RichTextLabel" parent="bubble"]
-layout_mode = 2
-offset_left = 10.0
-offset_top = 9.0
-offset_right = 603.0
-offset_bottom = 121.0
-text = "Rekku:
-
-When \"Quick Resume\" is enabled, a savestate is created upon quit and it will be loaded once the game is started.
-This is mot working on the following systems: Switch, WiiU."
-scroll_following = true
-script = ExtResource("5_cprkf")
-
-[node name="Rekku" type="Sprite2D" parent="."]
-position = Vector2(1125, 586)
-scale = Vector2(0.292969, 0.292969)
-texture = ExtResource("9_brsrf")
-
-[node name="blink" type="AnimatedSprite2D" parent="Rekku"]
-sprite_frames = SubResource("SpriteFrames_trwmf")
-animation = &"blink"
-autoplay = "blink"
-frame_progress = 0.299789
-
-[node name="speech" type="AnimatedSprite2D" parent="Rekku"]
-sprite_frames = SubResource("SpriteFrames_p8gbs")
-animation = &"speech"
-frame_progress = 0.664627
-
 [node name="coltroller_guide" type="PanelContainer" parent="."]
 layout_mode = 0
 offset_left = 1.0
@@ -835,3 +803,62 @@ theme_override_font_sizes/normal_font_size = 32
 text = "(A) Accept (B) Back (Y) Call/Dismiss Rekku (X) ??? (L/R) Tab Switch"
 fit_content = true
 scroll_active = false
+
+[node name="Rekku" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="bubble" type="Panel" parent="Rekku"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -310.0
+offset_top = -206.0
+offset_right = 310.0
+offset_bottom = -66.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxTexture_rf0rc")
+
+[node name="helper_text" type="RichTextLabel" parent="Rekku/bubble"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -60.0
+offset_right = 300.0
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Rekku:
+
+When \"Quick Resume\" is enabled, a savestate is created upon quit and it will be loaded once the game is started.
+This is mot working on the following systems: Switch, WiiU."
+scroll_following = true
+script = ExtResource("5_cprkf")
+
+[node name="RekkuSprite" type="Sprite2D" parent="Rekku"]
+position = Vector2(1125, 586)
+scale = Vector2(0.292969, 0.292969)
+texture = ExtResource("9_brsrf")
+
+[node name="blink" type="AnimatedSprite2D" parent="Rekku/RekkuSprite"]
+sprite_frames = SubResource("SpriteFrames_trwmf")
+animation = &"blink"
+autoplay = "blink"
+frame_progress = 0.299789
+
+[node name="speech" type="AnimatedSprite2D" parent="Rekku/RekkuSprite"]
+sprite_frames = SubResource("SpriteFrames_p8gbs")
+animation = &"speech"
+frame_progress = 0.664627
