@@ -1,9 +1,10 @@
-[gd_scene load_steps=16 format=3 uid="uid://61f6m4r1mpan"]
+[gd_scene load_steps=17 format=3 uid="uid://61f6m4r1mpan"]
 
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
 [ext_resource type="Script" path="res://main.gd" id="1_obpq7"]
 [ext_resource type="AudioStream" uid="uid://dig4pco500pyt" path="res://res/configurator.mp3" id="3_xivj6"]
 [ext_resource type="Texture2D" uid="uid://dx0u5hiwxfgu5" path="res://res/pixel_ui_theme/8x8_ui_elements.png" id="4_2tuu4"]
+[ext_resource type="Script" path="res://Rekku.gd" id="4_nqqx3"]
 [ext_resource type="Script" path="res://helper_text.gd" id="5_cprkf"]
 [ext_resource type="Texture2D" uid="uid://cor8ep0fkqm08" path="res://res/Rekku/base.png" id="9_brsrf"]
 [ext_resource type="Texture2D" uid="uid://cavtn1rljc5oe" path="res://res/Rekku/eyes-open.png" id="10_y6gkh"]
@@ -811,6 +812,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("4_nqqx3")
 
 [node name="bubble" type="Panel" parent="Rekku"]
 layout_mode = 1
