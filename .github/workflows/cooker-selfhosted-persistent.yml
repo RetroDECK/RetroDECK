@@ -64,7 +64,7 @@ jobs:
 
       - name: "Build flatpak: download only"
         id: "flatpak-download"
-        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
+        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only_persistent.sh"
         continue-on-error: true
 
       # Sometimes flatpak download fails, in this case it tries a second time
@@ -76,10 +76,10 @@ jobs:
           rm -f "{GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml"
           cp "${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml.bak" "${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml"
           "${GITHUB_WORKSPACE}/automation_tools/pre_build_automation.sh"
-          "${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
+          "${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only_persistent.sh"
 
       - name: Build flatpak
-        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_only.sh"
+        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_only_persistent.sh"
 
       - name: Create Artifact for flathub
         run: | 
@@ -90,7 +90,7 @@ jobs:
         continue-on-error: true
 
       - name: Create Bundle
-        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_bundle.sh"
+        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_bundle_persistent.sh"
 
       - name: Set environment variable with current branch name
         run: echo "GITHUB_REF_SLUG=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
