@@ -8,9 +8,9 @@ if [ $PERSISTENCE==true ]; then
 fi
 
 if [ "${GITHUB_REF##*/}" = "main" ]; then
-    flatpak build-bundle ${GITHUB_WORKSPACE}/.local RetroDECK.flatpak net.retrodeck.retrodeck
+    flatpak build-bundle ${GITHUB_WORKSPACE}/.local $GITHUB_WORKSPACE/RetroDECK.flatpak net.retrodeck.retrodeck
 else
-    flatpak build-bundle ${GITHUB_WORKSPACE}/.local RetroDECK-cooker.flatpak net.retrodeck.retrodeck
+    flatpak build-bundle ${GITHUB_WORKSPACE}/.local $GITHUB_WORKSPACE/RetroDECK-cooker.flatpak net.retrodeck.retrodeck
 fi
 
 if [ $PERSISTENCE==true ]; then

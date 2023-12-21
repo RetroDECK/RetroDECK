@@ -30,7 +30,7 @@ if [ $PERSISTENCE==true ]; then
 
 else
 
-    mkdir -vp "${GITHUB_WORKSPACE}"/{local,retrodeck-flatpak-cooker}
+    mkdir -vp "${GITHUB_WORKSPACE}"/{.local,retrodeck-flatpak-cooker}
 
     flatpak-builder --user --force-clean \
         --install-deps-from=flathub \
