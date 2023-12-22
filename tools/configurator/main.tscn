@@ -807,11 +807,15 @@ scroll_active = false
 
 [node name="Rekku" type="Control" parent="."]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
 anchor_bottom = 1.0
 grow_horizontal = 2
-grow_vertical = 2
+grow_vertical = 0
+mouse_filter = 1
+mouse_default_cursor_shape = 8
 script = ExtResource("4_nqqx3")
 
 [node name="bubble" type="Panel" parent="Rekku"]
@@ -850,9 +854,10 @@ scroll_following = true
 script = ExtResource("5_cprkf")
 
 [node name="RekkuSprite" type="Sprite2D" parent="Rekku"]
-position = Vector2(1125, 586)
+position = Vector2(490, -194)
 scale = Vector2(0.292969, 0.292969)
 texture = ExtResource("9_brsrf")
+metadata/_edit_group_ = true
 
 [node name="blink" type="AnimatedSprite2D" parent="Rekku/RekkuSprite"]
 sprite_frames = SubResource("SpriteFrames_trwmf")

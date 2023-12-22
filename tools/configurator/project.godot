@@ -25,6 +25,10 @@ window/size/borderless=true
 window/size/transparent=true
 window/per_pixel_transparency/allowed=true
 
+[filesystem]
+
+import/blender/enabled=false
+
 [gui]
 
 theme/custom="res://res/pixel_ui_theme/RetroDECKTheme.tres"
