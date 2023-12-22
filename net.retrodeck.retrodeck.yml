@@ -421,21 +421,13 @@ modules:
       - es-core
     sources:
       - type: git
-        url: https://gitlab.com/es-de/emulationstation-de
-        branch: 77bf5ed8a03c5d065512cded36e4fb3bea90f4df
+        url: https://github.com/XargonWan/RetroDECK-ES-DE
+        branch: cebbeff3b5f834fd9adaeb1f5dc9e0da6b106599
       - type: shell
         commands:
           - sed -i 's#"EMULATIONSTATION-DE  V" + Utils::String::toUpper(PROGRAM_VERSION_STRING)#"RetroDECK
             v'$(cat ${FLATPAK_DEST}/retrodeck/version)', ES-DE  v" + Utils::String::toUpper(PROGRAM_VERSION_STRING)#g'
             es-app/src/guis/GuiMenu.cpp
-      - type: patch
-        path: rd-submodules/es-de/GuiMenu.cpp.patch
-      - type: patch
-        path: rd-submodules/es-de/GuiMenu.h.patch
-      - type: patch
-        path: rd-submodules/es-de/ViewController.cpp.patch
-      - type: patch
-        path: rd-submodules/es-de/Window.cpp.patch
 
   # ES-DE - END
 
@@ -1312,7 +1304,6 @@ modules:
   #   buildsystem: simple
   #   build-commands:
   #     - cp -rn files/* /app
-  #     - COPY THE CONFIGS? MAYBE NOT
   #   sources:
   #   - type: archive
   #     url: 
