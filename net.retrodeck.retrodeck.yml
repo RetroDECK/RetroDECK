@@ -1312,6 +1312,7 @@ modules:
   #   buildsystem: simple
   #   build-commands:
   #     - cp -rn files/* /app
+  #     - COPY THE CONFIGS? MAYBE NOT
   #   sources:
   #   - type: archive
   #     url: 
