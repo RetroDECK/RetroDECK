@@ -138,6 +138,7 @@ columns = 2
 
 [node name="resume" type="CheckButton" parent="MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
 layout_mode = 2
+tooltip_text = "This is a test tooltip set to this element"
 theme_override_constants/h_separation = 128
 button_pressed = true
 text = "Quick Resume"
@@ -145,11 +146,12 @@ metadata/description = "This is a test description set to this element"
 
 [node name="Button" type="Button" parent="MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
 layout_mode = 2
-disabled = true
 text = "Advanced"
 
 [node name="rewind" type="CheckButton" parent="MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
 layout_mode = 2
+tooltip_text = "This is another, very long and convoluted, tooltip, that I put too much commas in to make in LONGER and more SOPHISTICATED. And I did it twice!!!
+This is another, very long and convoluted, tooltip, that I put too much commas in to make in LONGER and more SOPHISTICATED."
 theme_override_constants/h_separation = 256
 text = "Rewind"
 metadata/description = "This is another description. Very long text anyone? Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
