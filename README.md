@@ -79,8 +79,9 @@ Read up here on how to help out, there is something for everyone:
 [How to: Contribute to RetroDECK](https://github.com/XargonWan/RetroDECK/wiki/How-to%3A-Contribute-to-RetroDECK)
 
 ## Our repositories:
-| [RetroDECK](https://github.com/XargonWan/RetroDECK)          | This one, our main repo where the core of the project is  |
+| Name          | Description  |
 |-------------------------------------------------------------|-----------------------------------------------------------|
+| [RetroDECK](https://github.com/XargonWan/RetroDECK)          | This one, our main repo where the core of the project is  |
 | [RetroDECK-cooker](https://github.com/XargonWan/RetroDECK-cooker)  | Where we publish our test build, no code is hosted here |
 | [RetroDECK on Flathub](https://github.com/flathub/net.retrodeck.retrodeck) | Our little space in Flathub's organization                 |
 | [RetroDECK-MAME](https://github.com/XargonWan/RetroDECK-MAME)   | MAME is big to build, so it's pre-built here and then imported in the build |
