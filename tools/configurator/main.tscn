@@ -145,14 +145,13 @@ metadata/description = "This is a test description set to this element"
 
 [node name="Button" type="Button" parent="MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
 layout_mode = 2
-disabled = true
 text = "Advanced"
 
 [node name="rewind" type="CheckButton" parent="MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
 layout_mode = 2
 theme_override_constants/h_separation = 256
 text = "Rewind"
-metadata/description = "This is another description. Very long text anyone? Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+metadata/description = "This is another, very long and convoluted, description, that I put too much commas in to make in LONGER and more SOPHISTICATED. And I did it twice!!!This is another, very long and convoluted, description, that I put too much commas in to make in LONGER and more SOPHISTICATED."
 
 [node name="Button2" type="Button" parent="MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
 layout_mode = 2
@@ -807,11 +806,15 @@ scroll_active = false
 
 [node name="Rekku" type="Control" parent="."]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
 anchor_bottom = 1.0
 grow_horizontal = 2
-grow_vertical = 2
+grow_vertical = 0
+mouse_filter = 1
+mouse_default_cursor_shape = 8
 script = ExtResource("4_nqqx3")
 
 [node name="bubble" type="Panel" parent="Rekku"]
@@ -850,9 +853,10 @@ scroll_following = true
 script = ExtResource("5_cprkf")
 
 [node name="RekkuSprite" type="Sprite2D" parent="Rekku"]
-position = Vector2(1125, 586)
+position = Vector2(490, -194)
 scale = Vector2(0.292969, 0.292969)
 texture = ExtResource("9_brsrf")
+metadata/_edit_group_ = true
 
 [node name="blink" type="AnimatedSprite2D" parent="Rekku/RekkuSprite"]
 sprite_frames = SubResource("SpriteFrames_trwmf")
