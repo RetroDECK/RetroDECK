@@ -1225,7 +1225,7 @@ modules:
 
   - name: vita3k
     buildsystem: simple
-    build-commands:    
+    build-commands:
       # Copying the user icon
       - mkdir -p ${FLATPAK_DEST}/retrodeck
       - cp retrodeck.png ${FLATPAK_DEST}/retrodeck
