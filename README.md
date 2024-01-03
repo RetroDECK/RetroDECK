@@ -57,7 +57,8 @@ For our long term vision you can check out the following wiki page:
 [Subreddit](https://www.reddit.com/r/retrodeck)
 
 # How do I start using RetroDECK?
-We have an in depth How To on how to get started over here: 
+Basically just download it from Discover, put your games and bioses and just play.
+However, we have an in depth How To on how to get started over here: 
 
 [How to: Start using RetroDECK](https://retrodeck.readthedocs.io/en/latest/wiki_howto_faq/retrodeck-start/)
 
