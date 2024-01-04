@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source /app/libexec/logger.sh
+
 multi_user_set_default_dialog() {
   chosen_user="$1"
   choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="No and don't ask again" \

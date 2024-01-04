@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source /app/libexec/logger.sh
+
 compress_game() {
   # Function for compressing one or more files to .chd format
   # USAGE: compress_game $format $full_path_to_input_file

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source /app/libexec/logger.sh
+
 prepare_emulator() {
   # This function will perform one of several actions on one or more emulators
   # The actions currently include "reset" and "postmove"

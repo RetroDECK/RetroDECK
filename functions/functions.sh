@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source /app/libexec/logger.sh
+
 directory_browse() {
   # This function browses for a directory and returns the path chosen
   # USAGE: path_to_be_browsed_for=$(directory_browse $action_text)

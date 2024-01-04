@@ -1,6 +1,7 @@
 #!/bin/bash
 
 source /app/libexec/global.sh
+source /app/libexec/logger.sh
 
 # Arguments section
 

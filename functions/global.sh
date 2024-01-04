@@ -12,6 +12,7 @@ source /app/libexec/patching.sh
 source /app/libexec/post_update.sh
 source /app/libexec/prepare_emulator.sh
 source /app/libexec/presets.sh
+source /app/libexec/logger.sh
 
 # Static variables
 rd_conf="/var/config/retrodeck/retrodeck.cfg"                                                                         # RetroDECK config file path

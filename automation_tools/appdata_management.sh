@@ -4,6 +4,7 @@
 # This script is getting the latest release notes from the wiki and add them to the appdata
 
 source automation_tools/version_extractor.sh
+source /app/libexec/logger.sh
 
 # Fetch appdata version
 appdata_version=$(fetch_appdata_version)
