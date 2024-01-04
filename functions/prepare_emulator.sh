@@ -301,8 +301,9 @@ prepare_emulator() {
         set_setting_value "$multi_user_data_folder/$SteamAppUser/data/duckstation/settings.ini" "RecursivePaths" "$roms_folder/psx" "duckstation" "GameList"
         dir_prep "$multi_user_data_folder/$SteamAppUser/config/duckstation" "/var/config/duckstation"
       else # Single-user actions
-        rm -rf /var/config/duckstation
-        mkdir -p /var/config/duckstation/
+        rm -rf "/var/config/duckstation"
+        mkdir -p "/var/config/duckstation/"
+        mkdir -p "$saves_folder/psx/duckstation/memcards"
         cp -fv "$emuconfigs/duckstation/"* /var/config/duckstation
         set_setting_value "$duckstationconf" "SearchDirectory" "$bios_folder" "duckstation" "BIOS"
         set_setting_value "$duckstationconf" "Card1Path" "$saves_folder/psx/duckstation/memcards/shared_card_1.mcd" "duckstation" "MemoryCards"
