@@ -220,7 +220,7 @@ prepare_emulator() {
     fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
       dir_prep "$rdhome/bios/citra/sysdata" "/var/data/citra-emu/sysdata"
-      dir_prep "$rdhome/.logs/citra" "/var/data/citra-emu/log"
+      dir_prep "$rdhome/logs/citra" "/var/data/citra-emu/log"
       dir_prep "$mods_folder/Citra" "/var/data/citra-emu/load/mods"
       dir_prep "$texture_packs_folder/Citra" "/var/data/citra-emu/load/textures"
       set_setting_value "$citraconf" "nand_directory" "$saves_folder/n3ds/citra/nand/" "citra" "Data%20Storage"

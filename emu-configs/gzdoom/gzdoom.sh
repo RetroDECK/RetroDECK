@@ -11,7 +11,7 @@ IWAD_FILES=("DOOM1.WAD" "DOOM.WAD" "DOOM2.WAD" "DOOM2F.WAD" "DOOM64.WAD" "TNT.WA
 # Function to log messages to terminal and a log file
 log() {
     local message="$1"
-    local logfile="$rdhome/.logs/gzdoom.log"
+    local logfile="$rdhome/logs/gzdoom.log"
     local timestamp="$(date +[%Y-%m-%d\ %H:%M:%S])"
 
     echo "$timestamp $message" | tee -a "$logfile"
