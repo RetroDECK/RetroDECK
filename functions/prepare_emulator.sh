@@ -89,9 +89,9 @@ prepare_emulator() {
       # Shared actions
 
       # PPSSPP
-      echo "--------------------------------"
-      echo "Initializing PPSSPP_LIBRETRO"
-      echo "--------------------------------"
+      log i "--------------------------------"
+      log i "Initializing PPSSPP_LIBRETRO"
+      log i "--------------------------------"
       if [ -d $bios_folder/PPSSPP/flash0/font ]
       then
         mv -fv $bios_folder/PPSSPP/flash0/font $bios_folder/PPSSPP/flash0/font.bak
@@ -103,16 +103,16 @@ prepare_emulator() {
       fi
 
       # MSX / SVI / ColecoVision / SG-1000
-      echo "-----------------------------------------------------------"
-      echo "Initializing MSX / SVI / ColecoVision / SG-1000 LIBRETRO"
-      echo "-----------------------------------------------------------"
+      log i "-----------------------------------------------------------"
+      log i "Initializing MSX / SVI / ColecoVision / SG-1000 LIBRETRO"
+      log i "-----------------------------------------------------------"
       cp -rf "/app/retrodeck/extras/MSX/Databases" "$bios_folder/Databases"
       cp -rf "/app/retrodeck/extras/MSX/Machines" "$bios_folder/Machines"
 
       # AMIGA
-      echo "-----------------------------------------------------------"
-      echo "Initializing AMIGA LIBRETRO"
-      echo "-----------------------------------------------------------"
+      log i "-----------------------------------------------------------"
+      log i "Initializing AMIGA LIBRETRO"
+      log i "-----------------------------------------------------------"
       cp -f "/app/retrodeck/extras/Amiga/capsimg.so" "$bios_folder/capsimg.so"
     
       dir_prep "$texture_packs_folder/RetroArch-Mesen" "/var/config/retroarch/system/HdPacks"
@@ -158,9 +158,9 @@ prepare_emulator() {
 
   if [[ "$emulator" =~ ^(cemu|Cemu|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
-      echo "----------------------"
-      echo "Initializing CEMU"
-      echo "----------------------"
+      log i "----------------------"
+      log i "Initializing CEMU"
+      log i "----------------------"
       if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/Cemu"
         mkdir -p "$multi_user_data_folder/$SteamAppUser/config/Cemu"
@@ -187,9 +187,9 @@ prepare_emulator() {
 
   if [[ "$emulator" =~ ^(citra|citra-emu|Citra|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
-      echo "------------------------"
-      echo "Initializing CITRA"
-      echo "------------------------"
+      log i "------------------------"
+      log i "Initializing CITRA"
+      log i "------------------------"
       if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/citra-emu"
         mkdir -p "$multi_user_data_folder/$SteamAppUser/config/citra-emu"
@@ -234,9 +234,9 @@ prepare_emulator() {
 
   if [[ "$emulator" =~ ^(dolphin|dolphin-emu|Dolphin|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
-      echo "----------------------"
-      echo "Initializing DOLPHIN"
-      echo "----------------------"
+      log i "----------------------"
+      log i "Initializing DOLPHIN"
+      log i "----------------------"
       if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/dolphin-emu"
         mkdir -p "$multi_user_data_folder/$SteamAppUser/config/dolphin-emu"
@@ -289,9 +289,9 @@ prepare_emulator() {
 
   if [[ "$emulator" =~ ^(duckstation|Duckstation|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
-      echo "------------------------"
-      echo "Initializing DUCKSTATION"
-      echo "------------------------"
+      log i "------------------------"
+      log i "Initializing DUCKSTATION"
+      log i "------------------------"
       if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/duckstation"
         mkdir -p "$multi_user_data_folder/$SteamAppUser/data/duckstation/"
@@ -335,9 +335,9 @@ prepare_emulator() {
 
   if [[ "$emulator" =~ ^(melonds|melonDS|MelonDS|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
-      echo "----------------------"
-      echo "Initializing MELONDS"
-      echo "----------------------"
+      log i "----------------------"
+      log i "Initializing MELONDS"
+      log i "----------------------"
       if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/melonDS"
         mkdir -pv "$multi_user_data_folder/$SteamAppUser/config/melonDS/"
@@ -375,9 +375,9 @@ prepare_emulator() {
 
   if [[ "$emulator" =~ ^(pcsx2|PCSX2|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
-      echo "----------------------"
-      echo "Initializing PCSX2"
-      echo "----------------------"
+      log i "----------------------"
+      log i "Initializing PCSX2"
+      log i "----------------------"
       if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/PCSX2"
         mkdir -p "$multi_user_data_folder/$SteamAppUser/config/PCSX2/inis"
@@ -431,9 +431,9 @@ prepare_emulator() {
 
   if [[ "$emulator" =~ ^(ppsspp|PPSSPP|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
-      echo "------------------------"
-      echo "Initializing PPSSPPSDL"
-      echo "------------------------"
+      log i "------------------------"
+      log i "Initializing PPSSPPSDL"
+      log i "------------------------"
       if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/ppsspp"
         mkdir -p "$multi_user_data_folder/$SteamAppUser/config/ppsspp/PSP/SYSTEM/"
@@ -461,9 +461,9 @@ prepare_emulator() {
 
   if [[ "$emulator" =~ ^(primehack|Primehack|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
-      echo "----------------------"
-      echo "Initializing Primehack"
-      echo "----------------------"
+      log i "----------------------"
+      log i "Initializing Primehack"
+      log i "----------------------"
       if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/primehack"
         mkdir -p "$multi_user_data_folder/$SteamAppUser/config/primehack"
@@ -505,9 +505,9 @@ prepare_emulator() {
 
   if [[ "$emulator" =~ ^(rpcs3|RPCS3|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
-      echo "------------------------"
-      echo "Initializing RPCS3"
-      echo "------------------------"
+      log i "------------------------"
+      log i "Initializing RPCS3"
+      log i "------------------------"
       if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/rpcs3"
         mkdir -pv "$multi_user_data_folder/$SteamAppUser/config/rpcs3/"
@@ -543,9 +543,9 @@ prepare_emulator() {
 
   if [[ "$emulator" =~ ^(ryujunx|Ryujinx|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
-      echo "------------------------"
-      echo "Initializing RYUJINX"
-      echo "------------------------"
+      log i "------------------------"
+      log i "Initializing RYUJINX"
+      log i "------------------------"
       if [[ $multi_user_mode == "true" ]]; then
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/Ryujinx"
         mkdir -p "$multi_user_data_folder/$SteamAppUser/config/Ryujinx/system"
@@ -570,9 +570,9 @@ prepare_emulator() {
 
   if [[ "$emulator" =~ ^(xemu|XEMU|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
-      echo "------------------------"
-      echo "Initializing XEMU"
-      echo "------------------------"
+      log i "------------------------"
+      log i "Initializing XEMU"
+      log i "------------------------"
       if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         rm -rf /var/config/xemu
         rm -rf /var/data/xemu
@@ -615,9 +615,9 @@ prepare_emulator() {
 
   if [[ "$emulator" =~ ^(yuzu|Yuzu|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
-      echo "----------------------"
-      echo "Initializing YUZU"
-      echo "----------------------"
+      log i "----------------------"
+      log i "Initializing YUZU"
+      log i "----------------------"
       if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/yuzu"
         mkdir -p "$multi_user_data_folder/$SteamAppUser/config/yuzu"
@@ -671,11 +671,11 @@ prepare_emulator() {
 
   if [[ "$emulator" =~ ^(vita3k|Vita3K|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
-      echo "----------------------"
-      echo "Initializing Vita3K"
-      echo "----------------------"
+      log i "----------------------"
+      log i "Initializing Vita3K"
+      log i "----------------------"
       if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
-        echo "Figure out what Vita3k needs for multi-user"
+        log d "Figure out what Vita3k needs for multi-user"
       else # Single-user actions
         # NOTE: the emulator is writing in "." so it must be placed in the rw filesystem. A symlink of the binary is already placed in /app/bin/Vita3K
         rm -rf "/var/data/Vita3K"
@@ -706,9 +706,9 @@ prepare_emulator() {
   if [[ "$emulator" =~ ^(mame|MAME|all)$ ]]; then
     # TODO: do a proper script
     # This is just a placeholder script to test the emulator's flow
-    echo "----------------------"
-    echo "Initializing MAME"
-    echo "----------------------"
+    log i "----------------------"
+    log i "Initializing MAME"
+    log i "----------------------"
 
     mkdir -p $saves_folder/mame-sa
     mkdir -p "/var/config/mame"
@@ -723,9 +723,9 @@ prepare_emulator() {
   if [[ "$emulator" =~ ^(gzdoom|GZDOOM|all)$ ]]; then
     # TODO: do a proper script
     # This is just a placeholder script to test the emulator's flow
-    echo "----------------------"
-    echo "Initializing GZDOOM"
-    echo "----------------------"
+    log i "----------------------"
+    log i "Initializing GZDOOM"
+    log i "----------------------"
 
     mkdir -p "/var/config/gzdoom"
     mkdir -p "/var/data/gzdoom"

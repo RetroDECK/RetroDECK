@@ -537,6 +537,6 @@ quit_retrodeck() {
 start_retrodeck() {
   easter_eggs # Check if today has a surprise splashscreen and load it if so
   # normal startup
-  echo "Starting RetroDECK v$version"
+  log i "Starting RetroDECK v$version"
   emulationstation --home /var/config/emulationstation
 }

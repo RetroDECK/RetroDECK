@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source /app/libexec/logger.sh
+
 # Define the IWAD files list
 IWAD_FILES=("DOOM1.WAD" "DOOM.WAD" "DOOM2.WAD" "DOOM2F.WAD" "DOOM64.WAD" "TNT.WAD"
             "PLUTONIA.WAD" "HERETIC1.WAD" "HERETIC.WAD" "HEXEN.WAD" "HEXDD.WAD"
@@ -7,16 +9,6 @@ IWAD_FILES=("DOOM1.WAD" "DOOM.WAD" "DOOM2.WAD" "DOOM2F.WAD" "DOOM64.WAD" "TNT.WA
             "CHEX3.WAD" "HACX.WAD" "freedoom1.wad" "freedoom2.wad" "freedm.wad"
             "doom_complete.pk3"
 )
-
-# Function to log messages to terminal and a log file
-log() {
-    local message="$1"
-    local logfile="$rdhome/logs/gzdoom.log"
-    local timestamp="$(date +[%Y-%m-%d\ %H:%M:%S])"
-
-    echo "$timestamp $message" | tee -a "$logfile"
-}
-
 
 # Function to check if a file is an IWAD
 is_iwad() {
@@ -62,8 +54,8 @@ if [[ "${1##*.}" != "doom" ]]; then
     fi
 
     # Log the command
-    log "[INFO] Loading: \"$1\""
-    log "[INFO] Executing command \"$command\""
+    log i "Loading: \"$1\""
+    log i "Executing command \"$command\""
 
     # Execute the command
     eval "$command"
@@ -71,11 +63,11 @@ if [[ "${1##*.}" != "doom" ]]; then
 # Check if $1 is a .doom file
 else
     doom_file="$1"
-    log "[INFO] Found a doom file: \"$1\""
+    log i "Found a doom file: \"$1\""
 
     # Check if the .doom file exists
     if [[ ! -e "$doom_file" ]]; then
-        log "[Error] doom file not found in \"$doom_file\""
+        log e "doom file not found in \"$doom_file\""
         zenity --error --no-wrap \
 	    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
 	    --title "RetroDECK" \
@@ -103,15 +95,15 @@ else
         # Check if the file is an IWAD
         if [[ $(is_iwad "$found_file") == "true" ]]; then
             command+=" -iwad $found_file"
-            log "[INFO] Appending the param \"-iwad $found_file\""
+            log i "Appending the param \"-iwad $found_file\""
         else
             command+=" -file $found_file"
-            log "[INFO] Appending the param \"-file $found_file\""
+            log i "Appending the param \"-file $found_file\""
         fi
     done < "$doom_file"
 
     # Log the command
-    log "[INFO] Executing command \"$command\""
+    log i "Executing command \"$command\""
 
     # Execute the command
     eval "$command"
