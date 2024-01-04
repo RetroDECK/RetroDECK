@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source /app/libexec/logger.sh
+
 post_update() {
 
   # post update script
@@ -263,5 +265,15 @@ post_update() {
     changelog_dialog "$(echo $version | cut -d'-' -f2)"
   else
     changelog_dialog "$version"
+  fi
+
+  if [[ $prev_version -le "075" ]]; then
+    # In version 0.7.5b, the following changes were made:
+    if [ -d "$rdhome/.logs" ]; then
+      mv "$rdhome/.logs" "$logs_folder"
+      log i "Logs folder renamed successfully"
+    else
+      log i "The .logs folder does not exist, continuing."
+    fi
   fi
 }
