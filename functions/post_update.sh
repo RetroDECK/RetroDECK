@@ -269,6 +269,8 @@ post_update() {
 
   if [[ $prev_version -le "075" ]]; then
     # In version 0.7.5b, the following changes were made:
+    # TODO: vita3k init
+    # TODO: MAME init
     if [ -d "$rdhome/.logs" ]; then
       mv "$rdhome/.logs" "$logs_folder"
       log i "Logs folder renamed successfully"
