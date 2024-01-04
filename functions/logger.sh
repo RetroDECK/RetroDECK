@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # This script provides a logging function 'log' that can be sourced in other scripts.
 # It logs messages to both the terminal and a specified logfile, allowing different log levels.
 # The log function takes three parameters: log level, log message, and optionally the logfile. If no logfile is specified, it writes to retrodeck/logs/retrodeck.log
@@ -30,9 +32,9 @@ log() {
             echo "$timestamp $colored_message" | tee -a >(sed $'s,\e\\[[0-9;]*[a-zA-Z],,g' >> "$logfile")
             ;;
         d) 
-            # Debug (green) for both terminal and log file
+            # Debug (green) for both terminal, no color for log file
             colored_message="\e[32m[DEBUG]\e[0m $message"
-            echo "$timestamp $colored_message" | tee -a "$logfile"
+            echo "$timestamp $colored_message" | tee -a >(sed $'s,\e\\[[0-9;]*[a-zA-Z],,g' >> "$logfile")
             ;;
         *) 
             # Default (no color)
