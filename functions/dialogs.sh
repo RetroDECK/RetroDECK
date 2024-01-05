@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source functions/functions.sh
+source /app/libexec/functions.sh
 source /app/libexec/logger.sh
 
 debug_dialog() {
