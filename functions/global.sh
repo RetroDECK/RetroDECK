@@ -156,6 +156,7 @@ if [[ ! -f "$rd_conf" ]]; then
   log i "RetroDECK config file initialized. Contents:\n"
   log i "$(cat "$rd_conf")"
   conf_read # Load new variables into memory
+  tmplog_merger
 
 # If the config file is existing i just read the variables
 else
@@ -169,6 +170,7 @@ else
   fi
 
   conf_read
+  tmplog_merger
 
   # Verify rdhome is where it is supposed to be.
   if [[ ! -d $rdhome ]]; then
@@ -177,6 +179,7 @@ else
     new_home_path=$(directory_browse "RetroDECK folder location")
     set_setting_value $rd_conf "rdhome" "$new_home_path" retrodeck "paths"
     conf_read
+    tmplog_merger
     prepare_emulator "retrodeck" "postmove"
     prepare_emulator "all" "postmove"
     conf_write

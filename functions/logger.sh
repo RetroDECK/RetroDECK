@@ -7,12 +7,20 @@
 # log e "bar" -> logs an error with message bar in the default log file retrodeck/logs/retrodeck.log
 # log i "par" rekku.log -> logs an information with message in the specified log file inside the logs folder retrodeck/logs/rekku.log
 
-exec > >(tee -a "$logs_folder/retrodeck.log") 2>&1
+if [ "${log_init:-false}" = false ]; then
+    logs_folder=${logs_folder:-"/tmp"}
+    touch "$logs_folder/retrodeck.log"
+    # exec > >(tee "$logs_folder/retrodeck.log") 2>&1 # this is broken, creates strange artifacts and corrupts the log file
+    log_init=true
+fi
 
 log() {
+
+    # exec > >(tee "$logs_folder/retrodeck.log") 2>&1 # this is broken, creates strange artifacts and corrupts the log file
+
     local level="$1"
     local message="$2"
-    local timestamp="$(date +[%Y-%m-%d\ %H:%M:%S])"
+    local timestamp="$(date +[%Y-%m-%d\ %H:%M:%S.%3N])"
     local colorize_terminal
 
     # Use specified logfile or default to retrodeck.log
@@ -89,4 +97,21 @@ log() {
     # Write the log message to the log file
     echo "$log_message" >> "$logfile"
 
+}
+
+# This function is merging the temporary log file into the actual one
+tmplog_merger() {
+
+    # Check if /tmp/retrodeck.log exists
+    if [ -e "/tmp/retrodeck.log" ]; then
+
+        # Sort both temporary and existing log files by timestamp
+        sort -k1,1n -k2,2M -k3,3n -k4,4n -k5,5n "/tmp/retrodeck.log" "$logs_folder/retrodeck.log" > "$logs_folder/merged_logs.tmp"
+
+        # Move the merged logs to replace the original log file
+        mv "$logs_folder/merged_logs.tmp" "$logs_folder/retrodeck.log"
+
+        # Remove the temporary file
+        rm "/tmp/retrodeck.log"
+    fi
 }
