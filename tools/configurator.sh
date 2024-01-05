@@ -102,6 +102,7 @@ source /app/libexec/logger.sh
 # DIALOG TREE FUNCTIONS
 
 configurator_welcome_dialog() {
+  log i "Configurator: opening welcome dialog"
   if [[ $developer_options == "true" ]]; then
     welcome_menu_options=("Presets & Settings" "Here you find various presets, tweaks and settings to customize your RetroDECK experience" \
     "Open Emulator" "Launch and configure each emulators settings (for advanced users)" \
@@ -127,35 +128,43 @@ configurator_welcome_dialog() {
   case $choice in
 
   "Presets & Settings" )
+    log i "Configurator: opening \"$choice\" menu"
     configurator_presets_and_settings_dialog
   ;;
 
   "Open Emulator" )
+    log i "Configurator: opening \"$choice\" menu"
     configurator_power_user_warning_dialog
   ;;
 
   "RetroDECK: Tools" )
+    log i "Configurator: opening \"$choice\" menu"
     configurator_retrodeck_tools_dialog
   ;;
 
   "RetroDECK: Troubleshooting" )
+    log i "Configurator: opening \"$choice\" menu"
     configurator_retrodeck_troubleshooting_dialog
   ;;
 
   "RetroDECK: About" )
+    log i "Configurator: opening \"$choice\" menu"
     configurator_about_retrodeck_dialog
   ;;
 
   "Sync with Steam" )
+    log i "Configurator: opening \"$choice\" menu"
     configurator_add_steam
   ;;
 
   "Developer Options" )
+    log i "Configurator: opening \"$choice\" menu"
     configurator_generic_dialog "RetroDECK Configurator - Developer Options" "The following features and options are potentially VERY DANGEROUS for your RetroDECK install!\n\nThey should be considered the bleeding-edge of upcoming RetroDECK features, and never used when you have important saves/states/roms that are not backed up!\n\nYOU HAVE BEEN WARNED!"
     configurator_developer_dialog
   ;;
 
   "" )
+    log i "Configurator: closing"
     exit 1
   ;;
 
@@ -173,18 +182,22 @@ configurator_presets_and_settings_dialog() {
   case $choice in
 
   "Global: Presets & Settings" )
+    log i "Configurator: opening \"$choice\" menu"
     configurator_global_presets_and_settings_dialog
   ;;
 
   "RetroArch: Presets & Settings" )
+    log i "Configurator: opening \"$choice\" menu"
     configurator_retroarch_presets_and_settings_dialog
   ;;
 
   "Wii & GameCube: Presets & Settings" )
+    log i "Configurator: opening \"$choice\" menu"
     configurator_wii_and_gamecube_presets_and_settings_dialog
   ;;
 
   "" ) # No selection made or Back button clicked
+    log i "Configurator: going back"
     configurator_welcome_dialog
   ;;
 
@@ -205,11 +218,13 @@ configurator_global_presets_and_settings_dialog() {
   case $choice in
 
   "Widescreen: Enable/Disable" )
+    log i "Configurator: opening \"$choice\" menu"
     change_preset_dialog "widescreen"
     configurator_global_presets_and_settings_dialog
   ;;
 
   "Ask-to-Exit: Enable/Disable" )
+    log i "Configurator: opening \"$choice\" menu"
     change_preset_dialog "ask_to_exit"
     configurator_global_presets_and_settings_dialog
   ;;
@@ -238,16 +253,19 @@ configurator_global_presets_and_settings_dialog() {
   ;;
 
   "RetroAchievements: Hardcore Mode" )
+    log i "Configurator: opening \"$choice\" menu"
     change_preset_dialog "cheevos_hardcore"
     configurator_global_presets_and_settings_dialog
   ;;
 
   "Swap A/B and X/Y Buttons" )
+    log i "Configurator: opening \"$choice\" menu"
     change_preset_dialog "nintendo_button_layout"
     configurator_global_presets_and_settings_dialog
   ;;
 
   "" ) # No selection made or Back button clicked
+    log i "Configurator: going back"
     configurator_presets_and_settings_dialog
   ;;
 
@@ -264,15 +282,18 @@ configurator_retroarch_presets_and_settings_dialog() {
   case $choice in
 
   "Borders: Enable/Disable" )
+    log i "Configurator: opening \"$choice\" menu"
     change_preset_dialog "borders"
     configurator_retroarch_presets_and_settings_dialog
   ;;
 
   "Rewind: Enable/Disable" )
+    log i "Configurator: opening \"$choice\" menu"
     configurator_retroarch_rewind_dialog
   ;;
 
   "" ) # No selection made or Back button clicked
+    log i "Configurator: going back"
     configurator_presets_and_settings_dialog
   ;;
 
@@ -319,14 +340,17 @@ configurator_wii_and_gamecube_presets_and_settings_dialog() {
   case $choice in
 
   "Dolphin Textures: Universal Dynamic Input" )
+    log i "Configurator: opening \"$choice\" menu"
     configurator_dolphin_input_textures_dialog
   ;;
 
   "Primehack Textures: Universal Dynamic Input" )
+    log i "Configurator: opening \"$choice\" menu"
     configurator_primehack_input_textures_dialog
   ;;
 
   "" ) # No selection made or Back button clicked
+    log i "Configurator: going back"
     configurator_presets_and_settings_dialog
   ;;
 
@@ -455,66 +479,82 @@ configurator_open_emulator_dialog() {
   case $emulator in
 
   "RetroArch" )
+    log i "Configurator: \"$emulator\""
     retroarch
   ;;
 
   "Cemu" )
+    log i "Configurator: \"$emulator\""
     Cemu-wrapper
   ;;
 
   "Citra" )
+    log i "Configurator: \"$emulator\""
     citra-qt
   ;;
 
   "Dolphin" )
+    log i "Configurator: \"$emulator\""
     dolphin-emu
   ;;
 
   "Duckstation" )
+    log i "Configurator: \"$emulator\""
     duckstation-qt
   ;;
 
   "MAME" )
+    log i "Configurator: \"$emulator\""
     mame
   ;;
 
   "MelonDS" )
+    log i "Configurator: \"$emulator\""
     melonDS
   ;;
 
   "PCSX2" )
+    log i "Configurator: \"$emulator\""
     pcsx2-qt
   ;;
 
   "PPSSPP" )
+    log i "Configurator: \"$emulator\""
     PPSSPPSDL
   ;;
 
   "Primehack" )
+    log i "Configurator: \"$emulator\""
     primehack-wrapper
   ;;
 
   "RPCS3" )
+    log i "Configurator: \"$emulator\""
     rpcs3
   ;;
 
   "Ryujinx" )
+    log i "Configurator: \"$emulator\""
     ryujinx-wrapper
   ;;
 
   "Vita3K" )
+    log i "Configurator: \"$emulator\""
     Vita3K
   ;;
 
   "XEMU" )
+    log i "Configurator: \"$emulator\""
     xemu
   ;;
 
   "Yuzu" )
+    log i "Configurator: \"$emulator\""
     yuzu
   ;;
 
   "" ) # No selection made or Back button clicked
+    log i "Configurator: going back"
     configurator_welcome_dialog
   ;;
 
@@ -536,15 +576,18 @@ configurator_retrodeck_tools_dialog() {
   case $choice in
 
   "Tool: Move Folders" )
+    log i "Configurator: opening \"$choice\" menu"
     configurator_retrodeck_move_tool_dialog
   ;;
 
   "Tool: Compress Games" )
+    log i "Configurator: opening \"$choice\" menu"
     configurator_generic_dialog "RetroDECK Configurator - Compression Tool" "Depending on your library and compression choices, the process can sometimes take a long time.\nPlease be patient once it is started!"
     configurator_compression_tool_dialog
   ;;
 
   "Install: RetroDECK SD Controller Profile" )
+    log i "Configurator: opening \"$choice\" menu"
     configurator_generic_dialog "RetroDECK Configurator - Install: RetroDECK Controller Profile" "We are now offering a new official RetroDECK controller profile!\nIt is an optional component that helps you get the most out of RetroDECK with a new in-game radial menu for unified hotkeys across emulators.\n\nThe files need to be installed outside of the normal ~/retrodeck folder, so we wanted your permission before proceeding.\n\nThe files will be installed at the following shared Steam locations:\n\n$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/\n$HOME/.steam/steam/controller_base/templates"
     if [[ $(configurator_generic_question_dialog "Install: RetroDECK Controller Profile" "Would you like to install the official RetroDECK controller profile?") == "true" ]]; then
       install_retrodeck_controller_profile
@@ -554,6 +597,7 @@ configurator_retrodeck_tools_dialog() {
   ;;
 
   "Install: PS3 Firmware" )
+    log i "Configurator: opening \"$choice\" menu"
     if [[ $(check_network_connectivity) == "true" ]]; then
       configurator_generic_dialog "RetroDECK Configurator - Install: PS3 firmware" "This tool will download firmware required by RPCS3 to emulate PS3 games.\n\nThe process will take several minutes, and the emulator will launch to finish the installation.\nPlease close RPCS3 manually once the installation is complete."
       (
@@ -572,10 +616,12 @@ configurator_retrodeck_tools_dialog() {
   ;;
 
   "RetroDECK: Change Update Setting" )
+    log i "Configurator: opening \"$choice\" menu"
     configurator_online_update_setting_dialog
   ;;
 
   "" ) # No selection made or Back button clicked
+    log i "Configurator: going back"
     configurator_welcome_dialog
   ;;
 
@@ -600,42 +646,52 @@ configurator_retrodeck_move_tool_dialog() {
   case $choice in
 
   "Move all of RetroDECK" )
+    log i "Configurator: opening \"$choice\" menu"
     configurator_move_folder_dialog "rdhome"
   ;;
 
   "Move ROMs folder" )
+    log i "Configurator: opening \"$choice\" menu"
     configurator_move_folder_dialog "roms_folder"
   ;;
 
   "Move BIOS folder" )
+    log i "Configurator: opening \"$choice\" menu"
     configurator_move_folder_dialog "bios_folder"
   ;;
 
   "Move Downloaded Media folder" )
+    log i "Configurator: opening \"$choice\" menu"
     configurator_move_folder_dialog "media_folder"
   ;;
 
   "Move Saves folder" )
+    log i "Configurator: opening \"$choice\" menu"
     configurator_move_folder_dialog "saves_folder"
   ;;
 
   "Move States folder" )
+    log i "Configurator: opening \"$choice\" menu"
     configurator_move_folder_dialog "states_folder"
   ;;
 
   "Move Themes folder" )
+    log i "Configurator: opening \"$choice\" menu"
     configurator_move_folder_dialog "themes_folder"
   ;;
 
   "Move Screenshots folder" )
+    log i "Configurator: opening \"$choice\" menu"
     configurator_move_folder_dialog "screenshots_folder"
   ;;
 
   "Move Mods folder" )
+    log i "Configurator: opening \"$choice\" menu"
     configurator_move_folder_dialog "mods_folder"
   ;;
 
   "Move Texture Packs folder" )
+    log i "Configurator: opening \"$choice\" menu"
     configurator_move_folder_dialog "texture_packs_folder"
   ;;
 
@@ -658,30 +714,37 @@ configurator_compression_tool_dialog() {
   case $choice in
 
   "Compress Single Game" )
+    log i "Configurator: opening \"$choice\" menu"
     configurator_compress_single_game_dialog
   ;;
 
   "Compress Multiple Games - CHD" )
+    log i "Configurator: opening \"$choice\" menu"
     configurator_compress_multiple_games_dialog "chd"
   ;;
 
   "Compress Multiple Games - ZIP" )
+    log i "Configurator: opening \"$choice\" menu"
     configurator_compress_multiple_games_dialog "zip"
   ;;
 
   "Compress Multiple Games - RVZ" )
+    log i "Configurator: opening \"$choice\" menu"
     configurator_compress_multiple_games_dialog "rvz"
   ;;
 
   "Compress Multiple Games - All Formats" )
+    log i "Configurator: opening \"$choice\" menu"
     configurator_compress_multiple_games_dialog "all"
   ;;
 
   "Compress All Games" )
+    log i "Configurator: opening \"$choice\" menu"
     configurator_compress_multiple_games_dialog "everything"
   ;;
 
   "" ) # No selection made or Back button clicked
+    log i "Configurator: going back"
     configurator_retrodeck_tools_dialog
   ;;
 
@@ -901,6 +964,7 @@ configurator_retrodeck_troubleshooting_dialog() {
   case $choice in
 
   "Backup: RetroDECK Userdata" )
+    log i "Configurator: opening \"$choice\" menu"
     configurator_generic_dialog "RetroDECK Configurator - Backup: RetroDECK Userdata" "This tool will compress important RetroDECK userdata (basically everything except the ROMs folder) into a zip file.\n\nThis process can take several minutes, and the resulting zip file can be found in the ~/retrodeck/backups folder."
     (
       backup_retrodeck_userdata
@@ -918,18 +982,22 @@ configurator_retrodeck_troubleshooting_dialog() {
   ;;
 
   "Check & Verify: BIOS Files" )
+    log i "Configurator: opening \"$choice\" menu"
     configurator_check_bios_files
   ;;
 
   "Check & Verify: Multi-file structure" )
+    log i "Configurator: opening \"$choice\" menu"
     configurator_check_multifile_game_structure
   ;;
 
   "RetroDECK: Reset" )
+    log i "Configurator: opening \"$choice\" menu"
     configurator_reset_dialog
   ;;
 
   "" ) # No selection made or Back button clicked
+    log i "Configurator: going back"
     configurator_welcome_dialog
   ;;
 
@@ -993,6 +1061,7 @@ configurator_reset_dialog() {
   case $choice in
 
   "Reset Specific Emulator" )
+    log i "Configurator: opening \"$choice\" menu"
     emulator_to_reset=$(zenity --list \
     --title "RetroDECK Configurator Utility - Reset Specific Standalone Emulator" --cancel-label="Back" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
@@ -1050,6 +1119,7 @@ configurator_reset_dialog() {
   ;;
 
 "Reset All Emulators" )
+  log i "Configurator: opening \"$choice\" menu"
   if [[ $(check_network_connectivity) == "true" ]]; then
     if [[ $(configurator_reset_confirmation_dialog "all emulators" "Are you sure you want to reset all emulators to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
       (
@@ -1071,6 +1141,7 @@ configurator_reset_dialog() {
 ;;
 
 "Reset EmulationStation DE" )
+  log i "Configurator: opening \"$choice\" menu"
   if [[ $(configurator_reset_confirmation_dialog "EmulationStation DE" "Are you sure you want to reset EmulationStation DE to default settings?\n\nYour scraped media, downloaded themes and gamelists will not be touched.\n\nThis process cannot be undone.") == "true" ]]; then
     zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -1085,6 +1156,7 @@ configurator_reset_dialog() {
 ;;
 
 "Reset RetroDECK" )
+  log i "Configurator: opening \"$choice\" menu"
   if [[ $(configurator_reset_confirmation_dialog "RetroDECK" "Are you sure you want to reset RetroDECK entirely?\n\nThis process cannot be undone.") == "true" ]]; then
     zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -1116,10 +1188,12 @@ configurator_about_retrodeck_dialog() {
   case $choice in
 
   "Version History" )
+    log i "Configurator: opening \"$choice\" menu"
     configurator_version_history_dialog
   ;;
 
   "Credits" )
+    log i "Configurator: opening \"$choice\" menu"
     zenity --icon-name=net.retrodeck.retrodeck --text-info --width=1200 --height=720 \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Credits" \
@@ -1128,6 +1202,7 @@ configurator_about_retrodeck_dialog() {
   ;;
 
   "" ) # No selection made or Back button clicked
+    log i "Configurator: going back"
     configurator_welcome_dialog
   ;;
 
@@ -1156,10 +1231,12 @@ configurator_version_history_dialog() {
   case $choice in
 
   "Full RetroDECK Changelog" )
+    log i "Configurator: opening \"$choice\" menu"
     changelog_dialog "all"
   ;;
 
   "RetroDECK"*"Changelog" )
+    log i "Configurator: opening \"$choice\" menu"
     local version=$(echo "$choice" | sed 's/^RetroDECK \(.*\) Changelog$/\1/')
     changelog_dialog "$version"
   ;;
@@ -1182,23 +1259,28 @@ configurator_developer_dialog() {
   case $choice in
 
   "Change Multi-user mode" )
+    log i "Configurator: opening \"$choice\" menu"
     configurator_retrodeck_multiuser_dialog
   ;;
 
   "Change Update Channel" )
+    log i "Configurator: opening \"$choice\" menu"
     configurator_online_update_channel_dialog
   ;;
 
   "Browse the Wiki" )
+    log i "Configurator: opening \"$choice\" menu"
     xdg-open "https://github.com/XargonWan/RetroDECK/wiki"
     configurator_developer_dialog
   ;;
 
   "USB Import" )
+    log i "Configurator: opening \"$choice\" menu"
     configurator_usb_import_dialog
   ;;
 
   "Install RetroDECK Starter Pack" )
+    log i "Configurator: opening \"$choice\" menu"
     if [[ $(configurator_generic_question_dialog "Install: RetroDECK Starter Pack" "The RetroDECK creators have put together a collection of classic retro games you might enjoy!\n\nWould you like to have them automatically added to your library?") == "true" ]]; then
       install_retrodeck_starterpack
     fi
@@ -1206,6 +1288,7 @@ configurator_developer_dialog() {
   ;;
 
   "" ) # No selection made or Back button clicked
+    log i "Configurator: going back"
     configurator_welcome_dialog
   ;;
   esac
@@ -1277,6 +1360,7 @@ configurator_usb_import_dialog() {
   case $choice in
 
   "Prepare USB device" )
+    log i "Configurator: opening \"$choice\" menu"
     external_devices=()
 
     while read -r size device_path; do
@@ -1304,6 +1388,7 @@ configurator_usb_import_dialog() {
   ;;
 
   "Import from USB" )
+    log i "Configurator: opening \"$choice\" menu"
     external_devices=()
 
     while read -r size device_path; do
@@ -1350,6 +1435,7 @@ configurator_usb_import_dialog() {
   ;;
 
   "" ) # No selection made or Back button clicked
+    log i "Configurator: going back"
     configurator_developer_dialog
   ;;
   esac
