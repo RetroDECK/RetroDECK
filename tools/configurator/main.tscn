@@ -106,7 +106,7 @@ grow_vertical = 2
 layout_mode = 2
 tab_alignment = 1
 
-[node name="System" type="TabBar" parent="MarginContainer/TabContainer"]
+[node name="System" type="Control" parent="MarginContainer/TabContainer"]
 layout_mode = 2
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/TabContainer/System"]
@@ -115,6 +115,7 @@ offset_left = 21.0
 offset_top = 23.0
 offset_right = 745.0
 offset_bottom = 436.0
+follow_focus = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/TabContainer/System/ScrollContainer"]
 layout_mode = 2
@@ -179,7 +180,7 @@ layout_mode = 2
 disabled = true
 text = "Advanced"
 
-[node name="Graphics" type="TabBar" parent="MarginContainer/TabContainer"]
+[node name="Graphics" type="Control" parent="MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
 
@@ -190,6 +191,7 @@ offset_top = 23.0
 offset_right = 748.0
 offset_bottom = 455.0
 size_flags_vertical = 3
+follow_focus = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/TabContainer/Graphics/ScrollContainer"]
 layout_mode = 2
@@ -269,7 +271,7 @@ layout_mode = 2
 disabled = true
 text = "TATE Mode (coming soon)"
 
-[node name="Controls" type="TabBar" parent="MarginContainer/TabContainer"]
+[node name="Controls" type="Control" parent="MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
 
@@ -278,6 +280,7 @@ layout_mode = 0
 offset_left = 17.0
 offset_right = 751.0
 offset_bottom = 494.0
+follow_focus = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/TabContainer/Controls/ScrollContainer"]
 layout_mode = 2
@@ -330,7 +333,7 @@ button_pressed = true
 text = "Hotkey Activation Sound (coming soon)
 "
 
-[node name="Tools" type="TabBar" parent="MarginContainer/TabContainer"]
+[node name="Tools" type="Control" parent="MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
 
@@ -340,6 +343,7 @@ offset_left = 27.0
 offset_top = 22.0
 offset_right = 748.0
 offset_bottom = 470.0
+follow_focus = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/TabContainer/Tools/ScrollContainer"]
 layout_mode = 2
@@ -442,7 +446,7 @@ text = "Move User Files"
 [node name="game_control_container2" type="VBoxContainer" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Network" type="TabBar" parent="MarginContainer/TabContainer"]
+[node name="Network" type="Control" parent="MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
 
@@ -452,6 +456,7 @@ offset_left = 21.0
 offset_top = 8.0
 offset_right = 750.0
 offset_bottom = 464.0
+follow_focus = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/TabContainer/Network/ScrollContainer"]
 layout_mode = 2
@@ -594,7 +599,7 @@ layout_mode = 2
 disabled = true
 text = "Start FTP Server"
 
-[node name="Troubleshoot" type="TabBar" parent="MarginContainer/TabContainer"]
+[node name="Troubleshoot" type="Control" parent="MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
 
@@ -647,7 +652,7 @@ text = "All Emulators"
 layout_mode = 2
 text = "Full RetroDECK Reset"
 
-[node name="Configurator" type="TabBar" parent="MarginContainer/TabContainer"]
+[node name="Configurator" type="Control" parent="MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
 
@@ -657,6 +662,7 @@ offset_left = 21.0
 offset_top = 23.0
 offset_right = 750.0
 offset_bottom = 436.0
+follow_focus = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/TabContainer/Configurator/ScrollContainer"]
 layout_mode = 2
@@ -714,12 +720,11 @@ text = "Menu music
 layout_mode = 2
 text = "|| ------( )--------"
 
-[node name="About" type="TabBar" parent="MarginContainer/TabContainer"]
+[node name="About" type="Control" parent="MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
 
 [node name="Icon" type="Sprite2D" parent="MarginContainer/TabContainer/About"]
-visible = false
 position = Vector2(152, 83.5)
 scale = Vector2(0.515625, 0.503906)
 texture = ExtResource("1_axfei")
