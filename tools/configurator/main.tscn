@@ -1,7 +1,8 @@
-[gd_scene load_steps=17 format=3 uid="uid://61f6m4r1mpan"]
+[gd_scene load_steps=18 format=3 uid="uid://61f6m4r1mpan"]
 
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
 [ext_resource type="Script" path="res://main.gd" id="1_obpq7"]
+[ext_resource type="Script" path="res://TabContainer.gd" id="3_id6l4"]
 [ext_resource type="AudioStream" uid="uid://dig4pco500pyt" path="res://res/configurator.mp3" id="3_xivj6"]
 [ext_resource type="Texture2D" uid="uid://dx0u5hiwxfgu5" path="res://res/pixel_ui_theme/8x8_ui_elements.png" id="4_2tuu4"]
 [ext_resource type="Script" path="res://Rekku.gd" id="4_nqqx3"]
@@ -105,8 +106,11 @@ grow_vertical = 2
 [node name="TabContainer" type="TabContainer" parent="MarginContainer"]
 layout_mode = 2
 tab_alignment = 1
+current_tab = 4
+script = ExtResource("3_id6l4")
 
 [node name="System" type="Control" parent="MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/TabContainer/System"]
@@ -447,7 +451,6 @@ text = "Move User Files"
 layout_mode = 2
 
 [node name="Network" type="Control" parent="MarginContainer/TabContainer"]
-visible = false
 layout_mode = 2
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/TabContainer/Network"]
