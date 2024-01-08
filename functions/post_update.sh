@@ -269,11 +269,25 @@ post_update() {
 
   if [[ $prev_version -le "075" ]]; then
     # In version 0.7.5b, the following changes were made:
+    # TODO: vita3k init
+    # TODO: MAME init
     if [ -d "$rdhome/.logs" ]; then
       mv "$rdhome/.logs" "$logs_folder"
       log i "Logs folder renamed successfully"
     else
       log i "The .logs folder does not exist, continuing."
     fi
+
+    # The save folder of rpcs3 was inverted so we're moving the saves into the real one
+    echo "RPCS3 saves needs to be migrated, executing."
+    mv "$saves_folder/ps3/rpcs3" "$saves_folder/ps3/rpcs3.bak"
+    mkdir -p "$saves_folder/ps3/rpcs3"
+    mv -v "$saves_folder/ps3/rpcs3.bak"/* "$saves_folder/ps3/rpcs3"
+    mv -v "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata"/* "$saves_folder/ps3/rpcs3"
+    mv -v "$saves_folder/ps3/rpcs3.bak" "$rdhome/backups/saves/ps3/rpcs3"
+    echo "RPCS3 saves migration completed, a backup was made here: \"$rdhome/backups/saves/ps3/rpcs3\"."
+    source /app/libexec/functions.sh
+    dir_prep "$saves_folder/ps3/rpcs3" "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata"
+
   fi
 }

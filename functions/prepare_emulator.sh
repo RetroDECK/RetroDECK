@@ -303,8 +303,9 @@ prepare_emulator() {
         set_setting_value "$multi_user_data_folder/$SteamAppUser/data/duckstation/settings.ini" "RecursivePaths" "$roms_folder/psx" "duckstation" "GameList"
         dir_prep "$multi_user_data_folder/$SteamAppUser/config/duckstation" "/var/config/duckstation"
       else # Single-user actions
-        rm -rf /var/config/duckstation
-        mkdir -p /var/config/duckstation/
+        rm -rf "/var/config/duckstation"
+        mkdir -p "/var/config/duckstation/"
+        mkdir -p "$saves_folder/psx/duckstation/memcards"
         cp -fv "$emuconfigs/duckstation/"* /var/config/duckstation
         set_setting_value "$duckstationconf" "SearchDirectory" "$bios_folder" "duckstation" "BIOS"
         set_setting_value "$duckstationconf" "Card1Path" "$saves_folder/psx/duckstation/memcards/shared_card_1.mcd" "duckstation" "MemoryCards"
@@ -523,7 +524,7 @@ prepare_emulator() {
         # This is an unfortunate one-off because set_setting_value does not currently support settings with $ in the name.
         sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$bios_folder/rpcs3/"'^' "$rpcs3vfsconf"
         set_setting_value "$rpcs3vfsconf" "/games/" "$roms_folder/ps3/" "rpcs3"
-        dir_prep "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata" "$saves_folder/ps3/rpcs3"
+        dir_prep "$saves_folder/ps3/rpcs3" "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata"
       fi
       # Shared actions
       mkdir -p "$bios_folder/rpcs3/dev_hdd0"
