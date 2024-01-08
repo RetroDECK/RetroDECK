@@ -279,13 +279,13 @@ post_update() {
     fi
 
     # The save folder of rpcs3 was inverted so we're moving the saves into the real one
-    echo "RPCS3 saves needs to be migrated, executing."
+    log w "RPCS3 saves needs to be migrated, executing."
     mv "$saves_folder/ps3/rpcs3" "$saves_folder/ps3/rpcs3.bak"
     mkdir -p "$saves_folder/ps3/rpcs3"
     mv -v "$saves_folder/ps3/rpcs3.bak"/* "$saves_folder/ps3/rpcs3"
     mv -v "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata"/* "$saves_folder/ps3/rpcs3"
     mv -v "$saves_folder/ps3/rpcs3.bak" "$rdhome/backups/saves/ps3/rpcs3"
-    echo "RPCS3 saves migration completed, a backup was made here: \"$rdhome/backups/saves/ps3/rpcs3\"."
+    log w "RPCS3 saves migration completed, a backup was made here: \"$rdhome/backups/saves/ps3/rpcs3\"."
     source /app/libexec/functions.sh
     dir_prep "$saves_folder/ps3/rpcs3" "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata"
 

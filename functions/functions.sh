@@ -18,6 +18,7 @@ directory_browse() {
       if [ $? == 0 ]
       then
         path_selected=true
+        log i "\"$target\" selected."
         echo "$target"
         break
       fi
@@ -48,6 +49,7 @@ file_browse() {
       if [ $? == 0 ]
       then
         file_selected=true
+        log i "\"$target\" selected."
         echo "$target"
         break
       fi
@@ -201,51 +203,51 @@ dir_prep() {
   real="$1"
   symlink="$2"
 
-  echo -e "\n[DIR PREP]\nMoving $symlink in $real" #DEBUG
+  log d "[DIR PREP]\nMoving $symlink in $real" #DEBUG
 
    # if the symlink dir is already a symlink, unlink it first, to prevent recursion
   if [ -L "$symlink" ];
   then
-    echo "$symlink is already a symlink, unlinking to prevent recursives" #DEBUG
+    log d "$symlink is already a symlink, unlinking to prevent recursives" #DEBUG
     unlink "$symlink"
   fi
 
   # if the dest dir exists we want to backup it
   if [ -d "$symlink" ];
   then
-    echo "$symlink found" #DEBUG
+    log d "$symlink found" #DEBUG
     mv -f "$symlink" "$symlink.old"
   fi
 
   # if the real dir is already a symlink, unlink it first
   if [ -L "$real" ];
   then
-    echo "$real is already a symlink, unlinking to prevent recursives" #DEBUG
+    log d "$real is already a symlink, unlinking to prevent recursives" #DEBUG
     unlink "$real"
   fi
 
   # if the real dir doesn't exist we create it
   if [ ! -d "$real" ];
   then
-    echo "$real not found, creating it" #DEBUG
+    log d "$real not found, creating it" #DEBUG
     mkdir -pv "$real"
   fi
 
   # creating the symlink
-  echo "linking $real in $symlink" #DEBUG
+  log d "linking $real in $symlink" #DEBUG
   mkdir -pv "$(dirname "$symlink")" # creating the full path except the last folder
   ln -svf "$real" "$symlink"
 
   # moving everything from the old folder to the new one, delete the old one
   if [ -d "$symlink.old" ];
   then
-    echo "Moving the data from $symlink.old to $real" #DEBUG
+    log d "Moving the data from $symlink.old to $real" #DEBUG
     mv -f "$symlink.old"/{.[!.],}* $real
-    echo "Removing $symlink.old" #DEBUG
+    log d "Removing $symlink.old" #DEBUG
     rm -rf "$symlink.old"
   fi
 
-  echo -e "$symlink is now $real\n"
+  log i "$symlink is now $real\n"
 }
 
 update_rpcs3_firmware() {
@@ -290,6 +292,7 @@ do
       if [ $? == 0 ] #yes
       then
         path_selected=true
+        log i "\"$target/retrodeck\" selected."
         echo "$target/retrodeck"
         break
       else
@@ -331,28 +334,29 @@ finit_user_options_dialog() {
   --column "option_flag" \
   "${finit_available_options[@]}")
 
+  log i "User choiches: \"${choices[*]}\"."
   echo "${choices[*]}"
 }
 
 finit() {
 # Force/First init, depending on the situation
 
-  echo "Executing finit"
+  log i "Executing finit"
 
   # Internal or SD Card?
   local finit_dest_choice=$(configurator_destination_choice_dialog "RetroDECK data" "Welcome to the first configuration of RetroDECK.\nThe setup will be quick but please READ CAREFULLY each message in order to avoid misconfigurations.\n\nWhere do you want your RetroDECK data folder to be located?\n\nThis folder will contain all ROMs, BIOSs and scraped data." )
-  echo "Choice is $finit_dest_choice"
+  log i "Choice is $finit_dest_choice"
 
   case "$finit_dest_choice" in
 
   "Back" | "" ) # Back or X button quits
     rm -f "$rd_conf" # Cleanup unfinished retrodeck.cfg if first install is interrupted
-    echo "Now quitting"
+    log i "Now quitting"
     quit_retrodeck
   ;;
 
   "Internal Storage" ) # Internal
-    echo "Internal selected"
+    log i "Internal selected"
     rdhome="$HOME/retrodeck"
     if [[ -L "$rdhome" ]]; then #Remove old symlink from existing install, if it exists
       unlink "$rdhome"
@@ -360,10 +364,10 @@ finit() {
   ;;
 
   "SD Card" )
-    echo "SD Card selected"
+    log i "SD Card selected"
     if [ ! -d "$sdcard" ] # SD Card path is not existing
     then
-      echo "Error: SD card not found"
+      log e "SD card not found"
       zenity --error --no-wrap \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK" \
@@ -376,14 +380,14 @@ finit() {
       fi
     elif [ ! -w "$sdcard" ] #SD card found but not writable
       then
-        echo "Error: SD card found but not writable"
+        log e "SD card found but not writable"
         zenity --error --no-wrap \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         --title "RetroDECK" \
         --ok-label "Quit" \
         --text="SD card was found but is not writable\nThis can happen with cards formatted on PC.\nPlease format the SD card through the Steam Deck's Game Mode and run RetroDECK again."
         rm -f "$rd_conf" # Cleanup unfinished retrodeck.cfg if first install is interrupted
-        echo "Now quitting"
+        log i "Now quitting"
         quit_retrodeck
     else
       rdhome="$sdcard/retrodeck"
@@ -391,7 +395,7 @@ finit() {
   ;;
 
   "Custom Location" )
-      echo "Custom Location selected"
+      log i "Custom Location selected"
       zenity --info --no-wrap \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK" \
