@@ -522,7 +522,7 @@ prepare_emulator() {
         # This is an unfortunate one-off because set_setting_value does not currently support settings with $ in the name.
         sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$bios_folder/rpcs3/"'^' "$rpcs3vfsconf"
         set_setting_value "$rpcs3vfsconf" "/games/" "$roms_folder/ps3/" "rpcs3"
-        dir_prep "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata" "$saves_folder/ps3/rpcs3"
+        dir_prep "$saves_folder/ps3/rpcs3" "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata"
       fi
       # Shared actions
       mkdir -p "$bios_folder/rpcs3/dev_hdd0"
