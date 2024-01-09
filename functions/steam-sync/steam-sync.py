@@ -7,6 +7,7 @@ import shutil
 import glob
 import vdf
 import sys
+import stat
 
 import xml.etree.ElementTree as ET
 
@@ -267,12 +268,19 @@ alt_command_list={
 "Beetle PCE": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/mednafen_pce_libretro.so"
 }
 
-STEAM_DATA_DIRS = (
+STEAM_DATA_DIRS_ORIG = (
     "~/.steam/debian-installation",
     "~/.steam",
     "~/.local/share/steam",
     "~/.local/share/Steam",
     "~/.steam/steam",
+    "~/.var/app/com.valvesoftware.Steam/data/steam",
+    "~/.var/app/com.valvesoftware.Steam/data/Steam",
+    "/usr/share/steam",
+    "/usr/local/share/steam",
+)
+
+STEAM_DATA_DIRS = (
     "~/.var/app/com.valvesoftware.Steam/data/steam",
     "~/.var/app/com.valvesoftware.Steam/data/Steam",
     "/usr/share/steam",
@@ -286,11 +294,11 @@ def create_shortcut(games, launch_config_name=None):
             shortcuts = vdf.binary_loads(shortcut_file.read())['shortcuts'].values()
     else:
         shortcuts = []
-
+        
     if ".var/app/com.valvesoftware.Steam" in shortcut_path:
         for game in games:
             game[1]="flatpak-spawn --host "+game[1]
-    
+
     old_shortcuts=[]
     for shortcut in shortcuts:
         if "net.retrodeck.retrodeck" in shortcut["Exe"]:
@@ -369,6 +377,62 @@ def generate_preliminary_id(name):
 def generate_shortcut_id(name):
     return (generate_preliminary_id(name) >> 32) - 0x100000000
 
+def create_shortcut_new(games,rdhome):
+    old_games=os.listdir(rdhome+"/sync/")
+
+    for game in games:
+        try:
+            i=old_games.index(game[0])
+            old_games[i]=0
+        except ValueError:
+            print(game[0]+" is a new game!")
+    
+        path=rdhome+"/sync/"+game[0]
+        print("Go to path: "+path)
+        if not os.path.exists(path):
+            os.makedirs(path)
+            fl=open(path+"/goggame-0.info","w")
+            fl.write('{\n')
+            fl.write('    "buildId": "",\n')
+            fl.write('    "clientId": "",\n')
+            fl.write('    "gameId": "",\n')
+            fl.write('    "name": "'+game[0]+'",\n')
+            fl.write('    "playTasks": [\n')
+            fl.write('        {\n')
+            fl.write('            "category": "launcher",\n')
+            fl.write('            "isPrimary": true,\n')
+            fl.write('            "languages": [\n')
+            fl.write('                "en-US"\n')
+            fl.write('            ],\n')
+            fl.write('            "name": "'+game[0]+'",\n')
+            fl.write('            "path": "launch.sh",\n')
+            fl.write('            "type": "FileTask"\n')
+            fl.write('        }\n')
+            fl.write('    ]\n')
+            fl.write('}\n')
+            fl.close()
+        
+        fl=open(path+"/launch.sh","w")
+        fl.write("#!/bin/bash\n\n")
+        fl.write('if test "$(whereis flatpak)" = "flatpak:"\n')
+        fl.write("then\n")
+        fl.write("flatpak-spawn --host "+game[1]+"\n")
+        fl.write("else\n")
+        fl.write(game[1]+"\n")
+        fl.write("fi\n")
+        fl.close()
+        
+        st=os.stat(path+"/launch.sh")
+        os.chmod(path+"/launch.sh", st.st_mode | 0o0111)
+        
+    print("Start removing")
+    print(old_games)
+    for game in old_games:
+        if game:
+            shutil.rmtree(rdhome+"/sync/"+game)
+        
+    os.system("linux_BoilR --no-ui")
+
 def addToSteam():
     print("Open RetroDECK config file: {}".format(os.path.expanduser("~/.var/app/net.retrodeck.retrodeck/config/retrodeck/retrodeck.cfg")))
 
@@ -384,6 +448,12 @@ def addToSteam():
     
     command_list_default["pico8"]=command_list_default["pico8"].replace("{GAMEDIR}",roms_folder+"/pico8")
     alt_command_list["PICO-8 Splore (Standalone)"]=alt_command_list["PICO-8 Splore (Standalone)"].replace("{GAMEDIR}",roms_folder+"/pico8")
+
+    if not os.path.exists(rdhome+"/sync/"):
+        os.makedirs(rdhome+"/sync/")
+
+    if not os.path.exists(os.path.expanduser("~/.var/app/net.retrodeck.retrodeck/config/boilr/sync")):
+        os.symlink(rdhome+"/sync",os.path.expanduser("~/.var/app/net.retrodeck.retrodeck/config/boilr/sync"))
 
     for system in os.listdir(rdhome+"/gamelists/"):
         print("Start parsing system: {}".format(system))
@@ -418,25 +488,24 @@ def addToSteam():
                         elif tag.tag=="altemulator":
                             altemulator=tag.text
                             
-                    if favorite=="true" and os.path.exists(roms_folder+"/"+system+path[1:]):
-                        if altemulator=="":
-                            print("\tFind favorite game: {}".format(name))
-                            games.append([name,command_list_default[system]+" "+roms_folder+"/"+system+path[1:]])
-                        else:
-                            print("\tFind favorite game with alternative emulator: {}, {}".format(name,altemulator))
-                            if ("neogeocd" in system) and altemulator=="FinalBurn Neo":
-                                games.append([name,alt_command_list[altemulator+" neogeocd"]+" "+roms_folder+"/"+system+path[1:]])
-                                print("\t{}".format(alt_command_list[altemulator+" neogeocd"]+" "+roms_folder+"/"+system+path[1:]))
-                            elif system=="pico8" and altemulator=="PICO-8 Splore (Standalone)":
-                                games.append([name,alt_command_list[altemulator]])
-                                print("\t{}".format(alt_command_list[altemulator]))
-                            else:
-                                games.append([name,alt_command_list[altemulator]+" "+roms_folder+"/"+system+path[1:]])
-                                print("\t{}".format(alt_command_list[altemulator]+" "+roms_folder+"/"+system+path[1:]))
+                    if favorite=="true" and altemulator=="":
+                        print("Find favorite game: {}".format(name))
+                        games.append([name,command_list_default[system]+" '"+roms_folder+"/"+system+path[1:]+"'"])
                     elif favorite=="true":
-                        print("\tGame {} ignored, file not found".format(name))
-                
-    create_shortcut(games)
+                        print("Find favorite game with alternative emulator: {}, {}".format(name,altemulator))
+                        if ("neogeocd" in system) and altemulator=="FinalBurn Neo":
+                            games.append([name,alt_command_list[altemulator+" neogeocd"]+" '"+roms_folder+"/"+system+path[1:]+"'"])
+                            print(alt_command_list[altemulator+" neogeocd"]+" '"+roms_folder+"/"+system+path[1:]+"'")
+                        elif system=="pico8" and altemulator=="PICO-8 Splore (Standalone)":
+                            games.append([name,alt_command_list[altemulator]])
+                            print(alt_command_list[altemulator])
+                        else:
+                            games.append([name,alt_command_list[altemulator]+" '"+roms_folder+"/"+system+path[1:]+"'"])
+                            print(alt_command_list[altemulator]+" '"+roms_folder+"/"+system+path[1:]+"'")
+     
+    create_shortcut_new(games,rdhome)
 
 if __name__=="__main__":
     addToSteam()
+    
+    print("Finish!")
