@@ -1,6 +1,7 @@
 #!/bin/bash
 # Compare the retroarch core configurations made by EmuDeck with those by RetroDECK
 # Set KEEP_EMUDECK_CONFIGS env variable to keep the EmuDeck configs in the "emudeck_ra_configs" directory
+# The EmuDeck repo needs to be available for this script. Clone it from https://github.com/dragoonDorise/EmuDeck
 
 [[ $# != 2 ]] && echo "Usage: cmp_emudeck [EmuDeck Repo Path] [RetroArch Core]
 Example: cmp_emudeck ~/EmuDeck melonds" && exit 1
