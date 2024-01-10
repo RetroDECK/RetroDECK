@@ -3,9 +3,10 @@ runtime: org.kde.Platform
 runtime-version: 5.15-22.08
 sdk: org.kde.Sdk
 sdk-extensions:
-  - org.freedesktop.Sdk.Extension.llvm14    # Needed for rpcs3
-base: io.qt.qtwebengine.BaseApp             # Needed for Yuzu
-base-version: 5.15-22.08                    # Needed for Yuzu
+  - org.freedesktop.Sdk.Extension.llvm14        # Needed for rpcs3
+  - org.freedesktop.Sdk.Extension.rust-stable   # Needed for BoilR
+base: io.qt.qtwebengine.BaseApp                 # Needed for Yuzu
+base-version: 5.15-22.08                        # Needed for Yuzu
 command: retrodeck.sh
 
 add-extensions:
@@ -41,6 +42,10 @@ finish-args:
   # It allows an SDL application to specify its window class, which can be useful for window managers and desktop environments to identify and group similar windows
   - --env=SDL_VIDEO_X11_WMCLASS=net.retrodeck.retrodeck
   - --env=SDL_VIDEO_WAYLAND_WMCLASS=net.retrodeck.retrodeck
+  # BoilR
+  - --filesystem=xdg-data/Steam:rw #Steam (flatpak)
+  - --filesystem=~/.steam:rw # Steam (Non-flatpak)
+  - --filesystem=~/.var/app/com.valvesoftware.Steam:rw # Steam (Flatpak)
 
 cleanup:
   # ES-DE
@@ -363,6 +368,24 @@ modules:
   # ES-DE Themes - END
 
   # External manifests start
+
+  - name: boilr
+    buildsystem: simple
+    build-options:
+      append-path: /usr/lib/sdk/rust-stable/bin
+      env:
+        # To pick up vendored deps
+        CARGO_HOME: /run/build/boilr/cargo
+        RUSTFLAGS: "-L /app/lib/"
+    build-commands:    
+      - cargo --offline fetch --manifest-path Cargo.toml --verbose
+      - cargo --offline build --release --verbose --features flatpak
+      - install -Dm755 ./target/release/boilr -t /app/bin/
+    sources:
+      - type: git
+        url: https://github.com/PhilipK/BoilR
+        commit: b33d965f227fe971fd590cb022f608521b506ef3
+      - rd-submodules/boilr/cargo-lock.json
 
   # RetroArch - START
   # https://github.com/flathub/org.libretro.RetroArch
