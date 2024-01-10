@@ -17,6 +17,13 @@ rd_manifest=${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml
 automation_task_list=${GITHUB_WORKSPACE}/automation_tools/automation_task_list.cfg
 current_branch=$(git rev-parse --abbrev-ref HEAD)
 
+# During the PR automated tests instead of the branch name is returned "HEAD", fixing it
+if [ $current_branch == "HEAD" ]; then
+  echo "Looks like we are on a PR environment, retrieving the branch name from which the PR is raised."
+  current_branch=$(echo $GITHUB_REF | sed 's@refs/heads/@@')
+  echo "The branch name from which the PR is raised is \"$current_branch\"."
+fi
+
 echo "Manifest location: $rd_manifest"
 echo "Automation task list location: $automation_task_list"
 echo
