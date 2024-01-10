@@ -15,7 +15,7 @@
 
 rd_manifest=${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml
 automation_task_list=${GITHUB_WORKSPACE}/automation_tools/automation_task_list.cfg
-current_branch=$(git branch --contains $(git rev-parse HEAD) | grep -E '^\*' | awk '{print $2}')
+current_branch=$(git symbolic-ref --short HEAD)
 
 echo "Manifest location: $rd_manifest"
 echo "Automation task list location: $automation_task_list"
