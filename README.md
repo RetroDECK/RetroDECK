@@ -85,6 +85,9 @@ Read up here on how to help out, there is something for everyone:
 
 [How to: Contribute to RetroDECK](https://retrodeck.readthedocs.io/en/latest/wiki_community/contibute-rd/)
 
+## Can I donate to the project: 
+Yes, check here: <br>
+[Donations & Licenses 🎁](https://retrodeck.readthedocs.io/en/latest/wiki_about/donations-licenses/) 
 
 # The RetroDECK Wiki
 Please check out the [Wiki](https://retrodeck.readthedocs.io/en/latest/) for even more information.
