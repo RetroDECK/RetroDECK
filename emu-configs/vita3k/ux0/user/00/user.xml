@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<user id="00" name="RetroDECK">
+	<avatar>/app/retrodeck/retrodeck.png</avatar>
+	<sort-apps-list type="4" state="1" />
+	<theme use-background="true">
+		<content-id>default</content-id>
+	</theme>
+	<start-screen type="default">
+		<path></path>
+	</start-screen>
+	<backgrounds />
+</user>

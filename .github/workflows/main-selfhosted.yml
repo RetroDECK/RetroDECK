@@ -40,6 +40,10 @@ jobs:
       - name: "Install dependencies"
         run: "automation_tools/install_dependencies.sh"
 
+      # backing up manifest in case download fails and hashes must be recalculated
+      - name: Manifest backup
+        run: "cp ${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml ${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml.bak"
+
       - name: Run pre-build automation tasks
         run : "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/pre_build_automation.sh"
 
@@ -65,7 +69,13 @@ jobs:
       # Sometimes flatpak download fails, in this case it tries a second time
       - name: "Build flatpak: download only (retry)"
         if: steps.flatpak-download.outcome == 'failure'
-        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
+        run: |
+          echo "Download failed, maybe some hash changed since the build start."
+          echo "Recalculating hashes and retrying download..."
+          rm -f "{GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml"
+          cp "${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml.bak" "${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml"
+          "${GITHUB_WORKSPACE}/automation_tools/pre_build_automation.sh"
+          "${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
 
       - name: Build flatpak
         run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_only.sh"
@@ -76,7 +86,6 @@ jobs:
           hash=($(sha256sum ${GITHUB_WORKSPACE}/RetroDECK-Artifact.tar.gz))
           echo $hash > ${GITHUB_WORKSPACE}/RetroDECK-Artifact.sha
           mv -f RetroDECK-Artifact.* ${{ secrets.ARTIFACT_REPO }}
-        continue-on-error: true
 
       - name: Create Bundle
         run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_bundle.sh"
