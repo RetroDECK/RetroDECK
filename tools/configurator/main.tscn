@@ -72,197 +72,189 @@ animations = [{
 
 [node name="Control" type="Control"]
 layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
-anchor_bottom = 1.085
-offset_right = -3.0
-offset_bottom = -62.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_obpq7")
 
-[node name="Panel" type="Panel" parent="."]
-layout_mode = 0
-offset_left = 126.0
-offset_top = 66.0
-offset_right = 1127.0
-offset_bottom = 621.0
+[node name="Background" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -500.0
+offset_top = -350.0
+offset_right = 500.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("3_xivj6")
-volume_db = -11.243
-
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="Background"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 134.0
-offset_top = 77.0
-offset_right = -163.0
-offset_bottom = -200.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TabContainer" type="TabContainer" parent="MarginContainer"]
+[node name="TabContainer" type="TabContainer" parent="Background/MarginContainer"]
 layout_mode = 2
 tab_alignment = 1
-current_tab = 4
 script = ExtResource("3_id6l4")
 
-[node name="System" type="Control" parent="MarginContainer/TabContainer"]
-visible = false
+[node name="System" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
 layout_mode = 2
+theme_override_constants/margin_right = 240
 
-[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/TabContainer/System"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Background/MarginContainer/TabContainer/System"]
 layout_mode = 2
-offset_left = 21.0
-offset_top = 23.0
-offset_right = 745.0
-offset_bottom = 436.0
 follow_focus = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/TabContainer/System/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/System/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 2
 theme_override_constants/separation = 64
 
-[node name="game_control_container" type="VBoxContainer" parent="MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer"]
+[node name="game_control_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="game_control_label" type="Label" parent="MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container"]
+[node name="game_control_label" type="Label" parent="Background/MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container"]
 layout_mode = 2
 text = "Game Control"
 
-[node name="game_control_label2" type="HSeparator" parent="MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container"]
+[node name="game_control_label2" type="HSeparator" parent="Background/MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container"]
 layout_mode = 2
 
-[node name="GridContainer" type="GridContainer" parent="MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container"]
+[node name="GridContainer" type="GridContainer" parent="Background/MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container"]
 layout_mode = 2
 columns = 2
 
-[node name="resume" type="CheckButton" parent="MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
+[node name="resume" type="CheckButton" parent="Background/MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
 layout_mode = 2
 theme_override_constants/h_separation = 128
 button_pressed = true
 text = "Quick Resume"
 metadata/description = "This is a test description set to this element"
 
-[node name="Button" type="Button" parent="MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
+[node name="Button" type="Button" parent="Background/MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
 layout_mode = 2
 text = "Advanced"
 
-[node name="rewind" type="CheckButton" parent="MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
+[node name="rewind" type="CheckButton" parent="Background/MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
 layout_mode = 2
 theme_override_constants/h_separation = 256
 text = "Rewind"
 metadata/description = "This is another, very long and convoluted, description, that I put too much commas in to make in LONGER and more SOPHISTICATED. And I did it twice!!!This is another, very long and convoluted, description, that I put too much commas in to make in LONGER and more SOPHISTICATED."
 
-[node name="Button2" type="Button" parent="MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
+[node name="Button2" type="Button" parent="Background/MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
 layout_mode = 2
 disabled = true
 text = "Advanced"
 
-[node name="quitconfirm" type="CheckButton" parent="MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
+[node name="quitconfirm" type="CheckButton" parent="Background/MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
 layout_mode = 2
 button_pressed = true
 text = "Quit Confirmation
 "
 
-[node name="Button3" type="Button" parent="MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
+[node name="Button3" type="Button" parent="Background/MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
 layout_mode = 2
 disabled = true
 text = "Advanced"
 
-[node name="cheats" type="CheckButton" parent="MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
+[node name="cheats" type="CheckButton" parent="Background/MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
 layout_mode = 2
 disabled = true
 text = "Cheats (coming soon)"
 
-[node name="Button4" type="Button" parent="MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
+[node name="Button4" type="Button" parent="Background/MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
 layout_mode = 2
 disabled = true
 text = "Advanced"
 
-[node name="Graphics" type="Control" parent="MarginContainer/TabContainer"]
+[node name="Graphics" type="Control" parent="Background/MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/TabContainer/Graphics"]
-layout_mode = 2
-offset_left = 32.0
-offset_top = 23.0
-offset_right = 748.0
-offset_bottom = 455.0
+[node name="ScrollContainer" type="ScrollContainer" parent="Background/MarginContainer/TabContainer/Graphics"]
+layout_mode = 1
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 745.0
+offset_bottom = 470.0
 size_flags_vertical = 3
 follow_focus = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/TabContainer/Graphics/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/Graphics/ScrollContainer"]
 layout_mode = 2
 theme_override_constants/separation = 64
 
-[node name="decorations_container" type="VBoxContainer" parent="MarginContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer"]
+[node name="decorations_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="decorations_label" type="Label" parent="MarginContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/decorations_container"]
+[node name="decorations_label" type="Label" parent="Background/MarginContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/decorations_container"]
 layout_mode = 2
 text = "Decorations"
 
-[node name="decorations_separator" type="HSeparator" parent="MarginContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/decorations_container"]
+[node name="decorations_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/decorations_container"]
 layout_mode = 2
 
-[node name="GridContainer" type="GridContainer" parent="MarginContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/decorations_container"]
+[node name="GridContainer" type="GridContainer" parent="Background/MarginContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/decorations_container"]
 layout_mode = 2
 columns = 2
 
-[node name="borders" type="CheckButton" parent="MarginContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/decorations_container/GridContainer"]
+[node name="borders" type="CheckButton" parent="Background/MarginContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/decorations_container/GridContainer"]
 layout_mode = 2
 button_pressed = true
 text = "Borders"
 
-[node name="borders_advance" type="Button" parent="MarginContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/decorations_container/GridContainer"]
+[node name="borders_advance" type="Button" parent="Background/MarginContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/decorations_container/GridContainer"]
 layout_mode = 2
 disabled = true
 text = "Advanced"
 
-[node name="wide_screen" type="CheckButton" parent="MarginContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/decorations_container/GridContainer"]
+[node name="wide_screen" type="CheckButton" parent="Background/MarginContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/decorations_container/GridContainer"]
 layout_mode = 2
 text = "Wide Screen"
 
-[node name="wide_screen_advanced" type="Button" parent="MarginContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/decorations_container/GridContainer"]
+[node name="wide_screen_advanced" type="Button" parent="Background/MarginContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/decorations_container/GridContainer"]
 layout_mode = 2
 disabled = true
 text = "Advanced"
 
-[node name="shaders" type="CheckButton" parent="MarginContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/decorations_container/GridContainer"]
+[node name="shaders" type="CheckButton" parent="Background/MarginContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/decorations_container/GridContainer"]
 layout_mode = 2
 disabled = true
 button_pressed = true
 text = "Shaders (coming soon)
 "
 
-[node name="shaders_button" type="Button" parent="MarginContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/decorations_container/GridContainer"]
+[node name="shaders_button" type="Button" parent="Background/MarginContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/decorations_container/GridContainer"]
 layout_mode = 2
 disabled = true
 text = "Advanced"
 
-[node name="extra_container" type="VBoxContainer" parent="MarginContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer"]
+[node name="extra_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="decorations_label" type="Label" parent="MarginContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/extra_container"]
+[node name="decorations_label" type="Label" parent="Background/MarginContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/extra_container"]
 layout_mode = 2
 text = "Extra"
 
-[node name="decorations_separator" type="HSeparator" parent="MarginContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/extra_container"]
+[node name="decorations_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/extra_container"]
 layout_mode = 2
 
-[node name="wide_screen" type="CheckButton" parent="MarginContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/extra_container"]
+[node name="wide_screen" type="CheckButton" parent="Background/MarginContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/extra_container"]
 layout_mode = 2
 disabled = true
 button_pressed = true
 text = "Mods"
 
-[node name="wide_screen_advanced" type="Button" parent="MarginContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/extra_container/wide_screen"]
+[node name="wide_screen_advanced" type="Button" parent="Background/MarginContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/extra_container/wide_screen"]
 layout_mode = 0
 offset_left = 328.0
 offset_right = 404.0
@@ -270,56 +262,56 @@ offset_bottom = 29.0
 disabled = true
 text = "Advanced"
 
-[node name="borders" type="CheckButton" parent="MarginContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/extra_container"]
+[node name="borders" type="CheckButton" parent="Background/MarginContainer/TabContainer/Graphics/ScrollContainer/VBoxContainer/extra_container"]
 layout_mode = 2
 disabled = true
 text = "TATE Mode (coming soon)"
 
-[node name="Controls" type="Control" parent="MarginContainer/TabContainer"]
+[node name="Controls" type="Control" parent="Background/MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/TabContainer/Controls"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Background/MarginContainer/TabContainer/Controls"]
 layout_mode = 0
 offset_left = 17.0
 offset_right = 751.0
 offset_bottom = 494.0
 follow_focus = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/TabContainer/Controls/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/Controls/ScrollContainer"]
 layout_mode = 2
 
-[node name="buttons_container" type="VBoxContainer" parent="MarginContainer/TabContainer/Controls/ScrollContainer/VBoxContainer"]
+[node name="buttons_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/Controls/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="decorations_label" type="Label" parent="MarginContainer/TabContainer/Controls/ScrollContainer/VBoxContainer/buttons_container"]
+[node name="decorations_label" type="Label" parent="Background/MarginContainer/TabContainer/Controls/ScrollContainer/VBoxContainer/buttons_container"]
 layout_mode = 2
 text = "Controls"
 
-[node name="decorations_separator" type="HSeparator" parent="MarginContainer/TabContainer/Controls/ScrollContainer/VBoxContainer/buttons_container"]
+[node name="decorations_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/Controls/ScrollContainer/VBoxContainer/buttons_container"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/TabContainer/Controls/ScrollContainer/VBoxContainer/buttons_container"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Background/MarginContainer/TabContainer/Controls/ScrollContainer/VBoxContainer/buttons_container"]
 layout_mode = 2
 
-[node name="wide_screen" type="Label" parent="MarginContainer/TabContainer/Controls/ScrollContainer/VBoxContainer/buttons_container/HBoxContainer"]
+[node name="wide_screen" type="Label" parent="Background/MarginContainer/TabContainer/Controls/ScrollContainer/VBoxContainer/buttons_container/HBoxContainer"]
 layout_mode = 2
 text = "Steam: Controller Templates"
 
-[node name="wide_screen_advanced" type="Button" parent="MarginContainer/TabContainer/Controls/ScrollContainer/VBoxContainer/buttons_container/HBoxContainer"]
+[node name="wide_screen_advanced" type="Button" parent="Background/MarginContainer/TabContainer/Controls/ScrollContainer/VBoxContainer/buttons_container/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 4
 text = "Install"
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/TabContainer/Controls/ScrollContainer/VBoxContainer/buttons_container"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="Background/MarginContainer/TabContainer/Controls/ScrollContainer/VBoxContainer/buttons_container"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MarginContainer/TabContainer/Controls/ScrollContainer/VBoxContainer/buttons_container/HBoxContainer2"]
+[node name="Label" type="Label" parent="Background/MarginContainer/TabContainer/Controls/ScrollContainer/VBoxContainer/buttons_container/HBoxContainer2"]
 layout_mode = 2
 text = "Button Layout"
 
-[node name="borders" type="OptionButton" parent="MarginContainer/TabContainer/Controls/ScrollContainer/VBoxContainer/buttons_container/HBoxContainer2"]
+[node name="borders" type="OptionButton" parent="Background/MarginContainer/TabContainer/Controls/ScrollContainer/VBoxContainer/buttons_container/HBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 4
@@ -330,18 +322,18 @@ popup/item_0/id = 0
 popup/item_1/text = "Nintendo"
 popup/item_1/id = 1
 
-[node name="shaders" type="CheckButton" parent="MarginContainer/TabContainer/Controls/ScrollContainer/VBoxContainer/buttons_container"]
+[node name="shaders" type="CheckButton" parent="Background/MarginContainer/TabContainer/Controls/ScrollContainer/VBoxContainer/buttons_container"]
 layout_mode = 2
 disabled = true
 button_pressed = true
 text = "Hotkey Activation Sound (coming soon)
 "
 
-[node name="Tools" type="Control" parent="MarginContainer/TabContainer"]
+[node name="Tools" type="Control" parent="Background/MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/TabContainer/Tools"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Background/MarginContainer/TabContainer/Tools"]
 layout_mode = 2
 offset_left = 27.0
 offset_top = 22.0
@@ -349,111 +341,111 @@ offset_right = 748.0
 offset_bottom = 470.0
 follow_focus = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/TabContainer/Tools/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/Tools/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 3
 theme_override_constants/separation = 36
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="game_control_label" type="Label" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/VBoxContainer"]
+[node name="game_control_label" type="Label" parent="Background/MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Scan"
 
-[node name="game_control_label2" type="HSeparator" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/VBoxContainer"]
+[node name="game_control_label2" type="HSeparator" parent="Background/MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="resume" type="Button" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/VBoxContainer"]
+[node name="resume" type="Button" parent="Background/MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 disabled = true
 text = "PlayStation 3 Games"
 
-[node name="resume3" type="Button" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/VBoxContainer"]
+[node name="resume3" type="Button" parent="Background/MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 disabled = true
 text = "ScummVM Games"
 
-[node name="resume5" type="Button" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/VBoxContainer"]
+[node name="resume5" type="Button" parent="Background/MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Multi-File Structure"
 
-[node name="resume6" type="Button" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/VBoxContainer"]
+[node name="resume6" type="Button" parent="Background/MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 disabled = true
 text = "3DS Game Decrypter"
 
-[node name="resume7" type="Button" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/VBoxContainer"]
+[node name="resume7" type="Button" parent="Background/MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "BIOS"
 
-[node name="tools" type="VBoxContainer" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer"]
+[node name="tools" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="game_control_label" type="Label" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/tools"]
+[node name="game_control_label" type="Label" parent="Background/MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/tools"]
 layout_mode = 2
 text = "General Tools"
 
-[node name="game_control_label2" type="HSeparator" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/tools"]
+[node name="game_control_label2" type="HSeparator" parent="Background/MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/tools"]
 layout_mode = 2
 
-[node name="resume" type="Button" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/tools"]
+[node name="resume" type="Button" parent="Background/MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/tools"]
 layout_mode = 2
 text = "Open Emulator..."
 
-[node name="resume2" type="Button" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/tools"]
+[node name="resume2" type="Button" parent="Background/MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/tools"]
 layout_mode = 2
 disabled = true
 text = "Install RetroDECK Steam Grids"
 
-[node name="resume4" type="Button" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/tools"]
+[node name="resume4" type="Button" parent="Background/MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/tools"]
 layout_mode = 2
 text = "Install PS3 Firmware"
 
-[node name="quitconfirm" type="CheckButton" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/tools"]
+[node name="quitconfirm" type="CheckButton" parent="Background/MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/tools"]
 layout_mode = 2
 toggle_mode = false
 text = "Show Favorites as Steam Games
 "
 
-[node name="tools_2" type="VBoxContainer" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer"]
+[node name="tools_2" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="game_control_label" type="Label" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/tools_2"]
+[node name="game_control_label" type="Label" parent="Background/MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/tools_2"]
 layout_mode = 2
 text = "File Maniuplation"
 
-[node name="game_control_label2" type="HSeparator" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/tools_2"]
+[node name="game_control_label2" type="HSeparator" parent="Background/MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/tools_2"]
 layout_mode = 2
 
-[node name="resume5" type="Button" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/tools_2"]
+[node name="resume5" type="Button" parent="Background/MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/tools_2"]
 layout_mode = 2
 disabled = true
 text = "USB Transfer Tool"
 
-[node name="resume6" type="Button" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/tools_2"]
+[node name="resume6" type="Button" parent="Background/MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/tools_2"]
 layout_mode = 2
 disabled = true
 text = "Backup User Data"
 
-[node name="resume7" type="Button" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/tools_2"]
+[node name="resume7" type="Button" parent="Background/MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/tools_2"]
 layout_mode = 2
 disabled = true
 text = "Compress Games"
 
-[node name="resume8" type="Button" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/tools_2"]
+[node name="resume8" type="Button" parent="Background/MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer/tools_2"]
 layout_mode = 2
 disabled = true
 text = "Move User Files"
 
-[node name="game_control_container2" type="VBoxContainer" parent="MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer"]
+[node name="game_control_container2" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/Tools/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Network" type="Control" parent="MarginContainer/TabContainer"]
+[node name="Network" type="Control" parent="Background/MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/TabContainer/Network"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Background/MarginContainer/TabContainer/Network"]
 layout_mode = 2
 offset_left = 21.0
 offset_top = 8.0
@@ -461,152 +453,150 @@ offset_right = 750.0
 offset_bottom = 464.0
 follow_focus = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/TabContainer/Network/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/Network/ScrollContainer"]
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 2
 theme_override_constants/separation = 64
 
-[node name="cheevos_container" type="VBoxContainer" parent="MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer"]
+[node name="cheevos_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="cheevos" type="CheckButton" parent="MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/cheevos_container"]
+[node name="cheevos" type="CheckButton" parent="Background/MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/cheevos_container"]
 layout_mode = 2
 text = "Retro Achievements"
 
-[node name="cheevos_separator" type="HSeparator" parent="MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/cheevos_container"]
+[node name="cheevos_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/cheevos_container"]
 layout_mode = 2
 
-[node name="GridContainer" type="GridContainer" parent="MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/cheevos_container"]
+[node name="GridContainer" type="GridContainer" parent="Background/MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/cheevos_container"]
 layout_mode = 2
 theme_override_constants/h_separation = 64
 columns = 2
 
-[node name="cheevos_username_lab" type="Label" parent="MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/cheevos_container/GridContainer"]
+[node name="cheevos_username_lab" type="Label" parent="Background/MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/cheevos_container/GridContainer"]
 layout_mode = 2
 text = "Username:"
 
-[node name="cheevos_username" type="LineEdit" parent="MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/cheevos_container/GridContainer"]
+[node name="cheevos_username" type="LineEdit" parent="Background/MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/cheevos_container/GridContainer"]
 custom_minimum_size = Vector2(256, 0)
 layout_mode = 2
 text = "username"
 placeholder_text = "username"
 
-[node name="cheevos_pass_lab" type="Label" parent="MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/cheevos_container/GridContainer"]
+[node name="cheevos_pass_lab" type="Label" parent="Background/MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/cheevos_container/GridContainer"]
 layout_mode = 2
 text = "Password:"
 
-[node name="cheevos_pass" type="LineEdit" parent="MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/cheevos_container/GridContainer"]
+[node name="cheevos_pass" type="LineEdit" parent="Background/MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/cheevos_container/GridContainer"]
 layout_mode = 2
 text = "password"
 placeholder_text = "password"
 secret = true
 secret_character = "*"
 
-[node name="GridContainer2" type="GridContainer" parent="MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/cheevos_container"]
+[node name="GridContainer2" type="GridContainer" parent="Background/MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/cheevos_container"]
 layout_mode = 2
 
-[node name="cheevos_advanced" type="Button" parent="MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/cheevos_container/GridContainer2"]
+[node name="cheevos_advanced" type="Button" parent="Background/MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/cheevos_container/GridContainer2"]
 layout_mode = 2
 size_flags_horizontal = 0
 disabled = true
 text = "Advanced"
 
-[node name="cheevos_hardcore" type="CheckButton" parent="MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/cheevos_container/GridContainer2"]
+[node name="cheevos_hardcore" type="CheckButton" parent="Background/MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/cheevos_container/GridContainer2"]
 layout_mode = 2
 disabled = true
 text = "Hardcore Mode (coming soon)"
 
-[node name="cheevos_loginout_container" type="HBoxContainer" parent="MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/cheevos_container/GridContainer2"]
+[node name="cheevos_loginout_container" type="HBoxContainer" parent="Background/MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/cheevos_container/GridContainer2"]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 
-[node name="cheevos_login_logout" type="Button" parent="MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/cheevos_container/GridContainer2/cheevos_loginout_container"]
+[node name="cheevos_login_logout" type="Button" parent="Background/MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/cheevos_container/GridContainer2/cheevos_loginout_container"]
 layout_mode = 2
 text = "Login"
 
-[node name="cheevos_show" type="Button" parent="MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/cheevos_container/GridContainer2/cheevos_loginout_container"]
+[node name="cheevos_show" type="Button" parent="Background/MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/cheevos_container/GridContainer2/cheevos_loginout_container"]
 layout_mode = 2
 disabled = true
 text = "Show Throphies"
 
-[node name="netplay_container" type="VBoxContainer" parent="MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer"]
+[node name="netplay_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="netplay" type="Label" parent="MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/netplay_container"]
+[node name="netplay" type="Label" parent="Background/MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/netplay_container"]
 layout_mode = 2
 text = "Netplay"
 
-[node name="cheevos_separator" type="HSeparator" parent="MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/netplay_container"]
+[node name="cheevos_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/netplay_container"]
 layout_mode = 2
 
-[node name="GridContainer" type="GridContainer" parent="MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/netplay_container"]
+[node name="GridContainer" type="GridContainer" parent="Background/MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/netplay_container"]
 layout_mode = 2
 theme_override_constants/h_separation = 64
 columns = 2
 
-[node name="netplay_id" type="Label" parent="MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/netplay_container/GridContainer"]
+[node name="netplay_id" type="Label" parent="Background/MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/netplay_container/GridContainer"]
 layout_mode = 2
 text = "Netplay ID:"
 
-[node name="netplay_id2" type="LineEdit" parent="MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/netplay_container/GridContainer"]
+[node name="netplay_id2" type="LineEdit" parent="Background/MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/netplay_container/GridContainer"]
 custom_minimum_size = Vector2(256, 0)
 layout_mode = 2
 text = "RetroDECK"
 placeholder_text = "RetroDECK"
 
-[node name="netplay_address" type="Label" parent="MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/netplay_container/GridContainer"]
+[node name="netplay_address" type="Label" parent="Background/MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/netplay_container/GridContainer"]
 layout_mode = 2
 text = "Address:"
 
-[node name="netplay_address2" type="LineEdit" parent="MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/netplay_container/GridContainer"]
+[node name="netplay_address2" type="LineEdit" parent="Background/MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/netplay_container/GridContainer"]
 layout_mode = 2
 text = "127.0.0.1"
 placeholder_text = "127.0.0.1"
 
-[node name="blank_label" type="Label" parent="MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/netplay_container/GridContainer"]
+[node name="blank_label" type="Label" parent="Background/MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/netplay_container/GridContainer"]
 layout_mode = 2
 
-[node name="netplay_connect_disconnect" type="Button" parent="MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/netplay_container/GridContainer"]
+[node name="netplay_connect_disconnect" type="Button" parent="Background/MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/netplay_container/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 text = "Connect"
 
-[node name="netplay_join_disconnect" type="HBoxContainer" parent="MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/netplay_container"]
+[node name="netplay_join_disconnect" type="HBoxContainer" parent="Background/MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/netplay_container"]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="GridContainer" type="GridContainer" parent="MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/VBoxContainer"]
+[node name="GridContainer" type="GridContainer" parent="Background/MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="label" type="Label" parent="MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/VBoxContainer/GridContainer"]
+[node name="label" type="Label" parent="Background/MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 text = "Data Management"
 
-[node name="cheevos_separator" type="HSeparator" parent="MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/VBoxContainer/GridContainer"]
+[node name="cheevos_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 
-[node name="rewind" type="CheckButton" parent="MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/VBoxContainer/GridContainer"]
+[node name="rewind" type="CheckButton" parent="Background/MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 disabled = true
 text = "Saves Sync (coming soon)"
 
-[node name="ftp" type="Button" parent="MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/VBoxContainer/GridContainer"]
+[node name="ftp" type="Button" parent="Background/MarginContainer/TabContainer/Network/ScrollContainer/VBoxContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 disabled = true
 text = "Start FTP Server"
 
-[node name="Troubleshoot" type="Control" parent="MarginContainer/TabContainer"]
+[node name="Troubleshoot" type="Control" parent="Background/MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/TabContainer/Troubleshoot"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/Troubleshoot"]
 layout_mode = 0
 offset_left = 26.0
 offset_top = 36.0
@@ -614,52 +604,52 @@ offset_right = 390.0
 offset_bottom = 442.0
 theme_override_constants/separation = 64
 
-[node name="game_control_container" type="VBoxContainer" parent="MarginContainer/TabContainer/Troubleshoot/VBoxContainer"]
+[node name="game_control_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/Troubleshoot/VBoxContainer"]
 layout_mode = 2
 
-[node name="game_control_label" type="Label" parent="MarginContainer/TabContainer/Troubleshoot/VBoxContainer/game_control_container"]
+[node name="game_control_label" type="Label" parent="Background/MarginContainer/TabContainer/Troubleshoot/VBoxContainer/game_control_container"]
 layout_mode = 2
 text = "Troubleshooting"
 
-[node name="game_control_label2" type="HSeparator" parent="MarginContainer/TabContainer/Troubleshoot/VBoxContainer/game_control_container"]
+[node name="game_control_label2" type="HSeparator" parent="Background/MarginContainer/TabContainer/Troubleshoot/VBoxContainer/game_control_container"]
 layout_mode = 2
 
-[node name="Button" type="Button" parent="MarginContainer/TabContainer/Troubleshoot/VBoxContainer/game_control_container"]
+[node name="Button" type="Button" parent="Background/MarginContainer/TabContainer/Troubleshoot/VBoxContainer/game_control_container"]
 layout_mode = 2
 text = "Check Connection"
 
-[node name="Button2" type="Button" parent="MarginContainer/TabContainer/Troubleshoot/VBoxContainer/game_control_container"]
+[node name="Button2" type="Button" parent="Background/MarginContainer/TabContainer/Troubleshoot/VBoxContainer/game_control_container"]
 layout_mode = 2
 disabled = true
 text = "Show Logs"
 
-[node name="game_control_container2" type="VBoxContainer" parent="MarginContainer/TabContainer/Troubleshoot/VBoxContainer"]
+[node name="game_control_container2" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/Troubleshoot/VBoxContainer"]
 layout_mode = 2
 
-[node name="game_control_label" type="Label" parent="MarginContainer/TabContainer/Troubleshoot/VBoxContainer/game_control_container2"]
+[node name="game_control_label" type="Label" parent="Background/MarginContainer/TabContainer/Troubleshoot/VBoxContainer/game_control_container2"]
 layout_mode = 2
 text = "Reset"
 
-[node name="game_control_label2" type="HSeparator" parent="MarginContainer/TabContainer/Troubleshoot/VBoxContainer/game_control_container2"]
+[node name="game_control_label2" type="HSeparator" parent="Background/MarginContainer/TabContainer/Troubleshoot/VBoxContainer/game_control_container2"]
 layout_mode = 2
 
-[node name="Button" type="Button" parent="MarginContainer/TabContainer/Troubleshoot/VBoxContainer/game_control_container2"]
+[node name="Button" type="Button" parent="Background/MarginContainer/TabContainer/Troubleshoot/VBoxContainer/game_control_container2"]
 layout_mode = 2
 text = "Single Emulator..."
 
-[node name="Button2" type="Button" parent="MarginContainer/TabContainer/Troubleshoot/VBoxContainer/game_control_container2"]
+[node name="Button2" type="Button" parent="Background/MarginContainer/TabContainer/Troubleshoot/VBoxContainer/game_control_container2"]
 layout_mode = 2
 text = "All Emulators"
 
-[node name="Button3" type="Button" parent="MarginContainer/TabContainer/Troubleshoot/VBoxContainer/game_control_container2"]
+[node name="Button3" type="Button" parent="Background/MarginContainer/TabContainer/Troubleshoot/VBoxContainer/game_control_container2"]
 layout_mode = 2
 text = "Full RetroDECK Reset"
 
-[node name="Configurator" type="Control" parent="MarginContainer/TabContainer"]
+[node name="Configurator" type="Control" parent="Background/MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/TabContainer/Configurator"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Background/MarginContainer/TabContainer/Configurator"]
 layout_mode = 2
 offset_left = 21.0
 offset_top = 23.0
@@ -667,41 +657,41 @@ offset_right = 750.0
 offset_bottom = 436.0
 follow_focus = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/TabContainer/Configurator/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/Configurator/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 2
 theme_override_constants/separation = 64
 
-[node name="system_container" type="VBoxContainer" parent="MarginContainer/TabContainer/Configurator/ScrollContainer/VBoxContainer"]
+[node name="system_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/Configurator/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="system_label" type="Label" parent="MarginContainer/TabContainer/Configurator/ScrollContainer/VBoxContainer/system_container"]
+[node name="system_label" type="Label" parent="Background/MarginContainer/TabContainer/Configurator/ScrollContainer/VBoxContainer/system_container"]
 layout_mode = 2
 text = "System"
 
-[node name="system_line" type="HSeparator" parent="MarginContainer/TabContainer/Configurator/ScrollContainer/VBoxContainer/system_container"]
+[node name="system_line" type="HSeparator" parent="Background/MarginContainer/TabContainer/Configurator/ScrollContainer/VBoxContainer/system_container"]
 layout_mode = 2
 
-[node name="update_notification" type="CheckButton" parent="MarginContainer/TabContainer/Configurator/ScrollContainer/VBoxContainer/system_container"]
+[node name="update_notification" type="CheckButton" parent="Background/MarginContainer/TabContainer/Configurator/ScrollContainer/VBoxContainer/system_container"]
 layout_mode = 2
 button_pressed = true
 text = "Update Notification"
 
-[node name="update_notification2" type="CheckButton" parent="MarginContainer/TabContainer/Configurator/ScrollContainer/VBoxContainer/system_container"]
+[node name="update_notification2" type="CheckButton" parent="Background/MarginContainer/TabContainer/Configurator/ScrollContainer/VBoxContainer/system_container"]
 layout_mode = 2
 disabled = true
 button_pressed = true
 text = "Show Easter Eggs (coming soon)"
 
-[node name="multi_user_container" type="HBoxContainer" parent="MarginContainer/TabContainer/Configurator/ScrollContainer/VBoxContainer/system_container"]
+[node name="multi_user_container" type="HBoxContainer" parent="Background/MarginContainer/TabContainer/Configurator/ScrollContainer/VBoxContainer/system_container"]
 layout_mode = 2
 
-[node name="multi_user_label" type="Label" parent="MarginContainer/TabContainer/Configurator/ScrollContainer/VBoxContainer/system_container/multi_user_container"]
+[node name="multi_user_label" type="Label" parent="Background/MarginContainer/TabContainer/Configurator/ScrollContainer/VBoxContainer/system_container/multi_user_container"]
 layout_mode = 2
 text = "Multi-User Mode"
 
-[node name="multi_user" type="OptionButton" parent="MarginContainer/TabContainer/Configurator/ScrollContainer/VBoxContainer/system_container/multi_user_container"]
+[node name="multi_user" type="OptionButton" parent="Background/MarginContainer/TabContainer/Configurator/ScrollContainer/VBoxContainer/system_container/multi_user_container"]
 layout_mode = 2
 size_flags_horizontal = 10
 item_count = 3
@@ -713,26 +703,26 @@ popup/item_1/id = 1
 popup/item_2/text = "Custom Users"
 popup/item_2/id = 2
 
-[node name="menu_music" type="CheckButton" parent="MarginContainer/TabContainer/Configurator/ScrollContainer/VBoxContainer/system_container"]
+[node name="menu_music" type="CheckButton" parent="Background/MarginContainer/TabContainer/Configurator/ScrollContainer/VBoxContainer/system_container"]
 layout_mode = 2
 button_pressed = true
 text = "Menu music
 "
 
-[node name="fancy_audio_player_here" type="Label" parent="MarginContainer/TabContainer/Configurator/ScrollContainer/VBoxContainer/system_container"]
+[node name="fancy_audio_player_here" type="Label" parent="Background/MarginContainer/TabContainer/Configurator/ScrollContainer/VBoxContainer/system_container"]
 layout_mode = 2
 text = "|| ------( )--------"
 
-[node name="About" type="Control" parent="MarginContainer/TabContainer"]
+[node name="About" type="Control" parent="Background/MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
 
-[node name="Icon" type="Sprite2D" parent="MarginContainer/TabContainer/About"]
+[node name="Icon" type="Sprite2D" parent="Background/MarginContainer/TabContainer/About"]
 position = Vector2(152, 83.5)
 scale = Vector2(0.515625, 0.503906)
 texture = ExtResource("1_axfei")
 
-[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/TabContainer/About"]
+[node name="RichTextLabel" type="RichTextLabel" parent="Background/MarginContainer/TabContainer/About"]
 layout_mode = 2
 offset_left = 266.0
 offset_top = 42.0
@@ -741,61 +731,91 @@ offset_bottom = 132.0
 theme_override_font_sizes/normal_font_size = 80
 text = "About RetroDECK"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/TabContainer/About"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/About"]
 layout_mode = 0
 offset_left = 233.0
 offset_top = 142.0
 offset_right = 737.0
 offset_bottom = 440.0
 
-[node name="Button7" type="Button" parent="MarginContainer/TabContainer/About/VBoxContainer"]
+[node name="Button7" type="Button" parent="Background/MarginContainer/TabContainer/About/VBoxContainer"]
 layout_mode = 2
 text = "Website"
 
-[node name="Button" type="Button" parent="MarginContainer/TabContainer/About/VBoxContainer"]
+[node name="Button" type="Button" parent="Background/MarginContainer/TabContainer/About/VBoxContainer"]
 layout_mode = 2
 text = "Version History"
 
-[node name="Button2" type="Button" parent="MarginContainer/TabContainer/About/VBoxContainer"]
+[node name="Button2" type="Button" parent="Background/MarginContainer/TabContainer/About/VBoxContainer"]
 layout_mode = 2
 disabled = true
 text = "Wiki (coming soon)"
 
-[node name="Button3" type="Button" parent="MarginContainer/TabContainer/About/VBoxContainer"]
+[node name="Button3" type="Button" parent="Background/MarginContainer/TabContainer/About/VBoxContainer"]
 layout_mode = 2
 text = "Credits"
 
-[node name="Button4" type="Button" parent="MarginContainer/TabContainer/About/VBoxContainer"]
+[node name="Button4" type="Button" parent="Background/MarginContainer/TabContainer/About/VBoxContainer"]
 layout_mode = 2
 text = "Donate"
 
-[node name="Button5" type="Button" parent="MarginContainer/TabContainer/About/VBoxContainer"]
+[node name="Button5" type="Button" parent="Background/MarginContainer/TabContainer/About/VBoxContainer"]
 layout_mode = 2
 text = "Reach Us"
 
-[node name="Button6" type="Button" parent="MarginContainer/TabContainer/About/VBoxContainer"]
+[node name="Button6" type="Button" parent="Background/MarginContainer/TabContainer/About/VBoxContainer"]
 layout_mode = 2
 text = "Licences"
+
+[node name="Logo" type="Control" parent="Background"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -240.0
+offset_top = -175.0
+offset_bottom = 45.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="LogoIcon" type="TextureRect" parent="Background/Logo"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -64.0
+offset_right = 64.0
+offset_bottom = 128.0
+grow_horizontal = 2
+texture = ExtResource("1_axfei")
+expand_mode = 5
+
+[node name="Name" type="RichTextLabel" parent="Background/Logo"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -66.0
+offset_top = -76.0
+offset_right = 66.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "RetroDECK
+  v0.8.0b"
+scroll_active = false
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_xivj6")
+volume_db = -11.243
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
 visible = false
 position = Vector2(134, 151)
 color = Color(0.858824, 0.890196, 1, 1)
-
-[node name="RichTextLabel" type="RichTextLabel" parent="."]
-layout_mode = 2
-offset_left = 936.0
-offset_top = 301.0
-offset_right = 1068.0
-offset_bottom = 377.0
-text = "RetroDECK
-  v0.8.0b"
-scroll_active = false
-
-[node name="Icon2" type="Sprite2D" parent="."]
-position = Vector2(998, 212)
-scale = Vector2(0.507812, 0.507812)
-texture = ExtResource("1_axfei")
 
 [node name="coltroller_guide" type="PanelContainer" parent="."]
 layout_mode = 0
@@ -808,17 +828,20 @@ offset_bottom = 800.0
 layout_mode = 2
 theme_override_colors/default_color = Color(1, 1, 1, 0.607843)
 theme_override_font_sizes/normal_font_size = 32
-text = "(A) Accept (B) Back (Y) Call/Dismiss Rekku (X) ??? (L/R) Tab Switch"
+text = "(A) Accept (B) Back (L/R) Tab Switch (Menu) Exit"
 fit_content = true
 scroll_active = false
 
 [node name="Rekku" type="Control" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
+offset_top = 5.0
+offset_bottom = 5.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 1
