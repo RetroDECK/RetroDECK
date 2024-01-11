@@ -3,7 +3,7 @@ extends Control
 func _ready():
 	var children = findElements(self, "Control")
 	for n: Control in children: #iterate the children to grab focus on mouse hov
-		if (n.focus_mode != FOCUS_NONE):
+		if (n.focus_mode == FOCUS_ALL):
 			n.mouse_entered.connect(_on_control_mouse_entered.bind(n))
 
 func _input(event):
