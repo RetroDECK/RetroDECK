@@ -1,0 +1,86 @@
+Quick Resume
+Activate "Quick Resume" to continue playing your games from where you left off. With Quick Resume enabled, the system automatically saves your progress when you close a game and loads it when you start the game again.
+Please note that certain systems, like DOS, PS2, PS3, PSVita, and Switch, do not currently support this feature.
+
+Rewind
+When "Rewind" is turned on, hold Hotkey + L2 to rewind your gameplay, allowing you to alter your destiny. Keep in mind that activating this feature might cause slowdowns on some systems.
+Note: "Rewind" is not supported on certain systems, including DOS, PS2, PS3, PSVita, and Switch. 
+
+Quit Confirmation
+Activate "Quit Confirmation" to prevent accidental exits. This feature prompts you before quitting a game, ensuring you don't lose progress unintentionally.
+
+Cheats
+Unlock extra fun with "Cheats." Enable cheat codes to gain advantages to simplify your gaming experience.
+
+Borders
+Enable or disable the drawing of borders around the game.
+Note: this will disable the "Widescreen option".
+
+Wide Screen
+If enabled it widens the display, providing a more expansive gaming experience on supported systems.
+Note: this will disable the "Borders option".
+
+Shaders
+When turned on, "Shaders" displays the game just like it appeared on the original console's screen.
+
+Mods
+Enable or disable the loading of the installed mods.
+
+TATE Mode
+Turn on "TATE Mode" for games that support vertical screen orientation. This feature allows you to enjoy selected titles in portrait mode, mimicking the arcade experience.
+"Tate" (縦) means "vertical" in Japanese.
+
+Steam: Controller Templates
+Button Layout
+Hotkey Activation Sound
+
+[scan]
+PlayStation 3 Games <- remove
+ScummVM Games
+Multi-file Structure
+3DS Game Decrypter
+BIOS
+
+Open Emulator...
+Install RetroDECK Steam Grids <- rename to Add RetroDECK to Steam
+Show Favorites as Steam Games
+
+USB Transfer Tool
+Backup User Data
+Compress Games
+Move User Files
+
+Retro Aechievements
+Advanced
+Hardcore Mode
+Show Throphies
+Login
+
+Netplay ID
+Address
+Connect <- this is wrong probably, should be a toggle on Netplay ID?
+
+Saves Sync
+Start FTP Server <- Rename to SFTP
+
+Check Connection
+Show Logs
+
+[reset]
+Single Emulator...
+All Emulators
+Full RetroDECK Reset
+
+Update Notification
+Show Easter Eggs <- rename in Seasonal Loading Screen
+Multi-User Mode (off, steam users, custom users) rename to retrodeck users
+Menu Music
+
+[about]
+Website
+Version History
+Wiki
+Credits
+Donate
+Reach Us
+Licenses
