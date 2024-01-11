@@ -104,11 +104,9 @@ grow_vertical = 2
 [node name="TabContainer" type="TabContainer" parent="Background/MarginContainer"]
 layout_mode = 2
 tab_alignment = 1
-current_tab = 7
 script = ExtResource("3_id6l4")
 
 [node name="System" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
-visible = false
 layout_mode = 2
 theme_override_constants/margin_right = 240
 
@@ -719,6 +717,7 @@ size_flags_vertical = 1
 text = "|| ------( )--------"
 
 [node name="About" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_right = 240
 
@@ -907,3 +906,5 @@ frame_progress = 0.299789
 sprite_frames = SubResource("SpriteFrames_p8gbs")
 animation = &"speech"
 frame_progress = 0.664627
+
+[connection signal="pressed" from="Background/MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container/GridContainer/Button" to="." method="_on_quickresume_advanced_pressed"]

@@ -19,3 +19,9 @@ func findElements(node: Node, className: String, result: Array = []) -> Array:
 
 func _on_control_mouse_entered(control: Node):
 	control.grab_focus()
+
+
+func _on_quickresume_advanced_pressed():
+	var popup = load("res://components/popup.tscn").instantiate() as Control
+	popup.set_content("res://popup_content_test.tscn")
+	$Background.add_child(popup)
