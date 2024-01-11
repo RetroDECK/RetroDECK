@@ -1,11 +1,10 @@
 extends Control
 
 func _ready():
-	$MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container/GridContainer/resume.grab_focus() #Required to enable controller focusing
 	var children = findElements(self, "Control")
-	#print(children)
-	for n: Control in children:
-		n.mouse_entered.connect(_on_control_mouse_entered.bind(n))
+	for n: Control in children: #iterate the children to grab focus on mouse hov
+		if (n.focus_mode == FOCUS_ALL):
+			n.mouse_entered.connect(_on_control_mouse_entered.bind(n))
 
 func _input(event):
 	if event.is_action_pressed("quit"):
