@@ -3,7 +3,7 @@ Activate "Quick Resume" to continue playing your games from where you left off. 
 Please note that certain systems, like DOS, PS2, PS3, PSVita, and Switch, do not currently support this feature.
 
 Rewind
-When "Rewind" is turned on, hold Hotkey + L2 to rewind your gameplay, allowing you to alter your destiny. Keep in mind that activating this feature might cause slowdowns on some systems.
+When "Rewind" is turned on, hold HOTKEY + L2 to rewind your gameplay, allowing you to alter your destiny. Keep in mind that activating this feature might cause slowdowns on some systems.
 Note: "Rewind" is not supported on certain systems, including DOS, PS2, PS3, PSVita, and Switch. 
 
 Quit Confirmation
@@ -31,19 +31,45 @@ Turn on "TATE Mode" for games that support vertical screen orientation. This fea
 "Tate" (縦) means "vertical" in Japanese.
 
 Steam: Controller Templates
+Install the RetroDECK controller templates fror Steam. Once installed they will be automatically updated when an update is available.
+The controller templates will enable hotkeys and raidal menu (radial menu is currently available on Steam Deck trackpad only).
+Check the wiki for further details.
+
 Button Layout
+Select the desired button layout:
+Classic: A, B X and Y are in the Steam Deck/Xbox layout.
+Nintendo: A and B got their function inverted, same for X and Y like in the Nintendo controllers.
+
 Hotkey Activation Sound
+When this option is enabled you will hear a sound when the HOTKEY button is pressed.
 
 [scan]
 PlayStation 3 Games <- remove
+
 ScummVM Games
+Generate the entries of ScummVM games to adhere to the RetroDECK/ES-DE standard.
+More on this in the wiki.
+
 Multi-file Structure
+Group the multi disc or multi file games as a single game entry on the games list.
+More on this in the wiki.
+
 3DS Game Decrypter
+Decrypt your 3DS games.
+Note: you should provide the keys file, more on this in the wiki.
+
 BIOS
+Check which BIOS files are recognized by RetroDECK and which ones are missing.
 
 Open Emulator...
+Open an emulator to manually tweak the configurations.
+WARNING: this can breaking for the less expert users, you can always reset them by going to Troubleshoot > Reset menu.
+
 Install RetroDECK Steam Grids <- rename to Add RetroDECK to Steam
+
 Show Favorites as Steam Games
+If this option is enabled the game marked as favorites will be added to Steam, when disabled they will be removed.
+NOTE: the RetroDECK controller layout is not automatically applied to the single game entries.
 
 USB Transfer Tool
 Backup User Data
