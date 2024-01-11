@@ -5,9 +5,7 @@ import re
 import shlex
 import shutil
 import glob
-import vdf
 import sys
-import stat
 
 import xml.etree.ElementTree as ET
 
@@ -268,115 +266,6 @@ alt_command_list={
 "Beetle PCE": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/mednafen_pce_libretro.so"
 }
 
-STEAM_DATA_DIRS_ORIG = (
-    "~/.steam/debian-installation",
-    "~/.steam",
-    "~/.local/share/steam",
-    "~/.local/share/Steam",
-    "~/.steam/steam",
-    "~/.var/app/com.valvesoftware.Steam/data/steam",
-    "~/.var/app/com.valvesoftware.Steam/data/Steam",
-    "/usr/share/steam",
-    "/usr/local/share/steam",
-)
-
-STEAM_DATA_DIRS = (
-    "~/.var/app/com.valvesoftware.Steam/data/steam",
-    "~/.var/app/com.valvesoftware.Steam/data/Steam",
-    "/usr/share/steam",
-    "/usr/local/share/steam",
-)
-
-def create_shortcut(games, launch_config_name=None):
-    shortcut_path = get_shortcuts_vdf_path()
-    if os.path.exists(shortcut_path):
-        with open(shortcut_path, "rb") as shortcut_file:
-            shortcuts = vdf.binary_loads(shortcut_file.read())['shortcuts'].values()
-    else:
-        shortcuts = []
-        
-    if ".var/app/com.valvesoftware.Steam" in shortcut_path:
-        for game in games:
-            game[1]="flatpak-spawn --host "+game[1]
-
-    old_shortcuts=[]
-    for shortcut in shortcuts:
-        if "net.retrodeck.retrodeck" in shortcut["Exe"]:
-            keep=False
-            for game in games:
-                gameid=generate_shortcut_id(game[0])
-                if gameid==shortcut["appid"]:
-                    shortcut["Exe"]=game[1]
-                    game[0]="###"
-                    keep=True
-                    break
-            if keep:
-                old_shortcuts.append(shortcut)
-        else:
-            old_shortcuts.append(shortcut)
-
-    new_shortcuts=[]
-    for game in games:
-        if not game[0]=="###":
-            new_shortcuts=new_shortcuts+[generate_shortcut(game, launch_config_name)]
-
-    shortcuts = list(old_shortcuts) + list(new_shortcuts)
-
-    updated_shortcuts = {
-        'shortcuts': {
-            str(index): elem for index, elem in enumerate(shortcuts)
-        }
-    }
-    with open(shortcut_path, "wb") as shortcut_file:
-        shortcut_file.write(vdf.binary_dumps(updated_shortcuts))
-
-def get_config_path():
-    config_paths = search_recursive_in_steam_dirs("userdata/**/config/")
-    if not config_paths:
-        return None
-    return config_paths[0]
-
-def get_shortcuts_vdf_path():
-    config_path = get_config_path()
-    if not config_path:
-        return None
-    return os.path.join(config_path, "shortcuts.vdf")
-
-def search_recursive_in_steam_dirs(path_suffix):
-    """Perform a recursive search based on glob and returns a
-    list of hits"""
-    results = []
-    for candidate in STEAM_DATA_DIRS:
-        glob_path = os.path.join(os.path.expanduser(candidate), path_suffix)
-        for path in glob.glob(glob_path):
-            results.append(path)
-    return results
-
-def generate_shortcut(game, launch_config_name):
-    return {
-        'appid': generate_shortcut_id(game[0]),
-        'appname': f'{game[0]}',
-        'Exe': f'{game[1]}',
-        'StartDir': f'{os.path.expanduser("~")}',
-        'icon': "",
-        'LaunchOptions': "",
-        'IsHidden': 0,
-        'AllowDesktopConfig': 1,
-        'AllowOverlay': 1,
-        'OpenVR': 0,
-        'Devkit': 0,
-        'DevkitOverrideAppID': 0,
-        'LastPlayTime': 0,
-    }
-
-def generate_preliminary_id(name):
-    unique_id = ''.join(["RetroDECK", name])
-    top = binascii.crc32(str.encode(unique_id, 'utf-8')) | 0x80000000
-    return (top << 32) | 0x02000000
-
-def generate_shortcut_id(name):
-    return (generate_preliminary_id(name) >> 32) - 0x100000000
-
 def create_shortcut_new(games,rdhome):
     old_games=os.listdir(rdhome+"/sync/")
 
@@ -431,7 +320,7 @@ def create_shortcut_new(games,rdhome):
         if game:
             shutil.rmtree(rdhome+"/sync/"+game)
         
-    os.system("linux_BoilR --no-ui")
+    os.system("boilr --no-ui")
 
 def addToSteam():
     print("Open RetroDECK config file: {}".format(os.path.expanduser("~/.var/app/net.retrodeck.retrodeck/config/retrodeck/retrodeck.cfg")))
