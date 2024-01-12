@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://61f6m4r1mpan"]
+[gd_scene load_steps=20 format=3 uid="uid://61f6m4r1mpan"]
 
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
 [ext_resource type="Script" path="res://main.gd" id="1_obpq7"]
@@ -6,6 +6,7 @@
 [ext_resource type="AudioStream" uid="uid://dig4pco500pyt" path="res://res/configurator.mp3" id="3_xivj6"]
 [ext_resource type="Texture2D" uid="uid://dx0u5hiwxfgu5" path="res://res/pixel_ui_theme/8x8_ui_elements.png" id="4_2tuu4"]
 [ext_resource type="Script" path="res://Rekku.gd" id="4_nqqx3"]
+[ext_resource type="Texture2D" uid="uid://cxyml1owhi6de" path="res://res/pixel_ui_theme/8x8_ui_icons.png" id="4_v1scw"]
 [ext_resource type="Script" path="res://helper_text.gd" id="5_cprkf"]
 [ext_resource type="Texture2D" uid="uid://cor8ep0fkqm08" path="res://res/Rekku/base.png" id="9_brsrf"]
 [ext_resource type="Texture2D" uid="uid://cavtn1rljc5oe" path="res://res/Rekku/eyes-open.png" id="10_y6gkh"]
@@ -14,6 +15,11 @@
 [ext_resource type="Texture2D" uid="uid://ciwghjy0ahxk6" path="res://res/Rekku/mouth-A.png" id="13_xj3b3"]
 [ext_resource type="Texture2D" uid="uid://kx8eypf4ffvu" path="res://res/Rekku/mouth-base.png" id="14_lnkoa"]
 [ext_resource type="Texture2D" uid="uid://b6gl8sltbak7v" path="res://res/Rekku/mouth-O.png" id="15_1sikj"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_st633"]
+atlas = ExtResource("4_v1scw")
+region = Rect2(72, 56, 8, 8)
+margin = Rect2(1, 1, 1, 1)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_rf0rc"]
 texture = ExtResource("4_2tuu4")
@@ -812,6 +818,18 @@ text = "RetroDECK
   v0.8.0b"
 scroll_active = false
 
+[node name="Exit" type="Button" parent="Background"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -33.0
+offset_top = 50.0
+offset_right = -12.0
+offset_bottom = 71.0
+grow_horizontal = 0
+icon = SubResource("AtlasTexture_st633")
+
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_xivj6")
 volume_db = -11.243
@@ -908,3 +926,4 @@ animation = &"speech"
 frame_progress = 0.664627
 
 [connection signal="pressed" from="Background/MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container/GridContainer/Button" to="." method="_on_quickresume_advanced_pressed"]
+[connection signal="pressed" from="Background/Exit" to="." method="_on_exit_button_pressed"]

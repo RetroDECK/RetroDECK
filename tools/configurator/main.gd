@@ -8,7 +8,7 @@ func _ready():
 
 func _input(event):
 	if event.is_action_pressed("quit"):
-		get_tree().quit()
+		_exit()
 
 func findElements(node: Node, className: String, result: Array = []) -> Array:
 	if node.is_class(className):
@@ -25,3 +25,11 @@ func _on_quickresume_advanced_pressed():
 	var popup = load("res://components/popup.tscn").instantiate() as Control
 	popup.set_content("res://popup_content_test.tscn")
 	$Background.add_child(popup)
+
+
+func _on_exit_button_pressed():
+	_exit()
+
+func _exit():
+	get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
+	get_tree().quit()
