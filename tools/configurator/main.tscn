@@ -112,79 +112,79 @@ layout_mode = 2
 tab_alignment = 1
 script = ExtResource("3_id6l4")
 
-[node name="System" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
+[node name="TK_SYSTEM" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
 layout_mode = 2
 theme_override_constants/margin_right = 240
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Background/MarginContainer/TabContainer/System"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Background/MarginContainer/TabContainer/TK_SYSTEM"]
 layout_mode = 2
 follow_focus = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/System/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 64
 
-[node name="game_control_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer"]
+[node name="game_control_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="game_control_label" type="Label" parent="Background/MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container"]
+[node name="game_control_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/game_control_container"]
 layout_mode = 2
-text = "Game Control"
+text = "TK_GAME_CONTROL"
 
-[node name="game_control_label2" type="HSeparator" parent="Background/MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container"]
+[node name="game_control_label2" type="HSeparator" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/game_control_container"]
 layout_mode = 2
 
-[node name="GridContainer" type="GridContainer" parent="Background/MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container"]
+[node name="GridContainer" type="GridContainer" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/game_control_container"]
 layout_mode = 2
 columns = 2
 
-[node name="resume" type="CheckButton" parent="Background/MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
+[node name="resume" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/h_separation = 128
 button_pressed = true
-text = "Quick Resume"
+text = "TK_QRESUME"
 metadata/description = "This is a test description set to this element"
 
-[node name="Button" type="Button" parent="Background/MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
+[node name="Button" type="Button" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
 layout_mode = 2
-text = "Advanced"
+text = "TK_ADVANCED"
 
-[node name="rewind" type="CheckButton" parent="Background/MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
+[node name="rewind" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/h_separation = 256
 text = "Rewind"
 metadata/description = "This is another, very long and convoluted, description, that I put too much commas in to make in LONGER and more SOPHISTICATED. And I did it twice!!!This is another, very long and convoluted, description, that I put too much commas in to make in LONGER and more SOPHISTICATED."
 
-[node name="Button2" type="Button" parent="Background/MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
+[node name="Button2" type="Button" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
 layout_mode = 2
 disabled = true
-text = "Advanced"
+text = "TK_ADVANCED"
 
-[node name="quitconfirm" type="CheckButton" parent="Background/MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
+[node name="quitconfirm" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 button_pressed = true
 text = "Quit Confirmation
 "
 
-[node name="Button3" type="Button" parent="Background/MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
+[node name="Button3" type="Button" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
 layout_mode = 2
 disabled = true
-text = "Advanced"
+text = "TK_ADVANCED"
 
-[node name="cheats" type="CheckButton" parent="Background/MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
+[node name="cheats" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 disabled = true
 text = "Cheats (coming soon)"
 
-[node name="Button4" type="Button" parent="Background/MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
+[node name="Button4" type="Button" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
 layout_mode = 2
 disabled = true
-text = "Advanced"
+text = "TK_ADVANCED"
 
 [node name="Graphics" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
 visible = false
@@ -925,5 +925,5 @@ sprite_frames = SubResource("SpriteFrames_p8gbs")
 animation = &"speech"
 frame_progress = 0.664627
 
-[connection signal="pressed" from="Background/MarginContainer/TabContainer/System/ScrollContainer/VBoxContainer/game_control_container/GridContainer/Button" to="." method="_on_quickresume_advanced_pressed"]
+[connection signal="pressed" from="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/game_control_container/GridContainer/Button" to="." method="_on_quickresume_advanced_pressed"]
 [connection signal="pressed" from="Background/Exit" to="." method="_on_exit_button_pressed"]
