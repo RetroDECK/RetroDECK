@@ -1,0 +1,105 @@
+cemu:
+  name: "Cemu"
+  description: "Wii U emulator"
+  options:
+  - resettable: true
+  properties:
+  - standalone: true
+citra:
+  name: "Citra"
+  description: "N3DS emulator"
+  options:
+  - resettable: true
+  properties:
+  - standalone: true
+dolphin:
+  name: "Dolphin"
+  description: "Wii/GameCube emulator"
+  options:
+  - resettable: true
+  properties:
+  - standalone: true
+duckstation:
+  name: "Duckstation"
+  description: "PSX emulator"
+  options:
+  - resettable: true
+  properties:
+  - standalone: true
+gzdoom:
+  name: "GZDoom"
+  description: "Doom engine"
+  options:
+  - resettable: true
+  properties:
+  - standalone: true
+mame:
+  name: "MAME"
+  description: "Multiple Arcade Machine Emulator"
+  options:
+  - resettable: true
+  properties:
+  - standalone: true
+melonds:
+  name: "MelonDS"
+  description: "NDS emulator"
+  options:
+  - resettable: true
+  properties:
+  - standalone: true
+pcsx2:
+  name: "PCSX2"
+  description: "PS2 emulator"
+  options:
+  - resettable: true
+  properties:
+  - standalone: true
+ppsspp:
+  name: "PPSSPP"
+  description: "PSP emulator"
+  options:
+  - resettable: true
+  properties:
+  - standalone: true
+primehack:
+  name: "Primehack"
+  description: "Metroid Prime emulator"
+  options:
+  - resettable: true
+  properties:
+  - standalone: true
+rpcs3:
+  name: "RPCS3"
+  description: "PS3 emulator"
+  options:
+  - resettable: true
+  properties:
+  - standalone: true
+ryujinx:
+  name: "Ryujinx"
+  description: "Switch emulator"
+  options:
+  - resettable: true
+  properties:
+  - standalone: true
+vita3k:
+  name: "Vita3k"
+  description: "PS Vita emulator"
+  options:
+  - resettable: true
+  properties:
+  - standalone: true
+xemu:
+  name: "XEMU"
+  description: "XBOX emulator"
+  options:
+  - resettable: true
+  properties:
+  - standalone: true
+yuzu:
+  name: "Ryujinx"
+  description: "Switch emulator"
+  options:
+  - resettable: true
+  properties:
+  - standalone: true
