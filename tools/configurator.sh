@@ -115,7 +115,7 @@ configurator_welcome_dialog() {
     "RetroDECK: Tools" "Compress games, move RetroDECK and install optional features" \
     "RetroDECK: Troubleshooting" "Backup data, perform BIOS / multi-disc file checks checks and emulator resets" \
     "RetroDECK: About" "Show additional information about RetroDECK" \
-    "Add to Steam" "Add to Steam all the favorite games, it will not remove added games")
+    "Sync with Steam" "Sync with Steam all the favorites games")
   fi
 
   choice=$(zenity --list --title="RetroDECK Configurator Utility" --cancel-label="Quit" \

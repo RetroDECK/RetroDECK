@@ -3,7 +3,8 @@ runtime: org.kde.Platform
 runtime-version: "6.5"
 sdk: org.kde.Sdk
 sdk-extensions:
-  - org.freedesktop.Sdk.Extension.llvm16      # Needed for rpcs3 (llvm15) but llvm16 for CITRA
+  - org.freedesktop.Sdk.Extension.llvm16        # Needed for rpcs3 (llvm15) but llvm16 for CITRA
+  - org.freedesktop.Sdk.Extension.rust-stable   # Needed for BoilR 
 # base: io.qt.qtwebengine.BaseApp             # Needed for Yuzu - Disabled as we're using AppImage for Yuzu
 # base-version: "6.5"                         # Needed for Yuzu - Disabled as we're using AppImage for Yuzu
 command: retrodeck.sh
@@ -43,6 +44,10 @@ finish-args:
   - --env=SDL_VIDEO_WAYLAND_WMCLASS=net.retrodeck.retrodeck
   # XEMU - Fixes issues with openSUSE systems, QEMU_AUDIO_DRV is defined as "pa" causing xemu to not launch
   - --unset-env=QEMU_AUDIO_DRV
+  # BoilR
+  - --filesystem=xdg-data/Steam:rw #Steam (flatpak)
+  - --filesystem=~/.steam:rw # Steam (Non-flatpak)
+  - --filesystem=~/.var/app/com.valvesoftware.Steam:rw # Steam (Flatpak)
 
 cleanup:
   # ES-DE
@@ -446,6 +451,24 @@ modules:
   # ES-DE Themes - END
 
   # External manifests start
+
+  - name: boilr
+    buildsystem: simple
+    build-options:
+      append-path: /usr/lib/sdk/rust-stable/bin
+      env:
+        # To pick up vendored deps
+        CARGO_HOME: /run/build/boilr/cargo
+        RUSTFLAGS: "-L /app/lib/"
+    build-commands:    
+      - cargo --offline fetch --manifest-path Cargo.toml --verbose
+      - cargo --offline build --release --verbose --features flatpak
+      - install -Dm755 ./target/release/boilr -t /app/bin/
+    sources:
+      - type: git
+        url: https://github.com/PhilipK/BoilR
+        commit: b33d965f227fe971fd590cb022f608521b506ef3
+      - rd-submodules/boilr/cargo-lock.json
 
   # RetroArch - START
   # https://github.com/flathub/org.libretro.RetroArch
