@@ -16,40 +16,40 @@ stop_steam = false
 start_steam = false
 
 [bottles]
-enabled = true
+enabled = false
 
 [epic_games]
-enabled = true
+enabled = false
 safe_launch = []
 
 [flatpak]
-enabled = true
+enabled = false
 
 [gog]
 enabled = false
 create_symlinks = true
 
 [heroic]
-enabled = true
+enabled = false
 launch_games_through_heroic = []
 default_launch_through_heroic = true
 
 [itch]
-enabled = true
+enabled = false
 create_symlinks = true
 
 [legendary]
-enabled = true
+enabled = false
 
 [lutris]
-enabled = true
+enabled = false
 executable = "lutris"
 flatpak = true
 flatpak_image = "net.lutris.Lutris"
 installed = true
 
 [origin]
-enabled = true
+enabled = false
 
 [uplay]
 enabled = false
