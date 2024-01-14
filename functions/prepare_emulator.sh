@@ -735,6 +735,16 @@ prepare_emulator() {
     sed -i 's#RETRODECKSAVESDIR#'$saves_folder'#g' "/var/config/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON
   fi
 
+  if [[ "$emulator" =~ ^(boilr|BOILR|all)$ ]]; then
+    echo "----------------------"
+    echo "Initializing BOILR"
+    echo "----------------------"
+
+    mkdir -p "/var/config/boilr"
+    cp -fvr "/app/libexec/steam-sync/config.toml" "/var/config/boilr"
+    
+  fi
+
   # Update presets for all emulators after any reset or move
   if [[ ! "$emulator" == "retrodeck" ]]; then
     build_retrodeck_current_presets
