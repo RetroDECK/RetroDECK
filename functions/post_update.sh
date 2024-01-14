@@ -1,7 +1,5 @@
 #!/bin/bash
 
-source /app/libexec/logger.sh
-
 post_update() {
 
   # post update script
