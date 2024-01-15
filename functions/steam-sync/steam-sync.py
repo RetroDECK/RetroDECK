@@ -267,7 +267,7 @@ alt_command_list={
 }
 
 def create_shortcut_new(games,rdhome):
-    old_games=os.listdir(rdhome+"/sync/")
+    old_games=os.listdir(rdhome+"/.sync/")
 
     for game in games:
         try:
@@ -276,7 +276,7 @@ def create_shortcut_new(games,rdhome):
         except ValueError:
             print(game[0]+" is a new game!")
     
-        path=rdhome+"/sync/"+game[0]
+        path=rdhome+"/.sync/"+game[0]
         print("Go to path: "+path)
         if not os.path.exists(path):
             os.makedirs(path)
@@ -318,7 +318,7 @@ def create_shortcut_new(games,rdhome):
     print(old_games)
     for game in old_games:
         if game:
-            shutil.rmtree(rdhome+"/sync/"+game)
+            shutil.rmtree(rdhome+"/.sync/"+game)
         
     os.system("boilr --no-ui")
 
