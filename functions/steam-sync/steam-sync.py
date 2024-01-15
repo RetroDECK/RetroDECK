@@ -338,8 +338,8 @@ def addToSteam():
     command_list_default["pico8"]=command_list_default["pico8"].replace("{GAMEDIR}",roms_folder+"/pico8")
     alt_command_list["PICO-8 Splore (Standalone)"]=alt_command_list["PICO-8 Splore (Standalone)"].replace("{GAMEDIR}",roms_folder+"/pico8")
 
-    if not os.path.exists(rdhome+"/sync/"):
-        os.makedirs(rdhome+"/sync/")
+    if not os.path.exists(rdhome+"/.sync/"):
+        os.makedirs(rdhome+"/.sync/")
 
     '''
     if not os.path.exists(os.path.expanduser("~/.var/app/net.retrodeck.retrodeck/config/boilr/sync")):
@@ -350,7 +350,7 @@ def addToSteam():
     if os.path.isfile(boilr_path):
         with open(boilr_path,"r") as f:
             data=f.read()
-        data=re.sub("games_folder.*","games_folder = "+rdhome+"/sync/",data)
+        data=re.sub("games_folder.*","games_folder = "+rdhome+"/.sync/",data)
         with open(boilr_path,"w") as f:
             f.write(data)
     else:
