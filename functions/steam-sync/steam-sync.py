@@ -348,10 +348,10 @@ def addToSteam():
 
     boilr_path=os.path.expanduser("~/.var/app/net.retrodeck.retrodeck/config/boilr/config.toml")
     if os.path.isfile(boilr_path):
-        with open("boilr_path","r") as f:
+        with open(boilr_path,"r") as f:
             data=f.read()
         data=re.sub("games_folder.*","games_folder = "+rdhome+"/sync/",data)
-        with open("boilr_path","w") as f:
+        with open(boilr_path,"w") as f:
             f.write(data)
     else:
         print("Error! BoilR config not initialized.")
