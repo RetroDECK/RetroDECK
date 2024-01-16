@@ -1129,7 +1129,7 @@
         <platform>msxturbor</platform>
         <theme>msxturbor</theme>
     </system>
-<!--
+
     <system>
         <name>mugen</name>
         <fullname>M.U.G.E.N Game Engine</fullname>
@@ -1139,7 +1139,7 @@
         <platform>mugen</platform>
         <theme>mugen</theme>
     </system>
--->
+
     <system>
         <name>multivision</name>
         <fullname>Othello Multivision</fullname>
@@ -1329,7 +1329,7 @@
         <platform>odyssey2</platform>
         <theme>odyssey2</theme>
     </system>
-<!-- 
+
     <system>
         <name>openbor</name>
         <fullname>OpenBOR Game Engine</fullname>
@@ -1339,7 +1339,7 @@
         <platform>openbor</platform>
         <theme>openbor</theme>
     </system>
--->
+
 <!--
     <system>
         <name>oric</name>
