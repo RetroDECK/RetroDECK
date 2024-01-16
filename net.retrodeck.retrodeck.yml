@@ -1334,6 +1334,23 @@ modules:
 
   # MAME - End
 
+  # Ryujinx Appimage - START
+  # https://ryujinx.org/download
+
+  - name: Ryujinx
+    buildsystem: simple
+    build-commands:
+      - |
+        tar -zxvf ryujinx-1.1.685-linux_x64.tar.gz
+        mv -v publish ${FLATPAK_DEST}/ryujinx
+        ln -sv ${FLATPAK_DEST}/ryujinx/Ryujinx ${FLATPAK_DEST}/bin/Ryujinx
+    sources:
+      - type: file
+        url: https://github.com/Ryujinx/release-channel-master/releases/download/1.1.1111/ryujinx-1.1.1111-linux_x64.tar.gz
+        sha256: 612dd28c38e5f8657da0f1b3f54385ffbb304053bca7c9d8de027242b0c9f946
+
+  # Ryujinx Appimage - END
+
   # External manifests end
 
   - name: retrodeck
