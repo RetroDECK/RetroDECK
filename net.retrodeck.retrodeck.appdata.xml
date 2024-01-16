@@ -87,6 +87,7 @@
             </ul>
             <p>Issues:</p>
             <ul>
+               <li>!!! WARNING !!! Steam Sync is now REPLACING your Standalone BoilR links with RetroDECK's, use it at your own risk!</li>
                <li>GZDOOM: the controller for player 2+ is not correctly configured</li>
                <li>quit_retrodeck function seems to not working correctly</li>
                <li>Added new emulator: MAME (Standalone) -- Removed cause of compiling issues</li>
