@@ -1,7 +1,5 @@
 #!/bin/bash
 
-source /app/libexec/logger.sh
-
 post_update() {
 
   # post update script
@@ -269,14 +267,17 @@ post_update() {
 
   if [[ $prev_version -le "075" ]]; then
     # In version 0.7.5b, the following changes were made:
-    # TODO: vita3k init
-    # TODO: MAME init
+    prepare_emulator "reset" "vita3k"
+    prepare_emulator "reset" "mame"
+    prepare_emulator "reset" "boilr"
     if [ -d "$rdhome/.logs" ]; then
       mv "$rdhome/.logs" "$logs_folder"
       log i "Logs folder renamed successfully"
     else
       log i "The .logs folder does not exist, continuing."
     fi
+
+    
 
     # The save folder of rpcs3 was inverted so we're moving the saves into the real one
     echo "RPCS3 saves needs to be migrated, executing."

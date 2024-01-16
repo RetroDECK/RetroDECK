@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source functions/functions.sh
+source /app/libexec/functions.sh
 
 debug_dialog() {
   # This function is for displaying commands run by the Configurator without actually running them
