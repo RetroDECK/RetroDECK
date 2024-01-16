@@ -21,7 +21,7 @@ post_update() {
     # - Fix PICO-8 folder structure. ROM and save folders are now sane and binary files will go into ~/retrodeck/bios/pico-8/
 
     rm -rf /var/config/primehack # Purge old Primehack config files. Saves are safe as they are linked into /var/data/primehack.
-    prepare_emulator "reset" "primehack"
+    prepare_component "reset" "primehack"
 
     dir_prep "$rdhome/saves/duckstation" "/var/data/duckstation/memcards"
     dir_prep "$rdhome/states/duckstation" "/var/data/duckstation/savestates"
@@ -212,14 +212,14 @@ post_update() {
 
     set_setting_value "$ppssppconf" "AutoLoadSaveState" "0" "ppsspp" "General"
 
-    prepare_emulator "reset" "cemu"
+    prepare_component "reset" "cemu"
 
-    prepare_emulator "reset" "pico8"
+    prepare_component "reset" "pico8"
 
     configurator_generic_dialog "RetroDECK 0.7.0b Upgrade" "Would you like to install the official controller profile?\n(this will reset your custom emulator settings)\n\nAfter installation you can enable it from from Controller Settings -> Templates."
     if [[ $(configurator_generic_question_dialog "RetroDECK Official Controller Profile" "Would you like to install the official RetroDECK controller profile?") == "true" ]]; then
       install_retrodeck_controller_profile
-      prepare_emulator "reset" "all"
+      prepare_component "reset" "all"
     fi
   fi
   if [[ $prev_version -le "071" ]]; then
@@ -267,9 +267,9 @@ post_update() {
 
   if [[ $prev_version -le "075" ]]; then
     # In version 0.7.5b, the following changes were made:
-    prepare_emulator "reset" "vita3k"
-    prepare_emulator "reset" "mame"
-    prepare_emulator "reset" "boilr"
+    prepare_component "reset" "vita3k"
+    prepare_component "reset" "mame"
+    prepare_component "reset" "boilr"
     if [ -d "$rdhome/.logs" ]; then
       mv "$rdhome/.logs" "$logs_folder"
       log i "Logs folder renamed successfully"
