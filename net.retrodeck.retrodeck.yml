@@ -1341,7 +1341,7 @@ modules:
     buildsystem: simple
     build-commands:
       - |
-        tar -zxvf ryujinx-1.1.685-linux_x64.tar.gz
+        tar -zxvf ryujinx-*-linux_x64.tar.gz
         mv -v publish ${FLATPAK_DEST}/ryujinx
         ln -sv ${FLATPAK_DEST}/ryujinx/Ryujinx ${FLATPAK_DEST}/bin/Ryujinx
     sources:
