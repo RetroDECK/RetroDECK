@@ -97,6 +97,7 @@ source /app/libexec/global.sh
 #       - Browse the wiki
 #       - USB Import tool
 #       - Install: RetroDECK Starter Pack
+#       - Game Downloader
 
 # DIALOG TREE FUNCTIONS
 
@@ -1176,7 +1177,8 @@ configurator_developer_dialog() {
   "Change Update Channel" "Change between normal and cooker builds" \
   "Browse the Wiki" "Browse the RetroDECK wiki online" \
   "USB Import" "Prepare a USB device for ROMs or import an existing collection" \
-  "Install RetroDECK Starter Pack" "Install the optional RetroDECK starter pack" )
+  "Install RetroDECK Starter Pack" "Install the optional RetroDECK starter pack" \
+  "Game Downloader" "Install ROM Hacks, Homebrew or Ports" )
 
   case $choice in
 
@@ -1202,6 +1204,10 @@ configurator_developer_dialog() {
       install_retrodeck_starterpack
     fi
     configurator_developer_dialog
+  ;;
+
+  "Game Downloader" )
+    configurator_game_downloader_dialog
   ;;
 
   "" ) # No selection made or Back button clicked
@@ -1353,6 +1359,64 @@ configurator_usb_import_dialog() {
   ;;
   esac
 
+}
+
+configurator_game_downloader_dialog() {
+  choice=$(zenity --list --title="RetroDECK Configurator Utility - Game Downloader" --cancel-label="Back" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+  --column="Choice" --column="Description" \
+  "ROM Hack Downloader" "Install ROM Hacks which are compatible with your ROMs (Right now: Only shows compatible ROMs with Super Mario World (USA) and Super Mario Bros. (World). Can't download.)" \
+  "Homebrew Downloader" "Install Homebrew (Not yet functional)" \
+  "Ports Downloader" "Install Ports (Not yet functional)" )
+
+  case $choice in
+
+  "ROM Hack Downloader" )
+    configurator_romhack_downloader_dialog
+  ;;
+
+  "Homebrew Downloader" )
+    configurator_developer_dialog
+  ;;
+
+  "Ports Downloader" )
+    configurator_developer_dialog
+  ;;
+
+  "" ) # No selection made or Back button clicked
+    configurator_welcome_dialog
+  ;;
+
+  esac
+}
+
+configurator_romhack_downloader_dialog() {
+
+  get_compatible_romhacks # creates compatible_romhack_patches array
+
+  zenity_columns=()
+  for hack_name in "${compatible_romhack_patches[@]}"; do
+
+    # Get romhack info
+    sanitized_name="$(echo "$hack_name" | sed -e "s/'/''/g")"
+    hack_info="$($hacks_db_cmd "SELECT released,retro_achievements,description FROM main WHERE name = '""$sanitized_name""'")"
+    IFS='|' read -r -a hack_info_array <<< "$hack_info"
+
+    # Add row of hack info
+    zenity_columns+=("$hack_name")
+    for info in "${hack_info_array[@]}"; do
+      zenity_columns+=("$info")
+    done
+  done
+
+  choice=$(zenity --list --title="RetroDECK Configurator Utility - Game Downloader: ROM Hacks" --cancel-label="Back" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+  --column="ROM Hack Name" --column="Released" --column="Retro Achievements" --column="Description" \
+  "${zenity_columns[@]}" )
+
+  echo "$choice"
+
+  configurator_welcome_dialog
 }
 
 # START THE CONFIGURATOR
