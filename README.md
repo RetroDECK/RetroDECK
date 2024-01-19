@@ -4,9 +4,9 @@
 
 # RetroDECK on your device!
 
+
+
 <p float="center">
-<img src="https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen03.jpeg?raw=true" alt="screenshot" width="300"/>
-<img src="https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen04.jpeg?raw=true" alt="screenshot" width="300"/><br/>
 <img src="https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen05.jpeg?raw=true" alt="screenshot" width="300"/>
 <img src="https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen06.jpeg?raw=true" alt="screenshot" width="300"/>
 </p>
@@ -17,6 +17,13 @@
 ![Discord](https://img.shields.io/discord/951662718102962256?label=discord)
 ![GitHub](https://img.shields.io/github/license/XargonWan/RetroDECK)
 [![Documentation Status](https://readthedocs.org/projects/retrodeck/badge/?version=latest)](https://retrodeck.readthedocs.io/en/latest/?badge=latest)
+
+**The RetroDECK Wiki & FAQ**
+
+Please check out the these links for even more information: 
+
+- [RetroDECK Wiki](https://retrodeck.readthedocs.io/en/latest/) 
+- [RetroDECK FAQ](https://retrodeck.readthedocs.io/en/latest/wiki_general/faq/)
 
 # What is RetroDECK?
 Instead of having several different software on your system for a variety of emulators and frontends you only need one: RetroDECK.
@@ -49,6 +56,9 @@ It can help with:
 For our long term vision you can check out the following wiki page:
 [RetroDECK: Visions and Goals](https://retrodeck.readthedocs.io/en/latest/wiki_about/visions-and-goals/)
 
+
+# How to get support? 
+Use the supports channels on [Discord](https://discord.gg/Dz3szYsP8g) `🤝-community-support` and `🆘-support`.
 ### The RetroDECK community:
 [Website](https://retrodeck.net) <br/>
 [Wiki](https://github.com/XargonWan/RetroDECK/wiki) <br/>
@@ -60,7 +70,7 @@ For our long term vision you can check out the following wiki page:
 Basically just download it from Discover, put your games and bioses and just play.
 However, we have an in depth How To on how to get started over here: 
 
-[How to: Start using RetroDECK](https://retrodeck.readthedocs.io/en/latest/wiki_howto_faq/retrodeck-start/)
+[How to: Start using RetroDECK](https://retrodeck.readthedocs.io/en/latest/wiki_general/retrodeck-start/)
 
 ## What devices/systems does RetroDECK support: 
 RetroDECK currently supports:
@@ -89,11 +99,4 @@ Read up here on how to help out, there is something for everyone:
 Yes, check here: <br>
 [Donations & Licenses 🎁](https://retrodeck.readthedocs.io/en/latest/wiki_about/donations-licenses/) 
 
-# The RetroDECK Wiki
-Please check out the [Wiki](https://retrodeck.readthedocs.io/en/latest/) for even more information.
 
-## The FAQ
-The RetroDECK [FAQ](https://retrodeck.readthedocs.io/en/latest/wiki_howto_faq/faq/) on the wiki has a vast variety of questions and awnsers. 
-
-# How to get support? 
-Use the supports channels on [Discord](https://discord.gg/Dz3szYsP8g) `🤝-community-support` and `🆘-support`.
