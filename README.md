@@ -5,12 +5,12 @@
 # RetroDECK on your device!
 
 
-
 <p float="center">
 <img src="https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen05.jpeg?raw=true" alt="screenshot" width="300"/>
 <img src="https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen06.jpeg?raw=true" alt="screenshot" width="300"/>
 </p>
-<br/>
+
+Instead of having several different emulators, engines and frontends on your Linux/SteamOS system you only need one: RetroDECK.
 
 ![Flathub](https://img.shields.io/flathub/downloads/net.retrodeck.retrodeck)
 ![Flathub](https://img.shields.io/flathub/v/net.retrodeck.retrodeck)
@@ -26,11 +26,11 @@ Please check out the these links for even more information:
 - [RetroDECK FAQ](https://retrodeck.readthedocs.io/en/latest/wiki_general/faq/)
 
 # What is RetroDECK?
-Instead of having several different software on your system for a variety of emulators and frontends you only need one: RetroDECK.
 RetroDECK is a [EmulationStation Desktop Edition](https://es-de.org) (ES-DE) powered [Flatpak application](https://flathub.org/apps/net.retrodeck.retrodeck) that thanks to its `RetroDECK Framework` it builds-in and manage a variety of emulators and other software that allows you to play your favorite retro (and even not-so-retro) games in one complete package.
 
 ## So what does that mean?
-It means that RetroDECK provides all the emulators, systems and a frontend. RetroDECK configures them for you and put them into one application you can download from Flathub. <br>
+It means that RetroDECK provides all the emulators, systems and a frontend. RetroDECK configures them for you and put them into one application you can download from Flathub.
+
 By being one application RetroDECK can put all important files in one location for all the emulators, instead of having them spread out over your entire system and even add features on top to orchestrate them seamlessly.
 
 ## The RetroDECK Framework
