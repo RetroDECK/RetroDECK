@@ -721,6 +721,18 @@ modules:
         url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1648/yuzu-mainline-20231211-14c24e64e.AppImage
         sha256: d40f61c2abf8ddd0bb53098e2d9edf0c47e1cfd89e50cf5856b8cc27dbb25bd6
 
+  - name: gyrodsu
+    buildsystem: simple
+    build-commands:
+      - mkdir -p ${FLATPAK_DEST}/retrodeck
+      - cp install.sh ${FLATPAK_DEST}/retrodeck/install-gyrodsu.sh
+      - chmod +x ${FLATPAK_DEST}/retrodeck/install-gyrodsu.sh
+      - sed -i 's/\$HOME/\/var\/data\/gyrodsu/g' ${FLATPAK_DEST}/retrodeck/install-gyrodsu.sh
+    sources:
+      - type: archive
+        url: https://github.com/kmicki/SteamDeckGyroDSU/releases/latest/download/SteamDeckGyroDSUSetup.zip
+        sha256: GYRODSUSHAPLACEHOLDER
+
   # Yuzu - END
 
   # CITRA - START
