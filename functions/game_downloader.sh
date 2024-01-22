@@ -4,7 +4,7 @@ game_downloader_setup() {
   crc32_cmd="python3 /app/libexec/crc32.py"
 
   # "hacks" is the general name which includes ROM Hacks, Homebrew and Ports
-  hacks_repo_url="https://raw.githubusercontent.com/Libretto7/best-romhacks/main"
+  hacks_repo_url="https://raw.githubusercontent.com/Libretto7/best-romhacks/b6e2163e9707a23b209f2e3dd082fff29fb6e8c5"
   hacks_db_path="$HOME/.var/app/net.retrodeck.retrodeck/data/hacks_metadata.db"
 
   # set up hacks database
