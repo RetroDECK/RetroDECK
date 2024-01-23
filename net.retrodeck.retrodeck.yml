@@ -1329,7 +1329,7 @@ modules:
       - cp -rn files/* /app
     sources:
     - type: archive
-      url: RETRODECKMAMEPLACEHOLDERURL
+      url: RETRODECKMAMEURLPLACEHOLDER
       sha256: RETRODECKMAMEPLACEHOLDER
 
   # MAME - End
