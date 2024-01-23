@@ -1323,14 +1323,14 @@ modules:
   
   # MAME - Start
 
-  # - name: retrodeck-mame
-  #   buildsystem: simple
-  #   build-commands:
-  #     - cp -rn files/* /app
-  #   sources:
-  #   - type: archive
-  #     url: 
-  #     sha256: RETRODECKMAMEPLACEHOLDER
+  - name: retrodeck-mame
+    buildsystem: simple
+    build-commands:
+      - cp -rn files/* /app
+    sources:
+    - type: archive
+      url: RETRODECKMAMEPLACEHOLDERURL
+      sha256: RETRODECKMAMEPLACEHOLDER
 
   # MAME - End
 
