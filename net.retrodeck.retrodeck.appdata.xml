@@ -77,7 +77,8 @@
                <li>Quit button after emulators reset should act as an actual full quit button</li>
                <li>Created a quit_retrodeck function to ease the quit in the scripts.</li>
                <li>Logs folder is now in retrodeck/logs (previously was .logs)</li>
-               <li>The post update script is initializing vita3k, mame and boilr when coming from a version ealrier that 0.8.0, this don't work in cokker and must be resetted manually (for boilr reset RetroDECK)</li>
+               <li>The post update script is initializing vita3k, mame and boilr when coming from a version ealrier that 0.8.0, this don't work in cooker and must be resetted manually (for boilr reset RetroDECK)</li>
+               <li>Added GyroDSU for enabling GyroCapabilities and updated the controller configurations to accomodate it</li>
             </ul>
             <p>Fixes:</p>
             <ul>
