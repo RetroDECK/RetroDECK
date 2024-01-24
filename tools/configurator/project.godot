@@ -82,7 +82,6 @@ previous_tab={
 [internationalization]
 
 locale/translations=PackedStringArray("res://locales/interface.en.translation", "res://locales/interface.it.translation")
-locale/test="it"
 
 [rendering]
 
