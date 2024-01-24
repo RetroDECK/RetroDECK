@@ -984,7 +984,7 @@ configurator_reset_dialog() {
   choice=$(zenity --list --title="RetroDECK Configurator Utility - RetroDECK: Reset" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
-  "Reset Specific Emulator" "Reset only one specific emulator to default settings" \
+  "Reset Specific Emulator" "Reset only one specific emulator or engine to default settings" \
   "Reset RetroDECK Component" "Reset a single component, components are parts of RetroDECK that are not emulators" \
   "Reset All Emulators and Components" "Reset all emulators and components to default settings" \
   "Reset RetroDECK" "Reset RetroDECK to default settings" )
@@ -995,7 +995,7 @@ configurator_reset_dialog() {
     component_to_reset=$(zenity --list \
     --title "RetroDECK Configurator Utility - Reset Specific Standalone Emulator" --cancel-label="Back" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
-    --text="Which emulator do you want to reset to default?" \
+    --text="Which emulator or engine do you want to reset to default?" \
     --column="Emulator" --column="Action" \
     "RetroArch" "Reset the multi-emulator frontend RetroArch to default settings" \
     "Cemu" "Reset the Wii U emulator Cemu to default settings" \
@@ -1009,10 +1009,11 @@ configurator_reset_dialog() {
     "PPSSPP" "Reset the PSP emulator PPSSPP to default settings" \
     "Primehack" "Reset the Metroid Prime emulator Primehack to default settings" \
     "RPCS3" "Reset the PS3 emulator RPCS3 to default settings" \
-    "Ryujinx" "Reset the Switch emulator Ryujinx to default settings" \
     "Vita3k" "Reset the PS Vita emulator Vita3k to default settings" \
     "XEMU" "Reset the XBOX emulator XEMU to default settings" \
     "Yuzu" "Reset the Switch emulator Yuzu to default settings" )
+
+    # "Ryujinx" "Reset the Switch emulator Ryujinx to default settings" \
 
     case $component_to_reset in
 
@@ -1056,10 +1057,11 @@ configurator_reset_dialog() {
     --column="Component" --column="Action" \
     "BoilR" "Reset BoilR that manages the sync and scraping toward Steam library" \ 
     "ES-DE" "Reset the ES-DE frontend" \ )
+    # TODO: "GyroDSU" "Reset the gyroscope manager GyroDSU"
 
     case $component_to_reset in
 
-    "BoilR" | "ES-DE" )
+    "BoilR" | "ES-DE" ) # TODO: GyroDSU
       if [[ $(configurator_reset_confirmation_dialog "$component_to_reset" "Are you sure you want to reset $component_to_reset to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
         prepare_component "reset" "$component_to_reset" "configurator"
         configurator_process_complete_dialog "resetting $component_to_reset"
