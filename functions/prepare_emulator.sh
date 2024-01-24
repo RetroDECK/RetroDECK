@@ -745,6 +745,17 @@ prepare_emulator() {
     
   fi
 
+  if [[ "$emulator" =~ ^(gyrodsu|GyroDSU|all)$ ]]; then
+    echo "----------------------"
+    echo "Initializing GYRODSU"
+    echo "----------------------"
+    rm -rf /var/data/gyrodsu
+    mkdir -p /var/data/gyrodsu
+    cd /app/retrodeck/gyrodsu
+    /app/retrodeck/gyrodsu/install-gyrodsu.sh
+    cd - # back to the previous dir
+  fi
+
   # Update presets for all emulators after any reset or move
   if [[ ! "$emulator" == "retrodeck" ]]; then
     build_retrodeck_current_presets

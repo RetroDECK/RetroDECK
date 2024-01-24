@@ -437,10 +437,6 @@ finit() {
     install_retrodeck_starterpack
   fi
 
-  # Installing GyroDSU
-  echo "Initializing GyroDSU" #TODO: LOGGER
-  /app/retrodeck/install-gyrodsu.sh
-
   ) | # Don't delete this!
   zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
