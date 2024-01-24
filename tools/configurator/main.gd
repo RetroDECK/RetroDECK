@@ -5,6 +5,8 @@ func _ready():
 	for n: Control in children: #iterate the children to grab focus on mouse hov
 		if (n.focus_mode == FOCUS_ALL):
 			n.mouse_entered.connect(_on_control_mouse_entered.bind(n))
+	#Translation tests
+	$Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/game_control_container/GridContainer/cheats.text = tr("TK_CHEATS") + " " + tr("TK_SOON")
 
 func _input(event):
 	if event.is_action_pressed("quit"):
