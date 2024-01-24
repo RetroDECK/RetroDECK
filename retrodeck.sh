@@ -13,15 +13,15 @@ for i in "$@"; do
 flatpak run [FLATPAK-RUN-OPTION] net.retrodeck-retrodeck [ARGUMENTS]
 
 Arguments:
-    -h, --help                    Print this help
-    -v, --version                 Print RetroDECK version
-    --info-msg                    Print paths and config informations
-    --configurator                Starts the RetroDECK Configurator
-    --compress-one <file>         Compresses target file to a compatible format
-    --compress-all <format>       Compresses all supported games into compatible format. Available formats are \"chd\", \"zip\", \"rvz\" and \"all\".
-    --reset-component <component>   Reset one or more component configs to the default values
-    --reset-emulationstation      Reset EmulationStation DE to default settings
-    --reset-retrodeck             Starts the initial RetroDECK installer (backup your data first!)
+    -h, --help                      Print this help
+    -v, --version                   Print RetroDECK version
+    --info-msg                      Print paths and config informations
+    --configurator                  Starts the RetroDECK Configurator
+    --compress-one <file>           Compresses target file to a compatible format
+    --compress-all <format>         Compresses all supported games into compatible format. Available formats are \"chd\", \"zip\", \"rvz\" and \"all\".
+    --reset-component <component>   Reset one or more component or emulator configs to the default values
+    --reset-es-de                   Reset EmulationStation DE to default settings
+    --reset-retrodeck               Starts the initial RetroDECK installer (backup your data first!)
 
 For flatpak run specific options please run: flatpak run -h
 
@@ -56,10 +56,10 @@ https://retrodeck.net
       fi
       ;;
     --reset-component*)
-      echo "You are about to reset one or more RetroDECK components."
-      echo "Available options are: retroarch cemu citra dolphin duckstation melonds pcsx2 ppsspp primehack rpcs3 xemu yuzu all-components"
+      echo "You are about to reset one or more RetroDECK components or emulators."
+      echo "Available options are: es-de, retroarch, cemu, citra, dolphin, duckstation, melonds, pcsx3, pico8, ppsspp, primehack, rpcs3, xemu, yuzu, vita3k, mame, gzdoom, boilr, all"
       read -p "Please enter the component you would like to reset: " component
-      if [[ "$component" =~ ^(retroarch|cemu|citra|dolphin|duckstation|melonds|pcsx2|ppsspp|primehack|rpcs3|xemu|yuzu|all-components)$ ]]; then
+      if [[ "$component" =~ ^(es-de | retroarch | cemu | citra | dolphin | duckstation | melonds | pcsx3 | pico8 | ppsspp | primehack | rpcs3 | xemu | yuzu | vita3k | mame | gzdoom | boilr | all)$ ]]; then
         read -p "You are about to reset $component to default settings. Enter 'y' to continue, 'n' to stop: " response
         if [[ $response == [yY] ]]; then
           prepare_component "reset" "$component" "cli"
@@ -74,11 +74,11 @@ https://retrodeck.net
         exit
       fi
       ;;
-    --reset-emulationstation*)
-      echo "You are about to reset EmulationStation DE to default settings. Your scraped media, downloaded themes and gamelists will remain untouched."
+    --reset-es-de*)
+      echo "You are about to reset ES-DE to default settings. Your scraped media, downloaded themes and gamelists will remain untouched."
       read -p "Enter 'y' to continue, 'n' to stop: " response
       if [[ $response == [yY] ]]; then
-        prepare_component "reset" "emulationstation" "cli"
+        prepare_component "reset" "ES-DE" "cli"
         read -p "The process has been completed, press Enter key to start RetroDECK."
         shift # Continue launch after previous command is finished
       else
