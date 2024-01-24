@@ -37,7 +37,7 @@ prepare_component() {
     fi
   fi
 
-  if [[ "$component" =~ ^(emulationstation|all)$ ]]; then # For use after ESDE-related folders are moved or a reset
+  if [[ "$component" =~ ^(es-de|ES-DE|all)$ ]]; then # For use after ESDE-related folders are moved or a reset
     if [[ "$action" == "reset" ]]; then
       rm -rf /var/config/emulationstation/
       mkdir -p /var/config/emulationstation/.emulationstation/
