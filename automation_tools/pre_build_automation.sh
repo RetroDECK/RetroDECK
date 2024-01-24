@@ -44,9 +44,10 @@ do
     elif [[ "$action" == "hash" ]]; then
       echo
       echo "Placeholder text: $placeholder"
-      echo "URL to hash: $url"
+      calculated_url=$(eval echo "$url")  # in case the url has to be calculated from an expression
+      echo "URL to hash: $calculated_url"
       echo
-      hash=$(curl -sL "$url" | sha256sum | cut -d ' ' -f1)
+      hash=$(curl -sL "$calculated_url" | sha256sum | cut -d ' ' -f1)
       echo "Hash found: $hash"
       /bin/sed -i 's^'"$placeholder"'^'"$hash"'^' $rd_manifest
     elif [[ "$action" == "latestcommit" ]]; then
@@ -77,6 +78,14 @@ do
       echo "Information being injected: $(cat $url)"
       echo
       /bin/sed -i 's^'"$placeholder"'^'"$(cat $url)"'^' $rd_manifest
+    elif [[ "$action" == "url" ]]; then
+      # this is used to calculate a dynamic url
+      echo
+      echo "Placeholder text: $placeholder"
+      calculated_url=$(eval echo "$url")
+      echo "Information being injected: $calculated_url"
+      echo
+      /bin/sed -i 's^'"$placeholder"'^'"$calculated_url"'^' $rd_manifest
     fi
   fi
 done < "$automation_task_list"
