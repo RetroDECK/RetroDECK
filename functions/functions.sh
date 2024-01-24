@@ -490,16 +490,43 @@ update_splashscreens() {
 
 deploy_helper_files() {
   # This script will distribute helper documentation files throughout the filesystem according to the $helper_files_list
-  # USAGE: deploy_helper_files
+  # USAGE: deploy_helper_files <file_path>
 
-  while IFS='^' read -r file dest
-  do
-      if [[ ! "$file" == "#"* ]] && [[ ! -z "$file" ]]; then
-      eval current_dest="$dest"
-      cp -f "$helper_files_folder/$file" "$current_dest/$file"
-    fi
+  local file_path=$1
+  local wiki_link
+  local destination_path
+  local wiki_url="https://github.com/XargonWan/RetroDECK-Wiki"
+  local link_content
+  local wiki_path="/tmp/wiki"
 
-  done < "$helper_files_list"
+  # Check if the file exists
+  if [ ! -f "$file_path" ]; then
+    echo "Error: File not found: $file_path"
+    return 1
+  fi
+
+  # Read parameters from the file
+  IFS='^' read -r wiki_link destination_path < "$file_path"
+
+  # Check if the repository is already cloned
+  if [ ! -d "$wiki_path" ]; then
+    # Clone the repository
+    git clone "$wiki_url" "$wiki_path"
+  fi
+
+  # Change to the destination path and pull the latest changes
+  cd "$wiki_path" || return
+  git pull origin main
+
+  # Copy the wiki_link file to the destination path
+  cp "$wiki_link" "$destination_path"
+
+  # Append the link content to the end of the file
+  link_content="Related wiki article can be found here:\n$wiki_link\n\nThe RetroDECK Team"
+  echo -e "$link_content" >> "$destination_path"
+
+  # Return to the original directory if needed
+  cd - || return
 }
 
 easter_eggs() {
