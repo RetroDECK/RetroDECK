@@ -73,6 +73,7 @@
                <li>Added new system: SOLARUS</li>
                <li>Added new engine: GZDOOM</li>
                <li>Added new emulator: Vita3K - Reset the emulator to grap the lates changes</li>
+               <li>Added new emulator: MAME (Standalone)</li>
                <li>Added Steam Sync (with BoilR)</li>
                <li>Quit button after emulators reset should act as an actual full quit button</li>
                <li>Created a quit_retrodeck function to ease the quit in the scripts.</li>
@@ -89,7 +90,6 @@
             <ul>
                <li>GZDOOM: the controller for player 2+ is not correctly configured</li>
                <li>quit_retrodeck function seems to not working correctly</li>
-               <li>Added new emulator: MAME (Standalone) -- Removed cause of compiling issues</li>
                <li>MAME (Standalone) paths should be fixed</li>
             </ul>
             <p>Missing:</p>
