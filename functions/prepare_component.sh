@@ -512,7 +512,7 @@ prepare_component() {
         mkdir -pv "$multi_user_data_folder/$SteamAppUser/config/rpcs3/"
         cp -fr "$emuconfigs/rpcs3/"* "$multi_user_data_folder/$SteamAppUser/config/rpcs3/"
         # This is an unfortunate one-off because set_setting_value does not currently support settings with $ in the name.
-        sed -i 's^\^$(componentDir): .*^$(componentDir): '"$bios_folder/rpcs3/"'^' "$multi_user_data_folder/$SteamAppUser/config/rpcs3/vfs.yml"
+        sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$bios_folder/rpcs3/"'^' "$multi_user_data_folder/$SteamAppUser/config/rpcs3/vfs.yml"
         set_setting_value "$multi_user_data_folder/$SteamAppUser/config/rpcs3/vfs.yml" "/games/" "$roms_folder/ps3/" "rpcs3"
         dir_prep "$multi_user_data_folder/$SteamAppUser/config/rpcs3" "/var/config/rpcs3"
       else # Single-user actions
@@ -520,7 +520,7 @@ prepare_component() {
         mkdir -pv /var/config/rpcs3/
         cp -fr "$emuconfigs/rpcs3/"* /var/config/rpcs3/
         # This is an unfortunate one-off because set_setting_value does not currently support settings with $ in the name.
-        sed -i 's^\^$(componentDir): .*^$(componentDir): '"$bios_folder/rpcs3/"'^' "$rpcs3vfsconf"
+        sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$bios_folder/rpcs3/"'^' "$rpcs3vfsconf"
         set_setting_value "$rpcs3vfsconf" "/games/" "$roms_folder/ps3/" "rpcs3"
         dir_prep "$saves_folder/ps3/rpcs3" "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata"
       fi
@@ -535,7 +535,7 @@ prepare_component() {
     fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
       # This is an unfortunate one-off because set_setting_value does not currently support settings with $ in the name.
-      sed -i 's^\^$(componentDir): .*^$(componentDir): '"$bios_folder/rpcs3"'^' "$rpcs3vfsconf"
+      sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$bios_folder/rpcs3"'^' "$rpcs3vfsconf"
       set_setting_value "$rpcs3vfsconf" "/games/" "$roms_folder/ps3" "rpcs3"
     fi
   fi
