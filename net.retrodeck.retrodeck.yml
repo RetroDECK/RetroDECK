@@ -730,7 +730,7 @@ modules:
       - cp sdgyrodsu ${FLATPAK_DEST}/retrodeck/gyrodsu
       - cp sdgyrodsu.service ${FLATPAK_DEST}/retrodeck/gyrodsu
       - chmod +x ${FLATPAK_DEST}/retrodeck/gyrodsu/*
-      - sed -i 's/\$HOME/\/var\/data\/gyrodsu/g' ${FLATPAK_DEST}/retrodeck/gyrodsu/install-gyrodsu.sh
+      - sed -i 's/\$HOME/\/var\/data\/gyrodsu/g' ${FLATPAK_DEST}/retrodeck/gyrodsu/install.sh
     sources:
       - type: archive
         url: https://github.com/kmicki/SteamDeckGyroDSU/releases/latest/download/SteamDeckGyroDSUSetup.zip
