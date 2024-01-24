@@ -729,7 +729,7 @@ modules:
       - cp logcurrentrun.sh ${FLATPAK_DEST}/retrodeck/gyrodsu
       - cp sdgyrodsu ${FLATPAK_DEST}/retrodeck/gyrodsu
       - cp sdgyrodsu.service ${FLATPAK_DEST}/retrodeck/gyrodsu
-      - chmod +x ${FLATPAK_DEST}/retrodeck/gyrodsu/install-gyrodsu.sh
+      - chmod +x ${FLATPAK_DEST}/retrodeck/gyrodsu/*
       - sed -i 's/\$HOME/\/var\/data\/gyrodsu/g' ${FLATPAK_DEST}/retrodeck/gyrodsu/install-gyrodsu.sh
     sources:
       - type: archive
