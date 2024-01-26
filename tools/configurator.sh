@@ -91,6 +91,7 @@ source /app/libexec/global.sh
 #         - Version-specific changelogs
 #       - RetroDECK Credits
 #     - Add to Steam
+#     - ROM Hack Downloader
 #     - Developer Options (Hidden)
 #       - Change Multi-user mode
 #       - Change Update channel
@@ -109,6 +110,7 @@ configurator_welcome_dialog() {
     "RetroDECK: Troubleshooting" "Backup data, perform BIOS / multi-disc file checks checks and emulator resets" \
     "RetroDECK: About" "Show additional information about RetroDECK" \
     "Sync with Steam" "Sync with Steam all the favorites games" \
+    "ROM Hack Downloader" "Install ROM Hacks which are compatible with your ROMs" \
     "Developer Options" "Welcome to the DANGER ZONE")
   else
     welcome_menu_options=("Presets & Settings" "Here you find various presets, tweaks and settings to customize your RetroDECK experience" \
@@ -148,6 +150,10 @@ configurator_welcome_dialog() {
 
   "Sync with Steam" )
     configurator_add_steam
+  ;;
+
+  "ROM Hack Downloader" )
+    configurator_romhack_downloader_dialog
   ;;
 
   "Developer Options" )
@@ -1392,26 +1398,35 @@ configurator_game_downloader_dialog() {
 
 configurator_romhack_downloader_dialog() {
 
-  get_compatible_romhacks # creates compatible_romhack_patches array
+  hacks_db_setup
+  check_romhacks_compatibility # add paths of available base roms to db
+
+  available_bases_crc32s="$($hacks_db_cmd "SELECT crc32 FROM bases WHERE local_path NOT NULL;")"
 
   zenity_columns=()
-  for hack_name in "${compatible_romhack_patches[@]}"; do
 
-    # Get romhack info
-    sanitized_name="$(echo "$hack_name" | sed -e "s/'/''/g")"
-    hack_info="$($hacks_db_cmd "SELECT released,retro_achievements,description FROM main WHERE name = '""$sanitized_name""'")"
-    IFS='|' read -r -a hack_info_array <<< "$hack_info"
+  while IFS= read -r base_crc32; do
 
-    # Add row of hack info
-    zenity_columns+=("$hack_name")
-    for info in "${hack_info_array[@]}"; do
-      zenity_columns+=("$info")
-    done
-  done
+    # Get info of the available hacks for this base crc32
+    info_of_hacks_compatible_with_base="$($hacks_db_cmd "SELECT name,released,retro_achievements,description FROM rhacks WHERE base_crc32 = '""$base_crc32""'")"
+
+    while IFS= read -r single_hack_info; do
+    
+      # Turn db output into array
+      IFS='|' read -r -a single_hack_info_array <<< "$single_hack_info"
+
+      # Add row of hack info to zenity choices
+      for info in "${single_hack_info_array[@]}"; do
+        zenity_columns+=("$info")
+      done
+
+    done <<< "$info_of_hacks_compatible_with_base"
+
+  done <<< "$available_bases_crc32s"
 
   choice=$(zenity --list --title="RetroDECK Configurator Utility - Game Downloader: ROM Hacks" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
-  --column="ROM Hack Name" --column="Released" --column="Retro Achievements" --column="Description" \
+  --column="ROM Hack Name" --column="Released" --column="RetroAchievements" --column="Description" \
   "${zenity_columns[@]}" )
 
   echo "$choice"
