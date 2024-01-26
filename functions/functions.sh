@@ -528,13 +528,20 @@ easter_eggs() {
 }
 
 quit_retrodeck() {
+  echo "Terminating RetroDECK"  # TODO: logger
   pkill -f retrodeck
+  echo "Terminating ES-DE"  # TODO: logger
   pkill -f emulationstation
+  pkill -f es-de
+  echo "Terminating GyroDSU"  # TODO: logger
+  pkill -f sdgyrodsu
 }
 
 start_retrodeck() {
   easter_eggs # Check if today has a surprise splashscreen and load it if so
   # normal startup
   echo "Starting RetroDECK v$version"
+  echo "Initializing GyroDSU" # TODO: logger
+  /bin/bash "/var/data/sdgyrodsu/sdgyrodsu"
   emulationstation --home /var/config/emulationstation
 }

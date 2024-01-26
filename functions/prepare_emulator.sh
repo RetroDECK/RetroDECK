@@ -644,6 +644,8 @@ prepare_emulator() {
       dir_prep "$screenshots_folder" "/var/data/yuzu/screenshots"
       dir_prep "$mods_folder/Yuzu" "/var/data/yuzu/load"
       mkdir -pv "$rdhome/customs/yuzu"
+      rm -vf "/app/bin/yuzu-rdwrapper"
+      ln -vs "/app/tools/yuzu-rdwrapper" "/app/bin/yuzu-rdwrapper"
       # removing dead symlinks as they were present in a past version
       if [ -d $bios_folder/switch ]; then
         find $bios_folder/switch -xtype l -exec rm {} \;
@@ -749,11 +751,16 @@ prepare_emulator() {
     echo "----------------------"
     echo "Initializing GYRODSU"
     echo "----------------------"
-    rm -rf /var/data/gyrodsu
-    mkdir -p /var/data/gyrodsu
+    rm -rf /var/data/sdgyrodsu
+    mkdir -p /var/data/sdgyrodsu
     cd /app/retrodeck/gyrodsu
-    /bin/bash /app/retrodeck/gyrodsu/install-gyrodsu.sh
+    # gyrodsu is working on $HOME, so we're temporarly rerouting it ot /var/data
+    ORIGINAL_HOME=$HOME
+    export HOME=/var/data
+    /bin/bash /app/retrodeck/gyrodsu/install.sh
+    export HOME=$ORIGINAL_HOME    
     cd - # back to the previous dir
+    chmod +x "/var/data/sdgyrodsu/*"
   fi
 
   # Update presets for all emulators after any reset or move
