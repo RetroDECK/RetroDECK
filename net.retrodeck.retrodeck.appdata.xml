@@ -80,11 +80,12 @@
                <li>Logs folder is now in retrodeck/logs (previously was .logs)</li>
                <li>The post update script is initializing vita3k, mame and boilr when coming from a version ealrier that 0.8.0, this don't work in cooker and must be resetted manually (for boilr reset RetroDECK)</li>
                <li>Added GyroDSU for enabling GyroCapabilities and updated the controller configurations to accomodate it</li>
+               <li>RPCS3 is now running via shortcut (.desktop file) by default - WARN THE USERS TO MIGRATE</li>
             </ul>
             <p>Fixes:</p>
             <ul>
                <li>Fixed DUCKSTATION memory card folder</li>
-               <li>Fixed RPCS3 saves folder (wrong symlink)</li>
+               <li>Fixed RPCS3 saves folder (wrong symlink) - WRN THE USERS TO BACKUP</li>
                <li>Fixed issues that prevents Steam Sync to work correctly</li>
             </ul>
             <p>Issues:</p>
