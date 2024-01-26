@@ -103,6 +103,8 @@ source /app/libexec/global.sh
 # DIALOG TREE FUNCTIONS
 
 configurator_welcome_dialog() {
+  configurator_romhack_downloader_dialog  
+
   if [[ $developer_options == "true" ]]; then
     welcome_menu_options=("Presets & Settings" "Here you find various presets, tweaks and settings to customize your RetroDECK experience" \
     "Open Emulator" "Launch and configure each emulators settings (for advanced users)" \
@@ -1430,6 +1432,7 @@ configurator_romhack_downloader_dialog() {
   "${zenity_columns[@]}" )
 
   echo "$choice"
+  install_romhack "$choice" && echo "success"
 
   configurator_welcome_dialog
 }

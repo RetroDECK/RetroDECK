@@ -15,17 +15,40 @@ hacks_db_setup() {
   declare -g hacks_db_cmd="sqlite3 $hacks_db_path"
 }
 
+db_sanitize() {
+  echo "$(echo "$1" | sed -e "s/'/''/g")"
+}
+
 check_romhacks_compatibility() {
-  # Register all crc32 checksums of potential base ROMs and their paths into the dictionary "base_roms"
+  # Add paths of locally available base roms to db
 
   for rom_path in ${roms_folder}/*/*; do
     if [[ "$(basename "$rom_path")" != "systeminfo.txt" ]]; then
 
       crc32="$($crc32_cmd "$rom_path")"
-      sanitized_path="$(echo "$rom_path" | sed -e "s/'/''/g")"
 
-      $hacks_db_cmd < <(echo "UPDATE bases SET local_path = '""$sanitized_path""' WHERE crc32 = '""$crc32""'")
+      $hacks_db_cmd < <(echo "UPDATE bases SET local_path = '""$(db_sanitize "$rom_path")""' WHERE crc32 = '""$crc32""'")
     fi
   done
 }
 
+install_romhack() {
+  # $1: name of romhack
+
+  set -exo pipefail
+
+  hack_name="$1"
+  infos=$($hacks_db_cmd "SELECT bases.system,bases.name,bases.local_path \
+                         FROM bases JOIN rhacks ON bases.crc32 = rhacks.base_crc32 \
+                         WHERE rhacks.name = '""$(db_sanitize "$1")""'")
+
+  IFS='|' read -r system base_name base_local_path <<< $infos
+
+  # download patchfile
+  wget -q "https://github.com/Libretto7/best-romhacks/raw/main/rhacks/$system/$base_name/$hack_name/patch.tar.xz" -O "/tmp/patch.tar.xz"
+
+  patchfile_name=$(tar -xvf "/tmp/patch.tar.xz" --directory="$roms_folder/$system")
+  echo "$patchfile_name"
+  
+  flips="flatpak-spawn --host flatpak run com.github.Alcaro.Flips"
+}
