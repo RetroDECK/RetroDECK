@@ -74,6 +74,7 @@
                <li>Added new engine: GZDOOM</li>
                <li>Added new emulator: Vita3K - Reset the emulator to grap the lates changes</li>
                <li>Added new emulator: MAME (Standalone)</li>
+               <li>PPSSPP: added hotkeys</li>
                <li>Added Steam Sync (with BoilR)</li>
                <li>Quit button after emulators reset should act as an actual full quit button</li>
                <li>Created a quit_retrodeck function to ease the quit in the scripts.</li>
