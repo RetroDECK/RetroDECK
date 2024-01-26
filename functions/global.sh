@@ -7,6 +7,7 @@ source /app/libexec/checks.sh
 source /app/libexec/compression.sh
 source /app/libexec/dialogs.sh
 source /app/libexec/functions.sh
+source /app/libexec/game_downloader.sh
 source /app/libexec/multi_user.sh
 source /app/libexec/patching.sh
 source /app/libexec/post_update.sh
