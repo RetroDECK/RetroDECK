@@ -752,7 +752,7 @@ prepare_emulator() {
     rm -rf /var/data/gyrodsu
     mkdir -p /var/data/gyrodsu
     cd /app/retrodeck/gyrodsu
-    /app/retrodeck/gyrodsu/install-gyrodsu.sh
+    /bin/bash /app/retrodeck/gyrodsu/install-gyrodsu.sh
     cd - # back to the previous dir
   fi
 
