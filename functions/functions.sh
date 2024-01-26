@@ -422,7 +422,7 @@ finit() {
   (
   prepare_emulator "reset" "all"
   build_retrodeck_current_presets
-  deploy_helper_files
+  deploy_helper_files $helper_files_list
 
   # Optional actions based on user choices
   if [[ "$finit_options_choices" =~ (rpcs3_firmware|Enable All) ]]; then
