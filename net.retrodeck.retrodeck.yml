@@ -470,6 +470,16 @@ modules:
         commit: b33d965f227fe971fd590cb022f608521b506ef3
       - rd-submodules/boilr/cargo-lock.json
 
+  - name: flips
+    buildsystem: simple
+    build-commands:
+      - sh make.sh --cflags=-DFLATPAK
+      - make install PREFIX=/app
+    sources:
+      - type: git
+        url: https://github.com/Alcaro/Flips.git
+        commit: 96df78fd733ebc56d64bcfcaee7d127bfd6643d6
+
   # RetroArch - START
   # https://github.com/flathub/org.libretro.RetroArch
 

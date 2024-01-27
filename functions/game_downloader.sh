@@ -49,8 +49,7 @@ install_romhack() {
   # Create the hack  
   base_name="$(basename "$base_local_path")"
   ext="$(echo "${base_name##*.}")"
-  flatpak-spawn --host flatpak run com.github.Alcaro.Flips \
-                --apply "$roms_folder/$system/$patchfile_name" "$base_local_path" "$roms_folder/$system/$hack_name.$ext" >/dev/null
+  flips --apply "$roms_folder/$system/$patchfile_name" "$base_local_path" "$roms_folder/$system/$hack_name.$ext" >/dev/null
 
   # Cleanup
   rm "$roms_folder/$system/$patchfile_name"
