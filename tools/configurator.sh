@@ -103,8 +103,6 @@ source /app/libexec/global.sh
 # DIALOG TREE FUNCTIONS
 
 configurator_welcome_dialog() {
-  configurator_romhack_downloader_dialog  
-
   if [[ $developer_options == "true" ]]; then
     welcome_menu_options=("Presets & Settings" "Here you find various presets, tweaks and settings to customize your RetroDECK experience" \
     "Open Emulator" "Launch and configure each emulators settings (for advanced users)" \
@@ -155,6 +153,7 @@ configurator_welcome_dialog() {
   ;;
 
   "ROM Hack Downloader" )
+    configurator_generic_dialog "RetroDECK Configurator - ROM Hack Downloader" "In order to download ROM Hacks you need to have the ROMs the hacks are based on already available. Your base ROMs need to be compatible with the hacks, otherwise those hacks will not be shown.\n\nRight now, your base ROMs need to be uncompressed for this to work.\n\nThe compatible ROM Hacks will now be listed."
     configurator_romhack_downloader_dialog
   ;;
 
@@ -1373,13 +1372,14 @@ configurator_game_downloader_dialog() {
   choice=$(zenity --list --title="RetroDECK Configurator Utility - Game Downloader" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Description" \
-  "ROM Hack Downloader" "Install ROM Hacks which are compatible with your ROMs (Right now: Only shows compatible ROMs with Super Mario World (USA) and Super Mario Bros. (World). Can't download.)" \
+  "ROM Hack Downloader" "Install ROM Hacks which are compatible with your ROMs" \
   "Homebrew Downloader" "Install Homebrew (Not yet functional)" \
   "Ports Downloader" "Install Ports (Not yet functional)" )
 
   case $choice in
 
   "ROM Hack Downloader" )
+    configurator_generic_dialog "RetroDECK Configurator - ROM Hack Downloader" "In order to download ROM Hacks you need to have the ROMs the hacks are based on already available. Your base ROMs need to be compatible with the hacks, otherwise those hacks will not be shown.\n\nRight now, your base ROMs need to be uncompressed for this to work.\n\nThe compatible ROM Hacks will now be listed."
     configurator_romhack_downloader_dialog
   ;;
 
@@ -1399,18 +1399,18 @@ configurator_game_downloader_dialog() {
 }
 
 configurator_romhack_downloader_dialog() {
-
   hacks_db_setup
   check_romhacks_compatibility # add paths of available base roms to db
 
   available_bases_crc32s="$($hacks_db_cmd "SELECT crc32 FROM bases WHERE local_path NOT NULL;")"
 
   zenity_columns=()
-
   while IFS= read -r base_crc32; do
 
     # Get info of the available hacks for this base crc32
-    info_of_hacks_compatible_with_base="$($hacks_db_cmd "SELECT name,released,retro_achievements,description FROM rhacks WHERE base_crc32 = '""$base_crc32""'")"
+    info_of_hacks_compatible_with_base="$($hacks_db_cmd "SELECT rhacks.name,bases.system,rhacks.released,rhacks.retro_achievements,rhacks.description \
+                                                         FROM bases JOIN rhacks ON bases.crc32 = rhacks.base_crc32
+                                                         WHERE bases.crc32 = '""$base_crc32""'")"
 
     while IFS= read -r single_hack_info; do
     
@@ -1426,15 +1426,30 @@ configurator_romhack_downloader_dialog() {
 
   done <<< "$available_bases_crc32s"
 
-  choice=$(zenity --list --title="RetroDECK Configurator Utility - Game Downloader: ROM Hacks" --cancel-label="Back" \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
-  --column="ROM Hack Name" --column="Released" --column="RetroAchievements" --column="Description" \
-  "${zenity_columns[@]}" )
+  if [[ ${#zenity_columns[@]} != 0 ]]; then # Compatible base ROMs found
+  
+    choice=$(zenity --list --title="RetroDECK Configurator Utility - ROM Hack Downloader" --cancel-label="Back" \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+    --column="ROM Hack Name" --column="System" --column="Released" --column="RetroAchievements" --column="Description" \
+    "${zenity_columns[@]}" )
 
-  echo "$choice"
-  install_romhack "$choice" && echo "success"
+    if [[ -z "$choice" ]]; then # no selection or back button
+      configurator_welcome_dialog
+    else
+      install_romhack "$choice"
+      rc=$?
+      if [[ $rc == "0" ]]; then
+        configurator_generic_dialog "RetroDECK Configurator - ROM Hack Downloader" "$choice was installed successfully!"
+      else
+        configurator_generic_dialog "RetroDECK Configurator - ROM Hack Downloader" "Something went wrong :("
+      fi
 
-  configurator_welcome_dialog
+      configurator_romhack_downloader_dialog    
+    fi
+  else # No compatible base ROMs
+    configurator_generic_dialog "RetroDECK Configurator - ROM Hack Downloader" "You have no uncompressed ROMs which are compatible with the available patches."
+    configurator_welcome_dialog
+  fi
 }
 
 # START THE CONFIGURATOR

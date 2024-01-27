@@ -4,15 +4,12 @@ hacks_db_setup() {
   crc32_cmd="python3 /app/libexec/crc32.py"
 
   # "hacks" is the general name which includes ROM Hacks, Homebrew and Ports
-  hacks_repo_url="https://raw.githubusercontent.com/Libretto7/best-romhacks/main"
   hacks_db_path="$HOME/.var/app/net.retrodeck.retrodeck/data/hacks_metadata.db"
 
-  # set up hacks database
-  rm $hacks_db_path
-  sqlite3 $hacks_db_path < <(curl -sL "$hacks_repo_url"/db_setup.sql)
-  sqlite3 $hacks_db_path < <(echo "ALTER TABLE bases ADD COLUMN local_path;")
-
+  # Set up hacks database
   declare -g hacks_db_cmd="sqlite3 $hacks_db_path"
+  $hacks_db_cmd < <(curl -sL "https://raw.githubusercontent.com/Libretto7/best-romhacks/main/db_setup.sql")
+  $hacks_db_cmd "ALTER TABLE bases ADD COLUMN local_path;"
 }
 
 db_sanitize() {
@@ -35,8 +32,6 @@ check_romhacks_compatibility() {
 install_romhack() {
   # $1: name of romhack
 
-  set -exo pipefail
-
   hack_name="$1"
   infos=$($hacks_db_cmd "SELECT bases.system,bases.name,bases.local_path \
                          FROM bases JOIN rhacks ON bases.crc32 = rhacks.base_crc32 \
@@ -44,11 +39,19 @@ install_romhack() {
 
   IFS='|' read -r system base_name base_local_path <<< $infos
 
-  # download patchfile
-  wget -q "https://github.com/Libretto7/best-romhacks/raw/main/rhacks/$system/$base_name/$hack_name/patch.tar.xz" -O "/tmp/patch.tar.xz"
+  # Download patchfile
+  wget -q "https://github.com/Libretto7/best-romhacks/raw/main/rhacks/$system/$base_name/$hack_name/patch.tar.xz" \
+       -O "/tmp/patch.tar.xz"
 
+  # Extract patchfile
   patchfile_name=$(tar -xvf "/tmp/patch.tar.xz" --directory="$roms_folder/$system")
-  echo "$patchfile_name"
-  
-  flips="flatpak-spawn --host flatpak run com.github.Alcaro.Flips"
+
+  # Create the hack  
+  base_name="$(basename "$base_local_path")"
+  ext="$(echo "${base_name##*.}")"
+  flatpak-spawn --host flatpak run com.github.Alcaro.Flips \
+                --apply "$roms_folder/$system/$patchfile_name" "$base_local_path" "$roms_folder/$system/$hack_name.$ext" >/dev/null
+
+  # Cleanup
+  rm "$roms_folder/$system/$patchfile_name"
 }
