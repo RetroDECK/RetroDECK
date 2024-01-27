@@ -1423,11 +1423,9 @@ configurator_romhack_downloader_dialog() {
       done
 
     done <<< "$info_of_hacks_compatible_with_base"
-
   done <<< "$available_bases_crc32s"
 
   if [[ ${#zenity_columns[@]} != 0 ]]; then # Compatible base ROMs found
-  
     choice=$(zenity --list --title="RetroDECK Configurator Utility - ROM Hack Downloader" --cancel-label="Back" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
     --column="ROM Hack Name" --column="System" --column="Released" --column="RetroAchievements" --column="Description" \
