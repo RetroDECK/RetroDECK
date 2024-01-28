@@ -514,7 +514,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"xinput_button SELECT, , "
+							"binding"		"mouse_button RIGHT, , "
 						}
 					}
 				}
@@ -1209,7 +1209,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press TAB, Tab, RD-Tab.png, "
+							"binding"		"key_press SPACE, Space, RD-space.png, "
 						}
 						"settings"
 						{
@@ -1229,7 +1229,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press F1, F1, RD-F1.png, "
+							"binding"		"key_press TAB, Tab, RD-Tab.png, "
 						}
 						"settings"
 						{
@@ -1249,7 +1249,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press F4, F4, RD-F4.png, "
+							"binding"		"key_press LEFT_SHIFT, Shift, RD-shift.png, "
 						}
 						"settings"
 						{
@@ -1269,7 +1269,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press F5, F5, RD-F5.png, "
+							"binding"		"key_press LEFT_CONTROL, Control, RD-ctrl.png, "
 						}
 						"settings"
 						{
@@ -1289,7 +1289,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press F8, F8, RD-F8.png, "
+							"binding"		"key_press LEFT_ALT, Alt, RD-alt.png, "
 						}
 						"settings"
 						{
@@ -1309,7 +1309,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press F10, F10, RD-F10.png, "
+							"binding"		"key_press F1, F1, RD-F1.png, "
 						}
 						"settings"
 						{
@@ -1322,6 +1322,127 @@
 				}
 			}
 			"touch_menu_button_9"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press F4, F4, RD-F4.png, "
+						}
+						"settings"
+						{
+							"haptic_intensity"		"2"
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"touch_menu_button_10"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press F5, F5, RD-F5.png, "
+						}
+						"settings"
+						{
+							"haptic_intensity"		"2"
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"touch_menu_button_11"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press F8, F8, RD-F8.png, "
+						}
+						"settings"
+						{
+							"haptic_intensity"		"2"
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"touch_menu_button_12"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press F10, F10, RD-F10.png, "
+						}
+						"settings"
+						{
+							"haptic_intensity"		"2"
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"touch_menu_button_13"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press F12, F12, RD-F12.png, "
+						}
+						"settings"
+						{
+							"haptic_intensity"		"2"
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"touch_menu_button_14"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press LEFT_CONTROL, Restart / Reset, RD-system-reboot.png, "
+							"binding"		"key_press R, Restart / Reset, RD-system-reboot.png, "
+						}
+						"settings"
+						{
+							"haptic_intensity"		"2"
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"touch_menu_button_15"
 			{
 				"activators"
 				{
@@ -1342,7 +1463,7 @@
 				{
 				}
 			}
-			"touch_menu_button_10"
+			"touch_menu_button_16"
 			{
 				"activators"
 				{
@@ -1350,8 +1471,8 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press LEFT_CONTROL, Swap Dual - Screens, RD-system-switch-user.png, "
-							"binding"		"key_press TAB, Swap Dual - Screens, RD-system-switch-user.png, "
+							"binding"		"key_press LEFT_CONTROL, Swap - Dual Screens, RD-system-switch-user.png, "
+							"binding"		"key_press TAB, Swap - Dual Screens, RD-system-switch-user.png, "
 						}
 						"settings"
 						{
@@ -1363,7 +1484,7 @@
 				{
 				}
 			}
-			"touch_menu_button_11"
+			"touch_menu_button_17"
 			{
 				"activators"
 				{
@@ -1371,8 +1492,8 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press LEFT_CONTROL, Change Dual Screen - Layout, RD-preferences-system-windows-actions.png, "
-							"binding"		"key_press L, Change Dual Screen - Layout, RD-preferences-system-windows-actions.png, "
+							"binding"		"key_press LEFT_CONTROL, Change - Dual Screen Layout, RD-preferences-system-windows-actions.png, "
+							"binding"		"key_press L, Change - Dual Screen Layout, RD-preferences-system-windows-actions.png, "
 						}
 						"settings"
 						{
@@ -1384,16 +1505,7 @@
 				{
 				}
 			}
-			"touch_menu_button_12"
-			{
-				"activators"
-				{
-				}
-				"disabled_activators"
-				{
-				}
-			}
-			"touch_menu_button_13"
+			"touch_menu_button_18"
 			{
 				"activators"
 				{
@@ -1414,7 +1526,7 @@
 				{
 				}
 			}
-			"touch_menu_button_14"
+			"touch_menu_button_19"
 			{
 				"activators"
 				{
@@ -1424,26 +1536,6 @@
 						{
 							"binding"		"key_press LEFT_CONTROL, Swap Disc, RD-application-x-iso.png, "
 							"binding"		"key_press D, Swap Disc, RD-application-x-iso.png, "
-						}
-						"settings"
-						{
-							"haptic_intensity"		"2"
-						}
-					}
-				}
-				"disabled_activators"
-				{
-				}
-			}
-			"touch_menu_button_15"
-			{
-				"activators"
-				{
-					"Full_Press"
-					{
-						"bindings"
-						{
-							"binding"		"key_press SPACE, Space, RD-space.png, "
 						}
 						"settings"
 						{
@@ -1528,6 +1620,64 @@
 						"bindings"
 						{
 							"binding"		"mouse_button MIDDLE, Middle Click, , "
+						}
+						"settings"
+						{
+							"haptic_intensity"		"0"
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+		}
+	}
+	"group"
+	{
+		"id"		"41"
+		"mode"		"dpad"
+		"name"		""
+		"description"		""
+		"inputs"
+		{
+		}
+		"settings"
+		{
+			"requires_click"		"0"
+		}
+	}
+	"group"
+	{
+		"id"		"42"
+		"mode"		"dpad"
+		"name"		""
+		"description"		""
+		"inputs"
+		{
+		}
+		"settings"
+		{
+			"requires_click"		"0"
+		}
+	}
+	"group"
+	{
+		"id"		"43"
+		"mode"		"single_button"
+		"name"		""
+		"description"		""
+		"inputs"
+		{
+			"click"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"mouse_button MIDDLE, , "
 						}
 						"settings"
 						{
@@ -1779,8 +1929,8 @@
 			"7"		"switch active"
 			"0"		"button_diamond active"
 			"1"		"left_trackpad inactive"
-			"11"		"left_trackpad inactive"
-			"15"		"left_trackpad active"
+			"11"		"left_trackpad active"
+			"15"		"left_trackpad inactive"
 			"2"		"right_trackpad inactive"
 			"6"		"right_trackpad inactive"
 			"10"		"right_trackpad inactive"
@@ -1790,7 +1940,9 @@
 			"5"		"right_trigger active"
 			"8"		"right_joystick active"
 			"9"		"dpad active"
-			"35"		"center_trackpad active"
+			"35"		"center_trackpad inactive"
+			"43"		"center_trackpad active"
+			"41"		"gyro active"
 		}
 	}
 	"preset"
@@ -1814,6 +1966,7 @@
 			"26"		"dpad active"
 			"33"		"center_trackpad inactive"
 			"39"		"center_trackpad active"
+			"42"		"gyro active"
 		}
 	}
 	"settings"
