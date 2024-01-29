@@ -1602,6 +1602,9 @@
 				}
 			}
 		}
+		"gameactions"
+		{
+		}
 	}
 	"group"
 	{
@@ -1661,6 +1664,9 @@
 				{
 				}
 			}
+		}
+		"gameactions"
+		{
 		}
 	}
 	"group"
@@ -1973,7 +1979,7 @@
 			"8"		"right_joystick active"
 			"9"		"dpad active"
 			"41"		"center_trackpad inactive"
-			"47"		"center_trackpad active"
+			"47"		"center_trackpad inactive"
 			"51"		"gyro active"
 		}
 	}
@@ -1997,7 +2003,7 @@
 			"43"		"right_joystick active"
 			"37"		"dpad active"
 			"40"		"center_trackpad inactive"
-			"50"		"center_trackpad active"
+			"50"		"center_trackpad inactive"
 			"52"		"gyro active"
 		}
 	}
