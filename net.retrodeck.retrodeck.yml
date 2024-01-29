@@ -8,15 +8,6 @@ sdk-extensions:
 # base-version: "6.5"                         # Needed for Yuzu - Disabled as we're using AppImage for Yuzu
 command: retrodeck.sh
 
-add-extensions:
-  org.ppsspp.PPSSPP.Locale:
-    directory: share/locale
-    bundle: true
-    no-autodownload: false
-    subdirectories: false
-    autodelete: true
-    locale-subset: true
-
 finish-args:
   - --socket=fallback-x11
   - --socket=wayland
@@ -663,30 +654,14 @@ modules:
     sources:
       - type: git
         url: &ppsspp-url https://github.com/hrydgard/ppsspp.git
-        tag: v1.16.6
-        commit: ba0ce344937d17e177ec8656ab957f6b82facdda
+        tag: v1.17
+        commit: 493122a2fcf9ff538e242fe2844f019b53afd483
         x-checker-data:
           type: json
           url: https://api.github.com/repos/hrydgard/ppsspp/releases/latest
           version-query: .tag_name | sub("^v"; "")
           tag-query: .tag_name
           timestamp-query: .published_at
-
-  - name: ppsspp-localization
-    buildsystem: simple
-    build-commands:
-      - |
-        for LANG_FILE in assets/lang/*.ini; do
-          LANG_FILE_NAME="$(basename "$LANG_FILE")"
-          LANG_PREFIX="${LANG_FILE_NAME:0:2}"
-          LANG_DEST="$FLATPAK_DEST/share/locale/$LANG_PREFIX/ppsspp/$LANG_FILE_NAME";
-          ln -fsr "$LANG_DEST" "$FLATPAK_DEST/share/ppsspp/$LANG_FILE"
-          install -Dm644 "$LANG_FILE" "$LANG_DEST"
-        done
-    sources:
-      - type: shell
-        commands:
-          - cp -a $FLATPAK_DEST/share/ppsspp/assets .
 
   # PPSSPP - END
 
