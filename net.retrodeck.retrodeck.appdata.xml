@@ -82,6 +82,8 @@
                <li>Logs folder is now in retrodeck/logs (previously was .logs)</li>
                <li>The post update script is initializing vita3k, mame and boilr when coming from a version ealrier that 0.8.0, this don't work in cokker and must be resetted manually (for boilr reset RetroDECK)</li>
                <li>RPCS3 is now running via shortcut (.desktop file) by default - WARN THE USERS TO MIGRATE</li>
+               <li>Added controller config for PS4 and PS5</li>
+               <li>Controller config overhaul</li>
             </ul>
             <p>Fixes:</p>
             <ul>
