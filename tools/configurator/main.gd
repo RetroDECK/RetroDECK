@@ -35,3 +35,12 @@ func _on_exit_button_pressed():
 func _exit():
 	get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
 	get_tree().quit()
+
+
+func _on_locale_selected(index):
+	match index:
+		0:
+			TranslationServer.set_locale("en")
+		1:
+			TranslationServer.set_locale("it")
+	

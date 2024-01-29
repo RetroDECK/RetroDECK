@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://61f6m4r1mpan"]
+[gd_scene load_steps=22 format=3 uid="uid://61f6m4r1mpan"]
 
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
 [ext_resource type="Script" path="res://main.gd" id="1_obpq7"]
@@ -8,6 +8,8 @@
 [ext_resource type="Script" path="res://Rekku.gd" id="4_nqqx3"]
 [ext_resource type="Texture2D" uid="uid://cxyml1owhi6de" path="res://res/pixel_ui_theme/8x8_ui_icons.png" id="4_v1scw"]
 [ext_resource type="Script" path="res://helper_text.gd" id="5_cprkf"]
+[ext_resource type="Texture2D" uid="uid://dxdhjp18rgmr4" path="res://res/flags/united_kingdom_32.png" id="5_exkn2"]
+[ext_resource type="Texture2D" uid="uid://cru43y7hco6kh" path="res://res/flags/italy_32.png" id="6_fiylw"]
 [ext_resource type="Texture2D" uid="uid://cor8ep0fkqm08" path="res://res/Rekku/base.png" id="9_brsrf"]
 [ext_resource type="Texture2D" uid="uid://cavtn1rljc5oe" path="res://res/Rekku/eyes-open.png" id="10_y6gkh"]
 [ext_resource type="Texture2D" uid="uid://cv7nckloqhn5m" path="res://res/Rekku/blink1.png" id="11_6deod"]
@@ -829,6 +831,28 @@ offset_bottom = 71.0
 grow_horizontal = 0
 icon = SubResource("AtlasTexture_st633")
 
+[node name="locale" type="OptionButton" parent="Background"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -39.0
+offset_right = -9.0
+offset_bottom = -10.0
+grow_horizontal = 0
+grow_vertical = 0
+item_count = 2
+selected = 0
+popup/item_0/text = ""
+popup/item_0/icon = ExtResource("5_exkn2")
+popup/item_0/id = 0
+popup/item_1/text = ""
+popup/item_1/icon = ExtResource("6_fiylw")
+popup/item_1/id = 1
+
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_xivj6")
 volume_db = -11.243
@@ -926,3 +950,4 @@ frame_progress = 0.664627
 
 [connection signal="pressed" from="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/game_control_container/GridContainer/Button" to="." method="_on_quickresume_advanced_pressed"]
 [connection signal="pressed" from="Background/Exit" to="." method="_on_exit_button_pressed"]
+[connection signal="item_selected" from="Background/locale" to="." method="_on_locale_selected"]
