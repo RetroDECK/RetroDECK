@@ -1316,13 +1316,13 @@ modules:
     buildsystem: simple
     build-commands:
       - |
-        tar -zxvf ryujinx-*-linux_x64.tar.gz
+        tar -zxvf *.tar.gz
         mv -v publish ${FLATPAK_DEST}/ryujinx
         ln -sv ${FLATPAK_DEST}/ryujinx/Ryujinx ${FLATPAK_DEST}/bin/Ryujinx
     sources:
       - type: file
-        url: https://github.com/Ryujinx/release-channel-master/releases/download/1.1.1111/ryujinx-1.1.1111-linux_x64.tar.gz
-        sha256: 612dd28c38e5f8657da0f1b3f54385ffbb304053bca7c9d8de027242b0c9f946
+        url: https://github.com/Ryujinx/release-channel-master/releases/download/1.1.1151/ryujinx-1.1.1151-linux_x64.tar.gz
+        sha256: 34ac1d2fae46dc63cf7bdd0dfd9c819e6a4efec9aba35ee4d0f98fce63e49faa
 
   # Ryujinx Appimage - END
 
