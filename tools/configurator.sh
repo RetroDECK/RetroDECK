@@ -242,7 +242,7 @@ configurator_global_presets_and_settings_dialog() {
   ;;
 
   "Swap A/B and X/Y Buttons" )
-    change_preset_dialog "nintendo_button_layout"
+    change_preset_dialog "abxy_button_swap"
     configurator_global_presets_and_settings_dialog
   ;;
 

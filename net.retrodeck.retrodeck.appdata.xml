@@ -74,6 +74,8 @@
                <li>Added new engine: GZDOOM</li>
                <li>Added new emulator: Vita3K - Reset the emulator to grap the lates changes</li>
                <li>Added new emulator: MAME (Standalone)</li>
+               <li>PPSSPP: added hotkeys</li>
+               <li>DOLPHIN: improved wiimote pointer emulation for controllers</li>
                <li>Added Steam Sync (with BoilR)</li>
                <li>Quit button after emulators reset should act as an actual full quit button</li>
                <li>Created a quit_retrodeck function to ease the quit in the scripts.</li>
@@ -81,6 +83,8 @@
                <li>The post update script is initializing vita3k, mame and boilr when coming from a version ealrier that 0.8.0, this don't work in cooker and must be resetted manually (for boilr reset RetroDECK)</li>
                <li>Added GyroDSU for enabling GyroCapabilities and updated the controller configurations to accomodate it</li>
                <li>RPCS3 is now running via shortcut (.desktop file) by default - WARN THE USERS TO MIGRATE</li>
+               <li>Added controller config for PS4 and PS5</li>
+               <li>Controller config overhaul</li>
             </ul>
             <p>Fixes:</p>
             <ul>
