@@ -549,7 +549,7 @@ easter_eggs() {
   if [[ ! -z $(cat $easter_egg_checklist) ]]; then
     while IFS="^" read -r start_date end_date start_time end_time splash_file # Read Easter Egg checklist file and separate values
     do
-      if [[ $current_day -ge "$start_date" && $current_day -le "$end_date" && $current_time -ge "$start_time" && $current_time -le "$end_time" ]]; then # If current line specified date/time matches current date/time, set $splash_file to be deployed
+      if [[ "$((10#$current_day))" -ge "$((10#$start_date))" && "$((10#$current_day))" -le "$((10#$end_date))" && "$((10#$current_time))" -ge "$((10#$start_time))" && "$((10#$current_time))" -le "$((10#$end_time))" ]]; then # If current line specified date/time matches current date/time, set $splash_file to be deployed
         new_splash_file="$splashscreen_dir/$splash_file"
         break
       else # When there are no matches, the default splash screen is set to deploy

@@ -14,7 +14,7 @@
 	"minor_revision"		"0"
 	"Timestamp"		"-936017792"
 	"actions"
-		{
+	{
 		"Default"
 		{
 			"title"		"RetroDECK - Set"
@@ -917,7 +917,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press SPACE, RetroDECK, RD-icon_circle_2_180x180.png, "
+							"binding"		"key_press FORWARD_SLASH, RetroDECK, RD-icon_circle_2_180x180.png, "
 						}
 						"settings"
 						{
@@ -977,7 +977,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press TAB, Tab, RD-Tab.png, "
+							"binding"		"key_press SPACE, Space, RD-space.png, "
 						}
 						"settings"
 						{
@@ -997,7 +997,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press F1, F1, RD-F1.png, "
+							"binding"		"key_press TAB, Tab, RD-Tab.png, "
 						}
 						"settings"
 						{
@@ -1017,7 +1017,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press F5, F5, RD-F5.png, "
+							"binding"		"key_press LEFT_SHIFT, Shift, RD-shift.png, "
 						}
 						"settings"
 						{
@@ -1037,7 +1037,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press F10, F10, RD-F10.png, "
+							"binding"		"key_press LEFT_CONTROL, Control, RD-ctrl.png, "
 						}
 						"settings"
 						{
@@ -1050,6 +1050,167 @@
 				}
 			}
 			"touch_menu_button_7"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press LEFT_ALT, Alt, RD-alt.png, "
+						}
+						"settings"
+						{
+							"haptic_intensity"		"2"
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"touch_menu_button_8"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press F1, F1, RD-F1.png, "
+						}
+						"settings"
+						{
+							"haptic_intensity"		"2"
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"touch_menu_button_9"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press F4, F4, RD-F4.png, "
+						}
+						"settings"
+						{
+							"haptic_intensity"		"2"
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"touch_menu_button_10"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press F5, F5, RD-F5.png, "
+						}
+						"settings"
+						{
+							"haptic_intensity"		"2"
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"touch_menu_button_11"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press F8, F8, RD-F8.png, "
+						}
+						"settings"
+						{
+							"haptic_intensity"		"2"
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"touch_menu_button_12"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press F10, F10, RD-F10.png, "
+						}
+						"settings"
+						{
+							"haptic_intensity"		"2"
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"touch_menu_button_13"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press F12, F12, RD-F12.png, "
+						}
+						"settings"
+						{
+							"haptic_intensity"		"2"
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"touch_menu_button_14"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press LEFT_CONTROL, Restart / Reset, RD-system-reboot.png, "
+							"binding"		"key_press R, Restart / Reset, RD-system-reboot.png, "
+						}
+						"settings"
+						{
+							"haptic_intensity"		"2"
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"touch_menu_button_15"
 			{
 				"activators"
 				{
@@ -1070,7 +1231,7 @@
 				{
 				}
 			}
-			"touch_menu_button_8"
+			"touch_menu_button_16"
 			{
 				"activators"
 				{
@@ -1078,8 +1239,8 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press LEFT_CONTROL, Swap Dual - Screens, RD-system-switch-user.png, "
-							"binding"		"key_press TAB, Swap Dual - Screens, RD-system-switch-user.png, "
+							"binding"		"key_press LEFT_CONTROL, Swap - Dual Screens, RD-system-switch-user.png, "
+							"binding"		"key_press TAB, Swap - Dual Screens, RD-system-switch-user.png, "
 						}
 						"settings"
 						{
@@ -1091,7 +1252,7 @@
 				{
 				}
 			}
-			"touch_menu_button_9"
+			"touch_menu_button_17"
 			{
 				"activators"
 				{
@@ -1099,8 +1260,8 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press LEFT_CONTROL, Change Dual Screen - Layout, RD-preferences-system-windows-actions.png, "
-							"binding"		"key_press L, Change Dual Screen - Layout, RD-preferences-system-windows-actions.png, "
+							"binding"		"key_press LEFT_CONTROL, Change - Dual Screen Layout, RD-preferences-system-windows-actions.png, "
+							"binding"		"key_press L, Change - Dual Screen Layout, RD-preferences-system-windows-actions.png, "
 						}
 						"settings"
 						{
@@ -1112,28 +1273,7 @@
 				{
 				}
 			}
-			"touch_menu_button_10"
-			{
-				"activators"
-				{
-					"Full_Press"
-					{
-						"bindings"
-						{
-							"binding"		"key_press LEFT_CONTROL, Fullscreen On / Off, RD-zoom-fit-best.png, "
-							"binding"		"key_press RETURN, Fullscreen On / Off, RD-zoom-fit-best.png, "
-						}
-						"settings"
-						{
-							"haptic_intensity"		"2"
-						}
-					}
-				}
-				"disabled_activators"
-				{
-				}
-			}
-			"touch_menu_button_11"
+			"touch_menu_button_18"
 			{
 				"activators"
 				{
@@ -1154,7 +1294,7 @@
 				{
 				}
 			}
-			"touch_menu_button_12"
+			"touch_menu_button_19"
 			{
 				"activators"
 				{
@@ -1456,6 +1596,40 @@
 			}
 		}
 	}
+	"group"
+	{
+		"id"		"24"
+		"mode"		"dpad"
+		"name"		""
+		"description"		""
+		"inputs"
+		{
+		}
+		"settings"
+		{
+			"requires_click"		"0"
+		}
+		"gameactions"
+		{
+		}
+	}
+	"group"
+	{
+		"id"		"25"
+		"mode"		"dpad"
+		"name"		""
+		"description"		""
+		"inputs"
+		{
+		}
+		"settings"
+		{
+			"requires_click"		"0"
+		}
+		"gameactions"
+		{
+		}
+	}
 	"preset"
 	{
 		"id"		"0"
@@ -1469,6 +1643,7 @@
 			"5"		"right_trigger active"
 			"8"		"right_joystick active"
 			"9"		"dpad active"
+			"24"		"gyro active"
 		}
 	}
 	"preset"
@@ -1487,6 +1662,7 @@
 			"16"		"right_joystick inactive"
 			"20"		"right_joystick active"
 			"17"		"dpad active"
+			"25"		"gyro active"
 		}
 	}
 	"settings"

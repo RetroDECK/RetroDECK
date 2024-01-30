@@ -234,6 +234,15 @@ post_update() {
     emulationstation --home /var/config/emulationstation --create-system-dirs
   fi
 
+  if [[ $prev_version -le "080" ]]; then
+    # In version 0.8.0b, the following changes were made that required config file updates/reset or other changes to the filesystem:
+    # - Remove RetroDECK controller profile from existing template location TODO
+    # - Determine if Steam is installed via normal desktop application / Flatpak / SteamOS TODO
+    # - Install RetroDECK controller profile in desired location TODO
+    # - Change section name in retrodeck.cfg for ABXY button swap preset
+    sed -i 's^nintendo_button_layout^abxy_button_swap^' "$rd_conf" # This is a one-off sed statement as there are no functions for replacing section names
+  fi
+
   # The following commands are run every time.
 
   if [[ -d "/var/data/dolphin-emu/Load/DynamicInputTextures" ]]; then # Refresh installed textures if they have been enabled
