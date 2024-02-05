@@ -1321,8 +1321,8 @@ modules:
         ln -sv ${FLATPAK_DEST}/ryujinx/Ryujinx ${FLATPAK_DEST}/bin/Ryujinx
     sources:
       - type: file
-        url: https://github.com/Ryujinx/release-channel-master/releases/download/1.1.1151/ryujinx-1.1.1151-linux_x64.tar.gz
-        sha256: 34ac1d2fae46dc63cf7bdd0dfd9c819e6a4efec9aba35ee4d0f98fce63e49faa
+        url: https://github.com/Ryujinx/release-channel-master/releases/download/1.1.1159/ryujinx-1.1.1159-linux_x64.tar.gz
+        sha256: 5f2354ae6b1c982f4f2ea4734c1320ce32dca2badb8c1f6e4216353f54faaa94
 
   # Ryujinx Appimage - END
 
