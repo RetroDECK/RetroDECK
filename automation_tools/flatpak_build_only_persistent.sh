@@ -12,13 +12,14 @@ else
     FOLDER=retrodeck-flatpak-cooker
 fi
 
-mkdir -vp ${GITHUB_WORKSPACE}/.local
-mkdir -vp ${GITHUB_WORKSPACE}/"$FOLDER"
+BUILD_DIR="$HOME/cooker-persistent"
+mkdir -vp ${$BUILD_DIR}/.local
+mkdir -vp ${$BUILD_DIR}/"$FOLDER"
 
 flatpak-builder --user --force-clean \
-    --install-deps-from=flathub \
-    --install-deps-from=flathub-beta \
-    --repo=${GITHUB_WORKSPACE}/.local \
-    --disable-download \
-    "${GITHUB_WORKSPACE}/$FOLDER" \
-    net.retrodeck.retrodeck.yml
+--install-deps-from=flathub \
+--install-deps-from=flathub-beta \
+--repo="${BUILD_DIR}/.local" \
+--disable-download \
+"${BUILD_DIR}/${FOLDER}" \
+"${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml"
