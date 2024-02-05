@@ -222,7 +222,7 @@ modules:
         url: https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_amd64
         sha256: 4ee662847c588c3ef2fec8bfb304e8739e3dbaba87ccb9a608d691c88f5b64dc
 
-  # dependency of: CEMU (13.1.1), CITRA (14.0.0)
+  # dependency of: CEMU, CITRA
   - name: glslang
     buildsystem: cmake-ninja
     config-opts:
@@ -1073,8 +1073,8 @@ modules:
       - /lib/cmake
     sources:
       - type: archive
-        url: https://boostorg.jfrog.io/artifactory/main/release/1.83.0/source/boost_1_83_0.tar.bz2
-        sha256: 6478edfe2f3305127cffe8caf73ea0176c53769f4bf1585be237eb30798c3b8e
+        url: https://boostorg.jfrog.io/artifactory/main/release/1.84.0/source/boost_1_84_0.tar.bz2
+        sha256: cc4b893acf645c9d4b698e9a0f08ca8846aa5d6c68275c14c3e7949c24109454
         x-checker-data:
           type: anitya
           project-id: 6845
@@ -1154,8 +1154,8 @@ modules:
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+-\d+)$
-        tag: v2.0-61
-        commit: b6aaf6633063be47d89a8216e269e32aec5a4b49
+        tag: v2.0-65
+        commit: 7e778042ee0aa053f6daa6a0c23f7ff0c74b5f6e
       - type: shell
         commands:
           - sed "s/set(EXPERIMENTAL_VERSION.*/set(EXPERIMENTAL_VERSION \"$(git describe
