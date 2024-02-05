@@ -70,11 +70,15 @@
          <description>
             <p>Bug fixes and other changes:</p>
             <ul>
-               <li>Placeholder</li>
+               <li>DUCKSTATION: fixed an issue with memcard folder creation</li>
             </ul>
             <p>Updates:</p>
             <ul>
-               <li>Updates</li>
+               <li>General emulators refresh</li>
+               <li>Added new splash screens for Lunar New Year, St. Valentines and St. Patricks, be sure to check them out!</li>
+               <li>Credits section</li>
+               <li>PPSSPP: updated hotkeys, check the updates in the wiki</li>
+               <li>DOLPHIN: improved wiimote pointer emulation for controllers </li>
             </ul>
          </description>
       </release>
