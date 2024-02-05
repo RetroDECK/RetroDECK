@@ -339,7 +339,6 @@ modules:
   # ES-DE - START
   # https://gitlab.com/es-de/emulationstation-de
 
-  #This is disabled because we added the extension (line 11), check if the videos are ok.
   - name: ffmpeg
     config-opts:
       - --disable-static
@@ -354,7 +353,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/FFmpeg/FFmpeg.git
-        tag: n5.1.1
+        tag: n5.1.4
 
   - name: freeimage
     no-autogen: true
