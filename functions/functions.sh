@@ -100,6 +100,43 @@ move() {
   fi
 }
 
+download_file() {
+  # Function to download file from the Internet, with Zenity progress bar
+  # USAGE: download_file $source_url $file_dest $file_name
+  # source_url is the location the file is downloaded from
+  # file_dest is the destination the file should be in the filesystem, needs filename included!
+  # file_name is a user-readable file name or description to be put in the Zenity dialog
+
+  # Run wget in the background and redirect the progress to a temporary file
+  (
+    wget "$1" -O "$2" -q --show-progress --progress=dot 2>&1 | sed -n -e 's/^.* \([0-9]*\)%.*$/\1/p' > "/var/cache/tmp/download_progress" &
+    wget_pid=$!
+
+        progress="0"
+        echo "$progress" # Initial progress value. sent to Zenity
+        while true; do
+            progress=$(tail -n 2 "/var/cache/tmp/download_progress" | head -1) # Read the second-to-last value written to the pipe, to avoid reading data that is half written
+            echo "$progress" # Send value to Zenity
+            if [[ "$(tail -n 1 "/var/cache/tmp/download_progress")" == "100" ]]; then # Read last line every time to check for download completion
+                echo "100"
+                break
+            fi
+            sleep 0.5
+        done
+
+    # Wait for wget process to finish
+    wait "$wget_pid"
+  ) |
+  zenity --progress \
+    --title="Downloading File" \
+    --text="Downloading $3..." \
+    --percentage=0 \
+    --auto-close
+
+  # Cleanup temp file
+  rm -f "/var/cache/tmp/download_progress"
+}
+
 update_rd_conf() {
   # This function will import a default retrodeck.cfg file and update it with any current settings. This will allow us to expand the file over time while retaining current user settings.
   # USAGE: update_rd_conf
@@ -247,15 +284,9 @@ dir_prep() {
 }
 
 update_rpcs3_firmware() {
-  (
   mkdir -p "$roms_folder/ps3/tmp"
   chmod 777 "$roms_folder/ps3/tmp"
-  wget "$rpcs3_firmware" -P "$roms_folder/ps3/tmp/"
-  ) |
-  zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-  --title "RetroDECK RPCS3 Firmware Download" \
-  --text="RetroDECK downloading the RPCS3 firmware, please wait."
+  download_file "$rpcs3_firmware" "$roms_folder/ps3/tmp/PS3UPDAT.PUP" "RPCS3 Firmware"
   rpcs3 --installfw "$roms_folder/ps3/tmp/PS3UPDAT.PUP"
   rm -rf "$roms_folder/ps3/tmp"
 }
