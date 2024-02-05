@@ -353,7 +353,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/FFmpeg/FFmpeg.git
-        tag: n5.1.4
+        tag: n6.0.1
 
   - name: freeimage
     no-autogen: true
