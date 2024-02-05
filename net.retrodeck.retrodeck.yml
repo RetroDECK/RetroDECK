@@ -472,7 +472,6 @@ modules:
         ${FLATPAK_DEST}/etc/retroarch.cfg
       - mkdir -p ${FLATPAK_DEST}/share/vulkan/implicit_layer.d
       - mkdir -p ${FLATPAK_DEST}/share/appdata
-      - cp org.libretro.RetroArch.appdata.xml ${FLATPAK_DEST}/share/appdata
     modules:
       - rd-submodules/retroarch/modules/libpng/libpng-1.6.35.json
       - rd-submodules/retroarch/modules/nvidia-cg-toolkit/nvidia-cg-toolkit-3.1.0013.json
