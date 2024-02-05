@@ -1451,7 +1451,7 @@
 							"binding"		"controller_action CHANGE_PRESET 1 0 1, , "
 						}
 					}
-					"release"
+					"Full_Press"
 					{
 						"bindings"
 						{
