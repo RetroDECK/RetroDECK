@@ -1009,8 +1009,9 @@ modules:
         #commit: af7710ef7b04a632b4294eae5e0eff8fe9c4d1f8
         #url: https://github.com/TheDrifter363/primehack.git
         #commit: 6295c695307a67f11ee202b05cbdd7b5c1edae5c
-        url: https://github.com/TheDrifter363/primehack.git
-        branch: pull/118/head:03117e2947cd30237b760bd230037ef9513d63bc
+        # TODO: once pr-118 is merged switch to upstream repo: https://github.com/shiiion/dolphin/pull/118
+        url: https://github.com/XargonWan/primehack
+        branch: thedrifter-pr
        # detects whether dolphin is running in a flatpak sandbox
        # and makes it use xdg directories if it is.
        # prevents dolphin from attempting to write conf files
