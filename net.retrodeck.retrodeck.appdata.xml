@@ -68,7 +68,6 @@
       <release version="0.7.6b" date="2023-02-14">
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.7.6b</url>
          <description>
-            <p>WARNING: Primehack is disabled in this version until fixes are done upsrteam, if you don't want to lose please do not update.</p>
             <p>Bug fixes and other changes:</p>
             <ul>
                <li>DUCKSTATION: fixed an issue with memcard folder creation</li>
