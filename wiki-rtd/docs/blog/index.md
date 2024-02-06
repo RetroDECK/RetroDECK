@@ -1,2 +1,0 @@
-# The RetroDECK Blog 📝
-
