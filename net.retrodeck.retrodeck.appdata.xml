@@ -84,6 +84,7 @@
                <li>RPCS3 is now running via shortcut (.desktop file) by default - WARN THE USERS TO MIGRATE</li>
                <li>Added controller config for PS4 and PS5</li>
                <li>Controller config overhaul</li>
+               <li>Removed talk names in the manifest as they're not needed anymore as enabled by default</li>
             </ul>
             <p>Fixes:</p>
             <ul>
