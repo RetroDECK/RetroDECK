@@ -21,6 +21,9 @@ finish-args:
   - --filesystem=/media
   - --filesystem=home/.var/app/com.valvesoftware.Steam
   - --allow=multiarch
+  - --talk-name=org.freedesktop.ScreenSaver
+  - --talk-name=org.freedesktop.PowerManagement.Inhibit
+  - --talk-name=org.freedesktop.login1.Manager
   - --filesystem=xdg-run/app/com.discordapp.Discord:create
   - --filesystem=xdg-config/gtk-3.0:ro
   - --env=QT_QPA_PLATFORM=wayland-egl;wayland;xcb
