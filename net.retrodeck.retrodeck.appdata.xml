@@ -71,6 +71,9 @@
             <p>Changes:</p>
             <ul>
                <li>Added new splash screens for Lunar New Year, St. Valentines and St. Patricks, be sure to check them out!</li>
+               <li>Updated PPSSPP</li>
+               <li>PPSSPP: implemented combo hotkeys, more details in the wiki</li>
+               <li>Reworked building pipelines andautomations</li>
             </ul>
             <p>Known issues:</p>
             <ul>
