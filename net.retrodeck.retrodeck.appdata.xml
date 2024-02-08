@@ -71,6 +71,21 @@
             <p>Bug fixes and other changes:</p>
             <ul>
                <li>DUCKSTATION: fixed an issue with memcard folder creation</li>
+               <li>Added new system: SOLARUS</li>
+               <li>Added new engine: GZDOOM</li>
+               <li>Added new emulator: Vita3K - Reset the emulator to grap the lates changes</li>
+               <li>Added new emulator: MAME (Standalone)</li>
+               <li>PPSSPP: added hotkeys</li>
+               <li>DOLPHIN: improved wiimote pointer emulation for controllers</li>
+               <li>Added Steam Sync (with BoilR)</li>
+               <li>Quit button after emulators reset should act as an actual full quit button</li>
+               <li>Created a quit_retrodeck function to ease the quit in the scripts.</li>
+               <li>Logs folder is now in retrodeck/logs (previously was .logs)</li>
+               <li>The post update script is initializing vita3k, mame and boilr when coming from a version ealrier that 0.8.0, this don't work in cokker and must be resetted manually (for boilr reset RetroDECK)</li>
+               <li>RPCS3 is now running via shortcut (.desktop file) by default - WARN THE USERS TO MIGRATE</li>
+               <li>Added controller config for PS4 and PS5</li>
+               <li>Controller config overhaul</li>
+               <li>Removed talk names in the manifest as they're not needed anymore as enabled by default</li>
             </ul>
             <p>Updates:</p>
             <ul>
