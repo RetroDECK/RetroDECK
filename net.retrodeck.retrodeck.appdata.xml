@@ -86,6 +86,7 @@
                <li>Added controller config for PS4 and PS5</li>
                <li>Controller config overhaul</li>
                <li>Removed talk names in the manifest as they're not needed anymore as enabled by default</li>
+               <li>Fixed a sync issue with the RetroDECK controller profiles</li>
             </ul>
             <p>Updates:</p>
             <ul>
