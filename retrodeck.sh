@@ -189,7 +189,7 @@ if [[ $update_check == "true" ]]; then
   fi
 fi
 
-# THIS IS A ONE-OFF FORCED REFRESH OF RETRODECK CONTROLLER PROFILES IN A 0.7.6b VERSION REFRESH - REMOVE BEFORE NEXT VERSION RELEASE
+# TODO: REMOVEME - THIS IS A ONE-OFF FORCED REFRESH OF RETRODECK CONTROLLER PROFILES IN A 0.7.6b VERSION REFRESH - REMOVE BEFORE NEXT VERSION RELEASE
 if [[ -f "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf" ]]; then # If RetroDECK controller profile has been previously installed
   install_retrodeck_controller_profile
 fi
