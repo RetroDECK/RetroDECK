@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://61f6m4r1mpan"]
+[gd_scene load_steps=23 format=3 uid="uid://61f6m4r1mpan"]
 
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
 [ext_resource type="Script" path="res://main.gd" id="1_obpq7"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://helper_text.gd" id="5_cprkf"]
 [ext_resource type="Texture2D" uid="uid://dxdhjp18rgmr4" path="res://res/flags/united_kingdom_32.png" id="5_exkn2"]
 [ext_resource type="Texture2D" uid="uid://cru43y7hco6kh" path="res://res/flags/italy_32.png" id="6_fiylw"]
+[ext_resource type="Texture2D" uid="uid://cti2vt14gxisl" path="res://res/flags/germany_32.png" id="7_qgxid"]
 [ext_resource type="Texture2D" uid="uid://cor8ep0fkqm08" path="res://res/Rekku/base.png" id="9_brsrf"]
 [ext_resource type="Texture2D" uid="uid://cavtn1rljc5oe" path="res://res/Rekku/eyes-open.png" id="10_y6gkh"]
 [ext_resource type="Texture2D" uid="uid://cv7nckloqhn5m" path="res://res/Rekku/blink1.png" id="11_6deod"]
@@ -207,7 +208,7 @@ layout_mode = 2
 
 [node name="decorations_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container"]
 layout_mode = 2
-text = "Decorations"
+text = "TK_DECORATIONS"
 
 [node name="decorations_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container"]
 layout_mode = 2
@@ -220,42 +221,41 @@ columns = 2
 layout_mode = 2
 size_flags_horizontal = 3
 button_pressed = true
-text = "Borders"
+text = "TK_BORDERS"
 
 [node name="borders_adv_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/GridContainer"]
 layout_mode = 2
 disabled = true
-text = "Advanced"
+text = "TK_ADVANCED"
 
 [node name="wide_screen" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Wide Screen"
+text = "TK_WSCREEN"
 
 [node name="wide_screen_adv_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/GridContainer"]
 layout_mode = 2
 disabled = true
-text = "Advanced"
+text = "TK_ADVANCED"
 
 [node name="shaders" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 disabled = true
 button_pressed = true
-text = "Shaders (coming soon)
-"
+text = "TK_SHADERS"
 
 [node name="shaders_adv_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/GridContainer"]
 layout_mode = 2
 disabled = true
-text = "Advanced"
+text = "TK_ADVANCED"
 
 [node name="extra_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
 [node name="decorations_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/extra_container"]
 layout_mode = 2
-text = "Extra"
+text = "TK_EXTRA"
 
 [node name="decorations_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/extra_container"]
 layout_mode = 2
@@ -269,17 +269,17 @@ layout_mode = 2
 size_flags_horizontal = 3
 disabled = true
 button_pressed = true
-text = "Mods"
+text = "TK_MODS"
 
 [node name="wide_screen_adv_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/extra_container/GridContainer"]
 layout_mode = 2
 disabled = true
-text = "Advanced"
+text = "TK_ADVANCED"
 
 [node name="tate_mode" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/extra_container/GridContainer"]
 layout_mode = 2
 disabled = true
-text = "TATE Mode (coming soon)"
+text = "TK_TATE"
 
 [node name="TK_CONTROLS" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
 visible = false
@@ -299,7 +299,7 @@ layout_mode = 2
 
 [node name="controls_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_CONTROLS/ScrollContainer/VBoxContainer/controls_container"]
 layout_mode = 2
-text = "Controls"
+text = "TK_CONTROLS"
 
 [node name="controls_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/TK_CONTROLS/ScrollContainer/VBoxContainer/controls_container"]
 layout_mode = 2
@@ -310,13 +310,13 @@ layout_mode = 2
 [node name="controller_templates" type="Label" parent="Background/MarginContainer/TabContainer/TK_CONTROLS/ScrollContainer/VBoxContainer/controls_container/controller_templates_container"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Steam: Controller Templates"
+text = "TK_STEAMCONTEMP"
 
 [node name="controller_templater_install_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_CONTROLS/ScrollContainer/VBoxContainer/controls_container/controller_templates_container"]
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 4
-text = "Install"
+text = "TK_INSTALL"
 
 [node name="button_layout_container" type="HBoxContainer" parent="Background/MarginContainer/TabContainer/TK_CONTROLS/ScrollContainer/VBoxContainer/controls_container"]
 layout_mode = 2
@@ -324,7 +324,7 @@ layout_mode = 2
 [node name="button_layout" type="Label" parent="Background/MarginContainer/TabContainer/TK_CONTROLS/ScrollContainer/VBoxContainer/controls_container/button_layout_container"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Button Layout"
+text = "TK_BTNLAYOUT"
 
 [node name="button_layout_option" type="OptionButton" parent="Background/MarginContainer/TabContainer/TK_CONTROLS/ScrollContainer/VBoxContainer/controls_container/button_layout_container"]
 layout_mode = 2
@@ -332,17 +332,16 @@ size_flags_horizontal = 10
 size_flags_vertical = 4
 item_count = 2
 selected = 0
-popup/item_0/text = "Classic"
+popup/item_0/text = "TK_BTNCLASSIC"
 popup/item_0/id = 0
-popup/item_1/text = "Nintendo"
+popup/item_1/text = "TK_BTNNINTENDO"
 popup/item_1/id = 1
 
 [node name="hotkey_sound" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_CONTROLS/ScrollContainer/VBoxContainer/controls_container"]
 layout_mode = 2
 disabled = true
 button_pressed = true
-text = "Hotkey Activation Sound (coming soon)
-"
+text = "TK_HOTKEYSOUND"
 
 [node name="TK_TOOLS" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
 visible = false
@@ -363,7 +362,7 @@ layout_mode = 2
 
 [node name="scan_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
 layout_mode = 2
-text = "Scan"
+text = "TK_SCAN"
 
 [node name="scan_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
 layout_mode = 2
@@ -371,60 +370,59 @@ layout_mode = 2
 [node name="ps3_scan" type="Button" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
 layout_mode = 2
 disabled = true
-text = "PlayStation 3 Games"
+text = "TK_PS3GAMES"
 
 [node name="scummvm_scan" type="Button" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
 layout_mode = 2
 disabled = true
-text = "ScummVM Games"
+text = "TK_SCUMMVMGAMES"
 
 [node name="multifile_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
 layout_mode = 2
-text = "Multi-File Structure"
+text = "TK_MULTIFILE"
 
 [node name="3ds_decrypt_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
 layout_mode = 2
 disabled = true
-text = "3DS Game Decrypter"
+text = "TK_3DSDECRYPT"
 
 [node name="bios_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
 layout_mode = 2
-text = "BIOS"
+text = "TK_BIOS"
 
 [node name="tools_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
 [node name="tools_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/tools_container"]
 layout_mode = 2
-text = "General Tools"
+text = "TK_GENTOOLS"
 
 [node name="tools_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/tools_container"]
 layout_mode = 2
 
 [node name="emu_open_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/tools_container"]
 layout_mode = 2
-text = "Open Emulator..."
+text = "TK_EMUOPEN"
 
 [node name="steamgrid_install_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/tools_container"]
 layout_mode = 2
 disabled = true
-text = "Install RetroDECK Steam Grids"
+text = "TK_GRIDINSTALL"
 
 [node name="ps3_fw_install_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/tools_container"]
 layout_mode = 2
-text = "Install PS3 Firmware"
+text = "TK_PS3FWINSTALL"
 
 [node name="fav_steam" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/tools_container"]
 layout_mode = 2
-text = "Show Favorites as Steam Games
-"
+text = "TK_FAVSTEAM"
 
 [node name="file_tools_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
 [node name="file_tools_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
 layout_mode = 2
-text = "File Maniuplation"
+text = "TK_FILETOOLS"
 
 [node name="file_tools_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
 layout_mode = 2
@@ -432,22 +430,22 @@ layout_mode = 2
 [node name="usb_tool_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
 layout_mode = 2
 disabled = true
-text = "USB Transfer Tool"
+text = "TK_USBTOOL"
 
 [node name="backup_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
 layout_mode = 2
 disabled = true
-text = "Backup User Data"
+text = "TK_BACKUPBUT"
 
 [node name="compress_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
 layout_mode = 2
 disabled = true
-text = "Compress Games"
+text = "TK_COMPRESSGAMES"
 
 [node name="move_files_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
 layout_mode = 2
 disabled = true
-text = "Move User Files"
+text = "TK_MOVEFILES"
 
 [node name="TK_NETWORK" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
 visible = false
@@ -468,7 +466,7 @@ layout_mode = 2
 
 [node name="cheevos" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container"]
 layout_mode = 2
-text = "Retro Achievements"
+text = "TK_CHEEVOS"
 
 [node name="cheevos_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container"]
 layout_mode = 2
@@ -482,7 +480,7 @@ columns = 2
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-text = "Username:"
+text = "TK_CHEEVOSUNAME"
 
 [node name="cheevos_username" type="LineEdit" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container/cheevos_login_container"]
 custom_minimum_size = Vector2(256, 0)
@@ -495,7 +493,7 @@ placeholder_text = "username"
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
-text = "Password:"
+text = "TK_CHEEVOSPWD"
 
 [node name="cheevos_pass" type="LineEdit" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container/cheevos_login_container"]
 layout_mode = 2
@@ -511,12 +509,12 @@ layout_mode = 2
 [node name="cheevos_advanced_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container/cheevos_advanced_container"]
 layout_mode = 2
 disabled = true
-text = "Advanced"
+text = "TK_ADVANCED"
 
 [node name="cheevos_hardcore" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container/cheevos_advanced_container"]
 layout_mode = 2
 disabled = true
-text = "Hardcore Mode (coming soon)"
+text = "TK_CHEEVOSHARDCORE"
 
 [node name="cheevos_loginout_container" type="HBoxContainer" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container/cheevos_advanced_container"]
 layout_mode = 2
@@ -526,18 +524,18 @@ theme_override_constants/separation = 10
 [node name="cheevos_trophies_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container/cheevos_advanced_container/cheevos_loginout_container"]
 layout_mode = 2
 disabled = true
-text = "Show Throphies"
+text = "TK_CHEEVOSTROPHTBUT"
 
 [node name="cheevos_loginout_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container/cheevos_advanced_container/cheevos_loginout_container"]
 layout_mode = 2
-text = "Login"
+text = "TK_LOGIN"
 
 [node name="netplay_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
 [node name="netplay" type="Label" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/netplay_container"]
 layout_mode = 2
-text = "Netplay"
+text = "TK_NETPLAY"
 
 [node name="netplay_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/netplay_container"]
 layout_mode = 2
@@ -551,7 +549,7 @@ columns = 2
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 5
-text = "Netplay ID:"
+text = "TK_NETPLAYID"
 
 [node name="netplay_id" type="LineEdit" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/netplay_container/netplay_id_container"]
 custom_minimum_size = Vector2(256, 0)
@@ -564,7 +562,7 @@ placeholder_text = "RetroDECK"
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 5
-text = "Address:"
+text = "TK_NETPLAYADDRESS"
 
 [node name="netplay_address" type="LineEdit" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/netplay_container/netplay_id_container"]
 layout_mode = 2
@@ -579,14 +577,14 @@ size_flags_vertical = 5
 
 [node name="netplay_connect_disconnect_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/netplay_container/netplay_id_container"]
 layout_mode = 2
-text = "Connect"
+text = "TK_NETPLAYCONNECT"
 
 [node name="data_mng_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
 [node name="data_mng_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/data_mng_container"]
 layout_mode = 2
-text = "Data Management"
+text = "TK_DATAMNG"
 
 [node name="data_mng_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/data_mng_container"]
 layout_mode = 2
@@ -595,7 +593,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 disabled = true
-text = "Saves Sync (coming soon)"
+text = "TK_SAVESSYNC"
 
 [node name="ftp_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/data_mng_container"]
 layout_mode = 2
@@ -617,41 +615,41 @@ layout_mode = 2
 
 [node name="troubleshoot_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/troubleshoot_container"]
 layout_mode = 2
-text = "Troubleshooting"
+text = "TK_TROUBLESHOOT"
 
 [node name="troubleshoot_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/troubleshoot_container"]
 layout_mode = 2
 
 [node name="check_conn_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/troubleshoot_container"]
 layout_mode = 2
-text = "Check Connection"
+text = "TK_CHECKCONN"
 
 [node name="logs_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/troubleshoot_container"]
 layout_mode = 2
 disabled = true
-text = "Show Logs"
+text = "TK_LOGSBUT"
 
 [node name="reset_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer"]
 layout_mode = 2
 
 [node name="reset_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/reset_container"]
 layout_mode = 2
-text = "Reset"
+text = "TK_RESET"
 
 [node name="reset_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/reset_container"]
 layout_mode = 2
 
 [node name="reset_single_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/reset_container"]
 layout_mode = 2
-text = "Single Emulator..."
+text = "TK_RESETSINGLE"
 
 [node name="reset_all_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/reset_container"]
 layout_mode = 2
-text = "All Emulators"
+text = "TK_RESETALL"
 
 [node name="reset_full_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/reset_container"]
 layout_mode = 2
-text = "Full RetroDECK Reset"
+text = "TK_RESETFULL"
 
 [node name="TK_CONFIGURATOR" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
 visible = false
@@ -673,7 +671,7 @@ layout_mode = 2
 
 [node name="system_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer/system_container"]
 layout_mode = 2
-text = "System"
+text = "TK_SYSTEM"
 
 [node name="system_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer/system_container"]
 layout_mode = 2
@@ -681,13 +679,13 @@ layout_mode = 2
 [node name="update_notification" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer/system_container"]
 layout_mode = 2
 button_pressed = true
-text = "Update Notification"
+text = "TK_UPDATENOTIF"
 
 [node name="easter_eggs" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer/system_container"]
 layout_mode = 2
 disabled = true
 button_pressed = true
-text = "Show Easter Eggs (coming soon)"
+text = "TK_EASTEREGGS"
 
 [node name="multi_user_container" type="HBoxContainer" parent="Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer/system_container"]
 layout_mode = 2
@@ -696,24 +694,24 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
-text = "Multi-User Mode"
+text = "TK_MULTIUSR"
 
 [node name="multi_user_option" type="OptionButton" parent="Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer/system_container/multi_user_container"]
 layout_mode = 2
 size_flags_horizontal = 10
 item_count = 3
 selected = 0
-popup/item_0/text = "Off"
+popup/item_0/text = "TK_OFF"
 popup/item_0/id = 0
-popup/item_1/text = "Steam Users"
+popup/item_1/text = "TK_STEAMUSR"
 popup/item_1/id = 1
-popup/item_2/text = "Custom Users"
+popup/item_2/text = "TK_CUSTOMUSR"
 popup/item_2/id = 2
 
 [node name="menu_music" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer/system_container"]
 layout_mode = 2
 button_pressed = true
-text = "Menu music"
+text = "TK_MUSIC"
 
 [node name="fancy_audio_player_here_(please_no)" type="Label" parent="Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer/system_container"]
 layout_mode = 2
@@ -732,7 +730,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/normal_font_size = 52
-text = "About RetroDECK"
+text = "TK_ABOUTHEADER"
 
 [node name="logo" type="TextureRect" parent="Background/MarginContainer/TabContainer/TK_ABOUT/about_container"]
 custom_minimum_size = Vector2(128, 128)
@@ -745,32 +743,32 @@ stretch_mode = 4
 
 [node name="website_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/about_container"]
 layout_mode = 2
-text = "Website"
+text = "TK_WEBSITE"
 
 [node name="changelog_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/about_container"]
 layout_mode = 2
-text = "Version History"
+text = "TK_CHANGELOG"
 
 [node name="wiki_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/about_container"]
 layout_mode = 2
 disabled = true
-text = "Wiki (coming soon)"
+text = "TK_WIKI"
 
 [node name="credits_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/about_container"]
 layout_mode = 2
-text = "Credits"
+text = "TK_CREDITS"
 
 [node name="donate_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/about_container"]
 layout_mode = 2
-text = "Donate"
+text = "TK_DONATE"
 
 [node name="contactus_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/about_container"]
 layout_mode = 2
-text = "Reach Us"
+text = "TK_CONTACTUS"
 
 [node name="licenses_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/about_container"]
 layout_mode = 2
-text = "Licenses"
+text = "TK_LICENSES"
 
 [node name="side_logo" type="Control" parent="Background"]
 layout_mode = 1
@@ -838,7 +836,7 @@ offset_right = -9.0
 offset_bottom = -10.0
 grow_horizontal = 0
 grow_vertical = 0
-item_count = 2
+item_count = 3
 selected = 0
 popup/item_0/text = ""
 popup/item_0/icon = ExtResource("5_exkn2")
@@ -846,6 +844,9 @@ popup/item_0/id = 0
 popup/item_1/text = ""
 popup/item_1/icon = ExtResource("6_fiylw")
 popup/item_1/id = 1
+popup/item_2/text = ""
+popup/item_2/icon = ExtResource("7_qgxid")
+popup/item_2/id = 2
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_xivj6")
