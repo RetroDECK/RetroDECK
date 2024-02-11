@@ -370,12 +370,12 @@ layout_mode = 2
 [node name="ps3_scan" type="Button" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
 layout_mode = 2
 disabled = true
-text = "TK_PS3GAMES"
+text = "TK_PS3SCAN"
 
 [node name="scummvm_scan" type="Button" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
 layout_mode = 2
 disabled = true
-text = "TK_SCUMMVMGAMES"
+text = "TK_SCUMMVMSCAN"
 
 [node name="multifile_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
 layout_mode = 2
