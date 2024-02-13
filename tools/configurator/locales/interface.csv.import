@@ -6,10 +6,10 @@ uid="uid://cwb782o5jh5lx"
 
 [deps]
 
-files=["res://locales/interface.en.translation", "res://locales/interface.it.translation", "res://locales/interface.de.translation"]
+files=["res://locales/interface.en.translation", "res://locales/interface.it.translation", "res://locales/interface.de.translation", "res://locales/interface.se.translation"]
 
 source_file="res://locales/interface.csv"
-dest_files=["res://locales/interface.en.translation", "res://locales/interface.it.translation", "res://locales/interface.de.translation"]
+dest_files=["res://locales/interface.en.translation", "res://locales/interface.it.translation", "res://locales/interface.de.translation", "res://locales/interface.se.translation"]
 
 [params]
 
