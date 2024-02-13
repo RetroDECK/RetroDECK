@@ -81,7 +81,7 @@ previous_tab={
 
 [internationalization]
 
-locale/translations=PackedStringArray("res://locales/interface.en.translation", "res://locales/interface.it.translation", "res://locales/interface.de.translation")
+locale/translations=PackedStringArray("res://locales/interface.en.translation", "res://locales/interface.it.translation", "res://locales/interface.de.translation", "res://locales/interface.se.translation")
 
 [rendering]
 
