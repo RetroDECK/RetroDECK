@@ -408,7 +408,7 @@ modules:
   # When updating this module remember to check those:
   # https://gitlab.com/es-de/emulationstation-de/-/blob/[VERSION]/resources/systems/unix/es_find_rules.xml
   # But we don't include them 1:1 as RetroDECK got some specific configs in some cases
-  - name: emulationstation-de
+  - name: ES-DE
     buildsystem: cmake-ninja
     config-opts:
       - -DRETRODECK=on
