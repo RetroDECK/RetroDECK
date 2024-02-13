@@ -69,7 +69,9 @@
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.8.0b</url>
          <description>
             <p>CRITICAL:</p>
+            <ul>
                <li>DEEP TEST: prepare_emulator function is now called prepare_component, eidted even in the cli and split it into the Configurator, so we need to test if the reset emulator works as supposed, if the cli and the Configurator is consistent.</li>
+            </ul>
             <p>Changes:</p>
             <ul>
                <li>Added new system: SOLARUS</li>
