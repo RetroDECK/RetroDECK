@@ -435,7 +435,7 @@ finit() {
 
   esac
 
-  prepare_emulator "reset" "retrodeck" # Parse the [paths] section of retrodeck.cfg and set the value of / create all needed folders
+  prepare_component "reset" "retrodeck" # Parse the [paths] section of retrodeck.cfg and set the value of / create all needed folders
 
   conf_write # Write the new values to retrodeck.cfg
 
@@ -451,7 +451,7 @@ finit() {
   --text="RetroDECK will now install the needed files, which can take up to one minute.\nRetroDECK will start once the process is completed.\n\nPress OK to continue."
 
   (
-  prepare_emulator "reset" "all"
+  prepare_component "reset" "all"
   build_retrodeck_current_presets
   deploy_helper_files
 
