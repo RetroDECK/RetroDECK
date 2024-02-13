@@ -21,8 +21,8 @@ on:
 
   # Italy (CET): 11:00 PM
   # Japan (JST): 7:00 AM
-  schedule:
-    - cron: '0 22 * * *'
+  #schedule:
+  #  - cron: '0 22 * * *'
 
   workflow_dispatch:
 
