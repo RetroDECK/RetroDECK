@@ -435,7 +435,7 @@ finit() {
 
   esac
 
-  prepare_emulator "reset" "retrodeck" # Parse the [paths] section of retrodeck.cfg and set the value of / create all needed folders
+  prepare_component "reset" "retrodeck" # Parse the [paths] section of retrodeck.cfg and set the value of / create all needed folders
 
   conf_write # Write the new values to retrodeck.cfg
 
@@ -451,7 +451,7 @@ finit() {
   --text="RetroDECK will now install the needed files, which can take up to one minute.\nRetroDECK will start once the process is completed.\n\nPress OK to continue."
 
   (
-  prepare_emulator "reset" "all"
+  prepare_component "reset" "all"
   build_retrodeck_current_presets
   deploy_helper_files
 
@@ -498,7 +498,8 @@ install_retrodeck_controller_profile() {
   # USAGE: install_retrodeck_controller_profile
   if [[ -d "$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/" && -d "$HOME/.steam/steam/controller_base/templates/" ]]; then
     rsync -rlD --mkpath "/app/retrodeck/binding_icons/" "$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/"
-    cp -f "$emuconfigs/defaults/retrodeck/controller_configs/*.vdf" "$HOME/.steam/steam/controller_base/templates"
+    rsync -rlD --mkpath "$emuconfigs/defaults/retrodeck/controller_configs/" "$HOME/.steam/steam/controller_base/templates/"
+    # TODO: delete older files Issue#672
   else
     configurator_generic_dialog "RetroDECK Controller Profile Install" "The target directories for the controller profile do not exist.\n\nThis may happen if you do not have Steam installed or the location is does not have permission to be read."
   fi

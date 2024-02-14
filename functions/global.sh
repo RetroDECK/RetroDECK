@@ -10,7 +10,7 @@ source /app/libexec/functions.sh
 source /app/libexec/multi_user.sh
 source /app/libexec/patching.sh
 source /app/libexec/post_update.sh
-source /app/libexec/prepare_emulator.sh
+source /app/libexec/prepare_component.sh
 source /app/libexec/presets.sh
 
 # Static variables
@@ -177,8 +177,8 @@ else
     new_home_path=$(directory_browse "RetroDECK folder location")
     set_setting_value $rd_conf "rdhome" "$new_home_path" retrodeck "paths"
     conf_read
-    prepare_emulator "retrodeck" "postmove"
-    prepare_emulator "all" "postmove"
+    prepare_component "retrodeck" "postmove"
+    prepare_component "all" "postmove"
     conf_write
   fi
 
