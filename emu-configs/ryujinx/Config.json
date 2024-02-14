@@ -1,5 +1,5 @@
 {
-  "version": 48,
+  "version": 49,
   "enable_file_log": true,
   "backend_threading": "Auto",
   "res_scale": 1,
@@ -136,7 +136,7 @@
         "enable_rumble": true
       },
       "left_joycon": {
-        "button_minus": "Minus",
+        "button_minus": "Back",
         "button_l": "LeftShoulder",
         "button_zl": "LeftTrigger",
         "button_sl": "Unbound",
@@ -147,7 +147,7 @@
         "dpad_right": "DpadRight"
       },
       "right_joycon": {
-        "button_plus": "Plus",
+        "button_plus": "Start",
         "button_r": "RightShoulder",
         "button_zr": "RightTrigger",
         "button_sl": "Unbound",
@@ -166,6 +166,7 @@
   ],
   "graphics_backend": "Vulkan",
   "preferred_gpu": "0x1002_0x163F",
+  "multiplayer_mode": 0,
   "multiplayer_lan_interface_id": "0",
   "use_hypervisor": true
 }
