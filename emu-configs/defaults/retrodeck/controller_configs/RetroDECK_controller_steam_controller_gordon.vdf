@@ -1171,7 +1171,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press FORWARD_SLASH, RetroDECK, RD-icon_circle_2_180x180.png, "
+							"binding"		"mouse_button RIGHT, RetroDECK, RD-icon_circle_2_180x180.png, "
 						}
 						"settings"
 						{
@@ -1231,7 +1231,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press SPACE, Space, RD-space.png, "
+							"binding"		"key_press TAB, Tab, RD-Tab.png, "
 						}
 						"settings"
 						{
@@ -1251,7 +1251,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press TAB, Tab, RD-Tab.png, "
+							"binding"		"key_press LEFT_CONTROL, Control, RD-ctrl.png, "
 						}
 						"settings"
 						{
@@ -1271,7 +1271,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press LEFT_SHIFT, Shift, RD-shift.png, "
+							"binding"		"key_press SPACE, Space, RD-space.png, "
 						}
 						"settings"
 						{
@@ -1291,7 +1291,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press LEFT_CONTROL, Control, RD-ctrl.png, "
+							"binding"		"key_press FORWARD_SLASH, /, RD-frontslash.png, "
 						}
 						"settings"
 						{
@@ -1391,7 +1391,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press F8, F8, RD-F8.png, "
+							"binding"		"key_press F7, F7, RD-F7.png, "
 						}
 						"settings"
 						{
@@ -1411,7 +1411,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press F10, F10, RD-F10.png, "
+							"binding"		"key_press F8, F8, RD-F8.png, "
 						}
 						"settings"
 						{
@@ -1431,7 +1431,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press F12, F12, RD-F12.png, "
+							"binding"		"key_press F10, F10, RD-F10.png, "
 						}
 						"settings"
 						{
@@ -1493,8 +1493,8 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press LEFT_CONTROL, Swap - Dual Screens, RD-system-switch-user.png, "
-							"binding"		"key_press TAB, Swap - Dual Screens, RD-system-switch-user.png, "
+							"binding"		"key_press LEFT_CONTROL, Swap Dual - Screens, RD-system-switch-user.png, "
+							"binding"		"key_press TAB, Swap Dual - Screens, RD-system-switch-user.png, "
 						}
 						"settings"
 						{
@@ -1514,8 +1514,8 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press LEFT_CONTROL, Change - Dual Screen Layout, RD-preferences-system-windows-actions.png, "
-							"binding"		"key_press L, Change - Dual Screen Layout, RD-preferences-system-windows-actions.png, "
+							"binding"		"key_press LEFT_CONTROL, Change Dual Screen - Layout, RD-preferences-system-windows-actions.png, "
+							"binding"		"key_press L, Change Dual Screen - Layout, RD-preferences-system-windows-actions.png, "
 						}
 						"settings"
 						{
@@ -1558,26 +1558,6 @@
 						{
 							"binding"		"key_press LEFT_CONTROL, Swap Disc, RD-application-x-iso.png, "
 							"binding"		"key_press D, Swap Disc, RD-application-x-iso.png, "
-						}
-						"settings"
-						{
-							"haptic_intensity"		"2"
-						}
-					}
-				}
-				"disabled_activators"
-				{
-				}
-			}
-			"click"
-			{
-				"activators"
-				{
-					"Full_Press"
-					{
-						"bindings"
-						{
-							"binding"		"mouse_button RIGHT, , "
 						}
 						"settings"
 						{
@@ -2033,5 +2013,4 @@
 		"left_trackpad_mode"		"0"
 		"right_trackpad_mode"		"0"
 	}
-}
 }
