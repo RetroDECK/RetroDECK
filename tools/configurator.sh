@@ -1009,6 +1009,7 @@ configurator_reset_dialog() {
     "PPSSPP" "Reset the PSP emulator PPSSPP to default settings" \
     "Primehack" "Reset the Metroid Prime emulator Primehack to default settings" \
     "RPCS3" "Reset the PS3 emulator RPCS3 to default settings" \
+    "Ryujinx" "Reset the Switch emulator Ryujinx to default settings" \
     "Vita3k" "Reset the PS Vita emulator Vita3k to default settings" \
     "XEMU" "Reset the XBOX emulator XEMU to default settings" \
     "Yuzu" "Reset the Switch emulator Yuzu to default settings" )
