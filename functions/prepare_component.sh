@@ -549,14 +549,14 @@ prepare_component() {
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/Ryujinx"
         mkdir -p "$multi_user_data_folder/$SteamAppUser/config/Ryujinx/system"
         cp -fv $emuconfigs/ryujinx/* "$multi_user_data_folder/$SteamAppUser/config/Ryujinx"
-        sed -i 's#/home/deck/retrodeck#'$rdhome'#g' "$multi_user_data_folder/$SteamAppUser/config/Ryujinx/Config.json"
+        sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "$multi_user_data_folder/$SteamAppUser/config/Ryujinx/Config.json"
         dir_prep "$multi_user_data_folder/$SteamAppUser/config/Ryujinx" "/var/config/Ryujinx"
       else
         # removing config directory to wipe legacy files
         rm -rf /var/config/Ryujinx
         mkdir -p /var/config/Ryujinx/system
         cp -fv $emuconfigs/ryujinx/* /var/config/Ryujinx
-        sed -i 's#/home/deck/retrodeck#'$rdhome'#g' "$ryujinxconf"
+        sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "$ryujinxconf"
       fi
     fi
     if [[ "$action" == "reset" ]] || [[ "$action" == "postmove" ]]; then # Run commands that apply to both resets and moves
