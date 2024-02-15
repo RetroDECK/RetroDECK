@@ -559,9 +559,9 @@ prepare_component() {
         sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "$ryujinxconf"
       fi
     fi
-    if [[ "$action" == "reset" ]] || [[ "$action" == "postmove" ]]; then # Run commands that apply to both resets and moves
-      dir_prep "$bios_folder/switch/keys" "/var/config/Ryujinx/system"
-    fi
+    # if [[ "$action" == "reset" ]] || [[ "$action" == "postmove" ]]; then # Run commands that apply to both resets and moves
+    #   dir_prep "$bios_folder/switch/keys" "/var/config/Ryujinx/system"
+    # fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
       sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "$ryujinxconf" # This is an unfortunate one-off because set_setting_value does not currently support JSON
     fi
