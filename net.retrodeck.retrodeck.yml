@@ -1319,7 +1319,7 @@ modules:
       - |
         tar -zxvf *.tar.gz
         mv -v publish ${FLATPAK_DEST}/ryujinx
-        ln -sv ${FLATPAK_DEST}/ryujinx/Ryujinx ${FLATPAK_DEST}/bin/Ryujinx
+        ln -sv ${FLATPAK_DEST}/ryujinx/Ryujinx.sh ${FLATPAK_DEST}/bin/Ryujinx
     sources:
       - type: file
         url: https://github.com/Ryujinx/release-channel-master/releases/download/1.1.1192/ryujinx-1.1.1192-linux_x64.tar.gz
