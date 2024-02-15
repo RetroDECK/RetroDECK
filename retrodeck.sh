@@ -20,7 +20,6 @@ Arguments:
     --compress-one <file>           Compresses target file to a compatible format
     --compress-all <format>         Compresses all supported games into compatible format. Available formats are \"chd\", \"zip\", \"rvz\" and \"all\".
     --reset-component <component>   Reset one or more component or emulator configs to the default values
-    --reset-es-de                   Reset EmulationStation DE to default settings
     --reset-retrodeck               Starts the initial RetroDECK installer (backup your data first!)
 
 For flatpak run specific options please run: flatpak run -h
@@ -59,7 +58,7 @@ https://retrodeck.net
       echo "You are about to reset one or more RetroDECK components or emulators."
       echo "Available options are: es-de, retroarch, cemu, citra, dolphin, duckstation, melonds, pcsx3, pico8, ppsspp, primehack, rpcs3, ryujinx, xemu, yuzu, vita3k, mame, gzdoom, boilr, all"
       read -p "Please enter the component you would like to reset: " component
-      if [[ "$component" =~ ^(es-de | retroarch | cemu | citra | dolphin | duckstation | melonds | pcsx3 | pico8 | ppsspp | primehack | rpcs3 | ryujinx | xemu | yuzu | vita3k | mame | gzdoom | boilr | all)$ ]]; then
+      if [[ "$emulator" =~ ^(retroarch|cemu|citra|dolphin|duckstation|melonds|pcsx2|ppsspp|primehack|rpcs3|ryujinx|xemu|yuzu|all-emulators)$ ]]; then
         read -p "You are about to reset $component to default settings. Enter 'y' to continue, 'n' to stop: " response
         if [[ $response == [yY] ]]; then
           prepare_component "reset" "$component" "cli"
@@ -71,18 +70,6 @@ https://retrodeck.net
         fi
       else
         echo "$component is not a valid selection, exiting..."
-        exit
-      fi
-      ;;
-    --reset-es-de*)
-      echo "You are about to reset ES-DE to default settings. Your scraped media, downloaded themes and gamelists will remain untouched."
-      read -p "Enter 'y' to continue, 'n' to stop: " response
-      if [[ $response == [yY] ]]; then
-        prepare_component "reset" "ES-DE" "cli"
-        read -p "The process has been completed, press Enter key to start RetroDECK."
-        shift # Continue launch after previous command is finished
-      else
-        read -p "The process has been cancelled, press Enter key to exit."
         exit
       fi
       ;;
