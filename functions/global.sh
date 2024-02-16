@@ -189,3 +189,5 @@ else
   backups_folder="$rdhome/backups"                                                                                      # A standard location for backup file storage
   multi_user_data_folder="$rdhome/multi-user-data"                                                                      # The default location of multi-user environment profiles
 fi
+
+logs_folder="$rdhome/retrodeck/logs" # The path of the logs folder, here we collect all the logs
