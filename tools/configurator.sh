@@ -73,6 +73,7 @@ source /app/libexec/global.sh
 #           - Reset Dolphin
 #           - Reset Duckstation
 #           - Reset GZDoom
+#           - Reset MAME
 #           - Reset MelonDS
 #           - Reset PCSX2
 #           - Reset PPSSPP
@@ -1032,7 +1033,7 @@ configurator_reset_dialog() {
       fi
     ;;
 
-    "Cemu" | "Citra" | "Dolphin" | "Duckstation" | "MelonDS" | "PCSX2" | "PPSSPP" | "Primehack" | "RPCS3" | "Ryujinx" | "Yuzu" )
+    "Cemu" | "Citra" | "Dolphin" | "Duckstation" | "MelonDS" | "MAME" | "PCSX2" | "PPSSPP" | "Primehack" | "RPCS3" | "Ryujinx" | "Yuzu" )
       if [[ $(configurator_reset_confirmation_dialog "$component_to_reset" "Are you sure you want to reset the $component_to_reset emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
         prepare_component "reset" "$component_to_reset" "configurator"
         configurator_process_complete_dialog "resetting $component_to_reset"
