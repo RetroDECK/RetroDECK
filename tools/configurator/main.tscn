@@ -134,7 +134,7 @@ layout_mode = 2
 
 [node name="game_control_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/game_control_container"]
 layout_mode = 2
-text = "TK_GAME_CONTROL"
+text = "TK_GAME_SETTINGS"
 
 [node name="game_control_label2" type="HSeparator" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/game_control_container"]
 layout_mode = 2
