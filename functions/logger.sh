@@ -115,3 +115,13 @@ tmplog_merger() {
         rm "/tmp/retrodeck.log"
     fi
 }
+
+ESDE_source_logs="/var/config/emulationstation/.emulationstation/es_log.txt"
+# Check if the source file exists
+if [ -e "$ESDE_source_logs" ]; then
+    # Create the symlink in the logs folder
+    ln -sf "$source_file" "$logs_folder/ES-DE.log"
+    log i "ES-DE log file linked to \"$logs_folder/ES-DE.log\""
+else
+    echo "ES-DE log file not found, not linked"
+fi
