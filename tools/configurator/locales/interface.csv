@@ -1,6 +1,6 @@
-keys,en,it,de,se
+keys,en,it,de,sv
 TK_SYSTEM,"System","Sistema","System","System"
-TK_GAME_CONTROL,"Game Control","Controlli di Gioco","Spieleinstellungen","Spelinställningar"
+TK_GAME_SETTINGS,"Game Settings","Impostazioni di Gioco","Spieleinstellungen","Spelinställningar"
 TK_QRESUME,"Quick Resume","Quick Resume","Schnellfortsetzung","Snabb Återupptagning"
 TK_ADVANCED,"Advanced","Avanzate","Erweitert","Avancerat"
 TK_REWIND,"Rewind","Riavvolgimento","Zurückspulen","Tillbakaspolning"
@@ -54,7 +54,7 @@ TK_NETPLAYID,"Netplay ID:","ID Netplay:","Netplay ID:","Netplay ID:"
 TK_NETPLAYADDRESS,"Address:","Indirizzo:","Adresse:","Address:"
 TK_NETPLAYCONNECT,"Connect","Connetti","Verbinden","Anslut"
 TK_DATAMNG,"Data Management","Gestione Dati","Datenverwaltung","Datahantering"
-TK_SAVESSYNC,"Saves Sync","Sincronizzazione Salvataggi","Spielstände Synchronisieren","Sparfiler Sync"
+TK_SAVESSYNC,"Synchronize Saves","Sincronizzazione Salvataggi","Spielstände Synchronisieren","Synkronisera Sparfiler"
 TK_FTPBUTTON,"Start sFTP Server","Avvia Server sFTP","Starte sFTP Server","Starta sFTP Server"
 TK_CHECKCONN,"Check Connection","Controllo Connessione","Verbindung Überprüfen","Kontrollera Anslutning"
 TK_LOGSBUT,"Show Logs","Mostra Log","Logs Anzeigen","Visa Loggar"

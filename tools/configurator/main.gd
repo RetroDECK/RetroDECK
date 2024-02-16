@@ -46,7 +46,7 @@ func _on_locale_selected(index):
 		2:
 			TranslationServer.set_locale("de")
 		3:
-			TranslationServer.set_locale("se")
+			TranslationServer.set_locale("sv")
 	combine_tkeys()
 	
 func combine_tkeys(): #More as a test
