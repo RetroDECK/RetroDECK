@@ -1057,12 +1057,12 @@ configurator_reset_dialog() {
     --text="Which component do you want to reset to default?" \
     --column="Component" --column="Action" \
     "BoilR" "Reset BoilR that manages the sync and scraping toward Steam library" \ 
-    "ES-DE" "Reset the ES-DE frontend" \ )
-    # TODO: "GyroDSU" "Reset the gyroscope manager GyroDSU"
+    "ES-DE" "Reset the ES-DE frontend" \
+    "GyroDSU" "Reset the gyroscope manager GyroDSU" )
 
     case $component_to_reset in
 
-    "BoilR" | "ES-DE" ) # TODO: GyroDSU
+    "BoilR" | "ES-DE" |"GyroDSU" )
       if [[ $(configurator_reset_confirmation_dialog "$component_to_reset" "Are you sure you want to reset $component_to_reset to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
         prepare_component "reset" "$component_to_reset" "configurator"
         configurator_process_complete_dialog "resetting $component_to_reset"
