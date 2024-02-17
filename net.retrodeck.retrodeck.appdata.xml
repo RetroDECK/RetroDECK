@@ -68,6 +68,10 @@
       <release version="0.8.0b" date="2023-12-14">
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.8.0b</url>
          <description>
+            <p>CRITICAL:</p>
+            <ul>
+               <li>DEEP TEST: prepare_emulator function is now called prepare_component, eidted even in the cli and split it into the Configurator, so we need to test if the reset emulator works as supposed, if the cli and the Configurator is consistent.</li>
+            </ul>
             <p>Changes:</p>
             <ul>
                <li>Added new system: SOLARUS</li>
@@ -85,6 +89,7 @@
                <li>RPCS3 is now running via shortcut (.desktop file) by default - WARN THE USERS TO MIGRATE</li>
                <li>Added controller config for PS4 and PS5</li>
                <li>Controller config overhaul</li>
+               <li>Removed talk names in the manifest as they're not needed anymore as enabled by default</li>
             </ul>
             <p>Fixes:</p>
             <ul>
@@ -104,6 +109,24 @@
                <li>SOLARUS: hotkeys</li>
                <li>MAME (Standalone): hotkeys</li>
                <li>A proper reset script for the new emulators, now it's just a draft (only Vita3K is done)</li>
+            </ul>
+         </description>
+      </release>
+      <release version="0.7.6b" date="2024-02-08">
+         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.7.6b</url>
+         <description>
+            <p>Changes:</p>
+            <ul>
+               <li>Added new splash screens for Lunar New Year, St. Valentines and St. Patricks, be sure to check them out!</li>
+               <li>Updated PPSSPP</li>
+               <li>PPSSPP: implemented combo hotkeys, more details in the wiki</li>
+               <li>Reworked building pipelines andautomations</li>
+               <li>Removed talk names in the manifest as they're not needed anymore as enabled by default</li>
+               <li>Fixed a sync issue with the RetroDECK controller profiles</li>
+            </ul>
+            <p>Known issues:</p>
+            <ul>
+               <li>Please check the know issues in the Wiki under General Infomration.</li>
             </ul>
          </description>
       </release>

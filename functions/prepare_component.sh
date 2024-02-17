@@ -1,19 +1,19 @@
 #!/bin/bash
 
-prepare_emulator() {
-  # This function will perform one of several actions on one or more emulators
+prepare_component() {
+  # This function will perform one of several actions on one or more components
   # The actions currently include "reset" and "postmove"
-  # The "reset" action will initialize the emulator
-  # The "postmove" action will update the emulator settings after one or more RetroDECK folders were moved
-  # An emulator can be called by name, by parent folder name in the /var/config root or use the option "all" to perform the action on all emulators equally
+  # The "reset" action will initialize the component
+  # The "postmove" action will update the component settings after one or more RetroDECK folders were moved
+  # An component can be called by name, by parent folder name in the /var/config root or use the option "all" to perform the action on all components equally
   # The function will also behave differently depending on if the initial request was from the Configurator, the CLI interface or a normal function call if needed
-  # USAGE: prepare_emulator "$action" "$emulator" "$call_source(optional)"
+  # USAGE: prepare_component "$action" "$component" "$call_source(optional)"
 
   action="$1"
-  emulator="$2"
+  component="$2"
   call_source="$3"
 
-  if [[ "$emulator" == "retrodeck" ]]; then
+  if [[ "$component" == "retrodeck" ]]; then
     if [[ "$action" == "reset" ]]; then # Update the paths of all folders in retrodeck.cfg and create them
       while read -r config_line; do
         local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
@@ -37,7 +37,7 @@ prepare_emulator() {
     fi
   fi
 
-  if [[ "$emulator" =~ ^(emulationstation|all)$ ]]; then # For use after ESDE-related folders are moved or a reset
+  if [[ "$component" =~ ^(es-de|ES-DE|all)$ ]]; then # For use after ESDE-related folders are moved or a reset
     if [[ "$action" == "reset" ]]; then
       rm -rf /var/config/emulationstation/
       mkdir -p /var/config/emulationstation/.emulationstation/
@@ -57,7 +57,7 @@ prepare_emulator() {
     fi
   fi
 
-  if [[ "$emulator" =~ ^(retroarch|RetroArch|all)$ ]]; then
+  if [[ "$component" =~ ^(retroarch|RetroArch|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/retroarch"
@@ -154,7 +154,7 @@ prepare_emulator() {
     fi
   fi
 
-  if [[ "$emulator" =~ ^(cemu|Cemu|all)$ ]]; then
+  if [[ "$component" =~ ^(cemu|Cemu|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       echo "----------------------"
       echo "Initializing CEMU"
@@ -183,7 +183,7 @@ prepare_emulator() {
     fi
   fi
 
-  if [[ "$emulator" =~ ^(citra|citra-emu|Citra|all)$ ]]; then
+  if [[ "$component" =~ ^(citra|citra-emu|Citra|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       echo "------------------------"
       echo "Initializing CITRA"
@@ -230,7 +230,7 @@ prepare_emulator() {
     fi
   fi
 
-  if [[ "$emulator" =~ ^(dolphin|dolphin-emu|Dolphin|all)$ ]]; then
+  if [[ "$component" =~ ^(dolphin|dolphin-emu|Dolphin|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       echo "----------------------"
       echo "Initializing DOLPHIN"
@@ -285,7 +285,7 @@ prepare_emulator() {
     fi
   fi
 
-  if [[ "$emulator" =~ ^(duckstation|Duckstation|all)$ ]]; then
+  if [[ "$component" =~ ^(duckstation|Duckstation|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       echo "------------------------"
       echo "Initializing DUCKSTATION"
@@ -332,7 +332,7 @@ prepare_emulator() {
     fi
   fi
 
-  if [[ "$emulator" =~ ^(melonds|melonDS|MelonDS|all)$ ]]; then
+  if [[ "$component" =~ ^(melonds|melonDS|MelonDS|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       echo "----------------------"
       echo "Initializing MELONDS"
@@ -372,7 +372,7 @@ prepare_emulator() {
     fi
   fi
 
-  if [[ "$emulator" =~ ^(pcsx2|PCSX2|all)$ ]]; then
+  if [[ "$component" =~ ^(pcsx2|PCSX2|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       echo "----------------------"
       echo "Initializing PCSX2"
@@ -418,7 +418,7 @@ prepare_emulator() {
     fi
   fi
 
-  if [[ "$emulator" =~ ^(pico8|pico-8|all)$ ]]; then
+  if [[ "$component" =~ ^(pico8|pico-8|all)$ ]]; then
     if [[ ("$action" == "reset") || ("$action" == "postmove") ]]; then
       dir_prep "$bios_folder/pico-8" "$HOME/.lexaloffle/pico-8" # Store binary and config files together. The .lexaloffle directory is a hard-coded location for the PICO-8 config file, cannot be changed
       dir_prep "$roms_folder/pico8" "$bios_folder/pico-8/carts" # Symlink default game location to RD roms for cleanliness (this location is overridden anyway by the --root_path launch argument anyway)
@@ -428,7 +428,7 @@ prepare_emulator() {
     fi
   fi
 
-  if [[ "$emulator" =~ ^(ppsspp|PPSSPP|all)$ ]]; then
+  if [[ "$component" =~ ^(ppsspp|PPSSPP|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       echo "------------------------"
       echo "Initializing PPSSPPSDL"
@@ -458,7 +458,7 @@ prepare_emulator() {
     fi
   fi
 
-  if [[ "$emulator" =~ ^(primehack|Primehack|all)$ ]]; then
+  if [[ "$component" =~ ^(primehack|Primehack|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       echo "----------------------"
       echo "Initializing Primehack"
@@ -502,7 +502,7 @@ prepare_emulator() {
     fi
   fi
 
-  if [[ "$emulator" =~ ^(rpcs3|RPCS3|all)$ ]]; then
+  if [[ "$component" =~ ^(rpcs3|RPCS3|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       echo "------------------------"
       echo "Initializing RPCS3"
@@ -540,7 +540,7 @@ prepare_emulator() {
     fi
   fi
 
-  if [[ "$emulator" =~ ^(ryujunx|Ryujinx|all)$ ]]; then
+  if [[ "$component" =~ ^(ryujunx|Ryujinx|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       echo "------------------------"
       echo "Initializing RYUJINX"
@@ -567,7 +567,7 @@ prepare_emulator() {
     fi
   fi
 
-  if [[ "$emulator" =~ ^(xemu|XEMU|all)$ ]]; then
+  if [[ "$component" =~ ^(xemu|XEMU|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       echo "------------------------"
       echo "Initializing XEMU"
@@ -583,12 +583,12 @@ prepare_emulator() {
         set_setting_value "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml" "flashrom_path" "'$bios_folder/Complex.bin'" "xemu" "sys.files"
         set_setting_value "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml" "eeprom_path" "'$saves_folder/xbox/xemu/xbox-eeprom.bin'" "xemu" "sys.files"
         set_setting_value "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml" "hdd_path" "'$bios_folder/xbox_hdd.qcow2'" "xemu" "sys.files"
-        dir_prep "$multi_user_data_folder/$SteamAppUser/config/xemu" "/var/config/xemu" # Creating config folder in /var/config for consistentcy and linking back to original location where emulator will look
+        dir_prep "$multi_user_data_folder/$SteamAppUser/config/xemu" "/var/config/xemu" # Creating config folder in /var/config for consistentcy and linking back to original location where component will look
         dir_prep "$multi_user_data_folder/$SteamAppUser/config/xemu" "/var/data/xemu/xemu"
       else # Single-user actions
         rm -rf /var/config/xemu
         rm -rf /var/data/xemu
-        dir_prep "/var/config/xemu" "/var/data/xemu/xemu" # Creating config folder in /var/config for consistentcy and linking back to original location where emulator will look
+        dir_prep "/var/config/xemu" "/var/data/xemu/xemu" # Creating config folder in /var/config for consistentcy and linking back to original location where component will look
         cp -fv $emuconfigs/xemu/xemu.toml "$xemuconf"
         set_setting_value "$xemuconf" "screenshot_dir" "'$screenshots_folder'" "xemu" "General"
         set_setting_value "$xemuconf" "bootrom_path" "'$bios_folder/mcpx_1.0.bin'" "xemu" "sys.files"
@@ -612,7 +612,7 @@ prepare_emulator() {
     fi
   fi
 
-  if [[ "$emulator" =~ ^(yuzu|Yuzu|all)$ ]]; then
+  if [[ "$component" =~ ^(yuzu|Yuzu|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       echo "----------------------"
       echo "Initializing YUZU"
@@ -670,7 +670,7 @@ prepare_emulator() {
     fi
   fi
 
-  if [[ "$emulator" =~ ^(vita3k|Vita3K|all)$ ]]; then
+  if [[ "$component" =~ ^(vita3k|Vita3K|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       echo "----------------------"
       echo "Initializing Vita3K"
@@ -678,13 +678,13 @@ prepare_emulator() {
       if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         echo "Figure out what Vita3k needs for multi-user"
       else # Single-user actions
-        # NOTE: the emulator is writing in "." so it must be placed in the rw filesystem. A symlink of the binary is already placed in /app/bin/Vita3K
+        # NOTE: the component is writing in "." so it must be placed in the rw filesystem. A symlink of the binary is already placed in /app/bin/Vita3K
         rm -rf "/var/data/Vita3K"
         mkdir -p "/var/data/Vita3K"
         unzip "/app/retrodeck/vita3k.zip" -d "/var/data/Vita3K"
         chmod +x "/var/data/Vita3K/Vita3K"
         rm -f "/var/data/Vita3K/update-vita3k.sh"
-        cp -fvr "$emuconfigs/vita3k/config.yml" "/var/data/Vita3K" # Emulator config
+        cp -fvr "$emuconfigs/vita3k/config.yml" "/var/data/Vita3K" # component config
         cp -fvr "$emuconfigs/vita3k/ux0" "$bios_folder/Vita3K/Vita3K" # User config
         set_setting_value "$vita3kconf" "pref-path" "$rdhome/bios/Vita3K/Vita3K/" "vita3k"
       fi
@@ -704,9 +704,9 @@ prepare_emulator() {
     fi
   fi
 
-  if [[ "$emulator" =~ ^(mame|MAME|all)$ ]]; then
+  if [[ "$component" =~ ^(mame|MAME|all)$ ]]; then
     # TODO: do a proper script
-    # This is just a placeholder script to test the emulator's flow
+    # This is just a placeholder script to test the component's flow
     echo "----------------------"
     echo "Initializing MAME"
     echo "----------------------"
@@ -721,9 +721,9 @@ prepare_emulator() {
 
   fi
 
-  if [[ "$emulator" =~ ^(gzdoom|GZDOOM|all)$ ]]; then
+  if [[ "$component" =~ ^(gzdoom|GZDOOM|all)$ ]]; then
     # TODO: do a proper script
-    # This is just a placeholder script to test the emulator's flow
+    # This is just a placeholder script to test the component's flow
     echo "----------------------"
     echo "Initializing GZDOOM"
     echo "----------------------"
@@ -737,7 +737,7 @@ prepare_emulator() {
     sed -i 's#RETRODECKSAVESDIR#'$saves_folder'#g' "/var/config/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON
   fi
 
-  if [[ "$emulator" =~ ^(boilr|BOILR|all)$ ]]; then
+  if [[ "$component" =~ ^(boilr|BOILR|all)$ ]]; then
     echo "----------------------"
     echo "Initializing BOILR"
     echo "----------------------"
@@ -747,8 +747,8 @@ prepare_emulator() {
     
   fi
 
-  if [[ "$emulator" =~ ^(gyrodsu|GyroDSU|all)$ ]]; then
-    echo "----------------------"
+  if [[ "$component" =~ ^(gyrodsu|GyroDSU|all)$ ]]; then
+    echo "----------------------" # TODO logger
     echo "Initializing GYRODSU"
     echo "----------------------"
     rm -rf /var/data/sdgyrodsu
@@ -763,8 +763,8 @@ prepare_emulator() {
     chmod +x "/var/data/sdgyrodsu/*"
   fi
 
-  # Update presets for all emulators after any reset or move
-  if [[ ! "$emulator" == "retrodeck" ]]; then
+  # Update presets for all components after any reset or move
+  if [[ ! "$component" == "retrodeck" ]]; then
     build_retrodeck_current_presets
   fi
 }

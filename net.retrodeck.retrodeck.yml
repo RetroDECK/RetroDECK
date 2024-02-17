@@ -19,14 +19,15 @@ finish-args:
   - --filesystem=home
   - --filesystem=/run/media
   - --filesystem=/media
+  - --filesystem=/mnt
   - --filesystem=home/.var/app/com.valvesoftware.Steam
   - --allow=multiarch
   - --talk-name=org.freedesktop.ScreenSaver
   - --talk-name=org.freedesktop.PowerManagement.Inhibit
   - --talk-name=org.freedesktop.login1.Manager
-  - --talk-name=org.freedesktop.portal.Flatpak.UpdateMonitor
   - --filesystem=xdg-run/app/com.discordapp.Discord:create
   - --filesystem=xdg-config/gtk-3.0:ro
+  - --env=QT_QPA_PLATFORM=wayland-egl;wayland;xcb
   # Dolphin
   - --allow=bluetooth
   # PPSSPP
@@ -408,7 +409,7 @@ modules:
   # When updating this module remember to check those:
   # https://gitlab.com/es-de/emulationstation-de/-/blob/[VERSION]/resources/systems/unix/es_find_rules.xml
   # But we don't include them 1:1 as RetroDECK got some specific configs in some cases
-  - name: emulationstation-de
+  - name: ES-DE
     buildsystem: cmake-ninja
     config-opts:
       - -DRETRODECK=on

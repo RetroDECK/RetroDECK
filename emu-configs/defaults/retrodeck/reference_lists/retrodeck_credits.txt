@@ -5,19 +5,22 @@ If you feel you have contributed to the project but lacks mention, please contac
 
 The Team
 XargonWan
-RetroDECK project founder and also one of the founding members of AmberELEC
+RetroDECK project founder and also one of the founding members of AmberELEC.
 
 IceNine451
-Creator of the RetroDECK configurator and various awesome features.
+Creator of the RetroDECK configurator and the RetroDECK Framework.
 
 Lazorne
-Community management/outreach, testing, documentation, feature suggestions and some design.
+Community management/outreach, testing, documentation and Wiki Lord.
 
-dottormac
-Beta Tester
+WallK
+Works on Godot Features.
 
 LX32
-Junior code contributor, Beta Tester
+Works on a many projects.
+
+dottormac
+Tester
 
 
 Collaborators
