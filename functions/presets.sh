@@ -98,7 +98,7 @@ build_preset_config() {
       local read_system_name=$(get_setting_name "$system_line")
       if [[ "$read_system_name" == "$system_being_changed" ]]; then
         local read_system_enabled=$(get_setting_value "$rd_conf" "$read_system_name" "retrodeck" "$current_preset")
-        while IFS='^' read -r action read_preset read_setting_name new_setting_value section
+        while IFS='^' read -r action read_preset read_setting_name new_setting_value section target_file defaults_file
         do
           case "$action" in
 
@@ -111,22 +111,16 @@ build_preset_config() {
             fi
           ;;
 
-          "target_file" )
-            if [[ "$read_preset" = \$* ]]; then
-              eval read_preset=$read_preset
-            fi
-            local read_target_file="$read_preset"
-          ;;
-
-          "defaults_file" )
-            if [[ "$read_preset" = \$* ]]; then
-              eval read_preset=$read_preset
-            fi
-            local read_defaults_file="$read_preset"
-          ;;
-
           "change" )
             if [[ "$read_preset" == "$current_preset" ]]; then
+              if [[ "$target_file" = \$* ]]; then # Read current target file and resolve if it is a variable
+                declare -g "target_file=$target_file"
+              fi
+              local read_target_file="$target_file"
+              if [[ "$defaults_file" = \$* ]]; then #Read current defaults file and resolve if it is a variable
+                declare -g "defaults_file=$defaults_file"
+              fi
+              local read_defaults_file="$defaults_file"
               if [[ "$read_system_enabled" == "true" ]]; then
                 if [[ "$new_setting_value" = \$* ]]; then
                   eval new_setting_value=$new_setting_value

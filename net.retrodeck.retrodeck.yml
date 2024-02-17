@@ -3,19 +3,11 @@ runtime: org.kde.Platform
 runtime-version: "6.5"
 sdk: org.kde.Sdk
 sdk-extensions:
-  - org.freedesktop.Sdk.Extension.llvm16      # Needed for rpcs3 (llvm15) but llvm16 for CITRA
+  - org.freedesktop.Sdk.Extension.llvm16        # Needed for rpcs3 (llvm15) but llvm16 for CITRA
+  - org.freedesktop.Sdk.Extension.rust-stable   # Needed for BoilR 
 # base: io.qt.qtwebengine.BaseApp             # Needed for Yuzu - Disabled as we're using AppImage for Yuzu
 # base-version: "6.5"                         # Needed for Yuzu - Disabled as we're using AppImage for Yuzu
 command: retrodeck.sh
-
-add-extensions:
-  org.ppsspp.PPSSPP.Locale:
-    directory: share/locale
-    bundle: true
-    no-autodownload: false
-    subdirectories: false
-    autodelete: true
-    locale-subset: true
 
 finish-args:
   - --socket=fallback-x11
@@ -27,14 +19,15 @@ finish-args:
   - --filesystem=home
   - --filesystem=/run/media
   - --filesystem=/media
+  - --filesystem=/mnt
   - --filesystem=home/.var/app/com.valvesoftware.Steam
   - --allow=multiarch
   - --talk-name=org.freedesktop.ScreenSaver
   - --talk-name=org.freedesktop.PowerManagement.Inhibit
   - --talk-name=org.freedesktop.login1.Manager
-  - --talk-name=org.freedesktop.portal.Flatpak.UpdateMonitor
   - --filesystem=xdg-run/app/com.discordapp.Discord:create
   - --filesystem=xdg-config/gtk-3.0:ro
+  - --env=QT_QPA_PLATFORM=wayland-egl;wayland;xcb
   # Dolphin
   - --allow=bluetooth
   # PPSSPP
@@ -43,6 +36,10 @@ finish-args:
   - --env=SDL_VIDEO_WAYLAND_WMCLASS=net.retrodeck.retrodeck
   # XEMU - Fixes issues with openSUSE systems, QEMU_AUDIO_DRV is defined as "pa" causing xemu to not launch
   - --unset-env=QEMU_AUDIO_DRV
+  # BoilR
+  - --filesystem=xdg-data/Steam:rw #Steam (flatpak)
+  - --filesystem=~/.steam:rw # Steam (Non-flatpak)
+  - --filesystem=~/.var/app/com.valvesoftware.Steam:rw # Steam (Flatpak)
 
 cleanup:
   # ES-DE
@@ -412,7 +409,7 @@ modules:
   # When updating this module remember to check those:
   # https://gitlab.com/es-de/emulationstation-de/-/blob/[VERSION]/resources/systems/unix/es_find_rules.xml
   # But we don't include them 1:1 as RetroDECK got some specific configs in some cases
-  - name: emulationstation-de
+  - name: ES-DE
     buildsystem: cmake-ninja
     config-opts:
       - -DRETRODECK=on
@@ -446,6 +443,24 @@ modules:
   # ES-DE Themes - END
 
   # External manifests start
+
+  - name: boilr
+    buildsystem: simple
+    build-options:
+      append-path: /usr/lib/sdk/rust-stable/bin
+      env:
+        # To pick up vendored deps
+        CARGO_HOME: /run/build/boilr/cargo
+        RUSTFLAGS: "-L /app/lib/"
+    build-commands:    
+      - cargo --offline fetch --manifest-path Cargo.toml --verbose
+      - cargo --offline build --release --verbose --features flatpak
+      - install -Dm755 ./target/release/boilr -t /app/bin/
+    sources:
+      - type: git
+        url: https://github.com/PhilipK/BoilR
+        commit: b33d965f227fe971fd590cb022f608521b506ef3
+      - rd-submodules/boilr/cargo-lock.json
 
   # RetroArch - START
   # https://github.com/flathub/org.libretro.RetroArch
@@ -655,30 +670,14 @@ modules:
     sources:
       - type: git
         url: &ppsspp-url https://github.com/hrydgard/ppsspp.git
-        tag: v1.16.6
-        commit: ba0ce344937d17e177ec8656ab957f6b82facdda
+        tag: v1.17
+        commit: 493122a2fcf9ff538e242fe2844f019b53afd483
         x-checker-data:
           type: json
           url: https://api.github.com/repos/hrydgard/ppsspp/releases/latest
           version-query: .tag_name | sub("^v"; "")
           tag-query: .tag_name
           timestamp-query: .published_at
-
-  - name: ppsspp-localization
-    buildsystem: simple
-    build-commands:
-      - |
-        for LANG_FILE in assets/lang/*.ini; do
-          LANG_FILE_NAME="$(basename "$LANG_FILE")"
-          LANG_PREFIX="${LANG_FILE_NAME:0:2}"
-          LANG_DEST="$FLATPAK_DEST/share/locale/$LANG_PREFIX/ppsspp/$LANG_FILE_NAME";
-          ln -fsr "$LANG_DEST" "$FLATPAK_DEST/share/ppsspp/$LANG_FILE"
-          install -Dm644 "$LANG_FILE" "$LANG_DEST"
-        done
-    sources:
-      - type: shell
-        commands:
-          - cp -a $FLATPAK_DEST/share/ppsspp/assets .
 
   # PPSSPP - END
 
@@ -695,8 +694,8 @@ modules:
       - ln -s "${FLATPAK_DEST}/yuzu/usr/bin/yuzu" "${FLATPAK_DEST}/bin/yuzu"
     sources:
       - type: file
-        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1648/yuzu-mainline-20231211-14c24e64e.AppImage
-        sha256: d40f61c2abf8ddd0bb53098e2d9edf0c47e1cfd89e50cf5856b8cc27dbb25bd6
+        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1696/yuzu-mainline-20240128-1bd7a09e3.AppImage
+        sha256: d8ca508daa5ba929efda956488f4a9cbc38df9fd672fcb55cb2184625971706d
 
   # Yuzu - END
 
@@ -1300,14 +1299,14 @@ modules:
   
   # MAME - Start
 
-  # - name: retrodeck-mame
-  #   buildsystem: simple
-  #   build-commands:
-  #     - cp -rn files/* /app
-  #   sources:
-  #   - type: archive
-  #     url: 
-  #     sha256: RETRODECKMAMEPLACEHOLDER
+  - name: retrodeck-mame
+    buildsystem: simple
+    build-commands:
+      - cp -rn files/* /app
+    sources:
+    - type: archive
+      url: RETRODECKMAMEURLPLACEHOLDER
+      sha256: RETRODECKMAMEPLACEHOLDER
 
   # MAME - End
 
