@@ -149,7 +149,6 @@ columns = 2
 [node name="quick_resume" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/h_separation = 128
 button_pressed = true
 text = "TK_QRESUME"
 metadata/description = "This is a test description set to this element"
@@ -161,7 +160,6 @@ text = "TK_ADVANCED"
 [node name="rewind" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/h_separation = 256
 text = "TK_REWIND"
 metadata/description = "This is another, very long and convoluted, description, that I put too much commas in to make in LONGER and more SOPHISTICATED. And I did it twice!!!This is another, very long and convoluted, description, that I put too much commas in to make in LONGER and more SOPHISTICATED."
 
@@ -887,7 +885,7 @@ grow_vertical = 0
 [node name="controller_guide_text" type="RichTextLabel" parent="coltroller_guide"]
 layout_mode = 2
 theme_override_colors/default_color = Color(1, 1, 1, 0.607843)
-theme_override_font_sizes/normal_font_size = 32
+theme_override_font_sizes/normal_font_size = 23
 text = "(A) Accept (B) Back (L/R) Tab Switch (Menu) Exit"
 fit_content = true
 scroll_active = false
