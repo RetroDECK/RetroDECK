@@ -6,6 +6,8 @@ import shlex
 import shutil
 import glob
 import sys
+import time
+import hashlib
 
 import xml.etree.ElementTree as ET
 
@@ -266,7 +268,12 @@ alt_command_list={
 "Beetle PCE": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/mednafen_pce_libretro.so"
 }
 
-def create_shortcut_new(games,rdhome):
+exit_file="/tmp/retrodeck_steam_sync_exit"
+rdhome=""
+roms_folder=""
+
+def create_shortcut_new(games):
+    changes=0
     old_games=os.listdir(rdhome+"/.sync/")
 
     for game in games:
@@ -275,7 +282,8 @@ def create_shortcut_new(games,rdhome):
             old_games[i]=0
         except ValueError:
             print(game[0]+" is a new game!")
-    
+            changes=1
+
         path=rdhome+"/.sync/"+game[0]
         print("Go to path: "+path)
         if not os.path.exists(path):
@@ -300,7 +308,7 @@ def create_shortcut_new(games,rdhome):
             fl.write('    ]\n')
             fl.write('}\n')
             fl.close()
-        
+
         fl=open(path+"/launch.sh","w")
         fl.write("#!/bin/bash\n\n")
         fl.write('if test "$(whereis flatpak)" = "flatpak:"\n')
@@ -310,55 +318,25 @@ def create_shortcut_new(games,rdhome):
         fl.write(game[1]+"\n")
         fl.write("fi\n")
         fl.close()
-        
+
         st=os.stat(path+"/launch.sh")
         os.chmod(path+"/launch.sh", st.st_mode | 0o0111)
-        
+
     print("Start removing")
     print(old_games)
     for game in old_games:
         if game:
             shutil.rmtree(rdhome+"/.sync/"+game)
-        
-    os.system("boilr --no-ui")
+            changes=1
 
-def addToSteam():
-    print("Open RetroDECK config file: {}".format(os.path.expanduser("~/.var/app/net.retrodeck.retrodeck/config/retrodeck/retrodeck.cfg")))
+    if changes:
+        os.system("boilr --no-ui")
 
-    fl=open(os.path.expanduser("~/.var/app/net.retrodeck.retrodeck/config/retrodeck/retrodeck.cfg"),"r")
-    lines=fl.readlines()
-    for line in lines:
-        if "rdhome" in line:
-            rdhome=line[7:-1]
-        elif "roms_folder" in line:
-            roms_folder=line[12:-1]
-    fl.close()
+def addToSteam(systems):
     games=[]
-    
-    command_list_default["pico8"]=command_list_default["pico8"].replace("{GAMEDIR}",roms_folder+"/pico8")
-    alt_command_list["PICO-8 Splore (Standalone)"]=alt_command_list["PICO-8 Splore (Standalone)"].replace("{GAMEDIR}",roms_folder+"/pico8")
-
-    if not os.path.exists(rdhome+"/.sync/"):
-        os.makedirs(rdhome+"/.sync/")
-
-    '''
-    if not os.path.exists(os.path.expanduser("~/.var/app/net.retrodeck.retrodeck/config/boilr/sync")):
-        os.symlink(rdhome+"/sync",os.path.expanduser("~/.var/app/net.retrodeck.retrodeck/config/boilr/sync"))
-    '''
-
-    boilr_path=os.path.expanduser("~/.var/app/net.retrodeck.retrodeck/config/boilr/config.toml")
-    if os.path.isfile(boilr_path):
-        with open(boilr_path,"r") as f:
-            data=f.read()
-        data=re.sub("games_folder.*","games_folder = "+rdhome+"/.sync/",data)
-        with open(boilr_path,"w") as f:
-            f.write(data)
-    else:
-        print("Error! BoilR config not initialized.")
-    
-    for system in os.listdir(rdhome+"/gamelists/"):
+    for system in systems:
         print("Start parsing system: {}".format(system))
-        
+
         f=open(rdhome+"/gamelists/"+system+"/gamelist.xml","r")
         f.readline()
         parser=ET.XMLParser()
@@ -367,7 +345,7 @@ def addToSteam():
         parser.feed(b'</root>')
         root=parser.close()
         f.close()
-        
+
         globalAltEmu=""
         for subroot in root:
             if subroot.tag=="alternativeEmulator":
@@ -379,7 +357,7 @@ def addToSteam():
                     name=""
                     favorite=""
                     altemulator=globalAltEmu
-                    for tag in game:    
+                    for tag in game:
                         if tag.tag=="path":
                             path=tag.text
                         elif tag.tag=="name":
@@ -388,7 +366,7 @@ def addToSteam():
                             favorite=tag.text
                         elif tag.tag=="altemulator":
                             altemulator=tag.text
-                            
+
                     if favorite=="true" and altemulator=="":
                         print("Find favorite game: {}".format(name))
                         games.append([name,command_list_default[system]+" '"+roms_folder+"/"+system+path[1:]+"'"])
@@ -403,10 +381,76 @@ def addToSteam():
                         else:
                             games.append([name,alt_command_list[altemulator]+" '"+roms_folder+"/"+system+path[1:]+"'"])
                             print(alt_command_list[altemulator]+" '"+roms_folder+"/"+system+path[1:]+"'")
-     
-    create_shortcut_new(games,rdhome)
+    if not games==[]:
+        create_shortcut_new(games)
+
+def start_config():
+    global rdhome
+    global roms_folder
+    global command_list_default
+    global alt_command_list
+
+    if os.path.isfile(exit_file):
+        os.remove(exit_file)
+
+    print("Open RetroDECK config file: {}".format(os.path.expanduser("~/.var/app/net.retrodeck.retrodeck/config/retrodeck/retrodeck.cfg")))
+
+    fl=open(os.path.expanduser("~/.var/app/net.retrodeck.retrodeck/config/retrodeck/retrodeck.cfg"),"r")
+    lines=fl.readlines()
+    for line in lines:
+        if "rdhome" in line:
+            rdhome=line[7:-1]
+        elif "roms_folder" in line:
+            roms_folder=line[12:-1]
+    fl.close()
+
+    command_list_default["pico8"]=command_list_default["pico8"].replace("{GAMEDIR}",roms_folder+"/pico8")
+    alt_command_list["PICO-8 Splore (Standalone)"]=alt_command_list["PICO-8 Splore (Standalone)"].replace("{GAMEDIR}",roms_folder+"/pico8")
+
+    if not os.path.exists(rdhome+"/.sync/"):
+        os.makedirs(rdhome+"/.sync/")
+
+    boilr_path=os.path.expanduser("~/.var/app/net.retrodeck.retrodeck/config/boilr/config.toml")
+    if os.path.isfile(boilr_path):
+        with open(boilr_path,"r") as f:
+            data=f.read()
+        data=re.sub("\"games_folder.*","games_folder = "+rdhome+"/.sync/\"",data)
+        with open(boilr_path,"w") as f:
+            f.write(data)
+    else:
+        print("Error! BoilR config not initialized.")
 
 if __name__=="__main__":
-    addToSteam()
-    
+    start_config()
+
+    new_hash={}
+    for system in os.listdir(rdhome+"/gamelists/"):
+        new_hash[system]=hashlib.md5(open(rdhome+"/gamelists/"+system+"/gamelist.xml","rb").read()).hexdigest()
+
+    running=True
+
+    while running:
+        time.sleep(30)
+        systems=[]
+
+        for system in os.listdir(rdhome+"/gamelists/"):
+            if not system in systems:
+                if system in new_hash.keys():
+                    old_hash=new_hash[system]
+                    new_hash[system]=hashlib.md5(open(rdhome+"/gamelists/"+system+"/gamelist.xml","rb").read()).hexdigest()
+                    if not new_hash[system] == old_hash:
+                        print("System {} changed!".format(system))
+                        systems.append(system)
+                    else:
+                        print("System {} not changed!".format(system))
+                else:
+                    new_hash[system]=hashlib.md5(open(rdhome+"/gamelists/"+system+"/gamelist.xml","rb").read()).hexdigest()
+                    print("System {} added!".format(system))
+                    systems.append(system)
+
+        if os.path.isfile(exit_file):
+            running=False
+            os.remove(exit_file)
+
+    addToSteam(systems)
     print("Finish!")
