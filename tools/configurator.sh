@@ -1349,7 +1349,7 @@ configurator_usb_import_dialog() {
 
       if [[ ! -z "$choice" ]]; then
         emulationstation --home "$choice" --create-system-dirs
-        rm -rf "$choice/.emulationstation" # Cleanup unnecessary folder
+        rm -rf "$choice/ES-DE" # Cleanup unnecessary folder
       fi
     else
       configurator_generic_dialog "RetroDeck Configurator - USB Import" "There were no USB devices found."

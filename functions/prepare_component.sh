@@ -40,12 +40,12 @@ prepare_component() {
   if [[ "$component" =~ ^(es-de|ES-DE|all)$ ]]; then # For use after ESDE-related folders are moved or a reset
     if [[ "$action" == "reset" ]]; then
       rm -rf /var/config/emulationstation/
-      mkdir -p /var/config/emulationstation/.emulationstation/
-      cp -f /app/retrodeck/es_settings.xml /var/config/emulationstation/.emulationstation/es_settings.xml
+      mkdir -p /var/config/emulationstation/ES-DE/
+      cp -f /app/retrodeck/es_settings.xml /var/config/emulationstation/ES-DE/es_settings.xml
       set_setting_value "$es_settings" "ROMDirectory" "$roms_folder" "es_settings"
       set_setting_value "$es_settings" "MediaDirectory" "$media_folder" "es_settings"
       set_setting_value "$es_settings" "UserThemeDirectory" "$themes_folder" "es_settings"
-      dir_prep "$rdhome/gamelists" "/var/config/emulationstation/.emulationstation/gamelists"
+      dir_prep "$rdhome/gamelists" "/var/config/emulationstation/ES-DE/gamelists"
       emulationstation --home /var/config/emulationstation --create-system-dirs
       update_splashscreens
     fi
@@ -53,7 +53,7 @@ prepare_component() {
       set_setting_value "$es_settings" "ROMDirectory" "$roms_folder" "es_settings"
       set_setting_value "$es_settings" "MediaDirectory" "$media_folder" "es_settings"
       set_setting_value "$es_settings" "UserThemeDirectory" "$themes_folder" "es_settings"
-      dir_prep "$rdhome/gamelists" "/var/config/emulationstation/.emulationstation/gamelists"
+      dir_prep "$rdhome/gamelists" "/var/config/emulationstation/ES-DE/gamelists"
     fi
   fi
 

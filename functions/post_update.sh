@@ -124,7 +124,7 @@ post_update() {
     dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/hires_texture" "/var/config/retroarch/system/Mupen64plus/hires_texture"
     dir_prep "$texture_packs_folder/Duckstation" "/var/config/duckstation/textures"
 
-    dir_prep "$rdhome/gamelists" "/var/config/emulationstation/.emulationstation/gamelists"
+    dir_prep "$rdhome/gamelists" "/var/config/emulationstation/ES-DE/gamelists"
 
     dir_prep "$borders_folder" "/var/config/retroarch/overlays/borders"
     rsync -rlD --mkpath "/app/retrodeck/emu-configs/retroarch/borders/" "/var/config/retroarch/overlays/borders/"
@@ -172,7 +172,7 @@ post_update() {
     dir_prep "$states_folder/psx/duckstation" "/var/config/duckstation/savestates"
 
     rm -rf /var/config/retrodeck/tools
-    rm -rf /var/config/emulationstation/.emulationstation/gamelists/tools/
+    rm -rf /var/config/emulationstation/ES-DE/gamelists/tools/
 
     mv "$saves_folder/gc/dolphin/EUR" "$saves_folder/gc/dolphin/EU"
     mv "$saves_folder/gc/dolphin/USA" "$saves_folder/gc/dolphin/US"
@@ -195,8 +195,8 @@ post_update() {
     sed -i '$ a <string name="UserThemeDirectory" value="" />' "$es_settings" # Add new default line to existing file
     set_setting_value "$es_settings" "UserThemeDirectory" "$themes_folder" "es_settings"
     unlink "/var/config/emulationstation/ROMs"
-    unlink "/var/config/emulationstation/.emulationstation/downloaded_media"
-    unlink "/var/config/emulationstation/.emulationstation/themes"
+    unlink "/var/config/emulationstation/ES-DE/downloaded_media"
+    unlink "/var/config/emulationstation/ES-DE/themes"
 
     set_setting_value "$raconf" "savestate_auto_load" "false" "retroarch"
     set_setting_value "$raconf" "savestate_auto_save" "false" "retroarch"
@@ -241,7 +241,14 @@ post_update() {
     # - Install RetroDECK controller profile in desired location TODO
     # - Change section name in retrodeck.cfg for ABXY button swap preset
     sed -i 's^nintendo_button_layout^abxy_button_swap^' "$rd_conf" # This is a one-off sed statement as there are no functions for replacing section names
+    mv -f /var/config/emulationstation/.emulationstation /var/config/emulationstation/ES-DE # in 3.0 .emulationstation was moved into ES-DE
+    ln -s /var/config/emulationstation/ES-DE /var/config/emulationstation/.emulationstation # symlinking it to mantain the compatibility # TODO: remove this symlink n 0.9.0b
   fi
+
+  # if [[ $prev_version -le "090" ]]; then
+  #   # Placeholder for version 0.9.0b
+  #   rm /var/config/emulationstation/.emulationstation # remving the old symlink to .emulationstation as it might be not needed anymore
+  # fi
 
   # The following commands are run every time.
 
