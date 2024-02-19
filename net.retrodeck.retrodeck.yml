@@ -419,7 +419,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/XargonWan/RetroDECK-ES-DE
-        branch: cebbeff3b5f834fd9adaeb1f5dc9e0da6b106599
+        branch: update/3.0
       - type: shell
         commands:
           - sed -i 's#"EMULATIONSTATION-DE  V" + Utils::String::toUpper(PROGRAM_VERSION_STRING)#"RetroDECK
