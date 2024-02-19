@@ -21,7 +21,7 @@ post_update() {
     # - Fix PICO-8 folder structure. ROM and save folders are now sane and binary files will go into ~/retrodeck/bios/pico-8/
 
     rm -rf /var/config/primehack # Purge old Primehack config files. Saves are safe as they are linked into /var/data/primehack.
-    prepare_emulator "reset" "primehack"
+    prepare_component "reset" "primehack"
 
     dir_prep "$rdhome/saves/duckstation" "/var/data/duckstation/memcards"
     dir_prep "$rdhome/states/duckstation" "/var/data/duckstation/savestates"
@@ -212,14 +212,14 @@ post_update() {
 
     set_setting_value "$ppssppconf" "AutoLoadSaveState" "0" "ppsspp" "General"
 
-    prepare_emulator "reset" "cemu"
+    prepare_component "reset" "cemu"
 
-    prepare_emulator "reset" "pico8"
+    prepare_component "reset" "pico8"
 
     configurator_generic_dialog "RetroDECK 0.7.0b Upgrade" "Would you like to install the official controller profile?\n(this will reset your custom emulator settings)\n\nAfter installation you can enable it from from Controller Settings -> Templates."
     if [[ $(configurator_generic_question_dialog "RetroDECK Official Controller Profile" "Would you like to install the official RetroDECK controller profile?") == "true" ]]; then
       install_retrodeck_controller_profile
-      prepare_emulator "reset" "all"
+      prepare_component "reset" "all"
     fi
   fi
   if [[ $prev_version -le "071" ]]; then
@@ -232,6 +232,15 @@ post_update() {
   if [[ $prev_version -le "073" ]]; then
     # In version 0.7.3b, there was a bug that prevented the correct creations of the roms/system folders, so we force recreate them.
     emulationstation --home /var/config/emulationstation --create-system-dirs
+  fi
+
+  if [[ $prev_version -le "080" ]]; then
+    # In version 0.8.0b, the following changes were made that required config file updates/reset or other changes to the filesystem:
+    # - Remove RetroDECK controller profile from existing template location TODO
+    # - Determine if Steam is installed via normal desktop application / Flatpak / SteamOS TODO
+    # - Install RetroDECK controller profile in desired location TODO
+    # - Change section name in retrodeck.cfg for ABXY button swap preset
+    sed -i 's^nintendo_button_layout^abxy_button_swap^' "$rd_conf" # This is a one-off sed statement as there are no functions for replacing section names
   fi
 
   # The following commands are run every time.
@@ -267,9 +276,9 @@ post_update() {
 
   if [[ $prev_version -le "075" ]]; then
     # In version 0.7.5b, the following changes were made:
-    prepare_emulator "reset" "vita3k"
-    prepare_emulator "reset" "mame"
-    prepare_emulator "reset" "boilr"
+    prepare_component "reset" "vita3k"
+    prepare_component "reset" "mame"
+    prepare_component "reset" "boilr"
     if [ -d "$rdhome/.logs" ]; then
       mv "$rdhome/.logs" "$logs_folder"
       log i "Logs folder renamed successfully"

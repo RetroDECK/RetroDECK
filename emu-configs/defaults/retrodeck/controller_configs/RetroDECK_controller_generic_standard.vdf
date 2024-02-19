@@ -1,7 +1,7 @@
 "controller_mappings"
 {
 	"version"		"3"
-	"revision"		"158"
+	"revision"		"160"
 	"title"		"RetroDECK: Generic - Standard v.1b"
 	"description"		"RetroDECK: Generic - Standard - v.1b"
 	"creator"		""
@@ -12,9 +12,9 @@
 	"controller_caps"		"1573887"
 	"major_revision"		"0"
 	"minor_revision"		"0"
-	"Timestamp"		"-1035996608"
+	"Timestamp"		"-926565536"
 	"actions"
-		{
+	{
 		"Default"
 		{
 			"title"		"RetroDECK - Set"
@@ -925,7 +925,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press SPACE, RetroDECK, RD-icon_circle_2_180x180.png, "
+							"binding"		"mouse_button RIGHT, RetroDECK, RD-icon_circle_2_180x180.png, "
 						}
 						"settings"
 						{
@@ -1005,7 +1005,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press F1, F1, RD-F1.png, "
+							"binding"		"key_press LEFT_CONTROL, Control, RD-ctrl.png, "
 						}
 						"settings"
 						{
@@ -1025,7 +1025,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press F5, F5, RD-F5.png, "
+							"binding"		"key_press SPACE, Space, RD-space.png, "
 						}
 						"settings"
 						{
@@ -1045,7 +1045,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press F10, F10, RD-F10.png, "
+							"binding"		"key_press FORWARD_SLASH, /, RD-frontslash.png, "
 						}
 						"settings"
 						{
@@ -1058,6 +1058,167 @@
 				}
 			}
 			"touch_menu_button_7"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press LEFT_ALT, Alt, RD-alt.png, "
+						}
+						"settings"
+						{
+							"haptic_intensity"		"2"
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"touch_menu_button_8"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press F1, F1, RD-F1.png, "
+						}
+						"settings"
+						{
+							"haptic_intensity"		"2"
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"touch_menu_button_9"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press F4, F4, RD-F4.png, "
+						}
+						"settings"
+						{
+							"haptic_intensity"		"2"
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"touch_menu_button_10"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press F5, F5, RD-F5.png, "
+						}
+						"settings"
+						{
+							"haptic_intensity"		"2"
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"touch_menu_button_11"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press F7, F7, RD-F7.png, "
+						}
+						"settings"
+						{
+							"haptic_intensity"		"2"
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"touch_menu_button_12"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press F8, F8, RD-F8.png, "
+						}
+						"settings"
+						{
+							"haptic_intensity"		"2"
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"touch_menu_button_13"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press F10, F10, RD-F10.png, "
+						}
+						"settings"
+						{
+							"haptic_intensity"		"2"
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"touch_menu_button_14"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press LEFT_CONTROL, Restart / Reset, RD-system-reboot.png, "
+							"binding"		"key_press R, Restart / Reset, RD-system-reboot.png, "
+						}
+						"settings"
+						{
+							"haptic_intensity"		"2"
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"touch_menu_button_15"
 			{
 				"activators"
 				{
@@ -1078,7 +1239,7 @@
 				{
 				}
 			}
-			"touch_menu_button_8"
+			"touch_menu_button_16"
 			{
 				"activators"
 				{
@@ -1099,7 +1260,7 @@
 				{
 				}
 			}
-			"touch_menu_button_9"
+			"touch_menu_button_17"
 			{
 				"activators"
 				{
@@ -1120,28 +1281,7 @@
 				{
 				}
 			}
-			"touch_menu_button_10"
-			{
-				"activators"
-				{
-					"Full_Press"
-					{
-						"bindings"
-						{
-							"binding"		"key_press LEFT_CONTROL, Fullscreen On / Off, RD-zoom-fit-best.png, "
-							"binding"		"key_press RETURN, Fullscreen On / Off, RD-zoom-fit-best.png, "
-						}
-						"settings"
-						{
-							"haptic_intensity"		"2"
-						}
-					}
-				}
-				"disabled_activators"
-				{
-				}
-			}
-			"touch_menu_button_11"
+			"touch_menu_button_18"
 			{
 				"activators"
 				{
@@ -1162,7 +1302,7 @@
 				{
 				}
 			}
-			"touch_menu_button_12"
+			"touch_menu_button_19"
 			{
 				"activators"
 				{
@@ -1172,26 +1312,6 @@
 						{
 							"binding"		"key_press LEFT_CONTROL, Swap Disc, RD-application-x-iso.png, "
 							"binding"		"key_press D, Swap Disc, RD-application-x-iso.png, "
-						}
-						"settings"
-						{
-							"haptic_intensity"		"2"
-						}
-					}
-				}
-				"disabled_activators"
-				{
-				}
-			}
-			"click"
-			{
-				"activators"
-				{
-					"Full_Press"
-					{
-						"bindings"
-						{
-							"binding"		"mouse_button RIGHT, , "
 						}
 						"settings"
 						{
