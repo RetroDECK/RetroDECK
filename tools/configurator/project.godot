@@ -84,10 +84,11 @@ previous_tab={
 locale/translation_remaps={
 "res://res/pixel_ui_theme/8x8_ui_elements.png": PackedStringArray("res://res/pixel_ui_theme/8x8_ui_elements_de.png:de", "res://res/pixel_ui_theme/8x8_ui_elements_sv.png:sv")
 }
-locale/translations=PackedStringArray("res://locales/interface.en.translation", "res://locales/interface.it.translation", "res://locales/interface.de.translation", "res://locales/interface.sv.translation")
+locale/translations=PackedStringArray("res://locales/interface.en.translation", "res://locales/interface.it.translation", "res://locales/interface.de.translation", "res://locales/interface.sv.translation", "res://locales/interface.ua.translation", "res://locales/interface.zh.translation", "res://locales/interface.ja.translation")
 
 [rendering]
 
+textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
 viewport/transparent_background=true

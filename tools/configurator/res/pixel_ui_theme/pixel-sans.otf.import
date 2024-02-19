@@ -1,0 +1,40 @@
+[remap]
+
+importer="font_data_dynamic"
+type="FontFile"
+uid="uid://cqhvyjx75dls8"
+path="res://.godot/imported/pixel-sans.otf-c6ccef8029bb349d210b8711451e46a7.fontdata"
+
+[deps]
+
+source_file="res://res/pixel_ui_theme/pixel-sans.otf"
+dest_files=["res://.godot/imported/pixel-sans.otf-c6ccef8029bb349d210b8711451e46a7.fontdata"]
+
+[params]
+
+Rendering=null
+antialiasing=1
+generate_mipmaps=false
+multichannel_signed_distance_field=false
+msdf_pixel_range=8
+msdf_size=48
+allow_system_fallback=true
+force_autohinter=false
+hinting=1
+subpixel_positioning=1
+oversampling=0.0
+Fallbacks=null
+fallbacks=[]
+Compress=null
+compress=true
+preload=[{
+"chars": [],
+"glyphs": [],
+"name": "New Configuration",
+"size": Vector2i(16, 0),
+"variation_embolden": 0.62,
+"variation_transform": Transform2D(4, 1, 5, 2, 6, 3)
+}]
+language_support={}
+script_support={}
+opentype_features={}

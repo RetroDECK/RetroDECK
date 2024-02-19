@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://61f6m4r1mpan"]
+[gd_scene load_steps=27 format=3 uid="uid://61f6m4r1mpan"]
 
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
 [ext_resource type="Script" path="res://main.gd" id="1_obpq7"]
@@ -13,8 +13,11 @@
 [ext_resource type="Texture2D" uid="uid://cti2vt14gxisl" path="res://res/flags/germany_32.png" id="7_qgxid"]
 [ext_resource type="Texture2D" uid="uid://bns0ot5pbf03h" path="res://res/flags/sweden_32.png" id="8_lptln"]
 [ext_resource type="Texture2D" uid="uid://cor8ep0fkqm08" path="res://res/Rekku/base.png" id="9_brsrf"]
+[ext_resource type="Texture2D" uid="uid://dhsorn3kcfdcv" path="res://res/flags/ukraine_32.png" id="9_dp7oa"]
+[ext_resource type="Texture2D" uid="uid://dtwjo7co226dw" path="res://res/flags/japan_32.png" id="10_e8mt0"]
 [ext_resource type="Texture2D" uid="uid://cavtn1rljc5oe" path="res://res/Rekku/eyes-open.png" id="10_y6gkh"]
 [ext_resource type="Texture2D" uid="uid://cv7nckloqhn5m" path="res://res/Rekku/blink1.png" id="11_6deod"]
+[ext_resource type="Texture2D" uid="uid://cbwhpqip43aei" path="res://res/flags/china_32.png" id="11_ri2fv"]
 [ext_resource type="Texture2D" uid="uid://by0oj188x350g" path="res://res/Rekku/blink2.png" id="12_ro20g"]
 [ext_resource type="Texture2D" uid="uid://ciwghjy0ahxk6" path="res://res/Rekku/mouth-A.png" id="13_xj3b3"]
 [ext_resource type="Texture2D" uid="uid://kx8eypf4ffvu" path="res://res/Rekku/mouth-base.png" id="14_lnkoa"]
@@ -146,7 +149,6 @@ columns = 2
 [node name="quick_resume" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/h_separation = 128
 button_pressed = true
 text = "TK_QRESUME"
 metadata/description = "This is a test description set to this element"
@@ -158,7 +160,6 @@ text = "TK_ADVANCED"
 [node name="rewind" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/game_control_container/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/h_separation = 256
 text = "TK_REWIND"
 metadata/description = "This is another, very long and convoluted, description, that I put too much commas in to make in LONGER and more SOPHISTICATED. And I did it twice!!!This is another, very long and convoluted, description, that I put too much commas in to make in LONGER and more SOPHISTICATED."
 
@@ -436,7 +437,7 @@ text = "TK_USBTOOL"
 [node name="backup_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
 layout_mode = 2
 disabled = true
-text = "TK_BACKUPBUT"
+text = "TK_BACKUPBTN"
 
 [node name="compress_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
 layout_mode = 2
@@ -525,7 +526,7 @@ theme_override_constants/separation = 10
 [node name="cheevos_trophies_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container/cheevos_advanced_container/cheevos_loginout_container"]
 layout_mode = 2
 disabled = true
-text = "TK_CHEEVOSTROPHTBUT"
+text = "TK_CHEEVOSTROPHYBTN"
 
 [node name="cheevos_loginout_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container/cheevos_advanced_container/cheevos_loginout_container"]
 layout_mode = 2
@@ -600,7 +601,7 @@ text = "TK_SAVESSYNC"
 layout_mode = 2
 size_flags_horizontal = 3
 disabled = true
-text = "TK_FTPBUTTON"
+text = "TK_FTPBTN"
 
 [node name="TK_TROUBLESHOOT" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
 visible = false
@@ -616,7 +617,7 @@ layout_mode = 2
 
 [node name="troubleshoot_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/troubleshoot_container"]
 layout_mode = 2
-text = "TK_TROUBLESHOOT"
+text = "TK_TROUBLESHOOTLBL"
 
 [node name="troubleshoot_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/troubleshoot_container"]
 layout_mode = 2
@@ -628,7 +629,7 @@ text = "TK_CHECKCONN"
 [node name="logs_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/troubleshoot_container"]
 layout_mode = 2
 disabled = true
-text = "TK_LOGSBUT"
+text = "TK_LOGSBTN"
 
 [node name="reset_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer"]
 layout_mode = 2
@@ -730,8 +731,9 @@ layout_mode = 2
 [node name="about_header" type="RichTextLabel" parent="Background/MarginContainer/TabContainer/TK_ABOUT/about_container"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_font_sizes/normal_font_size = 52
+theme_override_font_sizes/normal_font_size = 23
 text = "TK_ABOUTHEADER"
+scroll_active = false
 
 [node name="logo" type="TextureRect" parent="Background/MarginContainer/TabContainer/TK_ABOUT/about_container"]
 custom_minimum_size = Vector2(128, 128)
@@ -837,7 +839,7 @@ offset_right = -9.0
 offset_bottom = -10.0
 grow_horizontal = 0
 grow_vertical = 0
-item_count = 4
+item_count = 7
 selected = 0
 popup/item_0/text = ""
 popup/item_0/icon = ExtResource("5_exkn2")
@@ -851,6 +853,15 @@ popup/item_2/id = 2
 popup/item_3/text = ""
 popup/item_3/icon = ExtResource("8_lptln")
 popup/item_3/id = 3
+popup/item_4/text = ""
+popup/item_4/icon = ExtResource("9_dp7oa")
+popup/item_4/id = 4
+popup/item_5/text = ""
+popup/item_5/icon = ExtResource("10_e8mt0")
+popup/item_5/id = 5
+popup/item_6/text = ""
+popup/item_6/icon = ExtResource("11_ri2fv")
+popup/item_6/id = 6
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_xivj6")
@@ -874,7 +885,7 @@ grow_vertical = 0
 [node name="controller_guide_text" type="RichTextLabel" parent="coltroller_guide"]
 layout_mode = 2
 theme_override_colors/default_color = Color(1, 1, 1, 0.607843)
-theme_override_font_sizes/normal_font_size = 32
+theme_override_font_sizes/normal_font_size = 23
 text = "(A) Accept (B) Back (L/R) Tab Switch (Menu) Exit"
 fit_content = true
 scroll_active = false
