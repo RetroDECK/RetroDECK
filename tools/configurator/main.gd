@@ -2,9 +2,11 @@ extends Control
 
 func _ready():
 	var children = findElements(self, "Control")
-	for n: Control in children: #iterate the children to grab focus on mouse hov
+	for n: Control in children: #iterate the children
 		if (n.focus_mode == FOCUS_ALL):
-			n.mouse_entered.connect(_on_control_mouse_entered.bind(n))
+			n.mouse_entered.connect(_on_control_mouse_entered.bind(n)) #grab focus on mouse hover
+		if (n.is_class("BaseButton") and n.disabled == true): #if button-like control and disabled
+			n.self_modulate.a = 0.5 #make it half transparent
 	combine_tkeys()
 	
 		
