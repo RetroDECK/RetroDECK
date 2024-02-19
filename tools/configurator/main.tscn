@@ -12,8 +12,8 @@
 [ext_resource type="Texture2D" uid="uid://cru43y7hco6kh" path="res://res/flags/italy_32.png" id="6_fiylw"]
 [ext_resource type="Texture2D" uid="uid://cti2vt14gxisl" path="res://res/flags/germany_32.png" id="7_qgxid"]
 [ext_resource type="Texture2D" uid="uid://bns0ot5pbf03h" path="res://res/flags/sweden_32.png" id="8_lptln"]
-[ext_resource type="Texture2D" uid="uid://dodrie5iipan3" path="res://res/flags/ua.png" id="9_bhqka"]
 [ext_resource type="Texture2D" uid="uid://cor8ep0fkqm08" path="res://res/Rekku/base.png" id="9_brsrf"]
+[ext_resource type="Texture2D" uid="uid://dhsorn3kcfdcv" path="res://res/flags/ukraine_32.png" id="9_dp7oa"]
 [ext_resource type="Texture2D" uid="uid://dtwjo7co226dw" path="res://res/flags/japan_32.png" id="10_e8mt0"]
 [ext_resource type="Texture2D" uid="uid://cavtn1rljc5oe" path="res://res/Rekku/eyes-open.png" id="10_y6gkh"]
 [ext_resource type="Texture2D" uid="uid://cv7nckloqhn5m" path="res://res/Rekku/blink1.png" id="11_6deod"]
@@ -854,7 +854,7 @@ popup/item_3/text = ""
 popup/item_3/icon = ExtResource("8_lptln")
 popup/item_3/id = 3
 popup/item_4/text = ""
-popup/item_4/icon = ExtResource("9_bhqka")
+popup/item_4/icon = ExtResource("9_dp7oa")
 popup/item_4/id = 4
 popup/item_5/text = ""
 popup/item_5/icon = ExtResource("10_e8mt0")

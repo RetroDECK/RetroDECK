@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dodrie5iipan3"
-path="res://.godot/imported/ua.png-0a0bc68ae565ceaacb9135a9254260a8.ctex"
+uid="uid://dhsorn3kcfdcv"
+path="res://.godot/imported/ukraine_32.png-79135d5c34b180310b5154fd5a5543ce.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://res/flags/ua.png"
-dest_files=["res://.godot/imported/ua.png-0a0bc68ae565ceaacb9135a9254260a8.ctex"]
+source_file="res://res/flags/ukraine_32.png"
+dest_files=["res://.godot/imported/ukraine_32.png-79135d5c34b180310b5154fd5a5543ce.ctex"]
 
 [params]
 
