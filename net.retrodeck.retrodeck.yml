@@ -444,24 +444,6 @@ modules:
 
   # External manifests start
 
-  - name: boilr
-    buildsystem: simple
-    build-options:
-      append-path: /usr/lib/sdk/rust-stable/bin
-      env:
-        # To pick up vendored deps
-        CARGO_HOME: /run/build/boilr/cargo
-        RUSTFLAGS: "-L /app/lib/"
-    build-commands:    
-      - cargo --offline fetch --manifest-path Cargo.toml --verbose
-      - cargo --offline build --release --verbose --features flatpak
-      - install -Dm755 ./target/release/boilr -t /app/bin/
-    sources:
-      - type: git
-        url: https://github.com/PhilipK/BoilR
-        branch: retro
-      #- rd-submodules/boilr/cargo-lock.json it's in the repo now, at least on retro branch, check on main later please
-
   # RetroArch - START
   # https://github.com/flathub/org.libretro.RetroArch
 
