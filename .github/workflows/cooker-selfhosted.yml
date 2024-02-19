@@ -1,23 +1,28 @@
 name: "Build cooker"
 
 on:
-  push:
-    branches:
-     - cooker*
-     - feat*
-    paths:
-     - '.github/workflows/**'
-     - 'automation_tools/**'
-     - 'emu-configs/**'
-     - 'es-configs/**'
-     - 'functions/**'
-     - 'rd-submodules/**'
-     - '*.sh'
-     - 'net.retrodeck.retrodeck.yml'
-     - 'net.retrodeck.retrodeck.appdata.xml'
-  pull_request: 
-    branches:
-     - cooker*
+  # push:
+  #   branches:
+  #    - cooker*
+  #    - feat*
+  #   paths:
+  #    - '.github/workflows/**'
+  #    - 'automation_tools/**'
+  #    - 'emu-configs/**'
+  #    - 'es-configs/**'
+  #    - 'functions/**'
+  #    - 'rd-submodules/**'
+  #    - '*.sh'
+  #    - 'net.retrodeck.retrodeck.yml'
+  #    - 'net.retrodeck.retrodeck.appdata.xml'
+  # pull_request: 
+  #   branches:
+  #    - cooker*
+
+  # Italy (CET): 11:00 PM
+  # Japan (JST): 7:00 AM
+  schedule:
+    - cron: '0 22 * * *'
 
   workflow_dispatch:
 
@@ -44,6 +49,10 @@ jobs:
       - name: Generate cooker build ID
         run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/cooker_build_id.sh"
 
+      # backing up manifest in case download fails and hashes must be recalculated
+      - name: Manifest backup
+        run: "cp ${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml ${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml.bak"
+
       - name: Run pre-build automation tasks
         run : "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/pre_build_automation.sh"
 
@@ -62,12 +71,15 @@ jobs:
         continue-on-error: true
 
       # Sometimes flatpak download fails, in this case it tries a second time
-      - name: Run pre-build automation tasks (retry)
-        if: steps.flatpak-download.outcome == 'failure'
-        run : "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/pre_build_automation.sh"
       - name: "Build flatpak: download only (retry)"
         if: steps.flatpak-download.outcome == 'failure'
-        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
+        run: |
+          echo "Download failed, maybe some hash changed since the build start."
+          echo "Recalculating hashes and retrying download..."
+          rm -f "{GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml"
+          cp "${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml.bak" "${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml"
+          "${GITHUB_WORKSPACE}/automation_tools/pre_build_automation.sh"
+          "${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
 
       - name: Build flatpak
         run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_only.sh"

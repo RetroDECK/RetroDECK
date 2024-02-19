@@ -30,7 +30,7 @@ save_migration() {
   # Doing the dir prep as we don't know from which version we came
   dir_prep "$media_folder" "/var/config/emulationstation/.emulationstation/downloaded_media"
   dir_prep "$themes_folder" "/var/config/emulationstation/.emulationstation/themes"
-  mkdir -pv $rdhome/.logs #this was added later, maybe safe to remove in a few versions
+  mkdir -pv $rdhome/logs #this was added later, maybe safe to remove in a few versions
 
   # Resetting es_settings, now we need it but in the future I should think a better solution, maybe with sed
   cp -fv /app/retrodeck/es_settings.xml /var/config/emulationstation/.emulationstation/es_settings.xml
@@ -50,7 +50,7 @@ save_migration() {
   versionwheresaveschanged="0.4.5b" # Hardcoded break point between unsorted and sorted saves
 
   if [[ $(sed -e "s/\.//g" <<< $hard_version) > $(sed -e "s/\.//g" <<< $versionwheresaveschanged) ]] && [[ ! $(sed -e "s/\.//g" <<< $version) > $(sed -e "s/\.//g" <<< $versionwheresaveschanged) ]]; then # Check if user is upgrading from the version where save organization was changed. Try not to reuse this, it things 0.4.5b is newer than 0.4.5
-    migration_logfile=$rdhome/.logs/savemove_"$(date +"%Y_%m_%d_%I_%M_%p").log"
+    migration_logfile=$rdhome/logs/savemove_"$(date +"%Y_%m_%d_%I_%M_%p").log"
     save_backup_file=$rdhome/savebackup_"$(date +"%Y_%m_%d_%I_%M_%p").zip"
     state_backup_file=$rdhome/statesbackup_"$(date +"%Y_%m_%d_%I_%M_%p").zip"
 

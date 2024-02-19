@@ -12,7 +12,7 @@ else
     FOLDER=retrodeck-flatpak-cooker
 fi
 
-mkdir -vp "${GITHUB_WORKSPACE}"/{local,retrodeck-flatpak-cooker}
+mkdir -vp "${GITHUB_WORKSPACE}"/{.local,retrodeck-flatpak-cooker}
 
 flatpak-builder --user --force-clean \
     --install-deps-from=flathub \
@@ -21,3 +21,4 @@ flatpak-builder --user --force-clean \
     --download-only \
     "${GITHUB_WORKSPACE}/${FOLDER}" \
     net.retrodeck.retrodeck.yml
+    

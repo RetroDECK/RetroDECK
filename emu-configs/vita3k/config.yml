@@ -4,7 +4,7 @@ gdbstub: false
 log-active-shaders: false
 log-uniforms: false
 log-compat-warn: false
-validation-layer: true
+validation-layer: false
 pstv-mode: false
 show-mode: false
 demo-mode: false

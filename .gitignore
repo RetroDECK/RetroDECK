@@ -20,6 +20,7 @@ tmp
 rd-submodules/es-de/patches-tmp*
 .local/
 buildid
+*.bak
 
 # Python #
 ##########
@@ -27,6 +28,7 @@ __pycache__
 
 # Submodules #
 ##############
-rd-submodules/retroarch/
-rd-submodules/ryujinx/
-rd-submodules/shared-modules/
+rd-submodules/retroarch*
+rd-submodules/ryujinx*
+rd-submodules/shared-modules*
+rd-submodules/es-de/patches-tmp*

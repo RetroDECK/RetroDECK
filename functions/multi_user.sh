@@ -208,7 +208,7 @@ multi_user_setup_new_user() {
   do
     if [[ ! -z $(grep "^$emu_conf$" "$multi_user_emulator_config_dirs") ]]; then
       unlink "/var/config/$emu_conf"
-      prepare_emulator "reset" "$emu_conf"
+      prepare_component "reset" "$emu_conf"
     fi
   done
   for emu_conf in $(find "/var/config" -mindepth 1 -maxdepth 1 -type d -printf '%f\n') # For all the currently non-linked config folders, like from a newly-added emulator
@@ -238,7 +238,7 @@ multi_user_link_current_user_files() {
       if [[ -d "$multi_user_data_folder/$SteamAppUser/config/$emu_conf" ]]; then # If the current user already has a config folder for this emulator
         ln -sfT "$multi_user_data_folder/$SteamAppUser/config/$emu_conf" "retrodeck/config/$emu_conf"
       else # If the current user doesn't have a config folder for this emulator, init it and then link it
-        prepare_emulator "reset" "$emu_conf"
+        prepare_component "reset" "$emu_conf"
         dir_prep "$multi_user_data_folder/$SteamAppUser/config/$emu_conf" "/var/config/$emu_conf"
       fi
     fi

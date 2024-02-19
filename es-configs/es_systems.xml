@@ -511,7 +511,7 @@
         <name>doom</name>
         <fullname>Doom</fullname>
         <path>%ROMPATH%/doom</path>
-        <extension>.doom .DOOM .desktop .iwad .IWAD .pk4 .PK4 .pk3 .PK3 .pwad .PWAD .sh .wad .WAD</extension>
+        <extension>.doom .DOOM .desktop .iwad .IWAD .pk4 .PK4 .pk3 .PK3 .pwad .PWAD .sh .wad .WAD .ipk3 .IPK3</extension>
         <command label="GZDoom (Standalone)">gzdoom.sh %ROM%</command>
         <command label="PrBoom">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/prboom_libretro.so %ROM%</command>
         <!-- <command label="PrBoom+ (Standalone)">%EMULATOR_PRBOOM-PLUS% -iwad %ROM%</command> -->
@@ -1129,7 +1129,7 @@
         <platform>msxturbor</platform>
         <theme>msxturbor</theme>
     </system>
-<!--
+
     <system>
         <name>mugen</name>
         <fullname>M.U.G.E.N Game Engine</fullname>
@@ -1139,7 +1139,7 @@
         <platform>mugen</platform>
         <theme>mugen</theme>
     </system>
--->
+
     <system>
         <name>multivision</name>
         <fullname>Othello Multivision</fullname>
@@ -1329,7 +1329,7 @@
         <platform>odyssey2</platform>
         <theme>odyssey2</theme>
     </system>
-<!-- 
+
     <system>
         <name>openbor</name>
         <fullname>OpenBOR Game Engine</fullname>
@@ -1339,7 +1339,7 @@
         <platform>openbor</platform>
         <theme>openbor</theme>
     </system>
--->
+
 <!--
     <system>
         <name>oric</name>
@@ -1471,8 +1471,8 @@
         <fullname>Sony PlayStation 3</fullname>
         <path>%ROMPATH%/ps3</path>
         <extension>.desktop .ps3 .PS3 .ps3dir .PS3DIR</extension>
-        <command label="RPCS3 Directory (Standalone)">%EMULATOR_RPCS3% --no-gui %ROM%</command>
         <command label="RPCS3 Shortcut (Standalone)">%ENABLESHORTCUTS% %EMULATOR_OS-SHELL% %ROM%</command>
+        <command label="RPCS3 Directory (Standalone)">%EMULATOR_RPCS3% --no-gui %ROM%</command>
         <platform>ps3</platform>
         <theme>ps3</theme>
     </system>

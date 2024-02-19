@@ -2,7 +2,7 @@
 
 # This script is downloading the needed files to prepare the manifest build
 
-git config --global protocol.file.allow always
+git config protocol.file.allow always
 
 if [ "${GITHUB_REF##*/}" = "main" ]; then
     BUNDLE_NAME="RetroDECK.flatpak"
@@ -20,5 +20,5 @@ flatpak-builder --user --force-clean \
     --install-deps-from=flathub-beta \
     --repo=${GITHUB_WORKSPACE}/.local \
     --disable-download \
-    ${GITHUB_WORKSPACE}/"$FOLDER" \
+    "${GITHUB_WORKSPACE}/$FOLDER" \
     net.retrodeck.retrodeck.yml

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source /app/libexec/functions.sh
+
 debug_dialog() {
   # This function is for displaying commands run by the Configurator without actually running them
   # USAGE: debug_dialog "command"
@@ -21,8 +23,7 @@ configurator_process_complete_dialog() {
   if [ ! $? == 0 ]; then # OK button clicked
       configurator_welcome_dialog
   elif [ ! $? == 1 ]; then # Quit button clicked
-      pkill -f retrodeck
-      pkill -f emulationstation
+      quit_retrodeck
   fi
 }
 
@@ -117,9 +118,9 @@ configurator_move_folder_dialog() {
             if [[ -d "$dest_root/$rd_dir_path" ]]; then # If the move succeeded
               declare -g "$rd_dir_name=$dest_root/$rd_dir_path" # Set the new path for that folder variable in retrodeck.cfg
               if [[ "$rd_dir_name" == "rdhome" ]]; then # If the whole retrodeck folder was moved...
-                prepare_emulator "postmove" "retrodeck"
+                prepare_component "postmove" "retrodeck"
               fi
-              prepare_emulator "postmove" "all" # Update all the appropriate emulator path settings
+              prepare_component "postmove" "all" # Update all the appropriate emulator path settings
               conf_write # Write the settings to retrodeck.cfg
               if [[ -z $(ls -1 "$source_root/retrodeck") ]]; then # Cleanup empty old_path/retrodeck folder if it was left behind
                 rmdir "$source_root/retrodeck"
@@ -149,7 +150,7 @@ configurator_move_folder_dialog() {
     configurator_generic_dialog "RetroDECK Configurator - Move Folder" "The $(basename $dir_to_move) folder was not found at the expected location.\n\nThis may have happened if the folder was moved manually.\n\nPlease select the current location of the folder."
     dir_to_move=$(directory_browse "RetroDECK $(basename $dir_to_move) directory location")
     declare -g "$rd_dir_name=$dir_to_move"
-    prepare_emulator "postmove" "all"
+    prepare_component "postmove" "all"
     conf_write
     configurator_generic_dialog "RetroDECK Configurator - Move Folder" "RetroDECK $(basename $dir_to_move) folder now configured at\n$dir_to_move."
     configurator_move_folder_dialog "$rd_dir_name"
