@@ -596,7 +596,10 @@ branch_selector() {
         # Output selected branch
         echo "Selected branch: $selected_branch" # TODO: logging - Outputting selected branch
         set_setting_value "$rd_conf" "branch" "$selected_branch" "retrodeck" "options"
-        # TODO: check what is the last release for $selected_branch
+        branch="feat/sftp"
+        # Get the latest release for the specified branch
+        latest_release=$(curl -s "https://api.github.com/repos/XargonWan/RetroDECK-cooker/releases" | jq ".[] | select(.target_commitish == \"$branch_name\") | .tag_name" | head -n 1)
+        # TODO: this will fail because the builds coming from the PRs are not published yet, we should fix them
         # TODO: form a proper url: $flatpak_file_url
         configurator_generic_dialog "RetroDECK Online Update" "The update process may take several minutes.\n\nAfter the update is complete, RetroDECK will close. When you run it again you will be using the latest version."
           (
