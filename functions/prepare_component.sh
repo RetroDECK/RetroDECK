@@ -712,7 +712,7 @@ prepare_component() {
     mkdir -p $saves_folder/mame-sa
     mkdir -p "/var/config/mame"
     dir_prep "$saves_folder/mame-sa/hiscore" "/var/config/mame/hiscore"
-    cp -fvr "$emuconfigs/mame/**" "/var/config/mame"
+    cp -fvr "$emuconfigs/mame/"** "/var/config/mame"
     sed -i 's#RETRODECKROMSDIR#'$roms_folder'#g' "/var/config/mame/*.ini"
     sed -i 's#RETRODECKHOMESDIR#'$rdhome'#g' "/var/config/mame/*.ini"
     sed -i 's#RETRODECKSAVESDIR#'$rdhome'#g' "/var/config/mame/*.ini"
