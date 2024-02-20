@@ -433,8 +433,8 @@ modules:
   - name: art-book-next-es-de
     buildsystem: simple
     build-commands:
-      - mkdir -p ${FLATPAK_DEST}/share/emulationstation/themes/art-book-next-es-de/
-      - mv -f * ${FLATPAK_DEST}/share/emulationstation/themes/art-book-next-es-de/
+      - mkdir -p ${FLATPAK_DEST}/share/es-de/themes/art-book-next-es-de/
+      - mv -f * ${FLATPAK_DEST}/share/es-de/themes/art-book-next-es-de/
     sources:
       - type: git
         url:  https://github.com/anthonycaccese/art-book-next-es-de.git
@@ -1302,16 +1302,16 @@ modules:
       - mkdir -p ${FLATPAK_DEST}/retrodeck
 
       # Prep the ES-DE and RetroArch config files - I will have to SED/XMLSTARLET them soon
-      - rm -rf /app/share/emulationstation/resources/systems/linux/es_find_rules.xml
-      - cp es-configs/es_find_rules.xml /app/share/emulationstation/resources/systems/linux/
-      - rm -rf /app/share/emulationstation/resources/systems/linux/es_systems.xml
-      - cp es-configs/es_systems.xml /app/share/emulationstation/resources/systems/linux/
+      - rm -rf /app/share/es-de/resources/systems/linux/es_find_rules.xml
+      - cp es-configs/es_find_rules.xml /app/share/es-de/resources/systems/linux/
+      - rm -rf /app/share/es-de/resources/systems/linux/es_systems.xml
+      - cp es-configs/es_systems.xml /app/share/es-de/resources/systems/linux/
       # These must be put in home folder, managed by retrodeck.sh
       - cp es-configs/es_settings.xml ${FLATPAK_DEST}/retrodeck/es_settings.xml
       - mv -f -t ${FLATPAK_DEST}/retrodeck es-configs/rd_prepacks
 
       # Logo, res, move graphics directory away from default location so splash can be changed after build
-      - mv -f -t ${FLATPAK_DEST}/retrodeck /app/share/emulationstation/resources/graphics
+      - mv -f -t ${FLATPAK_DEST}/retrodeck /app/share/es-de/resources/graphics
       - cp -f res/splash.svg ${FLATPAK_DEST}/retrodeck/graphics/splash.svg
       - cp -f res/splash.svg ${FLATPAK_DEST}/retrodeck/graphics/splash-orig.svg
       - cp -rf res/extra_splashes/ ${FLATPAK_DEST}/retrodeck/graphics
