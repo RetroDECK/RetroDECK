@@ -595,7 +595,7 @@ branch_selector() {
           --text="Are you sure you want to move to \"$selected_branch\" branch?"
         # Output selected branch
         echo "Selected branch: $selected_branch" # TODO: logging - Outputting selected branch
-        # TODO: write the branch into the config file
+        set_setting_value "$rd_conf" "branch" "$selected_branch" "retrodeck" "options"
         # TODO: check what is the last release for $selected_branch
         # TODO: form a proper url: $flatpak_file_url
         configurator_generic_dialog "RetroDECK Online Update" "The update process may take several minutes.\n\nAfter the update is complete, RetroDECK will close. When you run it again you will be using the latest version."
