@@ -716,7 +716,7 @@ prepare_component() {
     sed -i 's#RETRODECKROMSDIR#'$roms_folder'#g' "/var/config/mame/*.ini"
     sed -i 's#RETRODECKHOMESDIR#'$rdhome'#g' "/var/config/mame/*.ini"
     sed -i 's#RETRODECKSAVESDIR#'$rdhome'#g' "/var/config/mame/*.ini"
-
+    sed -i 's#RETRODECKSTATESDIR#'$rdhome'#g' "/var/config/mame/*.ini"
   fi
 
   if [[ "$component" =~ ^(gzdoom|GZDOOM|all)$ ]]; then
