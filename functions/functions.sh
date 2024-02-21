@@ -275,7 +275,7 @@ dir_prep() {
   if [ -d "$symlink.old" ];
   then
     echo "Moving the data from $symlink.old to $real" #DEBUG
-    mv -f "$symlink.old"/{.[!.],}* $real
+    mv -f "$symlink.old"/{.[!.],}* "$real"
     echo "Removing $symlink.old" #DEBUG
     rm -rf "$symlink.old"
   fi
@@ -367,9 +367,6 @@ finit() {
 # Force/First init, depending on the situation
 
   echo "Executing finit"
-
-  # Placing the default retrodeck.cfg
-  cp -vf $rd_defaults $rd_conf
 
   # Internal or SD Card?
   local finit_dest_choice=$(configurator_destination_choice_dialog "RetroDECK data" "Welcome to the first configuration of RetroDECK.\nThe setup will be quick but please READ CAREFULLY each message in order to avoid misconfigurations.\n\nWhere do you want your RetroDECK data folder to be located?\n\nThis folder will contain all ROMs, BIOSs and scraped data." )
