@@ -47,6 +47,10 @@ presets_dir="$emuconfigs/defaults/retrodeck/presets"                            
 incompatible_presets_reference_list="$emuconfigs/defaults/retrodeck/reference_lists/incompatible_presets.cfg"         # A config file listing all incompatible presets for reference (eg. cannot have borders and widescreen enabled simultaniously)
 pretty_system_names_reference_list="$emuconfigs/defaults/retrodeck/reference_lists/pretty_system_names.cfg"           # An internal translation list for turning internal names (eg. gbc) to "pretty" names (Nintendo GameBoy Color)
 
+# Godot data transfer temp files
+
+godot_bios_files_checked="var/config/retrodeck/godot_bios_files_checked.tmp"
+
 # Config files for emulators with single config files
 
 citraconf="/var/config/citra-emu/qt-config.ini"

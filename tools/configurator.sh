@@ -940,20 +940,7 @@ configurator_check_bios_files() {
   configurator_generic_dialog "RetroDECK Configurator - Check & Verify: BIOS Files" "This check will look for BIOS files that RetroDECK has identified as working.\n\nNot all BIOS files are required for games to work, please check the BIOS description for more information on its purpose.\n\nThere may be additional BIOS files that will function with the emulators that are not checked.\n\nSome more advanced emulators such as Yuzu will have additional methods for verifiying the BIOS files are in working order."
   bios_checked_list=()
 
-  while IFS="^" read -r bios_file bios_subdir bios_hash bios_system bios_desc
-  do
-    bios_file_found="No"
-    bios_hash_matched="No"
-    if [[ -f "$bios_folder/$bios_subdir$bios_file" ]]; then
-      bios_file_found="Yes"
-      if [[ $bios_hash == "Unknown" ]]; then
-        bios_hash_matched="Unknown"
-      elif [[ $(md5sum "$bios_folder/$bios_subdir$bios_file" | awk '{ print $1 }') == "$bios_hash" ]]; then
-        bios_hash_matched="Yes"
-      fi
-    fi
-    bios_checked_list=("${bios_checked_list[@]}" "$bios_file" "$bios_system" "$bios_file_found" "$bios_hash_matched" "$bios_desc")
-  done < $bios_checklist
+  check_bios_files
 
   zenity --list --title="RetroDECK Configurator Utility - Check & Verify: BIOS Files" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
