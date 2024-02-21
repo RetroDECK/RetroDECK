@@ -23,6 +23,7 @@ prepare_component() {
           mkdir -p "$rdhome/$(basename $current_setting_value)"
         fi
       done < <(grep -v '^\s*$' $rd_conf | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
+      mkdir -p "/var/config/retrodeck/godot"
     fi
     if [[ "$action" == "postmove" ]]; then # Update the paths of any folders that came with the retrodeck folder during a move
       while read -r config_line; do
@@ -678,10 +679,7 @@ prepare_component() {
       else # Single-user actions
         # NOTE: the component is writing in "." so it must be placed in the rw filesystem. A symlink of the binary is already placed in /app/bin/Vita3K
         rm -rf "/var/data/Vita3K"
-        mkdir -p "/var/data/Vita3K"
-        unzip "/app/retrodeck/vita3k.zip" -d "/var/data/Vita3K"
-        chmod +x "/var/data/Vita3K/Vita3K"
-        rm -f "/var/data/Vita3K/update-vita3k.sh"
+        mkdir -p "/var/data/Vita3K/Vita3K"
         cp -fvr "$emuconfigs/vita3k/config.yml" "/var/data/Vita3K" # component config
         cp -fvr "$emuconfigs/vita3k/ux0" "$bios_folder/Vita3K/Vita3K" # User config
         set_setting_value "$vita3kconf" "pref-path" "$rdhome/bios/Vita3K/Vita3K/" "vita3k"

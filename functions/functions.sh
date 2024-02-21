@@ -275,12 +275,35 @@ dir_prep() {
   if [ -d "$symlink.old" ];
   then
     echo "Moving the data from $symlink.old to $real" #DEBUG
-    mv -f "$symlink.old"/{.[!.],}* $real
+    mv -f "$symlink.old"/{.[!.],}* "$real"
     echo "Removing $symlink.old" #DEBUG
     rm -rf "$symlink.old"
   fi
 
   echo -e "$symlink is now $real\n"
+}
+
+check_bios_files() {
+  # This function validates all the BIOS files listed in the $bios_checklist and adds the results to an array called bios_checked_list which can be used elsewhere
+  
+  rm -f "$godot_bios_files_checked" # Godot data transfer temp files
+  touch "$godot_bios_files_checked"
+
+  while IFS="^" read -r bios_file bios_subdir bios_hash bios_system bios_desc
+    do
+      bios_file_found="No"
+      bios_hash_matched="No"
+      if [[ -f "$bios_folder/$bios_subdir$bios_file" ]]; then
+        bios_file_found="Yes"
+        if [[ $bios_hash == "Unknown" ]]; then
+          bios_hash_matched="Unknown"
+        elif [[ $(md5sum "$bios_folder/$bios_subdir$bios_file" | awk '{ print $1 }') == "$bios_hash" ]]; then
+          bios_hash_matched="Yes"
+        fi
+      fi
+      bios_checked_list=("${bios_checked_list[@]}" "$bios_file" "$bios_system" "$bios_file_found" "$bios_hash_matched" "$bios_desc")
+      echo "$bios_file"^"$bios_system"^"$bios_file_found"^"$bios_hash_matched"^"$bios_desc" >> "$godot_bios_files_checked" # Godot data transfer temp file
+  done < $bios_checklist
 }
 
 update_rpcs3_firmware() {
@@ -367,9 +390,6 @@ finit() {
 # Force/First init, depending on the situation
 
   echo "Executing finit"
-
-  # Placing the default retrodeck.cfg
-  cp -vf $rd_defaults $rd_conf
 
   # Internal or SD Card?
   local finit_dest_choice=$(configurator_destination_choice_dialog "RetroDECK data" "Welcome to the first configuration of RetroDECK.\nThe setup will be quick but please READ CAREFULLY each message in order to avoid misconfigurations.\n\nWhere do you want your RetroDECK data folder to be located?\n\nThis folder will contain all ROMs, BIOSs and scraped data." )
