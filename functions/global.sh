@@ -109,8 +109,7 @@ vita3kconf="/var/data/Vita3K/config.yml"
 vita3kusrconfdir="$bios_folder/Vita3K/Vita3K"
 
 # We moved the lockfile in /var/config/retrodeck in order to solve issue #53 - Remove in a few versions
-if [ -f "$HOME/retrodeck/.lock" ]
-then
+if [[ -f "$HOME/retrodeck/.lock" ]]; then
   mv "$HOME/retrodeck/.lock" $lockfile
 fi
 
@@ -121,10 +120,12 @@ if [[ ! -f "$rd_conf" ]]; then
   echo "Initializing"
   # if we are here means that the we are in a new installation, so the version is valorized with the hardcoded one
   # Initializing the variables
-  if [ -z $version]; then
-    if [[ $(cat $lockfile) == *"0.4."* ]] || [[ $(cat $lockfile) == *"0.3."* ]] || [[ $(cat $lockfile) == *"0.2."* ]] || [[ $(cat $lockfile) == *"0.1."* ]]; then # If the previous version is very out of date, pre-rd_conf
-      echo "Running version workaround"
-      version=$(cat $lockfile)
+  if [[ -z "$version" ]]; then
+    if [[ -f "$lockfile" ]]; then
+      if [[ $(cat $lockfile) == *"0.4."* ]] || [[ $(cat $lockfile) == *"0.3."* ]] || [[ $(cat $lockfile) == *"0.2."* ]] || [[ $(cat $lockfile) == *"0.1."* ]]; then # If the previous version is very out of date, pre-rd_conf
+        echo "Running version workaround"
+        version=$(cat $lockfile)
+      fi
     else
       version="$hard_version"
     fi
@@ -132,10 +133,10 @@ if [[ ! -f "$rd_conf" ]]; then
 
   # Check if SD card path has changed from SteamOS update
   if [[ ! -d "$default_sd" && "$(ls -A /run/media/deck/)" ]]; then
-    if [[ $(find media/deck/* -maxdepth 0 -type d -print | wc -l) -eq 1 ]]; then # If there is only one SD card found in the new Steam OS 3.5 location, assign it as the default
+    if [[ $(find media/deck/* -maxdepth 0 -type d -print | wc -l) -eq 1 ]]; then # If there is only one SD card found in the new SteamOS 3.5 location, assign it as the default
       default_sd="$(find media/deck/* -maxdepth 0 -type d -print)"
     else # If the default legacy path cannot be found, and there are multiple entries in the new Steam OS 3.5 SD card path, let the user pick which one to use
-      configurator_generic_dialog "RetroDECK Setup" "The SD card was not found in the expected location.\nThis may happen when SteamOS is updated.\n\nPlease browse to the current location of the SD card.\n\nIf you are not using an SD card, please click \"Cancel\"."
+      configurator_generic_dialog "RetroDECK Setup" "The SD card was not found in the default location, and multiple drives were detected.\nPlease browse to the location of the desired SD card.\n\nIf you are not using an SD card, please click \"Cancel\"."
       default_sd="$(directory_browse "SD Card Location")"
     fi
   fi
@@ -171,8 +172,8 @@ else
   conf_read
 
   # Verify rdhome is where it is supposed to be.
-  if [[ ! -d $rdhome ]]; then
-    prev_home_path=$rdhome
+  if [[ ! -d "$rdhome" ]]; then
+    prev_home_path="$rdhome"
     configurator_generic_dialog "RetroDECK Setup" "The RetroDECK data folder was not found in the expected location.\nThis may happen when SteamOS is updated.\n\nPlease browse to the current location of the \"retrodeck\" folder."
     new_home_path=$(directory_browse "RetroDECK folder location")
     set_setting_value $rd_conf "rdhome" "$new_home_path" retrodeck "paths"
