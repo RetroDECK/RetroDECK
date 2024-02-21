@@ -52,6 +52,11 @@ set_setting_value() {
         xml ed -L -u "//$current_section_name/$setting_name_to_change" -v "$setting_value_to_change" "$1"
       fi
       ;;
+    
+    "mame" ) # This only works for mame .ini files, not the .cfg XML files
+      local mame_current_value=$(get_setting_value $1 "$setting_name_to_change" $4)
+      sed -i '\^\^'"$setting_name_to_change"'\s^s^'"$mame_current_value"'^'"$setting_value_to_change"'^' "$1"
+      ;;
 
     "es_settings" )
       sed -i 's^'"$setting_name_to_change"'" value=".*"^'"$setting_name_to_change"'" value="'"$setting_value_to_change"'"^' "$1"
@@ -74,6 +79,10 @@ get_setting_name() {
 
   "rpcs3" | "vita3k" )
     echo "$current_setting_line" | grep -o -P "^\s*?.*?(?=\s?:\s?)" | sed -e 's/^[ \t]*//;s^\\ ^ ^g'
+    ;;
+
+  "mame" ) # This only works for mame .ini files, not the .cfg XML files
+    echo "$current_setting_line" | awk '{print $1}'
     ;;
 
   * )
@@ -130,6 +139,10 @@ get_setting_value() {
     else
       echo $(xml sel -t -v "//$current_section_name/$current_setting_name" "$1")
     fi
+  ;;
+
+  "mame" ) # This only works for mame .ini files, not the .cfg XML files
+    echo $(sed -n '\^\^'"$current_setting_name"'\s^p' "$1" | awk '{print $2}')
   ;;
 
   "es_settings" )
