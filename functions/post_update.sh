@@ -241,8 +241,10 @@ post_update() {
     # - Install RetroDECK controller profile in desired location TODO
     # - Change section name in retrodeck.cfg for ABXY button swap preset
     sed -i 's^nintendo_button_layout^abxy_button_swap^' "$rd_conf" # This is a one-off sed statement as there are no functions for replacing section names
-    mv -f /var/config/emulationstation/.emulationstation /var/config/emulationstation/ES-DE # in 3.0 .emulationstation was moved into ES-DE
-    ln -s /var/config/emulationstation/ES-DE /var/config/emulationstation/.emulationstation # symlinking it to mantain the compatibility # TODO: remove this symlink n 0.9.0b
+    # in 3.0 .emulationstation was moved into ES-DE
+    mv -f /var/config/es-de/ /var/config/es-de/ES-DE
+    mv -f /var/config/es-de/.emulationstation /var/config/es-de/ES-DE
+    ln -s /var/config/es-de/ES-DE /var/config/es-de/.emulationstation # symlinking it to mantain the compatibility # TODO: remove this symlink n 0.9.0b
   fi
 
   # if [[ $prev_version -le "090" ]]; then
