@@ -42,12 +42,12 @@ prepare_component() {
     if [[ "$action" == "reset" ]]; then
       rm -rf /var/config/es-de/
       mkdir -p /var/config/ES-DE/
-      cp -f /app/retrodeck/es_settings.xml /var/config/ES-DE/es_settings.xml
+      cp -f /app/retrodeck/es_settings.xml /var/config/ES-DE/settings/es_settings.xml
       set_setting_value "$es_settings" "ROMDirectory" "$roms_folder" "es_settings"
       set_setting_value "$es_settings" "MediaDirectory" "$media_folder" "es_settings"
       set_setting_value "$es_settings" "UserThemeDirectory" "$themes_folder" "es_settings"
       dir_prep "$rdhome/gamelists" "/var/config/ES-DE/gamelists"
-      es-de --home /var/config/es-de --create-system-dirs
+      es-de --home /var/config/ES-DE --create-system-dirs
       update_splashscreens
     fi
     if [[ "$action" == "postmove" ]]; then

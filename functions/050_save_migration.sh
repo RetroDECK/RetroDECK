@@ -33,7 +33,7 @@ save_migration() {
   mkdir -pv $rdhome/logs #this was added later, maybe safe to remove in a few versions
 
   # Resetting es_settings, now we need it but in the future I should think a better solution, maybe with sed
-  cp -fv /app/retrodeck/es_settings.xml /var/config/ES-DE/es_settings.xml
+  cp -fv /app/retrodeck/es_settings.xml /var/config/ES-DE/settings/es_settings.xml
 
   # 0.4 -> 0.5
   # Perform save and state migration if needed

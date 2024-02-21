@@ -62,7 +62,7 @@ yuzuconf="/var/config/yuzu/qt-config.ini"
 
 # ES-DE config files
 
-es_settings="/var/config/ES-DE/es_settings.xml"
+es_settings="/var/config/ES-DE/settings/es_settings.xml"
 
 # RetroArch config files
 
