@@ -8,7 +8,7 @@
    <developer_name>RetroDECK Team</developer_name>
    <url type="homepage">https://retrodeck.net</url>
    <url type="bugtracker">https://github.com/XargonWan/RetroDECK/issues</url>
-   <url type="help">http://discord.gg/Dz3szYsP8g</url>
+   <url type="help">https://retrodeck.readthedocs.io</url>
    <url type="faq">https://github.com/XargonWan/RetroDECK/wiki/FAQs---Frequently-asked-questions</url>
    <url type="donation">https://www.patreon.com/RetroDECK</url>
    <content_rating type="oars-1.0" />
@@ -98,6 +98,7 @@
             </ul>
             <p>Issues:</p>
             <ul>
+               <li>!!! WARNING !!! Steam Sync is now REPLACING your Standalone BoilR links with RetroDECK's, use it at your own risk!</li>
                <li>GZDOOM: the controller for player 2+ is not correctly configured</li>
                <li>quit_retrodeck function seems to not working correctly</li>
                <li>MAME (Standalone) paths should be fixed</li>
