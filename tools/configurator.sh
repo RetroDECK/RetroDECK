@@ -691,33 +691,24 @@ configurator_compression_tool_dialog() {
 configurator_compress_single_game_dialog() {
   local file=$(file_browse "Game to compress")
   if [[ ! -z "$file" ]]; then
+    local system=$(echo "$file" | grep -oE "$roms_folder/[^/]+" | grep -oE "[^/]+$")
     local compatible_compression_format=$(find_compatible_compression_format "$file")
     if [[ ! $compatible_compression_format == "none" ]]; then
       local post_compression_cleanup=$(configurator_compression_cleanup_dialog)
       (
-      if [[ $compatible_compression_format == "chd" ]]; then
-        if [[ $(validate_for_chd "$file") == "true" ]]; then
-          echo "# Compressing $(basename "$file") to $compatible_compression_format format"
-          compress_game "chd" "$file"
-          if [[ $post_compression_cleanup == "true" ]]; then # Remove file(s) if requested
-            if [[ "$file" == *".cue" ]]; then
-              local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" "$file")
-              local file_path=$(dirname "$(realpath "$file")")
-              while IFS= read -r line
-              do
-                rm -f "$file_path/$line"
-              done < <(printf '%s\n' "$cue_bin_files")
-              rm -f "$file"
-            else
-              rm -f "$file"
-            fi
-          fi
-        fi
-      else
-        echo "# Compressing $(basename "$file") to $compatible_compression_format format"
-        compress_game "$compatible_compression_format" "$file"
-        if [[ $post_compression_cleanup == "true" ]]; then # Remove file(s) if requested
-          rm -f "$file"
+      echo "# Compressing $(basename "$file") to $compatible_compression_format format"
+      compress_game "$compatible_compression_format" "$file" "$system"
+      if [[ $post_compression_cleanup == "true" ]]; then # Remove file(s) if requested
+        if [[ "$file" == *".cue" ]]; then
+          local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" "$file")
+          local file_path=$(dirname "$(realpath "$file")")
+          while IFS= read -r line
+          do
+            rm -f "$file_path/$line"
+          done < <(printf '%s\n' "$cue_bin_files")
+          rm -f $(realpath "$file")
+        else
+          rm -f "$(realpath "$file")"
         fi
       fi
       ) |
@@ -817,12 +808,13 @@ configurator_compress_multiple_games_dialog() {
     local post_compression_cleanup=$(configurator_compression_cleanup_dialog)
     (
     for file in "${games_to_compress[@]}"; do
+      local system=$(echo "$file" | grep -oE "$roms_folder/[^/]+" | grep -oE "[^/]+$")
       local compression_format=$(find_compatible_compression_format "$file")
       echo "# Compressing $(basename "$file") into $compression_format format" # Update Zenity dialog text
       progress=$(( 100 - (( 100 / "$total_games_to_compress" ) * "$games_left_to_compress" )))
       echo $progress
       games_left_to_compress=$((games_left_to_compress-1))
-      compress_game "$compression_format" "$file"
+      compress_game "$compression_format" "$file" "$system"
       if [[ $post_compression_cleanup == "true" ]]; then # Remove file(s) if requested
         if [[ "$file" == *".cue" ]]; then
           local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" "$file")
