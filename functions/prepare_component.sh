@@ -686,13 +686,6 @@ prepare_component() {
       fi
       # Shared actions
       dir_prep "$saves_folder/psvita/vita3k" "$bios_folder/Vita3K/Vita3K/ux0/user/00/savedata" # Multi-user safe?
-
-      # Installing firmware
-      # TODO: at the moment this is here instead of a tool because it seems like it cannot run without Firmware
-      curl "http://dus01.psv.update.playstation.net/update/psv/image/2022_0209/rel_f2c7b12fe85496ec88a0391b514d6e3b/PSVUPDAT.PUP" -po /tmp/PSVUPDAT.PUP
-      curl "http://dus01.psp2.update.playstation.net/update/psp2/image/2019_0924/sd_8b5f60b56c3da8365b973dba570c53a5/PSP2UPDAT.PUP?dest=us" -po /tmp/PSP2UPDAT.PUP
-      Vita3K --firmware /tmp/PSVUPDAT.PUP
-      Vita3K --firmware /tmp/PSP2UPDAT.PUP
     fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
       dir_prep "$saves_folder/psvita/vita3k" "$bios_folder/Vita3K/Vita3K/ux0/user/00/savedata" # Multi-user safe?
