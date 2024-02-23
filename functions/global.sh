@@ -137,8 +137,8 @@ if [[ ! -f "$rd_conf" ]]; then
 
   # Check if SD card path has changed from SteamOS update
   if [[ ! -d "$default_sd" && "$(ls -A /run/media/deck/)" ]]; then
-    if [[ $(find media/deck/* -maxdepth 0 -type d -print | wc -l) -eq 1 ]]; then # If there is only one SD card found in the new SteamOS 3.5 location, assign it as the default
-      default_sd="$(find media/deck/* -maxdepth 0 -type d -print)"
+    if [[ $(find /run/media/deck/* -maxdepth 0 -type d -print | wc -l) -eq 1 ]]; then # If there is only one SD card found in the new SteamOS 3.5 location, assign it as the default
+      default_sd="$(find /run/media/deck/* -maxdepth 0 -type d -print)"
     else # If the default legacy path cannot be found, and there are multiple entries in the new Steam OS 3.5 SD card path, let the user pick which one to use
       configurator_generic_dialog "RetroDECK Setup" "The SD card was not found in the default location, and multiple drives were detected.\nPlease browse to the location of the desired SD card.\n\nIf you are not using an SD card, please click \"Cancel\"."
       default_sd="$(directory_browse "SD Card Location")"
