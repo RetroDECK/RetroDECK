@@ -60,6 +60,7 @@ source /app/libexec/global.sh
 #         - Compress All Games
 #       - Install: RetroDECK SD Controller Profile
 #       - Install: PS3 firmware
+#       - Install: PS Vita firmware
 #       - RetroDECK: Change Update Setting
 #     - Troubleshooting
 #       - Backup: RetroDECK Userdata
@@ -531,6 +532,7 @@ configurator_retrodeck_tools_dialog() {
   "Tool: Compress Games" "Compress games for systems that support it" \
   "Install: RetroDECK SD Controller Profile" "Install the custom RetroDECK controller layout for the Steam Deck" \
   "Install: PS3 Firmware" "Download and install PS3 firmware for use with the RPCS3 emulator" \
+  "Install: PS Vita Firmware" "Download and install PS Vita firmware for use with the Vita3K emulator" \
   "RetroDECK: Change Update Setting" "Enable or disable online checks for new versions of RetroDECK" )
 
   case $choice in
@@ -567,6 +569,24 @@ configurator_retrodeck_tools_dialog() {
         --auto-close
     else
       configurator_generic_dialog "RetroDECK Configurator - Install: PS3 Firmware" "You do not appear to currently have Internet access, which is required by this tool. Please try again when network access has been restored."
+      configurator_retrodeck_tools_dialog
+    fi
+  ;;
+
+  "Install: PS Vita Firmware" )
+    if [[ $(check_network_connectivity) == "true" ]]; then
+      configurator_generic_dialog "RetroDECK Configurator - Install: PS Vita firmware" "This tool will download firmware required by Vita3K to emulate PS Vita games.\n\nThe process will take several minutes, and the emulator will launch to finish the installation.\nPlease close Vita3K manually once the installation is complete."
+      (
+        update_vita3k_firmware
+      ) |
+        zenity --progress --pulsate \
+        --icon-name=net.retrodeck.retrodeck \
+        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+        --title="Downloading PS Vita Firmware" \
+        --no-cancel \
+        --auto-close
+    else
+      configurator_generic_dialog "RetroDECK Configurator - Install: PS Vita Firmware" "You do not appear to currently have Internet access, which is required by this tool. Please try again when network access has been restored."
       configurator_retrodeck_tools_dialog
     fi
   ;;

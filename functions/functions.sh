@@ -294,6 +294,13 @@ update_rpcs3_firmware() {
   rm -rf "$roms_folder/ps3/tmp"
 }
 
+update_vita3k_firmware() {
+  download_file "http://dus01.psv.update.playstation.net/update/psv/image/2022_0209/rel_f2c7b12fe85496ec88a0391b514d6e3b/PSVUPDAT.PUP" "/tmp/PSVUPDAT.PUP" "Vita3K Firmware file 1"
+  download_file "http://dus01.psp2.update.playstation.net/update/psp2/image/2019_0924/sd_8b5f60b56c3da8365b973dba570c53a5/PSP2UPDAT.PUP?dest=us" "/tmp/PSP2UPDAT.PUP" "Vita3K Firmware file 2"
+  Vita3K --firmware /tmp/PSVUPDAT.PUP
+  Vita3K --firmware /tmp/PSP2UPDAT.PUP
+}
+
 backup_retrodeck_userdata() {
   mkdir -p "$backups_folder"
   zip -rq9 "$backups_folder/$(date +"%0m%0d")_retrodeck_userdata.zip" "$saves_folder" "$states_folder" "$bios_folder" "$media_folder" "$themes_folder" "$logs_folder" "$screenshots_folder" "$mods_folder" "$texture_packs_folder" "$borders_folder" > $logs_folder/$(date +"%0m%0d")_backup_log.log
@@ -449,6 +456,10 @@ finit() {
     configurator_generic_dialog "RPCS3 Firmware Install" "You have chosen to install the RPCS3 firmware during the RetroDECK first setup.\n\nThis process will take several minutes and requires network access.\n\nRPCS3 will be launched automatically at the end of the RetroDECK setup process.\nOnce the firmware is installed, please close the emulator to finish the process."
   fi
 
+  if [[ "$finit_options_choices" =~ (vita3k_firmware|Enable All) ]]; then # Additional information on the firmware install process, as the emulator needs to be manually closed
+    configurator_generic_dialog "Vita3K Firmware Install" "You have chosen to install the Vita3K firmware during the RetroDECK first setup.\n\nThis process will take several minutes and requires network access.\n\nVita3K will be launched automatically at the end of the RetroDECK setup process.\nOnce the firmware is installed, please close the emulator to finish the process."
+  fi
+
   zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
   --text="RetroDECK will now install the needed files, which can take up to one minute.\nRetroDECK will start once the process is completed.\n\nPress OK to continue."
@@ -462,6 +473,11 @@ finit() {
   if [[ "$finit_options_choices" =~ (rpcs3_firmware|Enable All) ]]; then
     if [[ $(check_network_connectivity) == "true" ]]; then
       update_rpcs3_firmware
+    fi
+  fi
+  if [[ "$finit_options_choices" =~ (vita3k_firmware|Enable All) ]]; then
+    if [[ $(check_network_connectivity) == "true" ]]; then
+      update_vita3k_firmware
     fi
   fi
   if [[ "$finit_options_choices" =~ (rd_controller_profile|Enable All) ]]; then
