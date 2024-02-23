@@ -539,10 +539,9 @@ update_splashscreens() {
   # This script will purge any existing ES graphics and reload them from RO space into somewhere ES will look for it
   # USAGE: update_splashscreens
 
-  rm -rf /var/config/ES-DE/ES-DE/resources/graphics
-  rsync -rlD --mkpath "/app/retrodeck/graphics/" "/var/config/ES-DE/ES-DE/resources/graphics/"
+  rm -rf /var/config/ES-DE/resources/graphics
+  rsync -rlD --mkpath "/app/retrodeck/graphics/" "/var/config/ES-DE/resources/graphics/"
 
-  # NOTE: for some reason some stuff is still created in ES-DE/ES-DE so this path is correct
 }
 
 deploy_helper_files() {
