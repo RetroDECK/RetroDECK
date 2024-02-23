@@ -582,14 +582,46 @@ easter_eggs() {
   cp -f "$new_splash_file" "$current_splash_file" # Deploy assigned splash screen
 }
 
+install_release() {
+  # TODO logging - add some logging here
+  # Pass me a vaild GitHub tag and I will update to that version, I will use the update_repo variable to determine the repo
+
+  local flatpak_url="https://github.com/XargonWan/$update_repo/releases/download/$1/RetroDECK-cooker.flatpak"
+
+  zenity --question --icon-name=net.retrodeck.retrodeck --no-wrap \
+          --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+          --title "RetroDECK Updater" \
+          --text="The chosen version will be now intalled, after the update process RetroDECK will quit, do you want to continue?"
+  rc=$? # Capture return code
+  if [[ $rc == "1" ]]; then # If any button other than "OK" was clicked
+    return 0
+  fi
+
+  configurator_generic_dialog "RetroDECK Online Update" "The update process may take several minutes.\n\nAfter the update is complete, RetroDECK will close. When you run it again you will be using the latest version."
+  (
+  mkdir -p "/tmp/RetroDECK_Updates"
+  wget -P "/tmp/RetroDECK_Updates" $flatpak_url
+  flatpak-spawn --host flatpak remove --noninteractive -y net.retrodeck.retrodeck # Remove current version before installing new one, to avoid duplicates
+  flatpak-spawn --host flatpak install --user --bundle --noninteractive -y "/tmp/RetroDECK_Updates/RetroDECK-cooker.flatpak"
+  rm -rf "/tmp/RetroDECK_Updates" # Cleanup old bundles to save space
+  ) |
+  zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+  --title "RetroDECK Updater" \
+  --text="RetroDECK is updating to the selected version, please wait."
+
+  configurator_generic_dialog "RetroDECK Online Update" "The update process is now complete!\n\nRetroDECK will now quit."
+  quit_retrodeck
+}
+
 # TODO: this function is not yet used
 branch_selector() {
     # Fetch branches from GitHub API excluding "main"
-    branches=$(curl -s https://api.github.com/repos/XargonWan/RetroDECK/branches | grep '"name":' | awk -F '"' '$4 != "main" {print $4}')
+    local branches=$(curl -s https://api.github.com/repos/XargonWan/RetroDECK/branches | grep '"name":' | awk -F '"' '$4 != "main" {print $4}')
     # TODO: logging - Fetching branches from GitHub API
 
     # Create an array to store branch names
-    branch_array=()
+    local branch_array=()
 
     # Loop through each branch and add it to the array
     while IFS= read -r branch; do
@@ -598,7 +630,7 @@ branch_selector() {
     # TODO: logging - Creating array of branch names
 
     # Display branches in a Zenity list dialog
-    selected_branch=$(
+    local selected_branch=$(
       zenity --list \
         --icon-name=net.retrodeck.retrodeck \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -607,38 +639,35 @@ branch_selector() {
     )
     # TODO: logging - Displaying branches in Zenity list dialog
 
-    # Display warning message
-    if [ $selected_branch ]; then
-        zenity --question --icon-name=net.retrodeck.retrodeck --no-wrap \
-          --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-          --title "RetroDECK Configurator Cooker Branch - Switch Branch" \
-          --text="Are you sure you want to move to \"$selected_branch\" branch?"
-        # Output selected branch
-        echo "Selected branch: $selected_branch" # TODO: logging - Outputting selected branch
-        set_setting_value "$rd_conf" "branch" "$selected_branch" "retrodeck" "options"
-        branch="feat/sftp"
-        # Get the latest release for the specified branch
-        latest_release=$(curl -s "https://api.github.com/repos/XargonWan/RetroDECK-cooker/releases" | jq ".[] | select(.target_commitish == \"$branch_name\") | .tag_name" | head -n 1)
-        # TODO: this will fail because the builds coming from the PRs are not published yet, we should fix them
-        # TODO: form a proper url: $flatpak_file_url
-        configurator_generic_dialog "RetroDECK Online Update" "The update process may take several minutes.\n\nAfter the update is complete, RetroDECK will close. When you run it again you will be using the latest version."
-          (
-          local desired_flatpak_file=$(curl --silent $flatpak_file_url | grep '"browser_download_url":' | sed -E 's/.*"([^"]+)".*/\1/')
-          mkdir -p "$rdhome/RetroDECK_Updates"
-          wget -P "$rdhome/RetroDECK_Updates" $desired_flatpak_file
-          flatpak-spawn --host flatpak remove --noninteractive -y net.retrodeck.retrodeck # Remove current version before installing new one, to avoid duplicates
-          flatpak-spawn --host flatpak install --user --bundle --noninteractive -y "$rdhome/RetroDECK_Updates/RetroDECK-cooker.flatpak"
-          rm -rf "$rdhome/RetroDECK_Updates" # Cleanup old bundles to save space
-          ) |
-          zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
-          --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-          --title "RetroDECK Updater" \
-          --text="RetroDECK is updating to the latest \"$selected_branch\" version, please wait."
-          configurator_generic_dialog "RetroDECK Online Update" "The update process is now complete!\n\nPlease restart RetroDECK to keep the fun going."
-          exit 1
-    else
-        configurator_generic_dialog "No branch selected, exiting."
+    # If no branch is selected, quit the function
+    if [ -z "$selected_branch" ]; then
         # TODO: logging
+        return 1
+    fi
+
+    # Display warning message
+    zenity --question --icon-name=net.retrodeck.retrodeck --no-wrap \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Configurator Cooker Branch - Switch Branch" \
+      --text="Are you sure you want to move to \"$selected_branch\" branch?"
+    # Output selected branch
+    echo "Selected branch: $selected_branch" # TODO: logging - Outputting selected branch
+    set_setting_value "$rd_conf" "branch" "$selected_branch" "retrodeck" "options"
+
+    # Get the latest release for the specified branch
+    local latest_release=$(curl -s "https://api.github.com/repos/XargonWan/$update_repo/releases" | jq -r --arg bn "$branch_name" 'sort_by(.published_at) | .[] | select(.tag_name | contains($bn)) | .tag_name' | tail -n 1)
+    
+    zenity --question --icon-name=net.retrodeck.retrodeck --no-wrap \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Configurator Cooker Branch - Switch Branch" \
+      --text="Do you want to download and install the release \"$latest_release\"?"
+
+    # Check user's choice
+    if [[ $? -eq 0 ]]; then
+        # User clicked Yes
+        install_release $latest_release
+    else
+        return 0
     fi
 }
 
