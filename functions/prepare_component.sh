@@ -23,6 +23,7 @@ prepare_component() {
           mkdir -p "$rdhome/$(basename $current_setting_value)"
         fi
       done < <(grep -v '^\s*$' $rd_conf | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
+      mkdir -p "/var/config/retrodeck/godot"
     fi
     if [[ "$action" == "postmove" ]]; then # Update the paths of any folders that came with the retrodeck folder during a move
       while read -r config_line; do
@@ -40,12 +41,12 @@ prepare_component() {
   if [[ "$component" =~ ^(es-de|ES-DE|all)$ ]]; then # For use after ESDE-related folders are moved or a reset
     if [[ "$action" == "reset" ]]; then
       rm -rf /var/config/emulationstation/
-      mkdir -p /var/config/emulationstation/.emulationstation/
-      cp -f /app/retrodeck/es_settings.xml /var/config/emulationstation/.emulationstation/es_settings.xml
+      mkdir -p /var/config/emulationstation/ES-DE/
+      cp -f /app/retrodeck/es_settings.xml /var/config/emulationstation/ES-DE/es_settings.xml
       set_setting_value "$es_settings" "ROMDirectory" "$roms_folder" "es_settings"
       set_setting_value "$es_settings" "MediaDirectory" "$media_folder" "es_settings"
       set_setting_value "$es_settings" "UserThemeDirectory" "$themes_folder" "es_settings"
-      dir_prep "$rdhome/gamelists" "/var/config/emulationstation/.emulationstation/gamelists"
+      dir_prep "$rdhome/gamelists" "/var/config/emulationstation/ES-DE/gamelists"
       emulationstation --home /var/config/emulationstation --create-system-dirs
       update_splashscreens
     fi
@@ -53,7 +54,7 @@ prepare_component() {
       set_setting_value "$es_settings" "ROMDirectory" "$roms_folder" "es_settings"
       set_setting_value "$es_settings" "MediaDirectory" "$media_folder" "es_settings"
       set_setting_value "$es_settings" "UserThemeDirectory" "$themes_folder" "es_settings"
-      dir_prep "$rdhome/gamelists" "/var/config/emulationstation/.emulationstation/gamelists"
+      dir_prep "$rdhome/gamelists" "/var/config/emulationstation/ES-DE/gamelists"
     fi
   fi
 
@@ -678,10 +679,7 @@ prepare_component() {
       else # Single-user actions
         # NOTE: the component is writing in "." so it must be placed in the rw filesystem. A symlink of the binary is already placed in /app/bin/Vita3K
         rm -rf "/var/data/Vita3K"
-        mkdir -p "/var/data/Vita3K"
-        unzip "/app/retrodeck/vita3k.zip" -d "/var/data/Vita3K"
-        chmod +x "/var/data/Vita3K/Vita3K"
-        rm -f "/var/data/Vita3K/update-vita3k.sh"
+        mkdir -p "/var/data/Vita3K/Vita3K"
         cp -fvr "$emuconfigs/vita3k/config.yml" "/var/data/Vita3K" # component config
         cp -fvr "$emuconfigs/vita3k/ux0" "$bios_folder/Vita3K/Vita3K" # User config
         set_setting_value "$vita3kconf" "pref-path" "$rdhome/bios/Vita3K/Vita3K/" "vita3k"
@@ -712,11 +710,11 @@ prepare_component() {
     mkdir -p $saves_folder/mame-sa
     mkdir -p "/var/config/mame"
     dir_prep "$saves_folder/mame-sa/hiscore" "/var/config/mame/hiscore"
-    cp -fvr "$emuconfigs/mame/**" "/var/config/mame"
-    sed -i 's#RETRODECKROMSDIR#'$roms_folder'#g' "/var/config/gzdoom/*.ini"
-    sed -i 's#RETRODECKHOMESDIR#'$rdhome'#g' "/var/config/gzdoom/*.ini"
-    sed -i 's#RETRODECKSAVESDIR#'$rdhome'#g' "/var/config/gzdoom/*.ini"
-
+    cp -fvr "$emuconfigs/mame/"** "/var/config/mame"
+    sed -i 's#RETRODECKROMSDIR#'$roms_folder'#g' "/var/config/mame/*.ini"
+    sed -i 's#RETRODECKHOMESDIR#'$rdhome'#g' "/var/config/mame/*.ini"
+    sed -i 's#RETRODECKSAVESDIR#'$rdhome'#g' "/var/config/mame/*.ini"
+    sed -i 's#RETRODECKSTATESDIR#'$rdhome'#g' "/var/config/mame/*.ini"
   fi
 
   if [[ "$component" =~ ^(gzdoom|GZDOOM|all)$ ]]; then

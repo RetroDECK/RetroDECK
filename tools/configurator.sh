@@ -73,6 +73,7 @@ source /app/libexec/global.sh
 #           - Reset Dolphin
 #           - Reset Duckstation
 #           - Reset GZDoom
+#           - Reset MAME
 #           - Reset MelonDS
 #           - Reset PCSX2
 #           - Reset PPSSPP
@@ -939,20 +940,7 @@ configurator_check_bios_files() {
   configurator_generic_dialog "RetroDECK Configurator - Check & Verify: BIOS Files" "This check will look for BIOS files that RetroDECK has identified as working.\n\nNot all BIOS files are required for games to work, please check the BIOS description for more information on its purpose.\n\nThere may be additional BIOS files that will function with the emulators that are not checked.\n\nSome more advanced emulators such as Yuzu will have additional methods for verifiying the BIOS files are in working order."
   bios_checked_list=()
 
-  while IFS="^" read -r bios_file bios_subdir bios_hash bios_system bios_desc
-  do
-    bios_file_found="No"
-    bios_hash_matched="No"
-    if [[ -f "$bios_folder/$bios_subdir$bios_file" ]]; then
-      bios_file_found="Yes"
-      if [[ $bios_hash == "Unknown" ]]; then
-        bios_hash_matched="Unknown"
-      elif [[ $(md5sum "$bios_folder/$bios_subdir$bios_file" | awk '{ print $1 }') == "$bios_hash" ]]; then
-        bios_hash_matched="Yes"
-      fi
-    fi
-    bios_checked_list=("${bios_checked_list[@]}" "$bios_file" "$bios_system" "$bios_file_found" "$bios_hash_matched" "$bios_desc")
-  done < $bios_checklist
+  check_bios_files
 
   zenity --list --title="RetroDECK Configurator Utility - Check & Verify: BIOS Files" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
@@ -1033,7 +1021,7 @@ configurator_reset_dialog() {
       fi
     ;;
 
-    "Cemu" | "Citra" | "Dolphin" | "Duckstation" | "MelonDS" | "PCSX2" | "PPSSPP" | "Primehack" | "RPCS3" | "Ryujinx" | "Yuzu" )
+    "Cemu" | "Citra" | "Dolphin" | "Duckstation" | "MelonDS" | "MAME" | "PCSX2" | "PPSSPP" | "Primehack" | "RPCS3" | "Ryujinx" | "Yuzu" )
       if [[ $(configurator_reset_confirmation_dialog "$component_to_reset" "Are you sure you want to reset the $component_to_reset emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
         prepare_component "reset" "$component_to_reset" "configurator"
         configurator_process_complete_dialog "resetting $component_to_reset"
@@ -1151,8 +1139,46 @@ configurator_about_retrodeck_dialog() {
 }
 
 configurator_add_steam() {
-    python3 /app/libexec/steam-sync/steam-sync.py
-    configurator_welcome_dialog
+  if [[ $(get_setting_value $rd_conf "steam_sync" retrodeck "options") == "true" ]]; then
+    zenity --question \
+    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator - RetroDECK Steam Syncronization" \
+    --text="Steam syncronization is current enabled. Do you want to disable it?\n\nThe already added shortcut will not be removed.\n"
+
+    if [ $? == 0 ] # User clicked "Yes"
+    then
+      disable_steam_sync
+    else # User clicked "Cancel"
+      configurator_welcome_dialog
+    fi
+  else
+    zenity --question \
+    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator - RetroDECK Steam Syncronization" \
+    --text="Steam syncronization is current disabled. Do you want to enable it?\n\nAll the games marked as favorites will be syncronized with Steam thanks to BoilR.\nRemember to restart Steam each time to see the changes.\n"
+
+    if [ $? == 0 ]
+    then
+      enable_steam_sync
+    else
+      configurator_welcome_dialog
+    fi
+  fi
+}
+
+enable_steam_sync() {
+  set_setting_value $rd_conf "steam_sync" "true" retrodeck "options"
+  zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK" \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Configurator - RetroDECK Steam Syncronization" \
+      --text="Steam syncronization enabled, restart RetroDECK to get effect."
+  configurator_welcome_dialog
+}
+
+disable_steam_sync() {
+  set_setting_value $rd_conf "steam_sync" "false" retrodeck "options"
+  touch /tmp/retrodeck_steam_sync_exit
+  configurator_welcome_dialog
 }
 
 configurator_version_history_dialog() {
@@ -1311,7 +1337,7 @@ configurator_usb_import_dialog() {
 
       if [[ ! -z "$choice" ]]; then
         emulationstation --home "$choice" --create-system-dirs
-        rm -rf "$choice/.emulationstation" # Cleanup unnecessary folder
+        rm -rf "$choice/ES-DE" # Cleanup unnecessary folder
       fi
     else
       configurator_generic_dialog "RetroDeck Configurator - USB Import" "There were no USB devices found."

@@ -275,12 +275,35 @@ dir_prep() {
   if [ -d "$symlink.old" ];
   then
     echo "Moving the data from $symlink.old to $real" #DEBUG
-    mv -f "$symlink.old"/{.[!.],}* $real
+    mv -f "$symlink.old"/{.[!.],}* "$real"
     echo "Removing $symlink.old" #DEBUG
     rm -rf "$symlink.old"
   fi
 
   echo -e "$symlink is now $real\n"
+}
+
+check_bios_files() {
+  # This function validates all the BIOS files listed in the $bios_checklist and adds the results to an array called bios_checked_list which can be used elsewhere
+  
+  rm -f "$godot_bios_files_checked" # Godot data transfer temp files
+  touch "$godot_bios_files_checked"
+
+  while IFS="^" read -r bios_file bios_subdir bios_hash bios_system bios_desc
+    do
+      bios_file_found="No"
+      bios_hash_matched="No"
+      if [[ -f "$bios_folder/$bios_subdir$bios_file" ]]; then
+        bios_file_found="Yes"
+        if [[ $bios_hash == "Unknown" ]]; then
+          bios_hash_matched="Unknown"
+        elif [[ $(md5sum "$bios_folder/$bios_subdir$bios_file" | awk '{ print $1 }') == "$bios_hash" ]]; then
+          bios_hash_matched="Yes"
+        fi
+      fi
+      bios_checked_list=("${bios_checked_list[@]}" "$bios_file" "$bios_system" "$bios_file_found" "$bios_hash_matched" "$bios_desc")
+      echo "$bios_file"^"$bios_system"^"$bios_file_found"^"$bios_hash_matched"^"$bios_desc" >> "$godot_bios_files_checked" # Godot data transfer temp file
+  done < $bios_checklist
 }
 
 update_rpcs3_firmware() {
@@ -483,9 +506,9 @@ install_retrodeck_starterpack() {
 
   ## DOOM section ##
   cp /app/retrodeck/extras/doom1.wad "$roms_folder/doom/doom1.wad" # No -f in case the user already has it
-  mkdir -p "/var/config/emulationstation/.emulationstation/gamelists/doom"
-  if [[ ! -f "/var/config/emulationstation/.emulationstation/gamelists/doom/gamelist.xml" ]]; then # Don't overwrite an existing gamelist
-    cp "/app/retrodeck/rd_prepacks/doom/gamelist.xml" "/var/config/emulationstation/.emulationstation/gamelists/doom/gamelist.xml"
+  mkdir -p "/var/config/emulationstation/ES-DE/gamelists/doom"
+  if [[ ! -f "/var/config/emulationstation/ES-DE/gamelists/doom/gamelist.xml" ]]; then # Don't overwrite an existing gamelist
+    cp "/app/retrodeck/rd_prepacks/doom/gamelist.xml" "/var/config/emulationstation/ES-DE/gamelists/doom/gamelist.xml"
   fi
   mkdir -p "$media_folder/doom"
   unzip -oq "/app/retrodeck/rd_prepacks/doom/doom.zip" -d "$media_folder/doom/"
@@ -516,8 +539,8 @@ update_splashscreens() {
   # This script will purge any existing ES graphics and reload them from RO space into somewhere ES will look for it
   # USAGE: update_splashscreens
 
-  rm -rf /var/config/emulationstation/.emulationstation/resources/graphics
-  rsync -rlD --mkpath "/app/retrodeck/graphics/" "/var/config/emulationstation/.emulationstation/resources/graphics/"
+  rm -rf /var/config/emulationstation/ES-DE/resources/graphics
+  rsync -rlD --mkpath "/app/retrodeck/graphics/" "/var/config/emulationstation/ES-DE/resources/graphics/"
 }
 
 deploy_helper_files() {
@@ -594,6 +617,66 @@ manage_ryujinx_keys() {
   else
       echo "Directory $bios_folder/switch/keys does not exist. Maybe Ryujinx was never run. Continuing" #TODO logging
   fi
+}
+
+# TODO: this function is not yet used
+branch_selector() {
+    # Fetch branches from GitHub API excluding "main"
+    branches=$(curl -s https://api.github.com/repos/XargonWan/RetroDECK/branches | grep '"name":' | awk -F '"' '$4 != "main" {print $4}')
+    # TODO: logging - Fetching branches from GitHub API
+
+    # Create an array to store branch names
+    branch_array=()
+
+    # Loop through each branch and add it to the array
+    while IFS= read -r branch; do
+        branch_array+=("$branch")
+    done <<< "$branches"
+    # TODO: logging - Creating array of branch names
+
+    # Display branches in a Zenity list dialog
+    selected_branch=$(
+      zenity --list \
+        --icon-name=net.retrodeck.retrodeck \
+        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+        --title "RetroDECK Configurator Cooker Branch - Select Branch" \
+        --column="Branch" --width=1280 --height=800 "${branch_array[@]}"
+    )
+    # TODO: logging - Displaying branches in Zenity list dialog
+
+    # Display warning message
+    if [ $selected_branch ]; then
+        zenity --question --icon-name=net.retrodeck.retrodeck --no-wrap \
+          --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+          --title "RetroDECK Configurator Cooker Branch - Switch Branch" \
+          --text="Are you sure you want to move to \"$selected_branch\" branch?"
+        # Output selected branch
+        echo "Selected branch: $selected_branch" # TODO: logging - Outputting selected branch
+        set_setting_value "$rd_conf" "branch" "$selected_branch" "retrodeck" "options"
+        branch="feat/sftp"
+        # Get the latest release for the specified branch
+        latest_release=$(curl -s "https://api.github.com/repos/XargonWan/RetroDECK-cooker/releases" | jq ".[] | select(.target_commitish == \"$branch_name\") | .tag_name" | head -n 1)
+        # TODO: this will fail because the builds coming from the PRs are not published yet, we should fix them
+        # TODO: form a proper url: $flatpak_file_url
+        configurator_generic_dialog "RetroDECK Online Update" "The update process may take several minutes.\n\nAfter the update is complete, RetroDECK will close. When you run it again you will be using the latest version."
+          (
+          local desired_flatpak_file=$(curl --silent $flatpak_file_url | grep '"browser_download_url":' | sed -E 's/.*"([^"]+)".*/\1/')
+          mkdir -p "$rdhome/RetroDECK_Updates"
+          wget -P "$rdhome/RetroDECK_Updates" $desired_flatpak_file
+          flatpak-spawn --host flatpak remove --noninteractive -y net.retrodeck.retrodeck # Remove current version before installing new one, to avoid duplicates
+          flatpak-spawn --host flatpak install --user --bundle --noninteractive -y "$rdhome/RetroDECK_Updates/RetroDECK-cooker.flatpak"
+          rm -rf "$rdhome/RetroDECK_Updates" # Cleanup old bundles to save space
+          ) |
+          zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+          --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+          --title "RetroDECK Updater" \
+          --text="RetroDECK is updating to the latest \"$selected_branch\" version, please wait."
+          configurator_generic_dialog "RetroDECK Online Update" "The update process is now complete!\n\nPlease restart RetroDECK to keep the fun going."
+          exit 1
+    else
+        configurator_generic_dialog "No branch selected, exiting."
+        # TODO: logging
+    fi
 }
 
 quit_retrodeck() {
