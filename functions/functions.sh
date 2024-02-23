@@ -586,7 +586,7 @@ install_release() {
   # TODO logging - add some logging here
   # Pass me a vaild GitHub tag and I will update to that version, I will use the update_repo variable to determine the repo
 
-  local flatpak_url="https://github.com/XargonWan/$update_repo/releases/download/$1/RetroDECK-cooker.flatpak"
+  local flatpak_url="https://github.com/XargonWan/$update_repo/releases/download/$1/$update_repo.flatpak"
 
   zenity --question --icon-name=net.retrodeck.retrodeck --no-wrap \
           --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -600,9 +600,9 @@ install_release() {
   configurator_generic_dialog "RetroDECK Online Update" "The update process may take several minutes.\n\nAfter the update is complete, RetroDECK will close. When you run it again you will be using the latest version."
   (
   mkdir -p "/tmp/RetroDECK_Updates"
-  wget -P "/tmp/RetroDECK_Updates" $flatpak_url
+  wget -P "/tmp/RetroDECK_Updates" $flatpak_url -O "/tmp/RetroDECK_Updates/$update_repo.flatpak"
   flatpak-spawn --host flatpak remove --noninteractive -y net.retrodeck.retrodeck # Remove current version before installing new one, to avoid duplicates
-  flatpak-spawn --host flatpak install --user --bundle --noninteractive -y "/tmp/RetroDECK_Updates/RetroDECK-cooker.flatpak"
+  flatpak-spawn --host flatpak install --user --bundle --noninteractive -y "/tmp/RetroDECK_Updates/$update_repo.flatpak"
   rm -rf "/tmp/RetroDECK_Updates" # Cleanup old bundles to save space
   ) |
   zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
