@@ -107,34 +107,14 @@ download_file() {
   # file_dest is the destination the file should be in the filesystem, needs filename included!
   # file_name is a user-readable file name or description to be put in the Zenity dialog
 
-  # Run wget in the background and redirect the progress to a temporary file
   (
-    wget "$1" -O "$2" -q --show-progress --progress=dot 2>&1 | sed -n -e 's/^.* \([0-9]*\)%.*$/\1/p' > "/var/cache/tmp/download_progress" &
-    wget_pid=$!
-
-        progress="0"
-        echo "$progress" # Initial progress value. sent to Zenity
-        while true; do
-            progress=$(tail -n 2 "/var/cache/tmp/download_progress" | head -1) # Read the second-to-last value written to the pipe, to avoid reading data that is half written
-            echo "$progress" # Send value to Zenity
-            if [[ "$(tail -n 1 "/var/cache/tmp/download_progress")" == "100" ]]; then # Read last line every time to check for download completion
-                echo "100"
-                break
-            fi
-            sleep 0.5
-        done
-
-    # Wait for wget process to finish
-    wait "$wget_pid"
+    wget "$1" -O "$2" -q
   ) |
   zenity --progress \
     --title="Downloading File" \
     --text="Downloading $3..." \
-    --percentage=0 \
+    --pulsate \
     --auto-close
-
-  # Cleanup temp file
-  rm -f "/var/cache/tmp/download_progress"
 }
 
 update_rd_conf() {
