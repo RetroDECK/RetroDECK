@@ -64,7 +64,7 @@ jobs:
         run: |
           if [[ "$BRANCH_NAME" == 'refs/'* ]]; then
             pr_number=$(echo ${{env.BRANCH_NAME}} | awk -F'/' '{print $3}')
-            source_branch=$(curl -s "https://api.github.com/repos/$repo_owner/$repo_name/pulls/$pr_number" | jq -r '.head.ref')
+            source_branch=$(curl -s "https://api.github.com/repos/XargonWan/RetroDECK/pulls/$pr_number" | jq -r '.head.ref')
             source_branch=${source_branch//\//-}
             echo "[DEBUG] source branch is: $source_branch"
             echo "TAG=PR-$pr_number-$source_branch-${{ env.buildid }}" >> $GITHUB_ENV
