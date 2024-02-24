@@ -40,8 +40,8 @@ prepare_component() {
 
   if [[ "$component" =~ ^(es-de|ES-DE|all)$ ]]; then # For use after ESDE-related folders are moved or a reset
     if [[ "$action" == "reset" ]]; then
-      rm -rf /var/config/es-de/
-      mkdir -p /var/config/ES-DE/
+      rm -rf /var/config/ES-DE
+      mkdir -p /var/config/ES-DE/settings
       cp -f /app/retrodeck/es_settings.xml /var/config/ES-DE/settings/es_settings.xml
       set_setting_value "$es_settings" "ROMDirectory" "$roms_folder" "es_settings"
       set_setting_value "$es_settings" "MediaDirectory" "$media_folder" "es_settings"
