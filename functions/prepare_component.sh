@@ -542,6 +542,8 @@ prepare_component() {
   fi
 
   if [[ "$component" =~ ^(ryujunx|Ryujinx|all)$ ]]; then
+    # NOTE: for techincal reasons the system folder of Ryujinx IS NOT a sumlink of the bios/switch/keys as not only the keys are located there
+    # When RetroDECK starts there is a "manage_ryujinx_keys" function that symlinks the keys only in Rryujinx/system.
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       echo "------------------------"
       echo "Initializing RYUJINX"
@@ -549,15 +551,22 @@ prepare_component() {
       if [[ $multi_user_mode == "true" ]]; then
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/Ryujinx"
         #mkdir -p "$multi_user_data_folder/$SteamAppUser/config/Ryujinx/system"
+        # TODO: add /var/config/Ryujinx/system system folder management
         cp -fv $emuconfigs/ryujinx/* "$multi_user_data_folder/$SteamAppUser/config/Ryujinx"
         sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "$multi_user_data_folder/$SteamAppUser/config/Ryujinx/Config.json"
         dir_prep "$multi_user_data_folder/$SteamAppUser/config/Ryujinx" "/var/config/Ryujinx"
+        # TODO: add nand (saves) folder management
+        # TODO: add "registered" folder management
       else
         # removing config directory to wipe legacy files
         rm -rf /var/config/Ryujinx
-        #mkdir -p /var/config/Ryujinx/system
+        mkdir -p /var/config/Ryujinx/system
         cp -fv $emuconfigs/ryujinx/* /var/config/Ryujinx
         sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "$ryujinxconf"
+        # Linking switch nand/saves folder
+        rm -rf /var/config/Ryujinx/bis
+        dir_prep "$saves_folder/switch/nand" "/var/config/Ryujinx/bis"
+        dir_prep "$bios_folder/switch/registered" "/var/config/Ryujinx/bis/system/Contents/registered"
       fi
     fi
     # if [[ "$action" == "reset" ]] || [[ "$action" == "postmove" ]]; then # Run commands that apply to both resets and moves
@@ -622,8 +631,8 @@ prepare_component() {
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/yuzu"
         mkdir -p "$multi_user_data_folder/$SteamAppUser/config/yuzu"
         cp -fvr "$emuconfigs/yuzu/"* "$multi_user_data_folder/$SteamAppUser/config/yuzu/"
-        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/yuzu/qt-config.ini" "nand_directory" "$saves_folder/switch/yuzu/nand" "yuzu" "Data%20Storage"
-        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/yuzu/qt-config.ini" "sdmc_directory" "$saves_folder/switch/yuzu/sdmc" "yuzu" "Data%20Storage"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/yuzu/qt-config.ini" "nand_directory" "$saves_folder/switch/nand" "yuzu" "Data%20Storage"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/yuzu/qt-config.ini" "sdmc_directory" "$saves_folder/switch/sdmc" "yuzu" "Data%20Storage"
         set_setting_value "$multi_user_data_folder/$SteamAppUser/config/yuzu/qt-config.ini" "Paths\gamedirs\4\path" "$roms_folder/switch" "yuzu" "UI"
         set_setting_value "$multi_user_data_folder/$SteamAppUser/config/yuzu/qt-config.ini" "Screenshots\screenshot_path" "$screenshots_folder" "yuzu" "UI"
         dir_prep "$multi_user_data_folder/$SteamAppUser/config/yuzu" "/var/config/yuzu"
