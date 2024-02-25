@@ -587,15 +587,15 @@ manage_ryujinx_keys() {
   # If the symlinks are broken it recreates them
 
   echo "Checking Ryujinx Switch keys." #TODO logging
-  ryujinx_system="/var/config/Ryujinx/system"  # Set the path to the Ryujinx system folder
+  local ryujinx_system="/var/config/Ryujinx/system"  # Set the path to the Ryujinx system folder
   # Check if the keys folder exists
   if [ -d "$bios_folder/switch/keys" ]; then
       # Check if there are files in the keys folder
       if [ -n "$(find "$bios_folder/switch/keys" -maxdepth 1 -type f)" ]; then
           # Iterate over each file in the keys folder
           for file in "$bios_folder/switch/keys"/*; do
-              filename=$(basename "$file")
-              symlink="$ryujinx_system/$filename"
+              local filename=$(basename "$file")
+              local symlink="$ryujinx_system/$filename"
               
               # Check if the symlink exists and is valid
               if [ -L "$symlink" ] && [ "$(readlink -f "$symlink")" = "$file" ]; then
@@ -604,7 +604,7 @@ manage_ryujinx_keys() {
               fi
               
               # Remove broken symlink or non-symlink file
-              echo "Found \"$symlink\" but it's not a valid symlink. Repeiring it" #TODO logging
+              echo "Found \"$symlink\" but it's not a valid symlink. Repairing it" #TODO logging
               [ -e "$symlink" ] && rm "$symlink"
 
               # Create symlink
