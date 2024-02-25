@@ -243,6 +243,16 @@ post_update() {
     sed -i 's^nintendo_button_layout^abxy_button_swap^' "$rd_conf" # This is a one-off sed statement as there are no functions for replacing section names
     mv -f /var/config/emulationstation/.emulationstation /var/config/emulationstation/ES-DE # in 3.0 .emulationstation was moved into ES-DE
     ln -s /var/config/emulationstation/ES-DE /var/config/emulationstation/.emulationstation # symlinking it to mantain the compatibility # TODO: remove this symlink n 0.9.0b
+
+    # YUZU - Switch saves are now unified for both Yuzu and Ryujinx
+    mv $saves_folder/switch/yuzu/* $saves_folder/switch
+    rm -rf $saves_folder/switch/yuzu
+    set_setting_value "$yuzuconf" "nand_directory" "$saves_folder/switch/nand" "yuzu" "Data%20Storage"
+    set_setting_value "$yuzuconf" "sdmc_directory" "$saves_folder/switch/sdmc" "yuzu" "Data%20Storage"
+
+    # TODO: init Vita3K
+    # TODO: init Ryujinx
+    # TODO: init GZDoom
   fi
 
   # if [[ $prev_version -le "090" ]]; then
