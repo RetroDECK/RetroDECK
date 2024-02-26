@@ -500,7 +500,7 @@ configurator_open_emulator_dialog() {
   ;;
 
   "Ryujinx" )
-    ryujinx-wrapper
+    Ryujinx.sh
   ;;
 
   "Vita3K" )
