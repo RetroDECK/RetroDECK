@@ -1055,7 +1055,7 @@ configurator_reset_dialog() {
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
     --text="Which component do you want to reset to default?" \
     --column="Component" --column="Action" \
-    "BoilR" "Reset BoilR that manages the sync and scraping toward Steam library" \ 
+    "BoilR" "Reset BoilR that manages the sync and scraping toward Steam library" \
     "ES-DE" "Reset the ES-DE frontend" \ )
     # TODO: "GyroDSU" "Reset the gyroscope manager GyroDSU"
 
