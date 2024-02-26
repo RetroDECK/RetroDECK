@@ -476,7 +476,7 @@ configurator_open_emulator_dialog() {
   ;;
 
   "MAME" )
-    mame
+    mame-rdwrapper.sh
   ;;
 
   "MelonDS" )
