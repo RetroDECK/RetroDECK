@@ -556,6 +556,7 @@ prepare_component() {
         sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "$multi_user_data_folder/$SteamAppUser/config/Ryujinx/Config.json"
         dir_prep "$multi_user_data_folder/$SteamAppUser/config/Ryujinx" "/var/config/Ryujinx"
         # TODO: add nand (saves) folder management
+        # TODO: add nand (saves) folder management
         # TODO: add "registered" folder management
       else
         # removing config directory to wipe legacy files
@@ -565,8 +566,9 @@ prepare_component() {
         sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "$ryujinxconf"
         # Linking switch nand/saves folder
         rm -rf /var/config/Ryujinx/bis
-        dir_prep "$saves_folder/switch/nand" "/var/config/Ryujinx/bis"
-        dir_prep "$bios_folder/switch/registered" "/var/config/Ryujinx/bis/system/Contents/registered"
+        dir_prep "$saves_folder/switch/ryujinx/nand" "/var/config/Ryujinx/bis"
+        dir_prep "$saves_folder/switch/ryujinx/sdcard" "/var/config/Ryujinx/sdcard"
+        dir_prep "$bios_folder/switch/ryujinx/registered" "/var/config/Ryujinx/bis/system/Contents/registered"
       fi
     fi
     # if [[ "$action" == "reset" ]] || [[ "$action" == "postmove" ]]; then # Run commands that apply to both resets and moves
@@ -631,8 +633,8 @@ prepare_component() {
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/yuzu"
         mkdir -p "$multi_user_data_folder/$SteamAppUser/config/yuzu"
         cp -fvr "$emuconfigs/yuzu/"* "$multi_user_data_folder/$SteamAppUser/config/yuzu/"
-        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/yuzu/qt-config.ini" "nand_directory" "$saves_folder/switch/nand" "yuzu" "Data%20Storage"
-        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/yuzu/qt-config.ini" "sdmc_directory" "$saves_folder/switch/sdmc" "yuzu" "Data%20Storage"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/yuzu/qt-config.ini" "nand_directory" "$saves_folder/switch/yuzu/nand" "yuzu" "Data%20Storage"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/yuzu/qt-config.ini" "sdmc_directory" "$saves_folder/switch/yuzu/sdmc" "yuzu" "Data%20Storage"
         set_setting_value "$multi_user_data_folder/$SteamAppUser/config/yuzu/qt-config.ini" "Paths\gamedirs\4\path" "$roms_folder/switch" "yuzu" "UI"
         set_setting_value "$multi_user_data_folder/$SteamAppUser/config/yuzu/qt-config.ini" "Screenshots\screenshot_path" "$screenshots_folder" "yuzu" "UI"
         dir_prep "$multi_user_data_folder/$SteamAppUser/config/yuzu" "/var/config/yuzu"
