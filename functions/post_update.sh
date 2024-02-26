@@ -247,6 +247,7 @@ post_update() {
     prepare_component "reset" "mame"
     prepare_component "reset" "vita3k"
     prepare_component "reset" "gzdoom"
+    
   fi
 
   # if [[ $prev_version -le "090" ]]; then

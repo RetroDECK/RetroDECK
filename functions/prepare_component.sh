@@ -542,27 +542,38 @@ prepare_component() {
   fi
 
   if [[ "$component" =~ ^(ryujunx|Ryujinx|all)$ ]]; then
+    # NOTE: for techincal reasons the system folder of Ryujinx IS NOT a sumlink of the bios/switch/keys as not only the keys are located there
+    # When RetroDECK starts there is a "manage_ryujinx_keys" function that symlinks the keys only in Rryujinx/system.
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       echo "------------------------"
       echo "Initializing RYUJINX"
       echo "------------------------"
       if [[ $multi_user_mode == "true" ]]; then
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/Ryujinx"
-        mkdir -p "$multi_user_data_folder/$SteamAppUser/config/Ryujinx/system"
+        #mkdir -p "$multi_user_data_folder/$SteamAppUser/config/Ryujinx/system"
+        # TODO: add /var/config/Ryujinx/system system folder management
         cp -fv $emuconfigs/ryujinx/* "$multi_user_data_folder/$SteamAppUser/config/Ryujinx"
-        sed -i 's#/home/deck/retrodeck#'$rdhome'#g' "$multi_user_data_folder/$SteamAppUser/config/Ryujinx/Config.json"
+        sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "$multi_user_data_folder/$SteamAppUser/config/Ryujinx/Config.json"
         dir_prep "$multi_user_data_folder/$SteamAppUser/config/Ryujinx" "/var/config/Ryujinx"
+        # TODO: add nand (saves) folder management
+        # TODO: add nand (saves) folder management
+        # TODO: add "registered" folder management
       else
         # removing config directory to wipe legacy files
         rm -rf /var/config/Ryujinx
         mkdir -p /var/config/Ryujinx/system
         cp -fv $emuconfigs/ryujinx/* /var/config/Ryujinx
-        sed -i 's#/home/deck/retrodeck#'$rdhome'#g' "$ryujinxconf"
+        sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "$ryujinxconf"
+        # Linking switch nand/saves folder
+        rm -rf /var/config/Ryujinx/bis
+        dir_prep "$saves_folder/switch/ryujinx/nand" "/var/config/Ryujinx/bis"
+        dir_prep "$saves_folder/switch/ryujinx/sdcard" "/var/config/Ryujinx/sdcard"
+        dir_prep "$bios_folder/switch/ryujinx/registered" "/var/config/Ryujinx/bis/system/Contents/registered"
       fi
     fi
-    if [[ "$action" == "reset" ]] || [[ "$action" == "postmove" ]]; then # Run commands that apply to both resets and moves
-      dir_prep "$bios_folder/switch/keys" "/var/config/Ryujinx/system"
-    fi
+    # if [[ "$action" == "reset" ]] || [[ "$action" == "postmove" ]]; then # Run commands that apply to both resets and moves
+    #   dir_prep "$bios_folder/switch/keys" "/var/config/Ryujinx/system"
+    # fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
       sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "$ryujinxconf" # This is an unfortunate one-off because set_setting_value does not currently support JSON
     fi
