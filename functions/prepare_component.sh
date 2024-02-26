@@ -697,13 +697,6 @@ prepare_component() {
       fi
       # Shared actions
       dir_prep "$saves_folder/psvita/vita3k" "$bios_folder/Vita3K/Vita3K/ux0/user/00/savedata" # Multi-user safe?
-
-      # Installing firmware
-      # TODO: at the moment this is here instead of a tool because it seems like it cannot run without Firmware
-      curl "http://dus01.psv.update.playstation.net/update/psv/image/2022_0209/rel_f2c7b12fe85496ec88a0391b514d6e3b/PSVUPDAT.PUP" -po /tmp/PSVUPDAT.PUP
-      curl "http://dus01.psp2.update.playstation.net/update/psp2/image/2019_0924/sd_8b5f60b56c3da8365b973dba570c53a5/PSP2UPDAT.PUP?dest=us" -po /tmp/PSP2UPDAT.PUP
-      Vita3K --firmware /tmp/PSVUPDAT.PUP
-      Vita3K --firmware /tmp/PSP2UPDAT.PUP
     fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
       dir_prep "$saves_folder/psvita/vita3k" "$bios_folder/Vita3K/Vita3K/ux0/user/00/savedata" # Multi-user safe?
@@ -718,14 +711,65 @@ prepare_component() {
     echo "Initializing MAME"
     echo "----------------------"
 
+    # TODO: probably some of these needs to be put elsewhere
     mkdir -p $saves_folder/mame-sa
-    mkdir -p "/var/config/mame"
+    mkdir -p "$saves_folder/mame-sa/nvram"
+    mkdir -p "$states_folder/mame-sa"
+    mkdir -p "$rdhome/screenshots/mame-sa"
+    mkdir -p "$saves_folder/mame-sa/diff"
+
+    mkdir -p "/var/config/ctrlr"
+    mkdir -p "/var/config/mame/ini"
+    mkdir -p "/var/config/mame/cfg"
+    mkdir -p "/var/config/mame/inp"
+
+    mkdir -p "/var/data/mame/plugin-data"
+    mkdir -p "/var/data/mame/hash"
+    mkdir -p "/var/data/mame/assets/samples"
+    mkdir -p "/var/data/mame/assets/artwork"
+    mkdir -p "/var/data/mame/assets/fonts"
+    mkdir -p "/var/data/mame/cheat"
+    mkdir -p "/var/data/mame/assets/crosshair"
+    mkdir -p "/var/data/mame/plugins"
+    mkdir -p "/var/data/mame/assets/language"
+    mkdir -p "/var/data/mame/assets/software"
+    mkdir -p "/var/data/mame/assets/comments"
+    mkdir -p "/var/data/mame/assets/share"
+    mkdir -p "/var/data/mame/dats"
+    mkdir -p "/var/data/mame/folders"
+    mkdir -p "/var/data/mame/assets/cabinets"
+    mkdir -p "/var/data/mame/assets/cpanel"
+    mkdir -p "/var/data/mame/assets/pcb"
+    mkdir -p "/var/data/mame/assets/flyers"
+    mkdir -p "/var/data/mame/assets/titles"
+    mkdir -p "/var/data/mame/assets/ends"
+    mkdir -p "/var/data/mame/assets/marquees"
+    mkdir -p "/var/data/mame/assets/artwork-preview"
+    mkdir -p "/var/data/mame/assets/bosses"
+    mkdir -p "/var/data/mame/assets/logo"
+    mkdir -p "/var/data/mame/assets/scores"
+    mkdir -p "/var/data/mame/assets/versus"
+    mkdir -p "/var/data/mame/assets/gameover"
+    mkdir -p "/var/data/mame/assets/howto"
+    mkdir -p "/var/data/mame/assets/select"
+    mkdir -p "/var/data/mame/assets/icons"
+    mkdir -p "/var/data/mame/assets/covers"
+    mkdir -p "/var/data/mame/assets/ui"
+
     dir_prep "$saves_folder/mame-sa/hiscore" "/var/config/mame/hiscore"
-    cp -fvr "$emuconfigs/mame/"** "/var/config/mame"
-    sed -i 's#RETRODECKROMSDIR#'$roms_folder'#g' "/var/config/mame/*.ini"
-    sed -i 's#RETRODECKHOMESDIR#'$rdhome'#g' "/var/config/mame/*.ini"
-    sed -i 's#RETRODECKSAVESDIR#'$rdhome'#g' "/var/config/mame/*.ini"
-    sed -i 's#RETRODECKSTATESDIR#'$rdhome'#g' "/var/config/mame/*.ini"
+    cp -fvr "$emuconfigs/mame/mame.ini" "/var/config/mame"
+    cp -fvr "$emuconfigs/mame/ui.ini" "/var/config/mame"
+    cp -fvr "$emuconfigs/mame/default.cfg" "/var/config/mame"
+
+    sed -i 's#RETRODECKROMSDIR#'$roms_folder'#g' "/var/config/mame/mame.ini"
+    sed -i 's#RETRODECKHOMESDIR#'$rdhome'#g' "/var/config/mame/mame.ini"
+    sed -i 's#RETRODECKSAVESDIR#'$rdhome'#g' "/var/config/mame/mame.ini"
+    sed -i 's#RETRODECKSTATESDIR#'$rdhome'#g' "/var/config/mame/mame.ini"
+
+    sed -i 's#RETRODECKROMSDIR#'$roms_folder'#g' "/var/config/mame/ui.ini"
+    sed -i 's#RETRODECKHOMESDIR#'$rdhome'#g' "/var/config/mame/ui.ini"
+    sed -i 's#RETRODECKSAVESDIR#'$rdhome'#g' "/var/config/mame/ui.ini"
+    sed -i 's#RETRODECKSTATESDIR#'$rdhome'#g' "/var/config/mame/ui.ini"
   fi
 
   if [[ "$component" =~ ^(gzdoom|GZDOOM|all)$ ]]; then

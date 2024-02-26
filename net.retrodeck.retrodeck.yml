@@ -1342,7 +1342,7 @@ modules:
       # Tools
       - mkdir -p /app/tools
       - cp -r tools/** /app/tools
-      - find /app/tools -name '*.py|*.sh' -exec chmod +x {} \;
+      - find /app/tools -type f \( -name "*.sh" -o -name "*.py" \) -exec chmod +x {} \;
 
       # Function libraries
       - mkdir -p /app/libexec
@@ -1374,6 +1374,10 @@ modules:
       # GZDOOM wrapper
       - cp emu-configs/gzdoom/gzdoom.sh ${FLATPAK_DEST}/bin/gzdoom.sh
       - chmod +x ${FLATPAK_DEST}/bin/gzdoom.sh
+
+      # MAME wrapper
+      - cp emu-configs/mame/mame-rdwrapper.sh ${FLATPAK_DEST}/bin/mame-rdwrapper.sh
+      - chmod +x ${FLATPAK_DEST}/bin/mame-rdwrapper.sh
 
     sources:
       - type: git

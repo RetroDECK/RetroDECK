@@ -60,6 +60,7 @@ source /app/libexec/global.sh
 #         - Compress All Games
 #       - Install: RetroDECK SD Controller Profile
 #       - Install: PS3 firmware
+#       - Install: PS Vita firmware
 #       - RetroDECK: Change Update Setting
 #     - Troubleshooting
 #       - Backup: RetroDECK Userdata
@@ -475,7 +476,7 @@ configurator_open_emulator_dialog() {
   ;;
 
   "MAME" )
-    mame
+    mame-rdwrapper.sh
   ;;
 
   "MelonDS" )
@@ -499,7 +500,7 @@ configurator_open_emulator_dialog() {
   ;;
 
   "Ryujinx" )
-    ryujinx-wrapper
+    Ryujinx.sh
   ;;
 
   "Vita3K" )
@@ -531,6 +532,7 @@ configurator_retrodeck_tools_dialog() {
   "Tool: Compress Games" "Compress games for systems that support it" \
   "Install: RetroDECK SD Controller Profile" "Install the custom RetroDECK controller layout for the Steam Deck" \
   "Install: PS3 Firmware" "Download and install PS3 firmware for use with the RPCS3 emulator" \
+  "Install: PS Vita Firmware" "Download and install PS Vita firmware for use with the Vita3K emulator" \
   "RetroDECK: Change Update Setting" "Enable or disable online checks for new versions of RetroDECK" )
 
   case $choice in
@@ -567,6 +569,24 @@ configurator_retrodeck_tools_dialog() {
         --auto-close
     else
       configurator_generic_dialog "RetroDECK Configurator - Install: PS3 Firmware" "You do not appear to currently have Internet access, which is required by this tool. Please try again when network access has been restored."
+      configurator_retrodeck_tools_dialog
+    fi
+  ;;
+
+  "Install: PS Vita Firmware" )
+    if [[ $(check_network_connectivity) == "true" ]]; then
+      configurator_generic_dialog "RetroDECK Configurator - Install: PS Vita firmware" "This tool will download firmware required by Vita3K to emulate PS Vita games.\n\nThe process will take several minutes, and the emulator will launch to finish the installation.\nPlease close Vita3K manually once the installation is complete."
+      (
+        update_vita3k_firmware
+      ) |
+        zenity --progress --pulsate \
+        --icon-name=net.retrodeck.retrodeck \
+        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+        --title="Downloading PS Vita Firmware" \
+        --no-cancel \
+        --auto-close
+    else
+      configurator_generic_dialog "RetroDECK Configurator - Install: PS Vita Firmware" "You do not appear to currently have Internet access, which is required by this tool. Please try again when network access has been restored."
       configurator_retrodeck_tools_dialog
     fi
   ;;
@@ -691,33 +711,24 @@ configurator_compression_tool_dialog() {
 configurator_compress_single_game_dialog() {
   local file=$(file_browse "Game to compress")
   if [[ ! -z "$file" ]]; then
+    local system=$(echo "$file" | grep -oE "$roms_folder/[^/]+" | grep -oE "[^/]+$")
     local compatible_compression_format=$(find_compatible_compression_format "$file")
     if [[ ! $compatible_compression_format == "none" ]]; then
       local post_compression_cleanup=$(configurator_compression_cleanup_dialog)
       (
-      if [[ $compatible_compression_format == "chd" ]]; then
-        if [[ $(validate_for_chd "$file") == "true" ]]; then
-          echo "# Compressing $(basename "$file") to $compatible_compression_format format"
-          compress_game "chd" "$file"
-          if [[ $post_compression_cleanup == "true" ]]; then # Remove file(s) if requested
-            if [[ "$file" == *".cue" ]]; then
-              local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" "$file")
-              local file_path=$(dirname "$(realpath "$file")")
-              while IFS= read -r line
-              do
-                rm -f "$file_path/$line"
-              done < <(printf '%s\n' "$cue_bin_files")
-              rm -f "$file"
-            else
-              rm -f "$file"
-            fi
-          fi
-        fi
-      else
-        echo "# Compressing $(basename "$file") to $compatible_compression_format format"
-        compress_game "$compatible_compression_format" "$file"
-        if [[ $post_compression_cleanup == "true" ]]; then # Remove file(s) if requested
-          rm -f "$file"
+      echo "# Compressing $(basename "$file") to $compatible_compression_format format"
+      compress_game "$compatible_compression_format" "$file" "$system"
+      if [[ $post_compression_cleanup == "true" ]]; then # Remove file(s) if requested
+        if [[ "$file" == *".cue" ]]; then
+          local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" "$file")
+          local file_path=$(dirname "$(realpath "$file")")
+          while IFS= read -r line
+          do
+            rm -f "$file_path/$line"
+          done < <(printf '%s\n' "$cue_bin_files")
+          rm -f $(realpath "$file")
+        else
+          rm -f "$(realpath "$file")"
         fi
       fi
       ) |
@@ -817,12 +828,13 @@ configurator_compress_multiple_games_dialog() {
     local post_compression_cleanup=$(configurator_compression_cleanup_dialog)
     (
     for file in "${games_to_compress[@]}"; do
+      local system=$(echo "$file" | grep -oE "$roms_folder/[^/]+" | grep -oE "[^/]+$")
       local compression_format=$(find_compatible_compression_format "$file")
       echo "# Compressing $(basename "$file") into $compression_format format" # Update Zenity dialog text
       progress=$(( 100 - (( 100 / "$total_games_to_compress" ) * "$games_left_to_compress" )))
       echo $progress
       games_left_to_compress=$((games_left_to_compress-1))
-      compress_game "$compression_format" "$file"
+      compress_game "$compression_format" "$file" "$system"
       if [[ $post_compression_cleanup == "true" ]]; then # Remove file(s) if requested
         if [[ "$file" == *".cue" ]]; then
           local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" "$file")
@@ -1044,7 +1056,7 @@ configurator_reset_dialog() {
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
     --text="Which component do you want to reset to default?" \
     --column="Component" --column="Action" \
-    "BoilR" "Reset BoilR that manages the sync and scraping toward Steam library" \ 
+    "BoilR" "Reset BoilR that manages the sync and scraping toward Steam library" \
     "ES-DE" "Reset the ES-DE frontend" \ )
     # TODO: "GyroDSU" "Reset the gyroscope manager GyroDSU"
 

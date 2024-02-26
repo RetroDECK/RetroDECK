@@ -79,8 +79,8 @@ https://retrodeck.net
       if [[ $response == [yY] ]]; then
         rm -f "$lockfile"
         rm -f "$rd_conf"
-        read -p "The process has been completed, press Enter key to start the initial RetroDECK setup process."
-        shift # Continue launch after previous command is finished
+        read -p "The process has been completed, press Enter key to exit. Please run RetroDECK again to start the initial setup process."
+        exit 1
       else
         read -p "The process has been cancelled, press Enter key to exit."
         exit
