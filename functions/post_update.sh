@@ -243,6 +243,10 @@ post_update() {
     sed -i 's^nintendo_button_layout^abxy_button_swap^' "$rd_conf" # This is a one-off sed statement as there are no functions for replacing section names
     mv -f /var/config/emulationstation/.emulationstation /var/config/emulationstation/ES-DE # in 3.0 .emulationstation was moved into ES-DE
     ln -s /var/config/emulationstation/ES-DE /var/config/emulationstation/.emulationstation # symlinking it to mantain the compatibility # TODO: remove this symlink n 0.9.0b
+
+    prepare_component "reset" "mame"
+    prepare_component "reset" "vita3k"
+    prepare_component "reset" "gzdoom"
   fi
 
   # if [[ $prev_version -le "090" ]]; then
