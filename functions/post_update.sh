@@ -247,7 +247,12 @@ post_update() {
     mv -f /var/config/ES-DE/.emulationstation/* /var/config/ES-DE
     rm -rf /var/config/ES-DE/.emulationstation
     rm -f /var/config/ES-DE/es_settings.xml
+
     prepare_component "reset" "es-de"
+    prepare_component "reset" "mame"
+    prepare_component "reset" "vita3k"
+    prepare_component "reset" "gzdoom"
+    
   fi
 
   # if [[ $prev_version -le "090" ]]; then

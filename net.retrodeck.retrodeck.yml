@@ -1288,6 +1288,23 @@ modules:
 
   # MAME - End
 
+  # Ryujinx Appimage - START
+  # https://ryujinx.org/download
+
+  - name: Ryujinx
+    buildsystem: simple
+    build-commands:
+      - |
+        tar -zxvf *.tar.gz
+        mv -v publish ${FLATPAK_DEST}/ryujinx
+        ln -sv ${FLATPAK_DEST}/ryujinx/Ryujinx ${FLATPAK_DEST}/bin/Ryujinx.sh
+    sources:
+      - type: file
+        url: https://github.com/Ryujinx/release-channel-master/releases/download/1.1.1192/ryujinx-1.1.1192-linux_x64.tar.gz
+        sha256: 41716233f5745a7df1e411af6bac9d828f0b6b6feb63b5ef87445b81b01dee54
+
+  # Ryujinx Appimage - END
+
   # External manifests end
 
   - name: retrodeck
@@ -1353,6 +1370,10 @@ modules:
       # GZDOOM wrapper
       - cp emu-configs/gzdoom/gzdoom.sh ${FLATPAK_DEST}/bin/gzdoom.sh
       - chmod +x ${FLATPAK_DEST}/bin/gzdoom.sh
+
+      # MAME wrapper
+      - cp emu-configs/mame/mame-rdwrapper.sh ${FLATPAK_DEST}/bin/mame-rdwrapper.sh
+      - chmod +x ${FLATPAK_DEST}/bin/mame-rdwrapper.sh
 
     sources:
       - type: git
