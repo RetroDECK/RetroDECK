@@ -712,7 +712,7 @@ prepare_component() {
     echo "----------------------"
 
     # TODO: probably some of these needs to be put elsewhere
-    mkdir -p $saves_folder/mame-sa
+    mkdir -p "$saves_folder/mame-sa"
     mkdir -p "$saves_folder/mame-sa/nvram"
     mkdir -p "$states_folder/mame-sa"
     mkdir -p "$rdhome/screenshots/mame-sa"
@@ -757,19 +757,19 @@ prepare_component() {
     mkdir -p "/var/data/mame/assets/ui"
 
     dir_prep "$saves_folder/mame-sa/hiscore" "/var/config/mame/hiscore"
-    cp -fvr "$emuconfigs/mame/mame.ini" "/var/config/mame"
-    cp -fvr "$emuconfigs/mame/ui.ini" "/var/config/mame"
-    cp -fvr "$emuconfigs/mame/default.cfg" "/var/config/mame"
+    cp -fvr "$emuconfigs/mame/mame.ini" "/var/config/mame/cfg"
+    cp -fvr "$emuconfigs/mame/ui.ini" "/var/config/mame/cfg"
+    cp -fvr "$emuconfigs/mame/default.cfg" "/var/config/mame/cfg"
 
-    sed -i 's#RETRODECKROMSDIR#'$roms_folder'#g' "/var/config/mame/mame.ini"
-    sed -i 's#RETRODECKHOMESDIR#'$rdhome'#g' "/var/config/mame/mame.ini"
-    sed -i 's#RETRODECKSAVESDIR#'$rdhome'#g' "/var/config/mame/mame.ini"
-    sed -i 's#RETRODECKSTATESDIR#'$rdhome'#g' "/var/config/mame/mame.ini"
+    sed -i 's#RETRODECKROMSDIR#'$roms_folder'#g' "/var/config/mame/cfg/mame.ini"
+    sed -i 's#RETRODECKHOMESDIR#'$rdhome'#g' "/var/config/mame/cfg/mame.ini"
+    sed -i 's#RETRODECKSAVESDIR#'$saves_folder'#g' "/var/config/mame/cfg/mame.ini"
+    sed -i 's#RETRODECKSTATESDIR#'$states_folder'#g' "/var/config/mame/cfg/mame.ini"
 
-    sed -i 's#RETRODECKROMSDIR#'$roms_folder'#g' "/var/config/mame/ui.ini"
-    sed -i 's#RETRODECKHOMESDIR#'$rdhome'#g' "/var/config/mame/ui.ini"
-    sed -i 's#RETRODECKSAVESDIR#'$rdhome'#g' "/var/config/mame/ui.ini"
-    sed -i 's#RETRODECKSTATESDIR#'$rdhome'#g' "/var/config/mame/ui.ini"
+    sed -i 's#RETRODECKROMSDIR#'$roms_folder'#g' "/var/config/mame/cfg/ui.ini"
+    sed -i 's#RETRODECKHOMESDIR#'$rdhome'#g' "/var/config/mame/cfg/ui.ini"
+    sed -i 's#RETRODECKSAVESDIR#'$saves_folder'#g' "/var/config/mame/cfg/ui.ini"
+    sed -i 's#RETRODECKSTATESDIR#'$states_folder'#g' "/var/config/mame/cfg/ui.ini"
   fi
 
   if [[ "$component" =~ ^(gzdoom|GZDOOM|all)$ ]]; then
