@@ -53,7 +53,7 @@ set_setting_value() {
       fi
       ;;
     
-    "mame" )
+    "mame" ) # In this option, $current_section_name is the <system name> in the .cfg file.
       local mame_current_value=$(get_setting_value "$1" "$setting_name_to_change" "$4" "$current_section_name")
       if [[ "$1" =~ (.ini)$ ]]; then # If this is a MAME .ini file
         sed -i '\^\^'"$setting_name_to_change"'\s^s^'"$mame_current_value"'^'"$setting_value_to_change"'^' "$1"
@@ -145,7 +145,7 @@ get_setting_value() {
     fi
   ;;
 
-  "mame" )
+  "mame" ) # In this option, $current_section_name is the <system name> in the .cfg file.
     if [[ "$1" =~ (.ini)$ ]]; then # If this is a MAME .ini file
       echo $(sed -n '\^\^'"$current_setting_name"'\s^p' "$1" | awk '{print $2}')
     elif [[ "$1" =~ (.cfg)$ ]]; then # If this is an XML-based MAME .cfg file
