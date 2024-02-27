@@ -16,10 +16,10 @@ source /app/libexec/global.sh
 #         - RetroAchievements: Login
 #         - RetroAchievements: Logout
 #         - RetroAchievements: Hardcore Mode
+#         - Rewind
 #         - Swap A/B and X/Y Buttons
 #       - RetroArch: Presets & Settings
 #         - Borders: Enable/Disable
-#         - Rewind: Enable/Disable
 #       - Wii & GameCube: Presets & Settings
 #         - Dolphin Textures: Universal Dynamic Input
 #         - Primehack Textures: Universal Dynamic Input
@@ -200,7 +200,8 @@ configurator_global_presets_and_settings_dialog() {
   "Ask-to-Exit: Enable/Disable" "Enable or disable emulators confirming when quitting in supported systems" \
   "RetroAchievements: Login" "Log into the RetroAchievements service in supported systems" \
   "RetroAchievements: Logout" "Disable RetroAchievements service in ALL supported systems" \
-  "RetroAchievements: Hardcore Mode" "Enable RetroAchievements hardcore mode (no cheats, rewind, save states etc.) in supported emulators" \
+  "RetroAchievements: Hardcore Mode" "Enable RetroAchievements hardcore mode (no cheats, rewind, save states etc.) in supported systems" \
+  "Rewind" "Enable or disable the rewind function in supported systems" \
   "Swap A/B and X/Y Buttons" "Enable or disable a swapped A/B and X/Y button layout in supported systems" )
 
   case $choice in
@@ -243,6 +244,11 @@ configurator_global_presets_and_settings_dialog() {
     configurator_global_presets_and_settings_dialog
   ;;
 
+  "Rewind" )
+    change_preset_dialog "rewind"
+    configurator_global_presets_and_settings_dialog
+  ;;
+
   "Swap A/B and X/Y Buttons" )
     change_preset_dialog "abxy_button_swap"
     configurator_global_presets_and_settings_dialog
@@ -259,8 +265,7 @@ configurator_retroarch_presets_and_settings_dialog() {
   choice=$(zenity --list --title="RetroDECK Configurator Utility - RetroArch: Presets & Settings" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
-  "Borders: Enable/Disable" "Enable or disable borders in supported systems" \
-  "Rewind: Enable/Disable" "Enable or disable the Rewind function in RetroArch." )
+  "Borders: Enable/Disable" "Enable or disable borders in supported systems" )
 
   case $choice in
 
@@ -269,45 +274,11 @@ configurator_retroarch_presets_and_settings_dialog() {
     configurator_retroarch_presets_and_settings_dialog
   ;;
 
-  "Rewind: Enable/Disable" )
-    configurator_retroarch_rewind_dialog
-  ;;
-
   "" ) # No selection made or Back button clicked
     configurator_presets_and_settings_dialog
   ;;
 
   esac
-}
-
-configurator_retroarch_rewind_dialog() {
-  if [[ $(get_setting_value "$raconf" rewind_enable retroarch) == "true" ]]; then
-    zenity --question \
-    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - RetroArch Rewind" \
-    --text="Rewind is currently enabled. Do you want to disable it?."
-
-    if [ $? == 0 ]
-    then
-      set_setting_value "$raconf" "rewind_enable" "false" retroarch
-      configurator_process_complete_dialog "disabling Rewind"
-    else
-      configurator_retroarch_presets_and_settings_dialog
-    fi
-  else
-    zenity --question \
-    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - RetroArch Rewind" \
-    --text="Rewind is currently disabled, do you want to enable it?\n\nNOTE:\nThis may impact performance on some more demanding systems."
-
-    if [ $? == 0 ]
-    then
-      set_setting_value "$raconf" "rewind_enable" "true" retroarch
-      configurator_process_complete_dialog "enabling Rewind"
-    else
-      configurator_retroarch_presets_and_settings_dialog
-    fi
-  fi
 }
 
 configurator_wii_and_gamecube_presets_and_settings_dialog() {

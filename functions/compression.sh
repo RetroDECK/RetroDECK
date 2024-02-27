@@ -10,15 +10,13 @@ compress_game() {
   local dest_file=$(dirname "$(realpath "$file")")"/""$filename_no_extension"
 
   if [[ "$1" == "chd" ]]; then
-    if [[ "$3" == "psp" ]]; then
-      echo "Put createdvd or maxcso here" # TODO
-    else
-      /app/bin/chdman createcd -i "$source_file" -o "$dest_file".chd
-    fi
+    /app/bin/chdman createcd -i "$source_file" -o "$dest_file".chd
   elif [[ "$1" == "zip" ]]; then
     zip -jq9 "$dest_file".zip "$source_file"
   elif [[ "$1" == "rvz" ]]; then
     dolphin-tool convert -f rvz -b 131072 -c zstd -l 5 -i "$source_file" -o "$dest_file.rvz"
+  elif [[ "$1" == "cso" ]]; then
+    echo "TODO: maxcso command"
   fi
 }
 
@@ -34,6 +32,8 @@ find_compatible_compression_format() {
     echo "zip"
   elif echo "$normalized_filename" | grep -qE '\.iso|\.gcm' && [[ $(sed -n '/^\[/{h;d};/\b'"$system"'\b/{g;s/\[\(.*\)\]/\1/p;q};' $compression_targets) == "rvz" ]]; then
     echo "rvz"
+  elif echo "$normalized_filename" | grep -qE '\.iso' && [[ $(sed -n '/^\[/{h;d};/\b'"$system"'\b/{g;s/\[\(.*\)\]/\1/p;q};' $compression_targets) == "cso" ]]; then
+    echo "cso"
   else
     # If no compatible format can be found for the input file
     echo "none"
