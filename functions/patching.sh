@@ -53,9 +53,13 @@ set_setting_value() {
       fi
       ;;
     
-    "mame" ) # This only works for mame .ini files, not the .cfg XML files
-      local mame_current_value=$(get_setting_value $1 "$setting_name_to_change" $4)
-      sed -i '\^\^'"$setting_name_to_change"'\s^s^'"$mame_current_value"'^'"$setting_value_to_change"'^' "$1"
+    "mame" )
+      local mame_current_value=$(get_setting_value "$1" "$setting_name_to_change" "$4" "$current_section_name")
+      if [[ "$1" =~ (.ini)$ ]]; then # If this is a MAME .ini file
+        sed -i '\^\^'"$setting_name_to_change"'\s^s^'"$mame_current_value"'^'"$setting_value_to_change"'^' "$1"
+      elif [[ "$1" =~ (.cfg)$ ]]; then # If this is an XML-based MAME .cfg file
+        sed -i '\^\<system name=\"'"$current_section_name"'\">^,\^<\/system>^s^'"$mame_current_value"'^'"$setting_value_to_change"'^' "$1"
+      fi
       ;;
 
     "es_settings" )
@@ -141,8 +145,12 @@ get_setting_value() {
     fi
   ;;
 
-  "mame" ) # This only works for mame .ini files, not the .cfg XML files
-    echo $(sed -n '\^\^'"$current_setting_name"'\s^p' "$1" | awk '{print $2}')
+  "mame" )
+    if [[ "$1" =~ (.ini)$ ]]; then # If this is a MAME .ini file
+      echo $(sed -n '\^\^'"$current_setting_name"'\s^p' "$1" | awk '{print $2}')
+    elif [[ "$1" =~ (.cfg)$ ]]; then # If this is an XML-based MAME .cfg file
+      echo $(xml sel -t -v "/mameconfig/system[@name='$current_section_name']//*[@type='$current_setting_name']//*" -v "text()" -n "$1")
+    fi
   ;;
 
   "es_settings" )
