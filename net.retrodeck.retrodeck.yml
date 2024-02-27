@@ -455,6 +455,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/Lx32/BoilR
+        branch: main
       #- rd-submodules/boilr/cargo-lock.json it's in the repo now, at least on retro branch, check on main later please
 
   # RetroArch - START
