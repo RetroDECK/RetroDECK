@@ -265,6 +265,8 @@ dir_prep() {
 
 check_bios_files() {
   # This function validates all the BIOS files listed in the $bios_checklist and adds the results to an array called bios_checked_list which can be used elsewhere
+  # There is a "basic" and "expert" mode which outputs different levels of data
+  # USAGE: check_bios_files "mode"
   
   rm -f "$godot_bios_files_checked" # Godot data transfer temp files
   touch "$godot_bios_files_checked"
@@ -281,8 +283,13 @@ check_bios_files() {
           bios_hash_matched="Yes"
         fi
       fi
-      bios_checked_list=("${bios_checked_list[@]}" "$bios_file" "$bios_system" "$bios_file_found" "$bios_hash_matched" "$bios_desc")
-      echo "$bios_file"^"$bios_system"^"$bios_file_found"^"$bios_hash_matched"^"$bios_desc" >> "$godot_bios_files_checked" # Godot data transfer temp file
+      if [[ "$1" == "basic" ]]; then
+        bios_checked_list=("${bios_checked_list[@]}" "$bios_file" "$bios_system" "$bios_file_found" "$bios_hash_matched" "$bios_desc")
+        echo "$bios_file"^"$bios_system"^"$bios_file_found"^"$bios_hash_matched"^"$bios_desc" >> "$godot_bios_files_checked" # Godot data transfer temp file
+      else
+        bios_checked_list=("${bios_checked_list[@]}" "$bios_file" "$bios_system" "$bios_file_found" "$bios_hash_matched" "$bios_desc" "$bios_subdir" "$bios_hash")
+        echo "$bios_file"^"$bios_system"^"$bios_file_found"^"$bios_hash_matched"^"$bios_desc"^"$bios_subdir"^"$bios_hash" >> "$godot_bios_files_checked" # Godot data transfer temp file
+      fi
   done < $bios_checklist
 }
 
