@@ -17,8 +17,8 @@ source /app/libexec/global.sh
 #         - RetroAchievements: Login
 #         - RetroAchievements: Logout
 #         - RetroAchievements: Hardcore Mode
-#         - Rewind
-#         - Swap A/B and X/Y Buttons
+#         - Rewind: Enable/Disable
+#         - Swap A/B and X/Y Buttons: Enable/Disable
 #       - RetroArch: Presets & Settings
 #         - Borders: Enable/Disable
 #       - Wii & GameCube: Presets & Settings
@@ -203,8 +203,8 @@ configurator_global_presets_and_settings_dialog() {
   "RetroAchievements: Login" "Log into the RetroAchievements service in supported systems" \
   "RetroAchievements: Logout" "Disable RetroAchievements service in ALL supported systems" \
   "RetroAchievements: Hardcore Mode" "Enable RetroAchievements hardcore mode (no cheats, rewind, save states etc.) in supported systems" \
-  "Rewind" "Enable or disable the rewind function in supported systems" \
-  "Swap A/B and X/Y Buttons" "Enable or disable a swapped A/B and X/Y button layout in supported systems" )
+  "Rewind: Enable/Disable" "Enable or disable the rewind function in supported systems" \
+  "Swap A/B and X/Y Buttons: Enable/Disable" "Enable or disable a swapped A/B and X/Y button layout in supported systems" )
 
   case $choice in
 
@@ -251,12 +251,12 @@ configurator_global_presets_and_settings_dialog() {
     configurator_global_presets_and_settings_dialog
   ;;
 
-  "Rewind" )
+  "Rewind: Enable/Disable" )
     change_preset_dialog "rewind"
     configurator_global_presets_and_settings_dialog
   ;;
 
-  "Swap A/B and X/Y Buttons" )
+  "Swap A/B and X/Y Buttons: Enable/Disable" )
     change_preset_dialog "abxy_button_swap"
     configurator_global_presets_and_settings_dialog
   ;;
