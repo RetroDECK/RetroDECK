@@ -310,7 +310,11 @@ make_name_pretty() {
   # This function will take an internal system name (like "gbc") and return a pretty version for user display ("Nintendo GameBoy Color")
   # USAGE: make_name_pretty "system name"
   local system=$(grep "$1^" "$pretty_system_names_reference_list")
-  IFS='^' read -r internal_name pretty_name < <(echo "$system")
+  if [[ ! -z "$system" ]]; then
+    IFS='^' read -r internal_name pretty_name < <(echo "$system")
+  else
+    pretty_name="$system"
+  fi
   echo "$pretty_name"
 }
 
