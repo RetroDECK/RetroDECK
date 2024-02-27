@@ -246,9 +246,6 @@ post_update() {
 
     # in 3.0 .emulationstation was moved into ES-DE
     mv -f /var/config/emulationstation /var/config/ES-DE
-    mv -f /var/config/ES-DE/.emulationstation/* /var/config/ES-DE
-    rm -rf /var/config/ES-DE/.emulationstation
-    rm -f /var/config/ES-DE/es_settings.xml
 
     prepare_component "reset" "es-de"
     prepare_component "reset" "mame"
