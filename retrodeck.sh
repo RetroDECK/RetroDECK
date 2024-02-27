@@ -56,9 +56,9 @@ https://retrodeck.net
       ;;
     --reset-component*)
       echo "You are about to reset one or more RetroDECK components or emulators."
-      echo "Available options are: es-de, retroarch, cemu, citra, dolphin, duckstation, melonds, pcsx3, pico8, ppsspp, primehack, rpcs3, xemu, yuzu, vita3k, mame, gzdoom, boilr, all"
+      echo "Available options are: es-de, retroarch, cemu, citra, dolphin, duckstation, melonds, pcsx3, pico8, ppsspp, primehack, ryujinx. rpcs3, ryujinx, xemu, yuzu, vita3k, mame, gzdoom, boilr, all"
       read -p "Please enter the component you would like to reset: " component
-      if [[ "$emulator" =~ ^(es-de|retroarch|cemu|citra|dolphin|duckstation|mame|melonds|pcsx2|ppsspp|primehack|rpcs3|xemu|yuzu|all-emulators)$ ]]; then
+      if [[ "$component" =~ ^(es-de|retroarch|cemu|citra|dolphin|duckstation|mame|melonds|pcsx2|ppsspp|primehack|ryujinx|rpcs3|xemu|yuzu|all)$ ]]; then
         read -p "You are about to reset $component to default settings. Enter 'y' to continue, 'n' to stop: " response
         if [[ $response == [yY] ]]; then
           prepare_component "reset" "$component" "cli"
@@ -79,8 +79,8 @@ https://retrodeck.net
       if [[ $response == [yY] ]]; then
         rm -f "$lockfile"
         rm -f "$rd_conf"
-        read -p "The process has been completed, press Enter key to start the initial RetroDECK setup process."
-        shift # Continue launch after previous command is finished
+        read -p "The process has been completed, press Enter key to exit. Please run RetroDECK again to start the initial setup process."
+        exit 1
       else
         read -p "The process has been cancelled, press Enter key to exit."
         exit
@@ -181,6 +181,9 @@ if [[ -f "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_conf
   install_retrodeck_controller_profile
 fi
 # REMOVE BEFORE NEXT VERSION RELEASE
+
+# Linking switch keys for Ryujinx
+manage_ryujinx_keys
 
 # Normal Startup
 
