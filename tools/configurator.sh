@@ -66,6 +66,7 @@ source /app/libexec/global.sh
 #     - Troubleshooting
 #       - Backup: RetroDECK Userdata
 #       - Check & Verify: BIOS
+#       - Check & Verify: BIOS - Expert Mode
 #       - Check & Verify: Multi-file structure
 #       - RetroDECK: Reset
 #         - Reset Specific Emulator
@@ -885,6 +886,7 @@ configurator_retrodeck_troubleshooting_dialog() {
   --column="Choice" --column="Action" \
   "Backup: RetroDECK Userdata" "Compress and backup important RetroDECK user data folders" \
   "Check & Verify: BIOS Files" "Show information about common BIOS files" \
+  "Check & Verify: BIOS Files - Expert Mode" "Show information about common BIOS files, with additional information useful for troubleshooting" \
   "Check & Verify: Multi-file structure" "Verify the proper structure of multi-file or multi-disc games" \
   "RetroDECK: Reset" "Reset specific parts or all of RetroDECK" )
 
@@ -911,6 +913,10 @@ configurator_retrodeck_troubleshooting_dialog() {
     configurator_check_bios_files
   ;;
 
+  "Check & Verify: BIOS Files - Expert Mode" )
+    configurator_check_bios_files_expert_mode
+  ;;
+
   "Check & Verify: Multi-file structure" )
     configurator_check_multifile_game_structure
   ;;
@@ -930,7 +936,7 @@ configurator_check_bios_files() {
   configurator_generic_dialog "RetroDECK Configurator - Check & Verify: BIOS Files" "This check will look for BIOS files that RetroDECK has identified as working.\n\nNot all BIOS files are required for games to work, please check the BIOS description for more information on its purpose.\n\nThere may be additional BIOS files that will function with the emulators that are not checked.\n\nSome more advanced emulators such as Yuzu will have additional methods for verifiying the BIOS files are in working order."
   bios_checked_list=()
 
-  check_bios_files
+  check_bios_files "basic"
 
   zenity --list --title="RetroDECK Configurator Utility - Check & Verify: BIOS Files" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
@@ -939,6 +945,26 @@ configurator_check_bios_files() {
   --column "BIOS File Found" \
   --column "BIOS Hash Match" \
   --column "BIOS File Description" \
+  "${bios_checked_list[@]}"
+
+  configurator_retrodeck_troubleshooting_dialog
+}
+
+configurator_check_bios_files_expert_mode() {
+  configurator_generic_dialog "RetroDECK Configurator - Check & Verify: BIOS Files - Expert Mode" "This check will look for BIOS files that RetroDECK has identified as working.\n\nNot all BIOS files are required for games to work, please check the BIOS description for more information on its purpose.\n\nThere may be additional BIOS files that will function with the emulators that are not checked.\n\nSome more advanced emulators such as Yuzu will have additional methods for verifiying the BIOS files are in working order."
+  bios_checked_list=()
+
+  check_bios_files "expert"
+
+  zenity --list --title="RetroDECK Configurator Utility - Check & Verify: BIOS Files" --cancel-label="Back" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+  --column "BIOS File Name" \
+  --column "System" \
+  --column "BIOS File Found" \
+  --column "BIOS Hash Match" \
+  --column "BIOS File Description" \
+  --column "BIOS File Subdirectory" \
+  --column "BIOS File Hash" \
   "${bios_checked_list[@]}"
 
   configurator_retrodeck_troubleshooting_dialog
