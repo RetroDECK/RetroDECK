@@ -502,9 +502,9 @@ install_retrodeck_starterpack() {
 
   ## DOOM section ##
   cp /app/retrodeck/extras/doom1.wad "$roms_folder/doom/doom1.wad" # No -f in case the user already has it
-  mkdir -p "/var/config/emulationstation/ES-DE/gamelists/doom"
-  if [[ ! -f "/var/config/emulationstation/ES-DE/gamelists/doom/gamelist.xml" ]]; then # Don't overwrite an existing gamelist
-    cp "/app/retrodeck/rd_prepacks/doom/gamelist.xml" "/var/config/emulationstation/ES-DE/gamelists/doom/gamelist.xml"
+  mkdir -p "/var/config/ES-DE/gamelists/doom"
+  if [[ ! -f "/var/config/ES-DE/gamelists/doom/gamelist.xml" ]]; then # Don't overwrite an existing gamelist
+    cp "/app/retrodeck/rd_prepacks/doom/gamelist.xml" "/var/config/ES-DE/gamelists/doom/gamelist.xml"
   fi
   mkdir -p "$media_folder/doom"
   unzip -oq "/app/retrodeck/rd_prepacks/doom/doom.zip" -d "$media_folder/doom/"
@@ -535,8 +535,9 @@ update_splashscreens() {
   # This script will purge any existing ES graphics and reload them from RO space into somewhere ES will look for it
   # USAGE: update_splashscreens
 
-  rm -rf /var/config/emulationstation/ES-DE/resources/graphics
-  rsync -rlD --mkpath "/app/retrodeck/graphics/" "/var/config/emulationstation/ES-DE/resources/graphics/"
+  rm -rf /var/config/ES-DE/resources/graphics
+  rsync -rlD --mkpath "/app/retrodeck/graphics/" "/var/config/ES-DE/resources/graphics/"
+
 }
 
 deploy_helper_files() {
@@ -677,12 +678,12 @@ branch_selector() {
 
 quit_retrodeck() {
   pkill -f retrodeck
-  pkill -f emulationstation
+  pkill -f es-de
 }
 
 start_retrodeck() {
   easter_eggs # Check if today has a surprise splashscreen and load it if so
   # normal startup
   echo "Starting RetroDECK v$version"
-  emulationstation --home /var/config/emulationstation
+  es-de --home /var/config/
 }

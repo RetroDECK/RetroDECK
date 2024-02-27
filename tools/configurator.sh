@@ -1348,7 +1348,7 @@ configurator_usb_import_dialog() {
       "${external_devices[@]}")
 
       if [[ ! -z "$choice" ]]; then
-        emulationstation --home "$choice" --create-system-dirs
+        es-de --home "$choice" --create-system-dirs
         rm -rf "$choice/ES-DE" # Cleanup unnecessary folder
       fi
     else

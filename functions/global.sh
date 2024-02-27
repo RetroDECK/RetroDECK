@@ -25,11 +25,11 @@ zip_compressable_extensions="$emuconfigs/defaults/retrodeck/reference_lists/zip_
 easter_egg_checklist="$emuconfigs/defaults/retrodeck/reference_lists/easter_egg_checklist.cfg"                        # A config file listing days and times when special splash screens should show up
 input_validation="$emuconfigs/defaults/retrodeck/reference_lists/input_validation.cfg"                                # A config file listing valid CLI inputs
 finit_options_list="$emuconfigs/defaults/retrodeck/reference_lists/finit_options_list.cfg"                            # A config file listing available optional installs during finit
-splashscreen_dir="/var/config/emulationstation/ES-DE/resources/graphics/extra_splashes"                   # The default location of extra splash screens
-current_splash_file="/var/config/emulationstation/ES-DE/resources/graphics/splash.svg"                    # The active splash file that will be shown on boot
-default_splash_file="/var/config/emulationstation/ES-DE/resources/graphics/splash-orig.svg"               # The default RetroDECK splash screen
+splashscreen_dir="/var/config/ES-DE/resources/graphics/extra_splashes"                   # The default location of extra splash screens
+current_splash_file="/var/config/ES-DE/resources/graphics/splash.svg"                    # The active splash file that will be shown on boot
+default_splash_file="/var/config/ES-DE/resources/graphics/splash-orig.svg"               # The default RetroDECK splash screen
 multi_user_emulator_config_dirs="$emuconfigs/defaults/retrodeck/reference_lists/multi_user_emulator_config_dirs.cfg"  # A list of emulator config folders that can be safely linked/unlinked entirely in multi-user mode
-rd_es_themes="/app/share/emulationstation/themes"                                                                     # The directory where themes packaged with RetroDECK are stored
+rd_es_themes="/app/share/es-de/themes"                                                                     # The directory where themes packaged with RetroDECK are stored
 lockfile="/var/config/retrodeck/.lock"                                                                                # where the lockfile is located
 default_sd="/run/media/mmcblk0p1"                                                                                     # Steam Deck SD default path
 hard_version="$(cat '/app/retrodeck/version')"                                                                        # hardcoded version (in the readonly filesystem)
@@ -62,7 +62,7 @@ yuzuconf="/var/config/yuzu/qt-config.ini"
 
 # ES-DE config files
 
-es_settings="/var/config/emulationstation/ES-DE/es_settings.xml"
+es_settings="/var/config/ES-DE/settings/es_settings.xml"
 
 # RetroArch config files
 
