@@ -762,12 +762,12 @@ prepare_component() {
     cp -fvr "$emuconfigs/mame/default.cfg" "/var/config/mame/cfg"
 
     sed -i 's#RETRODECKROMSDIR#'$roms_folder'#g' "/var/config/mame/cfg/mame.ini"
-    sed -i 's#RETRODECKHOMESDIR#'$rdhome'#g' "/var/config/mame/cfg/mame.ini"
+    sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "/var/config/mame/cfg/mame.ini"
     sed -i 's#RETRODECKSAVESDIR#'$saves_folder'#g' "/var/config/mame/cfg/mame.ini"
     sed -i 's#RETRODECKSTATESDIR#'$states_folder'#g' "/var/config/mame/cfg/mame.ini"
 
     sed -i 's#RETRODECKROMSDIR#'$roms_folder'#g' "/var/config/mame/cfg/ui.ini"
-    sed -i 's#RETRODECKHOMESDIR#'$rdhome'#g' "/var/config/mame/cfg/ui.ini"
+    sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "/var/config/mame/cfg/ui.ini"
     sed -i 's#RETRODECKSAVESDIR#'$saves_folder'#g' "/var/config/mame/cfg/ui.ini"
     sed -i 's#RETRODECKSTATESDIR#'$states_folder'#g' "/var/config/mame/cfg/ui.ini"
   fi
