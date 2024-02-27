@@ -240,8 +240,10 @@ post_update() {
     # - Determine if Steam is installed via normal desktop application / Flatpak / SteamOS TODO
     # - Install RetroDECK controller profile in desired location TODO
     # - Change section name in retrodeck.cfg for ABXY button swap preset
+    # - Force disable global rewind in RA in prep for preset system
     sed -i 's^nintendo_button_layout^abxy_button_swap^' "$rd_conf" # This is a one-off sed statement as there are no functions for replacing section names
-    
+    set_setting_value "$raconf" "rewind_enable" "false" "retroarch"
+
     # in 3.0 .emulationstation was moved into ES-DE
     mv -f /var/config/emulationstation /var/config/ES-DE
     mv -f /var/config/ES-DE/.emulationstation/* /var/config/ES-DE
