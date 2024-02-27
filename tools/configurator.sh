@@ -476,7 +476,7 @@ configurator_open_emulator_dialog() {
   ;;
 
   "MAME" )
-    mame
+    mame-rdwrapper.sh
   ;;
 
   "MelonDS" )
@@ -500,7 +500,7 @@ configurator_open_emulator_dialog() {
   ;;
 
   "Ryujinx" )
-    ryujinx-wrapper
+    Ryujinx.sh
   ;;
 
   "Vita3K" )
@@ -1009,6 +1009,7 @@ configurator_reset_dialog() {
     "PPSSPP" "Reset the PSP emulator PPSSPP to default settings" \
     "Primehack" "Reset the Metroid Prime emulator Primehack to default settings" \
     "RPCS3" "Reset the PS3 emulator RPCS3 to default settings" \
+    "Ryujinx" "Reset the Switch emulator Ryujinx to default settings" \
     "Vita3k" "Reset the PS Vita emulator Vita3k to default settings" \
     "XEMU" "Reset the XBOX emulator XEMU to default settings" \
     "Yuzu" "Reset the Switch emulator Yuzu to default settings" )
@@ -1055,7 +1056,7 @@ configurator_reset_dialog() {
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
     --text="Which component do you want to reset to default?" \
     --column="Component" --column="Action" \
-    "BoilR" "Reset BoilR that manages the sync and scraping toward Steam library" \ 
+    "BoilR" "Reset BoilR that manages the sync and scraping toward Steam library" \
     "ES-DE" "Reset the ES-DE frontend" \ )
     # TODO: "GyroDSU" "Reset the gyroscope manager GyroDSU"
 
@@ -1347,7 +1348,7 @@ configurator_usb_import_dialog() {
       "${external_devices[@]}")
 
       if [[ ! -z "$choice" ]]; then
-        emulationstation --home "$choice" --create-system-dirs
+        es-de --home "$choice" --create-system-dirs
         rm -rf "$choice/ES-DE" # Cleanup unnecessary folder
       fi
     else

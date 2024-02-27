@@ -463,7 +463,7 @@
     <emulator name="MAME">
         <!-- Arcade emulator MAME -->
         <rule type="systempath">
-            <entry>mame</entry>
+            <entry>mame-rdwrapper.sh</entry>
             <entry>org.mamedev.MAME</entry>
         </rule>
         <rule type="staticpath">

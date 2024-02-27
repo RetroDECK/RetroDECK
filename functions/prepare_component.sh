@@ -40,21 +40,21 @@ prepare_component() {
 
   if [[ "$component" =~ ^(es-de|ES-DE|all)$ ]]; then # For use after ESDE-related folders are moved or a reset
     if [[ "$action" == "reset" ]]; then
-      rm -rf /var/config/emulationstation/
-      mkdir -p /var/config/emulationstation/ES-DE/
-      cp -f /app/retrodeck/es_settings.xml /var/config/emulationstation/ES-DE/es_settings.xml
+      rm -rf /var/config/ES-DE
+      mkdir -p /var/config/ES-DE/settings
+      cp -f /app/retrodeck/es_settings.xml /var/config/ES-DE/settings/es_settings.xml
       set_setting_value "$es_settings" "ROMDirectory" "$roms_folder" "es_settings"
       set_setting_value "$es_settings" "MediaDirectory" "$media_folder" "es_settings"
       set_setting_value "$es_settings" "UserThemeDirectory" "$themes_folder" "es_settings"
-      dir_prep "$rdhome/gamelists" "/var/config/emulationstation/ES-DE/gamelists"
-      emulationstation --home /var/config/emulationstation --create-system-dirs
+      dir_prep "$rdhome/gamelists" "/var/config/ES-DE/gamelists"
+      es-de --home /var/config/ES-DE --create-system-dirs
       update_splashscreens
     fi
     if [[ "$action" == "postmove" ]]; then
       set_setting_value "$es_settings" "ROMDirectory" "$roms_folder" "es_settings"
       set_setting_value "$es_settings" "MediaDirectory" "$media_folder" "es_settings"
       set_setting_value "$es_settings" "UserThemeDirectory" "$themes_folder" "es_settings"
-      dir_prep "$rdhome/gamelists" "/var/config/emulationstation/ES-DE/gamelists"
+      dir_prep "$rdhome/gamelists" "/var/config/ES-DE/gamelists"
     fi
   fi
 
@@ -542,27 +542,38 @@ prepare_component() {
   fi
 
   if [[ "$component" =~ ^(ryujunx|Ryujinx|all)$ ]]; then
+    # NOTE: for techincal reasons the system folder of Ryujinx IS NOT a sumlink of the bios/switch/keys as not only the keys are located there
+    # When RetroDECK starts there is a "manage_ryujinx_keys" function that symlinks the keys only in Rryujinx/system.
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       echo "------------------------"
       echo "Initializing RYUJINX"
       echo "------------------------"
       if [[ $multi_user_mode == "true" ]]; then
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/Ryujinx"
-        mkdir -p "$multi_user_data_folder/$SteamAppUser/config/Ryujinx/system"
+        #mkdir -p "$multi_user_data_folder/$SteamAppUser/config/Ryujinx/system"
+        # TODO: add /var/config/Ryujinx/system system folder management
         cp -fv $emuconfigs/ryujinx/* "$multi_user_data_folder/$SteamAppUser/config/Ryujinx"
-        sed -i 's#/home/deck/retrodeck#'$rdhome'#g' "$multi_user_data_folder/$SteamAppUser/config/Ryujinx/Config.json"
+        sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "$multi_user_data_folder/$SteamAppUser/config/Ryujinx/Config.json"
         dir_prep "$multi_user_data_folder/$SteamAppUser/config/Ryujinx" "/var/config/Ryujinx"
+        # TODO: add nand (saves) folder management
+        # TODO: add nand (saves) folder management
+        # TODO: add "registered" folder management
       else
         # removing config directory to wipe legacy files
         rm -rf /var/config/Ryujinx
         mkdir -p /var/config/Ryujinx/system
         cp -fv $emuconfigs/ryujinx/* /var/config/Ryujinx
-        sed -i 's#/home/deck/retrodeck#'$rdhome'#g' "$ryujinxconf"
+        sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "$ryujinxconf"
+        # Linking switch nand/saves folder
+        rm -rf /var/config/Ryujinx/bis
+        dir_prep "$saves_folder/switch/ryujinx/nand" "/var/config/Ryujinx/bis"
+        dir_prep "$saves_folder/switch/ryujinx/sdcard" "/var/config/Ryujinx/sdcard"
+        dir_prep "$bios_folder/switch/ryujinx/registered" "/var/config/Ryujinx/bis/system/Contents/registered"
       fi
     fi
-    if [[ "$action" == "reset" ]] || [[ "$action" == "postmove" ]]; then # Run commands that apply to both resets and moves
-      dir_prep "$bios_folder/switch/keys" "/var/config/Ryujinx/system"
-    fi
+    # if [[ "$action" == "reset" ]] || [[ "$action" == "postmove" ]]; then # Run commands that apply to both resets and moves
+    #   dir_prep "$bios_folder/switch/keys" "/var/config/Ryujinx/system"
+    # fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
       sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "$ryujinxconf" # This is an unfortunate one-off because set_setting_value does not currently support JSON
     fi
@@ -700,14 +711,65 @@ prepare_component() {
     echo "Initializing MAME"
     echo "----------------------"
 
-    mkdir -p $saves_folder/mame-sa
-    mkdir -p "/var/config/mame"
+    # TODO: probably some of these needs to be put elsewhere
+    mkdir -p "$saves_folder/mame-sa"
+    mkdir -p "$saves_folder/mame-sa/nvram"
+    mkdir -p "$states_folder/mame-sa"
+    mkdir -p "$rdhome/screenshots/mame-sa"
+    mkdir -p "$saves_folder/mame-sa/diff"
+
+    mkdir -p "/var/config/ctrlr"
+    mkdir -p "/var/config/mame/ini"
+    mkdir -p "/var/config/mame/cfg"
+    mkdir -p "/var/config/mame/inp"
+
+    mkdir -p "/var/data/mame/plugin-data"
+    mkdir -p "/var/data/mame/hash"
+    mkdir -p "/var/data/mame/assets/samples"
+    mkdir -p "/var/data/mame/assets/artwork"
+    mkdir -p "/var/data/mame/assets/fonts"
+    mkdir -p "/var/data/mame/cheat"
+    mkdir -p "/var/data/mame/assets/crosshair"
+    mkdir -p "/var/data/mame/plugins"
+    mkdir -p "/var/data/mame/assets/language"
+    mkdir -p "/var/data/mame/assets/software"
+    mkdir -p "/var/data/mame/assets/comments"
+    mkdir -p "/var/data/mame/assets/share"
+    mkdir -p "/var/data/mame/dats"
+    mkdir -p "/var/data/mame/folders"
+    mkdir -p "/var/data/mame/assets/cabinets"
+    mkdir -p "/var/data/mame/assets/cpanel"
+    mkdir -p "/var/data/mame/assets/pcb"
+    mkdir -p "/var/data/mame/assets/flyers"
+    mkdir -p "/var/data/mame/assets/titles"
+    mkdir -p "/var/data/mame/assets/ends"
+    mkdir -p "/var/data/mame/assets/marquees"
+    mkdir -p "/var/data/mame/assets/artwork-preview"
+    mkdir -p "/var/data/mame/assets/bosses"
+    mkdir -p "/var/data/mame/assets/logo"
+    mkdir -p "/var/data/mame/assets/scores"
+    mkdir -p "/var/data/mame/assets/versus"
+    mkdir -p "/var/data/mame/assets/gameover"
+    mkdir -p "/var/data/mame/assets/howto"
+    mkdir -p "/var/data/mame/assets/select"
+    mkdir -p "/var/data/mame/assets/icons"
+    mkdir -p "/var/data/mame/assets/covers"
+    mkdir -p "/var/data/mame/assets/ui"
+
     dir_prep "$saves_folder/mame-sa/hiscore" "/var/config/mame/hiscore"
-    cp -fvr "$emuconfigs/mame/"** "/var/config/mame"
-    sed -i 's#RETRODECKROMSDIR#'$roms_folder'#g' "/var/config/mame/*.ini"
-    sed -i 's#RETRODECKHOMESDIR#'$rdhome'#g' "/var/config/mame/*.ini"
-    sed -i 's#RETRODECKSAVESDIR#'$rdhome'#g' "/var/config/mame/*.ini"
-    sed -i 's#RETRODECKSTATESDIR#'$rdhome'#g' "/var/config/mame/*.ini"
+    cp -fvr "$emuconfigs/mame/mame.ini" "/var/config/mame/cfg"
+    cp -fvr "$emuconfigs/mame/ui.ini" "/var/config/mame/cfg"
+    cp -fvr "$emuconfigs/mame/default.cfg" "/var/config/mame/cfg"
+
+    sed -i 's#RETRODECKROMSDIR#'$roms_folder'#g' "/var/config/mame/cfg/mame.ini"
+    sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "/var/config/mame/cfg/mame.ini"
+    sed -i 's#RETRODECKSAVESDIR#'$saves_folder'#g' "/var/config/mame/cfg/mame.ini"
+    sed -i 's#RETRODECKSTATESDIR#'$states_folder'#g' "/var/config/mame/cfg/mame.ini"
+
+    sed -i 's#RETRODECKROMSDIR#'$roms_folder'#g' "/var/config/mame/cfg/ui.ini"
+    sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "/var/config/mame/cfg/ui.ini"
+    sed -i 's#RETRODECKSAVESDIR#'$saves_folder'#g' "/var/config/mame/cfg/ui.ini"
+    sed -i 's#RETRODECKSTATESDIR#'$states_folder'#g' "/var/config/mame/cfg/ui.ini"
   fi
 
   if [[ "$component" =~ ^(gzdoom|GZDOOM|all)$ ]]; then

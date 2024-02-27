@@ -295,8 +295,8 @@ update_rpcs3_firmware() {
 }
 
 update_vita3k_firmware() {
-  download_file "http://dus01.psv.update.playstation.net/update/psv/image/2022_0209/rel_f2c7b12fe85496ec88a0391b514d6e3b/PSVUPDAT.PUP" "/tmp/PSVUPDAT.PUP" "Vita3K Firmware file 1"
-  download_file "http://dus01.psp2.update.playstation.net/update/psp2/image/2019_0924/sd_8b5f60b56c3da8365b973dba570c53a5/PSP2UPDAT.PUP?dest=us" "/tmp/PSP2UPDAT.PUP" "Vita3K Firmware file 2"
+  download_file "http://dus01.psv.update.playstation.net/update/psv/image/2022_0209/rel_f2c7b12fe85496ec88a0391b514d6e3b/PSVUPDAT.PUP" "/tmp/PSVUPDAT.PUP" "Vita3K Firmware file: PSVUPDAT.PUP"
+  download_file "http://dus01.psp2.update.playstation.net/update/psp2/image/2019_0924/sd_8b5f60b56c3da8365b973dba570c53a5/PSP2UPDAT.PUP?dest=us" "/tmp/PSP2UPDAT.PUP" "Vita3K Firmware file: PSP2UPDAT.PUP"
   Vita3K --firmware /tmp/PSVUPDAT.PUP
   Vita3K --firmware /tmp/PSP2UPDAT.PUP
 }
@@ -502,9 +502,9 @@ install_retrodeck_starterpack() {
 
   ## DOOM section ##
   cp /app/retrodeck/extras/doom1.wad "$roms_folder/doom/doom1.wad" # No -f in case the user already has it
-  mkdir -p "/var/config/emulationstation/ES-DE/gamelists/doom"
-  if [[ ! -f "/var/config/emulationstation/ES-DE/gamelists/doom/gamelist.xml" ]]; then # Don't overwrite an existing gamelist
-    cp "/app/retrodeck/rd_prepacks/doom/gamelist.xml" "/var/config/emulationstation/ES-DE/gamelists/doom/gamelist.xml"
+  mkdir -p "/var/config/ES-DE/gamelists/doom"
+  if [[ ! -f "/var/config/ES-DE/gamelists/doom/gamelist.xml" ]]; then # Don't overwrite an existing gamelist
+    cp "/app/retrodeck/rd_prepacks/doom/gamelist.xml" "/var/config/ES-DE/gamelists/doom/gamelist.xml"
   fi
   mkdir -p "$media_folder/doom"
   unzip -oq "/app/retrodeck/rd_prepacks/doom/doom.zip" -d "$media_folder/doom/"
@@ -535,8 +535,9 @@ update_splashscreens() {
   # This script will purge any existing ES graphics and reload them from RO space into somewhere ES will look for it
   # USAGE: update_splashscreens
 
-  rm -rf /var/config/emulationstation/ES-DE/resources/graphics
-  rsync -rlD --mkpath "/app/retrodeck/graphics/" "/var/config/emulationstation/ES-DE/resources/graphics/"
+  rm -rf /var/config/ES-DE/resources/graphics
+  rsync -rlD --mkpath "/app/retrodeck/graphics/" "/var/config/ES-DE/resources/graphics/"
+
 }
 
 deploy_helper_files() {
@@ -576,6 +577,43 @@ easter_eggs() {
   fi
 
   cp -f "$new_splash_file" "$current_splash_file" # Deploy assigned splash screen
+}
+
+manage_ryujinx_keys() {
+  # This function checks if Switch keys are existing and symlinks them inside the Ryujinx system folder
+  # If the symlinks are broken it recreates them
+
+  echo "Checking Ryujinx Switch keys." #TODO logging
+  local ryujinx_system="/var/config/Ryujinx/system"  # Set the path to the Ryujinx system folder
+  # Check if the keys folder exists
+  if [ -d "$bios_folder/switch/keys" ]; then
+      # Check if there are files in the keys folder
+      if [ -n "$(find "$bios_folder/switch/keys" -maxdepth 1 -type f)" ]; then
+          # Iterate over each file in the keys folder
+          for file in "$bios_folder/switch/keys"/*; do
+              local filename=$(basename "$file")
+              local symlink="$ryujinx_system/$filename"
+              
+              # Check if the symlink exists and is valid
+              if [ -L "$symlink" ] && [ "$(readlink -f "$symlink")" = "$file" ]; then
+                  echo "Found \"$symlink\" and it's a valid symlink." #TODO logging
+                  continue  # Skip if the symlink is already valid
+              fi
+              
+              # Remove broken symlink or non-symlink file
+              echo "Found \"$symlink\" but it's not a valid symlink. Repairing it" #TODO logging
+              [ -e "$symlink" ] && rm "$symlink"
+
+              # Create symlink
+              ln -s "$file" "$symlink"
+              echo "Created symlink: \"$symlink\""
+          done
+      else
+          echo "No files found in $bios_folder/switch/keys. Continuing" #TODO logging
+      fi
+  else
+      echo "Directory $bios_folder/switch/keys does not exist. Maybe Ryujinx was never run. Continuing" #TODO logging
+  fi
 }
 
 # TODO: this function is not yet used
@@ -640,12 +678,12 @@ branch_selector() {
 
 quit_retrodeck() {
   pkill -f retrodeck
-  pkill -f emulationstation
+  pkill -f es-de
 }
 
 start_retrodeck() {
   easter_eggs # Check if today has a surprise splashscreen and load it if so
   # normal startup
   echo "Starting RetroDECK v$version"
-  emulationstation --home /var/config/emulationstation
+  es-de --home /var/config/
 }
