@@ -13,6 +13,7 @@ source /app/libexec/global.sh
 #       - Global: Presets & Settings
 #         - Widescreen: Enable/Disable
 #         - Ask-To-Exit: Enable/Disable
+#         - Quick Resume: Enable/Disable
 #         - RetroAchievements: Login
 #         - RetroAchievements: Logout
 #         - RetroAchievements: Hardcore Mode
@@ -198,6 +199,7 @@ configurator_global_presets_and_settings_dialog() {
   --column="Choice" --column="Action" \
   "Widescreen: Enable/Disable" "Enable or disable widescreen in supported systems" \
   "Ask-to-Exit: Enable/Disable" "Enable or disable emulators confirming when quitting in supported systems" \
+  "Quick Resume: Enable/Disable" "Enable or disable save state auto-save/load in supported systems" \
   "RetroAchievements: Login" "Log into the RetroAchievements service in supported systems" \
   "RetroAchievements: Logout" "Disable RetroAchievements service in ALL supported systems" \
   "RetroAchievements: Hardcore Mode" "Enable RetroAchievements hardcore mode (no cheats, rewind, save states etc.) in supported systems" \
@@ -213,6 +215,11 @@ configurator_global_presets_and_settings_dialog() {
 
   "Ask-to-Exit: Enable/Disable" )
     change_preset_dialog "ask_to_exit"
+    configurator_global_presets_and_settings_dialog
+  ;;
+
+  "Quick Resume: Enable/Disable" )
+    change_preset_dialog "quick_resume"
     configurator_global_presets_and_settings_dialog
   ;;
 
