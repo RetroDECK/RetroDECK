@@ -236,12 +236,11 @@ post_update() {
 
   if [[ $prev_version -le "080" ]]; then
     # In version 0.8.0b, the following changes were made that required config file updates/reset or other changes to the filesystem:
-    # - Remove RetroDECK controller profile from existing template location
+    # - Remove RetroDECK controller profile from existing template location TODO
+    # - Determine if Steam is installed via normal desktop application / Flatpak / SteamOS TODO
+    # - Install RetroDECK controller profile in desired location TODO
     # - Change section name in retrodeck.cfg for ABXY button swap preset
     # - Force disable global rewind in RA in prep for preset system
-    if [[ -f "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"]]; then # Only remove if file had been previously installed
-      rm -f "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"
-    fi
     sed -i 's^nintendo_button_layout^abxy_button_swap^' "$rd_conf" # This is a one-off sed statement as there are no functions for replacing section names
     set_setting_value "$raconf" "rewind_enable" "false" "retroarch"
 
@@ -269,7 +268,9 @@ post_update() {
     rsync -rlD --mkpath "/app/retrodeck/extras/DynamicInputTextures/" "/var/data/primehack/Load/DynamicInputTextures/"
   fi
 
-  install_retrodeck_controller_profile # Refresh controller profiles with latest versions if they were previously installed
+  if [[ -f "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf" ]]; then # If RetroDECK controller profile has been previously installed
+    install_retrodeck_controller_profile
+  fi
 
   update_splashscreens
   deploy_helper_files
