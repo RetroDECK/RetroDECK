@@ -761,15 +761,12 @@ prepare_component() {
     cp -fvr "$emuconfigs/mame/ui.ini" "/var/config/mame/cfg"
     cp -fvr "$emuconfigs/mame/default.cfg" "/var/config/mame/cfg"
 
-    sed -i 's#RETRODECKROMSDIR#'$roms_folder'#g' "/var/config/mame/cfg/mame.ini"
-    sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "/var/config/mame/cfg/mame.ini"
-    sed -i 's#RETRODECKSAVESDIR#'$saves_folder'#g' "/var/config/mame/cfg/mame.ini"
-    sed -i 's#RETRODECKSTATESDIR#'$states_folder'#g' "/var/config/mame/cfg/mame.ini"
+    sed -i 's#RETRODECKROMSDIR#'$roms_folder'#g' "$mameconf" # one-off as roms folders are a lot
+    set_setting_value "$mameconf" "nvram_directory" "$saves_folder/mame-sa/nvram" "mame"
+    set_setting_value "$mameconf" "state_directory" "$states_folder/mame-sa" "mame"
+    set_setting_value "$mameconf" "snapshot_directory" "$screenshots_folder/mame-sa" "mame"
+    set_setting_value "$mameconf" "diff_directory" "$saves_folder/mame-sa/diff" "mame"
 
-    sed -i 's#RETRODECKROMSDIR#'$roms_folder'#g' "/var/config/mame/cfg/ui.ini"
-    sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "/var/config/mame/cfg/ui.ini"
-    sed -i 's#RETRODECKSAVESDIR#'$saves_folder'#g' "/var/config/mame/cfg/ui.ini"
-    sed -i 's#RETRODECKSTATESDIR#'$states_folder'#g' "/var/config/mame/cfg/ui.ini"
   fi
 
   if [[ "$component" =~ ^(gzdoom|GZDOOM|all)$ ]]; then
