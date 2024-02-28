@@ -239,7 +239,7 @@ post_update() {
     # - Remove RetroDECK controller profile from existing template location
     # - Change section name in retrodeck.cfg for ABXY button swap preset
     # - Force disable global rewind in RA in prep for preset system
-    if [[ -f "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"]]; then # Only remove if file had been previously installed
+    if [[ -f "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf" ]]; then # Only remove if file had been previously installed
       rm -f "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"
     fi
     sed -i 's^nintendo_button_layout^abxy_button_swap^' "$rd_conf" # This is a one-off sed statement as there are no functions for replacing section names

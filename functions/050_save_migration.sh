@@ -1,7 +1,5 @@
 #!/bin/bash
 
-source /app/libexec/logger.sh
-
 save_migration() {
   # Finding existing ROMs folder
   if [ -d "$default_sd/retrodeck" ]

@@ -1,7 +1,5 @@
 #!/bin/bash
 
-source /app/libexec/logger.sh
-
 directory_browse() {
   # This function browses for a directory and returns the path chosen
   # USAGE: path_to_be_browsed_for=$(directory_browse $action_text)
@@ -657,10 +655,10 @@ manage_ryujinx_keys() {
               echo "Created symlink: \"$symlink\""
           done
       else
-          log w "No files found in $bios_folder/switch/keys. Continuing"
+          log w "No files found in $bios_folder/switch/keys. Continuing..."
       fi
   else
-      log w "Directory $bios_folder/switch/keys does not exist. Maybe Ryujinx was never run. Continuing"
+      log w "Directory $bios_folder/switch/keys does not exist. Maybe Ryujinx was never run. Continuing..."
   fi
 }
 

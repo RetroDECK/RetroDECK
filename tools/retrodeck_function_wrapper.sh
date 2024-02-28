@@ -4,7 +4,6 @@
 # USAGE: /bin/bash retrodeck_function_wrapper.sh <function_name> <arg1> <arg2> ...
 
 source /app/libexec/global.sh
-source /app/libexec/logger.sh
 
 # Check if a function was specified
 if [[ $# -lt 1 ]]; then

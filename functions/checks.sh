@@ -1,7 +1,5 @@
 #!/bin/bash
 
-source /app/libexec/logger.sh
-
 check_network_connectivity() {
   # This function will do a basic check for network availability and return "true" if it is working.
   # USAGE: if [[ $(check_network_connectivity) == "true" ]]; then

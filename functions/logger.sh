@@ -7,12 +7,12 @@
 # log e "bar" -> logs an error with message bar in the default log file retrodeck/logs/retrodeck.log
 # log i "par" rekku.log -> logs an information with message in the specified log file inside the logs folder retrodeck/logs/rekku.log
 
-if [ "${log_init:-false}" = false ]; then
-    logs_folder=${logs_folder:-"/tmp"}
-    touch "$logs_folder/retrodeck.log"
-    # exec > >(tee "$logs_folder/retrodeck.log") 2>&1 # this is broken, creates strange artifacts and corrupts the log file
-    log_init=true
-fi
+# if [ "${log_init:-false}" = false ]; then
+#     logs_folder=${logs_folder:-"/tmp"}
+#     touch "$logs_folder/retrodeck.log"
+#     # exec > >(tee "$logs_folder/retrodeck.log") 2>&1 # this is broken, creates strange artifacts and corrupts the log file
+#     log_init=true
+# fi
 
 log() {
 
@@ -89,6 +89,10 @@ log() {
     echo -e "$colored_message"
 
     # Write the log message to the log file
+    if [ ! -f "$logfile" ]; then
+        echo "$timestamp [WARN] Log file not found in \"$logfile\", creating it"
+        touch "$logfile"
+    fi
     echo "$log_message" >> "$logfile"
 
 }
@@ -96,8 +100,10 @@ log() {
 # This function is merging the temporary log file into the actual one
 tmplog_merger() {
 
+    create_dir "$logs_folder"
+
     # Check if /tmp/retrodeck.log exists
-    if [ -e "/tmp/retrodeck.log" ]; then
+    if [ -e "/tmp/retrodeck.log" ] && [ -e "$logs_folder/retrodeck.log" ]; then
 
         # Sort both temporary and existing log files by timestamp
         sort -k1,1n -k2,2M -k3,3n -k4,4n -k5,5n "/tmp/retrodeck.log" "$logs_folder/retrodeck.log" > "$logs_folder/merged_logs.tmp"
@@ -108,14 +114,13 @@ tmplog_merger() {
         # Remove the temporary file
         rm "/tmp/retrodeck.log"
     fi
-}
 
-ESDE_source_logs="/var/config/emulationstation/.emulationstation/es_log.txt"
-# Check if the source file exists
-if [ -e "$ESDE_source_logs" ]; then
-    # Create the symlink in the logs folder
-    ln -sf "$source_file" "$logs_folder/ES-DE.log"
-    log i "ES-DE log file linked to \"$logs_folder/ES-DE.log\""
-else
-    echo "ES-DE log file not found, not linked"
-fi
+    local ESDE_source_logs="/var/config/ES-DE/logs/es_log.txt"
+    # Check if the source file exists
+    if [ -e "$ESDE_source_logs" ]; then
+        # Create the symlink in the logs folder
+        ln -sf "$ESDE_source_logs" "$logs_folder/ES-DE.log"
+        log i "ES-DE log file linked to \"$logs_folder/ES-DE.log\""
+    fi
+
+}

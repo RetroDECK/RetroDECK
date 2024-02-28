@@ -164,8 +164,7 @@ if [[ ! -f "$rd_conf" ]]; then
 
   log i "Setting config file permissions"
   chmod +rw $rd_conf
-  log i "RetroDECK config file initialized. Contents:\n"
-  log i "$(cat "$rd_conf")"
+  log i "RetroDECK config file initialized. Contents:\n\n$(cat $rd_conf\n)"
   conf_read # Load new variables into memory
   tmplog_merger
 
@@ -201,4 +200,4 @@ else
   multi_user_data_folder="$rdhome/multi-user-data"                                                                      # The default location of multi-user environment profiles
 fi
 
-logs_folder="$rdhome/retrodeck/logs" # The path of the logs folder, here we collect all the logs
+logs_folder="$rdhome/logs" # The path of the logs folder, here we collect all the logs
