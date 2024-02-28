@@ -32,7 +32,7 @@ save_migration() {
   # Doing the dir prep as we don't know from which version we came
   dir_prep "$media_folder" "/var/config/ES-DE/downloaded_media"
   dir_prep "$themes_folder" "/var/config/ES-DE/themes"
-  mkdir -pv $rdhome/logs #this was added later, maybe safe to remove in a few versions
+  create_dir $rdhome/logs #this was added later, maybe safe to remove in a few versions
 
   # Resetting es_settings, now we need it but in the future I should think a better solution, maybe with sed
   cp -fv /app/retrodeck/es_settings.xml /var/config/ES-DE/settings/es_settings.xml

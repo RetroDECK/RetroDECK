@@ -73,9 +73,12 @@ verify_space() {
   source_size=$((source_size+(source_size/10))) # Add 10% to source size for safety
   dest_avail=$(df -k --output=avail "$2" | tail -1)
 
+  log i "Checking free disk space"
   if [[ $source_size -ge $dest_avail ]]; then
+    log e "Not enough disk space: $dest_avail"
     echo "false"
   else
+    log i "Disk space is enough: $dest_avail"
     echo "true"
   fi
 }
@@ -86,6 +89,8 @@ move() {
 
   source_dir="$(echo $1 | sed 's![^/]$!&/!')" # Add trailing slash if it is missing
   dest_dir="$(echo $2 | sed 's![^/]$!&/!')" # Add trailing slash if it is missing
+
+  log d "Moving \"$source_dir\" to \"$dest_dir\""
 
   (
     rsync -a --remove-source-files --ignore-existing --mkpath "$source_dir" "$dest_dir" # Copy files but don't overwrite conflicts
@@ -101,6 +106,27 @@ move() {
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator Utility - Move Directories" \
     --text="There were some conflicting files that were not moved.\n\nAll files that could be moved are in the new location,\nany files that already existed at the new location have not been moved and will need to be handled manually."
+  fi
+}
+
+create_dir() {
+  # A simple function that creates a directory checking if is still there while logging the activity
+  # If -d it will delete it prior the creation
+
+  if [[ "$1" == "-d" ]]; then
+    # If "force" flag is provided, delete the directory first
+    shift # Remove the first argument (-f)
+    if [[ -e "$1" ]]; then
+      rm -rf "$1" # Forcefully delete the directory
+      log d "Found \"$1\", deleting it."
+    fi
+  fi
+
+  if [[ ! -d "$1" ]]; then
+    mkdir -p "$1" # Create directory if it doesn't exist
+    log d "Created directory: $1"
+  else
+    log d "Directory \"$1\" already exists, skipping."
   fi
 }
 
@@ -247,12 +273,12 @@ dir_prep() {
   if [ ! -d "$real" ];
   then
     log d "$real not found, creating it" #DEBUG
-    mkdir -pv "$real"
+    create_dir "$real"
   fi
 
   # creating the symlink
   log d "linking $real in $symlink" #DEBUG
-  mkdir -pv "$(dirname "$symlink")" # creating the full path except the last folder
+  create_dir "$(dirname "$symlink")" # creating the full path except the last folder
   ln -svf "$real" "$symlink"
 
   # moving everything from the old folder to the new one, delete the old one
@@ -298,7 +324,7 @@ check_bios_files() {
 }
 
 update_rpcs3_firmware() {
-  mkdir -p "$roms_folder/ps3/tmp"
+  create_dir "$roms_folder/ps3/tmp"
   chmod 777 "$roms_folder/ps3/tmp"
   download_file "$rpcs3_firmware" "$roms_folder/ps3/tmp/PS3UPDAT.PUP" "RPCS3 Firmware"
   rpcs3 --installfw "$roms_folder/ps3/tmp/PS3UPDAT.PUP"
@@ -313,7 +339,7 @@ update_vita3k_firmware() {
 }
 
 backup_retrodeck_userdata() {
-  mkdir -p "$backups_folder"
+  create_dir "$backups_folder"
   zip -rq9 "$backups_folder/$(date +"%0m%0d")_retrodeck_userdata.zip" "$saves_folder" "$states_folder" "$bios_folder" "$media_folder" "$themes_folder" "$logs_folder" "$screenshots_folder" "$mods_folder" "$texture_packs_folder" "$borders_folder" > $logs_folder/$(date +"%0m%0d")_backup_log.log
 }
 
@@ -519,11 +545,11 @@ install_retrodeck_starterpack() {
 
   ## DOOM section ##
   cp /app/retrodeck/extras/doom1.wad "$roms_folder/doom/doom1.wad" # No -f in case the user already has it
-  mkdir -p "/var/config/ES-DE/gamelists/doom"
+  create_dir "/var/config/ES-DE/gamelists/doom"
   if [[ ! -f "/var/config/ES-DE/gamelists/doom/gamelist.xml" ]]; then # Don't overwrite an existing gamelist
     cp "/app/retrodeck/rd_prepacks/doom/gamelist.xml" "/var/config/ES-DE/gamelists/doom/gamelist.xml"
   fi
-  mkdir -p "$media_folder/doom"
+  create_dir "$media_folder/doom"
   unzip -oq "/app/retrodeck/rd_prepacks/doom/doom.zip" -d "$media_folder/doom/"
 }
 
@@ -679,7 +705,7 @@ branch_selector() {
         configurator_generic_dialog "RetroDECK Online Update" "The update process may take several minutes.\n\nAfter the update is complete, RetroDECK will close. When you run it again you will be using the latest version."
           (
           local desired_flatpak_file=$(curl --silent $flatpak_file_url | grep '"browser_download_url":' | sed -E 's/.*"([^"]+)".*/\1/')
-          mkdir -p "$rdhome/RetroDECK_Updates"
+          create_dir "$rdhome/RetroDECK_Updates"
           wget -P "$rdhome/RetroDECK_Updates" $desired_flatpak_file
           flatpak-spawn --host flatpak remove --noninteractive -y net.retrodeck.retrodeck # Remove current version before installing new one, to avoid duplicates
           flatpak-spawn --host flatpak install --user --bundle --noninteractive -y "$rdhome/RetroDECK_Updates/RetroDECK-cooker.flatpak"
