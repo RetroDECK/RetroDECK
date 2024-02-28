@@ -16,7 +16,6 @@ directory_browse() {
       if [ $? == 0 ]
       then
         path_selected=true
-        log i "\"$target\" selected."
         echo "$target"
         break
       fi
@@ -47,7 +46,6 @@ file_browse() {
       if [ $? == 0 ]
       then
         file_selected=true
-        log i "\"$target\" selected."
         echo "$target"
         break
       fi
@@ -71,12 +69,9 @@ verify_space() {
   source_size=$((source_size+(source_size/10))) # Add 10% to source size for safety
   dest_avail=$(df -k --output=avail "$2" | tail -1)
 
-  log i "Checking free disk space"
   if [[ $source_size -ge $dest_avail ]]; then
-    log e "Not enough disk space: $dest_avail"
     echo "false"
   else
-    log i "Disk space is enough: $dest_avail"
     echo "true"
   fi
 }
@@ -368,7 +363,6 @@ do
       if [ $? == 0 ] #yes
       then
         path_selected=true
-        log i "\"$target/retrodeck\" selected."
         echo "$target/retrodeck"
         break
       else
@@ -410,7 +404,6 @@ finit_user_options_dialog() {
   --column "option_flag" \
   "${finit_available_options[@]}")
 
-  log i "User choiches: \"${choices[*]}\"."
   echo "${choices[*]}"
 }
 
@@ -652,7 +645,7 @@ manage_ryujinx_keys() {
 
               # Create symlink
               ln -s "$file" "$symlink"
-              echo "Created symlink: \"$symlink\""
+              log i "Created symlink: \"$symlink\""
           done
       else
           log w "No files found in $bios_folder/switch/keys. Continuing..."

@@ -188,8 +188,6 @@ get_cheevos_token_dialog() {
   # This function will return a RetroAchvievements token from a valid username and password, will return "login failed" otherwise
   # USAGE: get_cheevos_token_dialog
 
-  log d "Opening RetroAchievements dialog"
-
   local cheevos_info=$(zenity --forms --title="Cheevos" \
   --text="Username and password." \
   --separator="^" \

@@ -28,7 +28,7 @@ log() {
     if [ -n "$3" ]; then
         logfile="$3"
     else
-        logfile="$logs_folder/retrodeck.log"
+        logfile="$rd_logs_folder/retrodeck.log"
     fi
 
     # Check if the shell is sh (not bash or zsh) to avoid colorization
@@ -100,16 +100,16 @@ log() {
 # This function is merging the temporary log file into the actual one
 tmplog_merger() {
 
-    create_dir "$logs_folder"
+    create_dir "$rd_logs_folder"
 
     # Check if /tmp/retrodeck.log exists
-    if [ -e "/tmp/retrodeck.log" ] && [ -e "$logs_folder/retrodeck.log" ]; then
+    if [ -e "/tmp/retrodeck.log" ] && [ -e "$rd_logs_folder/retrodeck.log" ]; then
 
         # Sort both temporary and existing log files by timestamp
-        sort -k1,1n -k2,2M -k3,3n -k4,4n -k5,5n "/tmp/retrodeck.log" "$logs_folder/retrodeck.log" > "$logs_folder/merged_logs.tmp"
+        sort -k1,1n -k2,2M -k3,3n -k4,4n -k5,5n "/tmp/retrodeck.log" "$rd_logs_folder/retrodeck.log" > "$rd_logs_folder/merged_logs.tmp"
 
         # Move the merged logs to replace the original log file
-        mv "$logs_folder/merged_logs.tmp" "$logs_folder/retrodeck.log"
+        mv "$rd_logs_folder/merged_logs.tmp" "$rd_logs_folder/retrodeck.log"
 
         # Remove the temporary file
         rm "/tmp/retrodeck.log"
@@ -119,8 +119,8 @@ tmplog_merger() {
     # Check if the source file exists
     if [ -e "$ESDE_source_logs" ]; then
         # Create the symlink in the logs folder
-        ln -sf "$ESDE_source_logs" "$logs_folder/ES-DE.log"
-        log i "ES-DE log file linked to \"$logs_folder/ES-DE.log\""
+        ln -sf "$ESDE_source_logs" "$rd_logs_folder/ES-DE.log"
+        log i "ES-DE log file linked to \"$rd_logs_folder/ES-DE.log\""
     fi
 
 }
