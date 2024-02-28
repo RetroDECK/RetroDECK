@@ -42,7 +42,7 @@ log() {
         w) 
             if [ "$colorize_terminal" = true ]; then
                 # Warning (yellow) for terminal
-                colored_message="\e[33m[WARN]\e[0m $message"
+                colored_message="\e[33m[WARN] $message\e[0m"
             else
                 # Warning (no color for sh) for terminal
                 colored_message="$timestamp [WARN] $message"
@@ -53,7 +53,7 @@ log() {
         e) 
             if [ "$colorize_terminal" = true ]; then
                 # Error (red) for terminal
-                colored_message="\e[31m[ERROR]\e[0m $message"
+                colored_message="\e[31m[ERROR] $message\e[0m"
             else
                 # Error (no color for sh) for terminal
                 colored_message="$timestamp [ERROR] $message"
@@ -62,20 +62,14 @@ log() {
             log_message="$timestamp [ERROR] $message"
             ;;
         i) 
-            if [ "$colorize_terminal" = true ]; then
-                # Info (green) for terminal
-                colored_message="\e[32m[INFO]\e[0m $message"
-            else
-                # Info (no color for sh) for terminal
-                colored_message="$timestamp [INFO] $message"
-            fi
-            # Write to log file without colorization
+            # Write to log file without colorization for info message
             log_message="$timestamp [INFO] $message"
+            colored_message=$log_message
             ;;
         d) 
             if [ "$colorize_terminal" = true ]; then
                 # Debug (green) for terminal
-                colored_message="\e[32m[DEBUG]\e[0m $message"
+                colored_message="\e[32m[DEBUG] $message\e[0m"
             else
                 # Debug (no color for sh) for terminal
                 colored_message="$timestamp [DEBUG] $message"
