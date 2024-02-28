@@ -24,6 +24,7 @@ prepare_component() {
         fi
       done < <(grep -v '^\s*$' $rd_conf | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
       create_dir "/var/config/retrodeck/godot"
+      dir_prep "$rd_logs_folder" "$logs_folder"
     fi
     if [[ "$action" == "postmove" ]]; then # Update the paths of any folders that came with the retrodeck folder during a move
       while read -r config_line; do
@@ -35,6 +36,7 @@ prepare_component() {
           fi
         fi
       done < <(grep -v '^\s*$' $rd_conf | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
+      dir_prep "$rd_logs_folder" "$logs_folder"
     fi
   fi
 
