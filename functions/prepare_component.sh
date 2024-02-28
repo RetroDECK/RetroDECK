@@ -757,9 +757,9 @@ prepare_component() {
     mkdir -p "/var/data/mame/assets/ui"
 
     dir_prep "$saves_folder/mame-sa/hiscore" "/var/config/mame/hiscore"
-    cp -fvr "$emuconfigs/mame/mame.ini" "/var/config/mame/cfg"
-    cp -fvr "$emuconfigs/mame/ui.ini" "/var/config/mame/cfg"
-    cp -fvr "$emuconfigs/mame/default.cfg" "/var/config/mame/cfg"
+    cp -fvr "$emuconfigs/mame/mame.ini" "$mameconf"
+    cp -fvr "$emuconfigs/mame/ui.ini" "$mameuiconf"
+    cp -fvr "$emuconfigs/mame/default.cfg" "$mamedefconf"
 
     sed -i 's#RETRODECKROMSDIR#'$roms_folder'#g' "$mameconf" # one-off as roms folders are a lot
     set_setting_value "$mameconf" "nvram_directory" "$saves_folder/mame-sa/nvram" "mame"
