@@ -5,16 +5,14 @@ post_update() {
   # post update script
   echo "Executing post-update script"
 
-  local prev_version=$(sed -e 's/[\.a-z]//g' <<< $version)
-
-  if [[ $prev_version -le "050" ]]; then # If updating from prior to save sorting change at 0.5.0b
+  if [[ $(check_version_is_older_than "0.5.0b") == "true" ]]; then # If updating from prior to save sorting change at 0.5.0b
     save_migration
   fi
 
   # Everything within the following ( <code> ) will happen behind the Zenity dialog. The save migration was a long process so it has its own individual dialogs.
 
   (
-  if [[ $prev_version -le "062" ]]; then
+  if [[ $(check_version_is_older_than "0.6.2b") == "true" ]]; then
     # In version 0.6.2b, the following changes were made that required config file updates/reset:
     # - Primehack preconfiguration completely redone. "Stop emulation" hotkey set to Start+Select, Xbox and Nintendo keymap profiles were created, Xbox set as default.
     # - Duckstation save and state locations were dir_prep'd to the rdhome/save and /state folders, which was not previously done. Much safer now!
@@ -31,7 +29,7 @@ post_update() {
     dir_prep "$roms_folder/pico8" "$bios_folder/pico-8/carts" # Symlink default game location to RD roms for cleanliness (this location is overridden anyway by the --root_path launch argument anyway)
     dir_prep "$bios_folder/pico-8/cdata" "$saves_folder/pico-8" # PICO-8 saves folder
   fi
-  if [[ $prev_version -le "063" ]]; then
+  if [[ $(check_version_is_older_than "0.6.3b") == "true" ]]; then
     # In version 0.6.3b, the following changes were made that required config file updates/reset:
     # - Put Dolphin and Primehack save states in different folders inside $rd_home/states
     # - Fix symlink to hard-coded PICO-8 config folder (dir_prep doesn't like ~)
@@ -53,7 +51,7 @@ post_update() {
     # Remove unneeded tools folder, as location has changed to RO space
     rm -rfv /var/config/retrodeck/tools/
   fi
-  if [[ $prev_version -le "064" ]]; then
+  if [[ $(check_version_is_older_than "0.6.4b") == "true" ]]; then
     # In version 0.6.4b, the following changes were made:
     # Changed settings in Primehack: The audio output was not selected by default, default AR was also incorrect.
     # Changed settings in Duckstation and PCSX2: The "ask on exit" was disabled and "save on exit" was enabled.
@@ -61,13 +59,13 @@ post_update() {
 
     deploy_multi_patch "emu-configs/patches/updates/064b_update.patch"
   fi
-  if [[ $prev_version -le "065" ]]; then
+  if [[ $(check_version_is_older_than "0.6.5b") == "true" ]]; then
     # In version 0.6.5b, the following changes were made:
     # Change Yuzu GPU accuracy to normal for better performance
 
     set_setting_value $yuzuconf "gpu_accuracy" "0" "yuzu" "Renderer"
   fi
-  if [[ $prev_version -le "070" ]]; then
+  if [[ $(check_version_is_older_than "0.7.0b") == "true" ]]; then
     # In version 0.7.0b, the following changes were made that required config file updates/reset or other changes to the filesystem:
     # - Update retrodeck.cfg and set new paths to $rdhome by default
     # - Update PCSX2 and Duckstation configs to latest templates (to accomadate RetroAchievements feature) and move Duckstation config folder from /var/data to /var/config
@@ -222,19 +220,19 @@ post_update() {
       prepare_component "reset" "all"
     fi
   fi
-  if [[ $prev_version -le "071" ]]; then
+  if [[ $(check_version_is_older_than "0.7.1b") == "true" ]]; then
     # In version 0.7.1b, the following changes were made that required config file updates/reset or other changes to the filesystem:
     # - Force update PPSSPP standalone keybinds for L/R.
     set_setting_value "$ppssppcontrolsconf" "L" "1-45,10-193" "ppsspp" "ControlMapping"
     set_setting_value "$ppssppcontrolsconf" "R" "1-51,10-192" "ppsspp" "ControlMapping"
   fi
 
-  if [[ $prev_version -le "073" ]]; then
+  if [[ $(check_version_is_older_than "0.7.3b") == "true" ]]; then
     # In version 0.7.3b, there was a bug that prevented the correct creations of the roms/system folders, so we force recreate them.
     emulationstation --home /var/config/emulationstation --create-system-dirs
   fi
 
-  if [[ $prev_version -le "080" ]]; then
+  if [[ $(check_version_is_older_than "0.8.0b") == "true" ]]; then
     # In version 0.8.0b, the following changes were made that required config file updates/reset or other changes to the filesystem:
     # - Remove RetroDECK controller profile from existing template location
     # - Change section name in retrodeck.cfg for ABXY button swap preset
@@ -252,10 +250,27 @@ post_update() {
     prepare_component "reset" "mame"
     prepare_component "reset" "vita3k"
     prepare_component "reset" "gzdoom"
-    
+
+    if [ -d "$rdhome/.logs" ]; then
+      mv "$rdhome/.logs" "$logs_folder"
+      log i "Logs folder renamed successfully"
+    else
+      log i "The .logs folder does not exist, continuing."
+    fi
+
+    # The save folder of rpcs3 was inverted so we're moving the saves into the real one
+    echo "RPCS3 saves needs to be migrated, executing."
+    mv "$saves_folder/ps3/rpcs3" "$saves_folder/ps3/rpcs3.bak"
+    mkdir -p "$saves_folder/ps3/rpcs3"
+    mv -v "$saves_folder/ps3/rpcs3.bak"/* "$saves_folder/ps3/rpcs3"
+    mv -v "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata"/* "$saves_folder/ps3/rpcs3"
+    mv -v "$saves_folder/ps3/rpcs3.bak" "$rdhome/backups/saves/ps3/rpcs3"
+    echo "RPCS3 saves migration completed, a backup was made here: \"$rdhome/backups/saves/ps3/rpcs3\"."
+    source /app/libexec/functions.sh
+    dir_prep "$saves_folder/ps3/rpcs3" "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata"    
   fi
 
-  # if [[ $prev_version -le "090" ]]; then
+  # if [[ $(check_version_is_older_than "0.9.0b") == "true" ]]; then
   #   # Placeholder for version 0.9.0b
   #   rm /var/config/emulationstation/.emulationstation # remving the old symlink to .emulationstation as it might be not needed anymore
   # fi
@@ -289,32 +304,5 @@ post_update() {
     changelog_dialog "$(echo $version | cut -d'-' -f2)"
   else
     changelog_dialog "$version"
-  fi
-
-  if [[ $prev_version -le "075" ]]; then
-    # In version 0.7.5b, the following changes were made:
-    prepare_component "reset" "vita3k"
-    prepare_component "reset" "mame"
-    prepare_component "reset" "boilr"
-    if [ -d "$rdhome/.logs" ]; then
-      mv "$rdhome/.logs" "$logs_folder"
-      log i "Logs folder renamed successfully"
-    else
-      log i "The .logs folder does not exist, continuing."
-    fi
-
-    
-
-    # The save folder of rpcs3 was inverted so we're moving the saves into the real one
-    log w "RPCS3 saves needs to be migrated, executing."
-    mv "$saves_folder/ps3/rpcs3" "$saves_folder/ps3/rpcs3.bak"
-    create_dir "$saves_folder/ps3/rpcs3"
-    mv -v "$saves_folder/ps3/rpcs3.bak"/* "$saves_folder/ps3/rpcs3"
-    mv -v "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata"/* "$saves_folder/ps3/rpcs3"
-    mv -v "$saves_folder/ps3/rpcs3.bak" "$rdhome/backups/saves/ps3/rpcs3"
-    log w "RPCS3 saves migration completed, a backup was made here: \"$rdhome/backups/saves/ps3/rpcs3\"."
-    source /app/libexec/functions.sh
-    dir_prep "$saves_folder/ps3/rpcs3" "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata"
-
   fi
 }

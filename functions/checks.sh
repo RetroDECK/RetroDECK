@@ -111,3 +111,36 @@ validate_input() {
     fi
   done < $input_validation
 }
+
+check_version_is_older_than() {
+# This function will determine if a given version number is newer than the one currently read from retrodeck.cfg (which will be the previous running version at update time) and will return "true" if it is
+# The given version to check should be in normal RetroDECK version notation of N.N.Nb (eg. 0.8.0b)
+# USAGE: check_version_is_older_than "version"
+
+local current_version="$version"
+local new_version="$1"
+is_newer_version="false"
+
+current_version_major_rev=$(sed 's/^\([0-9]*\)\..*/\1/' <<< "$current_version")
+new_version_major_rev=$(sed 's/^\([0-9]*\)\..*/\1/' <<< "$new_version")
+
+current_version_minor_rev=$(sed 's/^[0-9]*\.\([0-9]*\)\..*/\1/' <<< "$current_version")
+new_version_minor_rev=$(sed 's/^[0-9]*\.\([0-9]*\)\..*/\1/' <<< "$new_version")
+
+current_version_point_rev=$(sed 's/^[0-9]*\.[0-9]*\.\([0-9]*\).*/\1/' <<< "$current_version")
+new_version_point_rev=$(sed 's/^[0-9]*\.[0-9]*\.\([0-9]*\).*/\1/' <<< "$new_version")
+
+if [[ "$new_version_major_rev" -gt "$current_version_major_rev" ]]; then
+  is_newer_version="true"
+elif [[ "$new_version_major_rev" -eq "$current_version_major_rev" ]]; then
+  if [[ "$new_version_minor_rev" -gt "$current_version_minor_rev" ]]; then
+    is_newer_version="true"
+  elif [[ "$new_version_minor_rev" -eq "$current_version_minor_rev" ]]; then
+    if [[ "$new_version_point_rev" -gt "$current_version_point_rev" ]]; then
+      is_newer_version="true"
+    fi
+  fi
+fi
+
+echo "$is_newer_version"
+}
