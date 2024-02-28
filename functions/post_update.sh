@@ -124,7 +124,7 @@ post_update() {
     dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/hires_texture" "/var/config/retroarch/system/Mupen64plus/hires_texture"
     dir_prep "$texture_packs_folder/Duckstation" "/var/config/duckstation/textures"
 
-    dir_prep "$rdhome/gamelists" "/var/config/emulationstation/.emulationstation/gamelists"
+    dir_prep "$rdhome/gamelists" "/var/config/emulationstation/ES-DE/gamelists"
 
     dir_prep "$borders_folder" "/var/config/retroarch/overlays/borders"
     rsync -rlD --mkpath "/app/retrodeck/emu-configs/retroarch/borders/" "/var/config/retroarch/overlays/borders/"
@@ -172,7 +172,7 @@ post_update() {
     dir_prep "$states_folder/psx/duckstation" "/var/config/duckstation/savestates"
 
     rm -rf /var/config/retrodeck/tools
-    rm -rf /var/config/emulationstation/.emulationstation/gamelists/tools/
+    rm -rf /var/config/emulationstation/ES-DE/gamelists/tools/
 
     mv "$saves_folder/gc/dolphin/EUR" "$saves_folder/gc/dolphin/EU"
     mv "$saves_folder/gc/dolphin/USA" "$saves_folder/gc/dolphin/US"
@@ -195,8 +195,8 @@ post_update() {
     sed -i '$ a <string name="UserThemeDirectory" value="" />' "$es_settings" # Add new default line to existing file
     set_setting_value "$es_settings" "UserThemeDirectory" "$themes_folder" "es_settings"
     unlink "/var/config/emulationstation/ROMs"
-    unlink "/var/config/emulationstation/.emulationstation/downloaded_media"
-    unlink "/var/config/emulationstation/.emulationstation/themes"
+    unlink "/var/config/emulationstation/ES-DE/downloaded_media"
+    unlink "/var/config/emulationstation/ES-DE/themes"
 
     set_setting_value "$raconf" "savestate_auto_load" "false" "retroarch"
     set_setting_value "$raconf" "savestate_auto_save" "false" "retroarch"
@@ -236,12 +236,29 @@ post_update() {
 
   if [[ $prev_version -le "080" ]]; then
     # In version 0.8.0b, the following changes were made that required config file updates/reset or other changes to the filesystem:
-    # - Remove RetroDECK controller profile from existing template location TODO
-    # - Determine if Steam is installed via normal desktop application / Flatpak / SteamOS TODO
-    # - Install RetroDECK controller profile in desired location TODO
+    # - Remove RetroDECK controller profile from existing template location
     # - Change section name in retrodeck.cfg for ABXY button swap preset
+    # - Force disable global rewind in RA in prep for preset system
+    if [[ -f "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"]]; then # Only remove if file had been previously installed
+      rm -f "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"
+    fi
     sed -i 's^nintendo_button_layout^abxy_button_swap^' "$rd_conf" # This is a one-off sed statement as there are no functions for replacing section names
+    set_setting_value "$raconf" "rewind_enable" "false" "retroarch"
+
+    # in 3.0 .emulationstation was moved into ES-DE
+    mv -f /var/config/emulationstation /var/config/ES-DE
+
+    prepare_component "reset" "es-de"
+    prepare_component "reset" "mame"
+    prepare_component "reset" "vita3k"
+    prepare_component "reset" "gzdoom"
+    
   fi
+
+  # if [[ $prev_version -le "090" ]]; then
+  #   # Placeholder for version 0.9.0b
+  #   rm /var/config/emulationstation/.emulationstation # remving the old symlink to .emulationstation as it might be not needed anymore
+  # fi
 
   # The following commands are run every time.
 
@@ -252,7 +269,7 @@ post_update() {
     rsync -rlD --mkpath "/app/retrodeck/extras/DynamicInputTextures/" "/var/data/primehack/Load/DynamicInputTextures/"
   fi
 
-  if [[ -f "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf" ]]; then # If RetroDECK controller profile has been previously installed
+  if [[ ! -z $(find "$HOME/.steam/steam/controller_base/templates/" -maxdepth 1 -type f -iname "RetroDECK*.vdf") || ! -z $(find "$HOME/.var/app/com.valvesoftware.Steam/.steam/steam/controller_base/templates/" -maxdepth 1 -type f -iname "RetroDECK*.vdf") ]]; then # If RetroDECK controller profile has been previously installed
     install_retrodeck_controller_profile
   fi
 
