@@ -16,6 +16,7 @@ directory_browse() {
       if [ $? == 0 ]
       then
         path_selected=true
+        log i "\"$target\" selected."
         echo "$target"
         break
       fi
@@ -46,6 +47,7 @@ file_browse() {
       if [ $? == 0 ]
       then
         file_selected=true
+        log i "\"$target\" selected."
         echo "$target"
         break
       fi
@@ -69,9 +71,12 @@ verify_space() {
   source_size=$((source_size+(source_size/10))) # Add 10% to source size for safety
   dest_avail=$(df -k --output=avail "$2" | tail -1)
 
+  log i "Checking free disk space"
   if [[ $source_size -ge $dest_avail ]]; then
+    log e "Not enough disk space: $dest_avail"
     echo "false"
   else
+    log i "Disk space is enough: $dest_avail"
     echo "true"
   fi
 }
@@ -82,6 +87,8 @@ move() {
 
   source_dir="$(echo $1 | sed 's![^/]$!&/!')" # Add trailing slash if it is missing
   dest_dir="$(echo $2 | sed 's![^/]$!&/!')" # Add trailing slash if it is missing
+
+  log d "Moving \"$source_dir\" to \"$dest_dir\""
 
   (
     rsync -a --remove-source-files --ignore-existing --mkpath "$source_dir" "$dest_dir" # Copy files but don't overwrite conflicts
@@ -97,6 +104,27 @@ move() {
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator Utility - Move Directories" \
     --text="There were some conflicting files that were not moved.\n\nAll files that could be moved are in the new location,\nany files that already existed at the new location have not been moved and will need to be handled manually."
+  fi
+}
+
+create_dir() {
+  # A simple function that creates a directory checking if is still there while logging the activity
+  # If -d it will delete it prior the creation
+
+  if [[ "$1" == "-d" ]]; then
+    # If "force" flag is provided, delete the directory first
+    shift # Remove the first argument (-f)
+    if [[ -e "$1" ]]; then
+      rm -rf "$1" # Forcefully delete the directory
+      log d "Found \"$1\", deleting it."
+    fi
+  fi
+
+  if [[ ! -d "$1" ]]; then
+    mkdir -p "$1" # Create directory if it doesn't exist
+    log d "Created directory: $1"
+  else
+    log d "Directory \"$1\" already exists, skipping."
   fi
 }
 
@@ -216,51 +244,51 @@ dir_prep() {
   real="$1"
   symlink="$2"
 
-  echo -e "\n[DIR PREP]\nMoving $symlink in $real" #DEBUG
+  log d "[DIR PREP]\nMoving $symlink in $real" #DEBUG
 
    # if the symlink dir is already a symlink, unlink it first, to prevent recursion
   if [ -L "$symlink" ];
   then
-    echo "$symlink is already a symlink, unlinking to prevent recursives" #DEBUG
+    log d "$symlink is already a symlink, unlinking to prevent recursives" #DEBUG
     unlink "$symlink"
   fi
 
   # if the dest dir exists we want to backup it
   if [ -d "$symlink" ];
   then
-    echo "$symlink found" #DEBUG
+    log d "$symlink found" #DEBUG
     mv -f "$symlink" "$symlink.old"
   fi
 
   # if the real dir is already a symlink, unlink it first
   if [ -L "$real" ];
   then
-    echo "$real is already a symlink, unlinking to prevent recursives" #DEBUG
+    log d "$real is already a symlink, unlinking to prevent recursives" #DEBUG
     unlink "$real"
   fi
 
   # if the real dir doesn't exist we create it
   if [ ! -d "$real" ];
   then
-    echo "$real not found, creating it" #DEBUG
-    mkdir -pv "$real"
+    log d "$real not found, creating it" #DEBUG
+    create_dir "$real"
   fi
 
   # creating the symlink
-  echo "linking $real in $symlink" #DEBUG
-  mkdir -pv "$(dirname "$symlink")" # creating the full path except the last folder
+  log d "linking $real in $symlink" #DEBUG
+  create_dir "$(dirname "$symlink")" # creating the full path except the last folder
   ln -svf "$real" "$symlink"
 
   # moving everything from the old folder to the new one, delete the old one
   if [ -d "$symlink.old" ];
   then
-    echo "Moving the data from $symlink.old to $real" #DEBUG
+    log d "Moving the data from $symlink.old to $real" #DEBUG
     mv -f "$symlink.old"/{.[!.],}* "$real"
-    echo "Removing $symlink.old" #DEBUG
+    log d "Removing $symlink.old" #DEBUG
     rm -rf "$symlink.old"
   fi
 
-  echo -e "$symlink is now $real\n"
+  log i "$symlink is now $real\n"
 }
 
 check_bios_files() {
@@ -294,7 +322,7 @@ check_bios_files() {
 }
 
 update_rpcs3_firmware() {
-  mkdir -p "$roms_folder/ps3/tmp"
+  create_dir "$roms_folder/ps3/tmp"
   chmod 777 "$roms_folder/ps3/tmp"
   download_file "$rpcs3_firmware" "$roms_folder/ps3/tmp/PS3UPDAT.PUP" "RPCS3 Firmware"
   rpcs3 --installfw "$roms_folder/ps3/tmp/PS3UPDAT.PUP"
@@ -309,7 +337,7 @@ update_vita3k_firmware() {
 }
 
 backup_retrodeck_userdata() {
-  mkdir -p "$backups_folder"
+  create_dir "$backups_folder"
   zip -rq9 "$backups_folder/$(date +"%0m%0d")_retrodeck_userdata.zip" "$saves_folder" "$states_folder" "$bios_folder" "$media_folder" "$themes_folder" "$logs_folder" "$screenshots_folder" "$mods_folder" "$texture_packs_folder" "$borders_folder" > $logs_folder/$(date +"%0m%0d")_backup_log.log
 }
 
@@ -340,6 +368,7 @@ do
       if [ $? == 0 ] #yes
       then
         path_selected=true
+        log i "\"$target/retrodeck\" selected."
         echo "$target/retrodeck"
         break
       else
@@ -381,28 +410,29 @@ finit_user_options_dialog() {
   --column "option_flag" \
   "${finit_available_options[@]}")
 
+  log i "User choiches: \"${choices[*]}\"."
   echo "${choices[*]}"
 }
 
 finit() {
 # Force/First init, depending on the situation
 
-  echo "Executing finit"
+  log i "Executing finit"
 
   # Internal or SD Card?
   local finit_dest_choice=$(configurator_destination_choice_dialog "RetroDECK data" "Welcome to the first configuration of RetroDECK.\nThe setup will be quick but please READ CAREFULLY each message in order to avoid misconfigurations.\n\nWhere do you want your RetroDECK data folder to be located?\n\nThis folder will contain all ROMs, BIOSs and scraped data." )
-  echo "Choice is $finit_dest_choice"
+  log i "Choice is $finit_dest_choice"
 
   case "$finit_dest_choice" in
 
   "Back" | "" ) # Back or X button quits
     rm -f "$rd_conf" # Cleanup unfinished retrodeck.cfg if first install is interrupted
-    echo "Now quitting"
+    log i "Now quitting"
     quit_retrodeck
   ;;
 
   "Internal Storage" ) # Internal
-    echo "Internal selected"
+    log i "Internal selected"
     rdhome="$HOME/retrodeck"
     if [[ -L "$rdhome" ]]; then #Remove old symlink from existing install, if it exists
       unlink "$rdhome"
@@ -410,10 +440,10 @@ finit() {
   ;;
 
   "SD Card" )
-    echo "SD Card selected"
+    log i "SD Card selected"
     if [ ! -d "$sdcard" ] # SD Card path is not existing
     then
-      echo "Error: SD card not found"
+      log e "SD card not found"
       zenity --error --no-wrap \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK" \
@@ -426,14 +456,14 @@ finit() {
       fi
     elif [ ! -w "$sdcard" ] #SD card found but not writable
       then
-        echo "Error: SD card found but not writable"
+        log e "SD card found but not writable"
         zenity --error --no-wrap \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         --title "RetroDECK" \
         --ok-label "Quit" \
         --text="SD card was found but is not writable\nThis can happen with cards formatted on PC.\nPlease format the SD card through the Steam Deck's Game Mode and run RetroDECK again."
         rm -f "$rd_conf" # Cleanup unfinished retrodeck.cfg if first install is interrupted
-        echo "Now quitting"
+        log i "Now quitting"
         quit_retrodeck
     else
       rdhome="$sdcard/retrodeck"
@@ -441,7 +471,7 @@ finit() {
   ;;
 
   "Custom Location" )
-      echo "Custom Location selected"
+      log i "Custom Location selected"
       zenity --info --no-wrap \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK" \
@@ -513,11 +543,11 @@ install_retrodeck_starterpack() {
 
   ## DOOM section ##
   cp /app/retrodeck/extras/doom1.wad "$roms_folder/doom/doom1.wad" # No -f in case the user already has it
-  mkdir -p "/var/config/ES-DE/gamelists/doom"
+  create_dir "/var/config/ES-DE/gamelists/doom"
   if [[ ! -f "/var/config/ES-DE/gamelists/doom/gamelist.xml" ]]; then # Don't overwrite an existing gamelist
     cp "/app/retrodeck/rd_prepacks/doom/gamelist.xml" "/var/config/ES-DE/gamelists/doom/gamelist.xml"
   fi
-  mkdir -p "$media_folder/doom"
+  create_dir "$media_folder/doom"
   unzip -oq "/app/retrodeck/rd_prepacks/doom/doom.zip" -d "$media_folder/doom/"
 }
 
@@ -599,7 +629,7 @@ manage_ryujinx_keys() {
   # This function checks if Switch keys are existing and symlinks them inside the Ryujinx system folder
   # If the symlinks are broken it recreates them
 
-  echo "Checking Ryujinx Switch keys." #TODO logging
+  log i "Checking Ryujinx Switch keys."
   local ryujinx_system="/var/config/Ryujinx/system"  # Set the path to the Ryujinx system folder
   # Check if the keys folder exists
   if [ -d "$bios_folder/switch/keys" ]; then
@@ -612,12 +642,12 @@ manage_ryujinx_keys() {
               
               # Check if the symlink exists and is valid
               if [ -L "$symlink" ] && [ "$(readlink -f "$symlink")" = "$file" ]; then
-                  echo "Found \"$symlink\" and it's a valid symlink." #TODO logging
+                  log i "Found \"$symlink\" and it's a valid symlink."
                   continue  # Skip if the symlink is already valid
               fi
               
               # Remove broken symlink or non-symlink file
-              echo "Found \"$symlink\" but it's not a valid symlink. Repairing it" #TODO logging
+              log w "Found \"$symlink\" but it's not a valid symlink. Repairing it"
               [ -e "$symlink" ] && rm "$symlink"
 
               # Create symlink
@@ -625,18 +655,17 @@ manage_ryujinx_keys() {
               echo "Created symlink: \"$symlink\""
           done
       else
-          echo "No files found in $bios_folder/switch/keys. Continuing" #TODO logging
+          log w "No files found in $bios_folder/switch/keys. Continuing..."
       fi
   else
-      echo "Directory $bios_folder/switch/keys does not exist. Maybe Ryujinx was never run. Continuing" #TODO logging
+      log w "Directory $bios_folder/switch/keys does not exist. Maybe Ryujinx was never run. Continuing..."
   fi
 }
 
 # TODO: this function is not yet used
 branch_selector() {
-    # Fetch branches from GitHub API excluding "main"
+    log d "Fetch branches from GitHub API excluding \"main\""
     branches=$(curl -s https://api.github.com/repos/XargonWan/RetroDECK/branches | grep '"name":' | awk -F '"' '$4 != "main" {print $4}')
-    # TODO: logging - Fetching branches from GitHub API
 
     # Create an array to store branch names
     branch_array=()
@@ -674,7 +703,7 @@ branch_selector() {
         configurator_generic_dialog "RetroDECK Online Update" "The update process may take several minutes.\n\nAfter the update is complete, RetroDECK will close. When you run it again you will be using the latest version."
           (
           local desired_flatpak_file=$(curl --silent $flatpak_file_url | grep '"browser_download_url":' | sed -E 's/.*"([^"]+)".*/\1/')
-          mkdir -p "$rdhome/RetroDECK_Updates"
+          create_dir "$rdhome/RetroDECK_Updates"
           wget -P "$rdhome/RetroDECK_Updates" $desired_flatpak_file
           flatpak-spawn --host flatpak remove --noninteractive -y net.retrodeck.retrodeck # Remove current version before installing new one, to avoid duplicates
           flatpak-spawn --host flatpak install --user --bundle --noninteractive -y "$rdhome/RetroDECK_Updates/RetroDECK-cooker.flatpak"
@@ -700,6 +729,6 @@ quit_retrodeck() {
 start_retrodeck() {
   easter_eggs # Check if today has a surprise splashscreen and load it if so
   # normal startup
-  echo "Starting RetroDECK v$version"
+  log i "Starting RetroDECK v$version"
   es-de --home /var/config/
 }

@@ -125,7 +125,7 @@ build_preset_config() {
                 fi
                 if [[ "$read_config_format" == "retroarch" && ! "$retroarch_all" == "true" ]]; then # If this is a RetroArch core, generate the override file
                   if [[ ! -f "$read_target_file" ]]; then
-                    mkdir -p "$(realpath "$(dirname "$read_target_file")")"
+                    create_dir "$(realpath "$(dirname "$read_target_file")")"
                     echo "$read_setting_name = \""$new_setting_value"\"" > "$read_target_file"
                   else
                     if [[ -z $(grep "$read_setting_name" "$read_target_file") ]]; then

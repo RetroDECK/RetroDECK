@@ -104,7 +104,7 @@ done
 if [ -f "$lockfile" ]; then
   # ...but the version doesn't match with the config file
   if [ "$hard_version" != "$version" ]; then
-    echo "Config file's version is $version but the actual version is $hard_version"
+    log i "Config file's version is $version but the actual version is $hard_version"
     if grep -qF "cooker" <<< $hard_version; then # If newly-installed version is a "cooker" build
       configurator_generic_dialog "RetroDECK Cooker Warning" "RUNNING COOKER VERSIONS OF RETRODECK CAN BE EXTREMELY DANGEROUS AND ALL OF YOUR RETRODECK DATA\n(INCLUDING BIOS FILES, BORDERS, DOWNLOADED MEDIA, GAMELISTS, MODS, ROMS, SAVES, STATES, SCREENSHOTS, TEXTURE PACKS AND THEMES)\nARE AT RISK BY CONTINUING!"
       set_setting_value $rd_conf "update_repo" "RetroDECK-cooker" retrodeck "options"
@@ -118,7 +118,7 @@ if [ -f "$lockfile" ]; then
       rc=$? # Capture return code, as "Yes" button has no text value
       if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
         if [[ $choice == "Don't Upgrade" ]]; then # If user wants to bypass the post_update.sh process this time.
-          echo "Skipping upgrade process for cooker build, updating stored version in retrodeck.cfg"
+          log i "Skipping upgrade process for cooker build, updating stored version in retrodeck.cfg"
           set_setting_value $rd_conf "version" "$hard_version" retrodeck # Set version of currently running RetroDECK to updated retrodeck.cfg
         elif [[ $choice == "Full Wipe and Fresh Install" ]]; then # Remove all RetroDECK data and start a fresh install
           if [[ $(configurator_generic_question_dialog "RetroDECK Cooker Reset" "This is going to remove all of the data in all locations used by RetroDECK!\n\n(INCLUDING BIOS FILES, BORDERS, DOWNLOADED MEDIA, GAMELISTS, MODS, ROMS, SAVES, STATES, SCREENSHOTS, TEXTURE PACKS AND THEMES)\n\nAre you sure you want to contine?") == "true" ]]; then
@@ -126,7 +126,7 @@ if [ -f "$lockfile" ]; then
               if [[ $(configurator_generic_question_dialog "RetroDECK Cooker Reset" "But are you super DUPER sure? We REAAAALLLLLYY want to make sure you know what is happening here.\n\nThe ~/retrodeck and ~/.var/app/net.retrodeck.retrodeck folders and ALL of their contents\nare about to be PERMANENTLY removed.\n\nStill sure you want to proceed?") == "true" ]]; then
                 configurator_generic_dialog "RetroDECK Cooker Reset" "Ok, if you're that sure, here we go!"
                 if [[ $(configurator_generic_question_dialog "RetroDECK Cooker Reset" "(Are you actually being serious here? Because we are...\n\nNo backsies.)") == "true" ]]; then
-                  echo "Removing RetroDECK data and starting fresh"
+                  log w "Removing RetroDECK data and starting fresh"
                   rm -rf /var
                   rm -rf "$HOME/retrodeck"
                   source /app/libexec/global.sh
@@ -137,7 +137,7 @@ if [ -f "$lockfile" ]; then
           fi
         fi
       else
-        echo "Performing normal upgrade process for version" $cooker_base_version
+        log i "Performing normal upgrade process for version" $cooker_base_version
         version=$cooker_base_version # Temporarily assign cooker base version to $version so update script can read it properly.
         post_update
       fi
@@ -156,7 +156,7 @@ if [ -f "$lockfile" ]; then
 # Else, LOCKFILE IS NOT EXISTING (WAS REMOVED)
 # if the lock file doesn't exist at all means that it's a fresh install or a triggered reset
 else
-  echo "Lockfile not found"
+  log w "Lockfile not found"
   finit             # Executing First/Force init
 fi
 

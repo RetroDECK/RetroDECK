@@ -12,6 +12,7 @@ source /app/libexec/patching.sh
 source /app/libexec/post_update.sh
 source /app/libexec/prepare_component.sh
 source /app/libexec/presets.sh
+source /app/libexec/logger.sh
 
 # Static variables
 rd_conf="/var/config/retrodeck/retrodeck.cfg"                                                                         # RetroDECK config file path
@@ -125,15 +126,15 @@ fi
 
 # If there is no config file I initalize the file with the the default values
 if [[ ! -f "$rd_conf" ]]; then
-  mkdir -p /var/config/retrodeck
-  echo "RetroDECK config file not found in $rd_conf"
-  echo "Initializing"
+  create_dir /var/config/retrodeck
+  log w "RetroDECK config file not found in $rd_conf"
+  log i "Initializing"
   # if we are here means that the we are in a new installation, so the version is valorized with the hardcoded one
   # Initializing the variables
   if [[ -z "$version" ]]; then
     if [[ -f "$lockfile" ]]; then
       if [[ $(cat $lockfile) == *"0.4."* ]] || [[ $(cat $lockfile) == *"0.3."* ]] || [[ $(cat $lockfile) == *"0.2."* ]] || [[ $(cat $lockfile) == *"0.1."* ]]; then # If the previous version is very out of date, pre-rd_conf
-        echo "Running version workaround"
+        log d "Running version workaround"
         version=$(cat $lockfile)
       fi
     else
@@ -161,17 +162,16 @@ if [[ ! -f "$rd_conf" ]]; then
     set_setting_value $rd_conf "developer_options" "true" retrodeck "options"
   fi
 
-  echo "Setting config file permissions"
+  log i "Setting config file permissions"
   chmod +rw $rd_conf
-  echo "RetroDECK config file initialized. Contents:"
-  echo
-  cat $rd_conf
+  log i "RetroDECK config file initialized. Contents:\n\n$(cat $rd_conf\n)"
   conf_read # Load new variables into memory
+  tmplog_merger
 
 # If the config file is existing i just read the variables
 else
-  echo "Found RetroDECK config file in $rd_conf"
-  echo "Loading it"
+  log i "Found RetroDECK config file in $rd_conf"
+  log i "Loading it"
 
   if grep -qF "cooker" <<< $hard_version; then # If newly-installed version is a "cooker" build
     set_setting_value $rd_conf "update_repo" "RetroDECK-cooker" retrodeck "options"
@@ -180,6 +180,7 @@ else
   fi
 
   conf_read
+  tmplog_merger
 
   # Verify rdhome is where it is supposed to be.
   if [[ ! -d "$rdhome" ]]; then
@@ -188,6 +189,7 @@ else
     new_home_path=$(directory_browse "RetroDECK folder location")
     set_setting_value $rd_conf "rdhome" "$new_home_path" retrodeck "paths"
     conf_read
+    tmplog_merger
     prepare_component "retrodeck" "postmove"
     prepare_component "all" "postmove"
     conf_write
@@ -197,3 +199,5 @@ else
   backups_folder="$rdhome/backups"                                                                                      # A standard location for backup file storage
   multi_user_data_folder="$rdhome/multi-user-data"                                                                      # The default location of multi-user environment profiles
 fi
+
+logs_folder="$rdhome/logs" # The path of the logs folder, here we collect all the logs

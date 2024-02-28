@@ -104,9 +104,9 @@ post_update() {
     deploy_single_patch "$emuconfigs/duckstation/settings.ini" "/var/config/duckstation/duckstation-cheevos-upgrade.patch" "$duckstationconf"
     rm -f "/var/config/duckstation/duckstation-cheevos-upgrade.patch"
 
-    mkdir -p "$mods_folder"
-    mkdir -p "$texture_packs_folder"
-    mkdir -p "$borders_folder"
+    create_dir "$mods_folder"
+    create_dir "$texture_packs_folder"
+    create_dir "$borders_folder"
 
     dir_prep "$mods_folder/Primehack" "/var/data/primehack/Load/GraphicMods"
     dir_prep "$texture_packs_folder/Primehack" "/var/data/primehack/Load/Textures"
@@ -142,13 +142,13 @@ post_update() {
       rm "$roms_folder/ps3/emudir"
       configurator_generic_dialog "RetroDECK 0.7.0b Upgrade" "As part of this update and due to a RPCS3 config upgrade, the files that used to exist at\n\n~/retrodeck/roms/ps3/emudir\n\nare now located at\n\n~/retrodeck/bios/rpcs3.\nYour existing files have been moved automatically."
     fi
-    mkdir -p "$bios_folder/rpcs3/dev_hdd0"
-    mkdir -p "$bios_folder/rpcs3/dev_hdd1"
-    mkdir -p "$bios_folder/rpcs3/dev_flash"
-    mkdir -p "$bios_folder/rpcs3/dev_flash2"
-    mkdir -p "$bios_folder/rpcs3/dev_flash3"
-    mkdir -p "$bios_folder/rpcs3/dev_bdvd"
-    mkdir -p "$bios_folder/rpcs3/dev_usb000"
+    create_dir "$bios_folder/rpcs3/dev_hdd0"
+    create_dir "$bios_folder/rpcs3/dev_hdd1"
+    create_dir "$bios_folder/rpcs3/dev_flash"
+    create_dir "$bios_folder/rpcs3/dev_flash2"
+    create_dir "$bios_folder/rpcs3/dev_flash3"
+    create_dir "$bios_folder/rpcs3/dev_bdvd"
+    create_dir "$bios_folder/rpcs3/dev_usb000"
     dir_prep "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata" "$saves_folder/ps3/rpcs3"
 
     set_setting_value $es_settings "ApplicationUpdaterFrequency" "never" "es_settings"
@@ -156,7 +156,7 @@ post_update() {
     if [[ -f "$saves_folder/duckstation/shared_card_1.mcd" || -f "$saves_folder/duckstation/shared_card_2.mcd" ]]; then
       configurator_generic_dialog "RetroDECK 0.7.0b Upgrade" "As part of this update, the location of saves and states for Duckstation has been changed.\n\nYour files will be moved automatically, and can now be found at\n\n~.../saves/psx/duckstation/memcards/\nand\n~.../states/psx/duckstation/"
     fi
-    mkdir -p "$saves_folder/psx/duckstation/memcards"
+    create_dir "$saves_folder/psx/duckstation/memcards"
     mv "$saves_folder/duckstation/"* "$saves_folder/psx/duckstation/memcards/"
     rmdir "$saves_folder/duckstation" # File-safe folder cleanup
     unlink "/var/config/duckstation/memcards"
@@ -164,7 +164,7 @@ post_update() {
     set_setting_value "$duckstationconf" "Card2Path" "$saves_folder/psx/duckstation/memcards/shared_card_2.mcd" "duckstation" "MemoryCards"
     set_setting_value "$duckstationconf" "Directory" "$saves_folder/psx/duckstation/memcards" "duckstation" "MemoryCards"
     set_setting_value "$duckstationconf" "RecursivePaths" "$roms_folder/psx" "duckstation" "GameList"
-    mkdir -p "$states_folder/psx"
+    create_dir "$states_folder/psx"
     mv -t "$states_folder/psx/" "$states_folder/duckstation"
     unlink "/var/config/duckstation/savestates"
     dir_prep "$states_folder/psx/duckstation" "/var/config/duckstation/savestates"
@@ -237,7 +237,7 @@ post_update() {
     # - Remove RetroDECK controller profile from existing template location
     # - Change section name in retrodeck.cfg for ABXY button swap preset
     # - Force disable global rewind in RA in prep for preset system
-    if [[ -f "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"]]; then # Only remove if file had been previously installed
+    if [[ -f "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf" ]]; then # Only remove if file had been previously installed
       rm -f "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"
     fi
     sed -i 's^nintendo_button_layout^abxy_button_swap^' "$rd_conf" # This is a one-off sed statement as there are no functions for replacing section names
