@@ -26,7 +26,7 @@ Please check out the these links for even more information:
 [Start using RetroDECK](https://retrodeck.readthedocs.io/en/latest/wiki_general/retrodeck-start/)
 
 ## What devices/systems does RetroDECK support: 
-RetroDECK currently supports:
+RetroDECK supports:
 
 - Steam Deck
 - Linux Desktop
@@ -37,11 +37,11 @@ For more information read up here:
 
 ## What is RetroDECK?
 
-[Read more here](https://retrodeck.readthedocs.io/en/latest/wiki_general/what-is-retrodeck/)
+[Read more here: What is RetroDECK?](https://retrodeck.readthedocs.io/en/latest/wiki_general/what-is-retrodeck/)
 
 ### How to get support or report bugs? 
 
-[Reporting bugs and Support](https://retrodeck.readthedocs.io/en/latest/wiki_bugs/report-bugs/)
+[Read more here: Reporting bugs and support](https://retrodeck.readthedocs.io/en/latest/wiki_bugs/report-bugs/)
 
 
 ### The RetroDECK community:
