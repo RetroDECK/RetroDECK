@@ -605,7 +605,7 @@ manage_ryujinx_keys() {
   # This function checks if Switch keys are existing and symlinks them inside the Ryujinx system folder
   # If the symlinks are broken it recreates them
 
-  echo "Checking Ryujinx Switch keys." #TODO logging
+  log i "Checking Ryujinx Switch keys."
   local ryujinx_system="/var/config/Ryujinx/system"  # Set the path to the Ryujinx system folder
   # Check if the keys folder exists
   if [ -d "$bios_folder/switch/keys" ]; then
@@ -618,12 +618,12 @@ manage_ryujinx_keys() {
               
               # Check if the symlink exists and is valid
               if [ -L "$symlink" ] && [ "$(readlink -f "$symlink")" = "$file" ]; then
-                  echo "Found \"$symlink\" and it's a valid symlink." #TODO logging
+                  log i "Found \"$symlink\" and it's a valid symlink."
                   continue  # Skip if the symlink is already valid
               fi
               
               # Remove broken symlink or non-symlink file
-              echo "Found \"$symlink\" but it's not a valid symlink. Repairing it" #TODO logging
+              log w "Found \"$symlink\" but it's not a valid symlink. Repairing it"
               [ -e "$symlink" ] && rm "$symlink"
 
               # Create symlink
@@ -631,18 +631,17 @@ manage_ryujinx_keys() {
               echo "Created symlink: \"$symlink\""
           done
       else
-          echo "No files found in $bios_folder/switch/keys. Continuing" #TODO logging
+          log w "No files found in $bios_folder/switch/keys. Continuing"
       fi
   else
-      echo "Directory $bios_folder/switch/keys does not exist. Maybe Ryujinx was never run. Continuing" #TODO logging
+      log w "Directory $bios_folder/switch/keys does not exist. Maybe Ryujinx was never run. Continuing"
   fi
 }
 
 # TODO: this function is not yet used
 branch_selector() {
-    # Fetch branches from GitHub API excluding "main"
+    log d "Fetch branches from GitHub API excluding \"main\""
     branches=$(curl -s https://api.github.com/repos/XargonWan/RetroDECK/branches | grep '"name":' | awk -F '"' '$4 != "main" {print $4}')
-    # TODO: logging - Fetching branches from GitHub API
 
     # Create an array to store branch names
     branch_array=()
