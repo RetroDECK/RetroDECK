@@ -8,6 +8,8 @@ set_setting_value() {
   local setting_value_to_change=$(sed -e 's^\\^\\\\^g;s^`^\\`^g' <<< "$3")
   local current_section_name=$(sed -e 's/%/\\%/g' <<< "$5")
 
+  log d "Setting $setting_name_to_change=$setting_value_to_change"
+
   case $4 in
 
     "retrodeck" | "citra" | "melonds" | "yuzu" )

@@ -239,19 +239,19 @@ dir_prep() {
   real="$1"
   symlink="$2"
 
-  log d "[DIR PREP]\nMoving $symlink in $real" #DEBUG
+  log d "Preparing directory $symlink in $real"
 
    # if the symlink dir is already a symlink, unlink it first, to prevent recursion
   if [ -L "$symlink" ];
   then
-    log d "$symlink is already a symlink, unlinking to prevent recursives" #DEBUG
+    log d "$symlink is already a symlink, unlinking to prevent recursives"
     unlink "$symlink"
   fi
 
   # if the dest dir exists we want to backup it
   if [ -d "$symlink" ];
   then
-    log d "$symlink found" #DEBUG
+    log d "$symlink found"
     mv -f "$symlink" "$symlink.old"
   fi
 
@@ -573,6 +573,8 @@ create_lock() {
 update_splashscreens() {
   # This script will purge any existing ES graphics and reload them from RO space into somewhere ES will look for it
   # USAGE: update_splashscreens
+
+  log i "Updating splash screen"
 
   rm -rf /var/config/ES-DE/resources/graphics
   rsync -rlD --mkpath "/app/retrodeck/graphics/" "/var/config/ES-DE/resources/graphics/"
