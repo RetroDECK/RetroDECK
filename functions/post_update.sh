@@ -233,17 +233,22 @@ post_update() {
   fi
 
   if [[ $(check_version_is_older_than "0.8.0b") == "true" ]]; then
-    # In version 0.8.0b, the following changes were made that required config file updates/reset or other changes to the filesystem:
-    # - Remove RetroDECK controller profile from existing template location
-    # - Change section name in retrodeck.cfg for ABXY button swap preset
-    # - Force disable global rewind in RA in prep for preset system
+    log i "In version 0.8.0b, the following changes were made that required config file updates/reset or other changes to the filesystem:"
+    log i "- Remove RetroDECK controller profile from existing template location"
+    log i "- Change section name in retrodeck.cfg for ABXY button swap preset"
+    log i "- Force disable global rewind in RA in prep for preset system"
+    log i "- The following components are been added and need to be initialized: es-de 3.0, MAME-SA, Vita3K, GZDoom"
     if [[ -f "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf" ]]; then # Only remove if file had been previously installed
+      log d "Found an old Steam Controller profile, removing it has been replaced: \"$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf\""
       rm -f "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"
     fi
+    log d "Renaming \"nintendo_button_layout\" into \"abxy_button_swap\" in the retrodeck config file: \"$rd_conf\""
     sed -i 's^nintendo_button_layout^abxy_button_swap^' "$rd_conf" # This is a one-off sed statement as there are no functions for replacing section names
+    log i "Force disabling rewind, you can re-enable it via the Configurator"
     set_setting_value "$raconf" "rewind_enable" "false" "retroarch"
 
     # in 3.0 .emulationstation was moved into ES-DE
+    log i "Renaming old \"/var/config/emulationstation\" folder as \"/var/config/ES-DE\""
     mv -f /var/config/emulationstation /var/config/ES-DE
 
     prepare_component "reset" "es-de"
@@ -253,19 +258,17 @@ post_update() {
 
     if [ -d "$rdhome/.logs" ]; then
       mv "$rdhome/.logs" "$logs_folder"
-      log i "Logs folder renamed successfully"
-    else
-      log i "The .logs folder does not exist, continuing."
+      log i "Old log folder \"$rdhome/.logs\" found. Renamed it as \"$logs_folder\""
     fi
 
     # The save folder of rpcs3 was inverted so we're moving the saves into the real one
-    echo "RPCS3 saves needs to be migrated, executing."
+    log i "RPCS3 saves needs to be migrated, executing."
     mv "$saves_folder/ps3/rpcs3" "$saves_folder/ps3/rpcs3.bak"
     mkdir -p "$saves_folder/ps3/rpcs3"
     mv -v "$saves_folder/ps3/rpcs3.bak"/* "$saves_folder/ps3/rpcs3"
     mv -v "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata"/* "$saves_folder/ps3/rpcs3"
     mv -v "$saves_folder/ps3/rpcs3.bak" "$rdhome/backups/saves/ps3/rpcs3"
-    echo "RPCS3 saves migration completed, a backup was made here: \"$rdhome/backups/saves/ps3/rpcs3\"."
+    log i "RPCS3 saves migration completed, a backup was made here: \"$rdhome/backups/saves/ps3/rpcs3\"."
     source /app/libexec/functions.sh
     dir_prep "$saves_folder/ps3/rpcs3" "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata"    
   fi
