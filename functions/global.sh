@@ -116,8 +116,8 @@ vita3kusrconfdir="$bios_folder/Vita3K/Vita3K"
 
 # MAME-SA config files
 
-mameconf="/var/config/mame/mame.ini"
-mameuiconf="/var/config/mame/ui.ini"
+mameconf="/var/config/mame/ini/mame.ini"
+mameuiconf="/var/config/mame/ini/ui.ini"
 mamedefconf="/var/config/mame/cfg/default.cfg"
 
 # We moved the lockfile in /var/config/retrodeck in order to solve issue #53 - Remove in a few versions
