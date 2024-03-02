@@ -182,9 +182,6 @@ if [[ -f "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_conf
 fi
 # REMOVE BEFORE NEXT VERSION RELEASE
 
-# Linking switch keys for Ryujinx
-manage_ryujinx_keys
-
 # Normal Startup
 
 if [[ $steam_sync == "true" ]]; then

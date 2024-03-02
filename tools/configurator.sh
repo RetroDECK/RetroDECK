@@ -510,7 +510,7 @@ configurator_open_emulator_dialog() {
 
   "Ryujinx" )
     log i "Configurator: \"$emulator\""
-    Ryujinx.sh
+    ryujinx-rdwrapper.sh
   ;;
 
   "Vita3K" )

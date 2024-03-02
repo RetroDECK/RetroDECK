@@ -1375,6 +1375,10 @@ modules:
       - cp emu-configs/mame/mame-rdwrapper.sh ${FLATPAK_DEST}/bin/mame-rdwrapper.sh
       - chmod +x ${FLATPAK_DEST}/bin/mame-rdwrapper.sh
 
+      # Ryujinx wrapper
+      - cp emu-configs/ryujinx/ryujinx-rdwrapper.sh ${FLATPAK_DEST}/bin/ryujinx-rdwrapper.sh
+      - chmod +x ${FLATPAK_DEST}/bin/ryujinx-rdwrapper.sh
+
     sources:
       - type: git
         url: https://github.com/XargonWan/RetroDECK.git
