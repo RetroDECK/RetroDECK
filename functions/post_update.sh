@@ -270,7 +270,11 @@ post_update() {
     mv -v "$saves_folder/ps3/rpcs3.bak" "$rdhome/backups/saves/ps3/rpcs3"
     log i "RPCS3 saves migration completed, a backup was made here: \"$rdhome/backups/saves/ps3/rpcs3\"."
     source /app/libexec/functions.sh
-    dir_prep "$saves_folder/ps3/rpcs3" "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata"    
+    dir_prep "$saves_folder/ps3/rpcs3" "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata"
+
+    log i "Switch firmware folder should be moved in \"$bios_folder/switch/firmware\" from \"$bios_folder/switch/registered\""
+    dir_prep "$bios_folder/switch/firmware" "$bios_folder/switch/registered"
+
   fi
 
   # if [[ $(check_version_is_older_than "0.9.0b") == "true" ]]; then

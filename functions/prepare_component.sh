@@ -557,7 +557,7 @@ prepare_component() {
         rm -rf /var/config/Ryujinx/bis
         dir_prep "$saves_folder/switch/ryujinx/nand" "/var/config/Ryujinx/bis"
         dir_prep "$saves_folder/switch/ryujinx/sdcard" "/var/config/Ryujinx/sdcard"
-        dir_prep "$bios_folder/switch/ryujinx/registered" "/var/config/Ryujinx/bis/system/Contents/registered"
+        dir_prep "$bios_folder/switch/firmware" "/var/config/Ryujinx/bis/system/Contents/registered"
       fi
     fi
     # if [[ "$action" == "reset" ]] || [[ "$action" == "postmove" ]]; then # Run commands that apply to both resets and moves
@@ -638,7 +638,7 @@ prepare_component() {
       dir_prep "$saves_folder/switch/yuzu/nand" "/var/data/yuzu/nand"
       dir_prep "$saves_folder/switch/yuzu/sdmc" "/var/data/yuzu/sdmc"
       dir_prep "$bios_folder/switch/keys" "/var/data/yuzu/keys"
-      dir_prep "$bios_folder/switch/registered" "/var/data/yuzu/nand/system/Contents/registered"
+      dir_prep "$bios_folder/switch/firmware" "/var/data/yuzu/nand/system/Contents/registered"
       dir_prep "$logs_folder/yuzu" "/var/data/yuzu/log"
       dir_prep "$screenshots_folder" "/var/data/yuzu/screenshots"
       dir_prep "$mods_folder/Yuzu" "/var/data/yuzu/load"
@@ -654,7 +654,7 @@ prepare_component() {
     fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
       dir_prep "$bios_folder/switch/keys" "/var/data/yuzu/keys"
-      dir_prep "$bios_folder/switch/registered" "/var/data/yuzu/nand/system/Contents/registered"
+      dir_prep "$bios_folder/switch/firmware" "/var/data/yuzu/nand/system/Contents/registered"
       dir_prep "$saves_folder/switch/yuzu/nand" "/var/data/yuzu/nand"
       dir_prep "$saves_folder/switch/yuzu/sdmc" "/var/data/yuzu/sdmc"
       dir_prep "$logs_folder/yuzu" "/var/data/yuzu/log"
