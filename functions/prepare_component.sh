@@ -549,7 +549,7 @@ prepare_component() {
         log d "Removing \"/var/config/Ryujinx\""
         rm -rf /var/config/Ryujinx
         create_dir /var/config/Ryujinx/system
-        cp -fv $emuconfigs/ryujinx/* /var/config/Ryujinx
+        cp -fv $emuconfigs/ryujinx/Config.json $ryujinxconf
         log d "Replacing placeholders in \"$ryujinxconf\""
         sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "$ryujinxconf"
         log i "Linking switch nand/saves folder"
