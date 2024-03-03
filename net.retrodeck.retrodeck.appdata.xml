@@ -105,6 +105,7 @@
                <li>PCSX2: general and graphical tweaks</li>
                <li>RPCS3 is now running via shortcut (.desktop file) by default - WARN THE USERS TO MIGRATE</li>
                <li>RPCS3: Updated to 4 controllers</li>
+               <li>RYUJINX: Updated to 4 controllers</li>
             </ul>
             <p>Fixes:</p>
             <ul>

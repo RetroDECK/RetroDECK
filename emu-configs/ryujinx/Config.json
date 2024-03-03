@@ -28,7 +28,7 @@
   "enable_discord_integration": true,
   "check_updates_on_start": false,
   "show_confirm_exit": false,
-  "hide_cursor": 2,
+  "hide_cursor": 1,
   "enable_vsync": true,
   "enable_shader_cache": true,
   "enable_texture_recompression": false,
@@ -38,7 +38,7 @@
   "enable_internet_access": false,
   "enable_fs_integrity_checks": true,
   "fs_global_access_log_mode": 0,
-  "audio_backend": "OpenAl",
+  "audio_backend": "SDL2",
   "audio_volume": 1,
   "memory_manager_mode": "HostMappedUnsafe",
   "expand_ram": false,
@@ -72,10 +72,10 @@
   },
   "window_startup": {
     "window_size_width": 1280,
-    "window_size_height": 800,
+    "window_size_height": 760,
     "window_position_x": 0,
     "window_position_y": 0,
-    "window_maximized": true
+    "window_maximized": false
   },
   "language_code": "en_US",
   "enable_custom_theme": false,
@@ -86,18 +86,18 @@
   "grid_size": 2,
   "application_sort": 0,
   "is_ascending_order": true,
-  "start_fullscreen": true,
+  "start_fullscreen": false,
   "show_console": true,
   "enable_keyboard": false,
   "enable_mouse": false,
   "hotkeys": {
-    "toggle_vsync": "Unknown",
-    "screenshot": "Unknown",
-    "show_ui": "F1",
-    "pause": "F4",
-    "toggle_mute": "Unknown",
-    "res_scale_up": "F7",
-    "res_scale_down": "F8",
+    "toggle_vsync": "",
+    "screenshot": "",
+    "show_ui": "ESC",
+    "pause": "",
+    "toggle_mute": "",
+    "res_scale_up": "Unbound",
+    "res_scale_down": "Unbound",
     "volume_up": "Unbound",
     "volume_down": "Unbound"
   },
@@ -141,7 +141,7 @@
         "enable_rumble": true
       },
       "left_joycon": {
-        "button_minus": "Back",
+        "button_minus": "Minus",
         "button_l": "LeftShoulder",
         "button_zl": "LeftTrigger",
         "button_sl": "Unbound",
@@ -152,20 +152,20 @@
         "dpad_right": "DpadRight"
       },
       "right_joycon": {
-        "button_plus": "Start",
+        "button_plus": "Plus",
         "button_r": "RightShoulder",
         "button_zr": "RightTrigger",
         "button_sl": "Unbound",
         "button_sr": "Unbound",
-        "button_x": "Y",
-        "button_b": "A",
-        "button_y": "X",
-        "button_a": "B"
+        "button_x": "X",
+        "button_b": "B",
+        "button_y": "Y",
+        "button_a": "A"
       },
       "version": 1,
       "backend": "GamepadSDL2",
-      "id": "0-f6790003-28de-0000-ff11-000001000000",
-      "controller_type": "ProController",
+      "id": "0-00000003-28de-0000-ff11-000001000000",
+      "controller_type": "JoyconPair",
       "player_index": "Player1"
     },
     {
@@ -200,7 +200,7 @@
         "enable_rumble": true
       },
       "left_joycon": {
-        "button_minus": "Back",
+        "button_minus": "Minus",
         "button_l": "LeftShoulder",
         "button_zl": "LeftTrigger",
         "button_sl": "Unbound",
@@ -211,15 +211,15 @@
         "dpad_right": "DpadRight"
       },
       "right_joycon": {
-        "button_plus": "Start",
+        "button_plus": "Plus",
         "button_r": "RightShoulder",
         "button_zr": "RightTrigger",
         "button_sl": "Unbound",
         "button_sr": "Unbound",
-        "button_x": "Y",
-        "button_b": "A",
-        "button_y": "X",
-        "button_a": "B"
+        "button_x": "X",
+        "button_b": "B",
+        "button_y": "Y",
+        "button_a": "A"
       },
       "version": 1,
       "backend": "GamepadSDL2",
@@ -259,7 +259,7 @@
         "enable_rumble": true
       },
       "left_joycon": {
-        "button_minus": "Back",
+        "button_minus": "Minus",
         "button_l": "LeftShoulder",
         "button_zl": "LeftTrigger",
         "button_sl": "Unbound",
@@ -270,15 +270,15 @@
         "dpad_right": "DpadRight"
       },
       "right_joycon": {
-        "button_plus": "Start",
+        "button_plus": "Plus",
         "button_r": "RightShoulder",
         "button_zr": "RightTrigger",
         "button_sl": "Unbound",
         "button_sr": "Unbound",
-        "button_x": "Y",
-        "button_b": "A",
-        "button_y": "X",
-        "button_a": "B"
+        "button_x": "X",
+        "button_b": "B",
+        "button_y": "Y",
+        "button_a": "A"
       },
       "version": 1,
       "backend": "GamepadSDL2",
@@ -318,7 +318,7 @@
         "enable_rumble": true
       },
       "left_joycon": {
-        "button_minus": "Back",
+        "button_minus": "Minus",
         "button_l": "LeftShoulder",
         "button_zl": "LeftTrigger",
         "button_sl": "Unbound",
@@ -329,15 +329,15 @@
         "dpad_right": "DpadRight"
       },
       "right_joycon": {
-        "button_plus": "Start",
+        "button_plus": "Plus",
         "button_r": "RightShoulder",
         "button_zr": "RightTrigger",
         "button_sl": "Unbound",
         "button_sr": "Unbound",
-        "button_x": "Y",
-        "button_b": "A",
-        "button_y": "X",
-        "button_a": "B"
+        "button_x": "X",
+        "button_b": "B",
+        "button_y": "Y",
+        "button_a": "A"
       },
       "version": 1,
       "backend": "GamepadSDL2",
