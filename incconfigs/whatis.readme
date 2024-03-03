@@ -1,0 +1,33 @@
+Citra (Minor changes)
+
+- Graphical Tweaks
+- Enabled Gyro
+
+Duckstation (Major changes)
+
+- The old Duckstation config does not work anymore
+- [Controller] is now [Pad]
+- All controlls now go via SDL
+- Updated to 4 controllers
+
+MelonDS (Minor changes)
+
+- Graphical tweaks
+
+PCXS2 (Minor Changes)
+
+- Graphical tweaks
+
+Ryujinx  (New)
+
+- We did not have this before
+
+Dolphin
+
+- Many changes in many files
+- Enabled Gyro
+- Tweaked Wii Input
+- Tweaked GC Input
+- Enabled GBA and Tweaked Input
+- Graphical Tweaks
+
