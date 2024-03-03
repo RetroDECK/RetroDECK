@@ -100,6 +100,9 @@
                <li>CITRA: Graphical Tweaks</li>
                <li>CITRA: Standrad layout Tweaks</li>
                <li>CITRA: Enabled Gyro</li>
+               <li>DUCKSTATION: config refactor. The old config didn't not work anymore for controllers.</li>
+               <li>DUCKSTATION: All controlls now go via SDL</li>
+               <li>DUCKSTATION: Updated to 4 controllers</li>
             </ul>
             <p>Fixes:</p>
             <ul>
