@@ -1,11 +1,13 @@
 Citra (Minor changes)
 
 - Graphical Tweaks
+- Standrad layout Tweaks
 - Enabled Gyro
 
 Duckstation (Major changes)
 
-- The old Duckstation config does not work anymore
+The old Duckstation config does not work anymore in cooker for controllers).
+
 - [Controller] is now [Pad]
 - All controlls now go via SDL
 - Updated to 4 controllers
