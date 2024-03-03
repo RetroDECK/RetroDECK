@@ -92,7 +92,6 @@
                <li>Quit button after emulators reset should act as an actual full quit button</li>
                <li>Created a quit_retrodeck function to ease the quit in the scripts.</li>
                <li>Logs folder is now in retrodeck/logs (previously was .logs)</li>
-               <li>RPCS3 is now running via shortcut (.desktop file) by default - WARN THE USERS TO MIGRATE</li>
                <li>Added controller config for PS4 and PS5</li>
                <li>Controller config overhaul</li>
                <li>Removed talk names in the manifest as they're not needed anymore as enabled by default</li>
@@ -104,6 +103,8 @@
                <li>DUCKSTATION: All controlls now go via SDL</li>
                <li>DUCKSTATION: Updated to 4 controllers</li>
                <li>PCSX2: general and graphical tweaks</li>
+               <li>RPCS3 is now running via shortcut (.desktop file) by default - WARN THE USERS TO MIGRATE</li>
+               <li>RPCS3: Updated to 4 controllers</li>
             </ul>
             <p>Fixes:</p>
             <ul>
