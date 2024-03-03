@@ -106,6 +106,7 @@
                <li>RPCS3 is now running via shortcut (.desktop file) by default - WARN THE USERS TO MIGRATE</li>
                <li>RPCS3: Updated to 4 controllers</li>
                <li>RYUJINX: Updated to 4 controllers</li>
+               <li>YUZU: Updated to 4 controllers + preformance tweaks</li>
             </ul>
             <p>Fixes:</p>
             <ul>
