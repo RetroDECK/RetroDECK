@@ -92,6 +92,9 @@
                <li>Controller config overhaul</li>
                <li>Removed talk names in the manifest as they're not needed anymore as enabled by default</li>
                <li>CEMU: updated input profiles</li>
+               <li>CITRA: Graphical Tweaks</li>
+               <li>CITRA: Standrad layout Tweaks</li>
+               <li>CITRA: Enabled Gyro</li>
             </ul>
             <p>Fixes:</p>
             <ul>
