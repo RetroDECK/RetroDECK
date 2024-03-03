@@ -84,6 +84,11 @@
                <li>MAME: added hotkeys</li>
                <li>SCUMMVM: added hotkeys</li>
                <li>DOLPHIN: improved wiimote pointer emulation for controllers</li>
+               <li>DOLPHIN: Enabled Gyro</li>
+               <li>DOLPHIN: Tweaked Wii Input</li>
+               <li>DOLPHIN: Tweaked GC Input</li>
+               <li>DOLPHIN: Enabled GBA and Tweaked Input</li>
+               <li>DOLPHIN: Graphical Tweaks</li>
                <li>Quit button after emulators reset should act as an actual full quit button</li>
                <li>Created a quit_retrodeck function to ease the quit in the scripts.</li>
                <li>Logs folder is now in retrodeck/logs (previously was .logs)</li>
