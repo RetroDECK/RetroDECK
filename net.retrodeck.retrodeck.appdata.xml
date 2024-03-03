@@ -91,6 +91,7 @@
                <li>Added controller config for PS4 and PS5</li>
                <li>Controller config overhaul</li>
                <li>Removed talk names in the manifest as they're not needed anymore as enabled by default</li>
+               <li>CEMU: updated input profiles</li>
             </ul>
             <p>Fixes:</p>
             <ul>
