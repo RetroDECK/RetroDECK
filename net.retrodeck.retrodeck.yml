@@ -3,10 +3,8 @@ runtime: org.kde.Platform
 runtime-version: "6.5"
 sdk: org.kde.Sdk
 sdk-extensions:
-  - org.freedesktop.Sdk.Extension.llvm16        # Needed for rpcs3 (llvm15) but llvm16 for CITRA
+  - org.freedesktop.Sdk.Extension.llvm16        # Needed for rpcs3 (llvm15)
   - org.freedesktop.Sdk.Extension.rust-stable   # Needed for BoilR 
-# base: io.qt.qtwebengine.BaseApp             # Needed for Yuzu - Disabled as we're using AppImage for Yuzu
-# base-version: "6.5"                         # Needed for Yuzu - Disabled as we're using AppImage for Yuzu
 command: retrodeck.sh
 
 finish-args:
@@ -47,7 +45,6 @@ cleanup:
   - /share/ffmpeg
   - /lib/cmake
   - /lib/pkgconfig
-  # Yuzu
   - /include
   - /bin/glslangValidator
   - /bin/zip*
@@ -61,13 +58,10 @@ cleanup:
   # XMLSTARLET
   - /lib/debug
   - /share/runtime
-#cleanup-commands:
-  # Yuzu
-  #- /app/cleanup-BaseApp.sh
 
 modules:
 
-  # dependency of: CEMU, CITRA, DOLPHIN
+  # dependency of: CEMU DOLPHIN
   - rd-submodules/shared-modules/libusb/libusb.json
 
   # This module is used to define the RetroDECK version
@@ -228,7 +222,7 @@ modules:
         url: https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_amd64
         sha256: 4ee662847c588c3ef2fec8bfb304e8739e3dbaba87ccb9a608d691c88f5b64dc
 
-  # dependency of: CEMU (13.1.1), CITRA (13.0.0)
+  # dependency of: CEMU (13.1.1)
   - name: glslang
     buildsystem: cmake-ninja
     config-opts:
@@ -277,7 +271,7 @@ modules:
           stable-only: true
           url-template: https://www.freedesktop.org/software/libevdev/libevdev-$version.tar.xz
 
-  # dependency of: CITRA, CEMU
+  # dependency of: CEMU
   - name: rapidjson
     buildsystem: cmake-ninja
     config-opts:
@@ -564,6 +558,8 @@ modules:
     buildsystem: simple
     build-commands:
       - mkdir -p /app/share/libretro/cores/
+      - rm -f ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/citra2018_libretro.so # Purge Citra cores until they are dropped from the packages
+      - rm -f ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/citra_libretro.so # Purge Citra cores until they are dropped from the packages
       - mv -f ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* /app/share/libretro/cores/
     sources:
       - type: archive
@@ -574,6 +570,8 @@ modules:
     buildsystem: simple
     build-commands:
       - mkdir -p /app/share/libretro/cores/
+      - rm -f ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/citra2018_libretro.so # Purge Citra cores until they are dropped from the packages
+      - rm -f ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/citra_libretro.so # Purge Citra cores until they are dropped from the packages
       - mv -f ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* /app/share/libretro/cores/
     sources:
       - type: archive
@@ -659,90 +657,6 @@ modules:
 
   # PPSSPP - END
 
-  # Yuzu - START
-  # https://github.com/yuzu-emu/yuzu-mainline/releases
-
-  - name: Yuzu
-    buildsystem: simple
-    build-commands:
-      - chmod +x yuzu*.AppImage
-      - ./yuzu*.AppImage --appimage-extract
-      - mkdir -p "${FLATPAK_DEST}/yuzu"
-      - cp -r squashfs-root/* "${FLATPAK_DEST}/yuzu"
-      - ln -s "${FLATPAK_DEST}/yuzu/usr/bin/yuzu" "${FLATPAK_DEST}/bin/yuzu"
-    sources:
-      - type: file
-        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1732/yuzu-mainline-20240302-d839edbda.AppImage
-        sha256: d2e8fb9f912ab287272587c383a8d825044bfc580c9963512133037f72a31e95
-
-  # Yuzu - END
-
-  # CITRA - START
-  # https://github.com/flathub/org.citra_emu.citra
-
-  - rd-submodules/shared-modules/SDL2/SDL2-with-libdecor.json
-
-  - rd-submodules/shared-modules/SDL2/SDL2-with-libdecor.json
-
-  - name: citra
-    buildsystem: cmake-ninja
-    builddir: true
-    build-options:
-      env:
-        CI: '1'
-        GITHUB_ACTIONS: '1'
-        GITHUB_REPOSITORY: citra-emu/citra-nightly
-        GITHUB_REF_NAME: nightly-2025
-      append-path: /usr/lib/sdk/llvm16/bin
-      prepend-ld-library-path: /usr/lib/sdk/llvm16/lib
-      cflags: '-Wno-unused-command-line-argument'
-      cxxflags: '-Wno-unused-command-line-argument'
-    config-opts:
-      - '-DCMAKE_BUILD_TYPE=Release'
-      - '-DCMAKE_C_COMPILER=clang'
-      - '-DCMAKE_CXX_COMPILER=clang++'
-      - '-DCMAKE_LINKER=lld'
-      - '-DENABLE_QT_TRANSLATION=ON'
-      - '-DCITRA_ENABLE_COMPATIBILITY_REPORTING=ON'
-      - '-DUSE_DISCORD_PRESENCE=ON'
-      - '-DENABLE_COMPATIBILITY_LIST_DOWNLOAD=OFF'
-      - '-DUSE_SYSTEM_SDL2=ON'
-    cleanup:
-      - /share/man
-      - /share/pixmaps
-    post-install:
-      - install -Dm755 ../citra-launcher.sh /app/bin/citra-launcher
-      - >-
-        install -Dm644 ../org.citra_emu.citra.svg
-        /app/share/icons/hicolor/scalable/apps/citra.svg
-      - >-
-        install -Dm644 ../dist/icon.png
-        /app/share/icons/hicolor/512x512/apps/citra.png
-      - >-
-        mv /app/share/mime/packages/citra.xml
-        /app/share/mime/packages/org.citra_emu.citra.xml
-      - >-
-        sed 's/citra/org.citra_emu.citra/g' -i
-        /app/share/mime/packages/org.citra_emu.citra.xml
-    sources:
-      - type: archive
-        url: >-
-          https://github.com/citra-emu/citra-nightly/releases/download/nightly-2025/citra-unified-source-20231105-998b9a9.tar.xz
-        sha256: ebf52af66c6ef729688a29d093d9139baa76973b698c0630a295f38d126cf118
-        x-checker-data:
-          type: json
-          url: https://api.github.com/repos/citra-emu/citra-nightly/releases/latest
-          version-query: .tag_name
-          url-query: >-
-            .assets[] | .browser_download_url |
-            match("https://.+citra-unified-source-.+.xz$") | .string
-          is-main-source: true
-      - type: file
-        path: rd-submodules/citra/org.citra_emu.citra.svg
-      - type: file
-        path: rd-submodules/citra/citra-launcher.sh
-
-  # CITRA - END
 
   # PCSX2 - START
   # Inspired by:

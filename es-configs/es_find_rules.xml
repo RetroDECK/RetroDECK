@@ -161,25 +161,6 @@
             <entry>~/.local/share/flatpak/exports/bin/info.cemu.Cemu</entry>
         </rule>
     </emulator>
-    <emulator name="CITRA">
-        <!-- Nintendo 3DS emulator Citra -->
-        <rule type="systempath">
-            <entry>citra-qt</entry> <!-- RetroDECK -->
-            <entry>citra</entry>
-            <entry>citra-emu.citra-nightly</entry>
-            <entry>org.citra_emu.citra</entry>
-        </rule>
-        <rule type="staticpath">
-            <entry>~/Applications/citra-qt*.AppImage</entry>
-            <entry>~/.local/share/applications/citra-qt*.AppImage</entry>
-            <entry>~/.local/bin/citra-qt*.AppImage</entry>
-            <entry>~/bin/citra-qt*.AppImage</entry>
-            <entry>~/.citra/canary/citra-qt.AppImage</entry>
-            <entry>~/.citra/nightly/citra-qt.AppImage</entry>
-            <entry>/var/lib/flatpak/exports/bin/org.citra_emu.citra</entry>
-            <entry>~/.local/share/flatpak/exports/bin/org.citra_emu.citra</entry>
-        </rule>
-    </emulator>
     <emulator name="CPCEMU">
         <!-- Amstrad CPC emulator CPCemu -->
         <rule type="systempath">
@@ -1047,27 +1028,6 @@
             <entry>~/.local/share/applications/xroar/xroar</entry>
             <entry>~/.local/bin/xroar/xroar</entry>
             <entry>~/bin/xroar/xroar</entry>
-        </rule>
-    </emulator>
-    <emulator name="YUZU">
-        <!-- Nintendo Switch emulator Yuzu -->
-        <rule type="systempath">
-            <entry>yuzu</entry>
-            <entry>org.yuzu_emu.yuzu</entry>
-        </rule>
-        <rule type="staticpath">
-            <entry>~/Applications/yuzu*.AppImage</entry>
-            <entry>~/.local/share/applications/yuzu*.AppImage</entry>
-            <entry>~/.local/bin/yuzu*.AppImage</entry>
-            <entry>~/bin/yuzu*.AppImage</entry>
-            <entry>/var/lib/flatpak/exports/bin/org.yuzu_emu.yuzu</entry>
-            <entry>~/.local/share/flatpak/exports/bin/org.yuzu_emu.yuzu</entry>
-        </rule>
-    </emulator>
-    <emulator name="YUZU-CUSTOM">
-        <!-- Nintendo Switch emulator Yuzu Custom provided by the user -->
-        <rule type="staticpath">
-            <entry>~/retrodeck/customs/yuzu/yuzu*.AppImage</entry>
         </rule>
     </emulator>
     <emulator name="ZESARUX">
