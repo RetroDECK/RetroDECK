@@ -717,13 +717,15 @@ branch_selector() {
 }
 
 quit_retrodeck() {
-  pkill -f retrodeck
-  pkill -f es-de
+  log i "Quitting ES-DE"
+  pkill -f "es-de"
+  log i "Shutting down RetroDECK's framework"
+  pkill -f "retrodeck"
+  log i "See you next time"
 }
 
 start_retrodeck() {
   easter_eggs # Check if today has a surprise splashscreen and load it if so
-  # normal startup
   log i "Starting RetroDECK v$version"
   es-de --home /var/config/
 }
