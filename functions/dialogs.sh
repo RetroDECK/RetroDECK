@@ -30,6 +30,7 @@ configurator_process_complete_dialog() {
 configurator_generic_dialog() {
   # This dialog is for showing temporary messages before another process happens.
   # USAGE: configurator_generic_dialog "title text" "info text"
+  log i "Showing a configurator_generic_dialog"
   zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "$1" \

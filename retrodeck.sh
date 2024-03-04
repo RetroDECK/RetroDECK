@@ -99,13 +99,14 @@ https://retrodeck.net
   esac
 done
 
-# UPDATE TRIGGERED
+log d "Update triggered"
 # if lockfile exists
 if [ -f "$lockfile" ]; then
-  # ...but the version doesn't match with the config file
+  log d "Lockfile found but the version doesn't match with the config file"
   if [ "$hard_version" != "$version" ]; then
     log i "Config file's version is $version but the actual version is $hard_version"
     if grep -qF "cooker" <<< $hard_version; then # If newly-installed version is a "cooker" build
+      log d "Newly-installed version is a \"cooker\" build"
       configurator_generic_dialog "RetroDECK Cooker Warning" "RUNNING COOKER VERSIONS OF RETRODECK CAN BE EXTREMELY DANGEROUS AND ALL OF YOUR RETRODECK DATA\n(INCLUDING BIOS FILES, BORDERS, DOWNLOADED MEDIA, GAMELISTS, MODS, ROMS, SAVES, STATES, SCREENSHOTS, TEXTURE PACKS AND THEMES)\nARE AT RISK BY CONTINUING!"
       set_setting_value $rd_conf "update_repo" "RetroDECK-cooker" retrodeck "options"
       set_setting_value $rd_conf "update_check" "true" retrodeck "options"
@@ -137,7 +138,7 @@ if [ -f "$lockfile" ]; then
           fi
         fi
       else
-        log i "Performing normal upgrade process for version" $cooker_base_version
+        log i "Performing normal upgrade process for version $cooker_base_version"
         version=$cooker_base_version # Temporarily assign cooker base version to $version so update script can read it properly.
         post_update
       fi
@@ -170,10 +171,13 @@ desktop_mode_warning
 low_space_warning
 
 # Check if there is a new version of RetroDECK available, if update_check=true in retrodeck.cfg and there is network connectivity available.
+log i "Check if there is a new version of RetroDECK available"
 if [[ $update_check == "true" ]]; then
   if [[ $(check_network_connectivity) == "true" ]]; then
+    log d "Running function check_for_version_update"
     check_for_version_update
   fi
+  log i "You're running the latest version"
 fi
 
 # THIS IS A ONE-OFF FORCED REFRESH OF RETRODECK CONTROLLER PROFILES IN A 0.7.6b VERSION REFRESH - REMOVE BEFORE NEXT VERSION RELEASE
