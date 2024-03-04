@@ -413,12 +413,12 @@ finit() {
   log i "Executing finit"
 
   # Internal or SD Card?
-  local finit_dest_choice=$(configurator_destination_choice_dialog "RetroDECK data" "Welcome to the first configuration of RetroDECK.\nThe setup will be quick but please READ CAREFULLY each message in order to avoid misconfigurations.\n\nWhere do you want your RetroDECK data folder to be located?\n\nThis folder will contain all ROMs, BIOSs and scraped data." )
+  local finit_dest_choice=$(configurator_destination_choice_dialog "RetroDECK data" "Welcome to the first setup of RetroDECK.\nPlease carefully read each message prompted during the installation process to avoid any unwanted misconfigurations.\n\nWhere do you want your RetroDECK data folder to be located?\nIn this location a \"retrodeck\" folder will be created.\nThis is the folder that you will use to contain all your important files, such as your own ROMs, BIOSs, Saves and Scraped Data." )
   log i "Choice is $finit_dest_choice"
 
   case "$finit_dest_choice" in
 
-  "Back" | "" ) # Back or X button quits
+  "Quit" | "" ) # Back or X button quits
     rm -f "$rd_conf" # Cleanup unfinished retrodeck.cfg if first install is interrupted
     log i "Now quitting"
     quit_retrodeck
