@@ -1877,9 +1877,7 @@
         <fullname>Nintendo Switch</fullname>
         <path>%ROMPATH%/switch</path>
         <extension>.nca .NCA .nro .NRO .nso .NSO .nsp .NSP .xci .XCI</extension>
-        <command label="Yuzu (Standalone)">%INJECT%=%BASENAME%.esprefix %EMULATOR_YUZU% -f -g %ROM%</command>
         <command label="Ryujinx (Standalone)">%EMULATOR_RYUJINX% %ROM%</command>
-        <command label="Yuzu (User provided)">%INJECT%=%BASENAME%.esprefix %EMULATOR_YUZU-CUSTOM% -f -g %ROM%</command>
         <platform>switch</platform>
         <theme>switch</theme>
     </system>

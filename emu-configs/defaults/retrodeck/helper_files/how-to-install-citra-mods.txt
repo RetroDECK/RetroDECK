@@ -11,7 +11,7 @@ From Citra
 From the mod folder directly
 - Extract any mod files from compressed .zip or any other format into folders.
 - Go into ~/retrodeck/mods/citra/. The folders are all named by TITLEID.
-- Past the mods into the right ~/retrodeck/mods/yuzu/<TITLEID> folder.
+- Past the mods into the right ~/retrodeck/mods/citra/<TITLEID> folder.
 
 Related wiki article can be found here:
 https://github.com/XargonWan/RetroDECK/wiki/Citra%3A-Mods#citra---3ds

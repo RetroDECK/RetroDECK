@@ -12,7 +12,7 @@ set_setting_value() {
 
   case $4 in
 
-    "retrodeck" | "citra" | "melonds" | "yuzu" )
+    "retrodeck" | "citra" | "melonds" )
       if [[ -z $current_section_name ]]; then
         sed -i 's^\^'"$setting_name_to_change"'=.*^'"$setting_name_to_change"'='"$setting_value_to_change"'^' "$1"
       else
@@ -107,7 +107,7 @@ get_setting_value() {
 
   case $3 in
 
-  "retrodeck" | "citra" | "melonds" | "yuzu" ) # For files with this syntax - setting_name=setting_value
+  "retrodeck" | "citra" | "melonds" ) # For files with this syntax - setting_name=setting_value
     if [[ -z $current_section_name ]]; then
       echo $(grep -o -P "(?<=^$current_setting_name=).*" "$1")
     else

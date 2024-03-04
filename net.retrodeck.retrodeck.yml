@@ -5,8 +5,6 @@ sdk: org.kde.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.llvm16        # Needed for rpcs3 (llvm15) but llvm16 for CITRA
   - org.freedesktop.Sdk.Extension.rust-stable   # Needed for BoilR 
-# base: io.qt.qtwebengine.BaseApp             # Needed for Yuzu - Disabled as we're using AppImage for Yuzu
-# base-version: "6.5"                         # Needed for Yuzu - Disabled as we're using AppImage for Yuzu
 command: retrodeck.sh
 
 finish-args:
@@ -47,7 +45,6 @@ cleanup:
   - /share/ffmpeg
   - /lib/cmake
   - /lib/pkgconfig
-  # Yuzu
   - /include
   - /bin/glslangValidator
   - /bin/zip*
@@ -61,9 +58,6 @@ cleanup:
   # XMLSTARLET
   - /lib/debug
   - /share/runtime
-#cleanup-commands:
-  # Yuzu
-  #- /app/cleanup-BaseApp.sh
 
 modules:
 
@@ -658,24 +652,6 @@ modules:
           timestamp-query: .published_at
 
   # PPSSPP - END
-
-  # Yuzu - START
-  # https://github.com/yuzu-emu/yuzu-mainline/releases
-
-  - name: Yuzu
-    buildsystem: simple
-    build-commands:
-      - chmod +x yuzu*.AppImage
-      - ./yuzu*.AppImage --appimage-extract
-      - mkdir -p "${FLATPAK_DEST}/yuzu"
-      - cp -r squashfs-root/* "${FLATPAK_DEST}/yuzu"
-      - ln -s "${FLATPAK_DEST}/yuzu/usr/bin/yuzu" "${FLATPAK_DEST}/bin/yuzu"
-    sources:
-      - type: file
-        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1732/yuzu-mainline-20240302-d839edbda.AppImage
-        sha256: d2e8fb9f912ab287272587c383a8d825044bfc580c9963512133037f72a31e95
-
-  # Yuzu - END
 
   # CITRA - START
   # https://github.com/flathub/org.citra_emu.citra
