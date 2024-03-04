@@ -1168,17 +1168,6 @@
         <theme>multivision</theme>
     </system>
     <system>
-        <name>n3ds</name>
-        <fullname>Nintendo 3DS</fullname>
-        <path>%ROMPATH%/n3ds</path>
-        <extension>.3ds .3DS .3dsx .3DSX .app .APP .axf .AXF .cci .CCI .cxi .CXI .elf .ELF .7z .7Z .zip .ZIP</extension>
-        <command label="Citra (Standalone)">%EMULATOR_CITRA% %ROM%</command>
-        <command label="Citra">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/citra_libretro.so %ROM%</command>
-        <command label="Citra 2018">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/citra2018_libretro.so %ROM%</command>
-        <platform>n3ds</platform>
-        <theme>n3ds</theme>
-    </system>
-    <system>
         <name>n64</name>
         <fullname>Nintendo 64</fullname>
         <path>%ROMPATH%/n64</path>

@@ -75,6 +75,8 @@
             <p>Changes:</p>
             <ul>
                <li>ES-DE: updated to 3.0</li>
+               <li>CITRA: Removed</li>
+               <li>YUZU: Removed</li>
                <li>Added new system: RYUJINX</li>
                <li>Added new system: SOLARUS</li>
                <li>Added new engine: GZDOOM</li>
@@ -96,9 +98,6 @@
                <li>Controller config overhaul</li>
                <li>Removed talk names in the manifest as they're not needed anymore as enabled by default</li>
                <li>CEMU: updated input profiles</li>
-               <li>CITRA: Graphical Tweaks</li>
-               <li>CITRA: Standrad layout Tweaks</li>
-               <li>CITRA: Enabled Gyro</li>
                <li>DUCKSTATION: config refactor. The old config didn't not work anymore for controllers.</li>
                <li>DUCKSTATION: All controlls now go via SDL</li>
                <li>DUCKSTATION: Updated to 4 controllers</li>
@@ -106,7 +105,6 @@
                <li>RPCS3 is now running via shortcut (.desktop file) by default - WARN THE USERS TO MIGRATE</li>
                <li>RPCS3: Updated to 4 controllers</li>
                <li>RYUJINX: Updated to 4 controllers</li>
-               <li>YUZU: Updated to 4 controllers + preformance tweaks</li>
             </ul>
             <p>Fixes:</p>
             <ul>

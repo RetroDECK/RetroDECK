@@ -161,25 +161,6 @@
             <entry>~/.local/share/flatpak/exports/bin/info.cemu.Cemu</entry>
         </rule>
     </emulator>
-    <emulator name="CITRA">
-        <!-- Nintendo 3DS emulator Citra -->
-        <rule type="systempath">
-            <entry>citra-qt</entry> <!-- RetroDECK -->
-            <entry>citra</entry>
-            <entry>citra-emu.citra-nightly</entry>
-            <entry>org.citra_emu.citra</entry>
-        </rule>
-        <rule type="staticpath">
-            <entry>~/Applications/citra-qt*.AppImage</entry>
-            <entry>~/.local/share/applications/citra-qt*.AppImage</entry>
-            <entry>~/.local/bin/citra-qt*.AppImage</entry>
-            <entry>~/bin/citra-qt*.AppImage</entry>
-            <entry>~/.citra/canary/citra-qt.AppImage</entry>
-            <entry>~/.citra/nightly/citra-qt.AppImage</entry>
-            <entry>/var/lib/flatpak/exports/bin/org.citra_emu.citra</entry>
-            <entry>~/.local/share/flatpak/exports/bin/org.citra_emu.citra</entry>
-        </rule>
-    </emulator>
     <emulator name="CPCEMU">
         <!-- Amstrad CPC emulator CPCemu -->
         <rule type="systempath">

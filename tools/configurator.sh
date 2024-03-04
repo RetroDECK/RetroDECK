@@ -27,7 +27,6 @@ source /app/libexec/global.sh
 #     - Open Emulator (Behind one-time power user warning dialog)
 #       - RetroArch
 #       - Cemu
-#       - Citra
 #       - Dolphin
 #       - Duckstation
 #       - MAME
@@ -71,7 +70,6 @@ source /app/libexec/global.sh
 #         - Reset Specific Emulator
 #           - Reset RetroArch
 #           - Reset Cemu
-#           - Reset Citra
 #           - Reset Dolphin
 #           - Reset Duckstation
 #           - Reset GZDoom
@@ -435,7 +433,6 @@ configurator_open_emulator_dialog() {
   --column="Emulator" --column="Action" \
   "RetroArch" "Open the multi-emulator frontend RetroArch" \
   "Cemu" "Open the Wii U emulator CEMU" \
-  "Citra" "Open the N3DS emulator Citra" \
   "Dolphin" "Open the Wii & GC emulator Dolphin" \
   "Duckstation" "Open the PSX emulator Duckstation" \
   "MAME" "Open the Multiple Arcade Machine Emulator emulator MAME" \
@@ -458,11 +455,6 @@ configurator_open_emulator_dialog() {
   "Cemu" )
     log i "Configurator: \"$emulator\""
     Cemu-wrapper
-  ;;
-
-  "Citra" )
-    log i "Configurator: \"$emulator\""
-    citra-qt
   ;;
 
   "Dolphin" )
@@ -1059,7 +1051,6 @@ configurator_reset_dialog() {
     --column="Emulator" --column="Action" \
     "RetroArch" "Reset the multi-emulator frontend RetroArch to default settings" \
     "Cemu" "Reset the Wii U emulator Cemu to default settings" \
-    "Citra" "Reset the N3DS emulator Citra to default settings" \
     "Dolphin" "Reset the Wii/GameCube emulator Dolphin to default settings" \
     "Duckstation" "Reset the PSX emulator Duckstation to default settings" \
     "GZDoom" "Reset the GZDoom Doom engine to default settings" \
@@ -1092,7 +1083,7 @@ configurator_reset_dialog() {
       fi
     ;;
 
-    "Cemu" | "Citra" | "Dolphin" | "Duckstation" | "MelonDS" | "MAME" | "PCSX2" | "PPSSPP" | "Primehack" | "RPCS3" | "Ryujinx" )
+    "Cemu" | "Dolphin" | "Duckstation" | "MelonDS" | "MAME" | "PCSX2" | "PPSSPP" | "Primehack" | "RPCS3" | "Ryujinx" )
       if [[ $(configurator_reset_confirmation_dialog "$component_to_reset" "Are you sure you want to reset the $component_to_reset emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
         prepare_component "reset" "$component_to_reset" "configurator"
         configurator_process_complete_dialog "resetting $component_to_reset"

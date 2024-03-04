@@ -55,7 +55,6 @@ godot_bios_files_checked="/var/config/retrodeck/godot/godot_bios_files_checked.t
 
 # Config files for emulators with single config files
 
-citraconf="/var/config/citra-emu/qt-config.ini"
 duckstationconf="/var/config/duckstation/settings.ini"
 melondsconf="/var/config/melonDS/melonDS.ini"
 ryujinxconf="/var/config/Ryujinx/Config.json"

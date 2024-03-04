@@ -186,51 +186,6 @@ prepare_component() {
     fi
   fi
 
-  if [[ "$component" =~ ^(citra|citra-emu|Citra|all)$ ]]; then
-    if [[ "$action" == "reset" ]]; then # Run reset-only commands
-      log i "------------------------"
-      log i "Prepearing CITRA"
-      log i "------------------------"
-      if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
-        create_dir -d "$multi_user_data_folder/$SteamAppUser/config/citra-emu"
-        cp -fv $emuconfigs/citra/qt-config.ini "$multi_user_data_folder/$SteamAppUser/config/citra-emu/qt-config.ini"
-        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/citra-emu/qt-config.ini" "nand_directory" "$saves_folder/n3ds/citra/nand/" "citra" "Data%20Storage"
-        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/citra-emu/qt-config.ini" "sdmc_directory" "$saves_folder/n3ds/citra/sdmc/" "citra" "Data%20Storage"
-        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/citra-emu/qt-config.ini" "Paths\gamedirs\3\path" "$roms_folder/n3ds" "citra" "UI"
-        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/citra-emu/qt-config.ini" "Paths\screenshotPath" "$screenshots_folder" "citra" "UI"
-        dir_prep "$multi_user_data_folder/$SteamAppUser/config/citra-emu" "/var/config/citra-emu"
-      else # Single-user actions
-        create_dir -d /var/config/citra-emu/
-        cp -f $emuconfigs/citra/qt-config.ini /var/config/citra-emu/qt-config.ini
-        set_setting_value "$citraconf" "nand_directory" "$saves_folder/n3ds/citra/nand/" "citra" "Data%20Storage"
-        set_setting_value "$citraconf" "sdmc_directory" "$saves_folder/n3ds/citra/sdmc/" "citra" "Data%20Storage"
-        set_setting_value "$citraconf" "Paths\gamedirs\3\path" "$roms_folder/n3ds" "citra" "UI"
-        set_setting_value "$citraconf" "Paths\screenshotPath" "$screenshots_folder" "citra" "UI"
-      fi
-      # Shared actions
-      create_dir "$saves_folder/n3ds/citra/nand/"
-      create_dir "$saves_folder/n3ds/citra/sdmc/"
-      dir_prep "$bios_folder/citra/sysdata" "/var/data/citra-emu/sysdata"
-      dir_prep "$logs_folder/citra" "/var/data/citra-emu/log"
-      dir_prep "$mods_folder/Citra" "/var/data/citra-emu/load/mods"
-      dir_prep "$texture_packs_folder/Citra" "/var/data/citra-emu/load/textures"
-
-      # Reset default preset settings
-      set_setting_value "$rd_conf" "citra" "$(get_setting_value "$rd_defaults" "citra" "retrodeck" "abxy_button_swap")" "retrodeck" "abxy_button_swap"
-      set_setting_value "$rd_conf" "citra" "$(get_setting_value "$rd_defaults" "citra" "retrodeck" "ask_to_exit")" "retrodeck" "ask_to_exit"
-    fi
-    if [[ "$action" == "postmove" ]]; then # Run only post-move commands
-      dir_prep "$rdhome/bios/citra/sysdata" "/var/data/citra-emu/sysdata"
-      dir_prep "$rdhome/logs/citra" "/var/data/citra-emu/log"
-      dir_prep "$mods_folder/Citra" "/var/data/citra-emu/load/mods"
-      dir_prep "$texture_packs_folder/Citra" "/var/data/citra-emu/load/textures"
-      set_setting_value "$citraconf" "nand_directory" "$saves_folder/n3ds/citra/nand/" "citra" "Data%20Storage"
-      set_setting_value "$citraconf" "sdmc_directory" "$saves_folder/n3ds/citra/sdmc/" "citra" "Data%20Storage"
-      set_setting_value "$citraconf" "Paths\gamedirs\3\path" "$roms_folder/n3ds" "citra" "UI"
-      set_setting_value "$citraconf" "Paths\screenshotPath" "$screenshots_folder" "citra" "UI"
-    fi
-  fi
-
   if [[ "$component" =~ ^(dolphin|dolphin-emu|Dolphin|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       log i "----------------------"
