@@ -25,10 +25,3 @@ buildid
 # Python #
 ##########
 __pycache__
-
-# Submodules #
-##############
-rd-submodules/retroarch*
-rd-submodules/ryujinx*
-rd-submodules/shared-modules*
-rd-submodules/es-de/patches-tmp*

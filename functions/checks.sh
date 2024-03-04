@@ -31,8 +31,6 @@ check_desktop_mode() {
 check_for_version_update() {
   # This function will perform a basic online version check and alert the user if there is a new version available.
 
-  log d "Entering funtcion check_for_version_update"
-
   wget -q --spider "https://api.github.com/repos/XargonWan/$update_repo/releases/latest"
 
   if [ $? -eq 0 ]; then
@@ -61,19 +59,15 @@ check_for_version_update() {
         #   configurator_generic_dialog "RetroDECK Online Update" "The update process is now complete!\n\nPlease restart RetroDECK to keep the fun going."
         #   exit 1
         # fi
-        # TODO: add the logic to check and update the branch from the configuration file
-        log i "Showing new version found dialog"
         choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK" --extra-button="Ignore this version" \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         --title "RetroDECK Update Available" \
         --text="There is a new version of RetroDECK on the stable release channel $online_version. Please update through the Discover app!\n\nIf you would like to ignore this version and recieve a notification at the NEXT version,\nclick the \"Ignore this version\" button.")
         rc=$? # Capture return code, as "OK" button has no text value
         if [[ $rc == "1" ]]; then # If any button other than "OK" was clicked
-          log i "Selected: \"OK\""
           set_setting_value $rd_conf "update_ignore" "$online_version" retrodeck "options" # Store version to ignore for future checks
         fi
       elif [[ "$update_repo" == "RetroDECK-cooker" ]] && [[ ! $version == $online_version ]]; then
-        log i "Showing update request dialog as \"$online_version\" was found and is greater then \"$version\""
         choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="Ignore this version" \
           --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
           --title "RetroDECK Update Available" \
@@ -81,30 +75,17 @@ check_for_version_update() {
         rc=$? # Capture return code, as "Yes" button has no text value
         if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
           if [[ $choice == "Ignore this version" ]]; then
-            log i "\"Ignore this version\" selected, updating \"$rd_conf\""
             set_setting_value $rd_conf "update_ignore" "$online_version" retrodeck "options" # Store version to ignore for future checks.
           fi
         else # User clicked "Yes"
-          log i "Selected: \"Yes\""
           configurator_generic_dialog "RetroDECK Online Update" "The update process may take several minutes.\n\nAfter the update is complete, RetroDECK will close. When you run it again you will be using the latest version."
           (
           local latest_cooker_download=$(curl --silent https://api.github.com/repos/XargonWan/$update_repo/releases/latest | grep '"browser_download_url":' | sed -E 's/.*"([^"]+)".*/\1/')
-          local temp_folder="$rdhome/RetroDECK_Updates"
-          create_dir $temp_folder
-          log i "Downloading version \"$online_version\" in \"$temp_folder/RetroDECK-cooker.flatpak\" from url: \"$latest_cooker_download\""
-          wget -P "$temp_folder" "$latest_cooker_download"
-          log d "Uninstalling old RetroDECK flatpak"
+          mkdir -p "$rdhome/RetroDECK_Updates"
+          wget -P "$rdhome/RetroDECK_Updates" $latest_cooker_download
           flatpak-spawn --host flatpak remove --noninteractive -y net.retrodeck.retrodeck # Remove current version before installing new one, to avoid duplicates
-          log d "Installing new flatpak file from: \"$temp_folder/RetroDECK-cooker.flatpak\""
-          if [ -f "$temp_folder/RetroDECK-cooker.flatpak" ]; then
-            log d "Flatpak file \"$temp_folder/RetroDECK-cooker.flatpak\" found, proceeding."
-            flatpak-spawn --host flatpak install --user --bundle --noninteractive -y "$temp_folder/RetroDECK-cooker.flatpak"
-          else
-            log e "Flatpak file \"$temp_folder/RetroDECK-cooker.flatpak\" NOT FOUND. Quitting"
-            configurator_generic_dialog "RetroDECK Online Update" "There was an error during the update: flatpak file not found please check the log file."
-            exit 1
-          fi
-          rm -rf "$temp_folder" # Cleanup old bundles to save space
+          flatpak-spawn --host flatpak install --user --bundle --noninteractive -y "$rdhome/RetroDECK_Updates/RetroDECK-cooker.flatpak"
+          rm -rf "$rdhome/RetroDECK_Updates" # Cleanup old bundles to save space
           ) |
           zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
           --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -128,37 +109,4 @@ validate_input() {
       input_validated="true"
     fi
   done < $input_validation
-}
-
-check_version_is_older_than() {
-# This function will determine if a given version number is newer than the one currently read from retrodeck.cfg (which will be the previous running version at update time) and will return "true" if it is
-# The given version to check should be in normal RetroDECK version notation of N.N.Nb (eg. 0.8.0b)
-# USAGE: check_version_is_older_than "version"
-
-local current_version="$version"
-local new_version="$1"
-local is_newer_version="false"
-
-current_version_major_rev=$(sed 's/^\([0-9]*\)\..*/\1/' <<< "$current_version")
-new_version_major_rev=$(sed 's/^\([0-9]*\)\..*/\1/' <<< "$new_version")
-
-current_version_minor_rev=$(sed 's/^[0-9]*\.\([0-9]*\)\..*/\1/' <<< "$current_version")
-new_version_minor_rev=$(sed 's/^[0-9]*\.\([0-9]*\)\..*/\1/' <<< "$new_version")
-
-current_version_point_rev=$(sed 's/^[0-9]*\.[0-9]*\.\([0-9]*\).*/\1/' <<< "$current_version")
-new_version_point_rev=$(sed 's/^[0-9]*\.[0-9]*\.\([0-9]*\).*/\1/' <<< "$new_version")
-
-if [[ "$new_version_major_rev" -gt "$current_version_major_rev" ]]; then
-  is_newer_version="true"
-elif [[ "$new_version_major_rev" -eq "$current_version_major_rev" ]]; then
-  if [[ "$new_version_minor_rev" -gt "$current_version_minor_rev" ]]; then
-    is_newer_version="true"
-  elif [[ "$new_version_minor_rev" -eq "$current_version_minor_rev" ]]; then
-    if [[ "$new_version_point_rev" -gt "$current_version_point_rev" ]]; then
-      is_newer_version="true"
-    fi
-  fi
-fi
-
-echo "$is_newer_version"
 }

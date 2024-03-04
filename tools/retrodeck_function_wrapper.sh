@@ -7,7 +7,7 @@ source /app/libexec/global.sh
 
 # Check if a function was specified
 if [[ $# -lt 1 ]]; then
-  log e "Usage: $0 function_name [args...]"
+  echo "Usage: $0 function_name [args...]"
   exit 1
 fi
 
@@ -17,7 +17,7 @@ shift
 
 # Check if the function exists
 if ! declare -f "$function_name" >/dev/null 2>&1; then
-  log e "Function \'$function_name\' not found"
+  echo "Function '$function_name' not found"
   exit 1
 fi
 

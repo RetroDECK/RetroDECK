@@ -8,7 +8,7 @@
    <developer_name>RetroDECK Team</developer_name>
    <url type="homepage">https://retrodeck.net</url>
    <url type="bugtracker">https://github.com/XargonWan/RetroDECK/issues</url>
-   <url type="help">https://retrodeck.readthedocs.io</url>
+   <url type="help">http://discord.gg/Dz3szYsP8g</url>
    <url type="faq">https://github.com/XargonWan/RetroDECK/wiki/FAQs---Frequently-asked-questions</url>
    <url type="donation">https://www.patreon.com/RetroDECK</url>
    <content_rating type="oars-1.0" />
@@ -65,66 +65,6 @@
    <project_license>GPL-3.0</project_license>
    <metadata_license>CC0-1.0</metadata_license>
    <releases>
-      <release version="0.8.0b" date="2023-02-27">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.8.0b</url>
-         <description>
-            <p>
-               WARNING:
-               The post update script is initializing es-de 3.0, vita3k, mame-sa and ryujinx when coming from a version ealrier that 0.8.0b. Tp fully test this build you must come from a build 0.7.6b or previous otherwise you will surely encounter issues. Else reset RetroDECK but be aware that will not be a proper testing.
-            </p>  
-            <p>Changes:</p>
-            <ul>
-               <li>ES-DE: updated to 3.0</li>
-               <li>CITRA: Removed</li>
-               <li>YUZU: Removed</li>
-               <li>Added new system: RYUJINX</li>
-               <li>Added new system: SOLARUS</li>
-               <li>Added new engine: GZDOOM</li>
-               <li>Added new emulator: Vita3K</li>
-               <li>Added new emulator: MAME (Standalone)</li>
-               <li>PPSSPP: added hotkeys</li>
-               <li>MAME: added hotkeys</li>
-               <li>SCUMMVM: added hotkeys</li>
-               <li>DOLPHIN: improved wiimote pointer emulation for controllers</li>
-               <li>DOLPHIN: Enabled Gyro</li>
-               <li>DOLPHIN: Tweaked Wii Input</li>
-               <li>DOLPHIN: Tweaked GC Input</li>
-               <li>DOLPHIN: Enabled GBA and Tweaked Input</li>
-               <li>DOLPHIN: Graphical Tweaks</li>
-               <li>Quit button after emulators reset should act as an actual full quit button</li>
-               <li>Created a quit_retrodeck function to ease the quit in the scripts.</li>
-               <li>Logs folder is now in retrodeck/logs (previously was .logs)</li>
-               <li>Added controller config for PS4 and PS5</li>
-               <li>Controller config overhaul</li>
-               <li>Removed talk names in the manifest as they're not needed anymore as enabled by default</li>
-               <li>CEMU: updated input profiles</li>
-               <li>DUCKSTATION: config refactor. The old config didn't not work anymore for controllers.</li>
-               <li>DUCKSTATION: All controlls now go via SDL</li>
-               <li>DUCKSTATION: Updated to 4 controllers</li>
-               <li>PCSX2: general and graphical tweaks</li>
-               <li>RPCS3 is now running via shortcut (.desktop file) by default - WARN THE USERS TO MIGRATE</li>
-               <li>RPCS3: Updated to 4 controllers</li>
-               <li>RYUJINX: Updated to 4 controllers</li>
-            </ul>
-            <p>Fixes:</p>
-            <ul>
-               <li>Fixed DUCKSTATION memory card folder</li>
-               <li>Fixed RPCS3 saves folder (wrong symlink) - WARN THE USERS TO BACKUP</li>
-            </ul>
-            <p>Issues:</p>
-            <ul>
-               <li>Vita3K firmware downloader is failing. Workaround: run the downloader twice</li>
-               <li>GZDOOM: the controller for player 2+ is not correctly configured</li>
-               <li>quit_retrodeck function seems to not working correctly</li>
-            </ul>
-            <p>Missing:</p>
-            <ul>
-               <li>GZDOOM: hotkeys</li>
-               <li>SOLARUS: hotkeys</li>
-               <li>A proper reset script for the new emulators, now it's just a draft (only Vita3K is done)</li>
-            </ul>
-         </description>
-      </release>
       <release version="0.7.6b" date="2024-02-08">
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.7.6b</url>
          <description>
@@ -143,7 +83,7 @@
             </ul>
          </description>
       </release>
-      <release version="0.7.5b" date="2023-14-12">
+      <release version="0.7.5b" date="2023-12-14">
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.7.5b</url>
          <description>
             <p>Bug fixes and other changes:</p>
@@ -175,7 +115,7 @@
             </ul>
             <p>Known issues:</p>
             <ul>
-               <li>Please check the know issues in the Wiki under General Infomration</li>
+               <li>Please check the know issues in the Wiki under General Infomration.</li>
             </ul>
          </description>
       </release>
@@ -189,7 +129,7 @@
             </ul>
             <p>Known issues:</p>
             <ul>
-               <li>Please check the know issues in the Wiki under General Infomration</li>
+               <li>Please check the know issues in the Wiki under General Infomration.</li>
             </ul>
          </description>
       </release>

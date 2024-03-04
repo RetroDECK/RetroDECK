@@ -1,7 +1,5 @@
 #!/bin/bash
 
-source /app/libexec/functions.sh
-
 debug_dialog() {
   # This function is for displaying commands run by the Configurator without actually running them
   # USAGE: debug_dialog "command"
@@ -18,19 +16,17 @@ configurator_process_complete_dialog() {
   zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Quit" --extra-button="OK" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Configurator Utility - Process Complete" \
-  --text="The process of $1 is now complete.\n\nYou may need to quit and restart RetroDECK for your changes to take effect\n\nClick OK to return to the Main Menu or Quit to quit RetroDECK."
+  --text="The process of $1 is now complete.\n\nYou may need to quit and restart RetroDECK for your changes to take effect\n\nClick OK to return to the Main Menu or Quit to return to RetroDECK."
 
-  if [ ! $? == 0 ]; then # OK button clicked
+  if [ ! $? == 0 ] # OK button clicked
+  then
       configurator_welcome_dialog
-  elif [ ! $? == 1 ]; then # Quit button clicked
-      quit_retrodeck
   fi
 }
 
 configurator_generic_dialog() {
   # This dialog is for showing temporary messages before another process happens.
   # USAGE: configurator_generic_dialog "title text" "info text"
-  log i "Showing a configurator_generic_dialog"
   zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "$1" \
@@ -119,9 +115,9 @@ configurator_move_folder_dialog() {
             if [[ -d "$dest_root/$rd_dir_path" ]]; then # If the move succeeded
               declare -g "$rd_dir_name=$dest_root/$rd_dir_path" # Set the new path for that folder variable in retrodeck.cfg
               if [[ "$rd_dir_name" == "rdhome" ]]; then # If the whole retrodeck folder was moved...
-                prepare_component "postmove" "retrodeck"
+                prepare_emulator "postmove" "retrodeck"
               fi
-              prepare_component "postmove" "all" # Update all the appropriate emulator path settings
+              prepare_emulator "postmove" "all" # Update all the appropriate emulator path settings
               conf_write # Write the settings to retrodeck.cfg
               if [[ -z $(ls -1 "$source_root/retrodeck") ]]; then # Cleanup empty old_path/retrodeck folder if it was left behind
                 rmdir "$source_root/retrodeck"
@@ -151,7 +147,7 @@ configurator_move_folder_dialog() {
     configurator_generic_dialog "RetroDECK Configurator - Move Folder" "The $(basename $dir_to_move) folder was not found at the expected location.\n\nThis may have happened if the folder was moved manually.\n\nPlease select the current location of the folder."
     dir_to_move=$(directory_browse "RetroDECK $(basename $dir_to_move) directory location")
     declare -g "$rd_dir_name=$dir_to_move"
-    prepare_component "postmove" "all"
+    prepare_emulator "postmove" "all"
     conf_write
     configurator_generic_dialog "RetroDECK Configurator - Move Folder" "RetroDECK $(basename $dir_to_move) folder now configured at\n$dir_to_move."
     configurator_move_folder_dialog "$rd_dir_name"
@@ -162,8 +158,6 @@ changelog_dialog() {
   # This function will pull the changelog notes from the version it is passed (which must match the appdata version tag) from the net.retrodeck.retrodeck.appdata.xml file
   # The function also accepts "all" as a version, and will print the entire changelog
   # USAGE: changelog_dialog "version"
-
-  log d "Showing changelog dialog"
 
   if [[ "$1" == "all" ]]; then
     xml sel -t -m "//release" -v "concat('RetroDECK version: ', @version)" -n -v "description" -n $rd_appdata | awk '{$1=$1;print}' | sed -e '/./b' -e :n -e 'N;s/\n$//;tn' > "/var/config/retrodeck/changelog.txt"
@@ -214,20 +208,15 @@ desktop_mode_warning() {
   # USAGE: desktop_mode_warning
 
   if [[ $(check_desktop_mode) == "true" && $desktop_mode_warning == "true" ]]; then
-    local message='You appear to be running RetroDECK in the Steam Deck'\''s Desktop mode!\n\nSome functions of RetroDECK may not work properly in Desktop mode, such as the Steam Deck'\''s normal controls.\n\nRetroDECK is best enjoyed in Game mode!\n\nDo you still want to proceed?'
-    log i "Showing message:\n$message"
     choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="Never show this again" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Desktop Mode Warning" \
-    --text="$message")
+    --text="You appear to be running RetroDECK in the Steam Deck's Desktop mode!\n\nSome functions of RetroDECK may not work properly in Desktop mode, such as the Steam Deck's normal controls.\n\nRetroDECK is best enjoyed in Game mode!\n\nDo you still want to proceed?")
     rc=$? # Capture return code, as "Yes" button has no text value
     if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
-      log i "Selected: \"Yes\""
       if [[ $choice == "No" ]]; then
-        log i "Selected: \"No\""
         exit 1
       elif [[ $choice == "Never show this again" ]]; then
-        log i "Selected: \"Never show this again\""
         set_setting_value $rd_conf "desktop_mode_warning" "false" retrodeck "options" # Store desktop mode warning variable for future checks
       fi
     fi
@@ -241,17 +230,13 @@ low_space_warning() {
   if [[ $low_space_warning == "true" ]]; then
     local used_percent=$(df --output=pcent "$HOME" | tail -1 | tr -d " " | tr -d "%")
     if [[ "$used_percent" -ge 90 && -d "$HOME/retrodeck" ]]; then # If there is any RetroDECK data on the main drive to move
-      local message='Your main drive is over 90% full!\n\nIf your drive fills completely this can lead to data loss or system crash.\n\nPlease consider moving some RetroDECK folders to other storage locations using the Configurator.'
-      log i "Showing message:\n$message"
       choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK" --extra-button="Never show this again" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Low Space Warning" \
-      --text="$message")
+      --text="Your main drive is over 90% full!\n\nIf your drive fills completely this can lead to data loss or system crash.\n\nPlease consider moving some RetroDECK folders to other storage locations using the Configurator.")
       if [[ $choice == "Never show this again" ]]; then
-        log i "Selected: \"Never show this again\""
-        set_setting_value $rd_conf "low_space_warning" "false" retrodeck "options" # Store low space warning variable for future checks
+          set_setting_value $rd_conf "low_space_warning" "false" retrodeck "options" # Store low space warning variable for future checks
       fi
     fi
-    log i "Selected: \"OK\""
   fi
 }

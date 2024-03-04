@@ -13,7 +13,7 @@ save_migration() {
     # ROMs on Internal
     roms_folder="$HOME/retrodeck/roms"
   fi
-  log i "ROMs folder found at $roms_folder"
+  echo "ROMs folder found at $roms_folder"
 
   # Unhiding downloaded media from the previous versions
   if [ -d "$rdhome/.downloaded_media" ]
@@ -28,12 +28,12 @@ save_migration() {
   fi
 
   # Doing the dir prep as we don't know from which version we came
-  dir_prep "$media_folder" "/var/config/ES-DE/downloaded_media"
-  dir_prep "$themes_folder" "/var/config/ES-DE/themes"
-  create_dir $rdhome/logs #this was added later, maybe safe to remove in a few versions
+  dir_prep "$media_folder" "/var/config/emulationstation/.emulationstation/downloaded_media"
+  dir_prep "$themes_folder" "/var/config/emulationstation/.emulationstation/themes"
+  mkdir -pv $rdhome/.logs #this was added later, maybe safe to remove in a few versions
 
   # Resetting es_settings, now we need it but in the future I should think a better solution, maybe with sed
-  cp -fv /app/retrodeck/es_settings.xml /var/config/ES-DE/settings/es_settings.xml
+  cp -fv /app/retrodeck/es_settings.xml /var/config/emulationstation/.emulationstation/es_settings.xml
 
   # 0.4 -> 0.5
   # Perform save and state migration if needed
@@ -50,7 +50,7 @@ save_migration() {
   versionwheresaveschanged="0.4.5b" # Hardcoded break point between unsorted and sorted saves
 
   if [[ $(sed -e "s/\.//g" <<< $hard_version) > $(sed -e "s/\.//g" <<< $versionwheresaveschanged) ]] && [[ ! $(sed -e "s/\.//g" <<< $version) > $(sed -e "s/\.//g" <<< $versionwheresaveschanged) ]]; then # Check if user is upgrading from the version where save organization was changed. Try not to reuse this, it things 0.4.5b is newer than 0.4.5
-    migration_logfile=$rdhome/logs/savemove_"$(date +"%Y_%m_%d_%I_%M_%p").log"
+    migration_logfile=$rdhome/.logs/savemove_"$(date +"%Y_%m_%d_%I_%M_%p").log"
     save_backup_file=$rdhome/savebackup_"$(date +"%Y_%m_%d_%I_%M_%p").zip"
     state_backup_file=$rdhome/statesbackup_"$(date +"%Y_%m_%d_%I_%M_%p").zip"
 
@@ -72,9 +72,9 @@ save_migration() {
     gamestoskip=
 
     tar -C $rdhome -czf $save_backup_file saves # Backup save directory for safety
-    log i "Saves backed up to" $save_backup_file $migration_logfile
+    echo "Saves backed up to" $save_backup_file >> $migration_logfile
     tar -C $rdhome -czf $state_backup_file states # Backup state directory for safety
-    log i "States backed up to" $state_backup_file $migration_logfile
+    echo "States backed up to" $state_backup_file >> $migration_logfile
 
     (
     movefile() { # Take matching save and rom files and sort save into appropriate system folder
@@ -92,22 +92,21 @@ save_migration() {
           gamestoskip+=("$1")
           return
         fi
-        log i "Examining ROM file:" "$game" $migration_logfile
-        log i "System detected as" $systemdir $migration_logfile
+        echo "INFO: Examining ROM file:" "$game" >> $migration_logfile
+        echo "INFO: System detected as" $systemdir >> $migration_logfile
         sosfile=$(sed -e "s/\^/ /g" <<< "$2") # Remove whitespace placeholder from s-ave o-r s-tate file
         sospurebasename="$(basename "$sosfile")" # Extract pure file name ie. /saves/game1.sav becomes game1
-        log i "Current save or state being examined for match:" $sosfile $migration_logfile
-        log i "Matching save or state" $sosfile "and game" $game "found." $migration_logfile
-        log i "Moving save or state to $current_dest_folder/$systemdir/$sosbasename" $migration_logfile
+        echo "INFO: Current save or state being examined for match:" $sosfile >> $migration_logfile
+        echo "INFO: Matching save or state" $sosfile "and game" $game "found." >> $migration_logfile
+        echo "INFO: Moving save or state to" $current_dest_folder"/"$systemdir"/"$sosbasename >> $migration_logfile
         if [[ ! -d $current_dest_folder"/"$systemdir ]]; then # If system directory doesn't exist for save yet, create it
-          log w "Creating missing system directory $current_dest_folder/$systemdir"
+          echo "WARNING: Creating missing system directory" $current_dest_folder"/"$systemdir
           mkdir $current_dest_folder/$systemdir
         fi
         mv "$sosfile" -t $current_dest_folder/$systemdir # Move save to appropriate system directory
         return
       else
-        local name="$(basename "$1" | sed -e "s/\^/ /g")"
-        log w "Game with name \"$name\" already found. Skipping to next game..." $migration_logfile # Inform user of game being skipped due to duplicate ROM names
+        echo "WARNING: Game with name" "$(basename "$1" | sed -e "s/\^/ /g")" "already found. Skipping to next game..." >> $migration_logfile # Inform user of game being skipped due to duplicate ROM names
       fi
     }
 
@@ -168,6 +167,6 @@ save_migration() {
     fi
 
   else
-    log i "Version $version is after the save and state organization was changed, no need to sort again"
+    echo "Version" $version "is after the save and state organization was changed, no need to sort again"
   fi
 }

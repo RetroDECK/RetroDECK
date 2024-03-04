@@ -3,8 +3,9 @@ runtime: org.kde.Platform
 runtime-version: "6.5"
 sdk: org.kde.Sdk
 sdk-extensions:
-  - org.freedesktop.Sdk.Extension.llvm16        # Needed for rpcs3 (llvm15)
-  - org.freedesktop.Sdk.Extension.rust-stable   # Needed for BoilR 
+  - org.freedesktop.Sdk.Extension.llvm16      # Needed for rpcs3 (llvm15) but llvm16 for CITRA
+# base: io.qt.qtwebengine.BaseApp             # Needed for Yuzu - Disabled as we're using AppImage for Yuzu
+# base-version: "6.5"                         # Needed for Yuzu - Disabled as we're using AppImage for Yuzu
 command: retrodeck.sh
 
 finish-args:
@@ -17,15 +18,13 @@ finish-args:
   - --filesystem=home
   - --filesystem=/run/media
   - --filesystem=/media
-  - --filesystem=/mnt
   - --filesystem=home/.var/app/com.valvesoftware.Steam
   - --allow=multiarch
   - --talk-name=org.freedesktop.ScreenSaver
   - --talk-name=org.freedesktop.PowerManagement.Inhibit
   - --talk-name=org.freedesktop.login1.Manager
   - --filesystem=xdg-run/app/com.discordapp.Discord:create
-  - --filesystem=xdg-config/gtk-3.0:ro
-  - --env=QT_QPA_PLATFORM=wayland-egl;wayland;xcb
+  #- --filesystem=xdg-config/gtk-3.0:ro #not needed as we got --filesystem=home
   # Dolphin
   - --allow=bluetooth
   # PPSSPP
@@ -34,10 +33,6 @@ finish-args:
   - --env=SDL_VIDEO_WAYLAND_WMCLASS=net.retrodeck.retrodeck
   # XEMU - Fixes issues with openSUSE systems, QEMU_AUDIO_DRV is defined as "pa" causing xemu to not launch
   - --unset-env=QEMU_AUDIO_DRV
-  # BoilR
-  - --filesystem=xdg-data/Steam:rw #Steam (flatpak)
-  - --filesystem=~/.steam:rw # Steam (Non-flatpak)
-  - --filesystem=~/.var/app/com.valvesoftware.Steam:rw # Steam (Flatpak)
 
 cleanup:
   # ES-DE
@@ -45,6 +40,7 @@ cleanup:
   - /share/ffmpeg
   - /lib/cmake
   - /lib/pkgconfig
+  # Yuzu
   - /include
   - /bin/glslangValidator
   - /bin/zip*
@@ -58,10 +54,13 @@ cleanup:
   # XMLSTARLET
   - /lib/debug
   - /share/runtime
+#cleanup-commands:
+  # Yuzu
+  #- /app/cleanup-BaseApp.sh
 
 modules:
 
-  # dependency of: CEMU DOLPHIN
+  # dependency of: CEMU, CITRA, DOLPHIN
   - rd-submodules/shared-modules/libusb/libusb.json
 
   # This module is used to define the RetroDECK version
@@ -222,7 +221,7 @@ modules:
         url: https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_amd64
         sha256: 4ee662847c588c3ef2fec8bfb304e8739e3dbaba87ccb9a608d691c88f5b64dc
 
-  # dependency of: CEMU (13.1.1)
+  # dependency of: CEMU (13.1.1), CITRA (13.0.0)
   - name: glslang
     buildsystem: cmake-ninja
     config-opts:
@@ -271,7 +270,7 @@ modules:
           stable-only: true
           url-template: https://www.freedesktop.org/software/libevdev/libevdev-$version.tar.xz
 
-  # dependency of: CEMU
+  # dependency of: CITRA, CEMU
   - name: rapidjson
     buildsystem: cmake-ninja
     config-opts:
@@ -401,9 +400,9 @@ modules:
       - '*.la'
 
   # When updating this module remember to check those:
-  # https://gitlab.com/es-de/emulationstation-de/-/blob/[VERSION]/resources/systems/linux/es_find_rules.xml
+  # https://gitlab.com/es-de/emulationstation-de/-/blob/[VERSION]/resources/systems/unix/es_find_rules.xml
   # But we don't include them 1:1 as RetroDECK got some specific configs in some cases
-  - name: ES-DE
+  - name: emulationstation-de
     buildsystem: cmake-ninja
     config-opts:
       - -DRETRODECK=on
@@ -412,9 +411,21 @@ modules:
       - es-core
     sources:
       - type: git
-        url: https://github.com/XargonWan/RetroDECK-ES-DE
-        branch: update/3.0
+        url: https://gitlab.com/es-de/emulationstation-de
+        branch: 77bf5ed8a03c5d065512cded36e4fb3bea90f4df
       - type: shell
+        commands:
+          - sed -i 's#"EMULATIONSTATION-DE  V" + Utils::String::toUpper(PROGRAM_VERSION_STRING)#"RetroDECK
+            v'$(cat ${FLATPAK_DEST}/retrodeck/version)', ES-DE  v" + Utils::String::toUpper(PROGRAM_VERSION_STRING)#g'
+            es-app/src/guis/GuiMenu.cpp
+      - type: patch
+        path: rd-submodules/es-de/GuiMenu.cpp.patch
+      - type: patch
+        path: rd-submodules/es-de/GuiMenu.h.patch
+      - type: patch
+        path: rd-submodules/es-de/ViewController.cpp.patch
+      - type: patch
+        path: rd-submodules/es-de/Window.cpp.patch
 
   # ES-DE - END
 
@@ -423,8 +434,8 @@ modules:
   - name: art-book-next-es-de
     buildsystem: simple
     build-commands:
-      - mkdir -p ${FLATPAK_DEST}/share/es-de/themes/art-book-next-es-de/
-      - mv -f * ${FLATPAK_DEST}/share/es-de/themes/art-book-next-es-de/
+      - mkdir -p ${FLATPAK_DEST}/share/emulationstation/themes/art-book-next-es-de/
+      - mv -f * ${FLATPAK_DEST}/share/emulationstation/themes/art-book-next-es-de/
     sources:
       - type: git
         url:  https://github.com/anthonycaccese/art-book-next-es-de.git
@@ -653,6 +664,90 @@ modules:
 
   # PPSSPP - END
 
+  # Yuzu - START
+  # https://github.com/yuzu-emu/yuzu-mainline/releases
+
+  - name: Yuzu
+    buildsystem: simple
+    build-commands:
+      - chmod +x yuzu*.AppImage
+      - ./yuzu*.AppImage --appimage-extract
+      - mkdir -p "${FLATPAK_DEST}/yuzu"
+      - cp -r squashfs-root/* "${FLATPAK_DEST}/yuzu"
+      - ln -s "${FLATPAK_DEST}/yuzu/usr/bin/yuzu" "${FLATPAK_DEST}/bin/yuzu"
+    sources:
+      - type: file
+        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1648/yuzu-mainline-20231211-14c24e64e.AppImage
+        sha256: d40f61c2abf8ddd0bb53098e2d9edf0c47e1cfd89e50cf5856b8cc27dbb25bd6
+
+  # Yuzu - END
+
+  # CITRA - START
+  # https://github.com/flathub/org.citra_emu.citra
+
+  - rd-submodules/shared-modules/SDL2/SDL2-with-libdecor.json
+
+  - rd-submodules/shared-modules/SDL2/SDL2-with-libdecor.json
+
+  - name: citra
+    buildsystem: cmake-ninja
+    builddir: true
+    build-options:
+      env:
+        CI: '1'
+        GITHUB_ACTIONS: '1'
+        GITHUB_REPOSITORY: citra-emu/citra-nightly
+        GITHUB_REF_NAME: nightly-2025
+      append-path: /usr/lib/sdk/llvm16/bin
+      prepend-ld-library-path: /usr/lib/sdk/llvm16/lib
+      cflags: '-Wno-unused-command-line-argument'
+      cxxflags: '-Wno-unused-command-line-argument'
+    config-opts:
+      - '-DCMAKE_BUILD_TYPE=Release'
+      - '-DCMAKE_C_COMPILER=clang'
+      - '-DCMAKE_CXX_COMPILER=clang++'
+      - '-DCMAKE_LINKER=lld'
+      - '-DENABLE_QT_TRANSLATION=ON'
+      - '-DCITRA_ENABLE_COMPATIBILITY_REPORTING=ON'
+      - '-DUSE_DISCORD_PRESENCE=ON'
+      - '-DENABLE_COMPATIBILITY_LIST_DOWNLOAD=OFF'
+      - '-DUSE_SYSTEM_SDL2=ON'
+    cleanup:
+      - /share/man
+      - /share/pixmaps
+    post-install:
+      - install -Dm755 ../citra-launcher.sh /app/bin/citra-launcher
+      - >-
+        install -Dm644 ../org.citra_emu.citra.svg
+        /app/share/icons/hicolor/scalable/apps/citra.svg
+      - >-
+        install -Dm644 ../dist/icon.png
+        /app/share/icons/hicolor/512x512/apps/citra.png
+      - >-
+        mv /app/share/mime/packages/citra.xml
+        /app/share/mime/packages/org.citra_emu.citra.xml
+      - >-
+        sed 's/citra/org.citra_emu.citra/g' -i
+        /app/share/mime/packages/org.citra_emu.citra.xml
+    sources:
+      - type: archive
+        url: >-
+          https://github.com/citra-emu/citra-nightly/releases/download/nightly-2025/citra-unified-source-20231105-998b9a9.tar.xz
+        sha256: ebf52af66c6ef729688a29d093d9139baa76973b698c0630a295f38d126cf118
+        x-checker-data:
+          type: json
+          url: https://api.github.com/repos/citra-emu/citra-nightly/releases/latest
+          version-query: .tag_name
+          url-query: >-
+            .assets[] | .browser_download_url |
+            match("https://.+citra-unified-source-.+.xz$") | .string
+          is-main-source: true
+      - type: file
+        path: rd-submodules/citra/org.citra_emu.citra.svg
+      - type: file
+        path: rd-submodules/citra/citra-launcher.sh
+
+  # CITRA - END
 
   # PCSX2 - START
   # Inspired by:
@@ -1108,113 +1203,6 @@ modules:
 
   # Cemu - END
 
-  # Vita3K - START
-
-  - name: vita3k
-    buildsystem: simple
-    build-commands:
-      # Copying the user icon
-      - mkdir -p ${FLATPAK_DEST}/retrodeck
-      - cp retrodeck.png ${FLATPAK_DEST}/retrodeck
-      - unzip "ubuntu-latest.zip" -d "${FLATPAK_DEST}/share/Vita3K"
-      - chmod +x "${FLATPAK_DEST}/share/Vita3K/Vita3K"
-      - rm -f "${FLATPAK_DEST}/share/Vita3K/update-vita3k.sh"
-      - ln -s ${FLATPAK_DEST}/share/Vita3K/Vita3K ${FLATPAK_DEST}/bin/Vita3K
-    sources:
-      - type: file
-        url: https://github.com/Vita3K/Vita3K/releases/download/continuous/ubuntu-latest.zip
-        sha256: VITA3KSHAPLACEHOLDER
-      - type: file
-        path: res/retrodeck.png
-
-  # Vita3K - END
-
-  # SOLARUS - START
-  # https://github.com/flathub/org.solarus_games.solarus.Launcher
-
-  - name: luajit
-    no-autogen: true
-    cleanup:
-      - /bin
-      - /lib/*.a
-      - /include
-      - /lib/pkgconfig
-      - /share/man
-    sources:
-      - type: archive
-        url: https://luajit.org/download/LuaJIT-2.0.5.tar.gz
-        sha256: 874b1f8297c697821f561f9b73b57ffd419ed8f4278c82e05b48806d30c1e979
-      - type: shell
-        commands:
-          - sed -i 's|/usr/local|/app|' ./Makefile
-
-  - name: libmodplug
-    cleanup:
-      - /include
-    sources:
-      - type: archive
-        url: https://download.sourceforge.net/project/modplug-xmms/libmodplug/0.8.9.0/libmodplug-0.8.9.0.tar.gz
-        sha512: 880e10154fd367ee24ace53ca7e32a5c1fee7dfff1f934e6499944c12779427da63e2f55f8d6ce25db0a42a5b4424053bf64305b31dbfc4ef6a8909924d655fd
-
-  - name: physfs
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DPHYSFS_BUILD_TEST=OFF
-    sources:
-      - type: archive
-        url: https://icculus.org/physfs/downloads/physfs-3.0.2.tar.bz2
-        sha256: 304df76206d633df5360e738b138c94e82ccf086e50ba84f456d3f8432f9f863
-        size: 194888
-        x-checker-data:
-          type: anitya
-          project-id: 3631
-          url-template: https://icculus.org/physfs/downloads/physfs-$version.tar.bz2
-
-  - name: solarus
-    buildsystem: cmake-ninja
-    builddir: true
-    config-opts:
-      - -DSOLARUS_GUI=OFF
-    sources:
-      - type: git
-        url: https://gitlab.com/solarus-games/solarus.git
-        tag: v1.6.5
-        commit: 3aec70b0556a8d7aed7903d1a3e4d9a18c5d1649
-
-  - rd-submodules/shared-modules/gzdoom/gzdoom.json
-
-  # SOLARUS - END
-  
-  # MAME - Start
-
-  - name: retrodeck-mame
-    buildsystem: simple
-    build-commands:
-      - cp -rn files/* /app
-    sources:
-    - type: archive
-      url: RETRODECKMAMEURLPLACEHOLDER
-      sha256: RETRODECKMAMEPLACEHOLDER
-
-  # MAME - End
-
-  # Ryujinx Appimage - START
-  # https://ryujinx.org/download
-
-  - name: Ryujinx
-    buildsystem: simple
-    build-commands:
-      - |
-        tar -zxvf *.tar.gz
-        mv -v publish ${FLATPAK_DEST}/ryujinx
-        ln -sv ${FLATPAK_DEST}/ryujinx/Ryujinx ${FLATPAK_DEST}/bin/Ryujinx.sh
-    sources:
-      - type: file
-        url: https://github.com/Ryujinx/release-channel-master/releases/download/1.1.1217/ryujinx-1.1.1217-linux_x64.tar.gz
-        sha256: 7ce3c07e63b732ef912df480492d40107a1c1b11b6660b2fd1418d5b45295e30
-
-  # Ryujinx Appimage - END
-
   # External manifests end
 
   - name: retrodeck
@@ -1225,16 +1213,16 @@ modules:
       - mkdir -p ${FLATPAK_DEST}/retrodeck
 
       # Prep the ES-DE and RetroArch config files - I will have to SED/XMLSTARLET them soon
-      - rm -rf /app/share/es-de/resources/systems/linux/es_find_rules.xml
-      - cp es-configs/es_find_rules.xml /app/share/es-de/resources/systems/linux/
-      - rm -rf /app/share/es-de/resources/systems/linux/es_systems.xml
-      - cp es-configs/es_systems.xml /app/share/es-de/resources/systems/linux/
+      - rm -rf /app/share/emulationstation/resources/systems/unix/es_find_rules.xml
+      - cp es-configs/es_find_rules.xml /app/share/emulationstation/resources/systems/unix/
+      - rm -rf /app/share/emulationstation/resources/systems/unix/es_systems.xml
+      - cp es-configs/es_systems.xml /app/share/emulationstation/resources/systems/unix/
       # These must be put in home folder, managed by retrodeck.sh
       - cp es-configs/es_settings.xml ${FLATPAK_DEST}/retrodeck/es_settings.xml
       - mv -f -t ${FLATPAK_DEST}/retrodeck es-configs/rd_prepacks
 
       # Logo, res, move graphics directory away from default location so splash can be changed after build
-      - mv -f -t ${FLATPAK_DEST}/retrodeck /app/share/es-de/resources/graphics
+      - mv -f -t ${FLATPAK_DEST}/retrodeck /app/share/emulationstation/resources/graphics
       - cp -f res/splash.svg ${FLATPAK_DEST}/retrodeck/graphics/splash.svg
       - cp -f res/splash.svg ${FLATPAK_DEST}/retrodeck/graphics/splash-orig.svg
       - cp -rf res/extra_splashes/ ${FLATPAK_DEST}/retrodeck/graphics
@@ -1248,7 +1236,7 @@ modules:
       # Tools
       - mkdir -p /app/tools
       - cp -r tools/** /app/tools
-      - find /app/tools -type f \( -name "*.sh" -o -name "*.py" \) -exec chmod +x {} \;
+      - find /app/tools -name '*.py|*.sh' -exec chmod +x {} \;
 
       # Function libraries
       - mkdir -p /app/libexec
@@ -1276,18 +1264,6 @@ modules:
       # Creating symlinks for a prettier access
       - ln -s /app/bin/retrodeck.sh /app/bin/retrodeck
       - ln -s /app/tools/configurator.sh /app/bin/configurator
-
-      # GZDOOM wrapper
-      - cp emu-configs/gzdoom/gzdoom.sh ${FLATPAK_DEST}/bin/gzdoom.sh
-      - chmod +x ${FLATPAK_DEST}/bin/gzdoom.sh
-
-      # MAME wrapper
-      - cp emu-configs/mame/mame-rdwrapper.sh ${FLATPAK_DEST}/bin/mame-rdwrapper.sh
-      - chmod +x ${FLATPAK_DEST}/bin/mame-rdwrapper.sh
-
-      # Ryujinx wrapper
-      - cp emu-configs/ryujinx/ryujinx-rdwrapper.sh ${FLATPAK_DEST}/bin/ryujinx-rdwrapper.sh
-      - chmod +x ${FLATPAK_DEST}/bin/ryujinx-rdwrapper.sh
 
     sources:
       - type: git

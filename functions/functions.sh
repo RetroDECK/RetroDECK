@@ -83,8 +83,6 @@ move() {
   source_dir="$(echo $1 | sed 's![^/]$!&/!')" # Add trailing slash if it is missing
   dest_dir="$(echo $2 | sed 's![^/]$!&/!')" # Add trailing slash if it is missing
 
-  log d "Moving \"$source_dir\" to \"$dest_dir\""
-
   (
     rsync -a --remove-source-files --ignore-existing --mkpath "$source_dir" "$dest_dir" # Copy files but don't overwrite conflicts
     find "$source_dir" -type d -empty -delete # Cleanup empty folders that were left behind
@@ -100,44 +98,6 @@ move() {
     --title "RetroDECK Configurator Utility - Move Directories" \
     --text="There were some conflicting files that were not moved.\n\nAll files that could be moved are in the new location,\nany files that already existed at the new location have not been moved and will need to be handled manually."
   fi
-}
-
-create_dir() {
-  # A simple function that creates a directory checking if is still there while logging the activity
-  # If -d it will delete it prior the creation
-
-  if [[ "$1" == "-d" ]]; then
-    # If "force" flag is provided, delete the directory first
-    shift # Remove the first argument (-f)
-    if [[ -e "$1" ]]; then
-      rm -rf "$1" # Forcefully delete the directory
-      log d "Found \"$1\", deleting it."
-    fi
-  fi
-
-  if [[ ! -d "$1" ]]; then
-    mkdir -p "$1" # Create directory if it doesn't exist
-    log d "Created directory: $1"
-  else
-    log d "Directory \"$1\" already exists, skipping."
-  fi
-}
-
-download_file() {
-  # Function to download file from the Internet, with Zenity progress bar
-  # USAGE: download_file $source_url $file_dest $file_name
-  # source_url is the location the file is downloaded from
-  # file_dest is the destination the file should be in the filesystem, needs filename included!
-  # file_name is a user-readable file name or description to be put in the Zenity dialog
-
-  (
-    wget "$1" -O "$2" -q
-  ) |
-  zenity --progress \
-    --title="Downloading File" \
-    --text="Downloading $3..." \
-    --pulsate \
-    --auto-close
 }
 
 update_rd_conf() {
@@ -239,100 +199,69 @@ dir_prep() {
   real="$1"
   symlink="$2"
 
-  log d "Preparing directory $symlink in $real"
+  echo -e "\n[DIR PREP]\nMoving $symlink in $real" #DEBUG
 
    # if the symlink dir is already a symlink, unlink it first, to prevent recursion
   if [ -L "$symlink" ];
   then
-    log d "$symlink is already a symlink, unlinking to prevent recursives"
+    echo "$symlink is already a symlink, unlinking to prevent recursives" #DEBUG
     unlink "$symlink"
   fi
 
   # if the dest dir exists we want to backup it
   if [ -d "$symlink" ];
   then
-    log d "$symlink found"
+    echo "$symlink found" #DEBUG
     mv -f "$symlink" "$symlink.old"
   fi
 
   # if the real dir is already a symlink, unlink it first
   if [ -L "$real" ];
   then
-    log d "$real is already a symlink, unlinking to prevent recursives" #DEBUG
+    echo "$real is already a symlink, unlinking to prevent recursives" #DEBUG
     unlink "$real"
   fi
 
   # if the real dir doesn't exist we create it
   if [ ! -d "$real" ];
   then
-    log d "$real not found, creating it" #DEBUG
-    create_dir "$real"
+    echo "$real not found, creating it" #DEBUG
+    mkdir -pv "$real"
   fi
 
   # creating the symlink
-  log d "linking $real in $symlink" #DEBUG
-  create_dir "$(dirname "$symlink")" # creating the full path except the last folder
+  echo "linking $real in $symlink" #DEBUG
+  mkdir -pv "$(dirname "$symlink")" # creating the full path except the last folder
   ln -svf "$real" "$symlink"
 
   # moving everything from the old folder to the new one, delete the old one
   if [ -d "$symlink.old" ];
   then
-    log d "Moving the data from $symlink.old to $real" #DEBUG
-    mv -f "$symlink.old"/{.[!.],}* "$real"
-    log d "Removing $symlink.old" #DEBUG
+    echo "Moving the data from $symlink.old to $real" #DEBUG
+    mv -f "$symlink.old"/{.[!.],}* $real
+    echo "Removing $symlink.old" #DEBUG
     rm -rf "$symlink.old"
   fi
 
-  log i "$symlink is now $real\n"
-}
-
-check_bios_files() {
-  # This function validates all the BIOS files listed in the $bios_checklist and adds the results to an array called bios_checked_list which can be used elsewhere
-  # There is a "basic" and "expert" mode which outputs different levels of data
-  # USAGE: check_bios_files "mode"
-  
-  rm -f "$godot_bios_files_checked" # Godot data transfer temp files
-  touch "$godot_bios_files_checked"
-
-  while IFS="^" read -r bios_file bios_subdir bios_hash bios_system bios_desc
-    do
-      bios_file_found="No"
-      bios_hash_matched="No"
-      if [[ -f "$bios_folder/$bios_subdir$bios_file" ]]; then
-        bios_file_found="Yes"
-        if [[ $bios_hash == "Unknown" ]]; then
-          bios_hash_matched="Unknown"
-        elif [[ $(md5sum "$bios_folder/$bios_subdir$bios_file" | awk '{ print $1 }') == "$bios_hash" ]]; then
-          bios_hash_matched="Yes"
-        fi
-      fi
-      if [[ "$1" == "basic" ]]; then
-        bios_checked_list=("${bios_checked_list[@]}" "$bios_file" "$bios_system" "$bios_file_found" "$bios_hash_matched" "$bios_desc")
-        echo "$bios_file"^"$bios_system"^"$bios_file_found"^"$bios_hash_matched"^"$bios_desc" >> "$godot_bios_files_checked" # Godot data transfer temp file
-      else
-        bios_checked_list=("${bios_checked_list[@]}" "$bios_file" "$bios_system" "$bios_file_found" "$bios_hash_matched" "$bios_desc" "$bios_subdir" "$bios_hash")
-        echo "$bios_file"^"$bios_system"^"$bios_file_found"^"$bios_hash_matched"^"$bios_desc"^"$bios_subdir"^"$bios_hash" >> "$godot_bios_files_checked" # Godot data transfer temp file
-      fi
-  done < $bios_checklist
+  echo -e "$symlink is now $real\n"
 }
 
 update_rpcs3_firmware() {
-  create_dir "$roms_folder/ps3/tmp"
+  (
+  mkdir -p "$roms_folder/ps3/tmp"
   chmod 777 "$roms_folder/ps3/tmp"
-  download_file "$rpcs3_firmware" "$roms_folder/ps3/tmp/PS3UPDAT.PUP" "RPCS3 Firmware"
+  wget "$rpcs3_firmware" -P "$roms_folder/ps3/tmp/"
+  ) |
+  zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+  --title "RetroDECK RPCS3 Firmware Download" \
+  --text="RetroDECK downloading the RPCS3 firmware, please wait."
   rpcs3 --installfw "$roms_folder/ps3/tmp/PS3UPDAT.PUP"
   rm -rf "$roms_folder/ps3/tmp"
 }
 
-update_vita3k_firmware() {
-  download_file "http://dus01.psv.update.playstation.net/update/psv/image/2022_0209/rel_f2c7b12fe85496ec88a0391b514d6e3b/PSVUPDAT.PUP" "/tmp/PSVUPDAT.PUP" "Vita3K Firmware file: PSVUPDAT.PUP"
-  download_file "http://dus01.psp2.update.playstation.net/update/psp2/image/2019_0924/sd_8b5f60b56c3da8365b973dba570c53a5/PSP2UPDAT.PUP?dest=us" "/tmp/PSP2UPDAT.PUP" "Vita3K Firmware file: PSP2UPDAT.PUP"
-  Vita3K --firmware /tmp/PSVUPDAT.PUP
-  Vita3K --firmware /tmp/PSP2UPDAT.PUP
-}
-
 backup_retrodeck_userdata() {
-  create_dir "$backups_folder"
+  mkdir -p "$backups_folder"
   zip -rq9 "$backups_folder/$(date +"%0m%0d")_retrodeck_userdata.zip" "$saves_folder" "$states_folder" "$bios_folder" "$media_folder" "$themes_folder" "$logs_folder" "$screenshots_folder" "$mods_folder" "$texture_packs_folder" "$borders_folder" > $logs_folder/$(date +"%0m%0d")_backup_log.log
 }
 
@@ -340,11 +269,7 @@ make_name_pretty() {
   # This function will take an internal system name (like "gbc") and return a pretty version for user display ("Nintendo GameBoy Color")
   # USAGE: make_name_pretty "system name"
   local system=$(grep "$1^" "$pretty_system_names_reference_list")
-  if [[ ! -z "$system" ]]; then
-    IFS='^' read -r internal_name pretty_name < <(echo "$system")
-  else
-    pretty_name="$system"
-  fi
+  IFS='^' read -r internal_name pretty_name < <(echo "$system")
   echo "$pretty_name"
 }
 
@@ -369,7 +294,7 @@ do
         zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" --text="Do you want to quit?"
         if [ $? == 0 ] # yes, quit
         then
-          quit_retrodeck
+          exit 2
         fi
       fi
     fi
@@ -379,7 +304,7 @@ do
     --title "RetroDECK" \
     --ok-label "Quit" \
     --text="No location was selected. Please run RetroDECK again to retry."
-    quit_retrodeck
+    exit 2
   fi
 done
 }
@@ -410,22 +335,22 @@ finit_user_options_dialog() {
 finit() {
 # Force/First init, depending on the situation
 
-  log i "Executing finit"
+  echo "Executing finit"
 
   # Internal or SD Card?
-  local finit_dest_choice=$(configurator_destination_choice_dialog "RetroDECK data" "Welcome to the first setup of RetroDECK.\nPlease carefully read each message prompted during the installation process to avoid any unwanted misconfigurations.\n\nWhere do you want your RetroDECK data folder to be located?\nIn this location a \"retrodeck\" folder will be created.\nThis is the folder that you will use to contain all your important files, such as your own ROMs, BIOSs, Saves and Scraped Data." )
-  log i "Choice is $finit_dest_choice"
+  local finit_dest_choice=$(configurator_destination_choice_dialog "RetroDECK data" "Welcome to the first configuration of RetroDECK.\nThe setup will be quick but please READ CAREFULLY each message in order to avoid misconfigurations.\n\nWhere do you want your RetroDECK data folder to be located?\n\nThis folder will contain all ROMs, BIOSs and scraped data." )
+  echo "Choice is $finit_dest_choice"
 
   case "$finit_dest_choice" in
 
-  "Quit" | "" ) # Back or X button quits
+  "Back" | "" ) # Back or X button quits
     rm -f "$rd_conf" # Cleanup unfinished retrodeck.cfg if first install is interrupted
-    log i "Now quitting"
-    quit_retrodeck
+    echo "Now quitting"
+    exit 2
   ;;
 
   "Internal Storage" ) # Internal
-    log i "Internal selected"
+    echo "Internal selected"
     rdhome="$HOME/retrodeck"
     if [[ -L "$rdhome" ]]; then #Remove old symlink from existing install, if it exists
       unlink "$rdhome"
@@ -433,10 +358,10 @@ finit() {
   ;;
 
   "SD Card" )
-    log i "SD Card selected"
+    echo "SD Card selected"
     if [ ! -d "$sdcard" ] # SD Card path is not existing
     then
-      log e "SD card not found"
+      echo "Error: SD card not found"
       zenity --error --no-wrap \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK" \
@@ -449,22 +374,22 @@ finit() {
       fi
     elif [ ! -w "$sdcard" ] #SD card found but not writable
       then
-        log e "SD card found but not writable"
+        echo "Error: SD card found but not writable"
         zenity --error --no-wrap \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         --title "RetroDECK" \
         --ok-label "Quit" \
         --text="SD card was found but is not writable\nThis can happen with cards formatted on PC.\nPlease format the SD card through the Steam Deck's Game Mode and run RetroDECK again."
         rm -f "$rd_conf" # Cleanup unfinished retrodeck.cfg if first install is interrupted
-        log i "Now quitting"
-        quit_retrodeck
+        echo "Now quitting"
+        exit 2
     else
       rdhome="$sdcard/retrodeck"
     fi
   ;;
 
   "Custom Location" )
-      log i "Custom Location selected"
+      echo "Custom Location selected"
       zenity --info --no-wrap \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK" \
@@ -479,7 +404,7 @@ finit() {
 
   esac
 
-  prepare_component "reset" "retrodeck" # Parse the [paths] section of retrodeck.cfg and set the value of / create all needed folders
+  prepare_emulator "reset" "retrodeck" # Parse the [paths] section of retrodeck.cfg and set the value of / create all needed folders
 
   conf_write # Write the new values to retrodeck.cfg
 
@@ -490,16 +415,12 @@ finit() {
     configurator_generic_dialog "RPCS3 Firmware Install" "You have chosen to install the RPCS3 firmware during the RetroDECK first setup.\n\nThis process will take several minutes and requires network access.\n\nRPCS3 will be launched automatically at the end of the RetroDECK setup process.\nOnce the firmware is installed, please close the emulator to finish the process."
   fi
 
-  if [[ "$finit_options_choices" =~ (vita3k_firmware|Enable All) ]]; then # Additional information on the firmware install process, as the emulator needs to be manually closed
-    configurator_generic_dialog "Vita3K Firmware Install" "You have chosen to install the Vita3K firmware during the RetroDECK first setup.\n\nThis process will take several minutes and requires network access.\n\nVita3K will be launched automatically at the end of the RetroDECK setup process.\nOnce the firmware is installed, please close the emulator to finish the process."
-  fi
-
   zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
   --text="RetroDECK will now install the needed files, which can take up to one minute.\nRetroDECK will start once the process is completed.\n\nPress OK to continue."
 
   (
-  prepare_component "reset" "all"
+  prepare_emulator "reset" "all"
   build_retrodeck_current_presets
   deploy_helper_files
 
@@ -507,11 +428,6 @@ finit() {
   if [[ "$finit_options_choices" =~ (rpcs3_firmware|Enable All) ]]; then
     if [[ $(check_network_connectivity) == "true" ]]; then
       update_rpcs3_firmware
-    fi
-  fi
-  if [[ "$finit_options_choices" =~ (vita3k_firmware|Enable All) ]]; then
-    if [[ $(check_network_connectivity) == "true" ]]; then
-      update_vita3k_firmware
     fi
   fi
   if [[ "$finit_options_choices" =~ (rd_controller_profile|Enable All) ]]; then
@@ -536,11 +452,11 @@ install_retrodeck_starterpack() {
 
   ## DOOM section ##
   cp /app/retrodeck/extras/doom1.wad "$roms_folder/doom/doom1.wad" # No -f in case the user already has it
-  create_dir "/var/config/ES-DE/gamelists/doom"
-  if [[ ! -f "/var/config/ES-DE/gamelists/doom/gamelist.xml" ]]; then # Don't overwrite an existing gamelist
-    cp "/app/retrodeck/rd_prepacks/doom/gamelist.xml" "/var/config/ES-DE/gamelists/doom/gamelist.xml"
+  mkdir -p "/var/config/emulationstation/.emulationstation/gamelists/doom"
+  if [[ ! -f "/var/config/emulationstation/.emulationstation/gamelists/doom/gamelist.xml" ]]; then # Don't overwrite an existing gamelist
+    cp "/app/retrodeck/rd_prepacks/doom/gamelist.xml" "/var/config/emulationstation/.emulationstation/gamelists/doom/gamelist.xml"
   fi
-  create_dir "$media_folder/doom"
+  mkdir -p "$media_folder/doom"
   unzip -oq "/app/retrodeck/rd_prepacks/doom/doom.zip" -d "$media_folder/doom/"
 }
 
@@ -549,15 +465,9 @@ install_retrodeck_controller_profile() {
   # NOTE: These files need to be stored in shared locations for Steam, outside of the normal RetroDECK folders and should always be an optional user choice
   # BIGGER NOTE: As part of this process, all emulators will need to have their configs hard-reset to match the controller mappings of the profile
   # USAGE: install_retrodeck_controller_profile
-  if [[ -d "$HOME/.steam/steam/controller_base/templates/" || -d "$HOME/.var/app/com.valvesoftware.Steam/.steam/steam/controller_base/templates/" ]]; then
-    if [[ -d "$HOME/.steam/steam/controller_base/templates/" ]]; then # If a normal binary Steam install exists
-      rsync -rlD --mkpath "/app/retrodeck/binding_icons/" "$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/"
-      rsync -rlD --mkpath "$emuconfigs/defaults/retrodeck/controller_configs/" "$HOME/.steam/steam/controller_base/templates/"
-    fi
-    if [[ -d "$HOME/.var/app/com.valvesoftware.Steam/.steam/steam/controller_base/templates/" ]]; then # If a Flatpak Steam install exists
-      rsync -rlD --mkpath "/app/retrodeck/binding_icons/" "$HOME/.var/app/com.valvesoftware.Steam/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/"
-      rsync -rlD --mkpath "$emuconfigs/defaults/retrodeck/controller_configs/" "$HOME/.var/app/com.valvesoftware.Steam/.steam/steam/controller_base/templates/"
-    fi
+  if [[ -d "$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/" && -d "$HOME/.steam/steam/controller_base/templates/" ]]; then
+    rsync -rlD --mkpath "/app/retrodeck/binding_icons/" "$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/"
+    rsync -rlD --mkpath "$emuconfigs/defaults/retrodeck/controller_configs/" "$HOME/.steam/steam/controller_base/templates/"
   else
     configurator_generic_dialog "RetroDECK Controller Profile Install" "The target directories for the controller profile do not exist.\n\nThis may happen if you do not have Steam installed or the location is does not have permission to be read."
   fi
@@ -574,11 +484,8 @@ update_splashscreens() {
   # This script will purge any existing ES graphics and reload them from RO space into somewhere ES will look for it
   # USAGE: update_splashscreens
 
-  log i "Updating splash screen"
-
-  rm -rf /var/config/ES-DE/resources/graphics
-  rsync -rlD --mkpath "/app/retrodeck/graphics/" "/var/config/ES-DE/resources/graphics/"
-
+  rm -rf /var/config/emulationstation/.emulationstation/resources/graphics
+  rsync -rlD --mkpath "/app/retrodeck/graphics/" "/var/config/emulationstation/.emulationstation/resources/graphics/"
 }
 
 deploy_helper_files() {
@@ -620,112 +527,9 @@ easter_eggs() {
   cp -f "$new_splash_file" "$current_splash_file" # Deploy assigned splash screen
 }
 
-manage_ryujinx_keys() {
-  # This function checks if Switch keys are existing and symlinks them inside the Ryujinx system folder
-  # If the symlinks are broken it recreates them
-
-  log i "Checking Ryujinx Switch keys."
-  local ryujinx_system="/var/config/Ryujinx/system"  # Set the path to the Ryujinx system folder
-  # Check if the keys folder exists
-  if [ -d "$bios_folder/switch/keys" ]; then
-      # Check if there are files in the keys folder
-      if [ -n "$(find "$bios_folder/switch/keys" -maxdepth 1 -type f)" ]; then
-          # Iterate over each file in the keys folder
-          for file in "$bios_folder/switch/keys"/*; do
-              local filename=$(basename "$file")
-              local symlink="$ryujinx_system/$filename"
-              
-              # Check if the symlink exists and is valid
-              if [ -L "$symlink" ] && [ "$(readlink -f "$symlink")" = "$file" ]; then
-                  log i "Found \"$symlink\" and it's a valid symlink."
-                  continue  # Skip if the symlink is already valid
-              fi
-              
-              # Remove broken symlink or non-symlink file
-              log w "Found \"$symlink\" but it's not a valid symlink. Repairing it"
-              [ -e "$symlink" ] && rm "$symlink"
-
-              # Create symlink
-              ln -s "$file" "$symlink"
-              log i "Created symlink: \"$symlink\""
-          done
-      else
-          log w "No files found in $bios_folder/switch/keys. Continuing..."
-      fi
-  else
-      log w "Directory $bios_folder/switch/keys does not exist. Maybe Ryujinx was never run. Continuing..."
-  fi
-}
-
-# TODO: this function is not yet used
-branch_selector() {
-    log d "Fetch branches from GitHub API excluding \"main\""
-    branches=$(curl -s https://api.github.com/repos/XargonWan/RetroDECK/branches | grep '"name":' | awk -F '"' '$4 != "main" {print $4}')
-
-    # Create an array to store branch names
-    branch_array=()
-
-    # Loop through each branch and add it to the array
-    while IFS= read -r branch; do
-        branch_array+=("$branch")
-    done <<< "$branches"
-    # TODO: logging - Creating array of branch names
-
-    # Display branches in a Zenity list dialog
-    selected_branch=$(
-      zenity --list \
-        --icon-name=net.retrodeck.retrodeck \
-        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-        --title "RetroDECK Configurator Cooker Branch - Select Branch" \
-        --column="Branch" --width=1280 --height=800 "${branch_array[@]}"
-    )
-    # TODO: logging - Displaying branches in Zenity list dialog
-
-    # Display warning message
-    if [ $selected_branch ]; then
-        zenity --question --icon-name=net.retrodeck.retrodeck --no-wrap \
-          --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-          --title "RetroDECK Configurator Cooker Branch - Switch Branch" \
-          --text="Are you sure you want to move to \"$selected_branch\" branch?"
-        # Output selected branch
-        echo "Selected branch: $selected_branch" # TODO: logging - Outputting selected branch
-        set_setting_value "$rd_conf" "branch" "$selected_branch" "retrodeck" "options"
-        branch="feat/sftp"
-        # Get the latest release for the specified branch
-        latest_release=$(curl -s "https://api.github.com/repos/XargonWan/RetroDECK-cooker/releases" | jq ".[] | select(.target_commitish == \"$branch_name\") | .tag_name" | head -n 1)
-        # TODO: this will fail because the builds coming from the PRs are not published yet, we should fix them
-        # TODO: form a proper url: $flatpak_file_url
-        configurator_generic_dialog "RetroDECK Online Update" "The update process may take several minutes.\n\nAfter the update is complete, RetroDECK will close. When you run it again you will be using the latest version."
-          (
-          local desired_flatpak_file=$(curl --silent $flatpak_file_url | grep '"browser_download_url":' | sed -E 's/.*"([^"]+)".*/\1/')
-          create_dir "$rdhome/RetroDECK_Updates"
-          wget -P "$rdhome/RetroDECK_Updates" $desired_flatpak_file
-          flatpak-spawn --host flatpak remove --noninteractive -y net.retrodeck.retrodeck # Remove current version before installing new one, to avoid duplicates
-          flatpak-spawn --host flatpak install --user --bundle --noninteractive -y "$rdhome/RetroDECK_Updates/RetroDECK-cooker.flatpak"
-          rm -rf "$rdhome/RetroDECK_Updates" # Cleanup old bundles to save space
-          ) |
-          zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
-          --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-          --title "RetroDECK Updater" \
-          --text="RetroDECK is updating to the latest \"$selected_branch\" version, please wait."
-          configurator_generic_dialog "RetroDECK Online Update" "The update process is now complete!\n\nPlease restart RetroDECK to keep the fun going."
-          exit 1
-    else
-        configurator_generic_dialog "No branch selected, exiting."
-        # TODO: logging
-    fi
-}
-
-quit_retrodeck() {
-  log i "Quitting ES-DE"
-  pkill -f "es-de"
-  log i "Shutting down RetroDECK's framework"
-  pkill -f "retrodeck"
-  log i "See you next time"
-}
-
 start_retrodeck() {
   easter_eggs # Check if today has a surprise splashscreen and load it if so
-  log i "Starting RetroDECK v$version"
-  es-de --home /var/config/
+  # normal startup
+  echo "Starting RetroDECK v$version"
+  emulationstation --home /var/config/emulationstation
 }

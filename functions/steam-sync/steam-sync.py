@@ -5,9 +5,8 @@ import re
 import shlex
 import shutil
 import glob
+import vdf
 import sys
-import time
-import hashlib
 
 import xml.etree.ElementTree as ET
 
@@ -129,6 +128,7 @@ command_list_default={
 "x68000": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/px68k_libretro.so",
 "zx81": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/81_libretro.so",
 "zxspectrum": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/fuse_libretro.so",
+"switch": "flatpak run --command=yuzu net.retrodeck.retrodeck -f -g",
 "n3ds": "flatpak run --command=citra net.retrodeck.retrodeck",
 "ps2": "flatpak run --command=pcsx2-qt net.retrodeck.retrodeck -batch",
 "wiiu": "flatpak run --command=Cemu-wrapper net.retrodeck.retrodeck -g",
@@ -169,6 +169,8 @@ alt_command_list={
 "Beetle Saturn": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/mednafen_saturn_libretro.so",
 "Snes 9x - Current": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/snes9x_libretro.so",
 "Beetle SuperGrafx": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/mednafen_supergrafx_libretro.so",
+"Yuzu (Standalone)": "flatpak run --command=yuzu net.retrodeck.retrodeck -f -g",
+"Citra (Standalone)": "flatpak run --command=citra net.retrodeck.retrodeck",
 "PCSX2 (Standalone)": "flatpak run --command=pcsx2-qt net.retrodeck.retrodeck -batch",
 "Dolphin (Standalone)": "flatpak run --command=dolphin-emu-wrapper net.retrodeck.retrodeck -b -e",
 "RPCS3 Directory (Standalone)": "flatpak run --command=pcsx3 net.retrodeck.retrodeck --no-gui",
@@ -231,6 +233,8 @@ alt_command_list={
 "BlastEm": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/blastem_libretro.so",
 "CrocoDS": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/crocods_libretro.so",
 "fMSX": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/fmsx_libretro.so",
+"Citra": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/citra_libretro.so",
+"Citra 2018": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/citra2018_libretro.so",
 "Mupen64Plus-Next": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/mupen64plus_next_libretro.so",
 "DeSmuME 2015": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/desmume2015_libretro.so",
 "melonDS": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/melonds_libretro.so",
@@ -263,75 +267,123 @@ alt_command_list={
 "Beetle PCE": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/mednafen_pce_libretro.so"
 }
 
-exit_file="/tmp/retrodeck_steam_sync_exit"
-rdhome=""
-roms_folder=""
+STEAM_DATA_DIRS = (
+    "~/.steam/debian-installation",
+    "~/.steam",
+    "~/.local/share/steam",
+    "~/.local/share/Steam",
+    "~/.steam/steam",
+    "~/.var/app/com.valvesoftware.Steam/data/steam",
+    "~/.var/app/com.valvesoftware.Steam/data/Steam",
+    "/usr/share/steam",
+    "/usr/local/share/steam",
+)
 
-def create_shortcut_new(games):
-    changes=0
-    old_games=os.listdir(rdhome+"/.sync/")
+def create_shortcut(games, launch_config_name=None):
+    shortcut_path = get_shortcuts_vdf_path()
+    if os.path.exists(shortcut_path):
+        with open(shortcut_path, "rb") as shortcut_file:
+            shortcuts = vdf.binary_loads(shortcut_file.read())['shortcuts'].values()
+    else:
+        shortcuts = []
 
+    old_shortcuts=[]
+    for shortcut in shortcuts:
+        if "net.retrodeck.retrodeck" in shortcut["Exe"]:
+            keep=False
+            for game in games:
+                gameid=generate_shortcut_id(game[0])
+                if gameid==shortcut["appid"]:
+                    shortcut["Exe"]=game[1]
+                    game[0]="###"
+                    keep=True
+                    break
+            if keep:
+                old_shortcuts.append(shortcut)
+        else:
+            old_shortcuts.append(shortcut)
+
+    new_shortcuts=[]
     for game in games:
-        try:
-            i=old_games.index(game[0])
-            old_games[i]=0
-        except ValueError:
-            print(game[0]+" is a new game!")
-            changes=1
+        if not game[0]=="###":
+            new_shortcuts=new_shortcuts+[generate_shortcut(game, launch_config_name)]
 
-        path=rdhome+"/.sync/"+game[0]
-        print("Go to path: "+path)
-        if not os.path.exists(path):
-            os.makedirs(path)
-            fl=open(path+"/goggame-0.info","w")
-            fl.write('{\n')
-            fl.write('    "buildId": "",\n')
-            fl.write('    "clientId": "",\n')
-            fl.write('    "gameId": "",\n')
-            fl.write('    "name": "'+game[0]+'",\n')
-            fl.write('    "playTasks": [\n')
-            fl.write('        {\n')
-            fl.write('            "category": "launcher",\n')
-            fl.write('            "isPrimary": true,\n')
-            fl.write('            "languages": [\n')
-            fl.write('                "en-US"\n')
-            fl.write('            ],\n')
-            fl.write('            "name": "'+game[0]+'",\n')
-            fl.write('            "path": "launch.sh",\n')
-            fl.write('            "type": "FileTask"\n')
-            fl.write('        }\n')
-            fl.write('    ]\n')
-            fl.write('}\n')
-            fl.close()
+    shortcuts = list(old_shortcuts) + list(new_shortcuts)
 
-        fl=open(path+"/launch.sh","w")
-        fl.write("#!/bin/bash\n\n")
-        fl.write('if test "$(whereis flatpak)" = "flatpak:"\n')
-        fl.write("then\n")
-        fl.write("flatpak-spawn --host "+game[1]+"\n")
-        fl.write("else\n")
-        fl.write(game[1]+"\n")
-        fl.write("fi\n")
-        fl.close()
+    updated_shortcuts = {
+        'shortcuts': {
+            str(index): elem for index, elem in enumerate(shortcuts)
+        }
+    }
+    with open(shortcut_path, "wb") as shortcut_file:
+        shortcut_file.write(vdf.binary_dumps(updated_shortcuts))
 
-        st=os.stat(path+"/launch.sh")
-        os.chmod(path+"/launch.sh", st.st_mode | 0o0111)
+def get_config_path():
+    config_paths = search_recursive_in_steam_dirs("userdata/**/config/")
+    if not config_paths:
+        return None
+    return config_paths[0]
 
-    print("Start removing")
-    print(old_games)
-    for game in old_games:
-        if game:
-            shutil.rmtree(rdhome+"/.sync/"+game)
-            changes=1
+def get_shortcuts_vdf_path():
+    config_path = get_config_path()
+    if not config_path:
+        return None
+    return os.path.join(config_path, "shortcuts.vdf")
 
-    if changes:
-        os.system("boilr --no-ui")
+def search_recursive_in_steam_dirs(path_suffix):
+    """Perform a recursive search based on glob and returns a
+    list of hits"""
+    results = []
+    for candidate in STEAM_DATA_DIRS:
+        glob_path = os.path.join(os.path.expanduser(candidate), path_suffix)
+        for path in glob.glob(glob_path):
+            results.append(path)
+    return results
 
-def addToSteam(systems):
+def generate_shortcut(game, launch_config_name):
+    return {
+        'appid': generate_shortcut_id(game[0]),
+        'appname': f'{game[0]}',
+        'Exe': f'{game[1]}',
+        'StartDir': f'{os.path.expanduser("~")}',
+        'icon': "",
+        'LaunchOptions': "",
+        'IsHidden': 0,
+        'AllowDesktopConfig': 1,
+        'AllowOverlay': 1,
+        'OpenVR': 0,
+        'Devkit': 0,
+        'DevkitOverrideAppID': 0,
+        'LastPlayTime': 0,
+    }
+
+def generate_preliminary_id(name):
+    unique_id = ''.join(["RetroDECK", name])
+    top = binascii.crc32(str.encode(unique_id, 'utf-8')) | 0x80000000
+    return (top << 32) | 0x02000000
+
+def generate_shortcut_id(name):
+    return (generate_preliminary_id(name) >> 32) - 0x100000000
+
+def addToSteam():
+    print("Open RetroDECK config file: {}".format(os.path.expanduser("~/.var/app/net.retrodeck.retrodeck/config/retrodeck/retrodeck.cfg")))
+
+    fl=open(os.path.expanduser("~/.var/app/net.retrodeck.retrodeck/config/retrodeck/retrodeck.cfg"),"r")
+    lines=fl.readlines()
+    for line in lines:
+        if "rdhome" in line:
+            rdhome=line[7:-1]
+        elif "roms_folder" in line:
+            roms_folder=line[12:-1]
+    fl.close()
     games=[]
-    for system in systems:
-        print("Start parsing system: {}".format(system))
+    
+    command_list_default["pico8"]=command_list_default["pico8"].replace("{GAMEDIR}",roms_folder+"/pico8")
+    alt_command_list["PICO-8 Splore (Standalone)"]=alt_command_list["PICO-8 Splore (Standalone)"].replace("{GAMEDIR}",roms_folder+"/pico8")
 
+    for system in os.listdir(rdhome+"/gamelists/"):
+        print("Start parsing system: {}".format(system))
+        
         f=open(rdhome+"/gamelists/"+system+"/gamelist.xml","r")
         f.readline()
         parser=ET.XMLParser()
@@ -340,7 +392,7 @@ def addToSteam(systems):
         parser.feed(b'</root>')
         root=parser.close()
         f.close()
-
+        
         globalAltEmu=""
         for subroot in root:
             if subroot.tag=="alternativeEmulator":
@@ -352,7 +404,7 @@ def addToSteam(systems):
                     name=""
                     favorite=""
                     altemulator=globalAltEmu
-                    for tag in game:
+                    for tag in game:    
                         if tag.tag=="path":
                             path=tag.text
                         elif tag.tag=="name":
@@ -361,7 +413,7 @@ def addToSteam(systems):
                             favorite=tag.text
                         elif tag.tag=="altemulator":
                             altemulator=tag.text
-
+                            
                     if favorite=="true" and altemulator=="":
                         print("Find favorite game: {}".format(name))
                         games.append([name,command_list_default[system]+" '"+roms_folder+"/"+system+path[1:]+"'"])
@@ -376,76 +428,8 @@ def addToSteam(systems):
                         else:
                             games.append([name,alt_command_list[altemulator]+" '"+roms_folder+"/"+system+path[1:]+"'"])
                             print(alt_command_list[altemulator]+" '"+roms_folder+"/"+system+path[1:]+"'")
-    if not games==[]:
-        create_shortcut_new(games)
-
-def start_config():
-    global rdhome
-    global roms_folder
-    global command_list_default
-    global alt_command_list
-
-    if os.path.isfile(exit_file):
-        os.remove(exit_file)
-
-    print("Open RetroDECK config file: {}".format(os.path.expanduser("~/.var/app/net.retrodeck.retrodeck/config/retrodeck/retrodeck.cfg")))
-
-    fl=open(os.path.expanduser("~/.var/app/net.retrodeck.retrodeck/config/retrodeck/retrodeck.cfg"),"r")
-    lines=fl.readlines()
-    for line in lines:
-        if "rdhome" in line:
-            rdhome=line[7:-1]
-        elif "roms_folder" in line:
-            roms_folder=line[12:-1]
-    fl.close()
-
-    command_list_default["pico8"]=command_list_default["pico8"].replace("{GAMEDIR}",roms_folder+"/pico8")
-    alt_command_list["PICO-8 Splore (Standalone)"]=alt_command_list["PICO-8 Splore (Standalone)"].replace("{GAMEDIR}",roms_folder+"/pico8")
-
-    if not os.path.exists(rdhome+"/.sync/"):
-        os.makedirs(rdhome+"/.sync/")
-
-    boilr_path=os.path.expanduser("~/.var/app/net.retrodeck.retrodeck/config/boilr/config.toml")
-    if os.path.isfile(boilr_path):
-        with open(boilr_path,"r") as f:
-            data=f.read()
-        data=re.sub("\"games_folder.*","games_folder = "+rdhome+"/.sync/\"",data)
-        with open(boilr_path,"w") as f:
-            f.write(data)
-    else:
-        print("Error! BoilR config not initialized.")
+                
+    create_shortcut(games)
 
 if __name__=="__main__":
-    start_config()
-
-    new_hash={}
-    for system in os.listdir(rdhome+"/gamelists/"):
-        new_hash[system]=hashlib.md5(open(rdhome+"/gamelists/"+system+"/gamelist.xml","rb").read()).hexdigest()
-
-    running=True
-
-    while running:
-        time.sleep(30)
-        systems=[]
-
-        for system in os.listdir(rdhome+"/gamelists/"):
-            if not system in systems:
-                if system in new_hash.keys():
-                    old_hash=new_hash[system]
-                    new_hash[system]=hashlib.md5(open(rdhome+"/gamelists/"+system+"/gamelist.xml","rb").read()).hexdigest()
-                    if not new_hash[system] == old_hash:
-                        print("System {} changed!".format(system))
-                        systems.append(system)
-                    else:
-                        print("System {} not changed!".format(system))
-                else:
-                    new_hash[system]=hashlib.md5(open(rdhome+"/gamelists/"+system+"/gamelist.xml","rb").read()).hexdigest()
-                    print("System {} added!".format(system))
-                    systems.append(system)
-
-        if os.path.isfile(exit_file):
-            running=False
-            os.remove(exit_file)
-
-    addToSteam(systems)
-    print("Finish!")
+    addToSteam()

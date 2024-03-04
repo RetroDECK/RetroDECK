@@ -46,33 +46,6 @@ jobs:
       - name: Generate cooker build ID
         run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/cooker_build_id.sh"
 
-      - name: Get branch name
-        id: branch_name
-        run: echo "BRANCH_NAME=$(echo $GITHUB_REF | sed 's|refs/heads/||')" >> $GITHUB_ENV
-
-      # if it's a feature branch it will not marked as "latest" cooker version
-      - name: "Set makeLatest (cooker only)"
-        run: |
-          if [[ "$BRANCH_NAME" == 'feat/'* || "$BRANCH_NAME" == 'refs/'* ]]; then
-            echo "MAKE_LATEST=false" >> $GITHUB_ENV
-          else
-            echo "MAKE_LATEST=true" >> $GITHUB_ENV
-          fi
-
-      # if the branch is coming from a PR the tag should be manually built
-      - name: "Generate version tag"
-        run: |
-          if [[ "$BRANCH_NAME" == 'refs/'* ]]; then
-            pr_number=$(echo ${{env.BRANCH_NAME}} | awk -F'/' '{print $3}')
-            source_branch=$(curl -s "https://api.github.com/repos/XargonWan/RetroDECK/pulls/$pr_number" | jq -r '.head.ref')
-            source_branch=${source_branch//\//-}
-            echo "[DEBUG] source branch is: $source_branch"
-            echo "TAG=PR-$pr_number-$source_branch-${{ env.buildid }}" >> $GITHUB_ENV
-          else
-            echo "TAG=${{env.BRANCH_NAME}}-${{ env.buildid }}" >> $GITHUB_ENV
-          fi
-          echo "Version TAG: ${{ env.TAG }}"
-
       # backing up manifest in case download fails and hashes must be recalculated
       - name: Manifest backup
         run: "cp ${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml ${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml.bak"
@@ -133,10 +106,23 @@ jobs:
         id: commits
         continue-on-error: true
 
+      - name: Get branch name
+        id: branch_name
+        run: echo "BRANCH_NAME=$(echo $GITHUB_REF | sed 's|refs/heads/||')" >> $GITHUB_ENV
+
+      # if it's a feature branch it will not marked as "latest" cooker version
+      - name: "Set makeLatest (cooker only)"
+        run: |
+          if [[ "$BRANCH_NAME" == 'feat/'* ]]; then
+            echo "MAKE_LATEST=false" >> $GITHUB_ENV
+          else
+            echo "MAKE_LATEST=true" >> $GITHUB_ENV
+          fi
+
       - name: Publish the flatpak in a new cooker release
         uses: ncipollo/release-action@v1
         with:
-          tag: "${{env.TAG}}"
+          tag: "${{env.BRANCH_NAME}}-${{ env.buildid }}"
           body: |
             # Release Notes (Cooker)
             This is a cooker snapshot based on the commit: ${{ github.event.repository.full_name }}@${{github.sha}}.

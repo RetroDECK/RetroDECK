@@ -1,20 +1,17 @@
-# Guide: Vita3K
-
-Please note that the PSVita support is still experimental and it will be available starting from RetroDECK 0.8.0b, and for the way Vita3K is actually working the automation is limited.
+Please note that the PSVita support is still experimental, and for the way Vita3K is working the automation is limited.
 In order to install a PSVita games is needed to:
 
-- Install a game opening the Vita3K emulator via Configurator, the supported formats are `pkg`, `zip`, `vpk`.
-- Upon installation the `zRIF` may be asked, it's different for each game, you can find it via web search by searching for example `WipEout 2048 (EU) zRIF`.
+- Install a game opening the Vita3K emulator via Configurator, the supported formats are pkg, zip, vpk.
+- Upon installation the zRIF may be asked, it's different for each game, you can find it via web search.
 - Install DLCs and patches in the same way.
-- Create an empty file in `retrodeck/roms/psvita/gamename.psvita`, please mind the `.psvita` extension.<br>
-For example: `roms/psvita/WipEout 2048 (EU).psvita.`
-- Edit the empty file adding the game `Title ID` (more below).
-- The game should appear in the game list after RetroDECK is re-opened or reloaded from the Utilities.
+- Create an empty file in roms/psvita/gamename.psvita, please mind the .psvita extension. For example: roms/psvita/WipEout 2048 (EU).psvita.
+- Edit the empty file adding the game Title ID (more below).
+- The game should appear in the game list after RetroDECK is re-opened.
 
-## How to find a title ID
+How to find a title ID
 It can be found inside the Vita3K GUI in the Title ID column, or found via web search.
-For example the game `WipEout 2048 (EU)` has an ID that is `PCSF00007`.
-So simply add `PCSF00007` to the `WipEout 2048 (EU).psvita` file and the setup for this game is complete.
+For example the game WipEout 2048 (EU) has an ID that is PCSF00007.
+So simply add PCSF00007 to the WipEout 2048 (EU).psvita file and the setup for this game is complete.
 
 Related wiki article can be found here:
 --

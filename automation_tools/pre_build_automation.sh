@@ -8,21 +8,11 @@
 #     Needs the URL of the file, in this line format: hash^PLACEHOLDERTEXT^url
 # latestcommit: Finds the most recent commit of a git repo and updated the placeholder in the manifest.
 #     Needs the URL of the repo and the branch to find the latest commit from, in this line format: latestcommit^PLACEHOLDERTEXT^url^branch
-# latestghrelease: Finds the download URL and SHA256 hash of the latest release from a git repo.
-#     Needs the API URL of the repo, in this line format: latestappimage^PLACEHOLDERTEXT^https://api.github.com/repos/<owner-name>/<repo-name>/releases/latest^<file suffix>
+# latestappimage: Finds the download URL and SHA256 hash of the latest AppImage release from a git repo.
+#     Needs the API URL of the repo, in this line format: latestappimage^PLACEHOLDERTEXT^https://api.github.com/repos/<owner-name>/<repo-name>/releases/latest
 #     As this command updates two different placeholders (one for the URL, one for the file hash) in the manifest, 
 #     the URL that would be used in the above example is "PLACEHOLDERTEXT" and the hash placeholder text would be "HASHPLACEHOLDERTEXT"
 #     The "HASH" prefix of the placeholder text is hardcoded in the script
-#     The <file_suffix> will be the file extension or other identifying suffix at the end of the file name that can be used to select from multiple releases.
-#     Example: If there are these file options for a given release:
-#     yuzu-mainline-20240205-149629642.AppImage
-#     yuzu-linux-20240205-149629642-source.tar.xz
-#     yuzu-linux-20240205-149629642-debug.tar.xz 
-#     Entering "AppImage" (without quotes) for the <file_suffix> will identify yuzu-mainline-20240205-149629642.AppImage
-#     Entering "source-.tar.xz" (without quotes) for the <file_suffix> will identify yuzu-linux-20240205-149629642-source.tar.xz
-#     Entering "debug-tar.xz" (without quotes) for the <file_suffix> will identify yuzu-linux-20240205-149629642-debug.tar.xz
-#     As a file extension like ".tar.zx" can apply to multiple file options, the entire part that is appended to each release name should be included.
-#     The <file_suffix> will also only consider entries where the given suffix is at the end of the file name. So "AppImage" will identify "file.AppImage" but not "file.AppImage.zsync"
 # outside_file: Prints the contents of a file from the build environment (such as the buildid file) and replaces the placeholder text with those contents.
 # outside_env_var: Gets the value of an environmental variable from the build environment (the output of "echo $var" from the terminal) and replaces the placeholder text with that value.
 # custom_command: Runs a single command explicitly as written in the $URL field of the task list, including variable and command expansion. This should work the same as if you were runnig the command directly from the terminal.
@@ -82,17 +72,17 @@ do
       /bin/sed -i 's^'"$placeholder"'^'"$commit"'^' $rd_manifest
     ;;
 
-    "latestghrelease" )
+    "latestappimage" )
       echo
       echo "Placeholder text: $placeholder"
       echo "Repo to look for AppImage releases: $url"
       echo
-      ghreleaseurl=$(curl -s "$url" | grep browser_download_url | grep "$branch\""$ | cut -d : -f 2,3 | tr -d \" | sed -n 1p | tr -d ' ')
-      echo "GitHub release URL found: $ghreleaseurl"
-      /bin/sed -i 's^'"$placeholder"'^'"$ghreleaseurl"'^' $rd_manifest
-      ghreleasehash=$(curl -sL "$ghreleaseurl" | sha256sum | cut -d ' ' -f1)
-      echo "GitHub release hash found: $ghreleasehash"
-      /bin/sed -i 's^'"HASHFOR$placeholder"'^'"$ghreleasehash"'^' $rd_manifest
+      appimageurl=$(curl -s "$url" | grep browser_download_url | grep "\.AppImage\"" | cut -d : -f 2,3 | tr -d \" | sed -n 1p | tr -d ' ')
+      echo "AppImage URL found: $appimageurl"
+      /bin/sed -i 's^'"$placeholder"'^'"$appimageurl"'^' $rd_manifest
+      appimagehash=$(curl -sL "$appimageurl" | sha256sum | cut -d ' ' -f1)
+      echo "AppImage hash found: $appimagehash"
+      /bin/sed -i 's^'"HASHFOR$placeholder"'^'"$appimagehash"'^' $rd_manifest
     ;;
 
     "outside_file" )

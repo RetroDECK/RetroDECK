@@ -2,7 +2,7 @@
 
 compress_game() {
   # Function for compressing one or more files to .chd format
-  # USAGE: compress_game $format $full_path_to_input_file $system(optional)
+  # USAGE: compress_game $format $full_path_to_input_file
   local file="$2"
   local filename_no_path=$(basename "$file")
   local filename_no_extension="${filename_no_path%.*}"
@@ -15,8 +15,6 @@ compress_game() {
     zip -jq9 "$dest_file".zip "$source_file"
   elif [[ "$1" == "rvz" ]]; then
     dolphin-tool convert -f rvz -b 131072 -c zstd -l 5 -i "$source_file" -o "$dest_file.rvz"
-  elif [[ "$1" == "cso" ]]; then
-    echo "TODO: maxcso command"
   fi
 }
 
@@ -32,8 +30,6 @@ find_compatible_compression_format() {
     echo "zip"
   elif echo "$normalized_filename" | grep -qE '\.iso|\.gcm' && [[ $(sed -n '/^\[/{h;d};/\b'"$system"'\b/{g;s/\[\(.*\)\]/\1/p;q};' $compression_targets) == "rvz" ]]; then
     echo "rvz"
-  elif echo "$normalized_filename" | grep -qE '\.iso' && [[ $(sed -n '/^\[/{h;d};/\b'"$system"'\b/{g;s/\[\(.*\)\]/\1/p;q};' $compression_targets) == "cso" ]]; then
-    echo "cso"
   else
     # If no compatible format can be found for the input file
     echo "none"
@@ -97,11 +93,11 @@ cli_compress_single_game() {
   read -p "RetroDECK will now attempt to compress your selected game. Press Enter key to continue..."
 	if [[ ! -z "$file" ]]; then
 		if [[ -f "$file" ]]; then
-      local system=$(echo "$file" | grep -oE "$roms_folder/[^/]+" | grep -oE "[^/]+$")
+      check_system=$(echo "$file" | grep -oE "$roms_folder/[^/]+" | grep -oE "[^/]+$")
       local compatible_compression_format=$(find_compatible_compression_format "$file")
       if [[ ! $compatible_compression_format == "none" ]]; then
         echo "$(basename "$file") can be compressed to $compatible_compression_format"
-        compress_game "$compatible_compression_format" "$file" "$system"
+        compress_game "$compatible_compression_format" "$file"
         if [[ $post_compression_cleanup == [yY] ]]; then # Remove file(s) if requested
           if [[ $(basename "$file") == *".cue" ]]; then
             local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" "$file")
@@ -159,7 +155,7 @@ cli_compress_all_games() {
         local compatible_compression_format=$(find_compatible_compression_format "$file")
         if [[ ! "$compatible_compression_format" == "none" ]]; then
           echo "$(basename "$file") can be compressed to $compatible_compression_format"
-          compress_game "$compatible_compression_format" "$file" "$system"
+          compress_game "$compatible_compression_format" "$file"
           if [[ $post_compression_cleanup == [yY] ]]; then # Remove file(s) if requested
             if [[ "$file" == *".cue" ]]; then
               local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" "$file")

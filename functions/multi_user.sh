@@ -43,7 +43,7 @@ multi_user_enable_multi_user_mode() {
   if [[ -d "$multi_user_data_folder" && $(ls -1 "$multi_user_data_folder" | wc -l) -gt 0 ]]; then # If multi-user data folder exists from prior use and is not empty
     if [[ -d "$multi_user_data_folder/$SteamAppUser" ]]; then # Current user has an existing save folder
       configurator_generic_dialog "RetroDECK Multi-User Mode" "The current user $SteamAppUser has an existing folder in the multi-user data folder.\n\nThe saves here are likely older than the ones currently used by RetroDECK.\n\nThe old saves will be backed up to $backups_folder and the current saves will be loaded into the multi-user data folder."
-      create_dir "$backups_folder"
+      mkdir -p "$backups_folder"
       tar -C "$multi_user_data_folder" -cahf "$backups_folder/multi-user-backup_$SteamAppUser_$(date +"%Y_%m_%d").zip" "$SteamAppUser"
       rm -rf "$multi_user_data_folder/$SteamAppUser" # Remove stale data after backup
     fi
@@ -162,18 +162,18 @@ multi_user_return_to_single_user() {
   # XEMU one-offs, because it stores its config in /var/data, not /var/config like everything else
   unlink "/var/config/xemu"
   unlink "/var/data/xemu/xemu"
-  create_dir "/var/config/xemu"
+  mkdir -p "/var/config/xemu"
   mv -f "$multi_user_data_folder/$single_user/config/xemu"/{.[!.],}* "/var/config/xemu"
   dir_prep "/var/config/xemu" "/var/data/xemu/xemu"
-  create_dir "$saves_folder"
-  create_dir "$states_folder"
+  mkdir -p "$saves_folder"
+  mkdir -p "$states_folder"
   mv -f "$multi_user_data_folder/$single_user/saves"/{.[!.],}* "$saves_folder"
   mv -f "$multi_user_data_folder/$single_user/states"/{.[!.],}* "$states_folder"
   for emu_conf in $(find "$multi_user_data_folder/$single_user/config" -mindepth 1 -maxdepth 1 -type d -printf '%f\n')
   do
     if [[ ! -z $(grep "^$emu_conf$" "$multi_user_emulator_config_dirs") ]]; then
       unlink "/var/config/$emu_conf"
-      create_dir "/var/config/$emu_conf"
+      mkdir -p "/var/config/$emu_conf"
       mv -f "$multi_user_data_folder/$single_user/config/$emu_conf"/{.[!.],}* "/var/config/$emu_conf"
     fi
   done
@@ -187,11 +187,11 @@ multi_user_setup_new_user() {
   unlink "$states_folder"
   dir_prep "$multi_user_data_folder/$SteamAppUser/saves" "$saves_folder"
   dir_prep "$multi_user_data_folder/$SteamAppUser/states" "$states_folder"
-  create_dir "$multi_user_data_folder/$SteamAppUser/config/retrodeck"
+  mkdir -p "$multi_user_data_folder/$SteamAppUser/config/retrodeck"
   cp -L "$rd_conf" "$multi_user_data_folder/$SteamAppUser/config/retrodeck/retrodeck.cfg" # Copy existing rd_conf file for new user.
   rm -f "$rd_conf"
   ln -sfT "$multi_user_data_folder/$SteamAppUser/config/retrodeck/retrodeck.cfg" "$rd_conf"
-  create_dir "$multi_user_data_folder/$SteamAppUser/config/retroarch"
+  mkdir -p "$multi_user_data_folder/$SteamAppUser/config/retroarch"
   if [[ ! -L "/var/config/retroarch/retroarch.cfg" ]]; then
     mv "/var/config/retroarch/retroarch.cfg" "$multi_user_data_folder/$SteamAppUser/config/retroarch/retroarch.cfg"
     mv "/var/config/retroarch/retroarch-core-options.cfg" "$multi_user_data_folder/$SteamAppUser/config/retroarch/retroarch-core-options.cfg"
@@ -208,7 +208,7 @@ multi_user_setup_new_user() {
   do
     if [[ ! -z $(grep "^$emu_conf$" "$multi_user_emulator_config_dirs") ]]; then
       unlink "/var/config/$emu_conf"
-      prepare_component "reset" "$emu_conf"
+      prepare_emulator "reset" "$emu_conf"
     fi
   done
   for emu_conf in $(find "/var/config" -mindepth 1 -maxdepth 1 -type d -printf '%f\n') # For all the currently non-linked config folders, like from a newly-added emulator
@@ -238,7 +238,7 @@ multi_user_link_current_user_files() {
       if [[ -d "$multi_user_data_folder/$SteamAppUser/config/$emu_conf" ]]; then # If the current user already has a config folder for this emulator
         ln -sfT "$multi_user_data_folder/$SteamAppUser/config/$emu_conf" "retrodeck/config/$emu_conf"
       else # If the current user doesn't have a config folder for this emulator, init it and then link it
-        prepare_component "reset" "$emu_conf"
+        prepare_emulator "reset" "$emu_conf"
         dir_prep "$multi_user_data_folder/$SteamAppUser/config/$emu_conf" "/var/config/$emu_conf"
       fi
     fi

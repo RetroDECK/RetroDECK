@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- This is the ES-DE find rules configuration file for Linux -->
+<!-- This is the ES-DE find rules configuration file for Unix -->
 <ruleList>
     <emulator name="OS-SHELL">
         <!-- Operating system shell -->
@@ -42,6 +42,10 @@
             <entry>/usr/lib64/libretro</entry>
             <!-- Manjaro repository -->
             <entry>/usr/lib/libretro</entry>
+            <!-- FreeBSD and OpenBSD repository -->
+            <entry>/usr/local/lib/libretro</entry>
+            <!-- NetBSD repository -->
+            <entry>/usr/pkg/lib/libretro</entry>
         </rule>
     </core>
     <emulator name="3DSEN-WINDOWS">
@@ -63,18 +67,6 @@
             <entry>~/.local/share/applications/advancemame/advmame</entry>
             <entry>~/.local/bin/advancemame/advmame</entry>
             <entry>~/bin/advancemame/advmame</entry>
-        </rule>
-    </emulator>
-    <emulator name="AMIBERRY">
-        <!-- Commodore Amiga emulator Amiberry -->
-        <rule type="systempath">
-            <entry>amiberry</entry>
-        </rule>
-        <rule type="staticpath">
-            <entry>~/Applications/amiberry/amiberry</entry>
-            <entry>~/.local/share/applications/amiberry/amiberry</entry>
-            <entry>~/.local/bin/amiberry/amiberry</entry>
-            <entry>~/bin/amiberry/amiberry</entry>
         </rule>
     </emulator>
     <emulator name="ARES">
@@ -159,6 +151,25 @@
             <entry>~/bin/Cemu/Cemu</entry>
             <entry>/var/lib/flatpak/exports/bin/info.cemu.Cemu</entry>
             <entry>~/.local/share/flatpak/exports/bin/info.cemu.Cemu</entry>
+        </rule>
+    </emulator>
+    <emulator name="CITRA">
+        <!-- Nintendo 3DS emulator Citra -->
+        <rule type="systempath">
+            <entry>citra-qt</entry> <!-- RetroDECK -->
+            <entry>citra</entry>
+            <entry>citra-emu.citra-nightly</entry>
+            <entry>org.citra_emu.citra</entry>
+        </rule>
+        <rule type="staticpath">
+            <entry>~/Applications/citra-qt*.AppImage</entry>
+            <entry>~/.local/share/applications/citra-qt*.AppImage</entry>
+            <entry>~/.local/bin/citra-qt*.AppImage</entry>
+            <entry>~/bin/citra-qt*.AppImage</entry>
+            <entry>~/.citra/canary/citra-qt.AppImage</entry>
+            <entry>~/.citra/nightly/citra-qt.AppImage</entry>
+            <entry>/var/lib/flatpak/exports/bin/org.citra_emu.citra</entry>
+            <entry>~/.local/share/flatpak/exports/bin/org.citra_emu.citra</entry>
         </rule>
     </emulator>
     <emulator name="CPCEMU">
@@ -307,35 +318,24 @@
             <entry>org.flycast.Flycast</entry>
         </rule>
         <rule type="staticpath">
-            <entry>~/Applications/flycast-x86*.AppImage</entry>
-            <entry>~/.local/share/applications/flycast-x86*.AppImage</entry>
-            <entry>~/.local/bin/flycast-x86*.AppImage</entry>
-            <entry>~/bin/flycast-x86*.AppImage</entry>
+            <entry>~/Applications/flycast*.AppImage</entry>
+            <entry>~/.local/share/applications/flycast*.AppImage</entry>
+            <entry>~/.local/bin/flycast*.AppImage</entry>
+            <entry>~/bin/flycast*.AppImage</entry>
             <entry>/var/lib/flatpak/exports/bin/org.flycast.Flycast</entry>
             <entry>~/.local/share/flatpak/exports/bin/org.flycast.Flycast</entry>
-        </rule>
-    </emulator>
-    <emulator name="FLYCAST-DOJO">
-        <!-- Sega Dreamcast emulator Flycast Dojo -->
-        <rule type="systempath">
-            <entry>flycast-dojo</entry>
-        </rule>
-        <rule type="staticpath">
-            <entry>~/Applications/flycast-dojo*.AppImage</entry>
-            <entry>~/.local/share/applications/flycast-dojo*.AppImage</entry>
-            <entry>~/.local/bin/flycast-dojo*.AppImage</entry>
-            <entry>~/bin/flycast-dojo*.AppImage</entry>
         </rule>
     </emulator>
     <emulator name="FS-UAE">
         <!-- Commodore Amiga emulator FS-UAE -->
         <rule type="systempath">
-            <entry>fs-uae-launcher</entry>
-            <entry>fsuae.launcher</entry>
+            <entry>fs-uae</entry>
+            <entry>fsuae.fs-uae</entry>
+            <entry>net.fsuae.FS-UAE</entry>
         </rule>
         <rule type="staticpath">
-            <entry>/var/lib/flatpak/exports/bin/net.fsuae.FS-UAE|flatpak run --command=fs-uae-launcher net.fsuae.FS-UAE</entry>
-            <entry>~/.local/share/flatpak/exports/bin/net.fsuae.FS-UAE|flatpak run --command=fs-uae-launcher net.fsuae.FS-UAE</entry>
+            <entry>/var/lib/flatpak/exports/bin/net.fsuae.FS-UAE</entry>
+            <entry>~/.local/share/flatpak/exports/bin/net.fsuae.FS-UAE</entry>
         </rule>
     </emulator>
     <emulator name="FUSE">
@@ -444,7 +444,7 @@
     <emulator name="MAME">
         <!-- Arcade emulator MAME -->
         <rule type="systempath">
-            <entry>mame-rdwrapper.sh</entry>
+            <entry>mame</entry>
             <entry>org.mamedev.MAME</entry>
         </rule>
         <rule type="staticpath">
@@ -649,8 +649,6 @@
             <entry>~/.local/share/applications/punes/punes</entry>
             <entry>~/.local/bin/punes/punes</entry>
             <entry>~/bin/punes/punes</entry>
-            <entry>/var/lib/flatpak/exports/bin/io.github.punesemu.puNES</entry>
-            <entry>~/.local/share/flatpak/exports/bin/io.github.punesemu.puNES</entry>
         </rule>
     </emulator>
     <emulator name="QUASI88">
@@ -723,22 +721,16 @@
     <emulator name="RYUJINX">
         <!-- Nintendo Switch emulator Ryujinx -->
         <rule type="systempath">
-	    <entry>ryujinx-rdwrapper.sh</entry> <!-- RetroDECK -->
-            <entry>Ryujinx</entry>
-            <entry>Ryujinx.Ava</entry>
+            <entry>Ryujinx.sh</entry>
             <entry>org.ryujinx.Ryujinx</entry>
         </rule>
         <rule type="staticpath">
             <entry>/var/lib/flatpak/exports/bin/org.ryujinx.Ryujinx</entry>
             <entry>~/.local/share/flatpak/exports/bin/org.ryujinx.Ryujinx</entry>
-            <entry>~/Applications/publish/Ryujinx</entry>
-            <entry>~/.local/share/applications/publish/Ryujinx</entry>
-            <entry>~/.local/bin/publish/Ryujinx</entry>
-            <entry>~/bin/publish/Ryujinx</entry>
-            <entry>~/Applications/publish/Ryujinx.Ava</entry>
-            <entry>~/.local/share/applications/publish/Ryujinx.Ava</entry>
-            <entry>~/.local/bin/publish/Ryujinx.Ava</entry>
-            <entry>~/bin/publish/Ryujinx.Ava</entry>
+            <entry>~/Applications/publish/Ryujinx.sh</entry>
+            <entry>~/.local/share/applications/publish/Ryujinx.sh</entry>
+            <entry>~/.local/bin/publish/Ryujinx.sh</entry>
+            <entry>~/bin/publish/Ryujinx.sh</entry>
         </rule>
     </emulator>
     <emulator name="SAMEBOY">
@@ -876,19 +868,6 @@
             <entry>~/.local/share/applications/Supermodel/supermodel</entry>
             <entry>~/.local/bin/Supermodel/supermodel</entry>
             <entry>~/bin/Supermodel/supermodel</entry>
-            <entry>/var/lib/flatpak/exports/bin/com.supermodel3.Supermodel</entry>
-            <entry>~/.local/share/flatpak/exports/bin/com.supermodel3.Supermodel</entry>
-        </rule>
-    </emulator>
-    <emulator name="TIC-80">
-        <!-- TIC-80 Fantasy Computer (game engine) -->
-        <rule type="systempath">
-            <entry>tic80</entry>
-            <entry>com.tic80.TIC_80</entry>
-        </rule>
-        <rule type="staticpath">
-            <entry>/var/lib/flatpak/exports/bin/com.tic80.TIC_80</entry>
-            <entry>~/.local/share/flatpak/exports/bin/com.tic80.TIC_80</entry>
         </rule>
     </emulator>
     <emulator name="TRIFORCE">
@@ -971,10 +950,6 @@
             <entry>Vita3K</entry>
         </rule>
         <rule type="staticpath">
-            <entry>~/Applications/Vita3K*.AppImage</entry>
-            <entry>~/.local/share/applications/Vita3K*.AppImage</entry>
-            <entry>~/.local/bin/Vita3K*.AppImage</entry>
-            <entry>~/bin/Vita3K*.AppImage</entry>
             <entry>~/Applications/Vita3K/Vita3K</entry>
             <entry>~/.local/share/applications/Vita3K/Vita3K</entry>
             <entry>~/.local/bin/Vita3K/Vita3K</entry>
@@ -1028,6 +1003,27 @@
             <entry>~/.local/share/applications/xroar/xroar</entry>
             <entry>~/.local/bin/xroar/xroar</entry>
             <entry>~/bin/xroar/xroar</entry>
+        </rule>
+    </emulator>
+    <emulator name="YUZU">
+        <!-- Nintendo Switch emulator Yuzu -->
+        <rule type="systempath">
+            <entry>yuzu</entry>
+            <entry>org.yuzu_emu.yuzu</entry>
+        </rule>
+        <rule type="staticpath">
+            <entry>~/Applications/yuzu*.AppImage</entry>
+            <entry>~/.local/share/applications/yuzu*.AppImage</entry>
+            <entry>~/.local/bin/yuzu*.AppImage</entry>
+            <entry>~/bin/yuzu*.AppImage</entry>
+            <entry>/var/lib/flatpak/exports/bin/org.yuzu_emu.yuzu</entry>
+            <entry>~/.local/share/flatpak/exports/bin/org.yuzu_emu.yuzu</entry>
+        </rule>
+    </emulator>
+    <emulator name="YUZU-CUSTOM">
+        <!-- Nintendo Switch emulator Yuzu Custom provided by the user -->
+        <rule type="staticpath">
+            <entry>~/retrodeck/customs/yuzu/yuzu*.AppImage</entry>
         </rule>
     </emulator>
     <emulator name="ZESARUX">

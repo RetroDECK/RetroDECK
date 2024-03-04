@@ -5,21 +5,23 @@ post_update() {
   # post update script
   echo "Executing post-update script"
 
-  if [[ $(check_version_is_older_than "0.5.0b") == "true" ]]; then # If updating from prior to save sorting change at 0.5.0b
+  local prev_version=$(sed -e 's/[\.a-z]//g' <<< $version)
+
+  if [[ $prev_version -le "050" ]]; then # If updating from prior to save sorting change at 0.5.0b
     save_migration
   fi
 
   # Everything within the following ( <code> ) will happen behind the Zenity dialog. The save migration was a long process so it has its own individual dialogs.
 
   (
-  if [[ $(check_version_is_older_than "0.6.2b") == "true" ]]; then
+  if [[ $prev_version -le "062" ]]; then
     # In version 0.6.2b, the following changes were made that required config file updates/reset:
     # - Primehack preconfiguration completely redone. "Stop emulation" hotkey set to Start+Select, Xbox and Nintendo keymap profiles were created, Xbox set as default.
     # - Duckstation save and state locations were dir_prep'd to the rdhome/save and /state folders, which was not previously done. Much safer now!
     # - Fix PICO-8 folder structure. ROM and save folders are now sane and binary files will go into ~/retrodeck/bios/pico-8/
 
     rm -rf /var/config/primehack # Purge old Primehack config files. Saves are safe as they are linked into /var/data/primehack.
-    prepare_component "reset" "primehack"
+    prepare_emulator "reset" "primehack"
 
     dir_prep "$rdhome/saves/duckstation" "/var/data/duckstation/memcards"
     dir_prep "$rdhome/states/duckstation" "/var/data/duckstation/savestates"
@@ -29,7 +31,7 @@ post_update() {
     dir_prep "$roms_folder/pico8" "$bios_folder/pico-8/carts" # Symlink default game location to RD roms for cleanliness (this location is overridden anyway by the --root_path launch argument anyway)
     dir_prep "$bios_folder/pico-8/cdata" "$saves_folder/pico-8" # PICO-8 saves folder
   fi
-  if [[ $(check_version_is_older_than "0.6.3b") == "true" ]]; then
+  if [[ $prev_version -le "063" ]]; then
     # In version 0.6.3b, the following changes were made that required config file updates/reset:
     # - Put Dolphin and Primehack save states in different folders inside $rd_home/states
     # - Fix symlink to hard-coded PICO-8 config folder (dir_prep doesn't like ~)
@@ -51,7 +53,7 @@ post_update() {
     # Remove unneeded tools folder, as location has changed to RO space
     rm -rfv /var/config/retrodeck/tools/
   fi
-  if [[ $(check_version_is_older_than "0.6.4b") == "true" ]]; then
+  if [[ $prev_version -le "064" ]]; then
     # In version 0.6.4b, the following changes were made:
     # Changed settings in Primehack: The audio output was not selected by default, default AR was also incorrect.
     # Changed settings in Duckstation and PCSX2: The "ask on exit" was disabled and "save on exit" was enabled.
@@ -59,13 +61,13 @@ post_update() {
 
     deploy_multi_patch "emu-configs/patches/updates/064b_update.patch"
   fi
-  if [[ $(check_version_is_older_than "0.6.5b") == "true" ]]; then
+  if [[ $prev_version -le "065" ]]; then
     # In version 0.6.5b, the following changes were made:
     # Change Yuzu GPU accuracy to normal for better performance
 
     set_setting_value $yuzuconf "gpu_accuracy" "0" "yuzu" "Renderer"
   fi
-  if [[ $(check_version_is_older_than "0.7.0b") == "true" ]]; then
+  if [[ $prev_version -le "070" ]]; then
     # In version 0.7.0b, the following changes were made that required config file updates/reset or other changes to the filesystem:
     # - Update retrodeck.cfg and set new paths to $rdhome by default
     # - Update PCSX2 and Duckstation configs to latest templates (to accomadate RetroAchievements feature) and move Duckstation config folder from /var/data to /var/config
@@ -104,9 +106,9 @@ post_update() {
     deploy_single_patch "$emuconfigs/duckstation/settings.ini" "/var/config/duckstation/duckstation-cheevos-upgrade.patch" "$duckstationconf"
     rm -f "/var/config/duckstation/duckstation-cheevos-upgrade.patch"
 
-    create_dir "$mods_folder"
-    create_dir "$texture_packs_folder"
-    create_dir "$borders_folder"
+    mkdir -p "$mods_folder"
+    mkdir -p "$texture_packs_folder"
+    mkdir -p "$borders_folder"
 
     dir_prep "$mods_folder/Primehack" "/var/data/primehack/Load/GraphicMods"
     dir_prep "$texture_packs_folder/Primehack" "/var/data/primehack/Load/Textures"
@@ -122,7 +124,7 @@ post_update() {
     dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/hires_texture" "/var/config/retroarch/system/Mupen64plus/hires_texture"
     dir_prep "$texture_packs_folder/Duckstation" "/var/config/duckstation/textures"
 
-    dir_prep "$rdhome/gamelists" "/var/config/emulationstation/ES-DE/gamelists"
+    dir_prep "$rdhome/gamelists" "/var/config/emulationstation/.emulationstation/gamelists"
 
     dir_prep "$borders_folder" "/var/config/retroarch/overlays/borders"
     rsync -rlD --mkpath "/app/retrodeck/emu-configs/retroarch/borders/" "/var/config/retroarch/overlays/borders/"
@@ -142,13 +144,13 @@ post_update() {
       rm "$roms_folder/ps3/emudir"
       configurator_generic_dialog "RetroDECK 0.7.0b Upgrade" "As part of this update and due to a RPCS3 config upgrade, the files that used to exist at\n\n~/retrodeck/roms/ps3/emudir\n\nare now located at\n\n~/retrodeck/bios/rpcs3.\nYour existing files have been moved automatically."
     fi
-    create_dir "$bios_folder/rpcs3/dev_hdd0"
-    create_dir "$bios_folder/rpcs3/dev_hdd1"
-    create_dir "$bios_folder/rpcs3/dev_flash"
-    create_dir "$bios_folder/rpcs3/dev_flash2"
-    create_dir "$bios_folder/rpcs3/dev_flash3"
-    create_dir "$bios_folder/rpcs3/dev_bdvd"
-    create_dir "$bios_folder/rpcs3/dev_usb000"
+    mkdir -p "$bios_folder/rpcs3/dev_hdd0"
+    mkdir -p "$bios_folder/rpcs3/dev_hdd1"
+    mkdir -p "$bios_folder/rpcs3/dev_flash"
+    mkdir -p "$bios_folder/rpcs3/dev_flash2"
+    mkdir -p "$bios_folder/rpcs3/dev_flash3"
+    mkdir -p "$bios_folder/rpcs3/dev_bdvd"
+    mkdir -p "$bios_folder/rpcs3/dev_usb000"
     dir_prep "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata" "$saves_folder/ps3/rpcs3"
 
     set_setting_value $es_settings "ApplicationUpdaterFrequency" "never" "es_settings"
@@ -156,7 +158,7 @@ post_update() {
     if [[ -f "$saves_folder/duckstation/shared_card_1.mcd" || -f "$saves_folder/duckstation/shared_card_2.mcd" ]]; then
       configurator_generic_dialog "RetroDECK 0.7.0b Upgrade" "As part of this update, the location of saves and states for Duckstation has been changed.\n\nYour files will be moved automatically, and can now be found at\n\n~.../saves/psx/duckstation/memcards/\nand\n~.../states/psx/duckstation/"
     fi
-    create_dir "$saves_folder/psx/duckstation/memcards"
+    mkdir -p "$saves_folder/psx/duckstation/memcards"
     mv "$saves_folder/duckstation/"* "$saves_folder/psx/duckstation/memcards/"
     rmdir "$saves_folder/duckstation" # File-safe folder cleanup
     unlink "/var/config/duckstation/memcards"
@@ -164,13 +166,13 @@ post_update() {
     set_setting_value "$duckstationconf" "Card2Path" "$saves_folder/psx/duckstation/memcards/shared_card_2.mcd" "duckstation" "MemoryCards"
     set_setting_value "$duckstationconf" "Directory" "$saves_folder/psx/duckstation/memcards" "duckstation" "MemoryCards"
     set_setting_value "$duckstationconf" "RecursivePaths" "$roms_folder/psx" "duckstation" "GameList"
-    create_dir "$states_folder/psx"
+    mkdir -p "$states_folder/psx"
     mv -t "$states_folder/psx/" "$states_folder/duckstation"
     unlink "/var/config/duckstation/savestates"
     dir_prep "$states_folder/psx/duckstation" "/var/config/duckstation/savestates"
 
     rm -rf /var/config/retrodeck/tools
-    rm -rf /var/config/emulationstation/ES-DE/gamelists/tools/
+    rm -rf /var/config/emulationstation/.emulationstation/gamelists/tools/
 
     mv "$saves_folder/gc/dolphin/EUR" "$saves_folder/gc/dolphin/EU"
     mv "$saves_folder/gc/dolphin/USA" "$saves_folder/gc/dolphin/US"
@@ -193,8 +195,8 @@ post_update() {
     sed -i '$ a <string name="UserThemeDirectory" value="" />' "$es_settings" # Add new default line to existing file
     set_setting_value "$es_settings" "UserThemeDirectory" "$themes_folder" "es_settings"
     unlink "/var/config/emulationstation/ROMs"
-    unlink "/var/config/emulationstation/ES-DE/downloaded_media"
-    unlink "/var/config/emulationstation/ES-DE/themes"
+    unlink "/var/config/emulationstation/.emulationstation/downloaded_media"
+    unlink "/var/config/emulationstation/.emulationstation/themes"
 
     set_setting_value "$raconf" "savestate_auto_load" "false" "retroarch"
     set_setting_value "$raconf" "savestate_auto_save" "false" "retroarch"
@@ -210,77 +212,27 @@ post_update() {
 
     set_setting_value "$ppssppconf" "AutoLoadSaveState" "0" "ppsspp" "General"
 
-    prepare_component "reset" "cemu"
+    prepare_emulator "reset" "cemu"
 
-    prepare_component "reset" "pico8"
+    prepare_emulator "reset" "pico8"
 
     configurator_generic_dialog "RetroDECK 0.7.0b Upgrade" "Would you like to install the official controller profile?\n(this will reset your custom emulator settings)\n\nAfter installation you can enable it from from Controller Settings -> Templates."
     if [[ $(configurator_generic_question_dialog "RetroDECK Official Controller Profile" "Would you like to install the official RetroDECK controller profile?") == "true" ]]; then
       install_retrodeck_controller_profile
-      prepare_component "reset" "all"
+      prepare_emulator "reset" "all"
     fi
   fi
-  if [[ $(check_version_is_older_than "0.7.1b") == "true" ]]; then
+  if [[ $prev_version -le "071" ]]; then
     # In version 0.7.1b, the following changes were made that required config file updates/reset or other changes to the filesystem:
     # - Force update PPSSPP standalone keybinds for L/R.
     set_setting_value "$ppssppcontrolsconf" "L" "1-45,10-193" "ppsspp" "ControlMapping"
     set_setting_value "$ppssppcontrolsconf" "R" "1-51,10-192" "ppsspp" "ControlMapping"
   fi
 
-  if [[ $(check_version_is_older_than "0.7.3b") == "true" ]]; then
+  if [[ $prev_version -le "073" ]]; then
     # In version 0.7.3b, there was a bug that prevented the correct creations of the roms/system folders, so we force recreate them.
     emulationstation --home /var/config/emulationstation --create-system-dirs
   fi
-
-  if [[ $(check_version_is_older_than "0.8.0b") == "true" ]]; then
-    log i "In version 0.8.0b, the following changes were made that required config file updates/reset or other changes to the filesystem:"
-    log i "- Remove RetroDECK controller profile from existing template location"
-    log i "- Change section name in retrodeck.cfg for ABXY button swap preset"
-    log i "- Force disable global rewind in RA in prep for preset system"
-    log i "- The following components are been added and need to be initialized: es-de 3.0, MAME-SA, Vita3K, GZDoom"
-    if [[ -f "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf" ]]; then # Only remove if file had been previously installed
-      log d "Found an old Steam Controller profile, removing it has been replaced: \"$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf\""
-      rm -f "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"
-    fi
-    log d "Renaming \"nintendo_button_layout\" into \"abxy_button_swap\" in the retrodeck config file: \"$rd_conf\""
-    sed -i 's^nintendo_button_layout^abxy_button_swap^' "$rd_conf" # This is a one-off sed statement as there are no functions for replacing section names
-    log i "Force disabling rewind, you can re-enable it via the Configurator"
-    set_setting_value "$raconf" "rewind_enable" "false" "retroarch"
-
-    # in 3.0 .emulationstation was moved into ES-DE
-    log i "Renaming old \"/var/config/emulationstation\" folder as \"/var/config/ES-DE\""
-    mv -f /var/config/emulationstation /var/config/ES-DE
-
-    prepare_component "reset" "es-de"
-    prepare_component "reset" "mame"
-    prepare_component "reset" "vita3k"
-    prepare_component "reset" "gzdoom"
-
-    if [ -d "$rdhome/.logs" ]; then
-      mv "$rdhome/.logs" "$logs_folder"
-      log i "Old log folder \"$rdhome/.logs\" found. Renamed it as \"$logs_folder\""
-    fi
-
-    # The save folder of rpcs3 was inverted so we're moving the saves into the real one
-    log i "RPCS3 saves needs to be migrated, executing."
-    mv "$saves_folder/ps3/rpcs3" "$saves_folder/ps3/rpcs3.bak"
-    mkdir -p "$saves_folder/ps3/rpcs3"
-    mv -v "$saves_folder/ps3/rpcs3.bak"/* "$saves_folder/ps3/rpcs3"
-    mv -v "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata"/* "$saves_folder/ps3/rpcs3"
-    mv -v "$saves_folder/ps3/rpcs3.bak" "$rdhome/backups/saves/ps3/rpcs3"
-    log i "RPCS3 saves migration completed, a backup was made here: \"$rdhome/backups/saves/ps3/rpcs3\"."
-    source /app/libexec/functions.sh
-    dir_prep "$saves_folder/ps3/rpcs3" "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata"
-
-    log i "Switch firmware folder should be moved in \"$bios_folder/switch/firmware\" from \"$bios_folder/switch/registered\""
-    dir_prep "$bios_folder/switch/firmware" "$bios_folder/switch/registered"
-
-  fi
-
-  # if [[ $(check_version_is_older_than "0.9.0b") == "true" ]]; then
-  #   # Placeholder for version 0.9.0b
-  #   rm /var/config/emulationstation/.emulationstation # remving the old symlink to .emulationstation as it might be not needed anymore
-  # fi
 
   # The following commands are run every time.
 
@@ -291,7 +243,7 @@ post_update() {
     rsync -rlD --mkpath "/app/retrodeck/extras/DynamicInputTextures/" "/var/data/primehack/Load/DynamicInputTextures/"
   fi
 
-  if [[ ! -z $(find "$HOME/.steam/steam/controller_base/templates/" -maxdepth 1 -type f -iname "RetroDECK*.vdf") || ! -z $(find "$HOME/.var/app/com.valvesoftware.Steam/.steam/steam/controller_base/templates/" -maxdepth 1 -type f -iname "RetroDECK*.vdf") ]]; then # If RetroDECK controller profile has been previously installed
+  if [[ -f "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf" ]]; then # If RetroDECK controller profile has been previously installed
     install_retrodeck_controller_profile
   fi
 

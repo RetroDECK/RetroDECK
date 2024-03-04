@@ -7,24 +7,24 @@ source automation_tools/version_extractor.sh
 
 # Fetch appdata version
 appdata_version=$(fetch_appdata_version)
-log i "Appdata:\t\t$appdata_version"
+echo -e "Appdata:\t\t$appdata_version"
 
 # Defining manifest file location
 appdata_file="net.retrodeck.retrodeck.appdata.xml"
 
 # Check if release with appdata_version already exists
 if grep -q "version=\"$appdata_version\"" "$appdata_file"; then
-    log i "Deleting existing release version $appdata_version..."
+    echo "Deleting existing release version $appdata_version..."
     
     # Remove the existing release entry
     sed -i "/<release version=\"$appdata_version\"/,/<\/release>/d" "$appdata_file"
 fi
 
-log i "Adding new release version $appdata_version..."
+echo "Adding new release version $appdata_version..."
 
 # Get today's date in the required format (YYYY-MM-DD)
 today_date=$(date +"%Y-%m-%d")
-log i "Today is $today_date"
+echo "Today is $today_date"
 
 # Construct the release snippet
 release_snippet="\

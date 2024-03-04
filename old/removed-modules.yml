@@ -112,7 +112,24 @@
 
   # Duckstation-DontUpdate - END
 
-  # Ryujinx - START
+    # Ryujinx Appimage - START
+  # https://ryujinx.org/download
+
+  # - name: Ryujinx
+  #   buildsystem: simple
+  #   build-commands:
+  #     - |
+  #       tar -zxvf ryujinx-1.1.685-linux_x64.tar.gz
+  #       mv -v publish ${FLATPAK_DEST}/ryujinx
+  #       ln -sv ${FLATPAK_DEST}/ryujinx/Ryujinx ${FLATPAK_DEST}/bin/Ryujinx
+  #   sources:
+  #     - type: file
+  #       url: https://github.com/Ryujinx/release-channel-master/releases/download/1.1.685/ryujinx-1.1.685-linux_x64.tar.gz
+  #       sha256: bc4d7076106d7aa59c3a3ea22b83c553e5fa1a897815831adcf18cc13d729e15
+
+  # Ryujinx Appimage - END
+
+    # Ryujinx - START
   # https://github.com/flathub/org.ryujinx.Ryujinx
 
   - name: Ryujinx
