@@ -223,7 +223,6 @@ modules:
         url: https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_amd64
         sha256: 4ee662847c588c3ef2fec8bfb304e8739e3dbaba87ccb9a608d691c88f5b64dc
 
-  # dependency of: CEMU (13.1.1)
   - name: glslang
     buildsystem: cmake-ninja
     config-opts:
@@ -236,10 +235,8 @@ modules:
       - /lib/cmake
     sources:
       - type: archive
-        url: https://github.com/KhronosGroup/glslang/archive/13.1.1.tar.gz
-        sha256: 1c4d0a5a38c8aaf89a2d7e6093be734320599f5a6775b2726beeb05b0c054e66
-        # url: https://github.com/KhronosGroup/glslang/archive/13.0.0.tar.gz
-        # sha256: bcda732434f829aa74414ea0e06d329ec8ac28637c38a0de45e17c8fd25a4715
+        url: https://github.com/KhronosGroup/glslang/archive/14.0.0.tar.gz
+        sha256: 80bbb916a23e94ea9cbfb1acb5d1a44a7e0c9613bcf5b5947c03f2273bdc92b0
         x-checker-data:
           type: anitya
           stable-only: true
