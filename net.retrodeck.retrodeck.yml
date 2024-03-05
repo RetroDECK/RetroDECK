@@ -38,6 +38,8 @@ finish-args:
   - --filesystem=xdg-data/Steam:rw #Steam (flatpak)
   - --filesystem=~/.steam:rw # Steam (Non-flatpak)
   - --filesystem=~/.var/app/com.valvesoftware.Steam:rw # Steam (Flatpak)
+  # PPSSPP
+  - --filesystem=xdg-run/gamescope-0:ro
 
 cleanup:
   # ES-DE
@@ -653,8 +655,8 @@ modules:
     sources:
       - type: git
         url: &ppsspp-url https://github.com/hrydgard/ppsspp.git
-        tag: v1.17
-        commit: 493122a2fcf9ff538e242fe2844f019b53afd483
+        tag: v1.17.1
+        commit: d479b74ed9c3e321bc3735da29bc125a2ac3b9b2
         x-checker-data:
           type: json
           url: https://api.github.com/repos/hrydgard/ppsspp/releases/latest
