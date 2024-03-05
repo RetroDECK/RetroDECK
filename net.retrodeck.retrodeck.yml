@@ -581,9 +581,8 @@ modules:
   - name: retroarch-cores-nightly
     buildsystem: simple
     build-commands:
-      - mkdir -p /app/share/libretro/cores/
-      - rm -f ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/citra2018_libretro.so # Purge Citra cores until they are dropped from the packages
-      - rm -f ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/citra_libretro.so # Purge Citra cores until they are dropped from the packages
+      - mkdir -p /app/share/libretro/cores/      
+      
       - mv -f ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* /app/share/libretro/cores/
     sources:
       - type: archive
@@ -593,9 +592,7 @@ modules:
   - name: retroarch-cores
     buildsystem: simple
     build-commands:
-      - mkdir -p /app/share/libretro/cores/
-      - rm -f ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/citra2018_libretro.so # Purge Citra cores until they are dropped from the packages
-      - rm -f ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/citra_libretro.so # Purge Citra cores until they are dropped from the packages
+      - mkdir -p /app/share/libretro/cores/      
       - mv -f ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* /app/share/libretro/cores/
     sources:
       - type: archive
