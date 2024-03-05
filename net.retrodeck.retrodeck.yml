@@ -62,8 +62,9 @@ cleanup:
 
 modules:
 
-  # dependency of: CEMU DOLPHIN
-  - rd-submodules/shared-modules/libusb/libusb.json
+  # dependency of: CEMU (1.0.26), DOLPHIN (1.0.27)
+  #- rd-submodules/shared-modules/libusb/libusb.json # 1.0.26
+  # we added the libusb 1.0.27 as Dolphin is breaking with 1.0.27, when bot will be aligned we can go back to the submodule
 
   # This module is used to define the RetroDECK version
   # If the version is set as cooker it will automatically generate the version tag based on the date
@@ -334,6 +335,24 @@ modules:
       - type: git
         url: https://gitlab.freedesktop.org/slirp/libslirp.git
         tag: v4.7.0
+
+  # dependency of: CEMU (1.0.26), DOLPHIN (1.0.27)
+  - name: libusb
+    config-opts:
+      - --disable-static
+    cleanup:
+      - /include
+      - /lib/*.la
+      - /lib/pkgconfig
+    sources:
+      - type: archive
+        url: https://github.com/libusb/libusb/releases/download/v1.0.27/libusb-1.0.27.tar.bz2
+        sha256: ffaa41d741a8a3bee244ac8e54a72ea05bf2879663c098c82fc5757853441575
+        x-checker-data:
+          type: anitya
+          project-id: 1749
+          stable-only: true
+          url-template: https://github.com/libusb/libusb/releases/download/v$version/libusb-$version.tar.bz2
 
   # ES-DE - START
   # https://gitlab.com/es-de/emulationstation-de
@@ -684,7 +703,6 @@ modules:
   # PCSX2 - END
 
   # Dolphin - START
-  # needed libusb 1.0.27 but we provide 1.0.26
   # https://github.com/flathub/org.DolphinEmu.dolphin-emu
   # WHEN UPADTING: remember to update rd-submodules/dolphin contents
 
@@ -962,6 +980,7 @@ modules:
   # Duckstation-AppImage - END
 
   # Cemu - START
+  # needed libusb 1.0.26 but we provide 1.0.27, it could break
   # https://github.com/cemu-project/Cemu/releases
   # https://github.com/flathub/info.cemu.Cemu
 
