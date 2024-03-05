@@ -837,17 +837,13 @@ modules:
   # MELONDS - START
   # https://github.com/flathub/net.kuribo64.melonDS
   # ちっちゃい、かわいい！
-
+  
   - name: melonds
     buildsystem: cmake-ninja
     builddir: true
-    config-opts:
-      - -DUSE_QT6=ON
     build-options:
-      arch:
-        aarch64:
-          config-opts:
-            - -DENABLE_LTO_RELEASE=OFF
+      config-opts:
+        - -DUSE_QT6=ON
     sources:
       - type: git
         url: https://github.com/melonDS-emu/melonDS.git
