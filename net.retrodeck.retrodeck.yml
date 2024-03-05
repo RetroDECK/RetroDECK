@@ -984,8 +984,8 @@ modules:
       - /lib/cmake
     sources:
       - type: archive
-        url: https://boostorg.jfrog.io/artifactory/main/release/1.83.0/source/boost_1_83_0.tar.bz2
-        sha256: 6478edfe2f3305127cffe8caf73ea0176c53769f4bf1585be237eb30798c3b8e
+        url: https://boostorg.jfrog.io/artifactory/main/release/1.84.0/source/boost_1_84_0.tar.bz2
+        sha256: cc4b893acf645c9d4b698e9a0f08ca8846aa5d6c68275c14c3e7949c24109454
         x-checker-data:
           type: anitya
           project-id: 6845
@@ -1055,9 +1055,6 @@ modules:
     config-opts:
       - -DPORTABLE=false
       - -DENABLE_VCPKG=false
-    build-options:
-      env:
-        - LC_ALL=C
     sources:
       - type: git
         url: https://github.com/cemu-project/Cemu
@@ -1065,8 +1062,8 @@ modules:
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+-\d+)$
-        tag: v2.0-61
-        commit: b6aaf6633063be47d89a8216e269e32aec5a4b49
+        tag: v2.0-66
+        commit: a63678c1f40c21151c6daa6f20cbb8fc600ae92a
       - type: shell
         commands:
           - sed "s/set(EXPERIMENTAL_VERSION.*/set(EXPERIMENTAL_VERSION \"$(git describe
