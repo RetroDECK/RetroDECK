@@ -3,7 +3,7 @@ runtime: org.kde.Platform
 runtime-version: "6.5"
 sdk: org.kde.Sdk
 sdk-extensions:
-  - org.freedesktop.Sdk.Extension.llvm16        # Needed for rpcs3 (llvm15)
+  - org.freedesktop.Sdk.Extension.llvm17        # Needed for RPCS3
   - org.freedesktop.Sdk.Extension.rust-stable   # Needed for BoilR 
 command: retrodeck.sh
 
@@ -837,7 +837,7 @@ modules:
   # MELONDS - START
   # https://github.com/flathub/net.kuribo64.melonDS
   # ちっちゃい、かわいい！
-  
+
   - name: melonds
     buildsystem: cmake-ninja
     builddir: true
@@ -860,8 +860,8 @@ modules:
     buildsystem: cmake-ninja
     builddir: true
     build-options:
-      append-ld-library-path: /usr/lib/sdk/llvm16/lib
-      append-path: /usr/lib/sdk/llvm16/bin
+      append-ld-library-path: /usr/lib/sdk/llvm17/lib
+      append-path: /usr/lib/sdk/llvm17/bin
       cflags: &optflags -O2 -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong
         -grecord-gcc-switches -fasynchronous-unwind-tables -fstack-clash-protection
         -fcf-protection -fno-omit-frame-pointer
@@ -887,7 +887,7 @@ modules:
       - -DUSE_SYSTEM_ZLIB=ON
       - -Wno-dev
     post-install:
-      - cp /usr/lib/sdk/llvm16/lib/libLLVM-16.so /app/lib/
+      - cp /usr/lib/sdk/llvm17/lib/libLLVM-17.so /app/lib/
       - |-
         set -eux
         COMM_TAG="$(awk -F'[\{,]' '/version{.*}/{printf "%d.%d.%d", $2, $3, $4}' ../rpcs3/rpcs3_version.cpp)"
@@ -896,7 +896,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/RPCS3/rpcs3.git
-        commit: f9d213650cfe4733937c43d93de91a17f8582820
+        commit: ef8afa78737dd426941b204187b6838ad74420f1
 
   # RPCS3 - END
 
