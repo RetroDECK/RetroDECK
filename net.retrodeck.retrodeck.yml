@@ -730,7 +730,7 @@ modules:
         # fatal: remote transport reported error
         # url: ssh://git@github.com/dolphin-emu/dolphin.git
         url: https://github.com/dolphin-emu/dolphin.git
-        commit: 9240f579eab18a2f67eef23846a6b508393d0e6c
+        commit: 032c77b462a220016f23c5079e71bb23e0ad2adf
         x-checker-data:
           type: json
           url: https://dolphin-emu.org/update/latest/beta
