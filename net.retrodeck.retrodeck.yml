@@ -28,7 +28,6 @@ finish-args:
   - --env=QT_QPA_PLATFORM=wayland-egl;wayland;xcb
   # Dolphin
   - --allow=bluetooth
-  # PPSSPP
   # It allows an SDL application to specify its window class, which can be useful for window managers and desktop environments to identify and group similar windows
   - --env=SDL_VIDEO_X11_WMCLASS=net.retrodeck.retrodeck
   - --env=SDL_VIDEO_WAYLAND_WMCLASS=net.retrodeck.retrodeck
@@ -38,7 +37,7 @@ finish-args:
   - --filesystem=xdg-data/Steam:rw #Steam (flatpak)
   - --filesystem=~/.steam:rw # Steam (Non-flatpak)
   - --filesystem=~/.var/app/com.valvesoftware.Steam:rw # Steam (Flatpak)
-  # PPSSPP
+  # PPSSPP, DOLPHIN
   - --filesystem=xdg-run/gamescope-0:ro
 
 cleanup:
@@ -688,6 +687,7 @@ modules:
   # PCSX2 - END
 
   # Dolphin - START
+  # needed libusb 1.0.27 but we provide 1.0.26
   # https://github.com/flathub/org.DolphinEmu.dolphin-emu
   # WHEN UPADTING: remember to update rd-submodules/dolphin contents
 
@@ -718,7 +718,7 @@ modules:
         # fatal: remote transport reported error
         # url: ssh://git@github.com/dolphin-emu/dolphin.git
         url: https://github.com/dolphin-emu/dolphin.git
-        commit: 032c77b462a220016f23c5079e71bb23e0ad2adf
+        commit: 9240f579eab18a2f67eef23846a6b508393d0e6c
         x-checker-data:
           type: json
           url: https://dolphin-emu.org/update/latest/beta
