@@ -65,7 +65,7 @@
    <project_license>GPL-3.0</project_license>
    <metadata_license>CC0-1.0</metadata_license>
    <releases>
-      <release version="0.8.0b" date="2023-02-27">
+      <release version="0.8.0b" date="2023-03-06">
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.8.0b</url>
          <description>
             <p>
@@ -91,6 +91,7 @@
                <li>DOLPHIN: Tweaked GC Input</li>
                <li>DOLPHIN: Enabled GBA and Tweaked Input</li>
                <li>DOLPHIN: Graphical Tweaks</li>
+               <li>PRIMEHACK: config structure refactor + new configs</li>
                <li>Quit button after emulators reset should act as an actual full quit button</li>
                <li>Created a quit_retrodeck function to ease the quit in the scripts.</li>
                <li>Logs folder is now in retrodeck/logs (previously was .logs)</li>
@@ -105,6 +106,7 @@
                <li>RPCS3 is now running via shortcut (.desktop file) by default - WARN THE USERS TO MIGRATE</li>
                <li>RPCS3: Updated to 4 controllers</li>
                <li>RYUJINX: Updated to 4 controllers</li>
+               <li>GZDOOM: Updated to 4 controllers</li>
             </ul>
             <p>Fixes:</p>
             <ul>
