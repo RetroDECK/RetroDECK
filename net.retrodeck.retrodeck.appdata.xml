@@ -75,8 +75,8 @@
             <p>Changes:</p>
             <ul>
                <li>ES-DE: updated to 3.0</li>
-               <li>CITRA-SA: Removed</li>
-               <li>YUZU: Removed</li>
+               <li>CITRA-SA: Removed, the libretro core is now the default emulator</li>
+               <li>YUZU: Removed, Ryujinx is now the default emulator</li>
                <li>Added new system: RYUJINX</li>
                <li>Added new system: SOLARUS</li>
                <li>Added new engine: GZDOOM</li>
