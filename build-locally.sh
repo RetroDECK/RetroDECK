@@ -3,6 +3,8 @@
 # TODO: FEDORA
 # sudo dnf install -y flatpak flatpak-builder p7zip p7zip-plugins xmlstarlet bzip2 curl
 
+git submodule update --init --recursive
+
 export GITHUB_WORKSPACE="."
 cp net.retrodeck.retrodeck.appdata.xml net.retrodeck.retrodeck.appdata.xml.bak
 cp net.retrodeck.retrodeck.yml net.retrodeck.retrodeck.yml.bak
