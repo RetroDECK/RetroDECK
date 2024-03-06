@@ -1233,7 +1233,7 @@ modules:
         url: https://github.com/zdoom/gzdoom/raw/g4.11.2/soundfont/gzdoom.sf2
         sha256: a9058609b07c1f0e0c1f420e76c2e80ba78136e6173e836caab51ffb13e552f1
       - type: patch
-        path: description.patch
+        path: rd-submodules/shared-modules/gzdoom/description.patch
     post-install:
       - install -Dm 644 gzdoom.sf2 /app/share/sounds/sf2/gzdoom.sf2
     modules:
