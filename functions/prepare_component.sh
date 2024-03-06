@@ -411,12 +411,12 @@ prepare_component() {
       log i "----------------------"
       if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         create_dir -d "$multi_user_data_folder/$SteamAppUser/config/primehack"
-        cp -fvr "$emuconfigs/primehack/"* "$multi_user_data_folder/$SteamAppUser/config/primehack/"
+        cp -fvr "$emuconfigs/primehack/config/"* "$multi_user_data_folder/$SteamAppUser/config/primehack/"
         set_setting_value ""$multi_user_data_folder/$SteamAppUser/config/primehack/Dolphin.ini"" "ISOPath0" "$roms_folder/gc" "primehack" "General"
         dir_prep "$multi_user_data_folder/$SteamAppUser/config/primehack" "/var/config/primehack"
       else # Single-user actions
         create_dir -d /var/config/primehack/
-        cp -fvr "$emuconfigs/primehack/"* /var/config/primehack/
+        cp -fvr "$emuconfigs/primehack/config/"* /var/config/primehack/
         set_setting_value "$primehackconf" "ISOPath0" "$roms_folder/gc" "primehack" "General"
       fi
       # Shared actions
@@ -429,6 +429,7 @@ prepare_component() {
       dir_prep "$saves_folder/wii/primehack" "/var/data/primehack/Wii"
       dir_prep "$mods_folder/Primehack" "/var/data/primehack/Load/GraphicMods"
       dir_prep "$texture_packs_folder/Primehack" "/var/data/primehack/Load/Textures"
+      cp -fvr "$emuconfigs/primehack/data/"* "$multi_user_data_folder/$SteamAppUser/data/primehack/" # this must be done after the dirs are prepared as it copying some "mods"
 
       # Reset default preset settings
       set_setting_value "$rd_conf" "primehack" "$(get_setting_value "$rd_defaults" "primehack" "retrodeck" "ask_to_exit")" "retrodeck" "ask_to_exit"
