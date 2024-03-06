@@ -657,6 +657,62 @@ manage_ryujinx_keys() {
   fi
 }
 
+ponzu() {
+
+  local tmp_folder="/tmp/extracted"
+
+  # This function is used to extract some specific appimages
+  # Check if any of the specified files exist
+  if kiroi_ponzu=$(ls "$rdhome"/ponzu/Citra*.AppImage 1> /dev/null 2>&1) \
+      || kiroi_ponzu=$(ls "$rdhome"/citra*.AppImage 1> /dev/null 2>&1) ; then
+      log i "Found kiroi ponzu! Elaborating it"
+      local data_dir="/var/data/Citra"
+      local appimage="$kiroi_ponzu"
+      create_dir "$data_dir"
+      log d "Moving AppImage in \"$data_dir\""
+      mv "$appimage" "$data_dir"
+      cd "$data_dir"
+      chmod +x "$appimage"
+      log d "Extracting AppImage"
+      "$appimage" --appimage-extract
+      create_dir "$tmp_folder"
+      log d "Cleaning up"
+      cp -r squashfs-root/* "$tmp_folder"
+      rm -rf *
+      mv "$tmp_folder/"** .
+      local executable=""
+      log d "Making $executable executable"
+      chmod +x "$executable"
+      cd -
+      log i "Kiroi ponzu is served, enjoy"
+  fi
+
+  # Check if any of the specified files exist
+  if akai_ponzu=$(ls "$rdhome"/Yuzu*.AppImage 1> /dev/null 2>&1) \
+      || akai_ponzu=$(ls "$rdhome"/yuzu*.AppImage 1> /dev/null 2>&1); then
+      log i "Found akai ponzu! Elaborating it"
+      local data_dir="/var/data/Yuzu"
+      local appimage="$akai_ponzu"
+      create_dir "$data_dir"
+      log d "Moving AppImage in \"$data_dir\""
+      mv "$appimage" "$data_dir"
+      cd "$data_dir"
+      chmod +x "$appimage"
+      log d "Extracting AppImage"
+      "$appimage" --appimage-extract
+      create_dir "$tmp_folder"
+      log d "Cleaning up"
+      cp -r squashfs-root/* "$tmp_folder"
+      rm -rf *
+      mv "$tmp_folder/"** .
+      local executable=""
+      log d "Making $executable executable"
+      chmod +x "$executable"
+      cd -
+      log i "Akai ponzu is served, enjoy"
+  fi
+}
+
 # TODO: this function is not yet used
 branch_selector() {
     log d "Fetch branches from GitHub API excluding \"main\""
@@ -726,6 +782,7 @@ quit_retrodeck() {
 
 start_retrodeck() {
   easter_eggs # Check if today has a surprise splashscreen and load it if so
+  ponzu
   log i "Starting RetroDECK v$version"
   es-de --home /var/config/
 }
