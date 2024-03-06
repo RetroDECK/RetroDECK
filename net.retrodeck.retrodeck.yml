@@ -1210,35 +1210,6 @@ modules:
   # This is broken, so for the moment we're manual adding a previous version
   # - rd-submodules/shared-modules/gzdoom/gzdoom.json
 
-  - name: gzdoom
-    buildsystem: cmake-ninja
-    config-opts:
-      - '-DCMAKE_BUILD_TYPE=RelWithDebInfo'
-    cleanup:
-      - /lib/*.a
-      - /lib/*.la
-      - /lib/pkgconfig
-      - /include
-    sources:
-      - type: git
-        url: https://github.com/zdoom/gzdoom.git
-        tag: g4.11.2
-        commit: df5a3c1a9c673aed528813aead6002c833ac24ac
-        x-checker-data:
-          type: anitya
-          project-id: 17531
-          stable-only: true
-          tag-template: g$version
-      - type: file
-        url: https://github.com/zdoom/gzdoom/raw/g4.11.2/soundfont/gzdoom.sf2
-        sha256: a9058609b07c1f0e0c1f420e76c2e80ba78136e6173e836caab51ffb13e552f1
-      - type: patch
-        path: rd-submodules/shared-modules/gzdoom/description.patch
-    post-install:
-      - install -Dm 644 gzdoom.sf2 /app/share/sounds/sf2/gzdoom.sf2
-    modules:
-      - rd-submodules/shared-modules/linux-audio/libinstpatch.json
-      - rd-submodules/shared-modules/linux-audio/fluidsynth2.json
   - name: libsndfile
     buildsystem: autotools
     sources:
@@ -1280,6 +1251,35 @@ modules:
           project-id: 153600
           stable-only: true
           url-template: https://github.com/zdoom/ZMusic/archive/$version.tar.gz
+  - name: gzdoom
+    buildsystem: cmake-ninja
+    config-opts:
+      - '-DCMAKE_BUILD_TYPE=RelWithDebInfo'
+    cleanup:
+      - /lib/*.a
+      - /lib/*.la
+      - /lib/pkgconfig
+      - /include
+    sources:
+      - type: git
+        url: https://github.com/zdoom/gzdoom.git
+        tag: g4.11.2
+        commit: df5a3c1a9c673aed528813aead6002c833ac24ac
+        x-checker-data:
+          type: anitya
+          project-id: 17531
+          stable-only: true
+          tag-template: g$version
+      - type: file
+        url: https://github.com/zdoom/gzdoom/raw/g4.11.2/soundfont/gzdoom.sf2
+        sha256: a9058609b07c1f0e0c1f420e76c2e80ba78136e6173e836caab51ffb13e552f1
+      - type: patch
+        path: rd-submodules/shared-modules/gzdoom/description.patch
+    post-install:
+      - install -Dm 644 gzdoom.sf2 /app/share/sounds/sf2/gzdoom.sf2
+    modules:
+      - rd-submodules/shared-modules/linux-audio/libinstpatch.json
+      - rd-submodules/shared-modules/linux-audio/fluidsynth2.json
 
   # GZDoom - END
   
