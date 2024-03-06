@@ -112,6 +112,7 @@
             <ul>
                <li>Fixed DUCKSTATION memory card folder</li>
                <li>Fixed RPCS3 saves folder (wrong symlink) - WARN THE USERS TO BACKUP</li>
+               <li>Fixed some issues that preventing RetroDECK to be built locally</li>
             </ul>
             <p>Issues:</p>
             <ul>
