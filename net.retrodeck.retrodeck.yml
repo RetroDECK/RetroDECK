@@ -3,10 +3,8 @@ runtime: org.kde.Platform
 runtime-version: "6.5"
 sdk: org.kde.Sdk
 sdk-extensions:
-  - org.freedesktop.Sdk.Extension.llvm16        # Needed for rpcs3 (llvm15) but llvm16 for CITRA
+  - org.freedesktop.Sdk.Extension.llvm16        # Needed for RPCS3 (llvm17 actually)
   - org.freedesktop.Sdk.Extension.rust-stable   # Needed for BoilR 
-# base: io.qt.qtwebengine.BaseApp             # Needed for Yuzu - Disabled as we're using AppImage for Yuzu
-# base-version: "6.5"                         # Needed for Yuzu - Disabled as we're using AppImage for Yuzu
 command: retrodeck.sh
 
 finish-args:
@@ -30,7 +28,6 @@ finish-args:
   - --env=QT_QPA_PLATFORM=wayland-egl;wayland;xcb
   # Dolphin
   - --allow=bluetooth
-  # PPSSPP
   # It allows an SDL application to specify its window class, which can be useful for window managers and desktop environments to identify and group similar windows
   - --env=SDL_VIDEO_X11_WMCLASS=net.retrodeck.retrodeck
   - --env=SDL_VIDEO_WAYLAND_WMCLASS=net.retrodeck.retrodeck
@@ -40,6 +37,8 @@ finish-args:
   - --filesystem=xdg-data/Steam:rw #Steam (flatpak)
   - --filesystem=~/.steam:rw # Steam (Non-flatpak)
   - --filesystem=~/.var/app/com.valvesoftware.Steam:rw # Steam (Flatpak)
+  # PPSSPP, DOLPHIN
+  - --filesystem=xdg-run/gamescope-0:ro
 
 cleanup:
   # ES-DE
@@ -47,7 +46,6 @@ cleanup:
   - /share/ffmpeg
   - /lib/cmake
   - /lib/pkgconfig
-  # Yuzu
   - /include
   - /bin/glslangValidator
   - /bin/zip*
@@ -61,14 +59,12 @@ cleanup:
   # XMLSTARLET
   - /lib/debug
   - /share/runtime
-#cleanup-commands:
-  # Yuzu
-  #- /app/cleanup-BaseApp.sh
 
 modules:
 
-  # dependency of: CEMU, CITRA, DOLPHIN
-  - rd-submodules/shared-modules/libusb/libusb.json
+  # dependency of: CEMU (1.0.26), DOLPHIN (1.0.27)
+  #- rd-submodules/shared-modules/libusb/libusb.json # 1.0.26
+  # we added the libusb 1.0.27 as Dolphin is breaking with 1.0.27, when bot will be aligned we can go back to the submodule
 
   # This module is used to define the RetroDECK version
   # If the version is set as cooker it will automatically generate the version tag based on the date
@@ -228,7 +224,6 @@ modules:
         url: https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_amd64
         sha256: 4ee662847c588c3ef2fec8bfb304e8739e3dbaba87ccb9a608d691c88f5b64dc
 
-  # dependency of: CEMU (13.1.1), CITRA (13.0.0)
   - name: glslang
     buildsystem: cmake-ninja
     config-opts:
@@ -241,10 +236,8 @@ modules:
       - /lib/cmake
     sources:
       - type: archive
-        url: https://github.com/KhronosGroup/glslang/archive/13.1.1.tar.gz
-        sha256: 1c4d0a5a38c8aaf89a2d7e6093be734320599f5a6775b2726beeb05b0c054e66
-        # url: https://github.com/KhronosGroup/glslang/archive/13.0.0.tar.gz
-        # sha256: bcda732434f829aa74414ea0e06d329ec8ac28637c38a0de45e17c8fd25a4715
+        url: https://github.com/KhronosGroup/glslang/archive/14.0.0.tar.gz
+        sha256: 80bbb916a23e94ea9cbfb1acb5d1a44a7e0c9613bcf5b5947c03f2273bdc92b0
         x-checker-data:
           type: anitya
           stable-only: true
@@ -277,7 +270,7 @@ modules:
           stable-only: true
           url-template: https://www.freedesktop.org/software/libevdev/libevdev-$version.tar.xz
 
-  # dependency of: CITRA, CEMU
+  # dependency of: CEMU
   - name: rapidjson
     buildsystem: cmake-ninja
     config-opts:
@@ -342,6 +335,24 @@ modules:
       - type: git
         url: https://gitlab.freedesktop.org/slirp/libslirp.git
         tag: v4.7.0
+
+  # dependency of: CEMU (1.0.26), DOLPHIN (1.0.27)
+  - name: libusb
+    config-opts:
+      - --disable-static
+    cleanup:
+      - /include
+      - /lib/*.la
+      - /lib/pkgconfig
+    sources:
+      - type: archive
+        url: https://github.com/libusb/libusb/releases/download/v1.0.27/libusb-1.0.27.tar.bz2
+        sha256: ffaa41d741a8a3bee244ac8e54a72ea05bf2879663c098c82fc5757853441575
+        x-checker-data:
+          type: anitya
+          project-id: 1749
+          stable-only: true
+          url-template: https://github.com/libusb/libusb/releases/download/v$version/libusb-$version.tar.bz2
 
   # ES-DE - START
   # https://gitlab.com/es-de/emulationstation-de
@@ -447,15 +458,17 @@ modules:
     config-opts:
       - '--enable-dbus'
     make-args:
-      - 'GLOBAL_CONFIG_DIR=${FLATPAK_DEST}/etc'
+      - GLOBAL_CONFIG_DIR=${FLATPAK_DEST}/etc
       - HAVE_TRANSLATE=1
       - HAVE_ACCESSIBILITY=1
     sources:
       - type: git
-        url: 'https://github.com/libretro/RetroArch.git'
-        commit: 712b9350a5c2b1b9129d939a2ae622093dfabd04
+        url: https://github.com/libretro/RetroArch.git
+        commit: ad8975cb5a0fe45be43438bdbd6c3d745653dd02
       - type: file
         path: rd-submodules/retroarch/retroarch.cfg
+      - type: file
+        path: rd-submodules/retroarch/VkLayer_FROG_gamescope_wsi.x86_64.json
     post-install:
       - mkdir -p ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/
       - >-
@@ -466,8 +479,12 @@ modules:
       - >-
         sed s:@prefix@:${FLATPAK_DEST}:g retroarch.cfg >
         ${FLATPAK_DEST}/etc/retroarch.cfg
+      - mkdir -p ${FLATPAK_DEST}/share/vulkan/implicit_layer.d
+      - >-
+        install VkLayer_FROG_gamescope_wsi.x86_64.json
+        /app/share/vulkan/implicit_layer.d/VkLayer_FROG_gamescope_wsi.x86_64.json
     modules:
-      - rd-submodules/retroarch/modules/libpng/libpng-1.6.35.json
+      - rd-submodules/retroarch/modules/libpng/libpng-1.6.json
       - rd-submodules/retroarch/modules/nvidia-cg-toolkit/nvidia-cg-toolkit-3.1.0013.json
       - rd-submodules/shared-modules/SDL/SDL-1.2.15.json
       - rd-submodules/shared-modules/SDL/SDL_image-1.2.12.json
@@ -478,55 +495,56 @@ modules:
       # certificate glu issue
       #- rd-submodules/shared-modules/gudev/gudev.json
       - rd-submodules/retroarch/modules/libbz2/libbz2-1.0.8.json
-      - rd-submodules/retroarch/modules/xrandr/xrandr-1.5.1.json
+      - rd-submodules/retroarch/modules/xrandr/xrandr-1.5.json
       - rd-submodules/retroarch/modules/libaio/libaio-0.3.112.json
       # certificate issue, check glu module for more info
       #- rd-submodules/shared-modules/glu/glu-9.json
-      - rd-submodules/shared-modules/libdecor/libdecor-0.1.1.json
+      - rd-submodules/shared-modules/libdecor/libdecor.json
+      - rd-submodules/retroarch/modules/gamemode/gamemode-1.8.json
   - name: retroarch-filers-video
     subdir: gfx/video_filters
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
-        url: 'https://github.com/libretro/RetroArch.git'
-        commit: 712b9350a5c2b1b9129d939a2ae622093dfabd04
+        url: https://github.com/libretro/RetroArch.git
+        commit: ad8975cb5a0fe45be43438bdbd6c3d745653dd02
   - name: retroarch-filers-audio
     subdir: libretro-common/audio/dsp_filters
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
-        url: 'https://github.com/libretro/RetroArch.git'
-        commit: 712b9350a5c2b1b9129d939a2ae622093dfabd04
+        url: https://github.com/libretro/RetroArch.git
+        commit: ad8975cb5a0fe45be43438bdbd6c3d745653dd02
   - name: retroarch-assets
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
-        url: 'https://github.com/libretro/retroarch-assets.git'
-        commit: 7b735ef18bcc6508b1c9a626eb237779ff787179
+        url: https://github.com/libretro/retroarch-assets.git
+        commit: 923b711dc6772a168d83dc8915e9260730fcf3a1
   - name: libretro-database
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
-        url: 'https://github.com/libretro/libretro-database.git'
-        commit: e3b5cb00da4f3ab99491bf67c19630ffa7ee19f2
+        url: https://github.com/libretro/libretro-database.git
+        commit: 2c121df3a1c661e7a686f159ec5500a2837eefb3
   - name: libretro-core-info
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
-        url: 'https://github.com/libretro/libretro-core-info.git'
-        commit: dacae85b406131feb12395a415fdf57fc4745201
+        url: https://github.com/libretro/libretro-core-info.git
+        commit: ef6815722bfd4cc7d0cf14640b7111ecb5709cdd
   - name: retroarch-joypad-autoconfig
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
-        url: 'https://github.com/libretro/retroarch-joypad-autoconfig.git'
-        commit: 5666e46bb89caf4e9af358fdb97a2b384cb62f36
+        url: https://github.com/libretro/retroarch-joypad-autoconfig.git
+        commit: 9999374439b6526cfec78dd1fc51ed889e51ec6d
   - name: common-shaders
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
@@ -539,21 +557,21 @@ modules:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
-        url: 'https://github.com/libretro/slang-shaders.git'
-        commit: 9266fa24b64b274fd429b73469ded3561de7b8f4
+        url: https://github.com/libretro/slang-shaders.git
+        commit: 5b4c9b2a75aba5f57fcb5b68662a06f0ed7c929f
   - name: glsl-shaders
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
-        url: 'https://github.com/libretro/glsl-shaders.git'
-        commit: c26b9e1913eda8c25d6cd218818745a3b451f982
+        url: https://github.com/libretro/glsl-shaders.git
+        commit: bc8df92f013a128c3a735a57d3d98c6f087cc291
   - name: common-overlays
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
-        url: 'https://github.com/libretro/common-overlays.git'
+        url: https://github.com/libretro/common-overlays.git
         commit: 115d8670c2e032e4a41ba45f766f5cfd9dae28b8
 
   # RetroArch - END
@@ -563,7 +581,8 @@ modules:
   - name: retroarch-cores-nightly
     buildsystem: simple
     build-commands:
-      - mkdir -p /app/share/libretro/cores/
+      - mkdir -p /app/share/libretro/cores/      
+      
       - mv -f ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* /app/share/libretro/cores/
     sources:
       - type: archive
@@ -573,12 +592,12 @@ modules:
   - name: retroarch-cores
     buildsystem: simple
     build-commands:
-      - mkdir -p /app/share/libretro/cores/
+      - mkdir -p /app/share/libretro/cores/      
       - mv -f ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* /app/share/libretro/cores/
     sources:
       - type: archive
-        url: https://buildbot.libretro.com/stable/1.16.0/linux/x86_64/RetroArch_cores.7z
-        sha256: a149d34662516d791e8f90507d1107949cb158196d6bbf75105c649fb26504b6
+        url: https://buildbot.libretro.com/stable/1.17.0/linux/x86_64/RetroArch_cores.7z
+        sha256: 1c1d61f86b196e9f89c1a93d0756fba95b60ef3ba57a7cd1d1e86dfd419c766b
     
   - name: retroarch-sameduck-core
     buildsystem: simple
@@ -648,8 +667,8 @@ modules:
     sources:
       - type: git
         url: &ppsspp-url https://github.com/hrydgard/ppsspp.git
-        tag: v1.17
-        commit: 493122a2fcf9ff538e242fe2844f019b53afd483
+        tag: v1.17.1
+        commit: d479b74ed9c3e321bc3735da29bc125a2ac3b9b2
         x-checker-data:
           type: json
           url: https://api.github.com/repos/hrydgard/ppsspp/releases/latest
@@ -659,90 +678,6 @@ modules:
 
   # PPSSPP - END
 
-  # Yuzu - START
-  # https://github.com/yuzu-emu/yuzu-mainline/releases
-
-  - name: Yuzu
-    buildsystem: simple
-    build-commands:
-      - chmod +x yuzu*.AppImage
-      - ./yuzu*.AppImage --appimage-extract
-      - mkdir -p "${FLATPAK_DEST}/yuzu"
-      - cp -r squashfs-root/* "${FLATPAK_DEST}/yuzu"
-      - ln -s "${FLATPAK_DEST}/yuzu/usr/bin/yuzu" "${FLATPAK_DEST}/bin/yuzu"
-    sources:
-      - type: file
-        url: https://github.com/yuzu-emu/yuzu-mainline/releases/download/mainline-0-1732/yuzu-mainline-20240302-d839edbda.AppImage
-        sha256: d2e8fb9f912ab287272587c383a8d825044bfc580c9963512133037f72a31e95
-
-  # Yuzu - END
-
-  # CITRA - START
-  # https://github.com/flathub/org.citra_emu.citra
-
-  - rd-submodules/shared-modules/SDL2/SDL2-with-libdecor.json
-
-  - rd-submodules/shared-modules/SDL2/SDL2-with-libdecor.json
-
-  - name: citra
-    buildsystem: cmake-ninja
-    builddir: true
-    build-options:
-      env:
-        CI: '1'
-        GITHUB_ACTIONS: '1'
-        GITHUB_REPOSITORY: citra-emu/citra-nightly
-        GITHUB_REF_NAME: nightly-2025
-      append-path: /usr/lib/sdk/llvm16/bin
-      prepend-ld-library-path: /usr/lib/sdk/llvm16/lib
-      cflags: '-Wno-unused-command-line-argument'
-      cxxflags: '-Wno-unused-command-line-argument'
-    config-opts:
-      - '-DCMAKE_BUILD_TYPE=Release'
-      - '-DCMAKE_C_COMPILER=clang'
-      - '-DCMAKE_CXX_COMPILER=clang++'
-      - '-DCMAKE_LINKER=lld'
-      - '-DENABLE_QT_TRANSLATION=ON'
-      - '-DCITRA_ENABLE_COMPATIBILITY_REPORTING=ON'
-      - '-DUSE_DISCORD_PRESENCE=ON'
-      - '-DENABLE_COMPATIBILITY_LIST_DOWNLOAD=OFF'
-      - '-DUSE_SYSTEM_SDL2=ON'
-    cleanup:
-      - /share/man
-      - /share/pixmaps
-    post-install:
-      - install -Dm755 ../citra-launcher.sh /app/bin/citra-launcher
-      - >-
-        install -Dm644 ../org.citra_emu.citra.svg
-        /app/share/icons/hicolor/scalable/apps/citra.svg
-      - >-
-        install -Dm644 ../dist/icon.png
-        /app/share/icons/hicolor/512x512/apps/citra.png
-      - >-
-        mv /app/share/mime/packages/citra.xml
-        /app/share/mime/packages/org.citra_emu.citra.xml
-      - >-
-        sed 's/citra/org.citra_emu.citra/g' -i
-        /app/share/mime/packages/org.citra_emu.citra.xml
-    sources:
-      - type: archive
-        url: >-
-          https://github.com/citra-emu/citra-nightly/releases/download/nightly-2025/citra-unified-source-20231105-998b9a9.tar.xz
-        sha256: ebf52af66c6ef729688a29d093d9139baa76973b698c0630a295f38d126cf118
-        x-checker-data:
-          type: json
-          url: https://api.github.com/repos/citra-emu/citra-nightly/releases/latest
-          version-query: .tag_name
-          url-query: >-
-            .assets[] | .browser_download_url |
-            match("https://.+citra-unified-source-.+.xz$") | .string
-          is-main-source: true
-      - type: file
-        path: rd-submodules/citra/org.citra_emu.citra.svg
-      - type: file
-        path: rd-submodules/citra/citra-launcher.sh
-
-  # CITRA - END
 
   # PCSX2 - START
   # Inspired by:
@@ -759,8 +694,8 @@ modules:
       - ln -s "${FLATPAK_DEST}/pcsx2-qt/usr/bin/pcsx2-qt" "${FLATPAK_DEST}/bin/pcsx2-qt"
     sources:
       - type: file
-        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.5284/pcsx2-v1.7.5284-linux-appimage-x64-Qt.AppImage
-        sha256: b3cb23e07435f7efe7145cddd0cf4d473cc65eee8feae436b8a718fc3017721a
+        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.5594/pcsx2-v1.7.5594-linux-appimage-x64-Qt.AppImage
+        sha256: 54ee896ca7b493f3ceaabb52f03495b7d2d0f64bf89213fd53ec31a4f48d4d25
 
   # PCSX2 - END
 
@@ -890,8 +825,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/xemu-project/xemu.git
-        tag: v0.7.116
-        commit: b3fc80b3a83fa99aeb541a0c665cfb596cedd71c
+        tag: v0.7.118
+        commit: 03f40b1d8e873b57eab68dc66ae9892aa5e39f89
         x-checker-data:
           type: json
           url: https://api.github.com/repos/xemu-project/xemu/releases/latest
@@ -918,13 +853,9 @@ modules:
   - name: melonds
     buildsystem: cmake-ninja
     builddir: true
-    config-opts:
-      - -DUSE_QT6=ON
     build-options:
-      arch:
-        aarch64:
-          config-opts:
-            - -DENABLE_LTO_RELEASE=OFF
+      config-opts:
+        - -DUSE_QT6=ON
     sources:
       - type: git
         url: https://github.com/melonDS-emu/melonDS.git
@@ -941,6 +872,9 @@ modules:
     buildsystem: cmake-ninja
     builddir: true
     build-options:
+      # llvm17 is not available in framework 6.5 but in 6.6, so we're trying llvm16 and cross our fingers until Primehack is updated (as Primehack breaks on 6.6)
+      #append-ld-library-path: /usr/lib/sdk/llvm17/lib
+      #append-path: /usr/lib/sdk/llvm17/bin
       append-ld-library-path: /usr/lib/sdk/llvm16/lib
       append-path: /usr/lib/sdk/llvm16/bin
       cflags: &optflags -O2 -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong
@@ -968,6 +902,7 @@ modules:
       - -DUSE_SYSTEM_ZLIB=ON
       - -Wno-dev
     post-install:
+      #- cp /usr/lib/sdk/llvm17/lib/libLLVM-17.so /app/lib/
       - cp /usr/lib/sdk/llvm16/lib/libLLVM-16.so /app/lib/
       - |-
         set -eux
@@ -977,7 +912,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/RPCS3/rpcs3.git
-        commit: f9d213650cfe4733937c43d93de91a17f8582820
+        commit: ef8afa78737dd426941b204187b6838ad74420f1
 
   # RPCS3 - END
 
@@ -1042,6 +977,7 @@ modules:
   # Duckstation-AppImage - END
 
   # Cemu - START
+  # needed libusb 1.0.26 but we provide 1.0.27, it could break
   # https://github.com/cemu-project/Cemu/releases
   # https://github.com/flathub/info.cemu.Cemu
 
@@ -1068,8 +1004,8 @@ modules:
       - /lib/cmake
     sources:
       - type: archive
-        url: https://boostorg.jfrog.io/artifactory/main/release/1.83.0/source/boost_1_83_0.tar.bz2
-        sha256: 6478edfe2f3305127cffe8caf73ea0176c53769f4bf1585be237eb30798c3b8e
+        url: https://boostorg.jfrog.io/artifactory/main/release/1.84.0/source/boost_1_84_0.tar.bz2
+        sha256: cc4b893acf645c9d4b698e9a0f08ca8846aa5d6c68275c14c3e7949c24109454
         x-checker-data:
           type: anitya
           project-id: 6845
@@ -1139,9 +1075,6 @@ modules:
     config-opts:
       - -DPORTABLE=false
       - -DENABLE_VCPKG=false
-    build-options:
-      env:
-        - LC_ALL=C
     sources:
       - type: git
         url: https://github.com/cemu-project/Cemu
@@ -1149,8 +1082,8 @@ modules:
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+-\d+)$
-        tag: v2.0-61
-        commit: b6aaf6633063be47d89a8216e269e32aec5a4b49
+        tag: v2.0-66
+        commit: a63678c1f40c21151c6daa6f20cbb8fc600ae92a
       - type: shell
         commands:
           - sed "s/set(EXPERIMENTAL_VERSION.*/set(EXPERIMENTAL_VERSION \"$(git describe
@@ -1271,9 +1204,84 @@ modules:
         tag: v1.6.5
         commit: 3aec70b0556a8d7aed7903d1a3e4d9a18c5d1649
 
-  - rd-submodules/shared-modules/gzdoom/gzdoom.json
-
   # SOLARUS - END
+
+  # GZDoom - Start
+  # https://github.com/ZDoom/gzdoom
+  # When updating:
+  # - take the latest commit from the repo
+  # - update gzdoom.sf2 link and sha
+  # - pray
+
+  - name: libsndfile
+    buildsystem: autotools
+    sources:
+      - type: archive
+        url: >-
+          https://github.com/libsndfile/libsndfile/releases/download/1.2.2/libsndfile-1.2.2.tar.xz
+        sha256: 3799ca9924d3125038880367bf1468e53a1b7e3686a934f098b7e1d286cdb80e
+        x-checker-data:
+          type: anitya
+          project-id: 13277
+          stable-only: true
+          url-template: >-
+            https://github.com/libsndfile/libsndfile/releases/download/$version/libsndfile-$version.tar.xz
+  - name: game-music-emu
+    buildsystem: cmake-ninja
+    config-opts:
+      - '-DCMAKE_BUILD_TYPE=RelWithDebInfo'
+    sources:
+      - type: archive
+        url: >-
+          https://bitbucket.org/mpyne/game-music-emu/downloads/game-music-emu-0.6.3.tar.gz
+        sha256: 626e8a104e0dadd10ef6519a67aca880c7b40f81471659f1935b61754e12fc7b
+        x-checker-data:
+          type: anitya
+          project-id: 866
+          stable-only: true
+          url-template: >-
+            https://bitbucket.org/mpyne/game-music-emu/downloads/game-music-emu-$version.tar.gz
+  - name: zmusic
+    buildsystem: cmake-ninja
+    config-opts:
+      - '-DCMAKE_BUILD_TYPE=RelWithDebInfo'
+    sources:
+      - type: archive
+        url: https://github.com/zdoom/ZMusic/archive/1.1.12.tar.gz
+        sha256: da818594b395aa9174561a36362332b0ab8e7906d2e556ec47669326e67613d4
+        x-checker-data:
+          type: anitya
+          project-id: 153600
+          stable-only: true
+          url-template: https://github.com/zdoom/ZMusic/archive/$version.tar.gz
+  - name: gzdoom
+    buildsystem: cmake-ninja
+    config-opts:
+      - '-DCMAKE_BUILD_TYPE=RelWithDebInfo'
+    cleanup:
+      - /lib/*.a
+      - /lib/*.la
+      - /lib/pkgconfig
+      - /include
+    sources:
+      - type: git
+        url: https://github.com/zdoom/gzdoom.git
+        commit: 05167fd4ef4388a511bad51b8a4304079c805424
+        x-checker-data:
+          type: anitya
+          project-id: 17531
+          stable-only: true
+          tag-template: g$version
+      - type: file
+        url: https://github.com/ZDoom/gzdoom/raw/b91300316875266e852e8b5890e188870189d4a6/soundfont/gzdoom.sf2
+        sha256: a9058609b07c1f0e0c1f420e76c2e80ba78136e6173e836caab51ffb13e552f1
+    post-install:
+      - install -Dm 644 gzdoom.sf2 /app/share/sounds/sf2/gzdoom.sf2
+    modules:
+      - rd-submodules/shared-modules/linux-audio/libinstpatch.json
+      - rd-submodules/shared-modules/linux-audio/fluidsynth2.json
+
+  # GZDoom - END
   
   # MAME - Start
 

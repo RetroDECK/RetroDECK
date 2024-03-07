@@ -65,7 +65,7 @@
    <project_license>GPL-3.0</project_license>
    <metadata_license>CC0-1.0</metadata_license>
    <releases>
-      <release version="0.8.0b" date="2023-02-27">
+      <release version="0.8.0b" date="2023-03-07">
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.8.0b</url>
          <description>
             <p>
@@ -75,6 +75,8 @@
             <p>Changes:</p>
             <ul>
                <li>ES-DE: updated to 3.0</li>
+               <li>CITRA-SA: Removed, the libretro core is now the default emulator</li>
+               <li>YUZU: Removed, Ryujinx is now the default emulator</li>
                <li>Added new system: RYUJINX</li>
                <li>Added new system: SOLARUS</li>
                <li>Added new engine: GZDOOM</li>
@@ -89,6 +91,7 @@
                <li>DOLPHIN: Tweaked GC Input</li>
                <li>DOLPHIN: Enabled GBA and Tweaked Input</li>
                <li>DOLPHIN: Graphical Tweaks</li>
+               <li>PRIMEHACK: config structure refactor + new configs</li>
                <li>Quit button after emulators reset should act as an actual full quit button</li>
                <li>Created a quit_retrodeck function to ease the quit in the scripts.</li>
                <li>Logs folder is now in retrodeck/logs (previously was .logs)</li>
@@ -96,9 +99,6 @@
                <li>Controller config overhaul</li>
                <li>Removed talk names in the manifest as they're not needed anymore as enabled by default</li>
                <li>CEMU: updated input profiles</li>
-               <li>CITRA: Graphical Tweaks</li>
-               <li>CITRA: Standrad layout Tweaks</li>
-               <li>CITRA: Enabled Gyro</li>
                <li>DUCKSTATION: config refactor. The old config didn't not work anymore for controllers.</li>
                <li>DUCKSTATION: All controlls now go via SDL</li>
                <li>DUCKSTATION: Updated to 4 controllers</li>
@@ -106,12 +106,16 @@
                <li>RPCS3 is now running via shortcut (.desktop file) by default - WARN THE USERS TO MIGRATE</li>
                <li>RPCS3: Updated to 4 controllers</li>
                <li>RYUJINX: Updated to 4 controllers</li>
-               <li>YUZU: Updated to 4 controllers + preformance tweaks</li>
+               <li>GZDOOM: Updated to 4 controllers</li>
+               <li>MELONDS: grahpical twekas</li>
             </ul>
             <p>Fixes:</p>
             <ul>
                <li>Fixed DUCKSTATION memory card folder</li>
                <li>Fixed RPCS3 saves folder (wrong symlink) - WARN THE USERS TO BACKUP</li>
+               <li>Fixed some issues that preventing RetroDECK to be built locally</li>
+               <li>SCUMMVM: fixed a bug where some paths were not existing</li>
+               <li>RETROARCH: fixed a bug where the default folder was not the rom folder in the rgui</li>
             </ul>
             <p>Issues:</p>
             <ul>

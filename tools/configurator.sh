@@ -27,7 +27,6 @@ source /app/libexec/global.sh
 #     - Open Emulator (Behind one-time power user warning dialog)
 #       - RetroArch
 #       - Cemu
-#       - Citra
 #       - Dolphin
 #       - Duckstation
 #       - MAME
@@ -39,7 +38,6 @@ source /app/libexec/global.sh
 #       - Ryujinx
 #       - Vita3K
 #       - XEMU
-#       - Yuzu
 #     - Tools
 #       - Tool: Move Folders
 #         - Move all of RetroDECK
@@ -72,7 +70,6 @@ source /app/libexec/global.sh
 #         - Reset Specific Emulator
 #           - Reset RetroArch
 #           - Reset Cemu
-#           - Reset Citra
 #           - Reset Dolphin
 #           - Reset Duckstation
 #           - Reset GZDoom
@@ -85,7 +82,6 @@ source /app/libexec/global.sh
 #           - Reset Ryujinx
 #           - Reset Vita3k
 #           - Reset XEMU
-#           - Reset Yuzu
 #         - Reset All Emulators
 #         - Reset EmulationStation DE
 #         - Reset RetroDECK
@@ -437,7 +433,6 @@ configurator_open_emulator_dialog() {
   --column="Emulator" --column="Action" \
   "RetroArch" "Open the multi-emulator frontend RetroArch" \
   "Cemu" "Open the Wii U emulator CEMU" \
-  "Citra" "Open the N3DS emulator Citra" \
   "Dolphin" "Open the Wii & GC emulator Dolphin" \
   "Duckstation" "Open the PSX emulator Duckstation" \
   "MAME" "Open the Multiple Arcade Machine Emulator emulator MAME" \
@@ -448,8 +443,7 @@ configurator_open_emulator_dialog() {
   "RPCS3" "Open the PS3 emulator RPCS3" \
   "Ryujinx" "Open the Switch emulator Ryujinx" \
   "Vita3K" "Open the PSVita emulator Vita3K" \
-  "XEMU" "Open the Xbox emulator XEMU" \
-  "Yuzu" "Open the Switch emulator Yuzu")
+  "XEMU" "Open the Xbox emulator XEMU" )
 
   case $emulator in
 
@@ -461,11 +455,6 @@ configurator_open_emulator_dialog() {
   "Cemu" )
     log i "Configurator: \"$emulator\""
     Cemu-wrapper
-  ;;
-
-  "Citra" )
-    log i "Configurator: \"$emulator\""
-    citra-qt
   ;;
 
   "Dolphin" )
@@ -521,11 +510,6 @@ configurator_open_emulator_dialog() {
   "XEMU" )
     log i "Configurator: \"$emulator\""
     xemu
-  ;;
-
-  "Yuzu" )
-    log i "Configurator: \"$emulator\""
-    yuzu
   ;;
 
   "" ) # No selection made or Back button clicked
@@ -996,7 +980,7 @@ configurator_retrodeck_troubleshooting_dialog() {
 }
 
 configurator_check_bios_files() {
-  configurator_generic_dialog "RetroDECK Configurator - Check & Verify: BIOS Files" "This check will look for BIOS files that RetroDECK has identified as working.\n\nNot all BIOS files are required for games to work, please check the BIOS description for more information on its purpose.\n\nThere may be additional BIOS files that will function with the emulators that are not checked.\n\nSome more advanced emulators such as Yuzu will have additional methods for verifiying the BIOS files are in working order."
+  configurator_generic_dialog "RetroDECK Configurator - Check & Verify: BIOS Files" "This check will look for BIOS files that RetroDECK has identified as working.\n\nNot all BIOS files are required for games to work, please check the BIOS description for more information on its purpose.\n\nThere may be additional BIOS files that will function with the emulators that are not checked.\n\nSome more advanced emulators such as Ryujinx will have additional methods for verifiying the BIOS files are in working order."
   bios_checked_list=()
 
   check_bios_files "basic"
@@ -1014,7 +998,7 @@ configurator_check_bios_files() {
 }
 
 configurator_check_bios_files_expert_mode() {
-  configurator_generic_dialog "RetroDECK Configurator - Check & Verify: BIOS Files - Expert Mode" "This check will look for BIOS files that RetroDECK has identified as working.\n\nNot all BIOS files are required for games to work, please check the BIOS description for more information on its purpose.\n\nThere may be additional BIOS files that will function with the emulators that are not checked.\n\nSome more advanced emulators such as Yuzu will have additional methods for verifiying the BIOS files are in working order."
+  configurator_generic_dialog "RetroDECK Configurator - Check & Verify: BIOS Files - Expert Mode" "This check will look for BIOS files that RetroDECK has identified as working.\n\nNot all BIOS files are required for games to work, please check the BIOS description for more information on its purpose.\n\nThere may be additional BIOS files that will function with the emulators that are not checked.\n\nSome more advanced emulators such as Ryujinx will have additional methods for verifiying the BIOS files are in working order."
   bios_checked_list=()
 
   check_bios_files "expert"
@@ -1067,7 +1051,6 @@ configurator_reset_dialog() {
     --column="Emulator" --column="Action" \
     "RetroArch" "Reset the multi-emulator frontend RetroArch to default settings" \
     "Cemu" "Reset the Wii U emulator Cemu to default settings" \
-    "Citra" "Reset the N3DS emulator Citra to default settings" \
     "Dolphin" "Reset the Wii/GameCube emulator Dolphin to default settings" \
     "Duckstation" "Reset the PSX emulator Duckstation to default settings" \
     "GZDoom" "Reset the GZDoom Doom engine to default settings" \
@@ -1079,8 +1062,7 @@ configurator_reset_dialog() {
     "RPCS3" "Reset the PS3 emulator RPCS3 to default settings" \
     "Ryujinx" "Reset the Switch emulator Ryujinx to default settings" \
     "Vita3k" "Reset the PS Vita emulator Vita3k to default settings" \
-    "XEMU" "Reset the XBOX emulator XEMU to default settings" \
-    "Yuzu" "Reset the Switch emulator Yuzu to default settings" )
+    "XEMU" "Reset the XBOX emulator XEMU to default settings" )
 
     # "Ryujinx" "Reset the Switch emulator Ryujinx to default settings" \
 
@@ -1101,7 +1083,7 @@ configurator_reset_dialog() {
       fi
     ;;
 
-    "Cemu" | "Citra" | "Dolphin" | "Duckstation" | "MelonDS" | "MAME" | "PCSX2" | "PPSSPP" | "Primehack" | "RPCS3" | "Ryujinx" | "Yuzu" )
+    "Cemu" | "Dolphin" | "Duckstation" | "MelonDS" | "MAME" | "PCSX2" | "PPSSPP" | "Primehack" | "RPCS3" | "Ryujinx" )
       if [[ $(configurator_reset_confirmation_dialog "$component_to_reset" "Are you sure you want to reset the $component_to_reset emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
         prepare_component "reset" "$component_to_reset" "configurator"
         configurator_process_complete_dialog "resetting $component_to_reset"

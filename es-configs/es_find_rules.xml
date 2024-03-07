@@ -1049,27 +1049,6 @@
             <entry>~/bin/xroar/xroar</entry>
         </rule>
     </emulator>
-    <emulator name="YUZU">
-        <!-- Nintendo Switch emulator Yuzu -->
-        <rule type="systempath">
-            <entry>yuzu</entry>
-            <entry>org.yuzu_emu.yuzu</entry>
-        </rule>
-        <rule type="staticpath">
-            <entry>~/Applications/yuzu*.AppImage</entry>
-            <entry>~/.local/share/applications/yuzu*.AppImage</entry>
-            <entry>~/.local/bin/yuzu*.AppImage</entry>
-            <entry>~/bin/yuzu*.AppImage</entry>
-            <entry>/var/lib/flatpak/exports/bin/org.yuzu_emu.yuzu</entry>
-            <entry>~/.local/share/flatpak/exports/bin/org.yuzu_emu.yuzu</entry>
-        </rule>
-    </emulator>
-    <emulator name="YUZU-CUSTOM">
-        <!-- Nintendo Switch emulator Yuzu Custom provided by the user -->
-        <rule type="staticpath">
-            <entry>~/retrodeck/customs/yuzu/yuzu*.AppImage</entry>
-        </rule>
-    </emulator>
     <emulator name="ZESARUX">
         <!-- Sinclair ZX Spectrum emulator ZEsarUX -->
         <rule type="systempath">

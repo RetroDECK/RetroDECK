@@ -3,7 +3,7 @@
 post_update() {
 
   # post update script
-  echo "Executing post-update script"
+  log i "Executing post-update script"
 
   if [[ $(check_version_is_older_than "0.5.0b") == "true" ]]; then # If updating from prior to save sorting change at 0.5.0b
     save_migration

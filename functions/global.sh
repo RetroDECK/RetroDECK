@@ -55,12 +55,10 @@ godot_bios_files_checked="/var/config/retrodeck/godot/godot_bios_files_checked.t
 
 # Config files for emulators with single config files
 
-citraconf="/var/config/citra-emu/qt-config.ini"
 duckstationconf="/var/config/duckstation/settings.ini"
 melondsconf="/var/config/melonDS/melonDS.ini"
 ryujinxconf="/var/config/Ryujinx/Config.json"
 xemuconf="/var/config/xemu/xemu.toml"
-yuzuconf="/var/config/yuzu/qt-config.ini"
 
 # ES-DE config files
 
@@ -70,6 +68,7 @@ es_settings="/var/config/ES-DE/settings/es_settings.xml"
 
 raconf="/var/config/retroarch/retroarch.cfg"
 ra_core_conf="/var/config/retroarch/retroarch-core-options.cfg"
+ra_scummvm_conf="/var/config/retroarch/system/scummvm.ini"
 
 # CEMU config files
 
