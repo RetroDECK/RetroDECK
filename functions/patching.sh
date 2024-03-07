@@ -12,7 +12,7 @@ set_setting_value() {
 
   case $4 in
 
-    "retrodeck" | "melonds" )
+    "retrodeck" | "melonds" | "scummvm_libretro" )
       if [[ -z $current_section_name ]]; then
         sed -i 's^\^'"$setting_name_to_change"'=.*^'"$setting_name_to_change"'='"$setting_value_to_change"'^' "$1"
       else
