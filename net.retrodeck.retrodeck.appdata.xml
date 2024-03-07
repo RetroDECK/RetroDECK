@@ -65,7 +65,7 @@
    <project_license>GPL-3.0</project_license>
    <metadata_license>CC0-1.0</metadata_license>
    <releases>
-      <release version="0.8.0b" date="2023-03-06">
+      <release version="0.8.0b" date="2023-03-07">
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.8.0b</url>
          <description>
             <p>
@@ -114,6 +114,8 @@
                <li>Fixed DUCKSTATION memory card folder</li>
                <li>Fixed RPCS3 saves folder (wrong symlink) - WARN THE USERS TO BACKUP</li>
                <li>Fixed some issues that preventing RetroDECK to be built locally</li>
+               <li>SCUMMVM: fixed a bug where some paths were not existing</li>
+               <li>RETROARCH: fixed a bug where the default folder was not the rom folder in the rgui</li>
             </ul>
             <p>Issues:</p>
             <ul>
