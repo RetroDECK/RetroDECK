@@ -88,18 +88,18 @@ prepare_component() {
         set_setting_value "$raconf" "savestate_directory" "$states_folder" "retroarch"
         set_setting_value "$raconf" "screenshot_directory" "$screenshots_folder" "retroarch"
         set_setting_value "$raconf" "log_dir" "$logs_folder" "retroarch"
-        set_setting_value "$raconf" "rgui_browser_directory" $roms_folder "retroarch"
+        set_setting_value "$raconf" "rgui_browser_directory" "$roms_folder" "retroarch"
         
         # Specific Settings for ScummVM core
         cp -fv "$emuconfigs/retroarch/scummvm.ini" "$ra_scummvm_conf"
-        create_dir $mods_folder/RetroArch/ScummVM/icons
-        create_dir $mods_folder/RetroArch/ScummVM/extra
-        create_dir $mods_folder/RetroArch/ScummVM/themes
-        set_setting_value "$ra_scummvm_conf" "iconspath" "$mods_folder/RetroArch/ScummVM/icons" "scummvm_libretro" "scummvm"
-        set_setting_value "$ra_scummvm_conf" "extrapath" "$mods_folder/RetroArch/ScummVM/extra" "scummvm_libretro" "scummvm"
-        set_setting_value "$ra_scummvm_conf" "themepath" "$mods_folder/RetroArch/ScummVM/themes" "scummvm_libretro" "scummvm"
-        set_setting_value "$ra_scummvm_conf" "savepath" "$saves_folder/scummvm" "scummvm_libretro" "scummvm"
-        set_setting_value "$ra_scummvm_conf" "browser_lastpath" "$roms_folder/scummvm" "scummvm_libretro" "scummvm"
+        create_dir "$mods_folder/RetroArch/ScummVM/icons"
+        create_dir "$mods_folder/RetroArch/ScummVM/extra"
+        create_dir "$mods_folder/RetroArch/ScummVM/themes"
+        set_setting_value "$ra_scummvm_conf" "iconspath" "$mods_folder/RetroArch/ScummVM/icons" "libretro_scummvm" "scummvm"
+        set_setting_value "$ra_scummvm_conf" "extrapath" "$mods_folder/RetroArch/ScummVM/extra" "libretro_scummvm" "scummvm"
+        set_setting_value "$ra_scummvm_conf" "themepath" "$mods_folder/RetroArch/ScummVM/themes" "libretro_scummvm" "scummvm"
+        set_setting_value "$ra_scummvm_conf" "savepath" "$saves_folder/scummvm" "libretro_scummvm" "scummvm"
+        set_setting_value "$ra_scummvm_conf" "browser_lastpath" "$roms_folder/scummvm" "libretro_scummvm" "scummvm"
       fi
       # Shared actions
 
