@@ -27,6 +27,7 @@ source /app/libexec/global.sh
 #     - Open Emulator (Behind one-time power user warning dialog)
 #       - RetroArch
 #       - Cemu
+#       - Citra
 #       - Dolphin
 #       - Duckstation
 #       - MAME
@@ -38,6 +39,7 @@ source /app/libexec/global.sh
 #       - Ryujinx
 #       - Vita3K
 #       - XEMU
+#       - Yuzu
 #     - Tools
 #       - Tool: Move Folders
 #         - Move all of RetroDECK
@@ -70,6 +72,7 @@ source /app/libexec/global.sh
 #         - Reset Specific Emulator
 #           - Reset RetroArch
 #           - Reset Cemu
+#           - Reset Citra
 #           - Reset Dolphin
 #           - Reset Duckstation
 #           - Reset GZDoom
@@ -82,6 +85,7 @@ source /app/libexec/global.sh
 #           - Reset Ryujinx
 #           - Reset Vita3k
 #           - Reset XEMU
+#           - Reset Yuzu
 #         - Reset All Emulators
 #         - Reset EmulationStation DE
 #         - Reset RetroDECK
@@ -425,25 +429,38 @@ configurator_power_user_warning_dialog() {
 }
 
 configurator_open_emulator_dialog() {
+
+  local emulator_list=(
+    "RetroArch" "Open the multi-emulator frontend RetroArch"
+    "Cemu" "Open the Wii U emulator CEMU"
+    "Dolphin" "Open the Wii & GC emulator Dolphin"
+    "Duckstation" "Open the PSX emulator Duckstation"
+    "MAME" "Open the Multiple Arcade Machine Emulator emulator MAME"
+    "MelonDS" "Open the NDS emulator MelonDS"
+    "PCSX2" "Open the PS2 emulator PSXC2"
+    "PPSSPP" "Open the PSP emulator PPSSPP"
+    "Primehack" "Open the Metroid Prime emulator Primehack"
+    "RPCS3" "Open the PS3 emulator RPCS3"
+    "Ryujinx" "Open the Switch emulator Ryujinx"
+    "Vita3K" "Open the PSVita emulator Vita3K"
+    "XEMU" "Open the Xbox emulator XEMU"
+  )
+
+  # Check if any ponzu is true before adding Yuzu or Citra to the list
+  if [[ "$kiroi_ponzu" == true ]]; then
+    emulator_list+=("Yuzu" "Open the Switch emulator Yuzu")
+  fi
+  if [[ "$kiroi_ponzu" == true ]]; then
+    emulator_list+=("Citra" "Open the 3DS emulator Citra")
+  fi
+
   emulator=$(zenity --list \
   --title "RetroDECK Configurator Utility - Open Emulator" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --text="Which emulator do you want to launch?" \
   --hide-header \
   --column="Emulator" --column="Action" \
-  "RetroArch" "Open the multi-emulator frontend RetroArch" \
-  "Cemu" "Open the Wii U emulator CEMU" \
-  "Dolphin" "Open the Wii & GC emulator Dolphin" \
-  "Duckstation" "Open the PSX emulator Duckstation" \
-  "MAME" "Open the Multiple Arcade Machine Emulator emulator MAME" \
-  "MelonDS" "Open the NDS emulator MelonDS" \
-  "PCSX2" "Open the PS2 emulator PSXC2" \
-  "PPSSPP" "Open the PSP emulator PPSSPP" \
-  "Primehack" "Open the Metroid Prime emulator Primehack" \
-  "RPCS3" "Open the PS3 emulator RPCS3" \
-  "Ryujinx" "Open the Switch emulator Ryujinx" \
-  "Vita3K" "Open the PSVita emulator Vita3K" \
-  "XEMU" "Open the Xbox emulator XEMU" )
+  "${emulator_list[@]}")
 
   case $emulator in
 
@@ -455,6 +472,11 @@ configurator_open_emulator_dialog() {
   "Cemu" )
     log i "Configurator: \"$emulator\""
     Cemu-wrapper
+  ;;
+
+  "Citra" )
+    log i "Configurator: \"$emulator\""
+    /var/data/ponzu/Citra/citra-qt
   ;;
 
   "Dolphin" )
@@ -510,6 +532,11 @@ configurator_open_emulator_dialog() {
   "XEMU" )
     log i "Configurator: \"$emulator\""
     xemu
+  ;;
+
+  "Yuzu" )
+    log i "Configurator: \"$emulator\""
+    /var/data/ponzu/Yuzu/yuzu-qt
   ;;
 
   "" ) # No selection made or Back button clicked
@@ -1040,6 +1067,31 @@ configurator_reset_dialog() {
   "Reset All Emulators and Components" "Reset all emulators and components to default settings" \
   "Reset RetroDECK" "Reset RetroDECK to default settings" )
 
+  local emulator_list=(
+    "RetroArch" "Reset the multi-emulator frontend RetroArch to default settings"
+    "Cemu" "Reset the Wii U emulator Cemu to default settings"
+    "Dolphin" "Reset the Wii/GameCube emulator Dolphin to default settings"
+    "Duckstation" "Reset the PSX emulator Duckstation to default settings"
+    "GZDoom" "Reset the GZDoom Doom engine to default settings"
+    "MAME" "Reset the Multiple Arcade Machine Emulator (MAME) to default settings"
+    "MelonDS" "Reset the NDS emulator MelonDS to default settings"
+    "PCSX2" "Reset the PS2 emulator PCSX2 to default settings"
+    "PPSSPP" "Reset the PSP emulator PPSSPP to default settings"
+    "Primehack" "Reset the Metroid Prime emulator Primehack to default settings"
+    "RPCS3" "Reset the PS3 emulator RPCS3 to default settings"
+    "Ryujinx" "Reset the Switch emulator Ryujinx to default settings"
+    "Vita3k" "Reset the PS Vita emulator Vita3k to default settings"
+    "XEMU" "Reset the XBOX emulator XEMU to default settings"
+  )
+
+  # Check if any ponzu is true before adding Yuzu or Citra to the list
+  if [[ "$kiroi_ponzu" == true ]]; then
+    emulator_list+=("Yuzu" "Reset the Switch emulator Yuzu")
+  fi
+  if [[ "$kiroi_ponzu" == true ]]; then
+    emulator_list+=("Citra" "Reset the 3DS emulator Citra")
+  fi
+
   case $choice in
 
   "Reset Specific Emulator" )
@@ -1049,22 +1101,7 @@ configurator_reset_dialog() {
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
     --text="Which emulator or engine do you want to reset to default?" \
     --column="Emulator" --column="Action" \
-    "RetroArch" "Reset the multi-emulator frontend RetroArch to default settings" \
-    "Cemu" "Reset the Wii U emulator Cemu to default settings" \
-    "Dolphin" "Reset the Wii/GameCube emulator Dolphin to default settings" \
-    "Duckstation" "Reset the PSX emulator Duckstation to default settings" \
-    "GZDoom" "Reset the GZDoom Doom engine to default settings" \
-    "MAME" "Reset the Multiple Arcade Machine Emulator (MAME) to default settings" \
-    "MelonDS" "Reset the NDS emulator MelonDS to default settings" \
-    "PCSX2" "Reset the PS2 emulator PCSX2 to default settings" \
-    "PPSSPP" "Reset the PSP emulator PPSSPP to default settings" \
-    "Primehack" "Reset the Metroid Prime emulator Primehack to default settings" \
-    "RPCS3" "Reset the PS3 emulator RPCS3 to default settings" \
-    "Ryujinx" "Reset the Switch emulator Ryujinx to default settings" \
-    "Vita3k" "Reset the PS Vita emulator Vita3k to default settings" \
-    "XEMU" "Reset the XBOX emulator XEMU to default settings" )
-
-    # "Ryujinx" "Reset the Switch emulator Ryujinx to default settings" \
+    "${emulator_list[@]}")
 
     case $component_to_reset in
 
@@ -1083,7 +1120,7 @@ configurator_reset_dialog() {
       fi
     ;;
 
-    "Cemu" | "Dolphin" | "Duckstation" | "MelonDS" | "MAME" | "PCSX2" | "PPSSPP" | "Primehack" | "RPCS3" | "Ryujinx" )
+    "Cemu" | "Citra" | "Dolphin" | "Duckstation" | "MelonDS" | "MAME" | "PCSX2" | "PPSSPP" | "Primehack" | "RPCS3" | "Ryujinx" )
       if [[ $(configurator_reset_confirmation_dialog "$component_to_reset" "Are you sure you want to reset the $component_to_reset emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
         prepare_component "reset" "$component_to_reset" "configurator"
         configurator_process_complete_dialog "resetting $component_to_reset"

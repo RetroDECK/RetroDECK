@@ -700,7 +700,12 @@ ponzu() {
       executable=""
       log d "Making $executable executable"
       chmod +x "$executable"
-      set_setting_value $rd_conf "ponzu" "true" retrodeck "options"
+      if [[ "$ponzu_file" == *itra*]]; then
+        set_setting_value $rd_conf "akai_ponzu" "true" retrodeck "options"
+      elif [[ "$ponzu_file" == *uzu* ]]; then
+        set_setting_value $rd_conf "kiroi_ponzu" "true" retrodeck "options"
+      fi
+      
       cd -
       log i "$message"
     fi

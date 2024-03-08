@@ -170,6 +170,7 @@
             <entry>org.citra_emu.citra</entry>
         </rule>
         <rule type="staticpath">
+            <entry>/var/data/ponzu/Citra/citra-qt</entry> <!-- RetroDECK, ponzu -->
             <entry>~/Applications/citra-qt*.AppImage</entry>
             <entry>~/.local/share/applications/citra-qt*.AppImage</entry>
             <entry>~/.local/bin/citra-qt*.AppImage</entry>
@@ -1047,6 +1048,22 @@
             <entry>~/.local/share/applications/xroar/xroar</entry>
             <entry>~/.local/bin/xroar/xroar</entry>
             <entry>~/bin/xroar/xroar</entry>
+        </rule>
+    </emulator>
+    <emulator name="YUZU">
+        <!-- Nintendo Switch emulator Yuzu -->
+        <rule type="systempath">
+            <entry>yuzu</entry>
+            <entry>org.yuzu_emu.yuzu</entry>
+        </rule>
+        <rule type="staticpath">
+            <entry>/var/data/ponzu/Yuzu/yuzu-qt</entry> <!-- RetroDECK, ponzu -->
+            <entry>~/Applications/yuzu*.AppImage</entry>
+            <entry>~/.local/share/applications/yuzu*.AppImage</entry>
+            <entry>~/.local/bin/yuzu*.AppImage</entry>
+            <entry>~/bin/yuzu*.AppImage</entry>
+            <entry>/var/lib/flatpak/exports/bin/org.yuzu_emu.yuzu</entry>
+            <entry>~/.local/share/flatpak/exports/bin/org.yuzu_emu.yuzu</entry>
         </rule>
     </emulator>
     <emulator name="ZESARUX">
