@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd ..
+
 # TODO: FEDORA
 # sudo dnf install -y flatpak flatpak-builder p7zip p7zip-plugins xmlstarlet bzip2 curl
 
@@ -22,3 +24,5 @@ rm -f net.retrodeck.retrodeck.appdata.xml
 rm -f net.retrodeck.retrodeck.yml
 cp net.retrodeck.retrodeck.appdata.xml.bak net.retrodeck.retrodeck.appdata.xml
 cp net.retrodeck.retrodeck.yml.bak net.retrodeck.retrodeck.yml
+
+cd -
