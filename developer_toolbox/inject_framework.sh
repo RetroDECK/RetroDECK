@@ -1,11 +1,11 @@
 #!/bin/bash
 
+# WARNING: run this script from the project root folder, not from here!!
+
 # This script is used to inject framework and config files inside a RetroDECK cooker installation
 # To apply the injected config you have to reset the targeted component from the Configurator
 # Please know what you're doing, if you need to undo this you need to completely uninstall and reinstall RetroDECK flatpak
 # Please not that this may create a dirty situation where older files are still in place as the action is add and overwrite
-
-cd ..
 
 flatpak_user_installation="$HOME/.local/share/flatpak/app/net.retrodeck.retrodeck/current/active/files"
 flatpak_system_installation="/var/lib/flatpak/app/net.retrodeck.retrodeck/current/active/files"
@@ -28,5 +28,3 @@ sudo cp -vfr "emu-configs/"** "$app/retrodeck/emu-configs/"
 sudo cp -vfr "es-configs/es_find_rules.xml" "$app/share/es-de/resources/systems/linux/"
 sudo cp -vfr "es-configs/es_systems.xml" "$app/share/es-de/resources/systems/linux/"
 sudo cp -vfr "res/binding_icons" "$app/retrodeck/binding_icons" 
-
-cd -
