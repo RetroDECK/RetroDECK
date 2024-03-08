@@ -672,7 +672,7 @@ ponzu() {
   for ponzu_file in "${ponzu_files[@]}"; do
     # Check if the current ponzu file exists
     if [ -f "$ponzu_file" ]; then
-      if [[ "$ponzu_file" == *itra*]]; then
+      if [[ "$ponzu_file" == *itra* ]]; then
         log i "Found akai ponzu! Elaborating it"
         data_dir="/var/data/ponzu/Citra"
         local message="Akai ponzu is served, enjoy"
@@ -696,13 +696,17 @@ ponzu() {
       log d "Cleaning up"
       cp -r squashfs-root/* "$tmp_folder"
       rm -rf *
-      mv "$tmp_folder/"** .
-      executable=""
-      log d "Making $executable executable"
-      chmod +x "$executable"
       if [[ "$ponzu_file" == *itra*]]; then
+        mv "$tmp_folder/usr/"** .
+        executable="$data_dir/bin/citra-qt"
+        log d "Making $executable executable"
+        chmod +x "$executable"
         set_setting_value $rd_conf "akai_ponzu" "true" retrodeck "options"
       elif [[ "$ponzu_file" == *uzu* ]]; then
+        mv "$tmp_folder/usr/"** .
+        executable="$data_dir/bin/yuzu"
+        log d "Making $executable executable"
+        chmod +x "$executable"
         set_setting_value $rd_conf "kiroi_ponzu" "true" retrodeck "options"
       fi
       
