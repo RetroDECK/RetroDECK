@@ -660,6 +660,7 @@ manage_ryujinx_keys() {
 ponzu() {
   # This function is used to extract some specific appimages
   # Check if any of the specified files exist
+  # If RetroDECK is reset Ponzu must re-cooked
 
   local tmp_folder="/tmp/extracted"
   local ponzu_files=("$rdhome"/ponzu/Citra*.AppImage "$rdhome"/ponzu/citra*.AppImage "$rdhome"/ponzu/Yuzu*.AppImage "$rdhome"/ponzu/yuzu*.AppImage) 
@@ -673,11 +674,11 @@ ponzu() {
     if [ -f "$ponzu_file" ]; then
       if [[ "$ponzu_file" == *itra*]]; then
         log i "Found akai ponzu! Elaborating it"
-        data_dir="/var/data/Citra"
+        data_dir="/var/data/ponzu/Citra"
         local message="Akai ponzu is served, enjoy"
       elif [[ "$ponzu_file" == *uzu* ]]; then
         log i "Found kiroi ponzu! Elaborating it"
-        data_dir="/var/data/Yuzu"
+        data_dir="/var/data/ponzu/Yuzu"
         local message="Kiroi ponzu is served, enjoy"
       else
         log e "AppImage not recognized, not a ponzu ingredient!"
@@ -699,6 +700,7 @@ ponzu() {
       executable=""
       log d "Making $executable executable"
       chmod +x "$executable"
+      set_setting_value $rd_conf "ponzu" "true" retrodeck "options"
       cd -
       log i "$message"
     fi
