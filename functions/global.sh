@@ -68,6 +68,7 @@ es_settings="/var/config/ES-DE/settings/es_settings.xml"
 
 raconf="/var/config/retroarch/retroarch.cfg"
 ra_core_conf="/var/config/retroarch/retroarch-core-options.cfg"
+ra_scummvm_conf="/var/config/retroarch/system/scummvm.ini"
 
 # CEMU config files
 

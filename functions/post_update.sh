@@ -275,6 +275,9 @@ post_update() {
     log i "Switch firmware folder should be moved in \"$bios_folder/switch/firmware\" from \"$bios_folder/switch/registered\""
     dir_prep "$bios_folder/switch/firmware" "$bios_folder/switch/registered"
 
+    log i "New systems were added in this version, regenerating system folders."
+    es-de --home "/var/config/" --create-system-dirs
+
   fi
 
   # if [[ $(check_version_is_older_than "0.9.0b") == "true" ]]; then

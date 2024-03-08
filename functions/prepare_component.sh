@@ -88,6 +88,18 @@ prepare_component() {
         set_setting_value "$raconf" "savestate_directory" "$states_folder" "retroarch"
         set_setting_value "$raconf" "screenshot_directory" "$screenshots_folder" "retroarch"
         set_setting_value "$raconf" "log_dir" "$logs_folder" "retroarch"
+        set_setting_value "$raconf" "rgui_browser_directory" "$roms_folder" "retroarch"
+        
+        # Specific Settings for ScummVM core
+        cp -fv "$emuconfigs/retroarch/scummvm.ini" "$ra_scummvm_conf"
+        create_dir "$mods_folder/RetroArch/ScummVM/icons"
+        create_dir "$mods_folder/RetroArch/ScummVM/extra"
+        create_dir "$mods_folder/RetroArch/ScummVM/themes"
+        set_setting_value "$ra_scummvm_conf" "iconspath" "$mods_folder/RetroArch/ScummVM/icons" "libretro_scummvm" "scummvm"
+        set_setting_value "$ra_scummvm_conf" "extrapath" "$mods_folder/RetroArch/ScummVM/extra" "libretro_scummvm" "scummvm"
+        set_setting_value "$ra_scummvm_conf" "themepath" "$mods_folder/RetroArch/ScummVM/themes" "libretro_scummvm" "scummvm"
+        set_setting_value "$ra_scummvm_conf" "savepath" "$saves_folder/scummvm" "libretro_scummvm" "scummvm"
+        set_setting_value "$ra_scummvm_conf" "browser_lastpath" "$roms_folder/scummvm" "libretro_scummvm" "scummvm"
       fi
       # Shared actions
 
@@ -666,9 +678,9 @@ prepare_component() {
     log i "----------------------"
 
     create_dir "/var/config/gzdoom"
-    create_dir "/var/data/gzdoom"
+    create_dir -d "/var/data/gzdoom"
     cp -fvr "$emuconfigs/gzdoom/gzdoom.ini" "/var/config/gzdoom"
-    cp -fvr "$emuconfigs/gzdoom/gzdoom.pk3" "/var/data/gzdoom"
+    cp -fvr "$emuconfigs/gzdoom/"*".pk3" "/var/data/gzdoom"
 
     sed -i 's#RETRODECKROMSDIR#'$roms_folder'#g' "/var/config/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON
     sed -i 's#RETRODECKSAVESDIR#'$saves_folder'#g' "/var/config/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON
