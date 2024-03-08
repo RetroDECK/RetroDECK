@@ -476,7 +476,7 @@ configurator_open_emulator_dialog() {
 
   "Citra" )
     log i "Configurator: \"$emulator\""
-    /var/data/ponzu/Citra/citra-qt
+    /var/data/ponzu/Citra/bin/citra-qt
   ;;
 
   "Dolphin" )
@@ -536,7 +536,7 @@ configurator_open_emulator_dialog() {
 
   "Yuzu" )
     log i "Configurator: \"$emulator\""
-    /var/data/ponzu/Yuzu/yuzu-qt
+    /var/data/ponzu/Yuzu/bin/yuzu-qt
   ;;
 
   "" ) # No selection made or Back button clicked

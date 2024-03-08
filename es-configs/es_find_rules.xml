@@ -170,7 +170,7 @@
             <entry>org.citra_emu.citra</entry>
         </rule>
         <rule type="staticpath">
-            <entry>/var/data/ponzu/Citra/citra-qt</entry> <!-- RetroDECK, ponzu -->
+            <entry>/var/data/ponzu/Citra/bin/citra-qt</entry> <!-- RetroDECK, ponzu -->
             <entry>~/Applications/citra-qt*.AppImage</entry>
             <entry>~/.local/share/applications/citra-qt*.AppImage</entry>
             <entry>~/.local/bin/citra-qt*.AppImage</entry>
@@ -1057,7 +1057,7 @@
             <entry>org.yuzu_emu.yuzu</entry>
         </rule>
         <rule type="staticpath">
-            <entry>/var/data/ponzu/Yuzu/yuzu-qt</entry> <!-- RetroDECK, ponzu -->
+            <entry>/var/data/ponzu/Yuzu/bin/yuzu-qt</entry> <!-- RetroDECK, ponzu -->
             <entry>~/Applications/yuzu*.AppImage</entry>
             <entry>~/.local/share/applications/yuzu*.AppImage</entry>
             <entry>~/.local/bin/yuzu*.AppImage</entry>
