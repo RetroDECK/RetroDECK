@@ -725,6 +725,30 @@ ponzu() {
   rm -rf "$rdhome/ponzu"
 }
 
+ponzu_remove(){
+
+  # Call me with yuzu or citra and I will remove them
+
+  if [[ "$1" == "citra" ]]; then
+    if [[ $(configurator_generic_question_dialog "Ponzu - Remove Citra" "Do you really want to remove Citra binaries?\n\nYour games and saves will not be deleted.") == "true" ]]; then
+      log i "Ponzu: removing Citra"
+      rm -rf "/var/data/ponzu/Citra"
+      set_setting_value $rd_conf "akai_ponzu" "false" retrodeck "options"
+      configurator_generic_dialog "Ponzu - Remove Citra" "Done, Citra is now removed from RetroDECK"
+    fi
+  elif [[ "$1" == "yuzu" ]]; then
+    if [[ $(configurator_generic_question_dialog "Ponzu - Remove Yuzu" "Do you really want to remove Yuzu binaries?\n\nYour games and saves will not be deleted.") == "true" ]]; then
+      log i "Ponzu: removing Yuzu"
+      rm -rf "/var/data/ponzu/Yuzu"
+      set_setting_value $rd_conf "kiroi_ponzu" "false" retrodeck "options"
+      configurator_generic_dialog "Ponzu - Remove Yuzu" "Done, Yuzu is now removed from RetroDECK"
+    fi
+  else
+    log e "Ponzu: \"$1\" is not a vaild choice for removal, quitting"
+  fi
+  configurator_retrodeck_tools_dialog
+}
+
 # TODO: this function is not yet used
 branch_selector() {
     log d "Fetch branches from GitHub API excluding \"main\""

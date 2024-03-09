@@ -550,15 +550,27 @@ configurator_open_emulator_dialog() {
 }
 
 configurator_retrodeck_tools_dialog() {
+
+  local choices=(
+  "Tool: Move Folders" "Move RetroDECK folders between internal/SD card or to a custom location"
+  "Tool: Compress Games" "Compress games for systems that support it"
+  "Install: RetroDECK SD Controller Profile" "Install the custom RetroDECK controller layout for the Steam Deck"
+  "Install: PS3 Firmware" "Download and install PS3 firmware for use with the RPCS3 emulator"
+  "Install: PS Vita Firmware" "Download and install PS Vita firmware for use with the Vita3K emulator"
+  "RetroDECK: Change Update Setting" "Enable or disable online checks for new versions of RetroDECK"
+  )
+
+  if [[ $(get_setting_value "$rd_conf" "kiroi_ponzu" "retrodeck" "options") == "true" ]]; then
+    choices+=("Ponzu - Remove Yuzu" "Run Ponzu to remove Yuzu from RetroDECK. Configurations and saves will be mantained.")
+  fi
+  if [[ $(get_setting_value "$rd_conf" "akai_ponzu" "retrodeck" "options") == "true" ]]; then
+    choices+=("Ponzu - Remove Citra" "Run Ponzu to remove Citra from RetroDECK. Configurations and saves will be mantained.")
+  fi
+
   choice=$(zenity --list --title="RetroDECK Configurator Utility - RetroDECK: Tools" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
-  "Tool: Move Folders" "Move RetroDECK folders between internal/SD card or to a custom location" \
-  "Tool: Compress Games" "Compress games for systems that support it" \
-  "Install: RetroDECK SD Controller Profile" "Install the custom RetroDECK controller layout for the Steam Deck" \
-  "Install: PS3 Firmware" "Download and install PS3 firmware for use with the RPCS3 emulator" \
-  "Install: PS Vita Firmware" "Download and install PS Vita firmware for use with the Vita3K emulator" \
-  "RetroDECK: Change Update Setting" "Enable or disable online checks for new versions of RetroDECK" )
+  "${choices[@]}")
 
   case $choice in
 
@@ -624,6 +636,14 @@ configurator_retrodeck_tools_dialog() {
     log i "Configurator: opening \"$choice\" menu"
     configurator_online_update_setting_dialog
   ;;
+
+"Ponzu - Remove Yuzu" )
+  ponzu_remove "yuzu"
+;;
+
+"Ponzu - Remove Citra" )
+  ponzu_remove "citra"
+;;
 
   "" ) # No selection made or Back button clicked
     log i "Configurator: going back"
@@ -1059,13 +1079,18 @@ configurator_check_multifile_game_structure() {
 }
 
 configurator_reset_dialog() {
+
+  local choices=(
+    "Reset Specific Emulator" "Reset only one specific emulator or engine to default settings"
+    "Reset RetroDECK Component" "Reset a single component, components are parts of RetroDECK that are not emulators"
+    "Reset All Emulators and Components" "Reset all emulators and components to default settings"
+    "Reset RetroDECK" "Reset RetroDECK to default settings"
+  )
+
   choice=$(zenity --list --title="RetroDECK Configurator Utility - RetroDECK: Reset" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
-  "Reset Specific Emulator" "Reset only one specific emulator or engine to default settings" \
-  "Reset RetroDECK Component" "Reset a single component, components are parts of RetroDECK that are not emulators" \
-  "Reset All Emulators and Components" "Reset all emulators and components to default settings" \
-  "Reset RetroDECK" "Reset RetroDECK to default settings" )
+  "${choices[@]}")
 
   local emulator_list=(
     "RetroArch" "Reset the multi-emulator frontend RetroArch to default settings"
