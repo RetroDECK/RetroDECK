@@ -701,12 +701,14 @@ ponzu() {
         executable="$data_dir/bin/citra-qt"
         log d "Making $executable executable"
         chmod +x "$executable"
+        prepare_component "reset" "yuzu"
         set_setting_value $rd_conf "akai_ponzu" "true" retrodeck "options"
       elif [[ "$ponzu_file" == *uzu* ]]; then
         mv "$tmp_folder/usr/"** .
         executable="$data_dir/bin/yuzu"
         log d "Making $executable executable"
         chmod +x "$executable"
+        prepare_component "reset" "citra"
         set_setting_value $rd_conf "kiroi_ponzu" "true" retrodeck "options"
       fi
       
