@@ -662,6 +662,8 @@ ponzu() {
   # Check if any of the specified files exist
   # If RetroDECK is reset Ponzu must re-cooked
 
+  log d "Checking for Ponzu"
+
   local tmp_folder="/tmp/extracted"
   local ponzu_files=("$rdhome"/ponzu/Citra*.AppImage "$rdhome"/ponzu/citra*.AppImage "$rdhome"/ponzu/Yuzu*.AppImage "$rdhome"/ponzu/yuzu*.AppImage) 
   local data_dir
@@ -685,18 +687,21 @@ ponzu() {
         exit 1
       fi
       appimage="$ponzu_file"
+      chmod +x "$ponzu_file"
       create_dir "$data_dir"
       log d "Moving AppImage in \"$data_dir\""
       mv "$appimage" "$data_dir"
       cd "$data_dir"
-      chmod +x "$appimage"
+      local filename=$(basename "$ponzu_file")
+      log d "Setting appimage=$data_dir/$filename"
+      appimage="$data_dir/$filename"
       log d "Extracting AppImage"
       "$appimage" --appimage-extract
       create_dir "$tmp_folder"
       log d "Cleaning up"
       cp -r squashfs-root/* "$tmp_folder"
       rm -rf *
-      if [[ "$ponzu_file" == *itra*]]; then
+      if [[ "$ponzu_file" == *itra* ]]; then
         mv "$tmp_folder/usr/"** .
         executable="$data_dir/bin/citra-qt"
         log d "Making $executable executable"
@@ -714,8 +719,10 @@ ponzu() {
       
       cd -
       log i "$message"
+      rm -rf "$tmp_folder"
     fi
   done
+  rm -rf "$rdhome/ponzu"
 }
 
 # TODO: this function is not yet used
