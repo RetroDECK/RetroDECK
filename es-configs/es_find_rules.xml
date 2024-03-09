@@ -1057,7 +1057,7 @@
             <entry>org.yuzu_emu.yuzu</entry>
         </rule>
         <rule type="staticpath">
-            <entry>/var/data/ponzu/Yuzu/bin/yuzu-qt</entry> <!-- RetroDECK, ponzu -->
+            <entry>/var/data/ponzu/Yuzu/bin/yuzu</entry> <!-- RetroDECK, ponzu -->
             <entry>~/Applications/yuzu*.AppImage</entry>
             <entry>~/.local/share/applications/yuzu*.AppImage</entry>
             <entry>~/.local/bin/yuzu*.AppImage</entry>

@@ -447,10 +447,10 @@ configurator_open_emulator_dialog() {
   )
 
   # Check if any ponzu is true before adding Yuzu or Citra to the list
-  if [[ "$kiroi_ponzu" == true ]]; then
+  if [[ $(get_setting_value "$rd_conf" "kiroi_ponzu" "retrodeck" "options") == "true" ]]; then
     emulator_list+=("Yuzu" "Open the Switch emulator Yuzu")
   fi
-  if [[ "$kiroi_ponzu" == true ]]; then
+  if [[ $(get_setting_value "$rd_conf" "akai_ponzu" "retrodeck" "options") == "true" ]]; then
     emulator_list+=("Citra" "Open the 3DS emulator Citra")
   fi
 
@@ -536,7 +536,7 @@ configurator_open_emulator_dialog() {
 
   "Yuzu" )
     log i "Configurator: \"$emulator\""
-    /var/data/ponzu/Yuzu/bin/yuzu-qt
+    /var/data/ponzu/Yuzu/bin/yuzu
   ;;
 
   "" ) # No selection made or Back button clicked
@@ -1085,10 +1085,10 @@ configurator_reset_dialog() {
   )
 
   # Check if any ponzu is true before adding Yuzu or Citra to the list
-  if [[ "$kiroi_ponzu" == true ]]; then
+  if [[ $(get_setting_value "$rd_conf" "kiroi_ponzu" "retrodeck" "options") == "true" ]]; then
     emulator_list+=("Yuzu" "Reset the Switch emulator Yuzu")
   fi
-  if [[ "$kiroi_ponzu" == true ]]; then
+  if [[ $(get_setting_value "$rd_conf" "akai_ponzu" "retrodeck" "options") == "true" ]]; then
     emulator_list+=("Citra" "Reset the 3DS emulator Citra")
   fi
 
