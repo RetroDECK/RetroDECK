@@ -657,6 +657,98 @@ manage_ryujinx_keys() {
   fi
 }
 
+ponzu() {
+  # This function is used to extract some specific appimages
+  # Check if any of the specified files exist
+  # If RetroDECK is reset Ponzu must re-cooked
+
+  log d "Checking for Ponzu"
+
+  local tmp_folder="/tmp/extracted"
+  local ponzu_files=("$rdhome"/ponzu/Citra*.AppImage "$rdhome"/ponzu/citra*.AppImage "$rdhome"/ponzu/Yuzu*.AppImage "$rdhome"/ponzu/yuzu*.AppImage) 
+  local data_dir
+  local appimage
+  local executable
+
+  # Loop through all ponzu files
+  for ponzu_file in "${ponzu_files[@]}"; do
+    # Check if the current ponzu file exists
+    if [ -f "$ponzu_file" ]; then
+      if [[ "$ponzu_file" == *itra* ]]; then
+        log i "Found akai ponzu! Elaborating it"
+        data_dir="/var/data/ponzu/Citra"
+        local message="Akai ponzu is served, enjoy"
+      elif [[ "$ponzu_file" == *uzu* ]]; then
+        log i "Found kiroi ponzu! Elaborating it"
+        data_dir="/var/data/ponzu/Yuzu"
+        local message="Kiroi ponzu is served, enjoy"
+      else
+        log e "AppImage not recognized, not a ponzu ingredient!"
+        exit 1
+      fi
+      appimage="$ponzu_file"
+      chmod +x "$ponzu_file"
+      create_dir "$data_dir"
+      log d "Moving AppImage in \"$data_dir\""
+      mv "$appimage" "$data_dir"
+      cd "$data_dir"
+      local filename=$(basename "$ponzu_file")
+      log d "Setting appimage=$data_dir/$filename"
+      appimage="$data_dir/$filename"
+      log d "Extracting AppImage"
+      "$appimage" --appimage-extract
+      create_dir "$tmp_folder"
+      log d "Cleaning up"
+      cp -r squashfs-root/* "$tmp_folder"
+      rm -rf *
+      if [[ "$ponzu_file" == *itra* ]]; then
+        mv "$tmp_folder/usr/"** .
+        executable="$data_dir/bin/citra-qt"
+        log d "Making $executable executable"
+        chmod +x "$executable"
+        prepare_component "reset" "yuzu"
+        set_setting_value $rd_conf "akai_ponzu" "true" retrodeck "options"
+      elif [[ "$ponzu_file" == *uzu* ]]; then
+        mv "$tmp_folder/usr/"** .
+        executable="$data_dir/bin/yuzu"
+        log d "Making $executable executable"
+        chmod +x "$executable"
+        prepare_component "reset" "citra"
+        set_setting_value $rd_conf "kiroi_ponzu" "true" retrodeck "options"
+      fi
+      
+      cd -
+      log i "$message"
+      rm -rf "$tmp_folder"
+    fi
+  done
+  rm -rf "$rdhome/ponzu"
+}
+
+ponzu_remove(){
+
+  # Call me with yuzu or citra and I will remove them
+
+  if [[ "$1" == "citra" ]]; then
+    if [[ $(configurator_generic_question_dialog "Ponzu - Remove Citra" "Do you really want to remove Citra binaries?\n\nYour games and saves will not be deleted.") == "true" ]]; then
+      log i "Ponzu: removing Citra"
+      rm -rf "/var/data/ponzu/Citra"
+      set_setting_value $rd_conf "akai_ponzu" "false" retrodeck "options"
+      configurator_generic_dialog "Ponzu - Remove Citra" "Done, Citra is now removed from RetroDECK"
+    fi
+  elif [[ "$1" == "yuzu" ]]; then
+    if [[ $(configurator_generic_question_dialog "Ponzu - Remove Yuzu" "Do you really want to remove Yuzu binaries?\n\nYour games and saves will not be deleted.") == "true" ]]; then
+      log i "Ponzu: removing Yuzu"
+      rm -rf "/var/data/ponzu/Yuzu"
+      set_setting_value $rd_conf "kiroi_ponzu" "false" retrodeck "options"
+      configurator_generic_dialog "Ponzu - Remove Yuzu" "Done, Yuzu is now removed from RetroDECK"
+    fi
+  else
+    log e "Ponzu: \"$1\" is not a vaild choice for removal, quitting"
+  fi
+  configurator_retrodeck_tools_dialog
+}
+
 # TODO: this function is not yet used
 branch_selector() {
     log d "Fetch branches from GitHub API excluding \"main\""
@@ -726,6 +818,7 @@ quit_retrodeck() {
 
 start_retrodeck() {
   easter_eggs # Check if today has a surprise splashscreen and load it if so
+  ponzu
   log i "Starting RetroDECK v$version"
   es-de --home /var/config/
 }

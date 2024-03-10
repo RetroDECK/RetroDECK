@@ -23,7 +23,7 @@ fi
 
 sudo cp -vfr "retrodeck.sh" "$app/bin/"
 sudo cp -vfr "functions/"** "$app/libexec/"
-sudo cp -vfr "tools" "$app/tools"
+sudo cp -vfr "tools" "$app"
 sudo cp -vfr "emu-configs/"** "$app/retrodeck/emu-configs/"
 sudo cp -vfr "es-configs/es_find_rules.xml" "$app/share/es-de/resources/systems/linux/"
 sudo cp -vfr "es-configs/es_systems.xml" "$app/share/es-de/resources/systems/linux/"
