@@ -75,8 +75,9 @@
             <p>Changes:</p>
             <ul>
                <li>ES-DE: updated to 3.0</li>
-               <li>CITRA-SA: Removed, the libretro core is now the default emulator</li>
-               <li>YUZU: Removed, Ryujinx is now the default emulator</li>
+               <li>PONZU: added</li>
+               <li>CITRA-SA: Removed, the libretro core is now the default emulator, they will available trough Ponzu</li>
+               <li>YUZU: Removed, Ryujinx is now the default emulator, they will available trough Ponzu</li>
                <li>Added new system: RYUJINX</li>
                <li>Added new system: SOLARUS</li>
                <li>Added new engine: GZDOOM</li>
@@ -119,15 +120,11 @@
             </ul>
             <p>Issues:</p>
             <ul>
-               <li>Vita3K firmware downloader is failing. Workaround: run the downloader twice</li>
-               <li>GZDOOM: the controller for player 2+ is not correctly configured</li>
                <li>quit_retrodeck function seems to not working correctly</li>
             </ul>
             <p>Missing:</p>
             <ul>
-               <li>GZDOOM: hotkeys</li>
                <li>SOLARUS: hotkeys</li>
-               <li>A proper reset script for the new emulators, now it's just a draft (only Vita3K is done)</li>
             </ul>
          </description>
       </release>

@@ -777,9 +777,8 @@ prepare_component() {
     log i "----------------------"
 
     create_dir "/var/config/gzdoom"
-    create_dir -d "/var/data/gzdoom"
+    create_dir "/data/gzdoom/audio/midi"
     cp -fvr "$emuconfigs/gzdoom/gzdoom.ini" "/var/config/gzdoom"
-    cp -fvr "$emuconfigs/gzdoom/"*".pk3" "/var/data/gzdoom"
 
     sed -i 's#RETRODECKROMSDIR#'$roms_folder'#g' "/var/config/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON
     sed -i 's#RETRODECKSAVESDIR#'$saves_folder'#g' "/var/config/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON
