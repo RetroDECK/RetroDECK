@@ -1,8 +1,0 @@
-GZDOOM
-
-New ini
-
-Fluidsynth:
-
-libfluidsynth64.dll should be put in the data folder.
-Make symlink from : /usr/share/sounds/sf2/ to /data/gzdoom/sounds/sf2 and put FluidR3_GS.sf2 in there
