@@ -1,4 +1,34 @@
 Vita3K
+
+Fix the bindings and make sure everything works
+
 MAME
+
+Double check all the inputs and hotkeys for Player 1 to 4
+
 GZDoom
-Solarus
+
+Fix the config.
+Feel if the bindings are right when everything is done and all works as excpected.
+
+Primehack
+
+See what bindings works best
+
+Dolphin
+
+Look into Rotational controls while holding two buttons + right joystick.
+
+RetroArch
+
+User complained about Touchscreen
+Make sure the config is SDL
+
+ALL
+
+Test all inputs after everything is done
+
+
+Question:
+
+Does the X/Y A/B switcher needs to be updated?
