@@ -59,6 +59,8 @@ duckstationconf="/var/config/duckstation/settings.ini"
 melondsconf="/var/config/melonDS/melonDS.ini"
 ryujinxconf="/var/config/Ryujinx/Config.json"
 xemuconf="/var/config/xemu/xemu.toml"
+yuzuconf="/var/config/yuzu/qt-config.ini"
+citraconf="/var/config/citra-emu/qt-config.ini"
 
 # ES-DE config files
 

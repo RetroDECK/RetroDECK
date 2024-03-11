@@ -171,6 +171,51 @@ prepare_component() {
     fi
   fi
 
+  if [[ "$component" =~ ^(citra|citra-emu|Citra|all)$ ]]; then
+    if [[ "$action" == "reset" ]]; then # Run reset-only commands
+      log i "------------------------"
+      log i "Prepearing CITRA"
+      log i "------------------------"
+      if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
+        create_dir -d "$multi_user_data_folder/$SteamAppUser/config/citra-emu"
+        cp -fv $emuconfigs/citra/qt-config.ini "$multi_user_data_folder/$SteamAppUser/config/citra-emu/qt-config.ini"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/citra-emu/qt-config.ini" "nand_directory" "$saves_folder/n3ds/citra/nand/" "citra" "Data%20Storage"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/citra-emu/qt-config.ini" "sdmc_directory" "$saves_folder/n3ds/citra/sdmc/" "citra" "Data%20Storage"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/citra-emu/qt-config.ini" "Paths\gamedirs\3\path" "$roms_folder/n3ds" "citra" "UI"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/citra-emu/qt-config.ini" "Paths\screenshotPath" "$screenshots_folder" "citra" "UI"
+        dir_prep "$multi_user_data_folder/$SteamAppUser/config/citra-emu" "/var/config/citra-emu"
+      else # Single-user actions
+        create_dir -d /var/config/citra-emu/
+        cp -f $emuconfigs/citra/qt-config.ini /var/config/citra-emu/qt-config.ini
+        set_setting_value "$citraconf" "nand_directory" "$saves_folder/n3ds/citra/nand/" "citra" "Data%20Storage"
+        set_setting_value "$citraconf" "sdmc_directory" "$saves_folder/n3ds/citra/sdmc/" "citra" "Data%20Storage"
+        set_setting_value "$citraconf" "Paths\gamedirs\3\path" "$roms_folder/n3ds" "citra" "UI"
+        set_setting_value "$citraconf" "Paths\screenshotPath" "$screenshots_folder" "citra" "UI"
+      fi
+      # Shared actions
+      create_dir "$saves_folder/n3ds/citra/nand/"
+      create_dir "$saves_folder/n3ds/citra/sdmc/"
+      dir_prep "$bios_folder/citra/sysdata" "/var/data/citra-emu/sysdata"
+      dir_prep "$logs_folder/citra" "/var/data/citra-emu/log"
+      dir_prep "$mods_folder/Citra" "/var/data/citra-emu/load/mods"
+      dir_prep "$texture_packs_folder/Citra" "/var/data/citra-emu/load/textures"
+
+      # Reset default preset settings
+      set_setting_value "$rd_conf" "citra" "$(get_setting_value "$rd_defaults" "citra" "retrodeck" "abxy_button_swap")" "retrodeck" "abxy_button_swap"
+      set_setting_value "$rd_conf" "citra" "$(get_setting_value "$rd_defaults" "citra" "retrodeck" "ask_to_exit")" "retrodeck" "ask_to_exit"
+    fi
+    if [[ "$action" == "postmove" ]]; then # Run only post-move commands
+      dir_prep "$rdhome/bios/citra/sysdata" "/var/data/citra-emu/sysdata"
+      dir_prep "$rdhome/logs/citra" "/var/data/citra-emu/log"
+      dir_prep "$mods_folder/Citra" "/var/data/citra-emu/load/mods"
+      dir_prep "$texture_packs_folder/Citra" "/var/data/citra-emu/load/textures"
+      set_setting_value "$citraconf" "nand_directory" "$saves_folder/n3ds/citra/nand/" "citra" "Data%20Storage"
+      set_setting_value "$citraconf" "sdmc_directory" "$saves_folder/n3ds/citra/sdmc/" "citra" "Data%20Storage"
+      set_setting_value "$citraconf" "Paths\gamedirs\3\path" "$roms_folder/n3ds" "citra" "UI"
+      set_setting_value "$citraconf" "Paths\screenshotPath" "$screenshots_folder" "citra" "UI"
+    fi
+  fi
+
   if [[ "$component" =~ ^(cemu|Cemu|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       log i "----------------------"
@@ -537,6 +582,60 @@ prepare_component() {
     fi
   fi
 
+  if [[ "$component" =~ ^(yuzu|Yuzu|all)$ ]]; then
+    if [[ "$action" == "reset" ]]; then # Run reset-only commands
+      log i "----------------------"
+      log i "Prepearing YUZU"
+      log i "----------------------"
+      if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
+        create_dir -d "$multi_user_data_folder/$SteamAppUser/config/yuzu"
+        cp -fvr "$emuconfigs/yuzu/"* "$multi_user_data_folder/$SteamAppUser/config/yuzu/"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/yuzu/qt-config.ini" "nand_directory" "$saves_folder/switch/yuzu/nand" "yuzu" "Data%20Storage"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/yuzu/qt-config.ini" "sdmc_directory" "$saves_folder/switch/yuzu/sdmc" "yuzu" "Data%20Storage"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/yuzu/qt-config.ini" "Paths\gamedirs\4\path" "$roms_folder/switch" "yuzu" "UI"
+        set_setting_value "$multi_user_data_folder/$SteamAppUser/config/yuzu/qt-config.ini" "Screenshots\screenshot_path" "$screenshots_folder" "yuzu" "UI"
+        dir_prep "$multi_user_data_folder/$SteamAppUser/config/yuzu" "/var/config/yuzu"
+      else # Single-user actions
+        create_dir -d /var/config/yuzu/
+        cp -fvr "$emuconfigs/yuzu/"* /var/config/yuzu/
+        set_setting_value "$yuzuconf" "nand_directory" "$saves_folder/switch/yuzu/nand" "yuzu" "Data%20Storage"
+        set_setting_value "$yuzuconf" "sdmc_directory" "$saves_folder/switch/yuzu/sdmc" "yuzu" "Data%20Storage"
+        set_setting_value "$yuzuconf" "Paths\gamedirs\4\path" "$roms_folder/switch" "yuzu" "UI"
+        set_setting_value "$yuzuconf" "Screenshots\screenshot_path" "$screenshots_folder" "yuzu" "UI"
+      fi
+      # Shared actions
+      dir_prep "$saves_folder/switch/yuzu/nand" "/var/data/yuzu/nand"
+      dir_prep "$saves_folder/switch/yuzu/sdmc" "/var/data/yuzu/sdmc"
+      dir_prep "$bios_folder/switch/keys" "/var/data/yuzu/keys"
+      dir_prep "$bios_folder/switch/firmware" "/var/data/yuzu/nand/system/Contents/registered"
+      dir_prep "$logs_folder/yuzu" "/var/data/yuzu/log"
+      dir_prep "$screenshots_folder" "/var/data/yuzu/screenshots"
+      dir_prep "$mods_folder/Yuzu" "/var/data/yuzu/load"
+      create_dir "$rdhome/customs/yuzu"
+      # removing dead symlinks as they were present in a past version
+      if [ -d $bios_folder/switch ]; then
+        find $bios_folder/switch -xtype l -exec rm {} \;
+      fi
+
+      # Reset default preset settings
+      set_setting_value "$rd_conf" "yuzu" "$(get_setting_value "$rd_defaults" "yuzu" "retrodeck" "abxy_button_swap")" "retrodeck" "abxy_button_swap"
+      set_setting_value "$rd_conf" "yuzu" "$(get_setting_value "$rd_defaults" "yuzu" "retrodeck" "ask_to_exit")" "retrodeck" "ask_to_exit"
+    fi
+    if [[ "$action" == "postmove" ]]; then # Run only post-move commands
+      dir_prep "$bios_folder/switch/keys" "/var/data/yuzu/keys"
+      dir_prep "$bios_folder/switch/firmware" "/var/data/yuzu/nand/system/Contents/registered"
+      dir_prep "$saves_folder/switch/yuzu/nand" "/var/data/yuzu/nand"
+      dir_prep "$saves_folder/switch/yuzu/sdmc" "/var/data/yuzu/sdmc"
+      dir_prep "$logs_folder/yuzu" "/var/data/yuzu/log"
+      dir_prep "$screenshots_folder" "/var/data/yuzu/screenshots"
+      dir_prep "$mods_folder/Yuzu" "/var/data/yuzu/load"
+      set_setting_value "$yuzuconf" "nand_directory" "$saves_folder/switch/yuzu/nand" "yuzu" "Data%20Storage"
+      set_setting_value "$yuzuconf" "sdmc_directory" "$saves_folder/switch/yuzu/sdmc" "yuzu" "Data%20Storage"
+      set_setting_value "$yuzuconf" "Paths\gamedirs\4\path" "$roms_folder/switch" "yuzu" "UI"
+      set_setting_value "$yuzuconf" "Screenshots\screenshot_path" "$screenshots_folder" "yuzu" "UI"
+    fi
+  fi
+
   if [[ "$component" =~ ^(xemu|XEMU|all)$ ]]; then
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       log i "------------------------"
@@ -678,9 +777,8 @@ prepare_component() {
     log i "----------------------"
 
     create_dir "/var/config/gzdoom"
-    create_dir -d "/var/data/gzdoom"
+    create_dir "/data/gzdoom/audio/midi"
     cp -fvr "$emuconfigs/gzdoom/gzdoom.ini" "/var/config/gzdoom"
-    cp -fvr "$emuconfigs/gzdoom/"*".pk3" "/var/data/gzdoom"
 
     sed -i 's#RETRODECKROMSDIR#'$roms_folder'#g' "/var/config/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON
     sed -i 's#RETRODECKSAVESDIR#'$saves_folder'#g' "/var/config/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON

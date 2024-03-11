@@ -19,6 +19,8 @@ mkdir -vp ${$BUILD_DIR}/"$FOLDER"
 flatpak-builder --user --force-clean \
 --install-deps-from=flathub \
 --install-deps-from=flathub-beta \
+--keep-build-dirs \
+--rebuild-on-sdk-change \
 --repo="${BUILD_DIR}/.local" \
 --disable-download \
 "${BUILD_DIR}/${FOLDER}" \
