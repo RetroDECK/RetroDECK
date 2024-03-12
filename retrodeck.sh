@@ -166,8 +166,9 @@ if [[ $multi_user_mode == "true" ]]; then
 fi
 
 # Run optional startup checks
-
-desktop_mode_warning
+if [[ $(check_is_steam_deck) == "true" ]]; then # Only warn about Desktop Mode on Steam Deck, ignore for other platforms
+  desktop_mode_warning
+fi
 low_space_warning
 
 # Check if there is a new version of RetroDECK available, if update_check=true in retrodeck.cfg and there is network connectivity available.
