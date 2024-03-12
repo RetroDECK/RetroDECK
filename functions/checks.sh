@@ -28,6 +28,17 @@ check_desktop_mode() {
   fi
 }
 
+check_is_steam_deck() {
+  # This function will check the internal product ID for the Steam Deck codename and return "true" if RetroDECK is running on a real Deck
+  # USAGE: if [[ $(check_is_steam_deck) == "true" ]]; then
+
+  if [[ $(cat /sys/devices/virtual/dmi/id/product_name) =~ ^(Jupiter|Galileo)$ ]]; then
+    echo "true"
+  else
+    echo "false"
+  fi
+}
+
 check_for_version_update() {
   # This function will perform a basic online version check and alert the user if there is a new version available.
 

@@ -222,7 +222,6 @@ desktop_mode_warning() {
     --text="$message")
     rc=$? # Capture return code, as "Yes" button has no text value
     if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
-      log i "Selected: \"Yes\""
       if [[ $choice == "No" ]]; then
         log i "Selected: \"No\""
         exit 1
@@ -230,6 +229,8 @@ desktop_mode_warning() {
         log i "Selected: \"Never show this again\""
         set_setting_value $rd_conf "desktop_mode_warning" "false" retrodeck "options" # Store desktop mode warning variable for future checks
       fi
+    else
+      log i "Selected: \"Yes\""
     fi
   fi
 }
