@@ -238,10 +238,30 @@ post_update() {
     log i "- Change section name in retrodeck.cfg for ABXY button swap preset"
     log i "- Force disable global rewind in RA in prep for preset system"
     log i "- The following components are been added and need to be initialized: es-de 3.0, MAME-SA, Vita3K, GZDoom"
-    if [[ -f "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf" ]]; then # Only remove if file had been previously installed
-      log d "Found an old Steam Controller profile, removing it has been replaced: \"$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf\""
-      rm -f "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf"
-    fi
+
+
+    # Removing old controller configs
+    local controller_configs_path="$HOME/.steam/steam/controller_base/templates"
+    local controller_configs=(
+      "$controller_configs_path/RetroDECK_controller_config.vdf"
+      "$controller_configs_path/RetroDECK_controller_generic_standard.vdf"
+      "$controller_configs_path/RetroDECK_controller_ps3_dualshock3.vdf"
+      "$controller_configs_path/RetroDECK_controller_ps4_dualshock4.vdf"
+      "$controller_configs_path/RetroDECK_controller_ps5_dualsense.vdf"
+      "$controller_configs_path/RetroDECK_controller_steam_controller_gordon.vdf"
+      "$controller_configs_path/RetroDECK_controller_neptune.vdf"
+      "$controller_configs_path/RetroDECK_controller_switch_pro.vdf"
+      "$controller_configs_path/RetroDECK_controller_xbox360.vdf"
+      "$controller_configs_path/RetroDECK_controller_xboxone.vdf"
+    )
+
+    for this_vdf in "${controller_configs[@]}"; do
+        if [[ -f "$this_vdf" ]]; then
+            log d "Found an old Steam Controller profile, removing it: \"$this_vdf\""
+            rm -f "$this_vdf"
+        fi
+    done
+
     log d "Renaming \"nintendo_button_layout\" into \"abxy_button_swap\" in the retrodeck config file: \"$rd_conf\""
     sed -i 's^nintendo_button_layout^abxy_button_swap^' "$rd_conf" # This is a one-off sed statement as there are no functions for replacing section names
     log i "Force disabling rewind, you can re-enable it via the Configurator"
