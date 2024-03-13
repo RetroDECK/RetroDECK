@@ -69,7 +69,7 @@ source /app/libexec/global.sh
 #       - Check & Verify: BIOS - Expert Mode
 #       - Check & Verify: Multi-file structure
 #       - RetroDECK: Reset
-#         - Reset Specific Emulator
+#         - Reset Emulator or Engine
 #           - Reset RetroArch
 #           - Reset Cemu
 #           - Reset Citra
@@ -1081,7 +1081,7 @@ configurator_check_multifile_game_structure() {
 configurator_reset_dialog() {
 
   local choices=(
-    "Reset Specific Emulator" "Reset only one specific emulator or engine to default settings"
+    "Reset Emulator or Engine" "Reset only one specific emulator or engine to default settings"
     "Reset RetroDECK Component" "Reset a single component, components are parts of RetroDECK that are not emulators"
     "Reset All Emulators and Components" "Reset all emulators and components to default settings"
     "Reset RetroDECK" "Reset RetroDECK to default settings"
@@ -1119,7 +1119,7 @@ configurator_reset_dialog() {
 
   case $choice in
 
-  "Reset Specific Emulator" )
+  "Reset Emulator or Engine" )
     log i "Configurator: opening \"$choice\" menu"
     component_to_reset=$(zenity --list \
     --title "RetroDECK Configurator Utility - Reset Specific Standalone Emulator" --cancel-label="Back" \
