@@ -778,6 +778,8 @@ prepare_component() {
 
     create_dir "/var/config/gzdoom"
     create_dir "/var/data/gzdoom/audio/midi"
+    create_dir "/var/data/gzdoom/audio/fm_banks"
+    create_dir "/var/data/gzdoom/audio/soundfonts"
     create_dir "$rdhome/bios/gzdoom"
 
     cp -fvr "$emuconfigs/gzdoom/gzdoom.ini" "/var/config/gzdoom"
