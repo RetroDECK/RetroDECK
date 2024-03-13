@@ -912,7 +912,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/RPCS3/rpcs3.git
-        commit: ef8afa78737dd426941b204187b6838ad74420f1
+        commit: 0f29a5be9fc6700a50b2743f79377eb8ec7e1b71
 
   # RPCS3 - END
 
