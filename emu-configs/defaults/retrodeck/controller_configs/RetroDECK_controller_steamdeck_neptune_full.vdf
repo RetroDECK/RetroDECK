@@ -1231,7 +1231,6 @@
 		"settings"
 		{
 			"touchmenu_button_fire_type"		"1"
-			"virtualmenu_center_bound"		"1"
 		}
 	}
 	"group"
@@ -4383,15 +4382,6 @@
 				{
 				}
 			}
-			"touch_menu_button_7"
-			{
-				"activators"
-				{
-				}
-				"disabled_activators"
-				{
-				}
-			}
 		}
 		"settings"
 		{
@@ -4764,6 +4754,7 @@
 						"bindings"
 						{
 							"binding"		"key_press LEFT_ALT, Service Mode, RD-emblem-documents.png, "
+							"binding"		"key_press S, Service Mode, RD-emblem-documents.png, "
 							"binding"		"key_press 0, Service Mode, RD-emblem-documents.png, "
 						}
 					}
@@ -4781,6 +4772,7 @@
 						"bindings"
 						{
 							"binding"		"key_press LEFT_ALT, Button 1 - Service, RD-Arcade-BLUE.png, "
+							"binding"		"key_press S, Button 1 - Service, RD-Arcade-BLUE.png, "
 							"binding"		"key_press 1, Button 1 - Service, RD-Arcade-BLUE.png, "
 						}
 					}
@@ -4798,6 +4790,7 @@
 						"bindings"
 						{
 							"binding"		"key_press LEFT_ALT, Button 2 - Service, RD-Arcade-GREEN.png, "
+							"binding"		"key_press S, Button 2 - Service, RD-Arcade-GREEN.png, "
 							"binding"		"key_press 2, Button 2 - Service, RD-Arcade-GREEN.png, "
 						}
 					}
@@ -4815,6 +4808,7 @@
 						"bindings"
 						{
 							"binding"		"key_press LEFT_ALT, Button 3 - Service, RD-Arcade-RED.png, "
+							"binding"		"key_press S, Button 3 - Service, RD-Arcade-RED.png, "
 							"binding"		"key_press 3, Button 3 - Service, RD-Arcade-RED.png, "
 						}
 					}
@@ -4832,6 +4826,7 @@
 						"bindings"
 						{
 							"binding"		"key_press LEFT_ALT, Button 4 - Service, RD-Arcade-YELLOW.png, "
+							"binding"		"key_press S, Button 4 - Service, RD-Arcade-YELLOW.png, "
 							"binding"		"key_press 4, Button 4 - Service, RD-Arcade-YELLOW.png, "
 						}
 					}
@@ -4848,8 +4843,9 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press LEFT_ALT, Bill / Note - Player 1, RD-emblem-generic.png, "
-							"binding"		"key_press 5, Bill / Note - Player 1, RD-emblem-generic.png, "
+							"binding"		"key_press LEFT_ALT, Insert Bill, RD-emblem-generic.png, "
+							"binding"		"key_press B, Insert Bill, RD-emblem-generic.png, "
+							"binding"		"key_press 1, Insert Bill, RD-emblem-generic.png, "
 						}
 					}
 				}
@@ -4865,8 +4861,81 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press LEFT_ALT, Tilt - Player 1, RD-emblem-synchronizing.png, "
-							"binding"		"key_press 6, Tilt - Player 1, RD-emblem-synchronizing.png, "
+							"binding"		"key_press LEFT_ALT, Tilt - Player 4, RD-tilt-4.png, "
+							"binding"		"key_press T, Tilt - Player 4, RD-tilt-4.png, "
+							"binding"		"key_press 4, Tilt - Player 4, RD-tilt-4.png, "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"touch_menu_button_8"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press LEFT_ALT, Tilt - Player 3, RD-tilt-3.png, "
+							"binding"		"key_press T, Tilt - Player 3, RD-tilt-3.png, "
+							"binding"		"key_press 3, Tilt - Player 3, RD-tilt-3.png, "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"touch_menu_button_9"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press LEFT_ALT, Tilt - Player 2, RD-tilt-2.png, "
+							"binding"		"key_press T, Tilt - Player 2, RD-tilt-2.png, "
+							"binding"		"key_press 2, Tilt - Player 2, RD-tilt-2.png, "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"touch_menu_button_10"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press LEFT_ALT, Tilt - Player 1, RD-tilt-1.png, "
+							"binding"		"key_press T, Tilt - Player 1, RD-tilt-1.png, "
+							"binding"		"key_press 1, Tilt - Player 1, RD-tilt-1.png, "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"touch_menu_button_11"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press LEFT_ALT, Tilt, rd-tilt.png, "
+							"binding"		"key_press T, Tilt, rd-tilt.png, "
+							"binding"		"key_press 0, Tilt, rd-tilt.png, "
 						}
 					}
 				}
@@ -5693,8 +5762,8 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press LEFT_ALT, Netplay - Golf Mode, RD-distributor-logo-netbsd.png, "
-							"binding"		"key_press H, Netplay - Golf Mode, RD-distributor-logo-netbsd.png, "
+							"binding"		"key_press LEFT_ALT, Wii Sync Button, RD-notification-network-wireless.png, "
+							"binding"		"key_press W, Wii Sync Button, RD-notification-network-wireless.png, "
 						}
 					}
 				}
@@ -5710,8 +5779,8 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press LEFT_ALT, Freelook Mode - Toggle, RD-preferences-system-search.png, "
-							"binding"		"key_press F, Freelook Mode - Toggle, RD-preferences-system-search.png, "
+							"binding"		"key_press LEFT_ALT, Netplay - Golf Mode, RD-distributor-logo-netbsd.png, "
+							"binding"		"key_press H, Netplay - Golf Mode, RD-distributor-logo-netbsd.png, "
 						}
 					}
 				}
@@ -5727,8 +5796,8 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press LEFT_ALT, Wii Sync Button, RD-notification-network-wireless.png, "
-							"binding"		"key_press W, Wii Sync Button, RD-notification-network-wireless.png, "
+							"binding"		"key_press LEFT_ALT, Freelook Mode - Toggle, RD-preferences-system-search.png, "
+							"binding"		"key_press F, Freelook Mode - Toggle, RD-preferences-system-search.png, "
 						}
 					}
 				}
@@ -5778,8 +5847,80 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press LEFT_ALT, Reset Freelook Camera, RD-preferences-system-search.png, "
-							"binding"		"key_press R, Reset Freelook Camera, RD-preferences-system-search.png, "
+							"binding"		"key_press LEFT_ALT, Reset Freelook Camera, RD-view-refresh.png, "
+							"binding"		"key_press R, Reset Freelook Camera, RD-view-refresh.png, "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"touch_menu_button_7"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press LEFT_ALT, Sync Wii Mote 4, RD-wii-4.png, "
+							"binding"		"key_press W, Sync Wii Mote 4, RD-wii-4.png, "
+							"binding"		"key_press 4, Sync Wii Mote 4, RD-wii-4.png, "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"touch_menu_button_8"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press LEFT_ALT, Sync Wii Mote 3, RD-wii-3.png, "
+							"binding"		"key_press W, Sync Wii Mote 3, RD-wii-3.png, "
+							"binding"		"key_press 3, Sync Wii Mote 3, RD-wii-3.png, "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"touch_menu_button_9"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press LEFT_ALT, Sync Wii Mote 2, RD-wii-2.png, "
+							"binding"		"key_press W, Sync Wii Mote 2, RD-wii-2.png, "
+							"binding"		"key_press 2, Sync Wii Mote 2, RD-wii-2.png, "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"touch_menu_button_10"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press LEFT_ALT, Sync Wii Mote 1, RD-wii-1.png, "
+							"binding"		"key_press W, Sync Wii Mote 1, RD-wii-1.png, "
+							"binding"		"key_press 1, Sync Wii Mote 1, RD-wii-1.png, "
 						}
 					}
 				}
@@ -6175,8 +6316,8 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press LEFT_ALT, Play Microphone, RD-media-playback-start.png, "
-							"binding"		"key_press P, Play Microphone, RD-media-playback-start.png, "
+							"binding"		"key_press LEFT_ALT, Blow Microphone, RD-media-playback-start.png, "
+							"binding"		"key_press P, Blow Microphone, RD-media-playback-start.png, "
 						}
 					}
 				}
