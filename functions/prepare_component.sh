@@ -43,6 +43,9 @@ prepare_component() {
   fi
 
   if [[ "$component" =~ ^(es-de|ES-DE|all)$ ]]; then # For use after ESDE-related folders are moved or a reset
+      log i "--------------------------------"
+      log i "Prepearing ES-DE"
+      log i "--------------------------------"
     if [[ "$action" == "reset" ]]; then
       rm -rf /var/config/ES-DE
       create_dir /var/config/ES-DE/settings
@@ -53,7 +56,8 @@ prepare_component() {
       set_setting_value "$es_settings" "UserThemeDirectory" "$themes_folder" "es_settings"
       dir_prep "$rdhome/gamelists" "/var/config/ES-DE/gamelists"
       log d "Generating roms system folders"
-      es-de --home /var/config/ES-DE --create-system-dirs
+      #es-de --home /var/config/ES-DE --create-system-dirs
+      es-de --create-system-dirs
       update_splashscreens
     fi
     if [[ "$action" == "postmove" ]]; then
@@ -65,6 +69,9 @@ prepare_component() {
   fi
 
   if [[ "$component" =~ ^(retroarch|RetroArch|all)$ ]]; then
+      log i "--------------------------------"
+      log i "Prepearing RetroArch"
+      log i "--------------------------------"
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         create_dir -d "$multi_user_data_folder/$SteamAppUser/config/retroarch"
@@ -121,13 +128,16 @@ prepare_component() {
       log i "-----------------------------------------------------------"
       log i "Prepearing MSX / SVI / ColecoVision / SG-1000 LIBRETRO"
       log i "-----------------------------------------------------------"
+      log i "Copying \"/app/retrodeck/extras/MSX/Databases\" in \"$bios_folder/Databases\""
       cp -rf "/app/retrodeck/extras/MSX/Databases" "$bios_folder/Databases"
+      log i "Copying \"/app/retrodeck/extras/MSX/Machines\" in \"$bios_folder/Machines\""
       cp -rf "/app/retrodeck/extras/MSX/Machines" "$bios_folder/Machines"
 
       # AMIGA
       log i "-----------------------------------------------------------"
       log i "Prepearing AMIGA LIBRETRO"
       log i "-----------------------------------------------------------"
+      log i "Copying \"/app/retrodeck/extras/Amiga/capsimg.so\" in \"$bios_folder/capsimg.so\""
       cp -f "/app/retrodeck/extras/Amiga/capsimg.so" "$bios_folder/capsimg.so"
     
       dir_prep "$texture_packs_folder/RetroArch-Mesen" "/var/config/retroarch/system/HdPacks"
