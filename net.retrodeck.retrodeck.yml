@@ -417,9 +417,7 @@ modules:
       - '*.a'
       - '*.la'
 
-  # When updating this module remember to check those:
-  # https://gitlab.com/es-de/emulationstation-de/-/blob/[VERSION]/resources/systems/linux/es_find_rules.xml
-  # But we don't include them 1:1 as RetroDECK got some specific configs in some cases
+  # When updating this module remember to check those on the main repos:
   - name: ES-DE
     buildsystem: cmake-ninja
     config-opts:
@@ -1250,11 +1248,6 @@ modules:
       # Initializing RO retrodeck config folder
       - mkdir -p ${FLATPAK_DEST}/retrodeck
 
-      # Prep the ES-DE and RetroArch config files - I will have to SED/XMLSTARLET them soon
-      - rm -rf /app/share/es-de/resources/systems/linux/es_find_rules.xml
-      - cp es-configs/es_find_rules.xml /app/share/es-de/resources/systems/linux/
-      - rm -rf /app/share/es-de/resources/systems/linux/es_systems.xml
-      - cp es-configs/es_systems.xml /app/share/es-de/resources/systems/linux/
       # These must be put in home folder, managed by retrodeck.sh
       - cp es-configs/es_settings.xml ${FLATPAK_DEST}/retrodeck/es_settings.xml
       - mv -f -t ${FLATPAK_DEST}/retrodeck es-configs/rd_prepacks
