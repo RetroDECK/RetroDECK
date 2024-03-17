@@ -296,7 +296,8 @@ post_update() {
     dir_prep "$bios_folder/switch/firmware" "$bios_folder/switch/registered"
 
     log i "New systems were added in this version, regenerating system folders."
-    es-de --home "/var/config/" --create-system-dirs
+    #es-de --home "/var/config/" --create-system-dirs
+    es-de --create-system-dirs
 
   fi
 

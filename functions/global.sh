@@ -64,6 +64,7 @@ citraconf="/var/config/citra-emu/qt-config.ini"
 
 # ES-DE config files
 
+export ESDE_APPDATA_DIR="/var/config/ES-DE"
 es_settings="/var/config/ES-DE/settings/es_settings.xml"
 
 # RetroArch config files
