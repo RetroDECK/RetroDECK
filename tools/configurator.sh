@@ -59,7 +59,7 @@ source /app/libexec/global.sh
 #         - Compress Multiple Games - RVZ
 #         - Compress Multiple Games - All Formats
 #         - Compress All Games
-#       - Install: RetroDECK SD Controller Profile
+#       - Install: RetroDECK Controller Layouts
 #       - Install: PS3 firmware
 #       - Install: PS Vita firmware
 #       - RetroDECK: Change Update Setting
@@ -554,7 +554,7 @@ configurator_retrodeck_tools_dialog() {
   local choices=(
   "Tool: Move Folders" "Move RetroDECK folders between internal/SD card or to a custom location"
   "Tool: Compress Games" "Compress games for systems that support it"
-  "Install: RetroDECK SD Controller Profile" "Install the custom RetroDECK controller layout for the Steam Deck"
+  "Install: RetroDECK Controller Layouts" "Install the custom RetroDECK controller layouts on Steam"
   "Install: PS3 Firmware" "Download and install PS3 firmware for use with the RPCS3 emulator"
   "Install: PS Vita Firmware" "Download and install PS Vita firmware for use with the Vita3K emulator"
   "RetroDECK: Change Update Setting" "Enable or disable online checks for new versions of RetroDECK"
@@ -585,7 +585,7 @@ configurator_retrodeck_tools_dialog() {
     configurator_compression_tool_dialog
   ;;
 
-  "Install: RetroDECK SD Controller Profile" )
+  "Install: RetroDECK Controller Layouts" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_generic_dialog "RetroDECK Configurator - Install: RetroDECK Controller Profile" "We are now offering a new official RetroDECK controller profile!\nIt is an optional component that helps you get the most out of RetroDECK with a new in-game radial menu for unified hotkeys across emulators.\n\nThe files need to be installed outside of the normal ~/retrodeck folder, so we wanted your permission before proceeding.\n\nThe files will be installed at the following shared Steam locations:\n\n$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/\n$HOME/.steam/steam/controller_base/templates"
     if [[ $(configurator_generic_question_dialog "Install: RetroDECK Controller Profile" "Would you like to install the official RetroDECK controller profile?") == "true" ]]; then
