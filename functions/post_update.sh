@@ -304,6 +304,13 @@ post_update() {
   # if [[ $(check_version_is_older_than "0.9.0b") == "true" ]]; then
   #   # Placeholder for version 0.9.0b
   #   rm /var/config/emulationstation/.emulationstation # remving the old symlink to .emulationstation as it might be not needed anymore
+  # TODO: change <mlc_path>RETRODECKHOMEDIR/bios/cemu</mlc_path> in emu-configs/cemu/settings.xml into <mlc_path>RETRODECKHOMEDIR/bios/cemu/mlc</mlc_path>
+  #     if [ ! -d "$bios_folder/cemu/mlc" ]; then
+  #     log i "Cemu MLC folder was moved from \"$bios_folder/cemu\" to \"$bios_folder/cemu/mlc\", migrating it"
+  #     mv -f "$bios_folder/cemu" "$bios_folder/cemu/mlc"
+  #     # TODO: set setting value mlc_path in settings.xml (check prepare script)
+  #   fi
+  # TODO: we must empty-symlink cemu keys.txt from /var/data/Cemu/keys.txt to $bios_folder/cemu/keys.txt but if itś already in place we should move it
   # fi
 
   # The following commands are run every time.
