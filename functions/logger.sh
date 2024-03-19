@@ -9,10 +9,20 @@
 
 # if [ "${log_init:-false}" = false ]; then
 #     logs_folder=${logs_folder:-"/tmp"}
+#     create_dir $logs_folder
 #     touch "$logs_folder/retrodeck.log"
 #     # exec > >(tee "$logs_folder/retrodeck.log") 2>&1 # this is broken, creates strange artifacts and corrupts the log file
 #     log_init=true
 # fi
+
+if [ -z "${rdhome}" ]; then
+    tmp_logs_folder="/tmp/rdlogs"
+    logs_folder="$tmp_logs_folder"
+    create_dir "$logs_folder"
+elif [ ! -z "${rdhome}" ] && [ -d "$tmp_logs_folder" ]; then
+    cp -f "$tmp_logs_folder/retrodeck.log" "$logs_folder/retrodeck.log"
+    rm -rf "$tmp_logs_folder"
+fi
 
 rd_logs_folder="$rdhome/logs"
 if [ ! -d "$rd_logs_folder" ]; then
