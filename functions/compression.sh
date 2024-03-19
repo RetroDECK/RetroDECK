@@ -10,13 +10,15 @@ compress_game() {
   local dest_file=$(dirname "$(realpath "$file")")"/""$filename_no_extension"
 
   if [[ "$1" == "chd" ]]; then
-    /app/bin/chdman createcd -i "$source_file" -o "$dest_file".chd
+    if [[ "$$3" =~ ^(psp)$ ]]; then
+      /app/bin/chdman createdvd -i "$source_file" -o "$dest_file".chd
+    else
+      /app/bin/chdman createcd -i "$source_file" -o "$dest_file".chd
+    fi
   elif [[ "$1" == "zip" ]]; then
     zip -jq9 "$dest_file".zip "$source_file"
   elif [[ "$1" == "rvz" ]]; then
     dolphin-tool convert -f rvz -b 131072 -c zstd -l 5 -i "$source_file" -o "$dest_file.rvz"
-  elif [[ "$1" == "cso" ]]; then
-    echo "TODO: maxcso command"
   fi
 }
 
