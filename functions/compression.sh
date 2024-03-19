@@ -10,11 +10,17 @@ compress_game() {
   local dest_file=$(dirname "$(realpath "$file")")"/""$filename_no_extension"
 
   if [[ "$1" == "chd" ]]; then
-    if [[ "$$3" =~ ^(psp)$ ]]; then
-      /app/bin/chdman createdvd -i "$source_file" -o "$dest_file".chd
-    else
+    case "$3" in # Check platform-specific compression options
+    "psp" )
+      /app/bin/chdman createdvd --hunksize 2048 -i "$source_file" -o "$dest_file".chd -c zstd
+    ;;
+    "ps2" )
+      /app/bin/chdman createdvd -i "$source_file" -o "$dest_file".chd -c zstd
+    ;;
+    * )
       /app/bin/chdman createcd -i "$source_file" -o "$dest_file".chd
-    fi
+    ;;
+    esac
   elif [[ "$1" == "zip" ]]; then
     zip -jq9 "$dest_file".zip "$source_file"
   elif [[ "$1" == "rvz" ]]; then
