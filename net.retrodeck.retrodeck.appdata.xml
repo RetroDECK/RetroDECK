@@ -8,7 +8,7 @@
    <developer_name>RetroDECK Team</developer_name>
    <url type="homepage">https://retrodeck.net</url>
    <url type="bugtracker">https://github.com/XargonWan/RetroDECK/issues</url>
-   <url type="help">http://discord.gg/Dz3szYsP8g</url>
+   <url type="help">https://retrodeck.readthedocs.io</url>
    <url type="faq">https://github.com/XargonWan/RetroDECK/wiki/FAQs---Frequently-asked-questions</url>
    <url type="donation">https://www.patreon.com/RetroDECK</url>
    <content_rating type="oars-1.0" />
@@ -65,50 +65,66 @@
    <project_license>GPL-3.0</project_license>
    <metadata_license>CC0-1.0</metadata_license>
    <releases>
-      <release version="0.8.0b" date="2023-12-14">
+      <release version="0.8.0b" date="2023-03-07">
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.8.0b</url>
          <description>
-            <p>CRITICAL:</p>
-            <ul>
-               <li>DEEP TEST: prepare_emulator function is now called prepare_component, eidted even in the cli and split it into the Configurator, so we need to test if the reset emulator works as supposed, if the cli and the Configurator is consistent.</li>
-            </ul>
+            <p>
+               WARNING:
+               The post update script is initializing es-de 3.0, vita3k, mame-sa and ryujinx when coming from a version ealrier that 0.8.0b. Tp fully test this build you must come from a build 0.7.6b or previous otherwise you will surely encounter issues. Else reset RetroDECK but be aware that will not be a proper testing.
+            </p>  
             <p>Changes:</p>
             <ul>
+               <li>ES-DE: updated to 3.0</li>
+               <li>PONZU: added</li>
+               <li>CITRA-SA: Removed, the libretro core is now the default emulator, they will available trough Ponzu</li>
+               <li>YUZU: Removed, Ryujinx is now the default emulator, they will available trough Ponzu</li>
+               <li>Added new system: RYUJINX</li>
                <li>Added new system: SOLARUS</li>
                <li>Added new engine: GZDOOM</li>
-               <li>Added new emulator: Vita3K - Reset the emulator to grap the lates changes</li>
+               <li>Added new emulator: Vita3K</li>
                <li>Added new emulator: MAME (Standalone)</li>
                <li>PPSSPP: added hotkeys</li>
+               <li>MAME: added hotkeys</li>
+               <li>SCUMMVM: added hotkeys</li>
                <li>DOLPHIN: improved wiimote pointer emulation for controllers</li>
-               <li>Added Steam Sync (with BoilR)</li>
+               <li>DOLPHIN: Enabled Gyro</li>
+               <li>DOLPHIN: Tweaked Wii Input</li>
+               <li>DOLPHIN: Tweaked GC Input</li>
+               <li>DOLPHIN: Enabled GBA and Tweaked Input</li>
+               <li>DOLPHIN: Graphical Tweaks</li>
+               <li>PRIMEHACK: config structure refactor + new configs</li>
                <li>Quit button after emulators reset should act as an actual full quit button</li>
                <li>Created a quit_retrodeck function to ease the quit in the scripts.</li>
                <li>Logs folder is now in retrodeck/logs (previously was .logs)</li>
-               <li>The post update script is initializing vita3k, mame and boilr when coming from a version ealrier that 0.8.0, this don't work in cokker and must be resetted manually (for boilr reset RetroDECK)</li>
-               <li>RPCS3 is now running via shortcut (.desktop file) by default - WARN THE USERS TO MIGRATE</li>
                <li>Added controller config for PS4 and PS5</li>
                <li>Controller config overhaul</li>
                <li>Removed talk names in the manifest as they're not needed anymore as enabled by default</li>
+               <li>CEMU: updated input profiles</li>
+               <li>DUCKSTATION: config refactor. The old config didn't not work anymore for controllers.</li>
+               <li>DUCKSTATION: All controlls now go via SDL</li>
+               <li>DUCKSTATION: Updated to 4 controllers</li>
+               <li>PCSX2: general and graphical tweaks</li>
+               <li>RPCS3 is now running via shortcut (.desktop file) by default - WARN THE USERS TO MIGRATE</li>
+               <li>RPCS3: Updated to 4 controllers</li>
+               <li>RYUJINX: Updated to 4 controllers</li>
+               <li>GZDOOM: Updated to 4 controllers</li>
+               <li>MELONDS: grahpical twekas</li>
             </ul>
             <p>Fixes:</p>
             <ul>
                <li>Fixed DUCKSTATION memory card folder</li>
-               <li>Fixed RPCS3 saves folder (wrong symlink) - WRN THE USERS TO BACKUP</li>
-               <li>Fixed issues that prevents Steam Sync to work correctly</li>
+               <li>Fixed RPCS3 saves folder (wrong symlink) - WARN THE USERS TO BACKUP</li>
+               <li>Fixed some issues that preventing RetroDECK to be built locally</li>
+               <li>SCUMMVM: fixed a bug where some paths were not existing</li>
+               <li>RETROARCH: fixed a bug where the default folder was not the rom folder in the rgui</li>
             </ul>
             <p>Issues:</p>
             <ul>
-               <li>!!! WARNING !!! Steam Sync is now REPLACING your Standalone BoilR links with RetroDECK's, use it at your own risk!</li>
-               <li>GZDOOM: the controller for player 2+ is not correctly configured</li>
                <li>quit_retrodeck function seems to not working correctly</li>
-               <li>MAME (Standalone) paths should be fixed</li>
             </ul>
             <p>Missing:</p>
             <ul>
-               <li>GZDOOM: hotkeys</li>
                <li>SOLARUS: hotkeys</li>
-               <li>MAME (Standalone): hotkeys</li>
-               <li>A proper reset script for the new emulators, now it's just a draft (only Vita3K is done)</li>
             </ul>
          </description>
       </release>

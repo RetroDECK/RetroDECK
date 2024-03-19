@@ -8,9 +8,11 @@ set_setting_value() {
   local setting_value_to_change=$(sed -e 's^\\^\\\\^g;s^`^\\`^g' <<< "$3")
   local current_section_name=$(sed -e 's/%/\\%/g' <<< "$5")
 
+  log d "Setting $setting_name_to_change=$setting_value_to_change in $1"
+
   case $4 in
 
-    "retrodeck" | "citra" | "melonds" | "yuzu" )
+    "retrodeck" | "melonds" | "yuzu" | "citra" | "libretro_scummvm" )
       if [[ -z $current_section_name ]]; then
         sed -i 's^\^'"$setting_name_to_change"'=.*^'"$setting_name_to_change"'='"$setting_value_to_change"'^' "$1"
       else
@@ -52,6 +54,15 @@ set_setting_value() {
         xml ed -L -u "//$current_section_name/$setting_name_to_change" -v "$setting_value_to_change" "$1"
       fi
       ;;
+    
+    "mame" ) # In this option, $current_section_name is the <system name> in the .cfg file.
+      local mame_current_value=$(get_setting_value "$1" "$setting_name_to_change" "$4" "$current_section_name")
+      if [[ "$1" =~ (.ini)$ ]]; then # If this is a MAME .ini file
+        sed -i '\^\^'"$setting_name_to_change"'\s^s^'"$mame_current_value"'^'"$setting_value_to_change"'^' "$1"
+      elif [[ "$1" =~ (.cfg)$ ]]; then # If this is an XML-based MAME .cfg file
+        sed -i '\^\<system name=\"'"$current_section_name"'\">^,\^<\/system>^s^'"$mame_current_value"'^'"$setting_value_to_change"'^' "$1"
+      fi
+      ;;
 
     "es_settings" )
       sed -i 's^'"$setting_name_to_change"'" value=".*"^'"$setting_name_to_change"'" value="'"$setting_value_to_change"'"^' "$1"
@@ -76,6 +87,10 @@ get_setting_name() {
     echo "$current_setting_line" | grep -o -P "^\s*?.*?(?=\s?:\s?)" | sed -e 's/^[ \t]*//;s^\\ ^ ^g'
     ;;
 
+  "mame" ) # This only works for mame .ini files, not the .cfg XML files
+    echo "$current_setting_line" | awk '{print $1}'
+    ;;
+
   * )
     echo "$current_setting_line" | grep -o -P "^\s*?.*?(?=\s?=\s?)" | sed -e 's/^[ \t]*//;s^\\ ^ ^g;s^\\$^^'
     ;;
@@ -92,7 +107,7 @@ get_setting_value() {
 
   case $3 in
 
-  "retrodeck" | "citra" | "melonds" | "yuzu" ) # For files with this syntax - setting_name=setting_value
+  "retrodeck" | "melonds" | "yuzu" ) # For files with this syntax - setting_name=setting_value
     if [[ -z $current_section_name ]]; then
       echo $(grep -o -P "(?<=^$current_setting_name=).*" "$1")
     else
@@ -129,6 +144,14 @@ get_setting_value() {
       echo $(xml sel -t -v "//$current_setting_name" "$1")
     else
       echo $(xml sel -t -v "//$current_section_name/$current_setting_name" "$1")
+    fi
+  ;;
+
+  "mame" ) # In this option, $current_section_name is the <system name> in the .cfg file.
+    if [[ "$1" =~ (.ini)$ ]]; then # If this is a MAME .ini file
+      echo $(sed -n '\^\^'"$current_setting_name"'\s^p' "$1" | awk '{print $2}')
+    elif [[ "$1" =~ (.cfg)$ ]]; then # If this is an XML-based MAME .cfg file
+      echo $(xml sel -t -v "/mameconfig/system[@name='$current_section_name']//*[@type='$current_setting_name']//*" -v "text()" -n "$1")
     fi
   ;;
 

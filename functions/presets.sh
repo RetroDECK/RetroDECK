@@ -112,11 +112,11 @@ build_preset_config() {
           "change" )
             if [[ "$read_preset" == "$current_preset" ]]; then
               if [[ "$target_file" = \$* ]]; then # Read current target file and resolve if it is a variable
-                declare -g "target_file=$target_file"
+                eval target_file=$target_file
               fi
               local read_target_file="$target_file"
               if [[ "$defaults_file" = \$* ]]; then #Read current defaults file and resolve if it is a variable
-                declare -g "defaults_file=$defaults_file"
+                eval defaults_file=$defaults_file
               fi
               local read_defaults_file="$defaults_file"
               if [[ "$read_system_enabled" == "true" ]]; then
@@ -125,7 +125,7 @@ build_preset_config() {
                 fi
                 if [[ "$read_config_format" == "retroarch" && ! "$retroarch_all" == "true" ]]; then # If this is a RetroArch core, generate the override file
                   if [[ ! -f "$read_target_file" ]]; then
-                    mkdir -p "$(realpath "$(dirname "$read_target_file")")"
+                    create_dir "$(realpath "$(dirname "$read_target_file")")"
                     echo "$read_setting_name = \""$new_setting_value"\"" > "$read_target_file"
                   else
                     if [[ -z $(grep "$read_setting_name" "$read_target_file") ]]; then

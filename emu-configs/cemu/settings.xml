@@ -101,7 +101,7 @@
     <Account>
         <PersistentId>2147483649</PersistentId>
         <OnlineEnabled>false</OnlineEnabled>
-        <ActiveService>0</ActiveService>
+        <ActiveService>1</ActiveService>
     </Account>
     <Debug>
         <CrashDumpUnix>1</CrashDumpUnix>
