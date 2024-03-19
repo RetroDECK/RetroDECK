@@ -830,5 +830,5 @@ start_retrodeck() {
   easter_eggs # Check if today has a surprise splashscreen and load it if so
   ponzu
   log i "Starting RetroDECK v$version"
-  es-de --home /var/config/
+  es-de
 }
