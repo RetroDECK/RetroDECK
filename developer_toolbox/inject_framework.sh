@@ -21,8 +21,8 @@ else
     exit 1
 fi
 
+sudo cp -vfr "res/binding_icons" "$app/retrodeck/binding_icons" 
+sudo cp -vfr "emu-configs/"** "$app/retrodeck/emu-configs/"
+sudo cp -vfr "tools" "$app"
 sudo cp -vfr "retrodeck.sh" "$app/bin/"
 sudo cp -vfr "functions/"** "$app/libexec/"
-sudo cp -vfr "tools" "$app"
-sudo cp -vfr "emu-configs/"** "$app/retrodeck/emu-configs/"
-sudo cp -vfr "res/binding_icons" "$app/retrodeck/binding_icons" 
