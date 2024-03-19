@@ -670,6 +670,16 @@ ponzu() {
   local appimage
   local executable
 
+  # if the binaries are found, ponzu should be set as true into the retrodeck config
+  if [ -f "/var/data/ponzu/Citra/bin/citra-qt" ]; then
+    log d "Citra binaries has already been installed, checking for updates and forcing the setting as true."
+    set_setting_value $rd_conf "akai_ponzu" "true" retrodeck "options"
+  fi
+  if [ -f "/var/data/ponzu/Yuzu/bin/yuzu" ]; then
+    log d "Yuzu binaries has already been installed, checking for updates and forcing the setting as true."
+    set_setting_value $rd_conf "kiroi_ponzu" "true" retrodeck "options"
+  fi
+
   # Loop through all ponzu files
   for ponzu_file in "${ponzu_files[@]}"; do
     # Check if the current ponzu file exists
