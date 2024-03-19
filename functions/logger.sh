@@ -14,6 +14,12 @@
 #     log_init=true
 # fi
 
+rd_logs_folder="$rdhome/logs"
+if [ ! -d "$rd_logs_folder" ]; then
+    # this is a one off otherwise it would be logging every time this function is called
+    create_dir "$rd_logs_folder"
+fi
+
 log() {
 
     # exec > >(tee "$logs_folder/retrodeck.log") 2>&1 # this is broken, creates strange artifacts and corrupts the log file
