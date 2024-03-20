@@ -78,10 +78,10 @@
                <li>PONZU: added</li>
                <li>CITRA-SA: Removed, the libretro core is now the default emulator, they will available trough Ponzu</li>
                <li>YUZU: Removed, Ryujinx is now the default emulator, they will available trough Ponzu</li>
-               <li>Added new system: RYUJINX</li>
+               <li>Added new system: PSVita, trough Vita3K</li>
                <li>Added new system: SOLARUS</li>
                <li>Added new engine: GZDOOM</li>
-               <li>Added new emulator: Vita3K</li>
+               <li>Added new emulator: RYUJINX</li>
                <li>Added new emulator: MAME (Standalone)</li>
                <li>PPSSPP: added hotkeys</li>
                <li>MAME: added hotkeys</li>
@@ -93,8 +93,6 @@
                <li>DOLPHIN: Enabled GBA and Tweaked Input</li>
                <li>DOLPHIN: Graphical Tweaks</li>
                <li>PRIMEHACK: config structure refactor + new configs</li>
-               <li>Quit button after emulators reset should act as an actual full quit button</li>
-               <li>Created a quit_retrodeck function to ease the quit in the scripts.</li>
                <li>Logs folder is now in retrodeck/logs (previously was .logs)</li>
                <li>Added controller config for PS4 and PS5</li>
                <li>Controller config overhaul</li>
@@ -102,12 +100,13 @@
                <li>CEMU: updated input profiles</li>
                <li>DUCKSTATION: config refactor. The old config didn't not work anymore for controllers.</li>
                <li>DUCKSTATION: All controlls now go via SDL</li>
-               <li>DUCKSTATION: Updated to 4 controllers</li>
                <li>PCSX2: general and graphical tweaks</li>
                <li>RPCS3 is now running via shortcut (.desktop file) by default - WARN THE USERS TO MIGRATE</li>
-               <li>RPCS3: Updated to 4 controllers</li>
-               <li>RYUJINX: Updated to 4 controllers</li>
-               <li>GZDOOM: Updated to 4 controllers</li>
+               <li>CEMU: enabled controller configs for player 2~4</li>
+               <li>DUCKSTATION: Updated to 4 controllers</li>
+               <li>GZDOOM: enabled controller configs for player 2~4</li>
+               <li>RPCS3: enabled controller configs for player 2~4</li>
+               <li>RYUJINX: enabled controller configs for player 2~4</li>
                <li>MELONDS: grahpical twekas</li>
             </ul>
             <p>Fixes:</p>
