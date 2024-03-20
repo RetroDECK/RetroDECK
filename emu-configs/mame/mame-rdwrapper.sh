@@ -1,3 +1,3 @@
 #!/bin/bash
 
-mame -inipath /var/config/mame/ini
+mame -inipath /var/config/mame/ini "$1"
