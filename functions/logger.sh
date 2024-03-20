@@ -131,12 +131,12 @@ tmplog_merger() {
         rm "/tmp/retrodeck.log"
     fi
 
-    local ESDE_source_logs="/var/config/ES-DE/logs/es_log.txt"
+    local ESDE_source_logs="/var/config/ES-DE/logs"
     # Check if the source file exists
     if [ -e "$ESDE_source_logs" ]; then
         # Create the symlink in the logs folder
-        ln -sf "$ESDE_source_logs" "$rd_logs_folder/ES-DE.log"
-        log i "ES-DE log file linked to \"$rd_logs_folder/ES-DE.log\""
+        ln -sf "$ESDE_source_logs" "$rd_logs_folder/ES-DE"
+        log i "ES-DE log folder linked to \"$rd_logs_folder/ES-DE\""
     fi
 
 }
