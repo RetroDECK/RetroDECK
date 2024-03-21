@@ -2,32 +2,33 @@
 # It logs messages to both the terminal and a specified logfile, allowing different log levels.
 # The log function takes three parameters: log level, log message, and optionally the logfile. If no logfile is specified, it writes to retrodeck/logs/retrodeck.log
 
+# Type of log messages:
+# log d - debug message: maybe in the future we can decide to hide them in main builds or if an option is toggled
+# log i - normal informational message
+# log w - waring: something is not expected but it's not a big deal
+# log e - error: something broke
+
 # Example usage:
 # log w "foo" -> logs a warning with message foo in the default log file retrodeck/logs/retrodeck.log
 # log e "bar" -> logs an error with message bar in the default log file retrodeck/logs/retrodeck.log
 # log i "par" rekku.log -> logs an information with message in the specified log file inside the logs folder retrodeck/logs/rekku.log
 
-# if [ "${log_init:-false}" = false ]; then
-#     logs_folder=${logs_folder:-"/tmp"}
-#     create_dir $logs_folder
-#     touch "$logs_folder/retrodeck.log"
-#     # exec > >(tee "$logs_folder/retrodeck.log") 2>&1 # this is broken, creates strange artifacts and corrupts the log file
-#     log_init=true
-# fi
 
+# this is a one off otherwise it would be logging every time this function is called
+
+# if retrodeck folder variable is not yet initialized
 if [ -z "${rdhome}" ]; then
     tmp_logs_folder="/tmp/rdlogs"
     logs_folder="$tmp_logs_folder"
     create_dir "$logs_folder"
+# if the log folder is not existing
+elif [ ! -d "$rd_logs_folder" ]; then
+    
+    rd_logs_folder="$rdhome/logs"
+    create_dir "$rd_logs_folder"
 elif [ ! -z "${rdhome}" ] && [ -d "$tmp_logs_folder" ]; then
     cp -f "$tmp_logs_folder/retrodeck.log" "$logs_folder/retrodeck.log"
     rm -rf "$tmp_logs_folder"
-fi
-
-rd_logs_folder="$rdhome/logs"
-if [ ! -d "$rd_logs_folder" ]; then
-    # this is a one off otherwise it would be logging every time this function is called
-    create_dir "$rd_logs_folder"
 fi
 
 log() {
