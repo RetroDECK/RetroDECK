@@ -653,7 +653,7 @@ manage_ryujinx_keys() {
           log w "No files found in $bios_folder/switch/keys. Continuing..."
       fi
   else
-      log w "Directory $bios_folder/switch/keys does not exist. Maybe Ryujinx was never run. Continuing..."
+      log e "Directory $bios_folder/switch/keys does not exist. Something is wrong with your RetroDECK installation. Continuing but Ryujinx will not be able to run any game."
   fi
 }
 
