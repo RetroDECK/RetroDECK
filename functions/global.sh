@@ -17,6 +17,7 @@ source /app/libexec/presets.sh
 # Static variables
 rd_conf="/var/config/retrodeck/retrodeck.cfg"                                                                         # RetroDECK config file path
 rd_conf_backup="/var/config/retrodeck/retrodeck.bak"                                                                  # Backup of RetroDECK config file from update
+rd_logs_folder="/var/config/retrodeck/logs"                                                                                  # Static location to write all RetroDECK-related logs
 emuconfigs="/app/retrodeck/emu-configs"                                                                               # folder with all the default emulator configs
 rd_defaults="$emuconfigs/defaults/retrodeck/retrodeck.cfg"                                                            # A default RetroDECK config file
 rd_update_patch="/var/config/retrodeck/rd_update.patch"                                                               # A static location for the temporary patch file used during retrodeck.cfg updates
@@ -65,6 +66,7 @@ citraconf="/var/config/citra-emu/qt-config.ini"
 
 export ESDE_APPDATA_DIR="/var/config/ES-DE"
 es_settings="/var/config/ES-DE/settings/es_settings.xml"
+es_source_logs="/var/config/ES-DE/logs"
 
 # RetroArch config files
 
@@ -120,6 +122,14 @@ vita3kusrconfdir="$bios_folder/Vita3K/Vita3K"
 mameconf="/var/config/mame/ini/mame.ini"
 mameuiconf="/var/config/mame/ini/ui.ini"
 mamedefconf="/var/config/mame/cfg/default.cfg"
+
+# Initialize logging location if it doesn't exist, before anything else happens
+if [ ! -d "$rd_logs_folder" ]; then
+    create_dir "$rd_logs_folder"
+fi
+if [[ ! -d "$rd_logs_folder/ES-DE" ]]; then
+    dir_prep "$rd_logs_folder/ES-DE" "$es_source_logs"
+fi
 
 # We moved the lockfile in /var/config/retrodeck in order to solve issue #53 - Remove in a few versions
 if [[ -f "$HOME/retrodeck/.lock" ]]; then
