@@ -6,13 +6,13 @@ source /app/libexec/050_save_migration.sh
 source /app/libexec/checks.sh
 source /app/libexec/compression.sh
 source /app/libexec/dialogs.sh
+source /app/libexec/logger.sh
 source /app/libexec/functions.sh
 source /app/libexec/multi_user.sh
 source /app/libexec/patching.sh
 source /app/libexec/post_update.sh
 source /app/libexec/prepare_component.sh
 source /app/libexec/presets.sh
-source /app/libexec/logger.sh
 
 # Static variables
 rd_conf="/var/config/retrodeck/retrodeck.cfg"                                                                         # RetroDECK config file path
@@ -168,7 +168,7 @@ if [[ ! -f "$rd_conf" ]]; then
   chmod +rw $rd_conf
   log i "RetroDECK config file initialized. Contents:\n\n$(cat $rd_conf)\n"
   conf_read # Load new variables into memory
-  tmplog_merger
+  #tmplog_merger # This function is tempry(?) removed
 
 # If the config file is existing i just read the variables
 else
@@ -182,7 +182,7 @@ else
   fi
 
   conf_read
-  tmplog_merger
+  #tmplog_merger # This function is tempry(?) removed
 
   # Verify rdhome is where it is supposed to be.
   if [[ ! -d "$rdhome" ]]; then
@@ -191,7 +191,7 @@ else
     new_home_path=$(directory_browse "RetroDECK folder location")
     set_setting_value $rd_conf "rdhome" "$new_home_path" retrodeck "paths"
     conf_read
-    tmplog_merger
+    #tmplog_merger # This function is tempry(?) removed
     prepare_component "retrodeck" "postmove"
     prepare_component "all" "postmove"
     conf_write
