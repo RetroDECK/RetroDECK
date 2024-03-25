@@ -8,8 +8,8 @@ sdk-extensions:
 command: retrodeck.sh
 
 finish-args:
-  - --socket=fallback-x11
   - --socket=wayland
+  - --socket=x11
   - --socket=pulseaudio
   - --share=ipc
   - --share=network
@@ -165,16 +165,19 @@ modules:
         url: https://ftp.osuosl.org/pub/blfs/conglomeration/libgudev/libgudev-237.tar.xz
         sha256: 0d06b21170d20c93e4f0534dbb9b0a8b4f1119ffb00b4031aaeb5b9148b686aa
 
-  - name: chdman-tool
-    buildsystem: simple
-    build-commands:
-      - cmake -B . -G Ninja
-      - cmake --build .
-      - cp chdman /app/bin
-    sources:
-      - type: git
-        url: https://github.com/CharlesThobe/chdman.git
-        commit: f7cadf1720cbeba8a14f2685830ff424a0c7f6cd
+  #                                           #
+  # DEPRECATED IN FAVOR OF COMPILED MAME TOOL #
+  #                                           #
+  # - name: chdman-tool
+  #   buildsystem: simple
+  #   build-commands:
+  #     - cmake -B . -G Ninja
+  #     - cmake --build .
+  #     - cp chdman /app/bin
+  #   sources:
+  #     - type: git
+  #       url: https://github.com/CharlesThobe/chdman.git
+  #       commit: f7cadf1720cbeba8a14f2685830ff424a0c7f6cd
 
   - name: rclone
     buildsystem: simple
@@ -462,7 +465,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/RetroArch.git
-        commit: ad8975cb5a0fe45be43438bdbd6c3d745653dd02
+        commit: 06fa5325f8b3cd42e6fba3d57835d5924c9ea2e7
       - type: file
         path: rd-submodules/retroarch/retroarch.cfg
       - type: file
@@ -506,7 +509,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/RetroArch.git
-        commit: ad8975cb5a0fe45be43438bdbd6c3d745653dd02
+        commit: 06fa5325f8b3cd42e6fba3d57835d5924c9ea2e7
   - name: retroarch-filers-audio
     subdir: libretro-common/audio/dsp_filters
     make-install-args:
@@ -514,7 +517,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/RetroArch.git
-        commit: ad8975cb5a0fe45be43438bdbd6c3d745653dd02
+        commit: 06fa5325f8b3cd42e6fba3d57835d5924c9ea2e7
   - name: retroarch-assets
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
@@ -528,21 +531,21 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/libretro-database.git
-        commit: 2c121df3a1c661e7a686f159ec5500a2837eefb3
+        commit: 977612e2cd284f67fc0d121d9d94c5982a49f61e
   - name: libretro-core-info
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
         url: https://github.com/libretro/libretro-core-info.git
-        commit: ef6815722bfd4cc7d0cf14640b7111ecb5709cdd
+        commit: ad0f67e172dca9edb88a4eea1d541f407a9c2d12
   - name: retroarch-joypad-autoconfig
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
         url: https://github.com/libretro/retroarch-joypad-autoconfig.git
-        commit: 9999374439b6526cfec78dd1fc51ed889e51ec6d
+        commit: ec43cfef730f15d6b20bf277681250b2f4b99a8b
   - name: common-shaders
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
@@ -556,21 +559,21 @@ modules:
     sources:
       - type: git
         url: https://github.com/libretro/slang-shaders.git
-        commit: 5b4c9b2a75aba5f57fcb5b68662a06f0ed7c929f
+        commit: d367f6cf73e01a8e43028107ab1ded2d2f05fe6a
   - name: glsl-shaders
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
         url: https://github.com/libretro/glsl-shaders.git
-        commit: bc8df92f013a128c3a735a57d3d98c6f087cc291
+        commit: db974e4d6f6e3178198b7690095a107b3b509d4b
   - name: common-overlays
     make-install-args:
       - PREFIX=${FLATPAK_DEST}
     sources:
       - type: git
         url: https://github.com/libretro/common-overlays.git
-        commit: 115d8670c2e032e4a41ba45f766f5cfd9dae28b8
+        commit: c266abf4d7f9286fb6fbcfb57647cd9c80c45530
 
   # RetroArch - END
 
@@ -823,8 +826,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/xemu-project/xemu.git
-        tag: v0.7.118
-        commit: 03f40b1d8e873b57eab68dc66ae9892aa5e39f89
+        tag: v0.7.120
+        commit: 94d826a4f125d755d6d37069ad7084bfde33d650
         x-checker-data:
           type: json
           url: https://api.github.com/repos/xemu-project/xemu/releases/latest
@@ -1258,7 +1261,7 @@ modules:
       - cp -f res/splash.svg ${FLATPAK_DEST}/retrodeck/graphics/splash-orig.svg
       - cp -rf res/extra_splashes/ ${FLATPAK_DEST}/retrodeck/graphics
       - cp -f res/icon.svg /app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg
-      - cp -f res/icon-configurator.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/retrodeck-configurator.svg
+      - cp -f res/icon-configurator.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.configurator.svg
       - mv -f -t ${FLATPAK_DEST}/retrodeck res/binding_icons
 
       # RetroDECK core script
@@ -1300,10 +1303,6 @@ modules:
       # GZDOOM wrapper
       - cp emu-configs/gzdoom/gzdoom.sh ${FLATPAK_DEST}/bin/gzdoom.sh
       - chmod +x ${FLATPAK_DEST}/bin/gzdoom.sh
-
-      # MAME wrapper
-      - cp emu-configs/mame/mame-rdwrapper.sh ${FLATPAK_DEST}/bin/mame-rdwrapper.sh
-      - chmod +x ${FLATPAK_DEST}/bin/mame-rdwrapper.sh
 
       # Ryujinx wrapper
       - cp emu-configs/ryujinx/ryujinx-rdwrapper.sh ${FLATPAK_DEST}/bin/ryujinx-rdwrapper.sh

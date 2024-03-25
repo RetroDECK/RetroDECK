@@ -6,17 +6,18 @@ source /app/libexec/050_save_migration.sh
 source /app/libexec/checks.sh
 source /app/libexec/compression.sh
 source /app/libexec/dialogs.sh
+source /app/libexec/logger.sh
 source /app/libexec/functions.sh
 source /app/libexec/multi_user.sh
 source /app/libexec/patching.sh
 source /app/libexec/post_update.sh
 source /app/libexec/prepare_component.sh
 source /app/libexec/presets.sh
-source /app/libexec/logger.sh
 
 # Static variables
 rd_conf="/var/config/retrodeck/retrodeck.cfg"                                                                         # RetroDECK config file path
 rd_conf_backup="/var/config/retrodeck/retrodeck.bak"                                                                  # Backup of RetroDECK config file from update
+rd_logs_folder="/var/config/retrodeck/logs"                                                                                  # Static location to write all RetroDECK-related logs
 emuconfigs="/app/retrodeck/emu-configs"                                                                               # folder with all the default emulator configs
 rd_defaults="$emuconfigs/defaults/retrodeck/retrodeck.cfg"                                                            # A default RetroDECK config file
 rd_update_patch="/var/config/retrodeck/rd_update.patch"                                                               # A static location for the temporary patch file used during retrodeck.cfg updates
@@ -32,8 +33,7 @@ default_splash_file="/var/config/ES-DE/resources/graphics/splash-orig.svg"      
 multi_user_emulator_config_dirs="$emuconfigs/defaults/retrodeck/reference_lists/multi_user_emulator_config_dirs.cfg"  # A list of emulator config folders that can be safely linked/unlinked entirely in multi-user mode
 rd_es_themes="/app/share/es-de/themes"                                                                                # The directory where themes packaged with RetroDECK are stored
 lockfile="/var/config/retrodeck/.lock"                                                                                # Where the lockfile is located
-default_sd="/run/media/mmcblk0p1"                                                                                     # Steam Deck SD default path
-rd_logs_folder="/var/config/retrodeck/logs/"                                                                          # A static location for RetroDECK logs to be written
+default_sd="/run/media/mmcblk0p1"                                                                                     # Steam Deck SD default path                                                                        # A static location for RetroDECK logs to be written
 hard_version="$(cat '/app/retrodeck/version')"                                                                        # hardcoded version (in the readonly filesystem)
 rd_repo="https://github.com/XargonWan/RetroDECK"                                                                      # The URL of the main RetroDECK GitHub repo
 es_themes_list="https://gitlab.com/es-de/themes/themes-list/-/raw/master/themes.json"                                 # The URL of the ES-DE 2.0 themes list
@@ -70,6 +70,7 @@ citraconf="/var/config/citra-emu/qt-config.ini"
 
 export ESDE_APPDATA_DIR="/var/config/ES-DE"
 es_settings="/var/config/ES-DE/settings/es_settings.xml"
+es_source_logs="/var/config/ES-DE/logs"
 
 # RetroArch config files
 
@@ -126,6 +127,14 @@ mameconf="/var/config/mame/ini/mame.ini"
 mameuiconf="/var/config/mame/ini/ui.ini"
 mamedefconf="/var/config/mame/cfg/default.cfg"
 
+# Initialize logging location if it doesn't exist, before anything else happens
+if [ ! -d "$rd_logs_folder" ]; then
+    create_dir "$rd_logs_folder"
+fi
+if [[ ! -d "$rd_logs_folder/ES-DE" ]]; then
+    dir_prep "$rd_logs_folder/ES-DE" "$es_source_logs"
+fi
+
 # We moved the lockfile in /var/config/retrodeck in order to solve issue #53 - Remove in a few versions
 if [[ -f "$HOME/retrodeck/.lock" ]]; then
   mv "$HOME/retrodeck/.lock" $lockfile
@@ -133,7 +142,6 @@ fi
 
 # If there is no config file I initalize the file with the the default values
 if [[ ! -f "$rd_conf" ]]; then
-  create_dir /var/config/retrodeck
   create_dir /var/config/retrodeck/logs
   log w "RetroDECK config file not found in $rd_conf"
   log i "Initializing"
@@ -174,7 +182,7 @@ if [[ ! -f "$rd_conf" ]]; then
   chmod +rw $rd_conf
   log i "RetroDECK config file initialized. Contents:\n\n$(cat $rd_conf)\n"
   conf_read # Load new variables into memory
-  tmplog_merger
+  #tmplog_merger # This function is tempry(?) removed
 
 # If the config file is existing i just read the variables
 else
@@ -188,7 +196,7 @@ else
   fi
 
   conf_read
-  tmplog_merger
+  #tmplog_merger # This function is tempry(?) removed
 
   # Verify rdhome is where it is supposed to be.
   if [[ ! -d "$rdhome" ]]; then
@@ -197,7 +205,7 @@ else
     new_home_path=$(directory_browse "RetroDECK folder location")
     set_setting_value $rd_conf "rdhome" "$new_home_path" retrodeck "paths"
     conf_read
-    tmplog_merger
+    #tmplog_merger # This function is tempry(?) removed
     prepare_component "retrodeck" "postmove"
     prepare_component "all" "postmove"
     conf_write
