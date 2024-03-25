@@ -30,9 +30,6 @@ prepare_component() {
       else
         create_dir "/var/config/retrodeck/godot_temp"
       fi
-
-
-      create_dir "/var/config/retrodeck/godot"
       dir_prep "$rd_logs_folder" "$logs_folder"
     fi
     if [[ "$action" == "postmove" ]]; then # Update the paths of any folders that came with the retrodeck folder during a move
