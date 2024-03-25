@@ -491,7 +491,7 @@ configurator_open_emulator_dialog() {
 
   "MAME" )
     log i "Configurator: \"$emulator\""
-    mame-rdwrapper.sh
+    mame -inipath /var/config/mame/ini
   ;;
 
   "MelonDS" )

@@ -26,7 +26,7 @@ prepare_component() {
         fi
       done < <(grep -v '^\s*$' $rd_conf | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
       create_dir "/var/config/retrodeck/godot"
-      dir_prep "$rd_logs_folder" "$logs_folder"
+      dir_prep "$logs_folder" "$rd_logs_folder"
     fi
     if [[ "$action" == "postmove" ]]; then # Update the paths of any folders that came with the retrodeck folder during a move
       while read -r config_line; do
@@ -38,7 +38,7 @@ prepare_component() {
           fi
         fi
       done < <(grep -v '^\s*$' $rd_conf | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
-      dir_prep "$rd_logs_folder" "$logs_folder"
+      dir_prep "$logs_folder" "$rd_logs_folder"
     fi
   fi
 
@@ -55,6 +55,7 @@ prepare_component() {
       set_setting_value "$es_settings" "MediaDirectory" "$media_folder" "es_settings"
       set_setting_value "$es_settings" "UserThemeDirectory" "$themes_folder" "es_settings"
       dir_prep "$rdhome/gamelists" "/var/config/ES-DE/gamelists"
+      dir_prep "$rd_logs_folder/ES-DE" "$es_source_logs"
       log d "Generating roms system folders"
       #es-de --home /var/config/ES-DE --create-system-dirs
       es-de --create-system-dirs
@@ -794,6 +795,7 @@ prepare_component() {
 
     cp -fvr "$emuconfigs/gzdoom/gzdoom.ini" "/var/config/gzdoom"
 
+    sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "/var/config/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON
     sed -i 's#RETRODECKROMSDIR#'$roms_folder'#g' "/var/config/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON
     sed -i 's#RETRODECKSAVESDIR#'$saves_folder'#g' "/var/config/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON
   fi
