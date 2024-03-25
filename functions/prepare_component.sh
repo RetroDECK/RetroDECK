@@ -25,6 +25,13 @@ prepare_component() {
           create_dir "$rdhome/$(basename $current_setting_value)"
         fi
       done < <(grep -v '^\s*$' $rd_conf | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
+      if [ -n "$XDG_RUNTIME_DIR" ]; then
+        create_dir "$XDG_RUNTIME_DIR/godot_temp"
+      else
+        create_dir "/var/config/retrodeck/godot_temp"
+      fi
+
+
       create_dir "/var/config/retrodeck/godot"
       dir_prep "$rd_logs_folder" "$logs_folder"
     fi

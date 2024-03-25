@@ -50,8 +50,12 @@ incompatible_presets_reference_list="$emuconfigs/defaults/retrodeck/reference_li
 pretty_system_names_reference_list="$emuconfigs/defaults/retrodeck/reference_lists/pretty_system_names.cfg"           # An internal translation list for turning internal names (eg. gbc) to "pretty" names (Nintendo GameBoy Color)
 
 # Godot data transfer temp files
-
-godot_bios_files_checked="/var/config/retrodeck/godot/godot_bios_files_checked.tmp"
+# Check if XDG_RUNTIME_DIR is set
+if [ -n "$XDG_RUNTIME_DIR" ]; then
+  godot_bios_files_checked="$XDG_RUNTIME_DIR/godot_temp/godot_bios_files_checked.tmp"
+else
+  godot_bios_files_checked="/var/config/retrodeck/godot_temp/godot_bios_files_checked.tmp"
+fi
 
 # Config files for emulators with single config files
 

@@ -1,5 +1,7 @@
 extends Control
 
+var bios_type:int
+
 func _ready():
 	var children = findElements(self, "Control")
 	for n: Control in children: #iterate the children
@@ -8,8 +10,7 @@ func _ready():
 		if (n.is_class("BaseButton") and n.disabled == true): #if button-like control and disabled
 			n.self_modulate.a = 0.5 #make it half transparent
 	combine_tkeys()
-	
-		
+
 func _input(event):
 	if event.is_action_pressed("quit"):
 		_exit()
@@ -24,11 +25,23 @@ func findElements(node: Node, className: String, result: Array = []) -> Array:
 func _on_control_mouse_entered(control: Node):
 	control.grab_focus()
 
+func load_popup(title:String, content_path:String):
+	var popup = load("res://components/popup.tscn").instantiate() as Control
+	popup.set_title(title)
+	popup.set_content(content_path)
+	$Background.add_child(popup)
 
 func _on_quickresume_advanced_pressed():
-	var popup = load("res://components/popup.tscn").instantiate() as Control
-	popup.set_content("res://popup_content_test.tscn")
-	$Background.add_child(popup)
+	load_popup("Quick Resume Advanced", "res://components/popups_content/popup_content_test.tscn")
+
+func _on_bios_button_pressed():
+	bios_type = 0
+	load_popup("BIOS File Check", "res://components/bios_check/bios_popup_content.tscn")
+
+
+func _on_bios_button_expert_pressed():
+	bios_type = 1
+	load_popup("BIOS File Check", "res://components/bios_check/bios_popup_content.tscn")
 
 
 func _on_exit_button_pressed():
