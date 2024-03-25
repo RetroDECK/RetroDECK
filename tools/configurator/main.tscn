@@ -91,6 +91,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_obpq7")
+metadata/bios_type = 0
 
 [node name="Background" type="Panel" parent="."]
 layout_mode = 1
@@ -117,9 +118,11 @@ grow_vertical = 2
 [node name="TabContainer" type="TabContainer" parent="Background/MarginContainer"]
 layout_mode = 2
 tab_alignment = 1
+current_tab = 3
 script = ExtResource("3_id6l4")
 
 [node name="TK_SYSTEM" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_right = 240
 
@@ -346,7 +349,6 @@ button_pressed = true
 text = "TK_HOTKEYSOUND"
 
 [node name="TK_TOOLS" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
-visible = false
 layout_mode = 2
 theme_override_constants/margin_right = 240
 
@@ -391,6 +393,10 @@ text = "TK_3DSDECRYPT"
 [node name="bios_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
 layout_mode = 2
 text = "TK_BIOS"
+
+[node name="bios_button_expert" type="Button" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
+layout_mode = 2
+text = "TK_BIOS_EXPERT"
 
 [node name="tools_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer"]
 layout_mode = 2
@@ -959,5 +965,7 @@ animation = &"speech"
 frame_progress = 0.664627
 
 [connection signal="pressed" from="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/game_control_container/GridContainer/quick_resume_adv_button" to="." method="_on_quickresume_advanced_pressed"]
+[connection signal="pressed" from="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container/bios_button" to="." method="_on_bios_button_pressed"]
+[connection signal="pressed" from="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container/bios_button_expert" to="." method="_on_bios_button_expert_pressed"]
 [connection signal="pressed" from="Background/exit_button" to="." method="_on_exit_button_pressed"]
 [connection signal="item_selected" from="Background/locale_option" to="." method="_on_locale_selected"]

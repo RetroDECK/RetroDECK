@@ -25,7 +25,11 @@ prepare_component() {
           create_dir "$rdhome/$(basename $current_setting_value)"
         fi
       done < <(grep -v '^\s*$' $rd_conf | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
-      create_dir "/var/config/retrodeck/godot"
+      if [ -n "$XDG_RUNTIME_DIR" ]; then
+        create_dir "$XDG_RUNTIME_DIR/godot_temp"
+      else
+        create_dir "/var/config/retrodeck/godot_temp"
+      fi
       dir_prep "$logs_folder" "$rd_logs_folder"
     fi
     if [[ "$action" == "postmove" ]]; then # Update the paths of any folders that came with the retrodeck folder during a move
