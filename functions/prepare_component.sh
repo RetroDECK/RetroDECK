@@ -111,6 +111,20 @@ prepare_component() {
       fi
       # Shared actions
 
+      create_dir "$bios_folder/np2kai"
+      create_dir "$bios_folder/dc"
+      create_dir "$bios_folder/Mupen64plus"
+      create_dir "$bios_folder/quasi88"
+
+      # FBNEO
+      log i "--------------------------------"
+      log i "Prepearing FBNEO_LIBRETRO"
+      log i "--------------------------------"
+      create_dir "$bios_folder/fbneo/samples"
+      create_dir "$bios_folder/fbneo/cheats"
+      create_dir "$bios_folder/fbneo/blend"
+      dir_prep "$mods_folder/FBNeo" "$bios_folder/fbneo/patched"
+      
       # PPSSPP
       log i "--------------------------------"
       log i "Prepearing PPSSPP_LIBRETRO"
@@ -622,7 +636,6 @@ prepare_component() {
       dir_prep "$logs_folder/yuzu" "/var/data/yuzu/log"
       dir_prep "$screenshots_folder" "/var/data/yuzu/screenshots"
       dir_prep "$mods_folder/Yuzu" "/var/data/yuzu/load"
-      create_dir "$rdhome/customs/yuzu"
       # removing dead symlinks as they were present in a past version
       if [ -d $bios_folder/switch ]; then
         find $bios_folder/switch -xtype l -exec rm {} \;
