@@ -3928,6 +3928,23 @@
 				{
 				}
 			}
+			"touch_menu_button_17"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press LEFT_ALT, ALT + F4, RD-alt-f4.png, "
+							"binding"		"key_press F4, ALT + F4, RD-alt-f4.png, "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
 		}
 		"settings"
 		{
@@ -5850,8 +5867,8 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press LEFT_ALT, Wiimote - Upright Mode, RD-mote-up.png, "
-							"binding"		"key_press Z, Wiimote - Upright Mode, RD-mote-up.png, "
+							"binding"		"key_press LEFT_ALT, Wiimote - Upright Mode, RD-wiimote-up.png, "
+							"binding"		"key_press Z, Wiimote - Upright Mode, RD-wiimote-up.png, "
 						}
 					}
 				}
@@ -5867,8 +5884,8 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press LEFT_ALT, Wiimote - Sideways Mode, RD-mote-side.png, "
-							"binding"		"key_press X, Wiimote - Sideways Mode, RD-mote-side.png, "
+							"binding"		"key_press LEFT_ALT, Wiimote - Sideways Mode, RD-wiimote-side.png, "
+							"binding"		"key_press X, Wiimote - Sideways Mode, RD-wiimote-side.png, "
 						}
 					}
 				}
