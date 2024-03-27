@@ -171,5 +171,12 @@ elif [[ "$new_version_major_rev" -eq "$current_version_major_rev" ]]; then
   fi
 fi
 
+# Perform post_update commands for current version if it is a cooker
+if grep -qF "cooker" <<< $hard_version; then # If newly-installed version is a "cooker" build, always perform post_update commands for current version
+  if [[ "$(echo $hard_version | cut -d'-' -f2)" == "$new_version" ]]; then
+    is_newer_version="true"
+  fi
+fi
+
 echo "$is_newer_version"
 }
