@@ -68,10 +68,6 @@
       <release version="0.8.0b" date="2023-03-27">
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.8.0b</url>
          <description>
-            <p>
-               WARNING:
-               The post update script is initializing es-de 3.0, vita3k, mame-sa and ryujinx when coming from a version ealrier that 0.8.0b. To fully test this build you must come from a build 0.7.6b or previous otherwise you will surely encounter issues. Else reset RetroDECK but be aware that will not be a proper testing.
-            </p>  
             <p>Changes:</p>
             <ul>
                <li>All the emulators and engines are updated to their latest version</li>
