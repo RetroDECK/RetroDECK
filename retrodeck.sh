@@ -102,8 +102,8 @@ done
 log d "Update triggered"
 # if lockfile exists
 if [ -f "$lockfile" ]; then
-  log d "Lockfile found but the version doesn't match with the config file"
   if [ "$hard_version" != "$version" ]; then
+    log d "Lockfile found but the version doesn't match with the config file"
     log i "Config file's version is $version but the actual version is $hard_version"
     if grep -qF "cooker" <<< $hard_version; then # If newly-installed version is a "cooker" build
       log d "Newly-installed version is a \"cooker\" build"
@@ -130,6 +130,7 @@ if [ -f "$lockfile" ]; then
                   log w "Removing RetroDECK data and starting fresh"
                   rm -rf /var
                   rm -rf "$HOME/retrodeck"
+                  rm -rf "$rdhome"
                   source /app/libexec/global.sh
                   finit
                 fi

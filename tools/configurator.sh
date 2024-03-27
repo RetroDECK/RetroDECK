@@ -268,6 +268,13 @@ configurator_global_presets_and_settings_dialog() {
     configurator_global_presets_and_settings_dialog
   ;;
 
+  "Rewind: Enable/Disable" )
+    log i "Configurator: opening \"$choice\" menu"
+
+    change_preset_dialog "rewind"
+    configurator_global_presets_and_settings_dialog
+  ;;
+
   "Swap A/B and X/Y Buttons: Enable/Disable" )
     log i "Configurator: opening \"$choice\" menu"
 

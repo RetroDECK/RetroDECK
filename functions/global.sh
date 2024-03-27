@@ -9,7 +9,7 @@ source /app/libexec/dialogs.sh
 source /app/libexec/logger.sh
 source /app/libexec/functions.sh
 source /app/libexec/multi_user.sh
-source /app/libexec/patching.sh
+source /app/libexec/framework.sh
 source /app/libexec/post_update.sh
 source /app/libexec/prepare_component.sh
 source /app/libexec/presets.sh
