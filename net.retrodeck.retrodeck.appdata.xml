@@ -92,6 +92,15 @@
                <li>MULTIPLAYER: enabled controller configs for player 2~4 for CEMU, DUCKSTATION, GZDOOM, RPCS3 and RYUJINX</li>
                <li>Graphical tweaks for DOLPHIN, MELONDS and PCSX2</li>
                <li>Added a new icon for RetroDECK Configurator</li>
+               <li>CONFIGURATOR: added more systems to valid compression targets in the compressor tool</li>
+               <li>CONFIGURATOR: simplified single-file-compression process</li>
+               <li>CONFIGURATOR: merged "save state on exit" and  "load state on run" presets into a new "Quick Resume" function</li>
+               <li>CONFIGURATOR: added a tool to "Swap A/B X/Y button" for compatible systems</li>
+               <li>CONFIGURATOR: moved "Rewind" preset to "Global Presets" section and added more compatible systems</li>
+               <li>CONFIGURATOR: added "expert mode" on BIOS checker tool (shows all available info)</li>
+               <li>DESKTOP: added Steam Flatpak detection for controller profile install</li>
+               <li>DESKTOP: RetroDECK now knows if it is running on a real Deck or other Linux desktop</li>
+               <li>DESKTOP: disabled "Desktop Mode" warning when not running on Deck</li>
             </ul>
             <p>Fixes:</p>
             <ul>
