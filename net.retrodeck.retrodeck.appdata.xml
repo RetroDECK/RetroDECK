@@ -65,7 +65,7 @@
    <project_license>GPL-3.0</project_license>
    <metadata_license>CC0-1.0</metadata_license>
    <releases>
-      <release version="0.8.0b" date="2023-03-07">
+      <release version="0.8.0b" date="2023-03-27">
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.8.0b</url>
          <description>
             <p>
@@ -74,56 +74,44 @@
             </p>  
             <p>Changes:</p>
             <ul>
-               <li>ES-DE: updated to 3.0</li>
-               <li>PONZU: added</li>
-               <li>CITRA-SA: Removed, the libretro core is now the default emulator, they will available trough Ponzu</li>
-               <li>YUZU: Removed, Ryujinx is now the default emulator, they will available trough Ponzu</li>
+               <li>All the emulators and engines are updated to their latest version</li>
+               <li>ES-DE: updated to 3.0.1</li>
+               <li>RPCS3 is now running via shortcut (.desktop file) by default - WARN THE USERS TO MIGRATE and how to change it back</li>
+               <li>CITRA-SA: Removed, it will available trough Ponzu. The libretro core is now the default emulator</li>
+               <li>YUZU: Removed, Ryujinx is now the default emulator, it will available trough Ponzu</li>
+               <li>PONZU: added, check the wiki if interested in this preservational function</li>
                <li>Added new system: PSVita, trough Vita3K</li>
                <li>Added new system: SOLARUS</li>
-               <li>Added new engine: GZDOOM</li>
+               <li>Added new engine: GZDOOM that is now the DOOM system default engine</li>
                <li>Added new emulator: RYUJINX</li>
-               <li>Added new emulator: MAME (Standalone)</li>
-               <li>PPSSPP: added hotkeys</li>
-               <li>MAME: added hotkeys</li>
-               <li>SCUMMVM: added hotkeys</li>
+               <li>Added new emulator: MAME (Standalone), v0.264</li>
+               <li>Added hotkeys for: PPSSPP, MAME, SCUMMVM</li>
                <li>DOLPHIN: improved wiimote pointer emulation for controllers</li>
                <li>DOLPHIN: Enabled Gyro</li>
-               <li>DOLPHIN: Tweaked Wii Input</li>
-               <li>DOLPHIN: Tweaked GC Input</li>
-               <li>DOLPHIN: Enabled GBA and Tweaked Input</li>
-               <li>DOLPHIN: Graphical Tweaks</li>
                <li>PRIMEHACK: config structure refactor + new configs</li>
-               <li>Logs folder is now in retrodeck/logs (previously was .logs)</li>
-               <li>Added controller config for PS4 and PS5</li>
-               <li>Controller config overhaul</li>
-               <li>Removed talk names in the manifest as they're not needed anymore as enabled by default</li>
-               <li>CEMU: updated input profiles</li>
+               <li>LOGGER: logging is completely refactored, logs folder is now in retrodeck/logs (previously was .logs)</li>
+               <li>Added Steam controller layouts for PS4 and PS5</li>
+               <li>Steam controller layouts overhaul</li>
                <li>DUCKSTATION: config refactor. The old config didn't not work anymore for controllers.</li>
-               <li>DUCKSTATION: All controlls now go via SDL</li>
-               <li>PCSX2: general and graphical tweaks</li>
-               <li>RPCS3 is now running via shortcut (.desktop file) by default - WARN THE USERS TO MIGRATE</li>
-               <li>CEMU: enabled controller configs for player 2~4</li>
-               <li>DUCKSTATION: Updated to 4 controllers</li>
-               <li>GZDOOM: enabled controller configs for player 2~4</li>
-               <li>RPCS3: enabled controller configs for player 2~4</li>
-               <li>RYUJINX: enabled controller configs for player 2~4</li>
-               <li>MELONDS: grahpical twekas</li>
+               <li>MULTIPLAYER: enabled controller configs for player 2~4 for CEMU, DUCKSTATION, GZDOOM, RPCS3 and RYUJINX</li>
+               <li>Graphical tweaks for DOLPHIN, MELONDS and PCSX2</li>
             </ul>
             <p>Fixes:</p>
             <ul>
-               <li>Fixed DUCKSTATION memory card folder</li>
-               <li>Fixed RPCS3 saves folder (wrong symlink) - WARN THE USERS TO BACKUP</li>
-               <li>Fixed some issues that preventing RetroDECK to be built locally</li>
+               <li>CEMU: refactored input profiles to reflect the new version changes </li>
+               <li>DUCKSTATION: fixed memory card folder path</li>
+               <li>DUCKSTATION: all controlls now are configured via SDL</li>
+               <li>RPCS3: fixed saves folder (wrong symlink) - WARN THE USERS TO BACKUP</li>
+               <li>DVELOPER TOOLS: Fixed some issues that preventing RetroDECK to be built locally</li>
                <li>SCUMMVM: fixed a bug where some paths were not existing</li>
                <li>RETROARCH: fixed a bug where the default folder was not the rom folder in the rgui</li>
+               <li>DOLPHIN: Tweaked Wii, GC and GBA inputs</li>
+               <li>Removed talk names in the manifest as they're not needed anymore as enabled by default</li>
+               <li>Fixed an issue that prevented RetroDECK to work properly on some distributions on Wayland</li>
             </ul>
-            <p>Issues:</p>
+            <p>Known issues:</p>
             <ul>
-               <li>quit_retrodeck function seems to not working correctly</li>
-            </ul>
-            <p>Missing:</p>
-            <ul>
-               <li>SOLARUS: hotkeys</li>
+               <li>Please check the know issues in the Wiki under General Infomration.</li>
             </ul>
          </description>
       </release>
