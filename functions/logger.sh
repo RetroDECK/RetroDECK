@@ -30,10 +30,6 @@ log() {
   else
     logfile="$rd_logs_folder/retrodeck.log"
   fi
-  if [[ ! -f "$logfile" ]]; then
-    touch "$logfile"
-    echo "$timestamp [WARN] \"$logfile\" not found, creating."
-  fi
 
   # Check if the shell is sh (not bash or zsh) to avoid colorization
   if [ "${SHELL##*/}" = "sh" ]; then
