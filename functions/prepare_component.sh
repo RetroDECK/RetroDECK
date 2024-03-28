@@ -22,13 +22,17 @@ prepare_component() {
         if [[ ! $current_setting_name =~ (rdhome|sdcard) ]]; then # Ignore these locations
           local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
           declare -g "$current_setting_name=$rdhome/$(basename $current_setting_value)"
-          if [[ ! $current_setting_name == "logs_folder" ]]; then # Don't create this folder, as it has already been created internally and is linked later
+          if [[ ! $current_setting_name == "logs_folder" ]]; then # Don't create a logs folder normally, we want to maintain the current files exactly to not lose early-install logs.
             create_dir "$rdhome/$(basename $current_setting_value)"
+          else # Log folder-specific actions
+            mv "$rd_logs_folder" "$logs_folder" # Move existing logs folder from internal to userland
+            ln -sf "$logs_folder" "$rd_logs_folder" # Link userland logs folder back to statically-written location
+            log d "Logs folder moved to $logs_folder and linked back to $rd_logs_folder"
           fi
         fi
       done < <(grep -v '^\s*$' $rd_conf | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
       create_dir "/var/config/retrodeck/godot"
-      dir_prep "$logs_folder" "$rd_logs_folder"
+
     fi
     if [[ "$action" == "postmove" ]]; then # Update the paths of any folders that came with the retrodeck folder during a move
       while read -r config_line; do
