@@ -283,7 +283,7 @@ dir_prep() {
     rm -rf "$symlink.old"
   fi
 
-  log i "$symlink is now $real\n"
+  log i "$symlink is now $real"
 }
 
 check_bios_files() {
