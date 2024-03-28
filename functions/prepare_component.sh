@@ -22,7 +22,9 @@ prepare_component() {
         if [[ ! $current_setting_name =~ (rdhome|sdcard) ]]; then # Ignore these locations
           local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
           declare -g "$current_setting_name=$rdhome/$(basename $current_setting_value)"
-          create_dir "$rdhome/$(basename $current_setting_value)"
+          if [[ ! $current_setting_name == "logs_folder" ]]; then # Don't create this folder, as it has already been created internally and is linked later
+            create_dir "$rdhome/$(basename $current_setting_value)"
+          fi
         fi
       done < <(grep -v '^\s*$' $rd_conf | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
       create_dir "/var/config/retrodeck/godot"
