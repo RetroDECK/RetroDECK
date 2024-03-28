@@ -2,7 +2,8 @@
 
 source /app/libexec/global.sh
 
-log i "Starting Ryujinx wrapper"
+log i "Ryujinx RetroDECK wrapper: starting"
 command="$1"
 manage_ryujinx_keys
-Ryujinx.sh $command # do not put comma here or it breaks
+log d "Ryujinx RetroDECK wrapper: launching \"Ryujinx.sh $command\""
+Ryujinx.sh "$command"
