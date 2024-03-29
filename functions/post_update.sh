@@ -293,7 +293,7 @@ post_update() {
     dir_prep "$saves_folder/ps3/rpcs3" "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata"
 
     log i "Switch firmware folder should be moved in \"$bios_folder/switch/firmware\" from \"$bios_folder/switch/registered\""
-    dir_prep "$bios_folder/switch/firmware" "$bios_folder/switch/registered"
+    mv "$bios_folder/switch/registered" "$bios_folder/switch/firmware"
 
     log i "New systems were added in this version, regenerating system folders."
     #es-de --home "/var/config/" --create-system-dirs
