@@ -283,14 +283,11 @@ post_update() {
 
     # The save folder of rpcs3 was inverted so we're moving the saves into the real one
     log i "RPCS3 saves needs to be migrated, executing."
-    mv "$saves_folder/ps3/rpcs3" "$saves_folder/ps3/rpcs3.bak"
-    mkdir -p "$saves_folder/ps3/rpcs3"
-    mv -v "$saves_folder/ps3/rpcs3.bak"/* "$saves_folder/ps3/rpcs3"
-    mv -v "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata"/* "$saves_folder/ps3/rpcs3"
-    mv -v "$saves_folder/ps3/rpcs3.bak" "$rdhome/backups/saves/ps3/rpcs3"
-    log i "RPCS3 saves migration completed, a backup was made here: \"$rdhome/backups/saves/ps3/rpcs3\"."
-    source /app/libexec/functions.sh
+    create_dir "$backups_folder"
+    zip -rq9 "$backups_folder/$(date +"%0m%0d")_rpcs3_save_data.zip" "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata"
     dir_prep "$saves_folder/ps3/rpcs3" "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata"
+    log i "RPCS3 saves migration completed, a backup was made here: \"$backups_folder/$(date +"%0m%0d")_rpcs3_save_data.zip\"."
+    
 
     log i "Switch firmware folder should be moved in \"$bios_folder/switch/firmware\" from \"$bios_folder/switch/registered\""
     mv "$bios_folder/switch/registered" "$bios_folder/switch/firmware"
