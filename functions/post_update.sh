@@ -283,8 +283,11 @@ post_update() {
 
     # The save folder of rpcs3 was inverted so we're moving the saves into the real one
     log i "RPCS3 saves needs to be migrated, executing."
-    create_dir "$backups_folder"
-    zip -rq9 "$backups_folder/$(date +"%0m%0d")_rpcs3_save_data.zip" "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata"
+    if [[ "$(ls -A $bios_folder/rpcs3/dev_hdd0/home/00000001/savedata)" ]]; then
+      log i "Existing RPCS3 savedata found, backing up..."
+      create_dir "$backups_folder"
+      zip -rq9 "$backups_folder/$(date +"%0m%0d")_rpcs3_save_data.zip" "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata"
+    fi
     dir_prep "$saves_folder/ps3/rpcs3" "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata"
     log i "RPCS3 saves migration completed, a backup was made here: \"$backups_folder/$(date +"%0m%0d")_rpcs3_save_data.zip\"."
 
