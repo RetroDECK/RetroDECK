@@ -119,8 +119,7 @@ configurator_welcome_dialog() {
     "Open Emulator" "Launch and configure each emulators settings (for advanced users)" \
     "RetroDECK: Tools" "Compress games, move RetroDECK and install optional features" \
     "RetroDECK: Troubleshooting" "Backup data, perform BIOS / multi-disc file checks checks and emulator resets" \
-    "RetroDECK: About" "Show additional information about RetroDECK" \
-    "Sync with Steam" "Sync with Steam all the favorites games")
+    "RetroDECK: About" "Show additional information about RetroDECK")
   fi
 
   choice=$(zenity --list --title="RetroDECK Configurator Utility" --cancel-label="Quit" \
