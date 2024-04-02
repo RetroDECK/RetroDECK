@@ -111,19 +111,23 @@ cli_compress_single_game() {
         echo "$(basename "$file") can be compressed to $compatible_compression_format"
         compress_game "$compatible_compression_format" "$file" "$system"
         if [[ $post_compression_cleanup == [yY] ]]; then # Remove file(s) if requested
-          if [[ $(basename "$file") == *".cue" ]]; then
-            local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" "$file")
-            local file_path=$(dirname "$(realpath "$file")")
-            while IFS= read -r line
-            do # Remove associated .bin files
-              echo "Removing original file "$file_path/$line""
-              rm -f "$file_path/$line"
-            done < <(printf '%s\n' "$cue_bin_files") # Remove original .cue file
-            echo "Removing original file $(basename "$file")"
-            rm -f "$file"
+          if [[ -f "${file%.*}.$compatible_compression_format" ]]; then
+            if [[ $(basename "$file") == *".cue" ]]; then
+              local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" "$file")
+              local file_path=$(dirname "$(realpath "$file")")
+              while IFS= read -r line
+              do # Remove associated .bin files
+                echo "Removing original file "$file_path/$line""
+                rm -f "$file_path/$line"
+              done < <(printf '%s\n' "$cue_bin_files") # Remove original .cue file
+              echo "Removing original file $(basename "$file")"
+              rm -f "$file"
+            else
+              echo "Removing original file $(basename "$file")"
+              rm -f "$file"
+            fi
           else
-            echo "Removing original file $(basename "$file")"
-            rm -f "$file"
+            echo "Compressed version of $(basename "$file") not found, skipping deletion."
           fi
         fi
       else
@@ -169,19 +173,23 @@ cli_compress_all_games() {
           echo "$(basename "$file") can be compressed to $compatible_compression_format"
           compress_game "$compatible_compression_format" "$file" "$system"
           if [[ $post_compression_cleanup == [yY] ]]; then # Remove file(s) if requested
-            if [[ "$file" == *".cue" ]]; then
-              local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" "$file")
-              local file_path=$(dirname "$(realpath "$file")")
-              while IFS= read -r line
-              do # Remove associated .bin files
-                echo "Removing original file "$file_path/$line""
-                rm -f "$file_path/$line"
-              done < <(printf '%s\n' "$cue_bin_files") # Remove original .cue file
-              echo "Removing original file "$file""
-              rm -f $(realpath "$file")
+            if [[ -f "${file%.*}.$compatible_compression_format" ]]; then
+              if [[ "$file" == *".cue" ]]; then
+                local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" "$file")
+                local file_path=$(dirname "$(realpath "$file")")
+                while IFS= read -r line
+                do # Remove associated .bin files
+                  echo "Removing original file "$file_path/$line""
+                  rm -f "$file_path/$line"
+                done < <(printf '%s\n' "$cue_bin_files") # Remove original .cue file
+                echo "Removing original file "$file""
+                rm -f $(realpath "$file")
+              else
+                echo "Removing original file "$file""
+                rm -f $(realpath "$file")
+              fi
             else
-              echo "Removing original file "$file""
-              rm -f $(realpath "$file")
+              echo "Compressed version of $(basename "$file") not found, skipping deletion."
             fi
           fi
         else
