@@ -602,6 +602,7 @@ prepare_component() {
         dir_prep "$saves_folder/switch/ryujinx/nand" "/var/config/Ryujinx/bis"
         dir_prep "$saves_folder/switch/ryujinx/sdcard" "/var/config/Ryujinx/sdcard"
         dir_prep "$bios_folder/switch/firmware" "/var/config/Ryujinx/bis/system/Contents/registered"
+        dir_prep "$bios_folder/switch/keys" "/var/config/Ryujinx/system"
       fi
     fi
     # if [[ "$action" == "reset" ]] || [[ "$action" == "postmove" ]]; then # Run commands that apply to both resets and moves
