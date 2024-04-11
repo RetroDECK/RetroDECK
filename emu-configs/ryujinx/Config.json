@@ -91,11 +91,11 @@
   "enable_keyboard": false,
   "enable_mouse": false,
   "hotkeys": {
-    "toggle_vsync": "",
-    "screenshot": "",
-    "show_ui": "ESC",
-    "pause": "",
-    "toggle_mute": "",
+    "toggle_vsync": "Tab",
+    "screenshot": "F8",
+    "show_ui": "F4",
+    "pause": "F5",
+    "toggle_mute": "F2",
     "res_scale_up": "Unbound",
     "res_scale_down": "Unbound",
     "volume_up": "Unbound",
@@ -119,11 +119,11 @@
         "rotate90_cw": false,
         "stick_button": "RightStick"
       },
-      "deadzone_left": 0,
-      "deadzone_right": 0,
-      "range_left": 1.2,
+      "deadzone_left": 0.1,
+      "deadzone_right": 0.1,
+      "range_left": 1,
       "range_right": 1,
-      "trigger_threshold": 0,
+      "trigger_threshold": 0.5,
       "motion": {
         "slot": 0,
         "alt_slot": 0,
@@ -136,12 +136,12 @@
         "enable_motion": true
       },
       "rumble": {
-        "strong_rumble": 2.1,
+        "strong_rumble": 1,
         "weak_rumble": 1,
         "enable_rumble": true
       },
       "left_joycon": {
-        "button_minus": "Minus",
+        "button_minus": "Back",
         "button_l": "LeftShoulder",
         "button_zl": "LeftTrigger",
         "button_sl": "Unbound",
@@ -152,20 +152,20 @@
         "dpad_right": "DpadRight"
       },
       "right_joycon": {
-        "button_plus": "Plus",
+        "button_plus": "Start",
         "button_r": "RightShoulder",
         "button_zr": "RightTrigger",
         "button_sl": "Unbound",
         "button_sr": "Unbound",
-        "button_x": "X",
-        "button_b": "B",
-        "button_y": "Y",
-        "button_a": "A"
+        "button_x": "Y",
+        "button_b": "A",
+        "button_y": "X",
+        "button_a": "B"
       },
       "version": 1,
       "backend": "GamepadSDL2",
-      "id": "0-00000003-28de-0000-ff11-000001000000",
-      "controller_type": "JoyconPair",
+      "id": "0-36b80003-28de-0000-ff11-000001000000",
+      "controller_type": "ProController",
       "player_index": "Player1"
     },
     {
@@ -183,11 +183,11 @@
         "rotate90_cw": false,
         "stick_button": "RightStick"
       },
-      "deadzone_left": 0,
-      "deadzone_right": 0,
-      "range_left": 1.2,
+      "deadzone_left": 0.1,
+      "deadzone_right": 0.1,
+      "range_left": 1,
       "range_right": 1,
-      "trigger_threshold": 0,
+      "trigger_threshold": 0.5,
       "motion": {
         "motion_backend": "GamepadDriver",
         "sensitivity": 100,
@@ -200,7 +200,7 @@
         "enable_rumble": true
       },
       "left_joycon": {
-        "button_minus": "Minus",
+        "button_minus": "Back",
         "button_l": "LeftShoulder",
         "button_zl": "LeftTrigger",
         "button_sl": "Unbound",
@@ -211,19 +211,19 @@
         "dpad_right": "DpadRight"
       },
       "right_joycon": {
-        "button_plus": "Plus",
+        "button_plus": "Start",
         "button_r": "RightShoulder",
         "button_zr": "RightTrigger",
         "button_sl": "Unbound",
         "button_sr": "Unbound",
-        "button_x": "X",
-        "button_b": "B",
-        "button_y": "Y",
-        "button_a": "A"
+        "button_x": "Y",
+        "button_b": "A",
+        "button_y": "X",
+        "button_a": "B"
       },
       "version": 1,
       "backend": "GamepadSDL2",
-      "id": "1-00000003-28de-0000-ff11-000001000000",
+      "id": "1-36b80003-28de-0000-ff11-000001000000",
       "controller_type": "ProController",
       "player_index": "Player2"
     },
@@ -242,11 +242,11 @@
         "rotate90_cw": false,
         "stick_button": "RightStick"
       },
-      "deadzone_left": 0,
-      "deadzone_right": 0,
-      "range_left": 1.2,
+      "deadzone_left": 0.1,
+      "deadzone_right": 0.1,
+      "range_left": 1,
       "range_right": 1,
-      "trigger_threshold": 0,
+      "trigger_threshold": 0.5,
       "motion": {
         "motion_backend": "GamepadDriver",
         "sensitivity": 100,
@@ -259,7 +259,7 @@
         "enable_rumble": true
       },
       "left_joycon": {
-        "button_minus": "Minus",
+        "button_minus": "Back",
         "button_l": "LeftShoulder",
         "button_zl": "LeftTrigger",
         "button_sl": "Unbound",
@@ -270,19 +270,19 @@
         "dpad_right": "DpadRight"
       },
       "right_joycon": {
-        "button_plus": "Plus",
+        "button_plus": "Start",
         "button_r": "RightShoulder",
         "button_zr": "RightTrigger",
         "button_sl": "Unbound",
         "button_sr": "Unbound",
-        "button_x": "X",
-        "button_b": "B",
-        "button_y": "Y",
-        "button_a": "A"
+        "button_x": "Y",
+        "button_b": "A",
+        "button_y": "X",
+        "button_a": "B"
       },
       "version": 1,
       "backend": "GamepadSDL2",
-      "id": "2-00000003-28de-0000-ff11-000001000000",
+      "id": "2-36b80003-28de-0000-ff11-000001000000",
       "controller_type": "ProController",
       "player_index": "Player3"
     },
@@ -301,11 +301,11 @@
         "rotate90_cw": false,
         "stick_button": "RightStick"
       },
-      "deadzone_left": 0,
-      "deadzone_right": 0,
-      "range_left": 1.2,
+      "deadzone_left": 0.1,
+      "deadzone_right": 0.1,
+      "range_left": 1,
       "range_right": 1,
-      "trigger_threshold": 0,
+      "trigger_threshold": 0.5,
       "motion": {
         "motion_backend": "GamepadDriver",
         "sensitivity": 100,
@@ -318,7 +318,7 @@
         "enable_rumble": true
       },
       "left_joycon": {
-        "button_minus": "Minus",
+        "button_minus": "Back",
         "button_l": "LeftShoulder",
         "button_zl": "LeftTrigger",
         "button_sl": "Unbound",
@@ -329,19 +329,19 @@
         "dpad_right": "DpadRight"
       },
       "right_joycon": {
-        "button_plus": "Plus",
+        "button_plus": "Start",
         "button_r": "RightShoulder",
         "button_zr": "RightTrigger",
         "button_sl": "Unbound",
         "button_sr": "Unbound",
-        "button_x": "X",
-        "button_b": "B",
-        "button_y": "Y",
-        "button_a": "A"
+        "button_x": "Y",
+        "button_b": "A",
+        "button_y": "X",
+        "button_a": "B"
       },
       "version": 1,
       "backend": "GamepadSDL2",
-      "id": "3-00000003-28de-0000-ff11-000001000000",
+      "id": "3-36b80003-28de-0000-ff11-000001000000",
       "controller_type": "ProController",
       "player_index": "Player4"
     }
