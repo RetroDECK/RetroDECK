@@ -571,7 +571,7 @@ prepare_component() {
     fi
   fi
 
-  if [[ "$component" =~ ^(ryujunx|Ryujinx|all)$ ]]; then
+  if [[ "$component" =~ ^(ryujinx|Ryujinx|all)$ ]]; then
     # NOTE: for techincal reasons the system folder of Ryujinx IS NOT a sumlink of the bios/switch/keys as not only the keys are located there
     # When RetroDECK starts there is a "manage_ryujinx_keys" function that symlinks the keys only in Rryujinx/system.
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
@@ -828,7 +828,10 @@ prepare_component() {
 
     create_dir "/var/config/boilr"
     cp -fvr "/app/libexec/steam-sync/config.toml" "/var/config/boilr"
-    
+  fi
+
+  if [[ ! "$component" =~ ^(retrodeck|es-de|ES-DE|retroarch|RetroArch|citra|citra-emu|Citra|cemu|Cemu|dolphin|dolphin-emu|Dolphin|duckstation|Duckstation|melonds|melonDS|MelonDS|pcsx2|PCSX2|pico8|pico-8|ppsspp|PPSSPP|primehack|Primehack|rpcs3|RPCS3|ryujinx|Ryujinx|yuzu|Yuzu|xemu|XEMU|vita3k|Vita3K|mame|MAME|gzdoom|GZDOOM|boilr|BOILR|)$ ]]; then
+    log e "Supplied component $component not found, not resetting"
   fi
 
   # Update presets for all components after any reset or move
