@@ -571,7 +571,7 @@ prepare_component() {
     fi
   fi
 
-  if [[ "$component" =~ ^(ryujunx|Ryujinx|all)$ ]]; then
+  if [[ "$component" =~ ^(ryujinx|Ryujinx|all)$ ]]; then
     # NOTE: for techincal reasons the system folder of Ryujinx IS NOT a sumlink of the bios/switch/keys as not only the keys are located there
     # When RetroDECK starts there is a "manage_ryujinx_keys" function that symlinks the keys only in Rryujinx/system.
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
