@@ -790,22 +790,28 @@ configurator_compress_single_game_dialog() {
     if [[ ! $compatible_compression_format == "none" ]]; then
       local post_compression_cleanup=$(configurator_compression_cleanup_dialog)
       (
-      echo "# Compressing $(basename "$file") to $compatible_compression_format format"
+      echo "# Compressing $(basename "$file") to $compatible_compression_format format" # This updates the Zenity dialog
+      log i "Compressing $(basename "$file") to $compatible_compression_format format"
       compress_game "$compatible_compression_format" "$file" "$system"
       if [[ $post_compression_cleanup == "true" ]]; then # Remove file(s) if requested
         if [[ -f "${file%.*}.$compatible_compression_format" ]]; then
+          log i "Performing post-compression file cleanup"
           if [[ "$file" == *".cue" ]]; then
             local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" "$file")
             local file_path=$(dirname "$(realpath "$file")")
             while IFS= read -r line
             do
+              log i "Removing file $file_path/$line"
               rm -f "$file_path/$line"
             done < <(printf '%s\n' "$cue_bin_files")
+            log i "Removing file $(realpath $file)"
             rm -f $(realpath "$file")
           else
+            log i "Removing file $(realpath $file)"
             rm -f "$(realpath "$file")"
           fi
         else
+          log i "Compressed file ${file%.*}.$compatible_compression_format not found, skipping original file deletion"
           configurator_generic_dialog "RetroDECK Configurator - RetroDECK: Compression Tool" "A compressed version of the file was not found, skipping deletion."
         fi
       fi
@@ -909,9 +915,11 @@ configurator_compress_multiple_games_dialog() {
       local system=$(echo "$file" | grep -oE "$roms_folder/[^/]+" | grep -oE "[^/]+$")
       local compression_format=$(find_compatible_compression_format "$file")
       echo "# Compressing $(basename "$file") into $compression_format format" # Update Zenity dialog text
+      log i "Compressing $(basename "$file") into $compression_format format"
       progress=$(( 100 - (( 100 / "$total_games_to_compress" ) * "$games_left_to_compress" )))
       echo $progress
       games_left_to_compress=$((games_left_to_compress-1))
+      log i "Games left to compress: $games_left_to_compress"
       compress_game "$compression_format" "$file" "$system"
       if [[ $post_compression_cleanup == "true" ]]; then # Remove file(s) if requested
         if [[ -f "${file%.*}.$compatible_compression_format" ]]; then
@@ -920,13 +928,17 @@ configurator_compress_multiple_games_dialog() {
             local file_path=$(dirname "$(realpath "$file")")
             while IFS= read -r line
             do
+              log i "Removing file $file_path/$line"
               rm -f "$file_path/$line"
             done < <(printf '%s\n' "$cue_bin_files")
+            log i "Removing file $(realpath $file)"
             rm -f $(realpath "$file")
           else
+            log i "Removing file $(realpath $file)"
             rm -f "$(realpath "$file")"
           fi
         else
+          log i "Compressed file ${file%.*}.$compatible_compression_format not found, skipping original file deletion"
           configurator_generic_dialog "RetroDECK Configurator - RetroDECK: Compression Tool" "Compression of $(basename $file) failed, skipping deletion."
         fi
       fi
