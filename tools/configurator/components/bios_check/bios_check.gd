@@ -41,5 +41,5 @@ func _ready():
 			for i in bios_line.size():
 				table_line.set_text(i, bios_line[i])
 				if table_line.get_index() % 2 == 1:
-					table_line.set_custom_bg_color(i,Color(0.23, 0.54, 0, 1),false)
+					table_line.set_custom_bg_color(i,Color(0.15, 0.15, 0.15, 1),false)
 					table_line.set_custom_color(i,Color(1,1,1,1))
