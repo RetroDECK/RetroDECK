@@ -687,7 +687,7 @@ ponzu() {
         executable="$data_dir/bin/yuzu"
         log d "Making $executable executable"
         chmod +x "$executable"
-        prepare_component "reset" "citra"
+        prepare_component "reset" "yuzu"
         set_setting_value $rd_conf "kiroi_ponzu" "true" retrodeck "options"
       fi
       
