@@ -676,10 +676,11 @@ ponzu() {
       rm -rf *
       if [[ "$ponzu_file" == *itra* ]]; then
         mv "$tmp_folder/usr/"** .
-        executable="$data_dir/bin/citra-qt"
-        log d "Making $executable executable"
+        executable="$data_dir/bin/citra"
+        log d "Making $executable and $executable-qt executable"
         chmod +x "$executable"
-        prepare_component "reset" "yuzu"
+        chmod +x "$executable-qt"
+        prepare_component "reset" "citra"
         set_setting_value $rd_conf "akai_ponzu" "true" retrodeck "options"
       elif [[ "$ponzu_file" == *uzu* ]]; then
         mv "$tmp_folder/usr/"** .
