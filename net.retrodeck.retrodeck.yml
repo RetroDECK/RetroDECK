@@ -431,7 +431,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/XargonWan/RetroDECK-ES-DE
-        branch: update/3.1
+        branch: retrodeck-main
       - type: shell
 
   # ES-DE - END
