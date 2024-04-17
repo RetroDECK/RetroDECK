@@ -122,3 +122,28 @@ jobs:
           name: retrodeck-flatpak
           path: RetroDECK.flatpak
         continue-on-error: true
+
+      - name: Publish the flatpak in a new release on Gitea
+        uses: ncipollo/release-action@v1
+        env:
+          REL_VER: ${{ env.REL_VER }}
+        with:
+          tag: ${{ env.REL_VER }}
+          name: "RetroDECK v${{ env.REL_VER }}"
+          bodyFile: "body.md"
+          artifacts: "RetroDECK.flatpak,RetroDECK-Artifact.tar.gz"
+          allowUpdates: true
+          makeLatest: true
+          token: ${{ secrets.GITEA_TRIGGER_BUILD_TOKEN }}
+          repo: "https://repo.retrodeck.net/RetroDECK/RetroDECK"
+        continue-on-error: true
+
+      - name: Upload RetroDECK.flatpak to Gitea Release
+        run: |
+          curl -X POST \
+            -H "Authorization: token ${GITEA_TOKEN}" \
+            -F "file=@RetroDECK.flatpak" \
+            "https://repo.retrodeck.net/RetroDECK/RetroDECK/releases/${{ env.REL_VER }}/assets?name=RetroDECK.flatpak"
+        env:
+          GITEA_TOKEN: ${{ secrets.GITEA_TRIGGER_BUILD_TOKEN }}
+
