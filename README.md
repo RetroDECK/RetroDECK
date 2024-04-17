@@ -74,11 +74,11 @@ For our long term vision you can check out the following wiki page:
 [RetroDECK: Visions and Goals](https://retrodeck.readthedocs.io/en/latest/wiki_about/visions-and-goals/)
 
 ### How to get support? 
-Use the supports channels on [Discord](https://discord.gg/Dz3szYsP8g) `🤝-community-support` and `🆘-support`.
+Use the supports channels on [Discord](https://discord.gg/WDc5C9YWMx) `🤝-community-support` and `🆘-support`.
 ### The RetroDECK community:
 [Website](https://retrodeck.net) <br/>
 [Wiki](https://github.com/XargonWan/RetroDECK/wiki) <br/>
-[Discord](https://discord.gg/Dz3szYsP8g)<br/>
+[Discord](https://discord.gg/WDc5C9YWMx)<br/>
 [Lemmy](https://lemmy.zip/c/retrodeck)<br/>
 [Subreddit](https://www.reddit.com/r/retrodeck)
 
@@ -113,4 +113,4 @@ Please check out the [Wiki](https://github.com/XargonWan/RetroDECK/wiki) for eve
 The RetroDECK [FAQ](https://github.com/XargonWan/RetroDECK/wiki/FAQs%3A-Frequently-asked-questions) on the wiki has a vast variety of questions and awnsers. 
 
 # How to get support? 
-Use the supports channels on [Discord](https://discord.gg/Dz3szYsP8g). 
+Use the supports channels on [Discord](https://discord.gg/WDc5C9YWMx). 
