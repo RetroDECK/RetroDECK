@@ -14,10 +14,7 @@ finish-args:
   - --share=ipc
   - --share=network
   - --device=all
-  - --filesystem=home
-  - --filesystem=/run/media
-  - --filesystem=/media
-  - --filesystem=/mnt
+  - --filesystem=host
   - --filesystem=home/.var/app/com.valvesoftware.Steam
   - --allow=multiarch
   - --talk-name=org.freedesktop.ScreenSaver
