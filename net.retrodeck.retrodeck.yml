@@ -4,7 +4,7 @@ runtime-version: "6.5"
 sdk: org.kde.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.llvm16        # Needed for RPCS3 (llvm17 actually)
-  - org.freedesktop.Sdk.Extension.rust-stable   # Needed for BoilR 
+  - org.electronjs.Electron2.BaseApp            # Needed for Steam ROM Manager 
 command: retrodeck.sh
 
 finish-args:
@@ -49,6 +49,7 @@ cleanup:
   - /bin/zstd*
   - /lib/pkg-config
   - /share/doc
+  - /share/gtk-doc # Steam ROM Manager
   - /share/man
   - /src
   - '*.a'
@@ -448,6 +449,48 @@ modules:
   # ES-DE Themes - END
 
   # External manifests start
+
+  # Steam ROM Manager - START
+
+  - name: zypak
+    sources:
+      - type: git
+        url: https://github.com/refi64/zypak
+        tag: v2022.03
+        commit: 8424c6bcf909ca2031ebc6537d324bb64772266e
+
+  - name: steam-rom-manager
+    buildsystem: simple
+    env:
+        IN_FLATPAK: 1
+    build-commands:
+      - install -D run.sh ${FLATPAK_DEST}/bin/steam-rom-manager
+      - cp /usr/bin/ar ${FLATPAK_DEST}/bin
+      - ar x srm.deb
+      - tar xf data.tar.xz
+      - mv "opt/Steam ROM Manager" "${FLATPAK_DEST}/srm"
+      - rm -rf "usr/share/icons/hicolor/1024x1024"
+      - cd usr; find share/icons/hicolor -type f -exec install -Dm644 "{}"
+        "${FLATPAK_DEST}/{}" \;
+      - rm -r srm.deb control.tar.* data.tar.xz debian-binary usr opt
+    sources:
+      - type: script
+        dest-filename: run.sh
+        commands:
+          - ${FLATPAK_DEST}/bin/zypak-wrapper.sh ${FLATPAK_DEST}/srm/steam-rom-manager
+      - type: file
+        dest-filename: srm.deb
+        url: https://github.com/SteamGridDB/steam-rom-manager/releases/download/v2.4.19/steam-rom-manager_2.4.19_amd64.deb
+        sha256: aa4f121d50612801c30b9365e05cb92a3b4a9c402974fee2b88652de8d731b0e
+        x-checker-data:
+          type: json
+          url: https://api.github.com/repos/SteamGridDB/steam-rom-manager/releases/latest
+          url-query: >-
+            .assets[] | select(.name=="steam-rom-manager_" + $version +
+            "_amd64.deb") | .browser_download_url
+          version-query: .tag_name | sub("^v"; "")
+
+  # Steam ROM Manager - END
 
   # RetroArch - START
   # https://github.com/flathub/org.libretro.RetroArch
