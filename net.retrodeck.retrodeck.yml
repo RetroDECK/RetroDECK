@@ -2,9 +2,10 @@ app-id: net.retrodeck.retrodeck
 runtime: org.kde.Platform
 runtime-version: "6.5"
 sdk: org.kde.Sdk
+base: org.electronjs.Electron2.BaseApp            # Needed for Steam ROM Manager
+base-version: "22.08"
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.llvm16        # Needed for RPCS3 (llvm17 actually)
-  - org.electronjs.Electron2.BaseApp            # Needed for Steam ROM Manager 
 command: retrodeck.sh
 
 finish-args:
