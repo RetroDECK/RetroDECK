@@ -74,11 +74,11 @@ For our long term vision you can check out the following wiki page:
 [RetroDECK: Visions and Goals](https://retrodeck.readthedocs.io/en/latest/wiki_about/visions-and-goals/)
 
 ### How to get support? 
-Use the supports channels on [Discord](https://discord.gg/Dz3szYsP8g) `🤝-community-support` and `🆘-support`.
+Use the supports channels on [Discord](https://discord.gg/WDc5C9YWMx) `🤝-community-support` and `🆘-support`.
 ### The RetroDECK community:
 [Website](https://retrodeck.net) <br/>
 [Wiki](https://github.com/XargonWan/RetroDECK/wiki) <br/>
-[Discord](https://discord.gg/Dz3szYsP8g)<br/>
+[Discord](https://discord.gg/WDc5C9YWMx)<br/>
 [Lemmy](https://lemmy.zip/c/retrodeck)<br/>
 [Subreddit](https://www.reddit.com/r/retrodeck)
 
@@ -99,6 +99,7 @@ Read up here on how to help out, there is something for everyone:
 | [RetroDECK](https://github.com/XargonWan/RetroDECK)          | This one, our main repo where the core of the project is  |
 | [RetroDECK-cooker](https://github.com/XargonWan/RetroDECK-cooker)  | Where we publish our test build, no code is hosted here |
 | [RetroDECK-Wiki](https://github.com/XargonWan/RetroDECK-Wiki)  | Where our wiki source code is |
+| [RetroDECK-website](https://github.com/XargonWan/RetroDECK-website)  | Where our website source code is |
 | [RetroDECK on Flathub](https://github.com/flathub/net.retrodeck.retrodeck) | Our little space in Flathub's organization                 |
 | [RetroDECK-MAME](https://github.com/XargonWan/RetroDECK-MAME)   | MAME is big to build, so it's pre-built here and then imported in the build |
 | [RetroDECK-ES-DE](https://github.com/XargonWan/RetroDECK-ES-DE)  | This is where we store our patched fork of ES-DE          |
@@ -112,4 +113,4 @@ Please check out the [Wiki](https://github.com/XargonWan/RetroDECK/wiki) for eve
 The RetroDECK [FAQ](https://github.com/XargonWan/RetroDECK/wiki/FAQs%3A-Frequently-asked-questions) on the wiki has a vast variety of questions and awnsers. 
 
 # How to get support? 
-Use the supports channels on [Discord](https://discord.gg/Dz3szYsP8g). 
+Use the supports channels on [Discord](https://discord.gg/WDc5C9YWMx). 

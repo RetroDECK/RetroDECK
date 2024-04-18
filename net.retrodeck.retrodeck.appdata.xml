@@ -46,12 +46,10 @@
       <p>NOTE: It can be run on Linux desktop right now but there will be some manual configurations needed for input, storage location and other tiny hickups.</p>
       <p>
          INSTALLATION INSTRUCTIONS FOR THE STEAM DECK:
-         <ul>
-            <li>1. Start RetroDECK from the Desktop mode (only needed for the initial first time configuration)</li>
-            <li>2. Add RetroDECK to your Steam Library by pressing "Add a non-steam game to my library"</li>
-            <li>3. Download the offical RetroDECK controller profile from Steam</li>
-            <li>4. [OPTIONAL] Download Steam Grids graphics for RetroDECK with BoilR</li>
-         </ul>
+            1. Start RetroDECK from the Desktop mode (only needed for the initial first time configuration)
+            2. Add RetroDECK to your Steam Library by pressing "Add a non-steam game to my library"
+            3. Download the offical RetroDECK controller profile from Steam
+            4. [OPTIONAL] Download Steam Grids graphics for RetroDECK with BoilR
       </p>
       <p>For more detailed information check our wiki: 
       https://github.com/XargonWan/RetroDECK/wiki</p>
@@ -59,55 +57,67 @@
       https://www.patreon.com/RetroDECK</p>
       <p>If you want to join the RetroDECK community check our:</p>
       <p>Reddit: https://www.reddit.com/r/RetroDECK/</p>
-      <p>Discord: https://discord.gg/Dz3szYsP8g 
+      <p>Discord: https://discord.gg/WDc5C9YWMx 
          (If you want to help out with the project join the "i-want-to-help" channel)</p>
    </description>
    <project_license>GPL-3.0</project_license>
    <metadata_license>CC0-1.0</metadata_license>
    <releases>
-      <release version="0.8.0b" date="2023-02-27">
+      <release version="0.8.0b" date="2024-04-17">
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.8.0b</url>
          <description>
-            <p>
-               WARNING:
-               The post update script is initializing es-de 3.0, vita3k, mame-sa and ryujinx when coming from a version ealrier that 0.8.0b. Tp fully test this build you must come from a build 0.7.6b or previous otherwise you will surely encounter issues. Else reset RetroDECK but be aware that will not be a proper testing.
-            </p>  
             <p>Changes:</p>
             <ul>
-               <li>ES-DE: updated to 3.0</li>
-               <li>Added new system: RYUJINX</li>
+               <li>All the emulators and engines are updated to their latest version</li>
+               <li>ES-DE: updated to 3.0.1</li>
+               <li>RPCS3 is now running via shortcut (.desktop file) by default - WARN THE USERS TO MIGRATE and how to change it back</li>
+               <li>CITRA-SA: removed, it will available trough Ponzu. The libretro core is now the default emulator</li>
+               <li>YUZU: removed, Ryujinx is now the default emulator, it will available trough Ponzu</li>
+               <li>PONZU: added, check the wiki if interested in this preservational function</li>
+               <li>Added new system: PSVita, trough Vita3K</li>
                <li>Added new system: SOLARUS</li>
-               <li>Added new engine: GZDOOM</li>
-               <li>Added new emulator: Vita3K</li>
-               <li>Added new emulator: MAME (Standalone)</li>
-               <li>PPSSPP: added hotkeys</li>
-               <li>MAME: added hotkeys</li>
-               <li>SCUMMVM: added hotkeys</li>
+               <li>Added new engine: GZDOOM that is now the DOOM system default engine</li>
+               <li>Added new emulator: RYUJINX</li>
+               <li>Added new emulator: MAME (Standalone), v0.264</li>
+               <li>Added hotkeys for: PPSSPP, MAME, SCUMMVM</li>
                <li>DOLPHIN: improved wiimote pointer emulation for controllers</li>
-               <li>Quit button after emulators reset should act as an actual full quit button</li>
-               <li>Created a quit_retrodeck function to ease the quit in the scripts.</li>
-               <li>Logs folder is now in retrodeck/logs (previously was .logs)</li>
-               <li>RPCS3 is now running via shortcut (.desktop file) by default - WARN THE USERS TO MIGRATE</li>
-               <li>Added controller config for PS4 and PS5</li>
-               <li>Controller config overhaul</li>
-               <li>Removed talk names in the manifest as they're not needed anymore as enabled by default</li>
+               <li>DOLPHIN: enabled Gyro</li>
+               <li>PRIMEHACK: config structure refactor + new configs</li>
+               <li>LOGGER: logging is completely refactored, logs folder is now in retrodeck/logs (previously was .logs)</li>
+               <li>Added Steam controller layouts for PS4 and PS5</li>
+               <li>Steam controller layouts overhaul</li>
+               <li>DUCKSTATION: config refactor. The old config didn't not work anymore for controllers.</li>
+               <li>MULTIPLAYER: enabled controller configs for player 2~4 for CEMU, DUCKSTATION, GZDOOM, RPCS3 and RYUJINX</li>
+               <li>Graphical tweaks for DOLPHIN, MELONDS and PCSX2</li>
+               <li>Added a new icon for RetroDECK Configurator</li>
+               <li>CONFIGURATOR: added more systems to valid compression targets in the compressor tool</li>
+               <li>CONFIGURATOR: simplified single-file-compression process</li>
+               <li>CONFIGURATOR: merged "save state on exit" and  "load state on run" presets into a new "Quick Resume" function</li>
+               <li>CONFIGURATOR: added a tool to "Swap A/B X/Y button" for compatible systems</li>
+               <li>CONFIGURATOR: moved "Rewind" preset to "Global Presets" section and added more compatible systems</li>
+               <li>CONFIGURATOR: added "expert mode" on BIOS checker tool (shows all available info)</li>
+               <li>DESKTOP: added Steam Flatpak detection for controller profile install</li>
+               <li>DESKTOP: RetroDECK now knows if it is running on a real Deck or other Linux desktop</li>
+               <li>DESKTOP: disabled "Desktop Mode" warning when not running on Deck</li>
             </ul>
             <p>Fixes:</p>
             <ul>
-               <li>Fixed DUCKSTATION memory card folder</li>
-               <li>Fixed RPCS3 saves folder (wrong symlink) - WARN THE USERS TO BACKUP</li>
+               <li>CEMU: refactored input profiles to reflect the new version changes </li>
+               <li>DUCKSTATION: fixed memory card folder path</li>
+               <li>DUCKSTATION: all controlls now are configured via SDL</li>
+               <li>RPCS3: fixed saves folder (wrong symlink) - WARN THE USERS TO BACKUP</li>
+               <li>SCUMMVM: fixed a bug where some paths were not existing</li>
+               <li>RETROARCH: fixed a bug where the default folder was not the rom folder in the rgui</li>
+               <li>DOLPHIN: tweaked Wii, GC and GBA inputs</li>
+               <li>Removed talk names in the manifest as they're not needed anymore as enabled by default</li>
+               <li>Fixed an issue that prevented RetroDECK to work properly on some distributions on Wayland</li>
+               <li>Added the needed subfolders in retrodeck/bios</li>
+               <li>DVELOPER TOOLS: fixed some issues that preventing RetroDECK to be built locally</li>
+               <li>DVELOPER TOOLS: added a script to inject changes in the current RetroDECK installation in order to test script and config changes without a full manifest rebuild</li>
             </ul>
-            <p>Issues:</p>
+            <p>Known issues:</p>
             <ul>
-               <li>Vita3K firmware downloader is failing. Workaround: run the downloader twice</li>
-               <li>GZDOOM: the controller for player 2+ is not correctly configured</li>
-               <li>quit_retrodeck function seems to not working correctly</li>
-            </ul>
-            <p>Missing:</p>
-            <ul>
-               <li>GZDOOM: hotkeys</li>
-               <li>SOLARUS: hotkeys</li>
-               <li>A proper reset script for the new emulators, now it's just a draft (only Vita3K is done)</li>
+               <li>Please check the know issues in the Wiki under General Infomration.</li>
             </ul>
          </description>
       </release>
@@ -129,7 +139,7 @@
             </ul>
          </description>
       </release>
-      <release version="0.7.5b" date="2023-14-12">
+      <release version="0.7.5b" date="2023-12-14">
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.7.5b</url>
          <description>
             <p>Bug fixes and other changes:</p>
@@ -207,13 +217,13 @@
          <description>
             <p>Information:</p>
             <ul>
-                <li>Steam Deck users update RetroDECK from <i>Discover</i> in Desktop Mode.</li>
-                <li>Don't forget to reapply the latest controller layout: Go into the <i>Templates</i> tab and reapply the new profile ending with 0.7.1b (there is no need to reinstall the entire layout from the Configurator).</li>
+                <li>Steam Deck users update RetroDECK from Discover in Desktop Mode.</li>
+                <li>Don't forget to reapply the latest controller layout: Go into the Templates tab and reapply the new profile ending with 0.7.1b (there is no need to reinstall the entire layout from the Configurator).</li>
             </ul>
             <p>Bug fixes and other changes:</p>
             <ul>
                 <li>Fixed an issue to make sure the RD controller layout file at update with each RD update.</li>
-                <li>Fixed an issue with PPSSPP that made <i>L</i> and <i>R</i> incorrectly bound.</li>
+                <li>Fixed an issue with PPSSPP that made L and R incorrectly bound.</li>
                 <li>Fixed an issue in the Configurator that prevented the Yuzu preset for swapping A/B X/Y from working.</li>
                 <li>Fixed a notification issue on the latest SteamOS Beta releases.</li>
                 <li>Fixed an rsync permissions issue in the RetroDECK Framework.</li>
@@ -226,18 +236,18 @@
             <p>Steam Deck - Global Controller Layout:</p>
             <p>We have done some changes based on community feedback</p>
             <ul>
-                <li><i>Select</i> is now a hotkey trigger while pressing it down, <i>L4</i> and <i>R4</i> are still triggers as well.</li>
-                <li>The RetroArch combo of <i>Select</i> + <i>Start</i> = <i>Quit</i> now works on many SA-Emulators.</li>
-                <li><i>Open Menu</i> is removed from <i>Select</i>.</li>
-                <li><i>R5</i> = <i>A</i> button (this allows for great Wii controls on the right touchpad and pressing down the <i>R5</i> for A).</li>
-                <li><i>L5</i> = <i>B</i> button.</li>
+                <li>Select is now a hotkey trigger while pressing it down, L4 and R4 are still triggers as well.</li>
+                <li>The RetroArch combo of Select + Start = Quit now works on many SA-Emulators.</li>
+                <li>Open Menu is removed from Select.</li>
+                <li>R5 = A button (this allows for great Wii controls on the right touchpad and pressing down the R5 for A).</li>
+                <li>L5 = B button.</li>
             </ul>
             <p>Global hotkey changes:</p>
             <ul>
-                <li><i>Open Menu</i> is on <i>Y</i>.</li>
-                <li><i>Increase Emulation Speed</i> is on <i>Dpad-UP</i>.</li>
-                <li><i>Decrease Emulation Speed</i> is on <i>Dpad-Down</i>.</li>
-                <li><i>Fullscreen OFF</i> command is removed (as emulators have migrated to toggle).</li>
+                <li>Open Menu is on Y.</li>
+                <li>Increase Emulation Speed is on Dpad-UP.</li>
+                <li>Decrease Emulation Speed is on Dpad-Down.</li>
+                <li>Fullscreen OFF command is removed (as emulators have migrated to toggle).</li>
             </ul>
             <p>Known issues:</p>
             <ul>
@@ -548,26 +558,26 @@
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.4.3b</url>
          <description>
             <p>
-               <b>Emulators:</b>
+               Emulators:
             </p>
             <ul>
                <li>Updated all the emulators at the latest available version.</li>
             </ul>
             <p>
-               <b>Backend:</b>
+               Backend:
             </p>
             <ul>
                <li>Manifest code cleanup.</li>
             </ul>
             <p>
-               <b>Known Issues:</b>
+               Known Issues:
             </p>
             <ul>
                <li>PCSX2: due to its limitation, the standalone PCSX2 doesn't have any way to set the hotkeys, so no save and load state, no quit button. In order to quit press: STEAM -&gt; PCSX2 -&gt; (X) CLOSE WINDOW, be aware that the state is not automatically saved</li>
                <li>Due to a Steam limitation, external controllers and keyboard seems not to be working, expecially in the desktop mode</li>
             </ul>
             <p>
-               <b>IMPORTANT NOTE:</b>
+               IMPORTANT NOTE:
                At the moment the emulator configs are reset during every update, this was made because every version they may bring new configurations, please back them up if you did some manual configs.
             </p>
          </description>
@@ -576,7 +586,7 @@
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.4.2b</url>
          <description>
             <p>
-               <b>Emulators:</b>
+               Emulators:
             </p>
             <ul>
                <li>Updated all the emulators at the latest available version.</li>
@@ -587,7 +597,7 @@
                <li>RETROARCH (LIBRETRO): Tweaked some configs and fixed some overlapping hotkeys (FPS was same as Show Menu action).</li>
             </ul>
             <p>
-               <b>Backend:</b>
+               Backend:
             </p>
             <ul>
                <li>Removed some broken tools that will be reintroduced once fixed, including the roms moving tool.</li>
@@ -595,14 +605,14 @@
                <li>Manifest trimmend and general code cleanup.</li>
             </ul>
             <p>
-               <b>Known Issues:</b>
+               Known Issues:
             </p>
             <ul>
                <li>PCSX2: due to its limitation, the standalone PCSX2 doesn't have any way to set the hotkeys, so no save and load state, no quit button. In order to quit press: STEAM -&gt; PCSX2 -&gt; (X) CLOSE WINDOW, be aware that the state is not automatically saved</li>
                <li>Due to a Steam limitation, external controllers and keyboard seems not to be working, expecially in the desktop mode</li>
             </ul>
             <p>
-               <b>IMPORTANT NOTE:</b>
+               IMPORTANT NOTE:
                At the moment the emulator configs are reset during every update, this was made because every version they may bring new configurations, please back them up if you did some manual configs.
             </p>
          </description>
@@ -611,7 +621,7 @@
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.4.1b</url>
          <description>
             <p>
-               <b>Emulators:</b>
+               Emulators:
             </p>
             <ul>
                <li>Tweaked various emulator configs</li>
@@ -619,7 +629,7 @@
                <li>Fixed home path in MelonDS (SA)</li>
             </ul>
             <p>
-               <b>Frontend:</b>
+               Frontend:
             </p>
             <ul>
                <li>Updated ES-DE to 1.2.4</li>
@@ -627,13 +637,13 @@
                <li>Now a custom roms path can be selected if SD Card is selected and the SD Card is not found in the default path</li>
             </ul>
             <p>
-               <b>Backend:</b>
+               Backend:
             </p>
             <ul>
                <li>Fixed a bug where the folders where not symlinked correclty</li>
             </ul>
             <p>
-               <b>Known Issues:</b>
+               Known Issues:
             </p>
             <ul>
                <li>PCSX2: due to its limitation, the standalone PCSX2 doesn't have any way to set the hotkeys, so no save and load state, no quit button. In order to quit press: STEAM -&gt; PCSX2 -&gt; (X) CLOSE WINDOW, be aware that the state is not automatically saved</li>
@@ -641,7 +651,7 @@
                <li>Yuzu makes RetroDECK freeze in some situations, like if the rom is a bad dump</li>
             </ul>
             <p>
-               <b>IMPORTANT NOTE:</b>
+               IMPORTANT NOTE:
                At the moment the emulator configs are reset during every update, this was made because every version they may bring new configurations, please back them up if you did some manual configs.
             </p>
          </description>

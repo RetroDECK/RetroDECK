@@ -83,6 +83,8 @@ move() {
   source_dir="$(echo $1 | sed 's![^/]$!&/!')" # Add trailing slash if it is missing
   dest_dir="$(echo $2 | sed 's![^/]$!&/!')" # Add trailing slash if it is missing
 
+  log d "Moving \"$source_dir\" to \"$dest_dir\""
+
   (
     rsync -a --remove-source-files --ignore-existing --mkpath "$source_dir" "$dest_dir" # Copy files but don't overwrite conflicts
     find "$source_dir" -type d -empty -delete # Cleanup empty folders that were left behind
@@ -97,6 +99,27 @@ move() {
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator Utility - Move Directories" \
     --text="There were some conflicting files that were not moved.\n\nAll files that could be moved are in the new location,\nany files that already existed at the new location have not been moved and will need to be handled manually."
+  fi
+}
+
+create_dir() {
+  # A simple function that creates a directory checking if is still there while logging the activity
+  # If -d it will delete it prior the creation
+
+  if [[ "$1" == "-d" ]]; then
+    # If "force" flag is provided, delete the directory first
+    shift # Remove the first argument (-f)
+    if [[ -e "$1" ]]; then
+      rm -rf "$1" # Forcefully delete the directory
+      log d "Found \"$1\", deleting it."
+    fi
+  fi
+
+  if [[ ! -d "$1" ]]; then
+    mkdir -p "$1" # Create directory if it doesn't exist
+    log d "Created directory: $1"
+  else
+    log d "Directory \"$1\" already exists, skipping."
   fi
 }
 
@@ -213,58 +236,60 @@ dir_prep() {
 
   # Call me with:
   # dir prep "real dir" "symlink location"
-  real="$1"
-  symlink="$2"
+  real="$(realpath -s $1)"
+  symlink="$(realpath -s $2)"
 
-  echo -e "\n[DIR PREP]\nMoving $symlink in $real" #DEBUG
+  log d "Preparing directory $symlink in $real"
 
    # if the symlink dir is already a symlink, unlink it first, to prevent recursion
   if [ -L "$symlink" ];
   then
-    echo "$symlink is already a symlink, unlinking to prevent recursives" #DEBUG
+    log d "$symlink is already a symlink, unlinking to prevent recursives"
     unlink "$symlink"
   fi
 
   # if the dest dir exists we want to backup it
   if [ -d "$symlink" ];
   then
-    echo "$symlink found" #DEBUG
+    log d "$symlink found"
     mv -f "$symlink" "$symlink.old"
   fi
 
   # if the real dir is already a symlink, unlink it first
   if [ -L "$real" ];
   then
-    echo "$real is already a symlink, unlinking to prevent recursives" #DEBUG
+    log d "$real is already a symlink, unlinking to prevent recursives" #DEBUG
     unlink "$real"
   fi
 
   # if the real dir doesn't exist we create it
   if [ ! -d "$real" ];
   then
-    echo "$real not found, creating it" #DEBUG
-    mkdir -pv "$real"
+    log d "$real not found, creating it" #DEBUG
+    create_dir "$real"
   fi
 
   # creating the symlink
-  echo "linking $real in $symlink" #DEBUG
-  mkdir -pv "$(dirname "$symlink")" # creating the full path except the last folder
+  log d "linking $real in $symlink" #DEBUG
+  create_dir "$(dirname "$symlink")" # creating the full path except the last folder
   ln -svf "$real" "$symlink"
 
   # moving everything from the old folder to the new one, delete the old one
   if [ -d "$symlink.old" ];
   then
-    echo "Moving the data from $symlink.old to $real" #DEBUG
+    log d "Moving the data from $symlink.old to $real" #DEBUG
     mv -f "$symlink.old"/{.[!.],}* "$real"
-    echo "Removing $symlink.old" #DEBUG
+    log d "Removing $symlink.old" #DEBUG
     rm -rf "$symlink.old"
   fi
 
-  echo -e "$symlink is now $real\n"
+  log i "$symlink is now $real"
 }
 
 check_bios_files() {
   # This function validates all the BIOS files listed in the $bios_checklist and adds the results to an array called bios_checked_list which can be used elsewhere
+  # There is a "basic" and "expert" mode which outputs different levels of data
+  # USAGE: check_bios_files "mode"
   
   rm -f "$godot_bios_files_checked" # Godot data transfer temp files
   touch "$godot_bios_files_checked"
@@ -281,13 +306,18 @@ check_bios_files() {
           bios_hash_matched="Yes"
         fi
       fi
-      bios_checked_list=("${bios_checked_list[@]}" "$bios_file" "$bios_system" "$bios_file_found" "$bios_hash_matched" "$bios_desc")
-      echo "$bios_file"^"$bios_system"^"$bios_file_found"^"$bios_hash_matched"^"$bios_desc" >> "$godot_bios_files_checked" # Godot data transfer temp file
+      if [[ "$1" == "basic" ]]; then
+        bios_checked_list=("${bios_checked_list[@]}" "$bios_file" "$bios_system" "$bios_file_found" "$bios_hash_matched" "$bios_desc")
+        echo "$bios_file"^"$bios_system"^"$bios_file_found"^"$bios_hash_matched"^"$bios_desc" >> "$godot_bios_files_checked" # Godot data transfer temp file
+      else
+        bios_checked_list=("${bios_checked_list[@]}" "$bios_file" "$bios_system" "$bios_file_found" "$bios_hash_matched" "$bios_desc" "$bios_subdir" "$bios_hash")
+        echo "$bios_file"^"$bios_system"^"$bios_file_found"^"$bios_hash_matched"^"$bios_desc"^"$bios_subdir"^"$bios_hash" >> "$godot_bios_files_checked" # Godot data transfer temp file
+      fi
   done < $bios_checklist
 }
 
 update_rpcs3_firmware() {
-  mkdir -p "$roms_folder/ps3/tmp"
+  create_dir "$roms_folder/ps3/tmp"
   chmod 777 "$roms_folder/ps3/tmp"
   download_file "$rpcs3_firmware" "$roms_folder/ps3/tmp/PS3UPDAT.PUP" "RPCS3 Firmware"
   rpcs3 --installfw "$roms_folder/ps3/tmp/PS3UPDAT.PUP"
@@ -302,7 +332,7 @@ update_vita3k_firmware() {
 }
 
 backup_retrodeck_userdata() {
-  mkdir -p "$backups_folder"
+  create_dir "$backups_folder"
   zip -rq9 "$backups_folder/$(date +"%0m%0d")_retrodeck_userdata.zip" "$saves_folder" "$states_folder" "$bios_folder" "$media_folder" "$themes_folder" "$logs_folder" "$screenshots_folder" "$mods_folder" "$texture_packs_folder" "$borders_folder" > $logs_folder/$(date +"%0m%0d")_backup_log.log
 }
 
@@ -310,7 +340,11 @@ make_name_pretty() {
   # This function will take an internal system name (like "gbc") and return a pretty version for user display ("Nintendo GameBoy Color")
   # USAGE: make_name_pretty "system name"
   local system=$(grep "$1^" "$pretty_system_names_reference_list")
-  IFS='^' read -r internal_name pretty_name < <(echo "$system")
+  if [[ ! -z "$system" ]]; then
+    IFS='^' read -r internal_name pretty_name < <(echo "$system")
+  else
+    pretty_name="$system"
+  fi
   echo "$pretty_name"
 }
 
@@ -376,22 +410,22 @@ finit_user_options_dialog() {
 finit() {
 # Force/First init, depending on the situation
 
-  echo "Executing finit"
+  log i "Executing finit"
 
   # Internal or SD Card?
-  local finit_dest_choice=$(configurator_destination_choice_dialog "RetroDECK data" "Welcome to the first configuration of RetroDECK.\nThe setup will be quick but please READ CAREFULLY each message in order to avoid misconfigurations.\n\nWhere do you want your RetroDECK data folder to be located?\n\nThis folder will contain all ROMs, BIOSs and scraped data." )
-  echo "Choice is $finit_dest_choice"
+  local finit_dest_choice=$(configurator_destination_choice_dialog "RetroDECK data" "Welcome to the first setup of RetroDECK.\nPlease carefully read each message prompted during the installation process to avoid any unwanted misconfigurations.\n\nWhere do you want your RetroDECK data folder to be located?\nIn this location a \"retrodeck\" folder will be created.\nThis is the folder that you will use to contain all your important files, such as your own ROMs, BIOSs, Saves and Scraped Data." )
+  log i "Choice is $finit_dest_choice"
 
   case "$finit_dest_choice" in
 
-  "Back" | "" ) # Back or X button quits
+  "Quit" | "" ) # Back or X button quits
     rm -f "$rd_conf" # Cleanup unfinished retrodeck.cfg if first install is interrupted
-    echo "Now quitting"
+    log i "Now quitting"
     quit_retrodeck
   ;;
 
   "Internal Storage" ) # Internal
-    echo "Internal selected"
+    log i "Internal selected"
     rdhome="$HOME/retrodeck"
     if [[ -L "$rdhome" ]]; then #Remove old symlink from existing install, if it exists
       unlink "$rdhome"
@@ -399,10 +433,10 @@ finit() {
   ;;
 
   "SD Card" )
-    echo "SD Card selected"
+    log i "SD Card selected"
     if [ ! -d "$sdcard" ] # SD Card path is not existing
     then
-      echo "Error: SD card not found"
+      log e "SD card not found"
       zenity --error --no-wrap \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK" \
@@ -415,14 +449,14 @@ finit() {
       fi
     elif [ ! -w "$sdcard" ] #SD card found but not writable
       then
-        echo "Error: SD card found but not writable"
+        log e "SD card found but not writable"
         zenity --error --no-wrap \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         --title "RetroDECK" \
         --ok-label "Quit" \
         --text="SD card was found but is not writable\nThis can happen with cards formatted on PC.\nPlease format the SD card through the Steam Deck's Game Mode and run RetroDECK again."
         rm -f "$rd_conf" # Cleanup unfinished retrodeck.cfg if first install is interrupted
-        echo "Now quitting"
+        log i "Now quitting"
         quit_retrodeck
     else
       rdhome="$sdcard/retrodeck"
@@ -430,7 +464,7 @@ finit() {
   ;;
 
   "Custom Location" )
-      echo "Custom Location selected"
+      log i "Custom Location selected"
       zenity --info --no-wrap \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK" \
@@ -502,11 +536,11 @@ install_retrodeck_starterpack() {
 
   ## DOOM section ##
   cp /app/retrodeck/extras/doom1.wad "$roms_folder/doom/doom1.wad" # No -f in case the user already has it
-  mkdir -p "/var/config/ES-DE/gamelists/doom"
+  create_dir "/var/config/ES-DE/gamelists/doom"
   if [[ ! -f "/var/config/ES-DE/gamelists/doom/gamelist.xml" ]]; then # Don't overwrite an existing gamelist
     cp "/app/retrodeck/rd_prepacks/doom/gamelist.xml" "/var/config/ES-DE/gamelists/doom/gamelist.xml"
   fi
-  mkdir -p "$media_folder/doom"
+  create_dir "$media_folder/doom"
   unzip -oq "/app/retrodeck/rd_prepacks/doom/doom.zip" -d "$media_folder/doom/"
 }
 
@@ -515,10 +549,15 @@ install_retrodeck_controller_profile() {
   # NOTE: These files need to be stored in shared locations for Steam, outside of the normal RetroDECK folders and should always be an optional user choice
   # BIGGER NOTE: As part of this process, all emulators will need to have their configs hard-reset to match the controller mappings of the profile
   # USAGE: install_retrodeck_controller_profile
-  if [[ -d "$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/" && -d "$HOME/.steam/steam/controller_base/templates/" ]]; then
-    rsync -rlD --mkpath "/app/retrodeck/binding_icons/" "$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/"
-    rsync -rlD --mkpath "$emuconfigs/defaults/retrodeck/controller_configs/" "$HOME/.steam/steam/controller_base/templates/"
-    # TODO: delete older files Issue#672
+  if [[ -d "$HOME/.steam/steam/controller_base/templates/" || -d "$HOME/.var/app/com.valvesoftware.Steam/.steam/steam/controller_base/templates/" ]]; then
+    if [[ -d "$HOME/.steam/steam/controller_base/templates/" ]]; then # If a normal binary Steam install exists
+      rsync -rlD --mkpath "/app/retrodeck/binding_icons/" "$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/"
+      rsync -rlD --mkpath "$emuconfigs/defaults/retrodeck/controller_configs/" "$HOME/.steam/steam/controller_base/templates/"
+    fi
+    if [[ -d "$HOME/.var/app/com.valvesoftware.Steam/.steam/steam/controller_base/templates/" ]]; then # If a Flatpak Steam install exists
+      rsync -rlD --mkpath "/app/retrodeck/binding_icons/" "$HOME/.var/app/com.valvesoftware.Steam/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/"
+      rsync -rlD --mkpath "$emuconfigs/defaults/retrodeck/controller_configs/" "$HOME/.var/app/com.valvesoftware.Steam/.steam/steam/controller_base/templates/"
+    fi
   else
     configurator_generic_dialog "RetroDECK Controller Profile Install" "The target directories for the controller profile do not exist.\n\nThis may happen if you do not have Steam installed or the location is does not have permission to be read."
   fi
@@ -534,6 +573,8 @@ create_lock() {
 update_splashscreens() {
   # This script will purge any existing ES graphics and reload them from RO space into somewhere ES will look for it
   # USAGE: update_splashscreens
+
+  log i "Updating splash screen"
 
   rm -rf /var/config/ES-DE/resources/graphics
   rsync -rlD --mkpath "/app/retrodeck/graphics/" "/var/config/ES-DE/resources/graphics/"
@@ -579,48 +620,113 @@ easter_eggs() {
   cp -f "$new_splash_file" "$current_splash_file" # Deploy assigned splash screen
 }
 
-manage_ryujinx_keys() {
-  # This function checks if Switch keys are existing and symlinks them inside the Ryujinx system folder
-  # If the symlinks are broken it recreates them
+ponzu() {
+  # This function is used to extract some specific appimages
+  # Check if any of the specified files exist
+  # If RetroDECK is reset Ponzu must re-cooked
 
-  echo "Checking Ryujinx Switch keys." #TODO logging
-  local ryujinx_system="/var/config/Ryujinx/system"  # Set the path to the Ryujinx system folder
-  # Check if the keys folder exists
-  if [ -d "$bios_folder/switch/keys" ]; then
-      # Check if there are files in the keys folder
-      if [ -n "$(find "$bios_folder/switch/keys" -maxdepth 1 -type f)" ]; then
-          # Iterate over each file in the keys folder
-          for file in "$bios_folder/switch/keys"/*; do
-              local filename=$(basename "$file")
-              local symlink="$ryujinx_system/$filename"
-              
-              # Check if the symlink exists and is valid
-              if [ -L "$symlink" ] && [ "$(readlink -f "$symlink")" = "$file" ]; then
-                  echo "Found \"$symlink\" and it's a valid symlink." #TODO logging
-                  continue  # Skip if the symlink is already valid
-              fi
-              
-              # Remove broken symlink or non-symlink file
-              echo "Found \"$symlink\" but it's not a valid symlink. Repairing it" #TODO logging
-              [ -e "$symlink" ] && rm "$symlink"
+  log d "Checking for Ponzu"
 
-              # Create symlink
-              ln -s "$file" "$symlink"
-              echo "Created symlink: \"$symlink\""
-          done
-      else
-          echo "No files found in $bios_folder/switch/keys. Continuing" #TODO logging
-      fi
-  else
-      echo "Directory $bios_folder/switch/keys does not exist. Maybe Ryujinx was never run. Continuing" #TODO logging
+  local tmp_folder="/tmp/extracted"
+  local ponzu_files=("$rdhome"/ponzu/Citra*.AppImage "$rdhome"/ponzu/citra*.AppImage "$rdhome"/ponzu/Yuzu*.AppImage "$rdhome"/ponzu/yuzu*.AppImage) 
+  local data_dir
+  local appimage
+  local executable
+
+  # if the binaries are found, ponzu should be set as true into the retrodeck config
+  if [ -f "/var/data/ponzu/Citra/bin/citra-qt" ]; then
+    log d "Citra binaries has already been installed, checking for updates and forcing the setting as true."
+    set_setting_value $rd_conf "akai_ponzu" "true" retrodeck "options"
   fi
+  if [ -f "/var/data/ponzu/Yuzu/bin/yuzu" ]; then
+    log d "Yuzu binaries has already been installed, checking for updates and forcing the setting as true."
+    set_setting_value $rd_conf "kiroi_ponzu" "true" retrodeck "options"
+  fi
+
+  # Loop through all ponzu files
+  for ponzu_file in "${ponzu_files[@]}"; do
+    # Check if the current ponzu file exists
+    if [ -f "$ponzu_file" ]; then
+      if [[ "$ponzu_file" == *itra* ]]; then
+        log i "Found akai ponzu! Elaborating it"
+        data_dir="/var/data/ponzu/Citra"
+        local message="Akai ponzu is served, enjoy"
+      elif [[ "$ponzu_file" == *uzu* ]]; then
+        log i "Found kiroi ponzu! Elaborating it"
+        data_dir="/var/data/ponzu/Yuzu"
+        local message="Kiroi ponzu is served, enjoy"
+      else
+        log e "AppImage not recognized, not a ponzu ingredient!"
+        exit 1
+      fi
+      appimage="$ponzu_file"
+      chmod +x "$ponzu_file"
+      create_dir "$data_dir"
+      log d "Moving AppImage in \"$data_dir\""
+      mv "$appimage" "$data_dir"
+      cd "$data_dir"
+      local filename=$(basename "$ponzu_file")
+      log d "Setting appimage=$data_dir/$filename"
+      appimage="$data_dir/$filename"
+      log d "Extracting AppImage"
+      "$appimage" --appimage-extract
+      create_dir "$tmp_folder"
+      log d "Cleaning up"
+      cp -r squashfs-root/* "$tmp_folder"
+      rm -rf *
+      if [[ "$ponzu_file" == *itra* ]]; then
+        mv "$tmp_folder/usr/"** .
+        executable="$data_dir/bin/citra"
+        log d "Making $executable and $executable-qt executable"
+        chmod +x "$executable"
+        chmod +x "$executable-qt"
+        prepare_component "reset" "citra"
+        set_setting_value $rd_conf "akai_ponzu" "true" retrodeck "options"
+      elif [[ "$ponzu_file" == *uzu* ]]; then
+        mv "$tmp_folder/usr/"** .
+        executable="$data_dir/bin/yuzu"
+        log d "Making $executable executable"
+        chmod +x "$executable"
+        prepare_component "reset" "yuzu"
+        set_setting_value $rd_conf "kiroi_ponzu" "true" retrodeck "options"
+      fi
+      
+      cd -
+      log i "$message"
+      rm -rf "$tmp_folder"
+    fi
+  done
+  rm -rf "$rdhome/ponzu"
+}
+
+ponzu_remove(){
+
+  # Call me with yuzu or citra and I will remove them
+
+  if [[ "$1" == "citra" ]]; then
+    if [[ $(configurator_generic_question_dialog "Ponzu - Remove Citra" "Do you really want to remove Citra binaries?\n\nYour games and saves will not be deleted.") == "true" ]]; then
+      log i "Ponzu: removing Citra"
+      rm -rf "/var/data/ponzu/Citra"
+      set_setting_value $rd_conf "akai_ponzu" "false" retrodeck "options"
+      configurator_generic_dialog "Ponzu - Remove Citra" "Done, Citra is now removed from RetroDECK"
+    fi
+  elif [[ "$1" == "yuzu" ]]; then
+    if [[ $(configurator_generic_question_dialog "Ponzu - Remove Yuzu" "Do you really want to remove Yuzu binaries?\n\nYour games and saves will not be deleted.") == "true" ]]; then
+      log i "Ponzu: removing Yuzu"
+      rm -rf "/var/data/ponzu/Yuzu"
+      set_setting_value $rd_conf "kiroi_ponzu" "false" retrodeck "options"
+      configurator_generic_dialog "Ponzu - Remove Yuzu" "Done, Yuzu is now removed from RetroDECK"
+    fi
+  else
+    log e "Ponzu: \"$1\" is not a vaild choice for removal, quitting"
+  fi
+  configurator_retrodeck_tools_dialog
 }
 
 # TODO: this function is not yet used
 branch_selector() {
-    # Fetch branches from GitHub API excluding "main"
+    log d "Fetch branches from GitHub API excluding \"main\""
     branches=$(curl -s https://api.github.com/repos/XargonWan/RetroDECK/branches | grep '"name":' | awk -F '"' '$4 != "main" {print $4}')
-    # TODO: logging - Fetching branches from GitHub API
 
     # Create an array to store branch names
     branch_array=()
@@ -658,7 +764,7 @@ branch_selector() {
         configurator_generic_dialog "RetroDECK Online Update" "The update process may take several minutes.\n\nAfter the update is complete, RetroDECK will close. When you run it again you will be using the latest version."
           (
           local desired_flatpak_file=$(curl --silent $flatpak_file_url | grep '"browser_download_url":' | sed -E 's/.*"([^"]+)".*/\1/')
-          mkdir -p "$rdhome/RetroDECK_Updates"
+          create_dir "$rdhome/RetroDECK_Updates"
           wget -P "$rdhome/RetroDECK_Updates" $desired_flatpak_file
           flatpak-spawn --host flatpak remove --noninteractive -y net.retrodeck.retrodeck # Remove current version before installing new one, to avoid duplicates
           flatpak-spawn --host flatpak install --user --bundle --noninteractive -y "$rdhome/RetroDECK_Updates/RetroDECK-cooker.flatpak"
@@ -677,13 +783,16 @@ branch_selector() {
 }
 
 quit_retrodeck() {
-  pkill -f retrodeck
-  pkill -f es-de
+  log i "Quitting ES-DE"
+  pkill -f "es-de"
+  log i "Shutting down RetroDECK's framework"
+  pkill -f "retrodeck"
+  log i "See you next time"
 }
 
 start_retrodeck() {
   easter_eggs # Check if today has a surprise splashscreen and load it if so
-  # normal startup
-  echo "Starting RetroDECK v$version"
-  es-de --home /var/config/
+  ponzu
+  log i "Starting RetroDECK v$version"
+  es-de
 }
