@@ -60,6 +60,10 @@
       <p>Discord: https://discord.gg/WDc5C9YWMx 
          (If you want to help out with the project join the "i-want-to-help" channel)</p>
    </description>
+   <branding>
+      <color type="primary" scheme_preference="light">#94a6fb</color>
+      <color type="primary" scheme_preference="dark">#404b98</color>
+   </branding>
    <project_license>GPL-3.0</project_license>
    <metadata_license>CC0-1.0</metadata_license>
    <releases>
