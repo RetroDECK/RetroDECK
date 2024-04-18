@@ -63,6 +63,19 @@
    <project_license>GPL-3.0</project_license>
    <metadata_license>CC0-1.0</metadata_license>
    <releases>
+      <release version="0.8.1b" date="2024-04-18">
+         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.8.1b</url>
+         <description>
+            <p>Changes:</p>
+            <ul>
+               <li>PLACEHOLDER</li>
+            </ul>
+            <p>Known issues:</p>
+            <ul>
+               <li>Please check the know issues in the Wiki under General Infomration.</li>
+            </ul>
+         </description>
+      </release>
       <release version="0.8.0b" date="2024-04-17">
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.8.0b</url>
          <description>
