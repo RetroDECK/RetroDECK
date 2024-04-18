@@ -478,7 +478,7 @@ modules:
       - type: script
         dest-filename: run.sh
         commands:
-          - ${FLATPAK_DEST}/bin/zypak-wrapper.sh ${FLATPAK_DEST}/srm/steam-rom-manager
+          - /app/bin/zypak-wrapper.sh /app/srm/steam-rom-manager
       - type: file
         dest-filename: srm.deb
         url: https://github.com/SteamGridDB/steam-rom-manager/releases/download/v2.4.19/steam-rom-manager_2.4.19_amd64.deb
