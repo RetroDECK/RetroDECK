@@ -821,16 +821,17 @@ prepare_component() {
     sed -i 's#RETRODECKSAVESDIR#'$saves_folder'#g' "/var/config/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON
   fi
 
-  if [[ "$component" =~ ^(boilr|BOILR|all)$ ]]; then
+  if [[ "$component" =~ ^(steam rom manager|STEAM ROM MANAGER|all)$ ]]; then
     log i "----------------------"
-    log i "Prepearing BOILR"
+    log i "Prepearing STEAM ROM MANAGER"
     log i "----------------------"
 
-    create_dir "/var/config/boilr"
-    cp -fvr "/app/libexec/steam-sync/config.toml" "/var/config/boilr"
+    create_dir "/var/config/steam-rom-manager"
+    create_dir "/var/config/steam-rom-manager/userData"
+    cp -fvr "/app/libexec/steam-sync/userConfigurations.json" "/var/config/steam-rom-manager/userData"
   fi
 
-  if [[ ! "$component" =~ ^(retrodeck|es-de|ES-DE|retroarch|RetroArch|citra|citra-emu|Citra|cemu|Cemu|dolphin|dolphin-emu|Dolphin|duckstation|Duckstation|melonds|melonDS|MelonDS|pcsx2|PCSX2|pico8|pico-8|ppsspp|PPSSPP|primehack|Primehack|rpcs3|RPCS3|ryujinx|Ryujinx|yuzu|Yuzu|xemu|XEMU|vita3k|Vita3K|mame|MAME|gzdoom|GZDOOM|boilr|BOILR|)$ ]]; then
+  if [[ ! "$component" =~ ^(retrodeck|es-de|ES-DE|retroarch|RetroArch|citra|citra-emu|Citra|cemu|Cemu|dolphin|dolphin-emu|Dolphin|duckstation|Duckstation|melonds|melonDS|MelonDS|pcsx2|PCSX2|pico8|pico-8|ppsspp|PPSSPP|primehack|Primehack|rpcs3|RPCS3|ryujinx|Ryujinx|yuzu|Yuzu|xemu|XEMU|vita3k|Vita3K|mame|MAME|gzdoom|GZDOOM|steam rom manager|STEAM ROM MANAGER|)$ ]]; then
     log e "Supplied component $component not found, not resetting"
   fi
 
