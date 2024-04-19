@@ -60,7 +60,8 @@ prepare_component() {
       set_setting_value "$es_settings" "ROMDirectory" "$roms_folder" "es_settings"
       set_setting_value "$es_settings" "MediaDirectory" "$media_folder" "es_settings"
       set_setting_value "$es_settings" "UserThemeDirectory" "$themes_folder" "es_settings"
-      dir_prep "$rdhome/gamelists" "/var/config/ES-DE/gamelists"
+      dir_prep "$rdhome/ES-DE/gamelists" "/var/config/ES-DE/gamelists"
+      dir_prep "$rdhome/ES-DE/collections" "/var/config/ES-DE/collections"
       dir_prep "$rd_logs_folder/ES-DE" "$es_source_logs"
       log d "Generating roms system folders"
       #es-de --home /var/config/ES-DE --create-system-dirs
