@@ -272,8 +272,7 @@ exit_file="/tmp/retrodeck_steam_sync_exit"
 rdhome=""
 roms_folder=""
 
-def create_shortcut_new(games):
-    changes=0
+def create_shortcut_new_new(games):
     old_games=os.listdir(rdhome+"/.sync/")
 
     for game in games:
@@ -282,34 +281,11 @@ def create_shortcut_new(games):
             old_games[i]=0
         except ValueError:
             print(game[0]+" is a new game!")
-            changes=1
 
-        path=rdhome+"/.sync/"+game[0]
+        path=rdhome+"/.sync/"+game[0]+".sh"
         print("Go to path: "+path)
-        if not os.path.exists(path):
-            os.makedirs(path)
-            fl=open(path+"/goggame-0.info","w")
-            fl.write('{\n')
-            fl.write('    "buildId": "",\n')
-            fl.write('    "clientId": "",\n')
-            fl.write('    "gameId": "",\n')
-            fl.write('    "name": "'+game[0]+'",\n')
-            fl.write('    "playTasks": [\n')
-            fl.write('        {\n')
-            fl.write('            "category": "launcher",\n')
-            fl.write('            "isPrimary": true,\n')
-            fl.write('            "languages": [\n')
-            fl.write('                "en-US"\n')
-            fl.write('            ],\n')
-            fl.write('            "name": "'+game[0]+'",\n')
-            fl.write('            "path": "launch.sh",\n')
-            fl.write('            "type": "FileTask"\n')
-            fl.write('        }\n')
-            fl.write('    ]\n')
-            fl.write('}\n')
-            fl.close()
 
-        fl=open(path+"/launch.sh","w")
+        fl=open(path,"w")
         fl.write("#!/bin/bash\n\n")
         fl.write('if test "$(whereis flatpak)" = "flatpak:"\n')
         fl.write("then\n")
@@ -319,18 +295,16 @@ def create_shortcut_new(games):
         fl.write("fi\n")
         fl.close()
 
-        st=os.stat(path+"/launch.sh")
-        os.chmod(path+"/launch.sh", st.st_mode | 0o0111)
+        st=os.stat(path)
+        os.chmod(path, st.st_mode | 0o0111)
 
     print("Start removing")
     print(old_games)
     for game in old_games:
         if game:
-            shutil.rmtree(rdhome+"/.sync/"+game)
-            changes=1
+            os.remove(rdhome+"/.sync/"+game)
 
-    if changes:
-        os.system("boilr --no-ui")
+    os.system("/app/bin/zypak-wrapper /app/srm/steam-rom-manager add")
 
 def addToSteam(systems):
     games=[]
@@ -382,7 +356,7 @@ def addToSteam(systems):
                             games.append([name,alt_command_list[altemulator]+" '"+roms_folder+"/"+system+path[1:]+"'"])
                             print(alt_command_list[altemulator]+" '"+roms_folder+"/"+system+path[1:]+"'")
     if not games==[]:
-        create_shortcut_new(games)
+        create_shortcut_new_new(games)
 
 def start_config():
     global rdhome
@@ -410,47 +384,29 @@ def start_config():
     if not os.path.exists(rdhome+"/.sync/"):
         os.makedirs(rdhome+"/.sync/")
 
-    boilr_path=os.path.expanduser("~/.var/app/net.retrodeck.retrodeck/config/boilr/config.toml")
-    if os.path.isfile(boilr_path):
-        with open(boilr_path,"r") as f:
+    os.system("/app/bin/zypak-wrapper /app/srm/steam-rom-manager list")
+    srm_path=os.path.expanduser("~/.var/app/net.retrodeck.retrodeck/config/steam-rom-manager/userData/userConfigurations.json")
+    if os.path.isfile(srm_path):
+        with open(srm_path,"r") as f:
             data=f.read()
-        data=re.sub("\"games_folder.*","games_folder = "+rdhome+"/.sync/\"",data)
-        with open(boilr_path,"w") as f:
+        data=re.sub("\"steamDirectory.*","\"steamDirectory\" : \""+os.path.expanduser("~/.steam/steam")+"\",",data)
+        data=re.sub("\"romDirectory.*","\"romDirectory\" : \""+rdhome+"/.sync/\",",data)
+        with open(srm_path,"w") as f:
             f.write(data)
     else:
-        print("Error! BoilR config not initialized.")
+        print("Error! Steam Rom Manager config not initialized.")
+        exit(1)
 
 if __name__=="__main__":
     start_config()
-
-    new_hash={}
-    for system in os.listdir(rdhome+"/gamelists/"):
-        new_hash[system]=hashlib.md5(open(rdhome+"/gamelists/"+system+"/gamelist.xml","rb").read()).hexdigest()
+    exit(1)
 
     running=True
 
     while running:
-        time.sleep(30)
-        systems=[]
-
-        for system in os.listdir(rdhome+"/gamelists/"):
-            if not system in systems:
-                if system in new_hash.keys():
-                    old_hash=new_hash[system]
-                    new_hash[system]=hashlib.md5(open(rdhome+"/gamelists/"+system+"/gamelist.xml","rb").read()).hexdigest()
-                    if not new_hash[system] == old_hash:
-                        print("System {} changed!".format(system))
-                        systems.append(system)
-                    else:
-                        print("System {} not changed!".format(system))
-                else:
-                    new_hash[system]=hashlib.md5(open(rdhome+"/gamelists/"+system+"/gamelist.xml","rb").read()).hexdigest()
-                    print("System {} added!".format(system))
-                    systems.append(system)
-
         if os.path.isfile(exit_file):
             running=False
             os.remove(exit_file)
 
-    addToSteam(systems)
+    addToSteam(os.listdir(rdhome+"/gamelists/"))
     print("Finish!")
