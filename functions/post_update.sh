@@ -300,6 +300,14 @@ post_update() {
 
   fi
 
+  if [[ $(check_version_is_older_than "0.8.1b") == "true" ]]; then
+    log d "ES-DE files were moved inside the retrodeck folder, migrating to the new structure"
+    dir_prep "$rdhome/ES-DE/collections" "/var/config/ES-DE/collections"
+    dir_prep "$rdhome/ES-DE/gamelists" "/var/config/ES-DE/gamelists"
+    mv -f "$rdhome/gamelists/"* "$rdhome/ES-DE/gamelists"
+    rm -rf "$rdhome/gamelists"
+  fi
+
   # if [[ $(check_version_is_older_than "0.9.0b") == "true" ]]; then
   #   # Placeholder for version 0.9.0b
   #   rm /var/config/emulationstation/.emulationstation # remving the old symlink to .emulationstation as it might be not needed anymore

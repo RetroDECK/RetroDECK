@@ -72,14 +72,14 @@ modules:
   #
   # UPDATE STEPS FOR MAIN:
   # [ ] Update the VERSION variable on line containing "VERSION=THISBRANCH"
-  # [ ] Update the appdata.xml with the version number and notes
+  # [x] Update the appdata.xml with the version number and notes
   #
   - name: version-initialization
     buildsystem: simple
     build-commands:
       - |
 
-        # on main please update this with the version variable, eg: VERSION='0.7.4b'
+        # on main please update this with the version variable, eg: VERSION=0.8.0b
         # on cooker will be THISBRANCH
         VERSION=THISBRANCH
 
@@ -430,7 +430,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/XargonWan/RetroDECK-ES-DE
-        branch: update/3.1
+        branch: retrodeck-main
       - type: shell
 
   # ES-DE - END
