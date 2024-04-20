@@ -31,7 +31,7 @@ finish-args:
   - --env=SDL_VIDEO_WAYLAND_WMCLASS=net.retrodeck.retrodeck
   # XEMU - Fixes issues with openSUSE systems, QEMU_AUDIO_DRV is defined as "pa" causing xemu to not launch
   - --unset-env=QEMU_AUDIO_DRV
-  # BoilR
+  # Steam Rom Manager
   - --filesystem=xdg-data/Steam:rw #Steam (flatpak)
   - --filesystem=~/.steam:rw # Steam (Non-flatpak)
   - --filesystem=~/.var/app/com.valvesoftware.Steam:rw # Steam (Flatpak)
