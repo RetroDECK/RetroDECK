@@ -1326,7 +1326,7 @@ enable_steam_sync() {
   zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Configurator - RetroDECK Steam Syncronization" \
-      --text="Steam syncronization enabled, restart Steam in order to see your games."
+      --text="Steam syncronization enabled, please restart first RetroDECK and then Steam in order to see your games."
   configurator_welcome_dialog
 }
 
