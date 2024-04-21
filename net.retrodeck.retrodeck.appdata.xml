@@ -87,7 +87,7 @@
             <ul>
                <li>All the emulators and engines are updated to their latest version</li>
                <li>ES-DE: updated to 3.0.1</li>
-               <li>RPCS3 is now running via shortcut (.desktop file) by default - WARN THE USERS TO MIGRATE and how to change it back</li>
+               <li>RPCS3 is now running via shortcut (.desktop file) by default</li>
                <li>CITRA-SA: removed, it will available trough Ponzu. The libretro core is now the default emulator</li>
                <li>YUZU: removed, Ryujinx is now the default emulator, it will available trough Ponzu</li>
                <li>PONZU: added, check the wiki if interested in this preservational function</li>
