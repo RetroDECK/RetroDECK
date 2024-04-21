@@ -612,6 +612,8 @@ configurator_retrodeck_tools_dialog() {
         --icon-name=net.retrodeck.retrodeck \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         --title="Downloading PS3 Firmware" \
+        --width=400 --height=200 \
+        --text="If it feels like this is taking too much time, please ensure there aren't any windows that unexpectedly slipped into the background and need attention.\n\n" \
         --no-cancel \
         --auto-close
     else
