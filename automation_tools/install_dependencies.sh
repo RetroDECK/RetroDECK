@@ -1,6 +1,8 @@
 #!/bin/bash
 # This script is installing the required dependencies to correctly run the pipeline and build the flatpak
 
+unset result
+
 # rpm-ostree must be checked before dnf because a dnf (wrapper) command also works on rpm-ostree distros (not what we want)
 for pkg_manager in apt pacman rpm-ostree dnf; do
   command -v "$pkg_manager" &> /dev/null && result="$pkg_manager" && break
