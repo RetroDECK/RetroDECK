@@ -344,7 +344,7 @@ post_update() {
   zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Finishing Upgrade" \
-  --text="RetroDECK is finishing the upgrade process, please wait."
+  --text="RetroDECK is finishing the upgrade process, please wait.\n\n If it feels like this is taking too much time, please ensure there aren't any windows that unexpectedly slipped into the background and need attention."
 
   version=$hard_version
   conf_write

@@ -25,6 +25,6 @@ For compressed textures stored in .hts files, place them in the 'texture_packs/R
 For uncompressed textures stored in loose folders or files, place them in the 'texture_packs/RetroArch-Mupen64Plus/hires_texture/' folder.
 
 Related wiki article can be found here:
-https://github.com/XargonWan/RetroDECK/wiki/RetroArch-Mupen64Plus-Next%3A-Texture-Packs
+https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/retroarch/retroarch-mupen64plus-texture-pack/
 
 The RetroDECK Team
