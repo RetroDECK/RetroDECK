@@ -1326,13 +1326,12 @@ enable_steam_sync() {
   zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Configurator - RetroDECK Steam Syncronization" \
-      --text="Steam syncronization enabled, restart RetroDECK to get effect."
+      --text="Steam syncronization enabled."
   configurator_welcome_dialog
 }
 
 disable_steam_sync() {
   set_setting_value $rd_conf "steam_sync" "false" retrodeck "options"
-  touch /tmp/retrodeck_steam_sync_exit
   configurator_welcome_dialog
 }
 
