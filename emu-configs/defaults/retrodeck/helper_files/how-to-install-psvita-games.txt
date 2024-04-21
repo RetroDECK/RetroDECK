@@ -17,6 +17,6 @@ For example the game `WipEout 2048 (EU)` has an ID that is `PCSF00007`.
 So simply add `PCSF00007` to the `WipEout 2048 (EU).psvita` file and the setup for this game is complete.
 
 Related wiki article can be found here:
---
+https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/vita3k/vita3k-guide/
 
 The RetroDECK Team
