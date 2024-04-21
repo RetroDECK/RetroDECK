@@ -191,12 +191,8 @@ fi
 
 # Normal Startup
 
-if [[ $steam_sync == "true" ]]; then
-  python3 /app/libexec/steam-sync/steam-sync.py &
-fi
-
 start_retrodeck
 
 if [[ $steam_sync == "true" ]]; then
-  touch /tmp/retrodeck_steam_sync_exit
+  python3 /app/libexec/steam-sync/steam-sync.py
 fi
