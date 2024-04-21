@@ -273,7 +273,7 @@ rdhome=""
 roms_folder=""
 
 def create_shortcut_new_new(games):
-    old_games=os.listdir(rdhome+"/.sync/")
+    old_games=os.listdir(rdhome+"/.sync/").copy()
 
     for game in games:
         try:
@@ -386,27 +386,18 @@ def start_config():
 
     os.system("/app/bin/zypak-wrapper /app/srm/steam-rom-manager list")
     srm_path=os.path.expanduser("~/.var/app/net.retrodeck.retrodeck/config/steam-rom-manager/userData/userConfigurations.json")
-    if os.path.isfile(srm_path):
-        with open(srm_path,"r") as f:
-            data=f.read()
-        data=re.sub("\"steamDirectory.*","\"steamDirectory\" : \""+os.path.expanduser("~/.steam/steam")+"\",",data)
-        data=re.sub("\"romDirectory.*","\"romDirectory\" : \""+rdhome+"/.sync/\",",data)
-        with open(srm_path,"w") as f:
-            f.write(data)
-    else:
-        print("Error! Steam Rom Manager config not initialized.")
-        exit(1)
+    if not os.path.isfile(srm_path):
+        print("Steam Rom Manager configuration not initialized! Initializing now.")
+        shutil.copyfile("/app/libexec/steam-sync/userConfigurations.json", srm_path)
+
+    with open(srm_path,"r") as f:
+        data=f.read()
+    data=re.sub("\"steamDirectory.*","\"steamDirectory\" : \""+os.path.expanduser("~/.steam/steam")+"\",",data)
+    data=re.sub("\"romDirectory.*","\"romDirectory\" : \""+rdhome+"/.sync/\",",data)
+    with open(srm_path,"w") as f:
+        f.write(data)
 
 if __name__=="__main__":
     start_config()
-    exit(1)
-
-    running=True
-
-    while running:
-        if os.path.isfile(exit_file):
-            running=False
-            os.remove(exit_file)
-
     addToSteam(os.listdir(rdhome+"/gamelists/"))
     print("Finish!")
