@@ -139,12 +139,16 @@ jobs:
           TAG="${{ env.REL_VER }}"
           RELEASE_BODY="$(cat body.md)"
 
+          echo -e "[DEBUG] Release Body:\n$RELEASE_BODY"
+
           # Create a release using curl and capture the release ID
           release_response=$(curl -X POST \
               -H "Authorization: token ${GITEA_TOKEN}" \
               -H "Content-Type: application/json" \
               -d "{\"tag_name\":\"$TAG\",\"name\":\"$RELEASE_NAME\",\"body\":\"$RELEASE_BODY\"}" \
               "http://$GITEA_HOST/api/v1/repos/$ORGANIZATION/$REPO/releases")
+
+          echo -e "[DEBUG] Release response:\n$release_response"
 
           # Extract the release ID from the response
           release_id=$(echo $release_response | jq -r '.id')
