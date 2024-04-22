@@ -107,12 +107,12 @@ source /app/libexec/global.sh
 configurator_welcome_dialog() {
   log i "Configurator: opening welcome dialog"
   if [[ $developer_options == "true" ]]; then
-    welcome_menu_options=("Presets & Settings" "Here you find various presets, tweaks and settings to customize your RetroDECK experience" \
-    "Open Emulator" "Launch and configure each emulators settings (for advanced users)" \
+    welcome_menu_options=("Presets & Settings" "Here you will find various presets, tweaks and settings to customize your RetroDECK experience" \
+    "Open Emulator" "Launch and configure each emulator's settings (for advanced users)" \
     "RetroDECK: Tools" "Compress games, move RetroDECK and install optional features" \
-    "RetroDECK: Troubleshooting" "Backup data, perform BIOS / multi-disc file checks checks and emulator resets" \
+    "RetroDECK: Troubleshooting" "Backup data, perform BIOS / multi-disc file checks and emulator resets" \
     "RetroDECK: About" "Show additional information about RetroDECK" \
-    "Sync with Steam" "Sync with Steam all the favorites games" \
+    "Sync with Steam" "Sync all favorited games with Steam" \
     "Developer Options" "Welcome to the DANGER ZONE")
   else
     welcome_menu_options=("Presets & Settings" "Here you find various presets, tweaks and settings to customize your RetroDECK experience" \
@@ -211,7 +211,7 @@ configurator_global_presets_and_settings_dialog() {
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
   "Widescreen: Enable/Disable" "Enable or disable widescreen in supported systems" \
-  "Ask-to-Exit: Enable/Disable" "Enable or disable emulators confirming when quitting in supported systems" \
+  "Ask-to-Exit: Enable/Disable" "Enable or disable emulators confirming attempts to quit in supported systems" \
   "Quick Resume: Enable/Disable" "Enable or disable save state auto-save/load in supported systems" \
   "RetroAchievements: Login" "Log into the RetroAchievements service in supported systems" \
   "RetroAchievements: Logout" "Disable RetroAchievements service in ALL supported systems" \
@@ -343,7 +343,7 @@ configurator_dolphin_input_textures_dialog() {
     zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - Dolphin Textures: Universal Dynamic Input" \
-    --text="Custom input textures are currently enabled. Do you want to disable them?."
+    --text="Custom input textures are currently enabled. Do you want to disable them?"
 
     if [ $? == 0 ]
     then
@@ -357,7 +357,7 @@ configurator_dolphin_input_textures_dialog() {
     zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - Dolphin Textures: Universal Dynamic Input" \
-    --text="Custom input textures are currently disabled. Do you want to enable them?.\n\nThis process may take several minutes to complete."
+    --text="Custom input textures are currently disabled. Do you want to enable them?\n\nThis process may take several minutes to complete."
 
     if [ $? == 0 ]
     then
@@ -381,7 +381,7 @@ configurator_primehack_input_textures_dialog() {
     zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - Dolphin Custom Input Textures" \
-    --text="Custom input textures are currently enabled. Do you want to disable them?."
+    --text="Custom input textures are currently enabled. Do you want to disable them?"
 
     if [ $? == 0 ]
     then
@@ -395,7 +395,7 @@ configurator_primehack_input_textures_dialog() {
     zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - Primehack Custom Input Textures" \
-    --text="Custom input textures are currently disabled. Do you want to enable them?.\n\nThis process may take several minutes to complete."
+    --text="Custom input textures are currently disabled. Do you want to enable them?\n\nThis process may take several minutes to complete."
 
     if [ $? == 0 ]
     then
@@ -419,7 +419,7 @@ configurator_power_user_warning_dialog() {
     choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="Never show this again" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Power User Warning" \
-    --text="Making manual changes to an emulators configuration may create serious issues,\nand some settings may be overwitten during RetroDECK updates or when using presets.\n\nSome standalone emulator functions may not work properly outside of Desktop mode.\n\nPlease continue only if you know what you're doing.\n\nDo you want to continue?")
+    --text="Making manual changes to an emulator's configuration may create serious issues,\nand some settings may be overwitten during RetroDECK updates or when using presets.\n\nSome standalone emulator functions may not work properly outside of Desktop mode.\n\nPlease continue only if you know what you're doing.\n\nDo you want to continue?")
   fi
   rc=$? # Capture return code, as "Yes" button has no text value
   if [[ $rc == "0" ]]; then # If user clicked "Yes"
@@ -825,7 +825,7 @@ configurator_compress_single_game_dialog() {
       configurator_compression_tool_dialog
 
     else
-      configurator_generic_dialog "RetroDECK Configurator - RetroDECK: Compression Tool" "The selected file does not have any compatible compressed format."
+      configurator_generic_dialog "RetroDECK Configurator - RetroDECK: Compression Tool" "The selected file does not have any compatible compression formats."
       configurator_compression_tool_dialog
     fi
   else
@@ -1055,7 +1055,7 @@ configurator_retrodeck_troubleshooting_dialog() {
 }
 
 configurator_check_bios_files() {
-  configurator_generic_dialog "RetroDECK Configurator - Check & Verify: BIOS Files" "This check will look for BIOS files that RetroDECK has identified as working.\n\nNot all BIOS files are required for games to work, please check the BIOS description for more information on its purpose.\n\nThere may be additional BIOS files that will function with the emulators that are not checked.\n\nSome more advanced emulators such as Ryujinx will have additional methods for verifiying the BIOS files are in working order."
+  configurator_generic_dialog "RetroDECK Configurator - Check & Verify: BIOS Files" "This check will look for BIOS files that RetroDECK has identified as working.\n\nNot all BIOS files are required for games to work, please check the BIOS description for more information on its purpose.\n\nBIOS files not known to this tool could still function.\n\nSome more advanced emulators such as Ryujinx will have additional methods to verify that the BIOS files are in working order."
   bios_checked_list=()
 
   check_bios_files "basic"
@@ -1073,7 +1073,7 @@ configurator_check_bios_files() {
 }
 
 configurator_check_bios_files_expert_mode() {
-  configurator_generic_dialog "RetroDECK Configurator - Check & Verify: BIOS Files - Expert Mode" "This check will look for BIOS files that RetroDECK has identified as working.\n\nNot all BIOS files are required for games to work, please check the BIOS description for more information on its purpose.\n\nThere may be additional BIOS files that will function with the emulators that are not checked.\n\nSome more advanced emulators such as Ryujinx will have additional methods for verifiying the BIOS files are in working order."
+  configurator_generic_dialog "RetroDECK Configurator - Check & Verify: BIOS Files - Expert Mode" "This check will look for BIOS files that RetroDECK has identified as working.\n\nNot all BIOS files are required for games to work, please check the BIOS description for more information on its purpose.\n\nBIOS files not known to this tool could still function.\n\nSome more advanced emulators such as Ryujinx will have additional methods to verify that the BIOS files are in working order."
   bios_checked_list=()
 
   check_bios_files "expert"
@@ -1194,7 +1194,7 @@ configurator_reset_dialog() {
     component_to_reset=$(zenity --list \
     --title "RetroDECK Configurator Utility - Reset Specific RetroDECK Component" --cancel-label="Back" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
-    --text="Which component do you want to reset to default?" \
+    --text="Which component do you want to reset to default settings?" \
     --column="Component" --column="Action" \
     "BoilR" "Reset BoilR that manages the sync and scraping toward Steam library" \
     "ES-DE" "Reset the ES-DE frontend" \ )
@@ -1300,7 +1300,7 @@ configurator_add_steam() {
     zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - RetroDECK Steam Syncronization" \
-    --text="Steam syncronization is current enabled. Do you want to disable it?\n\nThe already added shortcut will not be removed.\n"
+    --text="Steam syncronization is currently enabled. Do you want to disable it?\n\nThe already added shortcut will not be removed.\n"
 
     if [ $? == 0 ] # User clicked "Yes"
     then
@@ -1312,7 +1312,7 @@ configurator_add_steam() {
     zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - RetroDECK Steam Syncronization" \
-    --text="Steam syncronization is current disabled. Do you want to enable it?\n\nAll the games marked as favorites will be syncronized with Steam thanks to BoilR.\nRemember to restart Steam each time to see the changes.\n"
+    --text="Steam syncronization is currently disabled. Do you want to enable it?\n\nAll the games marked as favorites will be syncronized with Steam thanks to BoilR.\nRemember to restart Steam each time to see the changes.\n"
 
     if [ $? == 0 ]
     then
@@ -1423,7 +1423,7 @@ configurator_retrodeck_multiuser_dialog() {
     zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - RetroDECK Multi-user Support" \
-    --text="Multi-user support is current enabled. Do you want to disable it?\n\nIf there are more than one user configured,\nyou will be given a choice of which to use as the single RetroDECK user.\n\nThis users files will be moved to the default locations.\n\nOther users files will remain in the mutli-user-data folder.\n"
+    --text="Multi-user support is currently enabled. Do you want to disable it?\n\nIf there is more than one user configured,\nyou will be given a choice of which to use as the single RetroDECK user.\n\nThis user's files will be moved to the default locations.\n\nOther users' files will remain in the mutli-user-data folder.\n"
 
     if [ $? == 0 ] # User clicked "Yes"
     then
@@ -1435,7 +1435,7 @@ configurator_retrodeck_multiuser_dialog() {
     zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - RetroDECK Multi-user support" \
-    --text="Multi-user support is current disabled. Do you want to enable it?\n\nThe current users saves and states will be backed up and then moved to the \"retrodeck/multi-user-data\" folder.\nAdditional users will automatically be stored in their own folder here as they are added."
+    --text="Multi-user support is currently disabled. Do you want to enable it?\n\nThe current user's saves and states will be backed up and then moved to the \"retrodeck/multi-user-data\" folder.\nAdditional users will automatically be stored in their own folder here as they are added."
 
     if [ $? == 0 ]
     then
