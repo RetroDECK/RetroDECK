@@ -164,3 +164,47 @@ jobs:
           name: retrodeck-flatpak
           path: RetroDECK-cooker.flatpak
         continue-on-error: true
+
+      # - name: Upload RetroDECK-cooker.flatpak to Gitea Release
+      #   run: |
+      #     # Set variables for Gitea host, organization, repository, access token, and release details
+      #     GITEA_HOST="repo.retrodeck.net"
+      #     ORGANIZATION="RetroDECK"
+      #     REPO="RetroDECK-cooker"
+      #     GITEA_TOKEN="${{ secrets.GITEA_TRIGGER_BUILD_TOKEN }}"
+      #     RELEASE_NAME="RetroDECK ${{env.TAG}}"
+      #     TAG="${{env.TAG}}"
+      #     RELEASE_BODY="# Release Notes (Cooker)
+      #     This is a cooker snapshot based on the commit: ${{ github.event.repository.full_name }}@${{github.sha}}.
+      #     On branch [${{env.BRANCH_NAME}}](https://repo.retrodeck.net/RetroDECK/RetroDECK/src/branch/${{env.BRANCH_NAME}}).
+
+      #     ## Commits since last release
+      #     ${{ steps.commits.outputs.commits }}
+
+      #     For the full release note for this build please refer to the channel [#BETA-TESTING](https://discord.gg/WDc5C9YWMx) on our Discord server.
+
+      #     Cooker channel is provided for the community to test fixes and explore new functionality.
+      #     Please DO NOT open issues or ask support on this build."
+
+      #     # Create a release using curl and capture the release ID
+      #     release_response=$(curl -X POST \
+      #         -H "Authorization: token ${GITEA_TOKEN}" \
+      #         -H "Content-Type: application/json" \
+      #         -d "{\"tag_name\":\"$TAG\",\"name\":\"$RELEASE_NAME\",\"body\":\"$RELEASE_BODY\"}" \
+      #         "http://$GITEA_HOST/api/v1/repos/$ORGANIZATION/$REPO/releases")
+
+      #     # Extract the release ID from the response
+      #     release_id=$(echo $release_response | jq -r '.id')
+
+      #     # Upload artifacts
+      #     curl -X POST \
+      #         -H "Authorization: token ${GITEA_TOKEN}" \
+      #         -H "Content-Type: multipart/form-data" \
+      #         -F "attachment=@RetroDECK-cooker.flatpak" \
+      #         "http://$GITEA_HOST/api/v1/repos/$ORGANIZATION/$REPO/releases/$release_id/assets?name=RetroDECK-cooker.flatpak"
+
+      #     curl -X POST \
+      #         -H "Authorization: token ${GITEA_TOKEN}" \
+      #         -H "Content-Type: multipart/form-data" \
+      #         -F "attachment=@RetroDECK-Artifact.tar.gz" \
+      #         "http://$GITEA_HOST/api/v1/repos/$ORGANIZATION/$REPO/releases/$release_id/assets?name=RetroDECK-Artifact.tar.gz"
