@@ -399,5 +399,5 @@ def start_config():
 
 if __name__=="__main__":
     start_config()
-    addToSteam(os.listdir(rdhome+"/gamelists/"))
-    print("Finish!")
+    addToSteam(os.listdir(rdhome+"/ES-DE/gamelists/"))
+    print("Finished!")
