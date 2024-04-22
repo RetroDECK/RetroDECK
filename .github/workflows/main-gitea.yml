@@ -135,20 +135,23 @@ jobs:
           ORGANIZATION="RetroDECK"
           REPO="RetroDECK"
           GITEA_TOKEN="${{ secrets.GITEA_TRIGGER_BUILD_TOKEN }}"
-          RELEASE_NAME="RetroDECK ${{ env.REL_VER }}"
+          RELEASE_NAME="RetroDECK v${{ env.REL_VER }}"
           TAG="${{ env.REL_VER }}"
-          RELEASE_BODY="$(cat body.md)"
 
-          escaped_body=$(echo "$RELEASE_BODY" | sed 's/[][\\.*^$]/\\&/g')
+          payload=$(jq -cn \
+            --arg tag_name "$TAG" \
+            --arg name "$RELEASE_NAME" \
+            --arg body "$(cat body.md)" \
+            '{$tag_name, $name, $body}'
+          )
 
           # Create a release using curl and capture the release ID
           release_response=$(curl -X POST \
-              -H "Authorization: token ${GITEA_TOKEN}" \
-              -H "Content-Type: application/json" \
-              -d "{\"tag_name\":\"$TAG\",\"name\":\"$RELEASE_NAME\",\"body\":\"$escaped_body\"}" \
-              "http://$GITEA_HOST/api/v1/repos/$ORGANIZATION/$REPO/releases")
-
-          echo -e "[DEBUG] Release response:\n$release_response"
+            -H "Authorization: token ${GITEA_TOKEN}" \
+            -H "Content-Type: application/json" \
+            -d "$payload" \
+            "http://$GITEA_HOST/api/v1/repos/$ORGANIZATION/$REPO/releases"
+          )
 
           # Extract the release ID from the response
           release_id=$(echo $release_response | jq -r '.id')
