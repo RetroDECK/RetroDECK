@@ -76,11 +76,11 @@
                <li>ES-DE: gamelists are now moved to retrodeck/ES-DE/gamelist (previously was retrodeck/gamelist)</li>
                <li>ES-DE: custom collections are now located in retrodeck/ES-DE/collections, this prevents to be destroyed by a reset</li>
                <li>LOGGER: version notes are no more outputed in the terminal or in the logs</li>
-               <li>WORKFLOWS: disabled nighlty builds (was broken)</li>
-               <li>FRAMEWORK: now the PR builds are recongized same as cooker builds</li>
+               <li>WORKFLOWS: disabled nightly builds (was broken)</li>
+               <li>FRAMEWORK: now the PR builds are recognized same as cooker builds</li>
                <li>FRAMEWORK: now there is a warning to check background windows, useful when installing RCPS3 firmware as some users were stuck on that screen without noticing the windows in the backgrounds</li>
                <li>HELPER_FILES: updated links pointing to the new wiki</li>
-               <li>RYUJINX: added an helper file to sepcify how to install the firmware (not copying it in the folder)</li>
+               <li>RYUJINX: added an helper file to specify how to install the firmware (not copying it in the folder)</li>
                <li>CITRA_LIBRETRO: upscaled to 2x (was 4x but was too much), set system as "New 3DS"</li>
                <li>RETROARCH: fixed an issue where if a zip contained more than the game files it failed to load the game</li>
             </ul>
