@@ -311,7 +311,7 @@ def addToSteam(systems):
     for system in systems:
         print("Start parsing system: {}".format(system))
 
-        f=open(rdhome+"/gamelists/"+system+"/gamelist.xml","r")
+        f=open(rdhome+"/ES-DE/gamelists/"+system+"/gamelist.xml","r")
         f.readline()
         parser=ET.XMLParser()
         parser.feed(b'<root>')
