@@ -18,7 +18,7 @@ Arguments:
     --info-msg                      Print paths and config informations
     --configurator                  Starts the RetroDECK Configurator
     --compress-one <file>           Compresses target file to a compatible format
-    --compress-all <format>         Compresses all supported games into compatible format. Available formats are \"chd\", \"zip\", \"rvz\" and \"all\".
+    --compress-all <format>         Compresses all supported games into a compatible format. Available formats are \"chd\", \"zip\", \"rvz\" and \"all\".
     --reset-component <component>   Reset one or more component or emulator configs to the default values
     --reset-retrodeck               Starts the initial RetroDECK installer (backup your data first!)
 

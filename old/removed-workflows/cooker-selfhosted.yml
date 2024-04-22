@@ -134,7 +134,7 @@ jobs:
             ## Commits since last release
             ${{ steps.commits.outputs.commits }}
 
-            For the full release note for this build please refer to the channel [#BETA-TESTING](https://discord.gg/WDc5C9YWMx) on our Discord server.
+            For the full release note for this build please refer to the channel [#BETA-TESTING](https://discord.gg/qQcrFvaA2C) on our Discord server.
       
             Cooker channel is provided for the community to test fixes and explore new functionality.
             Please DO NOT open issues or ask support on this build.
