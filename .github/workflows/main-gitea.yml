@@ -105,20 +105,20 @@ jobs:
           echo -e "# Release Notes\n" >> "body.md"
           echo "$DES" >> "body.md"
 
-      - name: Publish the flatpak in a new release
-        uses: ncipollo/release-action@v1
-        env:
-          REL_VER: ${{ env.REL_VER }}
-        with:
-          tag: ${{ env.REL_VER }}
-          name: "RetroDECK v${{ env.REL_VER }}"
-          bodyFile: "body.md"
-          artifacts: "RetroDECK.flatpak,RetroDECK-Artifact.tar.gz"
-          allowUpdates: true
-          makeLatest: true
-          token: ${{ secrets.TRIGGER_BUILD_TOKEN }}
-          repo: RetroDECK
-        continue-on-error: true
+      # - name: Publish the flatpak in a new release
+      #   uses: ncipollo/release-action@v1
+      #   env:
+      #     REL_VER: ${{ env.REL_VER }}
+      #   with:
+      #     tag: ${{ env.REL_VER }}
+      #     name: "RetroDECK v${{ env.REL_VER }}"
+      #     bodyFile: "body.md"
+      #     artifacts: "RetroDECK.flatpak,RetroDECK-Artifact.tar.gz"
+      #     allowUpdates: true
+      #     makeLatest: true
+      #     token: ${{ secrets.TRIGGER_BUILD_TOKEN }}
+      #     repo: RetroDECK
+      #   continue-on-error: true
 
       # In case it cannot publish the release at least it's providing the flatpak file for creating a manual release
       # - name: Upload RetroDECK.flatpak
@@ -135,8 +135,8 @@ jobs:
           ORGANIZATION="RetroDECK"
           REPO="RetroDECK"
           GITEA_TOKEN="${{ secrets.GITEA_TRIGGER_BUILD_TOKEN }}"
-          RELEASE_NAME="RetroDECK ${{env.TAG}}"
-          TAG="${{env.TAG}}"
+          RELEASE_NAME="RetroDECK ${{ env.REL_VER }}"
+          TAG="${{ env.REL_VER }}"
           RELEASE_BODY="$(cat body.md)"
 
           # Create a release using curl and capture the release ID
