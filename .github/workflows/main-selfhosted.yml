@@ -123,27 +123,44 @@ jobs:
           path: RetroDECK.flatpak
         continue-on-error: true
 
-      - name: Publish the flatpak in a new release on Gitea
-        uses: ncipollo/release-action@v1
-        env:
-          REL_VER: ${{ env.REL_VER }}
-        with:
-          tag: ${{ env.REL_VER }}
-          name: "RetroDECK v${{ env.REL_VER }}"
-          bodyFile: "body.md"
-          artifacts: "RetroDECK.flatpak,RetroDECK-Artifact.tar.gz"
-          allowUpdates: true
-          makeLatest: true
-          token: ${{ secrets.GITEA_TRIGGER_BUILD_TOKEN }}
-          repo: "https://repo.retrodeck.net/RetroDECK/RetroDECK"
-        continue-on-error: true
-
-      - name: Upload RetroDECK.flatpak to Gitea Release
+      - name: Publish release on Gitea
         run: |
-          curl -X POST \
+          # Set variables for Gitea host, organization, repository, access token, and release details
+          GITEA_HOST="repo.retrodeck.net"
+          ORGANIZATION="RetroDECK"
+          REPO="RetroDECK"
+          GITEA_TOKEN="${{ secrets.GITEA_TRIGGER_BUILD_TOKEN }}"
+          RELEASE_NAME="RetroDECK v${{ env.REL_VER }}"
+          TAG="${{ env.REL_VER }}"
+
+          payload=$(jq -cn \
+            --arg tag_name "$TAG" \
+            --arg name "$RELEASE_NAME" \
+            --arg body "$(cat body.md)" \
+            '{$tag_name, $name, $body}'
+          )
+
+          # Create a release using curl and capture the release ID
+          release_response=$(curl -X POST \
             -H "Authorization: token ${GITEA_TOKEN}" \
-            -F "file=@RetroDECK.flatpak" \
-            "https://repo.retrodeck.net/RetroDECK/RetroDECK/releases/${{ env.REL_VER }}/assets?name=RetroDECK.flatpak"
-        env:
-          GITEA_TOKEN: ${{ secrets.GITEA_TRIGGER_BUILD_TOKEN }}
+            -H "Content-Type: application/json" \
+            -d "$payload" \
+            "http://$GITEA_HOST/api/v1/repos/$ORGANIZATION/$REPO/releases"
+          )
+
+          # Extract the release ID from the response
+          release_id=$(echo $release_response | jq -r '.id')
+
+          # Upload artifacts
+          curl -X POST \
+              -H "Authorization: token ${GITEA_TOKEN}" \
+              -H "Content-Type: multipart/form-data" \
+              -F "attachment=@RetroDECK.flatpak" \
+              "http://$GITEA_HOST/api/v1/repos/$ORGANIZATION/$REPO/releases/$release_id/assets?name=RetroDECK-cooker.flatpak"
+
+          curl -X POST \
+              -H "Authorization: token ${GITEA_TOKEN}" \
+              -H "Content-Type: multipart/form-data" \
+              -F "attachment=@RetroDECK-Artifact.tar.gz" \
+              "http://$GITEA_HOST/api/v1/repos/$ORGANIZATION/$REPO/releases/$release_id/assets?name=RetroDECK-Artifact.tar.gz"
 
