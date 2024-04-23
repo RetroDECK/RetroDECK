@@ -301,11 +301,20 @@ post_update() {
   fi
 
   if [[ $(check_version_is_older_than "0.8.1b") == "true" ]]; then
+    log i "In version 0.8.1b, the following changes were made that required config file updates/reset or other changes to the filesystem:"
+    log i "- ES-DE files were moved inside the retrodeck folder, migrating to the new structure"
+    log i "- Give the user the option to reset Ryujinx, which was not properly initialized in 0.8.0b"
     log d "ES-DE files were moved inside the retrodeck folder, migrating to the new structure"
     dir_prep "$rdhome/ES-DE/collections" "/var/config/ES-DE/collections"
     dir_prep "$rdhome/ES-DE/gamelists" "/var/config/ES-DE/gamelists"
     mv -f "$rdhome/gamelists/"* "$rdhome/ES-DE/gamelists"
     rm -rf "$rdhome/gamelists"
+
+    log d "Verifying with user if they want to reset Ryujinx"
+    if [[ "$(configurator_generic_question_dialog "RetroDECK 0.8.1b Ryujinx Reset" "In RetroDECK 0.8.0b the Ryujinx emulator was not properly initialized for upgrading users.\nThis would cause Ryujinx to not work properly.\n\nWould you like to reset Ryujinx to default RetroDECK settings now?\n\nIf you have made your own changes to the Ryujinx config, you can decline this reset.")" == "true" ]]; then
+      log d "User agreed to Ryujinx reset"
+      prepare_component "reset" "ryujinx"
+    fi
   fi
 
   # if [[ $(check_version_is_older_than "0.9.0b") == "true" ]]; then
