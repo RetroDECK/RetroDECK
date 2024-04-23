@@ -14,6 +14,6 @@ Notes:
 - GAME_ID is different for every game.
 
 Related wiki article can be found here:
-https://github.com/XargonWan/RetroDECK/wiki/Dolphin-and-Primehack%3A-Mods
+https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/dolphin-primehack/dolphin-primehack-mod/
 
 The RetroDECK Team

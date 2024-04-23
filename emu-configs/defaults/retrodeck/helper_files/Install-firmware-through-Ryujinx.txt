@@ -1,0 +1,10 @@
+Do not drop the firmware files here, install them via Ryujinx:
+
+RetroDECK Configurator -> Open Emulator -> Ryujinx -> Tools -> Install Firmware - Select the firmware zipped file
+
+Check the wiki for more information.
+
+Related wiki article can be found here:
+https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/ryujinx/ryujinx-guide/
+
+The RetroDECK Team

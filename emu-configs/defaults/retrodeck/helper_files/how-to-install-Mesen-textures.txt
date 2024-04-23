@@ -27,6 +27,6 @@ You want apply a texture pack to a game called ScaryCastle USA.nes and you have 
 NOTE: On the Steam Deck go into GameMode first, then launch RetroDECK.
 
 Related wiki article can be found here:
-https://github.com/XargonWan/RetroDECK/wiki/RetroArch-Mesen%3A-Texture-Packs
+https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/retroarch/retroarch-mesen-texture-pack/
 
 The RetroDECK Team

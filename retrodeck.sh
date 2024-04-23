@@ -18,7 +18,7 @@ Arguments:
     --info-msg                      Print paths and config informations
     --configurator                  Starts the RetroDECK Configurator
     --compress-one <file>           Compresses target file to a compatible format
-    --compress-all <format>         Compresses all supported games into compatible format. Available formats are \"chd\", \"zip\", \"rvz\" and \"all\".
+    --compress-all <format>         Compresses all supported games into a compatible format. Available formats are \"chd\", \"zip\", \"rvz\" and \"all\".
     --reset-component <component>   Reset one or more component or emulator configs to the default values
     --reset-retrodeck               Starts the initial RetroDECK installer (backup your data first!)
 
@@ -58,6 +58,7 @@ https://retrodeck.net
       echo "You are about to reset one or more RetroDECK components or emulators."
       echo "Available options are: es-de, retroarch, cemu, dolphin, duckstation, gzdoom, melonds, pcsx3, pico8, ppsspp, primehack, rpcs3, ryujinx, xemu, vita3k, mame, boilr, all"
       read -p "Please enter the component you would like to reset: " component
+      component=$(echo "$component" | tr '[:upper:]' '[:lower:]')
       if [[ "$component" =~ ^(es-de|retroarch|cemu|dolphin|duckstation|gzdoom|mame|melonds|pcsx2|ppsspp|primehack|ryujinx|rpcs3|xemu|all)$ ]]; then
         read -p "You are about to reset $component to default settings. Enter 'y' to continue, 'n' to stop: " response
         if [[ $response == [yY] ]]; then

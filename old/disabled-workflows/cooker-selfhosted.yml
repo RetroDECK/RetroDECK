@@ -1,28 +1,31 @@
-name: "Build cooker (persistent)"
-
-env:
-  PERSISTENCE: true
+name: "Build cooker"
 
 on:
-  push:
-    branches:
-     - cooker*
-     - feat*
-    paths:
-     - '.github/workflows/**'
-     - 'automation_tools/**'
-     - 'emu-configs/**'
-     - 'es-configs/**'
-     - 'functions/**'
-     - 'rd-submodules/**'
-     - '*.sh'
-     - 'net.retrodeck.retrodeck.yml'
-     - 'net.retrodeck.retrodeck.appdata.xml'
-  pull_request: 
-    branches:
-     - cooker*
+  # push:
+  #   branches:
+  #    - cooker*
+  #    - feat*
+  #   paths:
+  #    - '.github/workflows/**'
+  #    - 'automation_tools/**'
+  #    - 'emu-configs/**'
+  #    - 'es-configs/**'
+  #    - 'functions/**'
+  #    - 'rd-submodules/**'
+  #    - '*.sh'
+  #    - 'net.retrodeck.retrodeck.yml'
+  #    - 'net.retrodeck.retrodeck.appdata.xml'
+  # pull_request: 
+  #   branches:
+  #    - cooker*
+
+  # Italy (CET): 11:00 PM
+  # Japan (JST): 7:00 AM
+  schedule:
+    - cron: '0 22 * * *'
 
   workflow_dispatch:
+
 
 jobs:
 
@@ -46,33 +49,6 @@ jobs:
       - name: Generate cooker build ID
         run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/cooker_build_id.sh"
 
-      - name: Get branch name
-        id: branch_name
-        run: echo "BRANCH_NAME=$(echo $GITHUB_REF | sed 's|refs/heads/||')" >> $GITHUB_ENV
-
-      # if it's a feature branch it will not marked as "latest" cooker version
-      - name: "Set makeLatest (cooker only)"
-        run: |
-          if [[ "$BRANCH_NAME" == 'feat/'* || "$BRANCH_NAME" == 'refs/'* ]]; then
-            echo "MAKE_LATEST=false" >> $GITHUB_ENV
-          else
-            echo "MAKE_LATEST=true" >> $GITHUB_ENV
-          fi
-
-      # if the branch is coming from a PR the tag should be manually built
-      - name: "Generate version tag"
-        run: |
-          if [[ "$BRANCH_NAME" == 'refs/'* ]]; then
-            pr_number=$(echo ${{env.BRANCH_NAME}} | awk -F'/' '{print $3}')
-            source_branch=$(curl -s "https://api.github.com/repos/XargonWan/RetroDECK/pulls/$pr_number" | jq -r '.head.ref')
-            source_branch=${source_branch//\//-}
-            echo "[DEBUG] source branch is: $source_branch"
-            echo "TAG=PR-$pr_number-$source_branch-${{ env.buildid }}" >> $GITHUB_ENV
-          else
-            echo "TAG=${{env.BRANCH_NAME}}-${{ env.buildid }}" >> $GITHUB_ENV
-          fi
-          echo "Version TAG: ${{ env.TAG }}"
-
       # backing up manifest in case download fails and hashes must be recalculated
       - name: Manifest backup
         run: "cp ${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml ${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml.bak"
@@ -91,7 +67,7 @@ jobs:
 
       - name: "Build flatpak: download only"
         id: "flatpak-download"
-        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only_persistent.sh"
+        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
         continue-on-error: true
 
       # Sometimes flatpak download fails, in this case it tries a second time
@@ -103,10 +79,10 @@ jobs:
           rm -f "{GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml"
           cp "${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml.bak" "${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml"
           "${GITHUB_WORKSPACE}/automation_tools/pre_build_automation.sh"
-          "${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only_persistent.sh"
+          "${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
 
       - name: Build flatpak
-        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_only_persistent.sh"
+        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_only.sh"
 
       - name: Create Artifact for flathub
         run: | 
@@ -117,7 +93,7 @@ jobs:
         continue-on-error: true
 
       - name: Create Bundle
-        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_bundle_persistent.sh"
+        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_bundle.sh"
 
       - name: Set environment variable with current branch name
         run: echo "GITHUB_REF_SLUG=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
@@ -133,10 +109,23 @@ jobs:
         id: commits
         continue-on-error: true
 
+      - name: Get branch name
+        id: branch_name
+        run: echo "BRANCH_NAME=$(echo $GITHUB_REF | sed 's|refs/heads/||')" >> $GITHUB_ENV
+
+      # if it's a feature branch it will not marked as "latest" cooker version
+      - name: "Set makeLatest (cooker only)"
+        run: |
+          if [[ "$BRANCH_NAME" == 'feat/'* ]]; then
+            echo "MAKE_LATEST=false" >> $GITHUB_ENV
+          else
+            echo "MAKE_LATEST=true" >> $GITHUB_ENV
+          fi
+
       - name: Publish the flatpak in a new cooker release
         uses: ncipollo/release-action@v1
         with:
-          tag: "${{env.TAG}}"
+          tag: "${{env.BRANCH_NAME}}-${{ env.buildid }}"
           body: |
             # Release Notes (Cooker)
             This is a cooker snapshot based on the commit: ${{ github.event.repository.full_name }}@${{github.sha}}.
@@ -165,46 +154,3 @@ jobs:
           path: RetroDECK-cooker.flatpak
         continue-on-error: true
 
-      # - name: Upload RetroDECK-cooker.flatpak to Gitea Release
-      #   run: |
-      #     # Set variables for Gitea host, organization, repository, access token, and release details
-      #     GITEA_HOST="repo.retrodeck.net"
-      #     ORGANIZATION="RetroDECK"
-      #     REPO="RetroDECK-cooker"
-      #     GITEA_TOKEN="${{ secrets.GITEA_TRIGGER_BUILD_TOKEN }}"
-      #     RELEASE_NAME="RetroDECK ${{env.TAG}}"
-      #     TAG="${{env.TAG}}"
-      #     RELEASE_BODY="# Release Notes (Cooker)
-      #     This is a cooker snapshot based on the commit: ${{ github.event.repository.full_name }}@${{github.sha}}.
-      #     On branch [${{env.BRANCH_NAME}}](https://repo.retrodeck.net/RetroDECK/RetroDECK/src/branch/${{env.BRANCH_NAME}}).
-
-      #     ## Commits since last release
-      #     ${{ steps.commits.outputs.commits }}
-
-      #     For the full release note for this build please refer to the channel [#BETA-TESTING](https://discord.gg/WDc5C9YWMx) on our Discord server.
-
-      #     Cooker channel is provided for the community to test fixes and explore new functionality.
-      #     Please DO NOT open issues or ask support on this build."
-
-      #     # Create a release using curl and capture the release ID
-      #     release_response=$(curl -X POST \
-      #         -H "Authorization: token ${GITEA_TOKEN}" \
-      #         -H "Content-Type: application/json" \
-      #         -d "{\"tag_name\":\"$TAG\",\"name\":\"$RELEASE_NAME\",\"body\":\"$RELEASE_BODY\"}" \
-      #         "http://$GITEA_HOST/api/v1/repos/$ORGANIZATION/$REPO/releases")
-
-      #     # Extract the release ID from the response
-      #     release_id=$(echo $release_response | jq -r '.id')
-
-      #     # Upload artifacts
-      #     curl -X POST \
-      #         -H "Authorization: token ${GITEA_TOKEN}" \
-      #         -H "Content-Type: multipart/form-data" \
-      #         -F "attachment=@RetroDECK-cooker.flatpak" \
-      #         "http://$GITEA_HOST/api/v1/repos/$ORGANIZATION/$REPO/releases/$release_id/assets?name=RetroDECK-cooker.flatpak"
-
-      #     curl -X POST \
-      #         -H "Authorization: token ${GITEA_TOKEN}" \
-      #         -H "Content-Type: multipart/form-data" \
-      #         -F "attachment=@RetroDECK-Artifact.tar.gz" \
-      #         "http://$GITEA_HOST/api/v1/repos/$ORGANIZATION/$REPO/releases/$release_id/assets?name=RetroDECK-Artifact.tar.gz"

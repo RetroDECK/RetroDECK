@@ -167,7 +167,7 @@ if [[ ! -f "$rd_conf" ]]; then
   set_setting_value $rd_conf "version" "$version" retrodeck # Set current version for new installs
   set_setting_value $rd_conf "sdcard" "$default_sd" retrodeck "paths" # Set SD card location if default path has changed
 
-  if grep -qF "cooker" <<< $hard_version; then # If newly-installed version is a "cooker" build
+  if grep -qF "cooker" <<< "$hard_version" || grep -qF "PR-" <<< "$hard_version"; then # If newly-installed version is a "cooker" or PR build
     set_setting_value $rd_conf "update_repo" "RetroDECK-cooker" retrodeck "options"
     set_setting_value $rd_conf "update_check" "true" retrodeck "options"
     set_setting_value $rd_conf "developer_options" "true" retrodeck "options"
