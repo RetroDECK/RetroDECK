@@ -1,9 +1,9 @@
 "controller_mappings"
 {
 	"version"		"3"
-	"revision"		"1863"
-	"title"		"RetroDECK: Steam Deck - Neptune v.1b FULL"
-	"description"		"RetroDECK: Steam Deck - Neptune v.1b FULL"
+	"revision"		"1864"
+	"title"		"RetroDECK: Steam Deck - Neptune v.1.1b FULL"
+	"description"		"RetroDECK: Steam Deck - Neptune v.1.1b FULL"
 	"creator"		""
 	"progenitor"		""
 	"url"		""
@@ -4380,7 +4380,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 15 0 0, 3DS, RD-citra.png, "
+							"binding"		"controller_action CHANGE_PRESET 14 0 0, 3DS, RD-citra.png, "
 						}
 					}
 				}
@@ -4396,7 +4396,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"controller_action CHANGE_PRESET 16 0 0, Switch, RD-ryujinx.png, "
+							"binding"		"controller_action CHANGE_PRESET 15 0 0, Switch, RD-ryujinx.png, "
 						}
 					}
 				}
@@ -12072,3 +12072,4 @@
 		"right_trackpad_mode"		"0"
 	}
 }
+
