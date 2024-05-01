@@ -1,7 +1,7 @@
 app-id: net.retrodeck.retrodeck
-runtime: org.kde.Platform
-runtime-version: "6.5"
-sdk: org.kde.Sdk
+runtime: org.freedesktop.Platform
+runtime-version: 23.08
+sdk: org.freedesktop.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.llvm16        # Needed for RPCS3 (llvm17 actually)
   - org.freedesktop.Sdk.Extension.rust-stable   # Needed for BoilR 
