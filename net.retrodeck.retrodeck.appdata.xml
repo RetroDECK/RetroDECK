@@ -67,7 +67,7 @@
    <project_license>GPL-3.0</project_license>
    <metadata_license>CC0-1.0</metadata_license>
    <releases>
-      <release version="0.8.1b" date="2024-04-22">
+      <release version="0.8.1b" date="2024-05-01">
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.8.1b</url>
          <description>
             <p>Changes:</p>
@@ -83,6 +83,8 @@
                <li>RYUJINX: added an helper file to specify how to install the firmware (not copying it in the folder)</li>
                <li>CITRA_LIBRETRO: upscaled to 2x (was 4x but was too much), set system as "New 3DS"</li>
                <li>RETROARCH: fixed an issue where if a zip contained more than the game files it failed to load the game</li>
+               <li>GW_LIBRETRO: Handheld Electronic (GW) Libretro is now the defaulted Game And Watch emulator (due to a bug)</li>
+               <li>MESEN_LIBRETRO: enabled FDS disk auto load</li>
             </ul>
             <p>Known issues:</p>
             <ul>
