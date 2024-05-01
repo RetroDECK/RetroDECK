@@ -22,7 +22,7 @@ finish-args:
   - --talk-name=org.freedesktop.login1.Manager
   - --filesystem=xdg-run/app/com.discordapp.Discord:create
   - --filesystem=xdg-config/gtk-3.0:ro
-  - --env=QT_QPA_PLATFORM=wayland-egl;wayland;xcb
+  - --env=QT_QPA_PLATFORM=wayland;wayland-egl;xcb
   # Dolphin
   - --allow=bluetooth
   # It allows an SDL application to specify its window class, which can be useful for window managers and desktop environments to identify and group similar windows
