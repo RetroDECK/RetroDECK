@@ -152,7 +152,7 @@ jobs:
             Cooker channel is provided for the community to test fixes and explore new functionality.
             Please DO NOT open issues or ask support on this build.
 
-          artifacts: "RetroDECK-cooker.flatpak,RetroDECK-Artifact.tar.gz"
+          artifacts: "RetroDECK-cooker.flatpak,RetroDECK-cooker.flatpak.sha,RetroDECK-Artifact.tar.gz"
           allowUpdates: true
           makeLatest: ${{env.MAKE_LATEST}} # if it's a feat branch is not considered the latest build
           token: ${{ secrets.TRIGGER_BUILD_TOKEN }}
@@ -204,6 +204,13 @@ jobs:
       #         -H "Content-Type: multipart/form-data" \
       #         -F "attachment=@RetroDECK-cooker.flatpak" \
       #         "http://$GITEA_HOST/api/v1/repos/$ORGANIZATION/$REPO/releases/$release_id/assets?name=RetroDECK-cooker.flatpak"
+
+      #     # Upload artifacts sha
+      #     curl -X POST \
+      #         -H "Authorization: token ${GITEA_TOKEN}" \
+      #         -H "Content-Type: multipart/form-data" \
+      #         -F "attachment=@RetroDECK-cooker.flatpak.sha" \
+      #         "http://$GITEA_HOST/api/v1/repos/$ORGANIZATION/$REPO/releases/$release_id/assets?name=RetroDECK-cooker.flatpak.sha"
 
       #     curl -X POST \
       #         -H "Authorization: token ${GITEA_TOKEN}" \
