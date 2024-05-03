@@ -691,8 +691,8 @@ modules:
       - ln -s "${FLATPAK_DEST}/pcsx2-qt/usr/bin/pcsx2-qt" "${FLATPAK_DEST}/bin/pcsx2-qt"
     sources:
       - type: file
-        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.5645/pcsx2-v1.7.5645-linux-appimage-x64-Qt.AppImage
-        sha256: dcd11469a91d8daa57fe46719a968e73ed282d81925879aca9393527f8b695fd
+        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.5769/pcsx2-v1.7.5769-linux-appimage-x64-Qt.AppImage
+        sha256: d819a339b9f3c43ee44fe9b6d975b9f76cff7716b5976a3b94f77e2cf4cab667
 
   # PCSX2 - END
 
