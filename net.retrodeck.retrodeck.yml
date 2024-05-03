@@ -3,7 +3,7 @@ runtime: org.kde.Platform
 runtime-version: "6.5"
 sdk: org.kde.Sdk
 sdk-extensions:
-  - org.freedesktop.Sdk.Extension.llvm16        # Needed for RPCS3 (llvm17 actually)
+  - org.freedesktop.Sdk.Extension.llvm18        # Needed for RPCS3
   - org.freedesktop.Sdk.Extension.rust-stable   # Needed for BoilR 
 command: retrodeck.sh
 
@@ -855,11 +855,8 @@ modules:
     buildsystem: cmake-ninja
     builddir: true
     build-options:
-      # llvm17 is not available in framework 6.5 but in 6.6, so we're trying llvm16 and cross our fingers until Primehack is updated (as Primehack breaks on 6.6)
-      #append-ld-library-path: /usr/lib/sdk/llvm17/lib
-      #append-path: /usr/lib/sdk/llvm17/bin
-      append-ld-library-path: /usr/lib/sdk/llvm16/lib
-      append-path: /usr/lib/sdk/llvm16/bin
+      append-ld-library-path: /usr/lib/sdk/llvm18/lib
+      append-path: /usr/lib/sdk/llvm18/bin
       cflags: &optflags -O2 -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong
         -grecord-gcc-switches -fasynchronous-unwind-tables -fstack-clash-protection
         -fcf-protection -fno-omit-frame-pointer
@@ -885,8 +882,7 @@ modules:
       - -DUSE_SYSTEM_ZLIB=ON
       - -Wno-dev
     post-install:
-      #- cp /usr/lib/sdk/llvm17/lib/libLLVM-17.so /app/lib/
-      - cp /usr/lib/sdk/llvm16/lib/libLLVM-16.so /app/lib/
+      - cp /usr/lib/sdk/llvm18/lib/libLLVM.so.18.1 /app/lib/
       - |-
         set -eux
         COMM_TAG="$(awk -F'[\{,]' '/version{.*}/{printf "%d.%d.%d", $2, $3, $4}' ../rpcs3/rpcs3_version.cpp)"
@@ -895,7 +891,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/RPCS3/rpcs3.git
-        commit: 4ecf8ecd06c15f0557e1d9243f31e4c2d7baebe2
+        branch: master
+        commit: f1ef3bdcd7e2b22ecce67705d931de6b43fb9a20
 
   # RPCS3 - END
 
