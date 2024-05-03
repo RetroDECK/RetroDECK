@@ -103,18 +103,42 @@ check_for_version_update() {
           local temp_folder="$rdhome/RetroDECK_Updates"
           create_dir $temp_folder
           log i "Downloading version \"$online_version\" in \"$temp_folder/RetroDECK-cooker.flatpak\" from url: \"$latest_cooker_download\""
+          # Downloading the flatpak file
           wget -P "$temp_folder" "$latest_cooker_download"
-          log d "Uninstalling old RetroDECK flatpak"
-          flatpak-spawn --host flatpak remove --noninteractive -y net.retrodeck.retrodeck # Remove current version before installing new one, to avoid duplicates
-          log d "Installing new flatpak file from: \"$temp_folder/RetroDECK-cooker.flatpak\""
+          # And its sha
+          wget -P "$temp_folder" "$latest_cooker_download.sha"
+
+          # Get the expected SHA checksum from the SHA file
+          expected_sha=$(cat "$temp_folder/RetroDECK-cooker.flatpak.sha")
+
+          # Check if the file exists
           if [ -f "$temp_folder/RetroDECK-cooker.flatpak" ]; then
-            log d "Flatpak file \"$temp_folder/RetroDECK-cooker.flatpak\" found, proceeding."
-            flatpak-spawn --host flatpak install --user --bundle --noninteractive -y "$temp_folder/RetroDECK-cooker.flatpak"
+              # Calculate the actual SHA checksum of the file
+              actual_sha=$(sha256sum "$temp_folder/RetroDECK-cooker.flatpak" | awk '{print $1}')
+              
+              # Log the found and expected SHA checksums
+              log d "Found SHA: $actual_sha"
+              log d "Expected SHA: $expected_sha"
+              
+              # Check if the SHA checksum matches
+              if [ "$actual_sha" = "$expected_sha" ]; then
+                  log d "Flatpak file \"$temp_folder/RetroDECK-cooker.flatpak\" found and SHA checksum matches, proceeding."
+                  log d "Uninstalling old RetroDECK flatpak"
+                  # Remove current version before installing new one, to avoid duplicates
+                  flatpak-spawn --host flatpak remove --noninteractive -y net.retrodeck.retrodeck && log d "Uninstallation succesful"
+                  log d "Installing new flatpak file from: \"$temp_folder/RetroDECK-cooker.flatpak\""
+                  flatpak-spawn --host flatpak install --user --bundle --noninteractive -y "$temp_folder/RetroDECK-cooker.flatpak" && log d "Installation succesful"
+              else
+                  log e "Flatpak file \"$temp_folder/RetroDECK-cooker.flatpak\" found but SHA checksum does not match. Quitting."
+                  configurator_generic_dialog "RetroDECK Online Update" "There was an error during the update: flatpak file found but SHA checksum does not match. Please check the log file."
+                  exit 1
+              fi
           else
-            log e "Flatpak file \"$temp_folder/RetroDECK-cooker.flatpak\" NOT FOUND. Quitting"
-            configurator_generic_dialog "RetroDECK Online Update" "There was an error during the update: flatpak file not found please check the log file."
-            exit 1
+              log e "Flatpak file \"$temp_folder/RetroDECK-cooker.flatpak\" NOT FOUND. Quitting."
+              configurator_generic_dialog "RetroDECK Online Update" "There was an error during the update: flatpak file not found. Please check the log file."
+              exit 1
           fi
+
           rm -rf "$temp_folder" # Cleanup old bundles to save space
           ) |
           zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
