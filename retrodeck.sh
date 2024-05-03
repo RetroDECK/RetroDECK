@@ -183,12 +183,6 @@ if [[ $update_check == "true" ]]; then
   log i "You're running the latest version"
 fi
 
-# THIS IS A ONE-OFF FORCED REFRESH OF RETRODECK CONTROLLER PROFILES IN A 0.7.6b VERSION REFRESH - REMOVE BEFORE NEXT VERSION RELEASE
-if [[ -f "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf" ]]; then # If RetroDECK controller profile has been previously installed
-  install_retrodeck_controller_profile
-fi
-# REMOVE BEFORE NEXT VERSION RELEASE
-
 # Normal Startup
 
 if [[ $steam_sync == "true" ]]; then
