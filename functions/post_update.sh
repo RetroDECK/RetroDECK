@@ -307,6 +307,11 @@ post_update() {
     log d "ES-DE files were moved inside the retrodeck folder, migrating to the new structure"
     dir_prep "$rdhome/ES-DE/collections" "/var/config/ES-DE/collections"
     dir_prep "$rdhome/ES-DE/gamelists" "/var/config/ES-DE/gamelists"
+    log i "Moving ES-DE collections, downloaded_media, gamelist, and themes from \"$rdhome\" to \"$rdhome/ES-DE\""
+    set_setting_value "$es_settings" "MediaDirectory" "$rdhome/ES-DE/downloaded_media" "es_settings"
+    set_setting_value "$es_settings" "UserThemeDirectory" "$rdhome/ES-DE/themes" "es_settings"
+    mv -f "$rdhome/themes" "$rdhome/ES-DE/themes"
+    mv -f "$rdhome/downloaded_media" "$rdhome/ES-DE/downloaded_media"
     mv -f "$rdhome/gamelists/"* "$rdhome/ES-DE/gamelists"
     rm -rf "$rdhome/gamelists"
 
