@@ -801,6 +801,9 @@ prepare_component() {
     set_setting_value "$mameconf" "diff_directory" "$saves_folder/mame-sa/diff" "mame"
     set_setting_value "$mameconf" "samplepath" "$bios_folder/mame-sa/samples" "mame"
 
+    log i "Placing cheats in \"/var/data/mame/cheat\""
+    unzip -j "$emuconfigs/mame/cheat0264.zip" 'cheat.7z' -d "/var/data/mame/cheat"
+
   fi
 
   if [[ "$component" =~ ^(gzdoom|all)$ ]]; then

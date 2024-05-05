@@ -83,10 +83,11 @@
                <li>FRAMEWORK: now there is a warning to check background windows, useful when installing RCPS3 firmware as some users were stuck on that screen without noticing the windows in the backgrounds</li>
                <li>COOKER_UPDATER: added the hash check before uninstalling the flatpak</li>
                <li>HELPER_FILES: updated links pointing to the new wiki</li>
+               <li>MAME-SA: added cheats</li>
                <li>RYUJINX: added an helper file to specify how to install the firmware (not copying it in the folder)</li>
-               <li>CITRA_LIBRETRO: upscaled to 2x (was 4x but was too much), set system as "New 3DS"</li>
                <li>RPCS3: included the confirm on quit preset, that can be enabled or disabled trough configurator like the other emulators</li>
                <li>RETROARCH: fixed an issue where if a zip contained more than the game files it failed to load the game</li>
+               <li>CITRA_LIBRETRO: upscaled to 2x (was 4x but was too much), set system as "New 3DS"</li>
                <li>GW_LIBRETRO: Handheld Electronic (GW) Libretro is now the defaulted Game And Watch emulator (due to a bug)</li>
                <li>MESEN_LIBRETRO: enabled FDS disk auto load</li>
                <li>SCUMMVM_LIBRETRO: provided assets</li>
