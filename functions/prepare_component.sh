@@ -758,7 +758,7 @@ prepare_component() {
 
     create_dir "/var/data/mame/plugin-data"
     create_dir "/var/data/mame/hash"
-    create_dir "/var/data/mame/assets/samples"
+    create_dir "$bios_folder/mame-sa/samples"
     create_dir "/var/data/mame/assets/artwork"
     create_dir "/var/data/mame/assets/fonts"
     create_dir "/var/data/mame/cheat"
@@ -799,6 +799,7 @@ prepare_component() {
     set_setting_value "$mameconf" "state_directory" "$states_folder/mame-sa" "mame"
     set_setting_value "$mameconf" "snapshot_directory" "$screenshots_folder/mame-sa" "mame"
     set_setting_value "$mameconf" "diff_directory" "$saves_folder/mame-sa/diff" "mame"
+    set_setting_value "$mameconf" "samplepath" "$bios_folder/mame-sa/samples" "mame"
 
   fi
 

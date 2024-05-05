@@ -310,6 +310,11 @@ post_update() {
     mv -f "$rdhome/gamelists/"* "$rdhome/ES-DE/gamelists"
     rm -rf "$rdhome/gamelists"
 
+    log i "MAME-SA, migrating samples to the new exposed folder: from \"/var/data/mame/assets/samples\" to \"$bios_folder/mame-sa/samples\""
+    create_dir "$bios_folder/mame-sa/samples"
+    mv -r "/var/data/mame/assets/samples/"* "$bios_folder/mame-sa/samples"
+    set_setting_value "$mameconf" "samplepath" "$bios_folder/mame-sa/samples" "mame"
+
     log d "Verifying with user if they want to reset Ryujinx"
     if [[ "$(configurator_generic_question_dialog "RetroDECK 0.8.1b Ryujinx Reset" "In RetroDECK 0.8.0b the Ryujinx emulator was not properly initialized for upgrading users.\nThis would cause Ryujinx to not work properly.\n\nWould you like to reset Ryujinx to default RetroDECK settings now?\n\nIf you have made your own changes to the Ryujinx config, you can decline this reset.")" == "true" ]]; then
       log d "User agreed to Ryujinx reset"
