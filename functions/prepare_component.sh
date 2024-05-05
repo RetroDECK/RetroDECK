@@ -88,7 +88,7 @@ prepare_component() {
       else # Single-user actions
         create_dir -d /var/config/retroarch
         dir_prep "$bios_folder" "/var/config/retroarch/system"
-        dir_prep "$logs_folder/retroarch" "/var/config/retroarch/logs"
+        dir_prep "$rdhome/logs/retroarch" "/var/config/retroarch/logs"
         create_dir /var/config/retroarch/shaders/
         cp -rf /app/share/libretro/shaders /var/config/retroarch/
         dir_prep "$rdhome/shaders/retroarch" "/var/config/retroarch/shaders"
