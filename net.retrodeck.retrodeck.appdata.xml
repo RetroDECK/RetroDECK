@@ -89,6 +89,7 @@
                <li>RETROARCH: fixed an issue where if a zip contained more than the game files it failed to load the game</li>
                <li>GW_LIBRETRO: Handheld Electronic (GW) Libretro is now the defaulted Game And Watch emulator (due to a bug)</li>
                <li>MESEN_LIBRETRO: enabled FDS disk auto load</li>
+               <li>SCUMMVM_LIBRETRO: provided assets</li>
                <li>BIOS_CHECKER: added bios support for 3DO, GB, GBC, GBA, Neo Geo CD</li>
                <li>BIOS_CHECKER: added more missing hashes</li>
             </ul>
