@@ -315,6 +315,12 @@ post_update() {
     mv -r "/var/data/mame/assets/samples/"* "$bios_folder/mame-sa/samples"
     set_setting_value "$mameconf" "samplepath" "$bios_folder/mame-sa/samples" "mame"
 
+    log i "Installing the missing ScummVM assets and renaming \"$mods_folder/RetroArch/ScummVM/themes\" into \"theme\""
+    mv -f "$mods_folder/RetroArch/ScummVM/themes" "$mods_folder/RetroArch/ScummVM/theme"
+    unzip -q "$emuconfigs/retroarch/ScummVM.zip" 'scummvm/extra/*' -d "$mods_folder/RetroArch/ScummVM"
+    unzip -q "$emuconfigs/retroarch/ScummVM.zip" 'scummvm/theme/*' -d "$mods_folder/RetroArch/ScummVM"
+    set_setting_value "$ra_scummvm_conf" "themepath" "$mods_folder/RetroArch/ScummVM/theme" "libretro_scummvm" "scummvm"
+
     log d "Verifying with user if they want to reset Ryujinx"
     if [[ "$(configurator_generic_question_dialog "RetroDECK 0.8.1b Ryujinx Reset" "In RetroDECK 0.8.0b the Ryujinx emulator was not properly initialized for upgrading users.\nThis would cause Ryujinx to not work properly.\n\nWould you like to reset Ryujinx to default RetroDECK settings now?\n\nIf you have made your own changes to the Ryujinx config, you can decline this reset.")" == "true" ]]; then
       log d "User agreed to Ryujinx reset"

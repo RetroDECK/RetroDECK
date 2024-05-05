@@ -108,11 +108,11 @@ prepare_component() {
         # Specific Settings for ScummVM core
         cp -fv "$emuconfigs/retroarch/scummvm.ini" "$ra_scummvm_conf"
         create_dir "$mods_folder/RetroArch/ScummVM/icons"
-        create_dir "$mods_folder/RetroArch/ScummVM/extra"
-        create_dir "$mods_folder/RetroArch/ScummVM/themes"
+        unzip -q "$emuconfigs/retroarch/ScummVM.zip" 'scummvm/extra/*' -d "$mods_folder/RetroArch/ScummVM"
+        unzip -q "$emuconfigs/retroarch/ScummVM.zip" 'scummvm/theme/*' -d "$mods_folder/RetroArch/ScummVM"
         set_setting_value "$ra_scummvm_conf" "iconspath" "$mods_folder/RetroArch/ScummVM/icons" "libretro_scummvm" "scummvm"
         set_setting_value "$ra_scummvm_conf" "extrapath" "$mods_folder/RetroArch/ScummVM/extra" "libretro_scummvm" "scummvm"
-        set_setting_value "$ra_scummvm_conf" "themepath" "$mods_folder/RetroArch/ScummVM/themes" "libretro_scummvm" "scummvm"
+        set_setting_value "$ra_scummvm_conf" "themepath" "$mods_folder/RetroArch/ScummVM/theme" "libretro_scummvm" "scummvm"
         set_setting_value "$ra_scummvm_conf" "savepath" "$saves_folder/scummvm" "libretro_scummvm" "scummvm"
         set_setting_value "$ra_scummvm_conf" "browser_lastpath" "$roms_folder/scummvm" "libretro_scummvm" "scummvm"
       fi
