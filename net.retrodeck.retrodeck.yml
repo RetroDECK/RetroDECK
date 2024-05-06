@@ -341,6 +341,17 @@ modules:
           stable-only: true
           url-template: https://github.com/libusb/libusb/releases/download/v$version/libusb-$version.tar.bz2
 
+  - name: xterm
+    buildsystem: simple
+    build-commands:
+      - ./configure --enable-256-color
+      - make
+      - make install
+    sources:
+      - type: archive
+        url: https://invisible-island.net/datafiles/release/xterm.tar.gz
+        sha256: 75117c3cc5174a09c425ef106e69404d72f5ef05e03a5da00aaf15792d6f9c0f
+
   # ES-DE - START
   # https://gitlab.com/es-de/emulationstation-de
 
