@@ -109,7 +109,7 @@ check_for_version_update() {
           wget -P "$temp_folder" "$latest_cooker_download.sha"
 
           # Get the expected SHA checksum from the SHA file
-          expected_sha=$(cat "$temp_folder/RetroDECK-cooker.flatpak.sha")
+          local expected_sha=$(cat "$temp_folder/$(basename "$latest_cooker_download").sha" | awk '{print $1}')
 
           # Check if the file exists
           if [ -f "$temp_folder/RetroDECK-cooker.flatpak" ]; then
