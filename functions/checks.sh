@@ -125,9 +125,9 @@ check_for_version_update() {
                   log d "Flatpak file \"$temp_folder/RetroDECK-cooker.flatpak\" found and SHA checksum matches, proceeding."
                   log d "Uninstalling old RetroDECK flatpak"
                   # Remove current version before installing new one, to avoid duplicates
-                  flatpak-spawn --host flatpak remove --noninteractive -y net.retrodeck.retrodeck && log d "Uninstallation succesful"
+                  flatpak-spawn --host flatpak remove --noninteractive -y net.retrodeck.retrodeck && log d "Uninstallation successful"
                   log d "Installing new flatpak file from: \"$temp_folder/RetroDECK-cooker.flatpak\""
-                  flatpak-spawn --host flatpak install --user --bundle --noninteractive -y "$temp_folder/RetroDECK-cooker.flatpak" && log d "Installation succesful"
+                  flatpak-spawn --host flatpak install --user --bundle --noninteractive -y "$temp_folder/RetroDECK-cooker.flatpak" && log d "Installation successful"
               else
                   log e "Flatpak file \"$temp_folder/RetroDECK-cooker.flatpak\" found but SHA checksum does not match. Quitting."
                   configurator_generic_dialog "RetroDECK Online Update" "There was an error during the update: flatpak file found but SHA checksum does not match. Please check the log file."
