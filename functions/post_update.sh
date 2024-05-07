@@ -372,9 +372,9 @@ post_update() {
   ) |
   zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-  --title "RetroDECK Finishing Upgrade" \
+  --title "RetroDECK - Upgrade Process" \
   --width=400 --height=200 \
-  --text="RetroDECK is finishing the upgrade process, please wait.\n\n If it feels like this is taking too much time, please ensure there aren't any windows that unexpectedly slipped into the background and need attention."
+  --text="RetroDECK is finishing up the upgrading process, please be patient.\n\n<span foreground='$purple' size='larger'><b>NOTICE - If the process is taking too long:</b></span>\n\nSome windows might be running in the background that could require your attention: pop-ups from emulators or the upgrade itself that needs user input to continue.\n\n"
 
   version=$hard_version
   conf_write

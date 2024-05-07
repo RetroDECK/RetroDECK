@@ -76,8 +76,8 @@ check_for_version_update() {
         log i "Showing new version found dialog"
         choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK" --extra-button="Ignore this version" \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-        --title "RetroDECK Update Available" \
-        --text="There is a new version of RetroDECK on the stable release channel $online_version. Please update through the Discover app!\n\nIf you would like to ignore this version and recieve a notification at the NEXT version,\nclick the \"Ignore this version\" button.")
+        --title "RetroDECK - New Update Available" \
+        --text="There is a new version of RetroDECK available: <span foreground='$blue'><b>$online_version</b></span>.\nYou can easily update from the app store you have installed, examples: KDE Discover or Gnome Software.\n\nIf you would like to ignore this notification, click the \"Ignore this version\" button.")
         rc=$? # Capture return code, as "OK" button has no text value
         if [[ $rc == "1" ]]; then # If any button other than "OK" was clicked
           log i "Selected: \"OK\""
@@ -87,8 +87,8 @@ check_for_version_update() {
         log i "Showing update request dialog as \"$online_version\" was found and is greater then \"$version\""
         choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="Ignore this version" \
           --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-          --title "RetroDECK Update Available" \
-          --text="There is a more recent build of the RetroDECK cooker branch.\nYou are running version $hard_version, the latest is $online_version.\n\nWould you like to update to it?\nIf you would like to skip reminders about this version, click \"Ignore this version\".\nYou will be reminded again at the next version update.\n\nIf you would like to disable these update notifications entirely, disable Online Update Checks in the Configurator.")
+          --title "RetroDECK - New Cooker Version Available" \
+          --text="There is a more recent version of RetroDECK cooker.\nYou are running version <span foreground='$blue'><b>$hard_version</b></span>. The latest is <span foreground='$blue'><b>$online_version</b></span>.\n\nWould you like to update?\nIf you would like to ignore this notification, click the \"Ignore this version\" button.\n\nIf you would like to disable these notifications entirely: disable Online Update Checks in the Configurator.")
         rc=$? # Capture return code, as "Yes" button has no text value
         if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
           if [[ $choice == "Ignore this version" ]]; then

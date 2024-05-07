@@ -608,14 +608,13 @@ configurator_retrodeck_tools_dialog() {
       (
         update_rpcs3_firmware
       ) |
-        zenity --progress --pulsate \
+        zenity --progress --no-cancel --pulsate --auto-close \
         --icon-name=net.retrodeck.retrodeck \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         --title="Downloading PS3 Firmware" \
         --width=400 --height=200 \
-        --text="If it feels like this is taking too much time, please ensure there aren't any windows that unexpectedly slipped into the background and need attention.\n\n" \
-        --no-cancel \
-        --auto-close
+        --text="Dowloading and installing PS3 Firmware, please be patient.\n\n<span foreground='$purple' size='larger'><b>NOTICE - If the process is taking too long:</b></span>\n\nSome windows might be running in the background that could require your attention: pop-ups from emulators or the upgrade itself that needs user input to continue.\n\n"
+
     else
       configurator_generic_dialog "RetroDECK Configurator - Install: PS3 Firmware" "You do not appear to currently have Internet access, which is required by this tool. Please try again when network access has been restored."
       configurator_retrodeck_tools_dialog
