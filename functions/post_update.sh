@@ -323,9 +323,11 @@ post_update() {
 
     log i "Installing the missing ScummVM assets and renaming \"$mods_folder/RetroArch/ScummVM/themes\" into \"theme\""
     mv -f "$mods_folder/RetroArch/ScummVM/themes" "$mods_folder/RetroArch/ScummVM/theme"
-    unzip -o -q "$emuconfigs/retroarch/ScummVM.zip" 'scummvm/extra/*' -d "$mods_folder/RetroArch/ScummVM"
-    unzip -o -q "$emuconfigs/retroarch/ScummVM.zip" 'scummvm/theme/*' -d "$mods_folder/RetroArch/ScummVM"
-    set_setting_value "$ra_scummvm_conf" "themepath" "$mods_folder/RetroArch/ScummVM/theme" "libretro_scummvm" "scummvm"
+    unzip -o "$emuconfigs/retroarch/ScummVM.zip" 'scummvm/extra/*' -d /tmp
+    unzip -o "$emuconfigs/retroarch/ScummVM.zip" 'scummvm/theme/*' -d /tmp
+    mv -f /tmp/scummvm/extra "$mods_folder/RetroArch/ScummVM"
+    mv -f /tmp/scummvm/theme "$mods_folder/RetroArch/ScummVM"
+    rm -rf /tmp/extra /tmp/theme
 
     log i "Placing cheats in \"/var/data/mame/cheat\""
     unzip -j "$emuconfigs/mame/cheat0264.zip" 'cheat.7z' -d "/var/data/mame/cheat"

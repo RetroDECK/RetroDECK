@@ -104,17 +104,6 @@ prepare_component() {
         set_setting_value "$raconf" "screenshot_directory" "$screenshots_folder" "retroarch"
         set_setting_value "$raconf" "log_dir" "$logs_folder" "retroarch"
         set_setting_value "$raconf" "rgui_browser_directory" "$roms_folder" "retroarch"
-        
-        # Specific Settings for ScummVM core
-        cp -fv "$emuconfigs/retroarch/scummvm.ini" "$ra_scummvm_conf"
-        create_dir "$mods_folder/RetroArch/ScummVM/icons"
-        unzip -o -q "$emuconfigs/retroarch/ScummVM.zip" 'scummvm/extra/*' -d "$mods_folder/RetroArch/ScummVM"
-        unzip -o -q "$emuconfigs/retroarch/ScummVM.zip" 'scummvm/theme/*' -d "$mods_folder/RetroArch/ScummVM"
-        set_setting_value "$ra_scummvm_conf" "iconspath" "$mods_folder/RetroArch/ScummVM/icons" "libretro_scummvm" "scummvm"
-        set_setting_value "$ra_scummvm_conf" "extrapath" "$mods_folder/RetroArch/ScummVM/extra" "libretro_scummvm" "scummvm"
-        set_setting_value "$ra_scummvm_conf" "themepath" "$mods_folder/RetroArch/ScummVM/theme" "libretro_scummvm" "scummvm"
-        set_setting_value "$ra_scummvm_conf" "savepath" "$saves_folder/scummvm" "libretro_scummvm" "scummvm"
-        set_setting_value "$ra_scummvm_conf" "browser_lastpath" "$roms_folder/scummvm" "libretro_scummvm" "scummvm"
       fi
       # Shared actions
 
@@ -161,6 +150,24 @@ prepare_component() {
       log i "-----------------------------------------------------------"
       log i "Copying \"/app/retrodeck/extras/Amiga/capsimg.so\" in \"$bios_folder/capsimg.so\""
       cp -f "/app/retrodeck/extras/Amiga/capsimg.so" "$bios_folder/capsimg.so"
+
+      # ScummVM
+      log i "-----------------------------------------------------------"
+      log i "Prepearing ScummVM LIBRETRO"
+      log i "-----------------------------------------------------------"
+      cp -fv "$emuconfigs/retroarch/scummvm.ini" "$ra_scummvm_conf"
+      create_dir "$mods_folder/RetroArch/ScummVM/icons"
+      log i "Installing ScummVM assets"
+      unzip -o "$emuconfigs/retroarch/ScummVM.zip" 'scummvm/extra/*' -d /tmp
+      unzip -o "$emuconfigs/retroarch/ScummVM.zip" 'scummvm/theme/*' -d /tmp
+      mv -f /tmp/scummvm/extra "$mods_folder/RetroArch/ScummVM"
+      mv -f /tmp/scummvm/theme "$mods_folder/RetroArch/ScummVM"
+      rm -rf /tmp/extra /tmp/theme
+      set_setting_value "$ra_scummvm_conf" "iconspath" "$mods_folder/RetroArch/ScummVM/icons" "libretro_scummvm" "scummvm"
+      set_setting_value "$ra_scummvm_conf" "extrapath" "$mods_folder/RetroArch/ScummVM/extra" "libretro_scummvm" "scummvm"
+      set_setting_value "$ra_scummvm_conf" "themepath" "$mods_folder/RetroArch/ScummVM/theme" "libretro_scummvm" "scummvm"
+      set_setting_value "$ra_scummvm_conf" "savepath" "$saves_folder/scummvm" "libretro_scummvm" "scummvm"
+      set_setting_value "$ra_scummvm_conf" "browser_lastpath" "$roms_folder/scummvm" "libretro_scummvm" "scummvm"
     
       dir_prep "$texture_packs_folder/RetroArch-Mesen" "/var/config/retroarch/system/HdPacks"
       dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/cache" "/var/config/retroarch/system/Mupen64plus/cache"
