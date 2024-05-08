@@ -11,6 +11,8 @@ import hashlib
 
 import xml.etree.ElementTree as ET
 
+from resetsync import resetfun
+
 command_list_default={
 "3do": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/opera_libretro.so",
 "amiga": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/puae_libretro.so",
@@ -364,9 +366,6 @@ def start_config():
     global command_list_default
     global alt_command_list
 
-    if os.path.isfile(exit_file):
-        os.remove(exit_file)
-
     print("Open RetroDECK config file: {}".format(os.path.expanduser("~/.var/app/net.retrodeck.retrodeck/config/retrodeck/retrodeck.cfg")))
 
     fl=open(os.path.expanduser("~/.var/app/net.retrodeck.retrodeck/config/retrodeck/retrodeck.cfg"),"r")
@@ -381,21 +380,10 @@ def start_config():
     command_list_default["pico8"]=command_list_default["pico8"].replace("{GAMEDIR}",roms_folder+"/pico8")
     alt_command_list["PICO-8 Splore (Standalone)"]=alt_command_list["PICO-8 Splore (Standalone)"].replace("{GAMEDIR}",roms_folder+"/pico8")
 
-    if not os.path.exists(rdhome+"/.sync/"):
-        os.makedirs(rdhome+"/.sync/")
-
-    os.system("/app/bin/zypak-wrapper /app/srm/steam-rom-manager list")
     srm_path=os.path.expanduser("~/.var/app/net.retrodeck.retrodeck/config/steam-rom-manager/userData/userConfigurations.json")
     if not os.path.isfile(srm_path):
         print("Steam Rom Manager configuration not initialized! Initializing now.")
-        shutil.copyfile("/app/libexec/steam-sync/userConfigurations.json", srm_path)
-
-    with open(srm_path,"r") as f:
-        data=f.read()
-    data=re.sub("\"steamDirectory.*","\"steamDirectory\" : \""+os.path.expanduser("~/.steam/steam")+"\",",data)
-    data=re.sub("\"romDirectory.*","\"romDirectory\" : \""+rdhome+"/.sync/\",",data)
-    with open(srm_path,"w") as f:
-        f.write(data)
+        resetfun(rdhome)
 
 if __name__=="__main__":
     start_config()
