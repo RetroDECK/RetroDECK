@@ -826,10 +826,8 @@ prepare_component() {
     log i "----------------------"
     log i "Prepearing STEAM ROM MANAGER"
     log i "----------------------"
-
-    create_dir "/var/config/steam-rom-manager"
-    create_dir "/var/config/steam-rom-manager/userData"
-    cp -fvr "/app/libexec/steam-sync/userConfigurations.json" "/var/config/steam-rom-manager/userData"
+    
+    python3 /app/libexec/steam-sync/resetsync.py
   fi
 
   if [[ ! "$component" =~ ^(retrodeck|es-de|retroarch|citra|citra-emu|cemu|dolphin|dolphin-emu|duckstation|melonds|melonDS|pcsx2|pico8|pico-8|ppsspp|primehack|rpcs3|ryujinx|yuzu|xemu|vita3k|mame|gzdoom|steam_rom_manager|)$ ]]; then
