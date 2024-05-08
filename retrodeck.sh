@@ -194,5 +194,16 @@ fi
 start_retrodeck
 
 if [[ $steam_sync == "true" ]]; then
+  (
   python3 /app/libexec/steam-sync/steam-sync.py
+  ) |
+  zenity --progress \
+    --title="Synching with Steam" \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --text="Synching favorite game with Steam, please wait." \
+    --percentage=25 \
+    --pulsate \
+    --auto-close \
+    --auto-kill
+
 fi
