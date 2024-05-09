@@ -63,6 +63,9 @@ modules:
   #- rd-submodules/shared-modules/libusb/libusb.json # 1.0.26
   # we added the libusb 1.0.27 as Dolphin is breaking with 1.0.27, when bot will be aligned we can go back to the submodule
 
+  # pip modules for romhack downloader
+  - rd-submodules/python3-pip/python3-modules.json
+
   # This module is used to define the RetroDECK version
   # If the version is set as cooker it will automatically generate the version tag based on the date
   # else it will just put what is written, "v" is not needed

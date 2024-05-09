@@ -8,6 +8,7 @@ source /app/libexec/compression.sh
 source /app/libexec/dialogs.sh
 source /app/libexec/logger.sh
 source /app/libexec/functions.sh
+source /app/libexec/romhack_downloader_wrapper.sh
 source /app/libexec/multi_user.sh
 source /app/libexec/framework.sh
 source /app/libexec/post_update.sh
