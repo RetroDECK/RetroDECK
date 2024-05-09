@@ -66,6 +66,17 @@ modules:
   # pip modules for romhack downloader
   - rd-submodules/python3-pip/python3-modules.json
 
+  # dependency of romhack downloader
+  - name: flips
+    buildsystem: simple
+    build-commands:
+      - sh make.sh --cflags=-DFLATPAK
+      - make install PREFIX=/app
+    sources:
+      - type: git
+        url: https://github.com/Alcaro/Flips.git
+        commit: 96df78fd733ebc56d64bcfcaee7d127bfd6643d6
+
   # This module is used to define the RetroDECK version
   # If the version is set as cooker it will automatically generate the version tag based on the date
   # else it will just put what is written, "v" is not needed
