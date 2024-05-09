@@ -23,6 +23,6 @@ Texture folder directly
 - Move textures into the right ~/retrodeck/texture_packs/duckstation/<TITLEID> folder.
 
 Related wiki article can be found here:
-https://github.com/XargonWan/RetroDECK/wiki/Duckstation%3A-Texture-Packs
+https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/duckstation/duckstation-texture-pack/
 
 The RetroDECK Team

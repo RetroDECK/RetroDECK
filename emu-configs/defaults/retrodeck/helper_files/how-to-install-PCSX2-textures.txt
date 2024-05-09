@@ -21,6 +21,6 @@ For direct texture folder:
 3. Move textures into the correct '~/retrodeck/texture_packs/PCSX2/<TITLEID>' folder.
 
 Related wiki article can be found here:
-https://github.com/XargonWan/RetroDECK/wiki/PCSX2%3A-Texture-Packs
+https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/pcsx2/pcsx2-texture-pack/
 
 The RetroDECK Team
