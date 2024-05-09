@@ -21,6 +21,7 @@ rd-submodules/es-de/patches-tmp*
 .local/
 buildid
 *.bak
+incconfigs/
 
 # Python #
 ##########
