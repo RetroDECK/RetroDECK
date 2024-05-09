@@ -67,6 +67,9 @@ cleanup:
 
 modules:
 
+  # pip modules for romhack downloader
+  - rd-submodules/python3-pip/python3-modules.json
+
   # dependency of: CEMU, CITRA, DOLPHIN
   - rd-submodules/shared-modules/libusb/libusb.json
 

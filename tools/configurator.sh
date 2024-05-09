@@ -1441,18 +1441,18 @@ configurator_game_downloader_dialog() {
 }
 
 configurator_romhack_downloader_dialog() {
-  hacks_db_setup
-  check_romhacks_compatibility # add paths of available base roms to db
+  romhack_downloader_wrapper --fetch-compatible-hacks
+  hacks_db_cmd="sqlite3 /app/libexec/romhack_downloader/romhacks.db"
 
-  available_bases_crc32s="$($hacks_db_cmd "SELECT crc32 FROM bases WHERE local_path NOT NULL;")"
+  available_base_hashes="$($hacks_db_cmd "SELECT hash FROM base WHERE local_path NOT NULL;")"
 
   zenity_columns=()
-  while IFS= read -r base_crc32; do
+  while IFS= read -r base_hash; do
 
-    # Get info of the available hacks for this base crc32
-    info_of_hacks_compatible_with_base="$($hacks_db_cmd "SELECT rhacks.name,bases.system,rhacks.released,rhacks.retro_achievements,rhacks.description \
-                                                         FROM bases JOIN rhacks ON bases.crc32 = rhacks.base_crc32
-                                                         WHERE bases.crc32 = '""$base_crc32""'")"
+    # Get info of the available hacks for this base hash
+    info_of_hacks_compatible_with_base="$($hacks_db_cmd "SELECT rhack.id,rhack.name,base.system,rhack.released,rhack.retro_achievements,rhack.description \
+                                                         FROM base JOIN rhack ON base.hash = rhack.base_hash
+                                                         WHERE base.hash = '""$base_hash""'")"
 
     while IFS= read -r single_hack_info; do
     
@@ -1465,21 +1465,21 @@ configurator_romhack_downloader_dialog() {
       done
 
     done <<< "$info_of_hacks_compatible_with_base"
-  done <<< "$available_bases_crc32s"
+  done <<< "$available_base_hashes"
 
   if [[ ${#zenity_columns[@]} != 0 ]]; then # Compatible base ROMs found
     choice=$(zenity --list --title="RetroDECK Configurator Utility - ROM Hack Downloader" --cancel-label="Back" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
-    --column="ROM Hack Name" --column="System" --column="Released" --column="RetroAchievements" --column="Description" \
+    --column="ID" --column="ROM Hack Name" --column="System" --column="Released" --column="RetroAchievements" --column="Description" \
     "${zenity_columns[@]}" )
 
     if [[ -z "$choice" ]]; then # no selection or back button
       configurator_welcome_dialog
     else
-      install_romhack "$choice"
+      romhack_downloader_wrapper --install "$choice"
       rc=$?
       if [[ $rc == "0" ]]; then
-        configurator_generic_dialog "RetroDECK Configurator - ROM Hack Downloader" "$choice was installed successfully!"
+        configurator_generic_dialog "RetroDECK Configurator - ROM Hack Downloader" "The hack was installed successfully."
       else
         configurator_generic_dialog "RetroDECK Configurator - ROM Hack Downloader" "Something went wrong :("
       fi
