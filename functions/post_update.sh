@@ -330,7 +330,7 @@ post_update() {
     rm -rf /tmp/extra /tmp/theme
 
     log i "Placing cheats in \"/var/data/mame/cheat\""
-    unzip -j "$emuconfigs/mame/cheat0264.zip" 'cheat.7z' -d "/var/data/mame/cheat"
+    unzip -j -o "$emuconfigs/mame/cheat0264.zip" 'cheat.7z' -d "/var/data/mame/cheat"
 
     log d "Verifying with user if they want to reset Ryujinx"
     if [[ "$(configurator_generic_question_dialog "RetroDECK 0.8.1b Ryujinx Reset" "In RetroDECK 0.8.0b the Ryujinx emulator was not properly initialized for upgrading users.\nThis would cause Ryujinx to not work properly.\n\nWould you like to reset Ryujinx to default RetroDECK settings now?\n\nIf you have made your own changes to the Ryujinx config, you can decline this reset.")" == "true" ]]; then
