@@ -2,6 +2,10 @@
 
 source /app/libexec/functions.sh
 
+# Dialog colors
+purple="#a864fc"
+blue="#6fbfff"
+
 debug_dialog() {
   # This function is for displaying commands run by the Configurator without actually running them
   # USAGE: debug_dialog "command"

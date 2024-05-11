@@ -88,7 +88,7 @@ prepare_component() {
       else # Single-user actions
         create_dir -d /var/config/retroarch
         dir_prep "$bios_folder" "/var/config/retroarch/system"
-        dir_prep "$logs_folder/retroarch" "/var/config/retroarch/logs"
+        dir_prep "$rdhome/logs/retroarch" "/var/config/retroarch/logs"
         create_dir /var/config/retroarch/shaders/
         cp -rf /app/share/libretro/shaders /var/config/retroarch/
         dir_prep "$rdhome/shaders/retroarch" "/var/config/retroarch/shaders"
@@ -104,17 +104,6 @@ prepare_component() {
         set_setting_value "$raconf" "screenshot_directory" "$screenshots_folder" "retroarch"
         set_setting_value "$raconf" "log_dir" "$logs_folder" "retroarch"
         set_setting_value "$raconf" "rgui_browser_directory" "$roms_folder" "retroarch"
-        
-        # Specific Settings for ScummVM core
-        cp -fv "$emuconfigs/retroarch/scummvm.ini" "$ra_scummvm_conf"
-        create_dir "$mods_folder/RetroArch/ScummVM/icons"
-        create_dir "$mods_folder/RetroArch/ScummVM/extra"
-        create_dir "$mods_folder/RetroArch/ScummVM/themes"
-        set_setting_value "$ra_scummvm_conf" "iconspath" "$mods_folder/RetroArch/ScummVM/icons" "libretro_scummvm" "scummvm"
-        set_setting_value "$ra_scummvm_conf" "extrapath" "$mods_folder/RetroArch/ScummVM/extra" "libretro_scummvm" "scummvm"
-        set_setting_value "$ra_scummvm_conf" "themepath" "$mods_folder/RetroArch/ScummVM/themes" "libretro_scummvm" "scummvm"
-        set_setting_value "$ra_scummvm_conf" "savepath" "$saves_folder/scummvm" "libretro_scummvm" "scummvm"
-        set_setting_value "$ra_scummvm_conf" "browser_lastpath" "$roms_folder/scummvm" "libretro_scummvm" "scummvm"
       fi
       # Shared actions
 
@@ -161,6 +150,24 @@ prepare_component() {
       log i "-----------------------------------------------------------"
       log i "Copying \"/app/retrodeck/extras/Amiga/capsimg.so\" in \"$bios_folder/capsimg.so\""
       cp -f "/app/retrodeck/extras/Amiga/capsimg.so" "$bios_folder/capsimg.so"
+
+      # ScummVM
+      log i "-----------------------------------------------------------"
+      log i "Prepearing ScummVM LIBRETRO"
+      log i "-----------------------------------------------------------"
+      cp -fv "$emuconfigs/retroarch/scummvm.ini" "$ra_scummvm_conf"
+      create_dir "$mods_folder/RetroArch/ScummVM/icons"
+      log i "Installing ScummVM assets"
+      unzip -o "$emuconfigs/retroarch/ScummVM.zip" 'scummvm/extra/*' -d /tmp
+      unzip -o "$emuconfigs/retroarch/ScummVM.zip" 'scummvm/theme/*' -d /tmp
+      mv -f /tmp/scummvm/extra "$mods_folder/RetroArch/ScummVM"
+      mv -f /tmp/scummvm/theme "$mods_folder/RetroArch/ScummVM"
+      rm -rf /tmp/extra /tmp/theme
+      set_setting_value "$ra_scummvm_conf" "iconspath" "$mods_folder/RetroArch/ScummVM/icons" "libretro_scummvm" "scummvm"
+      set_setting_value "$ra_scummvm_conf" "extrapath" "$mods_folder/RetroArch/ScummVM/extra" "libretro_scummvm" "scummvm"
+      set_setting_value "$ra_scummvm_conf" "themepath" "$mods_folder/RetroArch/ScummVM/theme" "libretro_scummvm" "scummvm"
+      set_setting_value "$ra_scummvm_conf" "savepath" "$saves_folder/scummvm" "libretro_scummvm" "scummvm"
+      set_setting_value "$ra_scummvm_conf" "browser_lastpath" "$roms_folder/scummvm" "libretro_scummvm" "scummvm"
     
       dir_prep "$texture_packs_folder/RetroArch-Mesen" "/var/config/retroarch/system/HdPacks"
       dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/cache" "/var/config/retroarch/system/Mupen64plus/cache"
@@ -758,7 +765,7 @@ prepare_component() {
 
     create_dir "/var/data/mame/plugin-data"
     create_dir "/var/data/mame/hash"
-    create_dir "/var/data/mame/assets/samples"
+    create_dir "$bios_folder/mame-sa/samples"
     create_dir "/var/data/mame/assets/artwork"
     create_dir "/var/data/mame/assets/fonts"
     create_dir "/var/data/mame/cheat"
@@ -799,6 +806,10 @@ prepare_component() {
     set_setting_value "$mameconf" "state_directory" "$states_folder/mame-sa" "mame"
     set_setting_value "$mameconf" "snapshot_directory" "$screenshots_folder/mame-sa" "mame"
     set_setting_value "$mameconf" "diff_directory" "$saves_folder/mame-sa/diff" "mame"
+    set_setting_value "$mameconf" "samplepath" "$bios_folder/mame-sa/samples" "mame"
+
+    log i "Placing cheats in \"/var/data/mame/cheat\""
+    unzip -j -o "$emuconfigs/mame/cheat0264.zip" 'cheat.7z' -d "/var/data/mame/cheat"
 
   fi
 

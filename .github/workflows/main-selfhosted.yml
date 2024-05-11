@@ -108,7 +108,7 @@ jobs:
           tag: ${{ env.REL_VER }}
           name: "RetroDECK v${{ env.REL_VER }}"
           bodyFile: "body.md"
-          artifacts: "RetroDECK.flatpak,RetroDECK-Artifact.tar.gz"
+          artifacts: "RetroDECK.flatpak,RetroDECK.flatpak.sha,RetroDECK-Artifact.tar.gz"
           allowUpdates: true
           makeLatest: true
           token: ${{ secrets.TRIGGER_BUILD_TOKEN }}
@@ -147,3 +147,11 @@ jobs:
         env:
           GITEA_TOKEN: ${{ secrets.GITEA_TRIGGER_BUILD_TOKEN }}
 
+      - name: Upload RetroDECK.flatpak.sha to Gitea Release
+        run: |
+          curl -X POST \
+            -H "Authorization: token ${GITEA_TOKEN}" \
+            -F "file=@RetroDECK.flatpak.sha" \
+            "https://repo.retrodeck.net/RetroDECK/RetroDECK/releases/${{ env.REL_VER }}/assets?name=RetroDECK.flatpak.sha"
+        env:
+          GITEA_TOKEN: ${{ secrets.GITEA_TRIGGER_BUILD_TOKEN }}

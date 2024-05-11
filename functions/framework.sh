@@ -39,11 +39,21 @@ set_setting_value() {
       fi
       ;;
 
-    "rpcs3" | "vita3k" ) # This does not currently work for settings with a $ in them
-      if [[ -z $current_section_name ]]; then
-        sed -i 's^\^'"$setting_name_to_change"': .*^'"$setting_name_to_change"': '"$setting_value_to_change"'^' "$1"
-      else
-        sed -i '\^\['"$current_section_name"'\]^,\^\^'"$setting_name_to_change"'.*^s^\^'"$setting_name_to_change"': .*^'"$setting_name_to_change"': '"$setting_value_to_change"'^' "$1"
+    "rpcs3" | "vita3k" )
+       # This does not currently work for settings with a $ in them
+
+      if [[ "$1" =~ (.ini)$ ]]; then # If this is a RPCS3 .ini file
+        if [[ -z $current_section_name ]]; then
+          sed -i 's^\^'"$setting_name_to_change"'=.*^'"$setting_name_to_change"'='"$setting_value_to_change"'^' "$1"
+        else
+          sed -i '\^\['"$current_section_name"'\]^,\^\^'"$setting_name_to_change"'=^s^\^'"$setting_name_to_change"'=.*^'"$setting_name_to_change"'='"$setting_value_to_change"'^' "$1"
+        fi
+      elif [[ "$1" =~ (.yml)$ ]]; then # If this is an YML-based file
+        if [[ -z $current_section_name ]]; then
+          sed -i 's^\^'"$setting_name_to_change"': .*^'"$setting_name_to_change"': '"$setting_value_to_change"'^' "$1"
+        else
+          sed -i '\^\['"$current_section_name"'\]^,\^\^'"$setting_name_to_change"'.*^s^\^'"$setting_name_to_change"': .*^'"$setting_name_to_change"': '"$setting_value_to_change"'^' "$1"
+        fi
       fi
       ;;
 
@@ -55,7 +65,9 @@ set_setting_value() {
       fi
       ;;
     
-    "mame" ) # In this option, $current_section_name is the <system name> in the .cfg file.
+    "mame" )
+      # In this option, $current_section_name is the <system name> in the .cfg file.
+
       local mame_current_value=$(get_setting_value "$1" "$setting_name_to_change" "$4" "$current_section_name")
       if [[ "$1" =~ (.ini)$ ]]; then # If this is a MAME .ini file
         sed -i '\^\^'"$setting_name_to_change"'\s^s^'"$mame_current_value"'^'"$setting_value_to_change"'^' "$1"
@@ -84,7 +96,11 @@ get_setting_name() {
     ;;
 
   "rpcs3" | "vita3k" )
-    echo "$current_setting_line" | grep -o -P "^\s*?.*?(?=\s?:\s?)" | sed -e 's/^[ \t]*//;s^\\ ^ ^g'
+    if [[ "$1" =~ (.ini)$ ]]; then # If this is a RPCS3 .ini file
+      echo "$current_setting_line" | grep -o -P "^\s*?.*?(?=\s?=\s?)" | sed -e 's/^[ \t]*//;s^\\ ^ ^g;s^\\$^^'
+    elif [[ "$1" =~ (.yml)$ ]]; then # If this is an YML-based file
+      echo "$current_setting_line" | grep -o -P "^\s*?.*?(?=\s?:\s?)" | sed -e 's/^[ \t]*//;s^\\ ^ ^g'
+    fi
     ;;
 
   "mame" ) # This only works for mame .ini files, not the .cfg XML files

@@ -138,7 +138,6 @@ fi
 
 # If there is no config file I initalize the file with the the default values
 if [[ ! -f "$rd_conf" ]]; then
-  create_dir /var/config/retrodeck/logs
   log w "RetroDECK config file not found in $rd_conf"
   log i "Initializing"
   # if we are here means that the we are in a new installation, so the version is valorized with the hardcoded one

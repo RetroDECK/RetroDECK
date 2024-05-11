@@ -23,7 +23,7 @@ finish-args:
   - --talk-name=org.freedesktop.login1.Manager
   - --filesystem=xdg-run/app/com.discordapp.Discord:create
   - --filesystem=xdg-config/gtk-3.0:ro
-  - --env=QT_QPA_PLATFORM=wayland-egl;wayland;xcb
+  - --env=QT_QPA_PLATFORM=wayland;wayland-egl;xcb
   # Dolphin
   - --allow=bluetooth
   # It allows an SDL application to specify its window class, which can be useful for window managers and desktop environments to identify and group similar windows
@@ -164,20 +164,6 @@ modules:
         url: https://ftp.osuosl.org/pub/blfs/conglomeration/libgudev/libgudev-237.tar.xz
         sha256: 0d06b21170d20c93e4f0534dbb9b0a8b4f1119ffb00b4031aaeb5b9148b686aa
 
-  #                                           #
-  # DEPRECATED IN FAVOR OF COMPILED MAME TOOL #
-  #                                           #
-  # - name: chdman-tool
-  #   buildsystem: simple
-  #   build-commands:
-  #     - cmake -B . -G Ninja
-  #     - cmake --build .
-  #     - cp chdman /app/bin
-  #   sources:
-  #     - type: git
-  #       url: https://github.com/CharlesThobe/chdman.git
-  #       commit: f7cadf1720cbeba8a14f2685830ff424a0c7f6cd
-
   - name: rclone
     buildsystem: simple
     build-commands:
@@ -226,6 +212,7 @@ modules:
         url: https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_amd64
         sha256: 4ee662847c588c3ef2fec8bfb304e8739e3dbaba87ccb9a608d691c88f5b64dc
 
+  # dependency of: CEMU
   - name: glslang
     buildsystem: cmake-ninja
     config-opts:
@@ -238,8 +225,8 @@ modules:
       - /lib/cmake
     sources:
       - type: archive
-        url: https://github.com/KhronosGroup/glslang/archive/14.0.0.tar.gz
-        sha256: 80bbb916a23e94ea9cbfb1acb5d1a44a7e0c9613bcf5b5947c03f2273bdc92b0
+        url: https://github.com/KhronosGroup/glslang/archive/14.1.0.tar.gz
+        sha256: b5e4c36d60eda7613f36cfee3489c6f507156829c707e1ecd7f48ca45b435322
         x-checker-data:
           type: anitya
           stable-only: true
@@ -359,7 +346,6 @@ modules:
   # ES-DE - START
   # https://gitlab.com/es-de/emulationstation-de
 
-  #This is disabled because we added the extension (line 11), check if the videos are ok.
   - name: ffmpeg
     config-opts:
       - --disable-static
@@ -736,8 +722,8 @@ modules:
       - ln -s "${FLATPAK_DEST}/pcsx2-qt/usr/bin/pcsx2-qt" "${FLATPAK_DEST}/bin/pcsx2-qt"
     sources:
       - type: file
-        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.5645/pcsx2-v1.7.5645-linux-appimage-x64-Qt.AppImage
-        sha256: dcd11469a91d8daa57fe46719a968e73ed282d81925879aca9393527f8b695fd
+        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.5769/pcsx2-v1.7.5769-linux-appimage-x64-Qt.AppImage
+        sha256: d819a339b9f3c43ee44fe9b6d975b9f76cff7716b5976a3b94f77e2cf4cab667
 
   # PCSX2 - END
 
@@ -1046,8 +1032,8 @@ modules:
       - /lib/cmake
     sources:
       - type: archive
-        url: https://boostorg.jfrog.io/artifactory/main/release/1.84.0/source/boost_1_84_0.tar.bz2
-        sha256: cc4b893acf645c9d4b698e9a0f08ca8846aa5d6c68275c14c3e7949c24109454
+        url: https://boostorg.jfrog.io/artifactory/main/release/1.85.0/source/boost_1_85_0.tar.bz2
+        sha256: 7009fe1faa1697476bdc7027703a2badb84e849b7b0baad5086b087b971f8617
         x-checker-data:
           type: anitya
           project-id: 6845
@@ -1124,8 +1110,8 @@ modules:
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+-\d+)$
-        tag: v2.0-73
-        commit: 241915e1a6bfd92e4ffd0d6961a178335300e83f
+        tag: v2.0-79
+        commit: efbbb817fe1cbe09ee132344b44a0f61f8b8ac96
       - type: shell
         commands:
           - sed "s/set(EXPERIMENTAL_VERSION.*/set(EXPERIMENTAL_VERSION \"$(git describe
@@ -1278,8 +1264,8 @@ modules:
         ln -sv ${FLATPAK_DEST}/ryujinx/Ryujinx ${FLATPAK_DEST}/bin/Ryujinx.sh
     sources:
       - type: file
-        url: https://github.com/Ryujinx/release-channel-master/releases/download/1.1.1247/ryujinx-1.1.1247-linux_x64.tar.gz
-        sha256: c929a17b3fe819b155b1126ae5d255e71c986c0be257c92fbbae967e5070e51a
+        url: https://github.com/Ryujinx/release-channel-master/releases/download/1.1.1297/ryujinx-1.1.1297-linux_x64.tar.gz
+        sha256: 28b38754e7d2e92083b313b23278c180ae54ac025edbbd0276ec03baec0cec0f
 
   # Ryujinx Appimage - END
 
