@@ -7301,8 +7301,8 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press LEFT_ALT, Set GPU Accuracy, RD-emblem-new.png, "
-							"binding"		"key_press G, Set GPU Accuracy, RD-emblem-new.png, "
+							"binding"		"key_press LEFT_ALT, Yuzu - Set GPU Accuracy, RD-emblem-new.png, "
+							"binding"		"key_press G, Yuzu - Set GPU Accuracy, RD-emblem-new.png, "
 						}
 					}
 				}
@@ -7318,8 +7318,8 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press LEFT_ALT, Load/Remove Amiibo, RD-preferences-desktop-accessibility.png, "
-							"binding"		"key_press M, Load/Remove Amiibo, RD-preferences-desktop-accessibility.png, "
+							"binding"		"key_press LEFT_ALT, Yuzu - Load / Remove Amiibo, RD-preferences-desktop-accessibility.png, "
+							"binding"		"key_press M, Yuzu - Load / Remove Amiibo, RD-preferences-desktop-accessibility.png, "
 						}
 					}
 				}
@@ -7335,8 +7335,24 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press LEFT_ALT, Docked / Undocked Mode, RD-emblem-unlocked.png, "
-							"binding"		"key_press D, Docked / Undocked Mode, RD-emblem-unlocked.png, "
+							"binding"		"key_press LEFT_ALT, Yuzu - Docked / Undocked Mode, RD-emblem-unlocked.png, "
+							"binding"		"key_press D, Yuzu - Docked / Undocked Mode, RD-emblem-unlocked.png, "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"touch_menu_button_4"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press F4, Ryujinx - F4 Open Menu, RD-F4.png, "
 						}
 					}
 				}
@@ -12072,4 +12088,3 @@
 		"right_trackpad_mode"		"0"
 	}
 }
-
