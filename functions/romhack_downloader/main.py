@@ -15,7 +15,7 @@ def parse_arguments():
 
 
 def reset_db(db):
-    with open('db_setup.sql', 'r') as file:
+    with open('/app/libexec/romhack_downloader/db_setup.sql', 'r') as file:
         db.executescript(file.read())
 
 
@@ -45,14 +45,14 @@ def install_rhack(db, id, roms_folder):
     rhack_path = construct_rhack_path(roms_folder, system, rhack_name, base_path, rhack_version, rhack_type)
 
     patch_path = download_patch(url, archive_path)
-    if patch_path: os.system(f'flatpak run com.github.Alcaro.Flips --apply "{patch_path}" "{base_path}" "{rhack_path}"')
+    if patch_path: os.system(f'flips --apply "{patch_path}" "{base_path}" "{rhack_path}"')
 
     # cleanup
     os.system("rm -rf /tmp/patch_archive* /tmp/extract_patch")
 
 
 def main():
-    db_connection = sqlite3.connect('romhacks.db')
+    db_connection = sqlite3.connect('/var/data/romhacks.db')
     db = db_connection.cursor()
 
     args = parse_arguments()
@@ -64,6 +64,7 @@ def main():
     if args.install: 
         install_rhack(db, args.install, args.roms_folder)
     
+    db_connection.commit() # make db changes available to other connections
     db_connection.close()
 
 

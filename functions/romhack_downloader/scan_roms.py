@@ -3,7 +3,6 @@
 
 import os, zlib
 
-
 def crc32(file):
     prev = 0
     for each_line in open(file, 'rb'):

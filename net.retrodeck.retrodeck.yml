@@ -77,6 +77,25 @@ modules:
         url: https://github.com/Alcaro/Flips.git
         commit: 96df78fd733ebc56d64bcfcaee7d127bfd6643d6
 
+  # dependency of romhack downloader
+    name: 7-zip
+    buildsystem: simple
+    build-commands:
+      - |
+        for bundle in Alone2 SFXCon; do
+          pushd CPP/7zip/Bundles/${bundle}
+          make -j ${FLATPAK_BUILDER_N_JOBS} -f ../../cmpl_gcc.mak
+          popd
+        done
+      - install -Dm755 CPP/7zip/Bundles/Alone2/b/g/7zz   $FLATPAK_DEST/bin/7z
+      - install -Dm755 CPP/7zip/Bundles/SFXCon/b/g/7zCon $FLATPAK_DEST/bin/7zCon.sfx
+
+    sources:
+      - type: archive
+        strip-components: 0
+        url: https://7-zip.org/a/7z2301-src.tar.xz
+        sha256: 356071007360e5a1824d9904993e8b2480b51b570e8c9faf7c0f58ebe4bf9f74
+
   # This module is used to define the RetroDECK version
   # If the version is set as cooker it will automatically generate the version tag based on the date
   # else it will just put what is written, "v" is not needed

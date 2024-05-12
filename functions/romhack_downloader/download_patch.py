@@ -5,7 +5,6 @@ import os, pathlib, requests
 from pyunpack import Archive
 from urllib.parse import urlparse
 
-
 # return absolute path of patch
 def get_patch_from_archive(archive_path, location_in_archive):
     os.system("rm -rf /tmp/extract_patch")

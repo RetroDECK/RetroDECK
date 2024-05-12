@@ -1610,7 +1610,7 @@ configurator_game_downloader_dialog() {
 
 configurator_romhack_downloader_dialog() {
   romhack_downloader_wrapper --fetch-compatible-hacks
-  hacks_db_cmd="sqlite3 /app/libexec/romhack_downloader/romhacks.db"
+  hacks_db_cmd="sqlite3 /var/data/romhacks.db"
 
   available_base_hashes="$($hacks_db_cmd "SELECT hash FROM base WHERE local_path NOT NULL;")"
 
