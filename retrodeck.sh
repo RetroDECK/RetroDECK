@@ -192,9 +192,9 @@ if [[ $steam_sync == "true" ]]; then
   python3 /app/libexec/steam-sync/steam-sync.py
   ) |
   zenity --progress \
-    --title="Synching with Steam" \
+    --title="Syncing with Steam" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --text="Synching favorite game with Steam, please wait." \
+    --text="Syncing favorite games with Steam, please wait." \
     --percentage=25 \
     --pulsate \
     --auto-close \
