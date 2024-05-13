@@ -1,0 +1,88 @@
+
+name: PUSH-cooker-flathub
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  Pushing_cooker_into_flathub:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pushing
+        shell: bash
+        run: |
+
+          # EDITABLES:
+          rd_branch=${GITHUB_REF_NAME}
+          echo $rd_branch
+          gits_folder="${GITHUB_WORKSPACE}/gits" # without last /
+
+          mkdir -vp $gits_folder
+          cd $gits_folder
+          if [ -d flathub ]; then
+            rm -rf flathub
+          fi
+          git clone --recursive https://github.com/flathub/net.retrodeck.retrodeck.git flathub
+          cd $gits_folder
+          git clone --recursive https://github.com/XargonWan/RetroDECK RetroDECK
+          cd $gits_folder/RetroDECK
+
+          # NON-EDITABLES
+          #relname="$rd_branch-"$(date +%d%m%y.%H%M)
+          relname="cooker-"$(git rev-parse --short HEAD)
+
+          git checkout $rd_branch
+          git submodule init
+          git submodule update
+          # NOTE: the only linked submodules are: rd-submodules/retroarch
+          # these must be included in the exclusion list as they must be redownloaded
+          #sync -rav --progress --exclude={'res/screenshots/','shared-modules/','rd-submodules/retroarch','.git/','docs','retrodeck-flatpak/','retrodeck-flatpak-cooker/','.flatpak-builder/'} ~/RetroDECK/ ~/flathub/
+
+          cd $gits_folder/flathub
+
+          git checkout -b $relname
+
+          git rm -rf *
+          git clean -fxd # restroing git index
+
+          # Copying only a few files as the others are cloned by git in retrodeck.sh
+          cd $gits_folder/RetroDECK
+          cp -rf \
+          'flathub.json' \
+          'LICENSE' \
+          'flathub.yml' \
+          'README.md' \
+          $gits_folder/flathub/
+
+          cd $gits_folder/flathub
+          ls -lah
+
+          # manipulating manifest
+          mv flathub.yml net.retrodeck.retrodeck.yml
+
+          # Getting latest release name
+          # version=$(\
+          # curl -sL \
+          # -H "Accept: application/vnd.github+json" \
+          # -H "Authorization: Bearer ${{ secrets.TRIGGER_BUILD_TOKEN }}" \
+          # https://api.github.com/repos/XargonWan/RetroDECK-cooker/releases \
+          # | jq .[0].tag_name \
+          # | tr -d \" \
+          # )
+
+          sha=$(curl -sL https://artifacts.retrodeck.net/artifacts/RetroDECK-Artifact.sha)
+
+          sed -i "s#__SHA__#$sha#g" net.retrodeck.retrodeck.yml
+
+          echo -e "Resulting manifest:\n"
+          cat net.retrodeck.retrodeck.yml
+
+          git config --global user.name "${{ secrets.GITNAME }}"
+          git config --global user.email "${{ secrets.GITMAIL }}"
+
+          git add *
+          git commit -m "Updated flathub/net.retrodeck.retrodeck from RetroDECK/$rd_branch"
+
+          git remote -v
+          git push --force https://${{ secrets.TRIGGER_BUILD_TOKEN }}@github.com/flathub/net.retrodeck.retrodeck.git $relname

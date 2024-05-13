@@ -2,6 +2,10 @@
 
 source /app/libexec/functions.sh
 
+# Dialog colors
+purple="#a864fc"
+blue="#6fbfff"
+
 debug_dialog() {
   # This function is for displaying commands run by the Configurator without actually running them
   # USAGE: debug_dialog "command"
@@ -175,8 +179,7 @@ changelog_dialog() {
   else
     local version_changelog=$(xml sel -t -m "//release[@version='$1']/description" -v . -n $rd_appdata | tr -s '\n' | sed 's/^\s*//')
 
-    echo -e "In RetroDECK version $1, the following changes were made:\n$version_changelog" > "/var/config/retrodeck/changelog-partial.txt" 
-    "$version_changelog" >> "/var/config/retrodeck/changelog-partial.txt"
+    echo -e "In RetroDECK version $1, the following changes were made:\n$version_changelog" > "/var/config/retrodeck/changelog-partial.txt" 2>/dev/null
 
     zenity --icon-name=net.retrodeck.retrodeck --text-info --width=1200 --height=720 \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \

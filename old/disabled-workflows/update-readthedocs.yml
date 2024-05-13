@@ -1,0 +1,34 @@
+name: Update-ReadTheDocs
+
+on:
+  gollum
+  # push:
+  #   branches:
+  #    - main
+  #   paths:
+  #    - 'wiki-rtd'
+  # pull_request: 
+  #   branches:
+  #    - main
+  #   paths:
+  #    - 'wiki-rtd'
+  # workflow_dispatch:
+
+
+jobs:
+
+  Job1_-_Building_P1:
+    runs-on: ubuntu-latest
+    steps:
+
+      - uses: actions/checkout@v3
+
+      - name: Update ReadTheDocs wiki-rtd
+        id: wiki-rtd-update
+        run: |
+          git checkout https://github.com/XargonWan/RetroDECK.wiki-rtd.git tmp/wiki-rtd
+          cp -rf tmp/wiki-rtd/* wiki-rtd
+          rm wiki-rtd/index.md
+          mv wiki-rtd/Home.md wiki-rtd/index.md
+          git commit -m "Updating wiki-rtd"
+          git push
