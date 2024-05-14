@@ -40,6 +40,7 @@ source /app/libexec/global.sh
 #       - Vita3K
 #       - XEMU
 #       - Yuzu
+#     - ROM Hack Downloader
 #     - Tools
 #       - Tool: Move Folders
 #         - Move all of RetroDECK
@@ -95,7 +96,6 @@ source /app/libexec/global.sh
 #         - Version-specific changelogs
 #       - RetroDECK Credits
 #     - Add to Steam
-#     - ROM Hack Downloader
 #     - Developer Options (Hidden)
 #       - Change Multi-user mode
 #       - Change Update channel
@@ -111,15 +111,16 @@ configurator_welcome_dialog() {
   if [[ $developer_options == "true" ]]; then
     welcome_menu_options=("Presets & Settings" "Here you will find various presets, tweaks and settings to customize your RetroDECK experience" \
     "Open Emulator" "Launch and configure each emulator's settings (for advanced users)" \
+    "ROM Hack Downloader" "Install ROM Hacks which are compatible with your ROMs" \
     "RetroDECK: Tools" "Compress games, move RetroDECK and install optional features" \
     "RetroDECK: Troubleshooting" "Backup data, perform BIOS / multi-disc file checks and emulator resets" \
     "RetroDECK: About" "Show additional information about RetroDECK" \
     "Sync with Steam" "Sync all favorited games with Steam" \
-    "ROM Hack Downloader" "Install ROM Hacks which are compatible with your ROMs" \
     "Developer Options" "Welcome to the DANGER ZONE")
   else
     welcome_menu_options=("Presets & Settings" "Here you find various presets, tweaks and settings to customize your RetroDECK experience" \
     "Open Emulator" "Launch and configure each emulators settings (for advanced users)" \
+    "ROM Hack Downloader" "Install ROM Hacks which are compatible with your ROMs" \
     "RetroDECK: Tools" "Compress games, move RetroDECK and install optional features" \
     "RetroDECK: Troubleshooting" "Backup data, perform BIOS / multi-disc file checks checks and emulator resets" \
     "RetroDECK: About" "Show additional information about RetroDECK")
@@ -142,6 +143,11 @@ configurator_welcome_dialog() {
     configurator_power_user_warning_dialog
   ;;
 
+  "ROM Hack Downloader" )
+    configurator_generic_dialog "RetroDECK Configurator - ROM Hack Downloader" "In order to download ROM Hacks you need to have the ROMs the hacks are based on already available. Your base ROMs need to be compatible with the hacks, otherwise those hacks will not be shown.\n\nRight now, your base ROMs need to be uncompressed for this to work.\n\nThe compatible ROM Hacks will now be listed."
+    configurator_romhack_downloader_dialog
+  ;;
+
   "RetroDECK: Tools" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_retrodeck_tools_dialog
@@ -160,11 +166,6 @@ configurator_welcome_dialog() {
   "Sync with Steam" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_add_steam
-  ;;
-
-  "ROM Hack Downloader" )
-    configurator_generic_dialog "RetroDECK Configurator - ROM Hack Downloader" "In order to download ROM Hacks you need to have the ROMs the hacks are based on already available. Your base ROMs need to be compatible with the hacks, otherwise those hacks will not be shown.\n\nRight now, your base ROMs need to be uncompressed for this to work.\n\nThe compatible ROM Hacks will now be listed."
-    configurator_romhack_downloader_dialog
   ;;
 
   "Developer Options" )
@@ -1618,7 +1619,7 @@ configurator_romhack_downloader_dialog() {
   while IFS= read -r base_hash; do
 
     # Get info of the available hacks for this base hash
-    info_of_hacks_compatible_with_base="$($hacks_db_cmd "SELECT rhack.id,rhack.name,base.system,rhack.released,rhack.retro_achievements,rhack.description \
+    info_of_hacks_compatible_with_base="$($hacks_db_cmd "SELECT rhack.id,rhack.name,rhack.type,base.system,rhack.version,rhack.released,rhack.retro_achievements,rhack.description \
                                                          FROM base JOIN rhack ON base.hash = rhack.base_hash
                                                          WHERE base.hash = '""$base_hash""'")"
 
@@ -1638,7 +1639,7 @@ configurator_romhack_downloader_dialog() {
   if [[ ${#zenity_columns[@]} != 0 ]]; then # Compatible base ROMs found
     choice=$(zenity --list --title="RetroDECK Configurator Utility - ROM Hack Downloader" --cancel-label="Back" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
-    --column="ID" --column="ROM Hack Name" --column="System" --column="Released" --column="RetroAchievements" --column="Description" \
+    --column="ID" --column="ROM Hack Name" --column="Type" --column="System" --column="Version" --column="Released" --column="RetroAchievements" --column="Description" \
     "${zenity_columns[@]}" )
 
     if [[ -z "$choice" ]]; then # no selection or back button
