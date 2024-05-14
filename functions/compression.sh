@@ -34,7 +34,7 @@ find_compatible_compression_format() {
   local normalized_filename=$(echo "$1" | tr '[:upper:]' '[:lower:]')
   local system=$(echo "$1" | grep -oE "$roms_folder/[^/]+" | grep -oE "[^/]+$")
 
-	if [[ $(validate_for_chd "$1") == "true" ]] && [[ $(sed -n '/^\[/{h;d};/\b'"$system"'\b/{g;s/\[\(.*\)\]/\1/p;q};' $compression_targets) == "chd" ]]; then
+	if [[ $(validate_for_chd "$1") == *"true" ]] && [[ $(sed -n '/^\[/{h;d};/\b'"$system"'\b/{g;s/\[\(.*\)\]/\1/p;q};' $compression_targets) == "chd" ]]; then
     echo "chd"
   elif grep -qF ".${normalized_filename##*.}" $zip_compressable_extensions && [[ $(sed -n '/^\[/{h;d};/\b'"$system"'\b/{g;s/\[\(.*\)\]/\1/p;q};' $compression_targets) == "zip" ]]; then
     echo "zip"
@@ -66,7 +66,7 @@ validate_for_chd() {
         log i "Validating .cue associated .bin files"
         local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" "$file")
         log i "Associated bin files read:"
-        log i $(printf '%s\n' "$cue_bin_files")
+        log i "$(printf '%s\n' "$cue_bin_files")"
         if [[ ! -z "$cue_bin_files" ]]; then
           while IFS= read -r line
           do
