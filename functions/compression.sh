@@ -66,7 +66,7 @@ validate_for_chd() {
         log i "Validating .cue associated .bin files"
         local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" "$file")
         log i "Associated bin files read:"
-        log i $(printf '%s\n' "$cue_bin_files")
+        log i "$(printf '%s\n' "$cue_bin_files")"
         if [[ ! -z "$cue_bin_files" ]]; then
           while IFS= read -r line
           do
