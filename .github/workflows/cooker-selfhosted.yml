@@ -171,6 +171,7 @@ jobs:
       #   run: |
       #     # Set variables for Gitea host, organization, repository, access token, and release details
       #     GITEA_HOST="repo.retrodeck.net"
+      #     UPLOAD_HOST="upload.retrodeck.net"
       #     ORGANIZATION="RetroDECK"
       #     REPO="RetroDECK-cooker"
       #     GITEA_TOKEN="${{ secrets.GITEA_TRIGGER_BUILD_TOKEN }}"
@@ -201,19 +202,22 @@ jobs:
       #     # Upload artifacts
       #     curl -X POST \
       #         -H "Authorization: token ${GITEA_TOKEN}" \
+      #         -H "X-GitHub-Token: ${{ secrets.UPLOAD_TOKEN }}" \
       #         -H "Content-Type: multipart/form-data" \
       #         -F "attachment=@RetroDECK-cooker.flatpak" \
-      #         "http://$GITEA_HOST/api/v1/repos/$ORGANIZATION/$REPO/releases/$release_id/assets?name=RetroDECK-cooker.flatpak"
+      #         "http://$UPLOAD_HOST/api/v1/repos/$ORGANIZATION/$REPO/releases/$release_id/assets?name=RetroDECK-cooker.flatpak"
 
       #     # Upload artifacts sha
       #     curl -X POST \
       #         -H "Authorization: token ${GITEA_TOKEN}" \
+      #         -H "X-GitHub-Token: ${{ secrets.UPLOAD_TOKEN }}" \
       #         -H "Content-Type: multipart/form-data" \
       #         -F "attachment=@RetroDECK-cooker.flatpak.sha" \
-      #         "http://$GITEA_HOST/api/v1/repos/$ORGANIZATION/$REPO/releases/$release_id/assets?name=RetroDECK-cooker.flatpak.sha"
+      #         "http://$UPLOAD_HOST/api/v1/repos/$ORGANIZATION/$REPO/releases/$release_id/assets?name=RetroDECK-cooker.flatpak.sha"
 
       #     curl -X POST \
       #         -H "Authorization: token ${GITEA_TOKEN}" \
+      #         -H "X-GitHub-Token: ${{ secrets.UPLOAD_TOKEN }}" \
       #         -H "Content-Type: multipart/form-data" \
       #         -F "attachment=@RetroDECK-Artifact.tar.gz" \
-      #         "http://$GITEA_HOST/api/v1/repos/$ORGANIZATION/$REPO/releases/$release_id/assets?name=RetroDECK-Artifact.tar.gz"
+      #         "http://$UPLOAD_HOST/api/v1/repos/$ORGANIZATION/$REPO/releases/$release_id/assets?name=RetroDECK-Artifact.tar.gz"
