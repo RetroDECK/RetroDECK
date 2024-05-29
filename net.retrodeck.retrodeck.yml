@@ -92,7 +92,7 @@ modules:
         echo "Version is $VERSION"
     sources:
       - type: git
-        url: https://github.com/XargonWan/RetroDECK.git
+        url: https://github.com/monkeyx-net/RetroDECK.git
         branch: THISBRANCH
 
   - name: xmlstarlet
@@ -413,8 +413,8 @@ modules:
       - es-core
     sources:
       - type: git
-        url: https://github.com/XargonWan/RetroDECK-ES-DE
-        branch: retrodeck-main
+        url: https://github.com/mojkeyx-net/RetroDECK-ES-DE
+        branch: ruffle
       - type: shell
 
   # ES-DE - END
@@ -1115,6 +1115,27 @@ modules:
 
   # Cemu - END
 
+   # Ruffle - START
+
+  - name: ruffle
+    buildsystem: simple
+    build-commands:
+      # Copying the user icon
+      - mkdir -p ${FLATPAK_DEST}/retrodeck
+      - cp retrodeck.png ${FLATPAK_DEST}/retrodeck
+      - mkdir -p ${FLATPAK_DEST}/share/ruffle
+      - tar xvzf "ruffle-nightly-2024_05_03-linux-x86_64.tar.gz" -C "${FLATPAK_DEST}/share/ruffle"
+      - chmod +x "${FLATPAK_DEST}/share/ruffle/ruffle"
+      - ln -s ${FLATPAK_DEST}/share/ruffle/ruffle ${FLATPAK_DEST}/bin/ruffle
+    sources:
+      - type: file
+        url: https://github.com/ruffle-rs/ruffle/releases/download/nightly-2024-05-29/ruffle-nightly-2024_05_29-linux-x86_64.tar.gz
+        sha256: RUFFLESHAPLACEHOLDER
+      - type: file
+        path: res/retrodeck.png
+
+  # Ruffle - END
+
   # Vita3K - START
 
   - name: vita3k
@@ -1289,5 +1310,5 @@ modules:
 
     sources:
       - type: git
-        url: https://github.com/XargonWan/RetroDECK.git
+        url: https://github.com/monkeyx-net/RetroDECK.git
         branch: THISBRANCH
