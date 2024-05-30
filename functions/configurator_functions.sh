@@ -1,7 +1,7 @@
 #!/bin/bash
 
 check_bios_files() {
-  # This function validates all the BIOS files listed in the $bios_checklist and adds the results to an array called bios_checked_list which can be used elsewhere
+  # This function validates all the BIOS files listed in the $bios_checklist and adds the results to an array called $bios_checked_list which can be used elsewhere
   # There is a "basic" and "expert" mode which outputs different levels of data
   # USAGE: check_bios_files "mode"
   
