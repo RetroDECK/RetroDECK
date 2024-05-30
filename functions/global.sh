@@ -55,6 +55,7 @@ pretty_system_names_reference_list="$emuconfigs/defaults/retrodeck/reference_lis
 godot_bios_files_checked="/var/config/retrodeck/godot/godot_bios_files_checked.tmp"
 godot_current_preset_settings="/var/config/retrodeck/godot/godot_current_preset_settings.tmp"
 godot_compression_compatible_games="/var/config/retrodeck/godot/godot_compression_compatible_games.tmp"
+godot_empty_roms_folders="/var/config/retrodeck/godot/godot_empty_roms_folders.tmp"
 
 # Config files for emulators with single config files
 

@@ -31,3 +31,34 @@ check_bios_files() {
       fi
   done < $bios_checklist
 }
+
+find_empty_rom_folders() {
+  # This function will build an array of all the system subfolders in $roms_folder which are either empty or contain only systeminfo.txt for easy removal
+
+  if [[ -f "$godot_empty_roms_folders" ]]; then
+    rm -f "$godot_empty_roms_folders" # Godot data transfer temp files
+  fi
+  touch "$godot_empty_roms_folders"
+
+  empty_rom_folders_list=()
+  all_empty_folders=()
+
+  for system in $(find "$roms_folder" -mindepth 1 -maxdepth 1 -type d -printf '%f\n')
+  do
+    local dir="$roms_folder/$system"
+    local files=$(ls -A1 "$dir")
+    local count=$(ls -A "$dir" | wc -l)
+
+    if [[ $count -eq 0 ]]; then
+        # Directory is empty
+        empty_rom_folders_list=("${empty_rom_folders_list[@]}" "false" "$(realpath $dir)")
+        all_empty_folders=("${all_empty_folders[@]}" "$(realpath $dir)")
+        echo "$(realpath $dir)" >> "$godot_empty_roms_folders" # Godot data transfer temp file
+    elif [[ $count -eq 1 ]] && [[ "$(basename "${files[0]}")" == "systeminfo.txt" ]]; then
+        # Directory contains only systeminfo.txt
+        empty_rom_folders_list=("${empty_rom_folders_list[@]}" "false" "$(realpath $dir)")
+        all_empty_folders=("${all_empty_folders[@]}" "$(realpath $dir)")
+        echo "$(realpath $dir)" >> "$godot_empty_roms_folders" # Godot data transfer temp file
+    fi
+  done
+}

@@ -12,10 +12,12 @@ prepare_component() {
   action="$1"
   component=$(echo "$2" | tr '[:upper:]' '[:lower:]')
   call_source="$3"
+  component_found="false"
 
   log d "Preparing component: \"$component\", action: \"$action\""
 
   if [[ "$component" == "retrodeck" ]]; then
+    component_found="true"
     if [[ "$action" == "reset" ]]; then # Update the paths of all folders in retrodeck.cfg and create them
       while read -r config_line; do
         local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
@@ -49,9 +51,10 @@ prepare_component() {
   fi
 
   if [[ "$component" =~ ^(es-de|all)$ ]]; then # For use after ESDE-related folders are moved or a reset
-      log i "--------------------------------"
-      log i "Prepearing ES-DE"
-      log i "--------------------------------"
+    component_found="true"
+    log i "--------------------------------"
+    log i "Prepearing ES-DE"
+    log i "--------------------------------"
     if [[ "$action" == "reset" ]]; then
       rm -rf /var/config/ES-DE
       create_dir /var/config/ES-DE/settings
@@ -77,9 +80,10 @@ prepare_component() {
   fi
 
   if [[ "$component" =~ ^(retroarch|all)$ ]]; then
-      log i "--------------------------------"
-      log i "Prepearing RetroArch"
-      log i "--------------------------------"
+  component_found="true"
+    log i "--------------------------------"
+    log i "Prepearing RetroArch"
+    log i "--------------------------------"
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         create_dir -d "$multi_user_data_folder/$SteamAppUser/config/retroarch"
@@ -211,6 +215,7 @@ prepare_component() {
   fi
 
   if [[ "$component" =~ ^(citra|citra-emu|all)$ ]]; then
+  component_found="true"
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       log i "------------------------"
       log i "Prepearing CITRA"
@@ -256,6 +261,7 @@ prepare_component() {
   fi
 
   if [[ "$component" =~ ^(cemu|all)$ ]]; then
+  component_found="true"
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       log i "----------------------"
       log i "Prepearing CEMU"
@@ -283,6 +289,7 @@ prepare_component() {
   fi
 
   if [[ "$component" =~ ^(dolphin|dolphin-emu|all)$ ]]; then
+  component_found="true"
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       log i "----------------------"
       log i "Prepearing DOLPHIN"
@@ -336,6 +343,7 @@ prepare_component() {
   fi
 
   if [[ "$component" =~ ^(duckstation|all)$ ]]; then
+  component_found="true"
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       log i "------------------------"
       log i "Prepearing DUCKSTATION"
@@ -381,6 +389,7 @@ prepare_component() {
   fi
 
   if [[ "$component" =~ ^(melonds|all)$ ]]; then
+  component_found="true"
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       log i "----------------------"
       log i "Prepearing MELONDS"
@@ -419,6 +428,7 @@ prepare_component() {
   fi
 
   if [[ "$component" =~ ^(pcsx2|all)$ ]]; then
+  component_found="true"
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       log i "----------------------"
       log i "Prepearing PCSX2"
@@ -463,6 +473,7 @@ prepare_component() {
   fi
 
   if [[ "$component" =~ ^(pico8|pico-8|all)$ ]]; then
+  component_found="true"
     if [[ ("$action" == "reset") || ("$action" == "postmove") ]]; then
       dir_prep "$bios_folder/pico-8" "$HOME/.lexaloffle/pico-8" # Store binary and config files together. The .lexaloffle directory is a hard-coded location for the PICO-8 config file, cannot be changed
       dir_prep "$roms_folder/pico8" "$bios_folder/pico-8/carts" # Symlink default game location to RD roms for cleanliness (this location is overridden anyway by the --root_path launch argument anyway)
@@ -473,6 +484,7 @@ prepare_component() {
   fi
 
   if [[ "$component" =~ ^(ppsspp|all)$ ]]; then
+  component_found="true"
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       log i "------------------------"
       log i "Prepearing PPSSPPSDL"
@@ -501,6 +513,7 @@ prepare_component() {
   fi
 
   if [[ "$component" =~ ^(primehack|all)$ ]]; then
+  component_found="true"
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       log i "----------------------"
       log i "Prepearing Primehack"
@@ -544,6 +557,7 @@ prepare_component() {
   fi
 
   if [[ "$component" =~ ^(rpcs3|all)$ ]]; then
+  component_found="true"
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       log i "------------------------"
       log i "Prepearing RPCS3"
@@ -580,6 +594,7 @@ prepare_component() {
   fi
 
   if [[ "$component" =~ ^(ryujinx|all)$ ]]; then
+  component_found="true"
     # NOTE: for techincal reasons the system folder of Ryujinx IS NOT a sumlink of the bios/switch/keys as not only the keys are located there
     # When RetroDECK starts there is a "manage_ryujinx_keys" function that symlinks the keys only in Rryujinx/system.
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
@@ -624,6 +639,7 @@ prepare_component() {
   fi
 
   if [[ "$component" =~ ^(yuzu|all)$ ]]; then
+  component_found="true"
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       log i "----------------------"
       log i "Prepearing YUZU"
@@ -677,6 +693,7 @@ prepare_component() {
   fi
 
   if [[ "$component" =~ ^(xemu|all)$ ]]; then
+  component_found="true"
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       log i "------------------------"
       log i "Prepearing XEMU"
@@ -721,6 +738,7 @@ prepare_component() {
   fi
 
   if [[ "$component" =~ ^(vita3k|all)$ ]]; then
+  component_found="true"
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       log i "----------------------"
       log i "Prepearing Vita3K"
@@ -745,6 +763,7 @@ prepare_component() {
   fi
 
   if [[ "$component" =~ ^(mame|all)$ ]]; then
+  component_found="true"
     # TODO: do a proper script
     # This is just a placeholder script to test the emulator's flow
     log i "----------------------"
@@ -814,6 +833,7 @@ prepare_component() {
   fi
 
   if [[ "$component" =~ ^(gzdoom|all)$ ]]; then
+  component_found="true"
     # TODO: do a proper script
     # This is just a placeholder script to test the emulator's flow
     log i "----------------------"
@@ -834,6 +854,7 @@ prepare_component() {
   fi
 
   if [[ "$component" =~ ^(boilr|all)$ ]]; then
+  component_found="true"
     log i "----------------------"
     log i "Prepearing BOILR"
     log i "----------------------"
@@ -842,7 +863,7 @@ prepare_component() {
     cp -fvr "/app/libexec/steam-sync/config.toml" "/var/config/boilr"
   fi
 
-  if [[ ! "$component" =~ ^(retrodeck|es-de|retroarch|citra|citra-emu|cemu|dolphin|dolphin-emu|duckstation|melonds|melonDS|pcsx2|pico8|pico-8|ppsspp|primehack|rpcs3|ryujinx|yuzu|xemu|vita3k|mame|gzdoom|boilr|)$ ]]; then
+  if [[ $component_found="false" ]]; then
     log e "Supplied component $component not found, not resetting"
   fi
 
