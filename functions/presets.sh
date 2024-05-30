@@ -4,6 +4,43 @@ change_preset_dialog() {
   # This function will build a list of all systems compatible with a given preset, their current enable/disabled state and allow the user to change one or more
   # USAGE: change_preset_dialog "$preset"
 
+  build_preset_list_options "$1"
+
+  choice=$(zenity \
+    --list --width=1200 --height=720 \
+    --checklist \
+    --separator="," \
+    --hide-column=3 --print-column=3 \
+    --text="Enable $pretty_preset_name:" \
+    --column "Enabled" \
+    --column "Emulator" \
+    --column "internal_system_name" \
+    "${current_preset_settings[@]}")
+
+  local rc=$?
+
+  if [[ ! -z $choice || "$rc" == 0 ]]; then
+    (
+      make_preset_changes
+    ) |
+    zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator Utility - Presets Configuration" \
+    --text="Setting up your presets, please wait..."
+  else
+    echo "No choices made"
+  fi
+}
+
+build_preset_list_options() {
+  # This function will build a list of all the systems available for a given preset
+  # The list will be generated into a Godot temp file and the variable $current_preset_settings
+
+  if [[ -f "$godot_current_preset_settings" ]]; then
+    rm -f "$godot_current_preset_settings" # Godot data transfer temp files
+  fi
+  touch "$godot_current_preset_settings"
+
   local preset="$1"
   pretty_preset_name=${preset//_/ } # Preset name prettification
   pretty_preset_name=$(echo $pretty_preset_name | awk '{for(i=1;i<=NF;i++){$i=toupper(substr($i,1,1))substr($i,2)}}1') # Preset name prettification
@@ -25,24 +62,15 @@ change_preset_dialog() {
         current_disabled_systems=("${current_disabled_systems[@]}" "$system_name")
       fi
       current_preset_settings=("${current_preset_settings[@]}" "$system_value" "$(make_name_pretty $system_name)" "$system_name")
+      echo "$system_value"^"$(make_name_pretty $system_name)"^"$system_name" >> "$godot_current_preset_settings"
   done < <(printf '%s\n' "$section_results")
+}
 
-  choice=$(zenity \
-    --list --width=1200 --height=720 \
-    --checklist \
-    --separator="," \
-    --hide-column=3 --print-column=3 \
-    --text="Enable $pretty_preset_name:" \
-    --column "Enabled" \
-    --column "Emulator" \
-    --column "internal_system_name" \
-    "${current_preset_settings[@]}")
 
-  local rc=$?
+make_preset_changes() {
+  # This function will take an array $choices, which contains the names of systems that have been enabled for this preset and enable them in the backend
 
-  if [[ ! -z $choice || "$rc" == 0 ]]; then
-    (
-    IFS="," read -ra choices <<< "$choice"
+  IFS="," read -ra choices <<< "$choice"
     for emulator in "${all_systems[@]}"; do
       if [[ " ${choices[*]} " =~ " ${emulator} " && ! " ${current_enabled_systems[*]} " =~ " ${emulator} " ]]; then
         changed_systems=("${changed_systems[@]}" "$emulator")
@@ -71,14 +99,6 @@ change_preset_dialog() {
     for emulator in "${changed_systems[@]}"; do
       build_preset_config $emulator ${changed_presets[*]}
     done
-    ) |
-    zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
-    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator Utility - Presets Configuration" \
-    --text="Setting up your presets, please wait..."
-  else
-    echo "No choices made"
-  fi
 }
 
 build_preset_config() {

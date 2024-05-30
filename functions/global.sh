@@ -53,6 +53,7 @@ pretty_system_names_reference_list="$emuconfigs/defaults/retrodeck/reference_lis
 # Godot data transfer temp files
 
 godot_bios_files_checked="/var/config/retrodeck/godot/godot_bios_files_checked.tmp"
+godot_current_preset_settings="/var/config/retrodeck/godot/godot_current_preset_settings.tmp"
 
 # Config files for emulators with single config files
 
