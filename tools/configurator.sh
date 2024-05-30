@@ -52,6 +52,7 @@ source /app/libexec/global.sh
 #         - Move Screenshots folder
 #         - Move Mods folder
 #         - Move Texture Packs folder
+#       - Tool: Remove Empty ROM Folders
 #       - Tool: Compress Games
 #         - Compress Single Game
 #         - Compress Multiple Games - CHD
@@ -559,6 +560,7 @@ configurator_retrodeck_tools_dialog() {
 
   local choices=(
   "Tool: Move Folders" "Move RetroDECK folders between internal/SD card or to a custom location"
+  "Tool: Remove Empty ROM Folders" "Remove some or all of the empty ROM folders"
   "Tool: Compress Games" "Compress games for systems that support it"
   "Install: RetroDECK Controller Layouts" "Install the custom RetroDECK controller layouts on Steam"
   "Install: PS3 Firmware" "Download and install PS3 firmware for use with the RPCS3 emulator"
@@ -583,6 +585,34 @@ configurator_retrodeck_tools_dialog() {
   "Tool: Move Folders" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_retrodeck_move_tool_dialog
+  ;;
+
+  "Tool: Remove Empty ROM Folders" )
+    log i "Configurator: opening \"$choice\" menu"
+    find_empty_rom_folders
+
+    choice=$(zenity \
+        --list --width=1200 --height=720 --title "RetroDECK Configurator - RetroDECK: Remove Empty ROM Folders" \
+        --checklist --hide-column=3 --ok-label="Remove Selected" --extra-button="Remove All" \
+        --separator="," --print-column=2 \
+        --text="Choose which ROM folders to remove:" \
+        --column "Remove?" \
+        --column "System" \
+        "${empty_rom_folders_list[@]}")
+    
+    local rc=$?
+    if [[ $rc == "0" && ! -z $choice ]]; then # User clicked "Remove Selected" with at least one system selected
+      IFS="," read -ra folders_to_remove <<< "$choice"
+      for folder in "${folders_to_remove[@]}"; do
+        log i "Removing empty folder $folder"
+        rm -f "$folder"
+      done
+    elif [[ ! -z $choice ]]; then # User clicked "Remove All"
+      for folder in "${all_empty_folders[@]}"; do
+        log i "Removing empty folder $folder"
+        rm -f "$folder"
+      done
+    fi
   ;;
 
   "Tool: Compress Games" )
