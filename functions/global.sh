@@ -132,6 +132,11 @@ if [[ ! -d "$rd_logs_folder/ES-DE" ]]; then
     dir_prep "$rd_logs_folder/ES-DE" "$es_source_logs"
 fi
 
+# Initialize location of Godot temp data files, if it doesn't exist
+if [[ ! -d "/var/config/retrodeck/godot" ]]; then
+  create_dir "/var/config/retrodeck/godot"
+fi
+
 # We moved the lockfile in /var/config/retrodeck in order to solve issue #53 - Remove in a few versions
 if [[ -f "$HOME/retrodeck/.lock" ]]; then
   mv "$HOME/retrodeck/.lock" $lockfile
