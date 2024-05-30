@@ -26,6 +26,29 @@ compress_game() {
   elif [[ "$1" == "rvz" ]]; then
     dolphin-tool convert -f rvz -b 131072 -c zstd -l 5 -i "$source_file" -o "$dest_file.rvz"
   fi
+
+  if [[ $post_compression_cleanup == "true" ]]; then # Remove file(s) if requested
+    if [[ -f "${file%.*}.$compatible_compression_format" ]]; then
+      log i "Performing post-compression file cleanup"
+      if [[ "$file" == *".cue" ]]; then
+        local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" "$file")
+        local file_path=$(dirname "$(realpath "$file")")
+        while IFS= read -r line
+        do
+          log i "Removing file $file_path/$line"
+          rm -f "$file_path/$line"
+        done < <(printf '%s\n' "$cue_bin_files")
+        log i "Removing file $(realpath $file)"
+        rm -f $(realpath "$file")
+      else
+        log i "Removing file $(realpath $file)"
+        rm -f "$(realpath "$file")"
+      fi
+    else
+      log i "Compressed file ${file%.*}.$compatible_compression_format not found, skipping original file deletion"
+      configurator_generic_dialog "RetroDECK Configurator - RetroDECK: Compression Tool" "A compressed version of the file was not found, skipping deletion."
+    fi
+  fi
 }
 
 find_compatible_compression_format() {
@@ -96,6 +119,71 @@ validate_for_chd() {
 	fi
 }
 
+find_compatible_games() {
+  # The function takes the following arguments, which alter what files are compressed:
+  # "everything" - Compresses all games found into their compatible formats
+  # "all" - Compresses a list of user-chosen files into their compatible formats
+  # "chd" or "zip" or "rvz" - Compresses a list of user-chosen files into the given format
+
+  if [[ -f "$godot_compression_compatible_games" ]]; then
+    rm -f "$godot_compression_compatible_games" # Godot data transfer temp files
+  fi
+  touch "$godot_compression_compatible_games"
+
+  local compressable_games_list=()
+  local all_compressable_games=()
+  local games_to_compress=()
+  local target_selection="$1"
+
+  if [[ "$1" == "everything" ]]; then
+    local compression_format="all"
+  else
+    local compression_format="$1"
+  fi
+
+  if [[ $compression_format == "all" ]]; then
+    local compressable_systems_list=$(cat $compression_targets | sed '/^$/d' | sed '/^\[/d')
+  else
+    local compressable_systems_list=$(sed -n '/\['"$compression_format"'\]/, /\[/{ /\['"$compression_format"'\]/! { /\[/! p } }' $compression_targets | sed '/^$/d')
+  fi
+
+  while IFS= read -r system # Find and validate all games that are able to be compressed with this compression type
+  do
+    compression_candidates=$(find "$roms_folder/$system" -type f -not -iname "*.txt")
+    if [[ ! -z $compression_candidates ]]; then
+      while IFS= read -r game
+      do
+        local compatible_compression_format=$(find_compatible_compression_format "$game")
+        if [[ $compression_format == "chd" ]]; then
+          if [[ $compatible_compression_format == "chd" ]]; then
+            all_compressable_games=("${all_compressable_games[@]}" "$game")
+            compressable_games_list=("${compressable_games_list[@]}" "false" "${game#$roms_folder}" "$game")
+            echo "${game}"^"$compatible_compression_format" >> "$godot_compression_compatible_games"
+          fi
+        elif [[ $compression_format == "zip" ]]; then
+          if [[ $compatible_compression_format == "zip" ]]; then
+            all_compressable_games=("${all_compressable_games[@]}" "$game")
+            compressable_games_list=("${compressable_games_list[@]}" "false" "${game#$roms_folder}" "$game")
+            echo "${game}"^"$compatible_compression_format" >> "$godot_compression_compatible_games"
+          fi
+        elif [[ $compression_format == "rvz" ]]; then
+          if [[ $compatible_compression_format == "rvz" ]]; then
+            all_compressable_games=("${all_compressable_games[@]}" "$game")
+            compressable_games_list=("${compressable_games_list[@]}" "false" "${game#$roms_folder}" "$game")
+            echo "${game}"^"$compatible_compression_format" >> "$godot_compression_compatible_games"
+          fi
+        elif [[ $compression_format == "all" ]]; then
+          if [[ ! $compatible_compression_format == "none" ]]; then
+            all_compressable_games=("${all_compressable_games[@]}" "$game")
+            compressable_games_list=("${compressable_games_list[@]}" "false" "${game#$roms_folder}" "$game")
+            echo "${game}"^"$compatible_compression_format" >> "$godot_compression_compatible_games"
+          fi
+        fi
+      done < <(printf '%s\n' "$compression_candidates")
+    fi
+  done < <(printf '%s\n' "$compressable_systems_list")
+}
+
 cli_compress_single_game() {
 	# This function will compress a single file passed from the CLI arguments
   # USAGE: cli_compress_single_game $full_file_path
@@ -109,26 +197,6 @@ cli_compress_single_game() {
       if [[ ! $compatible_compression_format == "none" ]]; then
         log i "$(basename "$file") can be compressed to $compatible_compression_format"
         compress_game "$compatible_compression_format" "$file" "$system"
-        if [[ $post_compression_cleanup == [yY] ]]; then # Remove file(s) if requested
-          if [[ -f "${file%.*}.$compatible_compression_format" ]]; then
-            if [[ $(basename "$file") == *".cue" ]]; then
-              local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" "$file")
-              local file_path=$(dirname "$(realpath "$file")")
-              while IFS= read -r line
-              do # Remove associated .bin files
-                log i "Removing original file "$file_path/$line""
-                rm -f "$file_path/$line"
-              done < <(printf '%s\n' "$cue_bin_files") # Remove original .cue file
-              log i "Removing original file $(basename "$file")"
-              rm -f "$file"
-            else
-              log i "Removing original file $(basename "$file")"
-              rm -f "$file"
-            fi
-          else
-            log w "Compressed version of $(basename "$file") not found, skipping deletion."
-          fi
-        fi
       else
         log w "$(basename "$file") does not have any compatible compression formats."
       fi
@@ -171,26 +239,6 @@ cli_compress_all_games() {
         if [[ ! "$compatible_compression_format" == "none" ]]; then
           log i "$(basename "$file") can be compressed to $compatible_compression_format"
           compress_game "$compatible_compression_format" "$file" "$system"
-          if [[ $post_compression_cleanup == [yY] ]]; then # Remove file(s) if requested
-            if [[ -f "${file%.*}.$compatible_compression_format" ]]; then
-              if [[ "$file" == *".cue" ]]; then
-                local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" "$file")
-                local file_path=$(dirname "$(realpath "$file")")
-                while IFS= read -r line
-                do # Remove associated .bin files
-                  log i "Removing original file "$file_path/$line""
-                  rm -f "$file_path/$line"
-                done < <(printf '%s\n' "$cue_bin_files") # Remove original .cue file
-                log i "Removing original file "$file""
-                rm -f $(realpath "$file")
-              else
-                log i "Removing original file "$file""
-                rm -f $(realpath "$file")
-              fi
-            else
-              log w "Compressed version of $(basename "$file") not found, skipping deletion."
-            fi
-          fi
         else
           log w "No compatible compression format found for $(basename "$file")"
         fi

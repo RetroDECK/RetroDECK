@@ -7,12 +7,13 @@ source /app/libexec/checks.sh
 source /app/libexec/compression.sh
 source /app/libexec/dialogs.sh
 source /app/libexec/logger.sh
-source /app/libexec/functions.sh
+source /app/libexec/other_functions.sh
 source /app/libexec/multi_user.sh
 source /app/libexec/framework.sh
 source /app/libexec/post_update.sh
 source /app/libexec/prepare_component.sh
 source /app/libexec/presets.sh
+source /app/libexec/configurator_fuctions.sh
 
 # Static variables
 rd_conf="/var/config/retrodeck/retrodeck.cfg"                                                                         # RetroDECK config file path
@@ -52,6 +53,8 @@ pretty_system_names_reference_list="$emuconfigs/defaults/retrodeck/reference_lis
 # Godot data transfer temp files
 
 godot_bios_files_checked="/var/config/retrodeck/godot/godot_bios_files_checked.tmp"
+godot_current_preset_settings="/var/config/retrodeck/godot/godot_current_preset_settings.tmp"
+godot_compression_compatible_games="/var/config/retrodeck/godot/godot_compression_compatible_games.tmp"
 
 # Config files for emulators with single config files
 
@@ -129,6 +132,11 @@ if [ ! -d "$rd_logs_folder" ]; then
 fi
 if [[ ! -d "$rd_logs_folder/ES-DE" ]]; then
     dir_prep "$rd_logs_folder/ES-DE" "$es_source_logs"
+fi
+
+# Initialize location of Godot temp data files, if it doesn't exist
+if [[ ! -d "/var/config/retrodeck/godot" ]]; then
+  create_dir "/var/config/retrodeck/godot"
 fi
 
 # We moved the lockfile in /var/config/retrodeck in order to solve issue #53 - Remove in a few versions

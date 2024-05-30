@@ -794,28 +794,6 @@ configurator_compress_single_game_dialog() {
       echo "# Compressing $(basename "$file") to $compatible_compression_format format" # This updates the Zenity dialog
       log i "Compressing $(basename "$file") to $compatible_compression_format format"
       compress_game "$compatible_compression_format" "$file" "$system"
-      if [[ $post_compression_cleanup == "true" ]]; then # Remove file(s) if requested
-        if [[ -f "${file%.*}.$compatible_compression_format" ]]; then
-          log i "Performing post-compression file cleanup"
-          if [[ "$file" == *".cue" ]]; then
-            local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" "$file")
-            local file_path=$(dirname "$(realpath "$file")")
-            while IFS= read -r line
-            do
-              log i "Removing file $file_path/$line"
-              rm -f "$file_path/$line"
-            done < <(printf '%s\n' "$cue_bin_files")
-            log i "Removing file $(realpath $file)"
-            rm -f $(realpath "$file")
-          else
-            log i "Removing file $(realpath $file)"
-            rm -f "$(realpath "$file")"
-          fi
-        else
-          log i "Compressed file ${file%.*}.$compatible_compression_format not found, skipping original file deletion"
-          configurator_generic_dialog "RetroDECK Configurator - RetroDECK: Compression Tool" "A compressed version of the file was not found, skipping deletion."
-        fi
-      fi
       ) |
       zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -835,54 +813,7 @@ configurator_compress_single_game_dialog() {
 configurator_compress_multiple_games_dialog() {
   # This dialog will display any games it finds to be compressable, from the systems listed under each compression type in compression_targets.cfg
 
-  local compressable_games_list=()
-  local all_compressable_games=()
-  local games_to_compress=()
-  local target_selection="$1"
-
-  if [[ "$1" == "everything" ]]; then
-    local compression_format="all"
-  else
-    local compression_format="$1"
-  fi
-
-  if [[ $compression_format == "all" ]]; then
-    local compressable_systems_list=$(cat $compression_targets | sed '/^$/d' | sed '/^\[/d')
-  else
-    local compressable_systems_list=$(sed -n '/\['"$compression_format"'\]/, /\[/{ /\['"$compression_format"'\]/! { /\[/! p } }' $compression_targets | sed '/^$/d')
-  fi
-
-  while IFS= read -r system # Find and validate all games that are able to be compressed with this compression type
-  do
-    compression_candidates=$(find "$roms_folder/$system" -type f -not -iname "*.txt")
-    if [[ ! -z $compression_candidates ]]; then
-      while IFS= read -r game
-      do
-        local compatible_compression_format=$(find_compatible_compression_format "$game")
-        if [[ $compression_format == "chd" ]]; then
-          if [[ $compatible_compression_format == "chd" ]]; then
-            all_compressable_games=("${all_compressable_games[@]}" "$game")
-            compressable_games_list=("${compressable_games_list[@]}" "false" "${game#$roms_folder}" "$game")
-          fi
-        elif [[ $compression_format == "zip" ]]; then
-          if [[ $compatible_compression_format == "zip" ]]; then
-            all_compressable_games=("${all_compressable_games[@]}" "$game")
-            compressable_games_list=("${compressable_games_list[@]}" "false" "${game#$roms_folder}" "$game")
-          fi
-        elif [[ $compression_format == "rvz" ]]; then
-          if [[ $compatible_compression_format == "rvz" ]]; then
-            all_compressable_games=("${all_compressable_games[@]}" "$game")
-            compressable_games_list=("${compressable_games_list[@]}" "false" "${game#$roms_folder}" "$game")
-          fi
-        elif [[ $compression_format == "all" ]]; then
-          if [[ ! $compatible_compression_format == "none" ]]; then
-            all_compressable_games=("${all_compressable_games[@]}" "$game")
-            compressable_games_list=("${compressable_games_list[@]}" "false" "${game#$roms_folder}" "$game")
-          fi
-        fi
-      done < <(printf '%s\n' "$compression_candidates")
-    fi
-  done < <(printf '%s\n' "$compressable_systems_list")
+  find_compatible_games "$1"
 
   if [[ ! "$target_selection" == "everything" ]]; then # If the user chose to not auto-compress everything
     choice=$(zenity \
@@ -922,27 +853,6 @@ configurator_compress_multiple_games_dialog() {
       games_left_to_compress=$((games_left_to_compress-1))
       log i "Games left to compress: $games_left_to_compress"
       compress_game "$compression_format" "$file" "$system"
-      if [[ $post_compression_cleanup == "true" ]]; then # Remove file(s) if requested
-        if [[ -f "${file%.*}.$compatible_compression_format" ]]; then
-          if [[ "$file" == *".cue" ]]; then
-            local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" "$file")
-            local file_path=$(dirname "$(realpath "$file")")
-            while IFS= read -r line
-            do
-              log i "Removing file $file_path/$line"
-              rm -f "$file_path/$line"
-            done < <(printf '%s\n' "$cue_bin_files")
-            log i "Removing file $(realpath $file)"
-            rm -f $(realpath "$file")
-          else
-            log i "Removing file $(realpath $file)"
-            rm -f "$(realpath "$file")"
-          fi
-        else
-          log i "Compressed file ${file%.*}.$compatible_compression_format not found, skipping original file deletion"
-          configurator_generic_dialog "RetroDECK Configurator - RetroDECK: Compression Tool" "Compression of $(basename $file) failed, skipping deletion."
-        fi
-      fi
     done
     ) |
     zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
