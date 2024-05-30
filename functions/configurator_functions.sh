@@ -5,7 +5,9 @@ check_bios_files() {
   # There is a "basic" and "expert" mode which outputs different levels of data
   # USAGE: check_bios_files "mode"
   
-  rm -f "$godot_bios_files_checked" # Godot data transfer temp files
+  if [[ -f "$godot_bios_files_checked" ]]; then
+    rm -f "$godot_bios_files_checked" # Godot data transfer temp files
+  fi
   touch "$godot_bios_files_checked"
 
   while IFS="^" read -r bios_file bios_subdir bios_hash bios_system bios_desc
