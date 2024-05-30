@@ -26,6 +26,29 @@ compress_game() {
   elif [[ "$1" == "rvz" ]]; then
     dolphin-tool convert -f rvz -b 131072 -c zstd -l 5 -i "$source_file" -o "$dest_file.rvz"
   fi
+
+  if [[ $post_compression_cleanup == "true" ]]; then # Remove file(s) if requested
+    if [[ -f "${file%.*}.$compatible_compression_format" ]]; then
+      log i "Performing post-compression file cleanup"
+      if [[ "$file" == *".cue" ]]; then
+        local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" "$file")
+        local file_path=$(dirname "$(realpath "$file")")
+        while IFS= read -r line
+        do
+          log i "Removing file $file_path/$line"
+          rm -f "$file_path/$line"
+        done < <(printf '%s\n' "$cue_bin_files")
+        log i "Removing file $(realpath $file)"
+        rm -f $(realpath "$file")
+      else
+        log i "Removing file $(realpath $file)"
+        rm -f "$(realpath "$file")"
+      fi
+    else
+      log i "Compressed file ${file%.*}.$compatible_compression_format not found, skipping original file deletion"
+      configurator_generic_dialog "RetroDECK Configurator - RetroDECK: Compression Tool" "A compressed version of the file was not found, skipping deletion."
+    fi
+  fi
 }
 
 find_compatible_compression_format() {
