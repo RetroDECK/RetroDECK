@@ -119,6 +119,71 @@ validate_for_chd() {
 	fi
 }
 
+find_compatible_games() {
+  # The function takes the following arguments, which alter what files are compressed:
+  # "everything" - Compresses all games found into their compatible formats
+  # "all" - Compresses a list of user-chosen files into their compatible formats
+  # "chd" or "zip" or "rvz" - Compresses a list of user-chosen files into the given format
+
+  if [[ -f "$godot_compression_compatible_games" ]]; then
+    rm -f "$godot_compression_compatible_games" # Godot data transfer temp files
+  fi
+  touch "$godot_compression_compatible_games"
+
+  local compressable_games_list=()
+  local all_compressable_games=()
+  local games_to_compress=()
+  local target_selection="$1"
+
+  if [[ "$1" == "everything" ]]; then
+    local compression_format="all"
+  else
+    local compression_format="$1"
+  fi
+
+  if [[ $compression_format == "all" ]]; then
+    local compressable_systems_list=$(cat $compression_targets | sed '/^$/d' | sed '/^\[/d')
+  else
+    local compressable_systems_list=$(sed -n '/\['"$compression_format"'\]/, /\[/{ /\['"$compression_format"'\]/! { /\[/! p } }' $compression_targets | sed '/^$/d')
+  fi
+
+  while IFS= read -r system # Find and validate all games that are able to be compressed with this compression type
+  do
+    compression_candidates=$(find "$roms_folder/$system" -type f -not -iname "*.txt")
+    if [[ ! -z $compression_candidates ]]; then
+      while IFS= read -r game
+      do
+        local compatible_compression_format=$(find_compatible_compression_format "$game")
+        if [[ $compression_format == "chd" ]]; then
+          if [[ $compatible_compression_format == "chd" ]]; then
+            all_compressable_games=("${all_compressable_games[@]}" "$game")
+            compressable_games_list=("${compressable_games_list[@]}" "false" "${game#$roms_folder}" "$game")
+            echo "${game}"^"$compatible_compression_format" >> "$godot_compression_compatible_games"
+          fi
+        elif [[ $compression_format == "zip" ]]; then
+          if [[ $compatible_compression_format == "zip" ]]; then
+            all_compressable_games=("${all_compressable_games[@]}" "$game")
+            compressable_games_list=("${compressable_games_list[@]}" "false" "${game#$roms_folder}" "$game")
+            echo "${game}"^"$compatible_compression_format" >> "$godot_compression_compatible_games"
+          fi
+        elif [[ $compression_format == "rvz" ]]; then
+          if [[ $compatible_compression_format == "rvz" ]]; then
+            all_compressable_games=("${all_compressable_games[@]}" "$game")
+            compressable_games_list=("${compressable_games_list[@]}" "false" "${game#$roms_folder}" "$game")
+            echo "${game}"^"$compatible_compression_format" >> "$godot_compression_compatible_games"
+          fi
+        elif [[ $compression_format == "all" ]]; then
+          if [[ ! $compatible_compression_format == "none" ]]; then
+            all_compressable_games=("${all_compressable_games[@]}" "$game")
+            compressable_games_list=("${compressable_games_list[@]}" "false" "${game#$roms_folder}" "$game")
+            echo "${game}"^"$compatible_compression_format" >> "$godot_compression_compatible_games"
+          fi
+        fi
+      done < <(printf '%s\n' "$compression_candidates")
+    fi
+  done < <(printf '%s\n' "$compressable_systems_list")
+}
+
 cli_compress_single_game() {
 	# This function will compress a single file passed from the CLI arguments
   # USAGE: cli_compress_single_game $full_file_path
