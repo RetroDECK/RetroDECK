@@ -53,6 +53,7 @@ source /app/libexec/global.sh
 #         - Move Mods folder
 #         - Move Texture Packs folder
 #       - Tool: Remove Empty ROM Folders
+#       - Tool: Rebuild All ROM Folders
 #       - Tool: Compress Games
 #         - Compress Single Game
 #         - Compress Multiple Games - CHD
@@ -561,6 +562,7 @@ configurator_retrodeck_tools_dialog() {
   local choices=(
   "Tool: Move Folders" "Move RetroDECK folders between internal/SD card or to a custom location"
   "Tool: Remove Empty ROM Folders" "Remove some or all of the empty ROM folders"
+  "Tool: Rebuild All ROM Folders" "Rebuild any missing default ROM folders"
   "Tool: Compress Games" "Compress games for systems that support it"
   "Install: RetroDECK Controller Layouts" "Install the custom RetroDECK controller layouts on Steam"
   "Install: PS3 Firmware" "Download and install PS3 firmware for use with the RPCS3 emulator"
@@ -613,6 +615,16 @@ configurator_retrodeck_tools_dialog() {
         rm -f "$folder"
       done
     fi
+    
+    configurator_generic_dialog "RetroDECK Configurator - Remove Empty ROM Folders" "The removal process is complete."
+    configurator_retrodeck_tools_dialog
+  ;;
+
+  "Tool: Rebuild All ROM Folders" )
+    log i "Configurator: opening \"$choice\" menu"
+    es-de --create-system-dirs
+    configurator_generic_dialog "RetroDECK Configurator - Rebuild All ROM Folders" "The rebuilding process is complete.\n\nAll missing default ROM folders will now exist in $roms_folder"
+    configurator_retrodeck_tools_dialog
   ;;
 
   "Tool: Compress Games" )
