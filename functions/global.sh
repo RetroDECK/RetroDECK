@@ -13,6 +13,7 @@ source /app/libexec/framework.sh
 source /app/libexec/post_update.sh
 source /app/libexec/prepare_component.sh
 source /app/libexec/presets.sh
+source /app/libexec/configurator_fuctions.sh
 
 # Static variables
 rd_conf="/var/config/retrodeck/retrodeck.cfg"                                                                         # RetroDECK config file path
