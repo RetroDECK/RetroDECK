@@ -130,10 +130,10 @@ find_compatible_games() {
   fi
   touch "$godot_compression_compatible_games"
 
-  local compressable_games_list=()
-  local all_compressable_games=()
-  local games_to_compress=()
-  local target_selection="$1"
+  compressable_games_list=()
+  all_compressable_games=()
+  games_to_compress=()
+  target_selection="$1"
 
   if [[ "$1" == "everything" ]]; then
     local compression_format="all"
