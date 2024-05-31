@@ -41,14 +41,14 @@ build_preset_list_options() {
   fi
   touch "$godot_current_preset_settings"
 
-  local preset="$1"
+  preset="$1"
   pretty_preset_name=${preset//_/ } # Preset name prettification
   pretty_preset_name=$(echo $pretty_preset_name | awk '{for(i=1;i<=NF;i++){$i=toupper(substr($i,1,1))substr($i,2)}}1') # Preset name prettification
-  local current_preset_settings=()
-  local current_enabled_systems=()
-  local current_disabled_systems=()
-  local changed_systems=()
-  local changed_presets=()
+  current_preset_settings=()
+  current_enabled_systems=()
+  current_disabled_systems=()
+  changed_systems=()
+  changed_presets=()
   local section_results=$(sed -n '/\['"$preset"'\]/, /\[/{ /\['"$preset"'\]/! { /\[/! p } }' $rd_conf | sed '/^$/d')
 
   while IFS= read -r config_line
