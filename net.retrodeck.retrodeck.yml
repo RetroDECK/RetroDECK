@@ -1120,16 +1120,15 @@ modules:
   - name: ruffle
     buildsystem: simple
     build-commands:
-      # Copying the user icon
-      - mkdir -p ${FLATPAK_DEST}/retrodeck
-      - cp retrodeck.png ${FLATPAK_DEST}/retrodeck
+      - import datetime
+      - current_date = datetime.date.today().isoformat()
       - mkdir -p ${FLATPAK_DEST}/share/ruffle
-      - tar xvzf "ruffle-nightly-2024_05_29-linux-x86_64.tar.gz" -C "${FLATPAK_DEST}/share/ruffle"
+      - tar xvzf "ruffle-nightly-{current_date}-linux-x86_64.tar.gz" -C "${FLATPAK_DEST}/share/ruffle"
       - chmod +x "${FLATPAK_DEST}/share/ruffle/ruffle"
       - ln -s ${FLATPAK_DEST}/share/ruffle/ruffle ${FLATPAK_DEST}/bin/ruffle
     sources:
       - type: file
-        url: https://github.com/ruffle-rs/ruffle/releases/download/nightly-2024-05-29/ruffle-nightly-2024_05_29-linux-x86_64.tar.gz
+        url: https://github.com/ruffle-rs/ruffle/releases/download/nightly-2024-05-29/ruffle-nightly-{current_date}-linux-x86_64.tar.gz
         sha256: RUFFLESHAPLACEHOLDER
       - type: file
         path: res/retrodeck.png
