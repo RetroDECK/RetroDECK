@@ -92,6 +92,7 @@ do
       tag=$(git ls-remote "$url" | tail -n 1 | cut -f2 | sed 's|refs/tags/||')
       echo "Tag found: $tag"
       /bin/sed -i 's^'"$placeholder"'^'"$tag"'^' $rd_manifest
+    ;;
 
     "latestghrelease" )
       echo
