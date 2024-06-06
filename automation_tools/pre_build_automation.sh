@@ -8,6 +8,8 @@
 #     Needs the URL of the file, in this line format: hash^PLACEHOLDERTEXT^url
 # latestcommit: Finds the most recent commit of a git repo and updated the placeholder in the manifest.
 #     Needs the URL of the repo and the branch to find the latest commit from, in this line format: latestcommit^PLACEHOLDERTEXT^url^branch
+# latestghtag: Finds the most recent tag on a GitHub repo, for repos that don't have normal releases, but also shouldn't use the latest commit
+#     Needs the URL of the repo, in this line format: latestghtag^PLACEHOLDERTEXT^url
 # latestghrelease: Finds the download URL and SHA256 hash of the latest release from a git repo.
 #     Needs the API URL of the repo, in this line format: latestappimage^PLACEHOLDERTEXT^https://api.github.com/repos/<owner-name>/<repo-name>/releases/latest^<file suffix>
 #     As this command updates two different placeholders (one for the URL, one for the file hash) in the manifest, 
@@ -82,10 +84,19 @@ do
       /bin/sed -i 's^'"$placeholder"'^'"$commit"'^' $rd_manifest
     ;;
 
+    "latestghtag" )
+      echo
+      echo "Placeholder text: $placeholder"
+      echo "Repo to get the latest tag from: $url"
+      echo
+      tag=$(git ls-remote "$url" | tail -n 1 | cut -f2 | sed 's|refs/tags/||')
+      echo "Tag found: $tag"
+      /bin/sed -i 's^'"$placeholder"'^'"$tag"'^' $rd_manifest
+
     "latestghrelease" )
       echo
       echo "Placeholder text: $placeholder"
-      echo "Repo to look for AppImage releases: $url"
+      echo "Repo to look for latest releases: $url"
       echo
       ghreleaseurl=$(curl -s "$url" | grep browser_download_url | grep "$branch\""$ | cut -d : -f 2,3 | tr -d \" | sed -n 1p | tr -d ' ')
       echo "GitHub release URL found: $ghreleaseurl"
