@@ -93,7 +93,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/monkeyx-net/RetroDECK.git
-        branch: THISBRANCH
+        branch: feat/ruffle
 
   - name: xmlstarlet
     config-opts:
