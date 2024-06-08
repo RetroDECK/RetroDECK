@@ -1125,7 +1125,7 @@ modules:
       - ln -s ${FLATPAK_DEST}/share/ruffle/ruffle ${FLATPAK_DEST}/bin/ruffle
     sources:
       - type: file
-        url: RUFFLEURLPLACEHOLDER
+        url: RUFFLEGHTAGPLACEHOLDER
 
   # Ruffle - END
 
