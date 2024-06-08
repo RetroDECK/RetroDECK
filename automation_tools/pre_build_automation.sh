@@ -88,10 +88,10 @@ do
       echo
       echo "Placeholder text: $placeholder"
       echo "Repo to get the latest tag from: $url"
-      calculated_url=$(eval echo "$url")  # in case the url has to be calculated from an expression
-      echo "URL to hash: $calculated_url"
+      calculated_url=$(eval echo "$url$(git ls-remote https://github.com/ruffle-rs/ruffle.git | tail -n 1 | cut -f2 | sed 's|refs/tags/||')/ruffle-$(git ls-remote https://github.com/ruffle-rs/ruffle.git | tail -n 1 | cut -f2 | sed -E 's|refs/tags/||; s/-/_/2; s/-/_/2')-linux-x86_64.tar.gz")  # in case the url has to be calculated from an expression
+      echo "Information being injected: $calculated_url"
       echo
-      tag=$(git ls-remote "$calculated_url" | tail -n 1 | cut -f2 | sed 's|refs/tags/||')
+      tag=$calculated_url
       echo "Tag found: $tag"
       /bin/sed -i 's^'"$placeholder"'^'"$tag"'^' $rd_manifest
     ;;
