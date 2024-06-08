@@ -85,7 +85,7 @@ modules:
         mkdir -p ${FLATPAK_DEST}/retrodeck/
         if [[ $VERSION == *"cooker"* ]];
         then
-          VERSION="$VERSION-LeaksZetas"
+          VERSION="$VERSION-VERSIONPLACEHOLDER"
         fi
         echo $VERSION >> ${FLATPAK_DEST}/retrodeck/version
         cat ${FLATPAK_DEST}/retrodeck/version
@@ -571,7 +571,7 @@ modules:
     sources:
       - type: archive
         url: https://buildbot.libretro.com/nightly/linux/x86_64/RetroArch_cores.7z
-        sha256: 084f9d788afc26a93077a8f5995767f111d785dce44c431ed87acaa2d2279dd8
+        sha256: RANIGHTLYCORESPLACEHOLDER
 
   - name: retroarch-cores
     buildsystem: simple
@@ -590,7 +590,7 @@ modules:
     sources:
       - type: archive
         url: https://buildbot.libretro.com/nightly/linux/x86_64/latest/sameduck_libretro.so.zip
-        sha256: d888346fa00539b1a0fb38dd6c8cfddfdaa8413d3f54d0883103c27f030dae51
+        sha256: 9d3f830dbe17459949638b6f2b114a7e2951687dbd43705b1286e02a5c5dcc95
 
   - name: ppsspp-bios
     buildsystem: simple
@@ -600,7 +600,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/hrydgard/ppsspp/archive/refs/heads/master.zip
-        sha256: 7933e336149cf8fbbf7acb69514387f63f2773896a0c137182a259a0396482ac
+        sha256: PPSSPPBIOSHASHPLACEHOLDER
 
   - name: msx-bios
     buildsystem: simple
@@ -611,7 +611,7 @@ modules:
     sources:
       - type: archive
         url: http://bluemsx.msxblue.com/rel_download/blueMSXv282full.zip
-        sha256: 5b68e1bc41590302c762093243e66602da2b2f6951a595a06b9b436b0e458bc6
+        sha256: MSXBIOSHASHPLACEHOLDER
         strip-components: 0
   
   - name: amiga-bios
@@ -750,7 +750,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/Venomalia/UniversalDynamicInput.git
-        commit: 64e0a43e3c29dded5f8d03fff96bd56d4c6f4c1d
+        commit: UNIVERSALDYNAMICINPUTCOMMITPLACEHOLDER
 
   # Dolphin - END
 
@@ -826,7 +826,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/mborgerson/xemu-hdd-image/releases/latest/download/xbox_hdd.qcow2.zip
-        sha256: d9f5a4c1224ff24cf9066067bda70cc8b9c874ea22b9c542eb2edbfc4621bb39
+        sha256: XEMUHDDHASHPLACEHOLDER
 
   # XEMU - END
 
@@ -1114,19 +1114,20 @@ modules:
       - install -D -t ${FLATPAK_DEST}/bin/ bin/Cemu_relwithdebinfo Cemu-wrapper
 
   # Cemu - END
-  
-  # Ruffle - START
+
+   # Ruffle - START
 
   - name: ruffle
     buildsystem: simple
     build-commands:
-      - tar xvzf "https://github.com/ruffle-rs/ruffle/releases/download/nightly-2024-06-06/ruffle-nightly-2024_06_06-linux-x86_64.tar.gz" -C "${FLATPAK_DEST}/share/ruffle"
+      - tar xvzf "RUFFLEURLPLACEHOLDER" -C "${FLATPAK_DEST}/share/ruffle"
       - chmod +x "${FLATPAK_DEST}/share/ruffle/ruffle"
       - ln -s ${FLATPAK_DEST}/share/ruffle/ruffle ${FLATPAK_DEST}/bin/ruffle
     sources:
       - type: file
-        url: https://github.com/ruffle-rs/ruffle/releases/download/nightly-2024-06-06/ruffle-nightly-2024_06_06-linux-x86_64.tar.gz
-        sha256: f65483653e55cfbbae95d90e02e46c35a795935983553fa85a0b8c1bd96c72d8
+        url: RUFFLEURLPLACEHOLDER
+        sha256: RUFFLESHAPLACEHOLDER
+
 
   # Ruffle - END
 
@@ -1145,7 +1146,7 @@ modules:
     sources:
       - type: file
         url: https://github.com/Vita3K/Vita3K/releases/download/continuous/ubuntu-latest.zip
-        sha256: f1f4bce1010c9f84cc7634b41049a33b32397c001c3a52b193a8469d373052c8
+        sha256: VITA3KSHAPLACEHOLDER
       - type: file
         path: res/retrodeck.png
 
@@ -1218,8 +1219,8 @@ modules:
       - cp -rn files/* /app
     sources:
     - type: archive
-      url: https://github.com/XargonWan/RetroDECK-MAME/releases/download/main-170424.00/RetroDECK-MAME-Artifact.tar.gz
-      sha256: f6458beca8b85e4ce51d109fd6dd828939d4b32862f59e15ecd8eaf96f0752ed
+      url: RETRODECKMAMEURLPLACEHOLDER
+      sha256: RETRODECKMAMEPLACEHOLDER
 
   # MAME - End
 
