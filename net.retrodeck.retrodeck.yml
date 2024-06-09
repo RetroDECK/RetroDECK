@@ -590,7 +590,7 @@ modules:
     sources:
       - type: archive
         url: https://buildbot.libretro.com/nightly/linux/x86_64/latest/sameduck_libretro.so.zip
-        sha256: 9d3f830dbe17459949638b6f2b114a7e2951687dbd43705b1286e02a5c5dcc95
+        sha256: a36a4c6085e1cf260cf3c4ea32b2a885aeb0cd016a34e4814e840e8c1fa210a2
 
   - name: ppsspp-bios
     buildsystem: simple
