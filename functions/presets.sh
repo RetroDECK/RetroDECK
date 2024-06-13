@@ -4,28 +4,7 @@ change_preset_dialog() {
   # This function will build a list of all systems compatible with a given preset, their current enable/disabled state and allow the user to change one or more
   # USAGE: change_preset_dialog "$preset"
 
-  local preset="$1"
-  pretty_preset_name=${preset//_/ } # Preset name prettification
-  pretty_preset_name=$(echo $pretty_preset_name | awk '{for(i=1;i<=NF;i++){$i=toupper(substr($i,1,1))substr($i,2)}}1') # Preset name prettification
-  local current_preset_settings=()
-  local current_enabled_systems=()
-  local current_disabled_systems=()
-  local changed_systems=()
-  local changed_presets=()
-  local section_results=$(sed -n '/\['"$preset"'\]/, /\[/{ /\['"$preset"'\]/! { /\[/! p } }' $rd_conf | sed '/^$/d')
-
-  while IFS= read -r config_line
-    do
-      system_name=$(get_setting_name "$config_line" "retrodeck")
-      all_systems=("${all_systems[@]}" "$system_name")
-      system_value=$(get_setting_value "$rd_conf" "$system_name" "retrodeck" "$preset")
-      if [[ "$system_value" == "true" ]]; then
-        current_enabled_systems=("${current_enabled_systems[@]}" "$system_name")
-      elif [[ "$system_value" == "false" ]]; then
-        current_disabled_systems=("${current_disabled_systems[@]}" "$system_name")
-      fi
-      current_preset_settings=("${current_preset_settings[@]}" "$system_value" "$(make_name_pretty $system_name)" "$system_name")
-  done < <(printf '%s\n' "$section_results")
+  build_preset_list_options "$1"
 
   choice=$(zenity \
     --list --width=1200 --height=720 \
@@ -42,7 +21,56 @@ change_preset_dialog() {
 
   if [[ ! -z $choice || "$rc" == 0 ]]; then
     (
-    IFS="," read -ra choices <<< "$choice"
+      make_preset_changes
+    ) |
+    zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator Utility - Presets Configuration" \
+    --text="Setting up your presets, please wait..."
+  else
+    echo "No choices made"
+  fi
+}
+
+build_preset_list_options() {
+  # This function will build a list of all the systems available for a given preset
+  # The list will be generated into a Godot temp file and the variable $current_preset_settings
+
+  if [[ -f "$godot_current_preset_settings" ]]; then
+    rm -f "$godot_current_preset_settings" # Godot data transfer temp files
+  fi
+  touch "$godot_current_preset_settings"
+
+  preset="$1"
+  pretty_preset_name=${preset//_/ } # Preset name prettification
+  pretty_preset_name=$(echo $pretty_preset_name | awk '{for(i=1;i<=NF;i++){$i=toupper(substr($i,1,1))substr($i,2)}}1') # Preset name prettification
+  current_preset_settings=()
+  current_enabled_systems=()
+  current_disabled_systems=()
+  changed_systems=()
+  changed_presets=()
+  local section_results=$(sed -n '/\['"$preset"'\]/, /\[/{ /\['"$preset"'\]/! { /\[/! p } }' $rd_conf | sed '/^$/d')
+
+  while IFS= read -r config_line
+    do
+      system_name=$(get_setting_name "$config_line" "retrodeck")
+      all_systems=("${all_systems[@]}" "$system_name")
+      system_value=$(get_setting_value "$rd_conf" "$system_name" "retrodeck" "$preset")
+      if [[ "$system_value" == "true" ]]; then
+        current_enabled_systems=("${current_enabled_systems[@]}" "$system_name")
+      elif [[ "$system_value" == "false" ]]; then
+        current_disabled_systems=("${current_disabled_systems[@]}" "$system_name")
+      fi
+      current_preset_settings=("${current_preset_settings[@]}" "$system_value" "$(make_name_pretty $system_name)" "$system_name")
+      echo "$system_value"^"$(make_name_pretty $system_name)"^"$system_name" >> "$godot_current_preset_settings"
+  done < <(printf '%s\n' "$section_results")
+}
+
+
+make_preset_changes() {
+  # This function will take an array $choices, which contains the names of systems that have been enabled for this preset and enable them in the backend
+
+  IFS="," read -ra choices <<< "$choice"
     for emulator in "${all_systems[@]}"; do
       if [[ " ${choices[*]} " =~ " ${emulator} " && ! " ${current_enabled_systems[*]} " =~ " ${emulator} " ]]; then
         changed_systems=("${changed_systems[@]}" "$emulator")
@@ -71,14 +99,6 @@ change_preset_dialog() {
     for emulator in "${changed_systems[@]}"; do
       build_preset_config $emulator ${changed_presets[*]}
     done
-    ) |
-    zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
-    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator Utility - Presets Configuration" \
-    --text="Setting up your presets, please wait..."
-  else
-    echo "No choices made"
-  fi
 }
 
 build_preset_config() {
@@ -128,7 +148,7 @@ build_preset_config() {
                     create_dir "$(realpath "$(dirname "$read_target_file")")"
                     echo "$read_setting_name = \""$new_setting_value"\"" > "$read_target_file"
                   else
-                    if [[ -z $(grep "$read_setting_name" "$read_target_file") ]]; then
+                    if [[ -z $(grep -o -P "^$read_setting_name\b" "$read_target_file") ]]; then
                       add_setting "$read_target_file" "$read_setting_name" "$new_setting_value" "$read_config_format" "$section"
                     else
                       set_setting_value "$read_target_file" "$read_setting_name" "$new_setting_value" "$read_config_format" "$section"

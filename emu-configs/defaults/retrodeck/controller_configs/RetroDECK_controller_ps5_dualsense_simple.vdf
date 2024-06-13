@@ -1137,7 +1137,7 @@
 	{
 		"id"		"45"
 		"mode"		"radial_menu"
-		"name"		"Global Radial"
+		"name"		"Simple Radial"
 		"description"		""
 		"inputs"
 		{
@@ -1329,7 +1329,7 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press F4, F4, RD-F4.png, "
+							"binding"		"key_press F8, F8, RD-F8.png, "
 						}
 						"settings"
 						{
@@ -1349,66 +1349,6 @@
 					{
 						"bindings"
 						{
-							"binding"		"key_press F5, F5, RD-F5.png, "
-						}
-						"settings"
-						{
-							"haptic_intensity"		"2"
-						}
-					}
-				}
-				"disabled_activators"
-				{
-				}
-			}
-			"touch_menu_button_11"
-			{
-				"activators"
-				{
-					"Full_Press"
-					{
-						"bindings"
-						{
-							"binding"		"key_press F7, F7, RD-F7.png, "
-						}
-						"settings"
-						{
-							"haptic_intensity"		"2"
-						}
-					}
-				}
-				"disabled_activators"
-				{
-				}
-			}
-			"touch_menu_button_12"
-			{
-				"activators"
-				{
-					"Full_Press"
-					{
-						"bindings"
-						{
-							"binding"		"key_press F8, F8, RD-F8.png, "
-						}
-						"settings"
-						{
-							"haptic_intensity"		"2"
-						}
-					}
-				}
-				"disabled_activators"
-				{
-				}
-			}
-			"touch_menu_button_13"
-			{
-				"activators"
-				{
-					"Full_Press"
-					{
-						"bindings"
-						{
 							"binding"		"key_press F10, F10, RD-F10.png, "
 						}
 						"settings"
@@ -1421,7 +1361,7 @@
 				{
 				}
 			}
-			"touch_menu_button_14"
+			"touch_menu_button_11"
 			{
 				"activators"
 				{
@@ -1442,7 +1382,7 @@
 				{
 				}
 			}
-			"touch_menu_button_15"
+			"touch_menu_button_12"
 			{
 				"activators"
 				{
@@ -1463,7 +1403,7 @@
 				{
 				}
 			}
-			"touch_menu_button_16"
+			"touch_menu_button_13"
 			{
 				"activators"
 				{
@@ -1484,7 +1424,7 @@
 				{
 				}
 			}
-			"touch_menu_button_17"
+			"touch_menu_button_14"
 			{
 				"activators"
 				{
@@ -1505,7 +1445,7 @@
 				{
 				}
 			}
-			"touch_menu_button_18"
+			"touch_menu_button_15"
 			{
 				"activators"
 				{
@@ -1526,7 +1466,7 @@
 				{
 				}
 			}
-			"touch_menu_button_19"
+			"touch_menu_button_16"
 			{
 				"activators"
 				{
@@ -1547,10 +1487,394 @@
 				{
 				}
 			}
+			"touch_menu_button_17"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press LEFT_ALT, ALT + F4, RD-alt-f4.png, "
+							"binding"		"key_press F4, ALT + F4, RD-alt-f4.png, "
+						}
+						"settings"
+						{
+							"haptic_intensity"		"2"
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"touch_menu_button_18"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press LEFT_ALT, Wiimote - Sideways Mode, RD-wiimote-side.png, "
+							"binding"		"key_press X, Wiimote - Sideways Mode, RD-wiimote-side.png, "
+						}
+						"settings"
+						{
+							"haptic_intensity"		"2"
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"touch_menu_button_19"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press LEFT_ALT, Wiimote - Upright Mode, RD-wiimote-up.png, "
+							"binding"		"key_press Z, Wiimote - Upright Mode, RD-wiimote-up.png, "
+						}
+						"settings"
+						{
+							"haptic_intensity"		"2"
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
 		}
-		"settings"
+	}
+	"group"
+	{
+		"id"		"7"
+		"mode"		"switches"
+		"name"		""
+		"description"		""
+		"inputs"
 		{
-			"touchmenu_button_fire_type"		"0"
+			"button_escape"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"xinput_button start, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"button_menu"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"xinput_button SELECT, , "
+						}
+					}
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"controller_action CHANGE_PRESET 2 0 1, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"left_bumper"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"xinput_button shoulder_left, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"right_bumper"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"xinput_button shoulder_right, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"button_back_left"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"xinput_button y, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"button_back_right"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"xinput_button a, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"button_back_left_upper"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"xinput_button x, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"button_back_right_upper"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"xinput_button b, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"button_capture"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"controller_action SCREENSHOT, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+		}
+	}
+	"group"
+	{
+		"id"		"10"
+		"mode"		"switches"
+		"name"		""
+		"description"		""
+		"inputs"
+		{
+			"button_escape"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press LEFT_CONTROL, Quit Emulator, , "
+							"binding"		"key_press Q, Quit Emulator, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"button_menu"
+			{
+				"activators"
+				{
+					"release"
+					{
+						"bindings"
+						{
+							"binding"		"controller_action CHANGE_PRESET 1 0 1, , "
+						}
+					}
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"xinput_button SELECT, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"left_bumper"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press LEFT_CONTROL, Load State, , "
+							"binding"		"key_press A, Load State, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"right_bumper"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"key_press LEFT_CONTROL, Save State, , "
+							"binding"		"key_press S, Save State, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"button_back_left"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"xinput_button y, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"button_back_right"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"xinput_button a, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"button_back_left_upper"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"xinput_button x, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"button_back_right_upper"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"xinput_button b, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
+			"button_capture"
+			{
+				"activators"
+				{
+					"Full_Press"
+					{
+						"bindings"
+						{
+							"binding"		"controller_action SCREENSHOT, Take Steam Screenshot, , "
+						}
+					}
+				}
+				"disabled_activators"
+				{
+				}
+			}
 		}
 	}
 	"group"

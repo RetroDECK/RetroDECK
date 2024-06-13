@@ -21,6 +21,6 @@ For adding textures:
 3. Paste the textures into the correct '~/retrodeck/texture_packs/ppsspp/<TITLEID>' folder.
 
 Related wiki article can be found here:
-https://github.com/XargonWan/RetroDECK/wiki/PPSSPP%3A-Texture-Packs
+https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/ppsspp/ppsspp-texture-pack/
 
 The RetroDECK Team

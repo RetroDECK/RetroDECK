@@ -18,7 +18,7 @@ Arguments:
     --info-msg                      Print paths and config informations
     --configurator                  Starts the RetroDECK Configurator
     --compress-one <file>           Compresses target file to a compatible format
-    --compress-all <format>         Compresses all supported games into compatible format. Available formats are \"chd\", \"zip\", \"rvz\" and \"all\".
+    --compress-all <format>         Compresses all supported games into a compatible format. Available formats are \"chd\", \"zip\", \"rvz\" and \"all\".
     --reset-component <component>   Reset one or more component or emulator configs to the default values
     --reset-retrodeck               Starts the initial RetroDECK installer (backup your data first!)
 
@@ -56,8 +56,9 @@ https://retrodeck.net
       ;;
     --reset-component*)
       echo "You are about to reset one or more RetroDECK components or emulators."
-      echo "Available options are: es-de, retroarch, cemu, dolphin, duckstation, gzdoom, melonds, pcsx3, pico8, ppsspp, primehack, ryujinx, rpcs3, ryujinx, xemu, vita3k, mame, boilr, all"
+      echo "Available options are: es-de, retroarch, cemu, dolphin, duckstation, gzdoom, melonds, pcsx3, pico8, ppsspp, primehack, rpcs3, ryujinx, xemu, vita3k, mame, boilr, all"
       read -p "Please enter the component you would like to reset: " component
+      component=$(echo "$component" | tr '[:upper:]' '[:lower:]')
       if [[ "$component" =~ ^(es-de|retroarch|cemu|dolphin|duckstation|gzdoom|mame|melonds|pcsx2|ppsspp|primehack|ryujinx|rpcs3|xemu|all)$ ]]; then
         read -p "You are about to reset $component to default settings. Enter 'y' to continue, 'n' to stop: " response
         if [[ $response == [yY] ]]; then
@@ -102,8 +103,8 @@ done
 log d "Update triggered"
 # if lockfile exists
 if [ -f "$lockfile" ]; then
-  log d "Lockfile found but the version doesn't match with the config file"
   if [ "$hard_version" != "$version" ]; then
+    log d "Lockfile found but the version doesn't match with the config file"
     log i "Config file's version is $version but the actual version is $hard_version"
     if grep -qF "cooker" <<< $hard_version; then # If newly-installed version is a "cooker" build
       log d "Newly-installed version is a \"cooker\" build"
@@ -130,6 +131,7 @@ if [ -f "$lockfile" ]; then
                   log w "Removing RetroDECK data and starting fresh"
                   rm -rf /var
                   rm -rf "$HOME/retrodeck"
+                  rm -rf "$rdhome"
                   source /app/libexec/global.sh
                   finit
                 fi
@@ -180,12 +182,6 @@ if [[ $update_check == "true" ]]; then
   fi
   log i "You're running the latest version"
 fi
-
-# THIS IS A ONE-OFF FORCED REFRESH OF RETRODECK CONTROLLER PROFILES IN A 0.7.6b VERSION REFRESH - REMOVE BEFORE NEXT VERSION RELEASE
-if [[ -f "$HOME/.steam/steam/controller_base/templates/RetroDECK_controller_config.vdf" ]]; then # If RetroDECK controller profile has been previously installed
-  install_retrodeck_controller_profile
-fi
-# REMOVE BEFORE NEXT VERSION RELEASE
 
 # Normal Startup
 

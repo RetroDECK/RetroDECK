@@ -7,12 +7,13 @@ source /app/libexec/checks.sh
 source /app/libexec/compression.sh
 source /app/libexec/dialogs.sh
 source /app/libexec/logger.sh
-source /app/libexec/functions.sh
+source /app/libexec/other_functions.sh
 source /app/libexec/multi_user.sh
-source /app/libexec/patching.sh
+source /app/libexec/framework.sh
 source /app/libexec/post_update.sh
 source /app/libexec/prepare_component.sh
 source /app/libexec/presets.sh
+source /app/libexec/configurator_fuctions.sh
 
 # Static variables
 rd_conf="/var/config/retrodeck/retrodeck.cfg"                                                                         # RetroDECK config file path
@@ -50,12 +51,11 @@ incompatible_presets_reference_list="$emuconfigs/defaults/retrodeck/reference_li
 pretty_system_names_reference_list="$emuconfigs/defaults/retrodeck/reference_lists/pretty_system_names.cfg"           # An internal translation list for turning internal names (eg. gbc) to "pretty" names (Nintendo GameBoy Color)
 
 # Godot data transfer temp files
-# Check if XDG_RUNTIME_DIR is set
-if [ -n "$XDG_RUNTIME_DIR" ]; then
-  godot_bios_files_checked="$XDG_RUNTIME_DIR/godot_temp/godot_bios_files_checked.tmp"
-else
-  godot_bios_files_checked="/var/config/retrodeck/godot_temp/godot_bios_files_checked.tmp"
-fi
+
+godot_bios_files_checked="/var/config/retrodeck/godot/godot_bios_files_checked.tmp"
+godot_current_preset_settings="/var/config/retrodeck/godot/godot_current_preset_settings.tmp"
+godot_compression_compatible_games="/var/config/retrodeck/godot/godot_compression_compatible_games.tmp"
+godot_empty_roms_folders="/var/config/retrodeck/godot/godot_empty_roms_folders.tmp"
 
 # Config files for emulators with single config files
 
@@ -135,6 +135,11 @@ if [[ ! -d "$rd_logs_folder/ES-DE" ]]; then
     dir_prep "$rd_logs_folder/ES-DE" "$es_source_logs"
 fi
 
+# Initialize location of Godot temp data files, if it doesn't exist
+if [[ ! -d "/var/config/retrodeck/godot" ]]; then
+  create_dir "/var/config/retrodeck/godot"
+fi
+
 # We moved the lockfile in /var/config/retrodeck in order to solve issue #53 - Remove in a few versions
 if [[ -f "$HOME/retrodeck/.lock" ]]; then
   mv "$HOME/retrodeck/.lock" $lockfile
@@ -142,7 +147,6 @@ fi
 
 # If there is no config file I initalize the file with the the default values
 if [[ ! -f "$rd_conf" ]]; then
-  create_dir /var/config/retrodeck/logs
   log w "RetroDECK config file not found in $rd_conf"
   log i "Initializing"
   # if we are here means that the we are in a new installation, so the version is valorized with the hardcoded one
@@ -172,7 +176,7 @@ if [[ ! -f "$rd_conf" ]]; then
   set_setting_value $rd_conf "version" "$version" retrodeck # Set current version for new installs
   set_setting_value $rd_conf "sdcard" "$default_sd" retrodeck "paths" # Set SD card location if default path has changed
 
-  if grep -qF "cooker" <<< $hard_version; then # If newly-installed version is a "cooker" build
+  if grep -qF "cooker" <<< "$hard_version" || grep -qF "PR-" <<< "$hard_version"; then # If newly-installed version is a "cooker" or PR build
     set_setting_value $rd_conf "update_repo" "RetroDECK-cooker" retrodeck "options"
     set_setting_value $rd_conf "update_check" "true" retrodeck "options"
     set_setting_value $rd_conf "developer_options" "true" retrodeck "options"

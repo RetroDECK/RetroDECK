@@ -30,10 +30,6 @@ log() {
   else
     logfile="$rd_logs_folder/retrodeck.log"
   fi
-  if [[ ! -f "$logfile" ]]; then
-    touch "$logfile"
-    echo "$timestamp [WARN] \"$logfile\" not found, creating."
-  fi
 
   # Check if the shell is sh (not bash or zsh) to avoid colorization
   if [ "${SHELL##*/}" = "sh" ]; then
@@ -90,11 +86,11 @@ log() {
   esac
 
   # Display the message in the terminal
-  echo -e "$colored_message"
+  echo -e "$colored_message" >&2
 
   # Write the log message to the log file
   if [ ! -f "$logfile" ]; then
-    echo "$timestamp [WARN] Log file not found in \"$logfile\", creating it"
+    echo "$timestamp [WARN] Log file not found in \"$logfile\", creating it" >&2
     touch "$logfile"
   fi
   echo "$log_message" >> "$logfile"

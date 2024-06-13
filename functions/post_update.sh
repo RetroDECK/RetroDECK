@@ -283,22 +283,60 @@ post_update() {
 
     # The save folder of rpcs3 was inverted so we're moving the saves into the real one
     log i "RPCS3 saves needs to be migrated, executing."
-    mv "$saves_folder/ps3/rpcs3" "$saves_folder/ps3/rpcs3.bak"
-    mkdir -p "$saves_folder/ps3/rpcs3"
-    mv -v "$saves_folder/ps3/rpcs3.bak"/* "$saves_folder/ps3/rpcs3"
-    mv -v "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata"/* "$saves_folder/ps3/rpcs3"
-    mv -v "$saves_folder/ps3/rpcs3.bak" "$rdhome/backups/saves/ps3/rpcs3"
-    log i "RPCS3 saves migration completed, a backup was made here: \"$rdhome/backups/saves/ps3/rpcs3\"."
-    source /app/libexec/functions.sh
+    if [[ "$(ls -A $bios_folder/rpcs3/dev_hdd0/home/00000001/savedata)" ]]; then
+      log i "Existing RPCS3 savedata found, backing up..."
+      create_dir "$backups_folder"
+      zip -rq9 "$backups_folder/$(date +"%0m%0d")_rpcs3_save_data.zip" "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata"
+    fi
     dir_prep "$saves_folder/ps3/rpcs3" "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata"
+    log i "RPCS3 saves migration completed, a backup was made here: \"$backups_folder/$(date +"%0m%0d")_rpcs3_save_data.zip\"."
 
     log i "Switch firmware folder should be moved in \"$bios_folder/switch/firmware\" from \"$bios_folder/switch/registered\""
-    dir_prep "$bios_folder/switch/firmware" "$bios_folder/switch/registered"
+    mv "$bios_folder/switch/registered" "$bios_folder/switch/firmware"
 
     log i "New systems were added in this version, regenerating system folders."
     #es-de --home "/var/config/" --create-system-dirs
     es-de --create-system-dirs
 
+  fi
+
+  if [[ $(check_version_is_older_than "0.8.1b") == "true" ]]; then
+    log i "In version 0.8.1b, the following changes were made that required config file updates/reset or other changes to the filesystem:"
+    log i "- ES-DE files were moved inside the retrodeck folder, migrating to the new structure"
+    log i "- Give the user the option to reset Ryujinx, which was not properly initialized in 0.8.0b"
+    
+    log d "ES-DE files were moved inside the retrodeck folder, migrating to the new structure"
+    dir_prep "$rdhome/ES-DE/collections" "/var/config/ES-DE/collections"
+    dir_prep "$rdhome/ES-DE/gamelists" "/var/config/ES-DE/gamelists"
+    log i "Moving ES-DE collections, downloaded_media, gamelist, and themes from \"$rdhome\" to \"$rdhome/ES-DE\""
+    set_setting_value "$es_settings" "MediaDirectory" "$rdhome/ES-DE/downloaded_media" "es_settings"
+    set_setting_value "$es_settings" "UserThemeDirectory" "$rdhome/ES-DE/themes" "es_settings"
+    mv -f "$rdhome/themes" "$rdhome/ES-DE/themes" && log d "Move of \"$rdhome/themes\" completed"
+    mv -f "$rdhome/downloaded_media" "$rdhome/ES-DE/downloaded_media" && log d "Move of \"$rdhome/downloaded_media\" completed"
+    mv -f "$rdhome/gamelists/"* "$rdhome/ES-DE/gamelists" && log d "Move of \"$rdhome/gamelists/\" completed"
+    rm -rf "$rdhome/gamelists"
+
+    log i "MAME-SA, migrating samples to the new exposed folder: from \"/var/data/mame/assets/samples\" to \"$bios_folder/mame-sa/samples\""
+    create_dir "$bios_folder/mame-sa/samples"
+    mv -f "/var/data/mame/assets/samples/"* "$bios_folder/mame-sa/samples"
+    set_setting_value "$mameconf" "samplepath" "$bios_folder/mame-sa/samples" "mame"
+
+    log i "Installing the missing ScummVM assets and renaming \"$mods_folder/RetroArch/ScummVM/themes\" into \"theme\""
+    mv -f "$mods_folder/RetroArch/ScummVM/themes" "$mods_folder/RetroArch/ScummVM/theme"
+    unzip -o "$emuconfigs/retroarch/ScummVM.zip" 'scummvm/extra/*' -d /tmp
+    unzip -o "$emuconfigs/retroarch/ScummVM.zip" 'scummvm/theme/*' -d /tmp
+    mv -f /tmp/scummvm/extra "$mods_folder/RetroArch/ScummVM"
+    mv -f /tmp/scummvm/theme "$mods_folder/RetroArch/ScummVM"
+    rm -rf /tmp/extra /tmp/theme
+
+    log i "Placing cheats in \"/var/data/mame/cheat\""
+    unzip -j -o "$emuconfigs/mame/cheat0264.zip" 'cheat.7z' -d "/var/data/mame/cheat"
+
+    log d "Verifying with user if they want to reset Ryujinx"
+    if [[ "$(configurator_generic_question_dialog "RetroDECK 0.8.1b Ryujinx Reset" "In RetroDECK 0.8.0b the Ryujinx emulator was not properly initialized for upgrading users.\nThis would cause Ryujinx to not work properly.\n\nWould you like to reset Ryujinx to default RetroDECK settings now?\n\nIf you have made your own changes to the Ryujinx config, you can decline this reset.")" == "true" ]]; then
+      log d "User agreed to Ryujinx reset"
+      prepare_component "reset" "ryujinx"
+    fi
   fi
 
   # if [[ $(check_version_is_older_than "0.9.0b") == "true" ]]; then
@@ -336,8 +374,9 @@ post_update() {
   ) |
   zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-  --title "RetroDECK Finishing Upgrade" \
-  --text="RetroDECK is finishing the upgrade process, please wait."
+  --title "RetroDECK - Upgrade Process" \
+  --width=400 --height=200 \
+  --text="RetroDECK is finishing up the upgrading process, please be patient.\n\n<span foreground='$purple' size='larger'><b>NOTICE - If the process is taking too long:</b></span>\n\nSome windows might be running in the background that could require your attention: pop-ups from emulators or the upgrade itself that needs user input to continue.\n\n"
 
   version=$hard_version
   conf_write
