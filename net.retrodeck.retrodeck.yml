@@ -953,7 +953,7 @@ modules:
 
   # # PRIMEHACK - END
 
-  # Duckstation-AppImage - START
+  # Duckstation-AppImage - START - AUTOUPDATED
   # https://github.com/stenzek/duckstation/releases/tag/preview
 
   - name: Duckstation-AppImage
