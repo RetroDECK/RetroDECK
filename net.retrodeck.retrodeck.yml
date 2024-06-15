@@ -911,7 +911,7 @@ modules:
 
   # RPCS3 - END
 
-  # PRIMEHACK - START
+  # PRIMEHACK - START - FROZEN UNTIL KDE 6.7 UPDATE
   # https://github.com/flathub/io.github.shiiion.primehack
 
   - name: primehack
