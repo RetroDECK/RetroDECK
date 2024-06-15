@@ -1048,8 +1048,8 @@ modules:
       - /share
     sources:
       - type: archive
-        url: https://github.com/wxWidgets/wxWidgets/releases/download/v3.2.4/wxWidgets-3.2.4.tar.bz2
-        sha256: 0640e1ab716db5af2ecb7389dbef6138d7679261fbff730d23845ba838ca133e
+        url: https://github.com/wxWidgets/wxWidgets/releases/download/v3.2.5/wxWidgets-3.2.5.tar.bz2
+        sha256: 0ad86a3ad3e2e519b6a705248fc9226e3a09bbf069c6c692a02acf7c2d1c6b51
         x-checker-data:
           type: anitya
           project-id: 5150
@@ -1069,8 +1069,21 @@ modules:
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+-\d+)$
-        tag: v2.0-79
-        commit: efbbb817fe1cbe09ee132344b44a0f61f8b8ac96
+        tag: v2.0-86
+        commit: 1672f969bbc4a683e4a852aa2e145c1e6f9f68e6
+        disable-submodules: true
+      - type: git
+        url: https://github.com/mozilla/cubeb
+        commit: 6c1a6e151c1f981a2800d40af7c041cfcccc710e
+        dest: dependencies/cubeb
+      - type: git
+        url: https://github.com/Exzap/ZArchive
+        dest: dependencies/ZArchive
+        tag: v0.1.2
+      - type: git
+        url: https://github.com/ocornut/imgui
+        dest: dependencies/imgui
+        commit: f65bcf481ab34cd07d3909aab1479f409fa79f2f
       - type: shell
         commands:
           - sed "s/set(EXPERIMENTAL_VERSION.*/set(EXPERIMENTAL_VERSION \"$(git describe
