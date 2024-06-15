@@ -1237,7 +1237,7 @@ modules:
     sources:
       - type: file
         url: https://github.com/Ryujinx/release-channel-master/releases/download/1.1.1330/ryujinx-1.1.1330-linux_x64.tar.gz
-        sha256: 28b38754e7d2e92083b313b23278c180ae54ac025edbbd0276ec03baec0cec0f
+        sha256: 1e9158a3f55ff128e089ac3778dfb35127f2cab9d59bc52b5fe63c7b7ac2f6cb
 
   # Ryujinx Appimage - END
 
