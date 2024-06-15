@@ -223,21 +223,13 @@ modules:
       - /lib/cmake
     sources:
       - type: archive
-        url: https://github.com/KhronosGroup/glslang/archive/14.1.0.tar.gz
-        sha256: b5e4c36d60eda7613f36cfee3489c6f507156829c707e1ecd7f48ca45b435322
+        url: https://github.com/KhronosGroup/glslang/archive/14.2.0.tar.gz
+        sha256: 14a2edbb509cb3e51a9a53e3f5e435dbf5971604b4b833e63e6076e8c0a997b5
         x-checker-data:
           type: anitya
           stable-only: true
           project-id: 205796
           url-template: https://github.com/KhronosGroup/glslang/archive/$version.tar.gz
-      # - type: git
-      #   url: https://github.com/KhronosGroup/SPIRV-Tools.git
-      #   tag: sdk-1.3.261.1
-      #   dest: External/spirv-tools
-      # - type: git
-      #   url: https://github.com/KhronosGroup/SPIRV-Headers.git
-      #   tag: sdk-1.3.261.1
-      #   dest: External/spirv-tools/external/spirv-headers
 
   # enables motion controls on non-wii controllers (switch, ps4, etc)
   # dependency of: DOLPHIN, RPCS3
