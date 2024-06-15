@@ -318,10 +318,17 @@ modules:
   # dependency of: XEMU, MelonDS
   - name: libslirp
     buildsystem: meson
+    cleanup:
+      - /include
     sources:
-      - type: git
-        url: https://gitlab.freedesktop.org/slirp/libslirp.git
-        tag: v4.7.0
+      - type: archive
+        url: https://gitlab.freedesktop.org/slirp/libslirp/-/archive/v4.8.0/libslirp-v4.8.0.tar.gz
+        sha256: 2a98852e65666db313481943e7a1997abff0183bd9bea80caec1b5da89fda28c
+        x-checker-data:
+          type: anitya
+          project-id: 96796
+          stable-only: true
+          url-template: https://gitlab.freedesktop.org/slirp/libslirp/-/archive/v$version/libslirp-v$version.tar.gz
 
   # dependency of: CEMU (1.0.26), DOLPHIN (1.0.27)
   - name: libusb
