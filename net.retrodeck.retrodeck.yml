@@ -1131,7 +1131,7 @@ modules:
 
   # Cemu - END
 
-  # Vita3K - START
+  # Vita3K - START - AUTOUPDATED
 
   - name: vita3k
     buildsystem: simple
@@ -1149,7 +1149,7 @@ modules:
         sha256: VITA3KSHAPLACEHOLDER
       - type: file
         path: res/retrodeck.png
-
+        
   # Vita3K - END
 
   # SOLARUS - START
