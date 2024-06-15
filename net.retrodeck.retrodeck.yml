@@ -852,7 +852,7 @@ modules:
 
   # MELONDS - END
 
-  # RPCS3 - START
+  # RPCS3 - START - FROZEN UNTIL KDE 6.7 UPDATE
   # https://github.com/flathub/net.rpcs3.RPCS3
 
   - name: rpcs3
