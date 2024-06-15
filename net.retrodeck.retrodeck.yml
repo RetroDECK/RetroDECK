@@ -683,7 +683,7 @@ modules:
 
   # PCSX2 - END
 
-  # Dolphin - START
+  # Dolphin - START - FROZEN UNTIL KDE 6.7 UPDATE
   # https://github.com/flathub/org.DolphinEmu.dolphin-emu
   # WHEN UPADTING: remember to update rd-submodules/dolphin contents
 
