@@ -10,6 +10,7 @@ done
 
 case "$pkg_mgr" in
   apt)
+    sudo apt update
     sudo apt install -y flatpak flatpak-builder p7zip-full xmlstarlet bzip2 curl jq
     ;;
   pacman)
