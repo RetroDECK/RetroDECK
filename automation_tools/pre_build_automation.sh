@@ -34,6 +34,7 @@
 rd_manifest=${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml
 automation_task_list=${GITHUB_WORKSPACE}/automation_tools/automation_task_list.cfg
 current_branch=$(git rev-parse --abbrev-ref HEAD)
+current_repo=$(git remote get-url origin | sed 's|https://github.com/||')
 
 # During the PR automated tests instead of the branch name is returned "HEAD", fixing it
 if [ $current_branch == "HEAD" ]; then
@@ -61,6 +62,14 @@ do
       echo "Current branch:" "$current_branch"
       echo
       /bin/sed -i 's^'"$placeholder"'^'"$current_branch"'^g' $rd_manifest
+    ;;
+
+    "repo" )
+      echo
+      echo "Placeholder text: $placeholder"
+      echo "Current repo:" "$current_repo"
+      echo
+      /bin/sed -i 's^'"$placeholder"'^'"$current_repo"'^g' $rd_manifest
     ;;
 
     "hash" )
