@@ -956,6 +956,7 @@ modules:
     sources:
       - type: file
         url: RUFFLEURLPLACEHOLDER
+        sha256: RUFFLESHAPLACEHOLDER
 
   # Ruffle - END
 
