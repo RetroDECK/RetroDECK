@@ -83,9 +83,11 @@ start_game() {
     fi
   done
 
-  # Find the game ROM in the specified directory
+  # Find the game ROM by name and then verify CRC
   found_rom=""
-  for rom in $(find "$roms_folder" -type f); do
+  candidates=($(find "$roms_folder" -type f -iname "*$(echo "$selected_game_name" | sed 's/[^a-zA-Z0-9]//g')*"))
+
+  for rom in "${candidates[@]}"; do
     # Check the CRC of the ROM
     rom_crc=$(crc32 "$rom")
     if [ "$rom_crc" = "$selected_game_crc" ]; then
