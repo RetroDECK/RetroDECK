@@ -945,6 +945,20 @@ modules:
 
   # # PRIMEHACK - END
 
+  # Ruffle - START
+
+  - name: ruffle
+    buildsystem: simple
+    build-commands:
+      - tar xvzf "RUFFLEURLPLACEHOLDER" -C "${FLATPAK_DEST}/share/ruffle"
+      - chmod +x "${FLATPAK_DEST}/share/ruffle/ruffle"
+      - ln -s ${FLATPAK_DEST}/share/ruffle/ruffle ${FLATPAK_DEST}/bin/ruffle
+    sources:
+      - type: file
+        url: RUFFLEURLPLACEHOLDER
+
+  # Ruffle - END
+
   # Duckstation-AppImage - START - AUTOUPDATED
   # https://github.com/stenzek/duckstation/releases/tag/preview
 
