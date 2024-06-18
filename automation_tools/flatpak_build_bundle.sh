@@ -4,6 +4,8 @@
 
 if [ "${GITHUB_REF##*/}" = "main" ]; then
     flatpak build-bundle "${GITHUB_WORKSPACE}/.local" "$GITHUB_WORKSPACE/RetroDECK.flatpak" net.retrodeck.retrodeck
+    sha256sum RetroDECK.flatpak > RetroDECK.flatpak.sha
 else
     flatpak build-bundle "${GITHUB_WORKSPACE}/.local" "$GITHUB_WORKSPACE/RetroDECK-cooker.flatpak" net.retrodeck.retrodeck
+    sha256sum RetroDECK-cooker.flatpak > RetroDECK-cooker.flatpak.sha
 fi

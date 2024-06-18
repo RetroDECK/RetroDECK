@@ -52,6 +52,8 @@ source /app/libexec/global.sh
 #         - Move Screenshots folder
 #         - Move Mods folder
 #         - Move Texture Packs folder
+#       - Tool: Remove Empty ROM Folders
+#       - Tool: Rebuild All ROM Folders
 #       - Tool: Compress Games
 #         - Compress Single Game
 #         - Compress Multiple Games - CHD
@@ -559,6 +561,8 @@ configurator_retrodeck_tools_dialog() {
 
   local choices=(
   "Tool: Move Folders" "Move RetroDECK folders between internal/SD card or to a custom location"
+  "Tool: Remove Empty ROM Folders" "Remove some or all of the empty ROM folders"
+  "Tool: Rebuild All ROM Folders" "Rebuild any missing default ROM folders"
   "Tool: Compress Games" "Compress games for systems that support it"
   "Install: RetroDECK Controller Layouts" "Install the custom RetroDECK controller layouts on Steam"
   "Install: PS3 Firmware" "Download and install PS3 firmware for use with the RPCS3 emulator"
@@ -585,6 +589,44 @@ configurator_retrodeck_tools_dialog() {
     configurator_retrodeck_move_tool_dialog
   ;;
 
+  "Tool: Remove Empty ROM Folders" )
+    log i "Configurator: opening \"$choice\" menu"
+    find_empty_rom_folders
+
+    choice=$(zenity \
+        --list --width=1200 --height=720 --title "RetroDECK Configurator - RetroDECK: Remove Empty ROM Folders" \
+        --checklist --hide-column=3 --ok-label="Remove Selected" --extra-button="Remove All" \
+        --separator="," --print-column=2 \
+        --text="Choose which ROM folders to remove:" \
+        --column "Remove?" \
+        --column "System" \
+        "${empty_rom_folders_list[@]}")
+    
+    local rc=$?
+    if [[ $rc == "0" && ! -z $choice ]]; then # User clicked "Remove Selected" with at least one system selected
+      IFS="," read -ra folders_to_remove <<< "$choice"
+      for folder in "${folders_to_remove[@]}"; do
+        log i "Removing empty folder $folder"
+        rm -f "$folder"
+      done
+    elif [[ ! -z $choice ]]; then # User clicked "Remove All"
+      for folder in "${all_empty_folders[@]}"; do
+        log i "Removing empty folder $folder"
+        rm -f "$folder"
+      done
+    fi
+    
+    configurator_generic_dialog "RetroDECK Configurator - Remove Empty ROM Folders" "The removal process is complete."
+    configurator_retrodeck_tools_dialog
+  ;;
+
+  "Tool: Rebuild All ROM Folders" )
+    log i "Configurator: opening \"$choice\" menu"
+    es-de --create-system-dirs
+    configurator_generic_dialog "RetroDECK Configurator - Rebuild All ROM Folders" "The rebuilding process is complete.\n\nAll missing default ROM folders will now exist in $roms_folder"
+    configurator_retrodeck_tools_dialog
+  ;;
+
   "Tool: Compress Games" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_generic_dialog "RetroDECK Configurator - Compression Tool" "Depending on your library and compression choices, the process can sometimes take a long time.\nPlease be patient once it is started!"
@@ -608,14 +650,13 @@ configurator_retrodeck_tools_dialog() {
       (
         update_rpcs3_firmware
       ) |
-        zenity --progress --pulsate \
+        zenity --progress --no-cancel --pulsate --auto-close \
         --icon-name=net.retrodeck.retrodeck \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         --title="Downloading PS3 Firmware" \
         --width=400 --height=200 \
-        --text="If it feels like this is taking too much time, please ensure there aren't any windows that unexpectedly slipped into the background and need attention.\n\n" \
-        --no-cancel \
-        --auto-close
+        --text="Dowloading and installing PS3 Firmware, please be patient.\n\n<span foreground='$purple' size='larger'><b>NOTICE - If the process is taking too long:</b></span>\n\nSome windows might be running in the background that could require your attention: pop-ups from emulators or the upgrade itself that needs user input to continue.\n\n"
+
     else
       configurator_generic_dialog "RetroDECK Configurator - Install: PS3 Firmware" "You do not appear to currently have Internet access, which is required by this tool. Please try again when network access has been restored."
       configurator_retrodeck_tools_dialog
@@ -795,28 +836,6 @@ configurator_compress_single_game_dialog() {
       echo "# Compressing $(basename "$file") to $compatible_compression_format format" # This updates the Zenity dialog
       log i "Compressing $(basename "$file") to $compatible_compression_format format"
       compress_game "$compatible_compression_format" "$file" "$system"
-      if [[ $post_compression_cleanup == "true" ]]; then # Remove file(s) if requested
-        if [[ -f "${file%.*}.$compatible_compression_format" ]]; then
-          log i "Performing post-compression file cleanup"
-          if [[ "$file" == *".cue" ]]; then
-            local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" "$file")
-            local file_path=$(dirname "$(realpath "$file")")
-            while IFS= read -r line
-            do
-              log i "Removing file $file_path/$line"
-              rm -f "$file_path/$line"
-            done < <(printf '%s\n' "$cue_bin_files")
-            log i "Removing file $(realpath $file)"
-            rm -f $(realpath "$file")
-          else
-            log i "Removing file $(realpath $file)"
-            rm -f "$(realpath "$file")"
-          fi
-        else
-          log i "Compressed file ${file%.*}.$compatible_compression_format not found, skipping original file deletion"
-          configurator_generic_dialog "RetroDECK Configurator - RetroDECK: Compression Tool" "A compressed version of the file was not found, skipping deletion."
-        fi
-      fi
       ) |
       zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -836,54 +855,7 @@ configurator_compress_single_game_dialog() {
 configurator_compress_multiple_games_dialog() {
   # This dialog will display any games it finds to be compressable, from the systems listed under each compression type in compression_targets.cfg
 
-  local compressable_games_list=()
-  local all_compressable_games=()
-  local games_to_compress=()
-  local target_selection="$1"
-
-  if [[ "$1" == "everything" ]]; then
-    local compression_format="all"
-  else
-    local compression_format="$1"
-  fi
-
-  if [[ $compression_format == "all" ]]; then
-    local compressable_systems_list=$(cat $compression_targets | sed '/^$/d' | sed '/^\[/d')
-  else
-    local compressable_systems_list=$(sed -n '/\['"$compression_format"'\]/, /\[/{ /\['"$compression_format"'\]/! { /\[/! p } }' $compression_targets | sed '/^$/d')
-  fi
-
-  while IFS= read -r system # Find and validate all games that are able to be compressed with this compression type
-  do
-    compression_candidates=$(find "$roms_folder/$system" -type f -not -iname "*.txt")
-    if [[ ! -z $compression_candidates ]]; then
-      while IFS= read -r game
-      do
-        local compatible_compression_format=$(find_compatible_compression_format "$game")
-        if [[ $compression_format == "chd" ]]; then
-          if [[ $compatible_compression_format == "chd" ]]; then
-            all_compressable_games=("${all_compressable_games[@]}" "$game")
-            compressable_games_list=("${compressable_games_list[@]}" "false" "${game#$roms_folder}" "$game")
-          fi
-        elif [[ $compression_format == "zip" ]]; then
-          if [[ $compatible_compression_format == "zip" ]]; then
-            all_compressable_games=("${all_compressable_games[@]}" "$game")
-            compressable_games_list=("${compressable_games_list[@]}" "false" "${game#$roms_folder}" "$game")
-          fi
-        elif [[ $compression_format == "rvz" ]]; then
-          if [[ $compatible_compression_format == "rvz" ]]; then
-            all_compressable_games=("${all_compressable_games[@]}" "$game")
-            compressable_games_list=("${compressable_games_list[@]}" "false" "${game#$roms_folder}" "$game")
-          fi
-        elif [[ $compression_format == "all" ]]; then
-          if [[ ! $compatible_compression_format == "none" ]]; then
-            all_compressable_games=("${all_compressable_games[@]}" "$game")
-            compressable_games_list=("${compressable_games_list[@]}" "false" "${game#$roms_folder}" "$game")
-          fi
-        fi
-      done < <(printf '%s\n' "$compression_candidates")
-    fi
-  done < <(printf '%s\n' "$compressable_systems_list")
+  find_compatible_games "$1"
 
   if [[ ! "$target_selection" == "everything" ]]; then # If the user chose to not auto-compress everything
     choice=$(zenity \
@@ -923,27 +895,6 @@ configurator_compress_multiple_games_dialog() {
       games_left_to_compress=$((games_left_to_compress-1))
       log i "Games left to compress: $games_left_to_compress"
       compress_game "$compression_format" "$file" "$system"
-      if [[ $post_compression_cleanup == "true" ]]; then # Remove file(s) if requested
-        if [[ -f "${file%.*}.$compatible_compression_format" ]]; then
-          if [[ "$file" == *".cue" ]]; then
-            local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" "$file")
-            local file_path=$(dirname "$(realpath "$file")")
-            while IFS= read -r line
-            do
-              log i "Removing file $file_path/$line"
-              rm -f "$file_path/$line"
-            done < <(printf '%s\n' "$cue_bin_files")
-            log i "Removing file $(realpath $file)"
-            rm -f $(realpath "$file")
-          else
-            log i "Removing file $(realpath $file)"
-            rm -f "$(realpath "$file")"
-          fi
-        else
-          log i "Compressed file ${file%.*}.$compatible_compression_format not found, skipping original file deletion"
-          configurator_generic_dialog "RetroDECK Configurator - RetroDECK: Compression Tool" "Compression of $(basename $file) failed, skipping deletion."
-        fi
-      fi
     done
     ) |
     zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
