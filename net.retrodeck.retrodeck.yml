@@ -686,7 +686,7 @@ modules:
 
   # PCSX2 - END
 
-  # Dolphin - START - FROZEN UNTIL KDE 6.7 UPDATE
+  # Dolphin - START
   # https://github.com/flathub/org.DolphinEmu.dolphin-emu
   # WHEN UPADTING: remember to update rd-submodules/dolphin contents
 
@@ -716,7 +716,7 @@ modules:
         # fatal: remote transport reported error
         # url: ssh://git@github.com/dolphin-emu/dolphin.git
         url: https://github.com/dolphin-emu/dolphin.git
-        commit: 1efda863e47b690f460f069502a4391b3c7d87c4
+        commit: a9544510468740b77cf06ef28daaa65fe247fd32
         x-checker-data:
           type: json
           url: https://dolphin-emu.org/update/latest/beta
