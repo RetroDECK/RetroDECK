@@ -92,7 +92,7 @@ modules:
         echo "Version is $VERSION"
     sources:
       - type: git
-        url: https://github.com/THISREPO
+        url: THISREPO
         branch: THISBRANCH
 
   - name: xmlstarlet
@@ -1319,5 +1319,6 @@ modules:
 
     sources:
       - type: git
-        url: https://github.com/THISREPO
+        url: THISREPO
         branch: THISBRANCH
+       
