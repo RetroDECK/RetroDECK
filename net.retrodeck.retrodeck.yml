@@ -950,7 +950,7 @@ modules:
   - name: ruffle
     buildsystem: simple
     build-commands:
-      - tar xvzf "RUFFLEURLPLACEHOLDER" -C "${FLATPAK_DEST}/share/ruffle"
+      - tar -zxvf *.tar.gz -C "${FLATPAK_DEST}/share/ruffle"
       - chmod +x "${FLATPAK_DEST}/share/ruffle/ruffle"
       - ln -s ${FLATPAK_DEST}/share/ruffle/ruffle ${FLATPAK_DEST}/bin/ruffle
     sources:
