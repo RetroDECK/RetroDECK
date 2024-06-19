@@ -1,10 +1,9 @@
 app-id: net.retrodeck.retrodeck
 runtime: org.kde.Platform
-runtime-version: "6.5"
+runtime-version: "6.7"
 sdk: org.kde.Sdk
 sdk-extensions:
-  - org.freedesktop.Sdk.Extension.llvm16        # Needed for RPCS3 (llvm17 actually)
-  - org.freedesktop.Sdk.Extension.rust-stable   # Needed for BoilR 
+  - org.freedesktop.Sdk.Extension.llvm18        # Needed for RPCS3
 command: retrodeck.sh
 
 finish-args:
@@ -361,7 +360,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/FFmpeg/FFmpeg.git
-        tag: n5.1.1
+        tag: n5.1.4
 
   - name: freeimage
     no-autogen: true
@@ -686,11 +685,10 @@ modules:
 
   # PCSX2 - END
 
-  # Dolphin - START - FROZEN UNTIL KDE 6.7 UPDATE
+  # Dolphin - START
   # https://github.com/flathub/org.DolphinEmu.dolphin-emu
   # WHEN UPADTING: remember to update rd-submodules/dolphin contents
 
-  # needed for screensaver inhibition
   - name: xdg-screensaver-shim
     buildsystem: meson
     sources:
@@ -717,7 +715,7 @@ modules:
         # fatal: remote transport reported error
         # url: ssh://git@github.com/dolphin-emu/dolphin.git
         url: https://github.com/dolphin-emu/dolphin.git
-        commit: 032c77b462a220016f23c5079e71bb23e0ad2adf
+        commit: a9544510468740b77cf06ef28daaa65fe247fd32
         x-checker-data:
           type: json
           url: https://dolphin-emu.org/update/latest/beta
@@ -852,18 +850,15 @@ modules:
 
   # MELONDS - END
 
-  # RPCS3 - START - FROZEN UNTIL KDE 6.7 UPDATE
+  # RPCS3 - START
   # https://github.com/flathub/net.rpcs3.RPCS3
 
   - name: rpcs3
     buildsystem: cmake-ninja
     builddir: true
     build-options:
-      # llvm17 is not available in framework 6.5 but in 6.6, so we're trying llvm16 and cross our fingers until Primehack is updated (as Primehack breaks on 6.6)
-      #append-ld-library-path: /usr/lib/sdk/llvm17/lib
-      #append-path: /usr/lib/sdk/llvm17/bin
-      append-ld-library-path: /usr/lib/sdk/llvm16/lib
-      append-path: /usr/lib/sdk/llvm16/bin
+      append-ld-library-path: /usr/lib/sdk/llvm18/lib
+      append-path: /usr/lib/sdk/llvm18/bin
       cflags: &optflags -O2 -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong
         -grecord-gcc-switches -fasynchronous-unwind-tables -fstack-clash-protection
         -fcf-protection -fno-omit-frame-pointer
@@ -889,8 +884,7 @@ modules:
       - -DUSE_SYSTEM_ZLIB=ON
       - -Wno-dev
     post-install:
-      #- cp /usr/lib/sdk/llvm17/lib/libLLVM-17.so /app/lib/
-      - cp /usr/lib/sdk/llvm16/lib/libLLVM-16.so /app/lib/
+      - cp /usr/lib/sdk/llvm18/lib/libLLVM.so.18.1 /app/lib/
       - |-
         set -eux
         COMM_TAG="$(awk -F'[\{,]' '/version{.*}/{printf "%d.%d.%d", $2, $3, $4}' ../rpcs3/rpcs3_version.cpp)"
@@ -899,11 +893,11 @@ modules:
     sources:
       - type: git
         url: https://github.com/RPCS3/rpcs3.git
-        commit: 4ecf8ecd06c15f0557e1d9243f31e4c2d7baebe2
+        commit: 5b973448bf75a239f34fd9c7698c8a02b04e2ea9
 
   # RPCS3 - END
 
-  # PRIMEHACK - START - FROZEN UNTIL KDE 6.7 UPDATE
+  # PRIMEHACK - START
   # https://github.com/flathub/io.github.shiiion.primehack
 
   - name: primehack
@@ -914,17 +908,14 @@ modules:
       - -DENABLE_SDL=ON
       - -DENABLE_EVDEV=ON
       - -DDISTRIBUTOR=Flathub
-      - -DQT_DIR=
     cleanup:
       - /share/man
     post-install:
       - install -D primehack-wrapper /app/bin/primehack-wrapper
     sources:
       - type: git
-        url: https://github.com/XargonWan/primehack
-        commit: af7710ef7b04a632b4294eae5e0eff8fe9c4d1f8
-        #url: https://github.com/TheDrifter363/primehack.git
-        #commit: 6295c695307a67f11ee202b05cbdd7b5c1edae5c
+        url: https://github.com/shiiion/dolphin.git
+        commit: 81bfb9686afd2d190134b44dd72d3cee876fe2ab # This commit refers to the PR 166: https://github.com/shiiion/dolphin/pull/166, please change it when it's approved
        # detects whether dolphin is running in a flatpak sandbox
        # and makes it use xdg directories if it is.
        # prevents dolphin from attempting to write conf files
@@ -943,7 +934,7 @@ modules:
           - primehack "$@"
         dest-filename: primehack-wrapper
 
-  # # PRIMEHACK - END
+  # PRIMEHACK - END
 
   # Ruffle - START
 
