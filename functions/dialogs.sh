@@ -1,7 +1,5 @@
 #!/bin/bash
 
-source /app/libexec/functions.sh
-
 # Dialog colors
 purple="#a864fc"
 blue="#6fbfff"
