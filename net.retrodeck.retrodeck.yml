@@ -1,10 +1,9 @@
 app-id: net.retrodeck.retrodeck
 runtime: org.kde.Platform
-runtime-version: "6.5"
+runtime-version: "6.7"
 sdk: org.kde.Sdk
 sdk-extensions:
-  - org.freedesktop.Sdk.Extension.llvm16        # Needed for RPCS3 (llvm17 actually)
-  - org.freedesktop.Sdk.Extension.rust-stable   # Needed for BoilR 
+  - org.freedesktop.Sdk.Extension.llvm18        # Needed for RPCS3
 command: retrodeck.sh
 
 finish-args:
@@ -69,8 +68,8 @@ modules:
   # The version number is hardcoded in /app/retrodeck/version
   #
   # UPDATE STEPS FOR MAIN:
-  # [x] Update the VERSION variable on line containing "VERSION=THISBRANCH"
-  # [x] Update the appdata.xml with the version number and notes
+  # [ ] Update the VERSION variable on line containing "VERSION=THISBRANCH"
+  # [ ] Update the appdata.xml with the version number and notes
   #
   - name: version-initialization
     buildsystem: simple
@@ -79,7 +78,7 @@ modules:
 
         # on main please update this with the version variable, eg: VERSION=0.8.0b
         # on cooker will be THISBRANCH
-        VERSION=0.8.1b
+        VERSION=THISBRANCH
 
         git checkout ${GITHUB_REF_NAME}
         mkdir -p ${FLATPAK_DEST}/retrodeck/
@@ -223,21 +222,13 @@ modules:
       - /lib/cmake
     sources:
       - type: archive
-        url: https://github.com/KhronosGroup/glslang/archive/14.1.0.tar.gz
-        sha256: b5e4c36d60eda7613f36cfee3489c6f507156829c707e1ecd7f48ca45b435322
+        url: https://github.com/KhronosGroup/glslang/archive/14.2.0.tar.gz
+        sha256: 14a2edbb509cb3e51a9a53e3f5e435dbf5971604b4b833e63e6076e8c0a997b5
         x-checker-data:
           type: anitya
           stable-only: true
           project-id: 205796
           url-template: https://github.com/KhronosGroup/glslang/archive/$version.tar.gz
-      # - type: git
-      #   url: https://github.com/KhronosGroup/SPIRV-Tools.git
-      #   tag: sdk-1.3.261.1
-      #   dest: External/spirv-tools
-      # - type: git
-      #   url: https://github.com/KhronosGroup/SPIRV-Headers.git
-      #   tag: sdk-1.3.261.1
-      #   dest: External/spirv-tools/external/spirv-headers
 
   # enables motion controls on non-wii controllers (switch, ps4, etc)
   # dependency of: DOLPHIN, RPCS3
@@ -247,16 +238,20 @@ modules:
     config-opts:
       - -Dtests=disabled
       - -Ddocumentation=disabled
+    cleanup:
+      - /bin
+      - /include
+      - /lib/pkgconfig
+      - /share
     sources:
       - type: archive
-        url: https://www.freedesktop.org/software/libevdev/libevdev-1.13.1.tar.xz
-        sha256: 06a77bf2ac5c993305882bc1641017f5bec1592d6d1b64787bad492ab34f2f36
+        url: https://www.freedesktop.org/software/libevdev/libevdev-1.13.2.tar.xz
+        sha256: 3eca86a6ce55b81d5bce910637fc451c8bbe373b1f9698f375c7f1ad0de3ac48
         x-checker-data:
           type: anitya
           project-id: 20540
           stable-only: true
           url-template: https://www.freedesktop.org/software/libevdev/libevdev-$version.tar.xz
-
   # dependency of: CEMU
   - name: rapidjson
     buildsystem: cmake-ninja
@@ -318,10 +313,17 @@ modules:
   # dependency of: XEMU, MelonDS
   - name: libslirp
     buildsystem: meson
+    cleanup:
+      - /include
     sources:
-      - type: git
-        url: https://gitlab.freedesktop.org/slirp/libslirp.git
-        tag: v4.7.0
+      - type: archive
+        url: https://gitlab.freedesktop.org/slirp/libslirp/-/archive/v4.8.0/libslirp-v4.8.0.tar.gz
+        sha256: 2a98852e65666db313481943e7a1997abff0183bd9bea80caec1b5da89fda28c
+        x-checker-data:
+          type: anitya
+          project-id: 96796
+          stable-only: true
+          url-template: https://gitlab.freedesktop.org/slirp/libslirp/-/archive/v$version/libslirp-v$version.tar.gz
 
   # dependency of: CEMU (1.0.26), DOLPHIN (1.0.27)
   - name: libusb
@@ -358,7 +360,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/FFmpeg/FFmpeg.git
-        tag: n5.1.1
+        tag: n5.1.4
 
   - name: freeimage
     no-autogen: true
@@ -678,8 +680,8 @@ modules:
       - ln -s "${FLATPAK_DEST}/pcsx2-qt/usr/bin/pcsx2-qt" "${FLATPAK_DEST}/bin/pcsx2-qt"
     sources:
       - type: file
-        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.5769/pcsx2-v1.7.5769-linux-appimage-x64-Qt.AppImage
-        sha256: d819a339b9f3c43ee44fe9b6d975b9f76cff7716b5976a3b94f77e2cf4cab667
+        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.5900/pcsx2-v1.7.5900-linux-appimage-x64-Qt.AppImage
+        sha256: a4012fbdd175536cac99ef7f0b5fb65aa8303b4c5b8cc31918a05341d61bbb26
 
   # PCSX2 - END
 
@@ -687,7 +689,6 @@ modules:
   # https://github.com/flathub/org.DolphinEmu.dolphin-emu
   # WHEN UPADTING: remember to update rd-submodules/dolphin contents
 
-  # needed for screensaver inhibition
   - name: xdg-screensaver-shim
     buildsystem: meson
     sources:
@@ -714,7 +715,7 @@ modules:
         # fatal: remote transport reported error
         # url: ssh://git@github.com/dolphin-emu/dolphin.git
         url: https://github.com/dolphin-emu/dolphin.git
-        commit: 032c77b462a220016f23c5079e71bb23e0ad2adf
+        commit: a9544510468740b77cf06ef28daaa65fe247fd32
         x-checker-data:
           type: json
           url: https://dolphin-emu.org/update/latest/beta
@@ -809,8 +810,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/xemu-project/xemu.git
-        tag: v0.7.120
-        commit: 94d826a4f125d755d6d37069ad7084bfde33d650
+        tag: v0.7.126
+        commit: b2b6a98d5ea21970cd2436a1912230f4b97c5e03
         x-checker-data:
           type: json
           url: https://api.github.com/repos/xemu-project/xemu/releases/latest
@@ -856,11 +857,8 @@ modules:
     buildsystem: cmake-ninja
     builddir: true
     build-options:
-      # llvm17 is not available in framework 6.5 but in 6.6, so we're trying llvm16 and cross our fingers until Primehack is updated (as Primehack breaks on 6.6)
-      #append-ld-library-path: /usr/lib/sdk/llvm17/lib
-      #append-path: /usr/lib/sdk/llvm17/bin
-      append-ld-library-path: /usr/lib/sdk/llvm16/lib
-      append-path: /usr/lib/sdk/llvm16/bin
+      append-ld-library-path: /usr/lib/sdk/llvm18/lib
+      append-path: /usr/lib/sdk/llvm18/bin
       cflags: &optflags -O2 -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong
         -grecord-gcc-switches -fasynchronous-unwind-tables -fstack-clash-protection
         -fcf-protection -fno-omit-frame-pointer
@@ -886,8 +884,7 @@ modules:
       - -DUSE_SYSTEM_ZLIB=ON
       - -Wno-dev
     post-install:
-      #- cp /usr/lib/sdk/llvm17/lib/libLLVM-17.so /app/lib/
-      - cp /usr/lib/sdk/llvm16/lib/libLLVM-16.so /app/lib/
+      - cp /usr/lib/sdk/llvm18/lib/libLLVM.so.18.1 /app/lib/
       - |-
         set -eux
         COMM_TAG="$(awk -F'[\{,]' '/version{.*}/{printf "%d.%d.%d", $2, $3, $4}' ../rpcs3/rpcs3_version.cpp)"
@@ -896,7 +893,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/RPCS3/rpcs3.git
-        commit: 4ecf8ecd06c15f0557e1d9243f31e4c2d7baebe2
+        commit: 5b973448bf75a239f34fd9c7698c8a02b04e2ea9
 
   # RPCS3 - END
 
@@ -911,17 +908,14 @@ modules:
       - -DENABLE_SDL=ON
       - -DENABLE_EVDEV=ON
       - -DDISTRIBUTOR=Flathub
-      - -DQT_DIR=
     cleanup:
       - /share/man
     post-install:
       - install -D primehack-wrapper /app/bin/primehack-wrapper
     sources:
       - type: git
-        url: https://github.com/XargonWan/primehack
-        commit: af7710ef7b04a632b4294eae5e0eff8fe9c4d1f8
-        #url: https://github.com/TheDrifter363/primehack.git
-        #commit: 6295c695307a67f11ee202b05cbdd7b5c1edae5c
+        url: https://github.com/shiiion/dolphin.git
+        commit: 81bfb9686afd2d190134b44dd72d3cee876fe2ab # This commit refers to the PR 166: https://github.com/shiiion/dolphin/pull/166, please change it when it's approved
        # detects whether dolphin is running in a flatpak sandbox
        # and makes it use xdg directories if it is.
        # prevents dolphin from attempting to write conf files
@@ -940,9 +934,9 @@ modules:
           - primehack "$@"
         dest-filename: primehack-wrapper
 
-  # # PRIMEHACK - END
+  # PRIMEHACK - END
 
-  # Duckstation-AppImage - START
+  # Duckstation-AppImage - START - AUTOUPDATED
   # https://github.com/stenzek/duckstation/releases/tag/preview
 
   - name: Duckstation-AppImage
@@ -1045,8 +1039,8 @@ modules:
       - /share
     sources:
       - type: archive
-        url: https://github.com/wxWidgets/wxWidgets/releases/download/v3.2.4/wxWidgets-3.2.4.tar.bz2
-        sha256: 0640e1ab716db5af2ecb7389dbef6138d7679261fbff730d23845ba838ca133e
+        url: https://github.com/wxWidgets/wxWidgets/releases/download/v3.2.5/wxWidgets-3.2.5.tar.bz2
+        sha256: 0ad86a3ad3e2e519b6a705248fc9226e3a09bbf069c6c692a02acf7c2d1c6b51
         x-checker-data:
           type: anitya
           project-id: 5150
@@ -1066,8 +1060,21 @@ modules:
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+-\d+)$
-        tag: v2.0-79
-        commit: efbbb817fe1cbe09ee132344b44a0f61f8b8ac96
+        tag: v2.0-86
+        commit: 1672f969bbc4a683e4a852aa2e145c1e6f9f68e6
+        disable-submodules: true
+      - type: git
+        url: https://github.com/mozilla/cubeb
+        commit: 6c1a6e151c1f981a2800d40af7c041cfcccc710e
+        dest: dependencies/cubeb
+      - type: git
+        url: https://github.com/Exzap/ZArchive
+        dest: dependencies/ZArchive
+        tag: v0.1.2
+      - type: git
+        url: https://github.com/ocornut/imgui
+        dest: dependencies/imgui
+        commit: f65bcf481ab34cd07d3909aab1479f409fa79f2f
       - type: shell
         commands:
           - sed "s/set(EXPERIMENTAL_VERSION.*/set(EXPERIMENTAL_VERSION \"$(git describe
@@ -1115,7 +1122,7 @@ modules:
 
   # Cemu - END
 
-  # Vita3K - START
+  # Vita3K - START - AUTOUPDATED
 
   - name: vita3k
     buildsystem: simple
@@ -1133,7 +1140,7 @@ modules:
         sha256: VITA3KSHAPLACEHOLDER
       - type: file
         path: res/retrodeck.png
-
+        
   # Vita3K - END
 
   # SOLARUS - START
@@ -1220,8 +1227,8 @@ modules:
         ln -sv ${FLATPAK_DEST}/ryujinx/Ryujinx ${FLATPAK_DEST}/bin/Ryujinx.sh
     sources:
       - type: file
-        url: https://github.com/Ryujinx/release-channel-master/releases/download/1.1.1297/ryujinx-1.1.1297-linux_x64.tar.gz
-        sha256: 28b38754e7d2e92083b313b23278c180ae54ac025edbbd0276ec03baec0cec0f
+        url: https://github.com/Ryujinx/release-channel-master/releases/download/1.1.1330/ryujinx-1.1.1330-linux_x64.tar.gz
+        sha256: 1e9158a3f55ff128e089ac3778dfb35127f2cab9d59bc52b5fe63c7b7ac2f6cb
 
   # Ryujinx Appimage - END
 
