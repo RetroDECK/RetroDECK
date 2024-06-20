@@ -615,13 +615,13 @@ configurator_retrodeck_tools_dialog() {
       IFS="," read -ra folders_to_remove <<< "$choice"
       for folder in "${folders_to_remove[@]}"; do
         log i "Removing empty folder $folder"
-        rm -f "$folder"
+        rm -rf "$folder"
       done
       configurator_generic_dialog "RetroDECK Configurator - Remove Empty ROM Folders" "The removal process is complete."
     elif [[ ! -z $choice ]]; then # User clicked "Remove All"
       for folder in "${all_empty_folders[@]}"; do
         log i "Removing empty folder $folder"
-        rm -f "$folder"
+        rm -rf "$folder"
       done
       configurator_generic_dialog "RetroDECK Configurator - Remove Empty ROM Folders" "The removal process is complete."
     fi
