@@ -313,7 +313,7 @@ make_name_pretty() {
   if [[ ! -z "$system" ]]; then
     IFS='^' read -r internal_name pretty_name < <(echo "$system")
   else
-    pretty_name="$system"
+    pretty_name="$1"
   fi
   echo "$pretty_name"
 }
