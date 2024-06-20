@@ -591,8 +591,16 @@ configurator_retrodeck_tools_dialog() {
 
   "Tool: Remove Empty ROM Folders" )
     log i "Configurator: opening \"$choice\" menu"
-    find_empty_rom_folders
-
+    (
+      find_empty_rom_folders
+    ) |
+      zenity --progress --no-cancel --pulsate --auto-close \
+      --icon-name=net.retrodeck.retrodeck \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title="Finding Empty ROM Folders" \
+      --width=400 --height=200 \
+      --text="Finding empty ROM folders, please be patient.\n\n"
+    
     choice=$(zenity \
         --list --width=1200 --height=720 --title "RetroDECK Configurator - RetroDECK: Remove Empty ROM Folders" \
         --checklist --hide-column=3 --ok-label="Remove Selected" --extra-button="Remove All" \
