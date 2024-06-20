@@ -153,7 +153,6 @@ update_rd_conf() {
 
   # STAGE 2: To handle presets sections that use duplicate setting names
 
-  mv -f $rd_conf $rd_conf_backup # Backup config file agiain before update but after Stage 1 expansion
   generate_single_patch $rd_defaults $rd_conf_backup $rd_update_patch retrodeck # Create a patch file for differences between defaults and current user settings
   sed -i '/change^^version/d' $rd_update_patch # Remove version line from temporary patch file
   deploy_single_patch $rd_defaults $rd_update_patch $rd_conf # Re-apply user settings to defaults file
