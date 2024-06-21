@@ -1199,6 +1199,8 @@ modules:
 
   # GZDoom - Start
   # When updating remember to update all the .pk3 files from the standalone linux download
+  - rd-submodules/shared-modules/gzdoom/game-music-emu.json
+  - rd-submodules/shared-modules/gzdoom/zmusic.json
   - rd-submodules/shared-modules/gzdoom/gzdoom.json
   # GZDoom - END
   
