@@ -560,7 +560,6 @@ deploy_helper_files() {
       eval current_dest="$dest"
       cp -f "$helper_files_folder/$file" "$current_dest/$file"
     fi
-
   done < "$helper_files_list"
 }
 
