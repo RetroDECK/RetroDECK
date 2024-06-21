@@ -853,16 +853,6 @@ prepare_component() {
     sed -i 's#RETRODECKSAVESDIR#'$saves_folder'#g' "/var/config/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON
   fi
 
-  if [[ "$component" =~ ^(boilr|all)$ ]]; then
-  component_found="true"
-    log i "----------------------"
-    log i "Prepearing BOILR"
-    log i "----------------------"
-
-    create_dir "/var/config/boilr"
-    cp -fvr "/app/libexec/steam-sync/config.toml" "/var/config/boilr"
-  fi
-
   if [[ $component_found="false" ]]; then
     log e "Supplied component $component not found, not resetting"
   fi
