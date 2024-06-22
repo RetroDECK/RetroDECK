@@ -586,16 +586,10 @@ configurator_retrodeck_tools_dialog() {
 
   "Tool: Remove Empty ROM Folders" )
     log i "Configurator: opening \"$choice\" menu"
-    (
-      find_empty_rom_folders
-    ) |
-      zenity --progress --no-cancel --pulsate --auto-close \
-      --icon-name=net.retrodeck.retrodeck \
-      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title="Finding Empty ROM Folders" \
-      --width=400 --height=200 \
-      --text="Finding empty ROM folders, please be patient.\n\n"
-    
+
+    configurator_generic_dialog "RetroDECK Configurator - Remove Empty ROM Folders" "Searching for empty rom folders, please be patient..."
+    find_empty_rom_folders
+
     choice=$(zenity \
         --list --width=1200 --height=720 --title "RetroDECK Configurator - RetroDECK: Remove Empty ROM Folders" \
         --checklist --hide-column=3 --ok-label="Remove Selected" --extra-button="Remove All" \
@@ -604,7 +598,7 @@ configurator_retrodeck_tools_dialog() {
         --column "Remove?" \
         --column "System" \
         "${empty_rom_folders_list[@]}")
-    
+
     local rc=$?
     if [[ $rc == "0" && ! -z $choice ]]; then # User clicked "Remove Selected" with at least one system selected
       IFS="," read -ra folders_to_remove <<< "$choice"
@@ -620,7 +614,7 @@ configurator_retrodeck_tools_dialog() {
       done
       configurator_generic_dialog "RetroDECK Configurator - Remove Empty ROM Folders" "The removal process is complete."
     fi
-    
+
     configurator_retrodeck_tools_dialog
   ;;
 
