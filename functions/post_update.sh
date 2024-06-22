@@ -313,8 +313,7 @@ post_update() {
     set_setting_value "$es_settings" "UserThemeDirectory" "$rdhome/ES-DE/themes" "es_settings"
     mv -f "$rdhome/themes" "$rdhome/ES-DE/themes" && log d "Move of \"$rdhome/themes\" completed"
     mv -f "$rdhome/downloaded_media" "$rdhome/ES-DE/downloaded_media" && log d "Move of \"$rdhome/downloaded_media\" completed"
-    mv -f "$rdhome/gamelists/"* "$rdhome/ES-DE/gamelists" && log d "Move of \"$rdhome/gamelists/\" completed"
-    rm -rf "$rdhome/gamelists"
+    mv -f "$rdhome/gamelists/"* "$rdhome/ES-DE/gamelists" && log d "Move of \"$rdhome/gamelists/\" completed" && rm -rf "$rdhome/gamelists"
 
     log i "MAME-SA, migrating samples to the new exposed folder: from \"/var/data/mame/assets/samples\" to \"$bios_folder/mame-sa/samples\""
     create_dir "$bios_folder/mame-sa/samples"
@@ -343,6 +342,11 @@ post_update() {
     if [ -d ] then;
       log i "Vita3K changed some paths, reflecting them: moving \"/var/data/Vita3K\" in \"/var/config/Vita3K\""
       mv -f "/var/data/Vita3K" "/var/config/Vita3K"
+
+      log i "Moving ES-DE downloaded_media, gamelist, and themes from \"$rdhome\" to \"$rdhome/ES-DE\" due to a RetroDECK Framework bug"
+      mv -f "$rdhome/themes" "$rdhome/ES-DE/themes" && log d "Move of \"$rdhome/themes\" completed"
+      mv -f "$rdhome/downloaded_media" "$rdhome/ES-DE/downloaded_media" && log d "Move of \"$rdhome/downloaded_media\" completed"
+      mv -f "$rdhome/gamelists/"* "$rdhome/ES-DE/gamelists" && log d "Move of \"$rdhome/gamelists/\" completed" && rm -rf "$rdhome/gamelists"
     fi
   fi
 
