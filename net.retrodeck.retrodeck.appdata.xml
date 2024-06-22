@@ -74,12 +74,13 @@
             <ul>
                <li>ES-DE: updated to 3.0.3</li>
                <li>RUNTIME: updated to KDE 6.7</li>
-               <li>All emulators updated</li>
+               <li>All emulators and engines updated</li>
                <li>CONFIGURATOR: fixed an issue in the multi-file compression tool that prevented some type of files to be converted</li>
                <li>CONFIGURATOR: added headless state for some functions (this will help to migrate to the Godot Configurator)</li>
                <li>CONFIGURATOR: added a new "Empty ROMs folder removal" tool helping the user to cleanup the roms folder by deleting the empty folders</li>
                <li>CONFIGURATOR: edded a new "Rebuild removed ROMs folders" tool. This is complementary to the previous one:by recreating the whole roms folder structure</li>
                <li>CONFIGURATOR: chd compression functionality restored</li>
+               <li>FRAMEWORK: fixed an issue where second level subfolders inside retrodeck folder were not correctly placed, this caused errors on ES-DE as themes and downloaded_media folder could not be found after a reset or first install</li>
                <li>CEMU: now audio should work correctly when docking and undocking the Steam Deck</li>
                <li>CEMU: added microphone blow input to R3</li>
                <li>INFRASTRUCTURE: we now have a self-hosted Gitea repo in case fo disaster recovery</li>
