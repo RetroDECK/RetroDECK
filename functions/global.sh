@@ -200,7 +200,6 @@ else
   fi
 
   conf_read
-  #tmplog_merger # This function is tempry(?) removed
 
   # Verify rdhome is where it is supposed to be.
   if [[ ! -d "$rdhome" ]]; then

@@ -23,7 +23,8 @@ prepare_component() {
         local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
         if [[ ! $current_setting_name =~ (rdhome|sdcard) ]]; then # Ignore these locations
           local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
-          declare -g "$current_setting_name=$rdhome/$(basename $current_setting_value)"
+          declare -g "$current_setting_name=$rdhome/${current_setting_value#*retrodeck/}" #removes everything until "retrodeck" and adds the actual retrodeck folder
+          log d "Setting: $current_setting_name=$current_setting_value"
           if [[ ! $current_setting_name == "logs_folder" ]]; then # Don't create a logs folder normally, we want to maintain the current files exactly to not lose early-install logs.
             create_dir "$rdhome/$(basename $current_setting_value)"
           else # Log folder-specific actions
@@ -33,8 +34,8 @@ prepare_component() {
           fi
         fi
       done < <(grep -v '^\s*$' $rd_conf | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
-      create_dir "/var/config/retrodeck/godot"
-
+      create_dir "/var/config/retrodeck/godot" # TODO: what is this for? Can we delete it or add it to the retrodeck.cfg so the folder will be created by the above script?
+      
     fi
     if [[ "$action" == "postmove" ]]; then # Update the paths of any folders that came with the retrodeck folder during a move
       while read -r config_line; do

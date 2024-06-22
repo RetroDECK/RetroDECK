@@ -448,6 +448,8 @@ finit() {
 
   esac
 
+  log i "\"retrodeck\" folder will be located in \"$rdhome\""
+
   prepare_component "reset" "retrodeck" # Parse the [paths] section of retrodeck.cfg and set the value of / create all needed folders
 
   conf_write # Write the new values to retrodeck.cfg
