@@ -124,7 +124,7 @@ prepare_component() {
       create_dir "$bios_folder/fbneo/cheats"
       create_dir "$bios_folder/fbneo/blend"
       dir_prep "$mods_folder/FBNeo" "$bios_folder/fbneo/patched"
-      
+
       # PPSSPP
       log i "--------------------------------"
       log i "Prepearing PPSSPP_LIBRETRO"
@@ -172,11 +172,11 @@ prepare_component() {
       set_setting_value "$ra_scummvm_conf" "themepath" "$mods_folder/RetroArch/ScummVM/theme" "libretro_scummvm" "scummvm"
       set_setting_value "$ra_scummvm_conf" "savepath" "$saves_folder/scummvm" "libretro_scummvm" "scummvm"
       set_setting_value "$ra_scummvm_conf" "browser_lastpath" "$roms_folder/scummvm" "libretro_scummvm" "scummvm"
-    
+
       dir_prep "$texture_packs_folder/RetroArch-Mesen" "/var/config/retroarch/system/HdPacks"
       dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/cache" "/var/config/retroarch/system/Mupen64plus/cache"
       dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/hires_texture" "/var/config/retroarch/system/Mupen64plus/hires_texture"
-    
+
       # Reset default preset settings
       set_setting_value "$rd_conf" "retroarch" "$(get_setting_value "$rd_defaults" "retroarch" "retrodeck" "cheevos")" "retrodeck" "cheevos"
       set_setting_value "$rd_conf" "retroarch" "$(get_setting_value "$rd_defaults" "retroarch" "retrodeck" "cheevos_hardcore")" "retrodeck" "cheevos_hardcore"
@@ -853,7 +853,7 @@ prepare_component() {
     sed -i 's#RETRODECKSAVESDIR#'$saves_folder'#g' "/var/config/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON
   fi
 
-  if [[ $component_found="false" ]]; then
+  if [[ $component_found == "false" ]]; then
     log e "Supplied component $component not found, not resetting"
   fi
 

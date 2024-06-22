@@ -42,6 +42,14 @@ find_empty_rom_folders() {
 
   empty_rom_folders_list=()
   all_empty_folders=()
+  all_helper_files=()
+
+  while IFS='^' read -r file dest
+  do
+    if [[ ! "$file" == "#"* ]] && [[ ! -z "$file" ]]; then
+      all_helper_files=("${all_helper_files[@]}" "$file")
+    fi
+  done < "$helper_files_list"
 
   for system in $(find "$roms_folder" -mindepth 1 -maxdepth 1 -type d -printf '%f\n')
   do
@@ -59,6 +67,21 @@ find_empty_rom_folders() {
         empty_rom_folders_list=("${empty_rom_folders_list[@]}" "false" "$(realpath $dir)")
         all_empty_folders=("${all_empty_folders[@]}" "$(realpath $dir)")
         echo "$(realpath $dir)" >> "$godot_empty_roms_folders" # Godot data transfer temp file
+    elif [[ $count -eq 2 ]] && [[ "$files" =~ "systeminfo.txt" ]]; then
+      # Directory contains 2 files, one of which is "systeminfo.txt"
+      for helper_file in ${all_helper_files[@]} # Compare helper file list to dir file list
+      do
+        if [[ "$files" =~ "$helper_file" ]]; then
+          contains_helper_file="true" # Helper file was found
+          break
+        fi
+      done
+      if [[ "$contains_helper_file" == "true" ]]; then
+        # Directory contains only systeminfo.txt and a helper file
+        empty_rom_folders_list=("${empty_rom_folders_list[@]}" "false" "$(realpath $dir)")
+        all_empty_folders=("${all_empty_folders[@]}" "$(realpath $dir)")
+        echo "$(realpath $dir)" >> "$godot_empty_roms_folders" # Godot data transfer temp file
+      fi
     fi
   done
 }
