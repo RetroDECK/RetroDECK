@@ -250,7 +250,7 @@ prepare_component() {
       set_setting_value "$rd_conf" "citra" "$(get_setting_value "$rd_defaults" "citra" "retrodeck" "ask_to_exit")" "retrodeck" "ask_to_exit"
     fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
-      dir_prep "$rdhome/bios/citra/sysdata" "/var/data/citra-emu/sysdata"
+      dir_prep "$bios_folder/citra/sysdata" "/var/data/citra-emu/sysdata"
       dir_prep "$rdhome/logs/citra" "/var/data/citra-emu/log"
       dir_prep "$mods_folder/Citra" "/var/data/citra-emu/load/mods"
       dir_prep "$texture_packs_folder/Citra" "/var/data/citra-emu/load/textures"
@@ -748,18 +748,18 @@ prepare_component() {
         log d "Figure out what Vita3k needs for multi-user"
       else # Single-user actions
         # NOTE: the component is writing in "." so it must be placed in the rw filesystem. A symlink of the binary is already placed in /app/bin/Vita3K
-        rm -rf "/var/data/Vita3K"
-        create_dir "/var/data/Vita3K/Vita3K"
-        cp -fvr "$emuconfigs/vita3k/config.yml" "/var/data/Vita3K" # component config
-        cp -fvr "$emuconfigs/vita3k/ux0" "$bios_folder/Vita3K/Vita3K" # User config
-        set_setting_value "$vita3kconf" "pref-path" "$rdhome/bios/Vita3K/Vita3K/" "vita3k"
+        rm -rf "/var/config/Vita3K"
+        create_dir "/var/config/Vita3K"
+        cp -fvr "$emuconfigs/vita3k/config.yml" "$vita3kconf" # component config
+        cp -fvr "$emuconfigs/vita3k/ux0" "$bios_folder/Vita3K/" # User config
+        set_setting_value "$vita3kconf" "pref-path" "$bios_folder/Vita3K/" "vita3k"
       fi
       # Shared actions
-      dir_prep "$saves_folder/psvita/vita3k" "$bios_folder/Vita3K/Vita3K/ux0/user/00/savedata" # Multi-user safe?
+      dir_prep "$saves_folder/psvita/vita3k" "$bios_folder/Vita3K/ux0/user/00/savedata" # Multi-user safe?
     fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
-      dir_prep "$saves_folder/psvita/vita3k" "$bios_folder/Vita3K/Vita3K/ux0/user/00/savedata" # Multi-user safe?
-      set_setting_value "$vita3kconf" "pref-path" "$rdhome/bios/Vita3K/Vita3K/" "vita3k"
+      dir_prep "$saves_folder/psvita/vita3k" "$bios_folder/Vita3K/ux0/user/00/savedata" # Multi-user safe?
+      set_setting_value "$vita3kconf" "pref-path" "$bios_folder/Vita3K/" "vita3k"
     fi
   fi
 
@@ -845,7 +845,7 @@ prepare_component() {
     create_dir "/var/data/gzdoom/audio/midi"
     create_dir "/var/data/gzdoom/audio/fm_banks"
     create_dir "/var/data/gzdoom/audio/soundfonts"
-    create_dir "$rdhome/bios/gzdoom"
+    create_dir "$bios_folder/gzdoom"
 
     cp -fvr "$emuconfigs/gzdoom/gzdoom.ini" "/var/config/gzdoom"
 

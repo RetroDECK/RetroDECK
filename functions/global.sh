@@ -118,8 +118,7 @@ rpcs3vfsconf="/var/config/rpcs3/vfs.yml"
 
 # Vita3k config files
 
-vita3kconf="/var/data/Vita3K/config.yml"
-vita3kusrconfdir="$bios_folder/Vita3K/Vita3K"
+vita3kconf="/var/config/Vita3K/config.yml"
 
 # MAME-SA config files
 

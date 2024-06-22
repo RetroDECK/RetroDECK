@@ -339,6 +339,13 @@ post_update() {
     fi
   fi
 
+  if [[ $(check_version_is_older_than "0.8.2b") == "true" ]]; then
+    if [ -d ] then;
+      log i "Vita3K changed some paths, reflecting them: moving \"/var/data/Vita3K\" in \"/var/config/Vita3K\""
+      mv -f "/var/data/Vita3K" "/var/config/Vita3K"
+    fi
+  fi
+
   # if [[ $(check_version_is_older_than "0.9.0b") == "true" ]]; then
   #   # Placeholder for version 0.9.0b
   #   rm /var/config/emulationstation/.emulationstation # remving the old symlink to .emulationstation as it might be not needed anymore
