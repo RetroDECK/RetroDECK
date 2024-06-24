@@ -29,7 +29,7 @@ on:
 jobs:
 
   Building_RetroDECK:
-    runs-on: self-hosted
+    runs-on: self-hosted, ubuntu-20.04
     steps:
 
       # Circumventing this bug: https://github.com/flatpak/flatpak-builder/issues/317
