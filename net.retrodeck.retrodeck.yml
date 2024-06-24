@@ -343,6 +343,16 @@ modules:
           stable-only: true
           url-template: https://github.com/libusb/libusb/releases/download/v$version/libusb-$version.tar.bz2
 
+  # needed for chdman
+  - name: libFLAC
+    buildsystem: meson
+    config-opts:
+      - -Dbuildtype=release
+    sources:
+      - type: archive
+        url: https://downloads.xiph.org/releases/flac/flac-1.4.2.tar.xz
+        sha256: e322d58a1f48d23d9dd38f432672865f6f79e73a6f9cc5a5f57fcaa83eb5a8e4
+
   # ES-DE - START
   # https://gitlab.com/es-de/emulationstation-de
 
