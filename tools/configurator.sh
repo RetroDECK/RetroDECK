@@ -855,29 +855,33 @@ configurator_compress_multiple_games_dialog() {
 
   find_compatible_games "$1"
 
-  if [[ ! "$target_selection" == "everything" ]]; then # If the user chose to not auto-compress everything
-    choice=$(zenity \
-        --list --width=1200 --height=720 --title "RetroDECK Configurator - RetroDECK: Compression Tool" \
-        --checklist --hide-column=3 --ok-label="Compress Selected" --extra-button="Compress All" \
-        --separator="," --print-column=3 \
-        --text="Choose which games to compress:" \
-        --column "Compress?" \
-        --column "Game" \
-        --column "Game Full Path" \
-        "${compressable_games_list[@]}")
+  if [[ ! $(echo "${#all_compressable_games[@]}") == "0" ]]; then
+    if [[ ! "$target_selection" == "everything" ]]; then # If the user chose to not auto-compress everything
+      choice=$(zenity \
+          --list --width=1200 --height=720 --title "RetroDECK Configurator - RetroDECK: Compression Tool" \
+          --checklist --hide-column=3 --ok-label="Compress Selected" --extra-button="Compress All" \
+          --separator="," --print-column=3 \
+          --text="Choose which games to compress:" \
+          --column "Compress?" \
+          --column "Game" \
+          --column "Game Full Path" \
+          "${compressable_games_list[@]}")
 
-    local rc=$?
-    if [[ $rc == "0" && ! -z $choice ]]; then # User clicked "Compress Selected" with at least one game selected
-      IFS="," read -ra games_to_compress <<< "$choice"
-      local total_games_to_compress=${#games_to_compress[@]}
-      local games_left_to_compress=$total_games_to_compress
-    elif [[ ! -z $choice ]]; then # User clicked "Compress All"
+      local rc=$?
+      if [[ $rc == "0" && ! -z $choice ]]; then # User clicked "Compress Selected" with at least one game selected
+        IFS="," read -ra games_to_compress <<< "$choice"
+        local total_games_to_compress=${#games_to_compress[@]}
+        local games_left_to_compress=$total_games_to_compress
+      elif [[ ! -z $choice ]]; then # User clicked "Compress All"
+        games_to_compress=("${all_compressable_games[@]}")
+        local total_games_to_compress=${#all_compressable_games[@]}
+        local games_left_to_compress=$total_games_to_compress
+      fi
+    else # The user chose to auto-compress everything
       games_to_compress=("${all_compressable_games[@]}")
-      local total_games_to_compress=${#all_compressable_games[@]}
-      local games_left_to_compress=$total_games_to_compress
     fi
-  else # The user chose to auto-compress everything
-    games_to_compress=("${all_compressable_games[@]}")
+  else
+    configurator_generic_dialog "RetroDECK Configurator - RetroDECK: Compression Tool" "No compressable files were found."
   fi
 
   if [[ ! $(echo "${#games_to_compress[@]}") == "0" ]]; then
