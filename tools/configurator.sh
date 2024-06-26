@@ -879,8 +879,8 @@ configurator_compress_multiple_games_dialog() {
       fi
     else # The user chose to auto-compress everything
       games_to_compress=("${all_compressable_games[@]}")
-      total_games_to_compress=${#all_compressable_games[@]}
-      games_left_to_compress=$total_games_to_compress
+      local total_games_to_compress=${#all_compressable_games[@]}
+      local games_left_to_compress=$total_games_to_compress
     fi
   else
     configurator_generic_dialog "RetroDECK Configurator - RetroDECK: Compression Tool" "No compressable files were found."
