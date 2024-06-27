@@ -28,7 +28,7 @@ compress_game() {
   fi
 
   if [[ $post_compression_cleanup == "true" ]]; then # Remove file(s) if requested
-    if [[ -f "${file%.*}.$compatible_compression_format" ]]; then
+    if [[ -f "${file%.*}.$1" ]]; then
       log i "Performing post-compression file cleanup"
       if [[ "$file" == *".cue" ]]; then
         local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" "$file")
@@ -45,7 +45,7 @@ compress_game() {
         rm -f "$(realpath "$file")"
       fi
     else
-      log i "Compressed file ${file%.*}.$compatible_compression_format not found, skipping original file deletion"
+      log i "Compressed file ${file%.*}.$1 not found, skipping original file deletion"
     fi
   fi
 }
