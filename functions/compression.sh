@@ -28,7 +28,7 @@ compress_game() {
   fi
 
   if [[ $post_compression_cleanup == "true" ]]; then # Remove file(s) if requested
-    if [[ -f "${file%.*}.$compatible_compression_format" ]]; then
+    if [[ -f "${file%.*}.$1" ]]; then
       log i "Performing post-compression file cleanup"
       if [[ "$file" == *".cue" ]]; then
         local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" "$file")
@@ -38,15 +38,14 @@ compress_game() {
           log i "Removing file $file_path/$line"
           rm -f "$file_path/$line"
         done < <(printf '%s\n' "$cue_bin_files")
-        log i "Removing file $(realpath $file)"
+        log i "Removing file $(realpath "$file")"
         rm -f $(realpath "$file")
       else
-        log i "Removing file $(realpath $file)"
+        log i "Removing file $(realpath "$file")"
         rm -f "$(realpath "$file")"
       fi
     else
-      log i "Compressed file ${file%.*}.$compatible_compression_format not found, skipping original file deletion"
-      configurator_generic_dialog "RetroDECK Configurator - RetroDECK: Compression Tool" "A compressed version of the file was not found, skipping deletion."
+      log i "Compressed file ${file%.*}.$1 not found, skipping original file deletion"
     fi
   fi
 }
