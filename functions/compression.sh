@@ -46,7 +46,6 @@ compress_game() {
       fi
     else
       log i "Compressed file ${file%.*}.$compatible_compression_format not found, skipping original file deletion"
-      configurator_generic_dialog "RetroDECK Configurator - RetroDECK: Compression Tool" "A compressed version of the file was not found, skipping deletion."
     fi
   fi
 }
