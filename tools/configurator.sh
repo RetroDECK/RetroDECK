@@ -587,6 +587,7 @@ configurator_retrodeck_tools_dialog() {
   "Tool: Remove Empty ROM Folders" )
     log i "Configurator: opening \"$choice\" menu"
 
+    configurator_generic_dialog "RetroDECK Configurator - Remove Empty ROM Folders" "Before removing any identified empty ROM folders,\nplease make sure your ROM collection is backed up, just in case!"
     configurator_generic_dialog "RetroDECK Configurator - Remove Empty ROM Folders" "Searching for empty rom folders, please be patient..."
     find_empty_rom_folders
 
