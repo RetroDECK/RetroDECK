@@ -285,6 +285,11 @@ dir_prep() {
   log i "$symlink is now $real"
 }
 
+rd_zenity() {
+  # This function replaces the standard 'zenity' command and filters out annoying GTK errors on Steam Deck
+  zenity 2> >(grep -v 'Gtk' >&2) "$@"
+}
+
 update_rpcs3_firmware() {
   create_dir "$roms_folder/ps3/tmp"
   chmod 777 "$roms_folder/ps3/tmp"
