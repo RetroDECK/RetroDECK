@@ -380,7 +380,7 @@ post_update() {
   deploy_helper_files
   build_retrodeck_current_presets
   ) |
-  zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+  rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK - Upgrade Process" \
   --width=400 --height=200 \

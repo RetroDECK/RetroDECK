@@ -8,10 +8,10 @@ directory_browse() {
 
   while [ $path_selected == false ]
   do
-    local target="$(zenity --file-selection --title="Choose $1" --directory)"
+    local target="$(rd_zenity --file-selection --title="Choose $1" --directory)"
     if [ ! -z "$target" ] #yes
     then
-      zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
+      rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
       --text="Directory $target chosen, is this correct?"
       if [ $? == 0 ]
       then
@@ -20,7 +20,7 @@ directory_browse() {
         break
       fi
     else
-      zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
+      rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
       --text="No directory selected. Do you want to exit the selection process?"
       if [ $? == 0 ]
       then
@@ -38,10 +38,10 @@ file_browse() {
 
   while [ $file_selected == false ]
   do
-    local target="$(zenity --file-selection --title="Choose $1")"
+    local target="$(rd_zenity --file-selection --title="Choose $1")"
     if [ ! -z "$target" ] #yes
     then
-      zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
+      rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
       --text="File $target chosen, is this correct?"
       if [ $? == 0 ]
       then
@@ -50,7 +50,7 @@ file_browse() {
         break
       fi
     else
-      zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
+      rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
       --text="No file selected. Do you want to exit the selection process?"
       if [ $? == 0 ]
       then
@@ -89,13 +89,13 @@ move() {
     rsync -a --remove-source-files --ignore-existing --mkpath "$source_dir" "$dest_dir" # Copy files but don't overwrite conflicts
     find "$source_dir" -type d -empty -delete # Cleanup empty folders that were left behind
   ) |
-  zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+  rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Configurator Utility - Move in Progress" \
   --text="Moving directory $(basename "$1") to new location of $2, please wait."
 
   if [[ -d "$source_dir" ]]; then # Some conflicting files remain
-    zenity --icon-name=net.retrodeck.retrodeck --error --no-wrap \
+    rd_zenity --icon-name=net.retrodeck.retrodeck --error --no-wrap \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator Utility - Move Directories" \
     --text="There were some conflicting files that were not moved.\n\nAll files that could be moved are in the new location,\nany files that already existed at the new location have not been moved and will need to be handled manually."
@@ -133,7 +133,7 @@ download_file() {
   (
     wget "$1" -O "$2" -q
   ) |
-  zenity --progress \
+  rd_zenity --progress \
     --title="Downloading File" \
     --text="Downloading $3..." \
     --pulsate \
@@ -327,10 +327,10 @@ finit_browse() {
 path_selected=false
 while [ $path_selected == false ]
 do
-  local target="$(zenity --file-selection --title="Choose RetroDECK data directory location" --directory)"
+  local target="$(rd_zenity --file-selection --title="Choose RetroDECK data directory location" --directory)"
   if [[ ! -z "$target" ]]; then
     if [[ -w "$target" ]]; then
-      zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
+      rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
       --cancel-label="No" \
       --ok-label "Yes" \
       --text="Your RetroDECK data folder will be:\n\n$target/retrodeck\n\nis that ok?"
@@ -340,7 +340,7 @@ do
         echo "$target/retrodeck"
         break
       else
-        zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" --text="Do you want to quit?"
+        rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" --text="Do you want to quit?"
         if [ $? == 0 ] # yes, quit
         then
           quit_retrodeck
@@ -348,7 +348,7 @@ do
       fi
     fi
   else
-    zenity --error --no-wrap \
+    rd_zenity --error --no-wrap \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK" \
     --ok-label "Quit" \
@@ -367,7 +367,7 @@ finit_user_options_dialog() {
   done < $finit_options_list
 
 
-  local choices=$(zenity \
+  local choices=$(rd_zenity \
   --list --width=1200 --height=720 \
   --checklist --hide-column=4 --ok-label="Confirm Selections" --extra-button="Enable All" \
   --separator=" " --print-column=4 \
@@ -411,7 +411,7 @@ finit() {
     if [ ! -d "$sdcard" ] # SD Card path is not existing
     then
       log e "SD card not found"
-      zenity --error --no-wrap \
+      rd_zenity --error --no-wrap \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK" \
       --ok-label "Browse" \
@@ -424,7 +424,7 @@ finit() {
     elif [ ! -w "$sdcard" ] #SD card found but not writable
       then
         log e "SD card found but not writable"
-        zenity --error --no-wrap \
+        rd_zenity --error --no-wrap \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         --title "RetroDECK" \
         --ok-label "Quit" \
@@ -439,7 +439,7 @@ finit() {
 
   "Custom Location" )
       log i "Custom Location selected"
-      zenity --info --no-wrap \
+      rd_zenity --info --no-wrap \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK" \
       --ok-label "Browse" \
@@ -470,7 +470,7 @@ finit() {
     configurator_generic_dialog "Vita3K Firmware Install" "You have chosen to install the Vita3K firmware during the RetroDECK first setup.\n\nThis process will take several minutes and requires network access.\n\nVita3K will be launched automatically at the end of the RetroDECK setup process.\nOnce the firmware is installed, please close the emulator to finish the process."
   fi
 
-  zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
+  rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
   --text="RetroDECK will now install the needed files, which can take up to one minute.\nRetroDECK will start once the process is completed.\n\nPress OK to continue."
 
@@ -498,7 +498,7 @@ finit() {
   fi
 
   ) |
-  zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+  rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Finishing Initialization" \
   --text="RetroDECK is finishing the initial setup process, please wait."
@@ -714,7 +714,7 @@ branch_selector() {
 
     # Display branches in a Zenity list dialog
     selected_branch=$(
-      zenity --list \
+      rd_zenity --list \
         --icon-name=net.retrodeck.retrodeck \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         --title "RetroDECK Configurator Cooker Branch - Select Branch" \
@@ -724,7 +724,7 @@ branch_selector() {
 
     # Display warning message
     if [ $selected_branch ]; then
-        zenity --question --icon-name=net.retrodeck.retrodeck --no-wrap \
+        rd_zenity --question --icon-name=net.retrodeck.retrodeck --no-wrap \
           --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
           --title "RetroDECK Configurator Cooker Branch - Switch Branch" \
           --text="Are you sure you want to move to \"$selected_branch\" branch?"
@@ -745,7 +745,7 @@ branch_selector() {
           flatpak-spawn --host flatpak install --user --bundle --noninteractive -y "$rdhome/RetroDECK_Updates/RetroDECK-cooker.flatpak"
           rm -rf "$rdhome/RetroDECK_Updates" # Cleanup old bundles to save space
           ) |
-          zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+          rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
           --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
           --title "RetroDECK Updater" \
           --text="RetroDECK is updating to the latest \"$selected_branch\" version, please wait."
