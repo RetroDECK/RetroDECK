@@ -68,7 +68,7 @@ else
     # Check if the .doom file exists
     if [[ ! -e "$doom_file" ]]; then
         log e "doom file not found in \"$doom_file\""
-        zenity --error --no-wrap \
+        rd_zenity --error --no-wrap \
 	    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
 	    --title "RetroDECK" \
 	    --text="File \"$doom_file\" not found. Quitting."
@@ -85,7 +85,7 @@ else
         # If the file is not found, exit with an error
         if [[ -z "$found_file" ]]; then
             log "[ERROR] File not found in \"$line\""
-            zenity --error --no-wrap \
+            rd_zenity --error --no-wrap \
                 --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
                 --title "RetroDECK" \
                 --text="File \"$doom_file\" not found. Quitting."

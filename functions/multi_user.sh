@@ -2,7 +2,7 @@
 
 multi_user_set_default_dialog() {
   chosen_user="$1"
-  choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="No and don't ask again" \
+  choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="No and don't ask again" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Default User" \
   --text="Would you like to set $chosen_user as the default user?\n\nIf the current user cannot be determined from the system, the default will be used.\nThis normally only happens in Desktop Mode.\n\nIf you would like to be asked which user is playing every time, click \"No and don't ask again\"")
@@ -23,7 +23,7 @@ do
 full_userlist=("${full_userlist[@]}" "$user")
 done < <(ls -1 "$multi_user_data_folder")
 
-chosen_user=$(zenity \
+chosen_user=$(rd_zenity \
   --list --width=1200 --height=720 \
   --ok-label="Select User" \
   --text="Choose the current user:" \
@@ -65,7 +65,7 @@ multi_user_disable_multi_user_mode() {
     full_userlist=("${full_userlist[@]}" "$user")
     done < <(ls -1 "$multi_user_data_folder")
 
-    single_user=$(zenity \
+    single_user=$(rd_zenity \
       --list --width=1200 --height=720 \
       --ok-label="Select User" \
       --text="Choose the current user:" \
@@ -125,7 +125,7 @@ multi_user_determine_current_user() {
         multi_user_setup_new_user
       else # If running in Desktop mode for the first time
         configurator_generic_dialog "RetroDECK Multi-User Mode" "The current user could not be determined from the system and there is no existing userlist.\n\nPlease enter the Steam account username (not profile name) into the next dialog, or run RetroDECK in game mode."
-        if zenity --entry \
+        if rd_zenity --entry \
           --title="Specify Steam username" \
           --text="Enter Steam username:"
         then # User clicked "OK"
