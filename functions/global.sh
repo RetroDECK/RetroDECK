@@ -13,7 +13,7 @@ source /app/libexec/framework.sh
 source /app/libexec/post_update.sh
 source /app/libexec/prepare_component.sh
 source /app/libexec/presets.sh
-source /app/libexec/configurator_fuctions.sh
+source /app/libexec/configurator_functions.sh
 
 # Static variables
 rd_conf="/var/config/retrodeck/retrodeck.cfg"                                                                         # RetroDECK config file path
@@ -118,8 +118,7 @@ rpcs3vfsconf="/var/config/rpcs3/vfs.yml"
 
 # Vita3k config files
 
-vita3kconf="/var/data/Vita3K/config.yml"
-vita3kusrconfdir="$bios_folder/Vita3K/Vita3K"
+vita3kconf="/var/config/Vita3K/config.yml"
 
 # MAME-SA config files
 
@@ -200,7 +199,6 @@ else
   fi
 
   conf_read
-  #tmplog_merger # This function is tempry(?) removed
 
   # Verify rdhome is where it is supposed to be.
   if [[ ! -d "$rdhome" ]]; then

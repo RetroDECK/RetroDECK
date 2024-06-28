@@ -153,7 +153,6 @@ update_rd_conf() {
 
   # STAGE 2: To handle presets sections that use duplicate setting names
 
-  mv -f $rd_conf $rd_conf_backup # Backup config file agiain before update but after Stage 1 expansion
   generate_single_patch $rd_defaults $rd_conf_backup $rd_update_patch retrodeck # Create a patch file for differences between defaults and current user settings
   sed -i '/change^^version/d' $rd_update_patch # Remove version line from temporary patch file
   deploy_single_patch $rd_defaults $rd_update_patch $rd_conf # Re-apply user settings to defaults file
@@ -313,7 +312,7 @@ make_name_pretty() {
   if [[ ! -z "$system" ]]; then
     IFS='^' read -r internal_name pretty_name < <(echo "$system")
   else
-    pretty_name="$system"
+    pretty_name="$1"
   fi
   echo "$pretty_name"
 }
@@ -449,6 +448,8 @@ finit() {
 
   esac
 
+  log i "\"retrodeck\" folder will be located in \"$rdhome\""
+
   prepare_component "reset" "retrodeck" # Parse the [paths] section of retrodeck.cfg and set the value of / create all needed folders
 
   conf_write # Write the new values to retrodeck.cfg
@@ -561,7 +562,6 @@ deploy_helper_files() {
       eval current_dest="$dest"
       cp -f "$helper_files_folder/$file" "$current_dest/$file"
     fi
-
   done < "$helper_files_list"
 }
 

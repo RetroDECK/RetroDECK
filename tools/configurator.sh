@@ -156,11 +156,6 @@ configurator_welcome_dialog() {
     configurator_about_retrodeck_dialog
   ;;
 
-  "Sync with Steam" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_add_steam
-  ;;
-
   "Developer Options" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_generic_dialog "RetroDECK Configurator - Developer Options" "The following features and options are potentially VERY DANGEROUS for your RetroDECK install!\n\nThey should be considered the bleeding-edge of upcoming RetroDECK features, and never used when you have important saves/states/roms that are not backed up!\n\nYOU HAVE BEEN WARNED!"
@@ -591,6 +586,9 @@ configurator_retrodeck_tools_dialog() {
 
   "Tool: Remove Empty ROM Folders" )
     log i "Configurator: opening \"$choice\" menu"
+
+    configurator_generic_dialog "RetroDECK Configurator - Remove Empty ROM Folders" "Before removing any identified empty ROM folders,\nplease make sure your ROM collection is backed up, just in case!"
+    configurator_generic_dialog "RetroDECK Configurator - Remove Empty ROM Folders" "Searching for empty rom folders, please be patient..."
     find_empty_rom_folders
 
     choice=$(zenity \
@@ -601,22 +599,23 @@ configurator_retrodeck_tools_dialog() {
         --column "Remove?" \
         --column "System" \
         "${empty_rom_folders_list[@]}")
-    
+
     local rc=$?
     if [[ $rc == "0" && ! -z $choice ]]; then # User clicked "Remove Selected" with at least one system selected
       IFS="," read -ra folders_to_remove <<< "$choice"
       for folder in "${folders_to_remove[@]}"; do
         log i "Removing empty folder $folder"
-        rm -f "$folder"
+        rm -rf "$folder"
       done
+      configurator_generic_dialog "RetroDECK Configurator - Remove Empty ROM Folders" "The removal process is complete."
     elif [[ ! -z $choice ]]; then # User clicked "Remove All"
       for folder in "${all_empty_folders[@]}"; do
         log i "Removing empty folder $folder"
-        rm -f "$folder"
+        rm -rf "$folder"
       done
+      configurator_generic_dialog "RetroDECK Configurator - Remove Empty ROM Folders" "The removal process is complete."
     fi
-    
-    configurator_generic_dialog "RetroDECK Configurator - Remove Empty ROM Folders" "The removal process is complete."
+
     configurator_retrodeck_tools_dialog
   ;;
 
@@ -857,29 +856,35 @@ configurator_compress_multiple_games_dialog() {
 
   find_compatible_games "$1"
 
-  if [[ ! "$target_selection" == "everything" ]]; then # If the user chose to not auto-compress everything
-    choice=$(zenity \
-        --list --width=1200 --height=720 --title "RetroDECK Configurator - RetroDECK: Compression Tool" \
-        --checklist --hide-column=3 --ok-label="Compress Selected" --extra-button="Compress All" \
-        --separator="," --print-column=3 \
-        --text="Choose which games to compress:" \
-        --column "Compress?" \
-        --column "Game" \
-        --column "Game Full Path" \
-        "${compressable_games_list[@]}")
+  if [[ ! $(echo "${#all_compressable_games[@]}") == "0" ]]; then
+    if [[ ! "$target_selection" == "everything" ]]; then # If the user chose to not auto-compress everything
+      choice=$(zenity \
+          --list --width=1200 --height=720 --title "RetroDECK Configurator - RetroDECK: Compression Tool" \
+          --checklist --hide-column=3 --ok-label="Compress Selected" --extra-button="Compress All" \
+          --separator="," --print-column=3 \
+          --text="Choose which games to compress:" \
+          --column "Compress?" \
+          --column "Game" \
+          --column "Game Full Path" \
+          "${compressable_games_list[@]}")
 
-    local rc=$?
-    if [[ $rc == "0" && ! -z $choice ]]; then # User clicked "Compress Selected" with at least one game selected
-      IFS="," read -ra games_to_compress <<< "$choice"
-      local total_games_to_compress=${#games_to_compress[@]}
-      local games_left_to_compress=$total_games_to_compress
-    elif [[ ! -z $choice ]]; then # User clicked "Compress All"
+      local rc=$?
+      if [[ $rc == "0" && ! -z $choice ]]; then # User clicked "Compress Selected" with at least one game selected
+        IFS="," read -ra games_to_compress <<< "$choice"
+        local total_games_to_compress=${#games_to_compress[@]}
+        local games_left_to_compress=$total_games_to_compress
+      elif [[ ! -z $choice ]]; then # User clicked "Compress All"
+        games_to_compress=("${all_compressable_games[@]}")
+        local total_games_to_compress=${#all_compressable_games[@]}
+        local games_left_to_compress=$total_games_to_compress
+      fi
+    else # The user chose to auto-compress everything
       games_to_compress=("${all_compressable_games[@]}")
       local total_games_to_compress=${#all_compressable_games[@]}
       local games_left_to_compress=$total_games_to_compress
     fi
-  else # The user chose to auto-compress everything
-    games_to_compress=("${all_compressable_games[@]}")
+  else
+    configurator_generic_dialog "RetroDECK Configurator - RetroDECK: Compression Tool" "No compressable files were found."
   fi
 
   if [[ ! $(echo "${#games_to_compress[@]}") == "0" ]]; then
@@ -1147,13 +1152,12 @@ configurator_reset_dialog() {
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
     --text="Which component do you want to reset to default settings?" \
     --column="Component" --column="Action" \
-    "BoilR" "Reset BoilR that manages the sync and scraping toward Steam library" \
     "ES-DE" "Reset the ES-DE frontend" \ )
     # TODO: "GyroDSU" "Reset the gyroscope manager GyroDSU"
 
     case $component_to_reset in
 
-    "BoilR" | "ES-DE" ) # TODO: GyroDSU
+    "ES-DE" ) # TODO: GyroDSU
       if [[ $(configurator_reset_confirmation_dialog "$component_to_reset" "Are you sure you want to reset $component_to_reset to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
         prepare_component "reset" "$component_to_reset" "configurator"
         configurator_process_complete_dialog "resetting $component_to_reset"
@@ -1244,49 +1248,6 @@ configurator_about_retrodeck_dialog() {
   ;;
 
   esac
-}
-
-configurator_add_steam() {
-  if [[ $(get_setting_value $rd_conf "steam_sync" retrodeck "options") == "true" ]]; then
-    zenity --question \
-    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - RetroDECK Steam Syncronization" \
-    --text="Steam syncronization is currently enabled. Do you want to disable it?\n\nThe already added shortcut will not be removed.\n"
-
-    if [ $? == 0 ] # User clicked "Yes"
-    then
-      disable_steam_sync
-    else # User clicked "Cancel"
-      configurator_welcome_dialog
-    fi
-  else
-    zenity --question \
-    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - RetroDECK Steam Syncronization" \
-    --text="Steam syncronization is currently disabled. Do you want to enable it?\n\nAll the games marked as favorites will be syncronized with Steam thanks to BoilR.\nRemember to restart Steam each time to see the changes.\n"
-
-    if [ $? == 0 ]
-    then
-      enable_steam_sync
-    else
-      configurator_welcome_dialog
-    fi
-  fi
-}
-
-enable_steam_sync() {
-  set_setting_value $rd_conf "steam_sync" "true" retrodeck "options"
-  zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK" \
-      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Configurator - RetroDECK Steam Syncronization" \
-      --text="Steam syncronization enabled, restart RetroDECK to get effect."
-  configurator_welcome_dialog
-}
-
-disable_steam_sync() {
-  set_setting_value $rd_conf "steam_sync" "false" retrodeck "options"
-  touch /tmp/retrodeck_steam_sync_exit
-  configurator_welcome_dialog
 }
 
 configurator_version_history_dialog() {

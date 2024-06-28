@@ -67,12 +67,63 @@
    <project_license>GPL-3.0</project_license>
    <metadata_license>CC0-1.0</metadata_license>
    <releases>
-        <release version="0.8.1b" date="2024-06-18">
-            <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.8.1b</url>
-            <description>
-                
-            </description>
-        </release>
+      <release version="0.8.2b" date="2024-06-20">
+         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.8.2b</url>
+         <description>
+            <p>Changes:</p>
+            <ul>
+               <li>ES-DE: updated to 3.0.3</li>
+               <li>RUNTIME: updated to KDE 6.7</li>
+               <li>All emulators and engines updated</li>
+               <li>CONFIGURATOR: fixed an issue in the multi-file compression tool that prevented some type of files to be converted</li>
+               <li>CONFIGURATOR: added headless state for some functions (this will help to migrate to the Godot Configurator)</li>
+               <li>CONFIGURATOR: added a new "Empty ROMs folder removal" tool helping the user to cleanup the roms folder by deleting the empty folders</li>
+               <li>CONFIGURATOR: edded a new "Rebuild removed ROMs folders" tool. This is complementary to the previous one:by recreating the whole roms folder structure</li>
+               <li>CONFIGURATOR: chd compression functionality restored</li>
+               <li>FRAMEWORK: fixed an issue where second level subfolders inside retrodeck folder were not correctly placed, this caused errors on ES-DE as themes and downloaded_media folder could not be found after a reset or first install</li>
+               <li>CEMU: now audio should work correctly when docking and undocking the Steam Deck</li>
+               <li>CEMU: added microphone blow input to R3</li>
+               <li>INFRASTRUCTURE: we now have a self-hosted Gitea repo in case fo disaster recovery</li>
+            </ul>
+            <p>Known issues:</p>
+            <ul>
+               <li>Please check the know issues in the Wiki under General Information.</li>
+            </ul>
+         </description>
+      </release>
+      <release version="0.8.1b" date="2024-05-13">
+         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.8.1b</url>
+         <description>
+            <p>Changes:</p>
+            <ul>
+               <li>All emulators updated</li>
+               <li>PREPARE_COMPONENT: now the choice is passed lowercased so the script don't have to check for the possible casings, this should fix the issue where GZDoom couldn't be reset as it was expecting both GZDOOM or gzdoom.</li>
+               <li>ES-DE: downloaded_media, gamelist, and themes are now moved to the new retrodeck/ES-DE (previously was retrodeck)</li>
+               <li>ES-DE: custom collections are now located in retrodeck/ES-DE/collections, this prevents to be destroyed by a reset</li>
+               <li>LOGGER: version notes are no more outputed in the terminal or in the logs</li>
+               <li>WORKFLOWS: added RetroDECK.flatpak.sha files</li>
+               <li>WORKFLOWS: disabled nightly builds (was broken)</li>
+               <li>FRAMEWORK: now the PR builds are recognized same as cooker builds</li>
+               <li>FRAMEWORK: now there is a warning to check background windows, useful when installing RCPS3 firmware as some users were stuck on that screen without noticing the windows in the backgrounds</li>
+               <li>COOKER_UPDATER: added the hash check before uninstalling the flatpak</li>
+               <li>HELPER_FILES: updated links pointing to the new wiki</li>
+               <li>MAME-SA: added cheats</li>
+               <li>RYUJINX: added an helper file to specify how to install the firmware (not copying it in the folder)</li>
+               <li>RPCS3: included the confirm on quit preset, that can be enabled or disabled trough configurator like the other emulators</li>
+               <li>RETROARCH: fixed an issue where if a zip contained more than the game files it failed to load the game</li>
+               <li>CITRA_LIBRETRO: upscaled to 2x (was 4x but was too much), set system as "New 3DS"</li>
+               <li>GW_LIBRETRO: Handheld Electronic (GW) Libretro is now the defaulted Game And Watch emulator (due to a bug)</li>
+               <li>MESEN_LIBRETRO: enabled FDS disk auto load</li>
+               <li>SCUMMVM_LIBRETRO: provided assets</li>
+               <li>BIOS_CHECKER: added bios support for 3DO, GB, GBC, GBA, Neo Geo CD</li>
+               <li>BIOS_CHECKER: added more missing hashes</li>
+            </ul>
+            <p>Known issues:</p>
+            <ul>
+               <li>Please check the know issues in the Wiki under General Information.</li>
+            </ul>
+         </description>
+      </release>
       <release version="0.8.0b" date="2024-04-17">
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.8.0b</url>
          <description>

@@ -23,7 +23,8 @@ prepare_component() {
         local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
         if [[ ! $current_setting_name =~ (rdhome|sdcard) ]]; then # Ignore these locations
           local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
-          declare -g "$current_setting_name=$rdhome/$(basename $current_setting_value)"
+          declare -g "$current_setting_name=$rdhome/${current_setting_value#*retrodeck/}" #removes everything until "retrodeck" and adds the actual retrodeck folder
+          log d "Setting: $current_setting_name=$current_setting_value"
           if [[ ! $current_setting_name == "logs_folder" ]]; then # Don't create a logs folder normally, we want to maintain the current files exactly to not lose early-install logs.
             create_dir "$rdhome/$(basename $current_setting_value)"
           else # Log folder-specific actions
@@ -33,8 +34,8 @@ prepare_component() {
           fi
         fi
       done < <(grep -v '^\s*$' $rd_conf | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
-      create_dir "/var/config/retrodeck/godot"
-
+      create_dir "/var/config/retrodeck/godot" # TODO: what is this for? Can we delete it or add it to the retrodeck.cfg so the folder will be created by the above script?
+      
     fi
     if [[ "$action" == "postmove" ]]; then # Update the paths of any folders that came with the retrodeck folder during a move
       while read -r config_line; do
@@ -124,7 +125,7 @@ prepare_component() {
       create_dir "$bios_folder/fbneo/cheats"
       create_dir "$bios_folder/fbneo/blend"
       dir_prep "$mods_folder/FBNeo" "$bios_folder/fbneo/patched"
-      
+
       # PPSSPP
       log i "--------------------------------"
       log i "Prepearing PPSSPP_LIBRETRO"
@@ -172,11 +173,11 @@ prepare_component() {
       set_setting_value "$ra_scummvm_conf" "themepath" "$mods_folder/RetroArch/ScummVM/theme" "libretro_scummvm" "scummvm"
       set_setting_value "$ra_scummvm_conf" "savepath" "$saves_folder/scummvm" "libretro_scummvm" "scummvm"
       set_setting_value "$ra_scummvm_conf" "browser_lastpath" "$roms_folder/scummvm" "libretro_scummvm" "scummvm"
-    
+
       dir_prep "$texture_packs_folder/RetroArch-Mesen" "/var/config/retroarch/system/HdPacks"
       dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/cache" "/var/config/retroarch/system/Mupen64plus/cache"
       dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/hires_texture" "/var/config/retroarch/system/Mupen64plus/hires_texture"
-    
+
       # Reset default preset settings
       set_setting_value "$rd_conf" "retroarch" "$(get_setting_value "$rd_defaults" "retroarch" "retrodeck" "cheevos")" "retrodeck" "cheevos"
       set_setting_value "$rd_conf" "retroarch" "$(get_setting_value "$rd_defaults" "retroarch" "retrodeck" "cheevos_hardcore")" "retrodeck" "cheevos_hardcore"
@@ -249,7 +250,7 @@ prepare_component() {
       set_setting_value "$rd_conf" "citra" "$(get_setting_value "$rd_defaults" "citra" "retrodeck" "ask_to_exit")" "retrodeck" "ask_to_exit"
     fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
-      dir_prep "$rdhome/bios/citra/sysdata" "/var/data/citra-emu/sysdata"
+      dir_prep "$bios_folder/citra/sysdata" "/var/data/citra-emu/sysdata"
       dir_prep "$rdhome/logs/citra" "/var/data/citra-emu/log"
       dir_prep "$mods_folder/Citra" "/var/data/citra-emu/load/mods"
       dir_prep "$texture_packs_folder/Citra" "/var/data/citra-emu/load/textures"
@@ -747,18 +748,18 @@ prepare_component() {
         log d "Figure out what Vita3k needs for multi-user"
       else # Single-user actions
         # NOTE: the component is writing in "." so it must be placed in the rw filesystem. A symlink of the binary is already placed in /app/bin/Vita3K
-        rm -rf "/var/data/Vita3K"
-        create_dir "/var/data/Vita3K/Vita3K"
-        cp -fvr "$emuconfigs/vita3k/config.yml" "/var/data/Vita3K" # component config
-        cp -fvr "$emuconfigs/vita3k/ux0" "$bios_folder/Vita3K/Vita3K" # User config
-        set_setting_value "$vita3kconf" "pref-path" "$rdhome/bios/Vita3K/Vita3K/" "vita3k"
+        rm -rf "/var/config/Vita3K"
+        create_dir "/var/config/Vita3K"
+        cp -fvr "$emuconfigs/vita3k/config.yml" "$vita3kconf" # component config
+        cp -fvr "$emuconfigs/vita3k/ux0" "$bios_folder/Vita3K/" # User config
+        set_setting_value "$vita3kconf" "pref-path" "$bios_folder/Vita3K/" "vita3k"
       fi
       # Shared actions
-      dir_prep "$saves_folder/psvita/vita3k" "$bios_folder/Vita3K/Vita3K/ux0/user/00/savedata" # Multi-user safe?
+      dir_prep "$saves_folder/psvita/vita3k" "$bios_folder/Vita3K/ux0/user/00/savedata" # Multi-user safe?
     fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
-      dir_prep "$saves_folder/psvita/vita3k" "$bios_folder/Vita3K/Vita3K/ux0/user/00/savedata" # Multi-user safe?
-      set_setting_value "$vita3kconf" "pref-path" "$rdhome/bios/Vita3K/Vita3K/" "vita3k"
+      dir_prep "$saves_folder/psvita/vita3k" "$bios_folder/Vita3K/ux0/user/00/savedata" # Multi-user safe?
+      set_setting_value "$vita3kconf" "pref-path" "$bios_folder/Vita3K/" "vita3k"
     fi
   fi
 
@@ -868,7 +869,7 @@ prepare_component() {
     create_dir "/var/data/gzdoom/audio/midi"
     create_dir "/var/data/gzdoom/audio/fm_banks"
     create_dir "/var/data/gzdoom/audio/soundfonts"
-    create_dir "$rdhome/bios/gzdoom"
+    create_dir "$bios_folder/gzdoom"
 
     cp -fvr "$emuconfigs/gzdoom/gzdoom.ini" "/var/config/gzdoom"
 
@@ -877,17 +878,7 @@ prepare_component() {
     sed -i 's#RETRODECKSAVESDIR#'$saves_folder'#g' "/var/config/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON
   fi
 
-  if [[ "$component" =~ ^(boilr|all)$ ]]; then
-  component_found="true"
-    log i "----------------------"
-    log i "Prepearing BOILR"
-    log i "----------------------"
-
-    create_dir "/var/config/boilr"
-    cp -fvr "/app/libexec/steam-sync/config.toml" "/var/config/boilr"
-  fi
-
-  if [[ $component_found="false" ]]; then
+  if [[ $component_found == "false" ]]; then
     log e "Supplied component $component not found, not resetting"
   fi
 
