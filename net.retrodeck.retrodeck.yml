@@ -91,7 +91,7 @@ modules:
         echo "Version is $VERSION"
     sources:
       - type: git
-        url: THISREPO
+        url: RDREPO
         branch: THISBRANCH
 
   - name: xmlstarlet
@@ -415,8 +415,8 @@ modules:
       - es-core
     sources:
       - type: git
-        url: https://github.com/XargonWan/RetroDECK-ES-DE
-        branch: retrodeck-main
+        url: ESDEREPO
+        branch: retrodeck-ruffle
       - type: shell
 
   # ES-DE - END
@@ -1312,6 +1312,6 @@ modules:
 
     sources:
       - type: git
-        url: THISREPO
+        url: RDREPO
         branch: THISBRANCH
        
