@@ -425,7 +425,7 @@ modules:
       - es-core
     sources:
       - type: git
-        url: ESDEREPO
+        url: https://github.com/monkeyx-net/RetroDECK-ES-DE-UK.git
         branch: retrodeck-ruffle
       - type: shell
 
