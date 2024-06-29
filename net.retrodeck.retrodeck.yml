@@ -954,7 +954,6 @@ modules:
       - mkdir -p "${FLATPAK_DEST}/share/ruffle"
       - tar -zxvf *.tar.gz -C "${FLATPAK_DEST}/share/ruffle"
       - chmod +x "${FLATPAK_DEST}/share/ruffle/ruffle"
-      - ln -s ${FLATPAK_DEST}/share/ruffle/ruffle ${FLATPAK_DEST}/bin/ruffle
     sources:
       - type: file
         url: RUFFLEURLPLACEHOLDER
@@ -1304,6 +1303,10 @@ modules:
       # PICO-8 wrapper
       - cp ${FLATPAK_DEST}/retrodeck/emu-configs/pico-8/pico8-wrapper.sh /app/bin/pico8
       - chmod +x /app/bin/pico8
+
+      # Ruffle wrapper
+      - cp ${FLATPAK_DEST}/retrodeck/emu-configs/ruffle-wrapper.sh /app/bin/ruffle
+      - chmod +x /app/bin/ruffle
 
       # Needed for ffmpeg (RPCS3)
       - mkdir -p ${FLATPAK_DEST}/lib/ffmpeg
