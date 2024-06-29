@@ -116,7 +116,7 @@ build_preset_config() {
       local read_system_name=$(get_setting_name "$system_line")
       if [[ "$read_system_name" == "$system_being_changed" ]]; then
         local read_system_enabled=$(get_setting_value "$rd_conf" "$read_system_name" "retrodeck" "$current_preset")
-        while IFS='^' read -r action read_preset read_setting_name new_setting_value section target_file defaults_file
+        while IFS='^' read -r action read_preset read_setting_name new_setting_value section target_file defaults_file || [[ -n "$action" ]];
         do
           case "$action" in
 
@@ -202,7 +202,7 @@ build_retrodeck_current_presets() {
   # This can also be used to build the "current" state post-update after adding new systems
   # USAGE: build_retrodeck_current_presets
 
-  while IFS= read -r current_setting_line # Read the existing retrodeck.cfg
+  while IFS= read -r current_setting_line || [[ -n "$current_setting_line" ]]; # Read the existing retrodeck.cfg
   do
     if [[ (! -z "$current_setting_line") && (! "$current_setting_line" == "#"*) && (! "$current_setting_line" == "[]") ]]; then # If the line has a valid entry in it
       if [[ ! -z $(grep -o -P "^\[.+?\]$" <<< "$current_setting_line") ]]; then # If the line is a section header

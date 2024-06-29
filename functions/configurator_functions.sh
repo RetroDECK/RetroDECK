@@ -10,7 +10,7 @@ check_bios_files() {
   fi
   touch "$godot_bios_files_checked"
 
-  while IFS="^" read -r bios_file bios_subdir bios_hash bios_system bios_desc
+  while IFS="^" read -r bios_file bios_subdir bios_hash bios_system bios_desc || [[ -n "$bios_file" ]];
     do
       bios_file_found="No"
       bios_hash_matched="No"
@@ -44,7 +44,7 @@ find_empty_rom_folders() {
   all_empty_folders=()
   all_helper_files=()
 
-  while IFS='^' read -r file dest
+  while IFS='^' read -r file dest || [[ -n "$file" ]];
   do
     if [[ ! "$file" == "#"* ]] && [[ ! -z "$file" ]]; then
       all_helper_files=("${all_helper_files[@]}" "$file")

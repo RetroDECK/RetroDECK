@@ -361,7 +361,7 @@ done
 finit_user_options_dialog() {
   finit_available_options=()
 
-  while IFS="^" read -r enabled option_name option_desc option_tag
+  while IFS="^" read -r enabled option_name option_desc option_tag || [[ -n "$enabled" ]];
   do
     finit_available_options=("${finit_available_options[@]}" "$enabled" "$option_name" "$option_desc" "$option_tag")
   done < $finit_options_list
@@ -561,7 +561,7 @@ deploy_helper_files() {
   # This script will distribute helper documentation files throughout the filesystem according to the $helper_files_list
   # USAGE: deploy_helper_files
 
-  while IFS='^' read -r file dest
+  while IFS='^' read -r file dest || [[ -n "$file" ]];
   do
       if [[ ! "$file" == "#"* ]] && [[ ! -z "$file" ]]; then
       eval current_dest="$dest"
@@ -579,7 +579,7 @@ easter_eggs() {
   current_day=$(date +"%0m%0d") # Read the current date in a format that can be calculated in ranges
   current_time=$(date +"%0H%0M") # Read the current time in a format that can be calculated in ranges
   if [[ ! -z $(cat $easter_egg_checklist) ]]; then
-    while IFS="^" read -r start_date end_date start_time end_time splash_file # Read Easter Egg checklist file and separate values
+    while IFS="^" read -r start_date end_date start_time end_time splash_file || [[ -n "$start_date" ]]; # Read Easter Egg checklist file and separate values
     do
       if [[ "$((10#$current_day))" -ge "$((10#$start_date))" && "$((10#$current_day))" -le "$((10#$end_date))" && "$((10#$current_time))" -ge "$((10#$start_time))" && "$((10#$current_time))" -le "$((10#$end_time))" ]]; then # If current line specified date/time matches current date/time, set $splash_file to be deployed
         new_splash_file="$splashscreen_dir/$splash_file"

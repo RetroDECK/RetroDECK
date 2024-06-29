@@ -410,7 +410,7 @@ deploy_single_patch() {
 
 cp -fv "$1" "$3" # Create a copy of the original file to be patched
 
-while IFS="^" read -r action current_section setting_name setting_value system_name
+while IFS="^" read -r action current_section setting_name setting_value system_name || [[ -n "$action" ]];
 do
 
   case $action in
@@ -461,7 +461,7 @@ deploy_multi_patch() {
 # Patch file format should be as follows, with optional entries in (). Optional settings can be left empty, but must still have ^ dividers:
 # $action^($current_section)^$setting_name^$setting_value^$system_name^($config file)
 
-while IFS="^" read -r action current_section setting_name setting_value system_name config_file
+while IFS="^" read -r action current_section setting_name setting_value system_name config_file || [[ -n "$action" ]];
 do
   case $action in
 
