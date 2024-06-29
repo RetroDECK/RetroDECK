@@ -1305,7 +1305,7 @@ modules:
       - chmod +x /app/bin/pico8
 
       # Ruffle wrapper
-      - cp ${FLATPAK_DEST}/retrodeck/emu-configs/ruffle-wrapper.sh /app/bin/ruffle
+      - cp ${FLATPAK_DEST}/retrodeck/emu-configs/ruffle/ruffle-wrapper.sh /app/bin/ruffle
       - chmod +x /app/bin/ruffle
 
       # Needed for ffmpeg (RPCS3)
