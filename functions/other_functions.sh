@@ -363,7 +363,9 @@ finit_user_options_dialog() {
 
   while IFS="^" read -r enabled option_name option_desc option_tag || [[ -n "$enabled" ]];
   do
-    finit_available_options=("${finit_available_options[@]}" "$enabled" "$option_name" "$option_desc" "$option_tag")
+    if [[ ! $enabled == "#"* ]] && [[ ! -z "$enabled" ]]; then
+      finit_available_options=("${finit_available_options[@]}" "$enabled" "$option_name" "$option_desc" "$option_tag")
+    fi
   done < $finit_options_list
 
 
@@ -581,11 +583,13 @@ easter_eggs() {
   if [[ ! -z $(cat $easter_egg_checklist) ]]; then
     while IFS="^" read -r start_date end_date start_time end_time splash_file || [[ -n "$start_date" ]]; # Read Easter Egg checklist file and separate values
     do
-      if [[ "$((10#$current_day))" -ge "$((10#$start_date))" && "$((10#$current_day))" -le "$((10#$end_date))" && "$((10#$current_time))" -ge "$((10#$start_time))" && "$((10#$current_time))" -le "$((10#$end_time))" ]]; then # If current line specified date/time matches current date/time, set $splash_file to be deployed
-        new_splash_file="$splashscreen_dir/$splash_file"
-        break
-      else # When there are no matches, the default splash screen is set to deploy
-        new_splash_file="$default_splash_file"
+      if [[ ! $start_date == "#"* ]] && [[ ! -z "$start_date" ]]; then
+        if [[ "$((10#$current_day))" -ge "$((10#$start_date))" && "$((10#$current_day))" -le "$((10#$end_date))" && "$((10#$current_time))" -ge "$((10#$start_time))" && "$((10#$current_time))" -le "$((10#$end_time))" ]]; then # If current line specified date/time matches current date/time, set $splash_file to be deployed
+          new_splash_file="$splashscreen_dir/$splash_file"
+          break
+        else # When there are no matches, the default splash screen is set to deploy
+          new_splash_file="$default_splash_file"
+        fi
       fi
     done < $easter_egg_checklist
   else

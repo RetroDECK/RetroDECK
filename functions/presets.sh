@@ -79,11 +79,14 @@ make_preset_changes() {
         fi
         set_setting_value "$rd_conf" "$emulator" "true" "retrodeck" "$preset"
         # Check for conflicting presets for this system
-        while IFS=: read -r preset_being_checked known_incompatible_preset; do
-          if [[ "$preset" == "$preset_being_checked" ]]; then
-            if [[ $(get_setting_value "$rd_conf" "$emulator" "retrodeck" "$known_incompatible_preset") == "true" ]]; then
-              changed_presets=("${changed_presets[@]}" "$known_incompatible_preset")
-              set_setting_value "$rd_conf" "$emulator" "false" "retrodeck" "$known_incompatible_preset"
+        while IFS=: read -r preset_being_checked known_incompatible_preset || [[ -n "$preset_being_checked" ]];
+        do
+          if [[ ! $preset_being_checked == "#"* ]] && [[ ! -z "$preset_being_checked" ]]; then
+            if [[ "$preset" == "$preset_being_checked" ]]; then
+              if [[ $(get_setting_value "$rd_conf" "$emulator" "retrodeck" "$known_incompatible_preset") == "true" ]]; then
+                changed_presets=("${changed_presets[@]}" "$known_incompatible_preset")
+                set_setting_value "$rd_conf" "$emulator" "false" "retrodeck" "$known_incompatible_preset"
+              fi
             fi
           fi
         done < "$incompatible_presets_reference_list"
@@ -118,79 +121,81 @@ build_preset_config() {
         local read_system_enabled=$(get_setting_value "$rd_conf" "$read_system_name" "retrodeck" "$current_preset")
         while IFS='^' read -r action read_preset read_setting_name new_setting_value section target_file defaults_file || [[ -n "$action" ]];
         do
-          case "$action" in
+          if [[ ! $action == "#"* ]] && [[ ! -z "$action" ]]; then
+            case "$action" in
 
-          "config_file_format" )
-            if [[ "$read_preset" == "retroarch-all" ]]; then
-              local retroarch_all="true"
-              local read_config_format="retroarch"
-            else
-              local read_config_format="$read_preset"
-            fi
-          ;;
+            "config_file_format" )
+              if [[ "$read_preset" == "retroarch-all" ]]; then
+                local retroarch_all="true"
+                local read_config_format="retroarch"
+              else
+                local read_config_format="$read_preset"
+              fi
+            ;;
 
-          "change" )
-            if [[ "$read_preset" == "$current_preset" ]]; then
-              if [[ "$target_file" = \$* ]]; then # Read current target file and resolve if it is a variable
-                eval target_file=$target_file
-              fi
-              local read_target_file="$target_file"
-              if [[ "$defaults_file" = \$* ]]; then #Read current defaults file and resolve if it is a variable
-                eval defaults_file=$defaults_file
-              fi
-              local read_defaults_file="$defaults_file"
-              if [[ "$read_system_enabled" == "true" ]]; then
-                if [[ "$new_setting_value" = \$* ]]; then
-                  eval new_setting_value=$new_setting_value
+            "change" )
+              if [[ "$read_preset" == "$current_preset" ]]; then
+                if [[ "$target_file" = \$* ]]; then # Read current target file and resolve if it is a variable
+                  eval target_file=$target_file
                 fi
-                if [[ "$read_config_format" == "retroarch" && ! "$retroarch_all" == "true" ]]; then # If this is a RetroArch core, generate the override file
-                  if [[ ! -f "$read_target_file" ]]; then
-                    create_dir "$(realpath "$(dirname "$read_target_file")")"
-                    echo "$read_setting_name = \""$new_setting_value"\"" > "$read_target_file"
-                  else
-                    if [[ -z $(grep -o -P "^$read_setting_name\b" "$read_target_file") ]]; then
-                      add_setting "$read_target_file" "$read_setting_name" "$new_setting_value" "$read_config_format" "$section"
+                local read_target_file="$target_file"
+                if [[ "$defaults_file" = \$* ]]; then #Read current defaults file and resolve if it is a variable
+                  eval defaults_file=$defaults_file
+                fi
+                local read_defaults_file="$defaults_file"
+                if [[ "$read_system_enabled" == "true" ]]; then
+                  if [[ "$new_setting_value" = \$* ]]; then
+                    eval new_setting_value=$new_setting_value
+                  fi
+                  if [[ "$read_config_format" == "retroarch" && ! "$retroarch_all" == "true" ]]; then # If this is a RetroArch core, generate the override file
+                    if [[ ! -f "$read_target_file" ]]; then
+                      create_dir "$(realpath "$(dirname "$read_target_file")")"
+                      echo "$read_setting_name = \""$new_setting_value"\"" > "$read_target_file"
                     else
-                      set_setting_value "$read_target_file" "$read_setting_name" "$new_setting_value" "$read_config_format" "$section"
-                    fi                    
+                      if [[ -z $(grep -o -P "^$read_setting_name\b" "$read_target_file") ]]; then
+                        add_setting "$read_target_file" "$read_setting_name" "$new_setting_value" "$read_config_format" "$section"
+                      else
+                        set_setting_value "$read_target_file" "$read_setting_name" "$new_setting_value" "$read_config_format" "$section"
+                      fi                    
+                    fi
+                  else
+                    set_setting_value "$read_target_file" "$read_setting_name" "$new_setting_value" "$read_config_format" "$section"
                   fi
                 else
-                  set_setting_value "$read_target_file" "$read_setting_name" "$new_setting_value" "$read_config_format" "$section"
-                fi
-              else
-                if [[ "$read_config_format" == "retroarch" && ! "$retroarch_all" == "true" ]]; then
-                  if [[ -f "$read_target_file" ]]; then
-                    delete_setting "$read_target_file" "$read_setting_name" "$read_config_format" "$section"
-                    if [[ -z $(cat "$read_target_file") ]]; then # If the override file is empty
-                      rm -f "$read_target_file"
+                  if [[ "$read_config_format" == "retroarch" && ! "$retroarch_all" == "true" ]]; then
+                    if [[ -f "$read_target_file" ]]; then
+                      delete_setting "$read_target_file" "$read_setting_name" "$read_config_format" "$section"
+                      if [[ -z $(cat "$read_target_file") ]]; then # If the override file is empty
+                        rm -f "$read_target_file"
+                      fi
+                      if [[ -z $(ls -1 "$(dirname "$read_target_file")") ]]; then # If the override folder is empty
+                        rmdir "$(realpath "$(dirname "$read_target_file")")"
+                      fi
                     fi
-                    if [[ -z $(ls -1 "$(dirname "$read_target_file")") ]]; then # If the override folder is empty
-                      rmdir "$(realpath "$(dirname "$read_target_file")")"
-                    fi
+                  else
+                    local default_setting_value=$(get_setting_value "$read_defaults_file" "$read_setting_name" "$read_config_format" "$section")
+                    set_setting_value "$read_target_file" "$read_setting_name" "$default_setting_value" "$read_config_format" "$section"
                   fi
-                else
-                  local default_setting_value=$(get_setting_value "$read_defaults_file" "$read_setting_name" "$read_config_format" "$section")
-                  set_setting_value "$read_target_file" "$read_setting_name" "$default_setting_value" "$read_config_format" "$section"
                 fi
               fi
-            fi
-          ;;
+            ;;
 
-          "enable" )
-            if [[ "$read_preset" == "$current_preset" ]]; then
-              if [[ "$read_system_enabled" == "true" ]]; then
-                enable_file "$read_setting_name"
-              else
-                disable_file "$read_setting_name"
+            "enable" )
+              if [[ "$read_preset" == "$current_preset" ]]; then
+                if [[ "$read_system_enabled" == "true" ]]; then
+                  enable_file "$read_setting_name"
+                else
+                  disable_file "$read_setting_name"
+                fi
               fi
-            fi
-          ;;
+            ;;
 
-          * )
-            echo "Other data: $action $read_preset $read_setting_name $new_setting_value $section" # DEBUG
-          ;;
+            * )
+              echo "Other data: $action $read_preset $read_setting_name $new_setting_value $section" # DEBUG
+            ;;
 
-          esac
+            esac
+          fi
         done < <(cat "$presets_dir/$read_system_name"_presets.cfg)
       fi
     done < <(printf '%s\n' "$preset_section")

@@ -158,9 +158,11 @@ check_for_version_update() {
 validate_input() {
   while IFS="^" read -r input action || [[ -n "$input" ]];
   do
-    if [[ "$input" == "$1" ]]; then
-      eval "$action"
-      input_validated="true"
+    if [[ ! $input == "#"* ]] && [[ ! -z "$input" ]]; then
+      if [[ "$input" == "$1" ]]; then
+        eval "$action"
+        input_validated="true"
+      fi
     fi
   done < $input_validation
 }

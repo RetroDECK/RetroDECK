@@ -12,22 +12,24 @@ check_bios_files() {
 
   while IFS="^" read -r bios_file bios_subdir bios_hash bios_system bios_desc || [[ -n "$bios_file" ]];
     do
-      bios_file_found="No"
-      bios_hash_matched="No"
-      if [[ -f "$bios_folder/$bios_subdir$bios_file" ]]; then
-        bios_file_found="Yes"
-        if [[ $bios_hash == "Unknown" ]]; then
-          bios_hash_matched="Unknown"
-        elif [[ $(md5sum "$bios_folder/$bios_subdir$bios_file" | awk '{ print $1 }') == "$bios_hash" ]]; then
-          bios_hash_matched="Yes"
+      if [[ ! $bios_file == "#"* ]] && [[ ! -z "$bios_file" ]]; then
+        bios_file_found="No"
+        bios_hash_matched="No"
+        if [[ -f "$bios_folder/$bios_subdir$bios_file" ]]; then
+          bios_file_found="Yes"
+          if [[ $bios_hash == "Unknown" ]]; then
+            bios_hash_matched="Unknown"
+          elif [[ $(md5sum "$bios_folder/$bios_subdir$bios_file" | awk '{ print $1 }') == "$bios_hash" ]]; then
+            bios_hash_matched="Yes"
+          fi
         fi
-      fi
-      if [[ "$1" == "basic" ]]; then
-        bios_checked_list=("${bios_checked_list[@]}" "$bios_file" "$bios_system" "$bios_file_found" "$bios_hash_matched" "$bios_desc")
-        echo "$bios_file"^"$bios_system"^"$bios_file_found"^"$bios_hash_matched"^"$bios_desc" >> "$godot_bios_files_checked" # Godot data transfer temp file
-      else
-        bios_checked_list=("${bios_checked_list[@]}" "$bios_file" "$bios_system" "$bios_file_found" "$bios_hash_matched" "$bios_desc" "$bios_subdir" "$bios_hash")
-        echo "$bios_file"^"$bios_system"^"$bios_file_found"^"$bios_hash_matched"^"$bios_desc"^"$bios_subdir"^"$bios_hash" >> "$godot_bios_files_checked" # Godot data transfer temp file
+        if [[ "$1" == "basic" ]]; then
+          bios_checked_list=("${bios_checked_list[@]}" "$bios_file" "$bios_system" "$bios_file_found" "$bios_hash_matched" "$bios_desc")
+          echo "$bios_file"^"$bios_system"^"$bios_file_found"^"$bios_hash_matched"^"$bios_desc" >> "$godot_bios_files_checked" # Godot data transfer temp file
+        else
+          bios_checked_list=("${bios_checked_list[@]}" "$bios_file" "$bios_system" "$bios_file_found" "$bios_hash_matched" "$bios_desc" "$bios_subdir" "$bios_hash")
+          echo "$bios_file"^"$bios_system"^"$bios_file_found"^"$bios_hash_matched"^"$bios_desc"^"$bios_subdir"^"$bios_hash" >> "$godot_bios_files_checked" # Godot data transfer temp file
+        fi
       fi
   done < $bios_checklist
 }
