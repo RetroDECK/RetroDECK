@@ -6,7 +6,7 @@ change_preset_dialog() {
 
   build_preset_list_options "$1"
 
-  choice=$(zenity \
+  choice=$(rd_zenity \
     --list --width=1200 --height=720 \
     --checklist \
     --separator="," \
@@ -23,7 +23,7 @@ change_preset_dialog() {
     (
       make_preset_changes
     ) |
-    zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+    rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator Utility - Presets Configuration" \
     --text="Setting up your presets, please wait..."
