@@ -775,17 +775,17 @@ prepare_component() {
         # NOTE: the component is writing in "." so it must be placed in the rw filesystem. A symlink of the binary is already placed in /app/bin/
         rm -rf "/var/data/ruffle"
         create_dir "/var/data/ruffle"
-        cp -fvr "$emuconfigs/ruffle/*.toml" "/var/data/ruffle" # component config
+        cp -fvr "$emuconfigs/ruffle/"*.toml "/var/data/ruffle" # component config
         # No bios for ruffle or other settings. Showed for documentation purposes
-        # set_setting_value "$ruffleconf" "pref-path" "$rdhome/bios/ruffle/" "ruffle"
+        set_setting_value "$ruffleconf" "pref-path" "ruffle"
       fi
       # Shared actions
       dir_prep "$saves_folder/ruffle" # Multi-user safe?
     fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
-      dir_prep "$saves_folder/psvita/vita3k" # Multi-user safe?
+      dir_prep "$saves_folder/ruffle" # Multi-user safe?
       # No bios for ruffle or other settings. Showed for documentation purposes
-      # set_setting_value "$ruffleconf" "pref-path" "$rdhome/bios/ruffleK/" "ruffle"
+      set_setting_value "$ruffleconf" "pref-path" "ruffle"
     fi
   fi
 

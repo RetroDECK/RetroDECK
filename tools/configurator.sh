@@ -35,6 +35,7 @@ source /app/libexec/global.sh
 #       - PCSX2
 #       - PPSSPP
 #       - Primehack
+#       - Ruffle
 #       - RPCS3
 #       - Ryujinx
 #       - Vita3K
@@ -84,6 +85,7 @@ source /app/libexec/global.sh
 #           - Reset PPSSPP
 #           - Reset Primehack
 #           - Reset RPCS3
+#           - Reset Ruffle
 #           - Reset Ryujinx
 #           - Reset Vita3k
 #           - Reset XEMU
@@ -444,6 +446,7 @@ configurator_open_emulator_dialog() {
     "PPSSPP" "Open the PSP emulator PPSSPP"
     "Primehack" "Open the Metroid Prime emulator Primehack"
     "RPCS3" "Open the PS3 emulator RPCS3"
+    "Ruffle" "Open the Ruffle Flash emulator"
     "Ryujinx" "Open the Switch emulator Ryujinx"
     "Vita3K" "Open the PSVita emulator Vita3K"
     "XEMU" "Open the Xbox emulator XEMU"
@@ -520,6 +523,11 @@ configurator_open_emulator_dialog() {
   "RPCS3" )
     log i "Configurator: \"$emulator\""
     rpcs3
+  ;;
+
+  "Ruffle" )
+    log i "Configurator: \"$emulator\""
+    ruffle
   ;;
 
   "Ryujinx" )
@@ -1088,6 +1096,7 @@ configurator_reset_dialog() {
     "PPSSPP" "Reset the PSP emulator PPSSPP to default settings"
     "Primehack" "Reset the Metroid Prime emulator Primehack to default settings"
     "RPCS3" "Reset the PS3 emulator RPCS3 to default settings"
+    "Ruffle" "Reset the Ruffle flash emulator to default settings"
     "Ryujinx" "Reset the Switch emulator Ryujinx to default settings"
     "Vita3k" "Reset the PS Vita emulator Vita3k to default settings"
     "XEMU" "Reset the XBOX emulator XEMU to default settings"
@@ -1129,7 +1138,7 @@ configurator_reset_dialog() {
       fi
     ;;
 
-    "Cemu" | "Citra" | "Dolphin" | "Duckstation" | "GZDoom" | "Yuzu" | "MelonDS" | "MAME" | "PCSX2" | "PPSSPP" | "Primehack" | "RPCS3" | "Ryujinx" )
+    "Cemu" | "Citra" | "Dolphin" | "Duckstation" | "GZDoom" | "Yuzu" | "MelonDS" | "MAME" | "PCSX2" | "PPSSPP" | "Primehack" | "RPCS3" | "Ruffle" | "Ryujinx" )
       if [[ $(configurator_reset_confirmation_dialog "$component_to_reset" "Are you sure you want to reset the $component_to_reset emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
         prepare_component "reset" "$component_to_reset" "configurator"
         configurator_process_complete_dialog "resetting $component_to_reset"
