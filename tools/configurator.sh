@@ -1402,7 +1402,7 @@ configurator_usb_import_dialog() {
     while read -r size device_path; do
       device_name=$(basename "$device_path")
       external_devices=("${external_devices[@]}" "$device_name" "$size" "$device_path")
-    done < <(df --output=size,target | grep media | grep -v $default_sd | awk '{$1=$1;print}')
+    done < <(df --output=size,target -h | grep "/run/media/" | grep -v "$default_sd" | awk '{$1=$1;print}')
 
     if [[ "${#external_devices[@]}" -gt 0 ]]; then
       choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - USB Migration Tool" --cancel-label="Back" \
@@ -1432,7 +1432,7 @@ configurator_usb_import_dialog() {
         device_name=$(basename "$device_path")
         external_devices=("${external_devices[@]}" "$device_name" "$size" "$device_path")
       fi
-    done < <(df --output=size,target | grep media | grep -v $default_sd | awk '{$1=$1;print}')
+    done < <(df --output=size,target -h | grep "/run/media/" | grep -v "$default_sd" | awk '{$1=$1;print}')
 
     if [[ "${#external_devices[@]}" -gt 0 ]]; then
       choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - USB Migration Tool" --cancel-label="Back" \
