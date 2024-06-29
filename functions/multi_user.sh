@@ -149,7 +149,7 @@ multi_user_determine_current_user() {
 
 multi_user_return_to_single_user() {
   single_user="$1"
-  echo "Returning to single-user mode for $single_user"
+  log i "Returning to single-user mode for $single_user"
   unlink "$saves_folder"
   unlink "$states_folder"
   unlink "$rd_conf"
@@ -182,7 +182,7 @@ multi_user_return_to_single_user() {
 
 multi_user_setup_new_user() {
   # TODO: RPCS3 one-offs
-  echo "Setting up new user"
+  log i "Setting up new user"
   unlink "$saves_folder"
   unlink "$states_folder"
   dir_prep "$multi_user_data_folder/$SteamAppUser/saves" "$saves_folder"
@@ -220,7 +220,7 @@ multi_user_setup_new_user() {
 }
 
 multi_user_link_current_user_files() {
-  echo "Linking existing user"
+  log i "Linking existing user"
   ln -sfT "$multi_user_data_folder/$SteamAppUser/saves" "$saves_folder"
   ln -sfT "$multi_user_data_folder/$SteamAppUser/states" "$states_folder"
   ln -sfT "$multi_user_data_folder/$SteamAppUser/config/retrodeck/retrodeck.cfg" "$rd_conf"

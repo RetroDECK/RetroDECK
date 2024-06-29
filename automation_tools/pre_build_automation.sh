@@ -50,7 +50,7 @@ cat "$automation_task_list"
 echo
 
 # Update all collected information
-while IFS="^" read -r action placeholder url branch
+while IFS="^" read -r action placeholder url branch || [[ -n "$action" ]];
 do
   if [[ ! $action == "#"* ]] && [[ ! -z "$action" ]]; then
     case "$action" in
