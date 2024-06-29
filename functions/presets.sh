@@ -28,7 +28,7 @@ change_preset_dialog() {
     --title "RetroDECK Configurator Utility - Presets Configuration" \
     --text="Setting up your presets, please wait..."
   else
-    echo "No choices made"
+    log i "No preset choices made"
   fi
 }
 
@@ -191,7 +191,7 @@ build_preset_config() {
             ;;
 
             * )
-              echo "Other data: $action $read_preset $read_setting_name $new_setting_value $section" # DEBUG
+              log d "Other data: $action $read_preset $read_setting_name $new_setting_value $section" # DEBUG
             ;;
 
             esac
