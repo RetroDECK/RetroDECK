@@ -1397,12 +1397,15 @@ configurator_usb_import_dialog() {
 
   "Prepare USB device" )
     log i "Configurator: opening \"$choice\" menu"
+    
+    configurator_generic_dialog "RetroDeck Configurator - USB Import" "If you have an SD card installed that is not currently configured in RetroDECK it may show up in this list, but not be suitable for USB import.\n\nPlease select your desired drive carefully."
+
     external_devices=()
 
     while read -r size device_path; do
       device_name=$(basename "$device_path")
       external_devices=("${external_devices[@]}" "$device_name" "$size" "$device_path")
-    done < <(df --output=size,target -h | grep "/run/media/" | grep -v "$default_sd" | awk '{$1=$1;print}')
+    done < <(df --output=size,target -h | grep "/run/media/" | grep -v "$sdcard" | awk '{$1=$1;print}')
 
     if [[ "${#external_devices[@]}" -gt 0 ]]; then
       choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - USB Migration Tool" --cancel-label="Back" \
@@ -1414,8 +1417,8 @@ configurator_usb_import_dialog() {
       "${external_devices[@]}")
 
       if [[ ! -z "$choice" ]]; then
-        es-de --home "$choice" --create-system-dirs
-        rm -rf "$choice/ES-DE" # Cleanup unnecessary folder
+        es-de --home "$choice/RetroDECK ROM Import" --create-system-dirs
+        rm -rf "$choice/RetroDECK ROM Import/ES-DE" # Cleanup unnecessary folder
       fi
     else
       configurator_generic_dialog "RetroDeck Configurator - USB Import" "There were no USB devices found."
@@ -1428,11 +1431,11 @@ configurator_usb_import_dialog() {
     external_devices=()
 
     while read -r size device_path; do
-      if [[ -d "$device_path/ROMs" ]]; then
+      if [[ -d "$device_path/RetroDECK ROM Import/ROMs" ]]; then
         device_name=$(basename "$device_path")
         external_devices=("${external_devices[@]}" "$device_name" "$size" "$device_path")
       fi
-    done < <(df --output=size,target -h | grep "/run/media/" | grep -v "$default_sd" | awk '{$1=$1;print}')
+    done < <(df --output=size,target -h | grep "/run/media/" | grep -v "$sdcard" | awk '{$1=$1;print}')
 
     if [[ "${#external_devices[@]}" -gt 0 ]]; then
       choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - USB Migration Tool" --cancel-label="Back" \
@@ -1444,10 +1447,10 @@ configurator_usb_import_dialog() {
       "${external_devices[@]}")
 
       if [[ ! -z "$choice" ]]; then
-        if [[ $(verify_space "$choice/ROMs" "$roms_folder") == "false" ]]; then
+        if [[ $(verify_space "$choice/RetroDECK ROM Import/ROMs" "$roms_folder") == "false" ]]; then
           if [[ $(configurator_generic_question_dialog "RetroDECK Configurator Utility - USB Migration Tool" "You MAY not have enough free space to import this ROM library.\n\nThis utility only imports new additions from the USB device, so if there are a lot of the same ROMs in both locations you are likely going to be fine\nbut we are not able to verify how much data will be transferred before it happens.\n\nIf you are unsure, please verify your available free space before continuing.\n\nDo you want to continue now?") == "true" ]]; then
             (
-            rsync -a --mkpath "$choice/ROMs/"* "$roms_folder"
+            rsync -a --mkpath "$choice/RetroDECK ROM Import/ROMs/"* "$roms_folder"
             ) |
             rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
             --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -1456,7 +1459,7 @@ configurator_usb_import_dialog() {
           fi
         else
           (
-          rsync -a --mkpath "$choice/ROMs/"* "$roms_folder"
+          rsync -a --mkpath "$choice/RetroDECK ROM Import/ROMs/"* "$roms_folder"
           ) |
           rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
           --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
