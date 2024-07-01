@@ -1020,6 +1020,7 @@ configurator_usb_import_dialog() {
           if [[ $(configurator_generic_question_dialog "RetroDECK Configurator Utility - USB Migration Tool" "You MAY not have enough free space to import this ROM library.\n\nThis utility only imports new additions from the USB device, so if there are a lot of the same ROMs in both locations you are likely going to be fine\nbut we are not able to verify how much data will be transferred before it happens.\n\nIf you are unsure, please verify your available free space before continuing.\n\nDo you want to continue now?") == "true" ]]; then
             (
             rsync -a --mkpath "$choice/RetroDECK Import/ROMs/"* "$roms_folder"
+            rsync -a --mkpath "$choice/RetroDECK Import/BIOS/"* "$bios_folder"
             ) |
             rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
             --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -1029,6 +1030,7 @@ configurator_usb_import_dialog() {
         else
           (
           rsync -a --mkpath "$choice/RetroDECK Import/ROMs/"* "$roms_folder"
+          rsync -a --mkpath "$choice/RetroDECK Import/BIOS/"* "$bios_folder"
           ) |
           rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
           --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
