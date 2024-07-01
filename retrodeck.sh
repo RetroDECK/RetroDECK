@@ -56,7 +56,7 @@ https://retrodeck.net
       ;;
     --reset-component*)
       echo "You are about to reset one or more RetroDECK components or emulators."
-      echo "Available options are: es-de, retroarch, cemu, dolphin, duckstation, gzdoom, melonds, pcsx3, pico8, ppsspp, primehack, rpcs3, ryujinx, xemu, vita3k, ruffle, mame, boilr, all"
+      echo "Available options are: es-de, retroarch, cemu, dolphin, duckstation, gzdoom, melonds, pcsx3, pico8, ppsspp, primehack, rpcs3, ryujinx, xemu, vita3k, ruffle, mame, all"
       read -p "Please enter the component you would like to reset: " component
       component=$(echo "$component" | tr '[:upper:]' '[:lower:]')
       if [[ "$component" =~ ^(es-de|retroarch|cemu|dolphin|duckstation|gzdoom|mame|melonds|pcsx2|ppsspp|primehack|ryujinx|rpcs3|vita3k|ruffle|xemu|all)$ ]]; then

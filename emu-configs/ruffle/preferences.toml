@@ -1,1 +1,1 @@
-graphics_backend = "gl"
+graphics_backend = "vulcan"

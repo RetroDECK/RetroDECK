@@ -772,10 +772,10 @@ prepare_component() {
       if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         log d "Figure out what Ruffle needs for multi-user"
       else # Single-user actions
-        # NOTE: the component is writing in "." so it must be placed in the rw filesystem. A symlink of the binary is already placed in /app/bin/
+        # NOTE: TODO
         rm -rf "/var/data/ruffle"
         create_dir "/var/data/ruffle"
-        cp -fvr "$emuconfigs/ruffle/"*.toml "/var/data/ruffle" # component config
+        cp -fvr "$emuconfigs/ruffle/"prefernces.toml "/var/data/ruffle" # component config
         # No bios for ruffle or other settings. Showed for documentation purposes
         set_setting_value "$ruffleconf" "pref-path" "ruffle"
       fi
