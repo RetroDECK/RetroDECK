@@ -935,7 +935,7 @@ configurator_usb_import_dialog() {
   choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - Developer Options" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Description" \
-  "Prepare USB device" "Create ROM folders on a selected USB device" \
+  "Prepare USB device" "Create ROM and BIOS folders on a selected USB device" \
   "Import from USB" "Import collection from a previously prepared device" )
 
   case $choice in
