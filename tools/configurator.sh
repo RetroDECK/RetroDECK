@@ -961,8 +961,33 @@ configurator_usb_import_dialog() {
       "${external_devices[@]}")
 
       if [[ ! -z "$choice" ]]; then
-        es-de --home "$choice/RetroDECK ROM Import" --create-system-dirs
-        rm -rf "$choice/RetroDECK ROM Import/ES-DE" # Cleanup unnecessary folder
+        es-de --home "$choice/RetroDECK Import" --create-system-dirs
+        rm -rf "$choice/RetroDECK Import/ES-DE" # Cleanup unnecessary folder
+        create_dir "$choice/RetroDECK Import/BIOS"
+
+        # Prepare default BIOS folder subfolders
+        create_dir "$choice/RetroDECK Import/BIOS/np2kai"
+        create_dir "$choice/RetroDECK Import/BIOS/dc"
+        create_dir "$choice/RetroDECK Import/BIOS/Mupen64plus"
+        create_dir "$choice/RetroDECK Import/BIOS/quasi88"
+        create_dir "$choice/RetroDECK Import/BIOS/fbneo/samples"
+        create_dir "$choice/RetroDECK Import/BIOS/fbneo/cheats"
+        create_dir "$choice/RetroDECK Import/BIOS/fbneo/blend"
+        create_dir "$choice/RetroDECK Import/BIOS/fbneo/patched"
+        create_dir "$choice/RetroDECK Import/BIOS/citra/sysdata"
+        create_dir "$choice/RetroDECK Import/BIOS/cemu"
+        create_dir "$choice/RetroDECK Import/BIOS/pico-8/carts"
+        create_dir "$choice/RetroDECK Import/BIOS/pico-8/cdata"
+        create_dir "$choice/RetroDECK Import/BIOS/rpcs3/dev_hdd0"
+        create_dir "$choice/RetroDECK Import/BIOS/rpcs3/dev_hdd1"
+        create_dir "$choice/RetroDECK Import/BIOS/rpcs3/dev_flash"
+        create_dir "$choice/RetroDECK Import/BIOS/rpcs3/dev_flash2"
+        create_dir "$choice/RetroDECK Import/BIOS/rpcs3/dev_flash3"
+        create_dir "$choice/RetroDECK Import/BIOS/rpcs3/dev_bdvd"
+        create_dir "$choice/RetroDECK Import/BIOS/rpcs3/dev_usb000"
+        create_dir "$choice/RetroDECK Import/BIOS/Vita3K/"
+        create_dir "$choice/RetroDECK Import/BIOS/mame-sa/samples"
+        create_dir "$choice/RetroDECK Import/BIOS/gzdoom"
       fi
     else
       configurator_generic_dialog "RetroDeck Configurator - USB Import" "There were no USB devices found."
@@ -975,7 +1000,7 @@ configurator_usb_import_dialog() {
     external_devices=()
 
     while read -r size device_path; do
-      if [[ -d "$device_path/RetroDECK ROM Import/ROMs" ]]; then
+      if [[ -d "$device_path/RetroDECK Import/ROMs" ]]; then
         device_name=$(basename "$device_path")
         external_devices=("${external_devices[@]}" "$device_name" "$size" "$device_path")
       fi
@@ -991,10 +1016,10 @@ configurator_usb_import_dialog() {
       "${external_devices[@]}")
 
       if [[ ! -z "$choice" ]]; then
-        if [[ $(verify_space "$choice/RetroDECK ROM Import/ROMs" "$roms_folder") == "false" ]]; then
+        if [[ $(verify_space "$choice/RetroDECK Import/ROMs" "$roms_folder") == "false" ]]; then
           if [[ $(configurator_generic_question_dialog "RetroDECK Configurator Utility - USB Migration Tool" "You MAY not have enough free space to import this ROM library.\n\nThis utility only imports new additions from the USB device, so if there are a lot of the same ROMs in both locations you are likely going to be fine\nbut we are not able to verify how much data will be transferred before it happens.\n\nIf you are unsure, please verify your available free space before continuing.\n\nDo you want to continue now?") == "true" ]]; then
             (
-            rsync -a --mkpath "$choice/RetroDECK ROM Import/ROMs/"* "$roms_folder"
+            rsync -a --mkpath "$choice/RetroDECK Import/ROMs/"* "$roms_folder"
             ) |
             rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
             --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -1003,7 +1028,7 @@ configurator_usb_import_dialog() {
           fi
         else
           (
-          rsync -a --mkpath "$choice/RetroDECK ROM Import/ROMs/"* "$roms_folder"
+          rsync -a --mkpath "$choice/RetroDECK Import/ROMs/"* "$roms_folder"
           ) |
           rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
           --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
