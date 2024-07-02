@@ -951,13 +951,13 @@ modules:
   - name: ruffle
     buildsystem: simple
     build-commands:
-      - mkdir -p "${FLATPAK_DEST}/share/ruffle"
-      - tar -zxvf *.tar.gz -C "${FLATPAK_DEST}/share/ruffle"
       - chmod +x "${FLATPAK_DEST}/share/ruffle/ruffle"
+      - ln -s ${FLATPAK_DEST}/share/ruffle/ruffle ${FLATPAK_DEST}/bin/ruffle
     sources:
-      - type: file
-        url: RUFFLEURLPLACEHOLDER
-        sha256: RUFFLESHAPLACEHOLDER
+      - type: archive
+        url: https://github.com/ruffle-rs/ruffle/releases/download/nightly-2024-07-02/ruffle-nightly-2024_07_02-linux-x86_64.tar.gz
+        sha256: a410ce8956723a0043d1744ef9b519debc978faa2b5868953acc548e44586d15
+
 
   # Ruffle - END
 
@@ -1305,8 +1305,8 @@ modules:
       - chmod +x /app/bin/pico8
 
       # Ruffle wrapper
-      - cp ${FLATPAK_DEST}/retrodeck/emu-configs/ruffle/ruffle-wrapper.sh /app/bin/ruffle
-      - chmod +x /app/bin/ruffle
+      - cp ${FLATPAK_DEST}/retrodeck/emu-configs/ruffle/ruffle-wrapper.sh /app/bin/
+      - chmod +x /app/bin/ruffle-wrapper.sh
 
       # Needed for ffmpeg (RPCS3)
       - mkdir -p ${FLATPAK_DEST}/lib/ffmpeg

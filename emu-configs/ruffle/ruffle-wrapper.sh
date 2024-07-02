@@ -1,3 +1,5 @@
+#!/bin/bash
+
 source /app/libexec/global.sh
 
 #Check if Steam Deck in Desktop Mode
