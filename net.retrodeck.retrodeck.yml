@@ -167,8 +167,8 @@ modules:
       - cp rclone ${FLATPAK_DEST}/bin/
     sources:
       - type: archive
-        url: https://github.com/rclone/rclone/releases/download/v1.61.1/rclone-v1.61.1-linux-amd64.zip
-        sha256: 6d6455e1cb69eb0615a52cc046a296395e44d50c0f32627ba8590c677ddf50a9
+        url: https://github.com/rclone/rclone/releases/download/v1.67.0/rclone-v1.67.0-linux-amd64.zip
+        sha256: 07c23d21a94d70113d949253478e13261c54d14d72023bb14d96a8da5f3e7722
 
   # Source: https://github.com/flathub/com.valvesoftware.Steam.Utility.steamtinkerlaunch/blob/129c9192f874405d21612d95f9749dc2bcaf8cea/modules/rsync.yml#L5
   - name: rsync
