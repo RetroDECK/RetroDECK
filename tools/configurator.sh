@@ -572,6 +572,9 @@ configurator_retrodeck_tools_dialog() {
   if [[ $(get_setting_value "$rd_conf" "akai_ponzu" "retrodeck" "options") == "true" ]]; then
     choices+=("Ponzu - Remove Citra" "Run Ponzu to remove Citra from RetroDECK. Configurations and saves will be mantained.")
   fi
+  if [[ $(rclone listremotes) =~ "RetroDECK:" ]]; then
+    choices+=("Cloud: Manual Sync" "Run a manual sync with the configured cloud instance. Functionality is in ALPHA.")
+  fi
 
   choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - RetroDECK: Tools" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
@@ -691,13 +694,17 @@ configurator_retrodeck_tools_dialog() {
     configurator_online_update_setting_dialog
   ;;
 
-"Ponzu - Remove Yuzu" )
-  ponzu_remove "yuzu"
-;;
+  "Ponzu - Remove Yuzu" )
+    ponzu_remove "yuzu"
+  ;;
 
-"Ponzu - Remove Citra" )
-  ponzu_remove "citra"
-;;
+  "Ponzu - Remove Citra" )
+    ponzu_remove "citra"
+  ;;
+
+  "Cloud: Manual Sync" )
+    sync_cloud newer
+  ;;
 
   "" ) # No selection made or Back button clicked
     log i "Configurator: going back"
@@ -1414,6 +1421,7 @@ configurator_developer_dialog() {
   --column="Choice" --column="Description" \
   "Change Multi-user mode" "Enable or disable multi-user support" \
   "Change Update Channel" "Change between normal and cooker builds" \
+  "Configure Cloud Sync" "Enable, disable, or edit cloud configuration" \
   "Browse the Wiki" "Browse the RetroDECK wiki online" \
   "Install RetroDECK Starter Pack" "Install the optional RetroDECK starter pack" )
 
@@ -1427,6 +1435,11 @@ configurator_developer_dialog() {
   "Change Update Channel" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_online_update_channel_dialog
+  ;;
+
+  "Configure Cloud Sync" )
+    log i "Configurator: opening \"$choice\" menu"
+    configurator_cloud_sync_dialog
   ;;
 
   "Browse the Wiki" )
@@ -1504,6 +1517,68 @@ configurator_online_update_channel_dialog() {
       configurator_developer_dialog
     fi
   fi
+}
+
+configurator_cloud_sync_dialog() {
+  if [[ $(rclone listremotes) =~ "RetroDECK:" ]]; then
+    rd_zenity --question \
+    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator - RetroDECK Cloud Sync" \
+    --text="You currently have cloud sync set up. Would you like to disable cloud sync?\n\nDisabling cloud syncing and then setting it up again has NOT been tested. Please backup your data.\n\n(We recognise the irony of this statement.)"
+
+    if [ $? == 0 ] # User clicked "Yes"
+    then
+      unset_cloud
+    else # User clicked "Cancel"
+      configurator_developer_dialog
+    fi
+  else
+    rd_zenity --question \
+    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator - RetroDECK Change Update Branch" \
+    --text="No cloud sync config was detected. Would you like to set it up?\n\nThis functionality is in ALPHA, and RetroDECK is not responsible for any lost data. You have been warned."
+
+    if [ $? == 0 ] # User clicked "Yes"
+    then
+      configurator_cloud_provider_dialog
+    else # User clicked "Cancel"
+      configurator_developer_dialog
+    fi
+  fi
+}
+
+configurator_cloud_provider_dialog() {
+  choice=$(rd_zenity --list --title="RetroDECK Cloud Cloud Sync - Cloud Provider" --cancel-label="Back" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+  --column="Choice" \
+  "Box" \
+  "Dropbox" \
+  "Google Drive" \
+  "OneDrive" )
+
+  case $choice in
+
+  "Box" )
+    set_cloud box newer
+  ;;
+
+  "Dropbox" )
+    set_cloud dropbox newer
+  ;;
+
+  "Google Drive" )
+    set_cloud drive newer
+  ;;
+
+  "OneDrive" )
+    set_cloud onedrive newer
+  ;;
+
+  "" ) # No selection made or Back button clicked
+    log i "Configurator: going back"
+    configurator_developer_dialog
+  ;;
+  esac
 }
 
 # START THE CONFIGURATOR

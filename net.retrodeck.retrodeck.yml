@@ -167,8 +167,8 @@ modules:
       - cp rclone ${FLATPAK_DEST}/bin/
     sources:
       - type: archive
-        url: https://github.com/rclone/rclone/releases/download/v1.61.1/rclone-v1.61.1-linux-amd64.zip
-        sha256: 6d6455e1cb69eb0615a52cc046a296395e44d50c0f32627ba8590c677ddf50a9
+        url: https://github.com/rclone/rclone/releases/download/v1.67.0/rclone-v1.67.0-linux-amd64.zip
+        sha256: 07c23d21a94d70113d949253478e13261c54d14d72023bb14d96a8da5f3e7722
 
   # Source: https://github.com/flathub/com.valvesoftware.Steam.Utility.steamtinkerlaunch/blob/129c9192f874405d21612d95f9749dc2bcaf8cea/modules/rsync.yml#L5
   - name: rsync
@@ -310,7 +310,7 @@ modules:
   # dependency of: CEMU, RPCS3
   - rd-submodules/shared-modules/glew/glew.json
 
-  # dependency of: XEMU, MelonDS
+  # dependency of: XEMU, MelonDS (4.7.0)
   - name: libslirp
     buildsystem: meson
     cleanup:
@@ -342,16 +342,6 @@ modules:
           project-id: 1749
           stable-only: true
           url-template: https://github.com/libusb/libusb/releases/download/v$version/libusb-$version.tar.bz2
-
-  # needed for chdman
-  # - name: libFLAC
-  #   buildsystem: cmake-ninja
-  #   config-opts:
-  #     - -Dbuildtype=release
-  #   sources:
-  #     - type: archive
-  #       url: https://downloads.xiph.org/releases/flac/flac-1.4.3.tar.xz
-  #       sha256: 6c58e69cd22348f441b861092b825e591d0b822e106de6eb0ee4d05d27205b70
 
   # ES-DE - START
   # https://gitlab.com/es-de/emulationstation-de
@@ -690,8 +680,8 @@ modules:
       - ln -s "${FLATPAK_DEST}/pcsx2-qt/usr/bin/pcsx2-qt" "${FLATPAK_DEST}/bin/pcsx2-qt"
     sources:
       - type: file
-        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.5900/pcsx2-v1.7.5900-linux-appimage-x64-Qt.AppImage
-        sha256: a4012fbdd175536cac99ef7f0b5fb65aa8303b4c5b8cc31918a05341d61bbb26
+        url: https://github.com/PCSX2/pcsx2/releases/download/v1.7.5967/pcsx2-v1.7.5967-linux-appimage-x64-Qt.AppImage
+        sha256: 7af0257204fac749efd1d6a309e287378f56bae54446902a5f34aafe17ce9915
 
   # PCSX2 - END
 
@@ -718,14 +708,15 @@ modules:
       - /share/man
     post-install:
       - install -D -t ${FLATPAK_DEST}/bin/ dolphin-emu-wrapper
-      - sed -i -e 's/"2048"/"512"/g' /app/share/icons/hicolor/scalable/apps/dolphin-emu.svg
+      - sed -i -e 's/viewBox="0 0 1024.02 571.29"/viewBox="0 -285.645 1024 1024" width="2048"
+        height="2048"/g' /app/share/icons/hicolor/scalable/apps/dolphin-emu.svg
     sources:
       - type: git
         # Sometimes Dolphin or its submodules clone are failing in https so it must done in ssh
         # fatal: remote transport reported error
         # url: ssh://git@github.com/dolphin-emu/dolphin.git
         url: https://github.com/dolphin-emu/dolphin.git
-        commit: a9544510468740b77cf06ef28daaa65fe247fd32
+        commit: b92e354389bb7c0bd114a8631b8af110d3cb3a14
         x-checker-data:
           type: json
           url: https://dolphin-emu.org/update/latest/beta
@@ -959,8 +950,8 @@ modules:
       - ln -s "${FLATPAK_DEST}/duckstation/usr/bin/duckstation-qt" "${FLATPAK_DEST}/bin/duckstation-qt"
     sources:
       - type: file
-        url: https://github.com/stenzek/duckstation/releases/download/preview/DuckStation-x64.AppImage
-        sha256: DUCKSTATIONSHAPLACEHOLDER
+        url: https://github.com/stenzek/duckstation/releases/download/v0.1-6937/DuckStation-x64.AppImage
+        sha256: 01afc0c7c597d510455018d9ce902e4a3c06a51d35162ed8c025c3b65ae2218b
 
   # Duckstation-AppImage - END
 
@@ -1070,8 +1061,8 @@ modules:
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+-\d+)$
-        tag: v2.0-86
-        commit: 1672f969bbc4a683e4a852aa2e145c1e6f9f68e6
+        tag: v2.0-88
+        commit: aefbb918beb8718af8f190a73018ff63bf801d95
         disable-submodules: true
       - type: git
         url: https://github.com/mozilla/cubeb
@@ -1237,8 +1228,8 @@ modules:
         ln -sv ${FLATPAK_DEST}/ryujinx/Ryujinx ${FLATPAK_DEST}/bin/Ryujinx.sh
     sources:
       - type: file
-        url: https://github.com/Ryujinx/release-channel-master/releases/download/1.1.1330/ryujinx-1.1.1330-linux_x64.tar.gz
-        sha256: 1e9158a3f55ff128e089ac3778dfb35127f2cab9d59bc52b5fe63c7b7ac2f6cb
+        url: https://github.com/Ryujinx/release-channel-master/releases/download/1.1.1343/ryujinx-1.1.1343-linux_x64.tar.gz
+        sha256: 3cd2172d2f42a0fb93a83bffe6bd8fb2d1d81fb45afc80e0068a245c8f755ac1
 
   # Ryujinx Appimage - END
 
