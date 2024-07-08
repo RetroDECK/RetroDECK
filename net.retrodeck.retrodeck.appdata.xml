@@ -83,6 +83,7 @@
                <li>FRAMEWORK: fixed an issue where second level subfolders inside retrodeck folder were not correctly placed, this caused errors on ES-DE as themes and downloaded_media folder could not be found after a reset or first install</li>
                <li>CEMU: now audio should work correctly when docking and undocking the Steam Deck</li>
                <li>CEMU: added microphone blow input to R3</li>
+               <li>DUCKSTATION: now out of the rolling release</li>
                <li>INFRASTRUCTURE: we now have a self-hosted Gitea repo in case fo disaster recovery</li>
             </ul>
             <p>Known issues:</p>
