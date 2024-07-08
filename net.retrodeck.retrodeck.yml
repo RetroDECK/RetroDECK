@@ -950,8 +950,8 @@ modules:
       - ln -s "${FLATPAK_DEST}/duckstation/usr/bin/duckstation-qt" "${FLATPAK_DEST}/bin/duckstation-qt"
     sources:
       - type: file
-        url: https://github.com/stenzek/duckstation/releases/download/preview/DuckStation-x64.AppImage
-        sha256: DUCKSTATIONSHAPLACEHOLDER
+        url: https://github.com/stenzek/duckstation/releases/download/v0.1-6937/DuckStation-x64.AppImage
+        sha256: 01afc0c7c597d510455018d9ce902e4a3c06a51d35162ed8c025c3b65ae2218b
 
   # Duckstation-AppImage - END
 
