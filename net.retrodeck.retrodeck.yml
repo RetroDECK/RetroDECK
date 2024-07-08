@@ -310,7 +310,7 @@ modules:
   # dependency of: CEMU, RPCS3
   - rd-submodules/shared-modules/glew/glew.json
 
-  # dependency of: XEMU, MelonDS
+  # dependency of: XEMU, MelonDS (4.7.0)
   - name: libslirp
     buildsystem: meson
     cleanup:
