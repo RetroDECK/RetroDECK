@@ -708,14 +708,15 @@ modules:
       - /share/man
     post-install:
       - install -D -t ${FLATPAK_DEST}/bin/ dolphin-emu-wrapper
-      - sed -i -e 's/"2048"/"512"/g' /app/share/icons/hicolor/scalable/apps/dolphin-emu.svg
+      - sed -i -e 's/viewBox="0 0 1024.02 571.29"/viewBox="0 -285.645 1024 1024" width="2048"
+        height="2048"/g' /app/share/icons/hicolor/scalable/apps/dolphin-emu.svg
     sources:
       - type: git
         # Sometimes Dolphin or its submodules clone are failing in https so it must done in ssh
         # fatal: remote transport reported error
         # url: ssh://git@github.com/dolphin-emu/dolphin.git
         url: https://github.com/dolphin-emu/dolphin.git
-        commit: a9544510468740b77cf06ef28daaa65fe247fd32
+        commit: b92e354389bb7c0bd114a8631b8af110d3cb3a14
         x-checker-data:
           type: json
           url: https://dolphin-emu.org/update/latest/beta
