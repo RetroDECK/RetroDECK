@@ -1,0 +1,56 @@
+name: Check Emulator Updates
+
+on:
+  schedule:
+    - cron: '0 18 * * *' # Controlla ogni giorno alle 18:00 UTC (3:00 JST)
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  check-updates:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flatpak-builder-tools
+
+      - name: Check for emulator updates
+        run: |
+          flatpak-builder --check-updates ./net.retrodeck.retrodeck.yml --modules "modulo1,modulo2" # Sostituisci modulo1,modulo2 con i tuoi moduli specifici
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Create or update branch
+        run: |
+          git fetch origin
+          if git rev-parse --verify origin/feat/auto-emulator-updates; then
+            git branch -D feat/auto-emulator-updates
+          fi
+          git checkout -b feat/auto-emulator-updates
+          git add .
+          git commit -m "Update emulators"
+          git push --set-upstream origin feat/auto-emulator-updates --force
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          source: feat/auto-emulator-updates
+          destination: cooker-0.8.2b
+          title: 'Automated Emulator Updates'
+          body: 'This PR contains automated updates for specified emulators.'
