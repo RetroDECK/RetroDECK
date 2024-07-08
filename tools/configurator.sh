@@ -1437,7 +1437,7 @@ configurator_developer_dialog() {
     configurator_online_update_channel_dialog
   ;;
 
-  "Change Update Channel" )
+  "Configure Cloud Sync" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_cloud_sync_dialog
   ;;
