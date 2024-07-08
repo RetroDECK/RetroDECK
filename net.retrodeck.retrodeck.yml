@@ -1061,8 +1061,8 @@ modules:
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+-\d+)$
-        tag: v2.0-86
-        commit: 1672f969bbc4a683e4a852aa2e145c1e6f9f68e6
+        tag: v2.0-88
+        commit: aefbb918beb8718af8f190a73018ff63bf801d95
         disable-submodules: true
       - type: git
         url: https://github.com/mozilla/cubeb
