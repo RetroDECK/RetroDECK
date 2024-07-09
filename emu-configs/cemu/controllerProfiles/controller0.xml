@@ -21,8 +21,8 @@
 		</trigger>
 		<mappings>
 			<entry>
-				<mapping>24</mapping>
-				<button>40</button>
+				<mapping>25</mapping>
+				<button>8</button>
 			</entry>
 			<entry>
 				<mapping>23</mapping>
@@ -61,16 +61,12 @@
 				<button>7</button>
 			</entry>
 			<entry>
-				<mapping>14</mapping>
-				<button>14</button>
-			</entry>
-			<entry>
-				<mapping>1</mapping>
-				<button>0</button>
-			</entry>
-			<entry>
 				<mapping>2</mapping>
 				<button>1</button>
+			</entry>
+			<entry>
+				<mapping>14</mapping>
+				<button>14</button>
 			</entry>
 			<entry>
 				<mapping>3</mapping>
@@ -105,16 +101,24 @@
 				<button>4</button>
 			</entry>
 			<entry>
+				<mapping>24</mapping>
+				<button>40</button>
+			</entry>
+			<entry>
 				<mapping>11</mapping>
 				<button>11</button>
+			</entry>
+			<entry>
+				<mapping>13</mapping>
+				<button>13</button>
 			</entry>
 			<entry>
 				<mapping>12</mapping>
 				<button>12</button>
 			</entry>
 			<entry>
-				<mapping>13</mapping>
-				<button>13</button>
+				<mapping>1</mapping>
+				<button>0</button>
 			</entry>
 		</mappings>
 	</controller>
