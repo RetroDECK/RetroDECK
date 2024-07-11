@@ -84,6 +84,7 @@
                <li>CEMU: now audio should work correctly when docking and undocking the Steam Deck</li>
                <li>CEMU: added microphone blow input to R3</li>
                <li>DUCKSTATION: now out of the rolling release</li>
+               <li>RYUJINX: fixed an issue where firmware and keys were not correctly loaded due to a broken symlink upstream</li>
                <li>INFRASTRUCTURE: we now have a self-hosted Gitea repo in case fo disaster recovery</li>
             </ul>
             <p>Known issues:</p>

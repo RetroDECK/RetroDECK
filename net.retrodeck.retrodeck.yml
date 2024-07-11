@@ -1236,11 +1236,13 @@ modules:
     buildsystem: simple
     build-commands:
       - |
+        mkdir -p ${FLATPAK_DEST}/ryujinx
+        mkdir -p ${FLATPAK_DEST}/bin
         mv -v * ${FLATPAK_DEST}/ryujinx
-        ln -sv ${FLATPAK_DEST}/ryujinx/Ryujinx ${FLATPAK_DEST}/bin/Ryujinx.sh
+        ln -sv ${FLATPAK_DEST}/ryujinx/Ryujinx.sh ${FLATPAK_DEST}/bin/Ryujinx.sh
     sources:
       - type: archive
-        url: https://nightly.link/Ryujinx/Ryujinx/actions/artifacts/1688764696.zip
+        url: https://productionresultssa16.blob.core.windows.net/actions-results/ce0f0f41-48d9-4b8f-bead-e2246179dff1/workflow-job-run-53bad77f-70f5-5de0-58cd-6d1d3ebce659/artifacts/49fc825c955586ae7dcea975cda624177b98b9577ba4d98c46fd9449738279ab.zip?rscd=attachment%3B+filename%3D%22ryujinx-Release-1.1.0%2Ba51eb36-linux_x64.zip%22&se=2024-07-11T08%3A24%3A57Z&sig=SFOG0tSN6ydiFgBc%2B23YblX3D%2F10CQgKZp3vMDKGQ28%3D&ske=2024-07-11T19%3A55%3A26Z&skoid=ca7593d4-ee42-46cd-af88-8b886a2f84eb&sks=b&skt=2024-07-11T07%3A55%3A26Z&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skv=2023-11-03&sp=r&spr=https&sr=b&st=2024-07-11T08%3A14%3A52Z&sv=2023-11-03
         sha256: c68dd357830abd8c5fe809cb591efecafe590ae8221ef0e590a8136b184816a1
 
   # Ryujinx Appimage - END
