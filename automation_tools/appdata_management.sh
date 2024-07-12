@@ -40,19 +40,19 @@ release_snippet="\
 xml_content=$(cat "$appdata_file")
 
 # Replace RELEASE_NOTES_PLACEHOLDER with the actual release notes
-# TODO
-git clone https://github.com/XargonWan/RetroDECK.wiki.git /tmp/wiki
+# # TODO
+# git clone https://github.com/XargonWan/RetroDECK.wiki.git /tmp/wiki
 
-# Path to the markdown file
-wiki="/tmp/wiki/Version-history:-Patch-Notes.md"
-# Read the markdown file until the first occurrence of "---"
-latest_version_notes=""
-while IFS= read -r line; do
-    if [ "$line" = "---" ]; then
-        break
-    fi
-    latest_version_notes+="$line\n"
-done < "$wiki"
+# # Path to the markdown file
+# wiki="/tmp/wiki/Version-history:-Patch-Notes.md"
+# # Read the markdown file until the first occurrence of "---"
+# latest_version_notes=""
+# while IFS= read -r line; do
+#     if [ "$line" = "---" ]; then
+#         break
+#     fi
+#     latest_version_notes+="$line\n"
+# done < "$wiki"
 
 # Extract the version number
 version_number="${latest_version_notes#*# RetroDECK }"  # Remove text before "# RetroDECK "

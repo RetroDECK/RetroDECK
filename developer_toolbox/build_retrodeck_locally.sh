@@ -5,6 +5,11 @@
 git submodule update --init --recursive
 
 export GITHUB_WORKSPACE="."
+export $disable_rofiles_fuse="--disable-rofiles-fuse"
+
+# Initialize the Flatpak repo
+ostree init --mode=archive-z2 --repo=${GITHUB_WORKSPACE}/retrodeck-repo
+
 cp net.retrodeck.retrodeck.appdata.xml net.retrodeck.retrodeck.appdata.xml.bak
 cp net.retrodeck.retrodeck.yml net.retrodeck.retrodeck.yml.bak
 
