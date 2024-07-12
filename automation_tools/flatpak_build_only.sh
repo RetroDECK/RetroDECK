@@ -20,6 +20,5 @@ flatpak-builder --user --force-clean \
     --install-deps-from=flathub-beta \
     --repo=${GITHUB_WORKSPACE}/retrodeck-repo \
     --disable-download \
-    $disable_rofiles_fuse \
     "${GITHUB_WORKSPACE}/$FOLDER" \
     net.retrodeck.retrodeck.yml
