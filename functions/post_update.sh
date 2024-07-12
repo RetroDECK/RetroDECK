@@ -345,6 +345,8 @@ post_update() {
       mv -f "$rdhome/themes" "$rdhome/ES-DE/themes" && log d "Move of \"$rdhome/themes\" completed"
       mv -f "$rdhome/downloaded_media" "$rdhome/ES-DE/downloaded_media" && log d "Move of \"$rdhome/downloaded_media\" completed"
       mv -f "$rdhome/gamelists/"* "$rdhome/ES-DE/gamelists" && log d "Move of \"$rdhome/gamelists/\" completed" && rm -rf "$rdhome/gamelists"
+      log i "Since in this version we moved to a PR build of Ryujinx we need to symlink it."
+      ln -sv $ryujinxconf "$(dirname $ryujinxconf)/PRConfig.json"
   fi
 
   # if [[ $(check_version_is_older_than "0.9.0b") == "true" ]]; then
@@ -360,7 +362,10 @@ post_update() {
   #     log AND ZENITY "Found Cemu keys.txt" in "/var/data/Cemu/keys.txt", for a better compatibility is better to move it into "$bios_folder/cemu/mlc/keys.txt, do you want to continue?
   #     if yes: mv "/var/data/Cemu/keys.txt" "$bios_folder/cemu/mlc/keys.txt"
   #     ln -s "$bios_folder/cemu/mlc/keys.txt" "/var/data/Cemu/keys.txt" <--- AND THIS SHOULD BE EVEN PUT IN THE PREPARATION SCRIPT
-  #   fi 
+  #   fi
+  # TODO: is this true?
+  #  log i "Since in this version we restored Ryujinx to a main buikd we don't need the symlink anymore."
+  #  rm "$(dirname $ryujinxconf)/PRConfig.json"
   # fi
 
   # The following commands are run every time.
