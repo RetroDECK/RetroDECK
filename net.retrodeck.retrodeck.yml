@@ -1242,7 +1242,7 @@ modules:
         ln -sv ${FLATPAK_DEST}/ryujinx/Ryujinx.sh ${FLATPAK_DEST}/bin/Ryujinx.sh
     sources:
       - type: archive
-        url: https://github.com/XargonWan/cachetest/releases/download/1.2.4b/ryujinx-Release-1.1.0+a51eb36-linux_x64.zip
+        url: https://gitlab.com/-/project/59825450/uploads/869e2327571b1f40b774a3159c74a4a3/ryujinx-Release-1.1.0-a51eb36-linux_x64.zip
         sha256: c68dd357830abd8c5fe809cb591efecafe590ae8221ef0e590a8136b184816a1
 
   # Ryujinx Appimage - END
