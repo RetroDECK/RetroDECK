@@ -1240,6 +1240,7 @@ modules:
         mkdir -p ${FLATPAK_DEST}/bin
         mv -v * ${FLATPAK_DEST}/ryujinx
         ln -sv ${FLATPAK_DEST}/ryujinx/Ryujinx.sh ${FLATPAK_DEST}/bin/Ryujinx.sh
+        chmod +x ${FLATPAK_DEST}/bin/Ryujinx.sh
     sources:
       - type: archive
         url: https://gitlab.com/-/project/59825450/uploads/869e2327571b1f40b774a3159c74a4a3/ryujinx-Release-1.1.0-a51eb36-linux_x64.zip
