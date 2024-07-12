@@ -1238,6 +1238,8 @@ modules:
       - |
         mkdir -p ${FLATPAK_DEST}/ryujinx
         mkdir -p ${FLATPAK_DEST}/bin
+        chmod +x Ryujinx.sh
+        chmod +x Ryujinx
         mv -v * ${FLATPAK_DEST}/ryujinx
         ln -sv ${FLATPAK_DEST}/ryujinx/Ryujinx.sh ${FLATPAK_DEST}/bin/Ryujinx.sh
         chmod +x ${FLATPAK_DEST}/bin/Ryujinx.sh
