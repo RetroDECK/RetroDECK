@@ -2,10 +2,18 @@
 
 # WARNING: run this script from the project root folder, not from here!!
 
+# Check if script is running with elevated privileges
+if [ "$EUID" -ne 0 ]; then
+    echo "The build might fail without some superuser permissions, please run me with sudo. Continue without sudo? [y/N,]"
+    read -r continue_without_sudo
+    if [[ "$continue_without_sudo" != "y" ]]; then
+        exit 1
+    fi
+fi
+
 git submodule update --init --recursive
 
 export GITHUB_WORKSPACE="."
-export $disable_rofiles_fuse="--disable-rofiles-fuse"
 
 # Initialize the Flatpak repo
 ostree init --mode=archive-z2 --repo=${GITHUB_WORKSPACE}/retrodeck-repo
