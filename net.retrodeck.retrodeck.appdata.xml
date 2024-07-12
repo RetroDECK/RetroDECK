@@ -67,7 +67,7 @@
    <project_license>GPL-3.0</project_license>
    <metadata_license>CC0-1.0</metadata_license>
    <releases>
-      <release version="0.8.2b" date="2024-06-20">
+      <release version="0.8.2b" date="2024-07-14">
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.8.2b</url>
          <description>
             <p>Changes:</p>
@@ -78,7 +78,7 @@
                <li>CONFIGURATOR: fixed an issue in the multi-file compression tool that prevented some type of files to be converted</li>
                <li>CONFIGURATOR: added headless state for some functions (this will help to migrate to the Godot Configurator)</li>
                <li>CONFIGURATOR: added a new "Empty ROMs folder removal" tool helping the user to cleanup the roms folder by deleting the empty folders</li>
-               <li>CONFIGURATOR: edded a new "Rebuild removed ROMs folders" tool. This is complementary to the previous one:by recreating the whole roms folder structure</li>
+               <li>CONFIGURATOR: added a new "Rebuild removed ROMs folders" tool. This is complementary to the previous one:by recreating the whole roms folder structure</li>
                <li>CONFIGURATOR: chd compression functionality restored</li>
                <li>FRAMEWORK: fixed an issue where second level subfolders inside retrodeck folder were not correctly placed, this caused errors on ES-DE as themes and downloaded_media folder could not be found after a reset or first install</li>
                <li>CEMU: now audio should work correctly when docking and undocking the Steam Deck</li>
