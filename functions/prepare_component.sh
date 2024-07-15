@@ -12,16 +12,19 @@ prepare_component() {
   action="$1"
   component=$(echo "$2" | tr '[:upper:]' '[:lower:]')
   call_source="$3"
+  component_found="false"
 
   log d "Preparing component: \"$component\", action: \"$action\""
 
   if [[ "$component" == "retrodeck" ]]; then
+    component_found="true"
     if [[ "$action" == "reset" ]]; then # Update the paths of all folders in retrodeck.cfg and create them
       while read -r config_line; do
         local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
         if [[ ! $current_setting_name =~ (rdhome|sdcard) ]]; then # Ignore these locations
           local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
-          declare -g "$current_setting_name=$rdhome/$(basename $current_setting_value)"
+          declare -g "$current_setting_name=$rdhome/${current_setting_value#*retrodeck/}" #removes everything until "retrodeck" and adds the actual retrodeck folder
+          log d "Setting: $current_setting_name=$current_setting_value"
           if [[ ! $current_setting_name == "logs_folder" ]]; then # Don't create a logs folder normally, we want to maintain the current files exactly to not lose early-install logs.
             create_dir "$rdhome/$(basename $current_setting_value)"
           else # Log folder-specific actions
@@ -31,8 +34,8 @@ prepare_component() {
           fi
         fi
       done < <(grep -v '^\s*$' $rd_conf | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
-      create_dir "/var/config/retrodeck/godot"
-
+      create_dir "/var/config/retrodeck/godot" # TODO: what is this for? Can we delete it or add it to the retrodeck.cfg so the folder will be created by the above script?
+      
     fi
     if [[ "$action" == "postmove" ]]; then # Update the paths of any folders that came with the retrodeck folder during a move
       while read -r config_line; do
@@ -49,9 +52,10 @@ prepare_component() {
   fi
 
   if [[ "$component" =~ ^(es-de|all)$ ]]; then # For use after ESDE-related folders are moved or a reset
-      log i "--------------------------------"
-      log i "Prepearing ES-DE"
-      log i "--------------------------------"
+    component_found="true"
+    log i "--------------------------------"
+    log i "Prepearing ES-DE"
+    log i "--------------------------------"
     if [[ "$action" == "reset" ]]; then
       rm -rf /var/config/ES-DE
       create_dir /var/config/ES-DE/settings
@@ -77,9 +81,10 @@ prepare_component() {
   fi
 
   if [[ "$component" =~ ^(retroarch|all)$ ]]; then
-      log i "--------------------------------"
-      log i "Prepearing RetroArch"
-      log i "--------------------------------"
+  component_found="true"
+    log i "--------------------------------"
+    log i "Prepearing RetroArch"
+    log i "--------------------------------"
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
         create_dir -d "$multi_user_data_folder/$SteamAppUser/config/retroarch"
@@ -120,7 +125,7 @@ prepare_component() {
       create_dir "$bios_folder/fbneo/cheats"
       create_dir "$bios_folder/fbneo/blend"
       dir_prep "$mods_folder/FBNeo" "$bios_folder/fbneo/patched"
-      
+
       # PPSSPP
       log i "--------------------------------"
       log i "Prepearing PPSSPP_LIBRETRO"
@@ -168,11 +173,11 @@ prepare_component() {
       set_setting_value "$ra_scummvm_conf" "themepath" "$mods_folder/RetroArch/ScummVM/theme" "libretro_scummvm" "scummvm"
       set_setting_value "$ra_scummvm_conf" "savepath" "$saves_folder/scummvm" "libretro_scummvm" "scummvm"
       set_setting_value "$ra_scummvm_conf" "browser_lastpath" "$roms_folder/scummvm" "libretro_scummvm" "scummvm"
-    
+
       dir_prep "$texture_packs_folder/RetroArch-Mesen" "/var/config/retroarch/system/HdPacks"
       dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/cache" "/var/config/retroarch/system/Mupen64plus/cache"
       dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/hires_texture" "/var/config/retroarch/system/Mupen64plus/hires_texture"
-    
+
       # Reset default preset settings
       set_setting_value "$rd_conf" "retroarch" "$(get_setting_value "$rd_defaults" "retroarch" "retrodeck" "cheevos")" "retrodeck" "cheevos"
       set_setting_value "$rd_conf" "retroarch" "$(get_setting_value "$rd_defaults" "retroarch" "retrodeck" "cheevos_hardcore")" "retrodeck" "cheevos_hardcore"
@@ -211,6 +216,7 @@ prepare_component() {
   fi
 
   if [[ "$component" =~ ^(citra|citra-emu|all)$ ]]; then
+  component_found="true"
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       log i "------------------------"
       log i "Prepearing CITRA"
@@ -244,7 +250,7 @@ prepare_component() {
       set_setting_value "$rd_conf" "citra" "$(get_setting_value "$rd_defaults" "citra" "retrodeck" "ask_to_exit")" "retrodeck" "ask_to_exit"
     fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
-      dir_prep "$rdhome/bios/citra/sysdata" "/var/data/citra-emu/sysdata"
+      dir_prep "$bios_folder/citra/sysdata" "/var/data/citra-emu/sysdata"
       dir_prep "$rdhome/logs/citra" "/var/data/citra-emu/log"
       dir_prep "$mods_folder/Citra" "/var/data/citra-emu/load/mods"
       dir_prep "$texture_packs_folder/Citra" "/var/data/citra-emu/load/textures"
@@ -256,6 +262,7 @@ prepare_component() {
   fi
 
   if [[ "$component" =~ ^(cemu|all)$ ]]; then
+  component_found="true"
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       log i "----------------------"
       log i "Prepearing CEMU"
@@ -283,6 +290,7 @@ prepare_component() {
   fi
 
   if [[ "$component" =~ ^(dolphin|dolphin-emu|all)$ ]]; then
+  component_found="true"
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       log i "----------------------"
       log i "Prepearing DOLPHIN"
@@ -336,6 +344,7 @@ prepare_component() {
   fi
 
   if [[ "$component" =~ ^(duckstation|all)$ ]]; then
+  component_found="true"
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       log i "------------------------"
       log i "Prepearing DUCKSTATION"
@@ -381,6 +390,7 @@ prepare_component() {
   fi
 
   if [[ "$component" =~ ^(melonds|all)$ ]]; then
+  component_found="true"
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       log i "----------------------"
       log i "Prepearing MELONDS"
@@ -419,6 +429,7 @@ prepare_component() {
   fi
 
   if [[ "$component" =~ ^(pcsx2|all)$ ]]; then
+  component_found="true"
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       log i "----------------------"
       log i "Prepearing PCSX2"
@@ -463,6 +474,7 @@ prepare_component() {
   fi
 
   if [[ "$component" =~ ^(pico8|pico-8|all)$ ]]; then
+  component_found="true"
     if [[ ("$action" == "reset") || ("$action" == "postmove") ]]; then
       dir_prep "$bios_folder/pico-8" "$HOME/.lexaloffle/pico-8" # Store binary and config files together. The .lexaloffle directory is a hard-coded location for the PICO-8 config file, cannot be changed
       dir_prep "$roms_folder/pico8" "$bios_folder/pico-8/carts" # Symlink default game location to RD roms for cleanliness (this location is overridden anyway by the --root_path launch argument anyway)
@@ -473,6 +485,7 @@ prepare_component() {
   fi
 
   if [[ "$component" =~ ^(ppsspp|all)$ ]]; then
+  component_found="true"
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       log i "------------------------"
       log i "Prepearing PPSSPPSDL"
@@ -501,6 +514,7 @@ prepare_component() {
   fi
 
   if [[ "$component" =~ ^(primehack|all)$ ]]; then
+  component_found="true"
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       log i "----------------------"
       log i "Prepearing Primehack"
@@ -544,6 +558,7 @@ prepare_component() {
   fi
 
   if [[ "$component" =~ ^(rpcs3|all)$ ]]; then
+  component_found="true"
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       log i "------------------------"
       log i "Prepearing RPCS3"
@@ -580,6 +595,7 @@ prepare_component() {
   fi
 
   if [[ "$component" =~ ^(ryujinx|all)$ ]]; then
+  component_found="true"
     # NOTE: for techincal reasons the system folder of Ryujinx IS NOT a sumlink of the bios/switch/keys as not only the keys are located there
     # When RetroDECK starts there is a "manage_ryujinx_keys" function that symlinks the keys only in Rryujinx/system.
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
@@ -612,6 +628,9 @@ prepare_component() {
         dir_prep "$saves_folder/switch/ryujinx/sdcard" "/var/config/Ryujinx/sdcard"
         dir_prep "$bios_folder/switch/firmware" "/var/config/Ryujinx/bis/system/Contents/registered"
         dir_prep "$bios_folder/switch/keys" "/var/config/Ryujinx/system"
+        # TODO: delete these two lines after Ryujinx is back to a proper build
+        log i "Since in this version we moved to a PR build of Ryujinx we need to symlink it."  # TODO: deleteme later
+        ln -sv $ryujinxconf "$(dirname $ryujinxconf)/PRConfig.json"                             # TODO: deleteme later
       fi
     fi
     # if [[ "$action" == "reset" ]] || [[ "$action" == "postmove" ]]; then # Run commands that apply to both resets and moves
@@ -624,6 +643,7 @@ prepare_component() {
   fi
 
   if [[ "$component" =~ ^(yuzu|all)$ ]]; then
+  component_found="true"
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       log i "----------------------"
       log i "Prepearing YUZU"
@@ -677,6 +697,7 @@ prepare_component() {
   fi
 
   if [[ "$component" =~ ^(xemu|all)$ ]]; then
+  component_found="true"
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       log i "------------------------"
       log i "Prepearing XEMU"
@@ -721,6 +742,7 @@ prepare_component() {
   fi
 
   if [[ "$component" =~ ^(vita3k|all)$ ]]; then
+  component_found="true"
     if [[ "$action" == "reset" ]]; then # Run reset-only commands
       log i "----------------------"
       log i "Prepearing Vita3K"
@@ -729,22 +751,23 @@ prepare_component() {
         log d "Figure out what Vita3k needs for multi-user"
       else # Single-user actions
         # NOTE: the component is writing in "." so it must be placed in the rw filesystem. A symlink of the binary is already placed in /app/bin/Vita3K
-        rm -rf "/var/data/Vita3K"
-        create_dir "/var/data/Vita3K/Vita3K"
-        cp -fvr "$emuconfigs/vita3k/config.yml" "/var/data/Vita3K" # component config
-        cp -fvr "$emuconfigs/vita3k/ux0" "$bios_folder/Vita3K/Vita3K" # User config
-        set_setting_value "$vita3kconf" "pref-path" "$rdhome/bios/Vita3K/Vita3K/" "vita3k"
+        rm -rf "/var/config/Vita3K"
+        create_dir "/var/config/Vita3K"
+        cp -fvr "$emuconfigs/vita3k/config.yml" "$vita3kconf" # component config
+        cp -fvr "$emuconfigs/vita3k/ux0" "$bios_folder/Vita3K/" # User config
+        set_setting_value "$vita3kconf" "pref-path" "$bios_folder/Vita3K/" "vita3k"
       fi
       # Shared actions
-      dir_prep "$saves_folder/psvita/vita3k" "$bios_folder/Vita3K/Vita3K/ux0/user/00/savedata" # Multi-user safe?
+      dir_prep "$saves_folder/psvita/vita3k" "$bios_folder/Vita3K/ux0/user/00/savedata" # Multi-user safe?
     fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
-      dir_prep "$saves_folder/psvita/vita3k" "$bios_folder/Vita3K/Vita3K/ux0/user/00/savedata" # Multi-user safe?
-      set_setting_value "$vita3kconf" "pref-path" "$rdhome/bios/Vita3K/Vita3K/" "vita3k"
+      dir_prep "$saves_folder/psvita/vita3k" "$bios_folder/Vita3K/ux0/user/00/savedata" # Multi-user safe?
+      set_setting_value "$vita3kconf" "pref-path" "$bios_folder/Vita3K/" "vita3k"
     fi
   fi
 
   if [[ "$component" =~ ^(mame|all)$ ]]; then
+  component_found="true"
     # TODO: do a proper script
     # This is just a placeholder script to test the emulator's flow
     log i "----------------------"
@@ -814,6 +837,7 @@ prepare_component() {
   fi
 
   if [[ "$component" =~ ^(gzdoom|all)$ ]]; then
+  component_found="true"
     # TODO: do a proper script
     # This is just a placeholder script to test the emulator's flow
     log i "----------------------"
@@ -824,7 +848,7 @@ prepare_component() {
     create_dir "/var/data/gzdoom/audio/midi"
     create_dir "/var/data/gzdoom/audio/fm_banks"
     create_dir "/var/data/gzdoom/audio/soundfonts"
-    create_dir "$rdhome/bios/gzdoom"
+    create_dir "$bios_folder/gzdoom"
 
     cp -fvr "$emuconfigs/gzdoom/gzdoom.ini" "/var/config/gzdoom"
 
@@ -833,16 +857,7 @@ prepare_component() {
     sed -i 's#RETRODECKSAVESDIR#'$saves_folder'#g' "/var/config/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON
   fi
 
-  if [[ "$component" =~ ^(boilr|all)$ ]]; then
-    log i "----------------------"
-    log i "Prepearing BOILR"
-    log i "----------------------"
-
-    create_dir "/var/config/boilr"
-    cp -fvr "/app/libexec/steam-sync/config.toml" "/var/config/boilr"
-  fi
-
-  if [[ ! "$component" =~ ^(retrodeck|es-de|retroarch|citra|citra-emu|cemu|dolphin|dolphin-emu|duckstation|melonds|melonDS|pcsx2|pico8|pico-8|ppsspp|primehack|rpcs3|ryujinx|yuzu|xemu|vita3k|mame|gzdoom|boilr|)$ ]]; then
+  if [[ $component_found == "false" ]]; then
     log e "Supplied component $component not found, not resetting"
   fi
 
