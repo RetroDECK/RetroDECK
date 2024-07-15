@@ -3,9 +3,9 @@ name: Check Emulator Updates
 on:
   # schedule:
   #   - cron: '0 18 * * *'
-  push:
-    branches:
-      - main
+  # push:
+  #   branches:
+  #     - main
   workflow_dispatch:
 
 jobs:
