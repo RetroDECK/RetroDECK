@@ -176,3 +176,4 @@ jobs:
             "https://$UPLOAD_HOST/RetroDECK/RetroDECK/releases/${{ env.REL_VER }}/assets?name=RetroDECK.flatpak.sha"
         env:
           GITEA_TOKEN: ${{ secrets.GITEA_TRIGGER_BUILD_TOKEN }}
+        continue-on-error: true # this will be in place until we reate an artifacts website that bypasses cloudflare limit
