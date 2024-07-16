@@ -716,14 +716,14 @@ modules:
         # fatal: remote transport reported error
         # url: ssh://git@github.com/dolphin-emu/dolphin.git
         url: https://github.com/dolphin-emu/dolphin.git
-        commit: b92e354389bb7c0bd114a8631b8af110d3cb3a14
-        x-checker-data:
-          type: json
-          url: https://dolphin-emu.org/update/latest/beta
-          commit-query: .hash
-          version-query: .shortrev
-          timestamp-query: .date
-          is-main-source: true
+        commit: 505fe5cc0e3123746e673ecca77c04ec72ff106f
+        # x-checker-data:
+        #   type: json
+        #   url: https://dolphin-emu.org/update/latest/beta
+        #   commit-query: .hash
+        #   version-query: .shortrev
+        #   timestamp-query: .date
+        #   is-main-source: true
       # detects whether dolphin is running in a flatpak sandbox
       # and makes it use xdg directories if it is.
       # prevents dolphin from attempting to write conf files
