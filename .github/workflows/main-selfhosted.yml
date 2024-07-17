@@ -176,6 +176,7 @@ jobs:
               -H "Content-Type: multipart/form-data" \
               -F "attachment=@RetroDECK-Artifact.tar.gz" \
               "http://$UPLOAD_HOST/api/v1/repos/$ORGANIZATION/$REPO/releases/$release_id/assets?name=RetroDECK-Artifact.tar.gz"
+        continue-on-error: true # this will be in place until we reate an artifacts website that bypasses cloudflare limit
 
       - name: Upload RetroDECK.flatpak.sha to Gitea Release
         run: |
