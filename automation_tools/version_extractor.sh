@@ -32,3 +32,5 @@ fetch_manifest_version(){
     manifest_version=$(echo "$manifest_version" | awk '{$1=$1;print}')
     echo "$manifest_version"
 }
+
+echo "Version extractor functions loaded"
