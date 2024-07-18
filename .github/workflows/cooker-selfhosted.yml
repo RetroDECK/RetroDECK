@@ -66,8 +66,7 @@ jobs:
         run: |
           source automation_tools/version_extractor.sh
           MANIFEST_VERSION="$(fetch_manifest_version)"
-          echo "$MANIFEST_VERSION"
-          echo "MANIFEST_VERSION=$(fetch_manifest_version)" >> $GITHUB_ENV
+          echo "MANIFEST_VERSION=$MANIFEST_VERSION" >> $GITHUB_ENV
           if [[ "$BRANCH_NAME" == 'refs/'* ]]; then
             pr_number=$(echo ${{env.BRANCH_NAME}} | awk -F'/' '{print $3}')
             source_branch=$(curl -s "https://api.github.com/repos/XargonWan/RetroDECK/pulls/$pr_number" | jq -r '.head.ref')
