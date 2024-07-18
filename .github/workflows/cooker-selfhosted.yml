@@ -65,7 +65,7 @@ jobs:
       - name: "Generate version tag"
         run: |
           source automation_tools/version_extractor.sh
-          manifest_version=${$fetch_manifest_version}
+          manifest_version="$($fetch_manifest_version)"
           if [[ "$BRANCH_NAME" == 'refs/'* ]]; then
             pr_number=$(echo ${{env.BRANCH_NAME}} | awk -F'/' '{print $3}')
             source_branch=$(curl -s "https://api.github.com/repos/XargonWan/RetroDECK/pulls/$pr_number" | jq -r '.head.ref')
