@@ -74,7 +74,8 @@ jobs:
             echo "[DEBUG] source branch is: $source_branch"
             echo "TAG=PR-$pr_number-$source_branch-${{ env.buildid }}" >> $GITHUB_ENV
           else
-            echo "TAG=$MANIFEST_VERSION-${{ env.buildid }}" >> $GITHUB_ENV
+            TAG="$MANIFEST_VERSION-${{ env.buildid }}"
+            echo "TAG=$TAG" >> $GITHUB_ENV
           fi
           echo "MANIFEST_VERSION: $MANIFEST_VERSION"
           echo "Version TAG: $TAG"
