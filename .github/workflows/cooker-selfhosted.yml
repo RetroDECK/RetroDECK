@@ -76,7 +76,8 @@ jobs:
           else
             echo "TAG=$MANIFEST_VERSION-${{ env.buildid }}" >> $GITHUB_ENV
           fi
-          echo "Version TAG: ${{ env.TAG }}"
+          echo "MANIFEST_VERSION: $MANIFEST_VERSION"
+          echo "Version TAG: $TAG"
 
       # backing up manifest in case download fails and hashes must be recalculated
       - name: Manifest backup
