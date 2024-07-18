@@ -117,6 +117,7 @@ jobs:
 
       - name: Rewrite Tag
         run: |
+          git submodule deinit -f --all
           git fetch --tags
           if git rev-parse --verify "${{ env.REL_VER }}" >/dev/null 2>&1; then # if the tag exists
               git tag -d "${{ env.REL_VER }}"                                  # remove it from local repo
