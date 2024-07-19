@@ -343,97 +343,35 @@ modules:
           stable-only: true
           url-template: https://github.com/libusb/libusb/releases/download/v$version/libusb-$version.tar.bz2
 
-  # ES-DE - START
-  # https://gitlab.com/es-de/emulationstation-de
+  # Dependency of: ES-DE, ???
+  # - name: ffmpeg
+  #   config-opts:
+  #     - --disable-static
+  #     - --disable-programs
+  #     - --disable-doc
+  #     - --enable-gpl
+  #     - --enable-shared
+  #     - --enable-libvorbis
+  #     - --enable-libopus
+  #     - --enable-libvpx
+  #     - --enable-postproc
+  #   sources:
+  #     - type: git
+  #       url: https://github.com/FFmpeg/FFmpeg.git
+  #       tag: n5.1.4
 
-  - name: ffmpeg
-    config-opts:
-      - --disable-static
-      - --disable-programs
-      - --disable-doc
-      - --enable-gpl
-      - --enable-shared
-      - --enable-libvorbis
-      - --enable-libopus
-      - --enable-libvpx
-      - --enable-postproc
-    sources:
-      - type: git
-        url: https://github.com/FFmpeg/FFmpeg.git
-        tag: n5.1.4
+  # ES-DE - Start
 
-  - name: freeimage
-    no-autogen: true
-    build-options:
-      cxxflags: -std=c++14
-    make-args:
-      - DESTDIR=/app
-    sources:
-      - type: archive
-        url: http://downloads.sourceforge.net/freeimage/FreeImage3180.zip
-        sha256: f41379682f9ada94ea7b34fe86bf9ee00935a3147be41b6569c9605a53e438fd
-      - type: shell
-        commands:
-          - sed -i 's|-o root -g root ||' ./Makefile.gnu
-          - sed -i 's|/usr|/app|' ./Makefile.gnu
-
-  - name: libgit2
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-      - -DBUILD_SHARED_LIBS:BOOL=ON
-      - -DTHREADSAFE=ON
-    sources:
-      - type: git
-        url: https://github.com/libgit2/libgit2.git
-        tag: v1.6.3
-
-  # Needed from ES-DE 2.1.0+
-  - name: libpoppler-glib
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DENABLE_BOOST=OFF
-    sources:
-      - type: archive
-        # original link not working, found a mirror
-        url: https://poppler.freedesktop.org/poppler-22.11.0.tar.xz
-        #url: https://gitlab.freedesktop.org/poppler/poppler/-/archive/poppler-22.11.0/poppler-poppler-22.11.0.tar.bz2
-        sha256: 093ba9844ed774285517361c15e21a31ba4df278a499263d4403cca74f2da828
-    cleanup:
-      - /lib/pkgconfig
-      - /include
-      - '*.a'
-      - '*.la'
-
-  # When updating this module remember to check those on the main repos:
-  - name: ES-DE
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DRETRODECK=on
-    cleanup:
-      - es-app
-      - es-core
-    sources:
-      - type: git
-        url: https://github.com/XargonWan/RetroDECK-ES-DE
-        branch: retrodeck-main
-      - type: shell
-
-  # ES-DE - END
-
-  # ES-DE Themes - START
-
-  - name: art-book-next-es-de
+  - name: retrodeck-es-de
     buildsystem: simple
     build-commands:
-      - mkdir -p ${FLATPAK_DEST}/share/es-de/themes/art-book-next-es-de/
-      - mv -f * ${FLATPAK_DEST}/share/es-de/themes/art-book-next-es-de/
+      - cp -rn files/* /app
     sources:
-      - type: git
-        url:  https://github.com/anthonycaccese/art-book-next-es-de.git
-        commit: 4fe896af7447404f6ea083335cd661c91b0f7860
+    - type: archive
+      url: RETRODECKESDEURLPLACEHOLDER
+      sha256: RETRODECKESDEPLACEHOLDER
 
-  # ES-DE Themes - END
+  # ES-DE - End
 
   # External manifests start
 

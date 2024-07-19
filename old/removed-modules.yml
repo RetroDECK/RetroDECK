@@ -173,3 +173,20 @@
       path: rd-submodules/ryujinx/ryujinx-wrapper
 
   # Ryujinx - END
+
+  # Needed from ES-DE 2.1.0+
+  - name: libpoppler-glib
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DENABLE_BOOST=OFF
+    sources:
+      - type: archive
+        # original link not working, found a mirror
+        url: https://poppler.freedesktop.org/poppler-22.11.0.tar.xz
+        #url: https://gitlab.freedesktop.org/poppler/poppler/-/archive/poppler-22.11.0/poppler-poppler-22.11.0.tar.bz2
+        sha256: 093ba9844ed774285517361c15e21a31ba4df278a499263d4403cca74f2da828
+    cleanup:
+      - /lib/pkgconfig
+      - /include
+      - '*.a'
+      - '*.la'
