@@ -366,11 +366,11 @@ modules:
   - name: retroarch
     buildsystem: simple
     build-commands:
-      - mv -rf ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/* /app/share/libretro/
+      - cp -rn ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/* /app/share/libretro/
       - chmod +x *.AppImage
       - RetroArch-Linux-x86_64/*.AppImage --appimage-extract
       - mkdir -p "${FLATPAK_DEST}/app"
-      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}/app"
+      - cp -rn squashfs-root/usr/* "${FLATPAK_DEST}/app"
     sources:
       - type: archive
         url: https://buildbot.libretro.com/nightly/linux/x86_64/RetroArch.7z
@@ -384,7 +384,7 @@ modules:
     buildsystem: simple
     build-commands:
       - mkdir -p /app/share/libretro/cores/      
-      - mv -f ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* /app/share/libretro/cores/
+      - cp -rn ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* /app/share/libretro/cores/
     sources:
       - type: archive
         url: https://buildbot.libretro.com/nightly/linux/x86_64/RetroArch_cores.7z
@@ -394,7 +394,7 @@ modules:
     buildsystem: simple
     build-commands:
       - mkdir -p /app/share/libretro/cores/      
-      - mv -f ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* /app/share/libretro/cores/
+      - cp -rf ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* /app/share/libretro/cores/
     sources:
       - type: archive
         url: https://buildbot.libretro.com/stable/1.17.0/linux/x86_64/RetroArch_cores.7z
@@ -403,7 +403,7 @@ modules:
   - name: retroarch-sameduck-core
     buildsystem: simple
     build-commands:
-      - mv sameduck_libretro.so /app/share/libretro/cores/sameduck_libretro.so
+      - cp -f sameduck_libretro.so /app/share/libretro/cores/sameduck_libretro.so
     sources:
       - type: archive
         url: https://buildbot.libretro.com/nightly/linux/x86_64/latest/sameduck_libretro.so.zip
@@ -413,7 +413,7 @@ modules:
     buildsystem: simple
     build-commands:
     - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/PPSSPP
-    - mv -f assets/* ${FLATPAK_DEST}/retrodeck/extras/PPSSPP/
+    - cp -rn assets/* ${FLATPAK_DEST}/retrodeck/extras/PPSSPP/
     sources:
       - type: archive
         url: https://github.com/hrydgard/ppsspp/archive/refs/heads/master.zip
@@ -423,8 +423,8 @@ modules:
     buildsystem: simple
     build-commands:
     - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/MSX
-    - mv -f Databases ${FLATPAK_DEST}/retrodeck/extras/MSX/Databases
-    - mv -f Machines ${FLATPAK_DEST}/retrodeck/extras/MSX/Machines
+    - cp -rn Databases ${FLATPAK_DEST}/retrodeck/extras/MSX/Databases
+    - cp -rn Machines ${FLATPAK_DEST}/retrodeck/extras/MSX/Machines
     sources:
       - type: archive
         url: http://bluemsx.msxblue.com/rel_download/blueMSXv282full.zip
@@ -435,7 +435,7 @@ modules:
     buildsystem: simple
     build-commands:
     - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/Amiga
-    - cp -f Linux/x86-64/capsimg.so ${FLATPAK_DEST}/retrodeck/extras/Amiga/capsimg.so
+    - cp -rn Linux/x86-64/capsimg.so ${FLATPAK_DEST}/retrodeck/extras/Amiga/capsimg.so
     sources:
       - type: archive
         url: https://github.com/rsn8887/capsimg/releases/download/1.1/Capsimg_for_Retroarch.zip
@@ -484,14 +484,13 @@ modules:
   # Inspired by: https://github.com/flathub/com.zettlr.Zettlr/blob/master/com.zettlr.Zettlr.yaml
   # https://pcsx2.net/downloads/
 
-  - name: pcsx2-qt
+  - name: pcsx2
     buildsystem: simple
     build-commands:
-      - chmod +x pcsx2*.AppImage
-      - ./pcsx2*.AppImage --appimage-extract
-      - mkdir -p "${FLATPAK_DEST}/pcsx2-qt"
-      - cp -r squashfs-root/* "${FLATPAK_DEST}/pcsx2-qt"
-      - ln -s "${FLATPAK_DEST}/pcsx2-qt/usr/bin/pcsx2-qt" "${FLATPAK_DEST}/bin/pcsx2-qt"
+      - chmod +x *.AppImage
+      - ./*.AppImage --appimage-extract
+      - mkdir -p "${FLATPAK_DEST}/app"
+      - cp -rn squashfs-root/usr/* "${FLATPAK_DEST}/app"
     sources:
       - type: file
         url: https://github.com/PCSX2/pcsx2/releases/download/v2.0.3/pcsx2-v2.0.3-linux-appimage-x64-Qt.AppImage
@@ -563,7 +562,7 @@ modules:
     buildsystem: simple
     build-commands:
       - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/DynamicInputTextures
-      - cp -r * ${FLATPAK_DEST}/retrodeck/extras/DynamicInputTextures/
+      - cp -rf * ${FLATPAK_DEST}/retrodeck/extras/DynamicInputTextures/
     sources:
       - type: git
         url: https://github.com/Venomalia/UniversalDynamicInput.git
@@ -580,7 +579,7 @@ modules:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
       - mkdir -p "${FLATPAK_DEST}/app"
-      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}/app"
+      - cp -rn squashfs-root/usr/* "${FLATPAK_DEST}/app"
     sources:
     - type:
       url: https://github.com/xemu-project/xemu/releases/download/v0.7.129/xemu-v0.7.129-x86_64.AppImage
@@ -605,7 +604,7 @@ modules:
     buildsystem: simple
     commands:
       - chmod +x melonDS
-      - mv -f melonDS "${FLATPAK_DEST}/app"
+      - cp -rn melonDS "${FLATPAK_DEST}/app"
     sources:
       - type: archive
         url: https://github.com/melonDS-emu/melonDS/releases/download/0.9.5/melonDS_0.9.5_linux_x64.zip
@@ -622,9 +621,9 @@ modules:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
       - mkdir -p "${FLATPAK_DEST}/app"
-      - cp -r squashfs-root/usr/bin* "${FLATPAK_DEST}/app/bin"
-      - cp -r squashfs-root/usr/lib* "${FLATPAK_DEST}/app/lib"
-      - cp -r squashfs-root/usr/share* "${FLATPAK_DEST}/app/share"
+      - cp -rn squashfs-root/usr/bin* "${FLATPAK_DEST}/app/bin"
+      - cp -rn squashfs-root/usr/lib* "${FLATPAK_DEST}/app/lib"
+      - cp -rn squashfs-root/usr/share* "${FLATPAK_DEST}/app/share"
       #TODO: - cp -r squashfs-root/usr/optional* # maybe aloready included in flatpak runtime
       #TODO: - cp -r squashfs-root/usr/plugins* # maybe aloready included in qt
       #TODO: Do we need this wrapper? squashfs-root/apprun-hooks/linuxdeploy-plugin-qt-hook.sh
@@ -680,11 +679,10 @@ modules:
   - name: duckstation
     buildsystem: simple
     build-commands:
-      - chmod +x DuckStation-*.AppImage
-      - ./DuckStation-x64*.AppImage --appimage-extract
-      - mkdir -p "${FLATPAK_DEST}/duckstation"
-      - cp -r squashfs-root/* "${FLATPAK_DEST}/duckstation"
-      - ln -s "${FLATPAK_DEST}/duckstation/usr/bin/duckstation-qt" "${FLATPAK_DEST}/bin/duckstation-qt"
+      - chmod +x *.AppImage
+      - ./*.AppImage --appimage-extract
+      - mkdir -p "${FLATPAK_DEST}/app"
+      - cp -rn squashfs-root/usr/* "${FLATPAK_DEST}/duckstation"
     sources:
       - type: file
         url: https://github.com/stenzek/duckstation/releases/download/v0.1-6937/DuckStation-x64.AppImage
@@ -701,7 +699,7 @@ modules:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
       - mkdir -p "${FLATPAK_DEST}/app"
-      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}/app"
+      - cp -rn squashfs-root/usr/* "${FLATPAK_DEST}/app"
       #TODO: do we need this wrapper? squashfs-root/apprun-hooks/linuxdeploy-plugin-gtk.sh
     sources:
     - type:
