@@ -310,21 +310,6 @@ modules:
   # dependency of: CEMU, RPCS3
   - rd-submodules/shared-modules/glew/glew.json
 
-  # dependency of: XEMU, MelonDS (4.7.0)
-  - name: libslirp
-    buildsystem: meson
-    cleanup:
-      - /include
-    sources:
-      - type: archive
-        url: https://gitlab.freedesktop.org/slirp/libslirp/-/archive/v4.8.0/libslirp-v4.8.0.tar.gz
-        sha256: 2a98852e65666db313481943e7a1997abff0183bd9bea80caec1b5da89fda28c
-        x-checker-data:
-          type: anitya
-          project-id: 96796
-          stable-only: true
-          url-template: https://gitlab.freedesktop.org/slirp/libslirp/-/archive/v$version/libslirp-v$version.tar.gz
-
   # dependency of: CEMU (1.0.26), DOLPHIN (1.0.27)
   - name: libusb
     config-opts:
@@ -614,21 +599,17 @@ modules:
   # XEMU - END
 
   # MELONDS - START
-  # https://github.com/flathub/net.kuribo64.melonDS
-  # ちっちゃい、かわいい！
+  # https://github.com/melonDS-emu/melonDS/releases/latest
 
   - name: melonds
-    buildsystem: cmake-ninja
-    builddir: true
-    build-options:
-      config-opts:
-        - -DUSE_QT6=ON
+    buildsystem: simple
+    commands:
+      - chmod +x melonDS
+      - mv -f melonDS "${FLATPAK_DEST}/app"
     sources:
-      - type: git
-        url: https://github.com/melonDS-emu/melonDS.git
-        commit: 430de6b2702bb93faa8c2004aff3fbd084db4a1e
-      - type: patch
-        path: rd-submodules/melonds/hotkeys.patch
+      - type: archive
+        url: https://github.com/melonDS-emu/melonDS/releases/download/0.9.5/melonDS_0.9.5_linux_x64.zip
+        commit: 67eb30acb1bb33a36ad9ea3d025a4666cc188ee51c5289857e940f3892efe84d
 
   # MELONDS - END
 
