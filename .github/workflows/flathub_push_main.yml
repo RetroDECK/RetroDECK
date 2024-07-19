@@ -9,7 +9,6 @@ jobs:
   Pushing_main_into_flathub:
     runs-on:
       - ubuntu-latest
-      - self-hosted
     steps:
 
       - name: Pushing
