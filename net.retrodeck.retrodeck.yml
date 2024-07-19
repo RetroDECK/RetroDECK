@@ -350,8 +350,8 @@ modules:
   - name: retrodeck-es-de
     buildsystem: simple
     build-commands:
-      - mkdir -p "${FLATPAK_DEST}/app"
-      - cp -rn files/* "${FLATPAK_DEST}/app"
+      - mkdir -p "${FLATPAK_DEST}"
+      - cp -rn files/* "${FLATPAK_DEST}"
     sources:
     - type: archive
       url: RETRODECKESDEURLPLACEHOLDER
@@ -367,11 +367,12 @@ modules:
   - name: retroarch
     buildsystem: simple
     build-commands:
-      - cp -rn ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/* /app/share/libretro/
+      - mkdir -p "${FLATPAK_DEST}/share/libretro/"
+      - cp -rn ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/* "${FLATPAK_DEST}/share/libretro/"
       - chmod +x *.AppImage
       - RetroArch-Linux-x86_64/*.AppImage --appimage-extract
-      - mkdir -p "${FLATPAK_DEST}/app"
-      - cp -rn squashfs-root/usr/* "${FLATPAK_DEST}/app"
+      - mkdir -p "${FLATPAK_DEST}"
+      - cp -rn squashfs-root/usr/* "${FLATPAK_DEST}"
     sources:
       - type: archive
         url: https://buildbot.libretro.com/nightly/linux/x86_64/RetroArch.7z
@@ -384,8 +385,8 @@ modules:
   - name: retroarch-cores-nightly
     buildsystem: simple
     build-commands:
-      - mkdir -p /app/share/libretro/cores/      
-      - cp -rn ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* /app/share/libretro/cores/
+      - mkdir -p ${FLATPAK_DEST}/share/libretro/cores/      
+      - cp -rn ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* ${FLATPAK_DEST}/share/libretro/cores/
     sources:
       - type: archive
         url: https://buildbot.libretro.com/nightly/linux/x86_64/RetroArch_cores.7z
@@ -394,8 +395,8 @@ modules:
   - name: retroarch-cores
     buildsystem: simple
     build-commands:
-      - mkdir -p /app/share/libretro/cores/      
-      - cp -rf ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* /app/share/libretro/cores/
+      - mkdir -p ${FLATPAK_DEST}/share/libretro/cores/      
+      - cp -rf ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* ${FLATPAK_DEST}/share/libretro/cores/
     sources:
       - type: archive
         url: https://buildbot.libretro.com/stable/1.17.0/linux/x86_64/RetroArch_cores.7z
@@ -404,7 +405,7 @@ modules:
   - name: retroarch-sameduck-core
     buildsystem: simple
     build-commands:
-      - cp -f sameduck_libretro.so /app/share/libretro/cores/sameduck_libretro.so
+      - cp -f sameduck_libretro.so ${FLATPAK_DEST}/share/libretro/cores/sameduck_libretro.so
     sources:
       - type: archive
         url: https://buildbot.libretro.com/nightly/linux/x86_64/latest/sameduck_libretro.so.zip
@@ -490,8 +491,8 @@ modules:
     build-commands:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
-      - mkdir -p "${FLATPAK_DEST}/app"
-      - cp -rn squashfs-root/usr/* "${FLATPAK_DEST}/app"
+      - mkdir -p "${FLATPAK_DEST}"
+      - cp -rn squashfs-root/usr/* "${FLATPAK_DEST}"
     sources:
       - type: file
         url: https://github.com/PCSX2/pcsx2/releases/download/v2.0.3/pcsx2-v2.0.3-linux-appimage-x64-Qt.AppImage
@@ -579,8 +580,8 @@ modules:
     build-commands:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
-      - mkdir -p "${FLATPAK_DEST}/app"
-      - cp -rn squashfs-root/usr/* "${FLATPAK_DEST}/app"
+      - mkdir -p "${FLATPAK_DEST}"
+      - cp -rn squashfs-root/usr/* "${FLATPAK_DEST}"
     sources:
     - type:
       url: https://github.com/xemu-project/xemu/releases/download/v0.7.129/xemu-v0.7.129-x86_64.AppImage
@@ -605,7 +606,7 @@ modules:
     buildsystem: simple
     commands:
       - chmod +x melonDS
-      - cp -rn melonDS "${FLATPAK_DEST}/app"
+      - cp -rn melonDS "${FLATPAK_DEST}"
     sources:
       - type: archive
         url: https://github.com/melonDS-emu/melonDS/releases/download/0.9.5/melonDS_0.9.5_linux_x64.zip
@@ -621,10 +622,10 @@ modules:
     build-commands:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
-      - mkdir -p "${FLATPAK_DEST}/app"
-      - cp -rn squashfs-root/usr/bin* "${FLATPAK_DEST}/app/bin"
-      - cp -rn squashfs-root/usr/lib* "${FLATPAK_DEST}/app/lib"
-      - cp -rn squashfs-root/usr/share* "${FLATPAK_DEST}/app/share"
+      - mkdir -p "${FLATPAK_DEST}"
+      - cp -rn squashfs-root/usr/bin* "${FLATPAK_DEST}/bin"
+      - cp -rn squashfs-root/usr/lib* "${FLATPAK_DEST}/lib"
+      - cp -rn squashfs-root/usr/share* "${FLATPAK_DEST}/share"
       #TODO: - cp -r squashfs-root/usr/optional* # maybe aloready included in flatpak runtime
       #TODO: - cp -r squashfs-root/usr/plugins* # maybe aloready included in qt
       #TODO: Do we need this wrapper? squashfs-root/apprun-hooks/linuxdeploy-plugin-qt-hook.sh
@@ -682,7 +683,7 @@ modules:
     build-commands:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
-      - mkdir -p "${FLATPAK_DEST}/app"
+      - mkdir -p "${FLATPAK_DEST}"
       - cp -rn squashfs-root/usr/* "${FLATPAK_DEST}/duckstation"
     sources:
       - type: file
@@ -699,8 +700,8 @@ modules:
     build-commands:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
-      - mkdir -p "${FLATPAK_DEST}/app"
-      - cp -rn squashfs-root/usr/* "${FLATPAK_DEST}/app"
+      - mkdir -p "${FLATPAK_DEST}"
+      - cp -rn squashfs-root/usr/* "${FLATPAK_DEST}"
       #TODO: do we need this wrapper? squashfs-root/apprun-hooks/linuxdeploy-plugin-gtk.sh
     sources:
     - type:
@@ -795,7 +796,7 @@ modules:
   - name: retrodeck-mame
     buildsystem: simple
     build-commands:
-      - cp -rn files/* /app
+      - cp -rn files/* ${FLATPAK_DEST}
     sources:
     - type: archive
       url: RETRODECKMAMEURLPLACEHOLDER
@@ -851,29 +852,29 @@ modules:
       - mv -f -t ${FLATPAK_DEST}/retrodeck es-configs/rd_prepacks
 
       # Logo, res, move graphics directory away from default location so splash can be changed after build
-      - mv -f -t ${FLATPAK_DEST}/retrodeck /app/share/es-de/resources/graphics
+      - mv -f -t ${FLATPAK_DEST}/retrodeck ${FLATPAK_DEST}/share/es-de/resources/graphics
       - cp -f res/splash.svg ${FLATPAK_DEST}/retrodeck/graphics/splash.svg
       - cp -f res/splash.svg ${FLATPAK_DEST}/retrodeck/graphics/splash-orig.svg
       - cp -rf res/extra_splashes/ ${FLATPAK_DEST}/retrodeck/graphics
-      - cp -f res/icon.svg /app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg
+      - cp -f res/icon.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg
       - cp -f res/icon-configurator.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.configurator.svg
       - mv -f -t ${FLATPAK_DEST}/retrodeck res/binding_icons
 
       # RetroDECK core script
-      - cp retrodeck.sh /app/bin/retrodeck.sh
-      - chmod +x /app/bin/retrodeck.sh
+      - cp retrodeck.sh ${FLATPAK_DEST}/bin/retrodeck.sh
+      - chmod +x ${FLATPAK_DEST}/bin/retrodeck.sh
 
       # Tools
-      - mkdir -p /app/tools
-      - cp -r tools/** /app/tools
-      - find /app/tools -type f \( -name "*.sh" -o -name "*.py" \) -exec chmod +x {} \;
+      - mkdir -p ${FLATPAK_DEST}/tools
+      - cp -r tools/** ${FLATPAK_DEST}/tools
+      - find ${FLATPAK_DEST}/tools -type f \( -name "*.sh" -o -name "*.py" \) -exec chmod +x {} \;
 
       # Function libraries
-      - mkdir -p /app/libexec
-      - cp -r functions/** "/app/libexec/"
+      - mkdir -p ${FLATPAK_DEST}/libexec
+      - cp -r functions/** "${FLATPAK_DEST}/libexec/"
 
       # Desktop entries
-      - cp net.retrodeck.retrodeck.desktop /app/share/applications/net.retrodeck.retrodeck.desktop
+      - cp net.retrodeck.retrodeck.desktop ${FLATPAK_DEST}/share/applications/net.retrodeck.retrodeck.desktop
       - cp net.retrodeck.retrodeck.Configurator.desktop /app/share/applications/net.retrodeck.retrodeck.Configurator.desktop
       - chmod +x net.retrodeck.retrodeck*desktop
 
@@ -881,8 +882,8 @@ modules:
       - cp -r emu-configs ${FLATPAK_DEST}/retrodeck/emu-configs/
 
       # PICO-8 wrapper
-      - cp ${FLATPAK_DEST}/retrodeck/emu-configs/pico-8/pico8-wrapper.sh /app/bin/pico8
-      - chmod +x /app/bin/pico8
+      - cp ${FLATPAK_DEST}/retrodeck/emu-configs/pico-8/pico8-wrapper.sh ${FLATPAK_DEST}/bin/pico8
+      - chmod +x ${FLATPAK_DEST}/bin/pico8
 
       # Needed for ffmpeg (RPCS3)
       - mkdir -p ${FLATPAK_DEST}/lib/ffmpeg
@@ -892,8 +893,8 @@ modules:
       - cp net.retrodeck.retrodeck.appdata.xml ${FLATPAK_DEST}/share/appdata
 
       # Creating symlinks for a prettier access
-      - ln -s /app/bin/retrodeck.sh /app/bin/retrodeck
-      - ln -s /app/tools/configurator.sh /app/bin/configurator
+      - ln -s ${FLATPAK_DEST}/bin/retrodeck.sh ${FLATPAK_DEST}/bin/retrodeck
+      - ln -s ${FLATPAK_DEST}/tools/configurator.sh ${FLATPAK_DEST}/bin/configurator
 
       # GZDOOM wrapper
       - cp emu-configs/gzdoom/gzdoom.sh ${FLATPAK_DEST}/bin/gzdoom.sh
