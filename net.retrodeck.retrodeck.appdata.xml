@@ -67,6 +67,19 @@
    <project_license>GPL-3.0</project_license>
    <metadata_license>CC0-1.0</metadata_license>
    <releases>
+      <release version="0.9.0b" date="2024-07-19">
+         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.9.0b</url>
+         <description>
+            <p>Changes:</p>
+            <ul>
+               <li>WELCOME TO cooker-0.9.0b!</li>
+            </ul>
+            <p>Known issues:</p>
+            <ul>
+               <li>Please check the know issues in the Wiki under General Information.</li>
+            </ul>
+         </description>
+      </release>
       <release version="0.8.2b" date="2024-07-17">
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.8.2b</url>
          <description>
