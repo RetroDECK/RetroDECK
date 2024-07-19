@@ -495,10 +495,8 @@ modules:
 
   # PPSSPP - END
 
-
   # PCSX2 - START
-  # Inspired by:
-  # https://github.com/flathub/com.zettlr.Zettlr/blob/master/com.zettlr.Zettlr.yaml
+  # Inspired by: https://github.com/flathub/com.zettlr.Zettlr/blob/master/com.zettlr.Zettlr.yaml
   # https://pcsx2.net/downloads/
 
   - name: pcsx2-qt
@@ -517,6 +515,7 @@ modules:
   # PCSX2 - END
 
   # Dolphin - START
+  # why from source: AppImage not provided, only Flatpak
   # https://github.com/flathub/org.DolphinEmu.dolphin-emu
   # WHEN UPADTING: remember to update rd-submodules/dolphin contents
 
@@ -588,68 +587,19 @@ modules:
   # Dolphin - END
 
   # XEMU - START
-  # https://github.com/flathub/app.xemu.xemu
-
-  - name: libpcap
-    buildsystem: cmake-ninja
-    cleanup:
-      - /bin
-      - /include
-      - /lib/debug
-      - /lib/pkgconfig
-      - /lib/*.a
-      - /share
-    sources:
-      - type: archive
-        url: https://www.tcpdump.org/release/libpcap-1.10.4.tar.gz
-        sha256: ed19a0383fad72e3ad435fd239d7cd80d64916b87269550159d20e47160ebe5f
-        x-checker-data:
-          type: anitya
-          project-id: 1702
-          stable-only: true
-          url-template: https://www.tcpdump.org/release/libpcap-$version.tar.gz
-
-  - name: PyYAML
-    buildsystem: simple
-    build-commands:
-      - python3 setup.py install --prefix=/app --root=/
-    sources:
-      - type: archive
-        url: https://github.com/yaml/pyyaml/archive/refs/tags/6.0.tar.gz
-        sha256: f33eaba25d8e0c1a959bbf00655198c287dfc5868f5b7b01e401eaa1796cc778
+  # https://xemu.app/docs/download/#download-for-linux
 
   - name: xemu
-    buildsystem: autotools
-    builddir: true
-    no-make-install: true
-    build-options:
-      cflags: -O3 -DXBOX=1 -Wno-error=redundant-decls
-    config-opts:
-      - --audio-drv-list=sdl
-      - --disable-werror
-      - --target-list=i386-softmmu
-    make-args:
-      - qemu-system-i386
-    post-install:
-      - |-
-        for px in 16 32 48 64 128 256 512; do
-          install -Dm644 ../ui/icons/xemu_${px}x${px}.png $FLATPAK_DEST/share/icons/hicolor/${px}x${px}/apps/app.xemu.xemu.png
-        done
-      - install -Dm644 ../ui/icons/xemu.svg $FLATPAK_DEST/share/icons/hicolor/scalable/apps/app.xemu.xemu.svg
-      - mv qemu-system-i386 $FLATPAK_DEST/bin/xemu
-      - mkdir -p $FLATPAK_DEST/share/licenses/xemu
-      - cd .. && python3 scripts/gen-license.py > $FLATPAK_DEST/share/licenses/xemu/LICENSE.txt
+    buildsystem: simple
+    build-commands:
+      - chmod +x *.AppImage
+      - ./*.AppImage --appimage-extract
+      - mkdir -p "${FLATPAK_DEST}/app"
+      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}/app"
     sources:
-      - type: git
-        url: https://github.com/xemu-project/xemu.git
-        tag: v0.7.126
-        commit: b2b6a98d5ea21970cd2436a1912230f4b97c5e03
-        x-checker-data:
-          type: json
-          url: https://api.github.com/repos/xemu-project/xemu/releases/latest
-          tag-query: .tag_name
-          timestamp-query: .published_at
-          version-query: .tag_name
+    - type:
+      url: https://github.com/xemu-project/xemu/releases/download/v0.7.129/xemu-v0.7.129-x86_64.AppImage
+      sha526: f680774d96a66bf1195cd133497755d43be5eda5f178457a6df32bc691dd8c74
 
   - name: xemu-dummy-hdd
     buildsystem: simple
