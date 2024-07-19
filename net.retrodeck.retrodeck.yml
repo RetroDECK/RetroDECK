@@ -350,7 +350,8 @@ modules:
   - name: retrodeck-es-de
     buildsystem: simple
     build-commands:
-      - cp -rn files/* /app
+      - mkdir -p "${FLATPAK_DEST}/app"
+      - cp -rn files/* "${FLATPAK_DEST}/app"
     sources:
     - type: archive
       url: RETRODECKESDEURLPLACEHOLDER
