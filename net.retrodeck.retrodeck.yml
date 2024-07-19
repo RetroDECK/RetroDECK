@@ -343,22 +343,22 @@ modules:
           stable-only: true
           url-template: https://github.com/libusb/libusb/releases/download/v$version/libusb-$version.tar.bz2
 
-  # Dependency of: ES-DE, ???
-  # - name: ffmpeg
-  #   config-opts:
-  #     - --disable-static
-  #     - --disable-programs
-  #     - --disable-doc
-  #     - --enable-gpl
-  #     - --enable-shared
-  #     - --enable-libvorbis
-  #     - --enable-libopus
-  #     - --enable-libvpx
-  #     - --enable-postproc
-  #   sources:
-  #     - type: git
-  #       url: https://github.com/FFmpeg/FFmpeg.git
-  #       tag: n5.1.4
+  # Dependency of: ES-DE, PPSSPP, RPCS3
+  - name: ffmpeg
+    config-opts:
+      - --disable-static
+      - --disable-programs
+      - --disable-doc
+      - --enable-gpl
+      - --enable-shared
+      - --enable-libvorbis
+      - --enable-libopus
+      - --enable-libvpx
+      - --enable-postproc
+    sources:
+      - type: git
+        url: https://github.com/FFmpeg/FFmpeg.git
+        tag: n5.1.4
 
   # ES-DE - Start
 
@@ -376,137 +376,29 @@ modules:
   # External manifests start
 
   # RetroArch - START
-  # https://github.com/flathub/org.libretro.RetroArch
+  # https://retroarch.com/index.php?page=platforms
 
   - name: retroarch
-    config-opts:
-      - '--enable-dbus'
-    make-args:
-      - GLOBAL_CONFIG_DIR=${FLATPAK_DEST}/etc
-      - HAVE_TRANSLATE=1
-      - HAVE_ACCESSIBILITY=1
+    buildsystem: simple
+    build-commands:
+      - mv -rf ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/* /app/share/libretro/
+      - chmod +x *.AppImage
+      - RetroArch-Linux-x86_64/*.AppImage --appimage-extract
+      - mkdir -p "${FLATPAK_DEST}/app"
+      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}/app"
     sources:
-      - type: git
-        url: https://github.com/libretro/RetroArch.git
-        commit: 06fa5325f8b3cd42e6fba3d57835d5924c9ea2e7
-      - type: file
-        path: rd-submodules/retroarch/retroarch.cfg
-      - type: file
-        path: rd-submodules/retroarch/VkLayer_FROG_gamescope_wsi.x86_64.json
-    post-install:
-      - mkdir -p ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/
-      - >-
-        mv ${FLATPAK_DEST}/share/pixmaps/retroarch.svg
-        ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/
-      - rmdir --ignore-fail-on-non-empty ${FLATPAK_DEST}/share/pixmaps/
-      - mkdir -p ${FLATPAK_DEST}/etc
-      - >-
-        sed s:@prefix@:${FLATPAK_DEST}:g retroarch.cfg >
-        ${FLATPAK_DEST}/etc/retroarch.cfg
-      - mkdir -p ${FLATPAK_DEST}/share/vulkan/implicit_layer.d
-      - >-
-        install VkLayer_FROG_gamescope_wsi.x86_64.json
-        /app/share/vulkan/implicit_layer.d/VkLayer_FROG_gamescope_wsi.x86_64.json
-    modules:
-      - rd-submodules/retroarch/modules/libpng/libpng-1.6.json
-      - rd-submodules/retroarch/modules/nvidia-cg-toolkit/nvidia-cg-toolkit-3.1.0013.json
-      - rd-submodules/shared-modules/SDL/SDL-1.2.15.json
-      - rd-submodules/shared-modules/SDL/SDL_image-1.2.12.json
-      - rd-submodules/shared-modules/SDL/SDL_mixer-1.2.12.json
-      - rd-submodules/shared-modules/SDL/SDL_net-1.2.8.json
-      - rd-submodules/shared-modules/SDL/SDL_ttf-2.0.11.json
-      #- rd-submodules/shared-modules/libusb/libusb.json moved outside
-      # certificate glu issue
-      #- rd-submodules/shared-modules/gudev/gudev.json
-      - rd-submodules/retroarch/modules/libbz2/libbz2-1.0.8.json
-      - rd-submodules/retroarch/modules/xrandr/xrandr-1.5.json
-      - rd-submodules/retroarch/modules/libaio/libaio-0.3.112.json
-      # certificate issue, check glu module for more info
-      #- rd-submodules/shared-modules/glu/glu-9.json
-      - rd-submodules/shared-modules/libdecor/libdecor.json
-      - rd-submodules/retroarch/modules/gamemode/gamemode-1.8.json
-  - name: retroarch-filers-video
-    subdir: gfx/video_filters
-    make-install-args:
-      - PREFIX=${FLATPAK_DEST}
-    sources:
-      - type: git
-        url: https://github.com/libretro/RetroArch.git
-        commit: 06fa5325f8b3cd42e6fba3d57835d5924c9ea2e7
-  - name: retroarch-filers-audio
-    subdir: libretro-common/audio/dsp_filters
-    make-install-args:
-      - PREFIX=${FLATPAK_DEST}
-    sources:
-      - type: git
-        url: https://github.com/libretro/RetroArch.git
-        commit: 06fa5325f8b3cd42e6fba3d57835d5924c9ea2e7
-  - name: retroarch-assets
-    make-install-args:
-      - PREFIX=${FLATPAK_DEST}
-    sources:
-      - type: git
-        url: https://github.com/libretro/retroarch-assets.git
-        commit: 923b711dc6772a168d83dc8915e9260730fcf3a1
-  - name: libretro-database
-    make-install-args:
-      - PREFIX=${FLATPAK_DEST}
-    sources:
-      - type: git
-        url: https://github.com/libretro/libretro-database.git
-        commit: 977612e2cd284f67fc0d121d9d94c5982a49f61e
-  - name: libretro-core-info
-    make-install-args:
-      - PREFIX=${FLATPAK_DEST}
-    sources:
-      - type: git
-        url: https://github.com/libretro/libretro-core-info.git
-        commit: ad0f67e172dca9edb88a4eea1d541f407a9c2d12
-  - name: retroarch-joypad-autoconfig
-    make-install-args:
-      - PREFIX=${FLATPAK_DEST}
-    sources:
-      - type: git
-        url: https://github.com/libretro/retroarch-joypad-autoconfig.git
-        commit: ec43cfef730f15d6b20bf277681250b2f4b99a8b
-  - name: common-shaders
-    make-install-args:
-      - PREFIX=${FLATPAK_DEST}
-    sources:
-      - type: git
-        url: https://github.com/libretro/common-shaders.git
-        commit: 86cfa146a8dfddf6377ddb5dbcff552feae2e5bf
-  - name: slang-shaders
-    make-install-args:
-      - PREFIX=${FLATPAK_DEST}
-    sources:
-      - type: git
-        url: https://github.com/libretro/slang-shaders.git
-        commit: d367f6cf73e01a8e43028107ab1ded2d2f05fe6a
-  - name: glsl-shaders
-    make-install-args:
-      - PREFIX=${FLATPAK_DEST}
-    sources:
-      - type: git
-        url: https://github.com/libretro/glsl-shaders.git
-        commit: db974e4d6f6e3178198b7690095a107b3b509d4b
-  - name: common-overlays
-    make-install-args:
-      - PREFIX=${FLATPAK_DEST}
-    sources:
-      - type: git
-        url: https://github.com/libretro/common-overlays.git
-        commit: c266abf4d7f9286fb6fbcfb57647cd9c80c45530
+      - type: archive
+        url: https://buildbot.libretro.com/nightly/linux/x86_64/RetroArch.7z
+        commit: 599fcaead21f971612395ac83862744c7b6c8cf2398c9c32feda89a507d5dd1b
 
   # RetroArch - END
 
-  # Not part of the offical RetroArch manifest
+  # Not part of the offical RetroArch AppImage
   # retroarch-cores-nightly must be earlier than retroarch-cores as it will overwrite this cores with the stable ones
   - name: retroarch-cores-nightly
     buildsystem: simple
     build-commands:
       - mkdir -p /app/share/libretro/cores/      
-      
       - mv -f ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* /app/share/libretro/cores/
     sources:
       - type: archive
@@ -566,6 +458,7 @@ modules:
         strip-components: 0
 
   # PPSSPP - START
+  # why from source: AppImage not provided, only Flatpak
   # https://github.com/flathub/org.ppsspp.PPSSPP
 
   - name: ppsspp
