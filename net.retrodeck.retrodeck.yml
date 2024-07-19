@@ -351,6 +351,7 @@ modules:
     buildsystem: simple
     build-commands:
       - cp -rn files/* "${FLATPAK_DEST}"
+      - chmod +x "${FLATPAK_DEST}/app/*"
     sources:
     - type: archive
       url: RETRODECKESDEURLPLACEHOLDER
