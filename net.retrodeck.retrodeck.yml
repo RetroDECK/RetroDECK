@@ -377,7 +377,7 @@ modules:
     sources:
       - type: archive
         url: https://buildbot.libretro.com/nightly/linux/x86_64/RetroArch.7z
-        sha256: 599fcaead21f971612395ac83862744c7b6c8cf2398c9c32feda89a507d5dd1b
+        sha256: RASHAPLACEHOLDER
 
   # RetroArch - END
 
