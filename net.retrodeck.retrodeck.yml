@@ -113,7 +113,7 @@ modules:
   # mesa repo got a double certificate issue and gnutils cannot handle that so GLU download fails,
   # this affects even the shared-modules's libglu so I have to replace it temporarly
   # more info there: https://gitlab.com/gnutls/gnutls/-/issues/1335
-  # dependency of: RETROARCH, CEMU, RPCS3, XEMU
+  # dependency of: RETROARCH, CEMU, RPCS3, XEMU, PPSSPP
   - name: libglu
     buildsystem: meson
     cleanup:
@@ -307,7 +307,7 @@ modules:
           project-id: 3728
           url-template: https://github.com/zeux/pugixml/releases/download/v$version/pugixml-$version.tar.gz
           
-  # dependency of: CEMU, RPCS3
+  # dependency of: CEMU, RPCS3, PPSSPP
   - rd-submodules/shared-modules/glew/glew.json
 
   # dependency of: CEMU (1.0.26), DOLPHIN (1.0.27)
@@ -446,6 +446,9 @@ modules:
   # PPSSPP - START
   # why from source: AppImage not provided, only Flatpak
   # https://github.com/flathub/org.ppsspp.PPSSPP
+
+  # not part of the original manifest but needed as PPSSPP got a different framework with different SDL, earlier RetroArch manifest was providing it but now it's from AppImage
+  - rd-submodules/shared-modules/SDL/SDL-1.2.15.json
 
   - name: ppsspp
     buildsystem: cmake-ninja
