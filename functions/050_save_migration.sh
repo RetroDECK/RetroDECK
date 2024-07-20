@@ -6,8 +6,8 @@ save_migration() {
   then
     # ROMs on SD card
     roms_folder="$default_sd/retrodeck/roms"
-    if [[ ! -L $rdhome && ! -L $rdhome/roms ]]; then # Add a roms folder symlink back to ~/retrodeck if missing, to fix things like PS2 autosaves until user migrates whole ~retrodeck directory
-      ln -s $roms_folder $rdhome/roms
+    if [[ ! -L "$rdhome" && ! -L "$rdhome/roms" ]]; then # Add a roms folder symlink back to ~/retrodeck if missing, to fix things like PS2 autosaves until user migrates whole ~retrodeck directory
+      ln -s $roms_folder "$rdhome/roms"
     fi
   else
     # ROMs on Internal
@@ -30,7 +30,7 @@ save_migration() {
   # Doing the dir prep as we don't know from which version we came
   dir_prep "$media_folder" "/var/config/ES-DE/downloaded_media"
   dir_prep "$themes_folder" "/var/config/ES-DE/themes"
-  create_dir $rdhome/logs #this was added later, maybe safe to remove in a few versions
+  create_dir "$rdhome/logs" #this was added later, maybe safe to remove in a few versions
 
   # Resetting es_settings, now we need it but in the future I should think a better solution, maybe with sed
   cp -fv /app/retrodeck/es_settings.xml /var/config/ES-DE/settings/es_settings.xml
@@ -39,13 +39,13 @@ save_migration() {
   # Perform save and state migration if needed
 
   # Moving PCSX2 Saves
-  mv -fv /var/config/PCSX2/sstates/* $rdhome/states/ps2/pcsx2
-  mv -fv /var/config/PCSX2/memcards/* $rdhome/saves/ps2/memcards
+  mv -fv /var/config/PCSX2/sstates/* "$rdhome/states/ps2/pcsx2"
+  mv -fv /var/config/PCSX2/memcards/* "$rdhome/saves/ps2/memcards"
 
   # Moving Citra saves from legacy location to 0.5.0b structure
 
-  mv -fv $rdhome/saves/Citra/* $rdhome/saves/n3ds/citra
-  rmdir $rdhome/saves/Citra # Old folder cleanup
+  mv -fv "$rdhome/saves/Citra/"* "$rdhome/saves/n3ds/citra"
+  rmdir "$rdhome/saves/Citra" # Old folder cleanup
 
   versionwheresaveschanged="0.4.5b" # Hardcoded break point between unsorted and sorted saves
 
@@ -71,9 +71,9 @@ save_migration() {
     current_dest_folder=
     gamestoskip=
 
-    tar -C $rdhome -czf $save_backup_file saves # Backup save directory for safety
+    tar -C "$rdhome" -czf $save_backup_file saves # Backup save directory for safety
     log i "Saves backed up to" $save_backup_file $migration_logfile
-    tar -C $rdhome -czf $state_backup_file states # Backup state directory for safety
+    tar -C "$rdhome" -czf $state_backup_file states # Backup state directory for safety
     log i "States backed up to" $state_backup_file $migration_logfile
 
     (
