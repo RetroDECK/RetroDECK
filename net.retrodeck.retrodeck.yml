@@ -350,7 +350,9 @@ modules:
   - name: retrodeck-es-de
     buildsystem: simple
     build-commands:
-      - cp -rn files/* "${FLATPAK_DEST}"
+      - cp -rn files/lib/* "${FLATPAK_DEST}/lib"
+      - cp -rn files/share/* "${FLATPAK_DEST}/share"
+      - cp -rn files/bin/* "${FLATPAK_DEST}/bin"
       - chmod +x "${FLATPAK_DEST}/app/*"
     sources:
     - type: archive
