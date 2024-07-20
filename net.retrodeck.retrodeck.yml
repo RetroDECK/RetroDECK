@@ -449,6 +449,10 @@ modules:
 
   # not part of the original manifest but needed as PPSSPP got a different framework with different SDL, earlier RetroArch manifest was providing it but now it's from AppImage
   - rd-submodules/shared-modules/SDL/SDL-1.2.15.json
+  - rd-submodules/shared-modules/SDL/SDL_image-1.2.12.json
+  - rd-submodules/shared-modules/SDL/SDL_mixer-1.2.12.json
+  - rd-submodules/shared-modules/SDL/SDL_net-1.2.8.json
+  - rd-submodules/shared-modules/SDL/SDL_ttf-2.0.11.json
 
   - name: ppsspp
     buildsystem: cmake-ninja
