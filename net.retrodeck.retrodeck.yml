@@ -369,8 +369,8 @@ modules:
     build-commands:
       - mkdir -p "${FLATPAK_DEST}/share/libretro/"
       - cp -rn ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/* "${FLATPAK_DEST}/share/libretro/"
-      - chmod +x *.AppImage
-      - RetroArch-Linux-x86_64/*.AppImage --appimage-extract
+      - chmod +x ./*.AppImage
+      - ./*.AppImage --appimage-extract
       - cp -rn squashfs-root/usr/* "${FLATPAK_DEST}"
     sources:
       - type: archive
