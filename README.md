@@ -102,7 +102,7 @@ Read up here on how to help out, there is something for everyone:
 | [RetroDECK-website](https://github.com/XargonWan/RetroDECK-website)  | Where our website source code is |
 | [RetroDECK on Flathub](https://github.com/flathub/net.retrodeck.retrodeck) | Our little space in Flathub's organization                 |
 | [RetroDECK-MAME](https://github.com/XargonWan/RetroDECK-MAME)   | MAME is big to build, so it's pre-built here and then imported in the build |
-| [RetroDECK-ES-DE](https://github.com/XargonWan/RetroDECK-ES-DE)  | This is where we store our patched fork of ES-DE          |
+| [RetroDECK-ES-DE](https://github.com/RetroDECK/ES-DE)  | This is where we store our patched fork of ES-DE          |
 
 
 # The RetroDECK Wiki
