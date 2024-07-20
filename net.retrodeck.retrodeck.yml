@@ -444,47 +444,18 @@ modules:
         strip-components: 0
 
   # PPSSPP - START
-  # why from source: AppImage not provided, only Flatpak
-  # https://github.com/flathub/org.ppsspp.PPSSPP
+  # why from our artifacts: AppImage not provided, only Flatpak, requested here: https://github.com/hrydgard/ppsspp/issues/16511
+  # https://github.com/RetroDECK/org.ppsspp.PPSSPP
 
-  # not part of the original manifest but needed as PPSSPP got a different framework with different SDL, earlier RetroArch manifest was providing it but now it's from AppImage
-  - rd-submodules/shared-modules/SDL/SDL-1.2.15.json
-  - rd-submodules/shared-modules/SDL/SDL_image-1.2.12.json
-  - rd-submodules/shared-modules/SDL/SDL_mixer-1.2.12.json
-  - rd-submodules/shared-modules/SDL/SDL_net-1.2.8.json
-  - rd-submodules/shared-modules/SDL/SDL_ttf-2.0.11.json
-
-  - name: ppsspp
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DUSE_SYSTEM_FFMPEG=OFF
-      - -DUSE_SYSTEM_LIBZIP=ON
-      - -DUSE_SYSTEM_ZSTD=ON
-      - -DUSE_WAYLAND_WSI=ON
-      - -DUSING_QT_UI=OFF
-      - -DBUILD_TESTING=OFF
-      - -DOpenGL_GL_PREFERENCE=GLVND
-    build-options:
-      arch:
-        aarch64:
-          config-opts:
-            - -DUSING_EGL=ON
-            - -DUSING_GLES2=ON
-    post-install:
-      - install -Dm644 icons/icon-512.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/ppsspp.svg
-    cleanup:
-      - /share/ppsspp/assets/lang/README.md
+  - name: retrodeck-ppsspp
+    buildsystem: simple
+    build-commands:
+      - cp -r files/** "${FLATPAK_DEST}"
+      - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
-      - type: git
-        url: &ppsspp-url https://github.com/hrydgard/ppsspp.git
-        tag: v1.17.1
-        commit: d479b74ed9c3e321bc3735da29bc125a2ac3b9b2
-        x-checker-data:
-          type: json
-          url: https://api.github.com/repos/hrydgard/ppsspp/releases/latest
-          version-query: .tag_name | sub("^v"; "")
-          tag-query: .tag_name
-          timestamp-query: .published_at
+    - type: archive
+      url: RDPPSSPPURL
+      sha256: RDPPSSPPHASH
 
   # PPSSPP - END
 
