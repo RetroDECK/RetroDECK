@@ -436,8 +436,8 @@ modules:
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
-        url: RDPPSSPPURL
-        sha256: RDPPSSPPHASH
+        url: RETRODECKPPSSPPURL
+        sha256: RETRODECKPPSSPPHASH
 
   # PPSSPP - END
 
