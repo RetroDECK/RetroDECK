@@ -532,7 +532,7 @@ modules:
     sources:
       - type: file
         url: https://github.com/RPCS3/rpcs3-binaries-linux/releases/download/build-ebcb4034119955991a17210af2a45a672fc9533d/rpcs3-v0.0.32-16685-ebcb4034_linux64.AppImage
-        sha526: 2553D56E01A3E3058FA9CEB4E1D61A07EAF2C5BBA9E96B29E8923914D89F6E17
+        sha526: 2553d56e01a3e3058fa9ceb4e1d61a07eaf2c5bba9e96b29e8923914d89f6e17
 
   # RPCS3 - END
 
