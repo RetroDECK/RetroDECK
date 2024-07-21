@@ -310,24 +310,6 @@ modules:
   # dependency of: CEMU, RPCS3, PPSSPP
   - rd-submodules/shared-modules/glew/glew.json
 
-  # dependency of: CEMU (1.0.26), DOLPHIN (1.0.27)
-  - name: libusb
-    config-opts:
-      - --disable-static
-    cleanup:
-      - /include
-      - /lib/*.la
-      - /lib/pkgconfig
-    sources:
-      - type: archive
-        url: https://github.com/libusb/libusb/releases/download/v1.0.27/libusb-1.0.27.tar.bz2
-        sha256: ffaa41d741a8a3bee244ac8e54a72ea05bf2879663c098c82fc5757853441575
-        x-checker-data:
-          type: anitya
-          project-id: 1749
-          stable-only: true
-          url-template: https://github.com/libusb/libusb/releases/download/v$version/libusb-$version.tar.bz2
-
   # Dependency of: ES-DE, PPSSPP, RPCS3
   - name: ffmpeg
     config-opts:
@@ -479,74 +461,17 @@ modules:
 
   # Dolphin - START
   # why from source: AppImage not provided, only Flatpak
-  # https://github.com/flathub/org.DolphinEmu.dolphin-emu
-  # WHEN UPADTING: remember to update rd-submodules/dolphin contents
+  # https://github.com/RetroDECK/org.DolphinEmu.dolphin-emu
 
-  - name: xdg-screensaver-shim
-    buildsystem: meson
-    sources:
-      - type: archive
-        url: https://github.com/Unrud/xdg-screensaver-shim/archive/0.0.2.tar.gz
-        sha256: 0ed2a69fe6ee6cbffd2fe16f85116db737f17fb1e79bfb812d893cf15c728399
-
-  - name: dolphin-emu
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-      - -DENABLE_ALSA=OFF
-      - -DENABLE_SDL=ON
-      - -DENABLE_EVDEV=ON
-      - -DDISTRIBUTOR=Flathub
-    cleanup:
-      - /share/man
-    post-install:
-      - install -D -t ${FLATPAK_DEST}/bin/ dolphin-emu-wrapper
-      - sed -i -e 's/viewBox="0 0 1024.02 571.29"/viewBox="0 -285.645 1024 1024" width="2048"
-        height="2048"/g' /app/share/icons/hicolor/scalable/apps/dolphin-emu.svg
-    sources:
-      - type: git
-        # Sometimes Dolphin or its submodules clone are failing in https so it must done in ssh
-        # fatal: remote transport reported error
-        # url: ssh://git@github.com/dolphin-emu/dolphin.git
-        url: https://github.com/dolphin-emu/dolphin.git
-        commit: cc3ff347b437fd80f3a2880d1bbc7ba2d5f191f4
-        # x-checker-data:
-        #   type: json
-        #   url: https://dolphin-emu.org/update/latest/beta
-        #   commit-query: .hash
-        #   version-query: .shortrev
-        #   timestamp-query: .date
-        #   is-main-source: true
-      # detects whether dolphin is running in a flatpak sandbox
-      # and makes it use xdg directories if it is.
-      # prevents dolphin from attempting to write conf files
-      # in non-writable paths, typically happens when a user
-      # has leftover files from a previous non-flatpak install
-      - type: patch
-        path: rd-submodules/dolphin/detectflatpak.patch
-      # version strings must match exactly for online multiplayer
-      - type: patch
-        path: rd-submodules/dolphin/nodirtyversion.patch
-      - type: script
-        commands:
-          - |
-            for i in {0..9}; do
-              test -S $XDG_RUNTIME_DIR/discord-ipc-$i ||
-                ln -sf {app/com.discordapp.Discord,$XDG_RUNTIME_DIR}/discord-ipc-$i;
-            done
-            dolphin-emu "$@"
-        dest-filename: dolphin-emu-wrapper
-
-  - name: universal_dynamic_input
+  - name: retrodeck-dolphin
     buildsystem: simple
     build-commands:
-      - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/DynamicInputTextures
-      - cp -rf * ${FLATPAK_DEST}/retrodeck/extras/DynamicInputTextures/
+      - cp -r files/** "${FLATPAK_DEST}"
+      - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
-      - type: git
-        url: https://github.com/Venomalia/UniversalDynamicInput.git
-        commit: UNIVERSALDYNAMICINPUTCOMMITPLACEHOLDER
-
+    - type: archive
+      url: RETRODECKDOLPHINURLPLACEHOLDER
+      sha256: RETRODECKDOLPHINPLACEHOLDER
   # Dolphin - END
 
   # XEMU - START
