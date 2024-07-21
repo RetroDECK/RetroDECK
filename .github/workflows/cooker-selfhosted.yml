@@ -64,6 +64,9 @@ jobs:
       # if the branch is coming from a PR the tag should be manually built
       - name: "Generate version tag"
         run: |
+          source automation_tools/version_extractor.sh
+          MANIFEST_VERSION="$(fetch_manifest_version)"
+          echo "MANIFEST_VERSION=$MANIFEST_VERSION" >> $GITHUB_ENV
           if [[ "$BRANCH_NAME" == 'refs/'* ]]; then
             pr_number=$(echo ${{env.BRANCH_NAME}} | awk -F'/' '{print $3}')
             source_branch=$(curl -s "https://api.github.com/repos/XargonWan/RetroDECK/pulls/$pr_number" | jq -r '.head.ref')
@@ -71,9 +74,11 @@ jobs:
             echo "[DEBUG] source branch is: $source_branch"
             echo "TAG=PR-$pr_number-$source_branch-${{ env.buildid }}" >> $GITHUB_ENV
           else
-            echo "TAG=${{env.BRANCH_NAME}}-${{ env.buildid }}" >> $GITHUB_ENV
+            TAG="$MANIFEST_VERSION-${{ env.buildid }}"
+            echo "TAG=$TAG" >> $GITHUB_ENV
           fi
-          echo "Version TAG: ${{ env.TAG }}"
+          echo "MANIFEST_VERSION: $MANIFEST_VERSION"
+          echo "Version TAG: $TAG"
 
       # backing up manifest in case download fails and hashes must be recalculated
       - name: Manifest backup
@@ -158,6 +163,17 @@ jobs:
           token: ${{ secrets.TRIGGER_BUILD_TOKEN }}
           repo: RetroDECK-cooker
         continue-on-error: true
+
+      - name: Rewrite Tag
+        run: |
+          git submodule deinit -f --all
+          git fetch --tags
+          if git rev-parse --verify "${{ env.TAG }}" >/dev/null 2>&1; then # if the tag exists
+              git tag -d "${{ env.TAG }}"                                  # remove it from local repo
+              git push --delete origin "${{ env.TAG }}"                    # and from remote
+          fi
+          git tag "${{ env.TAG }}"             # Create the tag locally               
+          git push origin "${{ env.TAG }}"     # Push the new tag in the remote repo
 
       # In case it cannot publish the release at least it's providing the flatpak file for creating a manual release
       - name: Upload RetroDECK-cooker.flatpak

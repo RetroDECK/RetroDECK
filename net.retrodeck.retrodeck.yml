@@ -77,8 +77,8 @@ modules:
       - |
 
         # on main please update this with the version variable, eg: VERSION=0.8.0b
-        # on cooker will be THISBRANCH
-        VERSION=THISBRANCH
+        # on cooker will be VERSION=cooker-0.9.0b for example
+        VERSION=cooker-0.8.2b
 
         git checkout ${GITHUB_REF_NAME}
         mkdir -p ${FLATPAK_DEST}/retrodeck/
@@ -716,7 +716,7 @@ modules:
         # fatal: remote transport reported error
         # url: ssh://git@github.com/dolphin-emu/dolphin.git
         url: https://github.com/dolphin-emu/dolphin.git
-        commit: 505fe5cc0e3123746e673ecca77c04ec72ff106f
+        commit: cc3ff347b437fd80f3a2880d1bbc7ba2d5f191f4
         # x-checker-data:
         #   type: json
         #   url: https://dolphin-emu.org/update/latest/beta

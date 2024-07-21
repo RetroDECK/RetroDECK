@@ -115,6 +115,17 @@ jobs:
           repo: RetroDECK
         continue-on-error: true
 
+      - name: Rewrite Tag
+        run: |
+          git submodule deinit -f --all
+          git fetch --tags
+          if git rev-parse --verify "${{ env.REL_VER }}" >/dev/null 2>&1; then # if the tag exists
+              git tag -d "${{ env.REL_VER }}"                                  # remove it from local repo
+              git push --delete origin "${{ env.REL_VER }}"                    # and from remote
+          fi
+          git tag "${{ env.REL_VER }}"             # Create the tag locally               
+          git push origin "${{ env.REL_VER }}"     # Push the new tag in the remote repo
+
       # In case it cannot publish the release at least it's providing the flatpak file for creating a manual release
       - name: Upload RetroDECK.flatpak
         uses: actions/upload-artifact@v3
@@ -166,6 +177,7 @@ jobs:
               -H "Content-Type: multipart/form-data" \
               -F "attachment=@RetroDECK-Artifact.tar.gz" \
               "http://$UPLOAD_HOST/api/v1/repos/$ORGANIZATION/$REPO/releases/$release_id/assets?name=RetroDECK-Artifact.tar.gz"
+        continue-on-error: true # this will be in place until we reate an artifacts website that bypasses cloudflare limit
 
       - name: Upload RetroDECK.flatpak.sha to Gitea Release
         run: |
