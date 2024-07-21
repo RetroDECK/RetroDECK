@@ -368,10 +368,10 @@ modules:
     buildsystem: simple
     build-commands:
       - mkdir -p "${FLATPAK_DEST}/share/libretro/"
-      - cp -rn ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/* "${FLATPAK_DEST}/share/libretro/"
+      - cp -r ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/* "${FLATPAK_DEST}/share/libretro/"
       - chmod +x ./*.AppImage
       - ./*.AppImage --appimage-extract
-      - cp -rn squashfs-root/usr/* "${FLATPAK_DEST}"
+      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
     sources:
       - type: archive
         url: https://buildbot.libretro.com/nightly/linux/x86_64/RetroArch.7z
@@ -385,7 +385,7 @@ modules:
     buildsystem: simple
     build-commands:
       - mkdir -p ${FLATPAK_DEST}/share/libretro/cores/      
-      - cp -rn ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* ${FLATPAK_DEST}/share/libretro/cores/
+      - cp -r ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* ${FLATPAK_DEST}/share/libretro/cores/
     sources:
       - type: archive
         url: https://buildbot.libretro.com/nightly/linux/x86_64/RetroArch_cores.7z
@@ -414,7 +414,7 @@ modules:
     buildsystem: simple
     build-commands:
     - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/PPSSPP
-    - cp -rn assets/* ${FLATPAK_DEST}/retrodeck/extras/PPSSPP/
+    - cp -r assets/* ${FLATPAK_DEST}/retrodeck/extras/PPSSPP/
     sources:
       - type: archive
         url: https://github.com/hrydgard/ppsspp/archive/refs/heads/master.zip
@@ -424,8 +424,8 @@ modules:
     buildsystem: simple
     build-commands:
     - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/MSX
-    - cp -rn Databases ${FLATPAK_DEST}/retrodeck/extras/MSX/Databases
-    - cp -rn Machines ${FLATPAK_DEST}/retrodeck/extras/MSX/Machines
+    - cp -r Databases ${FLATPAK_DEST}/retrodeck/extras/MSX/Databases
+    - cp -r Machines ${FLATPAK_DEST}/retrodeck/extras/MSX/Machines
     sources:
       - type: archive
         url: http://bluemsx.msxblue.com/rel_download/blueMSXv282full.zip
@@ -436,7 +436,7 @@ modules:
     buildsystem: simple
     build-commands:
     - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/Amiga
-    - cp -rn Linux/x86-64/capsimg.so ${FLATPAK_DEST}/retrodeck/extras/Amiga/capsimg.so
+    - cp -r Linux/x86-64/capsimg.so ${FLATPAK_DEST}/retrodeck/extras/Amiga/capsimg.so
     sources:
       - type: archive
         url: https://github.com/rsn8887/capsimg/releases/download/1.1/Capsimg_for_Retroarch.zip
@@ -468,7 +468,7 @@ modules:
     build-commands:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
-      - cp -rn squashfs-root/usr/* "${FLATPAK_DEST}"
+      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
     sources:
       - type: file
         url: https://github.com/PCSX2/pcsx2/releases/download/v2.0.3/pcsx2-v2.0.3-linux-appimage-x64-Qt.AppImage
@@ -556,7 +556,7 @@ modules:
     build-commands:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
-      - cp -rn squashfs-root/usr/* "${FLATPAK_DEST}"
+      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
     sources:
     - type:
       url: https://github.com/xemu-project/xemu/releases/download/v0.7.129/xemu-v0.7.129-x86_64.AppImage
@@ -581,7 +581,7 @@ modules:
     buildsystem: simple
     commands:
       - chmod +x melonDS
-      - cp -rn melonDS "${FLATPAK_DEST}"
+      - cp -r melonDS "${FLATPAK_DEST}"
     sources:
       - type: archive
         url: https://github.com/melonDS-emu/melonDS/releases/download/0.9.5/melonDS_0.9.5_linux_x64.zip
@@ -597,9 +597,9 @@ modules:
     build-commands:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
-      - cp -rn squashfs-root/usr/bin* "${FLATPAK_DEST}/bin"
-      - cp -rn squashfs-root/usr/lib* "${FLATPAK_DEST}/lib"
-      - cp -rn squashfs-root/usr/share* "${FLATPAK_DEST}/share"
+      - cp -r squashfs-root/usr/bin* "${FLATPAK_DEST}/bin"
+      - cp -r squashfs-root/usr/lib* "${FLATPAK_DEST}/lib"
+      - cp -r squashfs-root/usr/share* "${FLATPAK_DEST}/share"
       #TODO: - cp -r squashfs-root/usr/optional* # maybe aloready included in flatpak runtime
       #TODO: - cp -r squashfs-root/usr/plugins* # maybe aloready included in qt
       #TODO: Do we need this wrapper? squashfs-root/apprun-hooks/linuxdeploy-plugin-qt-hook.sh
@@ -657,7 +657,7 @@ modules:
     build-commands:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
-      - cp -rn squashfs-root/usr/* "${FLATPAK_DEST}/duckstation"
+      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}/duckstation"
     sources:
       - type: file
         url: https://github.com/stenzek/duckstation/releases/download/v0.1-6937/DuckStation-x64.AppImage
@@ -673,7 +673,7 @@ modules:
     build-commands:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
-      - cp -rn squashfs-root/usr/* "${FLATPAK_DEST}"
+      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
       #TODO: do we need this wrapper? squashfs-root/apprun-hooks/linuxdeploy-plugin-gtk.sh
     sources:
     - type:
@@ -768,7 +768,7 @@ modules:
   - name: retrodeck-mame
     buildsystem: simple
     build-commands:
-      - cp -rn files/* ${FLATPAK_DEST}
+      - cp -r files/* ${FLATPAK_DEST}
     sources:
     - type: archive
       url: RETRODECKMAMEURLPLACEHOLDER
