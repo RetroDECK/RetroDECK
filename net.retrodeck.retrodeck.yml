@@ -493,7 +493,7 @@ modules:
     build-commands:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
-      - mv -n squashfs-root/usr/** "${FLATPAK_DEST}"
+      - mv squashfs-root/usr/** "${FLATPAK_DEST}"
     sources:
       - type: file
         url: https://github.com/xemu-project/xemu/releases/download/v0.7.129/xemu-v0.7.129-x86_64.AppImage
