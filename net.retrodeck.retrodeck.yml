@@ -335,9 +335,9 @@ modules:
       - cp -r files/** "${FLATPAK_DEST}"
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
-    - type: archive
-      url: RETRODECKESDEURLPLACEHOLDER
-      sha256: RETRODECKESDEPLACEHOLDER
+      - type: archive
+        url: RETRODECKESDEURLPLACEHOLDER
+        sha256: RETRODECKESDEPLACEHOLDER
 
   # ES-DE - End
 
@@ -435,9 +435,9 @@ modules:
       - cp -r files/** "${FLATPAK_DEST}"
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
-    - type: archive
-      url: RDPPSSPPURL
-      sha256: RDPPSSPPHASH
+      - type: archive
+        url: RDPPSSPPURL
+        sha256: RDPPSSPPHASH
 
   # PPSSPP - END
 
@@ -469,9 +469,9 @@ modules:
       - cp -r files/** "${FLATPAK_DEST}"
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
-    - type: archive
-      url: RETRODECKDOLPHINURLPLACEHOLDER
-      sha256: RETRODECKDOLPHINPLACEHOLDER
+      - type: archive
+        url: RETRODECKDOLPHINURLPLACEHOLDER
+        sha256: RETRODECKDOLPHINPLACEHOLDER
   # Dolphin - END
 
   # XEMU - START
@@ -484,9 +484,9 @@ modules:
       - ./*.AppImage --appimage-extract
       - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
     sources:
-    - type: file
-      url: https://github.com/xemu-project/xemu/releases/download/v0.7.129/xemu-v0.7.129-x86_64.AppImage
-      sha256: f680774d96a66bf1195cd133497755d43be5eda5f178457a6df32bc691dd8c74
+      - type: file
+        url: https://github.com/xemu-project/xemu/releases/download/v0.7.129/xemu-v0.7.129-x86_64.AppImage
+        sha256: f680774d96a66bf1195cd133497755d43be5eda5f178457a6df32bc691dd8c74
 
   - name: xemu-dummy-hdd
     buildsystem: simple
@@ -530,9 +530,9 @@ modules:
       #TODO: - cp -r squashfs-root/usr/plugins* # maybe aloready included in qt
       #TODO: Do we need this wrapper? squashfs-root/apprun-hooks/linuxdeploy-plugin-qt-hook.sh
     sources:
-    - type: file
-      url: https://github.com/RPCS3/rpcs3-binaries-linux/releases/download/build-ebcb4034119955991a17210af2a45a672fc9533d/rpcs3-v0.0.32-16685-ebcb4034_linux64.AppImage
-      sha526: 2553D56E01A3E3058FA9CEB4E1D61A07EAF2C5BBA9E96B29E8923914D89F6E17
+      - type: file
+        url: https://github.com/RPCS3/rpcs3-binaries-linux/releases/download/build-ebcb4034119955991a17210af2a45a672fc9533d/rpcs3-v0.0.32-16685-ebcb4034_linux64.AppImage
+        sha526: 2553D56E01A3E3058FA9CEB4E1D61A07EAF2C5BBA9E96B29E8923914D89F6E17
 
   # RPCS3 - END
 
@@ -602,9 +602,9 @@ modules:
       - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
       #TODO: do we need this wrapper? squashfs-root/apprun-hooks/linuxdeploy-plugin-gtk.sh
     sources:
-    - type: file
-      url: https://github.com/cemu-project/Cemu/releases/download/v2.0-88/Cemu-2.0-88-x86_64.AppImage
-      sha526: 1af1ad5322df5fa0e2a97588c7486604daf42deb8c4d07a2b885047d9701fed0
+      - type: file
+        url: https://github.com/cemu-project/Cemu/releases/download/v2.0-88/Cemu-2.0-88-x86_64.AppImage
+        sha526: 1af1ad5322df5fa0e2a97588c7486604daf42deb8c4d07a2b885047d9701fed0
 
   # Cemu - END
 
@@ -639,9 +639,9 @@ modules:
       - cp -r files/** "${FLATPAK_DEST}"
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
-    - type: archive
-      url: RETRODECKSOLARUSURLPLACEHOLDER
-      sha256: RETRODECKSOLARUSPLACEHOLDER
+      - type: archive
+        url: RETRODECKSOLARUSURLPLACEHOLDER
+        sha256: RETRODECKSOLARUSPLACEHOLDER
 
   # SOLARUS - END
 
@@ -657,9 +657,9 @@ modules:
     build-commands:
       - cp -r files/* ${FLATPAK_DEST}
     sources:
-    - type: archive
-      url: RETRODECKMAMEURLPLACEHOLDER
-      sha256: RETRODECKMAMEPLACEHOLDER
+      - type: archive
+        url: RETRODECKMAMEURLPLACEHOLDER
+        sha256: RETRODECKMAMEPLACEHOLDER
 
   # MAME - End
 
