@@ -468,6 +468,7 @@ modules:
     build-commands:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
+      - rm -f /app/lib/libselinux.so.1 # TODO this rfile is breaking the build, we need it? Error: cp: /app/lib/libselinux.so.1: no version information available (required by cp)
       - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
     sources:
       - type: file
