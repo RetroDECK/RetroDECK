@@ -339,6 +339,16 @@ modules:
         url: RETRODECKESDEURLPLACEHOLDER
         sha256: RETRODECKESDEPLACEHOLDER
 
+  - name: RetroDECK Theme
+    buildsystem: simple
+    build-commands:
+      - mkdir -p ${FLATPAK_DEST}/share/es-de/themes/retrodeck/
+      - mv -f * ${FLATPAK_DEST}/share/es-de/themes/retrodeck/
+    sources:
+      - type: git
+        url:  https://github.com/RetroDECK/RetroDECK-theme
+        commit: 975c41cac99d150b6ae86a1dfd19988058c69aad
+
   # ES-DE - End
 
   # External manifests start
