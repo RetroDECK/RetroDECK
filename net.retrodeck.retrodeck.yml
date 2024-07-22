@@ -485,6 +485,7 @@ modules:
     buildsystem: simple
     build-commands:
       - mkdir -p "${FLATPAK_DEST}/usr/local/lib"
+      - rm -rf "files/lib/debug"
       - mv "files/lib/"* "${FLATPAK_DEST}/usr/local/lib"
       - cp -r files/* "${FLATPAK_DEST}"
       - chmod +x "${FLATPAK_DEST}/bin/"*
