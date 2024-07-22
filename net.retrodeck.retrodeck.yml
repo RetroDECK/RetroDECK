@@ -639,8 +639,6 @@ modules:
   - name: retrodeck-mame
     buildsystem: simple
     build-commands:
-      - mkdir -p "${FLATPAK_DEST}/usr/local/lib"
-      - mv "files/lib/"* "${FLATPAK_DEST}/usr/local/lib"
       - cp -r files/* ${FLATPAK_DEST}
     sources:
       - type: archive
