@@ -332,6 +332,7 @@ modules:
   - name: retrodeck-es-de
     buildsystem: simple
     build-commands:
+      - mkdir -p "${FLATPAK_DEST}/usr/local/lib"
       - mv "files/lib/"* "${FLATPAK_DEST}/usr/local/lib"
       - ls -lah files/* # TODO: DEBUG, removeme
       - ls -lah "${FLATPAK_DEST}/usr/local/lib" # TODO: DEBUG, removeme
