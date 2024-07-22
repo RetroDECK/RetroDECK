@@ -363,7 +363,7 @@ modules:
       - cp -r ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/* "${FLATPAK_DEST}/share/libretro/"
       - chmod +x ./*.AppImage
       - ./*.AppImage --appimage-extract
-      - cp -r squashfs-root/usr/** "${FLATPAK_DEST}"
+      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
     sources:
       - type: archive
         url: https://buildbot.libretro.com/nightly/linux/x86_64/RetroArch.7z
@@ -461,7 +461,7 @@ modules:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
       - rm -f /app/lib/libselinux.so.1 # TODO this rfile is breaking the build, we need it? Error: cp: /app/lib/libselinux.so.1: no version information available (required by cp)
-      - cp -r squashfs-root/usr/** "${FLATPAK_DEST}"
+      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
     sources:
       - type: file
         url: https://github.com/PCSX2/pcsx2/releases/download/v2.0.3/pcsx2-v2.0.3-linux-appimage-x64-Qt.AppImage
@@ -570,7 +570,7 @@ modules:
     build-commands:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
-      - cp -r squashfs-root/usr/** "${FLATPAK_DEST}/duckstation"
+      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}/duckstation"
     sources:
       - type: file
         url: https://github.com/stenzek/duckstation/releases/download/v0.1-6937/DuckStation-x64.AppImage
@@ -586,7 +586,7 @@ modules:
     build-commands:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
-      - cp -r squashfs-root/usr/** "${FLATPAK_DEST}"
+      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
       #TODO: do we need this wrapper? squashfs-root/apprun-hooks/linuxdeploy-plugin-gtk.sh
     sources:
       - type: file
