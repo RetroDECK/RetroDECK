@@ -713,6 +713,7 @@ modules:
   - name: retrodeck-mame
     buildsystem: simple
     build-commands:
+      - rm -f files/manifest.json
       - cp -rn files/* ${FLATPAK_DEST}
     sources:
       - type: archive
