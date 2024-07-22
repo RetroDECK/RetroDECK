@@ -578,6 +578,7 @@ modules:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
       - mkdir -p "${FLATPAK_DEST}/usr/local/lib"
+      - rm -rf "squashfs-root/usr/lib/girepository-1.0" # causes issues, I think we already have this
       - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/usr/local/lib"
       - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
       #TODO: do we need this wrapper? squashfs-root/apprun-hooks/linuxdeploy-plugin-gtk.sh
