@@ -544,7 +544,7 @@ modules:
     build-commands:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
-      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}/duckstation"
+      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
     sources:
       - type: file
         url: https://github.com/stenzek/duckstation/releases/download/v0.1-6937/DuckStation-x64.AppImage
