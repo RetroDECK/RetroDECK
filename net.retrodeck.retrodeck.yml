@@ -649,19 +649,6 @@ modules:
         sha256: RETRODECKGZDOOMSHASPLACEHOLDER
 
   # GZDoom - END
-  
-  # MAME - Start
-
-  - name: retrodeck-mame
-    buildsystem: simple
-    build-commands:
-      - cp -r files/* ${FLATPAK_DEST}
-    sources:
-      - type: archive
-        url: RETRODECKMAMEURLPLACEHOLDER
-        sha256: RETRODECKMAMEPLACEHOLDER
-
-  # MAME - End
 
   # Ryujinx Appimage - START
   # https://ryujinx.org/download
@@ -720,6 +707,19 @@ modules:
         sha256: XEMUHDDHASHPLACEHOLDER
 
   # XEMU - END
+
+  # MAME - Start
+
+  - name: retrodeck-mame
+    buildsystem: simple
+    build-commands:
+      - cp -rn files/* ${FLATPAK_DEST}
+    sources:
+      - type: archive
+        url: RETRODECKMAMEURLPLACEHOLDER
+        sha256: RETRODECKMAMEPLACEHOLDER
+
+  # MAME - End
 
   # External manifests end
 
