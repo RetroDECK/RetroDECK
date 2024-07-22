@@ -485,47 +485,6 @@ modules:
 
   # Dolphin - END
 
-  # XEMU - START
-  # https://xemu.app/docs/download/#download-for-linux
-
-  - name: xemu
-    buildsystem: simple
-    build-commands:
-      - chmod +x *.AppImage
-      - ./*.AppImage --appimage-extract
-      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}/"
-    sources:
-      - type: file
-        url: https://github.com/xemu-project/xemu/releases/download/v0.7.129/xemu-v0.7.129-x86_64.AppImage
-        sha256: f680774d96a66bf1195cd133497755d43be5eda5f178457a6df32bc691dd8c74
-
-  - name: xemu-dummy-hdd
-    buildsystem: simple
-    build-commands:
-      - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/XEMU
-      - mv -f "xbox_hdd.qcow2" "${FLATPAK_DEST}/retrodeck/extras/XEMU/xbox_hdd.qcow2"
-    sources:
-      - type: archive
-        url: https://github.com/mborgerson/xemu-hdd-image/releases/latest/download/xbox_hdd.qcow2.zip
-        sha256: XEMUHDDHASHPLACEHOLDER
-
-  # XEMU - END
-
-  # MELONDS - START
-  # https://github.com/melonDS-emu/melonDS/releases/latest
-
-  - name: melonds
-    buildsystem: simple
-    commands:
-      - chmod +x melonDS
-      - cp -r melonDS "${FLATPAK_DEST}/bin"
-    sources:
-      - type: archive
-        url: https://github.com/melonDS-emu/melonDS/releases/download/0.9.5/melonDS_0.9.5_linux_x64.zip
-        sha256: 67eb30acb1bb33a36ad9ea3d025a4666cc188ee51c5289857e940f3892efe84d
-
-  # MELONDS - END
-
   # RPCS3 - START
   # https://rpcs3.net/download
 
@@ -546,6 +505,21 @@ modules:
         sha256: 2553d56e01a3e3058fa9ceb4e1d61a07eaf2c5bba9e96b29e8923914d89f6e17
 
   # RPCS3 - END
+
+  # MELONDS - START
+  # https://github.com/melonDS-emu/melonDS/releases/latest
+
+  - name: melonds
+    buildsystem: simple
+    commands:
+      - chmod +x melonDS
+      - cp -r melonDS "${FLATPAK_DEST}/bin"
+    sources:
+      - type: archive
+        url: https://github.com/melonDS-emu/melonDS/releases/download/0.9.5/melonDS_0.9.5_linux_x64.zip
+        sha256: 67eb30acb1bb33a36ad9ea3d025a4666cc188ee51c5289857e940f3892efe84d
+
+  # MELONDS - END
 
   # PRIMEHACK - START
   # https://github.com/RetroDECK/io.github.shiiion.primehack
@@ -679,6 +653,32 @@ modules:
         sha256: 9e4a4393a3dcc44fda2aec40c2842492e30656c7369a9959d865a3351f12eeb9
 
   # Ryujinx Appimage - END
+
+  # XEMU - START
+  # https://xemu.app/docs/download/#download-for-linux
+
+  - name: xemu
+    buildsystem: simple
+    build-commands:
+      - chmod +x *.AppImage
+      - ./*.AppImage --appimage-extract
+      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}/"
+    sources:
+      - type: file
+        url: https://github.com/xemu-project/xemu/releases/download/v0.7.129/xemu-v0.7.129-x86_64.AppImage
+        sha256: f680774d96a66bf1195cd133497755d43be5eda5f178457a6df32bc691dd8c74
+
+  - name: xemu-dummy-hdd
+    buildsystem: simple
+    build-commands:
+      - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/XEMU
+      - mv -f "xbox_hdd.qcow2" "${FLATPAK_DEST}/retrodeck/extras/XEMU/xbox_hdd.qcow2"
+    sources:
+      - type: archive
+        url: https://github.com/mborgerson/xemu-hdd-image/releases/latest/download/xbox_hdd.qcow2.zip
+        sha256: XEMUHDDHASHPLACEHOLDER
+
+  # XEMU - END
 
   # External manifests end
 
