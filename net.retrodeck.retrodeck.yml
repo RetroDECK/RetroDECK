@@ -466,7 +466,7 @@ modules:
     build-commands:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
-      - rm -f /app/lib/libselinux.so.1 # TODO this rfile is breaking the build, we need it? Error: cp: /app/lib/libselinux.so.1: no version information available (required by cp)
+      #- rm -f /app/lib/libselinux.so.1 # TODO this rfile is breaking the build, we need it? Error: cp: /app/lib/libselinux.so.1: no version information available (required by cp)
       - mkdir -p "${FLATPAK_DEST}/usr/local/lib"
       - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/usr/local/lib"
       - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
@@ -631,7 +631,20 @@ modules:
 
   # GZDoom - Start
   # When updating remember to update all the .pk3 files from the standalone linux download
-  - rd-submodules/shared-modules/gzdoom/gzdoom.json
+  # https://github.com/RetroDECK/org.zdoom.GZDoom
+
+  - name: retrodeck-gzdoom
+    buildsystem: simple
+    build-commands:
+      - mkdir -p "${FLATPAK_DEST}/usr/local/lib"
+      - mv "files/lib/"* "${FLATPAK_DEST}/usr/local/lib"
+      - cp -r files/* "${FLATPAK_DEST}"
+      - chmod +x "${FLATPAK_DEST}/bin/"*
+    sources:
+      - type: archive
+        url: RETRODECKGZDOOMSURLPLACEHOLDER
+        sha256: RETRODECKGZDOOMSHASPLACEHOLDER
+
   # GZDoom - END
   
   # MAME - Start
