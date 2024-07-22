@@ -511,7 +511,7 @@ modules:
 
   - name: melonds
     buildsystem: simple
-    commands:
+    build-commands:
       - chmod +x melonDS
       - cp -r melonDS "${FLATPAK_DEST}/bin"
     sources:
