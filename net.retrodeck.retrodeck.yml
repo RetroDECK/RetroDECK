@@ -334,8 +334,6 @@ modules:
     build-commands:
       - mkdir -p "${FLATPAK_DEST}/usr/local/lib"
       - mv "files/lib/"* "${FLATPAK_DEST}/usr/local/lib"
-      - ls -lah files/* # TODO: DEBUG, removeme
-      - ls -lah "${FLATPAK_DEST}/usr/local/lib" # TODO: DEBUG, removeme
       - cp -r files/* "${FLATPAK_DEST}"
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
@@ -367,6 +365,8 @@ modules:
       - cp -r ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/* "${FLATPAK_DEST}/share/libretro/"
       - chmod +x ./*.AppImage
       - ./*.AppImage --appimage-extract
+      - mkdir -p "${FLATPAK_DEST}/usr/local/lib"
+      - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/usr/local/lib"
       - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
     sources:
       - type: archive
@@ -446,7 +446,9 @@ modules:
   - name: retrodeck-ppsspp
     buildsystem: simple
     build-commands:
-      - cp -r files/** "${FLATPAK_DEST}"
+      - mkdir -p "${FLATPAK_DEST}/usr/local/lib"
+      - mv "files/lib/"* "${FLATPAK_DEST}/usr/local/lib"
+      - cp -r files/* "${FLATPAK_DEST}"
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
@@ -465,6 +467,8 @@ modules:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
       - rm -f /app/lib/libselinux.so.1 # TODO this rfile is breaking the build, we need it? Error: cp: /app/lib/libselinux.so.1: no version information available (required by cp)
+      - mkdir -p "${FLATPAK_DEST}/usr/local/lib"
+      - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/usr/local/lib"
       - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
     sources:
       - type: file
@@ -480,7 +484,9 @@ modules:
   - name: retrodeck-dolphin
     buildsystem: simple
     build-commands:
-      - cp -r files/** "${FLATPAK_DEST}"
+      - mkdir -p "${FLATPAK_DEST}/usr/local/lib"
+      - mv "files/lib/"* "${FLATPAK_DEST}/usr/local/lib"
+      - cp -r files/* "${FLATPAK_DEST}"
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
@@ -497,8 +503,9 @@ modules:
     build-commands:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
+      - mkdir -p "${FLATPAK_DEST}/usr/local/lib"
+      - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/usr/local/lib"
       - cp -r squashfs-root/usr/bin* "${FLATPAK_DEST}/bin"
-      - cp -r squashfs-root/usr/lib* "${FLATPAK_DEST}/lib"
       - cp -r squashfs-root/usr/share* "${FLATPAK_DEST}/share"
       #TODO: - cp -r squashfs-root/usr/optional* # maybe already included in flatpak runtime
       #TODO: - cp -r squashfs-root/usr/plugins* # maybe already included in qt
@@ -531,7 +538,9 @@ modules:
   - name: retrodeck-primehack
     buildsystem: simple
     build-commands:
-      - cp -r files/** "${FLATPAK_DEST}"
+      - mkdir -p "${FLATPAK_DEST}/usr/local/lib"
+      - mv "files/lib/"* "${FLATPAK_DEST}/usr/local/lib"
+      - cp -r files/* "${FLATPAK_DEST}"
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
@@ -548,6 +557,8 @@ modules:
     build-commands:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
+      - mkdir -p "${FLATPAK_DEST}/usr/local/lib"
+      - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/usr/local/lib"
       - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
     sources:
       - type: file
@@ -564,6 +575,8 @@ modules:
     build-commands:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
+      - mkdir -p "${FLATPAK_DEST}/usr/local/lib"
+      - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/usr/local/lib"
       - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
       #TODO: do we need this wrapper? squashfs-root/apprun-hooks/linuxdeploy-plugin-gtk.sh
     sources:
@@ -601,7 +614,9 @@ modules:
   - name: retrodeck-solarus
     buildsystem: simple
     build-commands:
-      - cp -r files/** "${FLATPAK_DEST}"
+      - mkdir -p "${FLATPAK_DEST}/usr/local/lib"
+      - mv "files/lib/"* "${FLATPAK_DEST}/usr/local/lib"
+      - cp -r files/* "${FLATPAK_DEST}"
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
@@ -620,6 +635,8 @@ modules:
   - name: retrodeck-mame
     buildsystem: simple
     build-commands:
+      - mkdir -p "${FLATPAK_DEST}/usr/local/lib"
+      - mv "files/lib/"* "${FLATPAK_DEST}/usr/local/lib"
       - cp -r files/* ${FLATPAK_DEST}
     sources:
       - type: archive
@@ -666,6 +683,8 @@ modules:
     build-commands:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
+      - mkdir -p "${FLATPAK_DEST}/usr/local/lib"
+      - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/usr/local/lib"
       - cp -r squashfs-root/usr/* "${FLATPAK_DEST}/"
     sources:
       - type: file
