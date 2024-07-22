@@ -668,8 +668,8 @@ modules:
     build-commands:
       - |
         mkdir -p ${FLATPAK_DEST}
-        mv -v * ${FLATPAK_DEST}
-        chmod +x ${FLATPAK_DEST}/app/*
+        mv * ${FLATPAK_DEST}
+        chmod +x ${FLATPAK_DEST}/bin/*
     sources:
       - type: archive
         url: https://gitlab.com/-/project/59825450/uploads/8519a04d7a3f5b5949f14b6ad25a4185/ryujinx-Release-1.1.0+81fd228-linux_x64.zip
