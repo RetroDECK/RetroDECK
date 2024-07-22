@@ -496,6 +496,24 @@ modules:
 
   # Dolphin - END
 
+  # PRIMEHACK - START
+  # https://github.com/RetroDECK/io.github.shiiion.primehack
+
+  - name: retrodeck-primehack
+    buildsystem: simple
+    build-commands:
+      - mkdir -p "${FLATPAK_DEST}/usr/local/lib"
+      - rm -rf "files/lib/debug"
+      - mv "files/lib/"* "${FLATPAK_DEST}/usr/local/lib"
+      - cp -r files/* "${FLATPAK_DEST}"
+      - chmod +x "${FLATPAK_DEST}/bin/"*
+    sources:
+      - type: archive
+        url: RETRODECKPRIMEHACKURLPLACEHOLDER
+        sha256: RETRODECKPRIMEHACKPLACEHOLDER
+
+  # PRIMEHACK - END
+
   # RPCS3 - START
   # https://rpcs3.net/download
 
@@ -532,23 +550,6 @@ modules:
         sha256: 67eb30acb1bb33a36ad9ea3d025a4666cc188ee51c5289857e940f3892efe84d
 
   # MELONDS - END
-
-  # PRIMEHACK - START
-  # https://github.com/RetroDECK/io.github.shiiion.primehack
-
-  - name: retrodeck-primehack
-    buildsystem: simple
-    build-commands:
-      - mkdir -p "${FLATPAK_DEST}/usr/local/lib"
-      - mv "files/lib/"* "${FLATPAK_DEST}/usr/local/lib"
-      - cp -r files/* "${FLATPAK_DEST}"
-      - chmod +x "${FLATPAK_DEST}/bin/"*
-    sources:
-      - type: archive
-        url: RETRODECKPRIMEHACKURLPLACEHOLDER
-        sha256: RETRODECKPRIMEHACKPLACEHOLDER
-
-  # PRIMEHACK - END
 
   # Duckstation - START
   # https://github.com/stenzek/duckstation/releases/tag/preview
