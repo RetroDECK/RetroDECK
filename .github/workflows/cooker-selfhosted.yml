@@ -5,6 +5,7 @@ on:
     branches:
      - cooker*
      - feat*
+     - branch/cooker*
     paths:
      - '.github/workflows/**'
      - 'automation_tools/**'

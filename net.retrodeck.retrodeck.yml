@@ -68,8 +68,8 @@ modules:
   # The version number is hardcoded in /app/retrodeck/version
   #
   # UPDATE STEPS FOR MAIN:
-  # [ ] Update the VERSION variable on line containing "VERSION=THISBRANCH"
-  # [ ] Update the appdata.xml with the version number and notes
+  # [X] Update the VERSION variable on line containing "VERSION=THISBRANCH"
+  # [X] Update the appdata.xml with the version number and notes
   #
   - name: version-initialization
     buildsystem: simple
@@ -77,8 +77,8 @@ modules:
       - |
 
         # on main please update this with the version variable, eg: VERSION=0.8.0b
-        # on cooker will be VERSION=cooker-0.9.0b for example
-        VERSION=cooker-0.8.2b
+        # on cooker will be THISBRANCH
+        VERSION=cooker-0.8.3b
 
         git checkout ${GITHUB_REF_NAME}
         mkdir -p ${FLATPAK_DEST}/retrodeck/
@@ -1232,21 +1232,34 @@ modules:
   #       url: https://github.com/Ryujinx/release-channel-master/releases/download/1.1.1343/ryujinx-1.1.1343-linux_x64.tar.gz
   #       sha256: 3cd2172d2f42a0fb93a83bffe6bd8fb2d1d81fb45afc80e0068a245c8f755ac1
 
-  - name: Ryujinx-with-symlink-fix
+  # - name: Ryujinx-with-symlink-fix
+  #   buildsystem: simple
+  #   build-commands:
+  #     - |
+  #       mkdir -p ${FLATPAK_DEST}/ryujinx
+  #       mkdir -p ${FLATPAK_DEST}/bin
+  #       chmod +x Ryujinx.sh
+  #       chmod +x Ryujinx
+  #       mv -v * ${FLATPAK_DEST}/ryujinx
+  #       ln -sv ${FLATPAK_DEST}/ryujinx/Ryujinx.sh ${FLATPAK_DEST}/bin/Ryujinx.sh
+  #       chmod +x ${FLATPAK_DEST}/bin/Ryujinx.sh
+  #   sources:
+  #     - type: archive
+  #       url: https://gitlab.com/-/project/59825450/uploads/8519a04d7a3f5b5949f14b6ad25a4185/ryujinx-Release-1.1.0+81fd228-linux_x64.zip
+  #       sha256: 9e4a4393a3dcc44fda2aec40c2842492e30656c7369a9959d865a3351f12eeb9
+
+  # This version was reported as working with symlinks: https://discord.com/channels/951662718102962256/951715885968654418/1264882000658169866
+  - name: Ryujinx-reported-working-version
     buildsystem: simple
     build-commands:
       - |
-        mkdir -p ${FLATPAK_DEST}/ryujinx
-        mkdir -p ${FLATPAK_DEST}/bin
-        chmod +x Ryujinx.sh
-        chmod +x Ryujinx
-        mv -v * ${FLATPAK_DEST}/ryujinx
-        ln -sv ${FLATPAK_DEST}/ryujinx/Ryujinx.sh ${FLATPAK_DEST}/bin/Ryujinx.sh
-        chmod +x ${FLATPAK_DEST}/bin/Ryujinx.sh
+        tar -zxvf *.tar.gz
+        mv -v publish ${FLATPAK_DEST}/ryujinx
+        ln -sv ${FLATPAK_DEST}/ryujinx/Ryujinx ${FLATPAK_DEST}/bin/Ryujinx.sh
     sources:
-      - type: archive
-        url: https://gitlab.com/-/project/59825450/uploads/8519a04d7a3f5b5949f14b6ad25a4185/ryujinx-Release-1.1.0+81fd228-linux_x64.zip
-        sha256: 9e4a4393a3dcc44fda2aec40c2842492e30656c7369a9959d865a3351f12eeb9
+      - type: file
+        url: https://github.com/Ryujinx/release-channel-master/releases/download/1.1.1297/ryujinx-1.1.1297-linux_x64.tar.gz
+        sha256: 28b38754e7d2e92083b313b23278c180ae54ac025edbbd0276ec03baec0cec0f
 
   # Ryujinx Appimage - END
 

@@ -304,7 +304,7 @@ post_update() {
     log i "In version 0.8.1b, the following changes were made that required config file updates/reset or other changes to the filesystem:"
     log i "- ES-DE files were moved inside the retrodeck folder, migrating to the new structure"
     log i "- Give the user the option to reset Ryujinx, which was not properly initialized in 0.8.0b"
-
+    
     log d "ES-DE files were moved inside the retrodeck folder, migrating to the new structure"
     dir_prep "$rdhome/ES-DE/collections" "/var/config/ES-DE/collections"
     dir_prep "$rdhome/ES-DE/gamelists" "/var/config/ES-DE/gamelists"
@@ -347,6 +347,36 @@ post_update() {
     move "$rdhome/gamelists" "$rdhome/ES-DE/gamelists" && log d "Move of \"$rdhome/gamelists/\" completed"
     log i "Since in this version we moved to a PR build of Ryujinx we need to symlink it."
     ln -sv $ryujinxconf "$(dirname $ryujinxconf)/PRConfig.json"
+  fi
+
+  if [[ $(check_version_is_older_than "0.8.3b") == "true" ]]; then
+    # In version 0.8.3b, the following changes were made:
+    # - Recovery from a failed move of the themes, downloaded_media and gamelists folder to their new ES-DE locations.
+    if [[ !-d "$rdhome/ES-DE/themes" || ! -d "$rdhome/ES-DE/downloaded_media" || ! -d "$rdhome/ES-DE/gamelists" || ! -d "$rdhome/ES-DE/collections" ]]; then
+    log i "Moving ES-DE downloaded_media, gamelist, and themes from \"$rdhome\" to \"$rdhome/ES-DE\" due to a RetroDECK Framework bug"
+      if [[ -d "$rdhome/themes" && ! -d "$rdhome/ES-DE/themes" ]]; then
+        move "$rdhome/themes" "$rdhome/ES-DE/themes" && log d "Move of \"$rdhome/themes\" completed"
+      else
+        log i "ES-DE themes appears to already have been migrated."
+      fi
+      if [[ -d "$rdhome/downloaded_media" && ! -d "$rdhome/ES-DE/downloaded_media" ]]; then
+        move "$rdhome/downloaded_media" "$rdhome/ES-DE/downloaded_media" && log d "Move of \"$rdhome/downloaded_media\" completed"
+      else
+        log i "ES-DE downloaded media appears to already have been migrated."
+      fi
+      if [[ -d "$rdhome/gamelists" && ! -d "$rdhome/ES-DE/gamelists" ]]; then
+        move "$rdhome/gamelists" "$rdhome/ES-DE/gamelists" && log d "Move of \"$rdhome/gamelists/\" completed"
+      else
+        log i "ES-DE gamelists appears to already have been migrated."
+      fi
+      if [[ -d "$rdhome/collections" && ! -d "$rdhome/ES-DE/collections" ]]; then
+        move "$rdhome/collections" "$rdhome/ES-DE/collections" && log d "Move of \"$rdhome/collections/\" completed"
+      else
+        log i "ES-DE collections appears to already have been migrated."
+      fi
+    else
+      log i "ES-DE folders appears to already have been migrated."
+    fi
   fi
 
   if [[ $(check_version_is_older_than "0.8.3b") == "true" ]]; then
