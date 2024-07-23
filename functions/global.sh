@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export LD_LIBRAY_PATH="$LD_LIBRAY_PATH:/app/retrodeck/lib/"
+
 # This file is containing some global function needed for the script such as the config file tools
 
 source /app/libexec/050_save_migration.sh

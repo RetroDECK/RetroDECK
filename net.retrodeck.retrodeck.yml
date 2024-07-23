@@ -329,7 +329,7 @@ modules:
   - name: retrodeck-es-de
     buildsystem: simple
     build-commands:
-      - install -Dm755 "files/lib/"* "/usr/local/lib/"
+      - install -Dm755 "files/lib/"* "/app/retrodeck/lib/"
       - install -Dm755 "files/"* "${FLATPAK_DEST}/"
     sources:
       - type: archive
@@ -358,7 +358,7 @@ modules:
       - install -Dm755 ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/* "${FLATPAK_DEST}/share/libretro/"
       - chmod +x ./*.AppImage
       - ./*.AppImage --appimage-extract
-      - install -Dm755 "squashfs-root/usr/lib/"* "/usr/local/lib/"
+      - install -Dm755 "squashfs-root/usr/lib/"* "/app/retrodeck/lib/"
       - install -Dm755 squashfs-root/usr/* "/usr/"
     sources:
       - type: archive
@@ -451,7 +451,7 @@ modules:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
       #- rm -f /app/lib/libselinux.so.1 # TODO this rfile is breaking the build, we need it? Error: cp: /app/lib/libselinux.so.1: no version information available (required by cp)
-      - install -Dm755 "squashfs-root/usr/lib/"* "/usr/local/lib/"
+      - install -Dm755 "squashfs-root/usr/lib/"* "/app/retrodeck/lib/"
       - install -Dm755 squashfs-root/usr/* "/usr/"
     sources:
       - type: file
@@ -467,7 +467,7 @@ modules:
   - name: retrodeck-dolphin
     buildsystem: simple
     build-commands:
-      - install -Dm755 "files/lib/"* "/usr/local/lib/"
+      - install -Dm755 "files/lib/"* "/app/retrodeck/lib/"
       - rm -rf "files/lib"
       - install -Dm755 files/* "${FLATPAK_DEST}/"
     sources:
@@ -484,7 +484,7 @@ modules:
     buildsystem: simple
     build-commands:
       - rm -rf "files/lib/pkgconfig" # TODO: we need them?
-      - install -Dm755 "files/lib/"* "/usr/local/lib/"
+      - install -Dm755 "files/lib/"* "/app/retrodeck/lib/"
       - rm -rf "files/lib"
       - install -Dm755 files/* "${FLATPAK_DEST}/"
     sources:
@@ -502,7 +502,7 @@ modules:
     build-commands:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
-      - install -Dm755 "squashfs-root/usr/lib/"* "/usr/local/lib/"
+      - install -Dm755 "squashfs-root/usr/lib/"* "/app/retrodeck/lib/"
       - install -Dm755 squashfs-root/usr/bin* "${FLATPAK_DEST}/bin/"
       - install -Dm755 squashfs-root/usr/share* "${FLATPAK_DEST}/share/"   
       - mkdir -p ${FLATPAK_DEST}/lib/ffmpeg # Needed to avoid a bug
@@ -539,7 +539,7 @@ modules:
     build-commands:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
-      - install -Dm755 "squashfs-root/usr/lib/"* "/usr/local/lib/"
+      - install -Dm755 "squashfs-root/usr/lib/"* "/app/retrodeck/lib/"
       - rm -rf "squashfs-root/usr/lib"
       - install -Dm755 squashfs-root/usr/* "/usr/"
     sources:
@@ -558,7 +558,7 @@ modules:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
       #- rm -rf "squashfs-root/usr/lib/girepository-1.0" # causes issues, I think we already have this
-      - install -Dm755 "squashfs-root/usr/lib/"* "/usr/local/lib/"
+      - install -Dm755 "squashfs-root/usr/lib/"* "/app/retrodeck/lib/"
       - rm -rf "squashfs-root/usr/lib" 
       - install -Dm755 squashfs-root/usr/* "/usr/"
       #TODO: do we need this wrapper? squashfs-root/apprun-hooks/linuxdeploy-plugin-gtk.sh
@@ -598,7 +598,7 @@ modules:
     buildsystem: simple
     build-commands:
       - rm -rf "files/lib/pkgconfig" # TODO: we need them?
-      - install -Dm755 "files/lib/"* "/usr/local/lib/"
+      - install -Dm755 "files/lib/"* "/app/retrodeck/lib/"
       - rm -rf "files/lib"
       - install -Dm755 files/* "${FLATPAK_DEST}/"
     sources:
@@ -617,7 +617,7 @@ modules:
     build-commands:
       - rm -rf "files/lib/cmake"
       - rm -rf "files/lib/pkgconfig"
-      - install -Dm755 "files/lib/"* "/usr/local/lib/"
+      - install -Dm755 "files/lib/"* "/app/retrodeck/lib/"
       - rm -rf "files/lib"
       - install -Dm755 files/* "${FLATPAK_DEST}/"
     sources:
@@ -662,7 +662,7 @@ modules:
     build-commands:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
-      - install -Dm755 "squashfs-root/usr/lib/"* "/usr/local/lib/"
+      - install -Dm755 "squashfs-root/usr/lib/"* "/app/retrodeck/lib/"
       - rm -rf "squashfs-root/usr/lib"
       - install -Dm755 squashfs-root/usr/* "${FLATPAK_DEST}/"
     sources:
