@@ -642,10 +642,12 @@ modules:
   - name: Ryujinx-with-symlink-fix
     buildsystem: simple
     build-commands:
-      - |
-        mkdir -p ${FLATPAK_DEST}
-        mv * ${FLATPAK_DEST}
-        chmod +x ${FLATPAK_DEST}/bin/*
+      - mkdir -p "${FLATPAK_DEST}"
+      - mv *.so* "${FLATPAK_DEST}/retrodeck/lib/"
+      - mv Ryujinx* "${FLATPAK_DEST}/bin/"
+      - chmod +x "${FLATPAK_DEST}/bin/Ryujinx"*
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/licenses"
+      - mv LICENSE.txt "${FLATPAK_DEST}/retrodeck/licenses"
     sources:
       - type: archive
         url: https://gitlab.com/-/project/59825450/uploads/8519a04d7a3f5b5949f14b6ad25a4185/ryujinx-Release-1.1.0+81fd228-linux_x64.zip
