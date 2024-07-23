@@ -52,9 +52,6 @@ cleanup:
   - /src
   - '*.a'
   - '*.la'
-  # XMLSTARLET
-  - /lib/debug
-  - /share/runtime
 
 modules:
 
@@ -332,10 +329,8 @@ modules:
   - name: retrodeck-es-de
     buildsystem: simple
     build-commands:
-      - mkdir -p "${FLATPAK_DEST}/usr/local/lib"
-      - mv "files/lib/"* "${FLATPAK_DEST}/usr/local/lib"
-      - cp -r files/* "${FLATPAK_DEST}"
-      - chmod +x "${FLATPAK_DEST}/bin/"*
+      - install -Dm755 "files/lib/"* "${FLATPAK_DEST}/usr/local/lib"
+      - install -Dm755 "files/"* "${FLATPAK_DEST}"
     sources:
       - type: archive
         url: RETRODECKESDEURLPLACEHOLDER
@@ -344,8 +339,7 @@ modules:
   - name: RetroDECK Theme
     buildsystem: simple
     build-commands:
-      - mkdir -p ${FLATPAK_DEST}/share/es-de/themes/retrodeck/
-      - mv -f * ${FLATPAK_DEST}/share/es-de/themes/retrodeck/
+      - install -Dm755 * ${FLATPAK_DEST}/share/es-de/themes/retrodeck/
     sources:
       - type: git
         url:  https://github.com/RetroDECK/RetroDECK-theme
@@ -361,13 +355,11 @@ modules:
   - name: retroarch
     buildsystem: simple
     build-commands:
-      - mkdir -p "${FLATPAK_DEST}/share/libretro/"
-      - cp -r ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/* "${FLATPAK_DEST}/share/libretro/"
+      - install -Dm755 ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/* "${FLATPAK_DEST}/share/libretro/"
       - chmod +x ./*.AppImage
       - ./*.AppImage --appimage-extract
-      - mkdir -p "${FLATPAK_DEST}/usr/local/lib"
-      - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/usr/local/lib"
-      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
+      - install -Dm755 "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/usr/local/lib"
+      - install -Dm755 squashfs-root/usr/* "/usr"
     sources:
       - type: archive
         url: https://buildbot.libretro.com/nightly/linux/x86_64/RetroArch.7z
@@ -379,9 +371,8 @@ modules:
   # retroarch-cores-nightly must be earlier than retroarch-cores as it will overwrite this cores with the stable ones
   - name: retroarch-cores-nightly
     buildsystem: simple
-    build-commands:
-      - mkdir -p ${FLATPAK_DEST}/share/libretro/cores/      
-      - cp -r ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* ${FLATPAK_DEST}/share/libretro/cores/
+    build-commands:     
+      - install -Dm755 ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* ${FLATPAK_DEST}/share/libretro/cores/
     sources:
       - type: archive
         url: https://buildbot.libretro.com/nightly/linux/x86_64/RetroArch_cores.7z
@@ -389,9 +380,8 @@ modules:
 
   - name: retroarch-cores
     buildsystem: simple
-    build-commands:
-      - mkdir -p ${FLATPAK_DEST}/share/libretro/cores/      
-      - cp -rf ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* ${FLATPAK_DEST}/share/libretro/cores/
+    build-commands:  
+      - install -Dm755 ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* ${FLATPAK_DEST}/share/libretro/cores/
     sources:
       - type: archive
         url: https://buildbot.libretro.com/stable/1.17.0/linux/x86_64/RetroArch_cores.7z
@@ -400,7 +390,7 @@ modules:
   - name: retroarch-sameduck-core
     buildsystem: simple
     build-commands:
-      - cp -f sameduck_libretro.so ${FLATPAK_DEST}/share/libretro/cores/sameduck_libretro.so
+      - install -Dm755 sameduck_libretro.so ${FLATPAK_DEST}/share/libretro/cores/sameduck_libretro.so
     sources:
       - type: archive
         url: https://buildbot.libretro.com/nightly/linux/x86_64/latest/sameduck_libretro.so.zip
@@ -409,8 +399,7 @@ modules:
   - name: ppsspp-bios
     buildsystem: simple
     build-commands:
-    - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/PPSSPP
-    - cp -r assets/* ${FLATPAK_DEST}/retrodeck/extras/PPSSPP/
+    - install -Dm755 assets/* ${FLATPAK_DEST}/retrodeck/extras/PPSSPP/
     sources:
       - type: archive
         url: https://github.com/hrydgard/ppsspp/archive/refs/heads/master.zip
@@ -419,9 +408,8 @@ modules:
   - name: msx-bios
     buildsystem: simple
     build-commands:
-    - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/MSX
-    - cp -r Databases ${FLATPAK_DEST}/retrodeck/extras/MSX/Databases
-    - cp -r Machines ${FLATPAK_DEST}/retrodeck/extras/MSX/Machines
+    - install -Dm755 Databases ${FLATPAK_DEST}/retrodeck/extras/MSX/Databases
+    - install -Dm755 Machines ${FLATPAK_DEST}/retrodeck/extras/MSX/Machines
     sources:
       - type: archive
         url: http://bluemsx.msxblue.com/rel_download/blueMSXv282full.zip
@@ -431,8 +419,7 @@ modules:
   - name: amiga-bios
     buildsystem: simple
     build-commands:
-    - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/Amiga
-    - cp -r Linux/x86-64/capsimg.so ${FLATPAK_DEST}/retrodeck/extras/Amiga/capsimg.so
+    - install -Dm755 Linux/x86-64/capsimg.so ${FLATPAK_DEST}/retrodeck/extras/Amiga/capsimg.so
     sources:
       - type: archive
         url: https://github.com/rsn8887/capsimg/releases/download/1.1/Capsimg_for_Retroarch.zip
@@ -446,10 +433,7 @@ modules:
   - name: retrodeck-ppsspp
     buildsystem: simple
     build-commands:
-      - mkdir -p "${FLATPAK_DEST}/usr/local/lib"
-      - mv "files/lib/"* "${FLATPAK_DEST}/usr/local/lib"
-      - cp -r files/* "${FLATPAK_DEST}"
-      - chmod +x "${FLATPAK_DEST}/bin/"*
+      - install -Dm755 files/* "${FLATPAK_DEST}"
     sources:
       - type: archive
         url: RETRODECKPPSSPPURL
@@ -467,9 +451,8 @@ modules:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
       #- rm -f /app/lib/libselinux.so.1 # TODO this rfile is breaking the build, we need it? Error: cp: /app/lib/libselinux.so.1: no version information available (required by cp)
-      - mkdir -p "${FLATPAK_DEST}/usr/local/lib"
-      - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/usr/local/lib"
-      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
+      - install -Dm755 "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/usr/local/lib"
+      - install -Dm755 squashfs-root/usr/* "/usr"
     sources:
       - type: file
         url: https://github.com/PCSX2/pcsx2/releases/download/v2.0.3/pcsx2-v2.0.3-linux-appimage-x64-Qt.AppImage
@@ -484,11 +467,9 @@ modules:
   - name: retrodeck-dolphin
     buildsystem: simple
     build-commands:
-      - mkdir -p "${FLATPAK_DEST}/usr/local/lib"
-      - rm -rf "files/lib/debug"
-      - mv "files/lib/"* "${FLATPAK_DEST}/usr/local/lib"
-      - cp -r files/* "${FLATPAK_DEST}"
-      - chmod +x "${FLATPAK_DEST}/bin/"*
+      - install -Dm755 "files/lib/"* "/usr/local/lib"
+      - rm -rf "files/lib"
+      - install -Dm755 files/* "${FLATPAK_DEST}"
     sources:
       - type: archive
         url: RETRODECKDOLPHINURLPLACEHOLDER
@@ -502,11 +483,10 @@ modules:
   - name: retrodeck-primehack
     buildsystem: simple
     build-commands:
-      - mkdir -p "${FLATPAK_DEST}/usr/local/lib"
-      - rm -rf "files/lib/debug" "files/lib/pkgconfig" # TODO: we need them?
-      - mv "files/lib/"* "${FLATPAK_DEST}/usr/local/lib"
-      - cp -r files/* "${FLATPAK_DEST}"
-      - chmod +x "${FLATPAK_DEST}/bin/"*
+      - rm -rf "files/lib/pkgconfig" # TODO: we need them?
+      - install -Dm755 "files/lib/"* "/usr/local/lib"
+      - rm -rf "files/lib"
+      - install -Dm755 files/* "${FLATPAK_DEST}"
     sources:
       - type: archive
         url: RETRODECKPRIMEHACKURLPLACEHOLDER
@@ -522,10 +502,9 @@ modules:
     build-commands:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
-      - mkdir -p "${FLATPAK_DEST}/usr/local/lib"
-      - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/usr/local/lib"
-      - cp -r squashfs-root/usr/bin* "${FLATPAK_DEST}/bin"
-      - cp -r squashfs-root/usr/share* "${FLATPAK_DEST}/share"
+      - install -Dm755 "squashfs-root/usr/lib/"* "/usr/local/lib"
+      - install -Dm755 squashfs-root/usr/bin* "${FLATPAK_DEST}/bin"
+      - install -Dm755 squashfs-root/usr/share* "${FLATPAK_DEST}/share"
       #TODO: - cp -r squashfs-root/usr/optional* # maybe already included in flatpak runtime
       #TODO: - cp -r squashfs-root/usr/plugins* # maybe already included in qt
       #TODO: Do we need this wrapper? squashfs-root/apprun-hooks/linuxdeploy-plugin-qt-hook.sh
@@ -543,7 +522,7 @@ modules:
     buildsystem: simple
     build-commands:
       - chmod +x melonDS
-      - cp -r melonDS "${FLATPAK_DEST}/bin"
+      - install -Dm755 melonDS "${FLATPAK_DEST}/bin"
     sources:
       - type: archive
         url: https://github.com/melonDS-emu/melonDS/releases/download/0.9.5/melonDS_0.9.5_linux_x64.zip
@@ -559,9 +538,9 @@ modules:
     build-commands:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
-      - mkdir -p "${FLATPAK_DEST}/usr/local/lib"
-      - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/usr/local/lib"
-      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
+      - install -Dm755 "squashfs-root/usr/lib/"* "/usr/local/lib"
+      - rm -rf "squashfs-root/usr/lib"
+      - install -Dm755 squashfs-root/usr/* "/usr"
     sources:
       - type: file
         url: https://github.com/stenzek/duckstation/releases/download/v0.1-6937/DuckStation-x64.AppImage
@@ -577,10 +556,10 @@ modules:
     build-commands:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
-      - mkdir -p "${FLATPAK_DEST}/usr/local/lib"
-      - rm -rf "squashfs-root/usr/lib/girepository-1.0" # causes issues, I think we already have this
-      - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/usr/local/lib"
-      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
+      #- rm -rf "squashfs-root/usr/lib/girepository-1.0" # causes issues, I think we already have this
+      - install -Dm755 "squashfs-root/usr/lib/"* "/usr/local/lib"
+      - rm -rf "squashfs-root/usr/lib" 
+      - install -Dm755 squashfs-root/usr/* "/usr"
       #TODO: do we need this wrapper? squashfs-root/apprun-hooks/linuxdeploy-plugin-gtk.sh
     sources:
       - type: file
@@ -595,8 +574,8 @@ modules:
     buildsystem: simple
     build-commands:
       # Copying the user icon
-      - mkdir -p ${FLATPAK_DEST}/retrodeck
-      - cp retrodeck.png ${FLATPAK_DEST}/retrodeck
+      - install -Dm755 retrodeck.png ${FLATPAK_DEST}/retrodeck
+      - mkdir -p "${FLATPAK_DEST}/share/Vita3K"
       - unzip "ubuntu-latest.zip" -d "${FLATPAK_DEST}/share/Vita3K"
       - chmod +x "${FLATPAK_DEST}/share/Vita3K/Vita3K"
       - rm -f "${FLATPAK_DEST}/share/Vita3K/update-vita3k.sh"
@@ -617,11 +596,10 @@ modules:
   - name: retrodeck-solarus
     buildsystem: simple
     build-commands:
-      - mkdir -p "${FLATPAK_DEST}/usr/local/lib"
-      - rm -rf "files/lib/debug" "files/lib/pkgconfig" # TODO: we need them?
-      - mv "files/lib/"* "${FLATPAK_DEST}/usr/local/lib"
-      - cp -r files/* "${FLATPAK_DEST}"
-      - chmod +x "${FLATPAK_DEST}/bin/"*
+      - rm -rf "files/lib/pkgconfig" # TODO: we need them?
+      - install -Dm755 "files/lib/"* "/usr/local/lib"
+      - rm -rf "files/lib"
+      - install -Dm755 files/* "${FLATPAK_DEST}"
     sources:
       - type: archive
         url: RETRODECKSOLARUSURLPLACEHOLDER
@@ -636,13 +614,11 @@ modules:
   - name: retrodeck-gzdoom
     buildsystem: simple
     build-commands:
-      - mkdir -p "${FLATPAK_DEST}/usr/local/lib"
-      - rm -rf files/lib/cmake
-      - rm -rf files/lib/debug
-      - rm -rf files/lib/pkgconfig
-      - mv "files/lib/"* "${FLATPAK_DEST}/usr/local/lib"
-      - cp -r files/* "${FLATPAK_DEST}"
-      - chmod +x "${FLATPAK_DEST}/bin/"*
+      - rm -rf "files/lib/cmake"
+      - rm -rf "files/lib/pkgconfig"
+      - install -Dm755 "files/lib/"* "/usr/local/lib"
+      - rm -rf "files/lib"
+      - install -Dm755 files/* "${FLATPAK_DEST}"
     sources:
       - type: archive
         url: RETRODECKGZDOOMSURLPLACEHOLDER
@@ -669,10 +645,7 @@ modules:
   - name: Ryujinx-with-symlink-fix
     buildsystem: simple
     build-commands:
-      - |
-        mkdir -p ${FLATPAK_DEST}
-        mv * ${FLATPAK_DEST}
-        chmod +x ${FLATPAK_DEST}/bin/*
+      - install -Dm755 ${FLATPAK_DEST}
     sources:
       - type: archive
         url: https://gitlab.com/-/project/59825450/uploads/8519a04d7a3f5b5949f14b6ad25a4185/ryujinx-Release-1.1.0+81fd228-linux_x64.zip
@@ -688,9 +661,9 @@ modules:
     build-commands:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
-      - mkdir -p "${FLATPAK_DEST}/usr/local/lib"
-      - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/usr/local/lib"
-      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}/"
+      - install -Dm755 "squashfs-root/usr/lib/"* "/usr/local/lib"
+      - rm -rf "squashfs-root/usr/lib"
+      - install -Dm755 squashfs-root/usr/* "${FLATPAK_DEST}/"
     sources:
       - type: file
         url: https://github.com/xemu-project/xemu/releases/download/v0.7.129/xemu-v0.7.129-x86_64.AppImage
@@ -699,8 +672,7 @@ modules:
   - name: xemu-dummy-hdd
     buildsystem: simple
     build-commands:
-      - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/XEMU
-      - mv -f "xbox_hdd.qcow2" "${FLATPAK_DEST}/retrodeck/extras/XEMU/xbox_hdd.qcow2"
+      - install -Dm755 "xbox_hdd.qcow2" "${FLATPAK_DEST}/retrodeck/extras/XEMU/"
     sources:
       - type: archive
         url: https://github.com/mborgerson/xemu-hdd-image/releases/latest/download/xbox_hdd.qcow2.zip
@@ -714,7 +686,7 @@ modules:
     buildsystem: simple
     build-commands:
       - rm -f files/manifest.json
-      - cp -rn files/* ${FLATPAK_DEST}
+      - install -Dm755 "files/"* "${FLATPAK_DEST}"
     sources:
       - type: archive
         url: RETRODECKMAMEURLPLACEHOLDER
@@ -740,10 +712,7 @@ modules:
       - cp -f res/splash.svg ${FLATPAK_DEST}/retrodeck/graphics/splash.svg
       - cp -f res/splash.svg ${FLATPAK_DEST}/retrodeck/graphics/splash-orig.svg
       - cp -rf res/extra_splashes/ ${FLATPAK_DEST}/retrodeck/graphics
-      - | # TODO: DEBUG
-          cp -f res/icon.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg
-          ls -lah ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg
-          ls -lah ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps
+      - cp -f res/icon.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg
       - cp -f res/icon-configurator.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.configurator.svg
       - mv -f -t ${FLATPAK_DEST}/retrodeck res/binding_icons
 
@@ -763,7 +732,6 @@ modules:
       # Desktop entries
       - cp net.retrodeck.retrodeck.desktop ${FLATPAK_DEST}/share/applications/net.retrodeck.retrodeck.desktop
       - cp net.retrodeck.retrodeck.Configurator.desktop /app/share/applications/net.retrodeck.retrodeck.Configurator.desktop
-      - chmod +x net.retrodeck.retrodeck*desktop
 
       # Initializing default emulator configs
       - cp -r emu-configs ${FLATPAK_DEST}/retrodeck/emu-configs/
