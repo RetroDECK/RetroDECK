@@ -522,7 +522,8 @@ modules:
     build-commands:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
-      - mkdir -p "${FLATPAK_DEST}/usr/local/lib"
+      - mkdir -p "${FLATPAK_DEST}/usr/local/lib" 
+      - mkdir -p ${FLATPAK_DEST}/lib/ffmpeg   # Needed for a ffmpeg bufgix
       - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/usr/local/lib"
       - cp -r squashfs-root/usr/bin* "${FLATPAK_DEST}/bin"
       - cp -r squashfs-root/usr/share* "${FLATPAK_DEST}/share"
@@ -771,9 +772,6 @@ modules:
       # PICO-8 wrapper
       - cp ${FLATPAK_DEST}/retrodeck/emu-configs/pico-8/pico8-wrapper.sh ${FLATPAK_DEST}/bin/pico8
       - chmod +x ${FLATPAK_DEST}/bin/pico8
-
-      # Needed for ffmpeg (RPCS3)
-      - mkdir -p ${FLATPAK_DEST}/lib/ffmpeg
 
       # Placing appdata
       - mkdir -p ${FLATPAK_DEST}/share/appdata
