@@ -91,6 +91,11 @@ modules:
         url: https://github.com/XargonWan/RetroDECK.git
         branch: THISBRANCH
 
+  - name: retrodeck-pre-build
+    buildsystem: simple
+    build-commands:
+      - mkdir -p "/app/retrodeck/lib/"
+
   - name: xmlstarlet
     config-opts:
       - --disable-static-libs
