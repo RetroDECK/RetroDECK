@@ -325,49 +325,6 @@ modules:
   #       url: https://github.com/FFmpeg/FFmpeg.git
   #       tag: n5.1.4
 
-  # ES-DE - Start
-
-  # Needed from ES-DE 2.1.0+
-  - name: libpoppler-glib
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DENABLE_BOOST=OFF
-    sources:
-      - type: archive
-        # original link not working, found a mirror
-        url: https://poppler.freedesktop.org/poppler-22.11.0.tar.xz
-        #url: https://gitlab.freedesktop.org/poppler/poppler/-/archive/poppler-22.11.0/poppler-poppler-22.11.0.tar.bz2
-        sha256: 093ba9844ed774285517361c15e21a31ba4df278a499263d4403cca74f2da828
-    cleanup:
-      - /lib/pkgconfig
-      - /include
-      - '*.a'
-      - '*.la'
-
-  - name: retrodeck-es-de
-    buildsystem: simple
-    build-commands:
-      - mkdir -p "${FLATPAK_DEST}/retrodeck/lib"
-      - mv "files/lib/"* "${FLATPAK_DEST}/retrodeck/lib"
-      - cp -r files/* "${FLATPAK_DEST}"
-      - chmod +x "${FLATPAK_DEST}/bin/"*
-    sources:
-      - type: archive
-        url: RETRODECKESDEURLPLACEHOLDER
-        sha256: RETRODECKESDEPLACEHOLDER
-
-  - name: RetroDECK Theme
-    buildsystem: simple
-    build-commands:
-      - mkdir -p ${FLATPAK_DEST}/share/es-de/themes/retrodeck/
-      - mv -f * ${FLATPAK_DEST}/share/es-de/themes/retrodeck/
-    sources:
-      - type: git
-        url:  https://github.com/RetroDECK/RetroDECK-theme
-        commit: 975c41cac99d150b6ae86a1dfd19988058c69aad
-
-  # ES-DE - End
-
   # External manifests start
 
   # RetroArch - START
@@ -737,6 +694,32 @@ modules:
         sha256: RETRODECKMAMEPLACEHOLDER
 
   # MAME - End
+
+  # ES-DE - Start
+
+  - name: retrodeck-es-de
+    buildsystem: simple
+    build-commands:
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/lib"
+      - mv "files/lib/"* "${FLATPAK_DEST}/retrodeck/lib"
+      - cp -r files/* "${FLATPAK_DEST}"
+      - chmod +x "${FLATPAK_DEST}/bin/"*
+    sources:
+      - type: archive
+        url: RETRODECKESDEURLPLACEHOLDER
+        sha256: RETRODECKESDEPLACEHOLDER
+
+  - name: RetroDECK Theme
+    buildsystem: simple
+    build-commands:
+      - mkdir -p ${FLATPAK_DEST}/share/es-de/themes/retrodeck/
+      - mv -f * ${FLATPAK_DEST}/share/es-de/themes/retrodeck/
+    sources:
+      - type: git
+        url:  https://github.com/RetroDECK/RetroDECK-theme
+        commit: 975c41cac99d150b6ae86a1dfd19988058c69aad
+
+  # ES-DE - End
 
   # External manifests end
 
