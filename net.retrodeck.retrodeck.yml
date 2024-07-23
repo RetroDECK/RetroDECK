@@ -335,8 +335,10 @@ modules:
     buildsystem: simple
     build-commands:
       - rm -rf "files/lib/girepository-1.0"
-      - install -Dm755 "files/lib/"* "/app/retrodeck/lib/"
-      - install -Dm755 "files/"* "${FLATPAK_DEST}/"
+      - install -Dm755 "files/lib/" "/app/retrodeck/lib/"
+      - install -Dm755 "files/" "${FLATPAK_DEST}/"
+      - ls -lah "files/"  # TODO: DEBUG
+      - ls -lah "${FLATPAK_DEST}/"  # TODO: DEBUG
     sources:
       - type: archive
         url: RETRODECKESDEURLPLACEHOLDER
