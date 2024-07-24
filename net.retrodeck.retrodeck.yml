@@ -425,8 +425,8 @@ modules:
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
-        url: RETRODECKPPSSPPPLACEHOLDER
-        sha256: HASHRETRODECKPPSSPPPLACEHOLDER
+        url: RETRODECKPPSSPPURL
+        sha256: HASHRETRODECKPPSSPPURL
 
   # PPSSPP - END
 
@@ -465,8 +465,8 @@ modules:
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
-        url: RETRODECKDOLPHINPLACEHOLDER
-        sha256: HASHRETRODECKDOLPHINPLACEHOLDER
+        url: RETRODECKDOLPHINURLPLACEHOLDER
+        sha256: RETRODECKDOLPHINPLACEHOLDER
 
   # Dolphin - END
 
@@ -485,8 +485,8 @@ modules:
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
-        url: RETRODECKPRIMEHACKPLACEHOLDER
-        sha256: HASHRETRODECKPRIMEHACKPLACEHOLDER
+        url: RETRODECKPRIMEHACKURLPLACEHOLDER
+        sha256: RETRODECKPRIMEHACKPLACEHOLDER
 
   # PRIMEHACK - END
 
@@ -527,8 +527,8 @@ modules:
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
-        url: RETRODECKMELONDSPLACEHOLDER
-        sha256: HASHRETRODECKMELONDSPLACEHOLDER
+        url: RETRODECKMELONDSURLPLACEHOLDER
+        sha256: RETRODECKMELONDSSHAPLACEHOLDER
 
   # MELONDS - END
 
@@ -607,8 +607,8 @@ modules:
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
-        url: RETRODECKSOLARUSPLACEHOLDER
-        sha256: HASHRETRODECKSOLARUSPLACEHOLDER
+        url: RETRODECKSOLARUSURLPLACEHOLDER
+        sha256: RETRODECKSOLARUSPLACEHOLDER
 
   # SOLARUS - END
 
@@ -629,8 +629,8 @@ modules:
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
-        url: RETRODECKGZDOOMPLACEHOLDER
-        sha256: HASHRETRODECKGZDOOMPLACEHOLDER
+        url: RETRODECKGZDOOMSURLPLACEHOLDER
+        sha256: RETRODECKGZDOOMSHASPLACEHOLDER
 
   # GZDoom - END
 
@@ -689,8 +689,8 @@ modules:
       - cp -rn files/* ${FLATPAK_DEST}
     sources:
       - type: archive
-        url: RETRODECKMAMEPLACEHOLDER
-        sha256: HASHRETRODECKMAMEPLACEHOLDER
+        url: RETRODECKMAMEURLPLACEHOLDER
+        sha256: RETRODECKMAMEPLACEHOLDER
 
   # MAME - End
 
@@ -705,8 +705,8 @@ modules:
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
-        url: RETRODECKESDEPLACEHOLDER
-        sha256: HASHRETRODECKESDEPLACEHOLDER
+        url: RETRODECKESDEURLPLACEHOLDER
+        sha256: RETRODECKESDEPLACEHOLDER
 
   - name: RetroDECK Theme
     buildsystem: simple
