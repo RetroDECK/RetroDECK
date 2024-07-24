@@ -70,13 +70,13 @@
       <release version="0.8.3b" date="2024-07-22">
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.8.3b</url>
          <description>
-            <p>Big fixes:</p>
+            <p>Bug fixes:</p>
             <ul>
-               <li>Fixed a bug where the ES-DE folders where not correctly migrated from retrodeck folder to retrodeck/ES-DE folder</li>
+               <li>FRAMEWORK: Fixed a bug where the ES-DE folders where not correctly migrated from retrodeck folder to retrodeck/ES-DE folder</li>
+               <li>RYUJINX: reverted it to an older version without the symlink bug</li>
             </ul>
             <p>Known issues:</p>
             <ul>
-               <li>Ryujinx is broken in this version, we plan to fix it soon, check the known issues to learn more</li>
                <li>Please check the know issues in the Wiki under General Information</li>
             </ul>
          </description>
