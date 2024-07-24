@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Set script to exit immediately on any error
+set -e
+
 # For the file paths to work correctly, call this script with this command from the cloned repo folder root:
 # sh automation_tools/pre_build_automation.sh
 # Different actions need different information in the task list file
@@ -31,16 +34,22 @@
 #     This command does not need a PLACEHOLDERTEXT field in the task list, so needs to be in this syntax: custom_command^^$COMMAND
 # url: This is used to calculate a dynamic URL and the value to the $caluculated_url environmental variable, for use in other subsequent commands.
 
-rd_manifest=${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml
-automation_task_list=${GITHUB_WORKSPACE}/automation_tools/automation_task_list.cfg
-current_branch=$(git rev-parse --abbrev-ref HEAD)
 
-# During the PR automated tests instead of the branch name is returned "HEAD", fixing it
-if [ $current_branch == "HEAD" ]; then
-  echo "Looks like we are on a PR environment, retrieving the branch name from which the PR is raised."
-  current_branch=$(echo $GITHUB_REF | sed 's@refs/heads/@@')
-  echo "The branch name from which the PR is raised is \"$current_branch\"."
-fi
+# Define paths
+rd_manifest="${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml"
+automation_task_list="${GITHUB_WORKSPACE}/automation_tools/automation_task_list.cfg"
+
+# Retrieve current git branch
+get_current_branch() {
+  local branch=$(git rev-parse --abbrev-ref HEAD)
+  if [ "$branch" == "HEAD" ]; then
+    echo "$GITHUB_REF" | sed 's@refs/heads/@@'
+  else
+    echo "$branch"
+  fi
+}
+
+current_branch=$(get_current_branch)
 
 echo "Manifest location: $rd_manifest"
 echo "Automation task list location: $automation_task_list"
@@ -49,103 +58,100 @@ echo "Task list contents:"
 cat "$automation_task_list"
 echo
 
-# Update all collected information
-while IFS="^" read -r action placeholder url branch || [[ -n "$action" ]];
-do
-  if [[ ! $action == "#"* ]] && [[ ! -z "$action" ]]; then
+# Functions to handle different actions
+handle_branch() {
+  local placeholder="$1"
+  echo "Replacing placeholder $placeholder with branch $current_branch"
+  /bin/sed -i 's^'"$placeholder"'^'"$current_branch"'^g' "$rd_manifest"
+}
+
+handle_hash() {
+  local placeholder="$1"
+  local url="$2"
+  local calculated_url=$(eval echo "$url")
+  local hash=$(curl -sL "$calculated_url" | sha256sum | cut -d ' ' -f1)
+  echo "Replacing placeholder $placeholder with hash $hash"
+  /bin/sed -i 's^'"$placeholder"'^'"$hash"'^g' "$rd_manifest"
+}
+
+handle_latestcommit() {
+  local placeholder="$1"
+  local url="$2"
+  local branch="$3"
+  local commit=$(git ls-remote "$url" "$branch" | cut -f1)
+  echo "Replacing placeholder $placeholder with latest commit $commit"
+  /bin/sed -i 's^'"$placeholder"'^'"$commit"'^g' "$rd_manifest"
+}
+
+handle_latestghtag() {
+  local placeholder="$1"
+  local url="$2"
+  local tag=$(git ls-remote --tags "$url" | tail -n 1 | cut -f2 | sed 's|refs/tags/||')
+  echo "Replacing placeholder $placeholder with latest tag $tag"
+  /bin/sed -i 's^'"$placeholder"'^'"$tag"'^g' "$rd_manifest"
+}
+
+handle_latestghrelease() {
+  local placeholder="$1"
+  local url="$2"
+  local suffix="$3"
+  local release_data=$(curl -s "$url")
+  local ghreleaseurl=$(echo "$release_data" | jq -r ".assets[] | select(.name | endswith(\"$suffix\")).browser_download_url")
+  local ghreleasehash=$(curl -sL "$ghreleaseurl" | sha256sum | cut -d ' ' -f1)
+  echo "Replacing placeholder $placeholder with URL $ghreleaseurl and hash $ghreleasehash"
+  /bin/sed -i 's^'"$placeholder"'^'"$ghreleaseurl"'^g' "$rd_manifest"
+  /bin/sed -i 's^'"HASHFOR$placeholder"'^'"$ghreleasehash"'^g' "$rd_manifest"
+}
+
+handle_outside_file() {
+  local placeholder="$1"
+  local file_path="$2"
+  if [[ "$file_path" == \$* ]]; then
+    eval file_path="$file_path"
+  fi
+  local content=$(cat "$file_path")
+  echo "Replacing placeholder $placeholder with content of file $file_path"
+  /bin/sed -i 's^'"$placeholder"'^'"$content"'^g' "$rd_manifest"
+}
+
+handle_outside_env_var() {
+  local placeholder="$1"
+  local var_name="$2"
+  if [[ "$var_name" == \$* ]]; then
+    eval var_name="$var_name"
+  fi
+  local value=$(echo "$var_name")
+  echo "Replacing placeholder $placeholder with environment variable $value"
+  /bin/sed -i 's^'"$placeholder"'^'"$value"'^g' "$rd_manifest"
+}
+
+handle_custom_command() {
+  local command="$1"
+  echo "Executing custom command: $command"
+  eval "$command"
+}
+
+handle_url() {
+  local placeholder="$1"
+  local url="$2"
+  local calculated_url=$(eval echo "$url")
+  echo "Replacing placeholder $placeholder with calculated URL $calculated_url"
+  /bin/sed -i 's^'"$placeholder"'^'"$calculated_url"'^g' "$rd_manifest"
+}
+
+# Process the task list
+while IFS="^" read -r action placeholder url branch || [[ -n "$action" ]]; do
+  if [[ ! "$action" == "#"* ]] && [[ -n "$action" ]]; then
     case "$action" in
-
-    "branch" )
-      echo
-      echo "Placeholder text: $placeholder"
-      echo "Current branch:" "$current_branch"
-      echo
-      /bin/sed -i 's^'"$placeholder"'^'"$current_branch"'^g' $rd_manifest
-    ;;
-
-    "hash" )
-      echo
-      echo "Placeholder text: $placeholder"
-      calculated_url=$(eval echo "$url")  # in case the url has to be calculated from an expression
-      echo "URL to hash: $calculated_url"
-      echo
-      hash=$(curl -sL "$calculated_url" | sha256sum | cut -d ' ' -f1)
-      echo "Hash found: $hash"
-      /bin/sed -i 's^'"$placeholder"'^'"$hash"'^' $rd_manifest
-    ;;
-
-    "latestcommit" )
-      echo
-      echo "Placeholder text: $placeholder"
-      echo "Repo to get latest commit from: $url branch: $branch"
-      echo
-      commit=$(git ls-remote "$url" "$branch" | cut -f1)
-      echo "Commit found: $commit"
-      /bin/sed -i 's^'"$placeholder"'^'"$commit"'^' $rd_manifest
-    ;;
-
-    "latestghtag" )
-      echo
-      echo "Placeholder text: $placeholder"
-      echo "Repo to get the latest tag from: $url"
-      echo
-      tag=$(git ls-remote "$url" | tail -n 1 | cut -f2 | sed 's|refs/tags/||')
-      echo "Tag found: $tag"
-      /bin/sed -i 's^'"$placeholder"'^'"$tag"'^' $rd_manifest
-    ;;
-
-    "latestghrelease" )
-      echo
-      echo "Placeholder text: $placeholder"
-      echo "Repo to look for latest releases: $url"
-      echo
-      ghreleaseurl=$(curl -s "$url" | grep browser_download_url | grep "$branch\""$ | cut -d : -f 2,3 | tr -d \" | sed -n 1p | tr -d ' ')
-      echo "GitHub release URL found: $ghreleaseurl"
-      /bin/sed -i 's^'"$placeholder"'^'"$ghreleaseurl"'^' $rd_manifest
-      ghreleasehash=$(curl -sL "$ghreleaseurl" | sha256sum | cut -d ' ' -f1)
-      echo "GitHub release hash found: $ghreleasehash"
-      /bin/sed -i 's^'"HASHFOR$placeholder"'^'"$ghreleasehash"'^' $rd_manifest
-    ;;
-
-    "outside_file" )
-      if [[ "$url" = \$* ]]; then # If value is a reference to a variable name
-        eval url="$url"
-      fi
-      echo
-      echo "Placeholder text: $placeholder"
-      echo "Information being injected: $(cat $url)"
-      echo
-      /bin/sed -i 's^'"$placeholder"'^'"$(cat $url)"'^' $rd_manifest
-    ;;
-
-    "outside_env_var" )
-      if [[ "$url" = \$* ]]; then # If value is a reference to a variable name
-        eval url="$url"
-      fi
-      echo
-      echo "Placeholder text: $placeholder"
-      echo "Information being injected: $(echo $url)"
-      echo
-      /bin/sed -i 's^'"$placeholder"'^'"$(echo $url)"'^' $rd_manifest
-    ;;
-
-    "custom_command" )
-      echo
-      echo "Command to run: $url"
-      echo
-      eval "$url"
-    ;;
-
-    "url" )
-      # this is used to calculate a dynamic url
-      echo
-      echo "Placeholder text: $placeholder"
-      calculated_url=$(eval echo "$url")
-      echo "Information being injected: $calculated_url"
-      echo
-      /bin/sed -i 's^'"$placeholder"'^'"$calculated_url"'^' $rd_manifest
-    ;;
-
+      "branch" ) handle_branch "$placeholder" ;;
+      "hash" ) handle_hash "$placeholder" "$url" ;;
+      "latestcommit" ) handle_latestcommit "$placeholder" "$url" "$branch" ;;
+      "latestghtag" ) handle_latestghtag "$placeholder" "$url" ;;
+      "latestghrelease" ) handle_latestghrelease "$placeholder" "$url" "$branch" ;;
+      "outside_file" ) handle_outside_file "$placeholder" "$url" ;;
+      "outside_env_var" ) handle_outside_env_var "$placeholder" "$url" ;;
+      "custom_command" ) handle_custom_command "$url" ;;
+      "url" ) handle_url "$placeholder" "$url" ;;
     esac
   fi
 done < "$automation_task_list"
