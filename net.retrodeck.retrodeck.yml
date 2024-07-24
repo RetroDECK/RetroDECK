@@ -426,7 +426,7 @@ modules:
     sources:
       - type: archive
         url: RETRODECKPPSSPPURL
-        sha256: RETRODECKPPSSPPHASH
+        sha256: HASHRETRODECKPPSSPPURL
 
   # PPSSPP - END
 
