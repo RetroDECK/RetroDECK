@@ -733,53 +733,19 @@ modules:
     buildsystem: simple
     build-commands:
       - |
-          mkdir -p "${FLATPAK_DEST}/retrodeck/lib"
+          # Search for missingl ibraries in our libtmp folder
+          missing_libs=$(find "${FLATPAK_DEST}/bin" -type f -exec ldd {} + 2>/dev/null | grep "not found" | awk '{print $1}' | sort | uniq)
 
-          # List of needed libraries
-          files=(
-            "libGLU.so.1"
-            "libevdev.so.2"
-            "libusb-1.0.so.0"
-            "libjpeg.so.9"
-            "libfreeimage.so.3"
-            "libgit2.so.1.6"
-            "libpugixml.so.1"
-            "libavcodec.so.59"
-            "libavfilter.so.8"
-            "libavformat.so.59"
-            "libavutil.so.57"
-            "libpoppler-cpp.so.0"
-            "libzmusic.so.1"
-            "libQt5Widgets.so.5"
-            "libQt5Multimedia.so.5"
-            "libslirp.so.0"
-            "libQt5Gui.so.5"
-            "libQt5Network.so.5"
-            "libQt5Core.so.5"
-            "libpcap.so.0.8"
-            "libGLEW.so.2.2"
-            "libsolarus.so.1"
-            "libswscale.so.6"
-            "libpostproc.so.56"
-            "libpoppler.so.125"
-            "libphysfs.so.1"
-            "libmodplug.so.1"
-            "libluajit-5.1.so.2"
-          )
+          src_dir="${FLATPAK_DEST}/retrodeck/tmplib"
+          dest_dir="${FLATPAK_DEST}/retrodeck/lib"
+          mkdir -p "$dest_dir"
 
-          src_dir="${FLATPAK_DEST}/retrodeck/lib"
-          dest_dir="${FLATPAK_DEST}/retrodeck/tmplib"
-
-          # copy needed libraries in
-          for file in "${files[@]}"; do
-            if [[ -f "$src_dir/$file" ]]; then
-              cp "$src_dir/$file" "$dest_dir"
-              echo "Copied $file to $dest_dir"
-            else
-              echo "File $file not found in $src_dir"
+          # Search and bring in the missing libraries
+          for lib in $missing_libs; do
+            if [[ -f "$src_dir/$lib" ]]; then
+              cp "$src_dir/$lib" "$dest_dir"
             fi
           done
-
 
   - name: retrodeck
     buildsystem: simple
