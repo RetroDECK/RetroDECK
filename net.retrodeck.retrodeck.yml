@@ -600,7 +600,7 @@ modules:
     build-commands:
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
       - rm -rf "files/lib/pkgconfig"
-      - cp -r "files/lib/debug/*" "${FLATPAK_DEST}/retrodeck/tmplib/debug/"
+      - cp -r "files/lib/debug/lib/*" "${FLATPAK_DEST}/retrodeck/tmplib/debug/"
       - rm -rf "files/lib/debug"
       - mv "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
       - cp -r files/* "${FLATPAK_DEST}"
