@@ -458,7 +458,8 @@ modules:
     buildsystem: simple
     build-commands:
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib"
-      - mv "files/lib/debug" "${FLATPAK_DEST}/retrodeck/tmplib"
+      - cp -r "files/lib/debug" "${FLATPAK_DEST}/retrodeck/tmplib"
+      - rm -rf "files/lib/debug"
       - mv "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
       - cp -r files/* "${FLATPAK_DEST}"
       - chmod +x "${FLATPAK_DEST}/bin/"*
@@ -477,7 +478,8 @@ modules:
     build-commands:
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib"
       - rm -rf "files/lib/pkgconfig"
-      - mv "files/lib/debug" "${FLATPAK_DEST}/retrodeck/tmplib"
+      - cp -r "files/lib/debug" "${FLATPAK_DEST}/retrodeck/tmplib"
+      - rm -rf "files/lib/debug"
       - mv "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
       - cp -r files/* "${FLATPAK_DEST}"
       - chmod +x "${FLATPAK_DEST}/bin/"*
