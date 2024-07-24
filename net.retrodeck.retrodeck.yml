@@ -338,7 +338,7 @@ modules:
       - cp -r ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/* "${FLATPAK_DEST}/share/libretro/"
       - chmod +x ./*.AppImage
       - ./*.AppImage --appimage-extract
-      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib"
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
       - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
       - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
     sources:
@@ -419,7 +419,7 @@ modules:
   - name: retrodeck-ppsspp
     buildsystem: simple
     build-commands:
-      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib"
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
       - mv "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
       - cp -r files/* "${FLATPAK_DEST}"
       - chmod +x "${FLATPAK_DEST}/bin/"*
@@ -440,7 +440,7 @@ modules:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
       #- rm -f /app/lib/libselinux.so.1 # TODO this rfile is breaking the build, we need it? Error: cp: /app/lib/libselinux.so.1: no version information available (required by cp)
-      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib"
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
       - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
       - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
     sources:
@@ -457,7 +457,7 @@ modules:
   - name: retrodeck-dolphin
     buildsystem: simple
     build-commands:
-      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib"
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
       - cp -r "files/lib/debug" "${FLATPAK_DEST}/retrodeck/tmplib"
       - rm -rf "files/lib/debug"
       - mv "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
@@ -476,7 +476,7 @@ modules:
   - name: retrodeck-primehack
     buildsystem: simple
     build-commands:
-      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib"
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
       - rm -rf "files/lib/pkgconfig"
       - cp -r "files/lib/debug" "${FLATPAK_DEST}/retrodeck/tmplib"
       - rm -rf "files/lib/debug"
@@ -498,7 +498,7 @@ modules:
     build-commands:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
-      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" 
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug" 
       - mkdir -p ${FLATPAK_DEST}/lib/ffmpeg   # Needed for a ffmpeg bufgix
       - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
       - cp -r squashfs-root/usr/bin* "${FLATPAK_DEST}/bin"
@@ -540,7 +540,7 @@ modules:
     build-commands:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
-      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib"
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
       - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
       - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
     sources:
@@ -558,7 +558,7 @@ modules:
     build-commands:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
-      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib"
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
       - rm -rf "squashfs-root/usr/lib/girepository-1.0" # causes issues, I think we already have this
       - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
       - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
@@ -598,9 +598,10 @@ modules:
   - name: retrodeck-solarus
     buildsystem: simple
     build-commands:
-      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib"
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
       - rm -rf "files/lib/pkgconfig"
-      - mv "files/lib/debug" "${FLATPAK_DEST}/retrodeck/tmplib/"
+      - cp -r "files/lib/debug/*" "${FLATPAK_DEST}/retrodeck/tmplib/debug/"
+      - rm -rf "files/lib/debug"
       - mv "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
       - cp -r files/* "${FLATPAK_DEST}"
       - chmod +x "${FLATPAK_DEST}/bin/"*
@@ -618,10 +619,11 @@ modules:
   - name: retrodeck-gzdoom
     buildsystem: simple
     build-commands:
-      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib"
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
       - rm -rf "files/lib/cmake"
       - rm -rf "files/lib/pkgconfig"
-      - mv "files/lib/debug" "${FLATPAK_DEST}/retrodeck/tmplib/"
+      - cp -r "files/lib/debug/*" "${FLATPAK_DEST}/retrodeck/tmplib/debug/"
+      - rm -rf "files/lib/debug"
       - mv "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
       - cp -r files/* "${FLATPAK_DEST}"
       - chmod +x "${FLATPAK_DEST}/bin/"*
@@ -658,7 +660,7 @@ modules:
     build-commands:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
-      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib"
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
       - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
       - cp -r squashfs-root/usr/* "${FLATPAK_DEST}/"
     sources:
@@ -697,7 +699,7 @@ modules:
   - name: retrodeck-es-de
     buildsystem: simple
     build-commands:
-      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib"
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
       - mv "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
       - cp -r files/* "${FLATPAK_DEST}"
       - chmod +x "${FLATPAK_DEST}/bin/"*
