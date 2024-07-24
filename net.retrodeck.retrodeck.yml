@@ -517,9 +517,10 @@ modules:
     buildsystem: simple
     build-commands:
       - rm -f "files/manifest.json"
-      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib"
-      - mv "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
-      - cp -r files/* "${FLATPAK_DEST}"
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib/"
+      - cp -r "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib/"
+      - rm -rf "files/lib"
+      - cp -r files/* "${FLATPAK_DEST}/"
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
@@ -729,7 +730,7 @@ modules:
 
   # External manifests end
 
-  - name: third-party-libs
+  - name: fetch-missing-libs
     buildsystem: simple
     build-commands:
       - |
