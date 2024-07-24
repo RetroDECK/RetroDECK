@@ -708,7 +708,7 @@ modules:
         url: RETRODECKESDEURLPLACEHOLDER
         sha256: RETRODECKESDEPLACEHOLDER
 
-  - name: RetroDECK Theme
+  - name: retrodeck-theme
     buildsystem: simple
     build-commands:
       - mkdir -p ${FLATPAK_DEST}/share/es-de/themes/retrodeck/
