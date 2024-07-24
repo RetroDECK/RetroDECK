@@ -457,8 +457,8 @@ modules:
   - name: retrodeck-dolphin
     buildsystem: simple
     build-commands:
-      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib"
-      - rm -rf "files/lib/debug"
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
+      - mv "files/lib/debug" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
       - mv "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
       - cp -r files/* "${FLATPAK_DEST}"
       - chmod +x "${FLATPAK_DEST}/bin/"*
@@ -475,8 +475,9 @@ modules:
   - name: retrodeck-primehack
     buildsystem: simple
     build-commands:
-      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib"
-      - rm -rf "files/lib/debug" "files/lib/pkgconfig" # TODO: we need them?
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug" "${FLATPAK_DEST}/retrodeck/tmplib/pkgconfig"
+      - mv "files/lib/pkgconfig" "${FLATPAK_DEST}/retrodeck/tmplib/pkgconfig"
+      - mv "files/lib/debug" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
       - mv "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
       - cp -r files/* "${FLATPAK_DEST}"
       - chmod +x "${FLATPAK_DEST}/bin/"*
@@ -595,8 +596,9 @@ modules:
   - name: retrodeck-solarus
     buildsystem: simple
     build-commands:
-      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib"
-      - rm -rf "files/lib/debug" "files/lib/pkgconfig" # TODO: we need them?
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug" "${FLATPAK_DEST}/retrodeck/tmplib/pkgconfig"
+      - mv "files/lib/pkgconfig" "${FLATPAK_DEST}/retrodeck/tmplib/pkgconfig"
+      - mv "files/lib/debug" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
       - mv "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
       - cp -r files/* "${FLATPAK_DEST}"
       - chmod +x "${FLATPAK_DEST}/bin/"*
@@ -614,10 +616,10 @@ modules:
   - name: retrodeck-gzdoom
     buildsystem: simple
     build-commands:
-      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib"
-      - rm -rf files/lib/cmake
-      - rm -rf files/lib/debug
-      - rm -rf files/lib/pkgconfig
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug" "${FLATPAK_DEST}/retrodeck/tmplib/pkgconfig"
+      - rm -rf files/lib/cmake # TODO: we need them?
+      - mv "files/lib/pkgconfig" "${FLATPAK_DEST}/retrodeck/tmplib/pkgconfig"
+      - mv "files/lib/debug" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
       - mv "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
       - cp -r files/* "${FLATPAK_DEST}"
       - chmod +x "${FLATPAK_DEST}/bin/"*
@@ -723,16 +725,32 @@ modules:
           # Search for missingl ibraries in our libtmp folder
           missing_libs=$(find "${FLATPAK_DEST}/bin" -type f -exec ldd {} + 2>/dev/null | grep "not found" | awk '{print $1}' | sort | uniq)
 
+          # Origin paths
           src_dir="${FLATPAK_DEST}/retrodeck/tmplib"
-          dest_dir="${FLATPAK_DEST}/retrodeck/lib"
-          mkdir -p "$dest_dir"
+          src_debug_dir="${FLATPAK_DEST}/retrodeck/tmplib/debug"
+          src_pkgconfig_dir="${FLATPAK_DEST}/retrodeck/tmplib/pkgconfig"
 
-          # Search and bring in the missing libraries
-          for lib in $missing_libs; do
-            if [[ -f "$src_dir/$lib" ]]; then
-              cp "$src_dir/$lib" "$dest_dir"
-            fi
-          done
+          # Destionation paths
+          dest_dir="${FLATPAK_DEST}/lib"
+          dest_debug_dir="${FLATPAK_DEST}/retrodeck/lib/debug"
+          dest_pkgconfig_dir="${FLATPAK_DEST}/retrodeck/lib/pkgconfig"
+          
+          mkdir -p "$dest_dir" "dest_debug_dir" "dest_pkgconfig_dir"
+
+          copy_missing_libs() {
+            local src=$1
+            local dest=$2
+            for lib in $missing_libs; do
+              if [[ -f "$src/$lib" ]]; then
+                cp "$src/$lib" "$dest"
+                echo "Copied \"$lib\" to \"$dest\""
+              fi
+            done
+          }
+
+          copy_missing_libs "$src_dir" "$dest_dir"
+          copy_missing_libs "$src_debug_dir" "$dest_debug_dir"
+          copy_missing_libs "$src_pkgconfig_dir" "$dest_pkgconfig_dir"
 
   - name: retrodeck
     buildsystem: simple
