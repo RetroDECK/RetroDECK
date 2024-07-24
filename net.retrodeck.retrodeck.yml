@@ -516,12 +516,15 @@ modules:
   - name: melonds
     buildsystem: simple
     build-commands:
-      - chmod +x melonDS
-      - cp -r melonDS "${FLATPAK_DEST}/bin"
+      - rm -f "files/manifest.json"
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib"
+      - mv "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - cp -r files/* "${FLATPAK_DEST}"
+      - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
-        url: https://github.com/melonDS-emu/melonDS/releases/download/0.9.5/melonDS_0.9.5_linux_x64.zip
-        sha256: 67eb30acb1bb33a36ad9ea3d025a4666cc188ee51c5289857e940f3892efe84d
+        url: RETRODECKMELONDSURLPLACEHOLDER
+        sha256: RETRODECKMELONDSSHAPLACEHOLDER
 
   # MELONDS - END
 
