@@ -756,6 +756,12 @@ modules:
             "libpcap.so.0.8"
             "libGLEW.so.2.2"
             "libsolarus.so.1"
+            "libswscale.so.6"
+            "libpostproc.so.56"
+            "libpoppler.so.125"
+            "libphysfs.so.1"
+            "libmodplug.so.1"
+            "libluajit-5.1.so.2"
           )
 
           src_dir="${FLATPAK_DEST}/retrodeck/lib"
