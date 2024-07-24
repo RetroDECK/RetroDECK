@@ -350,35 +350,52 @@ post_update() {
     ln -sv $ryujinxconf "$(dirname $ryujinxconf)/PRConfig.json"
   fi
 
-  if [[ $(check_version_is_older_than "0.8.3b") == "true" ]]; then
-    # In version 0.8.3b, the following changes were made:
-    # - Recovery from a failed move of the themes, downloaded_media and gamelists folder to their new ES-DE locations.
-    if [ -d "$rdhome/themes" ] || [ -d "$rdhome/downloaded_media" ] || [ -d "$rdhome/gamelists" ] || [ -d "$rdhome/collections" ]; then
+if [[ $(check_version_is_older_than "0.8.3b") == "true" ]]; then
+  # In version 0.8.3b, the following changes were made:
+  # - Recovery from a failed move of the themes, downloaded_media and gamelists folder to their new ES-DE locations.
+  
+  # Check if any of the directories exist
+  if [ -d "$rdhome/themes" ] || [ -d "$rdhome/downloaded_media" ] || [ -d "$rdhome/gamelists" ] || [ -d "$rdhome/collections" ]; then
     log i "Moving ES-DE downloaded_media, gamelist, and themes from \"$rdhome\" to \"$rdhome/ES-DE\" due to a RetroDECK Framework bug"
-      if [[ -d "$rdhome/themes" ]]; then
-        move "$rdhome/themes" "$rdhome/ES-DE/themes" && log d "Move of \"$rdhome/themes\" completed"
-      else
-        log i "ES-DE themes appears to already have been migrated."
-      fi
-      if [[ -d "$rdhome/downloaded_media" ]]; then
-        move "$rdhome/downloaded_media" "$rdhome/ES-DE/downloaded_media" && log d "Move of \"$rdhome/downloaded_media\" completed"
-      else
-        log i "ES-DE downloaded media appears to already have been migrated."
-      fi
-      if [[ -d "$rdhome/gamelists" ]]; then
-        move "$rdhome/gamelists" "$rdhome/ES-DE/gamelists" && log d "Move of \"$rdhome/gamelists/\" completed"
-      else
-        log i "ES-DE gamelists appears to already have been migrated."
-      fi
-      if [[ -d "$rdhome/collections" ]]; then
-        move "$rdhome/collections" "$rdhome/ES-DE/collections" && log d "Move of \"$rdhome/collections/\" completed"
-      else
-        log i "ES-DE collections appears to already have been migrated."
-      fi
+
+    # Ask user if they want to move and overwrite the data
+    if [[ $(configurator_generic_question_dialog "Move Data" "IN the previous version some user suddered a bug where ES-DE appeared empty (no scraped data or collections for example).\nYour data is not gone, it's just in a different path.\n\nDo you want to recover your old data replacing the actual one?") == "true" ]]; then
+      move_cmd="mv -f"  # Use mv with overwrite
+      log i "User chose to move and overwrite the data."
     else
-      log i "ES-DE folders appears to already have been migrated."
+      move_cmd="move"  # Use existing move function
+      log i "User chose to move the data without overwriting."
     fi
+
+    # Move each directory if it exists
+    if [[ -d "$rdhome/themes" ]]; then
+      $move_cmd "$rdhome/themes" "$rdhome/ES-DE/themes" && log d "Move of \"$rdhome/themes\" completed"
+    else
+      log i "ES-DE themes appears to already have been migrated."
+    fi
+
+    if [[ -d "$rdhome/downloaded_media" ]]; then
+      $move_cmd "$rdhome/downloaded_media" "$rdhome/ES-DE/downloaded_media" && log d "Move of \"$rdhome/downloaded_media\" completed"
+    else
+      log i "ES-DE downloaded media appears to already have been migrated."
+    fi
+
+    if [[ -d "$rdhome/gamelists" ]]; then
+      $move_cmd "$rdhome/gamelists" "$rdhome/ES-DE/gamelists" && log d "Move of \"$rdhome/gamelists/\" completed"
+    else
+      log i "ES-DE gamelists appears to already have been migrated."
+    fi
+
+    if [[ -d "$rdhome/collections" ]]; then
+      $move_cmd "$rdhome/collections" "$rdhome/ES-DE/collections" && log d "Move of \"$rdhome/collections/\" completed"
+    else
+      log i "ES-DE collections appears to already have been migrated."
+    fi
+  else
+    log i "ES-DE folders appears to already have been migrated."
   fi
+fi
+
 
   # if [[ $(check_version_is_older_than "0.9.0b") == "true" ]]; then
   #   # Placeholder for version 0.9.0b
