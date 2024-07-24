@@ -2,6 +2,8 @@ app-id: net.retrodeck.retrodeck
 runtime: org.kde.Platform
 runtime-version: "6.7"
 sdk: org.kde.Sdk
+add-extensions:
+  add-ld-path: "/app/retrodeck/lib"
 # sdk-extensions:
 #   - org.freedesktop.Sdk.Extension.llvm18        # Needed for RPCS3
 command: retrodeck.sh
