@@ -420,7 +420,8 @@ modules:
     buildsystem: simple
     build-commands:
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
-      - mv "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - cp -rL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - rm -rf "files/lib"
       - cp -r files/* "${FLATPAK_DEST}"
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
@@ -460,7 +461,8 @@ modules:
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
       - cp -r "files/lib/debug" "${FLATPAK_DEST}/retrodeck/tmplib"
       - rm -rf "files/lib/debug"
-      - mv "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - cp -rL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - rm -rf "files/lib"
       - cp -r files/* "${FLATPAK_DEST}"
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
@@ -478,9 +480,10 @@ modules:
     build-commands:
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
       - rm -rf "files/lib/pkgconfig"
-      - cp -r "files/lib/debug" "${FLATPAK_DEST}/retrodeck/tmplib"
+      - cp -rL "files/lib/debug" "${FLATPAK_DEST}/retrodeck/tmplib"
       - rm -rf "files/lib/debug"
-      - mv "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - cp -rL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - rm -rf "files/lib"
       - cp -r files/* "${FLATPAK_DEST}"
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
@@ -521,7 +524,7 @@ modules:
     build-commands:
       - rm -f "files/manifest.json"
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib/"
-      - cp -r "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib/"
+      - cp -rL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib/"
       - rm -rf "files/lib"
       - cp -r files/* "${FLATPAK_DEST}/"
       - chmod +x "${FLATPAK_DEST}/bin/"*
@@ -601,8 +604,7 @@ modules:
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
       #- cp -r "files/lib/debug/lib/*" "${FLATPAK_DEST}/retrodeck/tmplib/debug/"
       - rm -rf "files/lib/debug" "files/lib/pkgconfig"
-      - mv "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
-      - cp -r files/* "${FLATPAK_DEST}"
+      - cp -rL files/* "${FLATPAK_DEST}"
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
@@ -620,7 +622,8 @@ modules:
     build-commands:
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
       - rm -rf "files/lib/cmake" "files/lib/pkgconfig" "files/lib/debug"
-      - mv "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - cp -rL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - rm -rf "files/lib"
       - cp -r files/* "${FLATPAK_DEST}"
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
@@ -696,7 +699,8 @@ modules:
     buildsystem: simple
     build-commands:
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
-      - mv "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - cp -rL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - rm -rf "files/lib"
       - cp -r files/* "${FLATPAK_DEST}"
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
