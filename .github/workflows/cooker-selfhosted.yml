@@ -116,14 +116,6 @@ jobs:
       - name: Build flatpak
         run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_only.sh"
 
-      - name: Create Artifact for flathub
-        run: | 
-          tar -czf ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.tar.gz -C ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker .
-          hash=($(sha256sum ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.tar.gz))
-          echo $hash > ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.sha
-          mv -f RetroDECK-Artifact-cooker.* ${{ secrets.ARTIFACT_REPO }}
-        continue-on-error: true
-
       - name: Create Bundle
         run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_bundle.sh"
 
@@ -182,6 +174,14 @@ jobs:
         with:
           name: retrodeck-flatpak
           path: RetroDECK-cooker.flatpak
+        continue-on-error: true
+
+      - name: Create Artifact for flathub
+        run: | 
+          tar -czf ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.tar.gz -C ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker .
+          hash=($(sha256sum ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.tar.gz))
+          echo $hash > ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.sha
+          mv -f RetroDECK-Artifact-cooker.* ${{ secrets.ARTIFACT_REPO }}
         continue-on-error: true
 
       # - name: Upload RetroDECK-cooker.flatpak to Gitea Release
