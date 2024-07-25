@@ -1,5 +1,6 @@
 extends Control
 
+var classFunctions: ClassFunctions
 var file := FileAccess
 var bios_tempfile : String
 var BIOS_COLUMNS_BASIC := ["BIOS File Name", "System", "Found", "Hash Match", "Description"]
@@ -9,11 +10,14 @@ var BIOS_COLUMNS_EXPERT := ["BIOS File Name", "System", "Found", "Hash Match", "
 func _ready():
 	#Check if XDG_RUNTIME_DIR is set and choose temp file location
 	if OS.has_environment("XDG_RUNTIME_DIR"):
-		bios_tempfile = OS.get_environment("XDG_RUNTIME_DIR") + "/godot_temp/godot_bios_files_checked.tmp"
+		#bios_tempfile = OS.get_environment("XDG_RUNTIME_DIR") + "/godot_temp/godot_bios_files_checked.tmp"
+		bios_tempfile = "/var/config/retrodeck/godot/godot_bios_files_checked.tmp"
 	else:
 		bios_tempfile = "/var/config/retrodeck/godot_temp/godot_bios_files_checked.tmp"
 	
 	var table := $Table
+	classFunctions = ClassFunctions.new()
+	add_child(classFunctions)
 	
 	if bios_type == 0: #Basic BIOS button pressed
 		table.columns = BIOS_COLUMNS_BASIC.size()
@@ -28,7 +32,16 @@ func _ready():
 	table.hide_root = true
 
 	if bios_type == 0: #Basic BIOS button pressed
-		OS.execute("/app/tools/retrodeck_function_wrapper.sh",["check_bios_files", "basic"])
+		#OS.execute("/app/tools/retrodeck_function_wrapper.sh",["check_bios_files", "basic"])
+		var command = "../../tools/retrodeck_function_wrapper.sh"
+		var parameters = ["log", "i", "Configurator: " + "check_bios_files"]
+		var console = false
+		var result: Dictionary = classFunctions.execute_command(command, parameters, false)
+		parameters = ["check_bios_files"]
+		#result = classFunctions.execute_command(command, parameters, false)
+		#threaded
+		await run_thread_command(command, parameters, console)
+		
 	else: #Assume advanced BIOS button pressed
 		OS.execute("/app/tools/retrodeck_function_wrapper.sh",["check_bios_files"])
 	
@@ -43,3 +56,9 @@ func _ready():
 				if table_line.get_index() % 2 == 1:
 					table_line.set_custom_bg_color(i,Color(0.15, 0.15, 0.15, 1),false)
 					table_line.set_custom_color(i,Color(1,1,1,1))
+
+func run_thread_command(command: String, parameters: Array, console: bool) -> void:
+	var result = await classFunctions.run_command_in_thread(command, parameters, console)
+	if result != null:
+		print (result["output"])
+		print ("Exit Code: " + str(result["exit_code"]))
