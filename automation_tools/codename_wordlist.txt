@@ -1,4 +1,3 @@
-arcade
 advance
 aesthetic
 alien
@@ -6,9 +5,11 @@ amateratsu
 amazing
 amiga
 ann
+apposai
 arcade
 armor
 atari
+ataru
 attendant
 autobot
 axe
@@ -142,6 +143,7 @@ hot
 house
 hunter
 igor
+ikki
 inaba
 install
 inu
@@ -159,6 +161,7 @@ joystick
 jump
 junes
 jurassic
+jusenkyo
 kabuto
 kame
 kami
@@ -181,6 +184,8 @@ koopa
 kotone
 kuma
 kun
+kuno
+kunoichi
 kuwagata
 kyoto
 lagan
@@ -203,6 +208,8 @@ makoto
 mall
 man
 mandrake
+maneki
+manju
 margaret
 marie
 mario
@@ -213,13 +220,16 @@ medal
 mega
 megatron
 men
+metabee
 metal
 midnight
 mini
+mochi
 mode
 monk
 monkey
 monster
+moroboshi
 mosconi
 must
 mutten
@@ -233,11 +243,15 @@ ninja
 noclip
 nova
 novice
+obaba
 obake
 ocean
+okage
+okonomi
 omega
 one
 onizuka
+onsen
 optimus
 oracle
 osaka
@@ -276,11 +290,13 @@ punch
 puyo
 pyros
 rainbow
+rancher
 ranger
 rangers
 raptor
 redmond
 rekku
+retort
 retro
 rex
 rick
@@ -288,6 +304,7 @@ ring
 robot
 robotnik
 rocky
+rokusho
 roll
 room
 round
@@ -296,10 +313,13 @@ rupie
 ryoga
 ryuji
 saint
+sakura
+sakurambo
 sama
 samurai
 samus
 san
+saotome
 saturn
 saul
 saver
@@ -312,6 +332,7 @@ select
 setup
 sh
 shadow
+shampoo
 shinji
 ship
 shogun
@@ -350,6 +371,7 @@ tarot
 taxi
 team
 temple
+tendo
 terminator
 tetris
 thundaga
@@ -385,6 +407,7 @@ woman
 won
 wonder
 wrap
+yaki
 yamcha
 yen
 yoshi
