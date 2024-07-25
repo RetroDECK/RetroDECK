@@ -504,8 +504,8 @@ modules:
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug" 
       - mkdir -p ${FLATPAK_DEST}/lib/ffmpeg   # Needed for a ffmpeg bufgix
       - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
-      - cp -r squashfs-root/usr/bin* "${FLATPAK_DEST}/bin"
-      - cp -r squashfs-root/usr/share* "${FLATPAK_DEST}/share"
+      - cp -r "squashfs-root/usr/bin/"* "${FLATPAK_DEST}/bin/"
+      - cp -r "squashfs-root/usr/share/"* "${FLATPAK_DEST}/share/"
       #TODO: - cp -r squashfs-root/usr/optional* # maybe already included in flatpak runtime
       #TODO: - cp -r squashfs-root/usr/plugins* # maybe already included in qt
       #TODO: Do we need this wrapper? squashfs-root/apprun-hooks/linuxdeploy-plugin-qt-hook.sh
@@ -570,6 +570,17 @@ modules:
       - type: file
         url: https://github.com/cemu-project/Cemu/releases/download/v2.0-88/Cemu-2.0-88-x86_64.AppImage
         sha256: 1af1ad5322df5fa0e2a97588c7486604daf42deb8c4d07a2b885047d9701fed0
+      - type: script
+        commands:
+          - |
+            for d in DiscordCanary Discord; do
+              for i in {0..9}; do
+                test -S $XDG_RUNTIME_DIR/discord-ipc-$i ||
+                  ln -sf {app/com.discordapp.$d,$XDG_RUNTIME_DIR}/discord-ipc-$i;
+              done
+            done
+            Cemu_relwithdebinfo "$@"
+        dest-filename: /app/bin/Cemu-wrapper
 
   # Cemu - END
 
