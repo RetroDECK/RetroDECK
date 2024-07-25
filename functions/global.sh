@@ -3,7 +3,8 @@
 # This file is containing some global function needed for the script such as the config file tools
 
 # pathing the retrodeck components provided libraries
-export LD_LIBRARY_PATH="/app/retrodeck/lib:/app/retrodeck/lib/debug:/app/retrodeck/lib/pkgconfig:$LD_LIBRARY_PATH"
+# now disabled as we are importing everything in /app/lib. In case we are breaking something we need to restore this approach
+# export LD_LIBRARY_PATH="/app/retrodeck/lib:/app/retrodeck/lib/debug:/app/retrodeck/lib/pkgconfig:$LD_LIBRARY_PATH"
 
 source /app/libexec/050_save_migration.sh
 source /app/libexec/checks.sh
@@ -21,7 +22,7 @@ source /app/libexec/configurator_functions.sh
 # Static variables
 rd_conf="/var/config/retrodeck/retrodeck.cfg"                                                                         # RetroDECK config file path
 rd_conf_backup="/var/config/retrodeck/retrodeck.bak"                                                                  # Backup of RetroDECK config file from update
-rd_logs_folder="/var/config/retrodeck/logs"                                                                                  # Static location to write all RetroDECK-related logs
+rd_logs_folder="/var/config/retrodeck/logs"                                                                           # Static location to write all RetroDECK-related logs
 emuconfigs="/app/retrodeck/emu-configs"                                                                               # folder with all the default emulator configs
 rd_defaults="$emuconfigs/defaults/retrodeck/retrodeck.cfg"                                                            # A default RetroDECK config file
 rd_update_patch="/var/config/retrodeck/rd_update.patch"                                                               # A static location for the temporary patch file used during retrodeck.cfg updates
