@@ -580,7 +580,7 @@ modules:
                   ln -sf {app/com.discordapp.$d,$XDG_RUNTIME_DIR}/discord-ipc-$i;
               done
             done
-            Cemu_relwithdebinfo "$@"
+            Cemu "$@"
         dest-filename: Cemu-wrapper
 
   # Cemu - END
