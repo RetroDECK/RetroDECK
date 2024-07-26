@@ -7,8 +7,8 @@ on:
     paths:
      - '.github/workflows/**'
      - 'automation_tools/**'
-     - 'emu-configs/**'
-     - 'es-configs/**'
+     - 'config/**'
+     - 'config/es-de/**'
      - 'functions/**'
      - 'rd-submodules/**'
      - '*.sh'

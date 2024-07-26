@@ -779,8 +779,8 @@ modules:
       - mkdir -p ${FLATPAK_DEST}/retrodeck
 
       # These must be put in home folder, managed by retrodeck.sh
-      - cp es-configs/es_settings.xml ${FLATPAK_DEST}/retrodeck/es_settings.xml
-      - mv -f -t ${FLATPAK_DEST}/retrodeck es-configs/rd_prepacks
+      - cp config/es-de/es_settings.xml ${FLATPAK_DEST}/retrodeck/es_settings.xml
+      - mv -f -t ${FLATPAK_DEST}/retrodeck config/es-de/rd_prepacks
 
       # Logo, res, move graphics directory away from default location so splash can be changed after build
       - mv -f -t ${FLATPAK_DEST}/retrodeck ${FLATPAK_DEST}/share/es-de/resources/graphics
@@ -810,10 +810,10 @@ modules:
       - chmod +x net.retrodeck.retrodeck*desktop
 
       # Initializing default emulator configs
-      - cp -r emu-configs ${FLATPAK_DEST}/retrodeck/emu-configs/
+      - cp -r config ${FLATPAK_DEST}/retrodeck/config/
 
       # PICO-8 wrapper
-      - cp ${FLATPAK_DEST}/retrodeck/emu-configs/pico-8/pico8-wrapper.sh ${FLATPAK_DEST}/bin/pico8
+      - cp ${FLATPAK_DEST}/retrodeck/config/pico-8/pico8-wrapper.sh ${FLATPAK_DEST}/bin/pico8
       - chmod +x ${FLATPAK_DEST}/bin/pico8
 
       # Placing appdata
@@ -825,7 +825,7 @@ modules:
       - ln -s ${FLATPAK_DEST}/tools/configurator.sh ${FLATPAK_DEST}/bin/configurator
 
       # GZDOOM wrapper
-      - cp emu-configs/gzdoom/gzdoom.sh ${FLATPAK_DEST}/bin/gzdoom.sh
+      - cp config/gzdoom/gzdoom.sh ${FLATPAK_DEST}/bin/gzdoom.sh
       - chmod +x ${FLATPAK_DEST}/bin/gzdoom.sh
 
     sources:
