@@ -369,25 +369,25 @@ if [[ $(check_version_is_older_than "0.8.3b") == "true" ]]; then
 
     # Move each directory if it exists
     if [[ -d "$rdhome/themes" ]]; then
-      $move_cmd "$rdhome/themes" "$rdhome/ES-DE/themes" && log d "Move of \"$rdhome/themes\" completed"
+      $move_cmd "$rdhome/themes" "$rdhome/ES-DE/" && log d "Move of \"$rdhome/themes\" completed"
     else
       log i "ES-DE themes appears to already have been migrated."
     fi
 
     if [[ -d "$rdhome/downloaded_media" ]]; then
-      $move_cmd "$rdhome/downloaded_media" "$rdhome/ES-DE/downloaded_media" && log d "Move of \"$rdhome/downloaded_media\" completed"
+      $move_cmd "$rdhome/downloaded_media" "$rdhome/ES-DE/" && log d "Move of \"$rdhome/downloaded_media\" completed"
     else
       log i "ES-DE downloaded media appears to already have been migrated."
     fi
 
     if [[ -d "$rdhome/gamelists" ]]; then
-      $move_cmd "$rdhome/gamelists" "$rdhome/ES-DE/gamelists" && log d "Move of \"$rdhome/gamelists/\" completed"
+      $move_cmd "$rdhome/gamelists" "$rdhome/ES-DE/" && log d "Move of \"$rdhome/gamelists/\" completed"
     else
       log i "ES-DE gamelists appears to already have been migrated."
     fi
 
     if [[ -d "$rdhome/collections" ]]; then
-      $move_cmd "$rdhome/collections" "$rdhome/ES-DE/collections" && log d "Move of \"$rdhome/collections/\" completed"
+      $move_cmd "$rdhome/collections" "$rdhome/ES-DE/" && log d "Move of \"$rdhome/collections/\" completed"
     else
       log i "ES-DE collections appears to already have been migrated."
     fi
