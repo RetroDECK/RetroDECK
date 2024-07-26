@@ -2,15 +2,6 @@ app-id: net.retrodeck.retrodeck
 runtime: org.kde.Platform
 runtime-version: "6.7"
 sdk: org.kde.Sdk
-add-extensions:
-  org.freedesktop.Platform.GL:
-    directory: lib/GL
-    version: '23.08'
-    subdirectories: true
-    add-ld-path: lib
-    merge-dirs: vulkan/icd.d;glvnd/egl_vendor.d
-    download-if: active-gl-driver
-    enable-if: active-gl-driver
 command: retrodeck.sh
 
 finish-args:
