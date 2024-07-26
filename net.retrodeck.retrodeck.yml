@@ -580,7 +580,8 @@ modules:
               done
             done
             Cemu_relwithdebinfo "$@"
-        dest-filename: /app/bin/Cemu-wrapper
+        dest: /app/bin
+        dest-filename: Cemu-wrapper
 
   # Cemu - END
 
