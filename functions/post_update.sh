@@ -394,6 +394,10 @@ if [[ $(check_version_is_older_than "0.8.3b") == "true" ]]; then
   else
     log i "ES-DE folders appears to already have been migrated."
   fi
+  # Better to refresh the paths
+  set_setting_value "$es_settings" "ROMDirectory" "$roms_folder" "es_settings"
+  set_setting_value "$es_settings" "MediaDirectory" "$media_folder" "es_settings"
+  set_setting_value "$es_settings" "UserThemeDirectory" "$themes_folder" "es_settings"
 fi
 
 
