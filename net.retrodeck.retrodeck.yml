@@ -565,6 +565,7 @@ modules:
       - rm -rf "squashfs-root/usr/lib/girepository-1.0" # causes issues, I think we already have this
       - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
       - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
+      - install -Dm755 Cemu-wrapper "${FLATPAK_DEST}/bin/"
       #TODO: do we need this wrapper? squashfs-root/apprun-hooks/linuxdeploy-plugin-gtk.sh
     sources:
       - type: file
@@ -580,7 +581,6 @@ modules:
               done
             done
             Cemu_relwithdebinfo "$@"
-        dest: /app/bin
         dest-filename: Cemu-wrapper
 
   # Cemu - END
