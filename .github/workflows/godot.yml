@@ -19,7 +19,7 @@ jobs:
         with: 
           godot_executable_download_url: https://download.tuxfamily.org/godotengine/4.2.2/Godot_v4.2.2-stable_linux.x86_64.zip
           godot_export_templates_download_url: https://download.tuxfamily.org/godotengine/4.2.2/Godot_v4.2.2-stable_export_templates.tpz
-          relative_project_path: tools/rd-config-test/
+          relative_project_path: ./
           create_release: true
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
