@@ -43,9 +43,9 @@ post_update() {
     dir_prep "$bios_folder/pico-8" "$HOME/.lexaloffle/pico-8" # Store binary and config files together. The .lexaloffle directory is a hard-coded location for the PICO-8 config file, cannot be changed
     dir_prep "$saves_folder/pico-8" "$bios_folder/pico-8/cdata" # PICO-8 saves folder structure was backwards, fixing for consistency.
 
-    cp -f "$emuconfigs/citra/qt-config.ini" /var/config/citra-emu/qt-config.ini
+    cp -f "$config/citra/qt-config.ini" /var/config/citra-emu/qt-config.ini
     sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
-    cp -fr "$emuconfigs/yuzu/"* /var/config/yuzu/
+    cp -fr "$config/yuzu/"* /var/config/yuzu/
     sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/yuzu/qt-config.ini
 
     # Remove unneeded tools folder, as location has changed to RO space
@@ -57,7 +57,7 @@ post_update() {
     # Changed settings in Duckstation and PCSX2: The "ask on exit" was disabled and "save on exit" was enabled.
     # The default configs have been updated for new installs and resets, a patch was created to address existing installs.
 
-    deploy_multi_patch "emu-configs/patches/updates/064b_update.patch"
+    deploy_multi_patch "config/patches/updates/064b_update.patch"
   fi
   if [[ $(check_version_is_older_than "0.6.5b") == "true" ]]; then
     # In version 0.6.5b, the following changes were made:
@@ -95,13 +95,13 @@ post_update() {
     conf_read
 
     mv -f "$pcsx2conf" "$pcsx2conf.bak"
-    generate_single_patch "$emuconfigs/PCSX2/PCSX2.ini" "$pcsx2conf.bak" "/var/config/PCSX2/inis/PCSX2-cheevos-upgrade.patch" pcsx2
-    deploy_single_patch "$emuconfigs/PCSX2/PCSX2.ini" "/var/config/PCSX2/inis/PCSX2-cheevos-upgrade.patch" "$pcsx2conf"
+    generate_single_patch "$config/PCSX2/PCSX2.ini" "$pcsx2conf.bak" "/var/config/PCSX2/inis/PCSX2-cheevos-upgrade.patch" pcsx2
+    deploy_single_patch "$config/PCSX2/PCSX2.ini" "/var/config/PCSX2/inis/PCSX2-cheevos-upgrade.patch" "$pcsx2conf"
     rm -f "/var/config/PCSX2/inis/PCSX2-cheevos-upgrade.patch"
     dir_prep "/var/config/duckstation" "/var/data/duckstation"
     mv -f "$duckstationconf" "$duckstationconf.bak"
-    generate_single_patch "$emuconfigs/duckstation/settings.ini" "$duckstationconf.bak" "/var/config/duckstation/duckstation-cheevos-upgrade.patch" pcsx2
-    deploy_single_patch "$emuconfigs/duckstation/settings.ini" "/var/config/duckstation/duckstation-cheevos-upgrade.patch" "$duckstationconf"
+    generate_single_patch "$config/duckstation/settings.ini" "$duckstationconf.bak" "/var/config/duckstation/duckstation-cheevos-upgrade.patch" pcsx2
+    deploy_single_patch "$config/duckstation/settings.ini" "/var/config/duckstation/duckstation-cheevos-upgrade.patch" "$duckstationconf"
     rm -f "/var/config/duckstation/duckstation-cheevos-upgrade.patch"
 
     create_dir "$mods_folder"
@@ -125,15 +125,15 @@ post_update() {
     dir_prep "$rdhome/gamelists" "/var/config/emulationstation/ES-DE/gamelists"
 
     dir_prep "$borders_folder" "/var/config/retroarch/overlays/borders"
-    rsync -rlD --mkpath "/app/retrodeck/emu-configs/retroarch/borders/" "/var/config/retroarch/overlays/borders/"
+    rsync -rlD --mkpath "/app/retrodeck/config/retroarch/borders/" "/var/config/retroarch/overlays/borders/"
 
-    rsync -rlD --mkpath "$emuconfigs/defaults/retrodeck/presets/remaps/" "/var/config/retroarch/config/remaps/"
+    rsync -rlD --mkpath "$config/retrodeck/presets/remaps/" "/var/config/retroarch/config/remaps/"
 
     if [[ ! -f "$bios_folder/capsimg.so" ]]; then
       cp -f "/app/retrodeck/extras/Amiga/capsimg.so" "$bios_folder/capsimg.so"
     fi
 
-    cp -f $emuconfigs/rpcs3/vfs.yml /var/config/rpcs3/vfs.yml
+    cp -f $config/rpcs3/vfs.yml /var/config/rpcs3/vfs.yml
     sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$bios_folder/rpcs3/"'^' "$rpcs3vfsconf"
     set_setting_value "$rpcs3vfsconf" "/games/" "$roms_folder/ps3/" "rpcs3"
     if [[ -d "$roms_folder/ps3/emudir" ]]; then # The old location exists, meaning the emulator was run at least once.
@@ -322,14 +322,14 @@ post_update() {
 
     log i "Installing the missing ScummVM assets and renaming \"$mods_folder/RetroArch/ScummVM/themes\" into \"theme\""
     mv -f "$mods_folder/RetroArch/ScummVM/themes" "$mods_folder/RetroArch/ScummVM/theme"
-    unzip -o "$emuconfigs/retroarch/ScummVM.zip" 'scummvm/extra/*' -d /tmp
-    unzip -o "$emuconfigs/retroarch/ScummVM.zip" 'scummvm/theme/*' -d /tmp
+    unzip -o "$config/retroarch/ScummVM.zip" 'scummvm/extra/*' -d /tmp
+    unzip -o "$config/retroarch/ScummVM.zip" 'scummvm/theme/*' -d /tmp
     mv -f /tmp/scummvm/extra "$mods_folder/RetroArch/ScummVM"
     mv -f /tmp/scummvm/theme "$mods_folder/RetroArch/ScummVM"
     rm -rf /tmp/extra /tmp/theme
 
     log i "Placing cheats in \"/var/data/mame/cheat\""
-    unzip -j -o "$emuconfigs/mame/cheat0264.zip" 'cheat.7z' -d "/var/data/mame/cheat"
+    unzip -j -o "$config/mame/cheat0264.zip" 'cheat.7z' -d "/var/data/mame/cheat"
 
     log d "Verifying with user if they want to reset Ryujinx"
     if [[ "$(configurator_generic_question_dialog "RetroDECK 0.8.1b Ryujinx Reset" "In RetroDECK 0.8.0b the Ryujinx emulator was not properly initialized for upgrading users.\nThis would cause Ryujinx to not work properly.\n\nWould you like to reset Ryujinx to default RetroDECK settings now?\n\nIf you have made your own changes to the Ryujinx config, you can decline this reset.")" == "true" ]]; then
@@ -377,7 +377,7 @@ post_update() {
   # if [[ $(check_version_is_older_than "0.9.0b") == "true" ]]; then
   #   # Placeholder for version 0.9.0b
   #   rm /var/config/emulationstation/.emulationstation # remving the old symlink to .emulationstation as it might be not needed anymore
-  # TODO: change <mlc_path>RETRODECKHOMEDIR/bios/cemu</mlc_path> in emu-configs/cemu/settings.xml into <mlc_path>RETRODECKHOMEDIR/bios/cemu/mlc</mlc_path>
+  # TODO: change <mlc_path>RETRODECKHOMEDIR/bios/cemu</mlc_path> in config/cemu/settings.xml into <mlc_path>RETRODECKHOMEDIR/bios/cemu/mlc</mlc_path>
   #   if [ ! -d "$bios_folder/cemu/mlc" ]; then
   #     log i "Cemu MLC folder was moved from \"$bios_folder/cemu\" to \"$bios_folder/cemu/mlc\", migrating it"
   #     mv -f "$bios_folder/cemu" "$bios_folder/cemu/mlc"

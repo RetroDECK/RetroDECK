@@ -4,7 +4,7 @@
 
 # Check if script is running with elevated privileges
 if [ "$EUID" -ne 0 ]; then
-    echo "The build might fail without some superuser permissions, please run me with sudo. Continue without sudo? [y/N,]"
+    echo "The build might fail without some superuser permissions, please run me with sudo. Continue without sudo? [y/N]"
     read -r continue_without_sudo
     if [[ "$continue_without_sudo" != "y" ]]; then
         exit 1
