@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v3
       - name : exportGame
         uses: firebelley/godot-export@v5.2.1
         with: 
