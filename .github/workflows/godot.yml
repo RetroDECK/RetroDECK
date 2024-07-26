@@ -1,8 +1,10 @@
 name: Building  a mOnKeyX Project
 
 on:
-  push: {}
-  pull_request: {}
+  push: 
+    branches:
+     - feat/godot-uk
+  workflow_dispatch:
 
 jobs:
   Godot:
