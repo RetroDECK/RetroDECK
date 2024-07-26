@@ -22,5 +22,5 @@ jobs:
           relative_project_path: tools/rd-config-test/
           create_release: true
         env:
-          GITHUB_TOKEN: ${{secrects.GITHUB_TOKEN}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
    
