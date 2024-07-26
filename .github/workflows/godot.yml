@@ -1,28 +1,26 @@
 name: Building a mOnKeyX Project
 
 on:
-  push: {}
-  pull_request: {}
-  workflow_dispatch: {}
+  push: 
+    branches: [ feat/godot-uk ]
+  pull_request: 
+    branches: [ feat/godot-uk ]
+  workflow_dispatch:
 
 jobs:
-  Godot:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        platform: [linux, windows, mac]
+  build:
+
+    runs-on: ubunntu-latest
+    
     steps:
-      - uses: actions/checkout@v4.1.4
-        with:
-          lfs: true
-      - name: Build
-        id: build
-        with:
-          name: example
-          preset: ${{ matrix.platform }}
-          debugMode: "true"
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: Client - ${{ matrix.platform }}
-          path: ${{ github.workspace }}/${{ steps.build.outputs.build }}
+      - uses: actions/checkout@v5
+      - name : exportGame
+        uses: firebelley/godot-export@v5.2.1
+        with: 
+          godot_executable_download_url: https://download.tuxfamily.org/godotengine/4.2.2/Godot_v4.2.2-stable_linux.x86_64.zip
+          godot_export_templates_download_url: https://download.tuxfamily.org/godotengine/4.2.2/Godot_v4.2.2-stable_export_templates.tpz
+          relative_project_path: tools/rd-config-test/
+          create_release: true
+        env:
+          GITHUB_TOKEN: ${{secrects.GITHUB_TOKEN}}
+   
