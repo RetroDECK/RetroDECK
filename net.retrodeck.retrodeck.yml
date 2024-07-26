@@ -2,8 +2,6 @@ app-id: net.retrodeck.retrodeck
 runtime: org.kde.Platform
 runtime-version: "6.7"
 sdk: org.kde.Sdk
-# sdk-extensions:
-#   - org.freedesktop.Sdk.Extension.llvm18        # Needed for RPCS3
 command: retrodeck.sh
 
 finish-args:
@@ -69,7 +67,7 @@ modules:
   # UPDATE STEPS FOR MAIN:
   # [ ] Update the VERSION variable on line containing "VERSION=THISBRANCH"
   # [ ] Update the appdata.xml with the version number and notes
-  #
+
   - name: version-initialization
     buildsystem: simple
     build-commands:
@@ -108,57 +106,6 @@ modules:
           - autoreconf -vfi
     post-install:
       - ln -s "xml" "${FLATPAK_DEST}/bin/xmlstarlet" ||:
-
-  # # mesa repo got a double certificate issue and gnutils cannot handle that so GLU download fails,
-  # # this affects even the shared-modules's libglu so I have to replace it temporarly
-  # # more info there: https://gitlab.com/gnutls/gnutls/-/issues/1335
-  # # dependency of: RETROARCH, CEMU, RPCS3, XEMU, PPSSPP
-  # - name: libglu
-  #   buildsystem: meson
-  #   cleanup:
-  #     - /include
-  #     - /lib/debug
-  #     - /lib/pkgconfig
-  #     - /lib/*.a
-  #   sources:
-  #     - type: archive
-  #       url: https://ftp.osuosl.org/pub/blfs/conglomeration/glu/glu-9.0.3.tar.xz
-  #       sha256: bd43fe12f374b1192eb15fe20e45ff456b9bc26ab57f0eee919f96ca0f8a330f
-  #     # - type: archive
-  #     #   url: https://mesa.freedesktop.org/archive/glu/glu-9.0.3.tar.xz
-  #     #   sha256: bd43fe12f374b1192eb15fe20e45ff456b9bc26ab57f0eee919f96ca0f8a330f
-  #     #   x-checker-data:
-  #     #     type: anitya
-  #     #     project-id: 13518
-  #     #     stable-only: true
-  #     #     url-template: https://mesa.freedesktop.org/archive/glu/glu-$version.tar.xz
-
-  # - name: libgudev
-  #   buildsystem: meson
-  #   config-opts:
-  #     - -Dtests=disabled
-  #     - -Dvapi=disabled
-  #     - -Dintrospection=disabled
-  #     - -Dgtk_doc=false
-  #   cleanup:
-  #     - /include
-  #     - /etc
-  #     - /libexec
-  #     - /sbin
-  #     - /lib/pkgconfig
-  #     - /lib/systemd
-  #     - /man
-  #     - /share/aclocal
-  #     - /share/doc
-  #     - /share/gtk-doc
-  #     - /share/man
-  #     - /share/pkgconfig
-  #     - '*.la'
-  #     - '*.a'
-  #   sources:
-  #     - type: archive
-  #       url: https://ftp.osuosl.org/pub/blfs/conglomeration/libgudev/libgudev-237.tar.xz
-  #       sha256: 0d06b21170d20c93e4f0534dbb9b0a8b4f1119ffb00b4031aaeb5b9148b686aa
 
   - name: rclone
     buildsystem: simple
@@ -208,127 +155,7 @@ modules:
         url: https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_amd64
         sha256: 4ee662847c588c3ef2fec8bfb304e8739e3dbaba87ccb9a608d691c88f5b64dc
 
-  # dependency of: CEMU
-  # - name: glslang
-  #   buildsystem: cmake-ninja
-  #   config-opts:
-  #     - -DCMAKE_BUILD_TYPE=Release
-  #     - -DENABLE_CTEST=OFF
-  #     # TODO: Does Cemu benefit from SPIRV-Tools-opt
-  #     - -DENABLE_OPT=OFF
-  #   cleanup:
-  #     - /include
-  #     - /lib/cmake
-  #   sources:
-  #     - type: archive
-  #       url: https://github.com/KhronosGroup/glslang/archive/14.2.0.tar.gz
-  #       sha256: 14a2edbb509cb3e51a9a53e3f5e435dbf5971604b4b833e63e6076e8c0a997b5
-  #       x-checker-data:
-  #         type: anitya
-  #         stable-only: true
-  #         project-id: 205796
-  #         url-template: https://github.com/KhronosGroup/glslang/archive/$version.tar.gz
-
-  # # enables motion controls on non-wii controllers (switch, ps4, etc)
-  # # dependency of: DOLPHIN, RPCS3
-  # # TODO: requires a udev rule enabling Motion Sensors access
-  # - name: libevdev
-  #   buildsystem: meson
-  #   config-opts:
-  #     - -Dtests=disabled
-  #     - -Ddocumentation=disabled
-  #   cleanup:
-  #     - /bin
-  #     - /include
-  #     - /lib/pkgconfig
-  #     - /share
-  #   sources:
-  #     - type: archive
-  #       url: https://www.freedesktop.org/software/libevdev/libevdev-1.13.2.tar.xz
-  #       sha256: 3eca86a6ce55b81d5bce910637fc451c8bbe373b1f9698f375c7f1ad0de3ac48
-  #       x-checker-data:
-  #         type: anitya
-  #         project-id: 20540
-  #         stable-only: true
-  #         url-template: https://www.freedesktop.org/software/libevdev/libevdev-$version.tar.xz
-  # # dependency of: CEMU
-  # - name: rapidjson
-  #   buildsystem: cmake-ninja
-  #   config-opts:
-  #     - -DRAPIDJSON_BUILD_DOC=OFF
-  #     - -DRAPIDJSON_BUILD_EXAMPLES=OFF
-  #     - -DRAPIDJSON_BUILD_TESTS=OFF
-  #     - -DRAPIDJSON_BUILD_THIRDPARTY_GTEST=OFF
-  #   cleanup:
-  #     - /include
-  #     - /lib/cmake
-  #     - /lib/pkgconfig
-  #     - /share/doc
-  #   sources:
-  #     - type: archive
-  #       url: https://github.com/Tencent/rapidjson/archive/refs/tags/v1.1.0.tar.gz
-  #       sha256: bf7ced29704a1e696fbccf2a2b4ea068e7774fa37f6d7dd4039d0787f8bed98e
-  #       x-checker-data:
-  #         type: anitya
-  #         project-id: 7422
-  #         stable-only: true
-  #         url-template: https://github.com/Tencent/rapidjson/archive/refs/tags/v$version.tar.gz
-
-  # # dependency of: CEMU, SOLARUS
-  # - name: glm
-  #   buildsystem: cmake-ninja
-  #   cleanup: ['*']
-  #   no-make-install: true
-  #   post-install:
-  #     - install -d ${FLATPAK_DEST}/include
-  #     - cp -R glm ${FLATPAK_DEST}/include
-  #     - cp -R cmake/glm ${FLATPAK_DEST}/lib/cmake
-  #   sources:
-  #     - type: archive
-  #       url: https://github.com/g-truc/glm/releases/download/0.9.9.8/glm-0.9.9.8.zip
-  #       sha256: 37e2a3d62ea3322e43593c34bae29f57e3e251ea89f4067506c94043769ade4c
-        
-  # # dependency of: CEMU, ES-DE
-  # - name: pugixml
-  #   buildsystem: cmake-ninja
-  #   config-opts:
-  #     - -DBUILD_SHARED_LIBS=ON
-  #   cleanup:
-  #     - /include
-  #     - /lib/cmake
-  #     - /lib/pkgconfig
-  #   sources:
-  #     - type: archive
-  #       url: https://github.com/zeux/pugixml/releases/download/v1.14/pugixml-1.14.tar.gz
-  #       sha256: 2f10e276870c64b1db6809050a75e11a897a8d7456c4be5c6b2e35a11168a015
-  #       x-checker-data:
-  #         type: anitya
-  #         project-id: 3728
-  #         url-template: https://github.com/zeux/pugixml/releases/download/v$version/pugixml-$version.tar.gz
-          
-  # # dependency of: CEMU, RPCS3, PPSSPP
-  # - rd-submodules/shared-modules/glew/glew.json
-
-  # # Dependency of: ES-DE, PPSSPP, RPCS3
-  # - name: ffmpeg
-  #   config-opts:
-  #     - --disable-static
-  #     - --disable-programs
-  #     - --disable-doc
-  #     - --enable-gpl
-  #     - --enable-shared
-  #     - --enable-libvorbis
-  #     - --enable-libopus
-  #     - --enable-libvpx
-  #     - --enable-postproc
-  #   sources:
-  #     - type: git
-  #       url: https://github.com/FFmpeg/FFmpeg.git
-  #       tag: n5.1.4
-
-  # External manifests start
-
-  # RetroArch - START
+  # RetroArch
   # https://retroarch.com/index.php?page=platforms
 
   - name: retroarch
@@ -345,8 +172,6 @@ modules:
       - type: archive
         url: https://buildbot.libretro.com/nightly/linux/x86_64/RetroArch.7z
         sha256: RASHAPLACEHOLDER
-
-  # RetroArch - END
 
   # Not part of the offical RetroArch AppImage
   # retroarch-cores-nightly must be earlier than retroarch-cores as it will overwrite this cores with the stable ones
@@ -412,7 +237,7 @@ modules:
         sha256: 16c1b511b8e1374a2b6461a66bb6f07b7d2627eb4e941fd1497a432330acaad1
         strip-components: 0
 
-  # PPSSPP - START
+  # PPSSPP
   # why from our artifacts: AppImage not provided, only Flatpak, requested here: https://github.com/hrydgard/ppsspp/issues/16511
   # https://github.com/RetroDECK/org.ppsspp.PPSSPP
 
@@ -429,9 +254,7 @@ modules:
         url: RETRODECKPPSSPPURL
         sha256: RETRODECKPPSSPPHASH
 
-  # PPSSPP - END
-
-  # PCSX2 - START
+  # PCSX2
   # Inspired by: https://github.com/flathub/com.zettlr.Zettlr/blob/master/com.zettlr.Zettlr.yaml
   # https://pcsx2.net/downloads/
 
@@ -449,9 +272,7 @@ modules:
         url: https://github.com/PCSX2/pcsx2/releases/download/v2.0.3/pcsx2-v2.0.3-linux-appimage-x64-Qt.AppImage
         sha256: ce1a6240643a1c7b68d5ad21789bf9de218fcef6f61649a6503b7de7bfce186f
 
-  # PCSX2 - END
-
-  # Dolphin - START
+  # Dolphin
   # why from source: AppImage not provided, only Flatpak
   # https://github.com/RetroDECK/org.DolphinEmu.dolphin-emu
 
@@ -470,9 +291,7 @@ modules:
         url: RETRODECKDOLPHINURLPLACEHOLDER
         sha256: RETRODECKDOLPHINPLACEHOLDER
 
-  # Dolphin - END
-
-  # PRIMEHACK - START
+  # PRIMEHACK
   # https://github.com/RetroDECK/io.github.shiiion.primehack
 
   - name: retrodeck-primehack
@@ -491,9 +310,7 @@ modules:
         url: RETRODECKPRIMEHACKURLPLACEHOLDER
         sha256: RETRODECKPRIMEHACKPLACEHOLDER
 
-  # PRIMEHACK - END
-
-  # RPCS3 - START
+  # RPCS3
   # https://rpcs3.net/download
 
   - name: rpcs3
@@ -514,9 +331,7 @@ modules:
         url: https://github.com/RPCS3/rpcs3-binaries-linux/releases/download/build-ebcb4034119955991a17210af2a45a672fc9533d/rpcs3-v0.0.32-16685-ebcb4034_linux64.AppImage
         sha256: 2553d56e01a3e3058fa9ceb4e1d61a07eaf2c5bba9e96b29e8923914d89f6e17
 
-  # RPCS3 - END
-
-  # MELONDS - START
+  # MELONDS
   # https://github.com/melonDS-emu/melonDS/releases/latest
 
   - name: melonds
@@ -533,9 +348,7 @@ modules:
         url: RETRODECKMELONDSURLPLACEHOLDER
         sha256: RETRODECKMELONDSSHAPLACEHOLDER
 
-  # MELONDS - END
-
-  # Duckstation - START
+  # Duckstation
   # https://github.com/stenzek/duckstation/releases/tag/preview
 
   - name: duckstation
@@ -551,9 +364,7 @@ modules:
         url: https://github.com/stenzek/duckstation/releases/download/v0.1-6937/DuckStation-x64.AppImage
         sha256: 8a16f034cc8b11341ed9ad382226549301736794582bdec46a5e19b3ca981e07
 
-  # Duckstation - END
-
-  # Cemu - START
+  # Cemu
   # https://github.com/cemu-project/Cemu/releases
 
   - name: cemu
@@ -583,9 +394,7 @@ modules:
             Cemu "$@"
         dest-filename: Cemu-wrapper
 
-  # Cemu - END
-
-  # Vita3K - START - AUTOUPDATED
+  # Vita3K - AUTOUPDATED
 
   - name: vita3k
     buildsystem: simple
@@ -603,10 +412,8 @@ modules:
         sha256: VITA3KSHAPLACEHOLDER
       - type: file
         path: res/retrodeck.png
-        
-  # Vita3K - END
 
-  # SOLARUS - START
+  # SOLARUS
   # why from source: they only provide a snap
   # https://github.com/RetroDECK/org.solarus_games.solarus.Launcher
 
@@ -623,9 +430,7 @@ modules:
         url: RETRODECKSOLARUSURLPLACEHOLDER
         sha256: RETRODECKSOLARUSPLACEHOLDER
 
-  # SOLARUS - END
-
-  # GZDoom - Start
+  # GZDoom
   # When updating remember to update all the .pk3 files from the standalone linux download
   # https://github.com/RetroDECK/org.zdoom.GZDoom
 
@@ -643,9 +448,7 @@ modules:
         url: RETRODECKGZDOOMSURLPLACEHOLDER
         sha256: RETRODECKGZDOOMSHASPLACEHOLDER
 
-  # GZDoom - END
-
-  # Ryujinx Appimage - START
+  # Ryujinx Appimage
   # https://ryujinx.org/download
 
   # This version was reported as working with symlinks: https://discord.com/channels/951662718102962256/951715885968654418/1264882000658169866
@@ -661,9 +464,7 @@ modules:
         url: https://github.com/Ryujinx/release-channel-master/releases/download/1.1.1297/ryujinx-1.1.1297-linux_x64.tar.gz
         sha256: 28b38754e7d2e92083b313b23278c180ae54ac025edbbd0276ec03baec0cec0f
 
-  # Ryujinx Appimage - END
-
-  # XEMU - START
+  # XEMU
   # https://xemu.app/docs/download/#download-for-linux
 
   - name: xemu
@@ -689,9 +490,7 @@ modules:
         url: https://github.com/mborgerson/xemu-hdd-image/releases/latest/download/xbox_hdd.qcow2.zip
         sha256: XEMUHDDHASHPLACEHOLDER
 
-  # XEMU - END
-
-  # MAME - Start
+  # MAME
 
   - name: retrodeck-mame
     buildsystem: simple
@@ -703,9 +502,7 @@ modules:
         url: RETRODECKMAMEURLPLACEHOLDER
         sha256: RETRODECKMAMEPLACEHOLDER
 
-  # MAME - End
-
-  # ES-DE - Start
+  # ES-DE
 
   - name: retrodeck-es-de
     buildsystem: simple
@@ -729,10 +526,6 @@ modules:
       - type: git
         url:  https://github.com/RetroDECK/RetroDECK-theme
         commit: 975c41cac99d150b6ae86a1dfd19988058c69aad
-
-  # ES-DE - End
-
-  # External manifests end
 
   - name: fetch-missing-libs
     buildsystem: simple
