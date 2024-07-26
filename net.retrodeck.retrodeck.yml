@@ -52,7 +52,6 @@ cleanup:
   - '*.la'
   - /app/retrodeck/tmplib
 
-
 modules:
 
   # dependency of: CEMU (1.0.26), DOLPHIN (1.0.27)
@@ -263,7 +262,6 @@ modules:
     build-commands:
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
-      #- rm -f /app/lib/libselinux.so.1 # TODO this rfile is breaking the build, we need it? Error: cp: /app/lib/libselinux.so.1: no version information available (required by cp)
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
       - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
       - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
