@@ -154,55 +154,6 @@ modules:
         url: https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_amd64
         sha256: 4ee662847c588c3ef2fec8bfb304e8739e3dbaba87ccb9a608d691c88f5b64dc
 
-  # Maybe for Vulkan?
-  - name: shaderc
-    buildsystem: cmake-ninja
-    builddir: true
-    config-opts:
-      - -DSHADERC_SKIP_COPYRIGHT_CHECK=ON
-      - -DSHADERC_SKIP_EXAMPLES=ON
-      - -DSHADERC_SKIP_TESTS=ON
-      - -DSPIRV_SKIP_EXECUTABLES=ON
-      - -DENABLE_GLSLANG_BINARIES=OFF
-    cleanup:
-      - /bin
-      - /include
-      - /lib/cmake
-      - /lib/pkgconfig
-      - /lib/*.a
-    sources:
-      - type: git
-        url: https://github.com/google/shaderc.git
-        tag: v2024.1
-        commit: 47a9387ef5b3600d30d84c71ec77a59dc7db46fa
-        #x-checker-data:
-        #  type: git
-        #  tag-pattern: ^v(\d{4}\.\d{1,2})$
-      - type: git
-        url: https://github.com/KhronosGroup/SPIRV-Tools.git
-        tag: v2024.1
-        commit: 04896c462d9f3f504c99a4698605b6524af813c1
-        dest: third_party/spirv-tools
-        x-checker-data:
-          type: git
-          tag-pattern: ^v(\d{4}\.\d{1})$
-      - type: git
-        url: https://github.com/KhronosGroup/SPIRV-Headers.git
-        tag: vulkan-sdk-1.3.283.0
-        commit: 4f7b471f1a66b6d06462cd4ba57628cc0cd087d7
-        dest: third_party/spirv-headers
-        x-checker-data:
-          type: git
-          tag-pattern: ^vulkan-sdk-([\d.]+)$
-      - type: git
-        url: https://github.com/KhronosGroup/glslang.git
-        tag: 14.3.0
-        commit: fa9c3deb49e035a8abcabe366f26aac010f6cbfb
-        dest: third_party/glslang
-        x-checker-data:
-          type: git
-          tag-pattern: ^(\d{1,2}\.\d{1,2}\.\d{1,4})$
-
   # RetroArch
   # https://retroarch.com/index.php?page=platforms
 
