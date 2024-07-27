@@ -154,93 +154,54 @@ modules:
         url: https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_amd64
         sha256: 4ee662847c588c3ef2fec8bfb304e8739e3dbaba87ccb9a608d691c88f5b64dc
 
-  ###### Trying to add the former libraries to see if they solve the vulkan issue
-
-  # mesa repo got a double certificate issue and gnutils cannot handle that so GLU download fails,
-  # this affects even the shared-modules's libglu so I have to replace it temporarly
-  # more info there: https://gitlab.com/gnutls/gnutls/-/issues/1335
-  # dependency of: RETROARCH, CEMU, RPCS3, XEMU
-  - name: libglu
-    buildsystem: meson
+  # Maybe for Vulkan?
+  - name: shaderc
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
+      - -DSHADERC_SKIP_COPYRIGHT_CHECK=ON
+      - -DSHADERC_SKIP_EXAMPLES=ON
+      - -DSHADERC_SKIP_TESTS=ON
+      - -DSPIRV_SKIP_EXECUTABLES=ON
+      - -DENABLE_GLSLANG_BINARIES=OFF
     cleanup:
+      - /bin
       - /include
-      - /lib/debug
+      - /lib/cmake
       - /lib/pkgconfig
       - /lib/*.a
     sources:
-      - type: archive
-        url: https://ftp.osuosl.org/pub/blfs/conglomeration/glu/glu-9.0.3.tar.xz
-        sha256: bd43fe12f374b1192eb15fe20e45ff456b9bc26ab57f0eee919f96ca0f8a330f
-      # - type: archive
-      #   url: https://mesa.freedesktop.org/archive/glu/glu-9.0.3.tar.xz
-      #   sha256: bd43fe12f374b1192eb15fe20e45ff456b9bc26ab57f0eee919f96ca0f8a330f
-      #   x-checker-data:
-      #     type: anitya
-      #     project-id: 13518
-      #     stable-only: true
-      #     url-template: https://mesa.freedesktop.org/archive/glu/glu-$version.tar.xz
-
-  - name: libgudev
-    buildsystem: meson
-    config-opts:
-      - -Dtests=disabled
-      - -Dvapi=disabled
-      - -Dintrospection=disabled
-      - -Dgtk_doc=false
-    cleanup:
-      - /include
-      - /etc
-      - /libexec
-      - /sbin
-      - /lib/pkgconfig
-      - /lib/systemd
-      - /man
-      - /share/aclocal
-      - /share/doc
-      - /share/gtk-doc
-      - /share/man
-      - /share/pkgconfig
-      - '*.la'
-      - '*.a'
-    sources:
-      - type: archive
-        url: https://ftp.osuosl.org/pub/blfs/conglomeration/libgudev/libgudev-237.tar.xz
-        sha256: 0d06b21170d20c93e4f0534dbb9b0a8b4f1119ffb00b4031aaeb5b9148b686aa
-
-  - name: glslang
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-      - -DENABLE_CTEST=OFF
-      # TODO: Does Cemu benefit from SPIRV-Tools-opt
-      - -DENABLE_OPT=OFF
-    cleanup:
-      - /include
-      - /lib/cmake
-    sources:
-      - type: archive
-        url: https://github.com/KhronosGroup/glslang/archive/14.2.0.tar.gz
-        sha256: 14a2edbb509cb3e51a9a53e3f5e435dbf5971604b4b833e63e6076e8c0a997b5
+      - type: git
+        url: https://github.com/google/shaderc.git
+        tag: v2024.1
+        commit: 47a9387ef5b3600d30d84c71ec77a59dc7db46fa
+        #x-checker-data:
+        #  type: git
+        #  tag-pattern: ^v(\d{4}\.\d{1,2})$
+      - type: git
+        url: https://github.com/KhronosGroup/SPIRV-Tools.git
+        tag: v2024.1
+        commit: 04896c462d9f3f504c99a4698605b6524af813c1
+        dest: third_party/spirv-tools
         x-checker-data:
-          type: anitya
-          stable-only: true
-          project-id: 205796
-          url-template: https://github.com/KhronosGroup/glslang/archive/$version.tar.gz
-
-  - name: glm
-    buildsystem: cmake-ninja
-    cleanup: ['*']
-    no-make-install: true
-    post-install:
-      - install -d ${FLATPAK_DEST}/include
-      - cp -R glm ${FLATPAK_DEST}/include
-      - cp -R cmake/glm ${FLATPAK_DEST}/lib/cmake
-    sources:
-      - type: archive
-        url: https://github.com/g-truc/glm/releases/download/0.9.9.8/glm-0.9.9.8.zip
-        sha256: 37e2a3d62ea3322e43593c34bae29f57e3e251ea89f4067506c94043769ade4c
-
-  ################################################################################
+          type: git
+          tag-pattern: ^v(\d{4}\.\d{1})$
+      - type: git
+        url: https://github.com/KhronosGroup/SPIRV-Headers.git
+        tag: vulkan-sdk-1.3.283.0
+        commit: 4f7b471f1a66b6d06462cd4ba57628cc0cd087d7
+        dest: third_party/spirv-headers
+        x-checker-data:
+          type: git
+          tag-pattern: ^vulkan-sdk-([\d.]+)$
+      - type: git
+        url: https://github.com/KhronosGroup/glslang.git
+        tag: 14.3.0
+        commit: fa9c3deb49e035a8abcabe366f26aac010f6cbfb
+        dest: third_party/glslang
+        x-checker-data:
+          type: git
+          tag-pattern: ^(\d{1,2}\.\d{1,2}\.\d{1,4})$
 
   # RetroArch
   # https://retroarch.com/index.php?page=platforms
