@@ -11,6 +11,8 @@ var log_results: Dictionary
 var theme_option: OptionButton
 signal signal_theme_changed
 var custom_theme: Theme = $".".theme
+var emu_select_option: OptionButton
+var emu_pick_option: OptionButton
 
 func _ready():
 	class_functions = ClassFunctions.new()
@@ -28,14 +30,19 @@ func _ready():
 func _get_nodes() -> void:
 	status_code_label = get_node("%status_code_label")
 	theme_option = get_node("%theme_optionbutton")
+	emu_select_option = get_node("%emu_select_option")
+	emu_pick_option = get_node("%emu_pick_option")
 
 func _connect_signals() -> void:
 	#signal_theme_changed.connect(_conf_theme)
 	theme_option.item_selected.connect(_conf_theme)
 	signal_theme_changed.emit(theme_option.item_selected)
+	emu_select_option.item_selected.connect(_emu_select)
 	
+func _emu_select(index: int) -> void:
+	emu_pick_option.visible = true
+
 func _conf_theme(index: int) -> void: 
-	
 	match index:
 		1:
 			custom_theme = preload("res://assets/themes/default_theme.tres")
