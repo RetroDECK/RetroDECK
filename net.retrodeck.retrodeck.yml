@@ -916,17 +916,17 @@ modules:
 
   # PRIMEHACK - END
 
-  # Duckstation-AppImage - START - AUTOUPDATED
+  # Duckstation
   # https://github.com/stenzek/duckstation/releases/tag/preview
 
-  - name: Duckstation-AppImage
+  - name: duckstation
     buildsystem: simple
     build-commands:
-      - chmod +x DuckStation-*.AppImage
-      - ./DuckStation-x64*.AppImage --appimage-extract
-      - mkdir -p "${FLATPAK_DEST}/duckstation"
-      - cp -r squashfs-root/* "${FLATPAK_DEST}/duckstation"
-      - ln -s "${FLATPAK_DEST}/duckstation/usr/bin/duckstation-qt" "${FLATPAK_DEST}/bin/duckstation-qt"
+      - chmod +x *.AppImage
+      - ./*.AppImage --appimage-extract
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
+      - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
     sources:
       - type: file
         url: https://github.com/stenzek/duckstation/releases/download/v0.1-6937/DuckStation-x64.AppImage
