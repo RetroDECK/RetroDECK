@@ -118,6 +118,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="TabContainer" type="TabContainer" parent="Background/MarginContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 tab_alignment = 1
 current_tab = 3

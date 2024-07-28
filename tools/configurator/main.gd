@@ -13,11 +13,15 @@ signal signal_theme_changed
 var custom_theme: Theme = $".".theme
 var emu_select_option: OptionButton
 var emu_pick_option: OptionButton
+var tab_container: TabContainer
 
 func _ready():
 	class_functions = ClassFunctions.new()
 	_get_nodes()
 	_connect_signals()
+	# set current startup tab to match IDE
+	print (tab_container.current_tab)
+	tab_container.current_tab = tab_container.current_tab
 	add_child(class_functions) # Needed for threaded results
 	var children = findElements(self, "Control")
 	for n: Control in children: #iterate the children
@@ -32,6 +36,7 @@ func _get_nodes() -> void:
 	theme_option = get_node("%theme_optionbutton")
 	emu_select_option = get_node("%emu_select_option")
 	emu_pick_option = get_node("%emu_pick_option")
+	tab_container = get_node("%TabContainer")
 
 func _connect_signals() -> void:
 	#signal_theme_changed.connect(_conf_theme)
