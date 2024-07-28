@@ -1,0 +1,52 @@
+[gd_scene load_steps=7 format=3 uid="uid://cb4fvsgnwsf4q"]
+
+[ext_resource type="Texture2D" uid="uid://jw1s5l1dhufg" path="res://assets/graphics/Rekku/rekku-idle.png" id="1_rnwrc"]
+[ext_resource type="Texture2D" uid="uid://pjf86q3d6375" path="res://assets/graphics/Rekku/rekku-blink-up.png" id="2_idjj5"]
+[ext_resource type="Texture2D" uid="uid://dym6yad66luyl" path="res://assets/graphics/Rekku/rekku-blink-down.png" id="3_tdr5m"]
+[ext_resource type="Texture2D" uid="uid://dp0lb1sy2cl0i" path="res://assets/graphics/Rekku/rekku-speak1.png" id="4_2j71n"]
+[ext_resource type="Texture2D" uid="uid://r7fihohhmfau" path="res://assets/graphics/Rekku/rekku-speak2.png" id="5_uqvm4"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_e62bh"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_rnwrc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_idjj5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_tdr5m")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_2j71n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_uqvm4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_2j71n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_2j71n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_uqvm4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_uqvm4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_tdr5m")
+}],
+"loop": false,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="rekku_animated" type="AnimatedSprite2D"]
+position = Vector2(1113, 566)
+scale = Vector2(0.238281, 0.270508)
+sprite_frames = SubResource("SpriteFrames_e62bh")
+frame = 9
+frame_progress = 1.0
