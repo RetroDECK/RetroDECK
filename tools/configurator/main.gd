@@ -1,8 +1,18 @@
 extends Control
 
+var class_functions: ClassFunctions
+
 var bios_type:int
+var status_code_label: Label
+var wrapper_command: String = "../../tools/retrodeck_function_wrapper.sh"
+var log_text = "GD_Configurator: "
+var log_parameters: Array = ["log", "i", log_text]
+var log_results: Dictionary
 
 func _ready():
+	class_functions = ClassFunctions.new()
+	_get_nodes()
+	add_child(class_functions) # Needed for threaded results
 	var children = findElements(self, "Control")
 	for n: Control in children: #iterate the children
 		if (n.focus_mode == FOCUS_ALL):
@@ -10,6 +20,9 @@ func _ready():
 		if (n.is_class("BaseButton") and n.disabled == true): #if button-like control and disabled
 			n.self_modulate.a = 0.5 #make it half transparent
 	combine_tkeys()
+
+func _get_nodes() -> void:
+	status_code_label = get_node("%status_code_label")
 
 func _input(event):
 	if event.is_action_pressed("quit"):
@@ -36,21 +49,26 @@ func _on_quickresume_advanced_pressed():
 
 func _on_bios_button_pressed():
 	bios_type = 0
+	log_parameters[2] += "Bios_Check"
+	log_results = class_functions.execute_command(wrapper_command, log_parameters, false)
 	load_popup("BIOS File Check", "res://components/bios_check/bios_popup_content.tscn")
-
+	status_code_label.text = str(log_results["exit_code"])
 
 func _on_bios_button_expert_pressed():
 	bios_type = 1
+	log_parameters[2] += "Advanced_Bios_Check"
+	log_results = class_functions.execute_command(wrapper_command, log_parameters, false)
 	load_popup("BIOS File Check", "res://components/bios_check/bios_popup_content.tscn")
-
+	status_code_label.text = str(log_results["exit_code"])
 
 func _on_exit_button_pressed():
+	log_parameters[2] += "Exited"
+	log_results = class_functions.execute_command(wrapper_command, log_parameters, false)
 	_exit()
 
 func _exit():
 	get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
 	get_tree().quit()
-
 
 func _on_locale_selected(index):
 	match index:

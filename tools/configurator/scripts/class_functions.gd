@@ -11,7 +11,7 @@ func array_to_string(arr: Array) -> String:
 func execute_command(command: String, parameters: Array, console: bool) -> Dictionary:
 	var result = {}
 	var output = []
-	var exit_code = OS.execute(command, parameters, output, console)
+	var exit_code = OS.execute(command, parameters, output, console) ## add if exit == 0 etc
 	result["output"] = array_to_string(output)
 	result["exit_code"] = exit_code
 	return result

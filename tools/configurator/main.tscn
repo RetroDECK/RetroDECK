@@ -820,6 +820,23 @@ text = "RetroDECK
   v0.8.0b"
 scroll_active = false
 
+[node name="status_label" type="Label" parent="Background/side_logo"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = -1.0
+offset_top = 412.0
+offset_right = 106.0
+offset_bottom = 453.0
+text = "Status:"
+
+[node name="status_code_label" type="Label" parent="Background/side_logo/status_label"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 91.0
+offset_top = 2.0
+offset_right = 148.0
+offset_bottom = 34.0
+
 [node name="exit_button" type="Button" parent="Background"]
 layout_mode = 1
 anchors_preset = -1
