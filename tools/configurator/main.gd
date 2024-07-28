@@ -62,7 +62,7 @@ func _on_bios_button_expert_pressed():
 	status_code_label.text = str(log_results["exit_code"])
 
 func _on_exit_button_pressed():
-	log_parameters[2] += "Exited"
+	log_parameters[2] = log_text + "Exited"
 	log_results = class_functions.execute_command(wrapper_command, log_parameters, false)
 	_exit()
 
