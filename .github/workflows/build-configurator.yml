@@ -3,11 +3,11 @@ name: Configurator Build
 
 on:
   push: 
-    branches: [feat/godot-uk]
+    branches: [feat/godot-configurator]
     tags:
       - "v*-test"
   pull_request: 
-    branches: [feat/godot-uk]
+    branches: [feat/godot-configurator]
   workflow_dispatch:
 
 jobs:
