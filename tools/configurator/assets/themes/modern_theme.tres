@@ -1,0 +1,6 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://dcyix4kssqal2"]
+
+[ext_resource type="FontFile" uid="uid://1x3s2oon2g64" path="res://assets/fonts/akrobat/Akrobat-Regular.otf" id="1_qs1qb"]
+
+[resource]
+default_font = ExtResource("1_qs1qb")

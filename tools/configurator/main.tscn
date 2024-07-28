@@ -1,7 +1,8 @@
-[gd_scene load_steps=27 format=3 uid="uid://61f6m4r1mpan"]
+[gd_scene load_steps=28 format=3 uid="uid://61f6m4r1mpan"]
 
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
 [ext_resource type="Script" path="res://main.gd" id="1_obpq7"]
+[ext_resource type="Theme" uid="uid://hhc60cllcg47" path="res://assets/themes/default_theme.tres" id="1_xyph5"]
 [ext_resource type="Script" path="res://TabContainer.gd" id="3_id6l4"]
 [ext_resource type="AudioStream" uid="uid://dig4pco500pyt" path="res://res/configurator.mp3" id="3_xivj6"]
 [ext_resource type="Texture2D" uid="uid://dx0u5hiwxfgu5" path="res://res/pixel_ui_theme/8x8_ui_elements.png" id="4_2tuu4"]
@@ -90,6 +91,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_xyph5")
 script = ExtResource("1_obpq7")
 metadata/bios_type = 0
 
@@ -725,6 +727,24 @@ text = "TK_MUSIC"
 layout_mode = 2
 size_flags_vertical = 1
 text = "|| ------( )--------"
+
+[node name="theme_optionbutton" type="OptionButton" parent="Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+item_count = 5
+selected = 0
+popup/item_0/text = "Choose Theme"
+popup/item_0/id = 0
+popup/item_0/disabled = true
+popup/item_0/separator = true
+popup/item_1/text = "Default"
+popup/item_1/id = 1
+popup/item_2/text = "Retro"
+popup/item_2/id = 2
+popup/item_3/text = "Modern"
+popup/item_3/id = 3
+popup/item_4/text = "Accessible"
+popup/item_4/id = 4
 
 [node name="TK_ABOUT" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
 visible = false

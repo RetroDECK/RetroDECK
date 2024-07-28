@@ -8,16 +8,17 @@ var console: bool = false
 var BIOS_COLUMNS_BASIC := ["BIOS File Name", "System", "Found", "Hash Match", "Description"]
 var BIOS_COLUMNS_EXPERT := ["BIOS File Name", "System", "Found", "Hash Match", "Description", "Subdirectory", "Hash"]
 @onready var bios_type:int = get_tree().current_scene.bios_type
+@onready var custom_theme: Theme = get_tree().current_scene.custom_theme
 
 func _ready():
-
+	$".".theme = custom_theme
 	#Check if XDG_RUNTIME_DIR is set and choose temp file location
 	if OS.has_environment("XDG_RUNTIME_DIR"):
 		#bios_tempfile = OS.get_environment("XDG_RUNTIME_DIR") + "/godot_temp/godot_bios_files_checked.tmp"
 		bios_tempfile = "/var/config/retrodeck/godot/godot_bios_files_checked.tmp"
 	else:
 		bios_tempfile = "/var/config/retrodeck/godot/godot_bios_files_checked.tmp"
-	
+
 	var table := $Table
 	classFunctions = ClassFunctions.new()
 	add_child(classFunctions)

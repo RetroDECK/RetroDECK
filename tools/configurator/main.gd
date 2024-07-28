@@ -8,10 +8,14 @@ var wrapper_command: String = "../../tools/retrodeck_function_wrapper.sh"
 var log_text = "GD_Configurator: "
 var log_parameters: Array = ["log", "i", log_text]
 var log_results: Dictionary
+var theme_option: OptionButton
+signal signal_theme_changed
+var custom_theme: Theme = $".".theme
 
 func _ready():
 	class_functions = ClassFunctions.new()
 	_get_nodes()
+	_connect_signals()
 	add_child(class_functions) # Needed for threaded results
 	var children = findElements(self, "Control")
 	for n: Control in children: #iterate the children
@@ -23,6 +27,25 @@ func _ready():
 
 func _get_nodes() -> void:
 	status_code_label = get_node("%status_code_label")
+	theme_option = get_node("%theme_optionbutton")
+
+func _connect_signals() -> void:
+	#signal_theme_changed.connect(_conf_theme)
+	theme_option.item_selected.connect(_conf_theme)
+	signal_theme_changed.emit(theme_option.item_selected)
+	
+func _conf_theme(index: int) -> void: 
+	
+	match index:
+		1:
+			custom_theme = preload("res://assets/themes/default_theme.tres")
+		2:
+			custom_theme = preload("res://assets/themes/retro_theme.tres")
+		3:
+			custom_theme = preload("res://assets/themes/modern_theme.tres")
+		4:
+			custom_theme = preload("res://assets/themes/accesible_theme.tres")
+	$".".theme = custom_theme
 
 func _input(event):
 	if event.is_action_pressed("quit"):
