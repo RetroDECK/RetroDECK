@@ -1,8 +1,10 @@
 extends Control
 
 var content = null
+@onready var custom_theme: Theme = get_tree().current_scene.custom_theme
 
 func _ready():
+	$".".theme = custom_theme
 	if (content != null):
 		$Panel/MarginContainer/VBoxContainer/ContentContainer/MarginContainer.add_child(content)
 
