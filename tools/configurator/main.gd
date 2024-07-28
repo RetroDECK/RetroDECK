@@ -14,14 +14,16 @@ var custom_theme: Theme = $".".theme
 var emu_select_option: OptionButton
 var emu_pick_option: OptionButton
 var tab_container: TabContainer
+var anim_logo: AnimatedSprite2D
+var anim_rekku: AnimatedSprite2D
 
 func _ready():
 	class_functions = ClassFunctions.new()
 	_get_nodes()
 	_connect_signals()
+	_play_main_animations()
 	# set current startup tab to match IDE
-	print (tab_container.current_tab)
-	tab_container.current_tab = tab_container.current_tab
+	tab_container.current_tab = 3
 	add_child(class_functions) # Needed for threaded results
 	var children = findElements(self, "Control")
 	for n: Control in children: #iterate the children
@@ -37,15 +39,23 @@ func _get_nodes() -> void:
 	emu_select_option = get_node("%emu_select_option")
 	emu_pick_option = get_node("%emu_pick_option")
 	tab_container = get_node("%TabContainer")
+	anim_logo = get_node("%logo_animated")
+	anim_rekku = get_node("%rekku_animated")
 
 func _connect_signals() -> void:
 	#signal_theme_changed.connect(_conf_theme)
 	theme_option.item_selected.connect(_conf_theme)
 	signal_theme_changed.emit(theme_option.item_selected)
 	emu_select_option.item_selected.connect(_emu_select)
+	emu_pick_option.item_selected.connect(_emu_select) # place holder
 	
 func _emu_select(index: int) -> void:
 	emu_pick_option.visible = true
+	_play_main_animations()
+
+func _play_main_animations() -> void:
+	anim_logo.play()
+	anim_rekku.play()
 
 func _conf_theme(index: int) -> void: 
 	match index:
@@ -58,6 +68,7 @@ func _conf_theme(index: int) -> void:
 		4:
 			custom_theme = preload("res://assets/themes/accesible_theme.tres")
 	$".".theme = custom_theme
+	_play_main_animations()
 
 func _input(event):
 	if event.is_action_pressed("quit"):
@@ -83,6 +94,7 @@ func _on_quickresume_advanced_pressed():
 	load_popup("Quick Resume Advanced", "res://components/popups_content/popup_content_test.tscn")
 
 func _on_bios_button_pressed():
+	_play_main_animations()
 	bios_type = 0
 	log_parameters[2] = log_text + "Bios_Check"
 	log_results = class_functions.execute_command(wrapper_command, log_parameters, false)
@@ -90,6 +102,7 @@ func _on_bios_button_pressed():
 	status_code_label.text = str(log_results["exit_code"])
 
 func _on_bios_button_expert_pressed():
+	_play_main_animations()
 	bios_type = 1
 	log_parameters[2] = log_text + "Advanced_Bios_Check"
 	log_results = class_functions.execute_command(wrapper_command, log_parameters, false)
@@ -97,6 +110,7 @@ func _on_bios_button_expert_pressed():
 	status_code_label.text = str(log_results["exit_code"])
 
 func _on_exit_button_pressed():
+	_play_main_animations()
 	log_parameters[2] = log_text + "Exited"
 	log_results = class_functions.execute_command(wrapper_command, log_parameters, false)
 	_exit()

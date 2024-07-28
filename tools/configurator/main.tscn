@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://61f6m4r1mpan"]
+[gd_scene load_steps=35 format=3 uid="uid://61f6m4r1mpan"]
 
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
 [ext_resource type="Script" path="res://main.gd" id="1_obpq7"]
@@ -8,11 +8,16 @@
 [ext_resource type="Texture2D" uid="uid://dx0u5hiwxfgu5" path="res://res/pixel_ui_theme/8x8_ui_elements.png" id="4_2tuu4"]
 [ext_resource type="Script" path="res://Rekku.gd" id="4_nqqx3"]
 [ext_resource type="Texture2D" uid="uid://cxyml1owhi6de" path="res://res/pixel_ui_theme/8x8_ui_icons.png" id="4_v1scw"]
+[ext_resource type="Texture2D" uid="uid://d2lm4mfx1gt86" path="res://assets/graphics/retrodeck_base_shake0.png" id="5_7rjbt"]
 [ext_resource type="Script" path="res://helper_text.gd" id="5_cprkf"]
 [ext_resource type="Texture2D" uid="uid://dxdhjp18rgmr4" path="res://res/flags/united_kingdom_32.png" id="5_exkn2"]
+[ext_resource type="Texture2D" uid="uid://cjv6lhd4g63m3" path="res://assets/graphics/retrodeck_base_shake1.png" id="6_d43n7"]
 [ext_resource type="Texture2D" uid="uid://cru43y7hco6kh" path="res://res/flags/italy_32.png" id="6_fiylw"]
+[ext_resource type="Texture2D" uid="uid://cyqo650hjucw6" path="res://assets/graphics/retrodeck_base_shake2.png" id="7_mo842"]
 [ext_resource type="Texture2D" uid="uid://cti2vt14gxisl" path="res://res/flags/germany_32.png" id="7_qgxid"]
+[ext_resource type="Texture2D" uid="uid://bojog0xvms7hr" path="res://assets/graphics/retrodeck_base_shake3.png" id="8_l3t5c"]
 [ext_resource type="Texture2D" uid="uid://bns0ot5pbf03h" path="res://res/flags/sweden_32.png" id="8_lptln"]
+[ext_resource type="Texture2D" uid="uid://uko0ikrtjkj" path="res://assets/graphics/retrodeck_base_shake4.png" id="9_8eqo6"]
 [ext_resource type="Texture2D" uid="uid://cor8ep0fkqm08" path="res://res/Rekku/base.png" id="9_brsrf"]
 [ext_resource type="Texture2D" uid="uid://dhsorn3kcfdcv" path="res://res/flags/ukraine_32.png" id="9_dp7oa"]
 [ext_resource type="Texture2D" uid="uid://dtwjo7co226dw" path="res://res/flags/japan_32.png" id="10_e8mt0"]
@@ -23,6 +28,30 @@
 [ext_resource type="Texture2D" uid="uid://ciwghjy0ahxk6" path="res://res/Rekku/mouth-A.png" id="13_xj3b3"]
 [ext_resource type="Texture2D" uid="uid://kx8eypf4ffvu" path="res://res/Rekku/mouth-base.png" id="14_lnkoa"]
 [ext_resource type="Texture2D" uid="uid://b6gl8sltbak7v" path="res://res/Rekku/mouth-O.png" id="15_1sikj"]
+[ext_resource type="PackedScene" uid="uid://cb4fvsgnwsf4q" path="res://rekku_animated.tscn" id="29_uioq2"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_lhf2y"]
+animations = [{
+"frames": [{
+"duration": 0.61,
+"texture": ExtResource("5_7rjbt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_d43n7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_mo842")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_l3t5c")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_8eqo6")
+}],
+"loop": false,
+"name": &"default",
+"speed": 12.0
+}]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_st633"]
 atlas = ExtResource("4_v1scw")
@@ -847,6 +876,7 @@ grow_horizontal = 0
 grow_vertical = 2
 
 [node name="logo" type="TextureRect" parent="Background/side_logo"]
+visible = false
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -890,6 +920,14 @@ offset_left = 91.0
 offset_top = 2.0
 offset_right = 148.0
 offset_bottom = 34.0
+
+[node name="logo_animated" type="AnimatedSprite2D" parent="Background/side_logo"]
+unique_name_in_owner = true
+position = Vector2(117, 52)
+scale = Vector2(0.28, 0.288333)
+sprite_frames = SubResource("SpriteFrames_lhf2y")
+frame = 4
+frame_progress = 1.0
 
 [node name="exit_button" type="Button" parent="Background"]
 layout_mode = 1
@@ -1034,6 +1072,11 @@ frame_progress = 0.299789
 sprite_frames = SubResource("SpriteFrames_p8gbs")
 animation = &"speech"
 frame_progress = 0.664627
+
+[node name="rekku_animated" parent="." instance=ExtResource("29_uioq2")]
+unique_name_in_owner = true
+position = Vector2(1008.38, 450.938)
+scale = Vector2(0.165283, 0.175903)
 
 [connection signal="pressed" from="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/game_control_container/GridContainer/quick_resume_adv_button" to="." method="_on_quickresume_advanced_pressed"]
 [connection signal="pressed" from="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container/bios_button" to="." method="_on_bios_button_pressed"]
