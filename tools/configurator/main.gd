@@ -49,14 +49,14 @@ func _on_quickresume_advanced_pressed():
 
 func _on_bios_button_pressed():
 	bios_type = 0
-	log_parameters[2] += "Bios_Check"
+	log_parameters[2] = log_text + "Bios_Check"
 	log_results = class_functions.execute_command(wrapper_command, log_parameters, false)
 	load_popup("BIOS File Check", "res://components/bios_check/bios_popup_content.tscn")
 	status_code_label.text = str(log_results["exit_code"])
 
 func _on_bios_button_expert_pressed():
 	bios_type = 1
-	log_parameters[2] += "Advanced_Bios_Check"
+	log_parameters[2] = log_text + "Advanced_Bios_Check"
 	log_results = class_functions.execute_command(wrapper_command, log_parameters, false)
 	load_popup("BIOS File Check", "res://components/bios_check/bios_popup_content.tscn")
 	status_code_label.text = str(log_results["exit_code"])
