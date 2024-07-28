@@ -30,10 +30,10 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Linux Configurator
-          path: /home/runner/work/RetroDECK_UK/RetroDECK_UK/linux.zip
+          path: /home/runner/work/linux.zip
 
       - name: Upload Windows artifact
         uses: actions/upload-artifact@v4
         with:
           name: Windows Configurator
-          path: /home/runner/work/RetroDECK_UK/RetroDECK_UK/windows.zip
+          path: /home/runner/work/windows.zip
