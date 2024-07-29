@@ -357,8 +357,7 @@ def addToSteam(systems):
                         else:
                             games.append([name,alt_command_list[altemulator]+" '"+roms_folder+"/"+system+path[1:]+"'"])
                             print(alt_command_list[altemulator]+" '"+roms_folder+"/"+system+path[1:]+"'")
-    if not games==[]:
-        create_shortcut_new_new(games)
+    create_shortcut_new_new(games)
 
 def start_config():
     global rdhome
