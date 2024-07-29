@@ -1232,34 +1232,34 @@ modules:
   #       url: https://github.com/Ryujinx/release-channel-master/releases/download/1.1.1343/ryujinx-1.1.1343-linux_x64.tar.gz
   #       sha256: 3cd2172d2f42a0fb93a83bffe6bd8fb2d1d81fb45afc80e0068a245c8f755ac1
 
-  - name: Ryujinx-with-symlink-fix
-    buildsystem: simple
-    build-commands:
-      - |
-        mkdir -p ${FLATPAK_DEST}/ryujinx
-        mkdir -p ${FLATPAK_DEST}/bin
-        chmod +x Ryujinx.sh
-        chmod +x Ryujinx
-        mv -v * ${FLATPAK_DEST}/ryujinx
-        ln -sv ${FLATPAK_DEST}/ryujinx/Ryujinx.sh ${FLATPAK_DEST}/bin/Ryujinx.sh
-        chmod +x ${FLATPAK_DEST}/bin/Ryujinx.sh
-    sources:
-      - type: archive
-        url: https://gitlab.com/-/project/59825450/uploads/a512ffca03dea9a687a7c3048dc1fd00/ryujinx-Release-1.1.0+56c8844-linux_x64.zip
-        sha256: 890f82146d6847efaf480d63867f439d58f28261e9070a4790f77eab9be16e6b
-
-  # This version was reported as working with symlinks: https://discord.com/channels/951662718102962256/951715885968654418/1264882000658169866
-  # - name: Ryujinx-reported-working-version
+  # - name: Ryujinx-with-symlink-fix
   #   buildsystem: simple
   #   build-commands:
   #     - |
-  #       tar -zxvf *.tar.gz
-  #       mv -v publish ${FLATPAK_DEST}/ryujinx
-  #       ln -sv ${FLATPAK_DEST}/ryujinx/Ryujinx ${FLATPAK_DEST}/bin/Ryujinx.sh
+  #       mkdir -p ${FLATPAK_DEST}/ryujinx
+  #       mkdir -p ${FLATPAK_DEST}/bin
+  #       chmod +x Ryujinx.sh
+  #       chmod +x Ryujinx
+  #       mv -v * ${FLATPAK_DEST}/ryujinx
+  #       ln -sv ${FLATPAK_DEST}/ryujinx/Ryujinx.sh ${FLATPAK_DEST}/bin/Ryujinx.sh
+  #       chmod +x ${FLATPAK_DEST}/bin/Ryujinx.sh
   #   sources:
-  #     - type: file
-  #       url: https://github.com/Ryujinx/release-channel-master/releases/download/1.1.1297/ryujinx-1.1.1297-linux_x64.tar.gz
-  #       sha256: 28b38754e7d2e92083b313b23278c180ae54ac025edbbd0276ec03baec0cec0f
+  #     - type: archive
+  #       url: https://gitlab.com/-/project/59825450/uploads/a512ffca03dea9a687a7c3048dc1fd00/ryujinx-Release-1.1.0+56c8844-linux_x64.zip
+  #       sha256: 890f82146d6847efaf480d63867f439d58f28261e9070a4790f77eab9be16e6b
+
+  # This version was reported as working with symlinks: https://discord.com/channels/951662718102962256/951715885968654418/1264882000658169866
+  - name: Ryujinx-reported-working-version
+    buildsystem: simple
+    build-commands:
+      - |
+        tar -zxvf *.tar.gz
+        mv -v publish ${FLATPAK_DEST}/ryujinx
+        ln -sv ${FLATPAK_DEST}/ryujinx/Ryujinx ${FLATPAK_DEST}/bin/Ryujinx.sh
+    sources:
+      - type: file
+        url: https://github.com/Ryujinx/release-channel-master/releases/download/1.1.1297/ryujinx-1.1.1297-linux_x64.tar.gz
+        sha256: 28b38754e7d2e92083b313b23278c180ae54ac025edbbd0276ec03baec0cec0f
 
   # Ryujinx Appimage - END
 
