@@ -22,6 +22,15 @@ func _ready():
 	_get_nodes()
 	_connect_signals()
 	_play_main_animations()
+	var file_path = "../../tools/configurator.sh"
+	var command = "sed -n '/local emulator_list=(/,/)/{s/.*local emulator_list=\\(.*\\)/\\1/; /)/q; p}' "
+	var emulator_list = class_functions.get_text_file_from_system_path(file_path,command)
+	
+	file_path = "/var/config/retrodeck/retrodeck.cfg"
+	command = "sed -n '/\\[abxy_button_swap\\]/,/^\\s*$/p' "
+	var abxy_button_list = class_functions.get_text_file_from_system_path(file_path,command)
+	print(abxy_button_list)
+	print (emulator_list)
 	# set current startup tab to match IDE
 	tab_container.current_tab = 3
 	add_child(class_functions) # Needed for threaded results
@@ -47,9 +56,17 @@ func _connect_signals() -> void:
 	theme_option.item_selected.connect(_conf_theme)
 	signal_theme_changed.emit(theme_option.item_selected)
 	emu_select_option.item_selected.connect(_emu_select)
-	emu_pick_option.item_selected.connect(_emu_select) # place holder
+	emu_pick_option.item_selected.connect(_emu_pick)
 	
 func _emu_select(index: int) -> void:
+	emu_pick_option.visible = true
+	#change to radio button select
+	_play_main_animations()
+	if (index == 3): # make function and pass start and end
+		emu_pick_option.set_item_disabled(1, true)
+		emu_pick_option.set_item_disabled(2, true)
+	
+func _emu_pick(index: int) -> void:
 	emu_pick_option.visible = true
 	_play_main_animations()
 

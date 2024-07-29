@@ -444,7 +444,7 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
-item_count = 3
+item_count = 4
 selected = 0
 popup/item_0/text = "TK_SELECT_EMU"
 popup/item_0/id = 0
@@ -454,6 +454,8 @@ popup/item_1/text = "RetroArch"
 popup/item_1/id = 1
 popup/item_2/text = "MAME"
 popup/item_2/id = 2
+popup/item_3/text = ""
+popup/item_3/id = 3
 
 [node name="emu_pick_option" type="OptionButton" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/tools_container"]
 unique_name_in_owner = true
