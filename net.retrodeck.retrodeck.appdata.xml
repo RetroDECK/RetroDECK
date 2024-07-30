@@ -67,7 +67,46 @@
    <project_license>GPL-3.0</project_license>
    <metadata_license>CC0-1.0</metadata_license>
    <releases>
-      <release version="0.8.1b" date="2024-05-03">
+      <release version="0.9.0b" date="2024-07-19">
+         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.9.0b</url>
+         <description>
+            <p>Changes:</p>
+            <ul>
+               <li>WELCOME TO cooker-0.9.0b!</li>
+            </ul>
+            <p>Known issues:</p>
+            <ul>
+               <li>Please check the know issues in the Wiki under General Information.</li>
+            </ul>
+         </description>
+      </release>
+      <release version="0.8.2b" date="2024-07-17">
+         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.8.2b</url>
+         <description>
+            <p>Changes:</p>
+            <ul>
+               <li>ES-DE: updated to 3.0.3</li>
+               <li>RUNTIME: updated to KDE 6.7</li>
+               <li>All emulators and engines updated</li>
+               <li>CONFIGURATOR: fixed an issue in the multi-file compression tool that prevented some type of files to be converted</li>
+               <li>CONFIGURATOR: added headless state for some functions (this will help to migrate to the Godot Configurator)</li>
+               <li>CONFIGURATOR: added a new "Empty ROMs folder removal" tool helping the user to cleanup the roms folder by deleting the empty folders</li>
+               <li>CONFIGURATOR: added a new "Rebuild removed ROMs folders" tool. This is complementary to the previous one:by recreating the whole roms folder structure</li>
+               <li>CONFIGURATOR: chd compression functionality restored</li>
+               <li>FRAMEWORK: fixed an issue where second level subfolders inside retrodeck folder were not correctly placed, this caused errors on ES-DE as themes and downloaded_media folder could not be found after a reset or first install</li>
+               <li>CEMU: now audio should work correctly when docking and undocking the Steam Deck</li>
+               <li>CEMU: added microphone blow input to R3</li>
+               <li>DOLPHIN: now supports RetroAchivements but must be manually enabled from the emulator as the Configurator is not yet prepared for that</li>
+               <li>DUCKSTATION: now out of the rolling release</li>
+               <li>INFRASTRUCTURE: we now have a self-hosted Gitea repo in case fo disaster recovery</li>
+            </ul>
+            <p>Known issues:</p>
+            <ul>
+               <li>Please check the know issues in the Wiki under General Information.</li>
+            </ul>
+         </description>
+      </release>
+      <release version="0.8.1b" date="2024-05-13">
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.8.1b</url>
          <description>
             <p>Changes:</p>
@@ -96,7 +135,7 @@
             </ul>
             <p>Known issues:</p>
             <ul>
-               <li>Please check the know issues in the Wiki under General Infomration.</li>
+               <li>Please check the know issues in the Wiki under General Information.</li>
             </ul>
          </description>
       </release>
@@ -154,7 +193,7 @@
             </ul>
             <p>Known issues:</p>
             <ul>
-               <li>Please check the know issues in the Wiki under General Infomration.</li>
+               <li>Please check the know issues in the Wiki under General Information.</li>
             </ul>
          </description>
       </release>
@@ -172,7 +211,7 @@
             </ul>
             <p>Known issues:</p>
             <ul>
-               <li>Please check the know issues in the Wiki under General Infomration.</li>
+               <li>Please check the know issues in the Wiki under General Information.</li>
             </ul>
          </description>
       </release>
@@ -208,7 +247,7 @@
             </ul>
             <p>Known issues:</p>
             <ul>
-               <li>Please check the know issues in the Wiki under General Infomration</li>
+               <li>Please check the know issues in the Wiki under General Information</li>
             </ul>
          </description>
       </release>
@@ -222,7 +261,7 @@
             </ul>
             <p>Known issues:</p>
             <ul>
-               <li>Please check the know issues in the Wiki under General Infomration</li>
+               <li>Please check the know issues in the Wiki under General Information</li>
             </ul>
          </description>
       </release>

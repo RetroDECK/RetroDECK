@@ -115,6 +115,17 @@ jobs:
           repo: RetroDECK
         continue-on-error: true
 
+      - name: Rewrite Tag
+        run: |
+          git submodule deinit -f --all
+          git fetch --tags
+          if git rev-parse --verify "${{ env.REL_VER }}" >/dev/null 2>&1; then # if the tag exists
+              git tag -d "${{ env.REL_VER }}"                                  # remove it from local repo
+              git push --delete origin "${{ env.REL_VER }}"                    # and from remote
+          fi
+          git tag "${{ env.REL_VER }}"             # Create the tag locally               
+          git push origin "${{ env.REL_VER }}"     # Push the new tag in the remote repo
+
       # In case it cannot publish the release at least it's providing the flatpak file for creating a manual release
       - name: Upload RetroDECK.flatpak
         uses: actions/upload-artifact@v3
@@ -123,35 +134,58 @@ jobs:
           path: RetroDECK.flatpak
         continue-on-error: true
 
-      - name: Publish the flatpak in a new release on Gitea
-        uses: ncipollo/release-action@v1
-        env:
-          REL_VER: ${{ env.REL_VER }}
-        with:
-          tag: ${{ env.REL_VER }}
-          name: "RetroDECK v${{ env.REL_VER }}"
-          bodyFile: "body.md"
-          artifacts: "RetroDECK.flatpak,RetroDECK-Artifact.tar.gz"
-          allowUpdates: true
-          makeLatest: true
-          token: ${{ secrets.GITEA_TRIGGER_BUILD_TOKEN }}
-          repo: "https://repo.retrodeck.net/RetroDECK/RetroDECK"
-        continue-on-error: true
-
-      - name: Upload RetroDECK.flatpak to Gitea Release
+      - name: Publish release on Gitea
         run: |
-          curl -X POST \
+          # Set variables for Gitea host, organization, repository, access token, and release details
+          GITEA_HOST="repo.retrodeck.net"
+          UPLOAD_HOST="upload.retrodeck.net"
+          ORGANIZATION="RetroDECK"
+          REPO="RetroDECK"
+          GITEA_TOKEN="${{ secrets.GITEA_TRIGGER_BUILD_TOKEN }}"
+          RELEASE_NAME="RetroDECK v${{ env.REL_VER }}"
+          TAG="${{ env.REL_VER }}"
+
+          payload=$(jq -cn \
+            --arg tag_name "$TAG" \
+            --arg name "$RELEASE_NAME" \
+            --arg body "$(cat body.md)" \
+            '{$tag_name, $name, $body}'
+          )
+
+          # Create a release using curl and capture the release ID
+          release_response=$(curl -X POST \
             -H "Authorization: token ${GITEA_TOKEN}" \
-            -F "file=@RetroDECK.flatpak" \
-            "https://repo.retrodeck.net/RetroDECK/RetroDECK/releases/${{ env.REL_VER }}/assets?name=RetroDECK.flatpak"
-        env:
-          GITEA_TOKEN: ${{ secrets.GITEA_TRIGGER_BUILD_TOKEN }}
+            -H "Content-Type: application/json" \
+            -d "$payload" \
+            "http://$GITEA_HOST/api/v1/repos/$ORGANIZATION/$REPO/releases"
+          )
+
+          # Extract the release ID from the response
+          release_id=$(echo $release_response | jq -r '.id')
+
+          # Upload artifacts
+          curl -X POST \
+              -H "Authorization: token ${GITEA_TOKEN}" \
+              -H "X-GitHub-Token: ${{ secrets.UPLOAD_TOKEN }}" \
+              -H "Content-Type: multipart/form-data" \
+              -F "attachment=@RetroDECK.flatpak" \
+              "http://$UPLOAD_HOST/api/v1/repos/$ORGANIZATION/$REPO/releases/$release_id/assets?name=RetroDECK-cooker.flatpak"
+
+          curl -X POST \
+              -H "Authorization: token ${GITEA_TOKEN}" \
+              -H "X-GitHub-Token: ${{ secrets.UPLOAD_TOKEN }}" \
+              -H "Content-Type: multipart/form-data" \
+              -F "attachment=@RetroDECK-Artifact.tar.gz" \
+              "http://$UPLOAD_HOST/api/v1/repos/$ORGANIZATION/$REPO/releases/$release_id/assets?name=RetroDECK-Artifact.tar.gz"
+        continue-on-error: true # this will be in place until we reate an artifacts website that bypasses cloudflare limit
 
       - name: Upload RetroDECK.flatpak.sha to Gitea Release
         run: |
           curl -X POST \
             -H "Authorization: token ${GITEA_TOKEN}" \
+            -H "X-GitHub-Token: ${{ secrets.UPLOAD_TOKEN }}" \
             -F "file=@RetroDECK.flatpak.sha" \
-            "https://repo.retrodeck.net/RetroDECK/RetroDECK/releases/${{ env.REL_VER }}/assets?name=RetroDECK.flatpak.sha"
+            "https://$UPLOAD_HOST/RetroDECK/RetroDECK/releases/${{ env.REL_VER }}/assets?name=RetroDECK.flatpak.sha"
         env:
           GITEA_TOKEN: ${{ secrets.GITEA_TRIGGER_BUILD_TOKEN }}
+        continue-on-error: true # this will be in place until we reate an artifacts website that bypasses cloudflare limit

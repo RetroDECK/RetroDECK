@@ -20,7 +20,6 @@ Core:
   SPU loop detection: false
   Max SPURS Threads: 6
   SPU Block Size: Mega
-  Accurate GETLLAR: false
   Accurate SPU DMA: false
   Accurate SPU Reservations: true
   Accurate Cache Line Stores: false
@@ -104,6 +103,7 @@ Video:
   Strict Texture Flushing: false
   Multithreaded RSX: false
   Relaxed ZCULL Sync: false
+  Force Hardware MSAA Resolve: false
   3D Display Mode: Disabled
   Debug Program Analyser: false
   Accurate ZCULL stats: true
@@ -165,6 +165,7 @@ Audio:
   Convert to 16 bit: false
   Audio Format: Stereo
   Audio Formats: 0
+  Audio Channel Layout: Automatic
   Audio Device: "@@@default@@@"
   Master Volume: 100
   Enable Buffering: true
@@ -186,6 +187,7 @@ Input/Output:
   Buzz emulated controller: "Null"
   Turntable emulated controller: "Null"
   GHLtar emulated controller: "Null"
+  GameTablet emulated controller: Disabled
   Pad handler mode: Single-threaded
   Keep pads connected: false
   Pad handler sleep (microseconds): 1000
@@ -200,6 +202,7 @@ System:
   Keyboard Type: English keyboard (US standard)
   Enter button assignment: Enter with cross
   Console time offset (s): 0
+  System Name: RPCS3-960
   PSID high: 0
   PSID low: 0
   HDD Model Name: ""

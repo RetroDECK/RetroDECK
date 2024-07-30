@@ -410,47 +410,44 @@ deploy_single_patch() {
 
 cp -fv "$1" "$3" # Create a copy of the original file to be patched
 
-while IFS="^" read -r action current_section setting_name setting_value system_name
+while IFS="^" read -r action current_section setting_name setting_value system_name || [[ -n "$action" ]];
 do
+  if [[ ! $action == "#"* ]] && [[ ! -z "$action" ]]; then
+    case $action in
 
-  case $action in
+    "disable_file" )
+      eval disable_file "$setting_name"
+    ;;
 
-	"disable_file" )
-    eval disable_file "$setting_name"
-	;;
+    "enable_file" )
+      eval enable_file "$setting_name"
+    ;;
 
-	"enable_file" )
-    eval enable_file "$setting_name"
-	;;
+    "add_setting_line" )
+      add_setting_line "$3" "$setting_name" "$system_name" "$current_section"
+    ;;
 
-	"add_setting_line" )
-    add_setting_line "$3" "$setting_name" "$system_name" "$current_section"
-	;;
+    "disable_setting" )
+      disable_setting "$3" "$setting_name" "$system_name" "$current_section"
+    ;;
 
-	"disable_setting" )
-    disable_setting "$3" "$setting_name" "$system_name" "$current_section"
-	;;
+    "enable_setting" )
+      enable_setting "$3" "$setting_name" "$system_name" "$current_section"
+    ;;
 
-	"enable_setting" )
-    enable_setting "$3" "$setting_name" "$system_name" "$current_section"
-	;;
+    "change" )
+      if [[ "$setting_value" = \$* ]]; then # If patch setting value is a reference to an internal variable name
+        eval setting_value="$setting_value"
+      fi
+      set_setting_value "$3" "$setting_name" "$setting_value" "$system_name" "$current_section"
+    ;;
 
-	"change" )
-    if [[ "$setting_value" = \$* ]]; then # If patch setting value is a reference to an internal variable name
-      eval setting_value="$setting_value"
-    fi
-    set_setting_value "$3" "$setting_name" "$setting_value" "$system_name" "$current_section"
-  ;;
+    * )
+      log e "Config line malformed: $action"
+    ;;
 
-  *"#"* )
-	  # Comment line in patch file
-	;;
-
-	* )
-	  echo "Config line malformed: $action"
-	;;
-
-  esac
+    esac
+  fi
 done < "$2"
 }
 
@@ -461,60 +458,58 @@ deploy_multi_patch() {
 # Patch file format should be as follows, with optional entries in (). Optional settings can be left empty, but must still have ^ dividers:
 # $action^($current_section)^$setting_name^$setting_value^$system_name^($config file)
 
-while IFS="^" read -r action current_section setting_name setting_value system_name config_file
+while IFS="^" read -r action current_section setting_name setting_value system_name config_file || [[ -n "$action" ]];
 do
-  case $action in
+  if [[ ! $action == "#"* ]] && [[ ! -z "$action" ]]; then
+    case $action in
 
-	"disable_file" )
-    if [[ "$config_file" = \$* ]]; then # If patch setting value is a reference to an internal variable name
-      eval config_file="$config_file"
-    fi
-    disable_file "$config_file"
-	;;
+    "disable_file" )
+      if [[ "$config_file" = \$* ]]; then # If patch setting value is a reference to an internal variable name
+        eval config_file="$config_file"
+      fi
+      disable_file "$config_file"
+    ;;
 
-	"enable_file" )
-    if [[ "$config_file" = \$* ]]; then # If patch setting value is a reference to an internal variable name
-      eval config_file="$config_file"
-    fi
-    enable_file "$config_file"
-	;;
+    "enable_file" )
+      if [[ "$config_file" = \$* ]]; then # If patch setting value is a reference to an internal variable name
+        eval config_file="$config_file"
+      fi
+      enable_file "$config_file"
+    ;;
 
-	"add_setting_line" )
-    if [[ "$config_file" = \$* ]]; then # If patch setting value is a reference to an internal variable name
-      eval config_file="$config_file"
-    fi
-    add_setting_line "$config_file" "$setting_name" "$system_name" "$current_section"
-	;;
+    "add_setting_line" )
+      if [[ "$config_file" = \$* ]]; then # If patch setting value is a reference to an internal variable name
+        eval config_file="$config_file"
+      fi
+      add_setting_line "$config_file" "$setting_name" "$system_name" "$current_section"
+    ;;
 
-	"disable_setting" )
-    if [[ "$config_file" = \$* ]]; then # If patch setting value is a reference to an internal variable name
-      eval config_file="$config_file"
-    fi
-    disable_setting "$config_file" "$setting_name" "$system_name" "$current_section"
-	;;
+    "disable_setting" )
+      if [[ "$config_file" = \$* ]]; then # If patch setting value is a reference to an internal variable name
+        eval config_file="$config_file"
+      fi
+      disable_setting "$config_file" "$setting_name" "$system_name" "$current_section"
+    ;;
 
-	"enable_setting" )
-    if [[ "$config_file" = \$* ]]; then # If patch setting value is a reference to an internal variable name
-      eval config_file="$config_file"
-    fi
-    enable_setting "$config_file" "$setting_name" "$system_name" "$current_section"
-	;;
+    "enable_setting" )
+      if [[ "$config_file" = \$* ]]; then # If patch setting value is a reference to an internal variable name
+        eval config_file="$config_file"
+      fi
+      enable_setting "$config_file" "$setting_name" "$system_name" "$current_section"
+    ;;
 
-	"change" )
-    if [[ "$setting_value" = \$* ]]; then # If patch setting value is a reference to an internal variable name
-      eval setting_value="$setting_value"
-    fi
-    set_setting_value "$config_file" "$setting_name" "$setting_value" "$system_name" "$current_section"
-  ;;
+    "change" )
+      if [[ "$setting_value" = \$* ]]; then # If patch setting value is a reference to an internal variable name
+        eval setting_value="$setting_value"
+      fi
+      set_setting_value "$config_file" "$setting_name" "$setting_value" "$system_name" "$current_section"
+    ;;
 
-  *"#"* )
-	  # Comment line in patch file
-	;;
+    * )
+      log e "Config line malformed: $action"
+    ;;
 
-	* )
-	  echo "Config line malformed: $action"
-	;;
-
-  esac
+    esac
+  fi
 done < "$1"
 }

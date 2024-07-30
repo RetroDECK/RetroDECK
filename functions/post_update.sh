@@ -304,7 +304,7 @@ post_update() {
     log i "In version 0.8.1b, the following changes were made that required config file updates/reset or other changes to the filesystem:"
     log i "- ES-DE files were moved inside the retrodeck folder, migrating to the new structure"
     log i "- Give the user the option to reset Ryujinx, which was not properly initialized in 0.8.0b"
-    
+
     log d "ES-DE files were moved inside the retrodeck folder, migrating to the new structure"
     dir_prep "$rdhome/ES-DE/collections" "/var/config/ES-DE/collections"
     dir_prep "$rdhome/ES-DE/gamelists" "/var/config/ES-DE/gamelists"
@@ -313,8 +313,7 @@ post_update() {
     set_setting_value "$es_settings" "UserThemeDirectory" "$rdhome/ES-DE/themes" "es_settings"
     mv -f "$rdhome/themes" "$rdhome/ES-DE/themes" && log d "Move of \"$rdhome/themes\" completed"
     mv -f "$rdhome/downloaded_media" "$rdhome/ES-DE/downloaded_media" && log d "Move of \"$rdhome/downloaded_media\" completed"
-    mv -f "$rdhome/gamelists/"* "$rdhome/ES-DE/gamelists" && log d "Move of \"$rdhome/gamelists/\" completed"
-    rm -rf "$rdhome/gamelists"
+    mv -f "$rdhome/gamelists/"* "$rdhome/ES-DE/gamelists" && log d "Move of \"$rdhome/gamelists/\" completed" && rm -rf "$rdhome/gamelists"
 
     log i "MAME-SA, migrating samples to the new exposed folder: from \"/var/data/mame/assets/samples\" to \"$bios_folder/mame-sa/samples\""
     create_dir "$bios_folder/mame-sa/samples"
@@ -339,6 +338,42 @@ post_update() {
     fi
   fi
 
+  if [[ $(check_version_is_older_than "0.8.2b") == "true" ]]; then
+    log i "Vita3K changed some paths, reflecting them: moving \"/var/data/Vita3K\" in \"/var/config/Vita3K\""
+    move "/var/data/Vita3K" "/var/config/Vita3K"
+    log i "Moving ES-DE downloaded_media, gamelist, and themes from \"$rdhome\" to \"$rdhome/ES-DE\" due to a RetroDECK Framework bug"
+    move "$rdhome/themes" "$rdhome/ES-DE/themes" && log d "Move of \"$rdhome/themes\" completed"
+    move "$rdhome/downloaded_media" "$rdhome/ES-DE/downloaded_media" && log d "Move of \"$rdhome/downloaded_media\" completed"
+    move "$rdhome/gamelists" "$rdhome/ES-DE/gamelists" && log d "Move of \"$rdhome/gamelists/\" completed"
+    log i "Since in this version we moved to a PR build of Ryujinx we need to symlink it."
+    ln -sv $ryujinxconf "$(dirname $ryujinxconf)/PRConfig.json"
+  fi
+
+  if [[ $(check_version_is_older_than "0.8.3b") == "true" ]]; then
+    # In version 0.8.3b, the following changes were made:
+    # - Recovery from a failed move of the themes, downloaded_media and gamelists folder to their new ES-DE locations.
+    if [[ !-d "$rdhome/ES-DE/themes" || ! -d "$rdhome/ES-DE/downloaded_media" || ! -d "$rdhome/ES-DE/gamelists" ]]; then
+    log i "Moving ES-DE downloaded_media, gamelist, and themes from \"$rdhome\" to \"$rdhome/ES-DE\" due to a RetroDECK Framework bug"
+      if [[ -d "$rdhome/themes" && ! -d "$rdhome/ES-DE/themes" ]]; then
+        move "$rdhome/themes" "$rdhome/ES-DE/themes" && log d "Move of \"$rdhome/themes\" completed"
+      else
+        log i "ES-DE themes appears to already have been migrated."
+      fi
+      if [[ -d "$rdhome/downloaded_media" && ! -d "$rdhome/ES-DE/downloaded_media" ]]; then
+        move "$rdhome/downloaded_media" "$rdhome/ES-DE/downloaded_media" && log d "Move of \"$rdhome/downloaded_media\" completed"
+      else
+        log i "ES-DE downloaded media appears to already have been migrated."
+      fi
+      if [[ -d "$rdhome/gamelists" && ! -d "$rdhome/ES-DE/gamelists" ]]; then
+        move "$rdhome/gamelists" "$rdhome/ES-DE/gamelists" && log d "Move of \"$rdhome/gamelists/\" completed"
+      else
+        log i "ES-DE gamelists appears to already have been migrated."
+      fi
+    else
+      log i "ES-DE dfolders appears to already have been migrated."
+    fi
+  fi
+
   # if [[ $(check_version_is_older_than "0.9.0b") == "true" ]]; then
   #   # Placeholder for version 0.9.0b
   #   rm /var/config/emulationstation/.emulationstation # remving the old symlink to .emulationstation as it might be not needed anymore
@@ -352,7 +387,10 @@ post_update() {
   #     log AND ZENITY "Found Cemu keys.txt" in "/var/data/Cemu/keys.txt", for a better compatibility is better to move it into "$bios_folder/cemu/mlc/keys.txt, do you want to continue?
   #     if yes: mv "/var/data/Cemu/keys.txt" "$bios_folder/cemu/mlc/keys.txt"
   #     ln -s "$bios_folder/cemu/mlc/keys.txt" "/var/data/Cemu/keys.txt" <--- AND THIS SHOULD BE EVEN PUT IN THE PREPARATION SCRIPT
-  #   fi 
+  #   fi
+  # TODO: is this true?
+  #  log i "Since in this version we restored Ryujinx to a main buikd we don't need the symlink anymore."
+  #  rm "$(dirname $ryujinxconf)/PRConfig.json"
   # fi
 
   # The following commands are run every time.
@@ -372,7 +410,7 @@ post_update() {
   deploy_helper_files
   build_retrodeck_current_presets
   ) |
-  zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+  rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK - Upgrade Process" \
   --width=400 --height=200 \
