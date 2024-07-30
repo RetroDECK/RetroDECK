@@ -1208,7 +1208,8 @@ modules:
   - name: retrodeck-mame
     buildsystem: simple
     build-commands:
-      - cp -rn files/* /app
+      - rm -f files/manifest.json
+      - cp -rn files/* ${FLATPAK_DEST}
     sources:
     - type: archive
       url: RETRODECKMAMEURLPLACEHOLDER
