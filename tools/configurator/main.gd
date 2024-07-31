@@ -22,15 +22,11 @@ func _ready():
 	_get_nodes()
 	_connect_signals()
 	_play_main_animations()
-	var file_path = "../../tools/configurator.sh"
-	var command = "sed -n '/local emulator_list=(/,/)/{s/.*local emulator_list=\\(.*\\)/\\1/; /)/q; p}' "
-	var emulator_list = class_functions.get_text_file_from_system_path(file_path,command)
-	
-	file_path = "/var/config/retrodeck/retrodeck.cfg"
-	command = "sed -n '/\\[abxy_button_swap\\]/,/^\\s*$/p' "
-	var abxy_button_list = class_functions.get_text_file_from_system_path(file_path,command)
-	print(abxy_button_list)
+	var emulator_list = class_functions.get_text_file_from_system_path("../../tools/configurator.sh","sed -n '/local emulator_list=(/,/)/{s/.*local emulator_list=\\(.*\\)/\\1/; /)/q; p}' ","emulist")
 	print (emulator_list)
+	var abxy_button_list = class_functions.get_text_file_from_system_path("/var/config/retrodeck/retrodeck.cfg","sed -n '/\\[abxy_button_swap\\]/,/^$/p' ","normal")
+	print(abxy_button_list)
+	
 	# set current startup tab to match IDE
 	tab_container.current_tab = 3
 	add_child(class_functions) # Needed for threaded results

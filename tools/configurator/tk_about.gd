@@ -68,27 +68,28 @@ func _connect_signals() -> void:
 	licenses_button.pressed.connect(_about_button_pressed.bind("rd_licenses"))
 	
 func _about_button_pressed(id: String) -> void:
-	print (id)
+	var entry: Dictionary
 	match id:
 		"rd_web":
-			var entry = tk_about["rd_web"]
+			entry = tk_about[id]
 			OS.shell_open(%website_button.editor_description)
 		"rd_changelog":
-			var entry = tk_about["rd_changelog"]
+			entry = tk_about[id]
 			OS.shell_open(%changelog_button.editor_description)
 		"rd_wiki":
-			var entry = tk_about["rd_wiki"]
+			entry = tk_about[id]
 			OS.shell_open(%wiki_button.editor_description)
 		"rd_credits":
-			var entry = tk_about["rd_credits"]
+			entry = tk_about[id]
 			OS.shell_open(%credits_button.editor_description)
 		"rd_donate":
-			var entry = tk_about["rd_donate"]
+			entry = tk_about[id]
 			OS.shell_open(%donate_button.editor_description)
 		"rd_contactus":
-			var entry = tk_about["rd_contactus"]
+			entry = tk_about[id]
 			OS.shell_open(%contactus_button.editor_description)
 		"rd_licenses":
-			var entry = tk_about["rd_licenses"]
+			entry = tk_about[id]
 			OS.shell_open(%licenses_button.editor_description)
-#		print ("ID not found")
+		_:
+			print ("ID not found")
