@@ -150,7 +150,7 @@ grow_vertical = 2
 unique_name_in_owner = true
 layout_mode = 2
 tab_alignment = 1
-current_tab = 3
+current_tab = 7
 script = ExtResource("3_id6l4")
 
 [node name="TK_SYSTEM" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
@@ -381,6 +381,7 @@ button_pressed = true
 text = "TK_HOTKEYSOUND"
 
 [node name="TK_TOOLS" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_right = 240
 
@@ -812,7 +813,6 @@ popup/item_4/text = "Accessible"
 popup/item_4/id = 4
 
 [node name="TK_ABOUT" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
-visible = false
 layout_mode = 2
 theme_override_constants/margin_right = 240
 
