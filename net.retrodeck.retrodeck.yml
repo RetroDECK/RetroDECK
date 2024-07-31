@@ -76,9 +76,9 @@ modules:
     build-commands:
       - |
 
-        # on main please update this with the version variable, eg: VERSION=0.8.0b
+        # on main please update this with the version variable, eg: VERSION=0.8.3b
         # on cooker will be THISBRANCH
-        VERSION=cooker-0.8.3b
+        VERSION=0.8.3b
 
         git checkout ${GITHUB_REF_NAME}
         mkdir -p ${FLATPAK_DEST}/retrodeck/
