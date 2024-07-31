@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://61f6m4r1mpan"]
+[gd_scene load_steps=36 format=3 uid="uid://61f6m4r1mpan"]
 
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
 [ext_resource type="Script" path="res://main.gd" id="1_obpq7"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://TabContainer.gd" id="3_id6l4"]
 [ext_resource type="AudioStream" uid="uid://dig4pco500pyt" path="res://res/configurator.mp3" id="3_xivj6"]
 [ext_resource type="Texture2D" uid="uid://dx0u5hiwxfgu5" path="res://res/pixel_ui_theme/8x8_ui_elements.png" id="4_2tuu4"]
+[ext_resource type="Script" path="res://tk_about.gd" id="4_m4rto"]
 [ext_resource type="Script" path="res://Rekku.gd" id="4_nqqx3"]
 [ext_resource type="Texture2D" uid="uid://cxyml1owhi6de" path="res://res/pixel_ui_theme/8x8_ui_icons.png" id="4_v1scw"]
 [ext_resource type="Texture2D" uid="uid://d2lm4mfx1gt86" path="res://assets/graphics/retrodeck_base_shake0.png" id="5_7rjbt"]
@@ -815,6 +816,7 @@ popup/item_4/id = 4
 [node name="TK_ABOUT" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
 layout_mode = 2
 theme_override_constants/margin_right = 240
+script = ExtResource("4_m4rto")
 
 [node name="about_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_ABOUT"]
 layout_mode = 2
@@ -836,31 +838,37 @@ expand_mode = 1
 stretch_mode = 4
 
 [node name="website_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/about_container"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "TK_WEBSITE"
 
 [node name="changelog_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/about_container"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "TK_CHANGELOG"
 
 [node name="wiki_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/about_container"]
+unique_name_in_owner = true
 layout_mode = 2
-disabled = true
 text = "TK_WIKI"
 
 [node name="credits_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/about_container"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "TK_CREDITS"
 
 [node name="donate_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/about_container"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "TK_DONATE"
 
 [node name="contactus_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/about_container"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "TK_CONTACTUS"
 
 [node name="licenses_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/about_container"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "TK_LICENSES"
 

@@ -1,0 +1,17 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://bb4q4qm4wqx3b"
+
+[deps]
+
+files=["res://assets/data_lists/tk_about.URL.translation", "res://assets/data_lists/tk_about.Description.translation"]
+
+source_file="res://assets/data_lists/tk_about.csv"
+dest_files=["res://assets/data_lists/tk_about.URL.translation", "res://assets/data_lists/tk_about.Description.translation"]
+
+[params]
+
+compress=true
+delimiter=0

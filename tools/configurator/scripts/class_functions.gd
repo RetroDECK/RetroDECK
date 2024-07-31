@@ -61,3 +61,33 @@ func process_url_image(body) -> Texture:
 
 func launch_help(url: String) -> void:
 	OS.shell_open(url)
+
+func import_csv_data(file_path: String) -> Dictionary:
+	# check if file exists
+	var data_dict: Dictionary = {}
+	var file = FileAccess.open(file_path,FileAccess.READ)
+	if file:
+		var csv_lines: PackedStringArray = file.get_as_text().strip_edges().split("\n")
+		for i in range(1, csv_lines.size()):  # Start from 1 to skip the header
+			var line = csv_lines[i]
+			var columns = line.split(",")
+			if columns.size() >= 3:  # Ensure there are at least 2 elements (URL and Description)
+				var id = columns[0]
+				var url = columns[1]
+				var description = columns[2]
+				data_dict[id] = {"URL": url, "Description": description}
+		file.close()
+	else:
+		print ("Could not open file: %s", file_path)
+
+	return data_dict
+
+func _import_data_lists(file_path: String) -> void:
+	var tk_about: Dictionary = import_csv_data(file_path)
+	
+	for key in tk_about.keys():
+		var entry = tk_about[key]
+		print("ID: " + key)
+		print("URL: " + entry["URL"])
+		print("Description: " + entry["Description"])
+		print("---")
