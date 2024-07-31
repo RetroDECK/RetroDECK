@@ -67,6 +67,20 @@
    <project_license>GPL-3.0</project_license>
    <metadata_license>CC0-1.0</metadata_license>
    <releases>
+      <release version="0.8.3b" date="2024-07-31">
+         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.8.3b</url>
+         <description>
+            <p>Bug fixes:</p>
+            <ul>
+               <li>FRAMEWORK: Fixed a bug where the ES-DE folders were not correctly migrated from retrodeck folder to retrodeck/ES-DE folder</li>
+               <li>RYUJINX: reverted it to an older version without the symlink bug</li>
+            </ul>
+            <p>Known issues:</p>
+            <ul>
+               <li>Please check the know issues in the Wiki under General Information</li>
+            </ul>
+         </description>
+      </release>
       <release version="0.8.2b" date="2024-07-18">
          <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.8.2b</url>
          <description>
@@ -89,7 +103,8 @@
             </ul>
             <p>Known issues:</p>
             <ul>
-               <li>Please check the know issues in the Wiki under General Information.</li>
+               <li>Ryujinx is broken in this version, we plan to fix it soon, check the known issues to learn more</li>
+               <li>Please check the know issues in the Wiki under General Information</li>
             </ul>
          </description>
       </release>

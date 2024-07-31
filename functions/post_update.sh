@@ -214,7 +214,7 @@ post_update() {
 
     prepare_component "reset" "pico8"
 
-    configurator_generic_dialog "RetroDECK 0.7.0b Upgrade" "Would you like to install the official controller profile?\n(this will reset your custom emulator settings)\n\nAfter installation you can enable it from from Controller Settings -> Templates."
+    configurator_generic_dialog "RetroDECK 0.7.0b Upgrade" "Would you like to install the official controller profile?\n(this will reset your custom emulator settings)\n\nAfter installation you can enable it from from Controller Settings\t->\tTemplates."
     if [[ $(configurator_generic_question_dialog "RetroDECK Official Controller Profile" "Would you like to install the official RetroDECK controller profile?") == "true" ]]; then
       install_retrodeck_controller_profile
       prepare_component "reset" "all"
@@ -339,15 +339,67 @@ post_update() {
   fi
 
   if [[ $(check_version_is_older_than "0.8.2b") == "true" ]]; then
-      log i "Vita3K changed some paths, reflecting them: moving \"/var/data/Vita3K\" in \"/var/config/Vita3K\""
-      mv -f "/var/data/Vita3K" "/var/config/Vita3K"
-      log i "Moving ES-DE downloaded_media, gamelist, and themes from \"$rdhome\" to \"$rdhome/ES-DE\" due to a RetroDECK Framework bug"
-      mv -f "$rdhome/themes" "$rdhome/ES-DE/themes" && log d "Move of \"$rdhome/themes\" completed"
-      mv -f "$rdhome/downloaded_media" "$rdhome/ES-DE/downloaded_media" && log d "Move of \"$rdhome/downloaded_media\" completed"
-      mv -f "$rdhome/gamelists/"* "$rdhome/ES-DE/gamelists" && log d "Move of \"$rdhome/gamelists/\" completed" && rm -rf "$rdhome/gamelists"
-      log i "Since in this version we moved to a PR build of Ryujinx we need to symlink it."
-      ln -sv $ryujinxconf "$(dirname $ryujinxconf)/PRConfig.json"
+    log i "Vita3K changed some paths, reflecting them: moving \"/var/data/Vita3K\" in \"/var/config/Vita3K\""
+    move "/var/data/Vita3K" "/var/config/Vita3K"
+    log i "Moving ES-DE downloaded_media, gamelist, and themes from \"$rdhome\" to \"$rdhome/ES-DE\" due to a RetroDECK Framework bug"
+    move "$rdhome/themes" "$rdhome/ES-DE/themes" && log d "Move of \"$rdhome/themes\" completed"
+    move "$rdhome/downloaded_media" "$rdhome/ES-DE/downloaded_media" && log d "Move of \"$rdhome/downloaded_media\" completed"
+    move "$rdhome/gamelists" "$rdhome/ES-DE/gamelists" && log d "Move of \"$rdhome/gamelists/\" completed"
+    move "$rdhome/collections" "$rdhome/ES-DE/collections" && log d "Move of \"$rdhome/collections/\" completed"
+    log i "Since in this version we moved to a PR build of Ryujinx we need to symlink it."
+    ln -sv $ryujinxconf "$(dirname $ryujinxconf)/PRConfig.json"
   fi
+
+if [[ $(check_version_is_older_than "0.8.3b") == "true" ]]; then
+  # In version 0.8.3b, the following changes were made:
+  # - Recovery from a failed move of the themes, downloaded_media and gamelists folder to their new ES-DE locations.
+  
+  # Check if any of the directories exist
+  if [ -d "$rdhome/themes" ] || [ -d "$rdhome/downloaded_media" ] || [ -d "$rdhome/gamelists" ] || [ -d "$rdhome/collections" ]; then
+    log i "Moving ES-DE downloaded_media, gamelist, and themes from \"$rdhome\" to \"$rdhome/ES-DE\" due to a RetroDECK Framework bug"
+
+    # Ask user if they want to move and overwrite the data
+    if [[ $(configurator_generic_question_dialog "Move Data" "In the previous version some users suffered a bug where ES-DE appeared empty (no scraped data or collections for example).\n\n<span foreground='$purple' size='larger'><b>Your data is not gone!</b></span>\n\nit's just in a different path.\n\nDo you want to recover your old data replacing the actual one?\nBy choosing no instead, the folder with be moved but no data will be replaced and it will be availalbe in the retrodeck folder.\n\nThe affected folders are:\n\nretrodeck/themes\t\t\t\t->\tretrodeck/ES-DE/themes\nretrodeck/downloaded_media\t->\tretrodeck/ES-DE/downloaded_media\nretrodeck/gamelists\t\t\t\t->\tretrodeck/ES-DE/gamelist\nretrodeck/collections\t\t\t->\tretrodeck/ES-DE/collections") == "true" ]]; then
+      move_cmd="mv -f"  # Use mv with overwrite
+      log i "User chose to move and overwrite the data."
+    else
+      move_cmd="move"  # Use existing move function
+      log i "User chose to move the data without overwriting."
+    fi
+
+    # Move each directory if it exists
+    if [[ -d "$rdhome/themes" ]]; then
+      $move_cmd "$rdhome/themes" "$rdhome/ES-DE/" && log d "Move of \"$rdhome/themes\" completed"
+    else
+      log i "ES-DE themes appears to already have been migrated."
+    fi
+
+    if [[ -d "$rdhome/downloaded_media" ]]; then
+      $move_cmd "$rdhome/downloaded_media" "$rdhome/ES-DE/" && log d "Move of \"$rdhome/downloaded_media\" completed"
+    else
+      log i "ES-DE downloaded media appears to already have been migrated."
+    fi
+
+    if [[ -d "$rdhome/gamelists" ]]; then
+      $move_cmd "$rdhome/gamelists" "$rdhome/ES-DE/" && log d "Move of \"$rdhome/gamelists/\" completed"
+    else
+      log i "ES-DE gamelists appears to already have been migrated."
+    fi
+
+    if [[ -d "$rdhome/collections" ]]; then
+      $move_cmd "$rdhome/collections" "$rdhome/ES-DE/" && log d "Move of \"$rdhome/collections/\" completed"
+    else
+      log i "ES-DE collections appears to already have been migrated."
+    fi
+  else
+    log i "ES-DE folders appears to already have been migrated."
+  fi
+  # Better to refresh the paths
+  set_setting_value "$es_settings" "ROMDirectory" "$roms_folder" "es_settings"
+  set_setting_value "$es_settings" "MediaDirectory" "$media_folder" "es_settings"
+  set_setting_value "$es_settings" "UserThemeDirectory" "$themes_folder" "es_settings"
+fi
+
 
   # if [[ $(check_version_is_older_than "0.9.0b") == "true" ]]; then
   #   # Placeholder for version 0.9.0b
