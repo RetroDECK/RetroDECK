@@ -66,7 +66,7 @@ jobs:
           # curl -sL \
           # -H "Accept: application/vnd.github+json" \
           # -H "Authorization: Bearer ${{ secrets.TRIGGER_BUILD_TOKEN }}" \
-          # https://api.github.com/repos/XargonWan/RetroDECK-cooker/releases \
+          # https://api.github.com/repos/RetroDECK/Cooker/releases \
           # | jq .[0].tag_name \
           # | tr -d \" \
           # )

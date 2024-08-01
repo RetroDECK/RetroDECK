@@ -99,7 +99,7 @@ check_for_version_update() {
           log i "Selected: \"Yes\""
           configurator_generic_dialog "RetroDECK Online Update" "The update process may take several minutes.\n\nAfter the update is complete, RetroDECK will close. When you run it again you will be using the latest version."
           (
-          local latest_cooker_download=$(curl --silent https://api.github.com/repos/XargonWan/RetroDECK-cooker/releases/latest | grep '"browser_download_url":.*flatpak' | grep -v '\.sha' | sed -E 's/.*"([^"]+)".*/\1/')
+          local latest_cooker_download=$(curl --silent https://api.github.com/repos/RetroDECK/Cooker/releases/latest | grep '"browser_download_url":.*flatpak' | grep -v '\.sha' | sed -E 's/.*"([^"]+)".*/\1/')
           local temp_folder="$rdhome/RetroDECK_Updates"
           create_dir $temp_folder
           log i "Downloading version \"$online_version\" in \"$temp_folder/RetroDECK-cooker.flatpak\" from url: \"$latest_cooker_download\""

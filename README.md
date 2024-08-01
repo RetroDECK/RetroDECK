@@ -97,7 +97,7 @@ Read up here on how to help out, there is something for everyone:
 | Name          | Description  |
 |-------------------------------------------------------------|-----------------------------------------------------------|
 | [RetroDECK](https://github.com/XargonWan/RetroDECK)          | This one, our main repo where the core of the project is  |
-| [RetroDECK-cooker](https://github.com/XargonWan/RetroDECK-cooker)  | Where we publish our test build, no code is hosted here |
+| [RetroDECK/Cooker](https://github.com/RetroDECK/Cooker)  | Where we publish our test build, no code is hosted here |
 | [RetroDECK/Wiki](https://github.com/RetroDECK/Wiki)  | Where our wiki source code is |
 | [RetroDECK-website](https://github.com/XargonWan/RetroDECK-website)  | Where our website source code is |
 | [RetroDECK on Flathub](https://github.com/flathub/net.retrodeck.retrodeck) | Our little space in Flathub's organization                 |
