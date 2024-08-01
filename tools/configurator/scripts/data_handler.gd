@@ -141,3 +141,45 @@ func save_data(app_data: AppData):
 	file.store_string(json_text)
 	file.close()
 	print("Data appended successfully")
+# Function to modify an existing link
+func modify_link(key: String, new_name: String, new_url: String, new_description: String):
+	var app_data = load_data()
+	if app_data and app_data.about_links.has(key):
+		var link = app_data.about_links[key]
+		link.name = new_name
+		link.url = new_url
+		link.description = new_description
+		app_data.about_links[key] = link
+		save_data(app_data)
+		print("Link modified successfully")
+	else:
+		print("Link not found")
+
+# Function to modify an existing emulator
+func modify_emulator(key: String, new_name: String, new_description: String, new_options: Array, new_properties: Array):
+	var app_data = load_data()
+	if app_data and app_data.emulators.has(key):
+		var emulator = app_data.emulators[key]
+		emulator.name = new_name
+		emulator.description = new_description
+		
+		# Update options
+		emulator.options.clear()
+		for option in new_options:
+			var new_option = EmulatorOption.new()
+			new_option.resettable = option.resettable
+			emulator.options.append(new_option)
+
+		# Update properties
+		emulator.properties.clear()
+		for property in new_properties:
+			var new_property = EmulatorProperty.new()
+			new_property.standalone = property.standalone
+			new_property.abxy_button_status = property.abxy_button_status
+			emulator.properties.append(new_property)
+
+		app_data.emulators[key] = emulator
+		save_data(app_data)
+		print("Emulator modified successfully")
+	else:
+		print("Emulator not found")

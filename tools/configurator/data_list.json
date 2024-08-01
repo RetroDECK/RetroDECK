@@ -1,9 +1,9 @@
 {
 	"about_links": {
 		"example_site": {
-			"description": "An example description.",
-			"name": "Example Site",
-			"url": "https://example.com"
+			"description": "Updated description.",
+			"name": "Updated Site",
+			"url": "https://updated-example.com"
 		},
 		"rd_changelog": {
 			"description": "Opens the RetroDECK change log in your default browser",
@@ -52,12 +52,16 @@
 			],
 			"properties": [
 				{
+					"abxy_button": {
+						"status": false
+					},
 					"standalone": true
 				},
 				{
 					"abxy_button": {
 						"status": false
-					}
+					},
+					"standalone": false
 				}
 			]
 		},
@@ -71,12 +75,16 @@
 			],
 			"properties": [
 				{
+					"abxy_button": {
+						"status": false
+					},
 					"standalone": true
 				},
 				{
 					"abxy_button": {
 						"status": false
-					}
+					},
+					"standalone": false
 				}
 			]
 		},
@@ -90,12 +98,16 @@
 			],
 			"properties": [
 				{
+					"abxy_button": {
+						"status": false
+					},
 					"standalone": true
 				},
 				{
 					"abxy_button": {
 						"status": false
-					}
+					},
+					"standalone": false
 				}
 			]
 		},
@@ -109,29 +121,33 @@
 			],
 			"properties": [
 				{
+					"abxy_button": {
+						"status": false
+					},
 					"standalone": true
 				},
 				{
 					"abxy_button": {
 						"status": false
-					}
+					},
+					"standalone": false
 				}
 			]
 		},
 		"example_emulator": {
-			"description": "An example emulator.",
-			"name": "Example Emulator",
+			"description": "Updated description",
+			"name": "Updated Emulator",
 			"options": [
 				{
-					"resettable": true
+					"resettable": false
 				}
 			],
 			"properties": [
 				{
 					"abxy_button": {
-						"status": false
+						"status": true
 					},
-					"standalone": true
+					"standalone": false
 				}
 			]
 		},
@@ -145,12 +161,16 @@
 			],
 			"properties": [
 				{
+					"abxy_button": {
+						"status": false
+					},
 					"standalone": true
 				},
 				{
 					"abxy_button": {
 						"status": false
-					}
+					},
+					"standalone": false
 				}
 			]
 		},
@@ -164,12 +184,16 @@
 			],
 			"properties": [
 				{
+					"abxy_button": {
+						"status": false
+					},
 					"standalone": true
 				},
 				{
 					"abxy_button": {
 						"status": false
-					}
+					},
+					"standalone": false
 				}
 			]
 		},
@@ -183,12 +207,16 @@
 			],
 			"properties": [
 				{
+					"abxy_button": {
+						"status": false
+					},
 					"standalone": true
 				},
 				{
 					"abxy_button": {
 						"status": false
-					}
+					},
+					"standalone": false
 				}
 			]
 		},
@@ -202,12 +230,16 @@
 			],
 			"properties": [
 				{
+					"abxy_button": {
+						"status": false
+					},
 					"standalone": true
 				},
 				{
 					"abxy_button": {
 						"status": false
-					}
+					},
+					"standalone": false
 				}
 			]
 		},
@@ -221,12 +253,16 @@
 			],
 			"properties": [
 				{
+					"abxy_button": {
+						"status": false
+					},
 					"standalone": true
 				},
 				{
 					"abxy_button": {
 						"status": false
-					}
+					},
+					"standalone": false
 				}
 			]
 		},
@@ -240,12 +276,16 @@
 			],
 			"properties": [
 				{
+					"abxy_button": {
+						"status": false
+					},
 					"standalone": true
 				},
 				{
 					"abxy_button": {
 						"status": false
-					}
+					},
+					"standalone": false
 				}
 			]
 		},
@@ -259,12 +299,16 @@
 			],
 			"properties": [
 				{
+					"abxy_button": {
+						"status": false
+					},
 					"standalone": true
 				},
 				{
 					"abxy_button": {
 						"status": false
-					}
+					},
+					"standalone": false
 				}
 			]
 		},
@@ -278,12 +322,16 @@
 			],
 			"properties": [
 				{
+					"abxy_button": {
+						"status": false
+					},
 					"standalone": true
 				},
 				{
 					"abxy_button": {
 						"status": false
-					}
+					},
+					"standalone": false
 				}
 			]
 		},
@@ -297,12 +345,16 @@
 			],
 			"properties": [
 				{
+					"abxy_button": {
+						"status": false
+					},
 					"standalone": true
 				},
 				{
 					"abxy_button": {
 						"status": false
-					}
+					},
+					"standalone": false
 				}
 			]
 		},
@@ -316,12 +368,16 @@
 			],
 			"properties": [
 				{
+					"abxy_button": {
+						"status": false
+					},
 					"standalone": true
 				},
 				{
 					"abxy_button": {
 						"status": false
-					}
+					},
+					"standalone": false
 				}
 			]
 		},
@@ -335,12 +391,16 @@
 			],
 			"properties": [
 				{
+					"abxy_button": {
+						"status": false
+					},
 					"standalone": true
 				},
 				{
 					"abxy_button": {
 						"status": false
-					}
+					},
+					"standalone": false
 				}
 			]
 		}
