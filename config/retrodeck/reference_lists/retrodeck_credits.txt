@@ -5,7 +5,7 @@ The Team
 XargonWan
 
 RetroDECK project founder and also one of the founding members of AmberELEC.
-Grand General of the IPL (Italian Pizza Legion) also known as the Napoletanan Fist in the internal pizza war.
+Grand General of the IPL (Italian Pizza Legion) in the internal pizza war.
 
 ---
 
@@ -50,7 +50,12 @@ Does bleeding edge cooker testing (lives in the danger zone), some feature sugge
 
 ---
 
- We want give special thanks to:
+MonkeyX
+Jack of all trades: mainly working on GODOT and Manifest
+
+---
+
+We want give our special thanks to:
 
 - Our Patreon and donors that keeps the build servers running and provide feedback.
 
