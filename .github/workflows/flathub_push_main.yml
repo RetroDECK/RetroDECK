@@ -26,7 +26,7 @@ jobs:
           fi
           git clone --recursive https://github.com/flathub/net.retrodeck.retrodeck.git flathub
           cd $gits_folder
-          git clone --recursive https://github.com/XargonWan/RetroDECK RetroDECK
+          git clone --recursive https://github.com/RetroDECK/RetroDECK RetroDECK
           cd $gits_folder/RetroDECK
 
           relname="main-"$(git rev-parse --short HEAD)

@@ -1,13 +1,13 @@
 <p float="center">
-    <img src="https://github.com/XargonWan/RetroDECK/blob/main/res/logo.png?raw=true" alt="RetroDECK logo" width="600"/>
+    <img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/logo.png?raw=true" alt="RetroDECK logo" width="600"/>
 </p>
 
 # RetroDECK on your device!
 
 
 <p float="center">
-<img src="https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen05.jpeg?raw=true" alt="screenshot" width="300"/>
-<img src="https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen06.jpeg?raw=true" alt="screenshot" width="300"/>
+<img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen05.jpeg?raw=true" alt="screenshot" width="300"/>
+<img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen06.jpeg?raw=true" alt="screenshot" width="300"/>
 </p>
 
 Instead of having several different emulators, engines and frontends on your Linux/SteamOS system you only need one: RetroDECK.
@@ -15,7 +15,7 @@ Instead of having several different emulators, engines and frontends on your Lin
 ![Flathub](https://img.shields.io/flathub/downloads/net.retrodeck.retrodeck)
 ![Flathub](https://img.shields.io/flathub/v/net.retrodeck.retrodeck)
 ![Discord](https://img.shields.io/discord/951662718102962256?label=discord)
-![GitHub](https://img.shields.io/github/license/XargonWan/RetroDECK)
+![GitHub](https://img.shields.io/github/license/RetroDECK/RetroDECK)
 [![Documentation Status](https://readthedocs.org/projects/retrodeck/badge/?version=latest)](https://retrodeck.readthedocs.io/en/latest/?badge=latest)
 
 **The RetroDECK Wiki & FAQ**
@@ -77,7 +77,7 @@ For our long term vision you can check out the following wiki page:
 Use the supports channels on [Discord](https://discord.gg/WDc5C9YWMx) `🤝-community-support` and `🆘-support`.
 ### The RetroDECK community:
 [Website](https://retrodeck.net) <br/>
-[Wiki](https://github.com/XargonWan/RetroDECK/wiki) <br/>
+[Wiki](https://github.com/RetroDECK/RetroDECK/wiki) <br/>
 [Discord](https://discord.gg/WDc5C9YWMx)<br/>
 [Lemmy](https://lemmy.zip/c/retrodeck)<br/>
 [Subreddit](https://www.reddit.com/r/retrodeck)
@@ -96,21 +96,22 @@ Read up here on how to help out, there is something for everyone:
 ## Our repositories:
 | Name          | Description  |
 |-------------------------------------------------------------|-----------------------------------------------------------|
-| [RetroDECK](https://github.com/XargonWan/RetroDECK)          | This one, our main repo where the core of the project is  |
-| [RetroDECK/Cooker](https://github.com/RetroDECK/Cooker)  | Where we publish our test build, no code is hosted here |
+| [RetroDECK](https://github.com/RetroDECK/RetroDECK)          | This one, our main repo where the core of the project is  |
+| [Cooker](https://github.com/RetroDECK/Cooker)  | Where we publish our test build, no code is hosted here |
 | [RetroDECK/Wiki](https://github.com/RetroDECK/Wiki)  | Where our wiki source code is |
-| [RetroDECK-website](https://github.com/XargonWan/RetroDECK-website)  | Where our website source code is |
+| [RetroDECK-website](https://github.com/RetroDECK/RetroDECK-website)  | Where our website source code is |
 | [RetroDECK on Flathub](https://github.com/flathub/net.retrodeck.retrodeck) | Our little space in Flathub's organization                 |
 | [RetroDECK/MAME](https://github.com/RetroDECK/MAME)   | MAME is big to build, so it's pre-built here and then imported in the build |
 | [RetroDECK/ES-DE](https://github.com/RetroDECK/ES-DE)  | This is where we store our patched fork of ES-DE          |
 
+And many more, for the full list please check our [repositories page on GitHub](https://github.com/orgs/RetroDECK/repositories).
 
 # The RetroDECK Wiki
 
-Please check out the [Wiki](https://github.com/XargonWan/RetroDECK/wiki) for even more information.
+Please check out the [Wiki](https://github.com/RetroDECK/RetroDECK/wiki) for even more information.
 
 ## The FAQ
-The RetroDECK [FAQ](https://github.com/XargonWan/RetroDECK/wiki/FAQs%3A-Frequently-asked-questions) on the wiki has a vast variety of questions and answers. 
+The RetroDECK [FAQ](https://github.com/RetroDECK/RetroDECK/wiki/FAQs%3A-Frequently-asked-questions) on the wiki has a vast variety of questions and answers. 
 
 # How to get support? 
 Use the supports channels on [Discord](https://discord.gg/WDc5C9YWMx). 

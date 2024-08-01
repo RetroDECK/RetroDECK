@@ -705,7 +705,7 @@ ponzu_remove() {
 # TODO: this function is not yet used
 branch_selector() {
     log d "Fetch branches from GitHub API excluding \"main\""
-    branches=$(curl -s https://api.github.com/repos/XargonWan/RetroDECK/branches | grep '"name":' | awk -F '"' '$4 != "main" {print $4}')
+    branches=$(curl -s https://api.github.com/repos/RetroDECK/RetroDECK/branches | grep '"name":' | awk -F '"' '$4 != "main" {print $4}')
 
     # Create an array to store branch names
     branch_array=()

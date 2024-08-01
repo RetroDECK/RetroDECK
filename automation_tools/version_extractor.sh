@@ -12,7 +12,7 @@ manifest_content=$(cat "$manifest")
 
 fetch_repo_version(){
     # Getting latest RetroDECK release info
-    LATEST_RELEASE=$(curl -s "https://api.github.com/repos/XargonWan/RetroDECK/releases/latest")
+    LATEST_RELEASE=$(curl -s "https://api.github.com/repos/RetroDECK/RetroDECK/releases/latest")
     # Extracting tag name from the latest release
     repo_version=$(echo "$LATEST_RELEASE" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
     # Printing results
