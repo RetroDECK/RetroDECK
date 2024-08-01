@@ -27,7 +27,7 @@ on:
 jobs:
 
   Building_RetroDECK:
-    runs-on: self-hosted
+    runs-on: retrodeck
     steps:
 
       # Circumventing this bug: https://github.com/flatpak/flatpak-builder/issues/317
