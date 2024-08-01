@@ -1,6 +1,6 @@
 extends MarginContainer
 
-var class_functions: ClassFunctions
+#var class_functions: ClassFunctions
 
 var website_button: Button
 var changelog_button: Button
@@ -13,8 +13,9 @@ var tk_about: Dictionary
 signal signal_theme_changed
 
 func _ready():
-	class_functions = ClassFunctions.new()
-	#class_functions._import_data_lists("res://assets/data_lists/tk_about.csv")
+	#class_functions = ClassFunctions.new()
+	#tk_about = class_functions._import_data_lists("res://tk_about.txt")
+	
 	tk_about = class_functions.import_csv_data("tk_about.txt")
 	_get_nodes()
 	_connect_signals()
@@ -68,10 +69,10 @@ func _connect_signals() -> void:
 	licenses_button.pressed.connect(_about_button_pressed.bind("rd_licenses"))
 	
 func _about_button_pressed(id: String) -> void:
-	var entry: Dictionary
+	var entry: Dictionary 
 	match id:
 		"rd_web":
-			entry = tk_about[id]
+			entry = tk_about[id] 
 			OS.shell_open(%website_button.editor_description)
 		"rd_changelog":
 			entry = tk_about[id]

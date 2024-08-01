@@ -52,19 +52,19 @@ func get_text_file_from_system_path(file_path: String, command: String, etype: S
 		return {}
 		
 func parse_imported_string(input_string: String) -> Dictionary:
-	var result: Dictionary
-	var current_dict_key: String
+	var _result: Dictionary
+	var _current_dict_key: String
 	var lines = input_string.strip_edges().split("\n", false)
-	if lines.size() > 0:
-		lines = lines.slice(1, lines.size())  # Skip the first line
+	#if lines.size() > 0:
+	#	lines = lines.slice(1, lines.size())  # Skip the first line
 	for line in lines:
-		current_dict_key = line
+		_current_dict_key = line
 		var parts = line.split("=", false)
 		if parts.size() == 2:
 			var key = parts[0]
 			var value_str = parts[1]
-			result[key] = {"KEY": key, "Value": value_str}
-	return result
+			_result[key] = {"KEY": key, "Value": value_str}
+	return _result
 	
 func parse_file_list(content: String) -> Dictionary:
 	var file_dict = {}
@@ -116,3 +116,47 @@ func _import_data_lists(file_path: String) -> void:
 		print("URL: " + entry["URL"])
 		print("Description: " + entry["Description"])
 		print("---")
+
+
+func get_about_links_from_file(file_path: String) -> Dictionary:
+	var about_links_dict = {}
+	var file = FileAccess.open(file_path, FileAccess.READ)
+
+	if file:
+		var json_string = file.get_as_text()
+		file.close()
+		
+		var json = JSON.new()
+		var parse_result = json.parse(json_string)
+		print ("RES: %s",parse_result)
+
+		if parse_result == OK:
+			var data = parse_result
+			print (data)
+			print("JSON Parse Error: ", json.get_error_message(), " in ", json_string, " at line ", json.get_error_line())
+			#continue
+			if parse_result is Dictionary:
+				if parse_result.has("about_links"):
+					var about_links = parse_result["about_links"]
+					about_links_dict = parse_about_links(about_links)
+				else:
+					print("Error: 'about_links' key not found in JSON.")
+		else:
+			print("Error parsing JSON: %s" % json.error_string)
+	else:
+		print("Failed to open file: %s" % file_path)
+
+	print (about_links_dict)
+	return about_links_dict
+
+func parse_about_links(about_links: Array) -> Dictionary:
+	var about_links_dict = {}
+
+	for link in about_links:
+		about_links_dict[link["id"]] = {
+			"name": link["name"],
+			"url": link["url"],
+			"description": link["description"]
+		}
+	
+	return about_links_dict

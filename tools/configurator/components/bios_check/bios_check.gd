@@ -1,6 +1,6 @@
 extends Control
 
-var classFunctions: ClassFunctions
+
 var file := FileAccess
 var bios_tempfile : String
 var command: String = "../../tools/retrodeck_function_wrapper.sh"
@@ -16,14 +16,12 @@ func _ready():
 	if OS.has_environment("XDG_RUNTIME_DIR"):
 		#temporary hack for Tim
 		# This uses tempfs system revisit
-		bios_tempfile = OS.get_environment("XDG_RUNTIME_DIR") + "/godot_temp/godot_bios_files_checked.tmp"
-		#	bios_tempfile = "/var/config/retrodeck/godot/godot_bios_files_checked.tmp"
+		#bios_tempfile = OS.get_environment("XDG_RUNTIME_DIR") + "/godot_temp/godot_bios_files_checked.tmp"
+		bios_tempfile = "/var/config/retrodeck/godot/godot_bios_files_checked.tmp"
 	else:
 		bios_tempfile = "/var/config/retrodeck/godot/godot_bios_files_checked.tmp"
 
 	var table := $Table
-	classFunctions = ClassFunctions.new()
-	add_child(classFunctions)
 	
 	if bios_type == 0: #Basic BIOS button pressed
 		table.columns = BIOS_COLUMNS_BASIC.size()
@@ -48,7 +46,7 @@ func _ready():
 		
 	else: #Assume advanced BIOS button pressed
 		var parameters = ["check_bios_files"]
-		classFunctions.execute_command(command, parameters, false)
+		class_functions.execute_command(command, parameters, false)
 		await run_thread_command(command, parameters, console)
 		#OS.execute("/app/tools/retrodeck_function_wrapper.sh",["check_bios_files"])
 	
@@ -65,7 +63,7 @@ func _ready():
 					table_line.set_custom_color(i,Color(1,1,1,1))
 
 func run_thread_command(command: String, parameters: Array, console: bool) -> void:
-	var result = await classFunctions.run_command_in_thread(command, parameters, console)
+	var result = await class_functions.run_command_in_thread(command, parameters, console)
 	if result != null:
 		print (result["output"])
 		print ("Exit Code: " + str(result["exit_code"]))

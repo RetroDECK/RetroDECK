@@ -1,0 +1,333 @@
+﻿{
+  "about_links": [
+    {
+      "name": "Website",
+      "id": "rd_web",
+      "url": "https://retrodeck.net/",
+      "description": "Opens the RetroDECK Website in your default browser"
+    },
+    {
+      "name": "Changelog",
+      "id": "rd_changelog",
+      "url": "https://retrodeck.readthedocs.io/en/latest/wiki_rd_versions/version-history/",
+      "description": "Opens the RetroDECK change log in your default browser"
+    },
+    {
+      "name": "Wiki",
+      "id": "rd_wiki",
+      "url": "https://retrodeck.readthedocs.io/en/latest/",
+      "description": "Opens the RetroDECK Wiki in your default browser"
+    },
+    {
+      "name": "Credits",
+      "id": "rd_credits",
+      "url": "https://retrodeck.readthedocs.io/en/latest/wiki_credits/donations-licenses/",
+      "description": "Opens the RetroDECK Credits in your default browser"
+    },
+    {
+      "name": "Donate",
+      "id": "rd_donate",
+      "url": "https://retrodeck.readthedocs.io/en/latest/wiki_credits/donations-licenses/",
+      "description": "Opens Donations page in your default browser"
+    },
+    {
+      "name": "Contact us",
+      "id": "rd_contactus",
+      "url": "https://github.com/XargonWan/RetroDECK",
+      "description": "Opens the RetroDECK contact us section in your default browser"
+    },
+    {
+      "name": "Licences",
+      "id": "rd_licenses",
+      "url": "https://retrodeck.readthedocs.io/en/latest/wiki_credits/donations-licenses/",
+      "description": "Opens the RetroDECK licenses in your default browser"
+    }
+  ],
+  "emulators": {
+    "cemu": {
+      "name": "Cemu",
+      "description": "Wii U emulator",
+      "options": [
+        {
+          "resettable": true
+        }
+      ],
+      "properties": [
+        {
+          "standalone": true
+        },
+        {
+          "abxy_button": {
+            "status": false
+          }
+        }
+      ]
+    },
+    "citra": {
+      "name": "Citra",
+      "description": "N3DS emulator",
+      "options": [
+        {
+          "resettable": true
+        }
+      ],
+      "properties": [
+        {
+          "standalone": true
+        },
+        {
+          "abxy_button": {
+            "status": false
+          }
+        }
+      ]
+    },
+    "dolphin": {
+      "name": "Dolphin",
+      "description": "Wii/GameCube emulator",
+      "options": [
+        {
+          "resettable": true
+        }
+      ],
+      "properties": [
+        {
+          "standalone": true
+        },
+        {
+          "abxy_button": {
+            "status": false
+          }
+        }
+      ]
+    },
+    "duckstation": {
+      "name": "Duckstation",
+      "description": "PSX emulator",
+      "options": [
+        {
+          "resettable": true
+        }
+      ],
+      "properties": [
+        {
+          "standalone": true
+        },
+        {
+          "abxy_button": {
+            "status": false
+          }
+        }
+      ]
+    },
+    "gzdoom": {
+      "name": "GZDoom",
+      "description": "Doom engine",
+      "options": [
+        {
+          "resettable": true
+        }
+      ],
+      "properties": [
+        {
+          "standalone": true
+        },
+        {
+          "abxy_button": {
+            "status": false
+          }
+        }
+      ]
+    },
+    "mame": {
+      "name": "MAME",
+      "description": "Multiple Arcade Machine Emulator",
+      "options": [
+        {
+          "resettable": true
+        }
+      ],
+      "properties": [
+        {
+          "standalone": true
+        },
+        {
+          "abxy_button": {
+            "status": false
+          }
+        }
+      ]
+    },
+    "melonds": {
+      "name": "MelonDS",
+      "description": "NDS emulator",
+      "options": [
+        {
+          "resettable": true
+        }
+      ],
+      "properties": [
+        {
+          "standalone": true
+        },
+        {
+          "abxy_button": {
+            "status": false
+          }
+        }
+      ]
+    },
+    "pcsx2": {
+      "name": "PCSX2",
+      "description": "PS2 emulator",
+      "options": [
+        {
+          "resettable": true
+        }
+      ],
+      "properties": [
+        {
+          "standalone": true
+        },
+        {
+          "abxy_button": {
+            "status": false
+          }
+        }
+      ]
+    },
+    "ppsspp": {
+      "name": "PPSSPP",
+      "description": "PSP emulator",
+      "options": [
+        {
+          "resettable": true
+        }
+      ],
+      "properties": [
+        {
+          "standalone": true
+        },
+        {
+          "abxy_button": {
+            "status": false
+          }
+        }
+      ]
+    },
+    "primehack": {
+      "name": "Primehack",
+      "description": "Metroid Prime emulator",
+      "options": [
+        {
+          "resettable": true
+        }
+      ],
+      "properties": [
+        {
+          "standalone": true
+        },
+        {
+          "abxy_button": {
+            "status": false
+          }
+        }
+      ]
+    },
+    "rpcs3": {
+      "name": "RPCS3",
+      "description": "PS3 emulator",
+      "options": [
+        {
+          "resettable": true
+        }
+      ],
+      "properties": [
+        {
+          "standalone": true
+        },
+        {
+          "abxy_button": {
+            "status": false
+          }
+        }
+      ]
+    },
+    "ryujinx": {
+      "name": "Ryujinx",
+      "description": "Switch emulator",
+      "options": [
+        {
+          "resettable": true
+        }
+      ],
+      "properties": [
+        {
+          "standalone": true
+        },
+        {
+          "abxy_button": {
+            "status": false
+          }
+        }
+      ]
+    },
+    "vita3k": {
+      "name": "Vita3k",
+      "description": "PS Vita emulator",
+      "options": [
+        {
+          "resettable": true
+        }
+      ],
+      "properties": [
+        {
+          "standalone": true
+        },
+        {
+          "abxy_button": {
+            "status": false
+          }
+        }
+      ]
+    },
+    "xemu": {
+      "name": "XEMU",
+      "description": "XBOX emulator",
+      "options": [
+        {
+          "resettable": true
+        }
+      ],
+      "properties": [
+        {
+          "standalone": true
+        },
+        {
+          "abxy_button": {
+            "status": false
+          }
+        }
+      ]
+    },
+    "yuzu": {
+      "name": "Yuzu",
+      "description": "Switch emulator",
+      "options": [
+        {
+          "resettable": true
+        }
+      ],
+      "properties": [
+        {
+          "standalone": true
+        },
+        {
+          "abxy_button": {
+            "status": false
+          }
+        }
+      ]
+    }
+  }
+}

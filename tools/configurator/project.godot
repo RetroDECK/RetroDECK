@@ -17,6 +17,10 @@ boot_splash/bg_color=Color(0.141176, 0.141176, 0.141176, 0)
 boot_splash/show_image=false
 config/icon="res://icon.svg"
 
+[autoload]
+
+class_functions="*res://scripts/class_functions.gd"
+
 [display]
 
 window/size/viewport_width=1280
