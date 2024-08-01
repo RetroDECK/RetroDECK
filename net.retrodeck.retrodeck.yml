@@ -514,8 +514,8 @@ modules:
       - type: archive
         #url: RETRODECKESDEURLPLACEHOLDER
         #sha256: RETRODECKESDEPLACEHOLDER
-        url: https://github.com/RetroDECK/ES-DE/releases/download/feat%2Fsmaller-menu-310724.44/RetroDECK-ES-DE-Artifact.tar.gz
-        sha256: 5219a27bf34724728c1d4feafe91de0aa7e4a8afb5f3a81ab7b45dde36ed1bba
+        url: https://github.com/RetroDECK/ES-DE/releases/download/feat%2Fsmaller-menu-010824.58/RetroDECK-ES-DE-Artifact.tar.gz
+        sha256: 587121c69f8b7e696eed311904e90e18739c4c50eb8fdb5ab58e3dc3f1ebed92
 
   - name: retrodeck-theme
     buildsystem: simple
