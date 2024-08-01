@@ -15,16 +15,41 @@ var emu_pick_option: OptionButton
 var tab_container: TabContainer
 var anim_logo: AnimatedSprite2D
 var anim_rekku: AnimatedSprite2D
+#var data_handler: DataHandler
 
-var player =[]
-
+var app_data = AppData.new()
 func _ready():
 	_get_nodes()
 	_connect_signals()
 	_play_main_animations()
-	#print(save_manager.data)#["name"]["unlock_goal"])
-	print(save_manager.data["about_links"]["rd_web"]["name"], " ", save_manager.data["about_links"]["rd_web"]["url"])
-	print(save_manager.data["emulators"]["mame"]["name"], " ", save_manager.data["emulators"]["mame"]["description"])
+	#print(save_manager.data["about_links"]["rd_web"]["name"], " ", save_manager.data["about_links"]["rd_web"]["url"])
+	#print(save_manager.data["emulators"]["mame"]["name"], " ", save_manager.data["emulators"]["mame"]["description"])
+
+	# Populate app_data with some test data
+	var link = Link.new()
+	link.name = "Example Site"
+	link.url = "https://example.com"
+	link.description = "An example description."
+	app_data.about_links["example_site"] = link
+
+	var emulator = Emulator.new()
+	emulator.name = "Example Emulator"
+	emulator.description = "An example emulator."
+	var option = EmulatorOption.new()
+	option.resettable = true
+	emulator.options.append(option)
+	var property = EmulatorProperty.new()
+	property.standalone = true
+	property.abxy_button_status = false
+	emulator.properties.append(property)
+	app_data.emulators["example_emulator"] = emulator
+
+	data_handler.save_data(app_data)
+	
+	var app_data = data_handler.load_data()
+	if app_data:
+		var website_link = app_data.about_links["rd_web"]
+		print (website_link.name,"-",website_link.url,"-",website_link.description)
 	
 	var emulator_list = class_functions.get_text_file_from_system_path("../../tools/configurator.sh","sed -n '/local emulator_list=(/,/)/{s/.*local emulator_list=\\(.*\\)/\\1/; /)/q; p}' ","emulist")
 	#print (emulator_list)

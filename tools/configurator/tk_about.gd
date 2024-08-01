@@ -16,7 +16,7 @@ func _ready():
 	#class_functions = ClassFunctions.new()
 	#tk_about = class_functions._import_data_lists("res://tk_about.txt")
 	
-	tk_about = class_functions.import_csv_data("tk_about.txt")
+	tk_about = class_functions.import_csv_data("res://tk_about.txt")
 	_get_nodes()
 	_connect_signals()
 	

@@ -21,6 +21,7 @@ config/icon="res://icon.svg"
 
 class_functions="*res://scripts/class_functions.gd"
 save_manager="*res://scripts/save_manager.gd"
+data_handler="*res://scripts/data_handler.gd"
 
 [display]
 
