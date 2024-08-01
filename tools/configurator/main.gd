@@ -16,17 +16,21 @@ var tab_container: TabContainer
 var anim_logo: AnimatedSprite2D
 var anim_rekku: AnimatedSprite2D
 
+var player =[]
+
 func _ready():
 	_get_nodes()
 	_connect_signals()
 	_play_main_animations()
+	#print(save_manager.data)#["name"]["unlock_goal"])
+	print(save_manager.data["about_links"]["rd_web"]["name"], " ", save_manager.data["about_links"]["rd_web"]["url"])
+	print(save_manager.data["emulators"]["mame"]["name"], " ", save_manager.data["emulators"]["mame"]["description"])
+	
 	var emulator_list = class_functions.get_text_file_from_system_path("../../tools/configurator.sh","sed -n '/local emulator_list=(/,/)/{s/.*local emulator_list=\\(.*\\)/\\1/; /)/q; p}' ","emulist")
 	#print (emulator_list)
 	var abxy_button_list = class_functions.get_text_file_from_system_path("/var/config/retrodeck/retrodeck.cfg","sed -n '/\\[abxy_button_swap\\]/,/^$/p' ","normal")
 	#print(abxy_button_list)
 	var file_path = "res://data_list.json"
-	var about_links_dict: Dictionary = class_functions.get_about_links_from_file(file_path)
-	print(about_links_dict)
 	# set current startup tab to match IDE
 	tab_container.current_tab = 3
 	#add_child(class_functions) # Needed for threaded results Not need autoload?
