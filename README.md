@@ -2,7 +2,7 @@
     <img src="https://github.com/XargonWan/RetroDECK/blob/main/res/logo.png?raw=true" alt="RetroDECK logo" width="600"/>
 </p>
 
-# RetroDECK on your device!
+# Get RetroDECK working in a few steps!
 
 
 <p float="center">
