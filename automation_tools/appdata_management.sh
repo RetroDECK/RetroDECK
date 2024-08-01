@@ -30,7 +30,7 @@ log i "Today is $today_date"
 release_snippet="\
 <releases>
         <release version=\"$appdata_version\" date=\"$today_date\">
-            <url>https://github.com/XargonWan/RetroDECK/releases/tag/$appdata_version</url>
+            <url>https://github.com/RetroDECK/RetroDECK/releases/tag/$appdata_version</url>
             <description>
                 RELEASE_NOTES_PLACEHOLDER
             </description>
@@ -41,7 +41,7 @@ xml_content=$(cat "$appdata_file")
 
 # Replace RELEASE_NOTES_PLACEHOLDER with the actual release notes
 # TODO
-git clone https://github.com/XargonWan/RetroDECK.wiki.git /tmp/wiki
+git clone https://github.com/RetroDECK/RetroDECK.wiki.git /tmp/wiki
 
 # Path to the markdown file
 wiki="/tmp/wiki/Version-history:-Patch-Notes.md"

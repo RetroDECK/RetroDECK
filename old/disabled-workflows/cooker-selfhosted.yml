@@ -66,7 +66,7 @@ jobs:
         run: |
           if [[ "$BRANCH_NAME" == 'refs/'* ]]; then
             pr_number=$(echo ${{env.BRANCH_NAME}} | awk -F'/' '{print $3}')
-            source_branch=$(curl -s "https://api.github.com/repos/XargonWan/RetroDECK/pulls/$pr_number" | jq -r '.head.ref')
+            source_branch=$(curl -s "https://api.github.com/repos/RetroDECK/RetroDECK/pulls/$pr_number" | jq -r '.head.ref')
             source_branch=${source_branch//\//-}
             echo "[DEBUG] source branch is: $source_branch"
             echo "TAG=PR-$pr_number-$source_branch-${{ env.buildid }}" >> $GITHUB_ENV
@@ -142,7 +142,7 @@ jobs:
           body: |
             # Release Notes (Cooker)
             This is a cooker snapshot based on the commit: ${{ github.event.repository.full_name }}@${{github.sha}}.
-            On branch [${{env.BRANCH_NAME}}](https://github.com/XargonWan/RetroDECK/tree/${{env.BRANCH_NAME}}).
+            On branch [${{env.BRANCH_NAME}}](https://github.com/RetroDECK/RetroDECK/tree/${{env.BRANCH_NAME}}).
 
             ## Commits since last release
             ${{ steps.commits.outputs.commits }}
