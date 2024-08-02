@@ -64,6 +64,6 @@ func _ready():
 
 func run_thread_command(command: String, parameters: Array, console: bool) -> void:
 	var result = await class_functions.run_command_in_thread(command, parameters, console)
-	if result != null:
-		print (result["output"])
-		print ("Exit Code: " + str(result["exit_code"]))
+	#if result != null:
+	#	print (result["output"])
+	#	print ("Exit Code: " + str(result["exit_code"]))

@@ -97,7 +97,7 @@ grow_vertical = 2
 unique_name_in_owner = true
 layout_mode = 2
 tab_alignment = 1
-current_tab = 6
+current_tab = 5
 script = ExtResource("3_id6l4")
 
 [node name="TK_SYSTEM" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
@@ -625,7 +625,6 @@ disabled = true
 text = "TK_FTPBTN"
 
 [node name="TK_TROUBLESHOOT" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
-visible = false
 layout_mode = 2
 theme_override_constants/margin_right = 240
 
@@ -675,6 +674,7 @@ layout_mode = 2
 text = "TK_RESETFULL"
 
 [node name="TK_CONFIGURATOR" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_right = 240
 
@@ -872,10 +872,10 @@ text = "Status:"
 [node name="status_code_label" type="Label" parent="Background/side_logo/status_label"]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 91.0
-offset_top = 2.0
-offset_right = 148.0
-offset_bottom = 34.0
+offset_left = 87.0
+offset_top = 3.0
+offset_right = 144.0
+offset_bottom = 35.0
 
 [node name="logo_animated" type="AnimatedSprite2D" parent="Background/side_logo"]
 unique_name_in_owner = true
