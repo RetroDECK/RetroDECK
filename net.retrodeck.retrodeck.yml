@@ -286,7 +286,7 @@ modules:
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
-        url: https://github.com/RetroDECK/org.DolphinEmu.dolphin-emu/releases/download/latest/RetroDECK-dolphin-Artifact.tar.gz
+        url: https://github.com/RetroDECK/org.DolphinEmu.dolphin-emu/releases/latest/download/RetroDECK-dolphin-Artifact.tar.gz
         sha256: RETRODECKDOLPHINLATEST
 
   # PRIMEHACK
@@ -305,7 +305,7 @@ modules:
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
-        url: https://github.com/RetroDECK/io.github.shiiion.primehack/releases/download/latest/RetroDECK-primehack-Artifact.tar.gz
+        url: https://github.com/RetroDECK/io.github.shiiion.primehack/releases/latest/download/RetroDECK-primehack-Artifact.tar.gz
         sha256: RETRODECKPRIMEHACKLATEST
 
   # RPCS3
@@ -343,7 +343,7 @@ modules:
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
-        url: https://github.com/RetroDECK/net.kuribo64.melonDS/releases/download/latest/RetroDECK-melonds-Artifact.tar.gz
+        url: https://github.com/RetroDECK/net.kuribo64.melonDS/releases/latest/download/RetroDECK-melonds-Artifact.tar.gz
         sha256: RETRODECKMELONDSLATEST
 
   # Duckstation
@@ -425,7 +425,7 @@ modules:
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
-        url: https://github.com/RetroDECK/org.solarus_games.solarus.Launcher/releases/download/latest/RetroDECK-solarus-Artifact.tar.gz
+        url: https://github.com/RetroDECK/org.solarus_games.solarus.Launcher/releases/latest/download/RetroDECK-solarus-Artifact.tar.gz
         sha256: RETRODECKSOLARUSLATEST
 
   # GZDoom
