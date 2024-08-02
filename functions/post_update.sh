@@ -359,12 +359,12 @@ if [[ $(check_version_is_older_than "0.8.3b") == "true" ]]; then
   log i "Checking if ES-DE downloaded_media, gamelist, and themes folder must be migrated from \"$rdhome\" to \"$rdhome/ES-DE\" due to a RetroDECK Framework bug"
 
   # Ask user if they want to move and overwrite the data
-  if [[ $(configurator_generic_question_dialog "Move Data" "In the previous version some users suffered a bug where ES-DE appeared empty (no scraped data or collections for example).\n\n<span foreground='$purple' size='larger'><b>Your data is not gone!</b></span>\n\nit might just be in a different path.\n\nDo you want to recover your old data replacing the actual one?\nBy choosing no instead, the folder with be moved but no data will be replaced and it will be availalbe in the retrodeck folder.\n\nThe affected folders are:\n\nretrodeck/themes\t\t\t\t->\tretrodeck/ES-DE/themes\nretrodeck/downloaded_media\t->\tretrodeck/ES-DE/downloaded_media\nretrodeck/gamelists\t\t\t\t->\tretrodeck/ES-DE/gamelist\nretrodeck/collections\t\t\t->\tretrodeck/ES-DE/collections") == "true" ]]; then
+  if [[ $(configurator_generic_question_dialog "Move Data" "In the previous version some users suffered a bug where ES-DE appeared empty (no scraped data or collections for example).\n\n<span foreground='$purple' size='larger'><b>Your data is not gone!</b></span>\n\nit might just be in a different path.\n\nDo you want to recover your old data <span><b>replacing the actual one</b></span> and <span><b>reset ES-DE</b></span>?\nBy choosing no instead, the folders will still be moved but <span><b>no data will be replaced</b></span> and ES-DE will not be reset.\nYour data will still be availalbe in the retrodeck folder, outside of the ES-DE folder.\n\nThe affected folders are:<span foreground='$blue'><b>\n\nretrodeck/themes\t\t\t\t->\tretrodeck/ES-DE/themes\nretrodeck/downloaded_media\t->\tretrodeck/ES-DE/downloaded_media\nretrodeck/gamelists\t\t\t\t->\tretrodeck/ES-DE/gamelist\nretrodeck/collections\t\t\t->\tretrodeck/ES-DE/collections</b></span>") == "true" ]]; then
     move_cmd="mv -f"  # Use mv with overwrite
     log i "User chose to move and overwrite the data."
   else
     move_cmd="move"  # Use existing move function
-    log i "User chose to move the data without overwriting."
+    log i "User chose to move the data without overwriting and reseting ES-DE."
   fi
 
   # Move each directory if it exists
@@ -392,10 +392,11 @@ if [[ $(check_version_is_older_than "0.8.3b") == "true" ]]; then
     log i "ES-DE collections appears to already have been migrated."
   fi
 
-  # Better to refresh the paths
-  set_setting_value "$es_settings" "ROMDirectory" "$roms_folder" "es_settings"
-  set_setting_value "$es_settings" "MediaDirectory" "$media_folder" "es_settings"
-  set_setting_value "$es_settings" "UserThemeDirectory" "$themes_folder" "es_settings"
+  if [[ "$move_cmd" == "mv -f" ]]; then # If the user decided to reset
+    prepare_component "reset" "es-de"
+  else
+    configurator_generic_dialog "RetroDECK Configurator - Move Data" "You decided to don't overwrite the files and not reset ES-DE, but be aware that this might cause issues.\n\nRetroDECk will now start."
+  fi
 fi
 
 
