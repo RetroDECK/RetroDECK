@@ -250,8 +250,8 @@ modules:
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
-        url: RETRODECKPPSSPPURL
-        sha256: RETRODECKPPSSPPHASH
+        url: https://github.com/RetroDECK/org.ppsspp.PPSSPP/releases/latest/download/RetroDECK-PPSSPP-Artifact.tar.gz
+        sha256: RETRODECKPPSSPPLATEST
 
   # PCSX2
   # Inspired by: https://github.com/flathub/com.zettlr.Zettlr/blob/master/com.zettlr.Zettlr.yaml
@@ -286,8 +286,8 @@ modules:
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
-        url: RETRODECKDOLPHINURLPLACEHOLDER
-        sha256: RETRODECKDOLPHINPLACEHOLDER
+        url: https://github.com/RetroDECK/org.DolphinEmu.dolphin-emu/releases/download/latest/RetroDECK-dolphin-Artifact.tar.gz
+        sha256: RETRODECKDOLPHINLATEST
 
   # PRIMEHACK
   # https://github.com/RetroDECK/io.github.shiiion.primehack
@@ -305,8 +305,8 @@ modules:
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
-        url: RETRODECKPRIMEHACKURLPLACEHOLDER
-        sha256: RETRODECKPRIMEHACKPLACEHOLDER
+        url: https://github.com/RetroDECK/io.github.shiiion.primehack/releases/download/latest/RetroDECK-primehack-Artifact.tar.gz
+        sha256: RETRODECKPRIMEHACKLATEST
 
   # RPCS3
   # https://rpcs3.net/download
@@ -343,8 +343,8 @@ modules:
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
-        url: RETRODECKMELONDSURLPLACEHOLDER
-        sha256: RETRODECKMELONDSSHAPLACEHOLDER
+        url: https://github.com/RetroDECK/net.kuribo64.melonDS/releases/download/latest/RetroDECK-melonds-Artifact.tar.gz
+        sha256: RETRODECKMELONDSLATEST
 
   # Duckstation
   # https://github.com/stenzek/duckstation/releases/tag/preview
@@ -425,8 +425,8 @@ modules:
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
-        url: RETRODECKSOLARUSURLPLACEHOLDER
-        sha256: RETRODECKSOLARUSPLACEHOLDER
+        url: https://github.com/RetroDECK/org.solarus_games.solarus.Launcher/releases/download/latest/RetroDECK-solarus-Artifact.tar.gz
+        sha256: RETRODECKSOLARUSLATEST
 
   # GZDoom
   # When updating remember to update all the .pk3 files from the standalone linux download
