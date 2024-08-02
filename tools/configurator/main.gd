@@ -11,6 +11,7 @@ signal signal_theme_changed
 var custom_theme: Theme = $".".theme
 var emu_select_option: OptionButton
 var emu_pick_option: OptionButton
+var log_option: OptionButton
 var tab_container: TabContainer
 var anim_logo: AnimatedSprite2D
 var anim_rekku: AnimatedSprite2D
@@ -55,13 +56,15 @@ func _get_nodes() -> void:
 	tab_container = get_node("%TabContainer")
 	anim_logo = get_node("%logo_animated")
 	anim_rekku = get_node("%rekku_animated")
-
+	log_option = get_node("%logs_button")
+	
 func _connect_signals() -> void:
 	#signal_theme_changed.connect(_conf_theme)
 	theme_option.item_selected.connect(_conf_theme)
 	signal_theme_changed.emit(theme_option.item_selected)
 	emu_select_option.item_selected.connect(_emu_select)
 	emu_pick_option.item_selected.connect(_emu_pick)
+	log_option.item_selected.connect(_load_log)
 	
 func _emu_select(index: int) -> void:
 	emu_pick_option.visible = true
@@ -74,6 +77,17 @@ func _emu_select(index: int) -> void:
 func _emu_pick(index: int) -> void:
 	emu_pick_option.visible = true
 	_play_main_animations()
+
+func _load_log(index: int) -> void:
+	match index:
+		1: 
+			#https://docs.godotengine.org/en/stable/tutorials/scripting/singletons_autoload.html
+			#https://docs.godotengine.org/en/stable/classes/class_os.html
+			#https://docs.godotengine.org/en/stable/classes/class_os.html#class-os-method-get-environment
+			print ("Load log via dos and ref rdhome? or use Enviornment variable from godot")
+			load_popup("RetroDeck Log", "res://components/logs/logs_popup_content.tscn")
+		2:
+			load_popup("ES-DE Log", "res://components/logs/logs_popup_content.tscn")
 
 func _play_main_animations() -> void:
 	anim_logo.play()

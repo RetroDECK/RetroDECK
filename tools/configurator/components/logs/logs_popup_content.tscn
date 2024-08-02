@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://db4ibvxq5wnxe"]
+
+[node name="PopupContent" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 2
+fit_content = true
+scroll_following = true
+context_menu_enabled = true
+selection_enabled = true

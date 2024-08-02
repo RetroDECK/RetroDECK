@@ -97,7 +97,7 @@ grow_vertical = 2
 unique_name_in_owner = true
 layout_mode = 2
 tab_alignment = 1
-current_tab = 5
+current_tab = 2
 script = ExtResource("3_id6l4")
 
 [node name="TK_SYSTEM" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
@@ -266,7 +266,6 @@ disabled = true
 text = "TK_TATE"
 
 [node name="TK_CONTROLS" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
-visible = false
 layout_mode = 2
 theme_override_constants/margin_right = 240
 
@@ -625,6 +624,7 @@ disabled = true
 text = "TK_FTPBTN"
 
 [node name="TK_TROUBLESHOOT" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_right = 240
 
@@ -646,10 +646,20 @@ layout_mode = 2
 layout_mode = 2
 text = "TK_CHECKCONN"
 
-[node name="logs_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/troubleshoot_container"]
+[node name="logs_button" type="OptionButton" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/troubleshoot_container"]
+unique_name_in_owner = true
 layout_mode = 2
-disabled = true
-text = "TK_LOGSBTN"
+size_flags_horizontal = 4
+item_count = 3
+selected = 0
+popup/item_0/text = "TK_LOGSBTN"
+popup/item_0/id = 0
+popup/item_0/disabled = true
+popup/item_0/separator = true
+popup/item_1/text = "RetroDECK Log"
+popup/item_1/id = 1
+popup/item_2/text = "ES_DE Log"
+popup/item_2/id = 2
 
 [node name="reset_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer"]
 layout_mode = 2

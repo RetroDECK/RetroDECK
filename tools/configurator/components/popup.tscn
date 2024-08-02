@@ -68,4 +68,7 @@ theme_override_constants/margin_top = 6
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 6
 
+[node name="RichTextLabel" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer/ContentContainer/MarginContainer"]
+layout_mode = 2
+
 [connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/BackButton" to="." method="_on_back_pressed"]
