@@ -97,7 +97,7 @@ grow_vertical = 2
 unique_name_in_owner = true
 layout_mode = 2
 tab_alignment = 1
-current_tab = 7
+current_tab = 6
 script = ExtResource("3_id6l4")
 
 [node name="TK_SYSTEM" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
@@ -675,7 +675,6 @@ layout_mode = 2
 text = "TK_RESETFULL"
 
 [node name="TK_CONFIGURATOR" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
-visible = false
 layout_mode = 2
 theme_override_constants/margin_right = 240
 
@@ -756,10 +755,11 @@ popup/item_2/text = "Retro"
 popup/item_2/id = 2
 popup/item_3/text = "Modern"
 popup/item_3/id = 3
-popup/item_4/text = "Accessible"
+popup/item_4/text = "OpenDyslexic3"
 popup/item_4/id = 4
 
 [node name="TK_ABOUT" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_right = 240
 script = ExtResource("4_m4rto")
