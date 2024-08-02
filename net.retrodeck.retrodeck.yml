@@ -502,7 +502,7 @@ modules:
 
   # ES-DE
 
-  - name: retrodeck-es-de
+  - name: ES-DE
     buildsystem: simple
     build-commands:
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
