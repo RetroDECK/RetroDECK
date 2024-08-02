@@ -24,13 +24,14 @@ func _ready():
 	data_handler.add_emaultor()
 	data_handler.modify_emulator_test()
 	
-
-	app_data = data_handler.load_data()
-	
+	"""
+	# load json data
+	#app_data = data_handler.load_data()
+		#test to show some data
 	if app_data:
 		var website_data = app_data.about_links["rd_web"]
 		print (website_data.name,"-",website_data.url,"-",website_data.description)
-	
+	"""
 	var emulator_list = class_functions.get_text_file_from_system_path("../../tools/configurator.sh","sed -n '/local emulator_list=(/,/)/{s/.*local emulator_list=\\(.*\\)/\\1/; /)/q; p}' ","emulist")
 	#print (emulator_list)
 	var abxy_button_list = class_functions.get_text_file_from_system_path("/var/config/retrodeck/retrodeck.cfg","sed -n '/\\[abxy_button_swap\\]/,/^$/p' ","normal")
