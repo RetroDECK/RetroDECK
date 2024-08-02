@@ -415,9 +415,8 @@ modules:
       - es-core
     sources:
       - type: git
-        url: https://github.com/XargonWan/ES-DE
+        url: https://github.com/RetroDECK/ES-DE
         branch: retrodeck-main
-      - type: shell
 
   # ES-DE - END
 
