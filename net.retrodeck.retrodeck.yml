@@ -443,8 +443,8 @@ modules:
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
-        url: RETRODECKGZDOOMSURLPLACEHOLDER
-        sha256: RETRODECKGZDOOMSHASPLACEHOLDER
+        url: https://github.com/RetroDECK/org.zdoom.GZDoom/releases/latest/download/RetroDECK-gzdoom-Artifact.tar.gz
+        sha256: RETRODECKGZDOOMLATEST
 
   # Ryujinx Appimage
   # https://ryujinx.org/download
@@ -497,8 +497,8 @@ modules:
       - cp -rn files/* ${FLATPAK_DEST}
     sources:
       - type: archive
-        url: RETRODECKMAMEURLPLACEHOLDER
-        sha256: RETRODECKMAMEPLACEHOLDER
+        url: https://github.com/RetroDECK/MAME/releases/latest/RetroDECK-MAME-Artifact.tar.gz
+        sha256: RETRODECKMAMELATEST
 
   # ES-DE
 
