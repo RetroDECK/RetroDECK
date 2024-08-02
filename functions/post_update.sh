@@ -355,45 +355,43 @@ if [[ $(check_version_is_older_than "0.8.3b") == "true" ]]; then
   # - Recovery from a failed move of the themes, downloaded_media and gamelists folder to their new ES-DE locations.
   
   # Check if any of the directories exist
-  if [ -d "$rdhome/themes" ] || [ -d "$rdhome/downloaded_media" ] || [ -d "$rdhome/gamelists" ] || [ -d "$rdhome/collections" ]; then
-    log i "Moving ES-DE downloaded_media, gamelist, and themes from \"$rdhome\" to \"$rdhome/ES-DE\" due to a RetroDECK Framework bug"
 
-    # Ask user if they want to move and overwrite the data
-    if [[ $(configurator_generic_question_dialog "Move Data" "In the previous version some users suffered a bug where ES-DE appeared empty (no scraped data or collections for example).\n\n<span foreground='$purple' size='larger'><b>Your data is not gone!</b></span>\n\nit's just in a different path.\n\nDo you want to recover your old data replacing the actual one?\nBy choosing no instead, the folder with be moved but no data will be replaced and it will be availalbe in the retrodeck folder.\n\nThe affected folders are:\n\nretrodeck/themes\t\t\t\t->\tretrodeck/ES-DE/themes\nretrodeck/downloaded_media\t->\tretrodeck/ES-DE/downloaded_media\nretrodeck/gamelists\t\t\t\t->\tretrodeck/ES-DE/gamelist\nretrodeck/collections\t\t\t->\tretrodeck/ES-DE/collections") == "true" ]]; then
-      move_cmd="mv -f"  # Use mv with overwrite
-      log i "User chose to move and overwrite the data."
-    else
-      move_cmd="move"  # Use existing move function
-      log i "User chose to move the data without overwriting."
-    fi
+  log i "Checking if ES-DE downloaded_media, gamelist, and themes folder must be migrated from \"$rdhome\" to \"$rdhome/ES-DE\" due to a RetroDECK Framework bug"
 
-    # Move each directory if it exists
-    if [[ -d "$rdhome/themes" ]]; then
-      $move_cmd "$rdhome/themes" "$rdhome/ES-DE/" && log d "Move of \"$rdhome/themes\" completed"
-    else
-      log i "ES-DE themes appears to already have been migrated."
-    fi
-
-    if [[ -d "$rdhome/downloaded_media" ]]; then
-      $move_cmd "$rdhome/downloaded_media" "$rdhome/ES-DE/" && log d "Move of \"$rdhome/downloaded_media\" completed"
-    else
-      log i "ES-DE downloaded media appears to already have been migrated."
-    fi
-
-    if [[ -d "$rdhome/gamelists" ]]; then
-      $move_cmd "$rdhome/gamelists" "$rdhome/ES-DE/" && log d "Move of \"$rdhome/gamelists/\" completed"
-    else
-      log i "ES-DE gamelists appears to already have been migrated."
-    fi
-
-    if [[ -d "$rdhome/collections" ]]; then
-      $move_cmd "$rdhome/collections" "$rdhome/ES-DE/" && log d "Move of \"$rdhome/collections/\" completed"
-    else
-      log i "ES-DE collections appears to already have been migrated."
-    fi
+  # Ask user if they want to move and overwrite the data
+  if [[ $(configurator_generic_question_dialog "Move Data" "In the previous version some users suffered a bug where ES-DE appeared empty (no scraped data or collections for example).\n\n<span foreground='$purple' size='larger'><b>Your data is not gone!</b></span>\n\nit might just be in a different path.\n\nDo you want to recover your old data replacing the actual one?\nBy choosing no instead, the folder with be moved but no data will be replaced and it will be availalbe in the retrodeck folder.\n\nThe affected folders are:\n\nretrodeck/themes\t\t\t\t->\tretrodeck/ES-DE/themes\nretrodeck/downloaded_media\t->\tretrodeck/ES-DE/downloaded_media\nretrodeck/gamelists\t\t\t\t->\tretrodeck/ES-DE/gamelist\nretrodeck/collections\t\t\t->\tretrodeck/ES-DE/collections") == "true" ]]; then
+    move_cmd="mv -f"  # Use mv with overwrite
+    log i "User chose to move and overwrite the data."
   else
-    log i "ES-DE folders appears to already have been migrated."
+    move_cmd="move"  # Use existing move function
+    log i "User chose to move the data without overwriting."
   fi
+
+  # Move each directory if it exists
+  if [[ -d "$rdhome/themes" ]]; then
+    $move_cmd "$rdhome/themes" "$rdhome/ES-DE/" && log d "Move of \"$rdhome/themes\" completed"
+  else
+    log i "ES-DE themes appears to already have been migrated."
+  fi
+
+  if [[ -d "$rdhome/downloaded_media" ]]; then
+    $move_cmd "$rdhome/downloaded_media" "$rdhome/ES-DE/" && log d "Move of \"$rdhome/downloaded_media\" completed"
+  else
+    log i "ES-DE downloaded media appears to already have been migrated."
+  fi
+
+  if [[ -d "$rdhome/gamelists" ]]; then
+    $move_cmd "$rdhome/gamelists" "$rdhome/ES-DE/" && log d "Move of \"$rdhome/gamelists/\" completed"
+  else
+    log i "ES-DE gamelists appears to already have been migrated."
+  fi
+
+  if [[ -d "$rdhome/collections" ]]; then
+    $move_cmd "$rdhome/collections" "$rdhome/ES-DE/" && log d "Move of \"$rdhome/collections/\" completed"
+  else
+    log i "ES-DE collections appears to already have been migrated."
+  fi
+
   # Better to refresh the paths
   set_setting_value "$es_settings" "ROMDirectory" "$roms_folder" "es_settings"
   set_setting_value "$es_settings" "MediaDirectory" "$media_folder" "es_settings"
