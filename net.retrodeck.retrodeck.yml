@@ -924,6 +924,8 @@ modules:
        # has leftover files from a previous non-flatpak install
       - type: patch
         path: rd-submodules/primehack/detectflatpak.patch
+      - type: patch
+        path: Steam-Deck-Control-Fix.patch
        # version strings must match exactly for online multiplayer
       - type: patch
         path: rd-submodules/primehack/nodirtyversion.patch
