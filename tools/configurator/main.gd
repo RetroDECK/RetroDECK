@@ -1,6 +1,5 @@
 extends Control
 
-
 var bios_type:int
 var status_code_label: Label
 var wrapper_command: String = "../../tools/retrodeck_function_wrapper.sh"
@@ -22,29 +21,9 @@ func _ready():
 	_get_nodes()
 	_connect_signals()
 	_play_main_animations()
-	#print(save_manager.data["about_links"]["rd_web"]["name"], " ", save_manager.data["about_links"]["rd_web"]["url"])
-	#print(save_manager.data["emulators"]["mame"]["name"], " ", save_manager.data["emulators"]["mame"]["description"])
 
-	# Populate app_data with some test data
-	var link = Link.new()
-	link.name = "Example Site"
-	link.url = "https://example.com"
-	link.description = "An example description."
-	app_data.about_links["example_site"] = link
-
-	var emulator = Emulator.new()
-	emulator.name = "Example Emulator"
-	emulator.description = "An example emulator."
-	var option = EmulatorOption.new()
-	option.resettable = true
-	emulator.options.append(option)
-	var property = EmulatorProperty.new()
-	property.standalone = true
-	property.abxy_button_status = false
-	emulator.properties.append(property)
-	app_data.emulators["example_emulator"] = emulator
-
-	data_handler.save_data(app_data)
+	data_handler.add_emaultor()
+	
 	 # Example test cases for modifying data
 	data_handler.modify_link("example_site", "Updated Site", "https://updated-example.com", "Updated description.")
 
@@ -61,16 +40,15 @@ func _ready():
 
 	data_handler.modify_emulator("example_emulator", "Updated Emulator", "Updated description", new_options, new_properties)
 	
-	var app_data = data_handler.load_data()
+	app_data = data_handler.load_data()
 	if app_data:
 		var website_link = app_data.about_links["rd_web"]
 		print (website_link.name,"-",website_link.url,"-",website_link.description)
 	
 	var emulator_list = class_functions.get_text_file_from_system_path("../../tools/configurator.sh","sed -n '/local emulator_list=(/,/)/{s/.*local emulator_list=\\(.*\\)/\\1/; /)/q; p}' ","emulist")
-	#print (emulator_list)
+	print (emulator_list)
 	var abxy_button_list = class_functions.get_text_file_from_system_path("/var/config/retrodeck/retrodeck.cfg","sed -n '/\\[abxy_button_swap\\]/,/^$/p' ","normal")
-	#print(abxy_button_list)
-	var file_path = "res://data_list.json"
+	print(abxy_button_list)
 	# set current startup tab to match IDE
 	tab_container.current_tab = 3
 	#add_child(class_functions) # Needed for threaded results Not need autoload?

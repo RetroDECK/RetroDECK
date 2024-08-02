@@ -183,3 +183,25 @@ func modify_emulator(key: String, new_name: String, new_description: String, new
 		print("Emulator modified successfully")
 	else:
 		print("Emulator not found")
+
+
+func add_emaultor() -> void:
+	var link = Link.new()
+	link.name = "Example Site"
+	link.url = "https://example.com"
+	link.description = "An example description."
+	app_data.about_links["example_site"] = link
+
+	var emulator = Emulator.new()
+	emulator.name = "Example Emulator"
+	emulator.description = "An example emulator."
+	var option = EmulatorOption.new()
+	option.resettable = true
+	emulator.options.append(option)
+	var property = EmulatorProperty.new()
+	property.standalone = true
+	property.abxy_button_status = false
+	emulator.properties.append(property)
+	app_data.emulators["example_emulator"] = emulator
+	data_handler.save_data(app_data)
+	
