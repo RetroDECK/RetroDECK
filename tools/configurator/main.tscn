@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://61f6m4r1mpan"]
+[gd_scene load_steps=26 format=3 uid="uid://61f6m4r1mpan"]
 
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
 [ext_resource type="Script" path="res://main.gd" id="1_obpq7"]
@@ -19,17 +19,9 @@
 [ext_resource type="Texture2D" uid="uid://bojog0xvms7hr" path="res://assets/graphics/retrodeck_base_shake3.png" id="8_l3t5c"]
 [ext_resource type="Texture2D" uid="uid://bns0ot5pbf03h" path="res://res/flags/sweden_32.png" id="8_lptln"]
 [ext_resource type="Texture2D" uid="uid://uko0ikrtjkj" path="res://assets/graphics/retrodeck_base_shake4.png" id="9_8eqo6"]
-[ext_resource type="Texture2D" uid="uid://cor8ep0fkqm08" path="res://res/Rekku/base.png" id="9_brsrf"]
 [ext_resource type="Texture2D" uid="uid://dhsorn3kcfdcv" path="res://res/flags/ukraine_32.png" id="9_dp7oa"]
 [ext_resource type="Texture2D" uid="uid://dtwjo7co226dw" path="res://res/flags/japan_32.png" id="10_e8mt0"]
-[ext_resource type="Texture2D" uid="uid://cavtn1rljc5oe" path="res://res/Rekku/eyes-open.png" id="10_y6gkh"]
-[ext_resource type="Texture2D" uid="uid://cv7nckloqhn5m" path="res://res/Rekku/blink1.png" id="11_6deod"]
 [ext_resource type="Texture2D" uid="uid://cbwhpqip43aei" path="res://res/flags/china_32.png" id="11_ri2fv"]
-[ext_resource type="Texture2D" uid="uid://by0oj188x350g" path="res://res/Rekku/blink2.png" id="12_ro20g"]
-[ext_resource type="Texture2D" uid="uid://ciwghjy0ahxk6" path="res://res/Rekku/mouth-A.png" id="13_xj3b3"]
-[ext_resource type="Texture2D" uid="uid://kx8eypf4ffvu" path="res://res/Rekku/mouth-base.png" id="14_lnkoa"]
-[ext_resource type="Texture2D" uid="uid://b6gl8sltbak7v" path="res://res/Rekku/mouth-O.png" id="15_1sikj"]
-[ext_resource type="PackedScene" uid="uid://cb4fvsgnwsf4q" path="res://rekku_animated.tscn" id="29_uioq2"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_lhf2y"]
 animations = [{
@@ -67,52 +59,6 @@ texture_margin_right = 6.0
 texture_margin_bottom = 6.0
 region_rect = Rect2(0, 8, 16, 16)
 modulate_color = Color(0.65098, 0.403922, 0.819608, 1)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_trwmf"]
-animations = [{
-"frames": [{
-"duration": 40.0,
-"texture": ExtResource("10_y6gkh")
-}, {
-"duration": 0.15,
-"texture": ExtResource("11_6deod")
-}, {
-"duration": 0.15,
-"texture": ExtResource("12_ro20g")
-}],
-"loop": true,
-"name": &"blink",
-"speed": 5.0
-}]
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_p8gbs"]
-animations = [{
-"frames": [{
-"duration": 15.0,
-"texture": ExtResource("14_lnkoa")
-}, {
-"duration": 1.0,
-"texture": ExtResource("13_xj3b3")
-}, {
-"duration": 0.5,
-"texture": ExtResource("14_lnkoa")
-}, {
-"duration": 1.0,
-"texture": ExtResource("14_lnkoa")
-}, {
-"duration": 1.0,
-"texture": ExtResource("15_1sikj")
-}, {
-"duration": 1.0,
-"texture": ExtResource("13_xj3b3")
-}, {
-"duration": 1.0,
-"texture": ExtResource("14_lnkoa")
-}],
-"loop": true,
-"name": &"speech",
-"speed": 5.0
-}]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -1065,28 +1011,6 @@ When \"Quick Resume\" is enabled, a savestate is created upon quit and it will b
 This is mot working on the following systems: Switch, WiiU."
 scroll_following = true
 script = ExtResource("5_cprkf")
-
-[node name="rekku_sprite" type="Sprite2D" parent="rekku"]
-position = Vector2(490, -194)
-scale = Vector2(0.292969, 0.292969)
-texture = ExtResource("9_brsrf")
-metadata/_edit_group_ = true
-
-[node name="blink_anim" type="AnimatedSprite2D" parent="rekku/rekku_sprite"]
-sprite_frames = SubResource("SpriteFrames_trwmf")
-animation = &"blink"
-autoplay = "blink"
-frame_progress = 0.299789
-
-[node name="speech_anim" type="AnimatedSprite2D" parent="rekku/rekku_sprite"]
-sprite_frames = SubResource("SpriteFrames_p8gbs")
-animation = &"speech"
-frame_progress = 0.664627
-
-[node name="rekku_animated" parent="." instance=ExtResource("29_uioq2")]
-unique_name_in_owner = true
-position = Vector2(1008.38, 450.938)
-scale = Vector2(0.165283, 0.175903)
 
 [connection signal="pressed" from="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/game_control_container/GridContainer/quick_resume_adv_button" to="." method="_on_quickresume_advanced_pressed"]
 [connection signal="pressed" from="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container/bios_button" to="." method="_on_bios_button_pressed"]

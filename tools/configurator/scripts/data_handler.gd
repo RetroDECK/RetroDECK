@@ -55,7 +55,6 @@ func load_data() -> AppData:
 			var app_data = AppData.new()
 			app_data.about_links = about_links
 			app_data.emulators = emulators
-
 			return app_data
 		else:
 			print("Error parsing JSON")

@@ -14,7 +14,6 @@ var emu_pick_option: OptionButton
 var tab_container: TabContainer
 var anim_logo: AnimatedSprite2D
 var anim_rekku: AnimatedSprite2D
-#var data_handler: DataHandler
 
 var app_data = AppData.new()
 func _ready():
@@ -27,14 +26,15 @@ func _ready():
 	
 
 	app_data = data_handler.load_data()
+	
 	if app_data:
-		var website_link = app_data.about_links["rd_web"]
-		print (website_link.name,"-",website_link.url,"-",website_link.description)
+		var website_data = app_data.about_links["rd_web"]
+		print (website_data.name,"-",website_data.url,"-",website_data.description)
 	
 	var emulator_list = class_functions.get_text_file_from_system_path("../../tools/configurator.sh","sed -n '/local emulator_list=(/,/)/{s/.*local emulator_list=\\(.*\\)/\\1/; /)/q; p}' ","emulist")
-	print (emulator_list)
+	#print (emulator_list)
 	var abxy_button_list = class_functions.get_text_file_from_system_path("/var/config/retrodeck/retrodeck.cfg","sed -n '/\\[abxy_button_swap\\]/,/^$/p' ","normal")
-	print(abxy_button_list)
+	#print(abxy_button_list)
 	# set current startup tab to match IDE
 	tab_container.current_tab = 3
 	#add_child(class_functions) # Needed for threaded results Not need autoload?
@@ -76,7 +76,6 @@ func _emu_pick(index: int) -> void:
 
 func _play_main_animations() -> void:
 	anim_logo.play()
-	anim_rekku.play()
 
 func _conf_theme(index: int) -> void: 
 	match index:
