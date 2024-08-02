@@ -205,3 +205,19 @@ func add_emaultor() -> void:
 	app_data.emulators["example_emulator"] = emulator
 	data_handler.save_data(app_data)
 	
+func modify_emulator_test() -> void:
+	data_handler.modify_link("example_site", "Updated Site", "https://updated-example.com", "Updated description.")
+
+	var new_options = []
+	var new_option = EmulatorOption.new()
+	new_option.resettable = false
+	new_options.append(new_option)
+
+	var new_properties = []
+	var new_property = EmulatorProperty.new()
+	new_property.standalone = false
+	new_property.abxy_button_status = true
+	new_properties.append(new_property)
+
+	data_handler.modify_emulator("example_emulator", "Updated Emulator", "Updated description", new_options, new_properties)
+	

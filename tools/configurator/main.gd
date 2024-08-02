@@ -23,23 +23,9 @@ func _ready():
 	_play_main_animations()
 
 	data_handler.add_emaultor()
+	data_handler.modify_emulator_test()
 	
-	 # Example test cases for modifying data
-	data_handler.modify_link("example_site", "Updated Site", "https://updated-example.com", "Updated description.")
 
-	var new_options = []
-	var new_option = EmulatorOption.new()
-	new_option.resettable = false
-	new_options.append(new_option)
-
-	var new_properties = []
-	var new_property = EmulatorProperty.new()
-	new_property.standalone = false
-	new_property.abxy_button_status = true
-	new_properties.append(new_property)
-
-	data_handler.modify_emulator("example_emulator", "Updated Emulator", "Updated description", new_options, new_properties)
-	
 	app_data = data_handler.load_data()
 	if app_data:
 		var website_link = app_data.about_links["rd_web"]
