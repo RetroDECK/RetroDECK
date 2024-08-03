@@ -111,7 +111,7 @@ jobs:
         with:
           submodules: 'true'
 
-      - name: Build flatpak: download only
+      - name: "Build flatpak: download only"
         id: "flatpak-download"
         run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
         continue-on-error: true
