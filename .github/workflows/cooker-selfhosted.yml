@@ -208,7 +208,7 @@ jobs:
 
   Create_Artifact_For_Flathub:
     runs-on: retrodeck
-    needs: [Create_Flatpak, Creating_Release]
+    needs: Create_Flatpak
     steps:
       - name: Clone RetroDECK repo
         uses: actions/checkout@v3
