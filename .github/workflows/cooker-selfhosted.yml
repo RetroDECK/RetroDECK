@@ -161,7 +161,7 @@ jobs:
           artifacts: "RetroDECK-cooker.flatpak,RetroDECK-cooker.flatpak.sha,RetroDECK-Artifact.tar.gz"
           allowUpdates: true
           makeLatest: ${{env.MAKE_LATEST}} # if it's a feat branch is not considered the latest build
-          token: ${{ secrets.RETRODECK_PAT }}
+          token: ${{ secrets.TRIGGER_BUILD_TOKEN }}
           repo: RetroDECK-cooker
         continue-on-error: true
 
