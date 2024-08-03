@@ -97,52 +97,49 @@ jobs:
       - name: "[DEBUG] Outputting manifest"
         run: cat net.retrodeck.retrodeck.yml
 
-      - name: ¨DEBUG - Creating dummy file"
-        run: touch RetroDECK-cooker.flatpak
+      - name: "Build flatpak: download only"
+        id: "flatpak-download"
+        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
+        continue-on-error: true
 
-      # - name: "Build flatpak: download only"
-      #   id: "flatpak-download"
-      #   run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
-      #   continue-on-error: true
+      # Sometimes flatpak download fails, in this case it tries a second time
+      - name: "Build flatpak: download only (retry)"
+        if: steps.flatpak-download.outcome == 'failure'
+        run: |
+          echo "Download failed, maybe some hash changed since the build start."
+          echo "Recalculating hashes and retrying download..."
+          rm -f "{GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml"
+          cp "${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml.bak" "${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml"
+          "${GITHUB_WORKSPACE}/automation_tools/pre_build_automation.sh"
+          "${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
 
-      # # Sometimes flatpak download fails, in this case it tries a second time
-      # - name: "Build flatpak: download only (retry)"
-      #   if: steps.flatpak-download.outcome == 'failure'
-      #   run: |
-      #     echo "Download failed, maybe some hash changed since the build start."
-      #     echo "Recalculating hashes and retrying download..."
-      #     rm -f "{GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml"
-      #     cp "${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml.bak" "${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml"
-      #     "${GITHUB_WORKSPACE}/automation_tools/pre_build_automation.sh"
-      #     "${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
+      - name: Build flatpak
+        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_only.sh"
 
-      # - name: Build flatpak
-      #   run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_only.sh"
+      - name: Create Artifact for flathub
+        run: | 
+          tar -czf ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.tar.gz -C ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker .
+          hash=($(sha256sum ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.tar.gz))
+          echo $hash > ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.sha
+          mv -f RetroDECK-Artifact-cooker.* ${{ secrets.ARTIFACT_REPO }}
+        continue-on-error: true
 
-      # - name: Create Artifact for flathub
-      #   run: | 
-      #     tar -czf ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.tar.gz -C ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker .
-      #     hash=($(sha256sum ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.tar.gz))
-      #     echo $hash > ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.sha
-      #     mv -f RetroDECK-Artifact-cooker.* ${{ secrets.ARTIFACT_REPO }}
-      #   continue-on-error: true
+      - name: Create Bundle
+        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_bundle.sh"
 
-      # - name: Create Bundle
-      #   run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_bundle.sh"
+      - name: Set environment variable with current branch name
+        run: echo "GITHUB_REF_SLUG=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
 
-      # - name: Set environment variable with current branch name
-      #   run: echo "GITHUB_REF_SLUG=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
-
-      # - name: Get commits since last release
-      #   run: |
-      #     # Get the latest release tag
-      #     LATEST_TAG=$(git describe --tags --abbrev=0)
-      #     # Get all commits since the latest release tag
-      #     COMMITS=$(git log $LATEST_TAG..HEAD --pretty=format:"- %s")
-      #     # Set the output variable
-      #     echo "::set-output name=commits::$COMMITS"
-      #   id: commits
-      #   continue-on-error: true
+      - name: Get commits since last release
+        run: |
+          # Get the latest release tag
+          LATEST_TAG=$(git describe --tags --abbrev=0)
+          # Get all commits since the latest release tag
+          COMMITS=$(git log $LATEST_TAG..HEAD --pretty=format:"- %s")
+          # Set the output variable
+          echo "::set-output name=commits::$COMMITS"
+        id: commits
+        continue-on-error: true
 
       - name: Publish the flatpak in a new cooker release
         uses: ncipollo/release-action@v1
@@ -179,13 +176,13 @@ jobs:
           git tag "${{ env.TAG }}"             # Create the tag locally               
           git push origin "${{ env.TAG }}"     # Push the new tag in the remote repo
 
-      # # In case it cannot publish the release at least it's providing the flatpak file for creating a manual release
-      # - name: Upload RetroDECK-cooker.flatpak
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: retrodeck-flatpak
-      #     path: RetroDECK-cooker.flatpak
-      #   continue-on-error: true
+      # In case it cannot publish the release at least it's providing the flatpak file for creating a manual release
+      - name: Upload RetroDECK-cooker.flatpak
+        uses: actions/upload-artifact@v3
+        with:
+          name: retrodeck-flatpak
+          path: RetroDECK-cooker.flatpak
+        continue-on-error: true
 
       # - name: Upload RetroDECK-cooker.flatpak to Gitea Release
       #   run: |
