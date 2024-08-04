@@ -8,8 +8,8 @@ on:
     paths:
      - '.github/workflows/**'
      - 'automation_tools/**'
-     - 'emu-configs/**'
-     - 'es-configs/**'
+     - 'config/**'
+     - 'config/es-de/**'
      - 'functions/**'
      - 'rd-submodules/**'
      - '*.sh'
@@ -29,7 +29,7 @@ on:
 jobs:
 
   Building_RetroDECK:
-    runs-on: self-hosted
+    runs-on: retrodeck
     steps:
 
       # Circumventing this bug: https://github.com/flatpak/flatpak-builder/issues/317
@@ -38,7 +38,7 @@ jobs:
         continue-on-error: true
     
       - name: Clone RetroDECK repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: 'true'
 
@@ -64,16 +64,21 @@ jobs:
       # if the branch is coming from a PR the tag should be manually built
       - name: "Generate version tag"
         run: |
+          source automation_tools/version_extractor.sh
+          MANIFEST_VERSION="$(fetch_manifest_version)"
+          echo "MANIFEST_VERSION=$MANIFEST_VERSION" >> $GITHUB_ENV
           if [[ "$BRANCH_NAME" == 'refs/'* ]]; then
             pr_number=$(echo ${{env.BRANCH_NAME}} | awk -F'/' '{print $3}')
-            source_branch=$(curl -s "https://api.github.com/repos/XargonWan/RetroDECK/pulls/$pr_number" | jq -r '.head.ref')
+            source_branch=$(curl -s "https://api.github.com/repos/RetroDECK/RetroDECK/pulls/$pr_number" | jq -r '.head.ref')
             source_branch=${source_branch//\//-}
             echo "[DEBUG] source branch is: $source_branch"
             echo "TAG=PR-$pr_number-$source_branch-${{ env.buildid }}" >> $GITHUB_ENV
           else
-            echo "TAG=${{env.BRANCH_NAME}}-${{ env.buildid }}" >> $GITHUB_ENV
+            TAG="$MANIFEST_VERSION-${{ env.buildid }}"
+            echo "TAG=$TAG" >> $GITHUB_ENV
           fi
-          echo "Version TAG: ${{ env.TAG }}"
+          echo "MANIFEST_VERSION: $MANIFEST_VERSION"
+          echo "Version TAG: $TAG"
 
       # backing up manifest in case download fails and hashes must be recalculated
       - name: Manifest backup
@@ -110,14 +115,6 @@ jobs:
       - name: Build flatpak
         run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_only.sh"
 
-      - name: Create Artifact for flathub
-        run: | 
-          tar -czf ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.tar.gz -C ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker .
-          hash=($(sha256sum ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.tar.gz))
-          echo $hash > ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.sha
-          mv -f RetroDECK-Artifact-cooker.* ${{ secrets.ARTIFACT_REPO }}
-        continue-on-error: true
-
       - name: Create Bundle
         run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_bundle.sh"
 
@@ -142,7 +139,7 @@ jobs:
           body: |
             # Release Notes (Cooker)
             This is a cooker snapshot based on the commit: ${{ github.event.repository.full_name }}@${{github.sha}}.
-            On branch [${{env.BRANCH_NAME}}](https://github.com/XargonWan/RetroDECK/tree/${{env.BRANCH_NAME}}).
+            On branch [${{env.BRANCH_NAME}}](https://github.com/RetroDECK/RetroDECK/tree/${{env.BRANCH_NAME}}).
 
             ## Commits since last release
             ${{ steps.commits.outputs.commits }}
@@ -156,15 +153,34 @@ jobs:
           allowUpdates: true
           makeLatest: ${{env.MAKE_LATEST}} # if it's a feat branch is not considered the latest build
           token: ${{ secrets.TRIGGER_BUILD_TOKEN }}
-          repo: RetroDECK-cooker
+          repo: Cooker
         continue-on-error: true
+
+      - name: Rewrite Tag
+        run: |
+          git submodule deinit -f --all
+          git fetch --tags
+          if git rev-parse --verify "${{ env.TAG }}" >/dev/null 2>&1; then # if the tag exists
+              git tag -d "${{ env.TAG }}"                                  # remove it from local repo
+              git push --delete origin "${{ env.TAG }}"                    # and from remote
+          fi
+          git tag "${{ env.TAG }}"             # Create the tag locally               
+          git push origin "${{ env.TAG }}"     # Push the new tag in the remote repo
 
       # In case it cannot publish the release at least it's providing the flatpak file for creating a manual release
       - name: Upload RetroDECK-cooker.flatpak
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: retrodeck-flatpak
           path: RetroDECK-cooker.flatpak
+        continue-on-error: true
+
+      - name: Create Artifact for flathub
+        run: | 
+          tar -czf ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.tar.gz -C ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker .
+          hash=($(sha256sum ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.tar.gz))
+          echo $hash > ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.sha
+          mv -f RetroDECK-Artifact-cooker.* ${{ secrets.ARTIFACT_REPO }}
         continue-on-error: true
 
       # - name: Upload RetroDECK-cooker.flatpak to Gitea Release

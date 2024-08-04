@@ -42,8 +42,8 @@ appdata_version=$(fetch_appdata_version)
 echo -e "Appdata:\t\t$appdata_version"
 
 # Additional checks
-if [[ "$manifest_version" == "main" || "$manifest_version" == "THISBRANCH" ]]; then
-    echo "Manifest version cannot be 'main' or 'THISBRANCH'. Please fix it."
+if [[ "$manifest_version" == "main" || "$manifest_version" == "THISBRANCH" || "$manifest_version" == *"cooker"* ]]; then
+    echo "Manifest version cannot be 'main', 'THISBRANCH', or contain 'cooker'. Please fix it."
     exit 1
 fi
 

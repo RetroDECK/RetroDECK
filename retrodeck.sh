@@ -56,10 +56,10 @@ https://retrodeck.net
       ;;
     --reset-component*)
       echo "You are about to reset one or more RetroDECK components or emulators."
-      echo "Available options are: es-de, retroarch, cemu, dolphin, duckstation, gzdoom, melonds, pcsx3, pico8, ppsspp, primehack, rpcs3, ryujinx, xemu, vita3k, mame, boilr, all"
+      echo "Available options are: es-de, retroarch, cemu, dolphin, duckstation, gzdoom, melonds, pcsx3, pico8, ppsspp, primehack, rpcs3, ryujinx, xemu, vita3k, mame, all"
       read -p "Please enter the component you would like to reset: " component
       component=$(echo "$component" | tr '[:upper:]' '[:lower:]')
-      if [[ "$component" =~ ^(es-de|retroarch|cemu|dolphin|duckstation|gzdoom|mame|melonds|pcsx2|ppsspp|primehack|ryujinx|rpcs3|xemu|all)$ ]]; then
+      if [[ "$component" =~ ^(es-de|retroarch|cemu|dolphin|duckstation|gzdoom|mame|melonds|pcsx2|ppsspp|primehack|ryujinx|rpcs3|vita3k|xemu|all)$ ]]; then
         read -p "You are about to reset $component to default settings. Enter 'y' to continue, 'n' to stop: " response
         if [[ $response == [yY] ]]; then
           prepare_component "reset" "$component" "cli"
@@ -113,7 +113,7 @@ if [ -f "$lockfile" ]; then
       set_setting_value $rd_conf "update_check" "true" retrodeck "options"
       set_setting_value $rd_conf "developer_options" "true" retrodeck "options"
       cooker_base_version=$(echo $hard_version | cut -d'-' -f2)
-      choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Upgrade" --extra-button="Don't Upgrade" --extra-button="Full Wipe and Fresh Install" \
+      choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Upgrade" --extra-button="Don't Upgrade" --extra-button="Full Wipe and Fresh Install" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Cooker Upgrade" \
       --text="You appear to be upgrading to a \"cooker\" build of RetroDECK.\n\nWould you like to perform the standard post-update process, skip the post-update process or remove ALL existing RetroDECK folders and data (including ROMs and saves) to start from a fresh install?\n\nPerforming the normal post-update process multiple times may lead to unexpected results.")
@@ -184,13 +184,4 @@ if [[ $update_check == "true" ]]; then
 fi
 
 # Normal Startup
-
-if [[ $steam_sync == "true" ]]; then
-  python3 /app/libexec/steam-sync/steam-sync.py &
-fi
-
 start_retrodeck
-
-if [[ $steam_sync == "true" ]]; then
-  touch /tmp/retrodeck_steam_sync_exit
-fi

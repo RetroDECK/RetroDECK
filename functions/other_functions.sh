@@ -8,10 +8,10 @@ directory_browse() {
 
   while [ $path_selected == false ]
   do
-    local target="$(zenity --file-selection --title="Choose $1" --directory)"
+    local target="$(rd_zenity --file-selection --title="Choose $1" --directory)"
     if [ ! -z "$target" ] #yes
     then
-      zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
+      rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
       --text="Directory $target chosen, is this correct?"
       if [ $? == 0 ]
       then
@@ -20,7 +20,7 @@ directory_browse() {
         break
       fi
     else
-      zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
+      rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
       --text="No directory selected. Do you want to exit the selection process?"
       if [ $? == 0 ]
       then
@@ -38,10 +38,10 @@ file_browse() {
 
   while [ $file_selected == false ]
   do
-    local target="$(zenity --file-selection --title="Choose $1")"
+    local target="$(rd_zenity --file-selection --title="Choose $1")"
     if [ ! -z "$target" ] #yes
     then
-      zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
+      rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
       --text="File $target chosen, is this correct?"
       if [ $? == 0 ]
       then
@@ -50,7 +50,7 @@ file_browse() {
         break
       fi
     else
-      zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
+      rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
       --text="No file selected. Do you want to exit the selection process?"
       if [ $? == 0 ]
       then
@@ -89,13 +89,13 @@ move() {
     rsync -a --remove-source-files --ignore-existing --mkpath "$source_dir" "$dest_dir" # Copy files but don't overwrite conflicts
     find "$source_dir" -type d -empty -delete # Cleanup empty folders that were left behind
   ) |
-  zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+  rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Configurator Utility - Move in Progress" \
   --text="Moving directory $(basename "$1") to new location of $2, please wait."
 
   if [[ -d "$source_dir" ]]; then # Some conflicting files remain
-    zenity --icon-name=net.retrodeck.retrodeck --error --no-wrap \
+    rd_zenity --icon-name=net.retrodeck.retrodeck --error --no-wrap \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator Utility - Move Directories" \
     --text="There were some conflicting files that were not moved.\n\nAll files that could be moved are in the new location,\nany files that already existed at the new location have not been moved and will need to be handled manually."
@@ -133,7 +133,7 @@ download_file() {
   (
     wget "$1" -O "$2" -q
   ) |
-  zenity --progress \
+  rd_zenity --progress \
     --title="Downloading File" \
     --text="Downloading $3..." \
     --pulsate \
@@ -153,7 +153,6 @@ update_rd_conf() {
 
   # STAGE 2: To handle presets sections that use duplicate setting names
 
-  mv -f $rd_conf $rd_conf_backup # Backup config file agiain before update but after Stage 1 expansion
   generate_single_patch $rd_defaults $rd_conf_backup $rd_update_patch retrodeck # Create a patch file for differences between defaults and current user settings
   sed -i '/change^^version/d' $rd_update_patch # Remove version line from temporary patch file
   deploy_single_patch $rd_defaults $rd_update_patch $rd_conf # Re-apply user settings to defaults file
@@ -286,6 +285,11 @@ dir_prep() {
   log i "$symlink is now $real"
 }
 
+rd_zenity() {
+  # This function replaces the standard 'zenity' command and filters out annoying GTK errors on Steam Deck
+  zenity 2> >(grep -v 'Gtk' >&2) "$@"
+}
+
 update_rpcs3_firmware() {
   create_dir "$roms_folder/ps3/tmp"
   chmod 777 "$roms_folder/ps3/tmp"
@@ -313,7 +317,7 @@ make_name_pretty() {
   if [[ ! -z "$system" ]]; then
     IFS='^' read -r internal_name pretty_name < <(echo "$system")
   else
-    pretty_name="$system"
+    pretty_name="$1"
   fi
   echo "$pretty_name"
 }
@@ -323,10 +327,10 @@ finit_browse() {
 path_selected=false
 while [ $path_selected == false ]
 do
-  local target="$(zenity --file-selection --title="Choose RetroDECK data directory location" --directory)"
+  local target="$(rd_zenity --file-selection --title="Choose RetroDECK data directory location" --directory)"
   if [[ ! -z "$target" ]]; then
     if [[ -w "$target" ]]; then
-      zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
+      rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
       --cancel-label="No" \
       --ok-label "Yes" \
       --text="Your RetroDECK data folder will be:\n\n$target/retrodeck\n\nis that ok?"
@@ -336,7 +340,7 @@ do
         echo "$target/retrodeck"
         break
       else
-        zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" --text="Do you want to quit?"
+        rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" --text="Do you want to quit?"
         if [ $? == 0 ] # yes, quit
         then
           quit_retrodeck
@@ -344,7 +348,7 @@ do
       fi
     fi
   else
-    zenity --error --no-wrap \
+    rd_zenity --error --no-wrap \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK" \
     --ok-label "Quit" \
@@ -357,13 +361,15 @@ done
 finit_user_options_dialog() {
   finit_available_options=()
 
-  while IFS="^" read -r enabled option_name option_desc option_tag
+  while IFS="^" read -r enabled option_name option_desc option_tag || [[ -n "$enabled" ]];
   do
-    finit_available_options=("${finit_available_options[@]}" "$enabled" "$option_name" "$option_desc" "$option_tag")
+    if [[ ! $enabled == "#"* ]] && [[ ! -z "$enabled" ]]; then
+      finit_available_options=("${finit_available_options[@]}" "$enabled" "$option_name" "$option_desc" "$option_tag")
+    fi
   done < $finit_options_list
 
 
-  local choices=$(zenity \
+  local choices=$(rd_zenity \
   --list --width=1200 --height=720 \
   --checklist --hide-column=4 --ok-label="Confirm Selections" --extra-button="Enable All" \
   --separator=" " --print-column=4 \
@@ -407,7 +413,7 @@ finit() {
     if [ ! -d "$sdcard" ] # SD Card path is not existing
     then
       log e "SD card not found"
-      zenity --error --no-wrap \
+      rd_zenity --error --no-wrap \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK" \
       --ok-label "Browse" \
@@ -420,7 +426,7 @@ finit() {
     elif [ ! -w "$sdcard" ] #SD card found but not writable
       then
         log e "SD card found but not writable"
-        zenity --error --no-wrap \
+        rd_zenity --error --no-wrap \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         --title "RetroDECK" \
         --ok-label "Quit" \
@@ -435,7 +441,7 @@ finit() {
 
   "Custom Location" )
       log i "Custom Location selected"
-      zenity --info --no-wrap \
+      rd_zenity --info --no-wrap \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK" \
       --ok-label "Browse" \
@@ -448,6 +454,8 @@ finit() {
     ;;
 
   esac
+
+  log i "\"retrodeck\" folder will be located in \"$rdhome\""
 
   prepare_component "reset" "retrodeck" # Parse the [paths] section of retrodeck.cfg and set the value of / create all needed folders
 
@@ -464,7 +472,7 @@ finit() {
     configurator_generic_dialog "Vita3K Firmware Install" "You have chosen to install the Vita3K firmware during the RetroDECK first setup.\n\nThis process will take several minutes and requires network access.\n\nVita3K will be launched automatically at the end of the RetroDECK setup process.\nOnce the firmware is installed, please close the emulator to finish the process."
   fi
 
-  zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
+  rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
   --text="RetroDECK will now install the needed files, which can take up to one minute.\nRetroDECK will start once the process is completed.\n\nPress OK to continue."
 
@@ -492,7 +500,7 @@ finit() {
   fi
 
   ) |
-  zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+  rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Finishing Initialization" \
   --text="RetroDECK is finishing the initial setup process, please wait."
@@ -522,11 +530,11 @@ install_retrodeck_controller_profile() {
   if [[ -d "$HOME/.steam/steam/controller_base/templates/" || -d "$HOME/.var/app/com.valvesoftware.Steam/.steam/steam/controller_base/templates/" ]]; then
     if [[ -d "$HOME/.steam/steam/controller_base/templates/" ]]; then # If a normal binary Steam install exists
       rsync -rlD --mkpath "/app/retrodeck/binding_icons/" "$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/"
-      rsync -rlD --mkpath "$emuconfigs/defaults/retrodeck/controller_configs/" "$HOME/.steam/steam/controller_base/templates/"
+      rsync -rlD --mkpath "$config/retrodeck/controller_configs/" "$HOME/.steam/steam/controller_base/templates/"
     fi
     if [[ -d "$HOME/.var/app/com.valvesoftware.Steam/.steam/steam/controller_base/templates/" ]]; then # If a Flatpak Steam install exists
       rsync -rlD --mkpath "/app/retrodeck/binding_icons/" "$HOME/.var/app/com.valvesoftware.Steam/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/"
-      rsync -rlD --mkpath "$emuconfigs/defaults/retrodeck/controller_configs/" "$HOME/.var/app/com.valvesoftware.Steam/.steam/steam/controller_base/templates/"
+      rsync -rlD --mkpath "$config/retrodeck/controller_configs/" "$HOME/.var/app/com.valvesoftware.Steam/.steam/steam/controller_base/templates/"
     fi
   else
     configurator_generic_dialog "RetroDECK Controller Profile Install" "The target directories for the controller profile do not exist.\n\nThis may happen if you do not have Steam installed or the location is does not have permission to be read."
@@ -555,13 +563,12 @@ deploy_helper_files() {
   # This script will distribute helper documentation files throughout the filesystem according to the $helper_files_list
   # USAGE: deploy_helper_files
 
-  while IFS='^' read -r file dest
+  while IFS='^' read -r file dest || [[ -n "$file" ]];
   do
       if [[ ! "$file" == "#"* ]] && [[ ! -z "$file" ]]; then
       eval current_dest="$dest"
       cp -f "$helper_files_folder/$file" "$current_dest/$file"
     fi
-
   done < "$helper_files_list"
 }
 
@@ -574,13 +581,15 @@ easter_eggs() {
   current_day=$(date +"%0m%0d") # Read the current date in a format that can be calculated in ranges
   current_time=$(date +"%0H%0M") # Read the current time in a format that can be calculated in ranges
   if [[ ! -z $(cat $easter_egg_checklist) ]]; then
-    while IFS="^" read -r start_date end_date start_time end_time splash_file # Read Easter Egg checklist file and separate values
+    while IFS="^" read -r start_date end_date start_time end_time splash_file || [[ -n "$start_date" ]]; # Read Easter Egg checklist file and separate values
     do
-      if [[ "$((10#$current_day))" -ge "$((10#$start_date))" && "$((10#$current_day))" -le "$((10#$end_date))" && "$((10#$current_time))" -ge "$((10#$start_time))" && "$((10#$current_time))" -le "$((10#$end_time))" ]]; then # If current line specified date/time matches current date/time, set $splash_file to be deployed
-        new_splash_file="$splashscreen_dir/$splash_file"
-        break
-      else # When there are no matches, the default splash screen is set to deploy
-        new_splash_file="$default_splash_file"
+      if [[ ! $start_date == "#"* ]] && [[ ! -z "$start_date" ]]; then
+        if [[ "$((10#$current_day))" -ge "$((10#$start_date))" && "$((10#$current_day))" -le "$((10#$end_date))" && "$((10#$current_time))" -ge "$((10#$start_time))" && "$((10#$current_time))" -le "$((10#$end_time))" ]]; then # If current line specified date/time matches current date/time, set $splash_file to be deployed
+          new_splash_file="$splashscreen_dir/$splash_file"
+          break
+        else # When there are no matches, the default splash screen is set to deploy
+          new_splash_file="$default_splash_file"
+        fi
       fi
     done < $easter_egg_checklist
   else
@@ -696,7 +705,7 @@ ponzu_remove() {
 # TODO: this function is not yet used
 branch_selector() {
     log d "Fetch branches from GitHub API excluding \"main\""
-    branches=$(curl -s https://api.github.com/repos/XargonWan/RetroDECK/branches | grep '"name":' | awk -F '"' '$4 != "main" {print $4}')
+    branches=$(curl -s https://api.github.com/repos/RetroDECK/RetroDECK/branches | grep '"name":' | awk -F '"' '$4 != "main" {print $4}')
 
     # Create an array to store branch names
     branch_array=()
@@ -709,7 +718,7 @@ branch_selector() {
 
     # Display branches in a Zenity list dialog
     selected_branch=$(
-      zenity --list \
+      rd_zenity --list \
         --icon-name=net.retrodeck.retrodeck \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         --title "RetroDECK Configurator Cooker Branch - Select Branch" \
@@ -719,7 +728,7 @@ branch_selector() {
 
     # Display warning message
     if [ $selected_branch ]; then
-        zenity --question --icon-name=net.retrodeck.retrodeck --no-wrap \
+        rd_zenity --question --icon-name=net.retrodeck.retrodeck --no-wrap \
           --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
           --title "RetroDECK Configurator Cooker Branch - Switch Branch" \
           --text="Are you sure you want to move to \"$selected_branch\" branch?"
@@ -728,7 +737,7 @@ branch_selector() {
         set_setting_value "$rd_conf" "branch" "$selected_branch" "retrodeck" "options"
         branch="feat/sftp"
         # Get the latest release for the specified branch
-        latest_release=$(curl -s "https://api.github.com/repos/XargonWan/RetroDECK-cooker/releases" | jq ".[] | select(.target_commitish == \"$branch_name\") | .tag_name" | head -n 1)
+        latest_release=$(curl -s "https://api.github.com/repos/RetroDECK/Cooker/releases" | jq ".[] | select(.target_commitish == \"$branch_name\") | .tag_name" | head -n 1)
         # TODO: this will fail because the builds coming from the PRs are not published yet, we should fix them
         # TODO: form a proper url: $flatpak_file_url
         configurator_generic_dialog "RetroDECK Online Update" "The update process may take several minutes.\n\nAfter the update is complete, RetroDECK will close. When you run it again you will be using the latest version."
@@ -740,7 +749,7 @@ branch_selector() {
           flatpak-spawn --host flatpak install --user --bundle --noninteractive -y "$rdhome/RetroDECK_Updates/RetroDECK-cooker.flatpak"
           rm -rf "$rdhome/RetroDECK_Updates" # Cleanup old bundles to save space
           ) |
-          zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+          rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
           --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
           --title "RetroDECK Updater" \
           --text="RetroDECK is updating to the latest \"$selected_branch\" version, please wait."
