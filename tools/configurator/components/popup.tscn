@@ -71,7 +71,6 @@ theme_override_constants/margin_bottom = 6
 [node name="RichTextLabel" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer/ContentContainer/MarginContainer"]
 layout_mode = 2
 focus_mode = 2
-scroll_active = false
 scroll_following = true
 context_menu_enabled = true
 selection_enabled = true

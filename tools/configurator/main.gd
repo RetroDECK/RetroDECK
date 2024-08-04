@@ -94,7 +94,11 @@ func _load_log(index: int) -> void:
 			log_content = class_functions.import_text_file(rd_logs +"/retrodeck.log")
 			load_popup("RetroDeck Log", "res://components/logs_view/logs_popup_content.tscn", log_content)
 		2:
-			load_popup("ES-DE Log", "res://components/logs_view/logs_popup_content.tscn","")
+			log_content = class_functions.import_text_file(rd_logs +"/ES-DE/es_log.txt")
+			load_popup("ES-DE Log", "res://components/logs_view/logs_popup_content.tscn",log_content)
+		3: 
+			log_content = class_functions.import_text_file(rd_logs +"/retroarch/logs/log.txt")
+			load_popup("Retroarch Log", "res://components/logs_view/logs_popup_content.tscn",log_content)	
 
 func _play_main_animations() -> void:
 	anim_logo.play()
