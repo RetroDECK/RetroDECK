@@ -26,6 +26,7 @@ jobs:
           relative_project_path: ./tools/configurator
           relative_export_path: ../../
           archive_output: false
+          archive_root_folder: true
 
       - name: Upload Linux artifact
         uses: actions/upload-artifact@v4
