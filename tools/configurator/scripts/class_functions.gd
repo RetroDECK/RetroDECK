@@ -32,52 +32,6 @@ func _threaded_command_execution(command: String, parameters: Array, console: bo
 	var result = execute_command(command, parameters, console)
 	return result
 
-# Make this generic for command, path and naming
-func get_text_file_from_system_path(file_path: String, command: String, etype: String) -> Dictionary:
-	var output: Array
-	var data_dict: Dictionary
-	command += file_path
-	var exit_code = OS.execute("sh", ["-c", command], output)
-	if exit_code == 0:
-		var content = array_to_string(output)
-		if etype == "emulist":
-			data_dict = parse_file_list(content)
-		elif etype == "normal":
-			data_dict = parse_imported_string(content)
-		else:
-			print ("Error in get text function")
-		return data_dict
-	else:
-		print("Error reading file: ", exit_code)
-		return {}
-		
-func parse_imported_string(input_string: String) -> Dictionary:
-	var _result: Dictionary
-	var _current_dict_key: String
-	var lines = input_string.strip_edges().split("\n", false)
-	#if lines.size() > 0:
-	#	lines = lines.slice(1, lines.size())  # Skip the first line
-	for line in lines:
-		_current_dict_key = line
-		var parts = line.split("=", false)
-		if parts.size() == 2:
-			var key = parts[0]
-			var value_str = parts[1]
-			_result[key] = {"KEY": key, "Value": value_str}
-	return _result
-	
-func parse_file_list(content: String) -> Dictionary:
-	var file_dict = {}
-	var regex = RegEx.new()
-	regex.compile(r'"([^"]+)"\s*"([^"]+)"')
-	var matches = regex.search_all(content)
-	
-	for match in matches:
-		var name = match.get_string(1)
-		var description = match.get_string(2)
-		file_dict[name] = description
-	return file_dict
-
 func process_url_image(body) -> Texture:
 	var image = Image.new()
 	image.load_png_from_buffer(body)
@@ -116,3 +70,14 @@ func _import_data_lists(file_path: String) -> void:
 		print("URL: " + entry["URL"])
 		print("Description: " + entry["Description"])
 		print("---")
+
+func import_text_file(file_path: String) -> String:
+	var content: String
+	var file = FileAccess.open(file_path, FileAccess.READ)
+	if file == null:
+		print("Failed to open file")
+		return content
+	while not file.eof_reached():
+		content += file.get_line() + "\n"
+	file.close
+	return content

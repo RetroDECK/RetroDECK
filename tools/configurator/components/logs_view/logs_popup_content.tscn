@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://db4ibvxq5wnxe"]
+[gd_scene load_steps=2 format=3 uid="uid://db4ibvxq5wnxe"]
+
+[ext_resource type="Script" path="res://components/logs_view/view_log.gd" id="1_kk2pw"]
 
 [node name="PopupContent" type="Control"]
 layout_mode = 3
@@ -7,8 +9,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_kk2pw")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -16,7 +20,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 focus_mode = 2
-fit_content = true
 scroll_following = true
 context_menu_enabled = true
 selection_enabled = true

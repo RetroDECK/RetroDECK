@@ -14,7 +14,7 @@ var emu_pick_option: OptionButton
 var log_option: OptionButton
 var tab_container: TabContainer
 var anim_logo: AnimatedSprite2D
-var anim_rekku: AnimatedSprite2D
+var rd_logs: String
 
 var app_data = AppData.new()
 func _ready():
@@ -33,11 +33,21 @@ func _ready():
 		var website_data = app_data.about_links["rd_web"]
 		print (website_data.name,"-",website_data.url,"-",website_data.description)
 	"""
-	var emulator_list = class_functions.get_text_file_from_system_path("../../tools/configurator.sh","sed -n '/local emulator_list=(/,/)/{s/.*local emulator_list=\\(.*\\)/\\1/; /)/q; p}' ","emulist")
-	#print (emulator_list)
-	var abxy_button_list = class_functions.get_text_file_from_system_path("/var/config/retrodeck/retrodeck.cfg","sed -n '/\\[abxy_button_swap\\]/,/^$/p' ","normal")
-	#print(abxy_button_list)
-	# set current startup tab to match IDE
+	var console: bool = false
+	var test = class_functions.execute_command("cat",["/var/config/retrodeck/retrodeck.cfg"],console)
+	#print (test)
+	var config_file_path = "/var/config/retrodeck/retrodeck.cfg"
+	var json_file_path = "/var/config/retrodeck/retrodeck.json"
+	var config = data_handler.parse_config_to_json(config_file_path)
+	data_handler.config_save_json(config, json_file_path)
+	rd_logs = config["paths"]["logs_folder"]
+	#var log_file = class_functions.import_text_file(rd_logs +"/retrodeck.log")
+	
+	#for id in config.paths:
+	#	var path_data = config.paths[id]
+	#	print (id)
+
+	# set current startup tab to match IDE	
 	tab_container.current_tab = 3
 	#add_child(class_functions) # Needed for threaded results Not need autoload?
 	var children = findElements(self, "Control")
@@ -55,7 +65,6 @@ func _get_nodes() -> void:
 	emu_pick_option = get_node("%emu_pick_option")
 	tab_container = get_node("%TabContainer")
 	anim_logo = get_node("%logo_animated")
-	anim_rekku = get_node("%rekku_animated")
 	log_option = get_node("%logs_button")
 	
 func _connect_signals() -> void:
@@ -79,15 +88,13 @@ func _emu_pick(index: int) -> void:
 	_play_main_animations()
 
 func _load_log(index: int) -> void:
+	var log_content:String
 	match index:
 		1: 
-			#https://docs.godotengine.org/en/stable/tutorials/scripting/singletons_autoload.html
-			#https://docs.godotengine.org/en/stable/classes/class_os.html
-			#https://docs.godotengine.org/en/stable/classes/class_os.html#class-os-method-get-environment
-			print ("Load log via dos and ref rdhome? or use Enviornment variable from godot")
-			load_popup("RetroDeck Log", "res://components/logs/logs_popup_content.tscn")
+			log_content = class_functions.import_text_file(rd_logs +"/retrodeck.log")
+			load_popup("RetroDeck Log", "res://components/logs_view/logs_popup_content.tscn", log_content)
 		2:
-			load_popup("ES-DE Log", "res://components/logs/logs_popup_content.tscn")
+			load_popup("ES-DE Log", "res://components/logs_view/logs_popup_content.tscn","")
 
 func _play_main_animations() -> void:
 	anim_logo.play()
@@ -119,21 +126,22 @@ func findElements(node: Node, className: String, result: Array = []) -> Array:
 func _on_control_mouse_entered(control: Node):
 	control.grab_focus()
 
-func load_popup(title:String, content_path:String):
+func load_popup(title:String, content_path:String, display_text: String):
 	var popup = load("res://components/popup.tscn").instantiate() as Control
 	popup.set_title(title)
 	popup.set_content(content_path)
+	popup.set_display_text(display_text)
 	$Background.add_child(popup)
 
 func _on_quickresume_advanced_pressed():
-	load_popup("Quick Resume Advanced", "res://components/popups_content/popup_content_test.tscn")
+	load_popup("Quick Resume Advanced", "res://components/popups_content/popup_content_test.tscn","")
 
 func _on_bios_button_pressed():
 	_play_main_animations()
 	bios_type = 0
 	log_parameters[2] = log_text + "Bios_Check"
 	log_results = class_functions.execute_command(wrapper_command, log_parameters, false)
-	load_popup("BIOS File Check", "res://components/bios_check/bios_popup_content.tscn")
+	load_popup("BIOS File Check", "res://components/bios_check/bios_popup_content.tscn","")
 	status_code_label.text = str(log_results["exit_code"])
 
 func _on_bios_button_expert_pressed():
@@ -141,7 +149,7 @@ func _on_bios_button_expert_pressed():
 	bios_type = 1
 	log_parameters[2] = log_text + "Advanced_Bios_Check"
 	log_results = class_functions.execute_command(wrapper_command, log_parameters, false)
-	load_popup("BIOS File Check", "res://components/bios_check/bios_popup_content.tscn")
+	load_popup("BIOS File Check", "res://components/bios_check/bios_popup_content.tscn","")
 	status_code_label.text = str(log_results["exit_code"])
 
 func _on_exit_button_pressed():

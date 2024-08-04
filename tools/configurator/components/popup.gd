@@ -10,9 +10,9 @@ func _ready():
 
 func set_content(new_content):
 	content = load(new_content).instantiate()
-
 func set_title(new_title):
 	$Panel/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/Label.text = new_title
-
+func set_display_text(new_display_text):
+	$Panel/MarginContainer/VBoxContainer/ContentContainer/MarginContainer/RichTextLabel.text=new_display_text
 func _on_back_pressed():
 	queue_free()

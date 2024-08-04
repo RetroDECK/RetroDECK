@@ -15,7 +15,7 @@ var app_data = AppData.new()
 
 func _ready():
 	#tk_about = class_functions.import_csv_data("res://tk_about.txt")
-	app_data =  data_handler.load_data()
+	app_data =  data_handler.load_base_data()
 	_get_nodes()
 	_connect_signals()
 	
