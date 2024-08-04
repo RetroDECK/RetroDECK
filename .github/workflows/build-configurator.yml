@@ -27,9 +27,10 @@ jobs:
           relative_export_path: ../../
           archive_output: false
           archive_root_folder: true
+          export_as_pack: true
 
       - name: Upload Linux artifact
         uses: actions/upload-artifact@v4
         with:
           name: Godot Linux Configurator
-          path: /home/runner/work/linux.zip
+          path: /home/runner/work/linux.pck
