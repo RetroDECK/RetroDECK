@@ -33,4 +33,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Godot Linux Configurator
-          path: /home/runner/work/configurator.pck
+          path: /home/runner/work/configurator.x86_64.pck
