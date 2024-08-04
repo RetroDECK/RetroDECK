@@ -17,9 +17,6 @@ jobs:
     
     steps:
       - uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-        lfs: true
       - name : exportGame
         uses: firebelley/godot-export@v5.2.1
         with: 
