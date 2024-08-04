@@ -17,6 +17,9 @@ jobs:
     
     steps:
       - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        lfs: true
       - name : exportGame
         uses: firebelley/godot-export@v5.2.1
         with: 
@@ -33,4 +36,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Godot Linux Configurator
-          path: /home/runner/work/configuratir.pck
+          path: /home/runner/work/configurator.pck
