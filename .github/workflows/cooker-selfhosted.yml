@@ -153,7 +153,7 @@ jobs:
           allowUpdates: true
           makeLatest: ${{env.MAKE_LATEST}} # if it's a feat branch is not considered the latest build
           token: ${{ secrets.TRIGGER_BUILD_TOKEN }}
-          repo: RetroDECK-cooker
+          repo: Cooker
         continue-on-error: true
 
       - name: Rewrite Tag
