@@ -1,0 +1,67 @@
+name: Stable release builds2
+
+on:
+  push:
+    branches: [ feat/godot-configurator ]
+  
+  workflow_dispatch:
+    branches: [ feat/godot-configurator ]
+
+env:
+  GODOT_VERSION: 4.2.2
+  EXPORT_NAME: RetroDECKGodot
+  TAG: v0.005
+  #BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+
+jobs:
+  export-linux:
+    name: Linux Export 🐧
+    runs-on: ubuntu-latest
+    container:
+      image: docker://barichello/godot-ci:4.2.2
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: Setup 💻
+        run: |
+          mkdir -v -p build/${EXPORT_NAME}-Linux-64bit  ~/.local/share/godot/export_templates
+          mv /root/.local/share/godot/export_templates/${GODOT_VERSION}.stable ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
+      - name: Import resources once 📦
+        working-directory: tools/configurator
+        continue-on-error: true
+        run: godot --headless -v --import
+      - name: Linux Build 🔧
+        working-directory: tools/configurator
+        continue-on-error: true
+        run: |
+          godot --headless -v --export-release "linux" ./build/${EXPORT_NAME}-Linux-64bit/${EXPORT_NAME}.x86_64
+          list1=$(ls -ltr);
+          echo $list1
+          cp ./build/${EXPORT_NAME}-Linux-64bit/${EXPORT_NAME}.x86_64 ../
+          list2=$(ls -ltr)
+          echo $list2
+
+      - name: Give execute permission ☑️
+        working-directory: tools/configurator
+        run: |
+        ls
+         # chmod +x ./build/${EXPORT_NAME}-Linux-64bit/${EXPORT_NAME}.x86_64
+    #  - name: Copy pixelorama_data folder 📁
+    #    run: |
+    #      rm ./pixelorama_data/.gdignore
+    #      cp -R ./pixelorama_data ./build/${EXPORT_NAME}-Linux-64bit
+      - name: Create tar.gz archive 🗜️
+        working-directory: tools/configurator
+        run: |
+          cd build
+          tar zcvf ${EXPORT_NAME}-Linux-64bit.tar.gz ${EXPORT_NAME}-Linux-64bit
+      - name: Upload Release Asset 🚀
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ./build/${{env.EXPORT_NAME}}-Linux-*.tar.gz
+          tag: ${{env.TAG}}
+          overwrite: true
+          file_glob: true
