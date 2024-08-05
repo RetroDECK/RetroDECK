@@ -8,7 +8,7 @@ on:
 
 env:
   GODOT_VERSION: 4.2.2
-  EXPORT_NAME: RetroDECK-Godot
+  EXPORT_NAME: RetroDECKGodot
   TAG: v0.005
   #BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
 
@@ -25,6 +25,7 @@ jobs:
           submodules: true
       - name: Setup 💻
         run: |
+          cd tools/configurator
           mkdir -v -p build/${EXPORT_NAME}-Linux-64bit  ~/.local/share/godot/export_templates
           mv /root/.local/share/godot/export_templates/${GODOT_VERSION}.stable ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
       - name: Import resources once 📦
