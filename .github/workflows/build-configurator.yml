@@ -33,3 +33,11 @@ jobs:
         with:
           name: Godot Linux Configurator
           path: /home/runner/work/linux.zip
+
+      - name: create release
+        uses: ncipollo/release-action@v1.12.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          generateReleaseNotes: true
+          tag: ${{ github.ref_name }}
+          artifacts: ${{ steps.export.outputs.archive_directory }}/*
