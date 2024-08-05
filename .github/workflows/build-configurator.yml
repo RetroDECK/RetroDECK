@@ -7,6 +7,7 @@ on:
       - "v*-test"
   pull_request: 
     branches: [feat/godot-configurator]
+  
   workflow_dispatch:
 
 jobs:
