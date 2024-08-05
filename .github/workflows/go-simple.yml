@@ -11,12 +11,12 @@ jobs:
       matrix:
         platform: [linux]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           lfs: true
       - name: Build
         id: build
-        uses: manleydev/build-godot-action@v1.4.1
+        uses: manleydev/build-godot-action@v1.5.0
         with:
           name: gd-test
           preset: ${{ matrix.platform }}
