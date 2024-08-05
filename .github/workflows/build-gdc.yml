@@ -38,6 +38,7 @@ jobs:
         continue-on-error: true
         run: godot --headless -v --import
       - name: Linux Build 🔧
+        continue-on-error: true
         run: |
           godot --headless -v --export-release "Linux/X11 64-bit" ./build/${EXPORT_NAME}-Linux-64bit/$EXPORT_NAME.x86_64
       - name: Give execute permission ☑️

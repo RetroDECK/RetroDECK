@@ -9,6 +9,7 @@ command: retrodeck.sh
 
 finish-args:
   - --talk-name=org.freedesktop.Flatpak
+  - --talk-name=org.freedesktop.Flatpak
   - --socket=wayland
   - --socket=x11
   - --socket=pulseaudio
