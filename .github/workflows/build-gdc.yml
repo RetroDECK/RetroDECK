@@ -2,7 +2,7 @@ name: Stable release builds
 
 on:
   push:
-    branches: [ release ]
+    #branches: [ release ]
   
     workflow_dispatch:
 
