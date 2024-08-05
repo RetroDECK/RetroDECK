@@ -51,7 +51,6 @@ jobs:
           cd build
           tar zcvf ${EXPORT_NAME}-Linux-64bit.tar.gz ${EXPORT_NAME}-Linux-64bit
       - name: Upload Release Asset 🚀
-        working-directory: tools/configurator
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
