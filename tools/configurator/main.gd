@@ -48,7 +48,6 @@ func _ready():
 	$Background/side_logo/rd_title.text+= "\n   " + rd_version + "\nConfigurator\n    " + gc_version
 	
 	#var log_file = class_functions.import_text_file(rd_logs +"/retrodeck.log")
-	
 	#for id in config.paths:
 	#	var path_data = config.paths[id]
 	#	print (id)
