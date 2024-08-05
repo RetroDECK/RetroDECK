@@ -19,7 +19,10 @@ jobs:
   export-linux:
     name: Linux Export 🐧
     runs-on: ubuntu-latest
-    working-directory: tools/configurator
+    defaults:
+      run:
+        shell: bash
+        working-directory: tools/configurator
     container:
       image: docker://barichello/godot-ci:4.2.2
     steps:
