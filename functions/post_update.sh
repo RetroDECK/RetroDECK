@@ -488,6 +488,7 @@ fi
   --width=400 --height=200 \
   --text="RetroDECK is finishing up the upgrading process, please be patient.\n\n<span foreground='$purple' size='larger'><b>NOTICE - If the process is taking too long:</b></span>\n\nSome windows might be running in the background that could require your attention: pop-ups from emulators or the upgrade itself that needs user input to continue.\n\n"
 
+  conf_read
   version=$hard_version
   conf_write
 
