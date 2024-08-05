@@ -48,7 +48,7 @@ jobs:
       - name: Create tar.gz archive 🗜️
         run: |
           cd build
-          tar zcvf ~/${EXPORT_NAME}-Linux-64bit.tar.gz ~/${EXPORT_NAME}-Linux-64bit
+          tar zcvf ${EXPORT_NAME}-Linux-64bit.tar.gz ~/$EXPORT_NAME.x86_64
       - name: Upload Linux x86_64 Artifact 🚀
         uses: actions/upload-artifact@v4
         with:
