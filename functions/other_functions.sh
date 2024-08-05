@@ -205,6 +205,7 @@ conf_read() {
       fi
     fi
   done < $rd_conf
+  log d "retrodeck.cfg loaded"
 }
 
 conf_write() {
@@ -228,6 +229,7 @@ conf_write() {
       fi
     fi
   done < $rd_conf
+  log d "retrodeck.cfg written"
 }
 
 dir_prep() {
