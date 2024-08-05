@@ -2,6 +2,9 @@ app-id: net.retrodeck.retrodeck
 runtime: org.kde.Platform
 runtime-version: "6.7"
 sdk: org.kde.Sdk
+#Godot base
+base: org.godotengine.godot.BaseApp
+base-version: "4.2"
 command: retrodeck.sh
 
 finish-args:
@@ -159,8 +162,6 @@ modules:
   # TODO link to repo
 
   - name: godot-configurator
-    base: org.godotengine.godot.BaseApp
-    base-version: "4.2"
     buildsystem: simple
     sources:
       - type: archive
