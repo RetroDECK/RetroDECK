@@ -17,6 +17,8 @@ jobs:
   export-linux:
     name: Linux Export 🐧
     runs-on: ubuntu-latest
+    defaults:
+      working-directory: tools/configurator
     container:
       image: docker://barichello/godot-ci:4.2.2
     steps:
@@ -26,7 +28,7 @@ jobs:
           submodules: true
       - name: Setup 💻
         run: |
-          cd /tools/configurator
+          cd tools/configurator
           mkdir -v -p build/${EXPORT_NAME}-Linux-64bit  ~/.local/share/godot/export_templates
           mv /root/.local/share/godot/export_templates/${GODOT_VERSION}.stable ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
       - name: Import resources once 📦
