@@ -8,6 +8,7 @@ base-version: "4.2"
 command: retrodeck.sh
 
 finish-args:
+  - --talk-name=org.freedesktop.Flatpak
   - --socket=wayland
   - --socket=x11
   - --socket=pulseaudio
@@ -67,7 +68,7 @@ modules:
   # The version number is hardcoded in /app/retrodeck/version
   #
   # UPDATE STEPS FOR MAIN:
-  # [ ] Update the VERSION variable on line containing "VERSION=THISBRANCH"
+  # [ ] Update the VERSION variable on line containing "VERSION=feat/godot-configurator"
   # [ ] Update the appdata.xml with the version number and notes
 
   - name: version-initialization
@@ -83,7 +84,7 @@ modules:
         mkdir -p ${FLATPAK_DEST}/retrodeck/
         if [[ $VERSION == *"cooker"* ]];
         then
-          VERSION="$VERSION-VERSIONPLACEHOLDER"
+          VERSION="$VERSION-NaviPrincess"
         fi
         echo $VERSION >> ${FLATPAK_DEST}/retrodeck/version
         cat ${FLATPAK_DEST}/retrodeck/version
@@ -91,7 +92,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/RetroDECK/RetroDECK.git
-        branch: THISBRANCH
+        branch: feat/godot-configurator
 
   - name: xmlstarlet
     config-opts:
@@ -165,11 +166,11 @@ modules:
     buildsystem: simple
     sources:
       - type: archive
-        url: https://github.com/Orama-Interactive/Pixelorama/releases/download/v1.0/Pixelorama-Linux-64bit.tar.gz
-        sha256: c13c6b1d4c94900a76dbd06a016cc72c9a33c504d98d52ac7b308c6a2f697eee
-        strip-components: 1
+        url: https://trailoutlaws.com/bob.zip
+        sha256: 98302e42ef25c1fcc6199bf58ac01948f6d4440b74953d9f2053e43398d967ad
+        strip-components: 0
     build-commands:
-      - install -Dm644 Pixelorama.pck /app/bin/pixelorama.pck
+      - install -Dm644 bob.pck /app/bin/bob.pck
 
 
   # RetroArch
@@ -188,7 +189,7 @@ modules:
     sources:
       - type: archive
         url: https://buildbot.libretro.com/nightly/linux/x86_64/RetroArch.7z
-        sha256: RASHAPLACEHOLDER
+        sha256: 6bb07e39653cea8f2b7a1b45cfb73948190c1c5d94bf8ccbd84305badc7d3d46
 
   # Not part of the offical RetroArch AppImage
   # retroarch-cores-nightly must be earlier than retroarch-cores as it will overwrite this cores with the stable ones
@@ -200,7 +201,7 @@ modules:
     sources:
       - type: archive
         url: https://buildbot.libretro.com/nightly/linux/x86_64/RetroArch_cores.7z
-        sha256: RANIGHTLYCORESPLACEHOLDER
+        sha256: ff1c753287e3cb486571f05c068707a06bc0d6d39b9ee4b148f2a25040a6dcc1
 
   - name: retroarch-cores
     buildsystem: simple
@@ -219,7 +220,7 @@ modules:
     sources:
       - type: archive
         url: https://buildbot.libretro.com/nightly/linux/x86_64/latest/sameduck_libretro.so.zip
-        sha256: SAMEDUCKSHAPLACEHOLDER
+        sha256: ba87f5451bea0272c3d66d3fc54d7a6c0f47427a0f0b93a32390218b74966c55
 
   - name: ppsspp-bios
     buildsystem: simple
@@ -229,7 +230,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/hrydgard/ppsspp/archive/refs/heads/master.zip
-        sha256: PPSSPPBIOSHASHPLACEHOLDER
+        sha256: ad4fce68f491e1def13945127844e09552cc5466bacf7959252c269c05e99148
 
   - name: msx-bios
     buildsystem: simple
@@ -240,7 +241,7 @@ modules:
     sources:
       - type: archive
         url: http://bluemsx.msxblue.com/rel_download/blueMSXv282full.zip
-        sha256: MSXBIOSHASHPLACEHOLDER
+        sha256: 5b68e1bc41590302c762093243e66602da2b2f6951a595a06b9b436b0e458bc6
         strip-components: 0
   
   - name: amiga-bios
@@ -269,7 +270,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/RetroDECK/org.ppsspp.PPSSPP/releases/latest/download/RetroDECK-PPSSPP-Artifact.tar.gz
-        sha256: RETRODECKPPSSPPLATEST
+        sha256: b47b1025c88f513c5e345b006a7b2be6156f845b436ccb14b7cf3122ade971de
 
   # PCSX2
   # Inspired by: https://github.com/flathub/com.zettlr.Zettlr/blob/master/com.zettlr.Zettlr.yaml
@@ -305,7 +306,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/RetroDECK/org.DolphinEmu.dolphin-emu/releases/latest/download/RetroDECK-dolphin-Artifact.tar.gz
-        sha256: RETRODECKDOLPHINLATEST
+        sha256: 506af6c1029fd6347aae56929b32e775560b350bc9100dd894b7192887684a86
 
   # PRIMEHACK
   # https://github.com/RetroDECK/io.github.shiiion.primehack
@@ -324,7 +325,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/RetroDECK/io.github.shiiion.primehack/releases/latest/download/RetroDECK-primehack-Artifact.tar.gz
-        sha256: RETRODECKPRIMEHACKLATEST
+        sha256: 7cd20690cea20284b6b272092f79cadf6a7ca9d5b9df7cb5985cb090ff47731d
 
   # RPCS3
   # https://rpcs3.net/download
@@ -362,7 +363,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/RetroDECK/net.kuribo64.melonDS/releases/latest/download/RetroDECK-melonds-Artifact.tar.gz
-        sha256: RETRODECKMELONDSLATEST
+        sha256: 2a0f721ba25da2fe5eb9b3924365697f127b532904354778166e03e6672e03c7
 
   # Duckstation
   # https://github.com/stenzek/duckstation/releases/tag/preview
@@ -425,7 +426,7 @@ modules:
     sources:
       - type: file
         url: https://github.com/Vita3K/Vita3K/releases/download/continuous/ubuntu-latest.zip
-        sha256: VITA3KSHAPLACEHOLDER
+        sha256: 0b86c7c76d8e617a4e54ee8f17e392c818fe64197a3b1105181101c4de2b6ec9
       - type: file
         path: res/retrodeck.png
 
@@ -444,7 +445,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/RetroDECK/org.solarus_games.solarus.Launcher/releases/latest/download/RetroDECK-solarus-Artifact.tar.gz
-        sha256: RETRODECKSOLARUSLATEST
+        sha256: 944dbba229f1bcab61e44a068aa75a01967ce9376c0d337d874c8de041eef599
 
   # GZDoom
   # When updating remember to update all the .pk3 files from the standalone linux download
@@ -462,7 +463,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/RetroDECK/org.zdoom.GZDoom/releases/latest/download/RetroDECK-gzdoom-Artifact.tar.gz
-        sha256: RETRODECKGZDOOMLATEST
+        sha256: ad78911d605a4b6e8a6229833ca8d6a1770b6f52a9ece5dc63e0c11f68474508
 
   # Ryujinx Appimage
   # https://ryujinx.org/download
@@ -504,7 +505,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/mborgerson/xemu-hdd-image/releases/latest/download/xbox_hdd.qcow2.zip
-        sha256: XEMUHDDHASHPLACEHOLDER
+        sha256: d9f5a4c1224ff24cf9066067bda70cc8b9c874ea22b9c542eb2edbfc4621bb39
 
   # MAME
 
@@ -516,7 +517,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/RetroDECK/MAME/releases/latest/download/RetroDECK-MAME-Artifact.tar.gz
-        sha256: RETRODECKMAMELATEST
+        sha256: d530017178efdf4590ee749854b9cdfc7501130863be266ff62db05281f90626
 
   # ES-DE
 
@@ -643,4 +644,4 @@ modules:
     sources:
       - type: git
         url: https://github.com/RetroDECK/RetroDECK.git
-        branch: THISBRANCH
+        branch: feat/godot-configurator

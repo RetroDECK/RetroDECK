@@ -1,17 +1,19 @@
-name: Stable release builds
+name: Test GD Config
 
 on:
   push:
     branches: [ feat/godot-configurator ]
-  
-  workflow_dispatch:
-   
+  pull_request:
+    branches: [ feat/godot-configurator ]
+
+concurrency:
+  group: ci-${{github.actor}}-${{github.head_ref || github.run_number}}-${{github.ref}}-devdesktop
+  cancel-in-progress: true
 
 env:
   GODOT_VERSION: 4.2.2
-  EXPORT_NAME: RetroDECKGodot
-  TAG: v0.005
-  #BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+  EXPORT_NAME: GD-Test
+  working-directory: tools/configurator
 
 jobs:
   export-linux:
@@ -26,36 +28,24 @@ jobs:
           submodules: true
       - name: Setup 💻
         run: |
-          mkdir -v -p build/${EXPORT_NAME}-Linux-64bit  ~/.local/share/godot/export_templates
+          mkdir -v -p build/${EXPORT_NAME}-Linux-64bit ~/.local/share/godot/export_templates
           mv /root/.local/share/godot/export_templates/${GODOT_VERSION}.stable ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
       - name: Import resources once 📦
-        working-directory: tools/configurator
         continue-on-error: true
         run: godot --headless -v --import
       - name: Linux Build 🔧
-        working-directory: tools/configurator
-        continue-on-error: true
         run: |
-          godot --headless -v --export-release "linux" test.x86_64
-          cp ./build/${EXPORT_NAME}-Linux-64bit/${EXPORT_NAME}.x86_64 ../
-
-#      - name: Give execute permission ☑️
- #       working-directory: tools/configurator
-  #      run: |
-         # chmod +x ./build/${EXPORT_NAME}-Linux-64bit/${EXPORT_NAME}.x86_64
-    #  - name: Copy pixelorama_data folder 📁
-    #    run: |
-    #      rm ./pixelorama_data/.gdignore
-    #      cp -R ./pixelorama_data ./build/${EXPORT_NAME}-Linux-64bit
+          godot --headless -v --export-release "Linux/X11 64-bit" ./build/${EXPORT_NAME}-Linux-64bit/$EXPORT_NAME.x86_64
+      - name: Give execute permission ☑️
+        run: |
+          chmod +x ./build/${EXPORT_NAME}-Linux-64bit/$EXPORT_NAME.x86_64
       - name: Create tar.gz archive 🗜️
-        working-directory: tools/configurator
         run: |
-          tar zcvf test.tar.gz test.x86_64
-      - name: Upload Release Asset 🚀
-        uses: svenstaro/upload-release-action@v2
+          cd build
+          tar zcvf ${EXPORT_NAME}-Linux-64bit.tar.gz ${EXPORT_NAME}-Linux-64bit
+      - name: Upload Linux x86_64 Artifact 🚀
+        uses: actions/upload-artifact@v4
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: test.tar.gz
-          tag: ${{env.TAG}}
-          overwrite: true
-          file_glob: true
+          name: ${{env.EXPORT_NAME}}-Linux-64bit
+          path: ./build/${{env.EXPORT_NAME}}-Linux-64bit.tar.gz
+          retention-days: 14
