@@ -4,7 +4,7 @@ on:
   push:
     #branches: [ release ]
   
-    workflow_dispatch:
+  workflow_dispatch:
 
 env:
   GODOT_VERSION: 4.2.2
