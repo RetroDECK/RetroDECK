@@ -13,12 +13,13 @@ concurrency:
 env:
   GODOT_VERSION: 4.2.2
   EXPORT_NAME: GD-Test
-  working-directory: tools/configurator
+
 
 jobs:
   export-linux:
     name: Linux Export 🐧
     runs-on: ubuntu-latest
+    working-directory: tools/configurator
     container:
       image: docker://barichello/godot-ci:4.2.2
     steps:
