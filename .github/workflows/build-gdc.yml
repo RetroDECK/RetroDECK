@@ -54,5 +54,5 @@ jobs:
         with:
           name: ${{env.EXPORT_NAME}}-Linux-64bit
           #path: ./build/${{env.EXPORT_NAME}}-Linux-64bit.tar.gz
-          path: ~/${EXPORT_NAME}-Linux-64bit.tar.gz
+          path: ~/${{env.EXPORT_NAME}}-Linux-64bit.tar.gz
           retention-days: 14

@@ -2,13 +2,9 @@ app-id: net.retrodeck.retrodeck
 runtime: org.kde.Platform
 runtime-version: "6.7"
 sdk: org.kde.Sdk
-#Godot base
-base: org.godotengine.godot.BaseApp
-base-version: "4.2"
 command: retrodeck.sh
 
 finish-args:
-  - --talk-name=org.freedesktop.Flatpak
   - --socket=wayland
   - --socket=x11
   - --socket=pulseaudio
@@ -84,7 +80,7 @@ modules:
         mkdir -p ${FLATPAK_DEST}/retrodeck/
         if [[ $VERSION == *"cooker"* ]];
         then
-          VERSION="$VERSION-NaviPrincess"
+          VERSION="$VERSION-StationMonk"
         fi
         echo $VERSION >> ${FLATPAK_DEST}/retrodeck/version
         cat ${FLATPAK_DEST}/retrodeck/version
@@ -158,11 +154,7 @@ modules:
         url: https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_amd64
         sha256: 4ee662847c588c3ef2fec8bfb304e8739e3dbaba87ccb9a608d691c88f5b64dc
 
-  # Gotdot Configurator
-  # Inspired by https://github.com/flathub/com.orama_interactive.Pixelorama/blob/master/com.orama_interactive.Pixelorama.yaml
-  # TODO link to repo
-
-  - name: godot-configurator
+ name: godot-configurator
     buildsystem: simple
     sources:
       - type: archive
@@ -189,7 +181,7 @@ modules:
     sources:
       - type: archive
         url: https://buildbot.libretro.com/nightly/linux/x86_64/RetroArch.7z
-        sha256: 6bb07e39653cea8f2b7a1b45cfb73948190c1c5d94bf8ccbd84305badc7d3d46
+        sha256: 971bbf3d177ef489c0f71a5dc61f4b9f71abcf13f7e84a2d4e59300149d32f3a
 
   # Not part of the offical RetroArch AppImage
   # retroarch-cores-nightly must be earlier than retroarch-cores as it will overwrite this cores with the stable ones
@@ -201,7 +193,7 @@ modules:
     sources:
       - type: archive
         url: https://buildbot.libretro.com/nightly/linux/x86_64/RetroArch_cores.7z
-        sha256: ff1c753287e3cb486571f05c068707a06bc0d6d39b9ee4b148f2a25040a6dcc1
+        sha256: 213ec1778a6b81e81c7f07881fbe968a7d8642df947c99cb9f017ae481ac20d5
 
   - name: retroarch-cores
     buildsystem: simple
@@ -306,7 +298,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/RetroDECK/org.DolphinEmu.dolphin-emu/releases/latest/download/RetroDECK-dolphin-Artifact.tar.gz
-        sha256: 506af6c1029fd6347aae56929b32e775560b350bc9100dd894b7192887684a86
+        sha256: RETRODECKDOLPHINLATEST
 
   # PRIMEHACK
   # https://github.com/RetroDECK/io.github.shiiion.primehack
@@ -325,7 +317,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/RetroDECK/io.github.shiiion.primehack/releases/latest/download/RetroDECK-primehack-Artifact.tar.gz
-        sha256: 7cd20690cea20284b6b272092f79cadf6a7ca9d5b9df7cb5985cb090ff47731d
+        sha256: RETRODECKPRIMEHACKLATEST
 
   # RPCS3
   # https://rpcs3.net/download
@@ -363,7 +355,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/RetroDECK/net.kuribo64.melonDS/releases/latest/download/RetroDECK-melonds-Artifact.tar.gz
-        sha256: 2a0f721ba25da2fe5eb9b3924365697f127b532904354778166e03e6672e03c7
+        sha256: RETRODECKMELONDSLATEST
 
   # Duckstation
   # https://github.com/stenzek/duckstation/releases/tag/preview
@@ -445,7 +437,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/RetroDECK/org.solarus_games.solarus.Launcher/releases/latest/download/RetroDECK-solarus-Artifact.tar.gz
-        sha256: 944dbba229f1bcab61e44a068aa75a01967ce9376c0d337d874c8de041eef599
+        sha256: RETRODECKSOLARUSLATEST
 
   # GZDoom
   # When updating remember to update all the .pk3 files from the standalone linux download
@@ -463,7 +455,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/RetroDECK/org.zdoom.GZDoom/releases/latest/download/RetroDECK-gzdoom-Artifact.tar.gz
-        sha256: ad78911d605a4b6e8a6229833ca8d6a1770b6f52a9ece5dc63e0c11f68474508
+        sha256: RETRODECKGZDOOMLATEST
 
   # Ryujinx Appimage
   # https://ryujinx.org/download
@@ -517,7 +509,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/RetroDECK/MAME/releases/latest/download/RetroDECK-MAME-Artifact.tar.gz
-        sha256: d530017178efdf4590ee749854b9cdfc7501130863be266ff62db05281f90626
+        sha256: RETRODECKMAMELATEST
 
   # ES-DE
 
@@ -533,8 +525,8 @@ modules:
       - type: archive
         #url: RETRODECKESDEURLPLACEHOLDER
         #sha256: RETRODECKESDEPLACEHOLDER
-        url: https://github.com/RetroDECK/ES-DE/releases/download/feat%2Fsmaller-menu-010824.10/RetroDECK-ES-DE-Artifact.tar.gz
-        sha256: 47ac3a062e7f199475ee1989d0961ab55dac1f285a54ab0e1cf500f9ceb42015
+        url: https://github.com/RetroDECK/ES-DE/releases/download/feat%2Fsmaller-menu-050824.03/RetroDECK-ES-DE-Artifact.tar.gz
+        sha256: 0a89329e5a7e9743c21606fbf0f7d44a3244accf2985ab99ff6db29b212b98f6
 
   - name: retrodeck-theme
     buildsystem: simple
