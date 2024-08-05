@@ -37,11 +37,7 @@ jobs:
         continue-on-error: true
         run: |
           godot --headless -v --export-release "linux" ./build/${EXPORT_NAME}-Linux-64bit/${EXPORT_NAME}.x86_64
-          list1=$(ls -ltr);
-          echo $list1
           cp ./build/${EXPORT_NAME}-Linux-64bit/${EXPORT_NAME}.x86_64 ../
-          list2=$(ls -ltr)
-          echo $list2
 
 #      - name: Give execute permission ☑️
  #       working-directory: tools/configurator
@@ -54,8 +50,8 @@ jobs:
       - name: Create tar.gz archive 🗜️
         working-directory: tools/configurator
         run: |
-          cd
-          cd build
+          cd 
+          cd tools/configurator/build
           tar zcvf ${EXPORT_NAME}-Linux-64bit.tar.gz ${EXPORT_NAME}-Linux-64bit
       - name: Upload Release Asset 🚀
         uses: svenstaro/upload-release-action@v2
