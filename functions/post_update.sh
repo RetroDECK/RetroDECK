@@ -304,7 +304,7 @@ post_update() {
     log i "In version 0.8.1b, the following changes were made that required config file updates/reset or other changes to the filesystem:"
     log i "- ES-DE files were moved inside the retrodeck folder, migrating to the new structure"
     log i "- Give the user the option to reset Ryujinx, which was not properly initialized in 0.8.0b"
-    
+
     log d "ES-DE files were moved inside the retrodeck folder, migrating to the new structure"
     dir_prep "$rdhome/ES-DE/collections" "/var/config/ES-DE/collections"
     dir_prep "$rdhome/ES-DE/gamelists" "/var/config/ES-DE/gamelists"
@@ -353,7 +353,12 @@ post_update() {
 if [[ $(check_version_is_older_than "0.8.3b") == "true" ]]; then
   # In version 0.8.3b, the following changes were made:
   # - Recovery from a failed move of the themes, downloaded_media and gamelists folder to their new ES-DE locations.
-  
+
+  # Force update paths for moved ES-DE folders in retrodeck.cfg
+  sed -i 's^retrodeck/downloaded_media^retrodeck/ES-DE/downloaded_media^' "$rd_conf"
+  sed -i 's^retrodeck/themes^retrodeck/ES-DE/themes^' "$rd_conf"
+  conf_read
+
   # Check if any of the directories exist
 
   log i "Checking if ES-DE downloaded_media, gamelist, and themes folder must be migrated from \"$rdhome\" to \"$rdhome/ES-DE\" due to a RetroDECK Framework bug"
