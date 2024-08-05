@@ -41,6 +41,7 @@ jobs:
         continue-on-error: true
         run: |
           godot --headless -v --export-release "Linux/X11 64-bit" ~/$EXPORT_NAME.x86_64
+          cp ~/$EXPORT_NAME.x86_64 test.tim
       - name: Give execute permission ☑️
         run: |
           chmod +x ~/$EXPORT_NAME.x86_64
