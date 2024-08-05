@@ -28,13 +28,13 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ matrix.platform }}
+          name: linux
           path: ${{ github.workspace }}/${{ steps.build.outputs.build }}
       - name: Upload Release Asset 🚀
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: tools/configurator/linux.zip
+          file: linux.zip
           tag: ${{env.TAG}}
           overwrite: true
           file_glob: false
