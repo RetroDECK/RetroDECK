@@ -13,7 +13,7 @@ concurrency:
 env:
   GODOT_VERSION: 4.2.2
   EXPORT_NAME: GD-Test
-  TAG: v0.0.5
+  TAG: v0.0.6
 
 jobs:
   export-linux:
