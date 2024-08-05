@@ -3,6 +3,8 @@ name: Stable release builds
 on:
   push:
     branches: [ release ]
+  
+    workflow_dispatch:
 
 env:
   GODOT_VERSION: 4.2.2
