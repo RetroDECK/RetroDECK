@@ -404,9 +404,13 @@ if [[ $(check_version_is_older_than "0.8.4b") == "true" ]]; then
   # In version 0.8.4b, the following changes were made:
   # - Recovery from a failed move of the themes, downloaded_media and gamelists folder to their new ES-DE locations (AGAIN)
 
+
   log d "Injecting the new retrodeck/ES-DE subdir into the retrodeck.cfg"
   sed -i -e '/media_folder=/s|retrodeck/|retrodeck/ES-DE/|g' -e '/themes_folder=/s|retrodeck/|retrodeck/ES-DE/|g' "$rd_conf" && log d "Injection successful"
+  log d "$(cat "$rd_conf" | grep media_folder)"
+  log d "$(cat "$rd_conf" | grep themes_folder)"
   conf_read
+  conf_write
 
   log i "Checking if ES-DE downloaded_media, gamelist, and themes folder must be migrated from \"$rdhome\" to \"$rdhome/ES-DE\" due to a RetroDECK Framework bug"
 
