@@ -4,7 +4,7 @@ on:
   push: 
     branches: [feat/godot-configurator]
     tags:
-      - "v*-test"
+      - "v*"
   pull_request: 
     branches: [feat/godot-configurator]
   
