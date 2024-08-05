@@ -29,17 +29,11 @@ jobs:
           relative_export_path: ../../
           archive_output: true
 
-   #   - name: Upload Linux artifact
-   #     uses: actions/upload-artifact@v4
-   #     with:
-   #       name: Godot Linux Configurator
-    #      path: /home/runner/work/linux.zip
-
-
-      - name: create release
-        uses: ncipollo/release-action@v1.11.2
+      - name: Upload Linux artifact
+        uses: actions/upload-artifact@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          generateReleaseNotes: true
-          tag: ${{ github.ref_name }}
-          artifacts: ${{ steps.export.outputs.archive_directory }}/* # Added "/*" at the end is glob pattern match for this action
+          name: Godot Linux Configurator
+          path: /home/runner/work/linux.zip
+
+
+    
