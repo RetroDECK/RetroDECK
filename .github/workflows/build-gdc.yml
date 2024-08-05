@@ -5,7 +5,7 @@ on:
     branches: [ feat/godot-configurator ]
   
   workflow_dispatch:
-    branches: [ feat/godot-configurator ]
+   
 
 env:
   GODOT_VERSION: 4.2.2
