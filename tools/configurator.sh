@@ -1238,7 +1238,7 @@ configurator_about_retrodeck_dialog() {
     rd_zenity --icon-name=net.retrodeck.retrodeck --text-info --width=1200 --height=720 \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Credits" \
-    --filename="$emuconfigs/defaults/retrodeck/reference_lists/retrodeck_credits.txt"
+    --filename="$config/retrodeck/reference_lists/retrodeck_credits.txt"
     configurator_about_retrodeck_dialog
   ;;
 

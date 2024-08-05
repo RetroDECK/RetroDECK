@@ -73,6 +73,14 @@
             <p>Changes:</p>
             <ul>
                <li>WELCOME TO cooker-0.9.0b!</li>
+               <li>RetroDECK is on a diet: we saved around 600mb</li>
+            </ul>
+            <p>Developers, developers, developers:</p>
+            <ul>
+               <li>Manifest was completely redone, more on that on the MONTH blog post</li>
+               <li>RetroDECK now is migrated to an organization on GitHub, as before, please check the MONTH blog post</li>
+               <li>pre_build_automation script weas reworked and additional functions are added</li>
+               <li>Contributing is now easier and the manifest build time is down to about 40m (was 3h30)</li>
             </ul>
             <p>Known issues:</p>
             <ul>

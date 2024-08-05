@@ -2,8 +2,6 @@ app-id: net.retrodeck.retrodeck
 runtime: org.kde.Platform
 runtime-version: "6.7"
 sdk: org.kde.Sdk
-sdk-extensions:
-  - org.freedesktop.Sdk.Extension.llvm18        # Needed for RPCS3
 command: retrodeck.sh
 
 finish-args:
@@ -52,9 +50,7 @@ cleanup:
   - /src
   - '*.a'
   - '*.la'
-  # XMLSTARLET
-  - /lib/debug
-  - /share/runtime
+  - /app/retrodeck/tmplib
 
 modules:
 
@@ -70,7 +66,7 @@ modules:
   # UPDATE STEPS FOR MAIN:
   # [ ] Update the VERSION variable on line containing "VERSION=THISBRANCH"
   # [ ] Update the appdata.xml with the version number and notes
-  #
+
   - name: version-initialization
     buildsystem: simple
     build-commands:
@@ -109,57 +105,6 @@ modules:
           - autoreconf -vfi
     post-install:
       - ln -s "xml" "${FLATPAK_DEST}/bin/xmlstarlet" ||:
-
-  # mesa repo got a double certificate issue and gnutils cannot handle that so GLU download fails,
-  # this affects even the shared-modules's libglu so I have to replace it temporarly
-  # more info there: https://gitlab.com/gnutls/gnutls/-/issues/1335
-  # dependency of: RETROARCH, CEMU, RPCS3, XEMU
-  - name: libglu
-    buildsystem: meson
-    cleanup:
-      - /include
-      - /lib/debug
-      - /lib/pkgconfig
-      - /lib/*.a
-    sources:
-      - type: archive
-        url: https://ftp.osuosl.org/pub/blfs/conglomeration/glu/glu-9.0.3.tar.xz
-        sha256: bd43fe12f374b1192eb15fe20e45ff456b9bc26ab57f0eee919f96ca0f8a330f
-      # - type: archive
-      #   url: https://mesa.freedesktop.org/archive/glu/glu-9.0.3.tar.xz
-      #   sha256: bd43fe12f374b1192eb15fe20e45ff456b9bc26ab57f0eee919f96ca0f8a330f
-      #   x-checker-data:
-      #     type: anitya
-      #     project-id: 13518
-      #     stable-only: true
-      #     url-template: https://mesa.freedesktop.org/archive/glu/glu-$version.tar.xz
-
-  - name: libgudev
-    buildsystem: meson
-    config-opts:
-      - -Dtests=disabled
-      - -Dvapi=disabled
-      - -Dintrospection=disabled
-      - -Dgtk_doc=false
-    cleanup:
-      - /include
-      - /etc
-      - /libexec
-      - /sbin
-      - /lib/pkgconfig
-      - /lib/systemd
-      - /man
-      - /share/aclocal
-      - /share/doc
-      - /share/gtk-doc
-      - /share/man
-      - /share/pkgconfig
-      - '*.la'
-      - '*.a'
-    sources:
-      - type: archive
-        url: https://ftp.osuosl.org/pub/blfs/conglomeration/libgudev/libgudev-237.tar.xz
-        sha256: 0d06b21170d20c93e4f0534dbb9b0a8b4f1119ffb00b4031aaeb5b9148b686aa
 
   - name: rclone
     buildsystem: simple
@@ -209,367 +154,31 @@ modules:
         url: https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_amd64
         sha256: 4ee662847c588c3ef2fec8bfb304e8739e3dbaba87ccb9a608d691c88f5b64dc
 
-  # dependency of: CEMU
-  - name: glslang
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-      - -DENABLE_CTEST=OFF
-      # TODO: Does Cemu benefit from SPIRV-Tools-opt
-      - -DENABLE_OPT=OFF
-    cleanup:
-      - /include
-      - /lib/cmake
-    sources:
-      - type: archive
-        url: https://github.com/KhronosGroup/glslang/archive/14.2.0.tar.gz
-        sha256: 14a2edbb509cb3e51a9a53e3f5e435dbf5971604b4b833e63e6076e8c0a997b5
-        x-checker-data:
-          type: anitya
-          stable-only: true
-          project-id: 205796
-          url-template: https://github.com/KhronosGroup/glslang/archive/$version.tar.gz
-
-  # enables motion controls on non-wii controllers (switch, ps4, etc)
-  # dependency of: DOLPHIN, RPCS3
-  # TODO: requires a udev rule enabling Motion Sensors access
-  - name: libevdev
-    buildsystem: meson
-    config-opts:
-      - -Dtests=disabled
-      - -Ddocumentation=disabled
-    cleanup:
-      - /bin
-      - /include
-      - /lib/pkgconfig
-      - /share
-    sources:
-      - type: archive
-        url: https://www.freedesktop.org/software/libevdev/libevdev-1.13.2.tar.xz
-        sha256: 3eca86a6ce55b81d5bce910637fc451c8bbe373b1f9698f375c7f1ad0de3ac48
-        x-checker-data:
-          type: anitya
-          project-id: 20540
-          stable-only: true
-          url-template: https://www.freedesktop.org/software/libevdev/libevdev-$version.tar.xz
-  # dependency of: CEMU
-  - name: rapidjson
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DRAPIDJSON_BUILD_DOC=OFF
-      - -DRAPIDJSON_BUILD_EXAMPLES=OFF
-      - -DRAPIDJSON_BUILD_TESTS=OFF
-      - -DRAPIDJSON_BUILD_THIRDPARTY_GTEST=OFF
-    cleanup:
-      - /include
-      - /lib/cmake
-      - /lib/pkgconfig
-      - /share/doc
-    sources:
-      - type: archive
-        url: https://github.com/Tencent/rapidjson/archive/refs/tags/v1.1.0.tar.gz
-        sha256: bf7ced29704a1e696fbccf2a2b4ea068e7774fa37f6d7dd4039d0787f8bed98e
-        x-checker-data:
-          type: anitya
-          project-id: 7422
-          stable-only: true
-          url-template: https://github.com/Tencent/rapidjson/archive/refs/tags/v$version.tar.gz
-
-  # dependency of: CEMU, SOLARUS
-  - name: glm
-    buildsystem: cmake-ninja
-    cleanup: ['*']
-    no-make-install: true
-    post-install:
-      - install -d ${FLATPAK_DEST}/include
-      - cp -R glm ${FLATPAK_DEST}/include
-      - cp -R cmake/glm ${FLATPAK_DEST}/lib/cmake
-    sources:
-      - type: archive
-        url: https://github.com/g-truc/glm/releases/download/0.9.9.8/glm-0.9.9.8.zip
-        sha256: 37e2a3d62ea3322e43593c34bae29f57e3e251ea89f4067506c94043769ade4c
-        
-  # dependency of: CEMU, ES-DE
-  - name: pugixml
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DBUILD_SHARED_LIBS=ON
-    cleanup:
-      - /include
-      - /lib/cmake
-      - /lib/pkgconfig
-    sources:
-      - type: archive
-        url: https://github.com/zeux/pugixml/releases/download/v1.14/pugixml-1.14.tar.gz
-        sha256: 2f10e276870c64b1db6809050a75e11a897a8d7456c4be5c6b2e35a11168a015
-        x-checker-data:
-          type: anitya
-          project-id: 3728
-          url-template: https://github.com/zeux/pugixml/releases/download/v$version/pugixml-$version.tar.gz
-          
-  # dependency of: CEMU, RPCS3
-  - rd-submodules/shared-modules/glew/glew.json
-
-  # dependency of: XEMU, MelonDS (4.7.0)
-  - name: libslirp
-    buildsystem: meson
-    cleanup:
-      - /include
-    sources:
-      - type: archive
-        url: https://gitlab.freedesktop.org/slirp/libslirp/-/archive/v4.8.0/libslirp-v4.8.0.tar.gz
-        sha256: 2a98852e65666db313481943e7a1997abff0183bd9bea80caec1b5da89fda28c
-        x-checker-data:
-          type: anitya
-          project-id: 96796
-          stable-only: true
-          url-template: https://gitlab.freedesktop.org/slirp/libslirp/-/archive/v$version/libslirp-v$version.tar.gz
-
-  # dependency of: CEMU (1.0.26), DOLPHIN (1.0.27)
-  - name: libusb
-    config-opts:
-      - --disable-static
-    cleanup:
-      - /include
-      - /lib/*.la
-      - /lib/pkgconfig
-    sources:
-      - type: archive
-        url: https://github.com/libusb/libusb/releases/download/v1.0.27/libusb-1.0.27.tar.bz2
-        sha256: ffaa41d741a8a3bee244ac8e54a72ea05bf2879663c098c82fc5757853441575
-        x-checker-data:
-          type: anitya
-          project-id: 1749
-          stable-only: true
-          url-template: https://github.com/libusb/libusb/releases/download/v$version/libusb-$version.tar.bz2
-
-  # ES-DE - START
-  # https://gitlab.com/es-de/emulationstation-de
-
-  - name: ffmpeg
-    config-opts:
-      - --disable-static
-      - --disable-programs
-      - --disable-doc
-      - --enable-gpl
-      - --enable-shared
-      - --enable-libvorbis
-      - --enable-libopus
-      - --enable-libvpx
-      - --enable-postproc
-    sources:
-      - type: git
-        url: https://github.com/FFmpeg/FFmpeg.git
-        tag: n5.1.4
-
-  - name: freeimage
-    no-autogen: true
-    build-options:
-      cxxflags: -std=c++14
-    make-args:
-      - DESTDIR=/app
-    sources:
-      - type: archive
-        url: http://downloads.sourceforge.net/freeimage/FreeImage3180.zip
-        sha256: f41379682f9ada94ea7b34fe86bf9ee00935a3147be41b6569c9605a53e438fd
-      - type: shell
-        commands:
-          - sed -i 's|-o root -g root ||' ./Makefile.gnu
-          - sed -i 's|/usr|/app|' ./Makefile.gnu
-
-  - name: libgit2
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-      - -DBUILD_SHARED_LIBS:BOOL=ON
-      - -DTHREADSAFE=ON
-    sources:
-      - type: git
-        url: https://github.com/libgit2/libgit2.git
-        tag: v1.6.3
-
-  # Needed from ES-DE 2.1.0+
-  - name: libpoppler-glib
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DENABLE_BOOST=OFF
-    sources:
-      - type: archive
-        # original link not working, found a mirror
-        url: https://poppler.freedesktop.org/poppler-22.11.0.tar.xz
-        #url: https://gitlab.freedesktop.org/poppler/poppler/-/archive/poppler-22.11.0/poppler-poppler-22.11.0.tar.bz2
-        sha256: 093ba9844ed774285517361c15e21a31ba4df278a499263d4403cca74f2da828
-    cleanup:
-      - /lib/pkgconfig
-      - /include
-      - '*.a'
-      - '*.la'
-
-  # When updating this module remember to check those on the main repos:
-  - name: ES-DE
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DRETRODECK=on
-    cleanup:
-      - es-app
-      - es-core
-    sources:
-      - type: git
-        url: https://github.com/RetroDECK/ES-DE
-        branch: retrodeck-main
-      - type: shell
-
-  # ES-DE - END
-
-  # ES-DE Themes - START
-
-  - name: RetroDECK Theme
-    buildsystem: simple
-    build-commands:
-      - mkdir -p ${FLATPAK_DEST}/share/es-de/themes/retrodeck/
-      - mv -f * ${FLATPAK_DEST}/share/es-de/themes/retrodeck/
-    sources:
-      - type: git
-        url:  https://github.com/RetroDECK/RetroDECK-theme
-        commit: 975c41cac99d150b6ae86a1dfd19988058c69aad
-
-  # ES-DE Themes - END
-
-  # External manifests start
-
-  # RetroArch - START
-  # https://github.com/flathub/org.libretro.RetroArch
+  # RetroArch
+  # https://retroarch.com/index.php?page=platforms
 
   - name: retroarch
-    config-opts:
-      - '--enable-dbus'
-    make-args:
-      - GLOBAL_CONFIG_DIR=${FLATPAK_DEST}/etc
-      - HAVE_TRANSLATE=1
-      - HAVE_ACCESSIBILITY=1
+    buildsystem: simple
+    build-commands:
+      - mkdir -p "${FLATPAK_DEST}/share/libretro/"
+      - cp -r ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/* "${FLATPAK_DEST}/share/libretro/"
+      - chmod +x ./*.AppImage
+      - ./*.AppImage --appimage-extract
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
+      - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
     sources:
-      - type: git
-        url: https://github.com/libretro/RetroArch.git
-        commit: 06fa5325f8b3cd42e6fba3d57835d5924c9ea2e7
-      - type: file
-        path: rd-submodules/retroarch/retroarch.cfg
-      - type: file
-        path: rd-submodules/retroarch/VkLayer_FROG_gamescope_wsi.x86_64.json
-    post-install:
-      - mkdir -p ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/
-      - >-
-        mv ${FLATPAK_DEST}/share/pixmaps/retroarch.svg
-        ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/
-      - rmdir --ignore-fail-on-non-empty ${FLATPAK_DEST}/share/pixmaps/
-      - mkdir -p ${FLATPAK_DEST}/etc
-      - >-
-        sed s:@prefix@:${FLATPAK_DEST}:g retroarch.cfg >
-        ${FLATPAK_DEST}/etc/retroarch.cfg
-      - mkdir -p ${FLATPAK_DEST}/share/vulkan/implicit_layer.d
-      - >-
-        install VkLayer_FROG_gamescope_wsi.x86_64.json
-        /app/share/vulkan/implicit_layer.d/VkLayer_FROG_gamescope_wsi.x86_64.json
-    modules:
-      - rd-submodules/retroarch/modules/libpng/libpng-1.6.json
-      - rd-submodules/retroarch/modules/nvidia-cg-toolkit/nvidia-cg-toolkit-3.1.0013.json
-      - rd-submodules/shared-modules/SDL/SDL-1.2.15.json
-      - rd-submodules/shared-modules/SDL/SDL_image-1.2.12.json
-      - rd-submodules/shared-modules/SDL/SDL_mixer-1.2.12.json
-      - rd-submodules/shared-modules/SDL/SDL_net-1.2.8.json
-      - rd-submodules/shared-modules/SDL/SDL_ttf-2.0.11.json
-      #- rd-submodules/shared-modules/libusb/libusb.json moved outside
-      # certificate glu issue
-      #- rd-submodules/shared-modules/gudev/gudev.json
-      - rd-submodules/retroarch/modules/libbz2/libbz2-1.0.8.json
-      - rd-submodules/retroarch/modules/xrandr/xrandr-1.5.json
-      - rd-submodules/retroarch/modules/libaio/libaio-0.3.112.json
-      # certificate issue, check glu module for more info
-      #- rd-submodules/shared-modules/glu/glu-9.json
-      - rd-submodules/shared-modules/libdecor/libdecor.json
-      - rd-submodules/retroarch/modules/gamemode/gamemode-1.8.json
-  - name: retroarch-filers-video
-    subdir: gfx/video_filters
-    make-install-args:
-      - PREFIX=${FLATPAK_DEST}
-    sources:
-      - type: git
-        url: https://github.com/libretro/RetroArch.git
-        commit: 06fa5325f8b3cd42e6fba3d57835d5924c9ea2e7
-  - name: retroarch-filers-audio
-    subdir: libretro-common/audio/dsp_filters
-    make-install-args:
-      - PREFIX=${FLATPAK_DEST}
-    sources:
-      - type: git
-        url: https://github.com/libretro/RetroArch.git
-        commit: 06fa5325f8b3cd42e6fba3d57835d5924c9ea2e7
-  - name: retroarch-assets
-    make-install-args:
-      - PREFIX=${FLATPAK_DEST}
-    sources:
-      - type: git
-        url: https://github.com/libretro/retroarch-assets.git
-        commit: 923b711dc6772a168d83dc8915e9260730fcf3a1
-  - name: libretro-database
-    make-install-args:
-      - PREFIX=${FLATPAK_DEST}
-    sources:
-      - type: git
-        url: https://github.com/libretro/libretro-database.git
-        commit: 977612e2cd284f67fc0d121d9d94c5982a49f61e
-  - name: libretro-core-info
-    make-install-args:
-      - PREFIX=${FLATPAK_DEST}
-    sources:
-      - type: git
-        url: https://github.com/libretro/libretro-core-info.git
-        commit: ad0f67e172dca9edb88a4eea1d541f407a9c2d12
-  - name: retroarch-joypad-autoconfig
-    make-install-args:
-      - PREFIX=${FLATPAK_DEST}
-    sources:
-      - type: git
-        url: https://github.com/libretro/retroarch-joypad-autoconfig.git
-        commit: ec43cfef730f15d6b20bf277681250b2f4b99a8b
-  - name: common-shaders
-    make-install-args:
-      - PREFIX=${FLATPAK_DEST}
-    sources:
-      - type: git
-        url: https://github.com/libretro/common-shaders.git
-        commit: 86cfa146a8dfddf6377ddb5dbcff552feae2e5bf
-  - name: slang-shaders
-    make-install-args:
-      - PREFIX=${FLATPAK_DEST}
-    sources:
-      - type: git
-        url: https://github.com/libretro/slang-shaders.git
-        commit: d367f6cf73e01a8e43028107ab1ded2d2f05fe6a
-  - name: glsl-shaders
-    make-install-args:
-      - PREFIX=${FLATPAK_DEST}
-    sources:
-      - type: git
-        url: https://github.com/libretro/glsl-shaders.git
-        commit: db974e4d6f6e3178198b7690095a107b3b509d4b
-  - name: common-overlays
-    make-install-args:
-      - PREFIX=${FLATPAK_DEST}
-    sources:
-      - type: git
-        url: https://github.com/libretro/common-overlays.git
-        commit: c266abf4d7f9286fb6fbcfb57647cd9c80c45530
+      - type: archive
+        url: https://buildbot.libretro.com/nightly/linux/x86_64/RetroArch.7z
+        sha256: RASHAPLACEHOLDER
 
-  # RetroArch - END
-
-  # Not part of the offical RetroArch manifest
+  # Not part of the offical RetroArch AppImage
   # retroarch-cores-nightly must be earlier than retroarch-cores as it will overwrite this cores with the stable ones
   - name: retroarch-cores-nightly
     buildsystem: simple
     build-commands:
-      - mkdir -p /app/share/libretro/cores/      
-      
-      - mv -f ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* /app/share/libretro/cores/
+      - mkdir -p ${FLATPAK_DEST}/share/libretro/cores/      
+      - cp -r ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* ${FLATPAK_DEST}/share/libretro/cores/
     sources:
       - type: archive
         url: https://buildbot.libretro.com/nightly/linux/x86_64/RetroArch_cores.7z
@@ -578,8 +187,8 @@ modules:
   - name: retroarch-cores
     buildsystem: simple
     build-commands:
-      - mkdir -p /app/share/libretro/cores/      
-      - mv -f ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* /app/share/libretro/cores/
+      - mkdir -p ${FLATPAK_DEST}/share/libretro/cores/      
+      - cp -rf ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* ${FLATPAK_DEST}/share/libretro/cores/
     sources:
       - type: archive
         url: https://buildbot.libretro.com/stable/1.17.0/linux/x86_64/RetroArch_cores.7z
@@ -588,7 +197,7 @@ modules:
   - name: retroarch-sameduck-core
     buildsystem: simple
     build-commands:
-      - mv sameduck_libretro.so /app/share/libretro/cores/sameduck_libretro.so
+      - cp -f sameduck_libretro.so ${FLATPAK_DEST}/share/libretro/cores/sameduck_libretro.so
     sources:
       - type: archive
         url: https://buildbot.libretro.com/nightly/linux/x86_64/latest/sameduck_libretro.so.zip
@@ -598,7 +207,7 @@ modules:
     buildsystem: simple
     build-commands:
     - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/PPSSPP
-    - mv -f assets/* ${FLATPAK_DEST}/retrodeck/extras/PPSSPP/
+    - cp -r assets/* ${FLATPAK_DEST}/retrodeck/extras/PPSSPP/
     sources:
       - type: archive
         url: https://github.com/hrydgard/ppsspp/archive/refs/heads/master.zip
@@ -608,8 +217,8 @@ modules:
     buildsystem: simple
     build-commands:
     - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/MSX
-    - mv -f Databases ${FLATPAK_DEST}/retrodeck/extras/MSX/Databases
-    - mv -f Machines ${FLATPAK_DEST}/retrodeck/extras/MSX/Machines
+    - cp -r Databases ${FLATPAK_DEST}/retrodeck/extras/MSX/Databases
+    - cp -r Machines ${FLATPAK_DEST}/retrodeck/extras/MSX/Machines
     sources:
       - type: archive
         url: http://bluemsx.msxblue.com/rel_download/blueMSXv282full.zip
@@ -620,466 +229,157 @@ modules:
     buildsystem: simple
     build-commands:
     - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/Amiga
-    - cp -f Linux/x86-64/capsimg.so ${FLATPAK_DEST}/retrodeck/extras/Amiga/capsimg.so
+    - cp -r Linux/x86-64/capsimg.so ${FLATPAK_DEST}/retrodeck/extras/Amiga/capsimg.so
     sources:
       - type: archive
         url: https://github.com/rsn8887/capsimg/releases/download/1.1/Capsimg_for_Retroarch.zip
         sha256: 16c1b511b8e1374a2b6461a66bb6f07b7d2627eb4e941fd1497a432330acaad1
         strip-components: 0
 
-  # PPSSPP - START
-  # https://github.com/flathub/org.ppsspp.PPSSPP
+  # PPSSPP
+  # why from our artifacts: AppImage not provided, only Flatpak, requested here: https://github.com/hrydgard/ppsspp/issues/16511
+  # https://github.com/RetroDECK/org.ppsspp.PPSSPP
 
-  - name: ppsspp
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DUSE_SYSTEM_FFMPEG=OFF
-      - -DUSE_SYSTEM_LIBZIP=ON
-      - -DUSE_SYSTEM_ZSTD=ON
-      - -DUSE_WAYLAND_WSI=ON
-      - -DUSING_QT_UI=OFF
-      - -DBUILD_TESTING=OFF
-      - -DOpenGL_GL_PREFERENCE=GLVND
-    build-options:
-      arch:
-        aarch64:
-          config-opts:
-            - -DUSING_EGL=ON
-            - -DUSING_GLES2=ON
-    post-install:
-      - install -Dm644 icons/icon-512.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/ppsspp.svg
-    cleanup:
-      - /share/ppsspp/assets/lang/README.md
+  - name: retrodeck-ppsspp
+    buildsystem: simple
+    build-commands:
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
+      - cp -rL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - rm -rf "files/lib"
+      - cp -r files/* "${FLATPAK_DEST}"
+      - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
-      - type: git
-        url: &ppsspp-url https://github.com/hrydgard/ppsspp.git
-        tag: v1.17.1
-        commit: d479b74ed9c3e321bc3735da29bc125a2ac3b9b2
-        x-checker-data:
-          type: json
-          url: https://api.github.com/repos/hrydgard/ppsspp/releases/latest
-          version-query: .tag_name | sub("^v"; "")
-          tag-query: .tag_name
-          timestamp-query: .published_at
+      - type: archive
+        url: https://github.com/RetroDECK/org.ppsspp.PPSSPP/releases/latest/download/RetroDECK-PPSSPP-Artifact.tar.gz
+        sha256: RETRODECKPPSSPPLATEST
 
-  # PPSSPP - END
-
-
-  # PCSX2 - START
-  # Inspired by:
-  # https://github.com/flathub/com.zettlr.Zettlr/blob/master/com.zettlr.Zettlr.yaml
+  # PCSX2
+  # Inspired by: https://github.com/flathub/com.zettlr.Zettlr/blob/master/com.zettlr.Zettlr.yaml
   # https://pcsx2.net/downloads/
 
-  - name: pcsx2-qt
+  - name: pcsx2
     buildsystem: simple
     build-commands:
-      - chmod +x pcsx2*.AppImage
-      - ./pcsx2*.AppImage --appimage-extract
-      - mkdir -p "${FLATPAK_DEST}/pcsx2-qt"
-      - cp -r squashfs-root/* "${FLATPAK_DEST}/pcsx2-qt"
-      - ln -s "${FLATPAK_DEST}/pcsx2-qt/usr/bin/pcsx2-qt" "${FLATPAK_DEST}/bin/pcsx2-qt"
+      - chmod +x *.AppImage
+      - ./*.AppImage --appimage-extract
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
+      - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
     sources:
       - type: file
-        url: https://github.com/PCSX2/pcsx2/releases/download/v2.0.3/pcsx2-v2.0.3-linux-appimage-x64-Qt.AppImage
-        sha256: ce1a6240643a1c7b68d5ad21789bf9de218fcef6f61649a6503b7de7bfce186f
+        url: https://github.com/PCSX2/pcsx2/releases/download/v2.1.55/pcsx2-v2.1.55-linux-appimage-x64-Qt.AppImage
+        sha256: d08ae2fdfc1bc3a4bd264b62ceda02f1e2de87c704ee1f464e5ce52073998e33
 
-  # PCSX2 - END
+  # Dolphin
+  # why from source: AppImage not provided, only Flatpak
+  # https://github.com/RetroDECK/org.DolphinEmu.dolphin-emu
 
-  # Dolphin - START
-  # https://github.com/flathub/org.DolphinEmu.dolphin-emu
-  # WHEN UPADTING: remember to update rd-submodules/dolphin contents
-
-  - name: xdg-screensaver-shim
-    buildsystem: meson
-    sources:
-      - type: archive
-        url: https://github.com/Unrud/xdg-screensaver-shim/archive/0.0.2.tar.gz
-        sha256: 0ed2a69fe6ee6cbffd2fe16f85116db737f17fb1e79bfb812d893cf15c728399
-
-  - name: dolphin-emu
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-      - -DENABLE_ALSA=OFF
-      - -DENABLE_SDL=ON
-      - -DENABLE_EVDEV=ON
-      - -DDISTRIBUTOR=Flathub
-    cleanup:
-      - /share/man
-    post-install:
-      - install -D -t ${FLATPAK_DEST}/bin/ dolphin-emu-wrapper
-      - sed -i -e 's/viewBox="0 0 1024.02 571.29"/viewBox="0 -285.645 1024 1024" width="2048"
-        height="2048"/g' /app/share/icons/hicolor/scalable/apps/dolphin-emu.svg
-    sources:
-      - type: git
-        # Sometimes Dolphin or its submodules clone are failing in https so it must done in ssh
-        # fatal: remote transport reported error
-        # url: ssh://git@github.com/dolphin-emu/dolphin.git
-        url: https://github.com/dolphin-emu/dolphin.git
-        commit: cc3ff347b437fd80f3a2880d1bbc7ba2d5f191f4
-        # x-checker-data:
-        #   type: json
-        #   url: https://dolphin-emu.org/update/latest/beta
-        #   commit-query: .hash
-        #   version-query: .shortrev
-        #   timestamp-query: .date
-        #   is-main-source: true
-      # detects whether dolphin is running in a flatpak sandbox
-      # and makes it use xdg directories if it is.
-      # prevents dolphin from attempting to write conf files
-      # in non-writable paths, typically happens when a user
-      # has leftover files from a previous non-flatpak install
-      - type: patch
-        path: rd-submodules/dolphin/detectflatpak.patch
-      # version strings must match exactly for online multiplayer
-      - type: patch
-        path: rd-submodules/dolphin/nodirtyversion.patch
-      - type: script
-        commands:
-          - |
-            for i in {0..9}; do
-              test -S $XDG_RUNTIME_DIR/discord-ipc-$i ||
-                ln -sf {app/com.discordapp.Discord,$XDG_RUNTIME_DIR}/discord-ipc-$i;
-            done
-            dolphin-emu "$@"
-        dest-filename: dolphin-emu-wrapper
-
-  - name: universal_dynamic_input
+  - name: retrodeck-dolphin
     buildsystem: simple
     build-commands:
-      - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/DynamicInputTextures
-      - cp -r * ${FLATPAK_DEST}/retrodeck/extras/DynamicInputTextures/
-    sources:
-      - type: git
-        url: https://github.com/Venomalia/UniversalDynamicInput.git
-        commit: UNIVERSALDYNAMICINPUTCOMMITPLACEHOLDER
-
-  # Dolphin - END
-
-  # XEMU - START
-  # https://github.com/flathub/app.xemu.xemu
-
-  - name: libpcap
-    buildsystem: cmake-ninja
-    cleanup:
-      - /bin
-      - /include
-      - /lib/debug
-      - /lib/pkgconfig
-      - /lib/*.a
-      - /share
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
+      - cp -r "files/lib/debug" "${FLATPAK_DEST}/retrodeck/tmplib"
+      - rm -rf "files/lib/debug"
+      - cp -rL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - rm -rf "files/lib"
+      - cp -r files/* "${FLATPAK_DEST}"
+      - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
-        url: https://www.tcpdump.org/release/libpcap-1.10.4.tar.gz
-        sha256: ed19a0383fad72e3ad435fd239d7cd80d64916b87269550159d20e47160ebe5f
-        x-checker-data:
-          type: anitya
-          project-id: 1702
-          stable-only: true
-          url-template: https://www.tcpdump.org/release/libpcap-$version.tar.gz
+        url: https://github.com/RetroDECK/org.DolphinEmu.dolphin-emu/releases/latest/download/RetroDECK-dolphin-Artifact.tar.gz
+        sha256: RETRODECKDOLPHINLATEST
 
-  - name: PyYAML
+  # PRIMEHACK
+  # https://github.com/RetroDECK/io.github.shiiion.primehack
+
+  - name: retrodeck-primehack
     buildsystem: simple
     build-commands:
-      - python3 setup.py install --prefix=/app --root=/
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
+      - rm -rf "files/lib/pkgconfig"
+      - cp -rL "files/lib/debug" "${FLATPAK_DEST}/retrodeck/tmplib"
+      - rm -rf "files/lib/debug"
+      - cp -rL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - rm -rf "files/lib"
+      - cp -r files/* "${FLATPAK_DEST}"
+      - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
-        url: https://github.com/yaml/pyyaml/archive/refs/tags/6.0.tar.gz
-        sha256: f33eaba25d8e0c1a959bbf00655198c287dfc5868f5b7b01e401eaa1796cc778
+        url: https://github.com/RetroDECK/io.github.shiiion.primehack/releases/latest/download/RetroDECK-primehack-Artifact.tar.gz
+        sha256: RETRODECKPRIMEHACKLATEST
 
-  - name: xemu
-    buildsystem: autotools
-    builddir: true
-    no-make-install: true
-    build-options:
-      cflags: -O3 -DXBOX=1 -Wno-error=redundant-decls
-    config-opts:
-      - --audio-drv-list=sdl
-      - --disable-werror
-      - --target-list=i386-softmmu
-    make-args:
-      - qemu-system-i386
-    post-install:
-      - |-
-        for px in 16 32 48 64 128 256 512; do
-          install -Dm644 ../ui/icons/xemu_${px}x${px}.png $FLATPAK_DEST/share/icons/hicolor/${px}x${px}/apps/app.xemu.xemu.png
-        done
-      - install -Dm644 ../ui/icons/xemu.svg $FLATPAK_DEST/share/icons/hicolor/scalable/apps/app.xemu.xemu.svg
-      - mv qemu-system-i386 $FLATPAK_DEST/bin/xemu
-      - mkdir -p $FLATPAK_DEST/share/licenses/xemu
-      - cd .. && python3 scripts/gen-license.py > $FLATPAK_DEST/share/licenses/xemu/LICENSE.txt
-    sources:
-      - type: git
-        url: https://github.com/xemu-project/xemu.git
-        tag: v0.7.126
-        commit: b2b6a98d5ea21970cd2436a1912230f4b97c5e03
-        x-checker-data:
-          type: json
-          url: https://api.github.com/repos/xemu-project/xemu/releases/latest
-          tag-query: .tag_name
-          timestamp-query: .published_at
-          version-query: .tag_name
-
-  - name: xemu-dummy-hdd
-    buildsystem: simple
-    build-commands:
-    - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/XEMU
-    - mv -f "xbox_hdd.qcow2" "${FLATPAK_DEST}/retrodeck/extras/XEMU/xbox_hdd.qcow2"
-    sources:
-      - type: archive
-        url: https://github.com/mborgerson/xemu-hdd-image/releases/latest/download/xbox_hdd.qcow2.zip
-        sha256: XEMUHDDHASHPLACEHOLDER
-
-  # XEMU - END
-
-  # MELONDS - START
-  # https://github.com/flathub/net.kuribo64.melonDS
-  # ちっちゃい、かわいい！
-
-  - name: melonds
-    buildsystem: cmake-ninja
-    builddir: true
-    build-options:
-      config-opts:
-        - -DUSE_QT6=ON
-    sources:
-      - type: git
-        url: https://github.com/melonDS-emu/melonDS.git
-        commit: 430de6b2702bb93faa8c2004aff3fbd084db4a1e
-      - type: patch
-        path: rd-submodules/melonds/hotkeys.patch
-
-  # MELONDS - END
-
-  # RPCS3 - START
-  # https://github.com/flathub/net.rpcs3.RPCS3
+  # RPCS3
+  # https://rpcs3.net/download
 
   - name: rpcs3
-    buildsystem: cmake-ninja
-    builddir: true
-    build-options:
-      append-ld-library-path: /usr/lib/sdk/llvm18/lib
-      append-path: /usr/lib/sdk/llvm18/bin
-      cflags: &optflags -O2 -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong
-        -grecord-gcc-switches -fasynchronous-unwind-tables -fstack-clash-protection
-        -fcf-protection -fno-omit-frame-pointer
-      cflags-override: true
-      cxxflags: *optflags
-      cxxflags-override: true
-      env:
-        AR: llvm-ar
-        CC: clang
-        CXX: clang++
-        RANLIB: llvm-ranlib
-      ldflags: -fuse-ld=lld
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
-      - -DBUILD_LLVM=OFF
-      - -DUSE_NATIVE_INSTRUCTIONS=OFF
-      - -DUSE_PRECOMPILED_HEADERS=OFF
-      - -DUSE_SDL=ON
-      - -DUSE_SYSTEM_CURL=ON
-      - -DUSE_SYSTEM_FFMPEG=OFF # Disabled this to force RPCS3 to use our built FFMPEG
-      - -DUSE_SYSTEM_LIBPNG=ON
-      - -DUSE_SYSTEM_SDL=ON
-      - -DUSE_SYSTEM_ZLIB=ON
-      - -Wno-dev
-    post-install:
-      - cp /usr/lib/sdk/llvm18/lib/libLLVM.so.18.1 /app/lib/
-      - |-
-        set -eux
-        COMM_TAG="$(awk -F'[\{,]' '/version{.*}/{printf "%d.%d.%d", $2, $3, $4}' ../rpcs3/rpcs3_version.cpp)"
-        COMM_COUNT="$(git rev-list --count HEAD)";
-        COMM_HASH="$(git rev-parse --short=8 HEAD)";
-    sources:
-      - type: git
-        url: https://github.com/RPCS3/rpcs3.git
-        commit: 5b973448bf75a239f34fd9c7698c8a02b04e2ea9
-
-  # RPCS3 - END
-
-  # PRIMEHACK - START
-  # https://github.com/flathub/io.github.shiiion.primehack
-
-  - name: primehack
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-      - -DENABLE_ALSA=OFF
-      - -DENABLE_SDL=ON
-      - -DENABLE_EVDEV=ON
-      - -DDISTRIBUTOR=Flathub
-    cleanup:
-      - /share/man
-    post-install:
-      - install -D primehack-wrapper /app/bin/primehack-wrapper
-    sources:
-      - type: git
-        url: https://github.com/shiiion/dolphin.git
-        commit: 81bfb9686afd2d190134b44dd72d3cee876fe2ab # This commit refers to the PR 166: https://github.com/shiiion/dolphin/pull/166, please change it when it's approved
-       # detects whether dolphin is running in a flatpak sandbox
-       # and makes it use xdg directories if it is.
-       # prevents dolphin from attempting to write conf files
-       # in non-writable paths, typically happens when a user
-       # has leftover files from a previous non-flatpak install
-      - type: patch
-        path: rd-submodules/primehack/detectflatpak.patch
-       # version strings must match exactly for online multiplayer
-      - type: patch
-        path: rd-submodules/primehack/nodirtyversion.patch
-      - type: script
-        commands:
-          - for i in {0..9}; do
-          - test -S $XDG_RUNTIME_DIR/discord-ipc-$i || ln -sf {app/com.discordapp.Discord,$XDG_RUNTIME_DIR}/discord-ipc-$i;
-          - done
-          - primehack "$@"
-        dest-filename: primehack-wrapper
-
-  # PRIMEHACK - END
-
-  # Duckstation-AppImage - START - AUTOUPDATED
-  # https://github.com/stenzek/duckstation/releases/tag/preview
-
-  - name: Duckstation-AppImage
     buildsystem: simple
     build-commands:
-      - chmod +x DuckStation-*.AppImage
-      - ./DuckStation-x64*.AppImage --appimage-extract
-      - mkdir -p "${FLATPAK_DEST}/duckstation"
-      - cp -r squashfs-root/* "${FLATPAK_DEST}/duckstation"
-      - ln -s "${FLATPAK_DEST}/duckstation/usr/bin/duckstation-qt" "${FLATPAK_DEST}/bin/duckstation-qt"
+      - chmod +x *.AppImage
+      - ./*.AppImage --appimage-extract
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug" 
+      - mkdir -p ${FLATPAK_DEST}/lib/ffmpeg   # Needed for a ffmpeg bufgix
+      - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - cp -r "squashfs-root/usr/bin/"* "${FLATPAK_DEST}/bin/"
+      - cp -r "squashfs-root/usr/share/"* "${FLATPAK_DEST}/share/"
+      #TODO: - cp -r squashfs-root/usr/optional* # maybe already included in flatpak runtime
+      #TODO: - cp -r squashfs-root/usr/plugins* # maybe already included in qt
+      #TODO: Do we need this wrapper? squashfs-root/apprun-hooks/linuxdeploy-plugin-qt-hook.sh
+    sources:
+      - type: file
+        url: https://github.com/RPCS3/rpcs3-binaries-linux/releases/download/build-ebcb4034119955991a17210af2a45a672fc9533d/rpcs3-v0.0.32-16685-ebcb4034_linux64.AppImage
+        sha256: 2553d56e01a3e3058fa9ceb4e1d61a07eaf2c5bba9e96b29e8923914d89f6e17
+
+  # MELONDS
+  # https://github.com/melonDS-emu/melonDS/releases/latest
+
+  - name: melonds
+    buildsystem: simple
+    build-commands:
+      - rm -f "files/manifest.json"
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib/"
+      - cp -rL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib/"
+      - rm -rf "files/lib"
+      - cp -r files/* "${FLATPAK_DEST}/"
+      - chmod +x "${FLATPAK_DEST}/bin/"*
+    sources:
+      - type: archive
+        url: https://github.com/RetroDECK/net.kuribo64.melonDS/releases/latest/download/RetroDECK-melonds-Artifact.tar.gz
+        sha256: RETRODECKMELONDSLATEST
+
+  # Duckstation
+  # https://github.com/stenzek/duckstation/releases/tag/preview
+
+  - name: duckstation
+    buildsystem: simple
+    build-commands:
+      - chmod +x *.AppImage
+      - ./*.AppImage --appimage-extract
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
+      - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
     sources:
       - type: file
         url: https://github.com/stenzek/duckstation/releases/download/v0.1-6937/DuckStation-x64.AppImage
         sha256: 8a16f034cc8b11341ed9ad382226549301736794582bdec46a5e19b3ca981e07
 
-  # Duckstation-AppImage - END
-
-  # Cemu - START
-  # needed libusb 1.0.26 but we provide 1.0.27, it could break
+  # Cemu
   # https://github.com/cemu-project/Cemu/releases
-  # https://github.com/flathub/info.cemu.Cemu
 
-  - name: hidapi
-    buildsystem: cmake-ninja
-    sources:
-      - type: archive
-        url: https://github.com/libusb/hidapi/archive/refs/tags/hidapi-0.14.0.tar.gz
-        sha256: a5714234abe6e1f53647dd8cba7d69f65f71c558b7896ed218864ffcf405bcbd
-        x-checker-data:
-          type: anitya
-          project-id: 5594
-          stable-only: true
-          url-template: https://github.com/libusb/hidapi/archive/refs/tags/hidapi-$version.tar.gz
-
-  - name: boost
+  - name: cemu
     buildsystem: simple
     build-commands:
-      - ./bootstrap.sh --prefix=${FLATPAK_DEST} --with-toolset=gcc --with-libraries=filesystem,system,program_options,nowide
-      - ./b2 install variant=release link=shared runtime-link=shared cxxflags="$CXXFLAGS"
-        linkflags="$LDFLAGS" -j ${FLATPAK_BUILDER_N_JOBS}
-    cleanup:
-      - /include
-      - /lib/cmake
+      - chmod +x *.AppImage
+      - ./*.AppImage --appimage-extract
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
+      - rm -rf "squashfs-root/usr/lib/girepository-1.0" # causes issues, I think we already have this
+      - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
+      - install -Dm755 Cemu-wrapper "${FLATPAK_DEST}/bin/"
+      #TODO: do we need this wrapper? squashfs-root/apprun-hooks/linuxdeploy-plugin-gtk.sh
     sources:
-      - type: archive
-        url: https://boostorg.jfrog.io/artifactory/main/release/1.85.0/source/boost_1_85_0.tar.bz2
-        sha256: 7009fe1faa1697476bdc7027703a2badb84e849b7b0baad5086b087b971f8617
-        x-checker-data:
-          type: anitya
-          project-id: 6845
-          stable-only: true
-          url-template: https://boostorg.jfrog.io/artifactory/main/release/$version/source/boost_${major}_${minor}_$patch.tar.bz2
-
-  - name: libzip
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DBUILD_DOC=OFF
-      - -DBUILD_EXAMPLES=OFF
-      - -DBUILD_REGRESS=OFF
-      - -DBUILD_TOOLS=OFF
-    cleanup:
-      - /bin
-      - /include
-      - /lib/cmake
-      - /lib/pkgconfig
-    sources:
-      - type: archive
-        url: https://libzip.org/download/libzip-1.10.1.tar.xz
-        mirror-urls:
-          - https://github.com/nih-at/libzip/releases/download/v1.10.1/libzip-1.10.1.tar.xz
-        sha256: dc3c8d5b4c8bbd09626864f6bcf93de701540f761d76b85d7c7d710f4bd90318
-        x-checker-data:
-          type: anitya
-          project-id: 10649
-          url-template: https://libzip.org/download/libzip-$version.tar.xz
-
-  - name: fmt
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DFMT_TEST=Off
-    cleanup:
-      - '*'
-    sources:
-      - type: archive
-        url: https://github.com/fmtlib/fmt/archive/9.1.0.tar.gz
-        sha256: 5dea48d1fcddc3ec571ce2058e13910a0d4a6bab4cc09a809d8b1dd1c88ae6f2
-        x-checker-data:
-          type: anitya
-          project-id: 11526
-          url-template: https://github.com/fmtlib/fmt/archive/$version.tar.gz
-          versions: {<: '10.0'}
-
-  - name: wxWidgets
-    buildsystem: cmake-ninja
-    cleanup:
-      - /bin
-      - /include
-      - /lib/cmake
-      - /lib/wx
-      - /share
-    sources:
-      - type: archive
-        url: https://github.com/wxWidgets/wxWidgets/releases/download/v3.2.5/wxWidgets-3.2.5.tar.bz2
-        sha256: 0ad86a3ad3e2e519b6a705248fc9226e3a09bbf069c6c692a02acf7c2d1c6b51
-        x-checker-data:
-          type: anitya
-          project-id: 5150
-          stable-only: true
-          url-template: https://github.com/wxWidgets/wxWidgets/releases/download/v$version/wxWidgets-$version.tar.bz2
-          versions: {'!=': 3.2.4-with-msvs2012-fix}
-
-  - name: Cemu
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DPORTABLE=false
-      - -DENABLE_VCPKG=false
-    sources:
-      - type: git
-        url: https://github.com/cemu-project/Cemu
-        # TODO: Update tag pattern on next stable ^v([\d.]+)$
-        x-checker-data:
-          type: git
-          tag-pattern: ^v([\d.]+-\d+)$
-        tag: v2.0-88
-        commit: aefbb918beb8718af8f190a73018ff63bf801d95
-        disable-submodules: true
-      - type: git
-        url: https://github.com/mozilla/cubeb
-        commit: 6c1a6e151c1f981a2800d40af7c041cfcccc710e
-        dest: dependencies/cubeb
-      - type: git
-        url: https://github.com/Exzap/ZArchive
-        dest: dependencies/ZArchive
-        tag: v0.1.2
-      - type: git
-        url: https://github.com/ocornut/imgui
-        dest: dependencies/imgui
-        commit: f65bcf481ab34cd07d3909aab1479f409fa79f2f
-      - type: shell
-        commands:
-          - sed "s/set(EXPERIMENTAL_VERSION.*/set(EXPERIMENTAL_VERSION \"$(git describe
-            --tag | sed "s/v2.0-//")\" CACHE STRING \"\")/g" -i CMakeLists.txt
+      - type: file
+        url: https://github.com/cemu-project/Cemu/releases/download/v2.0-88/Cemu-2.0-88-x86_64.AppImage
+        sha256: 1af1ad5322df5fa0e2a97588c7486604daf42deb8c4d07a2b885047d9701fed0
       - type: script
         commands:
           - |
@@ -1089,41 +389,10 @@ modules:
                   ln -sf {app/com.discordapp.$d,$XDG_RUNTIME_DIR}/discord-ipc-$i;
               done
             done
-            Cemu_relwithdebinfo "$@"
+            Cemu "$@"
         dest-filename: Cemu-wrapper
-      - type: script
-        dest-filename: dev_release_metainfo.py
-        commands:
-          - |
-            import os
-            import xml.etree.ElementTree as ET
-            meta_file = os.environ.get('AS_META_FILE')
-            version = os.environ.get('AS_META_VERSION')
-            release_type = os.environ.get('AS_META_TYPE')
-            release_date = os.environ.get('AS_META_DATE')
-            release_url = os.environ.get('AS_META_URL')
-            tree = ET.parse(meta_file)
-            root = tree.getroot()
-            el_releases = root.find('releases')
-            for el_release in el_releases:
-              el_releases.remove(el_release)
-            el_release = ET.SubElement(el_releases, 'release')
-            el_url = ET.SubElement(el_release, 'url')
-            el_url.text = release_url
-            el_release.attrib['type'] = release_type
-            el_release.attrib['date'] = release_date
-            el_release.attrib['version'] = version
-            ET.indent(tree, space='  ', level=0)
-            tree.write(meta_file, encoding='utf8')
-    post-install:
-      - cp -r bin/gameProfiles ${FLATPAK_DEST}/share/Cemu/
-      - cp -r bin/resources ${FLATPAK_DEST}/share/Cemu/
-      - install -Dm644 -t ${FLATPAK_DEST}/share/icons/hicolor/128x128/apps/ dist/linux/info.cemu.Cemu.png
-      - install -D -t ${FLATPAK_DEST}/bin/ bin/Cemu_relwithdebinfo Cemu-wrapper
 
-  # Cemu - END
-
-  # Vita3K - START - AUTOUPDATED
+  # Vita3K - AUTOUPDATED
 
   - name: vita3k
     buildsystem: simple
@@ -1141,69 +410,85 @@ modules:
         sha256: VITA3KSHAPLACEHOLDER
       - type: file
         path: res/retrodeck.png
-        
-  # Vita3K - END
 
-  # SOLARUS - START
-  # https://github.com/flathub/org.solarus_games.solarus.Launcher
+  # SOLARUS
+  # why from source: they only provide a snap
+  # https://github.com/RetroDECK/org.solarus_games.solarus.Launcher
 
-  - name: luajit
-    no-autogen: true
-    cleanup:
-      - /bin
-      - /lib/*.a
-      - /include
-      - /lib/pkgconfig
-      - /share/man
+  - name: retrodeck-solarus
+    buildsystem: simple
+    build-commands:
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
+      #- cp -r "files/lib/debug/lib/*" "${FLATPAK_DEST}/retrodeck/tmplib/debug/"
+      - rm -rf "files/lib/debug" "files/lib/pkgconfig"
+      - cp -rL files/* "${FLATPAK_DEST}"
+      - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
-        url: https://luajit.org/download/LuaJIT-2.0.5.tar.gz
-        sha256: 874b1f8297c697821f561f9b73b57ffd419ed8f4278c82e05b48806d30c1e979
-      - type: shell
-        commands:
-          - sed -i 's|/usr/local|/app|' ./Makefile
+        url: https://github.com/RetroDECK/org.solarus_games.solarus.Launcher/releases/latest/download/RetroDECK-solarus-Artifact.tar.gz
+        sha256: RETRODECKSOLARUSLATEST
 
-  - name: libmodplug
-    cleanup:
-      - /include
-    sources:
-      - type: archive
-        url: https://download.sourceforge.net/project/modplug-xmms/libmodplug/0.8.9.0/libmodplug-0.8.9.0.tar.gz
-        sha512: 880e10154fd367ee24ace53ca7e32a5c1fee7dfff1f934e6499944c12779427da63e2f55f8d6ce25db0a42a5b4424053bf64305b31dbfc4ef6a8909924d655fd
-
-  - name: physfs
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DPHYSFS_BUILD_TEST=OFF
-    sources:
-      - type: archive
-        url: https://icculus.org/physfs/downloads/physfs-3.0.2.tar.bz2
-        sha256: 304df76206d633df5360e738b138c94e82ccf086e50ba84f456d3f8432f9f863
-        size: 194888
-        x-checker-data:
-          type: anitya
-          project-id: 3631
-          url-template: https://icculus.org/physfs/downloads/physfs-$version.tar.bz2
-
-  - name: solarus
-    buildsystem: cmake-ninja
-    builddir: true
-    config-opts:
-      - -DSOLARUS_GUI=OFF
-    sources:
-      - type: git
-        url: https://gitlab.com/solarus-games/solarus.git
-        tag: v1.6.5
-        commit: 3aec70b0556a8d7aed7903d1a3e4d9a18c5d1649
-
-  # SOLARUS - END
-
-  # GZDoom - Start
+  # GZDoom
   # When updating remember to update all the .pk3 files from the standalone linux download
-  - rd-submodules/shared-modules/gzdoom/gzdoom.json
-  # GZDoom - END
-  
-  # MAME - Start
+  # https://github.com/RetroDECK/org.zdoom.GZDoom
+
+  - name: retrodeck-gzdoom
+    buildsystem: simple
+    build-commands:
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
+      - rm -rf "files/lib/cmake" "files/lib/pkgconfig" "files/lib/debug"
+      - cp -rL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - rm -rf "files/lib"
+      - cp -r files/* "${FLATPAK_DEST}"
+      - chmod +x "${FLATPAK_DEST}/bin/"*
+    sources:
+      - type: archive
+        url: https://github.com/RetroDECK/org.zdoom.GZDoom/releases/latest/download/RetroDECK-gzdoom-Artifact.tar.gz
+        sha256: RETRODECKGZDOOMLATEST
+
+  # Ryujinx Appimage
+  # https://ryujinx.org/download
+
+  # This version was reported as working with symlinks: https://discord.com/channels/951662718102962256/951715885968654418/1264882000658169866
+  - name: Ryujinx-reported-working-version
+    buildsystem: simple
+    build-commands:
+      - |
+        tar -zxvf *.tar.gz
+        mv -v publish ${FLATPAK_DEST}/ryujinx
+        ln -sv ${FLATPAK_DEST}/ryujinx/Ryujinx ${FLATPAK_DEST}/bin/Ryujinx.sh
+    sources:
+      - type: file
+        url: https://github.com/Ryujinx/release-channel-master/releases/download/1.1.1297/ryujinx-1.1.1297-linux_x64.tar.gz
+        sha256: 28b38754e7d2e92083b313b23278c180ae54ac025edbbd0276ec03baec0cec0f
+
+  # XEMU
+  # https://xemu.app/docs/download/#download-for-linux
+
+  - name: xemu
+    buildsystem: simple
+    build-commands:
+      - chmod +x *.AppImage
+      - ./*.AppImage --appimage-extract
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
+      - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}/"
+    sources:
+      - type: file
+        url: https://github.com/xemu-project/xemu/releases/download/v0.7.129/xemu-v0.7.129-x86_64.AppImage
+        sha256: f680774d96a66bf1195cd133497755d43be5eda5f178457a6df32bc691dd8c74
+
+  - name: xemu-dummy-hdd
+    buildsystem: simple
+    build-commands:
+      - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/XEMU
+      - mv -f "xbox_hdd.qcow2" "${FLATPAK_DEST}/retrodeck/extras/XEMU/xbox_hdd.qcow2"
+    sources:
+      - type: archive
+        url: https://github.com/mborgerson/xemu-hdd-image/releases/latest/download/xbox_hdd.qcow2.zip
+        sha256: XEMUHDDHASHPLACEHOLDER
+
+  # MAME
 
   - name: retrodeck-mame
     buildsystem: simple
@@ -1211,47 +496,74 @@ modules:
       - rm -f files/manifest.json
       - cp -rn files/* ${FLATPAK_DEST}
     sources:
-    - type: archive
-      url: RETRODECKMAMEURLPLACEHOLDER
-      sha256: RETRODECKMAMEPLACEHOLDER
+      - type: archive
+        url: https://github.com/RetroDECK/MAME/releases/latest/download/RetroDECK-MAME-Artifact.tar.gz
+        sha256: RETRODECKMAMELATEST
 
-  # MAME - End
+  # ES-DE
 
-  # Ryujinx Appimage - START
-  # https://ryujinx.org/download
+  - name: ES-DE
+    buildsystem: simple
+    build-commands:
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
+      - cp -rL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - rm -rf "files/lib"
+      - cp -r files/* "${FLATPAK_DEST}"
+      - chmod +x "${FLATPAK_DEST}/bin/"*
+    sources:
+      - type: archive
+        #url: RETRODECKESDEURLPLACEHOLDER
+        #sha256: RETRODECKESDEPLACEHOLDER
+        url: https://github.com/RetroDECK/ES-DE/releases/download/feat%2Fsmaller-menu-010824.10/RetroDECK-ES-DE-Artifact.tar.gz
+        sha256: 47ac3a062e7f199475ee1989d0961ab55dac1f285a54ab0e1cf500f9ceb42015
 
-  # Temporary disabled to test a symlink fix build
-  # - name: Ryujinx
-  #   buildsystem: simple
-  #   build-commands:
-  #     - |
-  #       tar -zxvf *.tar.gz
-  #       mv -v publish ${FLATPAK_DEST}/ryujinx
-  #       ln -sv ${FLATPAK_DEST}/ryujinx/Ryujinx ${FLATPAK_DEST}/bin/Ryujinx.sh
-  #   sources:
-  #     - type: file
-  #       url: https://github.com/Ryujinx/release-channel-master/releases/download/1.1.1343/ryujinx-1.1.1343-linux_x64.tar.gz
-  #       sha256: 3cd2172d2f42a0fb93a83bffe6bd8fb2d1d81fb45afc80e0068a245c8f755ac1
+  - name: retrodeck-theme
+    buildsystem: simple
+    build-commands:
+      - mkdir -p ${FLATPAK_DEST}/share/es-de/themes/retrodeck/
+      - mv -f * ${FLATPAK_DEST}/share/es-de/themes/retrodeck/
+    sources:
+      - type: git
+        url:  https://github.com/RetroDECK/RetroDECK-theme
+        commit: 975c41cac99d150b6ae86a1dfd19988058c69aad
 
-  - name: Ryujinx-with-symlink-fix
+  - name: fetch-missing-libs
     buildsystem: simple
     build-commands:
       - |
-        mkdir -p ${FLATPAK_DEST}/ryujinx
-        mkdir -p ${FLATPAK_DEST}/bin
-        chmod +x Ryujinx.sh
-        chmod +x Ryujinx
-        mv -v * ${FLATPAK_DEST}/ryujinx
-        ln -sv ${FLATPAK_DEST}/ryujinx/Ryujinx.sh ${FLATPAK_DEST}/bin/Ryujinx.sh
-        chmod +x ${FLATPAK_DEST}/bin/Ryujinx.sh
-    sources:
-      - type: archive
-        url: https://gitlab.com/-/project/59825450/uploads/8519a04d7a3f5b5949f14b6ad25a4185/ryujinx-Release-1.1.0+81fd228-linux_x64.zip
-        sha256: 9e4a4393a3dcc44fda2aec40c2842492e30656c7369a9959d865a3351f12eeb9
+          # Search for missingl ibraries in our libtmp folder
+          missing_libs=$(find "${FLATPAK_DEST}/bin" -type f -exec ldd {} + 2>/dev/null | grep "not found" | awk '{print $1}' | sort | uniq)
+          
+          # for some reason these libraries are not recognized as missing so we mantain this list
+          manually_imported="libpostproc.so.56 libswscale.so.6 libshaderc_shared.so.1"
 
-  # Ryujinx Appimage - END
+          missing_libs="$missing_libs $manually_imported"
 
-  # External manifests end
+          # Origin paths
+          src_dir="${FLATPAK_DEST}/retrodeck/tmplib"
+          src_debug_dir="${FLATPAK_DEST}/retrodeck/tmplib/debug"
+
+          # Destionation paths
+          dest_dir="${FLATPAK_DEST}/lib"
+          dest_debug_dir="${FLATPAK_DEST}/retrodeck/lib/debug"
+          
+          mkdir -p "$dest_dir" "dest_debug_dir" 
+
+          copy_missing_libs() {
+            local src=$1
+            local dest=$2
+            for lib in $missing_libs; do
+              if [[ -f "$src/$lib" ]]; then
+                cp "$src/$lib" "$dest"
+                echo "Copied \"$lib\" to \"$dest\""
+              fi
+            done
+          }
+
+          copy_missing_libs "$src_dir" "$dest_dir"
+          copy_missing_libs "$src_debug_dir" "$dest_debug_dir"
+
+          rm -rf "$src_dir"
 
   - name: retrodeck
     buildsystem: simple
@@ -1261,56 +573,53 @@ modules:
       - mkdir -p ${FLATPAK_DEST}/retrodeck
 
       # These must be put in home folder, managed by retrodeck.sh
-      - cp es-configs/es_settings.xml ${FLATPAK_DEST}/retrodeck/es_settings.xml
-      - mv -f -t ${FLATPAK_DEST}/retrodeck es-configs/rd_prepacks
+      - cp config/es-de/es_settings.xml ${FLATPAK_DEST}/retrodeck/es_settings.xml
+      - mv -f -t ${FLATPAK_DEST}/retrodeck config/es-de/rd_prepacks
 
       # Logo, res, move graphics directory away from default location so splash can be changed after build
-      - mv -f -t ${FLATPAK_DEST}/retrodeck /app/share/es-de/resources/graphics
+      - mv -f -t ${FLATPAK_DEST}/retrodeck ${FLATPAK_DEST}/share/es-de/resources/graphics
       - cp -f res/splash.svg ${FLATPAK_DEST}/retrodeck/graphics/splash.svg
       - cp -f res/splash.svg ${FLATPAK_DEST}/retrodeck/graphics/splash-orig.svg
       - cp -rf res/extra_splashes/ ${FLATPAK_DEST}/retrodeck/graphics
-      - cp -f res/icon.svg /app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg
+      - cp -f res/icon.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg        
       - cp -f res/icon-configurator.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.configurator.svg
       - mv -f -t ${FLATPAK_DEST}/retrodeck res/binding_icons
 
       # RetroDECK core script
-      - cp retrodeck.sh /app/bin/retrodeck.sh
-      - chmod +x /app/bin/retrodeck.sh
+      - cp retrodeck.sh ${FLATPAK_DEST}/bin/retrodeck.sh
+      - chmod +x ${FLATPAK_DEST}/bin/retrodeck.sh
 
       # Tools
-      - mkdir -p /app/tools
-      - cp -r tools/** /app/tools
-      - find /app/tools -type f \( -name "*.sh" -o -name "*.py" \) -exec chmod +x {} \;
+      - mkdir -p ${FLATPAK_DEST}/tools
+      - cp -r tools/** ${FLATPAK_DEST}/tools
+      - find ${FLATPAK_DEST}/tools -type f \( -name "*.sh" -o -name "*.py" \) -exec chmod +x {} \;
 
       # Function libraries
-      - mkdir -p /app/libexec
-      - cp -r functions/** "/app/libexec/"
+      - mkdir -p ${FLATPAK_DEST}/libexec
+      - cp -r functions/** "${FLATPAK_DEST}/libexec/"
 
       # Desktop entries
-      - cp net.retrodeck.retrodeck.desktop /app/share/applications/net.retrodeck.retrodeck.desktop
+      - cp net.retrodeck.retrodeck.desktop ${FLATPAK_DEST}/share/applications/net.retrodeck.retrodeck.desktop
       - cp net.retrodeck.retrodeck.Configurator.desktop /app/share/applications/net.retrodeck.retrodeck.Configurator.desktop
       - chmod +x net.retrodeck.retrodeck*desktop
 
       # Initializing default emulator configs
-      - cp -r emu-configs ${FLATPAK_DEST}/retrodeck/emu-configs/
+      - cp -r config ${FLATPAK_DEST}/retrodeck/config/
 
       # PICO-8 wrapper
-      - cp ${FLATPAK_DEST}/retrodeck/emu-configs/pico-8/pico8-wrapper.sh /app/bin/pico8
-      - chmod +x /app/bin/pico8
-
-      # Needed for ffmpeg (RPCS3)
-      - mkdir -p ${FLATPAK_DEST}/lib/ffmpeg
+      - cp ${FLATPAK_DEST}/retrodeck/config/pico-8/pico8-wrapper.sh ${FLATPAK_DEST}/bin/pico8
+      - chmod +x ${FLATPAK_DEST}/bin/pico8
 
       # Placing appdata
       - mkdir -p ${FLATPAK_DEST}/share/appdata
       - cp net.retrodeck.retrodeck.appdata.xml ${FLATPAK_DEST}/share/appdata
 
       # Creating symlinks for a prettier access
-      - ln -s /app/bin/retrodeck.sh /app/bin/retrodeck
-      - ln -s /app/tools/configurator.sh /app/bin/configurator
+      - ln -s ${FLATPAK_DEST}/bin/retrodeck.sh ${FLATPAK_DEST}/bin/retrodeck
+      - ln -s ${FLATPAK_DEST}/tools/configurator.sh ${FLATPAK_DEST}/bin/configurator
 
       # GZDOOM wrapper
-      - cp emu-configs/gzdoom/gzdoom.sh ${FLATPAK_DEST}/bin/gzdoom.sh
+      - cp config/gzdoom/gzdoom.sh ${FLATPAK_DEST}/bin/gzdoom.sh
       - chmod +x ${FLATPAK_DEST}/bin/gzdoom.sh
 
     sources:
