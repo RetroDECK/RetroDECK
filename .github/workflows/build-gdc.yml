@@ -25,8 +25,7 @@ jobs:
           submodules: true
       - name: Setup 💻
         run: |
-          pwd
-          cd tools/configurator
+          cd RetroDECK_UK/tools/configurator
           mkdir -v -p build/${EXPORT_NAME}-Linux-64bit  ~/.local/share/godot/export_templates
           mv /root/.local/share/godot/export_templates/${GODOT_VERSION}.stable ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
       - name: Import resources once 📦
