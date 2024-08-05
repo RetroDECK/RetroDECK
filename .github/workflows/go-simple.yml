@@ -16,7 +16,7 @@ jobs:
           lfs: true
       - name: Build
         id: build
-        uses: manleydev/build-godot-action@v1.5.0
+        uses: krynv/build-godot-action@v1.0.0
         with:
           name: gd-test
           preset: ${{ matrix.platform }}
