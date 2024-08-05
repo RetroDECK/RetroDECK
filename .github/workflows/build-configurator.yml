@@ -11,10 +11,10 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-
+  export_game:
     runs-on: ubuntu-latest
-    
+  
+    name: Export game
     steps:
       - name: checkout
       - uses: actions/checkout@v4
@@ -29,7 +29,6 @@ jobs:
           archive_output: true
           archive_root_folder: true
           export_as_pack: true
-
       # This release action has worked well for me. However, you can most likely use any release action of your choosing.
       # https://github.com/ncipollo/release-action
      - name: create release
