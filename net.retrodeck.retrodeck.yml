@@ -155,7 +155,7 @@ modules:
         url: https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_amd64
         sha256: 4ee662847c588c3ef2fec8bfb304e8739e3dbaba87ccb9a608d691c88f5b64dc
 
- name: godot-configurator
+  -name: godot-configurator
     buildsystem: simple
     sources:
       - type: archive
