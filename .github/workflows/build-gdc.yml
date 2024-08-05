@@ -2,7 +2,7 @@ name: Stable release builds
 
 on:
   push:
-    #branches: [ release ]
+    branches: [ feat/godot-configurator ]
   
   workflow_dispatch:
 
