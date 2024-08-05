@@ -4,6 +4,9 @@ on:
   push: {}
   pull_request: {}
 
+env:
+  TAG: v0.006
+
 jobs:
   Godot:
     runs-on: ubuntu-latest
@@ -27,3 +30,11 @@ jobs:
         with:
           name: Client - ${{ matrix.platform }}
           path: ${{ github.workspace }}/${{ steps.build.outputs.build }}
+      - name: Upload Release Asset 🚀
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: Client - linux.zip
+          tag: ${{env.TAG}}
+          overwrite: true
+          file_glob: true
