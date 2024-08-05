@@ -1,4 +1,3 @@
-
 name: Configurator Build
 
 on:
@@ -11,12 +10,11 @@ on:
   workflow_dispatch:
 
 jobs:
- # export_game:
+  build:
+
     runs-on: ubuntu-latest
-  
-    name: Export game
+    
     steps:
-      - name: checkout
       - uses: actions/checkout@v4
       - name : exportGame
         uses: firebelley/godot-export@v5.2.1
@@ -29,12 +27,9 @@ jobs:
           archive_output: true
           archive_root_folder: true
           export_as_pack: true
-      # This release action has worked well for me. However, you can most likely use any release action of your choosing.
-      # https://github.com/ncipollo/release-action
-     - name: create release
-        uses: ncipollo/release-action@v1.12.0
+
+      - name: Upload Linux artifact
+        uses: actions/upload-artifact@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          generateReleaseNotes: true
-          tag: ${{ github.ref_name }}
-          artifacts: ${{ steps.export.outputs.archive_directory }}/*
+          name: Godot Linux Configurator
+          path: /home/runner/work/linux.zip
