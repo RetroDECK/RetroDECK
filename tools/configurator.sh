@@ -1349,7 +1349,7 @@ configurator_developer_dialog() {
 
   "Browse the Wiki" )
     log i "Configurator: opening \"$choice\" menu"
-    xdg-open "https://github.com/XargonWan/RetroDECK/wiki"
+    xdg-open "https://github.com/RetroDECK/RetroDECK/wiki"
     configurator_developer_dialog
   ;;
 
