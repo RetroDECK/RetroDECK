@@ -167,6 +167,9 @@ modules:
         url: https://github.com/Orama-Interactive/Pixelorama/releases/download/v1.0/Pixelorama-Linux-64bit.tar.gz
         sha256: c13c6b1d4c94900a76dbd06a016cc72c9a33c504d98d52ac7b308c6a2f697eee
         strip-components: 1
+    build-commands:
+      - install -Dm644 Pixelorama.pck /app/bin/pixelorama.pck
+
 
   # RetroArch
   # https://retroarch.com/index.php?page=platforms
