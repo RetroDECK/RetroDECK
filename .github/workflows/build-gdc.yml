@@ -43,10 +43,9 @@ jobs:
           list2=$(ls -ltr)
           echo $list2
 
-      - name: Give execute permission ☑️
-        working-directory: tools/configurator
-        run: |
-        ls
+#      - name: Give execute permission ☑️
+ #       working-directory: tools/configurator
+  #      run: |
          # chmod +x ./build/${EXPORT_NAME}-Linux-64bit/${EXPORT_NAME}.x86_64
     #  - name: Copy pixelorama_data folder 📁
     #    run: |
