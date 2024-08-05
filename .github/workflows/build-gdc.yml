@@ -61,7 +61,7 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ~/${{env.EXPORT_NAME}}-Linux-64bit.tar.gz
+          file: ~/$EXPORT_NAME}}-Linux-64bit.tar.gz
           tag: ${{env.TAG}}
           overwrite: true
           file_glob: true
