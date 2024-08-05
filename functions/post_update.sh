@@ -404,7 +404,6 @@ if [[ $(check_version_is_older_than "0.8.4b") == "true" ]]; then
   # In version 0.8.4b, the following changes were made:
   # - Recovery from a failed move of the themes, downloaded_media and gamelists folder to their new ES-DE locations (AGAIN)
 
-
   log d "Injecting the new retrodeck/ES-DE subdir into the retrodeck.cfg"
   sed -i -e '/media_folder=/s|retrodeck/|retrodeck/ES-DE/|g' -e '/themes_folder=/s|retrodeck/|retrodeck/ES-DE/|g' "$rd_conf" && log d "Injection successful"
   log d "$(cat "$rd_conf" | grep media_folder)"
@@ -488,6 +487,7 @@ fi
   --width=400 --height=200 \
   --text="RetroDECK is finishing up the upgrading process, please be patient.\n\n<span foreground='$purple' size='larger'><b>NOTICE - If the process is taking too long:</b></span>\n\nSome windows might be running in the background that could require your attention: pop-ups from emulators or the upgrade itself that needs user input to continue.\n\n"
 
+  conf_read
   version=$hard_version
   conf_write
 
