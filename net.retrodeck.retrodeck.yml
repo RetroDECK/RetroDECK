@@ -416,7 +416,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/RetroDECK/ES-DE
-        branch: retrodeck-main
+        branch: 6fca5df93116a2be3028aab89850a2f5be3eb6e4
 
   # ES-DE - END
 
