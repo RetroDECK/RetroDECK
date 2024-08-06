@@ -10,7 +10,7 @@ env:
   GODOT_VERSION: 4.2.2
   EXPORT_NAME: RetroDECK-Configurator
   #match tag in project settings of Godot
-  TAG: ${EXPORT_NAME}-v0.5
+  TAG: RetroDECK-Configurator-v0.5
 
 jobs:
   export-linux:
