@@ -165,13 +165,10 @@ modules:
         url: https://github.com/monkeyx-net/RetroDECK_UK/releases/download/RetroDECK-Configurator-v0.5/RetroDECK-Configurator.tar.gz
         sha256: 9fcdc7f9355f815f062064096b65e47cd976d0375ec0b670386393537e35bcc2
         strip-components: 3
-      - type: script
-          dest-filename: godot-configurator.sh
-          commands:
-            - echo '#!/bin/sh' > godot-configurator.sh
-            - echo 'godot-runner --main-pack /app/bin/RetroDECK-Configurator.pck' >> godot-configurator.sh
- 
+   
     build-commands:
+      - echo '#!/bin/sh' > godot-configurator.sh
+      - echo 'godot-runner --main-pack /app/bin/RetroDECK-Configurator.pck' >> godot-configurator.sh
       - install -Dm644 RetroDECK-Configurator.pck /app/bin/RetroDECK-Configurator.pck
       - install -Dm66 godot-configurator.sh /app/bin
 
