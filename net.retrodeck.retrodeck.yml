@@ -512,10 +512,8 @@ modules:
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
-        #url: RETRODECKESDEURLPLACEHOLDER
-        #sha256: RETRODECKESDEPLACEHOLDER
-        url: https://github.com/RetroDECK/ES-DE/releases/download/feat%2Fsmaller-menu-050824.03/RetroDECK-ES-DE-Artifact.tar.gz
-        sha256: 0a89329e5a7e9743c21606fbf0f7d44a3244accf2985ab99ff6db29b212b98f6
+        url: https://github.com/RetroDECK/ES-DE/releases/latest/download/RetroDECK-ES-DE-Artifact.tar.gz
+        sha256: RETRODECKESDELATEST
 
   - name: retrodeck-theme
     buildsystem: simple
