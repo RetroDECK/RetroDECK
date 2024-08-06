@@ -1,4 +1,4 @@
-name: Test GD Config
+name: Release Godot Configurator
 
 on:
   push:
@@ -7,13 +7,13 @@ on:
     branches: [ feat/godot-configurator ]
 
 concurrency:
-  group: ci-${{github.actor}}-${{github.head_ref || github.run_number}}-${{github.ref}}-devdesktop
+  #group: ci-${{github.actor}}-${{github.head_ref || github.run_number}}-${{github.ref}}-devdesktop
   cancel-in-progress: true
 
 env:
   GODOT_VERSION: 4.2.2
   EXPORT_NAME: RetroDECK-Configurator
-  TAG: v0.0.5
+  TAG: v0.5
 
 jobs:
   export-linux:
@@ -55,8 +55,10 @@ jobs:
           path: ~/${{env.EXPORT_NAME}}.tar.gz
           retention-days: 14
 
+      # Upload release linked to tag
+      # had to explicity call file 
       - name: Upload Release Asset 🚀
-        uses: svenstaro/upload-release-action@v2
+        uses: svenstaro/upload-release-action@v2.9.0
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: /github/home/RetroDECK-*
