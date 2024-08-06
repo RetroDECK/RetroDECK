@@ -13,7 +13,7 @@ concurrency:
 env:
   GODOT_VERSION: 4.2.2
   EXPORT_NAME: GD-Test
-  TAG: v0.0.7
+  TAG: v0.0.5
 
 jobs:
   export-linux:
@@ -49,13 +49,13 @@ jobs:
           cd build
           tar zcvf ~/${EXPORT_NAME}-Linux-64bit.tar.gz ~/$EXPORT_NAME.pck
           
-      #- name: Upload Linux x86_64 Artifact 🚀
-      #  uses: actions/upload-artifact@v4
-       # with:
-        #  name: ${{env.EXPORT_NAME}}-Linux-64bit
-          #path: ./build/${{env.EXPORT_NAME}}-Linux-64bit.tar.gz
-         # path: ~/${{env.EXPORT_NAME}}-Linux-64bit.tar.gz
-          #retention-days: 14
+      - name: Upload Linux x86_64 Artifact 🚀
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{env.EXPORT_NAME}}-Linux-64bit
+          path: ./build/${{env.EXPORT_NAME}}-Linux-64bit.tar.gz
+          path: ~/${{env.EXPORT_NAME}}-Linux-64bit.tar.gz
+          retention-days: 14
 
       - name: Upload Release Asset 🚀
         uses: svenstaro/upload-release-action@v2
