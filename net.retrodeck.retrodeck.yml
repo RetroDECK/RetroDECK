@@ -163,7 +163,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/monkeyx-net/RetroDECK_UK/releases/download/RetroDECK-Configurator-v0.5/RetroDECK-Configurator.tar.gz
-        sha256: 9fcdc7f9355f815f062064096b65e47cd976d0375ec0b670386393537e35bcc2
+        sha256: ce32cc212d173a3284afc42b89727e6159cc4643edea1ad0e52116b466adc94f
         strip-components: 2
    
     build-commands:
