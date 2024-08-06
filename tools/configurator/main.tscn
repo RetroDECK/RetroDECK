@@ -15,7 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://dxdhjp18rgmr4" path="res://res/flags/united_kingdom_32.png" id="5_exkn2"]
 [ext_resource type="Texture2D" uid="uid://cjv6lhd4g63m3" path="res://assets/graphics/retrodeck_base_shake1.png" id="6_d43n7"]
 [ext_resource type="Texture2D" uid="uid://cru43y7hco6kh" path="res://res/flags/italy_32.png" id="6_fiylw"]
-[ext_resource type="Texture2D" uid="uid://nysbwkpj4oyy" path="res://assets/icons/pixelitos/128/duckstation-nogui.png" id="6_jxyvh"]
+[ext_resource type="Texture2D" uid="uid://m5283vouicmb" path="res://assets/icons/pixelitos/128/duckstation.png" id="6_winpq"]
 [ext_resource type="Texture2D" uid="uid://c0xtgqyl2whg" path="res://assets/icons/pixelitos/128/net.kuribo64.melonDS.png" id="7_4otos"]
 [ext_resource type="Texture2D" uid="uid://cyqo650hjucw6" path="res://assets/graphics/retrodeck_base_shake2.png" id="7_mo842"]
 [ext_resource type="Texture2D" uid="uid://cti2vt14gxisl" path="res://res/flags/germany_32.png" id="7_qgxid"]
@@ -364,6 +364,8 @@ layout_mode = 2
 custom_minimum_size = Vector2(700, 400)
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
 columns = 4
 
 [node name="Button3" type="Button" parent="Background/MarginContainer/TabContainer/TK_EMULATORS/ScrollContainer/VBoxContainer/GridContainer"]
@@ -387,7 +389,7 @@ vertical_icon_alignment = 0
 layout_mode = 2
 tooltip_text = "Duckstation"
 text = "DuckSation"
-icon = ExtResource("6_jxyvh")
+icon = ExtResource("6_winpq")
 icon_alignment = 1
 vertical_icon_alignment = 0
 
