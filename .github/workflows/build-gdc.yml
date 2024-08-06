@@ -10,7 +10,7 @@ env:
   GODOT_VERSION: 4.2.2
   EXPORT_NAME: RetroDECK-Configurator
   #match tag in project settings of Godot
-  TAG: v0.5
+  TAG: ${EXPORT_NAME}-v0.5
 
 jobs:
   export-linux:
@@ -60,7 +60,7 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: /github/home/RetroDECK-Configurator-tar.gz
+          file: /github/home/RetroDECK-*
           tag: ${{env.TAG}}
           overwrite: true
           file_glob: true
