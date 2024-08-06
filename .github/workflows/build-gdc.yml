@@ -46,7 +46,7 @@ jobs:
           chmod +x ~/$EXPORT_NAME.pck
       - name: Create tar.gz archive 🗜️
         run: |
-          tar zcvf ~/${EXPORT_NAME}-Linux-64bit.tar.gz ~/$EXPORT_NAME.pck
+          tar zcvf ~/${EXPORT_NAME}.tar.gz ~/$EXPORT_NAME.pck
           
       - name: Upload Linux x86_64 Artifact 🚀
         uses: actions/upload-artifact@v4
