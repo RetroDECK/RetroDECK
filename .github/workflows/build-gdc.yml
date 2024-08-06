@@ -6,9 +6,9 @@ on:
   pull_request:
     branches: [ feat/godot-configurator ]
 
-concurrency:
+#concurrency:
   #group: ci-${{github.actor}}-${{github.head_ref || github.run_number}}-${{github.ref}}-devdesktop
-  cancel-in-progress: true
+#  cancel-in-progress: true
 
 env:
   GODOT_VERSION: 4.2.2
