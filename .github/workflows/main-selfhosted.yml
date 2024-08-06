@@ -7,8 +7,8 @@ on:
     paths:
      - '.github/workflows/**'
      - 'automation_tools/**'
-     - 'emu-configs/**'
-     - 'es-configs/**'
+     - 'config/**'
+     - 'config/es-de/**'
      - 'functions/**'
      - 'rd-submodules/**'
      - '*.sh'
@@ -24,7 +24,7 @@ on:
 jobs:
 
   Building_RetroDECK:
-    runs-on: self-hosted
+    runs-on: retrodeck
     steps:
 
       # Circumventing this bug: https://github.com/flatpak/flatpak-builder/issues/317
@@ -33,7 +33,7 @@ jobs:
         continue-on-error: true
 
       - name: Clone RetroDECK repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: 'true'
 
@@ -93,7 +93,7 @@ jobs:
       - name: Getting version info
         id: version
         run: |
-          appdata="https://raw.githubusercontent.com/XargonWan/RetroDECK/main/net.retrodeck.retrodeck.appdata.xml"
+          appdata="https://raw.githubusercontent.com/RetroDECK/RetroDECK/main/net.retrodeck.retrodeck.appdata.xml"
           REL_VER=$(curl -s $appdata | xmlstarlet sel -t -v "//release/@version" | head -1)
           DES="$(curl -s $appdata | xmlstarlet sel -t -m "//release[1]" -v "description" -n | sed '1,2d;$d;s/^ */- /;/^- $/d')"
           echo "REL_VER=$REL_VER" >> $GITHUB_ENV
@@ -115,9 +115,20 @@ jobs:
           repo: RetroDECK
         continue-on-error: true
 
+      - name: Rewrite Tag
+        run: |
+          git submodule deinit -f --all
+          git fetch --tags
+          if git rev-parse --verify "${{ env.REL_VER }}" >/dev/null 2>&1; then # if the tag exists
+              git tag -d "${{ env.REL_VER }}"                                  # remove it from local repo
+              git push --delete origin "${{ env.REL_VER }}"                    # and from remote
+          fi
+          git tag "${{ env.REL_VER }}"             # Create the tag locally               
+          git push origin "${{ env.REL_VER }}"     # Push the new tag in the remote repo
+
       # In case it cannot publish the release at least it's providing the flatpak file for creating a manual release
       - name: Upload RetroDECK.flatpak
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: retrodeck-flatpak
           path: RetroDECK.flatpak
@@ -127,6 +138,7 @@ jobs:
         run: |
           # Set variables for Gitea host, organization, repository, access token, and release details
           GITEA_HOST="repo.retrodeck.net"
+          UPLOAD_HOST="upload.retrodeck.net"
           ORGANIZATION="RetroDECK"
           REPO="RetroDECK"
           GITEA_TOKEN="${{ secrets.GITEA_TRIGGER_BUILD_TOKEN }}"
@@ -154,21 +166,26 @@ jobs:
           # Upload artifacts
           curl -X POST \
               -H "Authorization: token ${GITEA_TOKEN}" \
+              -H "X-GitHub-Token: ${{ secrets.UPLOAD_TOKEN }}" \
               -H "Content-Type: multipart/form-data" \
               -F "attachment=@RetroDECK.flatpak" \
-              "http://$GITEA_HOST/api/v1/repos/$ORGANIZATION/$REPO/releases/$release_id/assets?name=RetroDECK-cooker.flatpak"
+              "http://$UPLOAD_HOST/api/v1/repos/$ORGANIZATION/$REPO/releases/$release_id/assets?name=RetroDECK-cooker.flatpak"
 
           curl -X POST \
               -H "Authorization: token ${GITEA_TOKEN}" \
+              -H "X-GitHub-Token: ${{ secrets.UPLOAD_TOKEN }}" \
               -H "Content-Type: multipart/form-data" \
               -F "attachment=@RetroDECK-Artifact.tar.gz" \
-              "http://$GITEA_HOST/api/v1/repos/$ORGANIZATION/$REPO/releases/$release_id/assets?name=RetroDECK-Artifact.tar.gz"
+              "http://$UPLOAD_HOST/api/v1/repos/$ORGANIZATION/$REPO/releases/$release_id/assets?name=RetroDECK-Artifact.tar.gz"
+        continue-on-error: true # this will be in place until we reate an artifacts website that bypasses cloudflare limit
 
       - name: Upload RetroDECK.flatpak.sha to Gitea Release
         run: |
           curl -X POST \
             -H "Authorization: token ${GITEA_TOKEN}" \
+            -H "X-GitHub-Token: ${{ secrets.UPLOAD_TOKEN }}" \
             -F "file=@RetroDECK.flatpak.sha" \
-            "https://repo.retrodeck.net/RetroDECK/RetroDECK/releases/${{ env.REL_VER }}/assets?name=RetroDECK.flatpak.sha"
+            "https://$UPLOAD_HOST/RetroDECK/RetroDECK/releases/${{ env.REL_VER }}/assets?name=RetroDECK.flatpak.sha"
         env:
           GITEA_TOKEN: ${{ secrets.GITEA_TRIGGER_BUILD_TOKEN }}
+        continue-on-error: true # this will be in place until we reate an artifacts website that bypasses cloudflare limit

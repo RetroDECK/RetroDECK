@@ -18,7 +18,7 @@ backup
 tmp
 .godot
 rd-submodules/es-de/patches-tmp*
-.local/
+retrodeck-repo
 buildid
 *.bak
 incconfigs/

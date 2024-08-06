@@ -44,14 +44,14 @@ check_for_version_update() {
 
   log d "Entering funtcion check_for_version_update"
 
-  wget -q --spider "https://api.github.com/repos/XargonWan/$update_repo/releases/latest"
+  wget -q --spider "https://api.github.com/repos/$git_organization_name/$update_repo/releases/latest"
 
   if [ $? -eq 0 ]; then
-    local online_version=$(curl --silent "https://api.github.com/repos/XargonWan/$update_repo/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+    local online_version=$(curl --silent "https://api.github.com/repos/$git_organization_name/$update_repo/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
 
     if [[ ! "$update_ignore" == "$online_version" ]]; then
       if [[ "$update_repo" == "RetroDECK" ]] && [[ $(sed -e 's/[\.a-z]//g' <<< $version) -le $(sed -e 's/[\.a-z]//g' <<< $online_version) ]]; then
-        # choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="Ignore this version" \
+        # choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="Ignore this version" \
         #   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         #   --title "RetroDECK Update Available" \
         #   --text="There is a new version of RetroDECK on the stable release channel $online_version. Would you like to update to it?\n\n(depending on your internet speed this could takes several minutes).")
@@ -65,7 +65,7 @@ check_for_version_update() {
         #   (
         #   flatpak-spawn --host flatpak update --noninteractive -y net.retrodeck.retrodeck
         #   ) |
-        #   zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+        #   rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
         #   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         #   --title "RetroDECK Updater" \
         #   --text="Upgrade in process please wait (this could takes several minutes)."
@@ -74,7 +74,7 @@ check_for_version_update() {
         # fi
         # TODO: add the logic to check and update the branch from the configuration file
         log i "Showing new version found dialog"
-        choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK" --extra-button="Ignore this version" \
+        choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK" --extra-button="Ignore this version" \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         --title "RetroDECK - New Update Available" \
         --text="There is a new version of RetroDECK available: <span foreground='$blue'><b>$online_version</b></span>.\nYou can easily update from the app store you have installed, examples: KDE Discover or Gnome Software.\n\nIf you would like to ignore this notification, click the \"Ignore this version\" button.")
@@ -83,9 +83,9 @@ check_for_version_update() {
           log i "Selected: \"OK\""
           set_setting_value $rd_conf "update_ignore" "$online_version" retrodeck "options" # Store version to ignore for future checks
         fi
-      elif [[ "$update_repo" == "RetroDECK-cooker" ]] && [[ ! $version == $online_version ]]; then
+      elif [[ "$update_repo" == "$cooker_repository_name" ]] && [[ ! $version == $online_version ]]; then
         log i "Showing update request dialog as \"$online_version\" was found and is greater then \"$version\""
-        choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="Ignore this version" \
+        choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="Ignore this version" \
           --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
           --title "RetroDECK - New Cooker Version Available" \
           --text="There is a more recent version of RetroDECK cooker.\nYou are running version <span foreground='$blue'><b>$hard_version</b></span>. The latest is <span foreground='$blue'><b>$online_version</b></span>.\n\nWould you like to update?\nIf you would like to ignore this notification, click the \"Ignore this version\" button.\n\nIf you would like to disable these notifications entirely: disable Online Update Checks in the Configurator.")
@@ -99,7 +99,7 @@ check_for_version_update() {
           log i "Selected: \"Yes\""
           configurator_generic_dialog "RetroDECK Online Update" "The update process may take several minutes.\n\nAfter the update is complete, RetroDECK will close. When you run it again you will be using the latest version."
           (
-          local latest_cooker_download=$(curl --silent https://api.github.com/repos/XargonWan/RetroDECK-cooker/releases/latest | grep '"browser_download_url":.*flatpak' | grep -v '\.sha' | sed -E 's/.*"([^"]+)".*/\1/')
+          local latest_cooker_download=$(curl --silent https://api.github.com/repos/RetroDECK/Cooker/releases/latest | grep '"browser_download_url":.*flatpak' | grep -v '\.sha' | sed -E 's/.*"([^"]+)".*/\1/')
           local temp_folder="$rdhome/RetroDECK_Updates"
           create_dir $temp_folder
           log i "Downloading version \"$online_version\" in \"$temp_folder/RetroDECK-cooker.flatpak\" from url: \"$latest_cooker_download\""
@@ -141,7 +141,7 @@ check_for_version_update() {
 
           rm -rf "$temp_folder" # Cleanup old bundles to save space
           ) |
-          zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+          rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
           --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
           --title "RetroDECK Updater" \
           --text="RetroDECK is updating to the latest version, please wait."
@@ -156,11 +156,13 @@ check_for_version_update() {
 }
 
 validate_input() {
-  while IFS="^" read -r input action
+  while IFS="^" read -r input action || [[ -n "$input" ]];
   do
-    if [[ "$input" == "$1" ]]; then
-      eval "$action"
-      input_validated="true"
+    if [[ ! $input == "#"* ]] && [[ ! -z "$input" ]]; then
+      if [[ "$input" == "$1" ]]; then
+        eval "$action"
+        input_validated="true"
+      fi
     fi
   done < $input_validation
 }

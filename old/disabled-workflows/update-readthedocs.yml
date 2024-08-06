@@ -26,7 +26,7 @@ jobs:
       - name: Update ReadTheDocs wiki-rtd
         id: wiki-rtd-update
         run: |
-          git checkout https://github.com/XargonWan/RetroDECK.wiki-rtd.git tmp/wiki-rtd
+          git checkout https://github.com/RetroDECK/RetroDECK.wiki-rtd.git tmp/wiki-rtd
           cp -rf tmp/wiki-rtd/* wiki-rtd
           rm wiki-rtd/index.md
           mv wiki-rtd/Home.md wiki-rtd/index.md
