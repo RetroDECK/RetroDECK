@@ -1,4 +1,6 @@
 app-id: net.retrodeck.retrodeck
+base: org.godotengine.godot.BaseApp
+base-version: "4.2"
 runtime: org.kde.Platform
 runtime-version: "6.7"
 sdk: org.kde.Sdk
@@ -64,7 +66,7 @@ modules:
   # The version number is hardcoded in /app/retrodeck/version
   #
   # UPDATE STEPS FOR MAIN:
-  # [ ] Update the VERSION variable on line containing "VERSION=THISBRANCH"
+  # [ ] Update the VERSION variable on line containing "VERSION=feat/godot-configurator"
   # [ ] Update the appdata.xml with the version number and notes
 
   - name: version-initialization
@@ -80,7 +82,7 @@ modules:
         mkdir -p ${FLATPAK_DEST}/retrodeck/
         if [[ $VERSION == *"cooker"* ]];
         then
-          VERSION="$VERSION-VERSIONPLACEHOLDER"
+          VERSION="$VERSION-BlizzaraConsole"
         fi
         echo $VERSION >> ${FLATPAK_DEST}/retrodeck/version
         cat ${FLATPAK_DEST}/retrodeck/version
@@ -88,7 +90,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/RetroDECK/RetroDECK.git
-        branch: THISBRANCH
+        branch: feat/godot-configurator
 
   - name: xmlstarlet
     config-opts:
@@ -182,7 +184,7 @@ modules:
     sources:
       - type: archive
         url: https://buildbot.libretro.com/nightly/linux/x86_64/RetroArch.7z
-        sha256: RASHAPLACEHOLDER
+        sha256: 971bbf3d177ef489c0f71a5dc61f4b9f71abcf13f7e84a2d4e59300149d32f3a
 
   # Not part of the offical RetroArch AppImage
   # retroarch-cores-nightly must be earlier than retroarch-cores as it will overwrite this cores with the stable ones
@@ -194,7 +196,7 @@ modules:
     sources:
       - type: archive
         url: https://buildbot.libretro.com/nightly/linux/x86_64/RetroArch_cores.7z
-        sha256: RANIGHTLYCORESPLACEHOLDER
+        sha256: 213ec1778a6b81e81c7f07881fbe968a7d8642df947c99cb9f017ae481ac20d5
 
   - name: retroarch-cores
     buildsystem: simple
@@ -213,7 +215,7 @@ modules:
     sources:
       - type: archive
         url: https://buildbot.libretro.com/nightly/linux/x86_64/latest/sameduck_libretro.so.zip
-        sha256: SAMEDUCKSHAPLACEHOLDER
+        sha256: ba87f5451bea0272c3d66d3fc54d7a6c0f47427a0f0b93a32390218b74966c55
 
   - name: ppsspp-bios
     buildsystem: simple
@@ -223,7 +225,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/hrydgard/ppsspp/archive/refs/heads/master.zip
-        sha256: PPSSPPBIOSHASHPLACEHOLDER
+        sha256: ad4fce68f491e1def13945127844e09552cc5466bacf7959252c269c05e99148
 
   - name: msx-bios
     buildsystem: simple
@@ -234,7 +236,7 @@ modules:
     sources:
       - type: archive
         url: http://bluemsx.msxblue.com/rel_download/blueMSXv282full.zip
-        sha256: MSXBIOSHASHPLACEHOLDER
+        sha256: 5b68e1bc41590302c762093243e66602da2b2f6951a595a06b9b436b0e458bc6
         strip-components: 0
   
   - name: amiga-bios
@@ -263,7 +265,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/RetroDECK/org.ppsspp.PPSSPP/releases/latest/download/RetroDECK-PPSSPP-Artifact.tar.gz
-        sha256: RETRODECKPPSSPPLATEST
+        sha256: b47b1025c88f513c5e345b006a7b2be6156f845b436ccb14b7cf3122ade971de
 
   # PCSX2
   # Inspired by: https://github.com/flathub/com.zettlr.Zettlr/blob/master/com.zettlr.Zettlr.yaml
@@ -419,7 +421,7 @@ modules:
     sources:
       - type: file
         url: https://github.com/Vita3K/Vita3K/releases/download/continuous/ubuntu-latest.zip
-        sha256: VITA3KSHAPLACEHOLDER
+        sha256: 0b86c7c76d8e617a4e54ee8f17e392c818fe64197a3b1105181101c4de2b6ec9
       - type: file
         path: res/retrodeck.png
 
@@ -498,7 +500,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/mborgerson/xemu-hdd-image/releases/latest/download/xbox_hdd.qcow2.zip
-        sha256: XEMUHDDHASHPLACEHOLDER
+        sha256: d9f5a4c1224ff24cf9066067bda70cc8b9c874ea22b9c542eb2edbfc4621bb39
 
   # MAME
 
@@ -637,4 +639,4 @@ modules:
     sources:
       - type: git
         url: https://github.com/RetroDECK/RetroDECK.git
-        branch: THISBRANCH
+        branch: feat/godot-configurator
