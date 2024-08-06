@@ -5,6 +5,7 @@ sdk: org.kde.Sdk
 command: retrodeck.sh
 
 finish-args:
+  - --talk-name=org.freedesktop.Flatpak
   - --socket=wayland
   - --socket=x11
   - --socket=pulseaudio
@@ -318,7 +319,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/RetroDECK/io.github.shiiion.primehack/releases/latest/download/RetroDECK-primehack-Artifact.tar.gz
-        sha256: RETRODECKPRIMEHACKLATEST
+        sha256: 7cd20690cea20284b6b272092f79cadf6a7ca9d5b9df7cb5985cb090ff47731d
 
   # RPCS3
   # https://rpcs3.net/download
@@ -356,7 +357,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/RetroDECK/net.kuribo64.melonDS/releases/latest/download/RetroDECK-melonds-Artifact.tar.gz
-        sha256: RETRODECKMELONDSLATEST
+        sha256: 2a0f721ba25da2fe5eb9b3924365697f127b532904354778166e03e6672e03c7
 
   # Duckstation
   # https://github.com/stenzek/duckstation/releases/tag/preview
@@ -438,7 +439,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/RetroDECK/org.solarus_games.solarus.Launcher/releases/latest/download/RetroDECK-solarus-Artifact.tar.gz
-        sha256: RETRODECKSOLARUSLATEST
+        sha256: 944dbba229f1bcab61e44a068aa75a01967ce9376c0d337d874c8de041eef599
 
   # GZDoom
   # When updating remember to update all the .pk3 files from the standalone linux download
@@ -456,7 +457,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/RetroDECK/org.zdoom.GZDoom/releases/latest/download/RetroDECK-gzdoom-Artifact.tar.gz
-        sha256: RETRODECKGZDOOMLATEST
+        sha256: ad78911d605a4b6e8a6229833ca8d6a1770b6f52a9ece5dc63e0c11f68474508
 
   # Ryujinx Appimage
   # https://ryujinx.org/download
@@ -510,7 +511,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/RetroDECK/MAME/releases/latest/download/RetroDECK-MAME-Artifact.tar.gz
-        sha256: RETRODECKMAMELATEST
+        sha256: d530017178efdf4590ee749854b9cdfc7501130863be266ff62db05281f90626
 
   # ES-DE
 
