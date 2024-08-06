@@ -1,4 +1,5 @@
 app-id: net.retrodeck.retrodeck
+# next 2 lines Used by Godot
 base: org.godotengine.godot.BaseApp
 base-version: "4.2"
 runtime: org.kde.Platform
@@ -156,17 +157,23 @@ modules:
         url: https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_amd64
         sha256: 4ee662847c588c3ef2fec8bfb304e8739e3dbaba87ccb9a608d691c88f5b64dc
 
- # GoDot Configurator
+# GoDot Configurator
   - name: godot-configurator
     buildsystem: simple
     sources:
       - type: archive
-        url: https://trailoutlaws.com/bob.zip
-        sha256: 98302e42ef25c1fcc6199bf58ac01948f6d4440b74953d9f2053e43398d967ad
-        strip-components: 0
+        url: https://github.com/monkeyx-net/RetroDECK_UK/releases/download/RetroDECK-Configurator-v0.5/RetroDECK-Configurator.tar.gz
+        sha256: 9fcdc7f9355f815f062064096b65e47cd976d0375ec0b670386393537e35bcc2
+        strip-components: 3
+      - type: script
+          dest-filename: godot-configurator.sh
+          commands:
+            - echo '#!/bin/sh' > godot-configurator.sh
+            - echo 'godot-runner --main-pack /app/bin/RetroDECK-Configurator.pck' >> godot-configurator.sh
+ 
     build-commands:
-      - install -Dm644 bob.pck /app/bin/bob.pck
-
+      - install -Dm644 RetroDECK-Configurator.pck /app/bin/RetroDECK-Configurator.pck
+      - install -Dm66 godot-configurator.sh /app/bin
 
   # RetroArch
   # https://retroarch.com/index.php?page=platforms
