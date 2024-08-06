@@ -12,7 +12,7 @@ concurrency:
 
 env:
   GODOT_VERSION: 4.2.2
-  EXPORT_NAME: GD-Test
+  EXPORT_NAME: RetroDECK-Configurator
   TAG: v0.0.5
 
 jobs:
@@ -46,21 +46,20 @@ jobs:
           chmod +x ~/$EXPORT_NAME.pck
       - name: Create tar.gz archive 🗜️
         run: |
-          cd build
           tar zcvf ~/${EXPORT_NAME}-Linux-64bit.tar.gz ~/$EXPORT_NAME.pck
           
       - name: Upload Linux x86_64 Artifact 🚀
         uses: actions/upload-artifact@v4
         with:
-          name: ${{env.EXPORT_NAME}}-Linux-64bit
-          path: ~/${{env.EXPORT_NAME}}-Linux-64bit.tar.gz
+          name: ${{env.EXPORT_NAME}}
+          path: ~/${{env.EXPORT_NAME}}.tar.gz
           retention-days: 14
 
       - name: Upload Release Asset 🚀
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: /github/home/GD-Test-*
+          file: ~/${{env.EXPORT_NAME}}/RetoDECK-*
           tag: ${{env.TAG}}
           overwrite: true
           file_glob: true
