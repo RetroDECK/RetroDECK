@@ -170,7 +170,7 @@ modules:
       - echo '#!/bin/sh' > godot-configurator.sh
       - echo 'godot-runner --main-pack /app/bin/RetroDECK-Configurator.pck' >> godot-configurator.sh
       - install -Dm644 RetroDECK-Configurator.pck /app/bin/RetroDECK-Configurator.pck
-      - install -Dm66 godot-configurator.sh /app/bin
+      - install -Dm644 godot-configurator.sh /app/bin
 
   # RetroArch
   # https://retroarch.com/index.php?page=platforms
