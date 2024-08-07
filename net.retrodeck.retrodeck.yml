@@ -155,6 +155,19 @@ modules:
         url: https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_amd64
         sha256: 4ee662847c588c3ef2fec8bfb304e8739e3dbaba87ccb9a608d691c88f5b64dc
 
+
+# GoDot Configurator
+  - name: godot-configurator
+    buildsystem: simple
+    sources:
+      - type: archive
+        url: https://github.com/monkeyx-net/RetroDECK_UK/releases/download/RetroDECK-Configurator-v0.51/RetroDECK-Configurator.x86_64.tar.gz
+        sha256: c20c8de0e2482e1221b0dcb42898a9349a735ebd47c9a5754cc379c2a8f3ac47
+        strip-components: 2
+   
+    build-commands:
+      - install -Dm644 RetroDECK-Configurator.x86_64 /app/bin/RetroDECK-Configurator.x86_64
+
   # RetroArch
   # https://retroarch.com/index.php?page=platforms
 
