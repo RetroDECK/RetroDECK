@@ -151,100 +151,126 @@
 			"location": "$bios_folder/switch/firmware"
 		}	  
 	},
-	"emulators": {
-		"cemu": {
-			"description": "Wii U emulator",
-			"name": "Cemu",
-			"system": "wiiu",
-			"properties": [
-				{
-					"abxy_button": true,
-					"multi_user_config_dir" : "Cemu"
-				}
-			]
-		},
-		"citra": {
-			"description": "N3DS emulator",
-			"name": "Citra",
-			"system": "n3ds",
-			"properties": [
-				{
-					"abxy_button": true
-				}
-			]
-		},
-		"swanstation_libretro": {
-			"description": "Swanstation libretro core",
-			"name": "SwanStation",
-			"system": "psx",
-			"properties": [
-				{
-					"abxy_button": false,
-					"standalone": false
-				}
-			],
-			"bios": {
-				"psxonpsp660": {
-					"filename": "psxonpsp660.bin",
-					"description": "PS1 BIOS from PSP",
-					"hash": "c53ca5908936d412331790f4426c6c33",
-					"required": "At least one"
-				},
-				"scph5500": {
-					"filename": "scph5500.bin",
-					"description": "PS1 JP BIOS",
-					"hash": "8dd7d5296a650fac7319bce665a6a53c",
-					"required": "At least one"
-				},
-				"scph5501": {
-					"filename": "scph5501.bin",
-					"description": "PS1 US BIOS",
-					"hash": "490f666e1afb15b7362b406ed1cea246",
-					"required": "At least one"
-				},
-				"scph5502": {
-					"filename": "scph5502.bin",
-					"description": "PS1 EU BIOS",
-					"hash": "32736f17079d0b2b7024407c39bd3050",
-					"required": "At least one"
-				},
-				"scph7001": {
-					"filename": "scph7001.bin",
-					"description": "PS1 BIOS",
-					"hash": "1e68c231d0896b7eadcad1d7d8e76129",
-					"required": "At least one"
-				},
-				"scph7002": {
-					"filename": "scph7002.bin",
-					"description": "PS1 BIOS",
-					"hash": "b9d9a0286c33dc6b7237bb13cd46fdee",
-					"required": "At least one"
-				},
-				"scph7003": {
-					"filename": "scph7003.bin",
-					"description": "PS1 BIOS",
-					"hash": "490f666e1afb15b7362b406ed1cea246",
-					"required": "At least one"
-				},
-				"scph7502": {
-					"filename": "scph7502.bin",
-					"description": "PS1 BIOS",
-					"hash": "b9d9a0286c33dc6b7237bb13cd46fdee",
-					"required": "At least one"
-				},
-				"scph9002_7502": {
-					"filename": "scph9002(7502).bin",
-					"description": "PS1 BIOS",
-					"hash": "b9d9a0286c33dc6b7237bb13cd46fdee",
-					"required": "At least one"
-				},
-				"ps1_rom": {
-					"filename": "ps1_rom.bin",
-					"description": "PS1 BIOS",
-					"hash": "81bbe60ba7a3d1cea1d48c14cbcc647b",
-					"required": "At least one"
-				}		  
-			}
-		}
-	}
+    "system": {
+        "wiiu" : {
+            "name": "Wii U",
+            "folder" : "wiiu",
+            "emulators" : {
+                "cemu": {
+                "description": "Wii U emulator",
+                "name": "Cemu",
+                "properties": [
+                    {
+                        "abxy_button": true,
+                        "multi_user_config_dir" : "Cemu"
+                    }
+                ]
+                }
+            }
+        },
+        "n3ds" : {
+            "name": "Nintendo 3DS",
+            "folder" : "n3ds",
+            "emulator": {
+                "citra_libretro": {
+                    "description": "Nintendo 3DS Emulator",
+                    "name": "Citra",
+                    "libretro": true,
+                    "properties": [
+                        {
+                            "abxy_button": true
+                        }
+                    ]
+                }
+            }
+        },
+        "psx" : {
+            "name": "Sony PlayStation",
+            "folder" : "psx",
+            "bios": {
+                    "psxonpsp660": {
+                        "filename": "psxonpsp660.bin",
+                        "description": "PS1 BIOS from PSP",
+                        "hash": "c53ca5908936d412331790f4426c6c33",
+                        "required": "At least one"
+                    },
+                    "scph5500": {
+                        "filename": "scph5500.bin",
+                        "description": "PS1 JP BIOS",
+                        "hash": "8dd7d5296a650fac7319bce665a6a53c",
+                        "required": "At least one"
+                    },
+                    "scph5501": {
+                        "filename": "scph5501.bin",
+                        "description": "PS1 US BIOS",
+                        "hash": "490f666e1afb15b7362b406ed1cea246",
+                        "required": "At least one"
+                    },
+                    "scph5502": {
+                        "filename": "scph5502.bin",
+                        "description": "PS1 EU BIOS",
+                        "hash": "32736f17079d0b2b7024407c39bd3050",
+                        "required": "At least one"
+                    },
+                    "scph7001": {
+                        "filename": "scph7001.bin",
+                        "description": "PS1 BIOS",
+                        "hash": "1e68c231d0896b7eadcad1d7d8e76129",
+                        "required": "At least one"
+                    },
+                    "scph7002": {
+                        "filename": "scph7002.bin",
+                        "description": "PS1 BIOS",
+                        "hash": "b9d9a0286c33dc6b7237bb13cd46fdee",
+                        "required": "At least one"
+                    },
+                    "scph7003": {
+                        "filename": "scph7003.bin",
+                        "description": "PS1 BIOS",
+                        "hash": "490f666e1afb15b7362b406ed1cea246",
+                        "required": "At least one"
+                    },
+                    "scph7502": {
+                        "filename": "scph7502.bin",
+                        "description": "PS1 BIOS",
+                        "hash": "b9d9a0286c33dc6b7237bb13cd46fdee",
+                        "required": "At least one"
+                    },
+                    "scph9002_7502": {
+                        "filename": "scph9002(7502).bin",
+                        "description": "PS1 BIOS",
+                        "hash": "b9d9a0286c33dc6b7237bb13cd46fdee",
+                        "required": "At least one"
+                    },
+                    "ps1_rom": {
+                        "filename": "ps1_rom.bin",
+                        "description": "PS1 BIOS",
+                        "hash": "81bbe60ba7a3d1cea1d48c14cbcc647b",
+                        "required": "At least one"
+                    }		  
+            },
+            "emulator": {
+                "swanstation_libretro": {
+                    "name": "SwanStation",
+                    "description": "Swanstation libretro core",
+                    "libretro" : true,
+                    "properties": [
+                        {
+                            "abxy_button": false
+                        }
+                    ]
+                },
+                "duckstation" : {
+                    "name" : "Duckstation",
+                    "description" : "PlayStation Emulator",
+                    "launch" : "duckstation-qt",
+                    "properties": [
+                        {
+                            "abxy_button": false
+                        }
+                    ]                    
+                }
+            }
+        }
+    }
 }
