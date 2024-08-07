@@ -253,7 +253,7 @@
                 "swanstation_libretro": {
                     "name": "SwanStation",
                     "description": "Swanstation libretro core",
-                    "libretro" : true,
+                    "core" : "libretro",
                     "properties": [
                         {
                             "abxy_button": false
