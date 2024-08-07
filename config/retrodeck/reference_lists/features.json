@@ -202,7 +202,7 @@
 						},
 						"picodrive_libetro": {
 							"name" : "PicoDrive",
-							"description": "SEGA Multi System Libretro Core",
+							"description": "SEGA MS/MD/CD/32X Libretro Core",
 							"properties" : [{
 								"widescreen" : true,
 								"borders" : true,
@@ -211,7 +211,7 @@
 						},
 						"genesisplusgx_libetro": {
 							"name" : "Genesis Plus GX",
-							"description": "SEGA Multi System Libretro Core",
+							"description": "SEGA MS/GG/MD/CD Libretro Core",
 							"properties" : [{
 								"widescreen" : true,
 								"borders" : true,
@@ -220,7 +220,7 @@
 						},
 						"genesisplusgxwide_libetro": {
 							"name" : "Genesis Plus GX Wide",
-							"description": "SEGA Multi System Libretro Core for Wide Screen",
+							"description": "SEGA MS/GG/MD/CD Libretro Core for Wide Screen",
 							"properties" : [{
 								"widescreen" : true,
 								"rewind" : true
@@ -231,7 +231,8 @@
 							"description": "Nintendo 64 Libretro Core",
 							"properties" : [{
 								"widescreen" : true,
-								"borders" : true
+								"borders" : true,
+								"abxy_button": true
 							}]
 						},
 						"snes9x-current_libetro": {
@@ -240,7 +241,8 @@
 							"properties" : [{
 								"widescreen" : true,
 								"borders" : true,
-								"rewind" : true
+								"rewind" : true,
+								"abxy_button": true
 							}]
 						},
 						"gambatte_libetro": {
@@ -248,7 +250,8 @@
 							"description": "Game Boy/Color Libretro Core",
 							"properties" : [{
 								"borders" : true,
-								"rewind" : true
+								"rewind" : true,
+								"abxy_button": true
 							}]
 						},
 						"mgba_libetro": {
@@ -256,7 +259,8 @@
 							"description": "Game Boy Advance Libretro Core",
 							"properties" : [{
 								"borders" : true,
-								"rewind" : true
+								"rewind" : true,
+								"abxy_button": true
 							}]
 						}
 					}
@@ -485,7 +489,8 @@
 					"name": "Yuzu (via Ponzu)",
 					"description" : "Yuzu Nintendo Switch Emulator (via Ponzu)",
 					"launch" : "Yuzu",
-					"ponzu" : true
+					"ponzu" : true,
+					"abxy_button": true
 				}
 			}
 		},
@@ -501,7 +506,8 @@
                     	"abxy_button": true,
 						"ask_to_exit": true,
 						"cheevos" : true,
-						"cheevos_hardcore" : true
+						"cheevos_hardcore" : true,
+						"universal_dyn_input": true
                     }]
 				}
 			}
@@ -519,7 +525,8 @@
                             "abxy_button": true,
 							"ask_to_exit": true,
 							"cheevos" : true,
-							"cheevos_hardcore" : true
+							"cheevos_hardcore" : true,
+							"universal_dyn_input": true
                         }
                     ]
 				},
@@ -528,7 +535,8 @@
 					"description" : "A fork of Dolphiin to enhance Metroid Prime experience",
 					"launch" : "primehack-wrapper",
 					"properties": [{
-                    	"ask_to_exit": true
+                    	"ask_to_exit": true,
+						"universal_dyn_input": true
                     }]
 				}
 			}
