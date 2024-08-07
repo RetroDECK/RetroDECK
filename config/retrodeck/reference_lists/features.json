@@ -175,7 +175,7 @@
                 "citra_libretro": {
                     "description": "Nintendo 3DS Emulator",
                     "name": "Citra",
-                    "libretro": true,
+                    "core": "libretro",
                     "properties": [
                         {
                             "abxy_button": true
