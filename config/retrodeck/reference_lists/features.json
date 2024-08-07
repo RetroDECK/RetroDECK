@@ -273,7 +273,21 @@
                   "rewind": true,
                   "abxy_button": true
                 }
-              ]
+              ],
+              "bios": {
+                "gb_bios": {
+                  "filename": "gb_bios.bin",
+                  "hash": "32fbbd84168d3482956eb3c5051637f5",
+                  "description": "Game Boy BIOS",
+                  "required": "Optional BIOS file (used to display the Nintendo logo at boot)"
+                },
+                "gbc_bios": {
+                  "filename": "gbc_bios.bin",
+                  "hash": "dbfce9db9deaa2567f6a84fde55f9680",
+                  "description": "Game Boy Color BIOS",
+                  "required": "Optional BIOS file (used to display the Nintendo logo at boot)"
+                }
+              }
             },
             "mgba_libetro": {
               "name": "mGBA",
@@ -284,7 +298,15 @@
                   "rewind": true,
                   "abxy_button": true
                 }
-              ]
+              ],
+              "bios": {
+                "gba_bios": {
+                  "filename": "gba_bios.bin",
+                  "hash": "a860e8c0b6d573d191e4ec7db1b1e4f6",
+                  "description": "Game Boy Advance BIOS",
+                  "required": "Optional BIOS file (used to display the Nintendo logo at boot)"
+                }
+              }
             }
           }
         }
@@ -524,6 +546,22 @@
           "ponzu": true,
           "abxy_button": true
         }
+      },
+      "bios": {
+        "bios": {
+          "prod_keys": {
+            "filename": "prod.keys",
+            "hash": "Unknown",
+            "description": "Nintendo Switch key file",
+            "required": "A file for Switch emulation in Ryujinx (Required)"
+          },
+          "title_keys": {
+            "filename": "title.keys",
+            "hash": "Unknown",
+            "description": "Nintendo Switch key file",
+            "required": "A file for Switch emulation in Ryujinx (Required)"
+          }
+        }
       }
     },
     "gc": {
@@ -601,7 +639,33 @@
         "xemu": {
           "description": "xemu Xbox Emulator",
           "name": "xemu",
-          "launch": "xemu"
+          "launch": "xemu",
+          "bios": {
+            "mcpx_1.0": {
+              "filename": "mcpx_1.0.bin",
+              "hash": "d49c52a4102f6df7bcf8d0617ac475ed",
+              "description": "Microsoft XBOX BIOS",
+              "required": "no"
+            },
+            "complex": {
+              "filename": "Complex.bin",
+              "hash": "Unknown",
+              "description": "Microsoft XBOX BIOS",
+              "required": "no"
+            },
+            "complex_4627v1.03": {
+              "filename": "Complex_4627v1.03.bin",
+              "hash": "Unknown",
+              "description": "Microsoft XBOX BIOS",
+              "required": "no"
+            },
+            "complex_4627": {
+              "filename": "Complex_4627.bin",
+              "hash": "Unknown",
+              "description": "Microsoft XBOX BIOS",
+              "required": "no"
+            }
+          }
         }
       }
     }
