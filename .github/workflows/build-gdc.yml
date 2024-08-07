@@ -2,15 +2,15 @@ name: Release Godot Configurator
 
 on:
   push:
-    branches: [ feat/godot-configurator ]
+    branches: [ cooker ]
   pull_request:
-    branches: [ feat/godot-configurator ]
+    branches: [ cooker ]
 
 env:
   GODOT_VERSION: 4.2.2
-  EXPORT_NAME: RetroDECK-Configurator
+  EXPORT_NAME: RetroDECK-Configurator.x86_64
   #match tag in project settings of Godot
-  TAG: RetroDECK-Configurator-v0.5
+  TAG: RetroDECK-Configurator-v0.51
 
 jobs:
   export-linux:
@@ -38,13 +38,13 @@ jobs:
         continue-on-error: true
         # --export-release has to match the export template in Godot project
         run: |
-          godot --headless -v --export-release "Linux/X11 64-bit" ~/$EXPORT_NAME.pck
+          godot --headless -v --export-release "Linux/X11 64-bit" ~/$EXPORT_NAME
       - name: Give execute permission ☑️
         run: |
-          chmod +x ~/$EXPORT_NAME.pck
+          chmod +x ~/$EXPORT_NAME
       - name: Create tar.gz archive 🗜️
         run: |
-          tar zcvf ~/${EXPORT_NAME}.tar.gz ~/$EXPORT_NAME.pck
+          tar zcvf ~/${EXPORT_NAME}.tar.gz ~/$EXPORT_NAME
           
       # Create artifacts in action. Optional item
       - name: Upload Linux x86_64 Artifact 🚀
