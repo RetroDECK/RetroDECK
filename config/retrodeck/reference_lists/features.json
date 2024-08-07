@@ -107,7 +107,6 @@
         "borders" : "widescreen"
     },
 	"helper_files": {
-
 		"dolphin_mods": {
 			"filename": "how-to-install-dolphin-mods.txt",
 			"location": "$mods_folder/Dolphin"
@@ -158,7 +157,109 @@
 				"retroarch" : {
 					"description" : "RetroArch (Multi-emulator Frontend)",
 					"name" : "RetroArch",
-					"launch" : "retroarch"
+					"launch" : "retroarch",
+					"properties" : [{
+						"cheevos" : true,
+						"cheevos_hardcore" : true,
+						"quick_resume": true
+					}],
+					"cores" : {
+						"citra_libretro": {
+							"description": "Nintendo 3DS Libretro Core",
+							"name": "Citra",
+							"properties": [{
+									"abxy_button": true
+								}]
+						},
+						"mame_libretro" : {
+							"description": "MAME: Multiple Arcade Machine Libretro Core",
+							"name": "MAME",
+							"properties": [{
+									"tate_mode": true
+								}]
+						},
+						"desmume_libretro": {
+							"description": "DeSmuME Nintendo DS Libretro Core",
+							"name": "desmume",
+							"properties": [{
+									"abxy_button": true
+								}]
+						},
+						"melonds_libretro": {
+							"description": "MelonDS Nintendo DS Libretro Core",
+							"name": "melonds",
+							"properties": [{
+									"abxy_button": true
+								}]
+						},
+						"swanstation_libretro": {
+							"name": "SwanStation",
+							"description": "Swanstation Libretro Core",
+							"properties" : [{
+								"widescreen" : true,
+								"borders" : true
+							}]
+						},
+						"picodrive_libetro": {
+							"name" : "PicoDrive",
+							"description": "SEGA Multi System Libretro Core",
+							"properties" : [{
+								"widescreen" : true,
+								"borders" : true,
+								"rewind" : true
+							}]
+						},
+						"genesisplusgx_libetro": {
+							"name" : "Genesis Plus GX",
+							"description": "SEGA Multi System Libretro Core",
+							"properties" : [{
+								"widescreen" : true,
+								"borders" : true,
+								"rewind" : true
+							}]
+						},
+						"genesisplusgxwide_libetro": {
+							"name" : "Genesis Plus GX Wide",
+							"description": "SEGA Multi System Libretro Core for Wide Screen",
+							"properties" : [{
+								"widescreen" : true,
+								"rewind" : true
+							}]
+						},
+						"mupen64plus-next_libetro": {
+							"name" : "Mupen64Plus-Next",
+							"description": "Nintendo 64 Libretro Core",
+							"properties" : [{
+								"widescreen" : true,
+								"borders" : true
+							}]
+						},
+						"snes9x-current_libetro": {
+							"name" : "Snes9x - Current",
+							"description": "Super Nintendo Libretro Core",
+							"properties" : [{
+								"widescreen" : true,
+								"borders" : true,
+								"rewind" : true
+							}]
+						},
+						"gambatte_libetro": {
+							"name" : "Gambatte",
+							"description": "Game Boy/Color Libretro Core",
+							"properties" : [{
+								"borders" : true,
+								"rewind" : true
+							}]
+						},
+						"mgba_libetro": {
+							"name" : "mGBA",
+							"description": "Game Boy Advance Libretro Core",
+							"properties" : [{
+								"borders" : true,
+								"rewind" : true
+							}]
+						}
+					}
 				}
 			}
 		},
@@ -166,11 +267,6 @@
 			"name" : "Arcade",
 			"folder" : "arcade",
 			"emulator" : {
-				"mame_libretro" : {
-					"description": "MAME: Multiple Arcade Machine Libretro Core",
-                    "name": "MAME",
-                    "core": "libretro"
-				},
 				"mame" : {
 					"description": "MAME: Multiple Arcade Machine Emulator",
                     "name": "MAME",
@@ -182,25 +278,14 @@
             "name": "Nintendo 3DS",
             "folder" : "n3ds",
             "emulator": {
-                "citra_libretro": {
-                    "description": "Nintendo 3DS Emulator",
-                    "name": "Citra",
-                    "core": "libretro",
-                    "properties": [
-                        {
-                            "abxy_button": true
-                        }
-                    ]
-                },
 				"citra": {
                     "description": "Citra Nintendo 3DS Emulator (via Ponzu)",
                     "name": "Citra (via Ponzu)",
 					"ponzu" : true,
-                    "properties": [
-                        {
-                            "abxy_button": true
-                        }
-                    ]
+                    "properties": [{
+                    	"abxy_button": true,
+                    	"ask_to_exit": true
+                    }]
                 }
             }
         },
@@ -208,25 +293,6 @@
             "name": "Nintendo DS",
             "folder" : "nds",
             "emulator": {
-				"desmume_libretro": {
-                    "description": "DeSmuME Nintendo DS Libretro Core",
-                    "name": "desmume",
-					"core": "libretro",
-					"properties": [
-                        {
-                            "abxy_button": true
-                        }
-                    ]
-                },
-                "melonds_libretro": {
-                    "description": "MelonDS Nintendo DS Libretro Core",
-                    "name": "melonds",
-                    "core": "libretro",
-                    "properties": [
-                        {
-                            "abxy_button": true
-                        }
-                    ],
 				"melonds" : {
 					"description": "MelonDS Nintendo DS Emulator",
                     "name": "melonds",
@@ -281,7 +347,11 @@
 							"description": "PS2 JP BIOS",
 							"required": "At least one"
 						}
-					}
+					},
+					"properties": [{
+                    	"ask_to_exit": true,
+						"cheevos" : true
+                    }]   
 				}
 			}
 		},
@@ -351,15 +421,14 @@
                     }		  
             },
             "emulator": {
-                "swanstation_libretro": {
-                    "name": "SwanStation",
-                    "description": "Swanstation libretro core",
-                    "core" : "libretro"
-                },
                 "duckstation" : {
                     "name" : "Duckstation",
                     "description" : "PlayStation Emulator",
-                    "launch" : "duckstation-qt"             
+                    "launch" : "duckstation-qt",
+					"properties": [{
+                    	"ask_to_exit": true,
+						"cheevos" : true
+                    }]        
                 }
             }
         },
@@ -370,7 +439,11 @@
 				"ppsspp" : {
 					"name" : "PPSSPP",
                     "description" : "PPSSPP: PlayStation Portable Emulator",
-                    "launch" : "PPSSPPSDL"
+                    "launch" : "PPSSPPSDL",
+					"properties": [{
+						"cheevos" : true,
+						"cheevos_hardcore" : true
+                    }]     
 				}
 			}
 		},
@@ -393,7 +466,10 @@
 					"name" : "RPCS3",
                     "description" : "RPCS3 PlayStation 3 Emulator",
                     "launch" : "rpcs3"
-				}
+				},
+				"properties": [{
+                 	"ask_to_exit": true
+                }]
 			}
 		},
 		"switch" : {
@@ -421,11 +497,12 @@
 					"name" : "Dolphin",
 					"description" : "Dolphin Wii and GameCube Emulator",
 					"launch" : "dolphin-emu-wrapper", 
-					"properties": [
-                        {
-                            "abxy_button": true
-                        }
-                    ]
+					"properties": [{
+                    	"abxy_button": true,
+						"ask_to_exit": true,
+						"cheevos" : true,
+						"cheevos_hardcore" : true
+                    }]
 				}
 			}
 		},
@@ -439,14 +516,20 @@
 					"launch" : "dolphin-emu-wrapper", 
 					"properties": [
                         {
-                            "abxy_button": true
+                            "abxy_button": true,
+							"ask_to_exit": true,
+							"cheevos" : true,
+							"cheevos_hardcore" : true
                         }
                     ]
 				},
 				"primehack" : {
 					"name" : "PrimeHack",
 					"description" : "A fork of Dolphiin to enhance Metroid Prime experience",
-					"launch" : "primehack-wrapper"
+					"launch" : "primehack-wrapper",
+					"properties": [{
+                    	"ask_to_exit": true
+                    }]
 				}
 			}
 		},
