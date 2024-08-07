@@ -166,8 +166,16 @@
 			"name" : "Arcade",
 			"folder" : "arcade",
 			"emulator" : {
-				"mame_libretro" : {},
-				"mame" : {}
+				"mame_libretro" : {
+					"description": "MAME: Multiple Arcade Machine Libretro Core",
+                    "name": "MAME",
+                    "core": "libretro"
+				},
+				"mame" : {
+					"description": "MAME: Multiple Arcade Machine Emulator",
+                    "name": "MAME",
+					"launch" : "mame"
+				}
 			}
 		},
         "n3ds" : {
@@ -186,7 +194,7 @@
                 },
 				"citra": {
                     "description": "Citra Nintendo 3DS Emulator (via Ponzu)",
-                    "name": "Citra",
+                    "name": "Citra (via Ponzu)",
 					"ponzu" : true,
                     "properties": [
                         {
@@ -345,33 +353,34 @@
                 "swanstation_libretro": {
                     "name": "SwanStation",
                     "description": "Swanstation libretro core",
-                    "core" : "libretro",
-                    "properties": [
-                        {
-                            "abxy_button": false
-                        }
-                    ]
+                    "core" : "libretro"
                 },
                 "duckstation" : {
                     "name" : "Duckstation",
                     "description" : "PlayStation Emulator",
-                    "launch" : "duckstation-qt",
-                    "properties": [
-                        {
-                            "abxy_button": false
-                        }
-                    ]                    
+                    "launch" : "duckstation-qt"             
                 }
             }
         },
 		"psp" : {
+			"name" : "Sony PSP: PlayStation Portable",
+			"folder" : "psp",
 			"emulator" : {
-				"name" : "Sony PSP: PlayStation Portable",
-				"folder" : "psp",
 				"ppsspp" : {
 					"name" : "PPSSPP",
-                    "description" : "PSP: PlayStation Portable Emulator",
+                    "description" : "PPSSPP: PlayStation Portable Emulator",
                     "launch" : "PPSSPPSDL"
+				}
+			}
+		},
+		"psvita" : {
+			"name" : "Sony PlayStation Vita",
+			"folder" : "psvita",
+			"emulator" : {
+				"vita3k" : {
+					"name" : "Vita3k",
+					"description" : "Vita3K PSVita Emulator",
+					"launch" : "Vita3K"
 				}
 			}
 		},
@@ -390,22 +399,60 @@
 			"name" : "Nintendo Switch",
 			"folder" : "switch",
 			"emulator" : {
-				"ryujinx" : {},
-				"yuzu" : {}
+				"ryujinx" : {
+					"name": "Ryujinx",
+					"description" : "Ryujinx Nintendo Switch Emulator",
+					"launch" : "Ryujinx.sh"
+				},
+				"yuzu" : {
+					"name": "Yuzu (via Ponzu)",
+					"description" : "Yuzu Nintendo Switch Emulator (via Ponzu)",
+					"launch" : "Yuzu",
+					"ponzu" : true
+				}
+			}
+		},
+		"gc" : {
+			"name": "Nintendo GameCube",
+            "folder" : "gc",
+			"emulator" : {
+				"dolphin" : {
+					"name" : "Dolphin",
+					"description" : "Dolphin Wii and GameCube Emulator",
+					"launch" : "dolphin-emu-wrapper", 
+					"properties": [
+                        {
+                            "abxy_button": true
+                        }
+                    ]
+				}
 			}
 		},
 		"wii" : {
 			"name": "Nintendo Wii",
             "folder" : "wii",
-			"emulators" : {
-				"dolphin" : {},
-				"primehack" : {}
+			"emulator" : {
+				"dolphin" : {
+					"name" : "Dolphin",
+					"description" : "Dolphin Wii and GameCube Emulator",
+					"launch" : "dolphin-emu-wrapper", 
+					"properties": [
+                        {
+                            "abxy_button": true
+                        }
+                    ]
+				},
+				"primehack" : {
+					"name" : "PrimeHack",
+					"description" : "A fork of Dolphiin to enhance Metroid Prime experience",
+					"launch" : "primehack-wrapper"
+				}
 			}
 		},
         "wiiu" : {
             "name": "Nintendo Wii U",
             "folder" : "wiiu",
-            "emulators" : {
+            "emulator" : {
                 "cemu": {
 					"description": "Wii U emulator",
 					"name" : "Cemu",
@@ -418,6 +465,18 @@
 					]
                 }
             }
-        }
+        },
+		"xbox" : {
+			"name" : "Microsoft XBOX",
+			"folder" : "xbox",
+			"emulator" : {
+				"xemu" : {
+					"description": "xemu Xbox Emulator",
+					"name" : "xemu",
+					"launch" : "xemu"
+				}
+			}
+		}
     }
 }
+} 
