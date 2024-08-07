@@ -66,7 +66,7 @@ https://retrodeck.net
       #   (.emulator // .emulators | to_entries[]) |
       #   select(.value.core == null and .value.resettable != false) |
       #   .key] | sort | join("|")
-      # ' config/retrodeck/reference_lists/features.json
+      # ' "$features"
 
       if [[ "$component" =~ ^(es-de|retroarch|cemu|dolphin|duckstation|gzdoom|mame|melonds|pcsx2|ppsspp|primehack|ryujinx|rpcs3|vita3k|xemu|all)$ ]]; then
         read -p "You are about to reset $component to default settings. Enter 'y' to continue, 'n' to stop: " response
