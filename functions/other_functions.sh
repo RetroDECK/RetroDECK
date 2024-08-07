@@ -169,7 +169,7 @@ update_rd_conf() {
       "\(.key):\(.value)", 
       "\(.value):\(.key)"
     ] | join("\n")
-  ' config/retrodeck/reference_lists/features.json)
+  ' $features)
 
   while IFS= read -r current_setting_line # Read the existing retrodeck.cfg
   do
@@ -597,7 +597,7 @@ splash_screen() {
       ($current_day | tonumber) <= (.value.end_date | tonumber) and
       ($current_time | tonumber) >= (.value.start_time | tonumber) and
       ($current_time | tonumber) <= (.value.end_time | tonumber)
-    ) | .value.filename' config/retrodeck/reference_lists/features.json)
+    ) | .value.filename' $features)
 
   # Determine the splash file to use
   if [[ -n "$splash_screen" ]]; then
