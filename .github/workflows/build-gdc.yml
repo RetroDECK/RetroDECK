@@ -1,12 +1,11 @@
 name: Release Godot Configurator
 
 on:
-  workflow_dispatch:
 #  push:
 #    branches: [ cooker ]
 #  pull_request:
 #    branches: [ cooker ]
-
+  workflow_dispatch:
 
 env:
   GODOT_VERSION: 4.2.2
