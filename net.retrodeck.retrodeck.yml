@@ -1,6 +1,4 @@
 app-id: net.retrodeck.retrodeck
-# next 2 lines Used by Godot
-base: org.godotengine.godot.BaseApp
 base-version: "4.2"
 runtime: org.kde.Platform
 runtime-version: "6.7"
@@ -156,21 +154,6 @@ modules:
       - type: file
         url: https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_amd64
         sha256: 4ee662847c588c3ef2fec8bfb304e8739e3dbaba87ccb9a608d691c88f5b64dc
-
-# GoDot Configurator
-  - name: godot-configurator
-    buildsystem: simple
-    sources:
-      - type: archive
-        url: https://github.com/monkeyx-net/RetroDECK_UK/releases/download/RetroDECK-Configurator-v0.5/RetroDECK-Configurator.tar.gz
-        sha256: ce32cc212d173a3284afc42b89727e6159cc4643edea1ad0e52116b466adc94f
-        strip-components: 2
-   
-    build-commands:
-      - echo '#!/bin/sh' > godot-configurator.sh
-      - echo 'godot-runner --main-pack /app/bin/RetroDECK-Configurator.pck' >> godot-configurator.sh
-      - install -Dm644 RetroDECK-Configurator.pck /app/bin/RetroDECK-Configurator.pck
-      - install -Dm644 godot-configurator.sh /app/bin
 
   # RetroArch
   # https://retroarch.com/index.php?page=platforms
@@ -637,6 +620,10 @@ modules:
       # GZDOOM wrapper
       - cp config/gzdoom/gzdoom.sh ${FLATPAK_DEST}/bin/gzdoom.sh
       - chmod +x ${FLATPAK_DEST}/bin/gzdoom.sh
+
+      # Godot configurator
+      - cp tools/configurator/export/godot-configurator.x86_64 ${FLATPAK_DEST}/bin
+      - chmod +x ${FLATPAK_DEST}/bin/godot-configurator.x86_64
 
     sources:
       - type: git
