@@ -162,6 +162,15 @@ update_rd_conf() {
 
   # STAGE 3: Eliminate any preset incompatibility with existing user settings and new defaults
 
+  # Fetch incompatible presets from JSON and create a lookup list
+  incompatible_presets=$(jq -r '
+    .incompatible_presets | to_entries[] | 
+    [
+      "\(.key):\(.value)", 
+      "\(.value):\(.key)"
+    ] | join("\n")
+  ' config/retrodeck/reference_lists/features.json)
+
   while IFS= read -r current_setting_line # Read the existing retrodeck.cfg
   do
     if [[ (! -z "$current_setting_line") && (! "$current_setting_line" == "#"*) && (! "$current_setting_line" == "[]") ]]; then # If the line has a valid entry in it
@@ -179,13 +188,14 @@ update_rd_conf() {
                   set_setting_value "$rd_conf" "$system_name" "false" "retrodeck" "$current_section"
                 fi
               fi
-            done < "$incompatible_presets_reference_list"
+            done <<< "$incompatible_presets"
           fi
         fi
       fi
     fi
   done < $rd_conf
 }
+
 
 conf_read() {
   # This function will read the RetroDECK config file into memory
