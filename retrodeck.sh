@@ -59,6 +59,15 @@ https://retrodeck.net
       echo "Available options are: es-de, retroarch, cemu, dolphin, duckstation, gzdoom, melonds, pcsx3, pico8, ppsspp, primehack, rpcs3, ryujinx, xemu, vita3k, mame, all"
       read -p "Please enter the component you would like to reset: " component
       component=$(echo "$component" | tr '[:upper:]' '[:lower:]')
+
+      # TODO: this is the jq to get all the resettable emulators list, generic component is missing
+      # jq -r '
+      #   [.system[] |
+      #   (.emulator // .emulators | to_entries[]) |
+      #   select(.value.core == null and .value.resettable != false) |
+      #   .key] | sort | join("|")
+      # ' config/retrodeck/reference_lists/features.json
+
       if [[ "$component" =~ ^(es-de|retroarch|cemu|dolphin|duckstation|gzdoom|mame|melonds|pcsx2|ppsspp|primehack|ryujinx|rpcs3|vita3k|xemu|all)$ ]]; then
         read -p "You are about to reset $component to default settings. Enter 'y' to continue, 'n' to stop: " response
         if [[ $response == [yY] ]]; then
