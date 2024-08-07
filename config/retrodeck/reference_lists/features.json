@@ -152,22 +152,24 @@
 		}	  
 	},
     "system": {
-        "wiiu" : {
-            "name": "Wii U",
-            "folder" : "wiiu",
-            "emulators" : {
-                "cemu": {
-                "description": "Wii U emulator",
-                "name": "Cemu",
-                "properties": [
-                    {
-                        "abxy_button": true,
-                        "multi_user_config_dir" : "Cemu"
-                    }
-                ]
-                }
-            }
-        },
+		"libretro" : {
+			"name": "RetroArch",
+			"emulator": {
+				"retroarch" : {
+					"description" : "RetroArch (Multi-emulator Frontend)",
+					"name" : "RetroArch",
+					"launch" : "retroarch"
+				}
+			}
+		},
+		"arcade" : {
+			"name" : "Arcade",
+			"folder" : "arcade",
+			"emulator" : {
+				"mame_libretro" : {},
+				"mame" : {}
+			}
+		},
         "n3ds" : {
             "name": "Nintendo 3DS",
             "folder" : "n3ds",
@@ -181,9 +183,99 @@
                             "abxy_button": true
                         }
                     ]
+                },
+				"citra": {
+                    "description": "Citra Nintendo 3DS Emulator (via Ponzu)",
+                    "name": "Citra",
+					"ponzu" : true,
+                    "properties": [
+                        {
+                            "abxy_button": true
+                        }
+                    ]
                 }
             }
         },
+		"nds" : {
+            "name": "Nintendo DS",
+            "folder" : "nds",
+            "emulator": {
+				"desmume_libretro": {
+                    "description": "DeSmuME Nintendo DS Libretro Core",
+                    "name": "desmume",
+					"core": "libretro",
+					"properties": [
+                        {
+                            "abxy_button": true
+                        }
+                    ]
+                },
+                "melonds_libretro": {
+                    "description": "MelonDS Nintendo DS Libretro Core",
+                    "name": "melonds",
+                    "core": "libretro",
+                    "properties": [
+                        {
+                            "abxy_button": true
+                        }
+                    ],
+				"melonds" : {
+					"description": "MelonDS Nintendo DS Emulator",
+                    "name": "melonds",
+					"launch" : "MelonDS",
+					"bios": {
+						"bios7": {
+							"filename": "bios7.bin",
+							"hash": "df692a80a5b1bc90728bc3dfc76cd948",
+							"description": "Used by MelonDS emulator",
+							"required": "Required, see Wiki"
+						},
+						"bios9": {
+							"filename": "bios9.bin",
+							"hash": "a392174eb3e572fed6447e956bde4b25",
+							"description": "Used by MelonDS emulator",
+							"required": "Required, see Wiki"
+						},
+						"firmware": {
+							"filename": "firmware.bin",
+							"hash": "e45033d9b0fa6b0de071292bba7c9d13",
+							"description": "Used by MelonDS emulator",
+							"required": "Required, see Wiki"
+						}
+					}
+				}
+            }
+        },
+		"ps2" : {
+			"name": "Sony PlayStation 2",
+            "folder" : "ps2",
+			"emulator" : {
+				"pcsx2" : {
+					"name" : "pcsx2",
+					"description": "PCSX2 Play Station 2 Emulator",
+					"bios": {
+						"ps2-0200a": {
+							"filename": "ps2-0200a-20040614.bin",
+							"hash": "d333558cc14561c1fdc334c75d5f37b7",
+							"description": "PS2 US BIOS",
+							"required": "At least one"
+						},
+						"ps2-0200e": {
+							"filename": "ps2-0200e-20040614.bin",
+							"hash": "dc752f160044f2ed5fc1f4964db2a095",
+							"description": "PS2 EU BIOS",
+							"required": "At least one"
+						},
+						"ps2-0200j": {
+							"filename": "ps2-0200j-20040614.bin",
+							"hash": "0eee5d1c779aa50e94edd168b4ebf42e",
+							"description": "PS2 JP BIOS",
+							"required": "At least one"
+						}
+					}
+				}
+			}
+		},
         "psx" : {
             "name": "Sony PlayStation",
             "folder" : "psx",
@@ -269,6 +361,61 @@
                             "abxy_button": false
                         }
                     ]                    
+                }
+            }
+        },
+		"psp" : {
+			"emulator" : {
+				"name" : "Sony PSP: PlayStation Portable",
+				"folder" : "psp",
+				"ppsspp" : {
+					"name" : "PPSSPP",
+                    "description" : "PSP: PlayStation Portable Emulator",
+                    "launch" : "PPSSPPSDL"
+				}
+			}
+		},
+		"rpcs3" : {
+			"name" : "Sony PlayStation 3",
+			"folder" : "ps3",
+			"emulator" : {
+				"rpcs3" : {
+					"name" : "RPCS3",
+                    "description" : "RPCS3 PlayStation 3 Emulator",
+                    "launch" : "rpcs3"
+				}
+			}
+		},
+		"switch" : {
+			"name" : "Nintendo Switch",
+			"folder" : "switch",
+			"emulator" : {
+				"ryujinx" : {},
+				"yuzu" : {}
+			}
+		},
+		"wii" : {
+			"name": "Nintendo Wii",
+            "folder" : "wii",
+			"emulators" : {
+				"dolphin" : {},
+				"primehack" : {}
+			}
+		},
+        "wiiu" : {
+            "name": "Nintendo Wii U",
+            "folder" : "wiiu",
+            "emulators" : {
+                "cemu": {
+					"description": "Wii U emulator",
+					"name" : "Cemu",
+					"launch" : "Cemu-wrapper",
+					"properties": [
+						{
+							"abxy_button": true,
+							"multi_user_config_dir" : "Cemu"
+						}
+					]
                 }
             }
         }
