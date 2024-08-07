@@ -253,7 +253,8 @@
 					}
 				}
             }
-        },
+        }
+		},
 		"ps2" : {
 			"name": "Sony PlayStation 2",
             "folder" : "ps2",
