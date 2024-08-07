@@ -572,26 +572,26 @@ deploy_helper_files() {
   done < "$helper_files_list"
 }
 
-easter_eggs() {
-  # This function will replace the RetroDECK startup splash screen with a different image if the day and time match a listing in easter_egg_checklist.cfg
-  # The easter_egg_checklist.cfg file has the current format: $start_date^$end_date^$start_time^$end_time^$splash_file
-  # Ex. The line "1001^1031^0000^2359^spooky.svg" would show the file "spooky.svg" during any time of day in the month of October
-  # The easter_egg_checklist.cfg is read in order, so lines higher in the file will have higher priority in the event of an overlap
-  # USAGE: easter_eggs
-  current_day=$(date +"%0m%0d") # Read the current date in a format that can be calculated in ranges
-  current_time=$(date +"%0H%0M") # Read the current time in a format that can be calculated in ranges
-  if [[ ! -z $(cat $easter_egg_checklist) ]]; then
-    while IFS="^" read -r start_date end_date start_time end_time splash_file || [[ -n "$start_date" ]]; # Read Easter Egg checklist file and separate values
-    do
-      if [[ ! $start_date == "#"* ]] && [[ ! -z "$start_date" ]]; then
-        if [[ "$((10#$current_day))" -ge "$((10#$start_date))" && "$((10#$current_day))" -le "$((10#$end_date))" && "$((10#$current_time))" -ge "$((10#$start_time))" && "$((10#$current_time))" -le "$((10#$end_time))" ]]; then # If current line specified date/time matches current date/time, set $splash_file to be deployed
-          new_splash_file="$splashscreen_dir/$splash_file"
-          break
-        else # When there are no matches, the default splash screen is set to deploy
-          new_splash_file="$default_splash_file"
-        fi
-      fi
-    done < $easter_egg_checklist
+splash_screen() {
+  # This function will replace the RetroDECK startup splash screen with a different image if the day and time match a listing in the JSON data.
+  # USAGE: splash_screen
+
+  current_day=$(date +"%m%d")  # Read the current date in a format that can be calculated in ranges
+  current_time=$(date +"%H%M") # Read the current time in a format that can be calculated in ranges
+
+  # Read the JSON file and extract splash screen data using jq
+  splash_screen=$(jq -r --arg current_day "$current_day" --arg current_time "$current_time" '
+    .splash_screens | to_entries[] |
+    select(
+      ($current_day | tonumber) >= (.value.start_date | tonumber) and
+      ($current_day | tonumber) <= (.value.end_date | tonumber) and
+      ($current_time | tonumber) >= (.value.start_time | tonumber) and
+      ($current_time | tonumber) <= (.value.end_time | tonumber)
+    ) | .value.filename' config/retrodeck/reference_lists/features.json)
+
+  # Determine the splash file to use
+  if [[ -n "$splash_screen" ]]; then
+    new_splash_file="$splashscreen_dir/$splash_screen"
   else
     new_splash_file="$default_splash_file"
   fi
@@ -770,7 +770,7 @@ quit_retrodeck() {
 }
 
 start_retrodeck() {
-  easter_eggs # Check if today has a surprise splashscreen and load it if so
+  splash_screen # Check if today has a surprise splashscreen and load it if so
   ponzu
   log i "Starting RetroDECK v$version"
   es-de

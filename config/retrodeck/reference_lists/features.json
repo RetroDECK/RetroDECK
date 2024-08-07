@@ -58,7 +58,7 @@
 		  "enabled": false
 		}
 	  },
-	"spalsh_screens" : {
+	"splash_screens" : {
 		"xmas": {
 			"start_date": "1201",
 			"end_date": "1231",

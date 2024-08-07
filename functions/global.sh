@@ -29,7 +29,6 @@ rd_update_patch="/var/config/retrodeck/rd_update.patch"                         
 bios_checklist="$config/retrodeck/reference_lists/bios_checklist.cfg"                                    # A config file listing BIOS file information that can be verified
 compression_targets="$config/retrodeck/reference_lists/compression_targets.cfg"                          # A config file containing supported compression types per system
 zip_compressable_extensions="$config/retrodeck/reference_lists/zip_compressable_extensions.cfg"          # A config file containing every file extension that is allowed to be compressed to .zip format, because there are a lot!
-easter_egg_checklist="$config/retrodeck/reference_lists/easter_egg_checklist.cfg"                        # A config file listing days and times when special splash screens should show up
 input_validation="$config/retrodeck/reference_lists/input_validation.cfg"                                # A config file listing valid CLI inputs
 finit_options_list="$config/retrodeck/reference_lists/finit_options_list.cfg"                            # A config file listing available optional installs during finit
 splashscreen_dir="/var/config/ES-DE/resources/graphics/extra_splashes"                                                # The default location of extra splash screens
