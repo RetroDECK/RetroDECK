@@ -155,11 +155,9 @@ modules:
         url: https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_amd64
         sha256: 4ee662847c588c3ef2fec8bfb304e8739e3dbaba87ccb9a608d691c88f5b64dc
 
-
-# GoDot Configurator
+  # GoDot Configurator
   - name: godot-configurator
     buildsystem: simple
-    sources:
       - type: archive
         url: https://github.com/monkeyx-net/RetroDECK_UK/releases/download/RetroDECK-Configurator-v0.51/RetroDECK-Configurator.x86_64.tar.gz
         sha256: c20c8de0e2482e1221b0dcb42898a9349a735ebd47c9a5754cc379c2a8f3ac47
@@ -633,10 +631,6 @@ modules:
       # GZDOOM wrapper
       - cp config/gzdoom/gzdoom.sh ${FLATPAK_DEST}/bin/gzdoom.sh
       - chmod +x ${FLATPAK_DEST}/bin/gzdoom.sh
-
-      # Godot configurator
-      - cp tools/configurator/export/godot-configurator.x86_64 ${FLATPAK_DEST}/bin
-      - chmod +x ${FLATPAK_DEST}/bin/godot-configurator.x86_64
 
     sources:
       - type: git
