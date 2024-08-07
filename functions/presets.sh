@@ -70,6 +70,15 @@ build_preset_list_options() {
 make_preset_changes() {
   # This function will take an array $choices, which contains the names of systems that have been enabled for this preset and enable them in the backend
 
+  # Fetch incompatible presets from JSON and create a lookup list
+  incompatible_presets=$(jq -r '
+    .incompatible_presets | to_entries[] | 
+    [
+      "\(.key):\(.value)", 
+      "\(.value):\(.key)"
+    ] | join("\n")
+  ' $features)
+
   IFS="," read -ra choices <<< "$choice"
     for emulator in "${all_systems[@]}"; do
       if [[ " ${choices[*]} " =~ " ${emulator} " && ! " ${current_enabled_systems[*]} " =~ " ${emulator} " ]]; then
@@ -89,7 +98,7 @@ make_preset_changes() {
               fi
             fi
           fi
-        done < "$incompatible_presets_reference_list"
+        done < "$incompatible_presets"
       fi
       if [[ ! " ${choices[*]} " =~ " ${emulator} " && ! " ${current_disabled_systems[*]} " =~ " ${emulator} " ]]; then
         changed_systems=("${changed_systems[@]}" "$emulator")

@@ -50,7 +50,6 @@ rd_appdata="/app/share/appdata/net.retrodeck.retrodeck.appdata.xml"             
 rpcs3_firmware="http://dus01.ps3.update.playstation.net/update/ps3/image/us/2023_0228_05fe32f5dc8c78acbcd84d36ee7fdc5b/PS3UPDAT.PUP"
 RA_API_URL="https://retroachievements.org/dorequest.php"                                                              # API URL for RetroAchievements.org
 presets_dir="$config/retrodeck/presets"                                                                  # Repository for all system preset config files
-incompatible_presets_reference_list="$config/retrodeck/reference_lists/incompatible_presets.cfg"         # A config file listing all incompatible presets for reference (eg. cannot have borders and widescreen enabled simultaniously)
 pretty_system_names_reference_list="$config/retrodeck/reference_lists/pretty_system_names.cfg"           # An internal translation list for turning internal names (eg. gbc) to "pretty" names (Nintendo GameBoy Color)
 git_organization_name="RetroDECK"                                                                       # The name of the organization in our git repository such as GitHub
 cooker_repository_name="Cooker"                                                                         # The name of the cooker repository under RetroDECK organization
