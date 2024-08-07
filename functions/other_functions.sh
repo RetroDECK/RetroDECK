@@ -570,17 +570,21 @@ update_splashscreens() {
 }
 
 deploy_helper_files() {
-  # This script will distribute helper documentation files throughout the filesystem according to the $helper_files_list
+  # This script will distribute helper documentation files throughout the filesystem according to the JSON configuration
   # USAGE: deploy_helper_files
 
-  while IFS='^' read -r file dest || [[ -n "$file" ]];
-  do
-      if [[ ! "$file" == "#"* ]] && [[ ! -z "$file" ]]; then
+  # Extract helper files information using jq
+  helper_files=$(jq -r '.helper_files | to_entries | map("\(.value.filename)^\(.value.location)")[]' "$features")
+
+  # Iterate through each helper file entry
+  while IFS='^' read -r file dest; do
+    if [[ ! -z "$file" ]] && [[ ! -z "$dest" ]]; then
       eval current_dest="$dest"
       cp -f "$helper_files_folder/$file" "$current_dest/$file"
     fi
-  done < "$helper_files_list"
+  done <<< "$helper_files"
 }
+
 
 splash_screen() {
   # This function will replace the RetroDECK startup splash screen with a different image if the day and time match a listing in the JSON data.

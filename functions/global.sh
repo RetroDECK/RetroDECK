@@ -45,7 +45,6 @@ remote_network_target_1="https://flathub.org"                                   
 remote_network_target_2="$rd_repo"                                                                                    # The URL of a common internet target for testing network access
 remote_network_target_3="https://one.one.one.one"                                                                     # The URL of a common internet target for testing network access
 helper_files_folder="$config/retrodeck/helper_files"                                                     # The parent folder of RetroDECK documentation files for deployment
-helper_files_list="$config/retrodeck/reference_lists/helper_files_list.cfg"                              # The list of files to be deployed and where they go
 rd_appdata="/app/share/appdata/net.retrodeck.retrodeck.appdata.xml"                                                   # The shipped appdata XML file for this version
 rpcs3_firmware="http://dus01.ps3.update.playstation.net/update/ps3/image/us/2023_0228_05fe32f5dc8c78acbcd84d36ee7fdc5b/PS3UPDAT.PUP"
 RA_API_URL="https://retroachievements.org/dorequest.php"                                                              # API URL for RetroAchievements.org
