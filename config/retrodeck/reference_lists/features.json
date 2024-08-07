@@ -273,21 +273,7 @@
                   "rewind": true,
                   "abxy_button": true
                 }
-              ],
-              "bios": {
-                "gb_bios": {
-                  "filename": "gb_bios.bin",
-                  "hash": "32fbbd84168d3482956eb3c5051637f5",
-                  "description": "Game Boy BIOS",
-                  "required": "Optional BIOS file (used to display the Nintendo logo at boot)"
-                },
-                "gbc_bios": {
-                  "filename": "gbc_bios.bin",
-                  "hash": "dbfce9db9deaa2567f6a84fde55f9680",
-                  "description": "Game Boy Color BIOS",
-                  "required": "Optional BIOS file (used to display the Nintendo logo at boot)"
-                }
-              }
+              ]
             },
             "mgba_libetro": {
               "name": "mGBA",
@@ -298,15 +284,7 @@
                   "rewind": true,
                   "abxy_button": true
                 }
-              ],
-              "bios": {
-                "gba_bios": {
-                  "filename": "gba_bios.bin",
-                  "hash": "a860e8c0b6d573d191e4ec7db1b1e4f6",
-                  "description": "Game Boy Advance BIOS",
-                  "required": "Optional BIOS file (used to display the Nintendo logo at boot)"
-                }
-              }
+              ]
             }
           }
         }
@@ -347,27 +325,7 @@
         "melonds": {
           "description": "MelonDS Nintendo DS Emulator",
           "name": "melonds",
-          "launch": "MelonDS",
-          "bios": {
-            "bios7": {
-              "filename": "bios7.bin",
-              "hash": "df692a80a5b1bc90728bc3dfc76cd948",
-              "description": "Used by MelonDS emulator",
-              "required": "Required, see Wiki"
-            },
-            "bios9": {
-              "filename": "bios9.bin",
-              "hash": "a392174eb3e572fed6447e956bde4b25",
-              "description": "Used by MelonDS emulator",
-              "required": "Required, see Wiki"
-            },
-            "firmware": {
-              "filename": "firmware.bin",
-              "hash": "e45033d9b0fa6b0de071292bba7c9d13",
-              "description": "Used by MelonDS emulator",
-              "required": "Required, see Wiki"
-            }
-          }
+          "launch": "MelonDS"
         }
       }
     },
@@ -378,26 +336,6 @@
         "pcsx2": {
           "name": "pcsx2",
           "description": "PCSX2 Play Station 2 Emulator",
-          "bios": {
-            "ps2-0200a": {
-              "filename": "ps2-0200a-20040614.bin",
-              "hash": "d333558cc14561c1fdc334c75d5f37b7",
-              "description": "PS2 US BIOS",
-              "required": "At least one"
-            },
-            "ps2-0200e": {
-              "filename": "ps2-0200e-20040614.bin",
-              "hash": "dc752f160044f2ed5fc1f4964db2a095",
-              "description": "PS2 EU BIOS",
-              "required": "At least one"
-            },
-            "ps2-0200j": {
-              "filename": "ps2-0200j-20040614.bin",
-              "hash": "0eee5d1c779aa50e94edd168b4ebf42e",
-              "description": "PS2 JP BIOS",
-              "required": "At least one"
-            }
-          },
           "properties": [
             {
               "ask_to_exit": true,
@@ -410,68 +348,6 @@
     "psx": {
       "name": "Sony PlayStation",
       "folder": "psx",
-      "bios": {
-        "psxonpsp660": {
-          "filename": "psxonpsp660.bin",
-          "description": "PS1 BIOS from PSP",
-          "hash": "c53ca5908936d412331790f4426c6c33",
-          "required": "At least one"
-        },
-        "scph5500": {
-          "filename": "scph5500.bin",
-          "description": "PS1 JP BIOS",
-          "hash": "8dd7d5296a650fac7319bce665a6a53c",
-          "required": "At least one"
-        },
-        "scph5501": {
-          "filename": "scph5501.bin",
-          "description": "PS1 US BIOS",
-          "hash": "490f666e1afb15b7362b406ed1cea246",
-          "required": "At least one"
-        },
-        "scph5502": {
-          "filename": "scph5502.bin",
-          "description": "PS1 EU BIOS",
-          "hash": "32736f17079d0b2b7024407c39bd3050",
-          "required": "At least one"
-        },
-        "scph7001": {
-          "filename": "scph7001.bin",
-          "description": "PS1 BIOS",
-          "hash": "1e68c231d0896b7eadcad1d7d8e76129",
-          "required": "At least one"
-        },
-        "scph7002": {
-          "filename": "scph7002.bin",
-          "description": "PS1 BIOS",
-          "hash": "b9d9a0286c33dc6b7237bb13cd46fdee",
-          "required": "At least one"
-        },
-        "scph7003": {
-          "filename": "scph7003.bin",
-          "description": "PS1 BIOS",
-          "hash": "490f666e1afb15b7362b406ed1cea246",
-          "required": "At least one"
-        },
-        "scph7502": {
-          "filename": "scph7502.bin",
-          "description": "PS1 BIOS",
-          "hash": "b9d9a0286c33dc6b7237bb13cd46fdee",
-          "required": "At least one"
-        },
-        "scph9002_7502": {
-          "filename": "scph9002(7502).bin",
-          "description": "PS1 BIOS",
-          "hash": "b9d9a0286c33dc6b7237bb13cd46fdee",
-          "required": "At least one"
-        },
-        "ps1_rom": {
-          "filename": "ps1_rom.bin",
-          "description": "PS1 BIOS",
-          "hash": "81bbe60ba7a3d1cea1d48c14cbcc647b",
-          "required": "At least one"
-        }
-      },
       "emulator": {
         "duckstation": {
           "name": "Duckstation",
@@ -545,22 +421,6 @@
           "launch": "Yuzu",
           "ponzu": true,
           "abxy_button": true
-        }
-      },
-      "bios": {
-        "bios": {
-          "prod_keys": {
-            "filename": "prod.keys",
-            "hash": "Unknown",
-            "description": "Nintendo Switch key file",
-            "required": "A file for Switch emulation in Ryujinx (Required)"
-          },
-          "title_keys": {
-            "filename": "title.keys",
-            "hash": "Unknown",
-            "description": "Nintendo Switch key file",
-            "required": "A file for Switch emulation in Ryujinx (Required)"
-          }
         }
       }
     },
@@ -639,33 +499,7 @@
         "xemu": {
           "description": "xemu Xbox Emulator",
           "name": "xemu",
-          "launch": "xemu",
-          "bios": {
-            "mcpx_1.0": {
-              "filename": "mcpx_1.0.bin",
-              "hash": "d49c52a4102f6df7bcf8d0617ac475ed",
-              "description": "Microsoft XBOX BIOS",
-              "required": "no"
-            },
-            "complex": {
-              "filename": "Complex.bin",
-              "hash": "Unknown",
-              "description": "Microsoft XBOX BIOS",
-              "required": "no"
-            },
-            "complex_4627v1.03": {
-              "filename": "Complex_4627v1.03.bin",
-              "hash": "Unknown",
-              "description": "Microsoft XBOX BIOS",
-              "required": "no"
-            },
-            "complex_4627": {
-              "filename": "Complex_4627.bin",
-              "hash": "Unknown",
-              "description": "Microsoft XBOX BIOS",
-              "required": "no"
-            }
-          }
+          "launch": "xemu"
         }
       }
     }
