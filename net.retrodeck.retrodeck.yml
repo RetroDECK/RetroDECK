@@ -158,13 +158,14 @@ modules:
   # GoDot Configurator
   - name: godot-configurator
     buildsystem: simple
-      - type: archive
-        url: https://github.com/monkeyx-net/RetroDECK_UK/releases/download/RetroDECK-Configurator-v0.51/RetroDECK-Configurator.x86_64.tar.gz
-        sha256: c20c8de0e2482e1221b0dcb42898a9349a735ebd47c9a5754cc379c2a8f3ac47
-        strip-components: 2
-   
     build-commands:
-      - install -Dm644 RetroDECK-Configurator.x86_64 /app/bin/RetroDECK-Configurator.x86_64
+      - cp RetroDECK-Configurator.x86_64 ${FLATPAK_DEST}/bin/
+      - chmod +x ${FLATPAK_DEST}/bin/RetroDECK-Configurator.x86_64
+    sources:
+      - type: archive
+        url: https://github.com/monkeyx-net/RetroDECK_UK/releases/latest/download/RetroDECK-Configurator.x86_64.tar.gz
+        sha256: RETRODECKCONFIGURATORLATEST
+        strip-components: 2
 
   # RetroArch
   # https://retroarch.com/index.php?page=platforms
