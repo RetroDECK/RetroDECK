@@ -2,15 +2,12 @@
     <img src="https://github.com/XargonWan/RetroDECK/blob/main/res/logo.png?raw=true" alt="RetroDECK logo" width="600"/>
 </p>
 
-# Get RetroDECK working in a few steps!
-
-
 <p float="center">
 <img src="https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen05.jpeg?raw=true" alt="screenshot" width="300"/>
 <img src="https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen06.jpeg?raw=true" alt="screenshot" width="300"/>
 </p>
 
-Instead of having several different emulators, engines and frontends on your Linux/SteamOS system you only need one: RetroDECK.
+Instead of having several different emulators, engines and frontends on your Linux/SteamOS system you only need one flatpak: RetroDECK.
 
 ![Flathub](https://img.shields.io/flathub/downloads/net.retrodeck.retrodeck)
 ![Flathub](https://img.shields.io/flathub/v/net.retrodeck.retrodeck)
@@ -18,7 +15,7 @@ Instead of having several different emulators, engines and frontends on your Lin
 ![GitHub](https://img.shields.io/github/license/XargonWan/RetroDECK)
 [![Documentation Status](https://readthedocs.org/projects/retrodeck/badge/?version=latest)](https://retrodeck.readthedocs.io/en/latest/?badge=latest)
 
-## What is RetroDECK?
+# What is RetroDECK?
 
 The wiki has a detailed page on this:  
 
