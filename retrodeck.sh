@@ -87,6 +87,16 @@ https://retrodeck.net
         exit
       fi
       ;;
+    --test-upgrade*)
+      echo "You are about to test upgrading RetroDECK from version $2 to $hard_version"
+      read -p "Enter 'y' to continue, 'n' to start RetroDECK normally: " response
+      if [[ $response == [yY] ]]; then
+        version="$2"
+        shift
+      else
+        shift
+      fi
+      ;;
     -*|--*)
       echo "Unknown option $i"
       exit 1
@@ -100,10 +110,10 @@ https://retrodeck.net
   esac
 done
 
-log d "Update triggered"
 # if lockfile exists
 if [ -f "$lockfile" ]; then
   if [ "$hard_version" != "$version" ]; then
+    log d "Update triggered"
     log d "Lockfile found but the version doesn't match with the config file"
     log i "Config file's version is $version but the actual version is $hard_version"
     if grep -qF "cooker" <<< $hard_version; then # If newly-installed version is a "cooker" build
@@ -112,7 +122,7 @@ if [ -f "$lockfile" ]; then
       set_setting_value $rd_conf "update_repo" "$cooker_repository_name" retrodeck "options"
       set_setting_value $rd_conf "update_check" "true" retrodeck "options"
       set_setting_value $rd_conf "developer_options" "true" retrodeck "options"
-      cooker_base_version=$(echo $hard_version | cut -d'-' -f2)
+      cooker_base_version=$(echo $version | cut -d'-' -f2)
       choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Upgrade" --extra-button="Don't Upgrade" --extra-button="Full Wipe and Fresh Install" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Cooker Upgrade" \
