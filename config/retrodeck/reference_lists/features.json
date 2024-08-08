@@ -1,0 +1,507 @@
+{
+  "about_links": {
+    "example_site": {
+      "description": "Updated description.",
+      "name": "Updated Site",
+      "url": "https://updated-example.com"
+    },
+    "rd_changelog": {
+      "description": "Opens the RetroDECK change log in your default browser",
+      "name": "Changelog",
+      "url": "https://retrodeck.readthedocs.io/en/latest/wiki_rd_versions/version-history/"
+    },
+    "rd_contactus": {
+      "description": "Opens the RetroDECK contact us section in your default browser",
+      "name": "Contact us",
+      "url": "https://github.com/XargonWan/RetroDECK"
+    },
+    "rd_credits": {
+      "description": "Opens the RetroDECK Credits in your default browser",
+      "name": "Credits",
+      "url": "https://retrodeck.readthedocs.io/en/latest/wiki_credits/donations-licenses/"
+    },
+    "rd_donate": {
+      "description": "Opens Donations page in your default browser",
+      "name": "Donate",
+      "url": "https://retrodeck.readthedocs.io/en/latest/wiki_credits/donations-licenses/"
+    },
+    "rd_licenses": {
+      "description": "Opens the RetroDECK licenses in your default browser",
+      "name": "Licences",
+      "url": "https://retrodeck.readthedocs.io/en/latest/wiki_credits/donations-licenses/"
+    },
+    "rd_web": {
+      "description": "Opens the RetroDECK Website in your default browser",
+      "name": "Website",
+      "url": "https://retrodeck.net/"
+    },
+    "rd_wiki": {
+      "description": "Opens the RetroDECK Wiki in your default browser",
+      "name": "Wiki",
+      "url": "https://retrodeck.readthedocs.io/en/latest/"
+    }
+  },
+  "finit_default_options": {
+    "rd_controller_profile": {
+      "name": "RetroDECK Steam Controller Profiles Install",
+      "description": "Install RetroDECK Steam Input profiles to Steam - Recommended",
+      "enabled": true
+    },
+    "rpcs3_firmware": {
+      "name": "RPCS3 Firmware Install",
+      "description": "Install firmware needed for PS3 emulation",
+      "enabled": false
+    },
+    "vita3k_firmware": {
+      "name": "Vita3K Firmware Install",
+      "description": "Install firmware needed for Vita3K emulation",
+      "enabled": false
+    }
+  },
+  "splash_screens": {
+    "xmas": {
+      "start_date": "1201",
+      "end_date": "1231",
+      "start_time": "0000",
+      "end_time": "2359",
+      "filename": "rd-xmas-splash.svg"
+    },
+    "lunar_dragon": {
+      "start_date": "0209",
+      "end_date": "0212",
+      "start_time": "0000",
+      "end_time": "2359",
+      "filename": "rd-lunar-dragon-splash.svg"
+    },
+    "valentines_day": {
+      "start_date": "0214",
+      "end_date": "0214",
+      "start_time": "0001",
+      "end_time": "2359",
+      "filename": "rd-valentines-splash.svg"
+    },
+    "retrodeck_birthday": {
+      "start_date": "0304",
+      "end_date": "0304",
+      "start_time": "0000",
+      "end_time": "2359",
+      "filename": "rd-gm-bday-splash.svg"
+    },
+    "st_patricks_day": {
+      "start_date": "0317",
+      "end_date": "0317",
+      "start_time": "0000",
+      "end_time": "2359",
+      "filename": "rd-stpatricks-splash.svg"
+    },
+    "kodomo_golden_week": {
+      "start_date": "0429",
+      "end_date": "0505",
+      "start_time": "0000",
+      "end_time": "2359",
+      "filename": "rd-kodomo-golden.svg"
+    }
+  },
+  "incompatible_presets": {
+    "borders": "widescreen"
+  },
+  "helper_files": {
+    "dolphin_mods": {
+      "filename": "how-to-install-dolphin-mods.txt",
+      "location": "$mods_folder/Dolphin"
+    },
+    "primehack_mods": {
+      "filename": "how-to-install-primehack-mods.txt",
+      "location": "$mods_folder/Primehack"
+    },
+    "mesen_textures": {
+      "filename": "how-to-install-Mesen-textures.txt",
+      "location": "$texture_packs_folder/RetroArch-Mesen"
+    },
+    "ppsspp_textures": {
+      "filename": "how-to-install-PPSSPP-textures.txt",
+      "location": "$texture_packs_folder/PPSSPP"
+    },
+    "pcsx2_textures": {
+      "filename": "how-to-install-PCSX2-textures.txt",
+      "location": "$texture_packs_folder/PCSX2"
+    },
+    "mupen64plus_cache_textures": {
+      "filename": "how-to-install-Mupen64Plus-textures.txt",
+      "location": "$texture_packs_folder/RetroArch-Mupen64Plus/cache"
+    },
+    "mupen64plus_hires_textures": {
+      "filename": "how-to-install-Mupen64Plus-textures.txt",
+      "location": "$texture_packs_folder/RetroArch-Mupen64Plus/hires_texture"
+    },
+    "duckstation_textures": {
+      "filename": "how-to-install-Duckstation-textures.txt",
+      "location": "$texture_packs_folder/Duckstation"
+    },
+    "psvita_games": {
+      "filename": "how-to-install-psvita-games.txt",
+      "location": "$roms_folder/psvita"
+    },
+    "ryujinx_firmware": {
+      "filename": "Install-firmware-through-Ryujinx.txt",
+      "location": "$bios_folder/switch/firmware"
+    }
+  },
+  "system": {
+    "libretro": {
+      "name": "RetroArch",
+      "emulator": {
+        "retroarch": {
+          "description": "RetroArch (Multi-emulator Frontend)",
+          "name": "RetroArch",
+          "launch": "retroarch",
+          "properties": [
+            {
+              "cheevos": true,
+              "cheevos_hardcore": true,
+              "quick_resume": true
+            }
+          ],
+          "cores": {
+            "citra_libretro": {
+              "description": "Nintendo 3DS Libretro Core",
+              "name": "Citra",
+              "properties": [
+                {
+                  "abxy_button": true
+                }
+              ]
+            },
+            "mame_libretro": {
+              "description": "MAME: Multiple Arcade Machine Libretro Core",
+              "name": "MAME",
+              "properties": [
+                {
+                  "tate_mode": true
+                }
+              ]
+            },
+            "desmume_libretro": {
+              "description": "DeSmuME Nintendo DS Libretro Core",
+              "name": "desmume",
+              "properties": [
+                {
+                  "abxy_button": true
+                }
+              ]
+            },
+            "melonds_libretro": {
+              "description": "MelonDS Nintendo DS Libretro Core",
+              "name": "melonds",
+              "properties": [
+                {
+                  "abxy_button": true
+                }
+              ]
+            },
+            "swanstation_libretro": {
+              "name": "SwanStation",
+              "description": "Swanstation Libretro Core",
+              "properties": [
+                {
+                  "widescreen": true,
+                  "borders": true
+                }
+              ]
+            },
+            "picodrive_libetro": {
+              "name": "PicoDrive",
+              "description": "SEGA MS/MD/CD/32X Libretro Core",
+              "properties": [
+                {
+                  "widescreen": true,
+                  "borders": true,
+                  "rewind": true
+                }
+              ]
+            },
+            "genesisplusgx_libetro": {
+              "name": "Genesis Plus GX",
+              "description": "SEGA MS/GG/MD/CD Libretro Core",
+              "properties": [
+                {
+                  "widescreen": true,
+                  "borders": true,
+                  "rewind": true
+                }
+              ]
+            },
+            "genesisplusgxwide_libetro": {
+              "name": "Genesis Plus GX Wide",
+              "description": "SEGA MS/GG/MD/CD Libretro Core for Wide Screen",
+              "properties": [
+                {
+                  "widescreen": true,
+                  "rewind": true
+                }
+              ]
+            },
+            "mupen64plus-next_libetro": {
+              "name": "Mupen64Plus-Next",
+              "description": "Nintendo 64 Libretro Core",
+              "properties": [
+                {
+                  "widescreen": true,
+                  "borders": true,
+                  "abxy_button": true
+                }
+              ]
+            },
+            "snes9x-current_libetro": {
+              "name": "Snes9x - Current",
+              "description": "Super Nintendo Libretro Core",
+              "properties": [
+                {
+                  "widescreen": true,
+                  "borders": true,
+                  "rewind": true,
+                  "abxy_button": true
+                }
+              ]
+            },
+            "gambatte_libetro": {
+              "name": "Gambatte",
+              "description": "Game Boy/Color Libretro Core",
+              "properties": [
+                {
+                  "borders": true,
+                  "rewind": true,
+                  "abxy_button": true
+                }
+              ]
+            },
+            "mgba_libetro": {
+              "name": "mGBA",
+              "description": "Game Boy Advance Libretro Core",
+              "properties": [
+                {
+                  "borders": true,
+                  "rewind": true,
+                  "abxy_button": true
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "arcade": {
+      "name": "Arcade",
+      "folder": "arcade",
+      "emulator": {
+        "mame": {
+          "description": "MAME: Multiple Arcade Machine Emulator",
+          "name": "MAME",
+          "launch": "mame"
+        }
+      }
+    },
+    "n3ds": {
+      "name": "Nintendo 3DS",
+      "folder": "n3ds",
+      "emulator": {
+        "citra": {
+          "description": "Citra Nintendo 3DS Emulator (via Ponzu)",
+          "name": "Citra (via Ponzu)",
+          "ponzu": true,
+          "properties": [
+            {
+              "abxy_button": true,
+              "ask_to_exit": true
+            }
+          ]
+        }
+      }
+    },
+    "nds": {
+      "name": "Nintendo DS",
+      "folder": "nds",
+      "emulator": {
+        "melonds": {
+          "description": "MelonDS Nintendo DS Emulator",
+          "name": "melonds",
+          "launch": "MelonDS"
+        }
+      }
+    },
+    "ps2": {
+      "name": "Sony PlayStation 2",
+      "folder": "ps2",
+      "emulator": {
+        "pcsx2": {
+          "name": "pcsx2",
+          "description": "PCSX2 Play Station 2 Emulator",
+          "properties": [
+            {
+              "ask_to_exit": true,
+              "cheevos": true
+            }
+          ]
+        }
+      }
+    },
+    "psx": {
+      "name": "Sony PlayStation",
+      "folder": "psx",
+      "emulator": {
+        "duckstation": {
+          "name": "Duckstation",
+          "description": "PlayStation Emulator",
+          "launch": "duckstation-qt",
+          "properties": [
+            {
+              "ask_to_exit": true,
+              "cheevos": true
+            }
+          ]
+        }
+      }
+    },
+    "psp": {
+      "name": "Sony PSP: PlayStation Portable",
+      "folder": "psp",
+      "emulator": {
+        "ppsspp": {
+          "name": "PPSSPP",
+          "description": "PPSSPP: PlayStation Portable Emulator",
+          "launch": "PPSSPPSDL",
+          "properties": [
+            {
+              "cheevos": true,
+              "cheevos_hardcore": true
+            }
+          ]
+        }
+      }
+    },
+    "psvita": {
+      "name": "Sony PlayStation Vita",
+      "folder": "psvita",
+      "emulator": {
+        "vita3k": {
+          "name": "Vita3k",
+          "description": "Vita3K PSVita Emulator",
+          "launch": "Vita3K"
+        }
+      }
+    },
+    "rpcs3": {
+      "name": "Sony PlayStation 3",
+      "folder": "ps3",
+      "emulator": {
+        "rpcs3": {
+          "name": "RPCS3",
+          "description": "RPCS3 PlayStation 3 Emulator",
+          "launch": "rpcs3"
+        },
+        "properties": [
+          {
+            "ask_to_exit": true
+          }
+        ]
+      }
+    },
+    "switch": {
+      "name": "Nintendo Switch",
+      "folder": "switch",
+      "emulator": {
+        "ryujinx": {
+          "name": "Ryujinx",
+          "description": "Ryujinx Nintendo Switch Emulator",
+          "launch": "Ryujinx.sh"
+        },
+        "yuzu": {
+          "name": "Yuzu (via Ponzu)",
+          "description": "Yuzu Nintendo Switch Emulator (via Ponzu)",
+          "launch": "Yuzu",
+          "ponzu": true,
+          "abxy_button": true
+        }
+      }
+    },
+    "gc": {
+      "name": "Nintendo GameCube",
+      "folder": "gc",
+      "emulator": {
+        "dolphin": {
+          "name": "Dolphin",
+          "description": "Dolphin Wii and GameCube Emulator",
+          "launch": "dolphin-emu-wrapper",
+          "properties": [
+            {
+              "abxy_button": true,
+              "ask_to_exit": true,
+              "cheevos": true,
+              "cheevos_hardcore": true,
+              "universal_dyn_input": true
+            }
+          ]
+        }
+      }
+    },
+    "wii": {
+      "name": "Nintendo Wii",
+      "folder": "wii",
+      "emulator": {
+        "dolphin": {
+          "name": "Dolphin",
+          "description": "Dolphin Wii and GameCube Emulator",
+          "launch": "dolphin-emu-wrapper",
+          "properties": [
+            {
+              "abxy_button": true,
+              "ask_to_exit": true,
+              "cheevos": true,
+              "cheevos_hardcore": true,
+              "universal_dyn_input": true
+            }
+          ]
+        },
+        "primehack": {
+          "name": "PrimeHack",
+          "description": "A fork of Dolphiin to enhance Metroid Prime experience",
+          "launch": "primehack-wrapper",
+          "properties": [
+            {
+              "ask_to_exit": true,
+              "universal_dyn_input": true
+            }
+          ]
+        }
+      }
+    },
+    "wiiu": {
+      "name": "Nintendo Wii U",
+      "folder": "wiiu",
+      "emulator": {
+        "cemu": {
+          "description": "Wii U emulator",
+          "name": "Cemu",
+          "launch": "Cemu-wrapper",
+          "properties": [
+            {
+              "abxy_button": true,
+              "multi_user_config_dir": "Cemu"
+            }
+          ]
+        }
+      }
+    },
+    "xbox": {
+      "name": "Microsoft XBOX",
+      "folder": "xbox",
+      "emulator": {
+        "xemu": {
+          "description": "xemu Xbox Emulator",
+          "name": "xemu",
+          "launch": "xemu"
+        }
+      }
+    }
+  }
+}
