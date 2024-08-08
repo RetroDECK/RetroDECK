@@ -1290,7 +1290,8 @@ configurator_developer_dialog() {
   "Change Update Channel" "Change between normal and cooker builds" \
   "Browse the Wiki" "Browse the RetroDECK wiki online" \
   "Install RetroDECK Starter Pack" "Install the optional RetroDECK starter pack" \
-  "Tool: USB Import" "Prepare a USB device for ROMs or import an existing collection")
+  "Tool: USB Import" "Prepare a USB device for ROMs or import an existing collection" \
+  "Open GODOT Configurator" "Open the new Configurator made in GODOT engine")
 
   case $choice in
 
@@ -1321,6 +1322,11 @@ configurator_developer_dialog() {
   "Tool: USB Import" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_usb_import_dialog
+  ;;
+
+  "Open GODOT Configurator" )
+    log i "Configurator: opening \"$choice\" menu"
+    "godot-configurator.sh"
   ;;
 
   "" ) # No selection made or Back button clicked
