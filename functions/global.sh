@@ -55,6 +55,7 @@ incompatible_presets_reference_list="$config/retrodeck/reference_lists/incompati
 pretty_system_names_reference_list="$config/retrodeck/reference_lists/pretty_system_names.cfg"           # An internal translation list for turning internal names (eg. gbc) to "pretty" names (Nintendo GameBoy Color)
 git_organization_name="RetroDECK"                                                                       # The name of the organization in our git repository such as GitHub
 cooker_repository_name="Cooker"                                                                         # The name of the cooker repository under RetroDECK organization
+features="$config/retrodeck/reference_lists/features.json"                                                 # A file where all the RetroDECK and component capabilities are kept for querying
 
 
 # Godot data transfer temp files
