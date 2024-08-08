@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://61f6m4r1mpan"]
+[gd_scene load_steps=37 format=3 uid="uid://61f6m4r1mpan"]
 
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
 [ext_resource type="Script" path="res://main.gd" id="1_obpq7"]
@@ -9,19 +9,30 @@
 [ext_resource type="Script" path="res://tk_about.gd" id="4_m4rto"]
 [ext_resource type="Script" path="res://Rekku.gd" id="4_nqqx3"]
 [ext_resource type="Texture2D" uid="uid://cxyml1owhi6de" path="res://res/pixel_ui_theme/8x8_ui_icons.png" id="4_v1scw"]
+[ext_resource type="Texture2D" uid="uid://y71xve24ujw7" path="res://assets/icons/pixelitos/128/retroarch.png" id="4_xcuib"]
 [ext_resource type="Texture2D" uid="uid://d2lm4mfx1gt86" path="res://assets/graphics/retrodeck_base_shake0.png" id="5_7rjbt"]
 [ext_resource type="Script" path="res://helper_text.gd" id="5_cprkf"]
 [ext_resource type="Texture2D" uid="uid://dxdhjp18rgmr4" path="res://res/flags/united_kingdom_32.png" id="5_exkn2"]
 [ext_resource type="Texture2D" uid="uid://cjv6lhd4g63m3" path="res://assets/graphics/retrodeck_base_shake1.png" id="6_d43n7"]
 [ext_resource type="Texture2D" uid="uid://cru43y7hco6kh" path="res://res/flags/italy_32.png" id="6_fiylw"]
+[ext_resource type="Texture2D" uid="uid://m5283vouicmb" path="res://assets/icons/pixelitos/128/duckstation.png" id="6_winpq"]
+[ext_resource type="Texture2D" uid="uid://c0xtgqyl2whg" path="res://assets/icons/pixelitos/128/net.kuribo64.melonDS.png" id="7_4otos"]
 [ext_resource type="Texture2D" uid="uid://cyqo650hjucw6" path="res://assets/graphics/retrodeck_base_shake2.png" id="7_mo842"]
 [ext_resource type="Texture2D" uid="uid://cti2vt14gxisl" path="res://res/flags/germany_32.png" id="7_qgxid"]
+[ext_resource type="Texture2D" uid="uid://ch0e6q0xhxdb0" path="res://assets/icons/pixelitos/128/org.ppsspp.PPSSPP.png" id="8_akxf7"]
 [ext_resource type="Texture2D" uid="uid://bojog0xvms7hr" path="res://assets/graphics/retrodeck_base_shake3.png" id="8_l3t5c"]
 [ext_resource type="Texture2D" uid="uid://bns0ot5pbf03h" path="res://res/flags/sweden_32.png" id="8_lptln"]
 [ext_resource type="Texture2D" uid="uid://uko0ikrtjkj" path="res://assets/graphics/retrodeck_base_shake4.png" id="9_8eqo6"]
 [ext_resource type="Texture2D" uid="uid://dhsorn3kcfdcv" path="res://res/flags/ukraine_32.png" id="9_dp7oa"]
+[ext_resource type="Texture2D" uid="uid://cf6l70x4vr7e7" path="res://assets/icons/pixelitos/128/org.zdoom.GZDoom.png" id="9_iu6bj"]
 [ext_resource type="Texture2D" uid="uid://dtwjo7co226dw" path="res://res/flags/japan_32.png" id="10_e8mt0"]
+[ext_resource type="Texture2D" uid="uid://cw8v7tjh5btt1" path="res://assets/icons/pixelitos/128/org.citra_emu.citra.png" id="10_wbaif"]
+[ext_resource type="Texture2D" uid="uid://8cs0u4cejbdu" path="res://assets/icons/pixelitos/128/org.DolphinEmu.dolphin-emu.png" id="11_61sak"]
 [ext_resource type="Texture2D" uid="uid://cbwhpqip43aei" path="res://res/flags/china_32.png" id="11_ri2fv"]
+[ext_resource type="Texture2D" uid="uid://xe0kbep26x7j" path="res://assets/icons/pixelitos/16/org.gnome.Yelp.png" id="12_md12v"]
+[ext_resource type="Texture2D" uid="uid://ckjaln5waj3kt" path="res://assets/icons/pixelitos/16/org.xfce.session.png" id="13_uxdkq"]
+[ext_resource type="Texture2D" uid="uid://d1iwo2twiktvf" path="res://assets/icons/pixelitos/16/security-medium.png" id="14_tkrl4"]
+[ext_resource type="Texture2D" uid="uid://bo8ylm2fxoang" path="res://assets/icons/pixelitos/128/org.mamedev.MAME.png" id="36_r80tt"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_lhf2y"]
 animations = [{
@@ -97,7 +108,7 @@ grow_vertical = 2
 unique_name_in_owner = true
 layout_mode = 2
 tab_alignment = 1
-current_tab = 2
+current_tab = 3
 script = ExtResource("3_id6l4")
 
 [node name="TK_SYSTEM" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
@@ -266,6 +277,7 @@ disabled = true
 text = "TK_TATE"
 
 [node name="TK_CONTROLS" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_right = 240
 
@@ -325,6 +337,118 @@ layout_mode = 2
 disabled = true
 button_pressed = true
 text = "TK_HOTKEYSOUND"
+
+[node name="TK_EMULATORS" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
+layout_mode = 2
+theme_override_constants/margin_right = 240
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Background/MarginContainer/TabContainer/TK_EMULATORS"]
+layout_mode = 2
+follow_focus = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_EMULATORS/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="controls_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_EMULATORS/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="controls_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_EMULATORS/ScrollContainer/VBoxContainer/controls_container"]
+layout_mode = 2
+text = "TK_EMULATORS"
+
+[node name="controls_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/TK_EMULATORS/ScrollContainer/VBoxContainer/controls_container"]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="Background/MarginContainer/TabContainer/TK_EMULATORS/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(700, 400)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 4
+
+[node name="Button3" type="Button" parent="Background/MarginContainer/TabContainer/TK_EMULATORS/ScrollContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+tooltip_text = "RetroARCH"
+text = "RetroArch"
+icon = ExtResource("4_xcuib")
+icon_alignment = 1
+vertical_icon_alignment = 0
+expand_icon = true
+
+[node name="Button4" type="Button" parent="Background/MarginContainer/TabContainer/TK_EMULATORS/ScrollContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+tooltip_text = "MAME"
+text = "MAME"
+icon = ExtResource("36_r80tt")
+icon_alignment = 1
+vertical_icon_alignment = 0
+
+[node name="Button" type="Button" parent="Background/MarginContainer/TabContainer/TK_EMULATORS/ScrollContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+tooltip_text = "Duckstation"
+text = "DuckSation"
+icon = ExtResource("6_winpq")
+icon_alignment = 1
+vertical_icon_alignment = 0
+
+[node name="Button2" type="Button" parent="Background/MarginContainer/TabContainer/TK_EMULATORS/ScrollContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+tooltip_text = "Melon DS"
+text = "MelonDS"
+icon = ExtResource("7_4otos")
+icon_alignment = 1
+vertical_icon_alignment = 0
+
+[node name="Button5" type="Button" parent="Background/MarginContainer/TabContainer/TK_EMULATORS/ScrollContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+tooltip_text = "PSPSSPP"
+text = "PSPSSPP"
+icon = ExtResource("8_akxf7")
+icon_alignment = 1
+vertical_icon_alignment = 0
+
+[node name="Button6" type="Button" parent="Background/MarginContainer/TabContainer/TK_EMULATORS/ScrollContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+tooltip_text = "PSPSSPP"
+text = "GZ DOOM"
+icon = ExtResource("9_iu6bj")
+icon_alignment = 1
+vertical_icon_alignment = 0
+expand_icon = true
+
+[node name="Button7" type="Button" parent="Background/MarginContainer/TabContainer/TK_EMULATORS/ScrollContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+tooltip_text = "CITRA"
+text = "CITRA"
+icon = ExtResource("10_wbaif")
+icon_alignment = 1
+vertical_icon_alignment = 0
+
+[node name="OptionButton" type="OptionButton" parent="Background/MarginContainer/TabContainer/TK_EMULATORS/ScrollContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+tooltip_text = "Dolphin"
+alignment = 1
+icon_alignment = 1
+vertical_icon_alignment = 0
+expand_icon = true
+item_count = 4
+selected = 0
+popup/item_0/text = "Dolphin"
+popup/item_0/icon = ExtResource("11_61sak")
+popup/item_0/id = 0
+popup/item_0/disabled = true
+popup/item_0/separator = true
+popup/item_1/text = "HELP"
+popup/item_1/icon = ExtResource("12_md12v")
+popup/item_1/id = 1
+popup/item_2/text = "LAUNCH"
+popup/item_2/icon = ExtResource("13_uxdkq")
+popup/item_2/id = 2
+popup/item_3/text = "RESET"
+popup/item_3/icon = ExtResource("14_tkrl4")
+popup/item_3/id = 3
 
 [node name="TK_TOOLS" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
 visible = false
@@ -865,11 +989,11 @@ anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -66.0
 offset_top = -76.0
-offset_right = 66.0
+offset_right = 98.0
+offset_bottom = 61.0
 grow_horizontal = 2
 grow_vertical = 0
-text = "RetroDECK
-  v0.8.0b"
+text = "RetroDECK"
 scroll_active = false
 
 [node name="status_label" type="Label" parent="Background/side_logo"]

@@ -1,4 +1,7 @@
 app-id: net.retrodeck.retrodeck
+# next 2 lines Used by Godot
+base: org.godotengine.godot.BaseApp
+base-version: "4.2"
 runtime: org.kde.Platform
 runtime-version: "6.7"
 sdk: org.kde.Sdk
@@ -154,19 +157,20 @@ modules:
         url: https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_amd64
         sha256: 4ee662847c588c3ef2fec8bfb304e8739e3dbaba87ccb9a608d691c88f5b64dc
 
-  # Gotdot Configurator
-  # Inspired by https://github.com/flathub/com.orama_interactive.Pixelorama/blob/master/com.orama_interactive.Pixelorama.yaml
-  # TODO link to repo
-
+# GoDot Configurator
   - name: godot-configurator
-    base: org.godotengine.godot.BaseApp
-    base-version: "4.2"
     buildsystem: simple
     sources:
       - type: archive
-        url: https://github.com/Orama-Interactive/Pixelorama/releases/download/v1.0/Pixelorama-Linux-64bit.tar.gz
-        sha256: c13c6b1d4c94900a76dbd06a016cc72c9a33c504d98d52ac7b308c6a2f697eee
-        strip-components: 1
+        url: https://github.com/monkeyx-net/RetroDECK_UK/releases/download/RetroDECK-Configurator-v0.5/RetroDECK-Configurator.tar.gz
+        sha256: 9fcdc7f9355f815f062064096b65e47cd976d0375ec0b670386393537e35bcc2
+        strip-components: 2
+   
+    build-commands:
+      - echo '#!/bin/sh' > godot-configurator.sh
+      - echo 'godot-runner --main-pack /app/bin/RetroDECK-Configurator.pck' >> godot-configurator.sh
+      - install -Dm644 RetroDECK-Configurator.pck /app/bin/RetroDECK-Configurator.pck
+      - install -Dm66 godot-configurator.sh /app/bin
 
   # RetroArch
   # https://retroarch.com/index.php?page=platforms
@@ -526,10 +530,8 @@ modules:
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
-        #url: RETRODECKESDEURLPLACEHOLDER
-        #sha256: RETRODECKESDEPLACEHOLDER
-        url: https://github.com/RetroDECK/ES-DE/releases/download/feat%2Fsmaller-menu-010824.10/RetroDECK-ES-DE-Artifact.tar.gz
-        sha256: 47ac3a062e7f199475ee1989d0961ab55dac1f285a54ab0e1cf500f9ceb42015
+        url: https://github.com/RetroDECK/ES-DE/releases/latest/download/RetroDECK-ES-DE-Artifact.tar.gz
+        sha256: RETRODECKESDELATEST
 
   - name: retrodeck-theme
     buildsystem: simple
@@ -549,7 +551,7 @@ modules:
           missing_libs=$(find "${FLATPAK_DEST}/bin" -type f -exec ldd {} + 2>/dev/null | grep "not found" | awk '{print $1}' | sort | uniq)
           
           # for some reason these libraries are not recognized as missing so we mantain this list
-          manually_imported="libpostproc.so.56 libswscale.so.6 libshaderc_shared.so.1"
+          manually_imported="libpostproc.so.56 libswscale.so.6 libshaderc_shared.so.1 libbz2.so.1.0 libaio.so.1"
 
           missing_libs="$missing_libs $manually_imported"
 

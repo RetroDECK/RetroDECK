@@ -15,6 +15,8 @@ var log_option: OptionButton
 var tab_container: TabContainer
 var anim_logo: AnimatedSprite2D
 var rd_logs: String
+var rd_version: String
+var gc_version: String
 
 var app_data = AppData.new()
 func _ready():
@@ -41,8 +43,11 @@ func _ready():
 	var config = data_handler.parse_config_to_json(config_file_path)
 	data_handler.config_save_json(config, json_file_path)
 	rd_logs = config["paths"]["logs_folder"]
-	#var log_file = class_functions.import_text_file(rd_logs +"/retrodeck.log")
+	rd_version = config["version"]
+	gc_version = ProjectSettings.get_setting("application/config/version")
+	$Background/side_logo/rd_title.text+= "\n   " + rd_version + "\nConfigurator\n    " + gc_version
 	
+	#var log_file = class_functions.import_text_file(rd_logs +"/retrodeck.log")
 	#for id in config.paths:
 	#	var path_data = config.paths[id]
 	#	print (id)

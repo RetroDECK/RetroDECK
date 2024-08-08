@@ -109,7 +109,7 @@ if [ -f "$lockfile" ]; then
     if grep -qF "cooker" <<< $hard_version; then # If newly-installed version is a "cooker" build
       log d "Newly-installed version is a \"cooker\" build"
       configurator_generic_dialog "RetroDECK Cooker Warning" "RUNNING COOKER VERSIONS OF RETRODECK CAN BE EXTREMELY DANGEROUS AND ALL OF YOUR RETRODECK DATA\n(INCLUDING BIOS FILES, BORDERS, DOWNLOADED MEDIA, GAMELISTS, MODS, ROMS, SAVES, STATES, SCREENSHOTS, TEXTURE PACKS AND THEMES)\nARE AT RISK BY CONTINUING!"
-      set_setting_value $rd_conf "update_repo" "RetroDECK-cooker" retrodeck "options"
+      set_setting_value $rd_conf "update_repo" "$cooker_repository_name" retrodeck "options"
       set_setting_value $rd_conf "update_check" "true" retrodeck "options"
       set_setting_value $rd_conf "developer_options" "true" retrodeck "options"
       cooker_base_version=$(echo $hard_version | cut -d'-' -f2)

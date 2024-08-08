@@ -1367,7 +1367,7 @@ configurator_online_update_channel_dialog() {
 
     if [ $? == 0 ] # User clicked "Yes"
     then
-      set_setting_value $rd_conf "update_repo" "RetroDECK-cooker" retrodeck "options"
+      set_setting_value $rd_conf "update_repo" "$cooker_repository_name" retrodeck "options"
     else # User clicked "Cancel"
       configurator_developer_dialog
     fi
