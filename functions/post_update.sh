@@ -406,7 +406,13 @@ if [[ $(check_version_is_older_than "0.8.4b") == "true" ]]; then
 
 
   log d "Injecting the new retrodeck/ES-DE subdir into the retrodeck.cfg"
-  sed -i -e '/media_folder=/s|retrodeck/|retrodeck/ES-DE/|g' -e '/themes_folder=/s|retrodeck/|retrodeck/ES-DE/|g' "$rd_conf" && log d "Injection successful"
+  # Check if ES-DE already exists in media_folder or themes_folder
+  if grep -E '^(media_folder|themes_folder)=.*ES-DE' "$rd_conf"; then
+    log d "ES-DE path already exists in media_folder or themes_folder"
+  else
+    # Update the paths if ES-DE does not exist
+    sed -i -e '/media_folder=/s|retrodeck/|retrodeck/ES-DE/|g' -e '/themes_folder=/s|retrodeck/|retrodeck/ES-DE/|g' "$rd_conf" && log d "Injection successful"
+  fi
   log d "$(cat "$rd_conf" | grep media_folder)"
   log d "$(cat "$rd_conf" | grep themes_folder)"
   conf_read
