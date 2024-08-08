@@ -62,8 +62,7 @@ https://retrodeck.net
 
       # TODO: this is the jq to get all the resettable emulators list, generic component is missing
       # jq -r '
-      #   [.system[] |
-      #   (.emulator // .emulators | to_entries[]) |
+      #   [(.emulator | to_entries[]) |
       #   select(.value.core == null and .value.resettable != false) |
       #   .key] | sort | join("|")
       # ' "$features"
