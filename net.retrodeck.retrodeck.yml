@@ -157,18 +157,22 @@ modules:
         url: https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_amd64
         sha256: 4ee662847c588c3ef2fec8bfb304e8739e3dbaba87ccb9a608d691c88f5b64dc
 
-  # GoDot Configurator
+  # GODOT Configurator
   - name: retrodeck-configurator
     buildsystem: simple
     build-commands:
+      - install -Dm755 "Godot_v4.2.2-stable_linux.x86_64" "${FLATPAK_DEST}/bin/godot"
       - mkdir -p "${FLATPAK_DEST}/retrodeck"
-      - godot-runner --headless --path "tools/configurator" --export-pack "Linux/X11 64-bit" "${FLATPAK_DEST}/retrodeck/configurator.pck"
-      - godot-runner --headless --path "tools/configurator" --import
+      - godot --headless --path "tools/configurator" --import
+      - godot --headless --path "tools/configurator" --export-pack "Linux/X11 64-bit" "${FLATPAK_DEST}/retrodeck/configurator.pck"
       - chmod +x "${FLATPAK_DEST}/retrodeck/configurator.pck"
       - echo '#!/bin/sh' > "godot-configurator.sh"
       - echo 'godot-runner --main-pack /app/retrodeck/configurator.pck' >> "godot-configurator.sh"
       - install -Dm755 "godot-configurator.sh" "/app/bin/"
     sources:
+      - type: archive
+        url: https://github.com/godotengine/godot/releases/download/4.2.2-stable/Godot_v4.2.2-stable_linux.x86_64.zip
+        sha256: 69eb9881e1b82ab93924c83106a7c031497f252bc0c08e199e4da6380072d6ef
       - type: archive
         url: https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.15.0.tar.gz
         sha256: f5f359d6332861bd497570848fcb42520964a9e83d5e3abe397b6b6db9bcaaf4
