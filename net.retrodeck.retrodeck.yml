@@ -158,20 +158,15 @@ modules:
         sha256: 4ee662847c588c3ef2fec8bfb304e8739e3dbaba87ccb9a608d691c88f5b64dc
 
 # GoDot Configurator
-  - name: godot-configurator
+  - name: retrodeck-configurator
     buildsystem: simple
-    sources:
-      - type: archive
-        url: https://github.com/monkeyx-net/RetroDECK_UK/releases/download/RetroDECK-Configurator-v0.5/RetroDECK-Configurator.tar.gz
-        sha256: 9fcdc7f9355f815f062064096b65e47cd976d0375ec0b670386393537e35bcc2
-        strip-components: 2
-   
     build-commands:
-      - echo '#!/bin/sh' > godot-configurator.sh
-      - echo 'godot-runner --main-pack /app/bin/RetroDECK-Configurator.pck' >> godot-configurator.sh
-      - install -Dm644 RetroDECK-Configurator.pck /app/bin/RetroDECK-Configurator.pck
-      - install -Dm66 godot-configurator.sh /app/bin
-
+      - godot --export-pack "Linux/X11 64-bit" "tools/configurator/configurator.pck"
+      - install -Dm755 "tools/configurator/configurator.pck" "${FLATPAK_DEST}/retrodeck/"
+      - echo '#!/bin/sh' > "godot-configurator.sh"
+      - echo 'godot-runner --main-pack /app/retrodeck/configurator.pck' >> "godot-configurator.sh"
+      - install -Dm755 "godot-configurator.sh" "/app/bin/"
+    
   # RetroArch
   # https://retroarch.com/index.php?page=platforms
 
