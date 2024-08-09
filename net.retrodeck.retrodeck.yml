@@ -552,8 +552,8 @@ modules:
         url:  https://github.com/RetroDECK/RetroDECK-theme
         commit: 975c41cac99d150b6ae86a1dfd19988058c69aad
 
-  # Ruffle - START
-  #
+   # Ruffle - START
+  # https://github.com/ruffle-rs/ruffle/releases
   - name: ruffle
     buildsystem: simple
     build-commands:
@@ -568,12 +568,6 @@ modules:
       - echo '\truffle --graphics gl --config /var/data/ruffle --save-directory $saves_folder/ruffle --fullscreen "$@" >> "ruffle-wrapper.sh"
       - echo 'fi' >> "ruffle-wrapper.sh"
       - chmod +x "${FLATPAK_DEST}/bin/ruffle-wrapper.sh"
-
-    sources:
-      - type: archive
-        strip-components: 0
-        url: https://github.com/ruffle-rs/ruffle/releases/download/nightly-2024-07-02/ruffle-nightly-2024_07_02-linux-x86_64.tar.gz
-        sha256: a410ce8956723a0043d1744ef9b519debc978faa2b5868953acc548e44586d15
 
   - name: fetch-missing-libs
     buildsystem: simple
