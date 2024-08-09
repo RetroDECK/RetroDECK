@@ -565,7 +565,7 @@ modules:
       - echo 'if [[ $(check_desktop_mode) == "true" ]]; then' >> "ruffle-wrapper.sh"
       - echo '\truffle --graphics vulkan --config /var/data/ruffle --save-directory $saves_folder/ruffle --fullscreen "$@"' >> "ruffle-wrapper.sh"
       - echo 'else' >> "ruffle-wrapper.sh"
-      - echo '\truffle --graphics gl --config /var/data/ruffle --save-directory $saves_folder/ruffle --fullscreen "$@" >> "ruffle-wrapper.sh"
+      - echo '\truffle --graphics gl --config /var/data/ruffle --save-directory $saves_folder/ruffle --fullscreen "$@"' >> "ruffle-wrapper.sh"
       - echo 'fi' >> "ruffle-wrapper.sh"
       - chmod +x "${FLATPAK_DEST}/bin/ruffle-wrapper.sh"
 
