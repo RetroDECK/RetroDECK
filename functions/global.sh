@@ -27,7 +27,6 @@ config="/app/retrodeck/config"                                                  
 rd_defaults="$config/retrodeck/retrodeck.cfg"                                                            # A default RetroDECK config file
 rd_update_patch="/var/config/retrodeck/rd_update.patch"                                                               # A static location for the temporary patch file used during retrodeck.cfg updates
 bios_checklist="$config/retrodeck/reference_lists/bios_checklist.cfg"                                    # A config file listing BIOS file information that can be verified
-zip_compressable_extensions="$config/retrodeck/reference_lists/zip_compressable_extensions.cfg"          # A config file containing every file extension that is allowed to be compressed to .zip format, because there are a lot!
 input_validation="$config/retrodeck/reference_lists/input_validation.cfg"                                # A config file listing valid CLI inputs
 finit_options_list="$config/retrodeck/reference_lists/finit_options_list.cfg"                            # A config file listing available optional installs during finit
 splashscreen_dir="/var/config/ES-DE/resources/graphics/extra_splashes"                                                # The default location of extra splash screens

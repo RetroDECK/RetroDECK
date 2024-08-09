@@ -56,13 +56,15 @@ find_compatible_compression_format() {
   local normalized_filename=$(echo "$1" | tr '[:upper:]' '[:lower:]')
   local system=$(echo "$1" | grep -oE "$roms_folder/[^/]+" | grep -oE "[^/]+$")
 
+  # Extract the relevant lists from the JSON file
   local chd_systems=$(jq -r '.compression_targets.chd[]' $features)
   local rvz_systems=$(jq -r '.compression_targets.rvz[]' $features)
   local zip_systems=$(jq -r '.compression_targets.zip[]' $features)
+  local zip_compressable_extensions=$(jq -r '.zip_compressable_extensions[]' $features)
 
   if [[ $(validate_for_chd "$1") == "true" ]] && echo "$chd_systems" | grep -q "\b$system\b"; then
     echo "chd"
-  elif grep -qF ".${normalized_filename##*.}" $zip_compressable_extensions && echo "$zip_systems" | grep -q "\b$system\b"; then
+  elif echo "$zip_compressable_extensions" | grep -qF ".${normalized_filename##*.}" && echo "$zip_systems" | grep -q "\b$system\b"; then
     echo "zip"
   elif echo "$normalized_filename" | grep -qE '\.iso|\.gcm' && echo "$rvz_systems" | grep -q "\b$system\b"; then
     echo "rvz"
@@ -73,6 +75,7 @@ find_compatible_compression_format() {
     echo "none"
   fi
 }
+
 
 validate_for_chd() {
   # Function for validating chd compression candidates, and compresses if validation passes. Supports .cue, .iso and .gdi formats ONLY
