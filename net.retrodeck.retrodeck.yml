@@ -561,7 +561,7 @@ modules:
         cp -p ruffle "${FLATPAK_DEST}/bin/"
         chmod +x "${FLATPAK_DEST}/bin/ruffle"
         echo '#!/bin/sh' > "${FLATPAK_DEST}/bin/ruffle-wrapper.sh"
-        echo 'source ${FLATPAK_DEST}/libexec/global.sh' >> "${FLATPAK_DEST}/bin/ruffle-wrapper.sh"
+        echo 'source '"${FLATPAK_DEST}"'/libexec/global.sh' >> "${FLATPAK_DEST}/bin/ruffle-wrapper.sh"
         echo '#Check if Steam Deck in Desktop Mode' >> "${FLATPAK_DEST}/bin/ruffle-wrapper.sh"
         echo 'if [[ $(check_desktop_mode) == "true" ]]; then' >> "${FLATPAK_DEST}/bin/ruffle-wrapper.sh"
         echo -e '\truffle --graphics vulkan --config /var/data/ruffle --save-directory $saves_folder/ruffle --fullscreen "$@"' >> "${FLATPAK_DEST}/bin/ruffle-wrapper.sh"
