@@ -322,15 +322,17 @@ backup_retrodeck_userdata() {
 
 make_name_pretty() {
   # This function will take an internal system name (like "gbc") and return a pretty version for user display ("Nintendo GameBoy Color")
+  # If the name is nout found it only returns the short name such as "gbc"
   # USAGE: make_name_pretty "system name"
-  local system=$(grep "$1^" "$pretty_system_names_reference_list")
-  if [[ ! -z "$system" ]]; then
-    IFS='^' read -r internal_name pretty_name < <(echo "$system")
-  else
-    pretty_name="$1"
-  fi
+
+  local system_name="$1"
+
+  # Use jq to parse the JSON and find the pretty name
+  local pretty_name=$(jq -r --arg name "$system_name" '.system[$name].name // $name' "$features")
+
   echo "$pretty_name"
 }
+
 
 finit_browse() {
 # Function for choosing data directory location during first/forced init

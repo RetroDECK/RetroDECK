@@ -271,6 +271,9 @@
     "dreamcast": {
       "name": "Sega Dreamcast"
     },
+    "dc": {
+      "name": "Sega Dreamcast"
+    },
     "easyrpg": {
       "name": "EasyRPG Game Engine"
     },
@@ -308,6 +311,9 @@
       "name": "Tiger Electronics Game.com"
     },
     "gamegear": {
+      "name": "Sega Game Gear"
+    },
+    "gg": {
       "name": "Sega Game Gear"
     },
     "gb": {

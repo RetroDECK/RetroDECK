@@ -34,6 +34,7 @@ finit_options_list="$config/retrodeck/reference_lists/finit_options_list.cfg"   
 splashscreen_dir="/var/config/ES-DE/resources/graphics/extra_splashes"                                                # The default location of extra splash screens
 current_splash_file="/var/config/ES-DE/resources/graphics/splash.svg"                                                 # The active splash file that will be shown on boot
 default_splash_file="/var/config/ES-DE/resources/graphics/splash-orig.svg"                                            # The default RetroDECK splash screen
+# TODO: instead of this maybe we can iterate the features.json
 multi_user_emulator_config_dirs="$config/retrodeck/reference_lists/multi_user_emulator_config_dirs.cfg"  # A list of emulator config folders that can be safely linked/unlinked entirely in multi-user mode
 rd_es_themes="/app/share/es-de/themes"                                                                                # The directory where themes packaged with RetroDECK are stored
 lockfile="/var/config/retrodeck/.lock"                                                                                # Where the lockfile is located
@@ -49,7 +50,6 @@ rd_appdata="/app/share/appdata/net.retrodeck.retrodeck.appdata.xml"             
 rpcs3_firmware="http://dus01.ps3.update.playstation.net/update/ps3/image/us/2023_0228_05fe32f5dc8c78acbcd84d36ee7fdc5b/PS3UPDAT.PUP"
 RA_API_URL="https://retroachievements.org/dorequest.php"                                                              # API URL for RetroAchievements.org
 presets_dir="$config/retrodeck/presets"                                                                  # Repository for all system preset config files
-pretty_system_names_reference_list="$config/retrodeck/reference_lists/pretty_system_names.cfg"           # An internal translation list for turning internal names (eg. gbc) to "pretty" names (Nintendo GameBoy Color)
 git_organization_name="RetroDECK"                                                                       # The name of the organization in our git repository such as GitHub
 cooker_repository_name="Cooker"                                                                         # The name of the cooker repository under RetroDECK organization
 features="$config/retrodeck/reference_lists/features.json"                                                 # A file where all the RetroDECK and component capabilities are kept for querying
