@@ -552,7 +552,7 @@ modules:
         url:  https://github.com/RetroDECK/RetroDECK-theme
         commit: 975c41cac99d150b6ae86a1dfd19988058c69aad
 
-   # Ruffle - START
+  # Ruffle - START
   # https://github.com/ruffle-rs/ruffle/releases
   - name: ruffle
     buildsystem: simple
