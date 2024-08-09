@@ -852,7 +852,7 @@ configurator_compress_single_game_dialog() {
 }
 
 configurator_compress_multiple_games_dialog() {
-  # This dialog will display any games it finds to be compressable, from the systems listed under each compression type in compression_targets.cfg
+  # This dialog will display any games it finds to be compressable, from the systems listed under each compression type in features.json
 
   find_compatible_games "$1"
 

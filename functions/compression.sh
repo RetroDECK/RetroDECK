@@ -56,13 +56,17 @@ find_compatible_compression_format() {
   local normalized_filename=$(echo "$1" | tr '[:upper:]' '[:lower:]')
   local system=$(echo "$1" | grep -oE "$roms_folder/[^/]+" | grep -oE "[^/]+$")
 
-	if [[ $(validate_for_chd "$1") == "true" ]] && [[ $(sed -n '/^\[/{h;d};/\b'"$system"'\b/{g;s/\[\(.*\)\]/\1/p;q};' $compression_targets) == "chd" ]]; then
+  local chd_systems=$(jq -r '.compression_targets.chd[]' $features)
+  local rvz_systems=$(jq -r '.compression_targets.rvz[]' $features)
+  local zip_systems=$(jq -r '.compression_targets.zip[]' $features)
+
+  if [[ $(validate_for_chd "$1") == "true" ]] && echo "$chd_systems" | grep -q "\b$system\b"; then
     echo "chd"
-  elif grep -qF ".${normalized_filename##*.}" $zip_compressable_extensions && [[ $(sed -n '/^\[/{h;d};/\b'"$system"'\b/{g;s/\[\(.*\)\]/\1/p;q};' $compression_targets) == "zip" ]]; then
+  elif grep -qF ".${normalized_filename##*.}" $zip_compressable_extensions && echo "$zip_systems" | grep -q "\b$system\b"; then
     echo "zip"
-  elif echo "$normalized_filename" | grep -qE '\.iso|\.gcm' && [[ $(sed -n '/^\[/{h;d};/\b'"$system"'\b/{g;s/\[\(.*\)\]/\1/p;q};' $compression_targets) == "rvz" ]]; then
+  elif echo "$normalized_filename" | grep -qE '\.iso|\.gcm' && echo "$rvz_systems" | grep -q "\b$system\b"; then
     echo "rvz"
-  elif echo "$normalized_filename" | grep -qE '\.iso' && [[ $(sed -n '/^\[/{h;d};/\b'"$system"'\b/{g;s/\[\(.*\)\]/\1/p;q};' $compression_targets) == "cso" ]]; then
+  elif echo "$normalized_filename" | grep -qE '\.iso' && echo "$chd_systems" | grep -q "\b$system\b"; then
     echo "cso"
   else
     # If no compatible format can be found for the input file

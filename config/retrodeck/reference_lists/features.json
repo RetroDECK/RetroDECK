@@ -147,6 +147,54 @@
       "location": "$bios_folder/switch/firmware"
     }
   },
+  "compression_targets": {
+    "chd": [
+      "3do",
+      "amigacd32",
+      "dreamcast",
+      "megacd",
+      "neogeocd",
+      "pcenginecd",
+      "pcfx",
+      "psp",
+      "psx",
+      "ps2",
+      "saturn",
+      "saturnjp",
+      "segacd",
+      "tg-cd"
+    ],
+    "rvz": [
+      "gc",
+      "wii"
+    ],
+    "zip": [
+      "atari2600",
+      "atari5200",
+      "atari7800",
+      "atari800",
+      "atarijaguar",
+      "atarilynx",
+      "atarist",
+      "gamegear",
+      "gb",
+      "gba",
+      "gbc",
+      "genesis",
+      "mastersystem",
+      "n64",
+      "nds",
+      "nes",
+      "ngp",
+      "ngpc",
+      "sega32x",
+      "sega32xjp",
+      "sega32xna",
+      "snes",
+      "snesna",
+      "tg16"
+    ]
+  },
   "system": {
     "3do": {
       "name": "3DO Interactive Multiplayer"
