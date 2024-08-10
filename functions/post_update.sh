@@ -400,12 +400,13 @@ if [[ $(check_version_is_older_than "0.8.3b") == "true" ]]; then
   set_setting_value "$es_settings" "UserThemeDirectory" "$themes_folder" "es_settings"
 fi
 
+# Check if the version is older than 0.8.4b
 if [[ $(check_version_is_older_than "0.8.4b") == "true" ]]; then
   # In version 0.8.4b, the following changes were made:
-  # - Recovery from a failed move of the themes, downloaded_media and gamelists folder to their new ES-DE locations (AGAIN)
-
+  # - Recovery from a failed move of the themes, downloaded_media, and gamelists folder to their new ES-DE locations (AGAIN)
 
   log d "Injecting the new retrodeck/ES-DE subdir into the retrodeck.cfg"
+
   # Check if ES-DE already exists in media_folder or themes_folder
   if grep -E '^(media_folder|themes_folder)=.*ES-DE' "$rd_conf"; then
     log d "ES-DE path already exists in media_folder or themes_folder"
@@ -413,8 +414,8 @@ if [[ $(check_version_is_older_than "0.8.4b") == "true" ]]; then
     # Update the paths if ES-DE does not exist
     sed -i -e '/media_folder=/s|retrodeck/|retrodeck/ES-DE/|g' -e '/themes_folder=/s|retrodeck/|retrodeck/ES-DE/|g' "$rd_conf" && log d "Injection successful"
   fi
-  log d "$(cat "$rd_conf" | grep media_folder)"
-  log d "$(cat "$rd_conf" | grep themes_folder)"
+  log d "$(grep media_folder "$rd_conf")"
+  log d "$(grep themes_folder "$rd_conf")"
   conf_read
   conf_write
 
@@ -422,27 +423,35 @@ if [[ $(check_version_is_older_than "0.8.4b") == "true" ]]; then
 
   # Move each directory if it exists
   if [[ -d "$rdhome/themes" ]]; then
-    mv -f "$rdhome/themes" "$rdhome/ES-DE/" && log d "Move of \"$rdhome/themes\" in \"$rdhome/ES-DE\" folder completed"
+    rsync -av --remove-source-files "$rdhome/themes/" "$rdhome/ES-DE/" && log d "Move of \"$rdhome/themes\" in \"$rdhome/ES-DE\" folder completed"
+    # Remove the empty source directory
+    find "$rdhome/themes" -type d -empty -delete && log d "Removed empty directory \"$rdhome/themes\"."
   else
-    log i "ES-DE themes appears to already have been migrated."
+    log i "ES-DE themes appear to have already been migrated."
   fi
 
   if [[ -d "$rdhome/downloaded_media" ]]; then
-    mv -f "$rdhome/downloaded_media" "$rdhome/ES-DE/" && log d "Move of \"$rdhome/downloaded_media\" in \"$rdhome/ES-DE\" folder completed"
+    rsync -av --remove-source-files "$rdhome/downloaded_media/" "$rdhome/ES-DE/" && log d "Move of \"$rdhome/downloaded_media\" in \"$rdhome/ES-DE\" folder completed"
+    # Remove the empty source directory
+    find "$rdhome/downloaded_media" -type d -empty -delete && log d "Removed empty directory \"$rdhome/downloaded_media\"."
   else
-    log i "ES-DE downloaded media appears to already have been migrated."
+    log i "ES-DE downloaded media appears to have already been migrated."
   fi
 
   if [[ -d "$rdhome/gamelists" ]]; then
-    mv -f "$rdhome/gamelists" "$rdhome/ES-DE/" && log d "Move of \"$rdhome/gamelists/\" in \"$rdhome/ES-DE\" folder completed"
+    rsync -av --remove-source-files "$rdhome/gamelists/" "$rdhome/ES-DE/" && log d "Move of \"$rdhome/gamelists/\" in \"$rdhome/ES-DE\" folder completed"
+    # Remove the empty source directory
+    find "$rdhome/gamelists" -type d -empty -delete && log d "Removed empty directory \"$rdhome/gamelists\"."
   else
-    log i "ES-DE gamelists appears to already have been migrated."
+    log i "ES-DE gamelists appear to have already been migrated."
   fi
 
   if [[ -d "$rdhome/collections" ]]; then
-    mv -f "$rdhome/collections" "$rdhome/ES-DE/" && log d "Move of \"$rdhome/collections/\" in \"$rdhome/ES-DE\" folder completed"
+    rsync -av --remove-source-files "$rdhome/collections/" "$rdhome/ES-DE/" && log d "Move of \"$rdhome/collections/\" in \"$rdhome/ES-DE\" folder completed"
+    # Remove the empty source directory
+    find "$rdhome/collections" -type d -empty -delete && log d "Removed empty directory \"$rdhome/collections\"."
   else
-    log i "ES-DE collections appears to already have been migrated."
+    log i "ES-DE collections appear to have already been migrated."
   fi
 
   # Setting the correct variables once again
