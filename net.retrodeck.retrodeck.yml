@@ -67,7 +67,7 @@ modules:
   # The version number is hardcoded in /app/retrodeck/version
   #
   # UPDATE STEPS FOR MAIN:
-  # [ ] Update the VERSION variable on line containing "VERSION=feat/ruffle2.0"
+  # [ ] Update the VERSION variable on line containing "VERSION=THISBRANCH"
   # [ ] Update the appdata.xml with the version number and notes
 
   - name: version-initialization
@@ -90,8 +90,8 @@ modules:
         echo "Version is $VERSION"
     sources:
       - type: git
-        url: https://github.com/monkeyx-net/RetroDECK_UK.git
-        branch: feat/ruffle2.0
+        url: https://github.com/RetroDECK/RetroDECK.git
+        branch: THISBRANCH
 
   - name: xmlstarlet
     config-opts:
@@ -178,8 +178,8 @@ modules:
         sha256: f5f359d6332861bd497570848fcb42520964a9e83d5e3abe397b6b6db9bcaaf4
         dest: fontconfig
       - type: git
-        url: https://github.com/monkeyx-net/RetroDECK_UK.git
-        branch: feat/ruffle2.0
+        url: https://github.com/RetroDECK/RetroDECK.git
+        branch: THISBRANCH
         
   # RetroArch
   # https://retroarch.com/index.php?page=platforms
@@ -673,5 +673,5 @@ modules:
 
     sources:
       - type: git
-        url: https://github.com/monkeyx-net/RetroDECK_UK.git
-        branch: feat/ruffle2.0
+        url: https://github.com/RetroDECK/RetroDECK.git
+        branch: THISBRANCH
