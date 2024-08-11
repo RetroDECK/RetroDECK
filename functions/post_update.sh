@@ -403,10 +403,9 @@ fi
 # Check if the version is older than 0.8.4b
 if [[ $(check_version_is_older_than "0.8.4b") == "true" ]]; then
   # In version 0.8.4b, the following changes were made:
-  # - Recovery from a failed move of the themes, downloaded_media, and gamelists folder to their new ES-DE locations (AGAIN)
+  # - Recovery from a failed move of the themes, downloaded_media and gamelists folder to their new ES-DE locations (AGAIN)
 
   log d "Injecting the new retrodeck/ES-DE subdir into the retrodeck.cfg"
-
   # Check if ES-DE already exists in media_folder or themes_folder
   if grep -E '^(media_folder|themes_folder)=.*ES-DE' "$rd_conf"; then
     log d "ES-DE path already exists in media_folder or themes_folder"
@@ -421,35 +420,31 @@ if [[ $(check_version_is_older_than "0.8.4b") == "true" ]]; then
 
   log i "Checking if ES-DE downloaded_media, gamelist, and themes folder must be migrated from \"$rdhome\" to \"$rdhome/ES-DE\" due to a RetroDECK Framework bug"
 
-  # Move each directory if it exists
+  # Use rsync to merge directories and overwrite existing files
   if [[ -d "$rdhome/themes" ]]; then
-    rsync -av --remove-source-files "$rdhome/themes/" "$rdhome/ES-DE/" && log d "Move of \"$rdhome/themes\" in \"$rdhome/ES-DE\" folder completed"
-    # Remove the empty source directory
-    find "$rdhome/themes" -type d -empty -delete && log d "Removed empty directory \"$rdhome/themes\"."
+    rsync -a "$rdhome/themes/" "$rdhome/ES-DE/themes/" && log d "Move of \"$rdhome/themes\" to \"$rdhome/ES-DE/themes\" completed"
+    rm -rf "$rdhome/themes" # Remove the original directory after merging
   else
     log i "ES-DE themes appear to have already been migrated."
   fi
 
   if [[ -d "$rdhome/downloaded_media" ]]; then
-    rsync -av --remove-source-files "$rdhome/downloaded_media/" "$rdhome/ES-DE/" && log d "Move of \"$rdhome/downloaded_media\" in \"$rdhome/ES-DE\" folder completed"
-    # Remove the empty source directory
-    find "$rdhome/downloaded_media" -type d -empty -delete && log d "Removed empty directory \"$rdhome/downloaded_media\"."
+    rsync -a "$rdhome/downloaded_media/" "$rdhome/ES-DE/downloaded_media/" && log d "Move of \"$rdhome/downloaded_media\" to \"$rdhome/ES-DE/downloaded_media\" completed"
+    rm -rf "$rdhome/downloaded_media" # Remove the original directory after merging
   else
-    log i "ES-DE downloaded media appears to have already been migrated."
+    log i "ES-DE downloaded media appear to have already been migrated."
   fi
 
   if [[ -d "$rdhome/gamelists" ]]; then
-    rsync -av --remove-source-files "$rdhome/gamelists/" "$rdhome/ES-DE/" && log d "Move of \"$rdhome/gamelists/\" in \"$rdhome/ES-DE\" folder completed"
-    # Remove the empty source directory
-    find "$rdhome/gamelists" -type d -empty -delete && log d "Removed empty directory \"$rdhome/gamelists\"."
+    rsync -a "$rdhome/gamelists/" "$rdhome/ES-DE/gamelists/" && log d "Move of \"$rdhome/gamelists\" to \"$rdhome/ES-DE/gamelists\" completed"
+    rm -rf "$rdhome/gamelists" # Remove the original directory after merging
   else
     log i "ES-DE gamelists appear to have already been migrated."
   fi
 
   if [[ -d "$rdhome/collections" ]]; then
-    rsync -av --remove-source-files "$rdhome/collections/" "$rdhome/ES-DE/" && log d "Move of \"$rdhome/collections/\" in \"$rdhome/ES-DE\" folder completed"
-    # Remove the empty source directory
-    find "$rdhome/collections" -type d -empty -delete && log d "Removed empty directory \"$rdhome/collections\"."
+    rsync -a "$rdhome/collections/" "$rdhome/ES-DE/collections/" && log d "Move of \"$rdhome/collections\" to \"$rdhome/ES-DE/collections\" completed"
+    rm -rf "$rdhome/collections" # Remove the original directory after merging
   else
     log i "ES-DE collections appear to have already been migrated."
   fi
