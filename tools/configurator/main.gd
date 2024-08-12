@@ -46,7 +46,7 @@ func _ready():
 	rd_logs = config["paths"]["logs_folder"]
 	rd_version = config["version"]
 	gc_version = ProjectSettings.get_setting("application/config/version")
-	$Background/side_logo/rd_title.text+= "\n   " + rd_version + "\nConfigurator\n    " + gc_version
+	%rd_title.text+= "\n   " + rd_version + "\nConfigurator\n    " + gc_version
 	
 	#var log_file = class_functions.import_text_file(rd_logs +"/retrodeck.log")
 	#for id in config.paths:
@@ -54,7 +54,7 @@ func _ready():
 	#	print (id)
 
 	# set current startup tab to match IDE	
-	tab_container.current_tab = 3
+	tab_container.current_tab = 2
 	#add_child(class_functions) # Needed for threaded results Not need autoload?
 	var children = findElements(self, "Control")
 	for n: Control in children: #iterate the children
@@ -191,7 +191,8 @@ func _on_locale_selected(index):
 	combine_tkeys()
 	
 func combine_tkeys(): #More as a test
-	$Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/game_control_container/GridContainer/cheats.text = tr("TK_CHEATS") + " " + tr("TK_SOON")
+	$Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/HBoxContainer/GridContainer/cheats.text = tr("TK_CHEATS") + " " + tr("TK_SOON")
+	#$Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/game_control_container/GridContainer/cheats.text = tr("TK_CHEATS") + " " + tr("TK_SOON")
 	$Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/GridContainer/shaders.text = tr("TK_SHADERS") + " " + tr("TK_SOON")
 	$Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/extra_container/GridContainer/tate_mode.text = tr("TK_TATE") + " " + tr("TK_SOON")
 	$Background/MarginContainer/TabContainer/TK_CONTROLS/ScrollContainer/VBoxContainer/controls_container/hotkey_sound.text = tr("TK_HOTKEYSOUND") + " " + tr("TK_SOON")
