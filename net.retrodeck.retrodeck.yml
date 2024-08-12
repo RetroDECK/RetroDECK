@@ -76,9 +76,9 @@ modules:
     build-commands:
       - |
 
-        # on main please update this with the version variable, eg: VERSION=0.8.3b
+        # on main please update this with the version variable, eg: VERSION=0.8.4b
         # on cooker will be THISBRANCH
-        VERSION=0.8.3b
+        VERSION=0.8.4b
 
         git checkout ${GITHUB_REF_NAME}
         mkdir -p ${FLATPAK_DEST}/retrodeck/
@@ -415,9 +415,8 @@ modules:
       - es-core
     sources:
       - type: git
-        url: https://github.com/XargonWan/RetroDECK-ES-DE
-        branch: retrodeck-main
-      - type: shell
+        url: https://github.com/RetroDECK/ES-DE
+        branch: 6fca5df93116a2be3028aab89850a2f5be3eb6e4
 
   # ES-DE - END
 

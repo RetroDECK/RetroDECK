@@ -49,6 +49,8 @@ RA_API_URL="https://retroachievements.org/dorequest.php"                        
 presets_dir="$emuconfigs/defaults/retrodeck/presets"                                                                  # Repository for all system preset config files
 incompatible_presets_reference_list="$emuconfigs/defaults/retrodeck/reference_lists/incompatible_presets.cfg"         # A config file listing all incompatible presets for reference (eg. cannot have borders and widescreen enabled simultaniously)
 pretty_system_names_reference_list="$emuconfigs/defaults/retrodeck/reference_lists/pretty_system_names.cfg"           # An internal translation list for turning internal names (eg. gbc) to "pretty" names (Nintendo GameBoy Color)
+git_organization_name="RetroDECK"                                                                                     # The name of the organization in our git repository such as GitHub
+cooker_repository_name="Cooker"                                                                                       # The name of the cooker repository under RetroDECK organization
 
 # Godot data transfer temp files
 
@@ -176,7 +178,7 @@ if [[ ! -f "$rd_conf" ]]; then
   set_setting_value $rd_conf "sdcard" "$default_sd" retrodeck "paths" # Set SD card location if default path has changed
 
   if grep -qF "cooker" <<< "$hard_version" || grep -qF "PR-" <<< "$hard_version"; then # If newly-installed version is a "cooker" or PR build
-    set_setting_value $rd_conf "update_repo" "RetroDECK-cooker" retrodeck "options"
+    set_setting_value $rd_conf "update_repo" "$cooker_repository_name" retrodeck "options"
     set_setting_value $rd_conf "update_check" "true" retrodeck "options"
     set_setting_value $rd_conf "developer_options" "true" retrodeck "options"
   fi
@@ -193,7 +195,7 @@ else
   log i "Loading it"
 
   if grep -qF "cooker" <<< $hard_version; then # If newly-installed version is a "cooker" build
-    set_setting_value $rd_conf "update_repo" "RetroDECK-cooker" retrodeck "options"
+    set_setting_value $rd_conf "update_repo" "$cooker_repository_name" retrodeck "options"
     set_setting_value $rd_conf "update_check" "true" retrodeck "options"
     set_setting_value $rd_conf "developer_options" "true" retrodeck "options"
   fi

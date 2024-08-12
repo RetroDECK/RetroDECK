@@ -201,10 +201,12 @@ conf_read() {
           local current_setting_name=$(get_setting_name "$current_setting_line" "retrodeck") # Read the variable name from the current line
           local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "$current_section") # Read the variables value from retrodeck.cfg
           declare -g "$current_setting_name=$current_setting_value" # Write the current setting name and value to memory
+          export "$current_setting_name"
         fi
       fi
     fi
   done < $rd_conf
+  log d "retrodeck.cfg loaded"
 }
 
 conf_write() {
@@ -228,6 +230,7 @@ conf_write() {
       fi
     fi
   done < $rd_conf
+  log d "retrodeck.cfg written"
 }
 
 dir_prep() {
