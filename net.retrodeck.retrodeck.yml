@@ -560,16 +560,6 @@ modules:
       - |
         cp -p ruffle "${FLATPAK_DEST}/bin/"
         chmod +x "${FLATPAK_DEST}/bin/ruffle"
-        echo '#!/bin/sh' > "${FLATPAK_DEST}/bin/ruffle-wrapper.sh"
-        echo 'source '"${FLATPAK_DEST}"'/libexec/global.sh' >> "${FLATPAK_DEST}/bin/ruffle-wrapper.sh"
-        echo '#Check if Steam Deck in Desktop Mode' >> "${FLATPAK_DEST}/bin/ruffle-wrapper.sh"
-        echo 'if [[ $(check_desktop_mode) == "true" ]]; then' >> "${FLATPAK_DEST}/bin/ruffle-wrapper.sh"
-        echo -e '\truffle --graphics vulkan --config /var/data/ruffle --save-directory $saves_folder/ruffle --fullscreen "$@"' >> "${FLATPAK_DEST}/bin/ruffle-wrapper.sh"
-        echo 'else' >> "${FLATPAK_DEST}/bin/ruffle-wrapper.sh"
-        echo -e '\truffle --graphics gl --config /var/data/ruffle --save-directory $saves_folder/ruffle --fullscreen "$@"' >> "${FLATPAK_DEST}/bin/ruffle-wrapper.sh"
-        echo 'fi' >> "${FLATPAK_DEST}/bin/ruffle-wrapper.sh"
-        chmod +x "${FLATPAK_DEST}/bin/ruffle-wrapper.sh"
-
     sources:
       - type: archive
         strip-components: 0
@@ -670,6 +660,10 @@ modules:
       # GZDOOM wrapper
       - cp config/gzdoom/gzdoom.sh ${FLATPAK_DEST}/bin/gzdoom.sh
       - chmod +x ${FLATPAK_DEST}/bin/gzdoom.sh
+
+      # RUFFLE wrapper
+      - cp config/ruffle/ruffle-rdwrapper.sh "${FLATPAK_DEST}/bin/ruffle-rdwrapper.sh"
+      - chmod +x "${FLATPAK_DEST}/bin/ruffle-rdwrapper.sh"
 
     sources:
       - type: git
