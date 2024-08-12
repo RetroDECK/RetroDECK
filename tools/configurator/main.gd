@@ -27,6 +27,7 @@ func _ready():
 	data_handler.add_emaultor()
 	data_handler.modify_emulator_test()
 	
+	$Background/locale_option.selected = class_functions.map_locale_id(OS.get_locale_language())
 	"""
 	# load json data
 	#app_data = data_handler.load_data()
@@ -91,7 +92,7 @@ func _emu_select(index: int) -> void:
 func _emu_pick(index: int) -> void:
 	emu_pick_option.visible = true
 	_play_main_animations()
-
+	
 func _load_log(index: int) -> void:
 	var log_content:String
 	match index:

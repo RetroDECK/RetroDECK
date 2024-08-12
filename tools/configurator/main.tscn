@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://61f6m4r1mpan"]
+[gd_scene load_steps=38 format=3 uid="uid://61f6m4r1mpan"]
 
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
 [ext_resource type="Script" path="res://main.gd" id="1_obpq7"]
@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://d2lm4mfx1gt86" path="res://assets/graphics/retrodeck_base_shake0.png" id="5_7rjbt"]
 [ext_resource type="Script" path="res://helper_text.gd" id="5_cprkf"]
 [ext_resource type="Texture2D" uid="uid://dxdhjp18rgmr4" path="res://res/flags/united_kingdom_32.png" id="5_exkn2"]
+[ext_resource type="StyleBox" uid="uid://ba3l3ja1jbqpx" path="res://assets/themes/emulators.tres" id="5_rjtkn"]
 [ext_resource type="Texture2D" uid="uid://cjv6lhd4g63m3" path="res://assets/graphics/retrodeck_base_shake1.png" id="6_d43n7"]
 [ext_resource type="Texture2D" uid="uid://cru43y7hco6kh" path="res://res/flags/italy_32.png" id="6_fiylw"]
 [ext_resource type="Texture2D" uid="uid://m5283vouicmb" path="res://assets/icons/pixelitos/128/duckstation.png" id="6_winpq"]
@@ -81,18 +82,14 @@ grow_vertical = 2
 theme = ExtResource("1_xyph5")
 script = ExtResource("1_obpq7")
 metadata/bios_type = 0
+metadata/_edit_horizontal_guides_ = [-2575.0]
 
 [node name="Background" type="Panel" parent="."]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -500.0
-offset_top = -350.0
-offset_right = 500.0
-offset_bottom = 200.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -55.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -349,6 +346,7 @@ follow_focus = true
 [node name="VBoxContainer" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_EMULATORS/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="controls_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_EMULATORS/ScrollContainer/VBoxContainer"]
 layout_mode = 2
@@ -361,16 +359,16 @@ text = "TK_EMULATORS"
 layout_mode = 2
 
 [node name="GridContainer" type="GridContainer" parent="Background/MarginContainer/TabContainer/TK_EMULATORS/ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(700, 400)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/h_separation = 10
 theme_override_constants/v_separation = 10
-columns = 4
+columns = 6
 
 [node name="Button3" type="Button" parent="Background/MarginContainer/TabContainer/TK_EMULATORS/ScrollContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 tooltip_text = "RetroARCH"
+theme_override_styles/focus = ExtResource("5_rjtkn")
 text = "RetroArch"
 icon = ExtResource("4_xcuib")
 icon_alignment = 1
@@ -380,6 +378,7 @@ expand_icon = true
 [node name="Button4" type="Button" parent="Background/MarginContainer/TabContainer/TK_EMULATORS/ScrollContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 tooltip_text = "MAME"
+theme_override_styles/focus = ExtResource("5_rjtkn")
 text = "MAME"
 icon = ExtResource("36_r80tt")
 icon_alignment = 1
@@ -388,6 +387,7 @@ vertical_icon_alignment = 0
 [node name="Button" type="Button" parent="Background/MarginContainer/TabContainer/TK_EMULATORS/ScrollContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 tooltip_text = "Duckstation"
+theme_override_styles/focus = ExtResource("5_rjtkn")
 text = "DuckSation"
 icon = ExtResource("6_winpq")
 icon_alignment = 1
@@ -396,6 +396,7 @@ vertical_icon_alignment = 0
 [node name="Button2" type="Button" parent="Background/MarginContainer/TabContainer/TK_EMULATORS/ScrollContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 tooltip_text = "Melon DS"
+theme_override_styles/focus = ExtResource("5_rjtkn")
 text = "MelonDS"
 icon = ExtResource("7_4otos")
 icon_alignment = 1
@@ -404,6 +405,7 @@ vertical_icon_alignment = 0
 [node name="Button5" type="Button" parent="Background/MarginContainer/TabContainer/TK_EMULATORS/ScrollContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 tooltip_text = "PSPSSPP"
+theme_override_styles/focus = ExtResource("5_rjtkn")
 text = "PSPSSPP"
 icon = ExtResource("8_akxf7")
 icon_alignment = 1
@@ -412,15 +414,16 @@ vertical_icon_alignment = 0
 [node name="Button6" type="Button" parent="Background/MarginContainer/TabContainer/TK_EMULATORS/ScrollContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 tooltip_text = "PSPSSPP"
+theme_override_styles/focus = ExtResource("5_rjtkn")
 text = "GZ DOOM"
 icon = ExtResource("9_iu6bj")
 icon_alignment = 1
 vertical_icon_alignment = 0
-expand_icon = true
 
 [node name="Button7" type="Button" parent="Background/MarginContainer/TabContainer/TK_EMULATORS/ScrollContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 tooltip_text = "CITRA"
+theme_override_styles/focus = ExtResource("5_rjtkn")
 text = "CITRA"
 icon = ExtResource("10_wbaif")
 icon_alignment = 1
@@ -429,6 +432,7 @@ vertical_icon_alignment = 0
 [node name="OptionButton" type="OptionButton" parent="Background/MarginContainer/TabContainer/TK_EMULATORS/ScrollContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 tooltip_text = "Dolphin"
+theme_override_styles/focus = ExtResource("5_rjtkn")
 alignment = 1
 icon_alignment = 1
 vertical_icon_alignment = 0
@@ -961,9 +965,10 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -240.0
-offset_top = -175.0
-offset_bottom = 45.0
+offset_left = -254.0
+offset_top = -277.0
+offset_right = -13.0
+offset_bottom = -57.0
 grow_horizontal = 0
 grow_vertical = 2
 
@@ -999,10 +1004,10 @@ scroll_active = false
 [node name="status_label" type="Label" parent="Background/side_logo"]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = -1.0
-offset_top = 412.0
-offset_right = 106.0
-offset_bottom = 453.0
+offset_left = 46.0
+offset_top = 605.5
+offset_right = 153.0
+offset_bottom = 646.5
 text = "Status:"
 
 [node name="status_code_label" type="Label" parent="Background/side_logo/status_label"]
@@ -1075,27 +1080,8 @@ stream = ExtResource("3_xivj6")
 volume_db = -11.243
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
-visible = false
 position = Vector2(134, 151)
 color = Color(0.858824, 0.890196, 1, 1)
-
-[node name="coltroller_guide" type="PanelContainer" parent="."]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -38.0
-grow_horizontal = 2
-grow_vertical = 0
-
-[node name="controller_guide_text" type="RichTextLabel" parent="coltroller_guide"]
-layout_mode = 2
-theme_override_colors/default_color = Color(1, 1, 1, 0.607843)
-theme_override_font_sizes/normal_font_size = 23
-text = "(A) Accept (B) Back (L/R) Tab Switch (Menu) Exit"
-fit_content = true
-scroll_active = false
 
 [node name="rekku" type="Control" parent="."]
 visible = false
@@ -1105,7 +1091,9 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
+offset_left = -0.00012207
 offset_top = 5.0
+offset_right = -0.00012207
 offset_bottom = 5.0
 grow_horizontal = 2
 grow_vertical = 0
@@ -1147,6 +1135,24 @@ When \"Quick Resume\" is enabled, a savestate is created upon quit and it will b
 This is mot working on the following systems: Switch, WiiU."
 scroll_following = true
 script = ExtResource("5_cprkf")
+
+[node name="coltroller_guide" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -52.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="controller_guide_text" type="RichTextLabel" parent="coltroller_guide"]
+layout_mode = 2
+theme_override_colors/default_color = Color(1, 1, 1, 0.607843)
+theme_override_font_sizes/normal_font_size = 23
+text = "(A) Accept (B) Back (L/R) Tab Switch (Menu) Exit"
+fit_content = true
+scroll_active = false
 
 [connection signal="pressed" from="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/game_control_container/GridContainer/quick_resume_adv_button" to="." method="_on_quickresume_advanced_pressed"]
 [connection signal="pressed" from="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container/bios_button" to="." method="_on_bios_button_pressed"]
