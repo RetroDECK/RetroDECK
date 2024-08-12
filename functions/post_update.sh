@@ -352,7 +352,7 @@ post_update() {
   if [[ $(check_version_is_older_than "0.8.3b") == "true" ]]; then
     # In version 0.8.3b, the following changes were made:
     # - Recovery from a failed move of the themes, downloaded_media and gamelists folder to their new ES-DE locations.
-    if [[ !-d "$rdhome/ES-DE/themes" || ! -d "$rdhome/ES-DE/downloaded_media" || ! -d "$rdhome/ES-DE/gamelists" ]]; then
+    if [[ ! -d "$rdhome/ES-DE/themes" || ! -d "$rdhome/ES-DE/downloaded_media" || ! -d "$rdhome/ES-DE/gamelists" ]]; then
     log i "Moving ES-DE downloaded_media, gamelist, and themes from \"$rdhome\" to \"$rdhome/ES-DE\" due to a RetroDECK Framework bug"
       if [[ -d "$rdhome/themes" && ! -d "$rdhome/ES-DE/themes" ]]; then
         move "$rdhome/themes" "$rdhome/ES-DE/themes" && log d "Move of \"$rdhome/themes\" completed"
