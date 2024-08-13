@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://61f6m4r1mpan"]
+[gd_scene load_steps=45 format=3 uid="uid://61f6m4r1mpan"]
 
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
 [ext_resource type="Script" path="res://main.gd" id="1_obpq7"]
@@ -31,7 +31,13 @@
 [ext_resource type="Texture2D" uid="uid://8cs0u4cejbdu" path="res://assets/icons/pixelitos/128/org.DolphinEmu.dolphin-emu.png" id="11_61sak"]
 [ext_resource type="Texture2D" uid="uid://cbwhpqip43aei" path="res://res/flags/china_32.png" id="11_ri2fv"]
 [ext_resource type="Texture2D" uid="uid://donemjr3ojyxm" path="res://assets/Tilemap/tilemap.png" id="32_ja26r"]
+[ext_resource type="Texture2D" uid="uid://cor8ep0fkqm08" path="res://res/Rekku/base.png" id="32_omdu2"]
+[ext_resource type="Texture2D" uid="uid://cavtn1rljc5oe" path="res://res/Rekku/eyes-open.png" id="33_loftd"]
+[ext_resource type="Texture2D" uid="uid://cv7nckloqhn5m" path="res://res/Rekku/blink1.png" id="34_liw3o"]
+[ext_resource type="Texture2D" uid="uid://by0oj188x350g" path="res://res/Rekku/blink2.png" id="35_dxwop"]
+[ext_resource type="Texture2D" uid="uid://kx8eypf4ffvu" path="res://res/Rekku/mouth-base.png" id="36_qon8n"]
 [ext_resource type="Texture2D" uid="uid://bo8ylm2fxoang" path="res://assets/icons/pixelitos/128/org.mamedev.MAME.png" id="36_r80tt"]
+[ext_resource type="Texture2D" uid="uid://b6gl8sltbak7v" path="res://res/Rekku/mouth-O.png" id="37_2mdp6"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_icgo5"]
 bg_color = Color(0.941176, 0.388235, 0.917647, 1)
@@ -80,6 +86,52 @@ texture_margin_right = 6.0
 texture_margin_bottom = 6.0
 region_rect = Rect2(0, 8, 16, 16)
 modulate_color = Color(0.65098, 0.403922, 0.819608, 1)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_k7pd1"]
+animations = [{
+"frames": [{
+"duration": 40.0,
+"texture": ExtResource("33_loftd")
+}, {
+"duration": 0.15,
+"texture": ExtResource("34_liw3o")
+}, {
+"duration": 0.15,
+"texture": ExtResource("35_dxwop")
+}],
+"loop": true,
+"name": &"blink",
+"speed": 5.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_l20mt"]
+animations = [{
+"frames": [{
+"duration": 0.5,
+"texture": ExtResource("36_qon8n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37_2mdp6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_qon8n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_qon8n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37_2mdp6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37_2mdp6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_qon8n")
+}],
+"loop": true,
+"name": &"speech",
+"speed": 5.0
+}]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -1155,6 +1207,22 @@ When \"Quick Resume\" is enabled, a savestate is created upon quit and it will b
 This is mot working on the following systems: Switch, WiiU."
 scroll_following = true
 script = ExtResource("5_cprkf")
+
+[node name="rekku_sprite" type="Sprite2D" parent="rekku"]
+position = Vector2(481, -562)
+scale = Vector2(0.293, 0.293)
+texture = ExtResource("32_omdu2")
+
+[node name="blink_anim" type="AnimatedSprite2D" parent="rekku/rekku_sprite"]
+sprite_frames = SubResource("SpriteFrames_k7pd1")
+animation = &"blink"
+autoplay = "blink"
+frame_progress = 0.188668
+
+[node name="speech_anim" type="AnimatedSprite2D" parent="rekku/rekku_sprite"]
+sprite_frames = SubResource("SpriteFrames_l20mt")
+animation = &"speech"
+autoplay = "speech"
 
 [node name="coltroller_guide" type="PanelContainer" parent="."]
 visible = false
