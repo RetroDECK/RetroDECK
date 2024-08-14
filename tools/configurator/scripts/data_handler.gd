@@ -2,7 +2,7 @@ extends Node
 
 class_name DataHandler
 
-var data_file_path = "res://data_list.json"
+var data_file_path = "../../config/retrodeck/reference_lists/features.json"
 var app_data: AppData
 
 func _ready():
@@ -30,25 +30,19 @@ func load_base_data() -> AppData:
 				about_links[key] = link
 
 			var emulators = {}
-			for key in data_dict["emulators"].keys():
-				var emulator_data = data_dict["emulators"][key]
+			for key in data_dict["emulator"].keys():
+				var emulator_data = data_dict["emulator"][key]
 				var emulator = Emulator.new()
+				
 				emulator.name = emulator_data["name"]
 				emulator.description = emulator_data["description"]
-
-				#emulator.options = []
-				#emulator.properties = []
-				for option_data in emulator_data["options"]:
-					var option = EmulatorOption.new()
-					option.resettable = option_data["resettable"]
-					emulator.options.append(option)
-
-				
-				for property_data in emulator_data["properties"]:
-					var property = EmulatorProperty.new()
-					property.standalone = property_data.get("standalone", false)
-					property.abxy_button_status = property_data.get("abxy_button", {}).get("status", false)
-					emulator.properties.append(property)
+				print (emulator.name)
+				if emulator_data.has("properties"):
+					for property_data in emulator_data["properties"]:
+						var property = EmulatorProperty.new()
+						property.standalone = property_data.get("standalone", false)
+#						property.abxy_button_status = property_data.get("abxy_button", {}).get("status", false)
+						emulator.properties.append(property)
 
 				emulators[key] = emulator
 
@@ -97,12 +91,6 @@ func save_base_data(app_data: AppData):
 	var emulators = {}
 	for key in app_data.emulators.keys():
 		var emulator = app_data.emulators[key]
-		var options = []
-		for option in emulator.options:
-			options.append({
-				"resettable": option.resettable
-		})
-
 		var properties = []
 		for property in emulator.properties:
 			properties.append({
@@ -113,7 +101,6 @@ func save_base_data(app_data: AppData):
 		emulators[key] = {
 			"name": emulator.name,
 			"description": emulator.description,
-			"options": options,
 			"properties": properties
 		}
 
@@ -155,20 +142,13 @@ func modify_link(key: String, new_name: String, new_url: String, new_description
 		print("Link not found")
 
 # Function to modify an existing emulator
-func modify_emulator(key: String, new_name: String, new_description: String, new_options: Array, new_properties: Array):
+func modify_emulator(key: String, new_name: String, new_description: String, new_properties: Array):
 	var app_data = load_base_data()
 	if app_data and app_data.emulators.has(key):
 		var emulator = app_data.emulators[key]
 		emulator.name = new_name
 		emulator.description = new_description
 		
-		# Update options
-		emulator.options.clear()
-		for option in new_options:
-			var new_option = EmulatorOption.new()
-			new_option.resettable = option.resettable
-			emulator.options.append(new_option)
-
 		# Update properties
 		emulator.properties.clear()
 		for property in new_properties:
@@ -184,7 +164,7 @@ func modify_emulator(key: String, new_name: String, new_description: String, new
 		print("Emulator not found")
 
 
-func add_emaultor() -> void:
+func add_emulator() -> void:
 	var link = Link.new()
 	link.name = "Example Site"
 	link.url = "https://example.com"
@@ -194,9 +174,6 @@ func add_emaultor() -> void:
 	var emulator = Emulator.new()
 	emulator.name = "Example Emulator"
 	emulator.description = "An example emulator."
-	var option = EmulatorOption.new()
-	option.resettable = true
-	emulator.options.append(option)
 	var property = EmulatorProperty.new()
 	property.standalone = true
 	property.abxy_button_status = false
@@ -207,10 +184,6 @@ func add_emaultor() -> void:
 func modify_emulator_test() -> void:
 	data_handler.modify_link("example_site", "Updated Site", "https://updated-example.com", "Updated description.")
 
-	var new_options = []
-	var new_option = EmulatorOption.new()
-	new_option.resettable = false
-	new_options.append(new_option)
 
 	var new_properties = []
 	var new_property = EmulatorProperty.new()
@@ -218,7 +191,7 @@ func modify_emulator_test() -> void:
 	new_property.abxy_button_status = true
 	new_properties.append(new_property)
 
-	data_handler.modify_emulator("example_emulator", "Updated Emulator", "Updated description", new_options, new_properties)
+	data_handler.modify_emulator("example_emulator", "Updated Emulator", "Updated description",  new_properties)
 	
 
 func parse_config_to_json(file_path: String) -> Dictionary:

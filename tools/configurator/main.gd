@@ -9,8 +9,6 @@ var log_results: Dictionary
 var theme_option: OptionButton
 signal signal_theme_changed
 var custom_theme: Theme = $".".theme
-var emu_select_option: OptionButton
-var emu_pick_option: OptionButton
 var log_option: OptionButton
 var tab_container: TabContainer
 var anim_logo: AnimatedSprite2D
@@ -24,8 +22,8 @@ func _ready():
 	_connect_signals()
 	_play_main_animations()
 
-	data_handler.add_emaultor()
-	data_handler.modify_emulator_test()
+	#data_handler.add_emulator()
+	#data_handler.modify_emulator_test()
 	
 	$Background/locale_option.selected = class_functions.map_locale_id(OS.get_locale_language())
 	"""
@@ -67,8 +65,6 @@ func _ready():
 func _get_nodes() -> void:
 	status_code_label = get_node("%status_code_label")
 	theme_option = get_node("%theme_optionbutton")
-	emu_select_option = get_node("%emu_select_option")
-	emu_pick_option = get_node("%emu_pick_option")
 	tab_container = get_node("%TabContainer")
 	anim_logo = get_node("%logo_animated")
 	log_option = get_node("%logs_button")
@@ -77,21 +73,7 @@ func _connect_signals() -> void:
 	#signal_theme_changed.connect(_conf_theme)
 	theme_option.item_selected.connect(_conf_theme)
 	signal_theme_changed.emit(theme_option.item_selected)
-	emu_select_option.item_selected.connect(_emu_select)
-	emu_pick_option.item_selected.connect(_emu_pick)
 	log_option.item_selected.connect(_load_log)
-	
-func _emu_select(index: int) -> void:
-	emu_pick_option.visible = true
-	#change to radio button select
-	_play_main_animations()
-	if (index == 3): # make function and pass start and end
-		emu_pick_option.set_item_disabled(1, true)
-		emu_pick_option.set_item_disabled(2, true)
-	
-func _emu_pick(index: int) -> void:
-	emu_pick_option.visible = true
-	_play_main_animations()
 	
 func _load_log(index: int) -> void:
 	var log_content:String
