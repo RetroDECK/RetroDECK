@@ -51,7 +51,18 @@ get_current_branch() {
   fi
 }
 
+# Retrieve the repository URL
+get_repo_url() {
+  local repo_url=$(git config --get remote.origin.url)
+  # Convert SSH URL to HTTPS if needed
+  if [[ "$repo_url" == git@* ]]; then
+    repo_url=$(echo "$repo_url" | sed -e 's|git@|https://|' -e 's|:|/|')
+  fi
+  echo "$repo_url"
+}
+
 current_branch=$(get_current_branch)
+current_repo_url=$(get_repo_url)
 
 echo "Manifest location: $rd_manifest"
 echo "Automation task list location: $automation_task_list"
@@ -170,6 +181,13 @@ handle_url() {
   /bin/sed -i 's^'"$placeholder"'^'"$calculated_url"'^g' "$rd_manifest"
 }
 
+# Handle the THISREPO placeholder
+handle_thisrepo() {
+  local placeholder="$1"
+  echo "Replacing placeholder $placeholder with repository URL $current_repo_url"
+  /bin/sed -i 's^'"$placeholder"'^'"$current_repo_url"'^g' "$rd_manifest"
+}
+
 # Process the task list
 while IFS="^" read -r action placeholder url branch || [[ -n "$action" ]]; do
   if [[ ! "$action" == "#"* ]] && [[ -n "$action" ]]; then
@@ -184,6 +202,8 @@ while IFS="^" read -r action placeholder url branch || [[ -n "$action" ]]; do
       "outside_env_var" ) handle_outside_env_var "$placeholder" "$url" ;;
       "custom_command" ) handle_custom_command "$url" ;;
       "url" ) handle_url "$placeholder" "$url" ;;
+      "THISREPO" ) handle_thisrepo "$placeholder" ;;
     esac
   fi
 done < "$automation_task_list"
+

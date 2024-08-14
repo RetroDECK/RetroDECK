@@ -1,0 +1,6 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://co27jgr76wvcl"]
+
+[ext_resource type="FontFile" uid="uid://c8lbo5ljgtaaa" path="res://assets/fonts/OpenDyslexic3/OpenDyslexic3-Regular.ttf" id="1_d8f12"]
+
+[resource]
+default_font = ExtResource("1_d8f12")

@@ -1,0 +1,87 @@
+{
+	"abxy_button_swap": {
+		"citra": false,
+		"gb": false,
+		"gba": false,
+		"gbc": false,
+		"n64": false,
+		"snes": false
+	},
+	"ask_to_exit": {
+		"citra": false,
+		"dolphin": false,
+		"duckstation": false,
+		"pcsx2": false,
+		"primehack": false,
+		"rpcs3": false
+	},
+	"borders": {
+		"gb": false,
+		"gba": false,
+		"gbc": false,
+		"genesis": false,
+		"gg": false,
+		"n64": false,
+		"psx_ra": false,
+		"snes": false
+	},
+	"cheevos": {
+		"duckstation": false,
+		"pcsx2": false,
+		"retroarch": false
+	},
+	"cheevos_hardcore": {
+		"duckstation": false,
+		"pcsx2": false,
+		"retroarch": false
+	},
+	"options": {
+		"akai_ponzu": false,
+		"ask_default_user": true,
+		"branch": "",
+		"cloud_saves": false,
+		"default_user": "",
+		"desktop_mode_warning": true,
+		"developer_options": false,
+		"kiroi_ponzu": false,
+		"low_space_warning": true,
+		"multi_user_mode": false,
+		"power_user_warning": true,
+		"update_check": true,
+		"update_ignore": "",
+		"update_repo": "RetroDECK"
+	},
+	"paths": {
+		"bios_folder": "/run/media/tim/DATA/retrodeck/bios",
+		"borders_folder": "/run/media/tim/DATA/retrodeck/borders",
+		"logs_folder": "/run/media/tim/DATA/retrodeck/logs",
+		"media_folder": "/run/media/tim/DATA/retrodeck/downloaded_media",
+		"mods_folder": "/run/media/tim/DATA/retrodeck/mods",
+		"rdhome": "/home/tim/retrodeck",
+		"roms_folder": "/run/media/tim/DATA/retrodeck/roms",
+		"saves_folder": "/run/media/tim/DATA/retrodeck/saves",
+		"screenshots_folder": "/run/media/tim/DATA/retrodeck/screenshots",
+		"sdcard": "/run/media/mmcblk0p1",
+		"states_folder": "/run/media/tim/DATA/retrodeck/states",
+		"texture_packs_folder": "/run/media/tim/DATA/retrodeck/texture_packs",
+		"themes_folder": "/run/media/tim/DATA/retrodeck/themes"
+	},
+	"quick_resume": {
+		"retroarch": true
+	},
+	"rewind": {
+		"gb": false,
+		"gba": false,
+		"gbc": false,
+		"genesis": false,
+		"gg": false,
+		"snes": false
+	},
+	"version": "0.8.2b",
+	"widescreen": {
+		"genesis": false,
+		"n64": false,
+		"psx_ra": false,
+		"snes": false
+	}
+}
