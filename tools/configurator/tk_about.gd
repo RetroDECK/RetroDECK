@@ -10,7 +10,7 @@ var donate_button: Button
 var contactus_button: Button
 var licenses_button: Button
 #var tk_about: Dictionary
-signal signal_theme_changed
+#signal signal_theme_changed
 var app_data = AppData.new()
 
 func _ready():
