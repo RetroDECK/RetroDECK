@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://61f6m4r1mpan"]
+[gd_scene load_steps=48 format=3 uid="uid://61f6m4r1mpan"]
 
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
 [ext_resource type="Script" path="res://main.gd" id="1_obpq7"]
@@ -9,35 +9,38 @@
 [ext_resource type="Script" path="res://tk_about.gd" id="4_m4rto"]
 [ext_resource type="Script" path="res://Rekku.gd" id="4_nqqx3"]
 [ext_resource type="Texture2D" uid="uid://cxyml1owhi6de" path="res://res/pixel_ui_theme/8x8_ui_icons.png" id="4_v1scw"]
-[ext_resource type="Texture2D" uid="uid://y71xve24ujw7" path="res://assets/icons/pixelitos/128/retroarch.png" id="4_xcuib"]
+[ext_resource type="Texture2D" uid="uid://dk856hwnwsuab" path="res://assets/icons/pixelitos/128/retroarch.png" id="4_xcuib"]
 [ext_resource type="Texture2D" uid="uid://d2lm4mfx1gt86" path="res://assets/graphics/retrodeck_base_shake0.png" id="5_7rjbt"]
 [ext_resource type="Script" path="res://helper_text.gd" id="5_cprkf"]
 [ext_resource type="Texture2D" uid="uid://dxdhjp18rgmr4" path="res://res/flags/united_kingdom_32.png" id="5_exkn2"]
 [ext_resource type="StyleBox" uid="uid://ba3l3ja1jbqpx" path="res://assets/themes/emulators.tres" id="5_rjtkn"]
 [ext_resource type="Texture2D" uid="uid://cjv6lhd4g63m3" path="res://assets/graphics/retrodeck_base_shake1.png" id="6_d43n7"]
 [ext_resource type="Texture2D" uid="uid://cru43y7hco6kh" path="res://res/flags/italy_32.png" id="6_fiylw"]
-[ext_resource type="Texture2D" uid="uid://m5283vouicmb" path="res://assets/icons/pixelitos/128/duckstation.png" id="6_winpq"]
-[ext_resource type="Texture2D" uid="uid://c0xtgqyl2whg" path="res://assets/icons/pixelitos/128/net.kuribo64.melonDS.png" id="7_4otos"]
+[ext_resource type="Texture2D" uid="uid://cxwnt3djsrck7" path="res://assets/icons/pixelitos/128/duckstation.png" id="6_winpq"]
+[ext_resource type="Texture2D" uid="uid://c2furjlxwkxih" path="res://assets/icons/pixelitos/128/net.kuribo64.melonDS.png" id="7_4otos"]
 [ext_resource type="Texture2D" uid="uid://cyqo650hjucw6" path="res://assets/graphics/retrodeck_base_shake2.png" id="7_mo842"]
 [ext_resource type="Texture2D" uid="uid://cti2vt14gxisl" path="res://res/flags/germany_32.png" id="7_qgxid"]
-[ext_resource type="Texture2D" uid="uid://ch0e6q0xhxdb0" path="res://assets/icons/pixelitos/128/org.ppsspp.PPSSPP.png" id="8_akxf7"]
+[ext_resource type="Texture2D" uid="uid://c7i7mr38qxa4f" path="res://assets/icons/pixelitos/128/org.ppsspp.PPSSPP.png" id="8_akxf7"]
 [ext_resource type="Texture2D" uid="uid://bojog0xvms7hr" path="res://assets/graphics/retrodeck_base_shake3.png" id="8_l3t5c"]
 [ext_resource type="Texture2D" uid="uid://bns0ot5pbf03h" path="res://res/flags/sweden_32.png" id="8_lptln"]
 [ext_resource type="Texture2D" uid="uid://uko0ikrtjkj" path="res://assets/graphics/retrodeck_base_shake4.png" id="9_8eqo6"]
 [ext_resource type="Texture2D" uid="uid://dhsorn3kcfdcv" path="res://res/flags/ukraine_32.png" id="9_dp7oa"]
-[ext_resource type="Texture2D" uid="uid://cf6l70x4vr7e7" path="res://assets/icons/pixelitos/128/org.zdoom.GZDoom.png" id="9_iu6bj"]
+[ext_resource type="Texture2D" uid="uid://djpgrd6fs7u2w" path="res://assets/icons/pixelitos/128/org.zdoom.GZDoom.png" id="9_iu6bj"]
 [ext_resource type="Texture2D" uid="uid://dtwjo7co226dw" path="res://res/flags/japan_32.png" id="10_e8mt0"]
-[ext_resource type="Texture2D" uid="uid://cw8v7tjh5btt1" path="res://assets/icons/pixelitos/128/org.citra_emu.citra.png" id="10_wbaif"]
-[ext_resource type="Texture2D" uid="uid://8cs0u4cejbdu" path="res://assets/icons/pixelitos/128/org.DolphinEmu.dolphin-emu.png" id="11_61sak"]
+[ext_resource type="Texture2D" uid="uid://bevamv2c8knnn" path="res://assets/icons/pixelitos/128/org.citra_emu.citra.png" id="10_wbaif"]
+[ext_resource type="Texture2D" uid="uid://dbvjugxp84gsj" path="res://assets/icons/pixelitos/128/org.DolphinEmu.dolphin-emu.png" id="11_61sak"]
 [ext_resource type="Texture2D" uid="uid://cbwhpqip43aei" path="res://res/flags/china_32.png" id="11_ri2fv"]
-[ext_resource type="Texture2D" uid="uid://donemjr3ojyxm" path="res://assets/Tilemap/tilemap.png" id="32_ja26r"]
 [ext_resource type="Texture2D" uid="uid://cor8ep0fkqm08" path="res://res/Rekku/base.png" id="32_omdu2"]
 [ext_resource type="Texture2D" uid="uid://cavtn1rljc5oe" path="res://res/Rekku/eyes-open.png" id="33_loftd"]
 [ext_resource type="Texture2D" uid="uid://cv7nckloqhn5m" path="res://res/Rekku/blink1.png" id="34_liw3o"]
 [ext_resource type="Texture2D" uid="uid://by0oj188x350g" path="res://res/Rekku/blink2.png" id="35_dxwop"]
 [ext_resource type="Texture2D" uid="uid://kx8eypf4ffvu" path="res://res/Rekku/mouth-base.png" id="36_qon8n"]
-[ext_resource type="Texture2D" uid="uid://bo8ylm2fxoang" path="res://assets/icons/pixelitos/128/org.mamedev.MAME.png" id="36_r80tt"]
+[ext_resource type="Texture2D" uid="uid://chd6d8tx081hm" path="res://assets/icons/pixelitos/128/org.mamedev.MAME.png" id="36_r80tt"]
 [ext_resource type="Texture2D" uid="uid://b6gl8sltbak7v" path="res://res/Rekku/mouth-O.png" id="37_2mdp6"]
+[ext_resource type="Texture2D" uid="uid://dpi351mmxu7x6" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0797.png" id="38_prt7u"]
+[ext_resource type="Texture2D" uid="uid://ckyvec3wqx3t" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0798.png" id="39_5ft88"]
+[ext_resource type="Texture2D" uid="uid://n4hywdifr1q4" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0763.png" id="39_m4qgd"]
+[ext_resource type="Texture2D" uid="uid://bwcc0mjxxm0w1" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0764.png" id="40_pnuor"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_icgo5"]
 bg_color = Color(0.941176, 0.388235, 0.917647, 1)
@@ -505,6 +508,7 @@ disabled = true
 text = "TK_ADVANCED"
 
 [node name="cheats" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/HBoxContainer/GridContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 disabled = true
@@ -575,41 +579,6 @@ text = "TK_GENTOOLS"
 
 [node name="tools_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/tools_container"]
 layout_mode = 2
-
-[node name="emu_select_option" type="OptionButton" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/tools_container"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 4
-item_count = 4
-selected = 0
-popup/item_0/text = "TK_SELECT_EMU"
-popup/item_0/id = 0
-popup/item_0/disabled = true
-popup/item_0/separator = true
-popup/item_1/text = "RetroArch"
-popup/item_1/id = 1
-popup/item_2/text = "MAME"
-popup/item_2/id = 2
-popup/item_3/text = ""
-popup/item_3/id = 3
-
-[node name="emu_pick_option" type="OptionButton" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/tools_container"]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-size_flags_horizontal = 4
-item_count = 4
-selected = 0
-popup/item_0/text = "TK_ACTION_EMU"
-popup/item_0/id = 0
-popup/item_0/disabled = true
-popup/item_0/separator = true
-popup/item_1/text = "HELP"
-popup/item_1/id = 1
-popup/item_2/text = "LAUNCH"
-popup/item_2/id = 2
-popup/item_3/text = "RESET"
-popup/item_3/id = 3
 
 [node name="emu_open_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/tools_container"]
 layout_mode = 2
@@ -1103,10 +1072,10 @@ layout_mode = 1
 anchors_preset = -1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -33.0
-offset_top = 50.0
-offset_right = -12.0
-offset_bottom = 71.0
+offset_left = -40.0
+offset_top = 81.0
+offset_right = -19.0
+offset_bottom = 102.0
 grow_horizontal = 0
 icon = SubResource("AtlasTexture_st633")
 
@@ -1243,19 +1212,27 @@ text = "(A) Accept (B) Back (L/R) Tab Switch (Menu) Exit"
 fit_content = true
 scroll_active = false
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(37, 23)
-scale = Vector2(3.5625, 3.03572)
-texture = ExtResource("32_ja26r")
-region_enabled = true
-region_rect = Rect2(221, 222, 16, 14)
+[node name="l1_button" type="TextureButton" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+offset_left = 6.0
+offset_top = -3.0
+offset_right = 90.0
+offset_bottom = 56.0
+texture_normal = ExtResource("38_prt7u")
+texture_pressed = ExtResource("39_m4qgd")
+stretch_mode = 0
 
-[node name="Sprite2D2" type="Sprite2D" parent="."]
-position = Vector2(1244, 23)
-scale = Vector2(3.5625, 3.03572)
-texture = ExtResource("32_ja26r")
-region_enabled = true
-region_rect = Rect2(221, 256, 16, 14)
+[node name="r1_button" type="TextureButton" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 1189.0
+offset_top = -2.0
+offset_right = 1273.0
+offset_bottom = 57.0
+texture_normal = ExtResource("39_5ft88")
+texture_pressed = ExtResource("40_pnuor")
+stretch_mode = 0
 
 [connection signal="pressed" from="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/HBoxContainer/GridContainer/quick_resume_adv_button" to="." method="_on_quickresume_advanced_pressed"]
 [connection signal="pressed" from="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container/bios_button" to="." method="_on_bios_button_pressed"]
