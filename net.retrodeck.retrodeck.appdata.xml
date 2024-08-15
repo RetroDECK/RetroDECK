@@ -7,32 +7,32 @@
    <summary>RetroDECK brings an environment to catalog and play your retro games directly on your Steam Deck</summary>
    <developer_name>RetroDECK Team</developer_name>
    <url type="homepage">https://retrodeck.net</url>
-   <url type="bugtracker">https://github.com/XargonWan/RetroDECK/issues</url>
+   <url type="bugtracker">https://github.com/RetroDECK/RetroDECK/issues</url>
    <url type="help">https://retrodeck.readthedocs.io</url>
-   <url type="faq">https://github.com/XargonWan/RetroDECK/wiki/FAQs---Frequently-asked-questions</url>
+   <url type="faq">https://github.com/RetroDECK/RetroDECK/wiki/FAQs---Frequently-asked-questions</url>
    <url type="donation">https://www.patreon.com/RetroDECK</url>
    <content_rating type="oars-1.0" />
    <screenshots>
       <screenshot type="default">
-         <image>https://github.com/XargonWan/RetroDECK/blob/main/res/logo.png?raw=true</image>
+         <image>https://github.com/RetroDECK/RetroDECK/blob/main/res/logo.png?raw=true</image>
       </screenshot>
       <screenshot>
-         <image>https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen01.jpeg?raw=true</image>
+         <image>https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen01.jpeg?raw=true</image>
       </screenshot>
       <screenshot>
-         <image>https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen02.jpeg?raw=true</image>
+         <image>https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen02.jpeg?raw=true</image>
       </screenshot>
       <screenshot>
-         <image>https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen03.jpeg?raw=true</image>
+         <image>https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen03.jpeg?raw=true</image>
       </screenshot>
       <screenshot>
-         <image>https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen04.jpeg?raw=true</image>
+         <image>https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen04.jpeg?raw=true</image>
       </screenshot>
       <screenshot>
-         <image>https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen05.jpeg?raw=true</image>
+         <image>https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen05.jpeg?raw=true</image>
       </screenshot>
       <screenshot>
-         <image>https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen06.jpeg?raw=true</image>
+         <image>https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen06.jpeg?raw=true</image>
       </screenshot>
    </screenshots>
    <description>
@@ -46,74 +46,167 @@
       <p>NOTE: It can be run on Linux desktop right now but there will be some manual configurations needed for input, storage location and other tiny hickups.</p>
       <p>
          INSTALLATION INSTRUCTIONS FOR THE STEAM DECK:
-         <ul>
-            <li>1. Start RetroDECK from the Desktop mode (only needed for the initial first time configuration)</li>
-            <li>2. Add RetroDECK to your Steam Library by pressing "Add a non-steam game to my library"</li>
-            <li>3. Download the offical RetroDECK controller profile from Steam</li>
-            <li>4. [OPTIONAL] Download Steam Grids graphics for RetroDECK with BoilR</li>
-         </ul>
+            1. Start RetroDECK from the Desktop mode (only needed for the initial first time configuration)
+            2. Add RetroDECK to your Steam Library by pressing "Add a non-steam game to my library"
+            3. Download the offical RetroDECK controller profile from Steam
+            4. [OPTIONAL] Download Steam Grids graphics for RetroDECK with BoilR
       </p>
       <p>For more detailed information check our wiki: 
-      https://github.com/XargonWan/RetroDECK/wiki</p>
+      https://github.com/RetroDECK/RetroDECK/wiki</p>
       <p>If you want to sponsor the project: 
       https://www.patreon.com/RetroDECK</p>
       <p>If you want to join the RetroDECK community check our:</p>
       <p>Reddit: https://www.reddit.com/r/RetroDECK/</p>
-      <p>Discord: https://discord.gg/Dz3szYsP8g 
+      <p>Discord: https://discord.gg/WDc5C9YWMx 
          (If you want to help out with the project join the "i-want-to-help" channel)</p>
    </description>
+   <branding>
+      <color type="primary" scheme_preference="light">#94a6fb</color>
+      <color type="primary" scheme_preference="dark">#404b98</color>
+   </branding>
    <project_license>GPL-3.0</project_license>
    <metadata_license>CC0-1.0</metadata_license>
    <releases>
-      <release version="0.8.0b" date="2023-12-14">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.8.0b</url>
+      <release version="0.9.0b" date="2024-07-19">
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.9.0b</url>
          <description>
-            <p>CRITICAL:</p>
-            <ul>
-               <li>DEEP TEST: prepare_emulator function is now called prepare_component, eidted even in the cli and split it into the Configurator, so we need to test if the reset emulator works as supposed, if the cli and the Configurator is consistent.</li>
-            </ul>
             <p>Changes:</p>
             <ul>
+               <li>WELCOME TO cooker-0.9.0b!</li>
+               <li>RetroDECK is on a diet: we saved around 600mb</li>
+            </ul>
+            <p>Developers, developers, developers:</p>
+            <ul>
+               <li>Manifest was completely redone, more on that on the MONTH blog post</li>
+               <li>RetroDECK now is migrated to an organization on GitHub, as before, please check the MONTH blog post</li>
+               <li>pre_build_automation script weas reworked and additional functions are added</li>
+               <li>Contributing is now easier and the manifest build time is down to about 40m (was 3h30)</li>
+            </ul>
+            <p>Known issues:</p>
+            <ul>
+               <li>Please check the know issues in the Wiki under General Information.</li>
+            </ul>
+         </description>
+      </release>
+      <release version="0.8.2b" date="2024-07-17">
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.8.2b</url>
+         <description>
+            <p>Changes:</p>
+            <ul>
+               <li>ES-DE: updated to 3.0.3</li>
+               <li>RUNTIME: updated to KDE 6.7</li>
+               <li>All emulators and engines updated</li>
+               <li>CONFIGURATOR: fixed an issue in the multi-file compression tool that prevented some type of files to be converted</li>
+               <li>CONFIGURATOR: added headless state for some functions (this will help to migrate to the Godot Configurator)</li>
+               <li>CONFIGURATOR: added a new "Empty ROMs folder removal" tool helping the user to cleanup the roms folder by deleting the empty folders</li>
+               <li>CONFIGURATOR: added a new "Rebuild removed ROMs folders" tool. This is complementary to the previous one:by recreating the whole roms folder structure</li>
+               <li>CONFIGURATOR: chd compression functionality restored</li>
+               <li>FRAMEWORK: fixed an issue where second level subfolders inside retrodeck folder were not correctly placed, this caused errors on ES-DE as themes and downloaded_media folder could not be found after a reset or first install</li>
+               <li>CEMU: now audio should work correctly when docking and undocking the Steam Deck</li>
+               <li>CEMU: added microphone blow input to R3</li>
+               <li>DOLPHIN: now supports RetroAchivements but must be manually enabled from the emulator as the Configurator is not yet prepared for that</li>
+               <li>DUCKSTATION: now out of the rolling release</li>
+               <li>INFRASTRUCTURE: we now have a self-hosted Gitea repo in case fo disaster recovery</li>
+            </ul>
+            <p>Known issues:</p>
+            <ul>
+               <li>Please check the know issues in the Wiki under General Information.</li>
+            </ul>
+         </description>
+      </release>
+      <release version="0.8.1b" date="2024-05-13">
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.8.1b</url>
+         <description>
+            <p>Changes:</p>
+            <ul>
+               <li>All emulators updated</li>
+               <li>PREPARE_COMPONENT: now the choice is passed lowercased so the script don't have to check for the possible casings, this should fix the issue where GZDoom couldn't be reset as it was expecting both GZDOOM or gzdoom.</li>
+               <li>ES-DE: downloaded_media, gamelist, and themes are now moved to the new retrodeck/ES-DE (previously was retrodeck)</li>
+               <li>ES-DE: custom collections are now located in retrodeck/ES-DE/collections, this prevents to be destroyed by a reset</li>
+               <li>LOGGER: version notes are no more outputed in the terminal or in the logs</li>
+               <li>WORKFLOWS: added RetroDECK.flatpak.sha files</li>
+               <li>WORKFLOWS: disabled nightly builds (was broken)</li>
+               <li>FRAMEWORK: now the PR builds are recognized same as cooker builds</li>
+               <li>FRAMEWORK: now there is a warning to check background windows, useful when installing RCPS3 firmware as some users were stuck on that screen without noticing the windows in the backgrounds</li>
+               <li>COOKER_UPDATER: added the hash check before uninstalling the flatpak</li>
+               <li>HELPER_FILES: updated links pointing to the new wiki</li>
+               <li>MAME-SA: added cheats</li>
+               <li>RYUJINX: added an helper file to specify how to install the firmware (not copying it in the folder)</li>
+               <li>RPCS3: included the confirm on quit preset, that can be enabled or disabled trough configurator like the other emulators</li>
+               <li>RETROARCH: fixed an issue where if a zip contained more than the game files it failed to load the game</li>
+               <li>CITRA_LIBRETRO: upscaled to 2x (was 4x but was too much), set system as "New 3DS"</li>
+               <li>GW_LIBRETRO: Handheld Electronic (GW) Libretro is now the defaulted Game And Watch emulator (due to a bug)</li>
+               <li>MESEN_LIBRETRO: enabled FDS disk auto load</li>
+               <li>SCUMMVM_LIBRETRO: provided assets</li>
+               <li>BIOS_CHECKER: added bios support for 3DO, GB, GBC, GBA, Neo Geo CD</li>
+               <li>BIOS_CHECKER: added more missing hashes</li>
+            </ul>
+            <p>Known issues:</p>
+            <ul>
+               <li>Please check the know issues in the Wiki under General Information.</li>
+            </ul>
+         </description>
+      </release>
+      <release version="0.8.0b" date="2024-04-17">
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.8.0b</url>
+         <description>
+            <p>Changes:</p>
+            <ul>
+               <li>All the emulators and engines are updated to their latest version</li>
+               <li>ES-DE: updated to 3.0.1</li>
+               <li>RPCS3 is now running via shortcut (.desktop file) by default</li>
+               <li>CITRA-SA: removed, it will available trough Ponzu. The libretro core is now the default emulator</li>
+               <li>YUZU: removed, Ryujinx is now the default emulator, it will available trough Ponzu</li>
+               <li>PONZU: added, check the wiki if interested in this preservational function</li>
+               <li>Added new system: PSVita, trough Vita3K</li>
                <li>Added new system: SOLARUS</li>
-               <li>Added new engine: GZDOOM</li>
-               <li>Added new emulator: Vita3K - Reset the emulator to grap the lates changes</li>
-               <li>Added new emulator: MAME (Standalone)</li>
-               <li>PPSSPP: added hotkeys</li>
+               <li>Added new engine: GZDOOM that is now the DOOM system default engine</li>
+               <li>Added new emulator: RYUJINX</li>
+               <li>Added new emulator: MAME (Standalone), v0.264</li>
+               <li>Added hotkeys for: PPSSPP, MAME, SCUMMVM</li>
                <li>DOLPHIN: improved wiimote pointer emulation for controllers</li>
-               <li>Added Steam Sync (with BoilR)</li>
-               <li>Quit button after emulators reset should act as an actual full quit button</li>
-               <li>Created a quit_retrodeck function to ease the quit in the scripts.</li>
-               <li>Logs folder is now in retrodeck/logs (previously was .logs)</li>
-               <li>The post update script is initializing vita3k, mame and boilr when coming from a version ealrier that 0.8.0, this don't work in cokker and must be resetted manually (for boilr reset RetroDECK)</li>
-               <li>RPCS3 is now running via shortcut (.desktop file) by default - WARN THE USERS TO MIGRATE</li>
-               <li>Added controller config for PS4 and PS5</li>
-               <li>Controller config overhaul</li>
-               <li>Removed talk names in the manifest as they're not needed anymore as enabled by default</li>
+               <li>DOLPHIN: enabled Gyro</li>
+               <li>PRIMEHACK: config structure refactor + new configs</li>
+               <li>LOGGER: logging is completely refactored, logs folder is now in retrodeck/logs (previously was .logs)</li>
+               <li>Added Steam controller layouts for PS4 and PS5</li>
+               <li>Steam controller layouts overhaul</li>
+               <li>DUCKSTATION: config refactor. The old config didn't not work anymore for controllers.</li>
+               <li>MULTIPLAYER: enabled controller configs for player 2~4 for CEMU, DUCKSTATION, GZDOOM, RPCS3 and RYUJINX</li>
+               <li>Graphical tweaks for DOLPHIN, MELONDS and PCSX2</li>
+               <li>Added a new icon for RetroDECK Configurator</li>
+               <li>CONFIGURATOR: added more systems to valid compression targets in the compressor tool</li>
+               <li>CONFIGURATOR: simplified single-file-compression process</li>
+               <li>CONFIGURATOR: merged "save state on exit" and  "load state on run" presets into a new "Quick Resume" function</li>
+               <li>CONFIGURATOR: added a tool to "Swap A/B X/Y button" for compatible systems</li>
+               <li>CONFIGURATOR: moved "Rewind" preset to "Global Presets" section and added more compatible systems</li>
+               <li>CONFIGURATOR: added "expert mode" on BIOS checker tool (shows all available info)</li>
+               <li>DESKTOP: added Steam Flatpak detection for controller profile install</li>
+               <li>DESKTOP: RetroDECK now knows if it is running on a real Deck or other Linux desktop</li>
+               <li>DESKTOP: disabled "Desktop Mode" warning when not running on Deck</li>
             </ul>
             <p>Fixes:</p>
             <ul>
-               <li>Fixed DUCKSTATION memory card folder</li>
-               <li>Fixed RPCS3 saves folder (wrong symlink) - WRN THE USERS TO BACKUP</li>
-               <li>Fixed issues that prevents Steam Sync to work correctly</li>
+               <li>CEMU: refactored input profiles to reflect the new version changes </li>
+               <li>DUCKSTATION: fixed memory card folder path</li>
+               <li>DUCKSTATION: all controlls now are configured via SDL</li>
+               <li>RPCS3: fixed saves folder (wrong symlink) - WARN THE USERS TO BACKUP</li>
+               <li>SCUMMVM: fixed a bug where some paths were not existing</li>
+               <li>RETROARCH: fixed a bug where the default folder was not the rom folder in the rgui</li>
+               <li>DOLPHIN: tweaked Wii, GC and GBA inputs</li>
+               <li>Removed talk names in the manifest as they're not needed anymore as enabled by default</li>
+               <li>Fixed an issue that prevented RetroDECK to work properly on some distributions on Wayland</li>
+               <li>Added the needed subfolders in retrodeck/bios</li>
+               <li>DEVELOPER TOOLS: fixed some issues that preventing RetroDECK to be built locally</li>
+               <li>DEVELOPER TOOLS: added a script to inject changes in the current RetroDECK installation in order to test script and config changes without a full manifest rebuild</li>
             </ul>
-            <p>Issues:</p>
+            <p>Known issues:</p>
             <ul>
-               <li>!!! WARNING !!! Steam Sync is now REPLACING your Standalone BoilR links with RetroDECK's, use it at your own risk!</li>
-               <li>GZDOOM: the controller for player 2+ is not correctly configured</li>
-               <li>quit_retrodeck function seems to not working correctly</li>
-               <li>MAME (Standalone) paths should be fixed</li>
-            </ul>
-            <p>Missing:</p>
-            <ul>
-               <li>GZDOOM: hotkeys</li>
-               <li>SOLARUS: hotkeys</li>
-               <li>MAME (Standalone): hotkeys</li>
-               <li>A proper reset script for the new emulators, now it's just a draft (only Vita3K is done)</li>
+               <li>Please check the know issues in the Wiki under General Information.</li>
             </ul>
          </description>
       </release>
       <release version="0.7.6b" date="2024-02-08">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.7.6b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.7.6b</url>
          <description>
             <p>Changes:</p>
             <ul>
@@ -126,12 +219,12 @@
             </ul>
             <p>Known issues:</p>
             <ul>
-               <li>Please check the know issues in the Wiki under General Infomration.</li>
+               <li>Please check the know issues in the Wiki under General Information.</li>
             </ul>
          </description>
       </release>
-      <release version="0.7.5b" date="2023-14-12">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.7.5b</url>
+      <release version="0.7.5b" date="2023-12-14">
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.7.5b</url>
          <description>
             <p>Bug fixes and other changes:</p>
             <ul>
@@ -151,7 +244,7 @@
          </description>
       </release>
       <release version="0.7.4b" date="2023-11-18">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.7.4b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.7.4b</url>
          <description>
             <p>Hotfix:</p>
             <ul>
@@ -162,12 +255,12 @@
             </ul>
             <p>Known issues:</p>
             <ul>
-               <li>Please check the know issues in the Wiki under General Infomration</li>
+               <li>Please check the know issues in the Wiki under General Information</li>
             </ul>
          </description>
       </release>
       <release version="0.7.3b" date="2023-11-14">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.7.3b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.7.3b</url>
          <description>
             <p>Updates:</p>
             <ul>
@@ -176,12 +269,12 @@
             </ul>
             <p>Known issues:</p>
             <ul>
-               <li>Please check the know issues in the Wiki under General Infomration</li>
+               <li>Please check the know issues in the Wiki under General Information</li>
             </ul>
          </description>
       </release>
       <release version="0.7.2b" date="2023-09-27">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.7.2b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.7.2b</url>
          <description>
             <p>Updates:</p>
             <ul>
@@ -204,17 +297,17 @@
          </description>
       </release>
       <release version="0.7.1b" date="2023-08-16">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.7.1b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.7.1b</url>
          <description>
             <p>Information:</p>
             <ul>
-                <li>Steam Deck users update RetroDECK from <i>Discover</i> in Desktop Mode.</li>
-                <li>Don't forget to reapply the latest controller layout: Go into the <i>Templates</i> tab and reapply the new profile ending with 0.7.1b (there is no need to reinstall the entire layout from the Configurator).</li>
+                <li>Steam Deck users update RetroDECK from Discover in Desktop Mode.</li>
+                <li>Don't forget to reapply the latest controller layout: Go into the Templates tab and reapply the new profile ending with 0.7.1b (there is no need to reinstall the entire layout from the Configurator).</li>
             </ul>
             <p>Bug fixes and other changes:</p>
             <ul>
                 <li>Fixed an issue to make sure the RD controller layout file at update with each RD update.</li>
-                <li>Fixed an issue with PPSSPP that made <i>L</i> and <i>R</i> incorrectly bound.</li>
+                <li>Fixed an issue with PPSSPP that made L and R incorrectly bound.</li>
                 <li>Fixed an issue in the Configurator that prevented the Yuzu preset for swapping A/B X/Y from working.</li>
                 <li>Fixed a notification issue on the latest SteamOS Beta releases.</li>
                 <li>Fixed an rsync permissions issue in the RetroDECK Framework.</li>
@@ -227,18 +320,18 @@
             <p>Steam Deck - Global Controller Layout:</p>
             <p>We have done some changes based on community feedback</p>
             <ul>
-                <li><i>Select</i> is now a hotkey trigger while pressing it down, <i>L4</i> and <i>R4</i> are still triggers as well.</li>
-                <li>The RetroArch combo of <i>Select</i> + <i>Start</i> = <i>Quit</i> now works on many SA-Emulators.</li>
-                <li><i>Open Menu</i> is removed from <i>Select</i>.</li>
-                <li><i>R5</i> = <i>A</i> button (this allows for great Wii controls on the right touchpad and pressing down the <i>R5</i> for A).</li>
-                <li><i>L5</i> = <i>B</i> button.</li>
+                <li>Select is now a hotkey trigger while pressing it down, L4 and R4 are still triggers as well.</li>
+                <li>The RetroArch combo of Select + Start = Quit now works on many SA-Emulators.</li>
+                <li>Open Menu is removed from Select.</li>
+                <li>R5 = A button (this allows for great Wii controls on the right touchpad and pressing down the R5 for A).</li>
+                <li>L5 = B button.</li>
             </ul>
             <p>Global hotkey changes:</p>
             <ul>
-                <li><i>Open Menu</i> is on <i>Y</i>.</li>
-                <li><i>Increase Emulation Speed</i> is on <i>Dpad-UP</i>.</li>
-                <li><i>Decrease Emulation Speed</i> is on <i>Dpad-Down</i>.</li>
-                <li><i>Fullscreen OFF</i> command is removed (as emulators have migrated to toggle).</li>
+                <li>Open Menu is on Y.</li>
+                <li>Increase Emulation Speed is on Dpad-UP.</li>
+                <li>Decrease Emulation Speed is on Dpad-Down.</li>
+                <li>Fullscreen OFF command is removed (as emulators have migrated to toggle).</li>
             </ul>
             <p>Known issues:</p>
             <ul>
@@ -248,7 +341,7 @@
          </description>
       </release>
       <release version="0.7.0b" date="2023-06-15">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.7.0b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.7.0b</url>
          <description>
             <p>New - System features:</p>
             <ul>
@@ -301,7 +394,7 @@
          </description>
       </release>
       <release version="0.6.6b" date="2023-04-26">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.6b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.6.6b</url>
          <description>
             <p>Bug fixes:</p>
             <ul>
@@ -311,7 +404,7 @@
          </description>
       </release>
       <release version="0.6.5b" date="2023-04-07">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.5b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.6.5b</url>
          <description>
             <p>Bug fixes and other changes:</p>
             <ul>
@@ -323,7 +416,7 @@
          </description>
       </release>
       <release version="0.6.4b" date="2023-04-04">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.4b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.6.4b</url>
          <description>
             <p>New features - General:</p>
             <ul>
@@ -340,7 +433,7 @@
          </description>
       </release>
       <release version="0.6.3b" date="2023-03-24">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.3b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.6.3b</url>
          <description>
             <p>New features - General:</p>
             <ul>
@@ -368,7 +461,7 @@
          </description>
       </release>
       <release version="0.6.2b" date="2023-03-15">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.2b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.6.2b</url>
          <description>
             <ul>
                <li>Persistent configurations when updating RetroDECK, this means your custom configurations should be saved across future versions. (We also laid groundwork for dynamic persistent configurations, more on that in a future update. This is the reason why it has taken quite long to fix this).</li>
@@ -392,7 +485,7 @@
          </description>
       </release>
       <release version="0.6.1b" date="2023-02-21">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.1b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.6.1b</url>
          <description>
             <ul>
                <li>Updated all the emulators and cores at their latest versions (except for Duckstation)</li>
@@ -411,7 +504,7 @@
          </description>
       </release>
       <release version="0.6.0b" date="2022-12-24">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.0b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.6.0b</url>
          <description>
             <ul>
                <li>Added Ryujinx</li>
@@ -436,7 +529,7 @@
          </description>
       </release>
       <release version="0.5.3b" date="2022-10-26">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.5.3b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.5.3b</url>
          <description>
             <ul>
                <li>Fixed inaccessible RetroArch shaders folder</li>
@@ -453,7 +546,7 @@
          </description>
       </release>
       <release version="0.5.2b" date="2022-10-13">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.5.2b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.5.2b</url>
          <description>
             <ul>
                <li>VERY IMPORTANT: We are moving your saves! This can take time on the first boot. If you miss some saves they are not gone. Please read more in the wiki.</li>
@@ -464,7 +557,7 @@
          </description>
       </release>
       <release version="0.5.1b" date="2022-10-12">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.5.1b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.5.1b</url>
          <description>
             <ul>
                <li>VERY IMPORTANT: We are moving your saves! This can take time on the first boot. If you miss some saves they are not gone. Please read more in the wiki.</li>
@@ -486,7 +579,7 @@
          </description>
       </release>
       <release version="0.5.0b" date="2022-10-11">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.5.0b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.5.0b</url>
          <description>
             <ul>
                <li>VERY IMPORTANT: We are moving your saves! This can take time on the first boot. If you miss some saves they are not gone. Please read more in the wiki.</li>
@@ -506,7 +599,7 @@
          </description>
       </release>
       <release version="0.4.5b" date="2022-07-20">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.4.5b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.4.5b</url>
          <description>
             <ul>
                <li>Fixed a bug where new symlinks were not created correctly and users couldn't scrape their games</li>
@@ -521,7 +614,7 @@
          </description>
       </release>
       <release version="0.4.4b" date="2022-07-18">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.4.4b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.4.4b</url>
          <description>
             <ul>
                <li>Yuzu: Disabled shader caching as it was broken</li>
@@ -546,38 +639,38 @@
          </description>
       </release>
       <release version="0.4.3b" date="2022-07-07">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.4.3b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.4.3b</url>
          <description>
             <p>
-               <b>Emulators:</b>
+               Emulators:
             </p>
             <ul>
                <li>Updated all the emulators at the latest available version.</li>
             </ul>
             <p>
-               <b>Backend:</b>
+               Backend:
             </p>
             <ul>
                <li>Manifest code cleanup.</li>
             </ul>
             <p>
-               <b>Known Issues:</b>
+               Known Issues:
             </p>
             <ul>
                <li>PCSX2: due to its limitation, the standalone PCSX2 doesn't have any way to set the hotkeys, so no save and load state, no quit button. In order to quit press: STEAM -&gt; PCSX2 -&gt; (X) CLOSE WINDOW, be aware that the state is not automatically saved</li>
                <li>Due to a Steam limitation, external controllers and keyboard seems not to be working, expecially in the desktop mode</li>
             </ul>
             <p>
-               <b>IMPORTANT NOTE:</b>
+               IMPORTANT NOTE:
                At the moment the emulator configs are reset during every update, this was made because every version they may bring new configurations, please back them up if you did some manual configs.
             </p>
          </description>
       </release>
       <release version="0.4.2b" date="2022-07-01">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.4.2b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.4.2b</url>
          <description>
             <p>
-               <b>Emulators:</b>
+               Emulators:
             </p>
             <ul>
                <li>Updated all the emulators at the latest available version.</li>
@@ -588,7 +681,7 @@
                <li>RETROARCH (LIBRETRO): Tweaked some configs and fixed some overlapping hotkeys (FPS was same as Show Menu action).</li>
             </ul>
             <p>
-               <b>Backend:</b>
+               Backend:
             </p>
             <ul>
                <li>Removed some broken tools that will be reintroduced once fixed, including the roms moving tool.</li>
@@ -596,23 +689,23 @@
                <li>Manifest trimmend and general code cleanup.</li>
             </ul>
             <p>
-               <b>Known Issues:</b>
+               Known Issues:
             </p>
             <ul>
                <li>PCSX2: due to its limitation, the standalone PCSX2 doesn't have any way to set the hotkeys, so no save and load state, no quit button. In order to quit press: STEAM -&gt; PCSX2 -&gt; (X) CLOSE WINDOW, be aware that the state is not automatically saved</li>
                <li>Due to a Steam limitation, external controllers and keyboard seems not to be working, expecially in the desktop mode</li>
             </ul>
             <p>
-               <b>IMPORTANT NOTE:</b>
+               IMPORTANT NOTE:
                At the moment the emulator configs are reset during every update, this was made because every version they may bring new configurations, please back them up if you did some manual configs.
             </p>
          </description>
       </release>
       <release version="0.4.1b" date="2022-05-11">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.4.1b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.4.1b</url>
          <description>
             <p>
-               <b>Emulators:</b>
+               Emulators:
             </p>
             <ul>
                <li>Tweaked various emulator configs</li>
@@ -620,7 +713,7 @@
                <li>Fixed home path in MelonDS (SA)</li>
             </ul>
             <p>
-               <b>Frontend:</b>
+               Frontend:
             </p>
             <ul>
                <li>Updated ES-DE to 1.2.4</li>
@@ -628,13 +721,13 @@
                <li>Now a custom roms path can be selected if SD Card is selected and the SD Card is not found in the default path</li>
             </ul>
             <p>
-               <b>Backend:</b>
+               Backend:
             </p>
             <ul>
                <li>Fixed a bug where the folders where not symlinked correclty</li>
             </ul>
             <p>
-               <b>Known Issues:</b>
+               Known Issues:
             </p>
             <ul>
                <li>PCSX2: due to its limitation, the standalone PCSX2 doesn't have any way to set the hotkeys, so no save and load state, no quit button. In order to quit press: STEAM -&gt; PCSX2 -&gt; (X) CLOSE WINDOW, be aware that the state is not automatically saved</li>
@@ -642,13 +735,13 @@
                <li>Yuzu makes RetroDECK freeze in some situations, like if the rom is a bad dump</li>
             </ul>
             <p>
-               <b>IMPORTANT NOTE:</b>
+               IMPORTANT NOTE:
                At the moment the emulator configs are reset during every update, this was made because every version they may bring new configurations, please back them up if you did some manual configs.
             </p>
          </description>
       </release>
       <release version="0.4.0b" date="2022-05-26">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.4.0b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.4.0b</url>
          <description>
             <p>Emulators:</p>
             <ul>
@@ -705,7 +798,7 @@
          </description>
       </release>
       <release version="0.3.1b" date="2022-04-26">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.3.1b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.3.1b</url>
          <description>
             <ul>
                <li>Fixed Dolphin: now Dolphin (Standalone) is the default emulator for GC/Wii.</li>
@@ -713,7 +806,7 @@
          </description>
       </release>
       <release version="0.3.0b" date="2022-04-26">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.3.0b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.3.0b</url>
          <description>
             <ul>
                <li>Migrated everything from the old domain com.xargon.retrodeck to net.retrodeck.retrodeck to be aligned with flathub standards</li>
@@ -733,7 +826,7 @@
          </description>
       </release>
       <release version="0.2.0b" date="2022-04-17">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.2.0b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.2.0b</url>
          <description>
             <ul>
                <li>Migrated everything from the old building script to a full fledged yaml in order to being published on Discover</li>
@@ -749,7 +842,7 @@
          </description>
       </release>
       <release version="0.1.1b" date="2022-04-03">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.1.1b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.1.1b</url>
          <description>
             <ul>
                <li>Removed some debug stuff (press any key to continue)</li>
@@ -761,7 +854,7 @@
          </description>
       </release>
       <release version="0.1.0b" date="2022-04-03">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.1.0b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.1.0b</url>
          <description>
             <ul>
                <li>Pick up and play, just put your roms and bios in /retrodeck/roms and /retrodeck/bios folders.</li>

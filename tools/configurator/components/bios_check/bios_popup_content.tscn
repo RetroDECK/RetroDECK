@@ -1,0 +1,38 @@
+[gd_scene load_steps=2 format=3 uid="uid://bihon3xtx45y7"]
+
+[ext_resource type="Script" path="res://components/bios_check/bios_check.gd" id="1_qrkee"]
+
+[node name="PopupContent" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qrkee")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "This is a list of problematic BIOS?
+Very multiline text
+Why do we use it?
+
+PS3 BIOS IS VERY BAD
+I'm not sure what else?"
+
+[node name="Table" type="Tree" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+columns = 5
+column_titles_visible = true
+select_mode = 1

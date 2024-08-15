@@ -2,7 +2,7 @@
 
 multi_user_set_default_dialog() {
   chosen_user="$1"
-  choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="No and don't ask again" \
+  choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="No and don't ask again" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Default User" \
   --text="Would you like to set $chosen_user as the default user?\n\nIf the current user cannot be determined from the system, the default will be used.\nThis normally only happens in Desktop Mode.\n\nIf you would like to be asked which user is playing every time, click \"No and don't ask again\"")
@@ -23,7 +23,7 @@ do
 full_userlist=("${full_userlist[@]}" "$user")
 done < <(ls -1 "$multi_user_data_folder")
 
-chosen_user=$(zenity \
+chosen_user=$(rd_zenity \
   --list --width=1200 --height=720 \
   --ok-label="Select User" \
   --text="Choose the current user:" \
@@ -43,7 +43,7 @@ multi_user_enable_multi_user_mode() {
   if [[ -d "$multi_user_data_folder" && $(ls -1 "$multi_user_data_folder" | wc -l) -gt 0 ]]; then # If multi-user data folder exists from prior use and is not empty
     if [[ -d "$multi_user_data_folder/$SteamAppUser" ]]; then # Current user has an existing save folder
       configurator_generic_dialog "RetroDECK Multi-User Mode" "The current user $SteamAppUser has an existing folder in the multi-user data folder.\n\nThe saves here are likely older than the ones currently used by RetroDECK.\n\nThe old saves will be backed up to $backups_folder and the current saves will be loaded into the multi-user data folder."
-      mkdir -p "$backups_folder"
+      create_dir "$backups_folder"
       tar -C "$multi_user_data_folder" -cahf "$backups_folder/multi-user-backup_$SteamAppUser_$(date +"%Y_%m_%d").zip" "$SteamAppUser"
       rm -rf "$multi_user_data_folder/$SteamAppUser" # Remove stale data after backup
     fi
@@ -65,7 +65,7 @@ multi_user_disable_multi_user_mode() {
     full_userlist=("${full_userlist[@]}" "$user")
     done < <(ls -1 "$multi_user_data_folder")
 
-    single_user=$(zenity \
+    single_user=$(rd_zenity \
       --list --width=1200 --height=720 \
       --ok-label="Select User" \
       --text="Choose the current user:" \
@@ -125,7 +125,7 @@ multi_user_determine_current_user() {
         multi_user_setup_new_user
       else # If running in Desktop mode for the first time
         configurator_generic_dialog "RetroDECK Multi-User Mode" "The current user could not be determined from the system and there is no existing userlist.\n\nPlease enter the Steam account username (not profile name) into the next dialog, or run RetroDECK in game mode."
-        if zenity --entry \
+        if rd_zenity --entry \
           --title="Specify Steam username" \
           --text="Enter Steam username:"
         then # User clicked "OK"
@@ -149,7 +149,7 @@ multi_user_determine_current_user() {
 
 multi_user_return_to_single_user() {
   single_user="$1"
-  echo "Returning to single-user mode for $single_user"
+  log i "Returning to single-user mode for $single_user"
   unlink "$saves_folder"
   unlink "$states_folder"
   unlink "$rd_conf"
@@ -162,18 +162,18 @@ multi_user_return_to_single_user() {
   # XEMU one-offs, because it stores its config in /var/data, not /var/config like everything else
   unlink "/var/config/xemu"
   unlink "/var/data/xemu/xemu"
-  mkdir -p "/var/config/xemu"
+  create_dir "/var/config/xemu"
   mv -f "$multi_user_data_folder/$single_user/config/xemu"/{.[!.],}* "/var/config/xemu"
   dir_prep "/var/config/xemu" "/var/data/xemu/xemu"
-  mkdir -p "$saves_folder"
-  mkdir -p "$states_folder"
+  create_dir "$saves_folder"
+  create_dir "$states_folder"
   mv -f "$multi_user_data_folder/$single_user/saves"/{.[!.],}* "$saves_folder"
   mv -f "$multi_user_data_folder/$single_user/states"/{.[!.],}* "$states_folder"
   for emu_conf in $(find "$multi_user_data_folder/$single_user/config" -mindepth 1 -maxdepth 1 -type d -printf '%f\n')
   do
     if [[ ! -z $(grep "^$emu_conf$" "$multi_user_emulator_config_dirs") ]]; then
       unlink "/var/config/$emu_conf"
-      mkdir -p "/var/config/$emu_conf"
+      create_dir "/var/config/$emu_conf"
       mv -f "$multi_user_data_folder/$single_user/config/$emu_conf"/{.[!.],}* "/var/config/$emu_conf"
     fi
   done
@@ -182,22 +182,22 @@ multi_user_return_to_single_user() {
 
 multi_user_setup_new_user() {
   # TODO: RPCS3 one-offs
-  echo "Setting up new user"
+  log i "Setting up new user"
   unlink "$saves_folder"
   unlink "$states_folder"
   dir_prep "$multi_user_data_folder/$SteamAppUser/saves" "$saves_folder"
   dir_prep "$multi_user_data_folder/$SteamAppUser/states" "$states_folder"
-  mkdir -p "$multi_user_data_folder/$SteamAppUser/config/retrodeck"
+  create_dir "$multi_user_data_folder/$SteamAppUser/config/retrodeck"
   cp -L "$rd_conf" "$multi_user_data_folder/$SteamAppUser/config/retrodeck/retrodeck.cfg" # Copy existing rd_conf file for new user.
   rm -f "$rd_conf"
   ln -sfT "$multi_user_data_folder/$SteamAppUser/config/retrodeck/retrodeck.cfg" "$rd_conf"
-  mkdir -p "$multi_user_data_folder/$SteamAppUser/config/retroarch"
+  create_dir "$multi_user_data_folder/$SteamAppUser/config/retroarch"
   if [[ ! -L "/var/config/retroarch/retroarch.cfg" ]]; then
     mv "/var/config/retroarch/retroarch.cfg" "$multi_user_data_folder/$SteamAppUser/config/retroarch/retroarch.cfg"
     mv "/var/config/retroarch/retroarch-core-options.cfg" "$multi_user_data_folder/$SteamAppUser/config/retroarch/retroarch-core-options.cfg"
   else
-    cp "$emuconfigs/retroarch/retroarch.cfg" "$multi_user_data_folder/$SteamAppUser/config/retroarch/retroarch.cfg"
-    cp "$emuconfigs/retroarch/retroarch-core-options.cfg" "$multi_user_data_folder/$SteamAppUser/config/retroarch/retroarch-core-options.cfg"
+    cp "$config/retroarch/retroarch.cfg" "$multi_user_data_folder/$SteamAppUser/config/retroarch/retroarch.cfg"
+    cp "$config/retroarch/retroarch-core-options.cfg" "$multi_user_data_folder/$SteamAppUser/config/retroarch/retroarch-core-options.cfg"
     set_setting_value "$raconf" "savefile_directory" "$saves_folder" "retroarch"
     set_setting_value "$raconf" "savestate_directory" "$states_folder" "retroarch"
     set_setting_value "$raconf" "screenshot_directory" "$screenshots_folder" "retroarch"
@@ -220,7 +220,7 @@ multi_user_setup_new_user() {
 }
 
 multi_user_link_current_user_files() {
-  echo "Linking existing user"
+  log i "Linking existing user"
   ln -sfT "$multi_user_data_folder/$SteamAppUser/saves" "$saves_folder"
   ln -sfT "$multi_user_data_folder/$SteamAppUser/states" "$states_folder"
   ln -sfT "$multi_user_data_folder/$SteamAppUser/config/retrodeck/retrodeck.cfg" "$rd_conf"

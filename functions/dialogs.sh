@@ -1,12 +1,14 @@
 #!/bin/bash
 
-source /app/libexec/functions.sh
+# Dialog colors
+purple="#a864fc"
+blue="#6fbfff"
 
 debug_dialog() {
   # This function is for displaying commands run by the Configurator without actually running them
   # USAGE: debug_dialog "command"
 
-  zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
+  rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Configurator Utility - Debug Dialog" \
   --text="$1"
@@ -15,7 +17,7 @@ debug_dialog() {
 configurator_process_complete_dialog() {
   # This dialog shows when a process is complete.
   # USAGE: configurator_process_complete_dialog "process text"
-  zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Quit" --extra-button="OK" \
+  rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Quit" --extra-button="OK" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Configurator Utility - Process Complete" \
   --text="The process of $1 is now complete.\n\nYou may need to quit and restart RetroDECK for your changes to take effect\n\nClick OK to return to the Main Menu or Quit to quit RetroDECK."
@@ -30,7 +32,8 @@ configurator_process_complete_dialog() {
 configurator_generic_dialog() {
   # This dialog is for showing temporary messages before another process happens.
   # USAGE: configurator_generic_dialog "title text" "info text"
-  zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
+  log i "Showing a configurator_generic_dialog"
+  rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "$1" \
   --text="$2"
@@ -40,7 +43,7 @@ configurator_generic_question_dialog() {
   # This dialog provides a generic dialog for getting a response from a user.
   # USAGE: $(configurator_generic_question_dialog "title text" "action text")
   # This function will return a "true" if the user clicks "Yes", and "false" if they click "No".
-  choice=$(zenity --title "RetroDECK - $1" --question --no-wrap --cancel-label="No" --ok-label="Yes" \
+  choice=$(rd_zenity --title "RetroDECK - $1" --question --no-wrap --cancel-label="No" --ok-label="Yes" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --text="$2")
   if [[ $? == "0" ]]; then
@@ -54,7 +57,7 @@ configurator_destination_choice_dialog() {
   # This dialog is for making things easy for new users to move files to common locations. Gives the options for "Internal", "SD Card" and "Custom" locations.
   # USAGE: $(configurator_destination_choice_dialog "folder being moved" "action text")
   # This function returns one of the values: "Back" "Internal Storage" "SD Card" "Custom Location"
-  choice=$(zenity --title "RetroDECK Configurator Utility - Moving $1 folder" --info --no-wrap --ok-label="Back" --extra-button="Internal Storage" --extra-button="SD Card" --extra-button="Custom Location" \
+  choice=$(rd_zenity --title "RetroDECK Configurator Utility - Moving $1 folder" --info --no-wrap --ok-label="Back" --extra-button="Internal Storage" --extra-button="SD Card" --extra-button="Custom Location" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --text="$2")
 
@@ -70,7 +73,7 @@ configurator_reset_confirmation_dialog() {
   # This dialog provides a confirmation for any reset functions, before the reset is actually performed.
   # USAGE: $(configurator_reset_confirmation_dialog "emulator being reset" "action text")
   # This function will return a "true" if the user clicks Confirm, and "false" if they click Cancel.
-  choice=$(zenity --title "RetroDECK Configurator Utility - Reset $1" --question --no-wrap --cancel-label="Cancel" --ok-label="Confirm" \
+  choice=$(rd_zenity --title "RetroDECK Configurator Utility - Reset $1" --question --no-wrap --cancel-label="Cancel" --ok-label="Confirm" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --text="$2")
   if [[ $? == "0" ]]; then
@@ -130,7 +133,7 @@ configurator_move_folder_dialog() {
               configurator_generic_dialog "RetroDECK Configurator - Move Folder" "The moving process was not completed, please try again."
             fi
           else # If there isn't enough space in the picked destination
-            zenity --icon-name=net.retrodeck.retrodeck --error --no-wrap \
+            rd_zenity --icon-name=net.retrodeck.retrodeck --error --no-wrap \
             --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
             --title "RetroDECK Configurator Utility - Move Directories" \
             --text="The destination directory you have selected does not have enough free space for the files you are trying to move.\n\nPlease select a new destination or free up some space."
@@ -162,20 +165,21 @@ changelog_dialog() {
   # The function also accepts "all" as a version, and will print the entire changelog
   # USAGE: changelog_dialog "version"
 
+  log d "Showing changelog dialog"
+
   if [[ "$1" == "all" ]]; then
     xml sel -t -m "//release" -v "concat('RetroDECK version: ', @version)" -n -v "description" -n $rd_appdata | awk '{$1=$1;print}' | sed -e '/./b' -e :n -e 'N;s/\n$//;tn' > "/var/config/retrodeck/changelog.txt"
 
-    zenity --icon-name=net.retrodeck.retrodeck --text-info --width=1200 --height=720 \
+    rd_zenity --icon-name=net.retrodeck.retrodeck --text-info --width=1200 --height=720 \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Changelogs" \
     --filename="/var/config/retrodeck/changelog.txt"
   else
     local version_changelog=$(xml sel -t -m "//release[@version='$1']/description" -v . -n $rd_appdata | tr -s '\n' | sed 's/^\s*//')
 
-    echo -e "In RetroDECK version $1, the following changes were made:\n$version_changelog" > "/var/config/retrodeck/changelog-partial.txt" 
-    "$version_changelog" >> "/var/config/retrodeck/changelog-partial.txt"
+    echo -e "In RetroDECK version $1, the following changes were made:\n$version_changelog" > "/var/config/retrodeck/changelog-partial.txt" 2>/dev/null
 
-    zenity --icon-name=net.retrodeck.retrodeck --text-info --width=1200 --height=720 \
+    rd_zenity --icon-name=net.retrodeck.retrodeck --text-info --width=1200 --height=720 \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Changelogs" \
     --filename="/var/config/retrodeck/changelog-partial.txt"
@@ -186,7 +190,7 @@ get_cheevos_token_dialog() {
   # This function will return a RetroAchvievements token from a valid username and password, will return "login failed" otherwise
   # USAGE: get_cheevos_token_dialog
 
-  local cheevos_info=$(zenity --forms --title="Cheevos" \
+  local cheevos_info=$(rd_zenity --forms --title="Cheevos" \
   --text="Username and password." \
   --separator="^" \
   --add-entry="Username" \
@@ -211,17 +215,23 @@ desktop_mode_warning() {
   # USAGE: desktop_mode_warning
 
   if [[ $(check_desktop_mode) == "true" && $desktop_mode_warning == "true" ]]; then
-    choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="Never show this again" \
+    local message='You appear to be running RetroDECK in the Steam Deck'\''s Desktop mode!\n\nSome functions of RetroDECK may not work properly in Desktop mode, such as the Steam Deck'\''s normal controls.\n\nRetroDECK is best enjoyed in Game mode!\n\nDo you still want to proceed?'
+    log i "Showing message:\n$message"
+    choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="Never show this again" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Desktop Mode Warning" \
-    --text="You appear to be running RetroDECK in the Steam Deck's Desktop mode!\n\nSome functions of RetroDECK may not work properly in Desktop mode, such as the Steam Deck's normal controls.\n\nRetroDECK is best enjoyed in Game mode!\n\nDo you still want to proceed?")
+    --text="$message")
     rc=$? # Capture return code, as "Yes" button has no text value
     if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
       if [[ $choice == "No" ]]; then
+        log i "Selected: \"No\""
         exit 1
       elif [[ $choice == "Never show this again" ]]; then
+        log i "Selected: \"Never show this again\""
         set_setting_value $rd_conf "desktop_mode_warning" "false" retrodeck "options" # Store desktop mode warning variable for future checks
       fi
+    else
+      log i "Selected: \"Yes\""
     fi
   fi
 }
@@ -233,13 +243,17 @@ low_space_warning() {
   if [[ $low_space_warning == "true" ]]; then
     local used_percent=$(df --output=pcent "$HOME" | tail -1 | tr -d " " | tr -d "%")
     if [[ "$used_percent" -ge 90 && -d "$HOME/retrodeck" ]]; then # If there is any RetroDECK data on the main drive to move
-      choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK" --extra-button="Never show this again" \
+      local message='Your main drive is over 90% full!\n\nIf your drive fills completely this can lead to data loss or system crash.\n\nPlease consider moving some RetroDECK folders to other storage locations using the Configurator.'
+      log i "Showing message:\n$message"
+      choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK" --extra-button="Never show this again" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Low Space Warning" \
-      --text="Your main drive is over 90% full!\n\nIf your drive fills completely this can lead to data loss or system crash.\n\nPlease consider moving some RetroDECK folders to other storage locations using the Configurator.")
+      --text="$message")
       if [[ $choice == "Never show this again" ]]; then
-          set_setting_value $rd_conf "low_space_warning" "false" retrodeck "options" # Store low space warning variable for future checks
+        log i "Selected: \"Never show this again\""
+        set_setting_value $rd_conf "low_space_warning" "false" retrodeck "options" # Store low space warning variable for future checks
       fi
     fi
+    log i "Selected: \"OK\""
   fi
 }
