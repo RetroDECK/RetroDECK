@@ -603,12 +603,12 @@ install_release() {
   # TODO logging - add some logging here
   # Pass me a vaild GitHub tag and I will update to that version, I will use the update_repo variable to determine the repo
 
-  local flatpak_url="https://github.com/XargonWan/$update_repo/releases/download/$1/$update_repo.flatpak"
+  local flatpak_url="https://github.com/$git_organization_name/$update_repo/releases/download/$1/$update_repo.flatpak"
 
   zenity --question --icon-name=net.retrodeck.retrodeck --no-wrap \
           --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
           --title "RetroDECK Updater" \
-          --text="The chosen version will be now intalled, after the update process RetroDECK will quit, do you want to continue?"
+          --text="The latest version of $1 will be now installed, after the update process RetroDECK will quit, do you want to continue?"
   rc=$? # Capture return code
   if [[ $rc == "1" ]]; then # If any button other than "OK" was clicked
     return 0
