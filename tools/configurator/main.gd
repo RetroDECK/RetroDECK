@@ -15,10 +15,10 @@ var anim_logo: AnimatedSprite2D
 var rd_logs: String
 var rd_version: String
 var gc_version: String
-var l1_button: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0797.png")
-var r1_button: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0798.png")
-var l1_button_alt: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0763.png")
-var r1_button_alt: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0764.png")
+var l1_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0797.png")
+var r1_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0798.png")
+var l1_button_texture_alt: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0763.png")
+var r1_button_texture_alt: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0764.png")
 
 var app_data = AppData.new()
 func _ready():
@@ -71,8 +71,8 @@ func _process(delta):
 	elif Input.is_action_pressed("previous_tab"):
 		%l1_button.texture_normal = $l1_button.texture_pressed
 	else:
-		%r1_button.texture_normal = r1_button
-		%l1_button.texture_normal = l1_button
+		%r1_button.texture_normal = r1_button_texture
+		%l1_button.texture_normal = l1_button_texture
 func _get_nodes() -> void:
 	status_code_label = get_node("%status_code_label")
 	theme_option = get_node("%theme_optionbutton")
@@ -184,9 +184,8 @@ func _on_locale_selected(index):
 	combine_tkeys()
 	
 func combine_tkeys(): #More as a test
-	%cheats.text = tr("TK_CHEATS") + " " + tr("TK_SOON")
+	%cheats.text = tr("TK_CHEATS") + " " + tr("TK_SOON") # switched to access as a unique name as easier to refactor
 	#$Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/HBoxContainer/GridContainer/cheats.text = tr("TK_CHEATS") + " " + tr("TK_SOON")
-	#$Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/game_control_container/GridContainer/cheats.text = tr("TK_CHEATS") + " " + tr("TK_SOON")
 	$Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/GridContainer/shaders.text = tr("TK_SHADERS") + " " + tr("TK_SOON")
 	$Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/extra_container/GridContainer/tate_mode.text = tr("TK_TATE") + " " + tr("TK_SOON")
 	$Background/MarginContainer/TabContainer/TK_CONTROLS/ScrollContainer/VBoxContainer/controls_container/hotkey_sound.text = tr("TK_HOTKEYSOUND") + " " + tr("TK_SOON")
