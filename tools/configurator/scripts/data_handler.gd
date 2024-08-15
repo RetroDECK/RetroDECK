@@ -19,7 +19,6 @@ func load_base_data() -> AppData:
 		#if parsed_data.error == OK:
 		if parsed_data:
 			var data_dict = parsed_data
-
 			var about_links = {}
 			for key in data_dict["about_links"].keys():
 				var link_data = data_dict["about_links"][key]
@@ -33,7 +32,6 @@ func load_base_data() -> AppData:
 			for key in data_dict["emulator"].keys():
 				var emulator_data = data_dict["emulator"][key]
 				var emulator = Emulator.new()
-				
 				emulator.name = emulator_data["name"]
 				emulator.description = emulator_data["description"]
 				print (emulator.name)
@@ -41,15 +39,16 @@ func load_base_data() -> AppData:
 					for property_data in emulator_data["properties"]:
 						var property = EmulatorProperty.new()
 						property.standalone = property_data.get("standalone", false)
+#todo fix error
 #						property.abxy_button_status = property_data.get("abxy_button", {}).get("status", false)
 						emulator.properties.append(property)
 
 				emulators[key] = emulator
 
-			var app_data = AppData.new()
-			app_data.about_links = about_links
-			app_data.emulators = emulators
-			return app_data
+			var this_app_data = AppData.new()
+			this_app_data.about_links = about_links
+			this_app_data.emulators = emulators
+			return this_app_data
 		else:
 			print("Error parsing JSON")
 	else:

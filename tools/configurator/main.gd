@@ -26,17 +26,20 @@ func _ready():
 	_connect_signals()
 	_play_main_animations()
 	$Background/locale_option.selected = class_functions.map_locale_id(OS.get_locale_language())
+
 	"""
-	# load json data
-	#app_data = data_handler.load_data()
-		#test to show some data
+	# Load json data. Test to show some data
+	app_data = data_handler.load_base_data()
+
 	if app_data:
 		var website_data = app_data.about_links["rd_web"]
 		print (website_data.name,"-",website_data.url,"-",website_data.description)
-	"""
+		print (app_data.about_links["rd_web"]["url"])
+	
 	var console: bool = false
 	var test = class_functions.execute_command("cat",["/var/config/retrodeck/retrodeck.cfg"],console)
-	#print (test)
+	print (test)
+	"""
 	var config_file_path = "/var/config/retrodeck/retrodeck.cfg"
 	var json_file_path = "/var/config/retrodeck/retrodeck.json"
 	var config = data_handler.parse_config_to_json(config_file_path)
@@ -181,7 +184,8 @@ func _on_locale_selected(index):
 	combine_tkeys()
 	
 func combine_tkeys(): #More as a test
-	$Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/HBoxContainer/GridContainer/cheats.text = tr("TK_CHEATS") + " " + tr("TK_SOON")
+	%cheats.text = tr("TK_CHEATS") + " " + tr("TK_SOON")
+	#$Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/HBoxContainer/GridContainer/cheats.text = tr("TK_CHEATS") + " " + tr("TK_SOON")
 	#$Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/game_control_container/GridContainer/cheats.text = tr("TK_CHEATS") + " " + tr("TK_SOON")
 	$Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/GridContainer/shaders.text = tr("TK_SHADERS") + " " + tr("TK_SOON")
 	$Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/extra_container/GridContainer/tate_mode.text = tr("TK_TATE") + " " + tr("TK_SOON")

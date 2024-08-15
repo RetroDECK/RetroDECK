@@ -9,8 +9,6 @@ var credits_button: Button
 var donate_button: Button
 var contactus_button: Button
 var licenses_button: Button
-#var tk_about: Dictionary
-#signal signal_theme_changed
 var app_data = AppData.new()
 
 func _ready():
@@ -21,9 +19,6 @@ func _ready():
 	
 	for id in app_data.about_links:
 		var web_data = app_data.about_links[id]
-		var linkT =Link.new()
-		linkT = app_data.about_links[id]
-		print ("FREEED" + linkT.name)
 		match id:
 			"rd_web":
 				%website_button.tooltip_text = web_data.description
