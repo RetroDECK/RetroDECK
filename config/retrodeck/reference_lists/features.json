@@ -484,7 +484,7 @@
       "name": "Sega Mega-CD"
     },
     "megacdjp": {
-      "name": "Sega Mega-CD"
+      "name": "Sega Mega-CD (Japan)"
     },
     "megadrive": {
       "name": "Sega Mega Drive"
@@ -547,7 +547,7 @@
       "name": "SNK Neo Geo CD"
     },
     "neogeocdjp": {
-      "name": "SNK Neo Geo CD"
+      "name": "SNK Neo Geo CD (Japan)"
     },
     "nes": {
       "name": "Nintendo Entertainment System"
@@ -628,7 +628,7 @@
       "name": "Sega Saturn"
     },
     "saturnjp": {
-      "name": "Sega Saturn"
+      "name": "Sega Saturn (Japan)"
     },
     "scummvm": {
       "name": "ScummVM Game Engine"
@@ -640,7 +640,7 @@
       "name": "Sega Mega Drive 32X"
     },
     "sega32xjp": {
-      "name": "Sega Super 32X"
+      "name": "Sega Super 32X (Japan)"
     },
     "sega32xna": {
       "name": "Sega Genesis 32X"
