@@ -162,6 +162,15 @@ update_rd_conf() {
 
   # STAGE 3: Eliminate any preset incompatibility with existing user settings and new defaults
 
+  # Fetch incompatible presets from JSON and create a lookup list
+  incompatible_presets=$(jq -r '
+    .incompatible_presets | to_entries[] | 
+    [
+      "\(.key):\(.value)", 
+      "\(.value):\(.key)"
+    ] | join("\n")
+  ' $features)
+
   while IFS= read -r current_setting_line # Read the existing retrodeck.cfg
   do
     if [[ (! -z "$current_setting_line") && (! "$current_setting_line" == "#"*) && (! "$current_setting_line" == "[]") ]]; then # If the line has a valid entry in it
@@ -179,13 +188,14 @@ update_rd_conf() {
                   set_setting_value "$rd_conf" "$system_name" "false" "retrodeck" "$current_section"
                 fi
               fi
-            done < "$incompatible_presets_reference_list"
+            done <<< "$incompatible_presets"
           fi
         fi
       fi
     fi
   done < $rd_conf
 }
+
 
 conf_read() {
   # This function will read the RetroDECK config file into memory
@@ -312,15 +322,17 @@ backup_retrodeck_userdata() {
 
 make_name_pretty() {
   # This function will take an internal system name (like "gbc") and return a pretty version for user display ("Nintendo GameBoy Color")
+  # If the name is nout found it only returns the short name such as "gbc"
   # USAGE: make_name_pretty "system name"
-  local system=$(grep "$1^" "$pretty_system_names_reference_list")
-  if [[ ! -z "$system" ]]; then
-    IFS='^' read -r internal_name pretty_name < <(echo "$system")
-  else
-    pretty_name="$1"
-  fi
+
+  local system_name="$1"
+
+  # Use jq to parse the JSON and find the pretty name
+  local pretty_name=$(jq -r --arg name "$system_name" '.system[$name].name // $name' "$features")
+
   echo "$pretty_name"
 }
+
 
 finit_browse() {
 # Function for choosing data directory location during first/forced init
@@ -560,38 +572,42 @@ update_splashscreens() {
 }
 
 deploy_helper_files() {
-  # This script will distribute helper documentation files throughout the filesystem according to the $helper_files_list
+  # This script will distribute helper documentation files throughout the filesystem according to the JSON configuration
   # USAGE: deploy_helper_files
 
-  while IFS='^' read -r file dest || [[ -n "$file" ]];
-  do
-      if [[ ! "$file" == "#"* ]] && [[ ! -z "$file" ]]; then
+  # Extract helper files information using jq
+  helper_files=$(jq -r '.helper_files | to_entries | map("\(.value.filename)^\(.value.location)")[]' "$features")
+
+  # Iterate through each helper file entry
+  while IFS='^' read -r file dest; do
+    if [[ ! -z "$file" ]] && [[ ! -z "$dest" ]]; then
       eval current_dest="$dest"
       cp -f "$helper_files_folder/$file" "$current_dest/$file"
     fi
-  done < "$helper_files_list"
+  done <<< "$helper_files"
 }
 
-easter_eggs() {
-  # This function will replace the RetroDECK startup splash screen with a different image if the day and time match a listing in easter_egg_checklist.cfg
-  # The easter_egg_checklist.cfg file has the current format: $start_date^$end_date^$start_time^$end_time^$splash_file
-  # Ex. The line "1001^1031^0000^2359^spooky.svg" would show the file "spooky.svg" during any time of day in the month of October
-  # The easter_egg_checklist.cfg is read in order, so lines higher in the file will have higher priority in the event of an overlap
-  # USAGE: easter_eggs
-  current_day=$(date +"%0m%0d") # Read the current date in a format that can be calculated in ranges
-  current_time=$(date +"%0H%0M") # Read the current time in a format that can be calculated in ranges
-  if [[ ! -z $(cat $easter_egg_checklist) ]]; then
-    while IFS="^" read -r start_date end_date start_time end_time splash_file || [[ -n "$start_date" ]]; # Read Easter Egg checklist file and separate values
-    do
-      if [[ ! $start_date == "#"* ]] && [[ ! -z "$start_date" ]]; then
-        if [[ "$((10#$current_day))" -ge "$((10#$start_date))" && "$((10#$current_day))" -le "$((10#$end_date))" && "$((10#$current_time))" -ge "$((10#$start_time))" && "$((10#$current_time))" -le "$((10#$end_time))" ]]; then # If current line specified date/time matches current date/time, set $splash_file to be deployed
-          new_splash_file="$splashscreen_dir/$splash_file"
-          break
-        else # When there are no matches, the default splash screen is set to deploy
-          new_splash_file="$default_splash_file"
-        fi
-      fi
-    done < $easter_egg_checklist
+
+splash_screen() {
+  # This function will replace the RetroDECK startup splash screen with a different image if the day and time match a listing in the JSON data.
+  # USAGE: splash_screen
+
+  current_day=$(date +"%m%d")  # Read the current date in a format that can be calculated in ranges
+  current_time=$(date +"%H%M") # Read the current time in a format that can be calculated in ranges
+
+  # Read the JSON file and extract splash screen data using jq
+  splash_screen=$(jq -r --arg current_day "$current_day" --arg current_time "$current_time" '
+    .splash_screens | to_entries[] |
+    select(
+      ($current_day | tonumber) >= (.value.start_date | tonumber) and
+      ($current_day | tonumber) <= (.value.end_date | tonumber) and
+      ($current_time | tonumber) >= (.value.start_time | tonumber) and
+      ($current_time | tonumber) <= (.value.end_time | tonumber)
+    ) | .value.filename' $features)
+
+  # Determine the splash file to use
+  if [[ -n "$splash_screen" ]]; then
+    new_splash_file="$splashscreen_dir/$splash_screen"
   else
     new_splash_file="$default_splash_file"
   fi
@@ -870,7 +886,7 @@ quit_retrodeck() {
 }
 
 start_retrodeck() {
-  easter_eggs # Check if today has a surprise splashscreen and load it if so
+  splash_screen # Check if today has a surprise splashscreen and load it if so
   ponzu
   log i "Starting RetroDECK v$version"
   es-de

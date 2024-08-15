@@ -147,6 +147,119 @@
       "location": "$bios_folder/switch/firmware"
     }
   },
+  "compression_targets": {
+    "chd": [
+      "3do",
+      "amigacd32",
+      "dreamcast",
+      "megacd",
+      "neogeocd",
+      "pcenginecd",
+      "pcfx",
+      "psp",
+      "psx",
+      "ps2",
+      "saturn",
+      "saturnjp",
+      "segacd",
+      "tg-cd"
+    ],
+    "rvz": [
+      "gc",
+      "wii"
+    ],
+    "zip": [
+      "atari2600",
+      "atari5200",
+      "atari7800",
+      "atari800",
+      "atarijaguar",
+      "atarilynx",
+      "atarist",
+      "gamegear",
+      "gb",
+      "gba",
+      "gbc",
+      "genesis",
+      "mastersystem",
+      "n64",
+      "nds",
+      "nes",
+      "ngp",
+      "ngpc",
+      "sega32x",
+      "sega32xjp",
+      "sega32xna",
+      "snes",
+      "snesna",
+      "tg16"
+    ]
+  },
+  "zip_compressable_extensions": [
+    ".32x",
+    ".68k",
+    ".NDS",
+    ".a26",
+    ".a52",
+    ".a78",
+    ".abs",
+    ".agb",
+    ".atr",
+    ".atx",
+    ".bin",
+    ".bml",
+    ".bms",
+    ".bs",
+    ".bsx",
+    ".cas",
+    ".cdm",
+    ".cgb",
+    ".cof",
+    ".col",
+    ".dim",
+    ".dmg",
+    ".dx2",
+    ".fds",
+    ".fig",
+    ".gb",
+    ".gba",
+    ".gbc",
+    ".gd3",
+    ".gd7",
+    ".gen",
+    ".gg",
+    ".ipf",
+    ".j64",
+    ".jag",
+    ".lnx",
+    ".md",
+    ".mdx",
+    ".mgd",
+    ".msa",
+    ".nds",
+    ".nes",
+    ".ngc",
+    ".o",
+    ".pce",
+    ".prg",
+    ".rom",
+    ".sfc",
+    ".sg",
+    ".sgb",
+    ".sgd",
+    ".smc",
+    ".smd",
+    ".sms",
+    ".st",
+    ".st",
+    ".stx",
+    ".swc",
+    ".unf",
+    ".unif",
+    ".xex",
+    ".xfd",
+    ".z64"
+  ],
   "system": {
     "3do": {
       "name": "3DO Interactive Multiplayer"
@@ -271,6 +384,9 @@
     "dreamcast": {
       "name": "Sega Dreamcast"
     },
+    "dc": {
+      "name": "Sega Dreamcast"
+    },
     "easyrpg": {
       "name": "EasyRPG Game Engine"
     },
@@ -308,6 +424,9 @@
       "name": "Tiger Electronics Game.com"
     },
     "gamegear": {
+      "name": "Sega Game Gear"
+    },
+    "gg": {
       "name": "Sega Game Gear"
     },
     "gb": {
@@ -365,7 +484,7 @@
       "name": "Sega Mega-CD"
     },
     "megacdjp": {
-      "name": "Sega Mega-CD"
+      "name": "Sega Mega-CD (Japan)"
     },
     "megadrive": {
       "name": "Sega Mega Drive"
@@ -428,7 +547,7 @@
       "name": "SNK Neo Geo CD"
     },
     "neogeocdjp": {
-      "name": "SNK Neo Geo CD"
+      "name": "SNK Neo Geo CD (Japan)"
     },
     "nes": {
       "name": "Nintendo Entertainment System"
@@ -509,7 +628,7 @@
       "name": "Sega Saturn"
     },
     "saturnjp": {
-      "name": "Sega Saturn"
+      "name": "Sega Saturn (Japan)"
     },
     "scummvm": {
       "name": "ScummVM Game Engine"
@@ -521,7 +640,7 @@
       "name": "Sega Mega Drive 32X"
     },
     "sega32xjp": {
-      "name": "Sega Super 32X"
+      "name": "Sega Super 32X (Japan)"
     },
     "sega32xna": {
       "name": "Sega Genesis 32X"
