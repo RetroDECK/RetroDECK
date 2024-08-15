@@ -98,7 +98,7 @@ make_preset_changes() {
               fi
             fi
           fi
-        done < "$incompatible_presets"
+        done < <(echo "$incompatible_presets")
       fi
       if [[ ! " ${choices[*]} " =~ " ${emulator} " && ! " ${current_disabled_systems[*]} " =~ " ${emulator} " ]]; then
         changed_systems=("${changed_systems[@]}" "$emulator")
