@@ -143,6 +143,7 @@ func modify_link(key: String, new_name: String, new_url: String, new_description
 
 # Function to modify an existing emulator
 func modify_emulator(key: String, new_name: String, new_description: String, new_properties: Array):
+	#data_handler.modify_emulator_test()
 	var app_data = load_base_data()
 	if app_data and app_data.emulators.has(key):
 		var emulator = app_data.emulators[key]
@@ -165,6 +166,7 @@ func modify_emulator(key: String, new_name: String, new_description: String, new
 
 
 func add_emulator() -> void:
+	#data_handler.add_emulator()
 	var link = Link.new()
 	link.name = "Example Site"
 	link.url = "https://example.com"

@@ -15,16 +15,16 @@ var anim_logo: AnimatedSprite2D
 var rd_logs: String
 var rd_version: String
 var gc_version: String
+var l1_button: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0797.png")
+var r1_button: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0798.png")
+var l1_button_alt: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0763.png")
+var r1_button_alt: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0764.png")
 
 var app_data = AppData.new()
 func _ready():
 	_get_nodes()
 	_connect_signals()
 	_play_main_animations()
-
-	#data_handler.add_emulator()
-	#data_handler.modify_emulator_test()
-	
 	$Background/locale_option.selected = class_functions.map_locale_id(OS.get_locale_language())
 	"""
 	# load json data
@@ -62,6 +62,14 @@ func _ready():
 			n.self_modulate.a = 0.5 #make it half transparent
 	combine_tkeys()
 
+func _process(delta):
+	if Input.is_action_pressed("next_tab"):
+		%r1_button.texture_normal = $r1_button.texture_pressed
+	elif Input.is_action_pressed("previous_tab"):
+		%l1_button.texture_normal = $l1_button.texture_pressed
+	else:
+		%r1_button.texture_normal = r1_button
+		%l1_button.texture_normal = l1_button
 func _get_nodes() -> void:
 	status_code_label = get_node("%status_code_label")
 	theme_option = get_node("%theme_optionbutton")
