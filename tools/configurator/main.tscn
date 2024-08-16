@@ -161,7 +161,8 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_bottom = -60.0
+offset_right = -333.0
+offset_bottom = -61.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -169,7 +170,7 @@ grow_vertical = 2
 unique_name_in_owner = true
 layout_mode = 2
 tab_alignment = 1
-current_tab = 5
+current_tab = 2
 script = ExtResource("3_id6l4")
 
 [node name="TK_GRAPHICS" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
@@ -328,18 +329,17 @@ button_pressed = true
 text = "TK_HOTKEYSOUND"
 
 [node name="TK_SYSTEM" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
-visible = false
 layout_mode = 2
 theme_override_constants/margin_right = 240
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Background/MarginContainer/TabContainer/TK_SYSTEM"]
+clip_contents = false
 layout_mode = 2
 follow_focus = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer"]
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
+size_flags_horizontal = 4
 
 [node name="controls_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer"]
 layout_mode = 2
@@ -353,10 +353,9 @@ layout_mode = 2
 
 [node name="GridContainer" type="GridContainer" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer"]
 layout_mode = 2
-size_flags_vertical = 3
 theme_override_constants/h_separation = 10
 theme_override_constants/v_separation = 10
-columns = 6
+columns = 5
 
 [node name="Button3" type="Button" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
@@ -411,7 +410,7 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/h_separation = 10
 theme_override_constants/v_separation = 10
-columns = 6
+columns = 5
 
 [node name="Button" type="Button" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/GridContainer2"]
 layout_mode = 2
@@ -461,15 +460,12 @@ vertical_icon_alignment = 0
 [node name="HSeparator" type="HSeparator" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="game_control_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/HBoxContainer"]
+[node name="game_control_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_icgo5")
 text = "TK_GAME_SETTINGS"
 
-[node name="VSeparator" type="VSeparator" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/HBoxContainer"]
+[node name="HBoxContainer" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
 [node name="GridContainer" type="GridContainer" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/HBoxContainer"]
@@ -784,6 +780,7 @@ disabled = true
 text = "TK_FTPBTN"
 
 [node name="TK_TROUBLESHOOT" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_right = 240
 
@@ -1045,8 +1042,8 @@ grow_vertical = 2
 
 [node name="TextureRect" type="TextureRect" parent="Background/side_logo"]
 layout_mode = 0
-offset_left = 20.0
-offset_top = -75.0
+offset_left = -82.0
+offset_top = -120.0
 offset_right = 247.0
 offset_bottom = 676.0
 texture = ExtResource("15_qdvxo")
@@ -1084,10 +1081,10 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = 409.0
-offset_top = -337.0
+offset_left = 303.0
+offset_top = -437.0
 offset_right = 638.0
-offset_bottom = -12.0
+offset_bottom = -7.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxTexture_rf0rc")
@@ -1099,10 +1096,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -111.5
-offset_top = -153.5
-offset_right = 110.5
-offset_bottom = 159.5
+offset_left = -162.5
+offset_top = -201.0
+offset_right = 167.5
+offset_bottom = 213.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "Rekku:
@@ -1114,8 +1111,8 @@ scroll_following = true
 script = ExtResource("5_cprkf")
 
 [node name="rekku_sprite" type="Sprite2D" parent="Background/side_logo/rekku"]
-position = Vector2(510.5, -577.508)
-scale = Vector2(0.249024, 0.262711)
+position = Vector2(466, -653.5)
+scale = Vector2(0.271484, 0.264648)
 texture = ExtResource("32_omdu2")
 
 [node name="blink_anim" type="AnimatedSprite2D" parent="Background/side_logo/rekku/rekku_sprite"]
@@ -1145,7 +1142,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 5.0
 offset_top = -69.0
-offset_right = -235.0
+offset_right = -337.0
 grow_horizontal = 2
 grow_vertical = 0
 
@@ -1192,10 +1189,10 @@ stretch_mode = 0
 [node name="r1_button" type="TextureButton" parent="coltroller_guide/controller_guide_text"]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 946.0
-offset_top = -7.0
-offset_right = 1030.0
-offset_bottom = 52.0
+offset_left = 832.0
+offset_top = -8.0
+offset_right = 916.0
+offset_bottom = 51.0
 texture_normal = ExtResource("39_5ft88")
 texture_pressed = ExtResource("40_pnuor")
 stretch_mode = 0
@@ -1221,10 +1218,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -166.0
-offset_top = -34.0
-offset_right = -107.0
-offset_bottom = -5.0
+offset_left = -217.0
+offset_top = -46.0
+offset_right = -158.0
+offset_bottom = -17.0
 grow_horizontal = 0
 grow_vertical = 0
 item_count = 7
