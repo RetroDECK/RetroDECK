@@ -16,17 +16,20 @@ var rd_logs: String
 var rd_version: String
 var gc_version: String
 var l1_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0797.png")
-var r1_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0798.png")
 var l1_button_texture_alt: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0763.png")
+var r1_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0798.png")
 var r1_button_texture_alt: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0764.png")
+var a_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0042.png")
+var a_button_texture_alt: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0047.png")
+var b_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0043.png")
+var b_button_texture_alt: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0048.png")
 
 var app_data = AppData.new()
 func _ready():
 	_get_nodes()
 	_connect_signals()
 	_play_main_animations()
-	$Background/locale_option.selected = class_functions.map_locale_id(OS.get_locale_language())
-
+	%locale_option.selected = class_functions.map_locale_id(OS.get_locale_language())
 	"""
 	# Load json data. Test to show some data
 	app_data = data_handler.load_base_data()
@@ -67,12 +70,18 @@ func _ready():
 
 func _process(delta):
 	if Input.is_action_pressed("next_tab"):
-		%r1_button.texture_normal = $r1_button.texture_pressed
+		%r1_button.texture_normal = %r1_button.texture_pressed
 	elif Input.is_action_pressed("previous_tab"):
-		%l1_button.texture_normal = $l1_button.texture_pressed
+		%l1_button.texture_normal = %l1_button.texture_pressed
+	elif Input.is_action_pressed("back_button"):
+		%b_button.texture_normal = %b_button.texture_pressed
+	elif Input.is_action_pressed("action_button"):
+		%a_button.texture_normal = %a_button.texture_pressed
 	else:
 		%r1_button.texture_normal = r1_button_texture
 		%l1_button.texture_normal = l1_button_texture
+		%a_button.texture_normal = a_button_texture
+		%b_button.texture_normal = b_button_texture
 func _get_nodes() -> void:
 	status_code_label = get_node("%status_code_label")
 	theme_option = get_node("%theme_optionbutton")
@@ -169,6 +178,11 @@ func _on_locale_selected(index):
 	match index:
 		0:
 			TranslationServer.set_locale("en")
+		_:
+			TranslationServer.set_locale("en")
+	combine_tkeys()
+
+"""			
 		1:
 			TranslationServer.set_locale("it")
 		2:
@@ -181,7 +195,8 @@ func _on_locale_selected(index):
 			TranslationServer.set_locale("ja")
 		6:
 			TranslationServer.set_locale("zh")
-	combine_tkeys()
+"""
+
 	
 func combine_tkeys(): #More as a test
 	%cheats.text = tr("TK_CHEATS") + " " + tr("TK_SOON") # switched to access as a unique name as easier to refactor

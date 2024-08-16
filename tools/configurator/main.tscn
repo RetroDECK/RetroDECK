@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=3 uid="uid://61f6m4r1mpan"]
+[gd_scene load_steps=52 format=3 uid="uid://61f6m4r1mpan"]
 
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
 [ext_resource type="Script" path="res://main.gd" id="1_obpq7"]
@@ -8,7 +8,6 @@
 [ext_resource type="Texture2D" uid="uid://dx0u5hiwxfgu5" path="res://res/pixel_ui_theme/8x8_ui_elements.png" id="4_2tuu4"]
 [ext_resource type="Script" path="res://tk_about.gd" id="4_m4rto"]
 [ext_resource type="Script" path="res://Rekku.gd" id="4_nqqx3"]
-[ext_resource type="Texture2D" uid="uid://cxyml1owhi6de" path="res://res/pixel_ui_theme/8x8_ui_icons.png" id="4_v1scw"]
 [ext_resource type="Texture2D" uid="uid://dk856hwnwsuab" path="res://assets/icons/pixelitos/128/retroarch.png" id="4_xcuib"]
 [ext_resource type="Texture2D" uid="uid://d2lm4mfx1gt86" path="res://assets/graphics/retrodeck_base_shake0.png" id="5_7rjbt"]
 [ext_resource type="Script" path="res://helper_text.gd" id="5_cprkf"]
@@ -30,10 +29,16 @@
 [ext_resource type="Texture2D" uid="uid://bevamv2c8knnn" path="res://assets/icons/pixelitos/128/org.citra_emu.citra.png" id="10_wbaif"]
 [ext_resource type="Texture2D" uid="uid://dbvjugxp84gsj" path="res://assets/icons/pixelitos/128/org.DolphinEmu.dolphin-emu.png" id="11_61sak"]
 [ext_resource type="Texture2D" uid="uid://cbwhpqip43aei" path="res://res/flags/china_32.png" id="11_ri2fv"]
+[ext_resource type="Texture2D" uid="uid://b164ihk8riiwh" path="res://assets/graphics/space_bground.png" id="15_qdvxo"]
+[ext_resource type="Texture2D" uid="uid://dyumvh0ixwrbl" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0042.png" id="30_glnve"]
+[ext_resource type="Texture2D" uid="uid://cn11vcrybtor4" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0047.png" id="31_j5ri1"]
 [ext_resource type="Texture2D" uid="uid://cor8ep0fkqm08" path="res://res/Rekku/base.png" id="32_omdu2"]
+[ext_resource type="Texture2D" uid="uid://cc7ohmfxafe78" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0043.png" id="33_1ghye"]
 [ext_resource type="Texture2D" uid="uid://cavtn1rljc5oe" path="res://res/Rekku/eyes-open.png" id="33_loftd"]
+[ext_resource type="Texture2D" uid="uid://cs8lh31kh7jv1" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0048.png" id="34_fum2b"]
 [ext_resource type="Texture2D" uid="uid://cv7nckloqhn5m" path="res://res/Rekku/blink1.png" id="34_liw3o"]
 [ext_resource type="Texture2D" uid="uid://by0oj188x350g" path="res://res/Rekku/blink2.png" id="35_dxwop"]
+[ext_resource type="Texture2D" uid="uid://cfa5mn3dsdvw6" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0729.png" id="36_3qttl"]
 [ext_resource type="Texture2D" uid="uid://kx8eypf4ffvu" path="res://res/Rekku/mouth-base.png" id="36_qon8n"]
 [ext_resource type="Texture2D" uid="uid://chd6d8tx081hm" path="res://assets/icons/pixelitos/128/org.mamedev.MAME.png" id="36_r80tt"]
 [ext_resource type="Texture2D" uid="uid://b6gl8sltbak7v" path="res://res/Rekku/mouth-O.png" id="37_2mdp6"]
@@ -75,11 +80,6 @@ animations = [{
 "name": &"default",
 "speed": 12.0
 }]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_st633"]
-atlas = ExtResource("4_v1scw")
-region = Rect2(72, 56, 8, 8)
-margin = Rect2(1, 1, 1, 1)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_rf0rc"]
 texture = ExtResource("4_2tuu4")
@@ -161,6 +161,7 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_bottom = -60.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -168,7 +169,7 @@ grow_vertical = 2
 unique_name_in_owner = true
 layout_mode = 2
 tab_alignment = 1
-current_tab = 2
+current_tab = 5
 script = ExtResource("3_id6l4")
 
 [node name="TK_GRAPHICS" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
@@ -327,6 +328,7 @@ button_pressed = true
 text = "TK_HOTKEYSOUND"
 
 [node name="TK_SYSTEM" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_right = 240
 
@@ -782,7 +784,6 @@ disabled = true
 text = "TK_FTPBTN"
 
 [node name="TK_TROUBLESHOOT" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
-visible = false
 layout_mode = 2
 theme_override_constants/margin_right = 240
 
@@ -842,6 +843,19 @@ text = "TK_RESETALL"
 [node name="reset_full_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/reset_container"]
 layout_mode = 2
 text = "TK_RESETFULL"
+
+[node name="status_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Status:"
+
+[node name="status_code_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT/status_label"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 87.0
+offset_top = 3.0
+offset_right = 144.0
+offset_bottom = 35.0
 
 [node name="TK_CONFIGURATOR" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
 visible = false
@@ -1024,72 +1038,193 @@ anchor_right = 1.0
 anchor_bottom = 0.5
 offset_left = -254.0
 offset_top = -277.0
-offset_right = -13.0
-offset_bottom = -57.0
+offset_right = -14.0
+offset_bottom = -42.0
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="logo" type="TextureRect" parent="Background/side_logo"]
-visible = false
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -64.0
-offset_right = 64.0
-offset_bottom = 128.0
-grow_horizontal = 2
-texture = ExtResource("1_axfei")
-expand_mode = 5
-
-[node name="status_label" type="Label" parent="Background/side_logo"]
-unique_name_in_owner = true
+[node name="TextureRect" type="TextureRect" parent="Background/side_logo"]
 layout_mode = 0
-offset_left = 46.0
-offset_top = 605.5
-offset_right = 153.0
-offset_bottom = 646.5
-text = "Status:"
-
-[node name="status_code_label" type="Label" parent="Background/side_logo/status_label"]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 87.0
-offset_top = 3.0
-offset_right = 144.0
-offset_bottom = 35.0
+offset_left = 20.0
+offset_top = -75.0
+offset_right = 247.0
+offset_bottom = 676.0
+texture = ExtResource("15_qdvxo")
+expand_mode = 1
 
 [node name="logo_animated" type="AnimatedSprite2D" parent="Background/side_logo"]
 unique_name_in_owner = true
-position = Vector2(159, 514)
+position = Vector2(138, 53)
 scale = Vector2(0.28, 0.288333)
 sprite_frames = SubResource("SpriteFrames_lhf2y")
 frame = 4
 frame_progress = 1.0
 
-[node name="exit_button" type="Button" parent="Background"]
+[node name="rekku" type="Control" parent="Background/side_logo"]
 layout_mode = 1
-anchors_preset = -1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -40.0
-offset_top = 81.0
-offset_right = -19.0
-offset_bottom = 102.0
-grow_horizontal = 0
-icon = SubResource("AtlasTexture_st633")
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -506.0
+offset_top = 447.0
+offset_right = -506.0
+offset_bottom = 447.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 1
+mouse_default_cursor_shape = 8
+script = ExtResource("4_nqqx3")
 
-[node name="locale_option" type="OptionButton" parent="Background"]
+[node name="speach_bubble" type="Panel" parent="Background/side_logo/rekku"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 409.0
+offset_top = -337.0
+offset_right = 638.0
+offset_bottom = -12.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxTexture_rf0rc")
+
+[node name="helper_text" type="RichTextLabel" parent="Background/side_logo/rekku/speach_bubble"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -111.5
+offset_top = -153.5
+offset_right = 110.5
+offset_bottom = 159.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Rekku:
+
+When \"Quick Resume\" is enabled, a savestate is created upon quit and it will be loaded once the game is started.
+This is mot working on the following systems: Switch, WiiU."
+fit_content = true
+scroll_following = true
+script = ExtResource("5_cprkf")
+
+[node name="rekku_sprite" type="Sprite2D" parent="Background/side_logo/rekku"]
+position = Vector2(510.5, -577.508)
+scale = Vector2(0.249024, 0.262711)
+texture = ExtResource("32_omdu2")
+
+[node name="blink_anim" type="AnimatedSprite2D" parent="Background/side_logo/rekku/rekku_sprite"]
+sprite_frames = SubResource("SpriteFrames_k7pd1")
+animation = &"blink"
+autoplay = "blink"
+frame_progress = 0.188668
+
+[node name="speech_anim" type="AnimatedSprite2D" parent="Background/side_logo/rekku/rekku_sprite"]
+sprite_frames = SubResource("SpriteFrames_l20mt")
+animation = &"speech"
+autoplay = "speech"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_xivj6")
+volume_db = -11.243
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+position = Vector2(134, 151)
+color = Color(0.858824, 0.890196, 1, 1)
+
+[node name="coltroller_guide" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = -69.0
+offset_right = -235.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="controller_guide_text" type="RichTextLabel" parent="coltroller_guide"]
+layout_mode = 2
+theme_override_colors/default_color = Color(1, 1, 1, 0.607843)
+theme_override_font_sizes/normal_font_size = 23
+fit_content = true
+scroll_active = false
+
+[node name="a_button" type="TextureButton" parent="coltroller_guide/controller_guide_text"]
+unique_name_in_owner = true
+layout_mode = 2
+offset_left = 147.0
+offset_top = -5.0
+offset_right = 231.0
+offset_bottom = 54.0
+texture_normal = ExtResource("30_glnve")
+texture_pressed = ExtResource("31_j5ri1")
+stretch_mode = 0
+
+[node name="b_button" type="TextureButton" parent="coltroller_guide/controller_guide_text"]
+unique_name_in_owner = true
+layout_mode = 2
+offset_left = 314.0
+offset_top = -4.0
+offset_right = 398.0
+offset_bottom = 55.0
+texture_normal = ExtResource("33_1ghye")
+texture_pressed = ExtResource("34_fum2b")
+stretch_mode = 0
+
+[node name="l1_button" type="TextureButton" parent="coltroller_guide/controller_guide_text"]
+unique_name_in_owner = true
+layout_mode = 2
+offset_left = 7.0
+offset_top = -6.0
+offset_right = 91.0
+offset_bottom = 53.0
+texture_normal = ExtResource("38_prt7u")
+texture_pressed = ExtResource("39_m4qgd")
+stretch_mode = 0
+
+[node name="r1_button" type="TextureButton" parent="coltroller_guide/controller_guide_text"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 946.0
+offset_top = -7.0
+offset_right = 1030.0
+offset_bottom = 52.0
+texture_normal = ExtResource("39_5ft88")
+texture_pressed = ExtResource("40_pnuor")
+stretch_mode = 0
+
+[node name="exit_button" type="Button" parent="coltroller_guide/controller_guide_text"]
+layout_mode = 2
+offset_left = 567.0
+offset_top = -11.0
+offset_right = 651.0
+offset_bottom = 48.0
+grow_horizontal = 0
+scale = Vector2(1.4, 1.4)
+icon = ExtResource("36_3qttl")
+flat = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="locale_option" type="OptionButton" parent="coltroller_guide/controller_guide_text"]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -68.0
-offset_top = -39.0
-offset_right = -9.0
-offset_bottom = -10.0
+offset_left = -166.0
+offset_top = -34.0
+offset_right = -107.0
+offset_bottom = -5.0
 grow_horizontal = 0
 grow_vertical = 0
 item_count = 7
@@ -1116,126 +1251,8 @@ popup/item_6/text = ""
 popup/item_6/icon = ExtResource("11_ri2fv")
 popup/item_6/id = 6
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("3_xivj6")
-volume_db = -11.243
-
-[node name="CanvasModulate" type="CanvasModulate" parent="."]
-position = Vector2(134, 151)
-color = Color(0.858824, 0.890196, 1, 1)
-
-[node name="rekku" type="Control" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -0.00012207
-offset_top = 5.0
-offset_right = -0.00012207
-offset_bottom = 5.0
-grow_horizontal = 2
-grow_vertical = 0
-mouse_filter = 1
-mouse_default_cursor_shape = 8
-script = ExtResource("4_nqqx3")
-
-[node name="speach_bubble" type="Panel" parent="rekku"]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -310.0
-offset_top = -206.0
-offset_right = 310.0
-offset_bottom = -66.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_styles/panel = SubResource("StyleBoxTexture_rf0rc")
-
-[node name="helper_text" type="RichTextLabel" parent="rekku/speach_bubble"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -300.0
-offset_top = -60.0
-offset_right = 300.0
-offset_bottom = 60.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Rekku:
-
-When \"Quick Resume\" is enabled, a savestate is created upon quit and it will be loaded once the game is started.
-This is mot working on the following systems: Switch, WiiU."
-scroll_following = true
-script = ExtResource("5_cprkf")
-
-[node name="rekku_sprite" type="Sprite2D" parent="rekku"]
-position = Vector2(481, -562)
-scale = Vector2(0.293, 0.293)
-texture = ExtResource("32_omdu2")
-
-[node name="blink_anim" type="AnimatedSprite2D" parent="rekku/rekku_sprite"]
-sprite_frames = SubResource("SpriteFrames_k7pd1")
-animation = &"blink"
-autoplay = "blink"
-frame_progress = 0.188668
-
-[node name="speech_anim" type="AnimatedSprite2D" parent="rekku/rekku_sprite"]
-sprite_frames = SubResource("SpriteFrames_l20mt")
-animation = &"speech"
-autoplay = "speech"
-
-[node name="coltroller_guide" type="PanelContainer" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -52.0
-grow_horizontal = 2
-grow_vertical = 0
-
-[node name="controller_guide_text" type="RichTextLabel" parent="coltroller_guide"]
-layout_mode = 2
-theme_override_colors/default_color = Color(1, 1, 1, 0.607843)
-theme_override_font_sizes/normal_font_size = 23
-text = "(A) Accept (B) Back (L/R) Tab Switch (Menu) Exit"
-fit_content = true
-scroll_active = false
-
-[node name="l1_button" type="TextureButton" parent="."]
-unique_name_in_owner = true
-layout_mode = 2
-offset_left = 6.0
-offset_top = -3.0
-offset_right = 90.0
-offset_bottom = 56.0
-texture_normal = ExtResource("38_prt7u")
-texture_pressed = ExtResource("39_m4qgd")
-stretch_mode = 0
-
-[node name="r1_button" type="TextureButton" parent="."]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 1189.0
-offset_top = -2.0
-offset_right = 1273.0
-offset_bottom = 57.0
-texture_normal = ExtResource("39_5ft88")
-texture_pressed = ExtResource("40_pnuor")
-stretch_mode = 0
-
 [connection signal="pressed" from="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/HBoxContainer/GridContainer/quick_resume_adv_button" to="." method="_on_quickresume_advanced_pressed"]
 [connection signal="pressed" from="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container/bios_button" to="." method="_on_bios_button_pressed"]
 [connection signal="pressed" from="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container/bios_button_expert" to="." method="_on_bios_button_expert_pressed"]
-[connection signal="pressed" from="Background/exit_button" to="." method="_on_exit_button_pressed"]
-[connection signal="item_selected" from="Background/locale_option" to="." method="_on_locale_selected"]
+[connection signal="pressed" from="coltroller_guide/controller_guide_text/exit_button" to="." method="_on_exit_button_pressed"]
+[connection signal="item_selected" from="coltroller_guide/controller_guide_text/locale_option" to="." method="_on_locale_selected"]

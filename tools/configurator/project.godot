@@ -93,7 +93,8 @@ back_button={
 }
 action_button={
 "deadzone": 0.5,
-"events": []
+"events": [Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":0,"pressure":0.0,"pressed":true,"script":null)
+]
 }
 
 [internationalization]
