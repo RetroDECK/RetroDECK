@@ -39,6 +39,13 @@ jobs:
       - name: Remove stuck mounts
         run: sudo umount -f /home/ubuntu/actions-runner/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles/*
         continue-on-error: true
+
+      - name: Generate a token for Rekku
+        id: generate-rekku-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ vars.REKKU_APP_ID }}
+          private-key: ${{ secrets.REKKU_PRIVATE_KEY }}
     
       - name: Clone RetroDECK repo
         uses: actions/checkout@v4
@@ -155,7 +162,7 @@ jobs:
           artifacts: "RetroDECK-cooker.flatpak,RetroDECK-cooker.flatpak.sha,RetroDECK-Artifact.tar.gz"
           allowUpdates: true
           makeLatest: ${{env.MAKE_LATEST}} # if it's a feat branch is not considered the latest build
-          token: ${{ secrets.TRIGGER_BUILD_TOKEN }}
+          token: ${{ steps.generate-token.outputs.token }}
           repo: Cooker
         continue-on-error: true
 
@@ -163,6 +170,8 @@ jobs:
         run: |
           git submodule deinit -f --all
           git fetch --tags
+          git config --global user.name "Rekku"
+          git config --global user.email "rekku@retrodeck.net"
           if git rev-parse --verify "${{ env.TAG }}" >/dev/null 2>&1; then # if the tag exists
               git tag -d "${{ env.TAG }}"                                  # remove it from local repo
               git push --delete origin "${{ env.TAG }}"                    # and from remote
@@ -170,7 +179,7 @@ jobs:
           git tag "${{ env.TAG }}"             # Create the tag locally               
           git push origin "${{ env.TAG }}"     # Push the new tag in the remote repo
         env:
-          GITHUB_TOKEN: ${{ secrets.TRIGGER_BUILD_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
 
       # In case it cannot publish the release at least it's providing the flatpak file for creating a manual release
       - name: Upload RetroDECK-cooker.flatpak
