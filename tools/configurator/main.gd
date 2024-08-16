@@ -9,36 +9,37 @@ var log_results: Dictionary
 var theme_option: OptionButton
 signal signal_theme_changed
 var custom_theme: Theme = $".".theme
-var emu_select_option: OptionButton
-var emu_pick_option: OptionButton
 var log_option: OptionButton
 var tab_container: TabContainer
 var anim_logo: AnimatedSprite2D
 var rd_logs: String
 var rd_version: String
 var gc_version: String
+var l1_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0797.png")
+var r1_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0798.png")
+var l1_button_texture_alt: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0763.png")
+var r1_button_texture_alt: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0764.png")
 
 var app_data = AppData.new()
 func _ready():
 	_get_nodes()
 	_connect_signals()
 	_play_main_animations()
-
-	data_handler.add_emaultor()
-	data_handler.modify_emulator_test()
-	
 	$Background/locale_option.selected = class_functions.map_locale_id(OS.get_locale_language())
+
 	"""
-	# load json data
-	#app_data = data_handler.load_data()
-		#test to show some data
+	# Load json data. Test to show some data
+	app_data = data_handler.load_base_data()
+
 	if app_data:
 		var website_data = app_data.about_links["rd_web"]
 		print (website_data.name,"-",website_data.url,"-",website_data.description)
-	"""
+		print (app_data.about_links["rd_web"]["url"])
+	
 	var console: bool = false
 	var test = class_functions.execute_command("cat",["/var/config/retrodeck/retrodeck.cfg"],console)
-	#print (test)
+	print (test)
+	"""
 	var config_file_path = "/var/config/retrodeck/retrodeck.cfg"
 	var json_file_path = "/var/config/retrodeck/retrodeck.json"
 	var config = data_handler.parse_config_to_json(config_file_path)
@@ -64,11 +65,17 @@ func _ready():
 			n.self_modulate.a = 0.5 #make it half transparent
 	combine_tkeys()
 
+func _process(delta):
+	if Input.is_action_pressed("next_tab"):
+		%r1_button.texture_normal = $r1_button.texture_pressed
+	elif Input.is_action_pressed("previous_tab"):
+		%l1_button.texture_normal = $l1_button.texture_pressed
+	else:
+		%r1_button.texture_normal = r1_button_texture
+		%l1_button.texture_normal = l1_button_texture
 func _get_nodes() -> void:
 	status_code_label = get_node("%status_code_label")
 	theme_option = get_node("%theme_optionbutton")
-	emu_select_option = get_node("%emu_select_option")
-	emu_pick_option = get_node("%emu_pick_option")
 	tab_container = get_node("%TabContainer")
 	anim_logo = get_node("%logo_animated")
 	log_option = get_node("%logs_button")
@@ -77,21 +84,7 @@ func _connect_signals() -> void:
 	#signal_theme_changed.connect(_conf_theme)
 	theme_option.item_selected.connect(_conf_theme)
 	signal_theme_changed.emit(theme_option.item_selected)
-	emu_select_option.item_selected.connect(_emu_select)
-	emu_pick_option.item_selected.connect(_emu_pick)
 	log_option.item_selected.connect(_load_log)
-	
-func _emu_select(index: int) -> void:
-	emu_pick_option.visible = true
-	#change to radio button select
-	_play_main_animations()
-	if (index == 3): # make function and pass start and end
-		emu_pick_option.set_item_disabled(1, true)
-		emu_pick_option.set_item_disabled(2, true)
-	
-func _emu_pick(index: int) -> void:
-	emu_pick_option.visible = true
-	_play_main_animations()
 	
 func _load_log(index: int) -> void:
 	var log_content:String
@@ -191,8 +184,8 @@ func _on_locale_selected(index):
 	combine_tkeys()
 	
 func combine_tkeys(): #More as a test
-	$Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/HBoxContainer/GridContainer/cheats.text = tr("TK_CHEATS") + " " + tr("TK_SOON")
-	#$Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/game_control_container/GridContainer/cheats.text = tr("TK_CHEATS") + " " + tr("TK_SOON")
+	%cheats.text = tr("TK_CHEATS") + " " + tr("TK_SOON") # switched to access as a unique name as easier to refactor
+	#$Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/HBoxContainer/GridContainer/cheats.text = tr("TK_CHEATS") + " " + tr("TK_SOON")
 	$Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/GridContainer/shaders.text = tr("TK_SHADERS") + " " + tr("TK_SOON")
 	$Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/extra_container/GridContainer/tate_mode.text = tr("TK_TATE") + " " + tr("TK_SOON")
 	$Background/MarginContainer/TabContainer/TK_CONTROLS/ScrollContainer/VBoxContainer/controls_container/hotkey_sound.text = tr("TK_HOTKEYSOUND") + " " + tr("TK_SOON")
