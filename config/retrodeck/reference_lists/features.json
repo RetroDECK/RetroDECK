@@ -100,6 +100,27 @@
       "start_time": "0000",
       "end_time": "2359",
       "filename": "rd-kodomo-golden.svg"
+    },
+    "tanabata": {
+      "start_date": "0707",
+      "end_date": "0707",
+      "start_time": "0000",
+      "end_time": "2359",
+      "filename": "tanabata.svg"
+    },
+    "mountain_day": {
+      "start_date": "0811",
+      "end_date": "0811",
+      "start_time": "0000",
+      "end_time": "2359",
+      "filename": "placeholder.svg"
+    },
+    "obon": {
+      "start_date": "0813",
+      "end_date": "0815",
+      "start_time": "0000",
+      "end_time": "2359",
+      "filename": "placeholder.svg"
     }
   },
   "incompatible_presets": {
