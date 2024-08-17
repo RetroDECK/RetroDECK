@@ -2,8 +2,7 @@ extends TabContainer
 
 func _ready():
 	focusFirstFocusableChild() #grab focus on first element to enable controller focusing
-	%l1_button.visible = true
-
+#
 func _input(event):
 	if (event.is_action_pressed("next_tab")):
 		self.select_next_available()
