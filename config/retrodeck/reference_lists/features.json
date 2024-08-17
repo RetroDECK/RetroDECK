@@ -1,7 +1,4 @@
 {
-<<<<<<< HEAD
-
-=======
   "about_links": {
     "rd_changelog": {
       "description": "Opens the RetroDECK change log in your default browser",
@@ -1090,5 +1087,4 @@
       "launch": "xemu"
     }
   }
->>>>>>> feat/godot
 }
