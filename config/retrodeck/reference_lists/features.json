@@ -1,10 +1,5 @@
 {
   "about_links": {
-    "example_site": {
-      "description": "Updated description.",
-      "name": "Updated Site",
-      "url": "https://updated-example.com"
-    },
     "rd_changelog": {
       "description": "Opens the RetroDECK change log in your default browser",
       "name": "Changelog",
@@ -31,8 +26,8 @@
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_credits/donations-licenses/"
     },
     "rd_web": {
-      "description": "Opens the RetroDECK Website in your default browser!",
-      "name": "Website!",
+      "description": "Opens the RetroDECK Website in your default browser",
+      "name": "Website",
       "url": "https://retrodeck.net/"
     },
     "rd_wiki": {

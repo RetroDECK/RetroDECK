@@ -21,27 +21,33 @@ func _ready():
 		var web_data = app_data.about_links[id]
 		match id:
 			"rd_web":
+				%website_button.text = web_data.name
 				%website_button.tooltip_text = web_data.description
 				%website_button.editor_description = web_data.url
 			"rd_changelog":
+				%changelog_button.text = web_data.name
 				%changelog_button.tooltip_text = web_data.description
 				%changelog_button.editor_description = web_data.url
 			"rd_wiki":
+				%wiki_button.text = web_data.name
 				%wiki_button.tooltip_text = web_data.description
 				%wiki_button.editor_description = web_data.url
 			"rd_credits":
+				%credits_button.text = web_data.name
 				%credits_button.tooltip_text = web_data.description
 				%credits_button.editor_description = web_data.url
 			"rd_donate":
+				%donate_button.text = web_data.name
 				%donate_button.tooltip_text = web_data.description
 				%donate_button.editor_description = web_data.url
 			"rd_contactus":
+				%contactus_button.text = web_data.name
 				%contactus_button.tooltip_text = web_data.description
 				%contactus_button.editor_description = web_data.url
 			"rd_licenses":
+				%licenses_button.text = web_data.name
 				%licenses_button.tooltip_text = web_data.description
 				%licenses_button.editor_description = web_data.url
-
 
 func _get_nodes() -> void:
 	website_button = get_node("%website_button")
