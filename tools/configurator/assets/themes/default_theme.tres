@@ -1,3 +1,7 @@
-[gd_resource type="Theme" format=3 uid="uid://hhc60cllcg47"]
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://hhc60cllcg47"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ghisc"]
+bg_color = Color(0.6, 0.168627, 0.6, 0.372549)
 
 [resource]
+Button/styles/focus = SubResource("StyleBoxFlat_ghisc")

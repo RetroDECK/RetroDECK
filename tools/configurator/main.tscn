@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=3 uid="uid://61f6m4r1mpan"]
+[gd_scene load_steps=58 format=3 uid="uid://61f6m4r1mpan"]
 
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
 [ext_resource type="Script" path="res://main.gd" id="1_obpq7"]
@@ -8,8 +8,11 @@
 [ext_resource type="Texture2D" uid="uid://dx0u5hiwxfgu5" path="res://res/pixel_ui_theme/8x8_ui_elements.png" id="4_2tuu4"]
 [ext_resource type="Script" path="res://tk_about.gd" id="4_m4rto"]
 [ext_resource type="Script" path="res://Rekku.gd" id="4_nqqx3"]
+[ext_resource type="Texture2D" uid="uid://cwgvmej32322m" path="res://assets/icons/Icon Pack/GB.png" id="4_sfx5n"]
 [ext_resource type="Texture2D" uid="uid://dk856hwnwsuab" path="res://assets/icons/pixelitos/128/retroarch.png" id="4_xcuib"]
+[ext_resource type="Texture2D" uid="uid://c55jv8vav74fi" path="res://assets/icons/Icon Pack/GBA.png" id="5_5j6oj"]
 [ext_resource type="Texture2D" uid="uid://d2lm4mfx1gt86" path="res://assets/graphics/retrodeck_base_shake0.png" id="5_7rjbt"]
+[ext_resource type="Texture2D" uid="uid://bgmqtrn1lddw1" path="res://assets/icons/Icon Pack/GBC_1.png" id="5_bjgrq"]
 [ext_resource type="Script" path="res://helper_text.gd" id="5_cprkf"]
 [ext_resource type="Texture2D" uid="uid://dxdhjp18rgmr4" path="res://res/flags/united_kingdom_32.png" id="5_exkn2"]
 [ext_resource type="StyleBox" uid="uid://ba3l3ja1jbqpx" path="res://assets/themes/emulators.tres" id="5_rjtkn"]
@@ -17,18 +20,23 @@
 [ext_resource type="Texture2D" uid="uid://cru43y7hco6kh" path="res://res/flags/italy_32.png" id="6_fiylw"]
 [ext_resource type="Texture2D" uid="uid://cxwnt3djsrck7" path="res://assets/icons/pixelitos/128/duckstation.png" id="6_winpq"]
 [ext_resource type="Texture2D" uid="uid://c2furjlxwkxih" path="res://assets/icons/pixelitos/128/net.kuribo64.melonDS.png" id="7_4otos"]
+[ext_resource type="Texture2D" uid="uid://dxywon5p4o6v1" path="res://assets/icons/Icon Pack/SNES.png" id="7_7pbsj"]
 [ext_resource type="Texture2D" uid="uid://cyqo650hjucw6" path="res://assets/graphics/retrodeck_base_shake2.png" id="7_mo842"]
 [ext_resource type="Texture2D" uid="uid://cti2vt14gxisl" path="res://res/flags/germany_32.png" id="7_qgxid"]
 [ext_resource type="Texture2D" uid="uid://c7i7mr38qxa4f" path="res://assets/icons/pixelitos/128/org.ppsspp.PPSSPP.png" id="8_akxf7"]
+[ext_resource type="Texture2D" uid="uid://bigcnwlmpycoq" path="res://assets/icons/Icon Pack/SMS.png" id="8_bc6ho"]
 [ext_resource type="Texture2D" uid="uid://6x4onimvsynx" path="res://assets/icons/pixelitos/128/net.rpcs3.RPCS3.png" id="8_ec4gt"]
 [ext_resource type="Texture2D" uid="uid://bojog0xvms7hr" path="res://assets/graphics/retrodeck_base_shake3.png" id="8_l3t5c"]
 [ext_resource type="Texture2D" uid="uid://bns0ot5pbf03h" path="res://res/flags/sweden_32.png" id="8_lptln"]
 [ext_resource type="Texture2D" uid="uid://uko0ikrtjkj" path="res://assets/graphics/retrodeck_base_shake4.png" id="9_8eqo6"]
 [ext_resource type="Texture2D" uid="uid://dhsorn3kcfdcv" path="res://res/flags/ukraine_32.png" id="9_dp7oa"]
+[ext_resource type="Texture2D" uid="uid://b34is3lb2awil" path="res://assets/icons/Icon Pack/MD_GEN.png" id="9_mqlk4"]
 [ext_resource type="Texture2D" uid="uid://dtwjo7co226dw" path="res://res/flags/japan_32.png" id="10_e8mt0"]
+[ext_resource type="Texture2D" uid="uid://6k77yt3e88d" path="res://assets/icons/Icon Pack/N64.png" id="10_jdy2q"]
 [ext_resource type="Texture2D" uid="uid://bevamv2c8knnn" path="res://assets/icons/pixelitos/128/org.citra_emu.citra.png" id="10_wbaif"]
 [ext_resource type="Texture2D" uid="uid://dbvjugxp84gsj" path="res://assets/icons/pixelitos/128/org.DolphinEmu.dolphin-emu.png" id="11_61sak"]
 [ext_resource type="Texture2D" uid="uid://cbwhpqip43aei" path="res://res/flags/china_32.png" id="11_ri2fv"]
+[ext_resource type="Texture2D" uid="uid://cqq2qlcr5djsw" path="res://assets/icons/Icon Pack/PS1.png" id="11_v45kn"]
 [ext_resource type="Texture2D" uid="uid://b164ihk8riiwh" path="res://assets/graphics/space_bground.png" id="15_qdvxo"]
 [ext_resource type="Texture2D" uid="uid://dyumvh0ixwrbl" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0042.png" id="30_glnve"]
 [ext_resource type="Texture2D" uid="uid://cn11vcrybtor4" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0047.png" id="31_j5ri1"]
@@ -183,28 +191,26 @@ text = "TK_DECORATIONS"
 [node name="decorations_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container"]
 layout_mode = 2
 
-[node name="borders" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container"]
+[node name="GridContainer" type="GridContainer" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container"]
 layout_mode = 2
-size_flags_horizontal = 3
-button_pressed = true
-text = "TK_BORDERS"
+columns = 2
 
-[node name="borders_adv_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container"]
+[node name="borders_adv_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/GridContainer"]
 layout_mode = 2
 disabled = true
 text = "TK_ADVANCED"
 
-[node name="wide_screen" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container"]
+[node name="wide_screen" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "TK_WSCREEN"
 
-[node name="wide_screen_adv_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container"]
+[node name="wide_screen_adv_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/GridContainer"]
 layout_mode = 2
 disabled = true
 text = "TK_ADVANCED"
 
-[node name="shaders" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container"]
+[node name="shaders" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -212,30 +218,152 @@ disabled = true
 button_pressed = true
 text = "TK_SHADERS"
 
-[node name="shaders_adv_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container"]
+[node name="shaders_adv_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/GridContainer"]
 layout_mode = 2
 disabled = true
 text = "TK_ADVANCED"
+
+[node name="borders" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+button_pressed = true
+text = "TK_BORDERS"
+
+[node name="GridContainer" type="GridContainer" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+columns = 4
+
+[node name="Button3" type="Button" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.917647, 0, 1)
+theme_override_colors/font_pressed_color = Color(0.913725, 0, 0, 1)
+theme_override_colors/icon_normal_color = Color(0, 0.858824, 0, 1)
+theme_override_colors/icon_pressed_color = Color(0.866667, 0, 0, 1)
+theme_override_colors/icon_hover_color = Color(0.00392157, 0, 0, 1)
+toggle_mode = true
+text = "Nintendo
+Gameboy
+"
+icon = ExtResource("4_sfx5n")
+icon_alignment = 1
+vertical_icon_alignment = 0
+expand_icon = true
+
+[node name="Button4" type="Button" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.917647, 0, 1)
+theme_override_colors/font_pressed_color = Color(0.913725, 0, 0, 1)
+theme_override_colors/icon_normal_color = Color(0, 0.858824, 0, 1)
+theme_override_colors/icon_pressed_color = Color(0.866667, 0, 0, 1)
+toggle_mode = true
+text = "Nintendo
+Gameboy Colour
+"
+icon = ExtResource("5_bjgrq")
+icon_alignment = 1
+vertical_icon_alignment = 0
+expand_icon = true
+
+[node name="Button5" type="Button" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.917647, 0, 1)
+theme_override_colors/font_pressed_color = Color(0.913725, 0, 0, 1)
+theme_override_colors/icon_normal_color = Color(0, 0.858824, 0, 1)
+theme_override_colors/icon_pressed_color = Color(0.866667, 0, 0, 1)
+toggle_mode = true
+text = "Nintendo
+Gameboy Advanced
+"
+icon = ExtResource("5_5j6oj")
+icon_alignment = 1
+vertical_icon_alignment = 0
+expand_icon = true
+
+[node name="Button10" type="Button" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.917647, 0, 1)
+theme_override_colors/font_pressed_color = Color(0.913725, 0, 0, 1)
+theme_override_colors/icon_normal_color = Color(0, 0.858824, 0, 1)
+theme_override_colors/icon_pressed_color = Color(0.866667, 0, 0, 1)
+toggle_mode = true
+text = "Nintendo
+Super
+"
+icon = ExtResource("7_7pbsj")
+icon_alignment = 1
+vertical_icon_alignment = 0
+expand_icon = true
+
+[node name="Button8" type="Button" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.917647, 0, 1)
+theme_override_colors/font_pressed_color = Color(0.913725, 0, 0, 1)
+theme_override_colors/icon_normal_color = Color(0, 0.858824, 0, 1)
+theme_override_colors/icon_pressed_color = Color(0.866667, 0, 0, 1)
+toggle_mode = true
+text = "Nintendo
+Nintendo 64
+"
+icon = ExtResource("10_jdy2q")
+icon_alignment = 1
+vertical_icon_alignment = 0
+expand_icon = true
+
+[node name="Button6" type="Button" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.917647, 0, 1)
+theme_override_colors/font_pressed_color = Color(0.913725, 0, 0, 1)
+theme_override_colors/icon_normal_color = Color(0, 0.858824, 0, 1)
+theme_override_colors/icon_pressed_color = Color(0.866667, 0, 0, 1)
+toggle_mode = true
+text = "Sega
+Genesis/Master System
+"
+icon = ExtResource("8_bc6ho")
+icon_alignment = 1
+vertical_icon_alignment = 0
+expand_icon = true
+
+[node name="Button7" type="Button" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.917647, 0, 1)
+theme_override_colors/font_pressed_color = Color(0.913725, 0, 0, 1)
+theme_override_colors/icon_normal_color = Color(0, 0.858824, 0, 1)
+theme_override_colors/icon_pressed_color = Color(0.866667, 0, 0, 1)
+toggle_mode = true
+text = "Sega
+Gamegear
+"
+icon = ExtResource("9_mqlk4")
+icon_alignment = 1
+vertical_icon_alignment = 0
+expand_icon = true
+
+[node name="Button9" type="Button" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.917647, 0, 1)
+theme_override_colors/font_pressed_color = Color(0.913725, 0, 0, 1)
+theme_override_colors/icon_normal_color = Color(0, 0.858824, 0, 1)
+theme_override_colors/icon_pressed_color = Color(0.866667, 0, 0, 1)
+toggle_mode = true
+text = "Sony
+Playsation
+"
+icon = ExtResource("11_v45kn")
+icon_alignment = 1
+vertical_icon_alignment = 0
+expand_icon = true
 
 [node name="extra_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer"]
 layout_mode = 2
-
-[node name="wide_screen_adv_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/extra_container"]
-layout_mode = 2
-disabled = true
-text = "TK_ADVANCED"
-
-[node name="wide_screen" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/extra_container"]
-layout_mode = 2
-size_flags_horizontal = 3
-disabled = true
-button_pressed = true
-text = "TK_MODS"
-
-[node name="tate_mode" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/extra_container"]
-layout_mode = 2
-disabled = true
-text = "TK_TATE"
 
 [node name="decorations_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/extra_container"]
 layout_mode = 2
@@ -243,6 +371,27 @@ text = "TK_EXTRA"
 
 [node name="decorations_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/extra_container"]
 layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/extra_container"]
+layout_mode = 2
+columns = 2
+
+[node name="wide_screen" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/extra_container/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+disabled = true
+button_pressed = true
+text = "TK_MODS"
+
+[node name="wide_screen_adv_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/extra_container/GridContainer"]
+layout_mode = 2
+disabled = true
+text = "TK_ADVANCED"
+
+[node name="tate_mode" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/extra_container/GridContainer"]
+layout_mode = 2
+disabled = true
+text = "TK_TATE"
 
 [node name="TK_CONTROLS" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
 visible = false
@@ -984,6 +1133,7 @@ frame = 4
 frame_progress = 1.0
 
 [node name="rekku" type="Control" parent="Background/side_logo"]
+visible = false
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
