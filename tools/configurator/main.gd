@@ -3,7 +3,7 @@ extends Control
 var bios_type:int
 var status_code_label: Label
 var wrapper_command: String = "../../tools/retrodeck_function_wrapper.sh"
-var log_text = "GD_Configurator: "
+var log_text = "gdc_"
 var log_parameters: Array = ["log", "i", log_text]
 var log_results: Dictionary
 var theme_option: OptionButton
@@ -69,6 +69,9 @@ func _ready():
 	combine_tkeys()
 
 func _process(delta):
+	
+	if Input.is_action_pressed("quit1") and Input.is_action_pressed("quit2"):
+		get_tree().quit()
 	if Input.is_action_pressed("next_tab"):
 		%r1_button.texture_normal = %r1_button.texture_pressed
 	elif Input.is_action_pressed("previous_tab"):
