@@ -1,4 +1,4 @@
---- RetroDECK 3rd Party Licences ---
+--- RetroDECK 3rd Party Licences ---!!!!!
 
 All Licenses of the projects we are using are listed on the wiki:
 https://retrodeck.readthedocs.io/en/latest/wiki_about/donations-licenses/
