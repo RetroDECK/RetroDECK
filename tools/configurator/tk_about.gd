@@ -13,12 +13,12 @@ var app_data = AppData.new()
 
 func _ready():
 	#tk_about = class_functions.import_csv_data("res://tk_about.txt")
-	app_data =  data_handler.load_base_data()
+	app_data =  data_handler.app_data
 	_get_nodes()
 	_connect_signals()
 	
 	for id in app_data.about_links:
-		var web_data = app_data.about_links[id]
+		var web_data: Link = app_data.about_links[id]
 		match id:
 			"rd_web":
 				%website_button.text = web_data.name

@@ -34,21 +34,25 @@ func load_base_data() -> AppData:
 				var emulator = Emulator.new()
 				emulator.name = emulator_data["name"]
 				emulator.description = emulator_data["description"]
-				print (emulator.name)
 				if emulator_data.has("properties"):
 					for property_data in emulator_data["properties"]:
+						print (emulator,"----",property_data)
 						var property = EmulatorProperty.new()
-						property.standalone = property_data.get("standalone", false)
-#todo fix error
-#						property.abxy_button_status = property_data.get("abxy_button", {}).get("status", false)
+						if property_data.has("cheevos"):
+							property.cheevos = property_data.get("cheevos",true)
+						if property_data.has("cheevos_hardcore"):
+							property.cheevos_hardcore = property_data.get("cheevos_hardcore",true)
+						if property_data.has("abxy_button"):
+							property.abxy_button = property_data.get("abxy_button",true)
+						if property_data.has("multi_user_config_dir"):
+							property.multi_user_config_dir = property_data.get("multi_user_config_dir",true)
 						emulator.properties.append(property)
-
+				
 				emulators[key] = emulator
-
-			var this_app_data = AppData.new()
-			this_app_data.about_links = about_links
-			this_app_data.emulators = emulators
-			return this_app_data
+			var app_data = AppData.new()
+			app_data.about_links = about_links
+			app_data.emulators = emulators
+			return app_data
 		else:
 			print("Error parsing JSON")
 	else:
@@ -93,7 +97,7 @@ func save_base_data(app_data: AppData):
 		var properties = []
 		for property in emulator.properties:
 			properties.append({
-				"standalone": property.standalone,
+				#"standalone": property.standalone,
 				"abxy_button": {"status": property.abxy_button_status}
 		})
 
@@ -153,8 +157,11 @@ func modify_emulator(key: String, new_name: String, new_description: String, new
 		emulator.properties.clear()
 		for property in new_properties:
 			var new_property = EmulatorProperty.new()
-			new_property.standalone = property.standalone
+			new_property.borders = property.borders
 			new_property.abxy_button_status = property.abxy_button_status
+			new_property.ask_to_exit = property.ask_to_exit
+			new_property.cheevos = property.cheevos
+			
 			emulator.properties.append(new_property)
 
 		app_data.emulators[key] = emulator
@@ -176,7 +183,7 @@ func add_emulator() -> void:
 	emulator.name = "Example Emulator"
 	emulator.description = "An example emulator."
 	var property = EmulatorProperty.new()
-	property.standalone = true
+	#property.standalone = true
 	property.abxy_button_status = false
 	emulator.properties.append(property)
 	app_data.emulators["example_emulator"] = emulator
@@ -188,7 +195,7 @@ func modify_emulator_test() -> void:
 
 	var new_properties = []
 	var new_property = EmulatorProperty.new()
-	new_property.standalone = false
+	#new_property.standalone = false
 	new_property.abxy_button_status = true
 	new_properties.append(new_property)
 
