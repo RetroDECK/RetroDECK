@@ -15,7 +15,7 @@ on:
      - '*.sh'
      - 'net.retrodeck.retrodeck.yml'
      - 'net.retrodeck.retrodeck.appdata.xml'
-  pull_request: 
+  pull_request_target: 
     branches:
      - cooker*
 
@@ -33,7 +33,7 @@ jobs:
 
   Building_RetroDECK:
     runs-on: retrodeck
-    steps:
+    steps:        
 
       # Circumventing this bug: https://github.com/flatpak/flatpak-builder/issues/317
       - name: Remove stuck mounts
