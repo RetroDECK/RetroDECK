@@ -10,7 +10,6 @@
 [ext_resource type="Script" path="res://Rekku.gd" id="4_nqqx3"]
 [ext_resource type="Texture2D" uid="uid://cwgvmej32322m" path="res://assets/icons/Icon Pack/GB.png" id="4_sfx5n"]
 [ext_resource type="Texture2D" uid="uid://dk856hwnwsuab" path="res://assets/icons/pixelitos/128/retroarch.png" id="4_xcuib"]
-[ext_resource type="Texture2D" uid="uid://c55jv8vav74fi" path="res://assets/icons/Icon Pack/GBA.png" id="5_5j6oj"]
 [ext_resource type="Texture2D" uid="uid://d2lm4mfx1gt86" path="res://assets/graphics/retrodeck_base_shake0.png" id="5_7rjbt"]
 [ext_resource type="Texture2D" uid="uid://bgmqtrn1lddw1" path="res://assets/icons/Icon Pack/GBC_1.png" id="5_bjgrq"]
 [ext_resource type="Script" path="res://helper_text.gd" id="5_cprkf"]
@@ -18,6 +17,7 @@
 [ext_resource type="StyleBox" uid="uid://ba3l3ja1jbqpx" path="res://assets/themes/emulators.tres" id="5_rjtkn"]
 [ext_resource type="Texture2D" uid="uid://cjv6lhd4g63m3" path="res://assets/graphics/retrodeck_base_shake1.png" id="6_d43n7"]
 [ext_resource type="Texture2D" uid="uid://cru43y7hco6kh" path="res://res/flags/italy_32.png" id="6_fiylw"]
+[ext_resource type="Texture2D" uid="uid://dt77qr4c71lov" path="res://assets/icons/pixelitos/128/helltaker.png" id="6_my8m1"]
 [ext_resource type="Texture2D" uid="uid://cxwnt3djsrck7" path="res://assets/icons/pixelitos/128/duckstation.png" id="6_winpq"]
 [ext_resource type="Texture2D" uid="uid://c2furjlxwkxih" path="res://assets/icons/pixelitos/128/net.kuribo64.melonDS.png" id="7_4otos"]
 [ext_resource type="Texture2D" uid="uid://dxywon5p4o6v1" path="res://assets/icons/Icon Pack/SNES.png" id="7_7pbsj"]
@@ -167,11 +167,10 @@ grow_vertical = 2
 unique_name_in_owner = true
 layout_mode = 2
 tab_alignment = 1
-current_tab = 7
+current_tab = 0
 script = ExtResource("3_id6l4")
 
 [node name="TK_GRAPHICS" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -253,6 +252,14 @@ icon_alignment = 1
 vertical_icon_alignment = 0
 expand_icon = true
 
+[node name="CheckButton" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "SOME GAME"
+icon = ExtResource("6_my8m1")
+alignment = 1
+icon_alignment = 1
+vertical_icon_alignment = 0
+
 [node name="Button4" type="Button" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/GridContainer"]
 custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
@@ -260,6 +267,7 @@ theme_override_colors/font_pressed_color = Color(0.913725, 0, 0, 1)
 theme_override_colors/font_color = Color(0, 0.917647, 0, 1)
 theme_override_colors/icon_normal_color = Color(0, 0.858824, 0, 1)
 theme_override_colors/icon_pressed_color = Color(0.866667, 0, 0, 1)
+disabled = true
 toggle_mode = true
 text = "Nintendo
 Gameboy Colour
@@ -277,10 +285,10 @@ theme_override_colors/font_color = Color(0, 0.917647, 0, 1)
 theme_override_colors/icon_normal_color = Color(0, 0.858824, 0, 1)
 theme_override_colors/icon_pressed_color = Color(0.866667, 0, 0, 1)
 toggle_mode = true
+button_pressed = true
 text = "Nintendo
 Gameboy Advanced
 "
-icon = ExtResource("5_5j6oj")
 icon_alignment = 1
 vertical_icon_alignment = 0
 expand_icon = true
@@ -1020,6 +1028,7 @@ popup/item_4/text = "OpenDyslexic3"
 popup/item_4/id = 4
 
 [node name="TK_ABOUT" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
 script = ExtResource("4_m4rto")
 metadata/_tab_index = 7
