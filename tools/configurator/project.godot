@@ -22,10 +22,6 @@ config/icon="res://icon.svg"
 
 class_functions="*res://scripts/class_functions.gd"
 data_handler="*res://scripts/data_handler.gd"
-AppDataD="res://scripts/app_data.gd"
-Emulators="res://scripts/emulator.gd"
-EmulatorProperties="res://scripts/emulator_property.gd"
-Links="res://scripts/link.gd"
 
 [display]
 

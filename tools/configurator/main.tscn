@@ -11,7 +11,6 @@
 [ext_resource type="Texture2D" uid="uid://cwgvmej32322m" path="res://assets/icons/Icon Pack/GB.png" id="4_sfx5n"]
 [ext_resource type="Texture2D" uid="uid://dk856hwnwsuab" path="res://assets/icons/pixelitos/128/retroarch.png" id="4_xcuib"]
 [ext_resource type="Texture2D" uid="uid://d2lm4mfx1gt86" path="res://assets/graphics/retrodeck_base_shake0.png" id="5_7rjbt"]
-[ext_resource type="Texture2D" uid="uid://bgmqtrn1lddw1" path="res://assets/icons/Icon Pack/GBC_1.png" id="5_bjgrq"]
 [ext_resource type="Script" path="res://helper_text.gd" id="5_cprkf"]
 [ext_resource type="Texture2D" uid="uid://dxdhjp18rgmr4" path="res://res/flags/united_kingdom_32.png" id="5_exkn2"]
 [ext_resource type="StyleBox" uid="uid://ba3l3ja1jbqpx" path="res://assets/themes/emulators.tres" id="5_rjtkn"]
@@ -21,6 +20,7 @@
 [ext_resource type="Texture2D" uid="uid://cxwnt3djsrck7" path="res://assets/icons/pixelitos/128/duckstation.png" id="6_winpq"]
 [ext_resource type="Texture2D" uid="uid://c2furjlxwkxih" path="res://assets/icons/pixelitos/128/net.kuribo64.melonDS.png" id="7_4otos"]
 [ext_resource type="Texture2D" uid="uid://dxywon5p4o6v1" path="res://assets/icons/Icon Pack/SNES.png" id="7_7pbsj"]
+[ext_resource type="Texture2D" uid="uid://dap1fkorlyb1l" path="res://assets/icons/gamegear.png" id="7_iqwcw"]
 [ext_resource type="Texture2D" uid="uid://cyqo650hjucw6" path="res://assets/graphics/retrodeck_base_shake2.png" id="7_mo842"]
 [ext_resource type="Texture2D" uid="uid://cti2vt14gxisl" path="res://res/flags/germany_32.png" id="7_qgxid"]
 [ext_resource type="Texture2D" uid="uid://c7i7mr38qxa4f" path="res://assets/icons/pixelitos/128/org.ppsspp.PPSSPP.png" id="8_akxf7"]
@@ -261,18 +261,13 @@ icon_alignment = 1
 vertical_icon_alignment = 0
 
 [node name="Button4" type="Button" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/GridContainer"]
-custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
 theme_override_colors/font_pressed_color = Color(0.913725, 0, 0, 1)
 theme_override_colors/font_color = Color(0, 0.917647, 0, 1)
-theme_override_colors/icon_normal_color = Color(0, 0.858824, 0, 1)
 theme_override_colors/icon_pressed_color = Color(0.866667, 0, 0, 1)
-disabled = true
-toggle_mode = true
-text = "Nintendo
-Gameboy Colour
+text = "
 "
-icon = ExtResource("5_bjgrq")
+icon = ExtResource("7_iqwcw")
 icon_alignment = 1
 vertical_icon_alignment = 0
 expand_icon = true
