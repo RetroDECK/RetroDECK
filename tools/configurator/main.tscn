@@ -1060,47 +1060,55 @@ expand_mode = 1
 stretch_mode = 4
 
 [node name="GridContainer" type="GridContainer" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container"]
+unique_name_in_owner = true
 layout_mode = 2
 columns = 3
 
 [node name="website_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container/GridContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 text = "TK_WEBSITE"
 icon = ExtResource("21_1vm5n")
 
 [node name="changelog_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container/GridContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 text = "TK_CHANGELOG"
 icon = ExtResource("21_1vm5n")
 
 [node name="wiki_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container/GridContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 text = "TK_WIKI"
 icon = ExtResource("21_1vm5n")
 
 [node name="credits_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container/GridContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 text = "TK_CREDITS"
 icon = ExtResource("21_1vm5n")
 
 [node name="donate_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container/GridContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 text = "TK_DONATE"
 icon = ExtResource("21_1vm5n")
 
 [node name="contactus_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container/GridContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 text = "TK_CONTACTUS"
 icon = ExtResource("21_1vm5n")
 
 [node name="licenses_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container/GridContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 text = "TK_LICENSES"
 icon = ExtResource("21_1vm5n")

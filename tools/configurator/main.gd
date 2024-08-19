@@ -27,7 +27,7 @@ var a_button_texture_alt: Texture2D = load("res://assets/icons/kenney_input-prom
 var b_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0043.png")
 var b_button_texture_alt: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0048.png")
 
-var app_data = AppData.new()
+var app_data := AppData.new()
 func _ready():
 	_get_nodes()
 	_connect_signals()
