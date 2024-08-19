@@ -429,6 +429,9 @@
       "fds": {
         "name": "Nintendo Famicom Disk System"
       },
+      "flash" : {
+        "name" : "Adobe Flash Player"
+      },
       "fm7": {
         "name": "Fujitsu FM-7"
       },
@@ -969,6 +972,12 @@
             "ask_to_exit": true
           }
         ]
+      },
+      "ruffle": {
+        "description": "Flash Games emulator",
+        "name" : "Ruffle",
+        "system" : "flash",
+        "launch": "ruffle-rd-wrapper.sh"
       },
       "melonds": {
         "description": "MelonDS Nintendo DS Emulator",
