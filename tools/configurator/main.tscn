@@ -173,6 +173,7 @@ script = ExtResource("3_id6l4")
 [node name="TK_GRAPHICS" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
+metadata/_tab_index = 0
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS"]
 layout_mode = 2
@@ -239,8 +240,8 @@ columns = 4
 [node name="Button3" type="Button" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/GridContainer"]
 custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0.917647, 0, 1)
 theme_override_colors/font_pressed_color = Color(0.913725, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0.917647, 0, 1)
 theme_override_colors/icon_normal_color = Color(0, 0.858824, 0, 1)
 theme_override_colors/icon_pressed_color = Color(0.866667, 0, 0, 1)
 toggle_mode = true
@@ -255,8 +256,8 @@ expand_icon = true
 [node name="Button4" type="Button" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/GridContainer"]
 custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0.917647, 0, 1)
 theme_override_colors/font_pressed_color = Color(0.913725, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0.917647, 0, 1)
 theme_override_colors/icon_normal_color = Color(0, 0.858824, 0, 1)
 theme_override_colors/icon_pressed_color = Color(0.866667, 0, 0, 1)
 toggle_mode = true
@@ -271,8 +272,8 @@ expand_icon = true
 [node name="Button5" type="Button" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/GridContainer"]
 custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0.917647, 0, 1)
 theme_override_colors/font_pressed_color = Color(0.913725, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0.917647, 0, 1)
 theme_override_colors/icon_normal_color = Color(0, 0.858824, 0, 1)
 theme_override_colors/icon_pressed_color = Color(0.866667, 0, 0, 1)
 toggle_mode = true
@@ -287,8 +288,8 @@ expand_icon = true
 [node name="Button10" type="Button" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/GridContainer"]
 custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0.917647, 0, 1)
 theme_override_colors/font_pressed_color = Color(0.913725, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0.917647, 0, 1)
 theme_override_colors/icon_normal_color = Color(0, 0.858824, 0, 1)
 theme_override_colors/icon_pressed_color = Color(0.866667, 0, 0, 1)
 toggle_mode = true
@@ -303,8 +304,8 @@ expand_icon = true
 [node name="Button8" type="Button" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/GridContainer"]
 custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0.917647, 0, 1)
 theme_override_colors/font_pressed_color = Color(0.913725, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0.917647, 0, 1)
 theme_override_colors/icon_normal_color = Color(0, 0.858824, 0, 1)
 theme_override_colors/icon_pressed_color = Color(0.866667, 0, 0, 1)
 toggle_mode = true
@@ -319,8 +320,8 @@ expand_icon = true
 [node name="Button6" type="Button" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/GridContainer"]
 custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0.917647, 0, 1)
 theme_override_colors/font_pressed_color = Color(0.913725, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0.917647, 0, 1)
 theme_override_colors/icon_normal_color = Color(0, 0.858824, 0, 1)
 theme_override_colors/icon_pressed_color = Color(0.866667, 0, 0, 1)
 toggle_mode = true
@@ -335,8 +336,8 @@ expand_icon = true
 [node name="Button7" type="Button" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/GridContainer"]
 custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0.917647, 0, 1)
 theme_override_colors/font_pressed_color = Color(0.913725, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0.917647, 0, 1)
 theme_override_colors/icon_normal_color = Color(0, 0.858824, 0, 1)
 theme_override_colors/icon_pressed_color = Color(0.866667, 0, 0, 1)
 toggle_mode = true
@@ -351,8 +352,8 @@ expand_icon = true
 [node name="Button9" type="Button" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/GridContainer"]
 custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0.917647, 0, 1)
 theme_override_colors/font_pressed_color = Color(0.913725, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0.917647, 0, 1)
 theme_override_colors/icon_normal_color = Color(0, 0.858824, 0, 1)
 theme_override_colors/icon_pressed_color = Color(0.866667, 0, 0, 1)
 toggle_mode = true
@@ -398,6 +399,7 @@ text = "TK_TATE"
 [node name="TK_CONTROLS" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
+metadata/_tab_index = 1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Background/MarginContainer/TabContainer/TK_CONTROLS"]
 layout_mode = 2
@@ -443,10 +445,9 @@ text = "TK_BTNLAYOUT"
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 4
-item_count = 2
 selected = 0
+item_count = 2
 popup/item_0/text = "TK_BTNCLASSIC"
-popup/item_0/id = 0
 popup/item_1/text = "TK_BTNNINTENDO"
 popup/item_1/id = 1
 
@@ -459,6 +460,7 @@ text = "TK_HOTKEYSOUND"
 [node name="TK_SYSTEM" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
+metadata/_tab_index = 2
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Background/MarginContainer/TabContainer/TK_SYSTEM"]
 layout_mode = 2
@@ -601,6 +603,7 @@ text = "TK_ADVANCED"
 [node name="TK_TOOLS" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
+metadata/_tab_index = 3
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Background/MarginContainer/TabContainer/TK_TOOLS"]
 layout_mode = 2
@@ -708,6 +711,7 @@ text = "TK_MOVEFILES"
 [node name="TK_NETWORK" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
+metadata/_tab_index = 4
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Background/MarginContainer/TabContainer/TK_NETWORK"]
 layout_mode = 2
@@ -861,6 +865,7 @@ text = "TK_FTPBTN"
 [node name="TK_TROUBLESHOOT" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
+metadata/_tab_index = 5
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT"]
 layout_mode = 2
@@ -884,10 +889,9 @@ text = "TK_CHECKCONN"
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
-item_count = 4
 selected = 0
+item_count = 4
 popup/item_0/text = "TK_LOGSBTN"
-popup/item_0/id = 0
 popup/item_0/disabled = true
 popup/item_0/separator = true
 popup/item_1/text = "RetroDECK Log"
@@ -935,6 +939,7 @@ offset_bottom = 35.0
 [node name="TK_CONFIGURATOR" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
+metadata/_tab_index = 6
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Background/MarginContainer/TabContainer/TK_CONFIGURATOR"]
 layout_mode = 2
@@ -979,10 +984,9 @@ text = "TK_MULTIUSR"
 [node name="multi_user_option" type="OptionButton" parent="Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer/system_container/multi_user_container"]
 layout_mode = 2
 size_flags_horizontal = 10
-item_count = 3
 selected = 0
+item_count = 3
 popup/item_0/text = "TK_OFF"
-popup/item_0/id = 0
 popup/item_1/text = "TK_STEAMUSR"
 popup/item_1/id = 1
 popup/item_2/text = "TK_CUSTOMUSR"
@@ -1001,10 +1005,9 @@ text = "|| ------( )--------"
 [node name="theme_optionbutton" type="OptionButton" parent="Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-item_count = 5
 selected = 0
+item_count = 5
 popup/item_0/text = "Choose Theme"
-popup/item_0/id = 0
 popup/item_0/disabled = true
 popup/item_0/separator = true
 popup/item_1/text = "Default"
@@ -1019,6 +1022,7 @@ popup/item_4/id = 4
 [node name="TK_ABOUT" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
 layout_mode = 2
 script = ExtResource("4_m4rto")
+metadata/_tab_index = 7
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Background/MarginContainer/TabContainer/TK_ABOUT"]
 layout_mode = 2
@@ -1314,27 +1318,19 @@ offset_right = -158.0
 offset_bottom = -17.0
 grow_horizontal = 0
 grow_vertical = 0
-item_count = 7
 selected = 0
-popup/item_0/text = ""
+item_count = 7
 popup/item_0/icon = ExtResource("5_exkn2")
-popup/item_0/id = 0
-popup/item_1/text = ""
 popup/item_1/icon = ExtResource("6_fiylw")
 popup/item_1/id = 1
-popup/item_2/text = ""
 popup/item_2/icon = ExtResource("7_qgxid")
 popup/item_2/id = 2
-popup/item_3/text = ""
 popup/item_3/icon = ExtResource("8_lptln")
 popup/item_3/id = 3
-popup/item_4/text = ""
 popup/item_4/icon = ExtResource("9_dp7oa")
 popup/item_4/id = 4
-popup/item_5/text = ""
 popup/item_5/icon = ExtResource("10_e8mt0")
 popup/item_5/id = 5
-popup/item_6/text = ""
 popup/item_6/icon = ExtResource("11_ri2fv")
 popup/item_6/id = 6
 
