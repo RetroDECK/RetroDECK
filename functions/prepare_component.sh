@@ -857,6 +857,24 @@ prepare_component() {
     sed -i 's#RETRODECKSAVESDIR#'$saves_folder'#g' "/var/config/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON
   fi
 
+  if [[ "$component" =~ ^(ruffle|all)$ ]]; then
+  component_found="true"
+    log i "----------------------"
+    log i "Prepearing Ruffle"
+    log i "----------------------"
+
+    rm -rf "/var/config/ruffle"
+
+    # Ruffle creates a directory with the full rom paths in it, so this is necessary
+    # TODO: be aware of this when multi user support will be integrated for this component
+    dir_prep "$saves_folder/flash" "/var/data/ruffle/SharedObjects/localhost/$roms_folder/flash"
+
+    if [[ "$action" == "postmove" ]]; then # Run only post-move commands
+      dir_prep "$saves_folder/flash" "/var/data/ruffle/SharedObjects/localhost/$roms_folder/flash"
+    fi
+    
+  fi
+
   if [[ $component_found == "false" ]]; then
     log e "Supplied component $component not found, not resetting"
   fi
