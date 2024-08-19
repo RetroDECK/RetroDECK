@@ -1,7 +1,10 @@
-[gd_resource type="Theme" load_steps=2 format=3 uid="uid://hhc60cllcg47"]
+[gd_resource type="Theme" load_steps=3 format=3 uid="uid://hhc60cllcg47"]
+
+[ext_resource type="Texture2D" uid="uid://cybgluovwyfme" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0000.png" id="1_5eqtb"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ghisc"]
 bg_color = Color(0.6, 0.168627, 0.6, 0.372549)
 
 [resource]
 Button/styles/focus = SubResource("StyleBoxFlat_ghisc")
+CheckBox/icons/checked = ExtResource("1_5eqtb")
