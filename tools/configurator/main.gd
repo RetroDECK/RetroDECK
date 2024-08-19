@@ -13,19 +13,16 @@ var theme_option: OptionButton
 signal signal_theme_changed
 var custom_theme: Theme = $".".theme
 var log_option: OptionButton
+var borders_button : Button
 var tab_container: TabContainer
 var anim_logo: AnimatedSprite2D
 var rd_logs: String
 var rd_version: String
 var gc_version: String
 var l1_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0797.png")
-var l1_button_texture_alt: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0763.png")
 var r1_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0798.png")
-var r1_button_texture_alt: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0764.png")
 var a_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0042.png")
-var a_button_texture_alt: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0047.png")
 var b_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0043.png")
-var b_button_texture_alt: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0048.png")
 
 var app_data := AppData.new()
 func _ready():
@@ -69,7 +66,7 @@ func _ready():
 	#	print (id)
 
 	# set current startup tab to match IDE	
-	tab_container.current_tab = 2
+	tab_container.current_tab = 0
 	#add_child(class_functions) # Needed for threaded results Not need autoload?
 	var children = findElements(self, "Control")
 	for n: Control in children: #iterate the children
@@ -79,51 +76,7 @@ func _ready():
 			n.self_modulate.a = 0.5 #make it half transparent
 	combine_tkeys()
 
-
-func _get_nodes() -> void:
-	status_code_label = get_node("%status_code_label")
-	theme_option = get_node("%theme_optionbutton")
-	tab_container = get_node("%TabContainer")
-	anim_logo = get_node("%logo_animated")
-	log_option = get_node("%logs_button")
-	
-func _connect_signals() -> void:
-	#signal_theme_changed.connect(_conf_theme)
-	theme_option.item_selected.connect(_conf_theme)
-	signal_theme_changed.emit(theme_option.item_selected)
-	log_option.item_selected.connect(_load_log)
-	
-func _load_log(index: int) -> void:
-	var log_content:String
-	match index:
-		1: 
-			log_content = class_functions.import_text_file(rd_logs +"/retrodeck.log")
-			load_popup("RetroDeck Log", "res://components/logs_view/logs_popup_content.tscn", log_content)
-		2:
-			log_content = class_functions.import_text_file(rd_logs +"/ES-DE/es_log.txt")
-			load_popup("ES-DE Log", "res://components/logs_view/logs_popup_content.tscn",log_content)
-		3: 
-			log_content = class_functions.import_text_file(rd_logs +"/retroarch/logs/log.txt")
-			load_popup("Retroarch Log", "res://components/logs_view/logs_popup_content.tscn",log_content)	
-
-func _play_main_animations() -> void:
-	anim_logo.play()
-
-func _conf_theme(index: int) -> void: 
-	match index:
-		1:
-			custom_theme = preload("res://assets/themes/default_theme.tres")
-		2:
-			custom_theme = preload("res://assets/themes/retro_theme.tres")
-		3:
-			custom_theme = preload("res://assets/themes/modern_theme.tres")
-		4:
-			custom_theme = preload("res://assets/themes/accesible_theme.tres")
-	$".".theme = custom_theme
-	_play_main_animations()
-
 func _input(event):
-	
 	if Input.is_action_pressed("quit1") and Input.is_action_pressed("quit2"):
 		get_tree().quit()
 	if Input.is_action_pressed("next_tab"):
@@ -141,6 +94,62 @@ func _input(event):
 		%b_button.texture_normal = b_button_texture
 	if event.is_action_pressed("quit"):
 		_exit()
+
+func _get_nodes() -> void:
+	status_code_label = get_node("%status_code_label")
+	theme_option = get_node("%theme_optionbutton")
+	tab_container = get_node("%TabContainer")
+	anim_logo = get_node("%logo_animated")
+	log_option = get_node("%logs_button")
+	borders_button = get_node("%borders")
+	
+func _connect_signals() -> void:
+	#signal_theme_changed.connect(_conf_theme)
+	theme_option.item_selected.connect(_conf_theme)
+	signal_theme_changed.emit(theme_option.item_selected)
+	log_option.item_selected.connect(_load_log)
+	borders_button.pressed.connect(_hide_show) # make emot function to pass container to hide/show?
+	
+func _load_log(index: int) -> void:
+	var log_content:String
+	match index:
+		1: 
+			log_content = class_functions.import_text_file(rd_logs +"/retrodeck.log")
+			load_popup("RetroDeck Log", "res://components/logs_view/logs_popup_content.tscn", log_content)
+		2:
+			log_content = class_functions.import_text_file(rd_logs +"/ES-DE/es_log.txt")
+			load_popup("ES-DE Log", "res://components/logs_view/logs_popup_content.tscn",log_content)
+		3: 
+			log_content = class_functions.import_text_file(rd_logs +"/retroarch/logs/log.txt")
+			load_popup("Retroarch Log", "res://components/logs_view/logs_popup_content.tscn",log_content)	
+
+func _play_main_animations() -> void:
+	anim_logo.play()
+
+func _hide_show() -> void:
+	if %borders.button_pressed:
+		%borders_grid_container.visible = true
+		#$Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/borders_grid_container/CheckBox2.button_pressed=true
+		for i in range(%borders_grid_container.get_child_count()):
+			var child = %borders_grid_container.get_child(i)        
+			if child is Button:
+				child.button_pressed=true
+		
+	else:
+		%borders_grid_container.visible = false
+
+func _conf_theme(index: int) -> void: 
+	match index:
+		1:
+			custom_theme = preload("res://res/pixel_ui_theme/RetroDECKTheme.tres")
+		2:
+			custom_theme = preload("res://assets/themes/retro_theme.tres")
+		3:
+			custom_theme = preload("res://assets/themes/modern_theme.tres")
+		4:
+			custom_theme = preload("res://assets/themes/accesible_theme.tres")
+	$".".theme = custom_theme
+	_play_main_animations()
 
 func findElements(node: Node, className: String, result: Array = []) -> Array:
 	if node.is_class(className):
