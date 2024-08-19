@@ -158,13 +158,13 @@ modules:
   - name: retrodeck-configurator
     buildsystem: simple
     build-commands:
-      - install -Dm755 "Godot_v4.2.2-stable_linux.x86_64" "${FLATPAK_DEST}/bin/godot"
+      - install -Dm755 "Godot_*-stable_linux.x86_64" "${FLATPAK_DEST}/bin/godot"
       - mkdir -p "${FLATPAK_DEST}/retrodeck"
       - godot --headless --path "tools/configurator" --import
       - godot --headless --path "tools/configurator" --export-pack "Linux/X11 64-bit" "${FLATPAK_DEST}/retrodeck/configurator.pck"
       - chmod +x "${FLATPAK_DEST}/retrodeck/configurator.pck"
       - echo '#!/bin/sh' > "godot-configurator.sh"
-      - echo 'godot-runner --main-pack /app/retrodeck/configurator.pck' >> "godot-configurator.sh"
+      - echo 'godot --main-pack /app/retrodeck/configurator.pck' >> "godot-configurator.sh"
       - install -Dm755 "godot-configurator.sh" "/app/bin/"
     sources:
       - type: archive
