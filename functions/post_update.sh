@@ -374,8 +374,12 @@ post_update() {
     fi
   fi
 
-  # if [[ $(check_version_is_older_than "0.9.0b") == "true" ]]; then
-  #   # Placeholder for version 0.9.0b
+  if [[ $(check_version_is_older_than "0.9.0b") == "true" ]]; then
+    # Placeholder for version 0.9.0b
+
+    set_setting_value "$raconf" "libretro_info_path" "/var/config/retroarch/cores" "retroarch"
+
+  # TODO: check this
   #   rm /var/config/emulationstation/.emulationstation # remving the old symlink to .emulationstation as it might be not needed anymore
   # TODO: change <mlc_path>RETRODECKHOMEDIR/bios/cemu</mlc_path> in config/cemu/settings.xml into <mlc_path>RETRODECKHOMEDIR/bios/cemu/mlc</mlc_path>
   #   if [ ! -d "$bios_folder/cemu/mlc" ]; then
@@ -391,7 +395,7 @@ post_update() {
   # TODO: is this true?
   #  log i "Since in this version we restored Ryujinx to a main buikd we don't need the symlink anymore."
   #  rm "$(dirname $ryujinxconf)/PRConfig.json"
-  # fi
+  fi
 
   # The following commands are run every time.
 

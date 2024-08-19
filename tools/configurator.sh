@@ -99,7 +99,7 @@ source /app/libexec/global.sh
 #     - Add to Steam
 #     - Developer Options (Hidden)
 #       - Change Multi-user mode
-#       - Change Update channel
+#       - Install Specific Release
 #       - Browse the wiki
 #       - Install: RetroDECK Starter Pack
 #       - Tool: USB Import
@@ -852,7 +852,7 @@ configurator_compress_single_game_dialog() {
 }
 
 configurator_compress_multiple_games_dialog() {
-  # This dialog will display any games it finds to be compressable, from the systems listed under each compression type in compression_targets.cfg
+  # This dialog will display any games it finds to be compressable, from the systems listed under each compression type in features.json
 
   find_compatible_games "$1"
 
@@ -1287,7 +1287,7 @@ configurator_developer_dialog() {
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Description" \
   "Change Multi-user mode" "Enable or disable multi-user support" \
-  "Change Update Channel" "Change between normal and cooker builds" \
+  "Install Specific Release" "Install any cooker release or the latest main available" \
   "Browse the Wiki" "Browse the RetroDECK wiki online" \
   "Install RetroDECK Starter Pack" "Install the optional RetroDECK starter pack" \
   "Tool: USB Import" "Prepare a USB device for ROMs or import an existing collection" \
@@ -1300,7 +1300,7 @@ configurator_developer_dialog() {
     configurator_retrodeck_multiuser_dialog
   ;;
 
-  "Change Update Channel" )
+  "Install Specific Release" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_online_update_channel_dialog
   ;;
@@ -1378,17 +1378,8 @@ configurator_online_update_channel_dialog() {
       configurator_developer_dialog
     fi
   else
-    rd_zenity --question \
-    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - RetroDECK Change Update Branch" \
-    --text="You are currently on the cooker branch of RetroDECK updates. Would you like to switch to the production branch?\n\nAfter installing a production build, you may need to remove the \"cooker\" branch install of RetroDECK to avoid overlap."
-
-    if [ $? == 0 ] # User clicked "Yes"
-    then
-      set_setting_value $rd_conf "update_repo" "RetroDECK" retrodeck "options"
-    else # User clicked "Cancel"
-      configurator_developer_dialog
-    fi
+    set_setting_value $rd_conf "update_repo" "RetroDECK" retrodeck "options"
+    release_selector
   fi
 }
 

@@ -81,3 +81,22 @@ func import_text_file(file_path: String) -> String:
 		content += file.get_line() + "\n"
 	file.close
 	return content
+
+func map_locale_id(current_locale: String) -> int:
+	var int_locale: int
+	match current_locale:
+		"en":
+			int_locale = 0
+		"it":
+			int_locale = 1
+		"de":
+			int_locale = 2
+		"se":
+			int_locale = 3
+		"uk":
+			int_locale = 4
+		"jp":
+			int_locale = 5
+		"cn":
+			int_locale = 6
+	return int_locale
