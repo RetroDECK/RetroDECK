@@ -162,7 +162,7 @@ jobs:
           artifacts: "RetroDECK-cooker.flatpak,RetroDECK-cooker.flatpak.sha,RetroDECK-Artifact.tar.gz"
           allowUpdates: true
           makeLatest: ${{env.MAKE_LATEST}} # if it's a feat branch is not considered the latest build
-          token: ${{ steps.generate-token.outputs.token }}
+          token: ${{ steps.generate-rekku-token.outputs.token }}
           repo: Cooker
         continue-on-error: true
 
@@ -179,7 +179,7 @@ jobs:
           git tag "${{ env.TAG }}"             # Create the tag locally               
           git push origin "${{ env.TAG }}"     # Push the new tag in the remote repo
         env:
-          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
+          GITHUB_TOKEN: ${{ steps.generate-rekku-token.outputs.token }}
 
       # In case it cannot publish the release at least it's providing the flatpak file for creating a manual release
       - name: Upload RetroDECK-cooker.flatpak
