@@ -1,4 +1,4 @@
-[gd_scene load_steps=58 format=3 uid="uid://61f6m4r1mpan"]
+[gd_scene load_steps=59 format=3 uid="uid://61f6m4r1mpan"]
 
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
 [ext_resource type="Script" path="res://main.gd" id="1_obpq7"]
@@ -38,6 +38,7 @@
 [ext_resource type="Texture2D" uid="uid://cbwhpqip43aei" path="res://res/flags/china_32.png" id="11_ri2fv"]
 [ext_resource type="Texture2D" uid="uid://cqq2qlcr5djsw" path="res://assets/icons/Icon Pack/PS1.png" id="11_v45kn"]
 [ext_resource type="Texture2D" uid="uid://b164ihk8riiwh" path="res://assets/graphics/space_bground.png" id="15_qdvxo"]
+[ext_resource type="Texture2D" uid="uid://ble152m6361l8" path="res://assets/icons/pixelitos/128/internet-web-browser.png" id="21_1vm5n"]
 [ext_resource type="Texture2D" uid="uid://dyumvh0ixwrbl" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0042.png" id="30_glnve"]
 [ext_resource type="Texture2D" uid="uid://cn11vcrybtor4" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0047.png" id="31_j5ri1"]
 [ext_resource type="Texture2D" uid="uid://cor8ep0fkqm08" path="res://res/Rekku/base.png" id="32_omdu2"]
@@ -166,9 +167,11 @@ grow_vertical = 2
 unique_name_in_owner = true
 layout_mode = 2
 tab_alignment = 1
+current_tab = 7
 script = ExtResource("3_id6l4")
 
 [node name="TK_GRAPHICS" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS"]
@@ -196,6 +199,7 @@ layout_mode = 2
 columns = 2
 
 [node name="borders_adv_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/GridContainer"]
+visible = false
 layout_mode = 2
 disabled = true
 text = "TK_ADVANCED"
@@ -225,9 +229,8 @@ text = "TK_ADVANCED"
 
 [node name="borders" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 3
-button_pressed = true
 text = "TK_BORDERS"
+icon = ExtResource("4_xcuib")
 
 [node name="GridContainer" type="GridContainer" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer"]
 layout_mode = 2
@@ -240,7 +243,6 @@ theme_override_colors/font_color = Color(0, 0.917647, 0, 1)
 theme_override_colors/font_pressed_color = Color(0.913725, 0, 0, 1)
 theme_override_colors/icon_normal_color = Color(0, 0.858824, 0, 1)
 theme_override_colors/icon_pressed_color = Color(0.866667, 0, 0, 1)
-theme_override_colors/icon_hover_color = Color(0.00392157, 0, 0, 1)
 toggle_mode = true
 text = "Nintendo
 Gameboy
@@ -1015,7 +1017,6 @@ popup/item_4/text = "OpenDyslexic3"
 popup/item_4/id = 4
 
 [node name="TK_ABOUT" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
-visible = false
 layout_mode = 2
 script = ExtResource("4_m4rto")
 
@@ -1035,59 +1036,17 @@ theme_override_font_sizes/normal_font_size = 23
 text = "TK_ABOUTHEADER"
 scroll_active = false
 
-[node name="website_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "TK_WEBSITE"
-
-[node name="changelog_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "TK_CHANGELOG"
-
-[node name="wiki_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "TK_WIKI"
-
-[node name="credits_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "TK_CREDITS"
-
-[node name="donate_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "TK_DONATE"
-
-[node name="contactus_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "TK_CONTACTUS"
-
-[node name="licenses_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "TK_LICENSES"
-
-[node name="ScrollContainer2" type="ScrollContainer" parent="Background/MarginContainer/TabContainer/TK_ABOUT"]
-custom_minimum_size = Vector2(300, 200)
-layout_mode = 2
-size_flags_horizontal = 4
-follow_focus = true
-horizontal_scroll_mode = 0
-vertical_scroll_mode = 0
-
-[node name="rd_title" type="RichTextLabel" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer2"]
+[node name="rd_title" type="RichTextLabel" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container"]
 unique_name_in_owner = true
 clip_contents = false
-custom_minimum_size = Vector2(300, 300)
+custom_minimum_size = Vector2(300, 150)
 layout_mode = 2
 text = "RetroDECK"
 scroll_active = false
 autowrap_mode = 2
+tab_size = 2
 
-[node name="logo" type="TextureRect" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer2/rd_title"]
+[node name="logo" type="TextureRect" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container/rd_title"]
 custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
 offset_left = 166.0
@@ -1099,6 +1058,60 @@ size_flags_vertical = 0
 texture = ExtResource("1_axfei")
 expand_mode = 1
 stretch_mode = 4
+
+[node name="GridContainer" type="GridContainer" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container"]
+unique_name_in_owner = true
+layout_mode = 2
+columns = 3
+
+[node name="website_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container/GridContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "TK_WEBSITE"
+icon = ExtResource("21_1vm5n")
+
+[node name="changelog_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container/GridContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "TK_CHANGELOG"
+icon = ExtResource("21_1vm5n")
+
+[node name="wiki_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container/GridContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "TK_WIKI"
+icon = ExtResource("21_1vm5n")
+
+[node name="credits_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container/GridContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "TK_CREDITS"
+icon = ExtResource("21_1vm5n")
+
+[node name="donate_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container/GridContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "TK_DONATE"
+icon = ExtResource("21_1vm5n")
+
+[node name="contactus_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container/GridContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "TK_CONTACTUS"
+icon = ExtResource("21_1vm5n")
+
+[node name="licenses_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container/GridContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "TK_LICENSES"
+icon = ExtResource("21_1vm5n")
 
 [node name="side_logo" type="Control" parent="Background"]
 layout_mode = 1

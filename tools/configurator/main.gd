@@ -1,3 +1,6 @@
+#todo
+# add cores as class/ Like eumlator but one level lower
+
 extends Control
 
 var bios_type:int
@@ -24,25 +27,33 @@ var a_button_texture_alt: Texture2D = load("res://assets/icons/kenney_input-prom
 var b_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0043.png")
 var b_button_texture_alt: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0048.png")
 
-var app_data = AppData.new()
+var app_data := AppData.new()
 func _ready():
 	_get_nodes()
 	_connect_signals()
 	_play_main_animations()
 	%locale_option.selected = class_functions.map_locale_id(OS.get_locale_language())
-	"""
-	# Load json data. Test to show some data
-	app_data = data_handler.load_base_data()
+	app_data = data_handler.app_data
 
 	if app_data:
-		var website_data = app_data.about_links["rd_web"]
-		print (website_data.name,"-",website_data.url,"-",website_data.description)
-		print (app_data.about_links["rd_web"]["url"])
-	
-	var console: bool = false
-	var test = class_functions.execute_command("cat",["/var/config/retrodeck/retrodeck.cfg"],console)
-	print (test)
-	"""
+		var website_data: Link = app_data.about_links["rd_web"]
+		print (website_data.name,"-",website_data.url,"-",website_data.description,"-",website_data.url)
+		#print (app_data.about_links["rd_web"]["name"])
+		
+		for key in app_data.emulators.keys():
+			var emulator = app_data.emulators[key]
+			# Display the properties of each emulator
+			print("Emulator Name: ", emulator.name)
+			print("Description: ", emulator.description)
+			print("Properties:")
+			# Iterate over properties and show each one
+			for property: EmulatorProperty in emulator.properties:
+				print("Cheevos: ", property.cheevos)
+				print("ABXY_button:", property.abxy_button)
+				print("multi_user_config_dir: ", property.multi_user_config_dir)		
+	else:
+		print ("No emulators")
+
 	var config_file_path = "/var/config/retrodeck/retrodeck.cfg"
 	var json_file_path = "/var/config/retrodeck/retrodeck.json"
 	var config = data_handler.parse_config_to_json(config_file_path)
@@ -68,23 +79,7 @@ func _ready():
 			n.self_modulate.a = 0.5 #make it half transparent
 	combine_tkeys()
 
-func _process(delta):
-	
-	if Input.is_action_pressed("quit1") and Input.is_action_pressed("quit2"):
-		get_tree().quit()
-	if Input.is_action_pressed("next_tab"):
-		%r1_button.texture_normal = %r1_button.texture_pressed
-	elif Input.is_action_pressed("previous_tab"):
-		%l1_button.texture_normal = %l1_button.texture_pressed
-	elif Input.is_action_pressed("back_button"):
-		%b_button.texture_normal = %b_button.texture_pressed
-	elif Input.is_action_pressed("action_button"):
-		%a_button.texture_normal = %a_button.texture_pressed
-	else:
-		%r1_button.texture_normal = r1_button_texture
-		%l1_button.texture_normal = l1_button_texture
-		%a_button.texture_normal = a_button_texture
-		%b_button.texture_normal = b_button_texture
+
 func _get_nodes() -> void:
 	status_code_label = get_node("%status_code_label")
 	theme_option = get_node("%theme_optionbutton")
@@ -128,6 +123,22 @@ func _conf_theme(index: int) -> void:
 	_play_main_animations()
 
 func _input(event):
+	
+	if Input.is_action_pressed("quit1") and Input.is_action_pressed("quit2"):
+		get_tree().quit()
+	if Input.is_action_pressed("next_tab"):
+		%r1_button.texture_normal = %r1_button.texture_pressed
+	elif Input.is_action_pressed("previous_tab"):
+		%l1_button.texture_normal = %l1_button.texture_pressed
+	elif Input.is_action_pressed("back_button"):
+		%b_button.texture_normal = %b_button.texture_pressed
+	elif Input.is_action_pressed("action_button"):
+		%a_button.texture_normal = %a_button.texture_pressed
+	else:
+		%r1_button.texture_normal = r1_button_texture
+		%l1_button.texture_normal = l1_button_texture
+		%a_button.texture_normal = a_button_texture
+		%b_button.texture_normal = b_button_texture
 	if event.is_action_pressed("quit"):
 		_exit()
 
