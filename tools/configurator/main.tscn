@@ -199,19 +199,16 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="decorations_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="decorations_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container"]
+[node name="decorations_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 text = "TK_DECORATIONS"
 
-[node name="graphics_grid_container" type="GridContainer" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container"]
+[node name="graphics_grid_container" type="GridContainer" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 columns = 6
 
-[node name="wide_screen" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/graphics_grid_container"]
+[node name="wide_screen" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/graphics_grid_container"]
 custom_minimum_size = Vector2(125, 125)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -226,7 +223,7 @@ icon_alignment = 1
 vertical_icon_alignment = 0
 expand_icon = true
 
-[node name="shaders" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/graphics_grid_container"]
+[node name="shaders" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/graphics_grid_container"]
 custom_minimum_size = Vector2(125, 125)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -240,7 +237,7 @@ icon_alignment = 1
 vertical_icon_alignment = 0
 expand_icon = true
 
-[node name="mods" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/graphics_grid_container"]
+[node name="mods" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/graphics_grid_container"]
 custom_minimum_size = Vector2(125, 125)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -254,7 +251,7 @@ icon_alignment = 1
 vertical_icon_alignment = 0
 expand_icon = true
 
-[node name="tate_mode" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/graphics_grid_container"]
+[node name="tate_mode" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/graphics_grid_container"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(125, 125)
 layout_mode = 2
@@ -269,7 +266,7 @@ icon_alignment = 1
 vertical_icon_alignment = 0
 expand_icon = true
 
-[node name="borders" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/graphics_grid_container"]
+[node name="borders" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/graphics_grid_container"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(125, 125)
 layout_mode = 2
@@ -284,7 +281,7 @@ icon_alignment = 1
 vertical_icon_alignment = 0
 expand_icon = true
 
-[node name="hotkey_sound" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/graphics_grid_container"]
+[node name="hotkey_sound" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/graphics_grid_container"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(125, 125)
 layout_mode = 2
@@ -299,7 +296,7 @@ icon_alignment = 1
 vertical_icon_alignment = 0
 expand_icon = true
 
-[node name="buttons" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/graphics_grid_container"]
+[node name="buttons" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/graphics_grid_container"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(125, 125)
 layout_mode = 2
@@ -314,7 +311,7 @@ icon_alignment = 1
 vertical_icon_alignment = 0
 expand_icon = true
 
-[node name="save_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/graphics_grid_container"]
+[node name="save_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/graphics_grid_container"]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(125, 125)
@@ -328,14 +325,14 @@ icon_alignment = 1
 vertical_icon_alignment = 0
 expand_icon = true
 
-[node name="borders_grid_container" type="GridContainer" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container"]
+[node name="borders_grid_container" type="GridContainer" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 theme_override_constants/h_separation = 30
 columns = 4
 
-[node name="CheckBox5" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/borders_grid_container"]
+[node name="CheckBox5" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/borders_grid_container"]
 custom_minimum_size = Vector2(200, 180)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -343,7 +340,7 @@ size_flags_vertical = 0
 icon = ExtResource("5_ja8to")
 expand_icon = true
 
-[node name="CheckBox3" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/borders_grid_container"]
+[node name="CheckBox3" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/borders_grid_container"]
 custom_minimum_size = Vector2(200, 180)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -351,7 +348,7 @@ size_flags_vertical = 0
 icon = ExtResource("6_mvrie")
 expand_icon = true
 
-[node name="CheckBox4" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/borders_grid_container"]
+[node name="CheckBox4" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/borders_grid_container"]
 custom_minimum_size = Vector2(200, 180)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -359,7 +356,7 @@ size_flags_vertical = 0
 icon = ExtResource("7_01lqn")
 expand_icon = true
 
-[node name="CheckBox6" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/borders_grid_container"]
+[node name="CheckBox6" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/borders_grid_container"]
 custom_minimum_size = Vector2(200, 180)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -367,7 +364,7 @@ size_flags_vertical = 0
 icon = ExtResource("7_b8xj2")
 expand_icon = true
 
-[node name="CheckBox" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/borders_grid_container"]
+[node name="CheckBox" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/borders_grid_container"]
 custom_minimum_size = Vector2(200, 180)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -375,7 +372,7 @@ size_flags_vertical = 0
 icon = ExtResource("8_rvph4")
 expand_icon = true
 
-[node name="CheckBox7" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/borders_grid_container"]
+[node name="CheckBox7" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/borders_grid_container"]
 custom_minimum_size = Vector2(200, 180)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -383,7 +380,7 @@ size_flags_vertical = 0
 icon = ExtResource("9_s3srh")
 expand_icon = true
 
-[node name="CheckBox8" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/borders_grid_container"]
+[node name="CheckBox8" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/borders_grid_container"]
 custom_minimum_size = Vector2(200, 180)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -391,7 +388,7 @@ size_flags_vertical = 0
 icon = ExtResource("10_2jlmn")
 expand_icon = true
 
-[node name="CheckBox9" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/borders_grid_container"]
+[node name="CheckBox9" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/borders_grid_container"]
 custom_minimum_size = Vector2(200, 180)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -399,7 +396,7 @@ size_flags_vertical = 0
 icon = ExtResource("5_4d7s7")
 expand_icon = true
 
-[node name="CheckBox10" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/borders_grid_container"]
+[node name="CheckBox10" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/borders_grid_container"]
 custom_minimum_size = Vector2(200, 180)
 layout_mode = 2
 size_flags_horizontal = 0
