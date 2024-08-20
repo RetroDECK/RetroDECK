@@ -46,6 +46,8 @@ jobs:
         with:
           app-id: ${{ vars.REKKU_APP_ID }}
           private-key: ${{ secrets.REKKU_PRIVATE_KEY }}
+          repositories: "RetroDECK,Cooker"
+          owner: "RetroDECK"
     
       - name: Clone RetroDECK repo
         uses: actions/checkout@v4
