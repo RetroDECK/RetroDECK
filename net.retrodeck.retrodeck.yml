@@ -524,6 +524,22 @@ modules:
         url: https://github.com/RetroDECK/MAME/releases/latest/download/RetroDECK-MAME-Artifact.tar.gz
         sha256: RETRODECKMAMELATEST
 
+  # SHADPS4
+
+  - name: shadps4
+    buildsystem: simple
+    build-commands:
+      - unzip shadps4-linux-qt.zip
+      - chmod +x *.AppImage
+      - ./*.AppImage --appimage-extract
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
+      - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}/"
+    sources:
+      - type: file
+        url: RETRODECKSHADPS4LATESTURL
+        sha256: RETRODECKSHADPS4LATESTSHA
+
   # ES-DE
 
   - name: ES-DE
