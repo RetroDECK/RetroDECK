@@ -627,6 +627,9 @@
       "ps3": {
         "name": "Sony PlayStation 3"
       },
+      "ps4": {
+        "name": "Sony PlayStation 4"
+      },
       "psp": {
         "name": "Sony PlayStation Portable"
       },
@@ -1092,6 +1095,12 @@
         "name": "xemu",
         "system": "xbox",
         "launch": "xemu"
+      },
+      "shadps4" : {
+        "description": "PS4 Emulator for Linux",
+        "name": "shadps4",
+        "system": "ps4",
+        "launch": "shadps4-qt"
       }
     }
   }
