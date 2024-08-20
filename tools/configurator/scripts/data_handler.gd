@@ -14,9 +14,8 @@ func load_base_data() -> AppData:
 	if file:
 		var json_data = file.get_as_text()
 		file.close()
-		var json = JSON.new()
-		var parsed_data = json.parse_string(json_data)
-		#if parsed_data.error == OK:
+		#var json = JSON.new()
+		var parsed_data = JSON.parse_string(json_data)
 		if parsed_data:
 			var data_dict = parsed_data
 			var about_links = {}
@@ -26,6 +25,7 @@ func load_base_data() -> AppData:
 				link.name = link_data["name"]
 				link.url = link_data["url"]
 				link.description = link_data["description"]
+				link.icon = link_data["icon"]
 				about_links[key] = link
 
 			var emulators = {}
@@ -49,17 +49,17 @@ func load_base_data() -> AppData:
 						emulator.properties.append(property)
 				
 				emulators[key] = emulator
-			var app_data = AppData.new()
-			app_data.about_links = about_links
-			app_data.emulators = emulators
-			return app_data
+			var app_dict = AppData.new()
+			app_dict.about_links = about_links
+			app_dict.emulators = emulators
+			return app_dict
 		else:
 			print("Error parsing JSON")
 	else:
 		print("Error opening file")
 	return null
 
-func save_base_data(app_data: AppData):
+func save_base_data(app_dict: AppData): # was apP_data but gave warning
 	var file = FileAccess.open(data_file_path, FileAccess.READ)
 	var existing_data = {}
 	if file:
@@ -71,8 +71,8 @@ func save_base_data(app_data: AppData):
 	else:
 		print("File not found. Creating a new one.")		
 		var about_links = {}
-		for key in app_data.about_links.keys():
-			var link = app_data.about_links[key]
+		for key in app_dict.about_links.keys():
+			var link = app_dict.about_links[key]
 			about_links[key] = {
 				"name": link.name,
 				"url": link.url,
@@ -82,8 +82,8 @@ func save_base_data(app_data: AppData):
 	var new_data_dict = {}
 	# Convert about_links to a dictionary
 	var about_links = {}
-	for key in app_data.about_links.keys():
-		var link = app_data.about_links[key]
+	for key in app_dict.about_links.keys():
+		var link = app_dict.about_links[key]
 		about_links[key] = {
 			"name": link.name,
 			"url": link.url,
@@ -92,13 +92,13 @@ func save_base_data(app_data: AppData):
 
 	# Convert emulators to a dictionary
 	var emulators = {}
-	for key in app_data.emulators.keys():
+	for key in app_dict.emulators.keys():
 		var emulator = app_data.emulators[key]
 		var properties = []
 		for property in emulator.properties:
 			properties.append({
 				#"standalone": property.standalone,
-				"abxy_button": {"status": property.abxy_button_status}
+				"abxy_button": {"status": property.abxy_button}
 		})
 
 		emulators[key] = {
@@ -123,23 +123,26 @@ func save_base_data(app_data: AppData):
 			existing_data[key] = new_data_dict[key]
 
 	# Serialize the combined data to JSON
-	var json_text = JSON.new().stringify(existing_data, "\t")
+	#var json_text = JSON.new().stringify(existing_data, "\t")
+	#var json_text = json.stringify(existing_data, "\t")
+	var json_text = JSON.stringify(existing_data, "\t")
 
 	# Open the file in append mode and write the new JSON data
 	file = FileAccess.open(data_file_path, FileAccess.WRITE)
 	file.store_string(json_text)
 	file.close()
 	print("Data appended successfully")
+	
 # Function to modify an existing link
 func modify_link(key: String, new_name: String, new_url: String, new_description: String):
-	var app_data = load_base_data()
-	if app_data and app_data.about_links.has(key):
-		var link = app_data.about_links[key]
+	var app_dict = load_base_data() # was app_data
+	if app_dict and app_dict.about_links.has(key):
+		var link = app_dict.about_links[key]
 		link.name = new_name
 		link.url = new_url
 		link.description = new_description
-		app_data.about_links[key] = link
-		save_base_data(app_data)
+		app_dict.about_links[key] = link
+		save_base_data(app_dict)
 		print("Link modified successfully")
 	else:
 		print("Link not found")
@@ -147,9 +150,9 @@ func modify_link(key: String, new_name: String, new_url: String, new_description
 # Function to modify an existing emulator
 func modify_emulator(key: String, new_name: String, new_description: String, new_properties: Array):
 	#data_handler.modify_emulator_test()
-	var app_data = load_base_data()
-	if app_data and app_data.emulators.has(key):
-		var emulator = app_data.emulators[key]
+	var app_dict = load_base_data() # was app_data
+	if app_dict and app_dict.emulators.has(key):
+		var emulator = app_dict.emulators[key]
 		emulator.name = new_name
 		emulator.description = new_description
 		
@@ -158,14 +161,14 @@ func modify_emulator(key: String, new_name: String, new_description: String, new
 		for property in new_properties:
 			var new_property = EmulatorProperty.new()
 			new_property.borders = property.borders
-			new_property.abxy_button_status = property.abxy_button_status
+			new_property.abxy_button = property.abxy_button
 			new_property.ask_to_exit = property.ask_to_exit
 			new_property.cheevos = property.cheevos
 			
 			emulator.properties.append(new_property)
 
-		app_data.emulators[key] = emulator
-		save_base_data(app_data)
+		app_dict.emulators[key] = emulator
+		save_base_data(app_dict)
 		print("Emulator modified successfully")
 	else:
 		print("Emulator not found")
@@ -184,7 +187,7 @@ func add_emulator() -> void:
 	emulator.description = "An example emulator."
 	var property = EmulatorProperty.new()
 	#property.standalone = true
-	property.abxy_button_status = false
+	property.abxy_button = false
 	emulator.properties.append(property)
 	app_data.emulators["example_emulator"] = emulator
 	data_handler.save_base_data(app_data)
@@ -196,7 +199,7 @@ func modify_emulator_test() -> void:
 	var new_properties = []
 	var new_property = EmulatorProperty.new()
 	#new_property.standalone = false
-	new_property.abxy_button_status = true
+	new_property.abxy_button = true
 	new_properties.append(new_property)
 
 	data_handler.modify_emulator("example_emulator", "Updated Emulator", "Updated description",  new_properties)
@@ -244,8 +247,8 @@ func parse_config_to_json(file_path: String) -> Dictionary:
 	
 
 func config_save_json(config: Dictionary, json_file_path: String) -> void:
-	var json = JSON.new()
-	var json_string = json.stringify(config, "\t")
+	#var json = JSON.new()
+	var json_string = JSON.stringify(config, "\t")
 
 	var file = FileAccess.open(json_file_path, FileAccess.WRITE)
 	if file != null:

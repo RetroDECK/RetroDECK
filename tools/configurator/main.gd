@@ -13,7 +13,6 @@ var theme_option: OptionButton
 signal signal_theme_changed
 var custom_theme: Theme = $".".theme
 var log_option: OptionButton
-var borders_button : Button
 var tab_container: TabContainer
 var anim_logo: AnimatedSprite2D
 var rd_logs: String
@@ -31,7 +30,8 @@ func _ready():
 	_play_main_animations()
 	%locale_option.selected = class_functions.map_locale_id(OS.get_locale_language())
 	app_data = data_handler.app_data
-
+	#data_handler.add_emulator()
+	#data_handler.modify_emulator_test()
 	if app_data:
 		var website_data: Link = app_data.about_links["rd_web"]
 		print (website_data.name,"-",website_data.url,"-",website_data.description,"-",website_data.url)
@@ -101,14 +101,13 @@ func _get_nodes() -> void:
 	tab_container = get_node("%TabContainer")
 	anim_logo = get_node("%logo_animated")
 	log_option = get_node("%logs_button")
-	borders_button = get_node("%borders")
 	
 func _connect_signals() -> void:
 	#signal_theme_changed.connect(_conf_theme)
 	theme_option.item_selected.connect(_conf_theme)
 	signal_theme_changed.emit(theme_option.item_selected)
 	log_option.item_selected.connect(_load_log)
-	borders_button.pressed.connect(_hide_show) # make emot function to pass container to hide/show?
+	%borders.pressed.connect(_hide_show)
 	
 func _load_log(index: int) -> void:
 	var log_content:String
@@ -125,18 +124,25 @@ func _load_log(index: int) -> void:
 
 func _play_main_animations() -> void:
 	anim_logo.play()
-
 func _hide_show() -> void:
 	if %borders.button_pressed:
 		%borders_grid_container.visible = true
-		#$Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/borders_grid_container/CheckBox2.button_pressed=true
 		for i in range(%borders_grid_container.get_child_count()):
 			var child = %borders_grid_container.get_child(i)        
 			if child is Button:
 				child.button_pressed=true
-		
-	else:
+		for i in range(%graphics_grid_container.get_child_count()):
+			var child = %graphics_grid_container.get_child(i)        
+			if child is Button and child != %borders:
+				child.visible=false
+		%save_button.visible=true
+	elif !%borders.button_pressed:
 		%borders_grid_container.visible = false
+		for i in range(%graphics_grid_container.get_child_count()):
+			var child = %graphics_grid_container.get_child(i)        
+			if child is Button:
+				child.visible=true
+		%save_button.visible=false
 
 func _conf_theme(index: int) -> void: 
 	match index:
@@ -224,9 +230,8 @@ func _on_locale_selected(index):
 func combine_tkeys(): #More as a test
 	%cheats.text = tr("TK_CHEATS") + " " + tr("TK_SOON") # switched to access as a unique name as easier to refactor
 	#$Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/HBoxContainer/GridContainer/cheats.text = tr("TK_CHEATS") + " " + tr("TK_SOON")
-	%shaders.text = tr("TK_TATE") + " " + tr("TK_SOON")
-	#$Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/extra_container/GridContainer/tate_mode.text = tr("TK_TATE") + " " + tr("TK_SOON")
-	$Background/MarginContainer/TabContainer/TK_CONTROLS/ScrollContainer/VBoxContainer/controls_container/hotkey_sound.text = tr("TK_HOTKEYSOUND") + " " + tr("TK_SOON")
+	#%tate_mode.text = tr("TK_TATE") + " " + tr("TK_SOON")
+	#%hotkey_sound.text = tr("TK_HOTKEYSOUND") + " " + tr("TK_SOON")
 	$Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container/cheevos_advanced_container/cheevos_hardcore.text = tr("TK_CHEEVOSHARDCORE") + " " + tr("TK_SOON")
 	$Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/data_mng_container/saves_sync.text = tr("TK_SAVESSYNC") + " " + tr("TK_SOON")
 	$Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer/system_container/easter_eggs.text = tr("TK_EASTEREGGS") + " " + tr("TK_SOON")

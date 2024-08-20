@@ -1,4 +1,4 @@
-[gd_scene load_steps=61 format=3 uid="uid://61f6m4r1mpan"]
+[gd_scene load_steps=69 format=3 uid="uid://61f6m4r1mpan"]
 
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
 [ext_resource type="Theme" uid="uid://hhc60cllcg47" path="res://assets/themes/default_theme.tres" id="1_if8nh"]
@@ -6,22 +6,27 @@
 [ext_resource type="Script" path="res://TabContainer.gd" id="3_id6l4"]
 [ext_resource type="AudioStream" uid="uid://dig4pco500pyt" path="res://res/configurator.mp3" id="3_xivj6"]
 [ext_resource type="Texture2D" uid="uid://dx0u5hiwxfgu5" path="res://res/pixel_ui_theme/8x8_ui_elements.png" id="4_2tuu4"]
+[ext_resource type="Texture2D" uid="uid://bdj8vt3vhucq4" path="res://assets/icons/pixelitos/128/cs-display.png" id="4_jldgc"]
 [ext_resource type="Script" path="res://tk_about.gd" id="4_m4rto"]
 [ext_resource type="Script" path="res://Rekku.gd" id="4_nqqx3"]
 [ext_resource type="Texture2D" uid="uid://dk856hwnwsuab" path="res://assets/icons/pixelitos/128/retroarch.png" id="4_xcuib"]
 [ext_resource type="Texture2D" uid="uid://cvr1eijddf6nv" path="res://assets/icons/banner/gamegear.png" id="5_4d7s7"]
 [ext_resource type="Texture2D" uid="uid://d2lm4mfx1gt86" path="res://assets/graphics/retrodeck_base_shake0.png" id="5_7rjbt"]
+[ext_resource type="Texture2D" uid="uid://dv42c6hpi6tde" path="res://assets/icons/pixelitos/128/cs-tiling.png" id="5_box56"]
 [ext_resource type="Script" path="res://helper_text.gd" id="5_cprkf"]
 [ext_resource type="Texture2D" uid="uid://dxdhjp18rgmr4" path="res://res/flags/united_kingdom_32.png" id="5_exkn2"]
 [ext_resource type="Texture2D" uid="uid://du8go5dyabmsl" path="res://assets/icons/banner/gb.png" id="5_ja8to"]
 [ext_resource type="StyleBox" uid="uid://ba3l3ja1jbqpx" path="res://assets/themes/emulators.tres" id="5_rjtkn"]
+[ext_resource type="Texture2D" uid="uid://cboyy7fkdijwg" path="res://assets/icons/pixelitos/128/cs-desktop-effects.png" id="5_uiobi"]
 [ext_resource type="Texture2D" uid="uid://cjv6lhd4g63m3" path="res://assets/graphics/retrodeck_base_shake1.png" id="6_d43n7"]
 [ext_resource type="Texture2D" uid="uid://cru43y7hco6kh" path="res://res/flags/italy_32.png" id="6_fiylw"]
 [ext_resource type="Texture2D" uid="uid://du4mupvvwbusy" path="res://assets/icons/banner/gbc.png" id="6_mvrie"]
+[ext_resource type="Texture2D" uid="uid://debs53e7f7bjp" path="res://assets/icons/pixelitos/128/cs-general.png" id="6_u80kq"]
 [ext_resource type="Texture2D" uid="uid://cxwnt3djsrck7" path="res://assets/icons/pixelitos/128/duckstation.png" id="6_winpq"]
 [ext_resource type="Texture2D" uid="uid://b4jbv7xaqy0sq" path="res://assets/icons/banner/gba.png" id="7_01lqn"]
 [ext_resource type="Texture2D" uid="uid://c2furjlxwkxih" path="res://assets/icons/pixelitos/128/net.kuribo64.melonDS.png" id="7_4otos"]
 [ext_resource type="Texture2D" uid="uid://cpbowpuwjpqtu" path="res://assets/icons/banner/snes.png" id="7_b8xj2"]
+[ext_resource type="Texture2D" uid="uid://b5hwe733546r4" path="res://assets/icons/pixelitos/128/cs-windows.png" id="7_i14ax"]
 [ext_resource type="Texture2D" uid="uid://cyqo650hjucw6" path="res://assets/graphics/retrodeck_base_shake2.png" id="7_mo842"]
 [ext_resource type="Texture2D" uid="uid://cti2vt14gxisl" path="res://res/flags/germany_32.png" id="7_qgxid"]
 [ext_resource type="Texture2D" uid="uid://c7i7mr38qxa4f" path="res://assets/icons/pixelitos/128/org.ppsspp.PPSSPP.png" id="8_akxf7"]
@@ -30,16 +35,18 @@
 [ext_resource type="Texture2D" uid="uid://bns0ot5pbf03h" path="res://res/flags/sweden_32.png" id="8_lptln"]
 [ext_resource type="Texture2D" uid="uid://buywpflv7of6f" path="res://assets/icons/banner/n64.png" id="8_rvph4"]
 [ext_resource type="Texture2D" uid="uid://uko0ikrtjkj" path="res://assets/graphics/retrodeck_base_shake4.png" id="9_8eqo6"]
+[ext_resource type="Texture2D" uid="uid://pva53gfr7uqq" path="res://assets/icons/pixelitos/128/preferences-desktop-gaming.png" id="9_d2327"]
 [ext_resource type="Texture2D" uid="uid://dhsorn3kcfdcv" path="res://res/flags/ukraine_32.png" id="9_dp7oa"]
+[ext_resource type="Texture2D" uid="uid://c8q3l08j2hl3a" path="res://assets/icons/pixelitos/128/cs-sound.png" id="9_qwq2k"]
 [ext_resource type="Texture2D" uid="uid://dgdennwyj5g2l" path="res://assets/icons/banner/mastersystem.png" id="9_s3srh"]
 [ext_resource type="Texture2D" uid="uid://cpq0em8j2bank" path="res://assets/icons/banner/megadrive.png" id="10_2jlmn"]
 [ext_resource type="Texture2D" uid="uid://dtwjo7co226dw" path="res://res/flags/japan_32.png" id="10_e8mt0"]
 [ext_resource type="Texture2D" uid="uid://bevamv2c8knnn" path="res://assets/icons/pixelitos/128/org.citra_emu.citra.png" id="10_wbaif"]
 [ext_resource type="Texture2D" uid="uid://dbvjugxp84gsj" path="res://assets/icons/pixelitos/128/org.DolphinEmu.dolphin-emu.png" id="11_61sak"]
+[ext_resource type="Texture2D" uid="uid://blwtj4of6fb5y" path="res://assets/icons/pixelitos/128/spacefm.png" id="11_p6y0k"]
 [ext_resource type="Texture2D" uid="uid://cbwhpqip43aei" path="res://res/flags/china_32.png" id="11_ri2fv"]
 [ext_resource type="Texture2D" uid="uid://dv6sym5rr1hpu" path="res://assets/icons/banner/psx.png" id="12_pp08o"]
 [ext_resource type="Texture2D" uid="uid://b164ihk8riiwh" path="res://assets/graphics/space_bground.png" id="15_qdvxo"]
-[ext_resource type="Texture2D" uid="uid://ble152m6361l8" path="res://assets/icons/pixelitos/128/internet-web-browser.png" id="21_1vm5n"]
 [ext_resource type="Texture2D" uid="uid://dyumvh0ixwrbl" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0042.png" id="30_glnve"]
 [ext_resource type="Texture2D" uid="uid://cn11vcrybtor4" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0047.png" id="31_j5ri1"]
 [ext_resource type="Texture2D" uid="uid://cor8ep0fkqm08" path="res://res/Rekku/base.png" id="32_omdu2"]
@@ -59,6 +66,9 @@
 [sub_resource type="GDScript" id="GDScript_203iw"]
 script/source = "extends MarginContainer
 "
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_omewi"]
+bg_color = Color(0.712505, 0, 0.175592, 1)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_lhf2y"]
 animations = [{
@@ -188,67 +198,144 @@ follow_focus = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_constants/separation = 64
 
 [node name="decorations_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="GridContainer" type="GridContainer" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container"]
-layout_mode = 2
-columns = 2
-
-[node name="decorations_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/GridContainer"]
+[node name="decorations_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container"]
 layout_mode = 2
 text = "TK_DECORATIONS"
 
-[node name="decorations_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/GridContainer"]
+[node name="graphics_grid_container" type="GridContainer" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container"]
+unique_name_in_owner = true
 layout_mode = 2
+columns = 6
 
-[node name="wide_screen" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/GridContainer"]
+[node name="wide_screen" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/graphics_grid_container"]
+custom_minimum_size = Vector2(125, 125)
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 4
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.0
+tooltip_text = "TK_WSCREEN"
+theme_override_constants/check_v_offset = 20
 text = "TK_WSCREEN"
+icon = ExtResource("4_jldgc")
+alignment = 1
+icon_alignment = 1
+vertical_icon_alignment = 0
+expand_icon = true
 
-[node name="shaders" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/GridContainer"]
-unique_name_in_owner = true
+[node name="shaders" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/graphics_grid_container"]
+custom_minimum_size = Vector2(125, 125)
 layout_mode = 2
-size_flags_horizontal = 3
-disabled = true
-button_pressed = true
+size_flags_horizontal = 4
+size_flags_vertical = 4
+tooltip_text = "TK_SHADERS"
+theme_override_constants/check_v_offset = 20
 text = "TK_SHADERS"
+icon = ExtResource("5_box56")
+alignment = 1
+icon_alignment = 1
+vertical_icon_alignment = 0
+expand_icon = true
 
-[node name="decorations_label2" type="Label" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/GridContainer"]
+[node name="mods" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/graphics_grid_container"]
+custom_minimum_size = Vector2(125, 125)
 layout_mode = 2
-text = "TK_EXTRA"
-
-[node name="decorations_separator2" type="HSeparator" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/GridContainer"]
-layout_mode = 2
-
-[node name="wide_screen2" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-disabled = true
-button_pressed = true
+size_flags_horizontal = 4
+size_flags_vertical = 4
+tooltip_text = "TK_MODS"
+theme_override_constants/check_v_offset = 20
 text = "TK_MODS"
+icon = ExtResource("6_u80kq")
+alignment = 1
+icon_alignment = 1
+vertical_icon_alignment = 0
+expand_icon = true
 
-[node name="tate_mode" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/GridContainer"]
-layout_mode = 2
-disabled = true
-text = "TK_TATE"
-
-[node name="borders" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/GridContainer"]
+[node name="tate_mode" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/graphics_grid_container"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(125, 125)
 layout_mode = 2
-text = "TK_BORDERS"
+size_flags_horizontal = 4
+size_flags_vertical = 4
+tooltip_text = "TK_TATE"
+theme_override_constants/check_v_offset = 20
+text = "Tate Mode"
+icon = ExtResource("7_i14ax")
+alignment = 1
+icon_alignment = 1
+vertical_icon_alignment = 0
+expand_icon = true
 
-[node name="borders_grid_container" type="GridContainer" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer"]
+[node name="borders" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/graphics_grid_container"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(125, 125)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+tooltip_text = "TK_BORDERS"
+theme_override_constants/check_v_offset = 20
+text = "TK_BORDERS"
+icon = ExtResource("5_uiobi")
+alignment = 1
+icon_alignment = 1
+vertical_icon_alignment = 0
+expand_icon = true
+
+[node name="hotkey_sound" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/graphics_grid_container"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(125, 125)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+tooltip_text = "TK_HOTKEYSOUND"
+text = "TK_HOTKEYSOUND"
+icon = ExtResource("9_qwq2k")
+alignment = 1
+clip_text = true
+icon_alignment = 1
+vertical_icon_alignment = 0
+expand_icon = true
+
+[node name="buttons" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/graphics_grid_container"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(125, 125)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+tooltip_text = "TK_BTNLAYOUT"
+theme_override_constants/check_v_offset = 20
+text = "TK_BTNLAYOUT"
+icon = ExtResource("9_d2327")
+alignment = 1
+icon_alignment = 1
+vertical_icon_alignment = 0
+expand_icon = true
+
+[node name="save_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/graphics_grid_container"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(125, 125)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/focus = SubResource("StyleBoxFlat_omewi")
+text = "SAVE"
+icon = ExtResource("11_p6y0k")
+icon_alignment = 1
+vertical_icon_alignment = 0
+expand_icon = true
+
+[node name="borders_grid_container" type="GridContainer" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 theme_override_constants/h_separation = 30
 columns = 4
 
-[node name="CheckBox2" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/borders_grid_container"]
+[node name="CheckBox5" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/borders_grid_container"]
 custom_minimum_size = Vector2(200, 180)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -256,7 +343,7 @@ size_flags_vertical = 0
 icon = ExtResource("5_ja8to")
 expand_icon = true
 
-[node name="CheckBox3" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/borders_grid_container"]
+[node name="CheckBox3" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/borders_grid_container"]
 custom_minimum_size = Vector2(200, 180)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -264,7 +351,7 @@ size_flags_vertical = 0
 icon = ExtResource("6_mvrie")
 expand_icon = true
 
-[node name="CheckBox4" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/borders_grid_container"]
+[node name="CheckBox4" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/borders_grid_container"]
 custom_minimum_size = Vector2(200, 180)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -272,7 +359,7 @@ size_flags_vertical = 0
 icon = ExtResource("7_01lqn")
 expand_icon = true
 
-[node name="CheckBox6" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/borders_grid_container"]
+[node name="CheckBox6" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/borders_grid_container"]
 custom_minimum_size = Vector2(200, 180)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -280,7 +367,7 @@ size_flags_vertical = 0
 icon = ExtResource("7_b8xj2")
 expand_icon = true
 
-[node name="CheckBox" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/borders_grid_container"]
+[node name="CheckBox" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/borders_grid_container"]
 custom_minimum_size = Vector2(200, 180)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -288,7 +375,7 @@ size_flags_vertical = 0
 icon = ExtResource("8_rvph4")
 expand_icon = true
 
-[node name="CheckBox7" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/borders_grid_container"]
+[node name="CheckBox7" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/borders_grid_container"]
 custom_minimum_size = Vector2(200, 180)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -296,7 +383,7 @@ size_flags_vertical = 0
 icon = ExtResource("9_s3srh")
 expand_icon = true
 
-[node name="CheckBox8" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/borders_grid_container"]
+[node name="CheckBox8" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/borders_grid_container"]
 custom_minimum_size = Vector2(200, 180)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -304,7 +391,7 @@ size_flags_vertical = 0
 icon = ExtResource("10_2jlmn")
 expand_icon = true
 
-[node name="CheckBox9" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/borders_grid_container"]
+[node name="CheckBox9" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/borders_grid_container"]
 custom_minimum_size = Vector2(200, 180)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -312,7 +399,7 @@ size_flags_vertical = 0
 icon = ExtResource("5_4d7s7")
 expand_icon = true
 
-[node name="CheckBox10" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/borders_grid_container"]
+[node name="CheckBox10" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/borders_grid_container"]
 custom_minimum_size = Vector2(200, 180)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -320,71 +407,10 @@ size_flags_vertical = 0
 icon = ExtResource("12_pp08o")
 expand_icon = true
 
-[node name="TK_CONTROLS" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
-visible = false
-layout_mode = 2
-metadata/_tab_index = 1
-
-[node name="ScrollContainer" type="ScrollContainer" parent="Background/MarginContainer/TabContainer/TK_CONTROLS"]
-layout_mode = 2
-follow_focus = true
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_CONTROLS/ScrollContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="controls_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_CONTROLS/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="controls_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_CONTROLS/ScrollContainer/VBoxContainer/controls_container"]
-layout_mode = 2
-text = "TK_CONTROLS"
-
-[node name="controls_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/TK_CONTROLS/ScrollContainer/VBoxContainer/controls_container"]
-layout_mode = 2
-
-[node name="controller_templates_container" type="HBoxContainer" parent="Background/MarginContainer/TabContainer/TK_CONTROLS/ScrollContainer/VBoxContainer/controls_container"]
-layout_mode = 2
-
-[node name="controller_templates" type="Label" parent="Background/MarginContainer/TabContainer/TK_CONTROLS/ScrollContainer/VBoxContainer/controls_container/controller_templates_container"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "TK_STEAMCONTEMP"
-
-[node name="controller_templater_install_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_CONTROLS/ScrollContainer/VBoxContainer/controls_container/controller_templates_container"]
-layout_mode = 2
-size_flags_horizontal = 10
-size_flags_vertical = 4
-text = "TK_INSTALL"
-
-[node name="button_layout_container" type="HBoxContainer" parent="Background/MarginContainer/TabContainer/TK_CONTROLS/ScrollContainer/VBoxContainer/controls_container"]
-layout_mode = 2
-
-[node name="button_layout" type="Label" parent="Background/MarginContainer/TabContainer/TK_CONTROLS/ScrollContainer/VBoxContainer/controls_container/button_layout_container"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "TK_BTNLAYOUT"
-
-[node name="button_layout_option" type="OptionButton" parent="Background/MarginContainer/TabContainer/TK_CONTROLS/ScrollContainer/VBoxContainer/controls_container/button_layout_container"]
-layout_mode = 2
-size_flags_horizontal = 10
-size_flags_vertical = 4
-selected = 0
-item_count = 2
-popup/item_0/text = "TK_BTNCLASSIC"
-popup/item_1/text = "TK_BTNNINTENDO"
-popup/item_1/id = 1
-
-[node name="hotkey_sound" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_CONTROLS/ScrollContainer/VBoxContainer/controls_container"]
-layout_mode = 2
-disabled = true
-button_pressed = true
-text = "TK_HOTKEYSOUND"
-
 [node name="TK_SYSTEM" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
-metadata/_tab_index = 2
+metadata/_tab_index = 1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Background/MarginContainer/TabContainer/TK_SYSTEM"]
 layout_mode = 2
@@ -526,7 +552,7 @@ vertical_icon_alignment = 0
 [node name="TK_TOOLS" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
-metadata/_tab_index = 3
+metadata/_tab_index = 2
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Background/MarginContainer/TabContainer/TK_TOOLS"]
 layout_mode = 2
@@ -634,7 +660,7 @@ text = "TK_MOVEFILES"
 [node name="TK_NETWORK" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
-metadata/_tab_index = 4
+metadata/_tab_index = 3
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Background/MarginContainer/TabContainer/TK_NETWORK"]
 layout_mode = 2
@@ -788,7 +814,7 @@ text = "TK_FTPBTN"
 [node name="TK_TROUBLESHOOT" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
-metadata/_tab_index = 5
+metadata/_tab_index = 4
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT"]
 layout_mode = 2
@@ -846,6 +872,33 @@ text = "TK_RESETALL"
 layout_mode = 2
 text = "TK_RESETFULL"
 
+[node name="controls_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer"]
+layout_mode = 2
+
+[node name="controls_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/controls_container"]
+layout_mode = 2
+text = "TK_CONTROLS"
+
+[node name="controls_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/controls_container"]
+layout_mode = 2
+
+[node name="controller_templates_container" type="HBoxContainer" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/controls_container"]
+layout_mode = 2
+
+[node name="controller_templates" type="Label" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/controls_container/controller_templates_container"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "TK_STEAMCONTEMP"
+
+[node name="controller_templater_install_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/controls_container/controller_templates_container"]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+text = "TK_INSTALL"
+
+[node name="button_layout_container" type="HBoxContainer" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/controls_container"]
+layout_mode = 2
+
 [node name="status_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -862,7 +915,7 @@ offset_bottom = 35.0
 [node name="TK_CONFIGURATOR" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
-metadata/_tab_index = 6
+metadata/_tab_index = 5
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Background/MarginContainer/TabContainer/TK_CONFIGURATOR"]
 layout_mode = 2
@@ -946,7 +999,7 @@ popup/item_4/id = 4
 visible = false
 layout_mode = 2
 script = ExtResource("4_m4rto")
-metadata/_tab_index = 7
+metadata/_tab_index = 6
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Background/MarginContainer/TabContainer/TK_ABOUT"]
 layout_mode = 2
@@ -954,15 +1007,6 @@ layout_mode = 2
 [node name="about_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer"]
 layout_mode = 2
 alignment = 1
-
-[node name="about_header" type="RichTextLabel" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container"]
-clip_contents = false
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_font_sizes/normal_font_size = 23
-text = "TK_ABOUTHEADER"
-scroll_active = false
 
 [node name="rd_title" type="RichTextLabel" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container"]
 unique_name_in_owner = true
@@ -987,59 +1031,21 @@ texture = ExtResource("1_axfei")
 expand_mode = 1
 stretch_mode = 4
 
+[node name="about_header" type="RichTextLabel" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container"]
+clip_contents = false
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 23
+text = "TK_ABOUTHEADER"
+scroll_active = false
+
 [node name="GridContainer" type="GridContainer" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container"]
 unique_name_in_owner = true
 layout_mode = 2
-columns = 3
-
-[node name="website_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container/GridContainer"]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-text = "TK_WEBSITE"
-icon = ExtResource("21_1vm5n")
-
-[node name="changelog_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container/GridContainer"]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-text = "TK_CHANGELOG"
-icon = ExtResource("21_1vm5n")
-
-[node name="wiki_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container/GridContainer"]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-text = "TK_WIKI"
-icon = ExtResource("21_1vm5n")
-
-[node name="credits_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container/GridContainer"]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-text = "TK_CREDITS"
-icon = ExtResource("21_1vm5n")
-
-[node name="donate_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container/GridContainer"]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-text = "TK_DONATE"
-icon = ExtResource("21_1vm5n")
-
-[node name="contactus_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container/GridContainer"]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-text = "TK_CONTACTUS"
-icon = ExtResource("21_1vm5n")
-
-[node name="licenses_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container/GridContainer"]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-text = "TK_LICENSES"
-icon = ExtResource("21_1vm5n")
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 20
+columns = 5
 
 [node name="side_logo" type="Control" parent="Background"]
 layout_mode = 1

@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://ixg127wfv7wo"]
+[gd_scene load_steps=2 format=3 uid="uid://ixg127wfv7wo"]
 
 [ext_resource type="Script" path="res://components/popup.gd" id="1_ck1vn"]
-[ext_resource type="Theme" uid="uid://bq8dsxeo34sl" path="res://res/pixel_ui_theme/RetroDECKTheme.tres" id="1_oqd8s"]
 
 [node name="Popup" type="Control"]
 layout_mode = 3
@@ -10,7 +9,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("1_oqd8s")
 script = ExtResource("1_ck1vn")
 
 [node name="Panel" type="Panel" parent="."]
