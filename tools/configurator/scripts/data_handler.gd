@@ -2,7 +2,7 @@ extends Node
 
 class_name DataHandler
 
-var data_file_path = "../../config/retrodeck/reference_lists/features.json"
+var data_file_path = "/app/retrodeck/config/retrodeck/reference_lists/features.json"
 var app_data: AppData
 
 func _ready():
@@ -57,6 +57,7 @@ func load_base_data() -> AppData:
 			print("Error parsing JSON")
 	else:
 		print("Error opening file")
+		get_tree().quit()
 	return null
 
 func save_base_data(app_dict: AppData): # was apP_data but gave warning

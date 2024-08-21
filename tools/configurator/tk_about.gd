@@ -13,13 +13,11 @@ rd_credits_button,rd_donate_button,rd_contactus_button,rd_licenses_button]
 
 func _ready():
 	#tk_about = class_functions.import_csv_data("res://tk_about.txt")
-	app_data =  data_handler.app_data
+	app_data = data_handler.app_data
 	#_get_nodes()
 	_connect_signals()
-	
 	for but in bArray:
-		%GridContainer.add_child(but)	
-	
+		%GridContainer.add_child(but)		
 	for id in app_data.about_links:
 		var web_data: Link = app_data.about_links[id]
 		match id:
