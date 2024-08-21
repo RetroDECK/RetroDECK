@@ -1,4 +1,4 @@
-name: "Build cooker"
+name: "Build cooker locally"
 
 on:
   push:
