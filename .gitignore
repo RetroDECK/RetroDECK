@@ -22,6 +22,7 @@ retrodeck-repo
 buildid
 *.bak
 incconfigs/
+.github/workflows/cooker-monkeyx.yml
 
 # Python #
 ##########
