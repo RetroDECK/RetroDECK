@@ -199,14 +199,15 @@ jobs:
           path: RetroDECK-cooker.flatpak
         continue-on-error: true
 
-      - name: Create Artifact for flathub
-        if: github.repository_owner == 'RetroDECK'
-        run: | 
-          tar -czf ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.tar.gz -C ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker .
-          hash=($(sha256sum ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.tar.gz))
-          echo $hash > ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.sha
-          mv -f RetroDECK-Artifact-cooker.* ${{ secrets.ARTIFACT_REPO }}
-        continue-on-error: true
+      # We never needed this in cooker
+      # - name: Create Artifact for flathub
+      #   if: github.repository_owner == 'RetroDECK'
+      #   run: | 
+      #     tar -czf ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.tar.gz -C ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker .
+      #     hash=($(sha256sum ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.tar.gz))
+      #     echo $hash > ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.sha
+      #     mv -f RetroDECK-Artifact-cooker.* ${{ secrets.ARTIFACT_REPO }}
+      #   continue-on-error: true
 
       # - name: Upload RetroDECK-cooker.flatpak to Gitea Release
       #   if: github.repository_owner == 'RetroDECK'
