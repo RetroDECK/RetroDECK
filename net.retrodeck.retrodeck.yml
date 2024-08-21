@@ -529,16 +529,15 @@ modules:
   - name: shadps4
     buildsystem: simple
     build-commands:
-      - unzip shadps4-linux-qt.zip
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
       - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
       - cp -r squashfs-root/usr/* "${FLATPAK_DEST}/"
     sources:
-      - type: file
-        url: RETRODECKSHADPS4LATESTURL
-        sha256: RETRODECKSHADPS4LATESTSHA
+      - type: archive
+        url: https://github.com/shadps4-emu/shadPS4/releases/latest/download/shadps4-linux-qt.zip
+        sha256: RETRODECKSHADPS4LATESTSTABLE
 
   # ES-DE
 
