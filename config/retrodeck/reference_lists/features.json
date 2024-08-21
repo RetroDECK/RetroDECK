@@ -2,43 +2,43 @@
     "about_links": {
       "rd_changelog": {
         "description": "Opens the RetroDECK change log in your default browser",
-        "name": "Changelog",
+        "name": "TK_CHANGELOG",
         "url": "https://retrodeck.readthedocs.io/en/latest/wiki_rd_versions/version-history/",
         "icon": "res://assets/icons/pixelitos/128/internet-web-browser.png"
         },
       "rd_contactus": {
         "description": "Opens the RetroDECK contact us section in your default browser",
-        "name": "Contact us",
+        "name": "TK_CONTACTUS",
         "url": "https://github.com/XargonWan/RetroDECK",
         "icon": "res://assets/icons/pixelitos/128/internet-web-browser.png"
         },
       "rd_credits": {
         "description": "Opens the RetroDECK Credits in your default browser",
-        "name": "Credits",
+        "name": "TK_CREDITS",
         "url": "https://retrodeck.readthedocs.io/en/latest/wiki_credits/donations-licenses/",
         "icon": "res://assets/icons/pixelitos/128/internet-web-browser.png"
         },
       "rd_donate": {
         "description": "Opens Donations page in your default browser",
-        "name": "Donate",
+        "name": "TK_DONATE",
         "url": "https://retrodeck.readthedocs.io/en/latest/wiki_credits/donations-licenses/",
         "icon": "res://assets/icons/pixelitos/128/internet-web-browser.png"
         },
       "rd_licenses": {
         "description": "Opens the RetroDECK licenses in your default browser",
-        "name": "Licences",
+        "name": "TK_LICENSES",
         "url": "https://retrodeck.readthedocs.io/en/latest/wiki_credits/donations-licenses/",
         "icon": "res://assets/icons/pixelitos/128/internet-web-browser.png"
         },
       "rd_web": {
         "description": "Opens the RetroDECK Website in your default browser",
-        "name": "Website",
+        "name": "TK_WEBSITE",
         "url": "https://retrodeck.net/",
         "icon": "res://assets/icons/pixelitos/128/internet-web-browser.png"
         },
       "rd_wiki": {
         "description": "Opens the RetroDECK Wiki in your default browser",
-        "name": "Wiki",
+        "name": "TK_WIKI",
         "url": "https://retrodeck.readthedocs.io/en/latest/",
         "icon": "res://assets/icons/pixelitos/128/internet-web-browser.png"
         }

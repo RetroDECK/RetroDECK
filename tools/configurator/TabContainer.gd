@@ -22,6 +22,7 @@ func _ready():
 	set_tab_icon_max_width(5,icon_width)
 	set_tab_icon(6, ResourceLoader.load("res://assets/icons/pixelitos/128/help-about.png"))
 	set_tab_icon_max_width(6,icon_width)
+	#%TK_GRAPHICS.name="BOB"
 #
 func _input(event):
 	if (event.is_action_pressed("next_tab")):
