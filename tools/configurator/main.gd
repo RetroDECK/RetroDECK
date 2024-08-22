@@ -107,7 +107,8 @@ func _connect_signals() -> void:
 	theme_option.item_selected.connect(_conf_theme)
 	#signal_theme_changed.emit(theme_option.item_selected)
 	log_option.item_selected.connect(_load_log)
-	%borders.pressed.connect(_hide_show)
+	%borders_button.pressed.connect(_hide_show)
+	%save_button.pressed.connect(_hide_show.bind(%save_button))
 	
 func _load_log(index: int) -> void:
 	var log_content:String
@@ -124,8 +125,9 @@ func _load_log(index: int) -> void:
 
 func _play_main_animations() -> void:
 	anim_logo.play()
-func _hide_show() -> void:
-	if %borders.button_pressed:
+	
+func _hide_show(button: Button):
+	if %borders_button.button_pressed:
 		%borders_grid_container.visible = true
 		for i in range(%borders_grid_container.get_child_count()):
 			var child = %borders_grid_container.get_child(i)        
@@ -133,10 +135,10 @@ func _hide_show() -> void:
 				child.button_pressed=true
 		for i in range(%graphics_grid_container.get_child_count()):
 			var child = %graphics_grid_container.get_child(i)        
-			if child is Button and child != %borders:
+			if child is Button and child != %borders_button:
 				child.visible=false
 		%save_button.visible=true
-	elif !%borders.button_pressed:
+	elif !%borders_button.button_pressed:
 		%borders_grid_container.visible = false
 		for i in range(%graphics_grid_container.get_child_count()):
 			var child = %graphics_grid_container.get_child(i)        
@@ -235,4 +237,4 @@ func combine_tkeys(): #More as a test
 	#%hotkey_sound.text = tr("TK_HOTKEYSOUND") + " " + tr("TK_SOON")
 	$Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container/cheevos_advanced_container/cheevos_hardcore.text = tr("TK_CHEEVOSHARDCORE") + " " + tr("TK_SOON")
 	$Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/data_mng_container/saves_sync.text = tr("TK_SAVESSYNC") + " " + tr("TK_SOON")
-	$Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer/system_container/easter_eggs.text = tr("TK_EASTEREGGS") + " " + tr("TK_SOON")
+	#$Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer/system_container/easter_eggs.text = tr("TK_EASTEREGGS") + " " + tr("TK_SOON")

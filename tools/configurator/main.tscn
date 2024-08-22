@@ -211,10 +211,10 @@ text = "TK_DECORATIONS"
 [node name="graphics_grid_container" type="GridContainer" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-columns = 5
+columns = 4
 
 [node name="wide_screen" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/graphics_grid_container"]
-custom_minimum_size = Vector2(125, 125)
+custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -228,7 +228,7 @@ vertical_icon_alignment = 0
 expand_icon = true
 
 [node name="shaders" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/graphics_grid_container"]
-custom_minimum_size = Vector2(125, 125)
+custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -242,7 +242,7 @@ vertical_icon_alignment = 0
 expand_icon = true
 
 [node name="mods" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/graphics_grid_container"]
-custom_minimum_size = Vector2(125, 125)
+custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -257,7 +257,7 @@ expand_icon = true
 
 [node name="tate_mode" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/graphics_grid_container"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(125, 125)
+custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -270,9 +270,9 @@ icon_alignment = 1
 vertical_icon_alignment = 0
 expand_icon = true
 
-[node name="borders" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/graphics_grid_container"]
+[node name="borders_button" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/graphics_grid_container"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(125, 125)
+custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -287,7 +287,7 @@ expand_icon = true
 
 [node name="hotkey_sound" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/graphics_grid_container"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(125, 125)
+custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -303,7 +303,7 @@ expand_icon = true
 
 [node name="buttons" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/graphics_grid_container"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(125, 125)
+custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -318,7 +318,7 @@ vertical_icon_alignment = 0
 expand_icon = true
 
 [node name="quick_resume" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/graphics_grid_container"]
-custom_minimum_size = Vector2(125, 125)
+custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -333,7 +333,7 @@ expand_icon = true
 metadata/description = "This is a test description set to this element"
 
 [node name="rewind" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/graphics_grid_container"]
-custom_minimum_size = Vector2(125, 125)
+custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -348,7 +348,7 @@ expand_icon = true
 metadata/description = "This is another, very long and convoluted, description, that I put too much commas in to make in LONGER and more SOPHISTICATED. And I did it twice!!!This is another, very long and convoluted, description, that I put too much commas in to make in LONGER and more SOPHISTICATED."
 
 [node name="quit_confirm" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/graphics_grid_container"]
-custom_minimum_size = Vector2(125, 125)
+custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
@@ -364,7 +364,7 @@ expand_icon = true
 
 [node name="cheats" type="CheckBox" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/graphics_grid_container"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(125, 125)
+custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -927,52 +927,52 @@ offset_top = 3.0
 offset_right = 144.0
 offset_bottom = 35.0
 
-[node name="TK_CONFIGURATOR" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
+[node name="Settings" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 5
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Background/MarginContainer/TabContainer/TK_CONFIGURATOR"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Background/MarginContainer/TabContainer/Settings"]
 layout_mode = 2
 follow_focus = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/Settings/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 64
 
-[node name="system_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer"]
+[node name="system_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/Settings/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="system_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer/system_container"]
+[node name="system_label" type="Label" parent="Background/MarginContainer/TabContainer/Settings/ScrollContainer/VBoxContainer/system_container"]
 layout_mode = 2
 text = "TK_SYSTEM"
 
-[node name="system_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer/system_container"]
+[node name="system_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/Settings/ScrollContainer/VBoxContainer/system_container"]
 layout_mode = 2
 
-[node name="update_notification" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer/system_container"]
+[node name="update_notification" type="CheckButton" parent="Background/MarginContainer/TabContainer/Settings/ScrollContainer/VBoxContainer/system_container"]
 layout_mode = 2
 button_pressed = true
 text = "TK_UPDATENOTIF"
 
-[node name="easter_eggs" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer/system_container"]
+[node name="easter_eggs" type="CheckButton" parent="Background/MarginContainer/TabContainer/Settings/ScrollContainer/VBoxContainer/system_container"]
 layout_mode = 2
 disabled = true
 button_pressed = true
 text = "TK_EASTEREGGS"
 
-[node name="multi_user_container" type="HBoxContainer" parent="Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer/system_container"]
+[node name="multi_user_container" type="HBoxContainer" parent="Background/MarginContainer/TabContainer/Settings/ScrollContainer/VBoxContainer/system_container"]
 layout_mode = 2
 
-[node name="multi_user_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer/system_container/multi_user_container"]
+[node name="multi_user_label" type="Label" parent="Background/MarginContainer/TabContainer/Settings/ScrollContainer/VBoxContainer/system_container/multi_user_container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "TK_MULTIUSR"
 
-[node name="multi_user_option" type="OptionButton" parent="Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer/system_container/multi_user_container"]
+[node name="multi_user_option" type="OptionButton" parent="Background/MarginContainer/TabContainer/Settings/ScrollContainer/VBoxContainer/system_container/multi_user_container"]
 layout_mode = 2
 size_flags_horizontal = 10
 selected = 0
@@ -983,17 +983,17 @@ popup/item_1/id = 1
 popup/item_2/text = "TK_CUSTOMUSR"
 popup/item_2/id = 2
 
-[node name="menu_music" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer/system_container"]
+[node name="menu_music" type="CheckButton" parent="Background/MarginContainer/TabContainer/Settings/ScrollContainer/VBoxContainer/system_container"]
 layout_mode = 2
 button_pressed = true
 text = "TK_MUSIC"
 
-[node name="fancy_audio_player_here_(please_no)" type="Label" parent="Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer/system_container"]
+[node name="fancy_audio_player_here_(please_no)" type="Label" parent="Background/MarginContainer/TabContainer/Settings/ScrollContainer/VBoxContainer/system_container"]
 layout_mode = 2
 size_flags_vertical = 1
 text = "|| ------( )--------"
 
-[node name="theme_optionbutton" type="OptionButton" parent="Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer"]
+[node name="theme_optionbutton" type="OptionButton" parent="Background/MarginContainer/TabContainer/Settings/ScrollContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 selected = 0
