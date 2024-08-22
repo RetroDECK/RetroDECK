@@ -107,7 +107,7 @@ func _connect_signals() -> void:
 	theme_option.item_selected.connect(_conf_theme)
 	#signal_theme_changed.emit(theme_option.item_selected)
 	log_option.item_selected.connect(_load_log)
-	%borders_button.pressed.connect(_hide_show)
+	%borders_button.pressed.connect(_hide_show.bind(%borders_button))
 	%save_button.pressed.connect(_hide_show.bind(%save_button))
 	
 func _load_log(index: int) -> void:
@@ -126,7 +126,8 @@ func _load_log(index: int) -> void:
 func _play_main_animations() -> void:
 	anim_logo.play()
 	
-func _hide_show(button: Button):
+func _hide_show(button: Button) -> void:
+	print (button.name)
 	if %borders_button.button_pressed:
 		%borders_grid_container.visible = true
 		for i in range(%borders_grid_container.get_child_count()):
@@ -235,6 +236,6 @@ func combine_tkeys(): #More as a test
 	#$Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/HBoxContainer/GridContainer/cheats.text = tr("TK_CHEATS") + " " + tr("TK_SOON")
 	#%tate_mode.text = tr("TK_TATE") + " " + tr("TK_SOON")
 	#%hotkey_sound.text = tr("TK_HOTKEYSOUND") + " " + tr("TK_SOON")
-	$Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container/cheevos_advanced_container/cheevos_hardcore.text = tr("TK_CHEEVOSHARDCORE") + " " + tr("TK_SOON")
-	$Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/data_mng_container/saves_sync.text = tr("TK_SAVESSYNC") + " " + tr("TK_SOON")
+	#$Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container/cheevos_advanced_container/cheevos_hardcore.text = tr("TK_CHEEVOSHARDCORE") + " " + tr("TK_SOON")
+	#$Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/data_mng_container/saves_sync.text = tr("TK_SAVESSYNC") + " " + tr("TK_SOON")
 	#$Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer/system_container/easter_eggs.text = tr("TK_EASTEREGGS") + " " + tr("TK_SOON")
