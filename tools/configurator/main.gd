@@ -10,7 +10,7 @@ var log_text = "gdc_"
 var log_parameters: Array = ["log", "i", log_text]
 var log_results: Dictionary
 var theme_option: OptionButton
-signal signal_theme_changed
+#signal signal_theme_changed
 var custom_theme: Theme = $".".theme
 var log_option: OptionButton
 var tab_container: TabContainer
@@ -105,7 +105,7 @@ func _get_nodes() -> void:
 func _connect_signals() -> void:
 	#signal_theme_changed.connect(_conf_theme)
 	theme_option.item_selected.connect(_conf_theme)
-	signal_theme_changed.emit(theme_option.item_selected)
+	#signal_theme_changed.emit(theme_option.item_selected)
 	log_option.item_selected.connect(_load_log)
 	%borders.pressed.connect(_hide_show)
 	
@@ -145,6 +145,7 @@ func _hide_show() -> void:
 		%save_button.visible=false
 
 func _conf_theme(index: int) -> void: 
+	print (index)
 	match index:
 		1:
 			custom_theme = preload("res://res/pixel_ui_theme/RetroDECKTheme.tres")
