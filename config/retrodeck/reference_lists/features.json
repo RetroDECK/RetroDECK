@@ -1094,6 +1094,11 @@
         "name": "xemu",
         "system": "xbox",
         "launch": "xemu"
+      },
+      "es-de": {
+        "description": "ES-DE Emulation Frontend",
+        "name": "ES-DE",
+        "launch": "es-de"
       }
     }
   }
