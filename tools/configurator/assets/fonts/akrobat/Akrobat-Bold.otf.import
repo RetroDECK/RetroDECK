@@ -15,6 +15,7 @@ dest_files=["res://.godot/imported/Akrobat-Bold.otf-7ca68850824f1de1bfa3f2ae834a
 Rendering=null
 antialiasing=1
 generate_mipmaps=false
+disable_embedded_bitmaps=true
 multichannel_signed_distance_field=false
 msdf_pixel_range=8
 msdf_size=48
