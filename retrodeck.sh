@@ -2,6 +2,16 @@
 
 source /app/libexec/global.sh
 
+# uses jq to extract all the emulators (components) that don't have resettable: false in the features.json and separate them with "|"
+resettable_components=$(jq -r '
+  [(.emulator | to_entries[]) |
+  select(.value.core == null and .value.resettable != false) |
+  .key] | sort | join("|")
+' "$features")
+
+# uses sed to create, a, list, like, this
+pretty_resettable_components=$(echo "$resettable_components" | sed 's/|/, /g')
+
 # Arguments section
 
 for i in "$@"; do
@@ -55,19 +65,15 @@ https://retrodeck.net
       fi
       ;;
     --reset-component*)
-      echo "You are about to reset one or more RetroDECK components or emulators."
-      echo "Available options are: es-de, retroarch, cemu, dolphin, duckstation, gzdoom, melonds, pcsx3, pico8, ppsspp, primehack, rpcs3, ryujinx, xemu, vita3k, mame, all"
-      read -p "Please enter the component you would like to reset: " component
-      component=$(echo "$component" | tr '[:upper:]' '[:lower:]')
+      component="$2"
+      if [ -z "$component" ]; then
+        echo "You are about to reset one or more RetroDECK components or emulators."
+        echo -e "Available options are:\nall, $pretty_resettable_components"
+        read -p "Please enter the component you would like to reset: " component
+        component=$(echo "$component" | tr '[:upper:]' '[:lower:]')
+      fi
 
-      # TODO: this is the jq to get all the resettable emulators list, generic component is missing
-      # jq -r '
-      #   [(.emulator | to_entries[]) |
-      #   select(.value.core == null and .value.resettable != false) |
-      #   .key] | sort | join("|")
-      # ' "$features"
-
-      if [[ "$component" =~ ^(es-de|retroarch|cemu|dolphin|duckstation|gzdoom|mame|melonds|pcsx2|ppsspp|primehack|ryujinx|rpcs3|vita3k|xemu|all)$ ]]; then
+      if [[ "$component" =~ ^(all|$resettable_components)$ ]]; then
         read -p "You are about to reset $component to default settings. Enter 'y' to continue, 'n' to stop: " response
         if [[ $response == [yY] ]]; then
           prepare_component "reset" "$component" "cli"
