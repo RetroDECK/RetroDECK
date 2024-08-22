@@ -857,6 +857,18 @@ prepare_component() {
     sed -i 's#RETRODECKSAVESDIR#'$saves_folder'#g' "/var/config/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON
   fi
 
+  if [[ "$component" =~ ^(portmaster|all)$ ]]; then
+  component_found="true"
+    # TODO: MultiUser
+    log i "----------------------"
+    log i "Prepearing PortMaster"
+    log i "----------------------"
+
+    rm -rf "/var/data/PortMaster"
+    create_dir "/var/data/PortMaster"
+    cp "$config/PortMaster/control.txt" "/var/data/PortMaster/"
+  fi
+
   if [[ $component_found == "false" ]]; then
     log e "Supplied component $component not found, not resetting"
   fi
