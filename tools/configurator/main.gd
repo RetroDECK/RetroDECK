@@ -109,6 +109,9 @@ func _connect_signals() -> void:
 	log_option.item_selected.connect(_load_log)
 	%borders_button.pressed.connect(_hide_show.bind(%borders_button))
 	%save_button.pressed.connect(_hide_show.bind(%save_button))
+	%decorations_button.pressed.connect(_hide_show_containers.bind(%decorations_button))
+	%systems_button.pressed.connect(_hide_show_containers.bind(%systems_button))
+	%save_resume_button.pressed.connect(_hide_show_containers.bind(%decorations_button))
 	
 func _load_log(index: int) -> void:
 	var log_content:String
@@ -125,24 +128,41 @@ func _load_log(index: int) -> void:
 
 func _play_main_animations() -> void:
 	anim_logo.play()
-	
+
+func _hide_show_containers(button: Button) -> void:
+	match button.name:
+		"decorations_button":
+			%graphics_gridcontainer.visible = true
+			if button.toggle_mode:
+				button.toggle_mode=false
+				%graphics_gridcontainer.visible = false
+			else:
+				button.toggle_mode=true
+		"systems_button":
+			%systems_gridcontainer.visible = true
+			if button.toggle_mode:
+				button.toggle_mode=false
+				%systems_gridcontainer.visible = false
+			else:
+				button.toggle_mode=true
+
 func _hide_show(button: Button) -> void:
-	print (button.name)
 	if %borders_button.button_pressed:
-		%borders_grid_container.visible = true
-		for i in range(%borders_grid_container.get_child_count()):
-			var child = %borders_grid_container.get_child(i)        
+		%borders_gridcontainer.visible = true
+		for i in range(%borders_gridcontainer.get_child_count()):
+			var child = %borders_gridcontainer.get_child(i)        
 			if child is Button:
 				child.button_pressed=true
-		for i in range(%graphics_grid_container.get_child_count()):
-			var child = %graphics_grid_container.get_child(i)        
+		for i in range(%graphics_gridcontainer.get_child_count()):
+			var child = %graphics_gridcontainer.get_child(i)        
 			if child is Button and child != %borders_button:
 				child.visible=false
 		%save_button.visible=true
-	elif !%borders_button.button_pressed:
-		%borders_grid_container.visible = false
-		for i in range(%graphics_grid_container.get_child_count()):
-			var child = %graphics_grid_container.get_child(i)        
+	
+	if %save_button.button_pressed:
+		%borders_gridcontainer.visible = false
+		for i in range(%graphics_gridcontainer.get_child_count()):
+			var child = %graphics_gridcontainer.get_child(i)        
 			if child is Button:
 				child.visible=true
 		%save_button.visible=false
