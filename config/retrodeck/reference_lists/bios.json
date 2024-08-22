@@ -558,12 +558,9 @@
     },
     "top-sp1.bin": {
       "md5": "122aee210324c72e8a11116e6ef9c0d0",
-      "system": [
-        "neogeocd",
-        "neogeocdjp"
-      ],
-      "description": "Top Loader BIOS (MAME)",
-      "required": "at least one"
+      "system": "neogeocd",
+      "description": "NeoGeo CD Top SP1 ROM",
+      "required": "required"
     },
     "neocd.bin": {
       "md5": "f39572af7584cb5b3f70ae8cc848aba2",
@@ -949,6 +946,186 @@
       "md5": "ce0723f9bc02f4948c15d3b3230ae831",
       "system": "zxspectrum",
       "description": "Scorpion 256K ROM",
+      "required": "required"
+    },
+    "modplus-harp2.bin": {
+      "md5": "875919e2544644cd628f44b5c11db036",
+      "system": "macintosh",
+      "description": "Macintosh Plus ModPlus Harp2 ROM",
+      "required": "required"
+    },
+    "rominator-20150225-hi.bin": {
+      "md5": "efcefe8f11c10541a503d48a07878201",
+      "system": "macintosh",
+      "description": "Macintosh Rominator High ROM",
+      "required": "required"
+    },
+    "rominator-20150225-lo.bin": {
+      "md5": "f4b06da98500df0747a764dfbf1862b9",
+      "system": "macintosh",
+      "description": "Macintosh Rominator Low ROM",
+      "required": "required"
+    },
+    "nb_fake.bin": {
+      "md5": "93155ac7bad0fec36837252bb1e408f2",
+      "system": "macintosh",
+      "description": "Macintosh NB Fake ROM",
+      "required": "required"
+    },
+    "3410868.bin": {
+      "md5": "7500a6a958247ee6e092f08715f2fff8",
+      "system": "macintosh",
+      "description": "Macintosh 3410868 ROM",
+      "required": "required"
+    },
+    "cmos_arthur.bin": {
+      "md5": "c74763f720c98e16dc3c6c421db21485",
+      "system": "archimedes",
+      "description": "Acorn Archimedes CMOS Arthur ROM",
+      "required": "required"
+    },
+    "cmos_riscos2.bin": {
+      "md5": "6f564c8917f04594bda7385f6de61061",
+      "system": "archimedes",
+      "description": "Acorn Archimedes CMOS RISC OS 2 ROM",
+      "required": "required"
+    },
+    "cmos_riscos3.bin": {
+      "md5": "232a302efe19278d9df6ecbc8ea3dc6c",
+      "system": "archimedes",
+      "description": "Acorn Archimedes CMOS RISC OS 3 ROM",
+      "required": "required"
+    },
+    "acorn_0280,022-01_philips_8051ah-2.bin": {
+      "md5": "1a8617c1abe3e0729d20ce844e1e12a8",
+      "system": "archimedes",
+      "description": "Acorn Archimedes Keyboard ROM",
+      "required": "required"
+    },
+    "mod_bios.bin": {
+      "md5": "b325543b36d37edf3fc20761f00c7a37",
+      "system": "apfm1000",
+      "description": "APF M-1000 Mod BIOS",
+      "required": "required"
+    },
+    "trash-ii.bin": {
+      "md5": "89a7cfa5469ce24773721d65b28f8544",
+      "system": "apfm1000",
+      "description": "APF M-1000 Trash II ROM",
+      "required": "required"
+    },
+    "p513bk0b.bin": {
+      "md5": "ebf432d3b09f694db1c62018eb2ab471",
+      "system": "vis",
+      "description": "Tandy VIS P513BK0B ROM",
+      "required": "required"
+    },
+    "p513bk1b.bin": {
+      "md5": "758f8fec271fbf526bb22b36e88f154b",
+      "system": "vis",
+      "description": "Tandy VIS P513BK1B ROM",
+      "required": "required"
+    },
+    "vsmile_v102.bin": {
+      "md5": "f41fcc19ebe1e90fa359cd0df6293fab",
+      "system": "vsmile",
+      "description": "VTech V.Smile v1.02 ROM",
+      "required": "required"
+    },
+    "vsmile_v103.bin": {
+      "md5": "11e59253c578c8f16ea2375ec398e4e9",
+      "system": "vsmile",
+      "description": "VTech V.Smile v1.03 ROM",
+      "required": "required"
+    },
+    "speech_eng_vsm1.bin": {
+      "md5": "7046c2b27f51c9a5d33b4d6103f29acf",
+      "system": "socrates",
+      "description": "VTech Socrates Speech VSM1 ROM",
+      "required": "required"
+    },
+    "speech_eng_vsm2.bin": {
+      "md5": "6878302c362321eeee7e40d285cf7d30",
+      "system": "socrates",
+      "description": "VTech Socrates Speech VSM2 ROM",
+      "required": "required"
+    },
+    "speech_eng_vsm3.bin": {
+      "md5": "31c29c57e3d3e6788ba5817eaaa8b17a",
+      "system": "socrates",
+      "description": "VTech Socrates Speech VSM3 ROM",
+      "required": "required"
+    },
+    "b225__ins8048-11kdp_n.u5": {
+      "md5": "5729638bd856c475678467a353bd921c",
+      "system": "advision",
+      "description": "Entex Adventure Vision B225 ROM",
+      "required": "required"
+    },
+    "b8223__cop411l-kcn_n.u8": {
+      "md5": "fc5e71445e4947a9d00eedbc66b13a8f",
+      "system": "advision",
+      "description": "Entex Adventure Vision B8223 ROM",
+      "required": "required"
+    },
+    "gamate_bios_bit.bin": {
+      "md5": "b411167df6dd563111729296f4c547f6",
+      "system": "gamate",
+      "description": "Bitcorp Gamate BIOS Bit ROM",
+      "required": "required"
+    },
+    "gamate_bios_umc.bin": {
+      "md5": "ef67993a94503c4b7798b5901c7dda52",
+      "system": "gamate",
+      "description": "Bitcorp Gamate BIOS UMC ROM",
+      "required": "required"
+    },
+    "zx405037p__cdi_servo_2.1__b43t__llek9215.mc68hc705c8a_withtestrom.7201": {
+      "md5": "3e59b8a9a423d3ecd612a32fe4e2d748",
+      "system": "cdi",
+      "description": "Philips CD-i CDI Servo 2.1 ROM",
+      "required": "required"
+    },
+    "zx405042p__cdi_slave_2.0__b43t__zzmk9213.mc68hc705c8a_withtestrom.7206": {
+      "md5": "3d20cf7550f1b723158b42a1fd5bac62",
+      "system": "cdi",
+      "description": "Philips CD-i CDI Slave 2.0 ROM",
+      "required": "required"
+    },
+    "sp5001-a.bin": {
+      "md5": "689d2228b00fb59781f82af6e8ecdb78",
+      "system": "naomi2",
+      "description": "Naomi 2 SP5001-A ROM",
+      "required": "required"
+    },
+    "sp5001-b.bin": {
+      "md5": "8373a11106c1c2fc21ac839f75ea488f",
+      "system": "naomi2",
+      "description": "Naomi 2 SP5001-B ROM",
+      "required": "required"
+    },
+    "sp5002-a.bin": {
+      "md5": "7eecfb8e8f82b47ffab92a0c5528100e",
+      "system": "naomi2",
+      "description": "Naomi 2 SP5002-A ROM",
+      "required": "required"
+    },
+    "xilinx_spartan3e_pn__xc3s250e__1.2_sv.bin": {
+      "md5": "083cad15e8ef6cc7b19b5bde38c83932",
+      "system": "naomi2",
+      "description": "Naomi 2 Xilinx Spartan3e ROM",
+      "required": "required"
+    },
+    "ds9-3__30d5_bbin_16k.xci": {
+      "md5": "620739e71d74c611d5b7fc87a2b64793",
+      "system": "naomi2",
+      "description": "Naomi 2 DS9-3 ROM",
+      "required": "required"
+    },
+    "53c810_sea_1.0.bin": {
+      "md5": "9f3e2b07202e3b6b98e2336fc14ad1f2",
+      "system": "naomi2",
+      "description": "Naomi 2 53C810 ROM",
       "required": "required"
     }
   }
