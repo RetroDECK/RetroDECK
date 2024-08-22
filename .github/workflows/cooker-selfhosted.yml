@@ -41,7 +41,6 @@ jobs:
         continue-on-error: true
 
       - name: Generate a token for Rekku
-        if: github.repository_owner == 'RetroDECK'
         id: generate-rekku-token
         uses: actions/create-github-app-token@v1
         with:
@@ -53,8 +52,6 @@ jobs:
       - name: Clone RetroDECK repo
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.ref || github.ref }}                          # Use the branch or commit reference from the pull request if available; otherwise, fall back to the reference from the event that triggered the workflow.
-          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }} # Use the repository name from the pull request if available; otherwise, use the repository name from the event that triggered the workflow.
           submodules: 'true'
 
       - name: "Install dependencies"
@@ -67,41 +64,33 @@ jobs:
         id: branch_name
         run: echo "BRANCH_NAME=$(echo $GITHUB_REF | sed 's|refs/heads/||')" >> $GITHUB_ENV
 
-      # if it's a feature branch it will not marked as "latest" cooker version
-      - name: "Set makeLatest (cooker only)"
+      
+      # if the branch is coming from a PR the tag should be manually built
+      - name: "Generate version tag and evaluating latest tag"
         run: |
-          if [[ "$BRANCH_NAME" == 'feat/'* || "$BRANCH_NAME" == 'refs/'* ]]; then
-            echo "MAKE_LATEST=false" >> $GITHUB_ENV
+          # Source the version extractor script to get the manifest version
+          source automation_tools/version_extractor.sh
+          MANIFEST_VERSION="$(fetch_manifest_version)"
+          echo "MANIFEST_VERSION=$MANIFEST_VERSION" >> $GITHUB_ENV
+
+          # Check if the event is related to a pull request
+          if [[ "$GITHUB_EVENT_NAME" == "pull_request" || "$GITHUB_EVENT_NAME" == "pull_request_target" ]]; then
+            pr_number=$(echo "$GITHUB_REF" | awk -F'/' '{print $3}')
+            source_branch=$(curl -s "https://api.github.com/repos/RetroDECK/RetroDECK/pulls/$pr_number" | jq -r '.head.ref')
+            source_branch=${source_branch//\//-}  # Replace '/' with '-' in the branch name
+            echo "[DEBUG] source branch is: $source_branch"
+            echo "TAG=PR-$pr_number-$source_branch-${{ env.buildid }}" >> $GITHUB_ENV
+            echo "MAKE_LATEST=false" >> $GITHUB_ENV # if it's a feature branch it will not marked as "latest" cooker version
           else
+            TAG="$MANIFEST_VERSION-${{ env.buildid }}"
+            echo "TAG=$TAG" >> $GITHUB_ENV
             echo "MAKE_LATEST=true" >> $GITHUB_ENV
           fi
 
-      # Generate version tag based on the branch name: if the branch is coming from a PR the tag should be manually built
-      - name: "Generate version tag"
-        run: |
-
-          # Source version extractor script and get manifest version
-          source automation_tools/version_extractor.sh
-          MANIFEST_VERSION="$(fetch_manifest_version)"
-          
-          # Set manifest version to environment variable
-          echo "MANIFEST_VERSION=$MANIFEST_VERSION" >> $GITHUB_ENV
-
-          # Determine tag based on branch type
-          if [[ "$BRANCH_NAME" == refs/pull/* ]]; then
-            pr_number=$(echo "$GITHUB_REF" | awk -F'/' '{print $3}')
-            source_branch=$(curl -s "https://api.github.com/repos/RetroDECK/RetroDECK/pulls/$pr_number" | jq -r '.head.ref' | tr '/' '-')
-            TAG="PR-$pr_number-$source_branch-${{ env.buildid }}"
-          else
-            TAG="$MANIFEST_VERSION-${{ env.buildid }}"
-          fi
-
-          # Set tag to environment variable
-          echo "TAG=$TAG" >> $GITHUB_ENV
-
-          # Output debug information
+          # Output the manifest version and generated tag for debugging
           echo "MANIFEST_VERSION: $MANIFEST_VERSION"
           echo "Version TAG: $TAG"
+          echo "MAKE_LATEST: $MAKE_LATEST"
 
       # backing up manifest in case download fails and hashes must be recalculated
       - name: Manifest backup
@@ -140,6 +129,10 @@ jobs:
 
       - name: Create Bundle
         run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_bundle.sh"
+
+      - name: Set environment variable with current branch name
+        run: echo "GITHUB_REF_SLUG=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
+
       - name: Get commits since last release
         run: |
           # Get the latest release tag
@@ -147,7 +140,8 @@ jobs:
           # Get all commits since the latest release tag
           COMMITS=$(git log $LATEST_TAG..HEAD --pretty=format:"- %s")
           # Set the output variable
-          echo "COMMITS=$COMMITS" >> $GITHUB_ENV
+          echo "::set-output name=commits::$COMMITS"
+        id: commits
         continue-on-error: true
 
       - name: Publish the flatpak in a new cooker release
@@ -159,8 +153,8 @@ jobs:
             This is a cooker snapshot based on the commit: ${{ github.event.repository.full_name }}@${{github.sha}}.
             On branch [${{env.BRANCH_NAME}}](https://github.com/RetroDECK/RetroDECK/tree/${{env.BRANCH_NAME}}).
 
-            ## Commits since last cooker build
-            ${{ env.COMMITS }}
+            ## Commits since last release
+            ${{ steps.commits.outputs.commits }}
 
             For the full release note for this build please refer to the channel [#BETA-TESTING](https://discord.gg/WDc5C9YWMx) on our Discord server.
       
@@ -171,11 +165,10 @@ jobs:
           allowUpdates: true
           makeLatest: ${{env.MAKE_LATEST}} # if it's a feat branch is not considered the latest build
           token: ${{ steps.generate-rekku-token.outputs.token }}
-          repo: ${{ github.repository_owner == 'RetroDECK' && 'Cooker' || github.repository }} # If the repo owner is RetroDECK, publish to Cooker, otherwise publish to the current fork repo
+          repo: Cooker
         continue-on-error: true
 
       - name: Rewrite Tag
-        if: github.repository_owner == 'RetroDECK'
         run: |
           git submodule deinit -f --all
           git fetch --tags
@@ -198,18 +191,15 @@ jobs:
           path: RetroDECK-cooker.flatpak
         continue-on-error: true
 
-      # We never needed this in cooker
-      # - name: Create Artifact for flathub
-      #   if: github.repository_owner == 'RetroDECK'
-      #   run: | 
-      #     tar -czf ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.tar.gz -C ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker .
-      #     hash=($(sha256sum ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.tar.gz))
-      #     echo $hash > ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.sha
-      #     mv -f RetroDECK-Artifact-cooker.* ${{ secrets.ARTIFACT_REPO }}
-      #   continue-on-error: true
+      - name: Create Artifact for flathub
+        run: | 
+          tar -czf ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.tar.gz -C ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker .
+          hash=($(sha256sum ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.tar.gz))
+          echo $hash > ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.sha
+          mv -f RetroDECK-Artifact-cooker.* ${{ secrets.ARTIFACT_REPO }}
+        continue-on-error: true
 
       # - name: Upload RetroDECK-cooker.flatpak to Gitea Release
-      #   if: github.repository_owner == 'RetroDECK'
       #   run: |
       #     # Set variables for Gitea host, organization, repository, access token, and release details
       #     GITEA_HOST="repo.retrodeck.net"
