@@ -52,6 +52,7 @@ jobs:
           sed -i 's/config\/version=\"[^"]\*"/config\/version=\"${{ env.DATE }}-debug\"/' ${{ env.GODOT_PROJECT_LOCATION }}
            
       # DEBUG BUILDS
+      # LINUX
       - name: Building debug Linux
         if: ${{ github.event.inputs.job_target == 'linux' || github.event.inputs.job_target == 'all' }}
         run: |
@@ -72,6 +73,7 @@ jobs:
           name: ${{ env.APPLICATION_NAME }}_linux_debug_${{ env.DATE }}.tar
           path: ${{ env.APPLICATION_NAME }}_linux_debug_${{ env.DATE }}.tar
 
+      # WINDOWS
       - name: Building debug Windows
         if: ${{ github.event.inputs.job_target == 'windows' || github.event.inputs.job_target == 'all' }}
         run: |
@@ -84,7 +86,8 @@ jobs:
         with:
           name: ${{ env.APPLICATION_NAME }}_windows_debug_${{ env.DATE }}
           path: ${{ env.EXPORT_FOLDER_WINDOWS }}/
-  
+
+      #MAC
       - name: Building debug macOS
         if: ${{ github.event.inputs.job_target == 'mac' || github.event.inputs.job_target == 'all' }}
         run: |
