@@ -85,10 +85,10 @@ jobs:
             source_branch=$(curl -s "https://api.github.com/repos/RetroDECK/RetroDECK/pulls/$pr_number" | jq -r '.head.ref')
             source_branch=${source_branch//\//-}  # Replace '/' with '-' in the branch name
             echo "[DEBUG] source branch is: $source_branch"
-            echo "TAG=PR-$pr_number-$source_branch-${{ env.buildid }}" >> $GITHUB_ENV
+            echo "TAG=PR-$pr_number-$(echo $source_branch-${{ env.buildid }} | sed 's/\//-/g')" >> $GITHUB_ENV
             echo "MAKE_LATEST=false" >> $GITHUB_ENV # if it's a feature branch it will not marked as "latest" cooker version
           else
-            TAG="$MANIFEST_VERSION-${{ env.buildid }}"
+            TAG="$MANIFEST_VERSION-${{ env.buildid }} | sed 's/\//-/g'"
             echo "TAG=$TAG" >> $GITHUB_ENV
             echo "MAKE_LATEST=true" >> $GITHUB_ENV
           fi
