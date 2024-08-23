@@ -549,6 +549,20 @@ modules:
         url:  https://github.com/RetroDECK/RetroDECK-theme
         commit: 975c41cac99d150b6ae86a1dfd19988058c69aad
 
+  # RUFFLE - START
+  # https://github.com/ruffle-rs/ruffle/releases
+  - name: ruffle
+    buildsystem: simple
+    build-commands:
+      - |
+        cp -p ruffle "${FLATPAK_DEST}/bin/"
+        chmod +x "${FLATPAK_DEST}/bin/ruffle"
+    sources:
+      - type: archive
+        strip-components: 0
+        url: https://github.com/ruffle-rs/ruffle/releases/download/nightly-2024-08-09/ruffle-nightly-2024_08_09-linux-x86_64.tar.gz
+        sha256: d2c4c77d8426da6df8dc8b2a57565c151146464a8eec605d5faa68a297d8cad6
+
   - name: fetch-missing-libs
     buildsystem: simple
     build-commands:
@@ -643,6 +657,10 @@ modules:
       # GZDOOM wrapper
       - cp config/gzdoom/gzdoom.sh ${FLATPAK_DEST}/bin/gzdoom.sh
       - chmod +x ${FLATPAK_DEST}/bin/gzdoom.sh
+
+      # RUFFLE wrapper
+      - cp config/ruffle/ruffle-rdwrapper.sh "${FLATPAK_DEST}/bin/ruffle-rdwrapper.sh"
+      - chmod +x "${FLATPAK_DEST}/bin/ruffle-rdwrapper.sh"
 
     sources:
       - type: git

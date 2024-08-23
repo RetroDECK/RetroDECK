@@ -972,6 +972,12 @@
         }
       ]
     },
+      "ruffle": {
+        "description": "Flash Games emulator",
+        "name" : "Ruffle",
+        "system" : "flash",
+        "launch": "ruffle-rd-wrapper.sh"
+      },
     "melonds": {
       "description": "MelonDS Nintendo DS Emulator",
       "name": "melonds",
