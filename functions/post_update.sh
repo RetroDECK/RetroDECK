@@ -434,6 +434,7 @@ post_update() {
 
     set_setting_value "$raconf" "libretro_info_path" "/var/config/retroarch/cores" "retroarch"
     prepare_component "reset" "ruffle"
+    prepare_component "reset" "shadps4"
     update_rd_conf
 
   # TODO: check this

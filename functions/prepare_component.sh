@@ -872,7 +872,16 @@ prepare_component() {
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
       dir_prep "$saves_folder/flash" "/var/data/ruffle/SharedObjects/localhost/$roms_folder/flash"
     fi
+  fi
     
+  if [[ "$component" =~ ^(gzdoom|all)$ ]]; then
+  component_found="true"
+    # This is just a placeholder script to test the emulator's flow
+    log i "----------------------"
+    log i "Prepearing SHADPS4"
+    log i "----------------------"
+
+    # TODO: plceholder
   fi
 
   if [[ $component_found == "false" ]]; then
