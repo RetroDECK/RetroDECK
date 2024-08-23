@@ -47,7 +47,7 @@ jobs:
           mkdir -p ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
           unzip godot_export_templates.tpz -d ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
           mv ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable/templates/* ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable/
-          sed -i 's/config\/version=\"[^"]\*"/config\/version=\"${{ env.date }}-debug\"/' ${{ env.GODOT_PROJECT_LOCATION }}
+          sed -i 's/config\/version=\"[^"]\*"/config\/version=\"${{ env.DATE }}-debug\"/' ${{ env.GODOT_PROJECT_LOCATION }}
            
       # DEBUG BUILDS
       - name: Building debug Linux
@@ -67,8 +67,8 @@ jobs:
         if: ${{ github.event.inputs.job_target == 'linux' || github.event.inputs.job_target == 'both' }}
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.APPLICATION_NAME }}_linux_debug_${{ env.date }}.tar
-          path: ${{ env.APPLICATION_NAME }}_linux_debug_${{ env.date }}.tar
+          name: ${{ env.APPLICATION_NAME }}_linux_debug_${{ env.DATE }}.tar
+          path: ${{ env.APPLICATION_NAME }}_linux_debug_${{ env.DATE }}.tar
 
       - name: Building debug Windows
         if: ${{ github.event.inputs.job_target == 'windows' || github.event.inputs.job_target == 'both' }}
@@ -80,7 +80,7 @@ jobs:
         if: ${{ github.event.inputs.job_target == 'windows' || github.event.inputs.job_target == 'both' }}
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.APPLICATION_NAME }}_windows_debug_${{ env.date }}
+          name: ${{ env.APPLICATION_NAME }}_windows_debug_${{ env.DATE }}
           path: ${{ env.EXPORT_FOLDER_WINDOWS }}/
   
     
