@@ -1,5 +1,5 @@
-name: GoDot Configurator build
-run-name: Build Godot Configurator for RetroDECK
+name: GoDot Configurator Build Debug
+run-name: Build Godot Configurator(DEBUG) for RetroDECK
 on: 
   workflow_dispatch:
     inputs:
