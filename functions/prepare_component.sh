@@ -857,6 +857,17 @@ prepare_component() {
     sed -i 's#RETRODECKSAVESDIR#'$saves_folder'#g' "/var/config/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON
   fi
 
+  if [[ "$component" =~ ^(gzdoom|all)$ ]]; then
+  component_found="true"
+    # This is just a placeholder script to test the emulator's flow
+    log i "----------------------"
+    log i "Prepearing SHADPS4"
+    log i "----------------------"
+
+    # TODO: plceholder
+
+  fi
+
   if [[ $component_found == "false" ]]; then
     log e "Supplied component $component not found, not resetting"
   fi
