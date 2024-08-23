@@ -1,13 +1,16 @@
+#todo
+# add cores as class/ Like eumlator but one level lower
+
 extends Control
 
 var bios_type:int
 var status_code_label: Label
 var wrapper_command: String = "../../tools/retrodeck_function_wrapper.sh"
-var log_text = "GD_Configurator: "
+var log_text = "gdc_"
 var log_parameters: Array = ["log", "i", log_text]
 var log_results: Dictionary
 var theme_option: OptionButton
-signal signal_theme_changed
+#signal signal_theme_changed
 var custom_theme: Theme = $".".theme
 var log_option: OptionButton
 var tab_container: TabContainer
@@ -17,29 +20,37 @@ var rd_version: String
 var gc_version: String
 var l1_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0797.png")
 var r1_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0798.png")
-var l1_button_texture_alt: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0763.png")
-var r1_button_texture_alt: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0764.png")
+var a_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0042.png")
+var b_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0043.png")
 
-var app_data = AppData.new()
+var app_data := AppData.new()
 func _ready():
 	_get_nodes()
 	_connect_signals()
 	_play_main_animations()
-	$Background/locale_option.selected = class_functions.map_locale_id(OS.get_locale_language())
-
-	"""
-	# Load json data. Test to show some data
-	app_data = data_handler.load_base_data()
-
+	%locale_option.selected = class_functions.map_locale_id(OS.get_locale_language())
+	app_data = data_handler.app_data
+	#data_handler.add_emulator()
+	#data_handler.modify_emulator_test()
 	if app_data:
-		var website_data = app_data.about_links["rd_web"]
-		print (website_data.name,"-",website_data.url,"-",website_data.description)
-		print (app_data.about_links["rd_web"]["url"])
-	
-	var console: bool = false
-	var test = class_functions.execute_command("cat",["/var/config/retrodeck/retrodeck.cfg"],console)
-	print (test)
-	"""
+		var website_data: Link = app_data.about_links["rd_web"]
+		print (website_data.name,"-",website_data.url,"-",website_data.description,"-",website_data.url)
+		#print (app_data.about_links["rd_web"]["name"])
+		
+		for key in app_data.emulators.keys():
+			var emulator = app_data.emulators[key]
+			# Display the properties of each emulator
+			print("Emulator Name: ", emulator.name)
+			print("Description: ", emulator.description)
+			print("Properties:")
+			# Iterate over properties and show each one
+			for property: EmulatorProperty in emulator.properties:
+				print("Cheevos: ", property.cheevos)
+				print("ABXY_button:", property.abxy_button)
+				print("multi_user_config_dir: ", property.multi_user_config_dir)		
+	else:
+		print ("No emulators")
+
 	var config_file_path = "/var/config/retrodeck/retrodeck.cfg"
 	var json_file_path = "/var/config/retrodeck/retrodeck.json"
 	var config = data_handler.parse_config_to_json(config_file_path)
@@ -55,7 +66,7 @@ func _ready():
 	#	print (id)
 
 	# set current startup tab to match IDE	
-	tab_container.current_tab = 2
+	tab_container.current_tab = 0
 	#add_child(class_functions) # Needed for threaded results Not need autoload?
 	var children = findElements(self, "Control")
 	for n: Control in children: #iterate the children
@@ -65,14 +76,25 @@ func _ready():
 			n.self_modulate.a = 0.5 #make it half transparent
 	combine_tkeys()
 
-func _process(delta):
+func _input(event):
+	if Input.is_action_pressed("quit1") and Input.is_action_pressed("quit2"):
+		get_tree().quit()
 	if Input.is_action_pressed("next_tab"):
-		%r1_button.texture_normal = $r1_button.texture_pressed
+		%r1_button.texture_normal = %r1_button.texture_pressed
 	elif Input.is_action_pressed("previous_tab"):
-		%l1_button.texture_normal = $l1_button.texture_pressed
+		%l1_button.texture_normal = %l1_button.texture_pressed
+	elif Input.is_action_pressed("back_button"):
+		%b_button.texture_normal = %b_button.texture_pressed
+	elif Input.is_action_pressed("action_button"):
+		%a_button.texture_normal = %a_button.texture_pressed
 	else:
 		%r1_button.texture_normal = r1_button_texture
 		%l1_button.texture_normal = l1_button_texture
+		%a_button.texture_normal = a_button_texture
+		%b_button.texture_normal = b_button_texture
+	if event.is_action_pressed("quit"):
+		_exit()
+
 func _get_nodes() -> void:
 	status_code_label = get_node("%status_code_label")
 	theme_option = get_node("%theme_optionbutton")
@@ -83,8 +105,13 @@ func _get_nodes() -> void:
 func _connect_signals() -> void:
 	#signal_theme_changed.connect(_conf_theme)
 	theme_option.item_selected.connect(_conf_theme)
-	signal_theme_changed.emit(theme_option.item_selected)
+	#signal_theme_changed.emit(theme_option.item_selected)
 	log_option.item_selected.connect(_load_log)
+	%borders_button.pressed.connect(_hide_show.bind(%borders_button))
+	%save_button.pressed.connect(_hide_show.bind(%save_button))
+	%decorations_button.pressed.connect(_hide_show_containers.bind(%decorations_button))
+	%systems_button.pressed.connect(_hide_show_containers.bind(%systems_button))
+	%save_resume_button.pressed.connect(_hide_show_containers.bind(%decorations_button))
 	
 func _load_log(index: int) -> void:
 	var log_content:String
@@ -102,10 +129,49 @@ func _load_log(index: int) -> void:
 func _play_main_animations() -> void:
 	anim_logo.play()
 
+func _hide_show_containers(button: Button) -> void:
+	match button.name:
+		"decorations_button":
+			%graphics_gridcontainer.visible = true
+			if button.toggle_mode:
+				button.toggle_mode=false
+				%graphics_gridcontainer.visible = false
+			else:
+				button.toggle_mode=true
+		"systems_button":
+			%systems_gridcontainer.visible = true
+			if button.toggle_mode:
+				button.toggle_mode=false
+				%systems_gridcontainer.visible = false
+			else:
+				button.toggle_mode=true
+
+func _hide_show(button: Button) -> void:
+	if %borders_button.button_pressed:
+		%borders_gridcontainer.visible = true
+		for i in range(%borders_gridcontainer.get_child_count()):
+			var child = %borders_gridcontainer.get_child(i)        
+			if child is Button:
+				child.button_pressed=true
+		for i in range(%graphics_gridcontainer.get_child_count()):
+			var child = %graphics_gridcontainer.get_child(i)        
+			if child is Button and child != %borders_button:
+				child.visible=false
+		%save_button.visible=true
+	
+	if %save_button.button_pressed:
+		%borders_gridcontainer.visible = false
+		for i in range(%graphics_gridcontainer.get_child_count()):
+			var child = %graphics_gridcontainer.get_child(i)        
+			if child is Button:
+				child.visible=true
+		%save_button.visible=false
+
 func _conf_theme(index: int) -> void: 
+	print (index)
 	match index:
 		1:
-			custom_theme = preload("res://assets/themes/default_theme.tres")
+			custom_theme = preload("res://res/pixel_ui_theme/RetroDECKTheme.tres")
 		2:
 			custom_theme = preload("res://assets/themes/retro_theme.tres")
 		3:
@@ -114,10 +180,6 @@ func _conf_theme(index: int) -> void:
 			custom_theme = preload("res://assets/themes/accesible_theme.tres")
 	$".".theme = custom_theme
 	_play_main_animations()
-
-func _input(event):
-	if event.is_action_pressed("quit"):
-		_exit()
 
 func findElements(node: Node, className: String, result: Array = []) -> Array:
 	if node.is_class(className):
@@ -169,6 +231,11 @@ func _on_locale_selected(index):
 	match index:
 		0:
 			TranslationServer.set_locale("en")
+		_:
+			TranslationServer.set_locale("en")
+	combine_tkeys()
+
+"""			
 		1:
 			TranslationServer.set_locale("it")
 		2:
@@ -181,14 +248,14 @@ func _on_locale_selected(index):
 			TranslationServer.set_locale("ja")
 		6:
 			TranslationServer.set_locale("zh")
-	combine_tkeys()
+"""
+
 	
 func combine_tkeys(): #More as a test
 	%cheats.text = tr("TK_CHEATS") + " " + tr("TK_SOON") # switched to access as a unique name as easier to refactor
 	#$Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/HBoxContainer/GridContainer/cheats.text = tr("TK_CHEATS") + " " + tr("TK_SOON")
-	$Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/GridContainer/shaders.text = tr("TK_SHADERS") + " " + tr("TK_SOON")
-	$Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/extra_container/GridContainer/tate_mode.text = tr("TK_TATE") + " " + tr("TK_SOON")
-	$Background/MarginContainer/TabContainer/TK_CONTROLS/ScrollContainer/VBoxContainer/controls_container/hotkey_sound.text = tr("TK_HOTKEYSOUND") + " " + tr("TK_SOON")
-	$Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container/cheevos_advanced_container/cheevos_hardcore.text = tr("TK_CHEEVOSHARDCORE") + " " + tr("TK_SOON")
-	$Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/data_mng_container/saves_sync.text = tr("TK_SAVESSYNC") + " " + tr("TK_SOON")
-	$Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer/system_container/easter_eggs.text = tr("TK_EASTEREGGS") + " " + tr("TK_SOON")
+	#%tate_mode.text = tr("TK_TATE") + " " + tr("TK_SOON")
+	#%hotkey_sound.text = tr("TK_HOTKEYSOUND") + " " + tr("TK_SOON")
+	#$Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container/cheevos_advanced_container/cheevos_hardcore.text = tr("TK_CHEEVOSHARDCORE") + " " + tr("TK_SOON")
+	#$Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/data_mng_container/saves_sync.text = tr("TK_SAVESSYNC") + " " + tr("TK_SOON")
+	#$Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer/system_container/easter_eggs.text = tr("TK_EASTEREGGS") + " " + tr("TK_SOON")

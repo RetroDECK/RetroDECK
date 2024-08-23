@@ -72,7 +72,7 @@ func _import_data_lists(file_path: String) -> void:
 		print("---")
 
 func import_text_file(file_path: String) -> String:
-	var content: String
+	var content: String = ""
 	var file = FileAccess.open(file_path, FileAccess.READ)
 	if file == null:
 		print("Failed to open file")

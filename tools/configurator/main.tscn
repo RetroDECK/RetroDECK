@@ -1,57 +1,81 @@
-[gd_scene load_steps=48 format=3 uid="uid://61f6m4r1mpan"]
+[gd_scene load_steps=76 format=3 uid="uid://61f6m4r1mpan"]
 
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
+[ext_resource type="Theme" uid="uid://hhc60cllcg47" path="res://assets/themes/default_theme.tres" id="1_if8nh"]
 [ext_resource type="Script" path="res://main.gd" id="1_obpq7"]
-[ext_resource type="Theme" uid="uid://hhc60cllcg47" path="res://assets/themes/default_theme.tres" id="1_xyph5"]
 [ext_resource type="Script" path="res://TabContainer.gd" id="3_id6l4"]
 [ext_resource type="AudioStream" uid="uid://dig4pco500pyt" path="res://res/configurator.mp3" id="3_xivj6"]
 [ext_resource type="Texture2D" uid="uid://dx0u5hiwxfgu5" path="res://res/pixel_ui_theme/8x8_ui_elements.png" id="4_2tuu4"]
+[ext_resource type="Texture2D" uid="uid://bdj8vt3vhucq4" path="res://assets/icons/pixelitos/128/cs-display.png" id="4_jldgc"]
 [ext_resource type="Script" path="res://tk_about.gd" id="4_m4rto"]
 [ext_resource type="Script" path="res://Rekku.gd" id="4_nqqx3"]
-[ext_resource type="Texture2D" uid="uid://cxyml1owhi6de" path="res://res/pixel_ui_theme/8x8_ui_icons.png" id="4_v1scw"]
+[ext_resource type="Texture2D" uid="uid://suusabsjin6e" path="res://assets/icons/pixelitos/128/applications-graphics.png" id="4_q6hd2"]
 [ext_resource type="Texture2D" uid="uid://dk856hwnwsuab" path="res://assets/icons/pixelitos/128/retroarch.png" id="4_xcuib"]
+[ext_resource type="Texture2D" uid="uid://cvr1eijddf6nv" path="res://assets/icons/banner/gamegear.png" id="5_4d7s7"]
 [ext_resource type="Texture2D" uid="uid://d2lm4mfx1gt86" path="res://assets/graphics/retrodeck_base_shake0.png" id="5_7rjbt"]
+[ext_resource type="Texture2D" uid="uid://dv42c6hpi6tde" path="res://assets/icons/pixelitos/128/cs-tiling.png" id="5_box56"]
 [ext_resource type="Script" path="res://helper_text.gd" id="5_cprkf"]
 [ext_resource type="Texture2D" uid="uid://dxdhjp18rgmr4" path="res://res/flags/united_kingdom_32.png" id="5_exkn2"]
+[ext_resource type="Texture2D" uid="uid://du8go5dyabmsl" path="res://assets/icons/banner/gb.png" id="5_ja8to"]
 [ext_resource type="StyleBox" uid="uid://ba3l3ja1jbqpx" path="res://assets/themes/emulators.tres" id="5_rjtkn"]
+[ext_resource type="Texture2D" uid="uid://cboyy7fkdijwg" path="res://assets/icons/pixelitos/128/cs-desktop-effects.png" id="5_uiobi"]
 [ext_resource type="Texture2D" uid="uid://cjv6lhd4g63m3" path="res://assets/graphics/retrodeck_base_shake1.png" id="6_d43n7"]
 [ext_resource type="Texture2D" uid="uid://cru43y7hco6kh" path="res://res/flags/italy_32.png" id="6_fiylw"]
+[ext_resource type="Texture2D" uid="uid://du4mupvvwbusy" path="res://assets/icons/banner/gbc.png" id="6_mvrie"]
+[ext_resource type="Texture2D" uid="uid://debs53e7f7bjp" path="res://assets/icons/pixelitos/128/cs-general.png" id="6_u80kq"]
 [ext_resource type="Texture2D" uid="uid://cxwnt3djsrck7" path="res://assets/icons/pixelitos/128/duckstation.png" id="6_winpq"]
+[ext_resource type="Texture2D" uid="uid://b4jbv7xaqy0sq" path="res://assets/icons/banner/gba.png" id="7_01lqn"]
 [ext_resource type="Texture2D" uid="uid://c2furjlxwkxih" path="res://assets/icons/pixelitos/128/net.kuribo64.melonDS.png" id="7_4otos"]
+[ext_resource type="Texture2D" uid="uid://cpbowpuwjpqtu" path="res://assets/icons/banner/snes.png" id="7_b8xj2"]
+[ext_resource type="Texture2D" uid="uid://b5hwe733546r4" path="res://assets/icons/pixelitos/128/cs-windows.png" id="7_i14ax"]
 [ext_resource type="Texture2D" uid="uid://cyqo650hjucw6" path="res://assets/graphics/retrodeck_base_shake2.png" id="7_mo842"]
 [ext_resource type="Texture2D" uid="uid://cti2vt14gxisl" path="res://res/flags/germany_32.png" id="7_qgxid"]
 [ext_resource type="Texture2D" uid="uid://c7i7mr38qxa4f" path="res://assets/icons/pixelitos/128/org.ppsspp.PPSSPP.png" id="8_akxf7"]
+[ext_resource type="Texture2D" uid="uid://6x4onimvsynx" path="res://assets/icons/pixelitos/128/net.rpcs3.RPCS3.png" id="8_ec4gt"]
 [ext_resource type="Texture2D" uid="uid://bojog0xvms7hr" path="res://assets/graphics/retrodeck_base_shake3.png" id="8_l3t5c"]
 [ext_resource type="Texture2D" uid="uid://bns0ot5pbf03h" path="res://res/flags/sweden_32.png" id="8_lptln"]
+[ext_resource type="Texture2D" uid="uid://buywpflv7of6f" path="res://assets/icons/banner/n64.png" id="8_rvph4"]
 [ext_resource type="Texture2D" uid="uid://uko0ikrtjkj" path="res://assets/graphics/retrodeck_base_shake4.png" id="9_8eqo6"]
+[ext_resource type="Texture2D" uid="uid://pva53gfr7uqq" path="res://assets/icons/pixelitos/128/preferences-desktop-gaming.png" id="9_d2327"]
 [ext_resource type="Texture2D" uid="uid://dhsorn3kcfdcv" path="res://res/flags/ukraine_32.png" id="9_dp7oa"]
-[ext_resource type="Texture2D" uid="uid://djpgrd6fs7u2w" path="res://assets/icons/pixelitos/128/org.zdoom.GZDoom.png" id="9_iu6bj"]
+[ext_resource type="Texture2D" uid="uid://c8q3l08j2hl3a" path="res://assets/icons/pixelitos/128/cs-sound.png" id="9_qwq2k"]
+[ext_resource type="Texture2D" uid="uid://dgdennwyj5g2l" path="res://assets/icons/banner/mastersystem.png" id="9_s3srh"]
+[ext_resource type="Texture2D" uid="uid://cpq0em8j2bank" path="res://assets/icons/banner/megadrive.png" id="10_2jlmn"]
 [ext_resource type="Texture2D" uid="uid://dtwjo7co226dw" path="res://res/flags/japan_32.png" id="10_e8mt0"]
 [ext_resource type="Texture2D" uid="uid://bevamv2c8knnn" path="res://assets/icons/pixelitos/128/org.citra_emu.citra.png" id="10_wbaif"]
 [ext_resource type="Texture2D" uid="uid://dbvjugxp84gsj" path="res://assets/icons/pixelitos/128/org.DolphinEmu.dolphin-emu.png" id="11_61sak"]
+[ext_resource type="Texture2D" uid="uid://c0pbart7aj657" path="res://assets/icons/pixelitos/128/preferences-system-time.png" id="11_c3qcy"]
+[ext_resource type="Texture2D" uid="uid://blwtj4of6fb5y" path="res://assets/icons/pixelitos/128/spacefm.png" id="11_p6y0k"]
 [ext_resource type="Texture2D" uid="uid://cbwhpqip43aei" path="res://res/flags/china_32.png" id="11_ri2fv"]
+[ext_resource type="Texture2D" uid="uid://b763qnm02o5bd" path="res://assets/icons/pixelitos/128/system-reboot.png" id="12_3jrmi"]
+[ext_resource type="Texture2D" uid="uid://dv6sym5rr1hpu" path="res://assets/icons/banner/psx.png" id="12_pp08o"]
+[ext_resource type="Texture2D" uid="uid://ro1kdkjpfq3r" path="res://assets/icons/pixelitos/128/preferences-desktop-notification-bell.png" id="13_8kii4"]
+[ext_resource type="Texture2D" uid="uid://dyw0ondpk6ned" path="res://assets/icons/pixelitos/128/search.png" id="14_oe3l4"]
+[ext_resource type="Texture2D" uid="uid://b164ihk8riiwh" path="res://assets/graphics/space_bground.png" id="15_qdvxo"]
+[ext_resource type="Texture2D" uid="uid://cgh3df7ajg2c4" path="res://assets/icons/pixelitos/128/computer.png" id="17_0kr64"]
+[ext_resource type="Texture2D" uid="uid://cvt2jky3bbjun" path="res://assets/icons/pixelitos/128/drive-removable-media.png" id="18_h2o3e"]
+[ext_resource type="Texture2D" uid="uid://dyumvh0ixwrbl" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0042.png" id="30_glnve"]
+[ext_resource type="Texture2D" uid="uid://cn11vcrybtor4" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0047.png" id="31_j5ri1"]
 [ext_resource type="Texture2D" uid="uid://cor8ep0fkqm08" path="res://res/Rekku/base.png" id="32_omdu2"]
+[ext_resource type="Texture2D" uid="uid://cc7ohmfxafe78" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0043.png" id="33_1ghye"]
 [ext_resource type="Texture2D" uid="uid://cavtn1rljc5oe" path="res://res/Rekku/eyes-open.png" id="33_loftd"]
+[ext_resource type="Texture2D" uid="uid://cs8lh31kh7jv1" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0048.png" id="34_fum2b"]
 [ext_resource type="Texture2D" uid="uid://cv7nckloqhn5m" path="res://res/Rekku/blink1.png" id="34_liw3o"]
 [ext_resource type="Texture2D" uid="uid://by0oj188x350g" path="res://res/Rekku/blink2.png" id="35_dxwop"]
+[ext_resource type="Texture2D" uid="uid://cfa5mn3dsdvw6" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0729.png" id="36_3qttl"]
 [ext_resource type="Texture2D" uid="uid://kx8eypf4ffvu" path="res://res/Rekku/mouth-base.png" id="36_qon8n"]
-[ext_resource type="Texture2D" uid="uid://chd6d8tx081hm" path="res://assets/icons/pixelitos/128/org.mamedev.MAME.png" id="36_r80tt"]
 [ext_resource type="Texture2D" uid="uid://b6gl8sltbak7v" path="res://res/Rekku/mouth-O.png" id="37_2mdp6"]
 [ext_resource type="Texture2D" uid="uid://dpi351mmxu7x6" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0797.png" id="38_prt7u"]
 [ext_resource type="Texture2D" uid="uid://ckyvec3wqx3t" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0798.png" id="39_5ft88"]
 [ext_resource type="Texture2D" uid="uid://n4hywdifr1q4" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0763.png" id="39_m4qgd"]
 [ext_resource type="Texture2D" uid="uid://bwcc0mjxxm0w1" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0764.png" id="40_pnuor"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_icgo5"]
-bg_color = Color(0.941176, 0.388235, 0.917647, 1)
-border_width_left = 5
-border_width_top = 5
-border_width_right = 5
-border_width_bottom = 5
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
+[sub_resource type="GDScript" id="GDScript_203iw"]
+script/source = "extends MarginContainer
+"
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_omewi"]
+bg_color = Color(0.712505, 0, 0.175592, 1)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_lhf2y"]
 animations = [{
@@ -75,20 +99,6 @@ animations = [{
 "name": &"default",
 "speed": 12.0
 }]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_st633"]
-atlas = ExtResource("4_v1scw")
-region = Rect2(72, 56, 8, 8)
-margin = Rect2(1, 1, 1, 1)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_rf0rc"]
-texture = ExtResource("4_2tuu4")
-texture_margin_left = 6.0
-texture_margin_top = 6.0
-texture_margin_right = 6.0
-texture_margin_bottom = 6.0
-region_rect = Rect2(0, 8, 16, 16)
-modulate_color = Color(0.65098, 0.403922, 0.819608, 1)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_k7pd1"]
 animations = [{
@@ -136,6 +146,15 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_rf0rc"]
+texture = ExtResource("4_2tuu4")
+texture_margin_left = 6.0
+texture_margin_top = 6.0
+texture_margin_right = 6.0
+texture_margin_bottom = 6.0
+region_rect = Rect2(0, 8, 16, 16)
+modulate_color = Color(0.65098, 0.403922, 0.819608, 1)
+
 [node name="Control" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -143,7 +162,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("1_xyph5")
+theme = ExtResource("1_if8nh")
 script = ExtResource("1_obpq7")
 metadata/bios_type = 0
 metadata/_edit_horizontal_guides_ = [-2575.0]
@@ -156,207 +175,304 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="Background"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="SplitContainer" type="SplitContainer" parent="Background"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 1.0
+offset_top = 5.0
+offset_right = 1253.0
+offset_bottom = 724.0
 
-[node name="TabContainer" type="TabContainer" parent="Background/MarginContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Background/SplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TabContainer" type="TabContainer" parent="Background/SplitContainer/MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 tab_alignment = 1
-current_tab = 2
+current_tab = 0
 script = ExtResource("3_id6l4")
 
-[node name="TK_GRAPHICS" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
-visible = false
+[node name="Presets" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
+unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/margin_right = 240
+script = SubResource("GDScript_203iw")
+metadata/_tab_index = 0
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets"]
 layout_mode = 2
-size_flags_vertical = 3
 follow_focus = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 64
+size_flags_vertical = 3
 
-[node name="decorations_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer"]
+[node name="decorations_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
+text = "DECORATIONS - Borders, Widescreen"
+icon = ExtResource("4_q6hd2")
 
-[node name="decorations_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container"]
+[node name="graphics_gridcontainer" type="GridContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
 layout_mode = 2
-text = "TK_DECORATIONS"
+columns = 5
 
-[node name="decorations_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container"]
+[node name="wide_screen" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/graphics_gridcontainer"]
+custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
-
-[node name="GridContainer" type="GridContainer" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container"]
-layout_mode = 2
-columns = 2
-
-[node name="borders" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-button_pressed = true
-text = "TK_BORDERS"
-
-[node name="borders_adv_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/GridContainer"]
-layout_mode = 2
-disabled = true
-text = "TK_ADVANCED"
-
-[node name="wide_screen" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 4
+size_flags_vertical = 4
+tooltip_text = "TK_WSCREEN"
 text = "TK_WSCREEN"
+icon = ExtResource("4_jldgc")
+icon_alignment = 1
+vertical_icon_alignment = 0
+expand_icon = true
 
-[node name="wide_screen_adv_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/GridContainer"]
+[node name="shaders" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/graphics_gridcontainer"]
+custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
-disabled = true
-text = "TK_ADVANCED"
-
-[node name="shaders" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-disabled = true
-button_pressed = true
+size_flags_horizontal = 4
+size_flags_vertical = 4
+tooltip_text = "TK_SHADERS"
 text = "TK_SHADERS"
+icon = ExtResource("5_box56")
+icon_alignment = 1
+vertical_icon_alignment = 0
+expand_icon = true
 
-[node name="shaders_adv_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/decorations_container/GridContainer"]
+[node name="mods" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/graphics_gridcontainer"]
+custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
-disabled = true
-text = "TK_ADVANCED"
-
-[node name="extra_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="decorations_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/extra_container"]
-layout_mode = 2
-text = "TK_EXTRA"
-
-[node name="decorations_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/extra_container"]
-layout_mode = 2
-
-[node name="GridContainer" type="GridContainer" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/extra_container"]
-layout_mode = 2
-columns = 2
-
-[node name="wide_screen" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/extra_container/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-disabled = true
-button_pressed = true
+size_flags_horizontal = 4
+size_flags_vertical = 4
+tooltip_text = "TK_MODS"
 text = "TK_MODS"
+icon = ExtResource("6_u80kq")
+icon_alignment = 1
+vertical_icon_alignment = 0
+expand_icon = true
 
-[node name="wide_screen_adv_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/extra_container/GridContainer"]
+[node name="tate_mode" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/graphics_gridcontainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
-disabled = true
-text = "TK_ADVANCED"
-
-[node name="tate_mode" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_GRAPHICS/ScrollContainer/VBoxContainer/extra_container/GridContainer"]
-layout_mode = 2
-disabled = true
+size_flags_horizontal = 4
+size_flags_vertical = 4
+tooltip_text = "TK_TATE"
 text = "TK_TATE"
+icon = ExtResource("7_i14ax")
+icon_alignment = 1
+vertical_icon_alignment = 0
+expand_icon = true
 
-[node name="TK_CONTROLS" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
+[node name="borders_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/graphics_gridcontainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+tooltip_text = "TK_BORDERS"
+text = "TK_BORDERS"
+icon = ExtResource("5_uiobi")
+icon_alignment = 1
+vertical_icon_alignment = 0
+expand_icon = true
+
+[node name="hotkey_sound" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/graphics_gridcontainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+tooltip_text = "TK_HOTKEYSOUND"
+text = "TK_HOTKEYSOUND"
+icon = ExtResource("9_qwq2k")
+clip_text = true
+icon_alignment = 1
+vertical_icon_alignment = 0
+expand_icon = true
+
+[node name="buttons" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/graphics_gridcontainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+tooltip_text = "TK_BTNLAYOUT"
+text = "TK_BTNLAYOUT"
+icon = ExtResource("9_d2327")
+clip_text = true
+icon_alignment = 1
+vertical_icon_alignment = 0
+expand_icon = true
+
+[node name="quick_resume" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/graphics_gridcontainer"]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+tooltip_text = "TK_QRESUME"
+text = "TK_QRESUME"
+icon = ExtResource("11_c3qcy")
+icon_alignment = 1
+vertical_icon_alignment = 0
+expand_icon = true
+metadata/description = "This is a test description set to this element"
+
+[node name="rewind" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/graphics_gridcontainer"]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+tooltip_text = "TK_REWIND"
+text = "TK_REWIND"
+icon = ExtResource("12_3jrmi")
+icon_alignment = 1
+vertical_icon_alignment = 0
+expand_icon = true
+metadata/description = "This is another, very long and convoluted, description, that I put too much commas in to make in LONGER and more SOPHISTICATED. And I did it twice!!!This is another, very long and convoluted, description, that I put too much commas in to make in LONGER and more SOPHISTICATED."
+
+[node name="quit_confirm" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/graphics_gridcontainer"]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+tooltip_text = "TK_CONFIRMEXIT"
+text = "TK_CONFIRMEXIT"
+icon = ExtResource("13_8kii4")
+clip_text = true
+icon_alignment = 1
+vertical_icon_alignment = 0
+expand_icon = true
+
+[node name="cheats" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/graphics_gridcontainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+tooltip_text = "TK_CHEATS"
+text = "TK_CHEATS"
+icon = ExtResource("14_oe3l4")
+clip_text = true
+icon_alignment = 1
+vertical_icon_alignment = 0
+expand_icon = true
+
+[node name="save_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/graphics_gridcontainer"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(125, 125)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/focus = SubResource("StyleBoxFlat_omewi")
+text = "SAVE"
+icon = ExtResource("11_p6y0k")
+icon_alignment = 1
+vertical_icon_alignment = 0
+expand_icon = true
+
+[node name="borders_gridcontainer" type="GridContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
 visible = false
 layout_mode = 2
-theme_override_constants/margin_right = 240
+theme_override_constants/h_separation = 30
+columns = 4
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Background/MarginContainer/TabContainer/TK_CONTROLS"]
+[node name="CheckBox5" type="CheckBox" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/borders_gridcontainer"]
+custom_minimum_size = Vector2(200, 180)
 layout_mode = 2
-follow_focus = true
+size_flags_horizontal = 0
+size_flags_vertical = 0
+icon = ExtResource("5_ja8to")
+expand_icon = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_CONTROLS/ScrollContainer"]
+[node name="CheckBox3" type="CheckBox" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/borders_gridcontainer"]
+custom_minimum_size = Vector2(200, 180)
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 0
+size_flags_vertical = 0
+icon = ExtResource("6_mvrie")
+expand_icon = true
 
-[node name="controls_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_CONTROLS/ScrollContainer/VBoxContainer"]
+[node name="CheckBox4" type="CheckBox" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/borders_gridcontainer"]
+custom_minimum_size = Vector2(200, 180)
 layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+icon = ExtResource("7_01lqn")
+expand_icon = true
 
-[node name="controls_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_CONTROLS/ScrollContainer/VBoxContainer/controls_container"]
+[node name="CheckBox6" type="CheckBox" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/borders_gridcontainer"]
+custom_minimum_size = Vector2(200, 180)
 layout_mode = 2
-text = "TK_CONTROLS"
+size_flags_horizontal = 0
+size_flags_vertical = 0
+icon = ExtResource("7_b8xj2")
+expand_icon = true
 
-[node name="controls_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/TK_CONTROLS/ScrollContainer/VBoxContainer/controls_container"]
+[node name="CheckBox" type="CheckBox" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/borders_gridcontainer"]
+custom_minimum_size = Vector2(200, 180)
 layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+icon = ExtResource("8_rvph4")
+expand_icon = true
 
-[node name="controller_templates_container" type="HBoxContainer" parent="Background/MarginContainer/TabContainer/TK_CONTROLS/ScrollContainer/VBoxContainer/controls_container"]
+[node name="CheckBox7" type="CheckBox" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/borders_gridcontainer"]
+custom_minimum_size = Vector2(200, 180)
 layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+icon = ExtResource("9_s3srh")
+expand_icon = true
 
-[node name="controller_templates" type="Label" parent="Background/MarginContainer/TabContainer/TK_CONTROLS/ScrollContainer/VBoxContainer/controls_container/controller_templates_container"]
+[node name="CheckBox8" type="CheckBox" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/borders_gridcontainer"]
+custom_minimum_size = Vector2(200, 180)
 layout_mode = 2
-size_flags_horizontal = 3
-text = "TK_STEAMCONTEMP"
+size_flags_horizontal = 0
+size_flags_vertical = 0
+icon = ExtResource("10_2jlmn")
+expand_icon = true
 
-[node name="controller_templater_install_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_CONTROLS/ScrollContainer/VBoxContainer/controls_container/controller_templates_container"]
+[node name="CheckBox9" type="CheckBox" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/borders_gridcontainer"]
+custom_minimum_size = Vector2(200, 180)
 layout_mode = 2
-size_flags_horizontal = 10
-size_flags_vertical = 4
-text = "TK_INSTALL"
+size_flags_horizontal = 0
+size_flags_vertical = 0
+icon = ExtResource("5_4d7s7")
+expand_icon = true
 
-[node name="button_layout_container" type="HBoxContainer" parent="Background/MarginContainer/TabContainer/TK_CONTROLS/ScrollContainer/VBoxContainer/controls_container"]
+[node name="CheckBox10" type="CheckBox" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/borders_gridcontainer"]
+custom_minimum_size = Vector2(200, 180)
 layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+icon = ExtResource("12_pp08o")
+expand_icon = true
 
-[node name="button_layout" type="Label" parent="Background/MarginContainer/TabContainer/TK_CONTROLS/ScrollContainer/VBoxContainer/controls_container/button_layout_container"]
+[node name="systems_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
-text = "TK_BTNLAYOUT"
+text = "SYSTEMS - Emulators, Console, Computers"
+icon = ExtResource("17_0kr64")
 
-[node name="button_layout_option" type="OptionButton" parent="Background/MarginContainer/TabContainer/TK_CONTROLS/ScrollContainer/VBoxContainer/controls_container/button_layout_container"]
-layout_mode = 2
-size_flags_horizontal = 10
-size_flags_vertical = 4
-item_count = 2
-selected = 0
-popup/item_0/text = "TK_BTNCLASSIC"
-popup/item_0/id = 0
-popup/item_1/text = "TK_BTNNINTENDO"
-popup/item_1/id = 1
-
-[node name="hotkey_sound" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_CONTROLS/ScrollContainer/VBoxContainer/controls_container"]
-layout_mode = 2
-disabled = true
-button_pressed = true
-text = "TK_HOTKEYSOUND"
-
-[node name="TK_SYSTEM" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
-layout_mode = 2
-theme_override_constants/margin_right = 240
-
-[node name="ScrollContainer" type="ScrollContainer" parent="Background/MarginContainer/TabContainer/TK_SYSTEM"]
-layout_mode = 2
-follow_focus = true
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="controls_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="controls_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/controls_container"]
-layout_mode = 2
-text = "TK_SYSTEM"
-
-[node name="controls_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/controls_container"]
-layout_mode = 2
-
-[node name="GridContainer" type="GridContainer" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer"]
+[node name="systems_gridcontainer" type="GridContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/h_separation = 10
 theme_override_constants/v_separation = 10
 columns = 6
 
-[node name="Button3" type="Button" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/GridContainer"]
+[node name="Button3" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/systems_gridcontainer"]
 layout_mode = 2
 tooltip_text = "RetroARCH"
 theme_override_styles/focus = ExtResource("5_rjtkn")
@@ -364,72 +480,24 @@ text = "RetroArch"
 icon = ExtResource("4_xcuib")
 icon_alignment = 1
 vertical_icon_alignment = 0
-expand_icon = true
 
-[node name="Button4" type="Button" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/GridContainer"]
+[node name="Button8" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/systems_gridcontainer"]
 layout_mode = 2
-tooltip_text = "MAME"
 theme_override_styles/focus = ExtResource("5_rjtkn")
-text = "MAME"
-icon = ExtResource("36_r80tt")
+text = "Dolphin"
+icon = ExtResource("11_61sak")
 icon_alignment = 1
 vertical_icon_alignment = 0
 
-[node name="Button6" type="Button" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/GridContainer"]
-layout_mode = 2
-tooltip_text = "PSPSSPP"
-theme_override_styles/focus = ExtResource("5_rjtkn")
-text = "GZ DOOM"
-icon = ExtResource("9_iu6bj")
-icon_alignment = 1
-vertical_icon_alignment = 0
-
-[node name="Button7" type="Button" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/GridContainer"]
-visible = false
+[node name="Button7" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/systems_gridcontainer"]
 layout_mode = 2
 tooltip_text = "CITRA"
-theme_override_styles/focus = ExtResource("5_rjtkn")
-text = "CITRA"
-icon = ExtResource("10_wbaif")
+text = "RPCS3"
+icon = ExtResource("8_ec4gt")
 icon_alignment = 1
 vertical_icon_alignment = 0
 
-[node name="controls_container2" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="controls_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/controls_container2"]
-layout_mode = 2
-text = "TK_EMULATOR"
-
-[node name="controls_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/controls_container2"]
-layout_mode = 2
-
-[node name="GridContainer2" type="GridContainer" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/h_separation = 10
-theme_override_constants/v_separation = 10
-columns = 6
-
-[node name="Button" type="Button" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/GridContainer2"]
-layout_mode = 2
-tooltip_text = "Duckstation"
-theme_override_styles/focus = ExtResource("5_rjtkn")
-text = "DuckStation"
-icon = ExtResource("6_winpq")
-icon_alignment = 1
-vertical_icon_alignment = 0
-
-[node name="Button2" type="Button" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/GridContainer2"]
-layout_mode = 2
-tooltip_text = "Melon DS"
-theme_override_styles/focus = ExtResource("5_rjtkn")
-text = "MelonDS"
-icon = ExtResource("7_4otos")
-icon_alignment = 1
-vertical_icon_alignment = 0
-
-[node name="Button5" type="Button" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/GridContainer2"]
+[node name="Button5" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/systems_gridcontainer"]
 layout_mode = 2
 tooltip_text = "PSPSSPP"
 theme_override_styles/focus = ExtResource("5_rjtkn")
@@ -438,7 +506,25 @@ icon = ExtResource("8_akxf7")
 icon_alignment = 1
 vertical_icon_alignment = 0
 
-[node name="Button7" type="Button" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/GridContainer2"]
+[node name="Button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/systems_gridcontainer"]
+layout_mode = 2
+tooltip_text = "Duckstation"
+theme_override_styles/focus = ExtResource("5_rjtkn")
+text = "DuckStation"
+icon = ExtResource("6_winpq")
+icon_alignment = 1
+vertical_icon_alignment = 0
+
+[node name="Button2" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/systems_gridcontainer"]
+layout_mode = 2
+tooltip_text = "Melon DS"
+theme_override_styles/focus = ExtResource("5_rjtkn")
+text = "MelonDS"
+icon = ExtResource("7_4otos")
+icon_alignment = 1
+vertical_icon_alignment = 0
+
+[node name="Button9" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/systems_gridcontainer"]
 visible = false
 layout_mode = 2
 tooltip_text = "CITRA"
@@ -448,234 +534,193 @@ icon = ExtResource("10_wbaif")
 icon_alignment = 1
 vertical_icon_alignment = 0
 
-[node name="Button8" type="Button" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/GridContainer2"]
-layout_mode = 2
-theme_override_styles/focus = ExtResource("5_rjtkn")
-text = "Dolphin"
-icon = ExtResource("11_61sak")
-icon_alignment = 1
-vertical_icon_alignment = 0
-
-[node name="HSeparator" type="HSeparator" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="game_control_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_icgo5")
-text = "TK_GAME_SETTINGS"
-
-[node name="VSeparator" type="VSeparator" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-
-[node name="GridContainer" type="GridContainer" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-columns = 3
-
-[node name="quick_resume" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/HBoxContainer/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-button_pressed = true
-text = "TK_QRESUME"
-metadata/description = "This is a test description set to this element"
-
-[node name="quick_resume_adv_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/HBoxContainer/GridContainer"]
-layout_mode = 2
-text = "TK_ADVANCED"
-
-[node name="rewind" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/HBoxContainer/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "TK_REWIND"
-metadata/description = "This is another, very long and convoluted, description, that I put too much commas in to make in LONGER and more SOPHISTICATED. And I did it twice!!!This is another, very long and convoluted, description, that I put too much commas in to make in LONGER and more SOPHISTICATED."
-
-[node name="rewind_adv_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/HBoxContainer/GridContainer"]
-layout_mode = 2
-disabled = true
-text = "TK_ADVANCED"
-
-[node name="quit_confirm" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/HBoxContainer/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-button_pressed = true
-text = "TK_CONFIRMEXIT"
-
-[node name="quit_confirm_adv_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/HBoxContainer/GridContainer"]
-layout_mode = 2
-disabled = true
-text = "TK_ADVANCED"
-
-[node name="cheats" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/HBoxContainer/GridContainer"]
+[node name="save_resume_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
-disabled = true
-text = "TK_CHEATS, TK_SOON"
+text = "FUNCTIONS - Save states, etc"
+icon = ExtResource("18_h2o3e")
 
-[node name="cheats_adv_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/HBoxContainer/GridContainer"]
-layout_mode = 2
-disabled = true
-text = "TK_ADVANCED"
-
-[node name="TK_TOOLS" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
+[node name="TK_SYSTEM" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
-theme_override_constants/margin_right = 240
+metadata/_tab_index = 1
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Background/MarginContainer/TabContainer/TK_TOOLS"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_SYSTEM"]
 layout_mode = 2
 follow_focus = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="controls_container" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="controls_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/controls_container"]
+layout_mode = 2
+text = "TK_SYSTEM"
+
+[node name="controls_separator" type="HSeparator" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/controls_container"]
+layout_mode = 2
+
+[node name="TK_TOOLS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS"]
+layout_mode = 2
+follow_focus = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 36
 
-[node name="scan_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer"]
+[node name="scan_container" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="scan_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
+[node name="scan_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
 layout_mode = 2
 text = "TK_SCAN"
 
-[node name="scan_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
+[node name="scan_separator" type="HSeparator" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
 layout_mode = 2
 
-[node name="ps3_scan" type="Button" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
+[node name="ps3_scan" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
 layout_mode = 2
 disabled = true
 text = "TK_PS3SCAN"
 
-[node name="scummvm_scan" type="Button" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
+[node name="scummvm_scan" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
 layout_mode = 2
 disabled = true
 text = "TK_SCUMMVMSCAN"
 
-[node name="multifile_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
+[node name="multifile_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
 layout_mode = 2
 text = "TK_MULTIFILE"
 
-[node name="3ds_decrypt_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
+[node name="3ds_decrypt_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
 layout_mode = 2
 disabled = true
 text = "TK_3DSDECRYPT"
 
-[node name="bios_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
+[node name="bios_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
 layout_mode = 2
 text = "TK_BIOS"
 
-[node name="bios_button_expert" type="Button" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
+[node name="bios_button_expert" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
 layout_mode = 2
 text = "TK_BIOS_EXPERT"
 
-[node name="tools_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer"]
+[node name="tools_container" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="tools_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/tools_container"]
+[node name="tools_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/tools_container"]
 layout_mode = 2
 text = "TK_GENTOOLS"
 
-[node name="tools_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/tools_container"]
+[node name="tools_separator" type="HSeparator" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/tools_container"]
 layout_mode = 2
 
-[node name="emu_open_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/tools_container"]
+[node name="emu_open_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/tools_container"]
 layout_mode = 2
 text = "TK_EMUOPEN"
 
-[node name="steamgrid_install_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/tools_container"]
+[node name="steamgrid_install_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/tools_container"]
 layout_mode = 2
 disabled = true
 text = "TK_GRIDINSTALL"
 
-[node name="ps3_fw_install_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/tools_container"]
+[node name="ps3_fw_install_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/tools_container"]
 layout_mode = 2
 text = "TK_PS3FWINSTALL"
 
-[node name="fav_steam" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/tools_container"]
+[node name="fav_steam" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/tools_container"]
 layout_mode = 2
 text = "TK_FAVSTEAM"
 
-[node name="file_tools_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer"]
+[node name="file_tools_container" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="file_tools_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
+[node name="file_tools_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
 layout_mode = 2
 text = "TK_FILETOOLS"
 
-[node name="file_tools_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
+[node name="file_tools_separator" type="HSeparator" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
 layout_mode = 2
 
-[node name="usb_tool_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
+[node name="usb_tool_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
 layout_mode = 2
 disabled = true
 text = "TK_USBTOOL"
 
-[node name="backup_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
+[node name="backup_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
 layout_mode = 2
 disabled = true
 text = "TK_BACKUPBTN"
 
-[node name="compress_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
+[node name="compress_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
 layout_mode = 2
 disabled = true
 text = "TK_COMPRESSGAMES"
 
-[node name="move_files_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
+[node name="move_files_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
 layout_mode = 2
 disabled = true
 text = "TK_MOVEFILES"
 
-[node name="TK_NETWORK" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
+[node name="TK_NETWORK" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
-theme_override_constants/margin_right = 240
+metadata/_tab_index = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Background/MarginContainer/TabContainer/TK_NETWORK"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_NETWORK"]
 layout_mode = 2
 follow_focus = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 64
 
-[node name="cheevos_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer"]
+[node name="cheevos_container" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="cheevos" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container"]
+[node name="cheevos" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container"]
 layout_mode = 2
 text = "TK_CHEEVOS"
 
-[node name="cheevos_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container"]
+[node name="cheevos_separator" type="HSeparator" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container"]
 layout_mode = 2
 
-[node name="cheevos_login_container" type="GridContainer" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container"]
+[node name="cheevos_login_container" type="GridContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container"]
 layout_mode = 2
 theme_override_constants/h_separation = 64
 columns = 2
 
-[node name="cheevos_username_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container/cheevos_login_container"]
+[node name="cheevos_username_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container/cheevos_login_container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "TK_CHEEVOSUNAME"
 
-[node name="cheevos_username" type="LineEdit" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container/cheevos_login_container"]
+[node name="cheevos_username" type="LineEdit" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container/cheevos_login_container"]
 custom_minimum_size = Vector2(256, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "username"
 placeholder_text = "username"
 
-[node name="cheevos_pass_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container/cheevos_login_container"]
+[node name="cheevos_pass_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container/cheevos_login_container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "TK_CHEEVOSPWD"
 
-[node name="cheevos_pass" type="LineEdit" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container/cheevos_login_container"]
+[node name="cheevos_pass" type="LineEdit" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container/cheevos_login_container"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "password"
@@ -683,135 +728,134 @@ placeholder_text = "password"
 secret = true
 secret_character = "*"
 
-[node name="cheevos_advanced_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container"]
+[node name="cheevos_advanced_container" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container"]
 layout_mode = 2
 
-[node name="cheevos_advanced_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container/cheevos_advanced_container"]
+[node name="cheevos_advanced_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container/cheevos_advanced_container"]
 layout_mode = 2
 disabled = true
 text = "TK_ADVANCED"
 
-[node name="cheevos_hardcore" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container/cheevos_advanced_container"]
+[node name="cheevos_hardcore" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container/cheevos_advanced_container"]
 layout_mode = 2
 disabled = true
 text = "TK_CHEEVOSHARDCORE"
 
-[node name="cheevos_loginout_container" type="HBoxContainer" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container/cheevos_advanced_container"]
+[node name="cheevos_loginout_container" type="HBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container/cheevos_advanced_container"]
 layout_mode = 2
 size_flags_horizontal = 8
 theme_override_constants/separation = 10
 
-[node name="cheevos_trophies_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container/cheevos_advanced_container/cheevos_loginout_container"]
+[node name="cheevos_trophies_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container/cheevos_advanced_container/cheevos_loginout_container"]
 layout_mode = 2
 disabled = true
 text = "TK_CHEEVOSTROPHYBTN"
 
-[node name="cheevos_loginout_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container/cheevos_advanced_container/cheevos_loginout_container"]
+[node name="cheevos_loginout_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container/cheevos_advanced_container/cheevos_loginout_container"]
 layout_mode = 2
 text = "TK_LOGIN"
 
-[node name="netplay_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer"]
+[node name="netplay_container" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="netplay" type="Label" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/netplay_container"]
+[node name="netplay" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/netplay_container"]
 layout_mode = 2
 text = "TK_NETPLAY"
 
-[node name="netplay_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/netplay_container"]
+[node name="netplay_separator" type="HSeparator" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/netplay_container"]
 layout_mode = 2
 
-[node name="netplay_id_container" type="GridContainer" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/netplay_container"]
+[node name="netplay_id_container" type="GridContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/netplay_container"]
 layout_mode = 2
 theme_override_constants/h_separation = 64
 columns = 2
 
-[node name="netplay_id_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/netplay_container/netplay_id_container"]
+[node name="netplay_id_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/netplay_container/netplay_id_container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 5
 text = "TK_NETPLAYID"
 
-[node name="netplay_id" type="LineEdit" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/netplay_container/netplay_id_container"]
+[node name="netplay_id" type="LineEdit" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/netplay_container/netplay_id_container"]
 custom_minimum_size = Vector2(256, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "RetroDECK"
 placeholder_text = "RetroDECK"
 
-[node name="netplay_address_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/netplay_container/netplay_id_container"]
+[node name="netplay_address_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/netplay_container/netplay_id_container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 5
 text = "TK_NETPLAYADDRESS"
 
-[node name="netplay_address" type="LineEdit" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/netplay_container/netplay_id_container"]
+[node name="netplay_address" type="LineEdit" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/netplay_container/netplay_id_container"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "127.0.0.1"
 placeholder_text = "127.0.0.1"
 
-[node name="blank_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/netplay_container/netplay_id_container"]
+[node name="blank_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/netplay_container/netplay_id_container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 5
 
-[node name="netplay_connect_disconnect_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/netplay_container/netplay_id_container"]
+[node name="netplay_connect_disconnect_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/netplay_container/netplay_id_container"]
 layout_mode = 2
 text = "TK_NETPLAYCONNECT"
 
-[node name="data_mng_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer"]
+[node name="data_mng_container" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="data_mng_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/data_mng_container"]
+[node name="data_mng_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/data_mng_container"]
 layout_mode = 2
 text = "TK_DATAMNG"
 
-[node name="data_mng_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/data_mng_container"]
+[node name="data_mng_separator" type="HSeparator" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/data_mng_container"]
 layout_mode = 2
 
-[node name="saves_sync" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/data_mng_container"]
+[node name="saves_sync" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/data_mng_container"]
 layout_mode = 2
 size_flags_horizontal = 3
 disabled = true
 text = "TK_SAVESSYNC"
 
-[node name="ftp_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/data_mng_container"]
+[node name="ftp_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/data_mng_container"]
 layout_mode = 2
 size_flags_horizontal = 3
 disabled = true
 text = "TK_FTPBTN"
 
-[node name="TK_TROUBLESHOOT" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
+[node name="TK_TROUBLESHOOT" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
-theme_override_constants/margin_right = 240
+metadata/_tab_index = 4
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TROUBLESHOOT"]
 layout_mode = 2
 theme_override_constants/separation = 64
 
-[node name="troubleshoot_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer"]
+[node name="troubleshoot_container" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer"]
 layout_mode = 2
 
-[node name="troubleshoot_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/troubleshoot_container"]
+[node name="troubleshoot_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/troubleshoot_container"]
 layout_mode = 2
 text = "TK_TROUBLESHOOTLBL"
 
-[node name="troubleshoot_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/troubleshoot_container"]
+[node name="troubleshoot_separator" type="HSeparator" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/troubleshoot_container"]
 layout_mode = 2
 
-[node name="check_conn_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/troubleshoot_container"]
+[node name="check_conn_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/troubleshoot_container"]
 layout_mode = 2
 text = "TK_CHECKCONN"
 
-[node name="logs_button" type="OptionButton" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/troubleshoot_container"]
+[node name="logs_button" type="OptionButton" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/troubleshoot_container"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
-item_count = 4
 selected = 0
+item_count = 4
 popup/item_0/text = "TK_LOGSBTN"
-popup/item_0/id = 0
 popup/item_0/disabled = true
 popup/item_0/separator = true
 popup/item_1/text = "RetroDECK Log"
@@ -821,102 +865,140 @@ popup/item_2/id = 2
 popup/item_3/text = "Retroarch"
 popup/item_3/id = 3
 
-[node name="reset_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer"]
+[node name="reset_container" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer"]
 layout_mode = 2
 
-[node name="reset_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/reset_container"]
+[node name="reset_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/reset_container"]
 layout_mode = 2
 text = "TK_RESET"
 
-[node name="reset_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/reset_container"]
+[node name="reset_separator" type="HSeparator" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/reset_container"]
 layout_mode = 2
 
-[node name="reset_single_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/reset_container"]
+[node name="reset_single_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/reset_container"]
 layout_mode = 2
 text = "TK_RESETSINGLE"
 
-[node name="reset_all_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/reset_container"]
+[node name="reset_all_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/reset_container"]
 layout_mode = 2
 text = "TK_RESETALL"
 
-[node name="reset_full_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/reset_container"]
+[node name="reset_full_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/reset_container"]
 layout_mode = 2
 text = "TK_RESETFULL"
 
-[node name="TK_CONFIGURATOR" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
+[node name="controls_container" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer"]
+layout_mode = 2
+
+[node name="controls_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/controls_container"]
+layout_mode = 2
+text = "TK_CONTROLS"
+
+[node name="controls_separator" type="HSeparator" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/controls_container"]
+layout_mode = 2
+
+[node name="controller_templates_container" type="HBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/controls_container"]
+layout_mode = 2
+
+[node name="controller_templates" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/controls_container/controller_templates_container"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "TK_STEAMCONTEMP"
+
+[node name="controller_templater_install_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/controls_container/controller_templates_container"]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+text = "TK_INSTALL"
+
+[node name="button_layout_container" type="HBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/controls_container"]
+layout_mode = 2
+
+[node name="status_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TROUBLESHOOT"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Status:"
+
+[node name="status_code_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TROUBLESHOOT/status_label"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 87.0
+offset_top = 3.0
+offset_right = 144.0
+offset_bottom = 35.0
+
+[node name="Settings" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
-theme_override_constants/margin_right = 240
+metadata/_tab_index = 5
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Background/MarginContainer/TabContainer/TK_CONFIGURATOR"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/Settings"]
 layout_mode = 2
 follow_focus = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/Settings/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 64
 
-[node name="system_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer"]
+[node name="system_container" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/Settings/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="system_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer/system_container"]
+[node name="system_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/Settings/ScrollContainer/VBoxContainer/system_container"]
 layout_mode = 2
 text = "TK_SYSTEM"
 
-[node name="system_separator" type="HSeparator" parent="Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer/system_container"]
+[node name="system_separator" type="HSeparator" parent="Background/SplitContainer/MarginContainer/TabContainer/Settings/ScrollContainer/VBoxContainer/system_container"]
 layout_mode = 2
 
-[node name="update_notification" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer/system_container"]
+[node name="update_notification" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/Settings/ScrollContainer/VBoxContainer/system_container"]
 layout_mode = 2
 button_pressed = true
 text = "TK_UPDATENOTIF"
 
-[node name="easter_eggs" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer/system_container"]
+[node name="easter_eggs" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/Settings/ScrollContainer/VBoxContainer/system_container"]
 layout_mode = 2
 disabled = true
 button_pressed = true
 text = "TK_EASTEREGGS"
 
-[node name="multi_user_container" type="HBoxContainer" parent="Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer/system_container"]
+[node name="multi_user_container" type="HBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/Settings/ScrollContainer/VBoxContainer/system_container"]
 layout_mode = 2
 
-[node name="multi_user_label" type="Label" parent="Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer/system_container/multi_user_container"]
+[node name="multi_user_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/Settings/ScrollContainer/VBoxContainer/system_container/multi_user_container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "TK_MULTIUSR"
 
-[node name="multi_user_option" type="OptionButton" parent="Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer/system_container/multi_user_container"]
+[node name="multi_user_option" type="OptionButton" parent="Background/SplitContainer/MarginContainer/TabContainer/Settings/ScrollContainer/VBoxContainer/system_container/multi_user_container"]
 layout_mode = 2
 size_flags_horizontal = 10
-item_count = 3
 selected = 0
+item_count = 3
 popup/item_0/text = "TK_OFF"
-popup/item_0/id = 0
 popup/item_1/text = "TK_STEAMUSR"
 popup/item_1/id = 1
 popup/item_2/text = "TK_CUSTOMUSR"
 popup/item_2/id = 2
 
-[node name="menu_music" type="CheckButton" parent="Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer/system_container"]
+[node name="menu_music" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/Settings/ScrollContainer/VBoxContainer/system_container"]
 layout_mode = 2
 button_pressed = true
 text = "TK_MUSIC"
 
-[node name="fancy_audio_player_here_(please_no)" type="Label" parent="Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer/system_container"]
+[node name="fancy_audio_player_here_(please_no)" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/Settings/ScrollContainer/VBoxContainer/system_container"]
 layout_mode = 2
 size_flags_vertical = 1
 text = "|| ------( )--------"
 
-[node name="theme_optionbutton" type="OptionButton" parent="Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer"]
+[node name="theme_optionbutton" type="OptionButton" parent="Background/SplitContainer/MarginContainer/TabContainer/Settings/ScrollContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-item_count = 5
 selected = 0
+item_count = 5
 popup/item_0/text = "Choose Theme"
-popup/item_0/id = 0
 popup/item_0/disabled = true
 popup/item_0/separator = true
 popup/item_1/text = "Default"
@@ -928,81 +1010,30 @@ popup/item_3/id = 3
 popup/item_4/text = "OpenDyslexic3"
 popup/item_4/id = 4
 
-[node name="TK_ABOUT" type="MarginContainer" parent="Background/MarginContainer/TabContainer"]
+[node name="TK_ABOUT" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
-theme_override_constants/margin_right = 240
 script = ExtResource("4_m4rto")
+metadata/_tab_index = 6
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Background/MarginContainer/TabContainer/TK_ABOUT"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_ABOUT"]
 layout_mode = 2
 
-[node name="about_container" type="VBoxContainer" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer"]
+[node name="about_container" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer"]
 layout_mode = 2
 alignment = 1
 
-[node name="about_header" type="RichTextLabel" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container"]
-clip_contents = false
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_font_sizes/normal_font_size = 23
-text = "TK_ABOUTHEADER"
-scroll_active = false
-
-[node name="website_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "TK_WEBSITE"
-
-[node name="changelog_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "TK_CHANGELOG"
-
-[node name="wiki_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "TK_WIKI"
-
-[node name="credits_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "TK_CREDITS"
-
-[node name="donate_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "TK_DONATE"
-
-[node name="contactus_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "TK_CONTACTUS"
-
-[node name="licenses_button" type="Button" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "TK_LICENSES"
-
-[node name="ScrollContainer2" type="ScrollContainer" parent="Background/MarginContainer/TabContainer/TK_ABOUT"]
-custom_minimum_size = Vector2(300, 200)
-layout_mode = 2
-size_flags_horizontal = 4
-follow_focus = true
-horizontal_scroll_mode = 0
-vertical_scroll_mode = 0
-
-[node name="rd_title" type="RichTextLabel" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer2"]
+[node name="rd_title" type="RichTextLabel" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container"]
 unique_name_in_owner = true
 clip_contents = false
-custom_minimum_size = Vector2(300, 300)
+custom_minimum_size = Vector2(300, 150)
 layout_mode = 2
 text = "RetroDECK"
 scroll_active = false
 autowrap_mode = 2
+tab_size = 2
 
-[node name="logo" type="TextureRect" parent="Background/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer2/rd_title"]
+[node name="logo" type="TextureRect" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container/rd_title"]
 custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
 offset_left = 166.0
@@ -1015,116 +1046,35 @@ texture = ExtResource("1_axfei")
 expand_mode = 1
 stretch_mode = 4
 
-[node name="side_logo" type="Control" parent="Background"]
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -254.0
-offset_top = -277.0
-offset_right = -13.0
-offset_bottom = -57.0
-grow_horizontal = 0
-grow_vertical = 2
+[node name="about_header" type="RichTextLabel" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container"]
+clip_contents = false
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 23
+text = "TK_ABOUTHEADER"
+scroll_active = false
 
-[node name="logo" type="TextureRect" parent="Background/side_logo"]
+[node name="GridContainer" type="GridContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 20
+columns = 5
+
+[node name="logo_animated" type="AnimatedSprite2D" parent="Background/SplitContainer/MarginContainer"]
+unique_name_in_owner = true
 visible = false
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -64.0
-offset_right = 64.0
-offset_bottom = 128.0
-grow_horizontal = 2
-texture = ExtResource("1_axfei")
-expand_mode = 5
-
-[node name="status_label" type="Label" parent="Background/side_logo"]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 46.0
-offset_top = 605.5
-offset_right = 153.0
-offset_bottom = 646.5
-text = "Status:"
-
-[node name="status_code_label" type="Label" parent="Background/side_logo/status_label"]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 87.0
-offset_top = 3.0
-offset_right = 144.0
-offset_bottom = 35.0
-
-[node name="logo_animated" type="AnimatedSprite2D" parent="Background/side_logo"]
-unique_name_in_owner = true
-position = Vector2(159, 514)
+position = Vector2(1374, 104)
 scale = Vector2(0.28, 0.288333)
 sprite_frames = SubResource("SpriteFrames_lhf2y")
 frame = 4
 frame_progress = 1.0
 
-[node name="exit_button" type="Button" parent="Background"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -40.0
-offset_top = 81.0
-offset_right = -19.0
-offset_bottom = 102.0
-grow_horizontal = 0
-icon = SubResource("AtlasTexture_st633")
+[node name="side_logo" type="Control" parent="Background/SplitContainer"]
+layout_mode = 2
 
-[node name="locale_option" type="OptionButton" parent="Background"]
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -68.0
-offset_top = -39.0
-offset_right = -9.0
-offset_bottom = -10.0
-grow_horizontal = 0
-grow_vertical = 0
-item_count = 7
-selected = 0
-popup/item_0/text = ""
-popup/item_0/icon = ExtResource("5_exkn2")
-popup/item_0/id = 0
-popup/item_1/text = ""
-popup/item_1/icon = ExtResource("6_fiylw")
-popup/item_1/id = 1
-popup/item_2/text = ""
-popup/item_2/icon = ExtResource("7_qgxid")
-popup/item_2/id = 2
-popup/item_3/text = ""
-popup/item_3/icon = ExtResource("8_lptln")
-popup/item_3/id = 3
-popup/item_4/text = ""
-popup/item_4/icon = ExtResource("9_dp7oa")
-popup/item_4/id = 4
-popup/item_5/text = ""
-popup/item_5/icon = ExtResource("10_e8mt0")
-popup/item_5/id = 5
-popup/item_6/text = ""
-popup/item_6/icon = ExtResource("11_ri2fv")
-popup/item_6/id = 6
-
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("3_xivj6")
-volume_db = -11.243
-
-[node name="CanvasModulate" type="CanvasModulate" parent="."]
-position = Vector2(134, 151)
-color = Color(0.858824, 0.890196, 1, 1)
-
-[node name="rekku" type="Control" parent="."]
+[node name="rekku" type="Control" parent="Background/SplitContainer/side_logo"]
 visible = false
 layout_mode = 1
 anchors_preset = 7
@@ -1132,75 +1082,96 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -0.00012207
-offset_top = 5.0
-offset_right = -0.00012207
-offset_bottom = 5.0
+offset_left = -506.0
+offset_top = 447.0
+offset_right = -506.0
+offset_bottom = 447.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 1
 mouse_default_cursor_shape = 8
 script = ExtResource("4_nqqx3")
 
-[node name="speach_bubble" type="Panel" parent="rekku"]
+[node name="rekku_sprite" type="Sprite2D" parent="Background/SplitContainer/side_logo/rekku"]
+position = Vector2(530.5, -989)
+scale = Vector2(0.264648, 0.302734)
+texture = ExtResource("32_omdu2")
+
+[node name="blink_anim" type="AnimatedSprite2D" parent="Background/SplitContainer/side_logo/rekku/rekku_sprite"]
+sprite_frames = SubResource("SpriteFrames_k7pd1")
+animation = &"blink"
+autoplay = "blink"
+frame_progress = 0.188668
+
+[node name="speech_anim" type="AnimatedSprite2D" parent="Background/SplitContainer/side_logo/rekku/rekku_sprite"]
+sprite_frames = SubResource("SpriteFrames_l20mt")
+animation = &"speech"
+autoplay = "speech"
+
+[node name="speach_bubble" type="Panel" parent="Background/SplitContainer/side_logo/rekku"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -310.0
-offset_top = -206.0
-offset_right = 310.0
-offset_bottom = -66.0
+offset_left = 395.0
+offset_top = -830.0
+offset_right = 673.0
+offset_bottom = -402.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxTexture_rf0rc")
 
-[node name="helper_text" type="RichTextLabel" parent="rekku/speach_bubble"]
+[node name="helper_text" type="RichTextLabel" parent="Background/SplitContainer/side_logo/rekku"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -300.0
-offset_top = -60.0
-offset_right = 300.0
-offset_bottom = 60.0
+offset_left = 414.0
+offset_top = -815.0
+offset_right = 668.0
+offset_bottom = -420.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "Rekku:
 
 When \"Quick Resume\" is enabled, a savestate is created upon quit and it will be loaded once the game is started.
 This is mot working on the following systems: Switch, WiiU."
+fit_content = true
 scroll_following = true
 script = ExtResource("5_cprkf")
 
-[node name="rekku_sprite" type="Sprite2D" parent="rekku"]
-position = Vector2(481, -562)
-scale = Vector2(0.293, 0.293)
-texture = ExtResource("32_omdu2")
+[node name="TextureRect" type="TextureRect" parent="Background/SplitContainer/side_logo"]
+visible = false
+layout_mode = 0
+offset_left = -82.0
+offset_top = -120.0
+offset_right = 247.0
+offset_bottom = 676.0
+texture = ExtResource("15_qdvxo")
+expand_mode = 1
 
-[node name="blink_anim" type="AnimatedSprite2D" parent="rekku/rekku_sprite"]
-sprite_frames = SubResource("SpriteFrames_k7pd1")
-animation = &"blink"
-autoplay = "blink"
-frame_progress = 0.188668
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Background"]
+stream = ExtResource("3_xivj6")
+volume_db = -11.243
 
-[node name="speech_anim" type="AnimatedSprite2D" parent="rekku/rekku_sprite"]
-sprite_frames = SubResource("SpriteFrames_l20mt")
-animation = &"speech"
-autoplay = "speech"
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+visible = false
+position = Vector2(134, 151)
+color = Color(0.858824, 0.890196, 1, 1)
 
 [node name="coltroller_guide" type="PanelContainer" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -52.0
+offset_left = 5.0
+offset_top = -69.0
+offset_right = -337.0
 grow_horizontal = 2
 grow_vertical = 0
 
@@ -1208,34 +1179,97 @@ grow_vertical = 0
 layout_mode = 2
 theme_override_colors/default_color = Color(1, 1, 1, 0.607843)
 theme_override_font_sizes/normal_font_size = 23
-text = "(A) Accept (B) Back (L/R) Tab Switch (Menu) Exit"
 fit_content = true
 scroll_active = false
 
-[node name="l1_button" type="TextureButton" parent="."]
+[node name="a_button" type="TextureButton" parent="coltroller_guide/controller_guide_text"]
 unique_name_in_owner = true
 layout_mode = 2
-offset_left = 6.0
-offset_top = -3.0
-offset_right = 90.0
-offset_bottom = 56.0
+offset_left = 147.0
+offset_top = -5.0
+offset_right = 231.0
+offset_bottom = 54.0
+texture_normal = ExtResource("30_glnve")
+texture_pressed = ExtResource("31_j5ri1")
+stretch_mode = 0
+
+[node name="b_button" type="TextureButton" parent="coltroller_guide/controller_guide_text"]
+unique_name_in_owner = true
+layout_mode = 2
+offset_left = 314.0
+offset_top = -4.0
+offset_right = 398.0
+offset_bottom = 55.0
+texture_normal = ExtResource("33_1ghye")
+texture_pressed = ExtResource("34_fum2b")
+stretch_mode = 0
+
+[node name="l1_button" type="TextureButton" parent="coltroller_guide/controller_guide_text"]
+unique_name_in_owner = true
+layout_mode = 2
+offset_left = 7.0
+offset_top = -6.0
+offset_right = 91.0
+offset_bottom = 53.0
 texture_normal = ExtResource("38_prt7u")
 texture_pressed = ExtResource("39_m4qgd")
 stretch_mode = 0
 
-[node name="r1_button" type="TextureButton" parent="."]
+[node name="r1_button" type="TextureButton" parent="coltroller_guide/controller_guide_text"]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 1189.0
-offset_top = -2.0
-offset_right = 1273.0
-offset_bottom = 57.0
+offset_left = 832.0
+offset_top = -8.0
+offset_right = 916.0
+offset_bottom = 51.0
 texture_normal = ExtResource("39_5ft88")
 texture_pressed = ExtResource("40_pnuor")
 stretch_mode = 0
 
-[connection signal="pressed" from="Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/HBoxContainer/GridContainer/quick_resume_adv_button" to="." method="_on_quickresume_advanced_pressed"]
-[connection signal="pressed" from="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container/bios_button" to="." method="_on_bios_button_pressed"]
-[connection signal="pressed" from="Background/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container/bios_button_expert" to="." method="_on_bios_button_expert_pressed"]
-[connection signal="pressed" from="Background/exit_button" to="." method="_on_exit_button_pressed"]
-[connection signal="item_selected" from="Background/locale_option" to="." method="_on_locale_selected"]
+[node name="exit_button" type="Button" parent="coltroller_guide/controller_guide_text"]
+layout_mode = 2
+offset_left = 567.0
+offset_top = -11.0
+offset_right = 651.0
+offset_bottom = 48.0
+grow_horizontal = 0
+scale = Vector2(1.4, 1.4)
+icon = ExtResource("36_3qttl")
+flat = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="locale_option" type="OptionButton" parent="coltroller_guide/controller_guide_text"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -217.0
+offset_top = -46.0
+offset_right = -158.0
+offset_bottom = -17.0
+grow_horizontal = 0
+grow_vertical = 0
+selected = 0
+item_count = 7
+popup/item_0/icon = ExtResource("5_exkn2")
+popup/item_1/icon = ExtResource("6_fiylw")
+popup/item_1/id = 1
+popup/item_2/icon = ExtResource("7_qgxid")
+popup/item_2/id = 2
+popup/item_3/icon = ExtResource("8_lptln")
+popup/item_3/id = 3
+popup/item_4/icon = ExtResource("9_dp7oa")
+popup/item_4/id = 4
+popup/item_5/icon = ExtResource("10_e8mt0")
+popup/item_5/id = 5
+popup/item_6/icon = ExtResource("11_ri2fv")
+popup/item_6/id = 6
+
+[connection signal="pressed" from="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container/bios_button" to="." method="_on_bios_button_pressed"]
+[connection signal="pressed" from="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container/bios_button_expert" to="." method="_on_bios_button_expert_pressed"]
+[connection signal="pressed" from="coltroller_guide/controller_guide_text/exit_button" to="." method="_on_exit_button_pressed"]
+[connection signal="item_selected" from="coltroller_guide/controller_guide_text/locale_option" to="." method="_on_locale_selected"]

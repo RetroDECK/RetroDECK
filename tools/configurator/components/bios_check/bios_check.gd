@@ -14,10 +14,8 @@ func _ready():
 	$".".theme = custom_theme
 	#Check if XDG_RUNTIME_DIR is set and choose temp file location
 	if OS.has_environment("XDG_RUNTIME_DIR"):
-		#temporary hack for Tim
-		# This uses tempfs system revisit
-		#bios_tempfile = OS.get_environment("XDG_RUNTIME_DIR") + "/godot_temp/godot_bios_files_checked.tmp"
-		bios_tempfile = "/var/config/retrodeck/godot/godot_bios_files_checked.tmp"
+		bios_tempfile = OS.get_environment("XDG_RUNTIME_DIR") + "/godot_temp/godot_bios_files_checked.tmp"
+		#bios_tempfile = "/var/config/retrodeck/godot/godot_bios_files_checked.tmp"
 	else:
 		bios_tempfile = "/var/config/retrodeck/godot/godot_bios_files_checked.tmp"
 
