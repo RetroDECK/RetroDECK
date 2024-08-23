@@ -38,7 +38,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: recursive
-          
+
       - name: Prepare Godot
         run: |
           wget -q -O godot_linux.zip https://github.com/godotengine/godot-builds/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip
@@ -54,7 +54,7 @@ jobs:
         if: ${{ github.event.inputs.job_target == 'linux' || github.event.inputs.job_target == 'both' }}
         run: |
           mkdir -p ${{ env.EXPORT_FOLDER_LINUX }}
-          ./Godot_v${GODOT_VERSION}-stable_linux.x86_64 --import ${{  env.GODOT_PROJECT_LOCATION }} --quiet --headless --export-debug Linux/X11 64-bit ${{ env.MAIN_FOLDER }}/${{ env.EXPORT_FOLDER_LINUX }}/${{ env.APPLICATION_NAME}}.x86_64
+          ./Godot_v${GODOT_VERSION}-stable_linux.x86_64 --import ${{  env.GODOT_PROJECT_LOCATION }} --quiet --headless --export-debug "Linux/X11 64-bit" ${{ env.MAIN_FOLDER }}/${{ env.EXPORT_FOLDER_LINUX }}/${{ env.APPLICATION_NAME}}.x86_64
           chmod +x ${{ env.EXPORT_FOLDER_LINUX }}/${{ env.APPLICATION_NAME }}.sh
           chmod +x ${{ env.EXPORT_FOLDER_LINUX }}/${{ env.APPLICATION_NAME }}.x86_64
 
