@@ -34,6 +34,11 @@ jobs:
       - name: Installing dependencies
         run: pacman -Syu --noconfirm git bash yasm python python-pip scons gcc diffutils make wget unzip tar mingw-w64 
 
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          
       - name: Prepare Godot
         run: |
           wget -q -O godot_linux.zip https://github.com/godotengine/godot-builds/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip
