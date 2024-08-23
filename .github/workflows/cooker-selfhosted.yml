@@ -62,8 +62,14 @@ jobs:
 
       - name: Get branch name
         id: branch_name
-        run: echo "BRANCH_NAME=$(echo $GITHUB_REF | sed 's|refs/heads/||')" >> $GITHUB_ENV
-
+        run: |
+          if [[ "$GITHUB_EVENT_NAME" == "pull_request" || "$GITHUB_EVENT_NAME" == "pull_request_target" ]]; then
+            source_branch="${{ github.head_ref }}"
+            echo "BRANCH_NAME=$source_branch" >> $GITHUB_ENV
+          else
+            branch_name=$(echo $GITHUB_REF | sed 's|refs/heads/||')
+            echo "BRANCH_NAME=$branch_name" >> $GITHUB_ENV
+          fi
       
       # if the branch is coming from a PR the tag should be manually built
       - name: "Generate version tag and evaluating latest tag"
