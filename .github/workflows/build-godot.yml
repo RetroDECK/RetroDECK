@@ -92,7 +92,7 @@ jobs:
         if: ${{ github.event.inputs.job_target == 'mac' || github.event.inputs.job_target == 'all' }}
         run: |
           mkdir -p ${{ env.EXPORT_FOLDER_MAC }}
-          ./Godot_v${GODOT_VERSION}-stable_linux.x86_64 --import ${{  env.GODOT_PROJECT_LOCATION }} --quiet --headless --export-debug "macOS" ${{ env.MAIN_FOLDER }}/${{ env.EXPORT_FOLDER_MAC}}/${{ env.APPLICATION_NAME}}
+          ./Godot_v${GODOT_VERSION}-stable_linux.x86_64 --import ${{  env.GODOT_PROJECT_LOCATION }} --quiet --headless --export-debug "macOS" ${{ env.MAIN_FOLDER }}/${{ env.EXPORT_FOLDER_MAC}}/${{ env.APPLICATION_NAME}}.app
 
       - name: Uploading GDExtension artifact debug
         if: ${{ github.event.inputs.job_target == 'mac' || github.event.inputs.job_target == 'all' }}
