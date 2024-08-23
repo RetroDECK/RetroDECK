@@ -1,6 +1,16 @@
-[gd_resource type="Theme" load_steps=2 format=3 uid="uid://co27jgr76wvcl"]
+[gd_resource type="Theme" load_steps=5 format=3 uid="uid://co27jgr76wvcl"]
 
 [ext_resource type="FontFile" uid="uid://c8lbo5ljgtaaa" path="res://assets/fonts/OpenDyslexic3/OpenDyslexic3-Regular.ttf" id="1_d8f12"]
+[ext_resource type="Texture2D" uid="uid://buod4n6hw4i2m" path="res://assets/icons/pixelitos/vcs-normal.svg" id="1_pvl23"]
+[ext_resource type="Texture2D" uid="uid://cn0tfnnihjvy7" path="res://assets/icons/pixelitos/vcs-grey.svg" id="2_ud3yg"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ghisc"]
+bg_color = Color(0.6, 0.168627, 0.6, 0.372549)
 
 [resource]
 default_font = ExtResource("1_d8f12")
+Button/styles/focus = SubResource("StyleBoxFlat_ghisc")
+CheckBox/constants/check_v_offset = 0
+CheckBox/constants/h_separation = 0
+CheckBox/icons/checked = ExtResource("1_pvl23")
+CheckBox/icons/unchecked = ExtResource("2_ud3yg")
