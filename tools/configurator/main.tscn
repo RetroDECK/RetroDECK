@@ -383,10 +383,10 @@ unique_name_in_owner = true
 visible = false
 layout_mode = 2
 theme_override_constants/h_separation = 30
-columns = 4
+columns = 6
 
 [node name="CheckBox5" type="CheckBox" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/borders_gridcontainer"]
-custom_minimum_size = Vector2(200, 180)
+custom_minimum_size = Vector2(175, 175)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
@@ -394,7 +394,7 @@ icon = ExtResource("5_ja8to")
 expand_icon = true
 
 [node name="CheckBox3" type="CheckBox" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/borders_gridcontainer"]
-custom_minimum_size = Vector2(200, 180)
+custom_minimum_size = Vector2(175, 175)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
@@ -402,7 +402,7 @@ icon = ExtResource("6_mvrie")
 expand_icon = true
 
 [node name="CheckBox4" type="CheckBox" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/borders_gridcontainer"]
-custom_minimum_size = Vector2(200, 180)
+custom_minimum_size = Vector2(175, 175)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
@@ -410,7 +410,7 @@ icon = ExtResource("7_01lqn")
 expand_icon = true
 
 [node name="CheckBox6" type="CheckBox" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/borders_gridcontainer"]
-custom_minimum_size = Vector2(200, 180)
+custom_minimum_size = Vector2(175, 175)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
@@ -418,7 +418,7 @@ icon = ExtResource("7_b8xj2")
 expand_icon = true
 
 [node name="CheckBox" type="CheckBox" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/borders_gridcontainer"]
-custom_minimum_size = Vector2(200, 180)
+custom_minimum_size = Vector2(175, 175)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
@@ -426,7 +426,7 @@ icon = ExtResource("8_rvph4")
 expand_icon = true
 
 [node name="CheckBox7" type="CheckBox" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/borders_gridcontainer"]
-custom_minimum_size = Vector2(200, 180)
+custom_minimum_size = Vector2(175, 175)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
@@ -434,7 +434,7 @@ icon = ExtResource("9_s3srh")
 expand_icon = true
 
 [node name="CheckBox8" type="CheckBox" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/borders_gridcontainer"]
-custom_minimum_size = Vector2(200, 180)
+custom_minimum_size = Vector2(175, 175)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
@@ -442,7 +442,7 @@ icon = ExtResource("10_2jlmn")
 expand_icon = true
 
 [node name="CheckBox9" type="CheckBox" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/borders_gridcontainer"]
-custom_minimum_size = Vector2(200, 180)
+custom_minimum_size = Vector2(175, 175)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
@@ -450,7 +450,7 @@ icon = ExtResource("5_4d7s7")
 expand_icon = true
 
 [node name="CheckBox10" type="CheckBox" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/borders_gridcontainer"]
-custom_minimum_size = Vector2(200, 180)
+custom_minimum_size = Vector2(175, 175)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
