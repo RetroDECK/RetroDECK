@@ -3,14 +3,6 @@ run-name: Build Godot Configurator(DEBUG) for RetroDECK
 on: 
   workflow_dispatch:
     inputs:
-      build_target:
-        description: 'Select the build target'
-        required: true
-        default: 'debug'
-        type: choice
-        options:
-          - debug
-          - release
       job_target:
         description: 'Select the platform'
         required: true
