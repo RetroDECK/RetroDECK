@@ -74,7 +74,7 @@ jobs:
         if: ${{ github.event.inputs.job_target == 'windows' || github.event.inputs.job_target == 'both' }}
         run: |
           mkdir -p ${{ env.EXPORT_FOLDER_WINDOWS }}
-          ./Godot_v${GODOT_VERSION}-stable_linux.x86_64 --import ${{  env.GODOT_PROJECT_LOCATION }} --quiet --headless --export-debug Windows ${{ env.MAIN_FOLDER }}/${{ env.EXPORT_FOLDER_WINDOWS }}/${{ env.APPLICATION_NAME}}.exe
+          ./Godot_v${GODOT_VERSION}-stable_linux.x86_64 --import ${{  env.GODOT_PROJECT_LOCATION }} --quiet --headless --export-debug "windows" ${{ env.MAIN_FOLDER }}/${{ env.EXPORT_FOLDER_WINDOWS }}/${{ env.APPLICATION_NAME}}.exe
 
       - name: Uploading GDExtension artifact debug
         if: ${{ github.event.inputs.job_target == 'windows' || github.event.inputs.job_target == 'both' }}
