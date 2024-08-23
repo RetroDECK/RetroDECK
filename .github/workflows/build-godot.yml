@@ -32,7 +32,7 @@ jobs:
           echo "MAIN_FOLDER=$pwd" >> $GITHUB_ENV
 
       - name: Installing dependencies
-        run: pacman -Syu --noconfirm git bash yasm python python-pip scons gcc diffutils make wget unzip tar ming-w64 
+        run: pacman -Syu --noconfirm git bash yasm python python-pip scons gcc diffutils make wget unzip tar mingw-w64 
 
       - name: Prepare Godot
         run: |
