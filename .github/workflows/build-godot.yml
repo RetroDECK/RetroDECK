@@ -42,7 +42,7 @@ jobs:
           mkdir -p ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
           unzip godot_export_templates.tpz -d ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
           mv ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable/templates/* ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable/
-          sed -i 's/config\/version=\"[^]\*"/config\/version=\"${{ env.date }}-debug\"/' ${{ env.GODOT_PROJECT_LOCATION }}
+          sed -i 's/config\/version=\"[^"]\*"/config\/version=\"${{ env.date }}-debug\"/' ${{ env.GODOT_PROJECT_LOCATION }}
            
       # DEBUG BUILDS
       - name: Building debug Linux
@@ -72,7 +72,7 @@ jobs:
           ./Godot_v${GODOT_VERSION}-stable_linux.x86_64 --import ${{  env.GODOT_PROJECT_LOCATION }} --quiet --headless --export-debug Windows ${{ env.MAIN_FOLDER }}/${{ env.EXPORT_FOLDER_WINDOWS }}/${{ env.APPLICATION_NAME}}.exe
 
       - name: Uploading GDExtension artifact debug
-        if: ${{ github.event.inputs.job_target == 'linux' || github.event.inputs.job_target == 'both' }}
+        if: ${{ github.event.inputs.job_target == 'windows' || github.event.inputs.job_target == 'both' }}
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.APPLICATION_NAME }}_windows_debug_${{ env.date }}
