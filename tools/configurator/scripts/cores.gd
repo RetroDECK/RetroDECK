@@ -1,6 +1,6 @@
 extends Resource
 
-class_name SystemCores
+class_name RetroDeckCores
 @export var name: String
 @export var description: String
 @export var system: String

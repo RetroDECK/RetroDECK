@@ -45,7 +45,7 @@ func _ready():
 			print("Description: ", emulator.description)
 			print("Properties:")
 			# Iterate over properties and show each one
-			for property: SystemProperty in emulator.properties:
+			for property: EmulatorProperty in emulator.properties:
 				print("Cheevos: ", property.cheevos)
 				print("Borders: ", property.borders)
 				print("ABXY_button:", property.abxy_button)
