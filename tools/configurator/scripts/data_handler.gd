@@ -2,7 +2,7 @@ extends Node
 
 class_name DataHandler
 
-var data_file_path = "/app/retrodeck/config/retrodeck/reference_lists/features.json"
+var data_file_path = "../../config/retrodeck/reference_lists/features.json"
 var app_data: AppData
 
 func _ready():
@@ -47,8 +47,25 @@ func load_base_data() -> AppData:
 						if property_data.has("multi_user_config_dir"):
 							property.multi_user_config_dir = property_data.get("multi_user_config_dir",true)
 						emulator.properties.append(property)
-				
 				emulators[key] = emulator
+				
+			var retroarch_cores = {}
+			for key in data_dict["core_retroarch"].keys():
+				var core_data = data_dict["core_retroarch"][key]
+				var core = RetroarchCore.new()
+				core.name = core_data["name"]
+				core.description = core_data["description"]
+				#core.system = core_data["system"]
+				if core_data.has("properties"):
+					for property_data in core_data["properties"]:
+						print (core.name,"----",property_data)
+						var property = EmulatorProperty.new()
+						property.cheevos = true
+						property.cheevos_hardcore = true
+						property.quick_resume = true	
+						
+				retroarch_cores[key] = core
+					
 			var app_dict = AppData.new()
 			app_dict.about_links = about_links
 			app_dict.emulators = emulators
@@ -184,7 +201,7 @@ func add_emulator() -> void:
 	app_data.about_links["example_site"] = link
 
 	var emulator = Emulator.new()
-	emulator.name = "Example Emulator"
+	emulator.name = "Example System"
 	emulator.description = "An example emulator."
 	var property = EmulatorProperty.new()
 	#property.standalone = true
@@ -203,7 +220,7 @@ func modify_emulator_test() -> void:
 	new_property.abxy_button = true
 	new_properties.append(new_property)
 
-	data_handler.modify_emulator("example_emulator", "Updated Emulator", "Updated description",  new_properties)
+	data_handler.modify_emulator("example_emulator", "Updated System", "Updated description",  new_properties)
 	
 
 func parse_config_to_json(file_path: String) -> Dictionary:

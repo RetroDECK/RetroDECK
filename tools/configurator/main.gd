@@ -22,12 +22,13 @@ var l1_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts
 var r1_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0798.png")
 var a_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0042.png")
 var b_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0043.png")
-
 var app_data := AppData.new()
+
 func _ready():
 	_get_nodes()
 	_connect_signals()
 	_play_main_animations()
+
 	%locale_option.selected = class_functions.map_locale_id(OS.get_locale_language())
 	app_data = data_handler.app_data
 	#data_handler.add_emulator()
@@ -40,12 +41,13 @@ func _ready():
 		for key in app_data.emulators.keys():
 			var emulator = app_data.emulators[key]
 			# Display the properties of each emulator
-			print("Emulator Name: ", emulator.name)
+			print("System Name: ", emulator.name)
 			print("Description: ", emulator.description)
 			print("Properties:")
 			# Iterate over properties and show each one
 			for property: EmulatorProperty in emulator.properties:
 				print("Cheevos: ", property.cheevos)
+				print("Borders: ", property.borders)
 				print("ABXY_button:", property.abxy_button)
 				print("multi_user_config_dir: ", property.multi_user_config_dir)		
 	else:
@@ -75,7 +77,8 @@ func _ready():
 		if (n.is_class("BaseButton") and n.disabled == true): #if button-like control and disabled
 			n.self_modulate.a = 0.5 #make it half transparent
 	combine_tkeys()
-
+	
+	
 func _input(event):
 	if Input.is_action_pressed("quit1") and Input.is_action_pressed("quit2"):
 		get_tree().quit()
@@ -114,6 +117,7 @@ func _connect_signals() -> void:
 	%decorations_button.pressed.connect(_hide_show_containers.bind(%decorations_button, %decorations_gridcontainer))
 	%systems_button.pressed.connect(_hide_show_containers.bind(%systems_button, %systems_gridcontainer))
 	%save_resume_button.pressed.connect(_hide_show_containers.bind(%decorations_button,%systems_gridcontainer))
+<<<<<<< HEAD
 =======
 	%borders_button.pressed.connect(_hide_show.bind(%borders_button))
 	%save_button.pressed.connect(_hide_show.bind(%save_button))
@@ -122,6 +126,9 @@ func _connect_signals() -> void:
 	%save_resume_button.pressed.connect(_hide_show_containers.bind(%decorations_button))
 >>>>>>> 9bf1c2d886a879160c8f0ae3ed5115373588e55a
 	
+=======
+			
+>>>>>>> feat/godot
 func _load_log(index: int) -> void:
 	var log_content:String
 	match index:
