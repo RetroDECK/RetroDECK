@@ -37,19 +37,41 @@ func _ready():
 		var website_data: Link = app_data.about_links["rd_web"]
 		print (website_data.name,"-",website_data.url,"-",website_data.description,"-",website_data.url)
 		#print (app_data.about_links["rd_web"]["name"])
-		
-		for key in app_data.emulators.keys():
-			var emulator = app_data.emulators[key]
-			# Display the properties of each emulator
-			print("System Name: ", emulator.name)
-			print("Description: ", emulator.description)
-			print("Properties:")
-			# Iterate over properties and show each one
-			for property: EmulatorProperty in emulator.properties:
-				print("Cheevos: ", property.cheevos)
-				print("Borders: ", property.borders)
-				print("ABXY_button:", property.abxy_button)
-				print("multi_user_config_dir: ", property.multi_user_config_dir)		
+		var core_data: RetroarchCore = app_data.retroarch_cores["gambatte_libetro"]
+		print (core_data.name)
+		for property: CoreProperty in core_data.properties:
+			print("Cheevos: ", property.cheevos)
+			print("Cheevos Hardcore: ", property.cheevos_hardcore)
+			print("Quick Resume: ", property.quick_resume)
+			print("Rewind: ", property.rewind)
+			print("Borders: ", property.borders)
+			print("Widescreen: ", property.widescreen)
+			print("ABXY_button:", property.abxy_button)
+		#for key in app_data.emulators.keys():
+			#var emulator = app_data.emulators[key]
+			## Display the properties of each emulator
+			#print("System Name: ", emulator.name)
+			#print("Description: ", emulator.description)
+			#print("Properties:")
+			#for property: EmulatorProperty in emulator.properties:
+				#print("Cheevos: ", property.cheevos)
+				#print("Borders: ", property.borders)
+				#print("ABXY_button:", property.abxy_button)
+				#print("multi_user_config_dir: ", property.multi_user_config_dir)
+		#
+		#for key in app_data.retroarch_cores.keys():
+			#var core = app_data.retroarch_cores[key]
+			#print("Core Name: ", core.name)
+			#print("Description: ", core.description)
+			#print("Properties:")
+			#for property: CoreProperty in core.properties:
+				#print("Cheevos: ", property.cheevos)
+				#print("Cheevos Hardcore: ", property.cheevos_hardcore)
+				#print("Quick Resume: ", property.quick_resume)
+				#print("Rewind: ", property.rewind)
+				#print("Borders: ", property.borders)
+				#print("Widescreen: ", property.widescreen)
+				#print("ABXY_button:", property.abxy_button)
 	else:
 		print ("No emulators")
 

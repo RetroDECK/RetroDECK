@@ -36,7 +36,7 @@ func load_base_data() -> AppData:
 				emulator.description = emulator_data["description"]
 				if emulator_data.has("properties"):
 					for property_data in emulator_data["properties"]:
-						print (emulator,"----",property_data)
+						#print (emulator,"----",property_data)
 						var property = EmulatorProperty.new()
 						if property_data.has("cheevos"):
 							property.cheevos = property_data.get("cheevos",true)
@@ -55,20 +55,28 @@ func load_base_data() -> AppData:
 				var core = RetroarchCore.new()
 				core.name = core_data["name"]
 				core.description = core_data["description"]
-				#core.system = core_data["system"]
 				if core_data.has("properties"):
 					for property_data in core_data["properties"]:
-						print (core.name,"----",property_data)
-						var property = EmulatorProperty.new()
+						#print (core.name,"----",property_data)
+						var property = CoreProperty.new()
 						property.cheevos = true
 						property.cheevos_hardcore = true
 						property.quick_resume = true	
-						
+						if property_data.has("abxy_button"):
+							property.abxy_button = property_data.get("abxy_button",true)
+						if property_data.has("widescreen"):
+							property.widescreen = property_data.get("widescreen",true)
+						if property_data.has("borders"):
+							property.borders = property_data.get("borders",true)
+						if property_data.has("rewind"):
+							property.rewind = property_data.get("rewind",true)
+						core.properties.append(property)	
 				retroarch_cores[key] = core
 					
 			var app_dict = AppData.new()
 			app_dict.about_links = about_links
 			app_dict.emulators = emulators
+			app_dict.retroarch_cores = retroarch_cores
 			return app_dict
 		else:
 			print("Error parsing JSON")

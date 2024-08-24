@@ -211,43 +211,42 @@ size_flags_vertical = 3
 
 [node name="GridContainer" type="GridContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/Gobals/ScrollContainer/VBoxContainer"]
 layout_mode = 2
+columns = 3
 
-[node name="Widescreen5" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/Gobals/ScrollContainer/VBoxContainer"]
+[node name="Widescreen6" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/Gobals/ScrollContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
-text = "QUICK RESUME - FOR THOSE THAT GET INTERUPPTED A LOT!"
+text = "BUTTON SWAP
+"
 icon = ExtResource("4_q6hd2")
 
-[node name="decorations_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/Gobals/ScrollContainer/VBoxContainer"]
+[node name="Widescreen2" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/Gobals/ScrollContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
-text = "BORDERS - ADD COOL BORDERS ETC ETC ETC"
+text = "MODS"
+icon = ExtResource("4_q6hd2")
+
+[node name="Widescreen5" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/Gobals/ScrollContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "QUICK RESUME"
+icon = ExtResource("4_q6hd2")
+
+[node name="decorations_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/Gobals/ScrollContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "BORDERS"
 icon = ExtResource("4_jldgc")
 
-[node name="Widescreen" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/Gobals/ScrollContainer/VBoxContainer"]
+[node name="Widescreen" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/Gobals/ScrollContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
-text = "SHADERS - PUT ON YOUR SHADES
-"
+text = "SHADERS"
 icon = ExtResource("4_q6hd2")
 
-[node name="Widescreen2" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/Gobals/ScrollContainer/VBoxContainer"]
+[node name="Widescreen3" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/Gobals/ScrollContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
-text = "MODS - WHAT ABOUT THE ROCKERS!
-"
+text = "QUICK REWIND"
 icon = ExtResource("4_q6hd2")
 
-[node name="Widescreen6" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/Gobals/ScrollContainer/VBoxContainer"]
+[node name="Widescreen4" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/Gobals/ScrollContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
-text = "BUTTON SWAP - NINTENDO FANS ONLY!
-"
-icon = ExtResource("4_q6hd2")
-
-[node name="Widescreen3" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/Gobals/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-text = "QUICK REWIND - SOUNDS LIKE A CHEET TO ME"
-icon = ExtResource("4_q6hd2")
-
-[node name="Widescreen4" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/Gobals/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-text = "TATE MODE - SOUNDS LIKE AN ART GALLERY"
+text = "TATE MODE"
 icon = ExtResource("4_q6hd2")
 
 [node name="decorations_gridcontainer" type="GridContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/Gobals/ScrollContainer/VBoxContainer"]
