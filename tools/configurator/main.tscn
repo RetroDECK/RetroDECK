@@ -215,13 +215,21 @@ layout_mode = 2
 text = "DECORATIONS - Borders, Widescreen"
 icon = ExtResource("4_q6hd2")
 
+<<<<<<< HEAD
 [node name="decorations_gridcontainer" type="GridContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer"]
+=======
+[node name="graphics_gridcontainer" type="GridContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer"]
+>>>>>>> 9bf1c2d886a879160c8f0ae3ed5115373588e55a
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 columns = 5
 
+<<<<<<< HEAD
 [node name="wide_screen" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/decorations_gridcontainer"]
+=======
+[node name="wide_screen" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/graphics_gridcontainer"]
+>>>>>>> 9bf1c2d886a879160c8f0ae3ed5115373588e55a
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -233,7 +241,11 @@ icon_alignment = 1
 vertical_icon_alignment = 0
 expand_icon = true
 
+<<<<<<< HEAD
 [node name="shaders" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/decorations_gridcontainer"]
+=======
+[node name="shaders" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/graphics_gridcontainer"]
+>>>>>>> 9bf1c2d886a879160c8f0ae3ed5115373588e55a
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -245,7 +257,11 @@ icon_alignment = 1
 vertical_icon_alignment = 0
 expand_icon = true
 
+<<<<<<< HEAD
 [node name="mods" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/decorations_gridcontainer"]
+=======
+[node name="mods" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/graphics_gridcontainer"]
+>>>>>>> 9bf1c2d886a879160c8f0ae3ed5115373588e55a
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -257,7 +273,11 @@ icon_alignment = 1
 vertical_icon_alignment = 0
 expand_icon = true
 
+<<<<<<< HEAD
 [node name="tate_mode" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/decorations_gridcontainer"]
+=======
+[node name="tate_mode" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/graphics_gridcontainer"]
+>>>>>>> 9bf1c2d886a879160c8f0ae3ed5115373588e55a
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
@@ -270,7 +290,11 @@ icon_alignment = 1
 vertical_icon_alignment = 0
 expand_icon = true
 
+<<<<<<< HEAD
 [node name="borders_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/decorations_gridcontainer"]
+=======
+[node name="borders_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/graphics_gridcontainer"]
+>>>>>>> 9bf1c2d886a879160c8f0ae3ed5115373588e55a
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
@@ -283,7 +307,11 @@ icon_alignment = 1
 vertical_icon_alignment = 0
 expand_icon = true
 
+<<<<<<< HEAD
 [node name="hotkey_sound" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/decorations_gridcontainer"]
+=======
+[node name="hotkey_sound" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/graphics_gridcontainer"]
+>>>>>>> 9bf1c2d886a879160c8f0ae3ed5115373588e55a
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
@@ -297,7 +325,11 @@ icon_alignment = 1
 vertical_icon_alignment = 0
 expand_icon = true
 
+<<<<<<< HEAD
 [node name="button_layout" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/decorations_gridcontainer"]
+=======
+[node name="buttons" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/graphics_gridcontainer"]
+>>>>>>> 9bf1c2d886a879160c8f0ae3ed5115373588e55a
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
@@ -311,7 +343,11 @@ icon_alignment = 1
 vertical_icon_alignment = 0
 expand_icon = true
 
+<<<<<<< HEAD
 [node name="quick_resume" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/decorations_gridcontainer"]
+=======
+[node name="quick_resume" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/graphics_gridcontainer"]
+>>>>>>> 9bf1c2d886a879160c8f0ae3ed5115373588e55a
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -324,7 +360,11 @@ vertical_icon_alignment = 0
 expand_icon = true
 metadata/description = "This is a test description set to this element"
 
+<<<<<<< HEAD
 [node name="rewind" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/decorations_gridcontainer"]
+=======
+[node name="rewind" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/graphics_gridcontainer"]
+>>>>>>> 9bf1c2d886a879160c8f0ae3ed5115373588e55a
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -337,7 +377,11 @@ vertical_icon_alignment = 0
 expand_icon = true
 metadata/description = "This is another, very long and convoluted, description, that I put too much commas in to make in LONGER and more SOPHISTICATED. And I did it twice!!!This is another, very long and convoluted, description, that I put too much commas in to make in LONGER and more SOPHISTICATED."
 
+<<<<<<< HEAD
 [node name="quit_confirm" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/decorations_gridcontainer"]
+=======
+[node name="quit_confirm" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/graphics_gridcontainer"]
+>>>>>>> 9bf1c2d886a879160c8f0ae3ed5115373588e55a
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -350,7 +394,11 @@ icon_alignment = 1
 vertical_icon_alignment = 0
 expand_icon = true
 
+<<<<<<< HEAD
 [node name="cheats" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/decorations_gridcontainer"]
+=======
+[node name="cheats" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/graphics_gridcontainer"]
+>>>>>>> 9bf1c2d886a879160c8f0ae3ed5115373588e55a
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
@@ -364,7 +412,11 @@ icon_alignment = 1
 vertical_icon_alignment = 0
 expand_icon = true
 
+<<<<<<< HEAD
 [node name="decorations_save" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/decorations_gridcontainer"]
+=======
+[node name="save_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer/VBoxContainer/graphics_gridcontainer"]
+>>>>>>> 9bf1c2d886a879160c8f0ae3ed5115373588e55a
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(125, 125)
