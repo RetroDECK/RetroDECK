@@ -9,3 +9,4 @@ class_name EmulatorProperty
 @export var ask_to_exit: bool 
 @export var multi_user_config_dir: String
 @export var universal_dyn_input: bool 
+@export var quick_resume: bool 
