@@ -31,13 +31,13 @@ func load_base_data() -> AppData:
 			var emulators = {}
 			for key in data_dict["emulator"].keys():
 				var emulator_data = data_dict["emulator"][key]
-				var emulator = Emulator.new()
+				var emulator = System.new()
 				emulator.name = emulator_data["name"]
 				emulator.description = emulator_data["description"]
 				if emulator_data.has("properties"):
 					for property_data in emulator_data["properties"]:
 						print (emulator,"----",property_data)
-						var property = EmulatorProperty.new()
+						var property = SystemProperty.new()
 						if property_data.has("cheevos"):
 							property.cheevos = property_data.get("cheevos",true)
 						if property_data.has("cheevos_hardcore"):
@@ -160,7 +160,7 @@ func modify_emulator(key: String, new_name: String, new_description: String, new
 		# Update properties
 		emulator.properties.clear()
 		for property in new_properties:
-			var new_property = EmulatorProperty.new()
+			var new_property = SystemProperty.new()
 			new_property.borders = property.borders
 			new_property.abxy_button = property.abxy_button
 			new_property.ask_to_exit = property.ask_to_exit
@@ -170,9 +170,9 @@ func modify_emulator(key: String, new_name: String, new_description: String, new
 
 		app_dict.emulators[key] = emulator
 		save_base_data(app_dict)
-		print("Emulator modified successfully")
+		print("System modified successfully")
 	else:
-		print("Emulator not found")
+		print("System not found")
 
 
 func add_emulator() -> void:
@@ -183,10 +183,10 @@ func add_emulator() -> void:
 	link.description = "An example description."
 	app_data.about_links["example_site"] = link
 
-	var emulator = Emulator.new()
-	emulator.name = "Example Emulator"
+	var emulator = System.new()
+	emulator.name = "Example System"
 	emulator.description = "An example emulator."
-	var property = EmulatorProperty.new()
+	var property = SystemProperty.new()
 	#property.standalone = true
 	property.abxy_button = false
 	emulator.properties.append(property)
@@ -198,12 +198,12 @@ func modify_emulator_test() -> void:
 
 
 	var new_properties = []
-	var new_property = EmulatorProperty.new()
+	var new_property = SystemProperty.new()
 	#new_property.standalone = false
 	new_property.abxy_button = true
 	new_properties.append(new_property)
 
-	data_handler.modify_emulator("example_emulator", "Updated Emulator", "Updated description",  new_properties)
+	data_handler.modify_emulator("example_emulator", "Updated System", "Updated description",  new_properties)
 	
 
 func parse_config_to_json(file_path: String) -> Dictionary:

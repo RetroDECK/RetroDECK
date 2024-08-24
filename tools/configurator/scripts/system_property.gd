@@ -1,5 +1,5 @@
 extends Resource
-class_name EmulatorProperty
+class_name SystemProperty
 
 @export var borders: bool
 @export var abxy_button: bool 
