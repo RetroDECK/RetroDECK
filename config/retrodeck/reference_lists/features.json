@@ -620,6 +620,9 @@
       "pokemini": {
         "name": "Nintendo Pokémon Mini"
       },
+      "portmaster": {
+        "name": "PortMaster"
+      },
       "ports": {
         "name": "Ports"
       },
@@ -1094,6 +1097,12 @@
         "name": "xemu",
         "system": "xbox",
         "launch": "xemu"
+      },
+      "portmaster": {
+        "description": "PortMaster",
+        "name": "PortMaster",
+        "system": "portmaster",
+        "launch": "PortMaster"
       }
     }
   }

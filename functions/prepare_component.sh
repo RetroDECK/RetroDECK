@@ -865,8 +865,9 @@ prepare_component() {
     log i "----------------------"
 
     rm -rf "/var/data/PortMaster"
-    create_dir "/var/data/PortMaster"
-    cp "$config/PortMaster/control.txt" "/var/data/PortMaster/"
+    unzip "/app/retrodeck/PortMaster.zip" -d "/var/data/"
+    chmod +x "/var/data/PortMaster/PortMaster.sh"
+    ln -s "/app/bin/PortMaster" "$roms_folder/portmaster/PortMaster.sh"
   fi
 
   if [[ $component_found == "false" ]]; then
