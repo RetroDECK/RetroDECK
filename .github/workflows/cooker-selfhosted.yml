@@ -37,7 +37,9 @@ jobs:
 
       # Circumventing this bug: https://github.com/flatpak/flatpak-builder/issues/317
       - name: Remove stuck mounts
-        run: sudo umount -f /home/ubuntu/actions-runner/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles/*
+        run: |
+          sudo umount -f /home/ubuntu/actions-runner/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles/*
+          sudo umount -f $HOME/actions-run/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles/*
         continue-on-error: true
 
       - name: Generate a token for Rekku
