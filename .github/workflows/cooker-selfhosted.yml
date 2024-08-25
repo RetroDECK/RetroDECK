@@ -15,7 +15,7 @@ on:
      - '*.sh'
      - 'net.retrodeck.retrodeck.yml'
      - 'net.retrodeck.retrodeck.appdata.xml'
-  pull_request_target: 
+  pull_request: 
     branches:
      - cooker*
 
