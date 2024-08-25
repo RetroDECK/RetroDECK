@@ -15,9 +15,8 @@ on:
      - '*.sh'
      - 'net.retrodeck.retrodeck.yml'
      - 'net.retrodeck.retrodeck.appdata.xml'
-  pull_request_target: 
-    branches:
-     - cooker*
+  pull_request_target:
+  pull_request:
 
   # Italy (CET): 11:00 PM
   # Japan (JST): 7:00 AM
