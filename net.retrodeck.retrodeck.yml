@@ -542,8 +542,7 @@ modules:
           - |
             #!/bin/bash
             "/var/data/PortMaster/PortMaster.sh" "$@"
-        dest-filename: PortMaster.sh
-        
+        dest-filename: PortMaster.sh   
 
   # ES-DE
 
