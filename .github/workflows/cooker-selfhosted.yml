@@ -56,6 +56,12 @@ jobs:
         with:
           submodules: 'true'
 
+      - name: Checkout PR branch (include changes)
+        if: ${{ github.event_name == 'pull_request' }}
+        run: |
+          git fetch origin +refs/pull/${{ github.event.pull_request.number }}/merge
+          git checkout -qf FETCH_HEAD
+        
       - name: "Install dependencies"
         run: "automation_tools/install_dependencies.sh"    
 
