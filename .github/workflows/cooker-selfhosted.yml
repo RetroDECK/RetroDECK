@@ -15,7 +15,7 @@ on:
      - '*.sh'
      - 'net.retrodeck.retrodeck.yml'
      - 'net.retrodeck.retrodeck.appdata.xml'
-  pull_request_target: 
+  pull_request: 
     branches:
      - cooker*
 
@@ -37,7 +37,9 @@ jobs:
 
       # Circumventing this bug: https://github.com/flatpak/flatpak-builder/issues/317
       - name: Remove stuck mounts
-        run: sudo umount -f /home/ubuntu/actions-runner/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles/*
+        run: |
+          sudo umount -f /home/ubuntu/actions-runner/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles/*
+          sudo umount -f $HOME/actions-run/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles/*
         continue-on-error: true
 
       - name: Generate a token for Rekku
@@ -81,14 +83,19 @@ jobs:
 
           # Check if the event is related to a pull request
           if [[ "$GITHUB_EVENT_NAME" == "pull_request" || "$GITHUB_EVENT_NAME" == "pull_request_target" ]]; then
-            pr_number=$(echo "$GITHUB_REF" | awk -F'/' '{print $3}')
-            source_branch=$(curl -s "https://api.github.com/repos/RetroDECK/RetroDECK/pulls/$pr_number" | jq -r '.head.ref')
-            source_branch=${source_branch//\//-}  # Replace '/' with '-' in the branch name
+            # Use GITHUB_HEAD_REF to get the source branch
+            source_branch="${GITHUB_HEAD_REF}"
+
+            # Replace '/' with '-' in the branch name
+            source_branch=${source_branch//\//-}
             echo "[DEBUG] source branch is: $source_branch"
-            echo "TAG=PR-$pr_number-$(echo $source_branch-${{ env.buildid }} | sed 's/\//-/g')" >> $GITHUB_ENV
-            echo "MAKE_LATEST=false" >> $GITHUB_ENV # if it's a feature branch it will not marked as "latest" cooker version
+
+            # Generate the tag for a pull request
+            echo "TAG=PR-$GITHUB_RUN_ID-$source_branch-${{ env.buildid }}" >> $GITHUB_ENV
+            echo "MAKE_LATEST=false" >> $GITHUB_ENV  # Not marked as the latest cooker version if it's a feature branch
           else
-            TAG="$MANIFEST_VERSION-${{ env.buildid }} | sed 's/\//-/g'"
+            # Generate the tag for non-pull request branches
+            TAG="$MANIFEST_VERSION-${{ env.buildid }}"
             echo "TAG=$TAG" >> $GITHUB_ENV
             echo "MAKE_LATEST=true" >> $GITHUB_ENV
           fi
