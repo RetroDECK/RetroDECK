@@ -531,12 +531,19 @@ modules:
     build-commands:
       - mkdir -p "${FLATPAK_DEST}/retrodeck/PortMaster/"
       - cp retrodeck.portmaster.zip "${FLATPAK_DEST}/retrodeck/PortMaster.zip"
-      - ln -s "/var/data/PortMaster/PortMaster.sh" "${FLATPAK_DEST}/bin/PortMaster"
+      - cp "PortMaster.sh" "${FLATPAK_DEST}/bin/PortMaster"
       - chmod +x ${FLATPAK_DEST}/PortMaster
     sources:
       - type: file
         url: https://github.com/PortsMaster/PortMaster-GUI/releases/download/2024.08.24-1111/retrodeck.portmaster.zip
         sha256: 20a78192995a55ffdfdf4cd9343897c6d1ef50351a8800d188e084f90a847726
+      - type: script
+        commands:
+          - |
+            #!/bin/bash
+            "/var/data/PortMaster/PortMaster.sh" "$@"
+        dest-filename: PortMaster.sh
+        
 
   # ES-DE
 
