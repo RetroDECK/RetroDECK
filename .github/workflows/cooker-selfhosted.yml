@@ -92,7 +92,7 @@ jobs:
             echo "[DEBUG] source branch is: $source_branch"
 
             # Generate the tag for a pull request
-            echo "TAG=PR-$GITHUB_RUN_ID-$source_branch-${{ env.buildid }}" >> $GITHUB_ENV
+            echo "TAG=PR-$source_branch-${{ env.buildid }}" >> $GITHUB_ENV
             echo "MAKE_LATEST=false" >> $GITHUB_ENV  # Not marked as the latest cooker version if it's a feature branch
           else
             # Generate the tag for non-pull request branches
