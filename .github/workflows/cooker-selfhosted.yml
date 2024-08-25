@@ -54,7 +54,6 @@ jobs:
         with:
           fetch-depth: 0
           submodules: 'true'
-          ref: ${{ github.sha }}
         
       - name: "Install dependencies"
         run: "automation_tools/install_dependencies.sh"    
