@@ -531,7 +531,7 @@ modules:
     build-commands:
       - mkdir -p "${FLATPAK_DEST}/retrodeck/PortMaster/"
       - cp retrodeck.portmaster.zip "${FLATPAK_DEST}/retrodeck/PortMaster.zip"
-      - cp "PortMaster" "${FLATPAK_DEST}/bin/PortMaster"
+      - cp "PortMaster" "${FLATPAK_DEST}/bin/"
       - chmod +x ${FLATPAK_DEST}/PortMaster
     sources:
       - type: file
