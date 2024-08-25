@@ -5,17 +5,16 @@ on:
     branches:
      - cooker*
      - feat*
+     - branch/cooker*
     paths:
      - '.github/workflows/**'
      - 'automation_tools/**'
      - 'config/**'
-     - 'config/es-de/**'
      - 'functions/**'
      - 'rd-submodules/**'
      - '*.sh'
      - 'net.retrodeck.retrodeck.yml'
      - 'net.retrodeck.retrodeck.appdata.xml'
-  pull_request_target:
   pull_request:
 
   # Italy (CET): 11:00 PM
@@ -32,7 +31,7 @@ jobs:
 
   Building_RetroDECK:
     runs-on: retrodeck
-    steps:        
+    steps:
 
       # Circumventing this bug: https://github.com/flatpak/flatpak-builder/issues/317
       - name: Remove stuck mounts
@@ -53,9 +52,7 @@ jobs:
       - name: Clone RetroDECK repo
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
           submodules: 'true'
-          ref: ${{ github.sha }}
         
       - name: "Install dependencies"
         run: "automation_tools/install_dependencies.sh"    
