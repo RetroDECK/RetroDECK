@@ -37,7 +37,7 @@ func _ready():
 		var website_data: Link = app_data.about_links["rd_web"]
 		print (website_data.name,"-",website_data.url,"-",website_data.description,"-",website_data.url)
 		#print (app_data.about_links["rd_web"]["name"])
-		var core_data: RetroarchCore = app_data.retroarch_cores["gambatte_libetro"]
+		var core_data: Core = app_data.cores["gambatte_libetro"]
 		print (core_data.name)
 		for property: CoreProperty in core_data.properties:
 			print("Cheevos: ", property.cheevos)

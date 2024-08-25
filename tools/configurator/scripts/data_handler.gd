@@ -49,10 +49,10 @@ func load_base_data() -> AppData:
 						emulator.properties.append(property)
 				emulators[key] = emulator
 				
-			var retroarch_cores = {}
-			for key in data_dict["core_retroarch"].keys():
-				var core_data = data_dict["core_retroarch"][key]
-				var core = RetroarchCore.new()
+			var cores = {}
+			for key in data_dict["emulator"]["retroarch"]["cores"].keys():
+				var core_data = data_dict["emulator"]["retroarch"]["cores"][key]
+				var core = Core.new()
 				core.name = core_data["name"]
 				core.description = core_data["description"]
 				if core_data.has("properties"):
@@ -71,12 +71,12 @@ func load_base_data() -> AppData:
 						if property_data.has("rewind"):
 							property.rewind = property_data.get("rewind",true)
 						core.properties.append(property)	
-				retroarch_cores[key] = core
-					
+				cores[key] = core
+				
 			var app_dict = AppData.new()
 			app_dict.about_links = about_links
 			app_dict.emulators = emulators
-			app_dict.retroarch_cores = retroarch_cores
+			app_dict.cores = cores
 			return app_dict
 		else:
 			print("Error parsing JSON")

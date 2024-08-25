@@ -1,6 +1,6 @@
 extends Resource
 
-class_name RetroarchCore
+class_name Core
 
 @export var name: String
 @export var description: String

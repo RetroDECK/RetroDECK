@@ -1,3 +1,4 @@
+
 {
 	"about_links": {
 	  "rd_changelog": {
@@ -794,7 +795,162 @@
 			"cheevos_hardcore": true,
 			"quick_resume": true
 		  }
-		]
+		],
+		"cores": {
+		  "citra_libretro": {
+			"description": "Nintendo 3DS Libretro Core",
+			"name": "Citra",
+			"system": "n3ds",
+			"properties": [
+			  {
+				"abxy_button": true
+			  }
+			]
+		  },
+		  "mame_libretro": {
+			"description": "MAME: Multiple Arcade Machine Libretro Core",
+			"name": "MAME",
+			"system": "arcade",
+			"properties": [
+			  {
+				"tate_mode": true
+			  }
+			]
+		  },
+		  "desmume_libretro": {
+			"description": "DeSmuME Nintendo DS Libretro Core",
+			"name": "desmume",
+			"system": "nds",
+			"properties": [
+			  {
+				"abxy_button": true
+			  }
+			]
+		  },
+		  "melonds_libretro": {
+			"description": "MelonDS Nintendo DS Libretro Core",
+			"name": "melonds",
+			"system": "nds",
+			"properties": [
+			  {
+				"abxy_button": true
+			  }
+			]
+		  },
+		  "swanstation_libretro": {
+			"name": "SwanStation",
+			"description": "Swanstation Libretro Core",
+			"system": "psx",
+			"properties": [
+			  {
+				"widescreen": true,
+				"borders": true
+			  }
+			]
+		  },
+		  "picodrive_libetro": {
+			"name": "PicoDrive",
+			"description": "SEGA MS/MD/CD/32X Libretro Core",
+			"system": [
+			  "ms",
+			  "md",
+			  "cd",
+			  "32x"
+			],
+			"properties": [
+			  {
+				"widescreen": true,
+				"borders": true,
+				"rewind": true
+			  }
+			]
+		  },
+		  "genesisplusgx_libetro": {
+			"name": "Genesis Plus GX",
+			"description": "SEGA MS/GG/MD/CD Libretro Core",
+			"system": [
+			  "ms",
+			  "gg",
+			  "mc",
+			  "cd"
+			],
+			"properties": [
+			  {
+				"widescreen": true,
+				"borders": true,
+				"rewind": true
+			  }
+			]
+		  },
+		  "genesisplusgxwide_libetro": {
+			"name": "Genesis Plus GX Wide",
+			"description": "SEGA MS/GG/MD/CD Libretro Core for Wide Screen",
+			"system": [
+			  "ms",
+			  "gg",
+			  "mc",
+			  "cd"
+			],
+			"properties": [
+			  {
+				"widescreen": true,
+				"rewind": true
+			  }
+			]
+		  },
+		  "mupen64plus-next_libetro": {
+			"name": "Mupen64Plus-Next",
+			"description": "Nintendo 64 Libretro Core",
+			"system": "n64",
+			"properties": [
+			  {
+				"widescreen": true,
+				"borders": true,
+				"abxy_button": true
+			  }
+			]
+		  },
+		  "snes9x-current_libetro": {
+			"name": "Snes9x - Current",
+			"description": "Super Nintendo Libretro Core",
+			"system": "snes",
+			"properties": [
+			  {
+				"widescreen": true,
+				"borders": true,
+				"rewind": true,
+				"abxy_button": true
+			  }
+			]
+		  },
+		  "gambatte_libetro": {
+			"name": "Gambatte",
+			"description": "Game Boy/Color Libretro Core",
+			"system": [
+			  "gb",
+			  "gbc"
+			],
+			"properties": [
+			  {
+				"borders": true,
+				"rewind": true,
+				"abxy_button": true
+			  }
+			]
+		  },
+		  "mgba_libetro": {
+			"name": "mGBA",
+			"description": "Game Boy Advance Libretro Core",
+			"system": "gba",
+			"properties": [
+			  {
+				"borders": true,
+				"rewind": true,
+				"abxy_button": true
+			  }
+			]
+		  }
+		}
 	  },
 	  "mame": {
 		"description": "MAME: Multiple Arcade Machine Emulator",
@@ -951,161 +1107,6 @@
 		"name": "ES-DE",
 		"launch": "es-de"
 	  }
-	},
-   "core_retroarch": {
-	  "citra_libretro": {
-		"description": "Nintendo 3DS Libretro Core",
-		"name": "Citra",
-		"system": "n3ds",
-		"properties": [
-		  {
-			"abxy_button": true
-		  }
-		]
-	  },
-	  "mame_libretro": {
-		"description": "MAME: Multiple Arcade Machine Libretro Core",
-		"name": "MAME",
-		"system": "arcade",
-		"properties": [
-		  {
-			"tate_mode": true
-		  }
-		]
-	  },
-	  "desmume_libretro": {
-		"description": "DeSmuME Nintendo DS Libretro Core",
-		"name": "desmume",
-		"system": "nds",
-		"properties": [
-		  {
-			"abxy_button": true
-		  }
-		]
-	  },
-	  "melonds_libretro": {
-		"description": "MelonDS Nintendo DS Libretro Core",
-		"name": "melonds",
-		"system": "nds",
-		"properties": [
-		  {
-			"abxy_button": true
-		  }
-		]
-	  },
-	  "swanstation_libretro": {
-		"name": "SwanStation",
-		"description": "Swanstation Libretro Core",
-		"system": "psx",
-		"properties": [
-		  {
-			"widescreen": true,
-			"borders": true
-		  }
-		]
-	  },
-	  "picodrive_libetro": {
-		"name": "PicoDrive",
-		"description": "SEGA MS/MD/CD/32X Libretro Core",
-		"system": [
-		  "ms",
-		  "md",
-		  "cd",
-		  "32x"
-		],
-		"properties": [
-		  {
-			"widescreen": true,
-			"borders": true,
-			"rewind": true
-		  }
-		]
-	  },
-	  "genesisplusgx_libetro": {
-		"name": "Genesis Plus GX",
-		"description": "SEGA MS/GG/MD/CD Libretro Core",
-		"system": [
-		  "ms",
-		  "gg",
-		  "mc",
-		  "cd"
-		],
-		"properties": [
-		  {
-			"widescreen": true,
-			"borders": true,
-			"rewind": true
-		  }
-		]
-	  },
-	  "genesisplusgxwide_libetro": {
-		"name": "Genesis Plus GX Wide",
-		"description": "SEGA MS/GG/MD/CD Libretro Core for Wide Screen",
-		"system": [
-		  "ms",
-		  "gg",
-		  "mc",
-		  "cd"
-		],
-		"properties": [
-		  {
-			"widescreen": true,
-			"rewind": true
-		  }
-		]
-	  },
-	  "mupen64plus-next_libetro": {
-		"name": "Mupen64Plus-Next",
-		"description": "Nintendo 64 Libretro Core",
-		"system": "n64",
-		"properties": [
-		  {
-			"widescreen": true,
-			"borders": true,
-			"abxy_button": true
-		  }
-		]
-	  },
-	  "snes9x-current_libetro": {
-		"name": "Snes9x - Current",
-		"description": "Super Nintendo Libretro Core",
-		"system": "snes",
-		"properties": [
-		  {
-			"widescreen": true,
-			"borders": true,
-			"rewind": true,
-			"abxy_button": true
-		  }
-		]
-	  },
-	  "gambatte_libetro": {
-		"name": "Gambatte",
-		"description": "Game Boy/Color Libretro Core",
-		"system": [
-		  "gb",
-		  "gbc"
-		],
-		"properties": [
-		  {
-			"borders": true,
-			"rewind": true,
-			"abxy_button": true
-		  }
-		]
-	  },
-	  "mgba_libetro": {
-		"name": "mGBA",
-		"description": "Game Boy Advance Libretro Core",
-		"system": "gba",
-		"properties": [
-		  {
-			"borders": true,
-			"rewind": true,
-			"abxy_button": true
-		  }
-		]
-	  }
 	}
-   
   }
+  
