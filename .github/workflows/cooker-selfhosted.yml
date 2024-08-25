@@ -32,7 +32,7 @@ permissions:
 jobs:
 
   Building_RetroDECK:
-    runs-on: retrodeck
+    runs-on: monkey
     steps:        
 
       # Circumventing this bug: https://github.com/flatpak/flatpak-builder/issues/317
