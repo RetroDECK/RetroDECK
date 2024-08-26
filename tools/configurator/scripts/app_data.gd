@@ -6,3 +6,4 @@ class_name AppData
 
 @export var about_links: Dictionary = {}
 @export var emulators: Dictionary = {}
+@export var cores: Dictionary = {}

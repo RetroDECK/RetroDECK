@@ -2,7 +2,7 @@ extends Node
 
 class_name DataHandler
 
-var data_file_path = "/app/retrodeck/config/retrodeck/reference_lists/features.json"
+var data_file_path = "../../config/retrodeck/reference_lists/features.json"
 var app_data: AppData
 
 func _ready():
@@ -36,7 +36,7 @@ func load_base_data() -> AppData:
 				emulator.description = emulator_data["description"]
 				if emulator_data.has("properties"):
 					for property_data in emulator_data["properties"]:
-						print (emulator,"----",property_data)
+						#print (emulator,"----",property_data)
 						var property = EmulatorProperty.new()
 						if property_data.has("cheevos"):
 							property.cheevos = property_data.get("cheevos",true)
@@ -47,11 +47,36 @@ func load_base_data() -> AppData:
 						if property_data.has("multi_user_config_dir"):
 							property.multi_user_config_dir = property_data.get("multi_user_config_dir",true)
 						emulator.properties.append(property)
-				
 				emulators[key] = emulator
+				
+			var cores = {}
+			for key in data_dict["emulator"]["retroarch"]["cores"].keys():
+				var core_data = data_dict["emulator"]["retroarch"]["cores"][key]
+				var core = Core.new()
+				core.name = core_data["name"]
+				core.description = core_data["description"]
+				if core_data.has("properties"):
+					for property_data in core_data["properties"]:
+						#print (core.name,"----",property_data)
+						var property = CoreProperty.new()
+						property.cheevos = true
+						property.cheevos_hardcore = true
+						property.quick_resume = true	
+						if property_data.has("abxy_button"):
+							property.abxy_button = property_data.get("abxy_button",true)
+						if property_data.has("widescreen"):
+							property.widescreen = property_data.get("widescreen",true)
+						if property_data.has("borders"):
+							property.borders = property_data.get("borders",true)
+						if property_data.has("rewind"):
+							property.rewind = property_data.get("rewind",true)
+						core.properties.append(property)	
+				cores[key] = core
+				
 			var app_dict = AppData.new()
 			app_dict.about_links = about_links
 			app_dict.emulators = emulators
+			app_dict.cores = cores
 			return app_dict
 		else:
 			print("Error parsing JSON")
@@ -184,7 +209,7 @@ func add_emulator() -> void:
 	app_data.about_links["example_site"] = link
 
 	var emulator = Emulator.new()
-	emulator.name = "Example Emulator"
+	emulator.name = "Example System"
 	emulator.description = "An example emulator."
 	var property = EmulatorProperty.new()
 	#property.standalone = true
@@ -203,7 +228,7 @@ func modify_emulator_test() -> void:
 	new_property.abxy_button = true
 	new_properties.append(new_property)
 
-	data_handler.modify_emulator("example_emulator", "Updated Emulator", "Updated description",  new_properties)
+	data_handler.modify_emulator("example_emulator", "Updated System", "Updated description",  new_properties)
 	
 
 func parse_config_to_json(file_path: String) -> Dictionary:

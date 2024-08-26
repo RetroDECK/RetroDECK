@@ -22,12 +22,13 @@ var l1_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts
 var r1_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0798.png")
 var a_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0042.png")
 var b_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0043.png")
-
 var app_data := AppData.new()
+
 func _ready():
 	_get_nodes()
 	_connect_signals()
 	_play_main_animations()
+
 	%locale_option.selected = class_functions.map_locale_id(OS.get_locale_language())
 	app_data = data_handler.app_data
 	#data_handler.add_emulator()
@@ -36,18 +37,41 @@ func _ready():
 		var website_data: Link = app_data.about_links["rd_web"]
 		print (website_data.name,"-",website_data.url,"-",website_data.description,"-",website_data.url)
 		#print (app_data.about_links["rd_web"]["name"])
-		
-		for key in app_data.emulators.keys():
-			var emulator = app_data.emulators[key]
-			# Display the properties of each emulator
-			print("Emulator Name: ", emulator.name)
-			print("Description: ", emulator.description)
-			print("Properties:")
-			# Iterate over properties and show each one
-			for property: EmulatorProperty in emulator.properties:
-				print("Cheevos: ", property.cheevos)
-				print("ABXY_button:", property.abxy_button)
-				print("multi_user_config_dir: ", property.multi_user_config_dir)		
+		var core_data: Core = app_data.cores["gambatte_libetro"]
+		print (core_data.name)
+		for property: CoreProperty in core_data.properties:
+			print("Cheevos: ", property.cheevos)
+			print("Cheevos Hardcore: ", property.cheevos_hardcore)
+			print("Quick Resume: ", property.quick_resume)
+			print("Rewind: ", property.rewind)
+			print("Borders: ", property.borders)
+			print("Widescreen: ", property.widescreen)
+			print("ABXY_button:", property.abxy_button)
+		#for key in app_data.emulators.keys():
+			#var emulator = app_data.emulators[key]
+			## Display the properties of each emulator
+			#print("System Name: ", emulator.name)
+			#print("Description: ", emulator.description)
+			#print("Properties:")
+			#for property: EmulatorProperty in emulator.properties:
+				#print("Cheevos: ", property.cheevos)
+				#print("Borders: ", property.borders)
+				#print("ABXY_button:", property.abxy_button)
+				#print("multi_user_config_dir: ", property.multi_user_config_dir)
+		#
+		#for key in app_data.retroarch_cores.keys():
+			#var core = app_data.retroarch_cores[key]
+			#print("Core Name: ", core.name)
+			#print("Description: ", core.description)
+			#print("Properties:")
+			#for property: CoreProperty in core.properties:
+				#print("Cheevos: ", property.cheevos)
+				#print("Cheevos Hardcore: ", property.cheevos_hardcore)
+				#print("Quick Resume: ", property.quick_resume)
+				#print("Rewind: ", property.rewind)
+				#print("Borders: ", property.borders)
+				#print("Widescreen: ", property.widescreen)
+				#print("ABXY_button:", property.abxy_button)
 	else:
 		print ("No emulators")
 
@@ -75,7 +99,8 @@ func _ready():
 		if (n.is_class("BaseButton") and n.disabled == true): #if button-like control and disabled
 			n.self_modulate.a = 0.5 #make it half transparent
 	combine_tkeys()
-
+	
+	
 func _input(event):
 	if Input.is_action_pressed("quit1") and Input.is_action_pressed("quit2"):
 		get_tree().quit()
@@ -107,12 +132,13 @@ func _connect_signals() -> void:
 	theme_option.item_selected.connect(_conf_theme)
 	#signal_theme_changed.emit(theme_option.item_selected)
 	log_option.item_selected.connect(_load_log)
-	%borders_button.pressed.connect(_hide_show.bind(%borders_button))
-	%save_button.pressed.connect(_hide_show.bind(%save_button))
-	%decorations_button.pressed.connect(_hide_show_containers.bind(%decorations_button))
-	%systems_button.pressed.connect(_hide_show_containers.bind(%systems_button))
-	%save_resume_button.pressed.connect(_hide_show_containers.bind(%decorations_button))
-	
+	%borders_button.pressed.connect(_hide_show_buttons.bind(%borders_button,%borders_gridcontainer,%decorations_gridcontainer))
+	%button_layout.pressed.connect(_hide_show_buttons.bind(%button_layout,%borders_gridcontainer,%decorations_gridcontainer))
+	%decorations_save.pressed.connect(_hide_show_buttons.bind(%decorations_save,%decorations_save.get_parent(),null))
+	%decorations_button.pressed.connect(_hide_show_containers.bind(%decorations_button, %decorations_gridcontainer))
+	%systems_button.pressed.connect(_hide_show_containers.bind(%systems_button, %systems_gridcontainer))
+	%save_resume_button.pressed.connect(_hide_show_containers.bind(%decorations_button,%systems_gridcontainer))
+			
 func _load_log(index: int) -> void:
 	var log_content:String
 	match index:
@@ -129,43 +155,51 @@ func _load_log(index: int) -> void:
 func _play_main_animations() -> void:
 	anim_logo.play()
 
-func _hide_show_containers(button: Button) -> void:
+func _hide_show_containers(button: Button, grid_container: GridContainer) -> void:
 	match button.name:
-		"decorations_button":
-			%graphics_gridcontainer.visible = true
+		"decorations_button", "systems_button":
+			grid_container.visible = true
 			if button.toggle_mode:
 				button.toggle_mode=false
-				%graphics_gridcontainer.visible = false
-			else:
-				button.toggle_mode=true
-		"systems_button":
-			%systems_gridcontainer.visible = true
-			if button.toggle_mode:
-				button.toggle_mode=false
-				%systems_gridcontainer.visible = false
+				grid_container.visible = false
 			else:
 				button.toggle_mode=true
 
-func _hide_show(button: Button) -> void:
-	if %borders_button.button_pressed:
-		%borders_gridcontainer.visible = true
-		for i in range(%borders_gridcontainer.get_child_count()):
-			var child = %borders_gridcontainer.get_child(i)        
-			if child is Button:
-				child.button_pressed=true
-		for i in range(%graphics_gridcontainer.get_child_count()):
-			var child = %graphics_gridcontainer.get_child(i)        
-			if child is Button and child != %borders_button:
-				child.visible=false
-		%save_button.visible=true
-	
-	if %save_button.button_pressed:
-		%borders_gridcontainer.visible = false
-		for i in range(%graphics_gridcontainer.get_child_count()):
-			var child = %graphics_gridcontainer.get_child(i)        
-			if child is Button:
-				child.visible=true
-		%save_button.visible=false
+# TODO Pass GridContainer(might need 2?) as above
+# TODO load existing settings or default to enable all
+func _hide_show_buttons(button: Button, buttons_gridcontainer: GridContainer, hidden_gridcontainer: GridContainer) -> void:
+	match button.name:
+		"borders_button", "button_layout":
+			buttons_gridcontainer.visible = true
+			if button.toggle_mode == false:
+				for i in range(buttons_gridcontainer.get_child_count()):
+					var child = buttons_gridcontainer.get_child(i)        
+					child.button_pressed=true
+				for i in range(hidden_gridcontainer.get_child_count()):
+					var child = hidden_gridcontainer.get_child(i)        
+					if child is Button and child != button:
+						child.visible=false
+				%decorations_save.visible=true
+			elif button.toggle_mode == true and %borders_gridcontainer.visible == true:
+				print (button.name, "SAVE NOW? TODO") # TODO SHOW ALL AGAIN?
+				buttons_gridcontainer.visible = false
+				#button.toggle_mode = false
+				for i in range(hidden_gridcontainer.get_child_count()):
+					var child = hidden_gridcontainer.get_child(i)        
+					if child is Button:
+						child.visible=true
+						child.toggle_mode = false
+				%decorations_save.visible=false
+			button.toggle_mode = true
+		"decorations_save":
+			if %decorations_save.visible == true and %borders_gridcontainer.visible == true:
+				%borders_gridcontainer.visible = false
+				for i in range(buttons_gridcontainer.get_child_count()):
+					var child = buttons_gridcontainer.get_child(i)        
+					if child is Button:
+						child.visible=true
+						child.toggle_mode = false
+				%decorations_save.visible=false
 
 func _conf_theme(index: int) -> void: 
 	print (index)

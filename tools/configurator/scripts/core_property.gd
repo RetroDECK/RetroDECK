@@ -1,6 +1,6 @@
 extends Resource
 
-class_name EmulatorProperty
+class_name CoreProperty
 
 @export var borders: bool
 @export var abxy_button: bool 
@@ -10,3 +10,5 @@ class_name EmulatorProperty
 @export var multi_user_config_dir: String
 @export var universal_dyn_input: bool 
 @export var quick_resume: bool 
+@export var widescreen: bool
+@export var rewind: bool 
