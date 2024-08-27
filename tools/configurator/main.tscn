@@ -1,4 +1,4 @@
-[gd_scene load_steps=88 format=3 uid="uid://61f6m4r1mpan"]
+[gd_scene load_steps=90 format=3 uid="uid://61f6m4r1mpan"]
 
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
 [ext_resource type="Theme" uid="uid://hhc60cllcg47" path="res://assets/themes/default_theme.tres" id="1_if8nh"]
@@ -56,17 +56,11 @@
 [ext_resource type="Texture2D" uid="uid://cvt2jky3bbjun" path="res://assets/icons/pixelitos/128/drive-removable-media.png" id="18_h2o3e"]
 [ext_resource type="Texture2D" uid="uid://dyumvh0ixwrbl" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0042.png" id="30_glnve"]
 [ext_resource type="Texture2D" uid="uid://cn11vcrybtor4" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0047.png" id="31_j5ri1"]
-[ext_resource type="Texture2D" uid="uid://cor8ep0fkqm08" path="res://res/Rekku/base.png" id="32_omdu2"]
 [ext_resource type="Texture2D" uid="uid://cc7ohmfxafe78" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0043.png" id="33_1ghye"]
-[ext_resource type="Texture2D" uid="uid://cavtn1rljc5oe" path="res://res/Rekku/eyes-open.png" id="33_loftd"]
 [ext_resource type="Texture2D" uid="uid://cs8lh31kh7jv1" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0048.png" id="34_fum2b"]
-[ext_resource type="Texture2D" uid="uid://cv7nckloqhn5m" path="res://res/Rekku/blink1.png" id="34_liw3o"]
-[ext_resource type="Texture2D" uid="uid://by0oj188x350g" path="res://res/Rekku/blink2.png" id="35_dxwop"]
 [ext_resource type="Texture2D" uid="uid://cfa5mn3dsdvw6" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0729.png" id="36_3qttl"]
 [ext_resource type="Texture2D" uid="uid://chd6d8tx081hm" path="res://assets/icons/pixelitos/128/org.mamedev.MAME.png" id="36_dj81i"]
-[ext_resource type="Texture2D" uid="uid://kx8eypf4ffvu" path="res://res/Rekku/mouth-base.png" id="36_qon8n"]
 [ext_resource type="Script" path="res://scripts/system.gd" id="36_wv31h"]
-[ext_resource type="Texture2D" uid="uid://b6gl8sltbak7v" path="res://res/Rekku/mouth-O.png" id="37_2mdp6"]
 [ext_resource type="Texture2D" uid="uid://10pyy05xqpr4" path="res://assets/icons/pixelitos/128/ruffle.png" id="37_7hhbn"]
 [ext_resource type="Texture2D" uid="uid://fhxlwf7in0ke" path="res://assets/icons/pixelitos/128/net.pcsx2.PCSX2.png" id="38_44je8"]
 [ext_resource type="Texture2D" uid="uid://dpi351mmxu7x6" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0797.png" id="38_prt7u"]
@@ -81,6 +75,14 @@
 [ext_resource type="Texture2D" uid="uid://dhf620jyq75t1" path="res://assets/icons/pixelitos/128/es-de.png" id="44_7lpj5"]
 [ext_resource type="Texture2D" uid="uid://b6vndtbu4qduo" path="res://assets/icons/pixelitos/128/preferences-desktop-launch-feedback.png" id="45_qxd26"]
 [ext_resource type="Texture2D" uid="uid://3sw7gtoiuab3" path="res://assets/icons/pixelitos/128/help-browser.png" id="46_feagl"]
+[ext_resource type="Texture2D" uid="uid://l3bredurb11m" path="res://assets/graphics/rekku2/rekku_base.png" id="57_1n3u5"]
+[ext_resource type="Texture2D" uid="uid://cvlncuql8igrm" path="res://assets/graphics/rekku2/rekku_eye_1.png" id="59_7lcu5"]
+[ext_resource type="Texture2D" uid="uid://bdrdu4nddkqjn" path="res://assets/graphics/rekku2/rekku_eye_2.png" id="60_mbhg6"]
+[ext_resource type="Texture2D" uid="uid://cb2hwhaq036mu" path="res://assets/graphics/rekku2/rekku_mouth_a.png" id="61_5vyvy"]
+[ext_resource type="Texture2D" uid="uid://dl2fd66fvn1an" path="res://assets/graphics/rekku2/rekku_mouth_i.png" id="62_lji1k"]
+[ext_resource type="Texture2D" uid="uid://3ktnkmuecxea" path="res://assets/graphics/rekku2/rekku_mouth_m.png" id="63_52v81"]
+[ext_resource type="Texture2D" uid="uid://d08ngewjvxkmn" path="res://assets/graphics/rekku2/rekku_mouth_o.png" id="64_s8u0e"]
+[ext_resource type="Texture2D" uid="uid://dieva7tuxjrvy" path="res://assets/graphics/rekku2/rekku_nomouth.png" id="65_kk8ba"]
 [ext_resource type="AudioStream" uid="uid://dhejvg02t5o35" path="res://assets/sounds/30375__sjonas88__smooth-game-like-sounds/538549__sjonas88__select-2.wav" id="71_ghxvk"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_omewi"]
@@ -109,17 +111,23 @@ animations = [{
 "speed": 12.0
 }]
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_rf0rc"]
+texture = ExtResource("4_2tuu4")
+texture_margin_left = 6.0
+texture_margin_top = 6.0
+texture_margin_right = 6.0
+texture_margin_bottom = 6.0
+region_rect = Rect2(0, 8, 16, 16)
+modulate_color = Color(0.65098, 0.403922, 0.819608, 1)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_k7pd1"]
 animations = [{
 "frames": [{
-"duration": 40.0,
-"texture": ExtResource("33_loftd")
+"duration": 10.0,
+"texture": ExtResource("59_7lcu5")
 }, {
-"duration": 0.15,
-"texture": ExtResource("34_liw3o")
-}, {
-"duration": 0.15,
-"texture": ExtResource("35_dxwop")
+"duration": 1.0,
+"texture": ExtResource("60_mbhg6")
 }],
 "loop": true,
 "name": &"blink",
@@ -129,40 +137,25 @@ animations = [{
 [sub_resource type="SpriteFrames" id="SpriteFrames_l20mt"]
 animations = [{
 "frames": [{
-"duration": 0.5,
-"texture": ExtResource("36_qon8n")
+"duration": 1.0,
+"texture": ExtResource("63_52v81")
 }, {
 "duration": 1.0,
-"texture": ExtResource("37_2mdp6")
+"texture": ExtResource("62_lji1k")
 }, {
 "duration": 1.0,
-"texture": ExtResource("36_qon8n")
+"texture": ExtResource("61_5vyvy")
 }, {
 "duration": 1.0,
-"texture": ExtResource("36_qon8n")
+"texture": ExtResource("64_s8u0e")
 }, {
 "duration": 1.0,
-"texture": ExtResource("37_2mdp6")
-}, {
-"duration": 1.0,
-"texture": ExtResource("37_2mdp6")
-}, {
-"duration": 1.0,
-"texture": ExtResource("36_qon8n")
+"texture": ExtResource("65_kk8ba")
 }],
 "loop": true,
 "name": &"speech",
 "speed": 5.0
 }]
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_rf0rc"]
-texture = ExtResource("4_2tuu4")
-texture_margin_left = 6.0
-texture_margin_top = 6.0
-texture_margin_right = 6.0
-texture_margin_bottom = 6.0
-region_rect = Rect2(0, 8, 16, 16)
-modulate_color = Color(0.65098, 0.403922, 0.819608, 1)
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -615,57 +608,68 @@ layout_mode = 2
 text = "MELONDS"
 icon = ExtResource("7_4otos")
 
-[node name="systems_button6" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+[node name="pcsx2_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "PCSX2"
 icon = ExtResource("38_44je8")
 
-[node name="systems_button11" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+[node name="duckstation_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "DUCKSTATION"
 icon = ExtResource("6_winpq")
 
-[node name="systems_button7" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+[node name="ppsspp_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "PPSSPP"
 icon = ExtResource("8_akxf7")
 
-[node name="systems_button8" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+[node name="vita3k_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "VITA3K"
 icon = ExtResource("38_vsjf2")
 
-[node name="systems_button9" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+[node name="rpcs3_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "RPCS3"
 icon = ExtResource("8_ec4gt")
 
-[node name="systems_button10" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+[node name="ryujinx_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "RYUJINX"
 icon = ExtResource("40_7fdvq")
 
-[node name="systems_button12" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+[node name="dolphin_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "DOLPHIN"
 icon = ExtResource("11_61sak")
 
-[node name="systems_button13" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+[node name="primehack_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "PRIMEHACK"
 icon = ExtResource("41_55e56")
 
-[node name="systems_button14" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+[node name="cemu_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "CEMU"
 icon = ExtResource("42_n3n7j")
 
-[node name="systems_button15" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+[node name="xemu_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "XEMU"
 icon = ExtResource("43_ifi6j")
 
-[node name="systems_button16" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+[node name="esde_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "ES-DE"
 icon = ExtResource("44_7lpj5")
@@ -1567,22 +1571,6 @@ mouse_filter = 1
 mouse_default_cursor_shape = 8
 script = ExtResource("4_nqqx3")
 
-[node name="rekku_sprite" type="Sprite2D" parent="Background/SplitContainer/side_logo/rekku"]
-position = Vector2(530.5, -989)
-scale = Vector2(0.264648, 0.302734)
-texture = ExtResource("32_omdu2")
-
-[node name="blink_anim" type="AnimatedSprite2D" parent="Background/SplitContainer/side_logo/rekku/rekku_sprite"]
-sprite_frames = SubResource("SpriteFrames_k7pd1")
-animation = &"blink"
-autoplay = "blink"
-frame_progress = 0.188668
-
-[node name="speech_anim" type="AnimatedSprite2D" parent="Background/SplitContainer/side_logo/rekku/rekku_sprite"]
-sprite_frames = SubResource("SpriteFrames_l20mt")
-animation = &"speech"
-autoplay = "speech"
-
 [node name="speach_bubble" type="Panel" parent="Background/SplitContainer/side_logo/rekku"]
 layout_mode = 1
 anchors_preset = 7
@@ -1590,25 +1578,25 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = 395.0
-offset_top = -830.0
+offset_left = 365.0
+offset_top = -783.0
 offset_right = 673.0
 offset_bottom = -402.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxTexture_rf0rc")
 
-[node name="helper_text" type="RichTextLabel" parent="Background/SplitContainer/side_logo/rekku"]
+[node name="helper_text" type="RichTextLabel" parent="Background/SplitContainer/side_logo/rekku/speach_bubble"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 414.0
-offset_top = -815.0
-offset_right = 668.0
-offset_bottom = -420.0
+offset_left = -132.0
+offset_top = -177.5
+offset_right = 149.0
+offset_bottom = 172.5
 grow_horizontal = 2
 grow_vertical = 2
 text = "Rekku:
@@ -1618,6 +1606,24 @@ This is mot working on the following systems: Switch, WiiU."
 fit_content = true
 scroll_following = true
 script = ExtResource("5_cprkf")
+
+[node name="rekku_sprite" type="Sprite2D" parent="Background/SplitContainer/side_logo/rekku"]
+position = Vector2(544, -898)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("57_1n3u5")
+
+[node name="blink_anim" type="AnimatedSprite2D" parent="Background/SplitContainer/side_logo/rekku/rekku_sprite"]
+position = Vector2(-72, -252)
+sprite_frames = SubResource("SpriteFrames_k7pd1")
+animation = &"blink"
+autoplay = "blink"
+frame_progress = 0.188668
+
+[node name="speech_anim" type="AnimatedSprite2D" parent="Background/SplitContainer/side_logo/rekku/rekku_sprite"]
+position = Vector2(-76, -198)
+sprite_frames = SubResource("SpriteFrames_l20mt")
+animation = &"speech"
+autoplay = "speech"
 
 [node name="TextureRect" type="TextureRect" parent="Background/SplitContainer/side_logo"]
 visible = false

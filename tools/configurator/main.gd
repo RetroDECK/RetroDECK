@@ -144,12 +144,18 @@ func _load_log(index: int) -> void:
 	var log_content:String
 	match index:
 		1: 
+			class_functions.log_parameters[2] = class_functions.log_text + "Loading RetroDeck log"
+			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
 			log_content = class_functions.import_text_file(rd_logs +"/retrodeck.log")
 			load_popup("RetroDeck Log", "res://components/logs_view/logs_popup_content.tscn", log_content)
 		2:
+			class_functions.log_parameters[2] = class_functions.log_text + "Loading ES-DE log"
+			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
 			log_content = class_functions.import_text_file(rd_logs +"/ES-DE/es_log.txt")
 			load_popup("ES-DE Log", "res://components/logs_view/logs_popup_content.tscn",log_content)
 		3: 
+			class_functions.log_parameters[2] = class_functions.log_text + "Loading RetroArch log"
+			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
 			log_content = class_functions.import_text_file(rd_logs +"/retroarch/logs/log.txt")
 			load_popup("Retroarch Log", "res://components/logs_view/logs_popup_content.tscn",log_content)	
 
@@ -192,15 +198,22 @@ func _hide_show_buttons(button: Button, buttons_gridcontainer: GridContainer, hi
 			button.toggle_mode = true
 
 func _conf_theme(index: int) -> void: 
-	print (index)
 	match index:
 		1:
+			class_functions.log_parameters[2] = class_functions.log_text + "Set theme to index " + str(index)
+			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
 			custom_theme = preload("res://res/pixel_ui_theme/RetroDECKTheme.tres")
 		2:
+			class_functions.log_parameters[2] = class_functions.log_text + "Set theme to index " + str(index)
+			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
 			custom_theme = preload("res://assets/themes/retro_theme.tres")
 		3:
+			class_functions.log_parameters[2] = class_functions.log_text + "Set theme to index " + str(index)
+			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)	
 			custom_theme = preload("res://assets/themes/modern_theme.tres")
 		4:
+			class_functions.log_parameters[2] = class_functions.log_text + "Set theme to index " + str(index)
+			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)			
 			custom_theme = preload("res://assets/themes/accesible_theme.tres")
 	$".".theme = custom_theme
 	_play_main_animations()
@@ -246,8 +259,6 @@ func _on_exit_button_pressed():
 	class_functions.log_parameters[2] = class_functions.log_text + "Exited"
 	log_results = class_functions.execute_command(class_functions.wrapper_command, class_functions.log_parameters, false)
 	class_functions._exit()
-
-
 
 func _on_locale_selected(index):
 	match index:

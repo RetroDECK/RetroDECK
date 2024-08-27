@@ -788,6 +788,7 @@
 	  "retroarch": {
 		"description": "RetroArch (Multi-emulator Frontend)",
 		"name": "RetroArch",
+		"url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/retroarch/retroarch-guide/",
 		"launch": "retroarch",
 		"properties": [
 		  {
@@ -955,6 +956,7 @@
 	  "mame": {
 		"description": "MAME: Multiple Arcade Machine Emulator",
 		"name": "MAME",
+		"url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/mame/mame-guide/",
 		"system": [
 		  "arcade"
 		],
@@ -963,6 +965,7 @@
 	  "citra": {
 		"description": "Citra Nintendo 3DS Emulator (via Ponzu)",
 		"name": "Citra (via Ponzu)",
+		"url": "https://retrodeck.readthedocs.io/en/latest/wiki_about/what-is-retrodeck/",
 		"system": "n3ds",
 		"ponzu": true,
 		"launch": "citra-qt",
@@ -976,18 +979,21 @@
 		"ruffle": {
 		  "description": "Flash Games emulator",
 		  "name" : "Ruffle",
+		  "url": "https://retrodeck.readthedocs.io/en/latest/wiki_about/what-is-retrodeck/",
 		  "system" : "flash",
 		  "launch": "ruffle-rd-wrapper.sh"
 		},
 	  "melonds": {
 		"description": "MelonDS Nintendo DS Emulator",
 		"name": "melonds",
+		"url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/melonds/melonds-guide/",
 		"system": "nds",
 		"launch": "MelonDS"
 	  },
 	  "pcsx2": {
 		"name": "pcsx2",
 		"description": "PCSX2 Play Station 2 Emulator",
+		"url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/pcsx2/pcsx2-guide/",
 		"system": "ps2",
 		"launch": "pcsx2-qt",
 		"properties": [
@@ -1000,6 +1006,7 @@
 	  "duckstation": {
 		"name": "Duckstation",
 		"description": "PlayStation Emulator",
+		"url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/duckstation/duckstation-guide/",
 		"launch": "duckstation-qt",
 		"system": "psx",
 		"properties": [
@@ -1012,6 +1019,7 @@
 	  "ppsspp": {
 		"name": "PPSSPP",
 		"description": "PPSSPP: PlayStation Portable Emulator",
+		"url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/ppsspp/ppsspp-guide/",
 		"launch": "PPSSPPSDL",
 		"system": "psp",
 		"properties": [
@@ -1024,12 +1032,14 @@
 	  "vita3k": {
 		"name": "Vita3k",
 		"description": "Vita3K PSVita Emulator",
+		"url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/vita3k/vita3k-guide/",
 		"system": "psvita",
 		"launch": "Vita3K"
 	  },
 	  "rpcs3": {
 		"name": "RPCS3",
 		"description": "RPCS3 PlayStation 3 Emulator",
+		"url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/rpcs3/rpcs3-guide/",
 		"system": "ps3",
 		"launch": "rpcs3",
 		"properties": [
@@ -1041,12 +1051,14 @@
 	  "ryujinx": {
 		"name": "Ryujinx",
 		"description": "Ryujinx Nintendo Switch Emulator",
+		"url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/ryujinx/ryujinx-guide/",
 		"system": "switch",
 		"launch": "Ryujinx.sh"
 	  },
 	  "yuzu": {
 		"name": "Yuzu (via Ponzu)",
 		"description": "Yuzu Nintendo Switch Emulator (via Ponzu)",
+		"url": "https://retrodeck.readthedocs.io/en/latest/wiki_about/what-is-retrodeck/",
 		"launch": "Yuzu",
 		"system": "switch",
 		"ponzu": true,
@@ -1055,6 +1067,7 @@
 	  "dolphin": {
 		"name": "Dolphin",
 		"description": "Dolphin Wii and GameCube Emulator",
+		"url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/dolphin-primehack/dolphin-primehack-guide/",
 		"launch": "dolphin-emu-wrapper",
 		"system": [
 		  "gc",
@@ -1073,6 +1086,7 @@
 	  "primehack": {
 		"name": "PrimeHack",
 		"description": "A fork of Dolphiin to enhance Metroid Prime experience",
+		"url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/dolphin-primehack/dolphin-primehack-guide/",
 		"launch": "primehack-wrapper",
 		"system": [
 		  "wii"
@@ -1087,6 +1101,7 @@
 	  "cemu": {
 		"description": "Wii U emulator",
 		"name": "Cemu",
+		"url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/cemu/cemu-guide/",
 		"system": "wiiu",
 		"launch": "Cemu-wrapper",
 		"properties": [
@@ -1099,13 +1114,15 @@
 	  "xemu": {
 		"description": "xemu Xbox Emulator",
 		"name": "xemu",
+		"url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/xemu/xemu-guide/",
 		"system": "xbox",
 		"launch": "xemu"
 	  },
 	  "es-de": {
 		"description": "ES-DE Emulation Frontend",
 		"name": "ES-DE",
-		"launch": "es-de"
+		"url": "https://retrodeck.readthedocs.io/en/latest/wiki_es_de/esde-guide/."
+,		"launch": "es-de"
 	  }
 	}
   }
