@@ -192,11 +192,12 @@ size_flags_horizontal = 3
 unique_name_in_owner = true
 layout_mode = 2
 tab_alignment = 1
-current_tab = 0
+current_tab = 2
 script = ExtResource("3_id6l4")
 
 [node name="Gobals" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -582,6 +583,7 @@ layout_mode = 2
 columns = 5
 
 [node name="wide_screen" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/WIP/ScrollContainer/VBoxContainer/decorations_gridcontainer"]
+visible = false
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -901,7 +903,6 @@ text = "FUNCTIONS - Save states, etc"
 icon = ExtResource("18_h2o3e")
 
 [node name="TK_SYSTEM" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 
@@ -923,6 +924,81 @@ text = "TK_SYSTEM"
 
 [node name="controls_separator" type="HSeparator" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/controls_container"]
 layout_mode = 2
+
+[node name="systems_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/controls_container"]
+layout_mode = 2
+text = "SYSTEMS - Emulators, Console, Computers"
+icon = ExtResource("17_0kr64")
+
+[node name="systems_gridcontainer" type="GridContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/controls_container"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 6
+
+[node name="Button3" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/controls_container/systems_gridcontainer"]
+layout_mode = 2
+tooltip_text = "RetroARCH"
+theme_override_styles/focus = ExtResource("5_rjtkn")
+text = "RetroArch"
+icon = ExtResource("4_xcuib")
+icon_alignment = 1
+vertical_icon_alignment = 0
+
+[node name="Button8" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/controls_container/systems_gridcontainer"]
+layout_mode = 2
+theme_override_styles/focus = ExtResource("5_rjtkn")
+text = "Dolphin"
+icon = ExtResource("11_61sak")
+icon_alignment = 1
+vertical_icon_alignment = 0
+
+[node name="Button7" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/controls_container/systems_gridcontainer"]
+layout_mode = 2
+tooltip_text = "CITRA"
+text = "RPCS3"
+icon = ExtResource("8_ec4gt")
+icon_alignment = 1
+vertical_icon_alignment = 0
+
+[node name="Button5" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/controls_container/systems_gridcontainer"]
+layout_mode = 2
+tooltip_text = "PSPSSPP"
+theme_override_styles/focus = ExtResource("5_rjtkn")
+text = "PSPSSPP"
+icon = ExtResource("8_akxf7")
+icon_alignment = 1
+vertical_icon_alignment = 0
+
+[node name="Button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/controls_container/systems_gridcontainer"]
+layout_mode = 2
+tooltip_text = "Duckstation"
+theme_override_styles/focus = ExtResource("5_rjtkn")
+text = "DuckStation"
+icon = ExtResource("6_winpq")
+icon_alignment = 1
+vertical_icon_alignment = 0
+
+[node name="Button2" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/controls_container/systems_gridcontainer"]
+layout_mode = 2
+tooltip_text = "Melon DS"
+theme_override_styles/focus = ExtResource("5_rjtkn")
+text = "MelonDS"
+icon = ExtResource("7_4otos")
+icon_alignment = 1
+vertical_icon_alignment = 0
+
+[node name="Button9" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/controls_container/systems_gridcontainer"]
+visible = false
+layout_mode = 2
+tooltip_text = "CITRA"
+theme_override_styles/focus = ExtResource("5_rjtkn")
+text = "CITRA"
+icon = ExtResource("10_wbaif")
+icon_alignment = 1
+vertical_icon_alignment = 0
 
 [node name="TK_TOOLS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
 visible = false
