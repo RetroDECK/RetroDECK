@@ -18,7 +18,8 @@ func _connect_signals() -> void:
 	%vita3k_button.pressed.connect(_hide_show_buttons.bind(%vita3k_button,%system_gridcontainer, %action_gridcontainer))
 	%rpcs3_button.pressed.connect(_hide_show_buttons.bind(%rpcs3_button,%system_gridcontainer, %action_gridcontainer))
 	%ryujinx_button.pressed.connect(_hide_show_buttons.bind(%ryujinx_button,%system_gridcontainer, %action_gridcontainer))
-	%dolphin_button.pressed.connect(_hide_show_buttons.bind(%primehack_button,%system_gridcontainer, %action_gridcontainer))
+	%dolphin_button.pressed.connect(_hide_show_buttons.bind(%dolphin_button,%system_gridcontainer, %action_gridcontainer))
+	%primehack_button.pressed.connect(_hide_show_buttons.bind(%primehack_button,%system_gridcontainer, %action_gridcontainer))
 	%cemu_button.pressed.connect(_hide_show_buttons.bind(%cemu_button,%system_gridcontainer, %action_gridcontainer))
 	%xemu_button.pressed.connect(_hide_show_buttons.bind(%xemu_button,%system_gridcontainer, %action_gridcontainer))
 	%esde_button.pressed.connect(_hide_show_buttons.bind(%esde_button,%system_gridcontainer, %action_gridcontainer))	
@@ -53,7 +54,7 @@ func _do_action(button: Button) -> void:
 		["help_button", current_system.name]:
 			class_functions.log_parameters[2] = class_functions.log_text + "Launching " + current_system.name + " Help"
 			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
-			class_functions.launch_help("https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/retroarch/retroarch-guide/")
+			class_functions.launch_help(current_system.url)
 		["launch_button", current_system.name]:
 			class_functions.log_parameters[2] = class_functions.log_text + "Launching " + current_system.name
 			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
@@ -61,5 +62,3 @@ func _do_action(button: Button) -> void:
 			#Log the result TODO
 			class_functions.log_parameters[2] = class_functions.log_text + "Exit Code: " + str(launch["exit_code"])
 			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
-			
-		

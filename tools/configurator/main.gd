@@ -139,7 +139,7 @@ func _connect_signals() -> void:
 	%decorations_button.pressed.connect(_hide_show_containers.bind(%decorations_button, %decorations_gridcontainer))
 	%systems_button.pressed.connect(_hide_show_containers.bind(%systems_button, %systems_gridcontainer))
 	%save_resume_button.pressed.connect(_hide_show_containers.bind(%decorations_button,%systems_gridcontainer))
-			
+
 func _load_log(index: int) -> void:
 	var log_content:String
 	match index:

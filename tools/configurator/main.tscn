@@ -1,4 +1,4 @@
-[gd_scene load_steps=90 format=3 uid="uid://61f6m4r1mpan"]
+[gd_scene load_steps=91 format=3 uid="uid://61f6m4r1mpan"]
 
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
 [ext_resource type="Theme" uid="uid://hhc60cllcg47" path="res://assets/themes/default_theme.tres" id="1_if8nh"]
@@ -156,6 +156,8 @@ animations = [{
 "name": &"speech",
 "speed": 5.0
 }]
+
+[sub_resource type="GDScript" id="GDScript_j7wyh"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -1655,6 +1657,7 @@ offset_top = -69.0
 offset_right = -337.0
 grow_horizontal = 2
 grow_vertical = 0
+script = SubResource("GDScript_j7wyh")
 
 [node name="controller_guide_text" type="RichTextLabel" parent="controller_guide"]
 layout_mode = 2

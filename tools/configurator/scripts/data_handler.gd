@@ -34,6 +34,7 @@ func load_base_data() -> AppData:
 				var emulator = Emulator.new()
 				emulator.name = emulator_data["name"]
 				emulator.description = emulator_data["description"]
+				emulator.url = emulator_data["url"]
 				emulator.launch = emulator_data["launch"]
 				if emulator_data.has("properties"):
 					for property_data in emulator_data["properties"]:
@@ -87,7 +88,7 @@ func load_base_data() -> AppData:
 		get_tree().quit()
 	return null
 
-func save_base_data(app_dict: AppData): # was apP_data but gave warning
+func save_base_data(app_dict: AppData):
 	var file = FileAccess.open(data_file_path, FileAccess.READ)
 	var existing_data = {}
 	if file:
@@ -132,6 +133,8 @@ func save_base_data(app_dict: AppData): # was apP_data but gave warning
 		emulators[key] = {
 			"name": emulator.name,
 			"description": emulator.description,
+			"launch": emulator.launch,
+			"url": emulator.url,
 			"properties": properties
 		}
 
