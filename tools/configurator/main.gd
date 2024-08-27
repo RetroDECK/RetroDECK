@@ -26,24 +26,24 @@ func _ready():
 	_connect_signals()
 	_play_main_animations()
 
-	%locale_option.selected = class_functions.map_locale_id(OS.get_locale_language())
-	app_data = data_handler.app_data
+	#%locale_option.selected = class_functions.map_locale_id(OS.get_locale_language())
+	#app_data = data_handler.app_data
 	#data_handler.add_emulator()
 	#data_handler.modify_emulator_test()
-	if app_data:
-		var website_data: Link = app_data.about_links["rd_web"]
-		print (website_data.name,"-",website_data.url,"-",website_data.description,"-",website_data.url)
-		#print (app_data.about_links["rd_web"]["name"])
-		var core_data: Core = app_data.cores["gambatte_libetro"]
-		print (core_data.name)
-		for property: CoreProperty in core_data.properties:
-			print("Cheevos: ", property.cheevos)
-			print("Cheevos Hardcore: ", property.cheevos_hardcore)
-			print("Quick Resume: ", property.quick_resume)
-			print("Rewind: ", property.rewind)
-			print("Borders: ", property.borders)
-			print("Widescreen: ", property.widescreen)
-			print("ABXY_button:", property.abxy_button)
+	#if app_data:
+		#var website_data: Link = app_data.about_links["rd_web"]
+		#print (website_data.name,"-",website_data.url,"-",website_data.description,"-",website_data.url)
+		##print (app_data.about_links["rd_web"]["name"])
+		#var core_data: Core = app_data.cores["gambatte_libetro"]
+		#print (core_data.name)
+		#for property: CoreProperty in core_data.properties:
+			#print("Cheevos: ", property.cheevos)
+			#print("Cheevos Hardcore: ", property.cheevos_hardcore)
+			#print("Quick Resume: ", property.quick_resume)
+			#print("Rewind: ", property.rewind)
+			#print("Borders: ", property.borders)
+			#print("Widescreen: ", property.widescreen)
+			#print("ABXY_button:", property.abxy_button)
 		#for key in app_data.emulators.keys():
 			#var emulator = app_data.emulators[key]
 			## Display the properties of each emulator
@@ -69,8 +69,8 @@ func _ready():
 				#print("Borders: ", property.borders)
 				#print("Widescreen: ", property.widescreen)
 				#print("ABXY_button:", property.abxy_button)
-	else:
-		print ("No emulators")
+	#else:
+		#print ("No emulators")
 
 	var config_file_path = "/var/config/retrodeck/retrodeck.cfg"
 	var json_file_path = "/var/config/retrodeck/retrodeck.json"
