@@ -5,9 +5,6 @@ extends Control
 
 var bios_type:int
 var status_code_label: Label
-var wrapper_command: String = "../../tools/retrodeck_function_wrapper.sh"
-var log_text = "gdc_"
-var log_parameters: Array = ["log", "i", log_text]
 var log_results: Dictionary
 var theme_option: OptionButton
 #signal signal_theme_changed
@@ -100,7 +97,6 @@ func _ready():
 			n.self_modulate.a = 0.5 #make it half transparent
 	combine_tkeys()
 	
-	
 func _input(event):
 	if Input.is_action_pressed("quit1") and Input.is_action_pressed("quit2"):
 		get_tree().quit()
@@ -119,6 +115,11 @@ func _input(event):
 		%b_button.texture_normal = b_button_texture
 	if event.is_action_pressed("quit"):
 		_exit()
+
+func _exit():
+	get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
+	get_tree().quit()
+
 
 func _get_nodes() -> void:
 	status_code_label = get_node("%status_code_label")
@@ -179,7 +180,6 @@ func _hide_show_buttons(button: Button, buttons_gridcontainer: GridContainer, hi
 					var child = hidden_gridcontainer.get_child(i)        
 					if child is Button and child != button:
 						child.visible=false
-				%decorations_save.visible=true
 			elif button.toggle_mode == true and %borders_gridcontainer.visible == true:
 				print (button.name, "SAVE NOW? TODO") # TODO SHOW ALL AGAIN?
 				buttons_gridcontainer.visible = false
@@ -189,17 +189,7 @@ func _hide_show_buttons(button: Button, buttons_gridcontainer: GridContainer, hi
 					if child is Button:
 						child.visible=true
 						child.toggle_mode = false
-				%decorations_save.visible=false
 			button.toggle_mode = true
-		"decorations_save":
-			if %decorations_save.visible == true and %borders_gridcontainer.visible == true:
-				%borders_gridcontainer.visible = false
-				for i in range(buttons_gridcontainer.get_child_count()):
-					var child = buttons_gridcontainer.get_child(i)        
-					if child is Button:
-						child.visible=true
-						child.toggle_mode = false
-				%decorations_save.visible=false
 
 func _conf_theme(index: int) -> void: 
 	print (index)
@@ -238,28 +228,26 @@ func _on_quickresume_advanced_pressed():
 func _on_bios_button_pressed():
 	_play_main_animations()
 	bios_type = 0
-	log_parameters[2] = log_text + "Bios_Check"
-	log_results = class_functions.execute_command(wrapper_command, log_parameters, false)
+	class_functions.log_parameters[2] = class_functions.log_text + "Bios_Check"
+	log_results = class_functions.execute_command(class_functions.wrapper_command, class_functions.log_parameters, false)
 	load_popup("BIOS File Check", "res://components/bios_check/bios_popup_content.tscn","")
 	status_code_label.text = str(log_results["exit_code"])
 
 func _on_bios_button_expert_pressed():
 	_play_main_animations()
 	bios_type = 1
-	log_parameters[2] = log_text + "Advanced_Bios_Check"
-	log_results = class_functions.execute_command(wrapper_command, log_parameters, false)
+	class_functions.log_parameters[2] = class_functions.log_text + "Advanced_Bios_Check"
+	log_results = class_functions.execute_command(class_functions.wrapper_command, class_functions.log_parameters, false)
 	load_popup("BIOS File Check", "res://components/bios_check/bios_popup_content.tscn","")
 	status_code_label.text = str(log_results["exit_code"])
 
 func _on_exit_button_pressed():
 	_play_main_animations()
-	log_parameters[2] = log_text + "Exited"
-	log_results = class_functions.execute_command(wrapper_command, log_parameters, false)
-	_exit()
+	class_functions.log_parameters[2] = class_functions.log_text + "Exited"
+	log_results = class_functions.execute_command(class_functions.wrapper_command, class_functions.log_parameters, false)
+	class_functions._exit()
 
-func _exit():
-	get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
-	get_tree().quit()
+
 
 func _on_locale_selected(index):
 	match index:

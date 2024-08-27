@@ -1,4 +1,4 @@
-[gd_scene load_steps=77 format=3 uid="uid://61f6m4r1mpan"]
+[gd_scene load_steps=89 format=3 uid="uid://61f6m4r1mpan"]
 
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
 [ext_resource type="Theme" uid="uid://hhc60cllcg47" path="res://assets/themes/default_theme.tres" id="1_if8nh"]
@@ -63,20 +63,29 @@
 [ext_resource type="Texture2D" uid="uid://cv7nckloqhn5m" path="res://res/Rekku/blink1.png" id="34_liw3o"]
 [ext_resource type="Texture2D" uid="uid://by0oj188x350g" path="res://res/Rekku/blink2.png" id="35_dxwop"]
 [ext_resource type="Texture2D" uid="uid://cfa5mn3dsdvw6" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0729.png" id="36_3qttl"]
+[ext_resource type="Texture2D" uid="uid://chd6d8tx081hm" path="res://assets/icons/pixelitos/128/org.mamedev.MAME.png" id="36_dj81i"]
 [ext_resource type="Texture2D" uid="uid://kx8eypf4ffvu" path="res://res/Rekku/mouth-base.png" id="36_qon8n"]
+[ext_resource type="Script" path="res://scripts/system.gd" id="36_wv31h"]
 [ext_resource type="Texture2D" uid="uid://b6gl8sltbak7v" path="res://res/Rekku/mouth-O.png" id="37_2mdp6"]
+[ext_resource type="Texture2D" uid="uid://10pyy05xqpr4" path="res://assets/icons/pixelitos/128/ruffle.png" id="37_7hhbn"]
+[ext_resource type="Texture2D" uid="uid://fhxlwf7in0ke" path="res://assets/icons/pixelitos/128/net.pcsx2.PCSX2.png" id="38_44je8"]
 [ext_resource type="Texture2D" uid="uid://dpi351mmxu7x6" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0797.png" id="38_prt7u"]
+[ext_resource type="Texture2D" uid="uid://bum0ys5hf70g5" path="res://assets/icons/pixelitos/128/vita3k.png" id="38_vsjf2"]
 [ext_resource type="Texture2D" uid="uid://ckyvec3wqx3t" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0798.png" id="39_5ft88"]
 [ext_resource type="Texture2D" uid="uid://n4hywdifr1q4" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0763.png" id="39_m4qgd"]
+[ext_resource type="Texture2D" uid="uid://4rxej78gwu6" path="res://assets/icons/pixelitos/128/org.ryujinx.Ryujinx.png" id="40_7fdvq"]
 [ext_resource type="Texture2D" uid="uid://bwcc0mjxxm0w1" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0764.png" id="40_pnuor"]
+[ext_resource type="Texture2D" uid="uid://dr637stsnsg01" path="res://assets/icons/pixelitos/128/primehack.png" id="41_55e56"]
+[ext_resource type="Texture2D" uid="uid://lopxvipv6asb" path="res://assets/icons/pixelitos/128/info.cemu.Cemu.png" id="42_n3n7j"]
+[ext_resource type="Texture2D" uid="uid://bxng1bakpvyyr" path="res://assets/icons/pixelitos/128/app.xemu.xemu.png" id="43_ifi6j"]
+[ext_resource type="Texture2D" uid="uid://dhf620jyq75t1" path="res://assets/icons/pixelitos/128/es-de.png" id="44_7lpj5"]
+[ext_resource type="Texture2D" uid="uid://b6vndtbu4qduo" path="res://assets/icons/pixelitos/128/preferences-desktop-launch-feedback.png" id="45_qxd26"]
+[ext_resource type="Texture2D" uid="uid://3sw7gtoiuab3" path="res://assets/icons/pixelitos/128/help-browser.png" id="46_feagl"]
+[ext_resource type="Script" path="res://action_gridcontainer.gd" id="46_ua38n"]
 [ext_resource type="AudioStream" uid="uid://dhejvg02t5o35" path="res://assets/sounds/30375__sjonas88__smooth-game-like-sounds/538549__sjonas88__select-2.wav" id="71_ghxvk"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_omewi"]
 bg_color = Color(0.712505, 0, 0.175592, 1)
-
-[sub_resource type="GDScript" id="GDScript_203iw"]
-script/source = "extends MarginContainer
-"
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_lhf2y"]
 animations = [{
@@ -192,7 +201,7 @@ size_flags_horizontal = 3
 unique_name_in_owner = true
 layout_mode = 2
 tab_alignment = 1
-current_tab = 2
+current_tab = 1
 script = ExtResource("3_id6l4")
 
 [node name="Gobals" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
@@ -556,9 +565,7 @@ vertical_icon_alignment = 0
 
 [node name="WIP" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
-script = SubResource("GDScript_203iw")
 metadata/_tab_index = 1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/WIP"]
@@ -578,7 +585,6 @@ icon = ExtResource("4_q6hd2")
 
 [node name="decorations_gridcontainer" type="GridContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/WIP/ScrollContainer/VBoxContainer"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 columns = 5
 
@@ -902,103 +908,137 @@ layout_mode = 2
 text = "FUNCTIONS - Save states, etc"
 icon = ExtResource("18_h2o3e")
 
-[node name="TK_SYSTEM" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
+[node name="SYSTEM" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
+script = ExtResource("36_wv31h")
 metadata/_tab_index = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_SYSTEM"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM"]
 layout_mode = 2
 follow_focus = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="controls_container" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer"]
+[node name="controls_container" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="controls_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/controls_container"]
+[node name="controls_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container"]
 layout_mode = 2
-text = "TK_SYSTEM"
+text = "SYSTEMS & EMULATORS"
 
-[node name="controls_separator" type="HSeparator" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/controls_container"]
+[node name="controls_separator" type="HSeparator" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container"]
 layout_mode = 2
 
-[node name="systems_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/controls_container"]
+[node name="system_gridcontainer" type="GridContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container"]
+unique_name_in_owner = true
 layout_mode = 2
-text = "SYSTEMS - Emulators, Console, Computers"
-icon = ExtResource("17_0kr64")
+columns = 4
 
-[node name="systems_gridcontainer" type="GridContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/controls_container"]
-visible = false
+[node name="retroarch_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+unique_name_in_owner = true
 layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/h_separation = 10
-theme_override_constants/v_separation = 10
-columns = 6
-
-[node name="Button3" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/controls_container/systems_gridcontainer"]
-layout_mode = 2
-tooltip_text = "RetroARCH"
-theme_override_styles/focus = ExtResource("5_rjtkn")
-text = "RetroArch"
+text = "RETROARCH
+"
 icon = ExtResource("4_xcuib")
-icon_alignment = 1
-vertical_icon_alignment = 0
 
-[node name="Button8" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/controls_container/systems_gridcontainer"]
+[node name="systems_button3" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
 layout_mode = 2
-theme_override_styles/focus = ExtResource("5_rjtkn")
-text = "Dolphin"
-icon = ExtResource("11_61sak")
-icon_alignment = 1
-vertical_icon_alignment = 0
+text = "MAME
+"
+icon = ExtResource("36_dj81i")
 
-[node name="Button7" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/controls_container/systems_gridcontainer"]
+[node name="systems_button4" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
 layout_mode = 2
-tooltip_text = "CITRA"
+text = "RUFFLE"
+icon = ExtResource("37_7hhbn")
+
+[node name="systems_button5" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+layout_mode = 2
+text = "MELONDS"
+icon = ExtResource("7_4otos")
+
+[node name="systems_button6" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+layout_mode = 2
+text = "PCSX2"
+icon = ExtResource("38_44je8")
+
+[node name="systems_button11" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+layout_mode = 2
+text = "DUCKSTATION"
+icon = ExtResource("6_winpq")
+
+[node name="systems_button7" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+layout_mode = 2
+text = "PPSSPP"
+icon = ExtResource("8_akxf7")
+
+[node name="systems_button8" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+layout_mode = 2
+text = "VITA3K"
+icon = ExtResource("38_vsjf2")
+
+[node name="systems_button9" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+layout_mode = 2
 text = "RPCS3"
 icon = ExtResource("8_ec4gt")
-icon_alignment = 1
-vertical_icon_alignment = 0
 
-[node name="Button5" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/controls_container/systems_gridcontainer"]
+[node name="systems_button10" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
 layout_mode = 2
-tooltip_text = "PSPSSPP"
-theme_override_styles/focus = ExtResource("5_rjtkn")
-text = "PSPSSPP"
-icon = ExtResource("8_akxf7")
-icon_alignment = 1
-vertical_icon_alignment = 0
+text = "RYUJINX"
+icon = ExtResource("40_7fdvq")
 
-[node name="Button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/controls_container/systems_gridcontainer"]
+[node name="systems_button12" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
 layout_mode = 2
-tooltip_text = "Duckstation"
-theme_override_styles/focus = ExtResource("5_rjtkn")
-text = "DuckStation"
-icon = ExtResource("6_winpq")
-icon_alignment = 1
-vertical_icon_alignment = 0
+text = "DOLPHIN"
+icon = ExtResource("11_61sak")
 
-[node name="Button2" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/controls_container/systems_gridcontainer"]
+[node name="systems_button13" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
 layout_mode = 2
-tooltip_text = "Melon DS"
-theme_override_styles/focus = ExtResource("5_rjtkn")
-text = "MelonDS"
-icon = ExtResource("7_4otos")
-icon_alignment = 1
-vertical_icon_alignment = 0
+text = "PRIMEHACK"
+icon = ExtResource("41_55e56")
 
-[node name="Button9" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/controls_container/systems_gridcontainer"]
+[node name="systems_button14" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+layout_mode = 2
+text = "CEMU"
+icon = ExtResource("42_n3n7j")
+
+[node name="systems_button15" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+layout_mode = 2
+text = "XEMU"
+icon = ExtResource("43_ifi6j")
+
+[node name="systems_button16" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+layout_mode = 2
+text = "ES-DE"
+icon = ExtResource("44_7lpj5")
+
+[node name="action_gridcontainer" type="GridContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container"]
+unique_name_in_owner = true
 visible = false
 layout_mode = 2
-tooltip_text = "CITRA"
-theme_override_styles/focus = ExtResource("5_rjtkn")
-text = "CITRA"
-icon = ExtResource("10_wbaif")
-icon_alignment = 1
-vertical_icon_alignment = 0
+columns = 3
+script = ExtResource("46_ua38n")
+
+[node name="help_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/action_gridcontainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Help"
+icon = ExtResource("46_feagl")
+
+[node name="launch_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/action_gridcontainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "LAUNCH"
+icon = ExtResource("45_qxd26")
+
+[node name="reset_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/action_gridcontainer"]
+layout_mode = 2
+text = "RESET"
+icon = ExtResource("12_3jrmi")
 
 [node name="TK_TOOLS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
 visible = false
@@ -1599,7 +1639,7 @@ visible = false
 position = Vector2(134, 151)
 color = Color(0.858824, 0.890196, 1, 1)
 
-[node name="coltroller_guide" type="PanelContainer" parent="."]
+[node name="controller_guide" type="PanelContainer" parent="."]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -1611,14 +1651,14 @@ offset_right = -337.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="controller_guide_text" type="RichTextLabel" parent="coltroller_guide"]
+[node name="controller_guide_text" type="RichTextLabel" parent="controller_guide"]
 layout_mode = 2
 theme_override_colors/default_color = Color(1, 1, 1, 0.607843)
 theme_override_font_sizes/normal_font_size = 23
 fit_content = true
 scroll_active = false
 
-[node name="a_button" type="TextureButton" parent="coltroller_guide/controller_guide_text"]
+[node name="a_button" type="TextureButton" parent="controller_guide/controller_guide_text"]
 unique_name_in_owner = true
 layout_mode = 2
 offset_left = 147.0
@@ -1629,7 +1669,7 @@ texture_normal = ExtResource("30_glnve")
 texture_pressed = ExtResource("31_j5ri1")
 stretch_mode = 0
 
-[node name="b_button" type="TextureButton" parent="coltroller_guide/controller_guide_text"]
+[node name="b_button" type="TextureButton" parent="controller_guide/controller_guide_text"]
 unique_name_in_owner = true
 layout_mode = 2
 offset_left = 314.0
@@ -1640,7 +1680,7 @@ texture_normal = ExtResource("33_1ghye")
 texture_pressed = ExtResource("34_fum2b")
 stretch_mode = 0
 
-[node name="l1_button" type="TextureButton" parent="coltroller_guide/controller_guide_text"]
+[node name="l1_button" type="TextureButton" parent="controller_guide/controller_guide_text"]
 unique_name_in_owner = true
 layout_mode = 2
 offset_left = 7.0
@@ -1651,7 +1691,7 @@ texture_normal = ExtResource("38_prt7u")
 texture_pressed = ExtResource("39_m4qgd")
 stretch_mode = 0
 
-[node name="r1_button" type="TextureButton" parent="coltroller_guide/controller_guide_text"]
+[node name="r1_button" type="TextureButton" parent="controller_guide/controller_guide_text"]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 832.0
@@ -1662,7 +1702,7 @@ texture_normal = ExtResource("39_5ft88")
 texture_pressed = ExtResource("40_pnuor")
 stretch_mode = 0
 
-[node name="exit_button" type="Button" parent="coltroller_guide/controller_guide_text"]
+[node name="exit_button" type="Button" parent="controller_guide/controller_guide_text"]
 layout_mode = 2
 offset_left = 567.0
 offset_top = -11.0
@@ -1675,7 +1715,7 @@ flat = true
 icon_alignment = 1
 expand_icon = true
 
-[node name="locale_option" type="OptionButton" parent="coltroller_guide/controller_guide_text"]
+[node name="locale_option" type="OptionButton" parent="controller_guide/controller_guide_text"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 3
@@ -1712,5 +1752,5 @@ volume_db = -5.0
 
 [connection signal="pressed" from="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container/bios_button" to="." method="_on_bios_button_pressed"]
 [connection signal="pressed" from="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container/bios_button_expert" to="." method="_on_bios_button_expert_pressed"]
-[connection signal="pressed" from="coltroller_guide/controller_guide_text/exit_button" to="." method="_on_exit_button_pressed"]
-[connection signal="item_selected" from="coltroller_guide/controller_guide_text/locale_option" to="." method="_on_locale_selected"]
+[connection signal="pressed" from="controller_guide/controller_guide_text/exit_button" to="." method="_on_exit_button_pressed"]
+[connection signal="item_selected" from="controller_guide/controller_guide_text/locale_option" to="." method="_on_locale_selected"]

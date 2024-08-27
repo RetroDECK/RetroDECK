@@ -3,7 +3,6 @@ extends Control
 var file := FileAccess
 var bios_tempfile : String
 var bios_result: Dictionary
-var command: String = "../../tools/retrodeck_function_wrapper.sh"
 var console: bool = false
 var BIOS_COLUMNS_BASIC := ["BIOS File Name", "System", "Found", "Hash Match", "Description"]
 var BIOS_COLUMNS_EXPERT := ["BIOS File Name", "System", "Found", "Hash Match", "Description", "Subdirectory", "Hash"]
@@ -28,11 +27,11 @@ func _ready():
 
 	if bios_type == 0: #Basic BIOS button pressed
 		var parameters = ["check_bios_files","basic"]
-		await run_thread_command(command, parameters, console)
+		await run_thread_command(class_functions.wrapper_command, parameters, console)
 	else: #Assume advanced BIOS button pressed
 		var parameters = ["check_bios_files"]
-		class_functions.execute_command(command, parameters, false)
-		await run_thread_command(command, parameters, console)
+		class_functions.execute_command(class_functions.wrapper_command, parameters, false)
+		await run_thread_command(class_functions.wrapper_command, parameters, console)
 	var bios_list = bios_result["output"]
 	var bios_lines = bios_list.split("\n")
 	for line in bios_lines:

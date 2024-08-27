@@ -1,6 +1,9 @@
-class_name ClassFunctions extends Control
+class_name ClassFunctions 
 
-# This should be looked at again when GoDot 4.3 ships as has new OS.execute_with_pipe
+extends Control
+var log_text = "gdc_"
+var log_parameters: Array = ["log", "i", log_text]
+var wrapper_command: String = "../../tools/retrodeck_function_wrapper.sh"
 
 func array_to_string(arr: Array) -> String:
 	var text: String
@@ -9,6 +12,7 @@ func array_to_string(arr: Array) -> String:
 		text = line.strip_edges() + "\n"
 	return text
 
+# TODO This should be looked at again when GoDot 4.3 ships as has new OS.execute_with_pipe	
 func execute_command(command: String, parameters: Array, console: bool) -> Dictionary:
 	var result = {}
 	var output = []
