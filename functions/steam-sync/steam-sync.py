@@ -275,11 +275,12 @@ rdhome=""
 roms_folder=""
 
 def create_shortcut_new_new(games):
+    ignore_game=rdhome+"/.sync/IGNORE.sh"
     old_games=os.listdir(rdhome+"/.sync/").copy()
 
     for game in games:
         try:
-            i=old_games.index(game[0])
+            i=old_games.index(game[0]+".sh")
             old_games[i]=0
         except ValueError:
             print(game[0]+" is a new game!")
@@ -306,7 +307,16 @@ def create_shortcut_new_new(games):
         if game:
             os.remove(rdhome+"/.sync/"+game)
 
-    os.system("/app/bin/zypak-wrapper /app/srm/steam-rom-manager add")
+    dir=os.listdir(rdhome+"/.sync/")
+    if len(dir)==0:
+        print("No game found, removing all")
+        fl=open(ignore_game,"w")
+        fl.close()
+        os.system("/app/bin/zypak-wrapper /app/srm/steam-rom-manager remove")
+        os.remove(ignore_game)
+    else:
+        print("Adding the games")
+        os.system("/app/bin/zypak-wrapper /app/srm/steam-rom-manager add")
 
 def addToSteam(systems):
     games=[]
