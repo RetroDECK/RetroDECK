@@ -3,9 +3,6 @@ import shutil
 import re
 
 def resetfun(rdhome):
-    if not os.path.exists(rdhome+"/.sync/"):
-        os.makedirs(rdhome+"/.sync/")
-
     os.system("/app/bin/zypak-wrapper /app/srm/steam-rom-manager list")
     srm_path=os.path.expanduser("~/.var/app/net.retrodeck.retrodeck/config/steam-rom-manager/userData/userConfigurations.json")
     if not os.path.isfile(srm_path):
