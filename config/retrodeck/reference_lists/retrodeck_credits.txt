@@ -55,7 +55,7 @@ Jack of all trades: mainly working on GODOT and Manifest
 
 ---
 
- We want give special thanks to:
+We want give our special thanks to:
 
 - Our Patreon and donors that keeps the build servers running and provide feedback.
 

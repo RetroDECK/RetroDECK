@@ -2,6 +2,10 @@
 
 # This file is containing some global function needed for the script such as the config file tools
 
+# pathing the retrodeck components provided libraries
+# now disabled as we are importing everything in /app/lib. In case we are breaking something we need to restore this approach
+# export LD_LIBRARY_PATH="/app/retrodeck/lib:/app/retrodeck/lib/debug:/app/retrodeck/lib/pkgconfig:$LD_LIBRARY_PATH"
+
 source /app/libexec/050_save_migration.sh
 source /app/libexec/checks.sh
 source /app/libexec/compression.sh
@@ -18,20 +22,18 @@ source /app/libexec/configurator_functions.sh
 # Static variables
 rd_conf="/var/config/retrodeck/retrodeck.cfg"                                                                         # RetroDECK config file path
 rd_conf_backup="/var/config/retrodeck/retrodeck.bak"                                                                  # Backup of RetroDECK config file from update
-rd_logs_folder="/var/config/retrodeck/logs"                                                                                  # Static location to write all RetroDECK-related logs
-emuconfigs="/app/retrodeck/emu-configs"                                                                               # folder with all the default emulator configs
-rd_defaults="$emuconfigs/defaults/retrodeck/retrodeck.cfg"                                                            # A default RetroDECK config file
+rd_logs_folder="/var/config/retrodeck/logs"                                                                           # Static location to write all RetroDECK-related logs
+config="/app/retrodeck/config"                                                                               # folder with all the default emulator configs
+rd_defaults="$config/retrodeck/retrodeck.cfg"                                                            # A default RetroDECK config file
 rd_update_patch="/var/config/retrodeck/rd_update.patch"                                                               # A static location for the temporary patch file used during retrodeck.cfg updates
-bios_checklist="$emuconfigs/defaults/retrodeck/reference_lists/bios_checklist.cfg"                                    # A config file listing BIOS file information that can be verified
-compression_targets="$emuconfigs/defaults/retrodeck/reference_lists/compression_targets.cfg"                          # A config file containing supported compression types per system
-zip_compressable_extensions="$emuconfigs/defaults/retrodeck/reference_lists/zip_compressable_extensions.cfg"          # A config file containing every file extension that is allowed to be compressed to .zip format, because there are a lot!
-easter_egg_checklist="$emuconfigs/defaults/retrodeck/reference_lists/easter_egg_checklist.cfg"                        # A config file listing days and times when special splash screens should show up
-input_validation="$emuconfigs/defaults/retrodeck/reference_lists/input_validation.cfg"                                # A config file listing valid CLI inputs
-finit_options_list="$emuconfigs/defaults/retrodeck/reference_lists/finit_options_list.cfg"                            # A config file listing available optional installs during finit
+bios_checklist="$config/retrodeck/reference_lists/bios_checklist.cfg"                                    # A config file listing BIOS file information that can be verified
+input_validation="$config/retrodeck/reference_lists/input_validation.cfg"                                # A config file listing valid CLI inputs
+finit_options_list="$config/retrodeck/reference_lists/finit_options_list.cfg"                            # A config file listing available optional installs during finit
 splashscreen_dir="/var/config/ES-DE/resources/graphics/extra_splashes"                                                # The default location of extra splash screens
 current_splash_file="/var/config/ES-DE/resources/graphics/splash.svg"                                                 # The active splash file that will be shown on boot
 default_splash_file="/var/config/ES-DE/resources/graphics/splash-orig.svg"                                            # The default RetroDECK splash screen
-multi_user_emulator_config_dirs="$emuconfigs/defaults/retrodeck/reference_lists/multi_user_emulator_config_dirs.cfg"  # A list of emulator config folders that can be safely linked/unlinked entirely in multi-user mode
+# TODO: instead of this maybe we can iterate the features.json
+multi_user_emulator_config_dirs="$config/retrodeck/reference_lists/multi_user_emulator_config_dirs.cfg"  # A list of emulator config folders that can be safely linked/unlinked entirely in multi-user mode
 rd_es_themes="/app/share/es-de/themes"                                                                                # The directory where themes packaged with RetroDECK are stored
 lockfile="/var/config/retrodeck/.lock"                                                                                # Where the lockfile is located
 default_sd="/run/media/mmcblk0p1"                                                                                     # Steam Deck SD default path                                                                        # A static location for RetroDECK logs to be written
@@ -41,14 +43,16 @@ es_themes_list="https://gitlab.com/es-de/themes/themes-list/-/raw/master/themes.
 remote_network_target_1="https://flathub.org"                                                                         # The URL of a common internet target for testing network access
 remote_network_target_2="$rd_repo"                                                                                    # The URL of a common internet target for testing network access
 remote_network_target_3="https://one.one.one.one"                                                                     # The URL of a common internet target for testing network access
-helper_files_folder="$emuconfigs/defaults/retrodeck/helper_files"                                                     # The parent folder of RetroDECK documentation files for deployment
-helper_files_list="$emuconfigs/defaults/retrodeck/reference_lists/helper_files_list.cfg"                              # The list of files to be deployed and where they go
+helper_files_folder="$config/retrodeck/helper_files"                                                     # The parent folder of RetroDECK documentation files for deployment
 rd_appdata="/app/share/appdata/net.retrodeck.retrodeck.appdata.xml"                                                   # The shipped appdata XML file for this version
-rpcs3_firmware="http://dus01.ps3.update.playstation.net/update/ps3/image/us/2023_0228_05fe32f5dc8c78acbcd84d36ee7fdc5b/PS3UPDAT.PUP"
+rpcs3_firmware="http://dus01.ps3.update.playstation.net/update/ps3/image/us/2024_0227_3694eb3fb8d9915c112e6ab41a60c69f/PS3UPDAT.PUP"
 RA_API_URL="https://retroachievements.org/dorequest.php"                                                              # API URL for RetroAchievements.org
-presets_dir="$emuconfigs/defaults/retrodeck/presets"                                                                  # Repository for all system preset config files
-incompatible_presets_reference_list="$emuconfigs/defaults/retrodeck/reference_lists/incompatible_presets.cfg"         # A config file listing all incompatible presets for reference (eg. cannot have borders and widescreen enabled simultaniously)
-pretty_system_names_reference_list="$emuconfigs/defaults/retrodeck/reference_lists/pretty_system_names.cfg"           # An internal translation list for turning internal names (eg. gbc) to "pretty" names (Nintendo GameBoy Color)
+presets_dir="$config/retrodeck/presets"                                                                  # Repository for all system preset config files
+git_organization_name="RetroDECK"                                                                       # The name of the organization in our git repository such as GitHub
+cooker_repository_name="Cooker"                                                                         # The name of the cooker repository under RetroDECK organization
+main_repository_name="RetroDECK"                                                                        # The name of the main repository under RetroDECK organization
+features="$config/retrodeck/reference_lists/features.json"                                                 # A file where all the RetroDECK and component capabilities are kept for querying
+
 
 # Godot data transfer temp files
 
@@ -176,7 +180,7 @@ if [[ ! -f "$rd_conf" ]]; then
   set_setting_value $rd_conf "sdcard" "$default_sd" retrodeck "paths" # Set SD card location if default path has changed
 
   if grep -qF "cooker" <<< "$hard_version" || grep -qF "PR-" <<< "$hard_version"; then # If newly-installed version is a "cooker" or PR build
-    set_setting_value $rd_conf "update_repo" "RetroDECK-cooker" retrodeck "options"
+    set_setting_value $rd_conf "update_repo" "$cooker_repository_name" retrodeck "options"
     set_setting_value $rd_conf "update_check" "true" retrodeck "options"
     set_setting_value $rd_conf "developer_options" "true" retrodeck "options"
   fi
@@ -193,7 +197,7 @@ else
   log i "Loading it"
 
   if grep -qF "cooker" <<< $hard_version; then # If newly-installed version is a "cooker" build
-    set_setting_value $rd_conf "update_repo" "RetroDECK-cooker" retrodeck "options"
+    set_setting_value $rd_conf "update_repo" "$cooker_repository_name" retrodeck "options"
     set_setting_value $rd_conf "update_check" "true" retrodeck "options"
     set_setting_value $rd_conf "developer_options" "true" retrodeck "options"
   fi

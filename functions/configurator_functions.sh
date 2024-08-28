@@ -5,10 +5,6 @@ check_bios_files() {
   # There is a "basic" and "expert" mode which outputs different levels of data
   # USAGE: check_bios_files "mode"
   
-  if [[ -f "$godot_bios_files_checked" ]]; then
-    rm -f "$godot_bios_files_checked" # Godot data transfer temp files
-  fi
-  touch "$godot_bios_files_checked"
 
   while IFS="^" read -r bios_file bios_subdir bios_hash bios_system bios_desc || [[ -n "$bios_file" ]];
     do
@@ -25,10 +21,10 @@ check_bios_files() {
         fi
         if [[ "$1" == "basic" ]]; then
           bios_checked_list=("${bios_checked_list[@]}" "$bios_file" "$bios_system" "$bios_file_found" "$bios_hash_matched" "$bios_desc")
-          echo "$bios_file"^"$bios_system"^"$bios_file_found"^"$bios_hash_matched"^"$bios_desc" >> "$godot_bios_files_checked" # Godot data transfer temp file
+          echo "$bios_file"^"$bios_system"^"$bios_file_found"^"$bios_hash_matched"^"$bios_desc" # Godot data transfer
         else
           bios_checked_list=("${bios_checked_list[@]}" "$bios_file" "$bios_system" "$bios_file_found" "$bios_hash_matched" "$bios_desc" "$bios_subdir" "$bios_hash")
-          echo "$bios_file"^"$bios_system"^"$bios_file_found"^"$bios_hash_matched"^"$bios_desc"^"$bios_subdir"^"$bios_hash" >> "$godot_bios_files_checked" # Godot data transfer temp file
+          echo "$bios_file"^"$bios_system"^"$bios_file_found"^"$bios_hash_matched"^"$bios_desc"^"$bios_subdir"^"$bios_hash" # Godot data transfer
         fi
       fi
   done < $bios_checklist
@@ -44,14 +40,9 @@ find_empty_rom_folders() {
 
   empty_rom_folders_list=()
   all_empty_folders=()
-  all_helper_files=()
 
-  while IFS='^' read -r file dest || [[ -n "$file" ]];
-  do
-    if [[ ! "$file" == "#"* ]] && [[ ! -z "$file" ]]; then
-      all_helper_files=("${all_helper_files[@]}" "$file")
-    fi
-  done < "$helper_files_list"
+  # Extract helper file names using jq and populate the all_helper_files array
+  all_helper_files=($(jq -r '.helper_files | to_entries | .[] | .value.filename' "$features"))
 
   for system in $(find "$roms_folder" -mindepth 1 -maxdepth 1 -type d -printf '%f\n')
   do
@@ -70,8 +61,8 @@ find_empty_rom_folders() {
         all_empty_folders=("${all_empty_folders[@]}" "$(realpath $dir)")
         echo "$(realpath $dir)" >> "$godot_empty_roms_folders" # Godot data transfer temp file
     elif [[ $count -eq 2 ]] && [[ "$files" =~ "systeminfo.txt" ]]; then
-      # Directory contains 2 files, one of which is "systeminfo.txt"
-      for helper_file in ${all_helper_files[@]} # Compare helper file list to dir file list
+      contains_helper_file="false"
+      for helper_file in "${all_helper_files[@]}" # Compare helper file list to dir file list
       do
         if [[ "$files" =~ "$helper_file" ]]; then
           contains_helper_file="true" # Helper file was found
@@ -87,3 +78,4 @@ find_empty_rom_folders() {
     fi
   done
 }
+

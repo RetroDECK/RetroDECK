@@ -2,6 +2,16 @@
 
 source /app/libexec/global.sh
 
+# uses jq to extract all the emulators (components) that don't have resettable: false in the features.json and separate them with "|"
+resettable_components=$(jq -r '
+  [(.emulator | to_entries[]) |
+  select(.value.core == null and .value.resettable != false) |
+  .key] | sort | join("|")
+' "$features")
+
+# uses sed to create, a, list, like, this
+pretty_resettable_components=$(echo "$resettable_components" | sed 's/|/, /g')
+
 # Arguments section
 
 for i in "$@"; do
@@ -55,11 +65,15 @@ https://retrodeck.net
       fi
       ;;
     --reset-component*)
-      echo "You are about to reset one or more RetroDECK components or emulators."
-      echo "Available options are: es-de, retroarch, cemu, dolphin, duckstation, gzdoom, melonds, pcsx3, pico8, ppsspp, primehack, rpcs3, ryujinx, steam_rom_manager, xemu, vita3k, mame, all"
-      read -p "Please enter the component you would like to reset: " component
-      component=$(echo "$component" | tr '[:upper:]' '[:lower:]')
-      if [[ "$component" =~ ^(es-de|retroarch|cemu|dolphin|duckstation|gzdoom|mame|melonds|pcsx2|ppsspp|primehack|ryujinx|steam_rom_manager|rpcs3|xemu|all)$ ]]; then
+      component="$2"
+      if [ -z "$component" ]; then
+        echo "You are about to reset one or more RetroDECK components or emulators."
+        echo -e "Available options are:\nall, $pretty_resettable_components"
+        read -p "Please enter the component you would like to reset: " component
+        component=$(echo "$component" | tr '[:upper:]' '[:lower:]')
+      fi
+
+      if [[ "$component" =~ ^(all|$resettable_components)$ ]]; then
         read -p "You are about to reset $component to default settings. Enter 'y' to continue, 'n' to stop: " response
         if [[ $response == [yY] ]]; then
           prepare_component "reset" "$component" "cli"
@@ -109,7 +123,7 @@ if [ -f "$lockfile" ]; then
     if grep -qF "cooker" <<< $hard_version; then # If newly-installed version is a "cooker" build
       log d "Newly-installed version is a \"cooker\" build"
       configurator_generic_dialog "RetroDECK Cooker Warning" "RUNNING COOKER VERSIONS OF RETRODECK CAN BE EXTREMELY DANGEROUS AND ALL OF YOUR RETRODECK DATA\n(INCLUDING BIOS FILES, BORDERS, DOWNLOADED MEDIA, GAMELISTS, MODS, ROMS, SAVES, STATES, SCREENSHOTS, TEXTURE PACKS AND THEMES)\nARE AT RISK BY CONTINUING!"
-      set_setting_value $rd_conf "update_repo" "RetroDECK-cooker" retrodeck "options"
+      set_setting_value $rd_conf "update_repo" "$cooker_repository_name" retrodeck "options"
       set_setting_value $rd_conf "update_check" "true" retrodeck "options"
       set_setting_value $rd_conf "developer_options" "true" retrodeck "options"
       cooker_base_version=$(echo $hard_version | cut -d'-' -f2)

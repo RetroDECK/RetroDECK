@@ -1,0 +1,8 @@
+ID,URL,Description
+rd_web,https://retrodeck.net/,Opens the RetroDECK Website in your default browser
+rd_changelog,https://retrodeck.readthedocs.io/en/latest/wiki_rd_versions/version-history/,Opens the RetroDECK change log in your default browser
+rd_wiki,https://retrodeck.readthedocs.io/en/latest/,Opens the RetroDECK Wiki in your default browser
+rd_credits,https://retrodeck.readthedocs.io/en/latest/wiki_credits/donations-licenses/,Opens the RetroDECK Credits in your default browser
+rd_donate,https://retrodeck.readthedocs.io/en/latest/wiki_credits/donations-licenses/,Opens Donations in your default browser
+rd_contactus,https://github.com/XargonWan/RetroDECK,Opens the RetroDECK contact us section in your default browser
+rd_licenses,https://retrodeck.readthedocs.io/en/latest/wiki_credits/donations-licenses/,Opens the RetroDECK licenses in your default browser
