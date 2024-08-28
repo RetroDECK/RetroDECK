@@ -49,6 +49,7 @@ command_list_default={
 "dreamcast": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/flycast_libretro.so",
 "easyrpg": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/easyrpg_libretro.so",
 "famicom": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/mesen_libretro.so",
+"flash": "TODO: I have to catch how it works", #TODO
 "fba": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/fbalpha2012_libretro.so",
 "fbneo": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/fbneo_libretro.so",
 "fds": "flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/mesen_libretro.so",
@@ -393,6 +394,9 @@ def start_config():
     if not os.path.isfile(srm_path):
         print("Steam ROM Manager configuration not initialized! Initializing now.")
         resetfun(rdhome)
+
+    if not os.path.exists(rdhome+"/.sync/"):
+        os.makedirs(rdhome+"/.sync/")
 
 if __name__=="__main__":
     start_config()
