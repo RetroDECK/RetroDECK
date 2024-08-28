@@ -391,7 +391,7 @@ def start_config():
 
     srm_path=os.path.expanduser("~/.var/app/net.retrodeck.retrodeck/config/steam-rom-manager/userData/userConfigurations.json")
     if not os.path.isfile(srm_path):
-        print("Steam Rom Manager configuration not initialized! Initializing now.")
+        print("Steam ROM Manager configuration not initialized! Initializing now.")
         resetfun(rdhome)
 
 if __name__=="__main__":

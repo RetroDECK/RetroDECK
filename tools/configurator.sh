@@ -1152,13 +1152,13 @@ configurator_reset_dialog() {
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
     --text="Which component do you want to reset to default settings?" \
     --column="Component" --column="Action" \
-    "Steam Rom Manager" "Reset SRM that manages the sync and scraping toward Steam library" \
+    "Steam ROM Manager" "Reset SRM that manages the sync and scraping toward Steam library" \
     "ES-DE" "Reset the ES-DE frontend" \ )
     # TODO: "GyroDSU" "Reset the gyroscope manager GyroDSU"
 
     case $component_to_reset in
 
-    "Steam Rom Manager" | "ES-DE" ) # TODO: GyroDSU
+    "Steam ROM Manager" | "ES-DE" ) # TODO: GyroDSU
       if [[ $(configurator_reset_confirmation_dialog "$component_to_reset" "Are you sure you want to reset $component_to_reset to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
         prepare_component "reset" "$component_to_reset" "configurator"
         configurator_process_complete_dialog "resetting $component_to_reset"
@@ -1268,7 +1268,7 @@ configurator_add_steam() {
     zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - RetroDECK Steam Syncronization" \
-    --text="Steam syncronization is currently disabled. Do you want to enable it?\n\nAll the games marked as favorites will be syncronized with Steam Rom Manager.\nRemember to restart Steam each time to see the changes.\n"
+    --text="Steam syncronization is currently disabled. Do you want to enable it?\n\nAll the games marked as favorites will be syncronized with Steam ROM Manager.\nRemember to restart Steam each time to see the changes.\n"
 
     if [ $? == 0 ]
     then
