@@ -83,18 +83,34 @@ func _connect_signals() -> void:
 func _about_button_pressed(id: String) -> void:
 	match id:
 		"rd_web":
+			class_functions.log_parameters[2] = class_functions.log_text + "Loading website for " + id
+			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
 			OS.shell_open(rd_web_button.editor_description)
 		"rd_changelog":
+			class_functions.log_parameters[2] = class_functions.log_text + "Loading website for " + id
+			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
 			OS.shell_open(rd_changelog_button.editor_description)
 		"rd_wiki":
+			class_functions.log_parameters[2] = class_functions.log_text + "Loading website for " + id
+			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
 			OS.shell_open(rd_wiki_button.editor_description)
 		"rd_credits":
+			class_functions.log_parameters[2] = class_functions.log_text + "Loading website for " + id
+			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
 			OS.shell_open(rd_credits_button.editor_description)
 		"rd_donate":
+			class_functions.log_parameters[2] = class_functions.log_text + "Loading website for " + id
+			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
 			OS.shell_open(rd_donate_button.editor_description)
 		"rd_contactus":
+			class_functions.log_parameters[2] = class_functions.log_text + "Loading website for " + id
+			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
 			OS.shell_open(rd_contactus_button.editor_description)
 		"rd_licenses":
+			class_functions.log_parameters[2] = class_functions.log_text + "Loading website for " + id
+			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
 			OS.shell_open(rd_licenses_button.editor_description)
 		_:
+			class_functions.log_parameters[2] = class_functions.log_text + "Loading website - no matching ID found"
+			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
 			print ("Website ID/Link not found")

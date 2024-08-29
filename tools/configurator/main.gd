@@ -5,9 +5,6 @@ extends Control
 
 var bios_type:int
 var status_code_label: Label
-var wrapper_command: String = "../../tools/retrodeck_function_wrapper.sh"
-var log_text = "gdc_"
-var log_parameters: Array = ["log", "i", log_text]
 var log_results: Dictionary
 var theme_option: OptionButton
 #signal signal_theme_changed
@@ -29,24 +26,24 @@ func _ready():
 	_connect_signals()
 	_play_main_animations()
 
-	%locale_option.selected = class_functions.map_locale_id(OS.get_locale_language())
-	app_data = data_handler.app_data
+	#%locale_option.selected = class_functions.map_locale_id(OS.get_locale_language())
+	#app_data = data_handler.app_data
 	#data_handler.add_emulator()
 	#data_handler.modify_emulator_test()
-	if app_data:
-		var website_data: Link = app_data.about_links["rd_web"]
-		print (website_data.name,"-",website_data.url,"-",website_data.description,"-",website_data.url)
-		#print (app_data.about_links["rd_web"]["name"])
-		var core_data: Core = app_data.cores["gambatte_libetro"]
-		print (core_data.name)
-		for property: CoreProperty in core_data.properties:
-			print("Cheevos: ", property.cheevos)
-			print("Cheevos Hardcore: ", property.cheevos_hardcore)
-			print("Quick Resume: ", property.quick_resume)
-			print("Rewind: ", property.rewind)
-			print("Borders: ", property.borders)
-			print("Widescreen: ", property.widescreen)
-			print("ABXY_button:", property.abxy_button)
+	#if app_data:
+		#var website_data: Link = app_data.about_links["rd_web"]
+		#print (website_data.name,"-",website_data.url,"-",website_data.description,"-",website_data.url)
+		##print (app_data.about_links["rd_web"]["name"])
+		#var core_data: Core = app_data.cores["gambatte_libetro"]
+		#print (core_data.name)
+		#for property: CoreProperty in core_data.properties:
+			#print("Cheevos: ", property.cheevos)
+			#print("Cheevos Hardcore: ", property.cheevos_hardcore)
+			#print("Quick Resume: ", property.quick_resume)
+			#print("Rewind: ", property.rewind)
+			#print("Borders: ", property.borders)
+			#print("Widescreen: ", property.widescreen)
+			#print("ABXY_button:", property.abxy_button)
 		#for key in app_data.emulators.keys():
 			#var emulator = app_data.emulators[key]
 			## Display the properties of each emulator
@@ -72,8 +69,8 @@ func _ready():
 				#print("Borders: ", property.borders)
 				#print("Widescreen: ", property.widescreen)
 				#print("ABXY_button:", property.abxy_button)
-	else:
-		print ("No emulators")
+	#else:
+		#print ("No emulators")
 
 	var config_file_path = "/var/config/retrodeck/retrodeck.cfg"
 	var json_file_path = "/var/config/retrodeck/retrodeck.json"
@@ -100,7 +97,6 @@ func _ready():
 			n.self_modulate.a = 0.5 #make it half transparent
 	combine_tkeys()
 	
-	
 func _input(event):
 	if Input.is_action_pressed("quit1") and Input.is_action_pressed("quit2"):
 		get_tree().quit()
@@ -120,6 +116,11 @@ func _input(event):
 	if event.is_action_pressed("quit"):
 		_exit()
 
+func _exit():
+	get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
+	get_tree().quit()
+
+
 func _get_nodes() -> void:
 	status_code_label = get_node("%status_code_label")
 	theme_option = get_node("%theme_optionbutton")
@@ -138,17 +139,23 @@ func _connect_signals() -> void:
 	%decorations_button.pressed.connect(_hide_show_containers.bind(%decorations_button, %decorations_gridcontainer))
 	%systems_button.pressed.connect(_hide_show_containers.bind(%systems_button, %systems_gridcontainer))
 	%save_resume_button.pressed.connect(_hide_show_containers.bind(%decorations_button,%systems_gridcontainer))
-			
+
 func _load_log(index: int) -> void:
 	var log_content:String
 	match index:
 		1: 
+			class_functions.log_parameters[2] = class_functions.log_text + "Loading RetroDeck log"
+			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
 			log_content = class_functions.import_text_file(rd_logs +"/retrodeck.log")
 			load_popup("RetroDeck Log", "res://components/logs_view/logs_popup_content.tscn", log_content)
 		2:
+			class_functions.log_parameters[2] = class_functions.log_text + "Loading ES-DE log"
+			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
 			log_content = class_functions.import_text_file(rd_logs +"/ES-DE/es_log.txt")
 			load_popup("ES-DE Log", "res://components/logs_view/logs_popup_content.tscn",log_content)
 		3: 
+			class_functions.log_parameters[2] = class_functions.log_text + "Loading RetroArch log"
+			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
 			log_content = class_functions.import_text_file(rd_logs +"/retroarch/logs/log.txt")
 			load_popup("Retroarch Log", "res://components/logs_view/logs_popup_content.tscn",log_content)	
 
@@ -179,7 +186,6 @@ func _hide_show_buttons(button: Button, buttons_gridcontainer: GridContainer, hi
 					var child = hidden_gridcontainer.get_child(i)        
 					if child is Button and child != button:
 						child.visible=false
-				%decorations_save.visible=true
 			elif button.toggle_mode == true and %borders_gridcontainer.visible == true:
 				print (button.name, "SAVE NOW? TODO") # TODO SHOW ALL AGAIN?
 				buttons_gridcontainer.visible = false
@@ -189,28 +195,25 @@ func _hide_show_buttons(button: Button, buttons_gridcontainer: GridContainer, hi
 					if child is Button:
 						child.visible=true
 						child.toggle_mode = false
-				%decorations_save.visible=false
 			button.toggle_mode = true
-		"decorations_save":
-			if %decorations_save.visible == true and %borders_gridcontainer.visible == true:
-				%borders_gridcontainer.visible = false
-				for i in range(buttons_gridcontainer.get_child_count()):
-					var child = buttons_gridcontainer.get_child(i)        
-					if child is Button:
-						child.visible=true
-						child.toggle_mode = false
-				%decorations_save.visible=false
 
 func _conf_theme(index: int) -> void: 
-	print (index)
 	match index:
 		1:
+			class_functions.log_parameters[2] = class_functions.log_text + "Set theme to index " + str(index)
+			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
 			custom_theme = preload("res://res/pixel_ui_theme/RetroDECKTheme.tres")
 		2:
+			class_functions.log_parameters[2] = class_functions.log_text + "Set theme to index " + str(index)
+			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
 			custom_theme = preload("res://assets/themes/retro_theme.tres")
 		3:
+			class_functions.log_parameters[2] = class_functions.log_text + "Set theme to index " + str(index)
+			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)	
 			custom_theme = preload("res://assets/themes/modern_theme.tres")
 		4:
+			class_functions.log_parameters[2] = class_functions.log_text + "Set theme to index " + str(index)
+			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)			
 			custom_theme = preload("res://assets/themes/accesible_theme.tres")
 	$".".theme = custom_theme
 	_play_main_animations()
@@ -238,28 +241,24 @@ func _on_quickresume_advanced_pressed():
 func _on_bios_button_pressed():
 	_play_main_animations()
 	bios_type = 0
-	log_parameters[2] = log_text + "Bios_Check"
-	log_results = class_functions.execute_command(wrapper_command, log_parameters, false)
+	class_functions.log_parameters[2] = class_functions.log_text + "Bios_Check"
+	log_results = class_functions.execute_command(class_functions.wrapper_command, class_functions.log_parameters, false)
 	load_popup("BIOS File Check", "res://components/bios_check/bios_popup_content.tscn","")
 	status_code_label.text = str(log_results["exit_code"])
 
 func _on_bios_button_expert_pressed():
 	_play_main_animations()
 	bios_type = 1
-	log_parameters[2] = log_text + "Advanced_Bios_Check"
-	log_results = class_functions.execute_command(wrapper_command, log_parameters, false)
+	class_functions.log_parameters[2] = class_functions.log_text + "Advanced_Bios_Check"
+	log_results = class_functions.execute_command(class_functions.wrapper_command, class_functions.log_parameters, false)
 	load_popup("BIOS File Check", "res://components/bios_check/bios_popup_content.tscn","")
 	status_code_label.text = str(log_results["exit_code"])
 
 func _on_exit_button_pressed():
 	_play_main_animations()
-	log_parameters[2] = log_text + "Exited"
-	log_results = class_functions.execute_command(wrapper_command, log_parameters, false)
-	_exit()
-
-func _exit():
-	get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
-	get_tree().quit()
+	class_functions.log_parameters[2] = class_functions.log_text + "Exited"
+	log_results = class_functions.execute_command(class_functions.wrapper_command, class_functions.log_parameters, false)
+	class_functions._exit()
 
 func _on_locale_selected(index):
 	match index:
