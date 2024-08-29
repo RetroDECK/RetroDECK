@@ -181,6 +181,7 @@ if [[ ! -f "$rd_conf" ]]; then
 
   if grep -qF "cooker" <<< "$hard_version" || grep -qF "PR-" <<< "$hard_version"; then # If newly-installed version is a "cooker" or PR build
     set_setting_value $rd_conf "update_repo" "$cooker_repository_name" retrodeck "options"
+    set_setting_value $rd_conf "update_repo" "$cooker_repository_name" retrodeck "options"
     set_setting_value $rd_conf "update_check" "true" retrodeck "options"
     set_setting_value $rd_conf "developer_options" "true" retrodeck "options"
   fi
@@ -197,6 +198,7 @@ else
   log i "Loading it"
 
   if grep -qF "cooker" <<< $hard_version; then # If newly-installed version is a "cooker" build
+    set_setting_value $rd_conf "update_repo" "$cooker_repository_name" retrodeck "options"
     set_setting_value $rd_conf "update_repo" "$cooker_repository_name" retrodeck "options"
     set_setting_value $rd_conf "update_check" "true" retrodeck "options"
     set_setting_value $rd_conf "developer_options" "true" retrodeck "options"

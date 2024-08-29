@@ -6,6 +6,7 @@ on:
      - cooker*
      - feat*
      - branch/cooker*
+     - branch/cooker*
     paths:
      - '.github/workflows/**'
      - 'automation_tools/**'
@@ -30,6 +31,7 @@ permissions:
 jobs:
 
   Building_RetroDECK:
+    runs-on: retrodeck
     runs-on: retrodeck
     steps:
 

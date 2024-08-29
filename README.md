@@ -2,15 +2,12 @@
     <img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/logo.png?raw=true" alt="RetroDECK logo" width="600"/>
 </p>
 
-# RetroDECK on your device!
-
-
 <p float="center">
 <img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen05.jpeg?raw=true" alt="screenshot" width="300"/>
 <img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen06.jpeg?raw=true" alt="screenshot" width="300"/>
 </p>
 
-Instead of having several different emulators, engines and frontends on your Linux/SteamOS system you only need one: RetroDECK.
+Instead of having several different emulators, engines and frontends on your Linux/SteamOS system you only need one flatpak: RetroDECK.
 
 ![Flathub](https://img.shields.io/flathub/downloads/net.retrodeck.retrodeck)
 ![Flathub](https://img.shields.io/flathub/v/net.retrodeck.retrodeck)
@@ -18,27 +15,26 @@ Instead of having several different emulators, engines and frontends on your Lin
 ![GitHub](https://img.shields.io/github/license/RetroDECK/RetroDECK)
 [![Documentation Status](https://readthedocs.org/projects/retrodeck/badge/?version=latest)](https://retrodeck.readthedocs.io/en/latest/?badge=latest)
 
-**The RetroDECK Wiki & FAQ**
+# What is RetroDECK?
 
-Please check out the these links for even more information: 
+The wiki has a detailed page on this:  
 
-- [RetroDECK Wiki](https://retrodeck.readthedocs.io/en/latest/) 
-- [RetroDECK FAQ](https://retrodeck.readthedocs.io/en/latest/wiki_general/faq/)
+[What is RetroDECK](https://retrodeck.readthedocs.io/en/latest/wiki_about/what-is-retrodeck/)
 
-# How do I start using RetroDECK?
-Basically just download it from Flathub, put your roms/games and needed bioses and just play. 
+## How do I start using RetroDECK?
 
 Read our getting started guide here:
 
-[How to: Start using RetroDECK](https://retrodeck.readthedocs.io/en/latest/wiki_general/retrodeck-start/)
+[Start using RetroDECK](https://retrodeck.readthedocs.io/en/latest/wiki_general/retrodeck-start/)
 
 ## What devices/systems does RetroDECK support: 
+
 RetroDECK currently supports:
 
 - Steam Deck
 - Linux Desktop
 
-For more information read up here:
+For more information read here:
 
 [Supported Systems](https://retrodeck.readthedocs.io/en/latest/wiki_general/supported-devices/)
 
@@ -87,11 +83,32 @@ Yes, here you can read more about the beta period:
 
 [RetroDECK: Beta period](https://retrodeck.readthedocs.io/en/latest/wiki_general/beta-period/)
 
-### Can I contribute to the project?
-Yes, off course! <br>
-Read up here on how to help out, there is something for everyone:
+## How to get support and report issues? 
 
-[How to: Contribute to RetroDECK](https://retrodeck.readthedocs.io/en/latest/wiki_community/contibute-rd/)
+[Reporting Issues & Known Issues](https://retrodeck.readthedocs.io/en/latest/wiki_bugs/known-issues/)
+
+## The RetroDECK community links:
+
+- [RetroDECK Website](https://retrodeck.net)
+- [RetroDECK Wiki](https://github.com/XargonWan/RetroDECK/wiki)
+
+---
+
+- [Discord](https://discord.gg/WDc5C9YWMx) 
+- [Matrix](https://matrix.to/#/#retrodeck:matrix.org)
+
+---
+
+- [Lemmy c/retrodeck](https://lemmy.zip/c/retrodeck)
+- [Subreddit r/retrodeck](https://www.reddit.com/r/retrodeck)
+
+
+
+## Can I contribute to the project?
+
+Yes, off course! Read up here:
+
+[How-to: Contribute to RetroDECK](https://retrodeck.readthedocs.io/en/latest/wiki_community/contibute-rd/)
 
 ## Our repositories:
 | Name          | Description  |

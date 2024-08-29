@@ -26,7 +26,7 @@ prepare_component() {
           declare -g "$current_setting_name=$rdhome/${current_setting_value#*retrodeck/}" #removes everything until "retrodeck" and adds the actual retrodeck folder
           log d "Setting: $current_setting_name=$current_setting_value"
           if [[ ! $current_setting_name == "logs_folder" ]]; then # Don't create a logs folder normally, we want to maintain the current files exactly to not lose early-install logs.
-            create_dir "$rdhome/$(basename $current_setting_value)"
+            create_dir "$rdhome/${current_setting_value#*retrodeck/}"
           else # Log folder-specific actions
             mv "$rd_logs_folder" "$logs_folder" # Move existing logs folder from internal to userland
             ln -sf "$logs_folder" "$rd_logs_folder" # Link userland logs folder back to statically-written location
@@ -42,8 +42,8 @@ prepare_component() {
         local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
         if [[ ! $current_setting_name =~ (rdhome|sdcard) ]]; then # Ignore these locations
           local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
-          if [[ -d "$rdhome/$(basename $current_setting_value)" ]]; then # If the folder exists at the new ~/retrodeck location
-              declare -g "$current_setting_name=$rdhome/$(basename $current_setting_value)"
+          if [[ -d "$rdhome/${current_setting_value#*retrodeck/}" ]]; then # If the folder exists at the new ~/retrodeck location
+              declare -g "$current_setting_name=$rdhome/${current_setting_value#*retrodeck/}"
           fi
         fi
       done < <(grep -v '^\s*$' $rd_conf | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')

@@ -46,6 +46,7 @@ check_for_version_update() {
   log d "Entering funtcion check_for_version_update"
 
   wget -q --spider "https://api.github.com/repos/$git_organization_name/$update_repo/releases/latest"
+  wget -q --spider "https://api.github.com/repos/$git_organization_name/$update_repo/releases/latest"
 
   if [ $? -eq 0 ]; then
   
@@ -68,6 +69,7 @@ check_for_version_update() {
           log i "Selected: \"OK\""
           set_setting_value $rd_conf "update_ignore" "$online_version" retrodeck "options" # Store version to ignore for future checks
         fi
+      elif [[ "$update_repo" == "$cooker_repository_name" ]] && [[ ! $version == $online_version ]]; then
       elif [[ "$update_repo" == "$cooker_repository_name" ]] && [[ ! $version == $online_version ]]; then
         log i "Showing update request dialog as \"$online_version\" was found and is greater then \"$version\""
         choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="Ignore this version" \

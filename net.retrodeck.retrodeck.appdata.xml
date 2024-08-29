@@ -110,7 +110,8 @@
             </ul>
             <p>Known issues:</p>
             <ul>
-               <li>Please check the know issues in the Wiki under General Information.</li>
+               <li>Ryujinx is broken in this version, we plan to fix it soon, check the known issues to learn more</li>
+               <li>Please check the know issues in the Wiki under General Information</li>
             </ul>
          </description>
       </release>
