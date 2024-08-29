@@ -40,7 +40,16 @@ jobs:
           sudo umount -f $HOME/actions-run/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles/*
         continue-on-error: true
 
-      
+      - name: Generate a token for Rekku
+        if: ${{ github.repository == 'RetroDECK/RetroDECK' }}
+        id: generate-rekku-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ vars.REKKU_APP_ID }}
+          private-key: ${{ secrets.REKKU_PRIVATE_KEY }}
+          repositories: "RetroDECK,Cooker"
+          owner: "RetroDECK"
+    
       - name: Clone RetroDECK repo
         uses: actions/checkout@v4
         with:
@@ -174,10 +183,11 @@ jobs:
           allowUpdates: true
           makeLatest: ${{env.MAKE_LATEST}} # if it's a feat branch is not considered the latest build
           token: ${{ steps.generate-rekku-token.outputs.token }}
-          repo: Cooker
+          repo: ${{ github.repository_owner == 'RetroDECK' && 'Cooker' || github.event.repository.name }} # "Cooker" if we are in RetroDECK Org, else "this repo"
         continue-on-error: true
 
       - name: Rewrite Tag
+        if: ${{ github.repository == 'RetroDECK/RetroDECK' }}
         run: |
           git submodule deinit -f --all
           git fetch --tags
@@ -198,14 +208,6 @@ jobs:
         with:
           name: retrodeck-flatpak
           path: RetroDECK-cooker.flatpak
-        continue-on-error: true
-
-      - name: Create Artifact for flathub
-        run: | 
-          tar -czf ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.tar.gz -C ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker .
-          hash=($(sha256sum ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.tar.gz))
-          echo $hash > ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.sha
-          mv -f RetroDECK-Artifact-cooker.* ${{ secrets.ARTIFACT_REPO }}
         continue-on-error: true
 
       # - name: Upload RetroDECK-cooker.flatpak to Gitea Release
