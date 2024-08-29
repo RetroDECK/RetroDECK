@@ -374,10 +374,66 @@ post_update() {
     fi
   fi
 
+  # Check if the version is older than 0.8.4b
+  if [[ $(check_version_is_older_than "0.8.4b") == "true" ]]; then
+    # In version 0.8.4b, the following changes were made:
+    # - Recovery from a failed move of the themes, downloaded_media and gamelists folder to their new ES-DE locations (AGAIN)
+
+    log d "Injecting the new retrodeck/ES-DE subdir into the retrodeck.cfg"
+    # Check if ES-DE already exists in media_folder or themes_folder
+    if grep -E '^(media_folder|themes_folder)=.*ES-DE' "$rd_conf"; then
+      log d "ES-DE path already exists in media_folder or themes_folder"
+    else
+      # Update the paths if ES-DE does not exist
+      sed -i -e '/media_folder=/s|retrodeck/|retrodeck/ES-DE/|g' -e '/themes_folder=/s|retrodeck/|retrodeck/ES-DE/|g' "$rd_conf" && log d "Injection successful"
+    fi
+    log d "$(grep media_folder "$rd_conf")"
+    log d "$(grep themes_folder "$rd_conf")"
+    conf_read
+    conf_write
+
+    log i "Checking if ES-DE downloaded_media, gamelist, and themes folder must be migrated from \"$rdhome\" to \"$rdhome/ES-DE\" due to a RetroDECK Framework bug"
+
+    # Use rsync to merge directories and overwrite existing files
+    if [[ -d "$rdhome/themes" ]]; then
+      rsync -a "$rdhome/themes/" "$rdhome/ES-DE/themes/" && log d "Move of \"$rdhome/themes\" to \"$rdhome/ES-DE/themes\" completed"
+      rm -rf "$rdhome/themes" # Remove the original directory after merging
+    else
+      log i "ES-DE themes appear to have already been migrated."
+    fi
+
+    if [[ -d "$rdhome/downloaded_media" ]]; then
+      rsync -a "$rdhome/downloaded_media/" "$rdhome/ES-DE/downloaded_media/" && log d "Move of \"$rdhome/downloaded_media\" to \"$rdhome/ES-DE/downloaded_media\" completed"
+      rm -rf "$rdhome/downloaded_media" # Remove the original directory after merging
+    else
+      log i "ES-DE downloaded media appear to have already been migrated."
+    fi
+
+    if [[ -d "$rdhome/gamelists" ]]; then
+      rsync -a "$rdhome/gamelists/" "$rdhome/ES-DE/gamelists/" && log d "Move of \"$rdhome/gamelists\" to \"$rdhome/ES-DE/gamelists\" completed"
+      rm -rf "$rdhome/gamelists" # Remove the original directory after merging
+    else
+      log i "ES-DE gamelists appear to have already been migrated."
+    fi
+
+    if [[ -d "$rdhome/collections" ]]; then
+      rsync -a "$rdhome/collections/" "$rdhome/ES-DE/collections/" && log d "Move of \"$rdhome/collections\" to \"$rdhome/ES-DE/collections\" completed"
+      rm -rf "$rdhome/collections" # Remove the original directory after merging
+    else
+      log i "ES-DE collections appear to have already been migrated."
+    fi
+
+    # Setting the correct variables once again
+    set_setting_value "$es_settings" "MediaDirectory" "$media_folder" "es_settings"
+    set_setting_value "$es_settings" "UserThemeDirectory" "$themes_folder" "es_settings"
+
+  fi
+
   if [[ $(check_version_is_older_than "0.9.0b") == "true" ]]; then
     # Placeholder for version 0.9.0b
 
     set_setting_value "$raconf" "libretro_info_path" "/var/config/retroarch/cores" "retroarch"
+    prepare_component "reset" "ruffle"
 
   # TODO: check this
   #   rm /var/config/emulationstation/.emulationstation # remving the old symlink to .emulationstation as it might be not needed anymore
