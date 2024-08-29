@@ -99,18 +99,18 @@ func save_base_data(app_dict: AppData):
 		file.close()
 	else:
 		print("File not found. Creating a new one.")		
-		var about_links = {}
+		#var about_links ={}
+		var about_links_new = Link.new()
 		for key in app_dict.about_links.keys():
 			var link = app_dict.about_links[key]
-			about_links[key] = {
+			about_links_new[key] = {
 				"name": link.name,
 				"url": link.url,
 				"description": link.description
 			}
-		
 	var new_data_dict = {}
-	# Convert about_links to a dictionary
-	var about_links = {}
+	#var about_links = {}
+	var about_links = Link.new()
 	for key in app_dict.about_links.keys():
 		var link = app_dict.about_links[key]
 		about_links[key] = {
@@ -118,8 +118,6 @@ func save_base_data(app_dict: AppData):
 			"url": link.url,
 			"description": link.description
 	}
-
-	# Convert emulators to a dictionary
 	var emulators = {}
 	for key in app_dict.emulators.keys():
 		var emulator = app_data.emulators[key]
@@ -129,7 +127,6 @@ func save_base_data(app_dict: AppData):
 				#"standalone": property.standalone,
 				"abxy_button": {"status": property.abxy_button}
 		})
-
 		emulators[key] = {
 			"name": emulator.name,
 			"description": emulator.description,
@@ -137,10 +134,8 @@ func save_base_data(app_dict: AppData):
 			"url": emulator.url,
 			"properties": properties
 		}
-
 	new_data_dict["about_links"] = about_links
 	new_data_dict["emulators"] = emulators
-
 	# Merge existing data with new data
 	for key in new_data_dict.keys():
 		if existing_data.has(key):
@@ -152,7 +147,6 @@ func save_base_data(app_dict: AppData):
 				existing_dict[sub_key] = new_dict[sub_key]
 		else:
 			existing_data[key] = new_data_dict[key]
-
 	# Serialize the combined data to JSON
 	#var json_text = JSON.new().stringify(existing_data, "\t")
 	#var json_text = json.stringify(existing_data, "\t")

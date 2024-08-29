@@ -15,17 +15,37 @@ var anim_logo: AnimatedSprite2D
 var rd_logs: String
 var rd_version: String
 var gc_version: String
+var dialogue_title: String
+var dialogue_content: String
+var dialogue_command: String
+var dialogue_parameters: Array
 var l1_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0797.png")
 var r1_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0798.png")
 var a_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0042.png")
 var b_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0043.png")
 var app_data := AppData.new()
+var dialogue_mode: bool = false
 
 func _ready():
 	_get_nodes()
 	_connect_signals()
 	_play_main_animations()
-
+	var args = OS.get_cmdline_args()
+	for arg in range(args.size()):
+		if args[arg] == "--dialogue" and arg + 1 < args.size():
+			dialogue_mode = true
+		elif args[arg] == "--title" and arg + 1 < args.size():
+			dialogue_title = args[arg + 1]
+		elif args[arg] == "--content" and arg + 1 < args.size():
+			dialogue_content = args[arg + 1]
+		elif args[arg] == "--command" and arg + 1 < args.size():
+			dialogue_command = args[arg + 1]
+		elif args[arg] == "--parameters" and arg + 1 < args.size():
+			dialogue_parameters.append(args[arg + 1])
+		elif args[arg] == "--fullscreen" and arg + 1 < args.size():
+			DisplayServer.window_set_mode(DisplayServer.WindowMode.WINDOW_MODE_FULLSCREEN)
+	if dialogue_mode:
+		load_and_change_scene("res://components/popup_dialogue.tscn")		
 	#%locale_option.selected = class_functions.map_locale_id(OS.get_locale_language())
 	#app_data = data_handler.app_data
 	#data_handler.add_emulator()
@@ -96,7 +116,23 @@ func _ready():
 		if (n.is_class("BaseButton") and n.disabled == true): #if button-like control and disabled
 			n.self_modulate.a = 0.5 #make it half transparent
 	combine_tkeys()
-	
+
+func load_and_change_scene(scene_load: String):
+	var popup = load(scene_load).instantiate() as Control
+	if dialogue_title != "":
+		popup.set_title(dialogue_title)
+	if dialogue_content != "":
+		popup.set_content(dialogue_content)
+	if dialogue_command != "":
+		popup.set_ok_command(dialogue_command)
+	if dialogue_parameters != []:
+		popup.set_parameters(dialogue_parameters)
+	$Background.add_child(popup)
+
+	#var scene = ResourceLoader.load(scene_load)
+	#get_tree().change_scene_to_packed(scene)
+
+
 func _input(event):
 	if Input.is_action_pressed("quit1") and Input.is_action_pressed("quit2"):
 		get_tree().quit()

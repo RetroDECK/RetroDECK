@@ -83,6 +83,7 @@
 [ext_resource type="Texture2D" uid="uid://3ktnkmuecxea" path="res://assets/graphics/rekku2/rekku_mouth_m.png" id="63_52v81"]
 [ext_resource type="Texture2D" uid="uid://d08ngewjvxkmn" path="res://assets/graphics/rekku2/rekku_mouth_o.png" id="64_s8u0e"]
 [ext_resource type="Texture2D" uid="uid://dieva7tuxjrvy" path="res://assets/graphics/rekku2/rekku_nomouth.png" id="65_kk8ba"]
+[ext_resource type="Script" path="res://controller_guide.gd" id="68_ahvw4"]
 [ext_resource type="AudioStream" uid="uid://dhejvg02t5o35" path="res://assets/sounds/30375__sjonas88__smooth-game-like-sounds/538549__sjonas88__select-2.wav" id="71_ghxvk"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_omewi"]
@@ -156,8 +157,6 @@ animations = [{
 "name": &"speech",
 "speed": 5.0
 }]
-
-[sub_resource type="GDScript" id="GDScript_j7wyh"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -571,130 +570,130 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="controls_container" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer"]
+[node name="sysems_container" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="controls_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container"]
+[node name="systems_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/sysems_container"]
 layout_mode = 2
 text = "SYSTEMS & EMULATORS"
 
-[node name="controls_separator" type="HSeparator" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container"]
+[node name="systems_separator" type="HSeparator" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/sysems_container"]
 layout_mode = 2
 
-[node name="system_gridcontainer" type="GridContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container"]
+[node name="system_gridcontainer" type="GridContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/sysems_container"]
 unique_name_in_owner = true
 layout_mode = 2
 columns = 4
 
-[node name="retroarch_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+[node name="retroarch_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/sysems_container/system_gridcontainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "RETROARCH"
 icon = ExtResource("4_xcuib")
 
-[node name="mame_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+[node name="mame_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/sysems_container/system_gridcontainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "MAME"
 icon = ExtResource("36_dj81i")
 
-[node name="ruffle_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+[node name="ruffle_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/sysems_container/system_gridcontainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "RUFFLE"
 icon = ExtResource("37_7hhbn")
 
-[node name="melonds_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+[node name="melonds_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/sysems_container/system_gridcontainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "MELONDS"
 icon = ExtResource("7_4otos")
 
-[node name="pcsx2_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+[node name="pcsx2_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/sysems_container/system_gridcontainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "PCSX2"
 icon = ExtResource("38_44je8")
 
-[node name="duckstation_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+[node name="duckstation_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/sysems_container/system_gridcontainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "DUCKSTATION"
 icon = ExtResource("6_winpq")
 
-[node name="ppsspp_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+[node name="ppsspp_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/sysems_container/system_gridcontainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "PPSSPP"
 icon = ExtResource("8_akxf7")
 
-[node name="vita3k_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+[node name="vita3k_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/sysems_container/system_gridcontainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "VITA3K"
 icon = ExtResource("38_vsjf2")
 
-[node name="rpcs3_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+[node name="rpcs3_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/sysems_container/system_gridcontainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "RPCS3"
 icon = ExtResource("8_ec4gt")
 
-[node name="ryujinx_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+[node name="ryujinx_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/sysems_container/system_gridcontainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "RYUJINX"
 icon = ExtResource("40_7fdvq")
 
-[node name="dolphin_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+[node name="dolphin_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/sysems_container/system_gridcontainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "DOLPHIN"
 icon = ExtResource("11_61sak")
 
-[node name="primehack_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+[node name="primehack_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/sysems_container/system_gridcontainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "PRIMEHACK"
 icon = ExtResource("41_55e56")
 
-[node name="cemu_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+[node name="cemu_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/sysems_container/system_gridcontainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "CEMU"
 icon = ExtResource("42_n3n7j")
 
-[node name="xemu_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+[node name="xemu_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/sysems_container/system_gridcontainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "XEMU"
 icon = ExtResource("43_ifi6j")
 
-[node name="esde_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/system_gridcontainer"]
+[node name="esde_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/sysems_container/system_gridcontainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "ES-DE"
 icon = ExtResource("44_7lpj5")
 
-[node name="action_gridcontainer" type="GridContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container"]
+[node name="action_gridcontainer" type="GridContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/sysems_container"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 columns = 3
 
-[node name="help_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/action_gridcontainer"]
+[node name="help_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/sysems_container/action_gridcontainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Help"
 icon = ExtResource("46_feagl")
 
-[node name="launch_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/action_gridcontainer"]
+[node name="launch_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/sysems_container/action_gridcontainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "LAUNCH"
 icon = ExtResource("45_qxd26")
 
-[node name="reset_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/controls_container/action_gridcontainer"]
+[node name="reset_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/sysems_container/action_gridcontainer"]
 layout_mode = 2
 text = "RESET"
 icon = ExtResource("12_3jrmi")
@@ -1657,7 +1656,7 @@ offset_top = -69.0
 offset_right = -337.0
 grow_horizontal = 2
 grow_vertical = 0
-script = SubResource("GDScript_j7wyh")
+script = ExtResource("68_ahvw4")
 
 [node name="controller_guide_text" type="RichTextLabel" parent="controller_guide"]
 layout_mode = 2
