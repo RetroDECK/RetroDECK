@@ -5,19 +5,17 @@ on:
     branches:
      - cooker*
      - feat*
+     - branch/cooker*
     paths:
      - '.github/workflows/**'
      - 'automation_tools/**'
      - 'config/**'
-     - 'config/es-de/**'
      - 'functions/**'
      - 'rd-submodules/**'
      - '*.sh'
      - 'net.retrodeck.retrodeck.yml'
      - 'net.retrodeck.retrodeck.appdata.xml'
-  pull_request_target: 
-    branches:
-     - cooker*
+  pull_request:
 
   # Italy (CET): 11:00 PM
   # Japan (JST): 7:00 AM
@@ -33,7 +31,7 @@ jobs:
 
   Building_RetroDECK:
     runs-on: retrodeck
-    steps:        
+    steps:
 
       # Circumventing this bug: https://github.com/flatpak/flatpak-builder/issues/317
       - name: Remove stuck mounts
@@ -43,6 +41,7 @@ jobs:
         continue-on-error: true
 
       - name: Generate a token for Rekku
+        if: ${{ github.repository == 'RetroDECK/RetroDECK' }}
         id: generate-rekku-token
         uses: actions/create-github-app-token@v1
         with:
@@ -55,7 +54,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: 'true'
-
+        
       - name: "Install dependencies"
         run: "automation_tools/install_dependencies.sh"    
 
@@ -91,7 +90,7 @@ jobs:
             echo "[DEBUG] source branch is: $source_branch"
 
             # Generate the tag for a pull request
-            echo "TAG=PR-$GITHUB_RUN_ID-$source_branch-${{ env.buildid }}" >> $GITHUB_ENV
+            echo "TAG=PR-$source_branch-${{ env.buildid }}" >> $GITHUB_ENV
             echo "MAKE_LATEST=false" >> $GITHUB_ENV  # Not marked as the latest cooker version if it's a feature branch
           else
             # Generate the tag for non-pull request branches
@@ -178,10 +177,11 @@ jobs:
           allowUpdates: true
           makeLatest: ${{env.MAKE_LATEST}} # if it's a feat branch is not considered the latest build
           token: ${{ steps.generate-rekku-token.outputs.token }}
-          repo: Cooker
+          repo: ${{ github.repository_owner == 'RetroDECK' && 'Cooker' || github.event.repository.name }} # "Cooker" if we are in RetroDECK Org, else "this repo"
         continue-on-error: true
 
       - name: Rewrite Tag
+        if: ${{ github.repository == 'RetroDECK/RetroDECK' }}
         run: |
           git submodule deinit -f --all
           git fetch --tags
@@ -202,14 +202,6 @@ jobs:
         with:
           name: retrodeck-flatpak
           path: RetroDECK-cooker.flatpak
-        continue-on-error: true
-
-      - name: Create Artifact for flathub
-        run: | 
-          tar -czf ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.tar.gz -C ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker .
-          hash=($(sha256sum ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.tar.gz))
-          echo $hash > ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.sha
-          mv -f RetroDECK-Artifact-cooker.* ${{ secrets.ARTIFACT_REPO }}
         continue-on-error: true
 
       # - name: Upload RetroDECK-cooker.flatpak to Gitea Release
