@@ -11,9 +11,7 @@ func _ready():
 	$".".theme = custom_theme
 	var args = OS.get_cmdline_args()
 	for arg in range(args.size()):
-		if args[arg] == "--dialogue" and arg + 1 < args.size():
-			print ("TEST")
-		elif args[arg] == "--title" and arg + 1 < args.size():
+		if args[arg] == "--title" and arg + 1 < args.size():
 			%title_label.text = args[arg + 1]
 		elif args[arg] == "--content" and arg + 1 < args.size():
 			%content_rtl.text = args[arg + 1]

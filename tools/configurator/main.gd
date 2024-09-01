@@ -3,8 +3,7 @@
 
 extends Control
 
-var bios_type:int
-var status_code_label: Label
+@onready var bios_type:int
 var log_results: Dictionary
 var theme_option: OptionButton
 #signal signal_theme_changed
@@ -120,7 +119,6 @@ func _exit():
 	get_tree().quit()
 
 func _get_nodes() -> void:
-	status_code_label = get_node("%status_code_label")
 	theme_option = get_node("%theme_optionbutton")
 	tab_container = get_node("%TabContainer")
 	anim_logo = get_node("%logo_animated")
@@ -238,20 +236,21 @@ func _on_quickresume_advanced_pressed():
 
 func _on_bios_button_pressed():
 	_play_main_animations()
-	bios_type = 0
+	bios_type = 1
 	class_functions.log_parameters[2] = class_functions.log_text + "Bios_Check"
 	log_results = class_functions.execute_command(class_functions.wrapper_command, class_functions.log_parameters, false)
 	load_popup("BIOS File Check", "res://components/bios_check/bios_popup_content.tscn","")
-	status_code_label.text = str(log_results["exit_code"])
-
+	bios_type = 0
+	
 func _on_bios_button_expert_pressed():
 	_play_main_animations()
-	bios_type = 1
+	bios_type = 2
 	class_functions.log_parameters[2] = class_functions.log_text + "Advanced_Bios_Check"
 	log_results = class_functions.execute_command(class_functions.wrapper_command, class_functions.log_parameters, false)
+	class_functions.log_parameters[2] = class_functions.log_text + "Exit code: " + str(log_results["exit_code"])
 	load_popup("BIOS File Check", "res://components/bios_check/bios_popup_content.tscn","")
-	status_code_label.text = str(log_results["exit_code"])
-
+	bios_type = 0
+	
 func _on_exit_button_pressed():
 	_play_main_animations()
 	class_functions.log_parameters[2] = class_functions.log_text + "Exited"

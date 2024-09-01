@@ -14,14 +14,12 @@ func _ready():
 	set_tab_icon_max_width(1,icon_width)
 	set_tab_icon(2, ResourceLoader.load("res://assets/icons/pixelitos/128/utilities-tweak-tool.png"))
 	set_tab_icon_max_width(2,icon_width)
-	set_tab_icon(3, ResourceLoader.load("res://assets/icons/pixelitos/128/network-workgroup.png"))
+	set_tab_icon(3, ResourceLoader.load("res://assets/icons/pixelitos/128/utilities-system-monitor.png"))
 	set_tab_icon_max_width(3,icon_width)
-	set_tab_icon(4, ResourceLoader.load("res://assets/icons/pixelitos/128/utilities-system-monitor.png"))
+	set_tab_icon(4, ResourceLoader.load("res://assets/icons/pixelitos/128/preferences-system-session-services.png"))
 	set_tab_icon_max_width(4,icon_width)
-	set_tab_icon(5, ResourceLoader.load("res://assets/icons/pixelitos/128/preferences-system-session-services.png"))
+	set_tab_icon(5, ResourceLoader.load("res://assets/icons/pixelitos/128/help-about.png"))
 	set_tab_icon_max_width(5,icon_width)
-	set_tab_icon(6, ResourceLoader.load("res://assets/icons/pixelitos/128/help-about.png"))
-	set_tab_icon_max_width(6,icon_width)
 	#%TK_GRAPHICS.name="BOB"
 	connect_focus_signals(self)
 	
