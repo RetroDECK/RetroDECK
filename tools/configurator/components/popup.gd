@@ -21,7 +21,7 @@ func _process(delta):
 		lbhide.visible=true
 		rbhide.visible=true
 		queue_free()
-c
+
 func set_content(new_content):
 	content = load(new_content).instantiate()
 	
