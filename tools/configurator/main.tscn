@@ -201,7 +201,7 @@ size_flags_horizontal = 3
 unique_name_in_owner = true
 layout_mode = 2
 tab_alignment = 1
-current_tab = 5
+current_tab = 2
 script = ExtResource("3_id6l4")
 
 [node name="GLOBALS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
@@ -719,120 +719,27 @@ layout_mode = 2
 text = "RESET"
 icon = ExtResource("12_3jrmi")
 
-[node name="TK_TOOLS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
-visible = false
+[node name="TOOLS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
 layout_mode = 2
 metadata/_tab_index = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS"]
 layout_mode = 2
-follow_focus = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 36
-
-[node name="scan_container" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="scan_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
-layout_mode = 2
-text = "TK_SCAN"
-
-[node name="scan_separator" type="HSeparator" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
-layout_mode = 2
-
-[node name="ps3_scan" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
-layout_mode = 2
-disabled = true
-text = "TK_PS3SCAN"
-
-[node name="scummvm_scan" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
-layout_mode = 2
-disabled = true
-text = "TK_SCUMMVMSCAN"
-
-[node name="multifile_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
-layout_mode = 2
-text = "TK_MULTIFILE"
-
-[node name="3ds_decrypt_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
-layout_mode = 2
-disabled = true
-text = "TK_3DSDECRYPT"
-
-[node name="tools_container" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="tools_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/tools_container"]
-layout_mode = 2
-text = "TK_GENTOOLS"
-
-[node name="tools_separator" type="HSeparator" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/tools_container"]
-layout_mode = 2
-
-[node name="steamgrid_install_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/tools_container"]
-layout_mode = 2
-disabled = true
-text = "TK_GRIDINSTALL"
-
-[node name="ps3_fw_install_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/tools_container"]
-layout_mode = 2
-text = "TK_PS3FWINSTALL"
-
-[node name="fav_steam" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/tools_container"]
-layout_mode = 2
-text = "TK_FAVSTEAM"
-
-[node name="file_tools_container" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="file_tools_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
-layout_mode = 2
-text = "TK_FILETOOLS"
-
-[node name="file_tools_separator" type="HSeparator" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
-layout_mode = 2
-
-[node name="usb_tool_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
-layout_mode = 2
-disabled = true
-text = "TK_USBTOOL"
-
-[node name="backup_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
-layout_mode = 2
-disabled = true
-text = "TK_BACKUPBTN"
-
-[node name="compress_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
-layout_mode = 2
-disabled = true
-text = "TK_COMPRESSGAMES"
-
-[node name="move_files_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
-layout_mode = 2
-disabled = true
-text = "TK_MOVEFILES"
-
-[node name="TK_TROUBLESHOOT" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
-visible = false
-layout_mode = 2
-metadata/_tab_index = 3
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TROUBLESHOOT"]
-layout_mode = 2
 theme_override_constants/separation = 64
 
-[node name="troubleshoot_container" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer"]
+[node name="troubleshoot_container" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="check_conn_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/troubleshoot_container"]
+[node name="check_conn_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/troubleshoot_container"]
 layout_mode = 2
 text = "CHECK CONNECTION"
 icon = ExtResource("50_5d2ui")
 
-[node name="logs_button" type="OptionButton" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/troubleshoot_container"]
+[node name="logs_button" type="OptionButton" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/troubleshoot_container"]
 unique_name_in_owner = true
 layout_mode = 2
 selected = 0
@@ -851,47 +758,129 @@ popup/item_3/text = "Retroarch"
 popup/item_3/icon = ExtResource("4_xcuib")
 popup/item_3/id = 3
 
-[node name="bios_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/troubleshoot_container"]
+[node name="bios_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/troubleshoot_container"]
 layout_mode = 2
 text = "BIOS STANDARD"
 icon = ExtResource("50_tl5ty")
 
-[node name="bios_button_expert" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/troubleshoot_container"]
+[node name="bios_button_expert" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/troubleshoot_container"]
 layout_mode = 2
 text = "BIOS EXPERT"
 icon = ExtResource("50_tl5ty")
 
-[node name="controls_container" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer"]
+[node name="controls_container" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="controls_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/controls_container"]
+[node name="controls_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/controls_container"]
 layout_mode = 2
 text = "TK_CONTROLS"
 
-[node name="controls_separator" type="HSeparator" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/controls_container"]
+[node name="controls_separator" type="HSeparator" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/controls_container"]
 layout_mode = 2
 
-[node name="controller_templates_container" type="HBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/controls_container"]
+[node name="controller_templates_container" type="HBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/controls_container"]
 layout_mode = 2
 
-[node name="controller_templates" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/controls_container/controller_templates_container"]
+[node name="controller_templates" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/controls_container/controller_templates_container"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "TK_STEAMCONTEMP"
 
-[node name="controller_templater_install_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/controls_container/controller_templates_container"]
+[node name="controller_templater_install_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/controls_container/controller_templates_container"]
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 4
 text = "TK_INSTALL"
 
-[node name="button_layout_container" type="HBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/controls_container"]
+[node name="button_layout_container" type="HBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/controls_container"]
 layout_mode = 2
+
+[node name="file_tools_container" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="file_tools_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
+layout_mode = 2
+text = "TK_FILETOOLS"
+
+[node name="file_tools_separator" type="HSeparator" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
+layout_mode = 2
+
+[node name="usb_tool_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
+layout_mode = 2
+disabled = true
+text = "TK_USBTOOL"
+
+[node name="backup_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
+layout_mode = 2
+disabled = true
+text = "TK_BACKUPBTN"
+
+[node name="compress_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
+layout_mode = 2
+disabled = true
+text = "TK_COMPRESSGAMES"
+
+[node name="move_files_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
+layout_mode = 2
+disabled = true
+text = "TK_MOVEFILES"
+
+[node name="tools_container" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="tools_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/tools_container"]
+layout_mode = 2
+text = "TK_GENTOOLS"
+
+[node name="tools_separator" type="HSeparator" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/tools_container"]
+layout_mode = 2
+
+[node name="steamgrid_install_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/tools_container"]
+layout_mode = 2
+disabled = true
+text = "TK_GRIDINSTALL"
+
+[node name="ps3_fw_install_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/tools_container"]
+layout_mode = 2
+text = "TK_PS3FWINSTALL"
+
+[node name="fav_steam" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/tools_container"]
+layout_mode = 2
+text = "TK_FAVSTEAM"
+
+[node name="scan_container" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="scan_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/scan_container"]
+layout_mode = 2
+text = "TK_SCAN"
+
+[node name="scan_separator" type="HSeparator" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/scan_container"]
+layout_mode = 2
+
+[node name="ps3_scan" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/scan_container"]
+layout_mode = 2
+disabled = true
+text = "TK_PS3SCAN"
+
+[node name="scummvm_scan" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/scan_container"]
+layout_mode = 2
+disabled = true
+text = "TK_SCUMMVMSCAN"
+
+[node name="multifile_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/scan_container"]
+layout_mode = 2
+text = "TK_MULTIFILE"
+
+[node name="3ds_decrypt_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/scan_container"]
+layout_mode = 2
+disabled = true
+text = "TK_3DSDECRYPT"
 
 [node name="SETTINGS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
-metadata/_tab_index = 4
+metadata/_tab_index = 3
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS"]
 layout_mode = 2
@@ -1112,9 +1101,10 @@ disabled = true
 text = "TK_FTPBTN"
 
 [node name="ABOUT" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
 script = ExtResource("4_m4rto")
-metadata/_tab_index = 5
+metadata/_tab_index = 4
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/ABOUT"]
 layout_mode = 2
@@ -1166,7 +1156,7 @@ columns = 5
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
-metadata/_tab_index = 6
+metadata/_tab_index = 5
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/WIP"]
 layout_mode = 2
@@ -1723,7 +1713,7 @@ unique_name_in_owner = true
 stream = ExtResource("71_ghxvk")
 volume_db = -5.0
 
-[connection signal="pressed" from="Background/SplitContainer/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/troubleshoot_container/bios_button" to="." method="_on_bios_button_pressed"]
-[connection signal="pressed" from="Background/SplitContainer/MarginContainer/TabContainer/TK_TROUBLESHOOT/VBoxContainer/troubleshoot_container/bios_button_expert" to="." method="_on_bios_button_expert_pressed"]
+[connection signal="pressed" from="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/troubleshoot_container/bios_button" to="." method="_on_bios_button_pressed"]
+[connection signal="pressed" from="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/troubleshoot_container/bios_button_expert" to="." method="_on_bios_button_expert_pressed"]
 [connection signal="pressed" from="controller_guide/controller_guide_text/exit_button" to="." method="_on_exit_button_pressed"]
 [connection signal="item_selected" from="controller_guide/controller_guide_text/locale_option" to="." method="_on_locale_selected"]
