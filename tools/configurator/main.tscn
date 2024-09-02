@@ -201,12 +201,11 @@ size_flags_horizontal = 3
 unique_name_in_owner = true
 layout_mode = 2
 tab_alignment = 1
-current_tab = 2
+current_tab = 0
 script = ExtResource("3_id6l4")
 
 [node name="GLOBALS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -225,6 +224,7 @@ columns = 3
 
 [node name="Widescreen6" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
+tooltip_text = "Change to Nintendo style button mappings."
 text = "BUTTON SWAP
 "
 icon = ExtResource("4_caaxx")
@@ -720,6 +720,7 @@ text = "RESET"
 icon = ExtResource("12_3jrmi")
 
 [node name="TOOLS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 
