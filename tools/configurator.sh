@@ -156,6 +156,10 @@ configurator_welcome_dialog() {
     configurator_about_retrodeck_dialog
   ;;
 
+  "Sync with Steam" )
+    configurator_add_steam
+  ;;
+
   "Developer Options" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_generic_dialog "RetroDECK Configurator - Developer Options" "The following features and options are potentially VERY DANGEROUS for your RetroDECK install!\n\nThey should be considered the bleeding-edge of upcoming RetroDECK features, and never used when you have important saves/states/roms that are not backed up!\n\nYOU HAVE BEEN WARNED!"
