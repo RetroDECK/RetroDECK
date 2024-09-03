@@ -1,0 +1,12 @@
+{
+	"exceptionsVersion": 1,
+	"titles": {
+		"IGNORE": {
+			"newTitle": "",
+			"searchTitle": "",
+			"commandLineArguments": "",
+			"exclude": true,
+			"excludeArtwork": false
+		}
+	}
+}
