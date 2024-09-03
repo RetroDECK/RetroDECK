@@ -8,6 +8,7 @@ def resetfun(rdhome):
     if not os.path.isfile(srm_path):
         print("Steam ROM Manager configuration not initialized! Initializing now.")
         shutil.copyfile("/app/libexec/steam-sync/userConfigurations.json", srm_path)
+        shutil.copyfile("/app/libexec/steam-sync/userExceptions.json", srm_path)
 
     with open(srm_path,"r") as f:
         data=f.read()
