@@ -12,9 +12,15 @@ set_setting_value() {
 
   case $4 in
 
-    "retrodeck" | "melonds" | "yuzu" | "citra" | "libretro_scummvm" | "ini" )
-      initool set "$1" $current_section_name $setting_name_to_change $setting_value_to_change  > "$1.new" && mv -f "$1.new" "$1"
-      conf_read
+    "retrodeck" | "melonds" | "yuzu" | "citra" | "libretro_scummvm" )
+      if [[ -z $current_section_name ]]; then
+        sed -i 's^\^'"$setting_name_to_change"'=.*^'"$setting_name_to_change"'='"$setting_value_to_change"'^' "$1"
+      else
+        sed -i '\^\['"$current_section_name"'\]^,\^\^'"$setting_name_to_change"'=^s^\^'"$setting_name_to_change"'=.*^'"$setting_name_to_change"'='"$setting_value_to_change"'^' "$1"
+      fi
+      if [[ "$4" == "retrodeck" && ("$current_section_name" == "" || "$current_section_name" == "paths" || "$current_section_name" == "options") ]]; then # If a RetroDECK setting is being changed, also write it to memory for immediate use
+        declare -g "$setting_name_to_change=$setting_value_to_change"
+      fi
       ;;
 
     "retroarch" )
