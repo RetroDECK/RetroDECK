@@ -201,6 +201,15 @@ modules:
         url: https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_amd64
         sha256: 4ee662847c588c3ef2fec8bfb304e8739e3dbaba87ccb9a608d691c88f5b64dc
 
+  - name: initool
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 initool ${FLATPAK_DEST}/bin
+    source:
+      - type: archive
+        url: https://github.com/dbohdan/initool/releases/download/v0.18.0/initool-v0.18.0-fc0c3b1-linux-x86_64.zip
+        sha256: 0b3fc8c53a97e5362d2899f6a79a92bef9953c2c43716cfa85019211f67655bb
+
   # GODOT Configurator
   - name: retrodeck-configurator
     buildsystem: simple
