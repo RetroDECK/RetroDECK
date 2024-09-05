@@ -3,9 +3,9 @@ extends Control
 var app_data := AppData.new()
 var current_system := Emulator.new()
 var press_time: float = 0.0
-var is_pressed: bool = false
-
-# The duration the button needs to be pressed (in seconds)
+var is_launch_pressed: bool = false
+var is_reset_pressed: bool = false
+var reset_result: Dictionary
 @export var PRESS_DURATION: float = 3.0
 
 func _ready():
@@ -13,15 +13,19 @@ func _ready():
 	_connect_signals()
 	
 func _process(delta: float) -> void:
-	if is_pressed:
+	if is_launch_pressed:
 		press_time += delta
 		%launch_progress.value = press_time / PRESS_DURATION * 100.0
-		
+	if is_reset_pressed:
+		press_time += delta
+		%reset_progress.value = press_time / PRESS_DURATION * 100.0
 	if press_time >= PRESS_DURATION:
 		_do_complete()
 		press_time = 0.0
-		is_pressed = false
+		is_launch_pressed = false
+		is_reset_pressed = false
 		%launch_progress.value = 0.0
+		%reset_progress.value = 0.0
 	
 func _connect_signals() -> void:
 	%retroarch_button.pressed.connect(_hide_show_buttons.bind(%retroarch_button,%system_gridcontainer, %action_gridcontainer))
@@ -42,8 +46,10 @@ func _connect_signals() -> void:
 	%help_button.pressed.connect(_do_action.bind(%help_button))
 	#%launch_button.pressed.connect(_do_action.bind(%launch_button))
 	%launch_button.button_down.connect(_do_action.bind(%launch_button))
-	%launch_button.button_up.connect(_on_Button_released)
-
+	%launch_button.button_up.connect(_on_Button_released.bind(%launch_progress))
+	%reset_button.button_down.connect(_do_action.bind(%reset_button))
+	%reset_button.button_up.connect(_on_Button_released.bind(%reset_progress))
+	
 func _hide_show_buttons(button: Button, buttons_gridcontainer: GridContainer, hidden_gridcontainer: GridContainer) -> void:
 	current_system = app_data.emulators[button.text.to_lower()]
 	match button.name:
@@ -66,10 +72,11 @@ func _hide_show_buttons(button: Button, buttons_gridcontainer: GridContainer, hi
 			if hidden_gridcontainer.visible == true:
 				button.toggle_mode = true
 
-func _on_Button_released() -> void:
-	is_pressed = false
+func _on_Button_released(progress: ProgressBar) -> void:
+	is_launch_pressed = false
+	is_reset_pressed = false
 	press_time = 0.0
-	%launch_progress.value = 0.0
+	progress.value = 0.0
 		
 func _do_action(button: Button) -> void:
 	match [button.name, current_system.name]:
@@ -78,13 +85,26 @@ func _do_action(button: Button) -> void:
 			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
 			class_functions.launch_help(current_system.url)
 		["launch_button", current_system.name]:
-			is_pressed = true
-
+			is_launch_pressed = true
+		["reset_button", current_system.name]:
+			is_reset_pressed = true
 
 func _do_complete() ->void:
-	class_functions.log_parameters[2] = class_functions.log_text + "Launching " + current_system.name
-	class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
-	var launch = class_functions.execute_command(current_system.launch,[], false)
-	class_functions.log_parameters[2] = class_functions.log_text + "Exit Code: " + str(launch["exit_code"])
-	class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
-	
+	if is_launch_pressed:
+		class_functions.log_parameters[2] = class_functions.log_text + "Launching " + current_system.name
+		class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
+		var launch = class_functions.execute_command(current_system.launch,[], false)
+		class_functions.log_parameters[2] = class_functions.log_text + "Exit Code: " + str(launch["exit_code"])
+		class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
+	if is_reset_pressed:
+		var parameters = ["prepare_component","reset",current_system.name]
+		%reset_button.text = "RESETTING-NOW"
+		class_functions.log_parameters[2] = class_functions.log_text + "Resetting " + current_system.name
+		class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
+		await run_thread_command(class_functions.wrapper_command,parameters, false)
+		class_functions.log_parameters[2] = class_functions.log_text + "Exit Code: " + str(reset_result["exit_code"])
+		class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
+		%reset_button.text = "RESET COMPLETED"
+
+func run_thread_command(command: String, parameters: Array, console: bool) -> void:
+	reset_result = await class_functions.run_command_in_thread(command, parameters, console)

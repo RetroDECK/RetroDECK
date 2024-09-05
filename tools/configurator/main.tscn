@@ -64,7 +64,7 @@
 [ext_resource type="Texture2D" uid="uid://cs8lh31kh7jv1" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0048.png" id="34_fum2b"]
 [ext_resource type="Texture2D" uid="uid://cfa5mn3dsdvw6" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0729.png" id="36_3qttl"]
 [ext_resource type="Texture2D" uid="uid://chd6d8tx081hm" path="res://assets/icons/pixelitos/128/org.mamedev.MAME.png" id="36_dj81i"]
-[ext_resource type="Script" path="res://scripts/system.gd" id="36_wv31h"]
+[ext_resource type="Script" path="res://scripts/SystemTab.gd" id="36_wv31h"]
 [ext_resource type="Texture2D" uid="uid://10pyy05xqpr4" path="res://assets/icons/pixelitos/128/ruffle.png" id="37_7hhbn"]
 [ext_resource type="Texture2D" uid="uid://fhxlwf7in0ke" path="res://assets/icons/pixelitos/128/net.pcsx2.PCSX2.png" id="38_44je8"]
 [ext_resource type="Texture2D" uid="uid://dpi351mmxu7x6" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0797.png" id="38_prt7u"]
@@ -97,7 +97,7 @@
 bg_color = Color(0.712505, 0, 0.175592, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1161k"]
-bg_color = Color(0.362488, 0.697651, 0.122406, 1)
+bg_color = Color(0.101961, 0.623529, 1, 0.376471)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_lhf2y"]
 animations = [{
@@ -703,37 +703,48 @@ icon = ExtResource("44_7lpj5")
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
-columns = 2
 
 [node name="help_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/sysems_container/action_gridcontainer"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 text = "HELP"
 icon = ExtResource("46_feagl")
 
 [node name="launch_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/sysems_container/action_gridcontainer"]
 unique_name_in_owner = true
 layout_mode = 2
+action_mode = 0
 text = "LAUNCH"
 icon = ExtResource("45_qxd26")
 
 [node name="launch_progress" type="ProgressBar" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/sysems_container/action_gridcontainer/launch_button"]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -36.0
 grow_horizontal = 2
-grow_vertical = 0
+grow_vertical = 2
 theme_override_styles/fill = SubResource("StyleBoxFlat_1161k")
+show_percentage = false
 
 [node name="reset_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/sysems_container/action_gridcontainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "RESET"
 icon = ExtResource("12_3jrmi")
+
+[node name="reset_progress" type="ProgressBar" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/sysems_container/action_gridcontainer/reset_button"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_1161k")
+show_percentage = false
 
 [node name="TOOLS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
 visible = false

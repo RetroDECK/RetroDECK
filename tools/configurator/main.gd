@@ -26,8 +26,8 @@ func _ready():
 	_play_main_animations()
 	#%locale_option.selected = class_functions.map_locale_id(OS.get_locale_language())
 	#app_data = data_handler.app_data
-	#data_handler.add_emulator()
-	#data_handler.modify_emulator_test()
+	##data_handler.add_emulator()
+	##data_handler.modify_emulator_test()
 	#if app_data:
 		#var website_data: Link = app_data.about_links["rd_web"]
 		#print (website_data.name,"-",website_data.url,"-",website_data.description,"-",website_data.url)
@@ -47,6 +47,8 @@ func _ready():
 			## Display the properties of each emulator
 			#print("System Name: ", emulator.name)
 			#print("Description: ", emulator.description)
+			##print("System: ", emulator.systen)
+			#print("Help URL: ", emulator.url)
 			#print("Properties:")
 			#for property: EmulatorProperty in emulator.properties:
 				#print("Cheevos: ", property.cheevos)
@@ -54,8 +56,8 @@ func _ready():
 				#print("ABXY_button:", property.abxy_button)
 				#print("multi_user_config_dir: ", property.multi_user_config_dir)
 		#
-		#for key in app_data.retroarch_cores.keys():
-			#var core = app_data.retroarch_cores[key]
+		#for key in app_data.cores.keys():
+			#var core = app_data.cores[key]
 			#print("Core Name: ", core.name)
 			#print("Description: ", core.description)
 			#print("Properties:")

@@ -790,6 +790,7 @@
 		"name": "RetroArch",
 		"url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/retroarch/retroarch-guide/",
 		"launch": "retroarch",
+		"system": "retroarch",
 		"properties": [
 		  {
 			"cheevos": true,
