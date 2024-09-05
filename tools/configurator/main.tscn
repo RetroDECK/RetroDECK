@@ -1,4 +1,4 @@
-[gd_scene load_steps=98 format=3 uid="uid://61f6m4r1mpan"]
+[gd_scene load_steps=99 format=3 uid="uid://61f6m4r1mpan"]
 
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
 [ext_resource type="Theme" uid="uid://hhc60cllcg47" path="res://assets/themes/default_theme.tres" id="1_if8nh"]
@@ -95,6 +95,9 @@
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_omewi"]
 bg_color = Color(0.712505, 0, 0.175592, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1161k"]
+bg_color = Color(0.362488, 0.697651, 0.122406, 1)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_lhf2y"]
 animations = [{
@@ -201,11 +204,12 @@ size_flags_horizontal = 3
 unique_name_in_owner = true
 layout_mode = 2
 tab_alignment = 1
-current_tab = 0
+current_tab = 1
 script = ExtResource("3_id6l4")
 
 [node name="GLOBALS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -577,7 +581,6 @@ icon_alignment = 1
 vertical_icon_alignment = 0
 
 [node name="SYSTEM" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
-visible = false
 layout_mode = 2
 script = ExtResource("36_wv31h")
 metadata/_tab_index = 1
@@ -700,11 +703,11 @@ icon = ExtResource("44_7lpj5")
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
+columns = 2
 
 [node name="help_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/sysems_container/action_gridcontainer"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
 text = "HELP"
 icon = ExtResource("46_feagl")
 
@@ -714,7 +717,20 @@ layout_mode = 2
 text = "LAUNCH"
 icon = ExtResource("45_qxd26")
 
+[node name="launch_progress" type="ProgressBar" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/sysems_container/action_gridcontainer/launch_button"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -36.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/fill = SubResource("StyleBoxFlat_1161k")
+
 [node name="reset_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/sysems_container/action_gridcontainer"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "RESET"
 icon = ExtResource("12_3jrmi")
