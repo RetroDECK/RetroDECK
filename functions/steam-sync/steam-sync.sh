@@ -260,171 +260,93 @@ declare -A alt_command_list=(
 "[Beetle PCE"]="flatpak run --command=retroarch net.retrodeck.retrodeck -L /var/config/retroarch/cores/mednafen_pce_libretro.so"
 )
 
-exit_file="/tmp/retrodeck_steam_sync_exit"
-rdhome=""
-roms_folder=""
-
-# Create shortcut function
-create_shortcut() {
-    log "d" "Entering the function create_shortcut"
-
-    local games=("$@")
-    local ignore_game="$rdhome/.sync/IGNORE.sh"
-
-    if [ ! -d "$rdhome/.sync/" ]; then
-        mkdir -p "$rdhome/.sync/"
-        log "d" ".sync directory created"
-    fi
-
-    local old_games=($(ls "$rdhome/.sync/"))
-
-    log "i" "Start removing old games"
-    for old_game in "${old_games[@]}"; do
-        log "d" "Removing old game shortcut: $old_game"
-        rm "$rdhome/.sync/$old_game"
-    done
-
-    for game in "${games[@]}"; do
-
-        log d "Extracted: $game"
-
-        # Extract the game name (everything before the first path part, i.e., excluding paths and other arguments)
-        local game_name=$(echo "$game" | sed -n "s/^\([^']*\)'\([^']*\)'$/\1/p" | xargs)
-
-        # Extract the command part (everything after the game name)
-        local file_path=$(echo "$game" | sed -n "s/^\([^']*\)'\(.*\)'/\2/p")
-
-        # Sanitize the game name for the filename: replace special characters with underscores
-        local sanitized_name=$(echo "$game_name" | sed -e 's/[^A-Za-z0-9._\[\]()-]/_/g')
-
-        log d "File Path: $file_path"
-        log d "Game Name: $game_name"
-        log d "Sanitized Name: $sanitized_name" 
-
-        # If the filename is too long, shorten it
-        if [ ${#sanitized_name} -gt 100 ]; then
-            sanitized_name=$(echo "$sanitized_name" | cut -c 1-100)
-        fi
-
-        #TODO: FIXME, this part is wrong, I need to fix it
-
-        local launcher="$rdhome/.sync/${sanitized_name}.sh"
-        log "d" "Creating shortcut at path: $launcher"
-
-        # Escape the command properly by removing unnecessary backslashes
-        local clean_command=$(echo "$game_command" | sed 's/\\//g')
-
-        # Populate the .sync script with the correct command
-        echo "#!/bin/bash" > "$launcher"
-        echo "" >> "$launcher"
-        echo 'if test "$(whereis flatpak)" = "flatpak:"' >> "$launcher"
-        echo "then" >> "$launcher"
-        echo "  flatpak-spawn --host $clean_command" >> "$launcher"
-        echo "else" >> "$launcher"
-        echo "  $clean_command" >> "$launcher"
-        echo "fi" >> "$launcher"
-
-        chmod +x "$launcher"
-    done
-
-    if [ -z "$(ls -A $rdhome/.sync/)" ]; then
-        log "e" "No games found in .sync directory, removing all"
-        touch "$ignore_game"
-        /app/bin/zypak-wrapper /app/srm/steam-rom-manager remove
-        rm "$ignore_game"
-    else
-        log "i" "Adding games to Steam via Steam ROM Manager"
-        /app/bin/zypak-wrapper /app/srm/steam-rom-manager add
-    fi
-}
-
-# TODO: FIXME the path is returned with an unwanted ./ ---> '/home/jay/retrodeck/roms/wii/./Tales of Symphonia - Dawn of the New World [RT4PAF].wbfs'
 # Add games to Steam function
 addToSteam() {
     log "i" "Starting Steam Sync"
 
+    local srm_path="/var/config/steam-rom-manager/userData/userConfigurations.json"
+    if [ ! -f "$srm_path" ]; then
+        log "e" "Steam ROM Manager configuration not initialized! Initializing now."
+        # TODO: do a prepare_component here
+        resetfun "$rdhome"
+    fi
+
     # Build the systems array from space-separated systems
-    local systems_string="arcade doom dos dreamcast flash gb gba gbc Library mame n3ds n64 nds nes portmaster ps2 psp psvita psx scummvm switch wii wiiu"
+    local systems_string=$(jq -r '.system | keys[]' "$features" | paste -sd' ')
     IFS=' ' read -r -a systems <<< "$systems_string"
 
     local games=()
 
     for system in "${systems[@]}"; do
-        log "d" "Steam Sync: parsing system: $system"
 
         local gamelist="$rdhome/ES-DE/gamelists/$system/gamelist.xml"
-        if [ ! -f "$gamelist" ]; then
-            log "w" "Steam Sync: game list not found for system: $system, skipping"
-            continue
-        fi
+
+        if [ -f "$gamelist" ]; then
 
         # Extract all <game> elements that are marked as favorite="true"
         game_blocks=$(xmllint --recover --xpath '//game[favorite="true"]' "$gamelist" 2>/dev/null)
-        log "d" "Extracted favorite game blocks:\n\n$game_blocks\n\n"
-
-        if [ -z "$game_blocks" ]; then
-            log "w" "No favorite games found in $gamelist"
-            continue
-        fi
+        log d "Extracted favorite game blocks:\n\n$game_blocks\n\n"
 
         # Split the game_blocks into an array, where each element is a full <game> block
         IFS=$'\n' read -r -d '' -a game_array <<< "$(echo "$game_blocks" | xmllint --recover --format - | sed -n '/<game>/,/<\/game>/p' | tr '\n' ' ')"
 
         # Iterate over each full <game> block in the array
         for game_block in "${game_array[@]}"; do
-            log "d" "Processing game block:\n$game_block"
+          log "d" "Processing game block:\n$game_block"
 
-            # Extract the game's name and path from the full game block
-            local name=$(echo "$game_block" | xmllint --xpath 'string(//game/name)' - 2>/dev/null)
-            local path=$(echo "$game_block" | xmllint --xpath 'string(//game/path)' - 2>/dev/null)
+          # Extract the game's name and path from the full game block
+          local name=$(echo "$game_block" | xmllint --xpath 'string(//game/name)' - 2>/dev/null)
+          local path=$(echo "$game_block" | xmllint --xpath 'string(//game/path)' - 2>/dev/null | sed 's|^\./||') # removing the ./
 
-            log "d" "Game name: $name"
-            log "d" "Game path: $launcher"
+          log "d" "Game name: $name"
+          log "d" "Game path: $path"
 
-            # Ensure the extracted name and path are valid
-            if [ -n "$name" ] && [ -n "$launcher" ]; then
-                # Check for an alternative emulator if it exists
-                local emulator=$(echo "$game_block" | xmllint --xpath 'string(//game/altemulator)' - 2>/dev/null)
-                if [ -z "$emulator" ]; then
-                    games+=("$name ${command_list_default[$system]} '$roms_folder/$system/$launcher'")
-                else
-                    games+=("$name ${alt_command_list[$emulator]} '$roms_folder/$system/$launcher'")
-                fi
-                log "d" "Steam Sync: found favorite game: $name"
-            else
-                log "w" "Steam Sync: failed to find valid name or path for favorite game"
-            fi
+          # Ensure the extracted name and path are valid
+          if [ -n "$name" ] && [ -n "$path" ]; then
+              # Check for an alternative emulator if it exists
+              local emulator=$(echo "$game_block" | xmllint --xpath 'string(//game/altemulator)' - 2>/dev/null)
+              if [ -z "$emulator" ]; then
+                  games+=("$name ${command_list_default[$system]} '$roms_folder/$system/$path'")
+              else
+                  games+=("$name ${alt_command_list[$emulator]} '$roms_folder/$system/$path'")
+              fi
+              log "d" "Steam Sync: found favorite game: $name"
+          else
+              log "w" "Steam Sync: failed to find valid name or path for favorite game"
+          fi
+
+          # Sanitize the game name for the filename: replace special characters with underscores
+          local sanitized_name=$(echo "$name" | sed -e 's/^A-Za-z0-9._-/ /g')
+          local sanitized_name=$(echo "$sanitized_name" | sed -e 's/:/-/g')
+          local sanitized_name=$(echo "$sanitized_name" | sed -e 's/   / - /g')
+          local sanitized_name=$(echo "$sanitized_name" | sed -e 's/  / /g')
+          log d "File Path: $path"
+          log d "Game Name: $name"
+
+          # If the filename is too long, shorten it
+          if [ ${#sanitized_name} -gt 100 ]; then
+              sanitized_name=$(echo "$sanitized_name" | cut -c 1-100)
+          fi
+
+          log d "Sanitized Name: $sanitized_name" 
+
+          #TODO: FIXME, this part is wrong, I need to fix it
+
+          local launcher="$rdhome/.sync/${sanitized_name}.sh"
+          log "d" "Creating shortcut at path: $launcher"
+
+          # TODO: game_command is empty at the moment
+          # Escape the command properly by removing unnecessary backslashes
+          local clean_command=$(echo "$game_command" | sed 's/\\//g')
+
+          # Populate the .sync script with the correct command
+          echo -e '#!/bin/bash\n' > "$launcher"
+          echo "flatpak run --command=$clean_command" >> "$launcher"
+
+          chmod +x "$launcher"
         done
-    done
-
-    create_shortcut "${games[@]}"
-}
-
-# Start configuration function
-start_config() {
-    log "i" "Initializing Steam Sync"
-
-    if [ ! -f "$rd_conf" ]; then
-        log "e" "Config file not found"
-        exit 1
     fi
+  done
 
-    while IFS= read -r line; do
-        if [[ $line == rdhome=* ]]; then
-            rdhome="${line#rdhome=}"
-        elif [[ $line == roms_folder=* ]]; then
-            roms_folder="${line#roms_folder=}"
-        fi
-    done < "$rd_conf"
-
-    local srm_path="$HOME/.var/app/net.retrodeck.retrodeck/config/steam-rom-manager/userData/userConfigurations.json"
-    if [ ! -f "$srm_path" ]; then
-        log "e" "Steam ROM Manager configuration not initialized! Initializing now."
-        resetfun "$rdhome"
-    fi
-
-    if [ ! -d "$rdhome/.sync/" ]; then
-        mkdir -p "$rdhome/.sync/"
-        log "d" ".sync directory created"
-    fi
+  log i "Steam Sync: completed"
 }
