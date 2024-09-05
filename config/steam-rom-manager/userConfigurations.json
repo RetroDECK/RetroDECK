@@ -1,9 +1,9 @@
 [
     {
         "parserType": "Glob",
-        "configTitle": "Shortcuts",
+        "configTitle": "RetroDECK",
         "steamDirectory": "",
-        "steamCategory": "${RetroDECK}",
+        "steamCategory": "RetroDECK",
         "romDirectory": "",
         "executableArgs": "",
         "executableModifier": "\"${exePath}\"",
@@ -17,7 +17,7 @@
         "onlineImageQueries": "${${fuzzyTitle}}",
         "imagePool": "${fuzzyTitle}",
         "userAccounts": {
-            "specifiedAccounts": ""
+            "specifiedAccounts": null
         },
         "executable": {
             "path": "",
@@ -39,14 +39,46 @@
             "removeBrackets": true
         },
         "controllers": {
-            "ps4": null,
-            "ps5": null,
-            "xbox360": null,
-            "xboxone": null,
-            "switch_joycon_left": null,
-            "switch_joycon_right": null,
-            "switch_pro": null,
-            "neptune": null
+            "ps4": {
+                "title": "RetroDECK Controller",
+                "mappingId": "RetroDECK_controller_ps4.vdf",
+                "profileType": "template"
+            },
+            "ps5": {
+                "title": "RetroDECK Controller",
+                "mappingId": "RetroDECK_controller_ps5.vdf",
+                "profileType": "template"
+            },
+            "xbox360": {
+                "title": "RetroDECK Controller",
+                "mappingId": "RetroDECK_controller_xbox360_simple.vdf",
+                "profileType": "template"
+            },
+            "xboxone": {
+                "title": "RetroDECK Controller",
+                "mappingId": "RetroDECK_controller_xboxone_simple.vdf",
+                "profileType": "template"
+            },
+            "switch_joycon_left": {
+                "title": "Controller",
+                "mappingId": "controller_switch_joycon_left_gamepad_joystick.vdf",
+                "profileType": "template"
+            },
+            "switch_joycon_right": {
+                "title": "Controller",
+                "mappingId": "controller_switch_joycon_right_gamepad_joystick.vdf",
+                "profileType": "template"
+            },
+            "switch_pro": {
+                "title": "RetroDECK Controller",
+                "mappingId": "RetroDECK_controller_switchpro.vdf",
+                "profileType": "template"
+            },
+            "neptune": {
+                "title": "RetroDECK Controller",
+                "mappingId": "RetroDECK_controller_steamdeck_neptune_full.vdf",
+                "profileType": "template"
+            }
         },
         "imageProviderAPIs": {
             "SteamGridDB": {
@@ -62,20 +94,20 @@
             }
         },
         "defaultImage": {
-            "tall": "",
-            "long": "",
-            "hero": "",
-            "logo": "",
-            "icon": ""
+            "tall": null,
+            "long": null,
+            "hero": null,
+            "logo": null,
+            "icon": null
         },
         "localImages": {
-            "tall": "",
-            "long": "",
-            "hero": "",
-            "logo": "",
-            "icon": ""
+            "tall": null,
+            "long": null,
+            "hero": null,
+            "logo": null,
+            "icon": null
         },
-        "parserId": "171345715969886866",
+        "parserId": "1725539138664815",
         "version": 15
     }
 ]
