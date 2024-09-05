@@ -1,9 +1,6 @@
 extends Control
 
 @onready var custom_theme: Theme = get_tree().current_scene.custom_theme
-#@onready var button_off = get_node(current_scene.%l1_button)# .current_scene.l1_button
-#@onready var lbhide: TextureButton = get_tree().current_scene.get_node("%l1_button")
-#@onready var rbhide: TextureButton = get_tree().current_scene.get_node("%r1_button")
 var command: String
 var parameters: Array
 
@@ -21,10 +18,6 @@ func _ready():
 			parameters.append(args[arg + 1])
 		elif args[arg] == "--fullscreen" and arg + 1 < args.size():
 			DisplayServer.window_set_mode(DisplayServer.WindowMode.WINDOW_MODE_FULLSCREEN)
-
-#func _process(delta):
-	#if Input.is_action_pressed("back_button"):
-		#get_tree().quit()
 
 func _input(event):
 	if Input.is_action_pressed("back_button"):

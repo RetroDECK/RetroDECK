@@ -204,7 +204,7 @@ size_flags_horizontal = 3
 unique_name_in_owner = true
 layout_mode = 2
 tab_alignment = 1
-current_tab = 1
+current_tab = 4
 script = ExtResource("3_id6l4")
 
 [node name="GLOBALS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
@@ -581,6 +581,7 @@ icon_alignment = 1
 vertical_icon_alignment = 0
 
 [node name="SYSTEM" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
 script = ExtResource("36_wv31h")
 metadata/_tab_index = 1
@@ -1131,7 +1132,6 @@ disabled = true
 text = "TK_FTPBTN"
 
 [node name="ABOUT" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
-visible = false
 layout_mode = 2
 script = ExtResource("4_m4rto")
 metadata/_tab_index = 4
@@ -1156,10 +1156,10 @@ tab_size = 2
 [node name="logo" type="TextureRect" parent="Background/SplitContainer/MarginContainer/TabContainer/ABOUT/ScrollContainer/about_container/rd_title"]
 custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
-offset_left = 166.0
-offset_top = -14.0
-offset_right = 294.0
-offset_bottom = 114.0
+offset_left = 487.0
+offset_top = -3.0
+offset_right = 615.0
+offset_bottom = 125.0
 size_flags_horizontal = 4
 size_flags_vertical = 0
 texture = ExtResource("1_axfei")

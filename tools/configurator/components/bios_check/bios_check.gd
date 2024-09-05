@@ -1,7 +1,5 @@
 extends Control
 
-var file := FileAccess
-var bios_tempfile : String
 var bios_result: Dictionary
 var console: bool = false
 var BIOS_COLUMNS_BASIC := ["BIOS File Name", "System", "Found", "Hash Match", "Description"]
@@ -20,7 +18,6 @@ func _ready():
 		table.columns = BIOS_COLUMNS_EXPERT.size()
 		for i in BIOS_COLUMNS_EXPERT.size():
 			table.set_column_title(i, BIOS_COLUMNS_EXPERT[i])
-	
 	var root = table.create_item()
 	table.hide_root = true
 
@@ -29,7 +26,6 @@ func _ready():
 		await run_thread_command(class_functions.wrapper_command, parameters, console)
 		class_functions.log_parameters[2] = class_functions.log_text + "Exit code: " + str(bios_result["exit_code"])
 		class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
-
 	else: #Assume advanced BIOS button pressed
 		var parameters = ["check_bios_files"]
 		class_functions.execute_command(class_functions.wrapper_command, parameters, false)
