@@ -347,9 +347,15 @@ addToSteam() {
           echo "$command \"$path\"" >> "$launcher"
 
           chmod +x "$launcher"
+
+          zypak-wrapper steam-rom-manager add "$launcher"
         done
     fi
   done
 
   log i "Steam Sync: completed"
+}
+
+remove_from_steam {
+  echo "TBD"
 }

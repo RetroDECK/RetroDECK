@@ -89,7 +89,7 @@ prepare_component() {
     local srm_path="/var/config/steam-rom-manager/userData"
     create_dir -d $srm_path
     cp -fv "$config/steam-rom-manager/"*.json $srm_path
-    steam-rom-manager list
+    #steam-rom-manager list #TODO: what is this for?
 
     log i "Updating steamDirectory and romDirectory lines in $srm_path/userConfigurations.json"
     jq --arg steamDir "$HOME/.steam/steam" --arg romDir "$rdhome/.sync" \
