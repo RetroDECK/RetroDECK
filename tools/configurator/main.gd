@@ -3,8 +3,7 @@
 
 extends Control
 
-var bios_type:int
-var status_code_label: Label
+@onready var bios_type:int
 var log_results: Dictionary
 var theme_option: OptionButton
 #signal signal_theme_changed
@@ -15,41 +14,20 @@ var anim_logo: AnimatedSprite2D
 var rd_logs: String
 var rd_version: String
 var gc_version: String
-var dialogue_title: String
-var dialogue_content: String
-var dialogue_command: String
-var dialogue_parameters: Array
 var l1_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0797.png")
 var r1_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0798.png")
 var a_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0042.png")
 var b_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0043.png")
 var app_data := AppData.new()
-var dialogue_mode: bool = false
 
 func _ready():
 	_get_nodes()
 	_connect_signals()
 	_play_main_animations()
-	var args = OS.get_cmdline_args()
-	for arg in range(args.size()):
-		if args[arg] == "--dialogue" and arg + 1 < args.size():
-			dialogue_mode = true
-		elif args[arg] == "--title" and arg + 1 < args.size():
-			dialogue_title = args[arg + 1]
-		elif args[arg] == "--content" and arg + 1 < args.size():
-			dialogue_content = args[arg + 1]
-		elif args[arg] == "--command" and arg + 1 < args.size():
-			dialogue_command = args[arg + 1]
-		elif args[arg] == "--parameters" and arg + 1 < args.size():
-			dialogue_parameters.append(args[arg + 1])
-		elif args[arg] == "--fullscreen" and arg + 1 < args.size():
-			DisplayServer.window_set_mode(DisplayServer.WindowMode.WINDOW_MODE_FULLSCREEN)
-	if dialogue_mode:
-		load_and_change_scene("res://components/popup_dialogue.tscn")		
 	#%locale_option.selected = class_functions.map_locale_id(OS.get_locale_language())
 	#app_data = data_handler.app_data
-	#data_handler.add_emulator()
-	#data_handler.modify_emulator_test()
+	##data_handler.add_emulator()
+	##data_handler.modify_emulator_test()
 	#if app_data:
 		#var website_data: Link = app_data.about_links["rd_web"]
 		#print (website_data.name,"-",website_data.url,"-",website_data.description,"-",website_data.url)
@@ -69,6 +47,8 @@ func _ready():
 			## Display the properties of each emulator
 			#print("System Name: ", emulator.name)
 			#print("Description: ", emulator.description)
+			##print("System: ", emulator.systen)
+			#print("Help URL: ", emulator.url)
 			#print("Properties:")
 			#for property: EmulatorProperty in emulator.properties:
 				#print("Cheevos: ", property.cheevos)
@@ -76,8 +56,8 @@ func _ready():
 				#print("ABXY_button:", property.abxy_button)
 				#print("multi_user_config_dir: ", property.multi_user_config_dir)
 		#
-		#for key in app_data.retroarch_cores.keys():
-			#var core = app_data.retroarch_cores[key]
+		#for key in app_data.cores.keys():
+			#var core = app_data.cores[key]
 			#print("Core Name: ", core.name)
 			#print("Description: ", core.description)
 			#print("Properties:")
@@ -117,22 +97,6 @@ func _ready():
 			n.self_modulate.a = 0.5 #make it half transparent
 	combine_tkeys()
 
-func load_and_change_scene(scene_load: String):
-	var popup = load(scene_load).instantiate() as Control
-	if dialogue_title != "":
-		popup.set_title(dialogue_title)
-	if dialogue_content != "":
-		popup.set_content(dialogue_content)
-	if dialogue_command != "":
-		popup.set_ok_command(dialogue_command)
-	if dialogue_parameters != []:
-		popup.set_parameters(dialogue_parameters)
-	$Background.add_child(popup)
-
-	#var scene = ResourceLoader.load(scene_load)
-	#get_tree().change_scene_to_packed(scene)
-
-
 func _input(event):
 	if Input.is_action_pressed("quit1") and Input.is_action_pressed("quit2"):
 		get_tree().quit()
@@ -156,9 +120,7 @@ func _exit():
 	get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
 	get_tree().quit()
 
-
 func _get_nodes() -> void:
-	status_code_label = get_node("%status_code_label")
 	theme_option = get_node("%theme_optionbutton")
 	tab_container = get_node("%TabContainer")
 	anim_logo = get_node("%logo_animated")
@@ -276,20 +238,21 @@ func _on_quickresume_advanced_pressed():
 
 func _on_bios_button_pressed():
 	_play_main_animations()
-	bios_type = 0
+	bios_type = 1
 	class_functions.log_parameters[2] = class_functions.log_text + "Bios_Check"
 	log_results = class_functions.execute_command(class_functions.wrapper_command, class_functions.log_parameters, false)
 	load_popup("BIOS File Check", "res://components/bios_check/bios_popup_content.tscn","")
-	status_code_label.text = str(log_results["exit_code"])
-
+	bios_type = 0
+	
 func _on_bios_button_expert_pressed():
 	_play_main_animations()
-	bios_type = 1
+	bios_type = 2
 	class_functions.log_parameters[2] = class_functions.log_text + "Advanced_Bios_Check"
 	log_results = class_functions.execute_command(class_functions.wrapper_command, class_functions.log_parameters, false)
+	class_functions.log_parameters[2] = class_functions.log_text + "Exit code: " + str(log_results["exit_code"])
 	load_popup("BIOS File Check", "res://components/bios_check/bios_popup_content.tscn","")
-	status_code_label.text = str(log_results["exit_code"])
-
+	bios_type = 0
+	
 func _on_exit_button_pressed():
 	_play_main_animations()
 	class_functions.log_parameters[2] = class_functions.log_text + "Exited"

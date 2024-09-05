@@ -73,6 +73,7 @@ layout_mode = 2
 focus_mode = 2
 scroll_following = true
 context_menu_enabled = true
+shortcut_keys_enabled = false
 selection_enabled = true
 
 [connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/BackButton" to="." method="_on_back_pressed"]
