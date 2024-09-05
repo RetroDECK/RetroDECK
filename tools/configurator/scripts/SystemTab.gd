@@ -56,6 +56,7 @@ func _hide_show_buttons(button: Button, buttons_gridcontainer: GridContainer, hi
 		"retroarch_button", "mame_button", "ruffle_button", "melonds_button", "pcsx2_button", "duckstation_button", \
 		"ppsspp_button", "vita3k_button", "rpcs3_button", "ryujinx_button", "dolphin_button", "primehack_button", \
 		"cemu_button", "xemu_button", "esde_button":
+			%reset_button.text="RESET"
 			hidden_gridcontainer.visible = true
 			if button.toggle_mode == false:
 				for i in range(buttons_gridcontainer.get_child_count()):
