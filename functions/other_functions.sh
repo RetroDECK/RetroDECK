@@ -882,17 +882,10 @@ quit_retrodeck() {
   pkill -f "es-de"
   log i "Shutting down RetroDECK's framework"
   pkill -f "retrodeck"
-  log i "See you next time"
-}
 
-start_retrodeck() {
-  splash_screen # Check if today has a surprise splashscreen and load it if so
-  ponzu
-
-  # if steam sync is on do the magic
+    # if steam sync is on do the magic
   if [[ $steam_sync == "true" ]]; then
   (
-  #python3 /app/libexec/steam-sync/steam-sync.py #TODO: clean me
   source /app/libexec/steam-sync/steam-sync.sh
   addToSteam "$(ls "$rdhome/ES-DE/gamelists/")"
   ) |
@@ -905,7 +898,13 @@ start_retrodeck() {
     --auto-close \
     --auto-kill
   fi
+  
+  log i "See you next time"
+}
 
+start_retrodeck() {
+  splash_screen # Check if today has a surprise splashscreen and load it if so
+  ponzu
   log i "Starting RetroDECK v$version"
   es-de
 }
