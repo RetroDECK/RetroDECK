@@ -86,7 +86,15 @@ prepare_component() {
     log i "Prepearing Steam ROM Manager"
     log i "----------------------"
     
-    python3 /app/libexec/steam-sync/resetsync.py
+    local srm_path="/var/config/steam-rom-manager/userData"
+    create_dir -d $srm_path
+    cp -fv "$config/steam-rom-manager/"*.json $srm_path
+    steam-rom-manager list
+
+    log i "Updating steamDirectory and romDirectory lines in $srm_path/userConfigurations.json"
+    jq --arg steamDir "$HOME/.steam/steam" --arg romDir "$rdhome/.sync" \
+    '.[0].steamDirectory = $steamDir | .[0].romDirectory = $romDir' \
+    "$srm_path/userConfigurations.json" > tmpfile && mv tmpfile "$srm_path/userConfigurations.json"
   fi
 
   if [[ "$component" =~ ^(retroarch|all)$ ]]; then
