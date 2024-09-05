@@ -1106,7 +1106,7 @@
       "name": "ES-DE",
       "launch": "es-de"
     },
-    "steam_rom_manager": {
+    "steam-rom-manager": {
       "description": "Steam ROM Manager (used to sync RetroDECK favorites with Steam)",
       "name": "Steam ROM Manager",
       "launch": "steam-rom-manager"

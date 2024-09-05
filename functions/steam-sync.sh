@@ -348,7 +348,7 @@ addToSteam() {
 
           chmod +x "$launcher"
 
-          zypak-wrapper steam-rom-manager add "$launcher"
+          /app/bin/zypak-wrapper.sh steam-rom-manager add "$launcher"
         done
     fi
   done
