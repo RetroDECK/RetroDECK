@@ -720,6 +720,7 @@ icon = ExtResource("45_qxd26")
 
 [node name="launch_progress" type="ProgressBar" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/sysems_container/action_gridcontainer/launch_button"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -737,6 +738,7 @@ icon = ExtResource("12_3jrmi")
 
 [node name="reset_progress" type="ProgressBar" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/sysems_container/action_gridcontainer/reset_button"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

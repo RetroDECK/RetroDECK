@@ -76,6 +76,8 @@ func _hide_show_buttons(button: Button, buttons_gridcontainer: GridContainer, hi
 func _on_Button_released(progress: ProgressBar) -> void:
 	is_launch_pressed = false
 	is_reset_pressed = false
+	%launch_progress.visible = false
+	%reset_progress.visible = false
 	press_time = 0.0
 	progress.value = 0.0
 		
@@ -87,8 +89,10 @@ func _do_action(button: Button) -> void:
 			class_functions.launch_help(current_system.url)
 		["launch_button", current_system.name]:
 			is_launch_pressed = true
+			%launch_progress.visible = true
 		["reset_button", current_system.name]:
 			is_reset_pressed = true
+			%reset_progress.visible = true
 
 func _do_complete() ->void:
 	if is_launch_pressed:

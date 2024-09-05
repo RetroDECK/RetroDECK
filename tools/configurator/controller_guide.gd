@@ -5,6 +5,7 @@ func _process(delta):
 	if %action_gridcontainer.visible == true:
 		if Input.is_action_pressed("back_button"):
 			%action_gridcontainer.visible = false
+			%retroarch_button.grab_focus()
 			for i in range(%system_gridcontainer.get_child_count()):
 				var child = %system_gridcontainer.get_child(i)        
 				if child is Button:
