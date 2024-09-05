@@ -892,7 +892,11 @@ start_retrodeck() {
   # if steam sync is on do the magic
   if [[ $steam_sync == "true" ]]; then
   (
-  python3 /app/libexec/steam-sync/steam-sync.py
+  #python3 /app/libexec/steam-sync/steam-sync.py #TODO: clean me
+  source /app/libexec/steam-sync/steam-sync.sh
+  start_config
+  addToSteam "$(ls "$rdhome/ES-DE/gamelists/")"
+  log "i" "Finished syncing with Steam"
   ) |
   zenity --progress \
     --title="Syncing with Steam" \
