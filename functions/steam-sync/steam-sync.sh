@@ -278,36 +278,53 @@ create_shortcut() {
 
     local old_games=($(ls "$rdhome/.sync/"))
 
-    for game in "${games[@]}"; do
-        # Extract the game name (first field) and command (rest of the fields)
-        local game_name=$(echo "$game" | awk '{print $1}')
-        local game_command=$(echo "$game" | sed "s/$game_name //")
-
-        # Sanitize the game name by removing only problematic characters for filenames (preserve most characters)
-        local sanitized_name=$(echo "$game_name" | sed 's/[^a-zA-Z0-9._-]/_/g')
-        local path="$rdhome/.sync/${sanitized_name}.sh"
-        log "d" "Creating shortcut at path: $path"
-
-        # Properly format the game command without extra backslashes
-        local clean_command=$(echo "$game_command" | sed 's/\\//g')
-
-        # Populate the .sync script with the correct command
-        echo "#!/bin/bash" > "$path"
-        echo "" >> "$path"
-        echo 'if test "$(whereis flatpak)" = "flatpak:"' >> "$path"
-        echo "then" >> "$path"
-        echo "  flatpak-spawn --host $clean_command" >> "$path"
-        echo "else" >> "$path"
-        echo "  $clean_command" >> "$path"
-        echo "fi" >> "$path"
-    
-        chmod +x "$path"
-    done
-
     log "i" "Start removing old games"
     for old_game in "${old_games[@]}"; do
         log "d" "Removing old game shortcut: $old_game"
         rm "$rdhome/.sync/$old_game"
+    done
+
+    for game in "${games[@]}"; do
+
+        log d "Extracted: $game"
+
+        # Extract the game name (everything before the first path part, i.e., excluding paths and other arguments)
+        local game_name=$(echo "$game" | sed -n "s/^\([^']*\)'\([^']*\)'$/\1/p" | xargs)
+
+        # Extract the command part (everything after the game name)
+        local file_path=$(echo "$game" | sed -n "s/^\([^']*\)'\(.*\)'/\2/p")
+
+        # Sanitize the game name for the filename: replace special characters with underscores
+        local sanitized_name=$(echo "$game_name" | sed -e 's/[^A-Za-z0-9._\[\]()-]/_/g')
+
+        log d "File Path: $file_path"
+        log d "Game Name: $game_name"
+        log d "Sanitized Name: $sanitized_name" 
+
+        # If the filename is too long, shorten it
+        if [ ${#sanitized_name} -gt 100 ]; then
+            sanitized_name=$(echo "$sanitized_name" | cut -c 1-100)
+        fi
+
+        #TODO: FIXME, this part is wrong, I need to fix it
+
+        local launcher="$rdhome/.sync/${sanitized_name}.sh"
+        log "d" "Creating shortcut at path: $launcher"
+
+        # Escape the command properly by removing unnecessary backslashes
+        local clean_command=$(echo "$game_command" | sed 's/\\//g')
+
+        # Populate the .sync script with the correct command
+        echo "#!/bin/bash" > "$launcher"
+        echo "" >> "$launcher"
+        echo 'if test "$(whereis flatpak)" = "flatpak:"' >> "$launcher"
+        echo "then" >> "$launcher"
+        echo "  flatpak-spawn --host $clean_command" >> "$launcher"
+        echo "else" >> "$launcher"
+        echo "  $clean_command" >> "$launcher"
+        echo "fi" >> "$launcher"
+
+        chmod +x "$launcher"
     done
 
     if [ -z "$(ls -A $rdhome/.sync/)" ]; then
@@ -321,6 +338,7 @@ create_shortcut() {
     fi
 }
 
+# TODO: FIXME the path is returned with an unwanted ./ ---> '/home/jay/retrodeck/roms/wii/./Tales of Symphonia - Dawn of the New World [RT4PAF].wbfs'
 # Add games to Steam function
 addToSteam() {
     log "i" "Starting Steam Sync"
@@ -360,24 +378,19 @@ addToSteam() {
             local name=$(echo "$game_block" | xmllint --xpath 'string(//game/name)' - 2>/dev/null)
             local path=$(echo "$game_block" | xmllint --xpath 'string(//game/path)' - 2>/dev/null)
 
-            # Escape the name and path to handle special characters
-            local escaped_name=$(printf '%q' "$name")
-            local escaped_path=$(printf '%q' "$path")
-
-            # Log the extracted values
-            log "d" "Escaped name: $escaped_name"
-            log "d" "Escaped path: $escaped_path"
+            log "d" "Game name: $name"
+            log "d" "Game path: $launcher"
 
             # Ensure the extracted name and path are valid
-            if [ -n "$escaped_name" ] && [ -n "$escaped_path" ]; then
+            if [ -n "$name" ] && [ -n "$launcher" ]; then
                 # Check for an alternative emulator if it exists
                 local emulator=$(echo "$game_block" | xmllint --xpath 'string(//game/altemulator)' - 2>/dev/null)
                 if [ -z "$emulator" ]; then
-                    games+=("$escaped_name ${command_list_default[$system]} '$roms_folder/$system/$escaped_path'")
+                    games+=("$name ${command_list_default[$system]} '$roms_folder/$system/$launcher'")
                 else
-                    games+=("$escaped_name ${alt_command_list[$emulator]} '$roms_folder/$system/$escaped_path'")
+                    games+=("$name ${alt_command_list[$emulator]} '$roms_folder/$system/$launcher'")
                 fi
-                log "d" "Steam Sync: found favorite game: $escaped_name"
+                log "d" "Steam Sync: found favorite game: $name"
             else
                 log "w" "Steam Sync: failed to find valid name or path for favorite game"
             fi
