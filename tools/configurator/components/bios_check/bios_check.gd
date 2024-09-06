@@ -12,8 +12,7 @@ var BIOS_COLUMNS_EXPERT := ["BIOS File Name", "System", "Found", "Hash Match", "
 func _ready():
 	$".".theme = custom_theme
 	var table := $Table
-	
-	if bios_type == 0: #Basic BIOS button pressed
+	if bios_type == 1: #Basic BIOS button pressed
 		table.columns = BIOS_COLUMNS_BASIC.size()
 		for i in BIOS_COLUMNS_BASIC.size():
 			table.set_column_title(i, BIOS_COLUMNS_BASIC[i])
@@ -25,9 +24,12 @@ func _ready():
 	var root = table.create_item()
 	table.hide_root = true
 
-	if bios_type == 0: #Basic BIOS button pressed
+	if bios_type == 1: #Basic BIOS button pressed
 		var parameters = ["check_bios_files","basic"]
 		await run_thread_command(class_functions.wrapper_command, parameters, console)
+		class_functions.log_parameters[2] = class_functions.log_text + "Exit code: " + str(bios_result["exit_code"])
+		class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
+
 	else: #Assume advanced BIOS button pressed
 		var parameters = ["check_bios_files"]
 		class_functions.execute_command(class_functions.wrapper_command, parameters, false)
