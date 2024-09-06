@@ -62,7 +62,6 @@
 [ext_resource type="Texture2D" uid="uid://cn11vcrybtor4" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0047.png" id="31_j5ri1"]
 [ext_resource type="Texture2D" uid="uid://cc7ohmfxafe78" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0043.png" id="33_1ghye"]
 [ext_resource type="Texture2D" uid="uid://cs8lh31kh7jv1" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0048.png" id="34_fum2b"]
-[ext_resource type="Texture2D" uid="uid://cfa5mn3dsdvw6" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0729.png" id="36_3qttl"]
 [ext_resource type="Texture2D" uid="uid://chd6d8tx081hm" path="res://assets/icons/pixelitos/128/org.mamedev.MAME.png" id="36_dj81i"]
 [ext_resource type="Script" path="res://scripts/SystemTab.gd" id="36_wv31h"]
 [ext_resource type="Texture2D" uid="uid://10pyy05xqpr4" path="res://assets/icons/pixelitos/128/ruffle.png" id="37_7hhbn"]
@@ -92,6 +91,7 @@
 [ext_resource type="Texture2D" uid="uid://dieva7tuxjrvy" path="res://assets/graphics/rekku2/rekku_nomouth.png" id="65_kk8ba"]
 [ext_resource type="Script" path="res://controller_guide.gd" id="68_ahvw4"]
 [ext_resource type="AudioStream" uid="uid://dhejvg02t5o35" path="res://assets/sounds/30375__sjonas88__smooth-game-like-sounds/538549__sjonas88__select-2.wav" id="71_ghxvk"]
+[ext_resource type="Texture2D" uid="uid://dllymmym0335n" path="res://assets/icons/pixelitos/16/system-shutdown.png" id="87_1yqbe"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_omewi"]
 bg_color = Color(0.712505, 0, 0.175592, 1)
@@ -204,7 +204,7 @@ size_flags_horizontal = 3
 unique_name_in_owner = true
 layout_mode = 2
 tab_alignment = 1
-current_tab = 1
+current_tab = 4
 script = ExtResource("3_id6l4")
 
 [node name="GLOBALS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
@@ -581,6 +581,7 @@ icon_alignment = 1
 vertical_icon_alignment = 0
 
 [node name="SYSTEM" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
 script = ExtResource("36_wv31h")
 metadata/_tab_index = 1
@@ -720,6 +721,7 @@ icon = ExtResource("45_qxd26")
 
 [node name="launch_progress" type="ProgressBar" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/sysems_container/action_gridcontainer/launch_button"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -737,6 +739,7 @@ icon = ExtResource("12_3jrmi")
 
 [node name="reset_progress" type="ProgressBar" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/sysems_container/action_gridcontainer/reset_button"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -749,7 +752,7 @@ show_percentage = false
 [node name="TOOLS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
-metadata/_tab_index = 3
+metadata/_tab_index = 2
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS"]
 layout_mode = 2
@@ -1129,7 +1132,6 @@ disabled = true
 text = "TK_FTPBTN"
 
 [node name="ABOUT" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
-visible = false
 layout_mode = 2
 script = ExtResource("4_m4rto")
 metadata/_tab_index = 4
@@ -1154,10 +1156,10 @@ tab_size = 2
 [node name="logo" type="TextureRect" parent="Background/SplitContainer/MarginContainer/TabContainer/ABOUT/ScrollContainer/about_container/rd_title"]
 custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
-offset_left = 166.0
-offset_top = -14.0
-offset_right = 294.0
-offset_bottom = 114.0
+offset_left = 487.0
+offset_top = -3.0
+offset_right = 615.0
+offset_bottom = 125.0
 size_flags_horizontal = 4
 size_flags_vertical = 0
 texture = ExtResource("1_axfei")
@@ -1184,6 +1186,7 @@ columns = 5
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
+focus_neighbor_right = NodePath("../GLOBALS")
 metadata/_tab_index = 5
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/WIP"]
@@ -1557,18 +1560,11 @@ mouse_default_cursor_shape = 8
 script = ExtResource("4_nqqx3")
 
 [node name="speach_bubble" type="Panel" parent="Background/SplitContainer/side_logo/rekku"]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = 365.0
-offset_top = -783.0
-offset_right = 673.0
-offset_bottom = -402.0
-grow_horizontal = 2
-grow_vertical = 0
+layout_mode = 0
+offset_left = 371.0
+offset_top = -1120.0
+offset_right = 644.0
+offset_bottom = -786.0
 theme_override_styles/panel = SubResource("StyleBoxTexture_rf0rc")
 
 [node name="helper_text" type="RichTextLabel" parent="Background/SplitContainer/side_logo/rekku/speach_bubble"]
@@ -1578,10 +1574,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -132.0
-offset_top = -177.5
-offset_right = 149.0
-offset_bottom = 172.5
+offset_left = -129.5
+offset_top = -161.0
+offset_right = 129.5
+offset_bottom = 191.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "Rekku:
@@ -1593,7 +1589,7 @@ scroll_following = true
 script = ExtResource("5_cprkf")
 
 [node name="rekku_sprite" type="Sprite2D" parent="Background/SplitContainer/side_logo/rekku"]
-position = Vector2(544, -898)
+position = Vector2(536, -513)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("57_1n3u5")
 
@@ -1631,95 +1627,41 @@ color = Color(0.858824, 0.890196, 1, 1)
 
 [node name="controller_guide" type="PanelContainer" parent="."]
 layout_mode = 1
-anchors_preset = 12
+anchors_preset = 7
+anchor_left = 0.5
 anchor_top = 1.0
-anchor_right = 1.0
+anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = 5.0
-offset_top = -69.0
-offset_right = -337.0
+offset_left = -136.0
+offset_top = -72.0
+offset_right = 87.0
 grow_horizontal = 2
 grow_vertical = 0
 script = ExtResource("68_ahvw4")
 
-[node name="controller_guide_text" type="RichTextLabel" parent="controller_guide"]
+[node name="HBoxContainer" type="HBoxContainer" parent="controller_guide"]
 layout_mode = 2
-theme_override_colors/default_color = Color(1, 1, 1, 0.607843)
-theme_override_font_sizes/normal_font_size = 23
-fit_content = true
-scroll_active = false
+theme_override_constants/separation = 25
 
-[node name="a_button" type="TextureButton" parent="controller_guide/controller_guide_text"]
+[node name="a_button" type="TextureButton" parent="controller_guide/HBoxContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
-offset_left = 147.0
-offset_top = -5.0
-offset_right = 231.0
-offset_bottom = 54.0
 texture_normal = ExtResource("30_glnve")
 texture_pressed = ExtResource("31_j5ri1")
 stretch_mode = 0
 
-[node name="b_button" type="TextureButton" parent="controller_guide/controller_guide_text"]
+[node name="b_button" type="TextureButton" parent="controller_guide/HBoxContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
-offset_left = 314.0
-offset_top = -4.0
-offset_right = 398.0
-offset_bottom = 55.0
 texture_normal = ExtResource("33_1ghye")
 texture_pressed = ExtResource("34_fum2b")
 stretch_mode = 0
 
-[node name="l1_button" type="TextureButton" parent="controller_guide/controller_guide_text"]
+[node name="locale_option" type="OptionButton" parent="controller_guide/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-offset_left = 7.0
-offset_top = -6.0
-offset_right = 91.0
-offset_bottom = 53.0
-texture_normal = ExtResource("38_prt7u")
-texture_pressed = ExtResource("39_m4qgd")
-stretch_mode = 0
-
-[node name="r1_button" type="TextureButton" parent="controller_guide/controller_guide_text"]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 832.0
-offset_top = -8.0
-offset_right = 916.0
-offset_bottom = 51.0
-texture_normal = ExtResource("39_5ft88")
-texture_pressed = ExtResource("40_pnuor")
-stretch_mode = 0
-
-[node name="exit_button" type="Button" parent="controller_guide/controller_guide_text"]
-layout_mode = 2
-offset_left = 567.0
-offset_top = -11.0
-offset_right = 651.0
-offset_bottom = 48.0
-grow_horizontal = 0
-scale = Vector2(1.4, 1.4)
-icon = ExtResource("36_3qttl")
-flat = true
-icon_alignment = 1
-expand_icon = true
-
-[node name="locale_option" type="OptionButton" parent="controller_guide/controller_guide_text"]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -217.0
-offset_top = -46.0
-offset_right = -158.0
-offset_bottom = -17.0
-grow_horizontal = 0
-grow_vertical = 0
 selected = 0
 item_count = 7
 popup/item_0/icon = ExtResource("5_exkn2")
@@ -1736,12 +1678,40 @@ popup/item_5/id = 5
 popup/item_6/icon = ExtResource("11_ri2fv")
 popup/item_6/id = 6
 
+[node name="exit_button" type="TextureButton" parent="controller_guide/HBoxContainer"]
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+texture_normal = ExtResource("87_1yqbe")
+stretch_mode = 0
+
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 unique_name_in_owner = true
 stream = ExtResource("71_ghxvk")
 volume_db = -5.0
 
+[node name="l1_button" type="TextureButton" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+offset_left = 14.0
+offset_top = 2.0
+offset_right = 105.0
+offset_bottom = 54.0
+texture_normal = ExtResource("38_prt7u")
+texture_pressed = ExtResource("39_m4qgd")
+stretch_mode = 0
+
+[node name="r1_button" type="TextureButton" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 1134.0
+offset_top = 1.0
+offset_right = 1225.0
+offset_bottom = 53.0
+texture_normal = ExtResource("39_5ft88")
+texture_pressed = ExtResource("40_pnuor")
+stretch_mode = 0
+
 [connection signal="pressed" from="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/troubleshoot_container/bios_button" to="." method="_on_bios_button_pressed"]
 [connection signal="pressed" from="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/troubleshoot_container/bios_button_expert" to="." method="_on_bios_button_expert_pressed"]
-[connection signal="pressed" from="controller_guide/controller_guide_text/exit_button" to="." method="_on_exit_button_pressed"]
-[connection signal="item_selected" from="controller_guide/controller_guide_text/locale_option" to="." method="_on_locale_selected"]
+[connection signal="item_selected" from="controller_guide/HBoxContainer/locale_option" to="." method="_on_locale_selected"]
+[connection signal="pressed" from="controller_guide/HBoxContainer/exit_button" to="." method="_on_exit_button_pressed"]

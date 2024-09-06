@@ -14,8 +14,6 @@ var anim_logo: AnimatedSprite2D
 var rd_logs: String
 var rd_version: String
 var gc_version: String
-var l1_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0797.png")
-var r1_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0798.png")
 var a_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0042.png")
 var b_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0043.png")
 var app_data := AppData.new()
@@ -25,53 +23,7 @@ func _ready():
 	_connect_signals()
 	_play_main_animations()
 	#%locale_option.selected = class_functions.map_locale_id(OS.get_locale_language())
-	#app_data = data_handler.app_data
-	##data_handler.add_emulator()
-	##data_handler.modify_emulator_test()
-	#if app_data:
-		#var website_data: Link = app_data.about_links["rd_web"]
-		#print (website_data.name,"-",website_data.url,"-",website_data.description,"-",website_data.url)
-		##print (app_data.about_links["rd_web"]["name"])
-		#var core_data: Core = app_data.cores["gambatte_libetro"]
-		#print (core_data.name)
-		#for property: CoreProperty in core_data.properties:
-			#print("Cheevos: ", property.cheevos)
-			#print("Cheevos Hardcore: ", property.cheevos_hardcore)
-			#print("Quick Resume: ", property.quick_resume)
-			#print("Rewind: ", property.rewind)
-			#print("Borders: ", property.borders)
-			#print("Widescreen: ", property.widescreen)
-			#print("ABXY_button:", property.abxy_button)
-		#for key in app_data.emulators.keys():
-			#var emulator = app_data.emulators[key]
-			## Display the properties of each emulator
-			#print("System Name: ", emulator.name)
-			#print("Description: ", emulator.description)
-			##print("System: ", emulator.systen)
-			#print("Help URL: ", emulator.url)
-			#print("Properties:")
-			#for property: EmulatorProperty in emulator.properties:
-				#print("Cheevos: ", property.cheevos)
-				#print("Borders: ", property.borders)
-				#print("ABXY_button:", property.abxy_button)
-				#print("multi_user_config_dir: ", property.multi_user_config_dir)
-		#
-		#for key in app_data.cores.keys():
-			#var core = app_data.cores[key]
-			#print("Core Name: ", core.name)
-			#print("Description: ", core.description)
-			#print("Properties:")
-			#for property: CoreProperty in core.properties:
-				#print("Cheevos: ", property.cheevos)
-				#print("Cheevos Hardcore: ", property.cheevos_hardcore)
-				#print("Quick Resume: ", property.quick_resume)
-				#print("Rewind: ", property.rewind)
-				#print("Borders: ", property.borders)
-				#print("Widescreen: ", property.widescreen)
-				#print("ABXY_button:", property.abxy_button)
-	#else:
-		#print ("No emulators")
-
+	#display_json_data()
 	var config_file_path = "/var/config/retrodeck/retrodeck.cfg"
 	var json_file_path = "/var/config/retrodeck/retrodeck.json"
 	var config = data_handler.parse_config_to_json(config_file_path)
@@ -96,21 +48,15 @@ func _ready():
 		if (n.is_class("BaseButton") and n.disabled == true): #if button-like control and disabled
 			n.self_modulate.a = 0.5 #make it half transparent
 	combine_tkeys()
-	
+
 func _input(event):
 	if Input.is_action_pressed("quit1") and Input.is_action_pressed("quit2"):
-		get_tree().quit()
-	if Input.is_action_pressed("next_tab"):
-		%r1_button.texture_normal = %r1_button.texture_pressed
-	elif Input.is_action_pressed("previous_tab"):
-		%l1_button.texture_normal = %l1_button.texture_pressed
-	elif Input.is_action_pressed("back_button"):
+		_exit()
+	if Input.is_action_pressed("back_button"):
 		%b_button.texture_normal = %b_button.texture_pressed
 	elif Input.is_action_pressed("action_button"):
 		%a_button.texture_normal = %a_button.texture_pressed
 	else:
-		%r1_button.texture_normal = r1_button_texture
-		%l1_button.texture_normal = l1_button_texture
 		%a_button.texture_normal = a_button_texture
 		%b_button.texture_normal = b_button_texture
 	if event.is_action_pressed("quit"):
@@ -291,3 +237,51 @@ func combine_tkeys(): #More as a test
 	#$Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container/cheevos_advanced_container/cheevos_hardcore.text = tr("TK_CHEEVOSHARDCORE") + " " + tr("TK_SOON")
 	#$Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/data_mng_container/saves_sync.text = tr("TK_SAVESSYNC") + " " + tr("TK_SOON")
 	#$Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer/system_container/easter_eggs.text = tr("TK_EASTEREGGS") + " " + tr("TK_SOON")
+
+func display_json_data() -> void:
+	app_data = data_handler.app_data
+	#data_handler.add_emulator()
+	#data_handler.modify_emulator_test()
+	if app_data:
+		var website_data: Link = app_data.about_links["rd_web"]
+		print (website_data.name,"-",website_data.url,"-",website_data.description,"-",website_data.url)
+		#print (app_data.about_links["rd_web"]["name"])
+		var core_data: Core = app_data.cores["gambatte_libetro"]
+		print (core_data.name)
+		for property: CoreProperty in core_data.properties:
+			print("Cheevos: ", property.cheevos)
+			print("Cheevos Hardcore: ", property.cheevos_hardcore)
+			print("Quick Resume: ", property.quick_resume)
+			print("Rewind: ", property.rewind)
+			print("Borders: ", property.borders)
+			print("Widescreen: ", property.widescreen)
+			print("ABXY_button:", property.abxy_button)
+		for key in app_data.emulators.keys():
+			var emulator = app_data.emulators[key]
+			# Display the properties of each emulator
+			print("System Name: ", emulator.name)
+			print("Description: ", emulator.description)
+			#print("System: ", emulator.systen)
+			print("Help URL: ", emulator.url)
+			print("Properties:")
+			for property: EmulatorProperty in emulator.properties:
+				print("Cheevos: ", property.cheevos)
+				print("Borders: ", property.borders)
+				print("ABXY_button:", property.abxy_button)
+				print("multi_user_config_dir: ", property.multi_user_config_dir)
+		
+		for key in app_data.cores.keys():
+			var core = app_data.cores[key]
+			print("Core Name: ", core.name)
+			print("Description: ", core.description)
+			print("Properties:")
+			for property: CoreProperty in core.properties:
+				print("Cheevos: ", property.cheevos)
+				print("Cheevos Hardcore: ", property.cheevos_hardcore)
+				print("Quick Resume: ", property.quick_resume)
+				print("Rewind: ", property.rewind)
+				print("Borders: ", property.borders)
+				print("Widescreen: ", property.widescreen)
+				print("ABXY_button:", property.abxy_button)
+	else:
+		print ("No emulators")	

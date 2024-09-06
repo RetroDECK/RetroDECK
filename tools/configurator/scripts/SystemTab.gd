@@ -56,6 +56,7 @@ func _hide_show_buttons(button: Button, buttons_gridcontainer: GridContainer, hi
 		"retroarch_button", "mame_button", "ruffle_button", "melonds_button", "pcsx2_button", "duckstation_button", \
 		"ppsspp_button", "vita3k_button", "rpcs3_button", "ryujinx_button", "dolphin_button", "primehack_button", \
 		"cemu_button", "xemu_button", "esde_button":
+			%reset_button.text="RESET"
 			hidden_gridcontainer.visible = true
 			if button.toggle_mode == false:
 				for i in range(buttons_gridcontainer.get_child_count()):
@@ -75,6 +76,8 @@ func _hide_show_buttons(button: Button, buttons_gridcontainer: GridContainer, hi
 func _on_Button_released(progress: ProgressBar) -> void:
 	is_launch_pressed = false
 	is_reset_pressed = false
+	%launch_progress.visible = false
+	%reset_progress.visible = false
 	press_time = 0.0
 	progress.value = 0.0
 		
@@ -86,8 +89,10 @@ func _do_action(button: Button) -> void:
 			class_functions.launch_help(current_system.url)
 		["launch_button", current_system.name]:
 			is_launch_pressed = true
+			%launch_progress.visible = true
 		["reset_button", current_system.name]:
 			is_reset_pressed = true
+			%reset_progress.visible = true
 
 func _do_complete() ->void:
 	if is_launch_pressed:
