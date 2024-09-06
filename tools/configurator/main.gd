@@ -14,8 +14,6 @@ var anim_logo: AnimatedSprite2D
 var rd_logs: String
 var rd_version: String
 var gc_version: String
-var l1_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0797.png")
-var r1_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0798.png")
 var a_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0042.png")
 var b_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0043.png")
 var app_data := AppData.new()
@@ -53,18 +51,12 @@ func _ready():
 
 func _input(event):
 	if Input.is_action_pressed("quit1") and Input.is_action_pressed("quit2"):
-		get_tree().quit()
-	if Input.is_action_pressed("next_tab"):
-		%r1_button.texture_normal = %r1_button.texture_pressed
-	elif Input.is_action_pressed("previous_tab"):
-		%l1_button.texture_normal = %l1_button.texture_pressed
-	elif Input.is_action_pressed("back_button"):
+		_exit()
+	if Input.is_action_pressed("back_button"):
 		%b_button.texture_normal = %b_button.texture_pressed
 	elif Input.is_action_pressed("action_button"):
 		%a_button.texture_normal = %a_button.texture_pressed
 	else:
-		%r1_button.texture_normal = r1_button_texture
-		%l1_button.texture_normal = l1_button_texture
 		%a_button.texture_normal = a_button_texture
 		%b_button.texture_normal = b_button_texture
 	if event.is_action_pressed("quit"):

@@ -1,6 +1,10 @@
 extends TabContainer
 
 var icon_width: int = 32
+@onready var tcount: int = get_tab_count()-1
+var l1_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0797.png")
+var r1_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0798.png")
+
 
 func _ready():
 	focusFirstFocusableChild() #grab focus on first element to enable controller focusing
@@ -34,13 +38,24 @@ func _on_Button_focus_entered(button: Button):
 
 func _input(event):
 	if (event.is_action_pressed("next_tab")):
-		self.select_next_available()
-		focusFirstFocusableChild()
-		
+		%r1_button.texture_normal = %r1_button.texture_pressed
+		if current_tab == tcount:
+			current_tab = 0
+		else:
+			self.select_next_available()
+			focusFirstFocusableChild()
+	else:
+		%r1_button.texture_normal = r1_button_texture
 	if (event.is_action_pressed("previous_tab")):
-		self.select_previous_available()
-		focusFirstFocusableChild()
-	
+		%l1_button.texture_normal = %l1_button.texture_pressed
+		if current_tab == 0:
+			current_tab = tcount
+		else:	
+			self.select_previous_available()
+			focusFirstFocusableChild()
+	else:
+		%l1_button.texture_normal = l1_button_texture
+
 func focusFirstFocusableChild():
 	var children = findElements(get_current_tab_control(), "Control")
 	for n: Control in children:
