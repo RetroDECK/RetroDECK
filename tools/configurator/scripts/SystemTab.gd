@@ -45,8 +45,7 @@ func _connect_signals() -> void:
 	%esde_button.pressed.connect(_hide_show_buttons.bind(%esde_button,%system_gridcontainer, %action_gridcontainer))	
 	%help_button.pressed.connect(_do_action.bind(%help_button))
 	#%launch_button.pressed.connect(_do_action.bind(%launch_button))
-	%launch_button.button_down.connect(_do_action.bind(%launch_button))
-	%launch_button.button_up.connect(_on_Button_released.bind(%launch_progress))
+	%launch_button.pressed.connect(_do_action.bind(%launch_button))
 	%reset_button.button_down.connect(_do_action.bind(%reset_button))
 	%reset_button.button_up.connect(_on_Button_released.bind(%reset_progress))
 	
