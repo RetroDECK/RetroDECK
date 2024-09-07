@@ -328,11 +328,9 @@ addToSteam() {
               sanitized_name=$(echo "$sanitized_name" | cut -c 1-100)
           fi
 
-          log d "Sanitized Name: $sanitized_name" 
+          log d "Sanitized Name: $sanitized_name"
 
-          #TODO: FIXME, this part is wrong, I need to fix it
-
-          local launcher="$rdhome/.sync/${sanitized_name}.sh"
+          local launcher="$steamsync_folder/${sanitized_name}.sh"
           log d "Creating shortcut at path: $launcher"
 
           if [[ -v command_list_default[$system] ]]; then
@@ -356,6 +354,6 @@ addToSteam() {
   log i "Steam Sync: completed"
 }
 
-remove_from_steam {
+remove_from_steam() {
   echo "TBD"
 }

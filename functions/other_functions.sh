@@ -886,7 +886,7 @@ quit_retrodeck() {
     # if steam sync is on do the magic
   if [[ $steam_sync == "true" ]]; then
   (
-  source /app/libexec/steam-sync/steam-sync.sh
+  source /app/libexec/steam_sync.sh
   addToSteam "$(ls "$rdhome/ES-DE/gamelists/")"
   ) |
   zenity --progress \
