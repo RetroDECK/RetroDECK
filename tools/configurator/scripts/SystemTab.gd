@@ -3,7 +3,6 @@ extends Control
 var app_data := AppData.new()
 var current_system := Emulator.new()
 var press_time: float = 0.0
-var is_launch_pressed: bool = false
 var is_reset_pressed: bool = false
 var reset_result: Dictionary
 @export var PRESS_DURATION: float = 3.0
@@ -13,18 +12,13 @@ func _ready():
 	_connect_signals()
 	
 func _process(delta: float) -> void:
-	if is_launch_pressed:
-		press_time += delta
-		%launch_progress.value = press_time / PRESS_DURATION * 100.0
 	if is_reset_pressed:
 		press_time += delta
 		%reset_progress.value = press_time / PRESS_DURATION * 100.0
 	if press_time >= PRESS_DURATION:
 		_do_complete()
 		press_time = 0.0
-		is_launch_pressed = false
 		is_reset_pressed = false
-		%launch_progress.value = 0.0
 		%reset_progress.value = 0.0
 	
 func _connect_signals() -> void:
