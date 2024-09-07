@@ -16,7 +16,8 @@ func read_cfg() -> String:
 	var config = data_handler.parse_config_to_json(config_file_path)
 	data_handler.config_save_json(config, json_file_path)
 	rd_log_folder = config["paths"]["logs_folder"]
-	rd_log = rd_log_folder + "/retrodeck.log"
+	#rd_log = rd_log_folder + "/retrodeck.log"
+	rd_log = "/var/config/retrodeck/logs/retrodeck.log"
 	log_parameters = ["log", "i", log_text, rd_log]
 	rd_version = config["version"]
 	gc_version = ProjectSettings.get_setting("application/config/version")
