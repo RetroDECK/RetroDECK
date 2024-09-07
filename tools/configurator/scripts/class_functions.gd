@@ -3,7 +3,7 @@ class_name ClassFunctions
 extends Control
 var log_text = "gdc_"
 var log_parameters: Array
-var wrapper_command: String = "../../tools/retrodeck_function_wrapper.sh"
+var wrapper_command: String = "/app/tools/retrodeck_function_wrapper.sh"
 var rd_log: String
 var rd_log_folder: String
 var rd_version: String
@@ -16,8 +16,8 @@ func read_cfg() -> String:
 	var config = data_handler.parse_config_to_json(config_file_path)
 	data_handler.config_save_json(config, json_file_path)
 	rd_log_folder = config["paths"]["logs_folder"]
-	#rd_log = rd_log_folder + "/retrodeck.log"
-	rd_log = "/var/config/retrodeck/logs/retrodeck.log"
+	rd_log = rd_log_folder + "/retrodeck.log"
+	#rd_log = "/var/config/retrodeck/logs/retrodeck.log"
 	log_parameters = ["log", "i", log_text, rd_log]
 	rd_version = config["version"]
 	gc_version = ProjectSettings.get_setting("application/config/version")
