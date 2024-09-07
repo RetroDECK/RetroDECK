@@ -1,7 +1,33 @@
-class_name ClassFunctions extends Control
+class_name ClassFunctions 
 
-# This should be looked at again when GoDot 4.3 ships as has new OS.execute_with_pipe
+extends Control
+var log_text = "gdc_"
+var log_parameters: Array
+var wrapper_command: String = "/app/tools/retrodeck_function_wrapper.sh"
+var rd_log: String
+var rd_log_folder: String
+var rd_version: String
+var gc_version: String
 
+func read_cfg() -> String:
+	var title: String
+	var config_file_path = "/var/config/retrodeck/retrodeck.cfg"
+	var json_file_path = "/var/config/retrodeck/retrodeck.json"
+	var config = data_handler.parse_config_to_json(config_file_path)
+	data_handler.config_save_json(config, json_file_path)
+	rd_log_folder = config["paths"]["logs_folder"]
+	rd_log = rd_log_folder + "/retrodeck.log"
+	#rd_log = "/var/config/retrodeck/logs/retrodeck.log"
+	log_parameters = ["log", "i", log_text, rd_log]
+	rd_version = config["version"]
+	gc_version = ProjectSettings.get_setting("application/config/version")
+	title = "\n   " + rd_version + "\nConfigurator\n    " + gc_version
+	print ("Make logging a function\nAlso add d,i,e,w: ", rd_log)
+	return title
+
+func logger() -> void:
+	pass
+	
 func array_to_string(arr: Array) -> String:
 	var text: String
 	for line in arr:
@@ -9,6 +35,7 @@ func array_to_string(arr: Array) -> String:
 		text = line.strip_edges() + "\n"
 	return text
 
+# TODO This should be looked at again when GoDot 4.3 ships as has new OS.execute_with_pipe	
 func execute_command(command: String, parameters: Array, console: bool) -> Dictionary:
 	var result = {}
 	var output = []
