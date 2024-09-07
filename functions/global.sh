@@ -52,6 +52,7 @@ git_organization_name="RetroDECK"                                               
 cooker_repository_name="Cooker"                                                                         # The name of the cooker repository under RetroDECK organization
 main_repository_name="RetroDECK"                                                                        # The name of the main repository under RetroDECK organization
 features="$config/retrodeck/reference_lists/features.json"                                                 # A file where all the RetroDECK and component capabilities are kept for querying
+steamsync_folder="$rdhome/.sync"                                                                        # The folder where the favorite launchers are saved in order to be synced to Steam
 
 
 # Godot data transfer temp files
