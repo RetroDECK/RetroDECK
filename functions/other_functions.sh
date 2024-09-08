@@ -893,22 +893,45 @@ start_retrodeck() {
 }
 
 run_game() {
-  # Arguments: $1 -> game path, $2 -> optional system
-  local game="$1"
-  local system="$2"
+
+  # Initialize variables
+  emulator=""
+  system=""
+
+  # Parse options
+  while getopts ":e:s:" opt; do
+      case ${opt} in
+          e )
+              emulator=$OPTARG
+              ;;
+          s )
+              system=$OPTARG
+              ;;
+          \? )
+              echo "Usage: $0 --run [-e emulator] [-s system] game"
+              exit 1
+              ;;
+      esac
+  done
+  shift $((OPTIND -1))
+
+  # Check for game argument
+  if [[ -z "$1" ]]; then
+      echo "Error: Game file is required."
+      echo "Usage: $0 --run [-e emulator] [-s system] game"
+      exit 1
+  fi
+
+  game=$1
 
   # If no system is provided, extract it from the game path
   if [[ -z "$system" ]]; then
     system=$(echo "$game" | grep -oP '(?<=roms/)[^/]+')
   fi
 
-  log d "Run game: running $(basename "$game") for $system system"
-
-  # Special case for retroarch
-  if [[ "$system" == "retroarch" ]]; then
-    log d "TODO: implement retroarch"
-    return
-  fi
+  log d "Emulator: $emulator"
+  log d "System: $system"
+  log d "Game: $game"
 
   # Query the features JSON for emulators that support the system
   local emulators=$(jq -r --arg system "$system" '
@@ -925,6 +948,15 @@ run_game() {
       .value.system == $system or 
       (.value.system[]? == $system)
     ) | .key' "$features")
+
+  # if the emulator is given and it's a retroarch core just execute it
+  if [[ "$emulator" == *"_libretro" ]]; then
+    local core_path="/var/config/retroarch/cores/$emulator.so"
+    log d "Running RetroArch core: $core_path"
+    log d "Command: retroarch -L $core_path \"$game\""
+    eval "retroarch -L $core_path \"$game\""
+    return 1
+  fi
 
   # If the system is handled by RetroArch cores, add them to the list of emulators
   if [[ -n "$retroarch_cores" ]]; then
