@@ -25,6 +25,7 @@ flatpak run [FLATPAK-RUN-OPTION] net.retrodeck-retrodeck [ARGUMENTS]
 Arguments:
     -h, --help                      Print this help
     -v, --version                   Print RetroDECK version
+    --run <path> (system)           Run a game from cli, if no system is defined it will deducted from the path. For example --run ~/retrodeck/roms/system/game.ext will be run with the system "system".
     --info-msg                      Print paths and config informations
     --configurator                  Starts the RetroDECK Configurator
     --compress-one <file>           Compresses target file to a compatible format
@@ -40,6 +41,10 @@ https://retrodeck.net
       ;;
     --version*|-v*)
       echo "RetroDECK v$version"
+      exit
+      ;;
+    --run*)
+      run_game "$2" "$3"
       exit
       ;;
     --info-msg*)

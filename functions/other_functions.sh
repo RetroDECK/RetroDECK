@@ -891,3 +891,55 @@ start_retrodeck() {
   log i "Starting RetroDECK v$version"
   es-de
 }
+
+run_game() {
+  # Arguments: $1 -> game path, $2 -> optional system
+  local game="$1"
+  local system="$2"
+
+  # If no system is provided, extract it from the game path
+  if [[ -z "$system" ]]; then
+    system=$(echo "$game" | grep -oP '(?<=roms/)[^/]+')
+  fi
+
+  log d "Run game: running $(basename "$game") for $system system"
+
+  # Special case for retroarch
+  if [[ "$system" == "retroarch" ]]; then
+    log d "TODO: implement retroarch"
+    return
+  fi
+
+  # Query the features JSON for emulators that support the system
+  local emulators=$(jq -r --arg system "$system" '
+    .emulator | to_entries[] | 
+    select(
+      (.value.system == $system) or 
+      (.value.system[]? == $system)
+    ) | .key' "$features")
+
+  # Check if multiple emulators are found and prompt the user to select one with zenity
+  if [[ $(echo "$emulators" | wc -l) -gt 1 ]]; then
+    emulator=$(echo "$emulators" | zenity --list --title="Select Emulator" --text="Multiple emulators found for $system. Select one to run." --column="Emulator")
+  else
+    emulator="$emulators"
+  fi
+
+  # If no emulator was selected, exit
+  if [[ -z "$emulator" ]]; then
+    log e "No emulator selected. Exiting."
+    return 1
+  fi
+
+  log d "Run game: selected emulator $emulator"
+
+  # Parse emulator launch command and arguments from the JSON file
+  local launch_command=$(jq -r ".emulator.$emulator.launch" "$features")
+  local launch_args=$(jq -r ".emulator.$emulator.\"launch-args\"" "$features")
+
+  # Replace $game in launch_args with the actual game path, quoting it to handle spaces
+  launch_args=${launch_args//\$game/\"$game\"}
+
+  # Form and execute the command
+  eval "$launch_command $launch_args"
+}
