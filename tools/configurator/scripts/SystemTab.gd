@@ -75,29 +75,21 @@ func _on_Button_released(progress: ProgressBar) -> void:
 func _do_action(button: Button) -> void:
 	match [button.name, current_system.name]:
 		["help_button", current_system.name]:
-			class_functions.log_parameters[2] = class_functions.log_text + "Launching " + current_system.name + " Help"
-			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
+			class_functions.logger("i", "Launching " + current_system.name + " Help")
 			class_functions.launch_help(current_system.url)
 		["launch_button", current_system.name]:
-			class_functions.log_parameters[2] = class_functions.log_text + "Launching " + current_system.name
-			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
+			class_functions.logger("i", "Launching " + current_system.name)
 			var launch = class_functions.execute_command(current_system.launch,[], false)
-			class_functions.log_parameters[2] = class_functions.log_text + "Exit Code: " + str(launch["exit_code"])
-			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
+			class_functions.logger("d", "Exit Code: " + str(launch["exit_code"]))
 		["reset_button", current_system.name]:
 			is_reset_pressed = true
 			%reset_progress.visible = true
 
 func _do_complete() ->void:
 	if is_reset_pressed:
-		var parameters = ["prepare_component","reset",current_system.name]
 		%reset_button.text = "RESETTING-NOW"
-		class_functions.log_parameters[2] = class_functions.log_text + "Resetting " + current_system.name
-		class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
-		await run_thread_command(class_functions.wrapper_command,parameters, false)
-		class_functions.log_parameters[2] = class_functions.log_text + "Exit Code: " + str(reset_result["exit_code"])
-		class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
+		class_functions.logger("i", "Resetting " + current_system.name)
+		var parameters = ["prepare_component","reset",current_system.name]
+		reset_result = await class_functions.run_thread_command(class_functions.wrapper_command,parameters, false)
+		class_functions.logger("d", "Exit Code: " + str(reset_result["exit_code"]))
 		%reset_button.text = "RESET COMPLETED"
-
-func run_thread_command(command: String, parameters: Array, console: bool) -> void:
-	reset_result = await class_functions.run_command_in_thread(command, parameters, console)

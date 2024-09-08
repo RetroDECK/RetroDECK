@@ -4,7 +4,6 @@
 extends Control
 
 @onready var bios_type:int
-var log_results: Dictionary
 var theme_option: OptionButton
 #signal signal_theme_changed
 var custom_theme: Theme = $".".theme
@@ -13,6 +12,8 @@ var tab_container: TabContainer
 var anim_logo: AnimatedSprite2D
 var a_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0042.png")
 var b_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0043.png")
+var l1_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0797.png")
+var r1_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0798.png")
 var app_data := AppData.new()
 
 func _ready():
@@ -23,9 +24,8 @@ func _ready():
 
 	#class_functions.logger()	
 	%rd_title.text += class_functions.read_cfg()
-	class_functions.log_parameters[2] = class_functions.log_text + "started configurator"
-	class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
-	print (class_functions.rd_log)
+	class_functions.logger("i","Started Godot configurator")
+	
 	#var log_file = class_functions.import_text_file(rd_logs +"/retrodeck.log")
 	#for id in config.paths:
 	#	var path_data = config.paths[id]
@@ -45,19 +45,24 @@ func _ready():
 func _input(event):
 	if Input.is_action_pressed("quit1") and Input.is_action_pressed("quit2"):
 		_exit()
-	if Input.is_action_pressed("back_button"):
+	if Input.is_action_pressed("next_tab"):
+		%r1_button.texture_normal = %r1_button.texture_pressed
+	elif Input.is_action_pressed("previous_tab"):
+		%l1_button.texture_normal = %l1_button.texture_pressed
+	elif Input.is_action_pressed("back_button"):
 		%b_button.texture_normal = %b_button.texture_pressed
 	elif Input.is_action_pressed("action_button"):
 		%a_button.texture_normal = %a_button.texture_pressed
 	else:
+		%r1_button.texture_normal = r1_button_texture
+		%l1_button.texture_normal = l1_button_texture
 		%a_button.texture_normal = a_button_texture
 		%b_button.texture_normal = b_button_texture
 	if event.is_action_pressed("quit"):
 		_exit()
 
 func _exit():
-	class_functions.log_parameters[2] = class_functions.log_text + "exited configurator"
-	class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
+	class_functions.logger("i","Exited Godot configurator")
 	get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
 	get_tree().quit()
 
@@ -83,18 +88,15 @@ func _load_log(index: int) -> void:
 	var log_content:String
 	match index:
 		1: 
-			class_functions.log_parameters[2] = class_functions.log_text + "Loading RetroDeck log"
-			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
+			class_functions.logger("i","Loading RetroDeck log")
 			log_content = class_functions.import_text_file(class_functions.rd_log_folder +"/retrodeck.log")
 			load_popup("RetroDeck Log", "res://components/logs_view/logs_popup_content.tscn", log_content)
 		2:
-			class_functions.log_parameters[2] = class_functions.log_text + "Loading ES-DE log"
-			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
+			class_functions.logger("i","Loading ES-DE log")
 			log_content = class_functions.import_text_file(class_functions.rd_log_folder +"/ES-DE/es_log.txt")
 			load_popup("ES-DE Log", "res://components/logs_view/logs_popup_content.tscn",log_content)
 		3: 
-			class_functions.log_parameters[2] = class_functions.log_text + "Loading RetroArch log"
-			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
+			class_functions.logger("i","Loading RetroArch log")
 			log_content = class_functions.import_text_file(class_functions.rd_log_folder +"/retroarch/logs/log.txt")
 			load_popup("Retroarch Log", "res://components/logs_view/logs_popup_content.tscn",log_content)	
 
@@ -139,20 +141,16 @@ func _hide_show_buttons(button: Button, buttons_gridcontainer: GridContainer, hi
 func _conf_theme(index: int) -> void: 
 	match index:
 		1:
-			class_functions.log_parameters[2] = class_functions.log_text + "Set theme to index " + str(index)
-			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
+			class_functions.logger("i","Set theme to index " + str(index))
 			custom_theme = preload("res://res/pixel_ui_theme/RetroDECKTheme.tres")
 		2:
-			class_functions.log_parameters[2] = class_functions.log_text + "Set theme to index " + str(index)
-			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
+			class_functions.logger("i","Set theme to index " + str(index))
 			custom_theme = preload("res://assets/themes/retro_theme.tres")
 		3:
-			class_functions.log_parameters[2] = class_functions.log_text + "Set theme to index " + str(index)
-			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)	
+			class_functions.logger("i","Set theme to index " + str(index))
 			custom_theme = preload("res://assets/themes/modern_theme.tres")
 		4:
-			class_functions.log_parameters[2] = class_functions.log_text + "Set theme to index " + str(index)
-			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)			
+			class_functions.logger("i","Set theme to index " + str(index))
 			custom_theme = preload("res://assets/themes/accesible_theme.tres")
 	$".".theme = custom_theme
 	_play_main_animations()
@@ -180,17 +178,14 @@ func _on_quickresume_advanced_pressed():
 func _on_bios_button_pressed():
 	_play_main_animations()
 	bios_type = 1
-	class_functions.log_parameters[2] = class_functions.log_text + "Bios_Check"
-	log_results = class_functions.execute_command(class_functions.wrapper_command, class_functions.log_parameters, false)
+	class_functions.logger("i","Bios Check")
 	load_popup("BIOS File Check", "res://components/bios_check/bios_popup_content.tscn","")
 	bios_type = 0
 	
 func _on_bios_button_expert_pressed():
 	_play_main_animations()
 	bios_type = 2
-	class_functions.log_parameters[2] = class_functions.log_text + "Advanced_Bios_Check"
-	log_results = class_functions.execute_command(class_functions.wrapper_command, class_functions.log_parameters, false)
-	class_functions.log_parameters[2] = class_functions.log_text + "Exit code: " + str(log_results["exit_code"])
+	class_functions.logger("i","Advanced Bios Check")
 	load_popup("BIOS File Check", "res://components/bios_check/bios_popup_content.tscn","")
 	bios_type = 0
 	

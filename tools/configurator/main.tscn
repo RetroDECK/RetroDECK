@@ -1,4 +1,4 @@
-[gd_scene load_steps=99 format=3 uid="uid://61f6m4r1mpan"]
+[gd_scene load_steps=101 format=3 uid="uid://61f6m4r1mpan"]
 
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
 [ext_resource type="Theme" uid="uid://hhc60cllcg47" path="res://assets/themes/default_theme.tres" id="1_if8nh"]
@@ -92,6 +92,8 @@
 [ext_resource type="Script" path="res://controller_guide.gd" id="68_ahvw4"]
 [ext_resource type="AudioStream" uid="uid://dhejvg02t5o35" path="res://assets/sounds/30375__sjonas88__smooth-game-like-sounds/538549__sjonas88__select-2.wav" id="71_ghxvk"]
 [ext_resource type="Texture2D" uid="uid://dllymmym0335n" path="res://assets/icons/pixelitos/16/system-shutdown.png" id="87_1yqbe"]
+[ext_resource type="Texture2D" uid="uid://brf74puvpnwsd" path="res://assets/graphics/retrodeck.png" id="93_f7ex4"]
+[ext_resource type="Script" path="res://retrodeck.gd" id="94_8nlr1"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_omewi"]
 bg_color = Color(0.712505, 0, 0.175592, 1)
@@ -1698,6 +1700,12 @@ offset_bottom = 53.0
 texture_normal = ExtResource("39_5ft88")
 texture_pressed = ExtResource("40_pnuor")
 stretch_mode = 0
+
+[node name="Retrodeck_Thread_Check" type="Sprite2D" parent="."]
+position = Vector2(1046, 238)
+scale = Vector2(0.390625, 0.398438)
+texture = ExtResource("93_f7ex4")
+script = ExtResource("94_8nlr1")
 
 [connection signal="pressed" from="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/troubleshoot_container/bios_button" to="." method="_on_bios_button_pressed"]
 [connection signal="pressed" from="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/troubleshoot_container/bios_button_expert" to="." method="_on_bios_button_expert_pressed"]

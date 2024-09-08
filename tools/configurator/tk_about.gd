@@ -28,12 +28,10 @@ func _connect_signals() -> void:
 func _about_button_pressed(id: String, button: Button) -> void:
 	match id:
 		"rd_web", "rd_changelog", "rd_wiki", "rd_credits", "rd_donate", "rd_contactus", "rd_licenses":
-			class_functions.log_parameters[2] = class_functions.log_text + "Loading website for " + id
-			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
-			OS.shell_open(button.editor_description)
+			class_functions.logger("i","Loading website for " + id)
+			class_functions.launch_help(button.editor_description)
 		_:
-			class_functions.log_parameters[2] = class_functions.log_text + "Loading website - no matching ID found"
-			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
+			class_functions.logger("d","Loading website for " + id)
 			print ("Website ID/Link not found")
 
 func create_buttons() -> void:
