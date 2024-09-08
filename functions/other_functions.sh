@@ -880,14 +880,12 @@ release_selector() {
 quit_retrodeck() {
   log i "Quitting ES-DE"
   pkill -f "es-de"
-  log i "Shutting down RetroDECK's framework"
-  pkill -f "retrodeck"
 
-    # if steam sync is on do the magic
+  # if steam sync is on do the magic
   if [[ $steam_sync == "true" ]]; then
   (
   source /app/libexec/steam_sync.sh
-  addToSteam "$(ls "$rdhome/ES-DE/gamelists/")"
+  add_to_steam "$(ls "$rdhome/ES-DE/gamelists/")"
   ) |
   zenity --progress \
     --title="Syncing with Steam" \
@@ -898,6 +896,8 @@ quit_retrodeck() {
     --auto-close \
     --auto-kill
   fi
+  log i "Shutting down RetroDECK's framework"
+  pkill -f "retrodeck"
   
   log i "See you next time"
 }
