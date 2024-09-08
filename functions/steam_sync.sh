@@ -261,8 +261,11 @@ declare -A alt_command_list=(
 )
 
 # Add games to Steam function
-addToSteam() {
+add_to_steam() {
     log "i" "Starting Steam Sync"
+
+    steamsync_folder="$rdhome/.sync"
+    create_dir $steamsync_folder
 
     local srm_path="/var/config/steam-rom-manager/userData/userConfigurations.json"
     if [ ! -f "$srm_path" ]; then
@@ -317,7 +320,8 @@ addToSteam() {
 
           # Sanitize the game name for the filename: replace special characters with underscores
           local sanitized_name=$(echo "$name" | sed -e 's/^A-Za-z0-9._-/ /g')
-          local sanitized_name=$(echo "$sanitized_name" | sed -e 's/:/-/g')
+          local sanitized_name=$(echo "$sanitized_name" | sed -e 's/:/ -/g')
+          local sanitized_name=$(echo "$sanitized_name" | sed -e 's/&/and/g')
           local sanitized_name=$(echo "$sanitized_name" | sed -e 's/   / - /g')
           local sanitized_name=$(echo "$sanitized_name" | sed -e 's/  / /g')
           log d "File Path: $path"
@@ -345,12 +349,10 @@ addToSteam() {
           echo "$command \"$path\"" >> "$launcher"
 
           chmod +x "$launcher"
-
-          /app/bin/zypak-wrapper.sh steam-rom-manager add "$launcher"
         done
     fi
   done
-
+  steam-rom-manager add
   log i "Steam Sync: completed"
 }
 
