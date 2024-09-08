@@ -918,9 +918,11 @@ run_game() {
       (.value.system[]? == $system)
     ) | .key' "$features")
 
+  local pretty_system=$(jq -r --arg system "$system" '.system[$system].name' "$features")
+
   # Check if multiple emulators are found and prompt the user to select one with zenity
   if [[ $(echo "$emulators" | wc -l) -gt 1 ]]; then
-    emulator=$(echo "$emulators" | zenity --list --title="Select Emulator" --text="Multiple emulators found for $system. Select one to run." --column="Emulator")
+    emulator=$(echo "$emulators" | zenity --list --title="Select Emulator" --text="Multiple emulators found for $pretty_system. Select one to run." --column="Emulator")
   else
     emulator="$emulators"
   fi
