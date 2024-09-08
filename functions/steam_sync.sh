@@ -269,14 +269,13 @@ add_to_steam() {
 
     local srm_path="/var/config/steam-rom-manager/userData/userConfigurations.json"
     if [ ! -f "$srm_path" ]; then
-        log "e" "Steam ROM Manager configuration not initialized! Initializing now."
-        # TODO: do a prepare_component here
-        resetfun "$rdhome"
+      log "e" "Steam ROM Manager configuration not initialized! Initializing now."
+      prepare_component "reset" "steam-rom-manager"
     fi
 
     # Build the systems array from space-separated systems
     local systems_string=$(jq -r '.system | keys[]' "$features" | paste -sd' ')
-    IFS=' ' read -r -a systems <<< "$systems_string"
+    IFS=' ' read -r -a systems <<< "$systems_string" # TODO: do we need this line?
 
     local games=()
 
@@ -322,6 +321,7 @@ add_to_steam() {
           local sanitized_name=$(echo "$name" | sed -e 's/^A-Za-z0-9._-/ /g')
           local sanitized_name=$(echo "$sanitized_name" | sed -e 's/:/ -/g')
           local sanitized_name=$(echo "$sanitized_name" | sed -e 's/&/and/g')
+          local sanitized_name=$(echo "$sanitized_name" | sed -e 's%/%and%g')
           local sanitized_name=$(echo "$sanitized_name" | sed -e 's/   / - /g')
           local sanitized_name=$(echo "$sanitized_name" | sed -e 's/  / /g')
           log d "File Path: $path"
@@ -345,8 +345,13 @@ add_to_steam() {
           # fi
 
           # Populate the .sync script with the correct command
+          local command="flatpak run net.retrodeck.retrodeck --run \"$roms_folder/$system/$path\" $system"
           echo -e '#!/bin/bash\n' > "$launcher"
-          echo "flatpak run net.retrodeck.retrodeck --run \"$roms_folder/$system/$path\" $system" >> "$launcher"
+          echo -e "if [ test \"$(whereis flatpak)\" = \"flatpak:\" ]; then" >> "$launcher"
+          echo -e "\tflatpak-spawn --host $command" >> "$launcher"
+          echo -e "else" >> "$launcher"
+          echo -e "\t$command" >> "$launcher"
+          echo -e "fi" >> "$launcher"
 
           chmod +x "$launcher"
         done
