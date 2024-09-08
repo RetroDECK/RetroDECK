@@ -82,9 +82,9 @@ prepare_component() {
 
   if [[ "$component" =~ ^(steam-rom-manager|all)$ ]]; then
   component_found="true"
-    log i "----------------------"
+    log i "-----------------------------"
     log i "Prepearing Steam ROM Manager"
-    log i "----------------------"
+    log i "-----------------------------"
     
     local srm_userdata="/var/config/steam-rom-manager/userData"
     create_dir -d "/var/config/steam-rom-manager"
