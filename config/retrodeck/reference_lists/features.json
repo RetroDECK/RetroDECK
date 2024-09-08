@@ -849,7 +849,7 @@
 			  }
 			]
 		  },
-		  "picodrive_libetro": {
+		  "picodrive_libretro": {
 			"name": "PicoDrive",
 			"description": "SEGA MS/MD/CD/32X Libretro Core",
 			"system": [
@@ -866,7 +866,7 @@
 			  }
 			]
 		  },
-		  "genesisplusgx_libetro": {
+		  "genesisplusgx_libretro": {
 			"name": "Genesis Plus GX",
 			"description": "SEGA MS/GG/MD/CD Libretro Core",
 			"system": [
@@ -883,7 +883,7 @@
 			  }
 			]
 		  },
-		  "genesisplusgxwide_libetro": {
+		  "genesisplusgxwide_libretro": {
 			"name": "Genesis Plus GX Wide",
 			"description": "SEGA MS/GG/MD/CD Libretro Core for Wide Screen",
 			"system": [
@@ -899,7 +899,7 @@
 			  }
 			]
 		  },
-		  "mupen64plus-next_libetro": {
+		  "mupen64plus-next_libretro": {
 			"name": "Mupen64Plus-Next",
 			"description": "Nintendo 64 Libretro Core",
 			"system": "n64",
@@ -911,7 +911,7 @@
 			  }
 			]
 		  },
-		  "snes9x-current_libetro": {
+		  "snes9x-current_libretro": {
 			"name": "Snes9x - Current",
 			"description": "Super Nintendo Libretro Core",
 			"system": "snes",
@@ -924,7 +924,7 @@
 			  }
 			]
 		  },
-		  "gambatte_libetro": {
+		  "gambatte_libretro": {
 			"name": "Gambatte",
 			"description": "Game Boy/Color Libretro Core",
 			"system": [
@@ -939,7 +939,7 @@
 			  }
 			]
 		  },
-		  "mgba_libetro": {
+		  "mgba_libretro": {
 			"name": "mGBA",
 			"description": "Game Boy Advance Libretro Core",
 			"system": "gba",
