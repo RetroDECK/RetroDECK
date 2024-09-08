@@ -952,16 +952,22 @@ run_game() {
   if [[ "$emulator" == *"_libretro" ]]; then
     local core_path="/var/config/retroarch/cores/$emulator.so"
     log d "Running RetroArch core: $core_path"
+    log d "Command: retroarch -L $core_path \"$game\""
     eval "retroarch -L $core_path \"$game\""
   else
-    # Parse emulator launch command and arguments from the JSON file
+    # Parse emulator launch command and optional arguments from the JSON file
     local launch_command=$(jq -r ".emulator.$emulator.launch" "$features")
     local launch_args=$(jq -r ".emulator.$emulator.\"launch-args\"" "$features")
 
-    # Replace $game in launch_args with the actual game path, quoting it to handle spaces
-    launch_args=${launch_args//\$game/\"$game\"}
-
-    # Form and execute the command
-    eval "$launch_command $launch_args"
+    # Only add launch_args if they are not null
+    if [[ "$launch_args" != "null" ]]; then
+      # Replace $game in launch_args with the actual game path, quoting it to handle spaces
+      launch_args=${launch_args//\$game/\"$game\"}
+      log d "Command: \"$launch_command $launch_args\""
+      eval "$launch_command $launch_args"
+    else
+      log d "Command: \"$launch_command\""
+      eval "$launch_command \"$game\""
+    fi
   fi
 }
