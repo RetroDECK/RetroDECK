@@ -199,3 +199,4 @@ fi
 
 # Normal Startup
 start_retrodeck
+quit_retrodeck
