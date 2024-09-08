@@ -346,7 +346,7 @@ add_to_steam() {
 
           # Populate the .sync script with the correct command
           echo -e '#!/bin/bash\n' > "$launcher"
-          echo "flatpak run net.retrodeck.retrodeck --run \"$path\"" >> "$launcher"
+          echo "flatpak run net.retrodeck.retrodeck --run \"$roms_folder/$system/$path\" $system" >> "$launcher"
 
           chmod +x "$launcher"
         done
