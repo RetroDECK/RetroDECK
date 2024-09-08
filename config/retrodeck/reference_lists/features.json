@@ -1061,6 +1061,7 @@
 		"url": "https://retrodeck.readthedocs.io/en/latest/wiki_about/what-is-retrodeck/",
 		"launch": "Yuzu",
 		"system": "switch",
+		"launch-args": "-f -g $game",
 		"ponzu": true,
 		"abxy_button": true
 	  },
@@ -1069,6 +1070,7 @@
 		"description": "Dolphin Wii and GameCube Emulator",
 		"url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/dolphin-primehack/dolphin-primehack-guide/",
 		"launch": "dolphin-emu-wrapper",
+		"launch-args": "-e $game",
 		"system": [
 		  "gc",
 		  "wii"
@@ -1088,6 +1090,7 @@
 		"description": "A fork of Dolphiin to enhance Metroid Prime experience",
 		"url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/dolphin-primehack/dolphin-primehack-guide/",
 		"launch": "primehack-wrapper",
+		"launch-args": "-e $game",
 		"system": [
 		  "wii"
 		],
@@ -1104,6 +1107,7 @@
 		"url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/cemu/cemu-guide/",
 		"system": "wiiu",
 		"launch": "Cemu-wrapper",
+		"launch-args": "-g $game",
 		"properties": [
 		  {
 			"abxy_button": true,
@@ -1116,7 +1120,8 @@
 		"name": "xemu",
 		"url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/xemu/xemu-guide/",
 		"system": "xbox",
-		"launch": "xemu"
+		"launch": "xemu",
+		"launch-args": "-dvd_path $game"
 	  },
 	  "es-de": {
 		"description": "ES-DE Emulation Frontend",
