@@ -90,10 +90,9 @@ prepare_component() {
     create_dir -d $srm_path
     cp -fv "$config/steam-rom-manager/"*.json $srm_path
 
-    log i "Updating steamDirectory and romDirectory lines in $srm_path/userConfigurations.json"
-    jq --arg steamDir "$HOME/.steam/steam" --arg romDir "$rdhome/.sync" \
-    '.[0].steamDirectory = $steamDir | .[0].romDirectory = $romDir' \
-    "$srm_path/userConfigurations.json" > tmpfile && mv tmpfile "$srm_path/userConfigurations.json"
+    log i "Updating steamDirectory and romDirectory lines in $srm_path/userSettings.json"
+    jq '.environmentVariables.steamDirectory = "'$HOME'/.steam/steam"' $srm_path/userSettings.json" > tmp.json && mv tmp.json $srm_path/userSettings.json"
+    jq '.environmentVariables.romsDirectory = "'$rdhome'/.sync"' $srm_path/userSettings.json > tmp.json && mv tmp.json $srm_path/userSettings.json
   fi
 
   if [[ "$component" =~ ^(retroarch|all)$ ]]; then

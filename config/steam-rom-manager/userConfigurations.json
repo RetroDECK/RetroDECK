@@ -2,22 +2,20 @@
     {
         "parserType": "Glob",
         "configTitle": "RetroDECK",
-        "steamDirectory": "",
+        "steamDirectory": "${steamdirglobal}",
         "steamCategory": "RetroDECK",
-        "romDirectory": "",
+        "romDirectory": "${romsdirglobal}",
         "executableArgs": "",
         "executableModifier": "\"${exePath}\"",
         "startInDirectory": "",
         "titleModifier": "${fuzzyTitle}",
-        "fetchControllerTemplatesButton": null,
-        "removeControllersButton": null,
         "imageProviders": [
             "SteamGridDB"
         ],
         "onlineImageQueries": "${${fuzzyTitle}}",
         "imagePool": "${fuzzyTitle}",
         "userAccounts": {
-            "specifiedAccounts": null
+            "specifiedAccounts": ""
         },
         "executable": {
             "path": "",
@@ -25,7 +23,7 @@
             "appendArgsToExecutable": true
         },
         "parserInputs": {
-            "glob": "${title}@(.sh)"
+            "glob": "${title}.sh"
         },
         "titleFromVariable": {
             "limitToGroups": "",
