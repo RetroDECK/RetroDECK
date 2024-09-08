@@ -997,7 +997,7 @@
 		"url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/pcsx2/pcsx2-guide/",
 		"system": "ps2",
 		"launch": "pcsx2-qt",
-		"launch_args": "-batch $game", 
+		"launch-args": "-batch $game", 
 		"properties": [
 		  {
 			"ask_to_exit": true,
@@ -1038,7 +1038,7 @@
 		"url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/vita3k/vita3k-guide/",
 		"system": "psvita",
 		"launch": "Vita3K",
-		"launch_args": "-r $game.psvita"
+		"launch-args": "-r $game.psvita"
 	  },
 	  "rpcs3": {
 		"name": "RPCS3",
@@ -1046,6 +1046,7 @@
 		"url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/rpcs3/rpcs3-guide/",
 		"system": "ps3",
 		"launch": "rpcs3",
+		"launch-override": "cd $(dirname $game) && rpcs3 $game",
 		"properties": [
 		  {
 			"ask_to_exit": true

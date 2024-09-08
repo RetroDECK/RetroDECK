@@ -955,19 +955,29 @@ run_game() {
     log d "Command: retroarch -L $core_path \"$game\""
     eval "retroarch -L $core_path \"$game\""
   else
-    # Parse emulator launch command and optional arguments from the JSON file
-    local launch_command=$(jq -r ".emulator.$emulator.launch" "$features")
-    local launch_args=$(jq -r ".emulator.$emulator.\"launch-args\"" "$features")
-
-    # Only add launch_args if they are not null
-    if [[ "$launch_args" != "null" ]]; then
-      # Replace $game in launch_args with the actual game path, quoting it to handle spaces
-      launch_args=${launch_args//\$game/\"$game\"}
-      log d "Command: \"$launch_command $launch_args\""
-      eval "$launch_command $launch_args"
+    # Check if launch-override exists
+    local launch_override=$(jq -r ".emulator.$emulator.\"launch-override\"" "$features")
+    if [[ "$launch_override" != "null" ]]; then
+      # Use launch-override
+      launch_override=${launch_override//\$game/\"$game\"}
+      log d "Using launch-override: $launch_override"
+      eval "$launch_override"
     else
-      log d "Command: \"$launch_command\""
-      eval "$launch_command \"$game\""
+      # Use standard launch and launch-args
+      local launch_command=$(jq -r ".emulator.$emulator.launch" "$features")
+      local launch_args=$(jq -r ".emulator.$emulator.\"launch-args\"" "$features")
+      log d "launch args: $launch_args"
+
+      # Only add launch_args if they are not null
+      if [[ "$launch_args" != "null" ]]; then
+        # Replace $game in launch_args with the actual game path, quoting it to handle spaces
+        launch_args=${launch_args//\$game/\"$game\"}
+        log d "Command: \"$launch_command $launch_args\""
+        eval "$launch_command $launch_args"
+      else
+        log d "Command: \"$launch_command\""
+        eval "$launch_command \"$game\""
+      fi
     fi
   fi
 }
