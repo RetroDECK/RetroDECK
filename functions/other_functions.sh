@@ -910,22 +910,45 @@ start_retrodeck() {
 }
 
 run_game() {
-  # Arguments: $1 -> game path, $2 -> optional system
-  local game="$1"
-  local system="$2"
+
+  # Initialize variables
+  emulator=""
+  system=""
+
+  # Parse options
+  while getopts ":e:s:" opt; do
+      case ${opt} in
+          e )
+              emulator=$OPTARG
+              ;;
+          s )
+              system=$OPTARG
+              ;;
+          \? )
+              echo "Usage: $0 --run [-e emulator] [-s system] game"
+              exit 1
+              ;;
+      esac
+  done
+  shift $((OPTIND -1))
+
+  # Check for game argument
+  if [[ -z "$1" ]]; then
+      echo "Error: Game file is required."
+      echo "Usage: $0 --run [-e emulator] [-s system] game"
+      exit 1
+  fi
+
+  game=$1
 
   # If no system is provided, extract it from the game path
   if [[ -z "$system" ]]; then
     system=$(echo "$game" | grep -oP '(?<=roms/)[^/]+')
   fi
 
-  log d "Run game: running $(basename "$game") for $system system"
-
-  # Special case for retroarch
-  if [[ "$system" == "retroarch" ]]; then
-    log d "TODO: implement retroarch"
-    return
-  fi
+  log d "Emulator: $emulator"
+  log d "System: $system"
+  log d "Game: $game"
 
   # Query the features JSON for emulators that support the system
   local emulators=$(jq -r --arg system "$system" '
@@ -942,6 +965,15 @@ run_game() {
       .value.system == $system or 
       (.value.system[]? == $system)
     ) | .key' "$features")
+
+  # if the emulator is given and it's a retroarch core just execute it
+  if [[ "$emulator" == *"_libretro" ]]; then
+    local core_path="/var/config/retroarch/cores/$emulator.so"
+    log d "Running RetroArch core: $core_path"
+    log d "Command: retroarch -L $core_path \"$game\""
+    eval "retroarch -L $core_path \"$game\""
+    return 1
+  fi
 
   # If the system is handled by RetroArch cores, add them to the list of emulators
   if [[ -n "$retroarch_cores" ]]; then
@@ -972,19 +1004,29 @@ run_game() {
     log d "Command: retroarch -L $core_path \"$game\""
     eval "retroarch -L $core_path \"$game\""
   else
-    # Parse emulator launch command and optional arguments from the JSON file
-    local launch_command=$(jq -r ".emulator.$emulator.launch" "$features")
-    local launch_args=$(jq -r ".emulator.$emulator.\"launch-args\"" "$features")
-
-    # Only add launch_args if they are not null
-    if [[ "$launch_args" != "null" ]]; then
-      # Replace $game in launch_args with the actual game path, quoting it to handle spaces
-      launch_args=${launch_args//\$game/\"$game\"}
-      log d "Command: \"$launch_command $launch_args\""
-      eval "$launch_command $launch_args"
+    # Check if launch-override exists
+    local launch_override=$(jq -r ".emulator.$emulator.\"launch-override\"" "$features")
+    if [[ "$launch_override" != "null" ]]; then
+      # Use launch-override
+      launch_override=${launch_override//\$game/\"$game\"}
+      log d "Using launch-override: $launch_override"
+      eval "$launch_override"
     else
-      log d "Command: \"$launch_command\""
-      eval "$launch_command \"$game\""
+      # Use standard launch and launch-args
+      local launch_command=$(jq -r ".emulator.$emulator.launch" "$features")
+      local launch_args=$(jq -r ".emulator.$emulator.\"launch-args\"" "$features")
+      log d "launch args: $launch_args"
+
+      # Only add launch_args if they are not null
+      if [[ "$launch_args" != "null" ]]; then
+        # Replace $game in launch_args with the actual game path, quoting it to handle spaces
+        launch_args=${launch_args//\$game/\"$game\"}
+        log d "Command: \"$launch_command $launch_args\""
+        eval "$launch_command $launch_args"
+      else
+        log d "Command: \"$launch_command\""
+        eval "$launch_command \"$game\""
+      fi
     fi
   fi
 }
