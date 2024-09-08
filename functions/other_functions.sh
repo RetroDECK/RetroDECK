@@ -935,9 +935,24 @@ run_game() {
       (.value.system[]? == $system)
     ) | .key' "$features")
 
+  # Check if the system is handled by RetroArch cores
+  local retroarch_cores=$(jq -r --arg system "$system" '
+    .emulator.retroarch.cores | to_entries[] |
+    select(
+      .value.system == $system or 
+      (.value.system[]? == $system)
+    ) | .key' "$features")
+
+  # If the system is handled by RetroArch cores, add them to the list of emulators
+  if [[ -n "$retroarch_cores" ]]; then
+    emulators=$(echo -e "$emulators\n$retroarch_cores")
+  fi
+
+  local pretty_system=$(jq -r --arg system "$system" '.system[$system].name' "$features")
+
   # Check if multiple emulators are found and prompt the user to select one with zenity
   if [[ $(echo "$emulators" | wc -l) -gt 1 ]]; then
-    emulator=$(echo "$emulators" | zenity --list --title="Select Emulator" --text="Multiple emulators found for $system. Select one to run." --column="Emulator")
+    emulator=$(echo "$emulators" | zenity --list --title="Select Emulator" --text="Multiple emulators found for $pretty_system. Select one to run." --column="Emulator")
   else
     emulator="$emulators"
   fi
@@ -950,13 +965,26 @@ run_game() {
 
   log d "Run game: selected emulator $emulator"
 
-  # Parse emulator launch command and arguments from the JSON file
-  local launch_command=$(jq -r ".emulator.$emulator.launch" "$features")
-  local launch_args=$(jq -r ".emulator.$emulator.\"launch-args\"" "$features")
+  # Handle RetroArch core separately
+  if [[ "$emulator" == *"_libretro" ]]; then
+    local core_path="/var/config/retroarch/cores/$emulator.so"
+    log d "Running RetroArch core: $core_path"
+    log d "Command: retroarch -L $core_path \"$game\""
+    eval "retroarch -L $core_path \"$game\""
+  else
+    # Parse emulator launch command and optional arguments from the JSON file
+    local launch_command=$(jq -r ".emulator.$emulator.launch" "$features")
+    local launch_args=$(jq -r ".emulator.$emulator.\"launch-args\"" "$features")
 
-  # Replace $game in launch_args with the actual game path, quoting it to handle spaces
-  launch_args=${launch_args//\$game/\"$game\"}
-
-  # Form and execute the command
-  eval "$launch_command $launch_args"
+    # Only add launch_args if they are not null
+    if [[ "$launch_args" != "null" ]]; then
+      # Replace $game in launch_args with the actual game path, quoting it to handle spaces
+      launch_args=${launch_args//\$game/\"$game\"}
+      log d "Command: \"$launch_command $launch_args\""
+      eval "$launch_command $launch_args"
+    else
+      log d "Command: \"$launch_command\""
+      eval "$launch_command \"$game\""
+    fi
+  fi
 }

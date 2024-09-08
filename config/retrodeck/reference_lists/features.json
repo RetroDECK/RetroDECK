@@ -960,7 +960,8 @@
 		"system": [
 		  "arcade"
 		],
-		"launch": "mame"
+		"launch": "mame",
+		"launch-args": "-inipath /var/config/mame/ini -rompath $(dirname \"$game\") $game"
 	  },
 	  "citra": {
 		"description": "Citra Nintendo 3DS Emulator (via Ponzu)",
@@ -976,19 +977,19 @@
 		  }
 		]
 	  },
-		"ruffle": {
-		  "description": "Flash Games emulator",
-		  "name" : "Ruffle",
-		  "url": "https://retrodeck.readthedocs.io/en/latest/wiki_about/what-is-retrodeck/",
-		  "system" : "flash",
-		  "launch": "ruffle-rd-wrapper.sh"
-		},
+	  "ruffle": {
+	  	"description": "Flash Games emulator",
+	  	"name" : "Ruffle",
+	  	"url": "https://retrodeck.readthedocs.io/en/latest/wiki_about/what-is-retrodeck/",
+	  	"system" : "flash",
+	  	"launch": "ruffle-rd-wrapper.sh"
+	  },
 	  "melonds": {
 		"description": "MelonDS Nintendo DS Emulator",
 		"name": "melonds",
 		"url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/melonds/melonds-guide/",
 		"system": "nds",
-		"launch": "MelonDS"
+		"launch": "melonDS"
 	  },
 	  "pcsx2": {
 		"name": "pcsx2",
@@ -996,6 +997,7 @@
 		"url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/pcsx2/pcsx2-guide/",
 		"system": "ps2",
 		"launch": "pcsx2-qt",
+		"launch_args": "-batch $game", 
 		"properties": [
 		  {
 			"ask_to_exit": true,
@@ -1008,6 +1010,7 @@
 		"description": "PlayStation Emulator",
 		"url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/duckstation/duckstation-guide/",
 		"launch": "duckstation-qt",
+		"launch-args": "-batch $game",
 		"system": "psx",
 		"properties": [
 		  {
@@ -1034,7 +1037,8 @@
 		"description": "Vita3K PSVita Emulator",
 		"url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/vita3k/vita3k-guide/",
 		"system": "psvita",
-		"launch": "Vita3K"
+		"launch": "Vita3K",
+		"launch_args": "-r $game.psvita"
 	  },
 	  "rpcs3": {
 		"name": "RPCS3",
