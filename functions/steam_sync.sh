@@ -345,7 +345,9 @@ add_to_steam() {
           # fi
 
           # Populate the .sync script with the correct command
-          local command="flatpak run net.retrodeck.retrodeck --run \"$roms_folder/$system/$path\" $system"
+          # TODO: we need to implement the emulator parameter:
+          # TODO: if there is any emulator defined in the xml we use that, else... how we can know which is the default one?
+          local command="flatpak run net.retrodeck.retrodeck --run -s $system \"$roms_folder/$system/$path\""
           echo -e '#!/bin/bash\n' > "$launcher"
           echo -e "if [ test \"$(whereis flatpak)\" = \"flatpak:\" ]; then" >> "$launcher"
           echo -e "\tflatpak-spawn --host $command" >> "$launcher"
