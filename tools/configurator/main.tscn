@@ -1702,6 +1702,7 @@ texture_pressed = ExtResource("40_pnuor")
 stretch_mode = 0
 
 [node name="Retrodeck_Thread_Check" type="Sprite2D" parent="."]
+visible = false
 position = Vector2(1046, 238)
 scale = Vector2(0.390625, 0.398438)
 texture = ExtResource("93_f7ex4")
