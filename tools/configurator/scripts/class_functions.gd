@@ -1,7 +1,6 @@
 class_name ClassFunctions 
 
 extends Control
-var log_header_text = "gdc_"
 var log_result: Dictionary
 var log_parameters: Array
 var wrapper_command: String = "/app/tools/retrodeck_function_wrapper.sh"
@@ -27,6 +26,7 @@ func read_cfg() -> String:
 	return title
 
 func logger(log_type: String, log_text: String) -> void:
+	var log_header_text = "gdc_"
 	log_header_text+=log_text
 	log_parameters = ["log", log_type, log_header_text]
 	log_result = await class_functions.run_thread_command(wrapper_command,log_parameters, false)
@@ -69,6 +69,10 @@ func process_url_image(body) -> Texture:
 	return texture
 
 func launch_help(url: String) -> void:
+	#OS.unset_environment("LD_PRELOAD")
+	#OS.set_environment("XDG_CURRENT_DESKTOP", "KDE") 
+	#var launch = class_functions.execute_command("xdg-open",[url], false)
+	#var launch = class_functions.execute_command("org.mozilla.firefox",[url], false)
 	OS.shell_open(url)
 
 func import_csv_data(file_path: String) -> Dictionary:
