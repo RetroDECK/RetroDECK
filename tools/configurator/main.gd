@@ -11,9 +11,6 @@ var custom_theme: Theme = $".".theme
 var log_option: OptionButton
 var tab_container: TabContainer
 var anim_logo: AnimatedSprite2D
-var rd_logs: String
-var rd_version: String
-var gc_version: String
 var a_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0042.png")
 var b_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0043.png")
 var app_data := AppData.new()
@@ -23,16 +20,12 @@ func _ready():
 	_connect_signals()
 	_play_main_animations()
 	#%locale_option.selected = class_functions.map_locale_id(OS.get_locale_language())
-	#display_json_data()
-	var config_file_path = "/var/config/retrodeck/retrodeck.cfg"
-	var json_file_path = "/var/config/retrodeck/retrodeck.json"
-	var config = data_handler.parse_config_to_json(config_file_path)
-	data_handler.config_save_json(config, json_file_path)
-	rd_logs = config["paths"]["logs_folder"]
-	rd_version = config["version"]
-	gc_version = ProjectSettings.get_setting("application/config/version")
-	%rd_title.text+= "\n   " + rd_version + "\nConfigurator\n    " + gc_version
-	
+
+	#class_functions.logger()	
+	%rd_title.text += class_functions.read_cfg()
+	class_functions.log_parameters[2] = class_functions.log_text + "started configurator"
+	class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
+	print (class_functions.rd_log)
 	#var log_file = class_functions.import_text_file(rd_logs +"/retrodeck.log")
 	#for id in config.paths:
 	#	var path_data = config.paths[id]
@@ -63,6 +56,8 @@ func _input(event):
 		_exit()
 
 func _exit():
+	class_functions.log_parameters[2] = class_functions.log_text + "exited configurator"
+	class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
 	get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
 	get_tree().quit()
 
@@ -90,17 +85,17 @@ func _load_log(index: int) -> void:
 		1: 
 			class_functions.log_parameters[2] = class_functions.log_text + "Loading RetroDeck log"
 			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
-			log_content = class_functions.import_text_file(rd_logs +"/retrodeck.log")
+			log_content = class_functions.import_text_file(class_functions.rd_log_folder +"/retrodeck.log")
 			load_popup("RetroDeck Log", "res://components/logs_view/logs_popup_content.tscn", log_content)
 		2:
 			class_functions.log_parameters[2] = class_functions.log_text + "Loading ES-DE log"
 			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
-			log_content = class_functions.import_text_file(rd_logs +"/ES-DE/es_log.txt")
+			log_content = class_functions.import_text_file(class_functions.rd_log_folder +"/ES-DE/es_log.txt")
 			load_popup("ES-DE Log", "res://components/logs_view/logs_popup_content.tscn",log_content)
 		3: 
 			class_functions.log_parameters[2] = class_functions.log_text + "Loading RetroArch log"
 			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
-			log_content = class_functions.import_text_file(rd_logs +"/retroarch/logs/log.txt")
+			log_content = class_functions.import_text_file(class_functions.rd_log_folder +"/retroarch/logs/log.txt")
 			load_popup("Retroarch Log", "res://components/logs_view/logs_popup_content.tscn",log_content)	
 
 func _play_main_animations() -> void:
@@ -201,9 +196,7 @@ func _on_bios_button_expert_pressed():
 	
 func _on_exit_button_pressed():
 	_play_main_animations()
-	class_functions.log_parameters[2] = class_functions.log_text + "Exited"
-	log_results = class_functions.execute_command(class_functions.wrapper_command, class_functions.log_parameters, false)
-	class_functions._exit()
+	_exit()
 
 func _on_locale_selected(index):
 	match index:
