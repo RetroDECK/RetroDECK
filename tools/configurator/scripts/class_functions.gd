@@ -1,14 +1,42 @@
 class_name ClassFunctions 
 
 extends Control
-var log_text = "gdc_"
-var log_parameters: Array = ["log", "i", log_text]
-var wrapper_command: String = "../../tools/retrodeck_function_wrapper.sh"
+var log_result: Dictionary
+var log_parameters: Array
+var wrapper_command: String = "/app/tools/retrodeck_function_wrapper.sh"
+var config_file_path = "/var/config/retrodeck/retrodeck.cfg"
+var json_file_path = "/var/config/retrodeck/retrodeck.json"
+var rd_log: String
+var rd_log_folder: String
+var rd_version: String
+var gc_version: String
 
+func read_cfg() -> String:
+	var title: String
+	var config = data_handler.parse_config_to_json(config_file_path)
+	data_handler.config_save_json(config, json_file_path)
+	rd_log_folder = config["paths"]["logs_folder"]
+	rd_log = rd_log_folder + "/retrodeck.log"
+	#rd_log = "/var/config/retrodeck/logs/retrodeck.log"
+	
+	rd_version = config["version"]
+	gc_version = ProjectSettings.get_setting("application/config/version")
+	title = "\n   " + rd_version + "\nConfigurator\n    " + gc_version
+	print ("Make logging a function\nAlso add d,i,e,w: ", rd_log)
+	return title
+
+func logger(log_type: String, log_text: String) -> void:
+	var log_header_text = "gdc_"
+	log_header_text+=log_text
+	log_parameters = ["log", log_type, log_header_text]
+	log_result = await class_functions.run_thread_command(wrapper_command,log_parameters, false)
+	#log_result = await class_functions.run_thread_command("find",["$HOME", "-name", "*.xml","-print"], false)
+	#print (log_result["exit_code"])
+	#print (log_result["output"])
+	
 func array_to_string(arr: Array) -> String:
 	var text: String
 	for line in arr:
-		#text += line + "\n"
 		text = line.strip_edges() + "\n"
 	return text
 
@@ -19,8 +47,6 @@ func execute_command(command: String, parameters: Array, console: bool) -> Dicti
 	var exit_code = OS.execute(command, parameters, output, console) ## add if exit == 0 etc
 	result["output"] = array_to_string(output)
 	result["exit_code"] = exit_code
-	#print (array_to_string(output))
-	#print (result["exit_code"])
 	return result
 
 func run_command_in_thread(command: String, paramaters: Array, _console: bool) -> Dictionary:
@@ -31,11 +57,11 @@ func run_command_in_thread(command: String, paramaters: Array, _console: bool) -
 	var result = thread.wait_to_finish()
 	thread = null
 	return result
-
-func _threaded_command_execution(command: String, parameters: Array, console: bool) -> Dictionary:
-	var result = execute_command(command, parameters, console)
-	return result
-
+	
+func run_thread_command(command: String, parameters: Array, console: bool) -> Dictionary:
+	log_result = await run_command_in_thread(command, parameters, console)
+	return log_result
+	
 func process_url_image(body) -> Texture:
 	var image = Image.new()
 	image.load_png_from_buffer(body)
@@ -43,6 +69,10 @@ func process_url_image(body) -> Texture:
 	return texture
 
 func launch_help(url: String) -> void:
+	#OS.unset_environment("LD_PRELOAD")
+	#OS.set_environment("XDG_CURRENT_DESKTOP", "KDE") 
+	#var launch = class_functions.execute_command("xdg-open",[url], false)
+	#var launch = class_functions.execute_command("org.mozilla.firefox",[url], false)
 	OS.shell_open(url)
 
 func import_csv_data(file_path: String) -> Dictionary:

@@ -1,4 +1,3 @@
-
 {
 	"about_links": {
 	  "rd_changelog": {
@@ -850,7 +849,7 @@
 			  }
 			]
 		  },
-		  "picodrive_libetro": {
+		  "picodrive_libretro": {
 			"name": "PicoDrive",
 			"description": "SEGA MS/MD/CD/32X Libretro Core",
 			"system": [
@@ -867,7 +866,7 @@
 			  }
 			]
 		  },
-		  "genesisplusgx_libetro": {
+		  "genesisplusgx_libretro": {
 			"name": "Genesis Plus GX",
 			"description": "SEGA MS/GG/MD/CD Libretro Core",
 			"system": [
@@ -884,7 +883,7 @@
 			  }
 			]
 		  },
-		  "genesisplusgxwide_libetro": {
+		  "genesisplusgxwide_libretro": {
 			"name": "Genesis Plus GX Wide",
 			"description": "SEGA MS/GG/MD/CD Libretro Core for Wide Screen",
 			"system": [
@@ -900,7 +899,7 @@
 			  }
 			]
 		  },
-		  "mupen64plus-next_libetro": {
+		  "mupen64plus-next_libretro": {
 			"name": "Mupen64Plus-Next",
 			"description": "Nintendo 64 Libretro Core",
 			"system": "n64",
@@ -912,7 +911,7 @@
 			  }
 			]
 		  },
-		  "snes9x-current_libetro": {
+		  "snes9x-current_libretro": {
 			"name": "Snes9x - Current",
 			"description": "Super Nintendo Libretro Core",
 			"system": "snes",
@@ -925,7 +924,7 @@
 			  }
 			]
 		  },
-		  "gambatte_libetro": {
+		  "gambatte_libretro": {
 			"name": "Gambatte",
 			"description": "Game Boy/Color Libretro Core",
 			"system": [
@@ -940,7 +939,7 @@
 			  }
 			]
 		  },
-		  "mgba_libetro": {
+		  "mgba_libretro": {
 			"name": "mGBA",
 			"description": "Game Boy Advance Libretro Core",
 			"system": "gba",
@@ -961,7 +960,8 @@
 		"system": [
 		  "arcade"
 		],
-		"launch": "mame"
+		"launch": "mame",
+		"launch-args": "-inipath /var/config/mame/ini -rompath $(dirname \"$game\") $game"
 	  },
 	  "citra": {
 		"description": "Citra Nintendo 3DS Emulator (via Ponzu)",
@@ -977,19 +977,19 @@
 		  }
 		]
 	  },
-		"ruffle": {
-		  "description": "Flash Games emulator",
-		  "name" : "Ruffle",
-		  "url": "https://retrodeck.readthedocs.io/en/latest/wiki_about/what-is-retrodeck/",
-		  "system" : "flash",
-		  "launch": "ruffle-rd-wrapper.sh"
-		},
+	  "ruffle": {
+	  	"description": "Flash Games emulator",
+	  	"name" : "Ruffle",
+	  	"url": "https://retrodeck.readthedocs.io/en/latest/wiki_about/what-is-retrodeck/",
+	  	"system" : "flash",
+	  	"launch": "ruffle-rd-wrapper.sh"
+	  },
 	  "melonds": {
 		"description": "MelonDS Nintendo DS Emulator",
 		"name": "melonds",
 		"url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/melonds/melonds-guide/",
 		"system": "nds",
-		"launch": "MelonDS"
+		"launch": "melonDS"
 	  },
 	  "pcsx2": {
 		"name": "pcsx2",
@@ -997,6 +997,7 @@
 		"url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/pcsx2/pcsx2-guide/",
 		"system": "ps2",
 		"launch": "pcsx2-qt",
+		"launch-args": "-batch $game", 
 		"properties": [
 		  {
 			"ask_to_exit": true,
@@ -1009,6 +1010,7 @@
 		"description": "PlayStation Emulator",
 		"url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/duckstation/duckstation-guide/",
 		"launch": "duckstation-qt",
+		"launch-args": "-batch $game",
 		"system": "psx",
 		"properties": [
 		  {
@@ -1035,7 +1037,8 @@
 		"description": "Vita3K PSVita Emulator",
 		"url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/vita3k/vita3k-guide/",
 		"system": "psvita",
-		"launch": "Vita3K"
+		"launch": "Vita3K",
+		"launch-args": "-r $game.psvita"
 	  },
 	  "rpcs3": {
 		"name": "RPCS3",
@@ -1043,6 +1046,7 @@
 		"url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/rpcs3/rpcs3-guide/",
 		"system": "ps3",
 		"launch": "rpcs3",
+		"launch-override": "cd $(dirname $game) && rpcs3 $game",
 		"properties": [
 		  {
 			"ask_to_exit": true
@@ -1062,6 +1066,7 @@
 		"url": "https://retrodeck.readthedocs.io/en/latest/wiki_about/what-is-retrodeck/",
 		"launch": "Yuzu",
 		"system": "switch",
+		"launch-args": "-f -g $game",
 		"ponzu": true,
 		"abxy_button": true
 	  },
@@ -1070,6 +1075,7 @@
 		"description": "Dolphin Wii and GameCube Emulator",
 		"url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/dolphin-primehack/dolphin-primehack-guide/",
 		"launch": "dolphin-emu-wrapper",
+		"launch-args": "-e $game",
 		"system": [
 		  "gc",
 		  "wii"
@@ -1089,6 +1095,7 @@
 		"description": "A fork of Dolphiin to enhance Metroid Prime experience",
 		"url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/dolphin-primehack/dolphin-primehack-guide/",
 		"launch": "primehack-wrapper",
+		"launch-args": "-e $game",
 		"system": [
 		  "wii"
 		],
@@ -1105,6 +1112,7 @@
 		"url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/cemu/cemu-guide/",
 		"system": "wiiu",
 		"launch": "Cemu-wrapper",
+		"launch-args": "-g $game",
 		"properties": [
 		  {
 			"abxy_button": true,
@@ -1117,7 +1125,8 @@
 		"name": "xemu",
 		"url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/xemu/xemu-guide/",
 		"system": "xbox",
-		"launch": "xemu"
+		"launch": "xemu",
+		"launch-args": "-dvd_path $game"
 	  },
 	  "es-de": {
 		"description": "ES-DE Emulation Frontend",

@@ -10,7 +10,6 @@ var content = null
 func _ready():
 	lbhide.visible=false
 	rbhide.visible=false
-	print (bios_type)
 	$".".theme = custom_theme
 	# TODO this alowes copy and paste from RTB in logs?
 	if (content != null and bios_type > 0):
