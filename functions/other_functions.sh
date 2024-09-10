@@ -936,6 +936,7 @@ find_emulator() {
 
 
 # TODO: add the logic of alt emulator and default emulator
+# TODO: if the emulator is only one just skip the zenity and run it
 
 run_game() {
 
@@ -983,109 +984,129 @@ run_game() {
   # Function to handle the %INJECT% placeholder
   handle_inject_placeholder() {
       local cmd="$1"
-      
-      # Check if .esprefix file exists
-      local inject_file="${game}.esprefix"
 
-      log d "Checking if \"${game}.esprefix\" exists"
-      
-      if [[ ! -f "$inject_file" ]]; then
-          # If the inject file does not exist, strip all forms of %INJECT% from the command
-          
-          log d "\"${game}.esprefix\" not existing"
+      # Find all occurrences of %INJECT%=something
+      while [[ "$cmd" =~ %INJECT%=(.*) ]]; do
+          inject_file="${BASH_REMATCH[1]}"  # Extract the file name
 
-          # This handles cases where %INJECT% might be in different forms:
-          # Strip %INJECT%="value", %INJECT%="", or just %INJECT%=
-          cmd="${cmd//%INJECT%=\"*\"/}"
-          cmd="${cmd//%INJECT%=/}"
-          cmd="${cmd//%INJECT%/}"
+          # Prepend the directory path to ensure we have the full path to the file
+          inject_file_full_path="$rom_dir/$inject_file"
 
-          cmd="${cmd//%BASENAME%.esprefix=\"*\"/}"
-          cmd="${cmd//%BASENAME%.esprefix=/}"
-          cmd="${cmd//%BASENAME%.esprefix/}"
+          log d "Found %INJECT% pointing to file \"$inject_file_full_path\""
 
-          log d "Returning the following command:$cmd"
-          
-          echo "$cmd"
-          return
-      fi
+          # Check if the file exists
+          if [[ -f "$inject_file_full_path" ]]; then
+              # Read the content of the file
+              inject_content=$(cat "$inject_file_full_path")
+              log i "File \"$inject_file_full_path\" found, injecting content \"$inject_content\""
+              
+              # Replace the %INJECT% placeholder with the content of the file
+              cmd="${cmd//%INJECT%=$inject_file/$inject_content}"
+          else
+              log e "File \"$inject_file_full_path\" not found. Removing %INJECT% placeholder."
+              # If the file does not exist, just remove the placeholder
+              cmd="${cmd//%INJECT%=$inject_file/}"
+          fi
+      done
 
-      # If the .esprefix file exists, process its content
-      inject_content=$(head -c 4096 "$inject_file")
-      log i ".esprefix file found, injecting \"$inject_content\""
-      cmd="${cmd//%INJECT%=\"$inject_file\"/$inject_content}"
+      log d "Returning the command with injected content: $cmd"
       echo "$cmd"
   }
 
+# Function to replace %EMULATOR_SOMETHING% with the actual path of the emulator
+replace_emulator_placeholder() {
+    local placeholder=$1
+    # Extract emulator name from placeholder without changing case
+    local emulator_name="${placeholder//"%EMULATOR_"/}"  # Extract emulator name after %EMULATOR_
+    emulator_name="${emulator_name//"%"/}"  # Remove the trailing %
+
+    # Use the find_emulator function to get the emulator path using the correct casing
+    local emulator_exec=$(find_emulator "$emulator_name")
+    
+    if [[ -z "$emulator_exec" ]]; then
+        log e "Emulator '$emulator_name' not found."
+        exit 1
+    fi
+    echo "$emulator_exec"
+}
 
   # Function to substitute the placeholders
   substitute_placeholders() {
-    local cmd="$1"
-    local rom_path="$game"
-    local rom_dir=$(dirname "$rom_path")
-    local base_name=$(basename "$rom_path" .psvita)  # Ensure the .psvita extension is stripped
-    local file_name=$(basename "$rom_path")
-    local rom_raw="$rom_path"
-    local rom_dir_raw="$rom_dir"
-    local es_path=""
-    local emulator_path=""
+      local cmd="$1"
+      local rom_path="$game"
+      local rom_dir=$(dirname "$rom_path")
+      
+      # Strip all file extensions from the base name
+      local base_name=$(basename "$rom_path")
+      base_name="${base_name%%.*}"
 
-    # Handle %INJECT% placeholder if present
-    cmd=$(handle_inject_placeholder "$cmd")
+      local file_name=$(basename "$rom_path")
+      local rom_raw="$rom_path"
+      local rom_dir_raw="$rom_dir"
+      local es_path=""
+      local emulator_path=""
 
-    # Substitute emulator path
-    cmd=$(echo "$cmd" | sed -r 's/%EMULATOR_[A-Z0-9_]+%/$(replace_emulator_placeholder "&")/g')
+      # Manually replace %EMULATOR_*% placeholders
+      while [[ "$cmd" =~ (%EMULATOR_[A-Z0-9_]+%) ]]; do
+          placeholder="${BASH_REMATCH[1]}"
+          emulator_path=$(replace_emulator_placeholder "$placeholder")
+          cmd="${cmd//$placeholder/$emulator_path}"
+      done
 
-    # Ensure that paths with spaces are properly quoted and substitute other placeholders
-    cmd="${cmd//"%ROM%"/"\"$rom_path\""}"
-    cmd="${cmd//"%BASENAME%"/"\"$base_name\""}"  # Proper base name without extra .psvita
-    cmd="${cmd//"%FILENAME%"/"\"$file_name\""}"
-    cmd="${cmd//"%ROMRAW%"/"\"$rom_raw\""}"
-    cmd="${cmd//"%ROMPATH%"/"\"$rom_dir\""}"
-    cmd="${cmd//"%ESPATH%"/"\"$es_path\""}"
-    cmd="${cmd//"%EMUDIR%"/"\"$emulator_path\""}"
-    cmd="${cmd//"%GAMEDIR%"/"\"$rom_dir\""}"
-    cmd="${cmd//"%GAMEDIRRAW%"/"\"$rom_dir_raw\""}"
-    cmd="${cmd//"%CORE_RETROARCH%"/"/var/config/retroarch/cores"}"
+      # Substitute %BASENAME% and other placeholders
+      cmd="${cmd//"%BASENAME%"/"$base_name"}"
+      cmd="${cmd//"%FILENAME%"/"$file_name"}"
+      cmd="${cmd//"%ROMRAW%"/"$rom_raw"}"
+      cmd="${cmd//"%ROMPATH%"/"$rom_dir"}"
+      
+      # Ensure paths are quoted correctly
+      cmd="${cmd//"%ROM%"/"\"$rom_path\""}"
+      cmd="${cmd//"%GAMEDIR%"/"\"$rom_dir\""}"
+      cmd="${cmd//"%GAMEDIRRAW%"/"\"$rom_dir_raw\""}"
+      cmd="${cmd//"%CORE_RETROARCH%"/"/var/config/retroarch/cores"}"
 
-    log d "Final command: $cmd"  # Log the final command for debugging
-    echo "$cmd"
-}
+      log d "Command after %BASENAME% and other substitutions: $cmd"
+
+      # Now handle %INJECT% after %BASENAME% has been substituted
+      cmd=$(handle_inject_placeholder "$cmd")
+
+      echo "$cmd"
+  }
 
   # Extracting the commands from es_systems.xml for the selected system
   find_system_commands() {
-      local system_name=$system
-      # Use xmllint to extract the system commands from the XML
-      system_section=$(xmllint --xpath "//system[name='$system_name']" "$xml_file" 2>/dev/null)
-      
-      if [ -z "$system_section" ]; then
-          log e "System not found: $system_name"
-          exit 1
-      fi
+    local system_name=$system
+    # Use xmllint to extract the system commands from the XML
+    system_section=$(xmllint --xpath "//system[name='$system_name']" "$xml_file" 2>/dev/null)
+    
+    if [ -z "$system_section" ]; then
+        log e "System not found: $system_name"
+        exit 1
+    fi
 
-      # Extract commands and labels
-      commands=$(echo "$system_section" | xmllint --xpath "//command" - 2>/dev/null)
+    # Extract commands and labels
+    commands=$(echo "$system_section" | xmllint --xpath "//command" - 2>/dev/null)
 
-      # Prepare Zenity command list
-      command_list=()
-      while IFS= read -r line; do
-          label=$(echo "$line" | sed -n 's/.*label="\([^"]*\)".*/\1/p')
-          command=$(echo "$line" | sed -n 's/.*<command[^>]*>\(.*\)<\/command>.*/\1/p')
-          
-          # Substitute placeholders in the command
-          command=$(substitute_placeholders "$command")
-          
-          # Add label and command to Zenity list (label first, command second)
-          command_list+=("$label" "$command")
-      done <<< "$commands"
+    # Prepare Zenity command list
+    command_list=()
+    while IFS= read -r line; do
+        label=$(echo "$line" | sed -n 's/.*label="\([^"]*\)".*/\1/p')
+        command=$(echo "$line" | sed -n 's/.*<command[^>]*>\(.*\)<\/command>.*/\1/p')
+        
+        # Substitute placeholders in the command
+        command=$(substitute_placeholders "$command")
+        
+        # Add label and command to Zenity list (label first, command second)
+        command_list+=("$label" "$command")
+    done <<< "$commands"
 
-      # Show the list with Zenity and return the **command** (second column) selected
-      selected_command=$(zenity --list \
-          --title="Select an emulator for $system_name" \
-          --column="Emulator" --column="Hidden Command" "${command_list[@]}" \
-          --width=800 --height=400 --print-column=2 --hide-column=2)
+    # Show the list with Zenity and return the **command** (second column) selected
+    selected_command=$(zenity --list \
+        --title="Select an emulator for $system_name" \
+        --column="Emulator" --column="Hidden Command" "${command_list[@]}" \
+        --width=800 --height=400 --print-column=2 --hide-column=2)
 
-      echo "$selected_command"
+    echo "$selected_command"
   }
 
   # If the emulator is not specified, ask the user to select it or get it from the XML file
