@@ -1,6 +1,3 @@
-#todo
-# add cores as class/ Like eumlator but one level lower
-
 extends Control
 
 @onready var bios_type:int

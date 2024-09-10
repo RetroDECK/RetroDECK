@@ -1,4 +1,4 @@
-[gd_scene load_steps=101 format=3 uid="uid://61f6m4r1mpan"]
+[gd_scene load_steps=102 format=3 uid="uid://61f6m4r1mpan"]
 
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
 [ext_resource type="Theme" uid="uid://hhc60cllcg47" path="res://assets/themes/default_theme.tres" id="1_if8nh"]
@@ -81,6 +81,7 @@
 [ext_resource type="Texture2D" uid="uid://b0awa8venu1h8" path="res://assets/icons/pixelitos/128/cs-network.png" id="50_5d2ui"]
 [ext_resource type="Texture2D" uid="uid://bafdexg6aq8tn" path="res://assets/icons/pixelitos/128/applications-accessories.png" id="50_h3jx2"]
 [ext_resource type="Texture2D" uid="uid://be3tmvgoa1wua" path="res://assets/icons/pixelitos/128/applications-development.png" id="50_tl5ty"]
+[ext_resource type="Script" path="res://ToolsTab.gd" id="50_wqa5h"]
 [ext_resource type="Texture2D" uid="uid://l3bredurb11m" path="res://assets/graphics/rekku2/rekku_base.png" id="57_1n3u5"]
 [ext_resource type="Texture2D" uid="uid://cvlncuql8igrm" path="res://assets/graphics/rekku2/rekku_eye_1.png" id="59_7lcu5"]
 [ext_resource type="Texture2D" uid="uid://bdrdu4nddkqjn" path="res://assets/graphics/rekku2/rekku_eye_2.png" id="60_mbhg6"]
@@ -206,7 +207,7 @@ size_flags_horizontal = 3
 unique_name_in_owner = true
 layout_mode = 2
 tab_alignment = 1
-current_tab = 4
+current_tab = 2
 script = ExtResource("3_id6l4")
 
 [node name="GLOBALS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
@@ -216,6 +217,7 @@ layout_mode = 2
 metadata/_tab_index = 0
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS"]
+custom_minimum_size = Vector2(1200, 600)
 layout_mode = 2
 follow_focus = true
 
@@ -589,6 +591,7 @@ script = ExtResource("36_wv31h")
 metadata/_tab_index = 1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM"]
+custom_minimum_size = Vector2(1200, 600)
 layout_mode = 2
 follow_focus = true
 
@@ -739,9 +742,25 @@ grow_vertical = 2
 theme_override_styles/fill = SubResource("StyleBoxFlat_1161k")
 show_percentage = false
 
-[node name="TOOLS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
+[node name="rpcs3_firmware_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/sysems_container/action_gridcontainer"]
+unique_name_in_owner = true
 visible = false
 layout_mode = 2
+action_mode = 0
+text = "INSTALL FIRMWARE"
+icon = ExtResource("8_ec4gt")
+
+[node name="rpcs3_scan_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/sysems_container/action_gridcontainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+action_mode = 0
+text = "SCAN GAMES"
+icon = ExtResource("8_ec4gt")
+
+[node name="TOOLS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
+layout_mode = 2
+script = ExtResource("50_wqa5h")
 metadata/_tab_index = 2
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS"]
@@ -756,6 +775,7 @@ theme_override_constants/separation = 64
 layout_mode = 2
 
 [node name="check_conn_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/troubleshoot_container"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "CHECK CONNECTION"
 icon = ExtResource("50_5d2ui")
@@ -861,10 +881,6 @@ layout_mode = 2
 disabled = true
 text = "TK_GRIDINSTALL"
 
-[node name="ps3_fw_install_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/tools_container"]
-layout_mode = 2
-text = "TK_PS3FWINSTALL"
-
 [node name="fav_steam" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/tools_container"]
 layout_mode = 2
 text = "TK_FAVSTEAM"
@@ -878,11 +894,6 @@ text = "TK_SCAN"
 
 [node name="scan_separator" type="HSeparator" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/scan_container"]
 layout_mode = 2
-
-[node name="ps3_scan" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/scan_container"]
-layout_mode = 2
-disabled = true
-text = "TK_PS3SCAN"
 
 [node name="scummvm_scan" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/scan_container"]
 layout_mode = 2
@@ -1122,6 +1133,7 @@ disabled = true
 text = "TK_FTPBTN"
 
 [node name="ABOUT" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
 script = ExtResource("4_m4rto")
 metadata/_tab_index = 4

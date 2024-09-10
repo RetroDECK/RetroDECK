@@ -22,49 +22,56 @@ func _process(delta: float) -> void:
 		%reset_progress.value = 0.0
 	
 func _connect_signals() -> void:
-	%retroarch_button.pressed.connect(_hide_show_buttons.bind(%retroarch_button,%system_gridcontainer, %action_gridcontainer))
-	%mame_button.pressed.connect(_hide_show_buttons.bind(%mame_button,%system_gridcontainer, %action_gridcontainer))
-	%ruffle_button.pressed.connect(_hide_show_buttons.bind(%ruffle_button,%system_gridcontainer, %action_gridcontainer))
-	%melonds_button.pressed.connect(_hide_show_buttons.bind(%melonds_button,%system_gridcontainer, %action_gridcontainer))
-	%pcsx2_button.pressed.connect(_hide_show_buttons.bind(%pcsx2_button,%system_gridcontainer, %action_gridcontainer))
-	%duckstation_button.pressed.connect(_hide_show_buttons.bind(%duckstation_button,%system_gridcontainer, %action_gridcontainer))
-	%ppsspp_button.pressed.connect(_hide_show_buttons.bind(%ppsspp_button,%system_gridcontainer, %action_gridcontainer))
-	%vita3k_button.pressed.connect(_hide_show_buttons.bind(%vita3k_button,%system_gridcontainer, %action_gridcontainer))
-	%rpcs3_button.pressed.connect(_hide_show_buttons.bind(%rpcs3_button,%system_gridcontainer, %action_gridcontainer))
-	%ryujinx_button.pressed.connect(_hide_show_buttons.bind(%ryujinx_button,%system_gridcontainer, %action_gridcontainer))
-	%dolphin_button.pressed.connect(_hide_show_buttons.bind(%dolphin_button,%system_gridcontainer, %action_gridcontainer))
-	%primehack_button.pressed.connect(_hide_show_buttons.bind(%primehack_button,%system_gridcontainer, %action_gridcontainer))
-	%cemu_button.pressed.connect(_hide_show_buttons.bind(%cemu_button,%system_gridcontainer, %action_gridcontainer))
-	%xemu_button.pressed.connect(_hide_show_buttons.bind(%xemu_button,%system_gridcontainer, %action_gridcontainer))
-	%esde_button.pressed.connect(_hide_show_buttons.bind(%esde_button,%system_gridcontainer, %action_gridcontainer))	
+	%retroarch_button.pressed.connect(standard_buttons.bind(%retroarch_button,%system_gridcontainer, %action_gridcontainer))
+	%mame_button.pressed.connect(standard_buttons.bind(%mame_button,%system_gridcontainer, %action_gridcontainer))
+	%ruffle_button.pressed.connect(standard_buttons.bind(%ruffle_button,%system_gridcontainer, %action_gridcontainer))
+	%melonds_button.pressed.connect(standard_buttons.bind(%melonds_button,%system_gridcontainer, %action_gridcontainer))
+	%pcsx2_button.pressed.connect(standard_buttons.bind(%pcsx2_button,%system_gridcontainer, %action_gridcontainer))
+	%duckstation_button.pressed.connect(standard_buttons.bind(%duckstation_button,%system_gridcontainer, %action_gridcontainer))
+	%ppsspp_button.pressed.connect(standard_buttons.bind(%ppsspp_button,%system_gridcontainer, %action_gridcontainer))
+	%vita3k_button.pressed.connect(standard_buttons.bind(%vita3k_button,%system_gridcontainer, %action_gridcontainer))
+	%rpcs3_button.pressed.connect(standard_buttons.bind(%rpcs3_button,%system_gridcontainer, %action_gridcontainer))
+	%ryujinx_button.pressed.connect(standard_buttons.bind(%ryujinx_button,%system_gridcontainer, %action_gridcontainer))
+	%dolphin_button.pressed.connect(standard_buttons.bind(%dolphin_button,%system_gridcontainer, %action_gridcontainer))
+	%primehack_button.pressed.connect(standard_buttons.bind(%primehack_button,%system_gridcontainer, %action_gridcontainer))
+	%cemu_button.pressed.connect(standard_buttons.bind.bind(%cemu_button,%system_gridcontainer, %action_gridcontainer))
+	%xemu_button.pressed.connect(standard_buttons.bind.bind(%xemu_button,%system_gridcontainer, %action_gridcontainer))
+	%esde_button.pressed.connect(standard_buttons.bind.bind(%esde_button,%system_gridcontainer, %action_gridcontainer))	
 	%help_button.pressed.connect(_do_action.bind(%help_button))
 	#%launch_button.pressed.connect(_do_action.bind(%launch_button))
 	%launch_button.pressed.connect(_do_action.bind(%launch_button))
 	%reset_button.button_down.connect(_do_action.bind(%reset_button))
 	%reset_button.button_up.connect(_on_Button_released.bind(%reset_progress))
-	
-func _hide_show_buttons(button: Button, buttons_gridcontainer: GridContainer, hidden_gridcontainer: GridContainer) -> void:
+	%rpcs3_firmware_button.pressed.connect(_do_action.bind(%rpcs3_firmware_button))
+
+func extra_buttons () -> void:
+	print ("Extra")
+
+func standard_buttons(button: Button, buttons_gridcontainer: GridContainer, hidden_gridcontainer: GridContainer) -> void:
 	current_system = app_data.emulators[button.text.to_lower()]
+	%reset_button.text="RESET"
 	match button.name:
-		"retroarch_button", "mame_button", "ruffle_button", "melonds_button", "pcsx2_button", "duckstation_button", \
-		"ppsspp_button", "vita3k_button", "rpcs3_button", "ryujinx_button", "dolphin_button", "primehack_button", \
-		"cemu_button", "xemu_button", "esde_button":
-			%reset_button.text="RESET"
-			hidden_gridcontainer.visible = true
-			if button.toggle_mode == false:
-				for i in range(buttons_gridcontainer.get_child_count()):
-					var child = buttons_gridcontainer.get_child(i)        
-					if child is Button and child != button:
-						child.visible=false
-			elif button.toggle_mode == true and hidden_gridcontainer.visible == true:
-				hidden_gridcontainer.visible = false
-				for i in range(buttons_gridcontainer.get_child_count()):
-					var child = buttons_gridcontainer.get_child(i)        
-					if child is Button:
-						child.visible=true
-						child.toggle_mode = false
-			if hidden_gridcontainer.visible == true:
-				button.toggle_mode = true
+		"rpcs3_button":
+			%rpcs3_firmware_button.visible = true
+			%rpcs3_scan_button.visible = true
+		_:
+			%rpcs3_firmware_button.visible = false
+			%rpcs3_scan_button.visible = false
+	hidden_gridcontainer.visible = true
+	if button.toggle_mode == false:
+		for i in range(buttons_gridcontainer.get_child_count()):
+			var child = buttons_gridcontainer.get_child(i)        
+			if child is Button and child != button:
+				child.visible=false
+	elif button.toggle_mode == true and hidden_gridcontainer.visible == true:
+		hidden_gridcontainer.visible = false
+		for i in range(buttons_gridcontainer.get_child_count()):
+			var child = buttons_gridcontainer.get_child(i)        
+			if child is Button:
+				child.visible=true
+				child.toggle_mode = false
+	if hidden_gridcontainer.visible == true:
+		button.toggle_mode = true
 
 func _on_Button_released(progress: ProgressBar) -> void:
 	is_reset_pressed = false
@@ -84,6 +91,10 @@ func _do_action(button: Button) -> void:
 		["reset_button", current_system.name]:
 			is_reset_pressed = true
 			%reset_progress.visible = true
+		["rpcs3_firmware_button", current_system.name]:
+			class_functions.logger("i", "Firmware install " + current_system.name)
+			var launch = class_functions.execute_command(class_functions.wrapper_command,["update_rpcs3_firmware"], false)
+			class_functions.logger("d", "Exit Code: " + str(launch["exit_code"]))
 
 func _do_complete() ->void:
 	if is_reset_pressed:
