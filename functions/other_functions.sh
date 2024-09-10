@@ -933,6 +933,10 @@ find_emulator() {
   fi
 }
 
+
+# TODO: %INJECT% is not yet working (Dolphin, rpcs3, vita3k)
+# TODO: add the logic of alt emulator and default emulator
+
 run_game() {
 
   # Initialize variables
@@ -1050,7 +1054,10 @@ find_system_commands() {
     done <<< "$commands"
 
     # Show the list with Zenity and return the **command** (second column) selected
-    selected_command=$(zenity --list --title="Select an emulator for $system_name" --column="Emulator" --column="Command" "${command_list[@]}" --width=800 --height=400 --print-column=2)
+    selected_command=$(zenity --list \
+        --title="Select an emulator for $system_name" \
+        --column="Emulator" --column="Hidden Command" "${command_list[@]}" \
+        --width=800 --height=400 --print-column=2 --hide-column=2)
 
     echo "$selected_command"
 }
