@@ -629,6 +629,9 @@
     "ps3": {
       "name": "Sony PlayStation 3"
     },
+    "ps4": {
+      "name": "Sony PlayStation 4"
+    },
     "psp": {
       "name": "Sony PlayStation Portable"
     },
@@ -1069,6 +1072,12 @@
       "launch-args": "-f -g $game",
       "ponzu": true,
       "abxy_button": true
+    },
+    "shadps4": {
+      "description": "PS4 Emulator for Linux",
+      "name": "shadps4",
+      "system": "ps4",
+      "launch": "shadps4-qt"
     },
     "dolphin": {
       "name": "Dolphin",

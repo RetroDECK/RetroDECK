@@ -571,6 +571,21 @@ modules:
         url: https://github.com/RetroDECK/MAME/releases/latest/download/RetroDECK-MAME-Artifact.tar.gz
         sha256: RETRODECKMAMELATEST
 
+  # SHADPS4
+
+  - name: shadps4
+    buildsystem: simple
+    build-commands:
+      - chmod +x *.AppImage
+      - ./*.AppImage --appimage-extract
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
+      - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}/"
+    sources:
+      - type: archive
+        url: https://github.com/shadps4-emu/shadPS4/releases/latest/download/shadps4-linux-qt.zip
+        sha256: RETRODECKSHADPS4LATESTSTABLE
+
   # ES-DE
 
   - name: ES-DE
@@ -583,8 +598,10 @@ modules:
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
-        url: https://github.com/RetroDECK/ES-DE/releases/latest/download/RetroDECK-ES-DE-Artifact.tar.gz
-        sha256: RETRODECKESDELATEST
+        url: https://github.com/RetroDECK/ES-DE/releases/download/feat%2Fshadps4-200824.04/RetroDECK-ES-DE-Artifact.tar.gz
+        sha256: 3aa0334b4542ca4ca36c15f8b583d3c0075a7a894d765cbb8da1670a5a1f637f
+        #url: https://github.com/RetroDECK/ES-DE/releases/latest/download/RetroDECK-ES-DE-Artifact.tar.gz
+        #sha256: RETRODECKESDELATEST
 
   - name: retrodeck-theme
     buildsystem: simple

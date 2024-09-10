@@ -188,8 +188,44 @@ handle_thisrepo() {
   /bin/sed -i 's^'"$placeholder"'^'"$current_repo_url"'^g' "$rd_manifest"
 }
 
+# New function to handle the latest artifact from GitHub Actions
+handle_latestghaartifact() {
+  local placeholder_url="$1"
+  local placeholder_hash="$2"
+  local workflow_url="$3"
+  local artifact_name="$4"
+
+  echo "Fetching workflow runs from: $workflow_url"
+  workflow_runs_url=$(echo "$workflow_url" | sed 's/github.com/api.github.com\/repos/' | sed 's/actions\/workflows\/[^\/]*$/actions\/runs/')
+
+  local runs_data=$(curl -s "$workflow_runs_url")
+  local latest_run_url=$(echo "$runs_data" | jq -r ".workflow_runs[0].artifacts_url")
+
+  if [[ -z "$latest_run_url" ]]; then
+    echo "Error: No workflow runs found"
+    exit 1
+  fi
+
+  echo "Fetching artifacts from the latest run: $latest_run_url"
+  local artifacts_data=$(curl -s "$latest_run_url")
+  local artifact_url=$(echo "$artifacts_data" | jq -r ".artifacts[] | select(.name == \"$artifact_name\").archive_download_url")
+
+  if [[ -z "$artifact_url" ]]; then
+    echo "Error: No artifact found with name $artifact_name"
+    exit 1
+  fi
+
+  echo "Downloading the artifact to calculate the hash..."
+  local artifact_hash=$(curl -sL "$artifact_url" | sha256sum | cut -d ' ' -f1)
+
+  echo "Replacing placeholder $placeholder_url with artifact URL $artifact_url"
+  echo "Replacing placeholder $placeholder_hash with artifact hash $artifact_hash"
+  /bin/sed -i 's^'"$placeholder_url"'^'"$artifact_url"'^g' "$rd_manifest"
+  /bin/sed -i 's^'"$placeholder_hash"'^'"$artifact_hash"'^g' "$rd_manifest"
+}
+
 # Process the task list
-while IFS="^" read -r action placeholder url branch || [[ -n "$action" ]]; do
+while IFS="^" read -r action placeholder url branch artifact_name || [[ -n "$action" ]]; do
   if [[ ! "$action" == "#"* ]] && [[ -n "$action" ]]; then
     case "$action" in
       "branch" ) handle_branch "$placeholder" ;;
@@ -203,6 +239,7 @@ while IFS="^" read -r action placeholder url branch || [[ -n "$action" ]]; do
       "custom_command" ) handle_custom_command "$url" ;;
       "url" ) handle_url "$placeholder" "$url" ;;
       "THISREPO" ) handle_thisrepo "$placeholder" ;;
+      "latestghaartifact" ) handle_latestghaartifact "$placeholder" "$branch" "$url" "$artifact_name" ;;
     esac
   fi
 done < "$automation_task_list"
