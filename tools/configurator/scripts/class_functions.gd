@@ -11,6 +11,7 @@ var rd_log: String
 var rd_log_folder: String
 var rd_version: String
 var gc_version: String
+var sound_effects: bool = true
 
 func read_cfg() -> String:
 	var title: String

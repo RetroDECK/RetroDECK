@@ -3,7 +3,6 @@ extends TabContainer
 var icon_width: int = 32
 @onready var tcount: int = get_tab_count()-1
 
-
 func _ready():
 	focusFirstFocusableChild() #grab focus on first element to enable controller focusing
 	%TabContainer.add_theme_icon_override("decrement",ResourceLoader.load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0797.png"))
@@ -31,7 +30,7 @@ func connect_focus_signals(node):
 			connect_focus_signals(child)
 
 func _on_Button_focus_entered(button: Button):
-	if button:
+	if button and class_functions.sound_effects:
 		%AudioStreamPlayer2D.play()
 
 func _input(event):
