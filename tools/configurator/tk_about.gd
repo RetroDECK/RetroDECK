@@ -13,11 +13,33 @@ rd_credits_button,rd_donate_button,rd_contactus_button,rd_licenses_button]
 
 func _ready():
 	#tk_about = class_functions.import_csv_data("res://tk_about.txt")
-	app_data = data_handler.app_data
-	#_get_nodes()
 	_connect_signals()
-	for but in bArray:
-		%GridContainer.add_child(but)		
+	create_buttons()
+
+func _connect_signals() -> void:
+	rd_web_button.pressed.connect(_about_button_pressed.bind("rd_web", rd_web_button))
+	rd_changelog_button.pressed.connect(_about_button_pressed.bind("rd_changelog", rd_changelog_button))
+	rd_wiki_button.pressed.connect(_about_button_pressed.bind("rd_wiki",rd_wiki_button))
+	rd_credits_button.pressed.connect(_about_button_pressed.bind("rd_credits", rd_credits_button))
+	rd_donate_button.pressed.connect(_about_button_pressed.bind("rd_donate", rd_donate_button))
+	rd_contactus_button.pressed.connect(_about_button_pressed.bind("rd_contactus", rd_contactus_button))
+	rd_licenses_button.pressed.connect(_about_button_pressed.bind("rd_licenses", rd_licenses_button))
+	
+func _about_button_pressed(id: String, button: Button) -> void:
+	match id:
+		"rd_web", "rd_changelog", "rd_wiki", "rd_credits", "rd_donate", "rd_contactus", "rd_licenses":
+			class_functions.log_parameters[2] = class_functions.log_text + "Loading website for " + id
+			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
+			OS.shell_open(button.editor_description)
+		_:
+			class_functions.log_parameters[2] = class_functions.log_text + "Loading website - no matching ID found"
+			class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
+			print ("Website ID/Link not found")
+
+func create_buttons() -> void:
+	app_data = data_handler.app_data
+	for button in bArray:
+		%GridContainer.add_child(button)
 	for id in app_data.about_links:
 		var web_data: Link = app_data.about_links[id]
 		match id:
@@ -70,31 +92,3 @@ func _ready():
 				rd_licenses_button.editor_description = web_data.url
 				rd_licenses_button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 				rd_licenses_button.vertical_icon_alignment = VERTICAL_ALIGNMENT_TOP
-
-func _connect_signals() -> void:
-	rd_web_button.pressed.connect(_about_button_pressed.bind("rd_web"))
-	rd_changelog_button.pressed.connect(_about_button_pressed.bind("rd_changelog"))
-	rd_wiki_button.pressed.connect(_about_button_pressed.bind("rd_wiki"))
-	rd_credits_button.pressed.connect(_about_button_pressed.bind("rd_credits"))
-	rd_donate_button.pressed.connect(_about_button_pressed.bind("rd_donate"))
-	rd_contactus_button.pressed.connect(_about_button_pressed.bind("rd_contactus"))
-	rd_licenses_button.pressed.connect(_about_button_pressed.bind("rd_licenses"))
-	
-func _about_button_pressed(id: String) -> void:
-	match id:
-		"rd_web":
-			OS.shell_open(rd_web_button.editor_description)
-		"rd_changelog":
-			OS.shell_open(rd_changelog_button.editor_description)
-		"rd_wiki":
-			OS.shell_open(rd_wiki_button.editor_description)
-		"rd_credits":
-			OS.shell_open(rd_credits_button.editor_description)
-		"rd_donate":
-			OS.shell_open(rd_donate_button.editor_description)
-		"rd_contactus":
-			OS.shell_open(rd_contactus_button.editor_description)
-		"rd_licenses":
-			OS.shell_open(rd_licenses_button.editor_description)
-		_:
-			print ("Website ID/Link not found")

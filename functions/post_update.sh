@@ -435,6 +435,7 @@ post_update() {
     set_setting_value "$raconf" "libretro_info_path" "/var/config/retroarch/cores" "retroarch"
     prepare_component "reset" "shadps4"
     prepare_component "reset" "ruffle"
+    update_rd_conf
 
   # TODO: check this
   #   rm /var/config/emulationstation/.emulationstation # remving the old symlink to .emulationstation as it might be not needed anymore
