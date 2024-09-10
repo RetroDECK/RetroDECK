@@ -892,11 +892,55 @@ start_retrodeck() {
   es-de
 }
 
+find_emulator() {
+  local emulator_name=$1
+  local found_path=""
+
+  # Search the es_find_rules.xml file for the emulator
+  emulator_section=$(xmllint --xpath "//emulator[@name='$emulator_name']" "/app/share/es-de/resources/systems/linux/es_find_rules.xml" 2>/dev/null)
+  
+  if [ -z "$emulator_section" ]; then
+      echo "Emulator not found: $emulator_name"
+      return 1
+  fi
+  
+  # Search systempath entries
+  while IFS= read -r line; do
+      command_path=$(echo "$line" | sed -n 's/.*<entry>\(.*\)<\/entry>.*/\1/p')
+      if [ -x "$(command -v $command_path)" ]; then
+          found_path=$command_path
+          break
+      fi
+  done <<< "$(echo "$emulator_section" | xmllint --xpath "//rule[@type='systempath']/entry" - 2>/dev/null)"
+  
+  # If not found, search staticpath entries
+  if [ -z "$found_path" ]; then
+      while IFS= read -r line; do
+          command_path=$(eval echo "$line" | sed -n 's/.*<entry>\(.*\)<\/entry>.*/\1/p')
+          if [ -x "$command_path" ]; then
+              found_path=$command_path
+              break
+          fi
+      done <<< "$(echo "$emulator_section" | xmllint --xpath "//rule[@type='staticpath']/entry" - 2>/dev/null)"
+  fi
+  
+  if [ -z "$found_path" ]; then
+      echo "No valid path found for emulator: $emulator_name"
+      return 1
+  else
+      echo "$found_path"
+      return 0
+  fi
+}
+
 run_game() {
 
   # Initialize variables
   emulator=""
   system=""
+
+  # Percorso al file XML es_systems.xml
+  xml_file="/app/share/es-de/resources/systems/linux/es_systems.xml"
 
   # Parse options
   while getopts ":e:s:" opt; do
@@ -929,87 +973,98 @@ run_game() {
     system=$(echo "$game" | grep -oP '(?<=roms/)[^/]+')
   fi
 
-  log d "Emulator: $emulator"
-  log d "System: $system"
-  log d "Game: $game"
+  # Funzione per sostituire i placeholder
+  substitute_placeholders() {
+    local cmd="$1"
+    local rom_path="$game"
+    local rom_dir=$(dirname "$rom_path")
+    local base_name=$(basename "$rom_path" .ext)
+    local file_name=$(basename "$rom_path")
+    local rom_raw="$rom_path"
+    local rom_dir_raw="$rom_dir"
+    local es_path="/path/dell/emulatore"
+    local emulator_path="/path/dell/emulatore/bin"
 
-  # Query the features JSON for emulators that support the system
-  local emulators=$(jq -r --arg system "$system" '
-    .emulator | to_entries[] | 
-    select(
-      (.value.system == $system) or 
-      (.value.system[]? == $system)
-    ) | .key' "$features")
+    # Function to replace %EMULATOR_SOMETHING% with the actual path of the emulator
+    replace_emulator_placeholder() {
+        local placeholder=$1
+        local emulator_name=${placeholder//"%EMULATOR_"/} # Extract emulator name from placeholder
+        emulator_name=${emulator_name//"%"/} # Remove the ending "%"
+        local emulator_exec=$(find_emulator "$emulator_name")
+        
+        if [[ -z "$emulator_exec" ]]; then
+            echo "Error: Emulator '$emulator_name' not found."
+            exit 1
+        fi
 
-  # Check if the system is handled by RetroArch cores
-  local retroarch_cores=$(jq -r --arg system "$system" '
-    .emulator.retroarch.cores | to_entries[] |
-    select(
-      .value.system == $system or 
-      (.value.system[]? == $system)
-    ) | .key' "$features")
+        echo "$emulator_exec"
+    }
 
-  # if the emulator is given and it's a retroarch core just execute it
-  if [[ "$emulator" == *"_libretro" ]]; then
-    local core_path="/var/config/retroarch/cores/$emulator.so"
-    log d "Running RetroArch core: $core_path"
-    log d "Command: retroarch -L $core_path \"$game\""
-    eval "retroarch -L $core_path \"$game\""
-    return 1
-  fi
+    # Use sed to find %EMULATOR_*% and replace with actual emulator executable by calling find_emulator
+    cmd=$(echo "$cmd" | sed -r 's/%EMULATOR_[A-Z0-9_]+%/$(replace_emulator_placeholder "&")/g')
 
-  # If the system is handled by RetroArch cores, add them to the list of emulators
-  if [[ -n "$retroarch_cores" ]]; then
-    emulators=$(echo -e "$emulators\n$retroarch_cores")
-  fi
+    # Sourcing the emulator command to ensure immediate execution of placeholders
+    cmd=$(eval echo "$cmd")
 
-  local pretty_system=$(jq -r --arg system "$system" '.system[$system].name' "$features")
+    # Ensure that paths with spaces are properly quoted
+    cmd="${cmd//"%ROM%"/"\"$rom_path\""}"
+    cmd="${cmd//"%BASENAME%"/"\"$base_name\""}"
+    cmd="${cmd//"%FILENAME%"/"\"$file_name\""}"
+    cmd="${cmd//"%ROMRAW%"/"\"$rom_raw\""}"
+    cmd="${cmd//"%ROMPATH%"/"\"$rom_dir\""}"
+    cmd="${cmd//"%ESPATH%"/"\"$es_path\""}"
+    cmd="${cmd//"%EMUDIR%"/"\"$emulator_path\""}"
+    cmd="${cmd//"%GAMEDIR%"/"\"$rom_dir\""}"
+    cmd="${cmd//"%GAMEDIRRAW%"/"\"$rom_dir_raw\""}"
+    cmd="${cmd//"%CORE_RETROARCH%"/"\"/var/config/retroarch/cores\""}"
 
-  # Check if multiple emulators are found and prompt the user to select one with zenity
-  if [[ $(echo "$emulators" | wc -l) -gt 1 ]]; then
-    emulator=$(echo "$emulators" | zenity --list --title="Select Emulator" --text="Multiple emulators found for $pretty_system. Select one to run." --column="Emulator")
-  else
-    emulator="$emulators"
-  fi
+    echo "$cmd"
+}
 
-  # If no emulator was selected, exit
-  if [[ -z "$emulator" ]]; then
-    log e "No emulator selected. Exiting."
-    return 1
-  fi
 
-  log d "Run game: selected emulator $emulator"
-
-  # Handle RetroArch core separately
-  if [[ "$emulator" == *"_libretro" ]]; then
-    local core_path="/var/config/retroarch/cores/$emulator.so"
-    log d "Running RetroArch core: $core_path"
-    log d "Command: retroarch -L $core_path \"$game\""
-    eval "retroarch -L $core_path \"$game\""
-  else
-    # Check if launch-override exists
-    local launch_override=$(jq -r ".emulator.$emulator.\"launch-override\"" "$features")
-    if [[ "$launch_override" != "null" ]]; then
-      # Use launch-override
-      launch_override=${launch_override//\$game/\"$game\"}
-      log d "Using launch-override: $launch_override"
-      eval "$launch_override"
-    else
-      # Use standard launch and launch-args
-      local launch_command=$(jq -r ".emulator.$emulator.launch" "$features")
-      local launch_args=$(jq -r ".emulator.$emulator.\"launch-args\"" "$features")
-      log d "launch args: $launch_args"
-
-      # Only add launch_args if they are not null
-      if [[ "$launch_args" != "null" ]]; then
-        # Replace $game in launch_args with the actual game path, quoting it to handle spaces
-        launch_args=${launch_args//\$game/\"$game\"}
-        log d "Command: \"$launch_command $launch_args\""
-        eval "$launch_command $launch_args"
-      else
-        log d "Command: \"$launch_command\""
-        eval "$launch_command \"$game\""
-      fi
+  # Estrazione dei comandi da es_systems.xml per il sistema selezionato
+find_system_commands() {
+    local system_name=$system
+    # Use xmllint to extract the system commands from the XML
+    system_section=$(xmllint --xpath "//system[name='$system_name']" "$xml_file" 2>/dev/null)
+    
+    if [ -z "$system_section" ]; then
+        echo "System not found: $system_name"
+        exit 1
     fi
+
+    # Extract commands and labels
+    commands=$(echo "$system_section" | xmllint --xpath "//command" - 2>/dev/null)
+
+    # Prepare Zenity command list
+    command_list=()
+    while IFS= read -r line; do
+        label=$(echo "$line" | sed -n 's/.*label="\([^"]*\)".*/\1/p')
+        command=$(echo "$line" | sed -n 's/.*<command[^>]*>\(.*\)<\/command>.*/\1/p')
+        
+        # Substitute placeholders in the command
+        command=$(substitute_placeholders "$command")
+        
+        # Add label and command to Zenity list (label first, command second)
+        command_list+=("$label" "$command")
+    done <<< "$commands"
+
+    # Show the list with Zenity and return the **command** (second column) selected
+    selected_command=$(zenity --list --title="Select an emulator for $system_name" --column="Emulator" --column="Command" "${command_list[@]}" --width=800 --height=400 --print-column=2)
+
+    echo "$selected_command"
+}
+
+  # Se l'emulatore non è specificato, chiedi all'utente di selezionarlo o prendilo dal file XML
+  if [[ -z "$emulator" ]]; then
+    emulator=$(find_system_commands)
+  fi
+
+  if [[ -n "$emulator" ]]; then
+    log d "Running selected emulator: $emulator"
+    eval "$emulator"
+  else
+    log e "No emulator found or selected. Exiting."
+    return 1
   fi
 }
