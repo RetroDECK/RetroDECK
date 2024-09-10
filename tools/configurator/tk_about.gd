@@ -26,10 +26,16 @@ func _connect_signals() -> void:
 	rd_licenses_button.pressed.connect(_about_button_pressed.bind("rd_licenses", rd_licenses_button))
 	
 func _about_button_pressed(id: String, button: Button) -> void:
+	var tmp_txt = button.text
 	match id:
 		"rd_web", "rd_changelog", "rd_wiki", "rd_credits", "rd_donate", "rd_contactus", "rd_licenses":
-			class_functions.logger("i","Loading website for " + id)
-			class_functions.launch_help(button.editor_description)
+			if class_functions.desktop_mode != "gamescope":
+				class_functions.logger("i","Loading website for " + id)
+				class_functions.launch_help(button.editor_description)
+			else:
+				button.text = "Help only in Desktop Mode"
+				await class_functions.wait(3.0)
+				button.text = tmp_txt
 		_:
 			class_functions.logger("d","Loading website for " + id)
 			print ("Website ID/Link not found")

@@ -6,6 +6,7 @@ var log_parameters: Array
 var wrapper_command: String = "/app/tools/retrodeck_function_wrapper.sh"
 var config_file_path = "/var/config/retrodeck/retrodeck.cfg"
 var json_file_path = "/var/config/retrodeck/retrodeck.json"
+var desktop_mode: String = OS.get_environment("XDG_CURRENT_DESKTOP")
 var rd_log: String
 var rd_log_folder: String
 var rd_version: String
@@ -29,8 +30,8 @@ func logger(log_type: String, log_text: String) -> void:
 	var log_header_text = "gdc_"
 	log_header_text+=log_text
 	log_parameters = ["log", log_type, log_header_text]
-	log_result = await class_functions.run_thread_command(wrapper_command,log_parameters, false)
-	#log_result = await class_functions.run_thread_command("find",["$HOME", "-name", "*.xml","-print"], false)
+	log_result = await run_thread_command(wrapper_command,log_parameters, false)
+	#log_result = await run_thread_command("find",["$HOME", "-name", "*.xml","-print"], false)
 	#print (log_result["exit_code"])
 	#print (log_result["output"])
 	
@@ -39,6 +40,9 @@ func array_to_string(arr: Array) -> String:
 	for line in arr:
 		text = line.strip_edges() + "\n"
 	return text
+
+func wait (seconds: float) -> void:
+	await get_tree().create_timer(seconds).timeout
 
 # TODO This should be looked at again when GoDot 4.3 ships as has new OS.execute_with_pipe	
 func execute_command(command: String, parameters: Array, console: bool) -> Dictionary:
@@ -134,3 +138,12 @@ func map_locale_id(current_locale: String) -> int:
 		"cn":
 			int_locale = 6
 	return int_locale
+
+func environment_data() -> void:
+	var env_result = class_functions.execute_command("printenv",[], true)
+	#print (env_result["output"])
+	#print (OS.get_environment("XDG_CURRENT_DESKTOP"))
+	var file = FileAccess.open(OS.get_environment("HOME") + "/sdenv.txt",FileAccess.WRITE)
+	if file != null:
+		file.store_string(env_result["output"])
+	file.close()

@@ -80,10 +80,17 @@ func _on_Button_released(progress: ProgressBar) -> void:
 	progress.value = 0.0
 		
 func _do_action(button: Button) -> void:
+	var tmp_txt = button.text
 	match [button.name, current_system.name]:
 		["help_button", current_system.name]:
-			class_functions.logger("i", "Launching " + current_system.name + " Help")
-			class_functions.launch_help(current_system.url)
+			if class_functions.desktop_mode != "gamescope":
+				class_functions.logger("i", "Launching " + current_system.name + " Help")
+				class_functions.launch_help(current_system.url)
+			else:
+				button.text = "Help only in Desktop Mode"
+				await class_functions.wait(3.0)
+				button.text = tmp_txt
+				
 		["launch_button", current_system.name]:
 			class_functions.logger("i", "Launching " + current_system.name)
 			var launch = class_functions.execute_command(current_system.launch,[], false)
@@ -98,9 +105,12 @@ func _do_action(button: Button) -> void:
 
 func _do_complete() ->void:
 	if is_reset_pressed:
+		var tmp_txt = %reset_button.text
 		%reset_button.text = "RESETTING-NOW"
 		class_functions.logger("i", "Resetting " + current_system.name)
 		var parameters = ["prepare_component","reset",current_system.name]
 		reset_result = await class_functions.run_thread_command(class_functions.wrapper_command,parameters, false)
 		class_functions.logger("d", "Exit Code: " + str(reset_result["exit_code"]))
 		%reset_button.text = "RESET COMPLETED"
+		await class_functions.wait(3.0)
+		%reset_button.text = tmp_txt
