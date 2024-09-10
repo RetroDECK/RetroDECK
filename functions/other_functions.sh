@@ -900,7 +900,7 @@ find_emulator() {
   emulator_section=$(xmllint --xpath "//emulator[@name='$emulator_name']" "/app/share/es-de/resources/systems/linux/es_find_rules.xml" 2>/dev/null)
   
   if [ -z "$emulator_section" ]; then
-      echo "Emulator not found: $emulator_name"
+      log e "Emulator not found: $emulator_name"
       return 1
   fi
   
@@ -925,16 +925,16 @@ find_emulator() {
   fi
   
   if [ -z "$found_path" ]; then
-      echo "No valid path found for emulator: $emulator_name"
+      log e "No valid path found for emulator: $emulator_name"
       return 1
   else
+      log d "Found emulator: \"$found_path\""
       echo "$found_path"
       return 0
   fi
 }
 
 
-# TODO: %INJECT% is not yet working (Dolphin, rpcs3, vita3k)
 # TODO: add the logic of alt emulator and default emulator
 
 run_game() {
@@ -943,7 +943,7 @@ run_game() {
   emulator=""
   system=""
 
-  # Percorso al file XML es_systems.xml
+  # Path to the es_systems.xml file
   xml_file="/app/share/es-de/resources/systems/linux/es_systems.xml"
 
   # Parse options
@@ -977,42 +977,68 @@ run_game() {
     system=$(echo "$game" | grep -oP '(?<=roms/)[^/]+')
   fi
 
-  # Funzione per sostituire i placeholder
+  log d "Game: \"$game\""
+  log d "System: \"$system\""
+
+  # Function to handle the %INJECT% placeholder
+  handle_inject_placeholder() {
+      local cmd="$1"
+      
+      # Check if .esprefix file exists
+      local inject_file="${game}.esprefix"
+
+      log d "Checking if \"${game}.esprefix\" exists"
+      
+      if [[ ! -f "$inject_file" ]]; then
+          # If the inject file does not exist, strip all forms of %INJECT% from the command
+          
+          log d "\"${game}.esprefix\" not existing"
+
+          # This handles cases where %INJECT% might be in different forms:
+          # Strip %INJECT%="value", %INJECT%="", or just %INJECT%=
+          cmd="${cmd//%INJECT%=\"*\"/}"
+          cmd="${cmd//%INJECT%=/}"
+          cmd="${cmd//%INJECT%/}"
+
+          cmd="${cmd//%BASENAME%.esprefix=\"*\"/}"
+          cmd="${cmd//%BASENAME%.esprefix=/}"
+          cmd="${cmd//%BASENAME%.esprefix/}"
+
+          log d "Returning the following command:$cmd"
+          
+          echo "$cmd"
+          return
+      fi
+
+      # If the .esprefix file exists, process its content
+      inject_content=$(head -c 4096 "$inject_file")
+      log i ".esprefix file found, injecting \"$inject_content\""
+      cmd="${cmd//%INJECT%=\"$inject_file\"/$inject_content}"
+      echo "$cmd"
+  }
+
+
+  # Function to substitute the placeholders
   substitute_placeholders() {
     local cmd="$1"
     local rom_path="$game"
     local rom_dir=$(dirname "$rom_path")
-    local base_name=$(basename "$rom_path" .ext)
+    local base_name=$(basename "$rom_path" .psvita)  # Ensure the .psvita extension is stripped
     local file_name=$(basename "$rom_path")
     local rom_raw="$rom_path"
     local rom_dir_raw="$rom_dir"
-    local es_path="/path/dell/emulatore"
-    local emulator_path="/path/dell/emulatore/bin"
+    local es_path=""
+    local emulator_path=""
 
-    # Function to replace %EMULATOR_SOMETHING% with the actual path of the emulator
-    replace_emulator_placeholder() {
-        local placeholder=$1
-        local emulator_name=${placeholder//"%EMULATOR_"/} # Extract emulator name from placeholder
-        emulator_name=${emulator_name//"%"/} # Remove the ending "%"
-        local emulator_exec=$(find_emulator "$emulator_name")
-        
-        if [[ -z "$emulator_exec" ]]; then
-            echo "Error: Emulator '$emulator_name' not found."
-            exit 1
-        fi
+    # Handle %INJECT% placeholder if present
+    cmd=$(handle_inject_placeholder "$cmd")
 
-        echo "$emulator_exec"
-    }
-
-    # Use sed to find %EMULATOR_*% and replace with actual emulator executable by calling find_emulator
+    # Substitute emulator path
     cmd=$(echo "$cmd" | sed -r 's/%EMULATOR_[A-Z0-9_]+%/$(replace_emulator_placeholder "&")/g')
 
-    # Sourcing the emulator command to ensure immediate execution of placeholders
-    cmd=$(eval echo "$cmd")
-
-    # Ensure that paths with spaces are properly quoted
+    # Ensure that paths with spaces are properly quoted and substitute other placeholders
     cmd="${cmd//"%ROM%"/"\"$rom_path\""}"
-    cmd="${cmd//"%BASENAME%"/"\"$base_name\""}"
+    cmd="${cmd//"%BASENAME%"/"\"$base_name\""}"  # Proper base name without extra .psvita
     cmd="${cmd//"%FILENAME%"/"\"$file_name\""}"
     cmd="${cmd//"%ROMRAW%"/"\"$rom_raw\""}"
     cmd="${cmd//"%ROMPATH%"/"\"$rom_dir\""}"
@@ -1020,55 +1046,55 @@ run_game() {
     cmd="${cmd//"%EMUDIR%"/"\"$emulator_path\""}"
     cmd="${cmd//"%GAMEDIR%"/"\"$rom_dir\""}"
     cmd="${cmd//"%GAMEDIRRAW%"/"\"$rom_dir_raw\""}"
-    cmd="${cmd//"%CORE_RETROARCH%"/"\"/var/config/retroarch/cores\""}"
+    cmd="${cmd//"%CORE_RETROARCH%"/"/var/config/retroarch/cores"}"
 
+    log d "Final command: $cmd"  # Log the final command for debugging
     echo "$cmd"
 }
 
+  # Extracting the commands from es_systems.xml for the selected system
+  find_system_commands() {
+      local system_name=$system
+      # Use xmllint to extract the system commands from the XML
+      system_section=$(xmllint --xpath "//system[name='$system_name']" "$xml_file" 2>/dev/null)
+      
+      if [ -z "$system_section" ]; then
+          log e "System not found: $system_name"
+          exit 1
+      fi
 
-  # Estrazione dei comandi da es_systems.xml per il sistema selezionato
-find_system_commands() {
-    local system_name=$system
-    # Use xmllint to extract the system commands from the XML
-    system_section=$(xmllint --xpath "//system[name='$system_name']" "$xml_file" 2>/dev/null)
-    
-    if [ -z "$system_section" ]; then
-        echo "System not found: $system_name"
-        exit 1
-    fi
+      # Extract commands and labels
+      commands=$(echo "$system_section" | xmllint --xpath "//command" - 2>/dev/null)
 
-    # Extract commands and labels
-    commands=$(echo "$system_section" | xmllint --xpath "//command" - 2>/dev/null)
+      # Prepare Zenity command list
+      command_list=()
+      while IFS= read -r line; do
+          label=$(echo "$line" | sed -n 's/.*label="\([^"]*\)".*/\1/p')
+          command=$(echo "$line" | sed -n 's/.*<command[^>]*>\(.*\)<\/command>.*/\1/p')
+          
+          # Substitute placeholders in the command
+          command=$(substitute_placeholders "$command")
+          
+          # Add label and command to Zenity list (label first, command second)
+          command_list+=("$label" "$command")
+      done <<< "$commands"
 
-    # Prepare Zenity command list
-    command_list=()
-    while IFS= read -r line; do
-        label=$(echo "$line" | sed -n 's/.*label="\([^"]*\)".*/\1/p')
-        command=$(echo "$line" | sed -n 's/.*<command[^>]*>\(.*\)<\/command>.*/\1/p')
-        
-        # Substitute placeholders in the command
-        command=$(substitute_placeholders "$command")
-        
-        # Add label and command to Zenity list (label first, command second)
-        command_list+=("$label" "$command")
-    done <<< "$commands"
+      # Show the list with Zenity and return the **command** (second column) selected
+      selected_command=$(zenity --list \
+          --title="Select an emulator for $system_name" \
+          --column="Emulator" --column="Hidden Command" "${command_list[@]}" \
+          --width=800 --height=400 --print-column=2 --hide-column=2)
 
-    # Show the list with Zenity and return the **command** (second column) selected
-    selected_command=$(zenity --list \
-        --title="Select an emulator for $system_name" \
-        --column="Emulator" --column="Hidden Command" "${command_list[@]}" \
-        --width=800 --height=400 --print-column=2 --hide-column=2)
+      echo "$selected_command"
+  }
 
-    echo "$selected_command"
-}
-
-  # Se l'emulatore non è specificato, chiedi all'utente di selezionarlo o prendilo dal file XML
+  # If the emulator is not specified, ask the user to select it or get it from the XML file
   if [[ -z "$emulator" ]]; then
     emulator=$(find_system_commands)
   fi
 
   if [[ -n "$emulator" ]]; then
-    log d "Running selected emulator: $emulator"
+    log d "Running: $emulator"
     eval "$emulator"
   else
     log e "No emulator found or selected. Exiting."
