@@ -981,37 +981,42 @@ run_game() {
   log d "Game: \"$game\""
   log d "System: \"$system\""
 
-  # Function to handle the %INJECT% placeholder
-  handle_inject_placeholder() {
-      local cmd="$1"
+# Function to handle the %INJECT% placeholder
+handle_inject_placeholder() {
+    local cmd="$1"
+    local rom_dir=$(dirname "$game") # Define rom_dir based on the game path
 
-      # Find all occurrences of %INJECT%=something
-      while [[ "$cmd" =~ %INJECT%=(.*) ]]; do
-          inject_file="${BASH_REMATCH[1]}"  # Extract the file name
+    # Find all occurrences of %INJECT%=something
+    while [[ "$cmd" =~ %INJECT%=(.*) ]]; do
+        inject_file="${BASH_REMATCH[1]}"  # Extract the file name
 
-          # Prepend the directory path to ensure we have the full path to the file
-          inject_file_full_path="$rom_dir/$inject_file"
+        # Prepend the directory path to ensure we have the full path to the file
+        inject_file_full_path="$rom_dir/$inject_file"
 
-          log d "Found %INJECT% pointing to file \"$inject_file_full_path\""
+        log d "Found %INJECT% pointing to file \"$inject_file_full_path\""
 
-          # Check if the file exists
-          if [[ -f "$inject_file_full_path" ]]; then
-              # Read the content of the file
-              inject_content=$(cat "$inject_file_full_path")
-              log i "File \"$inject_file_full_path\" found, injecting content \"$inject_content\""
-              
-              # Replace the %INJECT% placeholder with the content of the file
-              cmd="${cmd//%INJECT%=$inject_file/$inject_content}"
-          else
-              log e "File \"$inject_file_full_path\" not found. Removing %INJECT% placeholder."
-              # If the file does not exist, just remove the placeholder
-              cmd="${cmd//%INJECT%=$inject_file/}"
-          fi
-      done
+        # Check if the file exists (no escaping needed, just quotes)
+        if [[ -f "$inject_file_full_path" ]]; then
+            # Read the content of the file
+            inject_content=$(cat "$inject_file_full_path")
+            log i "File \"$inject_file_full_path\" found, injecting content \"$inject_content\""
+            
+            # Replace the %INJECT% placeholder with the content of the file
+            cmd="${cmd//%INJECT%=$inject_file/$inject_content}"
+        else
+            log e "File \"$inject_file_full_path\" not found. Removing %INJECT% placeholder."
+            # If the file does not exist, just remove the placeholder
+            cmd="${cmd//%INJECT%=$inject_file/}"
+        fi
+    done
 
-      log d "Returning the command with injected content: $cmd"
-      echo "$cmd"
-  }
+    log d "Returning the command with injected content: $cmd"
+    echo "$cmd"
+}
+
+
+
+
 
 # Function to replace %EMULATOR_SOMETHING% with the actual path of the emulator
 replace_emulator_placeholder() {
