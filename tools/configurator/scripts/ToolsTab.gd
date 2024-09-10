@@ -15,13 +15,9 @@ func _connect_signals() -> void:
 	
 func check_internet_connection():
 	%check_conn_button.text = "CHECK CONNECTION"
-	var error = http_request.request("https://retrodeck.net/") # Change this URL to any reliable one
-	if error != OK:
-		print("Request failed: ", error)
-	else:
-		print("Request started.")
+	http_request.request("https://retrodeck.net/")
 
-func _on_request_completed(result, response_code, headers, body):
+func _on_request_completed(_result, response_code, _headers, _body):
 	var style_box = StyleBoxFlat.new()
 	if response_code == 200:
 		style_box.bg_color = Color(0, 1, 0)

@@ -1,15 +1,15 @@
-[gd_scene load_steps=102 format=3 uid="uid://61f6m4r1mpan"]
+[gd_scene load_steps=110 format=3 uid="uid://61f6m4r1mpan"]
 
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
 [ext_resource type="Theme" uid="uid://hhc60cllcg47" path="res://assets/themes/default_theme.tres" id="1_if8nh"]
-[ext_resource type="Script" path="res://main.gd" id="1_obpq7"]
-[ext_resource type="Script" path="res://TabContainer.gd" id="3_id6l4"]
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_obpq7"]
+[ext_resource type="Script" path="res://scripts/TabContainer.gd" id="3_id6l4"]
 [ext_resource type="AudioStream" uid="uid://dig4pco500pyt" path="res://res/configurator.mp3" id="3_xivj6"]
 [ext_resource type="Texture2D" uid="uid://dx0u5hiwxfgu5" path="res://res/pixel_ui_theme/8x8_ui_elements.png" id="4_2tuu4"]
 [ext_resource type="Texture2D" uid="uid://qu88ngewoj4w" path="res://assets/icons/pixelitos/128/applications-games.png" id="4_caaxx"]
 [ext_resource type="Texture2D" uid="uid://bdj8vt3vhucq4" path="res://assets/icons/pixelitos/128/cs-display.png" id="4_jldgc"]
-[ext_resource type="Script" path="res://tk_about.gd" id="4_m4rto"]
-[ext_resource type="Script" path="res://Rekku.gd" id="4_nqqx3"]
+[ext_resource type="Script" path="res://scripts/tk_about.gd" id="4_m4rto"]
+[ext_resource type="Script" path="res://scripts/Rekku.gd" id="4_nqqx3"]
 [ext_resource type="Texture2D" uid="uid://suusabsjin6e" path="res://assets/icons/pixelitos/128/applications-graphics.png" id="4_q6hd2"]
 [ext_resource type="Texture2D" uid="uid://dk856hwnwsuab" path="res://assets/icons/pixelitos/128/retroarch.png" id="4_xcuib"]
 [ext_resource type="Texture2D" uid="uid://cvr1eijddf6nv" path="res://assets/icons/banner/gamegear.png" id="5_4d7s7"]
@@ -81,8 +81,16 @@
 [ext_resource type="Texture2D" uid="uid://b0awa8venu1h8" path="res://assets/icons/pixelitos/128/cs-network.png" id="50_5d2ui"]
 [ext_resource type="Texture2D" uid="uid://bafdexg6aq8tn" path="res://assets/icons/pixelitos/128/applications-accessories.png" id="50_h3jx2"]
 [ext_resource type="Texture2D" uid="uid://be3tmvgoa1wua" path="res://assets/icons/pixelitos/128/applications-development.png" id="50_tl5ty"]
-[ext_resource type="Script" path="res://ToolsTab.gd" id="50_wqa5h"]
+[ext_resource type="Script" path="res://scripts/ToolsTab.gd" id="50_wqa5h"]
+[ext_resource type="Script" path="res://scripts/SettingsTab.gd" id="54_bxhvn"]
+[ext_resource type="Texture2D" uid="uid://dk4567tpvqpr6" path="res://assets/icons/pixelitos/128/preferences-desktop-plasma-theme.png" id="54_dah1j"]
+[ext_resource type="Texture2D" uid="uid://d4ee8j2kh1tmy" path="res://assets/icons/pixelitos/128/cs-themes.png" id="55_wv2p5"]
+[ext_resource type="Texture2D" uid="uid://cfcgi6owxt3uu" path="res://assets/icons/pixelitos/128/preferences-system-notifications.png" id="55_x32s4"]
+[ext_resource type="Texture2D" uid="uid://dw3tdbhmpkst7" path="res://assets/icons/pixelitos/128/preferences-desktop-theme-applications.png" id="56_ubqc2"]
+[ext_resource type="Texture2D" uid="uid://d4suyd0iag1k" path="res://assets/icons/pixelitos/128/system-suspend.png" id="56_witym"]
 [ext_resource type="Texture2D" uid="uid://l3bredurb11m" path="res://assets/graphics/rekku2/rekku_base.png" id="57_1n3u5"]
+[ext_resource type="Texture2D" uid="uid://dxtd2lvewb4qa" path="res://assets/icons/pixelitos/128/system-switch-user.png" id="57_7b0kp"]
+[ext_resource type="Texture2D" uid="uid://bby02mc8j6rxt" path="res://assets/icons/pixelitos/128/youtube-music.png" id="58_oismn"]
 [ext_resource type="Texture2D" uid="uid://cvlncuql8igrm" path="res://assets/graphics/rekku2/rekku_eye_1.png" id="59_7lcu5"]
 [ext_resource type="Texture2D" uid="uid://bdrdu4nddkqjn" path="res://assets/graphics/rekku2/rekku_eye_2.png" id="60_mbhg6"]
 [ext_resource type="Texture2D" uid="uid://cb2hwhaq036mu" path="res://assets/graphics/rekku2/rekku_mouth_a.png" id="61_5vyvy"]
@@ -90,11 +98,11 @@
 [ext_resource type="Texture2D" uid="uid://3ktnkmuecxea" path="res://assets/graphics/rekku2/rekku_mouth_m.png" id="63_52v81"]
 [ext_resource type="Texture2D" uid="uid://d08ngewjvxkmn" path="res://assets/graphics/rekku2/rekku_mouth_o.png" id="64_s8u0e"]
 [ext_resource type="Texture2D" uid="uid://dieva7tuxjrvy" path="res://assets/graphics/rekku2/rekku_nomouth.png" id="65_kk8ba"]
-[ext_resource type="Script" path="res://controller_guide.gd" id="68_ahvw4"]
+[ext_resource type="Script" path="res://scripts/controller_guide.gd" id="68_ahvw4"]
 [ext_resource type="AudioStream" uid="uid://dhejvg02t5o35" path="res://assets/sounds/30375__sjonas88__smooth-game-like-sounds/538549__sjonas88__select-2.wav" id="71_ghxvk"]
 [ext_resource type="Texture2D" uid="uid://dllymmym0335n" path="res://assets/icons/pixelitos/16/system-shutdown.png" id="87_1yqbe"]
 [ext_resource type="Texture2D" uid="uid://brf74puvpnwsd" path="res://assets/graphics/retrodeck.png" id="93_f7ex4"]
-[ext_resource type="Script" path="res://retrodeck.gd" id="94_8nlr1"]
+[ext_resource type="Script" path="res://scripts/retrodeck.gd" id="94_8nlr1"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_omewi"]
 bg_color = Color(0.712505, 0, 0.175592, 1)
@@ -207,7 +215,7 @@ size_flags_horizontal = 3
 unique_name_in_owner = true
 layout_mode = 2
 tab_alignment = 1
-current_tab = 2
+current_tab = 3
 script = ExtResource("3_id6l4")
 
 [node name="GLOBALS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
@@ -267,7 +275,7 @@ layout_mode = 2
 text = "TATE MODE"
 icon = ExtResource("10_jm3oh")
 
-[node name="Widescreen7" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/GridContainer"]
+[node name="reset_retrodeck_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 text = "RESET
 RETROCECK"
@@ -750,15 +758,16 @@ action_mode = 0
 text = "INSTALL FIRMWARE"
 icon = ExtResource("8_ec4gt")
 
-[node name="rpcs3_scan_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/sysems_container/action_gridcontainer"]
+[node name="vita3k_firmware_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/sysems_container/action_gridcontainer"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 action_mode = 0
-text = "SCAN GAMES"
-icon = ExtResource("8_ec4gt")
+text = "INSTALL FIRMWARE"
+icon = ExtResource("38_vsjf2")
 
 [node name="TOOLS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
 script = ExtResource("50_wqa5h")
 metadata/_tab_index = 2
@@ -910,8 +919,8 @@ disabled = true
 text = "TK_3DSDECRYPT"
 
 [node name="SETTINGS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
-visible = false
 layout_mode = 2
+script = ExtResource("54_bxhvn")
 metadata/_tab_index = 3
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS"]
@@ -938,12 +947,14 @@ layout_mode = 2
 layout_mode = 2
 button_pressed = true
 text = "TK_UPDATENOTIF"
+icon = ExtResource("55_x32s4")
 
 [node name="easter_eggs" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/system_container"]
 layout_mode = 2
 disabled = true
 button_pressed = true
 text = "TK_EASTEREGGS"
+icon = ExtResource("56_witym")
 
 [node name="multi_user_container" type="HBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/system_container"]
 layout_mode = 2
@@ -960,6 +971,7 @@ size_flags_horizontal = 10
 selected = 0
 item_count = 3
 popup/item_0/text = "TK_OFF"
+popup/item_0/icon = ExtResource("57_7b0kp")
 popup/item_1/text = "TK_STEAMUSR"
 popup/item_1/id = 1
 popup/item_2/text = "TK_CUSTOMUSR"
@@ -969,11 +981,18 @@ popup/item_2/id = 2
 layout_mode = 2
 button_pressed = true
 text = "TK_MUSIC"
+icon = ExtResource("58_oismn")
 
 [node name="fancy_audio_player_here_(please_no)" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/system_container"]
 layout_mode = 2
 size_flags_vertical = 1
 text = "|| ------( )--------"
+
+[node name="sound_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/system_container"]
+layout_mode = 2
+button_pressed = true
+text = "SOUND"
+icon = ExtResource("9_qwq2k")
 
 [node name="theme_optionbutton" type="OptionButton" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer"]
 unique_name_in_owner = true
@@ -981,15 +1000,20 @@ layout_mode = 2
 selected = 0
 item_count = 5
 popup/item_0/text = "Choose Theme"
+popup/item_0/icon = ExtResource("54_dah1j")
 popup/item_0/disabled = true
 popup/item_0/separator = true
 popup/item_1/text = "Default"
+popup/item_1/icon = ExtResource("55_wv2p5")
 popup/item_1/id = 1
 popup/item_2/text = "Retro"
+popup/item_2/icon = ExtResource("56_ubqc2")
 popup/item_2/id = 2
 popup/item_3/text = "Modern"
+popup/item_3/icon = ExtResource("55_wv2p5")
 popup/item_3/id = 3
 popup/item_4/text = "OpenDyslexic3"
+popup/item_4/icon = ExtResource("56_ubqc2")
 popup/item_4/id = 4
 
 [node name="cheevos_container" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer"]

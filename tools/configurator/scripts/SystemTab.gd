@@ -43,20 +43,19 @@ func _connect_signals() -> void:
 	%reset_button.button_down.connect(_do_action.bind(%reset_button))
 	%reset_button.button_up.connect(_on_Button_released.bind(%reset_progress))
 	%rpcs3_firmware_button.pressed.connect(_do_action.bind(%rpcs3_firmware_button))
-
-func extra_buttons () -> void:
-	print ("Extra")
-
+	%vita3k_firmware_button.pressed.connect(_do_action.bind(%vita3k_firmware_button))
+	
 func standard_buttons(button: Button, buttons_gridcontainer: GridContainer, hidden_gridcontainer: GridContainer) -> void:
 	current_system = app_data.emulators[button.text.to_lower()]
 	%reset_button.text="RESET"
 	match button.name:
+		"vita3k_button":
+			%vita3k_firmware_button.visible = true
 		"rpcs3_button":
 			%rpcs3_firmware_button.visible = true
-			%rpcs3_scan_button.visible = true
 		_:
+			%vita3k_firmware_button.visible = false
 			%rpcs3_firmware_button.visible = false
-			%rpcs3_scan_button.visible = false
 	hidden_gridcontainer.visible = true
 	if button.toggle_mode == false:
 		for i in range(buttons_gridcontainer.get_child_count()):
@@ -101,6 +100,10 @@ func _do_action(button: Button) -> void:
 		["rpcs3_firmware_button", current_system.name]:
 			class_functions.logger("i", "Firmware install " + current_system.name)
 			var launch = class_functions.execute_command(class_functions.wrapper_command,["update_rpcs3_firmware"], false)
+			class_functions.logger("d", "Exit Code: " + str(launch["exit_code"]))
+		["vita3k_firmware_button", current_system.name]:
+			class_functions.logger("i", "Firmware install " + current_system.name)
+			var launch = class_functions.execute_command(class_functions.wrapper_command,["update_vita3k_firmware"], false)
 			class_functions.logger("d", "Exit Code: " + str(launch["exit_code"]))
 
 func _do_complete() ->void:

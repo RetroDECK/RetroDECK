@@ -13,7 +13,7 @@ var l1_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts
 var r1_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0798.png")
 var app_data := AppData.new()
 
-func _ready():
+func _ready():	
 	_get_nodes()
 	_connect_signals()
 	_play_main_animations()
@@ -71,7 +71,6 @@ func _get_nodes() -> void:
 func _connect_signals() -> void:
 	#signal_theme_changed.connect(_conf_theme)
 	theme_option.item_selected.connect(_conf_theme)
-	#signal_theme_changed.emit(theme_option.item_selected)
 	log_option.item_selected.connect(_load_log)
 	%borders_button.pressed.connect(_hide_show_buttons.bind(%borders_button,%borders_gridcontainer,%decorations_gridcontainer))
 	%button_layout.pressed.connect(_hide_show_buttons.bind(%button_layout,%borders_gridcontainer,%decorations_gridcontainer))
@@ -79,6 +78,22 @@ func _connect_signals() -> void:
 	%decorations_button.pressed.connect(_hide_show_containers.bind(%decorations_button, %decorations_gridcontainer))
 	%systems_button.pressed.connect(_hide_show_containers.bind(%systems_button, %systems_gridcontainer))
 	%save_resume_button.pressed.connect(_hide_show_containers.bind(%decorations_button,%systems_gridcontainer))
+
+func _conf_theme(index: int) -> void: 
+	match index:
+		1:
+			class_functions.logger("i","Set theme to index " + str(index))
+			custom_theme = preload("res://res/pixel_ui_theme/RetroDECKTheme.tres")
+		2:
+			class_functions.logger("i","Set theme to index " + str(index))
+			custom_theme = preload("res://assets/themes/retro_theme.tres")
+		3:
+			class_functions.logger("i","Set theme to index " + str(index))
+			custom_theme = preload("res://assets/themes/modern_theme.tres")
+		4:
+			class_functions.logger("i","Set theme to index " + str(index))
+			custom_theme = preload("res://assets/themes/accesible_theme.tres")
+	$".".theme = custom_theme
 
 func _load_log(index: int) -> void:
 	var log_content:String
@@ -134,22 +149,6 @@ func _hide_show_buttons(button: Button, buttons_gridcontainer: GridContainer, hi
 						child.toggle_mode = false
 			button.toggle_mode = true
 
-func _conf_theme(index: int) -> void: 
-	match index:
-		1:
-			class_functions.logger("i","Set theme to index " + str(index))
-			custom_theme = preload("res://res/pixel_ui_theme/RetroDECKTheme.tres")
-		2:
-			class_functions.logger("i","Set theme to index " + str(index))
-			custom_theme = preload("res://assets/themes/retro_theme.tres")
-		3:
-			class_functions.logger("i","Set theme to index " + str(index))
-			custom_theme = preload("res://assets/themes/modern_theme.tres")
-		4:
-			class_functions.logger("i","Set theme to index " + str(index))
-			custom_theme = preload("res://assets/themes/accesible_theme.tres")
-	$".".theme = custom_theme
-	_play_main_animations()
 
 func findElements(node: Node, className: String, result: Array = []) -> Array:
 	if node.is_class(className):
