@@ -1,4 +1,4 @@
-[gd_scene load_steps=111 format=3 uid="uid://61f6m4r1mpan"]
+[gd_scene load_steps=113 format=3 uid="uid://61f6m4r1mpan"]
 
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
 [ext_resource type="Theme" uid="uid://hhc60cllcg47" path="res://assets/themes/default_theme.tres" id="1_if8nh"]
@@ -79,11 +79,12 @@
 [ext_resource type="Texture2D" uid="uid://b6vndtbu4qduo" path="res://assets/icons/pixelitos/128/preferences-desktop-launch-feedback.png" id="45_qxd26"]
 [ext_resource type="Texture2D" uid="uid://3sw7gtoiuab3" path="res://assets/icons/pixelitos/128/help-browser.png" id="46_feagl"]
 [ext_resource type="Texture2D" uid="uid://b0awa8venu1h8" path="res://assets/icons/pixelitos/128/cs-network.png" id="50_5d2ui"]
-[ext_resource type="Texture2D" uid="uid://bafdexg6aq8tn" path="res://assets/icons/pixelitos/128/applications-accessories.png" id="50_h3jx2"]
 [ext_resource type="Texture2D" uid="uid://be3tmvgoa1wua" path="res://assets/icons/pixelitos/128/applications-development.png" id="50_tl5ty"]
 [ext_resource type="Script" path="res://scripts/ToolsTab.gd" id="50_wqa5h"]
+[ext_resource type="Texture2D" uid="uid://33f5uahr5tqm" path="res://assets/icons/pixelitos/128/mate-system-log.png" id="52_1rasc"]
 [ext_resource type="Script" path="res://scripts/SettingsTab.gd" id="54_bxhvn"]
 [ext_resource type="Texture2D" uid="uid://dk4567tpvqpr6" path="res://assets/icons/pixelitos/128/preferences-desktop-plasma-theme.png" id="54_dah1j"]
+[ext_resource type="Texture2D" uid="uid://c5ik1giuv1ar5" path="res://assets/icons/pixelitos/128/system-lock-screen.png" id="54_f245y"]
 [ext_resource type="Texture2D" uid="uid://d4ee8j2kh1tmy" path="res://assets/icons/pixelitos/128/cs-themes.png" id="55_wv2p5"]
 [ext_resource type="Texture2D" uid="uid://cfcgi6owxt3uu" path="res://assets/icons/pixelitos/128/preferences-system-notifications.png" id="55_x32s4"]
 [ext_resource type="Texture2D" uid="uid://dw3tdbhmpkst7" path="res://assets/icons/pixelitos/128/preferences-desktop-theme-applications.png" id="56_ubqc2"]
@@ -110,6 +111,9 @@ bg_color = Color(0.712505, 0, 0.175592, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1161k"]
 bg_color = Color(0.101961, 0.623529, 1, 0.376471)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8lrwm"]
+bg_color = Color(0.352941, 0.858824, 0.129412, 0.556863)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_lhf2y"]
 animations = [{
@@ -796,7 +800,7 @@ alignment = 1
 selected = 0
 item_count = 4
 popup/item_0/text = "LOGS"
-popup/item_0/icon = ExtResource("50_h3jx2")
+popup/item_0/icon = ExtResource("52_1rasc")
 popup/item_0/disabled = true
 popup/item_0/separator = true
 popup/item_1/text = "RetroDECK Log"
@@ -818,6 +822,26 @@ icon = ExtResource("50_tl5ty")
 layout_mode = 2
 text = "BIOS EXPERT"
 icon = ExtResource("50_tl5ty")
+
+[node name="backup_user_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/troubleshoot_container"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "BACKUP USER DATA"
+icon = ExtResource("54_f245y")
+
+[node name="progress_bar_backup" type="ProgressBar" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/troubleshoot_container/backup_user_button"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_8lrwm")
+show_percentage = false
+indeterminate = true
+editor_preview_indeterminate = false
 
 [node name="controls_container" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer"]
 layout_mode = 2

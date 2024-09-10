@@ -7,27 +7,39 @@ var wrapper_command: String = "/app/tools/retrodeck_function_wrapper.sh"
 var config_file_path = "/var/config/retrodeck/retrodeck.cfg"
 var json_file_path = "/var/config/retrodeck/retrodeck.json"
 var desktop_mode: String = OS.get_environment("XDG_CURRENT_DESKTOP")
+var rdhome: String
+var roms_folder: String
+var saves_folder: String
+var states_folder: String
+var bios_folder: String
 var rd_log: String
 var rd_log_folder: String
 var rd_version: String
 var gc_version: String
 var sound_effects: bool = true
+var title: String
 
-func read_cfg() -> String:
-	var title: String
+func _ready():
 	var config = data_handler.parse_config_to_json(config_file_path)
 	data_handler.config_save_json(config, json_file_path)
 	rd_log_folder = config["paths"]["logs_folder"]
 	rd_log = rd_log_folder + "/retrodeck.log"
-	#rd_log = "/var/config/retrodeck/logs/retrodeck.log"
-	
+	rdhome = config["paths"]["rdhome"]
+	roms_folder = config["paths"]["roms_folder"]
+	saves_folder = config["paths"]["saves_folder"]
+	states_folder = config["paths"]["states_folder"]
+	bios_folder = config["paths"]["bios_folder"]
 	rd_version = config["version"]
 	gc_version = ProjectSettings.get_setting("application/config/version")
 	title = "\n   " + rd_version + "\nConfigurator\n    " + gc_version
-	print ("Make logging a function\nAlso add d,i,e,w: ", rd_log)
-	return title
+
 
 func logger(log_type: String, log_text: String) -> void:
+	# Type of log messages:
+	# log d - debug message: maybe in the future we can decide to hide them in main builds or if an option is toggled
+	# log i - normal informational message
+	# log w - waring: something is not expected but it's not a big deal
+	# log e - error: something broke
 	var log_header_text = "gdc_"
 	log_header_text+=log_text
 	log_parameters = ["log", log_type, log_header_text]

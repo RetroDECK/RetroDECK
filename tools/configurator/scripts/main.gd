@@ -19,7 +19,7 @@ func _ready():
 	_play_main_animations()
 	%locale_option.selected = class_functions.map_locale_id(OS.get_locale_language())
 	#class_functions.logger()	
-	%rd_title.text += class_functions.read_cfg()
+	%rd_title.text += class_functions.title
 	class_functions.logger("i","Started Godot configurator")
 	
 	#var log_file = class_functions.import_text_file(rd_logs +"/retrodeck.log")
@@ -148,7 +148,6 @@ func _hide_show_buttons(button: Button, buttons_gridcontainer: GridContainer, hi
 						child.visible=true
 						child.toggle_mode = false
 			button.toggle_mode = true
-
 
 func findElements(node: Node, className: String, result: Array = []) -> Array:
 	if node.is_class(className):
