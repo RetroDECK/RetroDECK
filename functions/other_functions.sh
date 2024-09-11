@@ -936,7 +936,6 @@ find_emulator() {
 
 
 # TODO: add the logic of alt emulator and default emulator
-# TODO: if the emulator is only one just skip the zenity and run it
 
 run_game() {
 
@@ -1085,38 +1084,44 @@ replace_emulator_placeholder() {
 
   # Extracting the commands from es_systems.xml for the selected system
   find_system_commands() {
-    local system_name=$system
-    # Use xmllint to extract the system commands from the XML
-    system_section=$(xmllint --xpath "//system[name='$system_name']" "$xml_file" 2>/dev/null)
-    
-    if [ -z "$system_section" ]; then
-        log e "System not found: $system_name"
-        exit 1
-    fi
+      local system_name=$system
+      # Use xmllint to extract the system commands from the XML
+      system_section=$(xmllint --xpath "//system[name='$system_name']" "$xml_file" 2>/dev/null)
+      
+      if [ -z "$system_section" ]; then
+          log e "System not found: $system_name"
+          exit 1
+      fi
 
-    # Extract commands and labels
-    commands=$(echo "$system_section" | xmllint --xpath "//command" - 2>/dev/null)
+      # Extract commands and labels
+      commands=$(echo "$system_section" | xmllint --xpath "//command" - 2>/dev/null)
 
-    # Prepare Zenity command list
-    command_list=()
-    while IFS= read -r line; do
-        label=$(echo "$line" | sed -n 's/.*label="\([^"]*\)".*/\1/p')
-        command=$(echo "$line" | sed -n 's/.*<command[^>]*>\(.*\)<\/command>.*/\1/p')
-        
-        # Substitute placeholders in the command
-        command=$(substitute_placeholders "$command")
-        
-        # Add label and command to Zenity list (label first, command second)
-        command_list+=("$label" "$command")
-    done <<< "$commands"
+      # Prepare Zenity command list
+      command_list=()
+      while IFS= read -r line; do
+          label=$(echo "$line" | sed -n 's/.*label="\([^"]*\)".*/\1/p')
+          command=$(echo "$line" | sed -n 's/.*<command[^>]*>\(.*\)<\/command>.*/\1/p')
+          
+          # Substitute placeholders in the command
+          command=$(substitute_placeholders "$command")
+          
+          # Add label and command to Zenity list (label first, command second)
+          command_list+=("$label" "$command")
+      done <<< "$commands"
 
-    # Show the list with Zenity and return the **command** (second column) selected
-    selected_command=$(zenity --list \
-        --title="Select an emulator for $system_name" \
-        --column="Emulator" --column="Hidden Command" "${command_list[@]}" \
-        --width=800 --height=400 --print-column=2 --hide-column=2)
+      # Check if there's only one command
+      if [ ${#command_list[@]} -eq 2 ]; then
+          log d "Only one command found for $system_name, running it directly: ${command_list[1]}"
+          selected_command="${command_list[1]}"
+      else
+          # Show the list with Zenity and return the **command** (second column) selected
+          selected_command=$(zenity --list \
+              --title="Select an emulator for $system_name" \
+              --column="Emulator" --column="Hidden Command" "${command_list[@]}" \
+              --width=800 --height=400 --print-column=2 --hide-column=2)
+      fi
 
-    echo "$selected_command"
+      echo "$selected_command"
   }
 
   # If the emulator is not specified, ask the user to select it or get it from the XML file
