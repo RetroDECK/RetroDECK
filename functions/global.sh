@@ -18,40 +18,43 @@ source /app/libexec/post_update.sh
 source /app/libexec/prepare_component.sh
 source /app/libexec/presets.sh
 source /app/libexec/configurator_functions.sh
+source /app/libexec/run_game.sh
 
 # Static variables
-rd_conf="/var/config/retrodeck/retrodeck.cfg"                                                                         # RetroDECK config file path
-rd_conf_backup="/var/config/retrodeck/retrodeck.bak"                                                                  # Backup of RetroDECK config file from update
-rd_logs_folder="/var/config/retrodeck/logs"                                                                           # Static location to write all RetroDECK-related logs
-config="/app/retrodeck/config"                                                                               # folder with all the default emulator configs
+rd_conf="/var/config/retrodeck/retrodeck.cfg"                                                            # RetroDECK config file path
+rd_conf_backup="/var/config/retrodeck/retrodeck.bak"                                                     # Backup of RetroDECK config file from update
+rd_logs_folder="/var/config/retrodeck/logs"                                                              # Static location to write all RetroDECK-related logs
+config="/app/retrodeck/config"                                                                           # folder with all the default emulator configs
 rd_defaults="$config/retrodeck/retrodeck.cfg"                                                            # A default RetroDECK config file
-rd_update_patch="/var/config/retrodeck/rd_update.patch"                                                               # A static location for the temporary patch file used during retrodeck.cfg updates
+rd_update_patch="/var/config/retrodeck/rd_update.patch"                                                  # A static location for the temporary patch file used during retrodeck.cfg updates
 bios_checklist="$config/retrodeck/reference_lists/bios_checklist.cfg"                                    # A config file listing BIOS file information that can be verified
 input_validation="$config/retrodeck/reference_lists/input_validation.cfg"                                # A config file listing valid CLI inputs
 finit_options_list="$config/retrodeck/reference_lists/finit_options_list.cfg"                            # A config file listing available optional installs during finit
-splashscreen_dir="/var/config/ES-DE/resources/graphics/extra_splashes"                                                # The default location of extra splash screens
-current_splash_file="/var/config/ES-DE/resources/graphics/splash.svg"                                                 # The active splash file that will be shown on boot
-default_splash_file="/var/config/ES-DE/resources/graphics/splash-orig.svg"                                            # The default RetroDECK splash screen
+splashscreen_dir="/var/config/ES-DE/resources/graphics/extra_splashes"                                   # The default location of extra splash screens
+current_splash_file="/var/config/ES-DE/resources/graphics/splash.svg"                                    # The active splash file that will be shown on boot
+default_splash_file="/var/config/ES-DE/resources/graphics/splash-orig.svg"                               # The default RetroDECK splash screen
 # TODO: instead of this maybe we can iterate the features.json
 multi_user_emulator_config_dirs="$config/retrodeck/reference_lists/multi_user_emulator_config_dirs.cfg"  # A list of emulator config folders that can be safely linked/unlinked entirely in multi-user mode
-rd_es_themes="/app/share/es-de/themes"                                                                                # The directory where themes packaged with RetroDECK are stored
-lockfile="/var/config/retrodeck/.lock"                                                                                # Where the lockfile is located
-default_sd="/run/media/mmcblk0p1"                                                                                     # Steam Deck SD default path                                                                        # A static location for RetroDECK logs to be written
-hard_version="$(cat '/app/retrodeck/version')"                                                                        # hardcoded version (in the readonly filesystem)
-rd_repo="https://github.com/RetroDECK/RetroDECK"                                                                      # The URL of the main RetroDECK GitHub repo
-es_themes_list="https://gitlab.com/es-de/themes/themes-list/-/raw/master/themes.json"                                 # The URL of the ES-DE 2.0 themes list
-remote_network_target_1="https://flathub.org"                                                                         # The URL of a common internet target for testing network access
-remote_network_target_2="$rd_repo"                                                                                    # The URL of a common internet target for testing network access
-remote_network_target_3="https://one.one.one.one"                                                                     # The URL of a common internet target for testing network access
+rd_es_themes="/app/share/es-de/themes"                                                                   # The directory where themes packaged with RetroDECK are stored
+lockfile="/var/config/retrodeck/.lock"                                                                   # Where the lockfile is located
+default_sd="/run/media/mmcblk0p1"                                                                        # Steam Deck SD default path
+hard_version="$(cat '/app/retrodeck/version')"                                                           # hardcoded version (in the readonly filesystem)
+rd_repo="https://github.com/RetroDECK/RetroDECK"                                                         # The URL of the main RetroDECK GitHub repo
+es_themes_list="https://gitlab.com/es-de/themes/themes-list/-/raw/master/themes.json"                    # The URL of the ES-DE 2.0 themes list
+remote_network_target_1="https://flathub.org"                                                            # The URL of a common internet target for testing network access
+remote_network_target_2="$rd_repo"                                                                       # The URL of a common internet target for testing network access
+remote_network_target_3="https://one.one.one.one"                                                        # The URL of a common internet target for testing network access
 helper_files_folder="$config/retrodeck/helper_files"                                                     # The parent folder of RetroDECK documentation files for deployment
-rd_appdata="/app/share/appdata/net.retrodeck.retrodeck.appdata.xml"                                                   # The shipped appdata XML file for this version
-rpcs3_firmware="http://dus01.ps3.update.playstation.net/update/ps3/image/us/2024_0227_3694eb3fb8d9915c112e6ab41a60c69f/PS3UPDAT.PUP"
-RA_API_URL="https://retroachievements.org/dorequest.php"                                                              # API URL for RetroAchievements.org
+rd_appdata="/app/share/appdata/net.retrodeck.retrodeck.appdata.xml"                                      # The shipped appdata XML file for this version
+rpcs3_firmware="http://dus01.ps3.update.playstation.net/update/ps3/image/us/2024_0227_3694eb3fb8d9915c112e6ab41a60c69f/PS3UPDAT.PUP" # RPCS3 Firmware download location
+RA_API_URL="https://retroachievements.org/dorequest.php"                                                 # API URL for RetroAchievements.org
 presets_dir="$config/retrodeck/presets"                                                                  # Repository for all system preset config files
-git_organization_name="RetroDECK"                                                                       # The name of the organization in our git repository such as GitHub
-cooker_repository_name="Cooker"                                                                         # The name of the cooker repository under RetroDECK organization
-main_repository_name="RetroDECK"                                                                        # The name of the main repository under RetroDECK organization
-features="$config/retrodeck/reference_lists/features.json"                                                 # A file where all the RetroDECK and component capabilities are kept for querying
+git_organization_name="RetroDECK"                                                                        # The name of the organization in our git repository such as GitHub
+cooker_repository_name="Cooker"                                                                          # The name of the cooker repository under RetroDECK organization
+main_repository_name="RetroDECK"                                                                         # The name of the main repository under RetroDECK organization
+features="$config/retrodeck/reference_lists/features.json"                                               # A file where all the RetroDECK and component capabilities are kept for querying
+es_systems="/app/share/es-de/resources/systems/linux/es_systems.xml"                                     # ES-DE supported system list   
+es_find_rules="/app/share/es-de/resources/systems/linux/es_find_rules.xml"                               # ES-DE emulator find rules
 
 
 # Godot data transfer temp files
