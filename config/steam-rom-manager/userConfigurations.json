@@ -23,7 +23,7 @@
             "appendArgsToExecutable": true
         },
         "parserInputs": {
-            "glob": "${title}.sh"
+            "glob": "${title}.desktop"
         },
         "titleFromVariable": {
             "limitToGroups": "",

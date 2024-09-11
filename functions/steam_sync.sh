@@ -75,8 +75,8 @@ add_to_steam() {
 
           log d "Sanitized Name: $sanitized_name"
 
-          local launcher="$steamsync_folder/${sanitized_name}.sh"
-          log d "Creating shortcut at path: $launcher"
+          local launcher="$steamsync_folder/${sanitized_name}.desktop"
+          log d "Creating desktop file: $launcher"
 
           # if [[ -v command_list_default[$system] ]]; then
           #   command="${command_list_default[$system]}"
@@ -88,13 +88,17 @@ add_to_steam() {
           # Populate the .sync script with the correct command
           # TODO: if there is any emulator defined in the xml we use that, else... how we can know which is the default one?
           local command="flatpak run net.retrodeck.retrodeck start -s $system \"$roms_folder/$system/$path\""
-          echo -e '#!/bin/bash\n' > "$launcher"
-          echo -e "if [ test \"$(whereis flatpak)\" = \"flatpak:\" ]; then" >> "$launcher"
-          echo -e "\tflatpak-spawn --host $command" >> "$launcher"
-          echo -e "else" >> "$launcher"
-          echo -e "\t$command" >> "$launcher"
-          echo -e "fi" >> "$launcher"
-
+          cat <<EOF > "$launcher"
+[Desktop Entry]
+Version=1.0
+Name=$name
+Comment=$name via RetroDECK
+Exec=bash -c 'if [ "\$(whereis flatpak)" = "flatpak:" ]; then flatpak-spawn --host $command; else $command; fi'
+Icon=net.retrodeck.retrodeck
+Terminal=false
+Type=Application
+Categories=Game;Emulator;
+EOF
           chmod +x "$launcher"
         done
     fi
