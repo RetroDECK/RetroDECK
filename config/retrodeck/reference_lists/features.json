@@ -963,8 +963,7 @@
       "system": [
         "arcade"
       ],
-      "launch": "mame",
-      "launch-args": "-inipath /var/config/mame/ini -rompath $(dirname \"$game\") $game"
+      "launch": "mame"
     },
     "citra": {
       "description": "Citra Nintendo 3DS Emulator (via Ponzu)",
@@ -1000,7 +999,6 @@
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/pcsx2/pcsx2-guide/",
       "system": "ps2",
       "launch": "pcsx2-qt",
-      "launch-args": "-batch $game",
       "properties": [
         {
           "ask_to_exit": true,
@@ -1013,7 +1011,6 @@
       "description": "PlayStation Emulator",
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/duckstation/duckstation-guide/",
       "launch": "duckstation-qt",
-      "launch-args": "-batch $game",
       "system": "psx",
       "properties": [
         {
@@ -1040,8 +1037,7 @@
       "description": "Vita3K PSVita Emulator",
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/vita3k/vita3k-guide/",
       "system": "psvita",
-      "launch": "Vita3K",
-      "launch-args": "-r $game.psvita"
+      "launch": "Vita3K"
     },
     "rpcs3": {
       "name": "RPCS3",
@@ -1069,7 +1065,6 @@
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_about/what-is-retrodeck/",
       "launch": "Yuzu",
       "system": "switch",
-      "launch-args": "-f -g $game",
       "ponzu": true,
       "abxy_button": true
     },
@@ -1084,7 +1079,6 @@
       "description": "Dolphin Wii and GameCube Emulator",
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/dolphin-primehack/dolphin-primehack-guide/",
       "launch": "dolphin-emu-wrapper",
-      "launch-args": "-e $game",
       "system": [
         "gc",
         "wii"
@@ -1104,7 +1098,6 @@
       "description": "A fork of Dolphiin to enhance Metroid Prime experience",
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/dolphin-primehack/dolphin-primehack-guide/",
       "launch": "primehack-wrapper",
-      "launch-args": "-e $game",
       "system": [
         "wii"
       ],
@@ -1121,7 +1114,6 @@
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/cemu/cemu-guide/",
       "system": "wiiu",
       "launch": "Cemu-wrapper",
-      "launch-args": "-g $game",
       "properties": [
         {
           "abxy_button": true,
@@ -1134,8 +1126,7 @@
       "name": "xemu",
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/xemu/xemu-guide/",
       "system": "xbox",
-      "launch": "xemu",
-      "launch-args": "-dvd_path $game"
+      "launch": "xemu"
     },
     "es-de": {
       "description": "ES-DE Emulation Frontend",

@@ -23,14 +23,16 @@ for i in "$@"; do
 flatpak run [FLATPAK-RUN-OPTION] net.retrodeck-retrodeck [ARGUMENTS]
 
 Arguments:
-    -h, --help                      Print this help
-    -v, --version                   Print RetroDECK version
-    --info-msg                      Print paths and config informations
-    --configurator                  Starts the RetroDECK Configurator
-    --compress-one <file>           Compresses target file to a compatible format
-    --compress-all <format>         Compresses all supported games into a compatible format. Available formats are \"chd\", \"zip\", \"rvz\" and \"all\".
-    --reset-component <component>   Reset one or more component or emulator configs to the default values
-    --reset-retrodeck               Starts the initial RetroDECK installer (backup your data first!)
+    -h, --help                          \t  Print this help
+    -v, --version                       \t  Print RetroDECK version
+    --info-msg                          \t  Print paths and config informations
+    --configurator                      \t  Starts the RetroDECK Configurator
+    --compress-one <file>               \t  Compresses target file to a compatible format
+    --compress-all <format>             \t  Compresses all supported games into a compatible format.\n\t\t\t\t\t\t  Available formats are \"chd\", \"zip\", \"rvz\" and \"all\".
+    --reset-component <component>       \t  Reset one or more component or emulator configs to the default values
+    --reset-retrodeck                   \t  Starts the initial RetroDECK installer (backup your data first!)
+
+    start [-s <path>] [-e <path>] <path>\t  Start a game from cli, if no system is defined it will deducted from the path.\n\t\t\t\t\t\t  For example flatpak run net.retrodeck.retrodeck start ~/retrodeck/roms/system/game.ext will be run with the system "system".\n\t\t\t\t\t\t  Optionally -e (emulator) and -s (system) can be passed as arguments.
 
 For flatpak run specific options please run: flatpak run -h
 
@@ -40,6 +42,11 @@ https://retrodeck.net
       ;;
     --version*|-v*)
       echo "RetroDECK v$version"
+      exit
+      ;;
+    start*)
+      shift # Remove "start"
+      run_game "$@"
       exit
       ;;
     --info-msg*)
