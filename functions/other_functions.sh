@@ -895,9 +895,10 @@ start_retrodeck() {
 find_emulator() {
   local emulator_name=$1
   local found_path=""
+  local es_find_rules="/app/share/es-de/resources/systems/linux/es_find_rules.xml"
 
   # Search the es_find_rules.xml file for the emulator
-  emulator_section=$(xmllint --xpath "//emulator[@name='$emulator_name']" "/app/share/es-de/resources/systems/linux/es_find_rules.xml" 2>/dev/null)
+  emulator_section=$(xmllint --xpath "//emulator[@name='$emulator_name']" "$es_find_rules" 2>/dev/null)
   
   if [ -z "$emulator_section" ]; then
       log e "Emulator not found: $emulator_name"
@@ -938,13 +939,15 @@ find_emulator() {
 # TODO: add the logic of alt emulator and default emulator
 
 run_game() {
+  # call me with (-e emulator) (-s system) game/path, examples:
+  # run_game -e gambatte_libretro ~/retrodeck/roms/gb/Capumon.gb
+  # run_game ~/retrodeck/roms/gb/Capumon.gb
+  # run_game -s gbc ~/retrodeck/roms/gb/Capumon.gb
 
   # Initialize variables
   emulator=""
   system=""
-
-  # Path to the es_systems.xml file
-  xml_file="/app/share/es-de/resources/systems/linux/es_systems.xml"
+  es_systems="/app/share/es-de/resources/systems/linux/es_systems.xml"
 
   # Parse options
   while getopts ":e:s:" opt; do
@@ -965,8 +968,8 @@ run_game() {
 
   # Check for game argument
   if [[ -z "$1" ]]; then
-      echo "Error: Game file is required."
-      echo "Usage: $0 --run [-e emulator] [-s system] game"
+      log e "Game path is required."
+      log i "Usage: $0 start [-e emulator] [-s system] game"
       exit 1
   fi
 
@@ -980,64 +983,66 @@ run_game() {
   log d "Game: \"$game\""
   log d "System: \"$system\""
 
-# Function to handle the %INJECT% placeholder
-handle_inject_placeholder() {
-    local cmd="$1"
-    local rom_dir=$(dirname "$game") # Get the ROM directory based on the game path
+  # Function to handle the %INJECT% placeholder
+  # When %INJECT%=filename is found in the game command it will check for the existence of the file
+  # If the file is found the "%INJECT%=file" will be replaced with the contents of the found file
+  handle_inject_placeholder() {
+      local cmd="$1"
+      local rom_dir=$(dirname "$game") # Get the ROM directory based on the game path
 
-    # Find and process all occurrences of %INJECT%='something'.extension
-    while [[ "$cmd" =~ (%INJECT%=\'([^\']+)\')(.[^ ]+)? ]]; do
-        inject_file="${BASH_REMATCH[2]}"  # Extract the quoted file name
-        extension="${BASH_REMATCH[3]}"    # Extract the extension (if any)
-        inject_file_full_path="$rom_dir/$inject_file$extension"  # Form the full path
+      # Find and process all occurrences of %INJECT%='something'.extension
+      while [[ "$cmd" =~ (%INJECT%=\'([^\']+)\')(.[^ ]+)? ]]; do
+          inject_file="${BASH_REMATCH[2]}"  # Extract the quoted file name
+          extension="${BASH_REMATCH[3]}"    # Extract the extension (if any)
+          inject_file_full_path="$rom_dir/$inject_file$extension"  # Form the full path
 
-        log d "Found inject part: %INJECT%='$inject_file'$extension"
+          log d "Found inject part: %INJECT%='$inject_file'$extension"
 
-        # Check if the file exists
-        if [[ -f "$inject_file_full_path" ]]; then
-            # Read the content of the file and replace newlines with spaces
-            inject_content=$(cat "$inject_file_full_path" | tr '\n' ' ')
-            log i "File \"$inject_file_full_path\" found. Replacing %INJECT% with content."
+          # Check if the file exists
+          if [[ -f "$inject_file_full_path" ]]; then
+              # Read the content of the file and replace newlines with spaces
+              inject_content=$(cat "$inject_file_full_path" | tr '\n' ' ')
+              log i "File \"$inject_file_full_path\" found. Replacing %INJECT% with content."
 
-            # Escape special characters in the inject part for the replacement
-            escaped_inject_part=$(printf '%s' "%INJECT%='$inject_file'$extension" | sed 's/[]\/$*.^[]/\\&/g')
+              # Escape special characters in the inject part for the replacement
+              escaped_inject_part=$(printf '%s' "%INJECT%='$inject_file'$extension" | sed 's/[]\/$*.^[]/\\&/g')
 
-            # Replace the entire %INJECT%=...'something'.extension part with the file content
-            cmd=$(echo "$cmd" | sed "s|$escaped_inject_part|$inject_content|g")
+              # Replace the entire %INJECT%=...'something'.extension part with the file content
+              cmd=$(echo "$cmd" | sed "s|$escaped_inject_part|$inject_content|g")
 
-            log d "Replaced cmd: $cmd"
-        else
-            log e "File \"$inject_file_full_path\" not found. Removing %INJECT% placeholder."
+              log d "Replaced cmd: $cmd"
+          else
+              log e "File \"$inject_file_full_path\" not found. Removing %INJECT% placeholder."
 
-            # Use sed to remove the entire %INJECT%=...'something'.extension
-            escaped_inject_part=$(printf '%s' "%INJECT%='$inject_file'$extension" | sed 's/[]\/$*.^[]/\\&/g')
-            cmd=$(echo "$cmd" | sed "s|$escaped_inject_part||g")
+              # Use sed to remove the entire %INJECT%=...'something'.extension
+              escaped_inject_part=$(printf '%s' "%INJECT%='$inject_file'$extension" | sed 's/[]\/$*.^[]/\\&/g')
+              cmd=$(echo "$cmd" | sed "s|$escaped_inject_part||g")
 
-            log d "sedded cmd: $cmd"
-        fi
-    done
+              log d "sedded cmd: $cmd"
+          fi
+      done
 
-    log d "Returning the command with injected content: $cmd"
-    echo "$cmd"
-}
+      log d "Returning the command with injected content: $cmd"
+      echo "$cmd"
+  }
 
 
-# Function to replace %EMULATOR_SOMETHING% with the actual path of the emulator
-replace_emulator_placeholder() {
-    local placeholder=$1
-    # Extract emulator name from placeholder without changing case
-    local emulator_name="${placeholder//"%EMULATOR_"/}"  # Extract emulator name after %EMULATOR_
-    emulator_name="${emulator_name//"%"/}"  # Remove the trailing %
+  # Function to replace %EMULATOR_SOMETHING% with the actual path of the emulator
+  replace_emulator_placeholder() {
+      local placeholder=$1
+      # Extract emulator name from placeholder without changing case
+      local emulator_name="${placeholder//"%EMULATOR_"/}"  # Extract emulator name after %EMULATOR_
+      emulator_name="${emulator_name//"%"/}"  # Remove the trailing %
 
-    # Use the find_emulator function to get the emulator path using the correct casing
-    local emulator_exec=$(find_emulator "$emulator_name")
-    
-    if [[ -z "$emulator_exec" ]]; then
-        log e "Emulator '$emulator_name' not found."
-        exit 1
-    fi
-    echo "$emulator_exec"
-}
+      # Use the find_emulator function to get the emulator path using the correct casing
+      local emulator_exec=$(find_emulator "$emulator_name")
+      
+      if [[ -z "$emulator_exec" ]]; then
+          log e "Emulator '$emulator_name' not found."
+          exit 1
+      fi
+      echo "$emulator_exec"
+  }
 
   # Function to substitute the placeholders
   substitute_placeholders() {
@@ -1086,7 +1091,7 @@ replace_emulator_placeholder() {
   find_system_commands() {
       local system_name=$system
       # Use xmllint to extract the system commands from the XML
-      system_section=$(xmllint --xpath "//system[name='$system_name']" "$xml_file" 2>/dev/null)
+      system_section=$(xmllint --xpath "//system[name='$system_name']" "$es_systems" 2>/dev/null)
       
       if [ -z "$system_section" ]; then
           log e "System not found: $system_name"
