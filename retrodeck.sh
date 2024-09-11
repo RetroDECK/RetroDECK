@@ -32,7 +32,7 @@ Arguments:
     --reset-component <component>       \t  Reset one or more component or emulator configs to the default values
     --reset-retrodeck                   \t  Starts the initial RetroDECK installer (backup your data first!)
 
-    --run [-s <path>] [-e <path>] <path>\t  Run a game from cli, if no system is defined it will deducted from the path.\n\t\t\t\t\t\t  For example --run ~/retrodeck/roms/system/game.ext will be run with the system "system".\n\t\t\t\t\t\t  Optionally -e (emulator) and -s (system) can be passed as arguments.
+    start [-s <path>] [-e <path>] <path>\t  Start a game from cli, if no system is defined it will deducted from the path.\n\t\t\t\t\t\t  For example flatpak run net.retrodeck.retrodeck start ~/retrodeck/roms/system/game.ext will be run with the system "system".\n\t\t\t\t\t\t  Optionally -e (emulator) and -s (system) can be passed as arguments.
 
 For flatpak run specific options please run: flatpak run -h
 
@@ -44,8 +44,8 @@ https://retrodeck.net
       echo "RetroDECK v$version"
       exit
       ;;
-    --run*)
-      shift # Remove --run
+    start*)
+      shift # Remove "start"
       run_game "$@"
       exit
       ;;
