@@ -11,17 +11,17 @@ var a_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-
 var b_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0043.png")
 var l1_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0797.png")
 var r1_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0798.png")
-var app_data := AppData.new()
 
 func _ready():	
 	_get_nodes()
 	_connect_signals()
 	_play_main_animations()
+	_set_up_globals()
 	%locale_option.selected = class_functions.map_locale_id(OS.get_locale_language())
 	#class_functions.logger()	
 	%rd_title.text += class_functions.title
 	class_functions.logger("i","Started Godot configurator")
-	
+	#class_functions.display_json_data()
 	#var log_file = class_functions.import_text_file(rd_logs +"/retrodeck.log")
 	#for id in config.paths:
 	#	var path_data = config.paths[id]
@@ -77,7 +77,6 @@ func _connect_signals() -> void:
 	%decorations_save.pressed.connect(_hide_show_buttons.bind(%decorations_save,%decorations_save.get_parent(),null))
 	%decorations_button.pressed.connect(_hide_show_containers.bind(%decorations_button, %decorations_gridcontainer))
 	%systems_button.pressed.connect(_hide_show_containers.bind(%systems_button, %systems_gridcontainer))
-	%save_resume_button.pressed.connect(_hide_show_containers.bind(%decorations_button,%systems_gridcontainer))
 
 func _conf_theme(index: int) -> void: 
 	match index:
@@ -139,7 +138,6 @@ func _hide_show_buttons(button: Button, buttons_gridcontainer: GridContainer, hi
 					if child is Button and child != button:
 						child.visible=false
 			elif button.toggle_mode == true and %borders_gridcontainer.visible == true:
-				print (button.name, "SAVE NOW? TODO") # TODO SHOW ALL AGAIN?
 				buttons_gridcontainer.visible = false
 				#button.toggle_mode = false
 				for i in range(hidden_gridcontainer.get_child_count()):
@@ -165,9 +163,6 @@ func load_popup(title:String, content_path:String, display_text: String):
 	popup.set_content(content_path)
 	popup.set_display_text(display_text)
 	$Background.add_child(popup)
-
-func _on_quickresume_advanced_pressed():
-	load_popup("Quick Resume Advanced", "res://components/popups_content/popup_content_test.tscn","")
 
 func _on_bios_button_pressed():
 	_play_main_animations()
@@ -196,22 +191,6 @@ func _on_locale_selected(index):
 			TranslationServer.set_locale("en")
 	combine_tkeys()
 
-"""			
-		1:
-			TranslationServer.set_locale("it")
-		2:
-			TranslationServer.set_locale("de")
-		3:
-			TranslationServer.set_locale("sv")
-		4:
-			TranslationServer.set_locale("ua")
-		5:
-			TranslationServer.set_locale("ja")
-		6:
-			TranslationServer.set_locale("zh")
-"""
-
-	
 func combine_tkeys(): #More as a test
 	pass
 	#%cheats.text = tr("TK_CHEATS") + " " + tr("TK_SOON") # switched to access as a unique name as easier to refactor
@@ -221,51 +200,7 @@ func combine_tkeys(): #More as a test
 	#$Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container/cheevos_advanced_container/cheevos_hardcore.text = tr("TK_CHEEVOSHARDCORE") + " " + tr("TK_SOON")
 	#$Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/data_mng_container/saves_sync.text = tr("TK_SAVESSYNC") + " " + tr("TK_SOON")
 	#$Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer/system_container/easter_eggs.text = tr("TK_EASTEREGGS") + " " + tr("TK_SOON")
-
-func display_json_data() -> void:
-	app_data = data_handler.app_data
-	#data_handler.add_emulator()
-	#data_handler.modify_emulator_test()
-	if app_data:
-		var website_data: Link = app_data.about_links["rd_web"]
-		print (website_data.name,"-",website_data.url,"-",website_data.description,"-",website_data.url)
-		#print (app_data.about_links["rd_web"]["name"])
-		var core_data: Core = app_data.cores["gambatte_libetro"]
-		print (core_data.name)
-		for property: CoreProperty in core_data.properties:
-			print("Cheevos: ", property.cheevos)
-			print("Cheevos Hardcore: ", property.cheevos_hardcore)
-			print("Quick Resume: ", property.quick_resume)
-			print("Rewind: ", property.rewind)
-			print("Borders: ", property.borders)
-			print("Widescreen: ", property.widescreen)
-			print("ABXY_button:", property.abxy_button)
-		for key in app_data.emulators.keys():
-			var emulator = app_data.emulators[key]
-			# Display the properties of each emulator
-			print("System Name: ", emulator.name)
-			print("Description: ", emulator.description)
-			#print("System: ", emulator.systen)
-			print("Help URL: ", emulator.url)
-			print("Properties:")
-			for property: EmulatorProperty in emulator.properties:
-				print("Cheevos: ", property.cheevos)
-				print("Borders: ", property.borders)
-				print("ABXY_button:", property.abxy_button)
-				print("multi_user_config_dir: ", property.multi_user_config_dir)
-		
-		for key in app_data.cores.keys():
-			var core = app_data.cores[key]
-			print("Core Name: ", core.name)
-			print("Description: ", core.description)
-			print("Properties:")
-			for property: CoreProperty in core.properties:
-				print("Cheevos: ", property.cheevos)
-				print("Cheevos Hardcore: ", property.cheevos_hardcore)
-				print("Quick Resume: ", property.quick_resume)
-				print("Rewind: ", property.rewind)
-				print("Borders: ", property.borders)
-				print("Widescreen: ", property.widescreen)
-				print("ABXY_button:", property.abxy_button)
-	else:
-		print ("No emulators")	
+	
+func _set_up_globals() -> void:
+	if class_functions.quick_resume_status:
+		%quick_resume_button.button_pressed = true

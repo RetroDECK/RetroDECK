@@ -7,12 +7,13 @@ var rd_credits_button := Button.new()
 var rd_donate_button := Button.new()
 var rd_contactus_button := Button.new()
 var rd_licenses_button := Button.new()
-var app_data := AppData.new()
+var app_data:= AppData.new()
 var bArray :Array = [rd_web_button,rd_changelog_button,rd_wiki_button,
 rd_credits_button,rd_donate_button,rd_contactus_button,rd_licenses_button]
 
 func _ready():
 	#tk_about = class_functions.import_csv_data("res://tk_about.txt")
+	app_data = data_handler.app_data
 	_connect_signals()
 	create_buttons()
 
@@ -41,7 +42,6 @@ func _about_button_pressed(id: String, button: Button) -> void:
 			print ("Website ID/Link not found")
 
 func create_buttons() -> void:
-	app_data = data_handler.app_data
 	for button in bArray:
 		%GridContainer.add_child(button)
 	for id in app_data.about_links:

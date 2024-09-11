@@ -4,6 +4,7 @@ class_name DataHandler
 
 var data_file_path = "/app/retrodeck/config/retrodeck/reference_lists/features.json"
 var app_data: AppData
+var button_swap: Array
 
 func _ready():
 	# Load the data when the scene is ready
@@ -61,6 +62,7 @@ func load_base_data() -> AppData:
 				if core_data.has("properties"):
 					for property_data in core_data["properties"]:
 						#print (core.name,"----",property_data)
+						# inherit from RetroArch
 						var property = CoreProperty.new()
 						property.cheevos = true
 						property.cheevos_hardcore = true
