@@ -22,6 +22,7 @@ func _process(delta: float) -> void:
 		%reset_progress.value = 0.0
 	
 func _connect_signals() -> void:
+	#TODO make for loops for each function linked to button function call
 	%retroarch_button.pressed.connect(standard_buttons.bind(%retroarch_button,%system_gridcontainer, %action_gridcontainer))
 	%mame_button.pressed.connect(standard_buttons.bind(%mame_button,%system_gridcontainer, %action_gridcontainer))
 	%ruffle_button.pressed.connect(standard_buttons.bind(%ruffle_button,%system_gridcontainer, %action_gridcontainer))
@@ -44,6 +45,7 @@ func _connect_signals() -> void:
 	%reset_button.button_up.connect(_on_Button_released.bind(%reset_progress))
 	%rpcs3_firmware_button.pressed.connect(_do_action.bind(%rpcs3_firmware_button))
 	%vita3k_firmware_button.pressed.connect(_do_action.bind(%vita3k_firmware_button))
+	%retroarch_quick_resume_button.pressed.connect(class_functions.run_function.bind(%retroarch_quick_resume_button))
 	
 func standard_buttons(button: Button, buttons_gridcontainer: GridContainer, hidden_gridcontainer: GridContainer) -> void:
 	current_system = app_data.emulators[button.text.to_lower()]
@@ -53,9 +55,12 @@ func standard_buttons(button: Button, buttons_gridcontainer: GridContainer, hidd
 			%vita3k_firmware_button.visible = true
 		"rpcs3_button":
 			%rpcs3_firmware_button.visible = true
+		"retroarch_button":
+			%retroarch_quick_resume_button.visible = true
 		_:
 			%vita3k_firmware_button.visible = false
 			%rpcs3_firmware_button.visible = false
+			%retroarch_quick_resume_button.visible = false
 	hidden_gridcontainer.visible = true
 	if button.toggle_mode == false:
 		for i in range(buttons_gridcontainer.get_child_count()):
@@ -86,10 +91,9 @@ func _do_action(button: Button) -> void:
 				class_functions.logger("i", "Launching " + current_system.name + " Help")
 				class_functions.launch_help(current_system.url)
 			else:
-				button.text = "Help only in Desktop Mode"
+				button.text = "Help only works in Desktop Mode"
 				await class_functions.wait(3.0)
 				button.text = tmp_txt
-				
 		["launch_button", current_system.name]:
 			class_functions.logger("i", "Launching " + current_system.name)
 			var launch = class_functions.execute_command(current_system.launch,[], false)

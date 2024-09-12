@@ -807,6 +807,15 @@ action_mode = 0
 text = "INSTALL FIRMWARE"
 icon = ExtResource("38_vsjf2")
 
+[node name="retroarch_quick_resume_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/sysems_container/action_gridcontainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+action_mode = 0
+text = "QUICK RESUME"
+icon = ExtResource("4_xcuib")
+alignment = 1
+
 [node name="TOOLS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2

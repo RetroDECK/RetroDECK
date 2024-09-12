@@ -19,6 +19,8 @@ var gc_version: String
 var sound_effects: bool = true
 var title: String
 var quick_resume_status: bool
+@onready var retoarch_qrg_button: Button  = get_tree().current_scene.get_node("%retroarch_quick_resume_button")
+@onready var retoarch_qrs_button: Button  = get_tree().current_scene.get_node("%quick_resume_button")
 
 func _ready():
 	var config = data_handler.parse_config_to_json(config_file_path)
@@ -211,3 +213,42 @@ func display_json_data() -> void:
 				print("ABXY_button:", property.abxy_button)
 	else:
 		print ("No emulators")	
+
+func run_function(button: Button) -> void:
+	if button.button_pressed:
+		enable_global(button)
+		quick_resume_status = true
+		class_functions._set_up_globals()
+	else:
+		disable_global(button)
+		quick_resume_status = false
+		class_functions._set_up_globals()
+
+func enable_global(button: Button) -> void:
+	var result: Array
+	match button.name:
+		"quick_resume_button", "retroarch_quick_resume_button":
+			result = data_handler.change_cfg_value(class_functions.config_file_path, "retroarch", "quick_resume", "true")
+			change_global(result)
+	
+func disable_global(button: Button) -> void:
+	var result: Array
+	match button.name:
+		"quick_resume_button", "retroarch_quick_resume_button":
+			result = data_handler.change_cfg_value(class_functions.config_file_path, "retroarch", "quick_resume", "false")
+			change_global(result)
+	
+func change_global(parameters: Array) -> void:
+	parameters.push_front("build_preset_config")
+	class_functions.logger("d", "Running: %s" % var_to_str(parameters)) 
+	var result: Dictionary
+	result = await class_functions.run_thread_command(class_functions.wrapper_command, parameters, false)
+	class_functions.logger("d", "Exit code: %s" % result["exit_code"])
+
+func _set_up_globals() -> void:
+	if class_functions.quick_resume_status:
+		retoarch_qrg_button.button_pressed = true
+		retoarch_qrs_button.button_pressed = true
+	else:
+		retoarch_qrg_button.button_pressed = false
+		retoarch_qrs_button.button_pressed = false

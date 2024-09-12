@@ -16,7 +16,7 @@ func _ready():
 	_get_nodes()
 	_connect_signals()
 	_play_main_animations()
-	_set_up_globals()
+	class_functions._set_up_globals()
 	%locale_option.selected = class_functions.map_locale_id(OS.get_locale_language())
 	#class_functions.logger()	
 	%rd_title.text += class_functions.title
@@ -200,7 +200,3 @@ func combine_tkeys(): #More as a test
 	#$Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container/cheevos_advanced_container/cheevos_hardcore.text = tr("TK_CHEEVOSHARDCORE") + " " + tr("TK_SOON")
 	#$Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/data_mng_container/saves_sync.text = tr("TK_SAVESSYNC") + " " + tr("TK_SOON")
 	#$Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer/system_container/easter_eggs.text = tr("TK_EASTEREGGS") + " " + tr("TK_SOON")
-	
-func _set_up_globals() -> void:
-	if class_functions.quick_resume_status:
-		%quick_resume_button.button_pressed = true
