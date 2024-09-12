@@ -41,4 +41,8 @@ func disable_global(button: Button) -> void:
 			change_global(result)
 	
 func change_global(parameters: Array) -> void:
-	print (parameters)
+	parameters.push_front("build_preset_config")
+	class_functions.logger("d", "Running: %s" % var_to_str(parameters)) 
+	var result: Dictionary
+	result = await class_functions.run_thread_command(class_functions.wrapper_command, parameters, false)
+	class_functions.logger("d", "Exit code: %s" % result["exit_code"])

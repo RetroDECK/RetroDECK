@@ -318,7 +318,7 @@ func write_cfg_file(file_path: String, lines: Array, changes: Dictionary) -> voi
 
 func change_cfg_value(file_path: String, key: String, section: String, new_value: String) -> Array:
 	var lines: Array = read_cfg_file(file_path)
-	var args: Array =[key, section, new_value]
+	var parameters: Array =[key, section]
 	var changes: Dictionary = {}
 	if section in changes:
 		changes[section][key] = new_value
@@ -326,4 +326,4 @@ func change_cfg_value(file_path: String, key: String, section: String, new_value
 		changes[section] = {key: new_value}
 		class_functions.logger("d", "No Change: Key: %s Section %s New Value: %s" % [key, section, new_value])
 	write_cfg_file(file_path, lines, changes)
-	return args
+	return parameters
