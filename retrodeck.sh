@@ -28,11 +28,15 @@ Arguments:
     --info-msg                          \t  Print paths and config informations
     --configurator                      \t  Starts the RetroDECK Configurator
     --compress-one <file>               \t  Compresses target file to a compatible format
-    --compress-all <format>             \t  Compresses all supported games into a compatible format.\n\t\t\t\t\t\t  Available formats are \"chd\", \"zip\", \"rvz\" and \"all\".
+    --compress-all <format>             \t  Compresses all supported games into a compatible format.\n\t\t\t\t\t\t  Available formats are \"chd\", \"zip\", \"rvz\" and \"all\"
     --reset-component <component>       \t  Reset one or more component or emulator configs to the default values
     --reset-retrodeck                   \t  Starts the initial RetroDECK installer (backup your data first!)
 
-    start [-s <path>] [-e <path>] <path>\t  Start a game from cli, if no system is defined it will deducted from the path.\n\t\t\t\t\t\t  For example flatpak run net.retrodeck.retrodeck start ~/retrodeck/roms/system/game.ext will be run with the system "system".\n\t\t\t\t\t\t  Optionally -e (emulator) and -s (system) can be passed as arguments.
+    start [-e emulator] [-s system] [-m] <game_path>\t  Start a game from cli using the default emulator or\n\t\t\t\t\t\t\t  the one defined in ES-DE for game or system
+    \t start arguments:
+    \t \t-e (emulator)\t Run the game with the defined emulator (optional)
+    \t \t-s (system)\t Force the game running with the defined system, for example running a gb game on gba (optional)
+    \t \t-m (manual)\t Manual mode: show the list of available emulator to chose from (optional)
 
 For flatpak run specific options please run: flatpak run -h
 
