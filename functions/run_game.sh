@@ -1,111 +1,106 @@
 #!/bin/bash
 
 run_game() {
-  # Initialize variables
-  emulator=""
-  system=""
-  manual_mode=false
+    # Initialize variables
+    emulator=""
+    system=""
+    manual_mode=false
 
-  # Parse options
-  while getopts ":e:s:m" opt; do  # Use `m` for manual mode flag
-      case ${opt} in
-          e )
-              emulator=$OPTARG
-              ;;
-          s )
-              system=$OPTARG
-              ;;
-          m )
-              manual_mode=true
-              log i "Run game: manual mode enabled"
-              ;;
-          \? )
-              echo "Usage: $0 --run [-e emulator] [-s system] [-m manual] game"
-              exit 1
-              ;;
-      esac
-  done
-  shift $((OPTIND -1))
+    # Parse options for system, emulator, and manual mode
+    while getopts ":e:s:m" opt; do
+        case ${opt} in
+            e)
+                emulator=$OPTARG  # Emulator provided via -e
+                ;;
+            s)
+                system=$OPTARG  # System provided via -s
+                ;;
+            m)
+                manual_mode=true  # Manual mode enabled via -m
+                log i "Run game: manual mode enabled"
+                ;;
+            \?)
+                echo "Usage: $0 --run [-e emulator] [-s system] [-m manual] game"
+                exit 1
+                ;;
+        esac
+    done
+    shift $((OPTIND - 1))
 
-  # Check for game argument
-  if [[ -z "$1" ]]; then
-      log e "Game path is required."
-      log i "Usage: $0 start [-e emulator] [-s system] [-m manual] game"
-      exit 1
-  fi
+    # Check for game argument
+    if [[ -z "$1" ]]; then
+        log e "Game path is required."
+        log i "Usage: $0 start [-e emulator] [-s system] [-m manual] game"
+        exit 1
+    fi
 
-  game=$1
+    game=$1
+    game_basename="./$(basename "$game")"
 
-  # If no system is provided, extract it from the game path
-  if [[ -z "$system" ]]; then
-    system=$(echo "$game" | grep -oP '(?<=roms/)[^/]+')
-  fi
-
-  log d "Game: \"$game\""
-  log d "System: \"$system\""
-  
-  # Try finding the <altemulator> inside the specific game block
-  altemulator=$(xmllint --recover --xpath "string(//game[path='$game']/altemulator)" "$rdhome/ES-DE/gamelists/$system/gamelist.xml" 2>/dev/null)
-
-  if [[ -n "$altemulator" ]]; then
-      log d "Alternate emulator found in <altemulator>: $altemulator"
-      emulator_name=$(echo "$altemulator" | sed -e 's/ (Standalone)//')  # Strip " (Standalone)" from name
-      emulator=$(find_emulator "$emulator_name")
-
-      if [[ -n "$emulator" ]]; then
-          log d "Using alternate emulator: $emulator"
-      else
-          log e "No valid path found for emulator: $altemulator"
-          exit 1
-      fi
-  else
-    # Try to fetch <alternativeEmulator> from anywhere in the document
-    alternative_emulator=$(xmllint --recover --xpath 'string(//alternativeEmulator/label)' "$rdhome/ES-DE/gamelists/$system/gamelist.xml" 2>/dev/null)
-
-    if [[ -n "$alternative_emulator" ]]; then
-        log d "Alternate emulator found in <alternativeEmulator> header: $alternative_emulator"
-        
-        # Find the emulator name from the label in es_systems.xml
-        emulator_name=$(find_emulator_name_from_label "$alternative_emulator")
-        
-        if [[ -n "$emulator_name" ]]; then
-            # Pass the extracted emulator name to find_emulator function
-            emulator=$(find_emulator "$emulator_name")
+    # Step 1: System Recognition
+    if [[ -z "$system" ]]; then
+        # Automatically detect system from game path
+        system=$(echo "$game" | grep -oP '(?<=roms/)[^/]+')
+        if [[ -z "$system" ]]; then
+            log e "Failed to detect system from game path."
+            exit 1
         fi
-        
-        if [[ -n "$emulator" ]]; then
-            log d "Using alternate emulator from <alternativeEmulator>: $emulator"
-        else
-            log e "No valid path found for emulator: $alternative_emulator"
+    fi
+    log d "System recognized: $system"
+
+    # Step 2: Emulator Definition
+    if [[ -n "$emulator" ]]; then
+        log d "Emulator provided via command-line: $emulator"
+    elif [[ "$manual_mode" = true ]]; then
+        log d "Manual mode: showing Zenity emulator selection"
+        emulator=$(show_zenity_emulator_list "$system")
+        if [[ -z "$emulator" ]]; then
+            log e "No emulator selected in manual mode."
             exit 1
         fi
     else
-        log i "No alternate emulator found in game block or header, proceeding to auto mode."
+        log d "Automatically searching for an emulator for system: $system"
+
+        # Check for <altemulator> in the game block in gamelist.xml
+        altemulator=$(xmllint --recover --xpath "string(//game[path='$game_basename']/altemulator)" "$rdhome/ES-DE/gamelists/$system/gamelist.xml" 2>/dev/null)
+
+        if [[ -n "$altemulator" ]]; then
+            log d "Found <altemulator> for game: $altemulator"
+            emulator=$(xmllint --recover --xpath "string(//command[@label=\"$altemulator\"])" "$es_systems" 2>/dev/null)
+        fi
+
+        # Fallback to first available emulator in es_systems.xml if no <altemulator> found
+        if [[ -z "$emulator" ]]; then
+            log d "No alternate emulator found, using first available emulator in es_systems.xml"
+            emulator_command=$(xmllint --recover --xpath "string(//system[name='$system']/command[1])" "$es_systems" 2>/dev/null)
+            emulator=$(find_emulator_name_from_label "$emulator_command")
+        fi
+
+        if [[ -z "$emulator" ]]; then
+            log e "No valid emulator found for system: $system"
+            exit 1
+        fi
     fi
-  fi
 
-  # If an emulator is found, substitute placeholders in the command before running
-  if [[ -n "$emulator" ]]; then
-    # Ensure command substitution
-    find_system_commands "$emulator"
-    # TODO: almost there, we need just to start the emulator without Zenity: maybe we have to edit THAT function to pass the emulator to run
-    log d "Final command: $command"
-    eval "$command"
-  else
-    log e "No emulator found or selected. Exiting."
-    return 1
-  fi
-  
-  # If the emulator is not specified or manual mode is set, ask the user to select it via Zenity
-  if [[ -z "$emulator" && "$manual_mode" == true ]]; then
-    emulator=$(find_system_commands)
-  fi
+    # Step 3: Construct and Run the Command
+    log d "Preparing to launch with emulator: $emulator"
 
-  # If emulator is still not set, fall back to the first available emulator
-  if [[ -z "$emulator" ]]; then
-    emulator=$(get_first_emulator)
-  fi
+    # Now pass the final constructed command to substitute_placeholders function
+    final_command=$(substitute_placeholders "$emulator")
 
+    # Log and execute the command
+    log i "Launching game with command: $final_command"
+    eval "$final_command"
+}
+
+
+# Assume this function handles showing the Zenity list of emulators for manual mode
+show_zenity_emulator_list() {
+    local system="$1"
+    # Example logic to retrieve and show Zenity list of emulators for the system
+    # This would extract available emulators for the system from es_systems.xml and show a Zenity dialog
+    emulators=$(xmllint --xpath "//system[name='$system']/command/@label" "$es_systems" | sed 's/ label=/\n/g' | sed 's/\"//g' | grep -o '[^ ]*')
+    zenity --list --title="Select Emulator" --column="Emulators" $emulators
 }
 
 # Function to extract commands from es_systems.xml and present them in Zenity
@@ -153,6 +148,7 @@ find_system_commands() {
 # Function to substitute placeholders in the command
 substitute_placeholders() {
     local cmd="$1"
+    log d "Substitute placeholder: working on $cmd"
     local rom_path="$game"
     local rom_dir=$(dirname "$rom_path")
     
@@ -183,9 +179,9 @@ substitute_placeholders() {
     cmd="${cmd//"%ROM%"/"'$rom_path'"}"
     cmd="${cmd//"%GAMEDIR%"/"'$rom_dir'"}"
     cmd="${cmd//"%GAMEDIRRAW%"/"'$rom_dir_raw'"}"
-    cmd="${cmd//"%CORE_RETROARCH%"/"/var/config/retroarch/cores"}"
+    cmd="${cmd//"%CORE_RETROARCH%"/"$ra_cores_path"}"
 
-    log d "Command after %BASENAME% and other substitutions: $cmd"
+    log d "Command after placeholders substitutions: $cmd"
 
     # Now handle %INJECT% after %BASENAME% has been substituted
     cmd=$(handle_inject_placeholder "$cmd")
@@ -276,45 +272,45 @@ get_first_emulator() {
 }
 
 find_emulator() {
-  local emulator_name=$1
-  local found_path=""
+    local emulator_name="$1"
+    found_path=""
 
-  # Search the es_find_rules.xml file for the emulator
-  emulator_section=$(xmllint --xpath "//emulator[@name='$emulator_name']" "$es_find_rules" 2>/dev/null)
-  
-  if [ -z "$emulator_section" ]; then
-      log e "Emulator not found: $emulator_name"
-      return 1
-  fi
-  
-  # Search systempath entries
-  while IFS= read -r line; do
-      command_path=$(echo "$line" | sed -n 's/.*<entry>\(.*\)<\/entry>.*/\1/p')
-      if [ -x "$(command -v $command_path)" ]; then
-          found_path=$command_path
-          break
-      fi
-  done <<< "$(echo "$emulator_section" | xmllint --xpath "//rule[@type='systempath']/entry" - 2>/dev/null)"
-  
-  # If not found, search staticpath entries
-  if [ -z "$found_path" ]; then
-      while IFS= read -r line; do
-          command_path=$(eval echo "$line" | sed -n 's/.*<entry>\(.*\)<\/entry>.*/\1/p')
-          if [ -x "$command_path" ]; then
-              found_path=$command_path
-              break
-          fi
-      done <<< "$(echo "$emulator_section" | xmllint --xpath "//rule[@type='staticpath']/entry" - 2>/dev/null)"
-  fi
-  
-  if [ -z "$found_path" ]; then
-      log e "No valid path found for emulator: $emulator_name"
-      return 1
-  else
-      log d "Found emulator: \"$found_path\""
-      echo "$found_path"
-      return 0
-  fi
+    # Search the es_find_rules.xml file for the emulator
+    emulator_section=$(xmllint --xpath "//emulator[@name='$emulator_name']" "$es_find_rules" 2>/dev/null)
+
+    if [ -z "$emulator_section" ]; then
+        log e "Find emulator: emulator not found: $emulator_name"
+        return 1
+    fi
+
+    # Search systempath entries
+    while IFS= read -r line; do
+        command_path=$(echo "$line" | sed -n 's/.*<entry>\(.*\)<\/entry>.*/\1/p')
+        if [ -x "$(command -v $command_path)" ]; then
+            found_path=$command_path
+            break
+        fi
+    done <<< "$(echo "$emulator_section" | xmllint --xpath "//rule[@type='systempath']/entry" - 2>/dev/null)"
+
+    # If not found, search staticpath entries
+    if [ -z "$found_path" ]; then
+        while IFS= read -r line; do
+            command_path=$(eval echo "$line" | sed -n 's/.*<entry>\(.*\)<\/entry>.*/\1/p')
+            if [ -x "$command_path" ]; then
+                found_path=$command_path
+                break
+            fi
+        done <<< "$(echo "$emulator_section" | xmllint --xpath "//rule[@type='staticpath']/entry" - 2>/dev/null)"
+    fi
+
+    if [ -z "$found_path" ]; then
+        log e "Find emulator: no valid path found for emulator: $emulator_name"
+        return 1
+    else
+        log d "Find emulator: found emulator \"$found_path\""
+        echo "$found_path"
+        return 0
+    fi
 }
 
 # Function to find the emulator name from the label in es_systems.xml
@@ -323,12 +319,14 @@ find_emulator_name_from_label() {
     
     # Search for the emulator matching the label in the es_systems.xml file
     extracted_emulator_name=$(xmllint --recover --xpath "string(//system[name='$system']/command[@label='$label']/text())" "$es_systems" 2>/dev/null | sed 's/%//g' | sed 's/EMULATOR_//g' | cut -d' ' -f1)
+    log d "Found emulator from label: $extracted_emulator_name"
 
-    if [[ -n "$extracted_emulator_name" ]]; then
-        log d "Found emulator by label: $extracted_emulator_name"
-        echo "$extracted_emulator_name"
+    emulator_command=$(find_emulator "$extracted_emulator_name")
+
+    if [[ -n "$emulator_command" ]]; then
+        echo "$emulator_command"
     else
-        log e "Emulator name not found for label: $label"
+        log e "Found emulator from label: emulator name not found for label: $label"
         return 1
     fi
 }

@@ -54,7 +54,7 @@ cooker_repository_name="Cooker"                                                 
 main_repository_name="RetroDECK"                                                                         # The name of the main repository under RetroDECK organization
 features="$config/retrodeck/reference_lists/features.json"                                               # A file where all the RetroDECK and component capabilities are kept for querying
 es_systems="/app/share/es-de/resources/systems/linux/es_systems.xml"                                     # ES-DE supported system list   
-es_find_rules="/app/share/es-de/resources/systems/linux/es_find_rules.xml"                               # ES-DE emulator find rules
+es_find_rules="/app/share/es-de/resources/systems/linux/es_find_rules.xml"                               # ES-DE emulator find rules                                                  
 
 
 # Godot data transfer temp files
@@ -84,6 +84,7 @@ es_source_logs="/var/config/ES-DE/logs"
 raconf="/var/config/retroarch/retroarch.cfg"
 ra_core_conf="/var/config/retroarch/retroarch-core-options.cfg"
 ra_scummvm_conf="/var/config/retroarch/system/scummvm.ini"
+ra_cores_path="/var/config/retroarch/cores"  
 
 # CEMU config files
 
