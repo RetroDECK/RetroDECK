@@ -88,7 +88,7 @@ add_to_steam() {
           # Populate the .sync script with the correct command
           # TODO: if there is any emulator defined in the xml we use that, else... how we can know which is the default one?
           # TODO: if steam is flatpak the command wrapping will change in .desktop
-          local command="flatpak run net.retrodeck.retrodeck start -s $system '$roms_folder/$system/$path'"
+          local command="flatpak run net.retrodeck.retrodeck start '$roms_folder/$system/$path'"
           # Create the launcher file using a heredoc - if you enable .desktp this remember to edit .desktop in SRM userConfigurations.json and the above launcher variable (and vice versa)
 #           cat <<EOF > "$launcher"
 # [Desktop Entry]
