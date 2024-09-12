@@ -35,6 +35,13 @@ run_game() {
     fi
 
     game=$1
+
+    if [[ -d "$game" ]]; then
+        log d "$(basename "$game") is a directory, parsing it like a \"directory as a file\""
+        game="$game/$(basename "$game")"
+        log d "Actual file is in \"$game\""
+    fi 
+
     game_basename="./$(basename "$game")"
 
     # Step 1: System Recognition
@@ -46,7 +53,6 @@ run_game() {
             exit 1
         fi
     fi
-    log d "System recognized: $system"
 
     # Step 2: Emulator Definition
     if [[ -n "$emulator" ]]; then
@@ -80,10 +86,8 @@ run_game() {
 
         # Fallback to first available emulator in es_systems.xml if no <altemulator> found
         if [[ -z "$emulator" ]]; then
-            # TODO: the non-alt emulator is broken
             log d "No alternate emulator found, using first available emulator in es_systems.xml"
-            emulator_command=$(xmllint --recover --xpath "string(//system[name='$system']/command[1])" "$es_systems" 2>/dev/null)
-            emulator=$(find_emulator_name_from_label "$emulator_command")
+            emulator=$(xmllint --recover --xpath "string(//system[name='$system']/command[1])" "$es_systems")
         fi
 
         if [[ -z "$emulator" ]]; then
@@ -93,7 +97,12 @@ run_game() {
     fi
 
     # Step 3: Construct and Run the Command
-    log d "Preparing to launch with emulator: $emulator"
+    log i "-------------------------------------------"
+    log i " RetroDECK is now booting the game"
+    log i " Game path: \"$game\""
+    log i " Recognized system: $system"
+    log i " Given emulator: $emulator"
+    log i "-------------------------------------------"
 
     # Now pass the final constructed command to substitute_placeholders function
     final_command=$(substitute_placeholders "$emulator")
