@@ -65,23 +65,17 @@ run_game() {
         altemulator=$(xmllint --recover --xpath "string(//game[path='$game_basename']/altemulator)" "$rdhome/ES-DE/gamelists/$system/gamelist.xml" 2>/dev/null)
 
         if [[ -n "$altemulator" ]]; then
+
             log d "Found <altemulator> for game: $altemulator"
             emulator=$(xmllint --recover --xpath "string(//command[@label=\"$altemulator\"])" "$es_systems" 2>/dev/null)
-        else
+
+        else # if no altemulator is found we search if a global one is set
 
             log d "No altemulator found in the game entry, searching for alternativeEmulator to check if a global emulator is set for the system $system"
-            
             alternative_emulator=$(xmllint --recover --xpath 'string(//alternativeEmulator/label)' "$rdhome/ES-DE/gamelists/$system/gamelist.xml" 2>/dev/null)
-
             log d "Alternate emulator found in <alternativeEmulator> header: $alternative_emulator"
+            emulator=$(xmllint --recover --xpath "string(//system[platform='$system']/command[@label=\"$alternative_emulator\"])" "$es_systems" 2>/dev/null)
 
-            # TODO: fix this function
-            # [2024-09-12 10:51:11.232] [DEBUG] Alternate emulator found in <alternativeEmulator> header: PicoDrive
-            # then is broken
-            
-            # Find the emulator name from the label in es_systems.xml
-            emulator_name=$(find_emulator_name_from_label "$alternative_emulator")
-            emulator=$(find_emulator "$emulator_name")
         fi
 
         # Fallback to first available emulator in es_systems.xml if no <altemulator> found
