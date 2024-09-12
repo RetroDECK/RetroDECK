@@ -21,4 +21,24 @@ func _connect_signals():
 	%quick_resume_button.pressed.connect(run_function.bind(%quick_resume_button))
 
 func run_function(button: Button) -> void:
-	pass
+	if button.button_pressed:
+		enable_global(button)
+	else:
+		disable_global(button)
+
+func enable_global(button: Button) -> void:
+	var result: Array
+	match button.name:
+		"quick_resume_button":
+			result = data_handler.change_cfg_value(class_functions.config_file_path, "retroarch", "quick_resume", "true")
+			change_global(result)
+	
+func disable_global(button: Button) -> void:
+	var result: Array
+	match button.name:
+		"quick_resume_button":
+			result = data_handler.change_cfg_value(class_functions.config_file_path, "retroarch", "quick_resume", "false")
+			change_global(result)
+	
+func change_global(parameters: Array) -> void:
+	print (parameters)

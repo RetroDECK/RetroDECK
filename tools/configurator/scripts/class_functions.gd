@@ -128,7 +128,7 @@ func import_text_file(file_path: String) -> String:
 	var content: String = ""
 	var file = FileAccess.open(file_path, FileAccess.READ)
 	if file == null:
-		print("Failed to open file")
+		class_functions.logger("e","Failed to open file %s" % file_path)
 		return content
 	while not file.eof_reached():
 		content += file.get_line() + "\n"

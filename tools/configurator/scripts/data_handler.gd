@@ -273,4 +273,57 @@ func config_save_json(config: Dictionary, json_file_path: String) -> void:
 		file.store_string(json_string)
 		file.close()
 	else:
-		print("Failed to open JSON file for writing")
+		class_functions.logger("e", "File not found: %s" % json_file_path)
+
+func read_cfg_file(file_path: String) -> Array:
+	var lines: Array = []
+	var current_section: String = ""
+	var file: FileAccess = FileAccess.open(file_path, FileAccess.ModeFlags.READ)
+	if file:
+		while not file.eof_reached():
+			var line: String = file.get_line()
+			lines.append(line)
+		file.close()
+	else:
+		class_functions.logger("e", "File not found: %s" % file_path)
+	return lines
+
+func write_cfg_file(file_path: String, lines: Array, changes: Dictionary) -> void:
+	var file: FileAccess = FileAccess.open(file_path, FileAccess.ModeFlags.WRITE)
+	var current_section: String = ""
+	for line in lines:
+		var trimmed_line: String = line.strip_edges()
+		if trimmed_line.begins_with("[") and trimmed_line.ends_with("]"):
+			current_section = trimmed_line.trim_prefix("[").trim_suffix("]")
+			file.store_line(line)
+		elif "=" in trimmed_line and current_section in changes:
+			var parts: Array = trimmed_line.split("=", false)
+			if parts.size() >= 2:
+				var key: String = parts[0].strip_edges()
+				var original_value: String = parts[1].strip_edges()
+				if key in changes[current_section]:
+					var new_value: String = changes[current_section][key]
+					if new_value != original_value:
+						file.store_line(key + "=" + new_value)
+						class_functions.logger("d", "Changed %s %s from Value: %s to Value: %s" % [key, current_section, original_value, new_value])
+					else:
+						file.store_line(line)
+				else:
+					file.store_line(line)
+			else:
+				file.store_line(line)
+		else:
+			file.store_line(line)
+	file.close()
+
+func change_cfg_value(file_path: String, key: String, section: String, new_value: String) -> Array:
+	var lines: Array = read_cfg_file(file_path)
+	var args: Array =[key, section, new_value]
+	var changes: Dictionary = {}
+	if section in changes:
+		changes[section][key] = new_value
+	else:
+		changes[section] = {key: new_value}
+		class_functions.logger("d", "No Change: Key: %s Section %s New Value: %s" % [key, section, new_value])
+	write_cfg_file(file_path, lines, changes)
+	return args
