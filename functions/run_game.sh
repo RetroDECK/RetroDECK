@@ -20,7 +20,7 @@ run_game() {
                 log i "Run game: manual mode enabled"
                 ;;
             \?)
-                echo "Usage: $0 --run [-e emulator] [-s system] [-m manual] game"
+                echo "Usage: $0 start [-e emulator] [-s system] [-m] game"
                 exit 1
                 ;;
         esac
@@ -30,7 +30,7 @@ run_game() {
     # Check for game argument
     if [[ -z "$1" ]]; then
         log e "Game path is required."
-        log i "Usage: $0 start [-e emulator] [-s system] [-m manual] game"
+        log i "Usage: $0 start [-e emulator] [-s system] [-m] game"
         exit 1
     fi
 
