@@ -84,9 +84,9 @@ func load_base_data() -> AppData:
 			app_dict.cores = cores
 			return app_dict
 		else:
-			print("Error parsing JSON")
+			class_functions.logger("d","Error parsing JSON ")
 	else:
-		print("Error opening file")
+		class_functions.logger("d","Error opening file: " + file)
 		get_tree().quit()
 	return null
 
@@ -233,7 +233,7 @@ func parse_config_to_json(file_path: String) -> Dictionary:
 	var current_section = ""
 	var file = FileAccess.open(file_path, FileAccess.READ)
 	if file == null:
-		print("Failed to open file")
+		class_functions.logger("e","Failed to open file: " + file_path)
 		return config
 
 	while not file.eof_reached():
@@ -305,7 +305,7 @@ func write_cfg_file(file_path: String, lines: Array, changes: Dictionary) -> voi
 					var new_value: String = changes[current_section][key]
 					if new_value != original_value:
 						file.store_line(key + "=" + new_value)
-						class_functions.logger("d", "Changed %s %s from Value: %s to Value: %s" % [key, current_section, original_value, new_value])
+						class_functions.logger("i", "Changed %s %s from Value: %s to Value: %s" % [key, current_section, original_value, new_value])
 					else:
 						file.store_line(line)
 				else:
@@ -324,6 +324,6 @@ func change_cfg_value(file_path: String, key: String, section: String, new_value
 		changes[section][key] = new_value
 	else:
 		changes[section] = {key: new_value}
-		class_functions.logger("d", "No Change: Key: %s Section %s New Value: %s" % [key, section, new_value])
+		class_functions.logger("i", "Change: Key: %s Section %s New Value: %s" % [key, section, new_value])
 	write_cfg_file(file_path, lines, changes)
 	return parameters

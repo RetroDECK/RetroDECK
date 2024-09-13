@@ -38,8 +38,7 @@ func _about_button_pressed(id: String, button: Button) -> void:
 				await class_functions.wait(3.0)
 				button.text = tmp_txt
 		_:
-			class_functions.logger("d","Loading website for " + id)
-			print ("Website ID/Link not found")
+			class_functions.logger("d","Website ID/Link not found " + id)
 
 func create_buttons() -> void:
 	for button in bArray:

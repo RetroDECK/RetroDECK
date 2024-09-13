@@ -27,9 +27,8 @@ data_handler="*res://scripts/data_handler.gd"
 
 window/size/viewport_width=1280
 window/size/viewport_height=800
-window/size/transparent=true
+window/size/borderless=true
 window/stretch/mode="canvas_items"
-window/per_pixel_transparency/allowed=true
 
 [filesystem]
 

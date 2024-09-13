@@ -19,8 +19,10 @@ var gc_version: String
 var sound_effects: bool = true
 var title: String
 var quick_resume_status: bool
+var update_check: bool
 @onready var retoarch_qrg_button: Button  = get_tree().current_scene.get_node("%retroarch_quick_resume_button")
 @onready var retoarch_qrs_button: Button  = get_tree().current_scene.get_node("%quick_resume_button")
+@onready var options_update_button: Button  = get_tree().current_scene.get_node("%update_notification_button")
 
 func _ready():
 	var config = data_handler.parse_config_to_json(config_file_path)
@@ -36,7 +38,7 @@ func _ready():
 	gc_version = ProjectSettings.get_setting("application/config/version")
 	title = "\n   " + rd_version + "\nConfigurator\n    " + gc_version
 	quick_resume_status = config["quick_resume"]["retroarch"]
-
+	update_check = config["options"]["update_check"]
 
 func logger(log_type: String, log_text: String) -> void:
 	# Type of log messages:
@@ -217,26 +219,30 @@ func display_json_data() -> void:
 func run_function(button: Button) -> void:
 	if button.button_pressed:
 		enable_global(button)
-		quick_resume_status = true
-		class_functions._set_up_globals()
 	else:
 		disable_global(button)
-		quick_resume_status = false
-		class_functions._set_up_globals()
 
 func enable_global(button: Button) -> void:
 	var result: Array
 	match button.name:
 		"quick_resume_button", "retroarch_quick_resume_button":
+			quick_resume_status = true
+			class_functions._set_up_globals()
 			result = data_handler.change_cfg_value(class_functions.config_file_path, "retroarch", "quick_resume", "true")
 			change_global(result)
+		"update_notification_button":
+			result = data_handler.change_cfg_value(class_functions.config_file_path, "update_check", "options", "true")
 	
 func disable_global(button: Button) -> void:
 	var result: Array
 	match button.name:
 		"quick_resume_button", "retroarch_quick_resume_button":
+			quick_resume_status = false
+			class_functions._set_up_globals()
 			result = data_handler.change_cfg_value(class_functions.config_file_path, "retroarch", "quick_resume", "false")
 			change_global(result)
+		"update_notification_button":
+			result = data_handler.change_cfg_value(class_functions.config_file_path, "update_check", "options", "false")
 	
 func change_global(parameters: Array) -> void:
 	parameters.push_front("build_preset_config")
@@ -246,7 +252,11 @@ func change_global(parameters: Array) -> void:
 	class_functions.logger("d", "Exit code: %s" % result["exit_code"])
 
 func _set_up_globals() -> void:
-	if class_functions.quick_resume_status:
+	if update_check:
+		options_update_button.button_pressed = true
+	else:
+		options_update_button.button_pressed = false
+	if quick_resume_status:
 		retoarch_qrg_button.button_pressed = true
 		retoarch_qrs_button.button_pressed = true
 	else:

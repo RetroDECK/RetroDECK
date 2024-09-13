@@ -19,7 +19,6 @@ func _ready():
 	set_tab_icon_max_width(3,icon_width)
 	set_tab_icon(4, ResourceLoader.load("res://assets/icons/pixelitos/128/help-about.png"))
 	set_tab_icon_max_width(4,icon_width)
-	#%TK_GRAPHICS.name="BOB"
 	connect_focus_signals(self)
 	
 func connect_focus_signals(node):		
