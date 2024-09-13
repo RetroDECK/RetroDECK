@@ -220,12 +220,11 @@ size_flags_horizontal = 3
 unique_name_in_owner = true
 layout_mode = 2
 tab_alignment = 1
-current_tab = 3
+current_tab = 0
 script = ExtResource("3_id6l4")
 
 [node name="GLOBALS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 script = ExtResource("4_2jqfc")
 metadata/_tab_index = 0
@@ -264,6 +263,7 @@ icon_alignment = 1
 vertical_icon_alignment = 0
 
 [node name="button_swap_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(345, 222)
 layout_mode = 2
 tooltip_text = "Change to Nintendo style button mappings."
@@ -533,6 +533,7 @@ layout_mode = 2
 [node name="check_conn_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/troubleshoot_container"]
 unique_name_in_owner = true
 layout_mode = 2
+toggle_mode = true
 text = "CHECK CONNECTION"
 icon = ExtResource("50_5d2ui")
 
@@ -687,6 +688,7 @@ disabled = true
 text = "TK_3DSDECRYPT"
 
 [node name="SETTINGS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
 script = ExtResource("54_bxhvn")
 metadata/_tab_index = 3

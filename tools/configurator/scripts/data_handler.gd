@@ -4,7 +4,6 @@ class_name DataHandler
 
 var data_file_path = "/app/retrodeck/config/retrodeck/reference_lists/features.json"
 var app_data: AppData
-var button_swap: Array
 
 func _ready():
 	# Load the data when the scene is ready
@@ -327,3 +326,39 @@ func change_cfg_value(file_path: String, key: String, section: String, new_value
 		class_functions.logger("i", "Change: Key: %s Section %s New Value: %s" % [key, section, new_value])
 	write_cfg_file(file_path, lines, changes)
 	return parameters
+
+func change_all_cfg_values(file_path: String, section: String, new_value: String) -> Array:
+	var lines: Array = read_cfg_file(file_path)
+	var parameters: Array =[section, new_value]
+	var changes: Dictionary = {}
+	var current_section: String
+	for line in lines:
+		var trimmed_line: String = line.strip_edges()
+		if trimmed_line.begins_with("[") and trimmed_line.ends_with("]"):
+			current_section = trimmed_line.trim_prefix("[").trim_suffix("]")
+			if current_section == section:
+				changes[current_section] = {}  # Initialize changes for this section
+		elif "=" in trimmed_line and current_section == section:
+			var parts: Array = trimmed_line.split("=", false)
+			if parts.size() >= 2:
+				var key: String = parts[0].strip_edges()
+				changes[section][key] = new_value
+				class_functions.logger("i", "Change: Key: %s Section %s New Value: %s" % [key, section, new_value])
+	write_cfg_file(file_path, lines, changes)
+	return parameters
+
+func get_elements_in_section(file_path: String, section: String) -> Dictionary:
+	var lines: Array = read_cfg_file(file_path)
+	var elements: Dictionary = {}
+	var current_section: String = ""
+	for line in lines:
+		var trimmed_line: String = line.strip_edges()
+		if trimmed_line.begins_with("[") and trimmed_line.ends_with("]"):
+			current_section = trimmed_line.trim_prefix("[").trim_suffix("]")
+		elif "=" in trimmed_line and current_section == section:
+			var parts: Array = trimmed_line.split("=", false)
+			if parts.size() >= 2:
+				var key: String = parts[0].strip_edges()
+				var value: String = parts[1].strip_edges()
+				elements[key] = value
+	return elements

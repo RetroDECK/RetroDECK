@@ -16,17 +16,11 @@ func _ready():
 	_get_nodes()
 	_connect_signals()
 	_play_main_animations()
-	class_functions._set_up_globals()
+	_set_up_globals()
 	%locale_option.selected = class_functions.map_locale_id(OS.get_locale_language())
-	#class_functions.logger()	
 	%rd_title.text += class_functions.title
 	class_functions.logger("i","Started Godot configurator")
 	#class_functions.display_json_data()
-	#var log_file = class_functions.import_text_file(rd_logs +"/retrodeck.log")
-	#for id in config.paths:
-	#	var path_data = config.paths[id]
-	#	print (id)
-
 	# set current startup tab to match IDE	
 	tab_container.current_tab = 0
 	#add_child(class_functions) # Needed for threaded results Not need autoload?
@@ -67,7 +61,7 @@ func _get_nodes() -> void:
 	tab_container = get_node("%TabContainer")
 	anim_logo = get_node("%logo_animated")
 	log_option = get_node("%logs_button")
-	
+
 func _connect_signals() -> void:
 	#signal_theme_changed.connect(_conf_theme)
 	theme_option.item_selected.connect(_conf_theme)
@@ -77,6 +71,8 @@ func _connect_signals() -> void:
 	%decorations_save.pressed.connect(_hide_show_buttons.bind(%decorations_save,%decorations_save.get_parent(),null))
 	%decorations_button.pressed.connect(_hide_show_containers.bind(%decorations_button, %decorations_gridcontainer))
 	%systems_button.pressed.connect(_hide_show_containers.bind(%systems_button, %systems_gridcontainer))
+	class_functions.update_global_signal.connect(_set_up_globals)
+
 
 func _conf_theme(index: int) -> void: 
 	match index:
@@ -200,3 +196,35 @@ func combine_tkeys(): #More as a test
 	#$Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/cheevos_container/cheevos_advanced_container/cheevos_hardcore.text = tr("TK_CHEEVOSHARDCORE") + " " + tr("TK_SOON")
 	#$Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/data_mng_container/saves_sync.text = tr("TK_SAVESSYNC") + " " + tr("TK_SOON")
 	#$Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer/system_container/easter_eggs.text = tr("TK_EASTEREGGS") + " " + tr("TK_SOON")
+
+func _set_up_globals() -> void:
+	if class_functions.update_check:
+		%update_notification_button.button_pressed = true
+	else:
+		%update_notification_button.button_pressed = false
+	if class_functions.quick_resume_status:
+		%quick_resume_button.button_pressed = true
+		%retroarch_quick_resume_button.button_pressed = true
+	else:
+		%quick_resume_button.button_pressed = false
+		%retroarch_quick_resume_button.button_pressed = false
+	if class_functions.abxy_state == "true":
+		%button_swap_button.button_pressed = true
+	elif class_functions.abxy_state == "false":
+		%button_swap_button.button_pressed = false
+	else:
+		var style_box = StyleBoxFlat.new()
+		style_box.bg_color = Color(1, 0.54902, 0, 1)
+		style_box.corner_detail = 8
+		style_box.border_width_left = 15
+		style_box.border_width_top = 15
+		style_box.border_width_right = 15
+		style_box.border_width_bottom = 15
+		style_box.corner_radius_top_left = 25
+		style_box.corner_radius_top_right = 25
+		style_box.corner_radius_bottom_right = 25
+		style_box.corner_radius_bottom_left = 25
+		style_box.border_color = Color(0.102, 0.624, 1, 1)
+		style_box.border_blend = true
+		%button_swap_button.add_theme_stylebox_override("normal", style_box)
+		%button_swap_button.toggle_mode = false

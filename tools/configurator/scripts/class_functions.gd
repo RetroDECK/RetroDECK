@@ -20,9 +20,8 @@ var sound_effects: bool = true
 var title: String
 var quick_resume_status: bool
 var update_check: bool
-@onready var retoarch_qrg_button: Button  = get_tree().current_scene.get_node("%retroarch_quick_resume_button")
-@onready var retoarch_qrs_button: Button  = get_tree().current_scene.get_node("%quick_resume_button")
-@onready var options_update_button: Button  = get_tree().current_scene.get_node("%update_notification_button")
+var abxy_state: String
+signal update_global_signal
 
 func _ready():
 	var config = data_handler.parse_config_to_json(config_file_path)
@@ -39,7 +38,20 @@ func _ready():
 	title = "\n   " + rd_version + "\nConfigurator\n    " + gc_version
 	quick_resume_status = config["quick_resume"]["retroarch"]
 	update_check = config["options"]["update_check"]
-
+	var testT:Dictionary = data_handler.get_elements_in_section(config_file_path, "abxy_button_swap")
+	var true_values: int
+	var false_values: int
+	for value in testT.values():
+		if value == "true":
+			true_values += 1
+		else:
+			false_values += 1
+	if true_values == testT.size():
+		abxy_state = "true"
+	elif false_values == testT.size():
+		abxy_state = "false"
+	else:
+		abxy_state = "mixed"
 func logger(log_type: String, log_text: String) -> void:
 	# Type of log messages:
 	# log d - debug message: maybe in the future we can decide to hide them in main builds or if an option is toggled
@@ -190,28 +202,28 @@ func display_json_data() -> void:
 			var emulator = app_data.emulators[key]
 			# Display the properties of each emulator
 			print("System Name: ", emulator.name)
-			print("Description: ", emulator.description)
+			#print("Description: ", emulator.description)
 			#print("System: ", emulator.systen)
-			print("Help URL: ", emulator.url)
-			print("Properties:")
+			#print("Help URL: ", emulator.url)
+			#print("Properties:")
 			for property: EmulatorProperty in emulator.properties:
-				print("Cheevos: ", property.cheevos)
-				print("Borders: ", property.borders)
+				#print("Cheevos: ", property.cheevos)
+				#print("Borders: ", property.borders)
 				print("ABXY_button:", property.abxy_button)
-				print("multi_user_config_dir: ", property.multi_user_config_dir)
+				#print("multi_user_config_dir: ", property.multi_user_config_dir)
 		
 		for key in app_data.cores.keys():
 			var core = app_data.cores[key]
 			print("Core Name: ", core.name)
-			print("Description: ", core.description)
-			print("Properties:")
+			#print("Description: ", core.description)
+			#print("Properties:")
 			for property: CoreProperty in core.properties:
-				print("Cheevos: ", property.cheevos)
-				print("Cheevos Hardcore: ", property.cheevos_hardcore)
-				print("Quick Resume: ", property.quick_resume)
-				print("Rewind: ", property.rewind)
-				print("Borders: ", property.borders)
-				print("Widescreen: ", property.widescreen)
+				#print("Cheevos: ", property.cheevos)
+				#print("Cheevos Hardcore: ", property.cheevos_hardcore)
+				#print("Quick Resume: ", property.quick_resume)
+				#print("Rewind: ", property.rewind)
+				#print("Borders: ", property.borders)
+				#print("Widescreen: ", property.widescreen)
 				print("ABXY_button:", property.abxy_button)
 	else:
 		print ("No emulators")	
@@ -227,38 +239,34 @@ func enable_global(button: Button) -> void:
 	match button.name:
 		"quick_resume_button", "retroarch_quick_resume_button":
 			quick_resume_status = true
-			class_functions._set_up_globals()
+			update_global_signal.emit()
 			result = data_handler.change_cfg_value(class_functions.config_file_path, "retroarch", "quick_resume", "true")
 			change_global(result)
 		"update_notification_button":
 			result = data_handler.change_cfg_value(class_functions.config_file_path, "update_check", "options", "true")
-	
+		"button_swap_button":
+			if abxy_state == "false":
+				abxy_state = "true"
+				result = data_handler.change_all_cfg_values(class_functions.config_file_path, "abxy_button_swap", "true")
+
 func disable_global(button: Button) -> void:
 	var result: Array
 	match button.name:
 		"quick_resume_button", "retroarch_quick_resume_button":
 			quick_resume_status = false
-			class_functions._set_up_globals()
+			update_global_signal.emit()
 			result = data_handler.change_cfg_value(class_functions.config_file_path, "retroarch", "quick_resume", "false")
 			change_global(result)
 		"update_notification_button":
 			result = data_handler.change_cfg_value(class_functions.config_file_path, "update_check", "options", "false")
-	
+		"button_swap_button":
+			if abxy_state == "true":
+				abxy_state = "false"
+				result = data_handler.change_all_cfg_values(class_functions.config_file_path, "abxy_button_swap", "false")
+
 func change_global(parameters: Array) -> void:
 	parameters.push_front("build_preset_config")
 	class_functions.logger("d", "Running: %s" % var_to_str(parameters)) 
 	var result: Dictionary
 	result = await class_functions.run_thread_command(class_functions.wrapper_command, parameters, false)
 	class_functions.logger("d", "Exit code: %s" % result["exit_code"])
-
-func _set_up_globals() -> void:
-	if update_check:
-		options_update_button.button_pressed = true
-	else:
-		options_update_button.button_pressed = false
-	if quick_resume_status:
-		retoarch_qrg_button.button_pressed = true
-		retoarch_qrs_button.button_pressed = true
-	else:
-		retoarch_qrg_button.button_pressed = false
-		retoarch_qrs_button.button_pressed = false

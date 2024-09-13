@@ -37,15 +37,12 @@ func check_internet_connection():
 	http_request.request("https://retrodeck.net/")
 
 func _on_request_completed(_result, response_code, _headers, _body):
-	var style_box = StyleBoxFlat.new()
+	#var style_box = StyleBoxFlat.new()
 	if response_code == 200:
 		class_functions.logger("i","Internet Connection Succesful")
-		style_box.bg_color = Color(0, 1, 0)
-		%check_conn_button.add_theme_stylebox_override("normal", style_box)
+		%check_conn_button.button_pressed = true
 		%check_conn_button.text += " - CONNECTED"
-
 	else:
 		class_functions.logger("d","Internet Connection Failed")
-		style_box.bg_color = Color(1, 0, 0)
-		%check_conn_button.add_theme_stylebox_override("normal", style_box)
+		%check_conn_button.button_pressed = false
 		%check_conn_button.text += " - NOT CONNECTED: " + str(response_code)
