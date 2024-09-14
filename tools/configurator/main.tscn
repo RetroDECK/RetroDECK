@@ -1,7 +1,7 @@
 [gd_scene load_steps=113 format=3 uid="uid://61f6m4r1mpan"]
 
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
-[ext_resource type="Theme" uid="uid://hhc60cllcg47" path="res://assets/themes/default_theme.tres" id="1_if8nh"]
+[ext_resource type="Theme" path="res://assets/themes/default_theme.tres" id="1_if8nh"]
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_obpq7"]
 [ext_resource type="Script" path="res://scripts/TabContainer.gd" id="3_id6l4"]
 [ext_resource type="AudioStream" uid="uid://dig4pco500pyt" path="res://res/configurator.mp3" id="3_xivj6"]
@@ -19,7 +19,7 @@
 [ext_resource type="Script" path="res://helper_text.gd" id="5_cprkf"]
 [ext_resource type="Texture2D" uid="uid://dxdhjp18rgmr4" path="res://res/flags/united_kingdom_32.png" id="5_exkn2"]
 [ext_resource type="Texture2D" uid="uid://du8go5dyabmsl" path="res://assets/icons/banner/gb.png" id="5_ja8to"]
-[ext_resource type="StyleBox" uid="uid://ba3l3ja1jbqpx" path="res://assets/themes/emulators.tres" id="5_rjtkn"]
+[ext_resource type="StyleBox" path="res://assets/themes/emulators.tres" id="5_rjtkn"]
 [ext_resource type="Texture2D" uid="uid://cboyy7fkdijwg" path="res://assets/icons/pixelitos/128/cs-desktop-effects.png" id="5_uiobi"]
 [ext_resource type="Texture2D" uid="uid://do3mc6sg5mfek" path="res://assets/icons/pixelitos/128/system-software-install.png" id="5_vehlp"]
 [ext_resource type="Texture2D" uid="uid://cjv6lhd4g63m3" path="res://assets/graphics/retrodeck_base_shake1.png" id="6_d43n7"]
@@ -715,17 +715,21 @@ layout_mode = 2
 
 [node name="update_notification_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/system_container"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 text = "AUTO UPDATES"
 icon = ExtResource("55_x32s4")
 alignment = 1
+expand_icon = true
 
 [node name="sound_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/system_container"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 text = "SOUND EFFECTS"
 icon = ExtResource("9_qwq2k")
 alignment = 1
+expand_icon = true
 
 [node name="volume_effects_slider" type="HSlider" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/system_container"]
 unique_name_in_owner = true
@@ -737,13 +741,15 @@ value = 10.0
 rounded = true
 tick_count = 25
 
-[node name="theme_optionbutton" type="OptionButton" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/system_container"]
+[node name="font_optionbutton" type="OptionButton" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/system_container"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 alignment = 1
+expand_icon = true
 selected = 0
 item_count = 5
-popup/item_0/text = "Choose Theme"
+popup/item_0/text = "CHOOSE FONT"
 popup/item_0/icon = ExtResource("54_dah1j")
 popup/item_0/disabled = true
 popup/item_0/separator = true

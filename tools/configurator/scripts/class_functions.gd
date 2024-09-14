@@ -22,8 +22,8 @@ var title: String
 var quick_resume_status: bool
 var update_check: bool
 var abxy_state: String
+var font_select: int
 signal update_global_signal
-var custom_theme: Theme = $".".theme
 
 func _ready():
 	read_values_states()
@@ -45,7 +45,7 @@ func read_values_states() -> void:
 	update_check = config["options"]["update_check"]
 	sound_effects = config["options"]["sound_effects"]
 	volume_effects = int(config["options"]["volume_effects"])
-	
+	font_select = int(config["options"]["font"])
 	multi_state("abxy_button_swap")
 
 func multi_state(section: String) -> void:

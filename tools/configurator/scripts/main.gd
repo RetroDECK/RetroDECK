@@ -1,9 +1,7 @@
 extends Control
 
 @onready var bios_type:int
-var theme_option: OptionButton
-#signal signal_theme_changed
-var custom_theme: Theme# = $".".theme
+var custom_theme: Theme
 var log_option: OptionButton
 var tab_container: TabContainer
 var anim_logo: AnimatedSprite2D
@@ -31,6 +29,7 @@ func _ready():
 		if (n.is_class("BaseButton") and n.disabled == true): #if button-like control and disabled
 			n.self_modulate.a = 0.5 #make it half transparent
 	#combine_tkeys()
+	change_font(class_functions.font_select)
 	
 func _input(event):
 	if Input.is_action_pressed("quit1") and Input.is_action_pressed("quit2"):
@@ -57,14 +56,13 @@ func _exit():
 	get_tree().quit()
 
 func _get_nodes() -> void:
-	theme_option = get_node("%theme_optionbutton")
 	tab_container = get_node("%TabContainer")
 	anim_logo = get_node("%logo_animated")
 	log_option = get_node("%logs_button")
 
 func _connect_signals() -> void:
 	#signal_theme_changed.connect(_conf_theme)
-	theme_option.item_selected.connect(_conf_theme)
+	%font_optionbutton.item_selected.connect(change_font)
 	log_option.item_selected.connect(_load_log)
 	%borders_button.pressed.connect(_hide_show_buttons.bind(%borders_button,%borders_gridcontainer,%decorations_gridcontainer))
 	%button_layout.pressed.connect(_hide_show_buttons.bind(%button_layout,%borders_gridcontainer,%decorations_gridcontainer))
@@ -218,20 +216,18 @@ func _set_up_globals() -> void:
 		%button_swap_button.add_theme_stylebox_override("normal", style_box)
 		%button_swap_button.toggle_mode = false
 
-func _conf_theme(index: int) -> void: 
+func change_font(index: int) -> void:
+	var font_file: FontFile
 	match index:
 		1:
-			class_functions.logger("i","Set theme to index " + str(index))
-			#custom_theme = preload("res://res/pixel_ui_theme/RetroDECKTheme.tres")
-			
+			font_file = load("res://res/pixel_ui_theme/pixel-sans.otf")
 		2:
-			class_functions.logger("i","Set theme to index " + str(index))
-			custom_theme = preload("res://assets/themes/retro_theme.tres")
+			font_file = load("res://assets/fonts/munro/munro.ttf")
 		3:
-			class_functions.logger("i","Set theme to index " + str(index))
-			custom_theme = preload("res://assets/themes/modern_theme.tres")
+			font_file = load("res://assets/fonts/akrobat/Akrobat-Regular.otf")
 		4:
-			class_functions.logger("i","Set theme to index " + str(index))
-			custom_theme = preload("res://assets/themes/accesible_theme.tres")
+			font_file = load("res://assets/fonts/OpenDyslexic3/OpenDyslexic3-Regular.ttf") 
+	custom_theme = load("res://assets/themes/default_theme.tres")
+	custom_theme.set_font("font", "Control", font_file)
 	$".".theme = custom_theme
-	#data_handler.change_cfg_value(class_functions.config_file_path, "theme", "options", str(index))
+	data_handler.change_cfg_value(class_functions.config_file_path, "font", "options", str(index))

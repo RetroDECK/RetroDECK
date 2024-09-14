@@ -1,11 +1,9 @@
 extends Control
 
-@onready var custom_theme: Theme = get_tree().current_scene.custom_theme
 var command: String
 var parameters: Array
 
 func _ready():
-	$".".theme = custom_theme
 	var args = OS.get_cmdline_args()
 	for arg in range(args.size()):
 		if args[arg] == "--title" and arg + 1 < args.size():
