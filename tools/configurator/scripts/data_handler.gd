@@ -234,25 +234,20 @@ func parse_config_to_json(file_path: String) -> Dictionary:
 	if file == null:
 		class_functions.logger("e","Failed to open file: " + file_path)
 		return config
-
 	while not file.eof_reached():
 		var line = file.get_line().strip_edges()
 		if line.begins_with("[") and line.ends_with("]"):
-			# Start a new section
 			current_section = line.substr(1, line.length() - 2)
 			config[current_section] = {}
 		elif line != "" and not line.begins_with("#"):
-			# Add key-value pair to the current section
 			var parts = line.split("=")
 			if parts.size() == 2:
 				var key = parts[0].strip_edges()
 				var value = parts[1].strip_edges()	
-				# Convert value to proper type
 				if value == "true":
 					value = true
 				elif value == "false":
 					value = false	
-					
 				if key == "version":
 					config[key] = value
 				else:
@@ -276,7 +271,6 @@ func config_save_json(config: Dictionary, json_file_path: String) -> void:
 
 func read_cfg_file(file_path: String) -> Array:
 	var lines: Array = []
-	var current_section: String = ""
 	var file: FileAccess = FileAccess.open(file_path, FileAccess.ModeFlags.READ)
 	if file:
 		while not file.eof_reached():

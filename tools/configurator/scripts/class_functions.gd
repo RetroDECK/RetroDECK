@@ -16,14 +16,19 @@ var rd_log: String
 var rd_log_folder: String
 var rd_version: String
 var gc_version: String
-var sound_effects: bool = true
+var sound_effects: bool
+var volume_effects: int
 var title: String
 var quick_resume_status: bool
 var update_check: bool
 var abxy_state: String
 signal update_global_signal
+var custom_theme: Theme = $".".theme
 
 func _ready():
+	read_values_states()
+
+func read_values_states() -> void:
 	var config = data_handler.parse_config_to_json(config_file_path)
 	data_handler.config_save_json(config, json_file_path)
 	rd_log_folder = config["paths"]["logs_folder"]
@@ -38,7 +43,13 @@ func _ready():
 	title = "\n   " + rd_version + "\nConfigurator\n    " + gc_version
 	quick_resume_status = config["quick_resume"]["retroarch"]
 	update_check = config["options"]["update_check"]
-	var testT:Dictionary = data_handler.get_elements_in_section(config_file_path, "abxy_button_swap")
+	sound_effects = config["options"]["sound_effects"]
+	volume_effects = int(config["options"]["volume_effects"])
+	
+	multi_state("abxy_button_swap")
+
+func multi_state(section: String) -> void:
+	var testT:Dictionary = data_handler.get_elements_in_section(config_file_path, section)
 	var true_values: int
 	var false_values: int
 	for value in testT.values():
@@ -52,6 +63,7 @@ func _ready():
 		abxy_state = "false"
 	else:
 		abxy_state = "mixed"
+
 func logger(log_type: String, log_text: String) -> void:
 	# Type of log messages:
 	# log d - debug message: maybe in the future we can decide to hide them in main builds or if an option is toggled
@@ -228,6 +240,10 @@ func display_json_data() -> void:
 	else:
 		print ("No emulators")	
 
+func slider_function(value: float, slide: HSlider) -> void:
+	volume_effects = int(slide.value)
+	data_handler.change_cfg_value(class_functions.config_file_path, "volume_effects", "options", str(slide.value))
+
 func run_function(button: Button) -> void:
 	if button.button_pressed:
 		enable_global(button)
@@ -244,6 +260,12 @@ func enable_global(button: Button) -> void:
 			change_global(result)
 		"update_notification_button":
 			result = data_handler.change_cfg_value(class_functions.config_file_path, "update_check", "options", "true")
+			change_global(result)
+		"sound_button":
+			sound_effects = true
+			update_global_signal.emit()
+			result = data_handler.change_cfg_value(class_functions.config_file_path, "sound_effects", "options", "true")
+			class_functions.logger("i", "Enabled: " % (button.name))
 		"button_swap_button":
 			if abxy_state == "false":
 				abxy_state = "true"
@@ -259,6 +281,12 @@ func disable_global(button: Button) -> void:
 			change_global(result)
 		"update_notification_button":
 			result = data_handler.change_cfg_value(class_functions.config_file_path, "update_check", "options", "false")
+			change_global(result)
+		"sound_button":
+			sound_effects = false
+			update_global_signal.emit()
+			result = data_handler.change_cfg_value(class_functions.config_file_path, "sound_effects", "options", "false")
+			class_functions.logger("i", "Disabled: " % (button.name))
 		"button_swap_button":
 			if abxy_state == "true":
 				abxy_state = "false"

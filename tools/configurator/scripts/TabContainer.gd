@@ -20,7 +20,8 @@ func _ready():
 	set_tab_icon(4, ResourceLoader.load("res://assets/icons/pixelitos/128/help-about.png"))
 	set_tab_icon_max_width(4,icon_width)
 	connect_focus_signals(self)
-	
+	%volume_effects_slider.value = class_functions.volume_effects
+
 func connect_focus_signals(node):		
 	for child in node.get_children():
 		if child is Button:
@@ -30,6 +31,7 @@ func connect_focus_signals(node):
 
 func _on_Button_focus_entered(button: Button):
 	if button and class_functions.sound_effects:
+		%AudioStreamPlayer2D.volume_db = class_functions.volume_effects
 		%AudioStreamPlayer2D.play()
 
 func _input(event):

@@ -3,7 +3,7 @@ extends Control
 @onready var bios_type:int
 var theme_option: OptionButton
 #signal signal_theme_changed
-var custom_theme: Theme = $".".theme
+var custom_theme: Theme# = $".".theme
 var log_option: OptionButton
 var tab_container: TabContainer
 var anim_logo: AnimatedSprite2D
@@ -30,8 +30,8 @@ func _ready():
 			n.mouse_entered.connect(_on_control_mouse_entered.bind(n)) #grab focus on mouse hover
 		if (n.is_class("BaseButton") and n.disabled == true): #if button-like control and disabled
 			n.self_modulate.a = 0.5 #make it half transparent
-	combine_tkeys()
-
+	#combine_tkeys()
+	
 func _input(event):
 	if Input.is_action_pressed("quit1") and Input.is_action_pressed("quit2"):
 		_exit()
@@ -73,23 +73,6 @@ func _connect_signals() -> void:
 	%systems_button.pressed.connect(_hide_show_containers.bind(%systems_button, %systems_gridcontainer))
 	class_functions.update_global_signal.connect(_set_up_globals)
 
-
-func _conf_theme(index: int) -> void: 
-	match index:
-		1:
-			class_functions.logger("i","Set theme to index " + str(index))
-			custom_theme = preload("res://res/pixel_ui_theme/RetroDECKTheme.tres")
-		2:
-			class_functions.logger("i","Set theme to index " + str(index))
-			custom_theme = preload("res://assets/themes/retro_theme.tres")
-		3:
-			class_functions.logger("i","Set theme to index " + str(index))
-			custom_theme = preload("res://assets/themes/modern_theme.tres")
-		4:
-			class_functions.logger("i","Set theme to index " + str(index))
-			custom_theme = preload("res://assets/themes/accesible_theme.tres")
-	$".".theme = custom_theme
-
 func _load_log(index: int) -> void:
 	var log_content:String
 	match index:
@@ -104,7 +87,7 @@ func _load_log(index: int) -> void:
 		3: 
 			class_functions.logger("i","Loading RetroArch log")
 			log_content = class_functions.import_text_file(class_functions.rd_log_folder +"/retroarch/logs/log.txt")
-			load_popup("Retroarch Log", "res://components/logs_view/logs_popup_content.tscn",log_content)	
+			load_popup("Retroarch Log", "res://components/logs_view/logs_popup_content.tscn",log_content)
 
 func _play_main_animations() -> void:
 	anim_logo.play()
@@ -179,16 +162,16 @@ func _on_exit_button_pressed():
 	_exit()
 	_exit()
 
-func _on_locale_selected(index):
-	match index:
-		0:
-			TranslationServer.set_locale("en")
-		_:
-			TranslationServer.set_locale("en")
-	combine_tkeys()
+#func _on_locale_selected(index):
+	#match index:
+		#0:
+			#TranslationServer.set_locale("en")
+		#_:
+			#TranslationServer.set_locale("en")
+	#combine_tkeys()
 
-func combine_tkeys(): #More as a test
-	pass
+#func combine_tkeys(): #More as a test
+	#pass
 	#%cheats.text = tr("TK_CHEATS") + " " + tr("TK_SOON") # switched to access as a unique name as easier to refactor
 	#$Background/MarginContainer/TabContainer/TK_SYSTEM/ScrollContainer/VBoxContainer/HBoxContainer/GridContainer/cheats.text = tr("TK_CHEATS") + " " + tr("TK_SOON")
 	#%tate_mode.text = tr("TK_TATE") + " " + tr("TK_SOON")
@@ -208,6 +191,12 @@ func _set_up_globals() -> void:
 	else:
 		%quick_resume_button.button_pressed = false
 		%retroarch_quick_resume_button.button_pressed = false
+	if class_functions.sound_effects:
+		%sound_button.button_pressed = true
+		%volume_effects_slider.visible = true
+	else:
+		%sound_button.button_pressed = false
+		%volume_effects_slider.visible = false
 	if class_functions.abxy_state == "true":
 		%button_swap_button.button_pressed = true
 	elif class_functions.abxy_state == "false":
@@ -228,3 +217,21 @@ func _set_up_globals() -> void:
 		style_box.border_blend = true
 		%button_swap_button.add_theme_stylebox_override("normal", style_box)
 		%button_swap_button.toggle_mode = false
+
+func _conf_theme(index: int) -> void: 
+	match index:
+		1:
+			class_functions.logger("i","Set theme to index " + str(index))
+			#custom_theme = preload("res://res/pixel_ui_theme/RetroDECKTheme.tres")
+			
+		2:
+			class_functions.logger("i","Set theme to index " + str(index))
+			custom_theme = preload("res://assets/themes/retro_theme.tres")
+		3:
+			class_functions.logger("i","Set theme to index " + str(index))
+			custom_theme = preload("res://assets/themes/modern_theme.tres")
+		4:
+			class_functions.logger("i","Set theme to index " + str(index))
+			custom_theme = preload("res://assets/themes/accesible_theme.tres")
+	$".".theme = custom_theme
+	#data_handler.change_cfg_value(class_functions.config_file_path, "theme", "options", str(index))
