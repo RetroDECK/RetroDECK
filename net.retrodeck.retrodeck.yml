@@ -535,8 +535,8 @@ modules:
       - ls -lah "${FLATPAK_DEST}/bin"
     sources:
       - type: file
-        url: https://github.com/PortsMaster/PortMaster-GUI/releases/download/2024.08.24-1111/retrodeck.portmaster.zip
-        sha256: 20a78192995a55ffdfdf4cd9343897c6d1ef50351a8800d188e084f90a847726
+        url: https://github.com/PortsMaster/PortMaster-GUI/releases/download/2024.09.13-1455/retrodeck.portmaster.zip
+        sha256: 4fe3ce3ffdc1d66fe235c8a1a6062a86aa06ee615dba1fe5fc6e9bdd75e9d39c
       - type: script
         commands:
           - |
