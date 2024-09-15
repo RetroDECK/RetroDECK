@@ -437,6 +437,7 @@ post_update() {
     prepare_component "reset" "es-de"
     prepare_component "reset" "portmaster"
     prepare_component "reset" "ruffle"
+    update_rd_conf
 
   # TODO: check this
   #   rm /var/config/emulationstation/.emulationstation # remving the old symlink to .emulationstation as it might be not needed anymore

@@ -41,6 +41,7 @@ jobs:
         continue-on-error: true
 
       - name: Generate a token for Rekku
+        if: ${{ github.repository == 'RetroDECK/RetroDECK' }}
         id: generate-rekku-token
         uses: actions/create-github-app-token@v1
         with:
@@ -86,12 +87,18 @@ jobs:
 
             # Replace '/' with '-' in the branch name
             source_branch=${source_branch//\//-}
+            # Use GITHUB_HEAD_REF to get the source branch
+            source_branch="${GITHUB_HEAD_REF}"
+
+            # Replace '/' with '-' in the branch name
+            source_branch=${source_branch//\//-}
             echo "[DEBUG] source branch is: $source_branch"
 
             # Generate the tag for a pull request
             echo "TAG=PR-$source_branch-${{ env.buildid }}" >> $GITHUB_ENV
             echo "MAKE_LATEST=false" >> $GITHUB_ENV  # Not marked as the latest cooker version if it's a feature branch
           else
+            # Generate the tag for non-pull request branches
             # Generate the tag for non-pull request branches
             TAG="$MANIFEST_VERSION-${{ env.buildid }}"
             echo "TAG=$TAG" >> $GITHUB_ENV
@@ -176,10 +183,11 @@ jobs:
           allowUpdates: true
           makeLatest: ${{env.MAKE_LATEST}} # if it's a feat branch is not considered the latest build
           token: ${{ steps.generate-rekku-token.outputs.token }}
-          repo: Cooker
+          repo: ${{ github.repository_owner == 'RetroDECK' && 'Cooker' || github.event.repository.name }} # "Cooker" if we are in RetroDECK Org, else "this repo"
         continue-on-error: true
 
       - name: Rewrite Tag
+        if: ${{ github.repository == 'RetroDECK/RetroDECK' }}
         run: |
           git submodule deinit -f --all
           git fetch --tags
@@ -200,14 +208,6 @@ jobs:
         with:
           name: retrodeck-flatpak
           path: RetroDECK-cooker.flatpak
-        continue-on-error: true
-
-      - name: Create Artifact for flathub
-        run: | 
-          tar -czf ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.tar.gz -C ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker .
-          hash=($(sha256sum ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.tar.gz))
-          echo $hash > ${GITHUB_WORKSPACE}/RetroDECK-Artifact-cooker.sha
-          mv -f RetroDECK-Artifact-cooker.* ${{ secrets.ARTIFACT_REPO }}
         continue-on-error: true
 
       # - name: Upload RetroDECK-cooker.flatpak to Gitea Release

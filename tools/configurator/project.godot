@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="RetroDECK Configurator"
-config/version="v0.051"
+config/version="0.053"
 run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
 boot_splash/bg_color=Color(0.141176, 0.141176, 0.141176, 0)
@@ -105,6 +105,7 @@ quit1={
 quit2={
 "deadzone": 0.5,
 "events": [Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":7,"pressure":0.0,"pressed":true,"script":null)
+, Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":4,"pressure":0.0,"pressed":true,"script":null)
 ]
 }
 
@@ -121,4 +122,5 @@ locale/translations=PackedStringArray("res://locales/interface.en.translation", 
 textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true
 viewport/transparent_background=true
