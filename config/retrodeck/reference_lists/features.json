@@ -621,7 +621,7 @@
       "name": "Nintendo Pokémon Mini"
     },
     "portmaster": {
-        "name": "PortMaster"
+      "name": "PortMaster"
     },
     "ports": {
       "name": "Ports"
@@ -1129,10 +1129,10 @@
       "launch": "es-de"
     },
     "portmaster": {
-        "description": "PortMaster",
-        "name": "PortMaster",
-        "system": "portmaster",
-        "launch": "PortMaster"
+      "description": "PortMaster",
+      "name": "PortMaster",
+      "system": "portmaster",
+      "launch": "PortMaster"
     }
   }
 }
