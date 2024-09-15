@@ -620,6 +620,9 @@
     "pokemini": {
       "name": "Nintendo Pokémon Mini"
     },
+    "portmaster": {
+      "name": "PortMaster"
+    },
     "ports": {
       "name": "Ports"
     },
@@ -1138,6 +1141,12 @@
       "description": "Steam ROM Manager (used to sync RetroDECK favorites with Steam)",
       "name": "Steam ROM Manager",
       "launch": "steam-rom-manager"
+    },
+    "portmaster": {
+      "description": "PortMaster",
+      "name": "PortMaster",
+      "system": "portmaster",
+      "launch": "PortMaster"
     }
   }
 }
