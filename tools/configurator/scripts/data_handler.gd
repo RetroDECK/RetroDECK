@@ -309,21 +309,21 @@ func write_cfg_file(file_path: String, lines: Array, changes: Dictionary) -> voi
 			file.store_line(line)
 	file.close()
 
-func change_cfg_value(file_path: String, key: String, section: String, new_value: String) -> Array:
+func change_cfg_value(file_path: String, system: String, section: String, new_value: String) -> Array:
 	var lines: Array = read_cfg_file(file_path)
-	var parameters: Array =[key, section]
+	var parameters: Array =[system, section]
 	var changes: Dictionary = {}
 	if section in changes:
-		changes[section][key] = new_value
+		changes[section][system] = new_value
 	else:
-		changes[section] = {key: new_value}
-		class_functions.logger("i", "Change: Key: %s Section %s New Value: %s" % [key, section, new_value])
+		changes[section] = {system: new_value}
+		class_functions.logger("i", "Change: System: %s Section %s New Value: %s" % [system, section, new_value])
 	write_cfg_file(file_path, lines, changes)
 	return parameters
 
-func change_all_cfg_values(file_path: String, section: String, new_value: String) -> Array:
+func change_all_cfg_values(file_path: String, systems: Dictionary, section: String, new_value: String) -> Array:
 	var lines: Array = read_cfg_file(file_path)
-	var parameters: Array =[section, new_value]
+	var parameters: Array =[systems, section]
 	var changes: Dictionary = {}
 	var current_section: String
 	for line in lines:
@@ -331,13 +331,13 @@ func change_all_cfg_values(file_path: String, section: String, new_value: String
 		if trimmed_line.begins_with("[") and trimmed_line.ends_with("]"):
 			current_section = trimmed_line.trim_prefix("[").trim_suffix("]")
 			if current_section == section:
-				changes[current_section] = {}  # Initialize changes for this section
+				changes[current_section] = {}
 		elif "=" in trimmed_line and current_section == section:
 			var parts: Array = trimmed_line.split("=", false)
 			if parts.size() >= 2:
 				var key: String = parts[0].strip_edges()
 				changes[section][key] = new_value
-				class_functions.logger("i", "Change: Key: %s Section %s New Value: %s" % [key, section, new_value])
+				class_functions.logger("i", "Change: Systems: %s Section %s New Value: %s" % [systems, section, new_value])
 	write_cfg_file(file_path, lines, changes)
 	return parameters
 

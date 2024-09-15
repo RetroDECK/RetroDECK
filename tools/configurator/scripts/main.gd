@@ -179,42 +179,33 @@ func _on_exit_button_pressed():
 	#$Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer/system_container/easter_eggs.text = tr("TK_EASTEREGGS") + " " + tr("TK_SOON")
 
 func _set_up_globals() -> void:
-	if class_functions.update_check:
-		%update_notification_button.button_pressed = true
-	else:
-		%update_notification_button.button_pressed = false
-	if class_functions.quick_resume_status:
-		%quick_resume_button.button_pressed = true
-		%retroarch_quick_resume_button.button_pressed = true
-	else:
-		%quick_resume_button.button_pressed = false
-		%retroarch_quick_resume_button.button_pressed = false
-	if class_functions.sound_effects:
-		%sound_button.button_pressed = true
-		%volume_effects_slider.visible = true
-	else:
-		%sound_button.button_pressed = false
-		%volume_effects_slider.visible = false
-	if class_functions.abxy_state == "true":
-		%button_swap_button.button_pressed = true
-	elif class_functions.abxy_state == "false":
-		%button_swap_button.button_pressed = false
-	else:
-		var style_box = StyleBoxFlat.new()
-		style_box.bg_color = Color(1, 0.54902, 0, 1)
-		style_box.corner_detail = 8
-		style_box.border_width_left = 15
-		style_box.border_width_top = 15
-		style_box.border_width_right = 15
-		style_box.border_width_bottom = 15
-		style_box.corner_radius_top_left = 25
-		style_box.corner_radius_top_right = 25
-		style_box.corner_radius_bottom_right = 25
-		style_box.corner_radius_bottom_left = 25
-		style_box.border_color = Color(0.102, 0.624, 1, 1)
-		style_box.border_blend = true
-		%button_swap_button.add_theme_stylebox_override("normal", style_box)
-		%button_swap_button.toggle_mode = false
+	%update_notification_button.button_pressed = class_functions.update_check
+	var quick_resume = class_functions.quick_resume_status
+	%quick_resume_button.button_pressed = quick_resume
+	%retroarch_quick_resume_button.button_pressed = quick_resume
+	var sound_effects = class_functions.sound_effects
+	%sound_button.button_pressed = sound_effects
+	%volume_effects_slider.visible = sound_effects
+	match class_functions.abxy_state:
+		"true":
+			%button_swap_button.button_pressed = true
+		"false":
+			%button_swap_button.button_pressed = false
+		_:
+			var style_box = StyleBoxFlat.new()
+			style_box.bg_color = Color(1, 0.54902, 0, 1)  # Orange color
+			style_box.border_color = Color(0.102, 0.624, 1, 1)  # Blue border
+			style_box.border_blend = true
+			style_box.corner_radius_top_left = 25
+			style_box.corner_radius_top_right = 25
+			style_box.corner_radius_bottom_right = 25
+			style_box.corner_radius_bottom_left = 25
+			style_box.border_width_left = 15
+			style_box.border_width_top = 15
+			style_box.border_width_right = 15
+			style_box.border_width_bottom = 15
+			%button_swap_button.add_theme_stylebox_override("normal", style_box)
+			%button_swap_button.toggle_mode = false
 
 func change_font(index: int) -> void:
 	var font_file: FontFile

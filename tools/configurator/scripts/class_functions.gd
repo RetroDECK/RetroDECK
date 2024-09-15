@@ -3,9 +3,9 @@ class_name ClassFunctions
 extends Control
 var log_result: Dictionary
 var log_parameters: Array
-var wrapper_command: String = "/app/tools/retrodeck_function_wrapper.sh"
-var config_file_path = "/var/config/retrodeck/retrodeck.cfg"
-var json_file_path = "/var/config/retrodeck/retrodeck.json"
+const wrapper_command: String = "/app/tools/retrodeck_function_wrapper.sh"
+const config_file_path = "/var/config/retrodeck/retrodeck.cfg"
+const json_file_path = "/var/config/retrodeck/retrodeck.json"
 var desktop_mode: String = OS.get_environment("XDG_CURRENT_DESKTOP")
 var rdhome: String
 var roms_folder: String
@@ -43,27 +43,27 @@ func read_values_states() -> void:
 	title = "\n   " + rd_version + "\nConfigurator\n    " + gc_version
 	quick_resume_status = config["quick_resume"]["retroarch"]
 	update_check = config["options"]["update_check"]
+	multi_state("abxy_button_swap")
 	sound_effects = config["options"]["sound_effects"]
 	volume_effects = int(config["options"]["volume_effects"])
 	font_select = int(config["options"]["font"])
-	multi_state("abxy_button_swap")
 
 func multi_state(section: String) -> void:
-	var testT:Dictionary = data_handler.get_elements_in_section(config_file_path, section)
-	var true_values: int
-	var false_values: int
-	for value in testT.values():
+	var config_section:Dictionary = data_handler.get_elements_in_section(config_file_path, section)
+	var true_count: int = 0
+	var false_count: int = 0
+	for value in config_section.values():
 		if value == "true":
-			true_values += 1
+			true_count += 1
 		else:
-			false_values += 1
-	if true_values == testT.size():
+			false_count += 1
+	if true_count == config_section.size():
 		abxy_state = "true"
-	elif false_values == testT.size():
+	elif false_count == config_section.size():
 		abxy_state = "false"
 	else:
 		abxy_state = "mixed"
-
+		
 func logger(log_type: String, log_text: String) -> void:
 	# Type of log messages:
 	# log d - debug message: maybe in the future we can decide to hide them in main builds or if an option is toggled
@@ -101,9 +101,7 @@ func run_command_in_thread(command: String, paramaters: Array, _console: bool) -
 	thread.start(execute_command.bind(command,paramaters,false))
 	while thread.is_alive():
 		await get_tree().process_frame
-	var result = thread.wait_to_finish()
-	thread = null
-	return result
+	return thread.wait_to_finish()
 	
 func run_thread_command(command: String, parameters: Array, console: bool) -> Dictionary:
 	log_result = await run_command_in_thread(command, parameters, console)
@@ -156,11 +154,11 @@ func import_text_file(file_path: String) -> String:
 	var content: String = ""
 	var file = FileAccess.open(file_path, FileAccess.READ)
 	if file == null:
-		class_functions.logger("e","Failed to open file %s" % file_path)
+		logger("e","Failed to open file %s" % file_path)
 		return content
 	while not file.eof_reached():
 		content += file.get_line() + "\n"
-	file.close
+	#file.close
 	return content
 
 func map_locale_id(current_locale: String) -> int:
@@ -183,9 +181,7 @@ func map_locale_id(current_locale: String) -> int:
 	return int_locale
 
 func environment_data() -> void:
-	var env_result = class_functions.execute_command("printenv",[], true)
-	#print (env_result["output"])
-	#print (OS.get_environment("XDG_CURRENT_DESKTOP"))
+	var env_result = execute_command("printenv",[], true)
 	var file = FileAccess.open(OS.get_environment("HOME") + "/sdenv.txt",FileAccess.WRITE)
 	if file != null:
 		file.store_string(env_result["output"])
@@ -242,7 +238,7 @@ func display_json_data() -> void:
 
 func slider_function(value: float, slide: HSlider) -> void:
 	volume_effects = int(slide.value)
-	data_handler.change_cfg_value(class_functions.config_file_path, "volume_effects", "options", str(slide.value))
+	data_handler.change_cfg_value(config_file_path, "volume_effects", "options", str(slide.value))
 
 func run_function(button: Button) -> void:
 	if button.button_pressed:
@@ -252,49 +248,53 @@ func run_function(button: Button) -> void:
 
 func enable_global(button: Button) -> void:
 	var result: Array
+	var config_section:Dictionary = data_handler.get_elements_in_section(config_file_path, "abxy_button_swap")
 	match button.name:
 		"quick_resume_button", "retroarch_quick_resume_button":
 			quick_resume_status = true
 			update_global_signal.emit()
-			result = data_handler.change_cfg_value(class_functions.config_file_path, "retroarch", "quick_resume", "true")
-			change_global(result)
+			result = data_handler.change_cfg_value(config_file_path, "retroarch", "quick_resume", "true")
+			change_global(result, "build_preset_config")
 		"update_notification_button":
-			result = data_handler.change_cfg_value(class_functions.config_file_path, "update_check", "options", "true")
-			change_global(result)
+			result = data_handler.change_cfg_value(config_file_path, "update_check", "options", "true")
+			change_global(result, "build_preset_config")
 		"sound_button":
 			sound_effects = true
 			update_global_signal.emit()
-			result = data_handler.change_cfg_value(class_functions.config_file_path, "sound_effects", "options", "true")
-			class_functions.logger("i", "Enabled: " % (button.name))
+			result = data_handler.change_cfg_value(config_file_path, "sound_effects", "options", "true")
+			logger("i", "Enabled: " % (button.name))
 		"button_swap_button":
 			if abxy_state == "false":
 				abxy_state = "true"
-				result = data_handler.change_all_cfg_values(class_functions.config_file_path, "abxy_button_swap", "true")
+				result = data_handler.change_all_cfg_values(config_file_path, config_section, "abxy_button_swap", "true")
+				change_global(result, "build_preset_config")
 
 func disable_global(button: Button) -> void:
 	var result: Array
+	var config_section:Dictionary = data_handler.get_elements_in_section(config_file_path, "abxy_button_swap")
 	match button.name:
 		"quick_resume_button", "retroarch_quick_resume_button":
 			quick_resume_status = false
 			update_global_signal.emit()
-			result = data_handler.change_cfg_value(class_functions.config_file_path, "retroarch", "quick_resume", "false")
-			change_global(result)
+			result = data_handler.change_cfg_value(config_file_path, "retroarch", "quick_resume", "false")
+			change_global(result, "build_preset_config")
 		"update_notification_button":
-			result = data_handler.change_cfg_value(class_functions.config_file_path, "update_check", "options", "false")
-			change_global(result)
+			result = data_handler.change_cfg_value(config_file_path, "update_check", "options", "false")
+			change_global(result, "build_preset_config")
 		"sound_button":
 			sound_effects = false
 			update_global_signal.emit()
-			result = data_handler.change_cfg_value(class_functions.config_file_path, "sound_effects", "options", "false")
-			class_functions.logger("i", "Disabled: " % (button.name))
+			result = data_handler.change_cfg_value(config_file_path, "sound_effects", "options", "false")
+			logger("i", "Disabled: " % (button.name))
 		"button_swap_button":
 			if abxy_state == "true":
 				abxy_state = "false"
-				result = data_handler.change_all_cfg_values(class_functions.config_file_path, "abxy_button_swap", "false")
+				result = data_handler.change_all_cfg_values(config_file_path, config_section, "abxy_button_swap", "false")
+				change_global(result, "build_preset_config")
 
-func change_global(parameters: Array) -> void:
-	parameters.push_front("build_preset_config")
-	class_functions.logger("d", "Running: %s" % var_to_str(parameters)) 
-	var result: Dictionary
-	result = await class_functions.run_thread_command(class_functions.wrapper_command, parameters, false)
-	class_functions.logger("d", "Exit code: %s" % result["exit_code"])
+func change_global(parameters: Array, preset: String) -> void:
+	for system in parameters[0].keys():
+		var command_parameter: Array = [preset, system, parameters[1]]
+		logger("d", "Change Global: %s System: %s Preset %s " % command_parameter) 
+		var result: Dictionary = await run_thread_command(wrapper_command, command_parameter, false)
+		logger("d", "Exit code: %s" % result["exit_code"])

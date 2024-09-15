@@ -8,4 +8,4 @@ func _ready():
 func _connect_signals():
 	%quick_resume_button.pressed.connect(class_functions.run_function.bind(%quick_resume_button))
 	%button_swap_button.pressed.connect(class_functions.run_function.bind(%button_swap_button))
-	
+	%widescreen_button.pressed.connect(class_functions.run_function.bind(%widescreen_button))
