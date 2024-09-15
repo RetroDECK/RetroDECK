@@ -24,7 +24,11 @@ if [[ $current_branch == feat/* && $current_branch == *okonomiyaki* ]]; then
     git pull origin $branch
     
     echo "Merging $branch into $current_branch..."
-    git merge origin/$branch
+    if ! git merge origin/$branch; then
+      echo "Merge conflict detected while merging $branch!"
+      echo "Please resolve the conflict, then run 'git merge --continue' to finish the merge."
+      exit 1  # Exit the script due to conflict
+    fi
   done
 else
   echo "Current branch is not an okonomiyaki branch, quitting."
