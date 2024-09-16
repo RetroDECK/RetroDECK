@@ -2,6 +2,10 @@ app-id: net.retrodeck.retrodeck
 runtime: org.kde.Platform
 runtime-version: "6.7"
 sdk: org.kde.Sdk
+base: org.electronjs.Electron2.BaseApp            # Needed for Steam ROM Manager
+base-version: "22.08"
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.llvm18        # Needed for RPCS3
 command: retrodeck.sh
 
 finish-args:
@@ -27,7 +31,7 @@ finish-args:
   - --env=SDL_VIDEO_WAYLAND_WMCLASS=net.retrodeck.retrodeck
   # XEMU - Fixes issues with openSUSE systems, QEMU_AUDIO_DRV is defined as "pa" causing xemu to not launch
   - --unset-env=QEMU_AUDIO_DRV
-  # BoilR
+  # Steam ROM Manager
   - --filesystem=xdg-data/Steam:rw #Steam (flatpak)
   - --filesystem=~/.steam:rw # Steam (Non-flatpak)
   - --filesystem=~/.var/app/com.valvesoftware.Steam:rw # Steam (Flatpak)
@@ -46,6 +50,7 @@ cleanup:
   - /bin/zstd*
   - /lib/pkg-config
   - /share/doc
+  - /share/gtk-doc # Steam ROM Manager
   - /share/man
   - /src
   - '*.a'
@@ -143,6 +148,48 @@ modules:
       - type: file
         url: https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
         sha256: af986793a515d500ab2d35f8d2aecd656e764504b789b66d7e1a0b727a124c44
+
+  # Steam ROM Manager - START
+
+  - name: zypak
+    sources:
+      - type: git
+        url: https://github.com/refi64/zypak
+        tag: v2022.03
+        commit: 8424c6bcf909ca2031ebc6537d324bb64772266e
+
+  - name: steam-rom-manager
+    buildsystem: simple
+    env:
+        IN_FLATPAK: 1
+    build-commands:
+      - install -D run.sh ${FLATPAK_DEST}/bin/steam-rom-manager
+      - cp /usr/bin/ar ${FLATPAK_DEST}/bin
+      - ar x srm.deb
+      - tar xf data.tar.xz
+      - mv "opt/Steam ROM Manager" "${FLATPAK_DEST}/srm"
+      - rm -rf "usr/share/icons/hicolor/1024x1024"
+      - cd usr; find share/icons/hicolor -type f -exec install -Dm644 "{}"
+        "${FLATPAK_DEST}/{}" \;
+      - rm -r srm.deb control.tar.* data.tar.xz debian-binary usr opt
+    sources:
+      - type: script
+        dest-filename: run.sh
+        commands:
+          - /app/bin/zypak-wrapper.sh /app/srm/steam-rom-manager "${@}"
+      - type: file
+        dest-filename: srm.deb
+        url: https://github.com/SteamGridDB/steam-rom-manager/releases/download/v2.4.19/steam-rom-manager_2.4.19_amd64.deb
+        sha256: aa4f121d50612801c30b9365e05cb92a3b4a9c402974fee2b88652de8d731b0e
+        x-checker-data:
+          type: json
+          url: https://api.github.com/repos/SteamGridDB/steam-rom-manager/releases/latest
+          url-query: >-
+            .assets[] | select(.name=="steam-rom-manager_" + $version +
+            "_amd64.deb") | .browser_download_url
+          version-query: .tag_name | sub("^v"; "")
+
+  # Steam ROM Manager - END
   
   - name: yq
     buildsystem: simple
