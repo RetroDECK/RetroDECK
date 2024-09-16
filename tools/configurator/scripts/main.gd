@@ -9,6 +9,7 @@ var a_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-
 var b_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0043.png")
 var l1_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0797.png")
 var r1_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0798.png")
+var style_box_original: StyleBox = preload("res://assets/themes/default_theme.tres::StyleBoxFlat_0ahfc")
 
 func _ready():	
 	_get_nodes()
@@ -180,21 +181,23 @@ func _on_exit_button_pressed():
 
 func _set_up_globals() -> void:
 	%update_notification_button.button_pressed = class_functions.update_check
-	var quick_resume = class_functions.quick_resume_status
-	%quick_resume_button.button_pressed = quick_resume
-	%retroarch_quick_resume_button.button_pressed = quick_resume
-	var sound_effects = class_functions.sound_effects
-	%sound_button.button_pressed = sound_effects
-	%volume_effects_slider.visible = sound_effects
+	%quick_resume_button.button_pressed = class_functions.quick_resume_status
+	%retroarch_quick_resume_button.button_pressed = class_functions.quick_resume_status
+	%sound_button.button_pressed = class_functions.sound_effects
+	%volume_effects_slider.visible = class_functions.sound_effects
 	match class_functions.abxy_state:
 		"true":
 			%button_swap_button.button_pressed = true
+			%button_swap_button.add_theme_stylebox_override("normal", style_box_original)
 		"false":
 			%button_swap_button.button_pressed = false
-		_:
+			%button_swap_button.add_theme_stylebox_override("normal", style_box_original)
+		"mixed":
+			%button_swap_button.button_pressed = false
+			%button_swap_button.toggle_mode = false
 			var style_box = StyleBoxFlat.new()
-			style_box.bg_color = Color(1, 0.54902, 0, 1)  # Orange color
-			style_box.border_color = Color(0.102, 0.624, 1, 1)  # Blue border
+			style_box.bg_color = Color(1, 0.54902, 0, 1)
+			style_box.border_color = Color(0.102, 0.624, 1, 1)
 			style_box.border_blend = true
 			style_box.corner_radius_top_left = 25
 			style_box.corner_radius_top_right = 25
@@ -205,7 +208,6 @@ func _set_up_globals() -> void:
 			style_box.border_width_right = 15
 			style_box.border_width_bottom = 15
 			%button_swap_button.add_theme_stylebox_override("normal", style_box)
-			%button_swap_button.toggle_mode = false
 
 func change_font(index: int) -> void:
 	var font_file: FontFile

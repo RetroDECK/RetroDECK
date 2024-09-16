@@ -84,7 +84,7 @@ func _on_Button_released(progress: ProgressBar) -> void:
 	progress.value = 0.0
 		
 func _do_action(button: Button) -> void:
-	var tmp_txt = button.text
+	var original_txt = button.text
 	match [button.name, current_system.name]:
 		["help_button", current_system.name]:
 			if class_functions.desktop_mode != "gamescope":
@@ -93,7 +93,7 @@ func _do_action(button: Button) -> void:
 			else:
 				button.text = "Help only works in Desktop Mode"
 				await class_functions.wait(3.0)
-				button.text = tmp_txt
+				button.text = original_txt
 		["launch_button", current_system.name]:
 			class_functions.logger("i", "Launching " + current_system.name)
 			var launch = class_functions.execute_command(current_system.launch,[], false)

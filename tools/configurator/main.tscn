@@ -273,10 +273,21 @@ tooltip_text = "Change to Nintendo style button mappings."
 text = "BUTTON SWAP
 "
 icon = ExtResource("4_caaxx")
-alignment = 1
 icon_alignment = 1
 vertical_icon_alignment = 0
 expand_icon = true
+
+[node name="button_swap_progress" type="ProgressBar" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer/button_swap_button"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_1161k")
+show_percentage = false
 
 [node name="mods_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer"]
 custom_minimum_size = Vector2(375, 125)
@@ -531,6 +542,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 size_flags_horizontal = 3
+action_mode = 0
 text = "HELP"
 icon = ExtResource("46_feagl")
 expand_icon = true

@@ -252,7 +252,6 @@ func enable_global(button: Button) -> void:
 	match button.name:
 		"quick_resume_button", "retroarch_quick_resume_button":
 			quick_resume_status = true
-			update_global_signal.emit()
 			result = data_handler.change_cfg_value(config_file_path, "retroarch", "quick_resume", "true")
 			change_global(result, "build_preset_config")
 		"update_notification_button":
@@ -260,7 +259,6 @@ func enable_global(button: Button) -> void:
 			change_global(result, "build_preset_config")
 		"sound_button":
 			sound_effects = true
-			update_global_signal.emit()
 			result = data_handler.change_cfg_value(config_file_path, "sound_effects", "options", "true")
 			logger("i", "Enabled: " % (button.name))
 		"button_swap_button":
@@ -275,7 +273,6 @@ func disable_global(button: Button) -> void:
 	match button.name:
 		"quick_resume_button", "retroarch_quick_resume_button":
 			quick_resume_status = false
-			update_global_signal.emit()
 			result = data_handler.change_cfg_value(config_file_path, "retroarch", "quick_resume", "false")
 			change_global(result, "build_preset_config")
 		"update_notification_button":
@@ -283,7 +280,6 @@ func disable_global(button: Button) -> void:
 			change_global(result, "build_preset_config")
 		"sound_button":
 			sound_effects = false
-			update_global_signal.emit()
 			result = data_handler.change_cfg_value(config_file_path, "sound_effects", "options", "false")
 			logger("i", "Disabled: " % (button.name))
 		"button_swap_button":
@@ -293,8 +289,16 @@ func disable_global(button: Button) -> void:
 				change_global(result, "build_preset_config")
 
 func change_global(parameters: Array, preset: String) -> void:
-	for system in parameters[0].keys():
-		var command_parameter: Array = [preset, system, parameters[1]]
-		logger("d", "Change Global: %s System: %s Preset %s " % command_parameter) 
-		var result: Dictionary = await run_thread_command(wrapper_command, command_parameter, false)
-		logger("d", "Exit code: %s" % result["exit_code"])
+	match parameters[1]:
+		"abxy_button_swap":
+			for system in parameters[0].keys():
+				var command_parameter: Array = [preset, system, parameters[1]]
+				logger("d", "Change Global: %s System: %s Preset %s " % command_parameter) 
+				var result: Dictionary = await run_thread_command(wrapper_command, command_parameter, false)
+				logger("d", "Exit code: %s" % result["exit_code"])
+		_:
+			var command_parameter: Array = [preset, parameters]
+			logger("d", "Change Global: %s System: %s" % command_parameter) 
+			var result: Dictionary = await run_thread_command(wrapper_command, command_parameter, false)
+			logger("d", "Exit code: %s" % result["exit_code"])
+	update_global_signal.emit()
