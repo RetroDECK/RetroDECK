@@ -210,4 +210,5 @@ fi
 
 # Normal Startup
 start_retrodeck
+# After everything is closed we run the quit function
 quit_retrodeck
