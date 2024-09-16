@@ -1,4 +1,4 @@
-[gd_scene load_steps=113 format=3 uid="uid://61f6m4r1mpan"]
+[gd_scene load_steps=114 format=3 uid="uid://61f6m4r1mpan"]
 
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
 [ext_resource type="Theme" uid="uid://hhc60cllcg47" path="res://assets/themes/default_theme.tres" id="1_if8nh"]
@@ -15,6 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://dk856hwnwsuab" path="res://assets/icons/pixelitos/128/retroarch.png" id="4_xcuib"]
 [ext_resource type="Texture2D" uid="uid://cvr1eijddf6nv" path="res://assets/icons/banner/gamegear.png" id="5_4d7s7"]
 [ext_resource type="Texture2D" uid="uid://d2lm4mfx1gt86" path="res://assets/graphics/retrodeck_base_shake0.png" id="5_7rjbt"]
+[ext_resource type="Texture2D" uid="uid://bns3nmvku2qhe" path="res://assets/icons/pixelitos/128/system-shutdown.png" id="5_ahd1x"]
 [ext_resource type="Texture2D" uid="uid://dv42c6hpi6tde" path="res://assets/icons/pixelitos/128/cs-tiling.png" id="5_box56"]
 [ext_resource type="Script" path="res://helper_text.gd" id="5_cprkf"]
 [ext_resource type="Texture2D" uid="uid://dxdhjp18rgmr4" path="res://res/flags/united_kingdom_32.png" id="5_exkn2"]
@@ -254,6 +255,29 @@ layout_mode = 2
 theme_override_constants/h_separation = 25
 theme_override_constants/v_separation = 25
 columns = 3
+
+[node name="ask_to_exit_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(375, 125)
+layout_mode = 2
+text = "ASK TO EXIT"
+icon = ExtResource("5_ahd1x")
+alignment = 1
+icon_alignment = 1
+vertical_icon_alignment = 0
+expand_icon = true
+
+[node name="ask_to_exit_progress" type="ProgressBar" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer/ask_to_exit_button"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_1161k")
+show_percentage = false
 
 [node name="borders_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer"]
 custom_minimum_size = Vector2(375, 125)
