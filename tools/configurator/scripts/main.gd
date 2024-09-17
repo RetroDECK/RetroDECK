@@ -191,36 +191,9 @@ func _set_up_globals(state: Array) -> void:
 	mixed_mode(%ask_to_exit_button, class_functions.ask_to_exit_state)
 	mixed_mode(%border_button, class_functions.border_state)
 	mixed_mode(%widescreen_button, class_functions.widescreen_state)
-	#match class_functions.ask_to_exit_state:
-		#"true":
-			#%ask_to_exit_button.button_pressed = true
-			#%ask_to_exit_button.add_theme_stylebox_override("normal", style_box_original)
-		#"false":
-			#%ask_to_exit_button.button_pressed = false
-			#%ask_to_exit_button.add_theme_stylebox_override("normal", style_box_original)
-		#"mixed":
-			#mixed_status(%ask_to_exit_button)
-	#match class_functions.border_state:
-		#"true":
-			#%border_button.button_pressed = true
-			#%border_button.add_theme_stylebox_override("normal", style_box_original)
-		#"false":
-			#%border_button.button_pressed = false
-			#%border_button.add_theme_stylebox_override("normal", style_box_original)
-		#"mixed":
-			#mixed_status(%border_button)
-	#match class_functions.widescreen_state:
-		#"true":
-			#%widescreen_button.button_pressed = true
-			#%widescreen_button.add_theme_stylebox_override("normal", style_box_original)
-		#"false":
-			#%widescreen_button.button_pressed = false
-			#%widescreen_button.add_theme_stylebox_override("normal", style_box_original)
-		#"mixed":
-			#mixed_status(%widescreen_button)
+	mixed_mode(%quick_rewind_button, class_functions.quick_rewind_state)
 
 func mixed_mode (button: Button, state: String) -> void:
-	
 	match [class_functions.button_list]:
 		[class_functions.button_list]:
 			if state == "true":

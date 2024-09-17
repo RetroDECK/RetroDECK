@@ -294,7 +294,12 @@ func update_global(button: Button, preset: String, state: bool) -> void:
 				widescreen_state = str(state)
 				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
 				change_global(result, "build_preset_config", button, widescreen_state)
-
+		"quick_rewind_button":
+			if quick_rewind_state != "mixed":
+				quick_rewind_state = str(state)
+				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
+				change_global(result, "build_preset_config", button, quick_rewind_state)
+				
 func change_global(parameters: Array, preset: String, button: Button, state: String) -> void:
 	print (parameters)
 	match parameters[1]:
