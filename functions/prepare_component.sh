@@ -892,8 +892,10 @@ prepare_component() {
 
     rm -rf "/var/data/PortMaster"
     unzip "/app/retrodeck/PortMaster.zip" -d "/var/data/"
+    cp -f "/var/data/PortMaster/retrodeck/PortMaster.txt" "/var/data/PortMaster/PortMaster.sh"
     chmod +x "/var/data/PortMaster/PortMaster.sh"
-    ln -s "/app/bin/PortMaster" "$roms_folder/portmaster/PortMaster.sh"
+    rm -f "$roms_folder/portmaster/PortMaster.sh"
+    install -Dm755 "/var/data/PortMaster/PortMaster.sh" "$roms_folder/portmaster/PortMaster.sh"
   fi
 
   if [[ "$component" =~ ^(ruffle|all)$ ]]; then
