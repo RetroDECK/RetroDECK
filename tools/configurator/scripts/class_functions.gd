@@ -24,7 +24,11 @@ var update_check: bool
 var abxy_state: String
 var ask_to_exit_state: String
 var border_state: String
+var widescreen_state: String
+var quick_rewind_state: String
 var font_select: int
+enum preset_list {abxy_button_swap, ask_to_exit, borders, widescreen, rewind}
+var button_list: Array = ["button_swap_button", "ask_to_exit_button", "border_button", "widescreen_button", "quick_rewind_button"]
 signal update_global_signal
 
 func _ready():
@@ -48,6 +52,8 @@ func read_values_states() -> void:
 	abxy_state = multi_state("abxy_button_swap", abxy_state)
 	ask_to_exit_state = multi_state("ask_to_exit", ask_to_exit_state)
 	border_state = multi_state("borders", border_state)
+	widescreen_state = multi_state("widescreen", widescreen_state)
+	quick_rewind_state = multi_state("rewind", quick_rewind_state)
 	sound_effects = config["options"]["sound_effects"]
 	volume_effects = int(config["options"]["volume_effects"])
 	font_select = int(config["options"]["font"])
@@ -247,10 +253,8 @@ func slider_function(value: float, slide: HSlider) -> void:
 
 func run_function(button: Button, preset: String) -> void:
 	if button.button_pressed:
-		print (button.name)
 		update_global(button, preset, true)
 	else:
-		print ("ELSE:" + button.name)
 		update_global(button, preset, false)
 
 func update_global(button: Button, preset: String, state: bool) -> void:
@@ -281,17 +285,20 @@ func update_global(button: Button, preset: String, state: bool) -> void:
 				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
 				change_global(result, "build_preset_config", button, ask_to_exit_state)
 		"border_button":
-			print (border_state)
 			if border_state != "mixed":
 				border_state = str(state)
-				print (border_state)
 				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
 				change_global(result, "build_preset_config", button, border_state)
+		"widescreen_button":
+			if widescreen_state != "mixed":
+				widescreen_state = str(state)
+				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
+				change_global(result, "build_preset_config", button, widescreen_state)
 
 func change_global(parameters: Array, preset: String, button: Button, state: String) -> void:
-	#print (parameters)
+	print (parameters)
 	match parameters[1]:
-		"abxy_button_swap", "ask_to_exit", "borders":
+		preset_list:
 			for system in parameters[0].keys():
 				var command_parameter: Array = [preset, system, parameters[1]]
 				logger("d", "Change Global: %s System: %s Preset %s " % command_parameter) 

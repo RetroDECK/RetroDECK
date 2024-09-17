@@ -329,6 +329,7 @@ show_percentage = false
 [node name="mods_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer"]
 custom_minimum_size = Vector2(375, 125)
 layout_mode = 2
+disabled = true
 text = "MODS"
 icon = ExtResource("5_vehlp")
 alignment = 1
@@ -349,6 +350,7 @@ vertical_icon_alignment = 0
 expand_icon = true
 
 [node name="quick_rewind_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(375, 125)
 layout_mode = 2
 text = "QUICK REWIND"
@@ -357,6 +359,18 @@ alignment = 1
 icon_alignment = 1
 vertical_icon_alignment = 0
 expand_icon = true
+
+[node name="quick_rewind_progress" type="ProgressBar" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer/quick_rewind_button"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_1161k")
+show_percentage = false
 
 [node name="tate_mode_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer"]
 custom_minimum_size = Vector2(375, 125)
@@ -373,6 +387,7 @@ expand_icon = true
 [node name="shaders_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer"]
 custom_minimum_size = Vector2(375, 125)
 layout_mode = 2
+disabled = true
 text = "SHADERS"
 icon = ExtResource("4_q6hd2")
 alignment = 1
@@ -390,6 +405,18 @@ alignment = 1
 icon_alignment = 1
 vertical_icon_alignment = 0
 expand_icon = true
+
+[node name="widescreen_progress" type="ProgressBar" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer/widescreen_button"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_1161k")
+show_percentage = false
 
 [node name="reset_retrodeck_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer"]
 custom_minimum_size = Vector2(375, 125)
