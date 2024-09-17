@@ -1,7 +1,6 @@
 extends Control
 
 var content = null
-@onready var custom_theme: Theme = get_tree().current_scene.custom_theme
 #@onready var button_off = get_node(current_scene.%l1_button)# .current_scene.l1_button
 @onready var lbhide: TextureButton = get_tree().current_scene.get_node("%l1_button")
 @onready var rbhide: TextureButton = get_tree().current_scene.get_node("%r1_button")
@@ -9,8 +8,8 @@ var content = null
 func _ready():
 	lbhide.visible=false
 	rbhide.visible=false
-	$".".theme = custom_theme
-	if (content != null):
+	# TODO this alowes copy and paste from RTB in logs?
+	if (content != null and bios_type > 0):
 		$Panel/MarginContainer/VBoxContainer/ContentContainer/MarginContainer.add_child(content)
 	
 
