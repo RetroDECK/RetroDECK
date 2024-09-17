@@ -642,8 +642,9 @@ modules:
       - cp -r files/* "${FLATPAK_DEST}"
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
+      # Testing the new feat/update-3.1.0
       - type: archive
-        url: https://github.com/RetroDECK/ES-DE/releases/download/feat%2Fshadps4-150924.23/RetroDECK-ES-DE-Artifact.tar.gz
+        url: https://github.com/RetroDECK/ES-DE/releases/download/feat%2Fupdate-3.1.0-170924.19/RetroDECK-ES-DE-Artifact.tar.gz
         sha256: 21b937034be0381dab81b00ec0a9a95210b0610c1a3b66c5ab3b3b0aceae8654
         #url: https://github.com/RetroDECK/ES-DE/releases/latest/download/RetroDECK-ES-DE-Artifact.tar.gz
         #sha256: RETRODECKESDELATEST
