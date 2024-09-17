@@ -247,19 +247,18 @@ func slider_function(value: float, slide: HSlider) -> void:
 
 func run_function(button: Button, preset: String) -> void:
 	if button.button_pressed:
-		enable_global(button, preset, true)
+		print (button.name)
+		update_global(button, preset, true)
 	else:
-		#TODO use enables put pass state?
-		enable_global(button, preset, false)
-		#disable_global(button, preset)
+		print ("ELSE:" + button.name)
+		update_global(button, preset, false)
 
-func enable_global(button: Button, preset: String, state: bool) -> void:
+func update_global(button: Button, preset: String, state: bool) -> void:
+	#TODO pass state as an object in future version
 	var result: Array
 	var config_section:Dictionary = data_handler.get_elements_in_section(config_file_path, preset)
-	print (config_section)
 	match button.name:
 		"quick_resume_button", "retroarch_quick_resume_button":
-			print (quick_resume_status)
 			quick_resume_status = state
 			result = data_handler.change_cfg_value(config_file_path, "retroarch", preset, str(state))
 			change_global(result, "build_preset_config", button, str(quick_resume_status))
@@ -272,53 +271,25 @@ func enable_global(button: Button, preset: String, state: bool) -> void:
 			result = data_handler.change_cfg_value(config_file_path, preset, "options", str(state))
 			logger("i", "Enabled: " % (button.name))
 		"button_swap_button":
-			#if abxy_state == "false":
-				#abxy_state = "true"
-			#else:
-				#abxy_state = ""
 			if abxy_state != "mixed":
 				abxy_state = str(state)
 				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
 				change_global(result, "build_preset_config", button, abxy_state)
 		"ask_to_exit_button":
-			if ask_to_exit_state == "false":
-				ask_to_exit_state = "true"
 			if ask_to_exit_state != "mixed":
+				ask_to_exit_state = str(state)
 				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
 				change_global(result, "build_preset_config", button, ask_to_exit_state)
-		"borders_button":
-			if ask_to_exit_state == "false":
-				ask_to_exit_state = "true"
-				result = data_handler.change_all_cfg_values(config_file_path, config_section, "ask_to_exit", str(state))
-				change_global(result, "build_preset_config", button, ask_to_exit_state)
-
-func disable_global(button: Button, preset: String) -> void:
-	var result: Array
-	var config_section:Dictionary = data_handler.get_elements_in_section(config_file_path, preset)
-	match button.name:
-		"quick_resume_button", "retroarch_quick_resume_button":
-			quick_resume_status = false
-			result = data_handler.change_cfg_value(config_file_path, "retroarch", preset, "false")
-			change_global(result, "build_preset_config", button, str(quick_resume_status))
-		"update_notification_button":
-			result = data_handler.change_cfg_value(config_file_path, "update_check", "options", "false")
-			change_global(result, "build_preset_config", button, str(result))
-		"sound_button":
-			sound_effects = false
-			result = data_handler.change_cfg_value(config_file_path, "sound_effects", "options", "false")
-			logger("i", "Disabled: " % (button.name))
-		"button_swap_button":
-			if abxy_state == "true":
-				abxy_state = "false"
-				result = data_handler.change_all_cfg_values(config_file_path, config_section, "abxy_button_swap", "false")
-				change_global(result, "build_preset_config", button, abxy_state)
-		"ask_to_exit_button":
-			if ask_to_exit_state == "true":
-				ask_to_exit_state = "false"
-				result = data_handler.change_all_cfg_values(config_file_path, config_section, "ask_to_exit", "false")
-				change_global(result, "build_preset_config", button, ask_to_exit_state)
+		"border_button":
+			print (border_state)
+			if border_state != "mixed":
+				border_state = str(state)
+				print (border_state)
+				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
+				change_global(result, "build_preset_config", button, border_state)
 
 func change_global(parameters: Array, preset: String, button: Button, state: String) -> void:
+	#print (parameters)
 	match parameters[1]:
 		"abxy_button_swap", "ask_to_exit", "borders":
 			for system in parameters[0].keys():
