@@ -6,6 +6,7 @@ branches=(
   "feat/shadps4"
   "feat/PortMaster"
   "feat/steam-rom-manager"
+  "feat/godot"
 )
 
 # Get the current branch name
