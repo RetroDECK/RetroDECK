@@ -289,6 +289,8 @@ func update_global(button: Button, preset: String, state: bool) -> void:
 				border_state = str(state)
 				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
 				change_global(result, "build_preset_config", button, border_state)
+			#if widescreen_state == "true" or widescreen_state == "mixed":
+				#print ("What's up")
 		"widescreen_button":
 			if widescreen_state != "mixed":
 				widescreen_state = str(state)
