@@ -113,10 +113,7 @@ quit2={
 
 [internationalization]
 
-locale/translation_remaps={
-"res://res/pixel_ui_theme/8x8_ui_elements.png": PackedStringArray("res://res/pixel_ui_theme/8x8_ui_elements_de.png:de", "res://res/pixel_ui_theme/8x8_ui_elements_sv.png:sv"),
-"res://res/pixel_ui_theme/8x8_ui_elements2x.png": PackedStringArray("res://res/pixel_ui_theme/8x8_ui_elements2x_de.png:de", "res://res/pixel_ui_theme/8x8_ui_elements2x_sv.png:sv")
-}
+locale/translation_remaps={}
 
 [rendering]
 

@@ -279,7 +279,8 @@ grow_vertical = 2
 theme_override_styles/fill = SubResource("StyleBoxFlat_1161k")
 show_percentage = false
 
-[node name="borders_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer"]
+[node name="border_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(375, 125)
 layout_mode = 2
 text = "BORDERS"
@@ -288,6 +289,20 @@ alignment = 1
 icon_alignment = 1
 vertical_icon_alignment = 0
 expand_icon = true
+
+[node name="border_progress" type="ProgressBar" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer/border_button"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 400.0
+offset_right = 400.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_1161k")
+show_percentage = false
 
 [node name="button_swap_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer"]
 unique_name_in_owner = true
@@ -348,6 +363,8 @@ expand_icon = true
 [node name="tate_mode_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer"]
 custom_minimum_size = Vector2(375, 125)
 layout_mode = 2
+tooltip_text = "This feature is planned for a future release."
+disabled = true
 text = "TATE MODE"
 icon = ExtResource("10_jm3oh")
 alignment = 1

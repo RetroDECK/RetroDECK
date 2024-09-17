@@ -23,6 +23,7 @@ var quick_resume_status: bool
 var update_check: bool
 var abxy_state: String
 var ask_to_exit_state: String
+var border_state: String
 var font_select: int
 signal update_global_signal
 
@@ -46,6 +47,7 @@ func read_values_states() -> void:
 	update_check = config["options"]["update_check"]
 	abxy_state = multi_state("abxy_button_swap", abxy_state)
 	ask_to_exit_state = multi_state("ask_to_exit", ask_to_exit_state)
+	border_state = multi_state("borders", border_state)
 	sound_effects = config["options"]["sound_effects"]
 	volume_effects = int(config["options"]["volume_effects"])
 	font_select = int(config["options"]["font"])
@@ -243,45 +245,60 @@ func slider_function(value: float, slide: HSlider) -> void:
 	volume_effects = int(slide.value)
 	data_handler.change_cfg_value(config_file_path, "volume_effects", "options", str(slide.value))
 
-func run_function(button: Button) -> void:
+func run_function(button: Button, preset: String) -> void:
 	if button.button_pressed:
-		enable_global(button)
+		enable_global(button, preset, true)
 	else:
-		disable_global(button)
+		#TODO use enables put pass state?
+		enable_global(button, preset, false)
+		#disable_global(button, preset)
 
-func enable_global(button: Button) -> void:
+func enable_global(button: Button, preset: String, state: bool) -> void:
 	var result: Array
-	var config_section:Dictionary = data_handler.get_elements_in_section(config_file_path, "abxy_button_swap")
+	var config_section:Dictionary = data_handler.get_elements_in_section(config_file_path, preset)
+	print (config_section)
 	match button.name:
 		"quick_resume_button", "retroarch_quick_resume_button":
-			quick_resume_status = true
-			result = data_handler.change_cfg_value(config_file_path, "retroarch", "quick_resume", "true")
+			print (quick_resume_status)
+			quick_resume_status = state
+			result = data_handler.change_cfg_value(config_file_path, "retroarch", preset, str(state))
 			change_global(result, "build_preset_config", button, str(quick_resume_status))
 		"update_notification_button":
-			result = data_handler.change_cfg_value(config_file_path, "update_check", "options", "true")
+			update_check = state
+			result = data_handler.change_cfg_value(config_file_path, preset, "options", str(state))
 			change_global(result, "build_preset_config", button, str(result))
 		"sound_button":
-			sound_effects = true
-			result = data_handler.change_cfg_value(config_file_path, "sound_effects", "options", "true")
+			sound_effects = state
+			result = data_handler.change_cfg_value(config_file_path, preset, "options", str(state))
 			logger("i", "Enabled: " % (button.name))
 		"button_swap_button":
-			if abxy_state == "false":
-				abxy_state = "true"
-				result = data_handler.change_all_cfg_values(config_file_path, config_section, "abxy_button_swap", "true")
+			#if abxy_state == "false":
+				#abxy_state = "true"
+			#else:
+				#abxy_state = ""
+			if abxy_state != "mixed":
+				abxy_state = str(state)
+				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
 				change_global(result, "build_preset_config", button, abxy_state)
 		"ask_to_exit_button":
 			if ask_to_exit_state == "false":
 				ask_to_exit_state = "true"
-				result = data_handler.change_all_cfg_values(config_file_path, config_section, "ask_to_exit", "true")
+			if ask_to_exit_state != "mixed":
+				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
+				change_global(result, "build_preset_config", button, ask_to_exit_state)
+		"borders_button":
+			if ask_to_exit_state == "false":
+				ask_to_exit_state = "true"
+				result = data_handler.change_all_cfg_values(config_file_path, config_section, "ask_to_exit", str(state))
 				change_global(result, "build_preset_config", button, ask_to_exit_state)
 
-func disable_global(button: Button) -> void:
+func disable_global(button: Button, preset: String) -> void:
 	var result: Array
-	var config_section:Dictionary = data_handler.get_elements_in_section(config_file_path, "abxy_button_swap")
+	var config_section:Dictionary = data_handler.get_elements_in_section(config_file_path, preset)
 	match button.name:
 		"quick_resume_button", "retroarch_quick_resume_button":
 			quick_resume_status = false
-			result = data_handler.change_cfg_value(config_file_path, "retroarch", "quick_resume", "false")
+			result = data_handler.change_cfg_value(config_file_path, "retroarch", preset, "false")
 			change_global(result, "build_preset_config", button, str(quick_resume_status))
 		"update_notification_button":
 			result = data_handler.change_cfg_value(config_file_path, "update_check", "options", "false")
@@ -303,7 +320,7 @@ func disable_global(button: Button) -> void:
 
 func change_global(parameters: Array, preset: String, button: Button, state: String) -> void:
 	match parameters[1]:
-		"abxy_button_swap", "ask_to_exit_state":
+		"abxy_button_swap", "ask_to_exit", "borders":
 			for system in parameters[0].keys():
 				var command_parameter: Array = [preset, system, parameters[1]]
 				logger("d", "Change Global: %s System: %s Preset %s " % command_parameter) 

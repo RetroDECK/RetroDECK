@@ -23,6 +23,7 @@ func _process(delta: float) -> void:
 	
 func _connect_signals() -> void:
 	#TODO make for loops for each function linked to button function call
+	# Change to  follow hoe TabGlobals Works
 	%retroarch_button.pressed.connect(standard_buttons.bind(%retroarch_button,%system_gridcontainer, %action_gridcontainer))
 	%mame_button.pressed.connect(standard_buttons.bind(%mame_button,%system_gridcontainer, %action_gridcontainer))
 	%ruffle_button.pressed.connect(standard_buttons.bind(%ruffle_button,%system_gridcontainer, %action_gridcontainer))
@@ -45,7 +46,7 @@ func _connect_signals() -> void:
 	%reset_button.button_up.connect(_on_Button_released.bind(%reset_progress))
 	%rpcs3_firmware_button.pressed.connect(_do_action.bind(%rpcs3_firmware_button))
 	%vita3k_firmware_button.pressed.connect(_do_action.bind(%vita3k_firmware_button))
-	%retroarch_quick_resume_button.pressed.connect(class_functions.run_function.bind(%retroarch_quick_resume_button))
+	%retroarch_quick_resume_button.pressed.connect(class_functions.run_function.bind(%retroarch_quick_resume_button, "abxy_button_swap"))
 	
 func standard_buttons(button: Button, buttons_gridcontainer: GridContainer, hidden_gridcontainer: GridContainer) -> void:
 	current_system = app_data.emulators[button.text.to_lower()]
