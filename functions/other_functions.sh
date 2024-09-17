@@ -775,6 +775,15 @@ ponzu_remove() {
 }
 
 release_selector() {
+    # Show a progress bar
+    ( 
+        while true; do
+            echo "# Fetching all available releases from GitHub repositories... Please wait. This may take some time." ; sleep 1
+        done
+    ) | zenity --progress --title="Fetching Releases" --text="Fetching releases..." --pulsate --no-cancel --auto-close --width=500 --height=150 &
+    
+    progress_pid=$!  # save process PID to kill it later
+
     log d "Fetching releases from GitHub API for repository $cooker_repository_name"
     
     # Fetch the main release from the RetroDECK repository
@@ -783,6 +792,7 @@ release_selector() {
 
     if [[ -z "$main_release" ]]; then
         log e "Failed to fetch the main release"
+        kill $progress_pid  # kill the progress bar
         configurator_generic_dialog "Error" "Unable to fetch the main release. Please check your network connection or try again later."
         return 1
     fi
@@ -796,11 +806,12 @@ release_selector() {
     # Add the main release as the first entry in the release array
     local release_array=("Main Release" "$main_tag_name" "$main_human_readable_date")
 
-    # Fetch all releases from the Cooker repository
-    local releases=$(curl -s https://api.github.com/repos/$git_organization_name/$cooker_repository_name/releases)
+    # Fetch all releases (including draft and pre-release) from the Cooker repository
+    local releases=$(curl -s https://api.github.com/repos/$git_organization_name/$cooker_repository_name/releases?per_page=100)
 
     if [[ -z "$releases" ]]; then
         log e "Failed to fetch releases or no releases available"
+        kill $progress_pid  # kill the progress bar
         configurator_generic_dialog "Error" "Unable to fetch releases. Please check your network connection or try again later."
         return 1
     fi
@@ -809,14 +820,36 @@ release_selector() {
     while IFS= read -r release; do
         tag_name=$(echo "$release" | jq -r '.tag_name')
         published_at=$(echo "$release" | jq -r '.published_at')
+        draft=$(echo "$release" | jq -r '.draft')
+        prerelease=$(echo "$release" | jq -r '.prerelease')
 
-        # Convert published_at to human-readable format
-        human_readable_date=$(date -d "$published_at" +"%d %B %Y %H:%M")
+        # Classifying releases
+        if echo "$tag_name" | grep -q "PR"; then
+            status="Pull Request"
+        elif [[ "$draft" == "true" ]]; then
+            status="Draft"
+        elif [[ "$prerelease" == "true" ]]; then
+            status="Pre-release"
+        elif [[ "$cooker_repository_name" == *"Cooker"* ]]; then
+            status="Cooker"
+        else
+            status="Main"
+        fi
+
+        # Convert published_at to human-readable format, if available
+        if [[ "$published_at" != "null" ]]; then
+            human_readable_date=$(date -d "$published_at" +"%d %B %Y %H:%M")
+        else
+            human_readable_date="Not published"
+        fi
 
         # Ensure fields are properly aligned for Zenity
-        release_array+=("Cooker Channel" "$tag_name" "$human_readable_date")
+        release_array+=("$status" "$tag_name" "$human_readable_date")
 
     done < <(echo "$releases" | jq -c '.[]' | sort -t: -k3,3r)
+
+    # kill the progress bar before opening the release list window
+    kill $progress_pid
 
     if [[ ${#release_array[@]} -eq 0 ]]; then
         configurator_generic_dialog "RetroDECK Updater" "No available releases found, exiting."
