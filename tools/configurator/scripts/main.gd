@@ -181,7 +181,7 @@ func _on_exit_button_pressed():
 
 func _set_up_globals(state: Array) -> void:
 	#TODO on initial run pass array date?
-	print (state)
+	#print (state)
 	%update_notification_button.button_pressed = class_functions.update_check
 	%quick_resume_button.button_pressed = class_functions.quick_resume_status
 	%retroarch_quick_resume_button.button_pressed = class_functions.quick_resume_status
@@ -209,7 +209,7 @@ func mixed_status (button: Button) -> void:
 	button.button_pressed = false
 	button.toggle_mode = false
 	var style_box = StyleBoxFlat.new()
-	style_box.bg_color = Color(1, 0.54902, 0, 1)
+	style_box.bg_color = Color(0.941, 0.502, 0, 1)
 	style_box.border_color = Color(0.102, 0.624, 1, 1)
 	style_box.border_blend = true
 	style_box.corner_radius_top_left = 25

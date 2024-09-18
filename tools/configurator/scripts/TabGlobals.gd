@@ -39,6 +39,8 @@ func _connect_signals():
 	%quick_rewind_button.button_down.connect(_do_action.bind(%quick_rewind_progress, %quick_rewind_button, class_functions.quick_rewind_state))
 	%quick_rewind_button.button_up.connect(_on_button_released.bind(%quick_rewind_progress))
 	%quick_rewind_button.pressed.connect(class_functions.run_function.bind(%quick_rewind_button, "rewind"))
+	%reset_retrodeck_button.pressed.connect(class_functions.run_function.bind(%reset_retrodeck_button, "reset"))
+
 	
 func _on_button_released(progress: ProgressBar) -> void:
 	is_state_pressed = false

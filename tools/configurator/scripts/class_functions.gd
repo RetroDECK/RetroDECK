@@ -3,10 +3,13 @@ class_name ClassFunctions
 extends Control
 var log_result: Dictionary
 var log_parameters: Array
+const globals_sh_file_path: String = "/app/libexec/global.sh"
 const wrapper_command: String = "/app/tools/retrodeck_function_wrapper.sh"
 const config_file_path = "/var/config/retrodeck/retrodeck.cfg"
 const json_file_path = "/var/config/retrodeck/retrodeck.json"
 var desktop_mode: String = OS.get_environment("XDG_CURRENT_DESKTOP")
+var rd_conf: String
+var lockfile: String
 var rdhome: String
 var roms_folder: String
 var saves_folder: String
@@ -45,6 +48,8 @@ func read_values_states() -> void:
 	states_folder = config["paths"]["states_folder"]
 	bios_folder = config["paths"]["bios_folder"]
 	rd_version = config["version"]
+	rd_conf = extract_goblals(globals_sh_file_path, "rd_conf")
+	lockfile = extract_goblals(globals_sh_file_path, "lockfile")
 	gc_version = ProjectSettings.get_setting("application/config/version")
 	title = "\n   " + rd_version + "\nConfigurator\n    " + gc_version
 	quick_resume_status = config["quick_resume"]["retroarch"]
@@ -262,6 +267,12 @@ func update_global(button: Button, preset: String, state: bool) -> void:
 	var result: Array
 	var config_section:Dictionary = data_handler.get_elements_in_section(config_file_path, preset)
 	match button.name:
+		"reset_retrodeck_button":
+			var dir = DirAccess.open(rd_conf.get_base_dir())
+			if dir is DirAccess:
+				dir.rename(rd_conf,rd_conf.get_base_dir() + "/retrodeck.bak")
+				dir.remove(lockfile)
+			
 		"quick_resume_button", "retroarch_quick_resume_button":
 			quick_resume_status = state
 			result = data_handler.change_cfg_value(config_file_path, "retroarch", preset, str(state))
@@ -290,8 +301,9 @@ func update_global(button: Button, preset: String, state: bool) -> void:
 				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
 				change_global(result, "build_preset_config", button, border_state)
 			if widescreen_state == "true" or widescreen_state == "mixed":
+				config_section = data_handler.get_elements_in_section(config_file_path, "widescreen")
 				widescreen_state = "false"
-				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
+				result = data_handler.change_all_cfg_values(config_file_path, config_section, "widescreen", widescreen_state)
 				change_global(result, "build_preset_config", button, widescreen_state)
 		"widescreen_button":
 			if widescreen_state != "mixed":
@@ -299,8 +311,9 @@ func update_global(button: Button, preset: String, state: bool) -> void:
 				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
 				change_global(result, "build_preset_config", button, widescreen_state)
 			if border_state == "true" or border_state == "mixed":
+				config_section = data_handler.get_elements_in_section(config_file_path, "borders")
 				border_state = "false"
-				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
+				result = data_handler.change_all_cfg_values(config_file_path, config_section, "borders", border_state)
 				change_global(result, "build_preset_config", button, border_state)
 		"quick_rewind_button":
 			if quick_rewind_state != "mixed":
@@ -325,3 +338,19 @@ func change_global(parameters: Array, preset: String, button: Button, state: Str
 	parameters.append(button)
 	parameters.append(state)
 	update_global_signal.emit(parameters)
+
+func extract_goblals(file_path: String, extract: String) -> String:
+	var file = FileAccess.open(file_path, FileAccess.ModeFlags.READ)
+	if file:
+		var regex := RegEx.new() 
+		var pattern := extract + '="([^"]+)"' 
+		regex.compile(pattern)
+		while not file.eof_reached():
+			var line := file.get_line().strip_edges()
+			var result := regex.search(line)
+			if result:
+				return result.get_string(1)
+		file.close()
+	else:
+		logger("e", "Could not open file: %s" % file_path)
+	return ""
