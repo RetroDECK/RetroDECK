@@ -4,7 +4,6 @@
 branches=(
   "cooker"
   "feat/shadps4"
-  "feat/PortMaster"
   "feat/steam-rom-manager"
   "feat/godot"
 )
