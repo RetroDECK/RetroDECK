@@ -582,10 +582,11 @@ modules:
       - cp -r files/* "${FLATPAK_DEST}"
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
-      # Testing the new feat/update-3.1.0
       - type: archive
-        url: https://github.com/RetroDECK/ES-DE/releases/latest/download/RetroDECK-ES-DE-Artifact.tar.gz
-        sha256: RETRODECKESDELATEST
+        url: https://github.com/RetroDECK/ES-DE/releases/download/feat%2Fxenia-190924.46/RetroDECK-ES-DE-Artifact.tar.gz
+        sha256: 6ea55f59613a066ae36f04b61b3e9810d45fa2ca0924d876b5ada2ca28f5f36f
+        # url: https://github.com/RetroDECK/ES-DE/releases/latest/download/RetroDECK-ES-DE-Artifact.tar.gz
+        # sha256: RETRODECKESDELATEST
 
   - name: retrodeck-theme
     buildsystem: simple
