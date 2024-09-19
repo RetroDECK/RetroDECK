@@ -16,7 +16,8 @@ func _ready():
 	_connect_signals()
 	_play_main_animations()
 	_set_up_globals([])
-	%locale_option.selected = class_functions.map_locale_id(OS.get_locale_language())
+	if class_functions.locale == "automatic":
+		%locale_option.selected = class_functions.map_locale_id(OS.get_locale_language())
 	%rd_title.text += class_functions.title
 	class_functions.logger("i","Started Godot configurator")
 	#class_functions.display_json_data()

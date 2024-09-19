@@ -7,6 +7,7 @@ const globals_sh_file_path: String = "/app/libexec/global.sh"
 const wrapper_command: String = "/app/tools/retrodeck_function_wrapper.sh"
 const config_file_path = "/var/config/retrodeck/retrodeck.cfg"
 const json_file_path = "/var/config/retrodeck/retrodeck.json"
+const esde_file_path = "/var/config/ES-DE/settings/es_settings.xml"
 var desktop_mode: String = OS.get_environment("XDG_CURRENT_DESKTOP")
 var rd_conf: String
 var lockfile: String
@@ -30,8 +31,9 @@ var border_state: String
 var widescreen_state: String
 var quick_rewind_state: String
 var font_select: int
+var locale: String
 enum preset_list {abxy_button_swap, ask_to_exit, borders, widescreen, rewind}
-var button_list: Array = ["button_swap_button", "ask_to_exit_button", "border_button", "widescreen_button", "quick_rewind_button"]
+var button_list: Array = ["button_swap_button", "ask_to_exit_button", "border_button", "widescreen_button", "quick_rewind_button", "reset_retrodeck_button", "reset_all_emulators_button"]
 signal update_global_signal
 
 func _ready():
@@ -48,8 +50,9 @@ func read_values_states() -> void:
 	states_folder = config["paths"]["states_folder"]
 	bios_folder = config["paths"]["bios_folder"]
 	rd_version = config["version"]
-	rd_conf = extract_goblals(globals_sh_file_path, "rd_conf")
-	lockfile = extract_goblals(globals_sh_file_path, "lockfile")
+	rd_conf = extract_text(globals_sh_file_path, "rd_conf")
+	lockfile = extract_text(globals_sh_file_path, "lockfile")
+	locale = extract_text(esde_file_path, "esde")
 	gc_version = ProjectSettings.get_setting("application/config/version")
 	title = "\n   " + rd_version + "\nConfigurator\n    " + gc_version
 	quick_resume_status = config["quick_resume"]["retroarch"]
@@ -267,12 +270,6 @@ func update_global(button: Button, preset: String, state: bool) -> void:
 	var result: Array
 	var config_section:Dictionary = data_handler.get_elements_in_section(config_file_path, preset)
 	match button.name:
-		"reset_retrodeck_button":
-			var dir = DirAccess.open(rd_conf.get_base_dir())
-			if dir is DirAccess:
-				dir.rename(rd_conf,rd_conf.get_base_dir() + "/retrodeck.bak")
-				dir.remove(lockfile)
-			
 		"quick_resume_button", "retroarch_quick_resume_button":
 			quick_resume_status = state
 			result = data_handler.change_cfg_value(config_file_path, "retroarch", preset, str(state))
@@ -322,7 +319,7 @@ func update_global(button: Button, preset: String, state: bool) -> void:
 				change_global(result, "build_preset_config", button, quick_rewind_state)
 				
 func change_global(parameters: Array, preset: String, button: Button, state: String) -> void:
-	print (parameters)
+	#print (parameters)
 	match parameters[1]:
 		preset_list:
 			for system in parameters[0].keys():
@@ -332,6 +329,7 @@ func change_global(parameters: Array, preset: String, button: Button, state: Str
 				logger("d", "Exit code: %s" % result["exit_code"])
 		_:
 			var command_parameter: Array = [preset, parameters]
+			print (preset, parameters)
 			logger("d", "Change Global: %s System: %s" % command_parameter) 
 			var result: Dictionary = await run_thread_command(wrapper_command, command_parameter, false)
 			logger("d", "Exit code: %s" % result["exit_code"])
@@ -339,15 +337,19 @@ func change_global(parameters: Array, preset: String, button: Button, state: Str
 	parameters.append(state)
 	update_global_signal.emit(parameters)
 
-func extract_goblals(file_path: String, extract: String) -> String:
+func extract_text(file_path: String, extract: String) -> String:
 	var file = FileAccess.open(file_path, FileAccess.ModeFlags.READ)
+	var pattern: String
 	if file:
-		var regex := RegEx.new() 
-		var pattern := extract + '="([^"]+)"' 
+		var regex = RegEx.new() 
+		if extract != "esde":
+			pattern = extract + '="([^"]+)"' 
+		else:
+			pattern = '<string name="ApplicationLanguage" value="([^"]+)" />'
 		regex.compile(pattern)
 		while not file.eof_reached():
-			var line := file.get_line().strip_edges()
-			var result := regex.search(line)
+			var line: String = file.get_line().strip_edges()
+			var result: RegExMatch = regex.search(line)
 			if result:
 				return result.get_string(1)
 		file.close()

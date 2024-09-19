@@ -17,6 +17,7 @@ func _process(delta: float) -> void:
 func update_progress(delta: float, progress: ProgressBar) -> void:
 	if press_time >= PRESS_DURATION:
 		_do_complete(current_button)
+		is_state_pressed = false
 		#print ("Progress Bar: %s Button: %s" % [progress.name, current_button.name])
 	elif is_state_pressed and current_state == "mixed":
 		press_time += delta
@@ -39,9 +40,11 @@ func _connect_signals():
 	%quick_rewind_button.button_down.connect(_do_action.bind(%quick_rewind_progress, %quick_rewind_button, class_functions.quick_rewind_state))
 	%quick_rewind_button.button_up.connect(_on_button_released.bind(%quick_rewind_progress))
 	%quick_rewind_button.pressed.connect(class_functions.run_function.bind(%quick_rewind_button, "rewind"))
-	%reset_retrodeck_button.pressed.connect(class_functions.run_function.bind(%reset_retrodeck_button, "reset"))
+	%reset_retrodeck_button.button_down.connect(_do_action.bind(%reset_retrodeck_progress, %reset_retrodeck_button, "mixed"))
+	%reset_retrodeck_button.button_up.connect(_on_button_released.bind(%reset_retrodeck_progress))	
+	%reset_all_emulators_button.button_down.connect(_do_action.bind(%reset_all_emulators_progress, %reset_all_emulators_button, "mixed"))
+	%reset_all_emulators_button.button_up.connect(_on_button_released.bind(%reset_all_emulators_progress))
 
-	
 func _on_button_released(progress: ProgressBar) -> void:
 	is_state_pressed = false
 	progress.visible = false
@@ -74,4 +77,19 @@ func _do_complete(button: Button) ->void:
 				class_functions.widescreen_state = "false"
 			"quick_rewind_button":
 				class_functions.quick_rewind_state = "false"
+			"reset_retrodeck_button":
+				print ("TESTS")
+				var dir = DirAccess.open(class_functions.rd_conf.get_base_dir())
+				if dir is DirAccess:
+					dir.rename(class_functions.rd_conf,class_functions.rd_conf.get_base_dir() + "/retrodeck.bak")
+					dir.remove(class_functions.lockfile)
+				class_functions.change_global(["reset", "retrodeck"], "prepapre_component", button, "")
+			"reset_all_emulators_button":
+				print ("TESTS")
+				var tmp_txt = button.text
+				button.text = "RESETTING-NOW"
+				class_functions.change_global(["reset", "all"], "prepapre_component", button, "")
+				button.text = "RESET COMPLETED"
+				await class_functions.wait(3.0)
+				button.text = tmp_txt
 	button.toggle_mode = true
