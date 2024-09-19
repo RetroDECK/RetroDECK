@@ -9,16 +9,30 @@ func _ready():
 	%TabContainer.add_theme_icon_override("decrement_highlight",ResourceLoader.load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0763.png"))
 	%TabContainer.add_theme_icon_override("increment",ResourceLoader.load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0798.png"))
 	%TabContainer.add_theme_icon_override("increment_highlight",ResourceLoader.load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0764.png"))
-	set_tab_icon(0, ResourceLoader.load("res://assets/icons/pixelitos/128/map-globe.png"))
-	set_tab_icon_max_width(0,icon_width)
-	set_tab_icon(1, ResourceLoader.load("res://assets/icons/pixelitos/128/preferences-system-windows.png"))
-	set_tab_icon_max_width(1,icon_width)
-	set_tab_icon(2, ResourceLoader.load("res://assets/icons/pixelitos/128/utilities-system-monitor.png"))
-	set_tab_icon_max_width(2,icon_width)
-	set_tab_icon(3, ResourceLoader.load("res://assets/icons/pixelitos/128/preferences-system-session-services.png"))
-	set_tab_icon_max_width(3,icon_width)
-	set_tab_icon(4, ResourceLoader.load("res://assets/icons/pixelitos/128/help-about.png"))
-	set_tab_icon_max_width(4,icon_width)
+	if class_functions.font_select !=3:
+		%TabContainer.add_theme_font_size_override("font_size", class_functions.font_tab_size)
+	elif class_functions.font_select == 2:
+		%TabContainer.add_theme_font_size_override("font_size", 15)
+	else:
+		%TabContainer.add_theme_font_size_override("font_size", class_functions.font_tab_size)
+
+	set_tab_title(0, "      GLOBALS    ")
+	set_tab_title(1, "      SYSTEM     ")
+	set_tab_title(2, "      TOOLS      ")
+	set_tab_title(3, "      SETTINGS   ")
+	set_tab_title(4, "      ABOUT      ")
+	set_tab_hidden(5, true)
+	
+	#set_tab_icon(0, ResourceLoader.load("res://assets/icons/pixelitos/128/map-globe.png"))
+	#set_tab_icon_max_width(0,icon_width)
+	#set_tab_icon(1, ResourceLoader.load("res://assets/icons/pixelitos/128/preferences-system-windows.png"))
+	#set_tab_icon_max_width(1,icon_width)
+	#set_tab_icon(2, ResourceLoader.load("res://assets/icons/pixelitos/128/utilities-system-monitor.png"))
+	#set_tab_icon_max_width(2,icon_width)
+	#set_tab_icon(3, ResourceLoader.load("res://assets/icons/pixelitos/128/preferences-system-session-services.png"))
+	#set_tab_icon_max_width(3,icon_width)
+	#set_tab_icon(4, ResourceLoader.load("res://assets/icons/pixelitos/128/help-about.png"))
+	#set_tab_icon_max_width(4,icon_width)
 	connect_focus_signals(self)
 	%volume_effects_slider.value = class_functions.volume_effects
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=114 format=3 uid="uid://61f6m4r1mpan"]
+[gd_scene load_steps=117 format=3 uid="uid://61f6m4r1mpan"]
 
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
 [ext_resource type="Theme" uid="uid://hhc60cllcg47" path="res://assets/themes/default_theme.tres" id="1_if8nh"]
@@ -104,8 +104,19 @@
 [ext_resource type="Script" path="res://scripts/controller_guide.gd" id="68_ahvw4"]
 [ext_resource type="AudioStream" uid="uid://dhejvg02t5o35" path="res://assets/sounds/30375__sjonas88__smooth-game-like-sounds/538549__sjonas88__select-2.wav" id="71_ghxvk"]
 [ext_resource type="Texture2D" uid="uid://dllymmym0335n" path="res://assets/icons/pixelitos/16/system-shutdown.png" id="87_1yqbe"]
+[ext_resource type="Texture2D" uid="uid://26piw1lylfai" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0650.png" id="90_xkj8e"]
 [ext_resource type="Texture2D" uid="uid://brf74puvpnwsd" path="res://assets/graphics/retrodeck.png" id="93_f7ex4"]
 [ext_resource type="Script" path="res://scripts/retrodeck.gd" id="94_8nlr1"]
+[ext_resource type="Texture2D" uid="uid://bfmu7t0xf5kdf" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0651.png" id="99_km4fg"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_co0k7"]
+bg_color = Color(0.580392, 0.419608, 0.921569, 1)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(0.101961, 0.623529, 1, 1)
+border_blend = true
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1161k"]
 bg_color = Color(0.101961, 0.623529, 1, 0.376471)
@@ -220,6 +231,7 @@ size_flags_horizontal = 3
 [node name="TabContainer" type="TabContainer" parent="Background/SplitContainer/MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_styles/tab_selected = SubResource("StyleBoxFlat_co0k7")
 tab_alignment = 1
 current_tab = 0
 script = ExtResource("3_id6l4")
@@ -949,7 +961,7 @@ layout_mode = 2
 alignment = 1
 expand_icon = true
 selected = 0
-item_count = 5
+item_count = 4
 popup/item_0/text = "CHOOSE FONT"
 popup/item_0/icon = ExtResource("54_dah1j")
 popup/item_0/disabled = true
@@ -957,15 +969,12 @@ popup/item_0/separator = true
 popup/item_1/text = "Default"
 popup/item_1/icon = ExtResource("55_wv2p5")
 popup/item_1/id = 1
-popup/item_2/text = "Retro"
-popup/item_2/icon = ExtResource("56_ubqc2")
+popup/item_2/text = "Modern"
+popup/item_2/icon = ExtResource("55_wv2p5")
 popup/item_2/id = 2
-popup/item_3/text = "Modern"
-popup/item_3/icon = ExtResource("55_wv2p5")
-popup/item_3/id = 3
-popup/item_4/text = "OpenDyslexic3"
-popup/item_4/icon = ExtResource("56_ubqc2")
-popup/item_4/id = 4
+popup/item_3/text = "OpenDyslexic3"
+popup/item_3/icon = ExtResource("56_ubqc2")
+popup/item_3/id = 2
 
 [node name="menu_music" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/system_container"]
 layout_mode = 2
@@ -1205,7 +1214,6 @@ columns = 4
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
-focus_neighbor_right = NodePath("../GLOBALS")
 metadata/_tab_index = 5
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/WIP"]
@@ -1640,41 +1648,50 @@ color = Color(0.858824, 0.890196, 1, 1)
 
 [node name="controller_guide" type="PanelContainer" parent="."]
 layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
+anchors_preset = 2
 anchor_top = 1.0
-anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -136.0
 offset_top = -72.0
-offset_right = 87.0
-grow_horizontal = 2
+offset_right = 326.0
 grow_vertical = 0
 script = ExtResource("68_ahvw4")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="controller_guide"]
 layout_mode = 2
-theme_override_constants/separation = 25
+theme_override_constants/separation = 10
 
 [node name="a_button" type="TextureButton" parent="controller_guide/HBoxContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(60, 60)
+custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
+size_flags_vertical = 4
 texture_normal = ExtResource("30_glnve")
 texture_pressed = ExtResource("31_j5ri1")
 stretch_mode = 0
 
 [node name="b_button" type="TextureButton" parent="controller_guide/HBoxContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(60, 60)
+custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
+size_flags_vertical = 4
 texture_normal = ExtResource("33_1ghye")
 texture_pressed = ExtResource("34_fum2b")
 stretch_mode = 0
 
+[node name="Label" type="Label" parent="controller_guide/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.270222, 0.270222, 0.270222, 1)
+text = "ACTION"
+
+[node name="Label2" type="Label" parent="controller_guide/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.270588, 0.270588, 0.270588, 1)
+text = "BACK"
+
 [node name="locale_option" type="OptionButton" parent="controller_guide/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_vertical = 4
 selected = 0
 item_count = 7
 popup/item_0/icon = ExtResource("5_exkn2")
@@ -1691,10 +1708,37 @@ popup/item_5/id = 5
 popup/item_6/icon = ExtResource("11_ri2fv")
 popup/item_6/id = 6
 
-[node name="exit_button" type="TextureButton" parent="controller_guide/HBoxContainer"]
-custom_minimum_size = Vector2(45, 45)
+[node name="Label3" type="Label" parent="controller_guide/HBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.270588, 0.270588, 0.270588, 1)
+text = "LANGUAGE"
+
+[node name="exit_button" type="TextureButton" parent="controller_guide/HBoxContainer"]
+custom_minimum_size = Vector2(35, 35)
+layout_mode = 2
+size_flags_vertical = 4
 texture_normal = ExtResource("87_1yqbe")
+stretch_mode = 0
+
+[node name="Label4" type="Label" parent="controller_guide/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.270588, 0.270588, 0.270588, 1)
+text = "QUIT"
+
+[node name="a_button2" type="TextureButton" parent="controller_guide/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(38, 38)
+layout_mode = 2
+size_flags_vertical = 4
+texture_normal = ExtResource("90_xkj8e")
+stretch_mode = 0
+
+[node name="a_button3" type="TextureButton" parent="controller_guide/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(38, 38)
+layout_mode = 2
+size_flags_vertical = 4
+texture_normal = ExtResource("99_km4fg")
 stretch_mode = 0
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
@@ -1704,6 +1748,7 @@ volume_db = -5.0
 
 [node name="l1_button" type="TextureButton" parent="."]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 offset_left = 14.0
 offset_top = 2.0
@@ -1715,6 +1760,7 @@ stretch_mode = 0
 
 [node name="r1_button" type="TextureButton" parent="."]
 unique_name_in_owner = true
+visible = false
 layout_mode = 0
 offset_left = 1134.0
 offset_top = 1.0

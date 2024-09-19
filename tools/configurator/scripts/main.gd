@@ -10,6 +10,7 @@ var b_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-
 var l1_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0797.png")
 var r1_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0798.png")
 var style_box_original: StyleBox = preload("res://assets/themes/default_theme.tres::StyleBoxFlat_0ahfc")
+var font_size: int = 20
 
 func _ready():	
 	_get_nodes()
@@ -227,14 +228,19 @@ func change_font(index: int) -> void:
 	var font_file: FontFile
 	match index:
 		1:
-			font_file = load("res://res/pixel_ui_theme/pixel-sans.otf")
-		2:
 			font_file = load("res://assets/fonts/munro/munro.ttf")
-		3:
+			%TabContainer.add_theme_font_size_override("font_size", class_functions.font_tab_size)
+			font_size = 30
+		2:
 			font_file = load("res://assets/fonts/akrobat/Akrobat-Regular.otf")
-		4:
-			font_file = load("res://assets/fonts/OpenDyslexic3/OpenDyslexic3-Regular.ttf") 
+			%TabContainer.add_theme_font_size_override("font_size", class_functions.font_tab_size)
+			font_size = 25
+		3:
+			font_file = load("res://assets/fonts/OpenDyslexic3/OpenDyslexic3-Regular.ttf")
+			%TabContainer.add_theme_font_size_override("font_size", 15)
+			font_size = 16
 	custom_theme = load("res://assets/themes/default_theme.tres")
 	custom_theme.set_font("font", "Control", font_file)
+	custom_theme.default_font_size = font_size
 	$".".theme = custom_theme
 	data_handler.change_cfg_value(class_functions.config_file_path, "font", "options", str(index))
