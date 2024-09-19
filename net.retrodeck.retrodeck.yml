@@ -620,7 +620,7 @@ modules:
       - install -Dm755 xenia-canary "${FLATPAK_DEST}/bin/xenia-canary"
     sources:
       - type: archive
-        url: https://github.com/xenia-canary/xenia-canary/releases/latest/download/experimental/xenia_canary.zip
+        url: https://github.com/xenia-canary/xenia-canary/releases/download/experimental/xenia_canary.zip
         sha256: XENIACANARYLATESTSHA
       - type: script
         commands:
