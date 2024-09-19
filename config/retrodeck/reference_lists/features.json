@@ -620,6 +620,9 @@
     "pokemini": {
       "name": "Nintendo Pokémon Mini"
     },
+    "portmaster": {
+      "name": "PortMaster"
+    },
     "ports": {
       "name": "Ports"
     },
@@ -1124,6 +1127,12 @@
       "name": "ES-DE",
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_es_de/esde-guide/.",
       "launch": "es-de"
+    },
+    "portmaster": {
+      "description": "PortMaster",
+      "name": "PortMaster",
+      "system": "portmaster",
+      "launch": "PortMaster"
     }
   }
 }
