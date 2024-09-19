@@ -890,6 +890,17 @@ prepare_component() {
     
   fi
 
+  if [[ "$component" =~ ^(xenia|all)$ ]]; then
+  component_found="true"
+    log i "----------------------"
+    log i "Prepearing Xenia"
+    log i "----------------------"
+
+    rm -rf "/var/data/xenia-canary-pfx"
+    # TODO: fill this
+    
+  fi
+
   if [[ $component_found == "false" ]]; then
     log e "Supplied component $component not found, not resetting"
   fi

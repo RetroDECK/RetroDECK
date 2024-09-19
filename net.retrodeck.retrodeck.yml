@@ -2,6 +2,8 @@ app-id: net.retrodeck.retrodeck
 runtime: org.kde.Platform
 runtime-version: "6.7"
 sdk: org.kde.Sdk
+base: org.winehq.Wine
+base-version: stable-23.08
 command: retrodeck.sh
 
 finish-args:
@@ -608,6 +610,23 @@ modules:
         strip-components: 0
         url: https://github.com/ruffle-rs/ruffle/releases/download/nightly-2024-08-09/ruffle-nightly-2024_08_09-linux-x86_64.tar.gz
         sha256: d2c4c77d8426da6df8dc8b2a57565c151146464a8eec605d5faa68a297d8cad6
+
+  # XENIA CANARY
+  - name: xenia-canary
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 xenia-canary.exe "${FLATPAK_DEST}/xenia-canary/xenia-canary.exe"
+      - install -Dm755 xenia-canary "${FLATPAK_DEST}/bin/xenia-canary"
+    sources:
+      - type: archive
+        url: https://github.com/xenia-canary/xenia-canary/releases/latest/download/experimental/xenia_canary.zip
+        sha256: XENIACANARYLATESTSHA
+      - type: script
+        commands:
+          - |
+            #!/bin/bash
+            WINEPREFIX="/var/data/xenia-canary-pfx" wine "/app/xenia-canary/xenia-canary.exe"
+        dest-filename: xenia-canary
 
   - name: fetch-missing-libs
     buildsystem: simple
