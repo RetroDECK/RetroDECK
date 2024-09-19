@@ -78,17 +78,16 @@ func _do_complete(button: Button) ->void:
 			"quick_rewind_button":
 				class_functions.quick_rewind_state = "false"
 			"reset_retrodeck_button":
-				print ("TESTS")
 				var dir = DirAccess.open(class_functions.rd_conf.get_base_dir())
 				if dir is DirAccess:
 					dir.rename(class_functions.rd_conf,class_functions.rd_conf.get_base_dir() + "/retrodeck.bak")
 					dir.remove(class_functions.lockfile)
-				class_functions.change_global(["reset", "retrodeck"], "prepapre_component", button, "")
+				class_functions.change_global(["reset", "retrodeck"], "prepare_component", button, "")
 			"reset_all_emulators_button":
-				print ("TESTS")
 				var tmp_txt = button.text
 				button.text = "RESETTING-NOW"
-				class_functions.change_global(["reset", "all"], "prepapre_component", button, "")
+				class_functions.change_global(["reset", "all"], "prepare_component", button, "")
+				await class_functions.wait(2.0)
 				button.text = "RESET COMPLETED"
 				await class_functions.wait(3.0)
 				button.text = tmp_txt

@@ -329,7 +329,6 @@ func change_global(parameters: Array, preset: String, button: Button, state: Str
 				logger("d", "Exit code: %s" % result["exit_code"])
 		_:
 			var command_parameter: Array = [preset, parameters]
-			print (preset, parameters)
 			logger("d", "Change Global: %s System: %s" % command_parameter) 
 			var result: Dictionary = await run_thread_command(wrapper_command, command_parameter, false)
 			logger("d", "Exit code: %s" % result["exit_code"])
