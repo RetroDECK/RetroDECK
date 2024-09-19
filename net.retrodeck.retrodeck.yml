@@ -616,7 +616,7 @@ modules:
   - name: xenia-canary
     buildsystem: simple
     build-commands:
-      - install -Dm755 xenia-canary.exe "${FLATPAK_DEST}/xenia-canary/xenia-canary.exe"
+      - install -Dm755 xenia_canary.exe "${FLATPAK_DEST}/xenia-canary/xenia_canary.exe"
       - install -Dm755 xenia-canary "${FLATPAK_DEST}/bin/xenia-canary"
     sources:
       - type: archive
@@ -626,7 +626,7 @@ modules:
         commands:
           - |
             #!/bin/bash
-            WINEPREFIX="/var/data/xenia-canary-pfx" wine "/app/xenia-canary/xenia-canary.exe"
+            WINEPREFIX="/var/data/xenia-canary-pfx" wine "/app/xenia-canary/xenia_canary.exe"
         dest-filename: xenia-canary
 
   - name: fetch-missing-libs
