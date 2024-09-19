@@ -857,6 +857,21 @@ prepare_component() {
     sed -i 's#RETRODECKSAVESDIR#'$saves_folder'#g' "/var/config/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON
   fi
 
+  if [[ "$component" =~ ^(portmaster|all)$ ]]; then
+  component_found="true"
+    # TODO: MultiUser
+    log i "----------------------"
+    log i "Prepearing PortMaster"
+    log i "----------------------"
+
+    rm -rf "/var/data/PortMaster"
+    unzip "/app/retrodeck/PortMaster.zip" -d "/var/data/"
+    cp -f "/var/data/PortMaster/retrodeck/PortMaster.txt" "/var/data/PortMaster/PortMaster.sh"
+    chmod +x "/var/data/PortMaster/PortMaster.sh"
+    rm -f "$roms_folder/portmaster/PortMaster.sh"
+    install -Dm755 "/var/data/PortMaster/PortMaster.sh" "$roms_folder/portmaster/PortMaster.sh"
+  fi
+
   if [[ "$component" =~ ^(ruffle|all)$ ]]; then
   component_found="true"
     log i "----------------------"
