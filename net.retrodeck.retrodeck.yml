@@ -2,9 +2,15 @@ app-id: net.retrodeck.retrodeck
 runtime: org.kde.Platform
 runtime-version: "6.7"
 sdk: org.kde.Sdk
+command: retrodeck.sh
+
 base: org.winehq.Wine
 base-version: stable-23.08
-command: retrodeck.sh
+
+inherit-extensions:
+  - org.winehq.Wine.gecko
+  - org.winehq.Wine.mono
+  - org.winehq.Wine.DLLs
 
 finish-args:
   - --socket=wayland
