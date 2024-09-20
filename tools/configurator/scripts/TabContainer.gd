@@ -1,7 +1,7 @@
 extends TabContainer
 
 var icon_width: int = 32
-@onready var tcount: int = get_tab_count()-1
+@onready var tcount: int = get_tab_count()-2
 
 func _ready():
 	focusFirstFocusableChild() #grab focus on first element to enable controller focusing
@@ -22,7 +22,7 @@ func _ready():
 	set_tab_title(3, "      SETTINGS   ")
 	set_tab_title(4, "      ABOUT      ")
 	set_tab_hidden(5, true)
-	
+	#set_tab_title(6, "")
 	#set_tab_icon(0, ResourceLoader.load("res://assets/icons/pixelitos/128/map-globe.png"))
 	#set_tab_icon_max_width(0,icon_width)
 	#set_tab_icon(1, ResourceLoader.load("res://assets/icons/pixelitos/128/preferences-system-windows.png"))

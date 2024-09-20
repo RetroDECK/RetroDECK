@@ -1,4 +1,4 @@
-[gd_scene load_steps=117 format=3 uid="uid://61f6m4r1mpan"]
+[gd_scene load_steps=118 format=3 uid="uid://61f6m4r1mpan"]
 
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
 [ext_resource type="Theme" uid="uid://hhc60cllcg47" path="res://assets/themes/default_theme.tres" id="1_if8nh"]
@@ -196,6 +196,10 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gie3e"]
+bg_color = Color(0.0509804, 0.0509804, 0.0509804, 1)
+border_color = Color(0.298039, 0.298039, 0.298039, 1)
+
 [node name="Control" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -230,14 +234,16 @@ size_flags_horizontal = 3
 
 [node name="TabContainer" type="TabContainer" parent="Background/SplitContainer/MarginContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(1265, 715)
 layout_mode = 2
 theme_override_styles/tab_selected = SubResource("StyleBoxFlat_co0k7")
 tab_alignment = 1
-current_tab = 0
+current_tab = 5
 script = ExtResource("3_id6l4")
 
 [node name="GLOBALS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 script = ExtResource("4_2jqfc")
 metadata/_tab_index = 0
@@ -1212,7 +1218,6 @@ columns = 4
 
 [node name="WIP" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 metadata/_tab_index = 5
 
@@ -1647,13 +1652,11 @@ position = Vector2(134, 151)
 color = Color(0.858824, 0.890196, 1, 1)
 
 [node name="controller_guide" type="PanelContainer" parent="."]
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -72.0
-offset_right = 326.0
-grow_vertical = 0
+layout_mode = 0
+offset_left = 6.0
+offset_top = 731.0
+offset_right = 655.0
+offset_bottom = 793.0
 script = ExtResource("68_ahvw4")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="controller_guide"]
@@ -1669,6 +1672,11 @@ texture_normal = ExtResource("30_glnve")
 texture_pressed = ExtResource("31_j5ri1")
 stretch_mode = 0
 
+[node name="Label" type="Label" parent="controller_guide/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.270222, 0.270222, 0.270222, 1)
+text = "ACTION"
+
 [node name="b_button" type="TextureButton" parent="controller_guide/HBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(38, 38)
@@ -1677,11 +1685,6 @@ size_flags_vertical = 4
 texture_normal = ExtResource("33_1ghye")
 texture_pressed = ExtResource("34_fum2b")
 stretch_mode = 0
-
-[node name="Label" type="Label" parent="controller_guide/HBoxContainer"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.270222, 0.270222, 0.270222, 1)
-text = "ACTION"
 
 [node name="Label2" type="Label" parent="controller_guide/HBoxContainer"]
 layout_mode = 2
@@ -1746,26 +1749,48 @@ unique_name_in_owner = true
 stream = ExtResource("71_ghxvk")
 volume_db = -5.0
 
-[node name="l1_button" type="TextureButton" parent="."]
+[node name="l1_box" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 10.0
+offset_right = 74.0
+offset_bottom = 70.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_gie3e")
+
+[node name="l1_button" type="TextureButton" parent="l1_box"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
-offset_left = 14.0
-offset_top = 2.0
-offset_right = 105.0
-offset_bottom = 54.0
+offset_left = 1.0
+offset_right = 50.0
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
 texture_normal = ExtResource("38_prt7u")
 texture_pressed = ExtResource("39_m4qgd")
 stretch_mode = 0
 
-[node name="r1_button" type="TextureButton" parent="."]
-unique_name_in_owner = true
-visible = false
+[node name="r1_box" type="Panel" parent="."]
 layout_mode = 0
-offset_left = 1134.0
-offset_top = 1.0
-offset_right = 1225.0
-offset_bottom = 53.0
+offset_left = 1202.0
+offset_top = 10.0
+offset_right = 1252.0
+offset_bottom = 70.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_gie3e")
+
+[node name="r1_button" type="TextureButton" parent="r1_box"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -22.5
+offset_top = -22.5
+offset_right = 22.5
+offset_bottom = 22.5
+grow_horizontal = 2
+grow_vertical = 2
 texture_normal = ExtResource("39_5ft88")
 texture_pressed = ExtResource("40_pnuor")
 stretch_mode = 0
