@@ -17,6 +17,8 @@ func _ready():
 	_connect_signals()
 	_play_main_animations()
 	_set_up_globals([])
+	custom_theme = get_tree().current_scene.custom_theme
+	$".".theme = custom_theme
 	if class_functions.locale == "automatic":
 		%locale_option.selected = class_functions.map_locale_id(OS.get_locale_language())
 	%rd_title.text += class_functions.title

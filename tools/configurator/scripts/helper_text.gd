@@ -11,4 +11,3 @@ func _on_focus_changed(selected_element:Control) -> void:
 		helper_text_node.text = selected_element.get_meta("description")
 	else:
 		helper_text_node.text = "Hey, there's no description"
-		#helper_text_node.text = "That stupid Monkey almost deleted me.\n\n\nPlease save me!!!!!!!!"

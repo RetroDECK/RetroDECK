@@ -83,6 +83,11 @@ func _do_complete(button: Button) ->void:
 					dir.rename(class_functions.rd_conf,class_functions.rd_conf.get_base_dir() + "/retrodeck.bak")
 					dir.remove(class_functions.lockfile)
 				class_functions.change_global(["reset", "retrodeck"], "prepare_component", button, "")
+				button.text = "RESETTING-NOW"
+				await class_functions.wait(2.0)
+				button.text = "CONFIGURATOR WILL NOW CLOSE"
+				await class_functions.wait(1.0)
+				get_tree().quit()
 			"reset_all_emulators_button":
 				var tmp_txt = button.text
 				button.text = "RESETTING-NOW"

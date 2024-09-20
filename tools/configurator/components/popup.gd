@@ -5,8 +5,10 @@ var content = null
 @onready var lbhide: TextureButton = get_tree().current_scene.get_node("%l1_button")
 @onready var rbhide: TextureButton = get_tree().current_scene.get_node("%r1_button")
 @onready var bios_type:int = get_tree().current_scene.bios_type
+@onready var custom_theme: Theme = get_tree().current_scene.custom_theme
 
 func _ready():
+	$".".theme = custom_theme
 	lbhide.visible=false
 	rbhide.visible=false
 	# TODO this alowes copy and paste from RTB in logs?

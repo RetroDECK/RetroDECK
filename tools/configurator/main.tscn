@@ -1,4 +1,4 @@
-[gd_scene load_steps=118 format=3 uid="uid://61f6m4r1mpan"]
+[gd_scene load_steps=124 format=3 uid="uid://61f6m4r1mpan"]
 
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
 [ext_resource type="Theme" uid="uid://hhc60cllcg47" path="res://assets/themes/default_theme.tres" id="1_if8nh"]
@@ -17,7 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://d2lm4mfx1gt86" path="res://assets/graphics/retrodeck_base_shake0.png" id="5_7rjbt"]
 [ext_resource type="Texture2D" uid="uid://bns3nmvku2qhe" path="res://assets/icons/pixelitos/128/system-shutdown.png" id="5_ahd1x"]
 [ext_resource type="Texture2D" uid="uid://dv42c6hpi6tde" path="res://assets/icons/pixelitos/128/cs-tiling.png" id="5_box56"]
-[ext_resource type="Script" path="res://helper_text.gd" id="5_cprkf"]
+[ext_resource type="Script" path="res://scripts/helper_text.gd" id="5_cprkf"]
 [ext_resource type="Texture2D" uid="uid://dxdhjp18rgmr4" path="res://res/flags/united_kingdom_32.png" id="5_exkn2"]
 [ext_resource type="Texture2D" uid="uid://du8go5dyabmsl" path="res://assets/icons/banner/gb.png" id="5_ja8to"]
 [ext_resource type="StyleBox" uid="uid://ba3l3ja1jbqpx" path="res://assets/themes/emulators.tres" id="5_rjtkn"]
@@ -105,8 +105,12 @@
 [ext_resource type="AudioStream" uid="uid://dhejvg02t5o35" path="res://assets/sounds/30375__sjonas88__smooth-game-like-sounds/538549__sjonas88__select-2.wav" id="71_ghxvk"]
 [ext_resource type="Texture2D" uid="uid://dllymmym0335n" path="res://assets/icons/pixelitos/16/system-shutdown.png" id="87_1yqbe"]
 [ext_resource type="Texture2D" uid="uid://26piw1lylfai" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0650.png" id="90_xkj8e"]
+[ext_resource type="Texture2D" uid="uid://cj5p6oa4tbh3l" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0044.png" id="92_xpwgw"]
 [ext_resource type="Texture2D" uid="uid://brf74puvpnwsd" path="res://assets/graphics/retrodeck.png" id="93_f7ex4"]
+[ext_resource type="Texture2D" uid="uid://ewsr5bqe7gcr" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0049.png" id="93_rdk5c"]
 [ext_resource type="Script" path="res://scripts/retrodeck.gd" id="94_8nlr1"]
+[ext_resource type="Texture2D" uid="uid://bjw5uccsiprpo" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0045.png" id="94_ybo5b"]
+[ext_resource type="Texture2D" uid="uid://da6e8m0kx265j" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0050.png" id="95_act8q"]
 [ext_resource type="Texture2D" uid="uid://bfmu7t0xf5kdf" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0651.png" id="99_km4fg"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_co0k7"]
@@ -196,6 +200,21 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cidk6"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4gcyr"]
+bg_color = Color(0.455, 0.455, 0.455, 0.444)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(0.580392, 0.419608, 0.921569, 1)
+border_blend = true
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gie3e"]
 bg_color = Color(0.0509804, 0.0509804, 0.0509804, 1)
 border_color = Color(0.298039, 0.298039, 0.298039, 1)
@@ -223,33 +242,29 @@ grow_vertical = 2
 [node name="SplitContainer" type="SplitContainer" parent="Background"]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 1.0
-offset_top = 5.0
-offset_right = 1253.0
-offset_bottom = 724.0
+offset_top = 1.0
+offset_right = 1287.0
+offset_bottom = 725.0
+split_offset = 1280
 
 [node name="MarginContainer" type="MarginContainer" parent="Background/SplitContainer"]
 layout_mode = 2
-size_flags_horizontal = 3
 
 [node name="TabContainer" type="TabContainer" parent="Background/SplitContainer/MarginContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(1265, 715)
 layout_mode = 2
 theme_override_styles/tab_selected = SubResource("StyleBoxFlat_co0k7")
 tab_alignment = 1
-current_tab = 5
+current_tab = 0
 script = ExtResource("3_id6l4")
 
 [node name="GLOBALS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 script = ExtResource("4_2jqfc")
 metadata/_tab_index = 0
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS"]
-custom_minimum_size = Vector2(1200, 600)
 layout_mode = 2
 follow_focus = true
 
@@ -284,6 +299,7 @@ alignment = 1
 icon_alignment = 1
 vertical_icon_alignment = 0
 expand_icon = true
+metadata/description = "This function will prompt you to exit on quiting an emulator."
 
 [node name="ask_to_exit_progress" type="ProgressBar" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer/ask_to_exit_button"]
 unique_name_in_owner = true
@@ -324,7 +340,6 @@ show_percentage = false
 unique_name_in_owner = true
 custom_minimum_size = Vector2(375, 125)
 layout_mode = 2
-tooltip_text = "Change to Nintendo style button mappings."
 text = "BUTTON SWAP
 "
 icon = ExtResource("4_caaxx")
@@ -348,7 +363,6 @@ show_percentage = false
 [node name="mods_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer"]
 custom_minimum_size = Vector2(375, 125)
 layout_mode = 2
-tooltip_text = "This feature is planned for a future release."
 disabled = true
 text = "MODS"
 icon = ExtResource("5_vehlp")
@@ -356,12 +370,12 @@ alignment = 1
 icon_alignment = 1
 vertical_icon_alignment = 0
 expand_icon = true
+metadata/description = "This feature is planned for a future release."
 
 [node name="quick_resume_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(375, 125)
 layout_mode = 2
-tooltip_text = "RetroArch Cores/Systems only"
 text = "QUICK RESUME"
 icon = ExtResource("12_3jrmi")
 alignment = 1
@@ -373,7 +387,7 @@ expand_icon = true
 unique_name_in_owner = true
 custom_minimum_size = Vector2(375, 125)
 layout_mode = 2
-text = "QUICK REWIND"
+text = "REWIND"
 icon = ExtResource("11_c3qcy")
 alignment = 1
 icon_alignment = 1
@@ -395,7 +409,6 @@ show_percentage = false
 [node name="tate_mode_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer"]
 custom_minimum_size = Vector2(375, 125)
 layout_mode = 2
-tooltip_text = "This feature is planned for a future release."
 disabled = true
 text = "TATE MODE"
 icon = ExtResource("10_jm3oh")
@@ -403,11 +416,11 @@ alignment = 1
 icon_alignment = 1
 vertical_icon_alignment = 0
 expand_icon = true
+metadata/description = "This feature is planned for a future release."
 
 [node name="shaders_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer"]
 custom_minimum_size = Vector2(375, 125)
 layout_mode = 2
-tooltip_text = "This feature is planned for a future release."
 disabled = true
 text = "SHADERS"
 icon = ExtResource("4_q6hd2")
@@ -415,6 +428,7 @@ alignment = 1
 icon_alignment = 1
 vertical_icon_alignment = 0
 expand_icon = true
+metadata/description = "This feature is planned for a future release."
 
 [node name="widescreen_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer"]
 unique_name_in_owner = true
@@ -490,7 +504,6 @@ script = ExtResource("36_wv31h")
 metadata/_tab_index = 1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM"]
-custom_minimum_size = Vector2(1200, 600)
 layout_mode = 2
 follow_focus = true
 
@@ -919,7 +932,6 @@ follow_focus = true
 [node name="VBoxContainer" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 3
 theme_override_constants/separation = 64
 
 [node name="system_container" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer"]
@@ -1218,6 +1230,7 @@ columns = 4
 
 [node name="WIP" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 metadata/_tab_index = 5
 
@@ -1564,6 +1577,19 @@ sprite_frames = SubResource("SpriteFrames_lhf2y")
 frame = 4
 frame_progress = 1.0
 
+[node name="Panel" type="Panel" parent="Background/SplitContainer"]
+visible = false
+custom_minimum_size = Vector2(900, 0)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Background/SplitContainer/Panel"]
+layout_mode = 2
+offset_left = 12.0
+offset_top = 346.0
+offset_right = 569.0
+offset_bottom = 378.0
+text = "SPLIT ME? kofdsofdosk oadk opdkdfpso koskfgd b"
+
 [node name="side_logo" type="Control" parent="Background/SplitContainer"]
 layout_mode = 2
 
@@ -1586,6 +1612,7 @@ mouse_default_cursor_shape = 8
 script = ExtResource("4_nqqx3")
 
 [node name="speach_bubble" type="Panel" parent="Background/SplitContainer/side_logo/rekku"]
+unique_name_in_owner = true
 layout_mode = 0
 offset_left = 371.0
 offset_top = -1120.0
@@ -1646,6 +1673,34 @@ expand_mode = 1
 stream = ExtResource("3_xivj6")
 volume_db = -11.243
 
+[node name="meta_panel" type="Panel" parent="Background"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+offset_left = 967.0
+offset_top = 594.0
+offset_right = 1266.0
+offset_bottom = 788.0
+
+[node name="MarginContainer" type="MarginContainer" parent="Background/meta_panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="pop_rtl" type="RichTextLabel" parent="Background/meta_panel/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 20
+theme_override_styles/fill = SubResource("StyleBoxFlat_cidk6")
+theme_override_styles/normal = SubResource("StyleBoxFlat_4gcyr")
+text = "TEST MESSAGE"
+fit_content = true
+scroll_following = true
+shortcut_keys_enabled = false
+
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
 visible = false
 position = Vector2(134, 151)
@@ -1675,7 +1730,7 @@ stretch_mode = 0
 [node name="Label" type="Label" parent="controller_guide/HBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.270222, 0.270222, 0.270222, 1)
-text = "ACTION"
+text = "CONFIRM"
 
 [node name="b_button" type="TextureButton" parent="controller_guide/HBoxContainer"]
 unique_name_in_owner = true
@@ -1690,6 +1745,34 @@ stretch_mode = 0
 layout_mode = 2
 theme_override_colors/font_color = Color(0.270588, 0.270588, 0.270588, 1)
 text = "BACK"
+
+[node name="x_button" type="TextureButton" parent="controller_guide/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(38, 38)
+layout_mode = 2
+size_flags_vertical = 4
+texture_normal = ExtResource("92_xpwgw")
+texture_pressed = ExtResource("93_rdk5c")
+stretch_mode = 0
+
+[node name="Label5" type="Label" parent="controller_guide/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.270588, 0.270588, 0.270588, 1)
+text = "INFO"
+
+[node name="y_button" type="TextureButton" parent="controller_guide/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(38, 38)
+layout_mode = 2
+size_flags_vertical = 4
+texture_normal = ExtResource("94_ybo5b")
+texture_pressed = ExtResource("95_act8q")
+stretch_mode = 0
+
+[node name="Label6" type="Label" parent="controller_guide/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.270588, 0.270588, 0.270588, 1)
+text = "REKKU"
 
 [node name="locale_option" type="OptionButton" parent="controller_guide/HBoxContainer"]
 unique_name_in_owner = true
@@ -1716,18 +1799,6 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0.270588, 0.270588, 0.270588, 1)
 text = "LANGUAGE"
 
-[node name="exit_button" type="TextureButton" parent="controller_guide/HBoxContainer"]
-custom_minimum_size = Vector2(35, 35)
-layout_mode = 2
-size_flags_vertical = 4
-texture_normal = ExtResource("87_1yqbe")
-stretch_mode = 0
-
-[node name="Label4" type="Label" parent="controller_guide/HBoxContainer"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.270588, 0.270588, 0.270588, 1)
-text = "QUIT"
-
 [node name="a_button2" type="TextureButton" parent="controller_guide/HBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(38, 38)
@@ -1744,6 +1815,23 @@ size_flags_vertical = 4
 texture_normal = ExtResource("99_km4fg")
 stretch_mode = 0
 
+[node name="Label4" type="Label" parent="controller_guide/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.270588, 0.270588, 0.270588, 1)
+text = "QUIT"
+
+[node name="exit_button" type="TextureButton" parent="controller_guide/HBoxContainer"]
+custom_minimum_size = Vector2(35, 35)
+layout_mode = 2
+size_flags_vertical = 4
+texture_normal = ExtResource("87_1yqbe")
+stretch_mode = 0
+
+[node name="Label7" type="Label" parent="controller_guide/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.270588, 0.270588, 0.270588, 1)
+text = "QUIT"
+
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 unique_name_in_owner = true
 stream = ExtResource("71_ghxvk")
@@ -1751,18 +1839,24 @@ volume_db = -5.0
 
 [node name="l1_box" type="Panel" parent="."]
 layout_mode = 0
-offset_left = 24.0
-offset_top = 10.0
-offset_right = 74.0
-offset_bottom = 70.0
+offset_left = 15.0
+offset_top = 6.0
+offset_right = 75.0
+offset_bottom = 66.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_gie3e")
 
 [node name="l1_button" type="TextureButton" parent="l1_box"]
 unique_name_in_owner = true
-layout_mode = 2
-offset_left = 1.0
-offset_right = 50.0
-offset_bottom = 60.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -22.5
+offset_top = -22.5
+offset_right = 22.5
+offset_bottom = 22.5
 grow_horizontal = 2
 grow_vertical = 2
 texture_normal = ExtResource("38_prt7u")
@@ -1771,10 +1865,10 @@ stretch_mode = 0
 
 [node name="r1_box" type="Panel" parent="."]
 layout_mode = 0
-offset_left = 1202.0
-offset_top = 10.0
-offset_right = 1252.0
-offset_bottom = 70.0
+offset_left = 1199.0
+offset_top = 6.0
+offset_right = 1259.0
+offset_bottom = 66.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_gie3e")
 
 [node name="r1_button" type="TextureButton" parent="r1_box"]
