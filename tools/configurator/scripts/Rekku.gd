@@ -8,7 +8,7 @@ func _input(event):
 			self.visible = true
 			class_functions.rekku_state = true
 			%SplitContainer.split_offset=925
-			%meta_panel.visible = false
+			%pop_rtl.visible = false
 		elif event.is_action_released("rekku_hide") and class_functions.rekku_state == true:
 			class_functions.rekku_state = false
 			self.visible = false

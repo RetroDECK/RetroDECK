@@ -30,16 +30,22 @@ var ask_to_exit_state: String
 var border_state: String
 var widescreen_state: String
 var quick_rewind_state: String
+var cheevos_state: String
+var cheevos_hardcore_state: String
 var font_select: int
 var font_tab_size: int = 35
 var font_size: int = 20
 var locale: String
-enum preset_list {abxy_button_swap, ask_to_exit, borders, widescreen, rewind}
-var button_list: Array = ["button_swap_button", "ask_to_exit_button", "border_button", "widescreen_button", "quick_rewind_button", "reset_retrodeck_button", "reset_all_emulators_button"]
+enum preset_list {abxy_button_swap, ask_to_exit, borders, widescreen, rewind, cheevos, cheevos_hardcore}
+var button_list: Array = ["button_swap_button", "ask_to_exit_button", "border_button", "widescreen_button", "quick_rewind_button", "reset_retrodeck_button", "reset_all_emulators_button", "cheevos_button"]
 signal update_global_signal
 var rekku_state: bool = false
-var custom_theme: Theme
-
+var press_time: float = 0.0
+var is_state_pressed: bool = false
+var PRESS_DURATION: float = 3.0
+var current_button: Button = null
+var current_progress: ProgressBar = null
+var current_state: String = ""
 
 func _ready():
 	read_values_states()
@@ -70,6 +76,8 @@ func read_values_states() -> void:
 	sound_effects = config["options"]["sound_effects"]
 	volume_effects = int(config["options"]["volume_effects"])
 	font_select = int(config["options"]["font"])
+	cheevos_state = multi_state("cheevos", cheevos_state)
+	cheevos_hardcore_state = multi_state("cheevos_hardcore", cheevos_hardcore_state)
 
 func multi_state(section: String, state: String) -> String:
 	var config_section:Dictionary = data_handler.get_elements_in_section(config_file_path, section)
@@ -323,6 +331,11 @@ func update_global(button: Button, preset: String, state: bool) -> void:
 				quick_rewind_state = str(state)
 				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
 				change_global(result, "build_preset_config", button, quick_rewind_state)
+		"cheevos_button":
+			if cheevos_state != "mixed":
+				cheevos_state = str(state)
+				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
+				change_global(result, "build_preset_config", button, quick_rewind_state)
 				
 func change_global(parameters: Array, preset: String, button: Button, state: String) -> void:
 	#print (parameters)
@@ -361,3 +374,60 @@ func extract_text(file_path: String, extract: String) -> String:
 	else:
 		logger("e", "Could not open file: %s" % file_path)
 	return ""
+
+func _on_button_released(progress: ProgressBar) -> void:
+	is_state_pressed = false
+	progress.visible = false
+	press_time = 0.0
+	progress.value = 0.0
+	current_button = null
+	current_progress = null
+	current_state == null
+	
+func _do_action(progress: ProgressBar, button: Button, state: String) -> void:
+	match [class_functions.button_list]:
+		[class_functions.button_list]:
+			current_state = state
+	current_button = button
+	current_progress = progress
+	current_progress.visible = true
+	is_state_pressed = true
+
+func _do_complete(button: Button) ->void:
+	#TODO use object for state
+	if is_state_pressed and button == current_button:
+		match button.name:
+			"button_swap_button":
+				class_functions.abxy_state = "false"
+			"ask_to_exit_button":
+				class_functions.ask_to_exit_state = "false"
+			"border_button":
+				class_functions.border_state = "false"
+			"widescreen_button":
+				class_functions.widescreen_state = "false"
+			"quick_rewind_button":
+				class_functions.quick_rewind_state = "false"
+			"cheevos_button":
+				class_functions.cheevos_state = "false"
+			"cheevos_hardcore_button":
+				class_functions.cheevos_hardcore_state = "false"
+			"reset_retrodeck_button":
+				var dir = DirAccess.open(class_functions.rd_conf.get_base_dir())
+				if dir is DirAccess:
+					dir.rename(class_functions.rd_conf,class_functions.rd_conf.get_base_dir() + "/retrodeck.bak")
+					dir.remove(class_functions.lockfile)
+				class_functions.change_global(["reset", "retrodeck"], "prepare_component", button, "")
+				button.text = "RESETTING-NOW"
+				await class_functions.wait(2.0)
+				button.text = "CONFIGURATOR WILL NOW CLOSE"
+				await class_functions.wait(1.0)
+				get_tree().quit()
+			"reset_all_emulators_button":
+				var tmp_txt = button.text
+				button.text = "RESETTING-NOW"
+				class_functions.change_global(["reset", "all"], "prepare_component", button, "")
+				await class_functions.wait(2.0)
+				button.text = "RESET COMPLETED"
+				await class_functions.wait(3.0)
+				button.text = tmp_txt
+	button.toggle_mode = true

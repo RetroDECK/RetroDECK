@@ -82,15 +82,15 @@ func _load_log(index: int) -> void:
 		1: 
 			class_functions.logger("i","Loading RetroDeck log")
 			log_content = class_functions.import_text_file(class_functions.rd_log_folder +"/retrodeck.log")
-			load_popup("RetroDeck Log", "res://components/logs_view/logs_popup_content.tscn", log_content)
+			load_popup("RetroDeck Log", "res://components/popup.tscn", log_content)
 		2:
 			class_functions.logger("i","Loading ES-DE log")
 			log_content = class_functions.import_text_file(class_functions.rd_log_folder +"/ES-DE/es_log.txt")
-			load_popup("ES-DE Log", "res://components/logs_view/logs_popup_content.tscn",log_content)
+			load_popup("ES-DE Log", "res://components/popup.tscn",log_content)
 		3: 
 			class_functions.logger("i","Loading RetroArch log")
 			log_content = class_functions.import_text_file(class_functions.rd_log_folder +"/retroarch/logs/log.txt")
-			load_popup("Retroarch Log", "res://components/logs_view/logs_popup_content.tscn",log_content)
+			load_popup("Retroarch Log", "res://components/popup.tscn",log_content)
 
 func _play_main_animations() -> void:
 	anim_logo.play()
@@ -196,6 +196,11 @@ func _set_up_globals(state: Array) -> void:
 	mixed_mode(%border_button, class_functions.border_state)
 	mixed_mode(%widescreen_button, class_functions.widescreen_state)
 	mixed_mode(%quick_rewind_button, class_functions.quick_rewind_state)
+	mixed_mode(%cheevos_button, class_functions.cheevos_state)
+	if class_functions.cheevos_state == "true":
+		%cheevos_login_container.visible = true
+	else:
+		%cheevos_login_container.visible = false
 
 func mixed_mode (button: Button, state: String) -> void:
 	match [class_functions.button_list]:

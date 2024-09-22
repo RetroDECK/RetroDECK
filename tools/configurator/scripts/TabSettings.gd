@@ -14,8 +14,10 @@ func _connect_signals() -> void:
 	%sound_button.pressed.connect(class_functions.run_function.bind(%sound_button, "sound_effects"))
 	%update_notification_button.pressed.connect(class_functions.run_function.bind(%update_notification_button, "update_check"))
 	%volume_effects_slider.drag_ended.connect(class_functions.slider_function.bind(%volume_effects_slider))
-	%cheevos.pressed.connect(cheevos.bind(%cheevos))
-	
+	#%cheevos_button.pressed.connect(cheevos.bind(%cheevos_button))
+	%cheevos_button.button_down.connect(class_functions._do_action.bind(%cheevos_progress, %cheevos_button, class_functions.cheevos_state))
+	%cheevos_button.button_up.connect(class_functions._on_button_released.bind(%cheevos_progress))
+	%cheevos_button.pressed.connect(class_functions.run_function.bind(%cheevos_button, "cheevos"))
 
 func _on_request_completed(_result, response_code, _headers, body):
 	var response_text = JSON.parse_string(body.get_string_from_utf8())
