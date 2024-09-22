@@ -44,17 +44,17 @@ func connect_focus_signals(node):
 			connect_focus_signals(child)
 
 func _on_Button_focus_exited():
-	%meta_panel.visible = false
+	%pop_rtl.visible = false
 	
 func _on_Button_focus_entered(button: Button):
 	if button and class_functions.sound_effects:
 		%AudioStreamPlayer2D.volume_db = class_functions.volume_effects
 		%AudioStreamPlayer2D.play()
 	if button and class_functions.rekku_state == false and button.has_meta("description"):
-		%meta_panel.visible = true
+		%pop_rtl.visible = true
 		%pop_rtl.text = button.get_meta("description")
 	else:
-		%meta_panel.visible = true
+		%pop_rtl.visible = true
 		%pop_rtl.text = "Hey, there's no description"
 
 func _input(event):

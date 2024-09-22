@@ -1,4 +1,4 @@
-[gd_scene load_steps=124 format=3 uid="uid://61f6m4r1mpan"]
+[gd_scene load_steps=123 format=3 uid="uid://61f6m4r1mpan"]
 
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
 [ext_resource type="Theme" uid="uid://hhc60cllcg47" path="res://assets/themes/default_theme.tres" id="1_if8nh"]
@@ -200,10 +200,8 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cidk6"]
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4gcyr"]
-bg_color = Color(0.455, 0.455, 0.455, 0.444)
+bg_color = Color(0.455, 0.455, 0.455, 1)
 border_width_left = 10
 border_width_top = 10
 border_width_right = 10
@@ -1011,6 +1009,28 @@ icon = ExtResource("56_witym")
 alignment = 1
 expand_icon = true
 
+[node name="locale_option" type="OptionButton" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/system_container"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+selected = 0
+fit_to_longest_item = false
+item_count = 7
+popup/item_0/text = "DEFAULT LANGUAGE"
+popup/item_0/icon = ExtResource("5_exkn2")
+popup/item_1/icon = ExtResource("6_fiylw")
+popup/item_1/id = 1
+popup/item_2/icon = ExtResource("7_qgxid")
+popup/item_2/id = 2
+popup/item_3/icon = ExtResource("8_lptln")
+popup/item_3/id = 3
+popup/item_4/icon = ExtResource("9_dp7oa")
+popup/item_4/id = 4
+popup/item_5/icon = ExtResource("10_e8mt0")
+popup/item_5/id = 5
+popup/item_6/icon = ExtResource("11_ri2fv")
+popup/item_6/id = 6
+
 [node name="multi_user_option" type="OptionButton" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
@@ -1212,14 +1232,11 @@ texture = ExtResource("1_axfei")
 expand_mode = 1
 stretch_mode = 4
 
-[node name="about_header" type="RichTextLabel" parent="Background/SplitContainer/MarginContainer/TabContainer/ABOUT/ScrollContainer/about_container"]
-clip_contents = false
+[node name="about_header" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/ABOUT/ScrollContainer/about_container"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_font_sizes/normal_font_size = 23
 text = "ABOUT RETRODECK"
-scroll_active = false
 
 [node name="GridContainer" type="GridContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/ABOUT/ScrollContainer/about_container"]
 unique_name_in_owner = true
@@ -1577,19 +1594,6 @@ sprite_frames = SubResource("SpriteFrames_lhf2y")
 frame = 4
 frame_progress = 1.0
 
-[node name="Panel" type="Panel" parent="Background/SplitContainer"]
-visible = false
-custom_minimum_size = Vector2(900, 0)
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Background/SplitContainer/Panel"]
-layout_mode = 2
-offset_left = 12.0
-offset_top = 346.0
-offset_right = 569.0
-offset_bottom = 378.0
-text = "SPLIT ME? kofdsofdosk oadk opdkdfpso koskfgd b"
-
 [node name="side_logo" type="Control" parent="Background/SplitContainer"]
 layout_mode = 2
 
@@ -1673,33 +1677,16 @@ expand_mode = 1
 stream = ExtResource("3_xivj6")
 volume_db = -11.243
 
-[node name="meta_panel" type="Panel" parent="Background"]
+[node name="pop_rtl" type="Label" parent="Background"]
 unique_name_in_owner = true
-visible = false
+z_index = 2
 layout_mode = 2
-offset_left = 967.0
-offset_top = 594.0
-offset_right = 1266.0
-offset_bottom = 788.0
-
-[node name="MarginContainer" type="MarginContainer" parent="Background/meta_panel"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="pop_rtl" type="RichTextLabel" parent="Background/meta_panel/MarginContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_font_sizes/normal_font_size = 20
-theme_override_styles/fill = SubResource("StyleBoxFlat_cidk6")
+offset_left = 6.0
+offset_top = 703.0
+offset_right = 1271.0
+offset_bottom = 797.0
 theme_override_styles/normal = SubResource("StyleBoxFlat_4gcyr")
 text = "TEST MESSAGE"
-fit_content = true
-scroll_following = true
-shortcut_keys_enabled = false
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
 visible = false
@@ -1773,31 +1760,6 @@ stretch_mode = 0
 layout_mode = 2
 theme_override_colors/font_color = Color(0.270588, 0.270588, 0.270588, 1)
 text = "REKKU"
-
-[node name="locale_option" type="OptionButton" parent="controller_guide/HBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 4
-selected = 0
-item_count = 7
-popup/item_0/icon = ExtResource("5_exkn2")
-popup/item_1/icon = ExtResource("6_fiylw")
-popup/item_1/id = 1
-popup/item_2/icon = ExtResource("7_qgxid")
-popup/item_2/id = 2
-popup/item_3/icon = ExtResource("8_lptln")
-popup/item_3/id = 3
-popup/item_4/icon = ExtResource("9_dp7oa")
-popup/item_4/id = 4
-popup/item_5/icon = ExtResource("10_e8mt0")
-popup/item_5/id = 5
-popup/item_6/icon = ExtResource("11_ri2fv")
-popup/item_6/id = 6
-
-[node name="Label3" type="Label" parent="controller_guide/HBoxContainer"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.270588, 0.270588, 0.270588, 1)
-text = "LANGUAGE"
 
 [node name="a_button2" type="TextureButton" parent="controller_guide/HBoxContainer"]
 unique_name_in_owner = true
@@ -1898,5 +1860,5 @@ script = ExtResource("94_8nlr1")
 
 [connection signal="pressed" from="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/troubleshoot_container/bios_button" to="." method="_on_bios_button_pressed"]
 [connection signal="pressed" from="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/troubleshoot_container/bios_button_expert" to="." method="_on_bios_button_expert_pressed"]
-[connection signal="item_selected" from="controller_guide/HBoxContainer/locale_option" to="." method="_on_locale_selected"]
+[connection signal="item_selected" from="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/system_container/locale_option" to="." method="_on_locale_selected"]
 [connection signal="pressed" from="controller_guide/HBoxContainer/exit_button" to="." method="_on_exit_button_pressed"]

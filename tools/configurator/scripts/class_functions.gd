@@ -286,7 +286,8 @@ func update_global(button: Button, preset: String, state: bool) -> void:
 		"sound_button":
 			sound_effects = state
 			result = data_handler.change_cfg_value(config_file_path, preset, "options", str(state))
-			logger("i", "Enabled: " % (button.name))
+			logger("i", "Enabled: %s" % (button.name))
+			update_global_signal.emit([button.name])
 		"button_swap_button":
 			if abxy_state != "mixed":
 				abxy_state = str(state)
