@@ -185,7 +185,7 @@ func _on_exit_button_pressed():
 
 func _set_up_globals(state: Array) -> void:
 	#TODO on initial run pass array date?
-	print (state)
+	#print (state)
 	%update_notification_button.button_pressed = class_functions.update_check
 	%quick_resume_button.button_pressed = class_functions.quick_resume_status
 	%retroarch_quick_resume_button.button_pressed = class_functions.quick_resume_status
