@@ -615,8 +615,8 @@ modules:
       - cp PortMaster.zip "${FLATPAK_DEST}/retrodeck/PortMaster.zip"
     sources:
       - type: file
-        url: https://github.com/PortsMaster/PortMaster-GUI/releases/download/2024.09.13-1455/retrodeck.portmaster.zip
-        sha256: 4fe3ce3ffdc1d66fe235c8a1a6062a86aa06ee615dba1fe5fc6e9bdd75e9d39c
+        url: https://github.com/PortsMaster/PortMaster-GUI/releases/latest/download/retrodeck.portmaster.zip
+        sha256: PORTMASTERLATESTSHA
         dest-filename: PortMaster.zip
       - type: script
         commands:
@@ -644,10 +644,8 @@ modules:
     sources:
       # Testing the new feat/update-3.1.0
       - type: archive
-        url: https://github.com/RetroDECK/ES-DE/releases/download/feat%2Fupdate-3.1.0-170924.19/RetroDECK-ES-DE-Artifact.tar.gz
-        sha256: 047198f98d4c57fefb19bda059ec059ea2fb9691519952b86b744d21b57a00ff
-        #url: https://github.com/RetroDECK/ES-DE/releases/latest/download/RetroDECK-ES-DE-Artifact.tar.gz
-        #sha256: RETRODECKESDELATEST
+        url: https://github.com/RetroDECK/ES-DE/releases/latest/download/RetroDECK-ES-DE-Artifact.tar.gz
+        sha256: RETRODECKESDELATEST
 
   - name: retrodeck-theme
     buildsystem: simple
