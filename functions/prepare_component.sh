@@ -896,7 +896,18 @@ prepare_component() {
     log i "Prepearing Xenia"
     log i "----------------------"
 
-    rm -rf "/var/data/xenia-canary-pfx"
+    local xenia_prefix="/var/data/xenia-canary-pfx"
+    create_dir -d "$xenia_prefix"
+
+    # sandboxing prefix to avoid writing on real user home folder
+    # TODO: multi user needs to carew about this as we're using the linux username
+    unlink "$xenia_prefix/drive_c/users/$(whoami)/Desktop" && create_dir "$xenia_prefix/drive_c/users/$(whoami)/Desktop"
+    unlink "$xenia_prefix/drive_c/users/$(whoami)/Documents" && create_dir "$xenia_prefix/drive_c/users/$(whoami)/Documents"
+    unlink "$xenia_prefix/drive_c/users/$(whoami)/Downloads" && create_dir "$xenia_prefix/drive_c/users/$(whoami)/Downloads"
+    unlink "$xenia_prefix/drive_c/users/$(whoami)/Music" && create_dir "$xenia_prefix/drive_c/users/$(whoami)/Music"
+    unlink "$xenia_prefix/drive_c/users/$(whoami)/Pictures" && create_dir "$xenia_prefix/drive_c/users/$(whoami)/Pictures"
+    unlink "$xenia_prefix/drive_c/users/$(whoami)/Videos"  && create_dir "$xenia_prefix/drive_c/users/$(whoami)/Videos" 
+
     # TODO: fill this
     
   fi
