@@ -197,6 +197,24 @@ modules:
         sha256: RASHAPLACEHOLDER
 
   # Not part of the offical RetroArch AppImage
+
+  # TODO: outsource me
+  - name: libbz2
+    no-autogen: true
+    make-args:
+      - --f=Makefile-libbz2_so
+      - PREFIX=${FLATPAK_DEST}
+    no-make-install: true
+    post-install: 
+      - mv libbz2.so.1.0.8 ${FLATPAK_DEST}/lib/
+      - ln -s ${FLATPAK_DEST}/lib/libbz2.so.1.0.8 ${FLATPAK_DEST}/lib/libbz2.so.1.0
+    sources:
+      - type: archive
+        url: https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz
+        sha256: ab5a03176ee106d3f0fa90e381da478ddae405918153cca248e682cd0c4a2269
+  
+  # TODO: If more are mising are here: https://github.com/flathub/org.libretro.RetroArch/tree/8c388bb84df63b3a2efb40dc3d8f78df7717059e/modules
+
   # retroarch-cores-nightly must be earlier than retroarch-cores as it will overwrite this cores with the stable ones
   - name: retroarch-cores-nightly
     buildsystem: simple
@@ -538,6 +556,32 @@ modules:
       - type: archive
         url: https://github.com/shadps4-emu/shadPS4/releases/latest/download/shadps4-linux-qt.zip
         sha256: RETRODECKSHADPS4LATESTSTABLE
+  # PortMaster
+
+  - name: PortMaster
+    buildsystem: simple
+    build-commands:
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/PortMaster/"
+      - install -Dm755 "PortMaster" "${FLATPAK_DEST}/bin/PortMaster"
+      - install -Dm755 "harbourmaster" "${FLATPAK_DEST}/bin/harbourmaster"
+      - cp PortMaster.zip "${FLATPAK_DEST}/retrodeck/PortMaster.zip"
+    sources:
+      - type: file
+        url: https://github.com/PortsMaster/PortMaster-GUI/releases/latest/download/retrodeck.portmaster.zip
+        sha256: PORTMASTERLATESTSHA
+        dest-filename: PortMaster.zip
+      - type: script
+        commands:
+          - |
+            #!/bin/bash
+            "/var/data/PortMaster/PortMaster.sh" "$@"
+        dest-filename: PortMaster
+      - type: script
+        commands:
+          - |
+            #!/bin/bash
+            "/var/data/PortMaster/harbourmaster" "$@"
+        dest-filename: harbourmaster
 
   # ES-DE
 
@@ -550,6 +594,7 @@ modules:
       - cp -r files/* "${FLATPAK_DEST}"
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
+      # Testing the new feat/update-3.1.0
       - type: archive
         url: https://github.com/RetroDECK/ES-DE/releases/download/feat%2Fshadps4-150924.23/RetroDECK-ES-DE-Artifact.tar.gz
         sha256: 21b937034be0381dab81b00ec0a9a95210b0610c1a3b66c5ab3b3b0aceae8654
