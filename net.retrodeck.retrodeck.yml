@@ -46,6 +46,8 @@ finish-args:
   - --filesystem=~/.var/app/com.valvesoftware.Steam:rw # Steam (Flatpak)
   # PPSSPP, DOLPHIN
   - --filesystem=xdg-run/gamescope-0:ro
+  # Xenia / Wine
+  - --env=WINEDLLPATH=/app/dlls/lib32:/app/dlls/lib:/app/lib32/wine/wined3d:/app/lib/wine/wined3d
 
 cleanup:
   # ES-DE
@@ -636,8 +638,7 @@ modules:
       - type: script
         commands:
           - |
-            #!/bin/bash
-            WINEPREFIX="/var/data/xenia-canary-pfx" wine "/app/xenia-canary/xenia_canary.exe"
+            WINEPREFIX="/var/data/xenia-canary-pfx" wine64 "/app/xenia-canary/xenia_canary.exe"
         dest-filename: xenia-canary
 
   - name: fetch-missing-libs
