@@ -44,6 +44,7 @@ func connect_focus_signals(node):
 			connect_focus_signals(child)
 
 func _on_Button_focus_exited():
+	print ("exit")
 	%pop_rtl.visible = false
 	
 func _on_Button_focus_entered(button: Button):

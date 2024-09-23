@@ -81,7 +81,7 @@
 [ext_resource type="Texture2D" uid="uid://3sw7gtoiuab3" path="res://assets/icons/pixelitos/128/help-browser.png" id="46_feagl"]
 [ext_resource type="Texture2D" uid="uid://b0awa8venu1h8" path="res://assets/icons/pixelitos/128/cs-network.png" id="50_5d2ui"]
 [ext_resource type="Texture2D" uid="uid://be3tmvgoa1wua" path="res://assets/icons/pixelitos/128/applications-development.png" id="50_tl5ty"]
-[ext_resource type="Script" path="res://scripts/ToolsTab.gd" id="50_wqa5h"]
+[ext_resource type="Script" path="res://scripts/TabTools.gd" id="50_wqa5h"]
 [ext_resource type="Texture2D" uid="uid://33f5uahr5tqm" path="res://assets/icons/pixelitos/128/mate-system-log.png" id="52_1rasc"]
 [ext_resource type="Script" path="res://scripts/TabSettings.gd" id="54_bxhvn"]
 [ext_resource type="Texture2D" uid="uid://dk4567tpvqpr6" path="res://assets/icons/pixelitos/128/preferences-desktop-plasma-theme.png" id="54_dah1j"]
@@ -253,7 +253,7 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_styles/tab_selected = SubResource("StyleBoxFlat_co0k7")
 tab_alignment = 1
-current_tab = 3
+current_tab = 1
 script = ExtResource("3_id6l4")
 
 [node name="GLOBALS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
@@ -284,20 +284,21 @@ layout_mode = 2
 
 [node name="globals_gridcontainer" type="GridContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/h_separation = 25
-theme_override_constants/v_separation = 25
-columns = 3
+theme_override_constants/h_separation = 15
+theme_override_constants/v_separation = 15
+columns = 4
 
 [node name="ask_to_exit_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(375, 125)
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/icon_max_width = 64
 text = "ASK TO EXIT"
 icon = ExtResource("5_ahd1x")
 alignment = 1
 icon_alignment = 1
 vertical_icon_alignment = 0
-expand_icon = true
 metadata/description = "This function will prompt you to exit on quiting an emulator."
 
 [node name="ask_to_exit_progress" type="ProgressBar" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer/ask_to_exit_button"]
@@ -314,14 +315,15 @@ show_percentage = false
 
 [node name="border_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(375, 125)
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/icon_max_width = 64
 text = "BORDERS"
 icon = ExtResource("4_jldgc")
 alignment = 1
 icon_alignment = 1
 vertical_icon_alignment = 0
-expand_icon = true
 
 [node name="border_progress" type="ProgressBar" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer/border_button"]
 unique_name_in_owner = true
@@ -337,15 +339,16 @@ show_percentage = false
 
 [node name="button_swap_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(375, 125)
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/icon_max_width = 64
 text = "BUTTON SWAP
 "
 icon = ExtResource("4_caaxx")
 alignment = 1
 icon_alignment = 1
 vertical_icon_alignment = 0
-expand_icon = true
 
 [node name="button_swap_progress" type="ProgressBar" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer/button_swap_button"]
 unique_name_in_owner = true
@@ -360,39 +363,42 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_1161k")
 show_percentage = false
 
 [node name="mods_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer"]
-custom_minimum_size = Vector2(375, 125)
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/icon_max_width = 64
 disabled = true
 text = "MODS"
 icon = ExtResource("5_vehlp")
 alignment = 1
 icon_alignment = 1
 vertical_icon_alignment = 0
-expand_icon = true
 metadata/description = "This feature is planned for a future release."
 
 [node name="quick_resume_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(375, 125)
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/icon_max_width = 64
 text = "QUICK RESUME"
 icon = ExtResource("12_3jrmi")
 alignment = 1
 icon_alignment = 1
 vertical_icon_alignment = 0
-expand_icon = true
 metadata/description = "Testing 1,2,3 .."
 
 [node name="quick_rewind_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(375, 125)
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/icon_max_width = 64
 text = "REWIND"
 icon = ExtResource("11_c3qcy")
 alignment = 1
 icon_alignment = 1
 vertical_icon_alignment = 0
-expand_icon = true
 
 [node name="quick_rewind_progress" type="ProgressBar" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer/quick_rewind_button"]
 unique_name_in_owner = true
@@ -407,39 +413,42 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_1161k")
 show_percentage = false
 
 [node name="tate_mode_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer"]
-custom_minimum_size = Vector2(375, 125)
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/icon_max_width = 64
 disabled = true
 text = "TATE MODE"
 icon = ExtResource("10_jm3oh")
 alignment = 1
 icon_alignment = 1
 vertical_icon_alignment = 0
-expand_icon = true
 metadata/description = "This feature is planned for a future release."
 
 [node name="shaders_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer"]
-custom_minimum_size = Vector2(375, 125)
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/icon_max_width = 64
 disabled = true
 text = "SHADERS"
 icon = ExtResource("4_q6hd2")
 alignment = 1
 icon_alignment = 1
 vertical_icon_alignment = 0
-expand_icon = true
 metadata/description = "This feature is planned for a future release."
 
 [node name="widescreen_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(375, 125)
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/icon_max_width = 64
 text = "WIDESCREEN"
 icon = ExtResource("4_jldgc")
 alignment = 1
 icon_alignment = 1
 vertical_icon_alignment = 0
-expand_icon = true
 
 [node name="widescreen_progress" type="ProgressBar" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer/widescreen_button"]
 unique_name_in_owner = true
@@ -455,9 +464,12 @@ show_percentage = false
 
 [node name="reset_retrodeck_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(375, 125)
 layout_mode = 2
-text = "RESET RETRODECK"
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/icon_max_width = 64
+text = "RESET
+RETRODECK"
 icon = ExtResource("11_g1uhn")
 icon_alignment = 1
 vertical_icon_alignment = 0
@@ -477,9 +489,12 @@ show_percentage = false
 
 [node name="reset_all_emulators_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(375, 125)
 layout_mode = 2
-text = "RESET ALL EMULATORS"
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/icon_max_width = 64
+text = "RESET ALL 
+EMULATORS"
 icon = ExtResource("45_qxd26")
 icon_alignment = 1
 vertical_icon_alignment = 0
@@ -498,7 +513,6 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_1161k")
 show_percentage = false
 
 [node name="SYSTEM" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
-visible = false
 layout_mode = 2
 script = ExtResource("36_wv31h")
 metadata/_tab_index = 1
@@ -515,144 +529,174 @@ size_flags_vertical = 3
 [node name="system_gridcontainer" type="GridContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/h_separation = 25
-theme_override_constants/v_separation = 25
-columns = 4
+theme_override_constants/h_separation = 15
+theme_override_constants/v_separation = 15
+columns = 5
 
 [node name="retroarch_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/system_gridcontainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(256, 125)
 layout_mode = 2
-theme_override_constants/icon_max_width = 128
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/icon_max_width = 64
 text = "RETROARCH"
 icon = ExtResource("4_xcuib")
-expand_icon = true
+icon_alignment = 1
+vertical_icon_alignment = 0
 
 [node name="mame_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/system_gridcontainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(256, 125)
 layout_mode = 2
-theme_override_constants/icon_max_width = 128
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/icon_max_width = 64
 text = "MAME"
 icon = ExtResource("36_dj81i")
-expand_icon = true
+icon_alignment = 1
+vertical_icon_alignment = 0
 
 [node name="ruffle_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/system_gridcontainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(256, 125)
 layout_mode = 2
-theme_override_constants/icon_max_width = 128
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/icon_max_width = 64
 text = "RUFFLE"
 icon = ExtResource("37_7hhbn")
-expand_icon = true
+icon_alignment = 1
+vertical_icon_alignment = 0
 
 [node name="melonds_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/system_gridcontainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(256, 125)
 layout_mode = 2
-theme_override_constants/icon_max_width = 128
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/icon_max_width = 64
 text = "MELONDS"
 icon = ExtResource("7_4otos")
-expand_icon = true
+icon_alignment = 1
+vertical_icon_alignment = 0
 
 [node name="pcsx2_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/system_gridcontainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(256, 125)
 layout_mode = 2
-theme_override_constants/icon_max_width = 128
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/icon_max_width = 64
 text = "PCSX2"
 icon = ExtResource("38_44je8")
-expand_icon = true
+icon_alignment = 1
+vertical_icon_alignment = 0
 
 [node name="duckstation_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/system_gridcontainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(256, 125)
 layout_mode = 2
-theme_override_constants/icon_max_width = 128
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/icon_max_width = 64
 text = "DUCKSTATION"
 icon = ExtResource("6_winpq")
-expand_icon = true
+icon_alignment = 1
+vertical_icon_alignment = 0
 
 [node name="ppsspp_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/system_gridcontainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(256, 125)
 layout_mode = 2
-theme_override_constants/icon_max_width = 128
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/icon_max_width = 64
 text = "PPSSPP"
 icon = ExtResource("8_akxf7")
-expand_icon = true
+icon_alignment = 1
+vertical_icon_alignment = 0
 
 [node name="vita3k_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/system_gridcontainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(256, 125)
 layout_mode = 2
-theme_override_constants/icon_max_width = 128
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/icon_max_width = 64
 text = "VITA3K"
 icon = ExtResource("38_vsjf2")
-expand_icon = true
+icon_alignment = 1
+vertical_icon_alignment = 0
 
 [node name="rpcs3_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/system_gridcontainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(256, 125)
 layout_mode = 2
-theme_override_constants/icon_max_width = 128
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/icon_max_width = 64
 text = "RPCS3"
 icon = ExtResource("8_ec4gt")
-expand_icon = true
+icon_alignment = 1
+vertical_icon_alignment = 0
 
 [node name="ryujinx_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/system_gridcontainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(256, 125)
 layout_mode = 2
-theme_override_constants/icon_max_width = 128
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/icon_max_width = 64
 text = "RYUJINX"
 icon = ExtResource("40_7fdvq")
-expand_icon = true
+icon_alignment = 1
+vertical_icon_alignment = 0
 
 [node name="dolphin_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/system_gridcontainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(256, 125)
 layout_mode = 2
-theme_override_constants/icon_max_width = 128
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/icon_max_width = 64
 text = "DOLPHIN"
 icon = ExtResource("11_61sak")
-expand_icon = true
+icon_alignment = 1
+vertical_icon_alignment = 0
 
 [node name="primehack_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/system_gridcontainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(256, 125)
 layout_mode = 2
-theme_override_constants/icon_max_width = 128
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/icon_max_width = 64
 text = "PRIMEHACK"
 icon = ExtResource("41_55e56")
-expand_icon = true
+icon_alignment = 1
+vertical_icon_alignment = 0
 
 [node name="cemu_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/system_gridcontainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(256, 125)
 layout_mode = 2
-theme_override_constants/icon_max_width = 128
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/icon_max_width = 64
 text = "CEMU"
 icon = ExtResource("42_n3n7j")
-expand_icon = true
+icon_alignment = 1
+vertical_icon_alignment = 0
 
 [node name="xemu_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/system_gridcontainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(256, 125)
 layout_mode = 2
-theme_override_constants/icon_max_width = 128
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/icon_max_width = 64
 text = "XEMU"
 icon = ExtResource("43_ifi6j")
-expand_icon = true
+icon_alignment = 1
+vertical_icon_alignment = 0
 
 [node name="esde_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer/system_gridcontainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(256, 125)
 layout_mode = 2
-theme_override_constants/icon_max_width = 128
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/icon_max_width = 64
 text = "ES-DE"
 icon = ExtResource("44_7lpj5")
-expand_icon = true
+icon_alignment = 1
+vertical_icon_alignment = 0
 
 [node name="action_gridcontainer" type="GridContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/SYSTEM/ScrollContainer/VBoxContainer"]
 unique_name_in_owner = true
@@ -752,7 +796,7 @@ theme_override_constants/separation = 64
 
 [node name="troubleshoot_container" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/separation = 25
+theme_override_constants/separation = 15
 
 [node name="check_conn_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/troubleshoot_container"]
 unique_name_in_owner = true
@@ -920,6 +964,7 @@ disabled = true
 text = "TK_MULTIFILE"
 
 [node name="SETTINGS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
 script = ExtResource("54_bxhvn")
 metadata/_tab_index = 3
@@ -1218,8 +1263,8 @@ text = "ABOUT RETRODECK"
 [node name="GridContainer" type="GridContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/ABOUT/ScrollContainer/about_container"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/h_separation = 20
-theme_override_constants/v_separation = 20
+theme_override_constants/h_separation = 15
+theme_override_constants/v_separation = 15
 columns = 4
 
 [node name="WIP" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
