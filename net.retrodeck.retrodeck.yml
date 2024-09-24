@@ -616,7 +616,7 @@ modules:
       - cp -r squashfs-root/usr/* "${FLATPAK_DEST}/"
     sources:
       - type: archive
-        url: https://github.com/shadps4-emu/shadPS4/releases/latest/download/shadps4-linux-qt.zip
+        url: https://github.com/shadps4-emu/shadPS4/releases/download/Pre-release-shadPS4-2024-09-24-1620eea/shadps4-linux-qt-2024-09-24-1620eea.zip
         sha256: RETRODECKSHADPS4LATESTSTABLE
         
   # PortMaster
