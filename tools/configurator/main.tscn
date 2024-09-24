@@ -258,6 +258,7 @@ script = ExtResource("3_id6l4")
 
 [node name="GLOBALS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 script = ExtResource("4_2jqfc")
 metadata/_tab_index = 0
