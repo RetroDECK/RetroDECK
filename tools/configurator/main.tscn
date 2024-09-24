@@ -453,56 +453,6 @@ grow_vertical = 2
 theme_override_styles/fill = SubResource("StyleBoxFlat_1161k")
 show_percentage = false
 
-[node name="reset_retrodeck_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme_override_constants/icon_max_width = 64
-text = "RESET
-RETRODECK"
-icon = ExtResource("11_g1uhn")
-icon_alignment = 1
-vertical_icon_alignment = 0
-expand_icon = true
-
-[node name="reset_retrodeck_progress" type="ProgressBar" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer/reset_retrodeck_button"]
-unique_name_in_owner = true
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/fill = SubResource("StyleBoxFlat_1161k")
-show_percentage = false
-
-[node name="reset_all_emulators_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme_override_constants/icon_max_width = 64
-text = "RESET ALL 
-EMULATORS"
-icon = ExtResource("45_qxd26")
-icon_alignment = 1
-vertical_icon_alignment = 0
-expand_icon = true
-
-[node name="reset_all_emulators_progress" type="ProgressBar" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer/reset_all_emulators_button"]
-unique_name_in_owner = true
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/fill = SubResource("StyleBoxFlat_1161k")
-show_percentage = false
-
 [node name="SYSTEM" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
@@ -970,7 +920,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="system_container" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer"]
-visible = false
 layout_mode = 2
 
 [node name="system_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/system_container"]
@@ -984,22 +933,23 @@ layout_mode = 2
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
+theme_override_constants/icon_max_width = 64
 text = "AUTO UPDATES"
 icon = ExtResource("55_x32s4")
 alignment = 1
-expand_icon = true
 
 [node name="sound_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/system_container"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
+theme_override_constants/icon_max_width = 64
 text = "SOUND EFFECTS"
 icon = ExtResource("9_qwq2k")
 alignment = 1
-expand_icon = true
 
 [node name="volume_effects_slider" type="HSlider" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/system_container"]
 unique_name_in_owner = true
+visible = false
 custom_minimum_size = Vector2(0, 75)
 layout_mode = 2
 min_value = 1.0
@@ -1012,8 +962,8 @@ tick_count = 25
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
+theme_override_constants/icon_max_width = 64
 alignment = 1
-expand_icon = true
 selected = 0
 item_count = 4
 popup/item_0/text = "CHOOSE FONT"
@@ -1029,23 +979,6 @@ popup/item_2/id = 2
 popup/item_3/text = "OpenDyslexic3"
 popup/item_3/icon = ExtResource("56_ubqc2")
 popup/item_3/id = 2
-
-[node name="menu_music" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/system_container"]
-layout_mode = 2
-disabled = true
-text = "TK_MUSIC"
-icon = ExtResource("58_oismn")
-alignment = 1
-expand_icon = true
-
-[node name="easter_eggs" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/system_container"]
-layout_mode = 2
-disabled = true
-button_pressed = true
-text = "TK_EASTEREGGS"
-icon = ExtResource("56_witym")
-alignment = 1
-expand_icon = true
 
 [node name="locale_option" type="OptionButton" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/system_container"]
 unique_name_in_owner = true
@@ -1069,6 +1002,48 @@ popup/item_5/icon = ExtResource("10_e8mt0")
 popup/item_5/id = 5
 popup/item_6/icon = ExtResource("11_ri2fv")
 popup/item_6/id = 6
+
+[node name="reset_retrodeck_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/system_container"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/icon_max_width = 64
+text = "RESET RETRODECK"
+icon = ExtResource("11_g1uhn")
+
+[node name="reset_retrodeck_progress" type="ProgressBar" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/system_container/reset_retrodeck_button"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_1161k")
+show_percentage = false
+
+[node name="reset_all_emulators_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/system_container"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/icon_max_width = 64
+text = "RESET ALL EMULATORS"
+icon = ExtResource("45_qxd26")
+
+[node name="reset_all_emulators_progress" type="ProgressBar" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/system_container/reset_all_emulators_button"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_1161k")
+show_percentage = false
 
 [node name="cheevos_container" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer"]
 layout_mode = 2
@@ -1235,6 +1210,23 @@ layout_mode = 2
 size_flags_horizontal = 3
 disabled = true
 text = "TK_FTPBTN"
+
+[node name="menu_music" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/data_mng_container"]
+layout_mode = 2
+theme_override_constants/icon_max_width = 64
+disabled = true
+text = "TK_MUSIC"
+icon = ExtResource("58_oismn")
+alignment = 1
+
+[node name="easter_eggs" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/data_mng_container"]
+layout_mode = 2
+theme_override_constants/icon_max_width = 64
+disabled = true
+button_pressed = true
+text = "TK_EASTEREGGS"
+icon = ExtResource("56_witym")
+alignment = 1
 
 [node name="ABOUT" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
 visible = false
