@@ -199,9 +199,10 @@ func _set_up_globals(state: Array) -> void:
 	mixed_mode(%cheevos_button, class_functions.cheevos_state)
 	if class_functions.cheevos_state == "true":
 		%cheevos_login_container.visible = true
-	else:
+	elif class_functions.cheevos_state == "false":
 		%cheevos_login_container.visible = false
-
+	mixed_mode(%cheevos_hardcore_button, class_functions.cheevos_hardcore_state)
+	
 func mixed_mode (button: Button, state: String) -> void:
 	match [class_functions.button_list]:
 		[class_functions.button_list]:
@@ -237,7 +238,7 @@ func change_font(index: int) -> void:
 		1:
 			font_file = load("res://assets/fonts/munro/munro.ttf")
 			%TabContainer.add_theme_font_size_override("font_size", class_functions.font_tab_size)
-			font_size = 30
+			font_size = 25
 		2:
 			font_file = load("res://assets/fonts/akrobat/Akrobat-Regular.otf")
 			%TabContainer.add_theme_font_size_override("font_size", class_functions.font_tab_size)

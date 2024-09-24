@@ -1,5 +1,4 @@
-extends MarginContainer
-
+extends Control
 
 func _ready():
 	_connect_signals()
@@ -34,7 +33,3 @@ func _connect_signals():
 	%quick_rewind_button.button_down.connect(class_functions._do_action.bind(%quick_rewind_progress, %quick_rewind_button, class_functions.quick_rewind_state))
 	%quick_rewind_button.button_up.connect(class_functions._on_button_released.bind(%quick_rewind_progress))
 	%quick_rewind_button.pressed.connect(class_functions.run_function.bind(%quick_rewind_button, "rewind"))
-	%reset_retrodeck_button.button_down.connect(class_functions._do_action.bind(%reset_retrodeck_progress, %reset_retrodeck_button, "mixed"))
-	%reset_retrodeck_button.button_up.connect(class_functions._on_button_released.bind(%reset_retrodeck_progress))	
-	%reset_all_emulators_button.button_down.connect(class_functions._do_action.bind(%reset_all_emulators_progress, %reset_all_emulators_button, "mixed"))
-	%reset_all_emulators_button.button_up.connect(class_functions._on_button_released.bind(%reset_all_emulators_progress))

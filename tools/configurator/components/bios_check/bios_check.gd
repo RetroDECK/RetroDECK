@@ -8,8 +8,10 @@ var BIOS_COLUMNS_EXPERT := ["BIOS File Name", "System", "Found", "Hash Match", "
 @onready var custom_theme: Theme = get_tree().current_scene.custom_theme
 
 func _ready():
+	#var font_size = get_theme_font_size("font")
+	#custom_theme.default_font_size = 16
 	$".".theme = custom_theme
-	var table := $Table
+	var table: Tree = %Table
 	if bios_type == 1: #Basic BIOS button pressed
 		table.columns = BIOS_COLUMNS_BASIC.size()
 		for i in BIOS_COLUMNS_BASIC.size():
@@ -20,7 +22,6 @@ func _ready():
 			table.set_column_title(i, BIOS_COLUMNS_EXPERT[i])
 	var root = table.create_item()
 	table.hide_root = true
-
 	if bios_type == 1: #Basic BIOS button pressed
 		var parameters = ["check_bios_files","basic"]
 		bios_result = await class_functions.run_thread_command(class_functions.wrapper_command, parameters, console)

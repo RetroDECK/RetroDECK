@@ -89,6 +89,7 @@ func _do_action(button: Button) -> void:
 	match [button.name, current_system.name]:
 		["help_button", current_system.name]:
 			if class_functions.desktop_mode != "gamescope":
+				print ("URL %s" %current_system.url)
 				class_functions.logger("i", "Launching " + current_system.name + " Help")
 				class_functions.launch_help(current_system.url)
 			else:

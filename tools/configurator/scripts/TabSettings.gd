@@ -18,6 +18,13 @@ func _connect_signals() -> void:
 	%cheevos_button.button_down.connect(class_functions._do_action.bind(%cheevos_progress, %cheevos_button, class_functions.cheevos_state))
 	%cheevos_button.button_up.connect(class_functions._on_button_released.bind(%cheevos_progress))
 	%cheevos_button.pressed.connect(class_functions.run_function.bind(%cheevos_button, "cheevos"))
+	%cheevos_hardcore_button.button_down.connect(class_functions._do_action.bind(%cheevos_hardcore_progress, %cheevos_hardcore_button, class_functions.cheevos_hardcore_state))
+	%cheevos_hardcore_button.button_up.connect(class_functions._on_button_released.bind(%cheevos_hardcore_progress))
+	%cheevos_hardcore_button.pressed.connect(class_functions.run_function.bind(%cheevos_hardcore_button, "cheevos_hardcore"))
+	%reset_retrodeck_button.button_down.connect(class_functions._do_action.bind(%reset_retrodeck_progress, %reset_retrodeck_button, "mixed"))
+	%reset_retrodeck_button.button_up.connect(class_functions._on_button_released.bind(%reset_retrodeck_progress))	
+	%reset_all_emulators_button.button_down.connect(class_functions._do_action.bind(%reset_all_emulators_progress, %reset_all_emulators_button, "mixed"))
+	%reset_all_emulators_button.button_up.connect(class_functions._on_button_released.bind(%reset_all_emulators_progress))
 
 func _on_request_completed(_result, response_code, _headers, body):
 	var response_text = JSON.parse_string(body.get_string_from_utf8())
@@ -37,4 +44,3 @@ func cheevos(button: Button):
 		await class_functions.run_thread_command(class_functions.wrapper_command,["change_preset_dialog", "cheevos"], false)
 		set_process_input(true)
 		$"../..".visible=true
-		print ("FIN?")
