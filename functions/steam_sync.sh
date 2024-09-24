@@ -77,7 +77,7 @@ add_to_steam() {
 
           local launcher="$steamsync_folder/${sanitized_name}.sh"
 
-          if [ ! -e $launcher ]; then
+          if [ ! -e "$launcher" ]; then
 
             log d "Creating desktop file: $launcher"
 
