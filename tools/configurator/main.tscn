@@ -253,7 +253,7 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_styles/tab_selected = SubResource("StyleBoxFlat_co0k7")
 tab_alignment = 1
-current_tab = 2
+current_tab = 3
 script = ExtResource("3_id6l4")
 
 [node name="GLOBALS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
@@ -774,6 +774,7 @@ alignment = 1
 expand_icon = true
 
 [node name="TOOLS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
 script = ExtResource("50_wqa5h")
 metadata/_tab_index = 2
@@ -956,7 +957,6 @@ disabled = true
 text = "TK_MULTIFILE"
 
 [node name="SETTINGS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
-visible = false
 layout_mode = 2
 script = ExtResource("54_bxhvn")
 metadata/_tab_index = 3
@@ -970,6 +970,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="system_container" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 
 [node name="system_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/system_container"]
@@ -1095,6 +1096,7 @@ unique_name_in_owner = true
 visible = false
 layout_mode = 2
 theme_override_constants/h_separation = 64
+columns = 2
 
 [node name="cheevos_username_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/cheevos_container/cheevos_login_container"]
 layout_mode = 2
@@ -1123,19 +1125,40 @@ placeholder_text = "password"
 secret = true
 secret_character = "*"
 
-[node name="cheevos_hardcore" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/cheevos_container/cheevos_login_container"]
+[node name="blank_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/cheevos_container/cheevos_login_container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 5
+
+[node name="cheevos_disconnect_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/cheevos_container/cheevos_login_container"]
+layout_mode = 2
+text = "TK_NETPLAYCONNECT"
+
+[node name="cheevos_hardcore_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/cheevos_container/cheevos_login_container"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 text = "TK_CHEEVOSHARDCORE"
+
+[node name="cheevos_hardcore_progress" type="ProgressBar" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/cheevos_container/cheevos_login_container/cheevos_hardcore_button"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_1161k")
+show_percentage = false
 
 [node name="netplay_container" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
 [node name="netplay" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/netplay_container"]
+custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 text = "TK_NETPLAY"
-
-[node name="netplay_separator" type="HSeparator" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/netplay_container"]
-layout_mode = 2
 
 [node name="netplay_id_container" type="GridContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/netplay_container"]
 layout_mode = 2

@@ -199,9 +199,10 @@ func _set_up_globals(state: Array) -> void:
 	mixed_mode(%cheevos_button, class_functions.cheevos_state)
 	if class_functions.cheevos_state == "true":
 		%cheevos_login_container.visible = true
-	else:
+	elif class_functions.cheevos_state == "false":
 		%cheevos_login_container.visible = false
-
+	mixed_mode(%cheevos_hardcore_button, class_functions.cheevos_hardcore_state)
+	
 func mixed_mode (button: Button, state: String) -> void:
 	match [class_functions.button_list]:
 		[class_functions.button_list]:

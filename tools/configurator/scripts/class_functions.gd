@@ -37,7 +37,7 @@ var font_tab_size: int = 35
 var font_size: int = 20
 var locale: String
 enum preset_list {abxy_button_swap, ask_to_exit, borders, widescreen, rewind, cheevos, cheevos_hardcore}
-var button_list: Array = ["button_swap_button", "ask_to_exit_button", "border_button", "widescreen_button", "quick_rewind_button", "reset_retrodeck_button", "reset_all_emulators_button", "cheevos_button"]
+var button_list: Array = ["button_swap_button", "ask_to_exit_button", "border_button", "widescreen_button", "quick_rewind_button", "reset_retrodeck_button", "reset_all_emulators_button", "cheevos_button", "cheevos_hardcore_button"]
 signal update_global_signal
 var rekku_state: bool = false
 var press_time: float = 0.0
@@ -335,8 +335,14 @@ func update_global(button: Button, preset: String, state: bool) -> void:
 			if cheevos_state != "mixed":
 				cheevos_state = str(state)
 				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
-				change_global(result, "build_preset_config", button, quick_rewind_state)
-				
+				change_global(result, "build_preset_config", button, cheevos_state)
+
+		"cheevos_hardcore_button":
+			if cheevos_hardcore_state != "mixed":
+				cheevos_hardcore_state = str(state)
+				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
+				change_global(result, "build_preset_config", button, cheevos_hardcore_state)
+
 func change_global(parameters: Array, preset: String, button: Button, state: String) -> void:
 	#print (parameters)
 	match parameters[1]:
