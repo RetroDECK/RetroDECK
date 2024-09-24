@@ -6,6 +6,9 @@ add_to_steam() {
     log "i" "Starting Steam Sync"
 
     steamsync_folder="$rdhome/.sync"
+    steamsync_folder_tmp="$rdhome/.sync-tmp"
+    create_dir $steamsync_folder
+    mv $steamsync_folder $steamsync_folder_tmp
     create_dir $steamsync_folder
 
     local srm_path="/var/config/steam-rom-manager/userData/userConfigurations.json"
@@ -76,8 +79,9 @@ add_to_steam() {
           log d "Sanitized Name: $sanitized_name"
 
           local launcher="$steamsync_folder/${sanitized_name}.sh"
+          local launcher_tmp="$steamsync_folder_tmp/${sanitized_name}.sh"
 
-          if [ ! -e "$launcher" ]; then
+          if [ ! -e "$launcher_tmp" ]; then
 
             log d "Creating desktop file: $launcher"
 
@@ -114,10 +118,13 @@ fi
 EOF
         else
           log d "$launcher desktop file already exists"
+          mv "$launcher_tmp" "$launcher"
         fi
         done
     fi
   done
+
+  rm -r $steamsync_folder_tmp
 
   if [ -z "$( ls -A $steamsync_folder )" ]; then
     log d "No games found, cleaning shortcut"
