@@ -129,10 +129,12 @@ handle_latestghrelease() {
 
 handle_latestghreleasesha() {
   local placeholder="$1"
-  local url="$2"
+  local api_url="$2"
   local pattern="$3"
-  echo "Fetching release data from: $url"
-  local release_data=$(curl -s "$url")
+  echo "Fetching release data from: $api_url"
+  
+  # Fetch the release data from GitHub API
+  local release_data=$(curl -s "$api_url")
   echo "Release data fetched."
 
   # Find the matching asset using the pattern
@@ -144,6 +146,7 @@ handle_latestghreleasesha() {
   fi
 
   # Download the file and compute its hash
+  echo "Downloading asset to compute hash: $ghreleaseurl"
   local ghreleasehash=$(curl -sL "$ghreleaseurl" | sha256sum | cut -d ' ' -f1)
 
   echo "Replacing placeholder $placeholder with hash $ghreleasehash"
