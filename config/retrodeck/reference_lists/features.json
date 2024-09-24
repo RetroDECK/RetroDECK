@@ -779,6 +779,9 @@
     "x68000": {
       "name": "Sharp X68000"
     },
+    "xbox360": {
+      "name": "Microsoft Xbox 360"
+    },
     "xbox": {
       "name": "Microsoft Xbox"
     },
@@ -1147,6 +1150,12 @@
       "name": "PortMaster",
       "system": "portmaster",
       "launch": "PortMaster"
+    },
+    "xenia": {
+      "description": "Xenia Canary Xbox360 Emulator",
+      "name": "Xenia Canary",
+      "system": "xbox360",
+      "launch": "xenia-canary"
     }
   }
 }

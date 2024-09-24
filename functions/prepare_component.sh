@@ -925,6 +925,28 @@ prepare_component() {
     # TODO: plceholder
   fi
 
+  if [[ "$component" =~ ^(xenia|all)$ ]]; then
+  component_found="true"
+    log i "----------------------"
+    log i "Prepearing Xenia"
+    log i "----------------------"
+
+    local xenia_prefix="/var/data/xenia-canary-pfx"
+    create_dir -d "$xenia_prefix"
+
+    # sandboxing prefix to avoid writing on real user home folder
+    # TODO: multi user needs to care about this as we're using the linux username
+    unlink "$xenia_prefix/drive_c/users/$(whoami)/Desktop" && create_dir "$xenia_prefix/drive_c/users/$(whoami)/Desktop"
+    unlink "$xenia_prefix/drive_c/users/$(whoami)/Documents" && create_dir "$xenia_prefix/drive_c/users/$(whoami)/Documents"
+    unlink "$xenia_prefix/drive_c/users/$(whoami)/Downloads" && create_dir "$xenia_prefix/drive_c/users/$(whoami)/Downloads"
+    unlink "$xenia_prefix/drive_c/users/$(whoami)/Music" && create_dir "$xenia_prefix/drive_c/users/$(whoami)/Music"
+    unlink "$xenia_prefix/drive_c/users/$(whoami)/Pictures" && create_dir "$xenia_prefix/drive_c/users/$(whoami)/Pictures"
+    unlink "$xenia_prefix/drive_c/users/$(whoami)/Videos" && create_dir "$xenia_prefix/drive_c/users/$(whoami)/Videos"
+
+    # TODO: fill this
+    
+  fi
+
   if [[ $component_found == "false" ]]; then
     log e "Supplied component $component not found, not resetting"
   fi

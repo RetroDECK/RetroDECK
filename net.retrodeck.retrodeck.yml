@@ -8,6 +8,19 @@ sdk-extensions:
   - org.freedesktop.Sdk.Extension.llvm18        # Needed for RPCS3
 command: retrodeck.sh
 
+base: org.winehq.Wine
+base-version: stable-23.08
+
+inherit-extensions:
+  - org.freedesktop.Platform.Compat.i386
+  - org.freedesktop.Platform.ffmpeg_full.i386
+  - org.freedesktop.Platform.ffmpeg-full
+  - org.freedesktop.Platform.GL32
+  - org.freedesktop.Platform.VAAPI.Intel.i386
+  - org.winehq.Wine.DLLs
+  - org.winehq.Wine.gecko
+  - org.winehq.Wine.mono
+
 finish-args:
   - --socket=wayland
   - --socket=x11
@@ -37,6 +50,8 @@ finish-args:
   - --filesystem=~/.var/app/com.valvesoftware.Steam:rw # Steam (Flatpak)
   # PPSSPP, DOLPHIN
   - --filesystem=xdg-run/gamescope-0:ro
+  # Xenia / Wine
+  - --env=WINEDLLPATH=/app/dlls/lib32:/app/dlls/lib:/app/lib32/wine/wined3d:/app/lib/wine/wined3d
 
 cleanup:
   # ES-DE
@@ -642,10 +657,11 @@ modules:
       - cp -r files/* "${FLATPAK_DEST}"
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
-      # Testing the new feat/update-3.1.0
       - type: archive
-        url: https://github.com/RetroDECK/ES-DE/releases/latest/download/RetroDECK-ES-DE-Artifact.tar.gz
-        sha256: RETRODECKESDELATEST
+        url: https://github.com/RetroDECK/ES-DE/releases/download/feat%2Fxenia-190924.46/RetroDECK-ES-DE-Artifact.tar.gz
+        sha256: 6ea55f59613a066ae36f04b61b3e9810d45fa2ca0924d876b5ada2ca28f5f36f
+        # url: https://github.com/RetroDECK/ES-DE/releases/latest/download/RetroDECK-ES-DE-Artifact.tar.gz
+        # sha256: RETRODECKESDELATEST
 
   - name: retrodeck-theme
     buildsystem: simple
@@ -670,6 +686,22 @@ modules:
         strip-components: 0
         url: https://github.com/ruffle-rs/ruffle/releases/download/nightly-2024-08-09/ruffle-nightly-2024_08_09-linux-x86_64.tar.gz
         sha256: d2c4c77d8426da6df8dc8b2a57565c151146464a8eec605d5faa68a297d8cad6
+
+  # XENIA CANARY
+  - name: xenia-canary
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 xenia_canary.exe "${FLATPAK_DEST}/xenia-canary/xenia_canary.exe"
+      - install -Dm755 xenia-canary "${FLATPAK_DEST}/bin/xenia-canary"
+    sources:
+      - type: archive
+        url: https://github.com/xenia-canary/xenia-canary/releases/download/experimental/xenia_canary.zip
+        sha256: XENIACANARYLATESTSHA
+      - type: script
+        commands:
+          - |
+            WINEPREFIX="/var/data/xenia-canary-pfx" wine64 "/app/xenia-canary/xenia_canary.exe"
+        dest-filename: xenia-canary
 
   - name: fetch-missing-libs
     buildsystem: simple
