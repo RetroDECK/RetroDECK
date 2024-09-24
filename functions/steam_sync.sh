@@ -76,7 +76,10 @@ add_to_steam() {
           log d "Sanitized Name: $sanitized_name"
 
           local launcher="$steamsync_folder/${sanitized_name}.sh"
-          log d "Creating desktop file: $launcher"
+
+          if [ ! -e $launcher ]; then
+
+            log d "Creating desktop file: $launcher"
 
           # if [[ -v command_list_default[$system] ]]; then
           #   command="${command_list_default[$system]}"
@@ -88,7 +91,7 @@ add_to_steam() {
           # Populate the .sync script with the correct command
           # TODO: if there is any emulator defined in the xml we use that, else... how we can know which is the default one?
           # TODO: if steam is flatpak the command wrapping will change in .desktop
-          local command="flatpak run net.retrodeck.retrodeck start '$roms_folder/$system/$path'"
+            local command="flatpak run net.retrodeck.retrodeck start '$roms_folder/$system/$path'"
           # Create the launcher file using a heredoc - if you enable .desktp this remember to edit .desktop in SRM userConfigurations.json and the above launcher variable (and vice versa)
 #           cat <<EOF > "$launcher"
 # [Desktop Entry]
@@ -101,18 +104,21 @@ add_to_steam() {
 # Type=Application
 # Categories=Game;Emulator;
 # EOF
-          cat <<EOF > "$launcher"
+            cat <<EOF > "$launcher"
 #!/bin/bash
-if [ test "$(whereis flatpak)" = "flatpak:" ]; then
+if [ test "\$(whereis flatpak)" = "flatpak:" ]; then
   flatpak-spawn --host $command
 else
   $command
 fi
 EOF
+        else
+          log d "$launcher desktop file already exists"
+        fi
         done
     fi
   done
-  steam-rom-manager add
+  #steam-rom-manager add
   log i "Steam Sync: completed"
 }
 
