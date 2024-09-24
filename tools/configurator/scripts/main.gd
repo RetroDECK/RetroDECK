@@ -237,7 +237,7 @@ func change_font(index: int) -> void:
 		1:
 			font_file = load("res://assets/fonts/munro/munro.ttf")
 			%TabContainer.add_theme_font_size_override("font_size", class_functions.font_tab_size)
-			font_size = 30
+			font_size = 25
 		2:
 			font_file = load("res://assets/fonts/akrobat/Akrobat-Regular.otf")
 			%TabContainer.add_theme_font_size_override("font_size", class_functions.font_tab_size)
