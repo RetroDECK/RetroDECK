@@ -5,17 +5,16 @@ var icon_width: int = 32
 
 func _ready():
 	focusFirstFocusableChild() #grab focus on first element to enable controller focusing
-	%TabContainer.add_theme_icon_override("decrement",ResourceLoader.load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0797.png"))
-	%TabContainer.add_theme_icon_override("decrement_highlight",ResourceLoader.load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0763.png"))
-	%TabContainer.add_theme_icon_override("increment",ResourceLoader.load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0798.png"))
-	%TabContainer.add_theme_icon_override("increment_highlight",ResourceLoader.load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0764.png"))
+	#%TabContainer.add_theme_icon_override("decrement",ResourceLoader.load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0797.png"))
+	#%TabContainer.add_theme_icon_override("decrement_highlight",ResourceLoader.load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0763.png"))
+	#%TabContainer.add_theme_icon_override("increment",ResourceLoader.load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0798.png"))
+	#%TabContainer.add_theme_icon_override("increment_highlight",ResourceLoader.load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0764.png"))
 	if class_functions.font_select !=3:
 		%TabContainer.add_theme_font_size_override("font_size", class_functions.font_tab_size)
 	elif class_functions.font_select == 3:
 		%TabContainer.add_theme_font_size_override("font_size", 15)
 	else:
 		%TabContainer.add_theme_font_size_override("font_size", class_functions.font_tab_size)
-
 	set_tab_title(0, "  GLOBALS    ")
 	set_tab_title(1, "  SYSTEM     ")
 	set_tab_title(2, "   TOOLS      ")
@@ -38,23 +37,22 @@ func _ready():
 func connect_focus_signals(node):
 	for child in node.get_children():
 		if child is Button:
-			child.focus_entered.connect(_on_Button_focus_entered.bind(child))
-			child.focus_exited.connect(_on_Button_focus_exited.bind())
+			child.focus_entered.connect(_on_button_focus_entered.bind(child))
+			child.focus_exited.connect(_on_button_focus_exited.bind())
 		elif child is Control:
 			connect_focus_signals(child)
 
-func _on_Button_focus_exited():
-	print ("exit")
+func _on_button_focus_exited() -> void:
 	%pop_rtl.visible = false
-	
-func _on_Button_focus_entered(button: Button):
+
+func _on_button_focus_entered(button: Button):
 	if button and class_functions.sound_effects:
 		%AudioStreamPlayer2D.volume_db = class_functions.volume_effects
 		%AudioStreamPlayer2D.play()
 	if button and class_functions.rekku_state == false and button.has_meta("description"):
 		%pop_rtl.visible = true
 		%pop_rtl.text = button.get_meta("description")
-	else:
+	elif class_functions.rekku_state == false:
 		%pop_rtl.visible = true
 		%pop_rtl.text = "Hey, there's no description"
 
@@ -78,7 +76,7 @@ func focusFirstFocusableChild():
 		if (n.focus_mode == FOCUS_ALL):
 			n.grab_focus.call_deferred()
 			break
-	
+
 func findElements(node: Node, className: String, result: Array = []) -> Array:
 	if node.is_class(className):
 		result.push_back(node)
