@@ -8,8 +8,10 @@ var console: bool = false
 var BIOS_COLUMNS_BASIC := ["BIOS File Name", "System", "Found", "Hash Match", "Description"]
 var BIOS_COLUMNS_EXPERT := ["BIOS File Name", "System", "Found", "Hash Match", "Description", "Subdirectory", "Hash"]
 @onready var bios_type:int = get_tree().current_scene.bios_type
+@onready var custom_theme: Theme = get_tree().current_scene.custom_theme
 
 func _ready():
+	$".".theme = custom_theme
 	var table := $Table
 	
 	if bios_type == 0: #Basic BIOS button pressed

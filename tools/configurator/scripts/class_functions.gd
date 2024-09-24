@@ -3,10 +3,14 @@ class_name ClassFunctions extends Control
 extends Control
 var log_result: Dictionary
 var log_parameters: Array
+const globals_sh_file_path: String = "/app/libexec/global.sh"
 const wrapper_command: String = "/app/tools/retrodeck_function_wrapper.sh"
 const config_file_path = "/var/config/retrodeck/retrodeck.cfg"
 const json_file_path = "/var/config/retrodeck/retrodeck.json"
+const esde_file_path = "/var/config/ES-DE/settings/es_settings.xml"
 var desktop_mode: String = OS.get_environment("XDG_CURRENT_DESKTOP")
+var rd_conf: String
+var lockfile: String
 var rdhome: String
 var roms_folder: String
 var saves_folder: String
@@ -22,8 +26,26 @@ var title: String
 var quick_resume_status: bool
 var update_check: bool
 var abxy_state: String
+var ask_to_exit_state: String
+var border_state: String
+var widescreen_state: String
+var quick_rewind_state: String
+var cheevos_state: String
+var cheevos_hardcore_state: String
 var font_select: int
+var font_tab_size: int = 35
+var font_size: int = 20
+var locale: String
+enum preset_list {abxy_button_swap, ask_to_exit, borders, widescreen, rewind, cheevos, cheevos_hardcore}
+var button_list: Array = ["button_swap_button", "ask_to_exit_button", "border_button", "widescreen_button", "quick_rewind_button", "reset_retrodeck_button", "reset_all_emulators_button", "cheevos_button"]
 signal update_global_signal
+var rekku_state: bool = false
+var press_time: float = 0.0
+var is_state_pressed: bool = false
+var PRESS_DURATION: float = 3.0
+var current_button: Button = null
+var current_progress: ProgressBar = null
+var current_state: String = ""
 
 func _ready():
 	read_values_states()
@@ -39,16 +61,25 @@ func read_values_states() -> void:
 	states_folder = config["paths"]["states_folder"]
 	bios_folder = config["paths"]["bios_folder"]
 	rd_version = config["version"]
+	rd_conf = extract_text(globals_sh_file_path, "rd_conf")
+	lockfile = extract_text(globals_sh_file_path, "lockfile")
+	locale = extract_text(esde_file_path, "esde")
 	gc_version = ProjectSettings.get_setting("application/config/version")
 	title = "\n   " + rd_version + "\nConfigurator\n    " + gc_version
 	quick_resume_status = config["quick_resume"]["retroarch"]
 	update_check = config["options"]["update_check"]
-	multi_state("abxy_button_swap")
+	abxy_state = multi_state("abxy_button_swap", abxy_state)
+	ask_to_exit_state = multi_state("ask_to_exit", ask_to_exit_state)
+	border_state = multi_state("borders", border_state)
+	widescreen_state = multi_state("widescreen", widescreen_state)
+	quick_rewind_state = multi_state("rewind", quick_rewind_state)
 	sound_effects = config["options"]["sound_effects"]
 	volume_effects = int(config["options"]["volume_effects"])
 	font_select = int(config["options"]["font"])
+	cheevos_state = multi_state("cheevos", cheevos_state)
+	cheevos_hardcore_state = multi_state("cheevos_hardcore", cheevos_hardcore_state)
 
-func multi_state(section: String) -> void:
+func multi_state(section: String, state: String) -> String:
 	var config_section:Dictionary = data_handler.get_elements_in_section(config_file_path, section)
 	var true_count: int = 0
 	var false_count: int = 0
@@ -58,11 +89,12 @@ func multi_state(section: String) -> void:
 		else:
 			false_count += 1
 	if true_count == config_section.size():
-		abxy_state = "true"
+		state = "true"
 	elif false_count == config_section.size():
-		abxy_state = "false"
+		state = "false"
 	else:
-		abxy_state = "mixed"
+		state = "mixed"
+	return state
 		
 func logger(log_type: String, log_text: String) -> void:
 	# Type of log messages:
@@ -240,61 +272,162 @@ func slider_function(value: float, slide: HSlider) -> void:
 	volume_effects = int(slide.value)
 	data_handler.change_cfg_value(config_file_path, "volume_effects", "options", str(slide.value))
 
-func run_function(button: Button) -> void:
+func run_function(button: Button, preset: String) -> void:
 	if button.button_pressed:
-		enable_global(button)
+		update_global(button, preset, true)
 	else:
-		disable_global(button)
+		update_global(button, preset, false)
 
-func enable_global(button: Button) -> void:
+func update_global(button: Button, preset: String, state: bool) -> void:
+	#TODO pass state as an object in future version
 	var result: Array
-	var config_section:Dictionary = data_handler.get_elements_in_section(config_file_path, "abxy_button_swap")
+	var config_section:Dictionary = data_handler.get_elements_in_section(config_file_path, preset)
 	match button.name:
 		"quick_resume_button", "retroarch_quick_resume_button":
-			quick_resume_status = true
-			update_global_signal.emit()
-			result = data_handler.change_cfg_value(config_file_path, "retroarch", "quick_resume", "true")
-			change_global(result, "build_preset_config")
+			quick_resume_status = state
+			result = data_handler.change_cfg_value(config_file_path, "retroarch", preset, str(state))
+			change_global(result, "build_preset_config", button, str(quick_resume_status))
 		"update_notification_button":
-			result = data_handler.change_cfg_value(config_file_path, "update_check", "options", "true")
-			change_global(result, "build_preset_config")
+			update_check = state
+			result = data_handler.change_cfg_value(config_file_path, preset, "options", str(state))
+			change_global(result, "build_preset_config", button, str(result))
 		"sound_button":
-			sound_effects = true
-			update_global_signal.emit()
-			result = data_handler.change_cfg_value(config_file_path, "sound_effects", "options", "true")
-			logger("i", "Enabled: " % (button.name))
+			sound_effects = state
+			result = data_handler.change_cfg_value(config_file_path, preset, "options", str(state))
+			logger("i", "Enabled: %s" % (button.name))
+			update_global_signal.emit([button.name])
 		"button_swap_button":
-			if abxy_state == "false":
-				abxy_state = "true"
-				result = data_handler.change_all_cfg_values(config_file_path, config_section, "abxy_button_swap", "true")
-				change_global(result, "build_preset_config")
+			if abxy_state != "mixed":
+				abxy_state = str(state)
+				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
+				change_global(result, "build_preset_config", button, abxy_state)
+		"ask_to_exit_button":
+			if ask_to_exit_state != "mixed":
+				ask_to_exit_state = str(state)
+				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
+				change_global(result, "build_preset_config", button, ask_to_exit_state)
+		"border_button":
+			if border_state != "mixed":
+				border_state = str(state)
+				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
+				change_global(result, "build_preset_config", button, border_state)
+			if widescreen_state == "true" or widescreen_state == "mixed":
+				config_section = data_handler.get_elements_in_section(config_file_path, "widescreen")
+				widescreen_state = "false"
+				result = data_handler.change_all_cfg_values(config_file_path, config_section, "widescreen", widescreen_state)
+				change_global(result, "build_preset_config", button, widescreen_state)
+		"widescreen_button":
+			if widescreen_state != "mixed":
+				widescreen_state = str(state)
+				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
+				change_global(result, "build_preset_config", button, widescreen_state)
+			if border_state == "true" or border_state == "mixed":
+				config_section = data_handler.get_elements_in_section(config_file_path, "borders")
+				border_state = "false"
+				result = data_handler.change_all_cfg_values(config_file_path, config_section, "borders", border_state)
+				change_global(result, "build_preset_config", button, border_state)
+		"quick_rewind_button":
+			if quick_rewind_state != "mixed":
+				quick_rewind_state = str(state)
+				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
+				change_global(result, "build_preset_config", button, quick_rewind_state)
+		"cheevos_button":
+			if cheevos_state != "mixed":
+				cheevos_state = str(state)
+				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
+				change_global(result, "build_preset_config", button, quick_rewind_state)
+				
+func change_global(parameters: Array, preset: String, button: Button, state: String) -> void:
+	#print (parameters)
+	match parameters[1]:
+		preset_list:
+			for system in parameters[0].keys():
+				var command_parameter: Array = [preset, system, parameters[1]]
+				logger("d", "Change Global: %s System: %s Preset %s " % command_parameter) 
+				var result: Dictionary = await run_thread_command(wrapper_command, command_parameter, false)
+				logger("d", "Exit code: %s" % result["exit_code"])
+		_:
+			var command_parameter: Array = [preset, parameters]
+			logger("d", "Change Global: %s System: %s" % command_parameter) 
+			var result: Dictionary = await run_thread_command(wrapper_command, command_parameter, false)
+			logger("d", "Exit code: %s" % result["exit_code"])
+	parameters.append(button)
+	parameters.append(state)
+	update_global_signal.emit(parameters)
 
-func disable_global(button: Button) -> void:
-	var result: Array
-	var config_section:Dictionary = data_handler.get_elements_in_section(config_file_path, "abxy_button_swap")
-	match button.name:
-		"quick_resume_button", "retroarch_quick_resume_button":
-			quick_resume_status = false
-			update_global_signal.emit()
-			result = data_handler.change_cfg_value(config_file_path, "retroarch", "quick_resume", "false")
-			change_global(result, "build_preset_config")
-		"update_notification_button":
-			result = data_handler.change_cfg_value(config_file_path, "update_check", "options", "false")
-			change_global(result, "build_preset_config")
-		"sound_button":
-			sound_effects = false
-			update_global_signal.emit()
-			result = data_handler.change_cfg_value(config_file_path, "sound_effects", "options", "false")
-			logger("i", "Disabled: " % (button.name))
-		"button_swap_button":
-			if abxy_state == "true":
-				abxy_state = "false"
-				result = data_handler.change_all_cfg_values(config_file_path, config_section, "abxy_button_swap", "false")
-				change_global(result, "build_preset_config")
+func extract_text(file_path: String, extract: String) -> String:
+	var file = FileAccess.open(file_path, FileAccess.ModeFlags.READ)
+	var pattern: String
+	if file:
+		var regex = RegEx.new() 
+		if extract != "esde":
+			pattern = extract + '="([^"]+)"' 
+		else:
+			pattern = '<string name="ApplicationLanguage" value="([^"]+)" />'
+		regex.compile(pattern)
+		while not file.eof_reached():
+			var line: String = file.get_line().strip_edges()
+			var result: RegExMatch = regex.search(line)
+			if result:
+				return result.get_string(1)
+		file.close()
+	else:
+		logger("e", "Could not open file: %s" % file_path)
+	return ""
 
-func change_global(parameters: Array, preset: String) -> void:
-	for system in parameters[0].keys():
-		var command_parameter: Array = [preset, system, parameters[1]]
-		logger("d", "Change Global: %s System: %s Preset %s " % command_parameter) 
-		var result: Dictionary = await run_thread_command(wrapper_command, command_parameter, false)
-		logger("d", "Exit code: %s" % result["exit_code"])
+func _on_button_released(progress: ProgressBar) -> void:
+	is_state_pressed = false
+	progress.visible = false
+	press_time = 0.0
+	progress.value = 0.0
+	current_button = null
+	current_progress = null
+	current_state == null
+	
+func _do_action(progress: ProgressBar, button: Button, state: String) -> void:
+	match [class_functions.button_list]:
+		[class_functions.button_list]:
+			current_state = state
+	current_button = button
+	current_progress = progress
+	current_progress.visible = true
+	is_state_pressed = true
+
+func _do_complete(button: Button) ->void:
+	#TODO use object for state
+	if is_state_pressed and button == current_button:
+		match button.name:
+			"button_swap_button":
+				class_functions.abxy_state = "false"
+			"ask_to_exit_button":
+				class_functions.ask_to_exit_state = "false"
+			"border_button":
+				class_functions.border_state = "false"
+			"widescreen_button":
+				class_functions.widescreen_state = "false"
+			"quick_rewind_button":
+				class_functions.quick_rewind_state = "false"
+			"cheevos_button":
+				class_functions.cheevos_state = "false"
+			"cheevos_hardcore_button":
+				class_functions.cheevos_hardcore_state = "false"
+			"reset_retrodeck_button":
+				var dir = DirAccess.open(class_functions.rd_conf.get_base_dir())
+				if dir is DirAccess:
+					dir.rename(class_functions.rd_conf,class_functions.rd_conf.get_base_dir() + "/retrodeck.bak")
+					dir.remove(class_functions.lockfile)
+				class_functions.change_global(["reset", "retrodeck"], "prepare_component", button, "")
+				button.text = "RESETTING-NOW"
+				await class_functions.wait(2.0)
+				button.text = "CONFIGURATOR WILL NOW CLOSE"
+				await class_functions.wait(1.0)
+				get_tree().quit()
+			"reset_all_emulators_button":
+				var tmp_txt = button.text
+				button.text = "RESETTING-NOW"
+				class_functions.change_global(["reset", "all"], "prepare_component", button, "")
+				await class_functions.wait(2.0)
+				button.text = "RESET COMPLETED"
+				await class_functions.wait(3.0)
+				button.text = tmp_txt
+	button.toggle_mode = true

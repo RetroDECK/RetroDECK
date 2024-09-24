@@ -14,13 +14,18 @@ var a_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-
 var b_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0043.png")
 var l1_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0797.png")
 var r1_button_texture: Texture2D = load("res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0798.png")
+var style_box_original: StyleBox = preload("res://assets/themes/default_theme.tres::StyleBoxFlat_0ahfc")
+var font_size: int = 20
 
 func _ready():	
 	_get_nodes()
 	_connect_signals()
 	_play_main_animations()
-	_set_up_globals()
-	%locale_option.selected = class_functions.map_locale_id(OS.get_locale_language())
+	_set_up_globals([])
+	custom_theme = get_tree().current_scene.custom_theme
+	$".".theme = custom_theme
+	if class_functions.locale == "automatic":
+		%locale_option.selected = class_functions.map_locale_id(OS.get_locale_language())
 	%rd_title.text += class_functions.title
 	class_functions.logger("i","Started Godot configurator")
 	#class_functions.display_json_data()
@@ -82,15 +87,15 @@ func _load_log(index: int) -> void:
 		1: 
 			class_functions.logger("i","Loading RetroDeck log")
 			log_content = class_functions.import_text_file(class_functions.rd_log_folder +"/retrodeck.log")
-			load_popup("RetroDeck Log", "res://components/logs_view/logs_popup_content.tscn", log_content)
+			load_popup("RetroDeck Log", "res://components/popup.tscn", log_content)
 		2:
 			class_functions.logger("i","Loading ES-DE log")
 			log_content = class_functions.import_text_file(class_functions.rd_log_folder +"/ES-DE/es_log.txt")
-			load_popup("ES-DE Log", "res://components/logs_view/logs_popup_content.tscn",log_content)
+			load_popup("ES-DE Log", "res://components/popup.tscn",log_content)
 		3: 
 			class_functions.logger("i","Loading RetroArch log")
 			log_content = class_functions.import_text_file(class_functions.rd_log_folder +"/retroarch/logs/log.txt")
-			load_popup("Retroarch Log", "res://components/logs_view/logs_popup_content.tscn",log_content)
+			load_popup("Retroarch Log", "res://components/popup.tscn",log_content)
 
 func _play_main_animations() -> void:
 	anim_logo.play()
@@ -196,47 +201,71 @@ func _on_exit_button_pressed():
 	#$Background/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer/VBoxContainer/data_mng_container/saves_sync.text = tr("TK_SAVESSYNC") + " " + tr("TK_SOON")
 	#$Background/MarginContainer/TabContainer/TK_CONFIGURATOR/ScrollContainer/VBoxContainer/system_container/easter_eggs.text = tr("TK_EASTEREGGS") + " " + tr("TK_SOON")
 
-func _set_up_globals() -> void:
+func _set_up_globals(state: Array) -> void:
+	#TODO on initial run pass array date?
+	#print (state)
 	%update_notification_button.button_pressed = class_functions.update_check
-	var quick_resume = class_functions.quick_resume_status
-	%quick_resume_button.button_pressed = quick_resume
-	%retroarch_quick_resume_button.button_pressed = quick_resume
-	var sound_effects = class_functions.sound_effects
-	%sound_button.button_pressed = sound_effects
-	%volume_effects_slider.visible = sound_effects
-	match class_functions.abxy_state:
-		"true":
-			%button_swap_button.button_pressed = true
-		"false":
-			%button_swap_button.button_pressed = false
-		_:
-			var style_box = StyleBoxFlat.new()
-			style_box.bg_color = Color(1, 0.54902, 0, 1)  # Orange color
-			style_box.border_color = Color(0.102, 0.624, 1, 1)  # Blue border
-			style_box.border_blend = true
-			style_box.corner_radius_top_left = 25
-			style_box.corner_radius_top_right = 25
-			style_box.corner_radius_bottom_right = 25
-			style_box.corner_radius_bottom_left = 25
-			style_box.border_width_left = 15
-			style_box.border_width_top = 15
-			style_box.border_width_right = 15
-			style_box.border_width_bottom = 15
-			%button_swap_button.add_theme_stylebox_override("normal", style_box)
-			%button_swap_button.toggle_mode = false
+	%quick_resume_button.button_pressed = class_functions.quick_resume_status
+	%retroarch_quick_resume_button.button_pressed = class_functions.quick_resume_status
+	%sound_button.button_pressed = class_functions.sound_effects
+	%volume_effects_slider.visible = class_functions.sound_effects
+	mixed_mode(%button_swap_button, class_functions.abxy_state)
+	mixed_mode(%ask_to_exit_button, class_functions.ask_to_exit_state)
+	mixed_mode(%border_button, class_functions.border_state)
+	mixed_mode(%widescreen_button, class_functions.widescreen_state)
+	mixed_mode(%quick_rewind_button, class_functions.quick_rewind_state)
+	mixed_mode(%cheevos_button, class_functions.cheevos_state)
+	if class_functions.cheevos_state == "true":
+		%cheevos_login_container.visible = true
+	else:
+		%cheevos_login_container.visible = false
+
+func mixed_mode (button: Button, state: String) -> void:
+	match [class_functions.button_list]:
+		[class_functions.button_list]:
+			if state == "true":
+				button.button_pressed = true
+				button.add_theme_stylebox_override("normal", style_box_original)
+			elif state == "false":
+				button.button_pressed = false
+				button.add_theme_stylebox_override("normal", style_box_original)
+			elif state == "mixed":
+				mixed_status(button)
+
+func mixed_status (button: Button) -> void:
+	button.button_pressed = false
+	button.toggle_mode = false
+	var style_box = StyleBoxFlat.new()
+	style_box.bg_color = Color(0.941, 0.502, 0, 1)
+	style_box.border_color = Color(0.102, 0.624, 1, 1)
+	style_box.border_blend = true
+	style_box.corner_radius_top_left = 25
+	style_box.corner_radius_top_right = 25
+	style_box.corner_radius_bottom_right = 25
+	style_box.corner_radius_bottom_left = 25
+	style_box.border_width_left = 15
+	style_box.border_width_top = 15
+	style_box.border_width_right = 15
+	style_box.border_width_bottom = 15
+	button.add_theme_stylebox_override("normal", style_box)
 
 func change_font(index: int) -> void:
 	var font_file: FontFile
 	match index:
 		1:
-			font_file = load("res://res/pixel_ui_theme/pixel-sans.otf")
-		2:
 			font_file = load("res://assets/fonts/munro/munro.ttf")
-		3:
+			%TabContainer.add_theme_font_size_override("font_size", class_functions.font_tab_size)
+			font_size = 30
+		2:
 			font_file = load("res://assets/fonts/akrobat/Akrobat-Regular.otf")
-		4:
-			font_file = load("res://assets/fonts/OpenDyslexic3/OpenDyslexic3-Regular.ttf") 
+			%TabContainer.add_theme_font_size_override("font_size", class_functions.font_tab_size)
+			font_size = 25
+		3:
+			font_file = load("res://assets/fonts/OpenDyslexic3/OpenDyslexic3-Regular.ttf")
+			%TabContainer.add_theme_font_size_override("font_size", 15)
+			font_size = 16
 	custom_theme = load("res://assets/themes/default_theme.tres")
 	custom_theme.set_font("font", "Control", font_file)
+	custom_theme.default_font_size = font_size
 	$".".theme = custom_theme
 	data_handler.change_cfg_value(class_functions.config_file_path, "font", "options", str(index))

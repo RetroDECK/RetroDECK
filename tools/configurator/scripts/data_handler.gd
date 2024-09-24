@@ -34,6 +34,12 @@ func load_base_data() -> AppData:
 				var emulator = Emulator.new()
 				emulator.name = emulator_data["name"]
 				emulator.description = emulator_data["description"]
+<<<<<<< HEAD
+=======
+				#emulator.url = emulator_data["url"]
+				#emulator.system = emulator_data["system"]
+				emulator.launch = emulator_data["launch"]
+>>>>>>> be95a1bf935fae24a2ab447f99022a39ae7a896a
 				if emulator_data.has("properties"):
 					for property_data in emulator_data["properties"]:
 						print (emulator,"----",property_data)
@@ -158,7 +164,6 @@ func save_base_data(app_dict: AppData): # was apP_data but gave warning
 	file = FileAccess.open(data_file_path, FileAccess.WRITE)
 	file.store_string(json_text)
 	file.close()
-	print("Data appended successfully")
 	
 # Function to modify an existing link
 func modify_link(key: String, new_name: String, new_url: String, new_description: String):
@@ -293,21 +298,23 @@ func read_cfg_file(file_path: String) -> Array:
 func write_cfg_file(file_path: String, lines: Array, changes: Dictionary) -> void:
 	var file: FileAccess = FileAccess.open(file_path, FileAccess.ModeFlags.WRITE)
 	var current_section: String = ""
-	for line in lines:
+	var line_count: int = lines.size()
+	for i in line_count:
+		var line: String = lines[i]
 		var trimmed_line: String = line.strip_edges()
 		if trimmed_line.begins_with("[") and trimmed_line.ends_with("]"):
-			current_section = trimmed_line.trim_prefix("[").trim_suffix("]")
+			current_section = trimmed_line.trim_prefix("[").trim_suffix("]")# trimmed_line.trim_prefix("["].trim_suffix("]")
 			file.store_line(line)
 		elif "=" in trimmed_line and current_section in changes:
 			var parts: Array = trimmed_line.split("=", false)
-			if parts.size() >= 2:
+			if parts.size() == 2:
 				var key: String = parts[0].strip_edges()
 				var original_value: String = parts[1].strip_edges()
 				if key in changes[current_section]:
 					var new_value: String = changes[current_section][key]
 					if new_value != original_value:
-						file.store_line(key + "=" + new_value)
-						class_functions.logger("i", "Changed %s %s from Value: %s to Value: %s" % [key, current_section, original_value, new_value])
+						file.store_line("%s=%s" % [key, new_value])
+						class_functions.logger("i", "Changed %s in section [%s] from %s to %s" % [key, current_section, original_value, new_value])
 					else:
 						file.store_line(line)
 				else:
@@ -316,17 +323,16 @@ func write_cfg_file(file_path: String, lines: Array, changes: Dictionary) -> voi
 				file.store_line(line)
 		else:
 			file.store_line(line)
+		if i == line_count - 2:
+			break
 	file.close()
 
 func change_cfg_value(file_path: String, system: String, section: String, new_value: String) -> Array:
 	var lines: Array = read_cfg_file(file_path)
 	var parameters: Array =[system, section]
 	var changes: Dictionary = {}
-	if section in changes:
-		changes[section][system] = new_value
-	else:
-		changes[section] = {system: new_value}
-		class_functions.logger("i", "Change: System: %s Section %s New Value: %s" % [system, section, new_value])
+	changes[section] = {system: new_value}
+	class_functions.logger("i", "Change: System: %s Section %s New Value: %s" % [system, section, new_value])
 	write_cfg_file(file_path, lines, changes)
 	return parameters
 

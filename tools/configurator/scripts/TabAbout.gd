@@ -25,7 +25,7 @@ func _about_button_pressed(id: String, button: Button) -> void:
 	var tmp_txt = button.text
 	if class_functions.desktop_mode != "gamescope":
 		class_functions.logger("i","Loading website for " + id)
-		class_functions.launch_help(button.editor_description)
+		class_functions.launch_help(button.get_meta("url"))
 	else:
 		button.text = "Help only in Desktop Mode"
 		await class_functions.wait(3.0)
@@ -42,8 +42,10 @@ func create_buttons() -> void:
 
 func _setup_button(button: Button, web_data: Link) -> void:
 	button.text = web_data.name
-	button.tooltip_text = web_data.description
+	#button.tooltip_text = web_data.description
 	button.icon = ResourceLoader.load(web_data.icon)
-	button.editor_description = web_data.url
+	#button.editor_description = web_data.url
+	button.set_meta("url", web_data.url)
+	button.set_meta("description", web_data.description)
 	button.icon_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	button.vertical_icon_alignment = VERTICAL_ALIGNMENT_CENTER
