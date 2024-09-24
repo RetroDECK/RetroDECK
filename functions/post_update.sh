@@ -437,6 +437,7 @@ post_update() {
     prepare_component "reset" "es-de"
     prepare_component "reset" "portmaster"
     prepare_component "reset" "ruffle"
+    prepare_component "reset" "shadps4"
     update_rd_conf
 
   # TODO: check this

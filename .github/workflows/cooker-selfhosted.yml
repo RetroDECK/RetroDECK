@@ -87,18 +87,12 @@ jobs:
 
             # Replace '/' with '-' in the branch name
             source_branch=${source_branch//\//-}
-            # Use GITHUB_HEAD_REF to get the source branch
-            source_branch="${GITHUB_HEAD_REF}"
-
-            # Replace '/' with '-' in the branch name
-            source_branch=${source_branch//\//-}
             echo "[DEBUG] source branch is: $source_branch"
 
             # Generate the tag for a pull request
             echo "TAG=PR-$source_branch-${{ env.buildid }}" >> $GITHUB_ENV
             echo "MAKE_LATEST=false" >> $GITHUB_ENV  # Not marked as the latest cooker version if it's a feature branch
           else
-            # Generate the tag for non-pull request branches
             # Generate the tag for non-pull request branches
             TAG="$MANIFEST_VERSION-${{ env.buildid }}"
             echo "TAG=$TAG" >> $GITHUB_ENV
