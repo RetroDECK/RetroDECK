@@ -63,10 +63,7 @@ theme_override_constants/margin_top = 6
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 6
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer/ContentContainer/MarginContainer"]
+[node name="LineEdit" type="TextEdit" parent="Panel/MarginContainer/VBoxContainer/ContentContainer/MarginContainer"]
 layout_mode = 2
-focus_mode = 2
-scroll_following = true
-context_menu_enabled = true
+editable = false
 shortcut_keys_enabled = false
-selection_enabled = true

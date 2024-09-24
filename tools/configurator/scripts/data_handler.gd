@@ -34,7 +34,7 @@ func load_base_data() -> AppData:
 				var emulator = Emulator.new()
 				emulator.name = emulator_data["name"]
 				emulator.description = emulator_data["description"]
-				emulator.url = emulator_data["url"]
+				#emulator.url = emulator_data["url"]
 				#emulator.system = emulator_data["system"]
 				emulator.launch = emulator_data["launch"]
 				if emulator_data.has("properties"):
@@ -61,6 +61,7 @@ func load_base_data() -> AppData:
 				if core_data.has("properties"):
 					for property_data in core_data["properties"]:
 						#print (core.name,"----",property_data)
+						# inherit from RetroArch
 						var property = CoreProperty.new()
 						property.cheevos = true
 						property.cheevos_hardcore = true
@@ -82,9 +83,9 @@ func load_base_data() -> AppData:
 			app_dict.cores = cores
 			return app_dict
 		else:
-			print("Error parsing JSON")
+			class_functions.logger("d","Error parsing JSON ")
 	else:
-		print("Error opening file")
+		class_functions.logger("d","Error opening file: " + file)
 		get_tree().quit()
 	return null
 
@@ -157,7 +158,6 @@ func save_base_data(app_dict: AppData):
 	file = FileAccess.open(data_file_path, FileAccess.WRITE)
 	file.store_string(json_text)
 	file.close()
-	print("Data appended successfully")
 	
 # Function to modify an existing link
 func modify_link(key: String, new_name: String, new_url: String, new_description: String):
@@ -231,27 +231,22 @@ func parse_config_to_json(file_path: String) -> Dictionary:
 	var current_section = ""
 	var file = FileAccess.open(file_path, FileAccess.READ)
 	if file == null:
-		print("Failed to open file")
+		class_functions.logger("e","Failed to open file: " + file_path)
 		return config
-
 	while not file.eof_reached():
 		var line = file.get_line().strip_edges()
 		if line.begins_with("[") and line.ends_with("]"):
-			# Start a new section
 			current_section = line.substr(1, line.length() - 2)
 			config[current_section] = {}
 		elif line != "" and not line.begins_with("#"):
-			# Add key-value pair to the current section
 			var parts = line.split("=")
 			if parts.size() == 2:
 				var key = parts[0].strip_edges()
 				var value = parts[1].strip_edges()	
-				# Convert value to proper type
 				if value == "true":
 					value = true
 				elif value == "false":
 					value = false	
-					
 				if key == "version":
 					config[key] = value
 				else:
@@ -271,4 +266,93 @@ func config_save_json(config: Dictionary, json_file_path: String) -> void:
 		file.store_string(json_string)
 		file.close()
 	else:
-		print("Failed to open JSON file for writing")
+		class_functions.logger("e", "File not found: %s" % json_file_path)
+
+func read_cfg_file(file_path: String) -> Array:
+	var lines: Array = []
+	var file: FileAccess = FileAccess.open(file_path, FileAccess.ModeFlags.READ)
+	if file:
+		while not file.eof_reached():
+			var line: String = file.get_line()
+			lines.append(line)
+		file.close()
+	else:
+		class_functions.logger("e", "File not found: %s" % file_path)
+	return lines
+
+func write_cfg_file(file_path: String, lines: Array, changes: Dictionary) -> void:
+	var file: FileAccess = FileAccess.open(file_path, FileAccess.ModeFlags.WRITE)
+	var current_section: String = ""
+	var line_count: int = lines.size()
+	for i in line_count:
+		var line: String = lines[i]
+		var trimmed_line: String = line.strip_edges()
+		if trimmed_line.begins_with("[") and trimmed_line.ends_with("]"):
+			current_section = trimmed_line.trim_prefix("[").trim_suffix("]")# trimmed_line.trim_prefix("["].trim_suffix("]")
+			file.store_line(line)
+		elif "=" in trimmed_line and current_section in changes:
+			var parts: Array = trimmed_line.split("=", false)
+			if parts.size() == 2:
+				var key: String = parts[0].strip_edges()
+				var original_value: String = parts[1].strip_edges()
+				if key in changes[current_section]:
+					var new_value: String = changes[current_section][key]
+					if new_value != original_value:
+						file.store_line("%s=%s" % [key, new_value])
+						class_functions.logger("i", "Changed %s in section [%s] from %s to %s" % [key, current_section, original_value, new_value])
+					else:
+						file.store_line(line)
+				else:
+					file.store_line(line)
+			else:
+				file.store_line(line)
+		else:
+			file.store_line(line)
+		if i == line_count - 2:
+			break
+	file.close()
+
+func change_cfg_value(file_path: String, system: String, section: String, new_value: String) -> Array:
+	var lines: Array = read_cfg_file(file_path)
+	var parameters: Array =[system, section]
+	var changes: Dictionary = {}
+	changes[section] = {system: new_value}
+	class_functions.logger("i", "Change: System: %s Section %s New Value: %s" % [system, section, new_value])
+	write_cfg_file(file_path, lines, changes)
+	return parameters
+
+func change_all_cfg_values(file_path: String, systems: Dictionary, section: String, new_value: String) -> Array:
+	var lines: Array = read_cfg_file(file_path)
+	var parameters: Array =[systems, section]
+	var changes: Dictionary = {}
+	var current_section: String
+	for line in lines:
+		var trimmed_line: String = line.strip_edges()
+		if trimmed_line.begins_with("[") and trimmed_line.ends_with("]"):
+			current_section = trimmed_line.trim_prefix("[").trim_suffix("]")
+			if current_section == section:
+				changes[current_section] = {}
+		elif "=" in trimmed_line and current_section == section:
+			var parts: Array = trimmed_line.split("=", false)
+			if parts.size() >= 2:
+				var key: String = parts[0].strip_edges()
+				changes[section][key] = new_value
+				class_functions.logger("i", "Change: Systems: %s Section %s New Value: %s" % [systems, section, new_value])
+	write_cfg_file(file_path, lines, changes)
+	return parameters
+
+func get_elements_in_section(file_path: String, section: String) -> Dictionary:
+	var lines: Array = read_cfg_file(file_path)
+	var elements: Dictionary = {}
+	var current_section: String = ""
+	for line in lines:
+		var trimmed_line: String = line.strip_edges()
+		if trimmed_line.begins_with("[") and trimmed_line.ends_with("]"):
+			current_section = trimmed_line.trim_prefix("[").trim_suffix("]")
+		elif "=" in trimmed_line and current_section == section:
+			var parts: Array = trimmed_line.split("=", false)
+			if parts.size() >= 2:
+				var key: String = parts[0].strip_edges()
+				var value: String = parts[1].strip_edges()
+				elements[key] = value
+	return elements

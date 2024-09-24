@@ -27,9 +27,7 @@ data_handler="*res://scripts/data_handler.gd"
 
 window/size/viewport_width=1280
 window/size/viewport_height=800
-window/size/transparent=true
 window/stretch/mode="canvas_items"
-window/per_pixel_transparency/allowed=true
 
 [filesystem]
 
@@ -66,6 +64,11 @@ rekku_hide={
 , Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":true,"meta_pressed":false,"pressed":false,"keycode":72,"physical_keycode":0,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
 ]
 }
+info={
+"deadzone": 0.5,
+"events": [Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":2,"pressure":0.0,"pressed":true,"script":null)
+]
+}
 quit={
 "deadzone": 0.5,
 "events": [Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":15,"pressure":0.0,"pressed":false,"script":null)
@@ -100,22 +103,20 @@ action_button={
 quit1={
 "deadzone": 0.5,
 "events": [Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":6,"pressure":0.0,"pressed":true,"script":null)
+, Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194306,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
 ]
 }
 quit2={
 "deadzone": 0.5,
 "events": [Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":7,"pressure":0.0,"pressed":true,"script":null)
 , Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":4,"pressure":0.0,"pressed":true,"script":null)
+, Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194305,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
 ]
 }
 
 [internationalization]
 
-locale/translation_remaps={
-"res://res/pixel_ui_theme/8x8_ui_elements.png": PackedStringArray("res://res/pixel_ui_theme/8x8_ui_elements_de.png:de", "res://res/pixel_ui_theme/8x8_ui_elements_sv.png:sv"),
-"res://res/pixel_ui_theme/8x8_ui_elements2x.png": PackedStringArray("res://res/pixel_ui_theme/8x8_ui_elements2x_de.png:de", "res://res/pixel_ui_theme/8x8_ui_elements2x_sv.png:sv")
-}
-locale/translations=PackedStringArray("res://locales/interface.en.translation", "res://locales/interface.it.translation", "res://locales/interface.de.translation", "res://locales/interface.sv.translation", "res://locales/interface.ua.translation", "res://locales/interface.zh.translation", "res://locales/interface.ja.translation")
+locale/translation_remaps={}
 
 [rendering]
 

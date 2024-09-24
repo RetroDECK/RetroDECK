@@ -1,6 +1,6 @@
 extends PanelContainer
 
-func _process(delta):
+func _process(_delta):
 	# TODO hack. Use state machine?
 	if %action_gridcontainer.visible == true:
 		if Input.is_action_pressed("back_button"):
