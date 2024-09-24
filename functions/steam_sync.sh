@@ -118,10 +118,23 @@ EOF
         done
     fi
   done
-  #steam-rom-manager add
+
+  if [ -z "$( ls -A $steamsync_folder )" ]; then
+    log d "No games found, cleaning shortcut"
+    remove_from_steam
+  else
+    log d "Updating game list"
+    #steam-rom-manager add
+  fi
+
   log i "Steam Sync: completed"
 }
 
 remove_from_steam() {
-  echo "TBD"
+  log d "Creating fake game"
+  cat "" > "$steamsync_folder/CUL0.sh"
+  log d "Cleaning the shortcut"
+  steam-rom-manager remove
+  log d "Removing fake game"
+  rm "$steamsync_folder/CUL0.sh"
 }
