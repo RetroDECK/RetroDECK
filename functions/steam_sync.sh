@@ -6,6 +6,9 @@ add_to_steam() {
     log "i" "Starting Steam Sync"
 
     steamsync_folder="$rdhome/.sync"
+    steamsync_folder_tmp="$rdhome/.sync-tmp"
+    create_dir $steamsync_folder
+    mv $steamsync_folder $steamsync_folder_tmp
     create_dir $steamsync_folder
 
     local srm_path="/var/config/steam-rom-manager/userData/userConfigurations.json"
@@ -76,7 +79,11 @@ add_to_steam() {
           log d "Sanitized Name: $sanitized_name"
 
           local launcher="$steamsync_folder/${sanitized_name}.sh"
-          log d "Creating desktop file: $launcher"
+          local launcher_tmp="$steamsync_folder_tmp/${sanitized_name}.sh"
+
+          if [ ! -e "$launcher_tmp" ]; then
+
+            log d "Creating desktop file: $launcher"
 
           # if [[ -v command_list_default[$system] ]]; then
           #   command="${command_list_default[$system]}"
@@ -88,7 +95,7 @@ add_to_steam() {
           # Populate the .sync script with the correct command
           # TODO: if there is any emulator defined in the xml we use that, else... how we can know which is the default one?
           # TODO: if steam is flatpak the command wrapping will change in .desktop
-          local command="flatpak run net.retrodeck.retrodeck start '$roms_folder/$system/$path'"
+            local command="flatpak run net.retrodeck.retrodeck start '$roms_folder/$system/$path'"
           # Create the launcher file using a heredoc - if you enable .desktp this remember to edit .desktop in SRM userConfigurations.json and the above launcher variable (and vice versa)
 #           cat <<EOF > "$launcher"
 # [Desktop Entry]
@@ -101,21 +108,40 @@ add_to_steam() {
 # Type=Application
 # Categories=Game;Emulator;
 # EOF
-          cat <<EOF > "$launcher"
+            cat <<EOF > "$launcher"
 #!/bin/bash
-if [ test "$(whereis flatpak)" = "flatpak:" ]; then
+if [ test "\$(whereis flatpak)" = "flatpak:" ]; then
   flatpak-spawn --host $command
 else
   $command
 fi
 EOF
+        else
+          log d "$launcher desktop file already exists"
+          mv "$launcher_tmp" "$launcher"
+        fi
         done
     fi
   done
-  steam-rom-manager add
+
+  rm -r $steamsync_folder_tmp
+
+  if [ -z "$( ls -A $steamsync_folder )" ]; then
+    log d "No games found, cleaning shortcut"
+    remove_from_steam
+  else
+    log d "Updating game list"
+    #steam-rom-manager add
+  fi
+
   log i "Steam Sync: completed"
 }
 
 remove_from_steam() {
-  echo "TBD"
+  log d "Creating fake game"
+  cat "" > "$steamsync_folder/CUL0.sh"
+  log d "Cleaning the shortcut"
+  steam-rom-manager remove
+  log d "Removing fake game"
+  rm "$steamsync_folder/CUL0.sh"
 }
