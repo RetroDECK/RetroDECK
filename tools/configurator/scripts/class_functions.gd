@@ -336,20 +336,23 @@ func update_global(button: Button, preset: String, state: bool) -> void:
 				cheevos_state = str(state)
 				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
 				change_global(result, "build_preset_config", button, cheevos_state)
+			if cheevos_state == "false":
+				cheevos_hardcore_state = "false"
+				result = data_handler.change_all_cfg_values(config_file_path, config_section, "cheevos_hardcore", class_functions.cheevos_hardcore_state)
+				change_global(result, "build_preset_config", button, cheevos_state)
 		"cheevos_hardcore_button":
 			if cheevos_hardcore_state != "mixed":
-				print (cheevos_hardcore_state)
 				cheevos_hardcore_state = str(state)
 				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
 				change_global(result, "build_preset_config", button, cheevos_hardcore_state)
 
 func change_global(parameters: Array, preset: String, button: Button, state: String) -> void:
-	#print (parameters)
+	print (parameters[1])
 	match parameters[1]:
 		preset_list:
 			for system in parameters[0].keys():
 				var command_parameter: Array = [preset, system, parameters[1]]
-				logger("d", "Change Global: %s System: %s Preset %s " % command_parameter) 
+				logger("d", "Change Global: %s System: %s Preset %s " % command_parameter)
 				var result: Dictionary = await run_thread_command(wrapper_command, command_parameter, false)
 				logger("d", "Exit code: %s" % result["exit_code"])
 		_:
