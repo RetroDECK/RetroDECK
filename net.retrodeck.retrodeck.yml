@@ -554,8 +554,11 @@ modules:
       - cp -r squashfs-root/usr/* "${FLATPAK_DEST}/"
     sources:
       - type: archive
-        url: SHADPS4LATESTGHREL
-        sha256: SHADPS4LATESTSHA
+        # TODO: fix this
+        # url: SHADPS4LATESTGHREL
+        # sha256: SHADPS4LATESTSHA
+        url: https://github.com/shadps4-emu/shadPS4/releases/download/v.0.3.0/shadps4-linux-qt-0.3.0.zip
+        sha256: 19a8c0796c36255ad8201715392fa57c0d370c1c3514ae56fe0200300c5163fd
   # PortMaster
 
   - name: PortMaster
