@@ -106,20 +106,25 @@ handle_latestghtag() {
 
 handle_latestghrelease() {
   local placeholder="$1"
-  local url="$2"
-  local suffix="$3"
-  echo "Fetching release data from: $url"
-  local release_data=$(curl -s "$url")
+  local api_url="$2"
+  local pattern="$3"
+  echo "Fetching release data from: $api_url"
+
+  # Fetch the release data from GitHub API
+  local release_data=$(curl -s "$api_url")
   echo "Release data fetched."
-  local ghreleaseurl=$(echo "$release_data" | jq -r ".assets[] | select(.name | endswith(\"$suffix\")).browser_download_url")
-  
+
+  # Find the matching asset using the pattern
+  local ghreleaseurl=$(echo "$release_data" | jq -r ".assets[] | select(.name | test(\"$pattern\")).browser_download_url")
+
   if [[ -z "$ghreleaseurl" ]]; then
-    echo "Error: No asset found with suffix $suffix"
+    echo "Error: No asset found matching pattern $pattern"
     exit 1
   fi
-  
+
+  # Download the file and compute its hash
   local ghreleasehash=$(curl -sL "$ghreleaseurl" | sha256sum | cut -d ' ' -f1)
-  
+
   echo "Replacing placeholder $placeholder with URL $ghreleaseurl and hash $ghreleasehash"
   /bin/sed -i 's^'"$placeholder"'^'"$ghreleaseurl"'^g' "$rd_manifest"
   /bin/sed -i 's^'"HASHFOR$placeholder"'^'"$ghreleasehash"'^g' "$rd_manifest"
@@ -127,20 +132,26 @@ handle_latestghrelease() {
 
 handle_latestghreleasesha() {
   local placeholder="$1"
-  local url="$2"
-  local suffix="$3"
-  echo "Fetching release data from: $url"
-  local release_data=$(curl -s "$url")
-  echo "Release data fetched."
-  local ghreleaseurl=$(echo "$release_data" | jq -r ".assets[] | select(.name | endswith(\"$suffix\")).browser_download_url")
+  local api_url="$2"
+  local pattern="$3"
+  echo "Fetching release data from: $api_url"
   
+  # Fetch the release data from GitHub API
+  local release_data=$(curl -s "$api_url")
+  echo "Release data fetched."
+
+  # Find the matching asset using the pattern
+  local ghreleaseurl=$(echo "$release_data" | jq -r ".assets[] | select(.name | test(\"$pattern\")).browser_download_url")
+
   if [[ -z "$ghreleaseurl" ]]; then
-    echo "Error: No asset found with suffix $suffix"
+    echo "Error: No asset found matching pattern $pattern"
     exit 1
   fi
-  
+
+  # Download the file and compute its hash
+  echo "Downloading asset to compute hash: $ghreleaseurl"
   local ghreleasehash=$(curl -sL "$ghreleaseurl" | sha256sum | cut -d ' ' -f1)
-  
+
   echo "Replacing placeholder $placeholder with hash $ghreleasehash"
   /bin/sed -i 's^'"$placeholder"'^'"$ghreleasehash"'^g' "$rd_manifest"
 }
