@@ -32,6 +32,7 @@ var widescreen_state: String
 var quick_rewind_state: String
 var cheevos_state: String
 var cheevos_hardcore_state: String
+var cheevos_token_state: String
 var font_select: int
 var font_tab_size: int = 35
 var font_size: int = 20
@@ -76,6 +77,7 @@ func read_values_states() -> void:
 	sound_effects = config["options"]["sound_effects"]
 	volume_effects = int(config["options"]["volume_effects"])
 	font_select = int(config["options"]["font"])
+	cheevos_token_state = str(config["options"]["cheevos_login"])
 	cheevos_state = multi_state("cheevos", cheevos_state)
 	cheevos_hardcore_state = multi_state("cheevos_hardcore", cheevos_hardcore_state)
 
@@ -293,6 +295,11 @@ func update_global(button: Button, preset: String, state: bool) -> void:
 			change_global(result, "build_preset_config", button, str(result))
 		"sound_button":
 			sound_effects = state
+			result = data_handler.change_cfg_value(config_file_path, preset, "options", str(state))
+			logger("i", "Enabled: %s" % (button.name))
+			update_global_signal.emit([button.name])
+		"cheevos_connect_button":
+			cheevos_token_state = str(state)
 			result = data_handler.change_cfg_value(config_file_path, preset, "options", str(state))
 			logger("i", "Enabled: %s" % (button.name))
 			update_global_signal.emit([button.name])

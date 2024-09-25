@@ -3,7 +3,11 @@ var responses: Array
 
 func _ready():
 	_connect_signals()
-	
+	if class_functions.cheevos_state != "false":
+		#%cheevos_label.add_theme_stylebox_override()
+		%cheevos_label.add_theme_color_override("font_color", Color(0.941, 0.502, 1, 1))
+		%cheevos_label.text = "ALREADY LOGGED IN"
+		#%cheevos_connect_button.text = "LOGOUT"
 func _connect_signals() -> void:
 	%sound_button.pressed.connect(class_functions.run_function.bind(%sound_button, "sound_effects"))
 	%update_notification_button.pressed.connect(class_functions.run_function.bind(%update_notification_button, "update_check"))
@@ -35,7 +39,6 @@ func _on_request_completed(_result, response_code, _headers, body) -> Array:
 	return responses
 
 func cheevos(button: Button):
-	#9LJX7**mie*9e4	
 	class_functions.logger("d","Attempting RA connection")
 	var ra_url = "https://retroachievements.org/dorequest.php?r=login&u="+%cheevos_username.text+"&p="+%cheevos_password.text 
 	button.disabled = true
