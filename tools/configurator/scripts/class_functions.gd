@@ -335,8 +335,14 @@ func update_global(button: Button, preset: String, state: bool) -> void:
 			if cheevos_state != "mixed":
 				cheevos_state = str(state)
 				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
-				change_global(result, "build_preset_config", button, quick_rewind_state)
-				
+				change_global(result, "build_preset_config", button, cheevos_state)
+		"cheevos_hardcore_button":
+			if cheevos_hardcore_state != "mixed":
+				print (cheevos_hardcore_state)
+				cheevos_hardcore_state = str(state)
+				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
+				change_global(result, "build_preset_config", button, cheevos_hardcore_state)
+
 func change_global(parameters: Array, preset: String, button: Button, state: String) -> void:
 	#print (parameters)
 	match parameters[1]:

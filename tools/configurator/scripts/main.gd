@@ -31,8 +31,8 @@ func _ready():
 	for n: Control in children: #iterate the children
 		if (n.focus_mode == FOCUS_ALL):
 			n.mouse_entered.connect(_on_control_mouse_entered.bind(n)) #grab focus on mouse hover
-		if (n.is_class("BaseButton") and n.disabled == true): #if button-like control and disabled
-			n.self_modulate.a = 0.5 #make it half transparent
+		#if (n.is_class("BaseButton") and n.disabled == true): #if button-like control and disabled
+			#n.self_modulate.a = 0.5 #make it half transparent
 	#combine_tkeys()
 	change_font(class_functions.font_select)
 	
@@ -197,12 +197,12 @@ func _set_up_globals(state: Array) -> void:
 	mixed_mode(%widescreen_button, class_functions.widescreen_state)
 	mixed_mode(%quick_rewind_button, class_functions.quick_rewind_state)
 	mixed_mode(%cheevos_button, class_functions.cheevos_state)
-	if class_functions.cheevos_state == "true":
-		%cheevos_login_container.visible = true
-	elif class_functions.cheevos_state == "false":
-		%cheevos_login_container.visible = false
 	mixed_mode(%cheevos_hardcore_button, class_functions.cheevos_hardcore_state)
-	
+	if class_functions.cheevos_state == "true":
+		%cheevos_enabled_container.visible = true
+	elif class_functions.cheevos_state == "false":
+		%cheevos_enabled_container.visible = false
+
 func mixed_mode (button: Button, state: String) -> void:
 	match [class_functions.button_list]:
 		[class_functions.button_list]:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=123 format=3 uid="uid://61f6m4r1mpan"]
+[gd_scene load_steps=126 format=3 uid="uid://61f6m4r1mpan"]
 
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
 [ext_resource type="Theme" uid="uid://hhc60cllcg47" path="res://assets/themes/default_theme.tres" id="1_if8nh"]
@@ -80,9 +80,12 @@
 [ext_resource type="Texture2D" uid="uid://b6vndtbu4qduo" path="res://assets/icons/pixelitos/128/preferences-desktop-launch-feedback.png" id="45_qxd26"]
 [ext_resource type="Texture2D" uid="uid://3sw7gtoiuab3" path="res://assets/icons/pixelitos/128/help-browser.png" id="46_feagl"]
 [ext_resource type="Texture2D" uid="uid://b0awa8venu1h8" path="res://assets/icons/pixelitos/128/cs-network.png" id="50_5d2ui"]
+[ext_resource type="Texture2D" uid="uid://hh6yudttgfu4" path="res://assets/icons/home_made/RetroAchievements_logo_square_color.png" id="50_kmgpr"]
 [ext_resource type="Texture2D" uid="uid://be3tmvgoa1wua" path="res://assets/icons/pixelitos/128/applications-development.png" id="50_tl5ty"]
 [ext_resource type="Script" path="res://scripts/TabTools.gd" id="50_wqa5h"]
+[ext_resource type="Texture2D" uid="uid://cyqfk3fjqqgv7" path="res://assets/icons/pixelitos/128/user-info.png" id="51_2my10"]
 [ext_resource type="Texture2D" uid="uid://33f5uahr5tqm" path="res://assets/icons/pixelitos/128/mate-system-log.png" id="52_1rasc"]
+[ext_resource type="Texture2D" uid="uid://ck1ff6wn5ge3w" path="res://assets/icons/pixelitos/128/dialog-password.png" id="52_g461w"]
 [ext_resource type="Script" path="res://scripts/TabSettings.gd" id="54_bxhvn"]
 [ext_resource type="Texture2D" uid="uid://dk4567tpvqpr6" path="res://assets/icons/pixelitos/128/preferences-desktop-plasma-theme.png" id="54_dah1j"]
 [ext_resource type="Texture2D" uid="uid://c5ik1giuv1ar5" path="res://assets/icons/pixelitos/128/system-lock-screen.png" id="54_f245y"]
@@ -913,7 +916,6 @@ metadata/_tab_index = 3
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS"]
 layout_mode = 2
-follow_focus = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer"]
 layout_mode = 2
@@ -1026,6 +1028,7 @@ show_percentage = false
 
 [node name="reset_all_emulators_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/system_container"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -1052,7 +1055,10 @@ layout_mode = 2
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
-text = "TK_CHEEVOS"
+theme_override_constants/icon_max_width = 64
+text = "RETRO ACHIEVEMENTS"
+icon = ExtResource("50_kmgpr")
+alignment = 1
 
 [node name="cheevos_progress" type="ProgressBar" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/cheevos_container/cheevos_button"]
 unique_name_in_owner = true
@@ -1066,55 +1072,78 @@ grow_vertical = 2
 theme_override_styles/fill = SubResource("StyleBoxFlat_1161k")
 show_percentage = false
 
-[node name="cheevos_login_container" type="GridContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/cheevos_container"]
+[node name="cheevos_enabled_container" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
-theme_override_constants/h_separation = 64
 
-[node name="cheevos_username_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/cheevos_container/cheevos_login_container"]
+[node name="cheevos_login_container" type="GridContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/cheevos_enabled_container"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 64
+columns = 2
+
+[node name="cheevos_username_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/cheevos_enabled_container/cheevos_login_container"]
+custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-text = "TK_CHEEVOSUNAME"
+theme_override_constants/icon_max_width = 64
+disabled = true
+text = "RETRO ACHIEVMENTS USERNAME"
+icon = ExtResource("51_2my10")
 
-[node name="cheevos_username" type="LineEdit" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/cheevos_container/cheevos_login_container"]
+[node name="cheevos_username" type="LineEdit" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/cheevos_enabled_container/cheevos_login_container"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(256, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-text = "username"
 placeholder_text = "username"
 
-[node name="cheevos_pass_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/cheevos_container/cheevos_login_container"]
+[node name="cheevos_password_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/cheevos_enabled_container/cheevos_login_container"]
+custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 1
-text = "TK_CHEEVOSPWD"
+theme_override_constants/icon_max_width = 64
+disabled = true
+text = "RETRO ACHIEVMENTS PASSWORD"
+icon = ExtResource("52_g461w")
 
-[node name="cheevos_pass" type="LineEdit" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/cheevos_container/cheevos_login_container"]
+[node name="cheevos_password" type="LineEdit" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/cheevos_enabled_container/cheevos_login_container"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-text = "password"
 placeholder_text = "password"
 secret = true
 secret_character = "*"
 
-[node name="blank_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/cheevos_container/cheevos_login_container"]
+[node name="cheevos_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/cheevos_enabled_container/cheevos_login_container"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 5
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
 
-[node name="cheevos_disconnect_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/cheevos_container/cheevos_login_container"]
-layout_mode = 2
-text = "TK_NETPLAYCONNECT"
-
-[node name="cheevos_hardcore_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/cheevos_container/cheevos_login_container"]
+[node name="cheevos_connect_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/cheevos_enabled_container/cheevos_login_container"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
-text = "TK_CHEEVOSHARDCORE"
+theme_override_constants/icon_max_width = 64
+text = "LOGIN"
+icon = ExtResource("50_kmgpr")
 
-[node name="cheevos_hardcore_progress" type="ProgressBar" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/cheevos_container/cheevos_login_container/cheevos_hardcore_button"]
+[node name="cheevos_hardcore_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/cheevos_enabled_container"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+theme_override_constants/icon_max_width = 64
+text = "RETRO ACHIEVEMENTS HARDCORE"
+icon = ExtResource("50_kmgpr")
+alignment = 1
+
+[node name="cheevos_hardcore_progress" type="ProgressBar" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer/cheevos_enabled_container/cheevos_hardcore_button"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
