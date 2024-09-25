@@ -16,7 +16,7 @@ func _ready():
 		$Panel/MarginContainer/VBoxContainer/ContentContainer/MarginContainer.add_child(content)
 	
 
-func _process(delta):
+func _process(_delta):
 	if Input.is_action_pressed("back_button"):
 		lbhide.visible=true
 		rbhide.visible=true

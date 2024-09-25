@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://bihon3xtx45y7"]
+[gd_scene load_steps=3 format=3 uid="uid://bihon3xtx45y7"]
 
 [ext_resource type="Script" path="res://components/bios_check/bios_check.gd" id="1_qrkee"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8e2dh"]
+bg_color = Color(0.133, 0.133, 0.133, 1)
 
 [node name="PopupContent" type="Control"]
 top_level = true
@@ -8,7 +11,7 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -355.0
+offset_right = -1.0
 offset_bottom = -71.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -30,12 +33,17 @@ PS3 BIOS IS VERY BAD
 I'm not sure what else?"
 
 [node name="Table" type="Tree" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+unique_name_in_owner = true
+clip_contents = false
+layout_mode = 2
+offset_right = 1277.0
+offset_bottom = 723.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 16
+theme_override_styles/panel = SubResource("StyleBoxFlat_8e2dh")
 columns = 5
 column_titles_visible = true
 select_mode = 1

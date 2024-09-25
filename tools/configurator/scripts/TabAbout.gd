@@ -41,11 +41,18 @@ func create_buttons() -> void:
 			_setup_button(button, web_data)
 
 func _setup_button(button: Button, web_data: Link) -> void:
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	button.text = web_data.name
+	var vect2 = Vector2(200,100)
+	button.custom_minimum_size = vect2
 	#button.tooltip_text = web_data.description
 	button.icon = ResourceLoader.load(web_data.icon)
-	#button.editor_description = web_data.url
 	button.set_meta("url", web_data.url)
 	button.set_meta("description", web_data.description)
 	button.icon_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	button.vertical_icon_alignment = VERTICAL_ALIGNMENT_CENTER
+	button.add_theme_constant_override("icon_max_width", 64)
+	button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	button.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	button.vertical_icon_alignment = VERTICAL_ALIGNMENT_TOP
