@@ -3,11 +3,13 @@ var responses: Array
 
 func _ready():
 	_connect_signals()
-	if class_functions.cheevos_state != "false":
+	if class_functions.cheevos_token_state == "true":
 		#%cheevos_label.add_theme_stylebox_override()
 		%cheevos_label.add_theme_color_override("font_color", Color(0.941, 0.502, 1, 1))
 		%cheevos_label.text = "ALREADY LOGGED IN"
 		#%cheevos_connect_button.text = "LOGOUT"
+	else:
+		%cheevos_label.text = "NOT LOGGED IN"
 func _connect_signals() -> void:
 	%sound_button.pressed.connect(class_functions.run_function.bind(%sound_button, "sound_effects"))
 	%update_notification_button.pressed.connect(class_functions.run_function.bind(%update_notification_button, "update_check"))
@@ -23,6 +25,9 @@ func _connect_signals() -> void:
 	%reset_retrodeck_button.button_up.connect(class_functions._on_button_released.bind(%reset_retrodeck_progress))	
 	%reset_all_emulators_button.button_down.connect(class_functions._do_action.bind(%reset_all_emulators_progress, %reset_all_emulators_button, "mixed"))
 	%reset_all_emulators_button.button_up.connect(class_functions._on_button_released.bind(%reset_all_emulators_progress))
+	%system_button.pressed.connect(class_functions._hide_show_containers.bind(%system_button, %system_gridcontainer2))
+	%cheevos_collapse_button.pressed.connect(class_functions._hide_show_containers.bind(%cheevos_collapse_button, %cheevos_gridcontainer))
+	%future_button.pressed.connect(class_functions._hide_show_containers.bind(%future_button, %future_gridcontainer))
 
 func _on_request_completed(_result, response_code, _headers, body) -> Array:
 	var response_text = JSON.parse_string(body.get_string_from_utf8())

@@ -72,8 +72,9 @@ func _connect_signals() -> void:
 	%borders_button.pressed.connect(_hide_show_buttons.bind(%borders_button,%borders_gridcontainer,%decorations_gridcontainer))
 	%button_layout.pressed.connect(_hide_show_buttons.bind(%button_layout,%borders_gridcontainer,%decorations_gridcontainer))
 	%decorations_save.pressed.connect(_hide_show_buttons.bind(%decorations_save,%decorations_save.get_parent(),null))
-	%decorations_button.pressed.connect(_hide_show_containers.bind(%decorations_button, %decorations_gridcontainer))
-	%systems_button.pressed.connect(_hide_show_containers.bind(%systems_button, %systems_gridcontainer))
+	%decorations_button.pressed.connect(class_functions._hide_show_containers.bind(%decorations_button, %decorations_gridcontainer))
+	%systems_button.pressed.connect(class_functions._hide_show_containers.bind(%systems_button, %systems_gridcontainer))
+
 	class_functions.update_global_signal.connect(_set_up_globals)
 
 func _load_log(index: int) -> void:
@@ -95,15 +96,6 @@ func _load_log(index: int) -> void:
 func _play_main_animations() -> void:
 	anim_logo.play()
 
-func _hide_show_containers(button: Button, grid_container: GridContainer) -> void:
-	match button.name:
-		"decorations_button", "systems_button":
-			grid_container.visible = true
-			if button.toggle_mode:
-				button.toggle_mode=false
-				grid_container.visible = false
-			else:
-				button.toggle_mode=true
 
 # TODO Pass GridContainer(might need 2?) as above
 # TODO load existing settings or default to enable all

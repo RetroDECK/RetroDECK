@@ -447,3 +447,13 @@ func _do_complete(button: Button) ->void:
 				await class_functions.wait(3.0)
 				button.text = tmp_txt
 	button.toggle_mode = true
+
+func _hide_show_containers(button: Button, grid_container: GridContainer) -> void:
+	match button.name:
+		"decorations_button", "systems_button", "system_button", "cheevos_collapse_button", "future_button":
+			grid_container.visible = true
+			if button.toggle_mode:
+				button.toggle_mode=false
+				grid_container.visible = false
+			else:
+				button.toggle_mode=true

@@ -16,7 +16,7 @@ func _ready():
 	else:
 		%TabContainer.add_theme_font_size_override("font_size", class_functions.font_tab_size)
 	set_tab_title(0, "  GLOBALS    ")
-	set_tab_title(1, "  SYSTEM     ")
+	set_tab_title(1, "  SYSTEMS    ")
 	set_tab_title(2, "   TOOLS      ")
 	set_tab_title(3, "  SETTINGS   ")
 	set_tab_title(4, "   ABOUT      ")
@@ -49,9 +49,9 @@ func _on_button_focus_entered(button: Button):
 	if button and class_functions.sound_effects:
 		%AudioStreamPlayer2D.volume_db = class_functions.volume_effects
 		%AudioStreamPlayer2D.play()
-	if button and class_functions.rekku_state == false and button.has_meta("description"):
-		%pop_rtl.visible = true
-		%pop_rtl.text = button.get_meta("description")
+	#if button and class_functions.rekku_state == false and button.has_meta("description"):
+		#%pop_rtl.visible = true
+		#%pop_rtl.text = button.get_meta("description")
 	elif class_functions.rekku_state == false:
 		%pop_rtl.visible = true
 		%pop_rtl.text = "Hey, there's no description"
