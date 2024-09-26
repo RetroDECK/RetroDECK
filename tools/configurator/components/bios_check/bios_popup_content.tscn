@@ -4,6 +4,12 @@
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8e2dh"]
 bg_color = Color(0.133, 0.133, 0.133, 1)
+border_width_left = 25
+border_width_top = 25
+border_width_right = 25
+border_width_bottom = 25
+border_color = Color(0.505882, 0.505882, 0.505882, 0.647059)
+border_blend = true
 
 [node name="PopupContent" type="Control"]
 top_level = true
@@ -27,7 +33,9 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_colors/relationship_line_color = Color(0.776471, 0.941176, 0, 1)
 theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/title_button_font_size = 20
 theme_override_styles/panel = SubResource("StyleBoxFlat_8e2dh")
 columns = 5
 column_titles_visible = true
