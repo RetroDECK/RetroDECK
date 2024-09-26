@@ -168,6 +168,10 @@
     "ryujinx_firmware": {
       "filename": "Install-firmware-through-Ryujinx.txt",
       "location": "$bios_folder/switch/firmware"
+    },
+    "custom_systems": {
+      "filename": "es_systems.xml",
+      "location": "$rdhome/ES-DE/custom_systems/es_systems.xml"
     }
   },
   "compression_targets": {
