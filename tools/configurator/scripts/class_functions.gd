@@ -32,6 +32,7 @@ var widescreen_state: String
 var quick_rewind_state: String
 var cheevos_state: String
 var cheevos_hardcore_state: String
+var cheevos_token_state: String
 var font_select: int
 var font_tab_size: int = 35
 var font_size: int = 20
@@ -76,6 +77,7 @@ func read_values_states() -> void:
 	sound_effects = config["options"]["sound_effects"]
 	volume_effects = int(config["options"]["volume_effects"])
 	font_select = int(config["options"]["font"])
+	cheevos_token_state = str(config["options"]["cheevos_login"])
 	cheevos_state = multi_state("cheevos", cheevos_state)
 	cheevos_hardcore_state = multi_state("cheevos_hardcore", cheevos_hardcore_state)
 
@@ -296,6 +298,11 @@ func update_global(button: Button, preset: String, state: bool) -> void:
 			result = data_handler.change_cfg_value(config_file_path, preset, "options", str(state))
 			logger("i", "Enabled: %s" % (button.name))
 			update_global_signal.emit([button.name])
+		"cheevos_connect_button":
+			cheevos_token_state = str(state)
+			result = data_handler.change_cfg_value(config_file_path, preset, "options", str(state))
+			logger("i", "Enabled: %s" % (button.name))
+			update_global_signal.emit([button.name])
 		"button_swap_button":
 			if abxy_state != "mixed":
 				abxy_state = str(state)
@@ -335,15 +342,24 @@ func update_global(button: Button, preset: String, state: bool) -> void:
 			if cheevos_state != "mixed":
 				cheevos_state = str(state)
 				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
-				change_global(result, "build_preset_config", button, quick_rewind_state)
-				
+				change_global(result, "build_preset_config", button, cheevos_state)
+			if cheevos_state == "false":
+				cheevos_hardcore_state = "false"
+				result = data_handler.change_all_cfg_values(config_file_path, config_section, "cheevos_hardcore", class_functions.cheevos_hardcore_state)
+				change_global(result, "build_preset_config", button, cheevos_state)
+		"cheevos_hardcore_button":
+			if cheevos_hardcore_state != "mixed":
+				cheevos_hardcore_state = str(state)
+				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
+				change_global(result, "build_preset_config", button, cheevos_hardcore_state)
+
 func change_global(parameters: Array, preset: String, button: Button, state: String) -> void:
-	#print (parameters)
+	print (parameters[1])
 	match parameters[1]:
 		preset_list:
 			for system in parameters[0].keys():
 				var command_parameter: Array = [preset, system, parameters[1]]
-				logger("d", "Change Global: %s System: %s Preset %s " % command_parameter) 
+				logger("d", "Change Global: %s System: %s Preset %s " % command_parameter)
 				var result: Dictionary = await run_thread_command(wrapper_command, command_parameter, false)
 				logger("d", "Exit code: %s" % result["exit_code"])
 		_:
@@ -431,3 +447,13 @@ func _do_complete(button: Button) ->void:
 				await class_functions.wait(3.0)
 				button.text = tmp_txt
 	button.toggle_mode = true
+
+func _hide_show_containers(button: Button, grid_container: GridContainer) -> void:
+	match button.name:
+		"decorations_button", "systems_button", "system_button", "cheevos_collapse_button", "future_button":
+			grid_container.visible = true
+			if button.toggle_mode:
+				button.toggle_mode=false
+				grid_container.visible = false
+			else:
+				button.toggle_mode=true

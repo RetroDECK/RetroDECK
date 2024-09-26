@@ -36,8 +36,8 @@ func _ready():
 	for n: Control in children: #iterate the children
 		if (n.focus_mode == FOCUS_ALL):
 			n.mouse_entered.connect(_on_control_mouse_entered.bind(n)) #grab focus on mouse hover
-		if (n.is_class("BaseButton") and n.disabled == true): #if button-like control and disabled
-			n.self_modulate.a = 0.5 #make it half transparent
+		#if (n.is_class("BaseButton") and n.disabled == true): #if button-like control and disabled
+			#n.self_modulate.a = 0.5 #make it half transparent
 	#combine_tkeys()
 	change_font(class_functions.font_select)
 	
@@ -77,8 +77,9 @@ func _connect_signals() -> void:
 	%borders_button.pressed.connect(_hide_show_buttons.bind(%borders_button,%borders_gridcontainer,%decorations_gridcontainer))
 	%button_layout.pressed.connect(_hide_show_buttons.bind(%button_layout,%borders_gridcontainer,%decorations_gridcontainer))
 	%decorations_save.pressed.connect(_hide_show_buttons.bind(%decorations_save,%decorations_save.get_parent(),null))
-	%decorations_button.pressed.connect(_hide_show_containers.bind(%decorations_button, %decorations_gridcontainer))
-	%systems_button.pressed.connect(_hide_show_containers.bind(%systems_button, %systems_gridcontainer))
+	%decorations_button.pressed.connect(class_functions._hide_show_containers.bind(%decorations_button, %decorations_gridcontainer))
+	%systems_button.pressed.connect(class_functions._hide_show_containers.bind(%systems_button, %systems_gridcontainer))
+
 	class_functions.update_global_signal.connect(_set_up_globals)
 
 func _load_log(index: int) -> void:
@@ -100,22 +101,6 @@ func _load_log(index: int) -> void:
 func _play_main_animations() -> void:
 	anim_logo.play()
 
-func _hide_show_containers(button: Button) -> void:
-	match button.name:
-		"decorations_button":
-			%graphics_gridcontainer.visible = true
-			if button.toggle_mode:
-				button.toggle_mode=false
-				%graphics_gridcontainer.visible = false
-			else:
-				button.toggle_mode=true
-		"systems_button":
-			%systems_gridcontainer.visible = true
-			if button.toggle_mode:
-				button.toggle_mode=false
-				%systems_gridcontainer.visible = false
-			else:
-				button.toggle_mode=true
 
 # TODO Pass GridContainer(might need 2?) as above
 # TODO load existing settings or default to enable all
@@ -215,12 +200,12 @@ func _set_up_globals(state: Array) -> void:
 	mixed_mode(%widescreen_button, class_functions.widescreen_state)
 	mixed_mode(%quick_rewind_button, class_functions.quick_rewind_state)
 	mixed_mode(%cheevos_button, class_functions.cheevos_state)
-	if class_functions.cheevos_state == "true":
-		%cheevos_login_container.visible = true
-	elif class_functions.cheevos_state == "false":
-		%cheevos_login_container.visible = false
 	mixed_mode(%cheevos_hardcore_button, class_functions.cheevos_hardcore_state)
-	
+	if class_functions.cheevos_state == "true":
+		%cheevos_enabled_container.visible = true
+	elif class_functions.cheevos_state == "false":
+		%cheevos_enabled_container.visible = false
+
 func mixed_mode (button: Button, state: String) -> void:
 	match [class_functions.button_list]:
 		[class_functions.button_list]:
