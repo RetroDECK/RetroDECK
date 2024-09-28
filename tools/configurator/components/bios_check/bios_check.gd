@@ -22,7 +22,7 @@ func _ready():
 	else: #Assume advanced BIOS button pressed
 		table.columns = BIOS_COLUMNS_EXPERT.size()
 		for i in BIOS_COLUMNS_EXPERT.size():
-			table.set_column_custom_minimum_width(0, 150)
+			table.set_column_custom_minimum_width(0, 170)
 			table.set_column_custom_minimum_width(1, 200)
 			table.set_column_custom_minimum_width(4, 325)
 			table.set_column_custom_minimum_width(6, 225)

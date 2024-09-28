@@ -7,6 +7,7 @@ const globals_sh_file_path: String = "/app/libexec/global.sh"
 const wrapper_command: String = "/app/tools/retrodeck_function_wrapper.sh"
 const config_file_path = "/var/config/retrodeck/retrodeck.cfg"
 const json_file_path = "/var/config/retrodeck/retrodeck.json"
+var config_folder_path = "/var/config/"
 const esde_file_path = "/var/config/ES-DE/settings/es_settings.xml"
 var desktop_mode: String = OS.get_environment("XDG_CURRENT_DESKTOP")
 var rd_conf: String

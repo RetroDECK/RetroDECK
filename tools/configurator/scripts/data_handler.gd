@@ -356,3 +356,27 @@ func get_elements_in_section(file_path: String, section: String) -> Dictionary:
 				var value: String = parts[1].strip_edges()
 				elements[key] = value
 	return elements
+
+func read_change_regex(file_path: String, key: String, new_value: String, use_quotes: bool = true) -> void:
+	var file := FileAccess.open(file_path, FileAccess.READ_WRITE)
+	if file == null:
+		print("Error: Could not open the file - %s" % file_path)
+		return
+	var content := file.get_as_text()
+	file.close()
+	var pattern := ""
+	if use_quotes:
+		pattern = '%s\\s*=\\s*"(.*?)"' % key
+	else:
+		pattern = '%s\\s*=\\s*(.*)' % key  # For keys without quotes
+	var regex := RegEx.new()
+	regex.compile(pattern)
+	var updated_content := ""
+	if use_quotes:
+		updated_content = regex.sub(content, '%s = "%s"' % [key, new_value])
+	else:
+		updated_content = regex.sub(content, '%s = %s' % [key, new_value])
+	file = FileAccess.open(file_path, FileAccess.WRITE)
+	file.store_string(updated_content)
+	file.close()
+	print("File updated successfully")
