@@ -2,8 +2,8 @@ extends Control
 
 var bios_result: Dictionary
 var console: bool = false
-var BIOS_COLUMNS_BASIC := ["BIOS File Name", "System", "Found", "Hash Match", "Description"]
-var BIOS_COLUMNS_EXPERT := ["BIOS File Name", "System", "Found", "Hash Match", "Description", "Subdirectory", "Hash"]
+var BIOS_COLUMNS_BASIC := ["BIOS File Name", "System", "Found", "Hash\nMatch", "Description"]
+var BIOS_COLUMNS_EXPERT := ["BIOS File Name", "System", "Found", "Hash\nMatch", "Description", "Sub\nFolder", "Hash"]
 @onready var bios_type:int = get_tree().current_scene.bios_type
 @onready var custom_theme: Theme = get_tree().current_scene.custom_theme
 
@@ -15,10 +15,18 @@ func _ready():
 	if bios_type == 1: #Basic BIOS button pressed
 		table.columns = BIOS_COLUMNS_BASIC.size()
 		for i in BIOS_COLUMNS_BASIC.size():
+			table.set_column_custom_minimum_width(0, 150)
+			table.set_column_custom_minimum_width(1, 200)
+			table.set_column_custom_minimum_width(4, 350)
 			table.set_column_title(i, BIOS_COLUMNS_BASIC[i])
 	else: #Assume advanced BIOS button pressed
 		table.columns = BIOS_COLUMNS_EXPERT.size()
 		for i in BIOS_COLUMNS_EXPERT.size():
+			table.set_column_custom_minimum_width(0, 150)
+			table.set_column_custom_minimum_width(1, 200)
+			table.set_column_custom_minimum_width(4, 325)
+			table.set_column_custom_minimum_width(6, 225)
+			
 			table.set_column_title(i, BIOS_COLUMNS_EXPERT[i])
 	var root = table.create_item()
 	table.hide_root = true

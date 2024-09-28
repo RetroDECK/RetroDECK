@@ -1,4 +1,4 @@
-[gd_scene load_steps=130 format=3 uid="uid://61f6m4r1mpan"]
+[gd_scene load_steps=133 format=3 uid="uid://61f6m4r1mpan"]
 
 [ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
 [ext_resource type="Theme" uid="uid://hhc60cllcg47" path="res://assets/themes/default_theme.tres" id="1_if8nh"]
@@ -134,6 +134,19 @@ bg_color = Color(0.101961, 0.623529, 1, 0.376471)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8lrwm"]
 bg_color = Color(0.352941, 0.858824, 0.129412, 0.556863)
+
+[sub_resource type="Gradient" id="Gradient_wpgfp"]
+offsets = PackedFloat32Array(0, 0.631148)
+colors = PackedColorArray(0.101961, 0.623529, 1, 1, 0.580392, 0.419608, 0.921569, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_g8i86"]
+gradient = SubResource("Gradient_wpgfp")
+width = 128
+height = 128
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_6ihey"]
+texture = SubResource("GradientTexture2D_g8i86")
+region_rect = Rect2(0, 0, 128, 127)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_omewi"]
 bg_color = Color(0.712505, 0, 0.175592, 1)
@@ -925,6 +938,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 theme_override_constants/icon_max_width = 64
+theme_override_styles/normal = SubResource("StyleBoxTexture_6ihey")
 text = "SYSTEM SETTINGS"
 icon = ExtResource("38_xw5qd")
 expand_icon = true
