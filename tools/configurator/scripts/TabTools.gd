@@ -6,7 +6,7 @@ func _ready():
 	add_child(http_request)
 	http_request.request_completed.connect(_on_request_completed)
 	_connect_signals()
-	%backup_user_button.text += " - " + class_functions.rdhome + "/backup"
+	#%backup_user_button.text += " - " + class_functions.rdhome + "/backup"
 	
 func _connect_signals() -> void:
 	%check_conn_button.pressed.connect(check_internet_connection)
