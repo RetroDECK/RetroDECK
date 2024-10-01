@@ -126,7 +126,7 @@ func execute_command(command: String, parameters: Array, console: bool) -> Dicti
 	var result = {}
 	var output = []
 	var exit_code = OS.execute(command, parameters, output, console) ## add if exit == 0 etc
-	result["output"] = str(output)
+	result["output"] = class_functions.array_to_string(output)
 	result["exit_code"] = exit_code
 	return result
 
