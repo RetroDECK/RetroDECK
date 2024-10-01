@@ -26,7 +26,6 @@ func _ready():
 			table.set_column_custom_minimum_width(1, 200)
 			table.set_column_custom_minimum_width(4, 325)
 			table.set_column_custom_minimum_width(6, 225)
-			
 			table.set_column_title(i, BIOS_COLUMNS_EXPERT[i])
 	var root = table.create_item()
 	table.hide_root = true

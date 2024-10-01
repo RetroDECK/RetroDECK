@@ -38,7 +38,6 @@ var font_select: int
 var font_tab_size: int = 35
 var font_size: int = 20
 var locale: String
-enum preset_list {abxy_button_swap, ask_to_exit, borders, widescreen, rewind, cheevos, cheevos_hardcore}
 var button_list: Array = ["button_swap_button", "ask_to_exit_button", "border_button", "widescreen_button", "quick_rewind_button", "reset_retrodeck_button", "reset_all_emulators_button", "cheevos_button", "cheevos_hardcore_button"]
 signal update_global_signal
 var rekku_state: bool = false
@@ -127,13 +126,13 @@ func execute_command(command: String, parameters: Array, console: bool) -> Dicti
 	var result = {}
 	var output = []
 	var exit_code = OS.execute(command, parameters, output, console) ## add if exit == 0 etc
-	result["output"] = array_to_string(output)
+	result["output"] = str(output)
 	result["exit_code"] = exit_code
 	return result
 
 func run_command_in_thread(command: String, paramaters: Array, _console: bool) -> Dictionary:
 	var thread = Thread.new()
-	thread.start(execute_command.bind(command,paramaters,false))
+	thread.start(execute_command.bind(command,paramaters,true))
 	while thread.is_alive():
 		await get_tree().process_frame
 	return thread.wait_to_finish()
@@ -284,89 +283,92 @@ func run_function(button: Button, preset: String) -> void:
 func update_global(button: Button, preset: String, state: bool) -> void:
 	#TODO pass state as an object in future version
 	var result: Array
+	result.append("build_preset_config")
 	var config_section:Dictionary = data_handler.get_elements_in_section(config_file_path, preset)
 	match button.name:
 		"quick_resume_button", "retroarch_quick_resume_button":
 			quick_resume_status = state
-			result = data_handler.change_cfg_value(config_file_path, "retroarch", preset, str(state))
-			change_global(result, "build_preset_config", button, str(quick_resume_status))
+			result.append_array(data_handler.change_cfg_value(config_file_path, "retroarch", preset, str(state)))
+			change_global(result, button, str(quick_resume_status))
 		"update_notification_button":
 			update_check = state
-			result = data_handler.change_cfg_value(config_file_path, preset, "options", str(state))
-			change_global(result, "build_preset_config", button, str(result))
+			result.append_array(data_handler.change_cfg_value(config_file_path, preset, "options", str(state)))
+			change_global(result, button, str(result))
 		"sound_button":
 			sound_effects = state
-			result = data_handler.change_cfg_value(config_file_path, preset, "options", str(state))
+			result.append_array(data_handler.change_cfg_value(config_file_path, preset, "options", str(state)))
 			logger("i", "Enabled: %s" % (button.name))
 			update_global_signal.emit([button.name])
 		"cheevos_connect_button":
 			cheevos_token_state = str(state)
-			result = data_handler.change_cfg_value(config_file_path, preset, "options", str(state))
+			result.append_array(data_handler.change_cfg_value(config_file_path, preset, "options", str(state)))
 			logger("i", "Enabled: %s" % (button.name))
 			update_global_signal.emit([button.name])
 		"button_swap_button":
 			if abxy_state != "mixed":
 				abxy_state = str(state)
-				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
-				change_global(result, "build_preset_config", button, abxy_state)
+				result.append_array(data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state)))
+				change_global(result, button, abxy_state)
 		"ask_to_exit_button":
 			if ask_to_exit_state != "mixed":
 				ask_to_exit_state = str(state)
-				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
-				change_global(result, "build_preset_config", button, ask_to_exit_state)
+				result.append_array(data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state)))
+				change_global(result, button, ask_to_exit_state)
 		"border_button":
 			if border_state != "mixed":
 				border_state = str(state)
-				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
-				change_global(result, "build_preset_config", button, border_state)
+				result.append_array(data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state)))
+				change_global(result, button, border_state)
 			if widescreen_state == "true" or widescreen_state == "mixed":
 				config_section = data_handler.get_elements_in_section(config_file_path, "widescreen")
 				widescreen_state = "false"
-				result = data_handler.change_all_cfg_values(config_file_path, config_section, "widescreen", widescreen_state)
-				change_global(result, "build_preset_config", button, widescreen_state)
+				result.append_array(data_handler.change_all_cfg_values(config_file_path, config_section, "widescreen", widescreen_state))
+				change_global(result, button, widescreen_state)
 		"widescreen_button":
 			if widescreen_state != "mixed":
 				widescreen_state = str(state)
-				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
-				change_global(result, "build_preset_config", button, widescreen_state)
+				result.append_array(data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state)))
+				change_global(result, button, widescreen_state)
 			if border_state == "true" or border_state == "mixed":
 				config_section = data_handler.get_elements_in_section(config_file_path, "borders")
 				border_state = "false"
-				result = data_handler.change_all_cfg_values(config_file_path, config_section, "borders", border_state)
-				change_global(result, "build_preset_config", button, border_state)
+				result.append_array(data_handler.change_all_cfg_values(config_file_path, config_section, "borders", border_state))
+				change_global(result, button, border_state)
 		"quick_rewind_button":
 			if quick_rewind_state != "mixed":
 				quick_rewind_state = str(state)
-				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
-				change_global(result, "build_preset_config", button, quick_rewind_state)
+				result.append_array(data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state)))
+				change_global(result, button, quick_rewind_state)
 		"cheevos_button":
 			if cheevos_state != "mixed":
 				cheevos_state = str(state)
-				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
-				change_global(result, "build_preset_config", button, cheevos_state)
+				result.append_array(data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state)))
+				change_global(result, button, cheevos_state)
 			if cheevos_state == "false":
 				cheevos_hardcore_state = "false"
-				result = data_handler.change_all_cfg_values(config_file_path, config_section, "cheevos_hardcore", class_functions.cheevos_hardcore_state)
-				change_global(result, "build_preset_config", button, cheevos_hardcore_state)
+				result.append_array(data_handler.change_all_cfg_values(config_file_path, config_section, "cheevos_hardcore", class_functions.cheevos_hardcore_state))
+				change_global(result, button, cheevos_hardcore_state)
 		"cheevos_hardcore_button":
 			if cheevos_hardcore_state != "mixed":
 				cheevos_hardcore_state = str(state)
-				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
-				change_global(result, "build_preset_config", button, cheevos_hardcore_state)
+				result.append_array(data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state)))
+				change_global(result, button, cheevos_hardcore_state)
 
-func change_global(parameters: Array, preset: String, button: Button, state: String) -> void:
-	print (parameters[1])
-	match parameters[1]:
-		preset_list:
-			for system in parameters[0].keys():
-				var command_parameter: Array = [preset, system, parameters[1]]
-				logger("d", "Change Global: %s System: %s Preset %s " % command_parameter)
+func change_global(parameters: Array, button: Button, state: String) -> void:
+	#print (str(parameters))
+	match parameters[2]:
+		"abxy_button_swap", "ask_to_exit", "borders", "widescreen", "rewind", "cheevos", "cheevos_hardcore":
+			for system in parameters[1].keys():
+				var command_parameter: Array = [parameters[0],system, parameters[2]]
+				logger("d", "Change Global Multi: %s  " % str(command_parameter))
 				var result: Dictionary = await run_thread_command(wrapper_command, command_parameter, false)
+				#var result = OS.execute_with_pipe(wrapper_command, command_parameter)
 				logger("d", "Exit code: %s" % result["exit_code"])
 		_:
-			var command_parameter: Array = [preset, parameters]
-			logger("d", "Change Global: %s System: %s" % command_parameter) 
-			var result: Dictionary = await run_thread_command(wrapper_command, command_parameter, false)
+			logger("d", "Change Global Single: %s" % str(parameters)) 
+			var result: Dictionary = await run_thread_command(wrapper_command, parameters, false)
+			#var result = OS.execute_with_pipe(wrapper_command, parameter)
+			#var result = OS.create_process(wrapper_command, cparameter)
 			logger("d", "Exit code: %s" % result["exit_code"])
 	parameters.append(button)
 	parameters.append(state)
@@ -431,9 +433,9 @@ func _do_complete(button: Button) ->void:
 			"reset_retrodeck_button":
 				var dir = DirAccess.open(class_functions.rd_conf.get_base_dir())
 				if dir is DirAccess:
-					dir.rename(class_functions.rd_conf,class_functions.rd_conf.get_base_dir() + "/retrodeck.bak")
+					dir.rename(class_functions.rd_conf, class_functions.rd_conf.get_base_dir() + "/retrodeck.bak")
 					dir.remove(class_functions.lockfile)
-				class_functions.change_global(["reset", "retrodeck"], "prepare_component", button, "")
+				class_functions.change_global(["prepare_component", "reset", "retrodeck"], button, "")
 				button.text = "RESETTING-NOW"
 				await class_functions.wait(2.0)
 				button.text = "CONFIGURATOR WILL NOW CLOSE"
@@ -442,7 +444,7 @@ func _do_complete(button: Button) ->void:
 			"reset_all_emulators_button":
 				var tmp_txt = button.text
 				button.text = "RESETTING-NOW"
-				class_functions.change_global(["reset", "all"], "prepare_component", button, "")
+				class_functions.change_global(["prepare_component", "reset", "all"], button, "")
 				await class_functions.wait(2.0)
 				button.text = "RESET COMPLETED"
 				await class_functions.wait(3.0)
