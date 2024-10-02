@@ -13,9 +13,9 @@ func _on_focus_changed(selected_element:Control) -> void:
 		%pop_rtl.text = selected_element.get_meta("rekku")
 	elif selected_element != null and selected_element.has_meta("description") and class_functions.rekku_state == false:
 		%pop_rtl.visible = true
-		var texta : String = selected_element.get_meta("description") as String
-		texta = texta.replace("\\n", "\n")
-		%pop_rtl.text = texta
+		var text_newline : String = selected_element.get_meta("description") as String
+		text_newline = text_newline.replace("\\n", "\n")
+		%pop_rtl.text = text_newline
 
-func replace_newline(text: String) -> String:
-	return text.replace("\n", "\n")
+#func replace_newline(text: String) -> String:
+	#return text.replace("\n", "\n")

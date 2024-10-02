@@ -46,7 +46,7 @@ func _connect_signals() -> void:
 	%reset_button.button_up.connect(_on_Button_released.bind(%reset_progress))
 	%rpcs3_firmware_button.pressed.connect(_do_action.bind(%rpcs3_firmware_button))
 	%vita3k_firmware_button.pressed.connect(_do_action.bind(%vita3k_firmware_button))
-	%retroarch_quick_resume_button.pressed.connect(class_functions.run_function.bind(%retroarch_quick_resume_button, "abxy_button_swap"))
+	%retroarch_quick_resume_button.pressed.connect(class_functions.run_function.bind(%retroarch_quick_resume_button, "quick_resume"))
 	
 func standard_buttons(button: Button, buttons_gridcontainer: GridContainer, hidden_gridcontainer: GridContainer) -> void:
 	current_system = app_data.emulators[button.text.to_lower()]

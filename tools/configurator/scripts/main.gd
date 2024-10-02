@@ -190,10 +190,10 @@ func _set_up_globals(state: Array) -> void:
 	mixed_mode(%quick_rewind_button, class_functions.quick_rewind_state)
 	mixed_mode(%cheevos_button, class_functions.cheevos_state)
 	mixed_mode(%cheevos_hardcore_button, class_functions.cheevos_hardcore_state)
-	if class_functions.cheevos_state == "true":
-		%cheevos_enabled_container.visible = true
-	elif class_functions.cheevos_state == "false":
-		%cheevos_enabled_container.visible = false
+	#if class_functions.cheevos_state == "true":
+		#%cheevos_enabled_container.visible = true
+	#elif class_functions.cheevos_state == "false":
+		#%cheevos_enabled_container.visible = false
 
 func mixed_mode (button: Button, state: String) -> void:
 	match [class_functions.button_list]:
