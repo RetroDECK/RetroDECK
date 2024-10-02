@@ -387,5 +387,5 @@ func read_change_regex(file_path: String, key: String, new_value: String, use_qu
 	file = FileAccess.open(file_path, FileAccess.WRITE)
 	file.store_string(updated_content)
 	file.close()
-	return new_value
 	print("File updated successfully")
+	return new_value
