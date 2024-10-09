@@ -130,9 +130,9 @@ func execute_command(command: String, parameters: Array, console: bool) -> Dicti
 	result["exit_code"] = exit_code
 	return result
 
-func run_command_in_thread(command: String, paramaters: Array, _console: bool) -> Dictionary:
+func run_command_in_thread(command: String, paramaters: Array, console: bool) -> Dictionary:
 	var thread = Thread.new()
-	thread.start(execute_command.bind(command,paramaters,true))
+	thread.start(execute_command.bind(command,paramaters,console))
 	while thread.is_alive():
 		await get_tree().process_frame
 	return thread.wait_to_finish()
@@ -290,6 +290,7 @@ func update_global(button: Button, preset: String, state: bool) -> void:
 			quick_resume_status = state
 			result.append_array(data_handler.change_cfg_value(config_file_path, "retroarch", preset, str(state)))
 			change_global(result, button, str(quick_resume_status))
+			#var resultT: Dictionary = await run_thread_command("/home/tim/bin/mult.sh", [], false)
 		"update_notification_button":
 			update_check = state
 			result.append_array(data_handler.change_cfg_value(config_file_path, preset, "options", str(state)))
