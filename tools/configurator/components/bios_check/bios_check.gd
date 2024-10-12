@@ -44,10 +44,10 @@ func _ready():
 			if bios_line.size() >= 5:
 				if bios_line[2] == "No":
 					table_line.set_custom_bg_color(i,Color(1,0,0,0.15))
+				elif bios_line[2] == "Yes" and bios_line[3] == "No":
+					table_line.set_custom_bg_color(i,Color(1,0.6,0,0.35))
 				elif bios_line[2] == "Yes":
 					table_line.set_custom_bg_color(i,Color(0,1,0,0.15))
-				elif bios_line[2] == "Yes" and bios_line[3] == "No":
-					table_line.set_custom_bg_color(i,Color(1,0.6,0,0.15))
 			table_line.set_text(i, bios_line[i])
 			#if table_line.get_index() % 2 == 1:
 				#table_line.set_custom_bg_color(i,Color(0.15, 0.15, 0.15, 1),false)

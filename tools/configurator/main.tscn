@@ -273,12 +273,11 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_styles/tab_selected = SubResource("StyleBoxFlat_co0k7")
 tab_alignment = 1
-current_tab = 3
+current_tab = 0
 script = ExtResource("3_id6l4")
 
 [node name="GLOBALS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 script = ExtResource("4_2jqfc")
 metadata/_tab_index = 0
@@ -935,6 +934,7 @@ disabled = true
 text = "TK_MULTIFILE"
 
 [node name="SETTINGS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
 script = ExtResource("54_bxhvn")
 metadata/_tab_index = 3

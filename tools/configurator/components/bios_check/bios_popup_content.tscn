@@ -40,4 +40,3 @@ columns = 5
 column_titles_visible = true
 allow_reselect = true
 allow_rmb_select = true
-select_mode = 1
