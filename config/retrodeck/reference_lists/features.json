@@ -780,6 +780,9 @@
     "x68000": {
       "name": "Sharp X68000"
     },
+    "xbox360": {
+      "name": "Microsoft Xbox 360"
+    },
     "xbox": {
       "name": "Microsoft Xbox"
     },
@@ -1138,6 +1141,12 @@
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_about/what-is-retrodeck/",
       "system": "portmaster",
       "launch": "PortMaster"
+    },
+    "xenia": {
+      "description": "Xenia Canary Xbox360 Emulator",
+      "name": "Xenia Canary",
+      "system": "xbox360",
+      "launch": "xenia-canary"
     }
   }
 }
