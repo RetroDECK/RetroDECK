@@ -98,19 +98,58 @@ func multi_state(section: String, state: String) -> String:
 		state = "mixed"
 	return state
 		
+# func logger_bash(log_type: String, log_text: String) -> void:
+# 	# Type of log messages:
+# 	# log d - debug message: maybe in the future we can decide to hide them in main builds or if an option is toggled
+# 	# log i - normal informational message
+# 	# log w - waring: something is not expected but it's not a big deal
+# 	# log e - error: something broke
+# 	var log_header_text = "gdc_"
+# 	log_header_text+=log_text
+# 	log_parameters = ["log", log_type, log_header_text]
+# 	log_result = await run_thread_command(wrapper_command,log_parameters, false)
+# 	#log_result = await run_thread_command("find",["$HOME", "-name", "*.xml","-print"], false)
+# 	#print (log_result["exit_code"])
+# 	#print (log_result["output"])
+
 func logger(log_type: String, log_text: String) -> void:
-	# Type of log messages:
-	# log d - debug message: maybe in the future we can decide to hide them in main builds or if an option is toggled
-	# log i - normal informational message
-	# log w - waring: something is not expected but it's not a big deal
-	# log e - error: something broke
-	var log_header_text = "gdc_"
-	log_header_text+=log_text
-	log_parameters = ["log", log_type, log_header_text]
-	log_result = await run_thread_command(wrapper_command,log_parameters, false)
-	#log_result = await run_thread_command("find",["$HOME", "-name", "*.xml","-print"], false)
-	#print (log_result["exit_code"])
-	#print (log_result["output"])
+	var log_dir_path: String = "/var/config/retrodeck/logs/"
+	var log_path: String = '/var/config/retrodeck/logs/gd_logs.log'
+
+	var log_dir: DirAccess = DirAccess.open(log_dir_path)
+	var log_file: FileAccess = FileAccess.open(log_path, FileAccess.WRITE)
+
+	var log_line: String = "GD "
+	match log_type:
+		'w':
+			log_line += "Warning "
+			print("Warning, mate")
+		'e':
+			log_line += "Error "
+			print("Error, mate")
+		'i':
+			log_line += "Info "
+			print("Info, mate")
+		'd':
+			log_line += "Debug "
+			print("Debug, mate")
+		_:
+			print("No idea, mate")
+	log_line += log_text
+	print(log_line)
+	
+	if not log_dir:
+		log_dir = DirAccess.open("res://") #open something valid to create an instance
+		if log_dir.make_dir_recursive(log_dir_path) != OK:
+			print("Something wrong with log directory")
+			return
+
+	if log_file:
+		log_file.seek_end()
+		log_file.store_line(log_line)
+		log_file.close()
+	else:
+		print("Something wrong with log file")
 	
 func array_to_string(arr: Array) -> String:
 	var text: String
