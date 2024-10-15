@@ -113,8 +113,12 @@ func multi_state(section: String, state: String) -> String:
 # 	#print (log_result["output"])
 
 func logger(log_type: String, log_text: String) -> void:
+	var log_dir_path: String = "/var/config/retrodeck/logs/"
 	var log_path: String = '/var/config/retrodeck/logs/gd_logs.log'
+
+	var log_dir: DirAccess = DirAccess.open(log_dir_path)
 	var log_file: FileAccess = FileAccess.open(log_path, FileAccess.WRITE)
+
 	var log_line: String = "GD "
 	match log_type:
 		'w':
@@ -133,14 +137,19 @@ func logger(log_type: String, log_text: String) -> void:
 			print("No idea, mate")
 	log_line += log_text
 	print(log_line)
+	
+	if not log_dir:
+		log_dir = DirAccess.open("res://") #open something valid to create an instance
+		if log_dir.make_dir_recursive(log_dir_path) != OK:
+			print("Something wrong with log directory")
+			return
+
 	if log_file:
 		log_file.seek_end()
 		log_file.store_line(log_line)
 		log_file.close()
 	else:
 		print("Something wrong with log file")
-
-# logger("e", "Could not open file: %s" % file_path)
 	
 func array_to_string(arr: Array) -> String:
 	var text: String
