@@ -49,6 +49,7 @@ build_preset_list_options() {
   current_disabled_systems=()
   changed_systems=()
   changed_presets=()
+  all_systems=()
   local section_results=$(sed -n '/\['"$preset"'\]/, /\[/{ /\['"$preset"'\]/! { /\[/! p } }' $rd_conf | sed '/^$/d')
 
   while IFS= read -r config_line
