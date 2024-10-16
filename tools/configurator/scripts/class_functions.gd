@@ -1,6 +1,7 @@
 class_name ClassFunctions 
 
 extends Control
+@onready var main_scene = get_tree().root.get_node("Control")
 var log_result: Dictionary
 var log_parameters: Array
 const globals_sh_file_path: String = "/app/libexec/global.sh"
@@ -50,6 +51,7 @@ var current_state: String = ""
 
 func _ready():
 	read_values_states()
+	
 
 func read_values_states() -> void:
 	var config = data_handler.parse_config_to_json(config_file_path)
@@ -117,26 +119,26 @@ func logger(log_type: String, log_text: String) -> void:
 	var log_path: String = '/var/config/retrodeck/logs/gd_logs.log'
 
 	var log_dir: DirAccess = DirAccess.open(log_dir_path)
-	var log_file: FileAccess = FileAccess.open(log_path, FileAccess.WRITE)
+	var log_file: FileAccess = FileAccess.open(log_path, FileAccess.READ_WRITE)
 
 	var log_line: String = "GD "
 	match log_type:
 		'w':
 			log_line += "Warning "
-			print("Warning, mate")
+			#print("Warning, mate")
 		'e':
 			log_line += "Error "
-			print("Error, mate")
+			#print("Error, mate")
 		'i':
 			log_line += "Info "
-			print("Info, mate")
+			#print("Info, mate")
 		'd':
 			log_line += "Debug "
-			print("Debug, mate")
-		_:
-			print("No idea, mate")
+			#print("Debug, mate")
+		#_:
+			#print("No idea, mate")
 	log_line += log_text
-	print(log_line)
+	#print(log_line)
 	
 	if not log_dir:
 		log_dir = DirAccess.open("res://") #open something valid to create an instance
@@ -353,13 +355,17 @@ func update_global(button: Button, preset: String, state: bool) -> void:
 			if ask_to_exit_state != "mixed":
 				ask_to_exit_state = str(state)
 				result.append_array(data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state)))
-				change_global(result, button, ask_to_exit_state)
+				await change_global(result, button, ask_to_exit_state)
 		"border_button":
 			if border_state != "mixed":
 				border_state = str(state)
 				result.append_array(data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state)))
-				change_global(result, button, border_state)
+				await change_global(result, button, border_state)
 			if widescreen_state == "true" or widescreen_state == "mixed":
+				var button_tmp = main_scene.get_node("%widescreen_button")
+				#Remove last array item or tries to append again
+				result.clear()
+				result.append("build_preset_config")
 				config_section = data_handler.get_elements_in_section(config_file_path, "widescreen")
 				widescreen_state = "false"
 				result.append_array(data_handler.change_all_cfg_values(config_file_path, config_section, "widescreen", widescreen_state))
@@ -368,12 +374,16 @@ func update_global(button: Button, preset: String, state: bool) -> void:
 			if widescreen_state != "mixed":
 				widescreen_state = str(state)
 				result.append_array(data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state)))
-				change_global(result, button, widescreen_state)
+				await change_global(result, button, widescreen_state)
 			if border_state == "true" or border_state == "mixed":
+				var button_tmp = main_scene.get_node("%border_button")
+				#Remove last array item or tries to append again
+				result.clear()
+				result.append("build_preset_config")
 				config_section = data_handler.get_elements_in_section(config_file_path, "borders")
 				border_state = "false"
 				result.append_array(data_handler.change_all_cfg_values(config_file_path, config_section, "borders", border_state))
-				change_global(result, button, border_state)
+				change_global(result, button_tmp, border_state)
 		"quick_rewind_button":
 			if quick_rewind_state != "mixed":
 				quick_rewind_state = str(state)
