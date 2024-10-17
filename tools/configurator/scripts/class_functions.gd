@@ -98,6 +98,20 @@ func multi_state(section: String, state: String) -> String:
 		state = "mixed"
 	return state
 		
+# func logger_bash(log_type: String, log_text: String) -> void:
+# 	# Type of log messages:
+# 	# log d - debug message: maybe in the future we can decide to hide them in main builds or if an option is toggled
+# 	# log i - normal informational message
+# 	# log w - waring: something is not expected but it's not a big deal
+# 	# log e - error: something broke
+# 	var log_header_text = "gdc_"
+# 	log_header_text+=log_text
+# 	log_parameters = ["log", log_type, log_header_text]
+# 	log_result = await run_thread_command(wrapper_command,log_parameters, false)
+# 	#log_result = await run_thread_command("find",["$HOME", "-name", "*.xml","-print"], false)
+# 	#print (log_result["exit_code"])
+# 	#print (log_result["output"])
+
 func logger(log_type: String, log_text: String) -> void:
 	var log_dir_path: String = "/var/config/retrodeck/logs/"
 	var log_path: String = '/var/config/retrodeck/logs/gd_logs.log'
