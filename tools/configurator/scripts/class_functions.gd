@@ -103,32 +103,49 @@ func logger(log_type: String, log_text: String) -> void:
 	var log_path: String = '/var/config/retrodeck/logs/gd_logs.log'
 
 	var log_dir: DirAccess = DirAccess.open(log_dir_path)
-	var log_file: FileAccess = FileAccess.open(log_path, FileAccess.READ_WRITE)
+	var log_file: FileAccess
 
-	var log_line: String = "GD "
+	var log_header: String = " GD "
+
+	var datetime = Time.get_datetime_dict_from_system()
+	var msec = Time.get_ticks_msec() #very very fake ms, TODO
+
+	var timestamp: String = "[%d-%02d-%02d %02d:%02d:%02d.%03d]" % [
+	datetime.year, datetime.month, datetime.day, 
+	datetime.hour, datetime.minute, datetime.second, msec] # fake ms
+
+	var log_line: String = timestamp + log_header
+
 	match log_type:
 		'w':
-			log_line += "Warning "
+			log_line += "[Warning] "
 			# print("Warning, mate")
 		'e':
-			log_line += "Error "
+			log_line += "[Error] "
 			# print("Error, mate")
 		'i':
-			log_line += "Info "
+			log_line += "[Info] "
 			# print("Info, mate")
 		'd':
-			log_line += "Debug "
+			log_line += "[Debug] "
 			# print("Debug, mate")
 		_:
+			log_line += " "
 			print("No idea, mate")
 	log_line += log_text
-	print(log_line)
+	# print(log_line)
 	
 	if not log_dir:
 		log_dir = DirAccess.open("res://") #open something valid to create an instance
+		print(log_dir.make_dir_recursive(log_dir_path))
 		if log_dir.make_dir_recursive(log_dir_path) != OK:
 			print("Something wrong with log directory")
 			return
+
+	if not FileAccess.open(log_path, FileAccess.READ): 
+		log_file = FileAccess.open(log_path, FileAccess.WRITE_READ) # to create a file if not there
+	else:
+		log_file = FileAccess.open(log_path, FileAccess.READ_WRITE) # to not truncate
 
 	if log_file:
 		log_file.seek_end()
