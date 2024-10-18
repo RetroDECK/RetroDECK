@@ -19,74 +19,73 @@
 log() {
   if [[ ! $logging_level == "none" ]]; then
 
-  local level="$1"
-  local message="$2"
-  local timestamp="$(date +[%Y-%m-%d\ %H:%M:%S.%3N])"
-  local colorize_terminal
+    local level="$1"
+    local message="$2"
+    local timestamp="$(date +[%Y-%m-%d\ %H:%M:%S.%3N])"
+    local colorize_terminal
 
-  # Use specified logfile or default to retrodeck.log
-  local logfile
-  if [ -n "$3" ]; then
-    logfile="$3"
-  else
-    logfile="$rd_logs_folder/retrodeck.log"
-  fi
+    # Use specified logfile or default to retrodeck.log
+    local logfile
+    if [ -n "$3" ]; then
+      logfile="$3"
+    else
+      logfile="$rd_logs_folder/retrodeck.log"
+    fi
 
-  # Check if the shell is sh (not bash or zsh) to avoid colorization
-  if [ "${SHELL##*/}" = "sh" ]; then
-    colorize_terminal=false
-  else
-    colorize_terminal=true
-  fi
+    # Check if the shell is sh (not bash or zsh) to avoid colorization
+    if [ "${SHELL##*/}" = "sh" ]; then
+      colorize_terminal=false
+    else
+      colorize_terminal=true
+    fi
 
-  case "$level" in
-    w) 
-      if [ "$colorize_terminal" = true ]; then
-        # Warning (yellow) for terminal
-        colored_message="\e[33m[WARN] $message\e[0m"
-      else
-        # Warning (no color for sh) for terminal
-        colored_message="$timestamp [WARN] $message"
-      fi
-      # Write to log file without colorization
-      log_message="$timestamp [WARN] $message"
-      ;;
-    e) 
-      if [ "$colorize_terminal" = true ]; then
-        # Error (red) for terminal
-        colored_message="\e[31m[ERROR] $message\e[0m"
-      else
-        # Error (no color for sh) for terminal
-        colored_message="$timestamp [ERROR] $message"
-      fi
-      # Write to log file without colorization
-      log_message="$timestamp [ERROR] $message"
-      ;;
-    i) 
-      # Write to log file without colorization for info message
-      log_message="$timestamp [INFO] $message"
-      colored_message=$log_message
-      ;;
-    d) 
-      if [ "$colorize_terminal" = true ]; then
-        # Debug (green) for terminal
-        colored_message="\e[32m[DEBUG] $message\e[0m"
-      else
-        # Debug (no color for sh) for terminal
-        colored_message="$timestamp [DEBUG] $message"
-      fi
-      # Write to log file without colorization
-      log_message="$timestamp [DEBUG] $message"
-      ;;
-    *) 
-      # Default (no color for other shells) for terminal
-      colored_message="$timestamp $message"
-      # Write to log file without colorization
-      log_message="$timestamp $message"
-      ;;
-  esac
+    case "$level" in
+      d) 
+        if [ "$colorize_terminal" = true ]; then
+          # Debug (green) for terminal
+          colored_message="\e[32m[DEBUG] $message\e[0m"
+        else
+          # Debug (no color for sh) for terminal
+          colored_message="$timestamp [DEBUG] $message"
+        fi
+        # Write to log file without colorization
+        log_message="$timestamp [DEBUG] $message"
+        ;;
+      e) 
+        if [ "$colorize_terminal" = true ]; then
+          # Error (red) for terminal
+          colored_message="\e[31m[ERROR] $message\e[0m"
+        else
+          # Error (no color for sh) for terminal
+          colored_message="$timestamp [ERROR] $message"
+        fi
+        # Write to log file without colorization
+        log_message="$timestamp [ERROR] $message"
+        ;;
+      w) 
+        if [ "$colorize_terminal" = true ]; then
+          # Warning (yellow) for terminal
+          colored_message="\e[33m[WARN] $message\e[0m"
+        else
+          # Warning (no color for sh) for terminal
+          colored_message="$timestamp [WARN] $message"
+        fi
+        # Write to log file without colorization
+        log_message="$timestamp [WARN] $message"
+        ;;
+      i) 
+        # Write to log file without colorization for info message
+        log_message="$timestamp [INFO] $message"
+        colored_message=$log_message
+        ;;
+      *) 
+        # Default (no color for other shells) for terminal
+        colored_message="$timestamp $message"
+        # Write to log file without colorization
+        log_message="$timestamp $message"
+        ;;
+    esac
 
-  
     # Display the message in the terminal
     echo -e "$colored_message" >&2
 
