@@ -66,6 +66,7 @@ prepare_component() {
       set_setting_value "$es_settings" "UserThemeDirectory" "$themes_folder" "es_settings"
       dir_prep "$rdhome/ES-DE/gamelists" "/var/config/ES-DE/gamelists"
       dir_prep "$rdhome/ES-DE/collections" "/var/config/ES-DE/collections"
+      dir_prep "$rdhome/ES-DE/custom_systems" "/var/config/ES-DE/custom_systems"
       dir_prep "$rd_logs_folder/ES-DE" "$es_source_logs"
       log d "Generating roms system folders"
       #es-de --home /var/config/ES-DE --create-system-dirs
@@ -871,6 +872,21 @@ prepare_component() {
     sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "/var/config/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON
     sed -i 's#RETRODECKROMSDIR#'$roms_folder'#g' "/var/config/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON
     sed -i 's#RETRODECKSAVESDIR#'$saves_folder'#g' "/var/config/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON
+  fi
+
+  if [[ "$component" =~ ^(portmaster|all)$ ]]; then
+  component_found="true"
+    # TODO: MultiUser
+    log i "----------------------"
+    log i "Prepearing PortMaster"
+    log i "----------------------"
+
+    rm -rf "/var/data/PortMaster"
+    unzip "/app/retrodeck/PortMaster.zip" -d "/var/data/"
+    cp -f "/var/data/PortMaster/retrodeck/PortMaster.txt" "/var/data/PortMaster/PortMaster.sh"
+    chmod +x "/var/data/PortMaster/PortMaster.sh"
+    rm -f "$roms_folder/portmaster/PortMaster.sh"
+    install -Dm755 "/var/data/PortMaster/PortMaster.sh" "$roms_folder/portmaster/PortMaster.sh"
   fi
 
   if [[ "$component" =~ ^(ruffle|all)$ ]]; then

@@ -168,6 +168,7 @@ find_system_commands() {
 substitute_placeholders() {
     local cmd="$1"
     log d "Substitute placeholder: working on $cmd"
+    game=$(echo "$game" | sed "s/'/'\\\\''/g") # escaping internal '
     local rom_path="$game"
     local rom_dir=$(dirname "$rom_path")
     
@@ -193,6 +194,8 @@ substitute_placeholders() {
     cmd="${cmd//"%FILENAME%"/"'$file_name'"}"
     cmd="${cmd//"%ROMRAW%"/"'$rom_raw'"}"
     cmd="${cmd//"%ROMPATH%"/"'$rom_dir'"}"
+    cmd="${cmd//"%ENABLESHORTCUTS%"/""}"
+    cmd="${cmd//"%EMULATOR_OS-SHELL%"/"/bin/sh"}"
     
     # Ensure paths are quoted correctly
     cmd="${cmd//"%ROM%"/"'$rom_path'"}"

@@ -535,21 +535,22 @@ modules:
         url: https://github.com/RetroDECK/org.zdoom.GZDoom/releases/latest/download/RetroDECK-gzdoom-Artifact.tar.gz
         sha256: RETRODECKGZDOOMLATEST
 
+  # TEMPORARLY DISABLED
   # Ryujinx Appimage
   # https://ryujinx.org/download
 
   # This version was reported as working with symlinks: https://discord.com/channels/951662718102962256/951715885968654418/1264882000658169866
-  - name: Ryujinx-reported-working-version
-    buildsystem: simple
-    build-commands:
-      - |
-        tar -zxvf *.tar.gz
-        mv -v publish ${FLATPAK_DEST}/ryujinx
-        ln -sv ${FLATPAK_DEST}/ryujinx/Ryujinx ${FLATPAK_DEST}/bin/Ryujinx.sh
-    sources:
-      - type: file
-        url: https://github.com/Ryujinx/release-channel-master/releases/download/1.1.1297/ryujinx-1.1.1297-linux_x64.tar.gz
-        sha256: 28b38754e7d2e92083b313b23278c180ae54ac025edbbd0276ec03baec0cec0f
+  # - name: Ryujinx-reported-working-version
+  #   buildsystem: simple
+  #   build-commands:
+  #     - |
+  #       tar -zxvf *.tar.gz
+  #       mv -v publish ${FLATPAK_DEST}/ryujinx
+  #       ln -sv ${FLATPAK_DEST}/ryujinx/Ryujinx ${FLATPAK_DEST}/bin/Ryujinx.sh
+  #   sources:
+  #     - type: file
+  #       url: https://github.com/Ryujinx/release-channel-master/releases/download/1.1.1297/ryujinx-1.1.1297-linux_x64.tar.gz
+  #       sha256: 28b38754e7d2e92083b313b23278c180ae54ac025edbbd0276ec03baec0cec0f
 
   # XEMU
   # https://xemu.app/docs/download/#download-for-linux
@@ -589,6 +590,33 @@ modules:
         url: https://github.com/RetroDECK/MAME/releases/latest/download/RetroDECK-MAME-Artifact.tar.gz
         sha256: RETRODECKMAMELATEST
 
+  # PortMaster
+
+  - name: PortMaster
+    buildsystem: simple
+    build-commands:
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/PortMaster/"
+      - install -Dm755 "PortMaster" "${FLATPAK_DEST}/bin/PortMaster"
+      - install -Dm755 "harbourmaster" "${FLATPAK_DEST}/bin/harbourmaster"
+      - cp PortMaster.zip "${FLATPAK_DEST}/retrodeck/PortMaster.zip"
+    sources:
+      - type: file
+        url: https://github.com/PortsMaster/PortMaster-GUI/releases/latest/download/retrodeck.portmaster.zip
+        sha256: PORTMASTERLATESTSHA
+        dest-filename: PortMaster.zip
+      - type: script
+        commands:
+          - |
+            #!/bin/bash
+            "/var/data/PortMaster/PortMaster.sh" "$@"
+        dest-filename: PortMaster
+      - type: script
+        commands:
+          - |
+            #!/bin/bash
+            "/var/data/PortMaster/harbourmaster" "$@"
+        dest-filename: harbourmaster
+
   # ES-DE
 
   - name: ES-DE
@@ -600,6 +628,7 @@ modules:
       - cp -r files/* "${FLATPAK_DEST}"
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
+      # Testing the new feat/update-3.1.0
       - type: archive
         url: https://github.com/RetroDECK/ES-DE/releases/latest/download/RetroDECK-ES-DE-Artifact.tar.gz
         sha256: RETRODECKESDELATEST

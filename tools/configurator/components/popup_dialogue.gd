@@ -1,8 +1,8 @@
 extends Control
 
-@onready var custom_theme: Theme = get_tree().current_scene.custom_theme
 var command: String
 var parameters: Array
+@onready var custom_theme: Theme = get_tree().current_scene.custom_theme
 
 func _ready():
 	$".".theme = custom_theme
