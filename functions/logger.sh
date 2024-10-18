@@ -17,6 +17,7 @@
 # log i "par" rekku.log -> logs an information with message in the specified log file inside the logs folder retrodeck/logs/rekku.log
 
 log() {
+  if [[ ! $logging_level == "none" ]]; then
 
   local level="$1"
   local message="$2"
@@ -85,7 +86,7 @@ log() {
       ;;
   esac
 
-  if [[ ! $logging_level == "none" ]]; then
+  
     # Display the message in the terminal
     echo -e "$colored_message" >&2
 
