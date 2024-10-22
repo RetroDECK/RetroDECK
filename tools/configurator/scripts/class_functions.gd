@@ -119,12 +119,13 @@ func logger_godot(log_type: String, log_text: String) -> void:
 
 	var log_header: String = " GD "
 
-	var datetime = Time.get_datetime_dict_from_system()
-	var msec = Time.get_ticks_msec() #very very fake ms, TODO
+	var datetime: Dictionary = Time.get_datetime_dict_from_system()
+	var unixtime: float = Time.get_unix_time_from_system()
+	var msec: int = (unixtime - floor(unixtime)) * 1000 # finally, real ms! Thanks, monkeyx
 
 	var timestamp: String = "[%d-%02d-%02d %02d:%02d:%02d.%03d]" % [
 	datetime.year, datetime.month, datetime.day,
-	datetime.hour, datetime.minute, datetime.second, msec] # fake ms
+	datetime.hour, datetime.minute, datetime.second, msec] # real ms!!
 
 	var log_line: String = timestamp + log_header
 
