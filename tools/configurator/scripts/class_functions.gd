@@ -1,6 +1,9 @@
 class_name ClassFunctions 
 
 extends Control
+
+# Test comment
+
 @onready var main_scene = get_tree().root.get_node("Control")
 var log_result: Dictionary
 var log_parameters: Array
