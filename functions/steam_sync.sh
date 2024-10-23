@@ -116,6 +116,7 @@ else
   $command
 fi
 EOF
+          chmod +x "$launcher"
         else
           log d "$launcher desktop file already exists"
           mv "$launcher_tmp" "$launcher"
@@ -131,7 +132,7 @@ EOF
     remove_from_steam
   else
     log d "Updating game list"
-    #steam-rom-manager add
+    steam-rom-manager add
   fi
 
   log i "Steam Sync: completed"
