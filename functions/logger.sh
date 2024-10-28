@@ -17,82 +17,91 @@
 # log i "par" rekku.log -> logs an information with message in the specified log file inside the logs folder retrodeck/logs/rekku.log
 
 log() {
+  if [[ ! $logging_level == "none" ]]; then
 
-  local level="$1"
-  local message="$2"
-  local timestamp="$(date +[%Y-%m-%d\ %H:%M:%S.%3N])"
-  local colorize_terminal
+    local level="$1"
+    local message="$2"
+    local timestamp="$(date +[%Y-%m-%d\ %H:%M:%S.%3N])"
+    local colorize_terminal
 
-  # Use specified logfile or default to retrodeck.log
-  local logfile
-  if [ -n "$3" ]; then
-    logfile="$3"
-  else
-    logfile="$rd_logs_folder/retrodeck.log"
+    # Use specified logfile or default to retrodeck.log
+    local logfile
+    if [ -n "$3" ]; then
+      logfile="$3"
+    else
+      logfile="$rd_logs_folder/retrodeck.log"
+    fi
+
+    # Check if the shell is sh (not bash or zsh) to avoid colorization
+    if [ "${SHELL##*/}" = "sh" ]; then
+      colorize_terminal=false
+    else
+      colorize_terminal=true
+    fi
+
+    case "$level" in
+      d)
+        if [[ $logging_level == "debug" ]]; then
+          if [ "$colorize_terminal" = true ]; then
+            # Debug (green) for terminal
+            colored_message="\e[32m[DEBUG] $message\e[0m"
+          else
+            # Debug (no color for sh) for terminal
+            colored_message="$timestamp [DEBUG] $message"
+          fi
+          # Write to log file without colorization
+          log_message="$timestamp [DEBUG] $message"
+        fi
+        ;;
+      e) 
+        if [[ $logging_level == "debug" || $logging_level == "error" ]]; then
+          if [ "$colorize_terminal" = true ]; then
+            # Error (red) for terminal
+            colored_message="\e[31m[ERROR] $message\e[0m"
+          else
+            # Error (no color for sh) for terminal
+            colored_message="$timestamp [ERROR] $message"
+          fi
+          # Write to log file without colorization
+          log_message="$timestamp [ERROR] $message"
+        fi
+        ;;
+      w)
+        if [[ $logging_level == "debug" || $logging_level == "error" || $logging_level == "warn" ]]; then
+          if [ "$colorize_terminal" = true ]; then
+            # Warning (yellow) for terminal
+            colored_message="\e[33m[WARN] $message\e[0m"
+          else
+            # Warning (no color for sh) for terminal
+            colored_message="$timestamp [WARN] $message"
+          fi
+          # Write to log file without colorization
+          log_message="$timestamp [WARN] $message"
+        fi
+        ;;
+      i)
+        if [[ $logging_level == "debug" || $logging_level == "error" || $logging_level == "warn" || $logging_level == "info" ]]; then
+          # Write to log file without colorization for info message
+          log_message="$timestamp [INFO] $message"
+          colored_message=$log_message
+        fi
+        ;;
+      *)
+        # Default (no color for other shells) for terminal
+        colored_message="$timestamp $message"
+        # Write to log file without colorization
+        log_message="$timestamp $message"
+        ;;
+    esac
+
+    # Display the message in the terminal
+    echo -e "$colored_message" >&2
+
+    # Write the log message to the log file
+    if [ ! -f "$logfile" ]; then
+      echo "$timestamp [WARN] Log file not found in \"$logfile\", creating it" >&2
+      touch "$logfile"
+    fi
+    echo "$log_message" >> "$logfile"
   fi
-
-  # Check if the shell is sh (not bash or zsh) to avoid colorization
-  if [ "${SHELL##*/}" = "sh" ]; then
-    colorize_terminal=false
-  else
-    colorize_terminal=true
-  fi
-
-  case "$level" in
-    w) 
-      if [ "$colorize_terminal" = true ]; then
-        # Warning (yellow) for terminal
-        colored_message="\e[33m[WARN] $message\e[0m"
-      else
-        # Warning (no color for sh) for terminal
-        colored_message="$timestamp [WARN] $message"
-      fi
-      # Write to log file without colorization
-      log_message="$timestamp [WARN] $message"
-      ;;
-    e) 
-      if [ "$colorize_terminal" = true ]; then
-        # Error (red) for terminal
-        colored_message="\e[31m[ERROR] $message\e[0m"
-      else
-        # Error (no color for sh) for terminal
-        colored_message="$timestamp [ERROR] $message"
-      fi
-      # Write to log file without colorization
-      log_message="$timestamp [ERROR] $message"
-      ;;
-    i) 
-      # Write to log file without colorization for info message
-      log_message="$timestamp [INFO] $message"
-      colored_message=$log_message
-      ;;
-    d) 
-      if [ "$colorize_terminal" = true ]; then
-        # Debug (green) for terminal
-        colored_message="\e[32m[DEBUG] $message\e[0m"
-      else
-        # Debug (no color for sh) for terminal
-        colored_message="$timestamp [DEBUG] $message"
-      fi
-      # Write to log file without colorization
-      log_message="$timestamp [DEBUG] $message"
-      ;;
-    *) 
-      # Default (no color for other shells) for terminal
-      colored_message="$timestamp $message"
-      # Write to log file without colorization
-      log_message="$timestamp $message"
-      ;;
-  esac
-
-  # Display the message in the terminal
-  echo -e "$colored_message" >&2
-
-  # Write the log message to the log file
-  if [ ! -f "$logfile" ]; then
-    echo "$timestamp [WARN] Log file not found in \"$logfile\", creating it" >&2
-    touch "$logfile"
-  fi
-  echo "$log_message" >> "$logfile"
-
 }
