@@ -1132,6 +1132,11 @@
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_es_de/esde-guide/.",
       "launch": "es-de"
     },
+    "steam-rom-manager": {
+      "description": "Steam ROM Manager (used to sync RetroDECK favorites with Steam)",
+      "name": "Steam ROM Manager",
+      "launch": "steam-rom-manager"
+    },
     "portmaster": {
       "description": "PortMaster",
       "name": "PortMaster",
