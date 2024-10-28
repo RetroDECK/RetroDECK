@@ -24,14 +24,13 @@ func _input(event):
 		get_tree().quit()
 	
 func _on_cancel_pressed():
-	class_functions.log_parameters[2] = class_functions.log_text + "Exited dialogue"
-	class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
+	class_functions.logger("d", "Exited dialogue")
 	get_tree().quit()
 
 func _on_ok_button_pressed() -> void:
-	class_functions.log_parameters[2] = class_functions.log_text + "Command to run:- " + command + " " + str(parameters)
-	class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
+	class_functions.logger("d", "Command to run " + command  + " " + str(parameters))
 	var result = class_functions.execute_command(command,parameters , false)
-	class_functions.log_parameters[2] = class_functions.log_text + "Exit code: " + str(result["exit_code"])
+	class_functions.logger("d", "Exit code: " + str(result["exit_code"]))
 	%content_rtl.text = result["output"]
-	class_functions.execute_command(class_functions.wrapper_command,class_functions.log_parameters, false)
+	#get_tree().quit()
+	

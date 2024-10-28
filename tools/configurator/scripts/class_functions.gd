@@ -1,6 +1,10 @@
 class_name ClassFunctions 
 
 extends Control
+
+# Test comment
+
+@onready var main_scene = get_tree().root.get_node("Control")
 var log_result: Dictionary
 var log_parameters: Array
 const globals_sh_file_path: String = "/app/libexec/global.sh"
@@ -97,21 +101,70 @@ func multi_state(section: String, state: String) -> String:
 	else:
 		state = "mixed"
 	return state
-		
+
 func logger(log_type: String, log_text: String) -> void:
-	# Type of log messages:
-	# log d - debug message: maybe in the future we can decide to hide them in main builds or if an option is toggled
-	# log i - normal informational message
-	# log w - waring: something is not expected but it's not a big deal
-	# log e - error: something broke
 	var log_header_text = "gdc_"
 	log_header_text+=log_text
 	log_parameters = ["log", log_type, log_header_text]
 	log_result = await run_thread_command(wrapper_command,log_parameters, false)
-	#log_result = await run_thread_command("find",["$HOME", "-name", "*.xml","-print"], false)
-	#print (log_result["exit_code"])
-	#print (log_result["output"])
-	
+
+func logger_godot(log_type: String, log_text: String) -> void:
+	var log_dir_path: String = "/var/config/retrodeck/logs/"
+	var log_path: String = '/var/config/retrodeck/logs/gd_logs.log'
+
+	var log_dir: DirAccess = DirAccess.open(log_dir_path)
+	var log_file: FileAccess
+
+	var log_header: String = " GD "
+
+	var datetime: Dictionary = Time.get_datetime_dict_from_system()
+	var unixtime: float = Time.get_unix_time_from_system()
+	var msec: int = (unixtime - floor(unixtime)) * 1000 # finally, real ms! Thanks, monkeyx
+
+	var timestamp: String = "[%d-%02d-%02d %02d:%02d:%02d.%03d]" % [
+	datetime.year, datetime.month, datetime.day,
+	datetime.hour, datetime.minute, datetime.second, msec] # real ms!!
+
+	var log_line: String = timestamp + log_header
+
+	match log_type:
+		'w':
+			log_line += "[Warning] "
+			# print("Warning, mate")
+		'e':
+			log_line += "[Error] "
+			# print("Error, mate")
+		'i':
+			log_line += "[Info] "
+			# print("Info, mate")
+		'd':
+			log_line += "[Debug] "
+			# print("Debug, mate")
+		_:
+			log_line += " "
+			print("No idea, mate")
+	log_line += log_text
+	# print(log_line)
+
+	if not log_dir:
+		log_dir = DirAccess.open("res://") #open something valid to create an instance
+		print(log_dir.make_dir_recursive(log_dir_path))
+		if log_dir.make_dir_recursive(log_dir_path) != OK:
+			print("Something wrong with log directory")
+			return
+
+	if not FileAccess.open(log_path, FileAccess.READ):
+		log_file = FileAccess.open(log_path, FileAccess.WRITE_READ) # to create a file if not there
+	else:
+		log_file = FileAccess.open(log_path, FileAccess.READ_WRITE) # to not truncate
+
+	if log_file:
+		log_file.seek_end()
+		log_file.store_line(log_line)
+		log_file.close()
+	else:
+		print("Something wrong with log file")
+
 func array_to_string(arr: Array) -> String:
 	var text: String
 	for line in arr:
@@ -130,9 +183,9 @@ func execute_command(command: String, parameters: Array, console: bool) -> Dicti
 	result["exit_code"] = exit_code
 	return result
 
-func run_command_in_thread(command: String, paramaters: Array, _console: bool) -> Dictionary:
+func run_command_in_thread(command: String, paramaters: Array, console: bool) -> Dictionary:
 	var thread = Thread.new()
-	thread.start(execute_command.bind(command,paramaters,true))
+	thread.start(execute_command.bind(command,paramaters,console))
 	while thread.is_alive():
 		await get_tree().process_frame
 	return thread.wait_to_finish()
@@ -290,6 +343,7 @@ func update_global(button: Button, preset: String, state: bool) -> void:
 			quick_resume_status = state
 			result.append_array(data_handler.change_cfg_value(config_file_path, "retroarch", preset, str(state)))
 			change_global(result, button, str(quick_resume_status))
+			#var resultT: Dictionary = await run_thread_command("/home/tim/bin/mult.sh", [], false)
 		"update_notification_button":
 			update_check = state
 			result.append_array(data_handler.change_cfg_value(config_file_path, preset, "options", str(state)))
@@ -313,13 +367,17 @@ func update_global(button: Button, preset: String, state: bool) -> void:
 			if ask_to_exit_state != "mixed":
 				ask_to_exit_state = str(state)
 				result.append_array(data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state)))
-				change_global(result, button, ask_to_exit_state)
+				await change_global(result, button, ask_to_exit_state)
 		"border_button":
 			if border_state != "mixed":
 				border_state = str(state)
 				result.append_array(data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state)))
-				change_global(result, button, border_state)
+				await change_global(result, button, border_state)
 			if widescreen_state == "true" or widescreen_state == "mixed":
+				var button_tmp = main_scene.get_node("%widescreen_button")
+				#Remove last array item or tries to append again
+				result.clear()
+				result.append("build_preset_config")
 				config_section = data_handler.get_elements_in_section(config_file_path, "widescreen")
 				widescreen_state = "false"
 				result.append_array(data_handler.change_all_cfg_values(config_file_path, config_section, "widescreen", widescreen_state))
@@ -328,12 +386,16 @@ func update_global(button: Button, preset: String, state: bool) -> void:
 			if widescreen_state != "mixed":
 				widescreen_state = str(state)
 				result.append_array(data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state)))
-				change_global(result, button, widescreen_state)
+				await change_global(result, button, widescreen_state)
 			if border_state == "true" or border_state == "mixed":
+				var button_tmp = main_scene.get_node("%border_button")
+				#Remove last array item or tries to append again
+				result.clear()
+				result.append("build_preset_config")
 				config_section = data_handler.get_elements_in_section(config_file_path, "borders")
 				border_state = "false"
 				result.append_array(data_handler.change_all_cfg_values(config_file_path, config_section, "borders", border_state))
-				change_global(result, button, border_state)
+				change_global(result, button_tmp, border_state)
 		"quick_rewind_button":
 			if quick_rewind_state != "mixed":
 				quick_rewind_state = str(state)

@@ -85,7 +85,7 @@ func load_base_data() -> AppData:
 		else:
 			class_functions.logger("d","Error parsing JSON ")
 	else:
-		class_functions.logger("d","Error opening file: " + file)
+		class_functions.logger("d","Error opening file: %s" % file)
 		get_tree().quit()
 	return null
 

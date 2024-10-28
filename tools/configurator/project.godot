@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="RetroDECK Configurator"
+config/name="RetroDECKConfigurator"
 config/version="0.053"
 run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
@@ -28,6 +28,7 @@ data_handler="*res://scripts/data_handler.gd"
 window/size/viewport_width=1280
 window/size/viewport_height=800
 window/stretch/mode="canvas_items"
+window/stretch/aspect="ignore"
 
 [filesystem]
 
@@ -117,6 +118,8 @@ quit2={
 [internationalization]
 
 locale/translation_remaps={}
+locale/translations=PackedStringArray("res://translations/en_US.po")
+locale/translations_pot_files=PackedStringArray("res://main.tscn", "res://scripts/TabContainer.gd")
 
 [rendering]
 
