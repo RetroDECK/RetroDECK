@@ -420,7 +420,7 @@ modules:
         sha256: 2D258B557C17EBBA4BEA927BE4032CFCBC230C26B8F090B796DAA5935FAA4A8B
 
   # MELONDS
-  # https://github.com/melonDS-emu/melonDS/releases/latest
+  # https://github.com/RetroDECK/net.kuribo64.melonDS
 
   - name: melonds
     buildsystem: simple
@@ -437,7 +437,8 @@ modules:
         sha256: RETRODECKMELONDSLATEST
 
   # Duckstation
-  # https://github.com/stenzek/duckstation/releases/tag/preview
+  # Do not update: Legacy
+  # https://github.com/RetroDECK/Duckstation
 
   - name: duckstation
     buildsystem: simple
@@ -449,8 +450,8 @@ modules:
       - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
     sources:
       - type: file
-        url: https://github.com/stenzek/duckstation/releases/download/v0.1-6937/DuckStation-x64.AppImage
-        sha256: 8a16f034cc8b11341ed9ad382226549301736794582bdec46a5e19b3ca981e07
+        url: https://github.com/RetroDECK/Duckstation/releases/download/preview/DuckStation-x64.AppImage
+        sha256: 84777a8d0fce9acfc2ffe6a8aea352bd68a8a37f5c793d328dbaa4ff5ada5e6d
 
   # Cemu
   # https://github.com/cemu-project/Cemu/releases
