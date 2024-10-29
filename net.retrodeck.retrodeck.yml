@@ -469,8 +469,8 @@ modules:
       #TODO: do we need this wrapper? squashfs-root/apprun-hooks/linuxdeploy-plugin-gtk.sh
     sources:
       - type: file
-        url: https://github.com/cemu-project/Cemu/releases/download/v2.0-88/Cemu-2.0-88-x86_64.AppImage
-        sha256: 1af1ad5322df5fa0e2a97588c7486604daf42deb8c4d07a2b885047d9701fed0
+        url: https://github.com/cemu-project/Cemu/releases/download/v2.2/Cemu-2.2-x86_64.AppImage
+        sha256: 05ad07e3b2fb60f9c19f84c7d65c4e978bc2cf58b4b53d39fca0376227900c27
       - type: script
         commands:
           - |
