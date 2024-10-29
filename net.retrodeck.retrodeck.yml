@@ -150,6 +150,7 @@ modules:
         sha256: af986793a515d500ab2d35f8d2aecd656e764504b789b66d7e1a0b727a124c44
 
   # Steam ROM Manager - START
+  # https://github.com/flathub/com.steamgriddb.steam-rom-manager
 
   - name: zypak
     sources:
@@ -164,14 +165,13 @@ modules:
         IN_FLATPAK: 1
     build-commands:
       - install -D run.sh ${FLATPAK_DEST}/bin/steam-rom-manager
-      - cp /usr/bin/ar ${FLATPAK_DEST}/bin
-      - ar x srm.deb
+      - bsdtar -xf srm.deb data.tar.xz
       - tar xf data.tar.xz
       - mv "opt/Steam ROM Manager" "${FLATPAK_DEST}/srm"
       - rm -rf "usr/share/icons/hicolor/1024x1024"
       - cd usr; find share/icons/hicolor -type f -exec install -Dm644 "{}"
         "${FLATPAK_DEST}/{}" \;
-      - rm -r srm.deb control.tar.* data.tar.xz debian-binary usr opt
+      - rm -r srm.deb data.tar.xz usr opt
     sources:
       - type: script
         dest-filename: run.sh
@@ -179,8 +179,8 @@ modules:
           - /app/bin/zypak-wrapper.sh /app/srm/steam-rom-manager "${@}"
       - type: file
         dest-filename: srm.deb
-        url: https://github.com/SteamGridDB/steam-rom-manager/releases/download/v2.4.19/steam-rom-manager_2.4.19_amd64.deb
-        sha256: aa4f121d50612801c30b9365e05cb92a3b4a9c402974fee2b88652de8d731b0e
+        url: https://github.com/SteamGridDB/steam-rom-manager/releases/download/v2.5.29/steam-rom-manager_2.5.29_amd64.deb
+        sha256: a85369ad8b758551b74755ddb712c6bd72311693971065c9bcec1dcdec53f54a
         x-checker-data:
           type: json
           url: https://api.github.com/repos/SteamGridDB/steam-rom-manager/releases/latest
@@ -628,7 +628,6 @@ modules:
       - cp -r files/* "${FLATPAK_DEST}"
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
-      # Testing the new feat/update-3.1.0
       - type: archive
         url: https://github.com/RetroDECK/ES-DE/releases/latest/download/RetroDECK-ES-DE-Artifact.tar.gz
         sha256: RETRODECKESDELATEST
