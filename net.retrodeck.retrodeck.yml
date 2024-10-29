@@ -416,8 +416,8 @@ modules:
       #TODO: Do we need this wrapper? squashfs-root/apprun-hooks/linuxdeploy-plugin-qt-hook.sh
     sources:
       - type: file
-        url: https://github.com/RPCS3/rpcs3-binaries-linux/releases/download/build-ebcb4034119955991a17210af2a45a672fc9533d/rpcs3-v0.0.32-16685-ebcb4034_linux64.AppImage
-        sha256: 2553d56e01a3e3058fa9ceb4e1d61a07eaf2c5bba9e96b29e8923914d89f6e17
+        url: https://github.com/RPCS3/rpcs3-binaries-linux/releases/download/build-cd8954db140855101d94a33c0dd7f4d72bdf5a35/rpcs3-v0.0.33-17066-cd8954db_linux64.AppImage
+        sha256: 2D258B557C17EBBA4BEA927BE4032CFCBC230C26B8F090B796DAA5935FAA4A8B
 
   # MELONDS
   # https://github.com/melonDS-emu/melonDS/releases/latest
