@@ -567,8 +567,8 @@ modules:
       - cp -r squashfs-root/usr/* "${FLATPAK_DEST}/"
     sources:
       - type: file
-        url: https://github.com/xemu-project/xemu/releases/download/v0.7.129/xemu-v0.7.129-x86_64.AppImage
-        sha256: f680774d96a66bf1195cd133497755d43be5eda5f178457a6df32bc691dd8c74
+        url: https://github.com/xemu-project/xemu/releases/download/v0.7.132/xemu-v0.7.132-x86_64.AppImage
+        sha256: c11821d6d0632da3c51a354e9101f68e5ab2ae0e2512c6aa6c8453aef56cedba
 
   - name: xemu-dummy-hdd
     buildsystem: simple
