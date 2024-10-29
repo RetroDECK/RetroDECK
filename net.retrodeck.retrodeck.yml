@@ -357,8 +357,8 @@ modules:
       - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
     sources:
       - type: file
-        url: https://github.com/PCSX2/pcsx2/releases/download/v2.1.55/pcsx2-v2.1.55-linux-appimage-x64-Qt.AppImage
-        sha256: d08ae2fdfc1bc3a4bd264b62ceda02f1e2de87c704ee1f464e5ce52073998e33
+        url: https://github.com/PCSX2/pcsx2/releases/download/v2.1.231/pcsx2-v2.1.231-linux-appimage-x64-Qt.AppImage
+        sha256: 227c8f5a38bd0ae9c565b9350868b4f4bd27ae00cde0a598738c2bdd8ca97e88
 
   # Dolphin
   # why from source: AppImage not provided, only Flatpak
