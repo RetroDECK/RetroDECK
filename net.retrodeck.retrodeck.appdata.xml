@@ -85,7 +85,8 @@
             <p>Changes:</p>
             <ul>
                <li>Updated all the outdated emulators</li>
-               <li>Duckstation due to licencing changes is frozen at the latest possible build becoming de facto: Legacy</li>
+               <li>Duckstation due to licensing changes is frozen at the latest possible build becoming de facto: Legacy</li>
+               <li>Duckstation configured to use OpenGL as Vulkan seems to be broken</li>
                <li>New Flash system via the new emulator: Ruffle</li>
                <li>PortMaster is now included in RetroDECK!</li>
                <li>Steam Sync is now a thing: favorite your games and enable the Steam Sync in the Configurator to find them as a Steam standalone games thank to Steam Rom Manager acting like an engine</li>
