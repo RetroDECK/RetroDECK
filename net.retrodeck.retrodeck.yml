@@ -646,6 +646,7 @@ modules:
 
   # RUFFLE - START
   # https://github.com/ruffle-rs/ruffle/releases
+  
   - name: ruffle
     buildsystem: simple
     build-commands:
