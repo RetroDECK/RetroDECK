@@ -417,7 +417,7 @@ modules:
     sources:
       - type: file
         url: https://github.com/RPCS3/rpcs3-binaries-linux/releases/download/build-cd8954db140855101d94a33c0dd7f4d72bdf5a35/rpcs3-v0.0.33-17066-cd8954db_linux64.AppImage
-        sha256: 2D258B557C17EBBA4BEA927BE4032CFCBC230C26B8F090B796DAA5935FAA4A8B
+        sha256: 2d258b557c17ebba4bea927be4032cfcbc230c26b8f090b796daa5935faa4a8b
 
   # MELONDS
   # https://github.com/RetroDECK/net.kuribo64.melonDS
