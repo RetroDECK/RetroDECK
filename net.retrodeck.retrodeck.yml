@@ -274,6 +274,16 @@ modules:
         url: https://buildbot.libretro.com/nightly/linux/x86_64/RetroArch_cores.7z
         sha256: RANIGHTLYCORESPLACEHOLDER
 
+  # Citra is removed from the LibretroCores but is still available in Libretro repo
+  - name: citra-libretro-core
+    buildsystem: simple
+    build-commands:
+      - cp citra_libretro.so ${FLATPAK_DEST}/share/libretro/cores/
+    sources:
+      - type: archive
+        url: https://buildbot.libretro.com/nightly/linux/x86_64/latest/citra_libretro.so.zip
+        sha256: RACITRAPLACEHOLDER
+
   - name: retroarch-cores
     buildsystem: simple
     build-commands:
