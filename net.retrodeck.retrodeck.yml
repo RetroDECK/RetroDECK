@@ -666,7 +666,7 @@ modules:
           missing_libs=$(find "${FLATPAK_DEST}/bin" -type f -exec ldd {} + 2>/dev/null | grep "not found" | awk '{print $1}' | sort | uniq)
           
           # for some reason these libraries are not recognized as missing so we mantain this list
-          manually_imported="libpostproc.so.56 libswscale.so.6 libshaderc_shared.so.1 libbz2.so.1.0 libaio.so.1 ld-linux.so.2"
+          manually_imported="libpostproc.so.56 libswscale.so.6 libshaderc_shared.so.1 libbz2.so.1.0 libaio.so.1 ld-linux.so.2 libvpx.so.9 libzmusic.so.1"
 
           missing_libs="$missing_libs $manually_imported"
 
