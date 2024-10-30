@@ -678,20 +678,24 @@ modules:
           dest_dir="${FLATPAK_DEST}/lib"
           dest_debug_dir="${FLATPAK_DEST}/retrodeck/lib/debug"
           
-          mkdir -p "$dest_dir" "dest_debug_dir" 
+          mkdir -p "$dest_dir" "$dest_debug_dir" 
 
           copy_missing_libs() {
             local src=$1
-            local dest=$2
+            local src_debug=$2
+            local dest=$3
             for lib in $missing_libs; do
               if [[ -f "$src/$lib" ]]; then
                 cp "$src/$lib" "$dest"
                 echo "Copied \"$lib\" to \"$dest\""
+              elif [[ -f "$src_debug/$lib.debug" ]]; then
+                cp "$src_debug/$lib.debug" "$dest"
+                echo "Copied debug version of \"$lib\" to \"$dest\""
               fi
             done
           }
 
-          copy_missing_libs "$src_dir" "$dest_dir"
+          copy_missing_libs "$src_dir" "$src_debug_dir" "$dest_dir"
           copy_missing_libs "$src_debug_dir" "$dest_debug_dir"
 
           rm -rf "$src_dir"
