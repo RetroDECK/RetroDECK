@@ -11,6 +11,7 @@ done
 case "$pkg_mgr" in
   apt)
     # Aggiorna l'indice dei pacchetti, poi installa o aggiorna solo i pacchetti indicati
+    sudo add-apt-repository ppa:flatpak/stable
     sudo apt update
     sudo apt install --only-upgrade -y flatpak flatpak-builder p7zip-full xmlstarlet bzip2 curl jq
     ;;
