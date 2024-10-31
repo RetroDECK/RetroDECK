@@ -716,8 +716,11 @@ modules:
     build-commands:
 
       # This prevents appstream-compose to fail
-      - mv -n ${FLATPAK_DEST}/usr/** ${FLATPAK_DEST}/share
-      - rm -rf ${FLATPAK_DEST}/usr
+      - | 
+        if [ -d ${FLATPAK_DEST}/usr ]; then
+          mv -n ${FLATPAK_DEST}/usr/** ${FLATPAK_DEST}/share
+          rm -rf ${FLATPAK_DEST}/usr
+        fi
 
       # Initializing RO retrodeck config folder
       - mkdir -p ${FLATPAK_DEST}/retrodeck
