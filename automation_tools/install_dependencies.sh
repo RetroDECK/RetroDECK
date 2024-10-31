@@ -10,13 +10,11 @@ done
 
 case "$pkg_mgr" in
   apt)
-    # Aggiorna l'indice dei pacchetti, poi installa o aggiorna solo i pacchetti indicati
-    sudo add-apt-repository ppa:flatpak/stable
+    sudo add-apt-repository -y ppa:flatpak/stable
     sudo apt update
     sudo apt install --only-upgrade -y flatpak flatpak-builder p7zip-full xmlstarlet bzip2 curl jq
     ;;
   pacman)
-    # Aggiorna i pacchetti specificati senza influenzare il resto del sistema
     sudo pacman -Syu --needed --noconfirm flatpak flatpak-builder p7zip xmlstarlet bzip2
     ;;
   rpm-ostree)
@@ -24,7 +22,6 @@ case "$pkg_mgr" in
     exit 1
     ;;
   dnf)
-    # Aggiorna i pacchetti specificati senza influenzare il resto del sistema
     sudo dnf upgrade --refresh -y flatpak flatpak-builder p7zip p7zip-plugins xmlstarlet bzip2 curl
     ;;
   *)
