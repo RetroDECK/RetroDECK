@@ -715,6 +715,10 @@ modules:
     buildsystem: simple
     build-commands:
 
+      # This prevents appstream-compose to fail
+      - mv -n ${FLATPAK_DEST}/usr/** ${FLATPAK_DEST}/share
+      - rm -rf ${FLATPAK_DEST}/usr
+
       # Initializing RO retrodeck config folder
       - mkdir -p ${FLATPAK_DEST}/retrodeck
 
