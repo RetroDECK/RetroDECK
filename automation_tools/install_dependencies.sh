@@ -10,17 +10,21 @@ done
 
 case "$pkg_mgr" in
   apt)
-    sudo apt install -y flatpak flatpak-builder p7zip-full xmlstarlet bzip2 curl jq
+    # Aggiorna l'indice dei pacchetti, poi installa o aggiorna solo i pacchetti indicati
+    sudo apt update
+    sudo apt install --only-upgrade -y flatpak flatpak-builder p7zip-full xmlstarlet bzip2 curl jq
     ;;
   pacman)
-    sudo pacman -S --noconfirm flatpak flatpak-builder p7zip xmlstarlet bzip2
+    # Aggiorna i pacchetti specificati senza influenzare il resto del sistema
+    sudo pacman -Syu --needed --noconfirm flatpak flatpak-builder p7zip xmlstarlet bzip2
     ;;
   rpm-ostree)
     echo "When using a distro with rpm-ostree, you shouldn't build directly on the host. Try using a distrobox."
     exit 1
     ;;
   dnf)
-    sudo dnf install -y flatpak flatpak-builder p7zip p7zip-plugins xmlstarlet bzip2 curl
+    # Aggiorna i pacchetti specificati senza influenzare il resto del sistema
+    sudo dnf upgrade --refresh -y flatpak flatpak-builder p7zip p7zip-plugins xmlstarlet bzip2 curl
     ;;
   *)
     echo "Package manager $pkg_mgr not supported. Please open an issue."
