@@ -56,7 +56,7 @@ jobs:
           submodules: 'true'
         
       - name: "Install dependencies"
-        run: "automation_tools/install_dependencies.sh"    
+        run: /bin/bash | curl "https://raw.githubusercontent.com/RetroDECK/components-template/refs/heads/main/automation_tools/install_dependencies.sh"  
 
       - name: Generate cooker build ID
         run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/cooker_build_id.sh"
