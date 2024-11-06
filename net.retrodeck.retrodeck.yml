@@ -1,6 +1,6 @@
 app-id: net.retrodeck.retrodeck
 runtime: org.kde.Platform
-runtime-version: "6.8"
+runtime-version: "6.7"
 sdk: org.kde.Sdk
 base: org.electronjs.Electron2.BaseApp            # Needed for Steam ROM Manager
 base-version: "22.08"
@@ -411,23 +411,36 @@ modules:
   # RPCS3
   # https://rpcs3.net/download
 
-  - name: rpcs3
+  # - name: rpcs3
+  #   buildsystem: simple
+  #   build-commands:
+  #     - chmod +x *.AppImage
+  #     - ./*.AppImage --appimage-extract
+  #     - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug" 
+  #     - mkdir -p ${FLATPAK_DEST}/lib/ffmpeg   # Needed for a ffmpeg bufgix
+  #     - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+  #     - cp -r "squashfs-root/usr/bin/"* "${FLATPAK_DEST}/bin/"
+  #     - cp -r "squashfs-root/usr/share/"* "${FLATPAK_DEST}/share/"
+  #     #TODO: - cp -r squashfs-root/usr/optional* # maybe already included in flatpak runtime
+  #     #TODO: - cp -r squashfs-root/usr/plugins* # maybe already included in qt
+  #     #TODO: Do we need this wrapper? squashfs-root/apprun-hooks/linuxdeploy-plugin-qt-hook.sh
+  #   sources:
+  #     - type: file
+  #       url: https://github.com/RPCS3/rpcs3-binaries-linux/releases/download/build-cd8954db140855101d94a33c0dd7f4d72bdf5a35/rpcs3-v0.0.33-17066-cd8954db_linux64.AppImage
+  #       sha256: 2d258b557c17ebba4bea927be4032cfcbc230c26b8f090b796daa5935faa4a8b
+
+  - name: retrodeck-rpcs3
     buildsystem: simple
     build-commands:
-      - chmod +x *.AppImage
-      - ./*.AppImage --appimage-extract
-      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug" 
-      - mkdir -p ${FLATPAK_DEST}/lib/ffmpeg   # Needed for a ffmpeg bufgix
-      - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
-      - cp -r "squashfs-root/usr/bin/"* "${FLATPAK_DEST}/bin/"
-      - cp -r "squashfs-root/usr/share/"* "${FLATPAK_DEST}/share/"
-      #TODO: - cp -r squashfs-root/usr/optional* # maybe already included in flatpak runtime
-      #TODO: - cp -r squashfs-root/usr/plugins* # maybe already included in qt
-      #TODO: Do we need this wrapper? squashfs-root/apprun-hooks/linuxdeploy-plugin-qt-hook.sh
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
+      - cp -rL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - rm -rf "files/lib"
+      - cp -r files/* "${FLATPAK_DEST}"
+      - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
-      - type: file
-        url: https://github.com/RPCS3/rpcs3-binaries-linux/releases/download/build-cd8954db140855101d94a33c0dd7f4d72bdf5a35/rpcs3-v0.0.33-17066-cd8954db_linux64.AppImage
-        sha256: 2d258b557c17ebba4bea927be4032cfcbc230c26b8f090b796daa5935faa4a8b
+      - type: archive
+        url: https://github.com/RetroDECK/net.rpcs3.RPCS3/releases/latest/download/RetroDECK-Artifact.tar.gz
+        sha256: RETRODECKRPCS3LATEST
 
   # MELONDS
   # https://github.com/RetroDECK/net.kuribo64.melonDS
