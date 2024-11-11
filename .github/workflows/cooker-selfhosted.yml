@@ -30,7 +30,7 @@ permissions:
 jobs:
 
   Building_RetroDECK:
-    runs-on: retrodeck
+    runs-on: retrodeck-server # was just "retrodeck", temporarly disabled other runners for troubleshooting
     steps:
 
       # Circumventing this bug: https://github.com/flatpak/flatpak-builder/issues/317
