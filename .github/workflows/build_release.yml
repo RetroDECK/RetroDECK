@@ -240,6 +240,7 @@ jobs:
 
   Generate-Rekku-Token:
     uses: RetroDECK/components-template/.github/workflows/generate_rekku_token.yml@main
+    needs: Build_RetroDECK
     secrets:
       REKKU_PRIVATE_KEY: ${{ secrets.REKKU_PRIVATE_KEY }}
 
