@@ -30,8 +30,6 @@ jobs:
   # Generate Rekku Token Job
   Generate-Rekku-Token:
     uses: RetroDECK/components-template/.github/workflows/generate_rekku_token.yml@main
-    outputs:
-      rekku_token: ${{ jobs.Generate-Rekku-Token.outputs.rekku_token }}
 
   # Build RetroDECK Job
   Build_RetroDECK:
