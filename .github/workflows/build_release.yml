@@ -1,0 +1,173 @@
+name: "Build RetroDECK"
+
+on:
+  push:
+    branches:
+      - main
+      - cooker*
+      - feat*
+      - branch/cooker*
+    paths:
+      - '.github/workflows/**'
+      - 'automation_tools/**'
+      - 'config/**'
+      - 'functions/**'
+      - 'rd-submodules/**'
+      - '*.sh'
+      - 'net.retrodeck.retrodeck.yml'
+      - 'net.retrodeck.retrodeck.appdata.xml'
+  pull_request:
+    branches:
+      - main
+      - cooker*
+
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+
+  # Generate Rekku Token Job
+  Generate-Rekku-Token:
+    runs-on: ubuntu-latest
+    outputs:
+      token: ${{ steps.generate-token.outputs.token }}
+    steps:
+      - name: Generate a token for Rekku
+        id: generate-token
+        uses: RetroDECK/components-template/.github/workflows/generate_rekku_token.yml@main
+
+  # Build RetroDECK Job
+  Build_RetroDECK:
+    runs-on: retrodeck-server
+    needs: Generate-Rekku-Token
+    outputs:
+      tag: ${{ steps.set-outputs.outputs.tag }}
+      release_body: ${{ steps.set-outputs.outputs.release_body }}
+      
+    steps:
+
+      # Remove Stuck Mounts
+      - name: Remove stuck mounts
+        run: |
+          sudo umount -f /home/ubuntu/actions-runner/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles/*
+          sudo umount -f $HOME/actions-run/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles/*
+        continue-on-error: true
+
+      # Clone Repository
+      - name: Clone RetroDECK repo
+        uses: actions/checkout@v4
+        with:
+          submodules: 'true'
+
+      # Install Dependencies
+      - name: Install dependencies
+        run: curl "https://raw.githubusercontent.com/RetroDECK/components-template/main/automation_tools/install_dependencies.sh" | bash
+
+      # Generate Build ID for Cooker Branches
+      - name: Generate cooker build ID
+        if: github.ref != 'refs/heads/main'
+        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/cooker_build_id.sh"
+
+      # Get Branch Name
+      - name: Get branch name
+        id: get-branch-name
+        run: |
+          branch_name=$(echo $GITHUB_REF | sed 's|refs/heads/||')
+          echo "BRANCH_NAME=$branch_name" >> $GITHUB_ENV
+
+      # Generate Version Tag
+      - name: Generate version tag
+        id: set-outputs
+        run: |
+          source automation_tools/version_extractor.sh
+          MANIFEST_VERSION="$(fetch_manifest_version)"
+          if [[ "$GITHUB_REF" == "refs/heads/main" ]]; then
+            TAG="$MANIFEST_VERSION"
+            MAKE_LATEST=true
+          else
+            source_branch="${GITHUB_HEAD_REF//\//-}"
+            TAG="PR-$source_branch-${{ github.run_id }}"
+            MAKE_LATEST=false
+          fi
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "MAKE_LATEST=$MAKE_LATEST" >> $GITHUB_ENV
+
+      # Get Commits Since Last Release
+      - name: Get commits since last release
+        id: get-commits
+        run: |
+          LATEST_TAG=$(git describe --tags --abbrev=0 $(git rev-list --tags --max-count=1 --first-parent) || echo "")
+          if [ -z "$LATEST_TAG" ]; then
+            COMMITS=$(git log HEAD --pretty=format:"- %s")
+          else
+            COMMITS=$(git log ${LATEST_TAG}..HEAD --pretty=format:"- %s")
+          fi
+          echo "commits=$COMMITS" >> $GITHUB_OUTPUT
+
+      # Generate Release Body
+      - name: Generate release body text
+        id: generate-body
+        run: |
+          RELEASE_BODY="# Release Notes\n"
+          RELEASE_BODY+="This release is based on the commit: ${{ github.repository }}@${{ github.sha }}.\n"
+          RELEASE_BODY+="On branch [${{ env.BRANCH_NAME }}](https://github.com/RetroDECK/RetroDECK/tree/${{ env.BRANCH_NAME }}).\n\n"
+          RELEASE_BODY+="## Commits since last release\n"
+          RELEASE_BODY+="${{ steps.get-commits.outputs.commits }}\n\n"
+          echo "release_body=$RELEASE_BODY" >> $GITHUB_OUTPUT
+
+      # Build Flatpak
+      - name: Build Flatpak
+        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_only.sh"
+
+      # Create a Flatpak Bundle
+      - name: Create Bundle
+        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_bundle.sh"
+
+      # Determine if Target Repository is Main or not, in that case is a Cooker build
+      - name: Determine target repository
+        id: set-repo
+        run: |
+          if [[ "$GITHUB_REF" == "refs/heads/main" || "$GITHUB_REF" == refs/heads/feat* ]]; then
+            echo "repo_name=RetroDECK" >> $GITHUB_ENV
+          else
+            echo "repo_name=Cooker" >> $GITHUB_ENV
+
+      # Publish Release, if main and fails throws an error, if cooker continues anyway
+      - name: Publish release
+        uses: ncipollo/release-action@v1.13.0
+        with:
+          tag: ${{ steps.set-outputs.outputs.tag }}
+          name: "RetroDECK ${{ steps.set-outputs.outputs.tag }}"
+          body: ${{ steps.generate-body.outputs.release_body }}
+          artifacts: "RetroDECK.flatpak,RetroDECK.flatpak.sha,RetroDECK-Artifact.tar.gz,RetroDECK-cooker.flatpak,RetroDECK-cooker.flatpak.sha"
+          allowUpdates: true
+          makeLatest: ${{ env.MAKE_LATEST }}
+          token: ${{ needs.Generate-Rekku-Token.outputs.token }}
+          repo: "${{ env.repo_name }}"
+        continue-on-error: ${{ github.ref != 'refs/heads/main' }}
+
+      # Rewrite Tag (for Main Branch Only)
+      - name: Rewrite Tag
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git submodule deinit -f --all
+          git fetch --tags
+          if git rev-parse --verify "${{ steps.set-outputs.outputs.tag }}" >/dev/null 2>&1; then
+              git tag -d "${{ steps.set-outputs.outputs.tag }}"
+              git push --delete origin "${{ steps.set-outputs.outputs.tag }}"
+          fi
+          git tag "${{ steps.set-outputs.outputs.tag }}"
+          git push origin "${{ steps.set-outputs.outputs.tag }}"
+        env:
+          GITHUB_TOKEN: ${{ needs.Generate-Rekku-Token.outputs.token }}
+
+  # Forgejo Publish Job
+  Forgejo-publish:
+    needs: Build_RetroDECK
+    uses: ./.github/workflows/publish-on-fogejo.yml
+    with:
+      release_body: ${{ needs.Build_RetroDECK.outputs.release_body }}
+      artifacts: "RetroDECK-cooker.flatpak,RetroDECK-cooker.flatpak.sha,RetroDECK-Artifact.tar.gz"
+      tag: ${{ needs.Build_RetroDECK.outputs.tag }}
