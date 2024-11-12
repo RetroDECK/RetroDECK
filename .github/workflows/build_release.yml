@@ -90,6 +90,60 @@ jobs:
           echo "tag=$TAG" >> $GITHUB_OUTPUT
           echo "MAKE_LATEST=$MAKE_LATEST" >> $GITHUB_ENV
 
+      # if the branch is coming from a PR the tag should be manually built
+      - name: "Generate version tag and evaluating latest tag"
+        run: |
+          # Source the version extractor script to get the manifest version
+          source automation_tools/version_extractor.sh
+          MANIFEST_VERSION="$(fetch_manifest_version)"
+          echo "MANIFEST_VERSION=$MANIFEST_VERSION" >> $GITHUB_ENV
+
+          # Check if the event is related to a pull request
+          if [[ "$GITHUB_EVENT_NAME" == "pull_request" || "$GITHUB_EVENT_NAME" == "pull_request_target" ]]; then
+            # Use GITHUB_HEAD_REF to get the source branch
+            source_branch="${GITHUB_HEAD_REF}"
+
+            # Replace '/' with '-' in the branch name
+            source_branch=${source_branch//\//-}
+            # Use GITHUB_HEAD_REF to get the source branch
+            source_branch="${GITHUB_HEAD_REF}"
+
+            # Replace '/' with '-' in the branch name
+            source_branch=${source_branch//\//-}
+            echo "[DEBUG] source branch is: $source_branch"
+
+            # Generate the tag for a pull request
+            echo "TAG=PR-$source_branch-${{ env.buildid }}" >> $GITHUB_ENV
+            echo "MAKE_LATEST=false" >> $GITHUB_ENV  # Not marked as the latest cooker version if it's a feature branch
+          else
+            # Generate the tag for non-pull request branches
+            TAG="$MANIFEST_VERSION-${{ env.buildid }}"
+            echo "TAG=$TAG" >> $GITHUB_ENV
+            echo "MAKE_LATEST=true" >> $GITHUB_ENV
+          fi
+
+          # Output the manifest version and generated tag for debugging
+          echo "MANIFEST_VERSION: $MANIFEST_VERSION"
+          echo "Version TAG: $TAG"
+          echo "MAKE_LATEST: $MAKE_LATEST"
+
+      # backing up manifest in case download fails and hashes must be recalculated
+      - name: Manifest backup
+        run: "cp ${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml ${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml.bak"
+
+      - name: Run pre-build automation tasks
+        run : "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/pre_build_automation.sh"
+
+      - name: "Adding flatpak portal for automated updates (Cooker only)"
+        if: github.ref != 'refs/heads/main'
+        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/cooker_flatpak_portal_add.sh"
+
+      - name: "Updating release notes in appdata"
+        run: "automation_tools/appdata_management.sh"
+
+      - name: "[DEBUG] Outputting manifest"
+        run: cat net.retrodeck.retrodeck.yml
+
       # Get Commits Since Last Release
       - name: Get commits since last release
         id: get-commits
@@ -113,11 +167,20 @@ jobs:
           RELEASE_BODY+="${{ steps.get-commits.outputs.commits }}\n\n"
           echo "release_body=$RELEASE_BODY" >> $GITHUB_OUTPUT
 
-      # Build Flatpak
-      - name: Build Flatpak
+      # Sometimes flatpak download fails, in this case it tries a second time
+      - name: "Build flatpak: download only (retry)"
+        if: steps.flatpak-download.outcome == 'failure'
+        run: |
+          echo "Download failed, maybe some hash changed since the build start."
+          echo "Recalculating hashes and retrying download..."
+          rm -f "{GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml"
+          cp "${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml.bak" "${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml"
+          "${GITHUB_WORKSPACE}/automation_tools/pre_build_automation.sh"
+          "${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
+
+      - name: Build flatpak
         run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_only.sh"
 
-      # Create a Flatpak Bundle
       - name: Create Bundle
         run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_bundle.sh"
 
