@@ -55,10 +55,7 @@ jobs:
       - name: Clone RetroDECK repo
         uses: actions/checkout@v4
         with:
-          fetch-depth: 5           # Fetch the last 5 commits; adjust as needed
-          submodules: true         # Fetch submodules
-          submodule-fetch-depth: 5 # Fetch the last 5 commits of submodules
-          ref: ${{ github.ref }}   # Ensure the current branch is checked out
+          submodules: 'true'
 
       # Install Dependencies
       - name: Install dependencies
