@@ -165,7 +165,6 @@ jobs:
           RELEASE_BODY+="On branch [${{ env.BRANCH_NAME }}](https://github.com/RetroDECK/RetroDECK/tree/${{ env.BRANCH_NAME }}).\n\n"
           RELEASE_BODY+="## Commits since last release\n"
           RELEASE_BODY+="${{ steps.get-commits.outputs.commits }}\n\n"
-          # RELEASE_BODY+="## In this release:\n"
 
           # # Extract the latest release version and date
           # LATEST_RELEASE=$(xmlstarlet sel -t -m "//release[1]" -v "@version" -o " (" -v "@date" -o ")" -n net.retrodeck.retrodeck.appdata.xml)
@@ -176,8 +175,7 @@ jobs:
           #     -i "self::ul/li" -o "- " -v "." -o "\n" \
           #     net.retrodeck.retrodeck.appdata.xml)
 
-          # # Construct the full release body
-          # RELEASE_BODY="# Release Notes\nVersion: $LATEST_RELEASE\n\n$DESCRIPTION"
+          # RELEASE_BODY+="# Release Notes\nVersion: $LATEST_RELEASE\n\n$DESCRIPTION"
 
           # Output the release body for GitHub Actions
           echo "release_body=$RELEASE_BODY" >> $GITHUB_OUTPUT
