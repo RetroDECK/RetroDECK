@@ -30,10 +30,8 @@ jobs:
   # Generate Rekku Token Job
   Generate-Rekku-Token:
     uses: RetroDECK/components-template/.github/workflows/generate_rekku_token.yml@main
-    permissions:
-      contents: write
-    secrets:
-      REKKU_TOKEN: ${{ secrets.REKKU_TOKEN }}
+    outputs:
+      rekku_token: ${{ jobs.Generate-Rekku-Token.outputs.rekku_token }}
 
   # Build RetroDECK Job
   Build_RetroDECK:
@@ -42,6 +40,8 @@ jobs:
     outputs:
       tag: ${{ steps.set-outputs.outputs.tag }}
       release_body: ${{ steps.set-outputs.outputs.release_body }}
+    env:
+      REKKU_TOKEN: ${{ needs.Generate-Rekku-Token.outputs.rekku_token }}
       
     steps:
       # Remove Stuck Mounts
