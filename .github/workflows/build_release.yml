@@ -179,4 +179,4 @@ jobs:
       artifacts: "RetroDECK*.flatpak,RetroDECK*.flatpak.sha,RetroDECK*Artifact.tar.gz"
       tag: ${{ needs.Build_RetroDECK.outputs.tag }}
     secrets: 
-      GITEA_TRIGGER_BUILD_TOKEN: ${{ secrets.FORGEJO_TRIGGER_BUILD_TOKEN }}
+      FORGEJO_TRIGGER_BUILD_TOKEN: ${{ secrets.FORGEJO_TRIGGER_BUILD_TOKEN }}
