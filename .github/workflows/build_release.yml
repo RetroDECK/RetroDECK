@@ -27,16 +27,13 @@ permissions:
   contents: write
 
 jobs:
-
   # Generate Rekku Token Job
   Generate-Rekku-Token:
-    runs-on: ubuntu-latest
-    outputs:
-      token: ${{ steps.generate-token.outputs.token }}
-    steps:
-      - name: Generate a token for Rekku
-        id: generate-token
-        uses: RetroDECK/components-template/.github/workflows/generate_rekku_token.yml@main
+    uses: RetroDECK/components-template/.github/workflows/generate_rekku_token.yml@main
+    permissions:
+      contents: write
+    secrets:
+      REKKU_TOKEN: ${{ secrets.REKKU_TOKEN }}
 
   # Build RetroDECK Job
   Build_RetroDECK:
@@ -47,7 +44,6 @@ jobs:
       release_body: ${{ steps.set-outputs.outputs.release_body }}
       
     steps:
-
       # Remove Stuck Mounts
       - name: Remove stuck mounts
         run: |
@@ -133,15 +129,16 @@ jobs:
             echo "repo_name=RetroDECK" >> $GITHUB_ENV
           else
             echo "repo_name=Cooker" >> $GITHUB_ENV
+          fi
 
-      # Publish Release, if main and fails throws an error, if cooker continues anyway
+      # Publish Release
       - name: Publish release
-        uses: ncipollo/release-action@v1.13.0
+        uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.set-outputs.outputs.tag }}
           name: "RetroDECK ${{ steps.set-outputs.outputs.tag }}"
           body: ${{ steps.generate-body.outputs.release_body }}
-          artifacts: "RetroDECK.flatpak,RetroDECK.flatpak.sha,RetroDECK-Artifact.tar.gz,RetroDECK-cooker.flatpak,RetroDECK-cooker.flatpak.sha"
+          artifacts: "RetroDECK*.flatpak,RetroDECK*.flatpak.sha,RetroDECK*Artifact.tar.gz"
           allowUpdates: true
           makeLatest: ${{ env.MAKE_LATEST }}
           token: ${{ needs.Generate-Rekku-Token.outputs.token }}
@@ -163,11 +160,25 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ needs.Generate-Rekku-Token.outputs.token }}
 
-  # Forgejo Publish Job
+      # Upload artifacts for other jobs
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: retrodeck-artifacts
+          path: |
+            RetroDECK*.flatpak
+            RetroDECK*.flatpak.sha
+            RetroDECK*Artifact.tar.gz
+
+  # As backup we're even publishing the build on our own selfhosted Fogejo instance
+  # Forgejo Publish Job if main branch
   Forgejo-publish:
+    if: github.ref == 'refs/heads/main'
     needs: Build_RetroDECK
-    uses: ./.github/workflows/publish-on-fogejo.yml
+    uses: RetroDECK/components-template/.github/workflows/fogejo_publish_release.yml@main
     with:
       release_body: ${{ needs.Build_RetroDECK.outputs.release_body }}
-      artifacts: "RetroDECK-cooker.flatpak,RetroDECK-cooker.flatpak.sha,RetroDECK-Artifact.tar.gz"
+      artifacts: "RetroDECK*.flatpak,RetroDECK*.flatpak.sha,RetroDECK*Artifact.tar.gz"
       tag: ${{ needs.Build_RetroDECK.outputs.tag }}
+    secrets: 
+      GITEA_TRIGGER_BUILD_TOKEN: ${{ secrets.FORGEJO_TRIGGER_BUILD_TOKEN }}
