@@ -55,7 +55,7 @@ jobs:
       - name: Clone RetroDECK repo
         uses: actions/checkout@v4
         with:
-          submodules: 'true'
+          submodules: true
 
       # Install Dependencies
       - name: Install dependencies
