@@ -30,6 +30,8 @@ jobs:
   # Generate Rekku Token Job
   Generate-Rekku-Token:
     uses: RetroDECK/components-template/.github/workflows/generate_rekku_token.yml@main
+    secrets:
+      REKKU_PRIVATE_KEY: ${{ secrets.REKKU_PRIVATE_KEY }}
 
   # Build RetroDECK Job
   Build_RetroDECK:
