@@ -41,6 +41,7 @@ xml_content=$(cat "$appdata_file")
 
 # Replace RELEASE_NOTES_PLACEHOLDER with the actual release notes
 # TODO
+rm -rf /tmp/wiki
 git clone https://github.com/RetroDECK/RetroDECK.wiki.git /tmp/wiki
 
 # Path to the markdown file
