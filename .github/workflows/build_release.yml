@@ -166,19 +166,26 @@ jobs:
           RELEASE_BODY+="## Commits since last release\n"
           RELEASE_BODY+="${{ steps.get-commits.outputs.commits }}\n\n"
 
-          # # Extract the latest release version and date
-          # LATEST_RELEASE=$(xmlstarlet sel -t -m "//release[1]" -v "@version" -o " (" -v "@date" -o ")" -n net.retrodeck.retrodeck.appdata.xml)
+          # Define the XML file path
+          xml_file="./net.retrodeck.retrodeck.appdata.xml"
 
-          # # Extract and format the description content
-          # DESCRIPTION=$(xmlstarlet sel -t -m "//release[1]/description/*" \
-          #     -i "self::p" -o "\n### " -v "." -o "\n" \
-          #     -i "self::ul/li" -o "- " -v "." -o "\n" \
-          #     net.retrodeck.retrodeck.appdata.xml)
+          # Extract the raw description content
+          raw_description=$(xmlstarlet sel -t -m "/component/releases/release[1]/description/*" -c "." -n "$xml_file")
 
-          # RELEASE_BODY+="# Release Notes\nVersion: $LATEST_RELEASE\n\n$DESCRIPTION"
+          # Convert <p> tags to markdown headers using sed and place headers correctly
+          markdown_description=$(echo "$raw_description" | sed -e 's|<p>|\n### |g' -e 's|</p>||g')
 
-          # Output the release body for GitHub Actions
-          echo "release_body=$RELEASE_BODY" >> $GITHUB_OUTPUT
+          # Convert <li> tags to bullet points and remove leading spaces
+          markdown_description=$(echo "$markdown_description" | sed -e 's|<ul>||g' -e 's|</ul>||g' -e 's|<li>|- |g' -e 's|</li>||g' | awk '{$1=$1;print}')
+
+          # Remove any remaining XML tags
+          markdown_description=$(echo "$markdown_description" | sed -e 's/<[^>]*>//g')
+
+          # Append markdown content with proper formatting
+          RELEASE_BODY+="$markdown_description\n"
+
+          # Use printf to preserve newlines and output to GITHUB_OUTPUT
+          printf "release_body<<EOF\n%s\nEOF\n" "$RELEASE_BODY" >> $GITHUB_OUTPUT
 
       - name: "Build flatpak: download only"
         run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
