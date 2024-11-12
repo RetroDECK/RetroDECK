@@ -160,32 +160,57 @@ jobs:
       - name: Generate release body text
         id: generate-body
         run: |
+          # Enable debugging
+          set -x
+
+          # Initialize the release body
           RELEASE_BODY="# Release Notes\n"
-          RELEASE_BODY+="This release is based on the commit: ${{ github.repository }}@${{ github.sha }}.\n"
-          RELEASE_BODY+="On branch [${{ env.BRANCH_NAME }}](https://github.com/RetroDECK/RetroDECK/tree/${{ env.BRANCH_NAME }}).\n\n"
+          RELEASE_BODY+="This release is based on the commit: RetroDECK/RetroDECK@c8bd579ad4d0922ba7ab1f5c122cc782ff6adc66.\n"
+          RELEASE_BODY+="On branch [cooker](https://github.com/RetroDECK/RetroDECK/tree/cooker).\n\n"
           RELEASE_BODY+="## Commits since last release\n"
-          RELEASE_BODY+="${{ steps.get-commits.outputs.commits }}\n\n"
+          RELEASE_BODY+="- RELEASE NOTES: fixed body\n\n"
 
           # Define the XML file path
           xml_file="./net.retrodeck.retrodeck.appdata.xml"
 
-          # Extract the raw description content
-          raw_description=$(xmlstarlet sel -t -m "/component/releases/release[1]/description/*" -c "." -n "$xml_file")
+          # Check if the XML file exists
+          if [[ ! -f "$xml_file" ]]; then
+            echo "Error: XML file not found: $xml_file"
+            exit 1
+          fi
 
-          # Convert <p> tags to markdown headers using sed and place headers correctly
+          # Extract the raw description content
+          raw_description=$(xmlstarlet sel -t -m "/component/releases/release[1]/description/*" -c "." -n "$xml_file" 2>/dev/null)
+
+          # Check if xmlstarlet extraction was successful
+          if [[ $? -ne 0 ]]; then
+            echo "Error: Failed to extract description content using xmlstarlet"
+            exit 1
+          fi
+
+          # Convert <p> tags to markdown headers using sed
           markdown_description=$(echo "$raw_description" | sed -e 's|<p>|\n### |g' -e 's|</p>||g')
 
-          # Convert <li> tags to bullet points and remove leading spaces
+          # Convert <li> tags to bullet points and trim spaces
           markdown_description=$(echo "$markdown_description" | sed -e 's|<ul>||g' -e 's|</ul>||g' -e 's|<li>|- |g' -e 's|</li>||g' | awk '{$1=$1;print}')
 
           # Remove any remaining XML tags
           markdown_description=$(echo "$markdown_description" | sed -e 's/<[^>]*>//g')
 
+          # Debug: Print the markdown description
+          echo "Markdown Description:"
+          echo "$markdown_description"
+
           # Append markdown content with proper formatting
           RELEASE_BODY+="$markdown_description\n"
 
-          # Use printf to preserve newlines and output to GITHUB_OUTPUT
-          printf "release_body<<EOF\n%s\nEOF\n" "$RELEASE_BODY" >> $GITHUB_OUTPUT
+          # Output the release body for GitHub Actions
+          {
+            printf "release_body<<EOF\n%s\nEOF\n" "$RELEASE_BODY"
+          } >> "$GITHUB_OUTPUT"
+
+          # Disable debugging
+          set +x
 
       - name: "Build flatpak: download only"
         run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
