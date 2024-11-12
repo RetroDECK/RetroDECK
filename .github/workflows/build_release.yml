@@ -170,13 +170,13 @@ jobs:
 
   # As backup we're even publishing the build on our own selfhosted Fogejo instance
   # Forgejo Publish Job if main branch
-  Forgejo-publish:
-    if: github.ref == 'refs/heads/main'
-    needs: Build_RetroDECK
-    uses: RetroDECK/components-template/.github/workflows/fogejo_publish_release.yml@main
-    with:
-      release_body: ${{ needs.Build_RetroDECK.outputs.release_body }}
-      artifacts: "RetroDECK*.flatpak,RetroDECK*.flatpak.sha,RetroDECK*Artifact.tar.gz"
-      tag: ${{ needs.Build_RetroDECK.outputs.tag }}
-    secrets: 
-      FORGEJO_TRIGGER_BUILD_TOKEN: ${{ secrets.FORGEJO_TRIGGER_BUILD_TOKEN }}
+  # Forgejo-publish:
+  #   if: github.ref == 'refs/heads/main'
+  #   needs: Build_RetroDECK
+  #   uses: RetroDECK/components-template/.github/workflows/fogejo_publish_release.yml@main
+  #   with:
+  #     release_body: ${{ needs.Build_RetroDECK.outputs.release_body }}
+  #     artifacts: "RetroDECK*.flatpak,RetroDECK*.flatpak.sha,RetroDECK*Artifact.tar.gz"
+  #     tag: ${{ needs.Build_RetroDECK.outputs.tag }}
+  #   secrets: 
+  #     FORGEJO_TRIGGER_BUILD_TOKEN: ${{ secrets.FORGEJO_TRIGGER_BUILD_TOKEN }}
