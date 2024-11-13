@@ -34,6 +34,7 @@ jobs:
     outputs:
       TAG: ${{ steps.version-tag.outputs.TAG }}
       RELEASE_BODY: ${{ steps.version-tag.outputs.RELEASE_BODY }}
+      MAKE_LATEST: ${{ steps.version-tag.outputs.MAKE_LATEST }}
       
     steps:
       # Remove Stuck Mounts
@@ -101,6 +102,9 @@ jobs:
 
           echo "TAG=$TAG" >> $GITHUB_ENV
           echo "MAKE_LATEST=$MAKE_LATEST" >> $GITHUB_ENV
+
+          echo "TAG=$TAG" >> $GITHUB_OUTPUT
+          echo "MAKE_LATEST=$MAKE_LATEST" >> $GITHUB_OUTPUT
 
       # backing up manifest in case download fails and hashes must be recalculated
       - name: Manifest backup
@@ -177,6 +181,7 @@ jobs:
           # Append markdown content to the release body
           RELEASE_BODY+="$markdown_description"
           printf "RELEASE_BODY=%s\n" "$RELEASE_BODY" >> $GITHUB_ENV
+          printf "RELEASE_BODY=%s\n" "$RELEASE_BODY" >> $GITHUB_OUTPUT
 
           echo "[DEBUG] CHECKPOINT 8"
 
