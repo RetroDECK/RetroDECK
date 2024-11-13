@@ -154,7 +154,7 @@ jobs:
           echo "[DEBUG] CHECKPOINT 2"
 
           # Extract the raw description content using xmlstarlet
-          raw_description=$(xmlstarlet sel -t -m "/component/releases/release[1]/description/*" -c "." -n "$xml_file" 2>/dev/null)
+          raw_description=$(xmlstarlet sel -t -m "/component/releases/release[1]/description/*" -c "." -n "$xml_file")
 
           echo "[DEBUG] CHECKPOINT 3"
 
