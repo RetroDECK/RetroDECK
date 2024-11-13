@@ -3,8 +3,19 @@
 change_preset_dialog() {
   # This function will build a list of all systems compatible with a given preset, their current enable/disabled state and allow the user to change one or more
   # USAGE: change_preset_dialog "$preset"
+  
+  preset="$1"
+  pretty_preset_name=${preset//_/ } # Preset name prettification
+  pretty_preset_name=$(echo $pretty_preset_name | awk '{for(i=1;i<=NF;i++){$i=toupper(substr($i,1,1))substr($i,2)}}1') # Preset name prettification
+  current_preset_settings=()
+  local section_results=$(sed -n '/\['"$preset"'\]/, /\[/{ /\['"$preset"'\]/! { /\[/! p } }' $rd_conf | sed '/^$/d')
 
-  build_preset_list_options "$1"
+  while IFS= read -r config_line
+    do
+      system_name=$(get_setting_name "$config_line" "retrodeck")
+      system_value=$(get_setting_value "$rd_conf" "$system_name" "retrodeck" "$preset")
+      current_preset_settings=("${current_preset_settings[@]}" "$system_value" "$(make_name_pretty $system_name)" "$system_name")
+  done < <(printf '%s\n' "$section_results")
 
   choice=$(rd_zenity \
     --list --width=1200 --height=720 \
@@ -21,7 +32,7 @@ change_preset_dialog() {
 
   if [[ ! -z $choice || "$rc" == 0 ]]; then
     (
-      make_preset_changes
+      make_preset_changes "$choice" "$1"
     ) |
     rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -79,6 +90,11 @@ make_preset_changes() {
       "\(.value):\(.key)"
     ] | join("\n")
   ' $features)
+
+  choice="$1"
+  preset="$2"
+
+  build_preset_list_options "$preset"
 
   IFS="," read -ra choices <<< "$choice"
     for emulator in "${all_systems[@]}"; do
