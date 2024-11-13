@@ -142,11 +142,11 @@ jobs:
           # Export the commits list to the GitHub environment
           echo "COMMITS=$COMMITS" >> $GITHUB_ENV
 
-      - name: Extract XML Description
-        uses: Mudlet/xmlstarlet-action@master
-        id: extract-description
-        with:
-          args: sel -t -v "/component/releases/release[1]/description//text()" ./net.retrodeck.retrodeck.appdata.xml
+      # - name: Extract XML Description
+      #   uses: Mudlet/xmlstarlet-action@master
+      #   id: extract-description
+      #   with:
+      #     args: sel -t -v "/component/releases/release[1]/description//text()" ./net.retrodeck.retrodeck.appdata.xml
 
       # Generate Release Body
       - name: Generate release body text
@@ -159,30 +159,20 @@ jobs:
           RELEASE_BODY+="## Commits since last release\n"
           RELEASE_BODY+="$COMMITS\n\n"
 
-          raw_description="${{ steps.extract-description.outputs.result }}"
-
-          echo "[DEBUG] CHECKPOINT 3"
+          #raw_description="${{ steps.extract-description.outputs.result }}"
 
           # Convert <p> tags to markdown headers using sed
           markdown_description=$(echo "$raw_description" | sed -e 's|<p>|\n### |g' -e 's|</p>||g')
 
-          echo "[DEBUG] CHECKPOINT 4"
-
           # Convert <li> tags to bullet points and trim spaces
           markdown_description=$(echo "$markdown_description" | sed -e 's|<ul>||g' -e 's|</ul>||g' -e 's|<li>|- |g' -e 's|</li>||g' | awk '{$1=$1;print}')
-
-          echo "[DEBUG] CHECKPOINT 5"
 
           # Remove any remaining XML tags
           markdown_description=$(echo "$markdown_description" | sed -e 's/<[^>]*>//g')
 
-          echo "[DEBUG] CHECKPOINT 6"
-
           # Debug: Print the markdown description
           echo "Markdown Description:"
           echo "$markdown_description"
-
-          echo "[DEBUG] CHECKPOINT 7"
 
           # Append markdown content to the release body
           RELEASE_BODY+="$markdown_description"
