@@ -156,6 +156,8 @@ jobs:
           # Debug
           xmlstarlet sel -t -m "/component/releases/release[1]/description/*" -c "." -n "$xml_file"
 
+          echo "[DEBUG] CHECKPOINT 2.1"
+
           # Extract the raw description content using xmlstarlet with error handling
           raw_description=$(xmlstarlet sel -t -m "/component/releases/release[1]/description/*" -c "." -n "$xml_file" 2>&1)
           status=$?
