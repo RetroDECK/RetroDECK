@@ -32,10 +32,8 @@ jobs:
   Build_RetroDECK:
     runs-on: retrodeck-server
     outputs:
-      tag: ${{ steps.version-tag.outputs.tag }}
-      release_body: ${{ steps.version-tag.outputs.release_body }}
-    env:
-      REKKU_TOKEN: ${{ needs.Generate-Rekku-Token.outputs.rekku_token }}
+      TAG: ${{ steps.version-tag.outputs.TAG }}
+      RELEASE_BODY: ${{ steps.version-tag.outputs.RELEASE_BODY }}
       
     steps:
       # Remove Stuck Mounts
@@ -90,14 +88,8 @@ jobs:
             MAKE_LATEST=true
           fi
 
-          # Export the tag and make_latest values
-          echo "tag=$TAG" >> $GITHUB_OUTPUT
-          echo "make_latest=$MAKE_LATEST" >> $GITHUB_OUTPUT
-
-          # Debug output
-          echo "[INFO] MANIFEST_VERSION: $MANIFEST_VERSION"
-          echo "[INFO] Generated TAG: $TAG"
-          echo "[INFO] MAKE_LATEST: $MAKE_LATEST"
+          echo "TAG=$TAG" >> $GITHUB_ENV
+          echo "MAKE_LATEST=$MAKE_LATEST" >> $GITHUB_ENV
 
       # backing up manifest in case download fails and hashes must be recalculated
       - name: Manifest backup
@@ -126,23 +118,20 @@ jobs:
           else
             COMMITS=$(git log ${LATEST_TAG}..HEAD --pretty=format:"- %s")
           fi
-          echo "commits=$COMMITS" >> $GITHUB_OUTPUT
+          echo "COMMITS=$COMMITS" >> $GITHUB_ENV
 
       # Generate Release Body
       - name: Generate release body text
         id: generate-body
         run: |
-          # Initialize the release body
+          # Initialize the release body text
           RELEASE_BODY="# Release Notes\n"
           RELEASE_BODY+="This release is based on the commit: RetroDECK/RetroDECK@c8bd579ad4d0922ba7ab1f5c122cc782ff6adc66.\n"
           RELEASE_BODY+="On branch [cooker](https://github.com/RetroDECK/RetroDECK/tree/cooker).\n\n"
           RELEASE_BODY+="## Commits since last release\n"
-          RELEASE_BODY+="- RELEASE NOTES: fixed body\n\n"
+          RELEASE_BODY+="$COMMITS\n\n"
 
-          # Define the XML file path
           xml_file="./net.retrodeck.retrodeck.appdata.xml"
-
-          # Check if the XML file exists
           if [[ ! -f "$xml_file" ]]; then
             echo "Error: XML file not found: $xml_file"
             exit 1
@@ -172,11 +161,7 @@ jobs:
 
           # Append markdown content to the release body
           RELEASE_BODY+="$markdown_description"
-
-          # Set the release body as an output using heredoc to preserve newlines
-          echo "release_body<<EOF" >> $GITHUB_OUTPUT
-          echo -e "$RELEASE_BODY" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          printf "RELEASE_BODY=%s\n" "$RELEASE_BODY" >> $GITHUB_ENV
 
       - name: "Build flatpak: download only"
         run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
@@ -212,8 +197,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: Build_RetroDECK
     env:
-      tag: ${{ needs.Build_RetroDECK.outputs.tag }}
-      release_body: ${{ needs.Build_RetroDECK.outputs.release_body }}
+      TAG: ${{ needs.Build_RetroDECK.outputs.TAG }}
+      RELEASE_BODY: ${{ needs.Build_RetroDECK.outputs.RELEASE_BODY }}
       MAKE_LATEST: ${{ needs.Build_RetroDECK.outputs.MAKE_LATEST }}
     steps:
 
@@ -232,24 +217,21 @@ jobs:
         id: set-repo
         run: |
           if [[ "$GITHUB_REF" == "refs/heads/main" ]]; then
-            echo "repo_name=RetroDECK" >> $GITHUB_ENV
+            echo "REPO_NAME=RetroDECK" >> $GITHUB_ENV
           else
-            echo "repo_name=Cooker" >> $GITHUB_ENV
+            echo "REPO_NAME=Cooker" >> $GITHUB_ENV
           fi
 
       # Publish Release
       - name: Publish release
         uses: ncipollo/release-action@v1
         with:
-          tag: ${{ env.tag }}
-          name: "RetroDECK ${{ env.tag }}"
-          body: ${{ env.release_body }}
+          tag: ${{ env.TAG }}
+          name: "RetroDECK ${{ env.TAG }}"
+          body: ${{ env.RELEASE_BODY }}
           artifacts: "*.flatpak,*.flatpak.sha,*Artifact.tar.gz"
           allowUpdates: true
           makeLatest: ${{ env.MAKE_LATEST }}
-          token: ${{ steps.generate-rekku-token.outputs.token }}
-          repo: "${{ env.repo_name }}"
-        continue-on-error: ${{ github.ref != 'refs/heads/main' }}
 
       # Rewrite Tag (for Main Branch Only)
       - name: Rewrite Tag
@@ -257,12 +239,12 @@ jobs:
         run: |
           git submodule deinit -f --all
           git fetch --tags
-          if git rev-parse --verify "${{ steps.version-tag.outputs.tag }}" >/dev/null 2>&1; then
-              git tag -d "${{ steps.version-tag.outputs.tag }}"
-              git push --delete origin "${{ steps.version-tag.outputs.tag }}"
+          if git rev-parse --verify "${{ env.TAG }}" >/dev/null 2>&1; then
+              git tag -d "${{ env.TAG }}"
+              git push --delete origin "${{ env.TAG }}"
           fi
-          git tag "${{ steps.version-tag.outputs.tag }}"
-          git push origin "${{ steps.version-tag.outputs.tag }}"
+          git tag "${{ env.TAG }}"
+          git push origin "${{ env.TAG }}"
         env:
           GITHUB_TOKEN: ${{ steps.generate-rekku-token.outputs.token }}
 
@@ -273,9 +255,9 @@ jobs:
   #   needs: Build_RetroDECK
   #   uses: RetroDECK/components-template/.github/workflows/fogejo_publish_release.yml@main
   #   with:
-  #     release_body: ${{ needs.Build_RetroDECK.outputs.release_body }}
+  #     release_body: ${{ env.RELEASE_BODY }}
   #     artifacts: "*.flatpak,*.flatpak.sha,*Artifact.tar.gz"
-  #     tag: ${{ needs.Build_RetroDECK.outputs.tag }}
+  #     tag: ${{ env.TAG }}
   #   secrets: 
   #     FORGEJO_TRIGGER_BUILD_TOKEN: ${{ secrets.FORGEJO_TRIGGER_BUILD_TOKEN }}
   
