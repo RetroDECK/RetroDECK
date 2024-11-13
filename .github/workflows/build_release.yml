@@ -145,7 +145,7 @@ jobs:
       - name: Extract XML Description
         uses: Mudlet/xmlstarlet-action@master
         with:
-          args: sel -t -c "/component/releases/release[1]/description/*" ./net.retrodeck.retrodeck.appdata.xml
+          args: sel -t -v "/component/releases/release[1]/description/p" ./net.retrodeck.retrodeck.appdata.xml
 
       # Generate Release Body
       - name: Generate release body text
