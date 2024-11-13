@@ -3,7 +3,7 @@
 change_preset_dialog() {
   # This function will build a list of all systems compatible with a given preset, their current enable/disabled state and allow the user to change one or more
   # USAGE: change_preset_dialog "$preset"
-  
+
   preset="$1"
   pretty_preset_name=${preset//_/ } # Preset name prettification
   pretty_preset_name=$(echo $pretty_preset_name | awk '{for(i=1;i<=NF;i++){$i=toupper(substr($i,1,1))substr($i,2)}}1') # Preset name prettification
@@ -46,6 +46,8 @@ change_preset_dialog() {
 build_preset_list_options() {
   # This function will build a list of all the systems available for a given preset
   # The list will be generated into a Godot temp file and the variable $current_preset_settings
+  # The other arrays built (all_systems, changed_systems etc.) are also used in the make_preset_changes() function, so this needs to be called in the same memory space as that function at least once
+  # USAGE: build_preset_list_options "$preset"
 
   if [[ -f "$godot_current_preset_settings" ]]; then
     rm -f "$godot_current_preset_settings" # Godot data transfer temp files
