@@ -57,6 +57,17 @@ jobs:
       - name: Generate cooker build ID
         if: github.ref != 'refs/heads/main'
         run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/cooker_build_id.sh"
+
+      # Getting branch name, this needs as PR should be managed in a different way
+      - name: Get Branch Name
+        run: |
+          if [[ "$GITHUB_EVENT_NAME" == "pull_request" || "$GITHUB_EVENT_NAME" == "pull_request_target" ]]; then
+            branch_name="$GITHUB_HEAD_REF"
+          else
+            branch_name="$GITHUB_REF_NAME"
+          fi
+          echo "Branch name: $branch_name"
+          echo "BRANCH_NAME=$branch_name" >> $GITHUB_ENV      
         
       # Generates a version tag based on the event type (main branch, PR, or cooker) and sets it as output.
       - name: Generate Version Tag
@@ -131,6 +142,12 @@ jobs:
           # Export the commits list to the GitHub environment
           echo "COMMITS=$COMMITS" >> $GITHUB_ENV
 
+      - name: Extract XML Description
+        uses: Mudlet/xmlstarlet-action@v1
+        id: extract-description
+        with:
+          xml-file: "./net.retrodeck.retrodeck.appdata.xml"
+          xpath: "/component/releases/release[1]/description/*"
 
       # Generate Release Body
       - name: Generate release body text
@@ -143,30 +160,7 @@ jobs:
           RELEASE_BODY+="## Commits since last release\n"
           RELEASE_BODY+="$COMMITS\n\n"
 
-          echo "[DEBUG] CHECKPOINT 1"
-
-          xml_file="./net.retrodeck.retrodeck.appdata.xml"
-          if [[ ! -f "$xml_file" ]]; then
-            echo "Error: XML file not found: $xml_file"
-            exit 1
-          fi
-
-          echo "[DEBUG] CHECKPOINT 2"
-
-          # Debug
-          xmlstarlet sel -t -m "/component/releases/release[1]/description/*" -c "." -n "$xml_file"
-
-          echo "[DEBUG] CHECKPOINT 2.1"
-
-          # Extract the raw description content using xmlstarlet with error handling
-          raw_description=$(xmlstarlet sel -t -m "/component/releases/release[1]/description/*" -c "." -n "$xml_file" 2>&1)
-          status=$?
-
-          if [[ $status -ne 0 ]]; then
-            echo "[ERROR] Failed to extract description content using xmlstarlet. Error output:"
-            echo "$raw_description"
-            exit 1
-          fi
+          raw_description="${{ steps.extract-description.outputs.result }}"
 
           echo "[DEBUG] CHECKPOINT 3"
 
