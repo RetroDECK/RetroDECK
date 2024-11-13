@@ -154,7 +154,15 @@ jobs:
           echo "[DEBUG] CHECKPOINT 2"
 
           # Extract the raw description content using xmlstarlet
-          raw_description=$(xmlstarlet sel -t -m "/component/releases/release[1]/description/*" -c "." -n "$xml_file")
+          # Extract the raw description content using xmlstarlet with error handling
+          raw_description=$(xmlstarlet sel -t -m "/component/releases/release[1]/description/*" -c "." -n "$xml_file" 2>&1)
+          status=$?
+
+          if [[ $status -ne 0 ]]; then
+            echo "[ERROR] Failed to extract description content using xmlstarlet. Error output:"
+            echo "$raw_description"
+            exit 1
+          fi
 
           echo "[DEBUG] CHECKPOINT 3"
 
