@@ -143,7 +143,7 @@ jobs:
           echo "COMMITS=$COMMITS" >> $GITHUB_ENV
 
       - name: Extract XML Description
-        uses: Mudlet/xmlstarlet-action@v1
+        uses: Mudlet/xmlstarlet-action@master
         id: extract-description
         with:
           xml-file: "./net.retrodeck.retrodeck.appdata.xml"
