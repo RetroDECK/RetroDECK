@@ -82,7 +82,9 @@ build_preset_list_options() {
 
 
 make_preset_changes() {
-  # This function will take an array $choices, which contains the names of systems that have been enabled for this preset and enable them in the backend
+  # This function will take a preset name $preset and a CSV list $choice, which contains the names of systems that have been enabled for this preset and enable them in the backend
+  # Any systems which are currently enabled and not in the CSV list $choice will instead be disabled in the backend
+  # USAGE: make_preset_changes $choice $preset
 
   # Fetch incompatible presets from JSON and create a lookup list
   incompatible_presets=$(jq -r '
