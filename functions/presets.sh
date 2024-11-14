@@ -4,7 +4,18 @@ change_preset_dialog() {
   # This function will build a list of all systems compatible with a given preset, their current enable/disabled state and allow the user to change one or more
   # USAGE: change_preset_dialog "$preset"
 
-  build_preset_list_options "$1"
+  preset="$1"
+  pretty_preset_name=${preset//_/ } # Preset name prettification
+  pretty_preset_name=$(echo $pretty_preset_name | awk '{for(i=1;i<=NF;i++){$i=toupper(substr($i,1,1))substr($i,2)}}1') # Preset name prettification
+  current_preset_settings=()
+  local section_results=$(sed -n '/\['"$preset"'\]/, /\[/{ /\['"$preset"'\]/! { /\[/! p } }' $rd_conf | sed '/^$/d')
+
+  while IFS= read -r config_line
+    do
+      system_name=$(get_setting_name "$config_line" "retrodeck")
+      system_value=$(get_setting_value "$rd_conf" "$system_name" "retrodeck" "$preset")
+      current_preset_settings=("${current_preset_settings[@]}" "$system_value" "$(make_name_pretty $system_name)" "$system_name")
+  done < <(printf '%s\n' "$section_results")
 
   choice=$(rd_zenity \
     --list --width=1200 --height=720 \
@@ -21,7 +32,7 @@ change_preset_dialog() {
 
   if [[ ! -z $choice || "$rc" == 0 ]]; then
     (
-      make_preset_changes
+      make_preset_changes "$choice" "$1"
     ) |
     rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -35,6 +46,8 @@ change_preset_dialog() {
 build_preset_list_options() {
   # This function will build a list of all the systems available for a given preset
   # The list will be generated into a Godot temp file and the variable $current_preset_settings
+  # The other arrays built (all_systems, changed_systems etc.) are also used in the make_preset_changes() function, so this needs to be called in the same memory space as that function at least once
+  # USAGE: build_preset_list_options "$preset"
 
   if [[ -f "$godot_current_preset_settings" ]]; then
     rm -f "$godot_current_preset_settings" # Godot data transfer temp files
@@ -69,7 +82,9 @@ build_preset_list_options() {
 
 
 make_preset_changes() {
-  # This function will take an array $choices, which contains the names of systems that have been enabled for this preset and enable them in the backend
+  # This function will take a preset name $preset and a CSV list $choice, which contains the names of systems that have been enabled for this preset and enable them in the backend
+  # Any systems which are currently enabled and not in the CSV list $choice will instead be disabled in the backend
+  # USAGE: make_preset_changes $choice $preset
 
   # Fetch incompatible presets from JSON and create a lookup list
   incompatible_presets=$(jq -r '
@@ -79,6 +94,11 @@ make_preset_changes() {
       "\(.value):\(.key)"
     ] | join("\n")
   ' $features)
+
+  choice="$1"
+  preset="$2"
+
+  build_preset_list_options "$preset"
 
   IFS="," read -ra choices <<< "$choice"
     for emulator in "${all_systems[@]}"; do
