@@ -265,7 +265,7 @@ jobs:
           tag: ${{ env.TAG }}
           name: "RetroDECK ${{ env.TAG }}"
           body: ${{ env.RELEASE_BODY }}
-          artifacts: "*.flatpak,*.flatpak.sha,*Artifact.tar.gz"
+          artifacts: "retrodeck-artifacts/*.flatpak,retrodeck-artifacts/*.flatpak.sha,retrodeck-artifacts/*Artifact.tar.gz"
           allowUpdates: true
           makeLatest: ${{ env.MAKE_LATEST }}
 
@@ -307,7 +307,7 @@ jobs:
   #       uses: RetroDECK/components-template/.github/workflows/fogejo_publish_release.yml@main
   #       with:
   #         release_body: ${{ env.RELEASE_BODY }}
-  #         artifacts: "*.flatpak,*.flatpak.sha,*Artifact.tar.gz"
+  #         artifacts: "retrodeck-artifacts/*.flatpak,retrodeck-artifacts/*.flatpak.sha,retrodeck-artifacts/*Artifact.tar.gz"
   #         tag: ${{ env.TAG }}
 
   
