@@ -211,6 +211,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: retrodeck-artifacts
+          include-hidden-files: true
+          retention-days: 1
           path: |
             RetroDECK*.flatpak
             RetroDECK*.flatpak.sha
@@ -237,6 +239,9 @@ jobs:
       - name: Download all workflow run artifacts
         uses: actions/download-artifact@v4.1.8
 
+      - name: Extract artifact zip
+        run: unzip retrodeck-artifacts.zip
+          
       # Determine if Target Repository is Main or not, in that case is a Cooker build
       - name: Determine target repository
         id: set-repo
@@ -284,9 +289,12 @@ jobs:
   #     MAKE_LATEST: ${{ needs.Build_RetroDECK.outputs.MAKE_LATEST }}
   #   steps:
 
-  #     - name: Download all workflow run artifacts
-  #       id: download-artifacts
-  #       uses: actions/download-artifact@v4.1.8
+      # - name: Download all workflow run artifacts
+      #   id: download-artifacts
+      #   uses: actions/download-artifact@v4.1.8
+
+      # - name: Extract artifact zip
+      #   run: unzip retrodeck-artifacts.zip
 
   #     - name: Forgejo-publish
   #       if: github.ref == 'refs/heads/main'
