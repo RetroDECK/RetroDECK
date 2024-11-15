@@ -32,7 +32,7 @@ change_preset_dialog() {
 
   if [[ ! -z $choice || "$rc" == 0 ]]; then
     (
-      make_preset_changes "$choice" "$1"
+      make_preset_changes "$1" "$choice"
     ) |
     rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -84,7 +84,7 @@ build_preset_list_options() {
 make_preset_changes() {
   # This function will take a preset name $preset and a CSV list $choice, which contains the names of systems that have been enabled for this preset and enable them in the backend
   # Any systems which are currently enabled and not in the CSV list $choice will instead be disabled in the backend
-  # USAGE: make_preset_changes $choice $preset
+  # USAGE: make_preset_changes $preset $choice
 
   # Fetch incompatible presets from JSON and create a lookup list
   incompatible_presets=$(jq -r '
@@ -95,8 +95,8 @@ make_preset_changes() {
     ] | join("\n")
   ' $features)
 
-  choice="$1"
-  preset="$2"
+  preset="$1"
+  choice="$2"
 
   build_preset_list_options "$preset"
 
