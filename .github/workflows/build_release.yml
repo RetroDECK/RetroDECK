@@ -240,7 +240,7 @@ jobs:
         uses: actions/download-artifact@v4.1.8
 
       - name: Extract artifact zip
-        run: unzip retrodeck-artifacts.zip
+        run: unzip retrodeck-artifacts
           
       # Determine if Target Repository is Main or not, in that case is a Cooker build
       - name: Determine target repository
@@ -294,7 +294,7 @@ jobs:
       #   uses: actions/download-artifact@v4.1.8
 
       # - name: Extract artifact zip
-      #   run: unzip retrodeck-artifacts.zip
+      #   run: unzip retrodeck-artifacts
 
   #     - name: Forgejo-publish
   #       if: github.ref == 'refs/heads/main'
