@@ -240,13 +240,13 @@ jobs:
         uses: actions/download-artifact@v4.1.8
 
       - name: "[DEBUG] Listing artifacts"
-        run: apt install -y tree && tree .
+        run: sudo apt install -y tree && tree .
 
       - name: Extract artifact archive
         run: unzip retrodeck-artifacts/retrodeck-artifacts.zip
 
       - name: "[DEBUG] Listing artifacts"
-        run: apt install -y tree && tree .
+        run: sudo apt install -y tree && tree .
           
       # Determine if Target Repository is Main or not, in that case is a Cooker build
       - name: Determine target repository
