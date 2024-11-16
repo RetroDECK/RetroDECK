@@ -309,5 +309,3 @@ jobs:
   #         release_body: ${{ env.RELEASE_BODY }}
   #         artifacts: "retrodeck-artifacts/*.flatpak,retrodeck-artifacts/*.flatpak.sha,retrodeck-artifacts/*Artifact.tar.gz"
   #         tag: ${{ env.TAG }}
-
-  
