@@ -262,6 +262,7 @@ jobs:
           artifacts: "retrodeck-artifacts/*.flatpak,retrodeck-artifacts/*.flatpak.sha,retrodeck-artifacts/*Artifact.tar.gz"
           allowUpdates: true
           makeLatest: ${{ env.MAKE_LATEST }}
+          repo: ${{ env.REPO_NAME }}
 
       # Rewrite Tag (for Main Branch Only)
       - name: Rewrite Tag
