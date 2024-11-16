@@ -241,12 +241,6 @@ jobs:
 
       - name: "[DEBUG] Listing artifacts"
         run: sudo apt install -y tree && tree .
-
-      - name: Extract artifact archive
-        run: unzip retrodeck-artifacts/retrodeck-artifacts.zip
-
-      - name: "[DEBUG] Listing artifacts"
-        run: sudo apt install -y tree && tree .
           
       # Determine if Target Repository is Main or not, in that case is a Cooker build
       - name: Determine target repository
