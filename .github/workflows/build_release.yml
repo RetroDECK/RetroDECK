@@ -212,7 +212,6 @@ jobs:
         with:
           name: retrodeck-artifacts
           include-hidden-files: true
-          retention-days: 1
           path: |
             RetroDECK*.flatpak
             RetroDECK*.flatpak.sha
@@ -238,9 +237,6 @@ jobs:
 
       - name: Download all workflow run artifacts
         uses: actions/download-artifact@v4.1.8
-
-      - name: "[DEBUG] Listing artifacts"
-        run: sudo apt install -y tree && tree .
           
       # Determine if Target Repository is Main or not, in that case is a Cooker build
       - name: Determine target repository
@@ -263,6 +259,7 @@ jobs:
           allowUpdates: true
           makeLatest: ${{ env.MAKE_LATEST }}
           repo: ${{ env.REPO_NAME }}
+          token: ${{ steps.generate-rekku-token.outputs.token }}
 
       # Rewrite Tag (for Main Branch Only)
       - name: Rewrite Tag
@@ -289,14 +286,10 @@ jobs:
   #     RELEASE_BODY: ${{ needs.Build_RetroDECK.outputs.RELEASE_BODY }}
   #     MAKE_LATEST: ${{ needs.Build_RetroDECK.outputs.MAKE_LATEST }}
   #   steps:
-
-      # - name: Download all workflow run artifacts
-      #   id: download-artifacts
-      #   uses: actions/download-artifact@v4.1.8
-
-      # - name: Extract artifact zip
-      #   run: unzip retrodeck-artifacts
-
+  #
+  #     - name: Download all workflow run artifacts
+  #       uses: actions/download-artifact@v4.1.8
+  #
   #     - name: Forgejo-publish
   #       if: github.ref == 'refs/heads/main'
   #       uses: RetroDECK/components-template/.github/workflows/fogejo_publish_release.yml@main
