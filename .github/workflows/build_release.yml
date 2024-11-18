@@ -30,7 +30,7 @@ jobs:
 
   # Build RetroDECK Job
   Build_RetroDECK:
-    runs-on: retrodeck-server
+    runs-on: retrodeck
     outputs:
       TAG: ${{ steps.version-tag.outputs.TAG }}
       RELEASE_BODY: ${{ steps.version-tag.outputs.RELEASE_BODY }}
