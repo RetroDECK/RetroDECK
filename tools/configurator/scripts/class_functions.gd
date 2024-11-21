@@ -102,13 +102,13 @@ func multi_state(section: String, state: String) -> String:
 		state = "mixed"
 	return state
 
-func logger(log_type: String, log_text: String) -> void:
+func logger_bash(log_type: String, log_text: String) -> void:
 	var log_header_text = "gdc_"
 	log_header_text+=log_text
 	log_parameters = ["log", log_type, log_header_text]
 	log_result = await run_thread_command(wrapper_command,log_parameters, false)
 
-func logger_godot(log_type: String, log_text: String) -> void:
+func logger(log_type: String, log_text: String) -> void:
 	var log_dir_path: String = "/var/config/retrodeck/logs/"
 	var log_path: String = '/var/config/retrodeck/logs/gd_logs.log'
 
@@ -336,7 +336,7 @@ func run_function(button: Button, preset: String) -> void:
 func update_global(button: Button, preset: String, state: bool) -> void:
 	#TODO pass state as an object in future version
 	var result: Array
-	result.append("build_preset_config")
+	result.append("make_preset_changes")
 	var config_section:Dictionary = data_handler.get_elements_in_section(config_file_path, preset)
 	match button.name:
 		"quick_resume_button", "retroarch_quick_resume_button":
@@ -371,7 +371,9 @@ func update_global(button: Button, preset: String, state: bool) -> void:
 		"border_button":
 			if border_state != "mixed":
 				border_state = str(state)
-				result.append_array(data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state)))
+				#result.append_array(data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state)))
+				result.append_array([preset])
+				result.append_array([config_section.keys()])
 				await change_global(result, button, border_state)
 			if widescreen_state == "true" or widescreen_state == "mixed":
 				var button_tmp = main_scene.get_node("%widescreen_button")
@@ -417,11 +419,14 @@ func update_global(button: Button, preset: String, state: bool) -> void:
 				change_global(result, button, cheevos_hardcore_state)
 
 func change_global(parameters: Array, button: Button, state: String) -> void:
-	#print (str(parameters))
-	match parameters[2]:
+	var bob =String(",").join(parameters[2])
+	print (bob)
+	match parameters[1]:
 		"abxy_button_swap", "ask_to_exit", "borders", "widescreen", "rewind", "cheevos", "cheevos_hardcore":
-			for system in parameters[1].keys():
-				var command_parameter: Array = [parameters[0],system, parameters[2]]
+			#pass
+			#for system in parameters[1].keys():
+				var command_parameter: Array = [parameters[0],parameters[1],bob]
+				print (command_parameter)
 				logger("d", "Change Global Multi: %s  " % str(command_parameter))
 				var result: Dictionary = await run_thread_command(wrapper_command, command_parameter, false)
 				#var result = OS.execute_with_pipe(wrapper_command, command_parameter)
