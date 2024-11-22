@@ -1,0 +1,37 @@
+From ed3bf410c016ac9f84e7362101f1d831f16dc430 Mon Sep 17 00:00:00 2001
+From: Vicki Pfau <vi@endrift.com>
+Date: Tue, 9 Jan 2024 20:49:38 -0800
+Subject: [PATCH] Steam Deck: Pad out feature report to 64 bytes
+
+Also update the names of the setting post-Steam Deck commits to SDL
+
+Fixes https://bugs.dolphin-emu.org/issues/13412
+---
+ .../ControllerInterface/SteamDeck/SteamDeck.cpp            | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/Source/Core/InputCommon/ControllerInterface/SteamDeck/SteamDeck.cpp b/Source/Core/InputCommon/ControllerInterface/SteamDeck/SteamDeck.cpp
+index 0a0dc88387..87504f77b8 100644
+--- a/Source/Core/InputCommon/ControllerInterface/SteamDeck/SteamDeck.cpp
++++ b/Source/Core/InputCommon/ControllerInterface/SteamDeck/SteamDeck.cpp
+@@ -288,14 +288,13 @@ void Device::UpdateInput()
+   if (++m_gyro_reenable == 250)
+   {
+     m_gyro_reenable = 0;
+-    // Using names from Valve's contribution to SDL for the Steam Controller
+-    // (and assuming this has not changed for the Deck), this packet decodes as:
++    // Using names from Valve's contribution to SDL this packet decodes as:
+     // 0x00 = report ID
+     // 0x87 = ID_SET_SETTINGS_VALUES
+     // 0x03 = payload length
+-    // 0x30 = SETTING_GYRO_MODE
++    // 0x30 = SETTING_IMU_MODE
+     // 0x18 0x00 = SETTING_GYRO_MODE_SEND_RAW_ACCEL | SETTING_GYRO_MODE_SEND_RAW_GYRO
+-    const unsigned char pkt[] = {0x00, 0x87, 0x03, 0x30, 0x18, 0x00};
++    const unsigned char pkt[65] = {0x00, 0x87, 0x03, 0x30, 0x18, 0x00};
+     hid_send_feature_report(m_device, pkt, sizeof(pkt));
+   }
+ 
+-- 
+2.45.2
+
