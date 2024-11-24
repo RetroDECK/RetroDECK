@@ -328,6 +328,7 @@ func slider_function(value: float, slide: HSlider) -> void:
 	data_handler.change_cfg_value(config_file_path, "volume_effects", "options", str(slide.value))
 
 func run_function(button: Button, preset: String) -> void:
+	print (button.pressed)
 	if button.button_pressed:
 		update_global(button, preset, true)
 	else:
@@ -335,6 +336,7 @@ func run_function(button: Button, preset: String) -> void:
 
 func update_global(button: Button, preset: String, state: bool) -> void:
 	#TODO pass state as an object in future version
+	print (state)
 	var result: Array
 	result.append("make_preset_changes")
 	var config_section:Dictionary = data_handler.get_elements_in_section(config_file_path, preset)
@@ -361,7 +363,8 @@ func update_global(button: Button, preset: String, state: bool) -> void:
 		"button_swap_button":
 			if abxy_state != "mixed":
 				abxy_state = str(state)
-				result.append_array(data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state)))
+				result.append_array([preset])
+				result.append_array([config_section.keys()])
 				change_global(result, button, abxy_state)
 		"ask_to_exit_button":
 			if ask_to_exit_state != "mixed":
@@ -419,18 +422,21 @@ func update_global(button: Button, preset: String, state: bool) -> void:
 				change_global(result, button, cheevos_hardcore_state)
 
 func change_global(parameters: Array, button: Button, state: String) -> void:
-	var bob =String(",").join(parameters[2])
-	print (bob)
+	var command_parameter: Array
 	match parameters[1]:
 		"abxy_button_swap", "ask_to_exit", "borders", "widescreen", "rewind", "cheevos", "cheevos_hardcore":
-			#pass
-			#for system in parameters[1].keys():
-				var command_parameter: Array = [parameters[0],parameters[1],bob]
-				print (command_parameter)
-				logger("d", "Change Global Multi: %s  " % str(command_parameter))
-				var result: Dictionary = await run_thread_command(wrapper_command, command_parameter, false)
-				#var result = OS.execute_with_pipe(wrapper_command, command_parameter)
-				logger("d", "Exit code: %s" % result["exit_code"])
+			if state == "true":
+				#var bob: String
+				parameters[2] =String(",").join(parameters[2])
+				#print (bob)
+				command_parameter = [parameters[0],parameters[1],parameters[2]]
+			else:
+				command_parameter = [parameters[0],parameters[1]]
+			print (command_parameter)
+			logger("d", "Change Global Multi: %s  " % str(command_parameter))
+			var result: Dictionary = await run_thread_command(wrapper_command, command_parameter, false)
+			#var result = OS.execute_with_pipe(wrapper_command, command_parameter)
+			logger("d", "Exit code: %s" % result["exit_code"])
 		_:
 			logger("d", "Change Global Single: %s" % str(parameters)) 
 			var result: Dictionary = await run_thread_command(wrapper_command, parameters, false)
