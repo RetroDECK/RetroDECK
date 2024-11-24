@@ -328,7 +328,6 @@ func slider_function(value: float, slide: HSlider) -> void:
 	data_handler.change_cfg_value(config_file_path, "volume_effects", "options", str(slide.value))
 
 func run_function(button: Button, preset: String) -> void:
-	print (button.pressed)
 	if button.button_pressed:
 		update_global(button, preset, true)
 	else:
@@ -336,8 +335,7 @@ func run_function(button: Button, preset: String) -> void:
 
 func update_global(button: Button, preset: String, state: bool) -> void:
 	#TODO pass state as an object in future version
-	print (state)
-	var result: Array
+	var result: Array	
 	result.append("make_preset_changes")
 	var config_section:Dictionary = data_handler.get_elements_in_section(config_file_path, preset)
 	match button.name:
@@ -345,11 +343,11 @@ func update_global(button: Button, preset: String, state: bool) -> void:
 			quick_resume_status = state
 			result.append_array(data_handler.change_cfg_value(config_file_path, "retroarch", preset, str(state)))
 			change_global(result, button, str(quick_resume_status))
-			#var resultT: Dictionary = await run_thread_command("/home/tim/bin/mult.sh", [], false)
 		"update_notification_button":
 			update_check = state
+			#result.append("build_preset_config")
 			result.append_array(data_handler.change_cfg_value(config_file_path, preset, "options", str(state)))
-			change_global(result, button, str(result))
+			#change_global(result, button, str(result))
 		"sound_button":
 			sound_effects = state
 			result.append_array(data_handler.change_cfg_value(config_file_path, preset, "options", str(state)))
@@ -369,70 +367,73 @@ func update_global(button: Button, preset: String, state: bool) -> void:
 		"ask_to_exit_button":
 			if ask_to_exit_state != "mixed":
 				ask_to_exit_state = str(state)
-				result.append_array(data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state)))
-				await change_global(result, button, ask_to_exit_state)
+				result.append_array([preset])
+				result.append_array([config_section.keys()])
+				change_global(result, button, ask_to_exit_state)
 		"border_button":
 			if border_state != "mixed":
 				border_state = str(state)
 				#result.append_array(data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state)))
 				result.append_array([preset])
 				result.append_array([config_section.keys()])
-				await change_global(result, button, border_state)
+				change_global(result, button, border_state)
 			if widescreen_state == "true" or widescreen_state == "mixed":
 				var button_tmp = main_scene.get_node("%widescreen_button")
 				#Remove last array item or tries to append again
 				result.clear()
-				result.append("build_preset_config")
+				result.append_array([preset])
 				config_section = data_handler.get_elements_in_section(config_file_path, "widescreen")
 				widescreen_state = "false"
-				result.append_array(data_handler.change_all_cfg_values(config_file_path, config_section, "widescreen", widescreen_state))
+				result.append_array([config_section.keys()])
 				change_global(result, button, widescreen_state)
 		"widescreen_button":
 			if widescreen_state != "mixed":
 				widescreen_state = str(state)
-				result.append_array(data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state)))
-				await change_global(result, button, widescreen_state)
+				result.append_array([preset])
+				result.append_array([config_section.keys()])
+				change_global(result, button, widescreen_state)
 			if border_state == "true" or border_state == "mixed":
 				var button_tmp = main_scene.get_node("%border_button")
 				#Remove last array item or tries to append again
 				result.clear()
-				result.append("build_preset_config")
+				result.append_array([preset])
 				config_section = data_handler.get_elements_in_section(config_file_path, "borders")
-				border_state = "false"
-				result.append_array(data_handler.change_all_cfg_values(config_file_path, config_section, "borders", border_state))
+				border_state = "mixed"
+				result.append_array([config_section.keys()])
 				change_global(result, button_tmp, border_state)
 		"quick_rewind_button":
 			if quick_rewind_state != "mixed":
 				quick_rewind_state = str(state)
-				result.append_array(data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state)))
+				result.append_array([preset])
+				result.append_array([config_section.keys()])
 				change_global(result, button, quick_rewind_state)
 		"cheevos_button":
 			if cheevos_state != "mixed":
 				cheevos_state = str(state)
-				result.append_array(data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state)))
+				result.append_array([preset])
+				result.append_array([config_section.keys()])
 				change_global(result, button, cheevos_state)
-			if cheevos_state == "false":
-				cheevos_hardcore_state = "false"
-				result.append_array(data_handler.change_all_cfg_values(config_file_path, config_section, "cheevos_hardcore", class_functions.cheevos_hardcore_state))
-				change_global(result, button, cheevos_hardcore_state)
+			#if cheevos_state == "false":
+				#cheevos_hardcore_state = "false"
+				#result.append_array(data_handler.change_all_cfg_values(config_file_path, config_section, "cheevos_hardcore", class_functions.cheevos_hardcore_state))
+				#change_global(result, button, cheevos_hardcore_state)
 		"cheevos_hardcore_button":
 			if cheevos_hardcore_state != "mixed":
 				cheevos_hardcore_state = str(state)
-				result.append_array(data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state)))
+				result.append_array([preset])
+				result.append_array([config_section.keys()])
 				change_global(result, button, cheevos_hardcore_state)
 
 func change_global(parameters: Array, button: Button, state: String) -> void:
-	var command_parameter: Array
+	print (parameters)
 	match parameters[1]:
 		"abxy_button_swap", "ask_to_exit", "borders", "widescreen", "rewind", "cheevos", "cheevos_hardcore":
+			var command_parameter: Array
 			if state == "true":
-				#var bob: String
 				parameters[2] =String(",").join(parameters[2])
-				#print (bob)
 				command_parameter = [parameters[0],parameters[1],parameters[2]]
 			else:
 				command_parameter = [parameters[0],parameters[1]]
-			print (command_parameter)
 			logger("d", "Change Global Multi: %s  " % str(command_parameter))
 			var result: Dictionary = await run_thread_command(wrapper_command, command_parameter, false)
 			#var result = OS.execute_with_pipe(wrapper_command, command_parameter)
