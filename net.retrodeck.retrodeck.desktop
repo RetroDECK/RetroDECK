@@ -1,11 +1,11 @@
 [Desktop Entry]
 Name=RetroDECK
-GenericName=Emulation bundle for Steam Deck
+GenericName=Universal Emulator Platform
 Type=Application
-Comment=All you need for emulation on Steam Deck
+Comment=All-in-one emulation solution for Steam Deck and Linux desktops, making emulation easy and accessible
 Icon=net.retrodeck.retrodeck
 Exec=
 Terminal=false
 StartupNotify=false
-Keywords=multi;engine;emulator;standalone;steam;deck
+Keywords=multi;engine;emulator;standalone;steam;deck;retro;games;roms;console;classic;gamepad;arcade
 Categories=Game;Emulator;

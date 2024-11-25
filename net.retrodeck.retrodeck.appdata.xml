@@ -72,18 +72,26 @@
          <description>
             <p>Changes:</p>
             <ul>
-               <li>WELCOME TO cooker-0.9.0b!</li>
-               <li>RetroDECK is on a diet: we saved around 600mb</li>
+               <li>RetroDECK is on a diet: we saved around 600mb on the final build</li>
+               <li>Updated all the outdated emulators</li>
+               <li>Duckstation due to licensing changes is frozen at the latest possible build becoming de facto: Legacy</li>
+               <li>Duckstation configured to use OpenGL as Vulkan seems to be broken in some cases</li>
+               <li>New Flash system via the new emulator: Ruffle</li>
+               <li>PortMaster is now included in RetroDECK!</li>
+               <li>Steam Sync is now a thing: favorite your games and enable the Steam Sync in the Configurator to find them as a Steam standalone games thank to Steam Rom Manager acting like an engine</li>
+               <li>New Configurator completely written in GODOT, now with controller support and many more features for you to discover</li>
+               <li>New run game engine added to run games via cli, just run `flatpak run net.retrodeck.retrodeck start retrodeck/roms/system/game.ext`, `--help` for more info</li>
             </ul>
             <p>Developers, developers, developers:</p>
             <ul>
-               <li>Manifest was completely redone, more on that on the MONTH blog post</li>
-               <li>RetroDECK now is migrated to an organization on GitHub, as before, please check the MONTH blog post</li>
+               <li>Manifest was completely redone, more on that on the October blog post</li>
+               <li>RetroDECK now is migrated to an organization on GitHub, as before, please check the October blog post</li>
                <li>pre_build_automation script weas reworked and additional functions are added</li>
-               <li>Contributing is now easier and the manifest build time is down to about 40m (was 3h30)</li>
+               <li>Contributing is now easier and the manifest build time is down to about 1h (was 3h30)</li>
             </ul>
             <p>Known issues:</p>
             <ul>
+               <li>Ryujinx temporary removed until we figure out the situation</li>
                <li>Please check the know issues in the Wiki under General Information.</li>
             </ul>
          </description>

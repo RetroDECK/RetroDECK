@@ -1,0 +1,30 @@
+{
+	"fuzzyMatcher": {
+		"verbose": false,
+		"filterProviders": true
+	},
+	"environmentVariables": {
+		"steamDirectory": "",
+		"userAccounts": "${steamlogin}",
+		"romsDirectory": "",
+		"retroarchPath": "",
+		"raCoresDirectory": "",
+		"localImagesDirectory": ""
+	},
+	"previewSettings": {
+		"retrieveCurrentSteamImages": true,
+		"deleteDisabledShortcuts": false,
+		"imageZoomPercentage": 30,
+		"preload": false
+	},
+	"enabledProviders": [
+		"SteamGridDB"
+	],
+	"batchDownloadSize": 50,
+	"language": "en-US",
+	"theme": "Deck",
+	"offlineMode": false,
+	"navigationWidth": 0,
+	"clearLogOnTest": false,
+	"version": 6
+}

@@ -26,6 +26,7 @@ Arguments:
     -h, --help                          \t  Print this help
     -v, --version                       \t  Print RetroDECK version
     --info-msg                          \t  Print paths and config informations
+    --debug                             \t  Enable debug logging for this launch of RetroDECK (This may miss errors very early in the launch process)
     --configurator                      \t  Starts the RetroDECK Configurator
     --compress-one <file>               \t  Compresses target file to a compatible format
     --compress-all <format>             \t  Compresses all supported games into a compatible format.\n\t\t\t\t\t\t  Available formats are \"chd\", \"zip\", \"rvz\" and \"all\"
@@ -59,6 +60,10 @@ https://retrodeck.net
       echo "Contents:"
       cat $rd_conf
       exit
+      ;;
+    --debug*)
+      logging_level="debug"
+      shift
       ;;
     --compress-one*)
       cli_compress_single_game "$2"
@@ -210,4 +215,5 @@ fi
 
 # Normal Startup
 start_retrodeck
+# After everything is closed we run the quit function
 quit_retrodeck

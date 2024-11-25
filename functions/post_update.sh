@@ -437,7 +437,10 @@ post_update() {
     prepare_component "reset" "es-de"
     prepare_component "reset" "portmaster"
     prepare_component "reset" "ruffle"
+
+    log d "Steam Rom Manager was added, we need to prepare it"
     update_rd_conf
+    prepare_component "reset" "steam-rom-manager"
 
   # TODO: check this
   #   rm /var/config/emulationstation/.emulationstation # remving the old symlink to .emulationstation as it might be not needed anymore
