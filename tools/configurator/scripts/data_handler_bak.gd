@@ -1,4 +1,4 @@
-class_name DataHandler
+#class_name DataHandler
 
 extends Node
 
@@ -158,6 +158,73 @@ func save_base_data(app_dict: AppData):
 	file = FileAccess.open(data_file_path, FileAccess.WRITE)
 	file.store_string(json_text)
 	file.close()
+	
+# Function to modify an existing link
+func modify_link(key: String, new_name: String, new_url: String, new_description: String):
+	var app_dict = load_base_data() # was app_data
+	if app_dict and app_dict.about_links.has(key):
+		var link = app_dict.about_links[key]
+		link.name = new_name
+		link.url = new_url
+		link.description = new_description
+		app_dict.about_links[key] = link
+		save_base_data(app_dict)
+		print("Link modified successfully")
+	else:
+		print("Link not found")
+
+# Function to modify an existing emulator
+func modify_emulator(key: String, new_name: String, new_launch: String, new_description: String, new_properties: Array):
+	#data_handler.modify_emulator_test()
+	var app_dict = load_base_data() # was app_data
+	if app_dict and app_dict.emulators.has(key):
+		var emulator = app_dict.emulators[key]
+		emulator.name = new_name
+		emulator.description = new_description
+		emulator.launch = new_launch
+		
+		# Update properties
+		emulator.properties.clear()
+		for property in new_properties:
+			var new_property = EmulatorProperty.new()
+			new_property.borders = property.borders
+			new_property.abxy_button = property.abxy_button
+			new_property.ask_to_exit = property.ask_to_exit
+			new_property.cheevos = property.cheevos
+			emulator.properties.append(new_property)
+		app_dict.emulators[key] = emulator
+		save_base_data(app_dict)
+		print("Emulator modified successfully")
+	else:
+		print("Emulator not found")
+
+
+func add_emulator() -> void:
+	#data_handler.add_emulator()
+	var link = Link.new()
+	link.name = "Example Site"
+	link.url = "https://example.com"
+	link.description = "An example description."
+	app_data.about_links["example_site"] = link
+	var emulator = Emulator.new()
+	emulator.name = "Example System"
+	emulator.description = "An example emulator."
+	emulator.launch = "launcher"
+	var property = EmulatorProperty.new()
+	#property.standalone = true
+	property.abxy_button = false
+	emulator.properties.append(property)
+	app_data.emulators["example_emulator"] = emulator
+	data_handler.save_base_data(app_data)
+	
+func modify_emulator_test() -> void:
+	data_handler.modify_link("example_site", "Updated Site", "https://updated-example.com", "Updated description.")
+	var new_properties = []
+	var new_property = EmulatorProperty.new()
+	#new_property.standalone = false
+	new_property.abxy_button = true
+	new_properties.append(new_property)
+	data_handler.modify_emulator("example_emulator", "Updated System", "launcher", "Updated description",  new_properties)	
 
 func parse_config_to_json(file_path: String) -> Dictionary:
 	var config = {}
