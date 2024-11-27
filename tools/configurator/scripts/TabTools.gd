@@ -11,12 +11,19 @@ func _ready():
 func _connect_signals() -> void:
 	%check_conn_button.pressed.connect(check_internet_connection)
 	%backup_user_button.pressed.connect(run_function.bind(%backup_user_button, "Start User Backup"))
+	%srm_button.pressed.connect(run_function.bind(%srm_button,""))
 	
 func run_function(button: Button, message: String) -> void:
 	class_functions.logger("d",message)
 	match button.name:
 		"backup_user_button":
 			_run_backup(button)
+		"srm_button":
+			_run_srm(button)
+
+func _run_srm(button) -> void:
+	var launch = "steam-rom-manager"
+	var run_result = await class_functions.run_thread_command(launch,[], true)
 
 func _run_backup(button: Button) -> void:
 	var original_txt = button.text

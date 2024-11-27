@@ -37,7 +37,7 @@ func load_base_data() -> AppData:
 				if emulator_data.has("url"):
 					emulator.url = emulator_data["url"]
 				if emulator_data.has("system"):	
-					emulator.system = emulator_data["system"]
+					emulator.system = str(emulator_data["system"])
 				emulator.launch = emulator_data["launch"]
 				if emulator_data.has("properties"):
 					for property_data in emulator_data["properties"]:

@@ -229,7 +229,6 @@ func import_csv_data(file_path: String) -> Dictionary:
 
 func _import_data_lists(file_path: String) -> void:
 	var tk_about: Dictionary = import_csv_data(file_path)
-	
 	for key in tk_about.keys():
 		var entry = tk_about[key]
 		print("ID: " + key)
@@ -425,7 +424,7 @@ func update_global(button: Button, preset: String, state: bool) -> void:
 				change_global(result, button, cheevos_hardcore_state)
 
 func change_global(parameters: Array, button: Button, state: String) -> void:
-	print (parameters)
+	#print (parameters)
 	match parameters[1]:
 		"abxy_button_swap", "ask_to_exit", "borders", "widescreen", "rewind", "cheevos", "cheevos_hardcore":
 			var command_parameter: Array
