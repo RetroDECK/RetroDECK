@@ -23,6 +23,8 @@ buildid
 *.bak
 incconfigs/
 .github/workflows/cooker-monkeyx.yml
+*.flatpak
+*.flatpak.sha
 
 # Python #
 ##########
