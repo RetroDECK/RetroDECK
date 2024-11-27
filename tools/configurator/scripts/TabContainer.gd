@@ -15,7 +15,7 @@ func _ready():
 		%TabContainer.add_theme_font_size_override("font_size", 15)
 	else:
 		%TabContainer.add_theme_font_size_override("font_size", class_functions.font_tab_size)
-	set_tab_title(0, "  GLOBALS    ")
+	set_tab_title(0, "  GLOBAL    ")
 	set_tab_title(1, "  SYSTEMS    ")
 	set_tab_title(2, "   TOOLS      ")
 	set_tab_title(3, "  SETTINGS   ")
