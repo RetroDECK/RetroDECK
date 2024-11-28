@@ -109,61 +109,54 @@ func logger_bash(log_type: String, log_text: String) -> void:
 	log_result = await run_thread_command(wrapper_command,log_parameters, false)
 
 func logger(log_type: String, log_text: String) -> void:
-	var log_dir_path: String = "/var/config/retrodeck/logs/"
-	var log_path: String = '/var/config/retrodeck/logs/gd_logs.log'
-
-	var log_dir: DirAccess = DirAccess.open(log_dir_path)
+	var log_dir: DirAccess = DirAccess.open(rd_log)
 	var log_file: FileAccess
-
-	var log_header: String = " GD "
-
+	var log_header: String = "[GODOT] "
 	var datetime: Dictionary = Time.get_datetime_dict_from_system()
 	var unixtime: float = Time.get_unix_time_from_system()
 	var msec: int = (unixtime - floor(unixtime)) * 1000 # finally, real ms! Thanks, monkeyx
-
 	var timestamp: String = "[%d-%02d-%02d %02d:%02d:%02d.%03d]" % [
 	datetime.year, datetime.month, datetime.day,
 	datetime.hour, datetime.minute, datetime.second, msec] # real ms!!
-
-	var log_line: String = timestamp + log_header
+	var log_line: String = timestamp
 
 	match log_type:
 		'w':
-			log_line += "[Warning] "
+			log_line += "[Warning] " + log_header
 			# print("Warning, mate")
 		'e':
-			log_line += "[Error] "
+			log_line += "[Error] " + log_header
 			# print("Error, mate")
 		'i':
-			log_line += "[Info] "
+			log_line += "[Info] " + log_header
 			# print("Info, mate")
 		'd':
-			log_line += "[Debug] "
+			log_line += "[Debug] " + log_header
 			# print("Debug, mate")
 		_:
-			log_line += " "
+			log_line += " " + log_header
 			print("No idea, mate")
 	log_line += log_text
 	# print(log_line)
 
 	if not log_dir:
 		log_dir = DirAccess.open("res://") #open something valid to create an instance
-		print(log_dir.make_dir_recursive(log_dir_path))
-		if log_dir.make_dir_recursive(log_dir_path) != OK:
-			print("Something wrong with log directory")
+		print(log_dir.make_dir_recursive(rd_log_folder))
+		if log_dir.make_dir_recursive(rd_log_folder) != OK:
+			print("Something wrong with log directory - ", rd_log_folder)
 			return
 
-	if not FileAccess.open(log_path, FileAccess.READ):
-		log_file = FileAccess.open(log_path, FileAccess.WRITE_READ) # to create a file if not there
+	if not FileAccess.open(rd_log, FileAccess.READ):
+		log_file = FileAccess.open(rd_log, FileAccess.WRITE_READ) # to create a file if not there
 	else:
-		log_file = FileAccess.open(log_path, FileAccess.READ_WRITE) # to not truncate
+		log_file = FileAccess.open(rd_log, FileAccess.READ_WRITE) # to not truncate
 
 	if log_file:
 		log_file.seek_end()
 		log_file.store_line(log_line)
 		log_file.close()
 	else:
-		print("Something wrong with log file")
+		print("Something wrong with log file - ", rd_log)
 
 func array_to_string(arr: Array) -> String:
 	var text: String
@@ -377,7 +370,7 @@ func update_global(button: Button, preset: String, state: bool) -> void:
 				result.append_array([config_section.keys()])
 				change_global(result, button, border_state)
 			if widescreen_state == "true" or widescreen_state == "mixed":
-				var button_tmp = main_scene.get_node("%widescreen_button")
+				var _button_tmp = main_scene.get_node("%widescreen_button")
 				#Remove last array item or tries to append again
 				result.clear()
 				result.append_array([preset])
@@ -433,16 +426,19 @@ func change_global(parameters: Array, button: Button, state: String) -> void:
 				command_parameter = [parameters[0],parameters[1],parameters[2]]
 			else:
 				command_parameter = [parameters[0],parameters[1]]
-			logger("d", "Change Global Multi: %s  " % str(command_parameter))
+			logger("i", "Change Global Multi: %s  " % str(command_parameter))
 			var result: Dictionary = await run_thread_command(wrapper_command, command_parameter, false)
 			#var result = OS.execute_with_pipe(wrapper_command, command_parameter)
-			logger("d", "Exit code: %s" % result["exit_code"])
+			logger("i", "Exit code: %s" % result["exit_code"])
 		_:
-			logger("d", "Change Global Single: %s" % str(parameters)) 
+			logger("i", "Change Global Single: %s" % str(parameters)) 
 			var result: Dictionary = await run_thread_command(wrapper_command, parameters, false)
 			#var result = OS.execute_with_pipe(wrapper_command, parameter)
 			#var result = OS.create_process(wrapper_command, cparameter)
-			logger("d", "Exit code: %s" % result["exit_code"])
+			if result["exit_code"] == 0:
+				logger("i", "Exit code: %s" % result["exit_code"])
+			else:
+				logger("e", "Exit code: %s" % result["exit_code"])
 	parameters.append(button)
 	parameters.append(state)
 	update_global_signal.emit(parameters)

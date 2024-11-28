@@ -85,9 +85,9 @@ func load_base_data() -> AppData:
 			app_dict.cores = cores
 			return app_dict
 		else:
-			class_functions.logger("d","Error parsing JSON ")
+			class_functions.logger("e","Error parsing JSON ")
 	else:
-		class_functions.logger("d","Error opening file: %s" % file)
+		class_functions.logger("e","Error opening file: %s" % file)
 		get_tree().quit()
 	return null
 
