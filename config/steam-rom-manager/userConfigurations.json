@@ -5,31 +5,40 @@
         "steamDirectory": "${steamdirglobal}",
         "steamCategory": "RetroDECK",
         "romDirectory": "${romsdirglobal}",
+        "steamCategories": [],
         "executableArgs": "",
         "executableModifier": "\"${exePath}\"",
         "startInDirectory": "",
         "titleModifier": "${fuzzyTitle}",
+        "fetchControllerTemplatesButton": null,
+        "removeControllersButton": null,
+        "steamInputEnabled": "1",
         "imageProviders": [
-            "SteamGridDB"
+            "sgdb",
+            "steamCDN"
         ],
-        "onlineImageQueries": "${${fuzzyTitle}}",
+        "onlineImageQueries": [
+            "${fuzzyTitle}"
+        ],
         "imagePool": "${fuzzyTitle}",
+        "drmProtect": false,
         "userAccounts": {
-            "specifiedAccounts": ""
+            "specifiedAccounts": [
+                ""
+            ]
+        },
+        "parserInputs": {
+            "glob": "${title}.sh"
         },
         "executable": {
             "path": "",
             "shortcutPassthrough": false,
             "appendArgsToExecutable": true
         },
-        "parserInputs": {
-            "glob": "${title}.sh"
-        },
         "titleFromVariable": {
-            "limitToGroups": "",
+            "limitToGroups": [],
             "caseInsensitiveVariables": false,
-            "skipFileIfVariableWasNotFound": false,
-            "tryToMatchTitle": false
+            "skipFileIfVariableWasNotFound": false
         },
         "fuzzyMatch": {
             "replaceDiacritics": true,
@@ -47,6 +56,7 @@
                 "mappingId": "RetroDECK_controller_ps5.vdf",
                 "profileType": "template"
             },
+            "ps5_edge": null,
             "xbox360": {
                 "title": "RetroDECK Controller",
                 "mappingId": "RetroDECK_controller_xbox360_simple.vdf",
@@ -57,6 +67,7 @@
                 "mappingId": "RetroDECK_controller_xboxone_simple.vdf",
                 "profileType": "template"
             },
+            "xboxelite": null,
             "switch_joycon_left": {
                 "title": "Controller",
                 "mappingId": "controller_switch_joycon_left_gamepad_joystick.vdf",
@@ -76,10 +87,11 @@
                 "title": "RetroDECK Controller",
                 "mappingId": "RetroDECK_controller_steamdeck_neptune_full.vdf",
                 "profileType": "template"
-            }
+            },
+            "steamcontroller_gordon": null
         },
         "imageProviderAPIs": {
-            "SteamGridDB": {
+            "sgdb": {
                 "nsfw": false,
                 "humor": false,
                 "styles": [],
@@ -88,7 +100,11 @@
                 "stylesIcon": [],
                 "imageMotionTypes": [
                     "static"
-                ]
+                ],
+                "sizes": [],
+                "sizesHero": [],
+                "sizesTall": null,
+                "sizesIcon": []
             }
         },
         "defaultImage": {
@@ -106,6 +122,6 @@
             "icon": null
         },
         "parserId": "1725539138664815",
-        "version": 15
+        "version": 25
     }
 ]

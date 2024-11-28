@@ -538,8 +538,28 @@ get_steam_user() {
     log i "SteamID:\t$steam_id"
     log i "Username:\t$steam_username"
     log i "Name:\t\t$steam_prettyname"
+
+    if [[ $steam_sync == "true" ]]; then
+      populate_steamuser_srm
+    fi
+    
   else
     # Log warning if file not found
     log w "No Steam user found, proceeding" >&2
   fi
+}
+
+populate_steamuser_srm(){
+  # Populating SRM config with Steam Username
+      log d "Populating Steam Rom Manager config file with Steam Username"
+      jq --arg username "$steam_username" '
+        map(
+          if .userAccounts.specifiedAccounts then
+            .userAccounts.specifiedAccounts = [$username]
+          else
+            .
+          end
+        )
+      ' "$XDG_CONFIG_HOME/steam-rom-manager/userData/userConfigurations.json" > "$XDG_CONFIG_HOME/steam-rom-manager/userData/userConfigurations.json.tmp" &&
+      mv "$XDG_CONFIG_HOME/steam-rom-manager/userData/userConfigurations.json.tmp" "$XDG_CONFIG_HOME/steam-rom-manager/userData/userConfigurations.json"
 }
