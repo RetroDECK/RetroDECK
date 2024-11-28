@@ -1,24 +1,29 @@
 {
 	"fuzzyMatcher": {
-		"verbose": false,
-		"filterProviders": true
+	  "verbose": false,
+	  "filterProviders": true
 	},
 	"environmentVariables": {
-		"steamDirectory": "",
-		"userAccounts": "${steamlogin}",
-		"romsDirectory": "",
-		"retroarchPath": "",
-		"raCoresDirectory": "",
-		"localImagesDirectory": ""
+	  "steamDirectory": "",
+		  "userAccounts": [
+			  "steamlogin"
+		  ],
+	  "romsDirectory": "",
+	  "retroarchPath": "",
+	  "raCoresDirectory": "",
+	  "localImagesDirectory": ""
 	},
 	"previewSettings": {
-		"retrieveCurrentSteamImages": true,
-		"deleteDisabledShortcuts": false,
-		"imageZoomPercentage": 30,
-		"preload": false
+		  "imageLoadStrategy": "loadLazy",
+	  "retrieveCurrentSteamImages": true,
+		  "disableCategories": false,
+	  "deleteDisabledShortcuts": false,
+	  "imageZoomPercentage": 30,
+	  "hideUserAccount": false
 	},
 	"enabledProviders": [
-		"SteamGridDB"
+		  "sgdb",
+		  "steamCDN"
 	],
 	"batchDownloadSize": 50,
 	"language": "en-US",
@@ -26,5 +31,10 @@
 	"offlineMode": false,
 	"navigationWidth": 0,
 	"clearLogOnTest": false,
-	"version": 6
-}
+	  "version": 10,
+	  "dnsServers": [],
+	  "autoUpdate": true,
+	  "autoKillSteam": false,
+	  "autoRestartSteam": false
+  }
+  
