@@ -155,7 +155,6 @@ func _on_bios_button_expert_pressed():
 func _on_exit_button_pressed():
 	_play_main_animations()
 	_exit()
-	_exit()
 
 #func _on_locale_selected(index):
 	#match index:

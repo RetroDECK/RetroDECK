@@ -19,11 +19,11 @@ func run_function(button: Button, message: String) -> void:
 		"backup_user_button":
 			_run_backup(button)
 		"srm_button":
-			_run_srm(button)
+			_run_srm()
 
-func _run_srm(button) -> void:
+func _run_srm() -> void:
 	var launch = "steam-rom-manager"
-	var run_result = await class_functions.run_thread_command(launch,[], true)
+	var _run_result = await class_functions.run_thread_command(launch,[], true)
 
 func _run_backup(button: Button) -> void:
 	var original_txt = button.text
