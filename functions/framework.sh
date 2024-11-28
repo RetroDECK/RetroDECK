@@ -513,3 +513,33 @@ do
   fi
 done < "$1"
 }
+
+get_steam_user() {
+  # This function populates environment variables with the actual logged Steam user data
+  if [ -f "$HOME/.steam/steam/config/loginusers.vdf" ]; then
+    # Extract the Steam ID of the most recent user
+    export steam_id=$(awk '
+      /"users"/ {flag=1} 
+      flag && /^[ \t]*"[0-9]+"/ {id=$1} 
+      flag && /"MostRecent".*"1"/ {print id; exit}' "$HOME/.steam/steam/config/loginusers.vdf" | tr -d '"')
+
+    # Extract the Steam username (AccountName)
+    export steam_username=$(awk -v steam_id="$steam_id" '
+      $0 ~ steam_id {flag=1} 
+      flag && /"AccountName"/ {gsub(/"/, "", $2); print $2; exit}' "$HOME/.steam/steam/config/loginusers.vdf")
+
+    # Extract the Steam pretty name (PersonaName)
+    export steam_prettyname=$(awk -v steam_id="$steam_id" '
+      $0 ~ steam_id {flag=1} 
+      flag && /"PersonaName"/ {gsub(/"/, "", $2); print $2; exit}' "$HOME/.steam/steam/config/loginusers.vdf")
+
+    # Log success
+    log i "Steam user found:"
+    log i "SteamID:\t$steam_id"
+    log i "Username:\t$steam_username"
+    log i "Name:\t\t$steam_prettyname"
+  else
+    # Log warning if file not found
+    log w "No Steam user found, proceeding" >&2
+  fi
+}

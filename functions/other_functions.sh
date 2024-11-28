@@ -936,6 +936,7 @@ quit_retrodeck() {
 }
 
 start_retrodeck() {
+  get_steam_user # get steam user info
   splash_screen # Check if today has a surprise splashscreen and load it if so
   ponzu
   log i "Starting RetroDECK v$version"
