@@ -61,12 +61,12 @@
     }
   },
   "splash_screens": {
-    "xmas": {
-      "start_date": "1201",
-      "end_date": "1231",
+    "new_year": {
+      "start_date": "1231",
+      "end_date": "0106",
       "start_time": "0000",
       "end_time": "2359",
-      "filename": "rd-xmas-splash.svg"
+      "filename": "placeholder.svg"
     },
     "lunar_dragon": {
       "start_date": "0209",
@@ -96,6 +96,13 @@
       "end_time": "2359",
       "filename": "rd-stpatricks-splash.svg"
     },
+    "fruhlingsfest": {
+      "start_date": "0425",
+      "end_date": "0428",
+      "start_time": "0000",
+      "end_time": "2359",
+      "filename": "placeholder.svg"
+    },
     "kodomo_golden_week": {
       "start_date": "0429",
       "end_date": "0505",
@@ -123,6 +130,20 @@
       "start_time": "0000",
       "end_time": "2359",
       "filename": "placeholder.svg"
+    },
+    "oktoberfest": {
+      "start_date": "0920",
+      "end_date": "1005",
+      "start_time": "0000",
+      "end_time": "2359",
+      "filename": "placeholder.svg"
+    },
+    "xmas": {
+      "start_date": "1201",
+      "end_date": "1231",
+      "start_time": "0000",
+      "end_time": "2359",
+      "filename": "rd-xmas-splash.svg"
     }
   },
   "incompatible_presets": {
