@@ -122,16 +122,16 @@ func logger(log_type: String, log_text: String) -> void:
 
 	match log_type:
 		'w':
-			log_line += "[Warning] " + log_header
+			log_line += " [WANRING] " + log_header
 			# print("Warning, mate")
 		'e':
-			log_line += "[Error] " + log_header
+			log_line += " [ERROR] " + log_header
 			# print("Error, mate")
 		'i':
-			log_line += "[Info] " + log_header
+			log_line += " [INFO] " + log_header
 			# print("Info, mate")
 		'd':
-			log_line += "[Debug] " + log_header
+			log_line += " [DEBUG] " + log_header
 			# print("Debug, mate")
 		_:
 			log_line += " " + log_header
