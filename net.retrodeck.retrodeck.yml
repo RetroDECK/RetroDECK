@@ -663,7 +663,7 @@ modules:
     sources:
       - type: git
         url:  https://github.com/RetroDECK/RetroDECK-theme
-        commit: 975c41cac99d150b6ae86a1dfd19988058c69aad
+        commit: 4e63e29edc4afc9dd0c9da753fe9a7639b471309
 
   # RUFFLE - START
   # https://github.com/ruffle-rs/ruffle/releases
