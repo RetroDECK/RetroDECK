@@ -29,9 +29,13 @@ log() {
 
   local level="$1"  # Logging level of the current message
   local message="$2"  # Message to log
-  local timestamp="$(date +[%Y-%m-%d\ %H:%M:%S.%3N])"  # Timestamp for the log entry
   local logfile="${3:-$rd_logs_folder/retrodeck.log}"  # Log file, default to retrodeck.log
+  local timestamp="$(date +[%Y-%m-%d\ %H:%M:%S.%3N])"  # Timestamp for the log entry
   local colorize_terminal=true
+
+  # Determine the calling function or use [FWORK]
+  local caller="${FUNCNAME[1]:-[FWORK]}"
+  caller="${caller^^}" # Convert to uppercase
 
   # Check if the shell is sh (not bash or zsh) to avoid colorization
   if [ "${SHELL##*/}" = "sh" ]; then
@@ -76,11 +80,11 @@ log() {
 
     # Construct the log message
     if [ "$colorize_terminal" = true ]; then
-      colored_message="$color $message\e[0m"
+      colored_message="$color [$caller] $message\e[0m"
     else
-      colored_message="$timestamp $prefix $message"
+      colored_message="$timestamp $prefix [$caller] $message"
     fi
-    log_message="$timestamp $prefix $message"
+    log_message="$timestamp $prefix [$caller] $message"
 
     # Display the message in the terminal
     echo -e "$colored_message" >&2
