@@ -199,7 +199,7 @@ jobs:
         run: |
           git config --global credential.helper store
           echo "https://${{ steps.generate-rekku-token.outputs.token }}@github.com" > ~/.git-credentials
-          "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
+          "${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
 
       # Sometimes flatpak download fails, in this case it tries a second time
       - name: "Build flatpak: download only (retry)"
