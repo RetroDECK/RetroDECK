@@ -4,6 +4,16 @@
 
 git config --global protocol.file.allow always
 
+# Getting token from env
+TOKEN=$GITHUB_TOKEN
+
+export GIT_CURL_VERBOSE=1
+export GIT_ASKPASS=echo
+export GIT_USERNAME=token
+export GIT_PASSWORD=$TOKEN
+
+sed -i "s|Authorization: token .*|Authorization: token ${TOKEN}|" "${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml"
+
 if [[ "${GITHUB_REF##*/}" == "main" ]]; then
     BUNDLE_NAME="RetroDECK.flatpak"
     FOLDER=retrodeck-flatpak
