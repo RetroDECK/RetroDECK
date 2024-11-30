@@ -889,6 +889,9 @@ prepare_component() {
     chmod +x "/var/data/PortMaster/PortMaster.sh"
     rm -f "$roms_folder/portmaster/PortMaster.sh"
     install -Dm755 "/var/data/PortMaster/PortMaster.sh" "$roms_folder/portmaster/PortMaster.sh"
+    create_dir "/var/data/PortMaster/config/"
+    cp "$config/portmaster/config.json" "/var/data/PortMaster/config/config.json"
+
   fi
 
   if [[ "$component" =~ ^(ruffle|all)$ ]]; then
