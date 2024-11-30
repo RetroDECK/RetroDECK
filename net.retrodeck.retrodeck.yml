@@ -652,11 +652,8 @@ modules:
       - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
-        # url: https://github.com/RetroDECK/ES-DE/releases/latest/download/RetroDECK-ES-DE-Artifact.tar.gz
-        # sha256: RETRODECKESDELATEST
-        # Temporarly testing the new logging branch
-        url: https://github.com/RetroDECK/ES-DE/releases/download/feat%2Flogger-291124.35/RetroDECK-ES-DE-Artifact.tar.gz
-        sha256: 55a9600644eb71bffd318b74c829596c9d10f750a3f1167f63b5e42736bf6a7a
+        url: https://github.com/RetroDECK/ES-DE/releases/latest/download/RetroDECK-ES-DE-Artifact.tar.gz
+        sha256: RETRODECKESDELATEST
 
   - name: retrodeck-theme
     buildsystem: simple
