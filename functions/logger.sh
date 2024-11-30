@@ -91,9 +91,40 @@ log() {
 
     # Write the log message to the log file
     if [ ! -f "$logfile" ]; then
-      echo "$timestamp [WARN] Log file not found in \"$logfile\", creating it" >&2
+      #echo "$timestamp [WARN] Log file not found in \"$logfile\", creating it" >&2 # Disabled it as it's always appearing because of log rotation
       touch "$logfile"
     fi
     echo "$log_message" >> "$logfile"
+  fi
+}
+
+
+# The rotate_logs function manages log file rotation to limit the number of logs retained.
+# It compresses the current log file into a .tar.gz archive, increments the version of 
+# older log files (e.g., retrodeck.1.tar.gz to retrodeck.2.tar.gz), and deletes the oldest 
+# archive if it exceeds the maximum limit (default: 3 rotated logs). After rotation, 
+# the original log file is cleared for continued logging.
+
+rotate_logs() {
+  local logfile="${1:-$rd_logs_folder/retrodeck.log}"  # Default log file
+  local max_logs=3  # Maximum number of rotated logs to keep
+
+  # Rotate existing logs
+  for ((i=max_logs; i>0; i--)); do
+    if [[ -f "${logfile}.${i}.tar.gz" ]]; then
+      if (( i == max_logs )); then
+        # Remove the oldest log if it exceeds the limit
+        rm -f "${logfile}.${i}.tar.gz"
+      else
+        # Rename log file to the next number
+        mv "${logfile}.${i}.tar.gz" "${logfile}.$((i+1)).tar.gz"
+      fi
+    fi
+  done
+
+  # Compress the current log file if it exists
+  if [[ -f "$logfile" ]]; then
+    # Compress without directory structure and suppress tar output
+    tar -czf "${logfile}.1.tar.gz" -C "$(dirname "$logfile")" "$(basename "$logfile")" --remove-files &>/dev/null
   fi
 }
