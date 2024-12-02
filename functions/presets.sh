@@ -212,6 +212,10 @@ build_preset_config() {
 
            "rewrite" )
               if [[ "$read_preset" == "$current_preset" ]]; then
+                if [[ "$target_file" = \$* ]]; then # Read current target file and resolve if it is a variable
+                  eval target_file=$target_file
+                fi
+                local read_target_file="$target_file"
                 if [[ "$read_system_enabled" == "true" ]]; then
                   if [[ "$new_setting_value" = \$* ]]; then
                     eval new_setting_value=$new_setting_value

@@ -28,12 +28,14 @@
 	"cheevos": {
 		"duckstation": false,
 		"pcsx2": false,
-		"retroarch": false
+		"retroarch": false,
+		"ppsspp": false
 	},
 	"cheevos_hardcore": {
 		"duckstation": false,
 		"pcsx2": false,
-		"retroarch": false
+		"retroarch": false,
+		"ppsspp": false
 	},
 	"options": {
 		"akai_ponzu": false,
