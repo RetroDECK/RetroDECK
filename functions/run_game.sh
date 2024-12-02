@@ -73,8 +73,8 @@ run_game() {
         if [[ -n "$altemulator" ]]; then
 
             log d "Found <altemulator> for game: $altemulator"
-            emulator=$(xmllint --recover --xpath "string(//command[@label=\"$altemulator\"])" "$es_systems" 2>/dev/null)
-
+            emulator=$(xmllint --recover --xpath "string(//system[name=\"$system\"]/command[@label=\"$altemulator\"])" "$es_systems" 2>/dev/null)
+            
         else # if no altemulator is found we search if a global one is set
 
             log d "No altemulator found in the game entry, searching for alternativeEmulator to check if a global emulator is set for the system $system"
@@ -101,7 +101,7 @@ run_game() {
     log i " RetroDECK is now booting the game"
     log i " Game path: \"$game\""
     log i " Recognized system: $system"
-    log i " Given emulator: $emulator"
+    log i " Command line: $emulator"
     log i "-------------------------------------------"
 
     # Now pass the final constructed command to substitute_placeholders function
@@ -164,7 +164,6 @@ find_system_commands() {
     echo "$selected_command"
 }
 
-# Function to substitute placeholders in the command
 substitute_placeholders() {
     local cmd="$1"
     log d "Substitute placeholder: working on $cmd"
@@ -181,13 +180,63 @@ substitute_placeholders() {
     local rom_dir_raw="$rom_dir"
     local es_path=""
     local emulator_path=""
-
+    local start_dir=""
+    
     # Manually replace %EMULATOR_*% placeholders
     while [[ "$cmd" =~ (%EMULATOR_[A-Z0-9_]+%) ]]; do
         placeholder="${BASH_REMATCH[1]}"
         emulator_path=$(replace_emulator_placeholder "$placeholder")
         cmd="${cmd//$placeholder/$emulator_path}"
     done
+
+    # Process %STARTDIR%
+    local start_dir_pos=$(echo "$cmd" | grep -b -o "%STARTDIR%" | cut -d: -f1)
+    if [[ -n "$start_dir_pos" ]]; then
+        # Validate and extract %STARTDIR% value
+        if [[ "${cmd:start_dir_pos+10:1}" != "=" ]]; then
+            log e "Error: Invalid %STARTDIR% entry in command"
+            return 1
+        fi
+
+        if [[ "${cmd:start_dir_pos+11:1}" == "\"" ]]; then
+            # Quoted path
+            local closing_quotation=$(echo "${cmd:start_dir_pos+12}" | grep -bo '"' | head -n 1 | cut -d: -f1)
+            if [[ -z "$closing_quotation" ]]; then
+                log e "Error: Invalid %STARTDIR% entry (missing closing quotation)"
+                return 1
+            fi
+            start_dir="${cmd:start_dir_pos+12:closing_quotation}"
+            cmd="${cmd:0:start_dir_pos}${cmd:start_dir_pos+12+closing_quotation+1}"
+        else
+            # Non-quoted path
+            local space_pos=$(echo "${cmd:start_dir_pos+11}" | grep -bo ' ' | head -n 1 | cut -d: -f1)
+            if [[ -n "$space_pos" ]]; then
+                start_dir="${cmd:start_dir_pos+11:space_pos}"
+                cmd="${cmd:0:start_dir_pos}${cmd:start_dir_pos+11+space_pos+1}"
+            else
+                start_dir="${cmd:start_dir_pos+11}"
+                cmd="${cmd:0:start_dir_pos}"
+            fi
+        fi
+
+        # Expand paths in %STARTDIR%
+        start_dir=$(eval echo "$start_dir") # Expand ~ or environment variables
+        start_dir="${start_dir//%EMUDIR%/$(dirname "$emulator_path")}"
+        start_dir="${start_dir//%GAMEDIR%/$(dirname "$rom_path")}"
+        start_dir="${start_dir//%GAMEENTRYDIR%/$rom_path}"
+
+        # Create directory if it doesn't exist
+        if [[ ! -d "$start_dir" ]]; then
+            mkdir -p "$start_dir" || {
+                log e "Error: Directory \"$start_dir\" could not be created. Permission problems?"
+                return 1
+            }
+        fi
+
+        # Normalize the path
+        start_dir=$(realpath "$start_dir")
+        log d "Setting start directory to: $start_dir"
+    fi
 
     # Substitute %BASENAME% and other placeholders
     cmd="${cmd//"%BASENAME%"/"'$base_name'"}"
