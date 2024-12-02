@@ -110,7 +110,7 @@ pcsx2gsconf="/var/config/PCSX2/inis/GS.ini" # This file should be deprecated sin
 pcsx2uiconf="/var/config/PCSX2/inis/PCSX2_ui.ini" # This file should be deprecated since moving to PCSX2-QT
 pcsx2vmconf="/var/config/PCSX2/inis/PCSX2_vm.ini" # This file should be deprecated since moving to PCSX2-QT
 
-# PPSSPPDL config files
+# PPSSPP-SDL config files
 
 ppssppconf="/var/config/ppsspp/PSP/SYSTEM/ppsspp.ini"
 ppssppcontrolsconf="/var/config/ppsspp/PSP/SYSTEM/controls.ini"
