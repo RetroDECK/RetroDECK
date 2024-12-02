@@ -216,11 +216,17 @@ build_preset_config() {
                   eval target_file=$target_file
                 fi
                 local read_target_file="$target_file"
+                if [[ "$defaults_file" = \$* ]]; then #Read current defaults file and resolve if it is a variable
+                  eval defaults_file=$defaults_file
+                fi
+                local read_defaults_file="$defaults_file"
                 if [[ "$read_system_enabled" == "true" ]]; then
                   if [[ "$new_setting_value" = \$* ]]; then
                     eval new_setting_value=$new_setting_value
                   fi
                   echo -n "$new_setting_value" > "$read_target_file"
+                else
+                  cat "$read_defaults_file" > "$read_target_file"
                 fi
               fi
             ;;
