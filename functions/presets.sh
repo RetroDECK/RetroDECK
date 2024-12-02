@@ -210,6 +210,17 @@ build_preset_config() {
               fi
             ;;
 
+           "rewrite" )
+              if [[ "$read_preset" == "$current_preset" ]]; then
+                if [[ "$read_system_enabled" == "true" ]]; then
+                  if [[ "$new_setting_value" = \$* ]]; then
+                    eval new_setting_value=$new_setting_value
+                  fi
+                  echo -n "$new_setting_value" > "$read_target_file"
+                fi
+              fi
+            ;;
+
             "enable" )
               if [[ "$read_preset" == "$current_preset" ]]; then
                 if [[ "$read_system_enabled" == "true" ]]; then

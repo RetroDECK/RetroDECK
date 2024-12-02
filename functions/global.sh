@@ -114,6 +114,7 @@ pcsx2vmconf="/var/config/PCSX2/inis/PCSX2_vm.ini" # This file should be deprecat
 
 ppssppconf="/var/config/ppsspp/PSP/SYSTEM/ppsspp.ini"
 ppssppcontrolsconf="/var/config/ppsspp/PSP/SYSTEM/controls.ini"
+ppssppcheevosconf="/var/config/ppsspp/PSP/SYSTEM/ppsspp_retroachievements.dat"
 
 # Primehack config files
 
