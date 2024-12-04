@@ -629,13 +629,11 @@ modules:
       - type: script
         commands:
           - |
-            #!/bin/bash
             "/var/data/PortMaster/PortMaster.sh" "$@"
         dest-filename: PortMaster
       - type: script
         commands:
           - |
-            #!/bin/bash
             "/var/data/PortMaster/harbourmaster" "$@"
         dest-filename: harbourmaster
 
