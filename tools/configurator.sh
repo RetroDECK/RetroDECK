@@ -1260,7 +1260,7 @@ configurator_add_steam() {
     zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - RetroDECK Steam Syncronization" \
-    --text="Steam syncronization is currently enabled.\nDisabling Steam Sync will remove all your favorites from Steam at the next Steam startup.\n\nDo you want to continue?\n\nTo re-add them just enable Steam Sync again and restart Steam."
+    --text="Steam syncronization is currently enabled.\nDisabling Steam Sync will remove all of your favorites from Steam at the next Steam startup.\n\nDo you want to continue?\n\nTo re-add them, just reenable Steam Sync then and restart Steam."
 
     if [ $? == 0 ] # User clicked "Yes"
     then
