@@ -730,8 +730,14 @@
       "path": "dc"
     },
     "f355bios.zip": {
-      "md5": "882f2c1cf8ec030955c48fe6aa6929ea",
-      "system": "dreamcast",
+      "md5": [
+      "547f3d12aed389058ca06148f1cca0ed",
+      "882f2c1cf8ec030955c48fe6aa6929ea",
+      ],
+      "system": [
+      "dreamcast",
+      "arcade",
+      ],
       "description": "Naomi Ferrari F355 Challenge Twin/Deluxe BIOS",
       "path": "dc"
     },
