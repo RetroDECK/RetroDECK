@@ -68,12 +68,12 @@
       "end_time": "2359",
       "filename": "placeholder.svg"
     },
-    "lunar_dragon": {
-      "start_date": "0209",
+    "chinese_new_year": {
+      "start_date": "0128",
       "end_date": "0212",
       "start_time": "0000",
       "end_time": "2359",
-      "filename": "rd-lunar-dragon-splash.svg"
+      "filename": "rd-lunar-snake-splash.svg"
     },
     "valentines_day": {
       "start_date": "0214",
@@ -82,7 +82,7 @@
       "end_time": "2359",
       "filename": "rd-valentines-splash.svg"
     },
-    "retrodeck_birthday": {
+    "retrodeck_birthday_gmday": {
       "start_date": "0304",
       "end_date": "0304",
       "start_time": "0000",
@@ -109,6 +109,13 @@
       "start_time": "0000",
       "end_time": "2359",
       "filename": "rd-kodomo-golden.svg"
+    },
+    "midsommarafton": {
+      "start_date": "0620",
+      "end_date": "0621",
+      "start_time": "0000",
+      "end_time": "2359",
+      "filename": "placeholder.svg"
     },
     "tanabata": {
       "start_date": "0707",

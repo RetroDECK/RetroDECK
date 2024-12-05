@@ -4,8 +4,6 @@
 branches=(
   "cooker"
   "feat/shadps4"
-  "feat/PortMaster"
-  "feat/steam-rom-manager"
 )
 
 # Get the current branch name

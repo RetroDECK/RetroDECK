@@ -535,9 +535,9 @@ get_steam_user() {
 
     # Log success
     log i "Steam user found:"
-    log i "SteamID:\t$steam_id"
-    log i "Username:\t$steam_username"
-    log i "Name:\t\t$steam_prettyname"
+    log i "SteamID: $steam_id"
+    log i "Username: $steam_username"
+    log i "Name: $steam_prettyname"
 
     if [[ $steam_sync == "true" ]]; then
       populate_steamuser_srm

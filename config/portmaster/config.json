@@ -1,0 +1,9 @@
+{
+    "change_channel": false,
+    "first-run": true,
+    "release_channel": "stable",
+    "show_experimental": false,
+    "theme": "default_theme",
+    "theme-scheme": "Dracula",
+    "version": 2
+}

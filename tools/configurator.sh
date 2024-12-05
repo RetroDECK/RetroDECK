@@ -1260,7 +1260,7 @@ configurator_add_steam() {
     zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - RetroDECK Steam Syncronization" \
-    --text="Steam syncronization is currently enabled. Do you want to disable it?\n\nThe already added shortcut will not be removed.\n"
+    --text="Steam syncronization is currently enabled.\nDisabling Steam Sync will remove all of your favorites from Steam at the next Steam startup.\n\nDo you want to continue?\n\nTo re-add them, just reenable Steam Sync then and restart Steam."
 
     if [ $? == 0 ] # User clicked "Yes"
     then
@@ -1294,6 +1294,12 @@ enable_steam_sync() {
 
 disable_steam_sync() {
   set_setting_value $rd_conf "steam_sync" "false" retrodeck "options"
+  source /app/libexec/steam_sync.sh
+  remove_from_steam
+  zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK" \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Configurator - RetroDECK Steam Syncronization" \
+      --text="Steam syncronization disabled and shortcuts removed, restart Steam to apply the changes."
   configurator_welcome_dialog
 }
 

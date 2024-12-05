@@ -12,6 +12,7 @@ func _connect_signals() -> void:
 	%check_conn_button.pressed.connect(check_internet_connection)
 	%backup_user_button.pressed.connect(run_function.bind(%backup_user_button, "Start User Backup"))
 	%srm_button.pressed.connect(run_function.bind(%srm_button,""))
+	%steam_sync_button.pressed.connect(class_functions.run_function.bind(%steam_sync_button, "steam_sync"))
 	
 func run_function(button: Button, message: String) -> void:
 	class_functions.logger("d",message)

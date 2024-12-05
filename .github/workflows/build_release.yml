@@ -185,14 +185,28 @@ jobs:
 
           echo "[DEBUG] CHECKPOINT 8"
 
+      - name: Generate a token for Rekku
+        id: generate-rekku-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ vars.REKKU_APP_ID }}
+          private-key: ${{ secrets.REKKU_PRIVATE_KEY }}
+          repositories: "RetroDECK,Cooker"
+          owner: "RetroDECK"
+
       - name: "Build flatpak: download only"
         id: flatpak-download
-        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
+        run: |
+          git config --global credential.helper store
+          echo "https://${{ steps.generate-rekku-token.outputs.token }}@github.com" > ~/.git-credentials
+          "${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
 
       # Sometimes flatpak download fails, in this case it tries a second time
       - name: "Build flatpak: download only (retry)"
         if: steps.flatpak-download.outcome == 'failure'
         run: |
+          git config --global credential.helper store
+          echo "https://${{ steps.generate-rekku-token.outputs.token }}@github.com" > ~/.git-credentials
           echo "Download failed, maybe some hash changed since the build start."
           echo "Recalculating hashes and retrying download..."
           rm -f "{GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml"

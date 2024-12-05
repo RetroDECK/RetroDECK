@@ -29,9 +29,13 @@ log() {
 
   local level="$1"  # Logging level of the current message
   local message="$2"  # Message to log
-  local timestamp="$(date +[%Y-%m-%d\ %H:%M:%S.%3N])"  # Timestamp for the log entry
   local logfile="${3:-$rd_logs_folder/retrodeck.log}"  # Log file, default to retrodeck.log
+  local timestamp="$(date +[%Y-%m-%d\ %H:%M:%S.%3N])"  # Timestamp for the log entry
   local colorize_terminal=true
+
+  # Determine the calling function or use [FWORK]
+  local caller="${FUNCNAME[1]:-[FWORK]}"
+  caller="${caller^^}" # Convert to uppercase
 
   # Check if the shell is sh (not bash or zsh) to avoid colorization
   if [ "${SHELL##*/}" = "sh" ]; then
@@ -76,20 +80,51 @@ log() {
 
     # Construct the log message
     if [ "$colorize_terminal" = true ]; then
-      colored_message="$color $message\e[0m"
+      colored_message="$color [$caller] $message\e[0m"
     else
-      colored_message="$timestamp $prefix $message"
+      colored_message="$timestamp $prefix [$caller] $message"
     fi
-    log_message="$timestamp $prefix $message"
+    log_message="$timestamp $prefix [$caller] $message"
 
     # Display the message in the terminal
     echo -e "$colored_message" >&2
 
     # Write the log message to the log file
     if [ ! -f "$logfile" ]; then
-      echo "$timestamp [WARN] Log file not found in \"$logfile\", creating it" >&2
+      #echo "$timestamp [WARN] Log file not found in \"$logfile\", creating it" >&2 # Disabled it as it's always appearing because of log rotation
       touch "$logfile"
     fi
     echo "$log_message" >> "$logfile"
+  fi
+}
+
+
+# The rotate_logs function manages log file rotation to limit the number of logs retained.
+# It compresses the current log file into a .tar.gz archive, increments the version of 
+# older log files (e.g., retrodeck.1.tar.gz to retrodeck.2.tar.gz), and deletes the oldest 
+# archive if it exceeds the maximum limit (default: 3 rotated logs). After rotation, 
+# the original log file is cleared for continued logging.
+
+rotate_logs() {
+  local logfile="${1:-$rd_logs_folder/retrodeck.log}"  # Default log file
+  local max_logs=3  # Maximum number of rotated logs to keep
+
+  # Rotate existing logs
+  for ((i=max_logs; i>0; i--)); do
+    if [[ -f "${logfile}.${i}.tar.gz" ]]; then
+      if (( i == max_logs )); then
+        # Remove the oldest log if it exceeds the limit
+        rm -f "${logfile}.${i}.tar.gz"
+      else
+        # Rename log file to the next number
+        mv "${logfile}.${i}.tar.gz" "${logfile}.$((i+1)).tar.gz"
+      fi
+    fi
+  done
+
+  # Compress the current log file if it exists
+  if [[ -f "$logfile" ]]; then
+    # Compress without directory structure and suppress tar output
+    tar -czf "${logfile}.1.tar.gz" -C "$(dirname "$logfile")" "$(basename "$logfile")" --remove-files &>/dev/null
   fi
 }
