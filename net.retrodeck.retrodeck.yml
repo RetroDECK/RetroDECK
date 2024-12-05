@@ -765,6 +765,7 @@ modules:
       # Desktop entries
       - cp net.retrodeck.retrodeck.desktop ${FLATPAK_DEST}/share/applications/net.retrodeck.retrodeck.desktop
       - cp net.retrodeck.retrodeck.Configurator.desktop /app/share/applications/net.retrodeck.retrodeck.Configurator.desktop
+      - cp net.retrodeck.retrodeck.start.desktop /app/share/applications/net.retrodeck.retrodeck.start.desktop
       - chmod +x net.retrodeck.retrodeck*desktop
 
       # Initializing default emulator configs
@@ -789,6 +790,9 @@ modules:
       # RUFFLE wrapper
       - cp config/ruffle/ruffle-rdwrapper.sh "${FLATPAK_DEST}/bin/ruffle-rdwrapper.sh"
       - chmod +x "${FLATPAK_DEST}/bin/ruffle-rdwrapper.sh"
+
+      # Install MIME Type
+      - install -Dm 644 config/retrodeck/net.retrodeck.retrodeck.mime.xml /app/share/mime/packages/net.retrodeck.retrodeck.mime.xml
 
     sources:
       - type: git
