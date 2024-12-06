@@ -34,7 +34,7 @@ run_game() {
         exit 1
     fi
 
-    game=$1
+    game="$(realpath "$1")"
 
     if [[ -d "$game" ]]; then
         log d "$(basename "$game") is a directory, parsing it like a \"directory as a file\""
@@ -44,13 +44,24 @@ run_game() {
 
     game_basename="./$(basename "$game")"
 
+    local error="File \"$game\" not found.\n\nPlease make sure that RetroDECK's Flatpak is correctly configured to reach the given path and try again."
+    # Check if realpath succeeded
+    if [[ -z "$game" || ! -e "$game" ]]; then
+        rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK" \
+            --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+            --title "RetroDECK - File not found" \
+            --text="ERROR: $error"
+        log e "$error"
+        exit 1
+    fi
+
     # Step 1: System Recognition
     if [[ -z "$system" ]]; then
         # Automatically detect system from game path
         system=$(echo "$game" | grep -oP '(?<=roms/)[^/]+')
         if [[ -z "$system" ]]; then
-            log e "Failed to detect system from game path."
-            exit 1
+            log i "Failed to detect system from game path, asking user action"
+            system=$(find_system_by_extension "$game_basename")
         fi
     fi
 
@@ -167,21 +178,25 @@ find_system_commands() {
 substitute_placeholders() {
     local cmd="$1"
     log d "Substitute placeholder: working on $cmd"
+
     game=$(echo "$game" | sed "s/'/'\\\\''/g") # escaping internal '
+    # Use the absolute path for %ROM%
     local rom_path="$game"
+    log d "rom_path is: \"$game\""
     local rom_dir=$(dirname "$rom_path")
-    
-    # Strip all file extensions from the base name
     local base_name=$(basename "$rom_path")
     base_name="${base_name%%.*}"
-
     local file_name=$(basename "$rom_path")
     local rom_raw="$rom_path"
     local rom_dir_raw="$rom_dir"
     local es_path=""
     local emulator_path=""
     local start_dir=""
-    
+
+    # Substitute placeholders with the absolute path and other variables
+    cmd="${cmd//"%ROM%"/"'$rom_path'"}"
+    cmd="${cmd//"%ROMPATH%"/"'$rom_dir'"}"
+
     # Manually replace %EMULATOR_*% placeholders
     while [[ "$cmd" =~ (%EMULATOR_[A-Z0-9_]+%) ]]; do
         placeholder="${BASH_REMATCH[1]}"
@@ -252,6 +267,7 @@ substitute_placeholders() {
     cmd="${cmd//"%GAMEDIRRAW%"/"'$rom_dir_raw'"}"
     cmd="${cmd//"%CORE_RETROARCH%"/"$ra_cores_path"}"
 
+    # Log the result
     log d "Command after placeholders substitutions: $cmd"
 
     # Now handle %INJECT% after %BASENAME% has been substituted
@@ -400,4 +416,38 @@ find_emulator_name_from_label() {
         log e "Found emulator from label: emulator name not found for label: $label"
         return 1
     fi
+}
+
+# Function to find systems by file extension and let user choose
+find_system_by_extension() {
+    local file_path="$1"
+    local file_extension="${file_path##*.}"
+    local file_extension_lower=$(echo "$file_extension" | tr '[:upper:]' '[:lower:]')
+
+    # Use xmllint to directly extract the systems supporting the extension
+    local matching_systems=$(xmllint --xpath "//system[extension[contains(., '.$file_extension_lower')]]/fullname/text()" "$es_systems")
+
+    # If no matching systems found, exit with an error
+    if [[ -z "$matching_systems" ]]; then
+        log e "No systems found supporting .${file_extension_lower} extension"
+        exit 1
+    fi
+
+    # Ensure each matching system is on its own line for Zenity
+    local formatted_systems=$(echo "$matching_systems" | tr '|' '\n')
+
+    # Use Zenity to create a selection dialog
+    local chosen_system=$(zenity --list --title="Select System" --column="Available Systems" --text="Multiple systems support .${file_extension_lower} extension. Please choose:" --width=500 --height=400 <<< "$formatted_systems")
+
+    # If no system was chosen, exit
+    if [[ -z "$chosen_system" ]]; then
+        log e "No system selected"
+        exit 1
+    fi
+
+    # Find the <name> corresponding to the chosen <fullname>
+    local detected_system=$(xmllint --xpath "string(//system[fullname='$chosen_system']/name)" "$es_systems")
+
+    # Return the detected system
+    echo "$detected_system"
 }
