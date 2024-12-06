@@ -39,7 +39,7 @@ compress_game() {
           rm -f "$file_path/$line"
         done < <(printf '%s\n' "$cue_bin_files")
         log i "Removing file $(realpath "$file")"
-        rm -f $(realpath "$file")
+        rm -f "$(realpath "$file")"
       else
         log i "Removing file $(realpath "$file")"
         rm -f "$(realpath "$file")"
