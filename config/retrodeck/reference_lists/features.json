@@ -62,92 +62,103 @@
   },
   "splash_screens": {
     "new_year": {
-      "start_date": "1231",
-      "end_date": "0106",
+      "start_date": "0101",
+      "end_date": "0107",
       "start_time": "0000",
       "end_time": "2359",
       "filename": "placeholder.svg"
     },
     "chinese_new_year": {
-      "start_date": "0128",
-      "end_date": "0212",
+      "start_date": "0129",
+      "end_date": "0213",
       "start_time": "0000",
       "end_time": "2359",
       "filename": "rd-lunar-snake-splash.svg"
     },
     "valentines_day": {
-      "start_date": "0214",
-      "end_date": "0214",
+      "start_date": "0215",
+      "end_date": "0215",
       "start_time": "0001",
       "end_time": "2359",
       "filename": "rd-valentines-splash.svg"
     },
     "retrodeck_birthday_gmday": {
-      "start_date": "0304",
-      "end_date": "0304",
+      "start_date": "0305",
+      "end_date": "0305",
       "start_time": "0000",
       "end_time": "2359",
       "filename": "rd-gm-bday-splash.svg"
     },
     "st_patricks_day": {
-      "start_date": "0317",
-      "end_date": "0317",
+      "start_date": "0318",
+      "end_date": "0318",
       "start_time": "0000",
       "end_time": "2359",
       "filename": "rd-stpatricks-splash.svg"
     },
     "fruhlingsfest": {
-      "start_date": "0425",
-      "end_date": "0428",
+      "start_date": "0426",
+      "end_date": "0429",
       "start_time": "0000",
       "end_time": "2359",
       "filename": "placeholder.svg"
     },
     "kodomo_golden_week": {
-      "start_date": "0429",
-      "end_date": "0505",
+      "start_date": "0430",
+      "end_date": "0506",
       "start_time": "0000",
       "end_time": "2359",
       "filename": "rd-kodomo-golden.svg"
     },
     "midsommarafton": {
-      "start_date": "0620",
-      "end_date": "0621",
+      "start_date": "0621",
+      "end_date": "0622",
       "start_time": "0000",
       "end_time": "2359",
       "filename": "placeholder.svg"
     },
     "tanabata": {
-      "start_date": "0707",
-      "end_date": "0707",
+      "start_date": "0708",
+      "end_date": "0708",
       "start_time": "0000",
       "end_time": "2359",
       "filename": "tanabata.svg"
     },
     "mountain_day": {
-      "start_date": "0811",
-      "end_date": "0811",
+      "start_date": "0812",
+      "end_date": "0812",
       "start_time": "0000",
       "end_time": "2359",
       "filename": "placeholder.svg"
     },
     "obon": {
-      "start_date": "0813",
-      "end_date": "0816",
+      "start_date": "0814",
+      "end_date": "0817",
       "start_time": "0000",
       "end_time": "2359",
+      "filename": "placeholder.svg"
+    },
+    "may_day": {
+      "start_date": "0406",
+      "end_date": "0406",
+      "start_time": "0000",
+      "end_time": "2359",
+      "full_start_date": "2025-04-06",
+      "full_end_date": "2025-04-06",
       "filename": "placeholder.svg"
     },
     "oktoberfest": {
-      "start_date": "0920",
-      "end_date": "1005",
+      "start_date": "0921",
+      "end_date": "1006",
       "start_time": "0000",
       "end_time": "2359",
+      "full_start_date": "2025-09-20",
+      "full_end_date": "2025-10-05",
       "filename": "placeholder.svg"
     },
     "xmas": {
-      "start_date": "1201",
-      "end_date": "1231",
+      "start_date": "1202",
+      "end_date": "0101",
       "start_time": "0000",
       "end_time": "2359",
       "filename": "rd-xmas-splash.svg"
