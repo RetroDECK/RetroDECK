@@ -7,7 +7,6 @@ base-version: "22.08"
 command: retrodeck.sh
 
 finish-args:
-  - --talk-name=org.freedesktop.Flatpak
   - --socket=wayland
   - --socket=x11
   - --socket=pulseaudio
@@ -68,7 +67,7 @@ modules:
   # The version number is hardcoded in /app/retrodeck/version
   #
   # UPDATE STEPS FOR MAIN:
-  # [ ] Update the VERSION variable on line containing "VERSION=cooker"
+  # [ ] Update the VERSION variable on line containing "VERSION=THISBRANCH"
   # [ ] Update the appdata.xml with the version number and notes
 
   - name: version-initialization
@@ -84,15 +83,15 @@ modules:
         mkdir -p ${FLATPAK_DEST}/retrodeck/
         if [[ $VERSION == *"cooker"* ]];
         then
-          VERSION="$VERSION-WomanNen"
+          VERSION="$VERSION-VERSIONPLACEHOLDER"
         fi
         echo $VERSION >> ${FLATPAK_DEST}/retrodeck/version
         cat ${FLATPAK_DEST}/retrodeck/version
         echo "Version is $VERSION"
     sources:
       - type: git
-        url: https://github.com/RetroDECK/RetroDECK
-        branch: cooker
+        url: THISREPO
+        branch: THISBRANCH
 
   - name: xmlstarlet
     config-opts:
@@ -221,8 +220,8 @@ modules:
         sha256: f5f359d6332861bd497570848fcb42520964a9e83d5e3abe397b6b6db9bcaaf4
         dest: fontconfig
       - type: git
-        url: https://github.com/RetroDECK/RetroDECK
-        branch: cooker
+        url: THISREPO
+        branch: THISBRANCH
         
   # RetroArch
   # https://retroarch.com/index.php?page=platforms
@@ -271,7 +270,7 @@ modules:
     sources:
       - type: archive
         url: https://buildbot.libretro.com/nightly/linux/x86_64/RetroArch_cores.7z
-        sha256: 17445ee97c58a16659b0588eb1621bf17c562c692dd15846c6ab6a56615660a1
+        sha256: RANIGHTLYCORESPLACEHOLDER
 
   # Citra is removed from the LibretroCores but is still available in Libretro repo
   - name: citra-libretro-core
@@ -281,7 +280,7 @@ modules:
     sources:
       - type: archive
         url: https://buildbot.libretro.com/nightly/linux/x86_64/latest/citra_libretro.so.zip
-        sha256: 832335d3b89ae7b42b7b23d80210d73651bc547b8c8e8832c4a20551f3f33f71
+        sha256: RACITRAPLACEHOLDER
 
   - name: retroarch-cores
     buildsystem: simple
@@ -300,7 +299,7 @@ modules:
     sources:
       - type: archive
         url: https://buildbot.libretro.com/nightly/linux/x86_64/latest/sameduck_libretro.so.zip
-        sha256: 8258f86723dbf5ef4060dab98f5df4501e93e2b624ce13327fd083ec1e17eda6
+        sha256: SAMEDUCKSHAPLACEHOLDER
 
   - name: ppsspp-bios
     buildsystem: simple
@@ -310,7 +309,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/hrydgard/ppsspp/archive/refs/heads/master.zip
-        sha256: d962bbdde9e39022dfe1ee1be187452aa74f57ba4466de2799ac6c72fe66cca7
+        sha256: PPSSPPBIOSHASHPLACEHOLDER
 
   - name: msx-bios
     buildsystem: simple
@@ -321,7 +320,7 @@ modules:
     sources:
       - type: archive
         url: http://bluemsx.msxblue.com/rel_download/blueMSXv282full.zip
-        sha256: 5b68e1bc41590302c762093243e66602da2b2f6951a595a06b9b436b0e458bc6
+        sha256: MSXBIOSHASHPLACEHOLDER
         strip-components: 0
   
   - name: amiga-bios
@@ -350,7 +349,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/RetroDECK/org.ppsspp.PPSSPP/releases/latest/download/RetroDECK-PPSSPP-Artifact.tar.gz
-        sha256: b47b1025c88f513c5e345b006a7b2be6156f845b436ccb14b7cf3122ade971de
+        sha256: RETRODECKPPSSPPLATEST
 
   # PCSX2
   # Inspired by: https://github.com/flathub/com.zettlr.Zettlr/blob/master/com.zettlr.Zettlr.yaml
@@ -386,7 +385,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/RetroDECK/org.DolphinEmu.dolphin-emu/releases/latest/download/RetroDECK-dolphin-Artifact.tar.gz
-        sha256: 51ba795bc566113d51a2b0e5c5a66fc452665af099b3150009fe6fd66a5352e3
+        sha256: RETRODECKDOLPHINLATEST
 
   # PRIMEHACK
   # https://github.com/RetroDECK/io.github.shiiion.primehack
@@ -405,7 +404,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/RetroDECK/io.github.shiiion.primehack/releases/latest/download/RetroDECK-primehack-Artifact.tar.gz
-        sha256: 7cd20690cea20284b6b272092f79cadf6a7ca9d5b9df7cb5985cb090ff47731d
+        sha256: RETRODECKPRIMEHACKLATEST
 
   # RPCS3
   # https://rpcs3.net/download
@@ -439,7 +438,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/RetroDECK/net.rpcs3.RPCS3/releases/latest/download/RetroDECK-Artifact.tar.gz
-        sha256: 02657e8a75b38080057fc88ceab337fe06d8ba62350beb17436597d44e5daebd
+        sha256: RETRODECKRPCS3LATEST
 
   # MELONDS
   # https://github.com/RetroDECK/net.kuribo64.melonDS
@@ -456,7 +455,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/RetroDECK/net.kuribo64.melonDS/releases/latest/download/RetroDECK-melonds-Artifact.tar.gz
-        sha256: 2a0f721ba25da2fe5eb9b3924365697f127b532904354778166e03e6672e03c7
+        sha256: RETRODECKMELONDSLATEST
 
   # Duckstation
   # Do not update: Legacy
@@ -520,7 +519,7 @@ modules:
     sources:
       - type: file
         url: https://github.com/Vita3K/Vita3K/releases/download/continuous/ubuntu-latest.zip
-        sha256: 420aa81f91d8a0eff7ec1669153580da80768e608cdd7de7969e845d9c902878
+        sha256: VITA3KSHAPLACEHOLDER
       - type: file
         path: res/retrodeck.png
 
@@ -539,7 +538,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/RetroDECK/org.solarus_games.solarus.Launcher/releases/latest/download/RetroDECK-solarus-Artifact.tar.gz
-        sha256: 944dbba229f1bcab61e44a068aa75a01967ce9376c0d337d874c8de041eef599
+        sha256: RETRODECKSOLARUSLATEST
 
   # GZDoom
   # When updating remember to update all the .pk3 files from the standalone linux download
@@ -557,7 +556,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/RetroDECK/org.zdoom.GZDoom/releases/latest/download/RetroDECK-gzdoom-Artifact.tar.gz
-        sha256: ad78911d605a4b6e8a6229833ca8d6a1770b6f52a9ece5dc63e0c11f68474508
+        sha256: RETRODECKGZDOOMLATEST
 
   # Pancakes
 
@@ -599,7 +598,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/mborgerson/xemu-hdd-image/releases/latest/download/xbox_hdd.qcow2.zip
-        sha256: d9f5a4c1224ff24cf9066067bda70cc8b9c874ea22b9c542eb2edbfc4621bb39
+        sha256: XEMUHDDHASHPLACEHOLDER
 
   # MAME
 
@@ -611,7 +610,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/RetroDECK/MAME/releases/latest/download/RetroDECK-MAME-Artifact.tar.gz
-        sha256: c4b8493e9f483406088073d776bf73528375e05924a77db910a30744c11347f5
+        sha256: RETRODECKMAMELATEST
 
   # PortMaster
 
@@ -625,7 +624,7 @@ modules:
     sources:
       - type: file
         url: https://github.com/PortsMaster/PortMaster-GUI/releases/latest/download/retrodeck.portmaster.zip
-        sha256: a973e470e699e316a6ac3c5b05c201792f6b86381b0e1538aae90a4e3808db16
+        sha256: PORTMASTERLATESTSHA
         dest-filename: PortMaster.zip
       - type: script
         commands:
@@ -651,7 +650,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/RetroDECK/ES-DE/releases/latest/download/RetroDECK-ES-DE-Artifact.tar.gz
-        sha256: 44e51c7a251a7e624ad9a397b363730dfd7b69bd3b18265e76391cfcd4f8310d
+        sha256: RETRODECKESDELATEST
 
   - name: retrodeck-theme
     buildsystem: simple
@@ -797,5 +796,5 @@ modules:
 
     sources:
       - type: git
-        url: https://github.com/RetroDECK/RetroDECK
-        branch: cooker
+        url: THISREPO
+        branch: THISBRANCH
