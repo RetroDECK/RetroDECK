@@ -182,6 +182,7 @@ func _set_up_globals(state: Array) -> void:
 	%retroarch_quick_resume_button.button_pressed = class_functions.quick_resume_status
 	%sound_button.button_pressed = class_functions.sound_effects
 	%volume_effects_slider.visible = class_functions.sound_effects
+	%steam_sync_button.button_pressed = class_functions.steam_sync
 	mixed_mode(%button_swap_button, class_functions.abxy_state)
 	mixed_mode(%ask_to_exit_button, class_functions.ask_to_exit_state)
 	mixed_mode(%border_button, class_functions.border_state)
