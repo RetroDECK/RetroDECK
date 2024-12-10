@@ -9,14 +9,14 @@ LOG_FILE="$HOME/check.log"
 > "$LOG_FILE"
 
 # Extract launch commands using jq
-commands=($(jq -r '.emulator | to_entries[] | .value.launch' /app/retrodeck/config/retrodeck/reference_lists//features.json))
+commands=($(jq -r '.emulator | to_entries[] | .value.launch' /app/retrodeck/config/retrodeck/reference_lists/features.json))
 
 # Timeout duration in seconds
 TIMEOUT=5
 
 # Function to run command with timeout
 run_and_check() {
-    local cmd="$1"
+    local cmd="flatpak run net.retrodeck.retrodeck $1"
     
     # Verify command exists
     if ! command -v "$cmd" &> /dev/null; then
