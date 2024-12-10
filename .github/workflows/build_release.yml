@@ -340,7 +340,7 @@ jobs:
         continue-on-error: true
         run: |
           ls -lah retrodeck-artifacts
-          flatpak install --user --bundle --noninteractive -y "retrodeck-artifacts/RetroDECK*.flatpak"
+          flatpak install --user --bundle --noninteractive -y "retrodeck-artifacts/RetroDECK"*".flatpak
 
       # Run Post Build Checks
       - name: Run Post Build Checks
