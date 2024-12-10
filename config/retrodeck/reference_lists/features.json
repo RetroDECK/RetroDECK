@@ -1027,7 +1027,7 @@
       "name": "Ruffle",
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_about/what-is-retrodeck/",
       "system": "flash",
-      "launch": "ruffle-rd-wrapper.sh"
+      "launch": "ruffle-rdwrapper.sh"
     },
     "melonds": {
       "description": "MelonDS Nintendo DS Emulator",
