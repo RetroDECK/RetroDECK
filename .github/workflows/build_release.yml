@@ -316,10 +316,7 @@ jobs:
   # Automated Tests
   Automated_Tests:
     runs-on: ubuntu-latest
-    outputs:
-      TAG: ${{ steps.version-tag.outputs.TAG }}
-      RELEASE_BODY: ${{ steps.version-tag.outputs.RELEASE_BODY }}
-      MAKE_LATEST: ${{ steps.version-tag.outputs.MAKE_LATEST }}
+    needs: Build_RetroDECK
       
     steps:
 
