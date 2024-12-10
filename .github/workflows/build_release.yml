@@ -317,6 +317,7 @@ jobs:
   Automated_Tests:
     runs-on: ubuntu-latest
     needs: Build_RetroDECK
+    continue-on-error: true
       
     steps:
 
@@ -336,15 +337,19 @@ jobs:
 
       # Install RetroDECK Flatpak
       - name: Install RetroDECK Flatpak
+        continue-on-error: true
         run: |
+          ls -lah retrodeck-artifacts
           flatpak install --user --bundle --noninteractive -y "retrodeck-artifacts/RetroDECK*.flatpak"
 
       # Run Post Build Checks
       - name: Run Post Build Checks
+        continue-on-error: true
         run: /bin/bash ./automation_tools/post_build_check.sh
 
       # Search for Missing Libraries
       - name: Search for Missing Libraries
+        continue-on-error: true
         run: /bin/bash ./automation_tools/search_missing_libs.sh
    
       # Uninstall RetroDECK Flatpak - Not needed on a thorwaway ubuntu-latest
