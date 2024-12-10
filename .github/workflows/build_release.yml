@@ -344,9 +344,12 @@ jobs:
 
       # Run Post Build Checks
       - name: Run Post Build Checks
-        run: |
-          /bin/bash ./automation_tools/post_build_check.sh
+        run: /bin/bash ./automation_tools/post_build_check.sh
 
+      # Search for Missing Libraries
+      - name: Search for Missing Libraries
+        run: /bin/bash ./automation_tools/search_missing_libs.sh
+   
       # Uninstall RetroDECK Flatpak - Not needed on a thorwaway ubuntu-latest
       # - name: Uninstall RetroDECK Flatpak
       #   run: |
