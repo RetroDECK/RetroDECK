@@ -311,4 +311,49 @@ jobs:
   #         release_body: ${{ env.RELEASE_BODY }}
   #         artifacts: "retrodeck-artifacts/*.flatpak,retrodeck-artifacts/*.flatpak.sha,retrodeck-artifacts/*Artifact.tar.gz"
   #         tag: ${{ env.TAG }}
+
+
+  # Automated Tests
+  Automated_Tests:
+    runs-on: ubuntu-latest
+    needs: Build_RetroDECK
+    continue-on-error: true
+      
+    steps:
+
+      # Clone Repository
+      - name: Clone RetroDECK repo
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      # Download RetroDECK Artifacts
+      - name: Download all workflow run artifacts
+        uses: actions/download-artifact@v4.1.8
+
+      # Install Dependencies
+      - name: Install dependencies
+        run: curl "https://raw.githubusercontent.com/RetroDECK/components-template/main/automation_tools/install_dependencies.sh" | bash
+
+      # Install RetroDECK Flatpak
+      - name: Install RetroDECK Flatpak
+        continue-on-error: true
+        run: |
+          ls -lah retrodeck-artifacts
+          flatpak install --user --bundle --noninteractive -y "retrodeck-artifacts/RetroDECK"*".flatpak
+
+      # Run Post Build Checks
+      - name: Run Post Build Checks
+        continue-on-error: true
+        run: /bin/bash ./automation_tools/post_build_check.sh
+
+      # Search for Missing Libraries
+      - name: Search for Missing Libraries
+        continue-on-error: true
+        run: /bin/bash ./automation_tools/search_missing_libs.sh
+   
+      # Uninstall RetroDECK Flatpak - Not needed on a thorwaway ubuntu-latest
+      # - name: Uninstall RetroDECK Flatpak
+      #   run: |
+      #     flatpak remove --user --noninteractive -y net.retrodeck.retrodeck
   
