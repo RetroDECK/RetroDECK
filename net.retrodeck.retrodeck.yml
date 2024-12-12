@@ -304,8 +304,8 @@ modules:
   - name: ppsspp-bios
     buildsystem: simple
     build-commands:
-    - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/PPSSPP
-    - cp -r assets/* ${FLATPAK_DEST}/retrodeck/extras/PPSSPP/
+      - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/PPSSPP
+      - cp -r assets/* ${FLATPAK_DEST}/retrodeck/extras/PPSSPP/
     sources:
       - type: archive
         url: https://github.com/hrydgard/ppsspp/archive/refs/heads/master.zip
@@ -341,11 +341,12 @@ modules:
   - name: retrodeck-ppsspp
     buildsystem: simple
     build-commands:
+      - rm -f "files/manifest.json"
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
       - cp -rL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
       - rm -rf "files/lib"
+      - chmod +x "files/bin/"*
       - cp -r files/* "${FLATPAK_DEST}"
-      - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
         url: https://github.com/RetroDECK/org.ppsspp.PPSSPP/releases/latest/download/RetroDECK-PPSSPP-Artifact.tar.gz
@@ -375,13 +376,14 @@ modules:
   - name: retrodeck-dolphin
     buildsystem: simple
     build-commands:
+      - rm -f "files/manifest.json"
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
       - cp -r "files/lib/debug" "${FLATPAK_DEST}/retrodeck/tmplib"
       - rm -rf "files/lib/debug"
       - cp -rL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
       - rm -rf "files/lib"
+      - chmod +x "files/bin/"*
       - cp -r files/* "${FLATPAK_DEST}"
-      - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
         url: https://github.com/RetroDECK/org.DolphinEmu.dolphin-emu/releases/latest/download/RetroDECK-dolphin-Artifact.tar.gz
@@ -393,14 +395,15 @@ modules:
   - name: retrodeck-primehack
     buildsystem: simple
     build-commands:
+      - rm -f "files/manifest.json"
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
       - rm -rf "files/lib/pkgconfig"
       - cp -rL "files/lib/debug" "${FLATPAK_DEST}/retrodeck/tmplib"
       - rm -rf "files/lib/debug"
       - cp -rL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
       - rm -rf "files/lib"
+      - chmod +x "files/bin/"*
       - cp -r files/* "${FLATPAK_DEST}"
-      - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
         url: https://github.com/RetroDECK/io.github.shiiion.primehack/releases/latest/download/RetroDECK-primehack-Artifact.tar.gz
@@ -430,11 +433,12 @@ modules:
   - name: retrodeck-rpcs3
     buildsystem: simple
     build-commands:
+      - rm -f "files/manifest.json"
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
       - cp -rL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
       - rm -rf "files/lib"
+      - chmod +x "files/bin/"*
       - cp -r files/* "${FLATPAK_DEST}"
-      - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
         url: https://github.com/RetroDECK/net.rpcs3.RPCS3/releases/latest/download/RetroDECK-Artifact.tar.gz
@@ -450,8 +454,8 @@ modules:
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib/"
       - cp -rL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib/"
       - rm -rf "files/lib"
+      - chmod +x "files/bin/"*
       - cp -r files/* "${FLATPAK_DEST}/"
-      - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
         url: https://github.com/RetroDECK/net.kuribo64.melonDS/releases/latest/download/RetroDECK-melonds-Artifact.tar.gz
@@ -530,11 +534,12 @@ modules:
   - name: retrodeck-solarus
     buildsystem: simple
     build-commands:
+      - rm -f "files/manifest.json"
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
       #- cp -r "files/lib/debug/lib/*" "${FLATPAK_DEST}/retrodeck/tmplib/debug/"
       - rm -rf "files/lib/debug" "files/lib/pkgconfig"
+      - chmod +x "files/bin/"*
       - cp -rL files/* "${FLATPAK_DEST}"
-      - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
         url: https://github.com/RetroDECK/org.solarus_games.solarus.Launcher/releases/latest/download/RetroDECK-solarus-Artifact.tar.gz
@@ -547,12 +552,13 @@ modules:
   - name: retrodeck-gzdoom
     buildsystem: simple
     build-commands:
+      - rm -f "files/manifest.json"
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
       - rm -rf "files/lib/cmake" "files/lib/pkgconfig" "files/lib/debug"
       - cp -rL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
       - rm -rf "files/lib"
+      - chmod +x "files/bin/"*
       - cp -r files/* "${FLATPAK_DEST}"
-      - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
         url: https://github.com/RetroDECK/org.zdoom.GZDoom/releases/latest/download/RetroDECK-gzdoom-Artifact.tar.gz
@@ -642,11 +648,12 @@ modules:
   - name: ES-DE
     buildsystem: simple
     build-commands:
+      - rm -f "files/manifest.json"
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
       - cp -rL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
       - rm -rf "files/lib"
+      - chmod +x "files/bin/"*
       - cp -r files/* "${FLATPAK_DEST}"
-      - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
         url: https://github.com/RetroDECK/ES-DE/releases/latest/download/RetroDECK-ES-DE-Artifact.tar.gz
