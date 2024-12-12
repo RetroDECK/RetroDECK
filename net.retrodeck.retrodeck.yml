@@ -682,8 +682,8 @@ modules:
     build-commands:
       - |
           # Search for missing libraries in our libtmp folder
-          missing_libs=$("find ${FLATPAK_DEST}/bin -type f -exec ldd {} + 2>/dev/null | grep 'not found' | awk '{print \$2}' | tr -d ':' | xargs -n 1 basename | sort | uniq | tr '\n' ' '")
-          echo "Missing libs: $missing_libs"
+          missing_libs=$(find /app/bin -type f -exec ldd {} + 2>/dev/null | grep 'not found' | awk '$1 ~ /\.so/ {print $1}' | sort | uniq)
+          echo $missing_libs
           
           # Manually specified libraries that are not automatically detected
           manually_imported="libpostproc.so.56 libswscale.so.6 libshaderc_shared.so.1 libbz2.so.1.0 libaio.so.1 ld-linux.so.2 libvpx.so.9 libzmusic.so.1 libicuuc.so.73 libLLVM.so.18.1"
