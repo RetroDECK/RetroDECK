@@ -14,6 +14,7 @@ func _ready():
 	# TODO this alowes copy and paste from RTB in logs?
 	if (content != null and bios_type > 0):
 		$Panel/MarginContainer/VBoxContainer/ContentContainer/MarginContainer.add_child(content)
+	
 
 func _process(_delta):
 	if Input.is_action_pressed("back_button"):
@@ -23,7 +24,6 @@ func _process(_delta):
 
 func set_content(new_content):
 	content = load(new_content).instantiate()
-	
 func set_title(new_title):
 	$Panel/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/Label.text = new_title
 func set_display_text(new_display_text):
