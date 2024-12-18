@@ -1,14 +1,65 @@
-[gd_resource type="Theme" load_steps=4 format=3 uid="uid://hhc60cllcg47"]
+[gd_resource type="Theme" load_steps=7 format=3 uid="uid://hhc60cllcg47"]
 
 [ext_resource type="Texture2D" uid="uid://buod4n6hw4i2m" path="res://assets/icons/pixelitos/vcs-normal.svg" id="1_pvl23"]
 [ext_resource type="Texture2D" uid="uid://cn0tfnnihjvy7" path="res://assets/icons/pixelitos/vcs-grey.svg" id="2_ud3yg"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ghisc"]
-bg_color = Color(0.6, 0.168627, 0.6, 0.372549)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_md22p"]
+bg_color = Color(0.580392, 0.419608, 0.921569, 1)
+border_width_left = 15
+border_width_top = 15
+border_width_right = 15
+border_width_bottom = 15
+border_color = Color(0.843137, 0.137255, 0.909804, 1)
+border_blend = true
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kr58o"]
+bg_color = Color(0.580392, 0.419608, 0.921569, 1)
+border_width_left = 15
+border_width_top = 15
+border_width_right = 15
+border_width_bottom = 15
+border_color = Color(0.136826, 0.136826, 0.136826, 1)
+border_blend = true
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0ahfc"]
+bg_color = Color(0.454524, 0.454524, 0.454524, 1)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(0.101961, 0.623529, 1, 1)
+border_blend = true
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+corner_detail = 7
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o8sf1"]
+bg_color = Color(0.101961, 0.623529, 1, 1)
+border_width_left = 15
+border_width_top = 14
+border_width_right = 15
+border_width_bottom = 15
+border_blend = true
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
 
 [resource]
-Button/styles/focus = SubResource("StyleBoxFlat_ghisc")
-CheckBox/constants/check_v_offset = 0
-CheckBox/constants/h_separation = 0
+Button/constants/align_to_largest_stylebox = 1
+Button/styles/focus = SubResource("StyleBoxFlat_md22p")
+Button/styles/hover = SubResource("StyleBoxFlat_kr58o")
+Button/styles/normal = SubResource("StyleBoxFlat_0ahfc")
+Button/styles/pressed = SubResource("StyleBoxFlat_o8sf1")
 CheckBox/icons/checked = ExtResource("1_pvl23")
 CheckBox/icons/unchecked = ExtResource("2_ud3yg")

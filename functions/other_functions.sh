@@ -205,16 +205,16 @@ conf_read() {
   do
     if [[ (! -z "$current_setting_line") && (! "$current_setting_line" == "#"*) && (! "$current_setting_line" == "[]") ]]; then # If the line has a valid entry in it
       if [[ ! -z $(grep -o -P "^\[.+?\]$" <<< "$current_setting_line") ]]; then # If the line is a section header
-        local current_section=$(sed 's^[][]^^g' <<< $current_setting_line) # Remove brackets from section name
+        local current_section=$(sed 's^[][]^^g' <<< "$current_setting_line") # Remove brackets from section name
       else
         if [[ "$current_section" == "" || "$current_section" == "paths" || "$current_section" == "options" ]]; then
-          local current_setting_name=$(get_setting_name "$current_setting_line" "retrodeck") # Read the variable name from the current line
-          local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "$current_section") # Read the variables value from retrodeck.cfg
+          local current_setting_name=$(cut -d'=' -f1 <<< "$current_setting_line" | xargs) # Extract name
+          local current_setting_value=$(cut -d'=' -f2 <<< "$current_setting_line" | xargs) # Extract value
           declare -g "$current_setting_name=$current_setting_value" # Write the current setting name and value to memory
         fi
       fi
     fi
-  done < $rd_conf
+  done < "$rd_conf"
 }
 
 conf_write() {
@@ -913,12 +913,30 @@ release_selector() {
 quit_retrodeck() {
   log i "Quitting ES-DE"
   pkill -f "es-de"
+
+  # if steam sync is on do the magic
+  if [[ $steam_sync == "true" ]]; then
+  (
+  source /app/libexec/steam_sync.sh
+  add_to_steam "$(ls "$rdhome/ES-DE/gamelists/")"
+  ) |
+  zenity --progress \
+    --title="Syncing with Steam" \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --text="Syncing favorite games with Steam, please wait." \
+    --percentage=25 \
+    --pulsate \
+    --auto-close \
+    --auto-kill
+  fi
   log i "Shutting down RetroDECK's framework"
   pkill -f "retrodeck"
+  
   log i "See you next time"
 }
 
 start_retrodeck() {
+  get_steam_user # get steam user info
   splash_screen # Check if today has a surprise splashscreen and load it if so
   ponzu
   log i "Starting RetroDECK v$version"

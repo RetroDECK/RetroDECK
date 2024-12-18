@@ -34,7 +34,7 @@ run_game() {
         exit 1
     fi
 
-    game=$1
+    game="$(realpath "$1")"
 
     if [[ -d "$game" ]]; then
         log d "$(basename "$game") is a directory, parsing it like a \"directory as a file\""
@@ -44,13 +44,24 @@ run_game() {
 
     game_basename="./$(basename "$game")"
 
+    local error="File \"$game\" not found.\n\nPlease make sure that RetroDECK's Flatpak is correctly configured to reach the given path and try again."
+    # Check if realpath succeeded
+    if [[ -z "$game" || ! -e "$game" ]]; then
+        rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK" \
+            --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+            --title "RetroDECK - File not found" \
+            --text="ERROR: $error"
+        log e "$error"
+        exit 1
+    fi
+
     # Step 1: System Recognition
     if [[ -z "$system" ]]; then
         # Automatically detect system from game path
         system=$(echo "$game" | grep -oP '(?<=roms/)[^/]+')
         if [[ -z "$system" ]]; then
-            log e "Failed to detect system from game path."
-            exit 1
+            log i "Failed to detect system from game path, asking user action"
+            system=$(find_system_by_extension "$game_basename")
         fi
     fi
 
@@ -73,8 +84,8 @@ run_game() {
         if [[ -n "$altemulator" ]]; then
 
             log d "Found <altemulator> for game: $altemulator"
-            emulator=$(xmllint --recover --xpath "string(//command[@label=\"$altemulator\"])" "$es_systems" 2>/dev/null)
-
+            emulator=$(xmllint --recover --xpath "string(//system[name=\"$system\"]/command[@label=\"$altemulator\"])" "$es_systems" 2>/dev/null)
+            
         else # if no altemulator is found we search if a global one is set
 
             log d "No altemulator found in the game entry, searching for alternativeEmulator to check if a global emulator is set for the system $system"
@@ -101,7 +112,7 @@ run_game() {
     log i " RetroDECK is now booting the game"
     log i " Game path: \"$game\""
     log i " Recognized system: $system"
-    log i " Given emulator: $emulator"
+    log i " Command line: $emulator"
     log i "-------------------------------------------"
 
     # Now pass the final constructed command to substitute_placeholders function
@@ -164,23 +175,27 @@ find_system_commands() {
     echo "$selected_command"
 }
 
-# Function to substitute placeholders in the command
 substitute_placeholders() {
     local cmd="$1"
     log d "Substitute placeholder: working on $cmd"
+
     game=$(echo "$game" | sed "s/'/'\\\\''/g") # escaping internal '
+    # Use the absolute path for %ROM%
     local rom_path="$game"
+    log d "rom_path is: \"$game\""
     local rom_dir=$(dirname "$rom_path")
-    
-    # Strip all file extensions from the base name
     local base_name=$(basename "$rom_path")
     base_name="${base_name%%.*}"
-
     local file_name=$(basename "$rom_path")
     local rom_raw="$rom_path"
     local rom_dir_raw="$rom_dir"
     local es_path=""
     local emulator_path=""
+    local start_dir=""
+
+    # Substitute placeholders with the absolute path and other variables
+    cmd="${cmd//"%ROM%"/"'$rom_path'"}"
+    cmd="${cmd//"%ROMPATH%"/"'$rom_dir'"}"
 
     # Manually replace %EMULATOR_*% placeholders
     while [[ "$cmd" =~ (%EMULATOR_[A-Z0-9_]+%) ]]; do
@@ -188,6 +203,55 @@ substitute_placeholders() {
         emulator_path=$(replace_emulator_placeholder "$placeholder")
         cmd="${cmd//$placeholder/$emulator_path}"
     done
+
+    # Process %STARTDIR%
+    local start_dir_pos=$(echo "$cmd" | grep -b -o "%STARTDIR%" | cut -d: -f1)
+    if [[ -n "$start_dir_pos" ]]; then
+        # Validate and extract %STARTDIR% value
+        if [[ "${cmd:start_dir_pos+10:1}" != "=" ]]; then
+            log e "Error: Invalid %STARTDIR% entry in command"
+            return 1
+        fi
+
+        if [[ "${cmd:start_dir_pos+11:1}" == "\"" ]]; then
+            # Quoted path
+            local closing_quotation=$(echo "${cmd:start_dir_pos+12}" | grep -bo '"' | head -n 1 | cut -d: -f1)
+            if [[ -z "$closing_quotation" ]]; then
+                log e "Error: Invalid %STARTDIR% entry (missing closing quotation)"
+                return 1
+            fi
+            start_dir="${cmd:start_dir_pos+12:closing_quotation}"
+            cmd="${cmd:0:start_dir_pos}${cmd:start_dir_pos+12+closing_quotation+1}"
+        else
+            # Non-quoted path
+            local space_pos=$(echo "${cmd:start_dir_pos+11}" | grep -bo ' ' | head -n 1 | cut -d: -f1)
+            if [[ -n "$space_pos" ]]; then
+                start_dir="${cmd:start_dir_pos+11:space_pos}"
+                cmd="${cmd:0:start_dir_pos}${cmd:start_dir_pos+11+space_pos+1}"
+            else
+                start_dir="${cmd:start_dir_pos+11}"
+                cmd="${cmd:0:start_dir_pos}"
+            fi
+        fi
+
+        # Expand paths in %STARTDIR%
+        start_dir=$(eval echo "$start_dir") # Expand ~ or environment variables
+        start_dir="${start_dir//%EMUDIR%/$(dirname "$emulator_path")}"
+        start_dir="${start_dir//%GAMEDIR%/$(dirname "$rom_path")}"
+        start_dir="${start_dir//%GAMEENTRYDIR%/$rom_path}"
+
+        # Create directory if it doesn't exist
+        if [[ ! -d "$start_dir" ]]; then
+            mkdir -p "$start_dir" || {
+                log e "Error: Directory \"$start_dir\" could not be created. Permission problems?"
+                return 1
+            }
+        fi
+
+        # Normalize the path
+        start_dir=$(realpath "$start_dir")
+        log d "Setting start directory to: $start_dir"
+    fi
 
     # Substitute %BASENAME% and other placeholders
     cmd="${cmd//"%BASENAME%"/"'$base_name'"}"
@@ -203,6 +267,7 @@ substitute_placeholders() {
     cmd="${cmd//"%GAMEDIRRAW%"/"'$rom_dir_raw'"}"
     cmd="${cmd//"%CORE_RETROARCH%"/"$ra_cores_path"}"
 
+    # Log the result
     log d "Command after placeholders substitutions: $cmd"
 
     # Now handle %INJECT% after %BASENAME% has been substituted
@@ -351,4 +416,38 @@ find_emulator_name_from_label() {
         log e "Found emulator from label: emulator name not found for label: $label"
         return 1
     fi
+}
+
+# Function to find systems by file extension and let user choose
+find_system_by_extension() {
+    local file_path="$1"
+    local file_extension="${file_path##*.}"
+    local file_extension_lower=$(echo "$file_extension" | tr '[:upper:]' '[:lower:]')
+
+    # Use xmllint to directly extract the systems supporting the extension
+    local matching_systems=$(xmllint --xpath "//system[extension[contains(., '.$file_extension_lower')]]/fullname/text()" "$es_systems")
+
+    # If no matching systems found, exit with an error
+    if [[ -z "$matching_systems" ]]; then
+        log e "No systems found supporting .${file_extension_lower} extension"
+        exit 1
+    fi
+
+    # Ensure each matching system is on its own line for Zenity
+    local formatted_systems=$(echo "$matching_systems" | tr '|' '\n')
+
+    # Use Zenity to create a selection dialog
+    local chosen_system=$(zenity --list --title="Select System" --column="Available Systems" --text="Multiple systems support .${file_extension_lower} extension. Please choose:" --width=500 --height=400 <<< "$formatted_systems")
+
+    # If no system was chosen, exit
+    if [[ -z "$chosen_system" ]]; then
+        log e "No system selected"
+        exit 1
+    fi
+
+    # Find the <name> corresponding to the chosen <fullname>
+    local detected_system=$(xmllint --xpath "string(//system[fullname='$chosen_system']/name)" "$es_systems")
+
+    # Return the detected system
+    echo "$detected_system"
 }

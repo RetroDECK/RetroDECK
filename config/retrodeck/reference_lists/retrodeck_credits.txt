@@ -1,31 +1,31 @@
 The Team
 
+Those that make RetroDECK happen
+
 ---
 
 XargonWan
 
 RetroDECK project founder and also one of the founding members of AmberELEC.
-Grand General of the IPL (Italian Pizza Legion) in the internal pizza war.
 
 ---
 
 Lazorne
 
 Community management/outreach, testing, documentation, emulator configurations, Steam Input and feature request / issue management.
-Meme Lord of the Wiki and also the cult leader of the NPC (The Nordic Pizza Cult) also called by the others as "The Pizza Heresy Cult" or "Harbingers of Pizza Chaos". Instigator of the internal pizza war.
 
 ---
 
 jiannazzone
 
-Web Development, Community management/outreach, testing, documentation. Have not choosen a side yet in the Pizza War.
+
+Web Development, Community management/outreach, testing, documentation.
 
 ---
 
 IceNine451
 
-Creator of the RetroDECK configurator, the RetroDECK Framework and various cool things.
-Freedom loving leader of the MCCP (Murican Cheese Crust Patriots) in the internal pizza war.
+Creator of the OG RetroDECK configurator, the RetroDECK Framework and bash god.
 
 ---
 
@@ -33,27 +33,27 @@ Lx32
 
 
 Develops various new features, functions and tools.
-1st Commander of the IPL (Italian Pizza Legion) nicknamed Paladin al Taglio in the internal pizza war.
 
 ---
 
 WallK
 
-Checks GODOT and other things.
-Pizza Mercenary
+Godot and scipting!
+
+---
+
+MonkeyX
+Godot, Emulators and more things!
+
 
 ---
 
 dottormac
 
-Does bleeding edge cooker testing (lives in the danger zone), some feature suggestions and design.
+Help with testing
 
 ---
 
-MonkeyX
-Jack of all trades: mainly working on GODOT and Manifest
-
----
 
 We want give our special thanks to:
 
@@ -70,3 +70,13 @@ We want give our special thanks to:
 - All the community creators who creates various art and assets for the community.
 
 You are all the ones that makes this project possible.
+
+
+
+---
+
+RetroDECK Alumni
+
+Former members of the RetroDECK team have contributed to the project
+
+---

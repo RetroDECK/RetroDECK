@@ -437,8 +437,13 @@ post_update() {
     prepare_component "reset" "es-de"
     prepare_component "reset" "portmaster"
     prepare_component "reset" "ruffle"
-    prepare_component "reset" "shadps4"
+
+    log d "Steam Rom Manager was added, we need to prepare it"
     update_rd_conf
+    prepare_component "reset" "steam-rom-manager"
+
+    rm -rf "$rd_logs_folder/ES-DE" && log d "Removing the logs/ES-DE folder as we don't need it anymore"
+    rm -rf "$es_source_logs" && mkdir -p "$es_source_logs"
 
   # TODO: check this
   #   rm /var/config/emulationstation/.emulationstation # remving the old symlink to .emulationstation as it might be not needed anymore
@@ -454,7 +459,7 @@ post_update() {
   #     ln -s "$bios_folder/cemu/mlc/keys.txt" "/var/data/Cemu/keys.txt" <--- AND THIS SHOULD BE EVEN PUT IN THE PREPARATION SCRIPT
   #   fi
   # TODO: is this true?
-  #  log i "Since in this version we restored Ryujinx to a main buikd we don't need the symlink anymore."
+  #  log i "Since in this version we restored Ryujinx to a main build we don't need the symlink anymore."
   #  rm "$(dirname $ryujinxconf)/PRConfig.json"
   fi
 

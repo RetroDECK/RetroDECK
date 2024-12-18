@@ -61,19 +61,19 @@
     }
   },
   "splash_screens": {
-    "xmas": {
-      "start_date": "1201",
-      "end_date": "1231",
+    "new_year": {
+      "start_date": "1231",
+      "end_date": "0106",
       "start_time": "0000",
       "end_time": "2359",
-      "filename": "rd-xmas-splash.svg"
+      "filename": "placeholder.svg"
     },
-    "lunar_dragon": {
-      "start_date": "0209",
+    "chinese_new_year": {
+      "start_date": "0128",
       "end_date": "0212",
       "start_time": "0000",
       "end_time": "2359",
-      "filename": "rd-lunar-dragon-splash.svg"
+      "filename": "rd-lunar-snake-splash.svg"
     },
     "valentines_day": {
       "start_date": "0214",
@@ -82,7 +82,7 @@
       "end_time": "2359",
       "filename": "rd-valentines-splash.svg"
     },
-    "retrodeck_birthday": {
+    "retrodeck_birthday_gmday": {
       "start_date": "0304",
       "end_date": "0304",
       "start_time": "0000",
@@ -96,12 +96,26 @@
       "end_time": "2359",
       "filename": "rd-stpatricks-splash.svg"
     },
+    "fruhlingsfest": {
+      "start_date": "0425",
+      "end_date": "0428",
+      "start_time": "0000",
+      "end_time": "2359",
+      "filename": "placeholder.svg"
+    },
     "kodomo_golden_week": {
       "start_date": "0429",
       "end_date": "0505",
       "start_time": "0000",
       "end_time": "2359",
       "filename": "rd-kodomo-golden.svg"
+    },
+    "midsommarafton": {
+      "start_date": "0620",
+      "end_date": "0621",
+      "start_time": "0000",
+      "end_time": "2359",
+      "filename": "placeholder.svg"
     },
     "tanabata": {
       "start_date": "0707",
@@ -123,6 +137,31 @@
       "start_time": "0000",
       "end_time": "2359",
       "filename": "placeholder.svg"
+    },
+    "may_day": {
+      "start_date": "0405",
+      "end_date": "0405",
+      "start_time": "0000",
+      "end_time": "2359",
+      "full_start_date": "2024-04-05",
+      "full_end_date": "2024-04-05",
+      "filename": "placeholder.svg"
+    },
+    "oktoberfest": {
+      "start_date": "0920",
+      "end_date": "1005",
+      "start_time": "0000",
+      "end_time": "2359",
+      "full_start_date": "2025-09-20",
+      "full_end_date": "2025-10-05",
+      "filename": "placeholder.svg"
+    },
+    "xmas": {
+      "start_date": "1201",
+      "end_date": "1231",
+      "start_time": "0000",
+      "end_time": "2359",
+      "filename": "rd-xmas-splash.svg"
     }
   },
   "incompatible_presets": {
@@ -168,6 +207,10 @@
     "ryujinx_firmware": {
       "filename": "Install-firmware-through-Ryujinx.txt",
       "location": "$bios_folder/switch/firmware"
+    },
+    "custom_systems": {
+      "filename": "es_systems.xml",
+      "location": "$rdhome/ES-DE/custom_systems/es_systems.xml"
     }
   },
   "compression_targets": {
@@ -795,6 +838,7 @@
       "name": "RetroArch",
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/retroarch/retroarch-guide/",
       "launch": "retroarch",
+      "cli-arg": "--version",
       "system": "retroarch",
       "properties": [
         {
@@ -966,7 +1010,8 @@
       "system": [
         "arcade"
       ],
-      "launch": "mame"
+      "launch": "mame",
+      "cli-arg": "-help"
     },
     "citra": {
       "description": "Citra Nintendo 3DS Emulator (via Ponzu)",
@@ -975,6 +1020,7 @@
       "system": "n3ds",
       "ponzu": true,
       "launch": "citra-qt",
+      "cli-arg": "-version",
       "properties": [
         {
           "abxy_button": true,
@@ -987,14 +1033,16 @@
       "name": "Ruffle",
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_about/what-is-retrodeck/",
       "system": "flash",
-      "launch": "ruffle-rd-wrapper.sh"
+      "launch": "ruffle-rdwrapper.sh",
+      "cli-arg": ""
     },
     "melonds": {
       "description": "MelonDS Nintendo DS Emulator",
       "name": "melonds",
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/melonds/melonds-guide/",
       "system": "nds",
-      "launch": "melonDS"
+      "launch": "melonDS",
+      "cli-arg": "--help"
     },
     "pcsx2": {
       "name": "pcsx2",
@@ -1002,6 +1050,7 @@
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/pcsx2/pcsx2-guide/",
       "system": "ps2",
       "launch": "pcsx2-qt",
+      "cli-arg": "-version",
       "properties": [
         {
           "ask_to_exit": true,
@@ -1014,6 +1063,7 @@
       "description": "PlayStation Emulator",
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/duckstation/duckstation-guide/",
       "launch": "duckstation-qt",
+      "cli-arg": "-version",
       "system": "psx",
       "properties": [
         {
@@ -1027,6 +1077,7 @@
       "description": "PPSSPP: PlayStation Portable Emulator",
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/ppsspp/ppsspp-guide/",
       "launch": "PPSSPPSDL",
+      "cli-arg": "--version",
       "system": "psp",
       "properties": [
         {
@@ -1040,7 +1091,8 @@
       "description": "Vita3K PSVita Emulator",
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/vita3k/vita3k-guide/",
       "system": "psvita",
-      "launch": "Vita3K"
+      "launch": "Vita3K",
+      "cli-arg": ""
     },
     "rpcs3": {
       "name": "RPCS3",
@@ -1048,6 +1100,7 @@
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/rpcs3/rpcs3-guide/",
       "system": "ps3",
       "launch": "rpcs3",
+      "cli-arg": "--version",
       "launch-override": "cd $(dirname $game) && rpcs3 $game",
       "properties": [
         {
@@ -1060,13 +1113,15 @@
       "description": "Ryujinx Nintendo Switch Emulator",
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/ryujinx/ryujinx-guide/",
       "system": "switch",
-      "launch": "Ryujinx.sh"
+      "launch": "Ryujinx.sh",
+      "cli-arg": ""
     },
     "yuzu": {
       "name": "Yuzu (via Ponzu)",
       "description": "Yuzu Nintendo Switch Emulator (via Ponzu)",
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_about/what-is-retrodeck/",
       "launch": "Yuzu",
+      "cli-arg": "",
       "system": "switch",
       "ponzu": true,
       "abxy_button": true
@@ -1082,6 +1137,7 @@
       "description": "Dolphin Wii and GameCube Emulator",
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/dolphin-primehack/dolphin-primehack-guide/",
       "launch": "dolphin-emu-wrapper",
+      "cli-arg": "--version",
       "system": [
         "gc",
         "wii"
@@ -1101,6 +1157,7 @@
       "description": "A fork of Dolphiin to enhance Metroid Prime experience",
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/dolphin-primehack/dolphin-primehack-guide/",
       "launch": "primehack-wrapper",
+      "cli-arg": "--version",
       "system": [
         "wii"
       ],
@@ -1117,6 +1174,7 @@
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/cemu/cemu-guide/",
       "system": "wiiu",
       "launch": "Cemu-wrapper",
+      "cli-arg": "--version",
       "properties": [
         {
           "abxy_button": true,
@@ -1129,19 +1187,29 @@
       "name": "xemu",
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/xemu/xemu-guide/",
       "system": "xbox",
-      "launch": "xemu"
+      "launch": "xemu",
+      "cli-arg": "--version"
     },
     "es-de": {
       "description": "ES-DE Emulation Frontend",
       "name": "ES-DE",
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_es_de/esde-guide/.",
-      "launch": "es-de"
+      "launch": "es-de",
+      "cli-arg": "--version"
+    },
+    "steam-rom-manager": {
+      "description": "Steam ROM Manager (used to sync RetroDECK favorites with Steam)",
+      "name": "Steam ROM Manager",
+      "launch": "steam-rom-manager",
+      "cli-arg": "--version"
     },
     "portmaster": {
       "description": "PortMaster",
       "name": "PortMaster",
+      "url": "https://retrodeck.readthedocs.io/en/latest/wiki_about/what-is-retrodeck/",
       "system": "portmaster",
-      "launch": "PortMaster"
+      "launch": "PortMaster", 
+      "cli-arg": ""
     }
   }
 }
