@@ -1208,7 +1208,7 @@
       "name": "PortMaster",
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_about/what-is-retrodeck/",
       "system": "portmaster",
-      "launch": "PortMaster", 
+      "launch": "PortMaster",
       "cli-arg": ""
     }
   }
