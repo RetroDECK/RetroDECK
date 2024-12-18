@@ -98,7 +98,6 @@
             </ul>
             <p>Known issues:</p>
             <ul>
-               <li>Ryujinx temporary removed until we figure out the situation</li>
                <li>Please check the know issues in the Wiki under General Information.</li>
                <li>GZDoom version is temporarly frozen until we find out how to correctly build it</li>
                <li>Vita3K currently broken, a PR with a fix is being "cooked"</li>
