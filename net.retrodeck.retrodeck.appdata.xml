@@ -82,7 +82,7 @@
                <li>Because of this, Favorites collection is now enabled by default on ES-DE</li>
                <li>New Configurator completely written in GODOT, now with controller support and many more features for you to discover</li>
                <li>Cli entry --configurator now opens the new Configurator, while --legacy-configurator opens the old, zenity, one</li>
-               <li>New run game engine added to run games via cli, just run `flatpak run net.retrodeck.retrodeck start retrodeck/roms/system/game.ext`, `--help` for more info</li>
+               <li>New run game engine added to run games via cli, just run `flatpak run net.retrodeck.retrodeck retrodeck/roms/system/game.ext`, `--help` for more info</li>
                <li>MIME Type added: this means that you can "open with" or double click your games and run them via RetroDECK thanks to the engine descripted above</li>
                <li>ES-DE Updated to 3.1.1 with language support and more</li>
                <li>ES-DE main menu tide up, because of our configurator there were too many entries, moved ES-DE specific configs inside a custom menu</li>

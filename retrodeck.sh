@@ -34,11 +34,12 @@ Arguments:
     --reset-component <component>       \t  Reset one or more component or emulator configs to the default values
     --reset-retrodeck                   \t  Starts the initial RetroDECK installer (backup your data first!)
 
-    start [-e emulator] [-s system] [-m] <game_path>\t  Start a game from cli using the default emulator or\n\t\t\t\t\t\t\t  the one defined in ES-DE for game or system
-    \t start arguments:
+Game Launch:
+    [<options>] <game_path>             \t  Start a game using the default emulator or\n\t\t\t\t\t\t  the one defined in ES-DE for game or system
+    \t Options:
     \t \t-e (emulator)\t Run the game with the defined emulator (optional)
     \t \t-s (system)\t Force the game running with the defined system, for example running a gb game on gba (optional)
-    \t \t-m (manual)\t Manual mode: show the list of available emulator to chose from (optional)
+    \t \t-m (manual)\t Manual mode: show the list of available emulator to choose from (optional)
 
 For flatpak run specific options please run: flatpak run -h
 
@@ -48,11 +49,6 @@ https://retrodeck.net
       ;;
     --version*|-v*)
       echo "RetroDECK v$version"
-      exit
-      ;;
-    start*)
-      shift # Remove "start"
-      run_game "$@"
       exit
       ;;
     --info-msg*)
@@ -126,9 +122,14 @@ https://retrodeck.net
       exit 1
       ;;
     *)
-      validate_input "$i"
-      if [[ ! $input_validated == "true" ]]; then
-        echo "Please specify a valid option. Use -h for more information."
+      # Assume unknown arguments are game start arguments
+      if [ -f "$i" ]; then
+          echo "Attempting to start the game: $i"
+          run_game "$@"
+          exit
+      else
+          echo "Command or File '$i' not found. Ignoring argument and continuing..."
+          break # Continue with the main program
       fi
       ;;
   esac
