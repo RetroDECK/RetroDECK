@@ -577,8 +577,8 @@ modules:
       - mv LICENSE.txt "${FLATPAK_DEST}/retrodeck/licenses"
     sources:
       - type: file
-        url: https://github.com/RetroDECK/Pancakes-bin/releases/latest/download/pancakes-Release-linux_x64.tar.gz
-        sha256: RETRODECKPANCAKESLATEST
+        url: https://github.com/RetroDECK/Pancakes-bin/releases/download/1.1.0.1403/pancakes-Release-linux_x64.tar.gz
+        sha256: 68b1602c99c5e5b743a1362eaf428ee88b237bd5029aede00d342fa8d79b8f27
 
   # XEMU
   # https://xemu.app/docs/download/#download-for-linux
