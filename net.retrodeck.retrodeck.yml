@@ -619,7 +619,7 @@ modules:
         sha256: RETRODECKMAMELATEST
 
   # SHADPS4
-
+  # This build brings pthreads patch for linux
   - name: shadps4
     buildsystem: simple
     build-commands:
@@ -633,8 +633,8 @@ modules:
         # TODO: fix this
         # url: SHADPS4LATESTGHREL
         # sha256: SHADPS4LATESTSHA
-        url: https://github.com/shadps4-emu/shadPS4/releases/download/v.0.4.0/shadps4-linux-qt-0.4.0.zip
-        sha256: a0fa250708ed06c3a1db4d3a5613472ebccdbc7d076c50e78ccdd5687c6d34cc
+        url: https://github.com/diegolix29/shadPS4/releases/download/release-shadPS4-2024-12-19-0b12f80/shadps4-linux-qt-2024-12-19-0b12f80.zip
+        sha256: 13fdc65328b3fe33d39cf52946542336d19f5d5cbb08f6177e676de290a65a10
   # PortMaster
 
   - name: PortMaster
