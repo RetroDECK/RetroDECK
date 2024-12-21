@@ -343,7 +343,7 @@ modules:
     build-commands:
       - rm -f "files/manifest.json"
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
-      - cp -rL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - cp -rnL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
       - rm -rf "files/lib"
       - chmod +x "files/bin/"*
       - cp -r files/* "${FLATPAK_DEST}"
@@ -380,7 +380,7 @@ modules:
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
       - cp -r "files/lib/debug" "${FLATPAK_DEST}/retrodeck/tmplib"
       - rm -rf "files/lib/debug"
-      - cp -rL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - cp -rnL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
       - rm -rf "files/lib"
       - chmod +x "files/bin/"*
       - cp -r files/* "${FLATPAK_DEST}"
@@ -400,7 +400,7 @@ modules:
       - rm -rf "files/lib/pkgconfig"
       - cp -rL "files/lib/debug" "${FLATPAK_DEST}/retrodeck/tmplib"
       - rm -rf "files/lib/debug"
-      - cp -rL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - cp -rnL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
       - rm -rf "files/lib"
       - chmod +x "files/bin/"*
       - cp -r files/* "${FLATPAK_DEST}"
@@ -435,7 +435,7 @@ modules:
     build-commands:
       - rm -f "files/manifest.json"
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
-      - cp -rL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - cp -rnL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
       - rm -rf "files/lib"
       - chmod +x "files/bin/"*
       - cp -r files/* "${FLATPAK_DEST}"
@@ -555,7 +555,7 @@ modules:
       - rm -f "files/manifest.json"
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
       - rm -rf "files/lib/cmake" "files/lib/pkgconfig" "files/lib/debug"
-      - cp -rL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - cp -rnL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
       - rm -rf "files/lib"
       - chmod +x "files/bin/"*
       - cp -r files/* "${FLATPAK_DEST}"
@@ -566,19 +566,19 @@ modules:
 
   # Pancakes
 
-  # - name: Pancakes
-  #   buildsystem: simple
-  #   build-commands:
-  #     - mkdir -p "${FLATPAK_DEST}"
-  #     - mv *.so* "${FLATPAK_DEST}/retrodeck/tmplib/"
-  #     - mv R*x* "${FLATPAK_DEST}/bin/"
-  #     - chmod +x "${FLATPAK_DEST}/bin/R*x"*
-  #     - mkdir -p "${FLATPAK_DEST}/retrodeck/licenses"
-  #     - mv LICENSE.txt "${FLATPAK_DEST}/retrodeck/licenses"
-  #   sources:
-  #     - type: file
-  #       url: https://github.com/RetroDECK/Pancakes/releases/download/1.1.0.1403/pancakes-Release-linux_x64.tar.gz
-  #       sha256: cc7d25b6a2f2ad16533e3d72ba9477a4d77b8cfbb450f0db3d0c05ffde5e1281
+  - name: Pancakes
+    buildsystem: simple
+    build-commands:
+      - mkdir -p "${FLATPAK_DEST}"
+      - mv *.so* "${FLATPAK_DEST}/retrodeck/tmplib/"
+      - mv R*x* "${FLATPAK_DEST}/bin/"
+      - chmod +x "${FLATPAK_DEST}/bin/"R*x*
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/licenses"
+      - mv LICENSE.txt "${FLATPAK_DEST}/retrodeck/licenses"
+    sources:
+      - type: archive
+        url: https://github.com/RetroDECK/Pancakes-bin/releases/download/1.1.0.1403/pancakes-Release-linux_x64.tar.gz
+        sha256: 68b1602c99c5e5b743a1362eaf428ee88b237bd5029aede00d342fa8d79b8f27
 
   # XEMU
   # https://xemu.app/docs/download/#download-for-linux
@@ -650,7 +650,7 @@ modules:
     build-commands:
       - rm -f "files/manifest.json"
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
-      - cp -rL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - cp -rnL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
       - rm -rf "files/lib"
       - chmod +x "files/bin/"*
       - cp -r files/* "${FLATPAK_DEST}"
@@ -774,7 +774,6 @@ modules:
       # Desktop entries
       - cp net.retrodeck.retrodeck.desktop ${FLATPAK_DEST}/share/applications/net.retrodeck.retrodeck.desktop
       - cp net.retrodeck.retrodeck.Configurator.desktop /app/share/applications/net.retrodeck.retrodeck.Configurator.desktop
-      - cp net.retrodeck.retrodeck.start.desktop /app/share/applications/net.retrodeck.retrodeck.start.desktop
       - chmod +x net.retrodeck.retrodeck*desktop
 
       # Initializing default emulator configs

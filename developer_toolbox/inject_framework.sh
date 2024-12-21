@@ -36,7 +36,7 @@ elif [ -d "$flatpak_system_installation" ]; then
     echo "RetroDECK is installed in system mode, proceeding."
     app="$flatpak_system_installation"
 else
-    echo "RetroDECK installation not found, quitting"
+    echo "RetroDECK installation not found, are you inside a flatpak? Quitting"
     exit 1
 fi
 
