@@ -275,7 +275,7 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_styles/tab_selected = SubResource("StyleBoxFlat_co0k7")
 tab_alignment = 1
-current_tab = 2
+current_tab = 1
 script = ExtResource("3_id6l4")
 
 [node name="GLOBALS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
@@ -479,7 +479,6 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_1161k")
 show_percentage = false
 
 [node name="SYSTEMS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
-visible = false
 layout_mode = 2
 script = ExtResource("36_wv31h")
 metadata/_tab_index = 1
@@ -749,6 +748,7 @@ alignment = 1
 expand_icon = true
 
 [node name="TOOLS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
 script = ExtResource("50_wqa5h")
 metadata/_tab_index = 2
@@ -791,7 +791,7 @@ alignment = 1
 icon_alignment = 1
 vertical_icon_alignment = 0
 selected = 0
-item_count = 4
+item_count = 3
 popup/item_0/text = "LOGS"
 popup/item_0/icon = ExtResource("52_1rasc")
 popup/item_0/disabled = true
@@ -799,12 +799,9 @@ popup/item_0/separator = true
 popup/item_1/text = "RetroDECK Log"
 popup/item_1/icon = ExtResource("11_g1uhn")
 popup/item_1/id = 1
-popup/item_2/text = "ES_DE Log"
-popup/item_2/icon = ExtResource("44_7lpj5")
-popup/item_2/id = 2
-popup/item_3/text = "Retroarch"
-popup/item_3/icon = ExtResource("4_xcuib")
-popup/item_3/id = 3
+popup/item_2/text = "Retroarch"
+popup/item_2/icon = ExtResource("4_xcuib")
+popup/item_2/id = 3
 
 [node name="bios_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/troubleshoot_gridcontainer"]
 custom_minimum_size = Vector2(0, 100)
