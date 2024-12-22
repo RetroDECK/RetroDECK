@@ -400,7 +400,7 @@ modules:
       - rm -rf "files/lib/pkgconfig"
       - cp -rL "files/lib/debug" "${FLATPAK_DEST}/retrodeck/tmplib"
       - rm -rf "files/lib/debug"
-      - "if ! cp -rnL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib 2>/dev/null; then echo 'Warning: Some files could not be copied, but the build will continue.'; fi"
+      - "cp -rnL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib 2>/dev/null || echo 'Warning: Some files could not be copied, but the build will continue.'"
       - rm -rf "files/lib"
       - chmod +x "files/bin/"*
       - cp -r files/* "${FLATPAK_DEST}"
@@ -650,7 +650,7 @@ modules:
     build-commands:
       - rm -f "files/manifest.json"
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
-      - "cp -rnL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib 2>/dev/null || echo 'Warning: Some files could not be copied, but the build will continue.'"
+      - cp -rfL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib
       - rm -rf "files/lib"
       - chmod +x "files/bin/"*
       - cp -r files/* "${FLATPAK_DEST}"
