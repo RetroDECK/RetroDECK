@@ -378,7 +378,7 @@ modules:
     build-commands:
       - rm -f "files/manifest.json"
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
-      - cp -r "files/lib/debug" "${FLATPAK_DEST}/retrodeck/tmplib"
+      - cp -rnL "files/lib/debug" "${FLATPAK_DEST}/retrodeck/tmplib"
       - rm -rf "files/lib/debug"
       - cp -rnL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
       - rm -rf "files/lib"
@@ -398,7 +398,7 @@ modules:
       - rm -f "files/manifest.json"
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
       - rm -rf "files/lib/pkgconfig"
-      - cp -rL "files/lib/debug" "${FLATPAK_DEST}/retrodeck/tmplib"
+      - cp -rnL "files/lib/debug" "${FLATPAK_DEST}/retrodeck/tmplib"
       - rm -rf "files/lib/debug"
       - cp -rnL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
       - rm -rf "files/lib"
@@ -452,7 +452,7 @@ modules:
     build-commands:
       - rm -f "files/manifest.json"
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib/"
-      - cp -rL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib/"
+      - cp -rnL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib/"
       - rm -rf "files/lib"
       - chmod +x "files/bin/"*
       - cp -r files/* "${FLATPAK_DEST}/"
@@ -539,7 +539,7 @@ modules:
       #- cp -r "files/lib/debug/lib/*" "${FLATPAK_DEST}/retrodeck/tmplib/debug/"
       - rm -rf "files/lib/debug" "files/lib/pkgconfig"
       - chmod +x "files/bin/"*
-      - cp -rL files/* "${FLATPAK_DEST}"
+      - cp -rnL files/* "${FLATPAK_DEST}"
     sources:
       - type: archive
         url: https://github.com/RetroDECK/org.solarus_games.solarus.Launcher/releases/latest/download/RetroDECK-solarus-Artifact.tar.gz
