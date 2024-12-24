@@ -343,7 +343,7 @@ modules:
     build-commands:
       - rm -f "files/manifest.json"
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
-      - "cp -rnL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib 2>/dev/null || echo 'Warning: Some files could not be copied, but the build will continue.'"
+      - "cp -rnL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib || echo 'Warning: Some files could not be copied, but the build will continue.'"
       - rm -rf "files/lib"
       - chmod +x "files/bin/"*
       - cp -r files/* "${FLATPAK_DEST}"
@@ -378,9 +378,9 @@ modules:
     build-commands:
       - rm -f "files/manifest.json"
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
-      - "cp -rnL files/lib/debug ${FLATPAK_DEST}/retrodeck/tmplib 2>/dev/null || echo 'Warning: Some files could not be copied, but the build will continue.'"
+      - "cp -rnL files/lib/debug ${FLATPAK_DEST}/retrodeck/tmplib || echo 'Warning: Some files could not be copied, but the build will continue.'"
       - rm -rf "files/lib/debug"
-      - "cp -rnL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib 2>/dev/null || echo 'Warning: Some files could not be copied, but the build will continue.'"
+      - "cp -rnL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib || echo 'Warning: Some files could not be copied, but the build will continue.'"
       - rm -rf "files/lib"
       - chmod +x "files/bin/"*
       - cp -r files/* "${FLATPAK_DEST}"
@@ -398,9 +398,9 @@ modules:
       - rm -f "files/manifest.json"
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
       - rm -rf "files/lib/pkgconfig"
-      - "cp -rnL files/lib/debug ${FLATPAK_DEST}/retrodeck/tmplib 2>/dev/null || echo 'Warning: Some files could not be copied, but the build will continue.'"
+      - "cp -rnL files/lib/debug ${FLATPAK_DEST}/retrodeck/tmplib || echo 'Warning: Some files could not be copied, but the build will continue.'"
       - rm -rf "files/lib/debug"
-      - "cp -rnL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib 2>/dev/null || echo 'Warning: Some files could not be copied, but the build will continue.'"
+      - "cp -rnL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib || echo 'Warning: Some files could not be copied, but the build will continue.'"
       - rm -rf "files/lib"
       - chmod +x "files/bin/"*
       - cp -r files/* "${FLATPAK_DEST}"
@@ -435,7 +435,7 @@ modules:
     build-commands:
       - rm -f "files/manifest.json"
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
-      - "cp -rnL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib 2>/dev/null || echo 'Warning: Some files could not be copied, but the build will continue.'"
+      - "cp -rnL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib || echo 'Warning: Some files could not be copied, but the build will continue.'"
       - rm -rf "files/lib"
       - chmod +x "files/bin/"*
       - cp -r files/* "${FLATPAK_DEST}"
@@ -452,7 +452,7 @@ modules:
     build-commands:
       - rm -f "files/manifest.json"
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib/"
-      - "cp -rnL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib 2>/dev/null || echo 'Warning: Some files could not be copied, but the build will continue.'"
+      - "cp -rnL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib || echo 'Warning: Some files could not be copied, but the build will continue.'"
       - rm -rf "files/lib"
       - chmod +x "files/bin/"*
       - cp -r files/* "${FLATPAK_DEST}/"
@@ -539,7 +539,7 @@ modules:
       #- cp -r "files/lib/debug/lib/*" "${FLATPAK_DEST}/retrodeck/tmplib/debug/"
       - rm -rf "files/lib/debug" "files/lib/pkgconfig"
       - chmod +x "files/bin/"*
-      - "cp -rnL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib 2>/dev/null || echo 'Warning: Some files could not be copied, but the build will continue.'"
+      - "cp -rnL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib || echo 'Warning: Some files could not be copied, but the build will continue.'"
     sources:
       - type: archive
         url: https://github.com/RetroDECK/org.solarus_games.solarus.Launcher/releases/latest/download/RetroDECK-solarus-Artifact.tar.gz
@@ -555,7 +555,7 @@ modules:
       - rm -f "files/manifest.json"
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
       - rm -rf "files/lib/cmake" "files/lib/pkgconfig" "files/lib/debug"
-      - "cp -rnL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib 2>/dev/null || echo 'Warning: Some files could not be copied, but the build will continue.'"
+      - "cp -rnL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib || echo 'Warning: Some files could not be copied, but the build will continue.'"
       - rm -rf "files/lib"
       - chmod +x "files/bin/"*
       - cp -r files/* "${FLATPAK_DEST}"
@@ -650,6 +650,7 @@ modules:
     build-commands:
       - rm -f "files/manifest.json"
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
+      - cp -rfL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib
       - cp -rfL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib
       - rm -rf "files/lib"
       - chmod +x "files/bin/"*
