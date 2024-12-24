@@ -651,6 +651,7 @@ modules:
       - rm -f "files/manifest.json"
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
       - cp -rfL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib
+      - cp -rfL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib
       - rm -rf "files/lib"
       - chmod +x "files/bin/"*
       - cp -r files/* "${FLATPAK_DEST}"
