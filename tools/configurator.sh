@@ -98,7 +98,7 @@ source /app/libexec/global.sh
 #         - Full changelog
 #         - Version-specific changelogs
 #       - RetroDECK Credits
-#     - Add to Steam
+#     - Steam Sync
 #     - Developer Options (Hidden)
 #       - Change Multi-user mode
 #       - Install Specific Release
