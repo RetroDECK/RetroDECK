@@ -452,6 +452,7 @@ configurator_open_emulator_dialog() {
     "Ruffle" "Open the Flash emulator Ruffle"
     "RPCS3" "Open the PS3 emulator RPCS3"
     "Ryujinx" "Open the Switch emulator Ryujinx"
+    "Steam ROM Manager" "Open Steam ROM Manager"
     "Vita3K" "Open the PSVita emulator Vita3K"
     "XEMU" "Open the Xbox emulator XEMU"
   )
@@ -537,6 +538,11 @@ configurator_open_emulator_dialog() {
   "Ryujinx" )
     log i "Configurator: \"$emulator\""
     Ryujinx.sh
+  ;;
+
+  "Steam ROM Manager" )
+    log i "Configurator: \"$emulator\""
+    steam-rom-manager
   ;;
 
   "Vita3K" )
@@ -1101,6 +1107,7 @@ configurator_reset_dialog() {
     "Primehack" "Reset the Metroid Prime emulator Primehack to default settings"
     "RPCS3" "Reset the PS3 emulator RPCS3 to default settings"
     "Ryujinx" "Reset the Switch emulator Ryujinx to default settings"
+    "Steam ROM Manager" "Reset Steam ROM Manager to default settings"
     "Vita3k" "Reset the PS Vita emulator Vita3k to default settings"
     "XEMU" "Reset the XBOX emulator XEMU to default settings"
   )
@@ -1141,7 +1148,7 @@ configurator_reset_dialog() {
       fi
     ;;
 
-    "Cemu" | "Citra" | "Dolphin" | "Duckstation" | "GZDoom" | "Yuzu" | "MelonDS" | "MAME" | "PCSX2" | "PPSSPP" | "Primehack" | "Ruffle" | "RPCS3" | "Ryujinx" )
+    "Cemu" | "Citra" | "Dolphin" | "Duckstation" | "GZDoom" | "Yuzu" | "MelonDS" | "MAME" | "PCSX2" | "PPSSPP" | "Primehack" | "Ruffle" | "RPCS3" | "Ryujinx" | "SteamROMManager" )
       if [[ $(configurator_reset_confirmation_dialog "$component_to_reset" "Are you sure you want to reset the $component_to_reset emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
         prepare_component "reset" "$component_to_reset" "configurator"
         configurator_process_complete_dialog "resetting $component_to_reset"
