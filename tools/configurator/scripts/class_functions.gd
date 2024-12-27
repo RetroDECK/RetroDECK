@@ -7,9 +7,10 @@ extends Control
 @onready var main_scene = get_tree().root.get_node("Control")
 var log_result: Dictionary
 var log_parameters: Array
+var data_file_path: String = "/app/retrodeck/config/retrodeck/reference_lists/features.json"
 const globals_sh_file_path: String = "/app/libexec/global.sh"
 const wrapper_command: String = "/app/tools/retrodeck_function_wrapper.sh"
-const config_file_path = "/var/config/retrodeck/retrodeck.cfg"
+var config_file_path = "/var/config/retrodeck/retrodeck.cfg"
 const json_file_path = "/var/config/retrodeck/retrodeck.json"
 var config_folder_path = "/var/config/"
 const esde_file_path = "/var/config/ES-DE/settings/es_settings.xml"
@@ -57,6 +58,8 @@ func _ready():
 	read_values_states()
 
 func read_values_states() -> void:
+	if not FileAccess.file_exists(config_file_path):
+		config_file_path = "../../config/retrodeck/retrodeck.cfg"
 	var config = data_handler.parse_config_to_json(config_file_path)
 	data_handler.config_save_json(config, json_file_path)
 	#rd_log_folder = config["paths"]["logs_folder"]
@@ -144,7 +147,7 @@ func logger(log_type: String, log_text: String) -> void:
 
 	if not log_dir:
 		log_dir = DirAccess.open("res://") #open something valid to create an instance
-		print(log_dir.make_dir_recursive(rd_log_folder))
+		#print(log_dir.make_dir_recursive(rd_log_folder))
 		if log_dir.make_dir_recursive(rd_log_folder) != OK:
 			print("Something wrong with log directory - ", rd_log_folder)
 			return

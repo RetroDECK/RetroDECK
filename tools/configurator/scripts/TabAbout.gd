@@ -1,5 +1,6 @@
 extends MarginContainer
 
+@onready var class_test = ClassFunctions.new()
 var rd_web_button:= Button.new()
 var rd_changelog_button:= Button.new()
 var rd_wiki_button:= Button.new()
