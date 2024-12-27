@@ -189,7 +189,7 @@ jobs:
         id: generate-rekku-token
         uses: actions/create-github-app-token@v1
         with:
-          app-id: ${{ vars.REKKU_APP_ID }}
+          app-id: 972136
           private-key: ${{ secrets.REKKU_PRIVATE_KEY }}
           repositories: "RetroDECK,Cooker"
           owner: "RetroDECK"
