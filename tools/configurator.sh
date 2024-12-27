@@ -97,11 +97,13 @@ source /app/libexec/global.sh
 #         - Version-specific changelogs
 #       - RetroDECK Credits
 #     - Add to Steam
+#     - ROM Hack Downloader
 #     - Developer Options (Hidden)
 #       - Change Multi-user mode
 #       - Install Specific Release
 #       - Browse the wiki
 #       - Install: RetroDECK Starter Pack
+#       - Game Downloader
 #       - Tool: USB Import
 
 # DIALOG TREE FUNCTIONS
@@ -115,6 +117,7 @@ configurator_welcome_dialog() {
     "RetroDECK: Troubleshooting" "Backup data, perform BIOS / multi-disc file checks and emulator resets" \
     "RetroDECK: About" "Show additional information about RetroDECK" \
     "Sync with Steam" "Sync all favorited games with Steam" \
+    "ROM Hack Downloader" "Install ROM Hacks which are compatible with your ROMs" \
     "Developer Options" "Welcome to the DANGER ZONE")
   else
     welcome_menu_options=("Presets & Settings" "Here you find various presets, tweaks and settings to customize your RetroDECK experience" \
@@ -158,6 +161,11 @@ configurator_welcome_dialog() {
 
   "Sync with Steam" )
     configurator_add_steam
+  ;;
+
+  "ROM Hack Downloader" )
+    configurator_generic_dialog "RetroDECK Configurator - ROM Hack Downloader" "In order to download ROM Hacks you need to have the ROMs the hacks are based on already available. Your base ROMs need to be compatible with the hacks, otherwise those hacks will not be shown.\n\nRight now, your base ROMs need to be uncompressed for this to work.\n\nThe compatible ROM Hacks will now be listed."
+    configurator_romhack_downloader_dialog
   ;;
 
   "Developer Options" )
@@ -1342,8 +1350,11 @@ configurator_developer_dialog() {
   "Change Multi-user mode" "Enable or disable multi-user support" \
   "Install Specific Release" "Install any cooker release or the latest main available" \
   "Browse the Wiki" "Browse the RetroDECK wiki online" \
+  "USB Import" "Prepare a USB device for ROMs or import an existing collection" \
+  "Install RetroDECK Starter Pack" "Install the optional RetroDECK starter pack" \
   "Install RetroDECK Starter Pack" "Install the optional RetroDECK starter pack" \
   "Tool: USB Import" "Prepare a USB device for ROMs or import an existing collection" \
+  "Game Downloader" "Install ROM Hacks, Homebrew or Ports" \
   "Open GODOT Configurator" "Open the new Configurator made in GODOT engine")
 
   case $choice in
@@ -1370,6 +1381,10 @@ configurator_developer_dialog() {
       install_retrodeck_starterpack
     fi
     configurator_developer_dialog
+  ;;
+
+  "Game Downloader" )
+    configurator_game_downloader_dialog
   ;;
 
   "Tool: USB Import" )
@@ -1554,6 +1569,88 @@ configurator_usb_import_dialog() {
     configurator_developer_dialog
   ;;
   esac
+}
+
+configurator_game_downloader_dialog() {
+  choice=$(zenity --list --title="RetroDECK Configurator Utility - Game Downloader" --cancel-label="Back" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+  --column="Choice" --column="Description" \
+  "ROM Hack Downloader" "Install ROM Hacks which are compatible with your ROMs" \
+  "Homebrew Downloader" "Install Homebrew (Not yet functional)" \
+  "Ports Downloader" "Install Ports (Not yet functional)" )
+
+  case $choice in
+
+  "ROM Hack Downloader" )
+    configurator_generic_dialog "RetroDECK Configurator - ROM Hack Downloader" "In order to download ROM Hacks you need to have the ROMs the hacks are based on already available. Your base ROMs need to be compatible with the hacks, otherwise those hacks will not be shown.\n\nRight now, your base ROMs need to be uncompressed for this to work.\n\nThe compatible ROM Hacks will now be listed."
+    configurator_romhack_downloader_dialog
+  ;;
+
+  "Homebrew Downloader" )
+    configurator_developer_dialog
+  ;;
+
+  "Ports Downloader" )
+    configurator_developer_dialog
+  ;;
+
+  "" ) # No selection made or Back button clicked
+    configurator_welcome_dialog
+  ;;
+
+  esac
+}
+
+configurator_romhack_downloader_dialog() {
+  hacks_db_setup
+  check_romhacks_compatibility # add paths of available base roms to db
+
+  available_bases_crc32s="$($hacks_db_cmd "SELECT crc32 FROM bases WHERE local_path NOT NULL;")"
+
+  zenity_columns=()
+  while IFS= read -r base_crc32; do
+
+    # Get info of the available hacks for this base crc32
+    info_of_hacks_compatible_with_base="$($hacks_db_cmd "SELECT rhacks.name,bases.system,rhacks.released,rhacks.retro_achievements,rhacks.description \
+                                                         FROM bases JOIN rhacks ON bases.crc32 = rhacks.base_crc32
+                                                         WHERE bases.crc32 = '""$base_crc32""'")"
+
+    while IFS= read -r single_hack_info; do
+    
+      # Turn db output into array
+      IFS='|' read -r -a single_hack_info_array <<< "$single_hack_info"
+
+      # Add row of hack info to zenity choices
+      for info in "${single_hack_info_array[@]}"; do
+        zenity_columns+=("$info")
+      done
+
+    done <<< "$info_of_hacks_compatible_with_base"
+  done <<< "$available_bases_crc32s"
+
+  if [[ ${#zenity_columns[@]} != 0 ]]; then # Compatible base ROMs found
+    choice=$(zenity --list --title="RetroDECK Configurator Utility - ROM Hack Downloader" --cancel-label="Back" \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+    --column="ROM Hack Name" --column="System" --column="Released" --column="RetroAchievements" --column="Description" \
+    "${zenity_columns[@]}" )
+
+    if [[ -z "$choice" ]]; then # no selection or back button
+      configurator_welcome_dialog
+    else
+      install_romhack "$choice"
+      rc=$?
+      if [[ $rc == "0" ]]; then
+        configurator_generic_dialog "RetroDECK Configurator - ROM Hack Downloader" "$choice was installed successfully!"
+      else
+        configurator_generic_dialog "RetroDECK Configurator - ROM Hack Downloader" "Something went wrong :("
+      fi
+
+      configurator_romhack_downloader_dialog    
+    fi
+  else # No compatible base ROMs
+    configurator_generic_dialog "RetroDECK Configurator - ROM Hack Downloader" "You have no uncompressed ROMs which are compatible with the available patches."
+    configurator_welcome_dialog
+  fi
 }
 
 # START THE CONFIGURATOR
