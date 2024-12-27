@@ -200,28 +200,28 @@ modules:
         sha256: 4ee662847c588c3ef2fec8bfb304e8739e3dbaba87ccb9a608d691c88f5b64dc
 
   # GODOT Configurator
-  - name: retrodeck-configurator
-    buildsystem: simple
-    build-commands:
-      - install -Dm755 "Godot_v4.3-stable_linux.x86_64" "${FLATPAK_DEST}/bin/godot"
-      - mkdir -p "${FLATPAK_DEST}/retrodeck"
-      - godot --headless --path "tools/configurator" --import
-      - godot --headless --path "tools/configurator" --export-pack "Linux/X11 64-bit" "${FLATPAK_DEST}/retrodeck/configurator.pck"
-      - chmod +x "${FLATPAK_DEST}/retrodeck/configurator.pck"
-      - echo '#!/bin/sh' > "godot-configurator.sh"
-      - echo 'godot --main-pack /app/retrodeck/configurator.pck' >> "godot-configurator.sh"
-      - install -Dm755 "godot-configurator.sh" "/app/bin/"
-    sources:
-      - type: archive
-        url: https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_linux.x86_64.zip
-        sha256: 7de56444b130b10af84d19c7e0cf63cf9e9937ee4ba94364c3b7dd114253ca21
-      - type: archive
-        url: https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.15.0.tar.gz
-        sha256: f5f359d6332861bd497570848fcb42520964a9e83d5e3abe397b6b6db9bcaaf4
-        dest: fontconfig
-      - type: git
-        url: THISREPO
-        branch: THISBRANCH
+  # - name: retrodeck-configurator
+  #   buildsystem: simple
+  #   build-commands:
+  #     - install -Dm755 "Godot_v4.3-stable_linux.x86_64" "${FLATPAK_DEST}/bin/godot"
+  #     - mkdir -p "${FLATPAK_DEST}/retrodeck"
+  #     - godot --headless --path "tools/configurator" --import
+  #     - godot --headless --path "tools/configurator" --export-pack "Linux/X11 64-bit" "${FLATPAK_DEST}/retrodeck/configurator.pck"
+  #     - chmod +x "${FLATPAK_DEST}/retrodeck/configurator.pck"
+  #     - echo '#!/bin/sh' > "godot-configurator.sh"
+  #     - echo 'godot --main-pack /app/retrodeck/configurator.pck' >> "godot-configurator.sh"
+  #     - install -Dm755 "godot-configurator.sh" "/app/bin/"
+  #   sources:
+  #     - type: archive
+  #       url: https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_linux.x86_64.zip
+  #       sha256: 7de56444b130b10af84d19c7e0cf63cf9e9937ee4ba94364c3b7dd114253ca21
+  #     - type: archive
+  #       url: https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.15.0.tar.gz
+  #       sha256: f5f359d6332861bd497570848fcb42520964a9e83d5e3abe397b6b6db9bcaaf4
+  #       dest: fontconfig
+  #     - type: git
+  #       url: THISREPO
+  #       branch: THISBRANCH
         
   # RetroArch
   # https://retroarch.com/index.php?page=platforms
