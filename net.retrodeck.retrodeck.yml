@@ -48,8 +48,6 @@ finish-args:
   - --filesystem=~/.var/app/com.valvesoftware.Steam:rw # Steam (Flatpak)
   # PPSSPP, DOLPHIN
   - --filesystem=xdg-run/gamescope-0:ro
-  # Xenia / Wine
-  - --env=WINEDLLPATH=/app/dlls/lib32:/app/dlls/lib:/app/lib32/wine/wined3d:/app/lib/wine/wined3d
 
 cleanup:
   # ES-DE
@@ -689,10 +687,8 @@ modules:
       - cp -r files/* "${FLATPAK_DEST}"
     sources:
       - type: archive
-        url: https://github.com/RetroDECK/ES-DE/releases/download/feat%2Fxenia-190924.46/RetroDECK-ES-DE-Artifact.tar.gz
-        sha256: 6ea55f59613a066ae36f04b61b3e9810d45fa2ca0924d876b5ada2ca28f5f36f
-        # url: https://github.com/RetroDECK/ES-DE/releases/latest/download/RetroDECK-ES-DE-Artifact.tar.gz
-        # sha256: RETRODECKESDELATEST
+        url: https://github.com/RetroDECK/ES-DE/releases/latest/download/RetroDECK-ES-DE-Artifact.tar.gz
+        sha256: RETRODECKESDELATEST
 
   - name: retrodeck-theme
     buildsystem: simple
@@ -718,22 +714,6 @@ modules:
         strip-components: 0
         url: https://github.com/ruffle-rs/ruffle/releases/download/nightly-2024-10-29/ruffle-nightly-2024_10_29-linux-x86_64.tar.gz
         sha256: 5ab0fc46b07d022d4b0ff355e88175cd77b8bb1663612f31d160f8001dc472bb
-
-  # XENIA CANARY
-  - name: xenia-canary
-    buildsystem: simple
-    build-commands:
-      - install -Dm755 xenia_canary.exe "${FLATPAK_DEST}/xenia-canary/xenia_canary.exe"
-      - install -Dm755 xenia-canary "${FLATPAK_DEST}/bin/xenia-canary"
-    sources:
-      - type: archive
-        url: https://github.com/xenia-canary/xenia-canary/releases/download/experimental/xenia_canary.zip
-        sha256: XENIACANARYLATESTSHA
-      - type: script
-        commands:
-          - |
-            WINEPREFIX="/var/data/xenia-canary-pfx" wine64 "/app/xenia-canary/xenia_canary.exe"
-        dest-filename: xenia-canary
 
   - name: fetch-missing-libs
     buildsystem: simple
