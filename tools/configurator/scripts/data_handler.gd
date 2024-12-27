@@ -39,7 +39,10 @@ func load_base_data() -> AppData:
 				if emulator_data.has("system"):	
 					emulator.system = str(emulator_data["system"])
 				emulator.launch = emulator_data["launch"]
+<<<<<<< HEAD
 >>>>>>> be95a1bf935fae24a2ab447f99022a39ae7a896a
+=======
+>>>>>>> origin/feat/shadps4
 				if emulator_data.has("properties"):
 					for property_data in emulator_data["properties"]:
 						print (emulator,"----",property_data)
