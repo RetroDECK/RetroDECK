@@ -1,5 +1,7 @@
 #!/bin/bash
 
+git config pull.rebase false
+
 # List of branches to pull and merge
 branches=(
   "cooker"
@@ -12,7 +14,7 @@ pull_requests=(
   983 # Cohee1207:Add megadrive to ZIP compression targets
   981 # Cohee1207:bug/fix-ps2-createcd
   974 # Cohee1207:feat/ppsspp-cheevos
-  863 # kageurufu:primehack-steamdeck-fix
+  #863 # kageurufu:primehack-steamdeck-fix
   842 # feat/game-downloader
 )
 
