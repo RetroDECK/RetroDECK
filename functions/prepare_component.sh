@@ -523,6 +523,10 @@ prepare_component() {
       dir_prep "$saves_folder/PSP/PPSSPP-SA" "/var/config/ppsspp/PSP/SAVEDATA"
       dir_prep "$states_folder/PSP/PPSSPP-SA" "/var/config/ppsspp/PSP/PPSSPP_STATE"
       dir_prep "$texture_packs_folder/PPSSPP" "/var/config/ppsspp/PSP/TEXTURES"
+
+      # Reset default preset settings
+      set_setting_value "$rd_conf" "ppsspp" "$(get_setting_value "$rd_defaults" "ppsspp" "retrodeck" "cheevos")" "retrodeck" "cheevos"
+      set_setting_value "$rd_conf" "ppsspp" "$(get_setting_value "$rd_defaults" "ppsspp" "retrodeck" "cheevos_hardcore")" "retrodeck" "cheevos_hardcore"
     fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
       set_setting_value "$ppssppconf" "CurrentDirectory" "$roms_folder/psp" "ppsspp" "General"
@@ -876,6 +880,16 @@ prepare_component() {
     sed -i 's#RETRODECKSAVESDIR#'$saves_folder'#g' "/var/config/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON
   fi
 
+  if [[ "$component" =~ ^(shadps4|all)$ ]]; then
+  component_found="true"
+    # This is just a placeholder script to test the emulator's flow
+    log i "----------------------"
+    log i "Prepearing SHADPS4"
+    log i "----------------------"
+
+    # TODO: plceholder
+  fi
+  
   if [[ "$component" =~ ^(portmaster|all)$ ]]; then
   component_found="true"
     # TODO: MultiUser
@@ -909,6 +923,37 @@ prepare_component() {
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
       dir_prep "$saves_folder/flash" "/var/data/ruffle/SharedObjects/localhost/$roms_folder/flash"
     fi
+  fi
+    
+  if [[ "$component" =~ ^(gzdoom|all)$ ]]; then
+  component_found="true"
+    # This is just a placeholder script to test the emulator's flow
+    log i "----------------------"
+    log i "Prepearing SHADPS4"
+    log i "----------------------"
+
+    # TODO: plceholder
+  fi
+
+  if [[ "$component" =~ ^(xenia|all)$ ]]; then
+  component_found="true"
+    log i "----------------------"
+    log i "Prepearing Xenia"
+    log i "----------------------"
+
+    local xenia_prefix="/var/data/xenia-canary-pfx"
+    create_dir -d "$xenia_prefix"
+
+    # sandboxing prefix to avoid writing on real user home folder
+    # TODO: multi user needs to care about this as we're using the linux username
+    unlink "$xenia_prefix/drive_c/users/$(whoami)/Desktop" && create_dir "$xenia_prefix/drive_c/users/$(whoami)/Desktop"
+    unlink "$xenia_prefix/drive_c/users/$(whoami)/Documents" && create_dir "$xenia_prefix/drive_c/users/$(whoami)/Documents"
+    unlink "$xenia_prefix/drive_c/users/$(whoami)/Downloads" && create_dir "$xenia_prefix/drive_c/users/$(whoami)/Downloads"
+    unlink "$xenia_prefix/drive_c/users/$(whoami)/Music" && create_dir "$xenia_prefix/drive_c/users/$(whoami)/Music"
+    unlink "$xenia_prefix/drive_c/users/$(whoami)/Pictures" && create_dir "$xenia_prefix/drive_c/users/$(whoami)/Pictures"
+    unlink "$xenia_prefix/drive_c/users/$(whoami)/Videos" && create_dir "$xenia_prefix/drive_c/users/$(whoami)/Videos"
+
+    # TODO: fill this
     
   fi
 

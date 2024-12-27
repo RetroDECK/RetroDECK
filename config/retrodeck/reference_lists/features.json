@@ -248,6 +248,7 @@
       "gbc",
       "genesis",
       "mastersystem",
+      "megadrive",
       "n64",
       "nds",
       "nes",
@@ -675,6 +676,9 @@
     "ps3": {
       "name": "Sony PlayStation 3"
     },
+    "ps4": {
+      "name": "Sony PlayStation 4"
+    },
     "psp": {
       "name": "Sony PlayStation Portable"
     },
@@ -818,6 +822,9 @@
     },
     "x68000": {
       "name": "Sharp X68000"
+    },
+    "xbox360": {
+      "name": "Microsoft Xbox 360"
     },
     "xbox": {
       "name": "Microsoft Xbox"
@@ -1123,6 +1130,12 @@
       "ponzu": true,
       "abxy_button": true
     },
+    "shadps4": {
+      "description": "PS4 Emulator for Linux",
+      "name": "shadps4",
+      "system": "ps4",
+      "launch": "shadps4-qt"
+    },
     "dolphin": {
       "name": "Dolphin",
       "description": "Dolphin Wii and GameCube Emulator",
@@ -1193,6 +1206,11 @@
       "name": "Steam ROM Manager",
       "launch": "steam-rom-manager",
       "cli-arg": "--version"
+    },
+    "steam-rom-manager": {
+      "description": "Steam ROM Manager (used to sync RetroDECK favorites with Steam)",
+      "name": "Steam ROM Manager",
+      "launch": "steam-rom-manager"
     },
     "portmaster": {
       "description": "PortMaster",

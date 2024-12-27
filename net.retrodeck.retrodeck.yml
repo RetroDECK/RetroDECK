@@ -6,6 +6,19 @@ base: org.electronjs.Electron2.BaseApp            # Needed for Steam ROM Manager
 base-version: "22.08"
 command: retrodeck.sh
 
+base: org.winehq.Wine
+base-version: stable-23.08
+
+inherit-extensions:
+  - org.freedesktop.Platform.Compat.i386
+  - org.freedesktop.Platform.ffmpeg_full.i386
+  - org.freedesktop.Platform.ffmpeg-full
+  - org.freedesktop.Platform.GL32
+  - org.freedesktop.Platform.VAAPI.Intel.i386
+  - org.winehq.Wine.DLLs
+  - org.winehq.Wine.gecko
+  - org.winehq.Wine.mono
+
 finish-args:
   - --socket=wayland
   - --socket=x11
@@ -618,6 +631,23 @@ modules:
         url: https://github.com/RetroDECK/MAME/releases/latest/download/RetroDECK-MAME-Artifact.tar.gz
         sha256: RETRODECKMAMELATEST
 
+  # SHADPS4
+  # This build brings pthreads patch for linux
+  - name: shadps4
+    buildsystem: simple
+    build-commands:
+      - chmod +x *.AppImage
+      - ./*.AppImage --appimage-extract
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
+      - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}/"
+    sources:
+      - type: archive
+        # TODO: fix this
+        # url: SHADPS4LATESTGHREL
+        # sha256: SHADPS4LATESTSHA
+        url: SHADPS4LATESTBIN
+        sha256: SHADPS4LATESTSHA
   # PortMaster
 
   - name: PortMaster

@@ -2,15 +2,23 @@ class_name DataHandler
 
 extends Node
 
-var data_file_path = "/app/retrodeck/config/retrodeck/reference_lists/features.json"
+@onready var main_scene = get_tree().root.get_node("Control")
 var app_data: AppData
+
 
 func _ready():
 	# Load the data when the scene is ready
+	print (class_functions.data_file_path)
+	if not FileAccess.file_exists(class_functions.data_file_path):
+		class_functions.data_file_path = "../../config/retrodeck/reference_lists/features.json"
+		var t_c = main_scene.get_node("%globals_gridcontainer")
+		for child in t_c.get_children():
+			if child.is_class("Button"):
+				child.disabled = true
 	app_data = load_base_data()
 
 func load_base_data() -> AppData:
-	var file = FileAccess.open(data_file_path, FileAccess.READ)
+	var file = FileAccess.open(class_functions.data_file_path, FileAccess.READ)
 	if file:
 		var json_data = file.get_as_text()
 		file.close()
@@ -39,9 +47,13 @@ func load_base_data() -> AppData:
 				if emulator_data.has("system"):	
 					emulator.system = str(emulator_data["system"])
 				emulator.launch = emulator_data["launch"]
+<<<<<<< HEAD
+>>>>>>> be95a1bf935fae24a2ab447f99022a39ae7a896a
+=======
+>>>>>>> origin/feat/shadps4
 				if emulator_data.has("properties"):
 					for property_data in emulator_data["properties"]:
-						#print (emulator,"----",property_data)
+						print (emulator,"----",property_data)
 						var property = EmulatorProperty.new()
 						if property_data.has("cheevos"):
 							property.cheevos = property_data.get("cheevos",true)
@@ -79,10 +91,10 @@ func load_base_data() -> AppData:
 						core.properties.append(property)	
 				cores[key] = core
 				
+				emulators[key] = emulator
 			var app_dict = AppData.new()
 			app_dict.about_links = about_links
 			app_dict.emulators = emulators
-			app_dict.cores = cores
 			return app_dict
 		else:
 			class_functions.logger("e","Error parsing JSON ")
@@ -92,7 +104,7 @@ func load_base_data() -> AppData:
 	return null
 
 func save_base_data(app_dict: AppData):
-	var file = FileAccess.open(data_file_path, FileAccess.READ)
+	var file = FileAccess.open(class_functions.data_file_path, FileAccess.READ)
 	var existing_data = {}
 	if file:
 		var json = JSON.new()
@@ -102,18 +114,18 @@ func save_base_data(app_dict: AppData):
 		file.close()
 	else:
 		print("File not found. Creating a new one.")		
-		#var about_links ={}
-		var about_links_new = Link.new()
+		var about_links = {}
 		for key in app_dict.about_links.keys():
 			var link = app_dict.about_links[key]
-			about_links_new[key] = {
+			about_links[key] = {
 				"name": link.name,
 				"url": link.url,
 				"description": link.description
 			}
+		
 	var new_data_dict = {}
-	#var about_links = {}
-	var about_links = Link.new()
+	# Convert about_links to a dictionary
+	var about_links = {}
 	for key in app_dict.about_links.keys():
 		var link = app_dict.about_links[key]
 		about_links[key] = {
@@ -121,6 +133,8 @@ func save_base_data(app_dict: AppData):
 			"url": link.url,
 			"description": link.description
 	}
+
+	# Convert emulators to a dictionary
 	var emulators = {}
 	for key in app_dict.emulators.keys():
 		var emulator = app_data.emulators[key]
@@ -130,16 +144,16 @@ func save_base_data(app_dict: AppData):
 				#"standalone": property.standalone,
 				"abxy_button": {"status": property.abxy_button}
 		})
+
 		emulators[key] = {
 			"name": emulator.name,
 			"description": emulator.description,
-			"launch": emulator.launch,
-			"system": emulator.system,
-			"url": emulator.url,
 			"properties": properties
 		}
+
 	new_data_dict["about_links"] = about_links
 	new_data_dict["emulators"] = emulators
+
 	# Merge existing data with new data
 	for key in new_data_dict.keys():
 		if existing_data.has(key):
@@ -151,25 +165,28 @@ func save_base_data(app_dict: AppData):
 				existing_dict[sub_key] = new_dict[sub_key]
 		else:
 			existing_data[key] = new_data_dict[key]
+
 	# Serialize the combined data to JSON
 	#var json_text = JSON.new().stringify(existing_data, "\t")
 	#var json_text = json.stringify(existing_data, "\t")
 	var json_text = JSON.stringify(existing_data, "\t")
 
 	# Open the file in append mode and write the new JSON data
-	file = FileAccess.open(data_file_path, FileAccess.WRITE)
+	file = FileAccess.open(class_functions.data_file_path, FileAccess.WRITE)
 	file.store_string(json_text)
 	file.close()
 
 func parse_config_to_json(file_path: String) -> Dictionary:
 	var config = {}
 	var current_section = ""
+
 	var file = FileAccess.open(file_path, FileAccess.READ)
 	if file == null:
 		class_functions.logger("e","Failed to open file: " + file_path)
 		return config
 	while not file.eof_reached():
 		var line = file.get_line().strip_edges()
+		
 		if line.begins_with("[") and line.ends_with("]"):
 			current_section = line.substr(1, line.length() - 2)
 			config[current_section] = {}
@@ -189,8 +206,10 @@ func parse_config_to_json(file_path: String) -> Dictionary:
 						config[key] = value
 					else:
 						config[current_section][key] = value
+	
 	file.close()
 	return config
+	
 
 func config_save_json(config: Dictionary, json_file_path: String) -> void:
 	#var json = JSON.new()
