@@ -43,9 +43,9 @@ post_update() {
     dir_prep "$bios_folder/pico-8" "$HOME/.lexaloffle/pico-8" # Store binary and config files together. The .lexaloffle directory is a hard-coded location for the PICO-8 config file, cannot be changed
     dir_prep "$saves_folder/pico-8" "$bios_folder/pico-8/cdata" # PICO-8 saves folder structure was backwards, fixing for consistency.
 
-    cp -f "$emuconfigs/citra/qt-config.ini" /var/config/citra-emu/qt-config.ini
+    cp -f "$config/citra/qt-config.ini" /var/config/citra-emu/qt-config.ini
     sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
-    cp -fr "$emuconfigs/yuzu/"* /var/config/yuzu/
+    cp -fr "$config/yuzu/"* /var/config/yuzu/
     sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/yuzu/qt-config.ini
 
     # Remove unneeded tools folder, as location has changed to RO space
@@ -57,7 +57,7 @@ post_update() {
     # Changed settings in Duckstation and PCSX2: The "ask on exit" was disabled and "save on exit" was enabled.
     # The default configs have been updated for new installs and resets, a patch was created to address existing installs.
 
-    deploy_multi_patch "emu-configs/patches/updates/064b_update.patch"
+    deploy_multi_patch "config/patches/updates/064b_update.patch"
   fi
   if [[ $(check_version_is_older_than "0.6.5b") == "true" ]]; then
     # In version 0.6.5b, the following changes were made:
@@ -95,13 +95,13 @@ post_update() {
     conf_read
 
     mv -f "$pcsx2conf" "$pcsx2conf.bak"
-    generate_single_patch "$emuconfigs/PCSX2/PCSX2.ini" "$pcsx2conf.bak" "/var/config/PCSX2/inis/PCSX2-cheevos-upgrade.patch" pcsx2
-    deploy_single_patch "$emuconfigs/PCSX2/PCSX2.ini" "/var/config/PCSX2/inis/PCSX2-cheevos-upgrade.patch" "$pcsx2conf"
+    generate_single_patch "$config/PCSX2/PCSX2.ini" "$pcsx2conf.bak" "/var/config/PCSX2/inis/PCSX2-cheevos-upgrade.patch" pcsx2
+    deploy_single_patch "$config/PCSX2/PCSX2.ini" "/var/config/PCSX2/inis/PCSX2-cheevos-upgrade.patch" "$pcsx2conf"
     rm -f "/var/config/PCSX2/inis/PCSX2-cheevos-upgrade.patch"
     dir_prep "/var/config/duckstation" "/var/data/duckstation"
     mv -f "$duckstationconf" "$duckstationconf.bak"
-    generate_single_patch "$emuconfigs/duckstation/settings.ini" "$duckstationconf.bak" "/var/config/duckstation/duckstation-cheevos-upgrade.patch" pcsx2
-    deploy_single_patch "$emuconfigs/duckstation/settings.ini" "/var/config/duckstation/duckstation-cheevos-upgrade.patch" "$duckstationconf"
+    generate_single_patch "$config/duckstation/settings.ini" "$duckstationconf.bak" "/var/config/duckstation/duckstation-cheevos-upgrade.patch" pcsx2
+    deploy_single_patch "$config/duckstation/settings.ini" "/var/config/duckstation/duckstation-cheevos-upgrade.patch" "$duckstationconf"
     rm -f "/var/config/duckstation/duckstation-cheevos-upgrade.patch"
 
     create_dir "$mods_folder"
@@ -125,15 +125,15 @@ post_update() {
     dir_prep "$rdhome/gamelists" "/var/config/emulationstation/ES-DE/gamelists"
 
     dir_prep "$borders_folder" "/var/config/retroarch/overlays/borders"
-    rsync -rlD --mkpath "/app/retrodeck/emu-configs/retroarch/borders/" "/var/config/retroarch/overlays/borders/"
+    rsync -rlD --mkpath "/app/retrodeck/config/retroarch/borders/" "/var/config/retroarch/overlays/borders/"
 
-    rsync -rlD --mkpath "$emuconfigs/defaults/retrodeck/presets/remaps/" "/var/config/retroarch/config/remaps/"
+    rsync -rlD --mkpath "$config/retrodeck/presets/remaps/" "/var/config/retroarch/config/remaps/"
 
     if [[ ! -f "$bios_folder/capsimg.so" ]]; then
       cp -f "/app/retrodeck/extras/Amiga/capsimg.so" "$bios_folder/capsimg.so"
     fi
 
-    cp -f $emuconfigs/rpcs3/vfs.yml /var/config/rpcs3/vfs.yml
+    cp -f $config/rpcs3/vfs.yml /var/config/rpcs3/vfs.yml
     sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$bios_folder/rpcs3/"'^' "$rpcs3vfsconf"
     set_setting_value "$rpcs3vfsconf" "/games/" "$roms_folder/ps3/" "rpcs3"
     if [[ -d "$roms_folder/ps3/emudir" ]]; then # The old location exists, meaning the emulator was run at least once.
@@ -304,7 +304,7 @@ post_update() {
     log i "In version 0.8.1b, the following changes were made that required config file updates/reset or other changes to the filesystem:"
     log i "- ES-DE files were moved inside the retrodeck folder, migrating to the new structure"
     log i "- Give the user the option to reset Ryujinx, which was not properly initialized in 0.8.0b"
-    
+
     log d "ES-DE files were moved inside the retrodeck folder, migrating to the new structure"
     dir_prep "$rdhome/ES-DE/collections" "/var/config/ES-DE/collections"
     dir_prep "$rdhome/ES-DE/gamelists" "/var/config/ES-DE/gamelists"
@@ -313,8 +313,7 @@ post_update() {
     set_setting_value "$es_settings" "UserThemeDirectory" "$rdhome/ES-DE/themes" "es_settings"
     mv -f "$rdhome/themes" "$rdhome/ES-DE/themes" && log d "Move of \"$rdhome/themes\" completed"
     mv -f "$rdhome/downloaded_media" "$rdhome/ES-DE/downloaded_media" && log d "Move of \"$rdhome/downloaded_media\" completed"
-    mv -f "$rdhome/gamelists/"* "$rdhome/ES-DE/gamelists" && log d "Move of \"$rdhome/gamelists/\" completed"
-    rm -rf "$rdhome/gamelists"
+    mv -f "$rdhome/gamelists/"* "$rdhome/ES-DE/gamelists" && log d "Move of \"$rdhome/gamelists/\" completed" && rm -rf "$rdhome/gamelists"
 
     log i "MAME-SA, migrating samples to the new exposed folder: from \"/var/data/mame/assets/samples\" to \"$bios_folder/mame-sa/samples\""
     create_dir "$bios_folder/mame-sa/samples"
@@ -323,14 +322,14 @@ post_update() {
 
     log i "Installing the missing ScummVM assets and renaming \"$mods_folder/RetroArch/ScummVM/themes\" into \"theme\""
     mv -f "$mods_folder/RetroArch/ScummVM/themes" "$mods_folder/RetroArch/ScummVM/theme"
-    unzip -o "$emuconfigs/retroarch/ScummVM.zip" 'scummvm/extra/*' -d /tmp
-    unzip -o "$emuconfigs/retroarch/ScummVM.zip" 'scummvm/theme/*' -d /tmp
+    unzip -o "$config/retroarch/ScummVM.zip" 'scummvm/extra/*' -d /tmp
+    unzip -o "$config/retroarch/ScummVM.zip" 'scummvm/theme/*' -d /tmp
     mv -f /tmp/scummvm/extra "$mods_folder/RetroArch/ScummVM"
     mv -f /tmp/scummvm/theme "$mods_folder/RetroArch/ScummVM"
     rm -rf /tmp/extra /tmp/theme
 
     log i "Placing cheats in \"/var/data/mame/cheat\""
-    unzip -j -o "$emuconfigs/mame/cheat0264.zip" 'cheat.7z' -d "/var/data/mame/cheat"
+    unzip -j -o "$config/mame/cheat0264.zip" 'cheat.7z' -d "/var/data/mame/cheat"
 
     log d "Verifying with user if they want to reset Ryujinx"
     if [[ "$(configurator_generic_question_dialog "RetroDECK 0.8.1b Ryujinx Reset" "In RetroDECK 0.8.0b the Ryujinx emulator was not properly initialized for upgrading users.\nThis would cause Ryujinx to not work properly.\n\nWould you like to reset Ryujinx to default RetroDECK settings now?\n\nIf you have made your own changes to the Ryujinx config, you can decline this reset.")" == "true" ]]; then
@@ -339,10 +338,116 @@ post_update() {
     fi
   fi
 
-  # if [[ $(check_version_is_older_than "0.9.0b") == "true" ]]; then
-  #   # Placeholder for version 0.9.0b
+  if [[ $(check_version_is_older_than "0.8.2b") == "true" ]]; then
+    log i "Vita3K changed some paths, reflecting them: moving \"/var/data/Vita3K\" in \"/var/config/Vita3K\""
+    move "/var/data/Vita3K" "/var/config/Vita3K"
+    log i "Moving ES-DE downloaded_media, gamelist, and themes from \"$rdhome\" to \"$rdhome/ES-DE\" due to a RetroDECK Framework bug"
+    move "$rdhome/themes" "$rdhome/ES-DE/themes" && log d "Move of \"$rdhome/themes\" completed"
+    move "$rdhome/downloaded_media" "$rdhome/ES-DE/downloaded_media" && log d "Move of \"$rdhome/downloaded_media\" completed"
+    move "$rdhome/gamelists" "$rdhome/ES-DE/gamelists" && log d "Move of \"$rdhome/gamelists/\" completed"
+    log i "Since in this version we moved to a PR build of Ryujinx we need to symlink it."
+    ln -sv $ryujinxconf "$(dirname $ryujinxconf)/PRConfig.json"
+  fi
+
+  if [[ $(check_version_is_older_than "0.8.3b") == "true" ]]; then
+    # In version 0.8.3b, the following changes were made:
+    # - Recovery from a failed move of the themes, downloaded_media and gamelists folder to their new ES-DE locations.
+    if [[ ! -d "$rdhome/ES-DE/themes" || ! -d "$rdhome/ES-DE/downloaded_media" || ! -d "$rdhome/ES-DE/gamelists" ]]; then
+    log i "Moving ES-DE downloaded_media, gamelist, and themes from \"$rdhome\" to \"$rdhome/ES-DE\" due to a RetroDECK Framework bug"
+      if [[ -d "$rdhome/themes" && ! -d "$rdhome/ES-DE/themes" ]]; then
+        move "$rdhome/themes" "$rdhome/ES-DE/themes" && log d "Move of \"$rdhome/themes\" completed"
+      else
+        log i "ES-DE themes appears to already have been migrated."
+      fi
+      if [[ -d "$rdhome/downloaded_media" && ! -d "$rdhome/ES-DE/downloaded_media" ]]; then
+        move "$rdhome/downloaded_media" "$rdhome/ES-DE/downloaded_media" && log d "Move of \"$rdhome/downloaded_media\" completed"
+      else
+        log i "ES-DE downloaded media appears to already have been migrated."
+      fi
+      if [[ -d "$rdhome/gamelists" && ! -d "$rdhome/ES-DE/gamelists" ]]; then
+        move "$rdhome/gamelists" "$rdhome/ES-DE/gamelists" && log d "Move of \"$rdhome/gamelists/\" completed"
+      else
+        log i "ES-DE gamelists appears to already have been migrated."
+      fi
+    else
+      log i "ES-DE dfolders appears to already have been migrated."
+    fi
+  fi
+
+  # Check if the version is older than 0.8.4b
+  if [[ $(check_version_is_older_than "0.8.4b") == "true" ]]; then
+    # In version 0.8.4b, the following changes were made:
+    # - Recovery from a failed move of the themes, downloaded_media and gamelists folder to their new ES-DE locations (AGAIN)
+
+    log d "Injecting the new retrodeck/ES-DE subdir into the retrodeck.cfg"
+    # Check if ES-DE already exists in media_folder or themes_folder
+    if grep -E '^(media_folder|themes_folder)=.*ES-DE' "$rd_conf"; then
+      log d "ES-DE path already exists in media_folder or themes_folder"
+    else
+      # Update the paths if ES-DE does not exist
+      sed -i -e '/media_folder=/s|retrodeck/|retrodeck/ES-DE/|g' -e '/themes_folder=/s|retrodeck/|retrodeck/ES-DE/|g' "$rd_conf" && log d "Injection successful"
+    fi
+    log d "$(grep media_folder "$rd_conf")"
+    log d "$(grep themes_folder "$rd_conf")"
+    conf_read
+    conf_write
+
+    log i "Checking if ES-DE downloaded_media, gamelist, and themes folder must be migrated from \"$rdhome\" to \"$rdhome/ES-DE\" due to a RetroDECK Framework bug"
+
+    # Use rsync to merge directories and overwrite existing files
+    if [[ -d "$rdhome/themes" ]]; then
+      rsync -a "$rdhome/themes/" "$rdhome/ES-DE/themes/" && log d "Move of \"$rdhome/themes\" to \"$rdhome/ES-DE/themes\" completed"
+      rm -rf "$rdhome/themes" # Remove the original directory after merging
+    else
+      log i "ES-DE themes appear to have already been migrated."
+    fi
+
+    if [[ -d "$rdhome/downloaded_media" ]]; then
+      rsync -a "$rdhome/downloaded_media/" "$rdhome/ES-DE/downloaded_media/" && log d "Move of \"$rdhome/downloaded_media\" to \"$rdhome/ES-DE/downloaded_media\" completed"
+      rm -rf "$rdhome/downloaded_media" # Remove the original directory after merging
+    else
+      log i "ES-DE downloaded media appear to have already been migrated."
+    fi
+
+    if [[ -d "$rdhome/gamelists" ]]; then
+      rsync -a "$rdhome/gamelists/" "$rdhome/ES-DE/gamelists/" && log d "Move of \"$rdhome/gamelists\" to \"$rdhome/ES-DE/gamelists\" completed"
+      rm -rf "$rdhome/gamelists" # Remove the original directory after merging
+    else
+      log i "ES-DE gamelists appear to have already been migrated."
+    fi
+
+    if [[ -d "$rdhome/collections" ]]; then
+      rsync -a "$rdhome/collections/" "$rdhome/ES-DE/collections/" && log d "Move of \"$rdhome/collections\" to \"$rdhome/ES-DE/collections\" completed"
+      rm -rf "$rdhome/collections" # Remove the original directory after merging
+    else
+      log i "ES-DE collections appear to have already been migrated."
+    fi
+
+    # Setting the correct variables once again
+    set_setting_value "$es_settings" "MediaDirectory" "$media_folder" "es_settings"
+    set_setting_value "$es_settings" "UserThemeDirectory" "$themes_folder" "es_settings"
+
+  fi
+
+  if [[ $(check_version_is_older_than "0.9.0b") == "true" ]]; then
+    # Placeholder for version 0.9.0b
+
+    set_setting_value "$raconf" "libretro_info_path" "/var/config/retroarch/cores" "retroarch"
+    # TODO: Configurator dialog: Hey, we need to reset ES-DE! (because again ES-DE folders, new theme and such)
+    prepare_component "reset" "es-de"
+    prepare_component "reset" "portmaster"
+    prepare_component "reset" "ruffle"
+
+    log d "Steam Rom Manager was added, we need to prepare it"
+    update_rd_conf
+    prepare_component "reset" "steam-rom-manager"
+
+    rm -rf "$rd_logs_folder/ES-DE" && log d "Removing the logs/ES-DE folder as we don't need it anymore"
+    rm -rf "$es_source_logs" && mkdir -p "$es_source_logs"
+
+  # TODO: check this
   #   rm /var/config/emulationstation/.emulationstation # remving the old symlink to .emulationstation as it might be not needed anymore
-  # TODO: change <mlc_path>RETRODECKHOMEDIR/bios/cemu</mlc_path> in emu-configs/cemu/settings.xml into <mlc_path>RETRODECKHOMEDIR/bios/cemu/mlc</mlc_path>
+  # TODO: change <mlc_path>RETRODECKHOMEDIR/bios/cemu</mlc_path> in config/cemu/settings.xml into <mlc_path>RETRODECKHOMEDIR/bios/cemu/mlc</mlc_path>
   #   if [ ! -d "$bios_folder/cemu/mlc" ]; then
   #     log i "Cemu MLC folder was moved from \"$bios_folder/cemu\" to \"$bios_folder/cemu/mlc\", migrating it"
   #     mv -f "$bios_folder/cemu" "$bios_folder/cemu/mlc"
@@ -352,8 +457,11 @@ post_update() {
   #     log AND ZENITY "Found Cemu keys.txt" in "/var/data/Cemu/keys.txt", for a better compatibility is better to move it into "$bios_folder/cemu/mlc/keys.txt, do you want to continue?
   #     if yes: mv "/var/data/Cemu/keys.txt" "$bios_folder/cemu/mlc/keys.txt"
   #     ln -s "$bios_folder/cemu/mlc/keys.txt" "/var/data/Cemu/keys.txt" <--- AND THIS SHOULD BE EVEN PUT IN THE PREPARATION SCRIPT
-  #   fi 
-  # fi
+  #   fi
+  # TODO: is this true?
+  #  log i "Since in this version we restored Ryujinx to a main build we don't need the symlink anymore."
+  #  rm "$(dirname $ryujinxconf)/PRConfig.json"
+  fi
 
   # The following commands are run every time.
 
@@ -372,7 +480,7 @@ post_update() {
   deploy_helper_files
   build_retrodeck_current_presets
   ) |
-  zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+  rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK - Upgrade Process" \
   --width=400 --height=200 \

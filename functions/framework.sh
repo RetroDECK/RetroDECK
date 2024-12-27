@@ -410,47 +410,44 @@ deploy_single_patch() {
 
 cp -fv "$1" "$3" # Create a copy of the original file to be patched
 
-while IFS="^" read -r action current_section setting_name setting_value system_name
+while IFS="^" read -r action current_section setting_name setting_value system_name || [[ -n "$action" ]];
 do
+  if [[ ! $action == "#"* ]] && [[ ! -z "$action" ]]; then
+    case $action in
 
-  case $action in
+    "disable_file" )
+      eval disable_file "$setting_name"
+    ;;
 
-	"disable_file" )
-    eval disable_file "$setting_name"
-	;;
+    "enable_file" )
+      eval enable_file "$setting_name"
+    ;;
 
-	"enable_file" )
-    eval enable_file "$setting_name"
-	;;
+    "add_setting_line" )
+      add_setting_line "$3" "$setting_name" "$system_name" "$current_section"
+    ;;
 
-	"add_setting_line" )
-    add_setting_line "$3" "$setting_name" "$system_name" "$current_section"
-	;;
+    "disable_setting" )
+      disable_setting "$3" "$setting_name" "$system_name" "$current_section"
+    ;;
 
-	"disable_setting" )
-    disable_setting "$3" "$setting_name" "$system_name" "$current_section"
-	;;
+    "enable_setting" )
+      enable_setting "$3" "$setting_name" "$system_name" "$current_section"
+    ;;
 
-	"enable_setting" )
-    enable_setting "$3" "$setting_name" "$system_name" "$current_section"
-	;;
+    "change" )
+      if [[ "$setting_value" = \$* ]]; then # If patch setting value is a reference to an internal variable name
+        eval setting_value="$setting_value"
+      fi
+      set_setting_value "$3" "$setting_name" "$setting_value" "$system_name" "$current_section"
+    ;;
 
-	"change" )
-    if [[ "$setting_value" = \$* ]]; then # If patch setting value is a reference to an internal variable name
-      eval setting_value="$setting_value"
-    fi
-    set_setting_value "$3" "$setting_name" "$setting_value" "$system_name" "$current_section"
-  ;;
+    * )
+      log e "Config line malformed: $action"
+    ;;
 
-  *"#"* )
-	  # Comment line in patch file
-	;;
-
-	* )
-	  echo "Config line malformed: $action"
-	;;
-
-  esac
+    esac
+  fi
 done < "$2"
 }
 
@@ -461,60 +458,108 @@ deploy_multi_patch() {
 # Patch file format should be as follows, with optional entries in (). Optional settings can be left empty, but must still have ^ dividers:
 # $action^($current_section)^$setting_name^$setting_value^$system_name^($config file)
 
-while IFS="^" read -r action current_section setting_name setting_value system_name config_file
+while IFS="^" read -r action current_section setting_name setting_value system_name config_file || [[ -n "$action" ]];
 do
-  case $action in
+  if [[ ! $action == "#"* ]] && [[ ! -z "$action" ]]; then
+    case $action in
 
-	"disable_file" )
-    if [[ "$config_file" = \$* ]]; then # If patch setting value is a reference to an internal variable name
-      eval config_file="$config_file"
-    fi
-    disable_file "$config_file"
-	;;
+    "disable_file" )
+      if [[ "$config_file" = \$* ]]; then # If patch setting value is a reference to an internal variable name
+        eval config_file="$config_file"
+      fi
+      disable_file "$config_file"
+    ;;
 
-	"enable_file" )
-    if [[ "$config_file" = \$* ]]; then # If patch setting value is a reference to an internal variable name
-      eval config_file="$config_file"
-    fi
-    enable_file "$config_file"
-	;;
+    "enable_file" )
+      if [[ "$config_file" = \$* ]]; then # If patch setting value is a reference to an internal variable name
+        eval config_file="$config_file"
+      fi
+      enable_file "$config_file"
+    ;;
 
-	"add_setting_line" )
-    if [[ "$config_file" = \$* ]]; then # If patch setting value is a reference to an internal variable name
-      eval config_file="$config_file"
-    fi
-    add_setting_line "$config_file" "$setting_name" "$system_name" "$current_section"
-	;;
+    "add_setting_line" )
+      if [[ "$config_file" = \$* ]]; then # If patch setting value is a reference to an internal variable name
+        eval config_file="$config_file"
+      fi
+      add_setting_line "$config_file" "$setting_name" "$system_name" "$current_section"
+    ;;
 
-	"disable_setting" )
-    if [[ "$config_file" = \$* ]]; then # If patch setting value is a reference to an internal variable name
-      eval config_file="$config_file"
-    fi
-    disable_setting "$config_file" "$setting_name" "$system_name" "$current_section"
-	;;
+    "disable_setting" )
+      if [[ "$config_file" = \$* ]]; then # If patch setting value is a reference to an internal variable name
+        eval config_file="$config_file"
+      fi
+      disable_setting "$config_file" "$setting_name" "$system_name" "$current_section"
+    ;;
 
-	"enable_setting" )
-    if [[ "$config_file" = \$* ]]; then # If patch setting value is a reference to an internal variable name
-      eval config_file="$config_file"
-    fi
-    enable_setting "$config_file" "$setting_name" "$system_name" "$current_section"
-	;;
+    "enable_setting" )
+      if [[ "$config_file" = \$* ]]; then # If patch setting value is a reference to an internal variable name
+        eval config_file="$config_file"
+      fi
+      enable_setting "$config_file" "$setting_name" "$system_name" "$current_section"
+    ;;
 
-	"change" )
-    if [[ "$setting_value" = \$* ]]; then # If patch setting value is a reference to an internal variable name
-      eval setting_value="$setting_value"
-    fi
-    set_setting_value "$config_file" "$setting_name" "$setting_value" "$system_name" "$current_section"
-  ;;
+    "change" )
+      if [[ "$setting_value" = \$* ]]; then # If patch setting value is a reference to an internal variable name
+        eval setting_value="$setting_value"
+      fi
+      set_setting_value "$config_file" "$setting_name" "$setting_value" "$system_name" "$current_section"
+    ;;
 
-  *"#"* )
-	  # Comment line in patch file
-	;;
+    * )
+      log e "Config line malformed: $action"
+    ;;
 
-	* )
-	  echo "Config line malformed: $action"
-	;;
-
-  esac
+    esac
+  fi
 done < "$1"
+}
+
+get_steam_user() {
+  # This function populates environment variables with the actual logged Steam user data
+  if [ -f "$HOME/.steam/steam/config/loginusers.vdf" ]; then
+    # Extract the Steam ID of the most recent user
+    export steam_id=$(awk '
+      /"users"/ {flag=1} 
+      flag && /^[ \t]*"[0-9]+"/ {id=$1} 
+      flag && /"MostRecent".*"1"/ {print id; exit}' "$HOME/.steam/steam/config/loginusers.vdf" | tr -d '"')
+
+    # Extract the Steam username (AccountName)
+    export steam_username=$(awk -v steam_id="$steam_id" '
+      $0 ~ steam_id {flag=1} 
+      flag && /"AccountName"/ {gsub(/"/, "", $2); print $2; exit}' "$HOME/.steam/steam/config/loginusers.vdf")
+
+    # Extract the Steam pretty name (PersonaName)
+    export steam_prettyname=$(awk -v steam_id="$steam_id" '
+      $0 ~ steam_id {flag=1} 
+      flag && /"PersonaName"/ {gsub(/"/, "", $2); print $2; exit}' "$HOME/.steam/steam/config/loginusers.vdf")
+
+    # Log success
+    log i "Steam user found:"
+    log i "SteamID: $steam_id"
+    log i "Username: $steam_username"
+    log i "Name: $steam_prettyname"
+
+    if [[ $steam_sync == "true" ]]; then
+      populate_steamuser_srm
+    fi
+    
+  else
+    # Log warning if file not found
+    log w "No Steam user found, proceeding" >&2
+  fi
+}
+
+populate_steamuser_srm(){
+  # Populating SRM config with Steam Username
+      log d "Populating Steam Rom Manager config file with Steam Username"
+      jq --arg username "$steam_username" '
+        map(
+          if .userAccounts.specifiedAccounts then
+            .userAccounts.specifiedAccounts = [$username]
+          else
+            .
+          end
+        )
+      ' "$XDG_CONFIG_HOME/steam-rom-manager/userData/userConfigurations.json" > "$XDG_CONFIG_HOME/steam-rom-manager/userData/userConfigurations.json.tmp" &&
+      mv "$XDG_CONFIG_HOME/steam-rom-manager/userData/userConfigurations.json.tmp" "$XDG_CONFIG_HOME/steam-rom-manager/userData/userConfigurations.json"
 }

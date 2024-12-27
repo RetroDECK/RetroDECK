@@ -1,0 +1,974 @@
+{
+  "bios": {
+    "panafz1.bin": {
+      "md5": "f47264dd47fe30f73ab3c010015c155b",
+      "system": "3do",
+      "description": "Panasonic FZ-1"
+    },
+    "panafz10.bin": {
+      "md5": "51f2f43ae2f3508a14d9f56597e2d3ce",
+      "system": "3do",
+      "description": "Panasonic FZ-10"
+    },
+    "panafz10-norsa.bin": {
+      "md5": "1477bda80dc33731a65468c1f5bcbee9",
+      "system": "3do",
+      "description": "Panasonic FZ-10 [RSA Patch]"
+    },
+    "panafz10e-anvil.bin": {
+      "md5": "a48e6746bd7edec0f40cff078f0bb19f",
+      "system": "3do",
+      "description": "Panasonic FZ-10-E [Anvil]"
+    },
+    "panafz10e-anvil-norsa.bin": {
+      "md5": "cf11bbb5a16d7af9875cca9de9a15e09",
+      "system": "3do",
+      "description": "Panasonic FZ-10-E [Anvil RSA Patch]"
+    },
+    "panafz1j.bin": {
+      "md5": "a496cfdded3da562759be3561317b605",
+      "system": "3do",
+      "description": "Panasonic FZ-1J"
+    },
+    "panafz1j-norsa.bin": {
+      "md5": "f6c71de7470d16abe4f71b1444883dc8",
+      "system": "3do",
+      "description": "Panasonic FZ-1J [RSA Patch]"
+    },
+    "goldstar.bin": {
+      "md5": "8639fd5e549bd6238cfee79e3e749114",
+      "system": "3do",
+      "description": "Goldstar GDO-101M"
+    },
+    "sanyotry.bin": {
+      "md5": "35fa1a1ebaaeea286dc5cd15487c13ea",
+      "system": "3do",
+      "description": "Sanyo IMP-21J TRY"
+    },
+    "3do_arcade_saot.bin": {
+      "md5": "8970fc987ab89a7f64da9f8a8c4333ff",
+      "system": "3do",
+      "description": "Shootout At Old Tucson"
+    },
+    "panafz1-kanji.bin": {
+      "md5": "b8dc97f778a6245c58e064b0312e8281",
+      "system": "3do",
+      "description": "Panasonic FZ-1 Kanji Font ROM",
+      "required": "Required for some Japanese games. Optional otherwise"
+    },
+    "panafz10ja-anvil-kanji.bin": {
+      "md5": "428577250f43edc902ea239c50d2240d",
+      "system": "3do",
+      "description": "Panasonic FZ-10JA Kanji Font ROM",
+      "required": "Required for some Japanese games. Optional otherwise"
+    },
+    "panafz1j-kanji.bin": {
+      "md5": "c23fb5d5e6bb1c240d02cf968972be37",
+      "system": "3do",
+      "description": "Panasonic FZ-1J Kanji Font ROM",
+      "required": "Required for some Japanese games. Optional otherwise"
+    },
+    "neogeo.zip": {
+      "md5": "00dad01abdbf8ea9e79ad2fe11bdb182",
+      "system": "fbneo",
+      "description": "Neo Geo BIOS",
+      "required": "required"
+    },
+    "neocdz.zip": {
+      "md5": "c733b4b7bd30fa849874d96c591c8639",
+      "system": "fbneo",
+      "description": "Neo Geo CDZ BIOS",
+      "required": "required"
+    },
+    "decocass.zip": {
+      "md5": "b7e1189b341bf6a8e270017c096d21b0",
+      "system": "fbneo",
+      "description": "DECO Cassette System BIOS",
+      "required": "required"
+    },
+    "isgsm.zip": {
+      "md5": "4a56d56e2219c5e2b006b66a4263c01c",
+      "system": "fbneo",
+      "description": "ISG Selection Master Type 2006 System BIOS",
+      "required": "required"
+    },
+    "midssio.zip": {
+      "md5": "5904b0de768d1d506e766aa7e18994c1",
+      "system": "fbneo",
+      "description": "Midway SSIO Sound Board Internal ROM",
+      "required": "required"
+    },
+    "nmk004.zip": {
+      "md5": "bfacf1a68792d5348f93cf724d2f1dda",
+      "system": "fbneo",
+      "description": "NMK004 Internal ROM",
+      "required": "required"
+    },
+    "pgm.zip": {
+      "md5": "87cc944eef4c671aa2629a8ba48a08e0",
+      "system": "fbneo",
+      "description": "PGM System BIOS",
+      "required": "required"
+    },
+    "skns.zip": {
+      "md5": "3f956c4e7008804cb47cbde49bd5b908",
+      "system": "fbneo",
+      "description": "Super Kaneko Nova System BIOS",
+      "required": "required"
+    },
+    "ym2608.zip": {
+      "md5": "79ae0d2bb1901b7e606b6dc339b79a97",
+      "system": "fbneo",
+      "description": "YM2608 Internal ROM",
+      "required": "required"
+    },
+    "cchip.zip": {
+      "md5": "df6f8a3d83c028a5cb9f2f2be60773f3",
+      "system": "fbneo",
+      "description": "C-Chip Internal ROM",
+      "required": "required"
+    },
+    "bubsys.zip": {
+      "md5": "f81298afd68a1a24a49a1a2d9f087964",
+      "system": "fbneo",
+      "description": "Bubble System BIOS",
+      "required": "required"
+    },
+    "namcoc69.zip": {
+      "system": "fbneo",
+      "description": "Namco C69 BIOS",
+      "required": "required"
+    },
+    "namcoc70.zip": {
+      "system": "fbneo",
+      "description": "Namco C70 BIOS",
+      "required": "required"
+    },
+    "namcoc75.zip": {
+      "system": "fbneo",
+      "description": "Namco C75 BIOS",
+      "required": "required"
+    },
+    "coleco.zip": {
+      "system": "fbneo",
+      "description": "ColecoVision System BIOS",
+      "required": "required"
+    },
+    "fdsbios.zip": {
+      "system": "fbneo",
+      "description": "FDS System BIOS",
+      "required": "required"
+    },
+    "msx.zip": {
+      "system": "fbneo",
+      "description": "MSX1 System BIOS",
+      "required": "required"
+    },
+    "ngp.zip": {
+      "system": "fbneo",
+      "description": "NeoGeo Pocket BIOS",
+      "required": "required"
+    },
+    "spectrum.zip": {
+      "system": "fbneo",
+      "description": "ZX Spectrum BIOS",
+      "required": "required"
+    },
+    "spec128.zip": {
+      "system": "fbneo",
+      "description": "ZX Spectrum 128 BIOS",
+      "required": "required"
+    },
+    "spec1282a.zip": {
+      "system": "fbneo",
+      "description": "ZX Spectrum 128 +2a BIOS",
+      "required": "required"
+    },
+    "channelf.zip": {
+      "system": "fbneo",
+      "description": "Fairchild Channel F BIOS",
+      "required": "required"
+    },
+    "5200.rom": {
+      "md5": "281f20ea4320404ec820fb7ec0693b38",
+      "system": "atari5200",
+      "description": "Atari 5200 BIOS",
+      "required": "required"
+    },
+    "ATARIXL.ROM": {
+      "md5": "06daac977823773a3eea3422fd26a703",
+      "system": "atari5200",
+      "description": "Atari XL/XE OS BIOS ",
+      "required": "required"
+    },
+    "ATARIBAS.ROM": {
+      "md5": "0bac0c6a50104045d902df4503a4c30b",
+      "system": "atari5200",
+      "description": "BASIC interpreter BIOS ",
+      "required": "required"
+    },
+    "ATARIOSA.ROM": {
+      "md5": "eb1f32f5d9f382db1bbfb8d7f9cb343a",
+      "system": "atari5200",
+      "description": "atari800",
+      "required": "required"
+    },
+    "ATARIOSB.ROM": {
+      "md5": "4177f386a3bac989a981d3fe3388cb6c",
+      "system": "atari5200",
+      "description": "BIOS for Atari 400/800 NTSC ",
+      "required": "required"
+    },
+    "tos.img": {
+      "md5": "c1c57ce48e8ee4135885cee9e63a68a2",
+      "system": "atarist",
+      "description": "TOS Boot Image",
+      "required": "required"
+    },
+    "lynxboot.img": {
+      "md5": "fcd403db69f54290b51035d82f835e7b",
+      "system": "atarilynx",
+      "description": "Atari Lynx Boot Image",
+      "required": "required"
+    },
+    "o2rom.bin": {
+      "md5": "562d5ebf9e030a40d6fabfc2f33139fd",
+      "system": [
+        "odyssey2",
+        "videopac"
+      ],
+      "description": "Odyssey2 BIOS - G7000 model",
+      "required": "required"
+    },
+    "c52.bin": {
+      "md5": "f1071cdb0b6b10dde94d3bc8a6146387",
+      "system": [
+        "odyssey2",
+        "videopac"
+      ],
+      "description": "Videopac+ French BIOS - G7000 model",
+      "required": "required"
+    },
+    "g7400.bin": {
+      "md5": "c500ff71236068e0dc0d0603d265ae76",
+      "system": [
+        "odyssey2",
+        "videopac"
+      ],
+      "description": "Videopac+ European BIOS - G7400 model",
+      "required": "required"
+    },
+    "jopac.bin": {
+      "md5": "279008e4a0db2dc5f1c048853b033828",
+      "system": [
+        "odyssey2",
+        "videopac"
+      ],
+      "description": "Videopac+ French BIOS - G7400 model",
+      "required": "required"
+    },
+    "exec.bin": {
+      "md5": "62e761035cb657903761800f4437b8af",
+      "system": "intellivision",
+      "description": "Executive ROM",
+      "required": "required"
+    },
+    "grom.bin": {
+      "md5": "0cd5946c6473e42e8e4c2137785e427f",
+      "system": "intellivision",
+      "description": "Graphics ROM",
+      "required": "required"
+    },
+    "MSX.ROM": {
+      "md5": "364a1a579fe5cb8dba54519bcfcdac0d",
+      "system": "msx",
+      "description": "MSX BIOS",
+      "required": "required"
+    },
+    "MSX2.ROM": {
+      "md5": "ec3a01c91f24fbddcbcab0ad301bc9ef",
+      "system": "msx",
+      "description": "MSX2 BIOS",
+      "required": "required"
+    },
+    "MSX2EXT.ROM": {
+      "md5": "2183c2aff17cf4297bdb496de78c2e8a",
+      "system": "msx",
+      "description": "MSX2 ExtROM",
+      "required": "required"
+    },
+    "MSX2P.ROM": {
+      "md5": "847cc025ffae665487940ff2639540e5",
+      "system": "msx",
+      "description": "MSX2+ BIOS",
+      "required": "required"
+    },
+    "MSX2PEXT.ROM": {
+      "md5": "7c8243c71d8f143b2531f01afa6a05dc",
+      "system": "msx",
+      "description": "MSX2+ ExtROM",
+      "required": "required"
+    },
+    "DISK.ROM": {
+      "md5": "80dcd1ad1a4cf65d64b7ba10504e8190",
+      "system": "msx",
+      "description": "DiskROM/BDOS"
+    },
+    "FMPAC.ROM": {
+      "md5": "6f69cc8b5ed761b03afd78000dfb0e19",
+      "system": "msx",
+      "description": "FMPAC BIOS"
+    },
+    "MSXDOS2.ROM": {
+      "md5": "6418d091cd6907bbcf940324339e43bb",
+      "system": "msx",
+      "description": "MSX-DOS 2"
+    },
+    "PAINTER.ROM": {
+      "md5": "403cdea1cbd2bb24fae506941f8f655e",
+      "system": "msx",
+      "description": "Yamaha Painter"
+    },
+    "KANJI.ROM": {
+      "md5": "febe8782b466d7c3b16de6d104826b34",
+      "system": "msx",
+      "description": "Kanji Font"
+    },
+    "mcpx_1.0.bin": {
+      "md5": "d49c52a4102f6df7bcf8d0617ac475ed",
+      "system": "xbox",
+      "description": "Used by XEMU emulator"
+    },
+    "Complex.bin": {
+      "system": "xbox",
+      "description": "Used by XEMU emulator"
+    },
+    "Complex_4627v1.03.bin": {
+      "system": "xbox",
+      "description": "Used by XEMU emulator"
+    },
+    "Complex_4627.bin": {
+      "system": "xbox",
+      "description": "Used by XEMU emulator"
+    },
+    "syscard3.pce": {
+      "md5": "38179df8f4ac870017db21ebcbf53114",
+      "system": [
+        "pcengine",
+        "pcenginecd"
+      ],
+      "description": "Super CD-ROM2 System V3.xx",
+      "required": "required"
+    },
+    "syscard2.pce": {
+      "md5": "3cdd6614a918616bfc41c862e889dd79",
+      "system": [
+        "pcengine",
+        "pcenginecd"
+      ],
+      "description": "CD-ROM System V2.xx"
+    },
+    "syscard1.pce": {
+      "md5": "2b7ccb3d86baa18f6402c176f3065082",
+      "system": [
+        "pcengine",
+        "pcenginecd"
+      ],
+      "description": "CD-ROM System V1.xx"
+    },
+    "gexpress.pce": {
+      "md5": "6d2cb14fc3e1f65ceb135633d1694122",
+      "system": [
+        "pcengine",
+        "pcenginecd"
+      ],
+      "description": "Game Express CD Card"
+    },
+    "font.bmp": {
+      "md5": "7da1e5b7c482d4108d22a5b09631d967",
+      "system": "pc98",
+      "description": "Needed to display text",
+      "required": "required"
+    },
+    "FONT.ROM": {
+      "md5": "2af6179d7de4893ea0b705c00e9a98d6",
+      "system": "pc98",
+      "description": "Alternative font file",
+      "required": "Required if normal font file is missing"
+    },
+    "bios.rom": {
+      "md5": "e246140dec5124c5e404869a84caefce",
+      "system": "pc98",
+      "description": "BIOS file",
+      "required": "required"
+    },
+    "itf.rom": {
+      "md5": "e9fc3890963b12cf15d0a2eea5815b72",
+      "system": "pc98",
+      "description": "BIOS file",
+      "required": "required"
+    },
+    "sound.rom": {
+      "md5": "caf90f22197aed6f14c471c21e64658d",
+      "system": "pc98",
+      "description": "BIOS file",
+      "required": "required"
+    },
+    "bios9821.rom": {
+      "system": "pc98",
+      "description": "Optional BIOS file"
+    },
+    "d8000.rom": {
+      "system": "pc98",
+      "description": "Optional BIOS file"
+    },
+    "2608_BD.WAV": {
+      "md5": "d94546e70f17fd899be8df3544ab6cbb",
+      "system": "pc98",
+      "description": "YM2608 RYTHM sample"
+    },
+    "2608_SD.WAV": {
+      "md5": "d71004351c8bbfdad53b18222c061d49",
+      "system": "pc98",
+      "description": "YM2608 RYTHM sample"
+    },
+    "2608_TOP.WAV": {
+      "md5": "593cff6597ab9380d822b8f824fd2c28",
+      "system": "pc98",
+      "description": "YM2608 RYTHM sample"
+    },
+    "2608_HH.WAV": {
+      "md5": "08c54a0c1f774a5538a848a6665a34b4",
+      "system": "pc98",
+      "description": "YM2608 RYTHM sample"
+    },
+    "2608_TOM.WAV": {
+      "md5": "96a4ead13f364734f79b0c58af2f0e1f",
+      "system": "pc98",
+      "description": "YM2608 RYTHM sample"
+    },
+    "2608_RIM.WAV": {
+      "md5": "465ea0768b27da404aec45dfc501404b",
+      "system": "pc98",
+      "description": "YM2608 RYTHM sample"
+    },
+    "n88.rom": {
+      "md5": "4f984e04a99d56c4cfe36115415d6eb8",
+      "system": "pc88",
+      "description": "BIOS File",
+      "required": "required"
+    },
+    "n88n.rom": {
+      "md5": "2ff07b8769367321128e03924af668a0",
+      "system": "pc88",
+      "description": "Required for PC-8000 series emulation. (N BASIC mode)"
+    },
+    "disk.rom": {
+      "md5": "793f86784e5608352a5d7f03f03e0858",
+      "system": "pc88",
+      "description": "Required for loading disk images"
+    },
+    "n88knj1.rom": {
+      "md5": "d81c6d5d7ad1a4bbbd6ae22a01257603",
+      "system": "pc88",
+      "description": "Required for viewing kanji"
+    },
+    "n88_0.rom": {
+      "md5": "d675a2ca186c6efcd6277b835de4c7e5",
+      "system": "pc88",
+      "description": "Required for viewing kanji"
+    },
+    "n88_1.rom": {
+      "md5": "e844534dfe5744b381444dbe61ef1b66",
+      "system": "pc88",
+      "description": "Optional BIOS file"
+    },
+    "n88_2.rom": {
+      "md5": "6548fa45061274dee1ea8ae1e9e93910",
+      "system": "pc88",
+      "description": "Optional BIOS file"
+    },
+    "n88_3.rom": {
+      "md5": "fc4b76a402ba501e6ba6de4b3e8b4273",
+      "system": "pc88",
+      "description": "Optional BIOS file"
+    },
+    "neocd_f.rom": {
+      "md5": "8834880c33164ccbe6476b559f3e37de",
+      "system": [
+        "neogeocd",
+        "neogeocdjp"
+      ],
+      "description": "Front Loader BIOS",
+      "required": "at least one"
+    },
+    "neocd_sf.rom": {
+      "md5": "043d76d5f0ef836500700c34faef774d",
+      "system": [
+        "neogeocd",
+        "neogeocdjp"
+      ],
+      "description": "Front Loader BIOS (SMKDAN 0.7b DEC 2010)",
+      "required": "at least one"
+    },
+    "neocd_t.rom": {
+      "md5": "de3cf45d227ad44645b22aa83b49f450",
+      "system": [
+        "neogeocd",
+        "neogeocdjp"
+      ],
+      "description": "Top Loader BIOS",
+      "required": "at least one"
+    },
+    "neocd_st.rom": {
+      "md5": "f6325a33c6d63ea4b9162a3fa8c32727",
+      "system": [
+        "neogeocd",
+        "neogeocdjp"
+      ],
+      "description": "Top Loader BIOS (SMKDAN 0.7b DEC 2010)",
+      "required": "at least one"
+    },
+    "neocd_z.rom": {
+      "md5": "11526d58d4c524daef7d5d677dc6b004",
+      "system": [
+        "neogeocd",
+        "neogeocdjp"
+      ],
+      "description": "CDZ BIOS",
+      "required": "at least one"
+    },
+    "neocd_sz.rom": {
+      "md5": "971ee8a36fb72da57aed01758f0a37f5",
+      "system": [
+        "neogeocd",
+        "neogeocdjp"
+      ],
+      "description": "CDZ BIOS (SMKDAN 0.7b DEC 2010)",
+      "required": "at least one"
+    },
+    "front-sp1.bin": {
+      "md5": "5c2366f25ff92d71788468ca492ebeca",
+      "system": [
+        "neogeocd",
+        "neogeocdjp"
+      ],
+      "description": "Front Loader BIOS (MAME)",
+      "required": "at least one"
+    },
+    "top-sp1.bin": {
+      "md5": "122aee210324c72e8a11116e6ef9c0d0",
+      "system": [
+        "neogeocd",
+        "neogeocdjp"
+      ],
+      "description": "Top Loader BIOS (MAME)",
+      "required": "at least one"
+    },
+    "neocd.bin": {
+      "md5": "f39572af7584cb5b3f70ae8cc848aba2",
+      "system": [
+        "neogeocd",
+        "neogeocdjp"
+      ],
+      "description": "CDZ BIOS (MAME)",
+      "required": "at least one"
+    },
+    "uni-bioscd.rom": {
+      "md5": "08ca8b2dba6662e8024f9e789711c6fc",
+      "system": [
+        "neogeocd",
+        "neogeocdjp"
+      ],
+      "description": "Universe BIOS CD 3.3"
+    },
+    "gb_bios.bin": {
+      "md5": "32fbbd84168d3482956eb3c5051637f5",
+      "system": "gb",
+      "description": "Optional BIOS file (used to display the Nintendo logo at boot)"
+    },
+    "gbc_bios.bin": {
+      "md5": "dbfce9db9deaa2567f6a84fde55f9680",
+      "system": "gbc",
+      "description": "Optional BIOS file (used to display the Nintendo logo at boot)"
+    },
+    "gba_bios.bin": {
+      "md5": "a860e8c0b6d573d191e4ec7db1b1e4f6",
+      "system": "gba",
+      "description": "Optional BIOS file (used to display the Nintendo logo at boot)"
+    },
+    "aes_keys.txt": {
+      "system": "n3ds",
+      "description": "Decryption keys used by Citra emulator"
+    },
+    "bios7.bin": {
+      "md5": "df692a80a5b1bc90728bc3dfc76cd948",
+      "system": "nds",
+      "description": "Nintendo DS arm7 bios (Required only by MelonDS Standalone)"
+    },
+    "bios9.bin": {
+      "md5": "a392174eb3e572fed6447e956bde4b25",
+      "system": "nds",
+      "description": "Nintendo DS arm9 bios (Required only by MelonDS Standalone)"
+    },
+    "firmware.bin": {
+      "md5": "e45033d9b0fa6b0de071292bba7c9d13",
+      "system": "nds",
+      "description": "Nintendo DS firmware (Required only by MelonDS Standalone)"
+    },
+    "biosdsi7.bin": {
+      "sha256": "2946281e730e71f7cafdb125f5cb60fed944ca5d610ee1e082c441b602b5f4e2",
+      "system": "nds",
+      "description": "Nintendo DSi arm7 bios (Required for DSi games)",
+      "required": "required"
+    },
+    "biosdsi9.bin": {
+      "sha256": "47538922a8e8a8e79b922ff1203863ef5c40d9c54656a8d2c89c56ece52029ce",
+      "system": "nds",
+      "description": "Nintendo DSi arm9 bios (Required for DSi games)",
+      "required": "required"
+    },
+    "dsifirmware.bin": {
+      "sha256": "11a150e3729bdde3ae8f5e7fc8be67d8bfbc548a1d2e523da58aa826ca0ffa99",
+      "system": "nds",
+      "description": "Nintendo DSi firmware (Required for DSi games)",
+      "required": "required"
+    },
+    "disksys.rom": {
+      "md5": "ca30b50f880eb660a320674ed365ef7a",
+      "system": [
+        "nes",
+        "sfc"
+      ],
+      "description": "Family Computer Disk System BIOS - Required for Family Computer Disk System emulation"
+    },
+    "bios.min": {
+      "md5": "1e4fb124a3a886865acb574f388c803d",
+      "system": "pokemini",
+      "description": "Pokémon Mini BIOS"
+    },
+    "prod.keys": {
+      "system": "switch",
+      "description": "A file for Switch emulation in Ryujinx",
+      "required": "required",
+      "path": "switch"
+    },
+    "title.keys": {
+      "system": "switch",
+      "description": "A file for Switch emulation in Ryujinx",
+      "required": "required",
+      "path": "switch"
+    },
+    "pico8": {
+      "system": "PICO-8",
+      "description": "The PICO-8 executable",
+      "required": "required"
+    },
+    "pico8.dat": {
+      "system": "PICO-8",
+      "description": "A PICO-8 system file",
+      "required": "required"
+    },
+    "pico8_dyn": {
+      "system": "PICO-8",
+      "description": "A PICO-8 system file",
+      "required": "required"
+    },
+    "bios_CD_E.bin": {
+      "md5": "e66fa1dc5820d254611fdcdba0662372",
+      "system": "segacd",
+      "description": "MegaCD EU BIOS",
+      "required": "at least one"
+    },
+    "bios_CD_U.bin": {
+      "md5": "2efd74e3232ff260e371b99f84024f7f",
+      "system": "segacd",
+      "description": "SegaCD US BIOS",
+      "required": "at least one"
+    },
+    "bios_CD_J.bin": {
+      "md5": "278a9397d192149e84e820ac621a8edd",
+      "system": "segacd",
+      "description": "MegaCD JP BIOS",
+      "required": "at least one"
+    },
+    "dc_boot.bin": {
+      "md5": "e10c53c2f8b90bab96ead2d368858623",
+      "system": "dreamcast",
+      "description": "Dreamcast BIOS",
+      "path": "dc",
+      "required": "required"
+    },
+    "naomi.zip": {
+      "md5": "0ea6d3650ce4a7608a589e5df21a1f2f",
+      "system": "dreamcast",
+      "description": "Naomi BIOS",
+      "path": "dc"
+    },
+    "naomi2.zip": {
+      "md5": "9b85e0de6ef359e5006c9b79a5a266b0",
+      "system": "dreamcast",
+      "description": "Naomi BIOS",
+      "path": "dc"
+    },
+    "naomi_boot.bin": {
+      "md5": "96cb91c4a0bedd86e5a6965cfe6c0148",
+      "system": "dreamcast",
+      "description": "Naomi BIOS",
+      "path": "dc"
+    },
+    "hod2bios.zip": {
+      "md5": "629bb0552463ba116ccf23d9a468a9f0",
+      "system": "dreamcast",
+      "description": "Naomi The House of the Dead 2 BIOS",
+      "path": "dc"
+    },
+    "f355dlx.zip": {
+      "md5": "4b5bb177cbd760477598f85531dbe7fd",
+      "system": "dreamcast",
+      "description": "Naomi Ferrari F355 Challenge Deluxe BIOS",
+      "path": "dc"
+    },
+    "f355bios.zip": {
+      "md5": [
+      "547f3d12aed389058ca06148f1cca0ed",
+      "882f2c1cf8ec030955c48fe6aa6929ea",
+      ],
+      "system": [
+      "dreamcast",
+      "arcade",
+      ],
+      "description": "Naomi Ferrari F355 Challenge Twin/Deluxe BIOS",
+      "path": "dc"
+    },
+    "airlbios.zip": {
+      "md5": [
+      "09ef4b8dea6cd8db2de1c13d510a6a87",
+      "7a11bfe0cc72886d032e386db68f890c",
+      ],
+      "system": [
+      "dreamcast",
+      "arcade",
+      ],
+      "description": "Naomi Airline Pilots Deluxe BIOS",
+      "path": "dc"
+    },
+    "awbios.zip": {
+      "md5": [
+      "b2f122e091da223beb824efafc3d6a36",
+      "85254fbe320ca82a768ec2c26bb08def",
+      ],
+      "system": [
+      "dreamcast",
+      "arcade",
+      ],
+      "description": "Naomi Atomiswave BIOS",
+      "path": "dc"
+    },
+    "bios.sms": {
+      "md5": "840481177270d5642a14ca71ee72844c",
+      "system": "mastersystem",
+      "description": "SEGA Master System BIOS"
+    },
+    "bios.gg": {
+      "md5": "672e104c3be3a238301aceffc3b23fd6",
+      "system": "gamegear",
+      "description": "SEGA Game Gear BIOS"
+    },
+    "BIOS.col": {
+      "md5": "2c66f5911e5b42b8ebe113403548eee7",
+      "system": [
+        "mastersystem",
+        "gamegear"
+      ],
+      "description": "Colecovision BIOS"
+    },
+    "sega_101.bin": {
+      "md5": "85ec9ca47d8f6807718151cbcca8b964",
+      "system": [
+        "saturn",
+        "saturnjp"
+      ],
+      "description": "Saturn JP BIOS",
+      "required": "at least one"
+    },
+    "mpr-17933.bin": {
+      "md5": "3240872c70984b6cbfda1586cab68dbe",
+      "system": [
+        "saturn",
+        "saturnjp"
+      ],
+      "description": "Saturn US BIOS",
+      "required": "at least one"
+    },
+    "mpr-18811-mx.ic1": {
+      "md5": "255113ba943c92a54facd25a10fd780c",
+      "system": [
+        "saturn",
+        "saturnjp"
+      ],
+      "description": "The King of Fighters 95 ROM Cartridge (Required for this game)"
+    },
+    "mpr-19367-mx.ic1": {
+      "md5": "1cd19988d1d72a3e7caa0b73234c96b4",
+      "system": [
+        "saturn",
+        "saturnjp"
+      ],
+      "description": "Ultraman: Hikari no Kyojin Densetsu ROM Cartridge (Required for this game)"
+    },
+    "iplrom.dat": {
+      "md5": "7fd4caabac1d9169e289f0f7bbf71d8e",
+      "system": "x68000",
+      "description": "X68000 BIOS",
+      "required": "required"
+    },
+    "cgrom.dat": {
+      "md5": "cb0a5cfcf7247a7eab74bb2716260269",
+      "system": "x68000",
+      "description": "Font file",
+      "required": "required"
+    },
+    "iplrom30.dat": {
+      "md5": "f373003710ab4322642f527f567e020a",
+      "system": "x68000",
+      "description": "X68000 BIOS 2"
+    },
+    "iplromco.dat": {
+      "md5": "cc78d4f4900f622bd6de1aed7f52592f",
+      "system": "x68000",
+      "description": "X68000 BIOS 3"
+    },
+    "iplromxv.dat": {
+      "md5": "0617321daa182c3f3d6f41fd02fb3275",
+      "system": "x68000",
+      "description": "X68000 BIOS 4"
+    },
+    "psxonpsp660.bin": {
+      "md5": "c53ca5908936d412331790f4426c6c33",
+      "system": "psx",
+      "description": "PS1 BIOS from PSP",
+      "required": "at least one"
+    },
+    "scph5500.bin": {
+      "md5": "8dd7d5296a650fac7319bce665a6a53c",
+      "system": "psx",
+      "description": "PS1 JP BIOS",
+      "required": "at least one"
+    },
+    "scph5501.bin": {
+      "md5": "490f666e1afb15b7362b406ed1cea246",
+      "system": "psx",
+      "description": "PS1 US BIOS",
+      "required": "at least one"
+    },
+    "scph5502.bin": {
+      "md5": "32736f17079d0b2b7024407c39bd3050",
+      "system": "psx",
+      "description": "PS1 EU BIOS",
+      "required": "at least one"
+    },
+    "scph7001.bin": {
+      "md5": "1e68c231d0896b7eadcad1d7d8e76129",
+      "system": "psx",
+      "description": "PS1 BIOS",
+      "required": "at least one"
+    },
+    "scph7002.bin": {
+      "md5": "b9d9a0286c33dc6b7237bb13cd46fdee",
+      "system": "psx",
+      "description": "PS1 BIOS",
+      "required": "at least one"
+    },
+    "scph7003.bin": {
+      "md5": "490f666e1afb15b7362b406ed1cea246",
+      "system": "psx",
+      "description": "PS1 BIOS",
+      "required": "at least one"
+    },
+    "scph7502.bin": {
+      "md5": "b9d9a0286c33dc6b7237bb13cd46fdee",
+      "system": "psx",
+      "description": "PS1 BIOS",
+      "required": "at least one"
+    },
+    "scph9002(7502).bin": {
+      "md5": "b9d9a0286c33dc6b7237bb13cd46fdee",
+      "system": "psx",
+      "description": "PS1 BIOS",
+      "required": "at least one"
+    },
+    "ps1_rom.bin": {
+      "md5": "81bbe60ba7a3d1cea1d48c14cbcc647b",
+      "system": "psx",
+      "description": "PS1 BIOS",
+      "required": "at least one"
+    },
+    "ps2-0200a-20040614.bin": {
+      "md5": "d333558cc14561c1fdc334c75d5f37b7",
+      "system": "ps2",
+      "description": "PS2 US BIOS",
+      "required": "at least one"
+    },
+    "ps2-0200e-20040614.bin": {
+      "md5": "dc752f160044f2ed5fc1f4964db2a095",
+      "system": "ps2",
+      "description": "PS2 EU BIOS",
+      "required": "at least one"
+    },
+    "ps2-0200j-20040614.bin": {
+      "md5": "0eee5d1c779aa50e94edd168b4ebf42e",
+      "system": "ps2",
+      "description": "PS2 JP BIOS",
+      "required": "at least one"
+    },
+    "128p-0.rom": {
+      "md5": "a249565f03b98d004ee7f019570069cd",
+      "system": "zxspectrum",
+      "description": "Pentagon 128K/512K/1024 ROM",
+      "required": "required"
+    },
+    "128p-1.rom": {
+      "md5": "6e09e5d3c4aef166601669feaaadc01c",
+      "system": "zxspectrum",
+      "description": "Pentagon 128K/512K/1024 ROM",
+      "required": "required"
+    },
+    "trdos.rom": {
+      "md5": "0da70a5d2a0e733398e005b96b7e4ba6",
+      "system": "zxspectrum",
+      "description": "Pentagon 128K/512K/1024 ROM",
+      "required": "required"
+    },
+    "gluck.rom": {
+      "md5": "d5869034604dbfd2c1d54170e874fd0a",
+      "system": "zxspectrum",
+      "description": "Pentagon 512K/1024 ROM",
+      "required": "required"
+    },
+    "256s-0.rom": {
+      "md5": "b9fda5b6a747ff037365b0e2d8c4379a",
+      "system": "zxspectrum",
+      "description": "Scorpion 256K ROM",
+      "required": "required"
+    },
+    "256s-1.rom": {
+      "md5": "643861ad34831b255bf2eb64e8b6ecb8",
+      "system": "zxspectrum",
+      "description": "Scorpion 256K ROM",
+      "required": "required"
+    },
+    "256s-2.rom": {
+      "md5": "d8ad507b1c915a9acfe0d73957082926",
+      "system": "zxspectrum",
+      "description": "Scorpion 256K ROM",
+      "required": "required"
+    },
+    "256s-3.rom": {
+      "md5": "ce0723f9bc02f4948c15d3b3230ae831",
+      "system": "zxspectrum",
+      "description": "Scorpion 256K ROM",
+      "required": "required"
+    }
+  }
+}

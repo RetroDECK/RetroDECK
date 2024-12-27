@@ -7,32 +7,32 @@
    <summary>RetroDECK brings an environment to catalog and play your retro games directly on your Steam Deck</summary>
    <developer_name>RetroDECK Team</developer_name>
    <url type="homepage">https://retrodeck.net</url>
-   <url type="bugtracker">https://github.com/XargonWan/RetroDECK/issues</url>
+   <url type="bugtracker">https://github.com/RetroDECK/RetroDECK/issues</url>
    <url type="help">https://retrodeck.readthedocs.io</url>
-   <url type="faq">https://github.com/XargonWan/RetroDECK/wiki/FAQs---Frequently-asked-questions</url>
+   <url type="faq">https://github.com/RetroDECK/RetroDECK/wiki/FAQs---Frequently-asked-questions</url>
    <url type="donation">https://www.patreon.com/RetroDECK</url>
    <content_rating type="oars-1.0" />
    <screenshots>
       <screenshot type="default">
-         <image>https://github.com/XargonWan/RetroDECK/blob/main/res/logo.png?raw=true</image>
+         <image>https://github.com/RetroDECK/RetroDECK/blob/main/res/logo.png?raw=true</image>
       </screenshot>
       <screenshot>
-         <image>https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen01.jpeg?raw=true</image>
+         <image>https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen01.jpeg?raw=true</image>
       </screenshot>
       <screenshot>
-         <image>https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen02.jpeg?raw=true</image>
+         <image>https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen02.jpeg?raw=true</image>
       </screenshot>
       <screenshot>
-         <image>https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen03.jpeg?raw=true</image>
+         <image>https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen03.jpeg?raw=true</image>
       </screenshot>
       <screenshot>
-         <image>https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen04.jpeg?raw=true</image>
+         <image>https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen04.jpeg?raw=true</image>
       </screenshot>
       <screenshot>
-         <image>https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen05.jpeg?raw=true</image>
+         <image>https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen05.jpeg?raw=true</image>
       </screenshot>
       <screenshot>
-         <image>https://github.com/XargonWan/RetroDECK/blob/main/res/screenshots/screen06.jpeg?raw=true</image>
+         <image>https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen06.jpeg?raw=true</image>
       </screenshot>
    </screenshots>
    <description>
@@ -52,7 +52,7 @@
             4. [OPTIONAL] Download Steam Grids graphics for RetroDECK with BoilR
       </p>
       <p>For more detailed information check our wiki: 
-      https://github.com/XargonWan/RetroDECK/wiki</p>
+      https://github.com/RetroDECK/RetroDECK/wiki</p>
       <p>If you want to sponsor the project: 
       https://www.patreon.com/RetroDECK</p>
       <p>If you want to join the RetroDECK community check our:</p>
@@ -67,8 +67,71 @@
    <project_license>GPL-3.0</project_license>
    <metadata_license>CC0-1.0</metadata_license>
    <releases>
-      <release version="0.8.1b" date="2024-05-03">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.8.1b</url>
+      <release version="0.9.0b" date="2024-07-19">
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.9.0b</url>
+         <description>
+            <p>Changes:</p>
+            <ul>
+               <li>RetroDECK is on a diet: we saved around 600mb on the final build</li>
+               <li>Updated all the possible outdated emulators</li>
+               <li>Duckstation due to licensing changes is frozen at the latest possible build becoming de facto: Legacy</li>
+               <li>Duckstation configured to use OpenGL as Vulkan seems to be broken in some cases</li>
+               <li>New Flash system via the new emulator: Ruffle</li>
+               <li>PortMaster is now included in RetroDECK!</li>
+               <li>Steam Sync is now a thing: favorite your games and enable the Steam Sync in the Configurator to find them as a Steam standalone games thank to Steam Rom Manager acting like an engine</li>
+               <li>Because of this, Favorites collection is now enabled by default on ES-DE</li>
+               <li>New Configurator completely written in GODOT, now with controller support and many more features for you to discover</li>
+               <li>Cli entry --configurator now opens the new Configurator, while --legacy-configurator opens the old, zenity, one</li>
+               <li>New run game engine added to run games via cli, just run `flatpak run net.retrodeck.retrodeck retrodeck/roms/system/game.ext`, `--help` for more info</li>
+               <li>MIME Type added: this means that you can "open with" or double click your games and run them via RetroDECK thanks to the engine descripted above</li>
+               <li>ES-DE Updated to 3.1.1 with language support and more</li>
+               <li>ES-DE main menu tide up, because of our configurator there were too many entries, moved ES-DE specific configs inside a custom menu</li>
+               <li>New Theme: RetroDECK now got its own custom theme for ES-DE, do you like it? Feel free to give us feedback</li>
+               <li>We soft laucnhed our new website earlier, come to take a look at retrodeck.net!</li>
+            </ul>
+            <p>Developers, developers, developers:</p>
+            <ul>
+               <li>Manifest was completely redone, more on that on the October blog post</li>
+               <li>RetroDECK now is migrated to an organization on GitHub, as before, please check the October blog post</li>
+               <li>pre_build_automation script was reworked and additional functions are added</li>
+               <li>Contributing is now easier and the manifest build time is down to about 1h (was 3h30)</li>
+            </ul>
+            <p>Known issues:</p>
+            <ul>
+               <li>Please check the know issues in the Wiki under General Information.</li>
+               <li>GZDoom version is temporarly frozen until we find out how to correctly build it</li>
+               <li>Vita3K currently broken, a PR with a fix is being "cooked"</li>
+            </ul>
+         </description>
+      </release>
+      <release version="0.8.2b" date="2024-07-17">
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.8.2b</url>
+         <description>
+            <p>Changes:</p>
+            <ul>
+               <li>ES-DE: updated to 3.0.3</li>
+               <li>RUNTIME: updated to KDE 6.7</li>
+               <li>All emulators and engines updated</li>
+               <li>CONFIGURATOR: fixed an issue in the multi-file compression tool that prevented some type of files to be converted</li>
+               <li>CONFIGURATOR: added headless state for some functions (this will help to migrate to the Godot Configurator)</li>
+               <li>CONFIGURATOR: added a new "Empty ROMs folder removal" tool helping the user to cleanup the roms folder by deleting the empty folders</li>
+               <li>CONFIGURATOR: added a new "Rebuild removed ROMs folders" tool. This is complementary to the previous one:by recreating the whole roms folder structure</li>
+               <li>CONFIGURATOR: chd compression functionality restored</li>
+               <li>FRAMEWORK: fixed an issue where second level subfolders inside retrodeck folder were not correctly placed, this caused errors on ES-DE as themes and downloaded_media folder could not be found after a reset or first install</li>
+               <li>CEMU: now audio should work correctly when docking and undocking the Steam Deck</li>
+               <li>CEMU: added microphone blow input to R3</li>
+               <li>DOLPHIN: now supports RetroAchivements but must be manually enabled from the emulator as the Configurator is not yet prepared for that</li>
+               <li>DUCKSTATION: now out of the rolling release</li>
+               <li>INFRASTRUCTURE: we now have a self-hosted Gitea repo in case fo disaster recovery</li>
+            </ul>
+            <p>Known issues:</p>
+            <ul>
+               <li>Please check the know issues in the Wiki under General Information.</li>
+            </ul>
+         </description>
+      </release>
+      <release version="0.8.1b" date="2024-05-13">
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.8.1b</url>
          <description>
             <p>Changes:</p>
             <ul>
@@ -96,12 +159,12 @@
             </ul>
             <p>Known issues:</p>
             <ul>
-               <li>Please check the know issues in the Wiki under General Infomration.</li>
+               <li>Please check the know issues in the Wiki under General Information.</li>
             </ul>
          </description>
       </release>
       <release version="0.8.0b" date="2024-04-17">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.8.0b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.8.0b</url>
          <description>
             <p>Changes:</p>
             <ul>
@@ -154,12 +217,12 @@
             </ul>
             <p>Known issues:</p>
             <ul>
-               <li>Please check the know issues in the Wiki under General Infomration.</li>
+               <li>Please check the know issues in the Wiki under General Information.</li>
             </ul>
          </description>
       </release>
       <release version="0.7.6b" date="2024-02-08">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.7.6b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.7.6b</url>
          <description>
             <p>Changes:</p>
             <ul>
@@ -172,12 +235,12 @@
             </ul>
             <p>Known issues:</p>
             <ul>
-               <li>Please check the know issues in the Wiki under General Infomration.</li>
+               <li>Please check the know issues in the Wiki under General Information.</li>
             </ul>
          </description>
       </release>
       <release version="0.7.5b" date="2023-12-14">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.7.5b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.7.5b</url>
          <description>
             <p>Bug fixes and other changes:</p>
             <ul>
@@ -197,7 +260,7 @@
          </description>
       </release>
       <release version="0.7.4b" date="2023-11-18">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.7.4b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.7.4b</url>
          <description>
             <p>Hotfix:</p>
             <ul>
@@ -208,12 +271,12 @@
             </ul>
             <p>Known issues:</p>
             <ul>
-               <li>Please check the know issues in the Wiki under General Infomration</li>
+               <li>Please check the know issues in the Wiki under General Information</li>
             </ul>
          </description>
       </release>
       <release version="0.7.3b" date="2023-11-14">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.7.3b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.7.3b</url>
          <description>
             <p>Updates:</p>
             <ul>
@@ -222,12 +285,12 @@
             </ul>
             <p>Known issues:</p>
             <ul>
-               <li>Please check the know issues in the Wiki under General Infomration</li>
+               <li>Please check the know issues in the Wiki under General Information</li>
             </ul>
          </description>
       </release>
       <release version="0.7.2b" date="2023-09-27">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.7.2b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.7.2b</url>
          <description>
             <p>Updates:</p>
             <ul>
@@ -250,7 +313,7 @@
          </description>
       </release>
       <release version="0.7.1b" date="2023-08-16">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.7.1b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.7.1b</url>
          <description>
             <p>Information:</p>
             <ul>
@@ -294,7 +357,7 @@
          </description>
       </release>
       <release version="0.7.0b" date="2023-06-15">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.7.0b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.7.0b</url>
          <description>
             <p>New - System features:</p>
             <ul>
@@ -347,7 +410,7 @@
          </description>
       </release>
       <release version="0.6.6b" date="2023-04-26">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.6b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.6.6b</url>
          <description>
             <p>Bug fixes:</p>
             <ul>
@@ -357,7 +420,7 @@
          </description>
       </release>
       <release version="0.6.5b" date="2023-04-07">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.5b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.6.5b</url>
          <description>
             <p>Bug fixes and other changes:</p>
             <ul>
@@ -369,7 +432,7 @@
          </description>
       </release>
       <release version="0.6.4b" date="2023-04-04">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.4b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.6.4b</url>
          <description>
             <p>New features - General:</p>
             <ul>
@@ -386,7 +449,7 @@
          </description>
       </release>
       <release version="0.6.3b" date="2023-03-24">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.3b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.6.3b</url>
          <description>
             <p>New features - General:</p>
             <ul>
@@ -414,7 +477,7 @@
          </description>
       </release>
       <release version="0.6.2b" date="2023-03-15">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.2b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.6.2b</url>
          <description>
             <ul>
                <li>Persistent configurations when updating RetroDECK, this means your custom configurations should be saved across future versions. (We also laid groundwork for dynamic persistent configurations, more on that in a future update. This is the reason why it has taken quite long to fix this).</li>
@@ -438,7 +501,7 @@
          </description>
       </release>
       <release version="0.6.1b" date="2023-02-21">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.1b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.6.1b</url>
          <description>
             <ul>
                <li>Updated all the emulators and cores at their latest versions (except for Duckstation)</li>
@@ -457,7 +520,7 @@
          </description>
       </release>
       <release version="0.6.0b" date="2022-12-24">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.6.0b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.6.0b</url>
          <description>
             <ul>
                <li>Added Ryujinx</li>
@@ -482,7 +545,7 @@
          </description>
       </release>
       <release version="0.5.3b" date="2022-10-26">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.5.3b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.5.3b</url>
          <description>
             <ul>
                <li>Fixed inaccessible RetroArch shaders folder</li>
@@ -499,7 +562,7 @@
          </description>
       </release>
       <release version="0.5.2b" date="2022-10-13">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.5.2b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.5.2b</url>
          <description>
             <ul>
                <li>VERY IMPORTANT: We are moving your saves! This can take time on the first boot. If you miss some saves they are not gone. Please read more in the wiki.</li>
@@ -510,7 +573,7 @@
          </description>
       </release>
       <release version="0.5.1b" date="2022-10-12">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.5.1b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.5.1b</url>
          <description>
             <ul>
                <li>VERY IMPORTANT: We are moving your saves! This can take time on the first boot. If you miss some saves they are not gone. Please read more in the wiki.</li>
@@ -532,7 +595,7 @@
          </description>
       </release>
       <release version="0.5.0b" date="2022-10-11">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.5.0b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.5.0b</url>
          <description>
             <ul>
                <li>VERY IMPORTANT: We are moving your saves! This can take time on the first boot. If you miss some saves they are not gone. Please read more in the wiki.</li>
@@ -552,7 +615,7 @@
          </description>
       </release>
       <release version="0.4.5b" date="2022-07-20">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.4.5b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.4.5b</url>
          <description>
             <ul>
                <li>Fixed a bug where new symlinks were not created correctly and users couldn't scrape their games</li>
@@ -567,7 +630,7 @@
          </description>
       </release>
       <release version="0.4.4b" date="2022-07-18">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.4.4b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.4.4b</url>
          <description>
             <ul>
                <li>Yuzu: Disabled shader caching as it was broken</li>
@@ -592,7 +655,7 @@
          </description>
       </release>
       <release version="0.4.3b" date="2022-07-07">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.4.3b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.4.3b</url>
          <description>
             <p>
                Emulators:
@@ -620,7 +683,7 @@
          </description>
       </release>
       <release version="0.4.2b" date="2022-07-01">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.4.2b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.4.2b</url>
          <description>
             <p>
                Emulators:
@@ -655,7 +718,7 @@
          </description>
       </release>
       <release version="0.4.1b" date="2022-05-11">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.4.1b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.4.1b</url>
          <description>
             <p>
                Emulators:
@@ -694,7 +757,7 @@
          </description>
       </release>
       <release version="0.4.0b" date="2022-05-26">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.4.0b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.4.0b</url>
          <description>
             <p>Emulators:</p>
             <ul>
@@ -751,7 +814,7 @@
          </description>
       </release>
       <release version="0.3.1b" date="2022-04-26">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.3.1b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.3.1b</url>
          <description>
             <ul>
                <li>Fixed Dolphin: now Dolphin (Standalone) is the default emulator for GC/Wii.</li>
@@ -759,7 +822,7 @@
          </description>
       </release>
       <release version="0.3.0b" date="2022-04-26">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.3.0b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.3.0b</url>
          <description>
             <ul>
                <li>Migrated everything from the old domain com.xargon.retrodeck to net.retrodeck.retrodeck to be aligned with flathub standards</li>
@@ -779,7 +842,7 @@
          </description>
       </release>
       <release version="0.2.0b" date="2022-04-17">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.2.0b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.2.0b</url>
          <description>
             <ul>
                <li>Migrated everything from the old building script to a full fledged yaml in order to being published on Discover</li>
@@ -795,7 +858,7 @@
          </description>
       </release>
       <release version="0.1.1b" date="2022-04-03">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.1.1b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.1.1b</url>
          <description>
             <ul>
                <li>Removed some debug stuff (press any key to continue)</li>
@@ -807,7 +870,7 @@
          </description>
       </release>
       <release version="0.1.0b" date="2022-04-03">
-         <url>https://github.com/XargonWan/RetroDECK/releases/tag/0.1.0b</url>
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.1.0b</url>
          <description>
             <ul>
                <li>Pick up and play, just put your roms and bios in /retrodeck/roms and /retrodeck/bios folders.</li>

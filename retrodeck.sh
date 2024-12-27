@@ -2,25 +2,44 @@
 
 source /app/libexec/global.sh
 
+# uses jq to extract all the emulators (components) that don't have resettable: false in the features.json and separate them with "|"
+resettable_components=$(jq -r '
+  [(.emulator | to_entries[]) |
+  select(.value.core == null and .value.resettable != false) |
+  .key] | sort | join("|")
+' "$features")
+
+# uses sed to create, a, list, like, this
+pretty_resettable_components=$(echo "$resettable_components" | sed 's/|/, /g')
+
 # Arguments section
 
 for i in "$@"; do
   case $i in
     -h*|--help*)
       echo "RetroDECK v""$version"
-      echo "
+      echo -e "
       Usage:
 flatpak run [FLATPAK-RUN-OPTION] net.retrodeck-retrodeck [ARGUMENTS]
 
 Arguments:
-    -h, --help                      Print this help
-    -v, --version                   Print RetroDECK version
-    --info-msg                      Print paths and config informations
-    --configurator                  Starts the RetroDECK Configurator
-    --compress-one <file>           Compresses target file to a compatible format
-    --compress-all <format>         Compresses all supported games into a compatible format. Available formats are \"chd\", \"zip\", \"rvz\" and \"all\".
-    --reset-component <component>   Reset one or more component or emulator configs to the default values
-    --reset-retrodeck               Starts the initial RetroDECK installer (backup your data first!)
+    -h, --help                          \t  Print this help
+    -v, --version                       \t  Print RetroDECK version
+    --info-msg                          \t  Print paths and config informations
+    --debug                             \t  Enable debug logging for this launch of RetroDECK (This may miss errors very early in the launch process)
+    --configurator                      \t  Starts the RetroDECK Configurator
+    --legacy-configurator               \t  Starts the old, zenity, RetroDECK Configurator
+    --compress-one <file>               \t  Compresses target file to a compatible format
+    --compress-all <format>             \t  Compresses all supported games into a compatible format.\n\t\t\t\t\t\t  Available formats are \"chd\", \"zip\", \"rvz\" and \"all\"
+    --reset-component <component>       \t  Reset one or more component or emulator configs to the default values
+    --reset-retrodeck                   \t  Starts the initial RetroDECK installer (backup your data first!)
+
+Game Launch:
+    [<options>] <game_path>             \t  Start a game using the default emulator or\n\t\t\t\t\t\t  the one defined in ES-DE for game or system
+    \t Options:
+    \t \t-e (emulator)\t Run the game with the defined emulator (optional)
+    \t \t-s (system)\t Force the game running with the defined system, for example running a gb game on gba (optional)
+    \t \t-m (manual)\t Manual mode: show the list of available emulator to choose from (optional)
 
 For flatpak run specific options please run: flatpak run -h
 
@@ -39,6 +58,10 @@ https://retrodeck.net
       cat $rd_conf
       exit
       ;;
+    --debug*)
+      logging_level="debug"
+      shift
+      ;;
     --compress-one*)
       cli_compress_single_game "$2"
       exit
@@ -47,6 +70,9 @@ https://retrodeck.net
       cli_compress_all_games "$2"
       ;;
     --configurator*)
+      sh /app/tools/godot-configurator.sh
+      ;;
+    --legacy-configurator*)
       sh /app/tools/configurator.sh
       if [[ $(configurator_generic_question_dialog "RetroDECK Configurator" "Would you like to launch RetroDECK after closing the Configurator?") == "false" ]]; then
         exit
@@ -55,11 +81,15 @@ https://retrodeck.net
       fi
       ;;
     --reset-component*)
-      echo "You are about to reset one or more RetroDECK components or emulators."
-      echo "Available options are: es-de, retroarch, cemu, dolphin, duckstation, gzdoom, melonds, pcsx3, pico8, ppsspp, primehack, rpcs3, ryujinx, xemu, vita3k, mame, boilr, all"
-      read -p "Please enter the component you would like to reset: " component
-      component=$(echo "$component" | tr '[:upper:]' '[:lower:]')
-      if [[ "$component" =~ ^(es-de|retroarch|cemu|dolphin|duckstation|gzdoom|mame|melonds|pcsx2|ppsspp|primehack|ryujinx|rpcs3|xemu|all)$ ]]; then
+      component="$2"
+      if [ -z "$component" ]; then
+        echo "You are about to reset one or more RetroDECK components or emulators."
+        echo -e "Available options are:\nall, $pretty_resettable_components"
+        read -p "Please enter the component you would like to reset: " component
+        component=$(echo "$component" | tr '[:upper:]' '[:lower:]')
+      fi
+
+      if [[ "$component" =~ ^(all|$resettable_components)$ ]]; then
         read -p "You are about to reset $component to default settings. Enter 'y' to continue, 'n' to stop: " response
         if [[ $response == [yY] ]]; then
           prepare_component "reset" "$component" "cli"
@@ -92,9 +122,14 @@ https://retrodeck.net
       exit 1
       ;;
     *)
-      validate_input "$i"
-      if [[ ! $input_validated == "true" ]]; then
-        echo "Please specify a valid option. Use -h for more information."
+      # Assume unknown arguments are game start arguments
+      if [ -f "$i" ]; then
+          echo "Attempting to start the game: $i"
+          run_game "$@"
+          exit
+      else
+          echo "Command or File '$i' not found. Ignoring argument and continuing..."
+          break # Continue with the main program
       fi
       ;;
   esac
@@ -109,11 +144,11 @@ if [ -f "$lockfile" ]; then
     if grep -qF "cooker" <<< $hard_version; then # If newly-installed version is a "cooker" build
       log d "Newly-installed version is a \"cooker\" build"
       configurator_generic_dialog "RetroDECK Cooker Warning" "RUNNING COOKER VERSIONS OF RETRODECK CAN BE EXTREMELY DANGEROUS AND ALL OF YOUR RETRODECK DATA\n(INCLUDING BIOS FILES, BORDERS, DOWNLOADED MEDIA, GAMELISTS, MODS, ROMS, SAVES, STATES, SCREENSHOTS, TEXTURE PACKS AND THEMES)\nARE AT RISK BY CONTINUING!"
-      set_setting_value $rd_conf "update_repo" "RetroDECK-cooker" retrodeck "options"
+      set_setting_value $rd_conf "update_repo" "$cooker_repository_name" retrodeck "options"
       set_setting_value $rd_conf "update_check" "true" retrodeck "options"
       set_setting_value $rd_conf "developer_options" "true" retrodeck "options"
       cooker_base_version=$(echo $hard_version | cut -d'-' -f2)
-      choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Upgrade" --extra-button="Don't Upgrade" --extra-button="Full Wipe and Fresh Install" \
+      choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Upgrade" --extra-button="Don't Upgrade" --extra-button="Full Wipe and Fresh Install" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Cooker Upgrade" \
       --text="You appear to be upgrading to a \"cooker\" build of RetroDECK.\n\nWould you like to perform the standard post-update process, skip the post-update process or remove ALL existing RetroDECK folders and data (including ROMs and saves) to start from a fresh install?\n\nPerforming the normal post-update process multiple times may lead to unexpected results.")
@@ -184,13 +219,6 @@ if [[ $update_check == "true" ]]; then
 fi
 
 # Normal Startup
-
-if [[ $steam_sync == "true" ]]; then
-  python3 /app/libexec/steam-sync/steam-sync.py &
-fi
-
 start_retrodeck
-
-if [[ $steam_sync == "true" ]]; then
-  touch /tmp/retrodeck_steam_sync_exit
-fi
+# After everything is closed we run the quit function
+quit_retrodeck

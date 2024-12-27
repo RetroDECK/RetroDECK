@@ -1,0 +1,82 @@
+The Team
+
+Those that make RetroDECK happen
+
+---
+
+XargonWan
+
+RetroDECK project founder and also one of the founding members of AmberELEC.
+
+---
+
+Lazorne
+
+Community management/outreach, testing, documentation, emulator configurations, Steam Input and feature request / issue management.
+
+---
+
+jiannazzone
+
+
+Web Development, Community management/outreach, testing, documentation.
+
+---
+
+IceNine451
+
+Creator of the OG RetroDECK configurator, the RetroDECK Framework and bash god.
+
+---
+
+Lx32
+
+
+Develops various new features, functions and tools.
+
+---
+
+WallK
+
+Godot and scipting!
+
+---
+
+MonkeyX
+Godot, Emulators and more things!
+
+
+---
+
+dottormac
+
+Help with testing
+
+---
+
+
+We want give our special thanks to:
+
+- Our Patreon and donors that keeps the build servers running and provide feedback.
+
+- All related emulation, front end and software projects that we are dependent on.
+
+- All people that have put both time and money into emulation projects.
+
+- All the users who help others with support, guidance and good spirit.
+
+- All the users who help with testing and reporting issues.
+
+- All the community creators who creates various art and assets for the community.
+
+You are all the ones that makes this project possible.
+
+
+
+---
+
+RetroDECK Alumni
+
+Former members of the RetroDECK team have contributed to the project
+
+---

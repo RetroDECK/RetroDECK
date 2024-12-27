@@ -1,0 +1,107 @@
+[gd_scene load_steps=3 format=3 uid="uid://bdbxu0r51jfk1"]
+
+[ext_resource type="Script" path="res://components/popup_dialogue.gd" id="1_oiwsy"]
+[ext_resource type="Texture2D" uid="uid://brf74puvpnwsd" path="res://assets/graphics/retrodeck.png" id="2_3a55w"]
+
+[node name="Popup_Dialogue" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 23.0
+offset_top = -7.0
+offset_right = 23.0
+offset_bottom = -7.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_oiwsy")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -357.0
+offset_bottom = -70.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="title_label" type="Label" parent="Panel/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 23
+text = "Welcome to RetroDeck"
+
+[node name="ContentContainer" type="Panel" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer/ContentContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 6
+
+[node name="content_rtl" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer/ContentContainer/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 2
+text = "Some text here for the content?"
+scroll_following = true
+context_menu_enabled = true
+selection_enabled = true
+
+[node name="MarginContainer_bootom" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/MarginContainer_bootom"]
+layout_mode = 2
+
+[node name="cancel_button" type="Button" parent="Panel/MarginContainer/VBoxContainer/MarginContainer_bootom/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+text = "CANCEL"
+
+[node name="ok_button" type="Button" parent="Panel/MarginContainer/VBoxContainer/MarginContainer_bootom/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+text = "OK"
+
+[node name="Retrodeck" type="Sprite2D" parent="."]
+position = Vector2(859, 108)
+scale = Vector2(0.209961, 0.204102)
+texture = ExtResource("2_3a55w")
+
+[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/MarginContainer_bootom/HBoxContainer/cancel_button" to="." method="_on_cancel_pressed"]
+[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/MarginContainer_bootom/HBoxContainer/ok_button" to="." method="_on_ok_button_pressed"]

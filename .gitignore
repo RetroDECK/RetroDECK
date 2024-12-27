@@ -18,10 +18,14 @@ backup
 tmp
 .godot
 rd-submodules/es-de/patches-tmp*
-.local/
+retrodeck-repo
 buildid
 *.bak
 incconfigs/
+.github/workflows/cooker-monkeyx.yml
+*.flatpak
+*.flatpak.sha
+net.retrodeck.retrodeck.cached.yml
 
 # Python #
 ##########
