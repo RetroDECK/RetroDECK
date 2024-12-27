@@ -2,15 +2,23 @@ class_name DataHandler
 
 extends Node
 
-var data_file_path = "/app/retrodeck/config/retrodeck/reference_lists/features.json"
+@onready var main_scene = get_tree().root.get_node("Control")
 var app_data: AppData
+
 
 func _ready():
 	# Load the data when the scene is ready
+	print (class_functions.data_file_path)
+	if not FileAccess.file_exists(class_functions.data_file_path):
+		class_functions.data_file_path = "../../config/retrodeck/reference_lists/features.json"
+		var t_c = main_scene.get_node("%globals_gridcontainer")
+		for child in t_c.get_children():
+			if child.is_class("Button"):
+				child.disabled = true
 	app_data = load_base_data()
 
 func load_base_data() -> AppData:
-	var file = FileAccess.open(data_file_path, FileAccess.READ)
+	var file = FileAccess.open(class_functions.data_file_path, FileAccess.READ)
 	if file:
 		var json_data = file.get_as_text()
 		file.close()
@@ -95,8 +103,8 @@ func load_base_data() -> AppData:
 		get_tree().quit()
 	return null
 
-func save_base_data(app_dict: AppData): # was apP_data but gave warning
-	var file = FileAccess.open(data_file_path, FileAccess.READ)
+func save_base_data(app_dict: AppData):
+	var file = FileAccess.open(class_functions.data_file_path, FileAccess.READ)
 	var existing_data = {}
 	if file:
 		var json = JSON.new()
@@ -164,7 +172,7 @@ func save_base_data(app_dict: AppData): # was apP_data but gave warning
 	var json_text = JSON.stringify(existing_data, "\t")
 
 	# Open the file in append mode and write the new JSON data
-	file = FileAccess.open(data_file_path, FileAccess.WRITE)
+	file = FileAccess.open(class_functions.data_file_path, FileAccess.WRITE)
 	file.store_string(json_text)
 	file.close()
 
