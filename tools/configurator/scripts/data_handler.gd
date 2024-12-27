@@ -10,7 +10,7 @@ func _ready():
 	# Load the data when the scene is ready
 	print (class_functions.data_file_path)
 	if not FileAccess.file_exists(class_functions.data_file_path):
-		class_functions.data_file_path = "../../config/retrodeck/reference_lists/features.json"
+		class_functions.data_file_path = "res://debug/features.json"
 		var t_c = main_scene.get_node("%globals_gridcontainer")
 		for child in t_c.get_children():
 			if child.is_class("Button"):

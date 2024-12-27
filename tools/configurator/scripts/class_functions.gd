@@ -59,11 +59,14 @@ func _ready():
 
 func read_values_states() -> void:
 	if not FileAccess.file_exists(config_file_path):
-		config_file_path = "../../config/retrodeck/retrodeck.cfg"
+		config_file_path = "res://debug/retrodeck.cfg"
 	var config = data_handler.parse_config_to_json(config_file_path)
 	data_handler.config_save_json(config, json_file_path)
 	#rd_log_folder = config["paths"]["logs_folder"]
-	rd_log_folder = "/var/config/retrodeck/logs"
+	if not FileAccess.file_exists(rd_log_folder):
+		rd_log_folder = "res://debug"
+	else:
+		rd_log_folder = "/var/config/retrodeck/logs"
 	rd_log = rd_log_folder + "/retrodeck.log"
 	rdhome = config["paths"]["rdhome"]
 	roms_folder = config["paths"]["roms_folder"]
