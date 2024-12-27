@@ -35,6 +35,7 @@ source /app/libexec/global.sh
 #       - PCSX2
 #       - PPSSPP
 #       - Primehack
+#       - Ruffle
 #       - RPCS3
 #       - Ryujinx
 #       - Vita3K
@@ -83,6 +84,7 @@ source /app/libexec/global.sh
 #           - Reset PCSX2
 #           - Reset PPSSPP
 #           - Reset Primehack
+#           - Reset Ruffle
 #           - Reset RPCS3
 #           - Reset Ryujinx
 #           - Reset Vita3k
@@ -447,6 +449,7 @@ configurator_open_emulator_dialog() {
     "PCSX2" "Open the PS2 emulator PSXC2"
     "PPSSPP" "Open the PSP emulator PPSSPP"
     "Primehack" "Open the Metroid Prime emulator Primehack"
+    "Ruffle" "Open the Flash emulator Ruffle"
     "RPCS3" "Open the PS3 emulator RPCS3"
     "Ryujinx" "Open the Switch emulator Ryujinx"
     "Vita3K" "Open the PSVita emulator Vita3K"
@@ -519,6 +522,11 @@ configurator_open_emulator_dialog() {
   "Primehack" )
     log i "Configurator: \"$emulator\""
     primehack-wrapper
+  ;;
+
+  "Ruffle" )
+    log i "Configurator: \"$emulator\""
+    ruffle
   ;;
 
   "RPCS3" )
@@ -1133,7 +1141,7 @@ configurator_reset_dialog() {
       fi
     ;;
 
-    "Cemu" | "Citra" | "Dolphin" | "Duckstation" | "GZDoom" | "Yuzu" | "MelonDS" | "MAME" | "PCSX2" | "PPSSPP" | "Primehack" | "RPCS3" | "Ryujinx" )
+    "Cemu" | "Citra" | "Dolphin" | "Duckstation" | "GZDoom" | "Yuzu" | "MelonDS" | "MAME" | "PCSX2" | "PPSSPP" | "Primehack" | "Ruffle" | "RPCS3" | "Ryujinx" )
       if [[ $(configurator_reset_confirmation_dialog "$component_to_reset" "Are you sure you want to reset the $component_to_reset emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
         prepare_component "reset" "$component_to_reset" "configurator"
         configurator_process_complete_dialog "resetting $component_to_reset"
