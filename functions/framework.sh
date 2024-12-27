@@ -513,3 +513,53 @@ do
   fi
 done < "$1"
 }
+
+get_steam_user() {
+  # This function populates environment variables with the actual logged Steam user data
+  if [ -f "$HOME/.steam/steam/config/loginusers.vdf" ]; then
+    # Extract the Steam ID of the most recent user
+    export steam_id=$(awk '
+      /"users"/ {flag=1} 
+      flag && /^[ \t]*"[0-9]+"/ {id=$1} 
+      flag && /"MostRecent".*"1"/ {print id; exit}' "$HOME/.steam/steam/config/loginusers.vdf" | tr -d '"')
+
+    # Extract the Steam username (AccountName)
+    export steam_username=$(awk -v steam_id="$steam_id" '
+      $0 ~ steam_id {flag=1} 
+      flag && /"AccountName"/ {gsub(/"/, "", $2); print $2; exit}' "$HOME/.steam/steam/config/loginusers.vdf")
+
+    # Extract the Steam pretty name (PersonaName)
+    export steam_prettyname=$(awk -v steam_id="$steam_id" '
+      $0 ~ steam_id {flag=1} 
+      flag && /"PersonaName"/ {gsub(/"/, "", $2); print $2; exit}' "$HOME/.steam/steam/config/loginusers.vdf")
+
+    # Log success
+    log i "Steam user found:"
+    log i "SteamID: $steam_id"
+    log i "Username: $steam_username"
+    log i "Name: $steam_prettyname"
+
+    if [[ $steam_sync == "true" ]]; then
+      populate_steamuser_srm
+    fi
+    
+  else
+    # Log warning if file not found
+    log w "No Steam user found, proceeding" >&2
+  fi
+}
+
+populate_steamuser_srm(){
+  # Populating SRM config with Steam Username
+      log d "Populating Steam Rom Manager config file with Steam Username"
+      jq --arg username "$steam_username" '
+        map(
+          if .userAccounts.specifiedAccounts then
+            .userAccounts.specifiedAccounts = [$username]
+          else
+            .
+          end
+        )
+      ' "$XDG_CONFIG_HOME/steam-rom-manager/userData/userConfigurations.json" > "$XDG_CONFIG_HOME/steam-rom-manager/userData/userConfigurations.json.tmp" &&
+      mv "$XDG_CONFIG_HOME/steam-rom-manager/userData/userConfigurations.json.tmp" "$XDG_CONFIG_HOME/steam-rom-manager/userData/userConfigurations.json"
+}

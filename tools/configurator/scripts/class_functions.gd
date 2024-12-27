@@ -1,12 +1,17 @@
 class_name ClassFunctions extends Control
 
 extends Control
+
+# Test comment
+
+@onready var main_scene = get_tree().root.get_node("Control")
 var log_result: Dictionary
 var log_parameters: Array
 const globals_sh_file_path: String = "/app/libexec/global.sh"
 const wrapper_command: String = "/app/tools/retrodeck_function_wrapper.sh"
 const config_file_path = "/var/config/retrodeck/retrodeck.cfg"
 const json_file_path = "/var/config/retrodeck/retrodeck.json"
+var config_folder_path = "/var/config/"
 const esde_file_path = "/var/config/ES-DE/settings/es_settings.xml"
 var desktop_mode: String = OS.get_environment("XDG_CURRENT_DESKTOP")
 var rd_conf: String
@@ -36,8 +41,8 @@ var cheevos_token_state: String
 var font_select: int
 var font_tab_size: int = 35
 var font_size: int = 20
+var steam_sync: bool
 var locale: String
-enum preset_list {abxy_button_swap, ask_to_exit, borders, widescreen, rewind, cheevos, cheevos_hardcore}
 var button_list: Array = ["button_swap_button", "ask_to_exit_button", "border_button", "widescreen_button", "quick_rewind_button", "reset_retrodeck_button", "reset_all_emulators_button", "cheevos_button", "cheevos_hardcore_button"]
 signal update_global_signal
 var rekku_state: bool = false
@@ -54,7 +59,8 @@ func _ready():
 func read_values_states() -> void:
 	var config = data_handler.parse_config_to_json(config_file_path)
 	data_handler.config_save_json(config, json_file_path)
-	rd_log_folder = config["paths"]["logs_folder"]
+	#rd_log_folder = config["paths"]["logs_folder"]
+	rd_log_folder = "/var/config/retrodeck/logs"
 	rd_log = rd_log_folder + "/retrodeck.log"
 	rdhome = config["paths"]["rdhome"]
 	roms_folder = config["paths"]["roms_folder"]
@@ -75,6 +81,7 @@ func read_values_states() -> void:
 	widescreen_state = multi_state("widescreen", widescreen_state)
 	quick_rewind_state = multi_state("rewind", quick_rewind_state)
 	sound_effects = config["options"]["sound_effects"]
+	steam_sync = config["options"]["steam_sync"]
 	volume_effects = int(config["options"]["volume_effects"])
 	font_select = int(config["options"]["font"])
 	cheevos_token_state = str(config["options"]["cheevos_login"])
@@ -97,21 +104,63 @@ func multi_state(section: String, state: String) -> String:
 	else:
 		state = "mixed"
 	return state
-		
-func logger(log_type: String, log_text: String) -> void:
-	# Type of log messages:
-	# log d - debug message: maybe in the future we can decide to hide them in main builds or if an option is toggled
-	# log i - normal informational message
-	# log w - waring: something is not expected but it's not a big deal
-	# log e - error: something broke
+
+func logger_bash(log_type: String, log_text: String) -> void:
 	var log_header_text = "gdc_"
 	log_header_text+=log_text
 	log_parameters = ["log", log_type, log_header_text]
 	log_result = await run_thread_command(wrapper_command,log_parameters, false)
-	#log_result = await run_thread_command("find",["$HOME", "-name", "*.xml","-print"], false)
-	#print (log_result["exit_code"])
-	#print (log_result["output"])
-	
+
+func logger(log_type: String, log_text: String) -> void:
+	var log_dir: DirAccess = DirAccess.open(rd_log)
+	var log_file: FileAccess
+	var log_header: String = "[GODOT] "
+	var datetime: Dictionary = Time.get_datetime_dict_from_system()
+	var unixtime: float = Time.get_unix_time_from_system()
+	var msec: int = (unixtime - floor(unixtime)) * 1000 # finally, real ms! Thanks, monkeyx
+	var timestamp: String = "[%d-%02d-%02d %02d:%02d:%02d.%03d]" % [
+	datetime.year, datetime.month, datetime.day,
+	datetime.hour, datetime.minute, datetime.second, msec] # real ms!!
+	var log_line: String = timestamp
+
+	match log_type:
+		'w':
+			log_line += " [WARNING] " + log_header
+			# print("Warning, mate")
+		'e':
+			log_line += " [ERROR] " + log_header
+			# print("Error, mate")
+		'i':
+			log_line += " [INFO] " + log_header
+			# print("Info, mate")
+		'd':
+			log_line += " [DEBUG] " + log_header
+			# print("Debug, mate")
+		_:
+			log_line += " " + log_header
+			print("No idea, mate")
+	log_line += log_text
+	# print(log_line)
+
+	if not log_dir:
+		log_dir = DirAccess.open("res://") #open something valid to create an instance
+		print(log_dir.make_dir_recursive(rd_log_folder))
+		if log_dir.make_dir_recursive(rd_log_folder) != OK:
+			print("Something wrong with log directory - ", rd_log_folder)
+			return
+
+	if not FileAccess.open(rd_log, FileAccess.READ):
+		log_file = FileAccess.open(rd_log, FileAccess.WRITE_READ) # to create a file if not there
+	else:
+		log_file = FileAccess.open(rd_log, FileAccess.READ_WRITE) # to not truncate
+
+	if log_file:
+		log_file.seek_end()
+		log_file.store_line(log_line)
+		log_file.close()
+	else:
+		print("Something wrong with log file - ", rd_log)
+
 func array_to_string(arr: Array) -> String:
 	var text: String
 	for line in arr:
@@ -126,13 +175,13 @@ func execute_command(command: String, parameters: Array, console: bool) -> Dicti
 	var result = {}
 	var output = []
 	var exit_code = OS.execute(command, parameters, output, console) ## add if exit == 0 etc
-	result["output"] = array_to_string(output)
+	result["output"] = class_functions.array_to_string(output)
 	result["exit_code"] = exit_code
 	return result
 
-func run_command_in_thread(command: String, paramaters: Array, _console: bool) -> Dictionary:
+func run_command_in_thread(command: String, paramaters: Array, console: bool) -> Dictionary:
 	var thread = Thread.new()
-	thread.start(execute_command.bind(command,paramaters,false))
+	thread.start(execute_command.bind(command,paramaters,console))
 	while thread.is_alive():
 		await get_tree().process_frame
 	return thread.wait_to_finish()
@@ -176,7 +225,6 @@ func import_csv_data(file_path: String) -> Dictionary:
 
 func _import_data_lists(file_path: String) -> void:
 	var tk_about: Dictionary = import_csv_data(file_path)
-	
 	for key in tk_about.keys():
 		var entry = tk_about[key]
 		print("ID: " + key)
@@ -282,91 +330,123 @@ func run_function(button: Button, preset: String) -> void:
 
 func update_global(button: Button, preset: String, state: bool) -> void:
 	#TODO pass state as an object in future version
-	var result: Array
+	var result: Array	
+	result.append("make_preset_changes")
 	var config_section:Dictionary = data_handler.get_elements_in_section(config_file_path, preset)
 	match button.name:
 		"quick_resume_button", "retroarch_quick_resume_button":
 			quick_resume_status = state
-			result = data_handler.change_cfg_value(config_file_path, "retroarch", preset, str(state))
-			change_global(result, "build_preset_config", button, str(quick_resume_status))
+			result.append_array(data_handler.change_cfg_value(config_file_path, "retroarch", preset, str(state)))
+			change_global(result, button, str(quick_resume_status))
 		"update_notification_button":
 			update_check = state
-			result = data_handler.change_cfg_value(config_file_path, preset, "options", str(state))
-			change_global(result, "build_preset_config", button, str(result))
+			#result.append("build_preset_config")
+			result.append_array(data_handler.change_cfg_value(config_file_path, preset, "options", str(state)))
+			#change_global(result, button, str(result))
 		"sound_button":
 			sound_effects = state
-			result = data_handler.change_cfg_value(config_file_path, preset, "options", str(state))
+			result.append_array(data_handler.change_cfg_value(config_file_path, preset, "options", str(state)))
+			logger("i", "Enabled: %s" % (button.name))
+			update_global_signal.emit([button.name])
+		"steam_sync_button":
+			steam_sync = state
+			result.append_array(data_handler.change_cfg_value(config_file_path, preset, "options", str(state)))
 			logger("i", "Enabled: %s" % (button.name))
 			update_global_signal.emit([button.name])
 		"cheevos_connect_button":
 			cheevos_token_state = str(state)
-			result = data_handler.change_cfg_value(config_file_path, preset, "options", str(state))
+			result.append_array(data_handler.change_cfg_value(config_file_path, preset, "options", str(state)))
 			logger("i", "Enabled: %s" % (button.name))
 			update_global_signal.emit([button.name])
 		"button_swap_button":
 			if abxy_state != "mixed":
 				abxy_state = str(state)
-				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
-				change_global(result, "build_preset_config", button, abxy_state)
+				result.append_array([preset])
+				result.append_array([config_section.keys()])
+				change_global(result, button, abxy_state)
 		"ask_to_exit_button":
 			if ask_to_exit_state != "mixed":
 				ask_to_exit_state = str(state)
-				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
-				change_global(result, "build_preset_config", button, ask_to_exit_state)
+				result.append_array([preset])
+				result.append_array([config_section.keys()])
+				change_global(result, button, ask_to_exit_state)
 		"border_button":
 			if border_state != "mixed":
 				border_state = str(state)
-				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
-				change_global(result, "build_preset_config", button, border_state)
+				#result.append_array(data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state)))
+				result.append_array([preset])
+				result.append_array([config_section.keys()])
+				change_global(result, button, border_state)
 			if widescreen_state == "true" or widescreen_state == "mixed":
+				var _button_tmp = main_scene.get_node("%widescreen_button")
+				#Remove last array item or tries to append again
+				result.clear()
+				result.append_array([preset])
 				config_section = data_handler.get_elements_in_section(config_file_path, "widescreen")
 				widescreen_state = "false"
-				result = data_handler.change_all_cfg_values(config_file_path, config_section, "widescreen", widescreen_state)
-				change_global(result, "build_preset_config", button, widescreen_state)
+				result.append_array([config_section.keys()])
+				change_global(result, button, widescreen_state)
 		"widescreen_button":
 			if widescreen_state != "mixed":
 				widescreen_state = str(state)
-				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
-				change_global(result, "build_preset_config", button, widescreen_state)
+				result.append_array([preset])
+				result.append_array([config_section.keys()])
+				change_global(result, button, widescreen_state)
 			if border_state == "true" or border_state == "mixed":
+				var button_tmp = main_scene.get_node("%border_button")
+				#Remove last array item or tries to append again
+				result.clear()
+				result.append_array([preset])
 				config_section = data_handler.get_elements_in_section(config_file_path, "borders")
-				border_state = "false"
-				result = data_handler.change_all_cfg_values(config_file_path, config_section, "borders", border_state)
-				change_global(result, "build_preset_config", button, border_state)
+				border_state = "mixed"
+				result.append_array([config_section.keys()])
+				change_global(result, button_tmp, border_state)
 		"quick_rewind_button":
 			if quick_rewind_state != "mixed":
 				quick_rewind_state = str(state)
-				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
-				change_global(result, "build_preset_config", button, quick_rewind_state)
+				result.append_array([preset])
+				result.append_array([config_section.keys()])
+				change_global(result, button, quick_rewind_state)
 		"cheevos_button":
 			if cheevos_state != "mixed":
 				cheevos_state = str(state)
-				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
-				change_global(result, "build_preset_config", button, cheevos_state)
-			if cheevos_state == "false":
-				cheevos_hardcore_state = "false"
-				result = data_handler.change_all_cfg_values(config_file_path, config_section, "cheevos_hardcore", class_functions.cheevos_hardcore_state)
-				change_global(result, "build_preset_config", button, cheevos_state)
+				result.append_array([preset])
+				result.append_array([config_section.keys()])
+				change_global(result, button, cheevos_state)
+			#if cheevos_state == "false":
+				#cheevos_hardcore_state = "false"
+				#result.append_array(data_handler.change_all_cfg_values(config_file_path, config_section, "cheevos_hardcore", class_functions.cheevos_hardcore_state))
+				#change_global(result, button, cheevos_hardcore_state)
 		"cheevos_hardcore_button":
 			if cheevos_hardcore_state != "mixed":
 				cheevos_hardcore_state = str(state)
-				result = data_handler.change_all_cfg_values(config_file_path, config_section, preset, str(state))
-				change_global(result, "build_preset_config", button, cheevos_hardcore_state)
+				result.append_array([preset])
+				result.append_array([config_section.keys()])
+				change_global(result, button, cheevos_hardcore_state)
 
-func change_global(parameters: Array, preset: String, button: Button, state: String) -> void:
-	print (parameters[1])
+func change_global(parameters: Array, button: Button, state: String) -> void:
+	#print (parameters)
 	match parameters[1]:
-		preset_list:
-			for system in parameters[0].keys():
-				var command_parameter: Array = [preset, system, parameters[1]]
-				logger("d", "Change Global: %s System: %s Preset %s " % command_parameter)
-				var result: Dictionary = await run_thread_command(wrapper_command, command_parameter, false)
-				logger("d", "Exit code: %s" % result["exit_code"])
-		_:
-			var command_parameter: Array = [preset, parameters]
-			logger("d", "Change Global: %s System: %s" % command_parameter) 
+		"abxy_button_swap", "ask_to_exit", "borders", "widescreen", "rewind", "cheevos", "cheevos_hardcore":
+			var command_parameter: Array
+			if state == "true":
+				parameters[2] =String(",").join(parameters[2])
+				command_parameter = [parameters[0],parameters[1],parameters[2]]
+			else:
+				command_parameter = [parameters[0],parameters[1]]
+			logger("i", "Change Global Multi: %s  " % str(command_parameter))
 			var result: Dictionary = await run_thread_command(wrapper_command, command_parameter, false)
-			logger("d", "Exit code: %s" % result["exit_code"])
+			#var result = OS.execute_with_pipe(wrapper_command, command_parameter)
+			logger("i", "Exit code: %s" % result["exit_code"])
+		_:
+			logger("i", "Change Global Single: %s" % str(parameters)) 
+			var result: Dictionary = await run_thread_command(wrapper_command, parameters, false)
+			#var result = OS.execute_with_pipe(wrapper_command, parameter)
+			#var result = OS.create_process(wrapper_command, cparameter)
+			if result["exit_code"] == 0:
+				logger("i", "Exit code: %s" % result["exit_code"])
+			else:
+				logger("e", "Exit code: %s" % result["exit_code"])
 	parameters.append(button)
 	parameters.append(state)
 	update_global_signal.emit(parameters)
@@ -430,9 +510,9 @@ func _do_complete(button: Button) ->void:
 			"reset_retrodeck_button":
 				var dir = DirAccess.open(class_functions.rd_conf.get_base_dir())
 				if dir is DirAccess:
-					dir.rename(class_functions.rd_conf,class_functions.rd_conf.get_base_dir() + "/retrodeck.bak")
+					dir.rename(class_functions.rd_conf, class_functions.rd_conf.get_base_dir() + "/retrodeck.bak")
 					dir.remove(class_functions.lockfile)
-				class_functions.change_global(["reset", "retrodeck"], "prepare_component", button, "")
+				class_functions.change_global(["prepare_component", "reset", "retrodeck"], button, "")
 				button.text = "RESETTING-NOW"
 				await class_functions.wait(2.0)
 				button.text = "CONFIGURATOR WILL NOW CLOSE"
@@ -441,7 +521,7 @@ func _do_complete(button: Button) ->void:
 			"reset_all_emulators_button":
 				var tmp_txt = button.text
 				button.text = "RESETTING-NOW"
-				class_functions.change_global(["reset", "all"], "prepare_component", button, "")
+				class_functions.change_global(["prepare_component", "reset", "all"], button, "")
 				await class_functions.wait(2.0)
 				button.text = "RESET COMPLETED"
 				await class_functions.wait(3.0)

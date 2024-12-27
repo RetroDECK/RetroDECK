@@ -1,6 +1,6 @@
-extends Node
-
 class_name DataHandler
+
+extends Node
 
 var data_file_path = "/app/retrodeck/config/retrodeck/reference_lists/features.json"
 var app_data: AppData
@@ -34,8 +34,10 @@ func load_base_data() -> AppData:
 				var emulator = Emulator.new()
 				emulator.name = emulator_data["name"]
 				emulator.description = emulator_data["description"]
-				emulator.url = emulator_data["url"]
-				#emulator.system = emulator_data["system"]
+				if emulator_data.has("url"):
+					emulator.url = emulator_data["url"]
+				if emulator_data.has("system"):	
+					emulator.system = str(emulator_data["system"])
 				emulator.launch = emulator_data["launch"]
 >>>>>>> be95a1bf935fae24a2ab447f99022a39ae7a896a
 				if emulator_data.has("properties"):
@@ -84,9 +86,9 @@ func load_base_data() -> AppData:
 			app_dict.emulators = emulators
 			return app_dict
 		else:
-			class_functions.logger("d","Error parsing JSON ")
+			class_functions.logger("e","Error parsing JSON ")
 	else:
-		class_functions.logger("d","Error opening file: " + file)
+		class_functions.logger("e","Error opening file: %s" % file)
 		get_tree().quit()
 	return null
 
@@ -162,78 +164,6 @@ func save_base_data(app_dict: AppData): # was apP_data but gave warning
 	file = FileAccess.open(data_file_path, FileAccess.WRITE)
 	file.store_string(json_text)
 	file.close()
-	
-# Function to modify an existing link
-func modify_link(key: String, new_name: String, new_url: String, new_description: String):
-	var app_dict = load_base_data() # was app_data
-	if app_dict and app_dict.about_links.has(key):
-		var link = app_dict.about_links[key]
-		link.name = new_name
-		link.url = new_url
-		link.description = new_description
-		app_dict.about_links[key] = link
-		save_base_data(app_dict)
-		print("Link modified successfully")
-	else:
-		print("Link not found")
-
-# Function to modify an existing emulator
-func modify_emulator(key: String, new_name: String, new_description: String, new_properties: Array):
-	#data_handler.modify_emulator_test()
-	var app_dict = load_base_data() # was app_data
-	if app_dict and app_dict.emulators.has(key):
-		var emulator = app_dict.emulators[key]
-		emulator.name = new_name
-		emulator.description = new_description
-		
-		# Update properties
-		emulator.properties.clear()
-		for property in new_properties:
-			var new_property = EmulatorProperty.new()
-			new_property.borders = property.borders
-			new_property.abxy_button = property.abxy_button
-			new_property.ask_to_exit = property.ask_to_exit
-			new_property.cheevos = property.cheevos
-			
-			emulator.properties.append(new_property)
-
-		app_dict.emulators[key] = emulator
-		save_base_data(app_dict)
-		print("Emulator modified successfully")
-	else:
-		print("Emulator not found")
-
-
-func add_emulator() -> void:
-	#data_handler.add_emulator()
-	var link = Link.new()
-	link.name = "Example Site"
-	link.url = "https://example.com"
-	link.description = "An example description."
-	app_data.about_links["example_site"] = link
-
-	var emulator = Emulator.new()
-	emulator.name = "Example Emulator"
-	emulator.description = "An example emulator."
-	var property = EmulatorProperty.new()
-	#property.standalone = true
-	property.abxy_button = false
-	emulator.properties.append(property)
-	app_data.emulators["example_emulator"] = emulator
-	data_handler.save_base_data(app_data)
-	
-func modify_emulator_test() -> void:
-	data_handler.modify_link("example_site", "Updated Site", "https://updated-example.com", "Updated description.")
-
-
-	var new_properties = []
-	var new_property = EmulatorProperty.new()
-	#new_property.standalone = false
-	new_property.abxy_button = true
-	new_properties.append(new_property)
-
-	data_handler.modify_emulator("example_emulator", "Updated Emulator", "Updated description",  new_properties)
-	
 
 func parse_config_to_json(file_path: String) -> Dictionary:
 	var config = {}
@@ -369,3 +299,36 @@ func get_elements_in_section(file_path: String, section: String) -> Dictionary:
 				var value: String = parts[1].strip_edges()
 				elements[key] = value
 	return elements
+
+func read_change_regex(file_path: String, key: String, new_value: String, use_quotes: bool = true) -> String:
+	var file := FileAccess.open(file_path, FileAccess.READ_WRITE)
+	if file == null:
+		print("Error: Could not open the file - %s" % file_path)
+		return ""
+	var content := file.get_as_text()
+	file.close()
+	var pattern := ""
+	if use_quotes:
+		pattern = '%s\\s*=\\s*"(.*?)"' % key
+	else:
+		pattern = '%s\\s*=\\s*(.*)' % key  # For keys without quotes
+	var regex := RegEx.new()
+	regex.compile(pattern)
+	var match := regex.search(content)
+	if match == null:
+		print("Key %s not found for match - %s" % [key, match])
+		return ""
+	var current_value := match.get_string(1)
+	if new_value == current_value:
+		print (current_value)
+		return current_value
+	var updated_content := ""
+	if use_quotes:
+		updated_content = regex.sub(content, '%s = "%s"' % [key, new_value])
+	else:
+		updated_content = regex.sub(content, '%s = %s' % [key, new_value])
+	file = FileAccess.open(file_path, FileAccess.WRITE)
+	file.store_string(updated_content)
+	file.close()
+	print("File updated successfully")
+	return new_value

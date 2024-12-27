@@ -53,8 +53,12 @@ func cheevos(button: Button):
 	http_request.request_completed.connect(self._on_request_completed)
 	http_request.request(ra_url)
 	responses = await wait_to_complete(http_request)
+	
 	%cheevos_label.text = "LOGIN SUCCESS = %s" % str(responses[1]).to_upper()
 	button.disabled = false
+	# need to create missing fields/keys too ie chhevos token duckstation? Possibly not But do need timestamp
+	#data_handler.read_change_regex(class_functions.config_folder_path + "retroarch/retroarch.cfg", "cheevos_username", "bob12")
+	data_handler.read_change_regex(class_functions.config_folder_path + "duckstation/settings.ini", "Username", "monkeyx", false)
 
 func wait_to_complete(http_request: HTTPRequest) -> Array:
 	await http_request.request_completed

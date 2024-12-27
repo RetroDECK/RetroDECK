@@ -166,7 +166,6 @@ func _on_exit_button_pressed():
 	log_parameters[2] = log_text + "Exited"
 	log_results = class_functions.execute_command(wrapper_command, log_parameters, false)
 	_exit()
-	_exit()
 
 #func _on_locale_selected(index):
 	#match index:
@@ -194,6 +193,7 @@ func _set_up_globals(state: Array) -> void:
 	%retroarch_quick_resume_button.button_pressed = class_functions.quick_resume_status
 	%sound_button.button_pressed = class_functions.sound_effects
 	%volume_effects_slider.visible = class_functions.sound_effects
+	%steam_sync_button.button_pressed = class_functions.steam_sync
 	mixed_mode(%button_swap_button, class_functions.abxy_state)
 	mixed_mode(%ask_to_exit_button, class_functions.ask_to_exit_state)
 	mixed_mode(%border_button, class_functions.border_state)
@@ -201,10 +201,10 @@ func _set_up_globals(state: Array) -> void:
 	mixed_mode(%quick_rewind_button, class_functions.quick_rewind_state)
 	mixed_mode(%cheevos_button, class_functions.cheevos_state)
 	mixed_mode(%cheevos_hardcore_button, class_functions.cheevos_hardcore_state)
-	if class_functions.cheevos_state == "true":
-		%cheevos_enabled_container.visible = true
-	elif class_functions.cheevos_state == "false":
-		%cheevos_enabled_container.visible = false
+	#if class_functions.cheevos_state == "true":
+		#%cheevos_enabled_container.visible = true
+	#elif class_functions.cheevos_state == "false":
+		#%cheevos_enabled_container.visible = false
 
 func mixed_mode (button: Button, state: String) -> void:
 	match [class_functions.button_list]:

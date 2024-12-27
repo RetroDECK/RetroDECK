@@ -5,8 +5,8 @@ var file := FileAccess
 var bios_tempfile : String
 var command: String = "../../tools/retrodeck_function_wrapper.sh"
 var console: bool = false
-var BIOS_COLUMNS_BASIC := ["BIOS File Name", "System", "Found", "Hash Match", "Description"]
-var BIOS_COLUMNS_EXPERT := ["BIOS File Name", "System", "Found", "Hash Match", "Description", "Subdirectory", "Hash"]
+var BIOS_COLUMNS_BASIC := ["BIOS File Name", "System", "Found", "Hash\nMatch", "Description"]
+var BIOS_COLUMNS_EXPERT := ["BIOS File Name", "System", "Found", "Hash\nMatch", "Description", "Sub\nFolder", "Hash"]
 @onready var bios_type:int = get_tree().current_scene.bios_type
 @onready var custom_theme: Theme = get_tree().current_scene.custom_theme
 
@@ -18,10 +18,17 @@ func _ready():
 	if bios_type == 1: #Basic BIOS button pressed
 		table.columns = BIOS_COLUMNS_BASIC.size()
 		for i in BIOS_COLUMNS_BASIC.size():
+			table.set_column_custom_minimum_width(0, 150)
+			table.set_column_custom_minimum_width(1, 200)
+			table.set_column_custom_minimum_width(4, 350)
 			table.set_column_title(i, BIOS_COLUMNS_BASIC[i])
 	else: #Assume advanced BIOS button pressed
 		table.columns = BIOS_COLUMNS_EXPERT.size()
 		for i in BIOS_COLUMNS_EXPERT.size():
+			table.set_column_custom_minimum_width(0, 170)
+			table.set_column_custom_minimum_width(1, 200)
+			table.set_column_custom_minimum_width(4, 325)
+			table.set_column_custom_minimum_width(6, 225)
 			table.set_column_title(i, BIOS_COLUMNS_EXPERT[i])
 	
 	var root = table.create_item()
@@ -33,12 +40,19 @@ func _ready():
 		var parameters = ["check_bios_files"]
 		bios_result = await class_functions.run_thread_command(class_functions.wrapper_command, parameters, console)
 	var bios_list = bios_result["output"]
-	var bios_lines = bios_list.split("\n")
+	var bios_lines: Array = bios_list.split("\n")
 	for line in bios_lines:
-		var bios_line = line.split("^")
+		var bios_line: Array = line.split("^")
 		var table_line: TreeItem = table.create_item(root)
 		for i in bios_line.size():
+			if bios_line.size() >= 5:
+				if bios_line[2] == "No":
+					table_line.set_custom_bg_color(i,Color(1,0,0,0.15))
+				elif bios_line[2] == "Yes" and bios_line[3] == "No":
+					table_line.set_custom_bg_color(i,Color(1,0.6,0,0.35))
+				elif bios_line[2] == "Yes":
+					table_line.set_custom_bg_color(i,Color(0,1,0,0.15))
 			table_line.set_text(i, bios_line[i])
-			if table_line.get_index() % 2 == 1:
-				table_line.set_custom_bg_color(i,Color(0.15, 0.15, 0.15, 1),false)
-				table_line.set_custom_color(i,Color(1,1,1,1))
+			#if table_line.get_index() % 2 == 1:
+				#table_line.set_custom_bg_color(i,Color(0.15, 0.15, 0.15, 1),false)
+				#table_line.set_custom_color(i,Color(1,1,1,1))

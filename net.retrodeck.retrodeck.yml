@@ -4,8 +4,6 @@ runtime-version: "6.7"
 sdk: org.kde.Sdk
 base: org.electronjs.Electron2.BaseApp            # Needed for Steam ROM Manager
 base-version: "22.08"
-sdk-extensions:
-  - org.freedesktop.Sdk.Extension.llvm18        # Needed for RPCS3
 command: retrodeck.sh
 
 base: org.winehq.Wine
@@ -165,6 +163,7 @@ modules:
         sha256: af986793a515d500ab2d35f8d2aecd656e764504b789b66d7e1a0b727a124c44
 
   # Steam ROM Manager - START
+  # https://github.com/flathub/com.steamgriddb.steam-rom-manager
 
   - name: zypak
     sources:
@@ -179,14 +178,13 @@ modules:
         IN_FLATPAK: 1
     build-commands:
       - install -D run.sh ${FLATPAK_DEST}/bin/steam-rom-manager
-      - cp /usr/bin/ar ${FLATPAK_DEST}/bin
-      - ar x srm.deb
+      - bsdtar -xf srm.deb data.tar.xz
       - tar xf data.tar.xz
       - mv "opt/Steam ROM Manager" "${FLATPAK_DEST}/srm"
       - rm -rf "usr/share/icons/hicolor/1024x1024"
       - cd usr; find share/icons/hicolor -type f -exec install -Dm644 "{}"
         "${FLATPAK_DEST}/{}" \;
-      - rm -r srm.deb control.tar.* data.tar.xz debian-binary usr opt
+      - rm -r srm.deb data.tar.xz usr opt
     sources:
       - type: script
         dest-filename: run.sh
@@ -194,8 +192,8 @@ modules:
           - /app/bin/zypak-wrapper.sh /app/srm/steam-rom-manager "${@}"
       - type: file
         dest-filename: srm.deb
-        url: https://github.com/SteamGridDB/steam-rom-manager/releases/download/v2.4.19/steam-rom-manager_2.4.19_amd64.deb
-        sha256: aa4f121d50612801c30b9365e05cb92a3b4a9c402974fee2b88652de8d731b0e
+        url: https://github.com/SteamGridDB/steam-rom-manager/releases/download/v2.5.29/steam-rom-manager_2.5.29_amd64.deb
+        sha256: a85369ad8b758551b74755ddb712c6bd72311693971065c9bcec1dcdec53f54a
         x-checker-data:
           type: json
           url: https://api.github.com/repos/SteamGridDB/steam-rom-manager/releases/latest
@@ -255,8 +253,9 @@ modules:
       - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
     sources:
       - type: archive
-        url: https://buildbot.libretro.com/nightly/linux/x86_64/RetroArch.7z
-        sha256: RASHAPLACEHOLDER
+        url: https://buildbot.libretro.com/stable/1.19.1/linux/x86_64/RetroArch.7z
+        #sha256: RASHAPLACEHOLDER
+        sha256: f98e954e99aef7b4b1a3334d710856b997c3f97c5451d33af9e5c88bf63213f8
 
   # Not part of the offical RetroArch AppImage
 
@@ -288,6 +287,16 @@ modules:
         url: https://buildbot.libretro.com/nightly/linux/x86_64/RetroArch_cores.7z
         sha256: RANIGHTLYCORESPLACEHOLDER
 
+  # Citra is removed from the LibretroCores but is still available in Libretro repo
+  - name: citra-libretro-core
+    buildsystem: simple
+    build-commands:
+      - cp citra_libretro.so ${FLATPAK_DEST}/share/libretro/cores/
+    sources:
+      - type: archive
+        url: https://buildbot.libretro.com/nightly/linux/x86_64/latest/citra_libretro.so.zip
+        sha256: RACITRAPLACEHOLDER
+
   - name: retroarch-cores
     buildsystem: simple
     build-commands:
@@ -295,8 +304,8 @@ modules:
       - cp -rf ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* ${FLATPAK_DEST}/share/libretro/cores/
     sources:
       - type: archive
-        url: https://buildbot.libretro.com/stable/1.17.0/linux/x86_64/RetroArch_cores.7z
-        sha256: 1c1d61f86b196e9f89c1a93d0756fba95b60ef3ba57a7cd1d1e86dfd419c766b
+        url: https://buildbot.libretro.com/stable/1.19.1/linux/x86_64/RetroArch_cores.7z
+        sha256: fe75e7e796e29933ab31e4a58f072a1a47ea155b477988a48f33b0f4addc9d49
     
   - name: retroarch-sameduck-core
     buildsystem: simple
@@ -310,8 +319,8 @@ modules:
   - name: ppsspp-bios
     buildsystem: simple
     build-commands:
-    - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/PPSSPP
-    - cp -r assets/* ${FLATPAK_DEST}/retrodeck/extras/PPSSPP/
+      - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/PPSSPP
+      - cp -r assets/* ${FLATPAK_DEST}/retrodeck/extras/PPSSPP/
     sources:
       - type: archive
         url: https://github.com/hrydgard/ppsspp/archive/refs/heads/master.zip
@@ -347,11 +356,12 @@ modules:
   - name: retrodeck-ppsspp
     buildsystem: simple
     build-commands:
+      - rm -f "files/manifest.json"
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
-      - cp -rL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - "cp -rnL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib || echo 'Warning: Some files could not be copied, but the build will continue.'"
       - rm -rf "files/lib"
+      - chmod +x "files/bin/"*
       - cp -r files/* "${FLATPAK_DEST}"
-      - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
         url: https://github.com/RetroDECK/org.ppsspp.PPSSPP/releases/latest/download/RetroDECK-PPSSPP-Artifact.tar.gz
@@ -371,8 +381,8 @@ modules:
       - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
     sources:
       - type: file
-        url: https://github.com/PCSX2/pcsx2/releases/download/v2.1.55/pcsx2-v2.1.55-linux-appimage-x64-Qt.AppImage
-        sha256: d08ae2fdfc1bc3a4bd264b62ceda02f1e2de87c704ee1f464e5ce52073998e33
+        url: https://github.com/PCSX2/pcsx2/releases/download/v2.3.53/pcsx2-v2.3.53-linux-appimage-x64-Qt.AppImage
+        sha256: a909ec179a2b1bac85625a32eaa6eae2adbfa4985a2be9a525a58e80fc1f57b5
 
   # Dolphin
   # why from source: AppImage not provided, only Flatpak
@@ -381,13 +391,14 @@ modules:
   - name: retrodeck-dolphin
     buildsystem: simple
     build-commands:
+      - rm -f "files/manifest.json"
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
-      - cp -r "files/lib/debug" "${FLATPAK_DEST}/retrodeck/tmplib"
+      - "cp -rnL files/lib/debug ${FLATPAK_DEST}/retrodeck/tmplib || echo 'Warning: Some files could not be copied, but the build will continue.'"
       - rm -rf "files/lib/debug"
-      - cp -rL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - "cp -rnL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib || echo 'Warning: Some files could not be copied, but the build will continue.'"
       - rm -rf "files/lib"
+      - chmod +x "files/bin/"*
       - cp -r files/* "${FLATPAK_DEST}"
-      - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
         url: https://github.com/RetroDECK/org.DolphinEmu.dolphin-emu/releases/latest/download/RetroDECK-dolphin-Artifact.tar.gz
@@ -399,14 +410,15 @@ modules:
   - name: retrodeck-primehack
     buildsystem: simple
     build-commands:
+      - rm -f "files/manifest.json"
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
       - rm -rf "files/lib/pkgconfig"
-      - cp -rL "files/lib/debug" "${FLATPAK_DEST}/retrodeck/tmplib"
+      - "cp -rnL files/lib/debug ${FLATPAK_DEST}/retrodeck/tmplib || echo 'Warning: Some files could not be copied, but the build will continue.'"
       - rm -rf "files/lib/debug"
-      - cp -rL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - "cp -rnL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib || echo 'Warning: Some files could not be copied, but the build will continue.'"
       - rm -rf "files/lib"
+      - chmod +x "files/bin/"*
       - cp -r files/* "${FLATPAK_DEST}"
-      - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
         url: https://github.com/RetroDECK/io.github.shiiion.primehack/releases/latest/download/RetroDECK-primehack-Artifact.tar.gz
@@ -415,43 +427,58 @@ modules:
   # RPCS3
   # https://rpcs3.net/download
 
-  - name: rpcs3
+  # - name: rpcs3
+  #   buildsystem: simple
+  #   build-commands:
+  #     - chmod +x *.AppImage
+  #     - ./*.AppImage --appimage-extract
+  #     - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug" 
+  #     - mkdir -p ${FLATPAK_DEST}/lib/ffmpeg   # Needed for a ffmpeg bufgix
+  #     - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+  #     - cp -r "squashfs-root/usr/bin/"* "${FLATPAK_DEST}/bin/"
+  #     - cp -r "squashfs-root/usr/share/"* "${FLATPAK_DEST}/share/"
+  #     #TODO: - cp -r squashfs-root/usr/optional* # maybe already included in flatpak runtime
+  #     #TODO: - cp -r squashfs-root/usr/plugins* # maybe already included in qt
+  #     #TODO: Do we need this wrapper? squashfs-root/apprun-hooks/linuxdeploy-plugin-qt-hook.sh
+  #   sources:
+  #     - type: file
+  #       url: https://github.com/RPCS3/rpcs3-binaries-linux/releases/download/build-cd8954db140855101d94a33c0dd7f4d72bdf5a35/rpcs3-v0.0.33-17066-cd8954db_linux64.AppImage
+  #       sha256: 2d258b557c17ebba4bea927be4032cfcbc230c26b8f090b796daa5935faa4a8b
+
+  - name: retrodeck-rpcs3
     buildsystem: simple
     build-commands:
-      - chmod +x *.AppImage
-      - ./*.AppImage --appimage-extract
-      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug" 
-      - mkdir -p ${FLATPAK_DEST}/lib/ffmpeg   # Needed for a ffmpeg bufgix
-      - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
-      - cp -r "squashfs-root/usr/bin/"* "${FLATPAK_DEST}/bin/"
-      - cp -r "squashfs-root/usr/share/"* "${FLATPAK_DEST}/share/"
-      #TODO: - cp -r squashfs-root/usr/optional* # maybe already included in flatpak runtime
-      #TODO: - cp -r squashfs-root/usr/plugins* # maybe already included in qt
-      #TODO: Do we need this wrapper? squashfs-root/apprun-hooks/linuxdeploy-plugin-qt-hook.sh
+      - rm -f "files/manifest.json"
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
+      - "cp -rnL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib || echo 'Warning: Some files could not be copied, but the build will continue.'"
+      - rm -rf "files/lib"
+      - chmod +x "files/bin/"*
+      - cp -r files/* "${FLATPAK_DEST}"
     sources:
-      - type: file
-        url: https://github.com/RPCS3/rpcs3-binaries-linux/releases/download/build-ebcb4034119955991a17210af2a45a672fc9533d/rpcs3-v0.0.32-16685-ebcb4034_linux64.AppImage
-        sha256: 2553d56e01a3e3058fa9ceb4e1d61a07eaf2c5bba9e96b29e8923914d89f6e17
+      - type: archive
+        url: https://github.com/RetroDECK/net.rpcs3.RPCS3/releases/latest/download/RetroDECK-Artifact.tar.gz
+        sha256: RETRODECKRPCS3LATEST
 
   # MELONDS
-  # https://github.com/melonDS-emu/melonDS/releases/latest
+  # https://github.com/RetroDECK/net.kuribo64.melonDS
 
   - name: melonds
     buildsystem: simple
     build-commands:
       - rm -f "files/manifest.json"
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib/"
-      - cp -rL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib/"
+      - "cp -rnL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib || echo 'Warning: Some files could not be copied, but the build will continue.'"
       - rm -rf "files/lib"
+      - chmod +x "files/bin/"*
       - cp -r files/* "${FLATPAK_DEST}/"
-      - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
         url: https://github.com/RetroDECK/net.kuribo64.melonDS/releases/latest/download/RetroDECK-melonds-Artifact.tar.gz
         sha256: RETRODECKMELONDSLATEST
 
   # Duckstation
-  # https://github.com/stenzek/duckstation/releases/tag/preview
+  # Do not update: Legacy
+  # https://github.com/RetroDECK/Duckstation
 
   - name: duckstation
     buildsystem: simple
@@ -463,8 +490,8 @@ modules:
       - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
     sources:
       - type: file
-        url: https://github.com/stenzek/duckstation/releases/download/v0.1-6937/DuckStation-x64.AppImage
-        sha256: 8a16f034cc8b11341ed9ad382226549301736794582bdec46a5e19b3ca981e07
+        url: https://github.com/RetroDECK/Duckstation/releases/download/preview/DuckStation-x64.AppImage
+        sha256: 84777a8d0fce9acfc2ffe6a8aea352bd68a8a37f5c793d328dbaa4ff5ada5e6d
 
   # Cemu
   # https://github.com/cemu-project/Cemu/releases
@@ -482,8 +509,8 @@ modules:
       #TODO: do we need this wrapper? squashfs-root/apprun-hooks/linuxdeploy-plugin-gtk.sh
     sources:
       - type: file
-        url: https://github.com/cemu-project/Cemu/releases/download/v2.0-88/Cemu-2.0-88-x86_64.AppImage
-        sha256: 1af1ad5322df5fa0e2a97588c7486604daf42deb8c4d07a2b885047d9701fed0
+        url: https://github.com/cemu-project/Cemu/releases/download/v2.2/Cemu-2.2-x86_64.AppImage
+        sha256: 05ad07e3b2fb60f9c19f84c7d65c4e978bc2cf58b4b53d39fca0376227900c27
       - type: script
         commands:
           - |
@@ -522,11 +549,12 @@ modules:
   - name: retrodeck-solarus
     buildsystem: simple
     build-commands:
+      - rm -f "files/manifest.json"
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
       #- cp -r "files/lib/debug/lib/*" "${FLATPAK_DEST}/retrodeck/tmplib/debug/"
       - rm -rf "files/lib/debug" "files/lib/pkgconfig"
-      - cp -rL files/* "${FLATPAK_DEST}"
-      - chmod +x "${FLATPAK_DEST}/bin/"*
+      - chmod +x "files/bin/"*
+      - "cp -rnL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib || echo 'Warning: Some files could not be copied, but the build will continue.'"
     sources:
       - type: archive
         url: https://github.com/RetroDECK/org.solarus_games.solarus.Launcher/releases/latest/download/RetroDECK-solarus-Artifact.tar.gz
@@ -539,32 +567,33 @@ modules:
   - name: retrodeck-gzdoom
     buildsystem: simple
     build-commands:
+      - rm -f "files/manifest.json"
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
       - rm -rf "files/lib/cmake" "files/lib/pkgconfig" "files/lib/debug"
-      - cp -rL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - "cp -rnL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib || echo 'Warning: Some files could not be copied, but the build will continue.'"
       - rm -rf "files/lib"
+      - chmod +x "files/bin/"*
       - cp -r files/* "${FLATPAK_DEST}"
-      - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
         url: https://github.com/RetroDECK/org.zdoom.GZDoom/releases/latest/download/RetroDECK-gzdoom-Artifact.tar.gz
         sha256: RETRODECKGZDOOMLATEST
 
-  # Ryujinx Appimage
-  # https://ryujinx.org/download
+  # Pancakes
 
-  # This version was reported as working with symlinks: https://discord.com/channels/951662718102962256/951715885968654418/1264882000658169866
-  - name: Ryujinx-reported-working-version
+  - name: Pancakes
     buildsystem: simple
     build-commands:
-      - |
-        tar -zxvf *.tar.gz
-        mv -v publish ${FLATPAK_DEST}/ryujinx
-        ln -sv ${FLATPAK_DEST}/ryujinx/Ryujinx ${FLATPAK_DEST}/bin/Ryujinx.sh
+      - mkdir -p "${FLATPAK_DEST}"
+      - mv *.so* "${FLATPAK_DEST}/retrodeck/tmplib/"
+      - mv R*x* "${FLATPAK_DEST}/bin/"
+      - chmod +x "${FLATPAK_DEST}/bin/"R*x*
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/licenses"
+      - mv LICENSE.txt "${FLATPAK_DEST}/retrodeck/licenses"
     sources:
-      - type: file
-        url: https://github.com/Ryujinx/release-channel-master/releases/download/1.1.1297/ryujinx-1.1.1297-linux_x64.tar.gz
-        sha256: 28b38754e7d2e92083b313b23278c180ae54ac025edbbd0276ec03baec0cec0f
+      - type: archive
+        url: https://github.com/RetroDECK/Pancakes-bin/releases/download/1.1.0.1403/pancakes-Release-linux_x64.tar.gz
+        sha256: 68b1602c99c5e5b743a1362eaf428ee88b237bd5029aede00d342fa8d79b8f27
 
   # XEMU
   # https://xemu.app/docs/download/#download-for-linux
@@ -579,8 +608,8 @@ modules:
       - cp -r squashfs-root/usr/* "${FLATPAK_DEST}/"
     sources:
       - type: file
-        url: https://github.com/xemu-project/xemu/releases/download/v0.7.129/xemu-v0.7.129-x86_64.AppImage
-        sha256: f680774d96a66bf1195cd133497755d43be5eda5f178457a6df32bc691dd8c74
+        url: https://github.com/xemu-project/xemu/releases/download/v0.7.132/xemu-v0.7.132-x86_64.AppImage
+        sha256: c11821d6d0632da3c51a354e9101f68e5ab2ae0e2512c6aa6c8453aef56cedba
 
   - name: xemu-dummy-hdd
     buildsystem: simple
@@ -638,13 +667,11 @@ modules:
       - type: script
         commands:
           - |
-            #!/bin/bash
             "/var/data/PortMaster/PortMaster.sh" "$@"
         dest-filename: PortMaster
       - type: script
         commands:
           - |
-            #!/bin/bash
             "/var/data/PortMaster/harbourmaster" "$@"
         dest-filename: harbourmaster
 
@@ -653,11 +680,13 @@ modules:
   - name: ES-DE
     buildsystem: simple
     build-commands:
+      - rm -f "files/manifest.json"
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
-      - cp -rL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - cp -rfL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib
+      - cp -rfL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib
       - rm -rf "files/lib"
+      - chmod +x "files/bin/"*
       - cp -r files/* "${FLATPAK_DEST}"
-      - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
         url: https://github.com/RetroDECK/ES-DE/releases/download/feat%2Fxenia-190924.46/RetroDECK-ES-DE-Artifact.tar.gz
@@ -673,10 +702,11 @@ modules:
     sources:
       - type: git
         url:  https://github.com/RetroDECK/RetroDECK-theme
-        commit: 975c41cac99d150b6ae86a1dfd19988058c69aad
+        commit: b02e8398b20bbd4a20f51bd4d7bfcc8db7f40a92
 
   # RUFFLE - START
   # https://github.com/ruffle-rs/ruffle/releases
+  
   - name: ruffle
     buildsystem: simple
     build-commands:
@@ -686,8 +716,8 @@ modules:
     sources:
       - type: archive
         strip-components: 0
-        url: https://github.com/ruffle-rs/ruffle/releases/download/nightly-2024-08-09/ruffle-nightly-2024_08_09-linux-x86_64.tar.gz
-        sha256: d2c4c77d8426da6df8dc8b2a57565c151146464a8eec605d5faa68a297d8cad6
+        url: https://github.com/ruffle-rs/ruffle/releases/download/nightly-2024-10-29/ruffle-nightly-2024_10_29-linux-x86_64.tar.gz
+        sha256: 5ab0fc46b07d022d4b0ff355e88175cd77b8bb1663612f31d160f8001dc472bb
 
   # XENIA CANARY
   - name: xenia-canary
@@ -709,43 +739,59 @@ modules:
     buildsystem: simple
     build-commands:
       - |
-          # Search for missingl ibraries in our libtmp folder
-          missing_libs=$(find "${FLATPAK_DEST}/bin" -type f -exec ldd {} + 2>/dev/null | grep "not found" | awk '{print $1}' | sort | uniq)
+          # Search for missing libraries in our libtmp folder
+          missing_libs=$(find /app/bin -type f -exec ldd {} + 2>/dev/null | grep 'not found' | awk '$1 ~ /\.so/ {print $1}' | sort | uniq)
+          echo $missing_libs
           
-          # for some reason these libraries are not recognized as missing so we mantain this list
-          manually_imported="libpostproc.so.56 libswscale.so.6 libshaderc_shared.so.1 libbz2.so.1.0 libaio.so.1 ld-linux.so.2"
-
+          # Manually specified libraries that are not automatically detected
+          manually_imported="libpostproc.so.56 libswscale.so.6 libshaderc_shared.so.1 libbz2.so.1.0 libaio.so.1 ld-linux.so.2 libvpx.so.9 libzmusic.so.1 libicuuc.so.73 libLLVM.so.18.1"
+          
+          # Combine detected missing libraries and manually specified ones
           missing_libs="$missing_libs $manually_imported"
+          echo "Missing libs and manually imported: $missing_libs"
 
-          # Origin paths
+          # Source paths
           src_dir="${FLATPAK_DEST}/retrodeck/tmplib"
           src_debug_dir="${FLATPAK_DEST}/retrodeck/tmplib/debug"
 
-          # Destionation paths
+          # Destination paths
           dest_dir="${FLATPAK_DEST}/lib"
           dest_debug_dir="${FLATPAK_DEST}/retrodeck/lib/debug"
           
-          mkdir -p "$dest_dir" "dest_debug_dir" 
+          mkdir -p "$dest_dir" "$dest_debug_dir" 
 
           copy_missing_libs() {
             local src=$1
-            local dest=$2
+            local src_debug=$2
+            local dest=$3
             for lib in $missing_libs; do
               if [[ -f "$src/$lib" ]]; then
-                cp "$src/$lib" "$dest"
-                echo "Copied \"$lib\" to \"$dest\""
+                cp "$src/$lib" "$dest" && echo "Copied \"$lib\" to \"$dest\"" || echo "Error copying \"$lib\""
+              elif [[ -f "$src_debug/$lib.debug" ]]; then
+                cp "$src_debug/$lib.debug" "$dest" && echo "Copied debug version of \"$lib\" to \"$dest\"" || echo "Error copying debug version of \"$lib\""
+              else
+                echo "Library \"$lib\" not found in \"$src\" or \"$src_debug\""
               fi
             done
           }
 
-          copy_missing_libs "$src_dir" "$dest_dir"
+          # Copy libraries from source to destination
+          copy_missing_libs "$src_dir" "$src_debug_dir" "$dest_dir"
           copy_missing_libs "$src_debug_dir" "$dest_debug_dir"
 
+          # Remove temporary source directory to free up space
           rm -rf "$src_dir"
 
   - name: retrodeck
     buildsystem: simple
     build-commands:
+
+      # This prevents appstream-compose to fail
+      - | 
+        if [ -d ${FLATPAK_DEST}/usr ]; then
+          mv -n ${FLATPAK_DEST}/usr/** ${FLATPAK_DEST}/share
+          rm -rf ${FLATPAK_DEST}/usr
+        fi
 
       # Initializing RO retrodeck config folder
       - mkdir -p ${FLATPAK_DEST}/retrodeck
@@ -803,6 +849,9 @@ modules:
       # RUFFLE wrapper
       - cp config/ruffle/ruffle-rdwrapper.sh "${FLATPAK_DEST}/bin/ruffle-rdwrapper.sh"
       - chmod +x "${FLATPAK_DEST}/bin/ruffle-rdwrapper.sh"
+
+      # Install MIME Type
+      - install -Dm 644 config/retrodeck/net.retrodeck.retrodeck.mime.xml /app/share/mime/packages/net.retrodeck.retrodeck.mime.xml
 
     sources:
       - type: git

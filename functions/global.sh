@@ -6,11 +6,16 @@
 # now disabled as we are importing everything in /app/lib. In case we are breaking something we need to restore this approach
 # export LD_LIBRARY_PATH="/app/retrodeck/lib:/app/retrodeck/lib/debug:/app/retrodeck/lib/pkgconfig:$LD_LIBRARY_PATH"
 
+: "${logging_level:=info}"                  # Initializing the log level variable if not already valued, this will be actually red later from the config file                                                 
+rd_logs_folder="/var/config/retrodeck/logs" # Static location to write all RetroDECK-related logs
+source /app/libexec/logger.sh
+rotate_logs
+log i "Initializing RetroDECK"
+
 source /app/libexec/050_save_migration.sh
 source /app/libexec/checks.sh
 source /app/libexec/compression.sh
 source /app/libexec/dialogs.sh
-source /app/libexec/logger.sh
 source /app/libexec/other_functions.sh
 source /app/libexec/multi_user.sh
 source /app/libexec/framework.sh
@@ -23,7 +28,6 @@ source /app/libexec/run_game.sh
 # Static variables
 rd_conf="/var/config/retrodeck/retrodeck.cfg"                                                            # RetroDECK config file path
 rd_conf_backup="/var/config/retrodeck/retrodeck.bak"                                                     # Backup of RetroDECK config file from update
-rd_logs_folder="/var/config/retrodeck/logs"                                                              # Static location to write all RetroDECK-related logs
 config="/app/retrodeck/config"                                                                           # folder with all the default emulator configs
 rd_defaults="$config/retrodeck/retrodeck.cfg"                                                            # A default RetroDECK config file
 rd_update_patch="/var/config/retrodeck/rd_update.patch"                                                  # A static location for the temporary patch file used during retrodeck.cfg updates
@@ -54,7 +58,7 @@ cooker_repository_name="Cooker"                                                 
 main_repository_name="RetroDECK"                                                                         # The name of the main repository under RetroDECK organization
 features="$config/retrodeck/reference_lists/features.json"                                               # A file where all the RetroDECK and component capabilities are kept for querying
 es_systems="/app/share/es-de/resources/systems/linux/es_systems.xml"                                     # ES-DE supported system list   
-es_find_rules="/app/share/es-de/resources/systems/linux/es_find_rules.xml"                               # ES-DE emulator find rules                                                  
+es_find_rules="/app/share/es-de/resources/systems/linux/es_find_rules.xml"                               # ES-DE emulator find rules
 
 
 # Godot data transfer temp files
@@ -137,9 +141,6 @@ mamedefconf="/var/config/mame/cfg/default.cfg"
 # Initialize logging location if it doesn't exist, before anything else happens
 if [ ! -d "$rd_logs_folder" ]; then
     create_dir "$rd_logs_folder"
-fi
-if [[ ! -d "$rd_logs_folder/ES-DE" ]]; then
-    dir_prep "$rd_logs_folder/ES-DE" "$es_source_logs"
 fi
 
 # Initialize location of Godot temp data files, if it doesn't exist
@@ -226,4 +227,6 @@ else
   multi_user_data_folder="$rdhome/multi-user-data"                                                                      # The default location of multi-user environment profiles
 fi
 
-logs_folder="$rdhome/logs" # The path of the logs folder, here we collect all the logs
+logs_folder="$rdhome/logs"                # The path of the logs folder, here we collect all the logs
+steamsync_folder="$rdhome/.sync"          # Folder containing all the steam sync launchers for SRM
+steamsync_folder_tmp="$rdhome/.sync-tmp"  # Temp folder containing all the steam sync launchers for SRM

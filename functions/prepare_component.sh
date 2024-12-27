@@ -67,9 +67,7 @@ prepare_component() {
       dir_prep "$rdhome/ES-DE/gamelists" "/var/config/ES-DE/gamelists"
       dir_prep "$rdhome/ES-DE/collections" "/var/config/ES-DE/collections"
       dir_prep "$rdhome/ES-DE/custom_systems" "/var/config/ES-DE/custom_systems"
-      dir_prep "$rd_logs_folder/ES-DE" "$es_source_logs"
       log d "Generating roms system folders"
-      #es-de --home /var/config/ES-DE --create-system-dirs
       es-de --create-system-dirs
       update_splashscreens
     fi
@@ -95,6 +93,10 @@ prepare_component() {
     log i "Updating steamDirectory and romDirectory lines in $srm_userdata/userSettings.json"
     jq '.environmentVariables.steamDirectory = "'$HOME'/.steam/steam"' "$srm_userdata/userSettings.json" > "$srm_userdata/tmp.json" && mv -f "$srm_userdata/tmp.json" "$srm_userdata/userSettings.json"
     jq '.environmentVariables.romsDirectory = "'$rdhome'/.sync"' "$srm_userdata/userSettings.json" > "$srm_userdata/tmp.json" && mv -f "$srm_userdata/tmp.json" "$srm_userdata/userSettings.json"
+
+    get_steam_user
+    populate_steamuser_srm
+    
   fi
 
   if [[ "$component" =~ ^(retroarch|all)$ ]]; then
@@ -897,6 +899,9 @@ prepare_component() {
     chmod +x "/var/data/PortMaster/PortMaster.sh"
     rm -f "$roms_folder/portmaster/PortMaster.sh"
     install -Dm755 "/var/data/PortMaster/PortMaster.sh" "$roms_folder/portmaster/PortMaster.sh"
+    create_dir "/var/data/PortMaster/config/"
+    cp "$config/portmaster/config.json" "/var/data/PortMaster/config/config.json"
+
   fi
 
   if [[ "$component" =~ ^(ruffle|all)$ ]]; then

@@ -118,7 +118,7 @@
 <string name="ApplicationUpdaterFrequency" value="never" />
 <string name="ApplicationUpdaterLastCheck" value="20230331T153206" />
 <string name="CollectionCustomGrouping" value="unthemed" />
-<string name="CollectionSystemsAuto" value="recent" />
+<string name="CollectionSystemsAuto" value="favorites,recent" />
 <string name="CollectionSystemsCustom" value="" />
 <string name="DefaultSortOrder" value="name, ascending" />
 <string name="GamelistViewStyle" value="automatic" />
