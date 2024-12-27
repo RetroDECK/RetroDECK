@@ -116,7 +116,7 @@ configurator_welcome_dialog() {
     "RetroDECK: Tools" "Compress games, move RetroDECK and install optional features" \
     "RetroDECK: Troubleshooting" "Backup data, perform BIOS / multi-disc file checks and emulator resets" \
     "RetroDECK: About" "Show additional information about RetroDECK" \
-    "Sync with Steam" "Sync all favorited games with Steam" \
+    "Steam Sync" "Sync all favorited games with Steam" \
     "Developer Options" "Welcome to the DANGER ZONE")
   else
     welcome_menu_options=("Presets & Settings" "Here you find various presets, tweaks and settings to customize your RetroDECK experience" \
@@ -158,7 +158,7 @@ configurator_welcome_dialog() {
     configurator_about_retrodeck_dialog
   ;;
 
-  "Sync with Steam" )
+  "Steam Sync" )
     configurator_add_steam
   ;;
 
