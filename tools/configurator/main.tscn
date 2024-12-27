@@ -1,6 +1,5 @@
 [gd_scene load_steps=135 format=3 uid="uid://61f6m4r1mpan"]
 
-[ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
 [ext_resource type="Theme" uid="uid://hhc60cllcg47" path="res://assets/themes/default_theme.tres" id="1_if8nh"]
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_obpq7"]
 [ext_resource type="Script" path="res://scripts/TabContainer.gd" id="3_id6l4"]
@@ -105,6 +104,7 @@
 [ext_resource type="Texture2D" uid="uid://cb2hwhaq036mu" path="res://assets/graphics/rekku2/rekku_mouth_a.png" id="61_5vyvy"]
 [ext_resource type="Texture2D" uid="uid://dl2fd66fvn1an" path="res://assets/graphics/rekku2/rekku_mouth_i.png" id="62_lji1k"]
 [ext_resource type="Texture2D" uid="uid://3ktnkmuecxea" path="res://assets/graphics/rekku2/rekku_mouth_m.png" id="63_52v81"]
+[ext_resource type="Texture2D" uid="uid://dcdlrjx1d5nu3" path="res://icon_retrodeck.svg" id="64_qcmnc"]
 [ext_resource type="Texture2D" uid="uid://d08ngewjvxkmn" path="res://assets/graphics/rekku2/rekku_mouth_o.png" id="64_s8u0e"]
 [ext_resource type="Texture2D" uid="uid://dieva7tuxjrvy" path="res://assets/graphics/rekku2/rekku_nomouth.png" id="65_kk8ba"]
 [ext_resource type="Script" path="res://scripts/controller_guide.gd" id="68_ahvw4"]
@@ -272,7 +272,7 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_styles/tab_selected = SubResource("StyleBoxFlat_co0k7")
 tab_alignment = 1
-current_tab = 2
+current_tab = 1
 script = ExtResource("3_id6l4")
 
 [node name="Presets" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
@@ -475,7 +475,6 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_1161k")
 show_percentage = false
 
 [node name="SYSTEMS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
-visible = false
 layout_mode = 2
 script = ExtResource("36_wv31h")
 metadata/_tab_index = 1
@@ -745,6 +744,7 @@ alignment = 1
 expand_icon = true
 
 [node name="TOOLS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
 script = ExtResource("50_wqa5h")
 metadata/_tab_index = 2
@@ -896,17 +896,16 @@ alignment = 1
 icon_alignment = 1
 vertical_icon_alignment = 0
 selected = 0
-item_count = 4
+item_count = 3
 popup/item_0/text = "LOGS"
 popup/item_0/icon = ExtResource("52_1rasc")
 popup/item_0/disabled = true
 popup/item_0/separator = true
 popup/item_1/text = "RetroDECK Log"
 popup/item_1/id = 1
-popup/item_2/text = "ES_DE Log"
-popup/item_2/id = 2
-popup/item_3/text = "Retroarch"
-popup/item_3/id = 3
+popup/item_2/text = "Retroarch"
+popup/item_2/icon = ExtResource("4_xcuib")
+popup/item_2/id = 3
 
 [node name="bios_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/troubleshoot_gridcontainer"]
 custom_minimum_size = Vector2(0, 100)
@@ -1510,7 +1509,7 @@ offset_right = 294.0
 offset_bottom = 114.0
 size_flags_horizontal = 4
 size_flags_vertical = 0
-texture = ExtResource("1_axfei")
+texture = ExtResource("64_qcmnc")
 expand_mode = 1
 stretch_mode = 4
 

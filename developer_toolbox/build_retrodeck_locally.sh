@@ -24,7 +24,7 @@ cp net.retrodeck.retrodeck.yml net.retrodeck.retrodeck.yml.bak
 if [[ -f "net.retrodeck.retrodeck.cached.yml" ]]; then
     read -rp "A cached manifest file with placeholder substitutions already exists. Do you want to use it? [y/N] " use_cached
     if [[ "${use_cached,,}" == "y" ]]; then
-        cp net.retrodeck.retrodeck.cached.yml net.retrodeck.retrodeck.yml
+        mv -f net.retrodeck.retrodeck.cached.yml net.retrodeck.retrodeck.yml
     else
         use_cached="n"
     fi
@@ -44,7 +44,5 @@ automation_tools/flatpak_build_download_only.sh
 automation_tools/flatpak_build_only.sh "${@}"
 automation_tools/flatpak_build_bundle.sh
 
-rm -f net.retrodeck.retrodeck.appdata.xml 
-rm -f net.retrodeck.retrodeck.yml
-cp net.retrodeck.retrodeck.appdata.xml.bak net.retrodeck.retrodeck.appdata.xml
-cp net.retrodeck.retrodeck.yml.bak net.retrodeck.retrodeck.yml
+mv -f net.retrodeck.retrodeck.appdata.xml.bak net.retrodeck.retrodeck.appdata.xml
+mv -f net.retrodeck.retrodeck.yml.bak net.retrodeck.retrodeck.yml

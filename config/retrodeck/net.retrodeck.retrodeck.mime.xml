@@ -61,7 +61,6 @@
 		<glob pattern="*.cof"/>
 		<glob pattern="*.col"/>
 		<glob pattern="*.com"/>
-		<glob pattern="*.conf"/>
 		<glob pattern="*.cpr"/>
 		<glob pattern="*.cqi"/>
 		<glob pattern="*.cqm"/>
