@@ -34,7 +34,9 @@ source /app/libexec/global.sh
 #       - MelonDS
 #       - PCSX2
 #       - PPSSPP
+#       - PortMaster
 #       - Primehack
+#       - Ruffle
 #       - RPCS3
 #       - Ryujinx
 #       - Vita3K
@@ -82,7 +84,9 @@ source /app/libexec/global.sh
 #           - Reset MelonDS
 #           - Reset PCSX2
 #           - Reset PPSSPP
+#           - Reset PortMaster
 #           - Reset Primehack
+#           - Reset Ruffle
 #           - Reset RPCS3
 #           - Reset Ryujinx
 #           - Reset Vita3k
@@ -96,7 +100,7 @@ source /app/libexec/global.sh
 #         - Full changelog
 #         - Version-specific changelogs
 #       - RetroDECK Credits
-#     - Add to Steam
+#     - Steam Sync
 #     - Developer Options (Hidden)
 #       - Change Multi-user mode
 #       - Install Specific Release
@@ -114,7 +118,7 @@ configurator_welcome_dialog() {
     "RetroDECK: Tools" "Compress games, move RetroDECK and install optional features" \
     "RetroDECK: Troubleshooting" "Backup data, perform BIOS / multi-disc file checks and emulator resets" \
     "RetroDECK: About" "Show additional information about RetroDECK" \
-    "Sync with Steam" "Sync all favorited games with Steam" \
+    "Steam Sync" "Sync all favorited games with Steam" \
     "Developer Options" "Welcome to the DANGER ZONE")
   else
     welcome_menu_options=("Presets & Settings" "Here you find various presets, tweaks and settings to customize your RetroDECK experience" \
@@ -156,7 +160,7 @@ configurator_welcome_dialog() {
     configurator_about_retrodeck_dialog
   ;;
 
-  "Sync with Steam" )
+  "Steam Sync" )
     configurator_add_steam
   ;;
 
@@ -446,9 +450,12 @@ configurator_open_emulator_dialog() {
     "MelonDS" "Open the NDS emulator MelonDS"
     "PCSX2" "Open the PS2 emulator PSXC2"
     "PPSSPP" "Open the PSP emulator PPSSPP"
+    "PortMaster" "Open PortMaster to manage your ports, even available from games list under PortMaster system"
     "Primehack" "Open the Metroid Prime emulator Primehack"
+    "Ruffle" "Open the Flash emulator Ruffle"
     "RPCS3" "Open the PS3 emulator RPCS3"
     "Ryujinx" "Open the Switch emulator Ryujinx"
+    "Steam ROM Manager" "Open Steam ROM Manager"
     "Vita3K" "Open the PSVita emulator Vita3K"
     "XEMU" "Open the Xbox emulator XEMU"
   )
@@ -516,9 +523,19 @@ configurator_open_emulator_dialog() {
     PPSSPPSDL
   ;;
 
+  "PortMaster" )
+    log i "Configurator: \"$emulator\""
+    PortMaster
+  ;;
+
   "Primehack" )
     log i "Configurator: \"$emulator\""
     primehack-wrapper
+  ;;
+
+  "Ruffle" )
+    log i "Configurator: \"$emulator\""
+    ruffle
   ;;
 
   "RPCS3" )
@@ -529,6 +546,11 @@ configurator_open_emulator_dialog() {
   "Ryujinx" )
     log i "Configurator: \"$emulator\""
     Ryujinx.sh
+  ;;
+
+  "Steam ROM Manager" )
+    log i "Configurator: \"$emulator\""
+    steam-rom-manager
   ;;
 
   "Vita3K" )
@@ -1090,9 +1112,11 @@ configurator_reset_dialog() {
     "MelonDS" "Reset the NDS emulator MelonDS to default settings"
     "PCSX2" "Reset the PS2 emulator PCSX2 to default settings"
     "PPSSPP" "Reset the PSP emulator PPSSPP to default settings"
+    "PortMaster" "Reset PortMaster to default settings"
     "Primehack" "Reset the Metroid Prime emulator Primehack to default settings"
     "RPCS3" "Reset the PS3 emulator RPCS3 to default settings"
     "Ryujinx" "Reset the Switch emulator Ryujinx to default settings"
+    "Steam ROM Manager" "Reset Steam ROM Manager to default settings"
     "Vita3k" "Reset the PS Vita emulator Vita3k to default settings"
     "XEMU" "Reset the XBOX emulator XEMU to default settings"
   )
@@ -1133,7 +1157,7 @@ configurator_reset_dialog() {
       fi
     ;;
 
-    "Cemu" | "Citra" | "Dolphin" | "Duckstation" | "GZDoom" | "Yuzu" | "MelonDS" | "MAME" | "PCSX2" | "PPSSPP" | "Primehack" | "RPCS3" | "Ryujinx" )
+    "Cemu" | "Citra" | "Dolphin" | "Duckstation" | "GZDoom" | "Yuzu" | "MelonDS" | "MAME" | "PCSX2" | "PPSSPP" | "PortMaster" | "Primehack" | "Ruffle" | "RPCS3" | "Ryujinx" | "SteamROMManager" )
       if [[ $(configurator_reset_confirmation_dialog "$component_to_reset" "Are you sure you want to reset the $component_to_reset emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
         prepare_component "reset" "$component_to_reset" "configurator"
         configurator_process_complete_dialog "resetting $component_to_reset"

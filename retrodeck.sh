@@ -28,7 +28,6 @@ Arguments:
     --info-msg                          \t  Print paths and config informations
     --debug                             \t  Enable debug logging for this launch of RetroDECK (This may miss errors very early in the launch process)
     --configurator                      \t  Starts the RetroDECK Configurator
-    --legacy-configurator               \t  Starts the old, zenity, RetroDECK Configurator
     --compress-one <file>               \t  Compresses target file to a compatible format
     --compress-all <format>             \t  Compresses all supported games into a compatible format.\n\t\t\t\t\t\t  Available formats are \"chd\", \"zip\", \"rvz\" and \"all\"
     --reset-component <component>       \t  Reset one or more component or emulator configs to the default values
@@ -70,16 +69,17 @@ https://retrodeck.net
       cli_compress_all_games "$2"
       ;;
     --configurator*)
-      sh /app/tools/godot-configurator.sh
-      ;;
-    --legacy-configurator*)
       sh /app/tools/configurator.sh
-      if [[ $(configurator_generic_question_dialog "RetroDECK Configurator" "Would you like to launch RetroDECK after closing the Configurator?") == "false" ]]; then
-        exit
-      else
-        shift
-      fi
+      #sh /app/bin/godot-configurator.sh
       ;;
+    # --legacy-configurator*)
+    #   sh /app/tools/configurator.sh
+    #   if [[ $(configurator_generic_question_dialog "RetroDECK Configurator" "Would you like to launch RetroDECK after closing the Configurator?") == "false" ]]; then
+    #     exit
+    #   else
+    #     shift
+    #   fi
+    #   ;;
     --reset-component*)
       component="$2"
       if [ -z "$component" ]; then
