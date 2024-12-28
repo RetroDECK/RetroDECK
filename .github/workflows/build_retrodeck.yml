@@ -237,6 +237,7 @@ jobs:
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           header: "RetroDECK Build Artifacts"
           message: |
             A build for this pull request has completed successfully.
