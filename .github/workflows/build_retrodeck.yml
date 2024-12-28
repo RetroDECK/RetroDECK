@@ -22,6 +22,12 @@ on:
       - main
       - cooker*
       - feat/*
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+      - cooker*
+      - feat/*
 
   workflow_dispatch:
 
