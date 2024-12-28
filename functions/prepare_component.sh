@@ -79,7 +79,7 @@ prepare_component() {
     fi
   fi
 
-  if [[ "$component" =~ ^(steam-rom-manager|all)$ ]]; then
+  if [[ "$component" =~ ^(steam-rom-manager|steamrommanager|all)$ ]]; then
   component_found="true"
     log i "-----------------------------"
     log i "Prepearing Steam ROM Manager"

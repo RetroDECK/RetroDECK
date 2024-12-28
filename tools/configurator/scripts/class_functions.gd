@@ -41,6 +41,7 @@ var cheevos_token_state: String
 var font_select: int
 var font_tab_size: int = 35
 var font_size: int = 20
+var steam_sync: bool
 var locale: String
 var button_list: Array = ["button_swap_button", "ask_to_exit_button", "border_button", "widescreen_button", "quick_rewind_button", "reset_retrodeck_button", "reset_all_emulators_button", "cheevos_button", "cheevos_hardcore_button"]
 signal update_global_signal
@@ -80,6 +81,7 @@ func read_values_states() -> void:
 	widescreen_state = multi_state("widescreen", widescreen_state)
 	quick_rewind_state = multi_state("rewind", quick_rewind_state)
 	sound_effects = config["options"]["sound_effects"]
+	steam_sync = config["options"]["steam_sync"]
 	volume_effects = int(config["options"]["volume_effects"])
 	font_select = int(config["options"]["font"])
 	cheevos_token_state = str(config["options"]["cheevos_login"])
@@ -123,7 +125,7 @@ func logger(log_type: String, log_text: String) -> void:
 
 	match log_type:
 		'w':
-			log_line += " [WANRING] " + log_header
+			log_line += " [WARNING] " + log_header
 			# print("Warning, mate")
 		'e':
 			log_line += " [ERROR] " + log_header
@@ -343,6 +345,11 @@ func update_global(button: Button, preset: String, state: bool) -> void:
 			#change_global(result, button, str(result))
 		"sound_button":
 			sound_effects = state
+			result.append_array(data_handler.change_cfg_value(config_file_path, preset, "options", str(state)))
+			logger("i", "Enabled: %s" % (button.name))
+			update_global_signal.emit([button.name])
+		"steam_sync_button":
+			steam_sync = state
 			result.append_array(data_handler.change_cfg_value(config_file_path, preset, "options", str(state)))
 			logger("i", "Enabled: %s" % (button.name))
 			update_global_signal.emit([button.name])

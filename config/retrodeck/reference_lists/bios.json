@@ -731,36 +731,36 @@
     },
     "f355bios.zip": {
       "md5": [
-      "547f3d12aed389058ca06148f1cca0ed",
-      "882f2c1cf8ec030955c48fe6aa6929ea",
+        "547f3d12aed389058ca06148f1cca0ed",
+        "882f2c1cf8ec030955c48fe6aa6929ea"
       ],
       "system": [
-      "dreamcast",
-      "arcade",
+        "dreamcast",
+        "arcade"
       ],
       "description": "Naomi Ferrari F355 Challenge Twin/Deluxe BIOS",
       "path": "dc"
     },
     "airlbios.zip": {
       "md5": [
-      "09ef4b8dea6cd8db2de1c13d510a6a87",
-      "7a11bfe0cc72886d032e386db68f890c",
+        "09ef4b8dea6cd8db2de1c13d510a6a87",
+        "7a11bfe0cc72886d032e386db68f890c"
       ],
       "system": [
-      "dreamcast",
-      "arcade",
+        "dreamcast",
+        "arcade"
       ],
       "description": "Naomi Airline Pilots Deluxe BIOS",
       "path": "dc"
     },
     "awbios.zip": {
       "md5": [
-      "b2f122e091da223beb824efafc3d6a36",
-      "85254fbe320ca82a768ec2c26bb08def",
+        "b2f122e091da223beb824efafc3d6a36",
+        "85254fbe320ca82a768ec2c26bb08def"
       ],
       "system": [
-      "dreamcast",
-      "arcade",
+        "dreamcast",
+        "arcade"
       ],
       "description": "Naomi Atomiswave BIOS",
       "path": "dc"

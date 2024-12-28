@@ -25,6 +25,7 @@ incconfigs/
 .github/workflows/cooker-monkeyx.yml
 *.flatpak
 *.flatpak.sha
+net.retrodeck.retrodeck.cached.yml
 
 # Python #
 ##########

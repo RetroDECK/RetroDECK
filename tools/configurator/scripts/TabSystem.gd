@@ -97,9 +97,11 @@ func _do_action(button: Button) -> void:
 				await class_functions.wait(3.0)
 				button.text = original_txt
 		["launch_button", current_system.name]:
+			button.disabled = true
 			class_functions.logger("i", "Launching " + current_system.name)
 			var launch = class_functions.execute_command(current_system.launch,[], false)
 			class_functions.logger("d", "Exit Code: " + str(launch["exit_code"]))
+			button.disabled = false
 		["reset_button", current_system.name]:
 			is_reset_pressed = true
 			%reset_progress.visible = true

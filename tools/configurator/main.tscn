@@ -1,6 +1,5 @@
-[gd_scene load_steps=134 format=3 uid="uid://61f6m4r1mpan"]
+[gd_scene load_steps=135 format=3 uid="uid://61f6m4r1mpan"]
 
-[ext_resource type="Texture2D" uid="uid://bv6vh33cnfaw4" path="res://icon.svg" id="1_axfei"]
 [ext_resource type="Theme" uid="uid://hhc60cllcg47" path="res://assets/themes/default_theme.tres" id="1_if8nh"]
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_obpq7"]
 [ext_resource type="Script" path="res://scripts/TabContainer.gd" id="3_id6l4"]
@@ -67,6 +66,7 @@
 [ext_resource type="Script" path="res://scripts/TabSystem.gd" id="36_wv31h"]
 [ext_resource type="Texture2D" uid="uid://10pyy05xqpr4" path="res://assets/icons/pixelitos/128/ruffle.png" id="37_7hhbn"]
 [ext_resource type="Texture2D" uid="uid://syrfbhy5ov58" path="res://assets/icons/pixelitos/128/steam-rom-manager.png" id="37_b5jhu"]
+[ext_resource type="Texture2D" uid="uid://bkouvh1ukkuob" path="res://assets/icons/pixelitos/128/steam.png" id="38_6ixfj"]
 [ext_resource type="Texture2D" uid="uid://fhxlwf7in0ke" path="res://assets/icons/pixelitos/128/net.pcsx2.PCSX2.png" id="38_44je8"]
 [ext_resource type="Texture2D" uid="uid://dpi351mmxu7x6" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0797.png" id="38_prt7u"]
 [ext_resource type="Texture2D" uid="uid://bum0ys5hf70g5" path="res://assets/icons/pixelitos/128/vita3k.png" id="38_vsjf2"]
@@ -107,6 +107,7 @@
 [ext_resource type="Texture2D" uid="uid://cb2hwhaq036mu" path="res://assets/graphics/rekku2/rekku_mouth_a.png" id="61_5vyvy"]
 [ext_resource type="Texture2D" uid="uid://dl2fd66fvn1an" path="res://assets/graphics/rekku2/rekku_mouth_i.png" id="62_lji1k"]
 [ext_resource type="Texture2D" uid="uid://3ktnkmuecxea" path="res://assets/graphics/rekku2/rekku_mouth_m.png" id="63_52v81"]
+[ext_resource type="Texture2D" uid="uid://dcdlrjx1d5nu3" path="res://icon_retrodeck.svg" id="64_qcmnc"]
 [ext_resource type="Texture2D" uid="uid://d08ngewjvxkmn" path="res://assets/graphics/rekku2/rekku_mouth_o.png" id="64_s8u0e"]
 [ext_resource type="Texture2D" uid="uid://dieva7tuxjrvy" path="res://assets/graphics/rekku2/rekku_nomouth.png" id="65_kk8ba"]
 [ext_resource type="Script" path="res://scripts/controller_guide.gd" id="68_ahvw4"]
@@ -274,7 +275,7 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_styles/tab_selected = SubResource("StyleBoxFlat_co0k7")
 tab_alignment = 1
-current_tab = 2
+current_tab = 1
 script = ExtResource("3_id6l4")
 
 [node name="GLOBALS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
@@ -375,6 +376,7 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_1161k")
 show_percentage = false
 
 [node name="mods_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -425,6 +427,7 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_1161k")
 show_percentage = false
 
 [node name="tate_mode_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -438,6 +441,7 @@ vertical_icon_alignment = 0
 metadata/description = "This feature is planned for a future release."
 
 [node name="shaders_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer/VBoxContainer/globals_gridcontainer"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -475,7 +479,6 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_1161k")
 show_percentage = false
 
 [node name="SYSTEMS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
-visible = false
 layout_mode = 2
 script = ExtResource("36_wv31h")
 metadata/_tab_index = 1
@@ -745,6 +748,7 @@ alignment = 1
 expand_icon = true
 
 [node name="TOOLS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
 script = ExtResource("50_wqa5h")
 metadata/_tab_index = 2
@@ -787,7 +791,7 @@ alignment = 1
 icon_alignment = 1
 vertical_icon_alignment = 0
 selected = 0
-item_count = 4
+item_count = 3
 popup/item_0/text = "LOGS"
 popup/item_0/icon = ExtResource("52_1rasc")
 popup/item_0/disabled = true
@@ -795,12 +799,9 @@ popup/item_0/separator = true
 popup/item_1/text = "RetroDECK Log"
 popup/item_1/icon = ExtResource("11_g1uhn")
 popup/item_1/id = 1
-popup/item_2/text = "ES_DE Log"
-popup/item_2/icon = ExtResource("44_7lpj5")
-popup/item_2/id = 2
-popup/item_3/text = "Retroarch"
-popup/item_3/icon = ExtResource("4_xcuib")
-popup/item_3/id = 3
+popup/item_2/text = "Retroarch"
+popup/item_2/icon = ExtResource("4_xcuib")
+popup/item_2/id = 3
 
 [node name="bios_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/troubleshoot_gridcontainer"]
 custom_minimum_size = Vector2(0, 100)
@@ -862,7 +863,20 @@ icon = ExtResource("37_b5jhu")
 icon_alignment = 1
 vertical_icon_alignment = 0
 
+[node name="steam_sync_button" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/troubleshoot_gridcontainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/icon_max_width = 64
+text = "STEAM SYNC"
+icon = ExtResource("38_6ixfj")
+icon_alignment = 1
+vertical_icon_alignment = 0
+
 [node name="controls_gridcontainer" type="GridContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 columns = 5
 
@@ -896,52 +910,63 @@ layout_mode = 2
 columns = 5
 
 [node name="file_tools_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
+visible = false
 layout_mode = 2
 text = "TK_FILETOOLS"
 
 [node name="file_tools_separator" type="HSeparator" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
+visible = false
 layout_mode = 2
 
 [node name="usb_tool_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
+visible = false
 layout_mode = 2
 disabled = true
 text = "TK_USBTOOL"
 
 [node name="compress_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
+visible = false
 layout_mode = 2
 disabled = true
 text = "TK_COMPRESSGAMES"
 
 [node name="move_files_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
+visible = false
 layout_mode = 2
 disabled = true
 text = "TK_MOVEFILES"
 
 [node name="tools_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
+visible = false
 layout_mode = 2
 text = "TK_GENTOOLS"
 
 [node name="steamgrid_install_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
+visible = false
 layout_mode = 2
 disabled = true
 text = "TK_GRIDINSTALL"
 
 [node name="fav_steam" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
+visible = false
 layout_mode = 2
 disabled = true
 toggle_mode = false
 text = "TK_FAVSTEAM"
 
 [node name="scan_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
+visible = false
 layout_mode = 2
 text = "TK_SCAN"
 
 [node name="scummvm_scan" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
+visible = false
 layout_mode = 2
 disabled = true
 text = "TK_SCUMMVMSCAN"
 
 [node name="multifile_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
+visible = false
 layout_mode = 2
 disabled = true
 text = "TK_MULTIFILE"
@@ -1100,6 +1125,7 @@ show_percentage = false
 
 [node name="cheevos_collapse_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer"]
 unique_name_in_owner = true
+visible = false
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 theme_override_constants/icon_max_width = 64
@@ -1223,6 +1249,7 @@ show_percentage = false
 
 [node name="netplay_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer"]
 unique_name_in_owner = true
+visible = false
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 theme_override_constants/icon_max_width = 64
@@ -1282,6 +1309,7 @@ text = "TK_NETPLAYCONNECT"
 
 [node name="future_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer/VBoxContainer"]
 unique_name_in_owner = true
+visible = false
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 theme_override_constants/icon_max_width = 64
@@ -1377,7 +1405,7 @@ offset_right = 615.0
 offset_bottom = 125.0
 size_flags_horizontal = 4
 size_flags_vertical = 0
-texture = ExtResource("1_axfei")
+texture = ExtResource("64_qcmnc")
 expand_mode = 1
 stretch_mode = 4
 

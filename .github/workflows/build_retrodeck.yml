@@ -188,6 +188,7 @@ jobs:
       - name: Generate a token for Rekku
         id: generate-rekku-token
         uses: actions/create-github-app-token@v1
+        if: github.event_name != 'pull_request'
         with:
           app-id: ${{ vars.REKKU_APP_ID }}
           private-key: ${{ secrets.REKKU_PRIVATE_KEY }}
@@ -231,7 +232,22 @@ jobs:
             RetroDECK*.flatpak.sha
             RetroDECK*Artifact.tar.gz
 
+      - name: Post PR comment with artifacts
+        if: github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          header: "RetroDECK Build Artifacts"
+          message: |
+            A build for this pull request has completed successfully.
+            Codenname: ${{ steps.version-tag.outputs.TAG }}
+            Here are the artifacts to install and test:
+            - RetroDECK Flatpak: [RetroDECK.flatpak](./retrodeck-artifacts/RetroDECK.flatpak)
+            - SHA256 Checksum: [RetroDECK.flatpak.sha](./retrodeck-artifacts/RetroDECK.flatpak.sha)
+            - Artifact Bundle: [RetroDECKArtifact.tar.gz](./retrodeck-artifacts/RetroDECKArtifact.tar.gz)
+
   GitHub-publish:
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     needs: Build_RetroDECK
     env:
@@ -243,6 +259,7 @@ jobs:
       - name: Generate a token for Rekku
         id: generate-rekku-token
         uses: actions/create-github-app-token@v1
+        if: github.event_name != 'pull_request'
         with:
           app-id: ${{ vars.REKKU_APP_ID }}
           private-key: ${{ secrets.REKKU_PRIVATE_KEY }}
@@ -311,4 +328,49 @@ jobs:
   #         release_body: ${{ env.RELEASE_BODY }}
   #         artifacts: "retrodeck-artifacts/*.flatpak,retrodeck-artifacts/*.flatpak.sha,retrodeck-artifacts/*Artifact.tar.gz"
   #         tag: ${{ env.TAG }}
+
+
+  # Automated Tests
+  Automated_Tests:
+    runs-on: ubuntu-latest
+    needs: Build_RetroDECK
+    continue-on-error: true
+      
+    steps:
+
+      # Clone Repository
+      - name: Clone RetroDECK repo
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      # Download RetroDECK Artifacts
+      - name: Download all workflow run artifacts
+        uses: actions/download-artifact@v4.1.8
+
+      # Install Dependencies
+      - name: Install dependencies
+        run: curl "https://raw.githubusercontent.com/RetroDECK/components-template/main/automation_tools/install_dependencies.sh" | bash
+
+      # Install RetroDECK Flatpak
+      - name: Install RetroDECK Flatpak
+        continue-on-error: true
+        run: |
+          ls -lah retrodeck-artifacts
+          flatpak install --user --bundle --noninteractive -y "retrodeck-artifacts/RetroDECK"*".flatpak
+
+      # Run Post Build Checks
+      - name: Run Post Build Checks
+        continue-on-error: true
+        run: /bin/bash ./automation_tools/post_build_check.sh
+
+      # Search for Missing Libraries
+      - name: Search for Missing Libraries
+        continue-on-error: true
+        run: /bin/bash ./automation_tools/search_missing_libs.sh
+   
+      # Uninstall RetroDECK Flatpak - Not needed on a thorwaway ubuntu-latest
+      # - name: Uninstall RetroDECK Flatpak
+      #   run: |
+      #     flatpak remove --user --noninteractive -y net.retrodeck.retrodeck
   

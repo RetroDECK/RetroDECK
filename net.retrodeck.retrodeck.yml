@@ -7,7 +7,6 @@ base-version: "22.08"
 command: retrodeck.sh
 
 finish-args:
-  - --talk-name=org.freedesktop.Flatpak
   - --socket=wayland
   - --socket=x11
   - --socket=pulseaudio
@@ -68,7 +67,7 @@ modules:
   # The version number is hardcoded in /app/retrodeck/version
   #
   # UPDATE STEPS FOR MAIN:
-  # [ ] Update the VERSION variable on line containing "VERSION=cooker"
+  # [ ] Update the VERSION variable on line containing "VERSION=THISBRANCH"
   # [ ] Update the appdata.xml with the version number and notes
 
   - name: version-initialization
@@ -84,15 +83,15 @@ modules:
         mkdir -p ${FLATPAK_DEST}/retrodeck/
         if [[ $VERSION == *"cooker"* ]];
         then
-          VERSION="$VERSION-WomanNen"
+          VERSION="$VERSION-VERSIONPLACEHOLDER"
         fi
         echo $VERSION >> ${FLATPAK_DEST}/retrodeck/version
         cat ${FLATPAK_DEST}/retrodeck/version
         echo "Version is $VERSION"
     sources:
       - type: git
-        url: https://github.com/RetroDECK/RetroDECK
-        branch: cooker
+        url: THISREPO
+        branch: THISBRANCH
 
   - name: xmlstarlet
     config-opts:
@@ -201,28 +200,28 @@ modules:
         sha256: 4ee662847c588c3ef2fec8bfb304e8739e3dbaba87ccb9a608d691c88f5b64dc
 
   # GODOT Configurator
-  - name: retrodeck-configurator
-    buildsystem: simple
-    build-commands:
-      - install -Dm755 "Godot_v4.3-stable_linux.x86_64" "${FLATPAK_DEST}/bin/godot"
-      - mkdir -p "${FLATPAK_DEST}/retrodeck"
-      - godot --headless --path "tools/configurator" --import
-      - godot --headless --path "tools/configurator" --export-pack "Linux/X11 64-bit" "${FLATPAK_DEST}/retrodeck/configurator.pck"
-      - chmod +x "${FLATPAK_DEST}/retrodeck/configurator.pck"
-      - echo '#!/bin/sh' > "godot-configurator.sh"
-      - echo 'godot --main-pack /app/retrodeck/configurator.pck' >> "godot-configurator.sh"
-      - install -Dm755 "godot-configurator.sh" "/app/bin/"
-    sources:
-      - type: archive
-        url: https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_linux.x86_64.zip
-        sha256: 7de56444b130b10af84d19c7e0cf63cf9e9937ee4ba94364c3b7dd114253ca21
-      - type: archive
-        url: https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.15.0.tar.gz
-        sha256: f5f359d6332861bd497570848fcb42520964a9e83d5e3abe397b6b6db9bcaaf4
-        dest: fontconfig
-      - type: git
-        url: https://github.com/RetroDECK/RetroDECK
-        branch: cooker
+  # - name: retrodeck-configurator
+  #   buildsystem: simple
+  #   build-commands:
+  #     - install -Dm755 "Godot_v4.3-stable_linux.x86_64" "${FLATPAK_DEST}/bin/godot"
+  #     - mkdir -p "${FLATPAK_DEST}/retrodeck"
+  #     - godot --headless --path "tools/configurator" --import
+  #     - godot --headless --path "tools/configurator" --export-pack "Linux/X11 64-bit" "${FLATPAK_DEST}/retrodeck/configurator.pck"
+  #     - chmod +x "${FLATPAK_DEST}/retrodeck/configurator.pck"
+  #     - echo '#!/bin/sh' > "godot-configurator.sh"
+  #     - echo 'godot --main-pack /app/retrodeck/configurator.pck' >> "godot-configurator.sh"
+  #     - install -Dm755 "godot-configurator.sh" "/app/bin/"
+  #   sources:
+  #     - type: archive
+  #       url: https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_linux.x86_64.zip
+  #       sha256: 7de56444b130b10af84d19c7e0cf63cf9e9937ee4ba94364c3b7dd114253ca21
+  #     - type: archive
+  #       url: https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.15.0.tar.gz
+  #       sha256: f5f359d6332861bd497570848fcb42520964a9e83d5e3abe397b6b6db9bcaaf4
+  #       dest: fontconfig
+  #     - type: git
+  #       url: THISREPO
+  #       branch: THISBRANCH
         
   # RetroArch
   # https://retroarch.com/index.php?page=platforms
@@ -239,7 +238,7 @@ modules:
       - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
     sources:
       - type: archive
-        url: https://buildbot.libretro.com/stable/1.19.1/linux/x86_64//RetroArch.7z
+        url: https://buildbot.libretro.com/stable/1.19.1/linux/x86_64/RetroArch.7z
         #sha256: RASHAPLACEHOLDER
         sha256: f98e954e99aef7b4b1a3334d710856b997c3f97c5451d33af9e5c88bf63213f8
 
@@ -271,7 +270,7 @@ modules:
     sources:
       - type: archive
         url: https://buildbot.libretro.com/nightly/linux/x86_64/RetroArch_cores.7z
-        sha256: 17445ee97c58a16659b0588eb1621bf17c562c692dd15846c6ab6a56615660a1
+        sha256: RANIGHTLYCORESPLACEHOLDER
 
   # Citra is removed from the LibretroCores but is still available in Libretro repo
   - name: citra-libretro-core
@@ -281,7 +280,7 @@ modules:
     sources:
       - type: archive
         url: https://buildbot.libretro.com/nightly/linux/x86_64/latest/citra_libretro.so.zip
-        sha256: 832335d3b89ae7b42b7b23d80210d73651bc547b8c8e8832c4a20551f3f33f71
+        sha256: RACITRAPLACEHOLDER
 
   - name: retroarch-cores
     buildsystem: simple
@@ -300,17 +299,17 @@ modules:
     sources:
       - type: archive
         url: https://buildbot.libretro.com/nightly/linux/x86_64/latest/sameduck_libretro.so.zip
-        sha256: 8258f86723dbf5ef4060dab98f5df4501e93e2b624ce13327fd083ec1e17eda6
+        sha256: SAMEDUCKSHAPLACEHOLDER
 
   - name: ppsspp-bios
     buildsystem: simple
     build-commands:
-    - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/PPSSPP
-    - cp -r assets/* ${FLATPAK_DEST}/retrodeck/extras/PPSSPP/
+      - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/PPSSPP
+      - cp -r assets/* ${FLATPAK_DEST}/retrodeck/extras/PPSSPP/
     sources:
       - type: archive
         url: https://github.com/hrydgard/ppsspp/archive/refs/heads/master.zip
-        sha256: d962bbdde9e39022dfe1ee1be187452aa74f57ba4466de2799ac6c72fe66cca7
+        sha256: PPSSPPBIOSHASHPLACEHOLDER
 
   - name: msx-bios
     buildsystem: simple
@@ -321,7 +320,7 @@ modules:
     sources:
       - type: archive
         url: http://bluemsx.msxblue.com/rel_download/blueMSXv282full.zip
-        sha256: 5b68e1bc41590302c762093243e66602da2b2f6951a595a06b9b436b0e458bc6
+        sha256: MSXBIOSHASHPLACEHOLDER
         strip-components: 0
   
   - name: amiga-bios
@@ -342,15 +341,16 @@ modules:
   - name: retrodeck-ppsspp
     buildsystem: simple
     build-commands:
+      - rm -f "files/manifest.json"
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
-      - cp -rL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - "cp -rnL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib || echo 'Warning: Some files could not be copied, but the build will continue.'"
       - rm -rf "files/lib"
+      - chmod +x "files/bin/"*
       - cp -r files/* "${FLATPAK_DEST}"
-      - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
         url: https://github.com/RetroDECK/org.ppsspp.PPSSPP/releases/latest/download/RetroDECK-PPSSPP-Artifact.tar.gz
-        sha256: b47b1025c88f513c5e345b006a7b2be6156f845b436ccb14b7cf3122ade971de
+        sha256: RETRODECKPPSSPPLATEST
 
   # PCSX2
   # Inspired by: https://github.com/flathub/com.zettlr.Zettlr/blob/master/com.zettlr.Zettlr.yaml
@@ -366,8 +366,8 @@ modules:
       - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
     sources:
       - type: file
-        url: https://github.com/PCSX2/pcsx2/releases/download/v2.1.231/pcsx2-v2.1.231-linux-appimage-x64-Qt.AppImage
-        sha256: 227c8f5a38bd0ae9c565b9350868b4f4bd27ae00cde0a598738c2bdd8ca97e88
+        url: https://github.com/PCSX2/pcsx2/releases/download/v2.3.53/pcsx2-v2.3.53-linux-appimage-x64-Qt.AppImage
+        sha256: a909ec179a2b1bac85625a32eaa6eae2adbfa4985a2be9a525a58e80fc1f57b5
 
   # Dolphin
   # why from source: AppImage not provided, only Flatpak
@@ -376,17 +376,18 @@ modules:
   - name: retrodeck-dolphin
     buildsystem: simple
     build-commands:
+      - rm -f "files/manifest.json"
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
-      - cp -r "files/lib/debug" "${FLATPAK_DEST}/retrodeck/tmplib"
+      - "cp -rnL files/lib/debug ${FLATPAK_DEST}/retrodeck/tmplib || echo 'Warning: Some files could not be copied, but the build will continue.'"
       - rm -rf "files/lib/debug"
-      - cp -rL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - "cp -rnL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib || echo 'Warning: Some files could not be copied, but the build will continue.'"
       - rm -rf "files/lib"
+      - chmod +x "files/bin/"*
       - cp -r files/* "${FLATPAK_DEST}"
-      - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
         url: https://github.com/RetroDECK/org.DolphinEmu.dolphin-emu/releases/latest/download/RetroDECK-dolphin-Artifact.tar.gz
-        sha256: 51ba795bc566113d51a2b0e5c5a66fc452665af099b3150009fe6fd66a5352e3
+        sha256: RETRODECKDOLPHINLATEST
 
   # PRIMEHACK
   # https://github.com/RetroDECK/io.github.shiiion.primehack
@@ -394,18 +395,19 @@ modules:
   - name: retrodeck-primehack
     buildsystem: simple
     build-commands:
+      - rm -f "files/manifest.json"
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
       - rm -rf "files/lib/pkgconfig"
-      - cp -rL "files/lib/debug" "${FLATPAK_DEST}/retrodeck/tmplib"
+      - "cp -rnL files/lib/debug ${FLATPAK_DEST}/retrodeck/tmplib || echo 'Warning: Some files could not be copied, but the build will continue.'"
       - rm -rf "files/lib/debug"
-      - cp -rL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - "cp -rnL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib || echo 'Warning: Some files could not be copied, but the build will continue.'"
       - rm -rf "files/lib"
+      - chmod +x "files/bin/"*
       - cp -r files/* "${FLATPAK_DEST}"
-      - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
         url: https://github.com/RetroDECK/io.github.shiiion.primehack/releases/latest/download/RetroDECK-primehack-Artifact.tar.gz
-        sha256: 7cd20690cea20284b6b272092f79cadf6a7ca9d5b9df7cb5985cb090ff47731d
+        sha256: RETRODECKPRIMEHACKLATEST
 
   # RPCS3
   # https://rpcs3.net/download
@@ -431,15 +433,16 @@ modules:
   - name: retrodeck-rpcs3
     buildsystem: simple
     build-commands:
+      - rm -f "files/manifest.json"
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
-      - cp -rL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - "cp -rnL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib || echo 'Warning: Some files could not be copied, but the build will continue.'"
       - rm -rf "files/lib"
+      - chmod +x "files/bin/"*
       - cp -r files/* "${FLATPAK_DEST}"
-      - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
         url: https://github.com/RetroDECK/net.rpcs3.RPCS3/releases/latest/download/RetroDECK-Artifact.tar.gz
-        sha256: 02657e8a75b38080057fc88ceab337fe06d8ba62350beb17436597d44e5daebd
+        sha256: RETRODECKRPCS3LATEST
 
   # MELONDS
   # https://github.com/RetroDECK/net.kuribo64.melonDS
@@ -449,14 +452,14 @@ modules:
     build-commands:
       - rm -f "files/manifest.json"
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib/"
-      - cp -rL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib/"
+      - "cp -rnL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib || echo 'Warning: Some files could not be copied, but the build will continue.'"
       - rm -rf "files/lib"
+      - chmod +x "files/bin/"*
       - cp -r files/* "${FLATPAK_DEST}/"
-      - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
         url: https://github.com/RetroDECK/net.kuribo64.melonDS/releases/latest/download/RetroDECK-melonds-Artifact.tar.gz
-        sha256: 2a0f721ba25da2fe5eb9b3924365697f127b532904354778166e03e6672e03c7
+        sha256: RETRODECKMELONDSLATEST
 
   # Duckstation
   # Do not update: Legacy
@@ -520,7 +523,7 @@ modules:
     sources:
       - type: file
         url: https://github.com/Vita3K/Vita3K/releases/download/continuous/ubuntu-latest.zip
-        sha256: 420aa81f91d8a0eff7ec1669153580da80768e608cdd7de7969e845d9c902878
+        sha256: VITA3KSHAPLACEHOLDER
       - type: file
         path: res/retrodeck.png
 
@@ -531,15 +534,16 @@ modules:
   - name: retrodeck-solarus
     buildsystem: simple
     build-commands:
+      - rm -f "files/manifest.json"
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
       #- cp -r "files/lib/debug/lib/*" "${FLATPAK_DEST}/retrodeck/tmplib/debug/"
       - rm -rf "files/lib/debug" "files/lib/pkgconfig"
-      - cp -rL files/* "${FLATPAK_DEST}"
-      - chmod +x "${FLATPAK_DEST}/bin/"*
+      - chmod +x "files/bin/"*
+      - "cp -rnL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib || echo 'Warning: Some files could not be copied, but the build will continue.'"
     sources:
       - type: archive
         url: https://github.com/RetroDECK/org.solarus_games.solarus.Launcher/releases/latest/download/RetroDECK-solarus-Artifact.tar.gz
-        sha256: 944dbba229f1bcab61e44a068aa75a01967ce9376c0d337d874c8de041eef599
+        sha256: RETRODECKSOLARUSLATEST
 
   # GZDoom
   # When updating remember to update all the .pk3 files from the standalone linux download
@@ -548,32 +552,33 @@ modules:
   - name: retrodeck-gzdoom
     buildsystem: simple
     build-commands:
+      - rm -f "files/manifest.json"
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
       - rm -rf "files/lib/cmake" "files/lib/pkgconfig" "files/lib/debug"
-      - cp -rL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - "cp -rnL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib || echo 'Warning: Some files could not be copied, but the build will continue.'"
       - rm -rf "files/lib"
+      - chmod +x "files/bin/"*
       - cp -r files/* "${FLATPAK_DEST}"
-      - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
         url: https://github.com/RetroDECK/org.zdoom.GZDoom/releases/latest/download/RetroDECK-gzdoom-Artifact.tar.gz
-        sha256: ad78911d605a4b6e8a6229833ca8d6a1770b6f52a9ece5dc63e0c11f68474508
+        sha256: RETRODECKGZDOOMLATEST
 
   # Pancakes
 
-  # - name: Pancakes
-  #   buildsystem: simple
-  #   build-commands:
-  #     - mkdir -p "${FLATPAK_DEST}"
-  #     - mv *.so* "${FLATPAK_DEST}/retrodeck/tmplib/"
-  #     - mv R*x* "${FLATPAK_DEST}/bin/"
-  #     - chmod +x "${FLATPAK_DEST}/bin/R*x"*
-  #     - mkdir -p "${FLATPAK_DEST}/retrodeck/licenses"
-  #     - mv LICENSE.txt "${FLATPAK_DEST}/retrodeck/licenses"
-  #   sources:
-  #     - type: file
-  #       url: https://github.com/RetroDECK/Pancakes/releases/download/1.1.0.1403/pancakes-Release-linux_x64.tar.gz
-  #       sha256: cc7d25b6a2f2ad16533e3d72ba9477a4d77b8cfbb450f0db3d0c05ffde5e1281
+  - name: Pancakes
+    buildsystem: simple
+    build-commands:
+      - mkdir -p "${FLATPAK_DEST}"
+      - mv *.so* "${FLATPAK_DEST}/retrodeck/tmplib/"
+      - mv R*x* "${FLATPAK_DEST}/bin/"
+      - chmod +x "${FLATPAK_DEST}/bin/"R*x*
+      - mkdir -p "${FLATPAK_DEST}/retrodeck/licenses"
+      - mv LICENSE.txt "${FLATPAK_DEST}/retrodeck/licenses"
+    sources:
+      - type: archive
+        url: https://github.com/RetroDECK/Pancakes-bin/releases/download/1.1.0.1403/pancakes-Release-linux_x64.tar.gz
+        sha256: 68b1602c99c5e5b743a1362eaf428ee88b237bd5029aede00d342fa8d79b8f27
 
   # XEMU
   # https://xemu.app/docs/download/#download-for-linux
@@ -599,7 +604,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/mborgerson/xemu-hdd-image/releases/latest/download/xbox_hdd.qcow2.zip
-        sha256: d9f5a4c1224ff24cf9066067bda70cc8b9c874ea22b9c542eb2edbfc4621bb39
+        sha256: XEMUHDDHASHPLACEHOLDER
 
   # MAME
 
@@ -611,7 +616,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/RetroDECK/MAME/releases/latest/download/RetroDECK-MAME-Artifact.tar.gz
-        sha256: c4b8493e9f483406088073d776bf73528375e05924a77db910a30744c11347f5
+        sha256: RETRODECKMAMELATEST
 
   # PortMaster
 
@@ -625,7 +630,7 @@ modules:
     sources:
       - type: file
         url: https://github.com/PortsMaster/PortMaster-GUI/releases/latest/download/retrodeck.portmaster.zip
-        sha256: a973e470e699e316a6ac3c5b05c201792f6b86381b0e1538aae90a4e3808db16
+        sha256: PORTMASTERLATESTSHA
         dest-filename: PortMaster.zip
       - type: script
         commands:
@@ -643,15 +648,17 @@ modules:
   - name: ES-DE
     buildsystem: simple
     build-commands:
+      - rm -f "files/manifest.json"
       - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
-      - cp -rL "files/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - cp -rfL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib
+      - cp -rfL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib
       - rm -rf "files/lib"
+      - chmod +x "files/bin/"*
       - cp -r files/* "${FLATPAK_DEST}"
-      - chmod +x "${FLATPAK_DEST}/bin/"*
     sources:
       - type: archive
         url: https://github.com/RetroDECK/ES-DE/releases/latest/download/RetroDECK-ES-DE-Artifact.tar.gz
-        sha256: 44e51c7a251a7e624ad9a397b363730dfd7b69bd3b18265e76391cfcd4f8310d
+        sha256: RETRODECKESDELATEST
 
   - name: retrodeck-theme
     buildsystem: simple
@@ -683,13 +690,15 @@ modules:
     build-commands:
       - |
           # Search for missing libraries in our libtmp folder
-          missing_libs=$(find "${FLATPAK_DEST}/bin" -type f -exec ldd {} + 2>/dev/null | grep "not found" | awk '{print $1}' | sort | uniq)
+          missing_libs=$(find /app/bin -type f -exec ldd {} + 2>/dev/null | grep 'not found' | awk '$1 ~ /\.so/ {print $1}' | sort | uniq)
+          echo $missing_libs
           
           # Manually specified libraries that are not automatically detected
           manually_imported="libpostproc.so.56 libswscale.so.6 libshaderc_shared.so.1 libbz2.so.1.0 libaio.so.1 ld-linux.so.2 libvpx.so.9 libzmusic.so.1 libicuuc.so.73 libLLVM.so.18.1"
           
           # Combine detected missing libraries and manually specified ones
           missing_libs="$missing_libs $manually_imported"
+          echo "Missing libs and manually imported: $missing_libs"
 
           # Source paths
           src_dir="${FLATPAK_DEST}/retrodeck/tmplib"
@@ -766,7 +775,6 @@ modules:
       # Desktop entries
       - cp net.retrodeck.retrodeck.desktop ${FLATPAK_DEST}/share/applications/net.retrodeck.retrodeck.desktop
       - cp net.retrodeck.retrodeck.Configurator.desktop /app/share/applications/net.retrodeck.retrodeck.Configurator.desktop
-      - cp net.retrodeck.retrodeck.start.desktop /app/share/applications/net.retrodeck.retrodeck.start.desktop
       - chmod +x net.retrodeck.retrodeck*desktop
 
       # Initializing default emulator configs
@@ -797,5 +805,5 @@ modules:
 
     sources:
       - type: git
-        url: https://github.com/RetroDECK/RetroDECK
-        branch: cooker
+        url: THISREPO
+        branch: THISBRANCH

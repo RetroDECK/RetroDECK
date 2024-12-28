@@ -28,17 +28,17 @@ Arguments:
     --info-msg                          \t  Print paths and config informations
     --debug                             \t  Enable debug logging for this launch of RetroDECK (This may miss errors very early in the launch process)
     --configurator                      \t  Starts the RetroDECK Configurator
-    --legacy-configurator               \t  Starts the old, zenity, RetroDECK Configurator
     --compress-one <file>               \t  Compresses target file to a compatible format
     --compress-all <format>             \t  Compresses all supported games into a compatible format.\n\t\t\t\t\t\t  Available formats are \"chd\", \"zip\", \"rvz\" and \"all\"
     --reset-component <component>       \t  Reset one or more component or emulator configs to the default values
     --reset-retrodeck                   \t  Starts the initial RetroDECK installer (backup your data first!)
 
-    start [-e emulator] [-s system] [-m] <game_path>\t  Start a game from cli using the default emulator or\n\t\t\t\t\t\t\t  the one defined in ES-DE for game or system
-    \t start arguments:
+Game Launch:
+    [<options>] <game_path>             \t  Start a game using the default emulator or\n\t\t\t\t\t\t  the one defined in ES-DE for game or system
+    \t Options:
     \t \t-e (emulator)\t Run the game with the defined emulator (optional)
     \t \t-s (system)\t Force the game running with the defined system, for example running a gb game on gba (optional)
-    \t \t-m (manual)\t Manual mode: show the list of available emulator to chose from (optional)
+    \t \t-m (manual)\t Manual mode: show the list of available emulator to choose from (optional)
 
 For flatpak run specific options please run: flatpak run -h
 
@@ -48,11 +48,6 @@ https://retrodeck.net
       ;;
     --version*|-v*)
       echo "RetroDECK v$version"
-      exit
-      ;;
-    start*)
-      shift # Remove "start"
-      run_game "$@"
       exit
       ;;
     --info-msg*)
@@ -74,16 +69,17 @@ https://retrodeck.net
       cli_compress_all_games "$2"
       ;;
     --configurator*)
-      sh /app/tools/godot-configurator.sh
-      ;;
-    --legacy-configurator*)
       sh /app/tools/configurator.sh
-      if [[ $(configurator_generic_question_dialog "RetroDECK Configurator" "Would you like to launch RetroDECK after closing the Configurator?") == "false" ]]; then
-        exit
-      else
-        shift
-      fi
+      #sh /app/bin/godot-configurator.sh
       ;;
+    # --legacy-configurator*)
+    #   sh /app/tools/configurator.sh
+    #   if [[ $(configurator_generic_question_dialog "RetroDECK Configurator" "Would you like to launch RetroDECK after closing the Configurator?") == "false" ]]; then
+    #     exit
+    #   else
+    #     shift
+    #   fi
+    #   ;;
     --reset-component*)
       component="$2"
       if [ -z "$component" ]; then
@@ -126,9 +122,14 @@ https://retrodeck.net
       exit 1
       ;;
     *)
-      validate_input "$i"
-      if [[ ! $input_validated == "true" ]]; then
-        echo "Please specify a valid option. Use -h for more information."
+      # Assume unknown arguments are game start arguments
+      if [ -f "$i" ]; then
+          echo "Attempting to start the game: $i"
+          run_game "$@"
+          exit
+      else
+          echo "Command or File '$i' not found. Ignoring argument and continuing..."
+          break # Continue with the main program
       fi
       ;;
   esac
