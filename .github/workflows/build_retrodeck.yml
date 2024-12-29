@@ -265,24 +265,7 @@ jobs:
           path: |
             RetroDECK*.flatpak
             RetroDECK*.flatpak.sha
-            RetroDECK*Artifact.tar.gz
-
-      - name: Post PR comment with artifacts
-        if: github.event_name == 'pull_request_target'
-        uses: marocchino/sticky-pull-request-comment@v2
-        with:
-          GITHUB_TOKEN: ${{ steps.generate-rekku-token.outputs.token }}
-          header: "RetroDECK Build Artifacts"
-          message: |
-            A build for this pull request has completed successfully.
-            Codenname: ${{ steps.version-tag.outputs.TAG }}
-            Here are the artifacts to install and test:
-            - RetroDECK Flatpak: [RetroDECK.flatpak](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifact-retrodeck-artifacts)
-            - SHA256 Checksum: [RetroDECK.flatpak.sha](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifact-retrodeck-artifacts)
-            - Artifact Bundle: [RetroDECKArtifact.tar.gz](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifact-retrodeck-artifacts)
-
-      - name: Cleanup Credentials
-        run: rm -f ~/.git-credentials          
+            RetroDECK*Artifact.tar.gz        
 
   GitHub-publish:
     runs-on: ubuntu-latest
@@ -327,6 +310,20 @@ jobs:
           makeLatest: ${{ env.MAKE_LATEST }}
           repo: ${{ env.REPO_NAME }}
           token: ${{ steps.generate-rekku-token.outputs.token }}
+
+      - name: Post PR comment with artifacts
+        if: github.event_name == 'pull_request_target' || github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          GITHUB_TOKEN: ${{ steps.generate-rekku-token.outputs.token }}
+          header: "RetroDECK Build Artifacts"
+          message: |
+            A build for this pull request has completed successfully.
+            Codenname: ${{ steps.version-tag.outputs.TAG }}
+            Here are the artifacts to install and test:
+            - RetroDECK Flatpak: [RetroDECK.flatpak](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifact-retrodeck-artifacts)
+            - SHA256 Checksum: [RetroDECK.flatpak.sha](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifact-retrodeck-artifacts)
+            - Artifact Bundle: [RetroDECKArtifact.tar.gz](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifact-retrodeck-artifacts)
 
       # Rewrite Tag (for Main Branch Only)
       - name: Rewrite Tag
