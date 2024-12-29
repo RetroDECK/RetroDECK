@@ -6,7 +6,6 @@
 [ext_resource type="AudioStream" uid="uid://dig4pco500pyt" path="res://res/configurator.mp3" id="3_xivj6"]
 [ext_resource type="Script" path="res://scripts/TabGlobals.gd" id="4_2jqfc"]
 [ext_resource type="Texture2D" uid="uid://dx0u5hiwxfgu5" path="res://res/pixel_ui_theme/8x8_ui_elements.png" id="4_2tuu4"]
-[ext_resource type="Texture2D" uid="uid://qu88ngewoj4w" path="res://assets/icons/pixelitos/128/applications-games.png" id="4_caaxx"]
 [ext_resource type="Texture2D" uid="uid://bdj8vt3vhucq4" path="res://assets/icons/pixelitos/128/cs-display.png" id="4_jldgc"]
 [ext_resource type="Script" path="res://scripts/TabAbout.gd" id="4_m4rto"]
 [ext_resource type="Script" path="res://scripts/Rekku.gd" id="4_nqqx3"]
@@ -21,7 +20,6 @@
 [ext_resource type="Texture2D" uid="uid://du8go5dyabmsl" path="res://assets/icons/banner/gb.png" id="5_ja8to"]
 [ext_resource type="StyleBox" uid="uid://ba3l3ja1jbqpx" path="res://assets/themes/emulators.tres" id="5_rjtkn"]
 [ext_resource type="Texture2D" uid="uid://cboyy7fkdijwg" path="res://assets/icons/pixelitos/128/cs-desktop-effects.png" id="5_uiobi"]
-[ext_resource type="Texture2D" uid="uid://do3mc6sg5mfek" path="res://assets/icons/pixelitos/128/system-software-install.png" id="5_vehlp"]
 [ext_resource type="Texture2D" uid="uid://cjv6lhd4g63m3" path="res://assets/graphics/retrodeck_base_shake1.png" id="6_d43n7"]
 [ext_resource type="Texture2D" uid="uid://cru43y7hco6kh" path="res://res/flags/italy_32.png" id="6_fiylw"]
 [ext_resource type="Texture2D" uid="uid://du4mupvvwbusy" path="res://assets/icons/banner/gbc.png" id="6_mvrie"]
@@ -45,11 +43,9 @@
 [ext_resource type="Texture2D" uid="uid://dgdennwyj5g2l" path="res://assets/icons/banner/mastersystem.png" id="9_s3srh"]
 [ext_resource type="Texture2D" uid="uid://cpq0em8j2bank" path="res://assets/icons/banner/megadrive.png" id="10_2jlmn"]
 [ext_resource type="Texture2D" uid="uid://dtwjo7co226dw" path="res://res/flags/japan_32.png" id="10_e8mt0"]
-[ext_resource type="Texture2D" uid="uid://clvsisb38lk72" path="res://assets/icons/pixelitos/128/accesories-screenshoot.png" id="10_jm3oh"]
 [ext_resource type="Texture2D" uid="uid://bevamv2c8knnn" path="res://assets/icons/pixelitos/128/org.citra_emu.citra.png" id="10_wbaif"]
 [ext_resource type="Texture2D" uid="uid://dbvjugxp84gsj" path="res://assets/icons/pixelitos/128/org.DolphinEmu.dolphin-emu.png" id="11_61sak"]
 [ext_resource type="Texture2D" uid="uid://c0pbart7aj657" path="res://assets/icons/pixelitos/128/preferences-system-time.png" id="11_c3qcy"]
-[ext_resource type="Texture2D" uid="uid://do6o02gxjxneh" path="res://assets/icons/pixelitos/128/net.retrodeck.retrodeck.png" id="11_g1uhn"]
 [ext_resource type="Texture2D" uid="uid://blwtj4of6fb5y" path="res://assets/icons/pixelitos/128/spacefm.png" id="11_p6y0k"]
 [ext_resource type="Texture2D" uid="uid://cbwhpqip43aei" path="res://res/flags/china_32.png" id="11_ri2fv"]
 [ext_resource type="Texture2D" uid="uid://b763qnm02o5bd" path="res://assets/icons/pixelitos/128/system-reboot.png" id="12_3jrmi"]
@@ -60,7 +56,9 @@
 [ext_resource type="Texture2D" uid="uid://cgh3df7ajg2c4" path="res://assets/icons/pixelitos/128/computer.png" id="17_0kr64"]
 [ext_resource type="Texture2D" uid="uid://dyumvh0ixwrbl" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0042.png" id="30_glnve"]
 [ext_resource type="Texture2D" uid="uid://cn11vcrybtor4" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0047.png" id="31_j5ri1"]
+[ext_resource type="Texture2D" uid="uid://cor8ep0fkqm08" path="res://res/Rekku/base.png" id="32_omdu2"]
 [ext_resource type="Texture2D" uid="uid://cc7ohmfxafe78" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0043.png" id="33_1ghye"]
+[ext_resource type="Texture2D" uid="uid://cavtn1rljc5oe" path="res://res/Rekku/eyes-open.png" id="33_loftd"]
 [ext_resource type="Texture2D" uid="uid://cs8lh31kh7jv1" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0048.png" id="34_fum2b"]
 [ext_resource type="Texture2D" uid="uid://chd6d8tx081hm" path="res://assets/icons/pixelitos/128/org.mamedev.MAME.png" id="36_dj81i"]
 [ext_resource type="Script" path="res://scripts/TabSystem.gd" id="36_wv31h"]
@@ -73,7 +71,6 @@
 [ext_resource type="Texture2D" uid="uid://ca2xg08hxnmd3" path="res://assets/icons/pixelitos/128/applications-system.png" id="38_xw5qd"]
 [ext_resource type="Texture2D" uid="uid://ckyvec3wqx3t" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0798.png" id="39_5ft88"]
 [ext_resource type="Texture2D" uid="uid://n4hywdifr1q4" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0763.png" id="39_m4qgd"]
-[ext_resource type="Texture2D" uid="uid://4rxej78gwu6" path="res://assets/icons/pixelitos/128/org.ryujinx.Ryujinx.png" id="40_7fdvq"]
 [ext_resource type="Texture2D" uid="uid://bwcc0mjxxm0w1" path="res://assets/icons/kenney_input-prompts-pixel-16/Tiles/tile_0764.png" id="40_pnuor"]
 [ext_resource type="Texture2D" uid="uid://dr637stsnsg01" path="res://assets/icons/pixelitos/128/primehack.png" id="41_55e56"]
 [ext_resource type="Texture2D" uid="uid://lopxvipv6asb" path="res://assets/icons/pixelitos/128/info.cemu.Cemu.png" id="42_n3n7j"]
@@ -176,23 +173,17 @@ animations = [{
 "speed": 12.0
 }]
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_rf0rc"]
-texture = ExtResource("4_2tuu4")
-texture_margin_left = 6.0
-texture_margin_top = 6.0
-texture_margin_right = 6.0
-texture_margin_bottom = 6.0
-region_rect = Rect2(0, 8, 16, 16)
-modulate_color = Color(0.65098, 0.403922, 0.819608, 1)
-
 [sub_resource type="SpriteFrames" id="SpriteFrames_k7pd1"]
 animations = [{
 "frames": [{
-"duration": 10.0,
-"texture": ExtResource("59_7lcu5")
+"duration": 40.0,
+"texture": ExtResource("33_loftd")
 }, {
-"duration": 1.0,
-"texture": ExtResource("60_mbhg6")
+"duration": 0.15,
+"texture": ExtResource("34_liw3o")
+}, {
+"duration": 0.15,
+"texture": ExtResource("35_dxwop")
 }],
 "loop": true,
 "name": &"blink",
@@ -202,20 +193,26 @@ animations = [{
 [sub_resource type="SpriteFrames" id="SpriteFrames_l20mt"]
 animations = [{
 "frames": [{
-"duration": 1.0,
-"texture": ExtResource("63_52v81")
+"duration": 0.5,
+"texture": ExtResource("36_qon8n")
 }, {
 "duration": 1.0,
-"texture": ExtResource("62_lji1k")
+"texture": ExtResource("37_2mdp6")
 }, {
 "duration": 1.0,
-"texture": ExtResource("61_5vyvy")
+"texture": ExtResource("36_qon8n")
 }, {
 "duration": 1.0,
-"texture": ExtResource("64_s8u0e")
+"texture": ExtResource("36_qon8n")
 }, {
 "duration": 1.0,
-"texture": ExtResource("65_kk8ba")
+"texture": ExtResource("37_2mdp6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37_2mdp6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_qon8n")
 }],
 "loop": true,
 "name": &"speech",
@@ -278,18 +275,17 @@ tab_alignment = 1
 current_tab = 1
 script = ExtResource("3_id6l4")
 
-[node name="GLOBALS" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
+[node name="Presets" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 script = ExtResource("4_2jqfc")
 metadata/_tab_index = 0
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets"]
 layout_mode = 2
 follow_focus = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/GLOBALS/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/Presets/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -753,11 +749,120 @@ layout_mode = 2
 script = ExtResource("50_wqa5h")
 metadata/_tab_index = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS"]
 layout_mode = 2
 follow_focus = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TOOLS/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 36
+
+[node name="scan_container" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+follow_focus = true
+
+[node name="scan_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
+layout_mode = 2
+text = "TK_SCAN"
+
+[node name="scan_separator" type="HSeparator" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
+layout_mode = 2
+
+[node name="ps3_scan" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
+layout_mode = 2
+disabled = true
+text = "TK_PS3SCAN"
+
+[node name="scummvm_scan" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
+layout_mode = 2
+disabled = true
+text = "TK_SCUMMVMSCAN"
+
+[node name="multifile_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
+layout_mode = 2
+text = "TK_MULTIFILE"
+
+[node name="3ds_decrypt_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
+layout_mode = 2
+disabled = true
+text = "TK_3DSDECRYPT"
+
+[node name="bios_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
+layout_mode = 2
+text = "TK_BIOS"
+
+[node name="bios_button_expert" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/scan_container"]
+layout_mode = 2
+text = "TK_BIOS_EXPERT"
+
+[node name="tools_container" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="tools_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/tools_container"]
+layout_mode = 2
+text = "TK_GENTOOLS"
+
+[node name="tools_separator" type="HSeparator" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/tools_container"]
+layout_mode = 2
+
+[node name="emu_open_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/tools_container"]
+layout_mode = 2
+text = "TK_EMUOPEN"
+
+[node name="steamgrid_install_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/tools_container"]
+layout_mode = 2
+disabled = true
+text = "TK_GRIDINSTALL"
+
+[node name="ps3_fw_install_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/tools_container"]
+layout_mode = 2
+text = "TK_PS3FWINSTALL"
+
+[node name="fav_steam" type="CheckButton" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/tools_container"]
+layout_mode = 2
+text = "TK_FAVSTEAM"
+
+[node name="file_tools_container" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="file_tools_label" type="Label" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
+layout_mode = 2
+text = "TK_FILETOOLS"
+
+[node name="file_tools_separator" type="HSeparator" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
+layout_mode = 2
+
+[node name="usb_tool_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
+layout_mode = 2
+disabled = true
+text = "TK_USBTOOL"
+
+[node name="backup_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
+layout_mode = 2
+disabled = true
+text = "TK_BACKUPBTN"
+
+[node name="compress_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
+layout_mode = 2
+disabled = true
+text = "TK_COMPRESSGAMES"
+
+[node name="move_files_button" type="Button" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_TOOLS/ScrollContainer/VBoxContainer/file_tools_container"]
+layout_mode = 2
+disabled = true
+text = "TK_MOVEFILES"
+
+[node name="TK_NETWORK" type="MarginContainer" parent="Background/SplitContainer/MarginContainer/TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_NETWORK"]
+layout_mode = 2
+follow_focus = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_NETWORK/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -797,7 +902,6 @@ popup/item_0/icon = ExtResource("52_1rasc")
 popup/item_0/disabled = true
 popup/item_0/separator = true
 popup/item_1/text = "RetroDECK Log"
-popup/item_1/icon = ExtResource("11_g1uhn")
 popup/item_1/id = 1
 popup/item_2/text = "Retroarch"
 popup/item_2/icon = ExtResource("4_xcuib")
@@ -982,7 +1086,7 @@ unique_name_in_owner = true
 layout_mode = 2
 follow_focus = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/SETTINGS/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/Settings/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
@@ -1379,13 +1483,13 @@ alignment = 1
 visible = false
 layout_mode = 2
 script = ExtResource("4_m4rto")
-metadata/_tab_index = 4
+metadata/_tab_index = 6
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/ABOUT"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_ABOUT"]
 layout_mode = 2
 follow_focus = true
 
-[node name="about_container" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/ABOUT/ScrollContainer"]
+[node name="about_container" type="VBoxContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer"]
 layout_mode = 2
 alignment = 1
 
@@ -1396,13 +1500,13 @@ layout_mode = 2
 text = "RetroDECK"
 autowrap_mode = 2
 
-[node name="logo" type="TextureRect" parent="Background/SplitContainer/MarginContainer/TabContainer/ABOUT/ScrollContainer/about_container/rd_title"]
+[node name="logo" type="TextureRect" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container/rd_title"]
 custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
-offset_left = 487.0
-offset_top = -3.0
-offset_right = 615.0
-offset_bottom = 125.0
+offset_left = 166.0
+offset_top = -14.0
+offset_right = 294.0
+offset_bottom = 114.0
 size_flags_horizontal = 4
 size_flags_vertical = 0
 texture = ExtResource("64_qcmnc")
@@ -1415,7 +1519,7 @@ layout_mode = 2
 size_flags_vertical = 3
 text = "ABOUT RETRODECK"
 
-[node name="GridContainer" type="GridContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/ABOUT/ScrollContainer/about_container"]
+[node name="GridContainer" type="GridContainer" parent="Background/SplitContainer/MarginContainer/TabContainer/TK_ABOUT/ScrollContainer/about_container"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/h_separation = 15
@@ -1793,6 +1897,22 @@ mouse_filter = 1
 mouse_default_cursor_shape = 8
 script = ExtResource("4_nqqx3")
 
+[node name="rekku_sprite" type="Sprite2D" parent="Background/SplitContainer/side_logo/rekku"]
+position = Vector2(530.5, -989)
+scale = Vector2(0.264648, 0.302734)
+texture = ExtResource("32_omdu2")
+
+[node name="blink_anim" type="AnimatedSprite2D" parent="Background/SplitContainer/side_logo/rekku/rekku_sprite"]
+sprite_frames = SubResource("SpriteFrames_k7pd1")
+animation = &"blink"
+autoplay = "blink"
+frame_progress = 0.188668
+
+[node name="speech_anim" type="AnimatedSprite2D" parent="Background/SplitContainer/side_logo/rekku/rekku_sprite"]
+sprite_frames = SubResource("SpriteFrames_l20mt")
+animation = &"speech"
+autoplay = "speech"
+
 [node name="speach_bubble" type="Panel" parent="Background/SplitContainer/side_logo/rekku"]
 unique_name_in_owner = true
 visible = false
@@ -1811,10 +1931,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -129.5
-offset_top = -161.0
-offset_right = 129.5
-offset_bottom = 191.0
+offset_left = 414.0
+offset_top = -815.0
+offset_right = 668.0
+offset_bottom = -420.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("5_cprkf")
@@ -1876,11 +1996,11 @@ offset_right = 655.0
 offset_bottom = 793.0
 script = ExtResource("68_ahvw4")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="controller_guide"]
+[node name="controller_guide_text" type="RichTextLabel" parent="coltroller_guide"]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="a_button" type="TextureButton" parent="controller_guide/HBoxContainer"]
+[node name="a_button" type="TextureButton" parent="coltroller_guide/controller_guide_text"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(38, 38)
 layout_mode = 2

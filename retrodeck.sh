@@ -18,7 +18,7 @@ for i in "$@"; do
   case $i in
     -h*|--help*)
       echo "RetroDECK v""$version"
-      echo -e "
+      echo "
       Usage:
 flatpak run [FLATPAK-RUN-OPTION] net.retrodeck-retrodeck [ARGUMENTS]
 

@@ -47,6 +47,11 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 23
 text = "This is the label"
 
+[node name="BackButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "Back"
+
 [node name="ContentContainer" type="Panel" parent="Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
