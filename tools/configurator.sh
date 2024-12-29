@@ -89,6 +89,7 @@ source /app/libexec/global.sh
 #           - Reset Ruffle
 #           - Reset RPCS3
 #           - Reset Ryujinx
+#           - Reset Steam ROM Manager
 #           - Reset Vita3k
 #           - Reset XEMU
 #           - Reset Yuzu
@@ -1114,6 +1115,7 @@ configurator_reset_dialog() {
     "PPSSPP" "Reset the PSP emulator PPSSPP to default settings"
     "PortMaster" "Reset PortMaster to default settings"
     "Primehack" "Reset the Metroid Prime emulator Primehack to default settings"
+    "Ruffle" "Reset the Flash emulator Ruffle to default settings"
     "RPCS3" "Reset the PS3 emulator RPCS3 to default settings"
     "Ryujinx" "Reset the Switch emulator Ryujinx to default settings"
     "Steam ROM Manager" "Reset Steam ROM Manager to default settings"
