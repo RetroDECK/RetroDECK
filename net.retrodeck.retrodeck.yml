@@ -583,6 +583,7 @@ modules:
         sha256: 68b1602c99c5e5b743a1362eaf428ee88b237bd5029aede00d342fa8d79b8f27
 
   # XEMU
+  # UPDATE IT HERE
   # https://xemu.app/docs/download/#download-for-linux
 
   - name: xemu
@@ -595,8 +596,8 @@ modules:
       - cp -r squashfs-root/usr/* "${FLATPAK_DEST}/"
     sources:
       - type: file
-        url: https://github.com/xemu-project/xemu/releases/download/v0.7.132/xemu-v0.7.132-x86_64.AppImage
-        sha256: c11821d6d0632da3c51a354e9101f68e5ab2ae0e2512c6aa6c8453aef56cedba
+        url: https://github.com/xemu-project/xemu/releases/download/v0.8.5/xemu-v0.8.5-x86_64.AppImage
+        sha256: fd282e299dbc3207b8afb84059da99feffc65a86eb29d96c9108fde368d4c99e
 
   - name: xemu-dummy-hdd
     buildsystem: simple
