@@ -179,8 +179,12 @@ jobs:
           echo "Commits since $LATEST_TAG:"
           echo "$COMMITS"
 
-          # Export the commits list to the GitHub environment
-          echo "COMMITS=$COMMITS" >> $GITHUB_ENV
+          # Write the commits list to a file
+          echo "$COMMITS" > commits_list.txt
+
+          # Set the commits list as an environment variable
+          echo "COMMITS_FILE=commits_list.txt" >> $GITHUB_ENV
+
 
       # - name: Extract XML Description
       #   uses: Mudlet/xmlstarlet-action@master
@@ -194,14 +198,28 @@ jobs:
         run: |
           # Initialize the release body text
           RELEASE_BODY="# Release Notes\n"
-          RELEASE_BODY+="This is a cooker snapshot based on the commit: ${{ github.event.repository.full_name }}@${{github.sha}}."
-          RELEASE_BODY+="On branch [${{env.BRANCH_NAME}}](https://repo.retrodeck.net/RetroDECK/RetroDECK/src/branch/${{env.BRANCH_NAME}})."
+          RELEASE_BODY+="This is a cooker snapshot based on the commit: ${{ github.event.repository.full_name }}@${{ github.sha }}.\n"
+          RELEASE_BODY+="On branch [${{ env.BRANCH_NAME }}](https://repo.retrodeck.net/RetroDECK/RetroDECK/src/branch/${{ env.BRANCH_NAME }}).\n"
           RELEASE_BODY+="## Commits since last release\n"
-          RELEASE_BODY+="$COMMITS\n\n"
-
+      
+          # Append commits from the file to the release body
+          if [ -f "${{ env.COMMITS_FILE }}" ]; then
+            COMMITS=$(cat "${{ env.COMMITS_FILE }}")
+            RELEASE_BODY+="$COMMITS\n\n"
+          else
+            echo "[ERROR] Commits file not found: ${{ env.COMMITS_FILE }}"
+            RELEASE_BODY+="[ERROR] Commits file not found"
+          fi
+      
+          # Debug: Print the release body so far
+          echo "[DEBUG] RELEASE_BODY:"
+          echo "$RELEASE_BODY"
+      
+          # Process raw description (if needed)
           #raw_description="${{ steps.extract-description.outputs.result }}"
-
+          
           # Convert <p> tags to markdown headers using sed
+          # raw_description="${{ steps.extract-description.outputs.result }}"
           markdown_description=$(echo "$raw_description" | sed -e 's|<p>|\n### |g' -e 's|</p>||g')
 
           # Convert <li> tags to bullet points and trim spaces
@@ -209,16 +227,16 @@ jobs:
 
           # Remove any remaining XML tags
           markdown_description=$(echo "$markdown_description" | sed -e 's/<[^>]*>//g')
-
+      
           # Debug: Print the markdown description
           echo "Markdown Description:"
           echo "$markdown_description"
-
+      
           # Append markdown content to the release body
           RELEASE_BODY+="$markdown_description"
           printf "RELEASE_BODY=%s\n" "$RELEASE_BODY" >> $GITHUB_ENV
           printf "RELEASE_BODY=%s\n" "$RELEASE_BODY" >> $GITHUB_OUTPUT
-
+      
           echo "[DEBUG] CHECKPOINT 8"
 
       - name: Generate a token for Rekku
