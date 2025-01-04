@@ -685,8 +685,8 @@ modules:
     sources:
       - type: archive
         strip-components: 0
-        url: https://github.com/ruffle-rs/ruffle/releases/download/nightly-2024-10-29/ruffle-nightly-2024_10_29-linux-x86_64.tar.gz
-        sha256: 5ab0fc46b07d022d4b0ff355e88175cd77b8bb1663612f31d160f8001dc472bb
+        url: https://github.com/ruffle-rs/ruffle/releases/download/nightly-2025-01-04/ruffle-nightly-2025_01_04-linux-x86_64.tar.gz
+        sha256: 27287f45c56c7a66c62f2dc218abffc57a864ba7b1a783e38e2c54609fde496d
 
   - name: fetch-missing-libs
     buildsystem: simple
