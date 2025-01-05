@@ -54,7 +54,7 @@
     <GameCache/>
     <GraphicPack/>
     <Graphic>
-        <api>1</api>
+        <api>0</api>
         <device>00000000000000000000000000000000</device>
         <VSync>0</VSync>
         <GX2DrawdoneSync>true</GX2DrawdoneSync>
