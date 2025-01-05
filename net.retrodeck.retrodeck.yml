@@ -611,15 +611,15 @@ modules:
 
   # MAME
 
-  # - name: retrodeck-mame
-  #   buildsystem: simple
-  #   build-commands:
-  #     - rm -f files/manifest.json
-  #     - cp -rn files/* ${FLATPAK_DEST}
-  #   sources:
-  #     - type: archive
-  #       url: https://github.com/RetroDECK/org.mamedev.MAME/releases/latest/download/RetroDECK-MAME-Artifact.tar.gz
-  #       sha256: RETRODECKMAMELATEST
+  - name: retrodeck-mame
+    buildsystem: simple
+    build-commands:
+      - rm -f files/manifest.json
+      - cp -rn files/* ${FLATPAK_DEST}
+    sources:
+      - type: archive
+        url: https://github.com/RetroDECK/org.mamedev.MAME/releases/latest/download/RetroDECK-MAME-Artifact.tar.gz
+        sha256: RETRODECKMAMELATEST
 
   # - name: retrodeck-mame
   #   buildsystem: simple
