@@ -563,7 +563,7 @@ modules:
       - cp -r files/* "${FLATPAK_DEST}"
     sources:
       - type: archive
-        url: https://github.com/RetroDECK/org.zdoom.GZDoom/releases/latest/download/RetroDECK-gzdoom-Artifact.tar.gz
+        url: https://github.com/RetroDECK/org.zdoom.GZDoom/releases/latest/download/RetroDECK-Artifact.tar.gz
         sha256: RETRODECKGZDOOMLATEST
 
   # Pancakes
