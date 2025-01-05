@@ -618,7 +618,7 @@ modules:
       - cp -rn files/* ${FLATPAK_DEST}
     sources:
       - type: archive
-        url: https://github.com/RetroDECK/org.mamedev.MAME/releases/latest/download/RetroDECK-MAME-Artifact.tar.gz
+        url: https://github.com/RetroDECK/org.mamedev.MAME/releases/latest/download/RetroDECK-Artifact.tar.gz
         sha256: RETRODECKMAMELATEST
 
   # - name: retrodeck-mame
