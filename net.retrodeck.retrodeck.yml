@@ -238,9 +238,9 @@ modules:
       - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
     sources:
       - type: archive
-        url: https://buildbot.libretro.com/stable/1.19.1/linux/x86_64/RetroArch.7z
+        url: https://buildbot.libretro.com/stable/1.20.0/linux/x86_64/RetroArch.7z
         #sha256: RASHAPLACEHOLDER
-        sha256: f98e954e99aef7b4b1a3334d710856b997c3f97c5451d33af9e5c88bf63213f8
+        sha256: 809b3e9f02a9849719453d0f189a0edc544ad3235c8ce75a79488e710ba9668a
 
   # Not part of the offical RetroArch AppImage
 
@@ -289,8 +289,8 @@ modules:
       - cp -rf ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* ${FLATPAK_DEST}/share/libretro/cores/
     sources:
       - type: archive
-        url: https://buildbot.libretro.com/stable/1.19.1/linux/x86_64/RetroArch_cores.7z
-        sha256: fe75e7e796e29933ab31e4a58f072a1a47ea155b477988a48f33b0f4addc9d49
+        url: https://buildbot.libretro.com/stable/1.20.0/linux/x86_64/RetroArch_cores.7z
+        sha256: 433f46ecbb3f1ae8d17b6c5fdffbd11761ce4532652d73a1d4e1f0029c175a87
     
   - name: retroarch-sameduck-core
     buildsystem: simple
