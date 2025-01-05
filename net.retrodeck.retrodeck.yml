@@ -704,14 +704,14 @@ modules:
       - |
           # Search for missing libraries in our libtmp folder
           missing_libs=$(find /app/bin -type f -exec ldd {} + 2>/dev/null | grep 'not found' | awk '$1 ~ /\.so/ {print $1}' | sort | uniq)
-          echo $missing_libs
+          echo "$missing_libs"
           
           # Manually specified libraries that are not automatically detected
           manually_imported="libpostproc.so.56 libswscale.so.6 libshaderc_shared.so.1 libbz2.so.1.0 libaio.so.1 ld-linux.so.2 libvpx.so.9 libzmusic.so.1 libicuuc.so.73 libLLVM.so.18.1"
           
           # Combine detected missing libraries and manually specified ones
           missing_libs="$missing_libs $manually_imported"
-          echo "Missing libs and manually imported: $missing_libs"
+          echo -e "Missing libs and manually imported:\n$missing_libs"
 
           # Source paths
           src_dir="${FLATPAK_DEST}/retrodeck/tmplib"
