@@ -39,7 +39,7 @@ done
 copied_files=()
 failed_files=()
 
-while IFS= read -r file; do
+find "$1" -type f -name "*.so*" | while IFS= read -r file; do
     # Define destination file path
     dest_file="$target_dir/$(basename "$file")"
     
@@ -65,10 +65,7 @@ while IFS= read -r file; do
         echo "Warning: Failed to copy $file. Skipping."
         failed_files+=("$file, $error_message")
     fi
-done < <(find "$1" -type f)
-
-echo "Deleting the used lib directory"
-rm -rf "$1"
+done
 
 echo "LibMan is flying away"
 
@@ -78,10 +75,13 @@ for file in "${copied_files[@]}"; do
     echo "$file"
 done
 
-echo "Failed files:"
-for file in "${failed_files[@]}"; do
-    echo "$file"
-done
+# Output failed files only if the list is not empty
+if [ ${#failed_files[@]} -ne 0 ]; then
+    echo "Failed files:"
+    for file in "${failed_files[@]}"; do
+        echo "$file"
+    fi
+fi
 
 
 
