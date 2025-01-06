@@ -37,7 +37,7 @@ finish-args:
   - --filesystem=xdg-run/gamescope-0:ro
 
 environment:
-  LD_LIBRARY_PATH: "${FLATPAK_DEST}/retrodeck/lib:${LD_LIBRARY_PATH}"
+  LD_LIBRARY_PATH: "{LD_LIBRARY_PATH}:${FLATPAK_DEST}/retrodeck/lib"
 
 cleanup:
   # ES-DE
