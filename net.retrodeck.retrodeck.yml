@@ -395,13 +395,15 @@ modules:
     build-commands:
       # Step 1: Remove any existing manifest.json file
       - rm -f "files/manifest.json"
-      # Step 2: Extract the AppImage
-      - chmod +x ./*.AppImage
-      - ./*.AppImage --appimage-extract
-      # Step 3: Use libman.sh to manage libraries
-      - /app/bin/libman.sh "squashfs-root/usr/lib"
-      # Step 4: Copy remaining extracted files to the Flatpak destination
-      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
+      # Step 2: Use libman.sh to manage libraries
+      - /app/bin/libman.sh "files/lib"
+      # Step 3: Copy the managed libraries to the Flatpak destination
+      - cp -rL files/lib/* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - rm -rf "files/lib"
+      # Step 4: Ensure binaries are executable
+      - chmod +x "files/bin/"*
+      # Step 5: Copy all remaining files to the Flatpak destination
+      - cp -r files/* "${FLATPAK_DEST}"
     sources:
       - type: archive
         url: https://github.com/RetroDECK/org.DolphinEmu.dolphin-emu/releases/latest/download/RetroDECK-Artifact.tar.gz
@@ -415,13 +417,17 @@ modules:
     build-commands:
       # Step 1: Remove any existing manifest.json file
       - rm -f "files/manifest.json"
-      # Step 2: Extract the AppImage
-      - chmod +x ./*.AppImage
-      - ./*.AppImage --appimage-extract
+      # Step 2: Remove unnecessary files
+      - rm -rf "files/lib/pkgconfig"
       # Step 3: Use libman.sh to manage libraries
-      - /app/bin/libman.sh "squashfs-root/usr/lib"
-      # Step 4: Copy remaining extracted files to the Flatpak destination
-      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
+      - /app/bin/libman.sh "files/lib"
+      # Step 4: Copy the managed libraries to the Flatpak destination
+      - cp -rL files/lib/* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - rm -rf "files/lib"
+      # Step 5: Ensure binaries are executable
+      - chmod +x "files/bin/"*
+      # Step 6: Copy all remaining files to the Flatpak destination
+      - cp -r files/* "${FLATPAK_DEST}"
     sources:
       - type: archive
         url: https://github.com/RetroDECK/io.github.shiiion.primehack/releases/latest/download/RetroDECK-primehack-Artifact.tar.gz
@@ -435,13 +441,15 @@ modules:
     build-commands:
       # Step 1: Remove any existing manifest.json file
       - rm -f "files/manifest.json"
-      # Step 2: Extract the AppImage
-      - chmod +x ./*.AppImage
-      - ./*.AppImage --appimage-extract
-      # Step 3: Use libman.sh to manage libraries
-      - /app/bin/libman.sh "squashfs-root/usr/lib"
-      # Step 4: Copy remaining extracted files to the Flatpak destination
-      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
+      # Step 2: Use libman.sh to manage libraries
+      - /app/bin/libman.sh "files/lib"
+      # Step 3: Copy the managed libraries to the Flatpak destination
+      - cp -rL files/lib/* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - rm -rf "files/lib"
+      # Step 4: Ensure binaries are executable
+      - chmod +x "files/bin/"*
+      # Step 5: Copy all remaining files to the Flatpak destination
+      - cp -r files/* "${FLATPAK_DEST}"
     sources:
       - type: archive
         url: https://github.com/RetroDECK/net.rpcs3.RPCS3/releases/latest/download/RetroDECK-Artifact.tar.gz
@@ -455,13 +463,15 @@ modules:
     build-commands:
       # Step 1: Remove any existing manifest.json file
       - rm -f "files/manifest.json"
-      # Step 2: Extract the AppImage
-      - chmod +x ./*.AppImage
-      - ./*.AppImage --appimage-extract
-      # Step 3: Use libman.sh to manage libraries
-      - /app/bin/libman.sh "squashfs-root/usr/lib"
-      # Step 4: Copy remaining extracted files to the Flatpak destination
-      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
+      # Step 2: Use libman.sh to manage libraries
+      - /app/bin/libman.sh "files/lib"
+      # Step 3: Copy the managed libraries to the Flatpak destination
+      - cp -rL files/lib/* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - rm -rf "files/lib"
+      # Step 4: Ensure binaries are executable
+      - chmod +x "files/bin/"*
+      # Step 5: Copy all remaining files to the Flatpak destination
+      - cp -r files/* "${FLATPAK_DEST}/"
     sources:
       - type: archive
         url: https://github.com/RetroDECK/net.kuribo64.melonDS/releases/latest/download/RetroDECK-melonds-Artifact.tar.gz
@@ -548,13 +558,17 @@ modules:
     build-commands:
       # Step 1: Remove any existing manifest.json file
       - rm -f "files/manifest.json"
-      # Step 2: Extract the AppImage
-      - chmod +x ./*.AppImage
-      - ./*.AppImage --appimage-extract
+      # Step 2: Remove unnecessary files
+      - rm -rf "files/lib/debug" "files/lib/pkgconfig"
       # Step 3: Use libman.sh to manage libraries
-      - /app/bin/libman.sh "squashfs-root/usr/lib"
-      # Step 4: Copy remaining extracted files to the Flatpak destination
-      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
+      - /app/bin/libman.sh "files/lib"
+      # Step 4: Copy the managed libraries to the Flatpak destination
+      - cp -rL files/lib/* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - rm -rf "files/lib"
+      # Step 5: Ensure binaries are executable
+      - chmod +x "files/bin/"*
+      # Step 6: Copy all remaining files to the Flatpak destination
+      - cp -r files/* "${FLATPAK_DEST}"
     sources:
       - type: archive
         url: https://github.com/RetroDECK/org.solarus_games.solarus.Launcher/releases/latest/download/RetroDECK-solarus-Artifact.tar.gz
@@ -569,15 +583,17 @@ modules:
     build-commands:
       # Step 1: Remove any existing manifest.json file
       - rm -f "files/manifest.json"
-      # Step 2: Extract the AppImage
-      - chmod +x ./*.AppImage
-      - ./*.AppImage --appimage-extract
-      # Step 3: Remove unnecessary files
-      - rm -rf "squashfs-root/usr/lib/cmake" "squashfs-root/usr/lib/pkgconfig" "squashfs-root/usr/lib/debug"
-      # Step 4: Use libman.sh to manage libraries
-      - /app/bin/libman.sh "squashfs-root/usr/lib"
-      # Step 5: Copy remaining extracted files to the Flatpak destination
-      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
+      # Step 2: Remove unnecessary files
+      - rm -rf "files/lib/cmake" "files/lib/pkgconfig" "files/lib/debug"
+      # Step 3: Use libman.sh to manage libraries
+      - /app/bin/libman.sh "files/lib"
+      # Step 4: Copy the managed libraries to the Flatpak destination
+      - cp -rL files/lib/* "${FLATPAK_DEST}/retrodeck/tmplib"
+      - rm -rf "files/lib"
+      # Step 5: Ensure binaries are executable
+      - chmod +x "files/bin/"*
+      # Step 6: Copy all remaining files to the Flatpak destination
+      - cp -r files/* "${FLATPAK_DEST}"
     sources:
       - type: archive
         url: https://github.com/RetroDECK/org.zdoom.GZDoom/releases/latest/download/RetroDECK-Artifact.tar.gz
@@ -639,22 +655,16 @@ modules:
   - name: retrodeck-mame
     buildsystem: simple
     build-commands:
+      # Step 1: Remove any existing manifest.json file
       - rm -f files/manifest.json
+      # Step 2: Use libman.sh to manage libraries
+      - /app/bin/libman.sh "files/lib"
+      # Step 3: Copy the managed libraries and all other files to the Flatpak destination
       - cp -rn files/* ${FLATPAK_DEST}
     sources:
       - type: archive
         url: https://github.com/RetroDECK/org.mamedev.MAME/releases/latest/download/RetroDECK-Artifact.tar.gz
         sha256: RETRODECKMAMELATEST
-
-  # - name: retrodeck-mame
-  #   buildsystem: simple
-  #   build-commands:
-  #     - rm -f files/manifest.json
-  #     - cp -rn files/* ${FLATPAK_DEST}
-  #   sources:
-  #     - type: archive
-  #       url: https://github.com/RetroDECK/MAME/releases/latest/download/RetroDECK-MAME-Artifact.tar.gz
-  #       sha256: RETRODECKOLDMAMELATEST
 
   # PortMaster
 
