@@ -7,6 +7,7 @@ on:
       - cooker*
       - feat*
       - branch/cooker*
+      - feat/libman
     paths:
       - '.github/workflows/**'
       - 'automation_tools/**'
