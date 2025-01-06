@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Be aware that this script is deleting the source directory after copying the files and it's intended to be used onyl by flatpak builder
+
 echo "Worry not, LibMan is here!"
 
 # Set default destination if FLATPAK_DEST is not set
@@ -37,7 +39,7 @@ done
 copied_files=()
 failed_files=()
 
-find "$1" -type f | while IFS= read -r file; do
+while IFS= read -r file; do
     # Define destination file path
     dest_file="$target_dir/$(basename "$file")"
     
@@ -63,7 +65,10 @@ find "$1" -type f | while IFS= read -r file; do
         echo "Warning: Failed to copy $file. Skipping."
         failed_files+=("$file, $error_message")
     fi
-done
+done < <(find "$1" -type f)
+
+echo "Deleting the used lib directory"
+rm -rf "$1"
 
 echo "LibMan is flying away"
 
