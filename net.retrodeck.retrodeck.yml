@@ -599,8 +599,6 @@ modules:
       # Step 1: Create the Flatpak destination directory
       - mkdir -p "${FLATPAK_DEST}"
       # Step 2: Extract and manage library files
-      - chmod +x *.so*
-      - mv *.so* "squashfs-root/usr/lib"
       - /app/bin/libman.sh "squashfs-root/usr/lib"
       # Step 3: Move and set up the binary
       - mv R*x* "${FLATPAK_DEST}/bin/"
