@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "Starting LibMan"
+
 # Set default destination if FLATPAK_DEST is not set
 if [ -z "$FLATPAK_DEST" ]; then
     FLATPAK_DEST="/app"
@@ -15,22 +17,29 @@ fi
 target_dir="${FLATPAK_DEST}/retrodeck/lib"
 
 # Ensure the target directory exists
-mkdir -p "$target_dir"
+if ! mkdir -p "$target_dir"; then
+    echo "Error: Failed to create target directory $target_dir"
+    exit 0
+fi
 
 # Find and copy files
-find "$1" -type f -exec sh -c '
-    target_dir="$1"
-    shift
-    for file in "$@"; do
-        dest_file="$target_dir/$(basename "$file")"
-        if [ ! -e "$dest_file" ]; then
-            if ! cp "$file" "$dest_file" 2>/dev/null; then
-                echo "Warning: Failed to copy $file. Skipping."
-            else
-                echo "Copied $file to $dest_file"
-            fi
-        else
-            echo "Skipped $file as $dest_file already exists"
-        fi
-    done
-' sh "$target_dir" {} +
+find "$1" -type f | while IFS= read -r file; do
+    # Define destination file path
+    dest_file="$target_dir/$(basename "$file")"
+    
+    # Skip if the destination file already exists
+    if [ -e "$dest_file" ]; then
+        echo "Skipped $file as $dest_file already exists"
+        continue
+    fi
+
+    # Attempt to copy the file
+    if cp "$file" "$dest_file"; then
+        echo "Copied $file to $dest_file"
+    else
+        echo "Warning: Failed to copy $file. Skipping."
+    fi
+done
+
+echo "Terminating LibMan"
+
