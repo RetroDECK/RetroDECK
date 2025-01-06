@@ -19,16 +19,18 @@ mkdir -p "$target_dir"
 
 # Find and copy files
 find "$1" -type f -exec sh -c '
-        for file; do
-          dest_file="$1/$(basename "$file")"
-          if [ ! -e "$dest_file" ]; then
+    target_dir="$1"
+    shift
+    for file in "$@"; do
+        dest_file="$target_dir/$(basename "$file")"
+        if [ ! -e "$dest_file" ]; then
             if cp "$file" "$dest_file"; then
-              echo "Copied $file to $dest_file"
+                echo "Copied $file to $dest_file"
             else
-              echo "Failed to copy $file to $dest_file"
+                echo "Failed to copy $file to $dest_file"
             fi
-          else
+        else
             echo "Skipped $file as $dest_file already exists"
-          fi
-        done
-        ' sh {} + "$target_dir"
+        fi
+    done
+' sh "$target_dir" {} +
