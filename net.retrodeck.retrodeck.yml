@@ -93,7 +93,7 @@ modules:
         echo "Version is $VERSION"
 
         # LBIMAN INSTALLATION
-        - install -Dm755 "automation_tools/libman.sh" "/app/bin/libman.sh"
+        install -Dm755 "automation_tools/libman.sh" "/app/bin/libman.sh"
     sources:
       - type: git
         url: THISREPO
