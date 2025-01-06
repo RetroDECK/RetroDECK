@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Be aware that this script is deleting the source directory after copying the files and it's intended to be used onyl by flatpak builder
+# Be aware that this script is deleting the source directory after copying the files and it's intended to be used only by flatpak builder
 
 echo "Worry not, LibMan is here!"
 
@@ -62,7 +62,7 @@ find "$1" -type f -name "*.so*" | while IFS= read -r file; do
         copied_files+=("$file")
     else
         error_message=$(<error_log)
-        echo "Warning: Failed to copy $file. Skipping."
+        echo "Warning: Failed to copy $file. Skipping. Error: $error_message"
         failed_files+=("$file, $error_message")
     fi
 done
@@ -80,8 +80,5 @@ if [ ${#failed_files[@]} -ne 0 ]; then
     echo "Failed files:"
     for file in "${failed_files[@]}"; do
         echo "$file"
-    fi
+    done
 fi
-
-
-
