@@ -42,7 +42,7 @@ jobs:
     runs-on: retrodeck
     outputs:
       TAG: ${{ steps.version-tag.outputs.TAG }}
-      RELEASE_BODY: ${{ steps.version-tag.outputs.RELEASE_BODY }}
+      RELEASE_BODY: "${{ needs.Build_RetroDECK.outputs.RELEASE_BODY_FILE }} || No release body found"
       MAKE_LATEST: ${{ steps.version-tag.outputs.MAKE_LATEST }}
       
     steps:
@@ -197,23 +197,25 @@ jobs:
         id: generate-body
         run: |
           # Initialize the release body text
-          RELEASE_BODY="# Release Notes\n"
-          RELEASE_BODY+="This is a cooker snapshot based on the commit: ${{ github.event.repository.full_name }}@${{ github.sha }}.\n"
-          RELEASE_BODY+="On branch [${{ env.BRANCH_NAME }}](https://repo.retrodeck.net/RetroDECK/RetroDECK/src/branch/${{ env.BRANCH_NAME }}).\n"
-          RELEASE_BODY+="## Commits since last release\n"
+          RELEASE_BODY_FILE="release_body.md"
+          echo "# Release Notes" > $RELEASE_BODY_FILE
+          echo "This is a cooker snapshot based on the commit: ${{ github.event.repository.full_name }}@${{ github.sha }}." >> $RELEASE_BODY_FILE
+          echo "On branch [${{ env.BRANCH_NAME }}](https://repo.retrodeck.net/RetroDECK/RetroDECK/src/branch/${{ env.BRANCH_NAME }})." >> $RELEASE_BODY_FILE
+          echo "## Commits since last release" >> $RELEASE_BODY_FILE
+          echo "" >> $RELEASE_BODY_FILE
       
           # Append commits from the file to the release body
           if [ -f "${{ env.COMMITS_FILE }}" ]; then
-            COMMITS=$(cat "${{ env.COMMITS_FILE }}")
-            RELEASE_BODY+="$COMMITS\n\n"
+            echo "${{ env.COMMITS_FILE }}" >> $RELEASE_BODY_FILE
+            echo "" >> $RELEASE_BODY_FILE
           else
             echo "[ERROR] Commits file not found: ${{ env.COMMITS_FILE }}"
-            RELEASE_BODY+="[ERROR] Commits file not found"
+            echo "[ERROR] Commits file not found" >> $RELEASE_BODY_FILE
           fi
       
           # Debug: Print the release body so far
-          echo "[DEBUG] RELEASE_BODY:"
-          echo "$RELEASE_BODY"
+          echo "[DEBUG] Current release body contents:"
+          cat $RELEASE_BODY_FILE
       
           # Process raw description (if needed)
           #raw_description="${{ steps.extract-description.outputs.result }}"
@@ -232,10 +234,12 @@ jobs:
           echo "Markdown Description:"
           echo "$markdown_description"
       
-          # Append markdown content to the release body
-          RELEASE_BODY+="$markdown_description"
-          printf "RELEASE_BODY=%s\n" "$RELEASE_BODY" >> $GITHUB_ENV
-          printf "RELEASE_BODY=%s\n" "$RELEASE_BODY" >> $GITHUB_OUTPUT
+          # Append markdown content to the release body file
+          echo "$markdown_description" >> $RELEASE_BODY_FILE
+      
+          # Output the file path to the environment and output variables
+          echo "RELEASE_BODY_FILE=$RELEASE_BODY_FILE" >> $GITHUB_ENV
+          echo "RELEASE_BODY_FILE=$RELEASE_BODY_FILE" >> $GITHUB_OUTPUT
       
           echo "[DEBUG] CHECKPOINT 8"
 
@@ -290,7 +294,7 @@ jobs:
     needs: Build_RetroDECK
     env:
       TAG: ${{ needs.Build_RetroDECK.outputs.TAG }}
-      RELEASE_BODY: ${{ needs.Build_RetroDECK.outputs.RELEASE_BODY }}
+      RELEASE_BODY: "${{ needs.Build_RetroDECK.outputs.RELEASE_BODY_FILE }} || No release body found"
       MAKE_LATEST: ${{ needs.Build_RetroDECK.outputs.MAKE_LATEST }}
     steps:
 
@@ -365,7 +369,7 @@ jobs:
   #   needs: Build_RetroDECK
   #   env:
   #     TAG: ${{ needs.Build_RetroDECK.outputs.TAG }}
-  #     RELEASE_BODY: ${{ needs.Build_RetroDECK.outputs.RELEASE_BODY }}
+  #     RELEASE_BODY: "${{ needs.Build_RetroDECK.outputs.RELEASE_BODY_FILE }} || No release body found"
   #     MAKE_LATEST: ${{ needs.Build_RetroDECK.outputs.MAKE_LATEST }}
   #   steps:
   #
@@ -376,7 +380,7 @@ jobs:
   #       if: github.ref == 'refs/heads/main'
   #       uses: RetroDECK/components-template/.github/workflows/fogejo_publish_release.yml@main
   #       with:
-  #         release_body: ${{ env.RELEASE_BODY }}
+  #         release_body: "${{ needs.Build_RetroDECK.outputs.RELEASE_BODY_FILE }} || No release body found"
   #         artifacts: "retrodeck-artifacts/*.flatpak,retrodeck-artifacts/*.flatpak.sha,retrodeck-artifacts/*Artifact.tar.gz"
   #         tag: ${{ env.TAG }}
 
