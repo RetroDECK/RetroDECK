@@ -24,10 +24,10 @@ find "$1" -type f -exec sh -c '
     for file in "$@"; do
         dest_file="$target_dir/$(basename "$file")"
         if [ ! -e "$dest_file" ]; then
-            if cp "$file" "$dest_file"; then
-                echo "Copied $file to $dest_file"
+            if ! cp "$file" "$dest_file" 2>/dev/null; then
+                echo "Warning: Failed to copy $file. Skipping."
             else
-                echo "Failed to copy $file to $dest_file"
+                echo "Copied $file to $dest_file"
             fi
         else
             echo "Skipped $file as $dest_file already exists"
