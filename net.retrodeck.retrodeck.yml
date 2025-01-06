@@ -397,8 +397,7 @@ modules:
       - rm -f "files/manifest.json"
       # Step 2: Use libman.sh to manage libraries
       - /app/bin/libman.sh "files/lib"
-      # Step 3: Copy the managed libraries to the Flatpak destination
-      - cp -rL files/lib/* "${FLATPAK_DEST}/retrodeck/tmplib"
+      # Step 3: removing libraries folder that have been already moved
       - rm -rf "files/lib"
       # Step 4: Ensure binaries are executable
       - chmod +x "files/bin/"*
@@ -421,8 +420,7 @@ modules:
       - rm -rf "files/lib/pkgconfig"
       # Step 3: Use libman.sh to manage libraries
       - /app/bin/libman.sh "files/lib"
-      # Step 4: Copy the managed libraries to the Flatpak destination
-      - cp -rL files/lib/* "${FLATPAK_DEST}/retrodeck/tmplib"
+      # Step 4: removing libraries folder that have been already moved
       - rm -rf "files/lib"
       # Step 5: Ensure binaries are executable
       - chmod +x "files/bin/"*
@@ -443,8 +441,7 @@ modules:
       - rm -f "files/manifest.json"
       # Step 2: Use libman.sh to manage libraries
       - /app/bin/libman.sh "files/lib"
-      # Step 3: Copy the managed libraries to the Flatpak destination
-      - cp -rL files/lib/* "${FLATPAK_DEST}/retrodeck/tmplib"
+      # Step 3: removing libraries folder that have been already moved
       - rm -rf "files/lib"
       # Step 4: Ensure binaries are executable
       - chmod +x "files/bin/"*
@@ -465,8 +462,7 @@ modules:
       - rm -f "files/manifest.json"
       # Step 2: Use libman.sh to manage libraries
       - /app/bin/libman.sh "files/lib"
-      # Step 3: Copy the managed libraries to the Flatpak destination
-      - cp -rL files/lib/* "${FLATPAK_DEST}/retrodeck/tmplib"
+      # Step 3: removing libraries folder that have been already moved
       - rm -rf "files/lib"
       # Step 4: Ensure binaries are executable
       - chmod +x "files/bin/"*
@@ -562,8 +558,7 @@ modules:
       - rm -rf "files/lib/debug" "files/lib/pkgconfig"
       # Step 3: Use libman.sh to manage libraries
       - /app/bin/libman.sh "files/lib"
-      # Step 4: Copy the managed libraries to the Flatpak destination
-      - cp -rL files/lib/* "${FLATPAK_DEST}/retrodeck/tmplib"
+      # Step 4: removing libraries folder that have been already moved
       - rm -rf "files/lib"
       # Step 5: Ensure binaries are executable
       - chmod +x "files/bin/"*
@@ -587,8 +582,7 @@ modules:
       - rm -rf "files/lib/cmake" "files/lib/pkgconfig" "files/lib/debug"
       # Step 3: Use libman.sh to manage libraries
       - /app/bin/libman.sh "files/lib"
-      # Step 4: Copy the managed libraries to the Flatpak destination
-      - cp -rL files/lib/* "${FLATPAK_DEST}/retrodeck/tmplib"
+      # Step 4: removing libraries folder that have been already moved
       - rm -rf "files/lib"
       # Step 5: Ensure binaries are executable
       - chmod +x "files/bin/"*
