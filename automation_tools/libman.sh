@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Starting LibMan"
+echo "Worry not, LibMan is here!"
 
 # Set default destination if FLATPAK_DEST is not set
 if [ -z "$FLATPAK_DEST" ]; then
@@ -10,7 +10,7 @@ fi
 # Check if source directory is provided
 if [ -z "$1" ]; then
     echo "Usage: $0 <source_directory>"
-    exit 1
+    exit 0
 fi
 
 # Define target directory
@@ -22,7 +22,21 @@ if ! mkdir -p "$target_dir"; then
     exit 0
 fi
 
+# List all libraries in LD_LIBRARY_PATH and store them in an array
+libraries=()
+IFS=: read -ra dirs <<< "$LD_LIBRARY_PATH"
+for dir in "${dirs[@]}"; do
+    if [ -d "$dir" ]; then
+        while IFS= read -r lib; do
+            libraries+=("$lib")
+        done < <(find "$dir" -type f -name "*.so")
+    fi
+done
+
 # Find and copy files
+copied_files=()
+failed_files=()
+
 find "$1" -type f | while IFS= read -r file; do
     # Define destination file path
     dest_file="$target_dir/$(basename "$file")"
@@ -33,13 +47,36 @@ find "$1" -type f | while IFS= read -r file; do
         continue
     fi
 
+    # Skip if the file is already in the list of libraries
+    if [[ " ${libraries[*]} " == *" $file "* ]]; then
+        echo "Skipped $file as it is already present in the system"
+        failed_files+=("$file, already present in the system")
+        continue
+    fi
+
     # Attempt to copy the file
-    if cp "$file" "$dest_file"; then
+    if install -D "$file" "$dest_file" 2>error_log; then
         echo "Copied $file to $dest_file"
+        copied_files+=("$file")
     else
+        error_message=$(<error_log)
         echo "Warning: Failed to copy $file. Skipping."
+        failed_files+=("$file, $error_message")
     fi
 done
 
-echo "Terminating LibMan"
+echo "LibMan is flying away"
+
+# Output the lists of copied and failed files
+echo "Copied files:"
+for file in "${copied_files[@]}"; do
+    echo "$file"
+done
+
+echo "Failed files:"
+for file in "${failed_files[@]}"; do
+    echo "$file"
+done
+
+
 
