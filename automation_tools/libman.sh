@@ -71,7 +71,7 @@ echo "LibMan is flying away"
 
 # Output the lists of copied and failed files
 if [ ${#copied_files[@]} -ne 0 ]; then
-    echo "Copied files:"
+    echo "Imported libraries:"
     for file in "${copied_files[@]}"; do
         echo "$file"
     done
@@ -79,7 +79,7 @@ fi
 
 # Output failed files only if the list is not empty
 if [ ${#failed_files[@]} -ne 0 ]; then
-    echo "Failed files:"
+    echo "Failed library files:"
     for file in "${failed_files[@]}"; do
         echo "$file"
     done
