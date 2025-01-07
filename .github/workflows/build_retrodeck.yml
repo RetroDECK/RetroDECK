@@ -16,15 +16,24 @@ on:
       - '*.sh'
       - 'net.retrodeck.retrodeck.yml'
       - 'net.retrodeck.retrodeck.appdata.xml'
-  pull_request:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
     branches:
       - main
       - cooker*
+      - feat/*
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+      - cooker*
+      - feat/*
 
   workflow_dispatch:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
 
@@ -33,7 +42,7 @@ jobs:
     runs-on: retrodeck
     outputs:
       TAG: ${{ steps.version-tag.outputs.TAG }}
-      RELEASE_BODY: ${{ steps.version-tag.outputs.RELEASE_BODY }}
+      RELEASE_BODY: "${{ needs.Build_RetroDECK.outputs.RELEASE_BODY_FILE }} || No release body found"
       MAKE_LATEST: ${{ steps.version-tag.outputs.MAKE_LATEST }}
       
     steps:
@@ -46,9 +55,36 @@ jobs:
 
       # Clone Repository
       - name: Clone RetroDECK repo
+        if: github.event_name != 'pull_request_target'
         uses: actions/checkout@v4
         with:
           submodules: true
+
+      # Clone the target branch (eg. cooker)
+      - name: Clone Target Branch
+        if: github.event_name == 'pull_request_target'
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}  # Branch target
+          submodules: true
+
+      # Because we're using pull_request_target, we need to merge the PR code
+      - name: Merge PR Code
+        if: github.event_name == 'pull_request_target'
+        run: |
+          git fetch origin pull/${{ github.event.pull_request.number }}/head:pr
+          git merge --no-ff pr || {
+            echo "Merge conflict detected. Please resolve conflicts manually.";
+            exit 1;
+          }
+      # In case of PR we merged the code so we want to check that is consistent
+      - name: Validate Merged Code
+        if: github.event_name == 'pull_request_target'
+        run: |
+          echo "Branch after merge:"
+          git branch
+          echo "Last commit:"
+          git log -1 --oneline
 
       # Install Dependencies
       - name: Install dependencies
@@ -143,8 +179,12 @@ jobs:
           echo "Commits since $LATEST_TAG:"
           echo "$COMMITS"
 
-          # Export the commits list to the GitHub environment
-          echo "COMMITS=$COMMITS" >> $GITHUB_ENV
+          # Write the commits list to a file
+          echo "$COMMITS" > commits_list.txt
+
+          # Set the commits list as an environment variable
+          echo "COMMITS_FILE=commits_list.txt" >> $GITHUB_ENV
+
 
       # - name: Extract XML Description
       #   uses: Mudlet/xmlstarlet-action@master
@@ -157,15 +197,31 @@ jobs:
         id: generate-body
         run: |
           # Initialize the release body text
-          RELEASE_BODY="# Release Notes\n"
-          RELEASE_BODY+="This is a cooker snapshot based on the commit: ${{ github.event.repository.full_name }}@${{github.sha}}."
-          RELEASE_BODY+="On branch [${{env.BRANCH_NAME}}](https://repo.retrodeck.net/RetroDECK/RetroDECK/src/branch/${{env.BRANCH_NAME}})."
-          RELEASE_BODY+="## Commits since last release\n"
-          RELEASE_BODY+="$COMMITS\n\n"
-
+          RELEASE_BODY_FILE="release_body.md"
+          echo "# Release Notes" > $RELEASE_BODY_FILE
+          echo "This is a cooker snapshot based on the commit: ${{ github.event.repository.full_name }}@${{ github.sha }}." >> $RELEASE_BODY_FILE
+          echo "On branch [${{ env.BRANCH_NAME }}](https://repo.retrodeck.net/RetroDECK/RetroDECK/src/branch/${{ env.BRANCH_NAME }})." >> $RELEASE_BODY_FILE
+          echo "## Commits since last release" >> $RELEASE_BODY_FILE
+          echo "" >> $RELEASE_BODY_FILE
+      
+          # Append commits from the file to the release body
+          if [ -f "${{ env.COMMITS_FILE }}" ]; then
+            echo "${{ env.COMMITS_FILE }}" >> $RELEASE_BODY_FILE
+            echo "" >> $RELEASE_BODY_FILE
+          else
+            echo "[ERROR] Commits file not found: ${{ env.COMMITS_FILE }}"
+            echo "[ERROR] Commits file not found" >> $RELEASE_BODY_FILE
+          fi
+      
+          # Debug: Print the release body so far
+          echo "[DEBUG] Current release body contents:"
+          cat $RELEASE_BODY_FILE
+      
+          # Process raw description (if needed)
           #raw_description="${{ steps.extract-description.outputs.result }}"
-
+          
           # Convert <p> tags to markdown headers using sed
+          # raw_description="${{ steps.extract-description.outputs.result }}"
           markdown_description=$(echo "$raw_description" | sed -e 's|<p>|\n### |g' -e 's|</p>||g')
 
           # Convert <li> tags to bullet points and trim spaces
@@ -173,16 +229,18 @@ jobs:
 
           # Remove any remaining XML tags
           markdown_description=$(echo "$markdown_description" | sed -e 's/<[^>]*>//g')
-
+      
           # Debug: Print the markdown description
           echo "Markdown Description:"
           echo "$markdown_description"
-
-          # Append markdown content to the release body
-          RELEASE_BODY+="$markdown_description"
-          printf "RELEASE_BODY=%s\n" "$RELEASE_BODY" >> $GITHUB_ENV
-          printf "RELEASE_BODY=%s\n" "$RELEASE_BODY" >> $GITHUB_OUTPUT
-
+      
+          # Append markdown content to the release body file
+          echo "$markdown_description" >> $RELEASE_BODY_FILE
+      
+          # Output the file path to the environment and output variables
+          echo "RELEASE_BODY_FILE=$RELEASE_BODY_FILE" >> $GITHUB_ENV
+          echo "RELEASE_BODY_FILE=$RELEASE_BODY_FILE" >> $GITHUB_OUTPUT
+      
           echo "[DEBUG] CHECKPOINT 8"
 
       - name: Generate a token for Rekku
@@ -229,14 +287,14 @@ jobs:
           path: |
             RetroDECK*.flatpak
             RetroDECK*.flatpak.sha
-            RetroDECK*Artifact.tar.gz
+            RetroDECK*Artifact.tar.gz        
 
   GitHub-publish:
     runs-on: ubuntu-latest
     needs: Build_RetroDECK
     env:
       TAG: ${{ needs.Build_RetroDECK.outputs.TAG }}
-      RELEASE_BODY: ${{ needs.Build_RetroDECK.outputs.RELEASE_BODY }}
+      RELEASE_BODY: "${{ needs.Build_RetroDECK.outputs.RELEASE_BODY_FILE }} || No release body found"
       MAKE_LATEST: ${{ needs.Build_RetroDECK.outputs.MAKE_LATEST }}
     steps:
 
@@ -275,6 +333,20 @@ jobs:
           repo: ${{ env.REPO_NAME }}
           token: ${{ steps.generate-rekku-token.outputs.token }}
 
+      - name: Post PR comment with artifacts
+        if: github.event_name == 'pull_request_target' || github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          GITHUB_TOKEN: ${{ steps.generate-rekku-token.outputs.token }}
+          header: "RetroDECK Build Artifacts"
+          message: |
+            A build for this pull request has completed successfully.
+            Codenname: ${{ env.TAG }}
+            Build artifacts can be find [here]((https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifact-retrodeck-artifacts)) and they include:
+            - RetroDECK Flatpak: RetroDECK.flatpak
+            - Flatpak file SHA256 checksum: RetroDECK.flatpak.sha
+            - Flatpak Artifact Bundle: RetroDECKArtifact.tar.gz, not useful for testing or end users
+
       # Rewrite Tag (for Main Branch Only)
       - name: Rewrite Tag
         if: github.ref == 'refs/heads/main'
@@ -297,7 +369,7 @@ jobs:
   #   needs: Build_RetroDECK
   #   env:
   #     TAG: ${{ needs.Build_RetroDECK.outputs.TAG }}
-  #     RELEASE_BODY: ${{ needs.Build_RetroDECK.outputs.RELEASE_BODY }}
+  #     RELEASE_BODY: "${{ needs.Build_RetroDECK.outputs.RELEASE_BODY_FILE }} || No release body found"
   #     MAKE_LATEST: ${{ needs.Build_RetroDECK.outputs.MAKE_LATEST }}
   #   steps:
   #
@@ -308,7 +380,7 @@ jobs:
   #       if: github.ref == 'refs/heads/main'
   #       uses: RetroDECK/components-template/.github/workflows/fogejo_publish_release.yml@main
   #       with:
-  #         release_body: ${{ env.RELEASE_BODY }}
+  #         release_body: "${{ needs.Build_RetroDECK.outputs.RELEASE_BODY_FILE }} || No release body found"
   #         artifacts: "retrodeck-artifacts/*.flatpak,retrodeck-artifacts/*.flatpak.sha,retrodeck-artifacts/*Artifact.tar.gz"
   #         tag: ${{ env.TAG }}
 
@@ -356,4 +428,3 @@ jobs:
       # - name: Uninstall RetroDECK Flatpak
       #   run: |
       #     flatpak remove --user --noninteractive -y net.retrodeck.retrodeck
-  

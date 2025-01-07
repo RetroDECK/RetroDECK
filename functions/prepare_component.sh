@@ -79,7 +79,7 @@ prepare_component() {
     fi
   fi
 
-  if [[ "$component" =~ ^(steam-rom-manager|all)$ ]]; then
+  if [[ "$component" =~ ^(steam-rom-manager|steamrommanager|all)$ ]]; then
   component_found="true"
     log i "-----------------------------"
     log i "Prepearing Steam ROM Manager"
@@ -297,6 +297,7 @@ prepare_component() {
         cp -fr "$config/cemu/"* /var/config/Cemu/
         set_setting_value "$cemuconf" "mlc_path" "$bios_folder/cemu" "cemu"
         set_setting_value "$cemuconf" "Entry" "$roms_folder/wiiu" "cemu" "GamePaths"
+        rm -rf "$XDG_DATA_HOME/Cemu/keys.txt" && ln -s "$bios_folder/cemu/keys.txt" "$XDG_DATA_HOME/Cemu/keys.txt" && log d "Linked $bios_folder/cemu/keys.txt to $XDG_DATA_HOME/Cemu/keys.txt"
       fi
       # Shared actions
       dir_prep "$saves_folder/wiiu/cemu" "$bios_folder/cemu/usr/save"
