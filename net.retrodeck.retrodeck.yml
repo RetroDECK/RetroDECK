@@ -245,7 +245,7 @@ modules:
       # Step 4: Use libman.sh to manage libraries
       - /app/bin/libman.sh "squashfs-root/usr/lib"
       # Step 5: Copy remaining extracted files to the Flatpak destination
-      - find squashfs-root/usr/ -type f -exec install -Dm755 "{}" "${FLATPAK_DEST}/{}" \;
+      - find squashfs-root/usr/ -exec sh -c 'install -Dm755 "{}" "${FLATPAK_DEST}/$(echo "{}" | sed "s|^squashfs-root/usr||")"' \;
     sources:
       - type: archive
         url: https://buildbot.libretro.com/stable/1.20.0/linux/x86_64/RetroArch.7z
@@ -378,7 +378,7 @@ modules:
       # Step 3: Use libman.sh to handle library files
       - /app/bin/libman.sh "squashfs-root/usr/lib"
       # Step 4: Copy the remaining extracted files to the Flatpak destination
-      - find squashfs-root/usr/ -type f -exec install -Dm755 "{}" "${FLATPAK_DEST}/{}" \;
+      - find squashfs-root/usr/ -exec sh -c 'install -Dm755 "{}" "${FLATPAK_DEST}/$(echo "{}" | sed "s|^squashfs-root/usr||")"' \;
     sources:
       - type: file
         url: https://github.com/PCSX2/pcsx2/releases/download/v2.3.88/pcsx2-v2.3.88-linux-appimage-x64-Qt.AppImage
@@ -484,7 +484,7 @@ modules:
       # Step 2: Use libman.sh to manage libraries
       - /app/bin/libman.sh "squashfs-root/usr/lib"
       # Step 3: Copy remaining extracted files to the Flatpak destination
-      - find squashfs-root/usr/ -type f -exec install -Dm755 "{}" "${FLATPAK_DEST}/{}" \;
+      - find squashfs-root/usr/ -exec sh -c 'install -Dm755 "{}" "${FLATPAK_DEST}/$(echo "{}" | sed "s|^squashfs-root/usr||")"' \;
     sources:
       - type: file
         url: https://github.com/RetroDECK/Duckstation/releases/download/preview/DuckStation-x64.AppImage
@@ -505,7 +505,7 @@ modules:
       # Step 3: Use libman.sh to manage libraries
       - /app/bin/libman.sh "squashfs-root/usr/lib"
       # Step 4: Copy remaining extracted files to the Flatpak destination
-      - find squashfs-root/usr/ -type f -exec install -Dm755 "{}" "${FLATPAK_DEST}/{}" \;
+      - find squashfs-root/usr/ -exec sh -c 'install -Dm755 "{}" "${FLATPAK_DEST}/$(echo "{}" | sed "s|^squashfs-root/usr||")"' \;
       # Step 5: Install the wrapper script
       - install -Dm755 Cemu-wrapper "${FLATPAK_DEST}/bin/"
     sources:
