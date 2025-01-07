@@ -647,8 +647,8 @@ modules:
     build-commands:
       # Step 1: Remove any existing manifest.json file
       - rm -f files/manifest.json
-      # Step 2: Use libman.sh to manage libraries
-      - /app/bin/libman.sh "files/lib"
+      # Step 2: Use libman.sh to manage libraries - REMOVED AS MAME DON'T BRING ANY LIBS WITH IT
+      # - /app/bin/libman.sh "files/lib"
       # Step 3: Copy the managed libraries and all other files to the Flatpak destination
       - cp -rn files/* ${FLATPAK_DEST}
     sources:
