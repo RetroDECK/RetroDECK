@@ -53,6 +53,7 @@ cleanup:
   - /src
   - '*.a'
   - '*.la'
+  - /app/bin/libman.sh
 
 modules:
 
