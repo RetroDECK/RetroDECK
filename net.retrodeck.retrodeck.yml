@@ -621,7 +621,7 @@ modules:
       # Step 2: Use libman.sh to manage libraries
       - /app/bin/libman.sh "squashfs-root/usr/lib"
       # Step 3: Copy remaining extracted files to the Flatpak destination
-      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}/"
+      - find squashfs-root/usr/ -exec sh -c 'install -Dm755 "{}" "${FLATPAK_DEST}/$(echo "{}" | sed "s|^squashfs-root/usr||")"' \;
     sources:
       - type: file
         url: https://github.com/xemu-project/xemu/releases/download/v0.8.5/xemu-v0.8.5-x86_64.AppImage
