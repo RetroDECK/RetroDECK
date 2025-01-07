@@ -450,23 +450,6 @@ post_update() {
       mv -f "$XDG_DATA_HOME/Cemu/keys.txt" "$bios_folder/cemu/keys.txt"
       ln -s "$bios_folder/cemu/keys.txt" "$XDG_DATA_HOME/Cemu/keys.txt"
     fi
-
-  # TODO: check this
-  #   rm /var/config/emulationstation/.emulationstation # remving the old symlink to .emulationstation as it might be not needed anymore
-  # TODO: change <mlc_path>RETRODECKHOMEDIR/bios/cemu</mlc_path> in config/cemu/settings.xml into <mlc_path>RETRODECKHOMEDIR/bios/cemu/mlc</mlc_path>
-  #   if [ ! -d "$bios_folder/cemu/mlc" ]; then
-  #     log i "Cemu MLC folder was moved from \"$bios_folder/cemu\" to \"$bios_folder/cemu/mlc\", migrating it"
-  #     mv -f "$bios_folder/cemu" "$bios_folder/cemu/mlc"
-  #     # TODO: set setting value mlc_path in settings.xml (check prepare script)
-  #   fi
-  #   if [ -f "/var/data/Cemu/keys.txt" ]; then
-  #     log AND ZENITY "Found Cemu keys.txt" in "/var/data/Cemu/keys.txt", for a better compatibility is better to move it into "$bios_folder/cemu/mlc/keys.txt, do you want to continue?
-  #     if yes: mv "/var/data/Cemu/keys.txt" "$bios_folder/cemu/mlc/keys.txt"
-  #     ln -s "$bios_folder/cemu/mlc/keys.txt" "/var/data/Cemu/keys.txt" <--- AND THIS SHOULD BE EVEN PUT IN THE PREPARATION SCRIPT
-  #   fi
-  # TODO: is this true?
-  #  log i "Since in this version we restored Ryujinx to a main build we don't need the symlink anymore."
-  #  rm "$(dirname $ryujinxconf)/PRConfig.json"
   fi
 
   # The following commands are run every time.
