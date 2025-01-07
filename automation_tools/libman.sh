@@ -1,12 +1,20 @@
 #!/bin/bash
 
-# Be aware that this script is deleting the source directory after copying the files and it's intended to be used only by flatpak builder
+# Be aware that this script deletes the source directory after copying the files. It is intended to be used only by the flatpak builder.
+
+
+# List of user-defined libraries to exclude
+excluded_libraries=("libselinux.so.1")
+
+# Define target directory
+target_dir="${FLATPAK_DEST}/lib"
+
 
 echo "Worry not, LibMan is here!"
 
 # Set default destination if FLATPAK_DEST is not set
 if [ -z "$FLATPAK_DEST" ]; then
-    FLATPAK_DEST="/app"
+    export FLATPAK_DEST="/app"
 fi
 
 # Check if source directory is provided
@@ -15,25 +23,22 @@ if [ -z "$1" ]; then
     exit 0
 fi
 
-# Define target directory
-target_dir="${FLATPAK_DEST}/lib"
-
 # Ensure the target directory exists
 if ! mkdir -p "$target_dir"; then
     echo "Error: Failed to create target directory $target_dir"
     exit 0
 fi
 
-# List all libraries in LD_LIBRARY_PATH and store them in an array
-libraries=()
-IFS=: read -ra dirs <<< "$LD_LIBRARY_PATH"
-for dir in "${dirs[@]}"; do
-    if [ -d "$dir" ]; then
-        while IFS= read -r lib; do
-            libraries+=("$lib")
-        done < <(find "$dir" -type f -name "*.so")
-    fi
-done
+# Function to check if a file is in the excluded libraries list
+is_excluded() {
+    local file="$1"
+    for excluded in "${excluded_libraries[@]}"; do
+        if [[ "$excluded" == "$file" ]]; then
+            return 0
+        fi
+    done
+    return 1
+}
 
 # Find and copy files
 copied_files=()
@@ -49,13 +54,13 @@ for file in $(find "$1" -type f -name "*.so*"); do
         continue
     fi
 
-    # Skip if the file is already in the list of libraries
-    if [[ " ${libraries[*]} " == *" $file "* ]]; then
-        echo "Skipped $file as it is already present in the system"
-        failed_files+=("$file, already present in the system")
+    # Skip if the file is in the list of excluded libraries
+    if is_excluded "$(basename "$file")"; then
+        reason="library is in the exclusion list"
+        echo "Skipped $file as it is $reason"
+        failed_files+=("$file, $reason")
         continue
     fi
-
     # Attempt to copy the file
     if install -D "$file" "$dest_file" 2>error_log; then
         echo "Copied $file to $dest_file"
@@ -66,8 +71,6 @@ for file in $(find "$1" -type f -name "*.so*"); do
         failed_files+=("$file, $error_message")
     fi
 done
-
-echo "LibMan is flying away"
 
 # Output the lists of copied and failed files
 if [ ${#copied_files[@]} -ne 0 ]; then
@@ -84,3 +87,5 @@ if [ ${#failed_files[@]} -ne 0 ]; then
         echo "$file"
     done
 fi
+
+echo "LibMan is flying away"
