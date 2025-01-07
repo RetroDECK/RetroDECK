@@ -35,9 +35,8 @@ finish-args:
   - --filesystem=~/.var/app/com.valvesoftware.Steam:rw # Steam (Flatpak)
   # PPSSPP, DOLPHIN
   - --filesystem=xdg-run/gamescope-0:ro
+  - --env=LD_LIBRARY_PATH=/app/lib:/app/retrodeck/lib
 
-environment:
-  LD_LIBRARY_PATH: "/app/lib:/app/retrodeck/lib"
 
 cleanup:
   # ES-DE
