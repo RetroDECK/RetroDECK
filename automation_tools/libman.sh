@@ -39,7 +39,7 @@ done
 copied_files=()
 failed_files=()
 
-find "$1" -type f -name "*.so*" | while IFS= read -r file; do
+for file in $(find "$1" -type f -name "*.so*"); do
     # Define destination file path
     dest_file="$target_dir/$(basename "$file")"
     
