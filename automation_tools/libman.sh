@@ -16,7 +16,7 @@ if [ -z "$1" ]; then
 fi
 
 # Define target directory
-target_dir="${FLATPAK_DEST}/retrodeck/lib"
+target_dir="${FLATPAK_DEST}/lib"
 
 # Ensure the target directory exists
 if ! mkdir -p "$target_dir"; then
