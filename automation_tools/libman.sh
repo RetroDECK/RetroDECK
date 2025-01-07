@@ -70,10 +70,12 @@ done
 echo "LibMan is flying away"
 
 # Output the lists of copied and failed files
-echo "Copied files:"
-for file in "${copied_files[@]}"; do
-    echo "$file"
-done
+if [ ${#copied_files[@]} -ne 0 ]; then
+    echo "Copied files:"
+    for file in "${copied_files[@]}"; do
+        echo "$file"
+    done
+fi
 
 # Output failed files only if the list is not empty
 if [ ${#failed_files[@]} -ne 0 ]; then
