@@ -445,6 +445,12 @@ post_update() {
     rm -rf "$rd_logs_folder/ES-DE" && log d "Removing the logs/ES-DE folder as we don't need it anymore"
     rm -rf "$es_source_logs" && mkdir -p "$es_source_logs"
 
+    if [[ -f "$XDG_DATA_HOME/Cemu/keys.txt" ]]; then
+      log d "Found Cemu keys.txt in \"$XDG_DATA_HOME/Cemu/keys.txt\", moving it to \"$bios_folder/cemu/keys.txt\""
+      mv -f "$XDG_DATA_HOME/Cemu/keys.txt" "$bios_folder/cemu/keys.txt"
+      ln -s "$bios_folder/cemu/keys.txt" "$XDG_DATA_HOME/Cemu/keys.txt"
+    fi
+
   # TODO: check this
   #   rm /var/config/emulationstation/.emulationstation # remving the old symlink to .emulationstation as it might be not needed anymore
   # TODO: change <mlc_path>RETRODECKHOMEDIR/bios/cemu</mlc_path> in config/cemu/settings.xml into <mlc_path>RETRODECKHOMEDIR/bios/cemu/mlc</mlc_path>
