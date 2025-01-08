@@ -1,6 +1,6 @@
 app-id: net.retrodeck.retrodeck
 runtime: org.kde.Platform
-runtime-version: "6.8"
+runtime-version: "6.7"
 sdk: org.kde.Sdk
 base: org.electronjs.Electron2.BaseApp            # Needed for Steam ROM Manager
 base-version: "22.08"
@@ -349,11 +349,10 @@ modules:
       - cp -r files/* "${FLATPAK_DEST}"
     sources:
       - type: archive
-        url: https://github.com/RetroDECK/org.ppsspp.PPSSPP/releases/latest/download/RetroDECK-Artifact.tar.gz
+        url: https://github.com/RetroDECK/org.ppsspp.PPSSPP/releases/latest/download/RetroDECK-PPSSPP-Artifact.tar.gz
         sha256: RETRODECKPPSSPPLATEST
 
   # PCSX2
-  # UPDATE IT HERE
   # Inspired by: https://github.com/flathub/com.zettlr.Zettlr/blob/master/com.zettlr.Zettlr.yaml
   # https://pcsx2.net/downloads/
 
@@ -367,8 +366,8 @@ modules:
       - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
     sources:
       - type: file
-        url: https://github.com/PCSX2/pcsx2/releases/download/v2.3.88/pcsx2-v2.3.88-linux-appimage-x64-Qt.AppImage
-        sha256: e65495068c7ac5675cef872478497d7bd3ff4ff68a822c034b31a6f5911133e0
+        url: https://github.com/PCSX2/pcsx2/releases/download/v2.3.53/pcsx2-v2.3.53-linux-appimage-x64-Qt.AppImage
+        sha256: a909ec179a2b1bac85625a32eaa6eae2adbfa4985a2be9a525a58e80fc1f57b5
 
   # Dolphin
   # why from source: AppImage not provided, only Flatpak
@@ -387,7 +386,7 @@ modules:
       - cp -r files/* "${FLATPAK_DEST}"
     sources:
       - type: archive
-        url: https://github.com/RetroDECK/org.DolphinEmu.dolphin-emu/releases/latest/download/RetroDECK-Artifact.tar.gz
+        url: https://github.com/RetroDECK/org.DolphinEmu.dolphin-emu/releases/latest/download/RetroDECK-dolphin-Artifact.tar.gz
         sha256: RETRODECKDOLPHINLATEST
 
   # PRIMEHACK
@@ -412,24 +411,6 @@ modules:
 
   # RPCS3
   # https://rpcs3.net/download
-
-  # - name: rpcs3
-  #   buildsystem: simple
-  #   build-commands:
-  #     - chmod +x *.AppImage
-  #     - ./*.AppImage --appimage-extract
-  #     - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug" 
-  #     - mkdir -p ${FLATPAK_DEST}/lib/ffmpeg   # Needed for a ffmpeg bufgix
-  #     - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
-  #     - cp -r "squashfs-root/usr/bin/"* "${FLATPAK_DEST}/bin/"
-  #     - cp -r "squashfs-root/usr/share/"* "${FLATPAK_DEST}/share/"
-  #     #TODO: - cp -r squashfs-root/usr/optional* # maybe already included in flatpak runtime
-  #     #TODO: - cp -r squashfs-root/usr/plugins* # maybe already included in qt
-  #     #TODO: Do we need this wrapper? squashfs-root/apprun-hooks/linuxdeploy-plugin-qt-hook.sh
-  #   sources:
-  #     - type: file
-  #       url: https://github.com/RPCS3/rpcs3-binaries-linux/releases/download/build-cd8954db140855101d94a33c0dd7f4d72bdf5a35/rpcs3-v0.0.33-17066-cd8954db_linux64.AppImage
-  #       sha256: 2d258b557c17ebba4bea927be4032cfcbc230c26b8f090b796daa5935faa4a8b
 
   - name: retrodeck-rpcs3
     buildsystem: simple
@@ -563,7 +544,7 @@ modules:
       - cp -r files/* "${FLATPAK_DEST}"
     sources:
       - type: archive
-        url: https://github.com/RetroDECK/org.zdoom.GZDoom/releases/latest/download/RetroDECK-Artifact.tar.gz
+        url: https://github.com/RetroDECK/org.zdoom.GZDoom/releases/latest/download/RetroDECK-gzdoom-Artifact.tar.gz
         sha256: RETRODECKGZDOOMLATEST
 
   # Pancakes
@@ -583,7 +564,6 @@ modules:
         sha256: 68b1602c99c5e5b743a1362eaf428ee88b237bd5029aede00d342fa8d79b8f27
 
   # XEMU
-  # UPDATE IT HERE
   # https://xemu.app/docs/download/#download-for-linux
 
   - name: xemu
@@ -620,16 +600,6 @@ modules:
       - type: archive
         url: https://github.com/RetroDECK/org.mamedev.MAME/releases/latest/download/RetroDECK-Artifact.tar.gz
         sha256: RETRODECKMAMELATEST
-
-  # - name: retrodeck-mame
-  #   buildsystem: simple
-  #   build-commands:
-  #     - rm -f files/manifest.json
-  #     - cp -rn files/* ${FLATPAK_DEST}
-  #   sources:
-  #     - type: archive
-  #       url: https://github.com/RetroDECK/MAME/releases/latest/download/RetroDECK-MAME-Artifact.tar.gz
-  #       sha256: RETRODECKOLDMAMELATEST
 
   # PortMaster
 
@@ -695,8 +665,8 @@ modules:
     sources:
       - type: archive
         strip-components: 0
-        url: https://github.com/ruffle-rs/ruffle/releases/download/nightly-2025-01-04/ruffle-nightly-2025_01_04-linux-x86_64.tar.gz
-        sha256: 27287f45c56c7a66c62f2dc218abffc57a864ba7b1a783e38e2c54609fde496d
+        url: https://github.com/ruffle-rs/ruffle/releases/download/nightly-2024-10-29/ruffle-nightly-2024_10_29-linux-x86_64.tar.gz
+        sha256: 5ab0fc46b07d022d4b0ff355e88175cd77b8bb1663612f31d160f8001dc472bb
 
   - name: fetch-missing-libs
     buildsystem: simple
