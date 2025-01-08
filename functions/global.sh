@@ -10,7 +10,12 @@
 rd_logs_folder="/var/config/retrodeck/logs" # Static location to write all RetroDECK-related logs
 source /app/libexec/logger.sh
 rotate_logs
+
 log i "Initializing RetroDECK"
+log i "Running on $XDG_SESSION_DESKTOP, $XDG_SESSION_TYPE"
+if [[ -n $container ]]; then
+  log i "$container environment"
+fi
 
 source /app/libexec/050_save_migration.sh
 source /app/libexec/checks.sh

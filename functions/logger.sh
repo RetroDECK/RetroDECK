@@ -34,7 +34,7 @@ log() {
   local colorize_terminal=true
 
   # Determine the calling function or use [FWORK]
-  local caller="${FUNCNAME[1]:-[FWORK]}"
+  local caller="${FUNCNAME[1]:-FWORK}"
   caller="${caller^^}" # Convert to uppercase
 
   # Check if the shell is sh (not bash or zsh) to avoid colorization

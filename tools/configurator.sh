@@ -24,7 +24,7 @@ source /app/libexec/global.sh
 #       - Wii & GameCube: Presets & Settings
 #         - Dolphin Textures: Universal Dynamic Input
 #         - Primehack Textures: Universal Dynamic Input
-#     - Open Emulator (Behind one-time power user warning dialog)
+#     - Open Emulator or Component (Behind one-time power user warning dialog)
 #       - RetroArch
 #       - Cemu
 #       - Citra
@@ -115,7 +115,7 @@ configurator_welcome_dialog() {
   log i "Configurator: opening welcome dialog"
   if [[ $developer_options == "true" ]]; then
     welcome_menu_options=("Presets & Settings" "Here you will find various presets, tweaks and settings to customize your RetroDECK experience" \
-    "Open Emulator" "Launch and configure each emulator's settings (for advanced users)" \
+    "Open Emulator or Component" "Launch and configure each emulator or component's settings (for advanced users)" \
     "RetroDECK: Tools" "Compress games, move RetroDECK and install optional features" \
     "RetroDECK: Troubleshooting" "Backup data, perform BIOS / multi-disc file checks and emulator resets" \
     "RetroDECK: About" "Show additional information about RetroDECK" \
@@ -123,7 +123,7 @@ configurator_welcome_dialog() {
     "Developer Options" "Welcome to the DANGER ZONE")
   else
     welcome_menu_options=("Presets & Settings" "Here you find various presets, tweaks and settings to customize your RetroDECK experience" \
-    "Open Emulator" "Launch and configure each emulators settings (for advanced users)" \
+    "Open Emulator or Component" "Launch and configure each emulator or component's settings (for advanced users)" \
     "RetroDECK: Tools" "Compress games, move RetroDECK and install optional features" \
     "RetroDECK: Troubleshooting" "Backup data, perform BIOS / multi-disc file checks checks and emulator resets" \
     "RetroDECK: About" "Show additional information about RetroDECK")
@@ -141,7 +141,7 @@ configurator_welcome_dialog() {
     configurator_presets_and_settings_dialog
   ;;
 
-  "Open Emulator" )
+  "Open Emulator or Component" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_power_user_warning_dialog
   ;;
@@ -470,7 +470,7 @@ configurator_open_emulator_dialog() {
   fi
 
   emulator=$(rd_zenity --list \
-  --title "RetroDECK Configurator Utility - Open Emulator" --cancel-label="Back" \
+  --title "RetroDECK Configurator Utility - Open Emulator or Component" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --text="Which emulator do you want to launch?" \
   --hide-header \

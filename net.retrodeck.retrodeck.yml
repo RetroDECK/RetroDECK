@@ -238,9 +238,9 @@ modules:
       - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
     sources:
       - type: archive
-        url: https://buildbot.libretro.com/stable/1.19.1/linux/x86_64/RetroArch.7z
+        url: https://buildbot.libretro.com/stable/1.20.0/linux/x86_64/RetroArch.7z
         #sha256: RASHAPLACEHOLDER
-        sha256: f98e954e99aef7b4b1a3334d710856b997c3f97c5451d33af9e5c88bf63213f8
+        sha256: 809b3e9f02a9849719453d0f189a0edc544ad3235c8ce75a79488e710ba9668a
 
   # Not part of the offical RetroArch AppImage
 
@@ -289,8 +289,8 @@ modules:
       - cp -rf ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* ${FLATPAK_DEST}/share/libretro/cores/
     sources:
       - type: archive
-        url: https://buildbot.libretro.com/stable/1.19.1/linux/x86_64/RetroArch_cores.7z
-        sha256: fe75e7e796e29933ab31e4a58f072a1a47ea155b477988a48f33b0f4addc9d49
+        url: https://buildbot.libretro.com/stable/1.20.0/linux/x86_64/RetroArch_cores.7z
+        sha256: 433f46ecbb3f1ae8d17b6c5fdffbd11761ce4532652d73a1d4e1f0029c175a87
     
   - name: retroarch-sameduck-core
     buildsystem: simple
@@ -412,24 +412,6 @@ modules:
   # RPCS3
   # https://rpcs3.net/download
 
-  # - name: rpcs3
-  #   buildsystem: simple
-  #   build-commands:
-  #     - chmod +x *.AppImage
-  #     - ./*.AppImage --appimage-extract
-  #     - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug" 
-  #     - mkdir -p ${FLATPAK_DEST}/lib/ffmpeg   # Needed for a ffmpeg bufgix
-  #     - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
-  #     - cp -r "squashfs-root/usr/bin/"* "${FLATPAK_DEST}/bin/"
-  #     - cp -r "squashfs-root/usr/share/"* "${FLATPAK_DEST}/share/"
-  #     #TODO: - cp -r squashfs-root/usr/optional* # maybe already included in flatpak runtime
-  #     #TODO: - cp -r squashfs-root/usr/plugins* # maybe already included in qt
-  #     #TODO: Do we need this wrapper? squashfs-root/apprun-hooks/linuxdeploy-plugin-qt-hook.sh
-  #   sources:
-  #     - type: file
-  #       url: https://github.com/RPCS3/rpcs3-binaries-linux/releases/download/build-cd8954db140855101d94a33c0dd7f4d72bdf5a35/rpcs3-v0.0.33-17066-cd8954db_linux64.AppImage
-  #       sha256: 2d258b557c17ebba4bea927be4032cfcbc230c26b8f090b796daa5935faa4a8b
-
   - name: retrodeck-rpcs3
     buildsystem: simple
     build-commands:
@@ -479,6 +461,7 @@ modules:
         sha256: 84777a8d0fce9acfc2ffe6a8aea352bd68a8a37f5c793d328dbaa4ff5ada5e6d
 
   # Cemu
+  # UPDATE IT HERE
   # https://github.com/cemu-project/Cemu/releases
 
   - name: cemu
@@ -494,8 +477,8 @@ modules:
       #TODO: do we need this wrapper? squashfs-root/apprun-hooks/linuxdeploy-plugin-gtk.sh
     sources:
       - type: file
-        url: https://github.com/cemu-project/Cemu/releases/download/v2.2/Cemu-2.2-x86_64.AppImage
-        sha256: 05ad07e3b2fb60f9c19f84c7d65c4e978bc2cf58b4b53d39fca0376227900c27
+        url: https://github.com/cemu-project/Cemu/releases/download/v2.4/Cemu-2.4-x86_64.AppImage
+        sha256: 92a1f081230809bd0ac30b228f72c6d8c7aa7eaa3e56df4cf8ad54d4c9927097
       - type: script
         commands:
           - |
@@ -593,8 +576,8 @@ modules:
       - cp -r squashfs-root/usr/* "${FLATPAK_DEST}/"
     sources:
       - type: file
-        url: https://github.com/xemu-project/xemu/releases/download/v0.7.132/xemu-v0.7.132-x86_64.AppImage
-        sha256: c11821d6d0632da3c51a354e9101f68e5ab2ae0e2512c6aa6c8453aef56cedba
+        url: https://github.com/xemu-project/xemu/releases/download/v0.8.5/xemu-v0.8.5-x86_64.AppImage
+        sha256: fd282e299dbc3207b8afb84059da99feffc65a86eb29d96c9108fde368d4c99e
 
   - name: xemu-dummy-hdd
     buildsystem: simple
@@ -615,7 +598,7 @@ modules:
       - cp -rn files/* ${FLATPAK_DEST}
     sources:
       - type: archive
-        url: https://github.com/RetroDECK/MAME/releases/latest/download/RetroDECK-MAME-Artifact.tar.gz
+        url: https://github.com/RetroDECK/org.mamedev.MAME/releases/latest/download/RetroDECK-Artifact.tar.gz
         sha256: RETRODECKMAMELATEST
 
   # PortMaster
@@ -691,14 +674,14 @@ modules:
       - |
           # Search for missing libraries in our libtmp folder
           missing_libs=$(find /app/bin -type f -exec ldd {} + 2>/dev/null | grep 'not found' | awk '$1 ~ /\.so/ {print $1}' | sort | uniq)
-          echo $missing_libs
+          echo "$missing_libs"
           
           # Manually specified libraries that are not automatically detected
           manually_imported="libpostproc.so.56 libswscale.so.6 libshaderc_shared.so.1 libbz2.so.1.0 libaio.so.1 ld-linux.so.2 libvpx.so.9 libzmusic.so.1 libicuuc.so.73 libLLVM.so.18.1"
           
           # Combine detected missing libraries and manually specified ones
           missing_libs="$missing_libs $manually_imported"
-          echo "Missing libs and manually imported: $missing_libs"
+          echo -e "Missing libs and manually imported:\n$missing_libs"
 
           # Source paths
           src_dir="${FLATPAK_DEST}/retrodeck/tmplib"
