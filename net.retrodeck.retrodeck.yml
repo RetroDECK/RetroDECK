@@ -721,8 +721,8 @@ modules:
     sources:
       - type: archive
         strip-components: 0
-        url: https://github.com/ruffle-rs/ruffle/releases/download/nightly-2025-01-04/ruffle-nightly-2025_01_04-linux-x86_64.tar.gz
-        sha256: 27287f45c56c7a66c62f2dc218abffc57a864ba7b1a783e38e2c54609fde496d
+        url: https://github.com/ruffle-rs/ruffle/releases/download/nightly-2025-01-07/ruffle-nightly-2025_01_07-linux-x86_64.tar.gz
+        sha256: cb36782b62c9fe000b08bf6dc07ff49d1fb9bd5825cecf8300bcf4ba2a4be27d
 
   - name: retrodeck
     buildsystem: simple
