@@ -379,8 +379,8 @@ modules:
       - find squashfs-root/usr/ -exec sh -c 'install -Dm755 "{}" "${FLATPAK_DEST}/$(echo "{}" | sed "s|^squashfs-root/usr||")"' \;
     sources:
       - type: file
-        url: https://github.com/PCSX2/pcsx2/releases/download/v2.3.88/pcsx2-v2.3.88-linux-appimage-x64-Qt.AppImage
-        sha256: e65495068c7ac5675cef872478497d7bd3ff4ff68a822c034b31a6f5911133e0
+        url: https://github.com/PCSX2/pcsx2/releases/download/v2.3.95/pcsx2-v2.3.95-linux-appimage-x64-Qt.AppImage
+        sha256: 73b7c48dc02b192d7bcc7cf30962dca737cad4f312d036d196ab0e10d8d6b9e1
 
   # Dolphin
   # why from source: AppImage not provided, only Flatpak
@@ -597,13 +597,14 @@ modules:
       # Step 1: Create the Flatpak destination directory
       - mkdir -p "${FLATPAK_DEST}"
       # Step 2: Extract and manage library files
-      - /app/bin/libman.sh "squashfs-root/usr/lib"
+      - /app/bin/libman.sh "."
       # Step 3: Move and set up the binary
+      - rm -rf *.dll.config
       - mv R*x* "${FLATPAK_DEST}/bin/"
       - chmod +x "${FLATPAK_DEST}/bin/"R*x*
       # Step 4: Set up license directory and move license files
       - mkdir -p "${FLATPAK_DEST}/retrodeck/licenses"
-      - mv LICENSE.txt "${FLATPAK_DEST}/retrodeck/licenses"
+      - mv LICENSE.txt THIRDPARTY.md "${FLATPAKc_DEST}/retrodeck/licenses"
     sources:
       - type: archive
         url: https://github.com/RetroDECK/Pancakes-bin/releases/download/1.1.0.1403/pancakes-Release-linux_x64.tar.gz
