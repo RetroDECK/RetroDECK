@@ -604,7 +604,7 @@ modules:
       - chmod +x "${FLATPAK_DEST}/bin/"R*x*
       # Step 4: Set up license directory and move license files
       - mkdir -p "${FLATPAK_DEST}/retrodeck/licenses"
-      - mv LICENSE.txt THIRDPARTY.md "${FLATPAKc_DEST}/retrodeck/licenses"
+      - mv LICENSE.txt THIRDPARTY.md "${FLATPAK_DEST}/retrodeck/licenses"
     sources:
       - type: archive
         url: https://github.com/RetroDECK/Pancakes-bin/releases/download/1.1.0.1403/pancakes-Release-linux_x64.tar.gz
