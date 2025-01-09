@@ -93,9 +93,8 @@ modules:
         # LIBMAN INSTALLATION
         install -Dm755 "automation_tools/libman.sh" "/app/bin/libman.sh"
     sources:
-      - type: git
-        url: THISREPO
-        branch: THISBRANCH
+      - type: dir
+        path: .
 
   - name: xmlstarlet
     config-opts:
@@ -798,6 +797,5 @@ modules:
       - install -Dm 644 config/retrodeck/net.retrodeck.retrodeck.mime.xml /app/share/mime/packages/net.retrodeck.retrodeck.mime.xml
 
     sources:
-      - type: git
-        url: THISREPO
-        branch: THISBRANCH
+      - type: dir
+        path: .
