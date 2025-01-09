@@ -16,6 +16,7 @@ if [[ "$use_cache_input" =~ ^[Yy]$ ]]; then
     export use_cache="true"
 else
     export use_cache="false"
+    rm -f "placeholders.cache"
 fi
 
 git submodule update --init --recursive
