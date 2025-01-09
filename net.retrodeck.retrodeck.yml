@@ -399,7 +399,7 @@ modules:
       - cp -r files/* "${FLATPAK_DEST}"
     sources:
       - type: archive
-        url: https://github.com/RetroDECK/org.DolphinEmu.dolphin-emu/releases/latest/download/RetroDECK-dolphin-Artifact.tar.gz
+        url: https://github.com/RetroDECK/org.DolphinEmu.dolphin-emu/releases/latest/download/RetroDECK-Artifact.tar.gz
         sha256: RETRODECKDOLPHINLATEST
 
   # PRIMEHACK
@@ -521,23 +521,23 @@ modules:
         dest-filename: Cemu-wrapper
 
   # Vita3K - AUTOUPDATED
-
-  - name: vita3k
-    buildsystem: simple
-    build-commands:
-      # Copying the user icon
-      - mkdir -p ${FLATPAK_DEST}/retrodeck
-      - cp retrodeck.png ${FLATPAK_DEST}/retrodeck
-      - unzip "ubuntu-latest.zip" -d "${FLATPAK_DEST}/share/Vita3K"
-      - chmod +x "${FLATPAK_DEST}/share/Vita3K/Vita3K"
-      - rm -f "${FLATPAK_DEST}/share/Vita3K/update-vita3k.sh"
-      - ln -s ${FLATPAK_DEST}/share/Vita3K/Vita3K ${FLATPAK_DEST}/bin/Vita3K
-    sources:
-      - type: file
-        url: https://github.com/Vita3K/Vita3K/releases/download/continuous/ubuntu-latest.zip
-        sha256: VITA3KSHAPLACEHOLDER
-      - type: file
-        path: res/retrodeck.png
+  # TODO: disabled until 10/02/2025 as the nightly build failed upstream and the artifact is no more available
+  # - name: vita3k
+  #   buildsystem: simple
+  #   build-commands:
+  #     # Copying the user icon
+  #     - mkdir -p ${FLATPAK_DEST}/retrodeck
+  #     - cp retrodeck.png ${FLATPAK_DEST}/retrodeck
+  #     - unzip "ubuntu-latest.zip" -d "${FLATPAK_DEST}/share/Vita3K"
+  #     - chmod +x "${FLATPAK_DEST}/share/Vita3K/Vita3K"
+  #     - rm -f "${FLATPAK_DEST}/share/Vita3K/update-vita3k.sh"
+  #     - ln -s ${FLATPAK_DEST}/share/Vita3K/Vita3K ${FLATPAK_DEST}/bin/Vita3K
+  #   sources:
+  #     - type: file
+  #       url: https://github.com/Vita3K/Vita3K/releases/download/continuous/ubuntu-latest.zip
+  #       sha256: 0019dfc4b32d63c1392aa264aed2253c1e0c2fb09216f8e2cc269bbfb8bb49b5
+  #     - type: file
+  #       path: res/retrodeck.png
 
   # SOLARUS
   # why from source: they only provide a snap
