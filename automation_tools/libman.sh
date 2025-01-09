@@ -6,6 +6,16 @@
 # List of user-defined libraries to exclude
 excluded_libraries=("libselinux.so.1")
 
+# Add libraries from /lib/x86_64-linux-gnu/ to the excluded list
+for lib in /lib/x86_64-linux-gnu/*.so*; do
+    excluded_libraries+=("$(basename "$lib")")
+done
+
+# Add libraries from /lib to the excluded list
+for lib in /lib/*.so*; do
+    excluded_libraries+=("$(basename "$lib")")
+done
+
 # Define target directory
 target_dir="${FLATPAK_DEST}/lib"
 
