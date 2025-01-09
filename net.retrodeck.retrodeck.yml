@@ -346,15 +346,15 @@ modules:
   - name: retrodeck-ppsspp
     buildsystem: simple
     build-commands:
-      # Step 1: Remove unused manifest file
+      # Step 1: Remove any existing manifest.json file
       - rm -f "files/manifest.json"
-      # Step 2: Use libman.sh to copy libraries to the RetroDeck library folder
+      # Step 2: Use libman.sh to manage libraries
       - /app/bin/libman.sh "files/lib"
-      # Step 3: Clean up source library folder
+      # Step 3: removing libraries folder that have been already moved
       - rm -rf "files/lib"
-      # Step 4: Make binaries executable
+      # Step 4: Ensure binaries are executable
       - chmod +x "files/bin/"*
-      # Step 5: Copy remaining files to Flatpak destination
+      # Step 5: Copy all remaining files to the Flatpak destination
       - cp -r files/* "${FLATPAK_DEST}"
     sources:
       - type: archive
@@ -600,6 +600,9 @@ modules:
       # Step 3: Move and set up the binary
       - rm -rf *.dll.config
       - mv R*x* "${FLATPAK_DEST}/bin/"
+      # This line inserts the command to export the LD_LIBRARY_PATH environment variable at the beginning of the specified file.
+      # It ensures that the /app/bin directory is included in the library search path for the executable files matching the pattern R*x*.sh.
+      - sed -i '1 a export LD_LIBRARY_PATH=/app/bin:$LD_LIBRARY_PATH' "${FLATPAK_DEST}/bin/"R*x*.sh
       - chmod +x "${FLATPAK_DEST}/bin/"R*x*
       # Step 4: Set up license directory and move license files
       - mkdir -p "${FLATPAK_DEST}/retrodeck/licenses"
