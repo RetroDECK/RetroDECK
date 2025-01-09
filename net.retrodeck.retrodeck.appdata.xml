@@ -97,6 +97,7 @@
                <li>RetroDECK now is migrated to an organization on GitHub, as before, please check the October blog post</li>
                <li>pre_build_automation script was reworked and additional functions are added</li>
                <li>Contributing is now easier and the manifest build time is down to about 1h (was 3h30)</li>
+               <li>Introduced a new library management system called LibMan to make sure that each compoent is bringing its own libraries while built from the manifest</li>
             </ul>
             <p>Known issues:</p>
             <ul>
