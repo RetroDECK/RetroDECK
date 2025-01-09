@@ -10,6 +10,14 @@
 #     fi
 # fi
 
+read -rp "Do you want to use the hashes cache? If you're unsure just say no [Y/n]" use_cache_input
+use_cache_input=${use_cache_input:-Y}
+if [[ "$use_cache_input" =~ ^[Yy]$ ]]; then
+    export use_cache="true"
+else
+    export use_cache="false"
+fi
+
 git submodule update --init --recursive
 
 export GITHUB_WORKSPACE="."
@@ -23,7 +31,7 @@ cp net.retrodeck.retrodeck.yml net.retrodeck.retrodeck.yml.bak
 
 automation_tools/install_dependencies.sh
 automation_tools/cooker_build_id.sh
-automation_tools/pre_build_automation.sh
+automation_tools/manifest_placeholder_replacer.sh
 automation_tools/cooker_flatpak_portal_add.sh
 # THIS SCRIPT IS BROKEN HENCE DISABLED FTM
 # automation_tools/appdata_management.sh

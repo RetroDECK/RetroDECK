@@ -26,6 +26,7 @@ incconfigs/
 *.flatpak
 *.flatpak.sha
 net.retrodeck.retrodeck.cached.yml
+placeholders.cache
 
 # Python #
 ##########

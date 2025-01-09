@@ -147,7 +147,7 @@ jobs:
         run: "cp ${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml ${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml.bak"
 
       - name: Run pre-build automation tasks
-        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/pre_build_automation.sh"
+        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/manifest_placeholder_replacer.sh"
 
       - name: "Adding flatpak portal for automated updates (Cooker only)"
         if: github.ref != 'refs/heads/main'
@@ -269,7 +269,7 @@ jobs:
           echo "Recalculating hashes and retrying download..."
           rm -f "{GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml"
           cp "${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml.bak" "${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml"
-          "${GITHUB_WORKSPACE}/automation_tools/pre_build_automation.sh"
+          "${GITHUB_WORKSPACE}/automation_tools/manifest_placeholder_replacer.sh"
           "${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
 
       - name: Build flatpak

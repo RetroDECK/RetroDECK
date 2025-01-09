@@ -4,7 +4,7 @@
 set -e
 
 # For the file paths to work correctly, call this script with this command from the cloned repo folder root:
-# sh automation_tools/pre_build_automation.sh
+# sh automation_tools/manifest_placeholder_replacer.sh
 # Different actions need different information in the task list file
 # branch: This changes the placeholder text to the currently-detected GIT branch if an automated build was started from a PR environment.
 # hash: Finds the SHA256 hash of a file online and updates the placeholder in the manifest.
@@ -40,6 +40,12 @@ set -e
 # Define paths
 rd_manifest="${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml"
 automation_task_list="${GITHUB_WORKSPACE}/automation_tools/automation_task_list.cfg"
+cache_file="${GITHUB_WORKSPACE}/placeholders.cache"
+
+# Check if cache file exists
+if [ -f "$cache_file" ]; then
+  echo "Warning: Cache file $cache_file is being used. If you encounter issues with hashes, consider deleting this file."
+fi
 
 # Retrieve current git branch
 get_current_branch() {
@@ -71,6 +77,34 @@ echo "Task list contents:"
 cat "$automation_task_list"
 echo
 
+# Function to get hash from cache or calculate it
+get_hash() {
+  local url="$1"
+  local hash
+
+  # Check if cache should be used and if cache file exists
+  # the use_cache variable is initialized by build_retrodeck_locally only so in the pipeline it will never use cache
+  if [ "$use_cache" == "true" ] && [ -f "$cache_file" ]; then
+    # Try to retrieve hash from cache
+    hash=$(grep "^$url " "$cache_file" | cut -d ' ' -f2)
+    if [ -n "$hash" ]; then
+      echo "Cache file exists, using cached hash for $url"
+    fi
+  fi
+
+  # If hash is not found in cache, calculate it
+  if [ -z "$hash" ]; then
+    hash=$(curl -sL "$url" | sha256sum | cut -d ' ' -f1)
+    # Save the calculated hash to cache if caching is enabled
+    if [ "$use_cache" == "true" ]; then
+      echo "$url $hash" >> "$cache_file"
+    fi
+  fi
+
+  # Return the hash
+  echo "$hash"
+}
+
 # Functions to handle different actions
 handle_branch() {
   local placeholder="$1"
@@ -82,7 +116,7 @@ handle_hash() {
   local placeholder="$1"
   local url="$2"
   local calculated_url=$(eval echo "$url")
-  local hash=$(curl -sL "$calculated_url" | sha256sum | cut -d ' ' -f1)
+  local hash=$(get_hash "$calculated_url")
   echo "Replacing placeholder $placeholder with hash $hash"
   /bin/sed -i 's^'"$placeholder"'^'"$hash"'^g' "$rd_manifest"
 }
@@ -118,7 +152,7 @@ handle_latestghrelease() {
     exit 1
   fi
   
-  local ghreleasehash=$(curl -sL "$ghreleaseurl" | sha256sum | cut -d ' ' -f1)
+  local ghreleasehash=$(get_hash "$ghreleaseurl")
   
   echo "Replacing placeholder $placeholder with URL $ghreleaseurl and hash $ghreleasehash"
   /bin/sed -i 's^'"$placeholder"'^'"$ghreleaseurl"'^g' "$rd_manifest"
@@ -139,7 +173,7 @@ handle_latestghreleasesha() {
     exit 1
   fi
   
-  local ghreleasehash=$(curl -sL "$ghreleaseurl" | sha256sum | cut -d ' ' -f1)
+  local ghreleasehash=$(get_hash "$ghreleaseurl")
   
   echo "Replacing placeholder $placeholder with hash $ghreleasehash"
   /bin/sed -i 's^'"$placeholder"'^'"$ghreleasehash"'^g' "$rd_manifest"
