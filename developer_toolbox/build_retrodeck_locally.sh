@@ -19,6 +19,15 @@ else
     rm -f "placeholders.cache"
 fi
 
+read -rp "Do you want to clear the build cache?\nKeeping the build cache can speed up the build process, but it might cause issues and should be cleared occasionally [y/N] " clear_cache_input
+clear_cache_input=${clear_cache_input:-N}
+if [[ "$clear_cache_input" =~ ^[Yy]$ ]]; then
+    # User chose to clear the build cache
+    echo "Clearing build cache..."
+    rm -rf "retrodeck-repo" "retrodeck-flatpak-cooker" ".flatpak-builder"
+
+fi
+
 git submodule update --init --recursive
 
 export GITHUB_WORKSPACE="."
