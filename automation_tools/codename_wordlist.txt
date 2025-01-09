@@ -1,6 +1,7 @@
 advance
 aesthetic
 alien
+abduction
 amateratsu
 amazing
 amiga
@@ -41,6 +42,7 @@ cage
 call
 capsule
 captain
+comeback
 capumon
 card
 cart
@@ -67,6 +69,7 @@ controller
 crazy
 critical
 crt
+culo
 curaga
 curara
 cure
@@ -115,6 +118,7 @@ future
 gainax
 galleon
 game
+gamma
 ganon
 gantz
 gear
@@ -163,6 +167,7 @@ junes
 jurassic
 jusenkyo
 kabuto
+kawaii
 kame
 kami
 kang
@@ -191,6 +196,7 @@ kyoto
 lagan
 landlubber
 level
+libman
 link
 linux
 lisa
@@ -219,7 +225,9 @@ mayonaka
 medal
 mega
 megatron
+megazord
 men
+mendokusai
 metabee
 metal
 midnight
@@ -314,6 +322,7 @@ ryoga
 ryuji
 saint
 sakura
+urusai
 sakurambo
 sama
 samurai
@@ -416,3 +425,4 @@ yukiko
 zelda
 zero
 zombie
+quest
