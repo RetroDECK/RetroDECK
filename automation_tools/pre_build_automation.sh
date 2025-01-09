@@ -189,22 +189,20 @@ handle_thisrepo() {
 }
 
 # Process the task list
-if [ "$use_cached" != "y" ]; then
-  while IFS="^" read -r action placeholder url branch || [[ -n "$action" ]]; do
-    if [[ ! "$action" == "#"* ]] && [[ -n "$action" ]]; then
-      case "$action" in
-        "branch" ) handle_branch "$placeholder" ;;
-        "hash" ) handle_hash "$placeholder" "$url" ;;
-        "latestcommit" ) handle_latestcommit "$placeholder" "$url" "$branch" ;;
-        "latestghtag" ) handle_latestghtag "$placeholder" "$url" ;;
-        "latestghrelease" ) handle_latestghrelease "$placeholder" "$url" "$branch" ;;
-        "latestghreleasesha" ) handle_latestghreleasesha "$placeholder" "$url" "$branch" ;;
-        "outside_file" ) handle_outside_file "$placeholder" "$url" ;;
-        "outside_env_var" ) handle_outside_env_var "$placeholder" "$url" ;;
-        "custom_command" ) handle_custom_command "$url" ;;
-        "url" ) handle_url "$placeholder" "$url" ;;
-        "THISREPO" ) handle_thisrepo "$placeholder" ;;
-      esac
-    fi
-  done < "$automation_task_list"
-fi
+while IFS="^" read -r action placeholder url branch || [[ -n "$action" ]]; do
+  if [[ ! "$action" == "#"* ]] && [[ -n "$action" ]]; then
+    case "$action" in
+      "branch" ) handle_branch "$placeholder" ;;
+      "hash" ) handle_hash "$placeholder" "$url" ;;
+      "latestcommit" ) handle_latestcommit "$placeholder" "$url" "$branch" ;;
+      "latestghtag" ) handle_latestghtag "$placeholder" "$url" ;;
+      "latestghrelease" ) handle_latestghrelease "$placeholder" "$url" "$branch" ;;
+      "latestghreleasesha" ) handle_latestghreleasesha "$placeholder" "$url" "$branch" ;;
+      "outside_file" ) handle_outside_file "$placeholder" "$url" ;;
+      "outside_env_var" ) handle_outside_env_var "$placeholder" "$url" ;;
+      "custom_command" ) handle_custom_command "$url" ;;
+      "url" ) handle_url "$placeholder" "$url" ;;
+      "THISREPO" ) handle_thisrepo "$placeholder" ;;
+    esac
+  fi
+done < "$automation_task_list"
