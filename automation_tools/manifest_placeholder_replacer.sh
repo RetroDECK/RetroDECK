@@ -87,9 +87,6 @@ get_hash() {
   if [ "$use_cache" == "true" ] && [ -f "$cache_file" ]; then
     # Try to retrieve hash from cache
     hash=$(grep "^$url " "$cache_file" | cut -d ' ' -f2)
-    if [ -n "$hash" ]; then
-      echo "Cache file exists, using cached hash for $url"
-    fi
   fi
 
   # If hash is not found in cache, calculate it

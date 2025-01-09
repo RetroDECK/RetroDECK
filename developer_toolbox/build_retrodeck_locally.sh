@@ -10,7 +10,7 @@
 #     fi
 # fi
 
-read -rp "Do you want to use the hashes cache? If you're unsure just say no [Y/n]" use_cache_input
+read -rp "Do you want to use the hashes cache? If you're unsure just say no [Y/n] " use_cache_input
 use_cache_input=${use_cache_input:-Y}
 if [[ "$use_cache_input" =~ ^[Yy]$ ]]; then
     export use_cache="true"
@@ -19,7 +19,8 @@ else
     rm -f "placeholders.cache"
 fi
 
-read -rp "Do you want to clear the build cache?\nKeeping the build cache can speed up the build process, but it might cause issues and should be cleared occasionally [y/N] " clear_cache_input
+echo "Do you want to clear the build cache?"
+read -rp "Keeping the build cache can speed up the build process, but it might cause issues and should be cleared occasionally [y/N] " clear_cache_input
 clear_cache_input=${clear_cache_input:-N}
 if [[ "$clear_cache_input" =~ ^[Yy]$ ]]; then
     # User chose to clear the build cache
