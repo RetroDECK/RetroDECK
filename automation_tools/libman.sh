@@ -9,6 +9,8 @@ excluded_libraries=("libselinux.so.1")
 # Define target directory
 target_dir="${FLATPAK_DEST}/lib"
 
+# Define debug directory
+debug_dir="${target_dir}/debug"
 
 echo "Worry not, LibMan is here!"
 
@@ -29,6 +31,12 @@ if ! mkdir -p "$target_dir"; then
     exit 0
 fi
 
+# Ensure the debug directory exists
+if ! mkdir -p "$debug_dir"; then
+    echo "Error: Failed to create debug directory $debug_dir"
+    exit 0
+fi
+
 # Function to check if a file is in the excluded libraries list
 is_excluded() {
     local file="$1"
@@ -46,8 +54,12 @@ failed_files=()
 
 # First, copy all regular files
 for file in $(find "$1" -type f -name "*.so*" ! -type l); do
-    # Define destination file path
-    dest_file="$target_dir/$(basename "$file")"
+    # Check if the file is in the debug folder
+    if [[ "$file" == *"/debug/"* ]]; then
+        dest_file="$debug_dir/$(basename "$file")"
+    else
+        dest_file="$target_dir/$(basename "$file")"
+    fi
 
     # Skip if the file is in the list of excluded libraries
     if is_excluded "$(basename "$file")"; then
@@ -76,13 +88,21 @@ done
 
 # Then, copy all symlinks
 for file in $(find "$1" -type l -name "*.so*"); do
-    # Define destination file path
-    dest_file="$target_dir/$(basename "$file")"
+    # Check if the file is in the debug folder
+    if [[ "$file" == *"/debug/"* ]]; then
+        dest_file="$debug_dir/$(basename "$file")"
+    else
+        dest_file="$target_dir/$(basename "$file")"
+    fi
 
     # Get the target of the symlink
     symlink_target=$(readlink "$file")
     # Define the destination for the symlink target
-    dest_symlink_target="$target_dir/$(basename "$symlink_target")"
+    if [[ "$symlink_target" == *"/debug/"* ]]; then
+        dest_symlink_target="$debug_dir/$(basename "$symlink_target")"
+    else
+        dest_symlink_target="$target_dir/$(basename "$symlink_target")"
+    fi
     
     # Copy the symlink target if it doesn't already exist
     if [ ! -e "$dest_symlink_target" ]; then
