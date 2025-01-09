@@ -16,6 +16,11 @@ for lib in /lib/*.so*; do
     excluded_libraries+=("$(basename "$lib")")
 done
 
+# Add libraries from /lib to the excluded list
+for lib in /lib64/*.so*; do
+    excluded_libraries+=("$(basename "$lib")")
+done
+
 # Define target directory
 target_dir="${FLATPAK_DEST}/lib"
 
