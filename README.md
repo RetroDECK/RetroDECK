@@ -93,6 +93,9 @@ Read up here on how to help out, there is something for everyone:
 
 [How to: Contribute to RetroDECK](https://retrodeck.readthedocs.io/en/latest/wiki_community/contibute-rd/)
 
+## Build RetroDECK locally
+Please follow [this guide](https://retrodeck.readthedocs.io/en/latest/wiki_development/general/build-locally/).
+
 ## Our repositories:
 | Name          | Description  |
 |-------------------------------------------------------------|-----------------------------------------------------------|
@@ -107,7 +110,6 @@ Read up here on how to help out, there is something for everyone:
 And many more, for the full list please check our [repositories page on GitHub](https://github.com/orgs/RetroDECK/repositories).
 
 # The RetroDECK Wiki
-
 Please check out the [Wiki](https://github.com/RetroDECK/RetroDECK/wiki) for even more information.
 
 ## The FAQ
