@@ -1104,8 +1104,8 @@ configurator_check_bios_files() {
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
       --column "BIOS File Name" \
       --column "Systems" \
-      --column "Found?" \
-      --column "Hash Matches?" \
+      --column "Found" \
+      --column "Hash Matches" \
       --column "Expected Path" \
       --column "MD5" \
       --column "Description" \
