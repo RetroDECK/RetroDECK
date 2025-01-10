@@ -1086,9 +1086,9 @@ configurator_check_bios_files() {
       log d "Adding BIOS entry: \"$bios_file $bios_systems $bios_file_found $bios_hash_matched $bios_desc $bios_subdir $bios_hash\" to the bios_checked_list"
 
       if [[ $bios_checked_list != "" ]]; then
-        bios_checked_list=("${bios_checked_list[@]}"^"$bios_file^$bios_systems^$bios_file_found^$bios_hash_matched^$bios_desc^$bios_subdir^$bios_hash")
+        bios_checked_list=("${bios_checked_list[@]}"^"$bios_file^$bios_systems^$bios_file_found^$bios_hash_matched^$bios_subdir^$bios_desc^$bios_hash")
       else
-        bios_checked_list=("$bios_file^$bios_systems^$bios_file_found^$bios_hash_matched^$bios_subdir^$bios_hash^$bios_desc")
+        bios_checked_list=("$bios_file^$bios_systems^$bios_file_found^$bios_hash_matched^$bios_subdir^$bios_desc^$bios_hash")
       fi
       #echo "$bios_file"^"$bios_systems"^"$bios_file_found"^"$bios_hash_matched"^"$bios_subdir"^"$bios_hash"^"$bios_desc" # Godot data transfer #TODO: this is breaking the zenity dialog, since we don't release Godot in this version I disabled it.
 
@@ -1107,8 +1107,8 @@ configurator_check_bios_files() {
       --column "Found" \
       --column "Hash Matches" \
       --column "Expected Path" \
-      --column "MD5" \
       --column "Description" \
+      --column "MD5" \
       $(printf '%s\n' "${bios_checked_list[@]}")
     IFS=$' \t\n' # Reset the Internal Field Separator
 
