@@ -656,13 +656,13 @@
       "system": "switch",
       "description": "A file for Switch emulation in Ryujinx",
       "required": "required",
-      "path": "switch"
+      "paths": "bios/switch"
     },
     "title.keys": {
       "system": "switch",
       "description": "A file for Switch emulation in Ryujinx",
       "required": "required",
-      "path": "switch"
+      "paths": "bios/switch"
     },
     "pico8": {
       "system": "PICO-8",
@@ -701,38 +701,38 @@
       "md5": "e10c53c2f8b90bab96ead2d368858623",
       "system": "dreamcast",
       "description": "Dreamcast BIOS",
-      "path": "dc",
+      "paths": "bios/dc",
       "required": "required"
     },
     "naomi.zip": {
       "md5": "0ea6d3650ce4a7608a589e5df21a1f2f",
       "system": "dreamcast",
       "description": "Naomi BIOS",
-      "path": "dc"
+      "paths": "bios/dc"
     },
     "naomi2.zip": {
       "md5": "9b85e0de6ef359e5006c9b79a5a266b0",
       "system": "dreamcast",
       "description": "Naomi BIOS",
-      "path": "dc"
+      "paths": "bios/dc"
     },
     "naomi_boot.bin": {
       "md5": "96cb91c4a0bedd86e5a6965cfe6c0148",
       "system": "dreamcast",
       "description": "Naomi BIOS",
-      "path": "dc"
+      "paths": "bios/dc"
     },
     "hod2bios.zip": {
       "md5": "629bb0552463ba116ccf23d9a468a9f0",
       "system": "dreamcast",
       "description": "Naomi The House of the Dead 2 BIOS",
-      "path": "dc"
+      "paths": "bios/dc"
     },
     "f355dlx.zip": {
       "md5": "4b5bb177cbd760477598f85531dbe7fd",
       "system": "dreamcast",
       "description": "Naomi Ferrari F355 Challenge Deluxe BIOS",
-      "path": "dc"
+      "paths": "bios/dc"
     },
     "f355bios.zip": {
       "md5": [
@@ -744,7 +744,7 @@
         "arcade"
       ],
       "description": "Naomi Ferrari F355 Challenge Twin/Deluxe BIOS",
-      "path": "dc"
+      "paths": "bios/dc"
     },
     "airlbios.zip": {
       "md5": [
@@ -756,7 +756,7 @@
         "arcade"
       ],
       "description": "Naomi Airline Pilots Deluxe BIOS",
-      "path": "dc"
+      "paths": "bios/dc"
     },
     "awbios.zip": {
       "md5": [
@@ -768,7 +768,7 @@
         "arcade"
       ],
       "description": "Naomi Atomiswave BIOS",
-      "path": "dc"
+      "paths": "bios/dc"
     },
     "bios.sms": {
       "md5": "840481177270d5642a14ca71ee72844c",

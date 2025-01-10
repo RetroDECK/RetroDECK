@@ -1054,43 +1054,47 @@ configurator_check_bios_files() {
     while read -r entry; do
         # Extract the key (element name) and the fields
         bios_file=$(echo "$entry" | jq -r '.key // "Unknown"')
-        bios_hash=$(echo "$entry" | jq -r '.value.md5 | if type=="array" then join(", ") else . end // "Unknown"')
+        bios_md5=$(echo "$entry" | jq -r '.value.md5 | if type=="array" then join(", ") else . end // "Unknown"')
         bios_systems=$(echo "$entry" | jq -r '.value.system | if type=="array" then join(", ") else . end // "Unknown"')
+        # Broken
+        #bios_systems_pretty=$(echo "$bios_systems" | jq -R -r 'split(", ") | map(. as $sys | input_filename | gsub("features.json"; "") | .emulator[$sys].name) | join(", ")' --slurpfile features $features)
         bios_desc=$(echo "$entry" | jq -r '.value.description // "No description provided"')
         required=$(echo "$entry" | jq -r '.value.required // "No"')
-        bios_subdir=$(echo "$entry" | jq -r ".value.subdir // \"$bios_folder\"")
+        bios_paths=$(echo "$entry" | jq -r '.value.paths | if type=="array" then join(", ") else . end // "'"$bios_folder"'"' | sed "s|"$rdhome/"||")
 
       log d "Checking entry $bios_entry"
 
       # Skip if bios_file is empty
       if [[ ! -z "$bios_file" ]]; then
         bios_file_found="No"
-        bios_hash_matched="No"
+        bios_md5_matched="No"
         
         # Check if the BIOS file exists
-        if [[ -f "$bios_folder/$bios_subdir$bios_file" ]]; then
+        if [[ -f "$bios_folder/$bios_paths$bios_file" ]]; then
           bios_file_found="Yes"
           
-          # Check if the hash matches
-          if [[ $bios_hash == "Unknown" ]]; then
-            bios_hash_matched="Unknown"
-          elif [[ $(md5sum "$bios_folder/$bios_subdir$bios_file" | awk '{ print $1 }') == "$bios_hash" ]]; then
-            bios_hash_matched="Yes"
-          fi
+          # Check if the hash matches any of the possible MD5s
+          IFS=', ' read -r -a md5_array <<< "$bios_md5"
+          for md5 in "${md5_array[@]}"; do
+            if [[ $(md5sum "$bios_folder/$bios_paths$bios_file" | awk '{ print $1 }') == "$md5" ]]; then
+              bios_md5_matched="Yes"
+              break
+            fi
+          done
         fi
         
-        log d "BIOS file found: $bios_file_found, Hash matched: $bios_hash_matched"
+        log d "BIOS file found: $bios_file_found, Hash matched: $bios_md5_matched"
 
       fi
 
-      log d "Adding BIOS entry: \"$bios_file $bios_systems $bios_file_found $bios_hash_matched $bios_desc $bios_subdir $bios_hash\" to the bios_checked_list"
+      log d "Adding BIOS entry: \"$bios_file $bios_systems $bios_file_found $bios_md5_matched $bios_desc $bios_paths $bios_md5\" to the bios_checked_list"
 
       if [[ $bios_checked_list != "" ]]; then
-        bios_checked_list=("${bios_checked_list[@]}"^"$bios_file^$bios_systems^$bios_file_found^$bios_hash_matched^$required^$bios_subdir^$bios_desc^$bios_hash")
+        bios_checked_list=("${bios_checked_list[@]}"^"$bios_file^$bios_systems^$bios_file_found^$bios_md5_matched^$required^$bios_paths^$bios_desc^$bios_md5")
       else
-        bios_checked_list=("$bios_file^$bios_systems^$bios_file_found^$bios_hash_matched^$required^$bios_subdir^$bios_desc^$bios_hash")
+        bios_checked_list=("$bios_file^$bios_systems^$bios_file_found^$bios_md5_matched^$required^$bios_paths^$bios_desc^$bios_md5")
       fi
-      #echo "$bios_file"^"$bios_systems"^"$bios_file_found"^"$bios_hash_matched"^"$bios_subdir"^"$bios_hash"^"$bios_desc" # Godot data transfer #TODO: this is breaking the zenity dialog, since we don't release Godot in this version I disabled it.
+      #echo "$bios_file"^"$bios_systems"^"$bios_file_found"^"$bios_md5_matched"^"$bios_paths"^"$bios_md5"^"$bios_desc" # Godot data transfer #TODO: this is breaking the zenity dialog, since we don't release Godot in this version I disabled it.
 
       current_bios=$((current_bios + 1))
       echo "$((current_bios * 100 / total_bios))"
