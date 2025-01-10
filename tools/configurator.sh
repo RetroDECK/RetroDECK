@@ -70,7 +70,6 @@ source /app/libexec/global.sh
 #     - Troubleshooting
 #       - Backup: RetroDECK Userdata
 #       - Check & Verify: BIOS
-#       - Check & Verify: BIOS - Expert Mode
 #       - Check & Verify: Multi-file structure
 #       - RetroDECK: Reset
 #         - Reset Emulator or Engine
@@ -153,6 +152,7 @@ configurator_welcome_dialog() {
 
   "RetroDECK: Troubleshooting" )
     log i "Configurator: opening \"$choice\" menu"
+    # Call the troubleshooting dialog to return to the previous menu after checking BIOS files
     configurator_retrodeck_troubleshooting_dialog
   ;;
 
@@ -986,7 +986,6 @@ configurator_retrodeck_troubleshooting_dialog() {
   --column="Choice" --column="Action" \
   "Backup: RetroDECK Userdata" "Compress and backup important RetroDECK user data folders" \
   "Check & Verify: BIOS Files" "Show information about common BIOS files" \
-  "Check & Verify: BIOS Files - Expert Mode" "Show information about common BIOS files, with additional information useful for troubleshooting" \
   "Check & Verify: Multi-file structure" "Verify the proper structure of multi-file or multi-disc games" \
   "RetroDECK: Reset" "Reset specific parts or all of RetroDECK" )
 
@@ -1015,10 +1014,6 @@ configurator_retrodeck_troubleshooting_dialog() {
     configurator_check_bios_files
   ;;
 
-  "Check & Verify: BIOS Files - Expert Mode" )
-    configurator_check_bios_files_expert_mode
-  ;;
-
   "Check & Verify: Multi-file structure" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_check_multifile_game_structure
@@ -1037,40 +1032,92 @@ configurator_retrodeck_troubleshooting_dialog() {
   esac
 }
 
+# This function checks and verifies BIOS files for RetroDECK.
+# It reads a list of required BIOS files from a JSON file, checks if they exist in the specified folder,
+# verifies their MD5 hashes if provided, and displays the results in a Zenity dialog.
 configurator_check_bios_files() {
+
   configurator_generic_dialog "RetroDECK Configurator - Check & Verify: BIOS Files" "This check will look for BIOS files that RetroDECK has identified as working.\n\nNot all BIOS files are required for games to work, please check the BIOS description for more information on its purpose.\n\nBIOS files not known to this tool could still function.\n\nSome more advanced emulators such as Ryujinx will have additional methods to verify that the BIOS files are in working order."
-  bios_checked_list=()
 
-  check_bios_files "basic"
+  log d "Starting BIOS check in mode: $mode"
 
-  rd_zenity --list --title="RetroDECK Configurator Utility - Check & Verify: BIOS Files" --cancel-label="Back" \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
-  --column "BIOS File Name" \
-  --column "System" \
-  --column "BIOS File Found" \
-  --column "BIOS Hash Match" \
-  --column "BIOS File Description" \
-  "${bios_checked_list[@]}"
+  (
 
-  configurator_retrodeck_troubleshooting_dialog
-}
+    # Read the BIOS checklist from bios.json using jq
+    total_bios=$(jq '.bios | length' $bios_checklist)
+    current_bios=0
 
-configurator_check_bios_files_expert_mode() {
-  configurator_generic_dialog "RetroDECK Configurator - Check & Verify: BIOS Files - Expert Mode" "This check will look for BIOS files that RetroDECK has identified as working.\n\nNot all BIOS files are required for games to work, please check the BIOS description for more information on its purpose.\n\nBIOS files not known to this tool could still function.\n\nSome more advanced emulators such as Ryujinx will have additional methods to verify that the BIOS files are in working order."
-  bios_checked_list=()
+    log d "Total BIOS files to check: $total_bios"
 
-  check_bios_files "expert"
+    declare -a bios_checked_list
 
-  rd_zenity --list --title="RetroDECK Configurator Utility - Check & Verify: BIOS Files" --cancel-label="Back" \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
-  --column "BIOS File Name" \
-  --column "System" \
-  --column "BIOS File Found" \
-  --column "BIOS Hash Match" \
-  --column "BIOS File Description" \
-  --column "BIOS File Subdirectory" \
-  --column "BIOS File Hash" \
-  "${bios_checked_list[@]}"
+    while read -r entry; do
+        # Extract the key (element name) and the fields
+        bios_file=$(echo "$entry" | jq -r '.key // "Unknown"')
+        bios_hash=$(echo "$entry" | jq -r '.value.md5 | if type=="array" then join(", ") else . end // "Unknown"')
+        bios_systems=$(echo "$entry" | jq -r '.value.system | if type=="array" then join(", ") else . end // "Unknown"')
+        bios_desc=$(echo "$entry" | jq -r '.value.description // "No description provided"')
+        required=$(echo "$entry" | jq -r '.value.required // "No"') # TODO: add me to zenity
+        bios_subdir=$(echo "$entry" | jq -r ".value.subdir // \"$bios_folder\"")
+
+      log d "Checking entry $bios_entry"
+
+      # Skip if bios_file is empty
+      if [[ ! -z "$bios_file" ]]; then
+        bios_file_found="No"
+        bios_hash_matched="No"
+        
+        # Check if the BIOS file exists
+        if [[ -f "$bios_folder/$bios_subdir$bios_file" ]]; then
+          bios_file_found="Yes"
+          
+          # Check if the hash matches
+          if [[ $bios_hash == "Unknown" ]]; then
+            bios_hash_matched="Unknown"
+          elif [[ $(md5sum "$bios_folder/$bios_subdir$bios_file" | awk '{ print $1 }') == "$bios_hash" ]]; then
+            bios_hash_matched="Yes"
+          fi
+        fi
+        
+        log d "BIOS file found: $bios_file_found, Hash matched: $bios_hash_matched"
+
+      fi
+
+      log d "Adding BIOS entry: \"$bios_file $bios_systems $bios_file_found $bios_hash_matched $bios_desc $bios_subdir $bios_hash\" to the bios_checked_list"
+
+      if [[ $bios_checked_list != "" ]]; then
+        bios_checked_list=("${bios_checked_list[@]}"^"$bios_file^$bios_systems^$bios_file_found^$bios_hash_matched^$bios_desc^$bios_subdir^$bios_hash")
+      else
+        bios_checked_list=("$bios_file^$bios_systems^$bios_file_found^$bios_hash_matched^$bios_subdir^$bios_hash^$bios_desc")
+      fi
+      #echo "$bios_file"^"$bios_systems"^"$bios_file_found"^"$bios_hash_matched"^"$bios_subdir"^"$bios_hash"^"$bios_desc" # Godot data transfer #TODO: this is breaking the zenity dialog, since we don't release Godot in this version I disabled it.
+
+      current_bios=$((current_bios + 1))
+      echo "$((current_bios * 100 / total_bios))"
+
+    done < <(jq -c '.bios | to_entries[]' "$bios_checklist")
+
+    log d "Finished checking BIOS files"
+
+    IFS="^" # Set the Internal Field Separator to ^ to split the bios_checked_list array
+    rd_zenity --list --title="RetroDECK Configurator Utility - Check & Verify: BIOS Files" --cancel-label="Back" \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+      --column "BIOS File Name" \
+      --column "Systems" \
+      --column "Found?" \
+      --column "Hash Matches?" \
+      --column "Expected Path" \
+      --column "MD5" \
+      --column "Description" \
+      $(printf '%s\n' "${bios_checked_list[@]}")
+    IFS=$' \t\n' # Reset the Internal Field Separator
+
+  ) |
+  rd_zenity --progress --no-cancel --auto-close \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+  --title "RetroDECK Configurator Utility - BIOS Check in Progress" \
+  --text="RetroDECK is checking your BIOS files, please wait..." \
+  --width=400 --height=100
 
   configurator_retrodeck_troubleshooting_dialog
 }
