@@ -1057,7 +1057,7 @@ configurator_check_bios_files() {
         bios_hash=$(echo "$entry" | jq -r '.value.md5 | if type=="array" then join(", ") else . end // "Unknown"')
         bios_systems=$(echo "$entry" | jq -r '.value.system | if type=="array" then join(", ") else . end // "Unknown"')
         bios_desc=$(echo "$entry" | jq -r '.value.description // "No description provided"')
-        required=$(echo "$entry" | jq -r '.value.required // "No"') # TODO: add me to zenity
+        required=$(echo "$entry" | jq -r '.value.required // "No"')
         bios_subdir=$(echo "$entry" | jq -r ".value.subdir // \"$bios_folder\"")
 
       log d "Checking entry $bios_entry"
@@ -1086,9 +1086,9 @@ configurator_check_bios_files() {
       log d "Adding BIOS entry: \"$bios_file $bios_systems $bios_file_found $bios_hash_matched $bios_desc $bios_subdir $bios_hash\" to the bios_checked_list"
 
       if [[ $bios_checked_list != "" ]]; then
-        bios_checked_list=("${bios_checked_list[@]}"^"$bios_file^$bios_systems^$bios_file_found^$bios_hash_matched^$bios_subdir^$bios_desc^$bios_hash")
+        bios_checked_list=("${bios_checked_list[@]}"^"$bios_file^$bios_systems^$bios_file_found^$bios_hash_matched^$required^$bios_subdir^$bios_desc^$bios_hash")
       else
-        bios_checked_list=("$bios_file^$bios_systems^$bios_file_found^$bios_hash_matched^$bios_subdir^$bios_desc^$bios_hash")
+        bios_checked_list=("$bios_file^$bios_systems^$bios_file_found^$bios_hash_matched^$required^$bios_subdir^$bios_desc^$bios_hash")
       fi
       #echo "$bios_file"^"$bios_systems"^"$bios_file_found"^"$bios_hash_matched"^"$bios_subdir"^"$bios_hash"^"$bios_desc" # Godot data transfer #TODO: this is breaking the zenity dialog, since we don't release Godot in this version I disabled it.
 
@@ -1106,6 +1106,7 @@ configurator_check_bios_files() {
       --column "Systems" \
       --column "Found" \
       --column "Hash Matches" \
+      --column "Required" \
       --column "Expected Path" \
       --column "Description" \
       --column "MD5" \
