@@ -72,7 +72,12 @@
       "md5": "00dad01abdbf8ea9e79ad2fe11bdb182",
       "system": "fbneo",
       "description": "Neo Geo BIOS",
-      "required": "required"
+      "required": "required",
+      "paths": [
+        "roms/neogeo",
+        "roms/fbneo",
+        "roms/arcade"
+      ]
     },
     "neocdz.zip": {
       "md5": "c733b4b7bd30fa849874d96c591c8639",
@@ -500,7 +505,7 @@
         "neogeocdjp"
       ],
       "description": "Front Loader BIOS",
-      "required": "at least one"
+      "required": "at least one for this system"
     },
     "neocd_sf.rom": {
       "md5": "043d76d5f0ef836500700c34faef774d",
@@ -509,7 +514,7 @@
         "neogeocdjp"
       ],
       "description": "Front Loader BIOS (SMKDAN 0.7b DEC 2010)",
-      "required": "at least one"
+      "required": "at least one for this system"
     },
     "neocd_t.rom": {
       "md5": "de3cf45d227ad44645b22aa83b49f450",
@@ -518,7 +523,7 @@
         "neogeocdjp"
       ],
       "description": "Top Loader BIOS",
-      "required": "at least one"
+      "required": "at least one for this system"
     },
     "neocd_st.rom": {
       "md5": "f6325a33c6d63ea4b9162a3fa8c32727",
@@ -527,7 +532,7 @@
         "neogeocdjp"
       ],
       "description": "Top Loader BIOS (SMKDAN 0.7b DEC 2010)",
-      "required": "at least one"
+      "required": "at least one for this system"
     },
     "neocd_z.rom": {
       "md5": "11526d58d4c524daef7d5d677dc6b004",
@@ -536,7 +541,7 @@
         "neogeocdjp"
       ],
       "description": "CDZ BIOS",
-      "required": "at least one"
+      "required": "at least one for this system"
     },
     "neocd_sz.rom": {
       "md5": "971ee8a36fb72da57aed01758f0a37f5",
@@ -545,7 +550,7 @@
         "neogeocdjp"
       ],
       "description": "CDZ BIOS (SMKDAN 0.7b DEC 2010)",
-      "required": "at least one"
+      "required": "at least one for this system"
     },
     "front-sp1.bin": {
       "md5": "5c2366f25ff92d71788468ca492ebeca",
@@ -554,7 +559,7 @@
         "neogeocdjp"
       ],
       "description": "Front Loader BIOS (MAME)",
-      "required": "at least one"
+      "required": "at least one for this system"
     },
     "top-sp1.bin": {
       "md5": "122aee210324c72e8a11116e6ef9c0d0",
@@ -563,7 +568,7 @@
         "neogeocdjp"
       ],
       "description": "Top Loader BIOS (MAME)",
-      "required": "at least one"
+      "required": "at least one for this system"
     },
     "neocd.bin": {
       "md5": "f39572af7584cb5b3f70ae8cc848aba2",
@@ -572,7 +577,7 @@
         "neogeocdjp"
       ],
       "description": "CDZ BIOS (MAME)",
-      "required": "at least one"
+      "required": "at least one for this system"
     },
     "uni-bioscd.rom": {
       "md5": "08ca8b2dba6662e8024f9e789711c6fc",
@@ -651,13 +656,13 @@
       "system": "switch",
       "description": "A file for Switch emulation in Ryujinx",
       "required": "required",
-      "path": "switch"
+      "paths": "bios/switch"
     },
     "title.keys": {
       "system": "switch",
       "description": "A file for Switch emulation in Ryujinx",
       "required": "required",
-      "path": "switch"
+      "paths": "bios/switch"
     },
     "pico8": {
       "system": "PICO-8",
@@ -678,56 +683,56 @@
       "md5": "e66fa1dc5820d254611fdcdba0662372",
       "system": "segacd",
       "description": "MegaCD EU BIOS",
-      "required": "at least one"
+      "required": "at least one for this system"
     },
     "bios_CD_U.bin": {
       "md5": "2efd74e3232ff260e371b99f84024f7f",
       "system": "segacd",
       "description": "SegaCD US BIOS",
-      "required": "at least one"
+      "required": "at least one for this system"
     },
     "bios_CD_J.bin": {
       "md5": "278a9397d192149e84e820ac621a8edd",
       "system": "segacd",
       "description": "MegaCD JP BIOS",
-      "required": "at least one"
+      "required": "at least one for this system"
     },
     "dc_boot.bin": {
       "md5": "e10c53c2f8b90bab96ead2d368858623",
       "system": "dreamcast",
       "description": "Dreamcast BIOS",
-      "path": "dc",
+      "paths": "bios/dc",
       "required": "required"
     },
     "naomi.zip": {
       "md5": "0ea6d3650ce4a7608a589e5df21a1f2f",
       "system": "dreamcast",
       "description": "Naomi BIOS",
-      "path": "dc"
+      "paths": "bios/dc"
     },
     "naomi2.zip": {
       "md5": "9b85e0de6ef359e5006c9b79a5a266b0",
       "system": "dreamcast",
       "description": "Naomi BIOS",
-      "path": "dc"
+      "paths": "bios/dc"
     },
     "naomi_boot.bin": {
       "md5": "96cb91c4a0bedd86e5a6965cfe6c0148",
       "system": "dreamcast",
       "description": "Naomi BIOS",
-      "path": "dc"
+      "paths": "bios/dc"
     },
     "hod2bios.zip": {
       "md5": "629bb0552463ba116ccf23d9a468a9f0",
       "system": "dreamcast",
       "description": "Naomi The House of the Dead 2 BIOS",
-      "path": "dc"
+      "paths": "bios/dc"
     },
     "f355dlx.zip": {
       "md5": "4b5bb177cbd760477598f85531dbe7fd",
       "system": "dreamcast",
       "description": "Naomi Ferrari F355 Challenge Deluxe BIOS",
-      "path": "dc"
+      "paths": "bios/dc"
     },
     "f355bios.zip": {
       "md5": [
@@ -739,7 +744,7 @@
         "arcade"
       ],
       "description": "Naomi Ferrari F355 Challenge Twin/Deluxe BIOS",
-      "path": "dc"
+      "paths": "bios/dc"
     },
     "airlbios.zip": {
       "md5": [
@@ -751,7 +756,7 @@
         "arcade"
       ],
       "description": "Naomi Airline Pilots Deluxe BIOS",
-      "path": "dc"
+      "paths": "bios/dc"
     },
     "awbios.zip": {
       "md5": [
@@ -763,7 +768,7 @@
         "arcade"
       ],
       "description": "Naomi Atomiswave BIOS",
-      "path": "dc"
+      "paths": "bios/dc"
     },
     "bios.sms": {
       "md5": "840481177270d5642a14ca71ee72844c",
@@ -790,7 +795,7 @@
         "saturnjp"
       ],
       "description": "Saturn JP BIOS",
-      "required": "at least one"
+      "required": "at least one for this system"
     },
     "mpr-17933.bin": {
       "md5": "3240872c70984b6cbfda1586cab68dbe",
@@ -799,7 +804,7 @@
         "saturnjp"
       ],
       "description": "Saturn US BIOS",
-      "required": "at least one"
+      "required": "at least one for this system"
     },
     "mpr-18811-mx.ic1": {
       "md5": "255113ba943c92a54facd25a10fd780c",
@@ -848,79 +853,79 @@
       "md5": "c53ca5908936d412331790f4426c6c33",
       "system": "psx",
       "description": "PS1 BIOS from PSP",
-      "required": "at least one"
+      "required": "at least one for this system"
     },
     "scph5500.bin": {
       "md5": "8dd7d5296a650fac7319bce665a6a53c",
       "system": "psx",
       "description": "PS1 JP BIOS",
-      "required": "at least one"
+      "required": "at least one for this system"
     },
     "scph5501.bin": {
       "md5": "490f666e1afb15b7362b406ed1cea246",
       "system": "psx",
       "description": "PS1 US BIOS",
-      "required": "at least one"
+      "required": "at least one for this system"
     },
     "scph5502.bin": {
       "md5": "32736f17079d0b2b7024407c39bd3050",
       "system": "psx",
       "description": "PS1 EU BIOS",
-      "required": "at least one"
+      "required": "at least one for this system"
     },
     "scph7001.bin": {
       "md5": "1e68c231d0896b7eadcad1d7d8e76129",
       "system": "psx",
       "description": "PS1 BIOS",
-      "required": "at least one"
+      "required": "at least one for this system"
     },
     "scph7002.bin": {
       "md5": "b9d9a0286c33dc6b7237bb13cd46fdee",
       "system": "psx",
       "description": "PS1 BIOS",
-      "required": "at least one"
+      "required": "at least one for this system"
     },
     "scph7003.bin": {
       "md5": "490f666e1afb15b7362b406ed1cea246",
       "system": "psx",
       "description": "PS1 BIOS",
-      "required": "at least one"
+      "required": "at least one for this system"
     },
     "scph7502.bin": {
       "md5": "b9d9a0286c33dc6b7237bb13cd46fdee",
       "system": "psx",
       "description": "PS1 BIOS",
-      "required": "at least one"
+      "required": "at least one for this system"
     },
     "scph9002(7502).bin": {
       "md5": "b9d9a0286c33dc6b7237bb13cd46fdee",
       "system": "psx",
       "description": "PS1 BIOS",
-      "required": "at least one"
+      "required": "at least one for this system"
     },
     "ps1_rom.bin": {
       "md5": "81bbe60ba7a3d1cea1d48c14cbcc647b",
       "system": "psx",
       "description": "PS1 BIOS",
-      "required": "at least one"
+      "required": "at least one for this system"
     },
     "ps2-0200a-20040614.bin": {
       "md5": "d333558cc14561c1fdc334c75d5f37b7",
       "system": "ps2",
       "description": "PS2 US BIOS",
-      "required": "at least one"
+      "required": "at least one for this system"
     },
     "ps2-0200e-20040614.bin": {
       "md5": "dc752f160044f2ed5fc1f4964db2a095",
       "system": "ps2",
       "description": "PS2 EU BIOS",
-      "required": "at least one"
+      "required": "at least one for this system"
     },
     "ps2-0200j-20040614.bin": {
       "md5": "0eee5d1c779aa50e94edd168b4ebf42e",
       "system": "ps2",
       "description": "PS2 JP BIOS",
-      "required": "at least one"
+      "required": "at least one for this system"
     },
     "128p-0.rom": {
       "md5": "a249565f03b98d004ee7f019570069cd",

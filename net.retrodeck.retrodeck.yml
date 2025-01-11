@@ -1,6 +1,6 @@
 app-id: net.retrodeck.retrodeck
 runtime: org.kde.Platform
-runtime-version: "6.7"
+runtime-version: "6.8"
 sdk: org.kde.Sdk
 base: org.electronjs.Electron2.BaseApp            # Needed for Steam ROM Manager
 base-version: "22.08"
@@ -53,7 +53,7 @@ cleanup:
   - /src
   - '*.a'
   - '*.la'
-  - /app/retrodeck/tmplib
+  - /app/bin/libman.sh
 
 modules:
 
@@ -70,11 +70,12 @@ modules:
   # [ ] Update the VERSION variable on line containing "VERSION=THISBRANCH"
   # [ ] Update the appdata.xml with the version number and notes
 
-  - name: version-initialization
+  - name: retrodeck-initialization
     buildsystem: simple
     build-commands:
       - |
 
+        # VERSION INITIALIZATION
         # on main please update this with the version variable, eg: VERSION=0.8.0b
         # on cooker will be VERSION=cooker-0.9.0b for example
         VERSION=cooker-0.9.0b
@@ -88,10 +89,12 @@ modules:
         echo $VERSION >> ${FLATPAK_DEST}/retrodeck/version
         cat ${FLATPAK_DEST}/retrodeck/version
         echo "Version is $VERSION"
+
+        # LIBMAN INSTALLATION
+        install -Dm755 "automation_tools/libman.sh" "/app/bin/libman.sh"
     sources:
-      - type: git
-        url: THISREPO
-        branch: THISBRANCH
+      - type: dir
+        path: .
 
   - name: xmlstarlet
     config-opts:
@@ -229,20 +232,21 @@ modules:
   - name: retroarch
     buildsystem: simple
     build-commands:
+      # Step 1: Create required directories
       - mkdir -p "${FLATPAK_DEST}/share/libretro/"
+      # Step 2: Copy RetroArch configuration files
       - cp -r ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/* "${FLATPAK_DEST}/share/libretro/"
+      # Step 3: Extract the AppImage
       - chmod +x ./*.AppImage
       - ./*.AppImage --appimage-extract
-      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
-      - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
-      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
+      # Step 4: Use libman.sh to manage libraries
+      - /app/bin/libman.sh "squashfs-root/usr/lib"
+      # Step 5: Copy remaining extracted files to the Flatpak destination
+      - find squashfs-root/usr/ -exec sh -c 'install -Dm755 "{}" "${FLATPAK_DEST}/$(echo "{}" | sed "s|^squashfs-root/usr||")"' \;
     sources:
       - type: archive
         url: https://buildbot.libretro.com/stable/1.20.0/linux/x86_64/RetroArch.7z
-        #sha256: RASHAPLACEHOLDER
         sha256: 809b3e9f02a9849719453d0f189a0edc544ad3235c8ce75a79488e710ba9668a
-
-  # Not part of the offical RetroArch AppImage
 
   # TODO: outsource me
   - name: libbz2
@@ -341,15 +345,19 @@ modules:
   - name: retrodeck-ppsspp
     buildsystem: simple
     build-commands:
+      # Step 1: Remove any existing manifest.json file
       - rm -f "files/manifest.json"
-      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
-      - "cp -rnL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib || echo 'Warning: Some files could not be copied, but the build will continue.'"
+      # Step 2: Use libman.sh to manage libraries
+      - /app/bin/libman.sh "files/lib"
+      # Step 3: removing libraries folder that have been already moved
       - rm -rf "files/lib"
+      # Step 4: Ensure binaries are executable
       - chmod +x "files/bin/"*
+      # Step 5: Copy all remaining files to the Flatpak destination
       - cp -r files/* "${FLATPAK_DEST}"
     sources:
       - type: archive
-        url: https://github.com/RetroDECK/org.ppsspp.PPSSPP/releases/latest/download/RetroDECK-PPSSPP-Artifact.tar.gz
+        url: https://github.com/RetroDECK/org.ppsspp.PPSSPP/releases/latest/download/RetroDECK-Artifact.tar.gz
         sha256: RETRODECKPPSSPPLATEST
 
   # PCSX2
@@ -359,11 +367,14 @@ modules:
   - name: pcsx2
     buildsystem: simple
     build-commands:
+      # Step 1: Ensure the AppImage is executable
       - chmod +x *.AppImage
+      # Step 2: Extract the AppImage
       - ./*.AppImage --appimage-extract
-      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
-      - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
-      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
+      # Step 3: Use libman.sh to handle library files
+      - /app/bin/libman.sh "squashfs-root/usr/lib"
+      # Step 4: Copy the remaining extracted files to the Flatpak destination
+      - find squashfs-root/usr/ -exec sh -c 'install -Dm755 "{}" "${FLATPAK_DEST}/$(echo "{}" | sed "s|^squashfs-root/usr||")"' \;
     sources:
       - type: file
         url: https://github.com/PCSX2/pcsx2/releases/download/v2.3.53/pcsx2-v2.3.53-linux-appimage-x64-Qt.AppImage
@@ -376,17 +387,19 @@ modules:
   - name: retrodeck-dolphin
     buildsystem: simple
     build-commands:
+      # Step 1: Remove any existing manifest.json file
       - rm -f "files/manifest.json"
-      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
-      - "cp -rnL files/lib/debug ${FLATPAK_DEST}/retrodeck/tmplib || echo 'Warning: Some files could not be copied, but the build will continue.'"
-      - rm -rf "files/lib/debug"
-      - "cp -rnL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib || echo 'Warning: Some files could not be copied, but the build will continue.'"
+      # Step 2: Use libman.sh to manage libraries
+      - /app/bin/libman.sh "files/lib"
+      # Step 3: removing libraries folder that have been already moved
       - rm -rf "files/lib"
+      # Step 4: Ensure binaries are executable
       - chmod +x "files/bin/"*
+      # Step 5: Copy all remaining files to the Flatpak destination
       - cp -r files/* "${FLATPAK_DEST}"
     sources:
       - type: archive
-        url: https://github.com/RetroDECK/org.DolphinEmu.dolphin-emu/releases/latest/download/RetroDECK-dolphin-Artifact.tar.gz
+        url: https://github.com/RetroDECK/org.DolphinEmu.dolphin-emu/releases/latest/download/RetroDECK-Artifact.tar.gz
         sha256: RETRODECKDOLPHINLATEST
 
   # PRIMEHACK
@@ -395,14 +408,17 @@ modules:
   - name: retrodeck-primehack
     buildsystem: simple
     build-commands:
+      # Step 1: Remove any existing manifest.json file
       - rm -f "files/manifest.json"
-      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
+      # Step 2: Remove unnecessary files
       - rm -rf "files/lib/pkgconfig"
-      - "cp -rnL files/lib/debug ${FLATPAK_DEST}/retrodeck/tmplib || echo 'Warning: Some files could not be copied, but the build will continue.'"
-      - rm -rf "files/lib/debug"
-      - "cp -rnL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib || echo 'Warning: Some files could not be copied, but the build will continue.'"
+      # Step 3: Use libman.sh to manage libraries
+      - /app/bin/libman.sh "files/lib"
+      # Step 4: removing libraries folder that have been already moved
       - rm -rf "files/lib"
+      # Step 5: Ensure binaries are executable
       - chmod +x "files/bin/"*
+      # Step 6: Copy all remaining files to the Flatpak destination
       - cp -r files/* "${FLATPAK_DEST}"
     sources:
       - type: archive
@@ -415,11 +431,15 @@ modules:
   - name: retrodeck-rpcs3
     buildsystem: simple
     build-commands:
+      # Step 1: Remove any existing manifest.json file
       - rm -f "files/manifest.json"
-      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
-      - "cp -rnL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib || echo 'Warning: Some files could not be copied, but the build will continue.'"
+      # Step 2: Use libman.sh to manage libraries
+      - /app/bin/libman.sh "files/lib"
+      # Step 3: removing libraries folder that have been already moved
       - rm -rf "files/lib"
+      # Step 4: Ensure binaries are executable
       - chmod +x "files/bin/"*
+      # Step 5: Copy all remaining files to the Flatpak destination
       - cp -r files/* "${FLATPAK_DEST}"
     sources:
       - type: archive
@@ -432,11 +452,15 @@ modules:
   - name: melonds
     buildsystem: simple
     build-commands:
+      # Step 1: Remove any existing manifest.json file
       - rm -f "files/manifest.json"
-      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib/"
-      - "cp -rnL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib || echo 'Warning: Some files could not be copied, but the build will continue.'"
+      # Step 2: Use libman.sh to manage libraries
+      - /app/bin/libman.sh "files/lib"
+      # Step 3: removing libraries folder that have been already moved
       - rm -rf "files/lib"
+      # Step 4: Ensure binaries are executable
       - chmod +x "files/bin/"*
+      # Step 5: Copy all remaining files to the Flatpak destination
       - cp -r files/* "${FLATPAK_DEST}/"
     sources:
       - type: archive
@@ -450,11 +474,13 @@ modules:
   - name: duckstation
     buildsystem: simple
     build-commands:
+      # Step 1: Ensure the AppImage is executable and extract it
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
-      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
-      - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
-      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
+      # Step 2: Use libman.sh to manage libraries
+      - /app/bin/libman.sh "squashfs-root/usr/lib"
+      # Step 3: Copy remaining extracted files to the Flatpak destination
+      - find squashfs-root/usr/ -exec sh -c 'install -Dm755 "{}" "${FLATPAK_DEST}/$(echo "{}" | sed "s|^squashfs-root/usr||")"' \;
     sources:
       - type: file
         url: https://github.com/RetroDECK/Duckstation/releases/download/preview/DuckStation-x64.AppImage
@@ -467,14 +493,17 @@ modules:
   - name: cemu
     buildsystem: simple
     build-commands:
+      # Step 1: Ensure the AppImage is executable and extract it
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
-      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
-      - rm -rf "squashfs-root/usr/lib/girepository-1.0" # causes issues, I think we already have this
-      - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
-      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}"
+      # Step 2: Remove unnecessary files causing potential issues
+      - rm -rf "squashfs-root/usr/lib/girepository-1.0"
+      # Step 3: Use libman.sh to manage libraries
+      - /app/bin/libman.sh "squashfs-root/usr/lib"
+      # Step 4: Copy remaining extracted files to the Flatpak destination
+      - find squashfs-root/usr/ -exec sh -c 'install -Dm755 "{}" "${FLATPAK_DEST}/$(echo "{}" | sed "s|^squashfs-root/usr||")"' \;
+      # Step 5: Install the wrapper script
       - install -Dm755 Cemu-wrapper "${FLATPAK_DEST}/bin/"
-      #TODO: do we need this wrapper? squashfs-root/apprun-hooks/linuxdeploy-plugin-gtk.sh
     sources:
       - type: file
         url: https://github.com/cemu-project/Cemu/releases/download/v2.4/Cemu-2.4-x86_64.AppImage
@@ -491,8 +520,7 @@ modules:
             Cemu "$@"
         dest-filename: Cemu-wrapper
 
-  # Vita3K - AUTOUPDATED
-
+  # Vita3K - ROLLING RELEASE
   - name: vita3k
     buildsystem: simple
     build-commands:
@@ -505,8 +533,8 @@ modules:
       - ln -s ${FLATPAK_DEST}/share/Vita3K/Vita3K ${FLATPAK_DEST}/bin/Vita3K
     sources:
       - type: file
-        url: https://github.com/Vita3K/Vita3K/releases/download/continuous/ubuntu-latest.zip
-        sha256: VITA3KSHAPLACEHOLDER
+        url: https://github.com/RetroDECK/Vita3K-bin/releases/latest/download/ubuntu-latest.zip
+        sha256: RETRODECKLATESTVITA3KSHA
       - type: file
         path: res/retrodeck.png
 
@@ -517,12 +545,18 @@ modules:
   - name: retrodeck-solarus
     buildsystem: simple
     build-commands:
+      # Step 1: Remove any existing manifest.json file
       - rm -f "files/manifest.json"
-      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
-      #- cp -r "files/lib/debug/lib/*" "${FLATPAK_DEST}/retrodeck/tmplib/debug/"
+      # Step 2: Remove unnecessary files
       - rm -rf "files/lib/debug" "files/lib/pkgconfig"
+      # Step 3: Use libman.sh to manage libraries
+      - /app/bin/libman.sh "files/lib"
+      # Step 4: removing libraries folder that have been already moved
+      - rm -rf "files/lib"
+      # Step 5: Ensure binaries are executable
       - chmod +x "files/bin/"*
-      - "cp -rnL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib || echo 'Warning: Some files could not be copied, but the build will continue.'"
+      # Step 6: Copy all remaining files to the Flatpak destination
+      - cp -r files/* "${FLATPAK_DEST}"
     sources:
       - type: archive
         url: https://github.com/RetroDECK/org.solarus_games.solarus.Launcher/releases/latest/download/RetroDECK-solarus-Artifact.tar.gz
@@ -535,12 +569,17 @@ modules:
   - name: retrodeck-gzdoom
     buildsystem: simple
     build-commands:
+      # Step 1: Remove any existing manifest.json file
       - rm -f "files/manifest.json"
-      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
+      # Step 2: Remove unnecessary files
       - rm -rf "files/lib/cmake" "files/lib/pkgconfig" "files/lib/debug"
-      - "cp -rnL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib || echo 'Warning: Some files could not be copied, but the build will continue.'"
+      # Step 3: Use libman.sh to manage libraries
+      - /app/bin/libman.sh "files/lib"
+      # Step 4: removing libraries folder that have been already moved
       - rm -rf "files/lib"
+      # Step 5: Ensure binaries are executable
       - chmod +x "files/bin/"*
+      # Step 6: Copy all remaining files to the Flatpak destination
       - cp -r files/* "${FLATPAK_DEST}"
     sources:
       - type: archive
@@ -549,15 +588,23 @@ modules:
 
   # Pancakes
 
-  - name: Pancakes
+  - name: pancakes
     buildsystem: simple
     build-commands:
+      # Step 1: Create the Flatpak destination directory
       - mkdir -p "${FLATPAK_DEST}"
-      - mv *.so* "${FLATPAK_DEST}/retrodeck/tmplib/"
+      # Step 2: Extract and manage library files
+      - /app/bin/libman.sh "."
+      # Step 3: Move and set up the binary
+      - rm -rf *.dll.config
       - mv R*x* "${FLATPAK_DEST}/bin/"
+      # This line inserts the command to export the LD_LIBRARY_PATH environment variable at the beginning of the specified file.
+      # It ensures that the /app/bin directory is included in the library search path for the executable files matching the pattern R*x*.sh.
+      - sed -i 's|#!/bin/bash|#!/bin/bash\nexport LD_LIBRARY_PATH=/app/bin:$LD_LIBRARY_PATH|' "${FLATPAK_DEST}/bin/"R*x*.sh
       - chmod +x "${FLATPAK_DEST}/bin/"R*x*
+      # Step 4: Set up license directory and move license files
       - mkdir -p "${FLATPAK_DEST}/retrodeck/licenses"
-      - mv LICENSE.txt "${FLATPAK_DEST}/retrodeck/licenses"
+      - mv LICENSE.txt THIRDPARTY.md "${FLATPAK_DEST}/retrodeck/licenses"
     sources:
       - type: archive
         url: https://github.com/RetroDECK/Pancakes-bin/releases/download/1.1.0.1403/pancakes-Release-linux_x64.tar.gz
@@ -569,11 +616,13 @@ modules:
   - name: xemu
     buildsystem: simple
     build-commands:
+      # Step 1: Ensure the AppImage is executable and extract it
       - chmod +x *.AppImage
       - ./*.AppImage --appimage-extract
-      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
-      - mv "squashfs-root/usr/lib/"* "${FLATPAK_DEST}/retrodeck/tmplib"
-      - cp -r squashfs-root/usr/* "${FLATPAK_DEST}/"
+      # Step 2: Use libman.sh to manage libraries
+      - /app/bin/libman.sh "squashfs-root/usr/lib"
+      # Step 3: Copy remaining extracted files to the Flatpak destination
+      - find squashfs-root/usr/ -exec sh -c 'install -Dm755 "{}" "${FLATPAK_DEST}/$(echo "{}" | sed "s|^squashfs-root/usr||")"' \;
     sources:
       - type: file
         url: https://github.com/xemu-project/xemu/releases/download/v0.8.5/xemu-v0.8.5-x86_64.AppImage
@@ -594,7 +643,11 @@ modules:
   - name: retrodeck-mame
     buildsystem: simple
     build-commands:
+      # Step 1: Remove any existing manifest.json file
       - rm -f files/manifest.json
+      # Step 2: Use libman.sh to manage libraries - REMOVED AS MAME DON'T BRING ANY LIBS WITH IT
+      # - /app/bin/libman.sh "files/lib"
+      # Step 3: Copy the managed libraries and all other files to the Flatpak destination
       - cp -rn files/* ${FLATPAK_DEST}
     sources:
       - type: archive
@@ -631,12 +684,15 @@ modules:
   - name: ES-DE
     buildsystem: simple
     build-commands:
+      # Step 1: Remove any existing manifest.json file
       - rm -f "files/manifest.json"
-      - mkdir -p "${FLATPAK_DEST}/retrodeck/tmplib" "${FLATPAK_DEST}/retrodeck/tmplib/debug"
-      - cp -rfL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib
-      - cp -rfL files/lib/* ${FLATPAK_DEST}/retrodeck/tmplib
+      # Step 2: Use libman.sh to manage libraries
+      - /app/bin/libman.sh "files/lib"
+      # Step 3: Clean up source library folder
       - rm -rf "files/lib"
+      # Step 4: Ensure binaries are executable
       - chmod +x "files/bin/"*
+      # Step 5: Copy all remaining files to the Flatpak destination
       - cp -r files/* "${FLATPAK_DEST}"
     sources:
       - type: archive
@@ -667,53 +723,6 @@ modules:
         strip-components: 0
         url: https://github.com/ruffle-rs/ruffle/releases/download/nightly-2024-10-29/ruffle-nightly-2024_10_29-linux-x86_64.tar.gz
         sha256: 5ab0fc46b07d022d4b0ff355e88175cd77b8bb1663612f31d160f8001dc472bb
-
-  - name: fetch-missing-libs
-    buildsystem: simple
-    build-commands:
-      - |
-          # Search for missing libraries in our libtmp folder
-          missing_libs=$(find /app/bin -type f -exec ldd {} + 2>/dev/null | grep 'not found' | awk '$1 ~ /\.so/ {print $1}' | sort | uniq)
-          echo "$missing_libs"
-          
-          # Manually specified libraries that are not automatically detected
-          manually_imported="libpostproc.so.56 libswscale.so.6 libshaderc_shared.so.1 libbz2.so.1.0 libaio.so.1 ld-linux.so.2 libvpx.so.9 libzmusic.so.1 libicuuc.so.73 libLLVM.so.18.1"
-          
-          # Combine detected missing libraries and manually specified ones
-          missing_libs="$missing_libs $manually_imported"
-          echo -e "Missing libs and manually imported:\n$missing_libs"
-
-          # Source paths
-          src_dir="${FLATPAK_DEST}/retrodeck/tmplib"
-          src_debug_dir="${FLATPAK_DEST}/retrodeck/tmplib/debug"
-
-          # Destination paths
-          dest_dir="${FLATPAK_DEST}/lib"
-          dest_debug_dir="${FLATPAK_DEST}/retrodeck/lib/debug"
-          
-          mkdir -p "$dest_dir" "$dest_debug_dir" 
-
-          copy_missing_libs() {
-            local src=$1
-            local src_debug=$2
-            local dest=$3
-            for lib in $missing_libs; do
-              if [[ -f "$src/$lib" ]]; then
-                cp "$src/$lib" "$dest" && echo "Copied \"$lib\" to \"$dest\"" || echo "Error copying \"$lib\""
-              elif [[ -f "$src_debug/$lib.debug" ]]; then
-                cp "$src_debug/$lib.debug" "$dest" && echo "Copied debug version of \"$lib\" to \"$dest\"" || echo "Error copying debug version of \"$lib\""
-              else
-                echo "Library \"$lib\" not found in \"$src\" or \"$src_debug\""
-              fi
-            done
-          }
-
-          # Copy libraries from source to destination
-          copy_missing_libs "$src_dir" "$src_debug_dir" "$dest_dir"
-          copy_missing_libs "$src_debug_dir" "$dest_debug_dir"
-
-          # Remove temporary source directory to free up space
-          rm -rf "$src_dir"
 
   - name: retrodeck
     buildsystem: simple
@@ -787,6 +796,7 @@ modules:
       - install -Dm 644 config/retrodeck/net.retrodeck.retrodeck.mime.xml /app/share/mime/packages/net.retrodeck.retrodeck.mime.xml
 
     sources:
-      - type: git
-        url: THISREPO
-        branch: THISBRANCH
+      - type: dir
+        path: .
+
+        

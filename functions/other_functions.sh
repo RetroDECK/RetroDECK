@@ -372,14 +372,12 @@ done
 
 finit_user_options_dialog() {
   finit_available_options=()
+  finit_extracted_options=$(jq -r '.finit_default_options | to_entries[] | "\(.value.enabled)^\(.value.name)^\(.value.description)^\(.key)"' "$features")
 
-  while IFS="^" read -r enabled option_name option_desc option_tag || [[ -n "$enabled" ]];
-  do
-    if [[ ! $enabled == "#"* ]] && [[ ! -z "$enabled" ]]; then
-      finit_available_options=("${finit_available_options[@]}" "$enabled" "$option_name" "$option_desc" "$option_tag")
-    fi
-  done < $finit_options_list
-
+  # Read finit_default_options from features.json using jq
+  while IFS="^" read -r enabled option_name option_desc option_tag; do
+    finit_available_options+=("$enabled" "$option_name" "$option_desc" "$option_tag")
+  done <<< "$finit_extracted_options"
 
   local choices=$(rd_zenity \
   --list --width=1200 --height=720 \

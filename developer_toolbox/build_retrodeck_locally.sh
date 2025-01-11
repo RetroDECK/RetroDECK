@@ -3,11 +3,30 @@
 # WARNING: run this script from the project root folder, not from here!!
 
 # Check if script is running with elevated privileges
-if [ "$EUID" -ne 0 ]; then
-    read -rp "The build might fail without some superuser permissions, please run me with sudo. Continue WITHOUT sudo (not suggested)? [y/N] " continue_without_sudo
-    if [[ "$continue_without_sudo" != "y" ]]; then
-        exit 1
-    fi
+# if [ "$EUID" -ne 0 ]; then
+#     read -rp "The build might fail without some superuser permissions, please run me with sudo. Continue WITHOUT sudo (not suggested)? [y/N] " continue_without_sudo
+#     if [[ "$continue_without_sudo" != "y" ]]; then
+#         exit 1
+#     fi
+# fi
+
+read -rp "Do you want to use the hashes cache? If you're unsure just say no [Y/n] " use_cache_input
+use_cache_input=${use_cache_input:-Y}
+if [[ "$use_cache_input" =~ ^[Yy]$ ]]; then
+    export use_cache="true"
+else
+    export use_cache="false"
+    rm -f "placeholders.cache"
+fi
+
+echo "Do you want to clear the build cache?"
+read -rp "Keeping the build cache can speed up the build process, but it might cause issues and should be cleared occasionally [y/N] " clear_cache_input
+clear_cache_input=${clear_cache_input:-N}
+if [[ "$clear_cache_input" =~ ^[Yy]$ ]]; then
+    # User chose to clear the build cache
+    echo "Clearing build cache..."
+    rm -rf "retrodeck-repo" "retrodeck-flatpak-cooker" ".flatpak-builder"
+
 fi
 
 git submodule update --init --recursive
@@ -21,22 +40,9 @@ ostree init --mode=archive-z2 --repo=${GITHUB_WORKSPACE}/retrodeck-repo
 cp net.retrodeck.retrodeck.appdata.xml net.retrodeck.retrodeck.appdata.xml.bak
 cp net.retrodeck.retrodeck.yml net.retrodeck.retrodeck.yml.bak
 
-if [[ -f "net.retrodeck.retrodeck.cached.yml" ]]; then
-    read -rp "A cached manifest file with placeholder substitutions already exists. Do you want to use it? [y/N] " use_cached
-    if [[ "${use_cached,,}" == "y" ]]; then
-        mv -f net.retrodeck.retrodeck.cached.yml net.retrodeck.retrodeck.yml
-    else
-        use_cached="n"
-    fi
-else
-    use_cached="n"
-fi
-
-export use_cached
-
 automation_tools/install_dependencies.sh
 automation_tools/cooker_build_id.sh
-automation_tools/pre_build_automation.sh
+automation_tools/manifest_placeholder_replacer.sh
 automation_tools/cooker_flatpak_portal_add.sh
 # THIS SCRIPT IS BROKEN HENCE DISABLED FTM
 # automation_tools/appdata_management.sh

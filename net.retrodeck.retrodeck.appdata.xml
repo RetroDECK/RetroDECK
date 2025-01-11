@@ -72,8 +72,8 @@
          <description>
             <p>New Additions:</p>
             <ul>
-               <li>New Flash system via the new emulator: Ruffle</li>
-               <li>New RetroArch core: Panda3DS</li>
+               <li>New Flash system via the new standalone emulator: Ruffle</li>
+               <li>New RetroArch experimental core: Panda3DS</li>
                <li>PortMaster is now included in RetroDECK!</li>
                <li>Steam Sync is now a thing: favorite your games and enable the Steam Sync in the Configurator to find them as a Steam standalone games thank to Steam Rom Manager acting like an engine</li>
                <li>New run game engine added to run games via cli, just run `flatpak run net.retrodeck.retrodeck retrodeck/roms/system/game.ext`, `--help` for more info</li>
@@ -97,6 +97,7 @@
                <li>RetroDECK now is migrated to an organization on GitHub, as before, please check the October blog post</li>
                <li>pre_build_automation script was reworked and additional functions are added</li>
                <li>Contributing is now easier and the manifest build time is down to about 1h (was 3h30)</li>
+               <li>Introduced a new library management system called LibMan to make sure that each compoent is bringing its own libraries while built from the manifest</li>
             </ul>
             <p>Known issues:</p>
             <ul>
