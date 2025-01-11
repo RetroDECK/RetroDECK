@@ -4,7 +4,13 @@
 
 
 # List of user-defined libraries to exclude
+
+# General libraries``
 excluded_libraries=("libselinux.so.1")
+# Qt libraries
+excluded_libraries+=("libQt6Core.so.6" "libQt6DBus.so.6" "libQt6Gui.so.6" "libQt6OpenGL.so.6" "libQt6Svg.so.6" "libQt6WaylandClient.so.6" "libQt6WaylandEglClientHwIntegration.so.6" "libQt6Widgets.so.6" "libQt6XcbQpa.so.6")
+# SDL libraries
+excluded_libraries+=("libSDL2_net-2.0.so.0.200.0" "libSDL2_mixer-2.0.so.0.600.3" "libSDL2-2.0.so.0" "libSDL2_mixer-2.0.so.0" "libSDL2_image-2.0.so.0" "libSDL2-2.0.so.0.2800.5" "libSDL2_ttf-2.0.so.0" "libSDL2_net-2.0.so.0" "libSDL2_image-2.0.so.0.600.3" "libSDL2_ttf-2.0.so.0.2200.0")
 
 # Add libraries from /lib/x86_64-linux-gnu/ to the excluded list
 for lib in /lib/x86_64-linux-gnu/*.so*; do
