@@ -360,7 +360,7 @@ modules:
         url: https://github.com/RetroDECK/org.ppsspp.PPSSPP/releases/latest/download/RetroDECK-Artifact.tar.gz
         sha256: RETRODECKPPSSPPLATEST
 
-  # PCSX2
+  # PCSX2 - FROZEN UNTIL QT 6.8 UPDATE
   # Inspired by: https://github.com/flathub/com.zettlr.Zettlr/blob/master/com.zettlr.Zettlr.yaml
   # https://pcsx2.net/downloads/
 
@@ -377,8 +377,8 @@ modules:
       - find squashfs-root/usr/ -exec sh -c 'install -Dm755 "{}" "${FLATPAK_DEST}/$(echo "{}" | sed "s|^squashfs-root/usr||")"' \;
     sources:
       - type: file
-        url: https://github.com/PCSX2/pcsx2/releases/download/v2.3.53/pcsx2-v2.3.53-linux-appimage-x64-Qt.AppImage
-        sha256: a909ec179a2b1bac85625a32eaa6eae2adbfa4985a2be9a525a58e80fc1f57b5
+        url: https://github.com/PCSX2/pcsx2/releases/download/v2.3.42/pcsx2-v2.3.42-linux-appimage-x64-Qt.AppImage
+        sha256: 72b94cb1b855d053b4936f2a95070b2515e709d5d2f3b680627addb892f0c7ec
 
   # Dolphin
   # why from source: AppImage not provided, only Flatpak
