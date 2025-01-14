@@ -719,6 +719,7 @@ modules:
     config-opts:
       - --prefix=${FLATPAK_DEST}
       - --libdir=${FLATPAK_DEST}/lib
+      - --disable-cet
     sources:
       - type: archive
         url: http://ftp.gnu.org/gnu/libc/glibc-2.39.tar.gz
