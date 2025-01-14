@@ -715,6 +715,7 @@ modules:
 
   - name: glibc
     buildsystem: autotools
+    builddir: true
     config-opts:
       - --prefix=${FLATPAK_DEST}
       - --libdir=${FLATPAK_DEST}/lib
