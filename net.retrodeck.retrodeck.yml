@@ -710,7 +710,18 @@ modules:
         commit: b02e8398b20bbd4a20f51bd4d7bfcc8db7f40a92
 
   # RUFFLE - START
+  # TODOD: probably we need to outsource this now
   # https://github.com/ruffle-rs/ruffle/releases
+
+  - name: glibc
+    buildsystem: autotools
+    config-opts:
+      - --prefix=${FLATPAK_DEST}
+      - --libdir=${FLATPAK_DEST}/lib
+    sources:
+      - type: archive
+        url: http://ftp.gnu.org/gnu/libc/glibc-2.39.tar.gz
+        sha256: 97f84f3b7588cd54093a6f6389b0c1a81e70d99708d74963a2e3eab7c7dc942d
   
   - name: ruffle
     buildsystem: simple
