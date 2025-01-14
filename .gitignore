@@ -22,13 +22,16 @@ retrodeck-repo
 buildid
 *.bak
 incconfigs/
-.github/workflows/cooker-monkeyx.yml
 *.flatpak
 *.flatpak.sha
 net.retrodeck.retrodeck.cached.yml
 placeholders.cache
 RetroDECK*Artifact.tar.gz
+
+#   Components artifacts   #
+############################
 *.AppImage
+ruffle-*.tar.gz
 
 # Python #
 ##########
