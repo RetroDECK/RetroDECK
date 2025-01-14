@@ -710,20 +710,7 @@ modules:
         commit: b02e8398b20bbd4a20f51bd4d7bfcc8db7f40a92
 
   # RUFFLE - START
-  # TODOD: probably we need to outsource this now
   # https://github.com/ruffle-rs/ruffle/releases
-
-  - name: glibc
-    buildsystem: autotools
-    builddir: true
-    config-opts:
-      - --prefix=${FLATPAK_DEST}
-      - --libdir=${FLATPAK_DEST}/lib
-      - --disable-cet
-    sources:
-      - type: archive
-        url: http://ftp.gnu.org/gnu/libc/glibc-2.39.tar.gz
-        sha256: 97f84f3b7588cd54093a6f6389b0c1a81e70d99708d74963a2e3eab7c7dc942d
   
   - name: ruffle
     buildsystem: simple
@@ -734,8 +721,8 @@ modules:
     sources:
       - type: archive
         strip-components: 0
-        url: https://github.com/ruffle-rs/ruffle/releases/download/nightly-2024-10-29/ruffle-nightly-2024_10_29-linux-x86_64.tar.gz
-        sha256: 5ab0fc46b07d022d4b0ff355e88175cd77b8bb1663612f31d160f8001dc472bb
+        url: https://github.com/ruffle-rs/ruffle/releases/download/nightly-2025-01-13/ruffle-nightly-2025_01_13-linux-x86_64.tar.gz
+        sha256: a67fb771680c9c7d3a54206047154607d0f1f4ac6ae48026eb2b4b6bbe3838e6
 
   - name: retrodeck
     buildsystem: simple
