@@ -600,7 +600,7 @@ modules:
       - mv R*x* "${FLATPAK_DEST}/bin/"
       # This line inserts the command to export the LD_LIBRARY_PATH environment variable at the beginning of the specified file.
       # It ensures that the /app/bin directory is included in the library search path for the executable files matching the pattern R*x*.sh.
-      - sed -i 's|#!/bin/bash|#!/bin/bash\nexport LD_LIBRARY_PATH=/app/bin:$LD_LIBRARY_PATH|' "${FLATPAK_DEST}/bin/"R*x*.sh
+      - sed -i 's|#!/bin/sh|#!/bin/sh\nexport LD_LIBRARY_PATH=/app/lib:$LD_LIBRARY_PATH|' "${FLATPAK_DEST}/bin/"R*x*.sh
       - chmod +x "${FLATPAK_DEST}/bin/"R*x*
       # Step 4: Set up license directory and move license files
       - mkdir -p "${FLATPAK_DEST}/retrodeck/licenses"
