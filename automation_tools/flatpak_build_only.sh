@@ -23,7 +23,7 @@ command="flatpak-builder --user --force-clean $FLATPAK_BUILD_EXTRA_ARGS \
     --install-deps-from=flathub \
     --install-deps-from=flathub-beta \
     --repo=${GITHUB_WORKSPACE}/retrodeck-repo \
-    --disable-download \
+    --disable-download $FLATPAK_BUILDER_CCACHE\
     \"${GITHUB_WORKSPACE}/$FOLDER\" \
     net.retrodeck.retrodeck.yml"
 

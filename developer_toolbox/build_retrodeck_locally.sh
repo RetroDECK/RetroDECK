@@ -2,13 +2,21 @@
 
 # WARNING: run this script from the project root folder, not from here!!
 
-# Check if script is running with elevated privileges
-# if [ "$EUID" -ne 0 ]; then
-#     read -rp "The build might fail without some superuser permissions, please run me with sudo. Continue WITHOUT sudo (not suggested)? [y/N] " continue_without_sudo
-#     if [[ "$continue_without_sudo" != "y" ]]; then
-#         exit 1
-#     fi
-# fi
+# Check if ccache is installed
+if ! command -v ccache &> /dev/null; then
+    echo "Compiler cache (ccache) is not installed. Install it to be able to use the cache and speed up your builds"
+else
+    read -rp "Do you want to use ccache? If you're unsure just say no [Y/n] " use_ccache_input
+    use_ccache_input=${use_ccache_input:-Y}
+    if [[ "$use_ccache_input" =~ ^[Yy]$ ]]; then
+        # Use ccache
+        export CC="ccache gcc"
+        export CXX="ccache g++"
+        export FLATPAK_BUILDER_CCACHE="--ccache"
+    else
+        echo "Proceeding without ccache"
+    fi
+fi
 
 read -rp "Do you want to use the hashes cache? If you're unsure just say no [Y/n] " use_cache_input
 use_cache_input=${use_cache_input:-Y}
