@@ -4,6 +4,7 @@
 
 
 # List of user-defined libraries to exclude
+excluded_libraries=()
 
 # General libraries``
 excluded_libraries=("libselinux.so.1")
@@ -22,7 +23,7 @@ for lib in /lib/*.so*; do
     excluded_libraries+=("$(basename "$lib")")
 done
 
-# Add libraries from /lib to the excluded list
+# Add libraries from /lib64 to the excluded list
 for lib in /lib64/*.so*; do
     excluded_libraries+=("$(basename "$lib")")
 done
