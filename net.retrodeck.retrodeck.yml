@@ -587,8 +587,8 @@ modules:
         sha256: RETRODECKGZDOOMLATEST
 
   # Pancakes
-
-  - name: pancakes
+  # NOTE: if this module breaks, might be caused by SDL2 version mismatch. Check last line of this module.
+  - name: Pancakes
     buildsystem: simple
     build-commands:
       # Step 1: Create the Flatpak destination directory
@@ -605,6 +605,8 @@ modules:
       # Step 4: Set up license directory and move license files
       - mkdir -p "${FLATPAK_DEST}/retrodeck/licenses"
       - mv LICENSE.txt THIRDPARTY.md "${FLATPAK_DEST}/retrodeck/licenses"
+      # One off to make it work with SDL2
+      - ln -s "/lib/x86_64-linux-gnu/libSDL2-2.0.so.0" "${FLATPAK_DEST}/lib/libSDL2.so"
     sources:
       - type: archive
         url: https://github.com/RetroDECK/Pancakes-bin/releases/download/1.1.0.1403/pancakes-Release-linux_x64.tar.gz
