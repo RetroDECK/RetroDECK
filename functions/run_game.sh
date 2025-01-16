@@ -36,6 +36,28 @@ run_game() {
 
     game="$(realpath "$1")"
 
+    # Check if the game is a .desktop file
+    if [[ "$game" == *.desktop ]]; then
+        # Extract the Exec command from the .desktop file
+        exec_cmd=$(grep '^Exec=' "$game" | sed 's/^Exec=//')
+        # Workaround for RPCS3 games, replace placeholder with actual game ID
+        exec_cmd=$(echo "$exec_cmd" | sed 's/%%RPCS3_GAMEID%%/%RPCS3_GAMEID%/g')
+        if [[ -n "$exec_cmd" ]]; then
+            log i "-------------------------------------------"
+            log i " RetroDECK is now booting the game"
+            log i " Game path: \"$game\""
+            log i " Recognized system: desktop file"
+            log i " Command line: $exec_cmd"
+            log i "-------------------------------------------"
+            # Execute the command from the .desktop file
+            eval "$exec_cmd"
+            exit 1
+        else
+            log e "No Exec command found in .desktop file."
+            exit 1
+        fi
+    fi
+
     if [[ -d "$game" ]]; then
         log d "$(basename "$game") is a directory, parsing it like a \"directory as a file\""
         game="$game/$(basename "$game")"
