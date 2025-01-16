@@ -6,7 +6,7 @@
 # List of user-defined libraries to exclude
 excluded_libraries=()
 
-# General libraries``
+# General libraries
 excluded_libraries=("libselinux.so.1")
 # Qt libraries
 excluded_libraries+=("libQt6Multimedia.so.6" "libQt6Core.so.6" "libQt6DBus.so.6" "libQt6Gui.so.6" "libQt6OpenGL.so.6" "libQt6Svg.so.6" "libQt6WaylandClient.so.6" "libQt6WaylandEglClientHwIntegration.so.6" "libQt6Widgets.so.6" "libQt6XcbQpa.so.6")
