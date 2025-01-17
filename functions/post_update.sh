@@ -298,7 +298,7 @@ post_update() {
     #es-de --home "/var/config/" --create-system-dirs
     es-de --create-system-dirs
 
-  fi
+  fi # end of 0.8.0b
 
   if [[ $(check_version_is_older_than "0.8.1b") == "true" ]]; then
     log i "In version 0.8.1b, the following changes were made that required config file updates/reset or other changes to the filesystem:"
@@ -336,7 +336,7 @@ post_update() {
       log d "User agreed to Ryujinx reset"
       prepare_component "reset" "ryujinx"
     fi
-  fi
+  fi # end of 0.8.1b
 
   if [[ $(check_version_is_older_than "0.8.2b") == "true" ]]; then
     log i "Vita3K changed some paths, reflecting them: moving \"/var/data/Vita3K\" in \"/var/config/Vita3K\""
@@ -347,7 +347,7 @@ post_update() {
     move "$rdhome/gamelists" "$rdhome/ES-DE/gamelists" && log d "Move of \"$rdhome/gamelists/\" completed"
     log i "Since in this version we moved to a PR build of Ryujinx we need to symlink it."
     ln -sv $ryujinxconf "$(dirname $ryujinxconf)/PRConfig.json"
-  fi
+  fi #end of 0.8.2b
 
   if [[ $(check_version_is_older_than "0.8.3b") == "true" ]]; then
     # In version 0.8.3b, the following changes were made:
@@ -372,7 +372,7 @@ post_update() {
     else
       log i "ES-DE dfolders appears to already have been migrated."
     fi
-  fi
+  fi # end of 0.8.3b
 
   # Check if the version is older than 0.8.4b
   if [[ $(check_version_is_older_than "0.8.4b") == "true" ]]; then
@@ -427,18 +427,19 @@ post_update() {
     set_setting_value "$es_settings" "MediaDirectory" "$media_folder" "es_settings"
     set_setting_value "$es_settings" "UserThemeDirectory" "$themes_folder" "es_settings"
 
-  fi
+  fi # end of 0.8.4b
 
   if [[ $(check_version_is_older_than "0.9.0b") == "true" ]]; then
     # Placeholder for version 0.9.0b
 
     set_setting_value "$raconf" "libretro_info_path" "/var/config/retroarch/cores" "retroarch"
-    # TODO: Configurator dialog: Hey, we need to reset ES-DE! (because again ES-DE folders, new theme and such)
-    prepare_component "reset" "es-de"
+    if [[ $(configurator_generic_question_dialog "RetroDECK ES-DE Reset" "ES-DE needs to be reset to ensure compatibility with the new version. Do you want to reset it now?\n\nIf you have made your own changes to the ES-DE config, you can decline this reset, but it might not work correctly.\n\nNote: Your game collections and scraped data will not be affected.\nYou can always reset ES-DE later from the Configurator, Troubleshooting section.") == "true" ]]; then
+      log i "User agreed to ES-DE reset"
+      prepare_component "reset" "es-de"
+    fi
+
     prepare_component "reset" "portmaster"
     prepare_component "reset" "ruffle"
-
-    log d "Steam Rom Manager was added, we need to prepare it"
     update_rd_conf
     prepare_component "reset" "steam-rom-manager"
 
@@ -446,28 +447,37 @@ post_update() {
     rm -rf "$es_source_logs" && mkdir -p "$es_source_logs"
 
     if [[ -f "$XDG_DATA_HOME/Cemu/keys.txt" ]]; then
-      log d "Found Cemu keys.txt in \"$XDG_DATA_HOME/Cemu/keys.txt\", moving it to \"$bios_folder/cemu/keys.txt\""
+      log i "Found Cemu keys.txt in \"$XDG_DATA_HOME/Cemu/keys.txt\", moving it to \"$bios_folder/cemu/keys.txt\""
       mv -f "$XDG_DATA_HOME/Cemu/keys.txt" "$bios_folder/cemu/keys.txt"
       ln -s "$bios_folder/cemu/keys.txt" "$XDG_DATA_HOME/Cemu/keys.txt"
     fi
-  fi
+
+      if [[ $(configurator_generic_question_dialog "RetroDECK Duckstation Reset" "<span foreground='$purple'><b>Duckstation</b></span> has updated the <span foreground='$purple'><b>hotkeys</b></span> configuration. Do you want to reset it to RetroDECK default settings to ensure compatibility?\n\nIf you have made your own changes to the Duckstation config, you can decline this reset, but the emulator might not work correctly.\nYou can always reset Duckstation later from the Configurator, Troubleshooting section.") == "true" ]]; then
+        log i "User agreed to Duckstation reset"
+        prepare_component "reset" "duckstation"
+      fi
+
+      log i "Moving Ryujinx data to the new locations"
+      mv -rf "/var/config/Ryujinx/bis"/* "$saves_folder/switch/ryujinx/nand" && rm -rf "/var/config/Ryujinx/bis" && log i "Migrated Ryujinx nand data to the new location"
+      mv -rf "/var/config/Ryujinx/sdcard"/* "$saves_folder/switch/ryujinx/sdcard" && rm -rf "/var/config/Ryujinx/sdcard" && log i "Migrated Ryujinx sdcard data to the new location"
+      mv -rf "/var/config/Ryujinx/bis/system/Contents/registered"/* "$bios_folder/switch/firmware" && rm -rf "/var/config/Ryujinx/bis/system/Contents/registered" && log i "Migration of Ryujinx firmware data to the new location"
+      mv -rf "/var/config/Ryujinx/system"/* "$bios_folder/switch/keys" && rm -rf "/var/config/Ryujinx/system" && log i "Migrated Ryujinx keys data to the new location"
+
+  fi # end of 0.9.0b
 
   # The following commands are run every time.
 
   if [[ -d "/var/data/dolphin-emu/Load/DynamicInputTextures" ]]; then # Refresh installed textures if they have been enabled
-    rsync -rlD --mkpath "/app/retrodeck/extras/DynamicInputTextures/" "/var/data/dolphin-emu/Load/DynamicInputTextures/"
+    log i "Refreshing installed textures for Dolphin..."
+    rsync -rlD --mkpath "/app/retrodeck/extras/DynamicInputTextures/" "/var/data/dolphin-emu/Load/DynamicInputTextures/" && log i "Done"
   fi
   if [[ -d "/var/data/primehack/Load/DynamicInputTextures" ]]; then # Refresh installed textures if they have been enabled
-    rsync -rlD --mkpath "/app/retrodeck/extras/DynamicInputTextures/" "/var/data/primehack/Load/DynamicInputTextures/"
+    log i "Refreshing installed textures for Dolphin..."
+    rsync -rlD --mkpath "/app/retrodeck/extras/DynamicInputTextures/" "/var/data/primehack/Load/DynamicInputTextures/" && log i "Done"
   fi
 
   if [[ ! -z $(find "$HOME/.steam/steam/controller_base/templates/" -maxdepth 1 -type f -iname "RetroDECK*.vdf") || ! -z $(find "$HOME/.var/app/com.valvesoftware.Steam/.steam/steam/controller_base/templates/" -maxdepth 1 -type f -iname "RetroDECK*.vdf") ]]; then # If RetroDECK controller profile has been previously installed
     install_retrodeck_controller_profile
-  fi
-
-  if [[ $(configurator_generic_question_dialog "RetroDECK Duckstation Reset" "<span foreground='$purple'><b>Duckstation</b></span> has updated the <span foreground='$purple'><b>hotkeys</b></span> configuration. Do you want to reset it to RetroDECK default settings to ensure compatibility?\n\nIf you have made your own changes to the Duckstation config, you can decline this reset, but the emulator might not work correctly.\nYou can always reset Duckstation later from the Configurator, Troubleshooting section.") == "true" ]]; then
-    log d "User agreed to Duckstation reset"
-    prepare_component "reset" "duckstation"
   fi
 
   update_splashscreens
