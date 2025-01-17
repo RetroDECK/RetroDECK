@@ -626,13 +626,9 @@ prepare_component() {
       if [[ $multi_user_mode == "true" ]]; then
         rm -rf "$multi_user_data_folder/$SteamAppUser/config/Ryujinx"
         #create_dir "$multi_user_data_folder/$SteamAppUser/config/Ryujinx/system"
-        # TODO: add /var/config/Ryujinx/system system folder management
         cp -fv $config/ryujinx/* "$multi_user_data_folder/$SteamAppUser/config/Ryujinx"
         sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "$multi_user_data_folder/$SteamAppUser/config/Ryujinx/Config.json"
         dir_prep "$multi_user_data_folder/$SteamAppUser/config/Ryujinx" "/var/config/Ryujinx"
-        # TODO: add nand (saves) folder management
-        # TODO: add nand (saves) folder management
-        # TODO: add "registered" folder management
       else
         # removing config directory to wipe legacy files
         log d "Removing \"/var/config/Ryujinx\""
