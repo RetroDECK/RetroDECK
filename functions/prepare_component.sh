@@ -641,14 +641,6 @@ prepare_component() {
         cp -fvr $config/ryujinx/profiles /var/config/Ryujinx/
         log d "Replacing placeholders in \"$ryujinxconf\""
         sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "$ryujinxconf"
-        log i "Linking switch nand/saves folder"
-        log d "Removing \"/var/config/Ryujinx/bis\", it will become a symlink"
-        rm -rf /var/config/Ryujinx/bis
-        dir_prep "$saves_folder/switch/ryujinx/nand" "/var/config/Ryujinx/bis"
-        dir_prep "$saves_folder/switch/ryujinx/sdcard" "/var/config/Ryujinx/sdcard"
-        dir_prep "$bios_folder/switch/firmware" "/var/config/Ryujinx/bis/system/Contents/registered"
-        dir_prep "$bios_folder/switch/keys" "/var/config/Ryujinx/system"
-        # TODO: delete these two lines after Ryujinx is back to a proper build
         log i "Since in this version we moved to a PR build of Ryujinx we need to symlink it."  # TODO: deleteme later
         ln -sv $ryujinxconf "$(dirname $ryujinxconf)/PRConfig.json"                             # TODO: deleteme later
       fi
