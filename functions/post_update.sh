@@ -465,6 +465,11 @@ post_update() {
     install_retrodeck_controller_profile
   fi
 
+  if [[ $(configurator_generic_question_dialog "RetroDECK Duckstation Reset" "<span foreground='$purple'><b>Duckstation</b></span> has updated the <span foreground='$purple'><b>hotkeys</b></span> configuration. Do you want to reset it to RetroDECK default settings to ensure compatibility?\n\nIf you have made your own changes to the Duckstation config, you can decline this reset, but the emulator might not work correctly.\nYou can always reset Duckstation later from the Configurator, Troubleshooting section.") == "true" ]]; then
+    log d "User agreed to Duckstation reset"
+    prepare_component "reset" "duckstation"
+  fi
+
   update_splashscreens
   deploy_helper_files
   build_retrodeck_current_presets
