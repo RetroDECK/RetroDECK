@@ -516,6 +516,12 @@ finit() {
   --text="RetroDECK is finishing the initial setup process, please wait."
 
   create_lock
+
+  # Inform the user where to put the ROMs and BIOS files
+  rd_zenity --info --no-wrap \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+  --title "RetroDECK Setup Complete" \
+  --text="RetroDECK setup is complete!\n\nPlease place your <span foreground='$purple'><b>game files</b></span> in the following directory: <span foreground='$purple'><b>$rdhome/roms\n\n</b></span>and your <span foreground='$purple'><b>BIOS</b></span> files in: <span foreground='$purple'><b>$rdhome/bios\n\n</b></span>You can use the BIOS checker tool available trough the <span foreground='$purple'><b>RetroDECK Configurator</b></span>\nor refer to the <span foreground='$purple'><b>RetroDECK WIKI</b></span> for more information about the required BIOS files and their proper paths.\n\nYou can now start using RetroDECK."
 }
 
 install_retrodeck_starterpack() {
