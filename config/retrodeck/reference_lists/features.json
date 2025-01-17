@@ -1035,7 +1035,7 @@
     },
     "melonds": {
       "description": "MelonDS Nintendo DS Emulator",
-      "name": "melonds",
+      "name": "melonDS",
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/melonds/melonds-guide/",
       "system": "nds",
       "launch": "melonDS",
@@ -1056,7 +1056,7 @@
       ]
     },
     "duckstation": {
-      "name": "Duckstation",
+      "name": "Duckstation (Legacy)",
       "description": "PlayStation Emulator",
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/duckstation/duckstation-guide/",
       "launch": "duckstation-qt",
