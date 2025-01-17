@@ -597,6 +597,7 @@ prepare_component() {
         sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$bios_folder/rpcs3/"'^' "$rpcs3vfsconf"
         set_setting_value "$rpcs3vfsconf" "/games/" "$roms_folder/ps3/" "rpcs3"
         dir_prep "$saves_folder/ps3/rpcs3" "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata"
+        dir_prep "$states_folder/ps3/rpcs3" "/var/config/rpcs3/savestates"
       fi
       # Shared actions
       create_dir "$bios_folder/rpcs3/dev_hdd0"
