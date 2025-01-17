@@ -237,7 +237,7 @@ Miscellaneous:
   Show RPCN popups: true
   Show shader compilation hint: true
   Show PPU compilation hint: true
-  Show autosave/autoload hint: false
+  Show autosave/autoload hint: true
   Show pressure intensity toggle hint: true
   Show analog limiter toggle hint: true
   Show mouse and keyboard toggle hint: true
