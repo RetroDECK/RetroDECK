@@ -1066,23 +1066,27 @@ configurator_check_bios_files() {
 
       # Skip if bios_file is empty
       if [[ ! -z "$bios_file" ]]; then
-        bios_file_found="No"
+        bios_file_found="Yes"
         bios_md5_matched="No"
-        
-        # Check if the BIOS file exists
-        if [[ -f "$bios_folder/$bios_paths$bios_file" ]]; then
-          bios_file_found="Yes"
-          
-          # Check if the hash matches any of the possible MD5s
+
+        IFS=', ' read -r -a paths_array <<< "$bios_paths"
+        for path in "${paths_array[@]}"; do
+          if [[ ! -f "$bios_folder/$path/$bios_file" ]]; then
+            bios_file_found="No"
+            break
+          fi
+        done
+
+        if [[ $bios_file_found == "Yes" ]]; then
           IFS=', ' read -r -a md5_array <<< "$bios_md5"
           for md5 in "${md5_array[@]}"; do
-            if [[ $(md5sum "$bios_folder/$bios_paths$bios_file" | awk '{ print $1 }') == "$md5" ]]; then
+            if [[ $(md5sum "$bios_folder/$path/$bios_file" | awk '{ print $1 }') == "$md5" ]]; then
               bios_md5_matched="Yes"
               break
             fi
           done
         fi
-        
+
         log d "BIOS file found: $bios_file_found, Hash matched: $bios_md5_matched"
 
       fi
