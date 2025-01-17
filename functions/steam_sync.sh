@@ -60,7 +60,7 @@ add_to_steam() {
                         # Create the launcher file
                         if [ ! -e "$launcher_tmp" ]; then
                             log d "Creating launcher file: $launcher"
-                            command="flatpak run net.retrodeck.retrodeck start '$roms_folder/$system/$path'"
+                            command="flatpak run net.retrodeck.retrodeck '$roms_folder/$system/$path'"
                             cat <<EOF > "$launcher"
 #!/bin/bash
 if [ test "\$(whereis flatpak)" = "flatpak:" ]; then
