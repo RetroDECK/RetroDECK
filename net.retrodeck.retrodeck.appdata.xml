@@ -90,6 +90,7 @@
                <li>Because of Steam Sync, Favorites collection is now enabled by default on ES-DE</li>
                <li>ES-DE Updated to 3.1.1 with language support and more</li>
                <li>ES-DE main menu tide up, because of our configurator there were too many entries, moved ES-DE specific configs inside a custom menu</li>
+               <li>After the initial installation, the user will be prompted to choose the location for game files and BIOSes, as the ES-DE screen will no longer appear due to the presence of PortMaster.</li>
             </ul>
             <p>Developers, developers, developers:</p>
             <ul>
