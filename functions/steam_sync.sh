@@ -10,6 +10,7 @@ add_to_steam() {
 
     log "i" "Starting Steam Sync"
 
+    create_dir $steamsync_folder
     create_dir $steamsync_folder_tmp
 
     local srm_path="/var/config/steam-rom-manager/userData/userConfigurations.json"
