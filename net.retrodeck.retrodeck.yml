@@ -707,7 +707,7 @@ modules:
     sources:
       - type: git
         url:  https://github.com/RetroDECK/RetroDECK-theme
-        commit: b02e8398b20bbd4a20f51bd4d7bfcc8db7f40a92
+        commit: e9d20225b6a5e74bc867d7b1fb31baeaf2663dcc
 
   # RUFFLE - START - FROZEN UNTIL QT 6.8 UPDATE
   # https://github.com/ruffle-rs/ruffle/releases
