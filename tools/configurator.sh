@@ -1064,6 +1064,9 @@ configurator_check_bios_files() {
 
       log d "Checking entry $bios_entry"
 
+      # Replace "bios/" with $bios_folder and "roms/" with $roms_folder
+      bios_paths=$(echo "$bios_paths" | sed "s|bios/|$bios_folder/|g" | sed "s|roms/|$roms_folder/|g")
+
       # Skip if bios_file is empty
       if [[ ! -z "$bios_file" ]]; then
         bios_file_found="Yes"
@@ -1071,7 +1074,7 @@ configurator_check_bios_files() {
 
         IFS=', ' read -r -a paths_array <<< "$bios_paths"
         for path in "${paths_array[@]}"; do
-          if [[ ! -f "$bios_folder/$path/$bios_file" ]]; then
+          if [[ ! -f "$path/$bios_file" ]]; then
             bios_file_found="No"
             break
           fi
@@ -1080,7 +1083,7 @@ configurator_check_bios_files() {
         if [[ $bios_file_found == "Yes" ]]; then
           IFS=', ' read -r -a md5_array <<< "$bios_md5"
           for md5 in "${md5_array[@]}"; do
-            if [[ $(md5sum "$bios_folder/$path/$bios_file" | awk '{ print $1 }') == "$md5" ]]; then
+            if [[ $(md5sum "$path/$bios_file" | awk '{ print $1 }') == "$md5" ]]; then
               bios_md5_matched="Yes"
               break
             fi
@@ -1088,6 +1091,8 @@ configurator_check_bios_files() {
         fi
 
         log d "BIOS file found: $bios_file_found, Hash matched: $bios_md5_matched"
+        log d "Expected path: $path/$bios_file"
+        log d "Expected MD5: $bios_md5"
 
       fi
 

@@ -654,15 +654,15 @@
     },
     "prod.keys": {
       "system": "switch",
-      "description": "A file for Switch emulation in Ryujinx",
+      "description": "A file required for Switch emulation",
       "required": "required",
-      "paths": "bios/switch"
+      "paths": "bios/switch/keys"
     },
     "title.keys": {
       "system": "switch",
-      "description": "A file for Switch emulation in Ryujinx",
+      "description": "A file required for Switch emulation",
       "required": "required",
-      "paths": "bios/switch"
+      "paths": "bios/switch/keys"
     },
     "pico8": {
       "system": "PICO-8",
