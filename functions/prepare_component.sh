@@ -17,16 +17,26 @@ prepare_component() {
   log d "Preparing component: \"$component\", action: \"$action\""
 
   if [[ "$component" == "retrodeck" ]]; then
+    log i "--------------------------------"
+    log i "Prepearing RetroDECK framework"
+    log i "--------------------------------"
     component_found="true"
     if [[ "$action" == "reset" ]]; then # Update the paths of all folders in retrodeck.cfg and create them
       while read -r config_line; do
         local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
         if [[ ! $current_setting_name =~ (rdhome|sdcard) ]]; then # Ignore these locations
           local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
-          declare -g "$current_setting_name=$rdhome/${current_setting_value#*retrodeck/}" #removes everything until "retrodeck" and adds the actual retrodeck folder
+          log d "Red setting: $current_setting_name=$current_setting_value"
+          # Extract the part of the setting value after "retrodeck/"
+          local relative_path="${current_setting_value#*retrodeck/}"
+          # Construct the new setting value
+          local new_setting_value="$rdhome/$relative_path"
+          log d "New setting: $current_setting_name=$new_setting_value"
+          # Declare the global variable with the new setting value
+          declare -g "$current_setting_name=$new_setting_value"
           log d "Setting: $current_setting_name=$current_setting_value"
-          if [[ ! $current_setting_name == "logs_folder" ]]; then # Don't create a logs folder normally, we want to maintain the current files exactly to not lose early-install logs.
-            create_dir "$rdhome/$(basename $current_setting_value)"
+            if [[ ! $current_setting_name == "logs_folder" ]]; then # Don't create a logs folder normally, we want to maintain the current files exactly to not lose early-install logs.
+            create_dir "$new_setting_value"
           else # Log folder-specific actions
             mv "$rd_logs_folder" "$logs_folder" # Move existing logs folder from internal to userland
             ln -sf "$logs_folder" "$rd_logs_folder" # Link userland logs folder back to statically-written location
