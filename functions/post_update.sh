@@ -430,38 +430,55 @@ post_update() {
   fi # end of 0.8.4b
 
   if [[ $(check_version_is_older_than "0.9.0b") == "true" ]]; then
-    # Placeholder for version 0.9.0b
 
-    set_setting_value "$raconf" "libretro_info_path" "/var/config/retroarch/cores" "retroarch"
-    if [[ $(configurator_generic_question_dialog "RetroDECK ES-DE Reset" "ES-DE needs to be reset to ensure compatibility with the new version. Do you want to reset it now?\n\nIf you have made your own changes to the ES-DE config, you can decline this reset, but it might not work correctly.\n\nNote: Your game collections and scraped data will not be affected.\nYou can always reset ES-DE later from the Configurator, Troubleshooting section.") == "true" ]]; then
-      log i "User agreed to ES-DE reset"
-      prepare_component "reset" "es-de"
-    fi
-
+    # New components preparation
+    log i "New components were added in this version, initializing them"
     prepare_component "reset" "portmaster"
     prepare_component "reset" "ruffle"
     update_rd_conf
     prepare_component "reset" "steam-rom-manager"
 
+    # RetroArch
+    log i "Forcing RetroArch to use the new libretro info path"
+    set_setting_value "$raconf" "libretro_info_path" "/var/config/retroarch/cores" "retroarch"
+
+    # ES-DE migration
+    if [[ $(configurator_generic_question_dialog "RetroDECK ES-DE Reset" "ES-DE needs to be reset to ensure compatibility with the new version. Do you want to reset it now?\n\nIf you have made your own changes to the ES-DE config, you can decline this reset, but it might not work correctly.\n\nNote: Your game collections and scraped data will not be affected.\nYou can always reset ES-DE later from the Configurator, Troubleshooting section.") == "true" ]]; then
+      log i "User agreed to ES-DE reset"
+      prepare_component "reset" "es-de"
+    fi
     rm -rf "$rd_logs_folder/ES-DE" && log d "Removing the logs/ES-DE folder as we don't need it anymore"
     rm -rf "$es_source_logs" && mkdir -p "$es_source_logs"
 
+    # Cemu key file migratipn
     if [[ -f "$XDG_DATA_HOME/Cemu/keys.txt" ]]; then
       log i "Found Cemu keys.txt in \"$XDG_DATA_HOME/Cemu/keys.txt\", moving it to \"$bios_folder/cemu/keys.txt\""
       mv -f "$XDG_DATA_HOME/Cemu/keys.txt" "$bios_folder/cemu/keys.txt"
       ln -s "$bios_folder/cemu/keys.txt" "$XDG_DATA_HOME/Cemu/keys.txt"
     fi
 
-      if [[ $(configurator_generic_question_dialog "RetroDECK Duckstation Reset" "<span foreground='$purple'><b>Duckstation</b></span> has updated the <span foreground='$purple'><b>hotkeys</b></span> configuration. Do you want to reset it to RetroDECK default settings to ensure compatibility?\n\nIf you have made your own changes to the Duckstation config, you can decline this reset, but the emulator might not work correctly.\nYou can always reset Duckstation later from the Configurator, Troubleshooting section.") == "true" ]]; then
-        log i "User agreed to Duckstation reset"
-        prepare_component "reset" "duckstation"
-      fi
+    # Duckstation reset
+    if [[ $(configurator_generic_question_dialog "RetroDECK Duckstation Reset" "<span foreground='$purple'><b>Duckstation</b></span> has updated the <span foreground='$purple'><b>hotkeys</b></span> configuration. Do you want to reset it to RetroDECK default settings to ensure compatibility?\n\nIf you have made your own changes to the Duckstation config, you can decline this reset, but the emulator might not work correctly.\nYou can always reset Duckstation later from the Configurator, Troubleshooting section.") == "true" ]]; then
+      log i "User agreed to Duckstation reset"
+      prepare_component "reset" "duckstation"
+    fi
 
-      log i "Moving Ryujinx data to the new locations"
-      mv -rf "/var/config/Ryujinx/bis"/* "$saves_folder/switch/ryujinx/nand" && rm -rf "/var/config/Ryujinx/bis" && log i "Migrated Ryujinx nand data to the new location"
-      mv -rf "/var/config/Ryujinx/sdcard"/* "$saves_folder/switch/ryujinx/sdcard" && rm -rf "/var/config/Ryujinx/sdcard" && log i "Migrated Ryujinx sdcard data to the new location"
-      mv -rf "/var/config/Ryujinx/bis/system/Contents/registered"/* "$bios_folder/switch/firmware" && rm -rf "/var/config/Ryujinx/bis/system/Contents/registered" && log i "Migration of Ryujinx firmware data to the new location"
-      mv -rf "/var/config/Ryujinx/system"/* "$bios_folder/switch/keys" && rm -rf "/var/config/Ryujinx/system" && log i "Migrated Ryujinx keys data to the new location"
+    # Ryujinx reset
+    if [[ $(configurator_generic_question_dialog "RetroDECK Ryujinx Reset" "<span foreground='$purple'><b>Ryujinx</b></span> has updated to a customized version, a configuration reset is needed. Do you want to reset it to RetroDECK default settings to ensure compatibility?\n\nIf you have made your own changes to the Ryujinx config, you can decline this reset, but the emulator might not work correctly.\nYou can always reset Ryujinx later from the Configurator, Troubleshooting section.") == "true" ]]; then
+      log i "User agreed to Ryujinx reset"
+      prepare_component "reset" "ryujinx"
+    else
+      create_dir "$logs_folder/ryujinx"
+      create_dir "$mods_folder/ryujinx"
+      create_dir "$screenshots_folder/ryujinx"
+    fi
+    log i "Moving Ryujinx data to the new locations"
+    mv -rf "/var/config/Ryujinx/bis"/* "$saves_folder/switch/ryujinx/nand" && rm -rf "/var/config/Ryujinx/bis" && log i "Migrated Ryujinx nand data to the new location"
+    mv -rf "/var/config/Ryujinx/sdcard"/* "$saves_folder/switch/ryujinx/sdcard" && rm -rf "/var/config/Ryujinx/sdcard" && log i "Migrated Ryujinx sdcard data to the new location"
+    mv -rf "/var/config/Ryujinx/bis/system/Contents/registered"/* "$bios_folder/switch/firmware" && rm -rf "/var/config/Ryujinx/bis/system/Contents/registered" && log i "Migration of Ryujinx firmware data to the new location"
+    mv -rf "/var/config/Ryujinx/system"/* "$bios_folder/switch/keys" && rm -rf "/var/config/Ryujinx/system" && log i "Migrated Ryujinx keys data to the new location"
+    mv -rf "/var/config/Ryujinx/mods"/* "$mods_folder/ryujinx" && rm -rf "/var/config/Ryujinx/mods" && log i "Migrated Ryujinx mods data to the new location"
+    mv -rf "/var/config/Ryujinx/screenshots"/* "$screenshots_folder/ryujinx" && rm -rf "/var/config/Ryujinx/screenshots" && log i "Migrated Ryujinx screenshots to the new location"
 
   fi # end of 0.9.0b
 
