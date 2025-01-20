@@ -511,17 +511,17 @@ finit() {
 
   ) |
   rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-  --title "RetroDECK Finishing Initialization" \
-  --text="RetroDECK is finishing the initial setup process, please wait."
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Finishing Initialization" \
+    --text="RetroDECK is finishing the initial setup process, please wait."
 
   create_lock
 
   # Inform the user where to put the ROMs and BIOS files
   rd_zenity --info --no-wrap \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-  --title "RetroDECK Setup Complete" \
-  --text="RetroDECK setup is complete!\n\nPlease place your <span foreground='$purple'><b>game files</b></span> in the following directory: <span foreground='$purple'><b>$rdhome/roms\n\n</b></span>and your <span foreground='$purple'><b>BIOS</b></span> files in: <span foreground='$purple'><b>$rdhome/bios\n\n</b></span>You can use the <span foreground='$purple'>BIOS checker tool</b></span> available trough the <span foreground='$purple'><b>RetroDECK Configurator</b></span>\nor refer to the <span foreground='$purple'><b>RetroDECK WIKI</b></span> for more information about the required BIOS files and their proper paths.\n\nYou can now start using RetroDECK."
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Setup Complete" \
+    --text="RetroDECK setup is complete!\n\nPlease place your <span foreground='$purple'><b>game files</b></span> in the following directory: <span foreground='$purple'><b>$rdhome/roms\n\n</b></span>and your <span foreground='$purple'><b>BIOS</b></span> files in: <span foreground='$purple'><b>$rdhome/bios\n\n</b></span>You can use the <span foreground='$purple'><b>BIOS checker tool</b></span> available trough the <span foreground='$purple'><b>RetroDECK Configurator</b></span>\nor refer to the <span foreground='$purple'><b>RetroDECK WIKI</b></span> for more information about the required BIOS files and their proper paths.\n\nYou can now start using RetroDECK."
 }
 
 install_retrodeck_starterpack() {
@@ -560,7 +560,15 @@ install_retrodeck_controller_profile() {
 create_lock() {
   # creating RetroDECK's lock file and writing the version in the config file
   version=$hard_version
-  touch "$lockfile"
+  if [[ ! -d "$(dirname "$logfile")" ]]; then
+    mkdir -p "$(dirname "$logfile")"
+  fi
+  if [[ -n "$logfile" ]]; then
+    touch "$logfile"
+  else
+    log w "I wished to touch the logfile but the variable is empty, creating a static \"$rdhome/logs/retrodeck.log\" if not already there"
+    touch "$rdhome/logs/retrodeck.log" || log w "\"$rdhome/logs/retrodeck.log\" already exists, proceeding"
+  fi
   conf_write
 }
 
