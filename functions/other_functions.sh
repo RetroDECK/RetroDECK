@@ -560,15 +560,7 @@ install_retrodeck_controller_profile() {
 create_lock() {
   # creating RetroDECK's lock file and writing the version in the config file
   version=$hard_version
-  if [[ ! -d "$(dirname "$logfile")" ]]; then
-    mkdir -p "$(dirname "$logfile")"
-  fi
-  if [[ -n "$logfile" ]]; then
-    touch "$logfile"
-  else
-    log w "I wished to touch the logfile but the variable is empty, creating a static \"$rdhome/logs/retrodeck.log\" if not already there"
-    touch "$rdhome/logs/retrodeck.log" || log w "\"$rdhome/logs/retrodeck.log\" already exists, proceeding"
-  fi
+  touch "$lockfile"
   conf_write
 }
 
