@@ -638,8 +638,9 @@ prepare_component() {
         cp -fvr $config/ryujinx/profiles /var/config/Ryujinx/
         log d "Replacing placeholders in \"$ryujinxconf\""
         sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "$ryujinxconf"
-        log i "Since in this version we moved to a PR build of Ryujinx we need to symlink it."  # TODO: deleteme later
-        ln -sv $ryujinxconf "$(dirname $ryujinxconf)/PRConfig.json"                             # TODO: deleteme later
+        create_dir "$logs_folder/ryujinx"
+        create_dir "$mods_folder/ryujinx"
+        create_dir "$screenshots_folder/ryujinx"
       fi
     fi
     # if [[ "$action" == "reset" ]] || [[ "$action" == "postmove" ]]; then # Run commands that apply to both resets and moves
