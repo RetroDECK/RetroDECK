@@ -1548,6 +1548,208 @@
         "saturnjp"
       ],
       "description": "SEGA Saturn BIOS"
+    },
+      "iplrom.x1": {
+      "md5": "eeeea1cd29c6e0e8b094790ae969bfa7",
+      "system": "x1",
+      "description": "Sharp X1 BIOS",
+      "required": "required"
+    },
+      "iplrom.x1t": {
+      "md5": "851e4a5936f17d13f8c39a980cf00d77",
+      "system": "x1",
+      "description": "Sharp X1 BIOS",
+      "required": "required"
+    },
+      "128-0.rom": {
+      "md5": "b4d2692115a9f2924df92a3cbfb358fb",
+      "system": "zxspectrum",
+      "description": "ZX Spectrum BIOS"
+    },
+      "128-spanish-0.rom": {
+      "md5": "c1231a70b8129311216acb7479b031d5",
+      "system": "zxspectrum",
+      "description": "ZX Spectrum Spanish BIOS"
+    },
+      "128-spanish-1.rom": {
+      "md5": "4f341936594cbcab75cfa62ce96e3682",
+      "system": "zxspectrum",
+      "description": "ZX Spectrum Spanish BIOS"
+    },
+      "zxs:48.rom": {
+      "md5": "4c42a2f075212361c3117015b107ff68",
+      "system": "zxspectrum",
+      "description": "ZX Spectrum BIOS"
+    },
+      "disciple.rom": {
+      "md5": "78e61a2a02121873c1756b21fd1398b1",
+      "system": "zxspectrum",
+      "description": "ZX Spectrum BIOS"
+    },
+      "disk_plus3.szx": {
+      "md5": "e6db6b9f6ad15012851115a7bc4b31d8",
+      "system": "zxspectrum",
+      "description": "ZX Spectrum BIOS"
+    },
+      "zxs:if1-2.rom": {
+      "md5": "31b704ae925305e74f50699271fddd9a",
+      "system": "zxspectrum",
+      "description": "ZX Spectrum BIOS"
+    },
+      "if1-1.rom": {
+      "md5": "5c11c61a2dd2ca4bf39328d9ff42d289",
+      "system": "zxspectrum",
+      "description": "ZX Spectrum BIOS"
+    },
+      "plus2-0.rom": {
+      "md5": "4ed7af4636308b8a48d7a35e6c5b546b",
+      "system": "zxspectrum",
+      "description": "ZX Spectrum BIOS"
+    },
+      "plus2-1.rom": {
+      "md5": "b3db95931cc844efaeb82db9c171b9f3",
+      "system": "zxspectrum",
+      "description": "ZX Spectrum BIOS"
+    },
+      "plus3-0.rom": {
+      "md5": "3abdc20e72890a750dd3c745d286dfba",
+      "system": "zxspectrum",
+      "description": "ZX Spectrum BIOS"
+    },
+      "plus3-1.rom": {
+      "md5": "8361a1d9c8bcef89c0c39293776564ad",
+      "system": "zxspectrum",
+      "description": "ZX Spectrum BIOS"
+    },
+      "plus3-2.rom": {
+      "md5": "f36c5c2d1f2a682caadeaa6f947db0da",
+      "system": "zxspectrum",
+      "description": "ZX Spectrum BIOS"
+    },
+      "plus3-3.rom": {
+      "md5": "a148bcc575e51389e84fdf5d555c3196",
+      "system": "zxspectrum",
+      "description": "ZX Spectrum BIOS"
+    },
+      "plus3e-0.rom": {
+      "md5": "3abdc20e72890a750dd3c745d286dfba",
+      "system": "zxspectrum",
+      "description": "ZX Spectrum BIOS"
+    },
+      "plus3e-1.rom": {
+      "md5": "8361a1d9c8bcef89c0c39293776564ad",
+      "system": "zxspectrum",
+      "description": "ZX Spectrum BIOS"
+    },
+      "plus3e-2.rom": {
+      "md5": "f36c5c2d1f2a682caadeaa6f947db0da",
+      "system": "zxspectrum",
+      "description": "ZX Spectrum BIOS"
+    },
+      "plus3e-3.rom": {
+      "md5": "f36c5c2d1f2a682caadeaa6f947db0da",
+      "system": "zxspectrum",
+      "description": "ZX Spectrum BIOS"
+    },
+      "plusd.rom": {
+      "md5": "42e5de16fb5e50082bb954ec7ce45851",
+      "system": "zxspectrum",
+      "description": "ZX Spectrum BIOS"
+    },
+      "se-0.rom": {
+      "md5": "fb3f86eb1e5a695d9c50c124e7cfb875",
+      "system": "zxspectrum",
+      "description": "ZX Spectrum BIOS"
+    },
+      "se-1.rom": {
+      "md5": "88de4a3129086f34bb9ca559acc51e6c",
+      "system": "zxspectrum",
+      "description": "ZX Spectrum BIOS"
+    },
+      "speccyboot-1.4.rom": {
+      "md5": "c54aa8f374b0971f51546c29d5d1eba1",
+      "system": "zxspectrum",
+      "description": "ZX Spectrum BIOS"
+    },
+      "tape_128.sz": {
+      "md5": "8942b43b73ed4eb7f32bd1741709a4dc",
+      "system": "zxspectrum",
+      "description": "ZX Spectrum BIOS"
+    },
+      "tape_16.szx": {
+      "md5": "fec97eb9ea1b017cae84de78508feb4a",
+      "system": "zxspectrum",
+      "description": "ZX Spectrum BIOS"
+    },
+      "tape_2048.szx": {
+      "md5": "116f732bbae4e49d625aaf2f311474d0",
+      "system": "zxspectrum",
+      "description": "ZX Spectrum BIOS"
+    },
+      "tape_2068.szx": {
+      "md5": "0b0f267b95d556318bb652af2e8dc25c",
+      "system": "zxspectrum",
+      "description": "ZX Spectrum BIOS"
+    },
+      "tape_48.szx": {
+      "md5": "0b0f267b95d556318bb652af2e8dc25c",
+      "system": "zxspectrum",
+      "description": "ZX Spectrum BIOS"
+    },
+      "tape_pentagon.szx": {
+      "md5": "bd7698603bd9079d337cdedfb04942d9",
+      "system": "zxspectrum",
+      "description": "ZX Spectrum BIOS"
+    },
+      "tape_plus2.szx": {
+      "md5": "166d4aa1a5aa4fbd99cc963b4e7c19cc",
+      "system": "zxspectrum",
+      "description": "ZX Spectrum BIOS"
+    },
+      "tape_plus2a.szx": {
+      "md5": "445d4817d5557bb363a216fbd6eeaa84",
+      "system": "zxspectrum",
+      "description": "ZX Spectrum BIOS"
+    },
+      "tape_plus3.szx": {
+      "md5": "0dc8828ac1db2e0efa915ac55191e96f",
+      "system": "zxspectrum",
+      "description": "ZX Spectrum BIOS"
+    },
+      "tape_plus3e.szx": {
+      "md5": "bf07537f028bbcb3309464bd30da779c",
+      "system": "zxspectrum",
+      "description": "ZX Spectrum BIOS"
+    },
+      "tape_scorpion.szx": {
+      "md5": "c10e677d3deb5a445689d3a599880745",
+      "system": "zxspectrum",
+      "description": "ZX Spectrum BIOS"
+    },
+      "tape_se.szx": {
+      "md5": "2518f9334bef8c44804a4185085579b5",
+      "system": "zxspectrum",
+      "description": "ZX Spectrum BIOS"
+    },
+      "tape_ts2068.szx": {
+      "md5": "1d360c09d370bb52a9a44b30cc7c59e6",
+      "system": "zxspectrum",
+      "description": "ZX Spectrum BIOS"
+    },
+      "tc2048.rom": {
+      "md5": "9dd7ecf784a6c04265c073c236f5fadb",
+      "system": "zxspectrum",
+      "description": "ZX Spectrum BIOS"
+    },
+      "tc2068-0.rom": {
+      "md5": "55d462fccc6c536037404ef4ced08bec",
+      "system": "zxspectrum",
+      "description": "ZX Spectrum BIOS"
+    },
+      "tc2068-1.rom": {
+      "md5": "575d203c6e15e679fba0b73f854ec7a2",
+      "system": "zxspectrum",
+      "description": "ZX Spectrum BIOS"
     }
   }
 }
