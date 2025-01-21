@@ -1750,6 +1750,175 @@
       "md5": "575d203c6e15e679fba0b73f854ec7a2",
       "system": "zxspectrum",
       "description": "ZX Spectrum BIOS"
+    },
+      "000-lo.lo": {
+      "md5": "fc7599f3f871578fe9a0453662d1c966",
+      "system": [
+        "neogeocd",
+        "neogeocdjp"
+      ],
+      "description": "NeoGeo CD BIOS"
+    },
+      "scph1000.bin": {
+      "md5": "239665b1a3dade1b5a52c06338011044",
+      "system": "psx",
+      "description": "PS1 BIOS",
+      "required": "at least one for this system"
+    },
+      "scph1001.bin": {
+      "md5": "924e392ed05558ffdb115408c263dccf",
+      "system": "psx",
+      "description": "PS1 BIOS",
+      "required": "at least one for this system"
+    },
+      "scph1002.bin": {
+      "md5": "54847e693405ffeb0359c6287434cbef",
+      "system": "psx",
+      "description": "PS1 BIOS",
+      "required": "at least one for this system"
+    },
+      "scph100.bin": {
+      "md5": "8abc1b549a4a80954addc48ef02c4521",
+      "system": "psx",
+      "description": "PS1 BIOS",
+      "required": "at least one for this system"
+    },
+      "scph101.bin": {
+      "md5": "6e3735ff4c7dc899ee98981385f6f3d0",
+      "system": "psx",
+      "description": "PS1 BIOS",
+      "required": "at least one for this system"
+    },
+      "scph102A.bin": {
+      "md5": "b10f5e0e3d9eb60e5159690680b1e774",
+      "system": "psx",
+      "description": "PS1 BIOS",
+      "required": "at least one for this system"
+    },
+      "scph102B.bin": {
+      "md5": "de93caec13d1a141a40a79f5c86168d6",
+      "system": "psx",
+      "description": "PS1 BIOS",
+      "required": "at least one for this system"
+    },
+      "scph102C.bin": {
+      "md5": "de93caec13d1a141a40a79f5c86168d6",
+      "system": "psx",
+      "description": "PS1 BIOS",
+      "required": "at least one for this system"
+    },
+      "scph3000.bin": {
+      "md5": "849515939161e62f6b866f6853006780",
+      "system": "psx",
+      "description": "PS1 BIOS",
+      "required": "at least one for this system"
+    },
+      "scph3500.bin": {
+      "md5": "cba733ceeff5aef5c32254f1d617fa62",
+      "system": "psx",
+      "description": "PS1 BIOS",
+      "required": "at least one for this system"
+    },
+      "scph5000.bin": {
+      "md5": "eb201d2d98251a598af467d4347bb62f",
+      "system": "psx",
+      "description": "PS1 BIOS",
+      "required": "at least one for this system"
+    },
+      "ppge_atlas.zim": {
+      "md5": "866855cc330b9b95cc69135fb7b41d38",
+      "system": "psp",
+      "description": "PSP Assets"
+    },
+      "ecwolf.pk3": {
+      "md5": "c011b428819eea4a80b455c245a5a04d",
+      "system": "wolfenstein",
+      "description": "Wolfenstein PK3"
+    },
+      "scummvm.zip": {
+      "md5": "a17e0e0150155400d8cced329563d9c8",
+      "system": "scummvm",
+      "description": "SCUMMVM"
+    },
+      "cpc464.rom": {
+      "md5": "a17e0e0150155400d8cced329563d9c8",
+      "system": "amstradcpc",
+      "description": "AMSTRAD CPC BIOS"
+    },
+      "cpc664.rom": {
+      "md5": "5a384a2310f472c7857888371c00ed66",
+      "system": "amstradcpc",
+      "description": "AMSTRAD CPC BIOS"
+    },
+      "cpc6128.rom": {
+      "md5": "b96280dc6c95a48857b4b8eb931533ae",
+      "system": "amstradcpc",
+      "description": "AMSTRAD CPC BIOS"
+    },
+      "cpc_amsdos.rom": {
+      "md5": "25629dfe870d097469c217b95fdc1c95",
+      "system": "amstradcpc",
+      "description": "AMSTRAD CPC BIOS"
+    },
+      "hun.rom": {
+      "md5": "22167938f142c222f40992839aa21a06",
+      "system": "enterprise",
+      "description": "Enterprise - 64/128  BIOS"
+    },
+      "brd.rom": {
+      "md5": "6af0402906944fd134004b85097c8524",
+      "system": "enterprise",
+      "description": "Enterprise - 64/128  BIOS"
+    },
+      "exos20.rom": {
+      "md5": "5ad3baaad3b5156d6b60b34229a676fb",
+      "system": "enterprise",
+      "description": "Enterprise - 64/128  BIOS"
+    },
+      "exos21.rom": {
+      "md5": "f36f24cbb87745fbd2714e4df881db09",
+      "system": "enterprise",
+      "description": "Enterprise - 64/128  BIOS"
+    },
+      "zt19uk.rom": {
+      "md5": "228540b6be83ae2acd7569c8ff0f91d0",
+      "system": "enterprise",
+      "description": "Enterprise - 64/128  BIOS"
+    },
+      "basic20.rom": {
+      "md5": "8e18edce4a7acb2c33cc0ab18f988482",
+      "system": "enterprise",
+      "description": "Enterprise - 64/128  BIOS"
+    },
+      "basic21.rom": {
+      "md5": "e972fe42b398c9ff1d93ff014786aec6",
+      "system": "enterprise",
+      "description": "Enterprise - 64/128  BIOS"
+    },
+      "exdos13.rom": {
+      "md5": "ddff70c014d1958dc75378b6c9aab6f8",
+      "system": "enterprise",
+      "description": "Enterprise - 64/128  BIOS"
+    },
+      "epd19hft.rom": {
+      "md5": "12cfc9c7e48c8a16c2e09edbd926d467",
+      "system": "enterprise",
+      "description": "Enterprise - 64/128  BIOS"
+    },
+      "zt18hfnt.rom": {
+      "md5": "3082dc488d32f30a612761b99074199b",
+      "system": "enterprise",
+      "description": "Enterprise - 64/128  BIOS"
+    },
+      "epfileio.rom": {
+      "md5": "a68ebcbc73a4d2178d755b7755bf18fe",
+      "system": "enterprise",
+      "description": "Enterprise - 64/128  BIOS"
+    },
+      "exos24uk.rom": {
+      "md5": "55af78f877a21ca45eb2df68a74fcc60",
+      "system": "enterprise",
+      "description": "Enterprise - 64/128  BIOS"
     }
   }
 }
