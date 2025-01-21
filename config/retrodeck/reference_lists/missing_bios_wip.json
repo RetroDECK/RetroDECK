@@ -15,7 +15,7 @@
     "sha1": "7940c7bf29eee85a5b2fdec78750b19aa22895dc"
   },
 
-    DONE
+
 
   "arcade:f355bios.zip": {
     "size": "1394278",
@@ -24,18 +24,27 @@
     "sha1": "b6ff66dcb5547bd91760d239ddf428a655631c53"
   },
 
+
+
   "arcade:f355dlx.zip": {
     "size": "2328436",
     "crc": "23ac17be",
     "md5": "1028615bcac4c31634a3364ce5c04044",
     "sha1": "48d1712d1b1cdfeeeb43c6287c17b0b6309cfaab"
   },
+
+
+
   "arcade:hod2bios.zip": {
     "size": "1479106",
     "crc": "0ddc6daf",
     "md5": "f4011d3116500354edf7302a90402711",
     "sha1": "782c303cbdfab1027b04db74a63e27bdad5e0c53"
   },
+
+
+
+
   "arcade:naomi.zip": {
     "size": "9321533",
     "crc": "6ee50181",
@@ -43,12 +52,17 @@
     "sha1": "c96711c01c0158f161791d6fbe75d88329e8ac0a"
   },
 
+
+
   "atari8bit:ATARIOSB.ROM": {
     "size": "10240",
     "crc": "3e28a1fe",
     "md5": "a3e8d617c95d08031fe1b20d541434b2",
     "sha1": "f1f0741b1d34fb4350cf7cb8ab3b6ea11cdd8174"
   },
+
+
+
   "atari7800:7800 BIOS (E).rom": {
     "size": "16384",
     "crc": "d5b61170",
@@ -69,6 +83,8 @@
     "sha1": "45bedc4cbdeac66c7df59e9e599195c778d86a92"
   },
 
+
+
   "amiga:kick34005.A500": {
     "size": "262144",
     "crc": "c4f0f55f",
@@ -87,6 +103,9 @@
     "md5": "646773759326fbac3b2311fd8c8793ee",
     "sha1": "e21545723fe8374e91342617604f1b3d703094f1"
   },
+
+
+
 
 
   "fairchild-channel-f:sl31253.bin": {
@@ -109,12 +128,17 @@
     "md5": "95d339631d867c8f1d15a5f2ec26069d",
     "sha1": "759e2ed31fbde4a2d8daf8b9f3e0dffebc90dae2"
   },
+
+
+
   "doom:prboom.wad": {
     "size": "143312",
     "crc": "a5751b99",
     "md5": "72ae1b47820fcc93cc0df9c428d0face",
     "sha1": "5f4aed208301449c2e9514edfd325fe9dead76fa"
   },
+
+
   "j2me:freej2me-lr.jar": {
     "size": "552042",
     "crc": "96a1babf",
@@ -133,12 +157,19 @@
     "md5": "29a92d0867da2917275b7c6c805d256f",
     "sha1": "7d738042268e4ffd0aae8e85e05dd28bce761d1f"
   },
+
+
+
   "mac:MacII.ROM": {
     "size": "262144",
     "crc": "4df6d054",
     "md5": "66223be1497460f1e60885eeb35e03cc",
     "sha1": "db6b504744281369794e26ba71a6e385cf6227fa"
   },
+
+
+
+
   "msx:CARTS.SHA": {
     "size": "33152",
     "crc": "d42f4444",
@@ -183,12 +214,17 @@
     "md5": "279efd1eae0d358eecd4edc7d9adedf3",
     "sha1": "7aec0134ad6a5177f4056fcb6047083e8e00529b"
   },
+
+
   "turbografx16--1:syscard2u.pce": {
     "size": "262144",
     "crc": "ff2a5ec3",
     "md5": "94279f315e8b52904f65ab3108542afe",
     "sha1": "2bea3dac98f84b2f2f469fa77ea720b8770d598d"
   },
+
+
+
   "pc-9800-series:bios.rom": {
     "size": "98304",
     "crc": "0a682b93",
@@ -213,6 +249,9 @@
     "md5": "524473c1a5a03b17e21d86a0408ff827",
     "sha1": "d5dbc4fea3b8367024d363f5351baecd6adcd8ef"
   },
+
+
+
   "pc-fx:fx-scsi.rom": {
     "size": "524288",
     "crc": "f3e60e5e",
@@ -231,9 +270,6 @@
     "md5": "08e36edbea28a017f79f8d4f7ff9b6d7",
     "sha1": "1a77fd83e337f906aecab27a1604db064cf10074"
   },
-
-
-
   "pc-fx:pcfxga.rom": {
     "size": "1048576",
     "crc": "41c3776b",
@@ -249,6 +285,7 @@
 
 
 
+                   DONE
 
   "ngc:gc-dvd-20010608.bin": {
     "size": "131072",
@@ -310,12 +347,17 @@
     "md5": "db92574caab77a7ec99d4605fd6f2450",
     "sha1": "80b8744ff5e43585392f55546bd03a673d11ef5f"
   },
+
+
+
   "nintendo-64dd:64DD_IPL.bin": {
     "size": "4194304",
     "crc": "7f933ce2",
     "md5": "8d3d9f294b6e174bc7b1d2fd1c727530",
     "sha1": "bf861922dcb78c316360e3e742f4f70ff63c9bc3"
   },
+
+
 
 
   "nes:NstDatabase.xml": {
@@ -343,12 +385,17 @@
     "md5": "4ed9648505ab33a4daec93707b16caba",
     "sha1": "7996bd1c01b99800e0d5d34beff93db283784864"
   },
+
+
+
   "sufami-turbo:STBIOS.bin": {
     "size": "262144",
     "crc": "9b4ca911",
     "md5": "d3a44ba7d42a74d3ac58cb9c14c6a5ca",
     "sha1": "ef86ea192eed03d5c413fdbbfd46043be1d7a127"
   },
+
+
   "super-gb:SGB1.sfc": {
     "size": "262144",
     "crc": "8a4a174f",
@@ -397,6 +444,9 @@
     "md5": "d574d4f9c12f305074798f54c091a8b4",
     "sha1": "aa2f50a77dfb4823da96ba99309085a3c6278515"
   },
+
+                     DONE
+
   "snes:cx4.data.rom": {
     "size": "3072",
     "crc": "b6e76a6a",
@@ -499,6 +549,10 @@
     "md5": "dda40ccd57390c96e49d30a041f9a9e7",
     "sha1": "388e3721b94cd074d6ba0eca8616523d2118a6c3"
   },
+
+
+DONE <----
+
   "dc:dc_flash.bin": {
     "size": "131072",
     "crc": "c611b498",
