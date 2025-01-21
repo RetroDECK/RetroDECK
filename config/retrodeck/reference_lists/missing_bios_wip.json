@@ -285,7 +285,6 @@
 
 
 
-                   DONE
 
   "ngc:gc-dvd-20010608.bin": {
     "size": "131072",
@@ -445,7 +444,6 @@
     "sha1": "aa2f50a77dfb4823da96ba99309085a3c6278515"
   },
 
-                     DONE
 
   "snes:cx4.data.rom": {
     "size": "3072",
@@ -551,7 +549,7 @@
   },
 
 
-DONE <----
+
 
   "dc:dc_flash.bin": {
     "size": "131072",
@@ -571,6 +569,9 @@ DONE <----
     "md5": "3bffafac42a7767d8dcecf771f5552ba",
     "sha1": "6d27d71aec4dfba98f66316ae74a1426d567698a"
   },
+
+
+
   "sms:bios_J.sms": {
     "size": "8192",
     "crc": "48d44a13",
@@ -613,6 +614,9 @@ DONE <----
     "md5": "b4e76e416b887f4e7413ba76fa735f16",
     "sha1": "70429f1d80503a0632f603bf762fe0bbaa881d22"
   },
+
+
+
   "saturn:hisaturn.bin": {
     "size": "524288",
     "crc": "721e1b60",
@@ -655,6 +659,9 @@ DONE <----
     "md5": "ac4e4b6522e200c0d23d371a8cecbfd3",
     "sha1": "4154e11959f3d5639b11d7902b3a393a99fb5776"
   },
+
+ DONE <----
+
   "x1:iplrom.x1": {
     "size": "4096",
     "crc": "e70011d3",
