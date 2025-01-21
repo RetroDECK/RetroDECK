@@ -805,5 +805,3 @@ modules:
     sources:
       - type: dir
         path: .
-
-        
