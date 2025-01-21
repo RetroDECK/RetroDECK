@@ -931,9 +931,11 @@ quit_retrodeck() {
   zenity --progress \
     --title="Syncing with Steam" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --text="Syncing favorite games with Steam, please wait." \
+    --text="<span foreground='$purple'><b>\t\t\t\t\tSyncing favorite games with Steam.</b></span>\n\n<b>NOTE: </b>This operation may take some time depending on the size of your library.\nFeel free to leave this in the background and switch to another application.\n\n" \
     --percentage=25 \
     --pulsate \
+    --width=500 \
+    --height=150 \
     --auto-close \
     --auto-kill
   fi
