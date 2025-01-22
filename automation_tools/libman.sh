@@ -7,13 +7,13 @@
 excluded_libraries=()
 
 # General libraries
-excluded_libraries=("libselinux.so.1")
+excluded_libraries=("libselinux.so.1" "libwayland-egl.so.1" "libwayland-cursor.so.0" "libxkbcommon.so.0")
 # Qt libraries
 excluded_libraries+=("libQt6Multimedia.so.6" "libQt6Core.so.6" "libQt6DBus.so.6" "libQt6Gui.so.6" "libQt6OpenGL.so.6" "libQt6Svg.so.6" "libQt6WaylandClient.so.6" "libQt6WaylandEglClientHwIntegration.so.6" "libQt6Widgets.so.6" "libQt6XcbQpa.so.6")
 # SDL libraries
 excluded_libraries+=("libSDL2_net-2.0.so.0.200.0" "libSDL2_mixer-2.0.so.0.600.3" "libSDL2-2.0.so.0" "libSDL2_mixer-2.0.so.0" "libSDL2_image-2.0.so.0" "libSDL2-2.0.so.0.2800.5" "libSDL2_ttf-2.0.so.0" "libSDL2_net-2.0.so.0" "libSDL2_image-2.0.so.0.600.3" "libSDL2_ttf-2.0.so.0.2200.0")
-# TEST
-excluded_libraries+=("libwayland-egl.so.1" "libwayland-cursor.so.0" "libxkbcommon.so.0")
+# FFMPEG libraries
+excluded_libraries+=("libavcodec.so" "libavformat.so" "libavutil.so" "libavfilter.so" "libavdevice" "libswresample.so" "libswscale.so")
 
 # Add libraries from /lib/x86_64-linux-gnu/ to the excluded list
 for lib in /lib/x86_64-linux-gnu/*.so*; do

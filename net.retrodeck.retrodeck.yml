@@ -6,6 +6,14 @@ base: org.electronjs.Electron2.BaseApp            # Needed for Steam ROM Manager
 base-version: "22.08"
 command: retrodeck.sh
 
+add-extensions:
+  org.freedesktop.Platform.ffmpeg-full:
+    directory: lib/ffmpeg
+    add-ld-path: .
+    version: *runtime-version
+cleanup-commands:
+  - mkdir -p ${FLATPAK_DEST}/lib/ffmpeg
+
 finish-args:
   - --socket=wayland
   - --socket=x11
