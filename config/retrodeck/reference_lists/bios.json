@@ -416,15 +416,15 @@
       "required": "Required if normal font file is missing"
     },
     "itf.rom": {
-      "md5": "e9fc3890963b12cf15d0a2eea5815b72",
+      "md5": "72ea51443070f0e9212bfc9b793ee28e",
       "system": "pc98",
-      "description": "BIOS file",
+      "description": "NEC PC-9800 BIOS",
       "required": "required"
     },
     "sound.rom": {
-      "md5": "caf90f22197aed6f14c471c21e64658d",
+      "md5": "524473c1a5a03b17e21d86a0408ff827",
       "system": "pc98",
-      "description": "BIOS file",
+      "description": "NEC PC-9800 BIOS",
       "required": "required"
     },
     "bios9821.rom": {
@@ -828,8 +828,8 @@
         "saturn",
         "saturnjp"
       ],
-      "description": "Saturn US BIOS",
-      "required": "at least one for this system"
+      "description": "Saturn US.mdEU - US/EU BIOS",
+      "required": "required"
     },
     "mpr-18811-mx.ic1": {
       "md5": "255113ba943c92a54facd25a10fd780c",
@@ -1045,82 +1045,82 @@
       "system": "doom",
       "description": "PrBoom RetroArch Core"
     },
-      "freej2me-lr.jar": {
+    "freej2me-lr.jar": {
       "md5": "ccd92e7156ce2f0ce14c88ffb68a16eb",
       "system": "j2me",
       "description": "FreeJ2ME BIOS",
       "required": "required"
     },
-      "freej2me-sdl.jar": {
+    "freej2me-sdl.jar": {
       "md5": "4da74084fc1b1bd3d776ed8d3ee648de",
       "system": "j2me",
       "description": "FreeJ2ME BIOS",
       "required": "required"
     },
-      "freej2me.jar": {
+    "freej2me.jar": {
       "md5": "29a92d0867da2917275b7c6c805d256f",
       "system": "j2me",
       "description": "FreeJ2ME BIOS",
       "required": "required"
     },
-      "MacII.ROM": {
+    "MacII.ROM": {
       "md5": "66223be1497460f1e60885eeb35e03cc",
       "system": "mac2",
       "description": "Macintosh II BIOS",
       "required": "required"
     },
-      "CARTS.SHA": {
+    "CARTS.SHA": {
       "md5": "74b0f217fa0e2b8bb5a2f8e2ecc69da3",
       "system": "msx",
       "description": "MSX Carts BIOS"
     },
-      "FMPAC16.ROM": {
+    "FMPAC16.ROM": {
       "md5": "74b0f217fa0e2b8bb5a2f8e2ecc69da3",
       "system": "msx",
       "description": "MSX FMPAC 16 BIOS",
       "required": "required"
     },
-      "RS232.ROM": {
+    "RS232.ROM": {
       "md5": "279efd1eae0d358eecd4edc7d9adedf3",
       "system": "msx",
       "description": "MSX RS232 BIOS"
     },
-      "CYRILLIC.FNT": {
+    "CYRILLIC.FNT": {
       "md5": "85b38e4128bbc300e675f55b278683a8",
       "system": "msx",
       "description": "MSX Cyrillic Font"
     },
-      "DEFAULT.FNT": {
+    "DEFAULT.FNT": {
       "md5": "85b38e4128bbc300e675f55b278683a8",
       "system": "msx",
       "description": "MSX Default Font"
     },
-      "INTERNAT.FNT": {
+    "INTERNAT.FNT": {
       "md5": "ac4f4a90c1b1887db48ded39c9d9c847",
       "system": "msx",
       "description": "MSX Internal Font"
     },
-      "ITALIC.FNT": {
+    "ITALIC.FNT": {
       "md5": "c83e50e9f33b8dd893c414691822740d",
       "system": "msx",
       "description": "MSX Italic Font"
     },
-      "JAPANESE.FNT": {
+    "JAPANESE.FNT": {
       "md5": "aa28f0703b951a6be8df3e28e20d263d",
       "system": "msx",
       "description": "MSX Japanese Font"
     },
-      "KOREAN.FNT": {
+    "KOREAN.FNT": {
       "md5": "73291e76638a2f5aa2eceb843df468f4",
       "system": "msx",
       "description": "MSX Korean Font"
     },
-      "syscard2u.pce": {
+    "syscard2u.pce": {
       "md5": "94279f315e8b52904f65ab3108542afe",
       "system": "turbografx16",
       "description": "TurboGrafx-16 BIOS"
     },
-      "bios.rom": {
+    "bios.rom": {
       "md5": [
         "cd237e16e7e77c06bb58540e9e9fca68",
         "e246140dec5124c5e404869a84caefce"
@@ -1129,115 +1129,103 @@
       "description": "NEC PC-9800 BIOS",
       "required": "required"
     },
-      "font.rom": {
+    "font.rom": {
       "md5": "38d32748ae49d1815b0614970849fd40",
       "system": "pc98",
       "description": "NEC PC-9800 BIOS",
       "required": "required"
     },
-      "itf.rom": {
-      "md5": "72ea51443070f0e9212bfc9b793ee28e",
-      "system": "pc98",
-      "description": "NEC PC-9800 BIOS",
-      "required": "required"
-    },
-      "sound.rom": {
-      "md5": "524473c1a5a03b17e21d86a0408ff827",
-      "system": "pc98",
-      "description": "NEC PC-9800 BIOS",
-      "required": "required"
-    },
-      "fx-scsi.rom": {
+    "fx-scsi.rom": {
       "md5": "430e9745f9235c515bc8e652d6ca3004",
       "system": "pcfx",
       "description": "NEC PC-FX BIOS",
       "required": "required"
     },
-      "pcfx.rom": {
+    "pcfx.rom": {
       "md5": "08e36edbea28a017f79f8d4f7ff9b6d7",
       "system": "pcfx",
       "description": "NEC PC-FX BIOS",
       "required": "required"
     },
-      "pcfxbios.bin": {
+    "pcfxbios.bin": {
       "md5": "08e36edbea28a017f79f8d4f7ff9b6d7",
       "system": "pcfx",
       "description": "NEC PC-FX BIOS",
       "required": "required"
     },
-      "pcfxga.rom": {
+    "pcfxga.rom": {
       "md5": "5885bc9a64bf80d4530b9b9b978ff587",
       "system": "pcfx",
       "description": "NEC PC-FX BIOS",
       "required": "required"
     },
-      "pcfxv101.bin": {
+    "pcfxv101.bin": {
       "md5": "e2fb7c7220e3a7838c2dd7e401a7f3d8",
       "system": "pcfx",
       "description": "NEC PC-FX BIOS",
       "required": "required"
     },
-      "gc-dvd-20010608.bin": {
+    "gc-dvd-20010608.bin": {
       "md5": "561532ad496f644897952d2cef5bb431",
       "system": "gc",
       "description": "Gamecube DVD BIOS"
     },
-      "gc-dvd-20010831.bin": {
+    "gc-dvd-20010831.bin": {
       "md5": "b953eb1a8fc9922b3f7051c1cdc451f1",
       "system": "gc",
       "description": "Gamecube DVD BIOS"
     },
-      "gc-dvd-20020402.bin": {
+    "gc-dvd-20020402.bin": {
       "md5": "413154dd0e2c824c9b18b807fd03ec4e",
       "system": "gc",
       "description": "Gamecube DVD BIOS"
     },
-      "gc-dvd-20020823.bin": {
+    "gc-dvd-20020823.bin": {
       "md5": "c03f6bbaf644eb9b3ee261dbe199eb42",
       "system": "gc",
       "description": "Gamecube DVD BIOS"
     },
-      "gc-ntsc-10.bin": {
+    "gc-ntsc-10.bin": {
       "md5": "fc924a7c879b661abc37cec4f018fdf3",
       "system": "gc",
       "description": "Gamecube NTSC BIOS"
     },
-      "gc-ntsc-11.bin": {
+    "gc-ntsc-11.bin": {
       "md5": "019e39822a9ca3029124f74dd4d55ac4",
       "system": "gc",
       "description": "Gamecube NTSC BIOS"
     },
-      "gc-ntsc-12.bin": {
+    "gc-ntsc-12.bin": {
       "md5": "b17148254a5799684c7d783206504926",
       "system": "gc",
       "description": "Gamecube NTSC BIOS"
     },
-      "gc-pal-10.bin": {
+    "gc-pal-10.bin": {
       "md5": "0cdda509e2da83c85bfe423dd87346cc",
       "system": "gc",
       "description": "Gamecube PAL BIOS"
     },
-      "gc-pal-11.bin": {
+    "gc-pal-11.bin": {
       "md5": "339848a0b7c2124cf155276c1e79cbd0",
       "system": "gc",
       "description": "Gamecube PAL BIOS"
     },
-      "gc-pal-12.bin": {
+    "gc-pal-12.bin": {
       "md5": "db92574caab77a7ec99d4605fd6f2450",
       "system": "gc",
       "description": "Gamecube PAL BIOS"
     },
-      "64DD_IPL.bin": {
+    "64DD_IPL.bin": {
       "md5": "8d3d9f294b6e174bc7b1d2fd1c727530",
       "system": "n64dd",
       "description": "Nintendo 64 64DD BIOS"
     },
-      "NstDatabase.xml": {
+    "NstDatabase.xml": {
       "md5": "7bfe8c0540ed4bd6a0f1e2a0f0118ced",
       "system": "nes",
       "description": "NES Nestopia NstDatabase"
     },
-      "BS-X.bin": {
+    "BS-X.bin": {
       "md5": "fed4d8242cfbed61343d53d48432aced",
       "system": [
         "snes",
@@ -1245,7 +1233,7 @@
       ],
       "description": "Satellaview BIOS"
     },
-      "BS-X (En).bin": {
+    "BS-X (En).bin": {
       "md5": "33b62505da6ca4525e3839db4e1a7bca",
       "system": [
         "snes",
@@ -1253,7 +1241,7 @@
       ],
       "description": "Satellaview EN BIOS"
     },
-      "BS-X (En) (DRM-Free).bin": {
+    "BS-X (En) (DRM-Free).bin": {
       "md5": "4ed9648505ab33a4daec93707b16caba",
       "system": [
         "snes",
@@ -1261,7 +1249,7 @@
       ],
       "description": "Satellaview EN DRM-Free BIOS"
     },
-      "STBIOS.bin": {
+    "STBIOS.bin": {
       "md5": "d3a44ba7d42a74d3ac58cb9c14c6a5ca",
       "system": [
         "snes",
@@ -1269,7 +1257,7 @@
       ],
       "description": "SuFami Turbo BIOS"
     },
-      "SGB1.sfc": {
+    "SGB1.sfc": {
       "md5": "b15ddb15721c657d82c5bab6db982ee9",
       "system": [
         "snes",
@@ -1277,7 +1265,7 @@
       ],
       "description": "Super Gameboy BIOS"
     },
-      "SGB2.sfc": {
+    "SGB2.sfc": {
       "md5": "8ecd73eb4edf7ed7e81aef1be80031d5",
       "system": [
         "snes",
@@ -1285,7 +1273,7 @@
       ],
       "description": "Super Gameboy BIOS"
     },
-      "sgb1.boot.rom": {
+    "sgb1.boot.rom": {
       "md5": "d574d4f9c12f305074798f54c091a8b4",
       "system": [
         "snes",
@@ -1293,7 +1281,7 @@
       ],
       "description": "Super Gameboy BIOS"
     },
-      "sgb1.program.rom": {
+    "sgb1.program.rom": {
       "md5": "b15ddb15721c657d82c5bab6db982ee9",
       "system": [
         "snes",
@@ -1301,7 +1289,7 @@
       ],
       "description": "Super Gameboy BIOS"
     },
-      "sgb2.boot.rom": {
+    "sgb2.boot.rom": {
       "md5": "e0430bca9925fb9882148fd2dc2418c1",
       "system": [
         "snes",
@@ -1309,7 +1297,7 @@
       ],
       "description": "Super Gameboy BIOS"
     },
-      "sgb_bios.bin": {
+    "sgb_bios.bin": {
       "md5": "e0430bca9925fb9882148fd2dc2418c1",
       "system": [
         "snes",
@@ -1317,106 +1305,106 @@
       ],
       "description": "Super Gameboy BIOS"
     },
-      "cx4.data.rom": {
+    "cx4.data.rom": {
       "md5": "037ac4296b6b6a5c47c440188d3c72e3",
       "system": "snes",
       "description": "SNES CX4 BIOS"
     },
-      "dsp1.data.rom": {
+    "dsp1.data.rom": {
       "md5": "3d81b45fa0c2aa8b852dfb1ece7c0971",
       "system": "snes",
       "description": "SNES dsp1 BIOS"
     },
-      "dsp1b.data.rom": {
+    "dsp1b.data.rom": {
       "md5": "1e3f568634a7d8284020dddc0ae905bc",
       "system": "snes",
       "description": "SNES DSP1 BIOS"
     },
-      "dsp1b.program.rom": {
+    "dsp1b.program.rom": {
       "md5": "d10f446888e097cbf500f3f663cf4f6d",
       "system": "snes",
       "description": "SNES DSP1 BIOS"
     },
-      "dsp2.data.rom": {
+    "dsp2.data.rom": {
       "md5": "e9417e29223b139c3c4b635a2a3b8744",
       "system": "snes",
       "description": "SNES DSP2 BIOS"
     },
-      "dsp2.program.rom": {
+    "dsp2.program.rom": {
       "md5": "aa6e5922a3ed5ded54f24247c11143c5",
       "system": "snes",
       "description": "SNES DSP2 BIOS"
     },
-      "dsp3.data.rom": {
+    "dsp3.data.rom": {
       "md5": "0a81210c0a940b997dd9843281008ee6",
       "system": "snes",
       "description": "SNES DSP3 BIOS"
     },
-      "dsp3.program.rom": {
+    "dsp3.program.rom": {
       "md5": "d99ca4562818d49cee1f242705bba6f8",
       "system": "snes",
       "description": "SNES DSP3 BIOS"
     },
-      "dsp4.data.rom": {
+    "dsp4.data.rom": {
       "md5": "ee4990879eb68e3cbca239c5bc20303d",
       "system": "snes",
       "description": "SNES DSP4 BIOS"
     },
-      "dsp4.program.rom": {
+    "dsp4.program.rom": {
       "md5": "a151023b948b90ffc23a5b594bb6fef2",
       "system": "snes",
       "description": "SNES DSP4 BIOS"
     },
-      "st010.data.rom": {
+    "st010.data.rom": {
       "md5": "254d70762b6f59f99c27c395aba7d07d",
       "system": "snes",
       "description": "SNES ST010 BIOS"
     },
-      "st010.program.rom": {
+    "st010.program.rom": {
       "md5": "1d70019179a59a566a0bb5d3f2845544",
       "system": "snes",
       "description": "SNES ST010 BIOS"
     },
-      "st011.data.rom": {
+    "st011.data.rom": {
       "md5": "10bd3f4aa949737ab9836512c35bcc29",
       "system": "snes",
       "description": "SNES ST011 BIOS"
     },
-      "st011.program.rom": {
+    "st011.program.rom": {
       "md5": "95222ebf1c0c2990bcf25db43743f032",
       "system": "snes",
       "description": "SNES ST011 BIOS"
     },
-      "snes:st018.data.rom": {
+    "snes:st018.data.rom": {
       "md5": "49c898b60d0f15e90d0ba780dd12f366",
       "system": "snes",
       "description": "SNES ST018 BIOS"
     },
-      "st018.program.rom": {
+    "st018.program.rom": {
       "md5": "dda40ccd57390c96e49d30a041f9a9e7",
       "system": "snes",
       "description": "SNES ST018 BIOS"
     },
-      "dc_flash.bin": {
+    "dc_flash.bin": {
       "md5": "0a93f7940c455905bea6e392dfde92a4",
       "system": "dreamcast",
       "description": "Dreamcast BIOS",
       "required": "required",
       "paths": "bios/dc"
     },
-      "flash.bin": {
+    "flash.bin": {
       "md5": "0a93f7940c455905bea6e392dfde92a4",
       "system": "dreamcast",
       "description": "Dreamcast BIOS",
       "required": "required",
       "paths": "bios/dc"
     },
-      "bios_J.sms": {
+    "bios_J.sms": {
       "md5": "24a519c53f67b00640d0048ef7089105",
       "system": "sms",
       "description": "SEGA Master System J BIOS"
     },
-      "areplay.bin": {
+    "areplay.bin": {
       "md5": "a0028b3043f9d59ceeb03da5b073b30d",
       "system": [
         "megadrive",
@@ -1424,7 +1412,7 @@
       ],
       "description": "SEGA Genesis / Mega Drive BIOS"
     },
-      "bios_MD.bin": {
+    "bios_MD.bin": {
       "md5": "d3293ebaaa7f4eb2a6766b68a0fb4609",
       "system": [
         "megadrive",
@@ -1432,7 +1420,7 @@
       ],
       "description": "SEGA Genesis / Mega Drive BIOS"
     },
-      "ggenie.bin": {
+    "ggenie.bin": {
       "md5": "e8af7fe115a75c849f6aab3701e7799b",
       "system": [
         "megadrive",
@@ -1440,7 +1428,7 @@
       ],
       "description": "SEGA Genesis / Mega Drive BIOS"
     },
-      "rom.db": {
+    "rom.db": {
       "md5": "ff4a3572475236e859e3e9ac5c87d1f1",
       "system": [
         "megadrive",
@@ -1448,7 +1436,7 @@
       ],
       "description": "SEGA Genesis / Mega Drive BIOS"
     },
-      "sk.bin": {
+    "sk.bin": {
       "md5": "4ea493ea4e9f6c9ebfccbdb15110367e",
       "system": [
         "megadrive",
@@ -1456,7 +1444,7 @@
       ],
       "description": "SEGA Genesis / Mega Drive BIOS"
     },
-      "sk2chip.bin": {
+    "sk2chip.bin": {
       "md5": "b4e76e416b887f4e7413ba76fa735f16",
       "system": [
         "megadrive",
@@ -1464,7 +1452,7 @@
       ],
       "description": "SEGA Genesis / Mega Drive BIOS"
     },
-      "hisaturn.bin": {
+    "hisaturn.bin": {
       "md5": "3ea3202e2634cb47cb90f3a05c015010",
       "system": [
         "saturn",
@@ -1472,7 +1460,7 @@
       ],
       "description": "SEGA Saturn BIOS"
     },
-      "mpr-18100.bin": {
+    "mpr-18100.bin": {
       "md5": "cb2cebc1b6e573b7c44523d037edcd45",
       "system": [
         "saturn",
@@ -1480,7 +1468,7 @@
       ],
       "description": "SEGA Saturn BIOS"
     },
-      "saturn_bios.bin": {
+    "saturn_bios.bin": {
       "md5": "af5828fdff51384f99b3c4926be27762",
       "system": [
         "saturn",
@@ -1489,7 +1477,7 @@
       "description": "SEGA Saturn BIOS",
       "required": "required"
     },
-      "stvbios.zip": {
+    "stvbios.zip": {
       "md5": "53a094ad3a188f86de4e64624fe9b3ca",
       "system": [
         "saturn",
@@ -1498,16 +1486,7 @@
       "description": "SEGA Saturn BIOS",
       "required": "required"
     },
-      "mpr-17933.bin": {
-      "md5": "3240872c70984b6cbfda1586cab68dbe",
-      "system": [
-        "saturn",
-        "saturnjp"
-      ],
-      "description": "Saturn US.mdEU - US/EU BIOS",
-      "required": "required"
-    },
-      "sega1003.bin": {
+    "sega1003.bin": {
       "md5": "74570fed4d44b2682b560c8cd44b8b6a",
       "system": [
         "saturn",
@@ -1516,7 +1495,7 @@
       "description": "SEGA Saturn BIOS",
       "required": "required"
     },
-      "sega_100a.bin": {
+    "sega_100a.bin": {
       "md5": "f273555d7d91e8a5a6bfd9bcf066331c",
       "system": [
         "saturn",
@@ -1524,7 +1503,7 @@
       ],
       "description": "SEGA Saturn BIOS"
     },
-      "sega_100.bin": {
+    "sega_100.bin": {
       "md5": "af5828fdff51384f99b3c4926be27762",
       "system": [
         "saturn",
@@ -1532,7 +1511,7 @@
       ],
       "description": "SEGA Saturn BIOS"
     },
-      "vsaturn.bin": {
+    "vsaturn.bin": {
       "md5": "ac4e4b6522e200c0d23d371a8cecbfd3",
       "system": [
         "saturn",
@@ -1540,209 +1519,209 @@
       ],
       "description": "SEGA Saturn BIOS"
     },
-      "iplrom.x1": {
+    "iplrom.x1": {
       "md5": "eeeea1cd29c6e0e8b094790ae969bfa7",
       "system": "x1",
       "description": "Sharp X1 BIOS",
       "required": "required"
     },
-      "iplrom.x1t": {
+    "iplrom.x1t": {
       "md5": "851e4a5936f17d13f8c39a980cf00d77",
       "system": "x1",
       "description": "Sharp X1 BIOS",
       "required": "required"
     },
-      "128-0.rom": {
+    "128-0.rom": {
       "md5": "b4d2692115a9f2924df92a3cbfb358fb",
       "system": "zxspectrum",
       "description": "ZX Spectrum BIOS"
     },
-      "128-spanish-0.rom": {
+    "128-spanish-0.rom": {
       "md5": "c1231a70b8129311216acb7479b031d5",
       "system": "zxspectrum",
       "description": "ZX Spectrum Spanish BIOS"
     },
-      "128-spanish-1.rom": {
+    "128-spanish-1.rom": {
       "md5": "4f341936594cbcab75cfa62ce96e3682",
       "system": "zxspectrum",
       "description": "ZX Spectrum Spanish BIOS"
     },
-      "zxs:48.rom": {
+    "zxs:48.rom": {
       "md5": "4c42a2f075212361c3117015b107ff68",
       "system": "zxspectrum",
       "description": "ZX Spectrum BIOS"
     },
-      "disciple.rom": {
+    "disciple.rom": {
       "md5": "78e61a2a02121873c1756b21fd1398b1",
       "system": "zxspectrum",
       "description": "ZX Spectrum BIOS"
     },
-      "disk_plus3.szx": {
+    "disk_plus3.szx": {
       "md5": "e6db6b9f6ad15012851115a7bc4b31d8",
       "system": "zxspectrum",
       "description": "ZX Spectrum BIOS"
     },
-      "zxs:if1-2.rom": {
+    "zxs:if1-2.rom": {
       "md5": "31b704ae925305e74f50699271fddd9a",
       "system": "zxspectrum",
       "description": "ZX Spectrum BIOS"
     },
-      "if1-1.rom": {
+    "if1-1.rom": {
       "md5": "5c11c61a2dd2ca4bf39328d9ff42d289",
       "system": "zxspectrum",
       "description": "ZX Spectrum BIOS"
     },
-      "plus2-0.rom": {
+    "plus2-0.rom": {
       "md5": "4ed7af4636308b8a48d7a35e6c5b546b",
       "system": "zxspectrum",
       "description": "ZX Spectrum BIOS"
     },
-      "plus2-1.rom": {
+    "plus2-1.rom": {
       "md5": "b3db95931cc844efaeb82db9c171b9f3",
       "system": "zxspectrum",
       "description": "ZX Spectrum BIOS"
     },
-      "plus3-0.rom": {
+    "plus3-0.rom": {
       "md5": "3abdc20e72890a750dd3c745d286dfba",
       "system": "zxspectrum",
       "description": "ZX Spectrum BIOS"
     },
-      "plus3-1.rom": {
+    "plus3-1.rom": {
       "md5": "8361a1d9c8bcef89c0c39293776564ad",
       "system": "zxspectrum",
       "description": "ZX Spectrum BIOS"
     },
-      "plus3-2.rom": {
+    "plus3-2.rom": {
       "md5": "f36c5c2d1f2a682caadeaa6f947db0da",
       "system": "zxspectrum",
       "description": "ZX Spectrum BIOS"
     },
-      "plus3-3.rom": {
+    "plus3-3.rom": {
       "md5": "a148bcc575e51389e84fdf5d555c3196",
       "system": "zxspectrum",
       "description": "ZX Spectrum BIOS"
     },
-      "plus3e-0.rom": {
+    "plus3e-0.rom": {
       "md5": "3abdc20e72890a750dd3c745d286dfba",
       "system": "zxspectrum",
       "description": "ZX Spectrum BIOS"
     },
-      "plus3e-1.rom": {
+    "plus3e-1.rom": {
       "md5": "8361a1d9c8bcef89c0c39293776564ad",
       "system": "zxspectrum",
       "description": "ZX Spectrum BIOS"
     },
-      "plus3e-2.rom": {
+    "plus3e-2.rom": {
       "md5": "f36c5c2d1f2a682caadeaa6f947db0da",
       "system": "zxspectrum",
       "description": "ZX Spectrum BIOS"
     },
-      "plus3e-3.rom": {
+    "plus3e-3.rom": {
       "md5": "f36c5c2d1f2a682caadeaa6f947db0da",
       "system": "zxspectrum",
       "description": "ZX Spectrum BIOS"
     },
-      "plusd.rom": {
+    "plusd.rom": {
       "md5": "42e5de16fb5e50082bb954ec7ce45851",
       "system": "zxspectrum",
       "description": "ZX Spectrum BIOS"
     },
-      "se-0.rom": {
+    "se-0.rom": {
       "md5": "fb3f86eb1e5a695d9c50c124e7cfb875",
       "system": "zxspectrum",
       "description": "ZX Spectrum BIOS"
     },
-      "se-1.rom": {
+    "se-1.rom": {
       "md5": "88de4a3129086f34bb9ca559acc51e6c",
       "system": "zxspectrum",
       "description": "ZX Spectrum BIOS"
     },
-      "speccyboot-1.4.rom": {
+    "speccyboot-1.4.rom": {
       "md5": "c54aa8f374b0971f51546c29d5d1eba1",
       "system": "zxspectrum",
       "description": "ZX Spectrum BIOS"
     },
-      "tape_128.sz": {
+    "tape_128.sz": {
       "md5": "8942b43b73ed4eb7f32bd1741709a4dc",
       "system": "zxspectrum",
       "description": "ZX Spectrum BIOS"
     },
-      "tape_16.szx": {
+    "tape_16.szx": {
       "md5": "fec97eb9ea1b017cae84de78508feb4a",
       "system": "zxspectrum",
       "description": "ZX Spectrum BIOS"
     },
-      "tape_2048.szx": {
+    "tape_2048.szx": {
       "md5": "116f732bbae4e49d625aaf2f311474d0",
       "system": "zxspectrum",
       "description": "ZX Spectrum BIOS"
     },
-      "tape_2068.szx": {
+    "tape_2068.szx": {
       "md5": "0b0f267b95d556318bb652af2e8dc25c",
       "system": "zxspectrum",
       "description": "ZX Spectrum BIOS"
     },
-      "tape_48.szx": {
+    "tape_48.szx": {
       "md5": "0b0f267b95d556318bb652af2e8dc25c",
       "system": "zxspectrum",
       "description": "ZX Spectrum BIOS"
     },
-      "tape_pentagon.szx": {
+    "tape_pentagon.szx": {
       "md5": "bd7698603bd9079d337cdedfb04942d9",
       "system": "zxspectrum",
       "description": "ZX Spectrum BIOS"
     },
-      "tape_plus2.szx": {
+    "tape_plus2.szx": {
       "md5": "166d4aa1a5aa4fbd99cc963b4e7c19cc",
       "system": "zxspectrum",
       "description": "ZX Spectrum BIOS"
     },
-      "tape_plus2a.szx": {
+    "tape_plus2a.szx": {
       "md5": "445d4817d5557bb363a216fbd6eeaa84",
       "system": "zxspectrum",
       "description": "ZX Spectrum BIOS"
     },
-      "tape_plus3.szx": {
+    "tape_plus3.szx": {
       "md5": "0dc8828ac1db2e0efa915ac55191e96f",
       "system": "zxspectrum",
       "description": "ZX Spectrum BIOS"
     },
-      "tape_plus3e.szx": {
+    "tape_plus3e.szx": {
       "md5": "bf07537f028bbcb3309464bd30da779c",
       "system": "zxspectrum",
       "description": "ZX Spectrum BIOS"
     },
-      "tape_scorpion.szx": {
+    "tape_scorpion.szx": {
       "md5": "c10e677d3deb5a445689d3a599880745",
       "system": "zxspectrum",
       "description": "ZX Spectrum BIOS"
     },
-      "tape_se.szx": {
+    "tape_se.szx": {
       "md5": "2518f9334bef8c44804a4185085579b5",
       "system": "zxspectrum",
       "description": "ZX Spectrum BIOS"
     },
-      "tape_ts2068.szx": {
+    "tape_ts2068.szx": {
       "md5": "1d360c09d370bb52a9a44b30cc7c59e6",
       "system": "zxspectrum",
       "description": "ZX Spectrum BIOS"
     },
-      "tc2048.rom": {
+    "tc2048.rom": {
       "md5": "9dd7ecf784a6c04265c073c236f5fadb",
       "system": "zxspectrum",
       "description": "ZX Spectrum BIOS"
     },
-      "tc2068-0.rom": {
+    "tc2068-0.rom": {
       "md5": "55d462fccc6c536037404ef4ced08bec",
       "system": "zxspectrum",
       "description": "ZX Spectrum BIOS"
     },
-      "tc2068-1.rom": {
+    "tc2068-1.rom": {
       "md5": "575d203c6e15e679fba0b73f854ec7a2",
       "system": "zxspectrum",
       "description": "ZX Spectrum BIOS"
     },
-      "000-lo.lo": {
+    "000-lo.lo": {
       "md5": "fc7599f3f871578fe9a0453662d1c966",
       "system": [
         "neogeocd",
@@ -1750,603 +1729,603 @@
       ],
       "description": "NeoGeo CD BIOS"
     },
-      "scph1000.bin": {
+    "scph1000.bin": {
       "md5": "239665b1a3dade1b5a52c06338011044",
       "system": "psx",
       "description": "PS1 BIOS",
       "required": "at least one for this system"
     },
-      "scph1001.bin": {
+    "scph1001.bin": {
       "md5": "924e392ed05558ffdb115408c263dccf",
       "system": "psx",
       "description": "PS1 BIOS",
       "required": "at least one for this system"
     },
-      "scph1002.bin": {
+    "scph1002.bin": {
       "md5": "54847e693405ffeb0359c6287434cbef",
       "system": "psx",
       "description": "PS1 BIOS",
       "required": "at least one for this system"
     },
-      "scph100.bin": {
+    "scph100.bin": {
       "md5": "8abc1b549a4a80954addc48ef02c4521",
       "system": "psx",
       "description": "PS1 BIOS",
       "required": "at least one for this system"
     },
-      "scph101.bin": {
+    "scph101.bin": {
       "md5": "6e3735ff4c7dc899ee98981385f6f3d0",
       "system": "psx",
       "description": "PS1 BIOS",
       "required": "at least one for this system"
     },
-      "scph102A.bin": {
+    "scph102A.bin": {
       "md5": "b10f5e0e3d9eb60e5159690680b1e774",
       "system": "psx",
       "description": "PS1 BIOS",
       "required": "at least one for this system"
     },
-      "scph102B.bin": {
+    "scph102B.bin": {
       "md5": "de93caec13d1a141a40a79f5c86168d6",
       "system": "psx",
       "description": "PS1 BIOS",
       "required": "at least one for this system"
     },
-      "scph102C.bin": {
+    "scph102C.bin": {
       "md5": "de93caec13d1a141a40a79f5c86168d6",
       "system": "psx",
       "description": "PS1 BIOS",
       "required": "at least one for this system"
     },
-      "scph3000.bin": {
+    "scph3000.bin": {
       "md5": "849515939161e62f6b866f6853006780",
       "system": "psx",
       "description": "PS1 BIOS",
       "required": "at least one for this system"
     },
-      "scph3500.bin": {
+    "scph3500.bin": {
       "md5": "cba733ceeff5aef5c32254f1d617fa62",
       "system": "psx",
       "description": "PS1 BIOS",
       "required": "at least one for this system"
     },
-      "scph5000.bin": {
+    "scph5000.bin": {
       "md5": "eb201d2d98251a598af467d4347bb62f",
       "system": "psx",
       "description": "PS1 BIOS",
       "required": "at least one for this system"
     },
-      "ppge_atlas.zim": {
+    "ppge_atlas.zim": {
       "md5": "866855cc330b9b95cc69135fb7b41d38",
       "system": "psp",
       "description": "PSP Assets"
     },
-      "ecwolf.pk3": {
+    "ecwolf.pk3": {
       "md5": "c011b428819eea4a80b455c245a5a04d",
       "system": "wolfenstein",
       "description": "Wolfenstein PK3"
     },
-      "scummvm.zip": {
+    "scummvm.zip": {
       "md5": "a17e0e0150155400d8cced329563d9c8",
       "system": "scummvm",
       "description": "SCUMMVM"
     },
-      "cpc464.rom": {
+    "cpc464.rom": {
       "md5": "a17e0e0150155400d8cced329563d9c8",
       "system": "amstradcpc",
       "description": "AMSTRAD CPC BIOS"
     },
-      "cpc664.rom": {
+    "cpc664.rom": {
       "md5": "5a384a2310f472c7857888371c00ed66",
       "system": "amstradcpc",
       "description": "AMSTRAD CPC BIOS"
     },
-      "cpc6128.rom": {
+    "cpc6128.rom": {
       "md5": "b96280dc6c95a48857b4b8eb931533ae",
       "system": "amstradcpc",
       "description": "AMSTRAD CPC BIOS"
     },
-      "cpc_amsdos.rom": {
+    "cpc_amsdos.rom": {
       "md5": "25629dfe870d097469c217b95fdc1c95",
       "system": "amstradcpc",
       "description": "AMSTRAD CPC BIOS"
     },
-      "hun.rom": {
+    "hun.rom": {
       "md5": "22167938f142c222f40992839aa21a06",
       "system": "enterprise",
       "description": "Enterprise - 64/128  BIOS"
     },
-      "brd.rom": {
+    "brd.rom": {
       "md5": "6af0402906944fd134004b85097c8524",
       "system": "enterprise",
       "description": "Enterprise - 64/128  BIOS"
     },
-      "exos20.rom": {
+    "exos20.rom": {
       "md5": "5ad3baaad3b5156d6b60b34229a676fb",
       "system": "enterprise",
       "description": "Enterprise - 64/128  BIOS"
     },
-      "exos21.rom": {
+    "exos21.rom": {
       "md5": "f36f24cbb87745fbd2714e4df881db09",
       "system": "enterprise",
       "description": "Enterprise - 64/128  BIOS"
     },
-      "zt19uk.rom": {
+    "zt19uk.rom": {
       "md5": "228540b6be83ae2acd7569c8ff0f91d0",
       "system": "enterprise",
       "description": "Enterprise - 64/128  BIOS"
     },
-      "basic20.rom": {
+    "basic20.rom": {
       "md5": "8e18edce4a7acb2c33cc0ab18f988482",
       "system": "enterprise",
       "description": "Enterprise - 64/128  BIOS"
     },
-      "basic21.rom": {
+    "basic21.rom": {
       "md5": "e972fe42b398c9ff1d93ff014786aec6",
       "system": "enterprise",
       "description": "Enterprise - 64/128  BIOS"
     },
-      "exdos13.rom": {
+    "exdos13.rom": {
       "md5": "ddff70c014d1958dc75378b6c9aab6f8",
       "system": "enterprise",
       "description": "Enterprise - 64/128  BIOS"
     },
-      "epd19hft.rom": {
+    "epd19hft.rom": {
       "md5": "12cfc9c7e48c8a16c2e09edbd926d467",
       "system": "enterprise",
       "description": "Enterprise - 64/128  BIOS"
     },
-      "zt18hfnt.rom": {
+    "zt18hfnt.rom": {
       "md5": "3082dc488d32f30a612761b99074199b",
       "system": "enterprise",
       "description": "Enterprise - 64/128  BIOS"
     },
-      "epfileio.rom": {
+    "epfileio.rom": {
       "md5": "a68ebcbc73a4d2178d755b7755bf18fe",
       "system": "enterprise",
       "description": "Enterprise - 64/128  BIOS"
     },
-      "exos24uk.rom": {
+    "exos24uk.rom": {
       "md5": "55af78f877a21ca45eb2df68a74fcc60",
       "system": "enterprise",
       "description": "Enterprise - 64/128  BIOS"
     },
-      "ps2-0100jd-20000117.bin": {
+    "ps2-0100jd-20000117.bin": {
       "md5": "32f2e4d5ff5ee11072a6bc45530f5765",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0100j-20000117.bin": {
+    "ps2-0100j-20000117.bin": {
       "md5": "acf4730ceb38ac9d8c7d8e21f2614600",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0101jd-20000217.bin": {
+    "ps2-0101jd-20000217.bin": {
       "md5": "acf9968c8f596d2b15f42272082513d1",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0101j-20000217.bin": {
+    "ps2-0101j-20000217.bin": {
       "md5": "b1459d7446c69e3e97e6ace3ae23dd1c",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0101xd-20000224.bin": {
+    "ps2-0101xd-20000224.bin": {
       "md5": "d3f1853a16c2ec18f3cd1ae655213308",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0110ad-20000727.bin": {
+    "ps2-0110ad-20000727.bin": {
       "md5": "63e6fd9b3c72e0d7b920e80cf76645cd",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0110a-20000727.bin": {
+    "ps2-0110a-20000727.bin": {
       "md5": "a20c97c02210f16678ca3010127caf36",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0120a-20000902.bin": {
+    "ps2-0120a-20000902.bin": {
       "md5": "8db2fbbac7413bf3e7154c1e0715e565",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0120ed-20000902.bin": {
+    "ps2-0120ed-20000902.bin": {
       "md5": "91c87cb2f2eb6ce529a2360f80ce2457",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0120ed-20000902-20030110.bin": {
+    "ps2-0120ed-20000902-20030110.bin": {
       "md5": "3016b3dd42148a67e2c048595ca4d7ce",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0120e-20000902.bin": {
+    "ps2-0120e-20000902.bin": {
       "md5": "b7fa11e87d51752a98b38e3e691cbf17",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0120j-20001027-185015.bin": {
+    "ps2-0120j-20001027-185015.bin": {
       "md5": "f63bc530bd7ad7c026fcd6f7bd0d9525",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0120j-20001027-191435.bin": {
+    "ps2-0120j-20001027-191435.bin": {
       "md5": "cee06bd68c333fc5768244eae77e4495",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0150ad-20001228-20030520.bin": {
+    "ps2-0150ad-20001228-20030520.bin": {
       "md5": "0bf988e9c7aaa4c051805b0fa6eb3387",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0150a-20001228.bin": {
+    "ps2-0150a-20001228.bin": {
       "md5": "8accc3c49ac45f5ae2c5db0adc854633",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0150ed-20001228-20030520.bin": {
+    "ps2-0150ed-20001228-20030520.bin": {
       "md5": "6f9a6feb749f0533aaae2cc45090b0ed",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0150e-20001228.bin": {
+    "ps2-0150e-20001228.bin": {
       "md5": "838544f12de9b0abc90811279ee223c8",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0150jd-20010118.bin": {
+    "ps2-0150jd-20010118.bin": {
       "md5": "bb6bbc850458fff08af30e969ffd0175",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0150j-20010118.bin": {
+    "ps2-0150j-20010118.bin": {
       "md5": "815ac991d8bc3b364696bead3457de7d",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0160a-20010427.bin": {
+    "ps2-0160a-20010427.bin": {
       "md5": "b107b5710042abe887c0f6175f6e94bb",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0160j-20010427.bin": {
+    "ps2-0160j-20010427.bin": {
       "md5": "ab55cceea548303c22c72570cfd4dd71",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0160a-20010704.bin": {
+    "ps2-0160a-20010704.bin": {
       "md5": "18bcaadb9ff74ed3add26cdf709fff2e",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0160e-20010704.bin": {
+    "ps2-0160e-20010704.bin": {
       "md5": "491209dd815ceee9de02dbbc408c06d6",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0160a-20011004.bin": {
+    "ps2-0160a-20011004.bin": {
       "md5": "7200a03d51cacc4c14fcdfdbc4898431",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0160e-20011004.bin": {
+    "ps2-0160e-20011004.bin": {
       "md5": "8359638e857c8bc18c3c18ac17d9cc3c",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0160h-20010730.bin": {
+    "ps2-0160h-20010730.bin": {
       "md5": "352d2ff9b3f68be7e6fa7e6dd8389346",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0160a-20020207.bin": {
+    "ps2-0160a-20020207.bin": {
       "md5": "d5ce2c7d119f563ce04bc04dbc3a323e",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0160e-20020319.bin": {
+    "ps2-0160e-20020319.bin": {
       "md5": "0d2228e6fd4fb639c9c39d077a9ec10c",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0160j-20020426.bin": {
+    "ps2-0160j-20020426.bin": {
       "md5": "72da56fccb8fcd77bba16d1b6f479914",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0160e-20020426.bin": {
+    "ps2-0160e-20020426.bin": {
       "md5": "5b1f47fbeb277c6be2fccdd6344ff2fd",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0160h-20020426.bin": {
+    "ps2-0160h-20020426.bin": {
       "md5": "315a4003535dfda689752cb25f24785c",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0170j-20030206.bin": {
+    "ps2-0170j-20030206.bin": {
       "md5": "312ad4816c232a9606e56f946bc0678a",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0170ed-20030227.bin": {
+    "ps2-0170ed-20030227.bin": {
       "md5": "666018ffec65c5c7e04796081295c6c7",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0170e-20030227.bin": {
+    "ps2-0170e-20030227.bin": {
       "md5": "666018ffec65c5c7e04796081295c6c7",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0170ad-20030325.bin": {
+    "ps2-0170ad-20030325.bin": {
       "md5": "eb960de68f0c0f7f9fa083e9f79d0360",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0170a-20030325.bin": {
+    "ps2-0170a-20030325.bin": {
       "md5": "8aa12ce243210128c5074552d3b86251",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0180cd-20030224.bin": {
+    "ps2-0180cd-20030224.bin": {
       "md5": "240d4c5ddd4b54069bdc4a3cd2faf99d",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0180j-20031028.bin": {
+    "ps2-0180j-20031028.bin": {
       "md5": "1c6cd089e6c83da618fbf2a081eb4888",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0190j-20030623.bin": {
+    "ps2-0190j-20030623.bin": {
       "md5": "463d87789c555a4a7604e97d7db545d1",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0190a-20030623.bin": {
+    "ps2-0190a-20030623.bin": {
       "md5": "35461cecaa51712b300b2d6798825048",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0190e-20030623.bin": {
+    "ps2-0190e-20030623.bin": {
       "md5": "bd6415094e1ce9e05daabe85de807666",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0190h-20030623.bin": {
+    "ps2-0190h-20030623.bin": {
       "md5": "2e70ad008d4ec8549aada8002fdf42fb",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0190r-20030623.bin": {
+    "ps2-0190r-20030623.bin": {
       "md5": "b53d51edc7fc086685e31b811dc32aad",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0190c-20030623.bin": {
+    "ps2-0190c-20030623.bin": {
       "md5": "1b6e631b536247756287b916f9396872",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0190j-20030822.bin": {
+    "ps2-0190j-20030822.bin": {
       "md5": "00da1b177096cfd2532c8fa22b43e667",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0190e-20030822.bin": {
+    "ps2-0190e-20030822.bin": {
       "md5": "afde410bd026c16be605a1ae4bd651fd",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0190a-20040329.bin": {
+    "ps2-0190a-20040329.bin": {
       "md5": "81f4336c1de607dd0865011c0447052e",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0200ed-20040614.bin": {
+    "ps2-0200ed-20040614.bin": {
       "md5": "63ead1d74893bf7f36880af81f68a82d",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0200h-20040614.bin": {
+    "ps2-0200h-20040614.bin": {
       "md5": "3e3e030c0f600442fa05b94f87a1e238",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0210j-20040917.bin": {
+    "ps2-0210j-20040917.bin": {
       "md5": "1ad977bb539fc9448a08ab276a836bbc",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0220j-20050620.bin": {
+    "ps2-0220j-20050620.bin": {
       "md5": "eb4f40fcf4911ede39c1bbfe91e7a89a",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0220ad-20050620.bin": {
+    "ps2-0220ad-20050620.bin": {
       "md5": "9959ad7a8685cad66206e7752ca23f8b",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0220a-20050620.bin": {
+    "ps2-0220a-20050620.bin": {
       "md5": "929a14baca1776b00869f983aa6e14d2",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0220e-20050620.bin": {
+    "ps2-0220e-20050620.bin": {
       "md5": "573f7d4a430c32b3cc0fd0c41e104bbd",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0220h-20050620.bin": {
+    "ps2-0220h-20050620.bin": {
       "md5": "df63a604e8bff5b0599bd1a6c2721bd0",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0220j-20060210.bin": {
+    "ps2-0220j-20060210.bin": {
       "md5": "5b1ba4bb914406fae75ab8e38901684d",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0220a-20060210.bin": {
+    "ps2-0220a-20060210.bin": {
       "md5": "cb801b7920a7d536ba07b6534d2433ca",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0220e-20060210.bin": {
+    "ps2-0220e-20060210.bin": {
       "md5": "af60e6d1a939019d55e5b330d24b1c25",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0220h-20060210.bin": {
+    "ps2-0220h-20060210.bin": {
       "md5": "549a66d0c698635ca9fa3ab012da7129",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0220j-20060905.bin": {
+    "ps2-0220j-20060905.bin": {
       "md5": "5de9d0d730ff1e7ad122806335332524",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0220ad-20060905.bin": {
+    "ps2-0220ad-20060905.bin": {
       "md5": "21fe4cad111f7dc0f9af29477057f88d",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0220a-20060905.bin": {
+    "ps2-0220a-20060905.bin": {
       "md5": "40c11c063b3b9409aa5e4058e984e30c",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0220e-20060905.bin": {
+    "ps2-0220e-20060905.bin": {
       "md5": "80bbb237a6af9c611df43b16b930b683",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0220h-20060905.bin": {
+    "ps2-0220h-20060905.bin": {
       "md5": "c37bce95d32b2be480f87dd32704e664",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0230j-20080220.bin": {
+    "ps2-0230j-20080220.bin": {
       "md5": "80ac46fa7e77b8ab4366e86948e54f83",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0230a-20080220.bin": {
+    "ps2-0230a-20080220.bin": {
       "md5": "21038400dc633070a78ad53090c53017",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0230e-20080220.bin": {
+    "ps2-0230e-20080220.bin": {
       "md5": "dc69f0643a3030aaa4797501b483d6c4",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0230h-20080220.bin": {
+    "ps2-0230h-20080220.bin": {
       "md5": "30d56e79d89fbddf10938fa67fe3f34e",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0250e-20100415.bin": {
+    "ps2-0250e-20100415.bin": {
       "md5": "93ea3bcee4252627919175ff1b16a1d9",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "ps2-0250j-20100415.bin": {
+    "ps2-0250j-20100415.bin": {
       "md5": "d3e81e95db25f5a86a7b7474550a2155",
       "system": "ps2",
       "description": "PS2 BIOS",
       "required": "at least one for this system"
     },
-      "tvcfileio.romn": {
+    "tvcfileio.romn": {
       "md5": "a2cf86ba8e7fc58b242137fe59036832",
       "system": "enterprise",
-      "description": "Enterprise - 64/128  BIOS",
+      "description": "Enterprise - 64/128  BIOS"
     },
-      "tvc22_ext.rom": {
+    "tvc22_ext.rom": {
       "md5": "5ce95a26ceed5bec73995d83568da9cf",
       "system": "enterprise",
       "description": "Enterprise - 64/128  BIOS"
     },
-      "tvc22_sys.rom": {
+    "tvc22_sys.rom": {
       "md5": "8c54285f541930cde766069942bad0f2",
       "system": "enterprise",
       "description": "Enterprise - 64/128  BIOS"
     },
-      "tvc_dos12d.rom": {
+    "tvc_dos12d.rom": {
       "md5": "88dc7876d584f90e4106f91444ab23b7",
       "system": "enterprise",
       "description": "Enterprise - 64/128  BIOS"
