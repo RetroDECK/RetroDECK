@@ -151,8 +151,7 @@ modules:
   - name: jq
     buildsystem: simple
     build-commands:
-      - cp jq-linux64 ${FLATPAK_DEST}/bin/jq
-      - chmod +x ${FLATPAK_DEST}/bin/jq
+      - install -Dm755 jq-linux64 ${FLATPAK_DEST}/bin/jq
     sources:
       - type: file
         url: https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
@@ -203,8 +202,7 @@ modules:
   - name: yq
     buildsystem: simple
     build-commands:
-      - cp yq_linux_amd64 ${FLATPAK_DEST}/bin/yq
-      - chmod +x ${FLATPAK_DEST}/bin/yq
+      - install -Dm755 yq_linux_amd64 ${FLATPAK_DEST}/bin/yq
     sources:
       - type: file
         url: https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_amd64
@@ -765,8 +763,7 @@ modules:
       - mv -f -t ${FLATPAK_DEST}/retrodeck res/binding_icons
 
       # RetroDECK core script
-      - cp retrodeck.sh ${FLATPAK_DEST}/bin/retrodeck.sh
-      - chmod +x ${FLATPAK_DEST}/bin/retrodeck.sh
+      - install -Dm755 retrodeck.sh ${FLATPAK_DEST}/bin/retrodeck.sh
 
       # Tools
       - mkdir -p ${FLATPAK_DEST}/tools
@@ -778,16 +775,14 @@ modules:
       - cp -r functions/** "${FLATPAK_DEST}/libexec/"
 
       # Desktop entries
-      - cp net.retrodeck.retrodeck.desktop ${FLATPAK_DEST}/share/applications/net.retrodeck.retrodeck.desktop
-      - cp net.retrodeck.retrodeck.Configurator.desktop /app/share/applications/net.retrodeck.retrodeck.Configurator.desktop
-      - chmod +x net.retrodeck.retrodeck*desktop
+      - install -Dm755 net.retrodeck.retrodeck.desktop ${FLATPAK_DEST}/share/applications/net.retrodeck.retrodeck.desktop
+      - install -Dm755 net.retrodeck.retrodeck.Configurator.desktop ${FLATPAK_DEST}/share/applications/net.retrodeck.retrodeck.Configurator.desktop
 
       # Initializing default emulator configs
       - cp -r config ${FLATPAK_DEST}/retrodeck/config/
 
       # PICO-8 wrapper
-      - cp ${FLATPAK_DEST}/retrodeck/config/pico-8/pico8-wrapper.sh ${FLATPAK_DEST}/bin/pico8
-      - chmod +x ${FLATPAK_DEST}/bin/pico8
+      - install -Dm755 ${FLATPAK_DEST}/retrodeck/config/pico-8/pico8-wrapper.sh ${FLATPAK_DEST}/bin/pico8
 
       # Placing appdata
       - mkdir -p ${FLATPAK_DEST}/share/appdata
