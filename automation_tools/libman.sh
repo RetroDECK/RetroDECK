@@ -65,7 +65,7 @@ fi
 is_excluded() {
     local file="$1"
     for excluded in "${excluded_libraries[@]}"; do
-        if [[ "$excluded" == "$file" ]]; then
+        if [[ "$file" == $excluded ]]; then # NOTE excluded is not quoted to allow for wildcard matching
             return 0
         fi
     done
