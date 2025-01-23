@@ -589,10 +589,14 @@ modules:
       - chmod +x "files/bin/"*
       # Step 6: Copy all remaining files to the Flatpak destination
       - cp -r files/* "${FLATPAK_DEST}"
+      # Step 7: installing GZDoom wrapper
+      - install -Dm755 gzdoom.sh ${FLATPAK_DEST}/bin/gzdoom.sh
     sources:
       - type: archive
-        url: https://github.com/RetroDECK/org.zdoom.GZDoom/releases/latest/download/RetroDECK-gzdoom-Artifact.tar.gz
+        url: https://github.com/RetroDECK/org.zdoom.GZDoom/releases/latest/download/RetroDECK-Artifact.tar.gz
         sha256: RETRODECKGZDOOMLATEST
+      - type: file
+        path: config/gzdoom/gzdoom.sh
 
   # Pancakes
   # NOTE: if this module breaks, might be caused by SDL2 version mismatch. Check last line of this module.
@@ -791,10 +795,6 @@ modules:
       # Creating symlinks for a prettier access
       - ln -s ${FLATPAK_DEST}/bin/retrodeck.sh ${FLATPAK_DEST}/bin/retrodeck
       - ln -s ${FLATPAK_DEST}/tools/configurator.sh ${FLATPAK_DEST}/bin/configurator
-
-      # GZDOOM wrapper
-      - cp config/gzdoom/gzdoom.sh ${FLATPAK_DEST}/bin/gzdoom.sh
-      - chmod +x ${FLATPAK_DEST}/bin/gzdoom.sh
 
       # RUFFLE wrapper
       - cp config/ruffle/ruffle-rdwrapper.sh "${FLATPAK_DEST}/bin/ruffle-rdwrapper.sh"
