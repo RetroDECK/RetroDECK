@@ -727,14 +727,15 @@ modules:
   - name: ruffle
     buildsystem: simple
     build-commands:
-      - |
-        cp -p ruffle "${FLATPAK_DEST}/bin/"
-        chmod +x "${FLATPAK_DEST}/bin/ruffle"
+      - install -Dm755 ruffle "${FLATPAK_DEST}/bin/ruffle"
+      - install -Dm755 ruffle-rdwrapper.sh "${FLATPAK_DEST}/bin/ruffle-rdwrapper.sh"
     sources:
       - type: archive
         strip-components: 0
         url: https://github.com/ruffle-rs/ruffle/releases/download/nightly-2024-09-17/ruffle-nightly-2024_09_17-linux-x86_64.tar.gz
         sha256: 8a0c8ab2638dd54140b14febee0bc43e354b05fb28a29e127e4e0e44fe5c087c
+      - type: file
+        path: config/ruffle/ruffle-rdwrapper.sh
 
   - name: retrodeck
     buildsystem: simple
@@ -795,10 +796,6 @@ modules:
       # Creating symlinks for a prettier access
       - ln -s ${FLATPAK_DEST}/bin/retrodeck.sh ${FLATPAK_DEST}/bin/retrodeck
       - ln -s ${FLATPAK_DEST}/tools/configurator.sh ${FLATPAK_DEST}/bin/configurator
-
-      # RUFFLE wrapper
-      - cp config/ruffle/ruffle-rdwrapper.sh "${FLATPAK_DEST}/bin/ruffle-rdwrapper.sh"
-      - chmod +x "${FLATPAK_DEST}/bin/ruffle-rdwrapper.sh"
 
       # Install MIME Type
       - install -Dm 644 config/retrodeck/net.retrodeck.retrodeck.mime.xml /app/share/mime/packages/net.retrodeck.retrodeck.mime.xml
