@@ -16,7 +16,7 @@ stretch_the_display_area: false
 show-live-area-screen: true
 icon-size: 64
 archive-log: false
-backend-renderer: OpenGL
+backend-renderer: Vulkan
 gpu-idx: 0
 high-accuracy: true
 resolution-multiplier: 1
