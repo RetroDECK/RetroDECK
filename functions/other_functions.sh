@@ -952,3 +952,19 @@ start_retrodeck() {
   log i "Starting RetroDECK v$version"
   es-de
 }
+
+# Function to convert XML tags to Markdown
+convert_to_markdown() {
+  local xml_content=$(cat "$1")
+  local output_file="$1.md"
+
+  # Convert main tags
+  echo "$xml_content" | xmllint --format - | \
+    sed -e 's|<p>\(.*\)</p>|**\1**|g' \
+      -e 's|<ul>||g' \
+      -e 's|</ul>||g' \
+      -e 's|<li>\(.*\)</li>|- \1|g' \
+      -e 's|<description>||g' \
+      -e 's|</description>||g' \
+      -e '/<[^>]*>/d' > "$output_file" # Remove any other XML tags and output to .md file
+}

@@ -168,22 +168,24 @@ changelog_dialog() {
   log d "Showing changelog dialog"
 
   if [[ "$1" == "all" ]]; then
-    xml sel -t -m "//release" -v "concat('RetroDECK version: ', @version)" -n -v "description" -n $rd_appdata | awk '{$1=$1;print}' | sed -e '/./b' -e :n -e 'N;s/\n$//;tn' > "/var/config/retrodeck/changelog.txt"
+    xml sel -t -m "//component/releases/release/description" -c . $rd_appdata | tr -s '\n' | sed 's/^\s*//' > "/var/config/retrodeck/changelog-full.xml"
+
+    convert_to_markdown "/var/config/retrodeck/changelog-full.xml"
 
     rd_zenity --icon-name=net.retrodeck.retrodeck --text-info --width=1200 --height=720 \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Changelogs" \
-    --filename="/var/config/retrodeck/changelog.txt"
+    --filename="/var/config/retrodeck/changelog-full.xml.md"
   else
-    local version_changelog=$(xml sel -t -m "//release[@version='$1']/description" -v . -n $rd_appdata | tr -s '\n' | sed 's/^\s*//')
+    xml sel -t -m "//component/releases/release[1]/description" -c . $rd_appdata | tr -s '\n' | sed 's/^\s*//' > "/var/config/retrodeck/changelog.xml"
 
-    echo -e "In RetroDECK version $1, the following changes were made:\n$version_changelog" > "/var/config/retrodeck/changelog-partial.txt" 2>/dev/null
+    convert_to_markdown "/var/config/retrodeck/changelog.xml"
 
     rd_zenity --icon-name=net.retrodeck.retrodeck --text-info --width=1200 --height=720 \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Changelogs" \
-    --filename="/var/config/retrodeck/changelog-partial.txt"
-    fi
+    --filename="/var/config/retrodeck/changelog.xml.md"
+  fi
 }
 
 get_cheevos_token_dialog() {
