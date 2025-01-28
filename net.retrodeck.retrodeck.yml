@@ -784,10 +784,6 @@ modules:
       # PICO-8 wrapper
       - install -Dm755 ${FLATPAK_DEST}/retrodeck/config/pico-8/pico8-wrapper.sh ${FLATPAK_DEST}/bin/pico8
 
-      # Placing appdata
-      - mkdir -p ${FLATPAK_DEST}/share/appdata
-      - cp net.retrodeck.retrodeck.appdata.xml ${FLATPAK_DEST}/share/appdata
-
       # Creating symlinks for a prettier access
       - ln -s ${FLATPAK_DEST}/bin/retrodeck.sh ${FLATPAK_DEST}/bin/retrodeck
       - ln -s ${FLATPAK_DEST}/tools/configurator.sh ${FLATPAK_DEST}/bin/configurator
