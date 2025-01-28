@@ -431,6 +431,105 @@ post_update() {
 
   if [[ $(check_version_is_older_than "0.9.0b") == "true" ]]; then
 
+    # Create a Zenity window with checkboxes for each reset option and two buttons
+    while true; do
+      choices=$(zenity --list --checklist --title="RetroDECK Reset Options" \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --text="The following components have been updated and need to be reset or fixed to ensure compatibility with the new version: select the components you want to reset.\n\nNot resetting them may cause serious issues with your installation.\nYou can also reset them manually later via Configurator -> Troubleshooting -> Reset Component.\n\nNote: Your games, saves, game collections and scraped data will not be affected." \
+      --column="Select" --column="Component" --column="Description" --width="1100" --height="700" \
+      TRUE "ES-DE" "Needs to be reset to accommodate new paths, theme settings, and general configurations" \
+      TRUE "Duckstation" "Configuration reset to RetroDECK defaults to ensure compatibility" \
+      TRUE "Ryujinx" "Configuration reset, firmware might need to be reinstalled by user" \
+      TRUE "Dolphin" "Setting screen size to 'Auto' instead of 'Widescreen' to ensure better game compatibility" \
+      TRUE "Primehack" "Setting screen size to 'Auto' instead of 'Widescreen' to ensure better game compatibility" \
+      --separator=":" \
+      --extra-button="Execute All" \
+      --ok-label="Execute Selected Only" \
+      --cancel-label="Execute None")
+
+      log d "User selected: $choices"
+      log d "User pressed: $?"
+
+      # Check if "Execute All" button was pressed
+      if [[ "$choices" == "Execute All" ]]; then
+        execute_all=true
+        break
+      else
+        execute_all=false
+        # Split the choices into an array
+        IFS=":" read -r -a selected_choices <<< "$choices"
+      fi
+
+      if [[ $? -eq 0 && -n "$choices" ]]; then
+        if ! zenity --question --title="Confirmation" --text="Are you sure you want to proceed with only the selected options?\n\nThis might cause issues in RetroDECK"; then
+          log i "User is not sure, showing the checklist window again."
+          continue
+        else
+          log i "User confirmed to proceed with only the selected options."
+          break
+        fi
+      fi
+
+      if [[ $? == 0 ]]; then
+      if ! zenity --question --title="Confirmation" --text="Are you sure you want to skip the reset process?\n\nThis might cause issues in RetroDECK"; then
+        log i "User is not sure, showing the checklist window again."
+        continue
+      else
+        log i "User confirmed to proceed without any reset."
+        break
+      fi
+      fi
+
+      break
+    done
+
+    # Execute the selected resets
+
+    # ES-DE reset
+    if [[ "$execute_all" == "true" || " ${selected_choices[@]} " =~ " ES-DE " ]]; then
+      log i "User agreed to ES-DE reset"
+      prepare_component "reset" "es-de"
+    fi
+    rm -rf "$rd_logs_folder/ES-DE" && log d "Removing the logs/ES-DE folder as we don't need it anymore"
+    rm -rf "$es_source_logs" && mkdir -p "$es_source_logs"
+
+    # Cemu key file migration
+    if [[ -f "$XDG_DATA_HOME/Cemu/keys.txt" ]]; then
+      log i "Found Cemu keys.txt in \"$XDG_DATA_HOME/Cemu/keys.txt\", moving it to \"$bios_folder/cemu/keys.txt\""
+      mv -f "$XDG_DATA_HOME/Cemu/keys.txt" "$bios_folder/cemu/keys.txt"
+      ln -s "$bios_folder/cemu/keys.txt" "$XDG_DATA_HOME/Cemu/keys.txt"
+    fi
+
+    # Duckstation reset
+    if [[ "$execute_all" == "true" || " ${selected_choices[@]} " =~ " Duckstation " ]]; then
+      log i "User agreed to Duckstation reset"
+      prepare_component "reset" "duckstation"
+    fi
+
+    # Ryujinx reset
+    if [[ "$execute_all" == "true" || " ${selected_choices[@]} " =~ " Ryujinx " ]]; then
+      log i "User agreed to Ryujinx reset"
+      prepare_component "reset" "ryujinx"
+    else
+      create_dir "$logs_folder/ryujinx"
+      create_dir "$mods_folder/ryujinx"
+      create_dir "$screenshots_folder/ryujinx"
+    fi
+
+    # Dolphin reset: Setting screen size to 'Auto' instead of 'Widescreen' to ensure better game compatibility
+    if [[ "$execute_all" == "true" || " ${selected_choices[@]} " =~ " Dolphin " ]]; then
+      log i "User agreed to Dolphin reset"
+      set_setting_value "$dolphingfxconf" "AspectRatio" "0" "dolphin" "Settings"
+    fi
+
+    # Primehack reset: Setting screen size to 'Auto' instead of 'Widescreen' to ensure better game compatibility
+    if [[ "$execute_all" == "true" || " ${selected_choices[@]} " =~ " Primehack " ]]; then
+      log i "User agreed to Primehack reset"
+      set_setting_value "$primehackgfxconf" "AspectRatio" "0" "dolphin" "Settings"
+    fi
+
+    # --- ALWAYS EXECUTED ---
+
     # New components preparation
     log i "New components were added in this version, initializing them"
     prepare_component "reset" "portmaster"
@@ -442,43 +541,13 @@ post_update() {
     log i "Forcing RetroArch to use the new libretro info path"
     set_setting_value "$raconf" "libretro_info_path" "/var/config/retroarch/cores" "retroarch"
 
-    # ES-DE migration
-    if [[ $(configurator_generic_question_dialog "RetroDECK ES-DE Reset" "ES-DE needs to be reset to ensure compatibility with the new version. Do you want to reset it now?\n\nIf you have made your own changes to the ES-DE config, you can decline this reset, but it might not work correctly.\n\nNote: Your game collections and scraped data will not be affected.\nYou can always reset ES-DE later from the Configurator, Troubleshooting section.") == "true" ]]; then
-      log i "User agreed to ES-DE reset"
-      prepare_component "reset" "es-de"
-    fi
-    rm -rf "$rd_logs_folder/ES-DE" && log d "Removing the logs/ES-DE folder as we don't need it anymore"
-    rm -rf "$es_source_logs" && mkdir -p "$es_source_logs"
-
-    # Cemu key file migratipn
-    if [[ -f "$XDG_DATA_HOME/Cemu/keys.txt" ]]; then
-      log i "Found Cemu keys.txt in \"$XDG_DATA_HOME/Cemu/keys.txt\", moving it to \"$bios_folder/cemu/keys.txt\""
-      mv -f "$XDG_DATA_HOME/Cemu/keys.txt" "$bios_folder/cemu/keys.txt"
-      ln -s "$bios_folder/cemu/keys.txt" "$XDG_DATA_HOME/Cemu/keys.txt"
-    fi
-
-    # Duckstation reset
-    if [[ $(configurator_generic_question_dialog "RetroDECK Duckstation Reset" "<span foreground='$purple'><b>Duckstation</b></span> has updated the <span foreground='$purple'><b>hotkeys</b></span> configuration. Do you want to reset it to RetroDECK default settings to ensure compatibility?\n\nIf you have made your own changes to the Duckstation config, you can decline this reset, but the emulator might not work correctly.\nYou can always reset Duckstation later from the Configurator, Troubleshooting section.") == "true" ]]; then
-      log i "User agreed to Duckstation reset"
-      prepare_component "reset" "duckstation"
-    fi
-
-    # Ryujinx reset
-    if [[ $(configurator_generic_question_dialog "RetroDECK Ryujinx Reset" "<span foreground='$purple'><b>Ryujinx</b></span> has updated to a customized version, a configuration reset is needed. Do you want to reset it to RetroDECK default settings to ensure compatibility?\n\nIf you have made your own changes to the Ryujinx config, you can decline this reset, but the emulator might not work correctly.\nYou can always reset Ryujinx later from the Configurator, Troubleshooting section.") == "true" ]]; then
-      log i "User agreed to Ryujinx reset"
-      prepare_component "reset" "ryujinx"
-    else
-      create_dir "$logs_folder/ryujinx"
-      create_dir "$mods_folder/ryujinx"
-      create_dir "$screenshots_folder/ryujinx"
-    fi
     log i "Moving Ryujinx data to the new locations"
-    mv -rf "/var/config/Ryujinx/bis"/* "$saves_folder/switch/ryujinx/nand" && rm -rf "/var/config/Ryujinx/bis" && log i "Migrated Ryujinx nand data to the new location"
-    mv -rf "/var/config/Ryujinx/sdcard"/* "$saves_folder/switch/ryujinx/sdcard" && rm -rf "/var/config/Ryujinx/sdcard" && log i "Migrated Ryujinx sdcard data to the new location"
-    mv -rf "/var/config/Ryujinx/bis/system/Contents/registered"/* "$bios_folder/switch/firmware" && rm -rf "/var/config/Ryujinx/bis/system/Contents/registered" && log i "Migration of Ryujinx firmware data to the new location"
-    mv -rf "/var/config/Ryujinx/system"/* "$bios_folder/switch/keys" && rm -rf "/var/config/Ryujinx/system" && log i "Migrated Ryujinx keys data to the new location"
-    mv -rf "/var/config/Ryujinx/mods"/* "$mods_folder/ryujinx" && rm -rf "/var/config/Ryujinx/mods" && log i "Migrated Ryujinx mods data to the new location"
-    mv -rf "/var/config/Ryujinx/screenshots"/* "$screenshots_folder/ryujinx" && rm -rf "/var/config/Ryujinx/screenshots" && log i "Migrated Ryujinx screenshots to the new location"
+    mv -f "/var/config/Ryujinx/bis"/* "$saves_folder/switch/ryujinx/nand" && rm -rf "/var/config/Ryujinx/bis" && log i "Migrated Ryujinx nand data to the new location"
+    mv -f "/var/config/Ryujinx/sdcard"/* "$saves_folder/switch/ryujinx/sdcard" && rm -rf "/var/config/Ryujinx/sdcard" && log i "Migrated Ryujinx sdcard data to the new location"
+    mv -f "/var/config/Ryujinx/bis/system/Contents/registered"/* "$bios_folder/switch/firmware" && rm -rf "/var/config/Ryujinx/bis/system/Contents/registered" && log i "Migration of Ryujinx firmware data to the new location"
+    mv -f "/var/config/Ryujinx/system"/* "$bios_folder/switch/keys" && rm -rf "/var/config/Ryujinx/system" && log i "Migrated Ryujinx keys data to the new location"
+    mv -f "/var/config/Ryujinx/mods"/* "$mods_folder/ryujinx" && rm -rf "/var/config/Ryujinx/mods" && log i "Migrated Ryujinx mods data to the new location"
+    mv -f "/var/config/Ryujinx/screenshots"/* "$screenshots_folder/ryujinx" && rm -rf "/var/config/Ryujinx/screenshots" && log i "Migrated Ryujinx screenshots to the new location"
 
   fi # end of 0.9.0b
 
