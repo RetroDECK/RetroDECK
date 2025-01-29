@@ -923,7 +923,7 @@ quit_retrodeck() {
   pkill -f "es-de"
 
   # if steam sync is on do the magic
-  if [[ $steam_sync == "true" ]]; then
+  if [[ $(get_setting_value "$rd_conf" "steam_sync" retrodeck "options") == "true" ]]; then
   (
   source /app/libexec/steam_sync.sh
   add_to_steam "$(ls "$rdhome/ES-DE/gamelists/")"
