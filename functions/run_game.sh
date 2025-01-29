@@ -92,7 +92,7 @@ run_game() {
         log d "Emulator provided via command-line: $emulator"
     elif [[ "$manual_mode" = true ]]; then
         log d "Manual mode: showing Zenity emulator selection"
-        emulator=$(show_zenity_emulator_list "$system")
+        emulator=$(find_system_commands "$system")
         if [[ -z "$emulator" ]]; then
             log e "No emulator selected in manual mode."
             exit 1
@@ -143,18 +143,6 @@ run_game() {
     # Log and execute the command
     log i "Launching game with command: $final_command"
     eval "$final_command"
-}
-
-
-# Assume this function handles showing the Zenity list of emulators for manual mode
-show_zenity_emulator_list() {
-    local system="$1"
-    # Example logic to retrieve and show Zenity list of emulators for the system
-    # This would extract available emulators for the system from es_systems.xml and show a Zenity dialog
-    emulators=$(xmllint --xpath "//system[name='$system']/command/@label" "$es_systems" | sed -e 's/ label=/\nlabel=/g' -e 's/\"//g' | grep '^label=' | cut -d= -f2)
-    IFS=$'\n' read -r -d '' -a emulator_array <<< "$emulators"
-    local emulator=$(zenity --list --title="Select Emulator" --column="Emulators" "${emulator_array[@]}")
-    echo "$emulator"
 }
 
 # Function to extract commands from es_systems.xml and present them in Zenity
@@ -382,6 +370,7 @@ get_first_emulator() {
     fi
 }
 
+# Find the emulator path from the es_find_rules.xml file
 find_emulator() {
     local emulator_name="$1"
     found_path=""
@@ -397,6 +386,7 @@ find_emulator() {
     # Search systempath entries
     while IFS= read -r line; do
         command_path=$(echo "$line" | sed -n 's/.*<entry>\(.*\)<\/entry>.*/\1/p')
+        # Check if the command specified by the variable 'command_path' exists and is executable
         if [ -x "$(command -v $command_path)" ]; then
             found_path=$command_path
             break
@@ -406,7 +396,7 @@ find_emulator() {
     # If not found, search staticpath entries
     if [ -z "$found_path" ]; then
         while IFS= read -r line; do
-            command_path=$(eval echo "$line" | sed -n 's/.*<entry>\(.*\)<\/entry>.*/\1/p')
+            command_path=$(echo "$line" | sed -n 's/.*<entry>\(.*\)<\/entry>.*/\1/p')
             if [ -x "$command_path" ]; then
                 found_path=$command_path
                 break
@@ -416,18 +406,6 @@ find_emulator() {
 
     if [ -z "$found_path" ]; then
         log e "Find emulator: no valid path found for emulator: $emulator_name"
-        # # If no valid path found, fallback to asking the user to choose the emulator
-        # log i "No valid path found for emulator: $emulator_name. Asking user to choose the emulator."
-        # rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK" \
-        #     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-        #     --title "RetroDECK - Emulator not found" \
-        #     --text="Emulator \"$emulator_name\" not found.\n\nPlease select it from the list that will appear next."
-        # emulator=$(show_zenity_emulator_list "$system")
-        # if [[ -z "$emulator" ]]; then
-        #     log e "No emulator selected by the user."
-        #     exit 1
-        # fi
-        # echo "$emulator"
         return 1
     else
         log d "Find emulator: found emulator \"$found_path\""
