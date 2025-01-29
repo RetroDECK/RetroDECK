@@ -943,6 +943,7 @@ quit_retrodeck() {
   pkill -f "retrodeck"
   
   log i "See you next time"
+  exit
 }
 
 start_retrodeck() {
