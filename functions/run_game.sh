@@ -20,7 +20,7 @@ run_game() {
                 log i "Run game: manual mode enabled"
                 ;;
             \?)
-                echo "Usage: $0 start [-e emulator] [-s system] [-m] game"
+                echo "Usage: $0 [-e emulator] [-s system] [-m] game"
                 exit 1
                 ;;
         esac
@@ -30,7 +30,7 @@ run_game() {
     # Check for game argument
     if [[ -z "$1" ]]; then
         log e "Game path is required."
-        log i "Usage: $0 start [-e emulator] [-s system] [-m] game"
+        log i "Usage: $0 [-e emulator] [-s system] [-m] game"
         exit 1
     fi
 
@@ -151,8 +151,10 @@ show_zenity_emulator_list() {
     local system="$1"
     # Example logic to retrieve and show Zenity list of emulators for the system
     # This would extract available emulators for the system from es_systems.xml and show a Zenity dialog
-    emulators=$(xmllint --xpath "//system[name='$system']/command/@label" "$es_systems" | sed 's/ label=/\n/g' | sed 's/\"//g' | grep -o '[^ ]*')
-    zenity --list --title="Select Emulator" --column="Emulators" $emulators
+    emulators=$(xmllint --xpath "//system[name='$system']/command/@label" "$es_systems" | sed -e 's/ label=/\nlabel=/g' -e 's/\"//g' | grep '^label=' | cut -d= -f2)
+    IFS=$'\n' read -r -d '' -a emulator_array <<< "$emulators"
+    local emulator=$(zenity --list --title="Select Emulator" --column="Emulators" "${emulator_array[@]}")
+    echo "$emulator"
 }
 
 # Function to extract commands from es_systems.xml and present them in Zenity
@@ -414,6 +416,18 @@ find_emulator() {
 
     if [ -z "$found_path" ]; then
         log e "Find emulator: no valid path found for emulator: $emulator_name"
+        # # If no valid path found, fallback to asking the user to choose the emulator
+        # log i "No valid path found for emulator: $emulator_name. Asking user to choose the emulator."
+        # rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK" \
+        #     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+        #     --title "RetroDECK - Emulator not found" \
+        #     --text="Emulator \"$emulator_name\" not found.\n\nPlease select it from the list that will appear next."
+        # emulator=$(show_zenity_emulator_list "$system")
+        # if [[ -z "$emulator" ]]; then
+        #     log e "No emulator selected by the user."
+        #     exit 1
+        # fi
+        # echo "$emulator"
         return 1
     else
         log d "Find emulator: found emulator \"$found_path\""

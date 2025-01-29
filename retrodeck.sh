@@ -12,12 +12,8 @@ resettable_components=$(jq -r '
 # uses sed to create, a, list, like, this
 pretty_resettable_components=$(echo "$resettable_components" | sed 's/|/, /g')
 
-# Arguments section
 
-for i in "$@"; do
-  case $i in
-    -h*|--help*)
-      echo "RetroDECK v""$version"
+show_cli_help() {
       echo -e "
       Usage:
 flatpak run [FLATPAK-RUN-OPTION] net.retrodeck-retrodeck [ARGUMENTS]
@@ -44,6 +40,15 @@ For flatpak run specific options please run: flatpak run -h
 
 https://retrodeck.net
 "
+}
+
+# Arguments section
+
+for i in "$@"; do
+  case $i in
+    -h*|--help*)
+      echo "RetroDECK v""$version"
+      show_cli_help
       exit
       ;;
     --version*|-v*)
@@ -117,20 +122,25 @@ https://retrodeck.net
         exit
       fi
       ;;
-    -*|--*)
-      echo "Unknown option $i"
-      exit 1
-      ;;
     *)
       # Assume unknown arguments are game start arguments
       if [ -f "$i" ]; then
-          echo "Attempting to start the game: $i"
-          run_game "$@"
-          exit
+        log i "Attempting to start the game: $i"
+        run_game "$@"
+        exit
+      elif [[ "$i" == "-e" || "$i" == "-s" || "$i" == "-m" ]]; then
+        log i "Game start option detected: $i"
+        run_game "$@"
+        exit
       else
-          echo "Command or File '$i' not found. Ignoring argument and continuing..."
-          break # Continue with the main program
+        log i "Command or File '$i' not found. Ignoring argument and continuing..."
+        break # Continue with the main program
       fi
+      ;;
+    -*|--*)
+      log i "Unknown option $i"
+      show_cli_help
+      exit 1
       ;;
   esac
 done
