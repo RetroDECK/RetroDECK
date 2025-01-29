@@ -9,7 +9,7 @@ sanitize() {
 add_to_steam() {
 
     log "i" "Starting Steam Sync"
-
+ 
     create_dir $steamsync_folder
     create_dir $steamsync_folder_tmp
 
@@ -21,6 +21,10 @@ add_to_steam() {
 
     # Iterate through all gamelist.xml files in the folder structure
     for system_path in "$rdhome/ES-DE/gamelists/"*/; do
+        # Skip the CLEANUP folder
+        if [[ "$system_path" == *"/CLEANUP/"* ]]; then
+            continue
+        fi
         system=$(basename "$system_path") # Extract the folder name as the system name
         gamelist="${system_path}gamelist.xml"
 
@@ -59,21 +63,15 @@ add_to_steam() {
                         local launcher_tmp="$steamsync_folder_tmp/${name}.sh"
 
                         # Create the launcher file
+                        # Check if the launcher file does not already exist
                         if [ ! -e "$launcher_tmp" ]; then
                             log d "Creating launcher file: $launcher"
-                            command="flatpak run net.retrodeck.retrodeck '$roms_folder/$system/$path'"
-                            cat <<EOF > "$launcher"
-#!/bin/bash
-if [ test "\$(whereis flatpak)" = "flatpak:" ]; then
-  flatpak-spawn --host $command
-else
-  $command
-fi
-EOF
-                            chmod +x "$launcher"
+                            command="flatpak run net.retrodeck.retrodeck -s $system '$roms_folder/$system/$path'"
+                            echo '#!/bin/bash' > "$launcher_tmp"
+                            echo "$command" >> "$launcher_tmp"
+                            chmod +x "$launcher_tmp"
                         else
-                            log d "$launcher desktop file already exists"
-                            mv "$launcher_tmp" "$launcher"
+                            log d "$(basename $launcher) desktop file already exists"
                         fi
                     fi
 
@@ -84,13 +82,20 @@ EOF
                 fi
             done < "$gamelist"
         else
-            log "e" "Gamelist file not found: $gamelist"
+            log "e" "Gamelist file not found for system: $system"
         fi
     done
 
-    rm -r $steamsync_folder_tmp
+    # Remove the old Steam sync folder
+    rm -rf "$steamsync_folder"
+    
+    # Move the temporary Steam sync folder to the final location
+    log d "Moving the temporary Steam sync folder to the final location"
+    mv "$steamsync_folder_tmp" "$steamsync_folder" && log d "\"$steamsync_folder_tmp\" -> \"$steamsync_folder\""
 
-    if [ -z "$( ls -A $steamsync_folder )" ]; then
+    # Check if the Steam sync folder is empty
+    if [ -z "$(ls -A $steamsync_folder)" ]; then
+        # if empty, add the remove_from_steam function
         log d "No games found, cleaning shortcut"
         remove_from_steam
     else
@@ -99,11 +104,13 @@ EOF
     fi
 }
 
+# Function to remove the games from Steam, this is a workaround to make SRM remove the games as it cannot remove the games based on a empty folder
+# So a dummy file must be in place to make SRM remove the other games
 remove_from_steam() {
-  log d "Creating fake game"
+  log d "Creating dummy game"
   cat "" > "$steamsync_folder/CUL0.sh"
   log d "Cleaning the shortcut"
   steam-rom-manager remove
-  log d "Removing fake game"
+  log d "Removing dummy game"
   rm "$steamsync_folder/CUL0.sh"
 }
