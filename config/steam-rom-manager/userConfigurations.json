@@ -47,23 +47,23 @@
         },
         "controllers": {
             "ps4": {
-                "title": "RetroDECK Controller",
+                "title": "RetroDECK: DualShock 4 v.1b",
                 "mappingId": "RetroDECK_controller_ps4_dualshock4_simple.vdf",
                 "profileType": "template"
             },
             "ps5": {
-                "title": "RetroDECK Controller",
+                "title": "RetroDECK: DualSense v.1b",
                 "mappingId": "RetroDECK_controller_ps5_dualsense_simple.vdf",
                 "profileType": "template"
             },
             "ps5_edge": null,
             "xbox360": {
-                "title": "RetroDECK Controller",
+                "title": "RetroDECK: Xbox 360 v.1b",
                 "mappingId": "RetroDECK_controller_xbox360_simple.vdf",
                 "profileType": "template"
             },
             "xboxone": {
-                "title": "RetroDECK Controller",
+                "title": "RetroDECK: Xbox Wireless v.1b",
                 "mappingId": "RetroDECK_controller_xboxone_simple.vdf",
                 "profileType": "template"
             },
@@ -79,17 +79,17 @@
                 "profileType": "template"
             },
             "switch_pro": {
-                "title": "RetroDECK Controller",
+                "title": "RetroDECK: Switch Pro v.1b",
                 "mappingId": "RetroDECK_controller_switch_pro_simple.vdf",
                 "profileType": "template"
             },
             "neptune": {
-                "title": "RetroDECK Controller",
+                "title": "RetroDECK: Steam Deck - Neptune v.1.1b FULL",
                 "mappingId": "RetroDECK_controller_steamdeck_neptune_full.vdf",
                 "profileType": "template"
             },
             "steamcontroller_gordon": {
-                "title": "RetroDECK Controller",
+                "title": "RetroDECK: Steam Controller - Gordon v.1b",
                 "mappingId": "RetroDECK_controller_steam_controller_gordon_simple.vdf",
                 "profileType": "template"
             }
