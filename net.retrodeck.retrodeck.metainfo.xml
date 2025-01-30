@@ -83,7 +83,7 @@
             </ul>
             <p>Changes:</p>
             <ul>
-               <li>RetroDECK is on a diet: we saved around 600mb on the final build, abput 40% less!</li>
+               <li>RetroDECK is on a diet: we saved around 600mb on the final build, about 40% less!</li>
                <li>Updated all the possible outdated emulators</li>
                <li>Duckstation due to licensing changes is frozen at the latest possible build becoming de facto: Legacy</li>
                <li>Duckstation configured to use OpenGL as Vulkan seems to be broken in some cases</li>
