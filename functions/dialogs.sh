@@ -168,16 +168,21 @@ changelog_dialog() {
   log d "Showing changelog dialog"
 
   if [[ "$1" == "all" ]]; then
-    xml sel -t -m "//component/releases/release/description" -c . $rd_metainfo | tr -s '\n' | sed 's/^\s*//' > "/var/config/retrodeck/changelog-full.xml"
+    > "/var/config/retrodeck/changelog-full.xml"
+    for release in $(xml sel -t -m "//component/releases/release" -v "@version" -n $rd_metainfo); do
+      echo "<h1>RetroDECK v$release</h1>" >> "/var/config/retrodeck/changelog-full.xml"
+      xml sel -t -m "//component/releases/release[@version='$release']/description" -c . $rd_metainfo | tr -s '\n' | sed 's/^\s*//' >> "/var/config/retrodeck/changelog-full.xml"
+      echo "" >> "/var/config/retrodeck/changelog-full.xml"
+    done
 
-    convert_to_markdown "/var/config/retrodeck/changelog-full.xml"
+    #convert_to_markdown "/var/config/retrodeck/changelog-full.xml"
 
     rd_zenity --icon-name=net.retrodeck.retrodeck --text-info --width=1200 --height=720 \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Changelogs" \
     --filename="/var/config/retrodeck/changelog-full.xml.md"
   else
-    xml sel -t -m "//component/releases/release[1]/description" -c . $rd_metainfo | tr -s '\n' | sed 's/^\s*//' > "/var/config/retrodeck/changelog.xml"
+    xml sel -t -m "//component/releases/release[@version='$1']/description" -c . $rd_metainfo | tr -s '\n' | sed 's/^\s*//' > "/var/config/retrodeck/changelog.xml"
 
     convert_to_markdown "/var/config/retrodeck/changelog.xml"
 

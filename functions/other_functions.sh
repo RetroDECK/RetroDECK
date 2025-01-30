@@ -960,10 +960,11 @@ convert_to_markdown() {
   local output_file="$1.md"
 
   # Convert main tags
-  echo "$xml_content" | xmllint --format - | \
-    sed -e 's|<p>\(.*\)</p>|**\1**|g' \
+  echo "$xml_content" | \
+    sed -e 's|<p>\(.*\)</p>|## \1|g' \
       -e 's|<ul>||g' \
       -e 's|</ul>||g' \
+      -e 's|<h1>\(.*\)</h1>|# \1|g' \
       -e 's|<li>\(.*\)</li>|- \1|g' \
       -e 's|<description>||g' \
       -e 's|</description>||g' \
