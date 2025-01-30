@@ -17,7 +17,7 @@ on:
      - 'rd-submodules/**'
      - '*.sh'
      - 'net.retrodeck.retrodeck.yml'
-     - 'net.retrodeck.retrodeck.appdata.xml'
+     - 'net.retrodeck.retrodeck.metainfo.xml'
   pull_request: 
     branches:
      - cooker*
@@ -83,8 +83,8 @@ jobs:
       - name: "Adding flatpak portal for automated updates (cooker only)"
         run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/cooker_flatpak_portal_add.sh"
 
-      - name: "Updating release notes in appdata"
-        run: "automation_tools/appdata_management.sh"
+      - name: "Updating release notes in metainfo"
+        run: "automation_tools/metainfo_management.sh"
 
       - name: "[DEBUG] Outputting manifest"
         run: cat net.retrodeck.retrodeck.yml

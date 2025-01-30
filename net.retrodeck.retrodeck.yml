@@ -76,7 +76,7 @@ modules:
   #
   # UPDATE STEPS FOR MAIN:
   # [ ] Update the VERSION variable on line containing "VERSION=THISBRANCH"
-  # [ ] Update the appdata.xml with the version number and notes
+  # [ ] Update the net.retrodeck.retrodeck.metainfo.xml with the version number and notes
 
   - name: retrodeck-initialization
     buildsystem: simple
@@ -797,6 +797,9 @@ modules:
           echo "${FLATPAK_DEST}/lib/libSDL2.so is missing, creating symlink"
           ln -s "/lib/x86_64-linux-gnu/libSDL2-2.0.so.0" "${FLATPAK_DEST}/lib/libSDL2.so"
         fi
+
+      # Installing metainfo
+      - install -Dm 644 net.retrodeck.retrodeck.metainfo.xml ${FLATPAK_DEST}/share/metainfo/net.retrodeck.retrodeck.metainfo.xml
 
     sources:
       - type: dir

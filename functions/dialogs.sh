@@ -161,14 +161,14 @@ configurator_move_folder_dialog() {
 }
 
 changelog_dialog() {
-  # This function will pull the changelog notes from the version it is passed (which must match the appdata version tag) from the net.retrodeck.retrodeck.appdata.xml file
+  # This function will pull the changelog notes from the version it is passed (which must match the metainfo version tag) from the net.retrodeck.retrodeck.metainfo.xml file
   # The function also accepts "all" as a version, and will print the entire changelog
   # USAGE: changelog_dialog "version"
 
   log d "Showing changelog dialog"
 
   if [[ "$1" == "all" ]]; then
-    xml sel -t -m "//component/releases/release/description" -c . $rd_appdata | tr -s '\n' | sed 's/^\s*//' > "/var/config/retrodeck/changelog-full.xml"
+    xml sel -t -m "//component/releases/release/description" -c . $rd_metainfo | tr -s '\n' | sed 's/^\s*//' > "/var/config/retrodeck/changelog-full.xml"
 
     convert_to_markdown "/var/config/retrodeck/changelog-full.xml"
 
@@ -177,7 +177,7 @@ changelog_dialog() {
     --title "RetroDECK Changelogs" \
     --filename="/var/config/retrodeck/changelog-full.xml.md"
   else
-    xml sel -t -m "//component/releases/release[1]/description" -c . $rd_appdata | tr -s '\n' | sed 's/^\s*//' > "/var/config/retrodeck/changelog.xml"
+    xml sel -t -m "//component/releases/release[1]/description" -c . $rd_metainfo | tr -s '\n' | sed 's/^\s*//' > "/var/config/retrodeck/changelog.xml"
 
     convert_to_markdown "/var/config/retrodeck/changelog.xml"
 
