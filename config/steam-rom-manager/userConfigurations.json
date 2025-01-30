@@ -3,16 +3,17 @@
         "parserType": "Glob",
         "configTitle": "RetroDECK",
         "steamDirectory": "${steamdirglobal}",
-        "steamCategory": "RetroDECK",
         "romDirectory": "${romsdirglobal}",
-        "steamCategories": [],
+        "steamCategories": [
+            "RetroDECK"
+        ],
         "executableArgs": "",
         "executableModifier": "\"${exePath}\"",
         "startInDirectory": "",
         "titleModifier": "${fuzzyTitle}",
         "fetchControllerTemplatesButton": null,
         "removeControllersButton": null,
-        "steamInputEnabled": "1",
+        "steamInputEnabled": "2",
         "imageProviders": [
             "sgdb",
             "steamCDN"
