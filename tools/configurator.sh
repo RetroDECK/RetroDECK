@@ -162,7 +162,7 @@ configurator_welcome_dialog() {
   ;;
 
   "Steam Sync" )
-    configurator_add_steam
+    configurator_steam_sync
   ;;
 
   "Developer Options" )
@@ -1342,12 +1342,12 @@ configurator_about_retrodeck_dialog() {
   esac
 }
 
-configurator_add_steam() {
+configurator_steam_sync() {
   if [[ $(get_setting_value "$rd_conf" "steam_sync" retrodeck "options") == "true" ]]; then
     zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - RetroDECK Steam Syncronization" \
-    --text="Steam syncronization is currently enabled.\nDisabling Steam Sync will remove all of your favorites from Steam at the next Steam startup.\n\nDo you want to continue?\n\nTo re-add them, just reenable Steam Sync then and restart Steam."
+    --text="Steam syncronization is <span foreground='$purple'><b>currently enabled</b></span>.\nDisabling Steam Sync will remove all of your favorites from Steam at the next Steam startup.\n\nDo you want to continue?\n\nTo re-add them, just reenable Steam Sync then and restart Steam."
 
     if [ $? == 0 ] # User clicked "Yes"
     then
@@ -1359,7 +1359,7 @@ configurator_add_steam() {
     zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - RetroDECK Steam Syncronization" \
-    --text="Steam syncronization is currently disabled. Do you want to enable it?\n\nAll the games marked as favorites will be syncronized with Steam ROM Manager.\nRemember to restart Steam each time to see the changes.\n"
+    --text="Steam synchronization is <span foreground='$purple'><b>currently disabled</b></span>. Do you want to enable it?\n\nAll the games marked as favorites will be synchronized with Steam ROM Manager.\nRemember to restart Steam each time to see the changes.\n\n<span foreground='$purple'><b>NOTE: games with unusual characters such as &apos; might break the sync, please refer to the Wiki for more info.</b></span>"
 
     if [ $? == 0 ]
     then
