@@ -153,8 +153,9 @@ jobs:
         if: github.ref != 'refs/heads/main'
         run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/cooker_flatpak_portal_add.sh"
 
-      - name: "Updating release notes in metainfo"
-        run: "automation_tools/metainfo_management.sh"
+      # Temporary disabled as the script is broken
+      # - name: "Updating release notes in metainfo"
+      #   run: "automation_tools/metainfo_management.sh"
 
       - name: "[DEBUG] Outputting manifest"
         run: cat net.retrodeck.retrodeck.yml
