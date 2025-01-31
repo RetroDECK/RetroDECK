@@ -75,8 +75,8 @@ modules:
   # The version number is hardcoded in /app/retrodeck/version
   #
   # UPDATE STEPS FOR MAIN:
-  # [ ] Update the VERSION variable in retrodeck-initialization module
-  # [ ] Update the net.retrodeck.retrodeck.metainfo.xml with the version number and notes
+  # [X] Update the VERSION variable in retrodeck-initialization module
+  # [X] Update the net.retrodeck.retrodeck.metainfo.xml with the version number, date and notes
 
   - name: retrodeck-initialization
     buildsystem: simple
