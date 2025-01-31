@@ -939,7 +939,8 @@ quit_retrodeck() {
     --width=500 \
     --height=150 \
     --auto-close \
-    --auto-kill
+    --auto-kill \
+    --no-cancel
   fi
   log i "Shutting down RetroDECK's framework"
   pkill -f "retrodeck"
