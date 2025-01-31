@@ -329,6 +329,7 @@ jobs:
           body: ${{ env.RELEASE_BODY }}
           artifacts: "retrodeck-artifacts/*.flatpak,retrodeck-artifacts/*.flatpak.sha,retrodeck-artifacts/*Artifact.tar.gz"
           allowUpdates: true
+          omitBodyDuringUpdate: true
           makeLatest: ${{ env.MAKE_LATEST }}
           repo: ${{ env.REPO_NAME }}
           token: ${{ steps.generate-rekku-token.outputs.token }}
