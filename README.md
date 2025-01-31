@@ -2,12 +2,14 @@
     <img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/logo.png?raw=true" alt="RetroDECK logo" width="600"/>
 </p>
 
+# RetroDECK on your device!
+
 <p float="center">
 <img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen05.jpeg?raw=true" alt="screenshot" width="300"/>
 <img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen06.jpeg?raw=true" alt="screenshot" width="300"/>
 </p>
 
-Instead of having several different emulators, engines and frontends on your Linux/SteamOS system you only need one flatpak: RetroDECK.
+Instead of having several different emulators, engines and frontends on your Linux/SteamOS system you only need one: RetroDECK.
 
 ![Flathub](https://img.shields.io/flathub/downloads/net.retrodeck.retrodeck)
 ![Flathub](https://img.shields.io/flathub/v/net.retrodeck.retrodeck)
@@ -15,31 +17,32 @@ Instead of having several different emulators, engines and frontends on your Lin
 ![GitHub](https://img.shields.io/github/license/RetroDECK/RetroDECK)
 [![Documentation Status](https://readthedocs.org/projects/retrodeck/badge/?version=latest)](https://retrodeck.readthedocs.io/en/latest/?badge=latest)
 
-# What is RetroDECK?
+**The RetroDECK Wiki & FAQ**
 
-The wiki has a detailed page on this:  
+Please check out the these links for even more information: 
 
-[What is RetroDECK](https://retrodeck.readthedocs.io/en/latest/wiki_about/what-is-retrodeck/)
+- [RetroDECK Wiki](https://retrodeck.readthedocs.io/en/latest/) 
+- [RetroDECK FAQ](https://retrodeck.readthedocs.io/en/latest/wiki_general/faq/)
 
-## How do I start using RetroDECK?
+# How do I start using RetroDECK?
+Basically just download it from Flathub, put your roms/games and needed bioses and just play. 
 
 Read our getting started guide here:
 
-[Start using RetroDECK](https://retrodeck.readthedocs.io/en/latest/wiki_general/retrodeck-start/)
+[How to: Start using RetroDECK](https://retrodeck.readthedocs.io/en/latest/wiki_general/retrodeck-start/)
 
 ## What devices/systems does RetroDECK support: 
-
 RetroDECK currently supports:
 
 - Steam Deck
 - Linux Desktop
 
-For more information read here:
+For more information read up here:
 
 [Supported Systems](https://retrodeck.readthedocs.io/en/latest/wiki_general/supported-devices/)
 
 ## What is RetroDECK?
-RetroDECK is a [EmulationStation Desktop Edition](https://es-de.org) (ES-DE) powered Linux [Flatpak application](https://flathub.org/apps/net.retrodeck.retrodeck) that thanks to its `RetroDECK Framework` it builds-in and manage a variety of emulators and other software that allows you to play your favorite retro (and even not-so-retro) games in one complete package.
+RetroDECK is an [ES-DE](https://es-de.org) powered Linux [Flatpak application](https://flathub.org/apps/net.retrodeck.retrodeck) that thanks to its `RetroDECK Framework` it builds-in and manage a variety of emulators and other software that allows you to play your favorite retro (and even not-so-retro) games in one complete package.
 
 ### So what does that mean?
 It means that RetroDECK provides all the emulators, systems and a frontend. RetroDECK configures them for you and puts them into one application you can download from Flathub.
@@ -56,15 +59,19 @@ The `RetroDECK Configurator` is a `Utility` that exposes some parts of the `Retr
 
 It can help with:
 
+- Sync your favorite games with `Steam`
+- Run your games with a simple double click from a Desktop environment thanks to the [RetroENGINE](https://retrodeck.readthedocs.io/en/latest/wiki_system_guides/retroengine/retroengine-guide/)
+- Check your `BIOS` files
+- Auto installing some free `BIOS`es
 - Compressing games
 - Easier `Texture Pack` and `Mod` management
 - File management
-- Tools for troubleshooting (BIOS Checker, Multi-File Structure Checker, Partial or full reset of functions)
-- Auto installing some free BIOSes
+- Tools for troubleshooting (Multi-File Structure Checker, Partial or full reset of functions)
 - Install prebuilt Steam Input profiles for devices like the Steam Deck and external controllers
-- Easier management of `mods`, `roms`, `texture_packs`, `scraped media`, `screenshots`, `saves / states` `gamelists` and more
+- Easier management of `roms`, `scraped media`, `screenshots`, `saves / states` `gamelists` and more
 - Give access to global presets that can be activated to configure things over many emulators in one go like: `RetroAchievements`
-  `Borders` `Widescreen Mode` `Swaping A/B X/Y for Nintendo Games`
+`Borders` `Widescreen Mode` `Swaping A/B X/Y for Nintendo Games`
+
 
 For our long term vision you can check out the following wiki page:
 [RetroDECK: Visions and Goals](https://retrodeck.readthedocs.io/en/latest/wiki_about/visions-and-goals/)
@@ -73,42 +80,27 @@ For our long term vision you can check out the following wiki page:
 Use the supports channels on [Discord](https://discord.gg/WDc5C9YWMx) `🤝-community-support` and `🆘-support`.
 ### The RetroDECK community:
 [Website](https://retrodeck.net) <br/>
-[Wiki](https://github.com/XargonWan/RetroDECK/wiki) <br/>
+[Wiki](https://retrodeck.readthedocs.io) <br/>
 [Discord](https://discord.gg/WDc5C9YWMx)<br/>
 [Lemmy](https://lemmy.zip/c/retrodeck)<br/>
-[Subreddit](https://www.reddit.com/r/retrodeck)
+[Bluesky](https://app.bsky.cz/profile/retrodeck.net)<br/>
+[Subreddit](https://www.reddit.com/r/retrodeck)<br/>
+[Matrix](https://matrix.to/#/#retrodeck:matrix.org)
 
 ### Is RetroDECK in Beta?
-Yes, here you can read more about the beta period:
+Yes, but is perfectly fine and safe for the daily use.
+Here you can read more about the beta period:
 
 [RetroDECK: Beta period](https://retrodeck.readthedocs.io/en/latest/wiki_about/what-is-retrodeck/#retrodeck-is-currently-in-in-beta)
 
-## How to get support and report issues? 
-
-[Reporting Issues & Known Issues](https://retrodeck.readthedocs.io/en/latest/wiki_bugs/known-issues/)
-
-## The RetroDECK community links:
-
-- [RetroDECK Website](https://retrodeck.net)
-- [RetroDECK Wiki](https://github.com/XargonWan/RetroDECK/wiki)
-
----
-
-- [Discord](https://discord.gg/WDc5C9YWMx) 
-- [Matrix](https://matrix.to/#/#retrodeck:matrix.org)
-
----
-
-- [Lemmy c/retrodeck](https://lemmy.zip/c/retrodeck)
-- [Subreddit r/retrodeck](https://www.reddit.com/r/retrodeck)
-
-
-
-## Can I contribute to the project?
-
-Yes, off course! Read up here:
+### Can I contribute to the project?
+Yes, off course! <br>
+Read up here on how to help out, there is something for everyone:
 
 [How to: Contribute to RetroDECK](https://retrodeck.readthedocs.io/en/latest/wiki_community/contibute-rd/)
+
+## Build RetroDECK locally
+Please follow [this guide](https://retrodeck.readthedocs.io/en/latest/wiki_development/general/build-locally/).
 
 ## Our repositories:
 | Name          | Description  |
@@ -118,16 +110,13 @@ Yes, off course! Read up here:
 | [RetroDECK/Wiki](https://github.com/RetroDECK/Wiki)  | Where our wiki source code is |
 | [RetroDECK-website](https://github.com/RetroDECK/RetroDECK-website)  | Where our website source code is |
 | [RetroDECK on Flathub](https://github.com/flathub/net.retrodeck.retrodeck) | Our little space in Flathub's organization                 |
-| [RetroDECK-MAME](https://github.com/XargonWan/RetroDECK-MAME)   | MAME is big to build, so it's pre-built here and then imported in the build |
-| [RetroDECK-ES-DE](https://github.com/XargonWan/RetroDECK-ES-DE)  | This is where we store our patched fork of ES-DE          |
-
+| [RetroDECK components](https://github.com/orgs/RetroDECK/repositories)   | All the other components can be found under our organization on GitHub |
 
 # The RetroDECK Wiki
-
-Please check out the [Wiki](https://github.com/XargonWan/RetroDECK/wiki) for even more information.
+Please check out the [Wiki](https://retrodeck.readthedocs.io) for even more information.
 
 ## The FAQ
-The RetroDECK [FAQ](https://github.com/XargonWan/RetroDECK/wiki/FAQs%3A-Frequently-asked-questions) on the wiki has a vast variety of questions and answers. 
+The RetroDECK [FAQ](https://retrodeck.readthedocs.io/en/latest/wiki_faq/faq-rd-general/) pahes on the wiki has a vast variety of questions and answers. Please be sure to check all the FAQ pages.
 
 # How to get support? 
-Use the supports channels on [Discord](https://discord.gg/WDc5C9YWMx). 
+Use the supports channels on [Discord](https://discord.gg/WDc5C9YWMx).
