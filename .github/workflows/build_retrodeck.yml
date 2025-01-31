@@ -348,6 +348,12 @@ jobs:
             - Flatpak Artifact Bundle: RetroDECKArtifact.tar.gz, not useful for testing or end users
 
       # Rewrite Tag (for Main Branch Only)
+      - name: Clone RetroDECK repo
+        if: github.ref == 'refs/heads/main'
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          
       - name: Rewrite Tag
         if: github.ref == 'refs/heads/main'
         run: |
