@@ -35,3 +35,6 @@ ruffle-*.tar.gz
 # Python #
 ##########
 __pycache__
+
+CMakeFiles
+build
