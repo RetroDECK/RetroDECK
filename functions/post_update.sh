@@ -10,7 +10,6 @@ post_update() {
   fi
 
   # Everything within the following ( <code> ) will happen behind the Zenity dialog. The save migration was a long process so it has its own individual dialogs.
-
   (
   if [[ $(check_version_is_older_than "0.6.2b") == "true" ]]; then
     # In version 0.6.2b, the following changes were made that required config file updates/reset:
@@ -354,15 +353,16 @@ post_update() {
     # In version 0.8.3b, the following changes were made:
     # - Recovery from a failed move of the themes, downloaded_media and gamelists folder to their new ES-DE locations.
     if [[ ! -d "$rdhome/ES-DE/themes" || ! -d "$rdhome/ES-DE/downloaded_media" || ! -d "$rdhome/ES-DE/gamelists" ]]; then
-    log i "Moving ES-DE downloaded_media, gamelist, and themes from \"$rdhome\" to \"$rdhome/ES-DE\" due to a RetroDECK Framework bug"
+      log i "Moving ES-DE downloaded_media, gamelist, and themes from \"$rdhome\" to \"$rdhome/ES-DE\" due to a RetroDECK Framework bug"
 
-    # Ask user if they want to move and overwrite the data
-    if [[ $(configurator_generic_question_dialog "Move Data" "In the previous version some users suffered a bug where ES-DE appeared empty (no scraped data or collections for example).\n\n<span foreground='$purple' size='larger'><b>Your data is not gone!</b></span>\n\nit's just in a different path.\n\nDo you want to recover your old data replacing the actual one?\nBy choosing no instead, the folder with be moved but no data will be replaced and it will be availalbe in the retrodeck folder.\n\nThe affected folders are:\n\nretrodeck/themes\t\t\t\t->\t\"$rdhome/ES-DE\"/themes\nretrodeck/downloaded_media\t->\t\"$rdhome/ES-DE\"/downloaded_media\nretrodeck/gamelists\t\t\t\t->\t\"$rdhome/ES-DE\"/gamelist\nretrodeck/collections\t\t\t->\t\"$rdhome/ES-DE\"/collections") == "true" ]]; then
-      move_cmd="mv -f"  # Use mv with overwrite
-      log i "User chose to move and overwrite the data."
-    else
-      move_cmd="move"  # Use existing move function
-      log i "User chose to move the data without overwriting."
+      # Ask user if they want to move and overwrite the data
+      if [[ $(configurator_generic_question_dialog "Move Data" "In the previous version some users suffered a bug where ES-DE appeared empty (no scraped data or collections for example).\n\n<span foreground='$purple' size='larger'><b>Your data is not gone!</b></span>\n\nit's just in a different path.\n\nDo you want to recover your old data replacing the actual one?\nBy choosing no instead, the folder with be moved but no data will be replaced and it will be availalbe in the retrodeck folder.\n\nThe affected folders are:\n\nretrodeck/themes\t\t\t\t->\t\"$rdhome/ES-DE\"/themes\nretrodeck/downloaded_media\t->\t\"$rdhome/ES-DE\"/downloaded_media\nretrodeck/gamelists\t\t\t\t->\t\"$rdhome/ES-DE\"/gamelist\nretrodeck/collections\t\t\t->\t\"$rdhome/ES-DE\"/collections") == "true" ]]; then
+        move_cmd="mv -f"  # Use mv with overwrite
+        log i "User chose to move and overwrite the data."
+      else
+        move_cmd="move"  # Use existing move function
+        log i "User chose to move the data without overwriting."
+      fi
     fi
   fi # end of 0.8.3b
 
@@ -534,12 +534,24 @@ post_update() {
     set_setting_value "$raconf" "libretro_info_path" "/var/config/retroarch/cores" "retroarch"
 
     log i "Moving Ryujinx data to the new locations"
-    mv -f "/var/config/Ryujinx/bis"/* "$saves_folder/switch/ryujinx/nand" && rm -rf "/var/config/Ryujinx/bis" && log i "Migrated Ryujinx nand data to the new location"
-    mv -f "/var/config/Ryujinx/sdcard"/* "$saves_folder/switch/ryujinx/sdcard" && rm -rf "/var/config/Ryujinx/sdcard" && log i "Migrated Ryujinx sdcard data to the new location"
-    mv -f "/var/config/Ryujinx/bis/system/Contents/registered"/* "$bios_folder/switch/firmware" && rm -rf "/var/config/Ryujinx/bis/system/Contents/registered" && log i "Migration of Ryujinx firmware data to the new location"
-    mv -f "/var/config/Ryujinx/system"/* "$bios_folder/switch/keys" && rm -rf "/var/config/Ryujinx/system" && log i "Migrated Ryujinx keys data to the new location"
-    mv -f "/var/config/Ryujinx/mods"/* "$mods_folder/ryujinx" && rm -rf "/var/config/Ryujinx/mods" && log i "Migrated Ryujinx mods data to the new location"
-    mv -f "/var/config/Ryujinx/screenshots"/* "$screenshots_folder/ryujinx" && rm -rf "/var/config/Ryujinx/screenshots" && log i "Migrated Ryujinx screenshots to the new location"
+    if [[ -d "/var/config/Ryujinx/bis" ]]; then
+      mv -f "/var/config/Ryujinx/bis"/* "$saves_folder/switch/ryujinx/nand" && rm -rf "/var/config/Ryujinx/bis" && log i "Migrated Ryujinx nand data to the new location"
+    fi
+    if [[ -d "/var/config/Ryujinx/sdcard" ]]; then
+      mv -f "/var/config/Ryujinx/sdcard"/* "$saves_folder/switch/ryujinx/sdcard" && rm -rf "/var/config/Ryujinx/sdcard" && log i "Migrated Ryujinx sdcard data to the new location"
+    fi
+    if [[ -d "/var/config/Ryujinx/bis/system/Contents/registered" ]]; then
+      mv -f "/var/config/Ryujinx/bis/system/Contents/registered"/* "$bios_folder/switch/firmware" && rm -rf "/var/config/Ryujinx/bis/system/Contents/registered" && log i "Migration of Ryujinx firmware data to the new location"
+    fi
+    if [[ -d "/var/config/Ryujinx/system" ]]; then
+      mv -f "/var/config/Ryujinx/system"/* "$bios_folder/switch/keys" && rm -rf "/var/config/Ryujinx/system" && log i "Migrated Ryujinx keys data to the new location"
+    fi
+    if [[ -d "/var/config/Ryujinx/mods" ]]; then
+      mv -f "/var/config/Ryujinx/mods"/* "$mods_folder/ryujinx" && rm -rf "/var/config/Ryujinx/mods" && log i "Migrated Ryujinx mods data to the new location"
+    fi
+    if [[ -d "/var/config/Ryujinx/screenshots" ]]; then
+      mv -f "/var/config/Ryujinx/screenshots"/* "$screenshots_folder/ryujinx" && rm -rf "/var/config/Ryujinx/screenshots" && log i "Migrated Ryujinx screenshots to the new location"
+    fi
 
   fi # end of 0.9.0b
 
