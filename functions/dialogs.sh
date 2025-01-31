@@ -57,7 +57,7 @@ configurator_destination_choice_dialog() {
   # This dialog is for making things easy for new users to move files to common locations. Gives the options for "Internal", "SD Card" and "Custom" locations.
   # USAGE: $(configurator_destination_choice_dialog "folder being moved" "action text")
   # This function returns one of the values: "Back" "Internal Storage" "SD Card" "Custom Location"
-  choice=$(rd_zenity --title "RetroDECK Configurator Utility - Moving $1 folder" --info --no-wrap --ok-label="Back" --extra-button="Internal Storage" --extra-button="SD Card" --extra-button="Custom Location" \
+  choice=$(rd_zenity --title "RetroDECK Configurator Utility - Moving $1 folder" --info --no-wrap --ok-label="Quit" --extra-button="Internal Storage" --extra-button="SD Card" --extra-button="Custom Location" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --text="$2")
 
@@ -161,29 +161,36 @@ configurator_move_folder_dialog() {
 }
 
 changelog_dialog() {
-  # This function will pull the changelog notes from the version it is passed (which must match the appdata version tag) from the net.retrodeck.retrodeck.appdata.xml file
+  # This function will pull the changelog notes from the version it is passed (which must match the metainfo version tag) from the net.retrodeck.retrodeck.metainfo.xml file
   # The function also accepts "all" as a version, and will print the entire changelog
   # USAGE: changelog_dialog "version"
 
   log d "Showing changelog dialog"
 
   if [[ "$1" == "all" ]]; then
-    xml sel -t -m "//release" -v "concat('RetroDECK version: ', @version)" -n -v "description" -n $rd_appdata | awk '{$1=$1;print}' | sed -e '/./b' -e :n -e 'N;s/\n$//;tn' > "/var/config/retrodeck/changelog.txt"
+    > "/var/config/retrodeck/changelog-full.xml"
+    for release in $(xml sel -t -m "//component/releases/release" -v "@version" -n $rd_metainfo); do
+      echo "<h1>RetroDECK v$release</h1>" >> "/var/config/retrodeck/changelog-full.xml"
+      xml sel -t -m "//component/releases/release[@version='$release']/description" -c . $rd_metainfo | tr -s '\n' | sed 's/^\s*//' >> "/var/config/retrodeck/changelog-full.xml"
+      echo "" >> "/var/config/retrodeck/changelog-full.xml"
+    done
+
+    #convert_to_markdown "/var/config/retrodeck/changelog-full.xml"
 
     rd_zenity --icon-name=net.retrodeck.retrodeck --text-info --width=1200 --height=720 \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Changelogs" \
-    --filename="/var/config/retrodeck/changelog.txt"
+    --filename="/var/config/retrodeck/changelog-full.xml.md"
   else
-    local version_changelog=$(xml sel -t -m "//release[@version='$1']/description" -v . -n $rd_appdata | tr -s '\n' | sed 's/^\s*//')
+    xml sel -t -m "//component/releases/release[@version='$1']/description" -c . $rd_metainfo | tr -s '\n' | sed 's/^\s*//' > "/var/config/retrodeck/changelog.xml"
 
-    echo -e "In RetroDECK version $1, the following changes were made:\n$version_changelog" > "/var/config/retrodeck/changelog-partial.txt" 2>/dev/null
+    convert_to_markdown "/var/config/retrodeck/changelog.xml"
 
     rd_zenity --icon-name=net.retrodeck.retrodeck --text-info --width=1200 --height=720 \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Changelogs" \
-    --filename="/var/config/retrodeck/changelog-partial.txt"
-    fi
+    --filename="/var/config/retrodeck/changelog.xml.md"
+  fi
 }
 
 get_cheevos_token_dialog() {

@@ -2,30 +2,54 @@
 
 source /app/libexec/global.sh
 
+# uses jq to extract all the emulators (components) that don't have resettable: false in the features.json and separate them with "|"
+resettable_components=$(jq -r '
+  [(.emulator | to_entries[]) |
+  select(.value.core == null and .value.resettable != false) |
+  .key] | sort | join("|")
+' "$features")
+
+# uses sed to create, a, list, like, this
+pretty_resettable_components=$(echo "$resettable_components" | sed 's/|/, /g')
+
+
+show_cli_help() {
+      echo -e "
+      Usage:
+flatpak run [FLATPAK-RUN-OPTION] net.retrodeck-retrodeck [ARGUMENTS]
+
+Arguments:
+    -h, --help                          \t  Print this help
+    -v, --version                       \t  Print RetroDECK version
+    --info-msg                          \t  Print paths and config informations
+    --debug                             \t  Enable debug logging for this launch of RetroDECK (This may miss errors very early in the launch process)
+    --configurator                      \t  Starts the RetroDECK Configurator
+    --compress-one <file>               \t  Compresses target file to a compatible format
+    --compress-all <format>             \t  Compresses all supported games into a compatible format.\n\t\t\t\t\t\t  Available formats are \"chd\", \"zip\", \"rvz\" and \"all\"
+    --reset-component <component>       \t  Reset one or more component or emulator configs to the default values
+    --reset-retrodeck                   \t  Starts the initial RetroDECK installer (backup your data first!)
+    --test-upgrade <version>            \t  Test upgrading RetroDECK to a specific version, developer use only
+
+Game Launch:
+    [<options>] <game_path>             \t  Start a game using the default emulator or\n\t\t\t\t\t\t  the one defined in ES-DE for game or system
+    \t Options:
+    \t \t-e (emulator)\t Run the game with the defined emulator (optional)
+    \t \t-s (system)\t Force the game running with the defined system, for example running a gb game on gba (optional)
+    \t \t-m (manual)\t Manual mode: show the list of available emulator to choose from (optional)
+
+For flatpak run specific options please run: flatpak run -h
+
+https://retrodeck.net
+"
+}
+
 # Arguments section
 
 for i in "$@"; do
   case $i in
     -h*|--help*)
       echo "RetroDECK v""$version"
-      echo "
-      Usage:
-flatpak run [FLATPAK-RUN-OPTION] net.retrodeck-retrodeck [ARGUMENTS]
-
-Arguments:
-    -h, --help                      Print this help
-    -v, --version                   Print RetroDECK version
-    --info-msg                      Print paths and config informations
-    --configurator                  Starts the RetroDECK Configurator
-    --compress-one <file>           Compresses target file to a compatible format
-    --compress-all <format>         Compresses all supported games into a compatible format. Available formats are \"chd\", \"zip\", \"rvz\" and \"all\".
-    --reset-component <component>   Reset one or more component or emulator configs to the default values
-    --reset-retrodeck               Starts the initial RetroDECK installer (backup your data first!)
-
-For flatpak run specific options please run: flatpak run -h
-
-https://retrodeck.net
-"
+      show_cli_help
       exit
       ;;
     --version*|-v*)
@@ -39,6 +63,10 @@ https://retrodeck.net
       cat $rd_conf
       exit
       ;;
+    --debug*)
+      logging_level="debug"
+      shift
+      ;;
     --compress-one*)
       cli_compress_single_game "$2"
       exit
@@ -48,18 +76,26 @@ https://retrodeck.net
       ;;
     --configurator*)
       sh /app/tools/configurator.sh
-      if [[ $(configurator_generic_question_dialog "RetroDECK Configurator" "Would you like to launch RetroDECK after closing the Configurator?") == "false" ]]; then
-        exit
-      else
-        shift
-      fi
+      #sh /app/bin/godot-configurator.sh
       ;;
+    # --legacy-configurator*)
+    #   sh /app/tools/configurator.sh
+    #   if [[ $(configurator_generic_question_dialog "RetroDECK Configurator" "Would you like to launch RetroDECK after closing the Configurator?") == "false" ]]; then
+    #     exit
+    #   else
+    #     shift
+    #   fi
+    #   ;;
     --reset-component*)
-      echo "You are about to reset one or more RetroDECK components or emulators."
-      echo "Available options are: es-de, retroarch, cemu, dolphin, duckstation, gzdoom, melonds, pcsx3, pico8, ppsspp, primehack, rpcs3, ryujinx, xemu, vita3k, mame, all"
-      read -p "Please enter the component you would like to reset: " component
-      component=$(echo "$component" | tr '[:upper:]' '[:lower:]')
-      if [[ "$component" =~ ^(es-de|retroarch|cemu|dolphin|duckstation|gzdoom|mame|melonds|pcsx2|ppsspp|primehack|ryujinx|rpcs3|vita3k|xemu|all)$ ]]; then
+      component="$2"
+      if [ -z "$component" ]; then
+        echo "You are about to reset one or more RetroDECK components or emulators."
+        echo -e "Available options are:\nall, $pretty_resettable_components"
+        read -p "Please enter the component you would like to reset: " component
+        component=$(echo "$component" | tr '[:upper:]' '[:lower:]')
+      fi
+
+      if [[ "$component" =~ ^(all|$resettable_components)$ ]]; then
         read -p "You are about to reset $component to default settings. Enter 'y' to continue, 'n' to stop: " response
         if [[ $response == [yY] ]]; then
           prepare_component "reset" "$component" "cli"
@@ -97,15 +133,25 @@ https://retrodeck.net
         shift
       fi
       ;;
-    -*|--*)
-      echo "Unknown option $i"
-      exit 1
-      ;;
     *)
-      validate_input "$i"
-      if [[ ! $input_validated == "true" ]]; then
-        echo "Please specify a valid option. Use -h for more information."
+      # Assume unknown arguments are game start arguments
+      if [ -f "$i" ]; then
+        log i "Attempting to start the game: $i"
+        run_game "$@"
+        exit
+      elif [[ "$i" == "-e" || "$i" == "-s" || "$i" == "-m" ]]; then
+        log i "Game start option detected: $i"
+        run_game "$@"
+        exit
+      else
+        log i "Command or File '$i' not found. Ignoring argument and continuing..."
+        break # Continue with the main program
       fi
+      ;;
+    -*|--*)
+      log i "Unknown option $i"
+      show_cli_help
+      exit 1
       ;;
   esac
 done
@@ -195,3 +241,5 @@ fi
 
 # Normal Startup
 start_retrodeck
+# After everything is closed we run the quit function
+quit_retrodeck

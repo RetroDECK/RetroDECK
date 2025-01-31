@@ -1,0 +1,69 @@
+[gd_scene load_steps=2 format=3 uid="uid://ixg127wfv7wo"]
+
+[ext_resource type="Script" path="res://components/popup.gd" id="1_ck1vn"]
+
+[node name="Popup" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ck1vn")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -357.0
+offset_bottom = -70.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 23
+text = "This is the label"
+
+[node name="ContentContainer" type="Panel" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer/ContentContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 6
+
+[node name="LineEdit" type="TextEdit" parent="Panel/MarginContainer/VBoxContainer/ContentContainer/MarginContainer"]
+layout_mode = 2
+editable = false
+shortcut_keys_enabled = false

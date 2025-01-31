@@ -1,0 +1,31 @@
+#!/bin/bash
+# A pre-commit hook to lint json files if it they're edited
+
+lint_list=(
+  "config/retrodeck/reference_lists/features.json"
+  "config/retrodeck/reference_lists/bios.json"
+  )
+
+for file in "${lint_list[@]}"; do
+  if git diff --cached --name-only | grep -q "$file"; then
+    # Run the linting script
+    echo "Linting $file..."
+    if ! bash "developer_toolbox/lint_json.sh" "$file"; then
+      echo "Linting failed for \"$(basename $file)\". Please fix the issues and try again."
+      exit 1  # Exit with a non-zero status to block the commit
+    fi
+  fi
+done
+
+# Lint Manifest
+# if git diff --cached --name-only | grep -q 'net.retrodeck.retrodeck.yml'; then
+#   # Run the linting script
+#   echo "Linting net.retrodeck.retrodeck.yml..."
+#   if ! bash developer_toolbox/lint_manifest.sh; then
+#     echo "Linting failed. Please fix the issues and try again."
+#     exit 1  # Exit with a non-zero status to block the commit
+#   fi
+# fi
+
+# Continue with the commit if all checks passed
+exit 0

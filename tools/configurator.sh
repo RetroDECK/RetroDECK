@@ -24,7 +24,7 @@ source /app/libexec/global.sh
 #       - Wii & GameCube: Presets & Settings
 #         - Dolphin Textures: Universal Dynamic Input
 #         - Primehack Textures: Universal Dynamic Input
-#     - Open Emulator (Behind one-time power user warning dialog)
+#     - Open Emulator or Component (Behind one-time power user warning dialog)
 #       - RetroArch
 #       - Cemu
 #       - Citra
@@ -34,7 +34,9 @@ source /app/libexec/global.sh
 #       - MelonDS
 #       - PCSX2
 #       - PPSSPP
+#       - PortMaster
 #       - Primehack
+#       - Ruffle
 #       - RPCS3
 #       - Ryujinx
 #       - Vita3K
@@ -68,7 +70,6 @@ source /app/libexec/global.sh
 #     - Troubleshooting
 #       - Backup: RetroDECK Userdata
 #       - Check & Verify: BIOS
-#       - Check & Verify: BIOS - Expert Mode
 #       - Check & Verify: Multi-file structure
 #       - RetroDECK: Reset
 #         - Reset Emulator or Engine
@@ -82,9 +83,12 @@ source /app/libexec/global.sh
 #           - Reset MelonDS
 #           - Reset PCSX2
 #           - Reset PPSSPP
+#           - Reset PortMaster
 #           - Reset Primehack
+#           - Reset Ruffle
 #           - Reset RPCS3
 #           - Reset Ryujinx
+#           - Reset Steam ROM Manager
 #           - Reset Vita3k
 #           - Reset XEMU
 #           - Reset Yuzu
@@ -96,10 +100,10 @@ source /app/libexec/global.sh
 #         - Full changelog
 #         - Version-specific changelogs
 #       - RetroDECK Credits
-#     - Add to Steam
+#     - Steam Sync
 #     - Developer Options (Hidden)
 #       - Change Multi-user mode
-#       - Change Update channel
+#       - Install Specific Release
 #       - Browse the wiki
 #       - Install: RetroDECK Starter Pack
 #       - Tool: USB Import
@@ -110,15 +114,15 @@ configurator_welcome_dialog() {
   log i "Configurator: opening welcome dialog"
   if [[ $developer_options == "true" ]]; then
     welcome_menu_options=("Presets & Settings" "Here you will find various presets, tweaks and settings to customize your RetroDECK experience" \
-    "Open Emulator" "Launch and configure each emulator's settings (for advanced users)" \
+    "Open Emulator or Component" "Launch and configure each emulator or component's settings (for advanced users)" \
     "RetroDECK: Tools" "Compress games, move RetroDECK and install optional features" \
     "RetroDECK: Troubleshooting" "Backup data, perform BIOS / multi-disc file checks and emulator resets" \
     "RetroDECK: About" "Show additional information about RetroDECK" \
-    "Sync with Steam" "Sync all favorited games with Steam" \
+    "Steam Sync" "Sync all favorited games with Steam" \
     "Developer Options" "Welcome to the DANGER ZONE")
   else
     welcome_menu_options=("Presets & Settings" "Here you find various presets, tweaks and settings to customize your RetroDECK experience" \
-    "Open Emulator" "Launch and configure each emulators settings (for advanced users)" \
+    "Open Emulator or Component" "Launch and configure each emulator or component's settings (for advanced users)" \
     "RetroDECK: Tools" "Compress games, move RetroDECK and install optional features" \
     "RetroDECK: Troubleshooting" "Backup data, perform BIOS / multi-disc file checks checks and emulator resets" \
     "RetroDECK: About" "Show additional information about RetroDECK")
@@ -136,7 +140,7 @@ configurator_welcome_dialog() {
     configurator_presets_and_settings_dialog
   ;;
 
-  "Open Emulator" )
+  "Open Emulator or Component" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_power_user_warning_dialog
   ;;
@@ -148,12 +152,17 @@ configurator_welcome_dialog() {
 
   "RetroDECK: Troubleshooting" )
     log i "Configurator: opening \"$choice\" menu"
+    # Call the troubleshooting dialog to return to the previous menu after checking BIOS files
     configurator_retrodeck_troubleshooting_dialog
   ;;
 
   "RetroDECK: About" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_about_retrodeck_dialog
+  ;;
+
+  "Steam Sync" )
+    configurator_steam_sync
   ;;
 
   "Developer Options" )
@@ -442,9 +451,12 @@ configurator_open_emulator_dialog() {
     "MelonDS" "Open the NDS emulator MelonDS"
     "PCSX2" "Open the PS2 emulator PSXC2"
     "PPSSPP" "Open the PSP emulator PPSSPP"
+    "PortMaster" "Open PortMaster to manage your ports, even available from games list under PortMaster system"
     "Primehack" "Open the Metroid Prime emulator Primehack"
+    "Ruffle" "Open the Flash emulator Ruffle"
     "RPCS3" "Open the PS3 emulator RPCS3"
     "Ryujinx" "Open the Switch emulator Ryujinx"
+    "Steam ROM Manager" "Open Steam ROM Manager"
     "Vita3K" "Open the PSVita emulator Vita3K"
     "XEMU" "Open the Xbox emulator XEMU"
   )
@@ -458,7 +470,7 @@ configurator_open_emulator_dialog() {
   fi
 
   emulator=$(rd_zenity --list \
-  --title "RetroDECK Configurator Utility - Open Emulator" --cancel-label="Back" \
+  --title "RetroDECK Configurator Utility - Open Emulator or Component" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --text="Which emulator do you want to launch?" \
   --hide-header \
@@ -512,9 +524,19 @@ configurator_open_emulator_dialog() {
     PPSSPPSDL
   ;;
 
+  "PortMaster" )
+    log i "Configurator: \"$emulator\""
+    PortMaster
+  ;;
+
   "Primehack" )
     log i "Configurator: \"$emulator\""
     primehack-wrapper
+  ;;
+
+  "Ruffle" )
+    log i "Configurator: \"$emulator\""
+    ruffle
   ;;
 
   "RPCS3" )
@@ -525,6 +547,11 @@ configurator_open_emulator_dialog() {
   "Ryujinx" )
     log i "Configurator: \"$emulator\""
     Ryujinx.sh
+  ;;
+
+  "Steam ROM Manager" )
+    log i "Configurator: \"$emulator\""
+    steam-rom-manager
   ;;
 
   "Vita3K" )
@@ -852,7 +879,7 @@ configurator_compress_single_game_dialog() {
 }
 
 configurator_compress_multiple_games_dialog() {
-  # This dialog will display any games it finds to be compressable, from the systems listed under each compression type in compression_targets.cfg
+  # This dialog will display any games it finds to be compressable, from the systems listed under each compression type in features.json
 
   find_compatible_games "$1"
 
@@ -959,7 +986,6 @@ configurator_retrodeck_troubleshooting_dialog() {
   --column="Choice" --column="Action" \
   "Backup: RetroDECK Userdata" "Compress and backup important RetroDECK user data folders" \
   "Check & Verify: BIOS Files" "Show information about common BIOS files" \
-  "Check & Verify: BIOS Files - Expert Mode" "Show information about common BIOS files, with additional information useful for troubleshooting" \
   "Check & Verify: Multi-file structure" "Verify the proper structure of multi-file or multi-disc games" \
   "RetroDECK: Reset" "Reset specific parts or all of RetroDECK" )
 
@@ -988,10 +1014,6 @@ configurator_retrodeck_troubleshooting_dialog() {
     configurator_check_bios_files
   ;;
 
-  "Check & Verify: BIOS Files - Expert Mode" )
-    configurator_check_bios_files_expert_mode
-  ;;
-
   "Check & Verify: Multi-file structure" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_check_multifile_game_structure
@@ -1010,40 +1032,106 @@ configurator_retrodeck_troubleshooting_dialog() {
   esac
 }
 
+# This function checks and verifies BIOS files for RetroDECK.
+# It reads a list of required BIOS files from a JSON file, checks if they exist in the specified folder,
+# verifies their MD5 hashes if provided, and displays the results in a Zenity dialog.
 configurator_check_bios_files() {
+
   configurator_generic_dialog "RetroDECK Configurator - Check & Verify: BIOS Files" "This check will look for BIOS files that RetroDECK has identified as working.\n\nNot all BIOS files are required for games to work, please check the BIOS description for more information on its purpose.\n\nBIOS files not known to this tool could still function.\n\nSome more advanced emulators such as Ryujinx will have additional methods to verify that the BIOS files are in working order."
-  bios_checked_list=()
 
-  check_bios_files "basic"
+  log d "Starting BIOS check in mode: $mode"
 
-  rd_zenity --list --title="RetroDECK Configurator Utility - Check & Verify: BIOS Files" --cancel-label="Back" \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
-  --column "BIOS File Name" \
-  --column "System" \
-  --column "BIOS File Found" \
-  --column "BIOS Hash Match" \
-  --column "BIOS File Description" \
-  "${bios_checked_list[@]}"
+  (
 
-  configurator_retrodeck_troubleshooting_dialog
-}
+    # Read the BIOS checklist from bios.json using jq
+    total_bios=$(jq '.bios | length' $bios_checklist)
+    current_bios=0
 
-configurator_check_bios_files_expert_mode() {
-  configurator_generic_dialog "RetroDECK Configurator - Check & Verify: BIOS Files - Expert Mode" "This check will look for BIOS files that RetroDECK has identified as working.\n\nNot all BIOS files are required for games to work, please check the BIOS description for more information on its purpose.\n\nBIOS files not known to this tool could still function.\n\nSome more advanced emulators such as Ryujinx will have additional methods to verify that the BIOS files are in working order."
-  bios_checked_list=()
+    log d "Total BIOS files to check: $total_bios"
 
-  check_bios_files "expert"
+    declare -a bios_checked_list
 
-  rd_zenity --list --title="RetroDECK Configurator Utility - Check & Verify: BIOS Files" --cancel-label="Back" \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
-  --column "BIOS File Name" \
-  --column "System" \
-  --column "BIOS File Found" \
-  --column "BIOS Hash Match" \
-  --column "BIOS File Description" \
-  --column "BIOS File Subdirectory" \
-  --column "BIOS File Hash" \
-  "${bios_checked_list[@]}"
+    while read -r entry; do
+        # Extract the key (element name) and the fields
+        bios_file=$(echo "$entry" | jq -r '.key // "Unknown"')
+        bios_md5=$(echo "$entry" | jq -r '.value.md5 | if type=="array" then join(", ") else . end // "Unknown"')
+        bios_systems=$(echo "$entry" | jq -r '.value.system | if type=="array" then join(", ") else . end // "Unknown"')
+        # Broken
+        #bios_systems_pretty=$(echo "$bios_systems" | jq -R -r 'split(", ") | map(. as $sys | input_filename | gsub("features.json"; "") | .emulator[$sys].name) | join(", ")' --slurpfile features $features)
+        bios_desc=$(echo "$entry" | jq -r '.value.description // "No description provided"')
+        required=$(echo "$entry" | jq -r '.value.required // "No"')
+        bios_paths=$(echo "$entry" | jq -r '.value.paths | if type=="array" then join(", ") else . end // "'"$bios_folder"'"' | sed "s|"$rdhome/"||")
+
+      log d "Checking entry $bios_entry"
+
+      # Replace "bios/" with $bios_folder and "roms/" with $roms_folder
+      bios_paths=$(echo "$bios_paths" | sed "s|bios/|$bios_folder/|g" | sed "s|roms/|$roms_folder/|g")
+
+      # Skip if bios_file is empty
+      if [[ ! -z "$bios_file" ]]; then
+        bios_file_found="Yes"
+        bios_md5_matched="No"
+
+        IFS=', ' read -r -a paths_array <<< "$bios_paths"
+        for path in "${paths_array[@]}"; do
+          if [[ ! -f "$path/$bios_file" ]]; then
+            bios_file_found="No"
+            break
+          fi
+        done
+
+        if [[ $bios_file_found == "Yes" ]]; then
+          IFS=', ' read -r -a md5_array <<< "$bios_md5"
+          for md5 in "${md5_array[@]}"; do
+            if [[ $(md5sum "$path/$bios_file" | awk '{ print $1 }') == "$md5" ]]; then
+              bios_md5_matched="Yes"
+              break
+            fi
+          done
+        fi
+
+        log d "BIOS file found: $bios_file_found, Hash matched: $bios_md5_matched"
+        log d "Expected path: $path/$bios_file"
+        log d "Expected MD5: $bios_md5"
+
+      fi
+
+      log d "Adding BIOS entry: \"$bios_file $bios_systems $bios_file_found $bios_md5_matched $bios_desc $bios_paths $bios_md5\" to the bios_checked_list"
+
+      if [[ $bios_checked_list != "" ]]; then
+        bios_checked_list=("${bios_checked_list[@]}"^"$bios_file^$bios_systems^$bios_file_found^$bios_md5_matched^$required^$bios_paths^$bios_desc^$bios_md5")
+      else
+        bios_checked_list=("$bios_file^$bios_systems^$bios_file_found^$bios_md5_matched^$required^$bios_paths^$bios_desc^$bios_md5")
+      fi
+      #echo "$bios_file"^"$bios_systems"^"$bios_file_found"^"$bios_md5_matched"^"$bios_paths"^"$bios_md5"^"$bios_desc" # Godot data transfer #TODO: this is breaking the zenity dialog, since we don't release Godot in this version I disabled it.
+
+      current_bios=$((current_bios + 1))
+      echo "$((current_bios * 100 / total_bios))"
+
+    done < <(jq -c '.bios | to_entries[]' "$bios_checklist")
+
+    log d "Finished checking BIOS files"
+
+    IFS="^" # Set the Internal Field Separator to ^ to split the bios_checked_list array
+    rd_zenity --list --title="RetroDECK Configurator Utility - Check & Verify: BIOS Files" --cancel-label="Back" \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+      --column "BIOS File Name" \
+      --column "Systems" \
+      --column "Found" \
+      --column "Hash Matches" \
+      --column "Required" \
+      --column "Expected Path" \
+      --column "Description" \
+      --column "MD5" \
+      $(printf '%s\n' "${bios_checked_list[@]}")
+    IFS=$' \t\n' # Reset the Internal Field Separator
+
+  ) |
+  rd_zenity --progress --no-cancel --auto-close \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+  --title "RetroDECK Configurator Utility - BIOS Check in Progress" \
+  --text="RetroDECK is checking your BIOS files, please wait..." \
+  --width=400 --height=100
 
   configurator_retrodeck_troubleshooting_dialog
 }
@@ -1086,9 +1174,12 @@ configurator_reset_dialog() {
     "MelonDS" "Reset the NDS emulator MelonDS to default settings"
     "PCSX2" "Reset the PS2 emulator PCSX2 to default settings"
     "PPSSPP" "Reset the PSP emulator PPSSPP to default settings"
+    "PortMaster" "Reset PortMaster to default settings"
     "Primehack" "Reset the Metroid Prime emulator Primehack to default settings"
+    "Ruffle" "Reset the Flash emulator Ruffle to default settings"
     "RPCS3" "Reset the PS3 emulator RPCS3 to default settings"
     "Ryujinx" "Reset the Switch emulator Ryujinx to default settings"
+    "Steam ROM Manager" "Reset Steam ROM Manager to default settings"
     "Vita3k" "Reset the PS Vita emulator Vita3k to default settings"
     "XEMU" "Reset the XBOX emulator XEMU to default settings"
   )
@@ -1129,7 +1220,7 @@ configurator_reset_dialog() {
       fi
     ;;
 
-    "Cemu" | "Citra" | "Dolphin" | "Duckstation" | "GZDoom" | "Yuzu" | "MelonDS" | "MAME" | "PCSX2" | "PPSSPP" | "Primehack" | "RPCS3" | "Ryujinx" )
+    "Cemu" | "Citra" | "Dolphin" | "Duckstation" | "GZDoom" | "Yuzu" | "MelonDS" | "MAME" | "PCSX2" | "PPSSPP" | "PortMaster" | "Primehack" | "Ruffle" | "RPCS3" | "Ryujinx" | "SteamROMManager" )
       if [[ $(configurator_reset_confirmation_dialog "$component_to_reset" "Are you sure you want to reset the $component_to_reset emulator to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
         prepare_component "reset" "$component_to_reset" "configurator"
         configurator_process_complete_dialog "resetting $component_to_reset"
@@ -1152,12 +1243,13 @@ configurator_reset_dialog() {
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
     --text="Which component do you want to reset to default settings?" \
     --column="Component" --column="Action" \
+    "Steam ROM Manager" "Reset SRM that manages the sync and scraping toward Steam library" \
     "ES-DE" "Reset the ES-DE frontend" \ )
     # TODO: "GyroDSU" "Reset the gyroscope manager GyroDSU"
 
     case $component_to_reset in
 
-    "ES-DE" ) # TODO: GyroDSU
+    "Steam ROM Manager" | "ES-DE" ) # TODO: GyroDSU
       if [[ $(configurator_reset_confirmation_dialog "$component_to_reset" "Are you sure you want to reset $component_to_reset to default settings?\n\nThis process cannot be undone.") == "true" ]]; then
         prepare_component "reset" "$component_to_reset" "configurator"
         configurator_process_complete_dialog "resetting $component_to_reset"
@@ -1238,7 +1330,7 @@ configurator_about_retrodeck_dialog() {
     rd_zenity --icon-name=net.retrodeck.retrodeck --text-info --width=1200 --height=720 \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Credits" \
-    --filename="$emuconfigs/defaults/retrodeck/reference_lists/retrodeck_credits.txt"
+    --filename="$config/retrodeck/reference_lists/retrodeck_credits.txt"
     configurator_about_retrodeck_dialog
   ;;
 
@@ -1250,8 +1342,56 @@ configurator_about_retrodeck_dialog() {
   esac
 }
 
+configurator_steam_sync() {
+  if [[ $(get_setting_value "$rd_conf" "steam_sync" retrodeck "options") == "true" ]]; then
+    zenity --question \
+    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator - RetroDECK Steam Syncronization" \
+    --text="Steam syncronization is <span foreground='$purple'><b>currently enabled</b></span>.\nDisabling Steam Sync will remove all of your favorites from Steam at the next Steam startup.\n\nDo you want to continue?\n\nTo re-add them, just reenable Steam Sync then and restart Steam."
+
+    if [ $? == 0 ] # User clicked "Yes"
+    then
+      disable_steam_sync
+    else # User clicked "Cancel"
+      configurator_welcome_dialog
+    fi
+  else
+    zenity --question \
+    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator - RetroDECK Steam Syncronization" \
+    --text="Steam synchronization is <span foreground='$purple'><b>currently disabled</b></span>. Do you want to enable it?\n\nAll the games marked as favorites will be synchronized with Steam ROM Manager.\nRemember to restart Steam each time to see the changes.\n\n<span foreground='$purple'><b>NOTE: games with unusual characters such as &apos;/\{}&lt;&gt;* might break the sync, please refer to the Wiki for more info.</b></span>"
+
+    if [ $? == 0 ]
+    then
+      enable_steam_sync
+    else
+      configurator_welcome_dialog
+    fi
+  fi
+}
+
+enable_steam_sync() {
+  set_setting_value "$rd_conf" "steam_sync" "true" retrodeck "options"
+  zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK" \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Configurator - RetroDECK Steam Syncronization" \
+      --text="Steam syncronization enabled."
+  configurator_welcome_dialog
+}
+
+disable_steam_sync() {
+  set_setting_value "$rd_conf" "steam_sync" "false" retrodeck "options"
+  source /app/libexec/steam_sync.sh
+  remove_from_steam
+  zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK" \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Configurator - RetroDECK Steam Syncronization" \
+      --text="Steam syncronization disabled and shortcuts removed, restart Steam to apply the changes."
+  configurator_welcome_dialog
+}
+
 configurator_version_history_dialog() {
-  local version_array=($(xml sel -t -v '//component/releases/release/@version' -n $rd_appdata))
+  local version_array=($(xml sel -t -v '//component/releases/release/@version' -n $rd_metainfo))
   local all_versions_list=()
 
   for rd_version in ${version_array[*]}; do
@@ -1287,10 +1427,11 @@ configurator_developer_dialog() {
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Description" \
   "Change Multi-user mode" "Enable or disable multi-user support" \
-  "Change Update Channel" "Change between normal and cooker builds" \
+  "Install Specific Release" "Install any cooker release or the latest main available" \
   "Browse the Wiki" "Browse the RetroDECK wiki online" \
   "Install RetroDECK Starter Pack" "Install the optional RetroDECK starter pack" \
-  "Tool: USB Import" "Prepare a USB device for ROMs or import an existing collection")
+  "Tool: USB Import" "Prepare a USB device for ROMs or import an existing collection" \
+  "Open GODOT Configurator" "Open the new Configurator made in GODOT engine")
 
   case $choice in
 
@@ -1299,14 +1440,14 @@ configurator_developer_dialog() {
     configurator_retrodeck_multiuser_dialog
   ;;
 
-  "Change Update Channel" )
+  "Install Specific Release" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_online_update_channel_dialog
   ;;
 
   "Browse the Wiki" )
     log i "Configurator: opening \"$choice\" menu"
-    xdg-open "https://github.com/XargonWan/RetroDECK/wiki"
+    xdg-open "https://github.com/RetroDECK/RetroDECK/wiki"
     configurator_developer_dialog
   ;;
 
@@ -1321,6 +1462,11 @@ configurator_developer_dialog() {
   "Tool: USB Import" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_usb_import_dialog
+  ;;
+
+  "Open GODOT Configurator" )
+    log i "Configurator: opening \"$choice\" menu"
+    "godot-configurator.sh"
   ;;
 
   "" ) # No selection made or Back button clicked
@@ -1372,17 +1518,8 @@ configurator_online_update_channel_dialog() {
       configurator_developer_dialog
     fi
   else
-    rd_zenity --question \
-    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - RetroDECK Change Update Branch" \
-    --text="You are currently on the cooker branch of RetroDECK updates. Would you like to switch to the production branch?\n\nAfter installing a production build, you may need to remove the \"cooker\" branch install of RetroDECK to avoid overlap."
-
-    if [ $? == 0 ] # User clicked "Yes"
-    then
-      set_setting_value $rd_conf "update_repo" "RetroDECK" retrodeck "options"
-    else # User clicked "Cancel"
-      configurator_developer_dialog
-    fi
+    set_setting_value $rd_conf "update_repo" "RetroDECK" retrodeck "options"
+    release_selector
   fi
 }
 

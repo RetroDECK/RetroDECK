@@ -162,6 +162,15 @@ update_rd_conf() {
 
   # STAGE 3: Eliminate any preset incompatibility with existing user settings and new defaults
 
+  # Fetch incompatible presets from JSON and create a lookup list
+  incompatible_presets=$(jq -r '
+    .incompatible_presets | to_entries[] | 
+    [
+      "\(.key):\(.value)", 
+      "\(.value):\(.key)"
+    ] | join("\n")
+  ' $features)
+
   while IFS= read -r current_setting_line # Read the existing retrodeck.cfg
   do
     if [[ (! -z "$current_setting_line") && (! "$current_setting_line" == "#"*) && (! "$current_setting_line" == "[]") ]]; then # If the line has a valid entry in it
@@ -179,13 +188,14 @@ update_rd_conf() {
                   set_setting_value "$rd_conf" "$system_name" "false" "retrodeck" "$current_section"
                 fi
               fi
-            done < "$incompatible_presets_reference_list"
+            done <<< "$incompatible_presets"
           fi
         fi
       fi
     fi
   done < $rd_conf
 }
+
 
 conf_read() {
   # This function will read the RetroDECK config file into memory
@@ -195,18 +205,17 @@ conf_read() {
   do
     if [[ (! -z "$current_setting_line") && (! "$current_setting_line" == "#"*) && (! "$current_setting_line" == "[]") ]]; then # If the line has a valid entry in it
       if [[ ! -z $(grep -o -P "^\[.+?\]$" <<< "$current_setting_line") ]]; then # If the line is a section header
-        local current_section=$(sed 's^[][]^^g' <<< $current_setting_line) # Remove brackets from section name
+        local current_section=$(sed 's^[][]^^g' <<< "$current_setting_line") # Remove brackets from section name
       else
         if [[ "$current_section" == "" || "$current_section" == "paths" || "$current_section" == "options" ]]; then
-          local current_setting_name=$(get_setting_name "$current_setting_line" "retrodeck") # Read the variable name from the current line
-          local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "$current_section") # Read the variables value from retrodeck.cfg
+          local current_setting_name=$(cut -d'=' -f1 <<< "$current_setting_line" | xargs) # Extract name
+          local current_setting_value=$(cut -d'=' -f2 <<< "$current_setting_line" | xargs) # Extract value
           declare -g "$current_setting_name=$current_setting_value" # Write the current setting name and value to memory
           export "$current_setting_name"
         fi
       fi
     fi
-  done < $rd_conf
-  log d "retrodeck.cfg loaded"
+  done < "$rd_conf"
 }
 
 conf_write() {
@@ -315,15 +324,17 @@ backup_retrodeck_userdata() {
 
 make_name_pretty() {
   # This function will take an internal system name (like "gbc") and return a pretty version for user display ("Nintendo GameBoy Color")
+  # If the name is nout found it only returns the short name such as "gbc"
   # USAGE: make_name_pretty "system name"
-  local system=$(grep "$1^" "$pretty_system_names_reference_list")
-  if [[ ! -z "$system" ]]; then
-    IFS='^' read -r internal_name pretty_name < <(echo "$system")
-  else
-    pretty_name="$1"
-  fi
+
+  local system_name="$1"
+
+  # Use jq to parse the JSON and find the pretty name
+  local pretty_name=$(jq -r --arg name "$system_name" '.system[$name].name // $name' "$features")
+
   echo "$pretty_name"
 }
+
 
 finit_browse() {
 # Function for choosing data directory location during first/forced init
@@ -363,14 +374,12 @@ done
 
 finit_user_options_dialog() {
   finit_available_options=()
+  finit_extracted_options=$(jq -r '.finit_default_options | to_entries[] | "\(.value.enabled)^\(.value.name)^\(.value.description)^\(.key)"' "$features")
 
-  while IFS="^" read -r enabled option_name option_desc option_tag || [[ -n "$enabled" ]];
-  do
-    if [[ ! $enabled == "#"* ]] && [[ ! -z "$enabled" ]]; then
-      finit_available_options=("${finit_available_options[@]}" "$enabled" "$option_name" "$option_desc" "$option_tag")
-    fi
-  done < $finit_options_list
-
+  # Read finit_default_options from features.json using jq
+  while IFS="^" read -r enabled option_name option_desc option_tag; do
+    finit_available_options+=("$enabled" "$option_name" "$option_desc" "$option_tag")
+  done <<< "$finit_extracted_options"
 
   local choices=$(rd_zenity \
   --list --width=1200 --height=720 \
@@ -393,11 +402,15 @@ finit() {
 
   # Internal or SD Card?
   local finit_dest_choice=$(configurator_destination_choice_dialog "RetroDECK data" "Welcome to the first setup of RetroDECK.\nPlease carefully read each message prompted during the installation process to avoid any unwanted misconfigurations.\n\nWhere do you want your RetroDECK data folder to be located?\nIn this location a \"retrodeck\" folder will be created.\nThis is the folder that you will use to contain all your important files, such as your own ROMs, BIOSs, Saves and Scraped Data." )
-  log i "Choice is $finit_dest_choice"
+  if [[ "$finit_dest_choice" == "" ]]; then
+    log i "User closed the window"
+  else
+    log i "User choice: $finit_dest_choice"
+  fi
 
   case "$finit_dest_choice" in
 
-  "Quit" | "" ) # Back or X button quits
+  "Quit" | "Back" | "" ) # Back, Quit or X button quits
     rm -f "$rd_conf" # Cleanup unfinished retrodeck.cfg if first install is interrupted
     log i "Now quitting"
     quit_retrodeck
@@ -504,11 +517,17 @@ finit() {
 
   ) |
   rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-  --title "RetroDECK Finishing Initialization" \
-  --text="RetroDECK is finishing the initial setup process, please wait."
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Finishing Initialization" \
+    --text="RetroDECK is finishing the initial setup process, please wait."
 
   create_lock
+
+  # Inform the user where to put the ROMs and BIOS files
+  rd_zenity --info --no-wrap \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Setup Complete" \
+    --text="RetroDECK setup is complete!\n\nPlease place your <span foreground='$purple'><b>game files</b></span> in the following directory: <span foreground='$purple'><b>$rdhome/roms\n\n</b></span>and your <span foreground='$purple'><b>BIOS</b></span> files in: <span foreground='$purple'><b>$rdhome/bios\n\n</b></span>You can use the <span foreground='$purple'><b>BIOS checker tool</b></span> available trough the <span foreground='$purple'><b>RetroDECK Configurator</b></span>\nor refer to the <span foreground='$purple'><b>RetroDECK WIKI</b></span> for more information about the required BIOS files and their proper paths.\n\nYou can now start using RetroDECK."
 }
 
 install_retrodeck_starterpack() {
@@ -533,11 +552,11 @@ install_retrodeck_controller_profile() {
   if [[ -d "$HOME/.steam/steam/controller_base/templates/" || -d "$HOME/.var/app/com.valvesoftware.Steam/.steam/steam/controller_base/templates/" ]]; then
     if [[ -d "$HOME/.steam/steam/controller_base/templates/" ]]; then # If a normal binary Steam install exists
       rsync -rlD --mkpath "/app/retrodeck/binding_icons/" "$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/"
-      rsync -rlD --mkpath "$emuconfigs/defaults/retrodeck/controller_configs/" "$HOME/.steam/steam/controller_base/templates/"
+      rsync -rlD --mkpath "$config/retrodeck/controller_configs/" "$HOME/.steam/steam/controller_base/templates/"
     fi
     if [[ -d "$HOME/.var/app/com.valvesoftware.Steam/.steam/steam/controller_base/templates/" ]]; then # If a Flatpak Steam install exists
       rsync -rlD --mkpath "/app/retrodeck/binding_icons/" "$HOME/.var/app/com.valvesoftware.Steam/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/"
-      rsync -rlD --mkpath "$emuconfigs/defaults/retrodeck/controller_configs/" "$HOME/.var/app/com.valvesoftware.Steam/.steam/steam/controller_base/templates/"
+      rsync -rlD --mkpath "$config/retrodeck/controller_configs/" "$HOME/.var/app/com.valvesoftware.Steam/.steam/steam/controller_base/templates/"
     fi
   else
     configurator_generic_dialog "RetroDECK Controller Profile Install" "The target directories for the controller profile do not exist.\n\nThis may happen if you do not have Steam installed or the location is does not have permission to be read."
@@ -563,43 +582,103 @@ update_splashscreens() {
 }
 
 deploy_helper_files() {
-  # This script will distribute helper documentation files throughout the filesystem according to the $helper_files_list
+  # This script will distribute helper documentation files throughout the filesystem according to the JSON configuration
   # USAGE: deploy_helper_files
 
-  while IFS='^' read -r file dest || [[ -n "$file" ]];
-  do
-      if [[ ! "$file" == "#"* ]] && [[ ! -z "$file" ]]; then
+  # Extract helper files information using jq
+  helper_files=$(jq -r '.helper_files | to_entries | map("\(.value.filename)^\(.value.location)")[]' "$features")
+
+  # Iterate through each helper file entry
+  while IFS='^' read -r file dest; do
+    if [[ ! -z "$file" ]] && [[ ! -z "$dest" ]]; then
       eval current_dest="$dest"
       cp -f "$helper_files_folder/$file" "$current_dest/$file"
     fi
-  done < "$helper_files_list"
+  done <<< "$helper_files"
 }
 
-easter_eggs() {
-  # This function will replace the RetroDECK startup splash screen with a different image if the day and time match a listing in easter_egg_checklist.cfg
-  # The easter_egg_checklist.cfg file has the current format: $start_date^$end_date^$start_time^$end_time^$splash_file
-  # Ex. The line "1001^1031^0000^2359^spooky.svg" would show the file "spooky.svg" during any time of day in the month of October
-  # The easter_egg_checklist.cfg is read in order, so lines higher in the file will have higher priority in the event of an overlap
-  # USAGE: easter_eggs
-  current_day=$(date +"%0m%0d") # Read the current date in a format that can be calculated in ranges
-  current_time=$(date +"%0H%0M") # Read the current time in a format that can be calculated in ranges
-  if [[ ! -z $(cat $easter_egg_checklist) ]]; then
-    while IFS="^" read -r start_date end_date start_time end_time splash_file || [[ -n "$start_date" ]]; # Read Easter Egg checklist file and separate values
-    do
-      if [[ ! $start_date == "#"* ]] && [[ ! -z "$start_date" ]]; then
-        if [[ "$((10#$current_day))" -ge "$((10#$start_date))" && "$((10#$current_day))" -le "$((10#$end_date))" && "$((10#$current_time))" -ge "$((10#$start_time))" && "$((10#$current_time))" -le "$((10#$end_time))" ]]; then # If current line specified date/time matches current date/time, set $splash_file to be deployed
-          new_splash_file="$splashscreen_dir/$splash_file"
-          break
-        else # When there are no matches, the default splash screen is set to deploy
-          new_splash_file="$default_splash_file"
-        fi
-      fi
-    done < $easter_egg_checklist
+
+splash_screen() {
+  # This function will replace the RetroDECK startup splash screen with a different image if the day and time match a listing in the JSON data.
+  # USAGE: splash_screen
+
+  current_day=$(date +"%m%d")  # Read the current date in a format that can be calculated in ranges
+  current_time=$(date +"%H%M") # Read the current time in a format that can be calculated in ranges
+
+  # Read the JSON file and extract splash screen data using jq
+  splash_screen=$(jq -r --arg current_day "$current_day" --arg current_time "$current_time" '
+    .splash_screens | to_entries[] |
+    select(
+      ($current_day | tonumber) >= (.value.start_date | tonumber) and
+      ($current_day | tonumber) <= (.value.end_date | tonumber) and
+      ($current_time | tonumber) >= (.value.start_time | tonumber) and
+      ($current_time | tonumber) <= (.value.end_time | tonumber)
+    ) | .value.filename' $features)
+
+  # Determine the splash file to use
+  if [[ -n "$splash_screen" ]]; then
+    new_splash_file="$splashscreen_dir/$splash_screen"
   else
     new_splash_file="$default_splash_file"
   fi
 
   cp -f "$new_splash_file" "$current_splash_file" # Deploy assigned splash screen
+}
+
+install_release() {
+  # Logging the release tag and URL
+  log d "Attempting to install release: $1 from repo $update_repo"
+
+  # Construct the URL for the flatpak file
+
+  if [ "$(get_setting_value "$rd_conf" "update_repo" "retrodeck" "options")" == "RetroDECK" ]; then
+      iscooker=""
+  else
+      iscooker="-cooker"
+  fi
+
+  local flatpak_url="https://github.com/$git_organization_name/$update_repo/releases/download/$1/RetroDECK$iscooker.flatpak"
+  log d "Constructed flatpak URL: $flatpak_url"
+
+  # Confirm installation with the user
+  zenity --question --icon-name=net.retrodeck.retrodeck --no-wrap \
+          --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+          --title "RetroDECK Updater" \
+          --text="$1 will be now installed.\nThe update process may take several minutes.\n\nAfter the update is complete, RetroDECK will close. When you run it again, you will be using the latest version.\n\nDo you want to continue?"
+
+  rc=$? # Capture return code
+  if [[ $rc == "1" ]]; then # If the user clicks "Cancel"
+    return 0
+  fi
+  
+  (
+    mkdir -p "$rdhome/RetroDECK_Updates"
+
+    # Download the flatpak file
+    wget -P "$rdhome/RetroDECK_Updates" $flatpak_url -O "$rdhome/RetroDECK_Updates/RetroDECK$iscooker.flatpak"
+    
+    # Check if the download was successful
+    if [[ $? -ne 0 ]]; then
+      configurator_generic_dialog "Error" "Failed to download the flatpak file. Please check the release tag and try again."
+      return 1
+    fi
+
+    # Remove the current version before installing the new one to avoid duplicates
+    flatpak-spawn --host flatpak remove --noninteractive -y net.retrodeck.retrodeck
+    
+    # Install the new version
+    flatpak-spawn --host flatpak install --user --bundle --noninteractive -y "$rdhome/RetroDECK_Updates/RetroDECK$iscooker.flatpak"
+    
+    # Cleanup old bundles to save space
+    rm -rf "$rdhome/RetroDECK_Updates"
+  ) |
+  zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+  --title "RetroDECK Updater" \
+  --text="RetroDECK is updating to the selected version, please wait."
+
+  configurator_generic_dialog "RetroDECK Online Update" "The update process is now complete!\n\nRetroDECK will now quit."
+  quit_retrodeck
 }
 
 ponzu() {
@@ -705,76 +784,191 @@ ponzu_remove() {
   configurator_retrodeck_tools_dialog
 }
 
-# TODO: this function is not yet used
-branch_selector() {
-    log d "Fetch branches from GitHub API excluding \"main\""
-    branches=$(curl -s https://api.github.com/repos/XargonWan/RetroDECK/branches | grep '"name":' | awk -F '"' '$4 != "main" {print $4}')
+release_selector() {
+    # Show a progress bar
+    ( 
+        while true; do
+            echo "# Fetching all available releases from GitHub repositories... Please wait. This may take some time." ; sleep 1
+        done
+    ) | zenity --progress --title="Fetching Releases" --text="Fetching releases..." --pulsate --no-cancel --auto-close --width=500 --height=150 &
+    
+    progress_pid=$!  # save process PID to kill it later
 
-    # Create an array to store branch names
-    branch_array=()
+    log d "Fetching releases from GitHub API for repository $cooker_repository_name"
+    
+    # Fetch the main release from the RetroDECK repository
+    log d "Fetching latest main release from GitHub API for repository RetroDECK"
+    local main_release=$(curl -s https://api.github.com/repos/$git_organization_name/RetroDECK/releases/latest)
 
-    # Loop through each branch and add it to the array
-    while IFS= read -r branch; do
-        branch_array+=("$branch")
-    done <<< "$branches"
-    # TODO: logging - Creating array of branch names
+    if [[ -z "$main_release" ]]; then
+        log e "Failed to fetch the main release"
+        kill $progress_pid  # kill the progress bar
+        configurator_generic_dialog "Error" "Unable to fetch the main release. Please check your network connection or try again later."
+        return 1
+    fi
 
-    # Display branches in a Zenity list dialog
-    selected_branch=$(
+    main_tag_name=$(echo "$main_release" | jq -r '.tag_name')
+    main_published_at=$(echo "$main_release" | jq -r '.published_at')
+
+    # Convert published_at to human-readable format for the main release
+    main_human_readable_date=$(date -d "$main_published_at" +"%d %B %Y %H:%M")
+
+    # Add the main release as the first entry in the release array
+    local release_array=("Main Release" "$main_tag_name" "$main_human_readable_date")
+
+    # Fetch all releases (including draft and pre-release) from the Cooker repository
+    local releases=$(curl -s https://api.github.com/repos/$git_organization_name/$cooker_repository_name/releases?per_page=100)
+
+    if [[ -z "$releases" ]]; then
+        log e "Failed to fetch releases or no releases available"
+        kill $progress_pid  # kill the progress bar
+        configurator_generic_dialog "Error" "Unable to fetch releases. Please check your network connection or try again later."
+        return 1
+    fi
+
+    # Loop through each release and add to the release array
+    while IFS= read -r release; do
+        tag_name=$(echo "$release" | jq -r '.tag_name')
+        published_at=$(echo "$release" | jq -r '.published_at')
+        draft=$(echo "$release" | jq -r '.draft')
+        prerelease=$(echo "$release" | jq -r '.prerelease')
+
+        # Classifying releases
+        if echo "$tag_name" | grep -q "PR"; then
+            status="Pull Request"
+        elif [[ "$draft" == "true" ]]; then
+            status="Draft"
+        elif [[ "$prerelease" == "true" ]]; then
+            status="Pre-release"
+        elif [[ "$cooker_repository_name" == *"Cooker"* ]]; then
+            status="Cooker"
+        else
+            status="Main"
+        fi
+
+        # Convert published_at to human-readable format, if available
+        if [[ "$published_at" != "null" ]]; then
+            human_readable_date=$(date -d "$published_at" +"%d %B %Y %H:%M")
+        else
+            human_readable_date="Not published"
+        fi
+
+        # Ensure fields are properly aligned for Zenity
+        release_array+=("$status" "$tag_name" "$human_readable_date")
+
+    done < <(echo "$releases" | jq -c '.[]' | sort -t: -k3,3r)
+
+    # kill the progress bar before opening the release list window
+    kill $progress_pid
+
+    if [[ ${#release_array[@]} -eq 0 ]]; then
+        configurator_generic_dialog "RetroDECK Updater" "No available releases found, exiting."
+        log d "No available releases found"
+        return 1
+    fi
+
+    log d "Showing available releases"
+
+    # Display releases in a Zenity list dialog with three columns
+    selected_release=$(
       rd_zenity --list \
         --icon-name=net.retrodeck.retrodeck \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-        --title "RetroDECK Configurator Cooker Branch - Select Branch" \
-        --column="Branch" --width=1280 --height=800 "${branch_array[@]}"
+        --title "RetroDECK Configurator Cooker Releases - Select Release" \
+        --column="Branch" --column="Release Tag" --column="Published Date" --width=1280 --height=800 \
+        --separator="|" --print-column='ALL' "${release_array[@]}"
     )
-    # TODO: logging - Displaying branches in Zenity list dialog
 
-    # Display warning message
-    if [ $selected_branch ]; then
-        rd_zenity --question --icon-name=net.retrodeck.retrodeck --no-wrap \
-          --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-          --title "RetroDECK Configurator Cooker Branch - Switch Branch" \
-          --text="Are you sure you want to move to \"$selected_branch\" branch?"
-        # Output selected branch
-        echo "Selected branch: $selected_branch" # TODO: logging - Outputting selected branch
+    log i "Selected release: $selected_release"
+
+    if [[ -z "$selected_release" ]]; then
+        log d "No release selected, user exited."
+        return 1
+    fi
+
+    # Parse the selected release using the pipe separator
+    IFS='|' read -r selected_branch selected_tag selected_date <<< "$selected_release"
+    selected_branch=$(echo "$selected_branch" | xargs)  # Trim any extra spaces
+    selected_tag=$(echo "$selected_tag" | xargs)
+    selected_date=$(echo "$selected_date" | xargs)
+
+    log d "Selected branch: $selected_branch, release: $selected_tag, date: $selected_date"
+
+    rd_zenity --question --icon-name=net.retrodeck.retrodeck --no-wrap \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Configurator Cooker Release - Confirm Selection" \
+      --text="Are you sure you want to install the following release?\n\n$selected_branch: \"$selected_tag\"\nPublished on $selected_date?"
+
+    if [[ $? -eq 0 ]]; then
+        log d "User confirmed installation of release $selected_tag"
+
+      if echo "$selected_release" | grep -q "Main Release"; then
+        set_setting_value $rd_conf "update_repo" "$main_repository_name" retrodeck "options"
+        log i "Switching to main channel"
+      else
+        set_setting_value $rd_conf "update_repo" "$cooker_repository_name" retrodeck "options"
+        log i "Switching to cooker channel"
+      fi
+
         set_setting_value "$rd_conf" "branch" "$selected_branch" "retrodeck" "options"
-        branch="feat/sftp"
-        # Get the latest release for the specified branch
-        latest_release=$(curl -s "https://api.github.com/repos/XargonWan/RetroDECK-cooker/releases" | jq ".[] | select(.target_commitish == \"$branch_name\") | .tag_name" | head -n 1)
-        # TODO: this will fail because the builds coming from the PRs are not published yet, we should fix them
-        # TODO: form a proper url: $flatpak_file_url
-        configurator_generic_dialog "RetroDECK Online Update" "The update process may take several minutes.\n\nAfter the update is complete, RetroDECK will close. When you run it again you will be using the latest version."
-          (
-          local desired_flatpak_file=$(curl --silent $flatpak_file_url | grep '"browser_download_url":' | sed -E 's/.*"([^"]+)".*/\1/')
-          create_dir "$rdhome/RetroDECK_Updates"
-          wget -P "$rdhome/RetroDECK_Updates" $desired_flatpak_file
-          flatpak-spawn --host flatpak remove --noninteractive -y net.retrodeck.retrodeck # Remove current version before installing new one, to avoid duplicates
-          flatpak-spawn --host flatpak install --user --bundle --noninteractive -y "$rdhome/RetroDECK_Updates/RetroDECK-cooker.flatpak"
-          rm -rf "$rdhome/RetroDECK_Updates" # Cleanup old bundles to save space
-          ) |
-          rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
-          --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-          --title "RetroDECK Updater" \
-          --text="RetroDECK is updating to the latest \"$selected_branch\" version, please wait."
-          configurator_generic_dialog "RetroDECK Online Update" "The update process is now complete!\n\nPlease restart RetroDECK to keep the fun going."
-          exit 1
+        log d "Set branch to $selected_branch in configuration"
+        install_release $selected_tag
+
     else
-        configurator_generic_dialog "No branch selected, exiting."
-        # TODO: logging
+      log d "User canceled installation"
+      return 0
     fi
 }
 
 quit_retrodeck() {
   log i "Quitting ES-DE"
   pkill -f "es-de"
+
+  # if steam sync is on do the magic
+  if [[ $(get_setting_value "$rd_conf" "steam_sync" retrodeck "options") == "true" ]]; then
+  (
+  source /app/libexec/steam_sync.sh
+  add_to_steam "$(ls "$rdhome/ES-DE/gamelists/")"
+  ) |
+  zenity --progress \
+    --title="Syncing with Steam" \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --text="<span foreground='$purple'><b>\t\t\t\t\tSyncing favorite games with Steam.</b></span>\n\n<b>NOTE: </b>This operation may take some time depending on the size of your library.\nFeel free to leave this in the background and switch to another application.\n\n" \
+    --percentage=25 \
+    --pulsate \
+    --width=500 \
+    --height=150 \
+    --auto-close \
+    --auto-kill
+  fi
   log i "Shutting down RetroDECK's framework"
   pkill -f "retrodeck"
+  
   log i "See you next time"
+  exit
 }
 
 start_retrodeck() {
-  easter_eggs # Check if today has a surprise splashscreen and load it if so
+  get_steam_user # get steam user info
+  splash_screen # Check if today has a surprise splashscreen and load it if so
   ponzu
   log i "Starting RetroDECK v$version"
   es-de
+}
+
+# Function to convert XML tags to Markdown
+convert_to_markdown() {
+  local xml_content=$(cat "$1")
+  local output_file="$1.md"
+
+  # Convert main tags
+  echo "$xml_content" | \
+    sed -e 's|<p>\(.*\)</p>|## \1|g' \
+      -e 's|<ul>||g' \
+      -e 's|</ul>||g' \
+      -e 's|<h1>\(.*\)</h1>|# \1|g' \
+      -e 's|<li>\(.*\)</li>|- \1|g' \
+      -e 's|<description>||g' \
+      -e 's|</description>||g' \
+      -e '/<[^>]*>/d' > "$output_file" # Remove any other XML tags and output to .md file
 }

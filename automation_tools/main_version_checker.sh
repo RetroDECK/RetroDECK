@@ -5,27 +5,27 @@
 source automation_tools/version_extractor.sh
 
 # Set the file paths
-appdata="net.retrodeck.retrodeck.appdata.xml"
+metainfo="net.retrodeck.retrodeck.metainfo.xml"
 manifest="net.retrodeck.retrodeck.yml"
 manifest_content=$(cat "$manifest")
 
 compare_versions() {
     local manifest_version_cleaned=$(echo "$1" | sed 's/[a-zA-Z]//g')
-    local appdata_version_cleaned=$(echo "$2" | sed 's/[a-zA-Z]//g')
+    local metainfo_version_cleaned=$(echo "$2" | sed 's/[a-zA-Z]//g')
 
-    if [[ "$manifest_version_cleaned" == "$appdata_version_cleaned" ]]; then
+    if [[ "$manifest_version_cleaned" == "$metainfo_version_cleaned" ]]; then
         return 0  # Versions are equal
     fi
 
     local IFS=.
     local manifest_parts=($manifest_version_cleaned)
-    local appdata_parts=($appdata_version_cleaned)
+    local metainfo_parts=($metainfo_version_cleaned)
 
     for ((i=0; i<${#manifest_parts[@]}; i++)); do
-        if ((manifest_parts[i] > appdata_parts[i])); then
+        if ((manifest_parts[i] > metainfo_parts[i])); then
             return 1  # Manifest version is greater
-        elif ((manifest_parts[i] < appdata_parts[i])); then
-            return 2  # Appdata version is greater
+        elif ((manifest_parts[i] < metainfo_parts[i])); then
+            return 2  # Metainfo version is greater
         fi
     done
 
@@ -38,8 +38,8 @@ echo -e "Online repository:\t$repo_version"
 manifest_version=$(fetch_manifest_version)
 echo -e "Manifest:\t\t$manifest_version"
 
-appdata_version=$(fetch_appdata_version)
-echo -e "Appdata:\t\t$appdata_version"
+metainfo_version=$(fetch_metainfo_version)
+echo -e "Metainfo:\t\t$metainfo_version"
 
 # Additional checks
 if [[ "$manifest_version" == "main" || "$manifest_version" == "THISBRANCH" || "$manifest_version" == *"cooker"* ]]; then
@@ -47,8 +47,8 @@ if [[ "$manifest_version" == "main" || "$manifest_version" == "THISBRANCH" || "$
     exit 1
 fi
 
-if [[ "$appdata_version" != "$manifest_version" ]]; then
-    echo "Appdata version is not equal to manifest version. Please fix it."
+if [[ "$metainfo_version" != "$manifest_version" ]]; then
+    echo "Metainfo version is not equal to manifest version. Please fix it."
     exit 1
 fi
 

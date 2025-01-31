@@ -40,6 +40,7 @@ check_is_steam_deck() {
 }
 
 check_for_version_update() {
+  # TODO logging
   # This function will perform a basic online version check and alert the user if there is a new version available.
 
   log d "Entering funtcion check_for_version_update"
@@ -47,34 +48,18 @@ check_for_version_update() {
   wget -q --spider "https://api.github.com/repos/$git_organization_name/$update_repo/releases/latest"
 
   if [ $? -eq 0 ]; then
-    local online_version=$(curl --silent "https://api.github.com/repos/$git_organization_name/$update_repo/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+  
+    # Check if $selected_branch is not set
+    if [[ -z "$selected_branch" ]]; then
+        # If $selected_branch is not set, get the latest release tag from GitHub API
+        local online_version=$(curl --silent "https://api.github.com/repos/$git_organization_name/$update_repo/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+    else
+        local online_version=$(curl -s "https://api.github.com/repos/$git_organization_name/$update_repo/releases" | jq -r --arg bn "$branch_name" 'sort_by(.published_at) | .[] | select(.tag_name | contains($bn)) | .tag_name' | tail -n 1)
+    fi
 
     if [[ ! "$update_ignore" == "$online_version" ]]; then
       if [[ "$update_repo" == "RetroDECK" ]] && [[ $(sed -e 's/[\.a-z]//g' <<< $version) -le $(sed -e 's/[\.a-z]//g' <<< $online_version) ]]; then
-        # choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="Ignore this version" \
-        #   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-        #   --title "RetroDECK Update Available" \
-        #   --text="There is a new version of RetroDECK on the stable release channel $online_version. Would you like to update to it?\n\n(depending on your internet speed this could takes several minutes).")
-        # rc=$? # Capture return code, as "Yes" button has no text value
-        # if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
-        #   if [[ $choice == "Ignore this version" ]]; then
-        #     set_setting_value $rd_conf "update_ignore" "$online_version" retrodeck "options" # Store version to ignore for future checks
-        #   fi
-        # else # User clicked "Yes"
-        #   configurator_generic_dialog "RetroDECK Online Update" "The update process may take several minutes.\n\nAfter the update is complete, RetroDECK will close. When you run it again you will be using the latest version."
-        #   (
-        #   flatpak-spawn --host flatpak update --noninteractive -y net.retrodeck.retrodeck
-        #   ) |
-        #   rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
-        #   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-        #   --title "RetroDECK Updater" \
-        #   --text="Upgrade in process please wait (this could takes several minutes)."
-        #   configurator_generic_dialog "RetroDECK Online Update" "The update process is now complete!\n\nPlease restart RetroDECK to keep the fun going."
-        #   exit 1
-        # fi
-        # TODO: add the logic to check and update the branch from the configuration file
-        log i "Showing new version found dialog"
-        choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK" --extra-button="Ignore this version" \
+        choice=$(zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK" --extra-button="Ignore this version" \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         --title "RetroDECK - New Update Available" \
         --text="There is a new version of RetroDECK available: <span foreground='$blue'><b>$online_version</b></span>.\nYou can easily update from the app store you have installed, examples: KDE Discover or Gnome Software.\n\nIf you would like to ignore this notification, click the \"Ignore this version\" button.")
@@ -96,57 +81,7 @@ check_for_version_update() {
             set_setting_value $rd_conf "update_ignore" "$online_version" retrodeck "options" # Store version to ignore for future checks.
           fi
         else # User clicked "Yes"
-          log i "Selected: \"Yes\""
-          configurator_generic_dialog "RetroDECK Online Update" "The update process may take several minutes.\n\nAfter the update is complete, RetroDECK will close. When you run it again you will be using the latest version."
-          (
-          local latest_cooker_download=$(curl --silent https://api.github.com/repos/XargonWan/RetroDECK-cooker/releases/latest | grep '"browser_download_url":.*flatpak' | grep -v '\.sha' | sed -E 's/.*"([^"]+)".*/\1/')
-          local temp_folder="$rdhome/RetroDECK_Updates"
-          create_dir $temp_folder
-          log i "Downloading version \"$online_version\" in \"$temp_folder/RetroDECK-cooker.flatpak\" from url: \"$latest_cooker_download\""
-          # Downloading the flatpak file
-          wget -P "$temp_folder" "$latest_cooker_download"
-          # And its sha
-          wget -P "$temp_folder" "$latest_cooker_download.sha"
-
-          # Get the expected SHA checksum from the SHA file
-          local expected_sha=$(cat "$temp_folder/$(basename "$latest_cooker_download").sha" | awk '{print $1}')
-
-          # Check if the file exists
-          if [ -f "$temp_folder/RetroDECK-cooker.flatpak" ]; then
-              # Calculate the actual SHA checksum of the file
-              actual_sha=$(sha256sum "$temp_folder/RetroDECK-cooker.flatpak" | awk '{print $1}')
-              
-              # Log the found and expected SHA checksums
-              log d "Found SHA: $actual_sha"
-              log d "Expected SHA: $expected_sha"
-              
-              # Check if the SHA checksum matches
-              if [ "$actual_sha" = "$expected_sha" ]; then
-                  log d "Flatpak file \"$temp_folder/RetroDECK-cooker.flatpak\" found and SHA checksum matches, proceeding."
-                  log d "Uninstalling old RetroDECK flatpak"
-                  # Remove current version before installing new one, to avoid duplicates
-                  flatpak-spawn --host flatpak remove --noninteractive -y net.retrodeck.retrodeck && log d "Uninstallation successful"
-                  log d "Installing new flatpak file from: \"$temp_folder/RetroDECK-cooker.flatpak\""
-                  flatpak-spawn --host flatpak install --user --bundle --noninteractive -y "$temp_folder/RetroDECK-cooker.flatpak" && log d "Installation successful"
-              else
-                  log e "Flatpak file \"$temp_folder/RetroDECK-cooker.flatpak\" found but SHA checksum does not match. Quitting."
-                  configurator_generic_dialog "RetroDECK Online Update" "There was an error during the update: flatpak file found but SHA checksum does not match. Please check the log file."
-                  exit 1
-              fi
-          else
-              log e "Flatpak file \"$temp_folder/RetroDECK-cooker.flatpak\" NOT FOUND. Quitting."
-              configurator_generic_dialog "RetroDECK Online Update" "There was an error during the update: flatpak file not found. Please check the log file."
-              exit 1
-          fi
-
-          rm -rf "$temp_folder" # Cleanup old bundles to save space
-          ) |
-          rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
-          --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-          --title "RetroDECK Updater" \
-          --text="RetroDECK is updating to the latest version, please wait."
-          configurator_generic_dialog "RetroDECK Online Update" "The update process is now complete!\n\nPlease restart RetroDECK to keep the fun going."
-          exit 1
+          install_release $online_version
         fi
       fi
     fi
@@ -197,8 +132,9 @@ elif [[ "$new_version_major_rev" -eq "$current_version_major_rev" ]]; then
   fi
 fi
 
-# Perform post_update commands for current version if it is a cooker
-if grep -qF "cooker" <<< $hard_version; then # If newly-installed version is a "cooker" build, always perform post_update commands for current version
+# Perform post_update commands for current version if it is a cooker or PR
+if grep -qF "cooker" <<< "$hard_version" || grep -qF "PR" <<< "$hard_version"; then
+  # If newly-installed version is a "cooker" or "PR" build, always perform post_update commands for current version
   if [[ "$(echo $hard_version | cut -d'-' -f2)" == "$new_version" ]]; then
     is_newer_version="true"
   fi
