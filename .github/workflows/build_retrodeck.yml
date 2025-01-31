@@ -12,7 +12,6 @@ on:
       - 'automation_tools/**'
       - 'config/**'
       - 'functions/**'
-      - 'rd-submodules/**'
       - '*.sh'
       - 'net.retrodeck.retrodeck.yml'
       - 'net.retrodeck.retrodeck.metainfo.xml'

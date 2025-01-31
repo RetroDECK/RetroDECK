@@ -33,12 +33,6 @@ jobs:
           relname="main-"$(git rev-parse --short HEAD)
 
           git checkout $rd_branch
-          git submodule init
-          git submodule update
-          # NOTE: the only linked submodules are: rd-submodules/retroarch
-          # these must be included in the exclusion list as they must be redownloaded
-          #sync -rav --progress --exclude={'res/screenshots/','shared-modules/','rd-submodules/retroarch','.git/','docs','retrodeck-flatpak/','retrodeck-flatpak-cooker/','.flatpak-builder/'} ~/RetroDECK/ ~/flathub/
-
           cd $gits_folder/flathub
 
           git checkout -b $relname

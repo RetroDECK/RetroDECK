@@ -17,7 +17,6 @@ backup
 .old
 tmp
 .godot
-rd-submodules/es-de/patches-tmp*
 retrodeck-repo
 buildid
 *.bak
@@ -36,10 +35,3 @@ ruffle-*.tar.gz
 # Python #
 ##########
 __pycache__
-
-# Submodules #
-##############
-rd-submodules/retroarch*
-rd-submodules/ryujinx*
-rd-submodules/shared-modules*
-rd-submodules/es-de/patches-tmp*
