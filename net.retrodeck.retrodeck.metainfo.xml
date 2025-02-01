@@ -109,7 +109,6 @@
             <p>Known issues:</p>
             <ul>
                <li>In some cases, Steam Sync fails to associate the controller template to the Steam entry, so the user needs to set it manually if desired</li>
-               <li>Ryujinx is still broken</li>
                <li>Please check the known issues in the Wiki under General Information</li>
             </ul>
          </description>

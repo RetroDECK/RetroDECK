@@ -618,7 +618,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/RetroDECK/Pancakes-bin/releases/download/1.1.0.1403-20250118/pancakes-Release-linux_x64.tar.gz
-        sha256: 52a7d37cb3586c8b8f281e8190a6af9ff654586f38a0c3caea27e5d1db322405
+        sha256: 6b4fee31782d8ca1def23c326f22263fda7c553ce0218d2423d39208c2bfe2f6
 
   # XEMU
   # https://xemu.app/docs/download/#download-for-linux
