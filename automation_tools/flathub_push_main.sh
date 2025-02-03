@@ -6,7 +6,7 @@
 if [ -z "${GITHUB_WORKSPACE}" ]; then
     gits_folder="${GITHUB_WORKSPACE}/tmp/gits" # without last /
 else
-    gits_folder="${PWD}/tmp/gits" # without last /
+    gits_folder="/tmp/gits" # without last /
 fi
 
 
@@ -63,11 +63,11 @@ sed -i '/^[[:space:]]*#/d' $manifest
 sed -i 's/[[:space:]]*#.*$//' $manifest
 cat << EOF >> $manifest
 modules:
-    - name: RetroDECK
-        buildsystem: simple
-        build-commands:
+  - name: RetroDECK
+      buildsystem: simple
+      build-commands:
         - cp -rn files/* /app
-        sources:
+      sources:
         - type: archive
         url: $artifacts_link
         sha256: $(curl -sL "$artifacts_sha_link")
