@@ -26,6 +26,8 @@ incconfigs/
 net.retrodeck.retrodeck.cached.yml
 placeholders.cache
 RetroDECK*Artifact.tar.gz
+./gits
+flathub.json
 
 #   Components artifacts   #
 ############################
