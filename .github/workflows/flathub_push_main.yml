@@ -23,10 +23,13 @@ jobs:
           GIT_MAIL: ${{ secrets.GITMAIL }}
 
       - name: Commit and push changes
-        uses: ad-m/github-push-action@master
+        uses: appleboy/git-push-action@v1.0.0
         with:
+          commit_message: "Update RetroDECK to v${{ env.RELNAME }} from RetroDECK/${{ env.RD_BRANCH }}"
           branch: "${{ env.RELNAME }}"
-          directory: "${{ env.FOLDER_TO_PUSH }}"
-          repository: "${{ env.TARGET_REPO }}"
-          tags: "v${{ env.RELNAME }} --force"
+          path: "${{ env.FOLDER_TO_PUSH }}"
+          remote: "${{ env.TARGET_REPO }}"
+          tag: "v${{ env.RELNAME }} --force"
           force: true
+          author_name: ${{ env.GIT_NAME }}
+          author_email: ${{ env.GIT_MAIL }}
