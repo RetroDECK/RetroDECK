@@ -3,7 +3,11 @@
 # EDITABLES:
 #rd_branch=${GITHUB_REF_NAME} # should be main
 
-gits_folder="/tmp/${GITHUB_WORKSPACE}/gits" # without last /
+if [ -z "${GITHUB_WORKSPACE}" ]; then
+    GITHUB_WORKSPACE="."
+fi
+
+gits_folder="${GITHUB_WORKSPACE}/tmp/gits" # without last /
 
 rd_branch="main"
 flathub_target_repo='flathub/net.retrodeck.retrodeck'
