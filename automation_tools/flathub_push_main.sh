@@ -58,11 +58,10 @@ ls -lah
 
 # Creating the manifest for flathub
 manifest='net.retrodeck.retrodeck.yml'
-sed -n '/modules:/q;p' $gits_folder/RetroDECK/net.retrodeck.retrodeck.yml > $manifest
+sed -n '/cleanup:/q;p' $gits_folder/RetroDECK/net.retrodeck.retrodeck.yml > $manifest
 sed -i '/^[[:space:]]*#/d' $manifest
 sed -i 's/[[:space:]]*#.*$//' $manifest
 cat << EOF >> $manifest
-
 modules:
 
     - name: RetroDECK
@@ -96,7 +95,6 @@ fi
 
 git add .
 git commit -m "Update RetroDECK to v$relname from RetroDECK/$rd_branch"
-
 
 if [ -n "${GITHUB_WORKFLOW}" ]; then
     git remote set-url origin https://x-access-token:${GH_TOKEN}@github.com/${flathub_target_repo}
