@@ -21,15 +21,17 @@ jobs:
         env:
           GIT_NAME: ${{ secrets.GITNAME }}
           GIT_MAIL: ${{ secrets.GITMAIL }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Commit and push changes
-        uses: appleboy/git-push-action@v1.0.0
-        with:
-          commit_message: "Update RetroDECK to v${{ env.RELNAME }} from RetroDECK/${{ env.RD_BRANCH }}"
-          branch: "${{ env.RELNAME }}"
-          path: "${{ env.FOLDER_TO_PUSH }}"
-          remote: "${{ env.TARGET_REPO }}"
-          tag: "v${{ env.RELNAME }} --force"
-          force: true
-          author_name: ${{ env.GIT_NAME }}
-          author_email: ${{ env.GIT_MAIL }}
+      # - name: Commit and push changes
+      #   uses: appleboy/git-push-action@v1.0.0
+      #   with:
+      #     commit_message: "Update RetroDECK to v${{ env.RELNAME }} from RetroDECK/${{ env.RD_BRANCH }}"
+      #     branch: "${{ env.RELNAME }}"
+      #     path: "${{ env.FOLDER_TO_PUSH }}"
+      #     remote: "${{ env.TARGET_REPO }}"
+      #     tag: "v${{ env.RELNAME }} --force"
+      #     force: true
+      #     author_name: ${{ env.GIT_NAME }}
+      #     author_email: ${{ env.GIT_MAIL }}
+      #     commit: true
