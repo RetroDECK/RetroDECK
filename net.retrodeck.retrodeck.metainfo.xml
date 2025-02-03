@@ -38,7 +38,7 @@
    <description>
       <p>RetroDECK is an emulation and retro gaming application powered by the ES-DE Frontend that allows you to catalog and play your game collection directly on Linux in one unified experience. It's inspired by other embedded emulation systems like AmberELEC, EmuELEC, CoreELEC, Lakka, and Batocera. The goal is to have everything you need included in one package, so no other software is required.</p>
       <p>Currently in Beta, RetroDECK focuses on SteamOS, Steam Deck, and Linux Desktop. It uses Steam Input for controller inputs and hotkeys. For the best experience, play and launch RetroDECK via Steam, though manual tweaks via RetroDECK Configurator may be needed if played without it.</p>
-      <p>Thanks to the RetroENGINE, RetroDECK can be used as a headless engine, and thanks to Steam Sync you can synchronize your favorites as non-Steam games (powered by Steam ROM Manager).</p>
+      <p>Thanks to the built-in RetroENGINE, RetroDECK can be used as a headless engine, and with Steam Sync, you can synchronize your favorites as non-Steam games (powered by Steam ROM Manager).</p>
       <p>What is it in detail?
       https://retrodeck.readthedocs.io/en/latest/wiki_about/what-is-retrodeck/</p>
       <p>How-to: Get Started using RetroDECK
