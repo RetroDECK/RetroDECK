@@ -64,13 +64,13 @@ sed -i 's/[[:space:]]*#.*$//' $manifest
 cat << EOF >> $manifest
 modules:
   - name: RetroDECK
-      buildsystem: simple
-      build-commands:
-        - cp -rn files/* /app
-      sources:
-        - type: archive
-        url: $artifacts_link
-        sha256: $(curl -sL "$artifacts_sha_link")
+    buildsystem: simple
+    build-commands:
+      - cp -rn files/* /app
+    sources:
+      - type: archive
+      url: $artifacts_link
+      sha256: $(curl -sL "$artifacts_sha_link")
 EOF
 
 cat << EOF >> flathub.json
