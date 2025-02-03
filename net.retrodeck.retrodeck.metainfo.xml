@@ -36,29 +36,22 @@
       </screenshot>
    </screenshots>
    <description>
-      <p>What is Retrodeck?</p>
-      <p>RetroDECK is an emulation and retro gaming solution to catalog and play your game collection directly from Linux in one unified application.
-  It's inspired by other embedded emulation systems like AmberELEC, EmuELEC, CoreELEC, Lakka, and Batocera.
-  RetroDECK is powered by EmulationStation Desktop Edition, that uses RetroArch and other standalone emulators to allow you to import and play your favorite games in a tidy environment.
-  No other software is needed as everything it's already included in one package!</p>
-      <p>BETA NOTICE: RetroDECK is still in Beta and the team is actively developing and adding more features.
-         The primary focus during the beta period is on SteamOS and the Steam Deck but we hope to expand to more devices and general Linux desktop in the future</p>
-      <p>NOTE: It can be run on Linux desktop right now but there will be some manual configurations needed for input, storage location and other tiny hickups.</p>
-      <p>
-         INSTALLATION INSTRUCTIONS FOR THE STEAM DECK:
-            1. Start RetroDECK from the Desktop mode (only needed for the initial first time configuration)
-            2. Add RetroDECK to your Steam Library by pressing "Add a non-steam game to my library"
-            3. Download the offical RetroDECK controller profile from Steam
-            4. [OPTIONAL] Download Steam Grids graphics for RetroDECK with BoilR
-      </p>
-      <p>For more detailed information check our wiki: 
-      https://github.com/RetroDECK/RetroDECK/wiki</p>
+      <p>RetroDECK is an emulation and retro gaming application powered by the ES-DE Frontend that allows you to catalog and play your game collection directly on Linux in one unified experience. It's inspired by other embedded emulation systems like AmberELEC, EmuELEC, CoreELEC, Lakka, and Batocera. The goal is to have everything you need included in one package, so no other software is required.</p>
+      <p>Currently in Beta, RetroDECK focuses on SteamOS, Steam Deck, and Linux Desktop. It uses Steam Input for controller inputs and hotkeys. For the best experience, play and launch RetroDECK via Steam, though manual tweaks via RetroDECK Configurator may be needed if played without it.</p>
+      <p>Thanks to the RetroENGINE, RetroDECK can be used as a headless engine, and thanks to Steam Sync you can synchronize your favorites as non-Steam games (powered by Steam ROM Manager).</p>
+      <p>What is it in detail?
+      https://retrodeck.readthedocs.io/en/latest/wiki_about/what-is-retrodeck/</p>
+      <p>How-to: Get Started using RetroDECK
+      https://retrodeck.readthedocs.io/en/latest/wiki_general/retrodeck-start/</p>
       <p>If you want to sponsor the project: 
       https://www.patreon.com/RetroDECK</p>
-      <p>If you want to join the RetroDECK community check our:</p>
-      <p>Reddit: https://www.reddit.com/r/RetroDECK/</p>
-      <p>Discord: https://discord.gg/WDc5C9YWMx 
-         (If you want to help out with the project join the "i-want-to-help" channel)</p>
+      <p>The RetroDECK Community:</p>
+      <p>Blog: https://retrodeck.readthedocs.io/en/latest/blog/</p>
+      <p>Discord: https://discord.gg/WDc5C9YWMx</p>
+      <p>Matrix: https://matrix.to/#/#retrodeck:matrix.org</p>
+      <p>Lemmy Community: https://lemmy.zip/c/retrodeck</p>
+      <p>Subreddit: https://www.reddit.com/r/retrodeck</p>
+      <p>Bluesky: https://bsky.app/profile/retrodeck.net</p>
    </description>
    <branding>
       <color type="primary" scheme_preference="light">#94a6fb</color>
@@ -67,7 +60,7 @@
    <project_license>GPL-3.0</project_license>
    <metadata_license>CC0-1.0</metadata_license>
    <releases>
-         <release version="0.9.0b" date="2025-01-31">
+         <release version="0.9.0b" date="2025-02-03">
          <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.9.0b</url>
          <description>
             <p>New Additions:</p>
