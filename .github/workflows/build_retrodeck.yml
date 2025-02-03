@@ -278,6 +278,19 @@ jobs:
       - name: Create Bundle
         run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_bundle.sh"
 
+      # TODO: Until we add support for Flathub-beta this is restricted to main
+      - name: Create Artifact for Flathub
+        if: github.ref == 'refs/heads/main'
+        run: |
+          if [[ "$GITHUB_REF" == "refs/heads/main" ]]; then
+            artifact_name="RetroDECK-Artifact"
+          else
+            artifact_name="RetroDECK-Artifact-cooker"
+          fi
+          tar -czf ${GITHUB_WORKSPACE}/${artifact_name}.tar.gz -C ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker .
+          hash=($(sha256sum ${GITHUB_WORKSPACE}/${artifact_name}.tar.gz))
+          echo $hash > ${GITHUB_WORKSPACE}/${artifact_name}.sha
+
       # Upload artifacts for other jobs
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
@@ -287,7 +300,8 @@ jobs:
           path: |
             RetroDECK*.flatpak
             RetroDECK*.flatpak.sha
-            RetroDECK*Artifact.tar.gz        
+            RetroDECK-Artifact*.tar.gz
+            RetroDECK-Artifact*.sha
 
   GitHub-publish:
     runs-on: ubuntu-latest
@@ -332,6 +346,20 @@ jobs:
           omitBodyDuringUpdate: true
           makeLatest: ${{ env.MAKE_LATEST }}
           repo: ${{ env.REPO_NAME }}
+          token: ${{ steps.generate-rekku-token.outputs.token }}
+
+      # Publish Artifacts
+      - name: Publish Artifacts
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ env.TAG }}
+          name: "RetroDECK Artifacts - ${{ env.TAG }}"
+          body: "Flathub artifacts for version ${{ env.TAG }}"
+          artifacts: "retrodeck-artifacts/RetroDECK-Artifact*.tar.gz,retrodeck-artifacts/RetroDECK-Artifact*.sha"
+          allowUpdates: true
+          omitBodyDuringUpdate: true
+          makeLatest: ${{ env.MAKE_LATEST }}
+          repo: Artifacts
           token: ${{ steps.generate-rekku-token.outputs.token }}
 
       - name: Post PR comment with artifacts

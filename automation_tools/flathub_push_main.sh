@@ -13,8 +13,8 @@ fi
 rd_branch="main"
 flathub_target_repo='flathub/net.retrodeck.retrodeck'
 retrodeck_repo='RetroDECK/RetroDECK'
-artifacts_sha_link="https://artifacts.retrodeck.net/artifacts/RetroDECK-Artifact.sha"
-artifacts_link="https://artifacts.retrodeck.net/artifacts/RetroDECK-Artifact.tar.gz"
+artifacts_sha_link=$(curl -s https://api.github.com/repos/RetroDECK/Artifacts/releases/latest | jq -r '.assets[] | select(.name == "RetroDECK-Artifacts.sha").browser_download_url')
+artifacts_link=$(curl -s https://api.github.com/repos/RetroDECK/Artifacts/releases/latest | jq -r '.assets[] | select(.name == "RetroDECK-Artifacts.tar.gz").browser_download_url')
 
 if -d "$gits_folder"; then
     rm -rf "$gits_folder"
