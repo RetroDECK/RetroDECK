@@ -67,7 +67,7 @@ modules:
     - name: RetroDECK
       buildsystem: simple
       build-commands:
-       - cp -rn files/* /app
+       - cp -rn files/* /app || echo "File as been skipped"
       sources:
         - type: archive
           url: $artifacts_link
