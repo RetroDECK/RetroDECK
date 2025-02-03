@@ -68,7 +68,7 @@ modules:
     build-commands:
       - cp -rn files/* /app
     sources:
-      - type: archive
+    - type: archive
       url: $artifacts_link
       sha256: $(curl -sL "$artifacts_sha_link")
 EOF
