@@ -62,16 +62,17 @@ sed -n '/cleanup/q;p' $gits_folder/RetroDECK/net.retrodeck.retrodeck.yml > $mani
 sed -i '/^[[:space:]]*#/d' $manifest
 sed -i 's/[[:space:]]*#.*$//' $manifest
 cat << EOF >> $manifest
-    modules:
 
-        - name: RetroDECK
-          buildsystem: simple
-          build-commands:
-            - cp -rn files/* /app
-          sources:
-            - type: archive
-            url: $artifacts_link
-            sha256: $(curl -sL "$artifacts_sha_link")
+modules:
+
+    - name: RetroDECK
+      buildsystem: simple
+      build-commands:
+       - cp -rn files/* /app
+      sources:
+        - type: archive
+          url: $artifacts_link
+          sha256: $(curl -sL "$artifacts_sha_link")
 EOF
 
 cat << EOF >> flathub.json
