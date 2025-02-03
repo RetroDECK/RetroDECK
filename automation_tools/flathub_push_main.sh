@@ -29,11 +29,10 @@ if [ -z "$relname" ]; then
 fi
 echo "Using release: $relname"
 
-git checkout "$rd_branch"
+cd "$gits_folder/RetroDECK" && git checkout "$rd_branch"
+
 cd "$gits_folder/flathub" || exit 1
-
 git checkout -b "$relname"
-
 git rm -rf *
 git clean -fxd # restroing git index
 
@@ -41,7 +40,7 @@ git clean -fxd # restroing git index
 files_to_copy=('LICENSE' 'README.md' 'other_licenses.txt')
 for file in "${files_to_copy[@]}"; do
     if [ -f "$file" ]; then
-        cp -fv "$file" "$gits_folder/flathub"
+        cp -fv "$gits_folder/RetroDECK/$file" "$gits_folder/flathub"
     else
         echo "Warning: $file not found in $gits_folder/RetroDECK"
     fi
@@ -74,13 +73,13 @@ cat << EOF >> flathub.json
 EOF
 
 if [ -n "${GITHUB_WORKFLOW}" ]; then
-    git config user.name "$GIT_NAME"
-    git config user.email "$GIT_MAIL"
+    git config --local user.name "$GIT_NAME"
+    git config --local user.email "$GIT_MAIL"
 elif [[ -z $(git config --get user.name) || -z $(git config --get user.email) ]]; then
     read -p "No git user.name set, please enter your name: " git_username
-    git config --global user.name "$git_username"
+    git config --local user.name "$git_username"
     read -p "No git user.email set, please enter your email: " git_email
-    git config --global user.email "$git_email"
+    git config --local user.email "$git_email"
 fi
 
 if [ -n "${GITHUB_WORKFLOW}" ]; then
