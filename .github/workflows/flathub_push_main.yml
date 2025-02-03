@@ -21,4 +21,4 @@ jobs:
         env:
           GIT_NAME: ${{ secrets.GITNAME }}
           GIT_MAIL: ${{ secrets.GITMAIL }}
-          GH_TOKEN: ${{ secrets.UPLOAD_TOKEN }}
+          GH_TOKEN: ${{ secrets.FLATHUB_PUSH }}
