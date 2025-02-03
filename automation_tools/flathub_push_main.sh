@@ -77,7 +77,10 @@ EOF
 
 # If we are in a GitHub workflow...
 if [ -n "${GITHUB_WORKFLOW}" ]; then
-    gh auth login
+    git config --local user.name "$GIT_NAME"
+    git config --local user.email "$GIT_MAIL"
+    git config --local credential.helper store
+    echo "${GITHUB_TOKEN}" | gh auth login --with-token
 elif [[ -z $(git config --get user.name) || -z $(git config --get user.email) ]]; then
     read -p "No git user.name set, please enter your name: " git_username
     git config --local user.name "$git_username"
