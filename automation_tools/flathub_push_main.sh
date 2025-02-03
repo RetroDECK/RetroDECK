@@ -80,7 +80,7 @@ if [ -n "${GITHUB_WORKFLOW}" ]; then
     git config --local user.name "$GIT_NAME"
     git config --local user.email "$GIT_MAIL"
     git config --local credential.helper store
-    echo "${GITHUB_TOKEN}" | gh auth login --with-token
+    gh auth login
 elif [[ -z $(git config --get user.name) || -z $(git config --get user.email) ]]; then
     read -p "No git user.name set, please enter your name: " git_username
     git config --local user.name "$git_username"
@@ -90,4 +90,10 @@ fi
 
 git add .
 git commit -m "Update RetroDECK to v$relname from RetroDECK/$rd_branch"
-git push --force "https://Rekku:${GITHUB_TOKEN}@github.com/${flathub_target_repo}" "$relname"
+
+if [ -n "${GITHUB_WORKFLOW}" ]; then
+    git push --force "https://${GITHUB_TOKEN}@github.com/${flathub_target_repo}" "$relname"
+else
+    git push --force "https://github.com/${flathub_target_repo}" "$relname"
+fi
+
