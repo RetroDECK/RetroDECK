@@ -62,15 +62,16 @@ sed -n '/cleanup/q;p' $gits_folder/RetroDECK/net.retrodeck.retrodeck.yml > $mani
 sed -i '/^[[:space:]]*#/d' $manifest
 sed -i 's/[[:space:]]*#.*$//' $manifest
 cat << EOF >> $manifest
-modules:
-  - name: RetroDECK
-    buildsystem: simple
-    build-commands:
-      - cp -rn files/* /app
-    sources:
-    - type: archive
-      url: $artifacts_link
-      sha256: $(curl -sL "$artifacts_sha_link")
+    modules:
+
+        - name: RetroDECK
+          buildsystem: simple
+          build-commands:
+            - cp -rn files/* /app
+          sources:
+            - type: archive
+            url: $artifacts_link
+            sha256: $(curl -sL "$artifacts_sha_link")
 EOF
 
 cat << EOF >> flathub.json
@@ -95,8 +96,9 @@ fi
 git add .
 git commit -m "Update RetroDECK to v$relname from RetroDECK/$rd_branch"
 
+
 if [ -n "${GITHUB_WORKFLOW}" ]; then
-    git push --force "https://${GIT_NAME}@github.com/${flathub_target_repo}" "$relname"
+    git push --force "${GIT_NAME}@github.com/${flathub_target_repo}.git" "$relname"
 else
     git push --force "https://github.com/${flathub_target_repo}" "$relname"
 fi
