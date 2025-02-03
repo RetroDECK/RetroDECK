@@ -80,9 +80,10 @@ elif [[ -z $(git config --get user.name) || -z $(git config --get user.email) ]]
 fi
 
 if [ -n "${GITHUB_WORKFLOW}" ]; then
-    secret="$GIT_TOKEN@"
+    echo "RD_BRANCH=$rd_branch" >> $GITHUB_ENV
+    echo "RELNAME=$relname" >> $GITHUB_ENV
+else
+    git add .
+    git commit -m "Updated flathub/net.retrodeck.retrodeck to v$relname from RetroDECK/$rd_branch"
+    git push --force "https://github.com/${flathub_target_repo}.git" "$relname"
 fi
-
-git add *
-git commit -m "Updated flathub/net.retrodeck.retrodeck to v$relname from RetroDECK/$rd_branch"
-git push --force "https://${secret}github.com/${flathub_target_repo}.git" "$relname"

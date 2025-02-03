@@ -21,4 +21,13 @@ jobs:
         env:
           GIT_NAME: ${{ secrets.GITNAME }}
           GIT_MAIL: ${{ secrets.GITMAIL }}
-          GIT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit and push changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Updated flathub/net.retrodeck.retrodeck to v${{ env.RELNAME }} from RetroDECK/${{ env.RD_BRANCH }}"
+          branch: "${{ env.RD_BRANCH }}"
+          repository: "${{ secrets.GITHUB_REPOSITORY }}"
+          commit_user_name: ${{ secrets.GITNAME }}
+          commit_user_email: ${{ secrets.GITMAIL }}
+          token: ${{ secrets.GITHUB_TOKEN }}
