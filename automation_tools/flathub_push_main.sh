@@ -42,7 +42,7 @@ git rm -rf *
 git clean -fxd # restroing git index
 
 # Copying only a few files as the others are cloned by git in retrodeck.sh
-files_to_copy=('LICENSE' 'README.md' 'other_licenses.txt' 'net.retrodeck.retrodeck.yml')
+files_to_copy=('LICENSE' 'README.md' 'other_licenses.txt' 'net.retrodeck.retrodeck.yml' 'net.retrodeck.retrodeck.metainfo.xml')
 for file in "${files_to_copy[@]}"; do
     if ! cp -fv "$gits_folder/RetroDECK/$file" "$gits_folder/flathub"; then
         echo "Warning: $file not found in $gits_folder/RetroDECK"
