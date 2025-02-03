@@ -21,7 +21,7 @@ jobs:
         env:
           GIT_NAME: ${{ secrets.GITNAME }}
           GIT_MAIL: ${{ secrets.GITMAIL }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.UPLOAD_TOKEN }}
 
       # - name: Commit and push changes
       #   uses: appleboy/git-push-action@v1.0.0

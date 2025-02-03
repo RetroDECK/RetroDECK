@@ -98,16 +98,7 @@ git add .
 git commit -m "Update RetroDECK to v$relname from RetroDECK/$rd_branch"
 
 if [ -n "${GITHUB_WORKFLOW}" ]; then
-
-    if ! git ls-remote --exit-code --heads origin "$relname"; then
-        echo "Branch $relname not found. Creating..."
-        git checkout -b "$relname"
-        git push -u origin "$relname"
-    fi
-
-    gh auth login --with-token <<< "${GITHUB_TOKEN}"
-    gh repo set-default "${flathub_target_repo}"
-    gh repo sync --force --branch "$relname"
+    git push --force "https://${GITHUB_TOKEN}@github.com/${flathub_target_repo}" "$relname"
 else
     git push --force "https://github.com/${flathub_target_repo}" "$relname"
 fi
