@@ -23,13 +23,15 @@ jobs:
           GIT_MAIL: ${{ secrets.GITMAIL }}
 
       - name: Commit and push changes
-        uses: stefanzweifel/git-auto-commit-action@v4
+        uses: EndBug/add-and-commit@v9
         with:
-          commit_message: "Updated flathub/net.retrodeck.retrodeck to v${{ env.RELNAME }} from RetroDECK/${{ env.RD_BRANCH }}"
-          branch: "${{ env.RD_BRANCH }}"
-          repository: "${{ env.TARGET_REPO }}"
-          push_options: '--force'
-          commit_user_email: ${{ secrets.GITMAIL }}
-          commit_user_name: ${{ secrets.GITNAME }}
+          message: "Updated flathub/net.retrodeck.retrodeck to v${{ env.RELNAME }} from RetroDECK/${{ env.RD_BRANCH }}"
+          new_branch: "${{ env.RD_BRANCH }}"
+          cwd: "${{ env.FOLDER_TO_PUSH }}"
+          push: 'origin ${{ env.TARGET_REPO }} --force'
+          author_email: ${{ secrets.GITMAIL }}
+          committer_email: ${{ secrets.GITNAME }}
           create_branch: true
-          file_pattern: "${{ env.FOLDER_TO_PUSH }}/*"
+          add: "*"
+          tag: "v${{ env.RD_BRANCH }}"
+          tag_push: '--force'
