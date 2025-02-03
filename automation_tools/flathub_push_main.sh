@@ -4,10 +4,11 @@
 #rd_branch=${GITHUB_REF_NAME} # should be main
 
 if [ -z "${GITHUB_WORKSPACE}" ]; then
-    GITHUB_WORKSPACE="."
+    gits_folder="${GITHUB_WORKSPACE}/tmp/gits" # without last /
+else
+    gits_folder="${PWD}/tmp/gits" # without last /
 fi
 
-gits_folder="${GITHUB_WORKSPACE}/tmp/gits" # without last /
 
 rd_branch="main"
 flathub_target_repo='flathub/net.retrodeck.retrodeck'
@@ -15,16 +16,19 @@ retrodeck_repo='RetroDECK/RetroDECK'
 artifacts_sha_link="https://artifacts.retrodeck.net/artifacts/RetroDECK-Artifact.sha"
 artifacts_link="https://artifacts.retrodeck.net/artifacts/RetroDECK-Artifact.tar.gz"
 
+if -d "$gits_folder"; then
+    rm -rf "$gits_folder"
+fi
 mkdir -vp "$gits_folder"
-cd "$gits_folder" || exit 1
+cd "$gits_folder" && echo "Moving in $gits_folder" || exit 1
 if [ -d flathub ]; then
-    rm -rf flathub
+    rm -rf "$gits_folder/flathub"
 fi
 if [ -d flathub ]; then
-    rm -rf RetroDECK
+    rm -rf "$gits_folder/RetroDECK"
 fi
-git clone --depth=1 --recursive "https://github.com/$flathub_target_repo.git" flathub
-git clone --depth=1 --recursive "https://github.com/$retrodeck_repo.git" RetroDECK
+git clone --depth=1 --recursive "https://github.com/$flathub_target_repo.git" "$gits_folder/flathub"
+git clone --depth=1 --recursive "https://github.com/$retrodeck_repo.git" "$gits_folder/RetroDECK"
 
 relname=$(curl -s https://api.github.com/repos/$retrodeck_repo/releases | jq -r '[.[] | select(.prerelease == true)][0].tag_name // empty')
 if [ -z "$relname" ]; then
@@ -34,7 +38,7 @@ echo "Using release: $relname"
 
 cd "$gits_folder/RetroDECK" && echo "Moving in $gits_folder/RetroDECK" && git checkout "$rd_branch"
 
-cd "$gits_folder/flathub" && echo "Moving in $gits_folder/flathub" || exit 1
+cd "$gits_folder"/flathub && echo "Moving in $gits_folder/flathub" || exit 1
 git checkout -b "$relname"
 echo "Current directory: $(pwd)"
 ls -lah
@@ -59,14 +63,14 @@ sed -i '/^[[:space:]]*#/d' $manifest
 sed -i 's/[[:space:]]*#.*$//' $manifest
 cat << EOF >> $manifest
 modules:
-- name: retrodeck
-    buildsystem: simple
-    build-commands:
-    - cp -rn files/* /app
-    sources:
-    - type: archive
-    url: $artifacts_link
-    sha256: $(curl -sL "$artifacts_sha_link")
+    - name: RetroDECK
+        buildsystem: simple
+        build-commands:
+        - cp -rn files/* /app
+        sources:
+        - type: archive
+        url: $artifacts_link
+        sha256: $(curl -sL "$artifacts_sha_link")
 EOF
 
 cat << EOF >> flathub.json
