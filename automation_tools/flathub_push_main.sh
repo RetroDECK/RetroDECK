@@ -79,7 +79,7 @@ if [ -n "${GITHUB_WORKFLOW}" ]; then
     git config --local user.name "$GIT_NAME"
     git config --local user.email "$GIT_MAIL"
     git config --local credential.helper store
-    echo "https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com" > ~/.git-credentials
+    echo "https://${GIT_NAME}:${GITHUB_TOKEN}@github.com" > ~/.git-credentials
 elif [[ -z $(git config --get user.name) || -z $(git config --get user.email) ]]; then
     read -p "No git user.name set, please enter your name: " git_username
     git config --local user.name "$git_username"
@@ -90,7 +90,7 @@ fi
 if [ -n "${GITHUB_WORKFLOW}" ]; then
     echo "RD_BRANCH=$rd_branch" >> $GITHUB_ENV
     echo "RELNAME=$relname" >> $GITHUB_ENV
-    echo "FOLDER_TO_PUSH="$gits_folder/flathub"" >> $GITHUB_ENV
+    echo "FOLDER_TO_PUSH=$gits_folder/flathub" >> $GITHUB_ENV
     echo "TARGET_REPO=${flathub_target_repo}" >> $GITHUB_ENV
 fi
 
@@ -98,6 +98,6 @@ git add .
 git commit -m "Updated flathub/net.retrodeck.retrodeck to v$relname from RetroDECK/$rd_branch"
 
 if [ -n "${GITHUB_WORKFLOW}" ]; then
-    git push --force "https://github.com/${flathub_target_repo}.git" "$relname"
+    git push --force "https://github.com/${flathub_target_repo}" "$relname"
     rm ~/.git-credentials
 fi
