@@ -16,7 +16,7 @@ jobs:
         with:
           fetch-depth: 1
           
-      - name: Pushing main to Flathub
+      - name: Preparing data to push
         run: automation_tools/flathub_push_main.sh
         env:
           GIT_NAME: ${{ secrets.GITNAME }}
@@ -28,10 +28,9 @@ jobs:
           message: "Updated flathub/net.retrodeck.retrodeck to v${{ env.RELNAME }} from RetroDECK/${{ env.RD_BRANCH }}"
           new_branch: "${{ env.RD_BRANCH }}"
           cwd: "${{ env.FOLDER_TO_PUSH }}"
-          push: 'origin ${{ env.TARGET_REPO }} --force'
+          push: 'origin ${{ env.TARGET_REPO }} --set-upstream --force'
           author_email: ${{ secrets.GITMAIL }}
           committer_email: ${{ secrets.GITNAME }}
-          create_branch: true
           add: "*"
           tag: "v${{ env.RD_BRANCH }}"
           tag_push: '--force'
