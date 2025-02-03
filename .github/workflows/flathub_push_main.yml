@@ -11,5 +11,10 @@ jobs:
       - ubuntu-latest
     steps:
 
-      - name: Pushing
+      - name: Checkout RetroDECK repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+
+      - name: Pushing main to Flathub
         run: automation_tools/flathub_push_main.sh
