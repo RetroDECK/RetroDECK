@@ -81,8 +81,6 @@ if [ -n "${GITHUB_WORKFLOW}" ]; then
     git config --local user.email "$GIT_MAIL"
     git config --local credential.helper store
 
-    GITHUB_TOKEN="${GITHUB_TOKEN}@" #we add this in order to inject the @ to correctly populate tue git url
-
     # echo "https://${GIT_NAME}:${GITHUB_TOKEN}@github.com" > ~/.git-credentials
     # echo "RD_BRANCH=$rd_branch" >> $GITHUB_ENV
     # echo "RELNAME=$relname" >> $GITHUB_ENV
@@ -98,5 +96,10 @@ fi
 
 git add .
 git commit -m "Update RetroDECK to v$relname from RetroDECK/$rd_branch"
-git push --force "https://${GITHUB_TOKEN}github.com/${flathub_target_repo}" "$relname"
+
+if [ -n "${GITHUB_WORKFLOW}" ]; then
+    git push --force "https://${GITHUB_TOKEN}@github.com/${flathub_target_repo}" "$relname"
+else
+    git push --force "https://github.com/${flathub_target_repo}" "$relname"
+fi
 
