@@ -82,6 +82,7 @@ fi
 if [ -n "${GITHUB_WORKFLOW}" ]; then
     echo "RD_BRANCH=$rd_branch" >> $GITHUB_ENV
     echo "RELNAME=$relname" >> $GITHUB_ENV
+    echo "FOLDER_TO_PUSH="$gits_folder/flathub"" >> $GITHUB_ENV
 else
     git add .
     git commit -m "Updated flathub/net.retrodeck.retrodeck to v$relname from RetroDECK/$rd_branch"

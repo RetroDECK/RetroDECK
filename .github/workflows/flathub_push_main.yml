@@ -30,4 +30,6 @@ jobs:
           repository: "${{ secrets.GITHUB_REPOSITORY }}"
           push_options: '--force'
           commit_user_email: ${{ secrets.GITMAIL }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          commit_user_name: ${{ secrets.GITNAME }}
+          create_branch: true
+          file_pattern: "${{ env.FOLDER_TO_PUSH }}/*"
