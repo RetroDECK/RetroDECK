@@ -23,15 +23,10 @@ jobs:
           GIT_MAIL: ${{ secrets.GITMAIL }}
 
       - name: Commit and push changes
-        uses: EndBug/add-and-commit@v9
+        uses: ad-m/github-push-action@master
         with:
-          message: "Updated flathub/net.retrodeck.retrodeck to v${{ env.RELNAME }} from RetroDECK/${{ env.RD_BRANCH }}"
-          new_branch: "${{ env.RELNAME }}"
-          cwd: "${{ env.FOLDER_TO_PUSH }}"
-          push: 'origin ${{ env.TARGET_REPO }} --set-upstream --force'
-          author_email: ${{ secrets.GITMAIL }}
-          committer_email: ${{ secrets.GITNAME }}
-          add: "*"
-          tag: "v${{ env.RELNAME }} --force"
-          default_author: "Rekku"
-          committer_name: "Rekku"
+          branch: "${{ env.RELNAME }}"
+          directory: "${{ env.FOLDER_TO_PUSH }}"
+          repository: "${{ env.TARGET_REPO }}"
+          tags: "v${{ env.RELNAME }} --force"
+          force: true
