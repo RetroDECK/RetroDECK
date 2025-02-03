@@ -70,8 +70,8 @@ cat << EOF >> flathub.json
 EOF
 
 if [ -n "${GITHUB_WORKFLOW}" ]; then
-    git config user.name "${{ secrets.GITNAME }}"
-    git config user.email "${{ secrets.GITMAIL }}"
+    git config user.name "$GIT_NAME"
+    git config user.email "$GIT_MAIL"
 elif [[ -z $(git config --get user.name) || -z $(git config --get user.email) ]]; then
     read -p "No git user.name set, please enter your name: " git_username
     git config --global user.name "$git_username"
@@ -80,7 +80,7 @@ elif [[ -z $(git config --get user.name) || -z $(git config --get user.email) ]]
 fi
 
 if [ -n "${GITHUB_WORKFLOW}" ]; then
-    secret="${{ secrets.TRIGGER_BUILD_TOKEN }}@"
+    secret="$GIT_TOKEN@"
 fi
 
 git add *
