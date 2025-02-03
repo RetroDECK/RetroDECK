@@ -58,7 +58,7 @@ ls -lah
 
 # Creating the manifest for flathub
 manifest='net.retrodeck.retrodeck.yml'
-sed -n '/cleanup/q;p' $gits_folder/RetroDECK/net.retrodeck.retrodeck.yml > $manifest
+sed -n '/modules:/q;p' $gits_folder/RetroDECK/net.retrodeck.retrodeck.yml > $manifest
 sed -i '/^[[:space:]]*#/d' $manifest
 sed -i 's/[[:space:]]*#.*$//' $manifest
 cat << EOF >> $manifest
