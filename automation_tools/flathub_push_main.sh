@@ -20,6 +20,9 @@ cd "$gits_folder" || exit 1
 if [ -d flathub ]; then
     rm -rf flathub
 fi
+if [ -d flathub ]; then
+    rm -rf RetroDECK
+fi
 git clone --depth=1 --recursive "https://github.com/$flathub_target_repo.git" flathub
 git clone --depth=1 --recursive "https://github.com/$retrodeck_repo.git" RetroDECK
 
@@ -29,19 +32,19 @@ if [ -z "$relname" ]; then
 fi
 echo "Using release: $relname"
 
-cd "$gits_folder/RetroDECK" && git checkout "$rd_branch"
+cd "$gits_folder/RetroDECK" && echo "Moving in $gits_folder/RetroDECK" && git checkout "$rd_branch"
 
-cd "$gits_folder/flathub" || exit 1
+cd "$gits_folder/flathub" && echo "Moving in $gits_folder/flathub" || exit 1
 git checkout -b "$relname"
-git rm -rf *
+echo "Current directory: $(pwd)"
+ls -lah
+git rm -rfv *
 git clean -fxd # restroing git index
 
 # Copying only a few files as the others are cloned by git in retrodeck.sh
 files_to_copy=('LICENSE' 'README.md' 'other_licenses.txt')
 for file in "${files_to_copy[@]}"; do
-    if [ -f "$file" ]; then
-        cp -fv "$gits_folder/RetroDECK/$file" "$gits_folder/flathub"
-    else
+    if ! cp -fv "$gits_folder/RetroDECK/$file" "$gits_folder/flathub"; then
         echo "Warning: $file not found in $gits_folder/RetroDECK"
     fi
 done
