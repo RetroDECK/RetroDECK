@@ -17,9 +17,7 @@ if [ -d flathub ]; then
     rm -rf flathub
 fi
 git clone --depth=1 --recursive "https://github.com/$flathub_target_repo.git" flathub
-cd "$gits_folder" || exit 1
 git clone --depth=1 --recursive "https://github.com/$retrodeck_repo.git" RetroDECK
-cd "$gits_folder/RetroDECK" || exit 1
 
 relname=$(curl -s https://api.github.com/repos/$retrodeck_repo/releases | jq -r '[.[] | select(.prerelease == true)][0].tag_name // empty')
 if [ -z "$relname" ]; then
@@ -36,12 +34,14 @@ git rm -rf *
 git clean -fxd # restroing git index
 
 # Copying only a few files as the others are cloned by git in retrodeck.sh
-cd "$gits_folder/RetroDECK" || exit 1
-cp -rf \
-'LICENSE' \
-'README.md' \
-'other_licenses.txt' \ 
-"$gits_folder/flathub/"
+files_to_copy=('LICENSE' 'README.md' 'other_licenses.txt')
+for file in "${files_to_copy[@]}"; do
+    if [ -f "$file" ]; then
+        cp -fv "$file" "$gits_folder/flathub"
+    else
+        echo "Warning: $file not found in $gits_folder/RetroDECK"
+    fi
+done
 
 cd "$gits_folder/flathub" || exit 1
 ls -lah
