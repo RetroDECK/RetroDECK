@@ -99,7 +99,7 @@ git commit -m "Update RetroDECK to v$relname from RetroDECK/$rd_branch"
 
 
 if [ -n "${GITHUB_WORKFLOW}" ]; then
-    git remote set-url origin https://x-access-token:${{ env.GH_TOKEN }}@github.com/${flathub_target_repo}
+    git remote set-url origin https://x-access-token:${GH_TOKEN}@github.com/${flathub_target_repo}
     git push --force origin "$relname"
 else
     git push --force "https://github.com/${flathub_target_repo}" "$relname"
