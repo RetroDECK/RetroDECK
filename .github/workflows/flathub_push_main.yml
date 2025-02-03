@@ -27,7 +27,9 @@ jobs:
         with:
           commit_message: "Updated flathub/net.retrodeck.retrodeck to v${{ env.RELNAME }} from RetroDECK/${{ env.RD_BRANCH }}"
           branch: "${{ env.RD_BRANCH }}"
-          repository: "${{ secrets.GITHUB_REPOSITORY }}"
+          repository: "${{ env.TARGET_REPO }}"
           push_options: '--force'
           commit_user_email: ${{ secrets.GITMAIL }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          commit_user_name: ${{ secrets.GITNAME }}
+          create_branch: true
+          file_pattern: "${{ env.FOLDER_TO_PUSH }}/*"
