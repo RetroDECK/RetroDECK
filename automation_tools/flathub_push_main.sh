@@ -85,4 +85,4 @@ fi
 
 git add *
 git commit -m "Updated flathub/net.retrodeck.retrodeck to v$relname from RetroDECK/$rd_branch"
-git push --force https://"$secret"github.com/"$flathub_target_repo.git" "$relname"
+git push --force "https://${secret}github.com/${flathub_target_repo}.git" "$relname"
