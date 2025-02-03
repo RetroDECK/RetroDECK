@@ -78,6 +78,8 @@ EOF
 if [ -n "${GITHUB_WORKFLOW}" ]; then
     git config --local user.name "$GIT_NAME"
     git config --local user.email "$GIT_MAIL"
+    git config --local credential.helper store
+    echo "https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com" > ~/.git-credentials
 elif [[ -z $(git config --get user.name) || -z $(git config --get user.email) ]]; then
     read -p "No git user.name set, please enter your name: " git_username
     git config --local user.name "$git_username"
@@ -97,4 +99,5 @@ git commit -m "Updated flathub/net.retrodeck.retrodeck to v$relname from RetroDE
 
 if [ -n "${GITHUB_WORKFLOW}" ]; then
     git push --force "https://github.com/${flathub_target_repo}.git" "$relname"
+    rm ~/.git-credentials
 fi
