@@ -98,7 +98,9 @@ git add .
 git commit -m "Update RetroDECK to v$relname from RetroDECK/$rd_branch"
 
 if [ -n "${GITHUB_WORKFLOW}" ]; then
-    git push --force "https://${GITHUB_TOKEN}:x-oauth-basic@github.com/${flathub_target_repo}" "$relname"
+    gh auth login --with-token <<< "${GITHUB_TOKEN}"
+    gh repo set-default "${flathub_target_repo}"
+    gh repo sync --force --branch "$relname"
 else
     git push --force "https://github.com/${flathub_target_repo}" "$relname"
 fi
