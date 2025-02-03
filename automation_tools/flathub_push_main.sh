@@ -38,7 +38,7 @@ cd "$gits_folder/flathub" && echo "Moving in $gits_folder/flathub" || exit 1
 git checkout -b "$relname"
 echo "Current directory: $(pwd)"
 ls -lah
-git rm -rfv *
+git rm -rf *
 git clean -fxd # restroing git index
 
 # Copying only a few files as the others are cloned by git in retrodeck.sh
