@@ -318,7 +318,7 @@ jobs:
         with:
           app-id: ${{ vars.REKKU_APP_ID }}
           private-key: ${{ secrets.REKKU_PRIVATE_KEY }}
-          repositories: "RetroDECK,Cooker"
+          repositories: "RetroDECK,Cooker,Artifacts"
           owner: "RetroDECK"
 
       - name: Download all workflow run artifacts
