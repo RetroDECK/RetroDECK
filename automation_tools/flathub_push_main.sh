@@ -16,7 +16,7 @@ retrodeck_repo='RetroDECK/RetroDECK'
 artifacts_sha_link=$(curl -s https://api.github.com/repos/RetroDECK/Artifacts/releases/latest | jq -r '.assets[] | select(.name == "RetroDECK-Artifacts.sha").browser_download_url')
 artifacts_link=$(curl -s https://api.github.com/repos/RetroDECK/Artifacts/releases/latest | jq -r '.assets[] | select(.name == "RetroDECK-Artifacts.tar.gz").browser_download_url')
 
-if -d "$gits_folder"; then
+if [ -d "$gits_folder" ] ; then
     rm -rf "$gits_folder"
 fi
 mkdir -vp "$gits_folder"
