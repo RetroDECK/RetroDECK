@@ -35,7 +35,7 @@ git clone --depth=1 --recursive "https://github.com/$flathub_target_repo.git" "$
 git clone --depth=1 --recursive "https://github.com/$retrodeck_repo.git" "$gits_folder/RetroDECK"
 
 # Get the latest release name, preferring prereleases if available and published after 2025-01-01
-relname=$(curl -s https://api.github.com/repos/$retrodeck_repo/releases | jq -r '[.[] | select(.prerelease == true and (.published_at | fromdateiso8601) > (strptime("2025-01-01T00:00:00Z") | mktime))][0].tag_name // empty')
+relname=$(curl -s "https://api.github.com/repos/$retrodeck_repo/releases" | jq -r '[.[] | select(.prerelease == true and (.published_at | fromdateiso8601) > 1735689600)][0].tag_name // empty')
 if [ -z "$relname" ]; then
     relname=$(curl -s https://api.github.com/repos/$retrodeck_repo/releases/latest | jq -r .tag_name)
 fi
