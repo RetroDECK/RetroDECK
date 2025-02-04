@@ -107,6 +107,7 @@ dolphingcpadconf="/var/config/dolphin-emu/GCPadNew.ini"
 dolphingfxconf="/var/config/dolphin-emu/GFX.ini"
 dolphinhkconf="/var/config/dolphin-emu/Hotkeys.ini"
 dolphinqtconf="/var/config/dolphin-emu/Qt.ini"
+dolphinDynamicInputTexturesPath="/var/data/dolphin-emu/Load/DynamicInputTextures"
 
 # PCSX2 config files
 
@@ -127,6 +128,7 @@ primehackgcpadconf="/var/config/primehack/GCPadNew.ini"
 primehackgfxconf="/var/config/primehack/GFX.ini"
 primehackhkconf="/var/config/primehack/Hotkeys.ini"
 primehackqtconf="/var/config/primehack/Qt.ini"
+primehackDynamicInputTexturesPath="/var/data/primehack/Load/DynamicInputTextures"
 
 # RPCS3 config files
 
