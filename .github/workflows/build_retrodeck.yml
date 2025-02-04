@@ -284,10 +284,12 @@ jobs:
         run: |
           if [[ "$GITHUB_REF" == "refs/heads/main" ]]; then
             artifact_name="RetroDECK-Artifact"
+            artifact_folder="retrodeck-flatpak-main"
           else
             artifact_name="RetroDECK-Artifact-cooker"
+            artifact_folder="retrodeck-flatpak-cooker"
           fi
-          tar -czf ${GITHUB_WORKSPACE}/${artifact_name}.tar.gz -C ${GITHUB_WORKSPACE}/retrodeck-flatpak-cooker .
+          tar -czf ${GITHUB_WORKSPACE}/${artifact_name}.tar.gz -C ${GITHUB_WORKSPACE}/"$artifact_folder" .
           hash=($(sha256sum ${GITHUB_WORKSPACE}/${artifact_name}.tar.gz))
           echo $hash > ${GITHUB_WORKSPACE}/${artifact_name}.sha
 
