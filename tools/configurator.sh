@@ -9,21 +9,18 @@ source /app/libexec/global.sh
 # Configurator Option Tree
 
 # Welcome
-#     - Presets & Settings
-#       - Global: Presets & Settings
-#         - Widescreen: Enable/Disable
-#         - Ask-To-Exit: Enable/Disable
-#         - Quick Resume: Enable/Disable
+#     - Settings
+#         - Borders
+#         - Widescreen
+#         - Ask-To-Exit
+#         - Quick Resume
 #         - RetroAchievements: Login
 #         - RetroAchievements: Logout
 #         - RetroAchievements: Hardcore Mode
-#         - Rewind: Enable/Disable
-#         - Swap A/B and X/Y Buttons: Enable/Disable
-#       - RetroArch: Presets & Settings
-#         - Borders: Enable/Disable
-#       - Wii & GameCube: Presets & Settings
-#         - Dolphin Textures: Universal Dynamic Input
-#         - Primehack Textures: Universal Dynamic Input
+#         - Rewind
+#         - Swap A/B and X/Y Buttons
+#         - Toggle Universal Dynamic Input for Dolphin
+#         - Toggle Universal Dynamic Input for Primehack
 #     - Open Emulator or Component (Behind one-time power user warning dialog)
 #       - RetroArch
 #       - Cemu
@@ -43,7 +40,7 @@ source /app/libexec/global.sh
 #       - XEMU
 #       - Yuzu
 #     - Tools
-#       - Tool: Move Folders
+#       - Data Migration
 #         - Move all of RetroDECK
 #         - Move ROMs folder
 #         - Move BIOS folder
@@ -54,9 +51,9 @@ source /app/libexec/global.sh
 #         - Move Screenshots folder
 #         - Move Mods folder
 #         - Move Texture Packs folder
-#       - Tool: Remove Empty ROM Folders
-#       - Tool: Rebuild All ROM Folders
-#       - Tool: Compress Games
+#       - Clean Empty ROM Folders
+#       - Rebuild All ROM Folders
+#       - Games Compressor
 #         - Compress Single Game
 #         - Compress Multiple Games - CHD
 #         - Compress Multiple Games - ZIP
@@ -66,13 +63,13 @@ source /app/libexec/global.sh
 #       - Install: RetroDECK Controller Layouts
 #       - Install: PS3 firmware
 #       - Install: PS Vita firmware
-#       - RetroDECK: Change Update Setting
+#       - Toggle Update Notify
 #       - PortMaster: hide/show
 #     - Troubleshooting
 #       - Backup: RetroDECK Userdata
-#       - Check & Verify: BIOS
+#       - BIOS Checker Tool
 #       - Check & Verify: Multi-file structure
-#       - RetroDECK: Reset
+#       - Reset Component
 #         - Reset Emulator or Engine
 #           - Reset RetroArch
 #           - Reset Cemu
@@ -94,9 +91,9 @@ source /app/libexec/global.sh
 #           - Reset XEMU
 #           - Reset Yuzu
 #         - Reset All Emulators
-#         - Reset EmulationStation DE
+#         - Reset ES-DE
 #         - Reset RetroDECK
-#     - RetroDECK: About
+#     - About RetroDECK
 #       - RetroDECK Version History
 #         - Full changelog
 #         - Version-specific changelogs
@@ -113,20 +110,17 @@ source /app/libexec/global.sh
 
 configurator_welcome_dialog() {
   log i "Configurator: opening welcome dialog"
+  welcome_menu_options=(
+    "Settings" "Here you will find various presets, tweaks and settings to customize your RetroDECK experience"
+    "Open Emulator or Component" "Launch and configure each emulator or component's settings (for advanced users)"
+    "Tools" "Games Compressor, move RetroDECK and install optional features"
+    "Troubleshooting" "Backup data, perform BIOS / multi-disc file checks and emulator resets"
+    "Steam Sync" "Sync all favorited games with Steam"
+    "About RetroDECK" "Show additional information about RetroDECK"
+  )
+
   if [[ $developer_options == "true" ]]; then
-    welcome_menu_options=("Presets & Settings" "Here you will find various presets, tweaks and settings to customize your RetroDECK experience" \
-    "Open Emulator or Component" "Launch and configure each emulator or component's settings (for advanced users)" \
-    "RetroDECK: Tools" "Compress games, move RetroDECK and install optional features" \
-    "RetroDECK: Troubleshooting" "Backup data, perform BIOS / multi-disc file checks and emulator resets" \
-    "RetroDECK: About" "Show additional information about RetroDECK" \
-    "Developer Options" "Welcome to the DANGER ZONE")
-  else
-    welcome_menu_options=("Presets & Settings" "Here you find various presets, tweaks and settings to customize your RetroDECK experience" \
-    "Open Emulator or Component" "Launch and configure each emulator or component's settings (for advanced users)" \
-    "RetroDECK: Tools" "Compress games, move RetroDECK and install optional features" \
-    "RetroDECK: Troubleshooting" "Backup data, perform BIOS / multi-disc file checks checks and emulator resets" \
-    "RetroDECK: About" "Show additional information about RetroDECK" \
-    "Steam Sync" "Sync all favorited games with Steam" )
+    welcome_menu_options+=("Developer Options" "Welcome to the DANGER ZONE")
   fi
 
   choice=$(rd_zenity --list --title="RetroDECK Configurator Utility" --cancel-label="Quit" \
@@ -136,9 +130,9 @@ configurator_welcome_dialog() {
 
   case $choice in
 
-  "Presets & Settings" )
+  "Settings" )
     log i "Configurator: opening \"$choice\" menu"
-    configurator_presets_and_settings_dialog
+    configurator_global_presets_and_settings_dialog
   ;;
 
   "Open Emulator or Component" )
@@ -146,18 +140,18 @@ configurator_welcome_dialog() {
     configurator_power_user_warning_dialog
   ;;
 
-  "RetroDECK: Tools" )
+  "Tools" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_retrodeck_tools_dialog
   ;;
 
-  "RetroDECK: Troubleshooting" )
+  "Troubleshooting" )
     log i "Configurator: opening \"$choice\" menu"
     # Call the troubleshooting dialog to return to the previous menu after checking BIOS files
     configurator_retrodeck_troubleshooting_dialog
   ;;
 
-  "RetroDECK: About" )
+  "About RetroDECK" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_about_retrodeck_dialog
   ;;
@@ -180,67 +174,44 @@ configurator_welcome_dialog() {
   esac
 }
 
-configurator_presets_and_settings_dialog() {
-  choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - Presets & Settings" --cancel-label="Back" \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
-  --column="Choice" --column="Action" \
-  "Global: Presets & Settings" "Here you find presets and settings that that span over multiple emulators" \
-  "RetroArch: Presets & Settings" "Here you find presets and settings for RetroArch and its cores" \
-  "Wii & GameCube: Presets & Settings" "Here you find presets and settings for Dolphin and Primehack" )
-
-  case $choice in
-
-  "Global: Presets & Settings" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_global_presets_and_settings_dialog
-  ;;
-
-  "RetroArch: Presets & Settings" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_retroarch_presets_and_settings_dialog
-  ;;
-
-  "Wii & GameCube: Presets & Settings" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_wii_and_gamecube_presets_and_settings_dialog
-  ;;
-
-  "" ) # No selection made or Back button clicked
-    log i "Configurator: going back"
-    configurator_welcome_dialog
-  ;;
-
-  esac
-}
-
 configurator_global_presets_and_settings_dialog() {
   choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - Global: Presets & Settings" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
-  "Widescreen: Enable/Disable" "Enable or disable widescreen in supported systems" \
-  "Ask-to-Exit: Enable/Disable" "Enable or disable emulators confirming attempts to quit in supported systems" \
-  "Quick Resume: Enable/Disable" "Enable or disable save state auto-save/load in supported systems" \
+  "Borders" "Enable or disable borders in supported systems" \
+  "Widescreen" "Enable or disable widescreen in supported systems" \
+  "Ask-to-Exit" "Enable or disable emulators confirming attempts to quit in supported systems" \
+  "Quick Resume" "Enable or disable save state auto-save/load in supported systems" \
+  "Rewind" "Enable or disable the rewind function in supported systems" \
+  "Swap A/B and X/Y Buttons" "Enable or disable a swapped A/B and X/Y button layout in supported systems" \
   "RetroAchievements: Login" "Log into the RetroAchievements service in supported systems" \
   "RetroAchievements: Logout" "Disable RetroAchievements service in ALL supported systems" \
   "RetroAchievements: Hardcore Mode" "Enable RetroAchievements hardcore mode (no cheats, rewind, save states etc.) in supported systems" \
-  "Rewind: Enable/Disable" "Enable or disable the rewind function in supported systems" \
-  "Swap A/B and X/Y Buttons: Enable/Disable" "Enable or disable a swapped A/B and X/Y button layout in supported systems" )
+  "Toggle Universal Dynamic Input for Dolphin" "Enable or disable universal dynamic input textures for Dolphin" \
+  "Toggle Universal Dynamic Input for Primehack" "Enable or disable universal dynamic input textures for Primehack"
+  )
 
   case $choice in
 
-  "Widescreen: Enable/Disable" )
+  "Borders" )
+    log i "Configurator: opening \"$choice\" menu"
+    change_preset_dialog "borders"
+    configurator_global_presets_and_settings_dialog
+  ;;
+
+  "Widescreen" )
     log i "Configurator: opening \"$choice\" menu"
     change_preset_dialog "widescreen"
     configurator_global_presets_and_settings_dialog
   ;;
 
-  "Ask-to-Exit: Enable/Disable" )
+  "Ask-to-Exit" )
     log i "Configurator: opening \"$choice\" menu"
     change_preset_dialog "ask_to_exit"
     configurator_global_presets_and_settings_dialog
   ;;
 
-  "Quick Resume: Enable/Disable" )
+  "Quick Resume" )
     change_preset_dialog "quick_resume"
     configurator_global_presets_and_settings_dialog
   ;;
@@ -274,72 +245,33 @@ configurator_global_presets_and_settings_dialog() {
     configurator_global_presets_and_settings_dialog
   ;;
 
-  "Rewind: Enable/Disable" )
+  "Rewind" )
     log i "Configurator: opening \"$choice\" menu"
 
     change_preset_dialog "rewind"
     configurator_global_presets_and_settings_dialog
   ;;
 
-  "Swap A/B and X/Y Buttons: Enable/Disable" )
+  "Swap A/B and X/Y Buttons" )
     log i "Configurator: opening \"$choice\" menu"
 
     change_preset_dialog "abxy_button_swap"
     configurator_global_presets_and_settings_dialog
   ;;
 
-  "" ) # No selection made or Back button clicked
-    log i "Configurator: going back"
-    configurator_presets_and_settings_dialog
-  ;;
-
-  esac
-}
-
-configurator_retroarch_presets_and_settings_dialog() {
-  choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - RetroArch: Presets & Settings" --cancel-label="Back" \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
-  --column="Choice" --column="Action" \
-  "Borders: Enable/Disable" "Enable or disable borders in supported systems" )
-
-  case $choice in
-
-  "Borders: Enable/Disable" )
-    log i "Configurator: opening \"$choice\" menu"
-    change_preset_dialog "borders"
-    configurator_retroarch_presets_and_settings_dialog
-  ;;
-
-  "" ) # No selection made or Back button clicked
-    log i "Configurator: going back"
-    configurator_presets_and_settings_dialog
-  ;;
-
-  esac
-}
-
-configurator_wii_and_gamecube_presets_and_settings_dialog() {
-  choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - Wii & GameCube: Presets & Settings" --cancel-label="Back" \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
-  --column="Choice" --column="Action" \
-  "Dolphin Textures: Universal Dynamic Input" "Enable/Disable Venomalia's Universal Dynamic Input Textures for Dolphin" \
-  "Primehack Textures: Universal Dynamic Input" "Enable/Disable: Venomalia's Universal Dynamic Input Textures for Primehack")
-
-  case $choice in
-
-  "Dolphin Textures: Universal Dynamic Input" )
+  "Toggle Universal Dynamic Input for Dolphin" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_dolphin_input_textures_dialog
   ;;
 
-  "Primehack Textures: Universal Dynamic Input" )
+  "Toggle Universal Dynamic Input for Primehack" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_primehack_input_textures_dialog
   ;;
 
   "" ) # No selection made or Back button clicked
     log i "Configurator: going back"
-    configurator_presets_and_settings_dialog
+    configurator_welcome_dialog
   ;;
 
   esac
@@ -349,7 +281,7 @@ configurator_dolphin_input_textures_dialog() {
   if [[ -d "/var/data/dolphin-emu/Load/DynamicInputTextures" ]]; then
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - Dolphin Textures: Universal Dynamic Input" \
+    --title "RetroDECK Configurator - Toggle Universal Dynamic Input for Dolphin" \
     --text="Custom input textures are currently enabled. Do you want to disable them?"
 
     if [ $? == 0 ]
@@ -358,12 +290,12 @@ configurator_dolphin_input_textures_dialog() {
       rm -rf "/var/data/dolphin-emu/Load/DynamicInputTextures"
       configurator_process_complete_dialog "disabling Dolphin custom input textures"
     else
-      configurator_wii_and_gamecube_presets_and_settings_dialog
+      configurator_global_presets_and_settings_dialog
     fi
   else
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - Dolphin Textures: Universal Dynamic Input" \
+    --title "RetroDECK Configurator - Toggle Universal Dynamic Input for Dolphin" \
     --text="Custom input textures are currently disabled. Do you want to enable them?\n\nThis process may take several minutes to complete."
 
     if [ $? == 0 ]
@@ -378,7 +310,7 @@ configurator_dolphin_input_textures_dialog() {
       --title "RetroDECK Configurator Utility - Dolphin Custom Input Textures Install"
       configurator_process_complete_dialog "enabling Dolphin custom input textures"
     else
-      configurator_wii_and_gamecube_presets_and_settings_dialog
+      configurator_global_presets_and_settings_dialog
     fi
   fi
 }
@@ -396,7 +328,7 @@ configurator_primehack_input_textures_dialog() {
       rm -rf "/var/data/primehack/Load/DynamicInputTextures"
       configurator_process_complete_dialog "disabling Primehack custom input textures"
     else
-      configurator_wii_and_gamecube_presets_and_settings_dialog
+      configurator_global_presets_and_settings_dialog
     fi
   else
     rd_zenity --question \
@@ -416,7 +348,7 @@ configurator_primehack_input_textures_dialog() {
       --title "RetroDECK Configurator Utility - Primehack Custom Input Textures Install"
       configurator_process_complete_dialog "enabling Primehack custom input textures"
     else
-      configurator_wii_and_gamecube_presets_and_settings_dialog
+      configurator_global_presets_and_settings_dialog
     fi
   fi
 }
@@ -583,14 +515,14 @@ configurator_open_emulator_dialog() {
 configurator_retrodeck_tools_dialog() {
 
   local choices=(
-  "Tool: Move Folders" "Move RetroDECK folders between internal/SD card or to a custom location"
-  "Tool: Remove Empty ROM Folders" "Remove some or all of the empty ROM folders"
-  "Tool: Rebuild All ROM Folders" "Rebuild any missing default ROM folders"
-  "Tool: Compress Games" "Compress games for systems that support it"
+  "Data Migration" "Move RetroDECK folders between internal/SD card or to a custom location"
+  "Clean Empty ROM Folders" "Remove some or all of the empty ROM folders"
+  "Rebuild All ROM Folders" "Rebuild any missing default ROM folders"
+  "Games Compressor" "Games Compressor for systems that support it"
   "Install: RetroDECK Controller Layouts" "Install the custom RetroDECK controller layouts on Steam"
   "Install: PS3 Firmware" "Download and install PS3 firmware for use with the RPCS3 emulator"
   "Install: PS Vita Firmware" "Download and install PS Vita firmware for use with the Vita3K emulator"
-  "RetroDECK: Change Update Setting" "Enable or disable online checks for new versions of RetroDECK"
+  "Toggle Update Notify" "Enable or disable online checks for new versions of RetroDECK"
   "PortMaster: hide/show" "Hide or show PortMaster in ES-DE"
   )
 
@@ -601,27 +533,27 @@ configurator_retrodeck_tools_dialog() {
     choices+=("Ponzu - Remove Citra" "Run Ponzu to remove Citra from RetroDECK. Configurations and saves will be mantained.")
   fi
 
-  choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - RetroDECK: Tools" --cancel-label="Back" \
+  choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - Tools" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
   "${choices[@]}")
 
   case $choice in
 
-  "Tool: Move Folders" )
+  "Data Migration" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_retrodeck_move_tool_dialog
   ;;
 
-  "Tool: Remove Empty ROM Folders" )
+  "Clean Empty ROM Folders" )
     log i "Configurator: opening \"$choice\" menu"
 
-    configurator_generic_dialog "RetroDECK Configurator - Remove Empty ROM Folders" "Before removing any identified empty ROM folders,\nplease make sure your ROM collection is backed up, just in case!"
-    configurator_generic_dialog "RetroDECK Configurator - Remove Empty ROM Folders" "Searching for empty rom folders, please be patient..."
+    configurator_generic_dialog "RetroDECK Configurator - Clean Empty ROM Folders" "Before removing any identified empty ROM folders,\nplease make sure your ROM collection is backed up, just in case!"
+    configurator_generic_dialog "RetroDECK Configurator - Clean Empty ROM Folders" "Searching for empty rom folders, please be patient..."
     find_empty_rom_folders
 
     choice=$(rd_zenity \
-        --list --width=1200 --height=720 --title "RetroDECK Configurator - RetroDECK: Remove Empty ROM Folders" \
+        --list --width=1200 --height=720 --title "RetroDECK Configurator - RetroDECK: Clean Empty ROM Folders" \
         --checklist --hide-column=3 --ok-label="Remove Selected" --extra-button="Remove All" \
         --separator="," --print-column=2 \
         --text="Choose which ROM folders to remove:" \
@@ -636,26 +568,26 @@ configurator_retrodeck_tools_dialog() {
         log i "Removing empty folder $folder"
         rm -rf "$folder"
       done
-      configurator_generic_dialog "RetroDECK Configurator - Remove Empty ROM Folders" "The removal process is complete."
+      configurator_generic_dialog "RetroDECK Configurator - Clean Empty ROM Folders" "The removal process is complete."
     elif [[ ! -z $choice ]]; then # User clicked "Remove All"
       for folder in "${all_empty_folders[@]}"; do
         log i "Removing empty folder $folder"
         rm -rf "$folder"
       done
-      configurator_generic_dialog "RetroDECK Configurator - Remove Empty ROM Folders" "The removal process is complete."
+      configurator_generic_dialog "RetroDECK Configurator - Clean Empty ROM Folders" "The removal process is complete."
     fi
 
     configurator_retrodeck_tools_dialog
   ;;
 
-  "Tool: Rebuild All ROM Folders" )
+  "Rebuild All ROM Folders" )
     log i "Configurator: opening \"$choice\" menu"
     es-de --create-system-dirs
     configurator_generic_dialog "RetroDECK Configurator - Rebuild All ROM Folders" "The rebuilding process is complete.\n\nAll missing default ROM folders will now exist in $roms_folder"
     configurator_retrodeck_tools_dialog
   ;;
 
-  "Tool: Compress Games" )
+  "Games Compressor" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_generic_dialog "RetroDECK Configurator - Compression Tool" "Depending on your library and compression choices, the process can sometimes take a long time.\nPlease be patient once it is started!"
     configurator_compression_tool_dialog
@@ -709,9 +641,9 @@ configurator_retrodeck_tools_dialog() {
     fi
   ;;
 
-  "RetroDECK: Change Update Setting" )
+  "Toggle Update Notify" )
     log i "Configurator: opening \"$choice\" menu"
-    configurator_online_update_setting_dialog
+    configurator_update_notify_dialog
   ;;
 
   "PortMaster: hide/show" )
@@ -959,7 +891,7 @@ configurator_compression_cleanup_dialog() {
   fi
 }
 
-configurator_online_update_setting_dialog() {
+configurator_update_notify_dialog() {
   if [[ $(get_setting_value $rd_conf "update_check" retrodeck "options") == "true" ]]; then
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -1026,13 +958,13 @@ configurator_portmaster_toggle_dialog(){
 }
 
 configurator_retrodeck_troubleshooting_dialog() {
-  choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - RetroDECK: Troubleshooting" --cancel-label="Back" \
+  choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - Troubleshooting" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
   "Backup: RetroDECK Userdata" "Compress and backup important RetroDECK user data folders" \
-  "Check & Verify: BIOS Files" "Show information about common BIOS files" \
+  "BIOS Checker Tool Files" "Show information about common BIOS files" \
   "Check & Verify: Multi-file structure" "Verify the proper structure of multi-file or multi-disc games" \
-  "RetroDECK: Reset" "Reset specific parts or all of RetroDECK" )
+  "Reset Component" "Reset specific parts or all of RetroDECK" )
 
   case $choice in
 
@@ -1054,7 +986,7 @@ configurator_retrodeck_troubleshooting_dialog() {
     configurator_retrodeck_troubleshooting_dialog
   ;;
 
-  "Check & Verify: BIOS Files" )
+  "BIOS Checker Tool Files" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_check_bios_files
   ;;
@@ -1064,7 +996,7 @@ configurator_retrodeck_troubleshooting_dialog() {
     configurator_check_multifile_game_structure
   ;;
 
-  "RetroDECK: Reset" )
+  "Reset Component" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_reset_dialog
   ;;
@@ -1082,7 +1014,7 @@ configurator_retrodeck_troubleshooting_dialog() {
 # verifies their MD5 hashes if provided, and displays the results in a Zenity dialog.
 configurator_check_bios_files() {
 
-  configurator_generic_dialog "RetroDECK Configurator - Check & Verify: BIOS Files" "This check will look for BIOS files that RetroDECK has identified as working.\n\nNot all BIOS files are required for games to work, please check the BIOS description for more information on its purpose.\n\nBIOS files not known to this tool could still function.\n\nSome more advanced emulators such as Ryujinx will have additional methods to verify that the BIOS files are in working order."
+  configurator_generic_dialog "RetroDECK Configurator - BIOS Checker Tool Files" "This check will look for BIOS files that RetroDECK has identified as working.\n\nNot all BIOS files are required for games to work, please check the BIOS description for more information on its purpose.\n\nBIOS files not known to this tool could still function.\n\nSome more advanced emulators such as Ryujinx will have additional methods to verify that the BIOS files are in working order."
 
   log d "Starting BIOS check in mode: $mode"
 
@@ -1158,7 +1090,7 @@ configurator_check_bios_files() {
     log d "Finished checking BIOS files"
 
     IFS="^" # Set the Internal Field Separator to ^ to split the bios_checked_list array
-    rd_zenity --list --title="RetroDECK Configurator Utility - Check & Verify: BIOS Files" --cancel-label="Back" \
+    rd_zenity --list --title="RetroDECK Configurator Utility - BIOS Checker Tool Files" --cancel-label="Back" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
       --column "BIOS File Name" \
       --column "Systems" \
@@ -1204,7 +1136,7 @@ configurator_reset_dialog() {
     "Reset RetroDECK" "Reset RetroDECK to default settings"
   )
 
-  choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - RetroDECK: Reset" --cancel-label="Back" \
+  choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - Reset Component" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
   "${choices[@]}")
@@ -1256,11 +1188,11 @@ configurator_reset_dialog() {
           prepare_component "reset" "$component_to_reset" "configurator"
           configurator_process_complete_dialog "resetting $component_to_reset"
         else
-          configurator_generic_dialog "RetroDeck Configurator - RetroDECK: Reset" "Reset process cancelled."
+          configurator_generic_dialog "RetroDeck Configurator - Reset Component" "Reset process cancelled."
           configurator_reset_dialog
         fi
       else
-        configurator_generic_dialog "RetroDeck Configurator - RetroDECK: Reset" "Resetting this emulator requires active network access.\nPlease try again when you are connected to an Internet-capable network.\n\nReset process cancelled."
+        configurator_generic_dialog "RetroDeck Configurator - Reset Component" "Resetting this emulator requires active network access.\nPlease try again when you are connected to an Internet-capable network.\n\nReset process cancelled."
         configurator_reset_dialog
       fi
     ;;
@@ -1270,7 +1202,7 @@ configurator_reset_dialog() {
         prepare_component "reset" "$component_to_reset" "configurator"
         configurator_process_complete_dialog "resetting $component_to_reset"
       else
-        configurator_generic_dialog "RetroDeck Configurator - RetroDECK: Reset" "Reset process cancelled."
+        configurator_generic_dialog "RetroDeck Configurator - Reset Component" "Reset process cancelled."
         configurator_reset_dialog
       fi
     ;;
@@ -1299,7 +1231,7 @@ configurator_reset_dialog() {
         prepare_component "reset" "$component_to_reset" "configurator"
         configurator_process_complete_dialog "resetting $component_to_reset"
       else
-        configurator_generic_dialog "RetroDeck Configurator - RetroDECK: Reset" "Reset process cancelled."
+        configurator_generic_dialog "RetroDeck Configurator - Reset Component" "Reset process cancelled."
         configurator_reset_dialog
       fi
     ;;
@@ -1324,11 +1256,11 @@ configurator_reset_dialog() {
       --text="RetroDECK is finishing the reset process, please wait."
       configurator_process_complete_dialog "resetting all emulators"
     else
-      configurator_generic_dialog "RetroDeck Configurator - RetroDECK: Reset" "Reset process cancelled."
+      configurator_generic_dialog "RetroDeck Configurator - Reset Component" "Reset process cancelled."
       configurator_reset_dialog
     fi
   else
-    configurator_generic_dialog "RetroDeck Configurator - RetroDECK: Reset" "Resetting all emulators requires active network access.\nPlease try again when you are connected to an Internet-capable network.\n\nReset process cancelled."
+    configurator_generic_dialog "RetroDeck Configurator - Reset Component" "Resetting all emulators requires active network access.\nPlease try again when you are connected to an Internet-capable network.\n\nReset process cancelled."
     configurator_reset_dialog
   fi
 ;;
@@ -1344,7 +1276,7 @@ configurator_reset_dialog() {
     rm -f "$rd_conf"
     configurator_process_complete_dialog "resetting RetroDECK"
   else
-    configurator_generic_dialog "RetroDeck Configurator - RetroDECK: Reset" "Reset process cancelled."
+    configurator_generic_dialog "RetroDeck Configurator - Reset Component" "Reset process cancelled."
     configurator_reset_dialog
   fi
 ;;
@@ -1357,7 +1289,7 @@ configurator_reset_dialog() {
 }
 
 configurator_about_retrodeck_dialog() {
-  choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - RetroDECK: About" --cancel-label="Back" \
+  choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - About RetroDECK" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Description" \
   "Version History" "View the version changelogs for RetroDECK" \
