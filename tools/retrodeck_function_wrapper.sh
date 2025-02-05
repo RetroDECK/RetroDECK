@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# TODO: is this function still needed?
+
 # This wrapper will run a single RetroDECK function with any number of arguments
 # USAGE: /bin/bash retrodeck_function_wrapper.sh <function_name> <arg1> <arg2> ...
 

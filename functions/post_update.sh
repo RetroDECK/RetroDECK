@@ -6,6 +6,7 @@ post_update() {
   log i "Executing post-update script"
 
   if [[ $(check_version_is_older_than "0.5.0b") == "true" ]]; then # If updating from prior to save sorting change at 0.5.0b
+    log d "Version is older than 0.5.0b, executing save migration"
     save_migration
   fi
 
@@ -520,7 +521,7 @@ post_update() {
       set_setting_value "$primehackgfxconf" "AspectRatio" "0" "dolphin" "Settings"
     fi
 
-    # --- ALWAYS EXECUTED ---
+    # --- ALWAYS EXECUTED IN 0.9.0b ---
 
     # New components preparation
     log i "New components were added in this version, initializing them"
@@ -554,6 +555,12 @@ post_update() {
     fi
 
   fi # end of 0.9.0b
+
+  if [[ $(check_version_is_older_than "0.9.1b") == "true" ]]; then
+
+    log d "Nothing to do here"
+
+  fi # end of 0.9.1b
 
   # The following commands are run every time.
 
@@ -590,4 +597,6 @@ post_update() {
   else
     changelog_dialog "$version"
   fi
+
+  log i "Upgrade process completed successfully."
 }
