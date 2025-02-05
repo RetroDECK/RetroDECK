@@ -63,7 +63,10 @@
          <release version="0.9.1b" date="2025-02-03">
             <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.9.0b</url>
             <description>
-               <p>Welcome to RetroDECK cooker-0.9.1b</p>
+               <p>Bug fixes:</p>
+               <ul>
+                  <li>RETROARCH: Fixed a bug where the cores were not updated along with RetroArch itself</li>
+               </ul>
             </description>
          </release>
          <release version="0.9.0b" date="2025-02-04">

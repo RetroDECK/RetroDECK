@@ -124,15 +124,12 @@ prepare_component() {
         dir_prep "$bios_folder" "/var/config/retroarch/system"
         dir_prep "$rdhome/logs/retroarch" "/var/config/retroarch/logs"
         create_dir /var/config/retroarch/shaders/
-        cp -rf /app/share/libretro/shaders /var/config/retroarch/
         dir_prep "$rdhome/shaders/retroarch" "/var/config/retroarch/shaders"
-        rsync -rlD --mkpath "/app/share/libretro/cores/" "/var/config/retroarch/cores/"
         cp -fv $config/retroarch/retroarch.cfg /var/config/retroarch/
         cp -fv $config/retroarch/retroarch-core-options.cfg /var/config/retroarch/
         rsync -rlD --mkpath "$config/retroarch/core-overrides/" "/var/config/retroarch/config/"
         rsync -rlD --mkpath "$config/retrodeck/presets/remaps/" "/var/config/retroarch/config/remaps/"
         dir_prep "$borders_folder" "/var/config/retroarch/overlays/borders"
-        rsync -rlD --mkpath "/app/retrodeck/config/retroarch/borders/" "/var/config/retroarch/overlays/borders/"
         set_setting_value "$raconf" "savefile_directory" "$saves_folder" "retroarch"
         set_setting_value "$raconf" "savestate_directory" "$states_folder" "retroarch"
         set_setting_value "$raconf" "screenshot_directory" "$screenshots_folder" "retroarch"
@@ -145,6 +142,8 @@ prepare_component() {
       create_dir "$bios_folder/dc"
       create_dir "$bios_folder/Mupen64plus"
       create_dir "$bios_folder/quasi88"
+
+      retroarch_updater
 
       # FBNEO
       log i "--------------------------------"
