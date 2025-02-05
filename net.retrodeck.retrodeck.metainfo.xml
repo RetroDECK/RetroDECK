@@ -66,6 +66,7 @@
                <p>Bug fixes:</p>
                <ul>
                   <li>RETROARCH: Fixed a bug where the cores were not updated along with RetroArch itself</li>
+                  <li>DOLPHIN and PRIMEHACK: Fixed a bug where the Universal Dynamic Input was missing from the build</li>
                </ul>
             </description>
          </release>

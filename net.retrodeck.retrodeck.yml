@@ -431,6 +431,17 @@ modules:
         url: https://github.com/RetroDECK/io.github.shiiion.primehack/releases/latest/download/RetroDECK-primehack-Artifact.tar.gz
         sha256: RETRODECKPRIMEHACKLATEST
 
+  # Universal Dynamic Input for Dolphin and Primehack
+  - name: universal_dynamic_input
+    buildsystem: simple
+    build-commands:
+      - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/DynamicInputTextures
+      - cp -r * ${FLATPAK_DEST}/retrodeck/extras/DynamicInputTextures/
+    sources:
+      - type: git
+        url: https://github.com/Venomalia/UniversalDynamicInput.git
+        commit: UNIVERSALDYNAMICINPUTCOMMITPLACEHOLDER
+
   # RPCS3
   # https://rpcs3.net/download
 
