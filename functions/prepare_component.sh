@@ -124,6 +124,7 @@ prepare_component() {
         dir_prep "$bios_folder" "/var/config/retroarch/system"
         dir_prep "$rdhome/logs/retroarch" "/var/config/retroarch/logs"
         create_dir /var/config/retroarch/shaders/
+        cp -rf /app/share/libretro/shaders /var/config/retroarch/
         dir_prep "$rdhome/shaders/retroarch" "/var/config/retroarch/shaders"
         cp -fv $config/retroarch/retroarch.cfg /var/config/retroarch/
         cp -fv $config/retroarch/retroarch-core-options.cfg /var/config/retroarch/

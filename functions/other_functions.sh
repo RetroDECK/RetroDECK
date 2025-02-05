@@ -979,9 +979,6 @@ convert_to_markdown() {
 retroarch_updater(){
 
   log i "Running RetroArch updater"
-
-  # Copy shaders from the application share directory to the RetroArch configuration directory
-  cp -rf /app/share/libretro/shaders /var/config/retroarch/ && log d "RetroArch shaders updated correctly"
   
   # Synchronize cores from the application share directory to the RetroArch cores directory
   rsync -rlD --mkpath "/app/share/libretro/cores/" "/var/config/retroarch/cores/" && log d "RetroArch cores updated correctly"
