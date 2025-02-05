@@ -124,13 +124,19 @@ for i in "$@"; do
       fi
       ;;
     --test-upgrade*)
+      if [[ "$2" =~ ^.+ ]]; then
       echo "You are about to test upgrading RetroDECK from version $2 to $hard_version"
       read -p "Enter 'y' to continue, 'n' to start RetroDECK normally: " response
       if [[ $response == [yY] ]]; then
         version="$2"
-        shift
+        logging_level="debug" # Temporarily enable debug
+        shift 2
       else
         shift
+      fi
+      else
+      echo "Error: Invalid format. Usage: --test-upgrade <version>"
+      exit 1
       fi
       ;;
     *)
