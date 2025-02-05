@@ -178,7 +178,7 @@ configurator_global_presets_and_settings_dialog() {
   choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - Global: Presets & Settings" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
-  "Borders" "Enable or disable borders in supported systems" \
+  "Borders" "Enable or disable borders in supported systems (only RetroArch is supported at this moment)" \
   "Widescreen" "Enable or disable widescreen in supported systems" \
   "Ask-to-Exit" "Enable or disable emulators confirming attempts to quit in supported systems" \
   "Quick Resume" "Enable or disable save state auto-save/load in supported systems" \
