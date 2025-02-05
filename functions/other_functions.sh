@@ -953,6 +953,16 @@ start_retrodeck() {
   get_steam_user # get steam user info
   splash_screen # Check if today has a surprise splashscreen and load it if so
   ponzu
+
+  log d "Checking if PortMaster should be shown"
+  if [[ $(get_setting_value "$rd_conf" "portmaster_show" "retrodeck" "options") == "false" ]]; then
+    log d "Assuring that PortMaster is hidden on ES-DE"
+    portmaster_show "false"
+  else
+    log d "Assuring that PortMaster is shown on ES-DE"
+    portmaster_show "true"
+  fi
+
   log i "Starting RetroDECK v$version"
   es-de
 }
@@ -985,4 +995,18 @@ retroarch_updater(){
   
   # Synchronize border overlays from the RetroDeck configuration directory to the RetroArch overlays directory
   rsync -rlD --mkpath "/app/retrodeck/config/retroarch/borders/" "/var/config/retroarch/overlays/borders/" && log d "RetroArch overlays and borders updated correctly"
+}
+
+portmaster_show(){
+  log d "Setting PortMaster visibility in ES-DE"
+  if [ "$1" = "true" ]; then
+      log d "\"$roms_folder/portmaster/PortMaster.sh\" is not found, installing it"
+      install -Dm755 "/var/data/PortMaster/PortMaster.sh" "$roms_folder/portmaster/PortMaster.sh" && log d "PortMaster is correctly showing in ES-DE"
+      set_setting_value $rd_conf "portmaster_show" "true" retrodeck "options"
+  elif [ "$1" = "false" ]; then
+    rm -rf "$roms_folder/portmaster/PortMaster.sh" && log d "PortMaster is correctly hidden in ES-DE"
+    set_setting_value $rd_conf "portmaster_show" "false" retrodeck "options"
+  else
+    log e "\"$1\" is not a valid choice, quitting"
+  fi
 }

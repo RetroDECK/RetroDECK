@@ -67,6 +67,7 @@
                <ul>
                   <li>RETROARCH: Fixed a bug where the cores were not updated along with RetroArch itself</li>
                   <li>DOLPHIN and PRIMEHACK: Fixed a bug where the Universal Dynamic Input was missing from the build</li>
+                  <li>PORTMASTER: added the ability to hide PortMaster from ES-DE</li>
                </ul>
             </description>
          </release>

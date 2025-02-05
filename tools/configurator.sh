@@ -67,6 +67,7 @@ source /app/libexec/global.sh
 #       - Install: PS3 firmware
 #       - Install: PS Vita firmware
 #       - RetroDECK: Change Update Setting
+#       - PortMaster: hide/show
 #     - Troubleshooting
 #       - Backup: RetroDECK Userdata
 #       - Check & Verify: BIOS
@@ -590,6 +591,7 @@ configurator_retrodeck_tools_dialog() {
   "Install: PS3 Firmware" "Download and install PS3 firmware for use with the RPCS3 emulator"
   "Install: PS Vita Firmware" "Download and install PS Vita firmware for use with the Vita3K emulator"
   "RetroDECK: Change Update Setting" "Enable or disable online checks for new versions of RetroDECK"
+  "PortMaster: hide/show" "Hide or show PortMaster in ES-DE"
   )
 
   if [[ $(get_setting_value "$rd_conf" "kiroi_ponzu" "retrodeck" "options") == "true" ]]; then
@@ -712,13 +714,18 @@ configurator_retrodeck_tools_dialog() {
     configurator_online_update_setting_dialog
   ;;
 
-"Ponzu - Remove Yuzu" )
-  ponzu_remove "yuzu"
-;;
+  "PortMaster: hide/show" )
+    log i "Configurator: opening \"$choice\" menu"
+    configurator_portmaster_toggle_dialog
+  ;;
 
-"Ponzu - Remove Citra" )
-  ponzu_remove "citra"
-;;
+  "Ponzu - Remove Yuzu" )
+    ponzu_remove "yuzu"
+  ;;
+
+  "Ponzu - Remove Citra" )
+    ponzu_remove "citra"
+  ;;
 
   "" ) # No selection made or Back button clicked
     log i "Configurator: going back"
@@ -978,6 +985,44 @@ configurator_online_update_setting_dialog() {
       configurator_retrodeck_tools_dialog
     fi
   fi
+}
+
+configurator_portmaster_toggle_dialog(){
+  
+  if [[ $(get_setting_value "$rd_conf" "portmaster_show" "retrodeck" "options") == "true" ]]; then
+    rd_zenity --question \
+    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator - PortMaster Visibility" \
+    --text="PortMaster is currently <span foreground='$purple'><b>visible</b></span> in ES-DE. Do you want to hide it?\n\nPlease note that the installed games will still be visible."
+
+    if [ $? == 0 ] # User clicked "Yes"
+    then
+      portmaster_show "false"
+      rd_zenity --info \
+      --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Configurator - PortMaster Visibility" \
+      --text="PortMaster is now <span foreground='$purple'><b>hidden</b></span> in ES-DE.\nPlease refresh your game list or restart RetroDECK to see the changes.\n\nIn order to launch PortMaster, you can access it from:\n<span foreground='$purple'><b>Configurator -> Open Emulator or Component -> PortMaster</b></span>."
+    else # User clicked "Cancel"
+      configurator_retrodeck_tools_dialog
+    fi
+  else
+    rd_zenity --question \
+    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator - PortMaster Visibility" \
+    --text="PortMaster is currently <span foreground='$purple'><b>hidden</b></span> in ES-DE. Do you want to show it?"
+
+    if [ $? == 0 ] # User clicked "Yes"
+    then
+      portmaster_show "true"
+      rd_zenity --info \
+      --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Configurator - PortMaster Visibility" \
+      --text="PortMaster is now <span foreground='$purple'><b>visible</b></span> in ES-DE.\nPlease refresh your game list or restart RetroDECK to see the changes."
+    else # User clicked "Cancel"
+      configurator_retrodeck_tools_dialog
+    fi
+  fi
+  configurator_retrodeck_tools_dialog
 }
 
 configurator_retrodeck_troubleshooting_dialog() {
