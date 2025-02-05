@@ -16,7 +16,7 @@ if [[ $(check_desktop_mode) == "true" ]]; then
     log d "ruffle --graphics vulkan $static_invoke $@"
     ruffle --graphics vulkan $static_invoke "$@"
 else
-    log d "Running Ruffle in Desktop Mode"
+    log d "Running Ruffle in Gaming Mode"
     log d "ruffle --graphics gl --no-gui $static_invoke $@"
     ruffle --graphics gl --no-gui $static_invoke "$@"
 fi
