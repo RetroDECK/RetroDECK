@@ -145,10 +145,18 @@ make_preset_changes() {
       current_state=$(get_setting_value "$rd_conf" "$emulator" "retrodeck" "$preset")
       if [[ "$current_state" == "true" ]]; then
         new_state="false"
-        log d "Toggling off $preset for system: $emulator"
+        if [[ $emulator == "all" ]]; then
+          log i "Toggling off $preset for all systems"
+        else
+          log i "Toggling off $preset for system: $emulator"
+        fi
       else
-        new_state="true"
-        log d "Toggling on $preset for system: $emulator"
+        if [[ $emulator == "all" ]]; then
+          log i "Toggling on $preset for all systems"
+        else
+          new_state="true"
+          log i "Toggling on $preset for system: $emulator"
+        fi
       fi
     fi
 

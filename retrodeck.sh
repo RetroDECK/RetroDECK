@@ -29,6 +29,7 @@ Arguments:
     --reset-component <component>       \t  Reset one or more component or emulator configs to the default values
     --reset-retrodeck                   \t  Starts the initial RetroDECK installer (backup your data first!)
     --test-upgrade <version>            \t  Test upgrading RetroDECK to a specific version, developer use only
+    --set <preset> [value]              \t  Set or toggle a preset. Examples: --set borders, --set borders true, --set borders gba false. --set help for more help
 
 Game Launch:
     [<options>] <game_path>             \t  Start a game using the default emulator or\n\t\t\t\t\t\t  the one defined in ES-DE for game or system
@@ -138,6 +139,31 @@ for i in "$@"; do
       echo "Error: Invalid format. Usage: --test-upgrade <version>"
       exit 1
       fi
+      ;;
+    --set*)
+      preset="$2"
+      value="$3"
+      if [ -z "$preset" ]; then
+      echo "Error: No preset specified. Usage: --set <preset> [value], --set help for more help"
+      exit 1
+      fi
+      if [ "$preset" == "help" ]; then
+      echo "Used to toggle or set a preset. Available presets are:"
+      fetch_all_presets
+      echo "Usage: --set <preset> [value]"
+      echo "Examples:"
+      echo "Force borders to be true for gba:"
+      echo "  make_preset_changes borders gba true"
+      echo "Force borders to be true for all supported systems:"
+      echo "  make_preset_changes borders all true"
+      echo "Toggle gba in preset borders, this will disable the enabled and vice versa:"
+      echo "  make_preset_changes borders gba true"
+      echo "Toggle all in preset borders:"
+      echo "  make_preset_changes borders all"
+      exit 0
+      fi
+      make_preset_changes "$preset" "$value"
+      exit 0
       ;;
     *)
       # Assume unknown arguments are game start arguments
