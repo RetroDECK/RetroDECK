@@ -490,6 +490,15 @@ prepare_component() {
         set_setting_value "$pcsx2conf" "SaveStates" "$states_folder/ps2/pcsx2" "pcsx2" "Folders"
         set_setting_value "$pcsx2conf" "MemoryCards" "$saves_folder/ps2/pcsx2/memcards" "pcsx2" "Folders"
         set_setting_value "$pcsx2conf" "RecursivePaths" "$roms_folder/ps2" "pcsx2" "GameList"
+        set_setting_value "$pcsx2conf" "Cheats" "$cheats_folder/pcsx2"
+        if [[ -d "$cheats_folder/pcsx2" && "$(ls -A $cheats_folder/pcsx2)" ]]; then
+          backup_file="$backup_folder/cheats/pcsx2-$(date +%y%m%d).tar.gz"
+          create_dir "$(dirname "$backup_file")"
+          tar -czf "$backup_file" -C "$cheats_folder" pcsx2
+          log i "PCSX2 cheats backed up to $backup_file"
+        fi
+        create_dir -d "$cheats_folder/pcsx2"
+        tar -xzf /app/retrodeck/cheats/pcsx2.tar.gz -C "$cheats_folder/pcsx2" --overwrite
       fi
       # Shared actions
       create_dir "$saves_folder/ps2/pcsx2/memcards"
