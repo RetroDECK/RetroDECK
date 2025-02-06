@@ -610,14 +610,17 @@ post_update() {
 
     # Execute the selected resets
 
-    # ES-DE reset
+    # RetroArch reset
     if [[ "$execute_all" == "true" || " ${selected_choices[@]} " =~ " RetroArch " ]]; then
       log i "User agreed to RetroArch reset"
       # Twice to toggle them once and then toggle them back to the original value
       make_preset_changes "borders" "all"
       make_preset_changes "borders" "all"
-
     fi
+
+    # --- ALWAYS EXECUTED IN 0.9.1b ---
+
+    create_dir "$cheats_folder/retroarch"
 
   fi # end of 0.9.1b
 

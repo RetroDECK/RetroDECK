@@ -66,7 +66,6 @@ features="$config/retrodeck/reference_lists/features.json"                      
 es_systems="/app/share/es-de/resources/systems/linux/es_systems.xml"                                     # ES-DE supported system list   
 es_find_rules="/app/share/es-de/resources/systems/linux/es_find_rules.xml"                               # ES-DE emulator find rules
 
-
 # Godot data transfer temp files
 
 godot_bios_files_checked="/var/config/retrodeck/godot/godot_bios_files_checked.tmp"
@@ -236,5 +235,6 @@ fi
 logs_folder="$rdhome/logs"                # The path of the logs folder, here we collect all the logs
 steamsync_folder="$rdhome/.sync"          # Folder containing all the steam sync launchers for SRM
 steamsync_folder_tmp="$rdhome/.sync-tmp"  # Temp folder containing all the steam sync launchers for SRM
+cheats_folder="$rdhome/cheats"            # Folder containing all the cheats for the emulators
 
 export GLOBAL_SOURCED=true

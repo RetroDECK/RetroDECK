@@ -66,6 +66,7 @@
                <p>New Additions:</p>
                <ul>
                   <li>New CLI argument `--set` to set presets, call retrodeck with `--set help` for more information</li>
+                  <li>RETROARCH: added a basic cheats support</li>
                </ul>
                <p>Bug fixes:</p>
                <ul>

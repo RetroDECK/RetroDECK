@@ -311,6 +311,16 @@ modules:
         url: https://buildbot.libretro.com/nightly/linux/x86_64/latest/sameduck_libretro.so.zip
         sha256: SAMEDUCKSHAPLACEHOLDER
 
+  - name: retroarch-cheats
+    buildsystem: simple
+    build-commands:
+      - mkdir -p ${FLATPAK_DEST}/retrodeck/cheats
+      - tar -czf ${FLATPAK_DEST}/retrodeck/cheats/retroarch.tar.gz cht
+    sources:
+    - type: git
+      url: https://github.com/libretro/libretro-database
+      branch: master
+
   - name: ppsspp-bios
     buildsystem: simple
     build-commands:

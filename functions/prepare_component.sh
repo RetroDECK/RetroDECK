@@ -123,7 +123,15 @@ prepare_component() {
         create_dir -d /var/config/retroarch
         dir_prep "$bios_folder" "/var/config/retroarch/system"
         dir_prep "$rdhome/logs/retroarch" "/var/config/retroarch/logs"
-        create_dir /var/config/retroarch/shaders/
+        create_dir -d "/var/config/retroarch/shaders/"
+        if [[ -d "$cheats_folder/retroarch" && "$(ls -A $cheats_folder/retroarch)" ]]; then
+          backup_file="$backup_folder/cheats/retroarch-$(date +%y%m%d).tar.gz"
+          create_dir "$(dirname "$backup_file")"
+          tar -czf "$backup_file" -C "$cheats_folder" retroarch
+          log i "RetroArch cheats backed up to $backup_file"
+        fi
+        create_dir -d "$cheats_folder/retroarch"
+        tar -xzf /app/retrodeck/cheats/retroarch.tar.gz -C "$cheats_folder/retroarch" --overwrite
         cp -rf /app/share/libretro/shaders /var/config/retroarch/
         dir_prep "$rdhome/shaders/retroarch" "/var/config/retroarch/shaders"
         cp -fv $config/retroarch/retroarch.cfg /var/config/retroarch/
@@ -136,6 +144,7 @@ prepare_component() {
         set_setting_value "$raconf" "screenshot_directory" "$screenshots_folder" "retroarch"
         set_setting_value "$raconf" "log_dir" "$logs_folder" "retroarch"
         set_setting_value "$raconf" "rgui_browser_directory" "$roms_folder" "retroarch"
+        set_setting_value "$raconf" "cheat_database_path" "$cheats_folder/retroarch"
       fi
       # Shared actions
 
