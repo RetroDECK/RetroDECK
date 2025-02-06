@@ -558,7 +558,66 @@ post_update() {
 
   if [[ $(check_version_is_older_than "0.9.1b") == "true" ]]; then
 
-    log d "Nothing to do here"
+    log i "Running the 0.9.1b post update process"
+
+    # Create a Zenity window with checkboxes for each reset option and two buttons
+    while true; do
+      choices=$(zenity --list --checklist --title="RetroDECK Reset Options" \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --text="The following components have been updated and need to be reset or fixed to ensure compatibility with the new version: select the components you want to reset.\n\nNot resetting them may cause serious issues with your installation.\nYou can also reset them manually later via Configurator -> Troubleshooting -> Reset Component.\n\nNote: Your games, saves, game collections and scraped data will not be affected." \
+      --column="Select" --column="Component" --column="Description" --width="1100" --height="700" \
+      TRUE "RetroArch" "Needs to be reset to fix the borders issue on some sytems such as psx" \
+      --separator=":" \
+      --extra-button="Execute All" \
+      --ok-label="Execute Selected Only" \
+      --cancel-label="Execute None")
+
+      log d "User selected: $choices"
+      log d "User pressed: $?"
+
+      # Check if "Execute All" button was pressed
+      if [[ "$choices" == "Execute All" ]]; then
+        execute_all=true
+        break
+      else
+        execute_all=false
+        # Split the choices into an array
+        IFS=":" read -r -a selected_choices <<< "$choices"
+      fi
+
+      if [[ $? -eq 0 && -n "$choices" ]]; then
+        if ! zenity --question --title="Confirmation" --text="Are you sure you want to proceed with only the selected options?\n\nThis might cause issues in RetroDECK"; then
+          log i "User is not sure, showing the checklist window again."
+          continue
+        else
+          log i "User confirmed to proceed with only the selected options."
+          break
+        fi
+      fi
+
+      if [[ $? == 0 ]]; then
+      if ! zenity --question --title="Confirmation" --text="Are you sure you want to skip the reset process?\n\nThis might cause issues in RetroDECK"; then
+        log i "User is not sure, showing the checklist window again."
+        continue
+      else
+        log i "User confirmed to proceed without any reset."
+        break
+      fi
+      fi
+
+      break
+    done
+
+    # Execute the selected resets
+
+    # ES-DE reset
+    if [[ "$execute_all" == "true" || " ${selected_choices[@]} " =~ " RetroArch " ]]; then
+      log i "User agreed to RetroArch reset"
+      # Twice to toggle them once and then toggle them back to the original value
+      make_preset_changes "borders" "all"
+      make_preset_changes "borders" "all"
+
+    fi
 
   fi # end of 0.9.1b
 
