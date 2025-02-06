@@ -6,6 +6,7 @@ compress_game() {
   local file="$2"
   local filename_no_path=$(basename "$file")
   local filename_no_extension="${filename_no_path%.*}"
+  local filename_extension="${filename_no_path##*.}"
   local source_file=$(dirname "$(realpath "$file")")"/"$(basename "$file")
   local dest_file=$(dirname "$(realpath "$file")")"/""$filename_no_extension"
 
@@ -15,7 +16,11 @@ compress_game() {
       /app/bin/chdman createdvd --hunksize 2048 -i "$source_file" -o "$dest_file".chd -c zstd
     ;;
     "ps2" )
-      /app/bin/chdman createdvd -i "$source_file" -o "$dest_file".chd -c zstd
+      if [[ "$filename_extension" == "cue" ]]; then
+        /app/bin/chdman createcd -i "$source_file" -o "$dest_file".chd
+      else
+        /app/bin/chdman createdvd -i "$source_file" -o "$dest_file".chd -c zstd
+      fi
     ;;
     * )
       /app/bin/chdman createcd -i "$source_file" -o "$dest_file".chd
