@@ -60,15 +60,26 @@
    <project_license>GPL-3.0</project_license>
    <metadata_license>CC0-1.0</metadata_license>
    <releases>
-         <release version="0.9.1b" date="2025-02-05">
+         <release version="0.9.1b" date="2025-02-06">
             <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.9.0b</url>
             <description>
+               <p>New Additions:</p>
+               <ul>
+                  <li>New CLI argument `--set` to set presets, call retrodeck with `--set help` for more information</li>
+               </ul>
                <p>Bug fixes:</p>
                <ul>
-                  <li>CONFIGURATOR: menus restructured</li>
-                  <li>RETROARCH: Fixed a bug where the cores were not updated along with RetroArch itself</li>
+                  <li>CONFIGURATOR: restructured menus for better navigation and clarity</li>
+                  <li>RETROARCH: fixed a bug where the cores were not updated along with RetroArch itself</li>
                   <li>DOLPHIN and PRIMEHACK: Fixed a bug where the Universal Dynamic Input was missing from the build</li>
+                  <li>DOLPHIN: fixed a bug where it wouldn't start in some Wayland configurations</li>
                   <li>PORTMASTER: added the ability to hide PortMaster from ES-DE</li>
+                  <li>PSX: fixed an issue that was not showing the borders correctly</li>
+               </ul>
+               <p>Developers, developers, developers:</p>
+               <ul>
+                  <li>Function `make_preset_changes` enhanced to be 100% headless</li>
+                  <li>New `fetch_all_presets` function to list all the presets globally of per-system</li>
                </ul>
             </description>
          </release>
