@@ -620,7 +620,19 @@ post_update() {
 
     # --- ALWAYS EXECUTED IN 0.9.1b ---
 
+    log i "Installing the cheats"
+
     create_dir "$cheats_folder/retroarch"
+    create_dir "$cheats_folder/ppsspp"
+    create_dir "$cheats_folder/pcsx2"
+
+    tar -xzf /app/retrodeck/cheats/retroarch.tar.gz -C "$cheats_folder/retroarch" --overwrite && log i "Cheats for RetroArch installed"
+    tar -xzf /app/retrodeck/cheats/pcsx2.tar.gz -C "$cheats_folder/pcsx2" --overwrite && log i "Cheats for PCSX2 installed"
+    tar -xzf /app/retrodeck/cheats/ppsspp.tar.gz -C "$cheats_folder/ppsspp" --overwrite && log i "Cheats for PPSSPP installed"
+
+    set_setting_value "$mameconf" "cheatpath" "$cheats_folder/mame" "mame"
+    unzip -j -o "$config/mame/cheat0264.zip" 'cheat.7z' -d "$cheats_folder/mame" && log i "Cheats for MAME installed"
+    rm -rf /var/data/mame/cheat
 
   fi # end of 0.9.1b
 

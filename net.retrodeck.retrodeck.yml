@@ -376,6 +376,16 @@ modules:
         url: https://github.com/RetroDECK/org.ppsspp.PPSSPP/releases/latest/download/RetroDECK-Artifact.tar.gz
         sha256: RETRODECKPPSSPPLATEST
 
+  - name: ppsspp-cheats
+    buildsystem: simple
+    build-commands:
+      - mkdir -p ${FLATPAK_DEST}/retrodeck/cheats
+      - tar -czf ${FLATPAK_DEST}/retrodeck/cheats/ppsspp.tar.gz cheat.db
+    sources:
+    - type: git
+      url: https://github.com/Saramagrean/CWCheat-Database-Plus-
+      branch: master
+
   # PCSX2 - FROZEN UNTIL QT 6.8 UPDATE
   # Inspired by: https://github.com/flathub/com.zettlr.Zettlr/blob/master/com.zettlr.Zettlr.yaml
   # https://pcsx2.net/downloads/

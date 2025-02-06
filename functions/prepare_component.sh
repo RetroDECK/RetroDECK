@@ -160,6 +160,7 @@ prepare_component() {
       log i "Prepearing FBNEO_LIBRETRO"
       log i "--------------------------------"
       create_dir "$bios_folder/fbneo/samples"
+      # TODO: cheats support
       create_dir "$bios_folder/fbneo/cheats"
       create_dir "$bios_folder/fbneo/blend"
       dir_prep "$mods_folder/FBNeo" "$bios_folder/fbneo/patched"
@@ -552,12 +553,23 @@ prepare_component() {
       dir_prep "$saves_folder/PSP/PPSSPP-SA" "/var/config/ppsspp/PSP/SAVEDATA"
       dir_prep "$states_folder/PSP/PPSSPP-SA" "/var/config/ppsspp/PSP/PPSSPP_STATE"
       dir_prep "$texture_packs_folder/PPSSPP" "/var/config/ppsspp/PSP/TEXTURES"
+
+      dir_prep "$cheats_folder/PPSSPP" "/var/config/ppsspp/PSP/Cheats"
+      if [[ -d "$cheats_folder/ppsspp" && "$(ls -A $cheats_folder/ppsspp)" ]]; then
+        backup_file="$backup_folder/cheats/ppsspp-$(date +%y%m%d).tar.gz"
+        create_dir "$(dirname "$backup_file")"
+        tar -czf "$backup_file" -C "$cheats_folder" ppsspp
+        log i "PPSSPP cheats backed up to $backup_file"
+      fi
+      create_dir -d "$cheats_folder/pcsx2"
+      tar -xzf /app/retrodeck/cheats/pcsx2.tar.gz -C "$cheats_folder/pcsx2" --overwrite
     fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
       set_setting_value "$ppssppconf" "CurrentDirectory" "$roms_folder/psp" "ppsspp" "General"
       dir_prep "$saves_folder/PSP/PPSSPP-SA" "/var/config/ppsspp/PSP/SAVEDATA"
       dir_prep "$states_folder/PSP/PPSSPP-SA" "/var/config/ppsspp/PSP/PPSSPP_STATE"
       dir_prep "$texture_packs_folder/PPSSPP" "/var/config/ppsspp/PSP/TEXTURES"
+      dir_prep "$cheats_folder/PPSSPP" "/var/config/ppsspp/PSP/Cheats"
     fi
   fi
 
@@ -829,7 +841,6 @@ prepare_component() {
     create_dir "$bios_folder/mame-sa/samples"
     create_dir "/var/data/mame/assets/artwork"
     create_dir "/var/data/mame/assets/fonts"
-    create_dir "/var/data/mame/cheat"
     create_dir "/var/data/mame/assets/crosshair"
     create_dir "/var/data/mame/plugins"
     create_dir "/var/data/mame/assets/language"
@@ -868,9 +879,10 @@ prepare_component() {
     set_setting_value "$mameconf" "snapshot_directory" "$screenshots_folder/mame-sa" "mame"
     set_setting_value "$mameconf" "diff_directory" "$saves_folder/mame-sa/diff" "mame"
     set_setting_value "$mameconf" "samplepath" "$bios_folder/mame-sa/samples" "mame"
+    set_setting_value "$mameconf" "cheatpath" "$cheats_folder/mame" "mame"
 
-    log i "Placing cheats in \"/var/data/mame/cheat\""
-    unzip -j -o "$config/mame/cheat0264.zip" 'cheat.7z' -d "/var/data/mame/cheat"
+    log i "Placing cheats in \"$cheats_folder/mame\""
+    unzip -j -o "$config/mame/cheat0264.zip" 'cheat.7z' -d "$cheats_folder/mame"
 
   fi
 
