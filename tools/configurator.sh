@@ -40,7 +40,7 @@ source /app/libexec/global.sh
 #       - XEMU
 #       - Yuzu
 #     - Tools
-#       - Data Migration
+#       - Data Management
 #         - Move all of RetroDECK
 #         - Move ROMs folder
 #         - Move BIOS folder
@@ -51,8 +51,8 @@ source /app/libexec/global.sh
 #         - Move Screenshots folder
 #         - Move Mods folder
 #         - Move Texture Packs folder
-#       - Clean Empty ROM Folders
-#       - Rebuild All ROM Folders
+#         - Clean Empty ROM Folders
+#         - Rebuild All ROM Folders
 #       - Games Compressor
 #         - Compress Single Game
 #         - Compress Multiple Games - CHD
@@ -63,7 +63,7 @@ source /app/libexec/global.sh
 #       - Install: RetroDECK Controller Layouts
 #       - Install: PS3 firmware
 #       - Install: PS Vita firmware
-#       - Toggle Update Notify
+#       - Update Notification
 #       - PortMaster: hide/show
 #     - Troubleshooting
 #       - Backup: RetroDECK Userdata
@@ -515,14 +515,12 @@ configurator_open_emulator_dialog() {
 configurator_retrodeck_tools_dialog() {
 
   local choices=(
-  "Data Migration" "Move RetroDECK folders between internal/SD card or to a custom location"
-  "Clean Empty ROM Folders" "Remove some or all of the empty ROM folders"
-  "Rebuild All ROM Folders" "Rebuild any missing default ROM folders"
+  "Data Management" "Move RetroDECK folders between internal/SD card or to a custom location"
   "Games Compressor" "Games Compressor for systems that support it"
   "Install: RetroDECK Controller Layouts" "Install the custom RetroDECK controller layouts on Steam"
   "Install: PS3 Firmware" "Download and install PS3 firmware for use with the RPCS3 emulator"
   "Install: PS Vita Firmware" "Download and install PS Vita firmware for use with the Vita3K emulator"
-  "Toggle Update Notify" "Enable or disable online checks for new versions of RetroDECK"
+  "Update Notification" "Enable or disable online checks for new versions of RetroDECK"
   "PortMaster: hide/show" "Hide or show PortMaster in ES-DE"
   )
 
@@ -540,58 +538,12 @@ configurator_retrodeck_tools_dialog() {
 
   case $choice in
 
-  "Data Migration" )
+  "Data Management" )
     log i "Configurator: opening \"$choice\" menu"
-    configurator_retrodeck_move_tool_dialog
+    configurator_data_management_dialog
   ;;
 
-  "Clean Empty ROM Folders" )
-    log i "Configurator: opening \"$choice\" menu"
 
-    configurator_generic_dialog "RetroDECK Configurator - Clean Empty ROM Folders" "Before removing any identified empty ROM folders,\nplease make sure your ROM collection is backed up, just in case!"
-    configurator_generic_dialog "RetroDECK Configurator - Clean Empty ROM Folders" "Searching for empty rom folders, please be patient..."
-    find_empty_rom_folders
-
-    choice=$(rd_zenity \
-        --list --width=1200 --height=720 --title "RetroDECK Configurator - RetroDECK: Clean Empty ROM Folders" \
-        --checklist --hide-column=3 --ok-label="Remove Selected" --extra-button="Remove All" \
-        --separator="," --print-column=2 \
-        --text="Choose which ROM folders to remove:" \
-        --column "Remove?" \
-        --column "System" \
-        "${empty_rom_folders_list[@]}")
-
-    local rc=$?
-    if [[ $rc == "0" && ! -z $choice ]]; then # User clicked "Remove Selected" with at least one system selected
-      IFS="," read -ra folders_to_remove <<< "$choice"
-      for folder in "${folders_to_remove[@]}"; do
-        log i "Removing empty folder $folder"
-        rm -rf "$folder"
-      done
-      configurator_generic_dialog "RetroDECK Configurator - Clean Empty ROM Folders" "The removal process is complete."
-    elif [[ ! -z $choice ]]; then # User clicked "Remove All"
-      for folder in "${all_empty_folders[@]}"; do
-        log i "Removing empty folder $folder"
-        rm -rf "$folder"
-      done
-      configurator_generic_dialog "RetroDECK Configurator - Clean Empty ROM Folders" "The removal process is complete."
-    fi
-
-    configurator_retrodeck_tools_dialog
-  ;;
-
-  "Rebuild All ROM Folders" )
-    log i "Configurator: opening \"$choice\" menu"
-    es-de --create-system-dirs
-    configurator_generic_dialog "RetroDECK Configurator - Rebuild All ROM Folders" "The rebuilding process is complete.\n\nAll missing default ROM folders will now exist in $roms_folder"
-    configurator_retrodeck_tools_dialog
-  ;;
-
-  "Games Compressor" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_generic_dialog "RetroDECK Configurator - Compression Tool" "Depending on your library and compression choices, the process can sometimes take a long time.\nPlease be patient once it is started!"
-    configurator_compression_tool_dialog
-  ;;
 
   "Install: RetroDECK Controller Layouts" )
     log i "Configurator: opening \"$choice\" menu"
@@ -641,7 +593,7 @@ configurator_retrodeck_tools_dialog() {
     fi
   ;;
 
-  "Toggle Update Notify" )
+  "Update Notification" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_update_notify_dialog
   ;;
@@ -667,7 +619,7 @@ configurator_retrodeck_tools_dialog() {
   esac
 }
 
-configurator_retrodeck_move_tool_dialog() {
+configurator_data_management_dialog() {
   choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - RetroDECK: Move Tool" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
@@ -680,7 +632,9 @@ configurator_retrodeck_move_tool_dialog() {
   "Move Themes folder" "Move only the Themes folder to a new location" \
   "Move Screenshots folder" "Move only the Screenshots folder to a new location" \
   "Move Mods folder" "Move only the Mods folder to a new location" \
-  "Move Texture Packs folder" "Move only the Texture Packs folder to a new location" )
+  "Move Texture Packs folder" "Move only the Texture Packs folder to a new location" \
+  "Clean Empty ROM Folders" "Remove some or all of the empty ROM folders" \
+  "Rebuild All ROM Folders" "Rebuild any missing default ROM folders" )
 
   case $choice in
 
@@ -732,6 +686,48 @@ configurator_retrodeck_move_tool_dialog() {
   "Move Texture Packs folder" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_move_folder_dialog "texture_packs_folder"
+  ;;
+
+  "Clean Empty ROM Folders" )
+    log i "Configurator: opening \"$choice\" menu"
+
+    configurator_generic_dialog "RetroDECK Configurator - Clean Empty ROM Folders" "Before removing any identified empty ROM folders,\nplease make sure your ROM collection is backed up, just in case!"
+    configurator_generic_dialog "RetroDECK Configurator - Clean Empty ROM Folders" "Searching for empty rom folders, please be patient..."
+    find_empty_rom_folders
+
+    choice=$(rd_zenity \
+        --list --width=1200 --height=720 --title "RetroDECK Configurator - RetroDECK: Clean Empty ROM Folders" \
+        --checklist --hide-column=3 --ok-label="Remove Selected" --extra-button="Remove All" \
+        --separator="," --print-column=2 \
+        --text="Choose which ROM folders to remove:" \
+        --column "Remove?" \
+        --column "System" \
+        "${empty_rom_folders_list[@]}")
+
+    local rc=$?
+    if [[ $rc == "0" && ! -z $choice ]]; then # User clicked "Remove Selected" with at least one system selected
+      IFS="," read -ra folders_to_remove <<< "$choice"
+      for folder in "${folders_to_remove[@]}"; do
+        log i "Removing empty folder $folder"
+        rm -rf "$folder"
+      done
+      configurator_generic_dialog "RetroDECK Configurator - Clean Empty ROM Folders" "The removal process is complete."
+    elif [[ ! -z $choice ]]; then # User clicked "Remove All"
+      for folder in "${all_empty_folders[@]}"; do
+        log i "Removing empty folder $folder"
+        rm -rf "$folder"
+      done
+      configurator_generic_dialog "RetroDECK Configurator - Clean Empty ROM Folders" "The removal process is complete."
+    fi
+
+    configurator_retrodeck_tools_dialog
+  ;;
+
+  "Rebuild All ROM Folders" )
+    log i "Configurator: opening \"$choice\" menu"
+    es-de --create-system-dirs
+    configurator_generic_dialog "RetroDECK Configurator - Rebuild All ROM Folders" "The rebuilding process is complete.\n\nAll missing default ROM folders will now exist in $roms_folder"
+    configurator_retrodeck_tools_dialog
   ;;
 
   esac
