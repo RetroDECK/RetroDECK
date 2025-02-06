@@ -306,32 +306,55 @@ build_retrodeck_current_presets() {
 
 fetch_all_presets() {
   # This function fetches all possible presets from the presets directory
-  # USAGE: fetch_all_presets [--pretty]
+  # USAGE: fetch_all_presets [--pretty] [system_name]
 
   local presets_dir="$config/retrodeck/presets"
   local presets=()
   local pretty_presets=()
   local pretty_output=false
+  local system_name=""
 
   if [[ "$1" == "--pretty" ]]; then
     pretty_output=true
+    system_name="$2"
+  else
+    system_name="$1"
   fi
 
-  for preset_file in "$presets_dir"/*_presets.cfg; do
-    while IFS= read -r line; do
-      if [[ $line =~ ^change\^([a-zA-Z0-9_]+)\^ ]]; then
-        preset="${BASH_REMATCH[1]}"
-        if [[ ! " ${presets[*]} " =~ " ${preset} " ]]; then
-          presets+=("$preset")
-          if $pretty_output; then
-            pretty_preset_name=${preset//_/ } # Preset name prettification
-            pretty_preset_name=$(echo $pretty_preset_name | awk '{for(i=1;i<=NF;i++){$i=toupper(substr($i,1,1))substr($i,2)}}1') # Preset name prettification
-            pretty_presets+=("$pretty_preset_name")
+  if [[ -n "$system_name" ]]; then
+    preset_file="$presets_dir/${system_name}_presets.cfg"
+    if [[ -f "$preset_file" ]]; then
+      while IFS= read -r line; do
+        if [[ $line =~ ^(change|enable)\^([a-zA-Z0-9_]+)\^ ]]; then
+          preset="${BASH_REMATCH[2]}"
+          if [[ ! " ${presets[*]} " =~ " ${preset} " ]]; then
+            presets+=("$preset")
+            if $pretty_output; then
+              pretty_preset_name=${preset//_/ } # Preset name prettification
+              pretty_preset_name=$(echo $pretty_preset_name | awk '{for(i=1;i<=NF;i++){$i=toupper(substr($i,1,1))substr($i,2)}}1') # Preset name prettification
+              pretty_presets+=("$pretty_preset_name")
+            fi
           fi
         fi
-      fi
-    done < "$preset_file"
-  done
+      done < "$preset_file"
+    fi
+  else
+    for preset_file in "$presets_dir"/*_presets.cfg; do
+      while IFS= read -r line; do
+        if [[ $line =~ ^change\^([a-zA-Z0-9_]+)\^ ]]; then
+          preset="${BASH_REMATCH[1]}"
+          if [[ ! " ${presets[*]} " =~ " ${preset} " ]]; then
+            presets+=("$preset")
+            if $pretty_output; then
+              pretty_preset_name=${preset//_/ } # Preset name prettification
+              pretty_preset_name=$(echo $pretty_preset_name | awk '{for(i=1;i<=NF;i++){$i=toupper(substr($i,1,1))substr($i,2)}}1') # Preset name prettification
+              pretty_presets+=("$pretty_preset_name")
+            fi
+          fi
+        fi
+      done < "$preset_file"
+    done
+  fi
 
   if $pretty_output; then
     printf "%s\n" "${pretty_presets[@]}"
