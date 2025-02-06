@@ -43,11 +43,24 @@ change_preset_dialog() {
   fi
 }
 
+
 build_preset_list_options() {
-  # This function will build a list of all the systems available for a given preset
-  # The list will be generated into a Godot temp file and the variable $current_preset_settings
-  # The other arrays built (all_systems, changed_systems etc.) are also used in the make_preset_changes() function, so this needs to be called in the same memory space as that function at least once
+  # FUNCTION: build_preset_list_options
+  # DESCRIPTION: This function builds a list of all the systems available for a given preset.
+  #              It generates the list into a Godot temp file and updates the variable $current_preset_settings.
+  #              The function also builds several arrays (all_systems, changed_systems, etc.) that are used in the make_preset_changes() function.
+  #              This function needs to be called in the same memory space as make_preset_changes() at least once.
   # USAGE: build_preset_list_options "$preset"
+  # INPUT: 
+  #   - $1: The name of the preset.
+  # OUTPUT:
+  #   - $godot_current_preset_settings: A Godot temp file containing the system values, pretty system names, and system names.
+  #   - $current_preset_settings: An array containing the system values, pretty system names, and system names.
+  #   - $current_enabled_systems: An array containing the names of systems that are enabled in the preset.
+  #   - $current_disabled_systems: An array containing the names of systems that are disabled in the preset.
+  #   - $changed_systems: An array that will be used to track systems that have changed.
+  #   - $changed_presets: An array that will be used to track presets that have changed.
+  #   - $all_systems: An array containing the names of all systems in the preset.
 
   if [[ -f "$godot_current_preset_settings" ]]; then
     rm -f "$godot_current_preset_settings" # Godot data transfer temp files
@@ -82,56 +95,92 @@ build_preset_list_options() {
 
 
 make_preset_changes() {
-  # This function will take a preset name $preset and a CSV list $choice, which contains the names of systems that have been enabled for this preset and enable them in the backend
-  # Any systems which are currently enabled and not in the CSV list $choice will instead be disabled in the backend
-  # USAGE: make_preset_changes $preset $choice
+  # This function takes a preset name ($1) and a CSV list ($2) of system names.
+  # If a third parameter is provided (force_state), it forces the specified state (true/false)
+  # for only the systems in the CSV list. Otherwise, it toggles the current state.
+  #
+  # USAGE: make_preset_changes $preset $choice [force_state]
+  #
+  # Examples:
+  # Force "borders" to be true for gba:
+  #   make_preset_changes "borders" "gba" true
+  # Force "borders" to be true for all supported systems:
+  #   make_preset_changes "borders" "all" true
+  # Toggle gba in preset "borders", this will disable the enabled and vice versa:
+  #   make_preset_changes "borders" "gba" true
+  # Toggle all in preset "borders":
+  #   make_preset_changes "borders" "all"
 
-  # Fetch incompatible presets from JSON and create a lookup list
+  log d "Fetching incompatible presets from JSON file"
   incompatible_presets=$(jq -r '
-    .incompatible_presets | to_entries[] | 
+    .incompatible_presets | to_entries[] |
     [
-      "\(.key):\(.value)", 
+      "\(.key):\(.value)",
       "\(.value):\(.key)"
     ] | join("\n")
-  ' $features)
+  ' "$features")
 
   preset="$1"
   choice="$2"
+  force_state="${3:-}"
 
+  log d "Building preset list options for preset: $preset"
   build_preset_list_options "$preset"
 
   IFS="," read -ra choices <<< "$choice"
-    for emulator in "${all_systems[@]}"; do
-      if [[ " ${choices[*]} " =~ " ${emulator} " && ! " ${current_enabled_systems[*]} " =~ " ${emulator} " ]]; then
-        changed_systems=("${changed_systems[@]}" "$emulator")
-        if [[ ! " ${changed_presets[*]} " =~ " ${preset} " ]]; then
-          changed_presets=("${changed_presets[@]}" "$preset")
-        fi
-        set_setting_value "$rd_conf" "$emulator" "true" "retrodeck" "$preset"
-        # Check for conflicting presets for this system
-        while IFS=: read -r preset_being_checked known_incompatible_preset || [[ -n "$preset_being_checked" ]];
-        do
-          if [[ ! $preset_being_checked == "#"* ]] && [[ ! -z "$preset_being_checked" ]]; then
-            if [[ "$preset" == "$preset_being_checked" ]]; then
-              if [[ $(get_setting_value "$rd_conf" "$emulator" "retrodeck" "$known_incompatible_preset") == "true" ]]; then
-                changed_presets=("${changed_presets[@]}" "$known_incompatible_preset")
-                set_setting_value "$rd_conf" "$emulator" "false" "retrodeck" "$known_incompatible_preset"
-              fi
-            fi
+  if [[ " ${choices[*]} " == *" all "* ]]; then
+    log d "All systems selected for preset: $preset"
+    choices=("${all_systems[@]}")
+  fi
+
+  # Use an associative array to store the new state for each emulator.
+  declare -A emulator_state
+
+  # Iterate only over the specified systems.
+  for emulator in "${choices[@]}"; do
+    if [[ -n "$force_state" ]]; then
+      new_state="$force_state"
+      log d "Forcing $preset to state: $new_state for $emulator"
+    else
+      current_state=$(get_setting_value "$rd_conf" "$emulator" "retrodeck" "$preset")
+      if [[ "$current_state" == "true" ]]; then
+        new_state="false"
+        log d "Toggling off $preset for system: $emulator"
+      else
+        new_state="true"
+        log d "Toggling on $preset for system: $emulator"
+      fi
+    fi
+
+    emulator_state["$emulator"]="$new_state"
+    changed_systems=("${changed_systems[@]}" "$emulator")
+    [[ ! " ${changed_presets[*]} " =~ " ${preset} " ]] && changed_presets=("${changed_presets[@]}" "$preset")
+    set_setting_value "$rd_conf" "$emulator" "$new_state" "retrodeck" "$preset"
+
+    # If enabling the emulator, disable any conflicting presets.
+    if [[ "$new_state" == "true" ]]; then
+      while IFS=: read -r preset_being_checked known_incompatible_preset || [[ -n "$preset_being_checked" ]]; do
+        if [[ ! $preset_being_checked =~ ^# ]] && [[ -n "$preset_being_checked" ]]; then
+          if [[ "$preset" == "$preset_being_checked" ]] && [[ $(get_setting_value "$rd_conf" "$emulator" "retrodeck" "$known_incompatible_preset") == "true" ]]; then
+            log d "Disabling conflicting preset: $known_incompatible_preset for emulator: $emulator"
+            changed_presets=("${changed_presets[@]}" "$known_incompatible_preset")
+            set_setting_value "$rd_conf" "$emulator" "false" "retrodeck" "$known_incompatible_preset"
           fi
-        done < <(echo "$incompatible_presets")
-      fi
-      if [[ ! " ${choices[*]} " =~ " ${emulator} " && ! " ${current_disabled_systems[*]} " =~ " ${emulator} " ]]; then
-        changed_systems=("${changed_systems[@]}" "$emulator")
-        if [[ ! " ${changed_presets[*]} " =~ " ${preset} " ]]; then
-          changed_presets=("${changed_presets[@]}" "$preset")
         fi
-        set_setting_value "$rd_conf" "$emulator" "false" "retrodeck" "$preset"
-      fi
-    done
-    for emulator in "${changed_systems[@]}"; do
-      build_preset_config $emulator ${changed_presets[*]}
-    done
+      done < <(echo "$incompatible_presets")
+    fi
+  done
+
+  # Rebuild config for all changed systems.
+  for emulator in "${changed_systems[@]}"; do
+    log d "Building preset config for changed emulator: $emulator"
+    if [[ "${emulator_state[$emulator]}" == "true" ]]; then
+      # When enabling, force a full config update (detailed settings applied).
+      build_preset_config "$emulator" "${changed_presets[*]}" true
+    else
+      build_preset_config "$emulator" "${changed_presets[*]}"
+    fi
+  done
 }
 
 build_preset_config() {
