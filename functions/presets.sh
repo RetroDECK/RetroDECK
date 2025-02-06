@@ -303,3 +303,39 @@ build_retrodeck_current_presets() {
     fi
   done < $rd_conf
 }
+
+fetch_all_presets() {
+  # This function fetches all possible presets from the presets directory
+  # USAGE: fetch_all_presets [--pretty]
+
+  local presets_dir="$config/retrodeck/presets"
+  local presets=()
+  local pretty_presets=()
+  local pretty_output=false
+
+  if [[ "$1" == "--pretty" ]]; then
+    pretty_output=true
+  fi
+
+  for preset_file in "$presets_dir"/*_presets.cfg; do
+    while IFS= read -r line; do
+      if [[ $line =~ ^change\^([a-zA-Z0-9_]+)\^ ]]; then
+        preset="${BASH_REMATCH[1]}"
+        if [[ ! " ${presets[*]} " =~ " ${preset} " ]]; then
+          presets+=("$preset")
+          if $pretty_output; then
+            pretty_preset_name=${preset//_/ } # Preset name prettification
+            pretty_preset_name=$(echo $pretty_preset_name | awk '{for(i=1;i<=NF;i++){$i=toupper(substr($i,1,1))substr($i,2)}}1') # Preset name prettification
+            pretty_presets+=("$pretty_preset_name")
+          fi
+        fi
+      fi
+    done < "$preset_file"
+  done
+
+  if $pretty_output; then
+    printf "%s\n" "${pretty_presets[@]}"
+  else
+    echo "${presets[@]}"
+  fi
+}
