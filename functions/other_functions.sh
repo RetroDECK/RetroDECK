@@ -1014,35 +1014,47 @@ portmaster_show(){
 open_component(){
 
   if [[ -z "$1" ]]; then
-    cmd=$(jq -r '.emulator[] | select(.ponzu != true) | .name' "$features" | sort)
-    if [[ "$akai_ponzu" == "true" ]]; then
-      cmd+="\n$(jq -r '.emulator[] | select(.name == "citra" and .ponzu == true) | .name' "$features")"
+    cmd=$(jq -r '.emulator[] | select(.ponzu != true) | .name' "$features")
+    if [[ $(get_setting_value "$rd_conf" "akai_ponzu" "retrodeck" "options") == "true" ]]; then
+      cmd+="\n$(jq -r '.emulator.citra | .name' "$features")"
     fi
-    if [[ "$kiroi_ponzu" == "true" ]]; then
-      cmd+="\n$(jq -r '.emulator[] | select(.name == "yuzu" and .ponzu == true) | .name' "$features")"
+    if [[ $(get_setting_value "$rd_conf" "kiroi_ponzu" "retrodeck" "options") == "true" ]]; then
+      cmd+="\n$(jq -r '.emulator.yuzu | .name' "$features")"
     fi
-    echo -e "This command expects one of the following components as arguments:\n$(echo -e "$cmd" | sort)"
+    echo -e "This command expects one of the following components as arguments:\n$(echo -e "$cmd")"
     return
   fi
 
   if [[ "$1" == "--getlist" ]]; then
-    cmd=$(jq -r '.emulator[] | select(.ponzu != true) | .name' "$features" | sort)
-    if [[ "$akai_ponzu" == "true" ]]; then
-      cmd+="\n$(jq -r '.emulator[] | select(.name == "citra" and .ponzu == true) | .name' "$features")"
+    cmd=$(jq -r '.emulator[] | select(.ponzu != true) | .name' "$features")
+    if [[ $(get_setting_value "$rd_conf" "akai_ponzu" "retrodeck" "options") == "true" ]]; then
+      cmd+="\n$(jq -r '.emulator.citra | .name' "$features")"
     fi
-    if [[ "$kiroi_ponzu" == "true" ]]; then
-      cmd+="\n$(jq -r '.emulator[] | select(.name == "yuzu" and .ponzu == true) | .name' "$features")"
+    if [[ $(get_setting_value "$rd_conf" "kiroi_ponzu" "retrodeck" "options") == "true" ]]; then
+      cmd+="\n$(jq -r '.emulator.yuzu | .name' "$features")"
     fi
-    echo -e "$cmd" | sort
+    echo -e "$cmd"
+    return
+  fi
+
+  if [[ "$1" == "--getdesc" ]]; then
+    cmd=$(jq -r '.emulator[] | select(.ponzu != true) | "\(.description)"' "$features")
+    if [[ $(get_setting_value "$rd_conf" "akai_ponzu" "retrodeck" "options") == "true" ]]; then
+      cmd+="\n$(jq -r '.emulator.citra | "\(.description)"' "$features")"
+    fi
+    if [[ $(get_setting_value "$rd_conf" "kiroi_ponzu" "retrodeck" "options") == "true" ]]; then
+      cmd+="\n$(jq -r '.emulator.yuzu | "\(.description)"' "$features")"
+    fi
+    echo -e "$cmd"
     return
   fi
 
   cmd=$(jq -r --arg name "$1" '.emulator[] | select(.name == $name and .ponzu != true) | .launch' "$features")
-  if [[ -z "$cmd" && "$akai_ponzu" == "true" && "$1" == "citra" ]]; then
-    cmd=$(jq -r '.emulator[] | select(.name == "citra" and .ponzu == true) | .launch' "$features")
+  if [[ -z "$cmd" && $(get_setting_value "$rd_conf" "akai_ponzu" "retrodeck" "options") == "true" && "$1" == "citra" ]]; then
+    cmd=$(jq -r '.emulator.citra | .launch' "$features")
   fi
-  if [[ -z "$cmd" && "$kiroi_ponzu" == "true" && "$1" == "yuzu" ]]; then
-    cmd=$(jq -r '.emulator[] | select(.name == "yuzu" and .ponzu == true) | .launch' "$features")
+  if [[ -z "$cmd" && $(get_setting_value "$rd_conf" "kiroi_ponzu" "retrodeck" "options") == "true" && "$1" == "yuzu" ]]; then
+    cmd=$(jq -r '.emulator.yuzu | .launch' "$features")
   fi
 
   if [[ -n "$cmd" ]]; then
