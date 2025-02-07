@@ -1049,6 +1049,6 @@ open_component(){
     eval "$cmd" "${@:2}"
   else
     echo "Invalid component name: $1"
-    echo "Please be sure that the casing is correct and if a space is present, the name is quoted."
+    echo "Please ensure the name is correctly spelled (case sensitive) and quoted if it contains spaces."
   fi
 }
