@@ -60,12 +60,13 @@
    <project_license>GPL-3.0</project_license>
    <metadata_license>CC0-1.0</metadata_license>
    <releases>
-         <release version="0.9.1b" date="2025-02-06">
+         <release version="0.9.1b" date="2025-02-07">
             <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.9.0b</url>
             <description>
                <p>New Additions:</p>
                <ul>
                   <li>New CLI argument `--set` to set presets, call retrodeck with `--set help` for more information</li>
+                  <li>New CLI argument `--open` to open a component or emulator. Call retrodeck with `--open --getlist` for a list of available components or emulator to open</li>
                   <li>CHEATS: added basic cheats support for RetroArch, PCSX2, PPSSPP</li>
                </ul>
                <p>Bug fixes:</p>
