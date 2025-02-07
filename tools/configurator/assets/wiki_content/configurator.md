@@ -124,7 +124,7 @@ This option lets you turn on or off automatic updates on launch.
 Various troubleshooting options.
 
 
-### Backup: RetroDECK Userdata
+### Backup Userdata
 Creates backups of the user data folders
 
 

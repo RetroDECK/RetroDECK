@@ -23,23 +23,7 @@ source /app/libexec/global.sh
 #         - Toggle Universal Dynamic Input for Primehack
 #         - PortMaster
 #     - Open Emulator or Component (Behind one-time power user warning dialog)
-#       - RetroArch
-#       - Cemu
-#       - Citra
-#       - Dolphin
-#       - Duckstation
-#       - MAME
-#       - MelonDS
-#       - PCSX2
-#       - PPSSPP
-#       - PortMaster
-#       - Primehack
-#       - Ruffle
-#       - RPCS3
-#       - Ryujinx
-#       - Vita3K
-#       - XEMU
-#       - Yuzu
+#       - Dynamically generated list of emulators from open_component --getlist and --getdesc (features.json)
 #     - Tools
 #       - Data Management
 #         - Move all of RetroDECK
@@ -55,6 +39,7 @@ source /app/libexec/global.sh
 #         - Clean Empty ROM Folders
 #         - Rebuild All ROM Folders
 #         - Verify Multi-file Structure
+#         - Backup Userdata
 #       - Games Compressor
 #         - Compress Single Game
 #         - Compress Multiple Games - CHD
@@ -67,7 +52,6 @@ source /app/libexec/global.sh
 #       - Install: PS Vita firmware
 #       - Update Notification
 #     - Troubleshooting
-#       - Backup: RetroDECK Userdata
 #       - BIOS Checker
 #       - Reset Component
 #         - Reset Emulator or Engine
@@ -415,6 +399,7 @@ configurator_retrodeck_tools_dialog() {
 
   local choices=(
   "Data Management" "Move RetroDECK folders between internal/SD card or to a custom location"
+  "Backup Userdata" "Compress and backup important RetroDECK user data folders"
   "Games Compressor" "Games Compressor for systems that support it"
   "Install: RetroDECK Controller Layouts" "Install the custom RetroDECK controller layouts on Steam"
   "Install: PS3 Firmware" "Download and install PS3 firmware for use with the RPCS3 emulator"
@@ -440,6 +425,24 @@ configurator_retrodeck_tools_dialog() {
   "Data Management" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_data_management_dialog
+  ;;
+
+  "Backup Userdata" )
+    log i "Configurator: opening \"$choice\" menu"
+    configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "This tool will compress important RetroDECK userdata (basically everything except the ROMs folder) into a zip file.\n\nThis process can take several minutes, and the resulting zip file can be found in the ~/retrodeck/backups folder."
+    (
+      backup_retrodeck_userdata
+    ) |
+    rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+            --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+            --title "RetroDECK Configurator Utility - Backup in Progress" \
+            --text="Backing up RetroDECK userdata, please wait..."
+    if [[ -f "$backups_folder/$(date +"%0m%0d")_retrodeck_userdata.zip" ]]; then
+      configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "The backup process is now complete."
+    else
+      configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "The backup process could not be completed,\nplease check the logs folder for more information."
+    fi
+    configurator_retrodeck_troubleshooting_dialog
   ;;
 
   "Install: RetroDECK Controller Layouts" )
@@ -854,29 +857,10 @@ configurator_retrodeck_troubleshooting_dialog() {
   choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - Troubleshooting" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
-  "Backup: RetroDECK Userdata" "Compress and backup important RetroDECK user data folders" \
   "BIOS Checker" "Show information about common BIOS files" \
   "Reset Component" "Reset specific parts or all of RetroDECK" )
 
   case $choice in
-
-  "Backup: RetroDECK Userdata" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_generic_dialog "RetroDECK Configurator - Backup: RetroDECK Userdata" "This tool will compress important RetroDECK userdata (basically everything except the ROMs folder) into a zip file.\n\nThis process can take several minutes, and the resulting zip file can be found in the ~/retrodeck/backups folder."
-    (
-      backup_retrodeck_userdata
-    ) |
-    rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
-            --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-            --title "RetroDECK Configurator Utility - Backup in Progress" \
-            --text="Backing up RetroDECK userdata, please wait..."
-    if [[ -f "$backups_folder/$(date +"%0m%0d")_retrodeck_userdata.zip" ]]; then
-      configurator_generic_dialog "RetroDECK Configurator - Backup: RetroDECK Userdata" "The backup process is now complete."
-    else
-      configurator_generic_dialog "RetroDECK Configurator - Backup: RetroDECK Userdata" "The backup process could not be completed,\nplease check the logs folder for more information."
-    fi
-    configurator_retrodeck_troubleshooting_dialog
-  ;;
 
   "BIOS Checker" )
     log i "Configurator: opening \"$choice\" menu"
