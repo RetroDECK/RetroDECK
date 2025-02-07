@@ -14,32 +14,43 @@ source /app/libexec/global.sh
 #         - Widescreen
 #         - Ask-To-Exit
 #         - Quick Resume
+#         - Rewind
+#         - Swap A/B and X/Y Buttons
 #         - RetroAchievements: Login
 #         - RetroAchievements: Logout
 #         - RetroAchievements: Hardcore Mode
-#         - Rewind
-#         - Swap A/B and X/Y Buttons
 #         - Toggle Universal Dynamic Input for Dolphin
 #         - Toggle Universal Dynamic Input for Primehack
 #         - PortMaster
 #     - Open Component (Behind one-time power user warning dialog)
 #       - Dynamically generated list of emulators from open_component --getlist and --getdesc (features.json)
+#     - Reset Component
+#       - Reset Emulator or Engine
+#         - Reset RetroArch
+#         - Reset Cemu
+#         - Reset Citra
+#         - Reset Dolphin
+#         - Reset Duckstation
+#         - Reset GZDoom
+#         - Reset MAME
+#         - Reset MelonDS
+#         - Reset PCSX2
+#         - Reset PPSSPP
+#         - Reset PortMaster
+#         - Reset Primehack
+#         - Reset Ruffle
+#         - Reset RPCS3
+#         - Reset Ryujinx
+#         - Reset Steam ROM Manager
+#         - Reset Vita3k
+#         - Reset XEMU
+#         - Reset Yuzu
+#       - Reset RetroDECK Component
+#       - Reset All Emulators and Components
+#       - Reset RetroDECK
 #     - Tools
-#       - Data Management
-#         - Move all of RetroDECK
-#         - Move ROMs folder
-#         - Move BIOS folder
-#         - Move Downloaded Media folder
-#         - Move Saves folder
-#         - Move States folder
-#         - Move Themes folder
-#         - Move Screenshots folder
-#         - Move Mods folder
-#         - Move Texture Packs folder
-#         - Clean Empty ROM Folders
-#         - Rebuild All ROM Folders
-#         - Verify Multi-file Structure
-#         - Backup Userdata
+#       - Backup Userdata
+#       - BIOS Checker
 #       - Games Compressor
 #         - Compress Single Game
 #         - Compress Multiple Games - CHD
@@ -51,45 +62,35 @@ source /app/libexec/global.sh
 #       - Install: PS3 firmware
 #       - Install: PS Vita firmware
 #       - Update Notification
-#     - Troubleshooting
-#       - BIOS Checker
-#       - Reset Component
-#         - Reset Emulator or Engine
-#           - Reset RetroArch
-#           - Reset Cemu
-#           - Reset Citra
-#           - Reset Dolphin
-#           - Reset Duckstation
-#           - Reset GZDoom
-#           - Reset MAME
-#           - Reset MelonDS
-#           - Reset PCSX2
-#           - Reset PPSSPP
-#           - Reset PortMaster
-#           - Reset Primehack
-#           - Reset Ruffle
-#           - Reset RPCS3
-#           - Reset Ryujinx
-#           - Reset Steam ROM Manager
-#           - Reset Vita3k
-#           - Reset XEMU
-#           - Reset Yuzu
-#         - Reset All Emulators
-#         - Reset ES-DE
-#         - Reset RetroDECK
+#       - Verify Multi-file Structure
+#       - Ponzu - Remove Yuzu
+#       - Ponzu - Remove Citra
+#     - Steam Sync
+#     - Data Management
+#       - Move all of RetroDECK
+#       - Move ROMs folder
+#       - Move BIOS folder
+#       - Move Downloaded Media folder
+#       - Move Saves folder
+#       - Move States folder
+#       - Move Themes folder
+#       - Move Screenshots folder
+#       - Move Mods folder
+#       - Move Texture Packs folder
+#       - Clean Empty ROM Folders
+#       - Rebuild All ROM Folders
 #     - About RetroDECK
 #       - RetroDECK Version History
 #         - Full changelog
 #         - Version-specific changelogs
 #       - RetroDECK Credits
-#     - Steam Sync
 #     - Developer Options (Hidden)
 #       - Change Multi-user mode
 #       - Install Specific Release
 #       - Browse the wiki
 #       - Install: RetroDECK Starter Pack
 #       - Tool: USB Import
-
+#
 # DIALOG TREE FUNCTIONS
 
 configurator_welcome_dialog() {
@@ -97,9 +98,10 @@ configurator_welcome_dialog() {
   welcome_menu_options=(
     "Settings" "Here you will find various presets, tweaks and settings to customize your RetroDECK experience"
     "Open Component" "Launch and configure each emulator or component's settings (for advanced users)"
+    "Reset Component" "Reset specific parts or all of RetroDECK"
     "Tools" "Games Compressor, move RetroDECK and install optional features"
-    "Troubleshooting" "Backup data, perform BIOS / multi-disc file checks and emulator resets"
     "Steam Sync" "Sync all favorited games with Steam"
+    "Data Management" "Move RetroDECK folders between internal/SD card or to a custom location"
     "About RetroDECK" "Show additional information about RetroDECK"
   )
 
@@ -124,15 +126,14 @@ configurator_welcome_dialog() {
     configurator_power_user_warning_dialog
   ;;
 
+  "Reset Component" )
+    log i "Configurator: opening \"$choice\" menu"
+    configurator_reset_dialog
+  ;;
+
   "Tools" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_retrodeck_tools_dialog
-  ;;
-
-  "Troubleshooting" )
-    log i "Configurator: opening \"$choice\" menu"
-    # Call the troubleshooting dialog to return to the previous menu after checking BIOS files
-    configurator_retrodeck_troubleshooting_dialog
   ;;
 
   "About RetroDECK" )
@@ -148,6 +149,11 @@ configurator_welcome_dialog() {
     log i "Configurator: opening \"$choice\" menu"
     configurator_generic_dialog "RetroDECK Configurator - Developer Options" "The following features and options are potentially VERY DANGEROUS for your RetroDECK install!\n\nThey should be considered the bleeding-edge of upcoming RetroDECK features, and never used when you have important saves/states/roms that are not backed up!\n\nYOU HAVE BEEN WARNED!"
     configurator_developer_dialog
+  ;;
+
+  "Data Management" )
+    log i "Configurator: opening \"$choice\" menu"
+    configurator_data_management_dialog
   ;;
 
   "" )
@@ -400,14 +406,12 @@ configurator_retrodeck_tools_dialog() {
   local choices=(
   "Backup Userdata" "Compress and backup important RetroDECK user data folders"
   "BIOS Checker" "Show information about common BIOS files"
-  "Data Management" "Move RetroDECK folders between internal/SD card or to a custom location"
   "Games Compressor" "Games Compressor for systems that support it"
   "Install: RetroDECK Controller Layouts" "Install the custom RetroDECK controller layouts on Steam"
   "Install: PS3 Firmware" "Download and install PS3 firmware for use with the RPCS3 emulator"
   "Install: PS Vita Firmware" "Download and install PS Vita firmware for use with the Vita3K emulator"
   "Update Notification" "Enable or disable online checks for new versions of RetroDECK"
   "Verify Multi-file Structure" "Verify the proper structure of multi-file or multi-disc games"
-  
   )
 
   if [[ $(get_setting_value "$rd_conf" "kiroi_ponzu" "retrodeck" "options") == "true" ]]; then
@@ -424,11 +428,6 @@ configurator_retrodeck_tools_dialog() {
 
   case $choice in
 
-  "Data Management" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_data_management_dialog
-  ;;
-
   "Backup Userdata" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "This tool will compress important RetroDECK userdata (basically everything except the ROMs folder) into a zip file.\n\nThis process can take several minutes, and the resulting zip file can be found in the ~/retrodeck/backups folder."
@@ -444,7 +443,7 @@ configurator_retrodeck_tools_dialog() {
     else
       configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "The backup process could not be completed,\nplease check the logs folder for more information."
     fi
-    configurator_retrodeck_troubleshooting_dialog
+    configurator_welcome_dialog
   ;;
 
   "BIOS Checker" )
@@ -627,19 +626,19 @@ configurator_data_management_dialog() {
       configurator_generic_dialog "RetroDECK Configurator - Clean Empty ROM Folders" "The removal process is complete."
     fi
 
-    configurator_retrodeck_tools_dialog
+    configurator_welcome_dialog
   ;;
 
   "Rebuild All ROM Folders" )
     log i "Configurator: opening \"$choice\" menu"
     es-de --create-system-dirs
     configurator_generic_dialog "RetroDECK Configurator - Rebuild All ROM Folders" "The rebuilding process is complete.\n\nAll missing default ROM folders will now exist in $roms_folder"
-    configurator_retrodeck_tools_dialog
+    configurator_welcome_dialog
   ;;
 
   esac
 
-  configurator_retrodeck_tools_dialog
+  configurator_welcome_dialog
 }
 
 configurator_compression_tool_dialog() {
@@ -860,27 +859,6 @@ configurator_portmaster_toggle_dialog(){
   configurator_retrodeck_tools_dialog
 }
 
-configurator_retrodeck_troubleshooting_dialog() {
-  choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - Troubleshooting" --cancel-label="Back" \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
-  --column="Choice" --column="Action" \
-  "Reset Component" "Reset specific parts or all of RetroDECK" )
-
-  case $choice in
-
-  "Reset Component" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_reset_dialog
-  ;;
-
-  "" ) # No selection made or Back button clicked
-    log i "Configurator: going back"
-    configurator_welcome_dialog
-  ;;
-
-  esac
-}
-
 # This function checks and verifies BIOS files for RetroDECK.
 # It reads a list of required BIOS files from a JSON file, checks if they exist in the specified folder,
 # verifies their MD5 hashes if provided, and displays the results in a Zenity dialog.
@@ -982,7 +960,7 @@ configurator_check_bios_files() {
   --text="RetroDECK is checking your BIOS files, please wait..." \
   --width=400 --height=100
 
-  configurator_retrodeck_troubleshooting_dialog
+  configurator_welcome_dialog
 }
 
 configurator_check_multifile_game_structure() {
@@ -996,7 +974,7 @@ configurator_check_multifile_game_structure() {
   else
     configurator_generic_dialog "RetroDECK Configurator - Verify Multi-file Structure" "No incorrect multi-file game folder structures found."
   fi
-  configurator_retrodeck_troubleshooting_dialog
+  configurator_welcome_dialog
 }
 
 configurator_reset_dialog() {
@@ -1154,7 +1132,7 @@ configurator_reset_dialog() {
 ;;
 
 "" ) # No selection made or Back button clicked
-  configurator_retrodeck_troubleshooting_dialog
+  configurator_welcome_dialog
 ;;
 
   esac
