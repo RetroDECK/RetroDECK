@@ -129,7 +129,7 @@ Creates backups of the user data folders
 
 
 
-### Check & Verify: Multi-file structure
+### Verify Multi-file Structure
 Verifies the structure of multi disc/file games that uses `.m3u` files.
 
 

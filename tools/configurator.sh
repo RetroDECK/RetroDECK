@@ -21,6 +21,7 @@ source /app/libexec/global.sh
 #         - Swap A/B and X/Y Buttons
 #         - Toggle Universal Dynamic Input for Dolphin
 #         - Toggle Universal Dynamic Input for Primehack
+#         - PortMaster
 #     - Open Emulator or Component (Behind one-time power user warning dialog)
 #       - RetroArch
 #       - Cemu
@@ -53,6 +54,7 @@ source /app/libexec/global.sh
 #         - Move Texture Packs folder
 #         - Clean Empty ROM Folders
 #         - Rebuild All ROM Folders
+#         - Verify Multi-file Structure
 #       - Games Compressor
 #         - Compress Single Game
 #         - Compress Multiple Games - CHD
@@ -64,11 +66,9 @@ source /app/libexec/global.sh
 #       - Install: PS3 firmware
 #       - Install: PS Vita firmware
 #       - Update Notification
-#       - PortMaster: hide/show
 #     - Troubleshooting
 #       - Backup: RetroDECK Userdata
-#       - BIOS Checker Tool
-#       - Check & Verify: Multi-file structure
+#       - BIOS Checker
 #       - Reset Component
 #         - Reset Emulator or Engine
 #           - Reset RetroArch
@@ -188,7 +188,8 @@ configurator_global_presets_and_settings_dialog() {
   "RetroAchievements: Logout" "Disable RetroAchievements service in ALL supported systems" \
   "RetroAchievements: Hardcore Mode" "Enable RetroAchievements hardcore mode (no cheats, rewind, save states etc.) in supported systems" \
   "Toggle Universal Dynamic Input for Dolphin" "Enable or disable universal dynamic input textures for Dolphin" \
-  "Toggle Universal Dynamic Input for Primehack" "Enable or disable universal dynamic input textures for Primehack"
+  "Toggle Universal Dynamic Input for Primehack" "Enable or disable universal dynamic input textures for Primehack" \
+  "PortMaster" "Hide or show PortMaster in ES-DE"
   )
 
   case $choice in
@@ -267,6 +268,11 @@ configurator_global_presets_and_settings_dialog() {
   "Toggle Universal Dynamic Input for Primehack" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_primehack_input_textures_dialog
+  ;;
+
+  "PortMaster" )
+    log i "Configurator: opening \"$choice\" menu"
+    configurator_portmaster_toggle_dialog
   ;;
 
   "" ) # No selection made or Back button clicked
@@ -374,142 +380,35 @@ configurator_power_user_warning_dialog() {
 }
 
 configurator_open_emulator_dialog() {
+  # This function displays a dialog to the user for selecting an emulator to open.
+  # It first constructs a list of available emulators and their descriptions by reading
+  # from the output of `open_component --getlist` and `open_component --getdesc`.
+  # If certain settings (kiroi_ponzu or akai_ponzu) are enabled, it adds Yuzu and Citra
+  # to the list of emulators.
+  # The function then uses `rd_zenity` to display a graphical list dialog with the
+  # available emulators and their descriptions.
+  # If the user selects an emulator, it calls `open_component` with the selected emulator.
+  # If the user cancels the dialog, it calls `configurator_welcome_dialog` to return to the
+  # welcome screen.
 
-  local emulator_list=(
-    "RetroArch" "Open the multi-emulator frontend RetroArch"
-    "Cemu" "Open the Wii U emulator CEMU"
-    "Dolphin" "Open the Wii & GC emulator Dolphin"
-    "Duckstation" "Open the PSX emulator Duckstation"
-    "MAME" "Open the Multiple Arcade Machine Emulator emulator MAME"
-    "MelonDS" "Open the NDS emulator MelonDS"
-    "PCSX2" "Open the PS2 emulator PSXC2"
-    "PPSSPP" "Open the PSP emulator PPSSPP"
-    "PortMaster" "Open PortMaster to manage your ports, even available from games list under PortMaster system"
-    "Primehack" "Open the Metroid Prime emulator Primehack"
-    "Ruffle" "Open the Flash emulator Ruffle"
-    "RPCS3" "Open the PS3 emulator RPCS3"
-    "Ryujinx" "Open the Switch emulator Ryujinx"
-    "Steam ROM Manager" "Open Steam ROM Manager"
-    "Vita3K" "Open the PSVita emulator Vita3K"
-    "XEMU" "Open the Xbox emulator XEMU"
-  )
-
-  # Check if any ponzu is true before adding Yuzu or Citra to the list
-  if [[ $(get_setting_value "$rd_conf" "kiroi_ponzu" "retrodeck" "options") == "true" ]]; then
-    emulator_list+=("Yuzu" "Open the Switch emulator Yuzu")
-  fi
-  if [[ $(get_setting_value "$rd_conf" "akai_ponzu" "retrodeck" "options") == "true" ]]; then
-    emulator_list+=("Citra" "Open the 3DS emulator Citra")
-  fi
+  local emulator_list=()
+  while IFS= read -r emulator && IFS= read -r desc; do
+    emulator_list+=("$emulator" "$desc")
+  done < <(paste -d '\n' <(open_component --getlist) <(open_component --getdesc))
 
   emulator=$(rd_zenity --list \
   --title "RetroDECK Configurator Utility - Open Emulator or Component" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --text="Which emulator do you want to launch?" \
   --hide-header \
-  --column="Emulator" --column="Action" \
+  --column="Emulator" --column="Description" \
   "${emulator_list[@]}")
 
-  case $emulator in
-
-  "RetroArch" )
-    log i "Configurator: \"$emulator\""
-    retroarch
-  ;;
-
-  "Cemu" )
-    log i "Configurator: \"$emulator\""
-    Cemu-wrapper
-  ;;
-
-  "Citra" )
-    log i "Configurator: \"$emulator\""
-    /var/data/ponzu/Citra/bin/citra-qt
-  ;;
-
-  "Dolphin" )
-    log i "Configurator: \"$emulator\""
-    dolphin-emu
-  ;;
-
-  "Duckstation" )
-    log i "Configurator: \"$emulator\""
-    duckstation-qt
-  ;;
-
-  "MAME" )
-    log i "Configurator: \"$emulator\""
-    mame -inipath /var/config/mame/ini
-  ;;
-
-  "MelonDS" )
-    log i "Configurator: \"$emulator\""
-    melonDS
-  ;;
-
-  "PCSX2" )
-    log i "Configurator: \"$emulator\""
-    pcsx2-qt
-  ;;
-
-  "PPSSPP" )
-    log i "Configurator: \"$emulator\""
-    PPSSPPSDL
-  ;;
-
-  "PortMaster" )
-    log i "Configurator: \"$emulator\""
-    PortMaster
-  ;;
-
-  "Primehack" )
-    log i "Configurator: \"$emulator\""
-    primehack-wrapper
-  ;;
-
-  "Ruffle" )
-    log i "Configurator: \"$emulator\""
-    ruffle
-  ;;
-
-  "RPCS3" )
-    log i "Configurator: \"$emulator\""
-    rpcs3
-  ;;
-
-  "Ryujinx" )
-    log i "Configurator: \"$emulator\""
-    Ryujinx.sh
-  ;;
-
-  "Steam ROM Manager" )
-    log i "Configurator: \"$emulator\""
-    steam-rom-manager
-  ;;
-
-  "Vita3K" )
-    log i "Configurator: \"$emulator\""
-    Vita3K
-  ;;
-
-  "XEMU" )
-    log i "Configurator: \"$emulator\""
-    xemu
-  ;;
-
-  "Yuzu" )
-    log i "Configurator: \"$emulator\""
-    /var/data/ponzu/Yuzu/bin/yuzu
-  ;;
-
-  "" ) # No selection made or Back button clicked
-    log i "Configurator: going back"
+  if [[ -n "$emulator" ]]; then
+    open_component "$emulator"
+  else
     configurator_welcome_dialog
-  ;;
-
-  esac
-
-  configurator_open_emulator_dialog
+  fi
 }
 
 configurator_retrodeck_tools_dialog() {
@@ -521,7 +420,7 @@ configurator_retrodeck_tools_dialog() {
   "Install: PS3 Firmware" "Download and install PS3 firmware for use with the RPCS3 emulator"
   "Install: PS Vita Firmware" "Download and install PS Vita firmware for use with the Vita3K emulator"
   "Update Notification" "Enable or disable online checks for new versions of RetroDECK"
-  "PortMaster: hide/show" "Hide or show PortMaster in ES-DE"
+  "Verify Multi-file Structure" "Verify the proper structure of multi-file or multi-disc games"
   )
 
   if [[ $(get_setting_value "$rd_conf" "kiroi_ponzu" "retrodeck" "options") == "true" ]]; then
@@ -542,8 +441,6 @@ configurator_retrodeck_tools_dialog() {
     log i "Configurator: opening \"$choice\" menu"
     configurator_data_management_dialog
   ;;
-
-
 
   "Install: RetroDECK Controller Layouts" )
     log i "Configurator: opening \"$choice\" menu"
@@ -598,9 +495,9 @@ configurator_retrodeck_tools_dialog() {
     configurator_update_notify_dialog
   ;;
 
-  "PortMaster: hide/show" )
+  "Verify Multi-file Structure" )
     log i "Configurator: opening \"$choice\" menu"
-    configurator_portmaster_toggle_dialog
+    configurator_check_multifile_game_structure
   ;;
 
   "Ponzu - Remove Yuzu" )
@@ -958,8 +855,7 @@ configurator_retrodeck_troubleshooting_dialog() {
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
   "Backup: RetroDECK Userdata" "Compress and backup important RetroDECK user data folders" \
-  "BIOS Checker Tool Files" "Show information about common BIOS files" \
-  "Check & Verify: Multi-file structure" "Verify the proper structure of multi-file or multi-disc games" \
+  "BIOS Checker" "Show information about common BIOS files" \
   "Reset Component" "Reset specific parts or all of RetroDECK" )
 
   case $choice in
@@ -982,14 +878,9 @@ configurator_retrodeck_troubleshooting_dialog() {
     configurator_retrodeck_troubleshooting_dialog
   ;;
 
-  "BIOS Checker Tool Files" )
+  "BIOS Checker" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_check_bios_files
-  ;;
-
-  "Check & Verify: Multi-file structure" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_check_multifile_game_structure
   ;;
 
   "Reset Component" )
@@ -1010,7 +901,7 @@ configurator_retrodeck_troubleshooting_dialog() {
 # verifies their MD5 hashes if provided, and displays the results in a Zenity dialog.
 configurator_check_bios_files() {
 
-  configurator_generic_dialog "RetroDECK Configurator - BIOS Checker Tool Files" "This check will look for BIOS files that RetroDECK has identified as working.\n\nNot all BIOS files are required for games to work, please check the BIOS description for more information on its purpose.\n\nBIOS files not known to this tool could still function.\n\nSome more advanced emulators such as Ryujinx will have additional methods to verify that the BIOS files are in working order."
+  configurator_generic_dialog "RetroDECK Configurator - BIOS Checker" "This check will look for BIOS files that RetroDECK has identified as working.\n\nNot all BIOS files are required for games to work, please check the BIOS description for more information on its purpose.\n\nBIOS files not known to this tool could still function.\n\nSome more advanced emulators such as Ryujinx will have additional methods to verify that the BIOS files are in working order."
 
   log d "Starting BIOS check in mode: $mode"
 
@@ -1086,7 +977,7 @@ configurator_check_bios_files() {
     log d "Finished checking BIOS files"
 
     IFS="^" # Set the Internal Field Separator to ^ to split the bios_checked_list array
-    rd_zenity --list --title="RetroDECK Configurator Utility - BIOS Checker Tool Files" --cancel-label="Back" \
+    rd_zenity --list --title="RetroDECK Configurator Utility - BIOS Checker" --cancel-label="Back" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
       --column "BIOS File Name" \
       --column "Systems" \
@@ -1115,10 +1006,10 @@ configurator_check_multifile_game_structure() {
     echo "$(find $roms_folder -maxdepth 2 -mindepth 2 -type d ! -name "*.m3u" ! -name "*.ps3")" > $logs_folder/multi_file_games_"$(date +"%Y_%m_%d_%I_%M_%p").log"
     rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - Check & Verify: Multi-file structure" \
+    --title "RetroDECK Configurator - Verify Multi-file Structure" \
     --text="The following games were found to have the incorrect folder structure:\n\n$(find $roms_folder -maxdepth 2 -mindepth 2 -type d ! -name "*.m3u" ! -name "*.ps3")\n\nIncorrect folder structure can result in failure to launch games or saves being in the incorrect location.\n\nPlease see the RetroDECK wiki for more details!\n\nYou can find this list of games in ~/retrodeck/logs"
   else
-    configurator_generic_dialog "RetroDECK Configurator - Check & Verify: Multi-file structure" "No incorrect multi-file game folder structures found."
+    configurator_generic_dialog "RetroDECK Configurator - Verify Multi-file Structure" "No incorrect multi-file game folder structures found."
   fi
   configurator_retrodeck_troubleshooting_dialog
 }
