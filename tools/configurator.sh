@@ -96,13 +96,13 @@ source /app/libexec/global.sh
 configurator_welcome_dialog() {
   log i "Configurator: opening welcome dialog"
   welcome_menu_options=(
-    "Settings" "Here you will find various presets, tweaks and settings to customize your RetroDECK experience"
-    "Open Component" "Launch and configure each emulator or component's settings (for advanced users)"
-    "Reset Components" "Reset specific parts or all of RetroDECK"
-    "Tools" "Games Compressor, move RetroDECK and install optional features"
-    "Steam Sync" "Sync all favorited games with Steam"
-    "Data Management" "Move RetroDECK folders between internal/SD card or to a custom location"
-    "About RetroDECK" "Show additional information about RetroDECK"
+    "Settings" "Customize your RetroDECK experience with various presets and tweaks."
+    "Open Component" "Manually launch and configure settings for each emulator or component (for advanced users)."
+    "Reset Component" "Reset a specific emulator, component or all of RetroDECK."
+    "Tools" "Various tools for verifying files and BIOS, and installing optional features."
+    "Steam Sync" "Enable / Disable: Synchronization of all favorited games with Steam."
+    "Data Management" "Move RetroDECK folders between internal storage, SD card, or a custom location, and clean out empty ROM folders or rebuild all ROM folders."
+    "About RetroDECK" "View additional information, including patch notes and credits."
   )
 
   if [[ $developer_options == "true" ]]; then
@@ -168,18 +168,18 @@ configurator_global_presets_and_settings_dialog() {
   choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - Global: Presets & Settings" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
-  "Borders" "Enable or disable borders in supported systems (only RetroArch is supported at this moment)" \
-  "Widescreen" "Enable or disable widescreen in supported systems" \
-  "Ask-to-Exit" "Enable or disable emulators confirming attempts to quit in supported systems" \
-  "Quick Resume" "Enable or disable save state auto-save/load in supported systems" \
-  "Rewind" "Enable or disable the rewind function in supported systems" \
-  "Swap A/B and X/Y Buttons" "Enable or disable a swapped A/B and X/Y button layout in supported systems" \
-  "RetroAchievements: Login" "Log into the RetroAchievements service in supported systems" \
-  "RetroAchievements: Logout" "Disable RetroAchievements service in ALL supported systems" \
-  "RetroAchievements: Hardcore Mode" "Enable RetroAchievements hardcore mode (no cheats, rewind, save states etc.) in supported systems" \
-  "Toggle Universal Dynamic Input for Dolphin" "Enable or disable universal dynamic input textures for Dolphin" \
-  "Toggle Universal Dynamic Input for Primehack" "Enable or disable universal dynamic input textures for Primehack" \
-  "PortMaster" "Hide or show PortMaster in ES-DE"
+  "Borders" "Enable / Disable: Borders in supported systems in RetroArch." \
+  "Widescreen" "Enable / Disable: Widescreen in supported systems." \
+  "Ask-to-Exit" "Enable / Disable: Popups that asks - Are sure you want to Quit? in supported systems." \
+  "Quick Resume" "Enable / Disable: Save state auto-save/load in supported systems." \
+  "Rewind" "Enable / Disable: the rewind function in supported systems." \
+  "Swap A/B and X/Y Buttons" "Enable / Disable: Swapped A/B and X/Y button layout in supported systems." \
+  "RetroAchievements: Login" "Login the RetroAchievements in supported systems." \
+  "RetroAchievements: Logout" "Logout RetroAchievements service in ALL supported systems" \
+  "RetroAchievements: Hardcore Mode" "Enable / Disable: RetroAchievements Hardcore Mode (no cheats, rewind, save states, etc.) in supported systems." \
+  "Toggle Universal Dynamic Input for Dolphin" "Enable / Disable: Universal Dynamic Input Textures for Dolphin." \
+  "Toggle Universal Dynamic Input for Primehack" "Enable / Disable: Universal Dynamic Input Textures for Primehack." \
+  "PortMaster" "Enable / Disable: PortMaster in ES-DE."
   )
 
   case $choice in
@@ -406,14 +406,14 @@ configurator_open_emulator_dialog() {
 configurator_retrodeck_tools_dialog() {
 
   local choices=(
-  "Backup Userdata" "Compress and backup important RetroDECK user data folders"
-  "BIOS Checker" "Show information about common BIOS files"
-  "Games Compressor" "Games Compressor for systems that support it"
-  "Install: RetroDECK Controller Layouts" "Install the custom RetroDECK controller layouts on Steam"
-  "Install: PS3 Firmware" "Download and install PS3 firmware for use with the RPCS3 emulator"
-  "Install: PS Vita Firmware" "Download and install PS Vita firmware for use with the Vita3K emulator"
-  "Update Notification" "Enable or disable online checks for new versions of RetroDECK"
-  "Verify Multi-file Structure" "Verify the proper structure of multi-file or multi-disc games"
+  "Backup Userdata" "Compress and backup RetroDECK userdata folders."
+  "BIOS Checker" "Checks and shows information about BIOS files."
+  "Games Compressor" "Compress games to save space for supported systems."
+  "Install: RetroDECK Controller Layouts" "Install RetroDECK controller templates into Steam."
+  "Install: PS3 Firmware" "Download and Install: Playstation 3 firmware for the RPCS3 emulator."
+  "Install: PS Vita Firmware" "Download and Install: PlayStation Vita firmware for the Vita3K emulator."
+  "Update Notification" "Enable / Disable: Notifications for new RetroDECK versions."
+  "Verify Multi-file Structure" "Verify the proper structure of multi-file or multi-disc games."
   )
 
   if [[ $(get_setting_value "$rd_conf" "kiroi_ponzu" "retrodeck" "options") == "true" ]]; then
@@ -531,18 +531,18 @@ configurator_data_management_dialog() {
   choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - RetroDECK: Move Tool" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
-  "Move all of RetroDECK" "Move the entire retrodeck folder to a new location" \
-  "Move ROMs folder" "Move only the ROMs folder to a new location" \
-  "Move BIOS folder" "Move only the BIOS folder to a new location" \
-  "Move Downloaded Media folder" "Move only the Downloaded Media folder to a new location" \
-  "Move Saves folder" "Move only the Saves folder to a new location" \
-  "Move States folder" "Move only the States folder to a new location" \
-  "Move Themes folder" "Move only the Themes folder to a new location" \
-  "Move Screenshots folder" "Move only the Screenshots folder to a new location" \
-  "Move Mods folder" "Move only the Mods folder to a new location" \
-  "Move Texture Packs folder" "Move only the Texture Packs folder to a new location" \
-  "Clean Empty ROM Folders" "Remove some or all of the empty ROM folders" \
-  "Rebuild All ROM Folders" "Rebuild any missing default ROM folders" )
+  "Move all of RetroDECK" "Move the entire RetroDECK folder to a new location." \
+  "Move ROMs folder" "Move the ROMs folder to a new location." \
+  "Move BIOS folder" "Move the BIOS folder to a new location." \
+  "Move Downloaded Media folder" "Move the Downloaded Media folder to a new location." \
+  "Move Saves folder" "Move the Saves folder to a new location." \
+  "Move States folder" "Move the States folder to a new location." \
+  "Move Themes folder" "Move the Themes folder to a new location." \
+  "Move Screenshots folder" "Move the Screenshots folder to a new location." \
+  "Move Mods folder" "Move the Mods folder to a new location." \
+  "Move Texture Packs folder" "Move the Texture Packs folder to a new location" \
+  "Clean Empty ROM Folders" "Removes some or all of the empty ROM folders." \
+  "Rebuild All ROM Folders" "Rebuilds any missing ROM folders." )
 
   case $choice in
 
@@ -647,12 +647,12 @@ configurator_compression_tool_dialog() {
   choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - RetroDECK: Compression Tool" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
-  "Compress Single Game" "Compress a single game into a compatible format" \
-  "Compress Multiple Games - CHD" "Compress one or more games compatible with the CHD format" \
-  "Compress Multiple Games - ZIP" "Compress one or more games compatible with the ZIP format" \
-  "Compress Multiple Games - RVZ" "Compress one or more games compatible with the RVZ format" \
-  "Compress Multiple Games - All Formats" "Compress one or more games compatible with any format" \
-  "Compress All Games" "Compress all games into compatible formats" )
+  "Compress Single Game" "Compress a single game into a compatible format." \
+  "Compress Multiple Games - CHD" "Compress one or more games into the CHD format." \
+  "Compress Multiple Games - ZIP" "Compress one or more games into the ZIP format." \
+  "Compress Multiple Games - RVZ" "Compress one or more games into the RVZ format." \
+  "Compress Multiple Games - All Formats" "Compress one or more games into any format." \
+  "Compress All Games" "Compress all games into compatible formats." )
 
   case $choice in
 
