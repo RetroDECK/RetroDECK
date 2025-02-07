@@ -1148,7 +1148,7 @@
     },
     "primehack": {
       "name": "PrimeHack",
-      "description": "A fork of Dolphiin to enhance Metroid Prime experience",
+      "description": "A fork of Dolphin to enhance Metroid Prime experience",
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/dolphin-primehack/dolphin-primehack-guide/",
       "launch": "primehack-wrapper",
       "cli-arg": "--version",
