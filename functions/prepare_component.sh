@@ -125,13 +125,13 @@ prepare_component() {
         dir_prep "$rdhome/logs/retroarch" "/var/config/retroarch/logs"
         create_dir -d "/var/config/retroarch/shaders/"
         if [[ -d "$cheats_folder/retroarch" && "$(ls -A $cheats_folder/retroarch)" ]]; then
-          backup_file="$backup_folder/cheats/retroarch-$(date +%y%m%d).tar.gz"
+          backup_file="$backups_folder/cheats/retroarch-$(date +%y%m%d).tar.gz"
           create_dir "$(dirname "$backup_file")"
           tar -czf "$backup_file" -C "$cheats_folder" retroarch
           log i "RetroArch cheats backed up to $backup_file"
         fi
         create_dir -d "$cheats_folder/retroarch"
-        tar -xzf /app/retrodeck/cheats/retroarch.tar.gz -C "$cheats_folder/retroarch" --overwrite
+        tar --strip-components=1 -xzf /app/retrodeck/cheats/retroarch.tar.gz -C "$cheats_folder/retroarch" --overwrite
         cp -rf /app/share/libretro/shaders /var/config/retroarch/
         dir_prep "$rdhome/shaders/retroarch" "/var/config/retroarch/shaders"
         cp -fv $config/retroarch/retroarch.cfg /var/config/retroarch/
@@ -144,7 +144,7 @@ prepare_component() {
         set_setting_value "$raconf" "screenshot_directory" "$screenshots_folder" "retroarch"
         set_setting_value "$raconf" "log_dir" "$logs_folder" "retroarch"
         set_setting_value "$raconf" "rgui_browser_directory" "$roms_folder" "retroarch"
-        set_setting_value "$raconf" "cheat_database_path" "$cheats_folder/retroarch"
+        set_setting_value "$raconf" "cheat_database_path" "$cheats_folder/retroarch" "retroarch"
       fi
       # Shared actions
 
@@ -491,15 +491,15 @@ prepare_component() {
         set_setting_value "$pcsx2conf" "SaveStates" "$states_folder/ps2/pcsx2" "pcsx2" "Folders"
         set_setting_value "$pcsx2conf" "MemoryCards" "$saves_folder/ps2/pcsx2/memcards" "pcsx2" "Folders"
         set_setting_value "$pcsx2conf" "RecursivePaths" "$roms_folder/ps2" "pcsx2" "GameList"
-        set_setting_value "$pcsx2conf" "Cheats" "$cheats_folder/pcsx2"
+        set_setting_value "$pcsx2conf" "Cheats" "$cheats_folder/pcsx2" "Folders"
         if [[ -d "$cheats_folder/pcsx2" && "$(ls -A $cheats_folder/pcsx2)" ]]; then
-          backup_file="$backup_folder/cheats/pcsx2-$(date +%y%m%d).tar.gz"
-          create_dir "$(dirname "$backup_file")"
+          backup_file="$backups_folder/cheats/pcsx2-$(date +%y%m%d).tar.gz"
+          create_dir "$(dirname $backup_file)"
           tar -czf "$backup_file" -C "$cheats_folder" pcsx2
           log i "PCSX2 cheats backed up to $backup_file"
         fi
         create_dir -d "$cheats_folder/pcsx2"
-        tar -xzf /app/retrodeck/cheats/pcsx2.tar.gz -C "$cheats_folder/pcsx2" --overwrite
+        tar --strip-components=1 -xzf /app/retrodeck/cheats/pcsx2.tar.gz -C "$cheats_folder/pcsx2" --overwrite
       fi
       # Shared actions
       create_dir "$saves_folder/ps2/pcsx2/memcards"
@@ -518,6 +518,7 @@ prepare_component() {
       set_setting_value "$pcsx2conf" "SaveStates" "$states_folder/ps2/pcsx2" "pcsx2" "Folders"
       set_setting_value "$pcsx2conf" "MemoryCards" "$saves_folder/ps2/pcsx2/memcards" "pcsx2" "Folders"
       set_setting_value "$pcsx2conf" "RecursivePaths" "$roms_folder/ps2" "pcsx2" "GameList"
+      set_setting_value "$pcsx2conf" "Cheats" "$cheats_folder/pcsx2" "Folders"
       dir_prep "$texture_packs_folder/PCSX2" "/var/config/PCSX2/textures"
     fi
   fi
@@ -553,16 +554,15 @@ prepare_component() {
       dir_prep "$saves_folder/PSP/PPSSPP-SA" "/var/config/ppsspp/PSP/SAVEDATA"
       dir_prep "$states_folder/PSP/PPSSPP-SA" "/var/config/ppsspp/PSP/PPSSPP_STATE"
       dir_prep "$texture_packs_folder/PPSSPP" "/var/config/ppsspp/PSP/TEXTURES"
-
+      create_dir -d "$cheats_folder/PPSSPP"
       dir_prep "$cheats_folder/PPSSPP" "/var/config/ppsspp/PSP/Cheats"
-      if [[ -d "$cheats_folder/ppsspp" && "$(ls -A $cheats_folder/ppsspp)" ]]; then
-        backup_file="$backup_folder/cheats/ppsspp-$(date +%y%m%d).tar.gz"
+      if [[ -d "$cheats_folder/PPSSPP" && "$(ls -A $cheats_folder/PPSSPP)" ]]; then
+        backup_file="$backups_folder/cheats/PPSSPP-$(date +%y%m%d).tar.gz"
         create_dir "$(dirname "$backup_file")"
-        tar -czf "$backup_file" -C "$cheats_folder" ppsspp
+        tar -czf "$backup_file" -C "$cheats_folder" PPSSPP
         log i "PPSSPP cheats backed up to $backup_file"
       fi
-      create_dir -d "$cheats_folder/pcsx2"
-      tar -xzf /app/retrodeck/cheats/pcsx2.tar.gz -C "$cheats_folder/pcsx2" --overwrite
+      tar -xzf /app/retrodeck/cheats/ppsspp.tar.gz -C "$cheats_folder/PPSSPP" --overwrite
     fi
     if [[ "$action" == "postmove" ]]; then # Run only post-move commands
       set_setting_value "$ppssppconf" "CurrentDirectory" "$roms_folder/psp" "ppsspp" "General"

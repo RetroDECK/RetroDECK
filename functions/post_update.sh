@@ -620,16 +620,23 @@ post_update() {
 
     # --- ALWAYS EXECUTED IN 0.9.1b ---
 
-    log i "Installing the cheats"
-
+    log i "Preparing the cheats for RetroArch..."
     create_dir "$cheats_folder/retroarch"
-    create_dir "$cheats_folder/ppsspp"
+    set_setting_value "$raconf" "cheat_database_path" "$cheats_folder/retroarch" "retroarch"
+    tar --strip-components=1 -xzf /app/retrodeck/cheats/retroarch.tar.gz -C "$cheats_folder/retroarch" --overwrite && log i "Cheats for RetroArch installed"
+
+    log i "Preparing the cheats for PPSSPP..."
+    create_dir -d "$cheats_folder/PPSSPP"
+    dir_prep "$cheats_folder/PPSSPP" "/var/config/ppsspp/PSP/Cheats"
+    tar -xzf /app/retrodeck/cheats/ppsspp.tar.gz -C "$cheats_folder/PPSSPP" --overwrite && log i "Cheats for PPSSPP installed"
+    
+    log i "Preparing the cheats for PCSX2..."
     create_dir "$cheats_folder/pcsx2"
+    set_setting_value "$pcsx2conf" "Cheats" "$cheats_folder/pcsx2" "Folders"
+    tar --strip-components=1 -xzf /app/retrodeck/cheats/pcsx2.tar.gz -C "$cheats_folder/pcsx2" --overwrite && log i "Cheats for PCSX2 installed"
 
-    tar -xzf /app/retrodeck/cheats/retroarch.tar.gz -C "$cheats_folder/retroarch" --overwrite && log i "Cheats for RetroArch installed"
-    tar -xzf /app/retrodeck/cheats/pcsx2.tar.gz -C "$cheats_folder/pcsx2" --overwrite && log i "Cheats for PCSX2 installed"
-    tar -xzf /app/retrodeck/cheats/ppsspp.tar.gz -C "$cheats_folder/ppsspp" --overwrite && log i "Cheats for PPSSPP installed"
-
+    log i "Preparing the cheats for MAME..."
+    create_dir "$cheats_folder/mame"
     set_setting_value "$mameconf" "cheatpath" "$cheats_folder/mame" "mame"
     unzip -j -o "$config/mame/cheat0264.zip" 'cheat.7z' -d "$cheats_folder/mame" && log i "Cheats for MAME installed"
     rm -rf /var/data/mame/cheat
