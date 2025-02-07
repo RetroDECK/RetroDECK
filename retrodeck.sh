@@ -15,22 +15,22 @@ pretty_resettable_components=$(echo "$resettable_components" | sed 's/|/, /g')
 
 show_cli_help() {
       echo -e "
-      Usage:
+Usage:
 flatpak run [FLATPAK-RUN-OPTION] net.retrodeck-retrodeck [ARGUMENTS]
 
 Arguments:
     -h, --help                          \t  Print this help
     -v, --version                       \t  Print RetroDECK version
     --info-msg                          \t  Print paths and config informations
-    --debug                             \t  Enable debug logging for this launch of RetroDECK (This may miss errors very early in the launch process)
+    --debug                             \t  Enable debug logging for this run of RetroDECK
     --configurator                      \t  Starts the RetroDECK Configurator
     --compress-one <file>               \t  Compresses target file to a compatible format
     --compress-all <format>             \t  Compresses all supported games into a compatible format.\n\t\t\t\t\t\t  Available formats are \"chd\", \"zip\", \"rvz\" and \"all\"
     --reset-component <component>       \t  Reset one or more component or emulator configs to the default values
     --reset-retrodeck                   \t  Starts the initial RetroDECK installer (backup your data first!)
     --test-upgrade <version>            \t  Test upgrading RetroDECK to a specific version, developer use only
-    --set <preset> <system/all> [value] \t  Set or toggle a preset. Examples: --set borders, --set borders all true, --set borders gba false. --set help for more help
-    --open <component/emulator>         \t  Open a specific component or emulator, --open --getlist for a list of available components
+    --set <preset> <system/all> [value] \t  Configure or toggle a preset. Examples: --set borders, --set borders all true,\n\t\t\t\t\t\t  --set borders gba false. Use --set help for more information
+    --open <component/emulator>         \t  Open a specific component or emulator\n\t\t\t\t\t\t  --open --getlist for a list of available components
 
 Game Launch:
     [<options>] <game_path>             \t  Start a game using the default emulator or\n\t\t\t\t\t\t  the one defined in ES-DE for game or system
@@ -41,6 +41,7 @@ Game Launch:
 
 For flatpak run specific options please run: flatpak run -h
 
+The RetroDECK Team
 https://retrodeck.net
 "
 }
@@ -50,7 +51,11 @@ https://retrodeck.net
 for i in "$@"; do
   case $i in
     -h*|--help*)
-      echo "RetroDECK v""$version"
+      if [[ "$version" == *"cooker"* ]]; then
+        echo "RetroDECK $version"
+      else
+        echo "RetroDECK v$version"
+      fi
       show_cli_help
       exit
       ;;
