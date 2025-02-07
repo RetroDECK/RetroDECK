@@ -2,17 +2,6 @@
 
 source /app/libexec/global.sh
 
-# uses jq to extract all the emulators (components) that don't have resettable: false in the features.json and separate them with "|"
-resettable_components=$(jq -r '
-  [(.emulator | to_entries[]) |
-  select(.value.core == null and .value.resettable != false) |
-  .key] | sort | join("|")
-' "$features")
-
-# uses sed to create, a, list, like, this
-pretty_resettable_components=$(echo "$resettable_components" | sed 's/|/, /g')
-
-
 show_cli_help() {
       echo -e "
 Usage:
@@ -26,11 +15,10 @@ Arguments:
     --configurator                      \t  Starts the RetroDECK Configurator
     --compress-one <file>               \t  Compresses target file to a compatible format
     --compress-all <format>             \t  Compresses all supported games into a compatible format.\n\t\t\t\t\t\t  Available formats are \"chd\", \"zip\", \"rvz\" and \"all\"
-    --reset-component <component>       \t  Reset one or more component or emulator configs to the default values
-    --reset-retrodeck                   \t  Starts the initial RetroDECK installer (backup your data first!)
+    --reset <component>                 \t  Reset RetroDECK or one or more component/emulator configurations to default values. WARNING: no confirmation prompt
     --test-upgrade <version>            \t  Test upgrading RetroDECK to a specific version, developer use only
     --set <preset> <system/all> [value] \t  Configure or toggle a preset. Examples: --set borders, --set borders all true,\n\t\t\t\t\t\t  --set borders gba false. Use --set help for more information
-    --open <component/emulator>         \t  Open a specific component or emulator\n\t\t\t\t\t\t  --open --getlist for a list of available components
+    --open <component/emulator>         \t  Open a specific component or emulator\n\t\t\t\t\t\t  --open --list for a list of available components
 
 Game Launch:
     [<options>] <game_path>             \t  Start a game using the default emulator or\n\t\t\t\t\t\t  the one defined in ES-DE for game or system
@@ -93,42 +81,17 @@ for i in "$@"; do
     #     shift
     #   fi
     #   ;;
-    --reset-component*)
-      component="$2"
+    --reset*)
+      component="${@:2}"
       if [ -z "$component" ]; then
         echo "You are about to reset one or more RetroDECK components or emulators."
-        echo -e "Available options are:\nall, $pretty_resettable_components"
+        echo -e "Available options are:\nall, $(prepare_component --list | tr ' ' ',' | sed 's/,/, /g')"
         read -p "Please enter the component you would like to reset: " component
         component=$(echo "$component" | tr '[:upper:]' '[:lower:]')
       fi
-
-      if [[ "$component" =~ ^(all|$resettable_components)$ ]]; then
-        read -p "You are about to reset $component to default settings. Enter 'y' to continue, 'n' to stop: " response
-        if [[ $response == [yY] ]]; then
-          prepare_component "reset" "$component" "cli"
-          read -p "The process has been completed, press Enter key to start RetroDECK."
-          shift # Continue launch after previous command is finished
-        else
-          read -p "The process has been cancelled, press Enter key to exit."
-          exit
-        fi
-      else
-        echo "$component is not a valid selection, exiting..."
-        exit
-      fi
-      ;;
-    --reset-retrodeck*)
-      echo "You are about to reset RetroDECK completely!"
-      read -p "Enter 'y' to continue, 'n' to stop: " response
-      if [[ $response == [yY] ]]; then
-        rm -f "$lockfile"
-        rm -f "$rd_conf"
-        read -p "The process has been completed, press Enter key to exit. Please run RetroDECK again to start the initial setup process."
-        exit 1
-      else
-        read -p "The process has been cancelled, press Enter key to exit."
-        exit
-      fi
+      log d "Resetting component: $component"
+      prepare_component "reset" "$component"
+      exit
       ;;
     --test-upgrade*)
       if [[ "$2" =~ ^.+ ]]; then

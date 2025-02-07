@@ -1025,7 +1025,7 @@ open_component(){
     return
   fi
 
-  if [[ "$1" == "--getlist" ]]; then
+  if [[ "$1" == "--list" ]]; then
     cmd=$(jq -r '.emulator[] | select(.ponzu != true) | .name' "$features")
     if [[ $(get_setting_value "$rd_conf" "akai_ponzu" "retrodeck" "options") == "true" ]]; then
       cmd+="\n$(jq -r '.emulator.citra | .name' "$features")"
@@ -1047,6 +1047,12 @@ open_component(){
     fi
     echo -e "$cmd"
     return
+  fi
+
+  launch_exists=$(jq -r --arg name "$1" '.emulator[] | select(.name == $name) | has("launch")' "$features")
+  if [[ "$launch_exists" != "true" ]]; then
+    echo "Error: The component '$1' cannot be opened."
+    return 1
   fi
 
   cmd=$(jq -r --arg name "$1" '.emulator[] | select(.name == $name and .ponzu != true) | .launch' "$features")

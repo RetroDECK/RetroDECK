@@ -833,6 +833,12 @@
     }
   },
   "emulator": {
+    "retrodeck": {
+      "description": "RetroDECK Framework",
+      "name": "RetroDECK",
+      "url": "https://retrodeck.net/",
+      "cli-arg": "--version"
+    },
     "retroarch": {
       "description": "RetroArch (Multi-emulator Frontend)",
       "name": "RetroArch",

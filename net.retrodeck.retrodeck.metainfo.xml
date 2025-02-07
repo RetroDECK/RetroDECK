@@ -65,8 +65,11 @@
             <description>
                <p>New Additions:</p>
                <ul>
+                  <li>CONFIGURATOR: reset components menu simplified and allowed multiple choices</li>
+                  <li>CONFIGURATOR: refacotred open component menu</li>
                   <li>New CLI argument `--set` to set presets, call retrodeck with `--set help` for more information</li>
-                  <li>New CLI argument `--open` to open a component or emulator. Call retrodeck with `--open --getlist` for a list of available components or emulator to open</li>
+                  <li>New CLI argument `--open` to open a component or emulator. Call retrodeck with `--open --list` for a list of available components or emulator to open</li>
+                  <li>New CLI argument `--reset` that replaces the previous ones</li>
                   <li>CHEATS: added basic cheats support for RetroArch, PCSX2, PPSSPP and MAME</li>
                </ul>
                <p>Bug fixes:</p>
@@ -82,6 +85,7 @@
                <ul>
                   <li>Function `make_preset_changes` enhanced to be 100% headless</li>
                   <li>New `fetch_all_presets` function to list all the presets globally of per-system</li>
+                  <li>`preapre_components` can now act/reset multiple components at once</li>
                </ul>
             </description>
          </release>
