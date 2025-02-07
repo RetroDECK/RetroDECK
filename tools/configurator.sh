@@ -22,7 +22,7 @@ source /app/libexec/global.sh
 #         - Toggle Universal Dynamic Input for Dolphin
 #         - Toggle Universal Dynamic Input for Primehack
 #         - PortMaster
-#     - Open Emulator or Component (Behind one-time power user warning dialog)
+#     - Open Component (Behind one-time power user warning dialog)
 #       - Dynamically generated list of emulators from open_component --getlist and --getdesc (features.json)
 #     - Tools
 #       - Data Management
@@ -96,7 +96,7 @@ configurator_welcome_dialog() {
   log i "Configurator: opening welcome dialog"
   welcome_menu_options=(
     "Settings" "Here you will find various presets, tweaks and settings to customize your RetroDECK experience"
-    "Open Emulator or Component" "Launch and configure each emulator or component's settings (for advanced users)"
+    "Open Component" "Launch and configure each emulator or component's settings (for advanced users)"
     "Tools" "Games Compressor, move RetroDECK and install optional features"
     "Troubleshooting" "Backup data, perform BIOS / multi-disc file checks and emulator resets"
     "Steam Sync" "Sync all favorited games with Steam"
@@ -119,7 +119,7 @@ configurator_welcome_dialog() {
     configurator_global_presets_and_settings_dialog
   ;;
 
-  "Open Emulator or Component" )
+  "Open Component" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_power_user_warning_dialog
   ;;
@@ -381,7 +381,7 @@ configurator_open_emulator_dialog() {
   done < <(paste -d '\n' <(open_component --getlist) <(open_component --getdesc))
 
   emulator=$(rd_zenity --list \
-  --title "RetroDECK Configurator Utility - Open Emulator or Component" --cancel-label="Back" \
+  --title "RetroDECK Configurator Utility - Open Component" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --text="Which emulator do you want to launch?" \
   --hide-header \
@@ -836,7 +836,7 @@ configurator_portmaster_toggle_dialog(){
       rd_zenity --info \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Configurator - PortMaster Visibility" \
-      --text="PortMaster is now <span foreground='$purple'><b>hidden</b></span> in ES-DE.\nPlease refresh your game list or restart RetroDECK to see the changes.\n\nIn order to launch PortMaster, you can access it from:\n<span foreground='$purple'><b>Configurator -> Open Emulator or Component -> PortMaster</b></span>."
+      --text="PortMaster is now <span foreground='$purple'><b>hidden</b></span> in ES-DE.\nPlease refresh your game list or restart RetroDECK to see the changes.\n\nIn order to launch PortMaster, you can access it from:\n<span foreground='$purple'><b>Configurator -> Open Component -> PortMaster</b></span>."
     else # User clicked "Cancel"
       configurator_retrodeck_tools_dialog
     fi
