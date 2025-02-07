@@ -29,7 +29,8 @@ Arguments:
     --reset-component <component>       \t  Reset one or more component or emulator configs to the default values
     --reset-retrodeck                   \t  Starts the initial RetroDECK installer (backup your data first!)
     --test-upgrade <version>            \t  Test upgrading RetroDECK to a specific version, developer use only
-    --set <preset> [value]              \t  Set or toggle a preset. Examples: --set borders, --set borders true, --set borders gba false. --set help for more help
+    --set <preset> <system/all> [value] \t  Set or toggle a preset. Examples: --set borders, --set borders all true, --set borders gba false. --set help for more help
+    --open <component/emulator>         \t  Open a specific component or emulator, --open --getlist for a list of available components
 
 Game Launch:
     [<options>] <game_path>             \t  Start a game using the default emulator or\n\t\t\t\t\t\t  the one defined in ES-DE for game or system
@@ -163,6 +164,10 @@ for i in "$@"; do
       exit 0
       fi
       make_preset_changes "$preset" "$value"
+      exit 0
+      ;;
+    --open*)
+      open_component "${@:2}"
       exit 0
       ;;
     *)
