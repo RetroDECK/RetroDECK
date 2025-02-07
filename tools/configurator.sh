@@ -398,14 +398,16 @@ configurator_open_emulator_dialog() {
 configurator_retrodeck_tools_dialog() {
 
   local choices=(
-  "Data Management" "Move RetroDECK folders between internal/SD card or to a custom location"
   "Backup Userdata" "Compress and backup important RetroDECK user data folders"
+  "BIOS Checker" "Show information about common BIOS files"
+  "Data Management" "Move RetroDECK folders between internal/SD card or to a custom location"
   "Games Compressor" "Games Compressor for systems that support it"
   "Install: RetroDECK Controller Layouts" "Install the custom RetroDECK controller layouts on Steam"
   "Install: PS3 Firmware" "Download and install PS3 firmware for use with the RPCS3 emulator"
   "Install: PS Vita Firmware" "Download and install PS Vita firmware for use with the Vita3K emulator"
   "Update Notification" "Enable or disable online checks for new versions of RetroDECK"
   "Verify Multi-file Structure" "Verify the proper structure of multi-file or multi-disc games"
+  
   )
 
   if [[ $(get_setting_value "$rd_conf" "kiroi_ponzu" "retrodeck" "options") == "true" ]]; then
@@ -443,6 +445,11 @@ configurator_retrodeck_tools_dialog() {
       configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "The backup process could not be completed,\nplease check the logs folder for more information."
     fi
     configurator_retrodeck_troubleshooting_dialog
+  ;;
+
+  "BIOS Checker" )
+    log i "Configurator: opening \"$choice\" menu"
+    configurator_check_bios_files
   ;;
 
   "Install: RetroDECK Controller Layouts" )
@@ -857,15 +864,9 @@ configurator_retrodeck_troubleshooting_dialog() {
   choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - Troubleshooting" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
-  "BIOS Checker" "Show information about common BIOS files" \
   "Reset Component" "Reset specific parts or all of RetroDECK" )
 
   case $choice in
-
-  "BIOS Checker" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_check_bios_files
-  ;;
 
   "Reset Component" )
     log i "Configurator: opening \"$choice\" menu"
