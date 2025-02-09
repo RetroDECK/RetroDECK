@@ -65,6 +65,7 @@
             <description>
                <p>New Additions:</p>
                <ul>
+                  <li>INITIAL SETUP: prompts to add RetroDECK to Steam</li>
                   <li>CONFIGURATOR: reset components menu simplified and allowed multiple choices</li>
                   <li>CONFIGURATOR: refacotred open component menu</li>
                   <li>New CLI argument `--set` to set presets, call retrodeck with `--set help` for more information</li>

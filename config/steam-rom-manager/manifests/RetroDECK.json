@@ -1,0 +1,4 @@
+{
+    "title": "RetroDECK",
+    "target": "flatpak run net.retrodeck.retrodeck"
+}
