@@ -450,7 +450,7 @@ configurator_retrodeck_tools_dialog() {
 
   "BIOS Checker" )
     log i "Configurator: opening \"$choice\" menu"
-    configurator_check_bios_files
+    configurator_bios_checker
   ;;
 
   "Install: RetroDECK Controller Layouts" )
@@ -864,11 +864,9 @@ configurator_portmaster_toggle_dialog(){
 # This function checks and verifies BIOS files for RetroDECK.
 # It reads a list of required BIOS files from a JSON file, checks if they exist in the specified folder,
 # verifies their MD5 hashes if provided, and displays the results in a Zenity dialog.
-configurator_check_bios_files() {
+configurator_bios_checker() {
 
-  configurator_generic_dialog "RetroDECK Configurator - BIOS Checker" "This check will look for BIOS files that RetroDECK has identified as working.\n\nNot all BIOS files are required for games to work, please check the BIOS description for more information on its purpose.\n\nBIOS files not known to this tool could still function.\n\nSome more advanced emulators such as Ryujinx will have additional methods to verify that the BIOS files are in working order."
-
-  log d "Starting BIOS check in mode: $mode"
+  log d "Starting BIOS checker"
 
   (
 
@@ -894,7 +892,7 @@ configurator_check_bios_files() {
       log d "Checking entry $bios_entry"
 
       # Replace "bios/" with $bios_folder and "roms/" with $roms_folder
-      bios_paths=$(echo "$bios_paths" | sed "s|bios/|$bios_folder/|g" | sed "s|roms/|$roms_folder/|g")
+      bios_paths=$(echo "$bios_paths" | sed "s|bios|$bios_folder|g" | sed "s|roms/|$roms_folder/|g")
 
       # Skip if bios_file is empty
       if [[ ! -z "$bios_file" ]]; then
@@ -956,10 +954,10 @@ configurator_check_bios_files() {
     IFS=$' \t\n' # Reset the Internal Field Separator
 
   ) |
-  rd_zenity --progress --no-cancel --auto-close \
+  rd_zenity --progress --auto-close --no-cancel \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Configurator Utility - BIOS Check in Progress" \
-  --text="RetroDECK is checking your BIOS files, please wait..." \
+  --text="This check will look for BIOS files that RetroDECK has identified as working.\n\nNot all BIOS files are required for games to work, please check the BIOS description for more information on its purpose.\n\nBIOS files not known to this tool could still function.\n\nSome more advanced emulators such as Ryujinx will have additional methods to verify that the BIOS files are in working order.\n\nRetroDECK is now checking your BIOS files, please wait...\n\n" \
   --width=400 --height=100
 
   configurator_welcome_dialog
