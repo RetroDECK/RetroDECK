@@ -99,7 +99,7 @@ configurator_welcome_dialog() {
   welcome_menu_options=(
     "Settings" "Customize your RetroDECK experience with various presets and tweaks."
     "Open Component" "Manually launch and configure settings for each emulator or component (for advanced users)."
-    "Reset Component" "Reset a specific emulator, component or all of RetroDECK."
+    "Reset Components" "Reset a specific emulator, component or all of RetroDECK."
     "Tools" "Various tools for verifying files and BIOS, and installing optional features."
     "Steam Sync" "Enable / Disable: Synchronization of all favorited games with Steam."
     "Data Management" "Move RetroDECK folders between internal storage, SD card, or a custom location, and clean out empty ROM folders or rebuild all ROM folders."
@@ -512,6 +512,7 @@ configurator_retrodeck_tools_dialog() {
 
   "Add RetroDECK to Steam" )
     add_retrodeck_to_steam
+  ;;
 
   "Verify Multi-file Structure" )
     log i "Configurator: opening \"$choice\" menu"
@@ -1005,7 +1006,7 @@ configurator_reset_dialog() {
   choice=$(rd_zenity --list \
   --title "RetroDECK Configurator Utility - Reset Components" --cancel-label="Cancel" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
-  --checklist --ok-label="Reset Selected" --extra-button="Reset All" \
+  --checklist --ok-label="Reset Selected" --extra-button="Reset All" --extra-button="Factory Reset" \
   --print-column=2 \
   --text="Which components do you want to reset?" \
   --column "Reset" \
@@ -1014,15 +1015,58 @@ configurator_reset_dialog() {
   --column "Description" \
   "${components_list[@]}")
 
-  if [[ $? == 0 && -n "$choice" ]]; then
+  log d "User selected: $choice"
+
+  if [[ "$choice" == "Factory Reset" ]]; then
+    rd_zenity --question \
+      --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Configurator - Factory Reset" \
+      --text="This will reset all RetroDECK settings and configurations to their default state, RetroDECk will restart with the first time setup.\n\n<span foreground='$purple'><b>Your personal data, such as games, saves and scraped content will remain untouched.</b></span>\n\nAre you sure you want to proceed?"
+    if [[ $? == 0 ]]; then # User clicked "Yes"
+      prepare_component --full-reset
+      configurator_process_complete_dialog "performing a factory reset"
+    else # User clicked "Cancel"
+      configurator_welcome_dialog
+    fi
+  elif [[ "$choice" == "Reset All" ]]; then
+    rd_zenity --question \
+      --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Configurator - Factory Reset" \
+      --text="This will reset all RetroDECK components to their default settings.\n\n<span foreground='$purple'><b>Your personal data, such as games, saves and scraped content will remain untouched.</b></span>\n\nAre you sure you want to proceed?"
+    if [[ $? == 0 ]]; then # User clicked "Yes"
+      (
+        prepare_component "reset" "all"
+      ) |
+      rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Configurator Utility - Reset in Progress" \
+      --text="Resetting all components, please wait...\n\n"
+      configurator_process_complete_dialog "resetting all components"
+    else # User clicked "Cancel"
+      configurator_welcome_dialog
+    fi
+  elif [[ -n "$choice" ]]; then
     choice=$(echo "$choice" | tr '|' ' ')
-    log d "User selected \"Reset Selected\" and selected: ${choice// / }"
-    prepare_component "reset" ${choice// / }
+    log d "...and selected: ${choice// / }"
+    pretty_choice=$(echo "$choice" | tr ' ' '\n' | while read -r emulator; do
+      jq -r --arg emulator "$emulator" '.emulator[$emulator].name' "$features"
+    done | tr '\n' ',' | sed 's/,$//' | sed 's/,/, /g')
+    rd_zenity --question \
+      --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Configurator - Reset Components" \
+      --text="You selected the following components to be reset:\n\n${pretty_choice}\n\nDo you want to continue?"
+    if [[ $? == 0 ]]; then # User clicked "Yes"
+      (
+      prepare_component "reset" ${choice// / }
+      ) |
+      rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Configurator Utility - Reset in Progress" \
+      --text="Resetting selected components, please wait...\n\n"
+    else # User clicked "Cancel"
+      configurator_reset_dialog
+    fi
     configurator_process_complete_dialog "resetting selected emulators"
-  elif [[ $? == 1 ]]; then
-    log "User selected \"Reset All\""
-    prepare_ccomponent "reset" "all"
-    configurator_process_complete_dialog "resetting all emulators"
   else
     log d "User selected \"Cancel\""
     configurator_welcome_dialog

@@ -519,7 +519,7 @@ finit() {
   rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Finishing Initialization" \
-    --text="RetroDECK is finishing the initial setup process, please wait."
+    --text="RetroDECK is finishing the initial setup process, please wait.\n\n"
 
   add_retrodeck_to_steam
   create_lock
