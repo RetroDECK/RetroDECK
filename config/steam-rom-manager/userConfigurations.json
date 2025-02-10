@@ -1,7 +1,7 @@
 [
     {
         "parserType": "Glob",
-        "configTitle": "RetroDECK",
+        "configTitle": "RetroDECK Steam Sync",
         "steamDirectory": "${steamdirglobal}",
         "romDirectory": "${romsdirglobal}",
         "steamCategories": [
@@ -156,7 +156,7 @@
             ]
         },
         "parserInputs": {
-            "manualManifests": "/var/config/steam-rom-manager/manifests"
+            "manualManifests": "/var/config/steam-rom-manager/userData/manifests"
         },
         "executable": {
             "path": "",
@@ -244,7 +244,7 @@
             "long": "/app/retrodeck/steam_grid/banner.png",
             "hero": "/app/retrodeck/steam_grid/hero.png",
             "logo": "/app/retrodeck/steam_grid/logo.png",
-            "icon": "/app/retrodeck/steam_grid/icon.ico"
+            "icon": "/app/retrodeck/steam_grid/icon.png"
         },
         "localImages": {
             "tall": null,
