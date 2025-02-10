@@ -345,7 +345,7 @@ configurator_wii_and_gamecube_presets_and_settings_dialog() {
 }
 
 configurator_dolphin_input_textures_dialog() {
-  if [[ -d "w" ]]; then
+  if [[ -d "$dolphinDynamicInputTexturesPath" ]]; then
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - Dolphin Textures: Universal Dynamic Input" \
