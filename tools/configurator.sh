@@ -274,7 +274,7 @@ configurator_global_presets_and_settings_dialog() {
 }
 
 configurator_dolphin_input_textures_dialog() {
-  if [[ -d "/var/data/dolphin-emu/Load/DynamicInputTextures" ]]; then
+  if [[ -d "$dolphinDynamicInputTexturesPath" ]]; then
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - Toggle Universal Dynamic Input for Dolphin" \
@@ -283,7 +283,7 @@ configurator_dolphin_input_textures_dialog() {
     if [ $? == 0 ]
     then
       # set_setting_value $dolphingfxconf "HiresTextures" "False" dolphin # TODO: Break out a preset for texture packs so this can be enabled and disabled independently.
-      rm -rf "/var/data/dolphin-emu/Load/DynamicInputTextures"
+      rm -rf "$dolphinDynamicInputTexturesPath" && log d "Dolphin custom input textures folder deleted: $dolphinDynamicInputTexturesPath"
       configurator_process_complete_dialog "disabling Dolphin custom input textures"
     else
       configurator_global_presets_and_settings_dialog
@@ -298,8 +298,8 @@ configurator_dolphin_input_textures_dialog() {
     then
       set_setting_value $dolphingfxconf "HiresTextures" "True" dolphin
       (
-        mkdir "/var/data/dolphin-emu/Load/DynamicInputTextures"
-        rsync -rlD --mkpath "/app/retrodeck/extras/DynamicInputTextures/" "/var/data/dolphin-emu/Load/DynamicInputTextures/"
+        mkdir -p "$dolphinDynamicInputTexturesPath" && log d "Dolphin custom input textures folder created: $dolphinDynamicInputTexturesPath"
+        rsync -rlD --mkpath "/app/retrodeck/extras/DynamicInputTextures/" "$dolphinDynamicInputTexturesPath/" && log d "Dolphin custom input textures folder populated: $dolphinDynamicInputTexturesPath"
       ) |
       rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -312,7 +312,7 @@ configurator_dolphin_input_textures_dialog() {
 }
 
 configurator_primehack_input_textures_dialog() {
-  if [[ -d "/var/data/primehack/Load/DynamicInputTextures" ]]; then
+  if [[ -d "$primehackDynamicInputTexturesPath" ]]; then
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - Dolphin Custom Input Textures" \
@@ -320,8 +320,9 @@ configurator_primehack_input_textures_dialog() {
 
     if [ $? == 0 ]
     then
+      # TODO: unify this in a single function
       # set_setting_value $primehackgfxconf "HiresTextures" "False" primehack # TODO: Break out a preset for texture packs so this can be enabled and disabled independently.
-      rm -rf "/var/data/primehack/Load/DynamicInputTextures"
+      rm -rf "$primehackDynamicInputTexturesPath" && log d "Primehack custom input textures folder deleted: $primehackDynamicInputTexturesPath"
       configurator_process_complete_dialog "disabling Primehack custom input textures"
     else
       configurator_global_presets_and_settings_dialog
@@ -336,8 +337,9 @@ configurator_primehack_input_textures_dialog() {
     then
       set_setting_value $primehackgfxconf "HiresTextures" "True" primehack
       (
-        mkdir "/var/data/primehack/Load/DynamicInputTextures"
-        rsync -rlD --mkpath "/app/retrodeck/extras/DynamicInputTextures/" "/var/data/primehack/Load/DynamicInputTextures/"
+        # TODO: unify this in a single function
+        mkdir "$primehackDynamicInputTexturesPath" && log d "Primehack custom input textures folder created: $primehackDynamicInputTexturesPath"
+        rsync -rlD --mkpath "/app/retrodeck/extras/DynamicInputTextures/" "$primehackDynamicInputTexturesPath/" && log d "Primehack custom input textures folder populated: $primehackDynamicInputTexturesPath"
       ) |
       rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
