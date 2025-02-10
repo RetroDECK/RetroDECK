@@ -16,6 +16,7 @@ Arguments:
     --compress-one <file>               \t  Compresses target file to a compatible format
     --compress-all <format>             \t  Compresses all supported games into a compatible format.\n\t\t\t\t\t\t  Available formats are \"chd\", \"zip\", \"rvz\" and \"all\"
     --reset <component>                 \t  Reset RetroDECK or one or more component/emulator configurations to default values. WARNING: no confirmation prompt
+    --factory-reset                     \t  Factory Reset, triggers the initial setup WARNING: no confirmation prompt
     --test-upgrade <version>            \t  Test upgrading RetroDECK to a specific version, developer use only
     --set <preset> <system/all> [value] \t  Configure or toggle a preset. Examples: --set borders, --set borders all true,\n\t\t\t\t\t\t  --set borders gba false. Use --set help for more information
     --open <component/emulator>         \t  Open a specific component or emulator\n\t\t\t\t\t\t  --open --list for a list of available components
@@ -92,7 +93,10 @@ for i in "$@"; do
       log d "Resetting component: $component"
       prepare_component "reset" "$component"
       exit
-      ;;
+    ;;
+    --factory-reset*)
+      prepare_component --factory-reset
+    ;;
     --test-upgrade*)
       if [[ "$2" =~ ^.+ ]]; then
       echo "You are about to test upgrading RetroDECK from version $2 to $hard_version"

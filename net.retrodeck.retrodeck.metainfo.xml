@@ -71,6 +71,7 @@
                   <li>New CLI argument `--set` to set presets, call retrodeck with `--set help` for more information</li>
                   <li>New CLI argument `--open` to open a component or emulator. Call retrodeck with `--open --list` for a list of available components or emulator to open</li>
                   <li>New CLI argument `--reset` that replaces the previous ones</li>
+                  <li>New CLI argument `--factory-reset` that resets RetroDECK completely and brings the user to the first setup</li>
                   <li>CHEATS: added basic cheats support for RetroArch, PCSX2, PPSSPP and MAME</li>
                </ul>
                <p>Bug fixes:</p>
