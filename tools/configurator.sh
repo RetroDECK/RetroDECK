@@ -19,8 +19,8 @@ source /app/libexec/global.sh
 #         - RetroAchievements: Login
 #         - RetroAchievements: Logout
 #         - RetroAchievements: Hardcore Mode
-#         - Toggle Universal Dynamic Input for Dolphin
-#         - Toggle Universal Dynamic Input for Primehack
+#         - Universal Dynamic Input Textures - Dolphin
+#         - Universal Dynamic Input Textures - Primehack
 #         - PortMaster
 #     - Open Component (Behind one-time power user warning dialog)
 #       - Dynamically generated list of emulators from open_component --list and --getdesc (features.json)
@@ -178,8 +178,8 @@ configurator_global_presets_and_settings_dialog() {
   "RetroAchievements: Login" "Login the RetroAchievements in supported systems." \
   "RetroAchievements: Logout" "Logout RetroAchievements service in ALL supported systems" \
   "RetroAchievements: Hardcore Mode" "Enable / Disable: RetroAchievements Hardcore Mode (no cheats, rewind, save states, etc.) in supported systems." \
-  "Toggle Universal Dynamic Input for Dolphin" "Enable / Disable: Universal Dynamic Input Textures for Dolphin." \
-  "Toggle Universal Dynamic Input for Primehack" "Enable / Disable: Universal Dynamic Input Textures for Primehack." \
+  "Universal Dynamic Input Textures - Dolphin" "Enable / Disable: Universal Dynamic Input Textures for Dolphin." \
+  "Universal Dynamic Input Textures - Primehack" "Enable / Disable: Universal Dynamic Input Textures for Primehack." \
   "PortMaster" "Enable / Disable: PortMaster in ES-DE."
   )
 
@@ -251,12 +251,12 @@ configurator_global_presets_and_settings_dialog() {
     configurator_global_presets_and_settings_dialog
   ;;
 
-  "Toggle Universal Dynamic Input for Dolphin" )
+  "Universal Dynamic Input Textures - Dolphin" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_dolphin_input_textures_dialog
   ;;
 
-  "Toggle Universal Dynamic Input for Primehack" )
+  "Universal Dynamic Input Textures - Primehack" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_primehack_input_textures_dialog
   ;;
@@ -278,7 +278,7 @@ configurator_dolphin_input_textures_dialog() {
   if [[ -d "$dolphinDynamicInputTexturesPath" ]]; then
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - Toggle Universal Dynamic Input for Dolphin" \
+    --title "RetroDECK Configurator - Universal Dynamic Input Textures - Dolphin" \
     --text="Custom input textures are currently enabled. Do you want to disable them?"
 
     if [ $? == 0 ]
@@ -292,7 +292,7 @@ configurator_dolphin_input_textures_dialog() {
   else
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - Toggle Universal Dynamic Input for Dolphin" \
+    --title "RetroDECK Configurator - Universal Dynamic Input Textures - Dolphin" \
     --text="Custom input textures are currently disabled. Do you want to enable them?\n\nThis process may take several minutes to complete."
 
     if [ $? == 0 ]
