@@ -2329,6 +2329,54 @@
       "md5": "88dc7876d584f90e4106f91444ab23b7",
       "system": "enterprise",
       "description": "Enterprise - 64/128  BIOS"
+    },
+    "a2diskiing.zip": {
+      "system": "apple2",
+      "description": "Holds the ROM(s) for the Disk II interface",
+      "paths": [
+        "roms/apple2"
+      ],
+      "required": "required"
+    },
+    "apple2e.zip": {
+      "system": "apple2",
+      "description": "Contains the main BIOS ROM images for the Apple IIe system",
+      "paths": [
+        "roms/apple2"
+      ],
+      "required": "required"
+    },
+    "d2fdc.zip": {
+      "system": "apple2",
+      "description": "Provides the ROM for the floppy disk controller itself",
+      "paths": [
+        "roms/apple2"
+      ],
+      "required": "required"
+    },
+    "votrsc01.zip": {
+      "system": "apple2",
+      "description": "Contains the ROM images for the Votrax SC-01 speech synthesizer chip",
+      "paths": [
+        "roms/apple2"
+      ],
+      "required": "required"
+    },
+    "votrsc01a.zip": {
+      "system": "apple2",
+      "description": "Contains the ROM images for the Votrax SC-01 speech synthesizer chip",
+      "paths": [
+        "roms/apple2"
+      ],
+      "required": "required"
+    },
+    "apple2gs.zip": {
+      "system": "apple2",
+      "description": "Apple IIGS system bios",
+      "paths": [
+        "roms/apple2gs"
+      ],
+      "required": "required"
     }
   }
 }
