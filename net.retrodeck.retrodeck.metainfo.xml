@@ -66,7 +66,7 @@
                <p>New Additions:</p>
                <ul>
                   <li>INITIAL SETUP: prompts to add RetroDECK to Steam</li>
-                  <li>CONFIGURATOR: reset components menu simplified and allowed multiple choices</li>
+                  <li>CONFIGURATOR: reset components menu simplified and allowed multiple choices and `Factory Reset`</li>
                   <li>CONFIGURATOR: refacotred open component menu</li>
                   <li>New CLI argument `--set` to set presets, call retrodeck with `--set help` for more information</li>
                   <li>New CLI argument `--open` to open a component or emulator. Call retrodeck with `--open --list` for a list of available components or emulator to open</li>
@@ -88,6 +88,7 @@
                   <li>Function `make_preset_changes` enhanced to be 100% headless</li>
                   <li>New `fetch_all_presets` function to list all the presets globally of per-system</li>
                   <li>`preapre_components` can now act/reset multiple components at once</li>
+                  <li>`preapre_components` can now execute a factory reset with --factory-reset</li>
                </ul>
             </description>
          </release>
