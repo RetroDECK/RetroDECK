@@ -100,7 +100,7 @@ add_to_steam() {
         remove_from_steam
     else
         log d "Updating game list"
-        steam-rom-manager enable --names "RetroDECK"
+        steam-rom-manager enable --names "RetroDECK Steam Sync"
         steam-rom-manager add
     fi
 }
@@ -111,10 +111,11 @@ remove_from_steam() {
   log d "Creating dummy game"
   cat "" > "$steamsync_folder/CUL0.sh"
   log d "Cleaning the shortcut"
-  steam-rom-manager enable --names "RetroDECK"
+  steam-rom-manager enable --names "RetroDECK Steam Sync"
   steam-rom-manager disable --names "RetroDECK Launcher"
   steam-rom-manager remove
   log d "Removing dummy game"
   rm "$steamsync_folder/CUL0.sh"
   steam-rom-manager enable --names "RetroDECK Launcher"
+  steam-rom-manager disable --names "RetroDECK Steam Sync"
 }

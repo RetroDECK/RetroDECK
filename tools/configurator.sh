@@ -62,6 +62,7 @@ source /app/libexec/global.sh
 #       - Install: PS3 firmware
 #       - Install: PS Vita firmware
 #       - Update Notification
+#       - Add RetroDECK to Steam
 #       - Verify Multi-file Structure
 #       - Ponzu - Remove Yuzu
 #       - Ponzu - Remove Citra
@@ -415,6 +416,7 @@ configurator_retrodeck_tools_dialog() {
   "Install: PS3 Firmware" "Download and Install: Playstation 3 firmware for the RPCS3 emulator."
   "Install: PS Vita Firmware" "Download and Install: PlayStation Vita firmware for the Vita3K emulator."
   "Update Notification" "Enable / Disable: Notifications for new RetroDECK versions."
+  "Add RetroDECK to Steam" "Add RetroDECK shortcut to Steam. Steam restart required."
   "Verify Multi-file Structure" "Verify the proper structure of multi-file or multi-disc games."
   )
 
@@ -507,6 +509,9 @@ configurator_retrodeck_tools_dialog() {
     log i "Configurator: opening \"$choice\" menu"
     configurator_update_notify_dialog
   ;;
+
+  "Add RetroDECK to Steam" )
+    add_retrodeck_to_steam
 
   "Verify Multi-file Structure" )
     log i "Configurator: opening \"$choice\" menu"

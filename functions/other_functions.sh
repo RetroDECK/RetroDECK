@@ -521,14 +521,7 @@ finit() {
     --title "RetroDECK Finishing Initialization" \
     --text="RetroDECK is finishing the initial setup process, please wait."
 
-  rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
-  --text="Do you want to add RetroDECK to Steam?"
-  if [ $? == 0 ]; then
-    steam-rom-manager enable --names "RetroDECK Launcher"
-    steam-rom-manager add
-    rd_zenity --info --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --text="RetroDECK has been added to Steam."
-  fi
-
+  add_retrodeck_to_steam
   create_lock
 
   # Inform the user where to put the ROMs and BIOS files
@@ -1077,4 +1070,25 @@ open_component(){
     echo "Invalid component name: $1"
     echo "Please ensure the name is correctly spelled (case sensitive) and quoted if it contains spaces."
   fi
+}
+
+add_retrodeck_to_steam(){
+
+    log i "Adding RetroDECK to Steam"
+
+    rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
+  --text="Do you want to add RetroDECK to Steam?"
+    if [ $? == 0 ]; then
+      (
+        steam-rom-manager enable --names "RetroDECK Launcher"
+        steam-rom-manager add
+      ) |
+      rd_zenity --progress --no-cancel --pulsate --auto-close \
+        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+        --title "Adding RetroDECK to Steam" \
+        --text="Please wait while RetroDECK is being added to Steam...\n\n"
+      rd_zenity --info --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --text="RetroDECK has been added to Steam.\n\nPlease close and reopen Steam to see the changes."
+    fi
+
+    log i "RetroDECK has been added to Steam"
 }

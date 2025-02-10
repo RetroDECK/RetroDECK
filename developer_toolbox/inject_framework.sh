@@ -42,7 +42,7 @@ fi
 
 # Copying files to the installation
 sudo cp -vfr "res/binding_icons" "$app/retrodeck/binding_icons"
-sudo cp -vfr "res/steam_grid" "$app/retrodeck/steam_grid" 
+sudo cp -vfr "res/steam_grid" "$app/retrodeck" 
 sudo cp -vfr "config/"** "$app/retrodeck/config/"
 sudo cp -vfr "tools" "$app"
 sudo cp -vfr "retrodeck.sh" "$app/bin/"
