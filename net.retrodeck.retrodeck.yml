@@ -802,6 +802,7 @@ modules:
       - cp -f res/icon.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg        
       - cp -f res/icon-configurator.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.configurator.svg
       - mv -f -t ${FLATPAK_DEST}/retrodeck res/binding_icons
+      - mv -f -t ${FLATPAK_DEST}/retrodeck res/steam_grid
 
       # RetroDECK core script
       - install -Dm755 retrodeck.sh ${FLATPAK_DEST}/bin/retrodeck.sh

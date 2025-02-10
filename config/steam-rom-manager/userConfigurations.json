@@ -144,14 +144,11 @@
         "fetchControllerTemplatesButton": null,
         "removeControllersButton": null,
         "steamInputEnabled": "2",
-        "imageProviders": [
-            "sgdb",
-            "steamCDN"
-        ],
+        "imageProviders": [],
         "onlineImageQueries": [
             "${fuzzyTitle}"
         ],
-        "imagePool": "${fuzzyTitle}",
+        "imagePool": "",
         "drmProtect": false,
         "userAccounts": {
             "specifiedAccounts": [
@@ -243,11 +240,11 @@
             }
         },
         "defaultImage": {
-            "tall": null,
-            "long": null,
-            "hero": null,
-            "logo": null,
-            "icon": null
+            "tall": "/app/retrodeck/steam_grid/portrait.png",
+            "long": "/app/retrodeck/steam_grid/banner.png",
+            "hero": "/app/retrodeck/steam_grid/hero.png",
+            "logo": "/app/retrodeck/steam_grid/logo.png",
+            "icon": "/app/retrodeck/steam_grid/icon.ico"
         },
         "localImages": {
             "tall": null,
@@ -257,7 +254,6 @@
             "icon": null
         },
         "parserId": "173908444383456337",
-        "disabled": false,
         "version": 25
     }
 ]
