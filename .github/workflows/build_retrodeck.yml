@@ -3,7 +3,6 @@ name: "Build RetroDECK"
 on:
   push:
     branches:
-      - main
       - cooker*
       - feat*
       - branch/cooker*
@@ -18,13 +17,11 @@ on:
   pull_request_target:
     types: [opened, synchronize, reopened]
     branches:
-      - main
       - cooker*
       - feat/*
   pull_request:
     types: [opened, synchronize, reopened]
     branches:
-      - main
       - cooker*
       - feat/*
 
