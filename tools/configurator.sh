@@ -736,90 +736,122 @@ configurator_compress_single_game_dialog() {
 }
 
 configurator_compress_multiple_games_dialog() {
-  # This dialog will display any games it finds to be compressable, from the systems listed under each compression type in features.json
-
   log d "Starting to compress \"$1\""
+  local output_file="${godot_compression_compatible_games}"
+  [ -f "$output_file" ] && rm -f "$output_file"
+  touch "$output_file"
 
-  # Create a temporary file for the final output and a named pipe for the progress messages.
-  temp_output=$(mktemp)
-  pipe=$(mktemp -u)
-  mkfifo "$pipe"
+  ## --- SEARCH PHASE WITH LOADING SCREEN ---
+  local progress_pipe
+  progress_pipe=$(mktemp -u)
+  mkfifo "$progress_pipe"
 
-  # Run find_compatible_games in the background.
-  # Its output is tee'd to both the temp file (for capturing later) and the named pipe (for Zenity).
-  ( find_compatible_games "$1" | tee "$temp_output" > "$pipe" ) &
+  # Launch find_compatible_games in the background (its output goes to the file)
+  find_compatible_games "$1" > "$output_file" &
+  local finder_pid=$!
 
-  # While the background process runs, show the progress dialog.
+  # Launch a background process that writes loading messages until the search completes.
+  (
+    while kill -0 "$finder_pid" 2>/dev/null; do
+      echo "# Loading: Searching for compatible games..."
+      sleep 1
+    done
+    echo "100"
+  ) > "$progress_pipe" &
+  local progress_writer_pid=$!
+
   rd_zenity --progress --pulsate --auto-close \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title="RetroDECK Configurator Utility - Searching for Compressable Games" \
-    --text="Searching for compressable games, please wait..." < "$pipe"
+    --text="Searching for compressable games, please wait..." < "$progress_pipe"
 
-  # Wait for the background process to complete.
-  wait
+  wait "$finder_pid"
+  wait "$progress_writer_pid"
+  rm "$progress_pipe"
 
-  # Now capture the final output.
-  all_compressable_games=($(cat "$temp_output"))
+  if [[ -s "$output_file" ]]; then
+    mapfile -t all_compressable_games < "$output_file"
+    log d "Found the following games to compress: ${all_compressable_games[*]}"
+  else
+    configurator_generic_dialog "RetroDECK Configurator - Compression Tool" "No compressable files were found."
+    return
+  fi
 
-  # Clean up temporary files.
-  rm "$temp_output" "$pipe"
+  local games_to_compress=()
+  if [[ "$1" != "everything" ]]; then
+    local checklist_entries=()
+    for line in "${all_compressable_games[@]}"; do
+      IFS="^" read -r game comp <<< "$line"
+      local short_game="${game#$roms_folder}"
+      checklist_entries+=( "TRUE" "$short_game" "$game" )
+    done
 
-  log d "Found the following games to compress:\n${all_compressable_games[@]}"
+    local choice
+    choice=$(rd_zenity \
+      --list --width=1200 --height=720 --title "RetroDECK Configurator - Compression Tool" \
+      --checklist --hide-column=3 --ok-label="Compress Selected" --extra-button="Compress All" \
+      --separator="," --print-column=3 \
+      --text="Choose which games to compress:" \
+      --column "Compress?" \
+      --column "Game" \
+      --column "Game Full Path" \
+      "${checklist_entries[@]}")
 
-  if [[ ! $(echo "${#all_compressable_games[@]}") == "0" ]]; then
-    if [[ ! "$target_selection" == "everything" ]]; then
-      choice=$(rd_zenity \
-          --list --width=1200 --height=720 --title "RetroDECK Configurator - RetroDECK: Compression Tool" \
-          --checklist --hide-column=3 --ok-label="Compress Selected" --extra-button="Compress All" \
-          --separator="," --print-column=3 \
-          --text="Choose which games to compress:" \
-          --column "Compress?" \
-          --column "Game" \
-          --column "Game Full Path" \
-          "${compressable_games_list[@]}")
-
-      local rc=$?
-      if [[ $rc == "0" && ! -z $choice ]]; then
-        IFS="," read -ra games_to_compress <<< "$choice"
-        local total_games_to_compress=${#games_to_compress[@]}
-        local games_left_to_compress=$total_games_to_compress
-      elif [[ ! -z $choice ]]; then
-        games_to_compress=("${all_compressable_games[@]}")
-        local total_games_to_compress=${#all_compressable_games[@]}
-        local games_left_to_compress=$total_games_to_compress
-      fi
-    else
+    local rc=$?
+    if [[ $rc == 0 && -n "$choice" ]]; then
+      IFS="," read -ra games_to_compress <<< "$choice"
+    elif [[ -n "$choice" ]]; then
       games_to_compress=("${all_compressable_games[@]}")
-      local total_games_to_compress=${#all_compressable_games[@]}
-      local games_left_to_compress=$total_games_to_compress
+    else
+      return
     fi
   else
-    configurator_generic_dialog "RetroDECK Configurator - RetroDECK: Compression Tool" "No compressable files were found."
+    games_to_compress=("${all_compressable_games[@]}")
   fi
 
-  if [[ ! $(echo "${#games_to_compress[@]}") == "0" ]]; then
-    local post_compression_cleanup=$(configurator_compression_cleanup_dialog)
-    (
-    for file in "${games_to_compress[@]}"; do
-      local system=$(echo "$file" | grep -oE "$roms_folder/[^/]+" | grep -oE "[^/]+$")
-      local compression_format=$(find_compatible_compression_format "$file")
-      echo "# Compressing $(basename "$file") into $compression_format format" # Update Zenity dialog text
-      log i "Compressing $(basename "$file") into $compression_format format"
-      progress=$(( 100 - (( 100 / "$total_games_to_compress" ) * "$games_left_to_compress" )))
-      echo $progress
-      games_left_to_compress=$((games_left_to_compress-1))
-      log i "Games left to compress: $games_left_to_compress"
-      compress_game "$compression_format" "$file" "$system"
+  local total_games=${#games_to_compress[@]}
+  local games_left=$total_games
+
+  ## --- COMPRESSION PHASE WITH PROGRESS SCREEN ---
+  local comp_pipe
+  comp_pipe=$(mktemp -u)
+  mkfifo "$comp_pipe"
+
+  (
+    for game_line in "${games_to_compress[@]}"; do
+      IFS="^" read -r game compression_format <<< "$game_line"
+      local system
+      system=$(echo "$game" | grep -oE "$roms_folder/[^/]+" | grep -oE "[^/]+$")
+      log i "Compressing $(basename "$game") into $compression_format format"
+
+      # Launch the compression in the background.
+      compress_game "$compression_format" "$game" "$system" &
+      local comp_pid=$!
+
+      # While the compression is in progress, write a status message every second.
+      while kill -0 "$comp_pid" 2>/dev/null; do
+        echo "# Compressing $(basename "$game") into $compression_format format"
+        sleep 1
+      done
+
+      # When finished, update the progress percentage.
+      local progress=$(( 100 - (( 100 / total_games ) * games_left) ))
+      echo "$progress"
+      games_left=$(( games_left - 1 ))
     done
-    ) |
-    rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
-      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Configurator Utility - Compression in Progress"
-      configurator_generic_dialog "RetroDECK Configurator - RetroDECK: Compression Tool" "The compression process is complete!"
-      configurator_compression_tool_dialog
-  else
-    configurator_compression_tool_dialog
-  fi
+    echo "100"
+  ) > "$comp_pipe" &
+  local comp_pid_group=$!
+
+  rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck/retrodeck.svg" \
+    --title "RetroDECK Configurator Utility - Compression in Progress" < "$comp_pipe"
+
+  wait "$comp_pid_group"
+  rm "$comp_pipe"
+
+  configurator_generic_dialog "RetroDECK Configurator - Compression Tool" "The compression process is complete!"
+  configurator_compression_tool_dialog
 }
 
 configurator_compression_cleanup_dialog() {
