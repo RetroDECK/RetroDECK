@@ -134,7 +134,7 @@ configurator_welcome_dialog() {
 
   "Tools" )
     log i "Configurator: opening \"$choice\" menu"
-    configurator_retrodeck_tools_dialog
+    configurator_tools_dialog
   ;;
 
   "About RetroDECK" )
@@ -406,7 +406,7 @@ configurator_open_emulator_dialog() {
   fi
 }
 
-configurator_retrodeck_tools_dialog() {
+configurator_tools_dialog() {
 
   local choices=(
   "Backup Userdata" "Compress and backup RetroDECK userdata folders."
@@ -457,6 +457,12 @@ configurator_retrodeck_tools_dialog() {
     configurator_bios_checker
   ;;
 
+  "Games Compressor" )
+    log i "Configurator: opening \"$choice\" menu"
+    configurator_generic_dialog "RetroDECK Configurator - Compression Tool" "Depending on your library and compression choices, the process can sometimes take a long time.\nPlease be patient once it is started!"
+    configurator_compression_tool_dialog
+  ;;
+
   "Install: RetroDECK Controller Layouts" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_generic_dialog "RetroDECK Configurator - Install: RetroDECK Controller Profile" "We are now offering a new official RetroDECK controller profile!\nIt is an optional component that helps you get the most out of RetroDECK with a new in-game radial menu for unified hotkeys across emulators.\n\nThe files need to be installed outside of the normal ~/retrodeck folder, so we wanted your permission before proceeding.\n\nThe files will be installed at the following shared Steam locations:\n\n$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/\n$HOME/.steam/steam/controller_base/templates"
@@ -464,7 +470,7 @@ configurator_retrodeck_tools_dialog() {
       install_retrodeck_controller_profile
       configurator_generic_dialog "RetroDECK Configurator - Install: RetroDECK Controller Profile" "The RetroDECK controller profile install is complete.\nSee the Wiki for more details on how to use it to its fullest potential!"
     fi
-    configurator_retrodeck_tools_dialog
+    configurator_tools_dialog
   ;;
 
   "Install: PS3 Firmware" )
@@ -483,7 +489,7 @@ configurator_retrodeck_tools_dialog() {
 
     else
       configurator_generic_dialog "RetroDECK Configurator - Install: PS3 Firmware" "You do not appear to currently have Internet access, which is required by this tool. Please try again when network access has been restored."
-      configurator_retrodeck_tools_dialog
+      configurator_tools_dialog
     fi
   ;;
 
@@ -501,7 +507,7 @@ configurator_retrodeck_tools_dialog() {
         --auto-close
     else
       configurator_generic_dialog "RetroDECK Configurator - Install: PS Vita Firmware" "You do not appear to currently have Internet access, which is required by this tool. Please try again when network access has been restored."
-      configurator_retrodeck_tools_dialog
+      configurator_tools_dialog
     fi
   ;;
 
@@ -696,7 +702,7 @@ configurator_compression_tool_dialog() {
 
   "" ) # No selection made or Back button clicked
     log i "Configurator: going back"
-    configurator_retrodeck_tools_dialog
+    configurator_tools_dialog
   ;;
 
   esac
@@ -732,10 +738,36 @@ configurator_compress_single_game_dialog() {
 configurator_compress_multiple_games_dialog() {
   # This dialog will display any games it finds to be compressable, from the systems listed under each compression type in features.json
 
-  find_compatible_games "$1"
+  log d "Starting to compress \"$1\""
+
+  # Create a temporary file for the final output and a named pipe for the progress messages.
+  temp_output=$(mktemp)
+  pipe=$(mktemp -u)
+  mkfifo "$pipe"
+
+  # Run find_compatible_games in the background.
+  # Its output is tee'd to both the temp file (for capturing later) and the named pipe (for Zenity).
+  ( find_compatible_games "$1" | tee "$temp_output" > "$pipe" ) &
+
+  # While the background process runs, show the progress dialog.
+  rd_zenity --progress --pulsate --auto-close \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title="RetroDECK Configurator Utility - Searching for Compressable Games" \
+    --text="Searching for compressable games, please wait..." < "$pipe"
+
+  # Wait for the background process to complete.
+  wait
+
+  # Now capture the final output.
+  all_compressable_games=($(cat "$temp_output"))
+
+  # Clean up temporary files.
+  rm "$temp_output" "$pipe"
+
+  log d "Found the following games to compress:\n${all_compressable_games[@]}"
 
   if [[ ! $(echo "${#all_compressable_games[@]}") == "0" ]]; then
-    if [[ ! "$target_selection" == "everything" ]]; then # If the user chose to not auto-compress everything
+    if [[ ! "$target_selection" == "everything" ]]; then
       choice=$(rd_zenity \
           --list --width=1200 --height=720 --title "RetroDECK Configurator - RetroDECK: Compression Tool" \
           --checklist --hide-column=3 --ok-label="Compress Selected" --extra-button="Compress All" \
@@ -747,16 +779,16 @@ configurator_compress_multiple_games_dialog() {
           "${compressable_games_list[@]}")
 
       local rc=$?
-      if [[ $rc == "0" && ! -z $choice ]]; then # User clicked "Compress Selected" with at least one game selected
+      if [[ $rc == "0" && ! -z $choice ]]; then
         IFS="," read -ra games_to_compress <<< "$choice"
         local total_games_to_compress=${#games_to_compress[@]}
         local games_left_to_compress=$total_games_to_compress
-      elif [[ ! -z $choice ]]; then # User clicked "Compress All"
+      elif [[ ! -z $choice ]]; then
         games_to_compress=("${all_compressable_games[@]}")
         local total_games_to_compress=${#all_compressable_games[@]}
         local games_left_to_compress=$total_games_to_compress
       fi
-    else # The user chose to auto-compress everything
+    else
       games_to_compress=("${all_compressable_games[@]}")
       local total_games_to_compress=${#all_compressable_games[@]}
       local games_left_to_compress=$total_games_to_compress
@@ -814,7 +846,7 @@ configurator_update_notify_dialog() {
     then
       set_setting_value $rd_conf "update_check" "false" retrodeck "options"
     else # User clicked "Cancel"
-      configurator_retrodeck_tools_dialog
+      configurator_tools_dialog
     fi
   else
     rd_zenity --question \
@@ -826,7 +858,7 @@ configurator_update_notify_dialog() {
     then
       set_setting_value $rd_conf "update_check" "true" retrodeck "options"
     else # User clicked "Cancel"
-      configurator_retrodeck_tools_dialog
+      configurator_tools_dialog
     fi
   fi
 }
@@ -847,7 +879,7 @@ configurator_portmaster_toggle_dialog(){
       --title "RetroDECK Configurator - PortMaster Visibility" \
       --text="PortMaster is now <span foreground='$purple'><b>hidden</b></span> in ES-DE.\nPlease refresh your game list or restart RetroDECK to see the changes.\n\nIn order to launch PortMaster, you can access it from:\n<span foreground='$purple'><b>Configurator -> Open Component -> PortMaster</b></span>."
     else # User clicked "Cancel"
-      configurator_retrodeck_tools_dialog
+      configurator_tools_dialog
     fi
   else
     rd_zenity --question \
@@ -863,10 +895,10 @@ configurator_portmaster_toggle_dialog(){
       --title "RetroDECK Configurator - PortMaster Visibility" \
       --text="PortMaster is now <span foreground='$purple'><b>visible</b></span> in ES-DE.\nPlease refresh your game list or restart RetroDECK to see the changes."
     else # User clicked "Cancel"
-      configurator_retrodeck_tools_dialog
+      configurator_tools_dialog
     fi
   fi
-  configurator_retrodeck_tools_dialog
+  configurator_tools_dialog
 }
 
 # This function checks and verifies BIOS files for RetroDECK.

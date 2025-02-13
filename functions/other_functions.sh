@@ -782,7 +782,7 @@ ponzu_remove() {
   else
     log e "Ponzu: \"$1\" is not a vaild choice for removal, quitting"
   fi
-  configurator_retrodeck_tools_dialog
+  configurator_tools_dialog
 }
 
 release_selector() {
