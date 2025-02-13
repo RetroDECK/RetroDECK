@@ -1,6 +1,7 @@
-#!/bin/bash
-
-source /app/libexec/logger.sh
+# Source the global.sh script if not already sourced
+if [ -z "${GLOBAL_SOURCED+x}" ]; then
+    source /app/libexec/global.sh
+fi
 
 # Define the IWAD files list
 IWAD_FILES=("DOOM1.WAD" "DOOM.WAD" "DOOM2.WAD" "DOOM2F.WAD" "DOOM64.WAD" "TNT.WAD"
@@ -15,7 +16,9 @@ is_iwad() {
     local file="$1"
     local lowercase_file="$(basename "${file,,}")"
     
+    # Loop through the list of IWAD files
     for iwad in "${IWAD_FILES[@]}"; do
+        # Check if the lowercase version of the IWAD file matches the input file
         if [[ "${iwad,,}" == "$lowercase_file" ]]; then
             echo "true"
             return
@@ -42,7 +45,17 @@ search_file_recursive() {
 }
 
 # Main script
-log "[INFO] RetroDECK GZDOOM wrapper init"
+log d "RetroDECK GZDOOM wrapper init"
+
+# Check if the filename contains a single quote
+if [[ "$1" == *"'"* ]]; then
+    log e "Invalid filename: \"$1\" contains a single quote.\nPlease rename the file in a proper way before continuing."
+    rd_zenity --error --no-wrap \
+        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+        --title "RetroDECK" \
+        --text="<span foreground='$purple'><b>Invalid filename\n\n</b></span>\"$1\" contains a single quote.\nPlease rename the file in a proper way before continuing."
+    exit 1
+fi
 
 # Check if $1 is not a .doom file
 if [[ "${1##*.}" != "doom" ]]; then
@@ -57,7 +70,7 @@ if [[ "${1##*.}" != "doom" ]]; then
     log i "Loading: \"$1\""
     log i "Executing command \"$command\""
 
-    # Execute the command
+    # Execute the command with double quotes
     eval "$command"
 
 # Check if $1 is a .doom file
@@ -79,6 +92,16 @@ else
     command="gzdoom -config /var/config/gzdoom/gzdoom.ini"
 
     while IFS= read -r line; do
+        # Check if the line contains a single quote
+        if [[ "$line" == *"'"* ]]; then
+            log e "Invalid filename: A file containined in \"$1\" contains a single quote"
+            rd_zenity --error --no-wrap \
+                --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+                --title "RetroDECK" \
+                --text="<span foreground='$purple'><b>Invalid filename\n\n</b></span>A file containined in \"$1\" contains a single quote.\nPlease rename the file and fix its name in the .doom file."
+            exit 1
+        fi
+
         # Search for the file recursively
         found_file=$(search_file_recursive "$line" "$(dirname "$doom_file")")
 
@@ -105,6 +128,6 @@ else
     # Log the command
     log i "Executing command \"$command\""
 
-    # Execute the command
+    # Execute the command with double quotes
     eval "$command"
 fi

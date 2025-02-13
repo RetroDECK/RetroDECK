@@ -6,11 +6,11 @@ post_update() {
   log i "Executing post-update script"
 
   if [[ $(check_version_is_older_than "0.5.0b") == "true" ]]; then # If updating from prior to save sorting change at 0.5.0b
+    log d "Version is older than 0.5.0b, executing save migration"
     save_migration
   fi
 
   # Everything within the following ( <code> ) will happen behind the Zenity dialog. The save migration was a long process so it has its own individual dialogs.
-
   (
   if [[ $(check_version_is_older_than "0.6.2b") == "true" ]]; then
     # In version 0.6.2b, the following changes were made that required config file updates/reset:
@@ -214,7 +214,7 @@ post_update() {
 
     prepare_component "reset" "pico8"
 
-    configurator_generic_dialog "RetroDECK 0.7.0b Upgrade" "Would you like to install the official controller profile?\n(this will reset your custom emulator settings)\n\nAfter installation you can enable it from from Controller Settings -> Templates."
+    configurator_generic_dialog "RetroDECK 0.7.0b Upgrade" "Would you like to install the official controller profile?\n(this will reset your custom emulator settings)\n\nAfter installation you can enable it from from Controller Settings\t->\tTemplates."
     if [[ $(configurator_generic_question_dialog "RetroDECK Official Controller Profile" "Would you like to install the official RetroDECK controller profile?") == "true" ]]; then
       install_retrodeck_controller_profile
       prepare_component "reset" "all"
@@ -298,22 +298,22 @@ post_update() {
     #es-de --home "/var/config/" --create-system-dirs
     es-de --create-system-dirs
 
-  fi
+  fi # end of 0.8.0b
 
   if [[ $(check_version_is_older_than "0.8.1b") == "true" ]]; then
     log i "In version 0.8.1b, the following changes were made that required config file updates/reset or other changes to the filesystem:"
     log i "- ES-DE files were moved inside the retrodeck folder, migrating to the new structure"
     log i "- Give the user the option to reset Ryujinx, which was not properly initialized in 0.8.0b"
-
+    
     log d "ES-DE files were moved inside the retrodeck folder, migrating to the new structure"
     dir_prep "$rdhome/ES-DE/collections" "/var/config/ES-DE/collections"
     dir_prep "$rdhome/ES-DE/gamelists" "/var/config/ES-DE/gamelists"
     log i "Moving ES-DE collections, downloaded_media, gamelist, and themes from \"$rdhome\" to \"$rdhome/ES-DE\""
     set_setting_value "$es_settings" "MediaDirectory" "$rdhome/ES-DE/downloaded_media" "es_settings"
     set_setting_value "$es_settings" "UserThemeDirectory" "$rdhome/ES-DE/themes" "es_settings"
-    mv -f "$rdhome/themes" "$rdhome/ES-DE/themes" && log d "Move of \"$rdhome/themes\" completed"
-    mv -f "$rdhome/downloaded_media" "$rdhome/ES-DE/downloaded_media" && log d "Move of \"$rdhome/downloaded_media\" completed"
-    mv -f "$rdhome/gamelists/"* "$rdhome/ES-DE/gamelists" && log d "Move of \"$rdhome/gamelists/\" completed" && rm -rf "$rdhome/gamelists"
+    mv -f "$rdhome/themes" "$rdhome/ES-DE/themes" && log d "Move of \"$rdhome/themes\" in \"$rdhome/ES-DE\" folder completed"
+    mv -f "$rdhome/downloaded_media" "$rdhome/ES-DE/downloaded_media" && log d "Move of \"$rdhome/downloaded_media\" in \"$rdhome/ES-DE\" folder completed"
+    mv -f "$rdhome/gamelists/"* "$rdhome/ES-DE/gamelists" && log d "Move of \"$rdhome/gamelists/\" in \"$rdhome/ES-DE\" folder completed" && rm -rf "$rdhome/gamelists"
 
     log i "MAME-SA, migrating samples to the new exposed folder: from \"/var/data/mame/assets/samples\" to \"$bios_folder/mame-sa/samples\""
     create_dir "$bios_folder/mame-sa/samples"
@@ -336,43 +336,36 @@ post_update() {
       log d "User agreed to Ryujinx reset"
       prepare_component "reset" "ryujinx"
     fi
-  fi
+  fi # end of 0.8.1b
 
   if [[ $(check_version_is_older_than "0.8.2b") == "true" ]]; then
     log i "Vita3K changed some paths, reflecting them: moving \"/var/data/Vita3K\" in \"/var/config/Vita3K\""
     move "/var/data/Vita3K" "/var/config/Vita3K"
     log i "Moving ES-DE downloaded_media, gamelist, and themes from \"$rdhome\" to \"$rdhome/ES-DE\" due to a RetroDECK Framework bug"
-    move "$rdhome/themes" "$rdhome/ES-DE/themes" && log d "Move of \"$rdhome/themes\" completed"
-    move "$rdhome/downloaded_media" "$rdhome/ES-DE/downloaded_media" && log d "Move of \"$rdhome/downloaded_media\" completed"
-    move "$rdhome/gamelists" "$rdhome/ES-DE/gamelists" && log d "Move of \"$rdhome/gamelists/\" completed"
+    move "$rdhome/themes" "$rdhome/ES-DE/themes" && log d "Move of \"$rdhome/themes\" in \"$rdhome/ES-DE\" folder completed"
+    move "$rdhome/downloaded_media" "$rdhome/ES-DE/downloaded_media" && log d "Move of \"$rdhome/downloaded_media\" in \"$rdhome/ES-DE\" folder completed"
+    move "$rdhome/gamelists" "$rdhome/ES-DE/gamelists" && log d "Move of \"$rdhome/gamelists/\" in \"$rdhome/ES-DE\" folder completed"
+    move "$rdhome/collections" "$rdhome/ES-DE/collections" && log d "Move of \"$rdhome/collections/\" in \"$rdhome/ES-DE\" folder completed"
     log i "Since in this version we moved to a PR build of Ryujinx we need to symlink it."
     ln -sv $ryujinxconf "$(dirname $ryujinxconf)/PRConfig.json"
-  fi
+  fi #end of 0.8.2b
 
   if [[ $(check_version_is_older_than "0.8.3b") == "true" ]]; then
     # In version 0.8.3b, the following changes were made:
     # - Recovery from a failed move of the themes, downloaded_media and gamelists folder to their new ES-DE locations.
     if [[ ! -d "$rdhome/ES-DE/themes" || ! -d "$rdhome/ES-DE/downloaded_media" || ! -d "$rdhome/ES-DE/gamelists" ]]; then
-    log i "Moving ES-DE downloaded_media, gamelist, and themes from \"$rdhome\" to \"$rdhome/ES-DE\" due to a RetroDECK Framework bug"
-      if [[ -d "$rdhome/themes" && ! -d "$rdhome/ES-DE/themes" ]]; then
-        move "$rdhome/themes" "$rdhome/ES-DE/themes" && log d "Move of \"$rdhome/themes\" completed"
+      log i "Moving ES-DE downloaded_media, gamelist, and themes from \"$rdhome\" to \"$rdhome/ES-DE\" due to a RetroDECK Framework bug"
+
+      # Ask user if they want to move and overwrite the data
+      if [[ $(configurator_generic_question_dialog "Move Data" "In the previous version some users suffered a bug where ES-DE appeared empty (no scraped data or collections for example).\n\n<span foreground='$purple' size='larger'><b>Your data is not gone!</b></span>\n\nit's just in a different path.\n\nDo you want to recover your old data replacing the actual one?\nBy choosing no instead, the folder with be moved but no data will be replaced and it will be availalbe in the retrodeck folder.\n\nThe affected folders are:\n\nretrodeck/themes\t\t\t\t->\t\"$rdhome/ES-DE\"/themes\nretrodeck/downloaded_media\t->\t\"$rdhome/ES-DE\"/downloaded_media\nretrodeck/gamelists\t\t\t\t->\t\"$rdhome/ES-DE\"/gamelist\nretrodeck/collections\t\t\t->\t\"$rdhome/ES-DE\"/collections") == "true" ]]; then
+        move_cmd="mv -f"  # Use mv with overwrite
+        log i "User chose to move and overwrite the data."
       else
-        log i "ES-DE themes appears to already have been migrated."
+        move_cmd="move"  # Use existing move function
+        log i "User chose to move the data without overwriting."
       fi
-      if [[ -d "$rdhome/downloaded_media" && ! -d "$rdhome/ES-DE/downloaded_media" ]]; then
-        move "$rdhome/downloaded_media" "$rdhome/ES-DE/downloaded_media" && log d "Move of \"$rdhome/downloaded_media\" completed"
-      else
-        log i "ES-DE downloaded media appears to already have been migrated."
-      fi
-      if [[ -d "$rdhome/gamelists" && ! -d "$rdhome/ES-DE/gamelists" ]]; then
-        move "$rdhome/gamelists" "$rdhome/ES-DE/gamelists" && log d "Move of \"$rdhome/gamelists/\" completed"
-      else
-        log i "ES-DE gamelists appears to already have been migrated."
-      fi
-    else
-      log i "ES-DE dfolders appears to already have been migrated."
     fi
-  fi
+  fi # end of 0.8.3b
 
   # Check if the version is older than 0.8.4b
   if [[ $(check_version_is_older_than "0.8.4b") == "true" ]]; then
@@ -427,44 +420,249 @@ post_update() {
     set_setting_value "$es_settings" "MediaDirectory" "$media_folder" "es_settings"
     set_setting_value "$es_settings" "UserThemeDirectory" "$themes_folder" "es_settings"
 
-  fi
+  fi # end of 0.8.4b
 
   if [[ $(check_version_is_older_than "0.9.0b") == "true" ]]; then
-    # Placeholder for version 0.9.0b
 
-    set_setting_value "$raconf" "libretro_info_path" "/var/config/retroarch/cores" "retroarch"
-    # TODO: Configurator dialog: Hey, we need to reset ES-DE! (because again ES-DE folders, new theme and such)
-    prepare_component "reset" "es-de"
-    prepare_component "reset" "portmaster"
-    prepare_component "reset" "ruffle"
+    # Create a Zenity window with checkboxes for each reset option and two buttons
+    while true; do
+      choices=$(zenity --list --checklist --title="RetroDECK Reset Options" \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --text="The following components have been updated and need to be reset or fixed to ensure compatibility with the new version: select the components you want to reset.\n\nNot resetting them may cause serious issues with your installation.\nYou can also reset them manually later via Configurator -> Troubleshooting -> Reset Component.\n\nNote: Your games, saves, game collections and scraped data will not be affected." \
+      --column="Select" --column="Component" --column="Description" --width="1100" --height="700" \
+      TRUE "ES-DE" "Needs to be reset to accommodate new paths, theme settings, and general configurations" \
+      TRUE "Duckstation" "Configuration reset to RetroDECK defaults to ensure compatibility" \
+      TRUE "Ryujinx" "Configuration reset, firmware might need to be reinstalled by user" \
+      TRUE "Dolphin" "Setting screen size to 'Auto' instead of 'Widescreen' to ensure better game compatibility" \
+      TRUE "Primehack" "Setting screen size to 'Auto' instead of 'Widescreen' to ensure better game compatibility" \
+      --separator=":" \
+      --extra-button="Execute All" \
+      --ok-label="Execute Selected Only" \
+      --cancel-label="Execute None")
 
-    log d "Steam Rom Manager was added, we need to prepare it"
-    update_rd_conf
-    prepare_component "reset" "steam-rom-manager"
+      log d "User selected: $choices"
+      log d "User pressed: $?"
 
+      # Check if "Execute All" button was pressed
+      if [[ "$choices" == "Execute All" ]]; then
+        execute_all=true
+        break
+      else
+        execute_all=false
+        # Split the choices into an array
+        IFS=":" read -r -a selected_choices <<< "$choices"
+      fi
+
+      if [[ $? -eq 0 && -n "$choices" ]]; then
+        if ! zenity --question --title="Confirmation" --text="Are you sure you want to proceed with only the selected options?\n\nThis might cause issues in RetroDECK"; then
+          log i "User is not sure, showing the checklist window again."
+          continue
+        else
+          log i "User confirmed to proceed with only the selected options."
+          break
+        fi
+      fi
+
+      if [[ $? == 0 ]]; then
+      if ! zenity --question --title="Confirmation" --text="Are you sure you want to skip the reset process?\n\nThis might cause issues in RetroDECK"; then
+        log i "User is not sure, showing the checklist window again."
+        continue
+      else
+        log i "User confirmed to proceed without any reset."
+        break
+      fi
+      fi
+
+      break
+    done
+
+    # Execute the selected resets
+
+    # ES-DE reset
+    if [[ "$execute_all" == "true" || " ${selected_choices[@]} " =~ " ES-DE " ]]; then
+      log i "User agreed to ES-DE reset"
+      prepare_component "reset" "es-de"
+    fi
     rm -rf "$rd_logs_folder/ES-DE" && log d "Removing the logs/ES-DE folder as we don't need it anymore"
     rm -rf "$es_source_logs" && mkdir -p "$es_source_logs"
 
+    # Cemu key file migration
     if [[ -f "$XDG_DATA_HOME/Cemu/keys.txt" ]]; then
-      log d "Found Cemu keys.txt in \"$XDG_DATA_HOME/Cemu/keys.txt\", moving it to \"$bios_folder/cemu/keys.txt\""
+      log i "Found Cemu keys.txt in \"$XDG_DATA_HOME/Cemu/keys.txt\", moving it to \"$bios_folder/cemu/keys.txt\""
       mv -f "$XDG_DATA_HOME/Cemu/keys.txt" "$bios_folder/cemu/keys.txt"
       ln -s "$bios_folder/cemu/keys.txt" "$XDG_DATA_HOME/Cemu/keys.txt"
     fi
-  fi
+
+    # Duckstation reset
+    if [[ "$execute_all" == "true" || " ${selected_choices[@]} " =~ " Duckstation " ]]; then
+      log i "User agreed to Duckstation reset"
+      prepare_component "reset" "duckstation"
+    fi
+
+    # Ryujinx reset
+    if [[ "$execute_all" == "true" || " ${selected_choices[@]} " =~ " Ryujinx " ]]; then
+      log i "User agreed to Ryujinx reset"
+      prepare_component "reset" "ryujinx"
+    else
+      create_dir "$logs_folder/ryujinx"
+      create_dir "$mods_folder/ryujinx"
+      create_dir "$screenshots_folder/ryujinx"
+    fi
+
+    # Dolphin reset: Setting screen size to 'Auto' instead of 'Widescreen' to ensure better game compatibility
+    if [[ "$execute_all" == "true" || " ${selected_choices[@]} " =~ " Dolphin " ]]; then
+      log i "User agreed to Dolphin reset"
+      set_setting_value "$dolphingfxconf" "AspectRatio" "0" "dolphin" "Settings"
+    fi
+
+    # Primehack reset: Setting screen size to 'Auto' instead of 'Widescreen' to ensure better game compatibility
+    if [[ "$execute_all" == "true" || " ${selected_choices[@]} " =~ " Primehack " ]]; then
+      log i "User agreed to Primehack reset"
+      set_setting_value "$primehackgfxconf" "AspectRatio" "0" "dolphin" "Settings"
+    fi
+
+    # --- ALWAYS EXECUTED IN 0.9.0b ---
+
+    # New components preparation
+    log i "New components were added in this version, initializing them"
+    prepare_component "reset" "portmaster"
+    prepare_component "reset" "ruffle"
+    update_rd_conf
+    prepare_component "reset" "steam-rom-manager"
+
+    # RetroArch
+    log i "Forcing RetroArch to use the new libretro info path"
+    set_setting_value "$raconf" "libretro_info_path" "/var/config/retroarch/cores" "retroarch"
+
+    log i "Moving Ryujinx data to the new locations"
+    if [[ -d "/var/config/Ryujinx/bis" ]]; then
+      mv -f "/var/config/Ryujinx/bis"/* "$saves_folder/switch/ryujinx/nand" && rm -rf "/var/config/Ryujinx/bis" && log i "Migrated Ryujinx nand data to the new location"
+    fi
+    if [[ -d "/var/config/Ryujinx/sdcard" ]]; then
+      mv -f "/var/config/Ryujinx/sdcard"/* "$saves_folder/switch/ryujinx/sdcard" && rm -rf "/var/config/Ryujinx/sdcard" && log i "Migrated Ryujinx sdcard data to the new location"
+    fi
+    if [[ -d "/var/config/Ryujinx/bis/system/Contents/registered" ]]; then
+      mv -f "/var/config/Ryujinx/bis/system/Contents/registered"/* "$bios_folder/switch/firmware" && rm -rf "/var/config/Ryujinx/bis/system/Contents/registered" && log i "Migration of Ryujinx firmware data to the new location"
+    fi
+    if [[ -d "/var/config/Ryujinx/system" ]]; then
+      mv -f "/var/config/Ryujinx/system"/* "$bios_folder/switch/keys" && rm -rf "/var/config/Ryujinx/system" && log i "Migrated Ryujinx keys data to the new location"
+    fi
+    if [[ -d "/var/config/Ryujinx/mods" ]]; then
+      mv -f "/var/config/Ryujinx/mods"/* "$mods_folder/ryujinx" && rm -rf "/var/config/Ryujinx/mods" && log i "Migrated Ryujinx mods data to the new location"
+    fi
+    if [[ -d "/var/config/Ryujinx/screenshots" ]]; then
+      mv -f "/var/config/Ryujinx/screenshots"/* "$screenshots_folder/ryujinx" && rm -rf "/var/config/Ryujinx/screenshots" && log i "Migrated Ryujinx screenshots to the new location"
+    fi
+
+  fi # end of 0.9.0b
+
+  if [[ $(check_version_is_older_than "0.9.1b") == "true" ]]; then
+
+    log i "Running the 0.9.1b post update process"
+
+    # Create a Zenity window with checkboxes for each reset option and two buttons
+    while true; do
+      choices=$(zenity --list --checklist --title="RetroDECK Reset Options" \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --text="The following components have been updated and need to be reset or fixed to ensure compatibility with the new version: select the components you want to reset.\n\nNot resetting them may cause serious issues with your installation.\nYou can also reset them manually later via Configurator -> Troubleshooting -> Reset Component.\n\nNote: Your games, saves, game collections and scraped data will not be affected." \
+      --column="Select" --column="Component" --column="Description" --width="1100" --height="700" \
+      TRUE "RetroArch" "Needs to be reset to fix the borders issue on some sytems such as psx" \
+      --separator=":" \
+      --extra-button="Execute All" \
+      --ok-label="Execute Selected Only" \
+      --cancel-label="Execute None")
+
+      log d "User selected: $choices"
+      log d "User pressed: $?"
+
+      # Check if "Execute All" button was pressed
+      if [[ "$choices" == "Execute All" ]]; then
+        execute_all=true
+        break
+      else
+        execute_all=false
+        # Split the choices into an array
+        IFS=":" read -r -a selected_choices <<< "$choices"
+      fi
+
+      if [[ $? -eq 0 && -n "$choices" ]]; then
+        if ! zenity --question --title="Confirmation" --text="Are you sure you want to proceed with only the selected options?\n\nThis might cause issues in RetroDECK"; then
+          log i "User is not sure, showing the checklist window again."
+          continue
+        else
+          log i "User confirmed to proceed with only the selected options."
+          break
+        fi
+      fi
+
+      if [[ $? == 0 ]]; then
+      if ! zenity --question --title="Confirmation" --text="Are you sure you want to skip the reset process?\n\nThis might cause issues in RetroDECK"; then
+        log i "User is not sure, showing the checklist window again."
+        continue
+      else
+        log i "User confirmed to proceed without any reset."
+        break
+      fi
+      fi
+
+      break
+    done
+
+    # Execute the selected resets
+
+    # RetroArch reset
+    if [[ "$execute_all" == "true" || " ${selected_choices[@]} " =~ " RetroArch " ]]; then
+      log i "User agreed to RetroArch reset"
+      # Twice to toggle them once and then toggle them back to the original value
+      make_preset_changes "borders" "all"
+      make_preset_changes "borders" "all"
+    fi
+
+    # --- ALWAYS EXECUTED IN 0.9.1b ---
+
+    log i "Preparing the shaders folder for MAME..."
+    shaders_folder=$rd_home/shaders && log i "Shaders folder set to \"$shaders_folder\""
+    conf_write && log i "Done"
+
+    log i "Preparing the cheats for RetroArch..."
+    create_dir "$cheats_folder/retroarch"
+    set_setting_value "$raconf" "cheat_database_path" "$cheats_folder/retroarch" "retroarch"
+    tar --strip-components=1 -xzf /app/retrodeck/cheats/retroarch.tar.gz -C "$cheats_folder/retroarch" --overwrite && log i "Cheats for RetroArch installed"
+
+    log i "Preparing the cheats for PPSSPP..."
+    create_dir -d "$cheats_folder/PPSSPP"
+    dir_prep "$cheats_folder/PPSSPP" "/var/config/ppsspp/PSP/Cheats"
+    tar -xzf /app/retrodeck/cheats/ppsspp.tar.gz -C "$cheats_folder/PPSSPP" --overwrite && log i "Cheats for PPSSPP installed"
+    
+    log i "Preparing the cheats for PCSX2..."
+    create_dir "$cheats_folder/pcsx2"
+    set_setting_value "$pcsx2conf" "Cheats" "$cheats_folder/pcsx2" "Folders"
+    tar --strip-components=1 -xzf /app/retrodeck/cheats/pcsx2.tar.gz -C "$cheats_folder/pcsx2" --overwrite && log i "Cheats for PCSX2 installed"
+
+    log i "Preparing the cheats for MAME..."
+    create_dir "$cheats_folder/mame"
+    set_setting_value "$mameconf" "cheatpath" "$cheats_folder/mame" "mame"
+    unzip -j -o "$config/mame/cheat0264.zip" 'cheat.7z' -d "$cheats_folder/mame" && log i "Cheats for MAME installed"
+    rm -rf /var/data/mame/cheat
+
+  fi # end of 0.9.1b
 
   # The following commands are run every time.
 
   if [[ -d "/var/data/dolphin-emu/Load/DynamicInputTextures" ]]; then # Refresh installed textures if they have been enabled
-    rsync -rlD --mkpath "/app/retrodeck/extras/DynamicInputTextures/" "/var/data/dolphin-emu/Load/DynamicInputTextures/"
+    log i "Refreshing installed textures for Dolphin..."
+    rsync -rlD --mkpath "/app/retrodeck/extras/DynamicInputTextures/" "/var/data/dolphin-emu/Load/DynamicInputTextures/" && log i "Done"
   fi
   if [[ -d "/var/data/primehack/Load/DynamicInputTextures" ]]; then # Refresh installed textures if they have been enabled
-    rsync -rlD --mkpath "/app/retrodeck/extras/DynamicInputTextures/" "/var/data/primehack/Load/DynamicInputTextures/"
+    log i "Refreshing installed textures for Dolphin..."
+    rsync -rlD --mkpath "/app/retrodeck/extras/DynamicInputTextures/" "/var/data/primehack/Load/DynamicInputTextures/" && log i "Done"
   fi
 
   if [[ ! -z $(find "$HOME/.steam/steam/controller_base/templates/" -maxdepth 1 -type f -iname "RetroDECK*.vdf") || ! -z $(find "$HOME/.var/app/com.valvesoftware.Steam/.steam/steam/controller_base/templates/" -maxdepth 1 -type f -iname "RetroDECK*.vdf") ]]; then # If RetroDECK controller profile has been previously installed
     install_retrodeck_controller_profile
   fi
 
+  retroarch_updater
   update_splashscreens
   deploy_helper_files
   build_retrodeck_current_presets
@@ -475,6 +673,7 @@ post_update() {
   --width=400 --height=200 \
   --text="RetroDECK is finishing up the upgrading process, please be patient.\n\n<span foreground='$purple' size='larger'><b>NOTICE - If the process is taking too long:</b></span>\n\nSome windows might be running in the background that could require your attention: pop-ups from emulators or the upgrade itself that needs user input to continue.\n\n"
 
+  conf_read
   version=$hard_version
   conf_write
 
@@ -483,4 +682,6 @@ post_update() {
   else
     changelog_dialog "$version"
   fi
+
+  log i "Upgrade process completed successfully."
 }

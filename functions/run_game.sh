@@ -20,7 +20,7 @@ run_game() {
                 log i "Run game: manual mode enabled"
                 ;;
             \?)
-                echo "Usage: $0 start [-e emulator] [-s system] [-m] game"
+                echo "Usage: $0 [-e emulator] [-s system] [-m] game"
                 exit 1
                 ;;
         esac
@@ -30,11 +30,33 @@ run_game() {
     # Check for game argument
     if [[ -z "$1" ]]; then
         log e "Game path is required."
-        log i "Usage: $0 start [-e emulator] [-s system] [-m] game"
+        log i "Usage: $0 [-e emulator] [-s system] [-m] game"
         exit 1
     fi
 
     game="$(realpath "$1")"
+
+    # Check if the game is a .desktop file
+    if [[ "$game" == *.desktop ]]; then
+        # Extract the Exec command from the .desktop file
+        exec_cmd=$(grep '^Exec=' "$game" | sed 's/^Exec=//')
+        # Workaround for RPCS3 games, replace placeholder with actual game ID
+        exec_cmd=$(echo "$exec_cmd" | sed 's/%%RPCS3_GAMEID%%/%RPCS3_GAMEID%/g')
+        if [[ -n "$exec_cmd" ]]; then
+            log i "-------------------------------------------"
+            log i " RetroDECK is now booting the game"
+            log i " Game path: \"$game\""
+            log i " Recognized system: desktop file"
+            log i " Command line: $exec_cmd"
+            log i "-------------------------------------------"
+            # Execute the command from the .desktop file
+            eval "$exec_cmd"
+            exit 1
+        else
+            log e "No Exec command found in .desktop file."
+            exit 1
+        fi
+    fi
 
     if [[ -d "$game" ]]; then
         log d "$(basename "$game") is a directory, parsing it like a \"directory as a file\""
@@ -70,7 +92,7 @@ run_game() {
         log d "Emulator provided via command-line: $emulator"
     elif [[ "$manual_mode" = true ]]; then
         log d "Manual mode: showing Zenity emulator selection"
-        emulator=$(show_zenity_emulator_list "$system")
+        emulator=$(find_system_commands "$system")
         if [[ -z "$emulator" ]]; then
             log e "No emulator selected in manual mode."
             exit 1
@@ -121,16 +143,6 @@ run_game() {
     # Log and execute the command
     log i "Launching game with command: $final_command"
     eval "$final_command"
-}
-
-
-# Assume this function handles showing the Zenity list of emulators for manual mode
-show_zenity_emulator_list() {
-    local system="$1"
-    # Example logic to retrieve and show Zenity list of emulators for the system
-    # This would extract available emulators for the system from es_systems.xml and show a Zenity dialog
-    emulators=$(xmllint --xpath "//system[name='$system']/command/@label" "$es_systems" | sed 's/ label=/\n/g' | sed 's/\"//g' | grep -o '[^ ]*')
-    zenity --list --title="Select Emulator" --column="Emulators" $emulators
 }
 
 # Function to extract commands from es_systems.xml and present them in Zenity
@@ -358,6 +370,7 @@ get_first_emulator() {
     fi
 }
 
+# Find the emulator path from the es_find_rules.xml file
 find_emulator() {
     local emulator_name="$1"
     found_path=""
@@ -373,6 +386,7 @@ find_emulator() {
     # Search systempath entries
     while IFS= read -r line; do
         command_path=$(echo "$line" | sed -n 's/.*<entry>\(.*\)<\/entry>.*/\1/p')
+        # Check if the command specified by the variable 'command_path' exists and is executable
         if [ -x "$(command -v $command_path)" ]; then
             found_path=$command_path
             break
@@ -382,7 +396,7 @@ find_emulator() {
     # If not found, search staticpath entries
     if [ -z "$found_path" ]; then
         while IFS= read -r line; do
-            command_path=$(eval echo "$line" | sed -n 's/.*<entry>\(.*\)<\/entry>.*/\1/p')
+            command_path=$(echo "$line" | sed -n 's/.*<entry>\(.*\)<\/entry>.*/\1/p')
             if [ -x "$command_path" ]; then
                 found_path=$command_path
                 break

@@ -211,6 +211,7 @@ conf_read() {
           local current_setting_name=$(cut -d'=' -f1 <<< "$current_setting_line" | xargs) # Extract name
           local current_setting_value=$(cut -d'=' -f2 <<< "$current_setting_line" | xargs) # Extract value
           declare -g "$current_setting_name=$current_setting_value" # Write the current setting name and value to memory
+          export "$current_setting_name"
         fi
       fi
     fi
@@ -238,6 +239,7 @@ conf_write() {
       fi
     fi
   done < $rd_conf
+  log d "retrodeck.cfg written"
 }
 
 dir_prep() {
@@ -317,7 +319,7 @@ update_vita3k_firmware() {
 
 backup_retrodeck_userdata() {
   create_dir "$backups_folder"
-  zip -rq9 "$backups_folder/$(date +"%0m%0d")_retrodeck_userdata.zip" "$saves_folder" "$states_folder" "$bios_folder" "$media_folder" "$themes_folder" "$logs_folder" "$screenshots_folder" "$mods_folder" "$texture_packs_folder" "$borders_folder" > $logs_folder/$(date +"%0m%0d")_backup_log.log
+  zip -rq9 "$backups_folder/$(date +"%0m%0d")_retrodeck_userdata.zip" "$saves_folder" "$states_folder" "$bios_folder" "$media_folder" "$themes_folder" "$rdhome/ES-DE/collections" "$rdhome/ES-DE/gamelists" "$logs_folder" "$screenshots_folder" "$mods_folder" "$texture_packs_folder" "$borders_folder" > $logs_folder/$(date +"%0m%0d")_backup_log.log
 }
 
 make_name_pretty() {
@@ -400,11 +402,15 @@ finit() {
 
   # Internal or SD Card?
   local finit_dest_choice=$(configurator_destination_choice_dialog "RetroDECK data" "Welcome to the first setup of RetroDECK.\nPlease carefully read each message prompted during the installation process to avoid any unwanted misconfigurations.\n\nWhere do you want your RetroDECK data folder to be located?\nIn this location a \"retrodeck\" folder will be created.\nThis is the folder that you will use to contain all your important files, such as your own ROMs, BIOSs, Saves and Scraped Data." )
-  log i "Choice is $finit_dest_choice"
+  if [[ "$finit_dest_choice" == "" ]]; then
+    log i "User closed the window"
+  else
+    log i "User choice: $finit_dest_choice"
+  fi
 
   case "$finit_dest_choice" in
 
-  "Quit" | "" ) # Back or X button quits
+  "Quit" | "Back" | "" ) # Back, Quit or X button quits
     rm -f "$rd_conf" # Cleanup unfinished retrodeck.cfg if first install is interrupted
     log i "Now quitting"
     quit_retrodeck
@@ -511,11 +517,18 @@ finit() {
 
   ) |
   rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-  --title "RetroDECK Finishing Initialization" \
-  --text="RetroDECK is finishing the initial setup process, please wait."
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Finishing Initialization" \
+    --text="RetroDECK is finishing the initial setup process, please wait.\n\n"
 
+  add_retrodeck_to_steam
   create_lock
+
+  # Inform the user where to put the ROMs and BIOS files
+  rd_zenity --info --no-wrap \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Setup Complete" \
+    --text="RetroDECK setup is complete!\n\nPlease place your <span foreground='$purple'><b>game files</b></span> in the following directory: <span foreground='$purple'><b>$rdhome/roms\n\n</b></span>and your <span foreground='$purple'><b>BIOS</b></span> files in: <span foreground='$purple'><b>$rdhome/bios\n\n</b></span>You can use the <span foreground='$purple'><b>BIOS checker tool</b></span> available trough the <span foreground='$purple'><b>RetroDECK Configurator</b></span>\nor refer to the <span foreground='$purple'><b>RetroDECK WIKI</b></span> for more information about the required BIOS files and their proper paths.\n\nYou can now start using RetroDECK."
 }
 
 install_retrodeck_starterpack() {
@@ -769,7 +782,7 @@ ponzu_remove() {
   else
     log e "Ponzu: \"$1\" is not a vaild choice for removal, quitting"
   fi
-  configurator_retrodeck_tools_dialog
+  configurator_tools_dialog
 }
 
 release_selector() {
@@ -913,7 +926,7 @@ quit_retrodeck() {
   pkill -f "es-de"
 
   # if steam sync is on do the magic
-  if [[ $steam_sync == "true" ]]; then
+  if [[ $(get_setting_value "$rd_conf" "steam_sync" retrodeck "options") == "true" ]]; then
   (
   source /app/libexec/steam_sync.sh
   add_to_steam "$(ls "$rdhome/ES-DE/gamelists/")"
@@ -921,22 +934,161 @@ quit_retrodeck() {
   zenity --progress \
     --title="Syncing with Steam" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --text="Syncing favorite games with Steam, please wait." \
+    --text="<span foreground='$purple'><b>\t\t\t\tSyncing favorite games with Steam.</b></span>\n\n<b>NOTE: </b>This operation may take some time depending on the size of your library.\nFeel free to leave this in the background and switch to another application.\n\n" \
     --percentage=25 \
     --pulsate \
+    --width=500 \
+    --height=150 \
     --auto-close \
-    --auto-kill
+    --auto-kill \
+    --no-cancel
   fi
   log i "Shutting down RetroDECK's framework"
   pkill -f "retrodeck"
   
   log i "See you next time"
+  exit
 }
 
 start_retrodeck() {
   get_steam_user # get steam user info
   splash_screen # Check if today has a surprise splashscreen and load it if so
   ponzu
+
+  log d "Checking if PortMaster should be shown"
+  if [[ $(get_setting_value "$rd_conf" "portmaster_show" "retrodeck" "options") == "false" ]]; then
+    log d "Assuring that PortMaster is hidden on ES-DE"
+    portmaster_show "false"
+  else
+    log d "Assuring that PortMaster is shown on ES-DE"
+    portmaster_show "true"
+  fi
+
   log i "Starting RetroDECK v$version"
   es-de
+}
+
+# Function to convert XML tags to Markdown
+convert_to_markdown() {
+  local xml_content=$(cat "$1")
+  local output_file="$1.md"
+
+  # Convert main tags
+  echo "$xml_content" | \
+    sed -e 's|<p>\(.*\)</p>|## \1|g' \
+      -e 's|<ul>||g' \
+      -e 's|</ul>||g' \
+      -e 's|<h1>\(.*\)</h1>|# \1|g' \
+      -e 's|<li>\(.*\)</li>|- \1|g' \
+      -e 's|<description>||g' \
+      -e 's|</description>||g' \
+      -e '/<[^>]*>/d' > "$output_file" # Remove any other XML tags and output to .md file
+}
+
+# This function updates RetroArch by synchronizing shaders, cores, and border overlays.
+# It should be called whenever RetroArch is reset or updated.
+retroarch_updater(){
+
+  log i "Running RetroArch updater"
+  
+  # Synchronize cores from the application share directory to the RetroArch cores directory
+  rsync -rlD --mkpath "/app/share/libretro/cores/" "/var/config/retroarch/cores/" && log d "RetroArch cores updated correctly"
+  
+  # Synchronize border overlays from the RetroDeck configuration directory to the RetroArch overlays directory
+  rsync -rlD --mkpath "/app/retrodeck/config/retroarch/borders/" "/var/config/retroarch/overlays/borders/" && log d "RetroArch overlays and borders updated correctly"
+}
+
+portmaster_show(){
+  log d "Setting PortMaster visibility in ES-DE"
+  if [ "$1" = "true" ]; then
+      log d "\"$roms_folder/portmaster/PortMaster.sh\" is not found, installing it"
+      install -Dm755 "/var/data/PortMaster/PortMaster.sh" "$roms_folder/portmaster/PortMaster.sh" && log d "PortMaster is correctly showing in ES-DE"
+      set_setting_value $rd_conf "portmaster_show" "true" retrodeck "options"
+  elif [ "$1" = "false" ]; then
+    rm -rf "$roms_folder/portmaster/PortMaster.sh" && log d "PortMaster is correctly hidden in ES-DE"
+    set_setting_value $rd_conf "portmaster_show" "false" retrodeck "options"
+  else
+    log e "\"$1\" is not a valid choice, quitting"
+  fi
+}
+
+open_component(){
+
+  if [[ -z "$1" ]]; then
+    cmd=$(jq -r '.emulator[] | select(.ponzu != true) | .name' "$features")
+    if [[ $(get_setting_value "$rd_conf" "akai_ponzu" "retrodeck" "options") == "true" ]]; then
+      cmd+="\n$(jq -r '.emulator.citra | .name' "$features")"
+    fi
+    if [[ $(get_setting_value "$rd_conf" "kiroi_ponzu" "retrodeck" "options") == "true" ]]; then
+      cmd+="\n$(jq -r '.emulator.yuzu | .name' "$features")"
+    fi
+    echo -e "This command expects one of the following components as arguments:\n$(echo -e "$cmd")"
+    return
+  fi
+
+  if [[ "$1" == "--list" ]]; then
+    cmd=$(jq -r '.emulator[] | select(.ponzu != true) | .name' "$features")
+    if [[ $(get_setting_value "$rd_conf" "akai_ponzu" "retrodeck" "options") == "true" ]]; then
+      cmd+="\n$(jq -r '.emulator.citra | .name' "$features")"
+    fi
+    if [[ $(get_setting_value "$rd_conf" "kiroi_ponzu" "retrodeck" "options") == "true" ]]; then
+      cmd+="\n$(jq -r '.emulator.yuzu | .name' "$features")"
+    fi
+    echo -e "$cmd"
+    return
+  fi
+
+  if [[ "$1" == "--getdesc" ]]; then
+    cmd=$(jq -r '.emulator[] | select(.ponzu != true) | "\(.description)"' "$features")
+    if [[ $(get_setting_value "$rd_conf" "akai_ponzu" "retrodeck" "options") == "true" ]]; then
+      cmd+="\n$(jq -r '.emulator.citra | "\(.description)"' "$features")"
+    fi
+    if [[ $(get_setting_value "$rd_conf" "kiroi_ponzu" "retrodeck" "options") == "true" ]]; then
+      cmd+="\n$(jq -r '.emulator.yuzu | "\(.description)"' "$features")"
+    fi
+    echo -e "$cmd"
+    return
+  fi
+
+  launch_exists=$(jq -r --arg name "$1" '.emulator[] | select(.name == $name) | has("launch")' "$features")
+  if [[ "$launch_exists" != "true" ]]; then
+    echo "Error: The component '$1' cannot be opened."
+    return 1
+  fi
+
+  cmd=$(jq -r --arg name "$1" '.emulator[] | select(.name == $name and .ponzu != true) | .launch' "$features")
+  if [[ -z "$cmd" && $(get_setting_value "$rd_conf" "akai_ponzu" "retrodeck" "options") == "true" && "$1" == "citra" ]]; then
+    cmd=$(jq -r '.emulator.citra | .launch' "$features")
+  fi
+  if [[ -z "$cmd" && $(get_setting_value "$rd_conf" "kiroi_ponzu" "retrodeck" "options") == "true" && "$1" == "yuzu" ]]; then
+    cmd=$(jq -r '.emulator.yuzu | .launch' "$features")
+  fi
+
+  if [[ -n "$cmd" ]]; then
+    eval "$cmd" "${@:2}"
+  else
+    echo "Invalid component name: $1"
+    echo "Please ensure the name is correctly spelled (case sensitive) and quoted if it contains spaces."
+  fi
+}
+
+add_retrodeck_to_steam(){
+
+    log i "Adding RetroDECK to Steam"
+
+    rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
+  --text="Do you want to add RetroDECK to Steam?"
+    if [ $? == 0 ]; then
+      (
+        steam-rom-manager enable --names "RetroDECK Launcher"
+        steam-rom-manager add
+      ) |
+      rd_zenity --progress --no-cancel --pulsate --auto-close \
+        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+        --title "Adding RetroDECK to Steam" \
+        --text="Please wait while RetroDECK is being added to Steam...\n\n"
+      rd_zenity --info --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --text="RetroDECK has been added to Steam.\n\nPlease close and reopen Steam to see the changes."
+    fi
+
+    log i "RetroDECK has been added to Steam"
 }

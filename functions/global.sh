@@ -11,6 +11,7 @@ rd_logs_folder="/var/config/retrodeck/logs" # Static location to write all Retro
 source /app/libexec/logger.sh
 rotate_logs
 
+log d "Debug mode enabled"
 log i "Initializing RetroDECK"
 log i "Running on $XDG_SESSION_DESKTOP, $XDG_SESSION_TYPE"
 if [[ -n $container ]]; then
@@ -54,7 +55,7 @@ remote_network_target_1="https://flathub.org"                                   
 remote_network_target_2="$rd_repo"                                                                       # The URL of a common internet target for testing network access
 remote_network_target_3="https://one.one.one.one"                                                        # The URL of a common internet target for testing network access
 helper_files_folder="$config/retrodeck/helper_files"                                                     # The parent folder of RetroDECK documentation files for deployment
-rd_appdata="/app/share/appdata/net.retrodeck.retrodeck.appdata.xml"                                      # The shipped appdata XML file for this version
+rd_metainfo="/app/share/metainfo/net.retrodeck.retrodeck.metainfo.xml"                                   # The shipped metainfo XML file for this version
 rpcs3_firmware="http://dus01.ps3.update.playstation.net/update/ps3/image/us/2024_0227_3694eb3fb8d9915c112e6ab41a60c69f/PS3UPDAT.PUP" # RPCS3 Firmware download location
 RA_API_URL="https://retroachievements.org/dorequest.php"                                                 # API URL for RetroAchievements.org
 presets_dir="$config/retrodeck/presets"                                                                  # Repository for all system preset config files
@@ -64,7 +65,6 @@ main_repository_name="RetroDECK"                                                
 features="$config/retrodeck/reference_lists/features.json"                                               # A file where all the RetroDECK and component capabilities are kept for querying
 es_systems="/app/share/es-de/resources/systems/linux/es_systems.xml"                                     # ES-DE supported system list   
 es_find_rules="/app/share/es-de/resources/systems/linux/es_find_rules.xml"                               # ES-DE emulator find rules
-
 
 # Godot data transfer temp files
 
@@ -107,6 +107,7 @@ dolphingcpadconf="/var/config/dolphin-emu/GCPadNew.ini"
 dolphingfxconf="/var/config/dolphin-emu/GFX.ini"
 dolphinhkconf="/var/config/dolphin-emu/Hotkeys.ini"
 dolphinqtconf="/var/config/dolphin-emu/Qt.ini"
+dolphinDynamicInputTexturesPath="/var/data/dolphin-emu/Load/DynamicInputTextures"
 
 # PCSX2 config files
 
@@ -128,6 +129,7 @@ primehackgcpadconf="/var/config/primehack/GCPadNew.ini"
 primehackgfxconf="/var/config/primehack/GFX.ini"
 primehackhkconf="/var/config/primehack/Hotkeys.ini"
 primehackqtconf="/var/config/primehack/Qt.ini"
+primehackDynamicInputTexturesPath="/var/data/primehack/Load/DynamicInputTextures"
 
 # RPCS3 config files
 
@@ -236,3 +238,7 @@ fi
 logs_folder="$rdhome/logs"                # The path of the logs folder, here we collect all the logs
 steamsync_folder="$rdhome/.sync"          # Folder containing all the steam sync launchers for SRM
 steamsync_folder_tmp="$rdhome/.sync-tmp"  # Temp folder containing all the steam sync launchers for SRM
+cheats_folder="$rdhome/cheats"            # Folder containing all the cheats for the emulators
+backups_folder="$rdhome/backups"          # Folder containing all the RetroDECK backups
+
+export GLOBAL_SOURCED=true

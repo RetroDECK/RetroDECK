@@ -92,6 +92,9 @@ log() {
     # Write the log message to the log file
     if [ ! -f "$logfile" ]; then
       #echo "$timestamp [WARN] Log file not found in \"$logfile\", creating it" >&2 # Disabled it as it's always appearing because of log rotation
+      if [[ ! -d "$(dirname "$logfile")" ]]; then
+        mkdir -p "$(dirname "$logfile")"
+      fi
       touch "$logfile"
     fi
     echo "$log_message" >> "$logfile"

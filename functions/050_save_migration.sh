@@ -1,6 +1,9 @@
 #!/bin/bash
 
 save_migration() {
+
+  log i "Executing 0.5.0b save migration"
+
   # Finding existing ROMs folder
   if [ -d "$default_sd/retrodeck" ]
   then

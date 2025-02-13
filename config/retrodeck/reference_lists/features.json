@@ -156,6 +156,15 @@
       "full_end_date": "2025-10-05",
       "filename": "placeholder.svg"
     },
+    "halloween": {
+      "start_date": "1025",
+      "end_date": "1102",
+      "start_time": "0000",
+      "end_time": "2359",
+      "full_start_date": "2025-10-25",
+      "full_end_date": "2025-11-02",
+      "filename": "placeholder.svg"
+    },
     "xmas": {
       "start_date": "1201",
       "end_date": "1231",
@@ -210,7 +219,7 @@
     },
     "custom_systems": {
       "filename": "es_systems.xml",
-      "location": "$rdhome/ES-DE/custom_systems/es_systems.xml"
+      "location": "$rdhome/ES-DE/custom_systems"
     }
   },
   "compression_targets": {
@@ -248,8 +257,8 @@
       "gbc",
       "genesis",
       "mastersystem",
+      "megadrive",
       "n64",
-      "nds",
       "nes",
       "ngp",
       "ngpc",
@@ -684,6 +693,9 @@
     "psx": {
       "name": "Sony PlayStation"
     },
+    "psx_ra": {
+      "name": "Sony PlayStation"
+    },
     "pv1000": {
       "name": "Casio PV-1000"
     },
@@ -830,8 +842,14 @@
     }
   },
   "emulator": {
+    "retrodeck": {
+      "description": "RetroDECK Framework",
+      "name": "RetroDECK",
+      "url": "https://retrodeck.net/",
+      "cli-arg": "--version"
+    },
     "retroarch": {
-      "description": "RetroArch (Multi-emulator Frontend)",
+      "description": "Libretro Multi-emulator Frontend",
       "name": "RetroArch",
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/retroarch/retroarch-guide/",
       "launch": "retroarch",
@@ -1001,7 +1019,7 @@
       }
     },
     "mame": {
-      "description": "MAME: Multiple Arcade Machine Emulator",
+      "description": "Multiple Arcade Machine Emulator",
       "name": "MAME",
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/mame/mame-guide/",
       "system": [
@@ -1011,7 +1029,7 @@
       "cli-arg": "-help"
     },
     "citra": {
-      "description": "Citra Nintendo 3DS Emulator (via Ponzu)",
+      "description": "A legacy Nintendo 3DS Emulator (via Ponzu)",
       "name": "Citra (via Ponzu)",
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_about/what-is-retrodeck/",
       "system": "n3ds",
@@ -1034,8 +1052,8 @@
       "cli-arg": ""
     },
     "melonds": {
-      "description": "MelonDS Nintendo DS Emulator",
-      "name": "melonds",
+      "description": "Nintendo DS Emulator",
+      "name": "melonDS",
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/melonds/melonds-guide/",
       "system": "nds",
       "launch": "melonDS",
@@ -1043,7 +1061,7 @@
     },
     "pcsx2": {
       "name": "pcsx2",
-      "description": "PCSX2 Play Station 2 Emulator",
+      "description": "PlayStation 2 Emulator",
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/pcsx2/pcsx2-guide/",
       "system": "ps2",
       "launch": "pcsx2-qt",
@@ -1056,7 +1074,7 @@
       ]
     },
     "duckstation": {
-      "name": "Duckstation",
+      "name": "Duckstation (Legacy)",
       "description": "PlayStation Emulator",
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/duckstation/duckstation-guide/",
       "launch": "duckstation-qt",
@@ -1071,7 +1089,7 @@
     },
     "ppsspp": {
       "name": "PPSSPP",
-      "description": "PPSSPP: PlayStation Portable Emulator",
+      "description": "PlayStation Portable Emulator",
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/ppsspp/ppsspp-guide/",
       "launch": "PPSSPPSDL",
       "cli-arg": "--version",
@@ -1085,7 +1103,7 @@
     },
     "vita3k": {
       "name": "Vita3k",
-      "description": "Vita3K PSVita Emulator",
+      "description": "PSVita Emulator",
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/vita3k/vita3k-guide/",
       "system": "psvita",
       "launch": "Vita3K",
@@ -1093,7 +1111,7 @@
     },
     "rpcs3": {
       "name": "RPCS3",
-      "description": "RPCS3 PlayStation 3 Emulator",
+      "description": "PlayStation 3 Emulator",
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/rpcs3/rpcs3-guide/",
       "system": "ps3",
       "launch": "rpcs3",
@@ -1107,7 +1125,7 @@
     },
     "ryujinx": {
       "name": "Ryujinx",
-      "description": "Ryujinx Nintendo Switch Emulator",
+      "description": "A legacy Nintendo Switch Emulator",
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/ryujinx/ryujinx-guide/",
       "system": "switch",
       "launch": "Ryujinx.sh",
@@ -1115,7 +1133,7 @@
     },
     "yuzu": {
       "name": "Yuzu (via Ponzu)",
-      "description": "Yuzu Nintendo Switch Emulator (via Ponzu)",
+      "description": "A legacy Nintendo Switch Emulator (via Ponzu)",
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_about/what-is-retrodeck/",
       "launch": "Yuzu",
       "cli-arg": "",
@@ -1125,7 +1143,7 @@
     },
     "dolphin": {
       "name": "Dolphin",
-      "description": "Dolphin Wii and GameCube Emulator",
+      "description": "Wii and GameCube Emulator",
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/dolphin-primehack/dolphin-primehack-guide/",
       "launch": "dolphin-emu-wrapper",
       "cli-arg": "--version",
@@ -1145,7 +1163,7 @@
     },
     "primehack": {
       "name": "PrimeHack",
-      "description": "A fork of Dolphiin to enhance Metroid Prime experience",
+      "description": "A fork of Dolphin to enhance Metroid Prime experience",
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/dolphin-primehack/dolphin-primehack-guide/",
       "launch": "primehack-wrapper",
       "cli-arg": "--version",
@@ -1174,7 +1192,7 @@
       ]
     },
     "xemu": {
-      "description": "xemu Xbox Emulator",
+      "description": "Xbox Emulator",
       "name": "xemu",
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/xemu/xemu-guide/",
       "system": "xbox",
@@ -1182,20 +1200,20 @@
       "cli-arg": "--version"
     },
     "es-de": {
-      "description": "ES-DE Emulation Frontend",
+      "description": "Emulation Frontend",
       "name": "ES-DE",
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_es_de/esde-guide/.",
       "launch": "es-de",
       "cli-arg": "--version"
     },
     "steam-rom-manager": {
-      "description": "Steam ROM Manager (used to sync RetroDECK favorites with Steam)",
+      "description": "Used to sync RetroDECK favorites and Launcher with Steam",
       "name": "Steam ROM Manager",
       "launch": "steam-rom-manager",
       "cli-arg": "--version"
     },
     "portmaster": {
-      "description": "PortMaster",
+      "description": "Port Manager also available on various linux handheld devices that ease the managing of ports",
       "name": "PortMaster",
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_about/what-is-retrodeck/",
       "system": "portmaster",

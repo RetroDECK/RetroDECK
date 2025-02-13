@@ -4,13 +4,16 @@
 
 
 # List of user-defined libraries to exclude
+excluded_libraries=()
 
-# General libraries``
-excluded_libraries=("libselinux.so.1")
+# General libraries
+excluded_libraries=("libselinux.so.1" "libwayland-egl.so.1" "libwayland-cursor.so.0" "libxkbcommon.so.0")
 # Qt libraries
-excluded_libraries+=("libQt6Core.so.6" "libQt6DBus.so.6" "libQt6Gui.so.6" "libQt6OpenGL.so.6" "libQt6Svg.so.6" "libQt6WaylandClient.so.6" "libQt6WaylandEglClientHwIntegration.so.6" "libQt6Widgets.so.6" "libQt6XcbQpa.so.6")
+excluded_libraries+=("libQt6Multimedia.so.6" "libQt6Core.so.6" "libQt6DBus.so.6" "libQt6Gui.so.6" "libQt6OpenGL.so.6" "libQt6Svg.so.6" "libQt6WaylandClient.so.6" "libQt6WaylandEglClientHwIntegration.so.6" "libQt6Widgets.so.6" "libQt6XcbQpa.so.6")
 # SDL libraries
 excluded_libraries+=("libSDL2_net-2.0.so.0.200.0" "libSDL2_mixer-2.0.so.0.600.3" "libSDL2-2.0.so.0" "libSDL2_mixer-2.0.so.0" "libSDL2_image-2.0.so.0" "libSDL2-2.0.so.0.2800.5" "libSDL2_ttf-2.0.so.0" "libSDL2_net-2.0.so.0" "libSDL2_image-2.0.so.0.600.3" "libSDL2_ttf-2.0.so.0.2200.0")
+# FFMPEG libraries
+excluded_libraries+=("libavcodec.so" "libavformat.so" "libavutil.so" "libavfilter.so" "libavdevice" "libswresample.so" "libswscale.so")
 
 # Add libraries from /lib/x86_64-linux-gnu/ to the excluded list
 for lib in /lib/x86_64-linux-gnu/*.so*; do
@@ -22,7 +25,7 @@ for lib in /lib/*.so*; do
     excluded_libraries+=("$(basename "$lib")")
 done
 
-# Add libraries from /lib to the excluded list
+# Add libraries from /lib64 to the excluded list
 for lib in /lib64/*.so*; do
     excluded_libraries+=("$(basename "$lib")")
 done
@@ -62,7 +65,7 @@ fi
 is_excluded() {
     local file="$1"
     for excluded in "${excluded_libraries[@]}"; do
-        if [[ "$excluded" == "$file" ]]; then
+        if [[ "$file" == $excluded ]]; then # NOTE excluded is not quoted to allow for wildcard matching
             return 0
         fi
     done
@@ -164,5 +167,13 @@ if [ ${#failed_files[@]} -ne 0 ]; then
         echo "$file"
     done
 fi
+
+# Remove excluded libraries from the target directory
+for excluded in "${excluded_libraries[@]}"; do
+    if [ -e "$target_dir/$excluded" ]; then
+        rm -f "$target_dir/$excluded"
+        echo "Deleted excluded library $target_dir/$excluded"
+    fi
+done
 
 echo "LibMan is flying away"

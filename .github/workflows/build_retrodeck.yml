@@ -12,10 +12,9 @@ on:
       - 'automation_tools/**'
       - 'config/**'
       - 'functions/**'
-      - 'rd-submodules/**'
       - '*.sh'
       - 'net.retrodeck.retrodeck.yml'
-      - 'net.retrodeck.retrodeck.appdata.xml'
+      - 'net.retrodeck.retrodeck.metainfo.xml'
   pull_request_target:
     types: [opened, synchronize, reopened]
     branches:
@@ -153,8 +152,9 @@ jobs:
         if: github.ref != 'refs/heads/main'
         run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/cooker_flatpak_portal_add.sh"
 
-      - name: "Updating release notes in appdata"
-        run: "automation_tools/appdata_management.sh"
+      # Temporary disabled as the script is broken
+      # - name: "Updating release notes in metainfo"
+      #   run: "automation_tools/metainfo_management.sh"
 
       - name: "[DEBUG] Outputting manifest"
         run: cat net.retrodeck.retrodeck.yml
@@ -190,7 +190,7 @@ jobs:
       #   uses: Mudlet/xmlstarlet-action@master
       #   id: extract-description
       #   with:
-      #     args: sel -t -v "/component/releases/release[1]/description//text()" ./net.retrodeck.retrodeck.appdata.xml
+      #     args: sel -t -v "/component/releases/release[1]/description//text()" ./net.retrodeck.retrodeck.metainfo.xml
 
       # Generate Release Body
       - name: Generate release body text
@@ -278,6 +278,21 @@ jobs:
       - name: Create Bundle
         run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_bundle.sh"
 
+      # TODO: Until we add support for Flathub-beta this is restricted to main
+      - name: Create Artifact for Flathub
+        if: github.ref == 'refs/heads/main'
+        run: |
+          if [[ "$GITHUB_REF" == "refs/heads/main" ]]; then
+            artifact_name="RetroDECK-Artifact"
+            artifact_folder="retrodeck-flatpak-main"
+          else
+            artifact_name="RetroDECK-Artifact-cooker"
+            artifact_folder="retrodeck-flatpak-cooker"
+          fi
+          tar -czf ${GITHUB_WORKSPACE}/${artifact_name}.tar.gz -C ${GITHUB_WORKSPACE}/"$artifact_folder" .
+          hash=($(sha256sum ${GITHUB_WORKSPACE}/${artifact_name}.tar.gz))
+          echo $hash > ${GITHUB_WORKSPACE}/${artifact_name}.sha
+
       # Upload artifacts for other jobs
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
@@ -287,7 +302,8 @@ jobs:
           path: |
             RetroDECK*.flatpak
             RetroDECK*.flatpak.sha
-            RetroDECK*Artifact.tar.gz        
+            RetroDECK-Artifact*.tar.gz
+            RetroDECK-Artifact*.sha
 
   GitHub-publish:
     runs-on: ubuntu-latest
@@ -304,7 +320,7 @@ jobs:
         with:
           app-id: ${{ vars.REKKU_APP_ID }}
           private-key: ${{ secrets.REKKU_PRIVATE_KEY }}
-          repositories: "RetroDECK,Cooker"
+          repositories: "RetroDECK,Cooker,Artifacts"
           owner: "RetroDECK"
 
       - name: Download all workflow run artifacts
@@ -329,8 +345,23 @@ jobs:
           body: ${{ env.RELEASE_BODY }}
           artifacts: "retrodeck-artifacts/*.flatpak,retrodeck-artifacts/*.flatpak.sha,retrodeck-artifacts/*Artifact.tar.gz"
           allowUpdates: true
+          omitBodyDuringUpdate: true
           makeLatest: ${{ env.MAKE_LATEST }}
           repo: ${{ env.REPO_NAME }}
+          token: ${{ steps.generate-rekku-token.outputs.token }}
+
+      # Publish Artifacts
+      - name: Publish Artifacts
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ env.TAG }}
+          name: "RetroDECK Artifacts - ${{ env.TAG }}"
+          body: "Flathub artifacts for version ${{ env.TAG }}"
+          artifacts: "retrodeck-artifacts/RetroDECK-Artifact*.tar.gz,retrodeck-artifacts/RetroDECK-Artifact*.sha"
+          allowUpdates: true
+          omitBodyDuringUpdate: true
+          makeLatest: ${{ env.MAKE_LATEST }}
+          repo: Artifacts
           token: ${{ steps.generate-rekku-token.outputs.token }}
 
       - name: Post PR comment with artifacts
@@ -348,6 +379,12 @@ jobs:
             - Flatpak Artifact Bundle: RetroDECKArtifact.tar.gz, not useful for testing or end users
 
       # Rewrite Tag (for Main Branch Only)
+      - name: Clone RetroDECK repo
+        if: github.ref == 'refs/heads/main'
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          
       - name: Rewrite Tag
         if: github.ref == 'refs/heads/main'
         run: |

@@ -17,25 +17,26 @@ backup
 .old
 tmp
 .godot
-rd-submodules/es-de/patches-tmp*
 retrodeck-repo
 buildid
 *.bak
 incconfigs/
-.github/workflows/cooker-monkeyx.yml
 *.flatpak
 *.flatpak.sha
 net.retrodeck.retrodeck.cached.yml
 placeholders.cache
 RetroDECK*Artifact.tar.gz
+./gits
+flathub.json
+
+#   Components artifacts   #
+############################
+*.AppImage
+ruffle-*.tar.gz
 
 # Python #
 ##########
 __pycache__
 
-# Submodules #
-##############
-rd-submodules/retroarch*
-rd-submodules/ryujinx*
-rd-submodules/shared-modules*
-rd-submodules/es-de/patches-tmp*
+CMakeFiles
+build

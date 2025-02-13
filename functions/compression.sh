@@ -6,7 +6,8 @@ compress_game() {
   local file="$2"
   local filename_no_path=$(basename "$file")
   local filename_no_extension="${filename_no_path%.*}"
-  local source_file=$(dirname "$(realpath "$file")")"/"$(basename "$file")
+  local filename_extension="${filename_no_path##*.}"
+  local source_file=$(dirname "$(realpath "$file")")"/""$(basename "$file")"
   local dest_file=$(dirname "$(realpath "$file")")"/""$filename_no_extension"
 
   if [[ "$1" == "chd" ]]; then
@@ -15,7 +16,11 @@ compress_game() {
       /app/bin/chdman createdvd --hunksize 2048 -i "$source_file" -o "$dest_file".chd -c zstd
     ;;
     "ps2" )
-      /app/bin/chdman createdvd -i "$source_file" -o "$dest_file".chd -c zstd
+      if [[ "$filename_extension" == "cue" ]]; then
+        /app/bin/chdman createcd -i "$source_file" -o "$dest_file".chd
+      else
+        /app/bin/chdman createdvd -i "$source_file" -o "$dest_file".chd -c zstd
+      fi
     ;;
     * )
       /app/bin/chdman createcd -i "$source_file" -o "$dest_file".chd
@@ -126,68 +131,94 @@ validate_for_chd() {
 }
 
 find_compatible_games() {
-  # The function takes the following arguments, which alter what files are compressed:
-  # "everything" - Compresses all games found into their compatible formats
-  # "all" - Compresses a list of user-chosen files into their compatible formats
-  # "chd" or "zip" or "rvz" - Compresses a list of user-chosen files into the given format
+  # Supported parameters:
+  # "everything"  - All games found (regardless of format)
+  # "all"         - Only user-chosen games (later selected via checklist)
+  # "chd", "zip", "rvz" - Only games matching that compression type
 
-  if [[ -f "$godot_compression_compatible_games" ]]; then
-    rm -f "$godot_compression_compatible_games" # Godot data transfer temp files
-  fi
-  touch "$godot_compression_compatible_games"
+  log d "Started find_compatible_games with parameter: $1"
+  local output_file="${godot_compression_compatible_games}"
+  [ -f "$output_file" ] && rm -f "$output_file"
+  touch "$output_file"
 
-  compressable_games_list=()
-  all_compressable_games=()
-  games_to_compress=()
-  target_selection="$1"
-
+  local target_selection="$1"
+  local compression_format
   if [[ "$1" == "everything" ]]; then
-    local compression_format="all"
+    compression_format="all"
   else
-    local compression_format="$1"
+    compression_format="$1"
   fi
 
-  if [[ $compression_format == "all" ]]; then
-    local compressable_systems_list=$(cat $compression_targets | sed '/^$/d' | sed '/^\[/d')
+  local compressable_systems_list
+  if [[ "$compression_format" == "all" ]]; then
+    compressable_systems_list=$(jq -r '.compression_targets | to_entries[] | .value[]' "$features")
+    log d "compressable_systems_list: $compressable_systems_list"
   else
-    local compressable_systems_list=$(sed -n '/\['"$compression_format"'\]/, /\[/{ /\['"$compression_format"'\]/! { /\[/! p } }' $compression_targets | sed '/^$/d')
+    compressable_systems_list=$(jq -r '.compression_targets["'"$compression_format"'"][]' "$features")
+    log d "compressable_systems_list: $compressable_systems_list"
   fi
 
-  while IFS= read -r system # Find and validate all games that are able to be compressed with this compression type
-  do
+  log d "Finding compatible games for compression ($1)"
+  log d "compression_targets: $compression_targets"
+
+  while IFS= read -r system; do
+    log d "Checking system: $system"
+    local compression_candidates
     compression_candidates=$(find "$roms_folder/$system" -type f -not -iname "*.txt")
-    if [[ ! -z $compression_candidates ]]; then
-      while IFS= read -r game
-      do
-        local compatible_compression_format=$(find_compatible_compression_format "$game")
-        if [[ $compression_format == "chd" ]]; then
-          if [[ $compatible_compression_format == "chd" && ! -f "$(echo ${game%.*}.chd)" ]]; then
-            all_compressable_games=("${all_compressable_games[@]}" "$game")
-            compressable_games_list=("${compressable_games_list[@]}" "false" "${game#$roms_folder}" "$game")
-            echo "${game}"^"$compatible_compression_format" >> "$godot_compression_compatible_games"
-          fi
-        elif [[ $compression_format == "zip" ]]; then
-          if [[ $compatible_compression_format == "zip" && ! -f "$(echo ${game%.*}.zip)" ]]; then
-            all_compressable_games=("${all_compressable_games[@]}" "$game")
-            compressable_games_list=("${compressable_games_list[@]}" "false" "${game#$roms_folder}" "$game")
-            echo "${game}"^"$compatible_compression_format" >> "$godot_compression_compatible_games"
-          fi
-        elif [[ $compression_format == "rvz" ]]; then
-          if [[ $compatible_compression_format == "rvz" && ! -f "$(echo ${game%.*}.rvz)" ]]; then
-            all_compressable_games=("${all_compressable_games[@]}" "$game")
-            compressable_games_list=("${compressable_games_list[@]}" "false" "${game#$roms_folder}" "$game")
-            echo "${game}"^"$compatible_compression_format" >> "$godot_compression_compatible_games"
-          fi
-        elif [[ $compression_format == "all" ]]; then
-          if [[ ! $compatible_compression_format == "none" ]]; then
-            all_compressable_games=("${all_compressable_games[@]}" "$game")
-            compressable_games_list=("${compressable_games_list[@]}" "false" "${game#$roms_folder}" "$game")
-            echo "${game}"^"$compatible_compression_format" >> "$godot_compression_compatible_games"
-          fi
-        fi
+    if [[ -n "$compression_candidates" ]]; then
+      while IFS= read -r game; do
+        log d "Checking game: $game"
+        local compatible_compression_format
+        compatible_compression_format=$(find_compatible_compression_format "$game")
+        local file_ext="${game##*.}"
+        case "$compression_format" in
+          "chd")
+            if [[ "$compatible_compression_format" == "chd" ]]; then
+              if [[ "$file_ext" == "chd" ]]; then
+                log d "Skipping $game because it is already a CHD file."
+              elif [[ ! -f "${game%.*}.chd" ]]; then
+                log d "Game $game is compatible with CHD compression"
+                echo "${game}^chd" >> "$output_file"
+              fi
+            fi
+            ;;
+          "zip")
+            if [[ "$compatible_compression_format" == "zip" ]]; then
+              if [[ "$file_ext" == "zip" ]]; then
+                log d "Skipping $game because it is already a ZIP file."
+              elif [[ ! -f "${game%.*}.zip" ]]; then
+                log d "Game $game is compatible with ZIP compression"
+                echo "${game}^zip" >> "$output_file"
+              fi
+            fi
+            ;;
+          "rvz")
+            if [[ "$compatible_compression_format" == "rvz" ]]; then
+              if [[ "$file_ext" == "rvz" ]]; then
+                log d "Skipping $game because it is already an RVZ file."
+              elif [[ ! -f "${game%.*}.rvz" ]]; then
+                log d "Game $game is compatible with RVZ compression"
+                echo "${game}^rvz" >> "$output_file"
+              fi
+            fi
+            ;;
+          "all")
+            if [[ "$compatible_compression_format" != "none" ]]; then
+              if [[ "$file_ext" == "$compatible_compression_format" ]]; then
+                log d "Skipping $game because it is already in $compatible_compression_format format."
+              else
+                log d "Game $game is compatible with $compatible_compression_format compression"
+                echo "${game}^${compatible_compression_format}" >> "$output_file"
+              fi
+            fi
+            ;;
+        esac
       done < <(printf '%s\n' "$compression_candidates")
     fi
   done < <(printf '%s\n' "$compressable_systems_list")
+
+  log d "Compatible games have been written to $output_file"
+  cat "$output_file"
 }
 
 cli_compress_single_game() {
@@ -226,9 +257,9 @@ cli_compress_all_games() {
   local compressable_game=""
   local all_compressable_games=()
   if [[ $compression_format == "all" ]]; then
-    local compressable_systems_list=$(cat $compression_targets | sed '/^$/d' | sed '/^\[/d')
+    local compressable_systems_list=$(jq -r '.compression_targets | to_entries[] | .value[]' $features)
   else
-    local compressable_systems_list=$(sed -n '/\['"$compression_format"'\]/, /\[/{ /\['"$compression_format"'\]/! { /\[/! p } }' $compression_targets | sed '/^$/d')
+    local compressable_systems_list=$(jq -r '.compression_targets["'"$compression_format"'"][]' $features)
   fi
 
   read -p "Do you want to have the original files removed after compression is complete? Please answer y/n and press Enter: " post_compression_cleanup
