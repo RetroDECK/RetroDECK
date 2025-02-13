@@ -156,6 +156,15 @@
       "full_end_date": "2025-10-05",
       "filename": "placeholder.svg"
     },
+    "halloween": {
+      "start_date": "1025",
+      "end_date": "1102",
+      "start_time": "0000",
+      "end_time": "2359",
+      "full_start_date": "2025-10-25",
+      "full_end_date": "2025-11-02",
+      "filename": "placeholder.svg"
+    },
     "xmas": {
       "start_date": "1201",
       "end_date": "1231",
