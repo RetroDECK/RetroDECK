@@ -166,7 +166,7 @@ prepare_component() {
           create_dir -d "$cheats_folder/retroarch"
           tar --strip-components=1 -xzf /app/retrodeck/cheats/retroarch.tar.gz -C "$cheats_folder/retroarch" --overwrite
           cp -rf /app/share/libretro/shaders /var/config/retroarch/
-          dir_prep "$rdhome/shaders/retroarch" "/var/config/retroarch/shaders"
+          dir_prep "$shaders_folder/retroarch" "/var/config/retroarch/shaders"
           cp -fv $config/retroarch/retroarch.cfg /var/config/retroarch/
           cp -fv $config/retroarch/retroarch-core-options.cfg /var/config/retroarch/
           rsync -rlD --mkpath "$config/retroarch/core-overrides/" "/var/config/retroarch/config/"
@@ -276,7 +276,7 @@ prepare_component() {
       if [[ "$action" == "postmove" ]]; then # Run only post-move commands
         dir_prep "$bios_folder" "/var/config/retroarch/system"
         dir_prep "$logs_folder/retroarch" "/var/config/retroarch/logs"
-        dir_prep "$rdhome/shaders/retroarch" "/var/config/retroarch/shaders"
+        dir_prep "$shaders_folder/retroarch" "/var/config/retroarch/shaders"
         dir_prep "$texture_packs_folder/RetroArch-Mesen" "/var/config/retroarch/system/HdPacks"
         dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/cache" "/var/config/retroarch/system/Mupen64plus/cache"
         dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/hires_texture" "/var/config/retroarch/system/Mupen64plus/hires_texture"
@@ -904,6 +904,7 @@ prepare_component() {
       create_dir "/var/data/mame/assets/icons"
       create_dir "/var/data/mame/assets/covers"
       create_dir "/var/data/mame/assets/ui"
+      create_dir "$shaders_folder/mame/bgfx/"
 
       dir_prep "$saves_folder/mame-sa/hiscore" "/var/config/mame/hiscore"
       cp -fvr "$config/mame/mame.ini" "$mameconf"
@@ -917,6 +918,7 @@ prepare_component() {
       set_setting_value "$mameconf" "diff_directory" "$saves_folder/mame-sa/diff" "mame"
       set_setting_value "$mameconf" "samplepath" "$bios_folder/mame-sa/samples" "mame"
       set_setting_value "$mameconf" "cheatpath" "$cheats_folder/mame" "mame"
+      set_setting_value "$mameconf" "bgfx_path" "/app/share/mame/bgfx;$shaders_folder/mame/bgfx/" "mame"
 
       log i "Placing cheats in \"$cheats_folder/mame\""
       unzip -j -o "$config/mame/cheat0264.zip" 'cheat.7z' -d "$cheats_folder/mame"

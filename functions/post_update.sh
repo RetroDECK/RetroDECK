@@ -620,6 +620,10 @@ post_update() {
 
     # --- ALWAYS EXECUTED IN 0.9.1b ---
 
+    log i "Preparing the shaders folder for MAME..."
+    shaders_folder=$rd_home/shaders && log i "Shaders folder set to \"$shaders_folder\""
+    conf_write && log i "Done"
+
     log i "Preparing the cheats for RetroArch..."
     create_dir "$cheats_folder/retroarch"
     set_setting_value "$raconf" "cheat_database_path" "$cheats_folder/retroarch" "retroarch"
