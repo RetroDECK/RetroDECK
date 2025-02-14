@@ -645,6 +645,10 @@ post_update() {
     unzip -j -o "$config/mame/cheat0264.zip" 'cheat.7z' -d "$cheats_folder/mame" && log i "Cheats for MAME installed"
     rm -rf /var/data/mame/cheat
 
+    log i "Preparing the RetroAchievements for PPSSPP..."
+    set_setting_value $rd_conf "ppsspp" "false" retrodeck "cheevos" && log i "Done"
+    set_setting_value $rd_conf "ppsspp" "false" retrodeck "cheevos_hardcore" && log i "Done"
+
   fi # end of 0.9.1b
 
   # The following commands are run every time.
