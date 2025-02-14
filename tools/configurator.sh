@@ -224,7 +224,7 @@ configurator_global_presets_and_settings_dialog() {
     local cheevos_emulators=$(sed -n '/\[cheevos\]/, /\[/{ /\[cheevos\]/! { /\[/! p } }' $rd_conf | sed '/^$/d')
     for setting_line in $cheevos_emulators; do
       emulator=$(get_setting_name "$setting_line" "retrodeck")
-      set_setting_value "$rdconf" "$emulator" "false" "retrodeck" "cheevos"
+      set_setting_value "$rd_conf" "$emulator" "false" "retrodeck" "cheevos"
       build_preset_config "$emulator" "cheevos"
     done
     configurator_generic_dialog "RetroDECK Configurator Utility - RetroAchievements" "RetroAchievements has been disabled in all supported systems."

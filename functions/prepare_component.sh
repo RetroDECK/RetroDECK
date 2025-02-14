@@ -598,6 +598,10 @@ prepare_component() {
           log i "PPSSPP cheats backed up to $backup_file"
         fi
         tar -xzf /app/retrodeck/cheats/ppsspp.tar.gz -C "$cheats_folder/PPSSPP" --overwrite
+
+        # Reset default preset settings
+        set_setting_value "$rd_conf" "ppsspp" "$(get_setting_value "$rd_defaults" "ppsspp" "retrodeck" "cheevos")" "retrodeck" "cheevos"
+        set_setting_value "$rd_conf" "ppsspp" "$(get_setting_value "$rd_defaults" "ppsspp" "retrodeck" "cheevos_hardcore")" "retrodeck" "cheevos_hardcore"
       fi
       if [[ "$action" == "postmove" ]]; then # Run only post-move commands
         set_setting_value "$ppssppconf" "CurrentDirectory" "$roms_folder/psp" "ppsspp" "General"
