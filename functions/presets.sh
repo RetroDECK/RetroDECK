@@ -242,6 +242,7 @@ build_preset_config() {
   local system_being_changed="$1"
   shift
   local presets_being_changed="$*"
+  log d "Applying presets: $presets_being_changed for system: $system_being_changed"
   for current_preset in $presets_being_changed
   do
     local preset_section=$(sed -n '/\['"$current_preset"'\]/, /\[/{ /\['"$current_preset"'\]/! { /\[/! p } }' $rd_conf | sed '/^$/d')
@@ -250,6 +251,7 @@ build_preset_config() {
       local read_system_name=$(get_setting_name "$system_line")
       if [[ "$read_system_name" == "$system_being_changed" ]]; then
         local read_system_enabled=$(get_setting_value "$rd_conf" "$read_system_name" "retrodeck" "$current_preset")
+        log d "Processing system: $read_system_name with preset: $current_preset, enabled: $read_system_enabled"
         while IFS='^' read -r action read_preset read_setting_name new_setting_value section target_file defaults_file || [[ -n "$action" ]];
         do
           if [[ ! $action == "#"* ]] && [[ ! -z "$action" ]]; then
@@ -262,6 +264,7 @@ build_preset_config() {
               else
                 local read_config_format="$read_preset"
               fi
+              log d "Config file format: $read_config_format"
             ;;
 
             "change" )
@@ -274,6 +277,7 @@ build_preset_config() {
                   eval defaults_file=$defaults_file
                 fi
                 local read_defaults_file="$defaults_file"
+                log d "Changing setting: $read_setting_name to $new_setting_value in $read_target_file"
                 if [[ "$read_system_enabled" == "true" ]]; then
                   if [[ "$new_setting_value" = \$* ]]; then
                     eval new_setting_value=$new_setting_value
@@ -321,6 +325,7 @@ build_preset_config() {
                   eval defaults_file=$defaults_file
                 fi
                 local read_defaults_file="$defaults_file"
+                log d "Rewriting setting: $read_setting_name to $new_setting_value in $read_target_file"
                 if [[ "$read_system_enabled" == "true" ]]; then
                   if [[ "$new_setting_value" = \$* ]]; then
                     eval new_setting_value=$new_setting_value
@@ -334,6 +339,7 @@ build_preset_config() {
 
             "enable" )
               if [[ "$read_preset" == "$current_preset" ]]; then
+                log d "Enabling file: $read_setting_name"
                 if [[ "$read_system_enabled" == "true" ]]; then
                   enable_file "$read_setting_name"
                 else
