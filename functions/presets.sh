@@ -56,6 +56,7 @@ change_preset_dialog() {
       done
       choice="$all_systems"
       extra_action="extra"
+      force_state="true"
   elif [ "$choice" == "Disable All" ]; then
       log d "Disable All selected"
       # Build a comma-separated list of all internal system names.
@@ -77,7 +78,7 @@ change_preset_dialog() {
   if [[ "$rc" == 0 || "$extra_action" == "extra" || -n "$choice" ]]; then
     log d "Calling make_preset_changes with choice: $choice"
     (
-      make_preset_changes "$1" "$choice"
+      make_preset_changes "$preset" "$choice" "$force_state"
     ) | rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
          --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
          --title "RetroDECK Configurator Utility - Presets Configuration" \
