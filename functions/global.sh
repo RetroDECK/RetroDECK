@@ -108,6 +108,7 @@ dolphingfxconf="/var/config/dolphin-emu/GFX.ini"
 dolphinhkconf="/var/config/dolphin-emu/Hotkeys.ini"
 dolphinqtconf="/var/config/dolphin-emu/Qt.ini"
 dolphinDynamicInputTexturesPath="/var/data/dolphin-emu/Load/DynamicInputTextures"
+dolphinCheevosConf="/var/config/dolphin-emu/RetroAchievements.ini"
 
 # PCSX2 config files
 

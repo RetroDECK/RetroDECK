@@ -65,6 +65,8 @@
             <description>
                <p>New Additions:</p>
                <ul>
+                  <li>RetroAchievements: PPSSPP support added (by Cohee)</li>
+                  <li>RetroAchievements: Dolphin support added</li>
                   <li>INITIAL SETUP: prompts to add RetroDECK to Steam</li>
                   <li>CONFIGURATOR: reset components menu simplified and allowed multiple choices and `Factory Reset`</li>
                   <li>CONFIGURATOR: refacotred open component menu</li>
