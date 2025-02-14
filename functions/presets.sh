@@ -316,25 +316,25 @@ build_preset_config() {
             ;;
 
            "rewrite" )
-              if [[ "$read_preset" == "$current_preset" ]]; then
+                if [[ "$read_preset" == "$current_preset" ]]; then
                 if [[ "$target_file" = \$* ]]; then # Read current target file and resolve if it is a variable
                   eval target_file=$target_file
                 fi
                 local read_target_file="$target_file"
-                if [[ "$defaults_file" = \$* ]]; then #Read current defaults file and resolve if it is a variable
+                if [[ "$defaults_file" = \$* ]]; then # Read current defaults file and resolve if it is a variable
                   eval defaults_file=$defaults_file
                 fi
                 local read_defaults_file="$defaults_file"
                 log d "Rewriting setting: $read_setting_name to $new_setting_value in $read_target_file"
                 if [[ "$read_system_enabled" == "true" ]]; then
-                  if [[ "$new_setting_value" = \$* ]]; then
-                    eval new_setting_value=$new_setting_value
+                  if [[ "$new_setting_value" = \$* ]]; then # Resolve new setting value if it is a variable
+                  eval new_setting_value=$new_setting_value
                   fi
-                  echo -n "$new_setting_value" > "$read_target_file"
+                  echo -n "$new_setting_value" > "$read_target_file" # Write the new setting value to the target file
                 else
-                  cat "$read_defaults_file" > "$read_target_file"
+                  cat "$read_defaults_file" > "$read_target_file" # Restore the default settings from the defaults file
                 fi
-              fi
+                fi
             ;;
 
             "enable" )
