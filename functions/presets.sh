@@ -1,22 +1,29 @@
 #!/bin/bash
 
 change_preset_dialog() {
-  # This function will build a list of all systems compatible with a given preset, their current enable/disabled state and allow the user to change one or more
+  # This function will build a list of all systems compatible with a given preset,
+  # show their current enable/disabled state and allow the user to change one or more.
   # USAGE: change_preset_dialog "$preset"
 
-  preset="$1"
-  pretty_preset_name=${preset//_/ } # Preset name prettification
-  pretty_preset_name=$(echo $pretty_preset_name | awk '{for(i=1;i<=NF;i++){$i=toupper(substr($i,1,1))substr($i,2)}}1') # Preset name prettification
-  current_preset_settings=()
-  local section_results=$(sed -n '/\['"$preset"'\]/, /\[/{ /\['"$preset"'\]/! { /\[/! p } }' $rd_conf | sed '/^$/d')
+  log d "Starting change_preset_dialog for preset: $preset"
 
-  while IFS= read -r config_line
-    do
+  preset="$1"
+  pretty_preset_name=${preset//_/ }  # Preset name prettification
+  pretty_preset_name=$(echo "$pretty_preset_name" | awk '{for(i=1;i<=NF;i++){$i=toupper(substr($i,1,1))substr($i,2)}}1')
+  current_preset_settings=()
+  local section_results
+  section_results=$(sed -n '/\['"$preset"'\]/, /\[/{ /\['"$preset"'\]/! { /\[/! p } }' "$rd_conf" | sed '/^$/d')
+
+  while IFS= read -r config_line; do
       system_name=$(get_setting_name "$config_line" "retrodeck")
       system_value=$(get_setting_value "$rd_conf" "$system_name" "retrodeck" "$preset")
-      current_preset_settings=("${current_preset_settings[@]}" "$system_value" "$(make_name_pretty $system_name)" "$system_name")
+      # Append three values: the current enabled state, a pretty name, and the internal system name.
+      current_preset_settings=("${current_preset_settings[@]}" "$system_value" "$(make_name_pretty "$system_name")" "$system_name")
   done < <(printf '%s\n' "$section_results")
 
+  log d "Current preset settings built for preset: $preset"
+
+  # Show the checklist with extra buttons for "Enable All" and "Disable All"
   choice=$(rd_zenity \
     --list --width=1200 --height=720 \
     --checklist \
@@ -26,18 +33,55 @@ change_preset_dialog() {
     --column "Enabled" \
     --column "Emulator" \
     --column "internal_system_name" \
-    "${current_preset_settings[@]}")
+    "${current_preset_settings[@]}" \
+    --extra-button "Enable All" \
+    --extra-button "Disable All")
 
   local rc=$?
+  local extra_action=""
 
-  if [[ ! -z $choice || "$rc" == 0 ]]; then
+  log d "User made a choice: $choice with return code: $rc"
+
+  # Handle extra button responses.
+  if [ "$choice" == "Enable All" ]; then
+      log d "Enable All selected"
+      # Build a comma-separated list of all internal system names.
+      all_systems=""
+      for ((i=2; i<${#current_preset_settings[@]}; i+=3)); do
+          if [ -z "$all_systems" ]; then
+              all_systems="${current_preset_settings[$i]}"
+          else
+              all_systems="$all_systems,${current_preset_settings[$i]}"
+          fi
+      done
+      choice="$all_systems"
+      extra_action="extra"
+  elif [ "$choice" == "Disable All" ]; then
+      log d "Disable All selected"
+      # Build a comma-separated list of all internal system names.
+      all_systems=""
+      for ((i=2; i<${#current_preset_settings[@]}; i+=3)); do
+          if [ -z "$all_systems" ]; then
+              all_systems="${current_preset_settings[$i]}"
+          else
+              all_systems="$all_systems,${current_preset_settings[$i]}"
+          fi
+      done
+      choice="$all_systems"
+      extra_action="extra"
+      force_state="false"
+  fi
+
+  # Call make_preset_changes if the user made a selection,
+  # or if an extra button was clicked (even if the resulting choice is empty).
+  if [[ "$rc" == 0 || "$extra_action" == "extra" || -n "$choice" ]]; then
+    log d "Calling make_preset_changes with choice: $choice"
     (
       make_preset_changes "$1" "$choice"
-    ) |
-    rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
-    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator Utility - Presets Configuration" \
-    --text="Setting up your presets, please wait..."
+    ) | rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+         --title "RetroDECK Configurator Utility - Presets Configuration" \
+         --text="Setting up your presets, please wait..."
   else
     log i "No preset choices made"
   fi

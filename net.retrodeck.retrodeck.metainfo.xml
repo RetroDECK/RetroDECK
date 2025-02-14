@@ -74,6 +74,7 @@
                   <li>New CLI argument `--factory-reset` that resets RetroDECK completely and brings the user to the first setup</li>
                   <li>CHEATS: added basic cheats support for RetroArch, PCSX2, PPSSPP and MAME</li>
                   <li>GAME COMPRESSOR: refactored</li>
+                  <li>CHANGE PRESET DIALOG: added enable all and disable all buttons</li>
                </ul>
                <p>Bug fixes:</p>
                <ul>
