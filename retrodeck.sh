@@ -115,25 +115,29 @@ for i in "$@"; do
       ;;
     --set*)
       preset="$2"
+      if [ "$preset" == "cheevos" ]; then
+        echo "Error: The 'cheevos' preset is not yet supported via CLI. Please use the RetroDECK Configurator."
+        exit 1
+      fi
       value="$3"
       if [ -z "$preset" ]; then
-      echo "Error: No preset specified. Usage: --set <preset> [value], --set help for more help"
-      exit 1
+        echo "Error: No preset specified. Usage: --set <preset> [value], --set help for more help"
+        exit 1
       fi
       if [ "$preset" == "help" ]; then
-      echo "Used to toggle or set a preset. Available presets are:"
-      fetch_all_presets
-      echo "Usage: --set <preset> [value]"
-      echo "Examples:"
-      echo "Force borders to be true for gba:"
-      echo "  make_preset_changes borders gba true"
-      echo "Force borders to be true for all supported systems:"
-      echo "  make_preset_changes borders all true"
-      echo "Toggle gba in preset borders, this will disable the enabled and vice versa:"
-      echo "  make_preset_changes borders gba true"
-      echo "Toggle all in preset borders:"
-      echo "  make_preset_changes borders all"
-      exit 0
+        echo "Used to toggle or set a preset. Available presets are:"
+        fetch_all_presets
+        echo "Usage: --set <preset> [value]"
+        echo "Examples:"
+        echo "Force borders to be true for gba:"
+        echo "  make_preset_changes borders gba true"
+        echo "Force borders to be true for all supported systems:"
+        echo "  make_preset_changes borders all true"
+        echo "Toggle gba in preset borders, this will disable the enabled and vice versa:"
+        echo "  make_preset_changes borders gba true"
+        echo "Toggle all in preset borders:"
+        echo "  make_preset_changes borders all"
+        exit 0
       fi
       make_preset_changes "$preset" "$value"
       exit 0
