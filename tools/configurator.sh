@@ -159,7 +159,7 @@ configurator_welcome_dialog() {
 
   "" )
     log i "Configurator: closing"
-    exit 1
+    exit 0
   ;;
 
   esac

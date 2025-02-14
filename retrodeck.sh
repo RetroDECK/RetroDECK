@@ -73,6 +73,7 @@ for i in "$@"; do
     --configurator*)
       sh /app/tools/configurator.sh
       #sh /app/bin/godot-configurator.sh
+      exit 0
       ;;
     # --legacy-configurator*)
     #   sh /app/tools/configurator.sh
