@@ -5,6 +5,8 @@ post_update() {
   # post update script
   log i "Executing post-update script"
 
+  update_rd_conf
+
   if [[ $(check_version_is_older_than "0.5.0b") == "true" ]]; then # If updating from prior to save sorting change at 0.5.0b
     log d "Version is older than 0.5.0b, executing save migration"
     save_migration
@@ -527,7 +529,6 @@ post_update() {
     log i "New components were added in this version, initializing them"
     prepare_component "reset" "portmaster"
     prepare_component "reset" "ruffle"
-    update_rd_conf
     prepare_component "reset" "steam-rom-manager"
 
     # RetroArch
@@ -645,9 +646,8 @@ post_update() {
     unzip -j -o "$config/mame/cheat0264.zip" 'cheat.7z' -d "$cheats_folder/mame" && log i "Cheats for MAME installed"
     rm -rf /var/data/mame/cheat
 
-    log i "Preparing the RetroAchievements for PPSSPP..."
-    set_setting_value $rd_conf "ppsspp" "false" retrodeck "cheevos" && log i "Done"
-    set_setting_value $rd_conf "ppsspp" "false" retrodeck "cheevos_hardcore" && log i "Done"
+    log i "Preparing the RetroAchievements for Dolphin..."
+    cp -vn "$config/dolphin/"* /var/config/dolphin-emu/
 
   fi # end of 0.9.1b
 
