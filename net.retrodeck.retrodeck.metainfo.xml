@@ -90,6 +90,7 @@
                   <li>BIOS CHECKER: fixed wrong folder check</li>
                   <li>POST_UPDATE: fixed a bug where retrodeck.cfg was not updated at every version</li>
                   <li>COMPRESSOR: fixed a bug where user selected items were misread</li>
+                  <li>ES-DE: removed 7zip and zip formats from PSP as not supported by PPSSPP (Standalone)</li>
                </ul>
                <p>Developers, developers, developers:</p>
                <ul>
