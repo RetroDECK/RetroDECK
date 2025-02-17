@@ -88,6 +88,7 @@
                   <li>PSX: fixed an issue that was not showing the borders correctly</li>
                   <li>BIOS CHECKER: fixed wrong folder check</li>
                   <li>POST_UPDATE: fixed a bug where retrodeck.cfg was not updated at every version</li>
+                  <li>COMPRESSOR: fixed a bug where user selected items were misread</li>
                </ul>
                <p>Developers, developers, developers:</p>
                <ul>

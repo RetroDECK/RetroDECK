@@ -722,6 +722,7 @@ configurator_compress_single_game_dialog() {
       ) |
       rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --width="800" \
       --title "RetroDECK Configurator Utility - Compression in Progress"
       configurator_generic_dialog "RetroDECK Configurator - RetroDECK: Compression Tool" "The compression process is complete."
       configurator_compression_tool_dialog
@@ -783,7 +784,7 @@ configurator_compress_multiple_games_dialog() {
     for line in "${all_compressable_games[@]}"; do
       IFS="^" read -r game comp <<< "$line"
       local short_game="${game#$roms_folder}"
-      checklist_entries+=( "TRUE" "$short_game" "$game" )
+      checklist_entries+=( "TRUE" "$short_game" "$line" )
     done
 
     local choice
@@ -798,6 +799,7 @@ configurator_compress_multiple_games_dialog() {
       "${checklist_entries[@]}")
 
     local rc=$?
+    log d "User choice: $choice"
     if [[ $rc == 0 && -n "$choice" ]]; then
       IFS="," read -ra games_to_compress <<< "$choice"
     elif [[ -n "$choice" ]]; then
@@ -845,6 +847,7 @@ configurator_compress_multiple_games_dialog() {
 
   rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck/retrodeck.svg" \
+    --width="800" \
     --title "RetroDECK Configurator Utility - Compression in Progress" < "$comp_pipe"
 
   wait "$comp_pid_group"
