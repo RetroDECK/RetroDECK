@@ -568,6 +568,7 @@ post_update() {
       --text="The following components have been updated and need to be reset or fixed to ensure compatibility with the new version: select the components you want to reset.\n\nNot resetting them may cause serious issues with your installation.\nYou can also reset them manually later via Configurator -> Troubleshooting -> Reset Component.\n\nNote: Your games, saves, game collections and scraped data will not be affected." \
       --column="Select" --column="Component" --column="Description" --width="1100" --height="700" \
       TRUE "RetroArch" "Needs to be reset to fix the borders issue on some sytems such as psx" \
+      TRUE "Dolphin - GameCube Controller" "The GameCube controller configuration needs to be reset to fix a trigger issue" \
       --separator=":" \
       --extra-button="Execute All" \
       --ok-label="Execute Selected Only" \
@@ -617,6 +618,12 @@ post_update() {
       # Twice to toggle them once and then toggle them back to the original value
       make_preset_changes "borders" "all"
       make_preset_changes "borders" "all"
+    fi
+
+    # Dolphin - GameCube Controller
+    if [[ "$execute_all" == "true" || " ${selected_choices[@]} " =~ " Dolphin - GameCube Controller " ]]; then
+      log i "User agreed to reset Dolphin - GameCube Controller"
+      cp -f "$config/dolphin/GCPadNew.ini" "$dolphingcpadconf" && log i "Done"
     fi
 
     # --- ALWAYS EXECUTED IN 0.9.1b ---
