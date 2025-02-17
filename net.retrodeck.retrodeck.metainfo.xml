@@ -129,6 +129,7 @@
                <li>Fixed an issue that was not correctly displaying version notes</li>
                <li>Vita3K now uses Vulkan as default</li>
                <li>Dolphin and Primehack are no longer scaled wide by default but are set to auto</li>
+               <li>Removed zip extension from NDS system as is not supported</li>
             </ul>
             <p>Developers, developers, developers:</p>
             <ul>
