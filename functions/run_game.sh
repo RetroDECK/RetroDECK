@@ -178,7 +178,7 @@ find_system_commands() {
         selected_command="${command_list[1]}"
     else
         # Show the list with Zenity and return the **command** (second column) selected
-        selected_command=$(zenity --list \
+        selected_command=$(rd_zenity --list \
             --title="Select an emulator for $system_name" \
             --column="Emulator" --column="Hidden Command" "${command_list[@]}" \
             --width=800 --height=400 --print-column=2 --hide-column=2)

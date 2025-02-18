@@ -428,7 +428,7 @@ post_update() {
 
     # Create a Zenity window with checkboxes for each reset option and two buttons
     while true; do
-      choices=$(zenity --list --checklist --title="RetroDECK Reset Options" \
+      choices=$(rd_zenity --list --checklist --title="RetroDECK Reset Options" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --text="The following components have been updated and need to be reset or fixed to ensure compatibility with the new version: select the components you want to reset.\n\nNot resetting them may cause serious issues with your installation.\nYou can also reset them manually later via Configurator -> Troubleshooting -> Reset Component.\n\nNote: Your games, saves, game collections and scraped data will not be affected." \
       --column="Select" --column="Component" --column="Description" --width="1100" --height="700" \
@@ -456,7 +456,7 @@ post_update() {
       fi
 
       if [[ $? -eq 0 && -n "$choices" ]]; then
-        if ! zenity --question --title="Confirmation" --text="Are you sure you want to proceed with only the selected options?\n\nThis might cause issues in RetroDECK"; then
+        if ! rd_zenity --question --title="Confirmation" --text="Are you sure you want to proceed with only the selected options?\n\nThis might cause issues in RetroDECK"; then
           log i "User is not sure, showing the checklist window again."
           continue
         else
@@ -466,7 +466,7 @@ post_update() {
       fi
 
       if [[ $? == 0 ]]; then
-      if ! zenity --question --title="Confirmation" --text="Are you sure you want to skip the reset process?\n\nThis might cause issues in RetroDECK"; then
+      if ! rd_zenity --question --title="Confirmation" --text="Are you sure you want to skip the reset process?\n\nThis might cause issues in RetroDECK"; then
         log i "User is not sure, showing the checklist window again."
         continue
       else
@@ -563,7 +563,7 @@ post_update() {
 
     # Create a Zenity window with checkboxes for each reset option and two buttons
     while true; do
-      choices=$(zenity --list --checklist --title="RetroDECK Reset Options" \
+      choices=$(rd_zenity --list --checklist --title="RetroDECK Reset Options" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --text="The following components have been updated and need to be reset or fixed to ensure compatibility with the new version: select the components you want to reset.\n\nNot resetting them may cause serious issues with your installation.\nYou can also reset them manually later via Configurator -> Troubleshooting -> Reset Component.\n\nNote: Your games, saves, game collections and scraped data will not be affected." \
       --column="Select" --column="Component" --column="Description" --width="1100" --height="700" \
@@ -588,7 +588,7 @@ post_update() {
       fi
 
       if [[ $? -eq 0 && -n "$choices" ]]; then
-        if ! zenity --question --title="Confirmation" --text="Are you sure you want to proceed with only the selected options?\n\nThis might cause issues in RetroDECK"; then
+        if ! rd_zenity --question --title="Confirmation" --text="Are you sure you want to proceed with only the selected options?\n\nThis might cause issues in RetroDECK"; then
           log i "User is not sure, showing the checklist window again."
           continue
         else
@@ -598,7 +598,7 @@ post_update() {
       fi
 
       if [[ $? == 0 ]]; then
-      if ! zenity --question --title="Confirmation" --text="Are you sure you want to skip the reset process?\n\nThis might cause issues in RetroDECK"; then
+      if ! rd_zenity --question --title="Confirmation" --text="Are you sure you want to skip the reset process?\n\nThis might cause issues in RetroDECK"; then
         log i "User is not sure, showing the checklist window again."
         continue
       else

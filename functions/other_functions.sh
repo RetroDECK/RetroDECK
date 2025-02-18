@@ -299,7 +299,9 @@ dir_prep() {
 
 rd_zenity() {
   # This function replaces the standard 'zenity' command and filters out annoying GTK errors on Steam Deck
+  export GUI="zenity"
   zenity 2> >(grep -v 'Gtk' >&2) "$@"
+  unset GUI
 }
 
 update_rpcs3_firmware() {
@@ -642,7 +644,7 @@ install_release() {
   log d "Constructed flatpak URL: $flatpak_url"
 
   # Confirm installation with the user
-  zenity --question --icon-name=net.retrodeck.retrodeck --no-wrap \
+  rd_zenity --question --icon-name=net.retrodeck.retrodeck --no-wrap \
           --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
           --title "RetroDECK Updater" \
           --text="$1 will be now installed.\nThe update process may take several minutes.\n\nAfter the update is complete, RetroDECK will close. When you run it again, you will be using the latest version.\n\nDo you want to continue?"
@@ -673,7 +675,7 @@ install_release() {
     # Cleanup old bundles to save space
     rm -rf "$rdhome/RetroDECK_Updates"
   ) |
-  zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+  rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Updater" \
   --text="RetroDECK is updating to the selected version, please wait."
@@ -791,7 +793,7 @@ release_selector() {
         while true; do
             echo "# Fetching all available releases from GitHub repositories... Please wait. This may take some time." ; sleep 1
         done
-    ) | zenity --progress --title="Fetching Releases" --text="Fetching releases..." --pulsate --no-cancel --auto-close --width=500 --height=150 &
+    ) | rd_zenity --progress --title="Fetching Releases" --text="Fetching releases..." --pulsate --no-cancel --auto-close --width=500 --height=150 &
     
     progress_pid=$!  # save process PID to kill it later
 
@@ -931,7 +933,7 @@ quit_retrodeck() {
   source /app/libexec/steam_sync.sh
   add_to_steam "$(ls "$rdhome/ES-DE/gamelists/")"
   ) |
-  zenity --progress \
+  rd_zenity --progress \
     --title="Syncing with Steam" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --text="<span foreground='$purple'><b>\t\t\t\tSyncing favorite games with Steam.</b></span>\n\n<b>NOTE: </b>This operation may take some time depending on the size of your library.\nFeel free to leave this in the background and switch to another application.\n\n" \
