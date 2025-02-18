@@ -11,11 +11,23 @@ rd_logs_folder="/var/config/retrodeck/logs" # Static location to write all Retro
 source /app/libexec/logger.sh
 rotate_logs
 
+width=$(grep -oP '\d+(?=x)' /sys/class/graphics/fb0/modes)
+height=$(grep -oP '(?<=x)\d+' /sys/class/graphics/fb0/modes)
+if [[ $width -ne 1280 ]] || [[ $height -ne 800 ]]; then
+  native_resolution=false
+else
+  native_resolution=true
+fi
+
 log d "Debug mode enabled"
 log i "Initializing RetroDECK"
 log i "Running on $XDG_SESSION_DESKTOP, $XDG_SESSION_TYPE"
 if [[ -n $container ]]; then
   log i "$container environment"
+fi
+log i "Resolution: $width x $height"
+if [[ $native_resolution == true ]]; then
+  log i "Steam Deck native resolution detected"
 fi
 
 source /app/libexec/050_save_migration.sh
