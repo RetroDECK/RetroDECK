@@ -301,7 +301,9 @@ rd_zenity() {
   # This function replaces the standard 'zenity' command and filters out annoying GTK errors on Steam Deck
   export GUI="zenity"
   zenity 2> >(grep -v 'Gtk' >&2) "$@"
+  local status=${PIPESTATUS[0]}  # Capture the exit code of 'zenity'
   unset GUI
+  return $status
 }
 
 update_rpcs3_firmware() {
