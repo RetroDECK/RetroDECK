@@ -189,9 +189,18 @@ configurator_global_presets_and_settings_dialog() {
 
   "Borders" )
     log i "Configurator: opening \"$choice\" menu"
-    change_preset_dialog "borders"
-    configurator_global_presets_and_settings_dialog
-  ;;
+    if [[ $native_resolution == false ]]; then 
+        rd_zenity --question --text="Borders are actually supported for ${width}x${height} resolution at the moment. This can be set in the Steam shortcut.\n\nDo you still want to continue?"
+        response=$?  # Capture the exit code immediately
+        if [ "$response" -eq 0 ]; then
+            change_preset_dialog "borders"
+        else
+            configurator_global_presets_and_settings_dialog
+        fi
+    else
+        change_preset_dialog "borders"
+    fi
+    ;;
 
   "Widescreen" )
     log i "Configurator: opening \"$choice\" menu"
