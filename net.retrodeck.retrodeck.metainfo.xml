@@ -86,6 +86,7 @@
                   <li>DOLPHIN and PRIMEHACK: Fixed a bug where the Universal Dynamic Input was missing from the build</li>
                   <li>DOLPHIN: fixed a bug where it wouldn't start in some Wayland configurations</li>
                   <li>DOLPHIN: fixed a trigger issue in the controller configuration</li>
+                  <li>PRIMEHACK: fixed an issue where wii folder was not mapped as roms path in GTK GUI</li>
                   <li>PORTMASTER: added the ability to hide PortMaster from ES-DE</li>
                   <li>PSX: fixed an issue that was not showing the borders correctly</li>
                   <li>BIOS CHECKER: fixed wrong folder check</li>

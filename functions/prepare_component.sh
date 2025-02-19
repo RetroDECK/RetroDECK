@@ -621,12 +621,14 @@ prepare_component() {
         if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
           create_dir -d "$multi_user_data_folder/$SteamAppUser/config/primehack"
           cp -fvr "$config/primehack/config/"* "$multi_user_data_folder/$SteamAppUser/config/primehack/"
-          set_setting_value ""$multi_user_data_folder/$SteamAppUser/config/primehack/Dolphin.ini"" "ISOPath0" "$roms_folder/gc" "primehack" "General"
+          set_setting_value ""$multi_user_data_folder/$SteamAppUser/config/primehack/Dolphin.ini"" "ISOPath0" "$roms_folder/wii" "primehack" "General"
+          set_setting_value ""$multi_user_data_folder/$SteamAppUser/config/primehack/Dolphin.ini"" "ISOPath1" "$roms_folder/gc" "primehack" "General"
           dir_prep "$multi_user_data_folder/$SteamAppUser/config/primehack" "/var/config/primehack"
         else # Single-user actions
           create_dir -d /var/config/primehack/
           cp -fvr "$config/primehack/config/"* /var/config/primehack/
-          set_setting_value "$primehackconf" "ISOPath0" "$roms_folder/gc" "primehack" "General"
+          set_setting_value "$primehackconf" "ISOPath0" "$roms_folder/wii" "primehack" "General"
+          set_setting_value "$primehackconf" "ISOPath1" "$roms_folder/gc" "primehack" "General"
         fi
         # Shared actions
         dir_prep "$saves_folder/gc/primehack/EU" "/var/data/primehack/GC/EUR"

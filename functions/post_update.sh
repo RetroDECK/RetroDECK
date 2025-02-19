@@ -663,6 +663,10 @@ post_update() {
     log i "Preparing the RetroAchievements for Dolphin..."
     cp -vn "$config/dolphin/"* /var/config/dolphin-emu/
 
+    log i "Fixing PrimeHack roms paths..."
+    set_setting_value "$rd_conf" "ppsspp" "$(get_setting_value "$rd_defaults" "ppsspp" "retrodeck" "cheevos")" "retrodeck" "cheevos"
+    set_setting_value "$rd_conf" "ppsspp" "$(get_setting_value "$rd_defaults" "ppsspp" "retrodeck" "cheevos_hardcore")" "retrodeck" "cheevos_hardcore"
+
   fi # end of 0.9.1b
 
   # The following commands are run every time.
