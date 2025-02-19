@@ -70,6 +70,7 @@
                   <li>INITIAL SETUP: prompts to add RetroDECK to Steam</li>
                   <li>CONFIGURATOR: reset components menu simplified and allowed multiple choices and `Factory Reset`</li>
                   <li>CONFIGURATOR: refacotred open component menu</li>
+                  <li>CONFIGURATOR: scaled UI to 1.5x</li>
                   <li>New CLI argument `--set` to set presets, call retrodeck with `--set help` for more information</li>
                   <li>New CLI argument `--open` to open a component or emulator. Call retrodeck with `--open --list` for a list of available components or emulator to open</li>
                   <li>New CLI argument `--reset` that replaces the previous ones</li>
