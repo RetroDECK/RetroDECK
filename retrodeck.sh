@@ -5,7 +5,7 @@ source /app/libexec/global.sh
 show_cli_help() {
       echo -e "
 Usage:
-flatpak run [FLATPAK-RUN-OPTION] net.retrodeck-retrodeck [ARGUMENTS]
+flatpak run [FLATPAK-RUN-OPTION] net.retrodeck.retrodeck [ARGUMENTS]
 
 Arguments:
     -h, --help                          \t  Print this help
