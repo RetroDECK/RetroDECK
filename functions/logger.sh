@@ -22,30 +22,30 @@
 # The function auto-detects if the shell is sh and avoids colorizing the output in that case.
 
 log() {
-  # Exit early if logging_level is "none"
+  # Exit immediately if logging_level is "none"
   if [[ $logging_level == "none" ]]; then
     return
   fi
 
-  local level="$1"  # Logging level of the current message
-  local message="$2"  # Message to log
-  local logfile="${3:-$rd_logs_folder/retrodeck.log}"  # Log file, default to retrodeck.log
-  local timestamp="$(date +[%Y-%m-%d\ %H:%M:%S.%3N])"  # Timestamp for the log entry
+  local level="$1"          # Current message level
+  local message="$2"        # Message to log
+  local logfile="${3:-$rd_logs_folder/retrodeck.log}"  # Default log file
+  local timestamp="$(date +[%Y-%m-%d\ %H:%M:%S.%3N])"   # Timestamp
   local colorize_terminal=true
 
-  # Determine the calling function or use [FWORK]
+  # Determine the calling function, or use [FWORK]
   local caller="${FUNCNAME[1]:-FWORK}"
-  caller="${caller^^}" # Convert to uppercase
+  caller="${caller^^}"  # Convert to uppercase
 
-  # Check if the shell is sh (not bash or zsh) to avoid colorization
+  # Check if the shell is sh to avoid colorization
   if [ "${SHELL##*/}" = "sh" ]; then
     colorize_terminal=false
   fi
 
-  # Function to check if the current message level should be logged
+  # Internal function to check if the message should be logged
   should_log() {
     case "$logging_level" in
-      debug) return 0 ;;  # Always log everything
+      debug) return 0 ;;  # Log everything
       info) [[ "$level" == "i" || "$level" == "e" ]] && return 0 ;;
       warn) [[ "$level" != "d" ]] && return 0 ;;
       error) [[ "$level" == "e" ]] && return 0 ;;
@@ -54,7 +54,7 @@ log() {
   }
 
   if should_log; then
-    # Define message colors based on level
+    # Define colors based on the message level
     case "$level" in
       d)
         color="\e[32m[DEBUG]"
@@ -78,7 +78,7 @@ log() {
         ;;
     esac
 
-    # Construct the log message
+    # Build the message to display
     if [ "$colorize_terminal" = true ]; then
       colored_message="$color [$caller] $message\e[0m"
     else
@@ -86,17 +86,20 @@ log() {
     fi
     log_message="$timestamp $prefix [$caller] $message"
 
-    # Display the message in the terminal
-    echo -e "$colored_message" >&2
+    # If silent mode is not active, print the message to the terminal
+    if [[ "$LOG_SILENT" != "true" ]]; then
+      echo -e "$colored_message" >&2
+    fi
 
-    # Write the log message to the log file
+    # Ensure the log file exists
     if [ ! -f "$logfile" ]; then
-      #echo "$timestamp [WARN] Log file not found in \"$logfile\", creating it" >&2 # Disabled it as it's always appearing because of log rotation
       if [[ ! -d "$(dirname "$logfile")" ]]; then
         mkdir -p "$(dirname "$logfile")"
       fi
       touch "$logfile"
     fi
+
+    # Write the log to the file
     echo "$log_message" >> "$logfile"
   fi
 }
