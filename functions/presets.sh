@@ -222,6 +222,36 @@ make_preset_changes() {
         fi
       done < <(echo "$incompatible_presets")
     fi
+
+    # Adjust the custom viewport dimensions to scale it correctly
+    if [[ "$read_setting_name" == "custom_viewport_width" || "$read_setting_name" == "custom_viewport_height" ]]; then
+      local scaled_width=$(( (75 * $width) / 100 ))  # For example, 75% width scaled
+      local scaled_height=$(( (80 * $height) / 100 ))  # For example, 80% height scaled
+
+      if [[ "$read_setting_name" == "custom_viewport_width" ]]; then
+        new_setting_value=$scaled_width
+        log d "Adjusted custom_viewport_width: $new_setting_value"
+      elif [[ "$read_setting_name" == "custom_viewport_height" ]]; then
+        new_setting_value=$scaled_height
+        log d "Adjusted custom_viewport_height: $new_setting_value"
+      fi
+    fi
+
+    # Adjust the custom viewport Y to fit inside the screen bounds
+    if [[ "$read_setting_name" == "custom_viewport_y" ]]; then
+      # Center the viewport vertically
+      local viewport_y_offset=$(( ($height - $scaled_height) / 2 ))  # Adjust for scaled height
+      new_setting_value=$viewport_y_offset
+      log d "Adjusted custom_viewport_y: $new_setting_value"
+    fi
+
+    # Adjust the custom viewport X if needed (same logic as Y)
+    if [[ "$read_setting_name" == "custom_viewport_x" ]]; then
+      local viewport_x_offset=$(( ($width - $scaled_width) / 2 ))  # Center horizontally
+      new_setting_value=$viewport_x_offset
+      log d "Adjusted custom_viewport_x: $new_setting_value"
+    fi
+
   done
 
   # Rebuild config for all changed systems.
@@ -244,21 +274,21 @@ build_preset_config() {
   shift
   local presets_being_changed="$*"
   log d "Applying presets: $presets_being_changed for system: $system_being_changed"
-  for current_preset in $presets_being_changed
-  do
+  
+  for current_preset in $presets_being_changed; do
     local preset_section=$(sed -n '/\['"$current_preset"'\]/, /\[/{ /\['"$current_preset"'\]/! { /\[/! p } }' $rd_conf | sed '/^$/d')
-    while IFS= read -r system_line
-    do
+    
+    while IFS= read -r system_line; do
       local read_system_name=$(get_setting_name "$system_line")
       if [[ "$read_system_name" == "$system_being_changed" ]]; then
         local read_system_enabled=$(get_setting_value "$rd_conf" "$read_system_name" "retrodeck" "$current_preset")
         log d "Processing system: $read_system_name with preset: $current_preset, enabled: $read_system_enabled"
-        while IFS='^' read -r action read_preset read_setting_name new_setting_value section target_file defaults_file || [[ -n "$action" ]];
-        do
+        
+        while IFS='^' read -r action read_preset read_setting_name new_setting_value section target_file defaults_file || [[ -n "$action" ]]; do
           if [[ ! $action == "#"* ]] && [[ ! -z "$action" ]]; then
             case "$action" in
 
-            "config_file_format" )
+            "config_file_format")
               if [[ "$read_preset" == "retroarch-all" ]]; then
                 local retroarch_all="true"
                 local read_config_format="retroarch"
@@ -266,18 +296,64 @@ build_preset_config() {
                 local read_config_format="$read_preset"
               fi
               log d "Config file format: $read_config_format"
-            ;;
+              ;;
 
-            "change" )
+            "change")
               if [[ "$read_preset" == "$current_preset" ]]; then
-                if [[ "$target_file" = \$* ]]; then # Read current target file and resolve if it is a variable
+                if [[ "$target_file" = \$* ]]; then # Resolve target file if it is a variable
                   eval target_file=$target_file
                 fi
                 local read_target_file="$target_file"
-                if [[ "$defaults_file" = \$* ]]; then #Read current defaults file and resolve if it is a variable
+                if [[ "$defaults_file" = \$* ]]; then # Resolve defaults file if it is a variable
                   eval defaults_file=$defaults_file
                 fi
                 local read_defaults_file="$defaults_file"
+                
+# Handle calc expressions for all settings (viewport and overlay)
+if [[ "$new_setting_value" =~ ^calc:([0-9]+)%:\$([a-zA-Z0-9_]+) ]]; then
+  local percent="${BASH_REMATCH[1]}"
+  local variable="${BASH_REMATCH[2]}"
+  local value="${!variable}"  # Get the value of $width or $height
+  
+  # Ensure value is numeric
+  if [[ "$value" =~ ^[0-9]+$ ]]; then
+    # Perform integer calculation (multiplying and then dividing by 100)
+    new_setting_value=$(( (percent * value) / 100 ))
+    log d "Calculated new_setting_value: $new_setting_value for calc: $percent%:$variable"
+  else
+    log e "Error: $variable value is not numeric. Value: $value"
+  fi
+fi
+
+# Adjust the custom viewport dimensions to scale it correctly
+if [[ "$read_setting_name" == "custom_viewport_width" || "$read_setting_name" == "custom_viewport_height" ]]; then
+  local scaled_width=$(( (75 * $width) / 100 ))  # For example, 75% width scaled
+  local scaled_height=$(( (80 * $height) / 100 ))  # For example, 80% height scaled
+
+  if [[ "$read_setting_name" == "custom_viewport_width" ]]; then
+    new_setting_value=$scaled_width
+    log d "Adjusted custom_viewport_width: $new_setting_value"
+  elif [[ "$read_setting_name" == "custom_viewport_height" ]]; then
+    new_setting_value=$scaled_height
+    log d "Adjusted custom_viewport_height: $new_setting_value"
+  fi
+fi
+
+# Adjust the custom viewport Y to fit inside the screen bounds
+if [[ "$read_setting_name" == "custom_viewport_y" ]]; then
+  # Center the viewport vertically
+  local viewport_y_offset=$(( ($height - $scaled_height) / 2 ))  # Adjust for scaled height
+  new_setting_value=$viewport_y_offset
+  log d "Adjusted custom_viewport_y: $new_setting_value"
+fi
+
+# Adjust the custom viewport X if needed (same logic as Y)
+if [[ "$read_setting_name" == "custom_viewport_x" ]]; then
+  local viewport_x_offset=$(( ($width - $scaled_width) / 2 ))  # Center horizontally
+  new_setting_value=$viewport_x_offset
+  log d "Adjusted custom_viewport_x: $new_setting_value"
+fi
+
                 log d "Changing setting: $read_setting_name to $new_setting_value in $read_target_file"
                 if [[ "$read_system_enabled" == "true" ]]; then
                   if [[ "$new_setting_value" = \$* ]]; then
@@ -314,10 +390,10 @@ build_preset_config() {
                   fi
                 fi
               fi
-            ;;
+              ;;
 
-           "rewrite" )
-                if [[ "$read_preset" == "$current_preset" ]]; then
+            "rewrite")
+              if [[ "$read_preset" == "$current_preset" ]]; then
                 if [[ "$target_file" = \$* ]]; then # Read current target file and resolve if it is a variable
                   eval target_file=$target_file
                 fi
@@ -329,16 +405,16 @@ build_preset_config() {
                 log d "Rewriting setting: $read_setting_name to $new_setting_value in $read_target_file"
                 if [[ "$read_system_enabled" == "true" ]]; then
                   if [[ "$new_setting_value" = \$* ]]; then # Resolve new setting value if it is a variable
-                  eval new_setting_value=$new_setting_value
+                    eval new_setting_value=$new_setting_value
                   fi
                   echo -n "$new_setting_value" > "$read_target_file" # Write the new setting value to the target file
                 else
                   cat "$read_defaults_file" > "$read_target_file" # Restore the default settings from the defaults file
                 fi
-                fi
-            ;;
+              fi
+              ;;
 
-            "enable" )
+            "enable")
               if [[ "$read_preset" == "$current_preset" ]]; then
                 log d "Enabling file: $read_setting_name"
                 if [[ "$read_system_enabled" == "true" ]]; then
@@ -347,11 +423,11 @@ build_preset_config() {
                   disable_file "$read_setting_name"
                 fi
               fi
-            ;;
+              ;;
 
-            * )
+            *)
               log d "Other data: $action $read_preset $read_setting_name $new_setting_value $section" # DEBUG
-            ;;
+              ;;
 
             esac
           fi
