@@ -222,36 +222,6 @@ make_preset_changes() {
         fi
       done < <(echo "$incompatible_presets")
     fi
-
-    # Adjust the custom viewport dimensions to scale it correctly
-    if [[ "$read_setting_name" == "custom_viewport_width" || "$read_setting_name" == "custom_viewport_height" ]]; then
-      local scaled_width=$(( (75 * $width) / 100 ))  # For example, 75% width scaled
-      local scaled_height=$(( (80 * $height) / 100 ))  # For example, 80% height scaled
-
-      if [[ "$read_setting_name" == "custom_viewport_width" ]]; then
-        new_setting_value=$scaled_width
-        log d "Adjusted custom_viewport_width: $new_setting_value"
-      elif [[ "$read_setting_name" == "custom_viewport_height" ]]; then
-        new_setting_value=$scaled_height
-        log d "Adjusted custom_viewport_height: $new_setting_value"
-      fi
-    fi
-
-    # Adjust the custom viewport Y to fit inside the screen bounds
-    if [[ "$read_setting_name" == "custom_viewport_y" ]]; then
-      # Center the viewport vertically
-      local viewport_y_offset=$(( ($height - $scaled_height) / 2 ))  # Adjust for scaled height
-      new_setting_value=$viewport_y_offset
-      log d "Adjusted custom_viewport_y: $new_setting_value"
-    fi
-
-    # Adjust the custom viewport X if needed (same logic as Y)
-    if [[ "$read_setting_name" == "custom_viewport_x" ]]; then
-      local viewport_x_offset=$(( ($width - $scaled_width) / 2 ))  # Center horizontally
-      new_setting_value=$viewport_x_offset
-      log d "Adjusted custom_viewport_x: $new_setting_value"
-    fi
-
   done
 
   # Rebuild config for all changed systems.
@@ -309,50 +279,50 @@ build_preset_config() {
                 fi
                 local read_defaults_file="$defaults_file"
                 
-# Handle calc expressions for all settings (viewport and overlay)
-if [[ "$new_setting_value" =~ ^calc:([0-9]+)%:\$([a-zA-Z0-9_]+) ]]; then
-  local percent="${BASH_REMATCH[1]}"
-  local variable="${BASH_REMATCH[2]}"
-  local value="${!variable}"  # Get the value of $width or $height
-  
-  # Ensure value is numeric
-  if [[ "$value" =~ ^[0-9]+$ ]]; then
-    # Perform integer calculation (multiplying and then dividing by 100)
-    new_setting_value=$(( (percent * value) / 100 ))
-    log d "Calculated new_setting_value: $new_setting_value for calc: $percent%:$variable"
-  else
-    log e "Error: $variable value is not numeric. Value: $value"
-  fi
-fi
+                # Handle calc expressions for all settings (viewport and overlay)
+                if [[ "$new_setting_value" =~ ^calc:([0-9]+)%:\$([a-zA-Z0-9_]+) ]]; then
+                  local percent="${BASH_REMATCH[1]}"
+                  local variable="${BASH_REMATCH[2]}"
+                  local value="${!variable}"  # Get the value of $width or $height
+                  
+                  # Ensure value is numeric
+                  if [[ "$value" =~ ^[0-9]+$ ]]; then
+                    # Perform integer calculation (multiplying and then dividing by 100)
+                    new_setting_value=$(( (percent * value) / 100 ))
+                    log d "Calculated new_setting_value: $new_setting_value for calc: $percent%:$variable"
+                  else
+                    log e "Error: $variable value is not numeric. Value: $value"
+                  fi
+                fi
 
-# Adjust the custom viewport dimensions to scale it correctly
-if [[ "$read_setting_name" == "custom_viewport_width" || "$read_setting_name" == "custom_viewport_height" ]]; then
-  local scaled_width=$(( (75 * $width) / 100 ))  # For example, 75% width scaled
-  local scaled_height=$(( (80 * $height) / 100 ))  # For example, 80% height scaled
+                # Adjust the custom viewport dimensions to scale it correctly
+                if [[ "$read_setting_name" == "custom_viewport_width" || "$read_setting_name" == "custom_viewport_height" ]]; then
+                  local scaled_width=$(( (75 * $width) / 100 ))  # For example, 75% width scaled
+                  local scaled_height=$(( (80 * $height) / 100 ))  # For example, 80% height scaled
 
-  if [[ "$read_setting_name" == "custom_viewport_width" ]]; then
-    new_setting_value=$scaled_width
-    log d "Adjusted custom_viewport_width: $new_setting_value"
-  elif [[ "$read_setting_name" == "custom_viewport_height" ]]; then
-    new_setting_value=$scaled_height
-    log d "Adjusted custom_viewport_height: $new_setting_value"
-  fi
-fi
+                  if [[ "$read_setting_name" == "custom_viewport_width" ]]; then
+                    new_setting_value=$scaled_width
+                    log d "Adjusted custom_viewport_width: $new_setting_value"
+                  elif [[ "$read_setting_name" == "custom_viewport_height" ]]; then
+                    new_setting_value=$scaled_height
+                    log d "Adjusted custom_viewport_height: $new_setting_value"
+                  fi
+                fi
 
-# Adjust the custom viewport Y to fit inside the screen bounds
-if [[ "$read_setting_name" == "custom_viewport_y" ]]; then
-  # Center the viewport vertically
-  local viewport_y_offset=$(( ($height - $scaled_height) / 2 ))  # Adjust for scaled height
-  new_setting_value=$viewport_y_offset
-  log d "Adjusted custom_viewport_y: $new_setting_value"
-fi
+                # Adjust the custom viewport Y to fit inside the screen bounds
+                if [[ "$read_setting_name" == "custom_viewport_y" ]]; then
+                  # Center the viewport vertically
+                  local viewport_y_offset=$(( ($height - $scaled_height) / 2 ))  # Adjust for scaled height
+                  new_setting_value=$viewport_y_offset
+                  log d "Adjusted custom_viewport_y: $new_setting_value"
+                fi
 
-# Adjust the custom viewport X if needed (same logic as Y)
-if [[ "$read_setting_name" == "custom_viewport_x" ]]; then
-  local viewport_x_offset=$(( ($width - $scaled_width) / 2 ))  # Center horizontally
-  new_setting_value=$viewport_x_offset
-  log d "Adjusted custom_viewport_x: $new_setting_value"
-fi
+                # Adjust the custom viewport X if needed (same logic as Y)
+                if [[ "$read_setting_name" == "custom_viewport_x" ]]; then
+                  local viewport_x_offset=$(( ($width - $scaled_width) / 2 ))  # Center horizontally
+                  new_setting_value=$viewport_x_offset
+                  log d "Adjusted custom_viewport_x: $new_setting_value"
+                fi
 
                 log d "Changing setting: $read_setting_name to $new_setting_value in $read_target_file"
                 if [[ "$read_system_enabled" == "true" ]]; then
