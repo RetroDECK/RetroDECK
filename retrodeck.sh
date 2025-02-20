@@ -17,7 +17,7 @@ Arguments:
     --reset <component>                 \t  Reset RetroDECK or one or more component/emulator configurations to default values. WARNING: no confirmation prompt
     --factory-reset                     \t  Factory Reset, triggers the initial setup WARNING: no confirmation prompt
     --test-upgrade <version>            \t  Test upgrading RetroDECK to a specific version, developer use only
-    --set <preset> <system/all> [value] \t  Configure or toggle a preset. Examples: --set borders, --set borders all true,\n\t\t\t\t\t\t  --set borders gba false. Use --set help for more information
+    --set <preset> <system/all> [value] \t  Configure or toggle a preset. Examples: --set borders, --set borders all true,\n\t\t\t\t\t\t  --set borders gba false. Use --set-help for more information
     --open <component/emulator>         \t  Open a specific component or emulator\n\t\t\t\t\t\t  --open --list for a list of available components
 
 Game Launch:
@@ -65,6 +65,24 @@ case "$1" in
     echo "RetroDECK config file is in: $rd_conf"
     echo "Contents:"
     cat "$rd_conf"
+    exit 0
+    ;;
+  --set-help)
+    LOG_SILENT=true
+    source /app/libexec/global.sh
+    echo -e "\nUsed to toggle or set a preset.\n\nAvailable presets are:"
+    fetch_all_presets | tr ' ' ',' | sed 's/,/, /g'
+    echo -e "\nUsage: --set <preset> <system/all> [value]"
+    echo -e "\nExamples:"
+    echo -e "  Force borders to be ON for GBA:"
+    echo -e "    make_preset_changes borders gba on"
+    echo -e "  Force borders to be OFF for all supported systems:"
+    echo -e "    make_preset_changes borders all off"
+    echo -e "  Toggle GBA in preset borders (this will disable if enabled and vice versa):"
+    echo -e "    make_preset_changes borders gba"
+    echo -e "  Toggle all in preset borders:"
+    echo -e "    make_preset_changes borders all"
+    echo -e "\nYou can also use 'true' or 'false' instead of 'on' and 'off'.\nThe forced status is case insensitive."
     exit 0
     ;;
 esac
@@ -132,31 +150,17 @@ while [[ $# -gt 0 ]]; do
             ;;
         --set)
             preset="$2"
+            system="$3"
+            value="$4"
             if [ "$preset" == "cheevos" ]; then
-                echo "Error: The 'cheevos' preset is not yet supported via CLI. Please use the RetroDECK Configurator."
-                exit 1
+              echo "Error: The 'cheevos' preset is not yet supported via CLI. Please use the RetroDECK Configurator."
+              exit 1
             fi
-            value="$3"
             if [ -z "$preset" ]; then
-                echo "Error: No preset specified. Usage: --set <preset> [value] (use --set help for more information)"
-                exit 1
+              echo "Error: No preset specified. Usage: --set <preset> <system/all> [value] (use --set-help for more information)"
+              exit 1
             fi
-            if [ "$preset" == "help" ]; then
-                echo "Used to toggle or set a preset. Available presets are:"
-                fetch_all_presets
-                echo "Usage: --set <preset> [value]"
-                echo "Examples:"
-                echo "  Force borders to be true for GBA:"
-                echo "    make_preset_changes borders gba true"
-                echo "  Force borders to be true for all supported systems:"
-                echo "    make_preset_changes borders all true"
-                echo "  Toggle GBA in preset borders (this will disable if enabled and vice versa):"
-                echo "    make_preset_changes borders gba true"
-                echo "  Toggle all in preset borders:"
-                echo "    make_preset_changes borders all"
-                exit 0
-            fi
-            make_preset_changes "$preset" "$value"
+            make_preset_changes "$preset" "$system" "$value"
             exit 0
             ;;
         --open)
