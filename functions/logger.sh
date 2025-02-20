@@ -22,6 +22,21 @@
 # The function auto-detects if the shell is sh and avoids colorizing the output in that case.
 
 log() {
+
+  # Define and export log color environment variables for ES-DE
+  export logcolor_debug="\033[32m[DEBUG]"
+  export logcolor_error="\033[31m[ERROR]"
+  export logcolor_warn="\033[33m[WARN]"
+  export logcolor_info="\033[37m[INFO]"
+  export logcolor_default="\033[37m[LOG]"
+
+  # Define and export log prefix environment variables for ES-DE
+  export logprefix_debug="[DEBUG]"
+  export logprefix_error="[ERROR]"
+  export logprefix_warn="[WARN]"
+  export logprefix_info="[INFO]"
+  export logprefix_default="[LOG]"
+
   # Exit immediately if logging_level is "none"
   if [[ $logging_level == "none" ]]; then
     return
@@ -37,10 +52,10 @@ log() {
   local caller="${FUNCNAME[1]:-FWORK}"
   caller="${caller^^}"  # Convert to uppercase
 
-  # Check if the shell is sh to avoid colorization
-  if [ "${SHELL##*/}" = "sh" ]; then
-    colorize_terminal=false
-  fi
+  # # Check if the shell is sh to avoid colorization
+  # if [ "${SHELL##*/}" = "sh" ]; then
+  #   colorize_terminal=false
+  # fi
 
   # Internal function to check if the message should be logged
   should_log() {
@@ -57,24 +72,24 @@ log() {
     # Define colors based on the message level
     case "$level" in
       d)
-        color="\e[32m[DEBUG]"
-        prefix="[DEBUG]"
+        color="${logcolor_debug:-\033[32m[DEBUG]}"
+        prefix="${logprefix_debug:-[DEBUG]}"
         ;;
       e)
-        color="\e[31m[ERROR]"
-        prefix="[ERROR]"
+        color="${logcolor_error:-\033[31m[ERROR]}"
+        prefix="${logprefix_error:-[ERROR]}"
         ;;
       w)
-        color="\e[33m[WARN]"
-        prefix="[WARN]"
+        color="${logcolor_warn:-\033[33m[WARN]}"
+        prefix="${logprefix_warn:-[WARN]}"
         ;;
       i)
-        color="\e[34m[INFO]"
-        prefix="[INFO]"
+        color="${logcolor_info:-\033[37m[INFO]}"
+        prefix="${logprefix_info:-[INFO]}"
         ;;
       *)
-        color="\e[37m[LOG]"
-        prefix="[LOG]"
+        color="${logcolor_default:-\033[37m[LOG]}"
+        prefix="${logprefix_default:-[LOG]}"
         ;;
     esac
 
