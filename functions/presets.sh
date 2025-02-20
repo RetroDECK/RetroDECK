@@ -169,6 +169,12 @@ make_preset_changes() {
   choice="$2"
   force_state="${3:-}"
 
+  if [[ "${force_state,,}" == "on" || "${force_state,,}" == "true" ]]; then
+    force_state="true"
+  elif [[ "${force_state,,}" == "off" || "${force_state,,}" == "false" ]]; then
+    force_state="false"
+  fi
+
   log d "Building preset list options for preset: $preset"
   build_preset_list_options "$preset"
 
@@ -185,7 +191,7 @@ make_preset_changes() {
   for emulator in "${choices[@]}"; do
     if [[ -n "$force_state" ]]; then
       new_state="$force_state"
-      log d "Forcing $preset to state: $new_state for $emulator"
+      log i "Forcing $preset to state: $new_state for $emulator"
     else
       current_state=$(get_setting_value "$rd_conf" "$emulator" "retrodeck" "$preset")
       if [[ "$current_state" == "true" ]]; then
