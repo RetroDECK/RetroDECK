@@ -74,9 +74,9 @@
       "description": "Neo Geo BIOS",
       "required": "required",
       "paths": [
-        "roms/neogeo",
-        "roms/fbneo",
-        "roms/arcade"
+        "$roms_folder/neogeo",
+        "$roms_folder/fbneo",
+        "$roms_folder/arcade"
       ]
     },
     "neocdz.zip": {
@@ -664,13 +664,13 @@
       "system": "switch",
       "description": "A file required for Switch emulation",
       "required": "required",
-      "paths": "bios/switch/keys"
+      "paths": "$bios_folder/switch/keys"
     },
     "title.keys": {
       "system": "switch",
       "description": "A file required for Switch emulation",
       "required": "required",
-      "paths": "bios/switch/keys"
+      "paths": "$bios_folder/switch/keys"
     },
     "pico8": {
       "system": "PICO-8",
@@ -709,7 +709,7 @@
       "md5": "e10c53c2f8b90bab96ead2d368858623",
       "system": "dreamcast",
       "description": "Dreamcast BIOS",
-      "paths": "bios/dc",
+      "paths": "$bios_folder/dc",
       "required": "required"
     },
     "naomi.zip": {
@@ -719,13 +719,13 @@
       ],
       "system": "dreamcast",
       "description": "Naomi BIOS",
-      "paths": "bios/dc"
+      "paths": "$bios_folder/dc"
     },
     "naomi2.zip": {
       "md5": "9b85e0de6ef359e5006c9b79a5a266b0",
       "system": "dreamcast",
       "description": "Naomi BIOS",
-      "paths": "bios/dc"
+      "paths": "$bios_folder/dc"
     },
     "naomi_boot.bin": {
       "md5": [
@@ -737,7 +737,7 @@
         "arcade"
       ],
       "description": "Naomi BIOS",
-      "paths": "bios/dc"
+      "paths": "$bios_folder/dc"
     },
     "hod2bios.zip": {
       "md5": [
@@ -746,7 +746,7 @@
       ],
       "system": "dreamcast",
       "description": "Naomi The House of the Dead 2 BIOS",
-      "paths": "bios/dc"
+      "paths": "$bios_folder/dc"
     },
     "f355dlx.zip": {
       "md5": [
@@ -755,7 +755,7 @@
       ],
       "system": "dreamcast",
       "description": "Naomi Ferrari F355 Challenge Deluxe BIOS",
-      "paths": "bios/dc"
+      "paths": "$bios_folder/dc"
     },
     "f355bios.zip": {
       "md5": [
@@ -767,7 +767,7 @@
         "arcade"
       ],
       "description": "Naomi Ferrari F355 Challenge Twin/Deluxe BIOS",
-      "paths": "bios/dc"
+      "paths": "$bios_folder/dc"
     },
     "airlbios.zip": {
       "md5": [
@@ -779,7 +779,7 @@
         "arcade"
       ],
       "description": "Naomi Airline Pilots Deluxe BIOS",
-      "paths": "bios/dc"
+      "paths": "$bios_folder/dc"
     },
     "awbios.zip": {
       "md5": [
@@ -791,7 +791,7 @@
         "arcade"
       ],
       "description": "Naomi Atomiswave BIOS",
-      "paths": "bios/dc"
+      "paths": "$bios_folder/dc"
     },
     "bios.sms": {
       "md5": "840481177270d5642a14ca71ee72844c",
@@ -1425,14 +1425,14 @@
       "system": "dreamcast",
       "description": "Dreamcast BIOS",
       "required": "required",
-      "paths": "bios/dc"
+      "paths": "$bios_folder/dc"
     },
     "flash.bin": {
       "md5": "0a93f7940c455905bea6e392dfde92a4",
       "system": "dreamcast",
       "description": "Dreamcast BIOS",
       "required": "required",
-      "paths": "bios/dc"
+      "paths": "$bios_folder/dc"
     },
     "bios_J.sms": {
       "md5": "24a519c53f67b00640d0048ef7089105",
@@ -2369,7 +2369,7 @@
       "system": "apple2",
       "description": "Holds the ROM(s) for the Disk II interface",
       "paths": [
-        "roms/apple2"
+        "$roms_folder/apple2"
       ],
       "required": "required"
     },
@@ -2377,7 +2377,7 @@
       "system": "apple2",
       "description": "Contains the main BIOS ROM images for the Apple IIe system",
       "paths": [
-        "roms/apple2"
+        "$roms_folder/apple2"
       ],
       "required": "required"
     },
@@ -2385,7 +2385,7 @@
       "system": "apple2",
       "description": "Provides the ROM for the floppy disk controller itself",
       "paths": [
-        "roms/apple2"
+        "$roms_folder/apple2"
       ],
       "required": "required"
     },
@@ -2393,7 +2393,7 @@
       "system": "apple2",
       "description": "Contains the ROM images for the Votrax SC-01 speech synthesizer chip",
       "paths": [
-        "roms/apple2"
+        "$roms_folder/apple2"
       ],
       "required": "required"
     },
@@ -2401,7 +2401,7 @@
       "system": "apple2",
       "description": "Contains the ROM images for the Votrax SC-01 speech synthesizer chip",
       "paths": [
-        "roms/apple2"
+        "$roms_folder/apple2"
       ],
       "required": "required"
     },
@@ -2409,7 +2409,7 @@
       "system": "apple2",
       "description": "Apple IIGS system bios",
       "paths": [
-        "roms/apple2gs"
+        "$roms_folder/apple2gs"
       ],
       "required": "required"
     }
