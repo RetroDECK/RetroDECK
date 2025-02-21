@@ -11,6 +11,7 @@ rd_logs_folder="/var/config/retrodeck/logs" # Static location to write all Retro
 source /app/libexec/logger.sh
 rotate_logs
 
+# OS detection
 width=$(grep -oP '\d+(?=x)' /sys/class/graphics/fb0/modes)
 height=$(grep -oP '(?<=x)\d+' /sys/class/graphics/fb0/modes)
 if [[ $width -ne 1280 ]] || [[ $height -ne 800 ]]; then
@@ -18,13 +19,17 @@ if [[ $width -ne 1280 ]] || [[ $height -ne 800 ]]; then
 else
   native_resolution=true
 fi
+distro_name=$(flatpak-spawn --host grep '^ID=' /etc/os-release | cut -d'=' -f2)
+distro_version=$(flatpak-spawn --host grep '^VERSION_ID=' /etc/os-release | cut -d'=' -f2)
+gpu_info=$(flatpak-spawn --host lspci | grep -i 'vga\|3d\|2d')
 
 log d "Debug mode enabled"
 log i "Initializing RetroDECK"
-log i "Running on $XDG_SESSION_DESKTOP, $XDG_SESSION_TYPE"
+log i "Running on $XDG_SESSION_DESKTOP, $XDG_SESSION_TYPE, $distro_name $distro_version"
 if [[ -n $container ]]; then
-  log i "$container environment"
+  log i "Running inside $container environment"
 fi
+log i "GPU: $gpu_info"
 log i "Resolution: $width x $height"
 if [[ $native_resolution == true ]]; then
   log i "Steam Deck native resolution detected"
@@ -219,8 +224,7 @@ if [[ ! -f "$rd_conf" ]]; then
 
 # If the config file is existing i just read the variables
 else
-  log i "Found RetroDECK config file in $rd_conf"
-  log i "Loading it"
+  log i "Loading RetroDECK config file in $rd_conf"
 
   if grep -qF "cooker" <<< $hard_version; then # If newly-installed version is a "cooker" build
     set_setting_value $rd_conf "update_repo" "$cooker_repository_name" retrodeck "options"

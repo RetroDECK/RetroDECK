@@ -59,14 +59,6 @@ case "$1" in
     fi
     exit 0
     ;;
-  --show-config)
-    LOG_SILENT=true
-    source /app/libexec/global.sh
-    echo "RetroDECK config file is in: $rd_conf"
-    echo "Contents:"
-    cat "$rd_conf"
-    exit 0
-    ;;
   --set-help)
     LOG_SILENT=true
     source /app/libexec/global.sh
@@ -100,6 +92,11 @@ while [[ $# -gt 0 ]]; do
     fi
 
     case "$1" in
+        --show-config)
+          echo ""
+          cat "$rd_conf"
+          exit 0
+        ;;
         --debug)
             logging_level="debug"
             shift
