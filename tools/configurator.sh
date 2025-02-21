@@ -969,9 +969,8 @@ configurator_bios_checker() {
   log d "Starting BIOS checker"
 
   (
-
     # Read the BIOS checklist from bios.json using jq
-    total_bios=$(jq '.bios | length' $bios_checklist)
+    total_bios=$(jq '.bios | length' "$bios_checklist")
     current_bios=0
 
     log d "Total BIOS files to check: $total_bios"
@@ -983,57 +982,53 @@ configurator_bios_checker() {
         bios_file=$(echo "$entry" | jq -r '.key // "Unknown"')
         bios_md5=$(echo "$entry" | jq -r '.value.md5 | if type=="array" then join(", ") else . end // "Unknown"')
         bios_systems=$(echo "$entry" | jq -r '.value.system | if type=="array" then join(", ") else . end // "Unknown"')
-        # Broken
-        #bios_systems_pretty=$(echo "$bios_systems" | jq -R -r 'split(", ") | map(. as $sys | input_filename | gsub("features.json"; "") | .emulator[$sys].name) | join(", ")' --slurpfile features $features)
         bios_desc=$(echo "$entry" | jq -r '.value.description // "No description provided"')
         required=$(echo "$entry" | jq -r '.value.required // "No"')
-        bios_paths=$(echo "$entry" | jq -r '.value.paths | if type=="array" then join(", ") else . end // "'"$bios_folder"'"' | sed "s|"$rdhome/"||")
+        bios_paths=$(echo "$entry" | jq -r '.value.paths | if type=="array" then join(", ") else . end // "'"$bios_folder"'"' | sed "s|$rdhome/||")
 
-      log d "Checking entry $bios_entry"
+        log d "Checking entry $bios_entry"
 
-      # Replace "bios/" with $bios_folder and "roms/" with $roms_folder
-      bios_paths=$(echo "$bios_paths" | sed "s|bios|$bios_folder|g" | sed "s|roms/|$roms_folder/|g")
+        # Expand any embedded shell variables (e.g. $saves_folder or $bios_folder) with their actual values
+        bios_paths=$(echo "$bios_paths" | envsubst)
 
-      # Skip if bios_file is empty
-      if [[ ! -z "$bios_file" ]]; then
-        bios_file_found="Yes"
-        bios_md5_matched="No"
+        # Skip if bios_file is empty
+        if [[ ! -z "$bios_file" ]]; then
+          bios_file_found="Yes"
+          bios_md5_matched="No"
 
-        IFS=', ' read -r -a paths_array <<< "$bios_paths"
-        for path in "${paths_array[@]}"; do
-          if [[ ! -f "$path/$bios_file" ]]; then
-            bios_file_found="No"
-            break
-          fi
-        done
-
-        if [[ $bios_file_found == "Yes" ]]; then
-          IFS=', ' read -r -a md5_array <<< "$bios_md5"
-          for md5 in "${md5_array[@]}"; do
-            if [[ $(md5sum "$path/$bios_file" | awk '{ print $1 }') == "$md5" ]]; then
-              bios_md5_matched="Yes"
+          IFS=', ' read -r -a paths_array <<< "$bios_paths"
+          for path in "${paths_array[@]}"; do
+            if [[ ! -f "$path/$bios_file" ]]; then
+              bios_file_found="No"
               break
             fi
           done
+
+          if [[ $bios_file_found == "Yes" ]]; then
+            IFS=', ' read -r -a md5_array <<< "$bios_md5"
+            for md5 in "${md5_array[@]}"; do
+              if [[ $(md5sum "$path/$bios_file" | awk '{ print $1 }') == "$md5" ]]; then
+                bios_md5_matched="Yes"
+                break
+              fi
+            done
+          fi
+
+          log d "BIOS file found: $bios_file_found, Hash matched: $bios_md5_matched"
+          log d "Expected path: $path/$bios_file"
+          log d "Expected MD5: $bios_md5"
         fi
 
-        log d "BIOS file found: $bios_file_found, Hash matched: $bios_md5_matched"
-        log d "Expected path: $path/$bios_file"
-        log d "Expected MD5: $bios_md5"
+        log d "Adding BIOS entry: \"$bios_file $bios_systems $bios_file_found $bios_md5_matched $bios_desc $bios_paths $bios_md5\" to the bios_checked_list"
 
-      fi
+        if [[ $bios_checked_list != "" ]]; then
+          bios_checked_list=("${bios_checked_list[@]}"^"$bios_file^$bios_systems^$bios_file_found^$bios_md5_matched^$required^$bios_paths^$bios_desc^$bios_md5")
+        else
+          bios_checked_list=("$bios_file^$bios_systems^$bios_file_found^$bios_md5_matched^$required^$bios_paths^$bios_desc^$bios_md5")
+        fi
 
-      log d "Adding BIOS entry: \"$bios_file $bios_systems $bios_file_found $bios_md5_matched $bios_desc $bios_paths $bios_md5\" to the bios_checked_list"
-
-      if [[ $bios_checked_list != "" ]]; then
-        bios_checked_list=("${bios_checked_list[@]}"^"$bios_file^$bios_systems^$bios_file_found^$bios_md5_matched^$required^$bios_paths^$bios_desc^$bios_md5")
-      else
-        bios_checked_list=("$bios_file^$bios_systems^$bios_file_found^$bios_md5_matched^$required^$bios_paths^$bios_desc^$bios_md5")
-      fi
-      #echo "$bios_file"^"$bios_systems"^"$bios_file_found"^"$bios_md5_matched"^"$bios_paths"^"$bios_md5"^"$bios_desc" # Godot data transfer #TODO: this is breaking the zenity dialog, since we don't release Godot in this version I disabled it.
-
-      current_bios=$((current_bios + 1))
-      echo "$((current_bios * 100 / total_bios))"
+        current_bios=$((current_bios + 1))
+        echo "$((current_bios * 100 / total_bios))"
 
     done < <(jq -c '.bios | to_entries[]' "$bios_checklist")
 
@@ -1055,25 +1050,11 @@ configurator_bios_checker() {
 
   ) |
   rd_zenity --progress --auto-close --no-cancel \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-  --title "RetroDECK Configurator Utility - BIOS Check in Progress" \
-  --text="This check will look for BIOS files that RetroDECK has identified as working.\n\nNot all BIOS files are required for games to work, please check the BIOS description for more information on its purpose.\n\nBIOS files not known to this tool could still function.\n\nSome more advanced emulators such as Ryujinx will have additional methods to verify that the BIOS files are in working order.\n\nRetroDECK is now checking your BIOS files, please wait...\n\n" \
-  --width=400 --height=100
-
-  configurator_welcome_dialog
-}
-
-configurator_check_multifile_game_structure() {
-  local folder_games=($(find $roms_folder -maxdepth 2 -mindepth 2 -type d ! -name "*.m3u" ! -name "*.ps3"))
-  if [[ ${#folder_games[@]} -gt 1 ]]; then
-    echo "$(find $roms_folder -maxdepth 2 -mindepth 2 -type d ! -name "*.m3u" ! -name "*.ps3")" > $logs_folder/multi_file_games_"$(date +"%Y_%m_%d_%I_%M_%p").log"
-    rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - Verify Multi-file Structure" \
-    --text="The following games were found to have the incorrect folder structure:\n\n$(find $roms_folder -maxdepth 2 -mindepth 2 -type d ! -name "*.m3u" ! -name "*.ps3")\n\nIncorrect folder structure can result in failure to launch games or saves being in the incorrect location.\n\nPlease see the RetroDECK wiki for more details!\n\nYou can find this list of games in ~/retrodeck/logs"
-  else
-    configurator_generic_dialog "RetroDECK Configurator - Verify Multi-file Structure" "No incorrect multi-file game folder structures found."
-  fi
+    --title "RetroDECK Configurator Utility - BIOS Check in Progress" \
+    --text="This check will look for BIOS files that RetroDECK has identified as working.\n\nNot all BIOS files are required for games to work, please check the BIOS description for more information on its purpose.\n\nBIOS files not known to this tool could still function.\n\nSome more advanced emulators such as Ryujinx will have additional methods to verify that the BIOS files are in working order.\n\nRetroDECK is now checking your BIOS files, please wait...\n\n" \
+    --width=400 --height=100
+
   configurator_welcome_dialog
 }
 
