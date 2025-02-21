@@ -31,9 +31,9 @@ rd_zenity --progress --no-cancel --pulsate --auto-close \
 #         - RetroAchievements: Login
 #         - RetroAchievements: Logout
 #         - RetroAchievements: Hardcore Mode
-#         - Universal Dynamic Input Textures - Dolphin
-#         - Universal Dynamic Input Textures - Primehack
-#         - PortMaster
+#         - Universal Dynamic Input Textures: Dolphin
+#         - Universal Dynamic Input Textures: Primehack
+#         - PortMaster: Hide
 #     - Open Component (Behind one-time power user warning dialog)
 #       - Dynamically generated list of emulators from open_component --list and --getdesc (features.json)
 #     - Reset Component
@@ -65,10 +65,10 @@ rd_zenity --progress --no-cancel --pulsate --auto-close \
 #       - BIOS Checker
 #       - Games Compressor
 #         - Compress Single Game
-#         - Compress Multiple Games - CHD
-#         - Compress Multiple Games - ZIP
-#         - Compress Multiple Games - RVZ
-#         - Compress Multiple Games - All Formats
+#         - Compress Multiple Games: CHD
+#         - Compress Multiple Games: ZIP
+#         - Compress Multiple Games: RVZ
+#         - Compress Multiple Games: All Formats
 #         - Compress All Games
 #       - Install: RetroDECK Controller Layouts
 #       - Install: PS3 firmware
@@ -76,8 +76,8 @@ rd_zenity --progress --no-cancel --pulsate --auto-close \
 #       - Update Notification
 #       - Add RetroDECK to Steam
 #       - Verify Multi-file Structure
-#       - Ponzu - Remove Yuzu
-#       - Ponzu - Remove Citra
+#       - Ponzu: Remove Yuzu
+#       - Ponzu: Remove Citra
 #     - Steam Sync
 #     - Data Management
 #       - Move all of RetroDECK
@@ -192,9 +192,9 @@ configurator_global_presets_and_settings_dialog() {
   "RetroAchievements: Login" "Login the RetroAchievements in supported systems." \
   "RetroAchievements: Logout" "Logout RetroAchievements service in ALL supported systems" \
   "RetroAchievements: Hardcore Mode" "Enable / Disable: RetroAchievements Hardcore Mode (no cheats, rewind, save states, etc.) in supported systems." \
-  "Universal Dynamic Input Textures - Dolphin" "Enable / Disable: Universal Dynamic Input Textures for Dolphin." \
-  "Universal Dynamic Input Textures - Primehack" "Enable / Disable: Universal Dynamic Input Textures for Primehack." \
-  "PortMaster" "Enable / Disable: PortMaster in ES-DE."
+  "Universal Dynamic Input Textures: Dolphin" "Enable / Disable: Universal Dynamic Input Textures for Dolphin." \
+  "Universal Dynamic Input Textures: Primehack" "Enable / Disable: Universal Dynamic Input Textures for Primehack." \
+  "PortMaster: Hide" "Enable / Disable: PortMaster in ES-DE."
   )
 
   case $choice in
@@ -274,17 +274,17 @@ configurator_global_presets_and_settings_dialog() {
     configurator_global_presets_and_settings_dialog
   ;;
 
-  "Universal Dynamic Input Textures - Dolphin" )
+  "Universal Dynamic Input Textures: Dolphin" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_dolphin_input_textures_dialog
   ;;
 
-  "Universal Dynamic Input Textures - Primehack" )
+  "Universal Dynamic Input Textures: Primehack" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_primehack_input_textures_dialog
   ;;
 
-  "PortMaster" )
+  "PortMaster: Hide" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_portmaster_toggle_dialog
   ;;
@@ -301,7 +301,7 @@ configurator_dolphin_input_textures_dialog() {
   if [[ -d "$dolphinDynamicInputTexturesPath" ]]; then
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - Universal Dynamic Input Textures - Dolphin" \
+    --title "RetroDECK Configurator - Universal Dynamic Input Textures: Dolphin" \
     --text="Custom input textures are currently enabled. Do you want to disable them?"
 
     if [ $? == 0 ]
@@ -315,7 +315,7 @@ configurator_dolphin_input_textures_dialog() {
   else
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - Universal Dynamic Input Textures - Dolphin" \
+    --title "RetroDECK Configurator - Universal Dynamic Input Textures: Dolphin" \
     --text="Custom input textures are currently disabled. Do you want to enable them?\n\nThis process may take several minutes to complete."
 
     if [ $? == 0 ]
@@ -446,10 +446,10 @@ configurator_tools_dialog() {
   )
 
   if [[ $(get_setting_value "$rd_conf" "kiroi_ponzu" "retrodeck" "options") == "true" ]]; then
-    choices+=("Ponzu - Remove Yuzu" "Run Ponzu to remove Yuzu from RetroDECK. Configurations and saves will be mantained.")
+    choices+=("Ponzu: Remove Yuzu" "Run Ponzu to remove Yuzu from RetroDECK. Configurations and saves will be mantained.")
   fi
   if [[ $(get_setting_value "$rd_conf" "akai_ponzu" "retrodeck" "options") == "true" ]]; then
-    choices+=("Ponzu - Remove Citra" "Run Ponzu to remove Citra from RetroDECK. Configurations and saves will be mantained.")
+    choices+=("Ponzu: Remove Citra" "Run Ponzu to remove Citra from RetroDECK. Configurations and saves will be mantained.")
   fi
 
   choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - Tools" --cancel-label="Back" \
@@ -550,11 +550,11 @@ configurator_tools_dialog() {
     configurator_check_multifile_game_structure
   ;;
 
-  "Ponzu - Remove Yuzu" )
+  "Ponzu: Remove Yuzu" )
     ponzu_remove "yuzu"
   ;;
 
-  "Ponzu - Remove Citra" )
+  "Ponzu: Remove Citra" )
     ponzu_remove "citra"
   ;;
 
@@ -687,10 +687,10 @@ configurator_compression_tool_dialog() {
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
   "Compress Single Game" "Compress a single game into a compatible format." \
-  "Compress Multiple Games - CHD" "Compress one or more games into the CHD format." \
-  "Compress Multiple Games - ZIP" "Compress one or more games into the ZIP format." \
-  "Compress Multiple Games - RVZ" "Compress one or more games into the RVZ format." \
-  "Compress Multiple Games - All Formats" "Compress one or more games into any format." \
+  "Compress Multiple Games: CHD" "Compress one or more games into the CHD format." \
+  "Compress Multiple Games: ZIP" "Compress one or more games into the ZIP format." \
+  "Compress Multiple Games: RVZ" "Compress one or more games into the RVZ format." \
+  "Compress Multiple Games: All Formats" "Compress one or more games into any format." \
   "Compress All Games" "Compress all games into compatible formats." )
 
   case $choice in
@@ -700,22 +700,22 @@ configurator_compression_tool_dialog() {
     configurator_compress_single_game_dialog
   ;;
 
-  "Compress Multiple Games - CHD" )
+  "Compress Multiple Games: CHD" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_compress_multiple_games_dialog "chd"
   ;;
 
-  "Compress Multiple Games - ZIP" )
+  "Compress Multiple Games: ZIP" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_compress_multiple_games_dialog "zip"
   ;;
 
-  "Compress Multiple Games - RVZ" )
+  "Compress Multiple Games: RVZ" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_compress_multiple_games_dialog "rvz"
   ;;
 
-  "Compress Multiple Games - All Formats" )
+  "Compress Multiple Games: All Formats" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_compress_multiple_games_dialog "all"
   ;;
