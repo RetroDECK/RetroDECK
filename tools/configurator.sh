@@ -984,7 +984,7 @@ configurator_bios_checker() {
         bios_systems=$(echo "$entry" | jq -r '.value.system | if type=="array" then join(", ") else . end // "Unknown"')
         bios_desc=$(echo "$entry" | jq -r '.value.description // "No description provided"')
         required=$(echo "$entry" | jq -r '.value.required // "No"')
-        bios_paths=$(echo "$entry" | jq -r '.value.paths | if type=="array" then join(", ") else . end // "'"$bios_folder"'"' | sed "s|$rdhome/||")
+        bios_paths=$(echo "$entry" | jq -r '.value.paths // "'"$bios_folder"'" | if type=="array" then join(", ") else . end')
 
         log d "Checking entry $bios_entry"
 
