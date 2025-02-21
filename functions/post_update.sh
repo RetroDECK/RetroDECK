@@ -33,7 +33,7 @@ post_update() {
   fi
   if [[ $(check_version_is_older_than "0.6.3b") == "true" ]]; then
     # In version 0.6.3b, the following changes were made that required config file updates/reset:
-    # - Put Dolphin and Primehack save states in different folders inside $rd_home/states
+    # - Put Dolphin and Primehack save states in different folders inside $rdhome/states
     # - Fix symlink to hard-coded PICO-8 config folder (dir_prep doesn't like ~)
     # - Overwrite Citra and Yuzu configs, as controller mapping was broken due to emulator updates.
 
@@ -636,7 +636,7 @@ post_update() {
     # --- ALWAYS EXECUTED IN 0.9.1b ---
 
     log i "Preparing the shaders folder for MAME..."
-    shaders_folder=$rd_home/shaders && log i "Shaders folder set to \"$shaders_folder\""
+    shaders_folder=$rdhome/shaders && log i "Shaders folder set to \"$shaders_folder\""
     conf_write && log i "Done"
 
     log i "Preparing the cheats for RetroArch..."
