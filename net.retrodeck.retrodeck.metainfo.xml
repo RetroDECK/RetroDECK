@@ -78,7 +78,7 @@
                   <li>CHEATS: added basic cheats support for RetroArch, PCSX2, PPSSPP and MAME</li>
                   <li>GAME COMPRESSOR: refactored</li>
                   <li>CHANGE PRESET DIALOG: added enable all and disable all buttons</li>
-                  <li>RPCS: updated for bringing in RPCSN updates</li>
+                  <li>RPCS3: updated</li>
                </ul>
                <p>Bug fixes:</p>
                <ul>
