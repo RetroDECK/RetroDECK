@@ -916,6 +916,7 @@ prepare_component() {
       cp -fvr "$config/mame/mame.ini" "$mameconf"
       cp -fvr "$config/mame/ui.ini" "$mameuiconf"
       cp -fvr "$config/mame/default.cfg" "$mamedefconf"
+      cp -fvr "/app/share/mame/bgfx/"* "$shaders_folder/mame/bgfx"
 
       sed -i 's#RETRODECKROMSDIR#'$roms_folder'#g' "$mameconf" # one-off as roms folders are a lot
       set_setting_value "$mameconf" "nvram_directory" "$saves_folder/mame-sa/nvram" "mame"
@@ -924,7 +925,7 @@ prepare_component() {
       set_setting_value "$mameconf" "diff_directory" "$saves_folder/mame-sa/diff" "mame"
       set_setting_value "$mameconf" "samplepath" "$bios_folder/mame-sa/samples" "mame"
       set_setting_value "$mameconf" "cheatpath" "$cheats_folder/mame" "mame"
-      set_setting_value "$mameconf" "bgfx_path" "/app/share/mame/bgfx;$shaders_folder/mame/bgfx/" "mame"
+      set_setting_value "$mameconf" "bgfx_path" "$shaders_folder/mame/bgfx/" "mame"
 
       log i "Placing cheats in \"$cheats_folder/mame\""
       unzip -j -o "$config/mame/cheat0264.zip" 'cheat.7z' -d "$cheats_folder/mame"

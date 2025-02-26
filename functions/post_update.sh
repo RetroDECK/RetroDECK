@@ -638,6 +638,9 @@ post_update() {
     log i "Preparing the shaders folder for MAME..."
     shaders_folder=$rdhome/shaders && log i "Shaders folder set to \"$shaders_folder\""
     conf_write && log i "Done"
+    create_dir "$shaders_folder/mame/bgfx"
+    set_setting_value "$mameconf" "bgfx_path" "$shaders_folder/mame/bgfx/" "mame"
+    cp -fvr "/app/share/mame/bgfx/"* "$shaders_folder/mame/bgfx"
 
     log i "Preparing the cheats for RetroArch..."
     create_dir "$cheats_folder/retroarch"
@@ -658,7 +661,7 @@ post_update() {
     create_dir "$cheats_folder/mame"
     set_setting_value "$mameconf" "cheatpath" "$cheats_folder/mame" "mame"
     unzip -j -o "$config/mame/cheat0264.zip" 'cheat.7z' -d "$cheats_folder/mame" && log i "Cheats for MAME installed"
-    rm -rf /var/data/mame/cheat
+    rm -rf /var/data/mame/cheat    
 
     log i "Preparing the RetroAchievements for Dolphin..."
     cp -vn "$config/dolphin/"* /var/config/dolphin-emu/
