@@ -580,6 +580,8 @@ configurator_data_management_dialog() {
   "Move Screenshots folder" "Move the Screenshots folder to a new location." \
   "Move Mods folder" "Move the Mods folder to a new location." \
   "Move Texture Packs folder" "Move the Texture Packs folder to a new location" \
+  "Move Cheats folder" "Move the Cheats folder to a new location" \
+  "Move Shaders folder" "Move the Shaders folder to a new location" \
   "Clean Empty ROM Folders" "Removes some or all of the empty ROM folders." \
   "Rebuild All ROM Folders" "Rebuilds any missing ROM folders." )
 
@@ -633,6 +635,16 @@ configurator_data_management_dialog() {
   "Move Texture Packs folder" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_move_folder_dialog "texture_packs_folder"
+  ;;
+
+  "Move Cheats folder" )
+    log i "Configurator: opening \"$choice\" menu"
+    configurator_move_folder_dialog "cheats_folder"
+  ;;
+
+  "Move Shaders folder" )
+    log i "Configurator: opening \"$choice\" menu"
+    configurator_move_folder_dialog "shaders_folder"
   ;;
 
   "Clean Empty ROM Folders" )
