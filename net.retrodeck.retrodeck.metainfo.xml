@@ -79,6 +79,7 @@
                   <li>GAME COMPRESSOR: refactored</li>
                   <li>CHANGE PRESET DIALOG: added enable all and disable all buttons</li>
                   <li>RPCS3: updated</li>
+                  <li>MAME: updated to 0.275</li>
                </ul>
                <p>Bug fixes:</p>
                <ul>
