@@ -36,22 +36,35 @@
       </screenshot>
    </screenshots>
    <description>
-      <p>RetroDECK is an emulation and retro gaming application powered by the ES-DE Frontend that allows you to catalog and play your game collection directly on Linux in one unified experience. It's inspired by other embedded emulation systems like AmberELEC, EmuELEC, CoreELEC, Lakka, and Batocera. The goal is to have everything you need included in one package, so no other software is required.</p>
-      <p>Currently in Beta, RetroDECK focuses on SteamOS, Steam Deck, and Linux Desktop. It uses Steam Input for controller inputs and hotkeys. For the best experience, play and launch RetroDECK via Steam, though manual tweaks via RetroDECK Configurator may be needed if played without it.</p>
-      <p>Thanks to the built-in RetroENGINE, RetroDECK can be used as a headless engine, and with Steam Sync, you can synchronize your favorites as non-Steam games (powered by Steam ROM Manager).</p>
-      <p>What is it in detail?
-      https://retrodeck.readthedocs.io/en/latest/wiki_about/what-is-retrodeck/</p>
-      <p>How-to: Get Started using RetroDECK
-      https://retrodeck.readthedocs.io/en/latest/wiki_general/retrodeck-start/</p>
-      <p>If you want to sponsor the project: 
-      https://www.patreon.com/RetroDECK</p>
+      <p>RetroDECK is a universal retro gaming platform that brings the power and flexibility of custom firmware without replacing your system’s OS. Perfect for Steam Deck and Linux desktops, RetroDECK is a self-contained app that delivers everything you need for retro gaming right out of the box.</p>
+      <p>Why RetroDECK?</p>
+      <ul>
+         <li>All-in-One Convenience: Catalog, customize, and play your retro games from one unified app.</li>
+         <li>No Custom Firmware: Enjoy the benefits of custom firmware without modifying your system — RetroDECK runs as a fully self-contained app.</li>
+         <li>Easy Installation and Updates: RetroDECK is easy to install, update, and remove if you choose, ensuring a hassle-free experience.</li>
+      </ul>
+      <p>What’s Inside?</p>
+      <ul>
+          <li>RetroDECK Framework: A flexible and powerful environment for seamless emulation and retro gaming.</li>
+          <li>RetroENGINE: Offers a versatile gaming setup with headless engine mode, perfect for advanced users.</li>
+          <li>RetroDECK Configurator: A multi-tool interface to tweak and tailor your gaming experience.</li>
+          <li>Steam Input Controller Support: Advanced input handling, radial menus and hotkeys via Steam Input.</li>
+          <li>Steam Sync: Add your games as non-Steam titles with ease using Steam ROM Manager.</li>
+          <li>ES-DE Frontend: A polished, user-friendly interface for browsing and launching your retro collection.</li>
+          <li>Emulators: Packed with emulators like RetroArch, MAME, PCSX2, and more — play almost any retro game you can think of.</li>
+          <li>Engines: Support for game engines like Solarus, GZDoom, and others.</li>
+          <li>PortMaster: Manage your Linux game ports with ease — no more headaches setting up game ports manually.</li>
+      </ul>
+      <p>RetroDECK gives you the power of a retro game handheld's custom firmware experience in a tidy, self-contained package. No system modding, no OS replacement — just pure retro gaming bliss.</p>
       <p>The RetroDECK Community:</p>
-      <p>Blog: https://retrodeck.readthedocs.io/en/latest/blog/</p>
-      <p>Discord: https://discord.gg/WDc5C9YWMx</p>
-      <p>Matrix: https://matrix.to/#/#retrodeck:matrix.org</p>
-      <p>Lemmy Community: https://lemmy.zip/c/retrodeck</p>
-      <p>Subreddit: https://www.reddit.com/r/retrodeck</p>
-      <p>Bluesky: https://bsky.app/profile/retrodeck.net</p>
+      <ul>
+         <li>Blog: https://retrodeck.readthedocs.io/en/latest/blog/</li>
+         <li>Discord: https://discord.gg/WDc5C9YWMx</li>
+         <li>Matrix: https://matrix.to/#/#retrodeck:matrix.org</li>
+         <li>Lemmy Community: https://lemmy.zip/c/retrodeck</li>
+         <li>Subreddit: https://www.reddit.com/r/retrodeck</li>
+         <li>Bluesky: https://bsky.app/profile/retrodeck.net</li>
+      </ul>
    </description>
    <branding>
       <color type="primary" scheme_preference="light">#94a6fb</color>
