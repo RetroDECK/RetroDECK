@@ -1,34 +1,24 @@
 #!/bin/bash
 
-source /app/libexec/global.sh
-
-# uses jq to extract all the emulators (components) that don't have resettable: false in the features.json and separate them with "|"
-resettable_components=$(jq -r '
-  [(.emulator | to_entries[]) |
-  select(.value.core == null and .value.resettable != false) |
-  .key] | sort | join("|")
-' "$features")
-
-# uses sed to create, a, list, like, this
-pretty_resettable_components=$(echo "$resettable_components" | sed 's/|/, /g')
-
-
+# Function to display CLI help
 show_cli_help() {
-      echo -e "
-      Usage:
-flatpak run [FLATPAK-RUN-OPTION] net.retrodeck-retrodeck [ARGUMENTS]
+    echo -e "
+Usage:
+flatpak run [FLATPAK-RUN-OPTION] net.retrodeck.retrodeck [ARGUMENTS]
 
 Arguments:
     -h, --help                          \t  Print this help
     -v, --version                       \t  Print RetroDECK version
-    --info-msg                          \t  Print paths and config informations
-    --debug                             \t  Enable debug logging for this launch of RetroDECK (This may miss errors very early in the launch process)
+    --show-config                       \t  Print information about the RetroDECK configuration file and its contents
+    --debug                             \t  Enable debug logging for this run of RetroDECK
     --configurator                      \t  Starts the RetroDECK Configurator
     --compress-one <file>               \t  Compresses target file to a compatible format
     --compress-all <format>             \t  Compresses all supported games into a compatible format.\n\t\t\t\t\t\t  Available formats are \"chd\", \"zip\", \"rvz\" and \"all\"
-    --reset-component <component>       \t  Reset one or more component or emulator configs to the default values
-    --reset-retrodeck                   \t  Starts the initial RetroDECK installer (backup your data first!)
+    --reset <component>                 \t  Reset RetroDECK or one or more component/emulator configurations to default values. WARNING: no confirmation prompt
+    --factory-reset                     \t  Factory Reset, triggers the initial setup WARNING: no confirmation prompt
     --test-upgrade <version>            \t  Test upgrading RetroDECK to a specific version, developer use only
+    --set <preset> <system/all> [value] \t  Configure or toggle a preset. Examples: --set borders, --set borders all true,\n\t\t\t\t\t\t  --set borders gba false. Use --set-help for more information
+    --open <component/emulator>         \t  Open a specific component or emulator\n\t\t\t\t\t\t  --open --list for a list of available components
 
 Game Launch:
     [<options>] <game_path>             \t  Start a game using the default emulator or\n\t\t\t\t\t\t  the one defined in ES-DE for game or system
@@ -39,121 +29,154 @@ Game Launch:
 
 For flatpak run specific options please run: flatpak run -h
 
+The RetroDECK Team
 https://retrodeck.net
 "
 }
 
-# Arguments section
-
-for i in "$@"; do
-  case $i in
-    -h*|--help*)
-      echo "RetroDECK v""$version"
-      show_cli_help
-      exit
-      ;;
-    --version*|-v*)
+# Check if is an infromational message
+# If so, set LOG_SILENT to true, source the global.sh script,
+# show the needed information and quit
+case "$1" in
+  -h|--help)
+    LOG_SILENT=true
+    source /app/libexec/global.sh
+    if [[ "$version" =~ ^[0-9] ]]; then
       echo "RetroDECK v$version"
-      exit
-      ;;
-    --info-msg*)
+    else
+      echo "RetroDECK $version"
+    fi
+    show_cli_help
+    exit 0
+    ;;
+  -v|--version)
+    LOG_SILENT=true
+    source /app/libexec/global.sh
+    if [[ "$version" =~ ^[0-9] ]]; then
       echo "RetroDECK v$version"
-      echo "RetroDECK config file is in: $rd_conf"
-      echo "Contents:"
-      cat $rd_conf
-      exit
-      ;;
-    --debug*)
-      logging_level="debug"
-      shift
-      ;;
-    --compress-one*)
-      cli_compress_single_game "$2"
-      exit
-      ;;
-    --compress-all*)
-      cli_compress_all_games "$2"
-      ;;
-    --configurator*)
-      sh /app/tools/configurator.sh
-      #sh /app/bin/godot-configurator.sh
-      ;;
-    # --legacy-configurator*)
-    #   sh /app/tools/configurator.sh
-    #   if [[ $(configurator_generic_question_dialog "RetroDECK Configurator" "Would you like to launch RetroDECK after closing the Configurator?") == "false" ]]; then
-    #     exit
-    #   else
-    #     shift
-    #   fi
-    #   ;;
-    --reset-component*)
-      component="$2"
-      if [ -z "$component" ]; then
-        echo "You are about to reset one or more RetroDECK components or emulators."
-        echo -e "Available options are:\nall, $pretty_resettable_components"
-        read -p "Please enter the component you would like to reset: " component
-        component=$(echo "$component" | tr '[:upper:]' '[:lower:]')
-      fi
+    else
+      echo "RetroDECK $version"
+    fi
+    exit 0
+    ;;
+  --set-help)
+    LOG_SILENT=true
+    source /app/libexec/global.sh
+    echo -e "\nUsed to toggle or set a preset.\n\nAvailable presets are:"
+    fetch_all_presets | tr ' ' ',' | sed 's/,/, /g'
+    echo -e "\nUsage: --set <preset> <system/all> [value]"
+    echo -e "\nExamples:"
+    echo -e "  Force borders to be ON for GBA:"
+    echo -e "    make_preset_changes borders gba on"
+    echo -e "  Force borders to be OFF for all supported systems:"
+    echo -e "    make_preset_changes borders all off"
+    echo -e "  Toggle GBA in preset borders (this will disable if enabled and vice versa):"
+    echo -e "    make_preset_changes borders gba"
+    echo -e "  Toggle all in preset borders:"
+    echo -e "    make_preset_changes borders all"
+    echo -e "\nYou can also use 'true' or 'false' instead of 'on' and 'off'.\nThe forced status is case insensitive."
+    exit 0
+    ;;
+esac
 
-      if [[ "$component" =~ ^(all|$resettable_components)$ ]]; then
-        read -p "You are about to reset $component to default settings. Enter 'y' to continue, 'n' to stop: " response
-        if [[ $response == [yY] ]]; then
-          prepare_component "reset" "$component" "cli"
-          read -p "The process has been completed, press Enter key to start RetroDECK."
-          shift # Continue launch after previous command is finished
-        else
-          read -p "The process has been cancelled, press Enter key to exit."
-          exit
-        fi
-      else
-        echo "$component is not a valid selection, exiting..."
-        exit
-      fi
-      ;;
-    --reset-retrodeck*)
-      echo "You are about to reset RetroDECK completely!"
-      read -p "Enter 'y' to continue, 'n' to stop: " response
-      if [[ $response == [yY] ]]; then
-        rm -f "$lockfile"
-        rm -f "$rd_conf"
-        read -p "The process has been completed, press Enter key to exit. Please run RetroDECK again to start the initial setup process."
-        exit 1
-      else
-        read -p "The process has been cancelled, press Enter key to exit."
-        exit
-      fi
-      ;;
-    --test-upgrade*)
-      echo "You are about to test upgrading RetroDECK from version $2 to $hard_version"
-      read -p "Enter 'y' to continue, 'n' to start RetroDECK normally: " response
-      if [[ $response == [yY] ]]; then
-        version="$2"
-        shift
-      else
-        shift
-      fi
-      ;;
-    *)
-      # Assume unknown arguments are game start arguments
-      if [ -f "$i" ]; then
-        log i "Attempting to start the game: $i"
+source /app/libexec/global.sh
+
+# Process command-line arguments
+while [[ $# -gt 0 ]]; do
+    # If the first argument is -e, -s, -m, or a valid file, attempt to launch the game
+    if [ -f "$1" ] || [[ "$1" == "-e" || "$1" == "-s" || "$1" == "-m" ]]; then
+        echo "$LOG_BUFFER"
+        log i "Game start option detected: $1"
         run_game "$@"
-        exit
-      elif [[ "$i" == "-e" || "$i" == "-s" || "$i" == "-m" ]]; then
-        log i "Game start option detected: $i"
-        run_game "$@"
-        exit
-      else
-        log i "Command or File '$i' not found. Ignoring argument and continuing..."
-        break # Continue with the main program
-      fi
-      ;;
-    -*|--*)
-      log i "Unknown option $i"
-      show_cli_help
-      exit 1
-      ;;
-  esac
+        exit 0
+    fi
+
+    case "$1" in
+        --show-config)
+          echo ""
+          cat "$rd_conf"
+          exit 0
+        ;;
+        --debug)
+            logging_level="debug"
+            shift
+            ;;
+        --compress-one)
+            cli_compress_single_game "$2"
+            exit 0
+            ;;
+        --compress-all)
+            cli_compress_all_games "$2"
+            shift 2
+            ;;
+        --configurator)
+            sh /app/tools/configurator.sh
+            exit 0
+            ;;
+        --reset)
+            component="${@:2}"
+            if [ -z "$component" ]; then
+                echo "You are about to reset one or more RetroDECK components or emulators."
+                echo -e "Available options are:\nall, $(prepare_component --list | tr ' ' ',' | sed 's/,/, /g')"
+                read -p "Please enter the component you would like to reset: " component
+                component=$(echo "$component" | tr '[:upper:]' '[:lower:]')
+            fi
+            log d "Resetting component: $component"
+            prepare_component "reset" "$component"
+            exit 0
+            ;;
+        --factory-reset)
+            prepare_component --factory-reset
+            exit 0
+            ;;
+        --test-upgrade)
+            if [[ "$2" =~ ^.+ ]]; then
+                echo "You are about to test upgrading RetroDECK from version $2 to $hard_version"
+                read -p "Enter 'y' to continue, 'n' to start RetroDECK normally: " response
+                if [[ $response == [yY] ]]; then
+                    version="$2"
+                    logging_level="debug"  # Temporarily enable debug logging
+                    shift 2
+                else
+                    shift
+                fi
+            else
+                echo "Error: Invalid format. Usage: --test-upgrade <version>"
+                exit 1
+            fi
+            ;;
+        --set)
+            preset="$2"
+            system="$3"
+            value="$4"
+            if [ "$preset" == "cheevos" ]; then
+              echo "Error: The 'cheevos' preset is not yet supported via CLI. Please use the RetroDECK Configurator."
+              exit 1
+            fi
+            if [ -z "$preset" ]; then
+              echo "Error: No preset specified. Usage: --set <preset> <system/all> [value] (use --set-help for more information)"
+              exit 1
+            fi
+            make_preset_changes "$preset" "$system" "$value"
+            exit 0
+            ;;
+        --open)
+            open_component "${@:2}"
+            exit 0
+            ;;
+        -*)
+            # Catch-all for unrecognized options starting with a dash
+            log e "Error: Unknown option '$1'"
+            echo "Error: Unrecognized option '$1'. Use -h or --help for usage information."
+            exit 1
+            ;;
+        *)
+            # If it reaches here and is an unrecognized argument, report the error
+            log e "Error: Command or file '$1' not recognized."
+            echo "Error: Command or file '$1' not recognized. Use -h or --help for usage information."
+            exit 1
+            ;;
+    esac
 done
 
 # if lockfile exists

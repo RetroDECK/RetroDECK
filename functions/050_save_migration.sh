@@ -1,6 +1,9 @@
 #!/bin/bash
 
 save_migration() {
+
+  log i "Executing 0.5.0b save migration"
+
   # Finding existing ROMs folder
   if [ -d "$default_sd/retrodeck" ]
   then
@@ -50,9 +53,9 @@ save_migration() {
   versionwheresaveschanged="0.4.5b" # Hardcoded break point between unsorted and sorted saves
 
   if [[ $(sed -e "s/\.//g" <<< $hard_version) > $(sed -e "s/\.//g" <<< $versionwheresaveschanged) ]] && [[ ! $(sed -e "s/\.//g" <<< $version) > $(sed -e "s/\.//g" <<< $versionwheresaveschanged) ]]; then # Check if user is upgrading from the version where save organization was changed. Try not to reuse this, it things 0.4.5b is newer than 0.4.5
-    migration_logfile=$rdhome/logs/savemove_"$(date +"%Y_%m_%d_%I_%M_%p").log"
-    save_backup_file=$rdhome/savebackup_"$(date +"%Y_%m_%d_%I_%M_%p").zip"
-    state_backup_file=$rdhome/statesbackup_"$(date +"%Y_%m_%d_%I_%M_%p").zip"
+    migration_logfile="$rdhome/logs/savemove_$(date +"%Y_%m_%d_%I_%M_%p").log"
+    save_backup_file="$rdhome/savebackup_$(date +"%Y_%m_%d_%I_%M_%p").zip"
+    state_backup_file="$rdhome/statesbackup_$(date +"%Y_%m_%d_%I_%M_%p").zip"
 
     rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \

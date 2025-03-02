@@ -11,10 +11,28 @@ rd_logs_folder="/var/config/retrodeck/logs" # Static location to write all Retro
 source /app/libexec/logger.sh
 rotate_logs
 
+# OS detection
+width=$(grep -oP '\d+(?=x)' /sys/class/graphics/fb0/modes)
+height=$(grep -oP '(?<=x)\d+' /sys/class/graphics/fb0/modes)
+if [[ $width -ne 1280 ]] || [[ $height -ne 800 ]]; then
+  native_resolution=false
+else
+  native_resolution=true
+fi
+distro_name=$(flatpak-spawn --host grep '^ID=' /etc/os-release | cut -d'=' -f2)
+distro_version=$(flatpak-spawn --host grep '^VERSION_ID=' /etc/os-release | cut -d'=' -f2)
+gpu_info=$(flatpak-spawn --host lspci | grep -i 'vga\|3d\|2d')
+
+log d "Debug mode enabled"
 log i "Initializing RetroDECK"
-log i "Running on $XDG_SESSION_DESKTOP, $XDG_SESSION_TYPE"
+log i "Running on $XDG_SESSION_DESKTOP, $XDG_SESSION_TYPE, $distro_name $distro_version"
 if [[ -n $container ]]; then
-  log i "$container environment"
+  log i "Running inside $container environment"
+fi
+log i "GPU: $gpu_info"
+log i "Resolution: $width x $height"
+if [[ $native_resolution == true ]]; then
+  log i "Steam Deck native resolution detected"
 fi
 
 source /app/libexec/050_save_migration.sh
@@ -65,7 +83,6 @@ features="$config/retrodeck/reference_lists/features.json"                      
 es_systems="/app/share/es-de/resources/systems/linux/es_systems.xml"                                     # ES-DE supported system list   
 es_find_rules="/app/share/es-de/resources/systems/linux/es_find_rules.xml"                               # ES-DE emulator find rules
 
-
 # Godot data transfer temp files
 
 godot_bios_files_checked="/var/config/retrodeck/godot/godot_bios_files_checked.tmp"
@@ -107,6 +124,8 @@ dolphingcpadconf="/var/config/dolphin-emu/GCPadNew.ini"
 dolphingfxconf="/var/config/dolphin-emu/GFX.ini"
 dolphinhkconf="/var/config/dolphin-emu/Hotkeys.ini"
 dolphinqtconf="/var/config/dolphin-emu/Qt.ini"
+dolphinDynamicInputTexturesPath="/var/data/dolphin-emu/Load/DynamicInputTextures"
+dolphinCheevosConf="/var/config/dolphin-emu/RetroAchievements.ini"
 
 # PCSX2 config files
 
@@ -115,10 +134,11 @@ pcsx2gsconf="/var/config/PCSX2/inis/GS.ini" # This file should be deprecated sin
 pcsx2uiconf="/var/config/PCSX2/inis/PCSX2_ui.ini" # This file should be deprecated since moving to PCSX2-QT
 pcsx2vmconf="/var/config/PCSX2/inis/PCSX2_vm.ini" # This file should be deprecated since moving to PCSX2-QT
 
-# PPSSPPDL config files
+# PPSSPP-SDL config files
 
 ppssppconf="/var/config/ppsspp/PSP/SYSTEM/ppsspp.ini"
 ppssppcontrolsconf="/var/config/ppsspp/PSP/SYSTEM/controls.ini"
+ppssppcheevosconf="/var/config/ppsspp/PSP/SYSTEM/ppsspp_retroachievements.dat"
 
 # Primehack config files
 
@@ -127,6 +147,7 @@ primehackgcpadconf="/var/config/primehack/GCPadNew.ini"
 primehackgfxconf="/var/config/primehack/GFX.ini"
 primehackhkconf="/var/config/primehack/Hotkeys.ini"
 primehackqtconf="/var/config/primehack/Qt.ini"
+primehackDynamicInputTexturesPath="/var/data/primehack/Load/DynamicInputTextures"
 
 # RPCS3 config files
 
@@ -203,8 +224,7 @@ if [[ ! -f "$rd_conf" ]]; then
 
 # If the config file is existing i just read the variables
 else
-  log i "Found RetroDECK config file in $rd_conf"
-  log i "Loading it"
+  log i "Loading RetroDECK config file in $rd_conf"
 
   if grep -qF "cooker" <<< $hard_version; then # If newly-installed version is a "cooker" build
     set_setting_value $rd_conf "update_repo" "$cooker_repository_name" retrodeck "options"
@@ -235,5 +255,7 @@ fi
 logs_folder="$rdhome/logs"                # The path of the logs folder, here we collect all the logs
 steamsync_folder="$rdhome/.sync"          # Folder containing all the steam sync launchers for SRM
 steamsync_folder_tmp="$rdhome/.sync-tmp"  # Temp folder containing all the steam sync launchers for SRM
+cheats_folder="$rdhome/cheats"            # Folder containing all the cheats for the emulators
+backups_folder="$rdhome/backups"          # Folder containing all the RetroDECK backups
 
 export GLOBAL_SOURCED=true

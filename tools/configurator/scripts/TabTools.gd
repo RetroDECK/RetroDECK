@@ -6,7 +6,7 @@ func _ready():
 	add_child(http_request)
 	http_request.request_completed.connect(_on_request_completed)
 	_connect_signals()
-	#%backup_user_button.text += " - " + class_functions.rdhome + "/backup"
+	#%backup_user_button.text += " - " + class_functions.rdhome + "/backups"
 	
 func _connect_signals() -> void:
 	%check_conn_button.pressed.connect(check_internet_connection)
@@ -34,7 +34,7 @@ func _run_backup(button: Button) -> void:
 	var parameters = ["backup_retrodeck_userdata"]
 	var run_result = await class_functions.run_thread_command(class_functions.wrapper_command, parameters, true)
 	if run_result["exit_code"] == 0:
-		button.text = "Backup Complete - " + class_functions.rdhome + "/backup"
+		button.text = "Backup Complete - " + class_functions.rdhome + "/backups"
 		class_functions.logger("d","User Backup Completed")
 		await class_functions.wait(3.0)
 		button.text = original_txt

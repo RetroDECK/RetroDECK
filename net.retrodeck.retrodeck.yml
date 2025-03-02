@@ -86,7 +86,7 @@ modules:
         # VERSION INITIALIZATION
         # on main please update this with the version variable, eg: VERSION=0.8.0b
         # on cooker will be VERSION=cooker-0.9.0b for example
-        VERSION=0.9.0b
+        VERSION=cooker-0.9.1b
 
         git checkout ${GITHUB_REF_NAME}
         mkdir -p ${FLATPAK_DEST}/retrodeck/
@@ -311,6 +311,16 @@ modules:
         url: https://buildbot.libretro.com/nightly/linux/x86_64/latest/sameduck_libretro.so.zip
         sha256: SAMEDUCKSHAPLACEHOLDER
 
+  - name: retroarch-cheats
+    buildsystem: simple
+    build-commands:
+      - mkdir -p ${FLATPAK_DEST}/retrodeck/cheats
+      - tar -czf ${FLATPAK_DEST}/retrodeck/cheats/retroarch.tar.gz cht
+    sources:
+    - type: git
+      url: https://github.com/libretro/libretro-database
+      branch: master
+
   - name: ppsspp-bios
     buildsystem: simple
     build-commands:
@@ -366,6 +376,16 @@ modules:
         url: https://github.com/RetroDECK/org.ppsspp.PPSSPP/releases/latest/download/RetroDECK-Artifact.tar.gz
         sha256: RETRODECKPPSSPPLATEST
 
+  - name: ppsspp-cheats
+    buildsystem: simple
+    build-commands:
+      - mkdir -p ${FLATPAK_DEST}/retrodeck/cheats
+      - tar -czf ${FLATPAK_DEST}/retrodeck/cheats/ppsspp.tar.gz cheat.db
+    sources:
+    - type: git
+      url: https://github.com/Saramagrean/CWCheat-Database-Plus-
+      branch: master
+
   # PCSX2 - FROZEN UNTIL QT 6.8 UPDATE
   # Inspired by: https://github.com/flathub/com.zettlr.Zettlr/blob/master/com.zettlr.Zettlr.yaml
   # https://pcsx2.net/downloads/
@@ -385,6 +405,16 @@ modules:
       - type: file
         url: https://github.com/PCSX2/pcsx2/releases/download/v2.1.190/pcsx2-v2.1.190-linux-appimage-x64-Qt.AppImage
         sha256: 6a83a7bc499ad4ef4940aa2df08624876b452998f897ebdb8f8d7687c9035b79
+
+  - name: pcsx2-cheats
+    buildsystem: simple
+    build-commands:
+      - mkdir -p ${FLATPAK_DEST}/retrodeck/cheats
+      - tar -czf ${FLATPAK_DEST}/retrodeck/cheats/pcsx2.tar.gz cheats
+    sources:
+    - type: git
+      url: https://github.com/xs1l3n7x/pcsx2_cheats_collection
+      branch: main
 
   # Dolphin
   # why from source: AppImage not provided, only Flatpak
@@ -430,6 +460,17 @@ modules:
       - type: archive
         url: https://github.com/RetroDECK/io.github.shiiion.primehack/releases/latest/download/RetroDECK-primehack-Artifact.tar.gz
         sha256: RETRODECKPRIMEHACKLATEST
+
+  # Universal Dynamic Input for Dolphin and Primehack
+  - name: universal_dynamic_input
+    buildsystem: simple
+    build-commands:
+      - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/DynamicInputTextures
+      - cp -r * ${FLATPAK_DEST}/retrodeck/extras/DynamicInputTextures/
+    sources:
+      - type: git
+        url: https://github.com/Venomalia/UniversalDynamicInput.git
+        commit: UNIVERSALDYNAMICINPUTCOMMITPLACEHOLDER
 
   # RPCS3
   # https://rpcs3.net/download
@@ -761,6 +802,7 @@ modules:
       - cp -f res/icon.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg        
       - cp -f res/icon-configurator.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.configurator.svg
       - mv -f -t ${FLATPAK_DEST}/retrodeck res/binding_icons
+      - mv -f -t ${FLATPAK_DEST}/retrodeck res/steam_grid
 
       # RetroDECK core script
       - install -Dm755 retrodeck.sh ${FLATPAK_DEST}/bin/retrodeck.sh

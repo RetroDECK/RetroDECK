@@ -36,22 +36,35 @@
       </screenshot>
    </screenshots>
    <description>
-      <p>RetroDECK is an emulation and retro gaming application powered by the ES-DE Frontend that allows you to catalog and play your game collection directly on Linux in one unified experience. It's inspired by other embedded emulation systems like AmberELEC, EmuELEC, CoreELEC, Lakka, and Batocera. The goal is to have everything you need included in one package, so no other software is required.</p>
-      <p>Currently in Beta, RetroDECK focuses on SteamOS, Steam Deck, and Linux Desktop. It uses Steam Input for controller inputs and hotkeys. For the best experience, play and launch RetroDECK via Steam, though manual tweaks via RetroDECK Configurator may be needed if played without it.</p>
-      <p>Thanks to the built-in RetroENGINE, RetroDECK can be used as a headless engine, and with Steam Sync, you can synchronize your favorites as non-Steam games (powered by Steam ROM Manager).</p>
-      <p>What is it in detail?
-      https://retrodeck.readthedocs.io/en/latest/wiki_about/what-is-retrodeck/</p>
-      <p>How-to: Get Started using RetroDECK
-      https://retrodeck.readthedocs.io/en/latest/wiki_general/retrodeck-start/</p>
-      <p>If you want to sponsor the project: 
-      https://www.patreon.com/RetroDECK</p>
+      <p>RetroDECK is a universal retro gaming platform that brings the power and flexibility of custom firmware without replacing your system’s OS. Perfect for Steam Deck and Linux desktops, RetroDECK is a self-contained app that delivers everything you need for retro gaming right out of the box.</p>
+      <p>Why RetroDECK?</p>
+      <ul>
+         <li>All-in-One Convenience: Catalog, customize, and play your retro games from one unified app.</li>
+         <li>No Custom Firmware: Enjoy the benefits of custom firmware without modifying your system — RetroDECK runs as a fully self-contained app.</li>
+         <li>Easy Installation and Updates: RetroDECK is easy to install, update, and remove if you choose, ensuring a hassle-free experience.</li>
+      </ul>
+      <p>What’s Inside?</p>
+      <ul>
+          <li>RetroDECK Framework: A flexible and powerful environment for seamless emulation and retro gaming.</li>
+          <li>RetroENGINE: Offers a versatile gaming setup with headless engine mode, perfect for advanced users.</li>
+          <li>RetroDECK Configurator: A multi-tool interface to tweak and tailor your gaming experience.</li>
+          <li>Steam Input Controller Support: Advanced input handling, radial menus and hotkeys via Steam Input.</li>
+          <li>Steam Sync: Add your games as non-Steam titles with ease using Steam ROM Manager.</li>
+          <li>ES-DE Frontend: A polished, user-friendly interface for browsing and launching your retro collection.</li>
+          <li>Emulators: Packed with emulators like RetroArch, MAME, PCSX2, and more — play almost any retro game you can think of.</li>
+          <li>Engines: Support for game engines like Solarus, GZDoom, and others.</li>
+          <li>PortMaster: Manage your Linux game ports with ease — no more headaches setting up game ports manually.</li>
+      </ul>
+      <p>RetroDECK gives you the power of a retro game handheld's custom firmware experience in a tidy, self-contained package. No system modding, no OS replacement — just pure retro gaming bliss.</p>
       <p>The RetroDECK Community:</p>
-      <p>Blog: https://retrodeck.readthedocs.io/en/latest/blog/</p>
-      <p>Discord: https://discord.gg/WDc5C9YWMx</p>
-      <p>Matrix: https://matrix.to/#/#retrodeck:matrix.org</p>
-      <p>Lemmy Community: https://lemmy.zip/c/retrodeck</p>
-      <p>Subreddit: https://www.reddit.com/r/retrodeck</p>
-      <p>Bluesky: https://bsky.app/profile/retrodeck.net</p>
+      <ul>
+         <li>Blog: https://retrodeck.readthedocs.io/en/latest/blog/</li>
+         <li>Discord: https://discord.gg/WDc5C9YWMx</li>
+         <li>Matrix: https://matrix.to/#/#retrodeck:matrix.org</li>
+         <li>Lemmy Community: https://lemmy.zip/c/retrodeck</li>
+         <li>Subreddit: https://www.reddit.com/r/retrodeck</li>
+         <li>Bluesky: https://bsky.app/profile/retrodeck.net</li>
+      </ul>
    </description>
    <branding>
       <color type="primary" scheme_preference="light">#94a6fb</color>
@@ -60,6 +73,51 @@
    <project_license>GPL-3.0</project_license>
    <metadata_license>CC0-1.0</metadata_license>
    <releases>
+         <release version="0.9.1b" date="2025-02-07">
+            <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.9.0b</url>
+            <description>
+               <p>New Additions:</p>
+               <ul>
+                  <li>RetroAchievements: PPSSPP support added (by Cohee)</li>
+                  <li>RetroAchievements: Dolphin support added</li>
+                  <li>INITIAL SETUP: prompts to add RetroDECK to Steam</li>
+                  <li>CONFIGURATOR: reset components menu simplified and allowed multiple choices and `Factory Reset`</li>
+                  <li>CONFIGURATOR: refacotred open component menu</li>
+                  <li>CONFIGURATOR: scaled UI to 1.5x</li>
+                  <li>New CLI argument `--set` to set presets, call retrodeck with `--set help` for more information</li>
+                  <li>New CLI argument `--open` to open a component or emulator. Call retrodeck with `--open --list` for a list of available components or emulator to open</li>
+                  <li>New CLI argument `--reset` that replaces the previous ones</li>
+                  <li>New CLI argument `--factory-reset` that resets RetroDECK completely and brings the user to the first setup</li>
+                  <li>CHEATS: added basic cheats support for RetroArch, PCSX2, PPSSPP and MAME</li>
+                  <li>GAME COMPRESSOR: refactored</li>
+                  <li>CHANGE PRESET DIALOG: added enable all and disable all buttons</li>
+                  <li>RPCS3: updated</li>
+                  <li>MAME: updated to 0.275</li>
+               </ul>
+               <p>Bug fixes:</p>
+               <ul>
+                  <li>CONFIGURATOR: restructured menus for better navigation and clarity</li>
+                  <li>RETROARCH: fixed a bug where the cores were not updated along with RetroArch itself</li>
+                  <li>DOLPHIN and PRIMEHACK: Fixed a bug where the Universal Dynamic Input was missing from the build</li>
+                  <li>DOLPHIN: fixed a bug where it wouldn't start in some Wayland configurations</li>
+                  <li>DOLPHIN: fixed a trigger issue in the controller configuration</li>
+                  <li>PRIMEHACK: fixed an issue where wii folder was not mapped as roms path in GTK GUI</li>
+                  <li>PORTMASTER: added the ability to hide PortMaster from ES-DE</li>
+                  <li>PSX: fixed an issue that was not showing the borders correctly</li>
+                  <li>BIOS CHECKER: fixed wrong folder check</li>
+                  <li>POST_UPDATE: fixed a bug where retrodeck.cfg was not updated at every version</li>
+                  <li>COMPRESSOR: fixed a bug where user selected items were misread</li>
+                  <li>ES-DE: removed 7zip and zip formats from PSP as not supported by PPSSPP (Standalone)</li>
+               </ul>
+               <p>Developers, developers, developers:</p>
+               <ul>
+                  <li>Function `make_preset_changes` enhanced to be 100% headless</li>
+                  <li>New `fetch_all_presets` function to list all the presets globally of per-system</li>
+                  <li>`preapre_components` can now act/reset multiple components at once</li>
+                  <li>`preapre_components` can now execute a factory reset with --factory-reset</li>
+               </ul>
+            </description>
+         </release>
          <release version="0.9.0b" date="2025-02-04">
          <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.9.0b</url>
          <description>
@@ -88,6 +146,7 @@
                <li>Fixed an issue that was not correctly displaying version notes</li>
                <li>Vita3K now uses Vulkan as default</li>
                <li>Dolphin and Primehack are no longer scaled wide by default but are set to auto</li>
+               <li>Removed zip extension from NDS system as is not supported</li>
             </ul>
             <p>Developers, developers, developers:</p>
             <ul>

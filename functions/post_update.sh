@@ -5,7 +5,10 @@ post_update() {
   # post update script
   log i "Executing post-update script"
 
+  update_rd_conf
+
   if [[ $(check_version_is_older_than "0.5.0b") == "true" ]]; then # If updating from prior to save sorting change at 0.5.0b
+    log d "Version is older than 0.5.0b, executing save migration"
     save_migration
   fi
 
@@ -30,7 +33,7 @@ post_update() {
   fi
   if [[ $(check_version_is_older_than "0.6.3b") == "true" ]]; then
     # In version 0.6.3b, the following changes were made that required config file updates/reset:
-    # - Put Dolphin and Primehack save states in different folders inside $rd_home/states
+    # - Put Dolphin and Primehack save states in different folders inside $rdhome/states
     # - Fix symlink to hard-coded PICO-8 config folder (dir_prep doesn't like ~)
     # - Overwrite Citra and Yuzu configs, as controller mapping was broken due to emulator updates.
 
@@ -425,7 +428,7 @@ post_update() {
 
     # Create a Zenity window with checkboxes for each reset option and two buttons
     while true; do
-      choices=$(zenity --list --checklist --title="RetroDECK Reset Options" \
+      choices=$(rd_zenity --list --checklist --title="RetroDECK Reset Options" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --text="The following components have been updated and need to be reset or fixed to ensure compatibility with the new version: select the components you want to reset.\n\nNot resetting them may cause serious issues with your installation.\nYou can also reset them manually later via Configurator -> Troubleshooting -> Reset Component.\n\nNote: Your games, saves, game collections and scraped data will not be affected." \
       --column="Select" --column="Component" --column="Description" --width="1100" --height="700" \
@@ -453,7 +456,7 @@ post_update() {
       fi
 
       if [[ $? -eq 0 && -n "$choices" ]]; then
-        if ! zenity --question --title="Confirmation" --text="Are you sure you want to proceed with only the selected options?\n\nThis might cause issues in RetroDECK"; then
+        if ! rd_zenity --question --title="Confirmation" --text="Are you sure you want to proceed with only the selected options?\n\nThis might cause issues in RetroDECK"; then
           log i "User is not sure, showing the checklist window again."
           continue
         else
@@ -463,7 +466,7 @@ post_update() {
       fi
 
       if [[ $? == 0 ]]; then
-      if ! zenity --question --title="Confirmation" --text="Are you sure you want to skip the reset process?\n\nThis might cause issues in RetroDECK"; then
+      if ! rd_zenity --question --title="Confirmation" --text="Are you sure you want to skip the reset process?\n\nThis might cause issues in RetroDECK"; then
         log i "User is not sure, showing the checklist window again."
         continue
       else
@@ -520,13 +523,12 @@ post_update() {
       set_setting_value "$primehackgfxconf" "AspectRatio" "0" "dolphin" "Settings"
     fi
 
-    # --- ALWAYS EXECUTED ---
+    # --- ALWAYS EXECUTED IN 0.9.0b ---
 
     # New components preparation
     log i "New components were added in this version, initializing them"
     prepare_component "reset" "portmaster"
     prepare_component "reset" "ruffle"
-    update_rd_conf
     prepare_component "reset" "steam-rom-manager"
 
     # RetroArch
@@ -555,6 +557,121 @@ post_update() {
 
   fi # end of 0.9.0b
 
+  if [[ $(check_version_is_older_than "0.9.1b") == "true" ]]; then
+
+    log i "Running the 0.9.1b post update process"
+
+    # Create a Zenity window with checkboxes for each reset option and two buttons
+    while true; do
+      choices=$(rd_zenity --list --checklist --title="RetroDECK Reset Options" \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --text="The following components have been updated and need to be reset or fixed to ensure compatibility with the new version: select the components you want to reset.\n\nNot resetting them may cause serious issues with your installation.\nYou can also reset them manually later via Configurator -> Troubleshooting -> Reset Component.\n\nNote: Your games, saves, game collections and scraped data will not be affected." \
+      --column="Select" --column="Component" --column="Description" --width="1100" --height="700" \
+      TRUE "Dolphin - GameCube Controller" "The GameCube controller configuration needs to be reset to fix a trigger issue" \
+      TRUE "RetroArch" "Needs to be reset to fix the borders issue on some sytems such as psx" \
+      TRUE "Steam ROM Manager" "Needs to add the \"Add RetroDECk to Steam\" functionality" \
+      --separator=":" \
+      --extra-button="Execute All" \
+      --ok-label="Execute Selected Only" \
+      --cancel-label="Execute None")
+
+      log d "User selected: $choices"
+      log d "User pressed: $?"
+
+      # Check if "Execute All" button was pressed
+      if [[ "$choices" == "Execute All" ]]; then
+        execute_all=true
+        break
+      else
+        execute_all=false
+        # Split the choices into an array
+        IFS=":" read -r -a selected_choices <<< "$choices"
+      fi
+
+      if [[ $? -eq 0 && -n "$choices" ]]; then
+        if ! rd_zenity --question --title="Confirmation" --text="Are you sure you want to proceed with only the selected options?\n\nThis might cause issues in RetroDECK"; then
+          log i "User is not sure, showing the checklist window again."
+          continue
+        else
+          log i "User confirmed to proceed with only the selected options."
+          break
+        fi
+      fi
+
+      if [[ $? == 0 ]]; then
+      if ! rd_zenity --question --title="Confirmation" --text="Are you sure you want to skip the reset process?\n\nThis might cause issues in RetroDECK"; then
+        log i "User is not sure, showing the checklist window again."
+        continue
+      else
+        log i "User confirmed to proceed without any reset."
+        break
+      fi
+      fi
+
+      break
+    done
+
+    # Execute the selected resets
+
+    # RetroArch reset
+    if [[ "$execute_all" == "true" || " ${selected_choices[@]} " =~ " RetroArch " ]]; then
+      log i "User agreed to RetroArch reset"
+      # Twice to toggle them once and then toggle them back to the original value
+      make_preset_changes "borders" "all"
+      make_preset_changes "borders" "all"
+    fi
+
+    # Dolphin - GameCube Controller
+    if [[ "$execute_all" == "true" || " ${selected_choices[@]} " =~ " Dolphin - GameCube Controller " ]]; then
+      log i "User agreed to reset Dolphin - GameCube Controller"
+      cp -f "$config/dolphin/GCPadNew.ini" "$dolphingcpadconf" && log i "Done"
+    fi
+
+    # Steam ROM Manager - Add to Steam fix
+    if [[ "$execute_all" == "true" || " ${selected_choices[@]} " =~ " Steam ROM Manager " ]]; then
+      log i "User agreed to reset Steam ROM Manager - Add to Steam fix"
+      prepare_component reset steam-rom-manager
+    fi
+
+    # --- ALWAYS EXECUTED IN 0.9.1b ---
+
+    log i "Preparing the shaders folder for MAME..."
+    shaders_folder=$rdhome/shaders && log i "Shaders folder set to \"$shaders_folder\""
+    conf_write && log i "Done"
+    create_dir "$shaders_folder/mame/bgfx"
+    set_setting_value "$mameconf" "bgfx_path" "$shaders_folder/mame/bgfx/" "mame"
+    cp -fvr "/app/share/mame/bgfx/"* "$shaders_folder/mame/bgfx"
+
+    log i "Preparing the cheats for RetroArch..."
+    create_dir "$cheats_folder/retroarch"
+    set_setting_value "$raconf" "cheat_database_path" "$cheats_folder/retroarch" "retroarch"
+    tar --strip-components=1 -xzf /app/retrodeck/cheats/retroarch.tar.gz -C "$cheats_folder/retroarch" --overwrite && log i "Cheats for RetroArch installed"
+
+    log i "Preparing the cheats for PPSSPP..."
+    create_dir -d "$cheats_folder/PPSSPP"
+    dir_prep "$cheats_folder/PPSSPP" "/var/config/ppsspp/PSP/Cheats"
+    tar -xzf /app/retrodeck/cheats/ppsspp.tar.gz -C "$cheats_folder/PPSSPP" --overwrite && log i "Cheats for PPSSPP installed"
+    
+    log i "Preparing the cheats for PCSX2..."
+    create_dir "$cheats_folder/pcsx2"
+    set_setting_value "$pcsx2conf" "Cheats" "$cheats_folder/pcsx2" "Folders"
+    tar --strip-components=1 -xzf /app/retrodeck/cheats/pcsx2.tar.gz -C "$cheats_folder/pcsx2" --overwrite && log i "Cheats for PCSX2 installed"
+
+    log i "Preparing the cheats for MAME..."
+    create_dir "$cheats_folder/mame"
+    set_setting_value "$mameconf" "cheatpath" "$cheats_folder/mame" "mame"
+    unzip -j -o "$config/mame/cheat0264.zip" 'cheat.7z' -d "$cheats_folder/mame" && log i "Cheats for MAME installed"
+    rm -rf /var/data/mame/cheat    
+
+    log i "Preparing the RetroAchievements for Dolphin..."
+    cp -vn "$config/dolphin/"* /var/config/dolphin-emu/
+
+    log i "Fixing PrimeHack roms paths..."
+    set_setting_value "$rd_conf" "ppsspp" "$(get_setting_value "$rd_defaults" "ppsspp" "retrodeck" "cheevos")" "retrodeck" "cheevos"
+    set_setting_value "$rd_conf" "ppsspp" "$(get_setting_value "$rd_defaults" "ppsspp" "retrodeck" "cheevos_hardcore")" "retrodeck" "cheevos_hardcore"
+
+  fi # end of 0.9.1b
+
   # The following commands are run every time.
 
   if [[ -d "/var/data/dolphin-emu/Load/DynamicInputTextures" ]]; then # Refresh installed textures if they have been enabled
@@ -570,6 +687,7 @@ post_update() {
     install_retrodeck_controller_profile
   fi
 
+  retroarch_updater
   update_splashscreens
   deploy_helper_files
   build_retrodeck_current_presets
@@ -589,4 +707,6 @@ post_update() {
   else
     changelog_dialog "$version"
   fi
+
+  log i "Upgrade process completed successfully."
 }

@@ -6,6 +6,8 @@ run_game() {
     system=""
     manual_mode=false
 
+    usage="Usage: flatpak run net.retrodeck.retrodeck [-e emulator] [-s system] [-m] game"
+
     # Parse options for system, emulator, and manual mode
     while getopts ":e:s:m" opt; do
         case ${opt} in
@@ -20,7 +22,7 @@ run_game() {
                 log i "Run game: manual mode enabled"
                 ;;
             \?)
-                echo "Usage: $0 [-e emulator] [-s system] [-m] game"
+                echo "$usage"
                 exit 1
                 ;;
         esac
@@ -30,7 +32,7 @@ run_game() {
     # Check for game argument
     if [[ -z "$1" ]]; then
         log e "Game path is required."
-        log i "Usage: $0 [-e emulator] [-s system] [-m] game"
+        log i "$usage"
         exit 1
     fi
 
@@ -178,7 +180,7 @@ find_system_commands() {
         selected_command="${command_list[1]}"
     else
         # Show the list with Zenity and return the **command** (second column) selected
-        selected_command=$(zenity --list \
+        selected_command=$(rd_zenity --list \
             --title="Select an emulator for $system_name" \
             --column="Emulator" --column="Hidden Command" "${command_list[@]}" \
             --width=800 --height=400 --print-column=2 --hide-column=2)

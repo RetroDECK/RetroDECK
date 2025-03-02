@@ -124,12 +124,12 @@ This option lets you turn on or off automatic updates on launch.
 Various troubleshooting options.
 
 
-### Backup: RetroDECK Userdata
+### Backup Userdata
 Creates backups of the user data folders
 
 
 
-### Check & Verify: Multi-file structure
+### Verify Multi-file Structure
 Verifies the structure of multi disc/file games that uses `.m3u` files.
 
 

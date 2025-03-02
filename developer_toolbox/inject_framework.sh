@@ -41,10 +41,12 @@ else
 fi
 
 # Copying files to the installation
-sudo cp -vfr "res/binding_icons" "$app/retrodeck/binding_icons" 
+sudo cp -vfr "res/binding_icons" "$app/retrodeck/binding_icons"
+sudo cp -vfr "res/steam_grid" "$app/retrodeck" 
 sudo cp -vfr "config/"** "$app/retrodeck/config/"
 sudo cp -vfr "tools" "$app"
 sudo cp -vfr "retrodeck.sh" "$app/bin/"
 sudo cp -vfr "functions/"** "$app/libexec/"
 sudo cp -vfr "config/gzdoom/gzdoom.sh" "$app/bin/"
 sudo cp -vfr "config/ruffle/ruffle-rdwrapper.sh" "$app/bin/"
+sudo cp -vfr "net.retrodeck.retrodeck.metainfo.xml" "$app/share/metainfo/net.retrodeck.retrodeck.metainfo.xml"
