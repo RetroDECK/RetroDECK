@@ -75,7 +75,7 @@ rd_zenity --progress --no-cancel --pulsate --auto-close \
 #       - Install: PS Vita firmware
 #       - Update Notification
 #       - Add RetroDECK to Steam
-#       - Verify Multi-file Structure
+#       - M3U Multi-File Validator
 #       - Ponzu: Remove Yuzu
 #       - Ponzu: Remove Citra
 #     - Steam Sync
@@ -442,7 +442,7 @@ configurator_tools_dialog() {
   "Install: PS Vita Firmware" "Download and Install: PlayStation Vita firmware for the Vita3K emulator."
   "Update Notification" "Enable / Disable: Notifications for new RetroDECK versions."
   "Add RetroDECK to Steam" "Add RetroDECK shortcut to Steam. Steam restart required."
-  "Verify Multi-file Structure" "Verify the proper structure of multi-file or multi-disc games."
+  "M3U Multi-File Validator" "Verify the proper structure of multi-file or multi-disc games."
   )
 
   if [[ $(get_setting_value "$rd_conf" "kiroi_ponzu" "retrodeck" "options") == "true" ]]; then
@@ -545,7 +545,7 @@ configurator_tools_dialog() {
     add_retrodeck_to_steam
   ;;
 
-  "Verify Multi-file Structure" )
+  "M3U Multi-File Validator" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_check_multifile_game_structure
   ;;
