@@ -107,8 +107,8 @@ check_version_is_older_than() {
 # The given version to check should be in normal RetroDECK version notation of N.N.Nb (eg. 0.8.0b)
 # USAGE: check_version_is_older_than "version"
 
-local current_version="$version"
-local new_version="$1"
+local current_version="$1"
+local new_version="$2"
 local is_newer_version="false"
 
 current_version_major_rev=$(sed 's/^\([0-9]*\)\..*/\1/' <<< "$current_version")
