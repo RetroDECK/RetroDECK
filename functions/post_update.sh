@@ -5,16 +5,18 @@ post_update() {
   # post update script
   log i "Executing post-update script"
 
+  version_being_updated="$version"
+
   update_rd_conf
 
-  if [[ $(check_version_is_older_than "0.5.0b") == "true" ]]; then # If updating from prior to save sorting change at 0.5.0b
+  if [[ $(check_version_is_older_than "$version_being_updated" "0.5.0b") == "true" ]]; then # If updating from prior to save sorting change at 0.5.0b
     log d "Version is older than 0.5.0b, executing save migration"
     save_migration
   fi
 
   # Everything within the following ( <code> ) will happen behind the Zenity dialog. The save migration was a long process so it has its own individual dialogs.
   (
-  if [[ $(check_version_is_older_than "0.6.2b") == "true" ]]; then
+  if [[ $(check_version_is_older_than "$version_being_updated" "0.6.2b") == "true" ]]; then
     # In version 0.6.2b, the following changes were made that required config file updates/reset:
     # - Primehack preconfiguration completely redone. "Stop emulation" hotkey set to Start+Select, Xbox and Nintendo keymap profiles were created, Xbox set as default.
     # - Duckstation save and state locations were dir_prep'd to the rdhome/save and /state folders, which was not previously done. Much safer now!
@@ -31,7 +33,7 @@ post_update() {
     dir_prep "$roms_folder/pico8" "$bios_folder/pico-8/carts" # Symlink default game location to RD roms for cleanliness (this location is overridden anyway by the --root_path launch argument anyway)
     dir_prep "$bios_folder/pico-8/cdata" "$saves_folder/pico-8" # PICO-8 saves folder
   fi
-  if [[ $(check_version_is_older_than "0.6.3b") == "true" ]]; then
+  if [[ $(check_version_is_older_than "$version_being_updated" "0.6.3b") == "true" ]]; then
     # In version 0.6.3b, the following changes were made that required config file updates/reset:
     # - Put Dolphin and Primehack save states in different folders inside $rdhome/states
     # - Fix symlink to hard-coded PICO-8 config folder (dir_prep doesn't like ~)
@@ -53,7 +55,7 @@ post_update() {
     # Remove unneeded tools folder, as location has changed to RO space
     rm -rfv /var/config/retrodeck/tools/
   fi
-  if [[ $(check_version_is_older_than "0.6.4b") == "true" ]]; then
+  if [[ $(check_version_is_older_than "$version_being_updated" "0.6.4b") == "true" ]]; then
     # In version 0.6.4b, the following changes were made:
     # Changed settings in Primehack: The audio output was not selected by default, default AR was also incorrect.
     # Changed settings in Duckstation and PCSX2: The "ask on exit" was disabled and "save on exit" was enabled.
@@ -61,13 +63,13 @@ post_update() {
 
     deploy_multi_patch "config/patches/updates/064b_update.patch"
   fi
-  if [[ $(check_version_is_older_than "0.6.5b") == "true" ]]; then
+  if [[ $(check_version_is_older_than "$version_being_updated" "0.6.5b") == "true" ]]; then
     # In version 0.6.5b, the following changes were made:
     # Change Yuzu GPU accuracy to normal for better performance
 
     set_setting_value $yuzuconf "gpu_accuracy" "0" "yuzu" "Renderer"
   fi
-  if [[ $(check_version_is_older_than "0.7.0b") == "true" ]]; then
+  if [[ $(check_version_is_older_than "$version_being_updated" "0.7.0b") == "true" ]]; then
     # In version 0.7.0b, the following changes were made that required config file updates/reset or other changes to the filesystem:
     # - Update retrodeck.cfg and set new paths to $rdhome by default
     # - Update PCSX2 and Duckstation configs to latest templates (to accomadate RetroAchievements feature) and move Duckstation config folder from /var/data to /var/config
@@ -222,19 +224,19 @@ post_update() {
       prepare_component "reset" "all"
     fi
   fi
-  if [[ $(check_version_is_older_than "0.7.1b") == "true" ]]; then
+  if [[ $(check_version_is_older_than "$version_being_updated" "0.7.1b") == "true" ]]; then
     # In version 0.7.1b, the following changes were made that required config file updates/reset or other changes to the filesystem:
     # - Force update PPSSPP standalone keybinds for L/R.
     set_setting_value "$ppssppcontrolsconf" "L" "1-45,10-193" "ppsspp" "ControlMapping"
     set_setting_value "$ppssppcontrolsconf" "R" "1-51,10-192" "ppsspp" "ControlMapping"
   fi
 
-  if [[ $(check_version_is_older_than "0.7.3b") == "true" ]]; then
+  if [[ $(check_version_is_older_than "$version_being_updated" "0.7.3b") == "true" ]]; then
     # In version 0.7.3b, there was a bug that prevented the correct creations of the roms/system folders, so we force recreate them.
     emulationstation --home /var/config/emulationstation --create-system-dirs
   fi
 
-  if [[ $(check_version_is_older_than "0.8.0b") == "true" ]]; then
+  if [[ $(check_version_is_older_than "$version_being_updated" "0.8.0b") == "true" ]]; then
     log i "In version 0.8.0b, the following changes were made that required config file updates/reset or other changes to the filesystem:"
     log i "- Remove RetroDECK controller profile from existing template location"
     log i "- Change section name in retrodeck.cfg for ABXY button swap preset"
@@ -302,7 +304,7 @@ post_update() {
 
   fi # end of 0.8.0b
 
-  if [[ $(check_version_is_older_than "0.8.1b") == "true" ]]; then
+  if [[ $(check_version_is_older_than "$version_being_updated" "0.8.1b") == "true" ]]; then
     log i "In version 0.8.1b, the following changes were made that required config file updates/reset or other changes to the filesystem:"
     log i "- ES-DE files were moved inside the retrodeck folder, migrating to the new structure"
     log i "- Give the user the option to reset Ryujinx, which was not properly initialized in 0.8.0b"
@@ -340,7 +342,7 @@ post_update() {
     fi
   fi # end of 0.8.1b
 
-  if [[ $(check_version_is_older_than "0.8.2b") == "true" ]]; then
+  if [[ $(check_version_is_older_than "$version_being_updated" "0.8.2b") == "true" ]]; then
     log i "Vita3K changed some paths, reflecting them: moving \"/var/data/Vita3K\" in \"/var/config/Vita3K\""
     move "/var/data/Vita3K" "/var/config/Vita3K"
     log i "Moving ES-DE downloaded_media, gamelist, and themes from \"$rdhome\" to \"$rdhome/ES-DE\" due to a RetroDECK Framework bug"
@@ -352,7 +354,7 @@ post_update() {
     ln -sv $ryujinxconf "$(dirname $ryujinxconf)/PRConfig.json"
   fi #end of 0.8.2b
 
-  if [[ $(check_version_is_older_than "0.8.3b") == "true" ]]; then
+  if [[ $(check_version_is_older_than "$version_being_updated" "0.8.3b") == "true" ]]; then
     # In version 0.8.3b, the following changes were made:
     # - Recovery from a failed move of the themes, downloaded_media and gamelists folder to their new ES-DE locations.
     if [[ ! -d "$rdhome/ES-DE/themes" || ! -d "$rdhome/ES-DE/downloaded_media" || ! -d "$rdhome/ES-DE/gamelists" ]]; then
@@ -370,7 +372,7 @@ post_update() {
   fi # end of 0.8.3b
 
   # Check if the version is older than 0.8.4b
-  if [[ $(check_version_is_older_than "0.8.4b") == "true" ]]; then
+  if [[ $(check_version_is_older_than "$version_being_updated" "0.8.4b") == "true" ]]; then
     # In version 0.8.4b, the following changes were made:
     # - Recovery from a failed move of the themes, downloaded_media and gamelists folder to their new ES-DE locations (AGAIN)
 
@@ -424,7 +426,7 @@ post_update() {
 
   fi # end of 0.8.4b
 
-  if [[ $(check_version_is_older_than "0.9.0b") == "true" ]]; then
+  if [[ $(check_version_is_older_than "$version_being_updated" "0.9.0b") == "true" ]]; then
 
     # Create a Zenity window with checkboxes for each reset option and two buttons
     while true; do
@@ -557,7 +559,7 @@ post_update() {
 
   fi # end of 0.9.0b
 
-  if [[ $(check_version_is_older_than "0.9.1b") == "true" ]]; then
+  if [[ $(check_version_is_older_than "$version_being_updated" "0.9.1b") == "true" ]]; then
 
     log i "Running the 0.9.1b post update process"
 
