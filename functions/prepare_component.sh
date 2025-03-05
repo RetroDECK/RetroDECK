@@ -68,7 +68,7 @@ prepare_component() {
             # Declare the global variable with the new setting value
             declare -g "$current_setting_name=$new_setting_value"
             log d "Setting: $current_setting_name=$current_setting_value"
-              if [[ ! $current_setting_name == "logs_folder" ]]; then # Don't create a logs folder normally, we want to maintain the current files exactly to not lose early-install logs.
+            if [[ ! $current_setting_name == "logs_folder" ]]; then # Don't create a logs folder normally, we want to maintain the current files exactly to not lose early-install logs.
               create_dir "$new_setting_value"
             else # Log folder-specific actions
               mv "$rd_logs_folder" "$logs_folder" # Move existing logs folder from internal to userland
