@@ -149,9 +149,36 @@ update_rd_conf() {
   conf_read # Read current settings into memory
   mv -f $rd_conf $rd_conf_backup # Backup config file before update
   cp $rd_defaults $rd_conf # Copy defaults file into place
-  conf_write # Write old values into new default file
+  conf_write # Write old values into new retrodeck.cfg file
 
-  # STAGE 2: To handle presets sections that use duplicate setting names
+  # STAGE 2: Create new folders that were added to the shipped retrodeck.cfg, if any
+
+  new_paths=$(awk -F= 'FNR==NR {keys[$1]=1; next} !($1 in keys)' \
+  <(grep -v '^\s*$' "$rd_conf_backup" | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f') \
+  <(grep -v '^\s*$' "$rd_conf" | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f'))
+
+  if [[ -n "$new_paths" ]]; then
+    log i "New paths found in RetroDECK config: \n $new_paths"
+    if [[ ! "$rdhome" == "/home/deck/retrodeck" ]]; then # If rdhome is not the normal internal path, set new folders to rdhome as their root
+      while read -r config_line; do
+        local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
+        local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
+        local relative_path="${current_setting_value#*retrodeck/}"
+        local new_setting_value="$rdhome/$relative_path"
+        set_setting_value "$rd_conf" "$current_setting_name" "$new_setting_value" "retrodeck" "paths"
+        create_dir "$new_setting_value"
+      done <<< "$new_paths"
+    else # rdhome is default internal location, so imported new paths are valid
+      while read -r config_line; do
+        local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
+        local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
+        create_dir "$current_setting_value"
+      done <<< "$new_paths"
+    fi
+    conf_read
+  fi
+
+  # STAGE 3: To handle presets sections that use duplicate setting names
 
   generate_single_patch $rd_defaults $rd_conf_backup $rd_update_patch retrodeck # Create a patch file for differences between defaults and current user settings
   sed -i '/change^^version/d' $rd_update_patch # Remove version line from temporary patch file
@@ -160,13 +187,13 @@ update_rd_conf() {
   rm -f $rd_update_patch # Cleanup temporary patch file
   conf_read # Read all settings into memory
 
-  # STAGE 3: Eliminate any preset incompatibility with existing user settings and new defaults
+  # STAGE 4: Eliminate any preset incompatibility with existing user settings and new defaults
 
   # Fetch incompatible presets from JSON and create a lookup list
   incompatible_presets=$(jq -r '
-    .incompatible_presets | to_entries[] | 
+    .incompatible_presets | to_entries[] |
     [
-      "\(.key):\(.value)", 
+      "\(.key):\(.value)",
       "\(.value):\(.key)"
     ] | join("\n")
   ' $features)
@@ -195,7 +222,6 @@ update_rd_conf() {
     fi
   done < $rd_conf
 }
-
 
 conf_read() {
   # This function will read the RetroDECK config file into memory
