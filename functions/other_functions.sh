@@ -151,7 +151,16 @@ update_rd_conf() {
   cp $rd_defaults $rd_conf # Copy defaults file into place
   conf_write # Write old values into new retrodeck.cfg file
 
-  # STAGE 2: Create new folders that were added to the shipped retrodeck.cfg, if any
+  # STAGE 2: To handle presets sections that use duplicate setting names
+
+  generate_single_patch $rd_defaults $rd_conf_backup $rd_update_patch retrodeck # Create a patch file for differences between defaults and current user settings
+  sed -i '/change^^version/d' $rd_update_patch # Remove version line from temporary patch file
+  deploy_single_patch $rd_defaults $rd_update_patch $rd_conf # Re-apply user settings to defaults file
+  set_setting_value $rd_conf "version" "$hard_version" retrodeck # Set version of currently running RetroDECK to updated retrodeck.cfg
+  rm -f $rd_update_patch # Cleanup temporary patch file
+  conf_read # Read all settings into memory
+
+  # STAGE 3: Create new folders that were added to the shipped retrodeck.cfg, if any
 
   new_paths=$(awk -F= 'FNR==NR {keys[$1]=1; next} !($1 in keys)' \
   <(grep -v '^\s*$' "$rd_conf_backup" | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f') \
@@ -177,15 +186,6 @@ update_rd_conf() {
     fi
     conf_read
   fi
-
-  # STAGE 3: To handle presets sections that use duplicate setting names
-
-  generate_single_patch $rd_defaults $rd_conf_backup $rd_update_patch retrodeck # Create a patch file for differences between defaults and current user settings
-  sed -i '/change^^version/d' $rd_update_patch # Remove version line from temporary patch file
-  deploy_single_patch $rd_defaults $rd_update_patch $rd_conf # Re-apply user settings to defaults file
-  set_setting_value $rd_conf "version" "$hard_version" retrodeck # Set version of currently running RetroDECK to updated retrodeck.cfg
-  rm -f $rd_update_patch # Cleanup temporary patch file
-  conf_read # Read all settings into memory
 
   # STAGE 4: Eliminate any preset incompatibility with existing user settings and new defaults
 
