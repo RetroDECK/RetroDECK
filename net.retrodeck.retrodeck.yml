@@ -75,7 +75,6 @@ modules:
   # The version number is hardcoded in /app/retrodeck/version
   #
   # UPDATE STEPS FOR MAIN:
-  # [ ] Update the VERSION variable in retrodeck-initialization module
   # [ ] Update the net.retrodeck.retrodeck.metainfo.xml with the version number, date and notes
 
   - name: retrodeck-initialization
@@ -84,18 +83,31 @@ modules:
       - |
 
         # VERSION INITIALIZATION
-        # on main please update this with the version variable, eg: VERSION=0.8.0b
-        # on cooker will be VERSION=cooker-0.9.0b for example
-        VERSION=cooker-0.9.1b
+        # Extract the version number from the metainfo XML file
+        VERSION=$(xmlstarlet sel -t -v "/component/releases/release[1]/@version" net.retrodeck.retrodeck.metainfo.xml)
+        # If the current Git branch is not 'main', append 'cooker-' to the version number
+        if [[ "${GITHUB_REF_NAME}" != "main" ]]; then
+          VERSION="cooker-$VERSION"
+        fi
 
+        # Check out the current Git branch
         git checkout ${GITHUB_REF_NAME}
+
+        # Create the retrodeck directory in the Flatpak destination
         mkdir -p ${FLATPAK_DEST}/retrodeck/
-        if [[ $VERSION == *"cooker"* ]];
-        then
+
+        # If the version contains "cooker", append "-VERSIONPLACEHOLDER" to the version number
+        if [[ $VERSION == *"cooker"* ]]; then
           VERSION="$VERSION-VERSIONPLACEHOLDER"
         fi
+
+        # Write the version number to the retrodeck version file
         echo $VERSION >> ${FLATPAK_DEST}/retrodeck/version
+
+        # Display the contents of the version file
         cat ${FLATPAK_DEST}/retrodeck/version
+
+        # Print the version number to the console
         echo "Version is $VERSION"
 
         # LIBMAN INSTALLATION
