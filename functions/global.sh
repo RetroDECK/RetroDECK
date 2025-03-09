@@ -246,8 +246,8 @@ else
     set_setting_value $rd_conf "rdhome" "$new_home_path" retrodeck "paths"
     conf_read
     #tmplog_merger # This function is tempry(?) removed
-    prepare_component "retrodeck" "postmove"
-    prepare_component "all" "postmove"
+    prepare_component "postmove" "retrodeck"
+    prepare_component "postmove" "all"
     conf_write
   fi
 
