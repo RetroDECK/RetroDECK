@@ -76,7 +76,7 @@ modules:
   #
   # UPDATE STEPS FOR MAIN:
   # [X] Update the VERSION variable in retrodeck-initialization module
-  # [ ] Update the net.retrodeck.retrodeck.metainfo.xml with the version number, date and notes
+  # [X] Update the net.retrodeck.retrodeck.metainfo.xml with the version number, date and notes
 
   - name: retrodeck-initialization
     buildsystem: simple
