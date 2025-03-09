@@ -241,7 +241,6 @@ else
 
   # Verify rdhome is where it is supposed to be.
   if [[ ! -d "$rdhome" ]]; then
-    prev_home_path="$rdhome"
     configurator_generic_dialog "RetroDECK Setup" "The RetroDECK data folder was not found in the expected location.\nThis may happen when SteamOS is updated.\n\nPlease browse to the current location of the \"retrodeck\" folder."
     new_home_path=$(directory_browse "RetroDECK folder location")
     set_setting_value $rd_conf "rdhome" "$new_home_path" retrodeck "paths"
