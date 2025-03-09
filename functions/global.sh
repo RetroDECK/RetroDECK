@@ -8,6 +8,11 @@
 
 : "${logging_level:=info}"                  # Initializing the log level variable if not already valued, this will be actually red later from the config file                                                 
 rd_logs_folder="/var/config/retrodeck/logs" # Static location to write all RetroDECK-related logs
+if [ -h "$rd_logs_folder" ]; then # Check if internal logging folder is already a symlink
+  if [ ! -e "$rd_logs_folder" ]; then # Check if internal logging folder symlink is broken
+    unlink "$rd_logs_folder" # Remove broken symlink so the folder is recreated when sourcing logger.sh
+  fi
+fi
 source /app/libexec/logger.sh
 rotate_logs
 
