@@ -1171,7 +1171,9 @@ repair_paths() {
     conf_read
     dir_prep "$logs_folder" "$rd_logs_folder"
     prepare_component "postmove" "all"
+    configurator_generic_dialog "RetroDECK Path Repair" "One or more incorrectly configured paths were repaired."
   else
     log i "All folders were found at their expected locations"
+    configurator_generic_dialog "RetroDECK Path Repair" "All RetroDECK folders were found at their expected locations."
   fi
 }
