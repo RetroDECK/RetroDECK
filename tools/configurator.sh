@@ -76,6 +76,7 @@ rd_zenity --progress --no-cancel --pulsate --auto-close \
 #       - Update Notification
 #       - Add RetroDECK to Steam
 #       - M3U Multi-File Validator
+#       - Repair RetroDECK paths
 #       - Ponzu: Remove Yuzu
 #       - Ponzu: Remove Citra
 #     - Steam Sync
@@ -443,6 +444,7 @@ configurator_tools_dialog() {
   "Update Notification" "Enable / Disable: Notifications for new RetroDECK versions."
   "Add RetroDECK to Steam" "Add RetroDECK shortcut to Steam. Steam restart required."
   "M3U Multi-File Validator" "Verify the proper structure of multi-file or multi-disc games."
+  "Repair RetroDECK Paths" "Repair RetroDECK folder path configs for unexpectedly missing folders."
   )
 
   if [[ $(get_setting_value "$rd_conf" "kiroi_ponzu" "retrodeck" "options") == "true" ]]; then
@@ -548,6 +550,12 @@ configurator_tools_dialog() {
   "M3U Multi-File Validator" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_check_multifile_game_structure
+  ;;
+
+  "Repair RetroDECK Paths" )
+    log i "Configurator: opening \"$choice\" menu"
+    repair_paths
+    configurator_tools_dialog
   ;;
 
   "Ponzu: Remove Yuzu" )
