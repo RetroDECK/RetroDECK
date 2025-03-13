@@ -476,12 +476,13 @@ configurator_tools_dialog() {
     else
       configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "The backup process could not be completed,\nplease check the logs folder for more information."
     fi
-    configurator_welcome_dialog
+    configurator_tools_dialog
   ;;
 
   "BIOS Checker" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_bios_checker
+    configurator_tools_dialog
   ;;
 
   "Games Compressor" )
@@ -545,11 +546,13 @@ configurator_tools_dialog() {
 
   "Add RetroDECK to Steam" )
     add_retrodeck_to_steam
+    configurator_tools_dialog
   ;;
 
   "M3U Multi-File Validator" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_check_multifile_game_structure
+    configurator_tools_dialog
   ;;
 
   "Repair RetroDECK Paths" )
@@ -1074,8 +1077,6 @@ configurator_bios_checker() {
     --title "RetroDECK Configurator Utility - BIOS Check in Progress" \
     --text="This check will look for BIOS files that RetroDECK has identified as working.\n\nNot all BIOS files are required for games to work, please check the BIOS description for more information on its purpose.\n\nBIOS files not known to this tool could still function.\n\nSome more advanced emulators such as Ryujinx will have additional methods to verify that the BIOS files are in working order.\n\nRetroDECK is now checking your BIOS files, please wait...\n\n" \
     --width=400 --height=100
-
-  configurator_welcome_dialog
 }
 
 configurator_reset_dialog() {

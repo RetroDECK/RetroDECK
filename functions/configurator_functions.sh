@@ -61,5 +61,4 @@ configurator_check_multifile_game_structure() {
   else
     configurator_generic_dialog "RetroDECK Configurator - Verify Multi-file Structure" "No incorrect multi-file game folder structures found."
   fi
-  configurator_welcome_dialog
 }
