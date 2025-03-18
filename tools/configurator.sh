@@ -109,7 +109,6 @@ rd_zenity --progress --no-cancel --pulsate --auto-close \
 
 configurator_welcome_dialog() {
   log i "Configurator: opening welcome dialog"
-  export CONFIGURATOR_GUI="zenity"
   welcome_menu_options=(
     "Settings" "Customize your RetroDECK experience with various presets and tweaks."
     "Open Component" "Manually launch and configure settings for each emulator or component (for advanced users)."
