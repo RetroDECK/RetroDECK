@@ -1422,7 +1422,6 @@ configurator_usb_import_dialog() {
 
   "Prepare USB device" )
     log i "Configurator: opening \"$choice\" menu"
-    configurator_generic_dialog "RetroDeck Configurator - USB Import" "If you have an SD card installed that is not currently configured in RetroDECK it may show up in this list, but not be suitable for USB import.\n\nPlease select your desired drive carefully."
 
     external_devices=()
 
@@ -1432,6 +1431,7 @@ configurator_usb_import_dialog() {
     done < <(df --output=size,target -h | grep "/run/media/" | grep -v "$sdcard" | awk '{$1=$1;print}')
 
     if [[ "${#external_devices[@]}" -gt 0 ]]; then
+      configurator_generic_dialog "RetroDeck Configurator - USB Import" "If you have an SD card installed that is not currently configured in RetroDECK it may show up in this list, but not be suitable for USB import.\n\nPlease select your desired drive carefully."
       choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - USB Migration Tool" --cancel-label="Back" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
       --hide-column=3 --print-column=3 \
@@ -1441,9 +1441,10 @@ configurator_usb_import_dialog() {
       "${external_devices[@]}")
 
       if [[ ! -z "$choice" ]]; then
+        create_dir "$choice/RetroDECK Import"
         es-de --home "$choice/RetroDECK Import" --create-system-dirs
         rm -rf "$choice/RetroDECK Import/ES-DE" # Cleanup unnecessary folder
-        create_dir "$choice/RetroDECK Import/BIOS"
+
 
         # Prepare default BIOS folder subfolders
         create_dir "$choice/RetroDECK Import/BIOS/np2kai"
