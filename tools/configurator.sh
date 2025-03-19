@@ -461,21 +461,53 @@ configurator_tools_dialog() {
   case $choice in
 
   "Backup Userdata" )
+
     log i "Configurator: opening \"$choice\" menu"
-    configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "This tool will compress important RetroDECK userdata (basically everything except the ROMs folder) into a zip file.\n\nThis process can take several minutes, and the resulting zip file can be found in the ~/retrodeck/backups folder."
-    (
-      backup_retrodeck_userdata
-    ) |
-    rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
-            --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-            --title "RetroDECK Configurator Utility - Backup in Progress" \
-            --text="Backing up RetroDECK userdata, please wait..."
-    if [[ -f "$backups_folder/$(date +"%0m%0d")_retrodeck_userdata.zip" ]]; then
-      configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "The backup process is now complete."
+    configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "This tool will compress one or more RetroDECK userdata folders into a single zip file.\n\nThis process can take several minutes, and the resulting zip file can be found in the ~/retrodeck/backups folder."
+
+    choice=$(rd_zenity --title "RetroDECK Configurator Utility - Backup Userdata" --info --no-wrap --ok-label="Cancel" --extra-button="Backup Some Userdata" --extra-button="Backup All Userdata" \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --text="Would you like to compress all RetroDECK userdata folders, or only some of them?")
+
+    local rc=$?
+    if [[ $rc == "0" ]] && [[ -z "$choice" ]]; then # User selected Cancel button
+      configurator_tools_dialog
     else
-      configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "The backup process could not be completed,\nplease check the logs folder for more information."
+      case $choice in
+        "Backup Some Userdata" )
+          while read -r config_line; do
+            local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
+            if [[ ! $current_setting_name =~ (rdhome|sdcard|backups_folder) ]]; then # Ignore these locations
+            log d "Adding $current_setting_name to compressible paths."
+              local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
+              compressible_paths=("${compressible_paths[@]}" "false" "$current_setting_name" "$current_setting_value")
+            fi
+          done < <(grep -v '^\s*$' $rd_conf | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
+
+          choice=$(rd_zenity \
+          --list --width=1200 --height=720 \
+          --checklist \
+          --separator="^" \
+          --print-column=3 \
+          --text="Please select folders to compress..." \
+          --column "Backup?" \
+          --column "Folder Name" \
+          --column "Path" \
+          "${compressible_paths[@]}")
+
+          choices=() # Expand choice string into passable array
+          IFS='^' read -ra choices <<< "$choice"
+
+          export CONFIGURATOR_GUI="zenity"
+          backup_retrodeck_userdata "custom" "${choices[@]}" # Expand array of choices into individual arguments
+        ;;
+        "Backup All Userdata" )
+          export CONFIGURATOR_GUI="zenity"
+          backup_retrodeck_userdata "standard"
+        ;;
+      esac
+
+      configurator_tools_dialog
     fi
-    configurator_tools_dialog
   ;;
 
   "BIOS Checker" )
