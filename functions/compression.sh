@@ -163,57 +163,61 @@ find_compatible_games() {
 
   while IFS= read -r system; do
     log d "Checking system: $system"
-    local compression_candidates
-    compression_candidates=$(find "$roms_folder/$system" -type f -not -iname "*.txt")
-    if [[ -n "$compression_candidates" ]]; then
-      while IFS= read -r game; do
-        log d "Checking game: $game"
-        local compatible_compression_format
-        compatible_compression_format=$(find_compatible_compression_format "$game")
-        local file_ext="${game##*.}"
-        case "$compression_format" in
-          "chd")
-            if [[ "$compatible_compression_format" == "chd" ]]; then
-              if [[ "$file_ext" == "chd" ]]; then
-                log d "Skipping $game because it is already a CHD file."
-              elif [[ ! -f "${game%.*}.chd" ]]; then
-                log d "Game $game is compatible with CHD compression"
-                echo "${game}^chd" >> "$output_file"
+    if [[ -d "$roms_folder/$system" ]]; then
+      local compression_candidates
+      compression_candidates=$(find "$roms_folder/$system" -type f -not -iname "*.txt")
+      if [[ -n "$compression_candidates" ]]; then
+        while IFS= read -r game; do
+          log d "Checking game: $game"
+          local compatible_compression_format
+          compatible_compression_format=$(find_compatible_compression_format "$game")
+          local file_ext="${game##*.}"
+          case "$compression_format" in
+            "chd")
+              if [[ "$compatible_compression_format" == "chd" ]]; then
+                if [[ "$file_ext" == "chd" ]]; then
+                  log d "Skipping $game because it is already a CHD file."
+                elif [[ ! -f "${game%.*}.chd" ]]; then
+                  log d "Game $game is compatible with CHD compression"
+                  echo "${game}^chd" >> "$output_file"
+                fi
               fi
-            fi
-            ;;
-          "zip")
-            if [[ "$compatible_compression_format" == "zip" ]]; then
-              if [[ "$file_ext" == "zip" ]]; then
-                log d "Skipping $game because it is already a ZIP file."
-              elif [[ ! -f "${game%.*}.zip" ]]; then
-                log d "Game $game is compatible with ZIP compression"
-                echo "${game}^zip" >> "$output_file"
+              ;;
+            "zip")
+              if [[ "$compatible_compression_format" == "zip" ]]; then
+                if [[ "$file_ext" == "zip" ]]; then
+                  log d "Skipping $game because it is already a ZIP file."
+                elif [[ ! -f "${game%.*}.zip" ]]; then
+                  log d "Game $game is compatible with ZIP compression"
+                  echo "${game}^zip" >> "$output_file"
+                fi
               fi
-            fi
-            ;;
-          "rvz")
-            if [[ "$compatible_compression_format" == "rvz" ]]; then
-              if [[ "$file_ext" == "rvz" ]]; then
-                log d "Skipping $game because it is already an RVZ file."
-              elif [[ ! -f "${game%.*}.rvz" ]]; then
-                log d "Game $game is compatible with RVZ compression"
-                echo "${game}^rvz" >> "$output_file"
+              ;;
+            "rvz")
+              if [[ "$compatible_compression_format" == "rvz" ]]; then
+                if [[ "$file_ext" == "rvz" ]]; then
+                  log d "Skipping $game because it is already an RVZ file."
+                elif [[ ! -f "${game%.*}.rvz" ]]; then
+                  log d "Game $game is compatible with RVZ compression"
+                  echo "${game}^rvz" >> "$output_file"
+                fi
               fi
-            fi
-            ;;
-          "all")
-            if [[ "$compatible_compression_format" != "none" ]]; then
-              if [[ "$file_ext" == "$compatible_compression_format" ]]; then
-                log d "Skipping $game because it is already in $compatible_compression_format format."
-              else
-                log d "Game $game is compatible with $compatible_compression_format compression"
-                echo "${game}^${compatible_compression_format}" >> "$output_file"
+              ;;
+            "all")
+              if [[ "$compatible_compression_format" != "none" ]]; then
+                if [[ "$file_ext" == "$compatible_compression_format" ]]; then
+                  log d "Skipping $game because it is already in $compatible_compression_format format."
+                else
+                  log d "Game $game is compatible with $compatible_compression_format compression"
+                  echo "${game}^${compatible_compression_format}" >> "$output_file"
+                fi
               fi
-            fi
-            ;;
-        esac
-      done < <(printf '%s\n' "$compression_candidates")
+              ;;
+          esac
+        done < <(printf '%s\n' "$compression_candidates")
+      fi
+    else
+      log i "Rom folder for $system is missing, skipping"
     fi
   done < <(printf '%s\n' "$compressable_systems_list")
 
