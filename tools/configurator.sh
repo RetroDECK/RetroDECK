@@ -700,7 +700,7 @@ configurator_data_management_dialog() {
         --list --width=1200 --height=720 --title "RetroDECK Configurator - RetroDECK: Clean Empty ROM Folders" \
         --checklist --hide-column=3 --ok-label="Remove Selected" --extra-button="Remove All" \
         --separator="," --print-column=2 \
-        --text="Choose which ROM folders to remove:" \
+        --text="Choose which empty ROM folders to remove:" \
         --column "Remove?" \
         --column "System" \
         "${empty_rom_folders_list[@]}")
