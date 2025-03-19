@@ -354,8 +354,233 @@ update_vita3k_firmware() {
 }
 
 backup_retrodeck_userdata() {
+  # This function can compress one or more RetroDECK userdata folders into a single zip file for backup.
+  # The function can do a "standard" backup of all the normal userdata files (which can be very big if there is a lot of media) or a "custom" backup of only specified paths
+  # The function can take both folder names as defined in retrodeck.cfg or full paths as arguments for folders to backup
+  # It will also validate that all the provided paths exist and that there is enough free space to perform the backup before actually proceeding.
+  # It will also rotate backups so that there are only 3 maximum of each type (standard or custom)
+  # USAGE: backup_retrodeck_userdata standard
+  #        backup_retrodeck_userdata custom saves_folder states_folder /some/other/path
+
   create_dir "$backups_folder"
-  zip -rq9 "$backups_folder/$(date +"%0m%0d")_retrodeck_userdata.zip" "$saves_folder" "$states_folder" "$bios_folder" "$media_folder" "$themes_folder" "$rdhome/ES-DE/collections" "$rdhome/ES-DE/gamelists" "$logs_folder" "$screenshots_folder" "$mods_folder" "$texture_packs_folder" "$borders_folder" > $logs_folder/$(date +"%0m%0d")_backup_log.log
+
+  backup_date=$(date +"%0m%0d_%H%M")
+  backup_log_file="$logs_folder/${backup_date}_${backup_type}_backup_log.log"
+
+  # Check if first argument is the type
+  if [[ "$1" == "standard" || "$1" == "custom" ]]; then
+    backup_type="$1"
+    shift # Remove the first argument
+  else
+    if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
+      configurator_generic_dialog "RetroDECK Userdata Backup" "No valid backup option chosen. Valid options are <standard> and <custom>."
+    fi
+    log e "No valid backup option chosen. Valid options are <standard> and <custom>."
+    exit 1
+  fi
+
+  zip_file="$backups_folder/retrodeck_${backup_date}_${backup_type}.zip"
+
+  # Initialize paths arrays
+  paths_to_backup=()
+  declare -A config_paths # Requires an associative (dictionary) array to work
+
+  # Build array of folder names and real paths from retrodeck.cfg
+  while read -r config_line; do
+    local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
+    if [[ ! $current_setting_name =~ (rdhome|sdcard|backups_folder) ]]; then # Ignore these locations
+      local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
+      config_paths["$current_setting_name"]="$current_setting_value"
+    fi
+  done < <(grep -v '^\s*$' $rd_conf | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
+
+  # Determine which paths to backup
+  if [[ "$backup_type" == "standard" ]]; then
+    for folder_name in "${!config_paths[@]}"; do
+      path_value="${config_paths[$folder_name]}"
+      if [[ -e "$path_value" ]]; then
+        paths_to_backup+=("$path_value")
+        log i "Adding to backup: $folder_name = $path_value"
+      else
+        if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
+          configurator_generic_dialog "RetroDECK Userdata Backup" "The $folder_name was not found at its expected location, $path_value\nSomething may be wrong with your RetroDECK installation."
+        fi
+        log i "Warning: Path does not exist: $folder_name = $path_value"
+      fi
+    done
+
+    # Add static paths not defined in retrodeck.cfg
+    if [[ -e "$rdhome/ES-DE/collections" ]]; then
+      paths_to_backup+=("$rdhome/ES-DE/collections")
+    else
+      if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
+        configurator_generic_dialog "RetroDECK Userdata Backup" "The ES-DE collections folder was not found at its expected location, $rdhome/ES-DE/collections\nSomething may be wrong with your RetroDECK installation."
+      fi
+      log i "Warning: Path does not exist: ES-DE/collections = $rdhome/ES-DE/collections"
+    fi
+
+    if [[ -e "$rdhome/ES-DE/gamelists" ]]; then
+      paths_to_backup+=("$rdhome/ES-DE/gamelists")
+    else
+      if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
+        configurator_generic_dialog "RetroDECK Userdata Backup" "The ES-DE gamelists folder was not found at its expected location, $rdhome/ES-DE/gamelists\nSomething may be wrong with your RetroDECK installation."
+      fi
+      log i "Warning: Path does not exist: ES-DE/gamelists = $rdhome/ES-DE/gamelists"
+    fi
+
+    if [[ -e "$rdhome/ES-DE/custom_systems" ]]; then
+      paths_to_backup+=("$rdhome/ES-DE/custom_systems")
+    else
+      if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
+        configurator_generic_dialog "RetroDECK Userdata Backup" "The ES-DE custom_systems folder was not found at its expected location, $rdhome/ES-DE/custom_systems\nSomething may be wrong with your RetroDECK installation."
+      fi
+      log i "Warning: Path does not exist: ES-DE/custom_systems = $rdhome/ES-DE/custom_systems"
+    fi
+
+    # Check if we found any valid paths
+    if [[ ${#paths_to_backup[@]} -eq 0 ]]; then
+      if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
+        configurator_generic_dialog "RetroDECK Userdata Backup" "No valid userdata folders were found.\nSomething may be wrong with your RetroDECK installation."
+      fi
+      log e "Error: No valid paths found in config file"
+      return 1
+    fi
+
+  elif [[ "$backup_type" == "custom" ]]; then
+    if [[ "$#" -eq 0 ]]; then # Check if any paths were provided in the arguments
+      if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
+        configurator_generic_dialog "RetroDECK Userdata Backup" "No valid backup locations were specified. Please try again."
+      fi
+      log e "Error: No paths specified for custom backup"
+      return 1
+    fi
+
+    # Process each argument - it could be a variable name or a direct path
+    for arg in "$@"; do
+      # Check if argument is a variable name in the config
+      if [[ -n "${config_paths[$arg]}" ]]; then
+        path_value="${config_paths[$arg]}"
+        if [[ -e "$path_value" ]]; then
+          paths_to_backup+=("$path_value")
+          log i "Added to backup: $arg = $path_value"
+        else
+          if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
+            configurator_generic_dialog "RetroDECK Userdata Backup" "The $arg was not found at its expected location, $path_value.\nSomething may be wrong with your RetroDECK installation."
+          fi
+          log e "Error: Path from variable '$arg' does not exist: $path_value"
+          return 1
+        fi
+      # Otherwise treat it as a direct path
+      elif [[ -e "$arg" ]]; then
+        paths_to_backup+=("$arg")
+        log i "Added to backup: $arg"
+      else
+        if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
+          configurator_generic_dialog "RetroDECK Userdata Backup" "The path $arg was not found at its expected location.\nPlease check the path and try again."
+        fi
+        log e "Error: '$arg' is neither a valid variable name nor an existing path"
+        return 1
+      fi
+    done
+  fi
+
+  # Calculate total size of selected paths
+  log i "Calculating size of backup data..."
+
+  total_size=0
+
+  if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then # Show progress dialog if running Zenity Configurator
+    total_size_file=$(mktemp) # Create temp file for Zenity subshell data extraction
+    (
+      for path in "${paths_to_backup[@]}"; do
+        if [[ -e "$path" ]]; then
+          log d "Checking size of path $path"
+          path_size=$(du -sk "$path" 2>/dev/null | cut -f1) # Get size in KB
+          path_size=$((path_size * 1024)) # Convert to bytes for calculation
+          total_size=$((total_size + path_size))
+          echo "$total_size" > $total_size_file
+        fi
+      done
+    ) |
+    rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+            --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+            --title "RetroDECK Configurator Utility - Userdata Backup" \
+            --text="Verifying there is enough free space for the backup, please wait..."
+    total_size=$(cat "$total_size_file")
+    rm "$total_size_file" # Clean up temp file
+  else # If running in CLI
+    for path in "${paths_to_backup[@]}"; do
+      if [[ -e "$path" ]]; then
+        log d "Checking size of path $path"
+        path_size=$(du -sk "$path" 2>/dev/null | cut -f1) # Get size in KB
+        path_size=$((path_size * 1024)) # Convert to bytes for calculation
+        total_size=$((total_size + path_size))
+      fi
+    done
+  fi
+
+  # Get available space at destination
+  available_space=$(df -B1 "$backups_folder" | awk 'NR==2 {print $4}')
+
+  # Log sizes for reference
+  log i "Total size of backup data: $(numfmt --to=iec-i --suffix=B $total_size)"
+  log i "Available space at destination: $(numfmt --to=iec-i --suffix=B $available_space)"
+
+  # Check if we have enough space (using uncompressed size as a conservative estimate)
+  if [[ "$available_space" -lt "$total_size" ]]; then
+    if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
+      configurator_generic_dialog "RetroDECK Userdata Backup" "There is not enough free space to perform this backup.\n\nYou need at least $(numfmt --to=iec-i --suffix=B $total_size),\nplease free up some space and try again."
+    fi
+    log e "Error: Not enough space to perform backup. Need at least $(numfmt --to=iec-i --suffix=B $total_size)"
+    return 1
+  fi
+
+  log i "Starting backup process..."
+
+  if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then # Show progress dialog if running Zenity Configurator
+    (
+      # Create zip with selected paths
+      if zip -rq9 "$zip_file" "${paths_to_backup[@]}" >> "$backup_log_file" 2>&1; then
+        # Rotate backups for the specific type
+        cd "$backups_folder" || return 1
+        ls -t *_${backup_type}.zip | tail -n +4 | xargs -r rm
+
+        final_size=$(du -h "$zip_file" | cut -f1)
+        configurator_generic_dialog "RetroDECK Userdata Backup" "The backup to $zip_file was successful, final size is $final_size.\n\nThe backups have been rotated, keeping the last 3 of the $backup_type backup type."
+        log i "Backup completed successfully: $zip_file (Size: $final_size)"
+        log i "Older backups rotated, keeping latest 3 of type $backup_type"
+
+        if [[ ! -s "$backup_log_file" ]]; then # If the backup log file is empty, meaning zip threw no errors
+          rm -f "$backup_log_file"
+        fi
+      else
+        configurator_generic_dialog "RetroDECK Userdata Backup" "Something went wrong with the backup process. Please check the log $backup_log_file for more information."
+        log i "Error: Backup failed"
+        return 1
+      fi
+    ) |
+    rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+            --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+            --title "RetroDECK Configurator Utility - Userdata Backup" \
+            --text="Compressing files into backup, please wait..."
+  else
+    if zip -rq9 "$zip_file" "${paths_to_backup[@]}" >> "$backup_log_file" 2>&1; then
+      # Rotate backups for the specific type
+      cd "$backups_folder" || return 1
+      ls -t *_${backup_type}.zip | tail -n +4 | xargs -r rm
+
+      final_size=$(du -h "$zip_file" | cut -f1)
+      log i "Backup completed successfully: $zip_file (Size: $final_size)"
+      log i "Older backups rotated, keeping latest 3 of type $backup_type"
+
+      if [[ ! -s "$backup_log_file" ]]; then # If the backup log file is empty, meaning zip threw no errors
+        rm -f "$backup_log_file"
+      fi
+    else
+      log i "Error: Backup failed"
+      return 1
+    fi
+  fi
 }
 
 make_name_pretty() {
