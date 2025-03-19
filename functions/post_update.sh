@@ -9,6 +9,54 @@ post_update() {
 
   update_rd_conf
 
+  # Optional userdata backup prior to update
+
+  choice=$(rd_zenity --title "RetroDECK Update - Backup Userdata" --info --no-wrap --ok-label="No Backup" --extra-button="Backup Some Userdata" --extra-button="Backup All Userdata" \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --text="Would you like to backup some or all of the RetroDECK userdata prior to update?\n\nIf you choose \"Backup Some Userdata\" you will be given a choice of which folders to backup.\nPLEASE NOTE: A full backup may take up a large amount of space, especially if you have a lot of scraped media.")
+
+  local rc=$?
+    if [[ $rc == "0" ]] && [[ -z "$choice" ]]; then # User selected No Backup button
+      log i "User chose to not backup prior to update."
+    else
+      case $choice in
+        "Backup Some Userdata" )
+          log i "User chose to backup some userdata prior to update."
+          while read -r config_line; do
+            local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
+            if [[ ! $current_setting_name =~ (rdhome|sdcard|backups_folder) ]]; then # Ignore these locations
+            log d "Adding $current_setting_name to compressible paths."
+              local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
+              compressible_paths=("${compressible_paths[@]}" "false" "$current_setting_name" "$current_setting_value")
+            fi
+          done < <(grep -v '^\s*$' $rd_conf | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
+
+          choice=$(rd_zenity \
+          --list --width=1200 --height=720 \
+          --checklist \
+          --separator="^" \
+          --print-column=3 \
+          --text="Please select folders to compress..." \
+          --column "Backup?" \
+          --column "Folder Name" \
+          --column "Path" \
+          "${compressible_paths[@]}")
+
+          choices=() # Expand choice string into passable array
+          IFS='^' read -ra choices <<< "$choice"
+
+          export CONFIGURATOR_GUI="zenity"
+          backup_retrodeck_userdata "custom" "${choices[@]}" # Expand array of choices into individual arguments
+        ;;
+        "Backup All Userdata" )
+          log i "User chose to backup all userdata prior to update."
+          export CONFIGURATOR_GUI="zenity"
+          backup_retrodeck_userdata "standard"
+        ;;
+      esac
+    fi
+
+  # Start of post_update actions
+
   if [[ $(check_version_is_older_than "$version_being_updated" "0.5.0b") == "true" ]]; then # If updating from prior to save sorting change at 0.5.0b
     log d "Version is older than 0.5.0b, executing save migration"
     save_migration
