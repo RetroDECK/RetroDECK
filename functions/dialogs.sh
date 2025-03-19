@@ -128,7 +128,7 @@ configurator_move_folder_dialog() {
               if [[ -z $(ls -1 "$source_root/retrodeck") ]]; then # Cleanup empty old_path/retrodeck folder if it was left behind
                 rmdir "$source_root/retrodeck"
               fi
-              configurator_process_complete_dialog "moving the RetroDECK data directory to internal storage"
+              configurator_generic_dialog "RetroDECK Configurator - Move Folder" "moving the RetroDECK data directory to internal storage"
             else
               configurator_generic_dialog "RetroDECK Configurator - Move Folder" "The moving process was not completed, please try again."
             fi
