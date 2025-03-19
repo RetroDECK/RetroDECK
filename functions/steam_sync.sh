@@ -71,7 +71,7 @@ add_to_steam() {
                             echo "$command" >> "$launcher_tmp"
                             chmod +x "$launcher_tmp"
                         else
-                            log d "$(basename $launcher) desktop file already exists"
+                            log d "$(basename "$launcher") desktop file already exists"
                         fi
                     fi
 

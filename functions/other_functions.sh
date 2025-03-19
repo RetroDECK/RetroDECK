@@ -273,8 +273,8 @@ dir_prep() {
 
   # Call me with:
   # dir prep "real dir" "symlink location"
-  real="$(realpath -s $1)"
-  symlink="$(realpath -s $2)"
+  real="$(realpath -s "$1")"
+  symlink="$(realpath -s "$2")"
 
   log d "Preparing directory $symlink in $real"
 
