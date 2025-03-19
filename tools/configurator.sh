@@ -757,26 +757,31 @@ configurator_compression_tool_dialog() {
   "Compress Multiple Games: CHD" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_compress_multiple_games_dialog "chd"
+    configurator_compression_tool_dialog
   ;;
 
   "Compress Multiple Games: ZIP" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_compress_multiple_games_dialog "zip"
+    configurator_compression_tool_dialog
   ;;
 
   "Compress Multiple Games: RVZ" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_compress_multiple_games_dialog "rvz"
+    configurator_compression_tool_dialog
   ;;
 
   "Compress Multiple Games: All Formats" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_compress_multiple_games_dialog "all"
+    configurator_compression_tool_dialog
   ;;
 
   "Compress All Games" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_compress_multiple_games_dialog "everything"
+    configurator_compression_tool_dialog
   ;;
 
   "" ) # No selection made or Back button clicked
