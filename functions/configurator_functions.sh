@@ -23,14 +23,14 @@ find_empty_rom_folders() {
 
     if [[ $count -eq 0 ]]; then
         # Directory is empty
-        empty_rom_folders_list=("${empty_rom_folders_list[@]}" "false" "$(realpath $dir)")
-        all_empty_folders=("${all_empty_folders[@]}" "$(realpath $dir)")
-        echo "$(realpath $dir)" >> "$godot_empty_roms_folders" # Godot data transfer temp file
+        empty_rom_folders_list=("${empty_rom_folders_list[@]}" "false" "$(realpath "$dir")")
+        all_empty_folders=("${all_empty_folders[@]}" "$(realpath "$dir")")
+        echo "$(realpath "$dir")" >> "$godot_empty_roms_folders" # Godot data transfer temp file
     elif [[ $count -eq 1 ]] && [[ "$(basename "${files[0]}")" == "systeminfo.txt" ]]; then
         # Directory contains only systeminfo.txt
-        empty_rom_folders_list=("${empty_rom_folders_list[@]}" "false" "$(realpath $dir)")
-        all_empty_folders=("${all_empty_folders[@]}" "$(realpath $dir)")
-        echo "$(realpath $dir)" >> "$godot_empty_roms_folders" # Godot data transfer temp file
+        empty_rom_folders_list=("${empty_rom_folders_list[@]}" "false" "$(realpath "$dir")")
+        all_empty_folders=("${all_empty_folders[@]}" "$(realpath "$dir")")
+        echo "$(realpath "$dir")" >> "$godot_empty_roms_folders" # Godot data transfer temp file
     elif [[ $count -eq 2 ]] && [[ "$files" =~ "systeminfo.txt" ]]; then
       contains_helper_file="false"
       for helper_file in "${all_helper_files[@]}" # Compare helper file list to dir file list
@@ -42,9 +42,9 @@ find_empty_rom_folders() {
       done
       if [[ "$contains_helper_file" == "true" ]]; then
         # Directory contains only systeminfo.txt and a helper file
-        empty_rom_folders_list=("${empty_rom_folders_list[@]}" "false" "$(realpath $dir)")
-        all_empty_folders=("${all_empty_folders[@]}" "$(realpath $dir)")
-        echo "$(realpath $dir)" >> "$godot_empty_roms_folders" # Godot data transfer temp file
+        empty_rom_folders_list=("${empty_rom_folders_list[@]}" "false" "$(realpath "$dir")")
+        all_empty_folders=("${all_empty_folders[@]}" "$(realpath "$dir")")
+        echo "$(realpath "$dir")" >> "$godot_empty_roms_folders" # Godot data transfer temp file
       fi
     fi
   done
