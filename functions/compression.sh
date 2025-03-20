@@ -219,8 +219,8 @@ cli_compress_single_game() {
   # USAGE: cli_compress_single_game $full_file_path
   local file=$(realpath "$1")
   read -p "Do you want to have the original file removed after compression is complete? Please answer y/n and press Enter: " post_compression_cleanup
-  read -p "RetroDECK will now attempt to compress your selected game. Press Enter key to continue..."
-	if [[ "$post_compression_cleanup" == "y" || "$post_compression_cleanup" == "n" ]]; then
+  if [[ "$post_compression_cleanup" == "y" || "$post_compression_cleanup" == "n" ]]; then
+    read -p "RetroDECK will now attempt to compress your selected game. Press Enter key to continue..."
     if [[ ! -z "$file" ]]; then
       if [[ -f "$file" ]]; then
         local system=$(echo "$file" | grep -oE "$roms_folder/[^/]+" | grep -oE "[^/]+$")
@@ -265,25 +265,33 @@ cli_compress_all_games() {
   fi
 
   read -p "Do you want to have the original files removed after compression is complete? Please answer y/n and press Enter: " post_compression_cleanup
-  read -p "RetroDECK will now attempt to compress all compatible games. Press Enter key to continue..."
-
-  while IFS= read -r system # Find and validate all games that are able to be compressed with this compression type
-  do
-    local compression_candidates=$(find "$roms_folder/$system" -type f -not -iname "*.txt")
-    if [[ ! -z "$compression_candidates" ]]; then
-      log i "Checking files for $system"
-      while IFS= read -r file
-      do
-        local compatible_compression_format=$(find_compatible_compression_format "$file")
-        if [[ ! "$compatible_compression_format" == "none" ]]; then
-          log i "$(basename "$file") can be compressed to $compatible_compression_format"
-          compress_game "$compatible_compression_format" "$file" "$system"
-        else
-          log w "No compatible compression format found for $(basename "$file")"
-        fi
-      done < <(printf '%s\n' "$compression_candidates")
+  if [[ "$post_compression_cleanup" == "y" || "$post_compression_cleanup" == "n" ]]; then
+    read -p "RetroDECK will now attempt to compress all compatible games. Press Enter key to continue..."
+    if [[ "$post_compression_cleanup" == "y" ]]; then
+      post_compression_cleanup="true"
     else
-      log w "No compatible files found for compression in $system"
+      post_compression_cleanup="false"
     fi
-  done < <(printf '%s\n' "$compressible_systems_list")
+    while IFS= read -r system # Find and validate all games that are able to be compressed with this compression type
+    do
+      local compression_candidates=$(find "$roms_folder/$system" -type f -not -iname "*.txt")
+      if [[ ! -z "$compression_candidates" ]]; then
+        log i "Checking files for $system"
+        while IFS= read -r file
+        do
+          local compatible_compression_format=$(find_compatible_compression_format "$file")
+          if [[ ! "$compatible_compression_format" == "none" ]]; then
+            log i "$(basename "$file") can be compressed to $compatible_compression_format"
+            compress_game "$compatible_compression_format" "$file" "$post_compression_cleanup" "$system"
+          else
+            log w "No compatible compression format found for $(basename "$file")"
+          fi
+        done < <(printf '%s\n' "$compression_candidates")
+      else
+        log w "No compatible files found for compression in $system"
+      fi
+    done < <(printf '%s\n' "$compressible_systems_list")
+  else
+    log i "The response for post-compression file cleanup was not correct. Please try again."
+  fi
 }
