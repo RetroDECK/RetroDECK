@@ -220,22 +220,29 @@ cli_compress_single_game() {
   local file=$(realpath "$1")
   read -p "Do you want to have the original file removed after compression is complete? Please answer y/n and press Enter: " post_compression_cleanup
   read -p "RetroDECK will now attempt to compress your selected game. Press Enter key to continue..."
-	if [[ ! -z "$file" ]]; then
-		if [[ -f "$file" ]]; then
-      local system=$(echo "$file" | grep -oE "$roms_folder/[^/]+" | grep -oE "[^/]+$")
-      local compatible_compression_format=$(find_compatible_compression_format "$file")
-      if [[ ! $compatible_compression_format == "none" ]]; then
-        log i "$(basename "$file") can be compressed to $compatible_compression_format"
-        compress_game "$compatible_compression_format" "$file" "$system"
+	if [[ "$post_compression_cleanup" == "y" || "$post_compression_cleanup" == "n" ]]; then
+    if [[ ! -z "$file" ]]; then
+      if [[ -f "$file" ]]; then
+        local system=$(echo "$file" | grep -oE "$roms_folder/[^/]+" | grep -oE "[^/]+$")
+        local compatible_compression_format=$(find_compatible_compression_format "$file")
+        if [[ ! $compatible_compression_format == "none" ]]; then
+          log i "$(basename "$file") can be compressed to $compatible_compression_format"
+          if [[ "$post_compression_cleanup" == "y" ]]; then
+            post_compression_cleanup="true"
+          else
+            post_compression_cleanup="false"
+          fi
+          compress_game "$compatible_compression_format" "$file" "$post_compression_cleanup" "$system"
+        else
+          log w "$(basename "$file") does not have any compatible compression formats."
+        fi
       else
-        log w "$(basename "$file") does not have any compatible compression formats."
+        log w "File not found, please specify the full path to the file to be compressed."
       fi
-		else
-			log w "File not found, please specify the full path to the file to be compressed."
-		fi
-	else
-		log i "Please use this command format \"--compress-one <path to file to compress>\""
-	fi
+    else
+      log i "Please use this command format \"--compress-one <path to file to compress>\""
+    fi
+  fi
 }
 
 cli_compress_all_games() {
