@@ -822,120 +822,86 @@ configurator_compress_single_game_dialog() {
 
 configurator_compress_multiple_games_dialog() {
   log d "Starting to compress \"$1\""
-  local output_file="${godot_compression_compatible_games}"
-  [ -f "$output_file" ] && rm -f "$output_file"
-  touch "$output_file"
+  local compressible_games_list_file="${godot_compression_compatible_games}"
+  [ -f "$compressible_games_list_file" ] && rm -f "$compressible_games_list_file"
+  touch "$compressible_games_list_file"
 
-  ## --- SEARCH PHASE WITH LOADING SCREEN ---
-  local progress_pipe
-  progress_pipe=$(mktemp -u)
-  mkfifo "$progress_pipe"
-
-  # Launch find_compatible_games in the background (its output goes to the file)
-  find_compatible_games "$1" > "$output_file" &
-  local finder_pid=$!
-
-  # Launch a background process that writes loading messages until the search completes.
   (
-    while kill -0 "$finder_pid" 2>/dev/null; do
-      echo "# Loading: Searching for compatible games..."
-      sleep 1
-    done
-    echo "100"
-  ) > "$progress_pipe" &
-  local progress_writer_pid=$!
+  find_compatible_games "$1" > "$compressible_games_list_file"
+  ) |
+  rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+  --title "RetroDECK Configurator - RetroDECK: Compression Tool" --text "RetroDECK is searching for compress1ble games, please wait..."
 
-  rd_zenity --progress --pulsate --auto-close \
-    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title="RetroDECK Configurator Utility - Searching for Compressable Games" \
-    --text="Searching for compressable games, please wait..." < "$progress_pipe"
-
-  wait "$finder_pid"
-  wait "$progress_writer_pid"
-  rm "$progress_pipe"
-
-  if [[ -s "$output_file" ]]; then
-    mapfile -t all_compressable_games < "$output_file"
-    log d "Found the following games to compress: ${all_compressable_games[*]}"
+  if [[ -s "$compressible_games_list_file" ]]; then
+    mapfile -t all_compressible_games < "$compressible_games_list_file"
+    log d "Found the following games to compress: ${all_compressible_games[*]}"
   else
-    configurator_generic_dialog "RetroDECK Configurator - Compression Tool" "No compressable files were found."
-    return
+    configurator_generic_dialog "RetroDECK Configurator - Compression Tool" "No compressible files were found."
+    configurator_compression_tool_dialog
   fi
 
   local games_to_compress=()
   if [[ "$1" != "everything" ]]; then
     local checklist_entries=()
-    for line in "${all_compressable_games[@]}"; do
+    for line in "${all_compressible_games[@]}"; do
       IFS="^" read -r game comp <<< "$line"
       local short_game="${game#$roms_folder}"
       checklist_entries+=( "TRUE" "$short_game" "$line" )
     done
 
-    local choice
-    choice=$(rd_zenity \
+    local choice=$(rd_zenity \
       --list --width=1200 --height=720 --title "RetroDECK Configurator - Compression Tool" \
       --checklist --hide-column=3 --ok-label="Compress Selected" --extra-button="Compress All" \
-      --separator="," --print-column=3 \
+      --separator=$'\0' --print-column=3 \
       --text="Choose which games to compress:" \
       --column "Compress?" \
       --column "Game" \
-      --column "Game Full Path" \
+      --column "Game Full Path and Compression Format" \
       "${checklist_entries[@]}")
 
     local rc=$?
     log d "User choice: $choice"
     if [[ $rc == 0 && -n "$choice" ]]; then
-      IFS="," read -ra games_to_compress <<< "$choice"
+      while IFS="^" read -r game comp; do # Split Zenity choice string into compatible pairs (game^format)
+        games_to_compress+=("$game"^"$comp")
+      done < "$compressible_games_list_file"
     elif [[ -n "$choice" ]]; then
-      games_to_compress=("${all_compressable_games[@]}")
+      games_to_compress=("${all_compressible_games[@]}")
     else
-      return
+      configurator_compression_tool_dialog
     fi
   else
-    games_to_compress=("${all_compressable_games[@]}")
+    games_to_compress=("${all_compressible_games[@]}")
   fi
+
+  local post_compression_cleanup=$(configurator_compression_cleanup_dialog)
 
   local total_games=${#games_to_compress[@]}
   local games_left=$total_games
 
-  ## --- COMPRESSION PHASE WITH PROGRESS SCREEN ---
-  local comp_pipe
-  comp_pipe=$(mktemp -u)
-  mkfifo "$comp_pipe"
-
   (
-    for game_line in "${games_to_compress[@]}"; do
-      IFS="^" read -r game compression_format <<< "$game_line"
-      local system
-      system=$(echo "$game" | grep -oE "$roms_folder/[^/]+" | grep -oE "[^/]+$")
-      log i "Compressing $(basename "$game") into $compression_format format"
+  for game_line in "${games_to_compress[@]}"; do
+    IFS="^" read -r game compression_format <<< "$game_line"
 
-      # Launch the compression in the background.
-      compress_game "$compression_format" "$game" "$system" &
-      local comp_pid=$!
+    local system
+    system=$(echo "$game" | grep -oE "$roms_folder/[^/]+" | grep -oE "[^/]+$")
+    log i "Compressing $(basename "$game") into $compression_format format"
 
-      # While the compression is in progress, write a status message every second.
-      while kill -0 "$comp_pid" 2>/dev/null; do
-        echo "# Compressing $(basename "$game") into $compression_format format"
-        sleep 1
-      done
+    echo "#Compressing $(basename "$game") into $compression_format format.\n\n$games_left games left to compress." # Update Zenity dialog text
+    compress_game "$compression_format" "$game" "$post_compression_cleanup" "$system"
 
-      # When finished, update the progress percentage.
-      local progress=$(( 100 - (( 100 / total_games ) * games_left) ))
-      echo "$progress"
-      games_left=$(( games_left - 1 ))
-    done
-    echo "100"
-  ) > "$comp_pipe" &
-  local comp_pid_group=$!
-
+    games_left=$(( games_left - 1 ))
+    local progress=$(( 99 - (( 99 / total_games ) * games_left) ))
+    log d "progress: $progress"
+    echo "$progress" # Update Zenity dialog progress bar
+  done
+  echo "100" # Close Zenity progress dialog when finished
+  ) |
   rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck/retrodeck.svg" \
     --width="800" \
-    --title "RetroDECK Configurator Utility - Compression in Progress" < "$comp_pipe"
-
-  wait "$comp_pid_group"
-  rm "$comp_pipe"
+    --title "RetroDECK Configurator Utility - Compression in Progress"
 
   configurator_generic_dialog "RetroDECK Configurator - Compression Tool" "The compression process is complete!"
   configurator_compression_tool_dialog
