@@ -242,6 +242,8 @@ cli_compress_single_game() {
     else
       log i "Please use this command format \"--compress-one <path to file to compress>\""
     fi
+  else
+    log i "The response for post-compression file cleanup was not correct. Please try again."
   fi
 }
 
