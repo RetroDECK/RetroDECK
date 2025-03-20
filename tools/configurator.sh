@@ -802,7 +802,7 @@ configurator_compress_single_game_dialog() {
       (
       echo "# Compressing $(basename "$file") to $compatible_compression_format format" # This updates the Zenity dialog
       log i "Compressing $(basename "$file") to $compatible_compression_format format"
-      compress_game "$compatible_compression_format" "$file" "$system"
+      compress_game "$compatible_compression_format" "$file" "$post_compression_cleanup" "$system"
       ) |
       rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
