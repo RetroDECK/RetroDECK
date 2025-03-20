@@ -2,7 +2,7 @@
 
 compress_game() {
   # Function for compressing one or more files to .chd format
-  # USAGE: compress_game $format $full_path_to_input_file $system(optional)
+  # USAGE: compress_game $format $full_path_to_input_file $cleanup_choice $system(optional)
   local file="$2"
   local filename_no_path=$(basename "$file")
   local filename_no_extension="${filename_no_path%.*}"
@@ -11,8 +11,9 @@ compress_game() {
   local dest_file=$(dirname "$(realpath "$file")")"/""$filename_no_extension"
 
   if [[ "$1" == "chd" ]]; then
-    case "$3" in # Check platform-specific compression options
+    case "$4" in # Check platform-specific compression options
     "psp" )
+      log d "Compressing PSP game $source_file into $dest_file"
       /app/bin/chdman createdvd --hunksize 2048 -i "$source_file" -o "$dest_file".chd -c zstd
     ;;
     "ps2" )
@@ -32,7 +33,7 @@ compress_game() {
     dolphin-tool convert -f rvz -b 131072 -c zstd -l 5 -i "$source_file" -o "$dest_file.rvz"
   fi
 
-  if [[ $post_compression_cleanup == "true" ]]; then # Remove file(s) if requested
+  if [[ "$3" == "true" ]]; then # Remove file(s) if requested
     if [[ -f "${file%.*}.$1" ]]; then
       log i "Performing post-compression file cleanup"
       if [[ "$file" == *".cue" ]]; then
