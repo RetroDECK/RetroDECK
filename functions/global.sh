@@ -256,7 +256,6 @@ else
   multi_user_data_folder="$rdhome/multi-user-data"                                                                      # The default location of multi-user environment profiles
 fi
 
-logs_folder="$rdhome/logs"                # The path of the logs folder, here we collect all the logs
 steamsync_folder="$rdhome/.sync"          # Folder containing all the steam sync launchers for SRM
 steamsync_folder_tmp="$rdhome/.sync-tmp"  # Temp folder containing all the steam sync launchers for SRM
 
