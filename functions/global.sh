@@ -259,6 +259,5 @@ fi
 logs_folder="$rdhome/logs"                # The path of the logs folder, here we collect all the logs
 steamsync_folder="$rdhome/.sync"          # Folder containing all the steam sync launchers for SRM
 steamsync_folder_tmp="$rdhome/.sync-tmp"  # Temp folder containing all the steam sync launchers for SRM
-backups_folder="$rdhome/backups"          # Folder containing all the RetroDECK backups
 
 export GLOBAL_SOURCED=true
