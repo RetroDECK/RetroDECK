@@ -465,15 +465,21 @@ configurator_tools_dialog() {
     log i "Configurator: opening \"$choice\" menu"
     configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "This tool will compress one or more RetroDECK userdata folders into a single zip file.\n\nThis process can take several minutes, and the resulting zip file can be found in the ~/retrodeck/backups folder."
 
-    choice=$(rd_zenity --title "RetroDECK Configurator Utility - Backup Userdata" --info --no-wrap --ok-label="Cancel" --extra-button="Backup Some Userdata" --extra-button="Backup All Userdata" \
-    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --text="Would you like to compress all RetroDECK userdata folders, or only some of them?")
+    choice=$(rd_zenity --title "RetroDECK Configurator Utility - Backup Userdata" --info --no-wrap --ok-label="Cancel" --extra-button"Backup Core Userdata" --extra-button="Backup Some Userdata" --extra-button="Backup All Userdata" \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --text="Would you like to compress all RetroDECK userdata folders, or only some of them?\nThe \"Core Userdata\" includes irreplaceable files such as saves, states and gamelists.\n\n A complete \"All Userdata\" backup can take up A LOT of space if you have a large library.")
 
     local rc=$?
     if [[ $rc == "0" ]] && [[ -z "$choice" ]]; then # User selected Cancel button
       configurator_tools_dialog
     else
       case $choice in
+        "Backup Core Userdata" )
+          log i "User chose to backup core userdata prior to update."
+          export CONFIGURATOR_GUI="zenity"
+          backup_retrodeck_userdata "core"
+        ;;
         "Backup Some Userdata" )
+          log i "User chose to backup custom userdata prior to update."
           while read -r config_line; do
             local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
             if [[ ! $current_setting_name =~ (rdhome|sdcard|backups_folder) ]]; then # Ignore these locations
@@ -501,8 +507,9 @@ configurator_tools_dialog() {
           backup_retrodeck_userdata "custom" "${choices[@]}" # Expand array of choices into individual arguments
         ;;
         "Backup All Userdata" )
+          log i "User chose to backup all userdata prior to update."
           export CONFIGURATOR_GUI="zenity"
-          backup_retrodeck_userdata "standard"
+          backup_retrodeck_userdata "complete"
         ;;
       esac
 
