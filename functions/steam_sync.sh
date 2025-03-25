@@ -1,21 +1,33 @@
 #!/bin/bash
 
+steam_sync() {
 
-
-add_to_steam() {
+    # This function looks for favorited games in all ES-DE gamelists and builds a manifest of any found.
+    # It then compares the new manifest to the existing one (if it exists) and runs an SRM sync if there are differences
+    # If all favorites were removed from ES-DE, it will remove all existing entries from Steam and then remove the favorites manifest entirely
+    # If there is no existing manifest, this is a first time sync and games are synced automatically
+    # USAGE: steam_sync
 
     log "i" "Starting Steam Sync"
- 
     create_dir $steamsync_folder
-    create_dir $steamsync_folder_tmp
 
-    local srm_path="/var/config/steam-rom-manager/userData/userConfigurations.json"
     if [ ! -f "$srm_path" ]; then
       log "e" "Steam ROM Manager configuration not initialized! Initializing now."
       prepare_component "reset" "steam-rom-manager"
     fi
 
-    # Iterate through all gamelist.xml files in the folder structure
+    # Prepare fresh log file
+    echo > "$srm_log"
+
+    # Prepare new favorites manifest
+    echo "[]" > "${retrodeck_favorites_file}.new" # Initialize favorites JSON file
+    favorites_found="false"
+
+    # Static definitions for all JSON objects
+    target="flatpak"
+    launch_command="run net.retrodeck.retrodeck"
+    startIn=""
+
     for system_path in "$rdhome/ES-DE/gamelists/"*/; do
         # Skip the CLEANUP folder
         if [[ "$system_path" == *"/CLEANUP/"* ]]; then
@@ -23,95 +35,54 @@ add_to_steam() {
         fi
         system=$(basename "$system_path") # Extract the folder name as the system name
         gamelist="${system_path}gamelist.xml"
-
-        log d "Reading favorites for $system"
-
-        # Ensure gamelist.xml exists in the current folder
-        if [ -f "$gamelist" ]; then
-            while IFS= read -r line; do
-                # Detect the start of a <game> block
-                if [[ "$line" =~ \<game\> ]]; then
-                    to_be_added=false # Reset the flag for a new block
-                    path=""
-                    name=""
-                fi
-
-                # Check for <favorite>true</favorite>
-                if [[ "$line" =~ \<favorite\>true\<\/favorite\> ]]; then
-                    to_be_added=true
-                fi
-
-                # Extract the <path> and remove leading "./" if present
-                if [[ "$line" =~ \<path\>(.*)\<\/path\> ]]; then
-                    path="${BASH_REMATCH[1]#./}"
-                fi
-
-                # Extract and sanitize <name>
-                if [[ "$line" =~ \<name\>(.*)\<\/name\> ]]; then
-                    name=$(sanitize "${BASH_REMATCH[1]}")
-                fi
-
-                # Detect the end of a </game> block
-                if [[ "$line" =~ \<\/game\> ]]; then
-                    # If the block is meaningful (marked as favorite), generate the launcher
-                    if [ "$to_be_added" = true ] && [ -n "$path" ] && [ -n "$name" ]; then
-                        local launcher="$steamsync_folder/${name}.sh"
-                        local launcher_tmp="$steamsync_folder_tmp/${name}.sh"
-
-                        # Create the launcher file
-                        # Check if the launcher file does not already exist
-                        if [ ! -e "$launcher_tmp" ]; then
-                            log d "Creating launcher file: $launcher"
-                            command="flatpak run net.retrodeck.retrodeck -s $system '$roms_folder/$system/$path'"
-                            echo '#!/bin/bash' > "$launcher_tmp"
-                            echo "$command" >> "$launcher_tmp"
-                            chmod +x "$launcher_tmp"
-                        else
-                            log d "$(basename "$launcher") desktop file already exists"
-                        fi
-                    fi
-
-                    # Clean up variables for safety
-                    to_be_added=false
-                    path=""
-                    name=""
-                fi
-            done < "$gamelist"
-        else
-            log "e" "Gamelist file not found for system: $system"
-        fi
+        system_favorites=$(xml sel -t -m "//game[favorite='true']" -v "path" -n "$gamelist")
+        while read -r game; do
+            if [[ -n "$game" ]]; then # Avoid empty lines created by xmlstarlet
+                favorites_found="true"
+                local game="${game#./}" # Remove leading ./
+                # Construct launch options with the rom path in quotes, to handle spaces
+                local launchOptions="$launch_command -s $system \"$roms_folder/$system/$game\""
+                jq --arg title "${game%.*}" --arg target "$target" --arg launchOptions "$launchOptions" \
+                '. += [{"title": $title, "target": $target, "launchOptions": $launchOptions}]' "${retrodeck_favorites_file}.new" > "${retrodeck_favorites_file}.tmp" \
+                && mv "${retrodeck_favorites_file}.tmp" "${retrodeck_favorites_file}.new"
+            fi
+        done <<< "$system_favorites"
     done
 
-    # Remove the old Steam sync folder
-    rm -rf "$steamsync_folder"
-    
-    # Move the temporary Steam sync folder to the final location
-    log d "Moving the temporary Steam sync folder to the final location"
-    mv "$steamsync_folder_tmp" "$steamsync_folder" && log d "\"$steamsync_folder_tmp\" -> \"$steamsync_folder\""
+    if [[ -f "$retrodeck_favorites_file" ]]; then # If an existing favorites manifest exists
+        if [[ $favorites_found == "false" ]]; then # If no favorites were found in the gamelists
+            log i "No favorites were found in current ES-DE gamelists, removing old entries"
+            # Remove old entries
+            steam-rom-manager enable --names "RetroDECK Steam Sync" >> "$srm_log" 2>&1
+            steam-rom-manager disable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
+            steam-rom-manager remove >> "$srm_log" 2>&1
+            # Old manifest cleanup
+            rm "$retrodeck_favorites_file"
+            rm "${retrodeck_favorites_file}.new"
+        else
+            if cmp -s "$retrodeck_favorites_file" "${retrodeck_favorites_file}.new"; then # See if the favorites manifests are the same, meaning there were no changes
+                log i "ES-DE favorites have not changed, no need to sync again"
+                rm "${retrodeck_favorites_file}.new"
+            else
+                log d "New and old manifests are different, running sync"
+                # Remove old entries
+                steam-rom-manager enable --names "RetroDECK Steam Sync" >> "$srm_log" 2>&1
+                steam-rom-manager disable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
+                steam-rom-manager remove >> "$srm_log" 2>&1
 
-    # Check if the Steam sync folder is empty
-    if [ -z "$(ls -A $steamsync_folder)" ]; then
-        # if empty, add the remove_from_steam function
-        log d "No games found, cleaning shortcut"
-        remove_from_steam
-    else
-        log d "Updating game list"
-        steam-rom-manager enable --names "RetroDECK Steam Sync"
-        steam-rom-manager add
+                # Load new favorites manifest
+                mv "${retrodeck_favorites_file}.new" "$retrodeck_favorites_file"
+
+                # Add new favorites manifest
+                steam-rom-manager enable --names "RetroDECK Steam Sync" >> "$srm_log" 2>&1
+                steam-rom-manager add >> "$srm_log" 2>&1
+            fi
+        fi
+    elif [[ $favorites_found == "true" ]]; then # Only sync if some favorites were found
+        log d "First time building favorites manifest, running sync"
+        mv "${retrodeck_favorites_file}.new" "$retrodeck_favorites_file"
+        # Add new favorites manifest
+        steam-rom-manager enable --names "RetroDECK Steam Sync" >> "$srm_log" 2>&1
+        steam-rom-manager add >> "$srm_log" 2>&1
     fi
-}
-
-# Function to remove the games from Steam, this is a workaround to make SRM remove the games as it cannot remove the games based on a empty folder
-# So a dummy file must be in place to make SRM remove the other games
-remove_from_steam() {
-  log d "Creating dummy game"
-  cat "" > "$steamsync_folder/CUL0.sh"
-  log d "Cleaning the shortcut"
-  steam-rom-manager enable --names "RetroDECK Steam Sync"
-  steam-rom-manager disable --names "RetroDECK Launcher"
-  steam-rom-manager remove
-  log d "Removing dummy game"
-  rm "$steamsync_folder/CUL0.sh"
-  steam-rom-manager enable --names "RetroDECK Launcher"
-  steam-rom-manager disable --names "RetroDECK Steam Sync"
 }
