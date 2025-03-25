@@ -262,5 +262,6 @@ fi
 steamsync_folder="$rdhome/.sync"                                                                                        # Folder containing favorites manifest for SRM
 retrodeck_favorites_file="$steamsync_folder/retrodeck_favorites.json"                                                   # The current SRM manifest of all games that have been favorited in ES-DE
 srm_log="$logs_folder/srm_log.log"                                                                                      # Log file for capturing the output of the most recent SRM run, for debugging purposes
+retrodeck_removed_favorites="$steamsync_folder/retrodeck_removed_favorites.json"                                        # Temporary manifest of any games that were unfavorited in ES-DE and should be removed from Steam
 
 export GLOBAL_SOURCED=true
