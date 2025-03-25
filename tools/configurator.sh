@@ -1210,7 +1210,7 @@ configurator_steam_sync() {
 
     if [ $? == 0 ] # User clicked "Yes"
     then
-      disable_steam_sync
+      configurator_disable_steam_sync
     else # User clicked "Cancel"
       configurator_welcome_dialog
     fi
@@ -1222,15 +1222,16 @@ configurator_steam_sync() {
 
     if [ $? == 0 ]
     then
-      enable_steam_sync
+      configurator_enable_steam_sync
     else
       configurator_welcome_dialog
     fi
   fi
 }
 
-enable_steam_sync() {
+configurator_enable_steam_sync() {
   set_setting_value "$rd_conf" "steam_sync" "true" retrodeck "options"
+  steam_sync
   zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Configurator - RetroDECK Steam Syncronization" \
@@ -1238,9 +1239,22 @@ enable_steam_sync() {
   configurator_welcome_dialog
 }
 
-disable_steam_sync() {
+configurator_disable_steam_sync() {
   set_setting_value "$rd_conf" "steam_sync" "false" retrodeck "options"
-  remove_from_steam
+  # Remove only synced favorites, leave RetroDECK shortcut if it exists
+  (
+  steam-rom-manager enable --names "RetroDECK Steam Sync" >> "$srm_log" 2>&1
+  steam-rom-manager disable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
+  steam-rom-manager remove >> "$srm_log" 2>&1
+  ) |
+  rd_zenity --progress \
+  --title="Removing RetroDECK Sync from Steam" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+  --text="Removing synced entries from Steam, please wait..." \
+  --pulsate --width=500 --height=150 --auto-close --no-cancel
+  if [[ -f "$retrodeck_favorites_file" ]]; then
+    rm -f "$retrodeck_favorites_file"
+  fi
   zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Configurator - RetroDECK Steam Syncronization" \
