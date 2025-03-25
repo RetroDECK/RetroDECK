@@ -576,7 +576,16 @@ configurator_tools_dialog() {
   ;;
 
   "Add RetroDECK to Steam" )
-    add_retrodeck_to_steam
+    (
+    # Add RetroDECK launcher to Steam
+    steam-rom-manager enable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
+    steam-rom-manager add >> "$srm_log" 2>&1
+    ) |
+    rd_zenity --progress \
+    --title="RetroDECK Configurator: Add RetroDECK to Steam" \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --text="Adding RetroDECK launcher to Steam, please wait..." \
+    --pulsate --width=500 --height=150 --auto-close --no-cancel
     configurator_tools_dialog
   ;;
 
