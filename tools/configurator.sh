@@ -1240,6 +1240,7 @@ configurator_steam_sync() {
 
 configurator_enable_steam_sync() {
   set_setting_value "$rd_conf" "steam_sync" "true" retrodeck "options"
+  export CONFIGURATOR_GUI="zenity"
   steam_sync
   zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
