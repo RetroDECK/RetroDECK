@@ -52,10 +52,17 @@ steam_sync() {
     if [[ -f "$retrodeck_favorites_file" ]]; then # If an existing favorites manifest exists
         if [[ $favorites_found == "false" ]]; then # If no favorites were found in the gamelists
             log i "No favorites were found in current ES-DE gamelists, removing old entries"
+            (
             # Remove old entries
             steam-rom-manager enable --names "RetroDECK Steam Sync" >> "$srm_log" 2>&1
             steam-rom-manager disable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
             steam-rom-manager remove >> "$srm_log" 2>&1
+            ) |
+            rd_zenity --progress \
+            --title="Syncing with Steam" \
+            --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+            --text="<span foreground='$purple'><b>\t\t\t\tSyncing favorite games with Steam</b></span>\n\n<b>NOTE: </b>This operation may take some time depending on the size of your library.\nFeel free to leave this in the background and switch to another application.\n\n" \
+            --pulsate --width=500 --height=150 --auto-close --no-cancel
             # Old manifest cleanup
             rm "$retrodeck_favorites_file"
             rm "${retrodeck_favorites_file}.new"
@@ -65,6 +72,7 @@ steam_sync() {
                 rm "${retrodeck_favorites_file}.new"
             else
                 log d "New and old manifests are different, running sync"
+                (
                 # Remove old entries
                 steam-rom-manager enable --names "RetroDECK Steam Sync" >> "$srm_log" 2>&1
                 steam-rom-manager disable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
@@ -76,13 +84,26 @@ steam_sync() {
                 # Add new favorites manifest
                 steam-rom-manager enable --names "RetroDECK Steam Sync" >> "$srm_log" 2>&1
                 steam-rom-manager add >> "$srm_log" 2>&1
+                ) |
+                rd_zenity --progress \
+                --title="Syncing with Steam" \
+                --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+                --text="<span foreground='$purple'><b>\t\t\t\tSyncing favorite games with Steam</b></span>\n\n<b>NOTE: </b>This operation may take some time depending on the size of your library.\nFeel free to leave this in the background and switch to another application.\n\n" \
+                --pulsate --width=500 --height=150 --auto-close --no-cancel
             fi
         fi
     elif [[ $favorites_found == "true" ]]; then # Only sync if some favorites were found
         log d "First time building favorites manifest, running sync"
         mv "${retrodeck_favorites_file}.new" "$retrodeck_favorites_file"
+        (
         # Add new favorites manifest
         steam-rom-manager enable --names "RetroDECK Steam Sync" >> "$srm_log" 2>&1
         steam-rom-manager add >> "$srm_log" 2>&1
+        ) |
+        rd_zenity --progress \
+        --title="Syncing with Steam" \
+        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+        --text="<span foreground='$purple'><b>\t\t\t\tSyncing favorite games with Steam</b></span>\n\n<b>NOTE: </b>This operation may take some time depending on the size of your library.\nFeel free to leave this in the background and switch to another application.\n\n" \
+        --pulsate --width=500 --height=150 --auto-close --no-cancel
     fi
 }
