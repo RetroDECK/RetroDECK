@@ -874,7 +874,7 @@ configurator_compress_multiple_games_dialog() {
     if [[ $rc == 0 && -n "$choice" ]]; then
       while IFS="^" read -r game comp; do # Split Zenity choice string into compatible pairs (game^format)
         games_to_compress+=("$game"^"$comp")
-      done < "$compressible_games_list_file"
+      done <<< "$choice"
     elif [[ -n "$choice" ]]; then
       games_to_compress=("${all_compressible_games[@]}")
     else
