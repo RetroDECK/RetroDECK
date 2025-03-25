@@ -1,10 +1,6 @@
 #!/bin/bash
 
-# Function to sanitize strings for filenames
-sanitize() {
-    # Replace sequences of underscores with a single space
-    echo "$1" | sed -e 's/_\{2,\}/ /g' -e 's/_/ /g' -e 's/:/ -/g' -e 's/&/and/g' -e 's%/%and%g' -e 's/  / /g'
-}
+
 
 add_to_steam() {
 
