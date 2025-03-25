@@ -1240,7 +1240,6 @@ enable_steam_sync() {
 
 disable_steam_sync() {
   set_setting_value "$rd_conf" "steam_sync" "false" retrodeck "options"
-  source /app/libexec/steam_sync.sh
   remove_from_steam
   zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
