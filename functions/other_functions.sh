@@ -355,11 +355,13 @@ update_vita3k_firmware() {
 
 backup_retrodeck_userdata() {
   # This function can compress one or more RetroDECK userdata folders into a single zip file for backup.
-  # The function can do a "standard" backup of all the normal userdata files (which can be very big if there is a lot of media) or a "custom" backup of only specified paths
+  # The function can do a "complete" backup of all userdata including ROMs and ES-DE media, so can end up being very large.
+  # The function can also do a "core" backup of all the very important userdata files (like saves, states and gamelists) or a "custom" backup of only specified paths
   # The function can take both folder names as defined in retrodeck.cfg or full paths as arguments for folders to backup
   # It will also validate that all the provided paths exist and that there is enough free space to perform the backup before actually proceeding.
   # It will also rotate backups so that there are only 3 maximum of each type (standard or custom)
-  # USAGE: backup_retrodeck_userdata standard
+  # USAGE: backup_retrodeck_userdata complete
+  #        backup_retrodeck_userdata core
   #        backup_retrodeck_userdata custom saves_folder states_folder /some/other/path
 
   create_dir "$backups_folder"
@@ -368,7 +370,7 @@ backup_retrodeck_userdata() {
   backup_log_file="$logs_folder/${backup_date}_${backup_type}_backup_log.log"
 
   # Check if first argument is the type
-  if [[ "$1" == "standard" || "$1" == "custom" ]]; then
+  if [[ "$1" == "complete" || "$1" == "core" || "$1" == "custom" ]]; then
     backup_type="$1"
     shift # Remove the first argument
   else
@@ -395,7 +397,7 @@ backup_retrodeck_userdata() {
   done < <(grep -v '^\s*$' $rd_conf | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
 
   # Determine which paths to backup
-  if [[ "$backup_type" == "standard" ]]; then
+  if [[ "$backup_type" == "complete" ]]; then
     for folder_name in "${!config_paths[@]}"; do
       path_value="${config_paths[$folder_name]}"
       if [[ -e "$path_value" ]]; then
@@ -406,6 +408,59 @@ backup_retrodeck_userdata() {
           configurator_generic_dialog "RetroDECK Userdata Backup" "The $folder_name was not found at its expected location, $path_value\nSomething may be wrong with your RetroDECK installation."
         fi
         log i "Warning: Path does not exist: $folder_name = $path_value"
+      fi
+    done
+
+    # Add static paths not defined in retrodeck.cfg
+    if [[ -e "$rdhome/ES-DE/collections" ]]; then
+      paths_to_backup+=("$rdhome/ES-DE/collections")
+    else
+      if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
+        configurator_generic_dialog "RetroDECK Userdata Backup" "The ES-DE collections folder was not found at its expected location, $rdhome/ES-DE/collections\nSomething may be wrong with your RetroDECK installation."
+      fi
+      log i "Warning: Path does not exist: ES-DE/collections = $rdhome/ES-DE/collections"
+    fi
+
+    if [[ -e "$rdhome/ES-DE/gamelists" ]]; then
+      paths_to_backup+=("$rdhome/ES-DE/gamelists")
+    else
+      if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
+        configurator_generic_dialog "RetroDECK Userdata Backup" "The ES-DE gamelists folder was not found at its expected location, $rdhome/ES-DE/gamelists\nSomething may be wrong with your RetroDECK installation."
+      fi
+      log i "Warning: Path does not exist: ES-DE/gamelists = $rdhome/ES-DE/gamelists"
+    fi
+
+    if [[ -e "$rdhome/ES-DE/custom_systems" ]]; then
+      paths_to_backup+=("$rdhome/ES-DE/custom_systems")
+    else
+      if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
+        configurator_generic_dialog "RetroDECK Userdata Backup" "The ES-DE custom_systems folder was not found at its expected location, $rdhome/ES-DE/custom_systems\nSomething may be wrong with your RetroDECK installation."
+      fi
+      log i "Warning: Path does not exist: ES-DE/custom_systems = $rdhome/ES-DE/custom_systems"
+    fi
+
+    # Check if we found any valid paths
+    if [[ ${#paths_to_backup[@]} -eq 0 ]]; then
+      if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
+        configurator_generic_dialog "RetroDECK Userdata Backup" "No valid userdata folders were found.\nSomething may be wrong with your RetroDECK installation."
+      fi
+      log e "Error: No valid paths found in config file"
+      return 1
+    fi
+
+  elif [[ "$backup_type" == "core" ]]; then
+    for folder_name in "${!config_paths[@]}"; do
+      if [[ $folder_name =~ (saves_folder|states_folder|logs_folder|screenshots_folder) ]]; then # Only include these paths
+        path_value="${config_paths[$folder_name]}"
+        if [[ -e "$path_value" ]]; then
+          paths_to_backup+=("$path_value")
+          log i "Adding to backup: $folder_name = $path_value"
+        else
+          if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
+            configurator_generic_dialog "RetroDECK Userdata Backup" "The $folder_name was not found at its expected location, $path_value\nSomething may be wrong with your RetroDECK installation."
+          fi
+          log i "Warning: Path does not exist: $folder_name = $path_value"
+        fi
       fi
     done
 
