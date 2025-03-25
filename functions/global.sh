@@ -257,7 +257,9 @@ else
   multi_user_data_folder="$rdhome/multi-user-data"                                                                      # The default location of multi-user environment profiles
 fi
 
-steamsync_folder="$rdhome/.sync"          # Folder containing all the steam sync launchers for SRM
-steamsync_folder_tmp="$rdhome/.sync-tmp"  # Temp folder containing all the steam sync launchers for SRM
+# Steam ROM Manager user files and paths
+
+steamsync_folder="$rdhome/.sync"                                                                                        # Folder containing favorites manifest for SRM
+retrodeck_favorites_file="$steamsync_folder/retrodeck_favorites.json"                                                   # The current SRM manifest of all games that have been favorited in ES-DE
 
 export GLOBAL_SOURCED=true
