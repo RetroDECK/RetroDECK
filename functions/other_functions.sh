@@ -450,7 +450,7 @@ backup_retrodeck_userdata() {
 
   elif [[ "$backup_type" == "core" ]]; then
     for folder_name in "${!config_paths[@]}"; do
-      if [[ $folder_name =~ (saves_folder|states_folder|logs_folder|screenshots_folder) ]]; then # Only include these paths
+      if [[ $folder_name =~ (saves_folder|states_folder|logs_folder) ]]; then # Only include these paths
         path_value="${config_paths[$folder_name]}"
         if [[ -e "$path_value" ]]; then
           paths_to_backup+=("$path_value")
