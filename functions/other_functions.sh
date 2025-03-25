@@ -1187,21 +1187,8 @@ quit_retrodeck() {
   pkill -f "es-de"
 
   # if steam sync is on do the magic
-  if [[ $(get_setting_value "$rd_conf" "steam_sync" retrodeck "options") == "true" ]]; then
-  (
-  add_to_steam "$(ls "$rdhome/ES-DE/gamelists/")"
-  ) |
-  rd_zenity --progress \
-    --title="Syncing with Steam" \
-    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --text="<span foreground='$purple'><b>\t\t\t\tSyncing favorite games with Steam</b></span>\n\n<b>NOTE: </b>This operation may take some time depending on the size of your library.\nFeel free to leave this in the background and switch to another application.\n\n" \
-    --percentage=25 \
-    --pulsate \
-    --width=500 \
-    --height=150 \
-    --auto-close \
-    --auto-kill \
-    --no-cancel
+  if [[ $(get_setting_value "$rd_conf" "steam_sync" "retrodeck" "options") == "true" ]]; then
+    steam_sync
   fi
   log i "Shutting down RetroDECK's framework"
   pkill -f "retrodeck"
