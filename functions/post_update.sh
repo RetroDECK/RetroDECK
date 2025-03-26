@@ -13,7 +13,7 @@ post_update() {
 
   # Optional userdata backup prior to update
 
-  choice=$(rd_zenity --title "RetroDECK Update - Backup Userdata" --info --no-wrap --ok-label="No Backup" --extra-button"Backup Core Userdata" --extra-button="Backup Some Userdata" --extra-button="Backup All Userdata" \
+  choice=$(rd_zenity --title "RetroDECK Update - Backup Userdata" --info --no-wrap --ok-label="No Backup" --extra-button="Backup Core Userdata" --extra-button="Backup Some Userdata" --extra-button="Backup All Userdata" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --text="Would you like to backup some or all of the RetroDECK userdata prior to update?\n\nIf you choose \"Backup Core Userdata\" only irreplaceable files (like saves, states and gamelists) will be backed up. If you choose \"Backup Some Userdata\" you will be given a choice of which folders to backup.\n\nIf you choose \"Backup All Userdata\" then ALL data (including ROMs and downloaded media) will be backed up.\nPLEASE NOTE: A full backup may take up a large amount of space, especially if you have a lot of scraped media.")
 
   local rc=$?
