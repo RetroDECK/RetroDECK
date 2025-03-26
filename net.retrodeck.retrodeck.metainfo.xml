@@ -73,6 +73,9 @@
    <project_license>GPL-3.0</project_license>
    <metadata_license>CC0-1.0</metadata_license>
    <releases>
+         <release version="0.9.2b" date="2025-03-26">
+            <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.9.2b</url>
+         </release>
          <release version="0.9.1b" date="2025-03-03">
             <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.9.1b</url>
             <description>
