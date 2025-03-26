@@ -359,7 +359,7 @@ backup_retrodeck_userdata() {
   # The function can also do a "core" backup of all the very important userdata files (like saves, states and gamelists) or a "custom" backup of only specified paths
   # The function can take both folder names as defined in retrodeck.cfg or full paths as arguments for folders to backup
   # It will also validate that all the provided paths exist and that there is enough free space to perform the backup before actually proceeding.
-  # It will also rotate backups so that there are only 3 maximum of each type (standard or custom)
+  # It will also rotate backups so that there are only 3 maximum of each type (complete, core or custom)
   # USAGE: backup_retrodeck_userdata complete
   #        backup_retrodeck_userdata core
   #        backup_retrodeck_userdata custom saves_folder states_folder /some/other/path
@@ -377,8 +377,8 @@ backup_retrodeck_userdata() {
     if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
       configurator_generic_dialog "RetroDECK Userdata Backup" "No valid backup option chosen. Valid options are <standard> and <custom>."
     fi
-    log e "No valid backup option chosen. Valid options are <standard> and <custom>."
-    exit 1
+    log e "No valid backup option chosen. Valid options are <complete>, <core> and <custom>."
+    return 1
   fi
 
   zip_file="$backups_folder/retrodeck_${backup_date}_${backup_type}.zip"
@@ -547,15 +547,15 @@ backup_retrodeck_userdata() {
   if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then # Show progress dialog if running Zenity Configurator
     total_size_file=$(mktemp) # Create temp file for Zenity subshell data extraction
     (
-      for path in "${paths_to_backup[@]}"; do
-        if [[ -e "$path" ]]; then
-          log d "Checking size of path $path"
-          path_size=$(du -sk "$path" 2>/dev/null | cut -f1) # Get size in KB
-          path_size=$((path_size * 1024)) # Convert to bytes for calculation
-          total_size=$((total_size + path_size))
-          echo "$total_size" > $total_size_file
-        fi
-      done
+    for path in "${paths_to_backup[@]}"; do
+      if [[ -e "$path" ]]; then
+        log d "Checking size of path $path"
+        path_size=$(du -sk "$path" 2>/dev/null | cut -f1) # Get size in KB
+        path_size=$((path_size * 1024)) # Convert to bytes for calculation
+        total_size=$((total_size + path_size))
+        echo "$total_size" > $total_size_file
+      fi
+    done
     ) |
     rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
             --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
