@@ -17,47 +17,65 @@ post_update() {
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --text="Would you like to backup some or all of the RetroDECK userdata prior to update?\n\nIf you choose \"Backup Core Userdata\" only irreplaceable files (like saves, states and gamelists) will be backed up. If you choose \"Backup Some Userdata\" you will be given a choice of which folders to backup.\n\nIf you choose \"Backup All Userdata\" then ALL data (including ROMs and downloaded media) will be backed up.\nPLEASE NOTE: A full backup may take up a large amount of space, especially if you have a lot of scraped media.")
 
   local rc=$?
-    if [[ $rc == "0" ]] && [[ -z "$choice" ]]; then # User selected No Backup button
-      log i "User chose to not backup prior to update."
-    else
-      case $choice in
-        "Backup Core Userdata" )
-          log i "User chose to backup core userdata prior to update."
-          backup_retrodeck_userdata "core"
-        ;;
-        "Backup Some Userdata" )
-          log i "User chose to backup some userdata prior to update."
-          while read -r config_line; do
-            local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
-            if [[ ! $current_setting_name =~ (rdhome|sdcard|backups_folder) ]]; then # Ignore these locations
-            log d "Adding $current_setting_name to compressible paths."
-              local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
-              compressible_paths=("${compressible_paths[@]}" "false" "$current_setting_name" "$current_setting_value")
-            fi
-          done < <(grep -v '^\s*$' $rd_conf | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
+  if [[ $rc == "0" ]] && [[ -z "$choice" ]]; then # User selected No Backup button
+    log i "User chose to not backup prior to update."
+  else
+    case $choice in
+      "Backup Core Userdata" )
+        log i "User chose to backup core userdata prior to update."
+        if ! backup_retrodeck_userdata "core"; then
+          log d "Userdata backup failed, giving option to proceed"
+          if [[ $(configurator_generic_question_dialog "RetroDECK Update" "Unfortunately the userdata backup process was not successful.\nWould you like to proceed with the upgrade anyway?\n\nRetroDECK will exit if you choose \"No\"") == "false" ]]; then
+            log d "User chose to stop post_update process after backup failure"
+            exit 1
+          fi
+        fi
+      ;;
+      "Backup Some Userdata" )
+        log i "User chose to backup some userdata prior to update."
+        while read -r config_line; do
+          local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
+          if [[ ! $current_setting_name =~ (rdhome|sdcard|backups_folder) ]]; then # Ignore these locations
+          log d "Adding $current_setting_name to compressible paths."
+            local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
+            compressible_paths=("${compressible_paths[@]}" "false" "$current_setting_name" "$current_setting_value")
+          fi
+        done < <(grep -v '^\s*$' $rd_conf | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
 
-          choice=$(rd_zenity \
-          --list --width=1200 --height=720 \
-          --checklist \
-          --separator="^" \
-          --print-column=3 \
-          --text="Please select folders to compress..." \
-          --column "Backup?" \
-          --column "Folder Name" \
-          --column "Path" \
-          "${compressible_paths[@]}")
+        choice=$(rd_zenity \
+        --list --width=1200 --height=720 \
+        --checklist \
+        --separator="^" \
+        --print-column=3 \
+        --text="Please select folders to compress..." \
+        --column "Backup?" \
+        --column "Folder Name" \
+        --column "Path" \
+        "${compressible_paths[@]}")
 
-          choices=() # Expand choice string into passable array
-          IFS='^' read -ra choices <<< "$choice"
+        choices=() # Expand choice string into passable array
+        IFS='^' read -ra choices <<< "$choice"
 
-          backup_retrodeck_userdata "custom" "${choices[@]}" # Expand array of choices into individual arguments
-        ;;
-        "Backup All Userdata" )
-          log i "User chose to backup all userdata prior to update."
-          backup_retrodeck_userdata "complete"
-        ;;
-      esac
-    fi
+        if ! backup_retrodeck_userdata "custom" "${choices[@]}"; then # Expand array of choices into individual arguments
+          log d "Userdata backup failed, giving option to proceed"
+          if [[ $(configurator_generic_question_dialog "RetroDECK Update" "Unfortunately the userdata backup process was not successful.\nWould you like to proceed with the upgrade anyway?\n\nRetroDECK will exit if you choose \"No\"") == "false" ]]; then
+            log d "User chose to stop post_update process after backup failure"
+            exit 1
+          fi
+        fi
+      ;;
+      "Backup All Userdata" )
+        log i "User chose to backup all userdata prior to update."
+        if ! backup_retrodeck_userdata "complete"; then
+          log d "Userdata backup failed, giving option to proceed"
+          if [[ $(configurator_generic_question_dialog "RetroDECK Update" "Unfortunately the userdata backup process was not successful.\nWould you like to proceed with the upgrade anyway?\n\nRetroDECK will exit if you choose \"No\"") == "false" ]]; then
+            log d "User chose to stop post_update process after backup failure"
+            exit 1
+          fi
+        fi
+      ;;
+    esac
+  fi
 
   # Start of post_update actions
 
