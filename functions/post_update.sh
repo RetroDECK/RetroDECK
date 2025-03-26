@@ -746,22 +746,24 @@ post_update() {
 
   if [[ $(check_version_is_older_than "$version_being_updated" "0.9.2b") == "true" ]]; then
     # In version 0.9.2b, the following changes were made that required config file updates/reset or other changes to the filesystem:
-    # Steam Sync completely rebuilt into new manifest system. Favorites will need to be nuked and, if steam_sync is enabled will be rebuilt.
+    # Steam Sync completely rebuilt into new manifest system. Favorites may need to be nuked and, if steam_sync is enabled will be rebuilt. This is an optional step.
 
-    if [[ -d "$steamsync_folder" ]]; then # If Steam Sync has ever been run
-      steam-rom-manager nuke
-      steam_sync
-      if [[ "$(configurator_generic_question_dialog "RetroDECK 0.9.2b Steam Sync Reset" "In RetroDECK 0.9.2b we upgraded our Steam Sync feature and the shortcuts in Steam need to be rebuilt.\n\nAll of your ES-DE favorites are still unchanged.\nAny games you have favorited now will be recreated.\n\nIf you have added RetroDECK to Steam through our Configurator it will also be removed through this process.\nWould you like to add the RetroDECK shortcut again?")" == "true" ]]; then
-        (
-        # Add RetroDECK launcher to Steam
-        steam-rom-manager enable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
-        steam-rom-manager add >> "$srm_log" 2>&1
-        ) |
-        rd_zenity --progress \
-        --title="RetroDECK Configurator: Add RetroDECK to Steam" \
-        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-        --text="Adding RetroDECK launcher to Steam, please wait..." \
-        --pulsate --width=500 --height=150 --auto-close --no-cancel
+    if [[ -d "$steamsync_folder" && ! -z $(ls -1 "$steamsync_folder") ]]; then # If Steam Sync folder exists and is not empty
+      if [[ "$(configurator_generic_question_dialog "RetroDECK 0.9.2b Steam Sync Reset" "In RetroDECK 0.9.2b we upgraded our Steam Sync feature and the shortcuts in Steam may need to be rebuilt.\n\nAll of your ES-DE favorites are still unchanged.\nAny games you have favorited now will be recreated, but last-played information and custom artwork changes may be lost.\n\nIf you have added RetroDECK to Steam through our Configurator it will also be removed through this process.\nWould you like to refresh the RetroDECK Steam Sync system?")" == "true" ]]; then
+        steam-rom-manager nuke
+        steam_sync
+        if [[ "$(configurator_generic_question_dialog "RetroDECK 0.9.2b Steam Sync Reset" "The Steam Sync reset is complete.\nIf you had previously added a RetroDECK shortcut to Steam through our tools, it would have also been removed.\n\nWould you like to add the RetroDECK shortcut now?")" == "true" ]]; then
+          (
+          # Add RetroDECK launcher to Steam
+          steam-rom-manager enable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
+          steam-rom-manager add >> "$srm_log" 2>&1
+          ) |
+          rd_zenity --progress \
+          --title="RetroDECK Configurator: Add RetroDECK to Steam" \
+          --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+          --text="Adding RetroDECK launcher to Steam, please wait..." \
+          --pulsate --width=500 --height=150 --auto-close --no-cancel
+        fi
       fi
     fi
 
