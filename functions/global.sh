@@ -8,6 +8,11 @@
 
 : "${logging_level:=info}"                  # Initializing the log level variable if not already valued, this will be actually red later from the config file                                                 
 rd_logs_folder="/var/config/retrodeck/logs" # Static location to write all RetroDECK-related logs
+if [ -h "$rd_logs_folder" ]; then # Check if internal logging folder is already a symlink
+  if [ ! -e "$rd_logs_folder" ]; then # Check if internal logging folder symlink is broken
+    unlink "$rd_logs_folder" # Remove broken symlink so the folder is recreated when sourcing logger.sh
+  fi
+fi
 source /app/libexec/logger.sh
 rotate_logs
 
@@ -47,6 +52,7 @@ source /app/libexec/prepare_component.sh
 source /app/libexec/presets.sh
 source /app/libexec/configurator_functions.sh
 source /app/libexec/run_game.sh
+source /app/libexec/steam_sync.sh
 
 # Static variables
 rd_conf="/var/config/retrodeck/retrodeck.cfg"                                                            # RetroDECK config file path
@@ -236,14 +242,13 @@ else
 
   # Verify rdhome is where it is supposed to be.
   if [[ ! -d "$rdhome" ]]; then
-    prev_home_path="$rdhome"
     configurator_generic_dialog "RetroDECK Setup" "The RetroDECK data folder was not found in the expected location.\nThis may happen when SteamOS is updated.\n\nPlease browse to the current location of the \"retrodeck\" folder."
     new_home_path=$(directory_browse "RetroDECK folder location")
     set_setting_value $rd_conf "rdhome" "$new_home_path" retrodeck "paths"
     conf_read
     #tmplog_merger # This function is tempry(?) removed
-    prepare_component "retrodeck" "postmove"
-    prepare_component "all" "postmove"
+    prepare_component "postmove" "retrodeck"
+    prepare_component "postmove" "all"
     conf_write
   fi
 
@@ -252,10 +257,11 @@ else
   multi_user_data_folder="$rdhome/multi-user-data"                                                                      # The default location of multi-user environment profiles
 fi
 
-logs_folder="$rdhome/logs"                # The path of the logs folder, here we collect all the logs
-steamsync_folder="$rdhome/.sync"          # Folder containing all the steam sync launchers for SRM
-steamsync_folder_tmp="$rdhome/.sync-tmp"  # Temp folder containing all the steam sync launchers for SRM
-cheats_folder="$rdhome/cheats"            # Folder containing all the cheats for the emulators
-backups_folder="$rdhome/backups"          # Folder containing all the RetroDECK backups
+# Steam ROM Manager user files and paths
+
+steamsync_folder="$rdhome/.sync"                                                                                        # Folder containing favorites manifest for SRM
+retrodeck_favorites_file="$steamsync_folder/retrodeck_favorites.json"                                                   # The current SRM manifest of all games that have been favorited in ES-DE
+srm_log="$logs_folder/srm_log.log"                                                                                      # Log file for capturing the output of the most recent SRM run, for debugging purposes
+retrodeck_removed_favorites="$steamsync_folder/retrodeck_removed_favorites.json"                                        # Temporary manifest of any games that were unfavorited in ES-DE and should be removed from Steam
 
 export GLOBAL_SOURCED=true

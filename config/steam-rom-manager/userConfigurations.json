@@ -1,6 +1,6 @@
 [
     {
-        "parserType": "Glob",
+        "parserType": "Manual",
         "configTitle": "RetroDECK Steam Sync",
         "steamDirectory": "${steamdirglobal}",
         "romDirectory": "${romsdirglobal}",
@@ -8,11 +8,9 @@
             "RetroDECK"
         ],
         "executableArgs": "",
-        "executableModifier": "\"${exePath}\"",
+        "executableModifier": "",
         "startInDirectory": "",
         "titleModifier": "${fuzzyTitle}",
-        "fetchControllerTemplatesButton": null,
-        "removeControllersButton": null,
         "steamInputEnabled": "2",
         "imageProviders": [
             "sgdb",
@@ -29,7 +27,7 @@
             ]
         },
         "parserInputs": {
-            "glob": "${title}.sh"
+            "manualManifests": "${romsdirglobal}"
         },
         "executable": {
             "path": "",
@@ -108,7 +106,6 @@
                 ],
                 "sizes": [],
                 "sizesHero": [],
-                "sizesTall": null,
                 "sizesIcon": []
             }
         },

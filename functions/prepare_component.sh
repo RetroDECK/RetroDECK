@@ -68,7 +68,7 @@ prepare_component() {
             # Declare the global variable with the new setting value
             declare -g "$current_setting_name=$new_setting_value"
             log d "Setting: $current_setting_name=$current_setting_value"
-              if [[ ! $current_setting_name == "logs_folder" ]]; then # Don't create a logs folder normally, we want to maintain the current files exactly to not lose early-install logs.
+            if [[ ! $current_setting_name == "logs_folder" ]]; then # Don't create a logs folder normally, we want to maintain the current files exactly to not lose early-install logs.
               create_dir "$new_setting_value"
             else # Log folder-specific actions
               mv "$rd_logs_folder" "$logs_folder" # Move existing logs folder from internal to userland
@@ -138,8 +138,6 @@ prepare_component() {
       jq '.environmentVariables.romsDirectory = "'$rdhome'/.sync"' "$srm_userdata/userSettings.json" > "$srm_userdata/tmp.json" && mv -f "$srm_userdata/tmp.json" "$srm_userdata/userSettings.json"
 
       get_steam_user
-      populate_steamuser_srm
-      
     fi
 
     if [[ "$component" =~ ^(retroarch|all)$ ]]; then
@@ -561,8 +559,10 @@ prepare_component() {
     if [[ "$component" =~ ^(pico8|pico-8|all)$ ]]; then
     component_found="true"
       if [[ ("$action" == "reset") || ("$action" == "postmove") ]]; then
+        if [[ -d "$roms_folder/pico8" ]]; then
+          dir_prep "$roms_folder/pico8" "$bios_folder/pico-8/carts" # Symlink default game location to RD roms for cleanliness (this location is overridden anyway by the --root_path launch argument anyway)
+        fi
         dir_prep "$bios_folder/pico-8" "$HOME/.lexaloffle/pico-8" # Store binary and config files together. The .lexaloffle directory is a hard-coded location for the PICO-8 config file, cannot be changed
-        dir_prep "$roms_folder/pico8" "$bios_folder/pico-8/carts" # Symlink default game location to RD roms for cleanliness (this location is overridden anyway by the --root_path launch argument anyway)
         dir_prep "$saves_folder/pico-8" "$bios_folder/pico-8/cdata"  # PICO-8 saves folder
         cp -fv "$config/pico-8/config.txt" "$bios_folder/pico-8/config.txt"
         cp -fv "$config/pico-8/sdl_controllers.txt" "$bios_folder/pico-8/sdl_controllers.txt"

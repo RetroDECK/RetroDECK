@@ -76,6 +76,7 @@ rd_zenity --progress --no-cancel --pulsate --auto-close \
 #       - Update Notification
 #       - Add RetroDECK to Steam
 #       - M3U Multi-File Validator
+#       - Repair RetroDECK paths
 #       - Ponzu: Remove Yuzu
 #       - Ponzu: Remove Citra
 #     - Steam Sync
@@ -108,7 +109,6 @@ rd_zenity --progress --no-cancel --pulsate --auto-close \
 
 configurator_welcome_dialog() {
   log i "Configurator: opening welcome dialog"
-  export CONFIGURATOR_GUI="zenity"
   welcome_menu_options=(
     "Settings" "Customize your RetroDECK experience with various presets and tweaks."
     "Open Component" "Manually launch and configure settings for each emulator or component (for advanced users)."
@@ -443,6 +443,7 @@ configurator_tools_dialog() {
   "Update Notification" "Enable / Disable: Notifications for new RetroDECK versions."
   "Add RetroDECK to Steam" "Add RetroDECK shortcut to Steam. Steam restart required."
   "M3U Multi-File Validator" "Verify the proper structure of multi-file or multi-disc games."
+  "Repair RetroDECK Paths" "Repair RetroDECK folder path configs for unexpectedly missing folders."
   )
 
   if [[ $(get_setting_value "$rd_conf" "kiroi_ponzu" "retrodeck" "options") == "true" ]]; then
@@ -460,26 +461,66 @@ configurator_tools_dialog() {
   case $choice in
 
   "Backup Userdata" )
+
     log i "Configurator: opening \"$choice\" menu"
-    configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "This tool will compress important RetroDECK userdata (basically everything except the ROMs folder) into a zip file.\n\nThis process can take several minutes, and the resulting zip file can be found in the ~/retrodeck/backups folder."
-    (
-      backup_retrodeck_userdata
-    ) |
-    rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
-            --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-            --title "RetroDECK Configurator Utility - Backup in Progress" \
-            --text="Backing up RetroDECK userdata, please wait..."
-    if [[ -f "$backups_folder/$(date +"%0m%0d")_retrodeck_userdata.zip" ]]; then
-      configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "The backup process is now complete."
+    configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "This tool will compress one or more RetroDECK userdata folders into a single zip file.\n\nThis process can take several minutes, and the resulting zip file can be found in the ~/retrodeck/backups folder."
+
+    choice=$(rd_zenity --title "RetroDECK Configurator Utility - Backup Userdata" --info --no-wrap --ok-label="Cancel" --extra-button"Backup Core Userdata" --extra-button="Backup Some Userdata" --extra-button="Backup All Userdata" \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --text="Would you like to compress all RetroDECK userdata folders, or only some of them?\nThe \"Core Userdata\" includes irreplaceable files such as saves, states and gamelists.\n\n A complete \"All Userdata\" backup can take up A LOT of space if you have a large library.")
+
+    local rc=$?
+    if [[ $rc == "0" ]] && [[ -z "$choice" ]]; then # User selected Cancel button
+      configurator_tools_dialog
     else
-      configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "The backup process could not be completed,\nplease check the logs folder for more information."
+      case $choice in
+        "Backup Core Userdata" )
+          log i "User chose to backup core userdata prior to update."
+          export CONFIGURATOR_GUI="zenity"
+          backup_retrodeck_userdata "core"
+        ;;
+        "Backup Some Userdata" )
+          log i "User chose to backup custom userdata prior to update."
+          while read -r config_line; do
+            local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
+            if [[ ! $current_setting_name =~ (rdhome|sdcard|backups_folder) ]]; then # Ignore these locations
+            log d "Adding $current_setting_name to compressible paths."
+              local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
+              compressible_paths=("${compressible_paths[@]}" "false" "$current_setting_name" "$current_setting_value")
+            fi
+          done < <(grep -v '^\s*$' $rd_conf | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
+
+          choice=$(rd_zenity \
+          --list --width=1200 --height=720 \
+          --checklist \
+          --separator="^" \
+          --print-column=3 \
+          --text="Please select folders to compress..." \
+          --column "Backup?" \
+          --column "Folder Name" \
+          --column "Path" \
+          "${compressible_paths[@]}")
+
+          choices=() # Expand choice string into passable array
+          IFS='^' read -ra choices <<< "$choice"
+
+          export CONFIGURATOR_GUI="zenity"
+          backup_retrodeck_userdata "custom" "${choices[@]}" # Expand array of choices into individual arguments
+        ;;
+        "Backup All Userdata" )
+          log i "User chose to backup all userdata prior to update."
+          export CONFIGURATOR_GUI="zenity"
+          backup_retrodeck_userdata "complete"
+        ;;
+      esac
+
+      configurator_tools_dialog
     fi
-    configurator_welcome_dialog
   ;;
 
   "BIOS Checker" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_bios_checker
+    configurator_tools_dialog
   ;;
 
   "Games Compressor" )
@@ -542,12 +583,29 @@ configurator_tools_dialog() {
   ;;
 
   "Add RetroDECK to Steam" )
-    add_retrodeck_to_steam
+    (
+    # Add RetroDECK launcher to Steam
+    steam-rom-manager enable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
+    steam-rom-manager add >> "$srm_log" 2>&1
+    ) |
+    rd_zenity --progress \
+    --title="RetroDECK Configurator: Add RetroDECK to Steam" \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --text="Adding RetroDECK launcher to Steam, please wait..." \
+    --pulsate --width=500 --height=150 --auto-close --no-cancel
+    configurator_tools_dialog
   ;;
 
   "M3U Multi-File Validator" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_check_multifile_game_structure
+    configurator_tools_dialog
+  ;;
+
+  "Repair RetroDECK Paths" )
+    log i "Configurator: opening \"$choice\" menu"
+    repair_paths
+    configurator_tools_dialog
   ;;
 
   "Ponzu: Remove Yuzu" )
@@ -658,7 +716,7 @@ configurator_data_management_dialog() {
         --list --width=1200 --height=720 --title "RetroDECK Configurator - RetroDECK: Clean Empty ROM Folders" \
         --checklist --hide-column=3 --ok-label="Remove Selected" --extra-button="Remove All" \
         --separator="," --print-column=2 \
-        --text="Choose which ROM folders to remove:" \
+        --text="Choose which empty ROM folders to remove:" \
         --column "Remove?" \
         --column "System" \
         "${empty_rom_folders_list[@]}")
@@ -715,26 +773,31 @@ configurator_compression_tool_dialog() {
   "Compress Multiple Games: CHD" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_compress_multiple_games_dialog "chd"
+    configurator_compression_tool_dialog
   ;;
 
   "Compress Multiple Games: ZIP" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_compress_multiple_games_dialog "zip"
+    configurator_compression_tool_dialog
   ;;
 
   "Compress Multiple Games: RVZ" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_compress_multiple_games_dialog "rvz"
+    configurator_compression_tool_dialog
   ;;
 
   "Compress Multiple Games: All Formats" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_compress_multiple_games_dialog "all"
+    configurator_compression_tool_dialog
   ;;
 
   "Compress All Games" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_compress_multiple_games_dialog "everything"
+    configurator_compression_tool_dialog
   ;;
 
   "" ) # No selection made or Back button clicked
@@ -755,7 +818,7 @@ configurator_compress_single_game_dialog() {
       (
       echo "# Compressing $(basename "$file") to $compatible_compression_format format" # This updates the Zenity dialog
       log i "Compressing $(basename "$file") to $compatible_compression_format format"
-      compress_game "$compatible_compression_format" "$file" "$system"
+      compress_game "$compatible_compression_format" "$file" "$post_compression_cleanup" "$system"
       ) |
       rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -775,120 +838,86 @@ configurator_compress_single_game_dialog() {
 
 configurator_compress_multiple_games_dialog() {
   log d "Starting to compress \"$1\""
-  local output_file="${godot_compression_compatible_games}"
-  [ -f "$output_file" ] && rm -f "$output_file"
-  touch "$output_file"
+  local compressible_games_list_file="${godot_compression_compatible_games}"
+  [ -f "$compressible_games_list_file" ] && rm -f "$compressible_games_list_file"
+  touch "$compressible_games_list_file"
 
-  ## --- SEARCH PHASE WITH LOADING SCREEN ---
-  local progress_pipe
-  progress_pipe=$(mktemp -u)
-  mkfifo "$progress_pipe"
-
-  # Launch find_compatible_games in the background (its output goes to the file)
-  find_compatible_games "$1" > "$output_file" &
-  local finder_pid=$!
-
-  # Launch a background process that writes loading messages until the search completes.
   (
-    while kill -0 "$finder_pid" 2>/dev/null; do
-      echo "# Loading: Searching for compatible games..."
-      sleep 1
-    done
-    echo "100"
-  ) > "$progress_pipe" &
-  local progress_writer_pid=$!
+  find_compatible_games "$1" > "$compressible_games_list_file"
+  ) |
+  rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+  --title "RetroDECK Configurator - RetroDECK: Compression Tool" --text "RetroDECK is searching for compress1ble games, please wait..."
 
-  rd_zenity --progress --pulsate --auto-close \
-    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title="RetroDECK Configurator Utility - Searching for Compressable Games" \
-    --text="Searching for compressable games, please wait..." < "$progress_pipe"
-
-  wait "$finder_pid"
-  wait "$progress_writer_pid"
-  rm "$progress_pipe"
-
-  if [[ -s "$output_file" ]]; then
-    mapfile -t all_compressable_games < "$output_file"
-    log d "Found the following games to compress: ${all_compressable_games[*]}"
+  if [[ -s "$compressible_games_list_file" ]]; then
+    mapfile -t all_compressible_games < "$compressible_games_list_file"
+    log d "Found the following games to compress: ${all_compressible_games[*]}"
   else
-    configurator_generic_dialog "RetroDECK Configurator - Compression Tool" "No compressable files were found."
-    return
+    configurator_generic_dialog "RetroDECK Configurator - Compression Tool" "No compressible files were found."
+    configurator_compression_tool_dialog
   fi
 
   local games_to_compress=()
   if [[ "$1" != "everything" ]]; then
     local checklist_entries=()
-    for line in "${all_compressable_games[@]}"; do
+    for line in "${all_compressible_games[@]}"; do
       IFS="^" read -r game comp <<< "$line"
       local short_game="${game#$roms_folder}"
       checklist_entries+=( "TRUE" "$short_game" "$line" )
     done
 
-    local choice
-    choice=$(rd_zenity \
+    local choice=$(rd_zenity \
       --list --width=1200 --height=720 --title "RetroDECK Configurator - Compression Tool" \
       --checklist --hide-column=3 --ok-label="Compress Selected" --extra-button="Compress All" \
-      --separator="," --print-column=3 \
+      --separator=$'\0' --print-column=3 \
       --text="Choose which games to compress:" \
       --column "Compress?" \
       --column "Game" \
-      --column "Game Full Path" \
+      --column "Game Full Path and Compression Format" \
       "${checklist_entries[@]}")
 
     local rc=$?
     log d "User choice: $choice"
     if [[ $rc == 0 && -n "$choice" ]]; then
-      IFS="," read -ra games_to_compress <<< "$choice"
+      while IFS="^" read -r game comp; do # Split Zenity choice string into compatible pairs (game^format)
+        games_to_compress+=("$game"^"$comp")
+      done <<< "$choice"
     elif [[ -n "$choice" ]]; then
-      games_to_compress=("${all_compressable_games[@]}")
+      games_to_compress=("${all_compressible_games[@]}")
     else
-      return
+      configurator_compression_tool_dialog
     fi
   else
-    games_to_compress=("${all_compressable_games[@]}")
+    games_to_compress=("${all_compressible_games[@]}")
   fi
+
+  local post_compression_cleanup=$(configurator_compression_cleanup_dialog)
 
   local total_games=${#games_to_compress[@]}
   local games_left=$total_games
 
-  ## --- COMPRESSION PHASE WITH PROGRESS SCREEN ---
-  local comp_pipe
-  comp_pipe=$(mktemp -u)
-  mkfifo "$comp_pipe"
-
   (
-    for game_line in "${games_to_compress[@]}"; do
-      IFS="^" read -r game compression_format <<< "$game_line"
-      local system
-      system=$(echo "$game" | grep -oE "$roms_folder/[^/]+" | grep -oE "[^/]+$")
-      log i "Compressing $(basename "$game") into $compression_format format"
+  for game_line in "${games_to_compress[@]}"; do
+    IFS="^" read -r game compression_format <<< "$game_line"
 
-      # Launch the compression in the background.
-      compress_game "$compression_format" "$game" "$system" &
-      local comp_pid=$!
+    local system
+    system=$(echo "$game" | grep -oE "$roms_folder/[^/]+" | grep -oE "[^/]+$")
+    log i "Compressing $(basename "$game") into $compression_format format"
 
-      # While the compression is in progress, write a status message every second.
-      while kill -0 "$comp_pid" 2>/dev/null; do
-        echo "# Compressing $(basename "$game") into $compression_format format"
-        sleep 1
-      done
+    echo "#Compressing $(basename "$game") into $compression_format format.\n\n$games_left games left to compress." # Update Zenity dialog text
+    compress_game "$compression_format" "$game" "$post_compression_cleanup" "$system"
 
-      # When finished, update the progress percentage.
-      local progress=$(( 100 - (( 100 / total_games ) * games_left) ))
-      echo "$progress"
-      games_left=$(( games_left - 1 ))
-    done
-    echo "100"
-  ) > "$comp_pipe" &
-  local comp_pid_group=$!
-
+    games_left=$(( games_left - 1 ))
+    local progress=$(( 99 - (( 99 / total_games ) * games_left) ))
+    log d "progress: $progress"
+    echo "$progress" # Update Zenity dialog progress bar
+  done
+  echo "100" # Close Zenity progress dialog when finished
+  ) |
   rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck/retrodeck.svg" \
     --width="800" \
-    --title "RetroDECK Configurator Utility - Compression in Progress" < "$comp_pipe"
-
-  wait "$comp_pid_group"
-  rm "$comp_pipe"
+    --title "RetroDECK Configurator Utility - Compression in Progress"
 
   configurator_generic_dialog "RetroDECK Configurator - Compression Tool" "The compression process is complete!"
   configurator_compression_tool_dialog
@@ -1066,8 +1095,6 @@ configurator_bios_checker() {
     --title "RetroDECK Configurator Utility - BIOS Check in Progress" \
     --text="This check will look for BIOS files that RetroDECK has identified as working.\n\nNot all BIOS files are required for games to work, please check the BIOS description for more information on its purpose.\n\nBIOS files not known to this tool could still function.\n\nSome more advanced emulators such as Ryujinx will have additional methods to verify that the BIOS files are in working order.\n\nRetroDECK is now checking your BIOS files, please wait...\n\n" \
     --width=400 --height=100
-
-  configurator_welcome_dialog
 }
 
 configurator_reset_dialog() {
@@ -1199,7 +1226,7 @@ configurator_steam_sync() {
 
     if [ $? == 0 ] # User clicked "Yes"
     then
-      disable_steam_sync
+      configurator_disable_steam_sync
     else # User clicked "Cancel"
       configurator_welcome_dialog
     fi
@@ -1211,15 +1238,17 @@ configurator_steam_sync() {
 
     if [ $? == 0 ]
     then
-      enable_steam_sync
+      configurator_enable_steam_sync
     else
       configurator_welcome_dialog
     fi
   fi
 }
 
-enable_steam_sync() {
+configurator_enable_steam_sync() {
   set_setting_value "$rd_conf" "steam_sync" "true" retrodeck "options"
+  export CONFIGURATOR_GUI="zenity"
+  steam_sync
   zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Configurator - RetroDECK Steam Syncronization" \
@@ -1227,10 +1256,22 @@ enable_steam_sync() {
   configurator_welcome_dialog
 }
 
-disable_steam_sync() {
+configurator_disable_steam_sync() {
   set_setting_value "$rd_conf" "steam_sync" "false" retrodeck "options"
-  source /app/libexec/steam_sync.sh
-  remove_from_steam
+  # Remove only synced favorites, leave RetroDECK shortcut if it exists
+  (
+  steam-rom-manager enable --names "RetroDECK Steam Sync" >> "$srm_log" 2>&1
+  steam-rom-manager disable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
+  steam-rom-manager remove >> "$srm_log" 2>&1
+  ) |
+  rd_zenity --progress \
+  --title="Removing RetroDECK Sync from Steam" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+  --text="Removing synced entries from Steam, please wait..." \
+  --pulsate --width=500 --height=150 --auto-close --no-cancel
+  if [[ -f "$retrodeck_favorites_file" ]]; then
+    rm -f "$retrodeck_favorites_file"
+  fi
   zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Configurator - RetroDECK Steam Syncronization" \
@@ -1382,7 +1423,6 @@ configurator_usb_import_dialog() {
 
   "Prepare USB device" )
     log i "Configurator: opening \"$choice\" menu"
-    configurator_generic_dialog "RetroDeck Configurator - USB Import" "If you have an SD card installed that is not currently configured in RetroDECK it may show up in this list, but not be suitable for USB import.\n\nPlease select your desired drive carefully."
 
     external_devices=()
 
@@ -1392,6 +1432,7 @@ configurator_usb_import_dialog() {
     done < <(df --output=size,target -h | grep "/run/media/" | grep -v "$sdcard" | awk '{$1=$1;print}')
 
     if [[ "${#external_devices[@]}" -gt 0 ]]; then
+      configurator_generic_dialog "RetroDeck Configurator - USB Import" "If you have an SD card installed that is not currently configured in RetroDECK it may show up in this list, but not be suitable for USB import.\n\nPlease select your desired drive carefully."
       choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - USB Migration Tool" --cancel-label="Back" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
       --hide-column=3 --print-column=3 \
@@ -1401,9 +1442,10 @@ configurator_usb_import_dialog() {
       "${external_devices[@]}")
 
       if [[ ! -z "$choice" ]]; then
+        create_dir "$choice/RetroDECK Import"
         es-de --home "$choice/RetroDECK Import" --create-system-dirs
         rm -rf "$choice/RetroDECK Import/ES-DE" # Cleanup unnecessary folder
-        create_dir "$choice/RetroDECK Import/BIOS"
+
 
         # Prepare default BIOS folder subfolders
         create_dir "$choice/RetroDECK Import/BIOS/np2kai"
