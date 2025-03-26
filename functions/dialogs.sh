@@ -92,11 +92,11 @@ configurator_move_folder_dialog() {
   if [[ ! "$rd_dir_name" == "rdhome" ]]; then # If a sub-folder is being moved, find it's path without the source_root. So /home/deck/retrodeck/roms becomes retrodeck/roms
     local rd_dir_path="$(echo "$dir_to_move" | sed "s/.*\(retrodeck\/.*\)/\1/; s/\/$//")"
   else # Otherwise just set the retrodeck root folder
-    local rd_dir_path="$(basename $dir_to_move)"
+    local rd_dir_path="$(basename "$dir_to_move")"
   fi
 
   if [[ -d "$dir_to_move" ]]; then # If the directory selected to move already exists at the expected location pulled from retrodeck.cfg
-    choice=$(configurator_destination_choice_dialog "RetroDECK Data" "Please choose a destination for the $(basename $dir_to_move) folder.")
+    choice=$(configurator_destination_choice_dialog "RetroDECK Data" "Please choose a destination for the $(basename "$dir_to_move") folder.")
     case $choice in
 
     "Internal Storage" | "SD Card" | "Custom Location" ) # If the user picks a location
@@ -105,17 +105,17 @@ configurator_move_folder_dialog() {
       elif [[ "$choice" == "SD Card" ]]; then # If the user wants to move the folder to the predefined SD card location, set the target as sdcard from retrodeck.cfg
         local dest_root="$sdcard"
       else
-        configurator_generic_dialog "RetroDECK Configurator - Move Folder" "Select the parent folder you would like to store the $(basename $dir_to_move) folder in."
+        configurator_generic_dialog "RetroDECK Configurator - Move Folder" "Select the parent folder you would like to store the $(basename "$dir_to_move") folder in."
         local dest_root=$(directory_browse "RetroDECK directory location") # Set the destination root as the selected custom location
       fi
 
       if [[ (! -z "$dest_root") && ( -w "$dest_root") ]]; then # If user picked a destination and it is writable
-        if [[ (-d "$dest_root/$rd_dir_path") && (! -L "$dest_root/$rd_dir_path") && (! $rd_dir_name == "rdhome") ]] || [[ "$(realpath $dir_to_move)" == "$dest_root/$rd_dir_path" ]]; then # If the user is trying to move the folder to where it already is (excluding symlinks that will be unlinked)
-          configurator_generic_dialog "RetroDECK Configurator - Move Folder" "The $(basename $dir_to_move) folder is already at that location, please pick a new one."
+        if [[ (-d "$dest_root/$rd_dir_path") && (! -L "$dest_root/$rd_dir_path") && (! $rd_dir_name == "rdhome") ]] || [[ "$(realpath "$dir_to_move")" == "$dest_root/$rd_dir_path" ]]; then # If the user is trying to move the folder to where it already is (excluding symlinks that will be unlinked)
+          configurator_generic_dialog "RetroDECK Configurator - Move Folder" "The $(basename "$dir_to_move") folder is already at that location, please pick a new one."
           configurator_move_folder_dialog "$rd_dir_name"
         else
           if [[ $(verify_space "$(echo $dir_to_move | sed 's/\/$//')" "$dest_root") ]]; then # Make sure there is enough space at the destination
-            configurator_generic_dialog "RetroDECK Configurator - Move Folder" "Moving $(basename $dir_to_move) folder to $choice"
+            configurator_generic_dialog "RetroDECK Configurator - Move Folder" "Moving $(basename "$dir_to_move") folder to $choice"
             unlink "$dest_root/$rd_dir_path" # In case there is already a symlink at the picked destination
             move "$dir_to_move" "$dest_root/$rd_dir_path"
             if [[ -d "$dest_root/$rd_dir_path" ]]; then # If the move succeeded
@@ -128,7 +128,7 @@ configurator_move_folder_dialog() {
               if [[ -z $(ls -1 "$source_root/retrodeck") ]]; then # Cleanup empty old_path/retrodeck folder if it was left behind
                 rmdir "$source_root/retrodeck"
               fi
-              configurator_process_complete_dialog "moving the RetroDECK data directory to internal storage"
+              configurator_generic_dialog "RetroDECK Configurator - Move Folder" "moving the RetroDECK data directory to internal storage"
             else
               configurator_generic_dialog "RetroDECK Configurator - Move Folder" "The moving process was not completed, please try again."
             fi
@@ -150,12 +150,12 @@ configurator_move_folder_dialog() {
 
     esac
   else # The folder to move was not found at the path pulled from retrodeck.cfg and it needs to be reconfigured manually.
-    configurator_generic_dialog "RetroDECK Configurator - Move Folder" "The $(basename $dir_to_move) folder was not found at the expected location.\n\nThis may have happened if the folder was moved manually.\n\nPlease select the current location of the folder."
-    dir_to_move=$(directory_browse "RetroDECK $(basename $dir_to_move) directory location")
+    configurator_generic_dialog "RetroDECK Configurator - Move Folder" "The $(basename "$dir_to_move") folder was not found at the expected location.\n\nThis may have happened if the folder was moved manually.\n\nPlease select the current location of the folder."
+    dir_to_move=$(directory_browse "RetroDECK $(basename "$dir_to_move") directory location")
     declare -g "$rd_dir_name=$dir_to_move"
     prepare_component "postmove" "all"
     conf_write
-    configurator_generic_dialog "RetroDECK Configurator - Move Folder" "RetroDECK $(basename $dir_to_move) folder now configured at\n$dir_to_move."
+    configurator_generic_dialog "RetroDECK Configurator - Move Folder" "RetroDECK $(basename "$dir_to_move") folder now configured at\n$dir_to_move."
     configurator_move_folder_dialog "$rd_dir_name"
   fi
 }

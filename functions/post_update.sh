@@ -9,6 +9,58 @@ post_update() {
 
   update_rd_conf
 
+  export CONFIGURATOR_GUI="zenity"
+
+  # Optional userdata backup prior to update
+
+  choice=$(rd_zenity --title "RetroDECK Update - Backup Userdata" --info --no-wrap --ok-label="No Backup" --extra-button"Backup Core Userdata" --extra-button="Backup Some Userdata" --extra-button="Backup All Userdata" \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --text="Would you like to backup some or all of the RetroDECK userdata prior to update?\n\nIf you choose \"Backup Core Userdata\" only irreplaceable files (like saves, states and gamelists) will be backed up. If you choose \"Backup Some Userdata\" you will be given a choice of which folders to backup.\n\nIf you choose \"Backup All Userdata\" then ALL data (including ROMs and downloaded media) will be backed up.\nPLEASE NOTE: A full backup may take up a large amount of space, especially if you have a lot of scraped media.")
+
+  local rc=$?
+    if [[ $rc == "0" ]] && [[ -z "$choice" ]]; then # User selected No Backup button
+      log i "User chose to not backup prior to update."
+    else
+      case $choice in
+        "Backup Core Userdata" )
+          log i "User chose to backup core userdata prior to update."
+          backup_retrodeck_userdata "core"
+        ;;
+        "Backup Some Userdata" )
+          log i "User chose to backup some userdata prior to update."
+          while read -r config_line; do
+            local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
+            if [[ ! $current_setting_name =~ (rdhome|sdcard|backups_folder) ]]; then # Ignore these locations
+            log d "Adding $current_setting_name to compressible paths."
+              local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
+              compressible_paths=("${compressible_paths[@]}" "false" "$current_setting_name" "$current_setting_value")
+            fi
+          done < <(grep -v '^\s*$' $rd_conf | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
+
+          choice=$(rd_zenity \
+          --list --width=1200 --height=720 \
+          --checklist \
+          --separator="^" \
+          --print-column=3 \
+          --text="Please select folders to compress..." \
+          --column "Backup?" \
+          --column "Folder Name" \
+          --column "Path" \
+          "${compressible_paths[@]}")
+
+          choices=() # Expand choice string into passable array
+          IFS='^' read -ra choices <<< "$choice"
+
+          backup_retrodeck_userdata "custom" "${choices[@]}" # Expand array of choices into individual arguments
+        ;;
+        "Backup All Userdata" )
+          log i "User chose to backup all userdata prior to update."
+          backup_retrodeck_userdata "complete"
+        ;;
+      esac
+    fi
+
+  # Start of post_update actions
+
   if [[ $(check_version_is_older_than "$version_being_updated" "0.5.0b") == "true" ]]; then # If updating from prior to save sorting change at 0.5.0b
     log d "Version is older than 0.5.0b, executing save migration"
     save_migration
@@ -674,6 +726,29 @@ post_update() {
 
   fi # end of 0.9.1b
 
+  if [[ $(check_version_is_older_than "$version_being_updated" "0.9.2b") == "true" ]]; then
+    # In version 0.9.2b, the following changes were made that required config file updates/reset or other changes to the filesystem:
+    # Steam Sync completely rebuilt into new manifest system. Favorites will need to be nuked and, if steam_sync is enabled will be rebuilt.
+
+    if [[ -d "$steamsync_folder" ]]; then # If Steam Sync has ever been run
+      steam-rom-manager nuke
+      steam_sync
+      if [[ "$(configurator_generic_question_dialog "RetroDECK 0.9.2b Steam Sync Reset" "In RetroDECK 0.9.2b we upgraded our Steam Sync feature and the shortcuts in Steam need to be rebuilt.\n\nAll of your ES-DE favorites are still unchanged.\nAny games you have favorited now will be recreated.\n\nIf you have added RetroDECK to Steam through our Configurator it will also be removed through this process.\nWould you like to add the RetroDECK shortcut again?")" == "true" ]]; then
+        (
+        # Add RetroDECK launcher to Steam
+        steam-rom-manager enable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
+        steam-rom-manager add >> "$srm_log" 2>&1
+        ) |
+        rd_zenity --progress \
+        --title="RetroDECK Configurator: Add RetroDECK to Steam" \
+        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+        --text="Adding RetroDECK launcher to Steam, please wait..." \
+        --pulsate --width=500 --height=150 --auto-close --no-cancel
+      fi
+    fi
+
+  fi # end of 0.9.2b
+
   # The following commands are run every time.
 
   if [[ -d "/var/data/dolphin-emu/Load/DynamicInputTextures" ]]; then # Refresh installed textures if they have been enabled
@@ -709,6 +784,8 @@ post_update() {
   else
     changelog_dialog "$version"
   fi
+
+  unset CONFIGURATOR_GUI
 
   log i "Upgrade process completed successfully."
 }

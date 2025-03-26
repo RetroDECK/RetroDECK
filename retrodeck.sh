@@ -109,6 +109,10 @@ while [[ $# -gt 0 ]]; do
             cli_compress_all_games "$2"
             shift 2
             ;;
+        --repair-paths)
+            repair_paths
+            exit 0
+            ;;
         --configurator)
             sh /app/tools/configurator.sh
             exit 0
