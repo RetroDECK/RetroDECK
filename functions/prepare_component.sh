@@ -134,8 +134,8 @@ prepare_component() {
       cp -fvr "$config/steam-rom-manager/manifests" "$srm_userdata"
 
       log i "Updating steamDirectory and romDirectory lines in $srm_userdata/userSettings.json"
-      jq '.environmentVariables.steamDirectory = "'$HOME'/.steam/steam"' "$srm_userdata/userSettings.json" > "$srm_userdata/tmp.json" && mv -f "$srm_userdata/tmp.json" "$srm_userdata/userSettings.json"
-      jq '.environmentVariables.romsDirectory = "'$rdhome'/.sync"' "$srm_userdata/userSettings.json" > "$srm_userdata/tmp.json" && mv -f "$srm_userdata/tmp.json" "$srm_userdata/userSettings.json"
+      jq '.environmentVariables.steamDirectory = "'"$HOME"'/.steam/steam"' "$srm_userdata/userSettings.json" > "$srm_userdata/tmp.json" && mv -f "$srm_userdata/tmp.json" "$srm_userdata/userSettings.json"
+      jq '.environmentVariables.romsDirectory = "'"$rdhome"'/.sync"' "$srm_userdata/userSettings.json" > "$srm_userdata/tmp.json" && mv -f "$srm_userdata/tmp.json" "$srm_userdata/userSettings.json"
 
       get_steam_user
     fi
@@ -200,14 +200,14 @@ prepare_component() {
         log i "--------------------------------"
         log i "Prepearing PPSSPP_LIBRETRO"
         log i "--------------------------------"
-        if [ -d $bios_folder/PPSSPP/flash0/font ]
+        if [ -d "$bios_folder/PPSSPP/flash0/font" ]
         then
-          mv -fv $bios_folder/PPSSPP/flash0/font $bios_folder/PPSSPP/flash0/font.bak
+          mv -fv "$bios_folder/PPSSPP/flash0/font" "$bios_folder/PPSSPP/flash0/font.bak"
         fi
         cp -rf "/app/retrodeck/extras/PPSSPP" "$bios_folder/PPSSPP"
-        if [ -d $bios_folder/PPSSPP/flash0/font.bak ]
+        if [ -d "$bios_folder/PPSSPP/flash0/font.bak" ]
         then
-          mv -f $bios_folder/PPSSPP/flash0/font.bak $bios_folder/PPSSPP/flash0/font
+          mv -f "$bios_folder/PPSSPP/flash0/font.bak" "$bios_folder/PPSSPP/flash0/font"
         fi
 
         # MSX / SVI / ColecoVision / SG-1000
@@ -350,7 +350,9 @@ prepare_component() {
           cp -fr "$config/cemu/"* /var/config/Cemu/
           set_setting_value "$cemuconf" "mlc_path" "$bios_folder/cemu" "cemu"
           set_setting_value "$cemuconf" "Entry" "$roms_folder/wiiu" "cemu" "GamePaths"
-          rm -rf "$XDG_DATA_HOME/Cemu/keys.txt" && ln -s "$bios_folder/cemu/keys.txt" "$XDG_DATA_HOME/Cemu/keys.txt" && log d "Linked $bios_folder/cemu/keys.txt to $XDG_DATA_HOME/Cemu/keys.txt"
+          if [[ -e "$bios_folder/cemu/keys.txt" ]]; then
+            rm -rf "$XDG_DATA_HOME/Cemu/keys.txt" && ln -s "$bios_folder/cemu/keys.txt" "$XDG_DATA_HOME/Cemu/keys.txt" && log d "Linked $bios_folder/cemu/keys.txt to $XDG_DATA_HOME/Cemu/keys.txt"
+          fi
         fi
         # Shared actions
         dir_prep "$saves_folder/wiiu/cemu" "$bios_folder/cemu/usr/save"
@@ -591,7 +593,7 @@ prepare_component() {
         dir_prep "$texture_packs_folder/PPSSPP" "/var/config/ppsspp/PSP/TEXTURES"
         create_dir -d "$cheats_folder/PPSSPP"
         dir_prep "$cheats_folder/PPSSPP" "/var/config/ppsspp/PSP/Cheats"
-        if [[ -d "$cheats_folder/PPSSPP" && "$(ls -A $cheats_folder/PPSSPP)" ]]; then
+        if [[ -d "$cheats_folder/PPSSPP" && "$(ls -A "$cheats_folder"/PPSSPP)" ]]; then
           backup_file="$backups_folder/cheats/PPSSPP-$(date +%y%m%d).tar.gz"
           create_dir "$(dirname "$backup_file")"
           tar -czf "$backup_file" -C "$cheats_folder" PPSSPP
@@ -640,7 +642,9 @@ prepare_component() {
         dir_prep "$saves_folder/wii/primehack" "/var/data/primehack/Wii"
         dir_prep "$mods_folder/Primehack" "/var/data/primehack/Load/GraphicMods"
         dir_prep "$texture_packs_folder/Primehack" "/var/data/primehack/Load/Textures"
-        cp -fvr "$config/primehack/data/"* "$multi_user_data_folder/$SteamAppUser/data/primehack/" # this must be done after the dirs are prepared as it copying some "mods"
+        if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
+          cp -fvr "$config/primehack/data/"* "$multi_user_data_folder/$SteamAppUser/data/primehack/" # this must be done after the dirs are prepared as it copying some "mods"
+        fi
 
         # Reset default preset settings
         set_setting_value "$rd_conf" "primehack" "$(get_setting_value "$rd_defaults" "primehack" "retrodeck" "ask_to_exit")" "retrodeck" "ask_to_exit"
@@ -708,17 +712,17 @@ prepare_component() {
           rm -rf "$multi_user_data_folder/$SteamAppUser/config/Ryujinx"
           #create_dir "$multi_user_data_folder/$SteamAppUser/config/Ryujinx/system"
           cp -fv $config/ryujinx/* "$multi_user_data_folder/$SteamAppUser/config/Ryujinx"
-          sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "$multi_user_data_folder/$SteamAppUser/config/Ryujinx/Config.json"
+          sed -i 's#RETRODECKHOMEDIR#'"$rdhome"'#g' "$multi_user_data_folder/$SteamAppUser/config/Ryujinx/Config.json"
           dir_prep "$multi_user_data_folder/$SteamAppUser/config/Ryujinx" "/var/config/Ryujinx"
         else
           # removing config directory to wipe legacy files
           log d "Removing \"/var/config/Ryujinx\""
-          rm -rf /var/config/Ryujinx
-          create_dir /var/config/Ryujinx/system
-          cp -fv $config/ryujinx/Config.json $ryujinxconf
-          cp -fvr $config/ryujinx/profiles /var/config/Ryujinx/
+          rm -rf "/var/config/Ryujinx"
+          create_dir "/var/config/Ryujinx/system"
+          cp -fv "$config/ryujinx/Config.json" "$ryujinxconf"
+          cp -fvr "$config/ryujinx/profiles" "/var/config/Ryujinx/"
           log d "Replacing placeholders in \"$ryujinxconf\""
-          sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "$ryujinxconf"
+          sed -i 's#RETRODECKHOMEDIR#'"$rdhome"'#g' "$ryujinxconf"
           create_dir "$logs_folder/ryujinx"
           create_dir "$mods_folder/ryujinx"
           create_dir "$screenshots_folder/ryujinx"
@@ -796,10 +800,10 @@ prepare_component() {
         log i "Prepearing XEMU"
         log i "------------------------"
         if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
-          rm -rf /var/config/xemu
-          rm -rf /var/data/xemu
+          rm -rf "/var/config/xemu"
+          rm -rf "/var/data/xemu"
           create_dir -d "$multi_user_data_folder/$SteamAppUser/config/xemu/"
-          cp -fv $config/xemu/xemu.toml "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml"
+          cp -fv "$config/xemu/xemu.toml" "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml"
           set_setting_value "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml" "screenshot_dir" "'$screenshots_folder'" "xemu" "General"
           set_setting_value "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml" "bootrom_path" "'$bios_folder/mcpx_1.0.bin'" "xemu" "sys.files"
           set_setting_value "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml" "flashrom_path" "'$bios_folder/Complex.bin'" "xemu" "sys.files"
@@ -808,19 +812,19 @@ prepare_component() {
           dir_prep "$multi_user_data_folder/$SteamAppUser/config/xemu" "/var/config/xemu" # Creating config folder in /var/config for consistentcy and linking back to original location where component will look
           dir_prep "$multi_user_data_folder/$SteamAppUser/config/xemu" "/var/data/xemu/xemu"
         else # Single-user actions
-          rm -rf /var/config/xemu
-          rm -rf /var/data/xemu
+          rm -rf "/var/config/xemu"
+          rm -rf "/var/data/xemu"
           dir_prep "/var/config/xemu" "/var/data/xemu/xemu" # Creating config folder in /var/config for consistentcy and linking back to original location where component will look
-          cp -fv $config/xemu/xemu.toml "$xemuconf"
+          cp -fv "$config/xemu/xemu.toml" "$xemuconf"
           set_setting_value "$xemuconf" "screenshot_dir" "'$screenshots_folder'" "xemu" "General"
           set_setting_value "$xemuconf" "bootrom_path" "'$bios_folder/mcpx_1.0.bin'" "xemu" "sys.files"
           set_setting_value "$xemuconf" "flashrom_path" "'$bios_folder/Complex.bin'" "xemu" "sys.files"
           set_setting_value "$xemuconf" "eeprom_path" "'$saves_folder/xbox/xemu/xbox-eeprom.bin'" "xemu" "sys.files"
           set_setting_value "$xemuconf" "hdd_path" "'$bios_folder/xbox_hdd.qcow2'" "xemu" "sys.files"
         fi # Shared actions
-        create_dir $saves_folder/xbox/xemu/
+        create_dir "$saves_folder/xbox/xemu/"
         # Preparing HD dummy Image if the image is not found
-        if [ ! -f $bios_folder/xbox_hdd.qcow2 ]
+        if [ ! -f "$bios_folder/xbox_hdd.qcow2" ]
         then
           cp -f "/app/retrodeck/extras/XEMU/xbox_hdd.qcow2" "$bios_folder/xbox_hdd.qcow2"
         fi
@@ -918,7 +922,7 @@ prepare_component() {
       cp -fvr "$config/mame/default.cfg" "$mamedefconf"
       cp -fvr "/app/share/mame/bgfx/"* "$shaders_folder/mame/bgfx"
 
-      sed -i 's#RETRODECKROMSDIR#'$roms_folder'#g' "$mameconf" # one-off as roms folders are a lot
+      sed -i 's#RETRODECKROMSDIR#'"$roms_folder"'#g' "$mameconf" # one-off as roms folders are a lot
       set_setting_value "$mameconf" "nvram_directory" "$saves_folder/mame-sa/nvram" "mame"
       set_setting_value "$mameconf" "state_directory" "$states_folder/mame-sa" "mame"
       set_setting_value "$mameconf" "snapshot_directory" "$screenshots_folder/mame-sa" "mame"
@@ -948,9 +952,9 @@ prepare_component() {
 
       cp -fvr "$config/gzdoom/gzdoom.ini" "/var/config/gzdoom"
 
-      sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "/var/config/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON
-      sed -i 's#RETRODECKROMSDIR#'$roms_folder'#g' "/var/config/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON
-      sed -i 's#RETRODECKSAVESDIR#'$saves_folder'#g' "/var/config/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON
+      sed -i 's#RETRODECKHOMEDIR#'"$rdhome"'#g' "/var/config/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON
+      sed -i 's#RETRODECKROMSDIR#'"$roms_folder"'#g' "/var/config/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON
+      sed -i 's#RETRODECKSAVESDIR#'"$saves_folder"'#g' "/var/config/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON
     fi
 
     if [[ "$component" =~ ^(portmaster|all)$ ]]; then
