@@ -61,10 +61,24 @@ steam_sync() {
             '[$source[0][] | select(. as $item | ($target[0] | map(. == $item) | any | not))]')
     fi
 
+    if [[ -f "$retrodeck_favorites_file" && -f "${retrodeck_favorites_file}.new" ]]; then
+        # Look for new favorites added between steam_sync runs, if any
+        added_items=$(jq -n \
+            --slurpfile source "${retrodeck_favorites_file}.new" \
+            --slurpfile target "$retrodeck_favorites_file" \
+            '[$source[0][] | select(. as $item | ($target[0] | map(. == $item) | any | not))]')
+    fi
+
     # Check if there are any missing objects
     if [[ "$(echo "$removed_items" | jq 'length')" -gt 0 ]]; then
         log d "Some favorites were removed between sync, writing to $retrodeck_removed_favorites"
         echo "$removed_items" > "$retrodeck_removed_favorites"
+    fi
+
+    # Check if any new favorites were added
+    if [[ "$(echo "$added_items" | jq 'length')" -gt 0 ]]; then
+        log d "Some new favorites were added between sync, writing to $retrodeck_added_favorites"
+        echo "$added_items" > "$retrodeck_added_favorites"
     fi
 
     # Decide if sync needs to happen
@@ -74,9 +88,7 @@ steam_sync() {
             if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
                 (
                 # Remove old entries
-                steam-rom-manager disable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
-                steam-rom-manager enable --names "RetroDECK Steam Sync" >> "$srm_log" 2>&1
-                steam-rom-manager remove >> "$srm_log" 2>&1
+                steam_sync_remove
                 ) |
                 rd_zenity --progress \
                 --title="Syncing with Steam" \
@@ -85,9 +97,7 @@ steam_sync() {
                 --pulsate --width=500 --height=150 --auto-close --no-cancel
             else
                 # Remove old entries
-                steam-rom-manager disable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
-                steam-rom-manager enable --names "RetroDECK Steam Sync" >> "$srm_log" 2>&1
-                steam-rom-manager remove >> "$srm_log" 2>&1
+                steam_sync_remove
             fi
             # Old manifest cleanup
             rm "$retrodeck_favorites_file"
@@ -104,9 +114,7 @@ steam_sync() {
                     mv "$retrodeck_removed_favorites" "$retrodeck_favorites_file"
                     if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
                         (
-                        steam-rom-manager disable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
-                        steam-rom-manager enable --names "RetroDECK Steam Sync" >> "$srm_log" 2>&1
-                        steam-rom-manager remove >> "$srm_log" 2>&1
+                        steam_sync_remove
                         ) |
                         rd_zenity --progress \
                         --title="Syncing with Steam" \
@@ -114,32 +122,29 @@ steam_sync() {
                         --text="<span foreground='$purple'><b>\t\t\t\tRemoving unfavorited games from Steam</b></span>\n\n<b>NOTE: </b>This operation may take some time depending on the size of your library.\nFeel free to leave this in the background and switch to another application.\n\n" \
                         --pulsate --width=500 --height=150 --auto-close --no-cancel
                     else
-                        steam-rom-manager disable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
-                        steam-rom-manager enable --names "RetroDECK Steam Sync" >> "$srm_log" 2>&1
-                        steam-rom-manager remove >> "$srm_log" 2>&1
+                        steam_sync_remove
+                    fi
+                fi
+                if [[ -f "$retrodeck_added_favorites" ]]; then # If some new favorites were added between syncs
+                    log d "Some new favorites added between syncs, adding new favorited games"
+                    # Load added favorites as manifest and run SRM add
+                    mv "$retrodeck_added_favorites" "$retrodeck_favorites_file"
+                    if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
+                        (
+                        steam_sync_add
+                        ) |
+                        rd_zenity --progress \
+                        --title="Syncing with Steam" \
+                        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+                        --text="<span foreground='$purple'><b>\t\t\t\tAdding new favorited games to Steam</b></span>\n\n<b>NOTE: </b>This operation may take some time depending on the size of your library.\nFeel free to leave this in the background and switch to another application.\n\n" \
+                        --pulsate --width=500 --height=150 --auto-close --no-cancel
+                    else
+                        steam_sync_add
                     fi
                 fi
 
-                # Load new favorites manifest as games to add during sync
+                # Make new favorites manifest the current one
                 mv "${retrodeck_favorites_file}.new" "$retrodeck_favorites_file"
-
-                if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
-                    (
-                    # Add new favorites manifest
-                    steam-rom-manager disable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
-                    steam-rom-manager enable --names "RetroDECK Steam Sync" >> "$srm_log" 2>&1
-                    steam-rom-manager add >> "$srm_log" 2>&1
-                    ) |
-                    rd_zenity --progress \
-                    --title="Syncing with Steam" \
-                    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-                    --text="<span foreground='$purple'><b>\t\t\t\tSyncing favorite games with Steam</b></span>\n\n<b>NOTE: </b>This operation may take some time depending on the size of your library.\nFeel free to leave this in the background and switch to another application.\n\n" \
-                    --pulsate --width=500 --height=150 --auto-close --no-cancel
-                else
-                    steam-rom-manager disable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
-                    steam-rom-manager enable --names "RetroDECK Steam Sync" >> "$srm_log" 2>&1
-                    steam-rom-manager add >> "$srm_log" 2>&1
-                fi
             fi
         fi
     elif [[ "$(cat "${retrodeck_favorites_file}.new" | jq 'length')" -gt 0 ]]; then # No existing favorites manifest was found, so check if new manifest has entries
@@ -148,9 +153,7 @@ steam_sync() {
         if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
             (
             # Add new favorites manifest
-            steam-rom-manager disable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
-            steam-rom-manager enable --names "RetroDECK Steam Sync" >> "$srm_log" 2>&1
-            steam-rom-manager add >> "$srm_log" 2>&1
+            steam_sync_add
             ) |
             rd_zenity --progress \
             --title="Syncing with Steam" \
@@ -159,9 +162,19 @@ steam_sync() {
             --pulsate --width=500 --height=150 --auto-close --no-cancel
         else
             # Add new favorites manifest
-            steam-rom-manager disable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
-            steam-rom-manager enable --names "RetroDECK Steam Sync" >> "$srm_log" 2>&1
-            steam-rom-manager add >> "$srm_log" 2>&1
+            steam_sync_add
         fi
     fi
+}
+
+steam_sync_add() {
+    steam-rom-manager disable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
+    steam-rom-manager enable --names "RetroDECK Steam Sync" >> "$srm_log" 2>&1
+    steam-rom-manager add >> "$srm_log" 2>&1
+}
+
+steam_sync_remove() {
+    steam-rom-manager disable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
+    steam-rom-manager enable --names "RetroDECK Steam Sync" >> "$srm_log" 2>&1
+    steam-rom-manager remove >> "$srm_log" 2>&1
 }
