@@ -63,10 +63,10 @@ find_compatible_compression_format() {
   local system=$(echo "$1" | grep -oE "$roms_folder/[^/]+" | grep -oE "[^/]+$")
 
   # Extract the relevant lists from the JSON file
-  local chd_systems=$(jq -r '.compression_targets.chd[]' $features)
-  local rvz_systems=$(jq -r '.compression_targets.rvz[]' $features)
-  local zip_systems=$(jq -r '.compression_targets.zip[]' $features)
-  local zip_compressable_extensions=$(jq -r '.zip_compressable_extensions[]' $features)
+  local chd_systems=$(jq -r '.compression_targets.chd[]' "$features")
+  local rvz_systems=$(jq -r '.compression_targets.rvz[]' "$features")
+  local zip_systems=$(jq -r '.compression_targets.zip[]' "$features")
+  local zip_compressable_extensions=$(jq -r '.zip_compressable_extensions[]' "$features")
 
   if [[ $(validate_for_chd "$1") == "true" ]] && echo "$chd_systems" | grep -q "\b$system\b"; then
     echo "chd"
@@ -259,9 +259,9 @@ cli_compress_all_games() {
   local compressable_game=""
   local all_compressable_games=()
   if [[ $compression_format == "all" ]]; then
-    local compressible_systems_list=$(jq -r '.compression_targets | to_entries[] | .value[]' $features)
+    local compressible_systems_list=$(jq -r '.compression_targets | to_entries[] | .value[]' "$features")
   else
-    local compressible_systems_list=$(jq -r '.compression_targets["'"$compression_format"'"][]' $features)
+    local compressible_systems_list=$(jq -r '.compression_targets["'"$compression_format"'"][]' "$features")
   fi
 
   read -p "Do you want to have the original files removed after compression is complete? Please answer y/n and press Enter: " post_compression_cleanup

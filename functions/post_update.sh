@@ -40,7 +40,7 @@ post_update() {
             local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
             compressible_paths=("${compressible_paths[@]}" "false" "$current_setting_name" "$current_setting_value")
           fi
-        done < <(grep -v '^\s*$' $rd_conf | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
+        done < <(grep -v '^\s*$' "$rd_conf" | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
 
         choice=$(rd_zenity \
         --list --width=1200 --height=720 \
@@ -92,11 +92,11 @@ post_update() {
     # - Duckstation save and state locations were dir_prep'd to the rdhome/save and /state folders, which was not previously done. Much safer now!
     # - Fix PICO-8 folder structure. ROM and save folders are now sane and binary files will go into ~/retrodeck/bios/pico-8/
 
-    rm -rf /var/config/primehack # Purge old Primehack config files. Saves are safe as they are linked into /var/data/primehack.
+    rm -rf "$XDG_CONFIG_HOME/primehack" # Purge old Primehack config files. Saves are safe as they are linked into $XDG_DATA_HOME/primehack.
     prepare_component "reset" "primehack"
 
-    dir_prep "$rdhome/saves/duckstation" "/var/data/duckstation/memcards"
-    dir_prep "$rdhome/states/duckstation" "/var/data/duckstation/savestates"
+    dir_prep "$rdhome/saves/duckstation" "$XDG_DATA_HOME/duckstation/memcards"
+    dir_prep "$rdhome/states/duckstation" "$XDG_DATA_HOME/duckstation/savestates"
 
     mv "$bios_folder/pico8" "$bios_folder/pico8_olddata" # Move legacy (and incorrect / non-functional ) PICO-8 location for future cleanup / less confusion
     dir_prep "$bios_folder/pico-8" "$HOME/.lexaloffle/pico-8" # Store binary and config files together. The .lexaloffle directory is a hard-coded location for the PICO-8 config file, cannot be changed
@@ -109,21 +109,21 @@ post_update() {
     # - Fix symlink to hard-coded PICO-8 config folder (dir_prep doesn't like ~)
     # - Overwrite Citra and Yuzu configs, as controller mapping was broken due to emulator updates.
 
-    dir_prep "$rdhome/states/dolphin" "/var/data/dolphin-emu/StateSaves"
-    dir_prep "$rdhome/states/primehack" "/var/data/primehack/StateSaves"
+    dir_prep "$rdhome/states/dolphin" "$XDG_DATA_HOME/dolphin-emu/StateSaves"
+    dir_prep "$rdhome/states/primehack" "$XDG_DATA_HOME/primehack/StateSaves"
 
     rm -rf "$HOME/~/" # Remove old incorrect location from 0.6.2b
     rm -f "$HOME/.lexaloffle/pico-8" # Remove old symlink to prevent recursion
     dir_prep "$bios_folder/pico-8" "$HOME/.lexaloffle/pico-8" # Store binary and config files together. The .lexaloffle directory is a hard-coded location for the PICO-8 config file, cannot be changed
     dir_prep "$saves_folder/pico-8" "$bios_folder/pico-8/cdata" # PICO-8 saves folder structure was backwards, fixing for consistency.
 
-    cp -f "$config/citra/qt-config.ini" /var/config/citra-emu/qt-config.ini
-    sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/citra-emu/qt-config.ini
-    cp -fr "$config/yuzu/"* /var/config/yuzu/
-    sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' /var/config/yuzu/qt-config.ini
+    cp -f "$config/citra/qt-config.ini" "$XDG_CONFIG_HOME/citra-emu/qt-config.ini"
+    sed -i 's#RETRODECKHOMEDIR#'"$rdhome"'#g' "$XDG_CONFIG_HOME/citra-emu/qt-config.ini"
+    cp -fr "$config/yuzu/"* "$XDG_CONFIG_HOME/yuzu/"
+    sed -i 's#RETRODECKHOMEDIR#'"$rdhome"'#g' "$XDG_CONFIG_HOME/yuzu/qt-config.ini"
 
     # Remove unneeded tools folder, as location has changed to RO space
-    rm -rfv /var/config/retrodeck/tools/
+    rm -rfv "$XDG_CONFIG_HOME/retrodeck/tools/"
   fi
   if [[ $(check_version_is_older_than "$version_being_updated" "0.6.4b") == "true" ]]; then
     # In version 0.6.4b, the following changes were made:
@@ -137,12 +137,12 @@ post_update() {
     # In version 0.6.5b, the following changes were made:
     # Change Yuzu GPU accuracy to normal for better performance
 
-    set_setting_value $yuzuconf "gpu_accuracy" "0" "yuzu" "Renderer"
+    set_setting_value "$yuzuconf" "gpu_accuracy" "0" "yuzu" "Renderer"
   fi
   if [[ $(check_version_is_older_than "$version_being_updated" "0.7.0b") == "true" ]]; then
     # In version 0.7.0b, the following changes were made that required config file updates/reset or other changes to the filesystem:
     # - Update retrodeck.cfg and set new paths to $rdhome by default
-    # - Update PCSX2 and Duckstation configs to latest templates (to accomadate RetroAchievements feature) and move Duckstation config folder from /var/data to /var/config
+    # - Update PCSX2 and Duckstation configs to latest templates (to accomadate RetroAchievements feature) and move Duckstation config folder from $XDG_DATA_HOME to $XDG_CONFIG_HOME
     # - New ~/retrodeck/mods and ~/retrodeck/texture_packs directories are added and symlinked to multiple different emulators (where supported)
     # - Expose ES-DE gamelists folder to user at ~/retrodeck/gamelists
     # - Copy new borders into RA config location
@@ -162,52 +162,52 @@ post_update() {
     # - Init PICO-8 as it has newly-shipped config files
 
     update_rd_conf # Expand retrodeck.cfg to latest template
-    set_setting_value $rd_conf "screenshots_folder" "$rdhome/screenshots"
-    set_setting_value $rd_conf "mods_folder" "$rdhome/mods"
-    set_setting_value $rd_conf "texture_packs_folder" "$rdhome/texture_packs"
-    set_setting_value $rd_conf "borders_folder" "$rdhome/borders"
+    set_setting_value "$rd_conf" "screenshots_folder" "$rdhome/screenshots"
+    set_setting_value "$rd_conf" "mods_folder" "$rdhome/mods"
+    set_setting_value "$rd_conf" "texture_packs_folder" "$rdhome/texture_packs"
+    set_setting_value "$rd_conf" "borders_folder" "$rdhome/borders"
     conf_read
 
     mv -f "$pcsx2conf" "$pcsx2conf.bak"
-    generate_single_patch "$config/PCSX2/PCSX2.ini" "$pcsx2conf.bak" "/var/config/PCSX2/inis/PCSX2-cheevos-upgrade.patch" pcsx2
-    deploy_single_patch "$config/PCSX2/PCSX2.ini" "/var/config/PCSX2/inis/PCSX2-cheevos-upgrade.patch" "$pcsx2conf"
-    rm -f "/var/config/PCSX2/inis/PCSX2-cheevos-upgrade.patch"
-    dir_prep "/var/config/duckstation" "/var/data/duckstation"
+    generate_single_patch "$config/PCSX2/PCSX2.ini" "$pcsx2conf.bak" "$XDG_CONFIG_HOME/PCSX2/inis/PCSX2-cheevos-upgrade.patch" pcsx2
+    deploy_single_patch "$config/PCSX2/PCSX2.ini" "$XDG_CONFIG_HOME/PCSX2/inis/PCSX2-cheevos-upgrade.patch" "$pcsx2conf"
+    rm -f "$XDG_CONFIG_HOME/PCSX2/inis/PCSX2-cheevos-upgrade.patch"
+    dir_prep "$XDG_CONFIG_HOME/duckstation" "$XDG_DATA_HOME/duckstation"
     mv -f "$duckstationconf" "$duckstationconf.bak"
-    generate_single_patch "$config/duckstation/settings.ini" "$duckstationconf.bak" "/var/config/duckstation/duckstation-cheevos-upgrade.patch" pcsx2
-    deploy_single_patch "$config/duckstation/settings.ini" "/var/config/duckstation/duckstation-cheevos-upgrade.patch" "$duckstationconf"
-    rm -f "/var/config/duckstation/duckstation-cheevos-upgrade.patch"
+    generate_single_patch "$config/duckstation/settings.ini" "$duckstationconf.bak" "$XDG_CONFIG_HOME/duckstation/duckstation-cheevos-upgrade.patch" pcsx2
+    deploy_single_patch "$config/duckstation/settings.ini" "$XDG_CONFIG_HOME/duckstation/duckstation-cheevos-upgrade.patch" "$duckstationconf"
+    rm -f "$XDG_CONFIG_HOME/duckstation/duckstation-cheevos-upgrade.patch"
 
     create_dir "$mods_folder"
     create_dir "$texture_packs_folder"
     create_dir "$borders_folder"
 
-    dir_prep "$mods_folder/Primehack" "/var/data/primehack/Load/GraphicMods"
-    dir_prep "$texture_packs_folder/Primehack" "/var/data/primehack/Load/Textures"
-    dir_prep "$mods_folder/Dolphin" "/var/data/dolphin-emu/Load/GraphicMods"
-    dir_prep "$texture_packs_folder/Dolphin" "/var/data/dolphin-emu/Load/Textures"
-    dir_prep "$mods_folder/Citra" "/var/data/citra-emu/load/mods"
-    dir_prep "$texture_packs_folder/Citra" "/var/data/citra-emu/load/textures"
-    dir_prep "$mods_folder/Yuzu" "/var/data/yuzu/load"
-    dir_prep "$texture_packs_folder/RetroArch-Mesen" "/var/config/retroarch/system/HdPacks"
-    dir_prep "$texture_packs_folder/PPSSPP" "/var/config/ppsspp/PSP/TEXTURES"
-    dir_prep "$texture_packs_folder/PCSX2" "/var/config/PCSX2/textures"
-    dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/cache" "/var/config/retroarch/system/Mupen64plus/cache"
-    dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/hires_texture" "/var/config/retroarch/system/Mupen64plus/hires_texture"
-    dir_prep "$texture_packs_folder/Duckstation" "/var/config/duckstation/textures"
+    dir_prep "$mods_folder/Primehack" "$XDG_DATA_HOME/primehack/Load/GraphicMods"
+    dir_prep "$texture_packs_folder/Primehack" "$XDG_DATA_HOME/primehack/Load/Textures"
+    dir_prep "$mods_folder/Dolphin" "$XDG_DATA_HOME/dolphin-emu/Load/GraphicMods"
+    dir_prep "$texture_packs_folder/Dolphin" "$XDG_DATA_HOME/dolphin-emu/Load/Textures"
+    dir_prep "$mods_folder/Citra" "$XDG_DATA_HOME/citra-emu/load/mods"
+    dir_prep "$texture_packs_folder/Citra" "$XDG_DATA_HOME/citra-emu/load/textures"
+    dir_prep "$mods_folder/Yuzu" "$XDG_DATA_HOME/yuzu/load"
+    dir_prep "$texture_packs_folder/RetroArch-Mesen" "$XDG_CONFIG_HOME/retroarch/system/HdPacks"
+    dir_prep "$texture_packs_folder/PPSSPP" "$XDG_CONFIG_HOME/ppsspp/PSP/TEXTURES"
+    dir_prep "$texture_packs_folder/PCSX2" "$XDG_CONFIG_HOME/PCSX2/textures"
+    dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/cache" "$XDG_CONFIG_HOME/retroarch/system/Mupen64plus/cache"
+    dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/hires_texture" "$XDG_CONFIG_HOME/retroarch/system/Mupen64plus/hires_texture"
+    dir_prep "$texture_packs_folder/Duckstation" "$XDG_CONFIG_HOME/duckstation/textures"
 
-    dir_prep "$rdhome/gamelists" "/var/config/emulationstation/ES-DE/gamelists"
+    dir_prep "$rdhome/gamelists" "$XDG_CONFIG_HOME/emulationstation/ES-DE/gamelists"
 
-    dir_prep "$borders_folder" "/var/config/retroarch/overlays/borders"
-    rsync -rlD --mkpath "/app/retrodeck/config/retroarch/borders/" "/var/config/retroarch/overlays/borders/"
+    dir_prep "$borders_folder" "$XDG_CONFIG_HOME/retroarch/overlays/borders"
+    rsync -rlD --mkpath "/app/retrodeck/config/retroarch/borders/" "$XDG_CONFIG_HOME/retroarch/overlays/borders/"
 
-    rsync -rlD --mkpath "$config/retrodeck/presets/remaps/" "/var/config/retroarch/config/remaps/"
+    rsync -rlD --mkpath "$config/retrodeck/presets/remaps/" "$XDG_CONFIG_HOME/retroarch/config/remaps/"
 
     if [[ ! -f "$bios_folder/capsimg.so" ]]; then
       cp -f "/app/retrodeck/extras/Amiga/capsimg.so" "$bios_folder/capsimg.so"
     fi
 
-    cp -f $config/rpcs3/vfs.yml /var/config/rpcs3/vfs.yml
+    cp -f "$config/rpcs3/vfs.yml" "$XDG_CONFIG_HOME/rpcs3/vfs.yml"
     sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$bios_folder/rpcs3/"'^' "$rpcs3vfsconf"
     set_setting_value "$rpcs3vfsconf" "/games/" "$roms_folder/ps3/" "rpcs3"
     if [[ -d "$roms_folder/ps3/emudir" ]]; then # The old location exists, meaning the emulator was run at least once.
@@ -225,7 +225,7 @@ post_update() {
     create_dir "$bios_folder/rpcs3/dev_usb000"
     dir_prep "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata" "$saves_folder/ps3/rpcs3"
 
-    set_setting_value $es_settings "ApplicationUpdaterFrequency" "never" "es_settings"
+    set_setting_value "$es_settings" "ApplicationUpdaterFrequency" "never" "es_settings"
 
     if [[ -f "$saves_folder/duckstation/shared_card_1.mcd" || -f "$saves_folder/duckstation/shared_card_2.mcd" ]]; then
       configurator_generic_dialog "RetroDECK 0.7.0b Upgrade" "As part of this update, the location of saves and states for Duckstation has been changed.\n\nYour files will be moved automatically, and can now be found at\n\n~.../saves/psx/duckstation/memcards/\nand\n~.../states/psx/duckstation/"
@@ -233,42 +233,42 @@ post_update() {
     create_dir "$saves_folder/psx/duckstation/memcards"
     mv "$saves_folder/duckstation/"* "$saves_folder/psx/duckstation/memcards/"
     rmdir "$saves_folder/duckstation" # File-safe folder cleanup
-    unlink "/var/config/duckstation/memcards"
+    unlink "$XDG_CONFIG_HOME/duckstation/memcards"
     set_setting_value "$duckstationconf" "Card1Path" "$saves_folder/psx/duckstation/memcards/shared_card_1.mcd" "duckstation" "MemoryCards"
     set_setting_value "$duckstationconf" "Card2Path" "$saves_folder/psx/duckstation/memcards/shared_card_2.mcd" "duckstation" "MemoryCards"
     set_setting_value "$duckstationconf" "Directory" "$saves_folder/psx/duckstation/memcards" "duckstation" "MemoryCards"
     set_setting_value "$duckstationconf" "RecursivePaths" "$roms_folder/psx" "duckstation" "GameList"
     create_dir "$states_folder/psx"
     mv -t "$states_folder/psx/" "$states_folder/duckstation"
-    unlink "/var/config/duckstation/savestates"
-    dir_prep "$states_folder/psx/duckstation" "/var/config/duckstation/savestates"
+    unlink "$XDG_CONFIG_HOME/duckstation/savestates"
+    dir_prep "$states_folder/psx/duckstation" "$XDG_CONFIG_HOME/duckstation/savestates"
 
-    rm -rf /var/config/retrodeck/tools
-    rm -rf /var/config/emulationstation/ES-DE/gamelists/tools/
+    rm -rf "$XDG_CONFIG_HOME/retrodeck/tools"
+    rm -rf "$XDG_CONFIG_HOME/emulationstation/ES-DE/gamelists/tools/"
 
     mv "$saves_folder/gc/dolphin/EUR" "$saves_folder/gc/dolphin/EU"
     mv "$saves_folder/gc/dolphin/USA" "$saves_folder/gc/dolphin/US"
     mv "$saves_folder/gc/dolphin/JAP" "$saves_folder/gc/dolphin/JP"
-    dir_prep "$saves_folder/gc/dolphin/EU" "/var/data/dolphin-emu/GC/EUR"
-    dir_prep "$saves_folder/gc/dolphin/US" "/var/data/dolphin-emu/GC/USA"
-    dir_prep "$saves_folder/gc/dolphin/JP" "/var/data/dolphin-emu/GC/JAP"
+    dir_prep "$saves_folder/gc/dolphin/EU" "$XDG_DATA_HOME/dolphin-emu/GC/EUR"
+    dir_prep "$saves_folder/gc/dolphin/US" "$XDG_DATA_HOME/dolphin-emu/GC/USA"
+    dir_prep "$saves_folder/gc/dolphin/JP" "$XDG_DATA_HOME/dolphin-emu/GC/JAP"
     mv "$saves_folder/gc/primehack/EUR" "$saves_folder/gc/primehack/EU"
     mv "$saves_folder/gc/primehack/USA" "$saves_folder/gc/primehack/US"
     mv "$saves_folder/gc/primehack/JAP" "$saves_folder/gc/primehack/JP"
-    dir_prep "$saves_folder/gc/primehack/EU" "/var/data/primehack/GC/EUR"
-    dir_prep "$saves_folder/gc/primehack/US" "/var/data/primehack/GC/USA"
-    dir_prep "$saves_folder/gc/primehack/JP" "/var/data/primehack/GC/JAP"
+    dir_prep "$saves_folder/gc/primehack/EU" "$XDG_DATA_HOME/primehack/GC/EUR"
+    dir_prep "$saves_folder/gc/primehack/US" "$XDG_DATA_HOME/primehack/GC/USA"
+    dir_prep "$saves_folder/gc/primehack/JP" "$XDG_DATA_HOME/primehack/GC/JAP"
 
-    dir_prep "$saves_folder/PSP/PPSSPP-SA" "/var/config/ppsspp/PSP/SAVEDATA"
-    dir_prep "$states_folder/PSP/PPSSPP-SA" "/var/config/ppsspp/PSP/PPSSPP_STATE"
+    dir_prep "$saves_folder/PSP/PPSSPP-SA" "$XDG_CONFIG_HOME/ppsspp/PSP/SAVEDATA"
+    dir_prep "$states_folder/PSP/PPSSPP-SA" "$XDG_CONFIG_HOME/ppsspp/PSP/PPSSPP_STATE"
 
     set_setting_value "$es_settings" "ROMDirectory" "$roms_folder" "es_settings"
     set_setting_value "$es_settings" "MediaDirectory" "$media_folder" "es_settings"
     sed -i '$ a <string name="UserThemeDirectory" value="" />' "$es_settings" # Add new default line to existing file
     set_setting_value "$es_settings" "UserThemeDirectory" "$themes_folder" "es_settings"
-    unlink "/var/config/emulationstation/ROMs"
-    unlink "/var/config/emulationstation/ES-DE/downloaded_media"
-    unlink "/var/config/emulationstation/ES-DE/themes"
+    unlink "$XDG_CONFIG_HOME/emulationstation/ROMs"
+    unlink "$XDG_CONFIG_HOME/emulationstation/ES-DE/downloaded_media"
+    unlink "$XDG_CONFIG_HOME/emulationstation/ES-DE/themes"
 
     set_setting_value "$raconf" "savestate_auto_load" "false" "retroarch"
     set_setting_value "$raconf" "savestate_auto_save" "false" "retroarch"
@@ -303,7 +303,7 @@ post_update() {
 
   if [[ $(check_version_is_older_than "$version_being_updated" "0.7.3b") == "true" ]]; then
     # In version 0.7.3b, there was a bug that prevented the correct creations of the roms/system folders, so we force recreate them.
-    emulationstation --home /var/config/emulationstation --create-system-dirs
+    emulationstation --home "$XDG_CONFIG_HOME/emulationstation" --create-system-dirs
   fi
 
   if [[ $(check_version_is_older_than "$version_being_updated" "0.8.0b") == "true" ]]; then
@@ -342,8 +342,8 @@ post_update() {
     set_setting_value "$raconf" "rewind_enable" "false" "retroarch"
 
     # in 3.0 .emulationstation was moved into ES-DE
-    log i "Renaming old \"/var/config/emulationstation\" folder as \"/var/config/ES-DE\""
-    mv -f /var/config/emulationstation /var/config/ES-DE
+    log i "Renaming old \"$XDG_CONFIG_HOME/emulationstation\" folder as \"$XDG_CONFIG_HOME/ES-DE\""
+    mv -f "$XDG_CONFIG_HOME/emulationstation" "$XDG_CONFIG_HOME/ES-DE"
 
     prepare_component "reset" "es-de"
     prepare_component "reset" "mame"
@@ -357,7 +357,7 @@ post_update() {
 
     # The save folder of rpcs3 was inverted so we're moving the saves into the real one
     log i "RPCS3 saves needs to be migrated, executing."
-    if [[ "$(ls -A $bios_folder/rpcs3/dev_hdd0/home/00000001/savedata)" ]]; then
+    if [[ "$(ls -A "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata")" ]]; then
       log i "Existing RPCS3 savedata found, backing up..."
       create_dir "$backups_folder"
       zip -rq9 "$backups_folder/$(date +"%0m%0d")_rpcs3_save_data.zip" "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata"
@@ -369,7 +369,7 @@ post_update() {
     mv "$bios_folder/switch/registered" "$bios_folder/switch/firmware"
 
     log i "New systems were added in this version, regenerating system folders."
-    #es-de --home "/var/config/" --create-system-dirs
+    #es-de --home "$XDG_CONFIG_HOME/" --create-system-dirs
     es-de --create-system-dirs
 
   fi # end of 0.8.0b
@@ -380,8 +380,8 @@ post_update() {
     log i "- Give the user the option to reset Ryujinx, which was not properly initialized in 0.8.0b"
     
     log d "ES-DE files were moved inside the retrodeck folder, migrating to the new structure"
-    dir_prep "$rdhome/ES-DE/collections" "/var/config/ES-DE/collections"
-    dir_prep "$rdhome/ES-DE/gamelists" "/var/config/ES-DE/gamelists"
+    dir_prep "$rdhome/ES-DE/collections" "$XDG_CONFIG_HOME/ES-DE/collections"
+    dir_prep "$rdhome/ES-DE/gamelists" "$XDG_CONFIG_HOME/ES-DE/gamelists"
     log i "Moving ES-DE collections, downloaded_media, gamelist, and themes from \"$rdhome\" to \"$rdhome/ES-DE\""
     set_setting_value "$es_settings" "MediaDirectory" "$rdhome/ES-DE/downloaded_media" "es_settings"
     set_setting_value "$es_settings" "UserThemeDirectory" "$rdhome/ES-DE/themes" "es_settings"
@@ -389,21 +389,21 @@ post_update() {
     mv -f "$rdhome/downloaded_media" "$rdhome/ES-DE/downloaded_media" && log d "Move of \"$rdhome/downloaded_media\" in \"$rdhome/ES-DE\" folder completed"
     mv -f "$rdhome/gamelists/"* "$rdhome/ES-DE/gamelists" && log d "Move of \"$rdhome/gamelists/\" in \"$rdhome/ES-DE\" folder completed" && rm -rf "$rdhome/gamelists"
 
-    log i "MAME-SA, migrating samples to the new exposed folder: from \"/var/data/mame/assets/samples\" to \"$bios_folder/mame-sa/samples\""
+    log i "MAME-SA, migrating samples to the new exposed folder: from \"$XDG_DATA_HOME/mame/assets/samples\" to \"$bios_folder/mame-sa/samples\""
     create_dir "$bios_folder/mame-sa/samples"
-    mv -f "/var/data/mame/assets/samples/"* "$bios_folder/mame-sa/samples"
+    mv -f "$XDG_DATA_HOME/mame/assets/samples/"* "$bios_folder/mame-sa/samples"
     set_setting_value "$mameconf" "samplepath" "$bios_folder/mame-sa/samples" "mame"
 
     log i "Installing the missing ScummVM assets and renaming \"$mods_folder/RetroArch/ScummVM/themes\" into \"theme\""
     mv -f "$mods_folder/RetroArch/ScummVM/themes" "$mods_folder/RetroArch/ScummVM/theme"
     unzip -o "$config/retroarch/ScummVM.zip" 'scummvm/extra/*' -d /tmp
     unzip -o "$config/retroarch/ScummVM.zip" 'scummvm/theme/*' -d /tmp
-    mv -f /tmp/scummvm/extra "$mods_folder/RetroArch/ScummVM"
-    mv -f /tmp/scummvm/theme "$mods_folder/RetroArch/ScummVM"
-    rm -rf /tmp/extra /tmp/theme
+    mv -f "/tmp/scummvm/extra" "$mods_folder/RetroArch/ScummVM"
+    mv -f "/tmp/scummvm/theme" "$mods_folder/RetroArch/ScummVM"
+    rm -rf "/tmp/extra /tmp/theme"
 
-    log i "Placing cheats in \"/var/data/mame/cheat\""
-    unzip -j -o "$config/mame/cheat0264.zip" 'cheat.7z' -d "/var/data/mame/cheat"
+    log i "Placing cheats in \"$XDG_DATA_HOME/mame/cheat\""
+    unzip -j -o "$config/mame/cheat0264.zip" 'cheat.7z' -d "$XDG_DATA_HOME/mame/cheat"
 
     log d "Verifying with user if they want to reset Ryujinx"
     if [[ "$(configurator_generic_question_dialog "RetroDECK 0.8.1b Ryujinx Reset" "In RetroDECK 0.8.0b the Ryujinx emulator was not properly initialized for upgrading users.\nThis would cause Ryujinx to not work properly.\n\nWould you like to reset Ryujinx to default RetroDECK settings now?\n\nIf you have made your own changes to the Ryujinx config, you can decline this reset.")" == "true" ]]; then
@@ -413,15 +413,15 @@ post_update() {
   fi # end of 0.8.1b
 
   if [[ $(check_version_is_older_than "$version_being_updated" "0.8.2b") == "true" ]]; then
-    log i "Vita3K changed some paths, reflecting them: moving \"/var/data/Vita3K\" in \"/var/config/Vita3K\""
-    move "/var/data/Vita3K" "/var/config/Vita3K"
+    log i "Vita3K changed some paths, reflecting them: moving \"$XDG_DATA_HOME/Vita3K\" in \"$XDG_CONFIG_HOME/Vita3K\""
+    move "$XDG_DATA_HOME/Vita3K" "$XDG_CONFIG_HOME/Vita3K"
     log i "Moving ES-DE downloaded_media, gamelist, and themes from \"$rdhome\" to \"$rdhome/ES-DE\" due to a RetroDECK Framework bug"
     move "$rdhome/themes" "$rdhome/ES-DE/themes" && log d "Move of \"$rdhome/themes\" in \"$rdhome/ES-DE\" folder completed"
     move "$rdhome/downloaded_media" "$rdhome/ES-DE/downloaded_media" && log d "Move of \"$rdhome/downloaded_media\" in \"$rdhome/ES-DE\" folder completed"
     move "$rdhome/gamelists" "$rdhome/ES-DE/gamelists" && log d "Move of \"$rdhome/gamelists/\" in \"$rdhome/ES-DE\" folder completed"
     move "$rdhome/collections" "$rdhome/ES-DE/collections" && log d "Move of \"$rdhome/collections/\" in \"$rdhome/ES-DE\" folder completed"
     log i "Since in this version we moved to a PR build of Ryujinx we need to symlink it."
-    ln -sv $ryujinxconf "$(dirname $ryujinxconf)/PRConfig.json"
+    ln -sv "$ryujinxconf" "$(dirname "$ryujinxconf")/PRConfig.json"
   fi #end of 0.8.2b
 
   if [[ $(check_version_is_older_than "$version_being_updated" "0.8.3b") == "true" ]]; then
@@ -605,26 +605,26 @@ post_update() {
 
     # RetroArch
     log i "Forcing RetroArch to use the new libretro info path"
-    set_setting_value "$raconf" "libretro_info_path" "/var/config/retroarch/cores" "retroarch"
+    set_setting_value "$raconf" "libretro_info_path" "$XDG_CONFIG_HOME/retroarch/cores" "retroarch"
 
     log i "Moving Ryujinx data to the new locations"
-    if [[ -d "/var/config/Ryujinx/bis" ]]; then
-      mv -f "/var/config/Ryujinx/bis"/* "$saves_folder/switch/ryujinx/nand" && rm -rf "/var/config/Ryujinx/bis" && log i "Migrated Ryujinx nand data to the new location"
+    if [[ -d "$XDG_CONFIG_HOME/Ryujinx/bis" ]]; then
+      mv -f "$XDG_CONFIG_HOME/Ryujinx/bis"/* "$saves_folder/switch/ryujinx/nand" && rm -rf "$XDG_CONFIG_HOME/Ryujinx/bis" && log i "Migrated Ryujinx nand data to the new location"
     fi
-    if [[ -d "/var/config/Ryujinx/sdcard" ]]; then
-      mv -f "/var/config/Ryujinx/sdcard"/* "$saves_folder/switch/ryujinx/sdcard" && rm -rf "/var/config/Ryujinx/sdcard" && log i "Migrated Ryujinx sdcard data to the new location"
+    if [[ -d "$XDG_CONFIG_HOME/Ryujinx/sdcard" ]]; then
+      mv -f "$XDG_CONFIG_HOME/Ryujinx/sdcard"/* "$saves_folder/switch/ryujinx/sdcard" && rm -rf "$XDG_CONFIG_HOME/Ryujinx/sdcard" && log i "Migrated Ryujinx sdcard data to the new location"
     fi
-    if [[ -d "/var/config/Ryujinx/bis/system/Contents/registered" ]]; then
-      mv -f "/var/config/Ryujinx/bis/system/Contents/registered"/* "$bios_folder/switch/firmware" && rm -rf "/var/config/Ryujinx/bis/system/Contents/registered" && log i "Migration of Ryujinx firmware data to the new location"
+    if [[ -d "$XDG_CONFIG_HOME/Ryujinx/bis/system/Contents/registered" ]]; then
+      mv -f "$XDG_CONFIG_HOME/Ryujinx/bis/system/Contents/registered"/* "$bios_folder/switch/firmware" && rm -rf "$XDG_CONFIG_HOME/Ryujinx/bis/system/Contents/registered" && log i "Migration of Ryujinx firmware data to the new location"
     fi
-    if [[ -d "/var/config/Ryujinx/system" ]]; then
-      mv -f "/var/config/Ryujinx/system"/* "$bios_folder/switch/keys" && rm -rf "/var/config/Ryujinx/system" && log i "Migrated Ryujinx keys data to the new location"
+    if [[ -d "$XDG_CONFIG_HOME/Ryujinx/system" ]]; then
+      mv -f "$XDG_CONFIG_HOME/Ryujinx/system"/* "$bios_folder/switch/keys" && rm -rf "$XDG_CONFIG_HOME/Ryujinx/system" && log i "Migrated Ryujinx keys data to the new location"
     fi
-    if [[ -d "/var/config/Ryujinx/mods" ]]; then
-      mv -f "/var/config/Ryujinx/mods"/* "$mods_folder/ryujinx" && rm -rf "/var/config/Ryujinx/mods" && log i "Migrated Ryujinx mods data to the new location"
+    if [[ -d "$XDG_CONFIG_HOME/Ryujinx/mods" ]]; then
+      mv -f "$XDG_CONFIG_HOME/Ryujinx/mods"/* "$mods_folder/ryujinx" && rm -rf "$XDG_CONFIG_HOME/Ryujinx/mods" && log i "Migrated Ryujinx mods data to the new location"
     fi
-    if [[ -d "/var/config/Ryujinx/screenshots" ]]; then
-      mv -f "/var/config/Ryujinx/screenshots"/* "$screenshots_folder/ryujinx" && rm -rf "/var/config/Ryujinx/screenshots" && log i "Migrated Ryujinx screenshots to the new location"
+    if [[ -d "$XDG_CONFIG_HOME/Ryujinx/screenshots" ]]; then
+      mv -f "$XDG_CONFIG_HOME/Ryujinx/screenshots"/* "$screenshots_folder/ryujinx" && rm -rf "$XDG_CONFIG_HOME/Ryujinx/screenshots" && log i "Migrated Ryujinx screenshots to the new location"
     fi
 
   fi # end of 0.9.0b
@@ -708,7 +708,7 @@ post_update() {
     # --- ALWAYS EXECUTED IN 0.9.1b ---
 
     log i "Preparing the shaders folder for MAME..."
-    shaders_folder=$rdhome/shaders && log i "Shaders folder set to \"$shaders_folder\""
+    shaders_folder="$rdhome/shaders" && log i "Shaders folder set to \"$shaders_folder\""
     conf_write && log i "Done"
     create_dir "$shaders_folder/mame/bgfx"
     set_setting_value "$mameconf" "bgfx_path" "$shaders_folder/mame/bgfx/" "mame"
@@ -717,26 +717,26 @@ post_update() {
     log i "Preparing the cheats for RetroArch..."
     create_dir "$cheats_folder/retroarch"
     set_setting_value "$raconf" "cheat_database_path" "$cheats_folder/retroarch" "retroarch"
-    tar --strip-components=1 -xzf /app/retrodeck/cheats/retroarch.tar.gz -C "$cheats_folder/retroarch" --overwrite && log i "Cheats for RetroArch installed"
+    tar --strip-components=1 -xzf "/app/retrodeck/cheats/retroarch.tar.gz" -C "$cheats_folder/retroarch" --overwrite && log i "Cheats for RetroArch installed"
 
     log i "Preparing the cheats for PPSSPP..."
     create_dir -d "$cheats_folder/PPSSPP"
-    dir_prep "$cheats_folder/PPSSPP" "/var/config/ppsspp/PSP/Cheats"
-    tar -xzf /app/retrodeck/cheats/ppsspp.tar.gz -C "$cheats_folder/PPSSPP" --overwrite && log i "Cheats for PPSSPP installed"
+    dir_prep "$cheats_folder/PPSSPP" "$XDG_CONFIG_HOME/ppsspp/PSP/Cheats"
+    tar -xzf "/app/retrodeck/cheats/ppsspp.tar.gz" -C "$cheats_folder/PPSSPP" --overwrite && log i "Cheats for PPSSPP installed"
     
     log i "Preparing the cheats for PCSX2..."
     create_dir "$cheats_folder/pcsx2"
     set_setting_value "$pcsx2conf" "Cheats" "$cheats_folder/pcsx2" "Folders"
-    tar --strip-components=1 -xzf /app/retrodeck/cheats/pcsx2.tar.gz -C "$cheats_folder/pcsx2" --overwrite && log i "Cheats for PCSX2 installed"
+    tar --strip-components=1 -xzf "/app/retrodeck/cheats/pcsx2.tar.gz" -C "$cheats_folder/pcsx2" --overwrite && log i "Cheats for PCSX2 installed"
 
     log i "Preparing the cheats for MAME..."
     create_dir "$cheats_folder/mame"
     set_setting_value "$mameconf" "cheatpath" "$cheats_folder/mame" "mame"
     unzip -j -o "$config/mame/cheat0264.zip" 'cheat.7z' -d "$cheats_folder/mame" && log i "Cheats for MAME installed"
-    rm -rf /var/data/mame/cheat    
+    rm -rf "$XDG_DATA_HOME/mame/cheat"
 
     log i "Preparing the RetroAchievements for Dolphin..."
-    cp -vn "$config/dolphin/"* /var/config/dolphin-emu/
+    cp -vn "$config/dolphin/"* "$XDG_CONFIG_HOME/dolphin-emu/"
 
     log i "Fixing PrimeHack roms paths..."
     set_setting_value "$rd_conf" "ppsspp" "$(get_setting_value "$rd_defaults" "ppsspp" "retrodeck" "cheevos")" "retrodeck" "cheevos"
@@ -766,18 +766,17 @@ post_update() {
         fi
       fi
     fi
-
   fi # end of 0.9.2b
 
   # The following commands are run every time.
 
-  if [[ -d "/var/data/dolphin-emu/Load/DynamicInputTextures" ]]; then # Refresh installed textures if they have been enabled
+  if [[ -d "$XDG_DATA_HOME/dolphin-emu/Load/DynamicInputTextures" ]]; then # Refresh installed textures if they have been enabled
     log i "Refreshing installed textures for Dolphin..."
-    rsync -rlD --mkpath "/app/retrodeck/extras/DynamicInputTextures/" "/var/data/dolphin-emu/Load/DynamicInputTextures/" && log i "Done"
+    rsync -rlD --mkpath "/app/retrodeck/extras/DynamicInputTextures/" "$XDG_DATA_HOME/dolphin-emu/Load/DynamicInputTextures/" && log i "Done"
   fi
-  if [[ -d "/var/data/primehack/Load/DynamicInputTextures" ]]; then # Refresh installed textures if they have been enabled
+  if [[ -d "$XDG_DATA_HOME/primehack/Load/DynamicInputTextures" ]]; then # Refresh installed textures if they have been enabled
     log i "Refreshing installed textures for Dolphin..."
-    rsync -rlD --mkpath "/app/retrodeck/extras/DynamicInputTextures/" "/var/data/primehack/Load/DynamicInputTextures/" && log i "Done"
+    rsync -rlD --mkpath "/app/retrodeck/extras/DynamicInputTextures/" "$XDG_DATA_HOME/primehack/Load/DynamicInputTextures/" && log i "Done"
   fi
 
   if [[ ! -z $(find "$HOME/.steam/steam/controller_base/templates/" -maxdepth 1 -type f -iname "RetroDECK*.vdf") || ! -z $(find "$HOME/.var/app/com.valvesoftware.Steam/.steam/steam/controller_base/templates/" -maxdepth 1 -type f -iname "RetroDECK*.vdf") ]]; then # If RetroDECK controller profile has been previously installed
@@ -796,11 +795,11 @@ post_update() {
   --text="RetroDECK is finishing up the upgrading process, please be patient.\n\n<span foreground='$purple' size='larger'><b>NOTICE - If the process is taking too long:</b></span>\n\nSome windows might be running in the background that could require your attention: pop-ups from emulators or the upgrade itself that needs user input to continue.\n\n"
 
   conf_read
-  version=$hard_version
+  version="$hard_version"
   conf_write
 
-  if grep -qF "cooker" <<< $hard_version; then
-    changelog_dialog "$(echo $version | cut -d'-' -f2)"
+  if grep -qF "cooker" <<< "$hard_version"; then
+    changelog_dialog "$(echo "$version" | cut -d'-' -f2)"
   else
     changelog_dialog "$version"
   fi

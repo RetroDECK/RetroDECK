@@ -7,7 +7,7 @@
 # export LD_LIBRARY_PATH="/app/retrodeck/lib:/app/retrodeck/lib/debug:/app/retrodeck/lib/pkgconfig:$LD_LIBRARY_PATH"
 
 : "${logging_level:=info}"                  # Initializing the log level variable if not already valued, this will be actually red later from the config file                                                 
-rd_logs_folder="/var/config/retrodeck/logs" # Static location to write all RetroDECK-related logs
+rd_logs_folder="$XDG_CONFIG_HOME/retrodeck/logs" # Static location to write all RetroDECK-related logs
 if [ -h "$rd_logs_folder" ]; then # Check if internal logging folder is already a symlink
   if [ ! -e "$rd_logs_folder" ]; then # Check if internal logging folder symlink is broken
     unlink "$rd_logs_folder" # Remove broken symlink so the folder is recreated when sourcing logger.sh
@@ -55,21 +55,21 @@ source /app/libexec/run_game.sh
 source /app/libexec/steam_sync.sh
 
 # Static variables
-rd_conf="/var/config/retrodeck/retrodeck.cfg"                                                            # RetroDECK config file path
-rd_conf_backup="/var/config/retrodeck/retrodeck.bak"                                                     # Backup of RetroDECK config file from update
+rd_conf="$XDG_CONFIG_HOME/retrodeck/retrodeck.cfg"                                                            # RetroDECK config file path
+rd_conf_backup="$XDG_CONFIG_HOME/retrodeck/retrodeck.bak"                                                     # Backup of RetroDECK config file from update
 config="/app/retrodeck/config"                                                                           # folder with all the default emulator configs
 rd_defaults="$config/retrodeck/retrodeck.cfg"                                                            # A default RetroDECK config file
-rd_update_patch="/var/config/retrodeck/rd_update.patch"                                                  # A static location for the temporary patch file used during retrodeck.cfg updates
+rd_update_patch="$XDG_CONFIG_HOME/retrodeck/rd_update.patch"                                                  # A static location for the temporary patch file used during retrodeck.cfg updates
 bios_checklist="$config/retrodeck/reference_lists/bios.json"                                    # A config file listing BIOS file information that can be verified
 input_validation="$config/retrodeck/reference_lists/input_validation.cfg"                                # A config file listing valid CLI inputs
 finit_options_list="$config/retrodeck/reference_lists/finit_options_list.cfg"                            # A config file listing available optional installs during finit
-splashscreen_dir="/var/config/ES-DE/resources/graphics/extra_splashes"                                   # The default location of extra splash screens
-current_splash_file="/var/config/ES-DE/resources/graphics/splash.svg"                                    # The active splash file that will be shown on boot
-default_splash_file="/var/config/ES-DE/resources/graphics/splash-orig.svg"                               # The default RetroDECK splash screen
+splashscreen_dir="$XDG_CONFIG_HOME/ES-DE/resources/graphics/extra_splashes"                                   # The default location of extra splash screens
+current_splash_file="$XDG_CONFIG_HOME/ES-DE/resources/graphics/splash.svg"                                    # The active splash file that will be shown on boot
+default_splash_file="$XDG_CONFIG_HOME/ES-DE/resources/graphics/splash-orig.svg"                               # The default RetroDECK splash screen
 # TODO: instead of this maybe we can iterate the features.json
 multi_user_emulator_config_dirs="$config/retrodeck/reference_lists/multi_user_emulator_config_dirs.cfg"  # A list of emulator config folders that can be safely linked/unlinked entirely in multi-user mode
 rd_es_themes="/app/share/es-de/themes"                                                                   # The directory where themes packaged with RetroDECK are stored
-lockfile="/var/config/retrodeck/.lock"                                                                   # Where the lockfile is located
+lockfile="$XDG_CONFIG_HOME/retrodeck/.lock"                                                                   # Where the lockfile is located
 default_sd="/run/media/mmcblk0p1"                                                                        # Steam Deck SD default path
 hard_version="$(cat '/app/retrodeck/version')"                                                           # hardcoded version (in the readonly filesystem)
 rd_repo="https://github.com/RetroDECK/RetroDECK"                                                         # The URL of the main RetroDECK GitHub repo
@@ -91,84 +91,84 @@ es_find_rules="/app/share/es-de/resources/systems/linux/es_find_rules.xml"      
 
 # Godot data transfer temp files
 
-godot_bios_files_checked="/var/config/retrodeck/godot/godot_bios_files_checked.tmp"
-godot_current_preset_settings="/var/config/retrodeck/godot/godot_current_preset_settings.tmp"
-godot_compression_compatible_games="/var/config/retrodeck/godot/godot_compression_compatible_games.tmp"
-godot_empty_roms_folders="/var/config/retrodeck/godot/godot_empty_roms_folders.tmp"
+godot_bios_files_checked="$XDG_CONFIG_HOME/retrodeck/godot/godot_bios_files_checked.tmp"
+godot_current_preset_settings="$XDG_CONFIG_HOME/retrodeck/godot/godot_current_preset_settings.tmp"
+godot_compression_compatible_games="$XDG_CONFIG_HOME/retrodeck/godot/godot_compression_compatible_games.tmp"
+godot_empty_roms_folders="$XDG_CONFIG_HOME/retrodeck/godot/godot_empty_roms_folders.tmp"
 
 # Config files for emulators with single config files
 
-duckstationconf="/var/config/duckstation/settings.ini"
-melondsconf="/var/config/melonDS/melonDS.ini"
-ryujinxconf="/var/config/Ryujinx/Config.json"
-xemuconf="/var/config/xemu/xemu.toml"
-yuzuconf="/var/config/yuzu/qt-config.ini"
-citraconf="/var/config/citra-emu/qt-config.ini"
+duckstationconf="$XDG_CONFIG_HOME/duckstation/settings.ini"
+melondsconf="$XDG_CONFIG_HOME/melonDS/melonDS.ini"
+ryujinxconf="$XDG_CONFIG_HOME/Ryujinx/Config.json"
+xemuconf="$XDG_CONFIG_HOME/xemu/xemu.toml"
+yuzuconf="$XDG_CONFIG_HOME/yuzu/qt-config.ini"
+citraconf="$XDG_CONFIG_HOME/citra-emu/qt-config.ini"
 
 # ES-DE config files
 
-export ESDE_APPDATA_DIR="/var/config/ES-DE"
-es_settings="/var/config/ES-DE/settings/es_settings.xml"
-es_source_logs="/var/config/ES-DE/logs"
+export ESDE_APPDATA_DIR="$XDG_CONFIG_HOME/ES-DE"
+es_settings="$XDG_CONFIG_HOME/ES-DE/settings/es_settings.xml"
+es_source_logs="$XDG_CONFIG_HOME/ES-DE/logs"
 
 # RetroArch config files
 
-raconf="/var/config/retroarch/retroarch.cfg"
-ra_core_conf="/var/config/retroarch/retroarch-core-options.cfg"
-ra_scummvm_conf="/var/config/retroarch/system/scummvm.ini"
-ra_cores_path="/var/config/retroarch/cores"  
+raconf="$XDG_CONFIG_HOME/retroarch/retroarch.cfg"
+ra_core_conf="$XDG_CONFIG_HOME/retroarch/retroarch-core-options.cfg"
+ra_scummvm_conf="$XDG_CONFIG_HOME/retroarch/system/scummvm.ini"
+ra_cores_path="$XDG_CONFIG_HOME/retroarch/cores"
 
 # CEMU config files
 
-cemuconf="/var/config/Cemu/settings.xml"
-cemucontrollerconf="/var/config/Cemu/controllerProfiles/controller0.xml"
+cemuconf="$XDG_CONFIG_HOME/Cemu/settings.xml"
+cemucontrollerconf="$XDG_CONFIG_HOME/Cemu/controllerProfiles/controller0.xml"
 
 # Dolphin config files
 
-dolphinconf="/var/config/dolphin-emu/Dolphin.ini"
-dolphingcpadconf="/var/config/dolphin-emu/GCPadNew.ini"
-dolphingfxconf="/var/config/dolphin-emu/GFX.ini"
-dolphinhkconf="/var/config/dolphin-emu/Hotkeys.ini"
-dolphinqtconf="/var/config/dolphin-emu/Qt.ini"
-dolphinDynamicInputTexturesPath="/var/data/dolphin-emu/Load/DynamicInputTextures"
-dolphinCheevosConf="/var/config/dolphin-emu/RetroAchievements.ini"
+dolphinconf="$XDG_CONFIG_HOME/dolphin-emu/Dolphin.ini"
+dolphingcpadconf="$XDG_CONFIG_HOME/dolphin-emu/GCPadNew.ini"
+dolphingfxconf="$XDG_CONFIG_HOME/dolphin-emu/GFX.ini"
+dolphinhkconf="$XDG_CONFIG_HOME/dolphin-emu/Hotkeys.ini"
+dolphinqtconf="$XDG_CONFIG_HOME/dolphin-emu/Qt.ini"
+dolphinDynamicInputTexturesPath="$XDG_DATA_HOME/dolphin-emu/Load/DynamicInputTextures"
+dolphinCheevosConf="$XDG_CONFIG_HOME/dolphin-emu/RetroAchievements.ini"
 
 # PCSX2 config files
 
-pcsx2conf="/var/config/PCSX2/inis/PCSX2.ini"
-pcsx2gsconf="/var/config/PCSX2/inis/GS.ini" # This file should be deprecated since moving to PCSX2-QT
-pcsx2uiconf="/var/config/PCSX2/inis/PCSX2_ui.ini" # This file should be deprecated since moving to PCSX2-QT
-pcsx2vmconf="/var/config/PCSX2/inis/PCSX2_vm.ini" # This file should be deprecated since moving to PCSX2-QT
+pcsx2conf="$XDG_CONFIG_HOME/PCSX2/inis/PCSX2.ini"
+pcsx2gsconf="$XDG_CONFIG_HOME/PCSX2/inis/GS.ini" # This file should be deprecated since moving to PCSX2-QT
+pcsx2uiconf="$XDG_CONFIG_HOME/PCSX2/inis/PCSX2_ui.ini" # This file should be deprecated since moving to PCSX2-QT
+pcsx2vmconf="$XDG_CONFIG_HOME/PCSX2/inis/PCSX2_vm.ini" # This file should be deprecated since moving to PCSX2-QT
 
 # PPSSPP-SDL config files
 
-ppssppconf="/var/config/ppsspp/PSP/SYSTEM/ppsspp.ini"
-ppssppcontrolsconf="/var/config/ppsspp/PSP/SYSTEM/controls.ini"
-ppssppcheevosconf="/var/config/ppsspp/PSP/SYSTEM/ppsspp_retroachievements.dat"
+ppssppconf="$XDG_CONFIG_HOME/ppsspp/PSP/SYSTEM/ppsspp.ini"
+ppssppcontrolsconf="$XDG_CONFIG_HOME/ppsspp/PSP/SYSTEM/controls.ini"
+ppssppcheevosconf="$XDG_CONFIG_HOME/ppsspp/PSP/SYSTEM/ppsspp_retroachievements.dat"
 
 # Primehack config files
 
-primehackconf="/var/config/primehack/Dolphin.ini"
-primehackgcpadconf="/var/config/primehack/GCPadNew.ini"
-primehackgfxconf="/var/config/primehack/GFX.ini"
-primehackhkconf="/var/config/primehack/Hotkeys.ini"
-primehackqtconf="/var/config/primehack/Qt.ini"
-primehackDynamicInputTexturesPath="/var/data/primehack/Load/DynamicInputTextures"
+primehackconf="$XDG_CONFIG_HOME/primehack/Dolphin.ini"
+primehackgcpadconf="$XDG_CONFIG_HOME/primehack/GCPadNew.ini"
+primehackgfxconf="$XDG_CONFIG_HOME/primehack/GFX.ini"
+primehackhkconf="$XDG_CONFIG_HOME/primehack/Hotkeys.ini"
+primehackqtconf="$XDG_CONFIG_HOME/primehack/Qt.ini"
+primehackDynamicInputTexturesPath="$XDG_DATA_HOME/primehack/Load/DynamicInputTextures"
 
 # RPCS3 config files
 
-rpcs3conf="/var/config/rpcs3/config.yml"
-rpcs3vfsconf="/var/config/rpcs3/vfs.yml"
+rpcs3conf="$XDG_CONFIG_HOME/rpcs3/config.yml"
+rpcs3vfsconf="$XDG_CONFIG_HOME/rpcs3/vfs.yml"
 
 # Vita3k config files
 
-vita3kconf="/var/config/Vita3K/config.yml"
+vita3kconf="$XDG_CONFIG_HOME/Vita3K/config.yml"
 
 # MAME-SA config files
 
-mameconf="/var/config/mame/ini/mame.ini"
-mameuiconf="/var/config/mame/ini/ui.ini"
-mamedefconf="/var/config/mame/cfg/default.cfg"
+mameconf="$XDG_CONFIG_HOME/mame/ini/mame.ini"
+mameuiconf="$XDG_CONFIG_HOME/mame/ini/ui.ini"
+mamedefconf="$XDG_CONFIG_HOME/mame/cfg/default.cfg"
 
 # Initialize logging location if it doesn't exist, before anything else happens
 if [ ! -d "$rd_logs_folder" ]; then
@@ -176,13 +176,13 @@ if [ ! -d "$rd_logs_folder" ]; then
 fi
 
 # Initialize location of Godot temp data files, if it doesn't exist
-if [[ ! -d "/var/config/retrodeck/godot" ]]; then
-  create_dir "/var/config/retrodeck/godot"
+if [[ ! -d "$XDG_CONFIG_HOME/retrodeck/godot" ]]; then
+  create_dir "$XDG_CONFIG_HOME/retrodeck/godot"
 fi
 
-# We moved the lockfile in /var/config/retrodeck in order to solve issue #53 - Remove in a few versions
+# We moved the lockfile in $XDG_CONFIG_HOME/retrodeck in order to solve issue #53 - Remove in a few versions
 if [[ -f "$HOME/retrodeck/.lock" ]]; then
-  mv "$HOME/retrodeck/.lock" $lockfile
+  mv "$HOME/retrodeck/.lock" "$lockfile"
 fi
 
 # If there is no config file I initalize the file with the the default values
@@ -193,9 +193,9 @@ if [[ ! -f "$rd_conf" ]]; then
   # Initializing the variables
   if [[ -z "$version" ]]; then
     if [[ -f "$lockfile" ]]; then
-      if [[ $(cat $lockfile) == *"0.4."* ]] || [[ $(cat $lockfile) == *"0.3."* ]] || [[ $(cat $lockfile) == *"0.2."* ]] || [[ $(cat $lockfile) == *"0.1."* ]]; then # If the previous version is very out of date, pre-rd_conf
+      if [[ $(cat "$lockfile") == *"0.4."* ]] || [[ $(cat "$lockfile") == *"0.3."* ]] || [[ $(cat "$lockfile") == *"0.2."* ]] || [[ $(cat "$lockfile") == *"0.1."* ]]; then # If the previous version is very out of date, pre-rd_conf
         log d "Running version workaround"
-        version=$(cat $lockfile)
+        version=$(cat "$lockfile")
       fi
     else
       version="$hard_version"
@@ -203,28 +203,28 @@ if [[ ! -f "$rd_conf" ]]; then
   fi
 
   # Check if SD card path has changed from SteamOS update
-  if [[ ! -d "$default_sd" && "$(ls -A /run/media/deck/)" ]]; then
-    if [[ $(find /run/media/deck/* -maxdepth 0 -type d -print | wc -l) -eq 1 ]]; then # If there is only one SD card found in the new SteamOS 3.5 location, assign it as the default
-      default_sd="$(find /run/media/deck/* -maxdepth 0 -type d -print)"
+  if [[ ! -d "$default_sd" && "$(ls -A "/run/media/deck/")" ]]; then
+    if [[ $(find "/run/media/deck/"* -maxdepth 0 -type d -print | wc -l) -eq 1 ]]; then # If there is only one SD card found in the new SteamOS 3.5 location, assign it as the default
+      default_sd="$(find "/run/media/deck/"* -maxdepth 0 -type d -print)"
     else # If the default legacy path cannot be found, and there are multiple entries in the new Steam OS 3.5 SD card path, let the user pick which one to use
       configurator_generic_dialog "RetroDECK Setup" "The SD card was not found in the default location, and multiple drives were detected.\nPlease browse to the location of the desired SD card.\n\nIf you are not using an SD card, please click \"Cancel\"."
       default_sd="$(directory_browse "SD Card Location")"
     fi
   fi
 
-  cp $rd_defaults $rd_conf # Load default settings file
-  set_setting_value $rd_conf "version" "$version" retrodeck # Set current version for new installs
-  set_setting_value $rd_conf "sdcard" "$default_sd" retrodeck "paths" # Set SD card location if default path has changed
+  cp "$rd_defaults" "$rd_conf" # Load default settings file
+  set_setting_value "$rd_conf" "version" "$version" retrodeck # Set current version for new installs
+  set_setting_value "$rd_conf" "sdcard" "$default_sd" retrodeck "paths" # Set SD card location if default path has changed
 
   if grep -qF "cooker" <<< "$hard_version" || grep -qF "PR-" <<< "$hard_version"; then # If newly-installed version is a "cooker" or PR build
-    set_setting_value $rd_conf "update_repo" "$cooker_repository_name" retrodeck "options"
-    set_setting_value $rd_conf "update_check" "true" retrodeck "options"
-    set_setting_value $rd_conf "developer_options" "true" retrodeck "options"
+    set_setting_value "$rd_conf" "update_repo" "$cooker_repository_name" retrodeck "options"
+    set_setting_value "$rd_conf" "update_check" "true" retrodeck "options"
+    set_setting_value "$rd_conf" "developer_options" "true" retrodeck "options"
   fi
 
   log i "Setting config file permissions"
-  chmod +rw $rd_conf
-  log i "RetroDECK config file initialized. Contents:\n\n$(cat $rd_conf)\n"
+  chmod +rw "$rd_conf"
+  log i "RetroDECK config file initialized. Contents:\n\n$(cat "$rd_conf")\n"
   conf_read # Load new variables into memory
   #tmplog_merger # This function is tempry(?) removed
 
@@ -232,10 +232,10 @@ if [[ ! -f "$rd_conf" ]]; then
 else
   log i "Loading RetroDECK config file in $rd_conf"
 
-  if grep -qF "cooker" <<< $hard_version; then # If newly-installed version is a "cooker" build
-    set_setting_value $rd_conf "update_repo" "$cooker_repository_name" retrodeck "options"
-    set_setting_value $rd_conf "update_check" "true" retrodeck "options"
-    set_setting_value $rd_conf "developer_options" "true" retrodeck "options"
+  if grep -qF "cooker" <<< "$hard_version"; then # If newly-installed version is a "cooker" build
+    set_setting_value "$rd_conf" "update_repo" "$cooker_repository_name" retrodeck "options"
+    set_setting_value "$rd_conf" "update_check" "true" retrodeck "options"
+    set_setting_value "$rd_conf" "developer_options" "true" retrodeck "options"
   fi
 
   conf_read
@@ -244,7 +244,7 @@ else
   if [[ ! -d "$rdhome" ]]; then
     configurator_generic_dialog "RetroDECK Setup" "The RetroDECK data folder was not found in the expected location.\nThis may happen when SteamOS is updated.\n\nPlease browse to the current location of the \"retrodeck\" folder."
     new_home_path=$(directory_browse "RetroDECK folder location")
-    set_setting_value $rd_conf "rdhome" "$new_home_path" retrodeck "paths"
+    set_setting_value "$rd_conf" "rdhome" "$new_home_path" retrodeck "paths"
     conf_read
     #tmplog_merger # This function is tempry(?) removed
     prepare_component "postmove" "retrodeck"

@@ -9,7 +9,7 @@ steam_sync() {
   # USAGE: steam_sync
 
   log "i" "Starting Steam Sync"
-  create_dir $steamsync_folder
+  create_dir "$steamsync_folder"
 
   if [ ! -f "$srm_path" ]; then
     log "e" "Steam ROM Manager configuration not initialized! Initializing now."

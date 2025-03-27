@@ -80,8 +80,8 @@ move() {
   # Function to move a directory from one parent to another
   # USAGE: move $source_dir $dest_dir
 
-  source_dir="$(echo $1 | sed 's![^/]$!&/!')" # Add trailing slash if it is missing
-  dest_dir="$(echo $2 | sed 's![^/]$!&/!')" # Add trailing slash if it is missing
+  source_dir="$(echo "$1" | sed 's![^/]$!&/!')" # Add trailing slash if it is missing
+  dest_dir="$(echo "$2" | sed 's![^/]$!&/!')" # Add trailing slash if it is missing
 
   log d "Moving \"$source_dir\" to \"$dest_dir\""
 
@@ -147,17 +147,17 @@ update_rd_conf() {
   # STAGE 1: For current files that haven't been broken into sections yet, where every setting name is unique
 
   conf_read # Read current settings into memory
-  mv -f $rd_conf $rd_conf_backup # Backup config file before update
-  cp $rd_defaults $rd_conf # Copy defaults file into place
+  mv -f "$rd_conf" "$rd_conf_backup" # Backup config file before update
+  cp "$rd_defaults" "$rd_conf" # Copy defaults file into place
   conf_write # Write old values into new retrodeck.cfg file
 
   # STAGE 2: To handle presets sections that use duplicate setting names
 
-  generate_single_patch $rd_defaults $rd_conf_backup $rd_update_patch retrodeck # Create a patch file for differences between defaults and current user settings
-  sed -i '/change^^version/d' $rd_update_patch # Remove version line from temporary patch file
-  deploy_single_patch $rd_defaults $rd_update_patch $rd_conf # Re-apply user settings to defaults file
-  set_setting_value $rd_conf "version" "$hard_version" retrodeck # Set version of currently running RetroDECK to updated retrodeck.cfg
-  rm -f $rd_update_patch # Cleanup temporary patch file
+  generate_single_patch "$rd_defaults" "$rd_conf_backup" "$rd_update_patch" retrodeck # Create a patch file for differences between defaults and current user settings
+  sed -i '/change^^version/d' "$rd_update_patch" # Remove version line from temporary patch file
+  deploy_single_patch "$rd_defaults" "$rd_update_patch" "$rd_conf" # Re-apply user settings to defaults file
+  set_setting_value "$rd_conf" "version" "$hard_version" retrodeck # Set version of currently running RetroDECK to updated retrodeck.cfg
+  rm -f "$rd_update_patch" # Cleanup temporary patch file
   conf_read # Read all settings into memory
 
   # STAGE 3: Create new folders that were added to the shipped retrodeck.cfg, if any
@@ -196,13 +196,13 @@ update_rd_conf() {
       "\(.key):\(.value)",
       "\(.value):\(.key)"
     ] | join("\n")
-  ' $features)
+  ' "$features")
 
   while IFS= read -r current_setting_line # Read the existing retrodeck.cfg
   do
     if [[ (! -z "$current_setting_line") && (! "$current_setting_line" == "#"*) && (! "$current_setting_line" == "[]") ]]; then # If the line has a valid entry in it
       if [[ ! -z $(grep -o -P "^\[.+?\]$" <<< "$current_setting_line") ]]; then # If the line is a section header
-        local current_section=$(sed 's^[][]^^g' <<< $current_setting_line) # Remove brackets from section name
+        local current_section=$(sed 's^[][]^^g' <<< "$current_setting_line") # Remove brackets from section name
       else
         if [[ ! ("$current_section" == "" || "$current_section" == "paths" || "$current_section" == "options" || "$current_section" == "cheevos" || "$current_section" == "cheevos_hardcore") ]]; then
           local system_name=$(get_setting_name "$current_setting_line" "retrodeck") # Read the variable name from the current line
@@ -220,7 +220,7 @@ update_rd_conf() {
         fi
       fi
     fi
-  done < $rd_conf
+  done < "$rd_conf"
 }
 
 conf_read() {
@@ -252,7 +252,7 @@ conf_write() {
   do
     if [[ (! -z "$current_setting_line") && (! "$current_setting_line" == "#"*) && (! "$current_setting_line" == "[]") ]]; then # If the line has a valid entry in it
       if [[ ! -z $(grep -o -P "^\[.+?\]$" <<< "$current_setting_line") ]]; then # If the line is a section header
-        local current_section=$(sed 's^[][]^^g' <<< $current_setting_line) # Remove brackets from section name
+        local current_section=$(sed 's^[][]^^g' <<< "$current_setting_line") # Remove brackets from section name
       else
         if [[ "$current_section" == "" || "$current_section" == "paths" || "$current_section" == "options" ]]; then
           local current_setting_name=$(get_setting_name "$current_setting_line" "retrodeck") # Read the variable name from the current line
@@ -264,7 +264,7 @@ conf_write() {
         fi
       fi
     fi
-  done < $rd_conf
+  done < "$rd_conf"
   log d "retrodeck.cfg written"
 }
 
@@ -335,7 +335,7 @@ rd_zenity() {
 
   unset CONFIGURATOR_GUI
   
-  return $status
+  return "$status"
 }
 
 update_rpcs3_firmware() {
@@ -394,7 +394,7 @@ backup_retrodeck_userdata() {
       local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
       config_paths["$current_setting_name"]="$current_setting_value"
     fi
-  done < <(grep -v '^\s*$' $rd_conf | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
+  done < <(grep -v '^\s*$' "$rd_conf" | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
 
   # Determine which paths to backup
   if [[ "$backup_type" == "complete" ]]; then
@@ -553,7 +553,7 @@ backup_retrodeck_userdata() {
         path_size=$(du -sk "$path" 2>/dev/null | cut -f1) # Get size in KB
         path_size=$((path_size * 1024)) # Convert to bytes for calculation
         total_size=$((total_size + path_size))
-        echo "$total_size" > $total_size_file
+        echo "$total_size" > "$total_size_file"
       fi
     done
     ) |
@@ -578,15 +578,15 @@ backup_retrodeck_userdata() {
   available_space=$(df -B1 "$backups_folder" | awk 'NR==2 {print $4}')
 
   # Log sizes for reference
-  log i "Total size of backup data: $(numfmt --to=iec-i --suffix=B $total_size)"
-  log i "Available space at destination: $(numfmt --to=iec-i --suffix=B $available_space)"
+  log i "Total size of backup data: $(numfmt --to=iec-i --suffix=B "$total_size")"
+  log i "Available space at destination: $(numfmt --to=iec-i --suffix=B "$available_space")"
 
   # Check if we have enough space (using uncompressed size as a conservative estimate)
   if [[ "$available_space" -lt "$total_size" ]]; then
     if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
-      configurator_generic_dialog "RetroDECK Userdata Backup" "There is not enough free space to perform this backup.\n\nYou need at least $(numfmt --to=iec-i --suffix=B $total_size),\nplease free up some space and try again."
+      configurator_generic_dialog "RetroDECK Userdata Backup" "There is not enough free space to perform this backup.\n\nYou need at least $(numfmt --to=iec-i --suffix=B "$total_size"),\nplease free up some space and try again."
     fi
-    log e "Error: Not enough space to perform backup. Need at least $(numfmt --to=iec-i --suffix=B $total_size)"
+    log e "Error: Not enough space to perform backup. Need at least $(numfmt --to=iec-i --suffix=B "$total_size")"
     return 1
   fi
 
@@ -853,9 +853,9 @@ install_retrodeck_starterpack() {
 
   ## DOOM section ##
   cp /app/retrodeck/extras/doom1.wad "$roms_folder/doom/doom1.wad" # No -f in case the user already has it
-  create_dir "/var/config/ES-DE/gamelists/doom"
-  if [[ ! -f "/var/config/ES-DE/gamelists/doom/gamelist.xml" ]]; then # Don't overwrite an existing gamelist
-    cp "/app/retrodeck/rd_prepacks/doom/gamelist.xml" "/var/config/ES-DE/gamelists/doom/gamelist.xml"
+  create_dir "$XDG_CONFIG_HOME/ES-DE/gamelists/doom"
+  if [[ ! -f "$XDG_CONFIG_HOME/ES-DE/gamelists/doom/gamelist.xml" ]]; then # Don't overwrite an existing gamelist
+    cp "/app/retrodeck/rd_prepacks/doom/gamelist.xml" "$XDG_CONFIG_HOME/ES-DE/gamelists/doom/gamelist.xml"
   fi
   create_dir "$media_folder/doom"
   unzip -oq "/app/retrodeck/rd_prepacks/doom/doom.zip" -d "$media_folder/doom/"
@@ -893,8 +893,8 @@ update_splashscreens() {
 
   log i "Updating splash screen"
 
-  rm -rf /var/config/ES-DE/resources/graphics
-  rsync -rlD --mkpath "/app/retrodeck/graphics/" "/var/config/ES-DE/resources/graphics/"
+  rm -rf "$XDG_CONFIG_HOME/ES-DE/resources/graphics"
+  rsync -rlD --mkpath "/app/retrodeck/graphics/" "$XDG_CONFIG_HOME/ES-DE/resources/graphics/"
 
 }
 
@@ -930,7 +930,7 @@ splash_screen() {
       ($current_day | tonumber) <= (.value.end_date | tonumber) and
       ($current_time | tonumber) >= (.value.start_time | tonumber) and
       ($current_time | tonumber) <= (.value.end_time | tonumber)
-    ) | .value.filename' $features)
+    ) | .value.filename' "$features")
 
   # Determine the splash file to use
   if [[ -n "$splash_screen" ]]; then
@@ -972,7 +972,7 @@ install_release() {
     mkdir -p "$rdhome/RetroDECK_Updates"
 
     # Download the flatpak file
-    wget -P "$rdhome/RetroDECK_Updates" $flatpak_url -O "$rdhome/RetroDECK_Updates/RetroDECK$iscooker.flatpak"
+    wget -P "$rdhome/RetroDECK_Updates" "$flatpak_url" -O "$rdhome/RetroDECK_Updates/RetroDECK$iscooker.flatpak"
     
     # Check if the download was successful
     if [[ $? -ne 0 ]]; then
@@ -1012,13 +1012,13 @@ ponzu() {
   local executable
 
   # if the binaries are found, ponzu should be set as true into the retrodeck config
-  if [ -f "/var/data/ponzu/Citra/bin/citra-qt" ]; then
+  if [ -f "$XDG_DATA_HOME/ponzu/Citra/bin/citra-qt" ]; then
     log d "Citra binaries has already been installed, checking for updates and forcing the setting as true."
-    set_setting_value $rd_conf "akai_ponzu" "true" retrodeck "options"
+    set_setting_value "$rd_conf" "akai_ponzu" "true" retrodeck "options"
   fi
-  if [ -f "/var/data/ponzu/Yuzu/bin/yuzu" ]; then
+  if [ -f "$XDG_DATA_HOME/ponzu/Yuzu/bin/yuzu" ]; then
     log d "Yuzu binaries has already been installed, checking for updates and forcing the setting as true."
-    set_setting_value $rd_conf "kiroi_ponzu" "true" retrodeck "options"
+    set_setting_value "$rd_conf" "kiroi_ponzu" "true" retrodeck "options"
   fi
 
   # Loop through all ponzu files
@@ -1027,11 +1027,11 @@ ponzu() {
     if [ -f "$ponzu_file" ]; then
       if [[ "$ponzu_file" == *itra* ]]; then
         log i "Found akai ponzu! Elaborating it"
-        data_dir="/var/data/ponzu/Citra"
+        data_dir="$XDG_DATA_HOME/ponzu/Citra"
         local message="Akai ponzu is served, enjoy"
       elif [[ "$ponzu_file" == *uzu* ]]; then
         log i "Found kiroi ponzu! Elaborating it"
-        data_dir="/var/data/ponzu/Yuzu"
+        data_dir="$XDG_DATA_HOME/ponzu/Yuzu"
         local message="Kiroi ponzu is served, enjoy"
       else
         log e "AppImage not recognized, not a ponzu ingredient!"
@@ -1059,14 +1059,14 @@ ponzu() {
         chmod +x "$executable"
         chmod +x "$executable-qt"
         prepare_component "reset" "citra"
-        set_setting_value $rd_conf "akai_ponzu" "true" retrodeck "options"
+        set_setting_value "$rd_conf" "akai_ponzu" "true" retrodeck "options"
       elif [[ "$ponzu_file" == *uzu* ]]; then
         mv "$tmp_folder/usr/"** .
         executable="$data_dir/bin/yuzu"
         log d "Making $executable executable"
         chmod +x "$executable"
         prepare_component "reset" "yuzu"
-        set_setting_value $rd_conf "kiroi_ponzu" "true" retrodeck "options"
+        set_setting_value "$rd_conf" "kiroi_ponzu" "true" retrodeck "options"
       fi
       
       cd -
@@ -1084,15 +1084,15 @@ ponzu_remove() {
   if [[ "$1" == "citra" ]]; then
     if [[ $(configurator_generic_question_dialog "Ponzu - Remove Citra" "Do you really want to remove Citra binaries?\n\nYour games and saves will not be deleted.") == "true" ]]; then
       log i "Ponzu: removing Citra"
-      rm -rf "/var/data/ponzu/Citra"
-      set_setting_value $rd_conf "akai_ponzu" "false" retrodeck "options"
+      rm -rf "$XDG_DATA_HOME/ponzu/Citra"
+      set_setting_value "$rd_conf" "akai_ponzu" "false" retrodeck "options"
       configurator_generic_dialog "Ponzu - Remove Citra" "Done, Citra is now removed from RetroDECK"
     fi
   elif [[ "$1" == "yuzu" ]]; then
     if [[ $(configurator_generic_question_dialog "Ponzu - Remove Yuzu" "Do you really want to remove Yuzu binaries?\n\nYour games and saves will not be deleted.") == "true" ]]; then
       log i "Ponzu: removing Yuzu"
-      rm -rf "/var/data/ponzu/Yuzu"
-      set_setting_value $rd_conf "kiroi_ponzu" "false" retrodeck "options"
+      rm -rf "$XDG_DATA_HOME/ponzu/Yuzu"
+      set_setting_value "$rd_conf" "kiroi_ponzu" "false" retrodeck "options"
       configurator_generic_dialog "Ponzu - Remove Yuzu" "Done, Yuzu is now removed from RetroDECK"
     fi
   else
@@ -1115,7 +1115,7 @@ release_selector() {
     
     # Fetch the main release from the RetroDECK repository
     log d "Fetching latest main release from GitHub API for repository RetroDECK"
-    local main_release=$(curl -s https://api.github.com/repos/$git_organization_name/RetroDECK/releases/latest)
+    local main_release=$(curl -s "https://api.github.com/repos/$git_organization_name/RetroDECK/releases/latest")
 
     if [[ -z "$main_release" ]]; then
         log e "Failed to fetch the main release"
@@ -1134,7 +1134,7 @@ release_selector() {
     local release_array=("Main Release" "$main_tag_name" "$main_human_readable_date")
 
     # Fetch all releases (including draft and pre-release) from the Cooker repository
-    local releases=$(curl -s https://api.github.com/repos/$git_organization_name/$cooker_repository_name/releases?per_page=100)
+    local releases=$(curl -s "https://api.github.com/repos/$git_organization_name/$cooker_repository_name/releases?per_page=100")
 
     if [[ -z "$releases" ]]; then
         log e "Failed to fetch releases or no releases available"
@@ -1220,16 +1220,16 @@ release_selector() {
         log d "User confirmed installation of release $selected_tag"
 
       if echo "$selected_release" | grep -q "Main Release"; then
-        set_setting_value $rd_conf "update_repo" "$main_repository_name" retrodeck "options"
+        set_setting_value "$rd_conf" "update_repo" "$main_repository_name" retrodeck "options"
         log i "Switching to main channel"
       else
-        set_setting_value $rd_conf "update_repo" "$cooker_repository_name" retrodeck "options"
+        set_setting_value "$rd_conf" "update_repo" "$cooker_repository_name" retrodeck "options"
         log i "Switching to cooker channel"
       fi
 
         set_setting_value "$rd_conf" "branch" "$selected_branch" "retrodeck" "options"
         log d "Set branch to $selected_branch in configuration"
-        install_release $selected_tag
+        install_release "$selected_tag"
 
     else
       log d "User canceled installation"
@@ -1294,21 +1294,21 @@ retroarch_updater(){
   log i "Running RetroArch updater"
   
   # Synchronize cores from the application share directory to the RetroArch cores directory
-  rsync -rlD --mkpath "/app/share/libretro/cores/" "/var/config/retroarch/cores/" && log d "RetroArch cores updated correctly"
+  rsync -rlD --mkpath "/app/share/libretro/cores/" "$XDG_CONFIG_HOME/retroarch/cores/" && log d "RetroArch cores updated correctly"
   
   # Synchronize border overlays from the RetroDeck configuration directory to the RetroArch overlays directory
-  rsync -rlD --mkpath "/app/retrodeck/config/retroarch/borders/" "/var/config/retroarch/overlays/borders/" && log d "RetroArch overlays and borders updated correctly"
+  rsync -rlD --mkpath "/app/retrodeck/config/retroarch/borders/" "$XDG_CONFIG_HOME/retroarch/overlays/borders/" && log d "RetroArch overlays and borders updated correctly"
 }
 
 portmaster_show(){
   log d "Setting PortMaster visibility in ES-DE"
   if [ "$1" = "true" ]; then
       log d "\"$roms_folder/portmaster/PortMaster.sh\" is not found, installing it"
-      install -Dm755 "/var/data/PortMaster/PortMaster.sh" "$roms_folder/portmaster/PortMaster.sh" && log d "PortMaster is correctly showing in ES-DE"
-      set_setting_value $rd_conf "portmaster_show" "true" retrodeck "options"
+      install -Dm755 "$XDG_DATA_HOME/PortMaster/PortMaster.sh" "$roms_folder/portmaster/PortMaster.sh" && log d "PortMaster is correctly showing in ES-DE"
+      set_setting_value "$rd_conf" "portmaster_show" "true" retrodeck "options"
   elif [ "$1" = "false" ]; then
     rm -rf "$roms_folder/portmaster/PortMaster.sh" && log d "PortMaster is correctly hidden in ES-DE"
-    set_setting_value $rd_conf "portmaster_show" "false" retrodeck "options"
+    set_setting_value "$rd_conf" "portmaster_show" "false" retrodeck "options"
   else
     log e "\"$1\" is not a valid choice, quitting"
   fi
@@ -1430,7 +1430,7 @@ repair_paths() {
         fi
       fi
     fi
-  done < <(grep -v '^\s*$' $rd_conf | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
+  done < <(grep -v '^\s*$' "$rd_conf" | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
 
   if [[ $invalid_path_found == "true" ]]; then
     log i "One or more invalid paths repaired, fixing internal RetroDECK structures"

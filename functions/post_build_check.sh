@@ -21,7 +21,7 @@ run_and_check() {
     fi
     
     # Run command with timeout
-    timeout -s TERM $TIMEOUT $full_cmd
+    timeout -s TERM $TIMEOUT "$full_cmd"
     local exit_code=$?
     
     # Log the results

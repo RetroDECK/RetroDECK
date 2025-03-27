@@ -5,7 +5,7 @@ prepare_component() {
   # The actions currently include "reset" and "postmove"
   # The "reset" action will initialize the component
   # The "postmove" action will update the component settings after one or more RetroDECK folders were moved
-  # An component can be called by name, by parent folder name in the /var/config root or use the option "all" to perform the action on all components equally
+  # An component can be called by name, by parent folder name in the $XDG_CONFIG_HOME root or use the option "all" to perform the action on all components equally
   # USAGE: prepare_component "$action" "$component" "$call_source(optional)"
 
   if [[ "$1" == "--list" ]]; then
@@ -76,8 +76,8 @@ prepare_component() {
               log d "Logs folder moved to $logs_folder and linked back to $rd_logs_folder"
             fi
           fi
-        done < <(grep -v '^\s*$' $rd_conf | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
-        create_dir "/var/config/retrodeck/godot" # TODO: what is this for? Can we delete it or add it to the retrodeck.cfg so the folder will be created by the above script?
+        done < <(grep -v '^\s*$' "$rd_conf" | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
+        create_dir "$XDG_CONFIG_HOME/retrodeck/godot" # TODO: what is this for? Can we delete it or add it to the retrodeck.cfg so the folder will be created by the above script?
         
       fi
       if [[ "$action" == "postmove" ]]; then # Update the paths of any folders that came with the retrodeck folder during a move
@@ -89,7 +89,7 @@ prepare_component() {
                 declare -g "$current_setting_name=$rdhome/${current_setting_value#*retrodeck/}"
             fi
           fi
-        done < <(grep -v '^\s*$' $rd_conf | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
+        done < <(grep -v '^\s*$' "$rd_conf" | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
         dir_prep "$logs_folder" "$rd_logs_folder"
       fi
     fi
@@ -100,16 +100,16 @@ prepare_component() {
       log i "Prepearing ES-DE"
       log i "--------------------------------"
       if [[ "$action" == "reset" ]]; then
-        rm -rf /var/config/ES-DE
-        create_dir /var/config/ES-DE/settings
+        rm -rf "$XDG_CONFIG_HOME/ES-DE"
+        create_dir "$XDG_CONFIG_HOME/ES-DE/settings"
         log d "Prepearing es_settings.xml"
-        cp -f /app/retrodeck/es_settings.xml /var/config/ES-DE/settings/es_settings.xml
+        cp -f "/app/retrodeck/es_settings.xml" "$XDG_CONFIG_HOME/ES-DE/settings/es_settings.xml"
         set_setting_value "$es_settings" "ROMDirectory" "$roms_folder" "es_settings"
         set_setting_value "$es_settings" "MediaDirectory" "$media_folder" "es_settings"
         set_setting_value "$es_settings" "UserThemeDirectory" "$themes_folder" "es_settings"
-        dir_prep "$rdhome/ES-DE/gamelists" "/var/config/ES-DE/gamelists"
-        dir_prep "$rdhome/ES-DE/collections" "/var/config/ES-DE/collections"
-        dir_prep "$rdhome/ES-DE/custom_systems" "/var/config/ES-DE/custom_systems"
+        dir_prep "$rdhome/ES-DE/gamelists" "$XDG_CONFIG_HOME/ES-DE/gamelists"
+        dir_prep "$rdhome/ES-DE/collections" "$XDG_CONFIG_HOME/ES-DE/collections"
+        dir_prep "$rdhome/ES-DE/custom_systems" "$XDG_CONFIG_HOME/ES-DE/custom_systems"
         log d "Generating roms system folders"
         es-de --create-system-dirs
         update_splashscreens
@@ -118,7 +118,7 @@ prepare_component() {
         set_setting_value "$es_settings" "ROMDirectory" "$roms_folder" "es_settings"
         set_setting_value "$es_settings" "MediaDirectory" "$media_folder" "es_settings"
         set_setting_value "$es_settings" "UserThemeDirectory" "$themes_folder" "es_settings"
-        dir_prep "$rdhome/gamelists" "/var/config/ES-DE/gamelists"
+        dir_prep "$rdhome/gamelists" "$XDG_CONFIG_HOME/ES-DE/gamelists"
       fi
     fi
 
@@ -128,7 +128,7 @@ prepare_component() {
       log i "Prepearing Steam ROM Manager"
       log i "-----------------------------"
       
-      local srm_userdata="/var/config/steam-rom-manager/userData"
+      local srm_userdata="$XDG_CONFIG_HOME/steam-rom-manager/userData"
       create_dir -d "$srm_userdata"
       cp -fv "$config/steam-rom-manager/"*.json "$srm_userdata"
       cp -fvr "$config/steam-rom-manager/manifests" "$srm_userdata"
@@ -148,28 +148,28 @@ prepare_component() {
       if [[ "$action" == "reset" ]]; then # Run reset-only commands
         if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
           create_dir -d "$multi_user_data_folder/$SteamAppUser/config/retroarch"
-          cp -fv $config/retroarch/retroarch.cfg "$multi_user_data_folder/$SteamAppUser/config/retroarch/"
-          cp -fv $config/retroarch/retroarch-core-options.cfg "$multi_user_data_folder/$SteamAppUser/config/retroarch/"
+          cp -fv "$config/retroarch/retroarch.cfg" "$multi_user_data_folder/$SteamAppUser/config/retroarch/"
+          cp -fv "$config/retroarch/retroarch-core-options.cfg" "$multi_user_data_folder/$SteamAppUser/config/retroarch/"
         else # Single-user actions
-          create_dir -d /var/config/retroarch
-          dir_prep "$bios_folder" "/var/config/retroarch/system"
-          dir_prep "$rdhome/logs/retroarch" "/var/config/retroarch/logs"
-          create_dir -d "/var/config/retroarch/shaders/"
-          if [[ -d "$cheats_folder/retroarch" && "$(ls -A $cheats_folder/retroarch)" ]]; then
+          create_dir -d "$XDG_CONFIG_HOME/retroarch"
+          dir_prep "$bios_folder" "$XDG_CONFIG_HOME/retroarch/system"
+          dir_prep "$rdhome/logs/retroarch" "$XDG_CONFIG_HOME/retroarch/logs"
+          create_dir -d "$XDG_CONFIG_HOME/retroarch/shaders/"
+          if [[ -d "$cheats_folder/retroarch" && "$(ls -A "$cheats_folder/retroarch")" ]]; then
             backup_file="$backups_folder/cheats/retroarch-$(date +%y%m%d).tar.gz"
             create_dir "$(dirname "$backup_file")"
             tar -czf "$backup_file" -C "$cheats_folder" retroarch
             log i "RetroArch cheats backed up to $backup_file"
           fi
           create_dir -d "$cheats_folder/retroarch"
-          tar --strip-components=1 -xzf /app/retrodeck/cheats/retroarch.tar.gz -C "$cheats_folder/retroarch" --overwrite
-          cp -rf /app/share/libretro/shaders /var/config/retroarch/
-          dir_prep "$shaders_folder/retroarch" "/var/config/retroarch/shaders"
-          cp -fv $config/retroarch/retroarch.cfg /var/config/retroarch/
-          cp -fv $config/retroarch/retroarch-core-options.cfg /var/config/retroarch/
-          rsync -rlD --mkpath "$config/retroarch/core-overrides/" "/var/config/retroarch/config/"
-          rsync -rlD --mkpath "$config/retrodeck/presets/remaps/" "/var/config/retroarch/config/remaps/"
-          dir_prep "$borders_folder" "/var/config/retroarch/overlays/borders"
+          tar --strip-components=1 -xzf "/app/retrodeck/cheats/retroarch.tar.gz" -C "$cheats_folder/retroarch" --overwrite
+          cp -rf "/app/share/libretro/shaders" "$XDG_CONFIG_HOME/retroarch/"
+          dir_prep "$shaders_folder/retroarch" "$XDG_CONFIG_HOME/retroarch/shaders"
+          cp -fv "$config/retroarch/retroarch.cfg" "$XDG_CONFIG_HOME/retroarch/"
+          cp -fv "$config/retroarch/retroarch-core-options.cfg" "$XDG_CONFIG_HOME/retroarch/"
+          rsync -rlD --mkpath "$config/retroarch/core-overrides/" "$XDG_CONFIG_HOME/retroarch/config/"
+          rsync -rlD --mkpath "$config/retrodeck/presets/remaps/" "$XDG_CONFIG_HOME/retroarch/config/remaps/"
+          dir_prep "$borders_folder" "$XDG_CONFIG_HOME/retroarch/overlays/borders"
           set_setting_value "$raconf" "savefile_directory" "$saves_folder" "retroarch"
           set_setting_value "$raconf" "savestate_directory" "$states_folder" "retroarch"
           set_setting_value "$raconf" "screenshot_directory" "$screenshots_folder" "retroarch"
@@ -244,9 +244,9 @@ prepare_component() {
         set_setting_value "$ra_scummvm_conf" "savepath" "$saves_folder/scummvm" "libretro_scummvm" "scummvm"
         set_setting_value "$ra_scummvm_conf" "browser_lastpath" "$roms_folder/scummvm" "libretro_scummvm" "scummvm"
 
-        dir_prep "$texture_packs_folder/RetroArch-Mesen" "/var/config/retroarch/system/HdPacks"
-        dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/cache" "/var/config/retroarch/system/Mupen64plus/cache"
-        dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/hires_texture" "/var/config/retroarch/system/Mupen64plus/hires_texture"
+        dir_prep "$texture_packs_folder/RetroArch-Mesen" "$XDG_CONFIG_HOME/retroarch/system/HdPacks"
+        dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/cache" "$XDG_CONFIG_HOME/retroarch/system/Mupen64plus/cache"
+        dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/hires_texture" "$XDG_CONFIG_HOME/retroarch/system/Mupen64plus/hires_texture"
 
         # Reset default preset settings
         set_setting_value "$rd_conf" "retroarch" "$(get_setting_value "$rd_defaults" "retroarch" "retrodeck" "cheevos")" "retrodeck" "cheevos"
@@ -272,12 +272,12 @@ prepare_component() {
         set_setting_value "$rd_conf" "retroarch" "$(get_setting_value "$rd_defaults" "retroarch" "retrodeck" "savestate_auto_save")" "retrodeck" "savestate_auto_save"
       fi
       if [[ "$action" == "postmove" ]]; then # Run only post-move commands
-        dir_prep "$bios_folder" "/var/config/retroarch/system"
-        dir_prep "$logs_folder/retroarch" "/var/config/retroarch/logs"
-        dir_prep "$shaders_folder/retroarch" "/var/config/retroarch/shaders"
-        dir_prep "$texture_packs_folder/RetroArch-Mesen" "/var/config/retroarch/system/HdPacks"
-        dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/cache" "/var/config/retroarch/system/Mupen64plus/cache"
-        dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/hires_texture" "/var/config/retroarch/system/Mupen64plus/hires_texture"
+        dir_prep "$bios_folder" "$XDG_CONFIG_HOME/retroarch/system"
+        dir_prep "$logs_folder/retroarch" "$XDG_CONFIG_HOME/retroarch/logs"
+        dir_prep "$shaders_folder/retroarch" "$XDG_CONFIG_HOME/retroarch/shaders"
+        dir_prep "$texture_packs_folder/RetroArch-Mesen" "$XDG_CONFIG_HOME/retroarch/system/HdPacks"
+        dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/cache" "$XDG_CONFIG_HOME/retroarch/system/Mupen64plus/cache"
+        dir_prep "$texture_packs_folder/RetroArch-Mupen64Plus/hires_texture" "$XDG_CONFIG_HOME/retroarch/system/Mupen64plus/hires_texture"
         set_setting_value "$raconf" "savefile_directory" "$saves_folder" "retroarch"
         set_setting_value "$raconf" "savestate_directory" "$states_folder" "retroarch"
         set_setting_value "$raconf" "screenshot_directory" "$screenshots_folder" "retroarch"
@@ -294,15 +294,15 @@ prepare_component() {
           log i "------------------------"
           if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
             create_dir -d "$multi_user_data_folder/$SteamAppUser/config/citra-emu"
-            cp -fv $config/citra/qt-config.ini "$multi_user_data_folder/$SteamAppUser/config/citra-emu/qt-config.ini"
+            cp -fv "$config/citra/qt-config.ini" "$multi_user_data_folder/$SteamAppUser/config/citra-emu/qt-config.ini"
             set_setting_value "$multi_user_data_folder/$SteamAppUser/config/citra-emu/qt-config.ini" "nand_directory" "$saves_folder/n3ds/citra/nand/" "citra" "Data%20Storage"
             set_setting_value "$multi_user_data_folder/$SteamAppUser/config/citra-emu/qt-config.ini" "sdmc_directory" "$saves_folder/n3ds/citra/sdmc/" "citra" "Data%20Storage"
             set_setting_value "$multi_user_data_folder/$SteamAppUser/config/citra-emu/qt-config.ini" "Paths\gamedirs\3\path" "$roms_folder/n3ds" "citra" "UI"
             set_setting_value "$multi_user_data_folder/$SteamAppUser/config/citra-emu/qt-config.ini" "Paths\screenshotPath" "$screenshots_folder" "citra" "UI"
-            dir_prep "$multi_user_data_folder/$SteamAppUser/config/citra-emu" "/var/config/citra-emu"
+            dir_prep "$multi_user_data_folder/$SteamAppUser/config/citra-emu" "$XDG_CONFIG_HOME/citra-emu"
           else # Single-user actions
-            create_dir -d /var/config/citra-emu/
-            cp -f $config/citra/qt-config.ini /var/config/citra-emu/qt-config.ini
+            create_dir -d "$XDG_CONFIG_HOME/citra-emu/"
+            cp -f "$config/citra/qt-config.ini" "$XDG_CONFIG_HOME/citra-emu/qt-config.ini"
             set_setting_value "$citraconf" "nand_directory" "$saves_folder/n3ds/citra/nand/" "citra" "Data%20Storage"
             set_setting_value "$citraconf" "sdmc_directory" "$saves_folder/n3ds/citra/sdmc/" "citra" "Data%20Storage"
             set_setting_value "$citraconf" "Paths\gamedirs\3\path" "$roms_folder/n3ds" "citra" "UI"
@@ -311,20 +311,20 @@ prepare_component() {
           # Shared actions
           create_dir "$saves_folder/n3ds/citra/nand/"
           create_dir "$saves_folder/n3ds/citra/sdmc/"
-          dir_prep "$bios_folder/citra/sysdata" "/var/data/citra-emu/sysdata"
-          dir_prep "$logs_folder/citra" "/var/data/citra-emu/log"
-          dir_prep "$mods_folder/Citra" "/var/data/citra-emu/load/mods"
-          dir_prep "$texture_packs_folder/Citra" "/var/data/citra-emu/load/textures"
+          dir_prep "$bios_folder/citra/sysdata" "$XDG_DATA_HOME/citra-emu/sysdata"
+          dir_prep "$logs_folder/citra" "$XDG_DATA_HOME/citra-emu/log"
+          dir_prep "$mods_folder/Citra" "$XDG_DATA_HOME/citra-emu/load/mods"
+          dir_prep "$texture_packs_folder/Citra" "$XDG_DATA_HOME/citra-emu/load/textures"
 
           # Reset default preset settings
           set_setting_value "$rd_conf" "citra" "$(get_setting_value "$rd_defaults" "citra" "retrodeck" "abxy_button_swap")" "retrodeck" "abxy_button_swap"
           set_setting_value "$rd_conf" "citra" "$(get_setting_value "$rd_defaults" "citra" "retrodeck" "ask_to_exit")" "retrodeck" "ask_to_exit"
         fi
         if [[ "$action" == "postmove" ]]; then # Run only post-move commands
-          dir_prep "$bios_folder/citra/sysdata" "/var/data/citra-emu/sysdata"
-          dir_prep "$rdhome/logs/citra" "/var/data/citra-emu/log"
-          dir_prep "$mods_folder/Citra" "/var/data/citra-emu/load/mods"
-          dir_prep "$texture_packs_folder/Citra" "/var/data/citra-emu/load/textures"
+          dir_prep "$bios_folder/citra/sysdata" "$XDG_DATA_HOME/citra-emu/sysdata"
+          dir_prep "$rdhome/logs/citra" "$XDG_DATA_HOME/citra-emu/log"
+          dir_prep "$mods_folder/Citra" "$XDG_DATA_HOME/citra-emu/load/mods"
+          dir_prep "$texture_packs_folder/Citra" "$XDG_DATA_HOME/citra-emu/load/textures"
           set_setting_value "$citraconf" "nand_directory" "$saves_folder/n3ds/citra/nand/" "citra" "Data%20Storage"
           set_setting_value "$citraconf" "sdmc_directory" "$saves_folder/n3ds/citra/sdmc/" "citra" "Data%20Storage"
           set_setting_value "$citraconf" "Paths\gamedirs\3\path" "$roms_folder/n3ds" "citra" "UI"
@@ -344,10 +344,10 @@ prepare_component() {
           cp -fr "$config/cemu/"* "$multi_user_data_folder/$SteamAppUser/config/Cemu/"
           set_setting_value "$multi_user_data_folder/$SteamAppUser/config/Cemu/settings.ini" "mlc_path" "$bios_folder/cemu" "cemu"
           set_setting_value "$multi_user_data_folder/$SteamAppUser/config/Cemu/settings.ini" "Entry" "$roms_folder/wiiu" "cemu" "GamePaths"
-          dir_prep "$multi_user_data_folder/$SteamAppUser/config/Cemu" "/var/config/Cemu"
+          dir_prep "$multi_user_data_folder/$SteamAppUser/config/Cemu" "$XDG_CONFIG_HOME/Cemu"
         else
-          create_dir -d /var/config/Cemu/
-          cp -fr "$config/cemu/"* /var/config/Cemu/
+          create_dir -d "$XDG_CONFIG_HOME/Cemu/"
+          cp -fr "$config/cemu/"* "$XDG_CONFIG_HOME/Cemu/"
           set_setting_value "$cemuconf" "mlc_path" "$bios_folder/cemu" "cemu"
           set_setting_value "$cemuconf" "Entry" "$roms_folder/wiiu" "cemu" "GamePaths"
           if [[ -e "$bios_folder/cemu/keys.txt" ]]; then
@@ -378,10 +378,10 @@ prepare_component() {
           set_setting_value "$multi_user_data_folder/$SteamAppUser/config/dolphin-emu/Dolphin.ini" "ISOPath0" "$roms_folder/wii" "dolphin" "General"
           set_setting_value "$multi_user_data_folder/$SteamAppUser/config/dolphin-emu/Dolphin.ini" "ISOPath1" "$roms_folder/gc" "dolphin" "General"
           set_setting_value "$multi_user_data_folder/$SteamAppUser/config/dolphin-emu/Dolphin.ini" "WiiSDCardPath" "$saves_folder/wii/dolphin/sd.raw" "dolphin" "General"
-          dir_prep "$multi_user_data_folder/$SteamAppUser/config/dolphin-emu" "/var/config/dolphin-emu"
+          dir_prep "$multi_user_data_folder/$SteamAppUser/config/dolphin-emu" "$XDG_CONFIG_HOME/dolphin-emu"
         else # Single-user actions
-          create_dir -d /var/config/dolphin-emu/
-          cp -fvr "$config/dolphin/"* /var/config/dolphin-emu/
+          create_dir -d "$XDG_CONFIG_HOME/dolphin-emu/"
+          cp -fvr "$config/dolphin/"* "$XDG_CONFIG_HOME/dolphin-emu/"
           set_setting_value "$dolphinconf" "BIOS" "$bios_folder" "dolphin" "GBA"
           set_setting_value "$dolphinconf" "SavesPath" "$saves_folder/gba" "dolphin" "GBA"
           set_setting_value "$dolphinconf" "ISOPath0" "$roms_folder/wii" "dolphin" "General"
@@ -389,27 +389,27 @@ prepare_component() {
           set_setting_value "$dolphinconf" "WiiSDCardPath" "$saves_folder/wii/dolphin/sd.raw" "dolphin" "General"
         fi
         # Shared actions
-        dir_prep "$saves_folder/gc/dolphin/EU" "/var/data/dolphin-emu/GC/EUR" # TODO: Multi-user one-off
-        dir_prep "$saves_folder/gc/dolphin/US" "/var/data/dolphin-emu/GC/USA" # TODO: Multi-user one-off
-        dir_prep "$saves_folder/gc/dolphin/JP" "/var/data/dolphin-emu/GC/JAP" # TODO: Multi-user one-off
-        dir_prep "$screenshots_folder" "/var/data/dolphin-emu/ScreenShots"
-        dir_prep "$states_folder/dolphin" "/var/data/dolphin-emu/StateSaves"
-        dir_prep "$saves_folder/wii/dolphin" "/var/data/dolphin-emu/Wii"
-        dir_prep "$mods_folder/Dolphin" "/var/data/dolphin-emu/Load/GraphicMods"
-        dir_prep "$texture_packs_folder/Dolphin" "/var/data/dolphin-emu/Load/Textures"
+        dir_prep "$saves_folder/gc/dolphin/EU" "$XDG_DATA_HOME/dolphin-emu/GC/EUR" # TODO: Multi-user one-off
+        dir_prep "$saves_folder/gc/dolphin/US" "$XDG_DATA_HOME/dolphin-emu/GC/USA" # TODO: Multi-user one-off
+        dir_prep "$saves_folder/gc/dolphin/JP" "$XDG_DATA_HOME/dolphin-emu/GC/JAP" # TODO: Multi-user one-off
+        dir_prep "$screenshots_folder" "$XDG_DATA_HOME/dolphin-emu/ScreenShots"
+        dir_prep "$states_folder/dolphin" "$XDG_DATA_HOME/dolphin-emu/StateSaves"
+        dir_prep "$saves_folder/wii/dolphin" "$XDG_DATA_HOME/dolphin-emu/Wii"
+        dir_prep "$mods_folder/Dolphin" "$XDG_DATA_HOME/dolphin-emu/Load/GraphicMods"
+        dir_prep "$texture_packs_folder/Dolphin" "$XDG_DATA_HOME/dolphin-emu/Load/Textures"
 
         # Reset default preset settings
         set_setting_value "$rd_conf" "dolphin" "$(get_setting_value "$rd_defaults" "dolphin" "retrodeck" "ask_to_exit")" "retrodeck" "ask_to_exit"
       fi
       if [[ "$action" == "postmove" ]]; then # Run only post-move commands
-        dir_prep "$saves_folder/gc/dolphin/EU" "/var/data/dolphin-emu/GC/EUR"
-        dir_prep "$saves_folder/gc/dolphin/US" "/var/data/dolphin-emu/GC/USA"
-        dir_prep "$saves_folder/gc/dolphin/JP" "/var/data/dolphin-emu/GC/JAP"
-        dir_prep "$screenshots_folder" "/var/data/dolphin-emu/ScreenShots"
-        dir_prep "$states_folder/dolphin" "/var/data/dolphin-emu/StateSaves"
-        dir_prep "$saves_folder/wii/dolphin" "/var/data/dolphin-emu/Wii"
-        dir_prep "$mods_folder/Dolphin" "/var/data/dolphin-emu/Load/GraphicMods"
-        dir_prep "$texture_packs_folder/Dolphin" "/var/data/dolphin-emu/Load/Textures"
+        dir_prep "$saves_folder/gc/dolphin/EU" "$XDG_DATA_HOME/dolphin-emu/GC/EUR"
+        dir_prep "$saves_folder/gc/dolphin/US" "$XDG_DATA_HOME/dolphin-emu/GC/USA"
+        dir_prep "$saves_folder/gc/dolphin/JP" "$XDG_DATA_HOME/dolphin-emu/GC/JAP"
+        dir_prep "$screenshots_folder" "$XDG_DATA_HOME/dolphin-emu/ScreenShots"
+        dir_prep "$states_folder/dolphin" "$XDG_DATA_HOME/dolphin-emu/StateSaves"
+        dir_prep "$saves_folder/wii/dolphin" "$XDG_DATA_HOME/dolphin-emu/Wii"
+        dir_prep "$mods_folder/Dolphin" "$XDG_DATA_HOME/dolphin-emu/Load/GraphicMods"
+        dir_prep "$texture_packs_folder/Dolphin" "$XDG_DATA_HOME/dolphin-emu/Load/Textures"
         set_setting_value "$dolphinconf" "BIOS" "$bios_folder" "dolphin" "GBA"
         set_setting_value "$dolphinconf" "SavesPath" "$saves_folder/gba" "dolphin" "GBA"
         set_setting_value "$dolphinconf" "ISOPath0" "$roms_folder/wii" "dolphin" "General"
@@ -432,11 +432,11 @@ prepare_component() {
           set_setting_value "$multi_user_data_folder/$SteamAppUser/data/duckstation/settings.ini" "Card2Path" "$saves_folder/psx/duckstation/memcards/shared_card_2.mcd" "duckstation" "MemoryCards"
           set_setting_value "$multi_user_data_folder/$SteamAppUser/data/duckstation/settings.ini" "Directory" "$saves_folder/psx/duckstation/memcards" "duckstation" "MemoryCards"
           set_setting_value "$multi_user_data_folder/$SteamAppUser/data/duckstation/settings.ini" "RecursivePaths" "$roms_folder/psx" "duckstation" "GameList"
-          dir_prep "$multi_user_data_folder/$SteamAppUser/config/duckstation" "/var/config/duckstation"
+          dir_prep "$multi_user_data_folder/$SteamAppUser/config/duckstation" "$XDG_CONFIG_HOME/duckstation"
         else # Single-user actions
-          create_dir -d "/var/config/duckstation/"
+          create_dir -d "$XDG_CONFIG_HOME/duckstation/"
           create_dir "$saves_folder/psx/duckstation/memcards"
-          cp -fv "$config/duckstation/"* /var/config/duckstation
+          cp -fv "$config/duckstation/"* "$XDG_CONFIG_HOME/duckstation"
           set_setting_value "$duckstationconf" "SearchDirectory" "$bios_folder" "duckstation" "BIOS"
           set_setting_value "$duckstationconf" "Card1Path" "$saves_folder/psx/duckstation/memcards/shared_card_1.mcd" "duckstation" "MemoryCards"
           set_setting_value "$duckstationconf" "Card2Path" "$saves_folder/psx/duckstation/memcards/shared_card_2.mcd" "duckstation" "MemoryCards"
@@ -444,8 +444,8 @@ prepare_component() {
           set_setting_value "$duckstationconf" "RecursivePaths" "$roms_folder/psx" "duckstation" "GameList"
         fi
         # Shared actions
-        dir_prep "$states_folder/psx/duckstation" "/var/config/duckstation/savestates" # This is hard-coded in Duckstation, always needed
-        dir_prep "$texture_packs_folder/Duckstation" "/var/config/duckstation/textures"
+        dir_prep "$states_folder/psx/duckstation" "$XDG_CONFIG_HOME/duckstation/savestates" # This is hard-coded in Duckstation, always needed
+        dir_prep "$texture_packs_folder/Duckstation" "$XDG_CONFIG_HOME/duckstation/textures"
 
         # Reset default preset settings
         set_setting_value "$rd_conf" "duckstation" "$(get_setting_value "$rd_defaults" "duckstation" "retrodeck" "cheevos")" "retrodeck" "cheevos"
@@ -459,8 +459,8 @@ prepare_component() {
         set_setting_value "$duckstationconf" "Card2Path" "$saves_folder/psx/duckstation/memcards/shared_card_2.mcd" "duckstation" "MemoryCards"
         set_setting_value "$duckstationconf" "Directory" "$saves_folder/psx/duckstation/memcards" "duckstation" "MemoryCards"
         set_setting_value "$duckstationconf" "RecursivePaths" "$roms_folder/psx" "duckstation" "GameList"
-        dir_prep "$states_folder/psx/duckstation" "/var/config/duckstation/savestates" # This is hard-coded in Duckstation, always needed
-        dir_prep "$texture_packs_folder/Duckstation" "/var/config/duckstation/textures"
+        dir_prep "$states_folder/psx/duckstation" "$XDG_CONFIG_HOME/duckstation/savestates" # This is hard-coded in Duckstation, always needed
+        dir_prep "$texture_packs_folder/Duckstation" "$XDG_CONFIG_HOME/duckstation/textures"
       fi
     fi
 
@@ -472,16 +472,16 @@ prepare_component() {
         log i "----------------------"
         if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
           create_dir -d "$multi_user_data_folder/$SteamAppUser/config/melonDS/"
-          cp -fvr $config/melonds/melonDS.ini "$multi_user_data_folder/$SteamAppUser/config/melonDS/"
+          cp -fvr "$config/melonds/melonDS.ini" "$multi_user_data_folder/$SteamAppUser/config/melonDS/"
           set_setting_value "$multi_user_data_folder/$SteamAppUser/config/melonDS/melonDS.ini" "BIOS9Path" "$bios_folder/bios9.bin" "melonds"
           set_setting_value "$multi_user_data_folder/$SteamAppUser/config/melonDS/melonDS.ini" "BIOS7Path" "$bios_folder/bios7.bin" "melonds"
           set_setting_value "$multi_user_data_folder/$SteamAppUser/config/melonDS/melonDS.ini" "FirmwarePath" "$bios_folder/firmware.bin" "melonds"
           set_setting_value "$multi_user_data_folder/$SteamAppUser/config/melonDS/melonDS.ini" "SaveFilePath" "$saves_folder/nds/melonds" "melonds"
           set_setting_value "$multi_user_data_folder/$SteamAppUser/config/melonDS/melonDS.ini" "SavestatePath" "$states_folder/nds/melonds" "melonds"
-          dir_prep "$multi_user_data_folder/$SteamAppUser/config/melonDS" "/var/config/melonDS"
+          dir_prep "$multi_user_data_folder/$SteamAppUser/config/melonDS" "$XDG_CONFIG_HOME/melonDS"
         else # Single-user actions
-          create_dir -d /var/config/melonDS/
-          cp -fvr $config/melonds/melonDS.ini /var/config/melonDS/
+          create_dir -d "$XDG_CONFIG_HOME/melonDS/"
+          cp -fvr "$config/melonds/melonDS.ini" "$XDG_CONFIG_HOME/melonDS/"
           set_setting_value "$melondsconf" "BIOS9Path" "$bios_folder/bios9.bin" "melonds"
           set_setting_value "$melondsconf" "BIOS7Path" "$bios_folder/bios7.bin" "melonds"
           set_setting_value "$melondsconf" "FirmwarePath" "$bios_folder/firmware.bin" "melonds"
@@ -491,10 +491,10 @@ prepare_component() {
         # Shared actions
         create_dir "$saves_folder/nds/melonds"
         create_dir "$states_folder/nds/melonds"
-        dir_prep "$bios_folder" "/var/config/melonDS/bios"
+        dir_prep "$bios_folder" "$XDG_CONFIG_HOME/melonDS/bios"
       fi
       if [[ "$action" == "postmove" ]]; then # Run only post-move commands
-        dir_prep "$bios_folder" "/var/config/melonDS/bios"
+        dir_prep "$bios_folder" "$XDG_CONFIG_HOME/melonDS/bios"
         set_setting_value "$melondsconf" "BIOS9Path" "$bios_folder/bios9.bin" "melonds"
         set_setting_value "$melondsconf" "BIOS7Path" "$bios_folder/bios7.bin" "melonds"
         set_setting_value "$melondsconf" "FirmwarePath" "$bios_folder/firmware.bin" "melonds"
@@ -517,29 +517,29 @@ prepare_component() {
           set_setting_value "$multi_user_data_folder/$SteamAppUser/config/PCSX2/inis/PCSX2.ini" "SaveStates" "$states_folder/ps2/pcsx2" "pcsx2" "Folders"
           set_setting_value "$multi_user_data_folder/$SteamAppUser/config/PCSX2/inis/PCSX2.ini" "MemoryCards" "$saves_folder/ps2/pcsx2/memcards" "pcsx2" "Folders"
           set_setting_value "$multi_user_data_folder/$SteamAppUser/config/PCSX2/inis/PCSX2.ini" "RecursivePaths" "$roms_folder/ps2" "pcsx2" "GameList"
-          dir_prep "$multi_user_data_folder/$SteamAppUser/config/PCSX2" "/var/config/PCSX2"
+          dir_prep "$multi_user_data_folder/$SteamAppUser/config/PCSX2" "$XDG_CONFIG_HOME/PCSX2"
         else # Single-user actions
-          create_dir -d "/var/config/PCSX2/inis"
-          cp -fvr "$config/PCSX2/"* /var/config/PCSX2/inis/
+          create_dir -d "$XDG_CONFIG_HOME/PCSX2/inis"
+          cp -fvr "$config/PCSX2/"* "$XDG_CONFIG_HOME/PCSX2/inis/"
           set_setting_value "$pcsx2conf" "Bios" "$bios_folder" "pcsx2" "Folders"
           set_setting_value "$pcsx2conf" "Snapshots" "$screenshots_folder" "pcsx2" "Folders"
           set_setting_value "$pcsx2conf" "SaveStates" "$states_folder/ps2/pcsx2" "pcsx2" "Folders"
           set_setting_value "$pcsx2conf" "MemoryCards" "$saves_folder/ps2/pcsx2/memcards" "pcsx2" "Folders"
           set_setting_value "$pcsx2conf" "RecursivePaths" "$roms_folder/ps2" "pcsx2" "GameList"
           set_setting_value "$pcsx2conf" "Cheats" "$cheats_folder/pcsx2" "Folders"
-          if [[ -d "$cheats_folder/pcsx2" && "$(ls -A $cheats_folder/pcsx2)" ]]; then
+          if [[ -d "$cheats_folder/pcsx2" && "$(ls -A "$cheats_folder/pcsx2")" ]]; then
             backup_file="$backups_folder/cheats/pcsx2-$(date +%y%m%d).tar.gz"
-            create_dir "$(dirname $backup_file)"
+            create_dir "$(dirname "$backup_file")"
             tar -czf "$backup_file" -C "$cheats_folder" pcsx2
             log i "PCSX2 cheats backed up to $backup_file"
           fi
           create_dir -d "$cheats_folder/pcsx2"
-          tar --strip-components=1 -xzf /app/retrodeck/cheats/pcsx2.tar.gz -C "$cheats_folder/pcsx2" --overwrite
+          tar --strip-components=1 -xzf "/app/retrodeck/cheats/pcsx2.tar.gz" -C "$cheats_folder/pcsx2" --overwrite
         fi
         # Shared actions
         create_dir "$saves_folder/ps2/pcsx2/memcards"
         create_dir "$states_folder/ps2/pcsx2"
-        dir_prep "$texture_packs_folder/PCSX2" "/var/config/PCSX2/textures"
+        dir_prep "$texture_packs_folder/PCSX2" "$XDG_CONFIG_HOME/PCSX2/textures"
 
         # Reset default preset settings
         set_setting_value "$rd_conf" "pcsx2" "$(get_setting_value "$rd_defaults" "pcsx2" "retrodeck" "cheevos")" "retrodeck" "cheevos"
@@ -554,7 +554,7 @@ prepare_component() {
         set_setting_value "$pcsx2conf" "MemoryCards" "$saves_folder/ps2/pcsx2/memcards" "pcsx2" "Folders"
         set_setting_value "$pcsx2conf" "RecursivePaths" "$roms_folder/ps2" "pcsx2" "GameList"
         set_setting_value "$pcsx2conf" "Cheats" "$cheats_folder/pcsx2" "Folders"
-        dir_prep "$texture_packs_folder/PCSX2" "/var/config/PCSX2/textures"
+        dir_prep "$texture_packs_folder/PCSX2" "$XDG_CONFIG_HOME/PCSX2/textures"
       fi
     fi
 
@@ -581,25 +581,25 @@ prepare_component() {
           create_dir -d "$multi_user_data_folder/$SteamAppUser/config/ppsspp/PSP/SYSTEM/"
           cp -fv "$config/ppssppsdl/"* "$multi_user_data_folder/$SteamAppUser/config/ppsspp/PSP/SYSTEM/"
           set_setting_value "$multi_user_data_folder/$SteamAppUser/config/ppsspp/PSP/SYSTEM/ppsspp.ini" "CurrentDirectory" "$roms_folder/psp" "ppsspp" "General"
-          dir_prep "$multi_user_data_folder/$SteamAppUser/config/ppsspp" "/var/config/ppsspp"
+          dir_prep "$multi_user_data_folder/$SteamAppUser/config/ppsspp" "$XDG_CONFIG_HOME/ppsspp"
         else # Single-user actions
-          create_dir -d /var/config/ppsspp/PSP/SYSTEM/
-          cp -fv "$config/ppssppsdl/"* /var/config/ppsspp/PSP/SYSTEM/
+          create_dir -d "$XDG_CONFIG_HOME/ppsspp/PSP/SYSTEM/"
+          cp -fv "$config/ppssppsdl/"* "$XDG_CONFIG_HOME/ppsspp/PSP/SYSTEM/"
           set_setting_value "$ppssppconf" "CurrentDirectory" "$roms_folder/psp" "ppsspp" "General"
         fi
         # Shared actions
-        dir_prep "$saves_folder/PSP/PPSSPP-SA" "/var/config/ppsspp/PSP/SAVEDATA"
-        dir_prep "$states_folder/PSP/PPSSPP-SA" "/var/config/ppsspp/PSP/PPSSPP_STATE"
-        dir_prep "$texture_packs_folder/PPSSPP" "/var/config/ppsspp/PSP/TEXTURES"
+        dir_prep "$saves_folder/PSP/PPSSPP-SA" "$XDG_CONFIG_HOME/ppsspp/PSP/SAVEDATA"
+        dir_prep "$states_folder/PSP/PPSSPP-SA" "$XDG_CONFIG_HOME/ppsspp/PSP/PPSSPP_STATE"
+        dir_prep "$texture_packs_folder/PPSSPP" "$XDG_CONFIG_HOME/ppsspp/PSP/TEXTURES"
         create_dir -d "$cheats_folder/PPSSPP"
-        dir_prep "$cheats_folder/PPSSPP" "/var/config/ppsspp/PSP/Cheats"
+        dir_prep "$cheats_folder/PPSSPP" "$XDG_CONFIG_HOME/ppsspp/PSP/Cheats"
         if [[ -d "$cheats_folder/PPSSPP" && "$(ls -A "$cheats_folder"/PPSSPP)" ]]; then
           backup_file="$backups_folder/cheats/PPSSPP-$(date +%y%m%d).tar.gz"
           create_dir "$(dirname "$backup_file")"
           tar -czf "$backup_file" -C "$cheats_folder" PPSSPP
           log i "PPSSPP cheats backed up to $backup_file"
         fi
-        tar -xzf /app/retrodeck/cheats/ppsspp.tar.gz -C "$cheats_folder/PPSSPP" --overwrite
+        tar -xzf "/app/retrodeck/cheats/ppsspp.tar.gz" -C "$cheats_folder/PPSSPP" --overwrite
 
         # Reset default preset settings
         set_setting_value "$rd_conf" "ppsspp" "$(get_setting_value "$rd_defaults" "ppsspp" "retrodeck" "cheevos")" "retrodeck" "cheevos"
@@ -607,10 +607,10 @@ prepare_component() {
       fi
       if [[ "$action" == "postmove" ]]; then # Run only post-move commands
         set_setting_value "$ppssppconf" "CurrentDirectory" "$roms_folder/psp" "ppsspp" "General"
-        dir_prep "$saves_folder/PSP/PPSSPP-SA" "/var/config/ppsspp/PSP/SAVEDATA"
-        dir_prep "$states_folder/PSP/PPSSPP-SA" "/var/config/ppsspp/PSP/PPSSPP_STATE"
-        dir_prep "$texture_packs_folder/PPSSPP" "/var/config/ppsspp/PSP/TEXTURES"
-        dir_prep "$cheats_folder/PPSSPP" "/var/config/ppsspp/PSP/Cheats"
+        dir_prep "$saves_folder/PSP/PPSSPP-SA" "$XDG_CONFIG_HOME/ppsspp/PSP/SAVEDATA"
+        dir_prep "$states_folder/PSP/PPSSPP-SA" "$XDG_CONFIG_HOME/ppsspp/PSP/PPSSPP_STATE"
+        dir_prep "$texture_packs_folder/PPSSPP" "$XDG_CONFIG_HOME/ppsspp/PSP/TEXTURES"
+        dir_prep "$cheats_folder/PPSSPP" "$XDG_CONFIG_HOME/ppsspp/PSP/Cheats"
       fi
     fi
 
@@ -623,25 +623,25 @@ prepare_component() {
         if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
           create_dir -d "$multi_user_data_folder/$SteamAppUser/config/primehack"
           cp -fvr "$config/primehack/config/"* "$multi_user_data_folder/$SteamAppUser/config/primehack/"
-          set_setting_value ""$multi_user_data_folder/$SteamAppUser/config/primehack/Dolphin.ini"" "ISOPath0" "$roms_folder/wii" "primehack" "General"
-          set_setting_value ""$multi_user_data_folder/$SteamAppUser/config/primehack/Dolphin.ini"" "ISOPath1" "$roms_folder/gc" "primehack" "General"
-          dir_prep "$multi_user_data_folder/$SteamAppUser/config/primehack" "/var/config/primehack"
+          set_setting_value "$multi_user_data_folder/$SteamAppUser/config/primehack/Dolphin.ini" "ISOPath0" "$roms_folder/wii" "primehack" "General"
+          set_setting_value "$multi_user_data_folder/$SteamAppUser/config/primehack/Dolphin.ini" "ISOPath1" "$roms_folder/gc" "primehack" "General"
+          dir_prep "$multi_user_data_folder/$SteamAppUser/config/primehack" "$XDG_CONFIG_HOME/primehack"
         else # Single-user actions
-          create_dir -d /var/config/primehack/
-          cp -fvr "$config/primehack/config/"* /var/config/primehack/
+          create_dir -d "$XDG_CONFIG_HOME/primehack/"
+          cp -fvr "$config/primehack/config/"* "$XDG_CONFIG_HOME/primehack/"
           set_setting_value "$primehackconf" "ISOPath0" "$roms_folder/wii" "primehack" "General"
           set_setting_value "$primehackconf" "ISOPath1" "$roms_folder/gc" "primehack" "General"
         fi
         # Shared actions
-        dir_prep "$saves_folder/gc/primehack/EU" "/var/data/primehack/GC/EUR"
-        dir_prep "$saves_folder/gc/primehack/US" "/var/data/primehack/GC/USA"
-        dir_prep "$saves_folder/gc/primehack/JP" "/var/data/primehack/GC/JAP"
-        dir_prep "$screenshots_folder" "/var/data/primehack/ScreenShots"
-        dir_prep "$states_folder/primehack" "/var/data/primehack/StateSaves"
-        create_dir /var/data/primehack/Wii/
-        dir_prep "$saves_folder/wii/primehack" "/var/data/primehack/Wii"
-        dir_prep "$mods_folder/Primehack" "/var/data/primehack/Load/GraphicMods"
-        dir_prep "$texture_packs_folder/Primehack" "/var/data/primehack/Load/Textures"
+        dir_prep "$saves_folder/gc/primehack/EU" "$XDG_DATA_HOME/primehack/GC/EUR"
+        dir_prep "$saves_folder/gc/primehack/US" "$XDG_DATA_HOME/primehack/GC/USA"
+        dir_prep "$saves_folder/gc/primehack/JP" "$XDG_DATA_HOME/primehack/GC/JAP"
+        dir_prep "$screenshots_folder" "$XDG_DATA_HOME/primehack/ScreenShots"
+        dir_prep "$states_folder/primehack" "$XDG_DATA_HOME/primehack/StateSaves"
+        create_dir "$XDG_DATA_HOME/primehack/Wii/"
+        dir_prep "$saves_folder/wii/primehack" "$XDG_DATA_HOME/primehack/Wii"
+        dir_prep "$mods_folder/Primehack" "$XDG_DATA_HOME/primehack/Load/GraphicMods"
+        dir_prep "$texture_packs_folder/Primehack" "$XDG_DATA_HOME/primehack/Load/Textures"
         if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
           cp -fvr "$config/primehack/data/"* "$multi_user_data_folder/$SteamAppUser/data/primehack/" # this must be done after the dirs are prepared as it copying some "mods"
         fi
@@ -650,14 +650,14 @@ prepare_component() {
         set_setting_value "$rd_conf" "primehack" "$(get_setting_value "$rd_defaults" "primehack" "retrodeck" "ask_to_exit")" "retrodeck" "ask_to_exit"
       fi
       if [[ "$action" == "postmove" ]]; then # Run only post-move commands
-        dir_prep "$saves_folder/gc/primehack/EU" "/var/data/primehack/GC/EUR"
-        dir_prep "$saves_folder/gc/primehack/US" "/var/data/primehack/GC/USA"
-        dir_prep "$saves_folder/gc/primehack/JP" "/var/data/primehack/GC/JAP"
-        dir_prep "$screenshots_folder" "/var/data/primehack/ScreenShots"
-        dir_prep "$states_folder/primehack" "/var/data/primehack/StateSaves"
-        dir_prep "$saves_folder/wii/primehack" "/var/data/primehack/Wii/"
-        dir_prep "$mods_folder/Primehack" "/var/data/primehack/Load/GraphicMods"
-        dir_prep "$texture_packs_folder/Primehack" "/var/data/primehack/Load/Textures"
+        dir_prep "$saves_folder/gc/primehack/EU" "$XDG_DATA_HOME/primehack/GC/EUR"
+        dir_prep "$saves_folder/gc/primehack/US" "$XDG_DATA_HOME/primehack/GC/USA"
+        dir_prep "$saves_folder/gc/primehack/JP" "$XDG_DATA_HOME/primehack/GC/JAP"
+        dir_prep "$screenshots_folder" "$XDG_DATA_HOME/primehack/ScreenShots"
+        dir_prep "$states_folder/primehack" "$XDG_DATA_HOME/primehack/StateSaves"
+        dir_prep "$saves_folder/wii/primehack" "$XDG_DATA_HOME/primehack/Wii/"
+        dir_prep "$mods_folder/Primehack" "$XDG_DATA_HOME/primehack/Load/GraphicMods"
+        dir_prep "$texture_packs_folder/Primehack" "$XDG_DATA_HOME/primehack/Load/Textures"
         set_setting_value "$primehackconf" "ISOPath0" "$roms_folder/gc" "primehack" "General"
       fi
     fi
@@ -674,15 +674,15 @@ prepare_component() {
           # This is an unfortunate one-off because set_setting_value does not currently support settings with $ in the name.
           sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$bios_folder/rpcs3/"'^' "$multi_user_data_folder/$SteamAppUser/config/rpcs3/vfs.yml"
           set_setting_value "$multi_user_data_folder/$SteamAppUser/config/rpcs3/vfs.yml" "/games/" "$roms_folder/ps3/" "rpcs3"
-          dir_prep "$multi_user_data_folder/$SteamAppUser/config/rpcs3" "/var/config/rpcs3"
+          dir_prep "$multi_user_data_folder/$SteamAppUser/config/rpcs3" "$XDG_CONFIG_HOME/rpcs3"
         else # Single-user actions
-          create_dir -d /var/config/rpcs3/
-          cp -fr "$config/rpcs3/"* /var/config/rpcs3/
+          create_dir -d "$XDG_CONFIG_HOME/rpcs3/"
+          cp -fr "$config/rpcs3/"* "$XDG_CONFIG_HOME/rpcs3/"
           # This is an unfortunate one-off because set_setting_value does not currently support settings with $ in the name.
           sed -i 's^\^$(EmulatorDir): .*^$(EmulatorDir): '"$bios_folder/rpcs3/"'^' "$rpcs3vfsconf"
           set_setting_value "$rpcs3vfsconf" "/games/" "$roms_folder/ps3/" "rpcs3"
           dir_prep "$saves_folder/ps3/rpcs3" "$bios_folder/rpcs3/dev_hdd0/home/00000001/savedata"
-          dir_prep "$states_folder/ps3/rpcs3" "/var/config/rpcs3/savestates"
+          dir_prep "$states_folder/ps3/rpcs3" "$XDG_CONFIG_HOME/rpcs3/savestates"
         fi
         # Shared actions
         create_dir "$bios_folder/rpcs3/dev_hdd0"
@@ -711,16 +711,16 @@ prepare_component() {
         if [[ $multi_user_mode == "true" ]]; then
           rm -rf "$multi_user_data_folder/$SteamAppUser/config/Ryujinx"
           #create_dir "$multi_user_data_folder/$SteamAppUser/config/Ryujinx/system"
-          cp -fv $config/ryujinx/* "$multi_user_data_folder/$SteamAppUser/config/Ryujinx"
+          cp -fv "$config/ryujinx/"* "$multi_user_data_folder/$SteamAppUser/config/Ryujinx"
           sed -i 's#RETRODECKHOMEDIR#'"$rdhome"'#g' "$multi_user_data_folder/$SteamAppUser/config/Ryujinx/Config.json"
-          dir_prep "$multi_user_data_folder/$SteamAppUser/config/Ryujinx" "/var/config/Ryujinx"
+          dir_prep "$multi_user_data_folder/$SteamAppUser/config/Ryujinx" "$XDG_CONFIG_HOME/Ryujinx"
         else
           # removing config directory to wipe legacy files
-          log d "Removing \"/var/config/Ryujinx\""
-          rm -rf "/var/config/Ryujinx"
-          create_dir "/var/config/Ryujinx/system"
+          log d "Removing \"$XDG_CONFIG_HOME/Ryujinx\""
+          rm -rf "$XDG_CONFIG_HOME/Ryujinx"
+          create_dir "$XDG_CONFIG_HOME/Ryujinx/system"
           cp -fv "$config/ryujinx/Config.json" "$ryujinxconf"
-          cp -fvr "$config/ryujinx/profiles" "/var/config/Ryujinx/"
+          cp -fvr "$config/ryujinx/profiles" "$XDG_CONFIG_HOME/Ryujinx/"
           log d "Replacing placeholders in \"$ryujinxconf\""
           sed -i 's#RETRODECKHOMEDIR#'"$rdhome"'#g' "$ryujinxconf"
           create_dir "$logs_folder/ryujinx"
@@ -729,11 +729,11 @@ prepare_component() {
         fi
       fi
       # if [[ "$action" == "reset" ]] || [[ "$action" == "postmove" ]]; then # Run commands that apply to both resets and moves
-      #   dir_prep "$bios_folder/switch/keys" "/var/config/Ryujinx/system"
+      #   dir_prep "$bios_folder/switch/keys" "$XDG_CONFIG_HOME/Ryujinx/system"
       # fi
       if [[ "$action" == "postmove" ]]; then # Run only post-move commands
         log d "Replacing placeholders in \"$ryujinxconf\""
-        sed -i 's#RETRODECKHOMEDIR#'$rdhome'#g' "$ryujinxconf" # This is an unfortunate one-off because set_setting_value does not currently support JSON
+        sed -i 's#RETRODECKHOMEDIR#'"$rdhome"'#g' "$ryujinxconf" # This is an unfortunate one-off because set_setting_value does not currently support JSON
       fi
     fi
 
@@ -751,26 +751,26 @@ prepare_component() {
             set_setting_value "$multi_user_data_folder/$SteamAppUser/config/yuzu/qt-config.ini" "sdmc_directory" "$saves_folder/switch/yuzu/sdmc" "yuzu" "Data%20Storage"
             set_setting_value "$multi_user_data_folder/$SteamAppUser/config/yuzu/qt-config.ini" "Paths\gamedirs\4\path" "$roms_folder/switch" "yuzu" "UI"
             set_setting_value "$multi_user_data_folder/$SteamAppUser/config/yuzu/qt-config.ini" "Screenshots\screenshot_path" "$screenshots_folder" "yuzu" "UI"
-            dir_prep "$multi_user_data_folder/$SteamAppUser/config/yuzu" "/var/config/yuzu"
+            dir_prep "$multi_user_data_folder/$SteamAppUser/config/yuzu" "$XDG_CONFIG_HOME/yuzu"
           else # Single-user actions
-            create_dir -d /var/config/yuzu/
-            cp -fvr "$config/yuzu/"* /var/config/yuzu/
+            create_dir -d "$XDG_CONFIG_HOME/yuzu/"
+            cp -fvr "$config/yuzu/"* "$XDG_CONFIG_HOME/yuzu/"
             set_setting_value "$yuzuconf" "nand_directory" "$saves_folder/switch/yuzu/nand" "yuzu" "Data%20Storage"
             set_setting_value "$yuzuconf" "sdmc_directory" "$saves_folder/switch/yuzu/sdmc" "yuzu" "Data%20Storage"
             set_setting_value "$yuzuconf" "Paths\gamedirs\4\path" "$roms_folder/switch" "yuzu" "UI"
             set_setting_value "$yuzuconf" "Screenshots\screenshot_path" "$screenshots_folder" "yuzu" "UI"
           fi
           # Shared actions
-          dir_prep "$saves_folder/switch/yuzu/nand" "/var/data/yuzu/nand"
-          dir_prep "$saves_folder/switch/yuzu/sdmc" "/var/data/yuzu/sdmc"
-          dir_prep "$bios_folder/switch/keys" "/var/data/yuzu/keys"
-          dir_prep "$bios_folder/switch/firmware" "/var/data/yuzu/nand/system/Contents/registered"
-          dir_prep "$logs_folder/yuzu" "/var/data/yuzu/log"
-          dir_prep "$screenshots_folder" "/var/data/yuzu/screenshots"
-          dir_prep "$mods_folder/Yuzu" "/var/data/yuzu/load"
+          dir_prep "$saves_folder/switch/yuzu/nand" "$XDG_DATA_HOME/yuzu/nand"
+          dir_prep "$saves_folder/switch/yuzu/sdmc" "$XDG_DATA_HOME/yuzu/sdmc"
+          dir_prep "$bios_folder/switch/keys" "$XDG_DATA_HOME/yuzu/keys"
+          dir_prep "$bios_folder/switch/firmware" "$XDG_DATA_HOME/yuzu/nand/system/Contents/registered"
+          dir_prep "$logs_folder/yuzu" "$XDG_DATA_HOME/yuzu/log"
+          dir_prep "$screenshots_folder" "$XDG_DATA_HOME/yuzu/screenshots"
+          dir_prep "$mods_folder/Yuzu" "$XDG_DATA_HOME/yuzu/load"
           # removing dead symlinks as they were present in a past version
-          if [ -d $bios_folder/switch ]; then
-            find $bios_folder/switch -xtype l -exec rm {} \;
+          if [ -d "$bios_folder/switch" ]; then
+            find "$bios_folder/switch" -xtype l -exec rm {} \;
           fi
 
           # Reset default preset settings
@@ -778,13 +778,13 @@ prepare_component() {
           set_setting_value "$rd_conf" "yuzu" "$(get_setting_value "$rd_defaults" "yuzu" "retrodeck" "ask_to_exit")" "retrodeck" "ask_to_exit"
         fi
         if [[ "$action" == "postmove" ]]; then # Run only post-move commands
-          dir_prep "$bios_folder/switch/keys" "/var/data/yuzu/keys"
-          dir_prep "$bios_folder/switch/firmware" "/var/data/yuzu/nand/system/Contents/registered"
-          dir_prep "$saves_folder/switch/yuzu/nand" "/var/data/yuzu/nand"
-          dir_prep "$saves_folder/switch/yuzu/sdmc" "/var/data/yuzu/sdmc"
-          dir_prep "$logs_folder/yuzu" "/var/data/yuzu/log"
-          dir_prep "$screenshots_folder" "/var/data/yuzu/screenshots"
-          dir_prep "$mods_folder/Yuzu" "/var/data/yuzu/load"
+          dir_prep "$bios_folder/switch/keys" "$XDG_DATA_HOME/yuzu/keys"
+          dir_prep "$bios_folder/switch/firmware" "$XDG_DATA_HOME/yuzu/nand/system/Contents/registered"
+          dir_prep "$saves_folder/switch/yuzu/nand" "$XDG_DATA_HOME/yuzu/nand"
+          dir_prep "$saves_folder/switch/yuzu/sdmc" "$XDG_DATA_HOME/yuzu/sdmc"
+          dir_prep "$logs_folder/yuzu" "$XDG_DATA_HOME/yuzu/log"
+          dir_prep "$screenshots_folder" "$XDG_DATA_HOME/yuzu/screenshots"
+          dir_prep "$mods_folder/Yuzu" "$XDG_DATA_HOME/yuzu/load"
           set_setting_value "$yuzuconf" "nand_directory" "$saves_folder/switch/yuzu/nand" "yuzu" "Data%20Storage"
           set_setting_value "$yuzuconf" "sdmc_directory" "$saves_folder/switch/yuzu/sdmc" "yuzu" "Data%20Storage"
           set_setting_value "$yuzuconf" "Paths\gamedirs\4\path" "$roms_folder/switch" "yuzu" "UI"
@@ -800,8 +800,8 @@ prepare_component() {
         log i "Prepearing XEMU"
         log i "------------------------"
         if [[ $multi_user_mode == "true" ]]; then # Multi-user actions
-          rm -rf "/var/config/xemu"
-          rm -rf "/var/data/xemu"
+          rm -rf "$XDG_CONFIG_HOME/xemu"
+          rm -rf "$XDG_DATA_HOME/xemu"
           create_dir -d "$multi_user_data_folder/$SteamAppUser/config/xemu/"
           cp -fv "$config/xemu/xemu.toml" "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml"
           set_setting_value "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml" "screenshot_dir" "'$screenshots_folder'" "xemu" "General"
@@ -809,12 +809,12 @@ prepare_component() {
           set_setting_value "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml" "flashrom_path" "'$bios_folder/Complex.bin'" "xemu" "sys.files"
           set_setting_value "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml" "eeprom_path" "'$saves_folder/xbox/xemu/xbox-eeprom.bin'" "xemu" "sys.files"
           set_setting_value "$multi_user_data_folder/$SteamAppUser/config/xemu/xemu.toml" "hdd_path" "'$bios_folder/xbox_hdd.qcow2'" "xemu" "sys.files"
-          dir_prep "$multi_user_data_folder/$SteamAppUser/config/xemu" "/var/config/xemu" # Creating config folder in /var/config for consistentcy and linking back to original location where component will look
-          dir_prep "$multi_user_data_folder/$SteamAppUser/config/xemu" "/var/data/xemu/xemu"
+          dir_prep "$multi_user_data_folder/$SteamAppUser/config/xemu" "$XDG_CONFIG_HOME/xemu" # Creating config folder in $XDG_CONFIG_HOME for consistentcy and linking back to original location where component will look
+          dir_prep "$multi_user_data_folder/$SteamAppUser/config/xemu" "$XDG_DATA_HOME/xemu/xemu"
         else # Single-user actions
-          rm -rf "/var/config/xemu"
-          rm -rf "/var/data/xemu"
-          dir_prep "/var/config/xemu" "/var/data/xemu/xemu" # Creating config folder in /var/config for consistentcy and linking back to original location where component will look
+          rm -rf "$XDG_CONFIG_HOME/xemu"
+          rm -rf "$XDG_DATA_HOME/xemu"
+          dir_prep "$XDG_CONFIG_HOME/xemu" "$XDG_DATA_HOME/xemu/xemu" # Creating config folder in $XDG_CONFIG_HOME for consistentcy and linking back to original location where component will look
           cp -fv "$config/xemu/xemu.toml" "$xemuconf"
           set_setting_value "$xemuconf" "screenshot_dir" "'$screenshots_folder'" "xemu" "General"
           set_setting_value "$xemuconf" "bootrom_path" "'$bios_folder/mcpx_1.0.bin'" "xemu" "sys.files"
@@ -848,8 +848,8 @@ prepare_component() {
           log d "Figure out what Vita3k needs for multi-user"
         else # Single-user actions
           # NOTE: the component is writing in "." so it must be placed in the rw filesystem. A symlink of the binary is already placed in /app/bin/Vita3K
-          rm -rf "/var/config/Vita3K"
-          create_dir "/var/config/Vita3K"
+          rm -rf "$XDG_CONFIG_HOME/Vita3K"
+          create_dir "$XDG_CONFIG_HOME/Vita3K"
           cp -fvr "$config/vita3k/config.yml" "$vita3kconf" # component config
           cp -fvr "$config/vita3k/ux0" "$bios_folder/Vita3K/" # User config
           set_setting_value "$vita3kconf" "pref-path" "$bios_folder/Vita3K/" "vita3k"
@@ -878,45 +878,45 @@ prepare_component() {
       create_dir "$rdhome/screenshots/mame-sa"
       create_dir "$saves_folder/mame-sa/diff"
 
-      create_dir "/var/config/ctrlr"
-      create_dir "/var/config/mame/ini"
-      create_dir "/var/config/mame/cfg"
-      create_dir "/var/config/mame/inp"
+      create_dir "$XDG_CONFIG_HOME/ctrlr"
+      create_dir "$XDG_CONFIG_HOME/mame/ini"
+      create_dir "$XDG_CONFIG_HOME/mame/cfg"
+      create_dir "$XDG_CONFIG_HOME/mame/inp"
 
-      create_dir "/var/data/mame/plugin-data"
-      create_dir "/var/data/mame/hash"
+      create_dir "$XDG_DATA_HOME/mame/plugin-data"
+      create_dir "$XDG_DATA_HOME/mame/hash"
       create_dir "$bios_folder/mame-sa/samples"
-      create_dir "/var/data/mame/assets/artwork"
-      create_dir "/var/data/mame/assets/fonts"
-      create_dir "/var/data/mame/assets/crosshair"
-      create_dir "/var/data/mame/plugins"
-      create_dir "/var/data/mame/assets/language"
-      create_dir "/var/data/mame/assets/software"
-      create_dir "/var/data/mame/assets/comments"
-      create_dir "/var/data/mame/assets/share"
-      create_dir "/var/data/mame/dats"
-      create_dir "/var/data/mame/folders"
-      create_dir "/var/data/mame/assets/cabinets"
-      create_dir "/var/data/mame/assets/cpanel"
-      create_dir "/var/data/mame/assets/pcb"
-      create_dir "/var/data/mame/assets/flyers"
-      create_dir "/var/data/mame/assets/titles"
-      create_dir "/var/data/mame/assets/ends"
-      create_dir "/var/data/mame/assets/marquees"
-      create_dir "/var/data/mame/assets/artwork-preview"
-      create_dir "/var/data/mame/assets/bosses"
-      create_dir "/var/data/mame/assets/logo"
-      create_dir "/var/data/mame/assets/scores"
-      create_dir "/var/data/mame/assets/versus"
-      create_dir "/var/data/mame/assets/gameover"
-      create_dir "/var/data/mame/assets/howto"
-      create_dir "/var/data/mame/assets/select"
-      create_dir "/var/data/mame/assets/icons"
-      create_dir "/var/data/mame/assets/covers"
-      create_dir "/var/data/mame/assets/ui"
+      create_dir "$XDG_DATA_HOME/mame/assets/artwork"
+      create_dir "$XDG_DATA_HOME/mame/assets/fonts"
+      create_dir "$XDG_DATA_HOME/mame/assets/crosshair"
+      create_dir "$XDG_DATA_HOME/mame/plugins"
+      create_dir "$XDG_DATA_HOME/mame/assets/language"
+      create_dir "$XDG_DATA_HOME/mame/assets/software"
+      create_dir "$XDG_DATA_HOME/mame/assets/comments"
+      create_dir "$XDG_DATA_HOME/mame/assets/share"
+      create_dir "$XDG_DATA_HOME/mame/dats"
+      create_dir "$XDG_DATA_HOME/mame/folders"
+      create_dir "$XDG_DATA_HOME/mame/assets/cabinets"
+      create_dir "$XDG_DATA_HOME/mame/assets/cpanel"
+      create_dir "$XDG_DATA_HOME/mame/assets/pcb"
+      create_dir "$XDG_DATA_HOME/mame/assets/flyers"
+      create_dir "$XDG_DATA_HOME/mame/assets/titles"
+      create_dir "$XDG_DATA_HOME/mame/assets/ends"
+      create_dir "$XDG_DATA_HOME/mame/assets/marquees"
+      create_dir "$XDG_DATA_HOME/mame/assets/artwork-preview"
+      create_dir "$XDG_DATA_HOME/mame/assets/bosses"
+      create_dir "$XDG_DATA_HOME/mame/assets/logo"
+      create_dir "$XDG_DATA_HOME/mame/assets/scores"
+      create_dir "$XDG_DATA_HOME/mame/assets/versus"
+      create_dir "$XDG_DATA_HOME/mame/assets/gameover"
+      create_dir "$XDG_DATA_HOME/mame/assets/howto"
+      create_dir "$XDG_DATA_HOME/mame/assets/select"
+      create_dir "$XDG_DATA_HOME/mame/assets/icons"
+      create_dir "$XDG_DATA_HOME/mame/assets/covers"
+      create_dir "$XDG_DATA_HOME/mame/assets/ui"
       create_dir "$shaders_folder/mame/bgfx/"
 
-      dir_prep "$saves_folder/mame-sa/hiscore" "/var/config/mame/hiscore"
+      dir_prep "$saves_folder/mame-sa/hiscore" "$XDG_CONFIG_HOME/mame/hiscore"
       cp -fvr "$config/mame/mame.ini" "$mameconf"
       cp -fvr "$config/mame/ui.ini" "$mameuiconf"
       cp -fvr "$config/mame/default.cfg" "$mamedefconf"
@@ -944,17 +944,17 @@ prepare_component() {
       log i "Prepearing GZDOOM"
       log i "----------------------"
 
-      create_dir "/var/config/gzdoom"
-      create_dir "/var/data/gzdoom/audio/midi"
-      create_dir "/var/data/gzdoom/audio/fm_banks"
-      create_dir "/var/data/gzdoom/audio/soundfonts"
+      create_dir "$XDG_CONFIG_HOME/gzdoom"
+      create_dir "$XDG_DATA_HOME/gzdoom/audio/midi"
+      create_dir "$XDG_DATA_HOME/gzdoom/audio/fm_banks"
+      create_dir "$XDG_DATA_HOME/gzdoom/audio/soundfonts"
       create_dir "$bios_folder/gzdoom"
 
-      cp -fvr "$config/gzdoom/gzdoom.ini" "/var/config/gzdoom"
+      cp -fvr "$config/gzdoom/gzdoom.ini" "$XDG_CONFIG_HOME/gzdoom"
 
-      sed -i 's#RETRODECKHOMEDIR#'"$rdhome"'#g' "/var/config/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON
-      sed -i 's#RETRODECKROMSDIR#'"$roms_folder"'#g' "/var/config/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON
-      sed -i 's#RETRODECKSAVESDIR#'"$saves_folder"'#g' "/var/config/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON
+      sed -i 's#RETRODECKHOMEDIR#'"$rdhome"'#g' "$XDG_CONFIG_HOME/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON
+      sed -i 's#RETRODECKROMSDIR#'"$roms_folder"'#g' "$XDG_CONFIG_HOME/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON
+      sed -i 's#RETRODECKSAVESDIR#'"$saves_folder"'#g' "$XDG_CONFIG_HOME/gzdoom/gzdoom.ini" # This is an unfortunate one-off because set_setting_value does not currently support JSON
     fi
 
     if [[ "$component" =~ ^(portmaster|all)$ ]]; then
@@ -964,14 +964,14 @@ prepare_component() {
       log i "Prepearing PortMaster"
       log i "----------------------"
 
-      rm -rf "/var/data/PortMaster"
-      unzip "/app/retrodeck/PortMaster.zip" -d "/var/data/"
-      cp -f "/var/data/PortMaster/retrodeck/PortMaster.txt" "/var/data/PortMaster/PortMaster.sh"
-      chmod +x "/var/data/PortMaster/PortMaster.sh"
+      rm -rf "$XDG_DATA_HOME/PortMaster"
+      unzip "/app/retrodeck/PortMaster.zip" -d "$XDG_DATA_HOME/"
+      cp -f "$XDG_DATA_HOME/PortMaster/retrodeck/PortMaster.txt" "$XDG_DATA_HOME/PortMaster/PortMaster.sh"
+      chmod +x "$XDG_DATA_HOME/PortMaster/PortMaster.sh"
       rm -f "$roms_folder/portmaster/PortMaster.sh"
-      install -Dm755 "/var/data/PortMaster/PortMaster.sh" "$roms_folder/portmaster/PortMaster.sh"
-      create_dir "/var/data/PortMaster/config/"
-      cp "$config/portmaster/config.json" "/var/data/PortMaster/config/config.json"
+      install -Dm755 "$XDG_DATA_HOME/PortMaster/PortMaster.sh" "$roms_folder/portmaster/PortMaster.sh"
+      create_dir "$XDG_DATA_HOME/PortMaster/config/"
+      cp "$config/portmaster/config.json" "$XDG_DATA_HOME/PortMaster/config/config.json"
 
     fi
 
@@ -981,14 +981,14 @@ prepare_component() {
       log i "Prepearing Ruffle"
       log i "----------------------"
 
-      rm -rf "/var/config/ruffle"
+      rm -rf "$XDG_CONFIG_HOME/ruffle"
 
       # Ruffle creates a directory with the full rom paths in it, so this is necessary
       # TODO: be aware of this when multi user support will be integrated for this component
-      dir_prep "$saves_folder/flash" "/var/data/ruffle/SharedObjects/localhost/$roms_folder/flash"
+      dir_prep "$saves_folder/flash" "$XDG_DATA_HOME/ruffle/SharedObjects/localhost/$roms_folder/flash"
 
       if [[ "$action" == "postmove" ]]; then # Run only post-move commands
-        dir_prep "$saves_folder/flash" "/var/data/ruffle/SharedObjects/localhost/$roms_folder/flash"
+        dir_prep "$saves_folder/flash" "$XDG_DATA_HOME/ruffle/SharedObjects/localhost/$roms_folder/flash"
       fi
       
     fi
