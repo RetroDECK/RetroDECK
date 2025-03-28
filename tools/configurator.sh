@@ -77,6 +77,7 @@ rd_zenity --progress --no-cancel --pulsate --auto-close \
 #       - Add RetroDECK to Steam
 #       - M3U Multi-File Validator
 #       - Repair RetroDECK paths
+#       - Change logging level
 #       - Ponzu: Remove Yuzu
 #       - Ponzu: Remove Citra
 #     - Steam Sync
@@ -444,6 +445,7 @@ configurator_tools_dialog() {
   "Add RetroDECK to Steam" "Add RetroDECK shortcut to Steam. Steam restart required."
   "M3U Multi-File Validator" "Verify the proper structure of multi-file or multi-disc games."
   "Repair RetroDECK Paths" "Repair RetroDECK folder path configs for unexpectedly missing folders."
+  "Change Logging Level" "Change the RetroDECK logging level, for debugging purposes"
   )
 
   if [[ $(get_setting_value "$rd_conf" "kiroi_ponzu" "retrodeck" "options") == "true" ]]; then
@@ -605,6 +607,46 @@ configurator_tools_dialog() {
   "Repair RetroDECK Paths" )
     log i "Configurator: opening \"$choice\" menu"
     repair_paths
+    configurator_tools_dialog
+  ;;
+
+  "Change Logging Level" )
+    log i "Configurator: opening \"$choice\" menu"
+    choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - RetroDECK: Change Logging Level" --cancel-label="Back" \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+    --column="Choice" --column="Action" \
+    "Informational" "The default, only logs important information." \
+    "Warnings" "Additionally log warnings." \
+    "Errors" "Additionally log warnings and errors." \
+    "Debug" "Log everything, may generate a lot of logs!." \)
+
+    case $choice in
+
+    "Informational" )
+      log i "Configurator: Changing logging level to \"$choice\""
+      set_setting_value "$rd_conf" "logging_level" "info" "retrodeck" "options"
+    ;;
+
+    "Warnings" )
+      log i "Configurator: Changing logging level to \"$choice\""
+      set_setting_value "$rd_conf" "logging_level" "warn" "retrodeck" "options"
+    ;;
+
+    "Errors" )
+      log i "Configurator: Changing logging level to \"$choice\""
+      set_setting_value "$rd_conf" "logging_level" "error" "retrodeck" "options"
+    ;;
+
+    "Debug" )
+      log i "Configurator: Changing logging level to \"$choice\""
+      set_setting_value "$rd_conf" "logging_level" "debug" "retrodeck" "options"
+    ;;
+
+    "" ) # No selection made or Back button clicked
+    log i "Configurator: going back"
+    ;;
+
+    esac
     configurator_tools_dialog
   ;;
 
