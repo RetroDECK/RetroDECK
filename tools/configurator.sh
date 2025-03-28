@@ -980,7 +980,7 @@ configurator_portmaster_toggle_dialog(){
       --title "RetroDECK Configurator - PortMaster Visibility" \
       --text="PortMaster is now <span foreground='$purple'><b>hidden</b></span> in ES-DE.\nPlease refresh your game list or restart RetroDECK to see the changes.\n\nIn order to launch PortMaster, you can access it from:\n<span foreground='$purple'><b>Configurator -> Open Component -> PortMaster</b></span>."
     else # User clicked "Cancel"
-      configurator_tools_dialog
+      configurator_global_presets_and_settings_dialog
     fi
   else
     rd_zenity --question \
@@ -996,10 +996,10 @@ configurator_portmaster_toggle_dialog(){
       --title "RetroDECK Configurator - PortMaster Visibility" \
       --text="PortMaster is now <span foreground='$purple'><b>visible</b></span> in ES-DE.\nPlease refresh your game list or restart RetroDECK to see the changes."
     else # User clicked "Cancel"
-      configurator_tools_dialog
+      configurator_global_presets_and_settings_dialog
     fi
   fi
-  configurator_tools_dialog
+  configurator_global_presets_and_settings_dialog
 }
 
 # This function checks and verifies BIOS files for RetroDECK.
