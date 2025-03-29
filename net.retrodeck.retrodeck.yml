@@ -89,7 +89,7 @@ modules:
         # Check out the current Git branch
         git checkout ${GITHUB_REF_NAME}
 
-        # Create the retrodeck directory in the Flatpak destination
+        # Prepare needed directories
         mkdir -p ${FLATPAK_DEST}/retrodeck/
         mkdir -p ${FLATPAK_DEST}/bin/bundled-components/
 
@@ -397,15 +397,21 @@ modules:
   - name: pcsx2
     buildsystem: simple
     build-commands:
-      # Step 1: Ensure the AppImage is executable
+      # Step 1: Move the component binary to the bin directory
+      - install -Dm755 pcsx2-qt ${FLATPAK_DEST}/bin/pcsx2-qt
+      # Step 2: Ensure the AppImage is executable
       - chmod +x *.AppImage
-      # Step 2: Extract the AppImage
+      # Step 3: Extract the AppImage
       - ./*.AppImage --appimage-extract
-      # Step 3: Use libman.sh to handle library files
-      - /app/bin/libman.sh "squashfs-root/usr/lib"
-      # Step 4: Copy the remaining extracted files to the Flatpak destination
-      - find squashfs-root/usr/ -exec sh -c 'install -Dm755 "{}" "${FLATPAK_DEST}/$(echo "{}" | sed "s|^squashfs-root/usr||")"' \;
+      # Step 4: moving the extracted AppImage to the components folder
+      - mv squashfs-root ${FLATPAK_DEST}/bin/bundled-components/pcsx2-qt
     sources:
+      - type: script
+        commands:
+          - |
+            cd /app/bin/bundled-components/pcsx2-qt/
+            ./AppRun "$@"
+        dest-filename: pcsx2-qt
       - type: file
         url: https://github.com/PCSX2/pcsx2/releases/download/v2.3.245/pcsx2-v2.3.245-linux-appimage-x64-Qt.AppImage
         sha256: 1504fe8236c6dbadffa77a7a6287c3cce1f6e4c3f17b66b240e766d33ad87c1e
