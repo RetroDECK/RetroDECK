@@ -14,6 +14,8 @@ Arguments:
     --configurator                      \t  Starts the RetroDECK Configurator
     --compress-one <file>               \t  Compresses target file to a compatible format
     --compress-all <format>             \t  Compresses all supported games into a compatible format.\n\t\t\t\t\t\t  Available formats are \"chd\", \"zip\", \"rvz\" and \"all\"
+    --steam-sync                        \t  Run the Steam ROM Manager sync process to update all ES-DE favorites in Steam
+    --repair-paths                      \t  Reconfigure broken folder locations in RetroDECK without a full reset
     --reset <component>                 \t  Reset RetroDECK or one or more component/emulator configurations to default values. WARNING: no confirmation prompt
     --factory-reset                     \t  Factory Reset, triggers the initial setup WARNING: no confirmation prompt
     --test-upgrade <version>            \t  Test upgrading RetroDECK to a specific version, developer use only
@@ -108,6 +110,10 @@ while [[ $# -gt 0 ]]; do
         --compress-all)
             cli_compress_all_games "$2"
             shift 2
+            ;;
+        --steam-sync)
+            steam_sync
+            exit 0
             ;;
         --repair-paths)
             repair_paths

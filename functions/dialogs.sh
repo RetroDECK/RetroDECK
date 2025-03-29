@@ -65,7 +65,7 @@ configurator_destination_choice_dialog() {
   if [[ $rc == "0" ]] && [[ -z "$choice" ]]; then
     echo "Back"
   else
-    echo $choice
+    echo "$choice"
   fi
 }
 
@@ -88,7 +88,7 @@ configurator_move_folder_dialog() {
   # USAGE: configurator_move_folder_dialog "folder_variable_name"
   local rd_dir_name="$1" # The folder variable name from retrodeck.cfg
   local dir_to_move="$(get_setting_value "$rd_conf" "$rd_dir_name" "retrodeck" "paths")/" # The path of that folder variable
-  local source_root="$(echo $dir_to_move | sed -e 's/\(.*\)\/retrodeck\/.*/\1/')" # The root path of the folder, excluding retrodeck/<folder name>. So /home/deck/retrodeck/roms becomes /home/deck
+  local source_root="$(echo "$dir_to_move" | sed -e 's/\(.*\)\/retrodeck\/.*/\1/')" # The root path of the folder, excluding retrodeck/<folder name>. So /home/deck/retrodeck/roms becomes /home/deck
   if [[ ! "$rd_dir_name" == "rdhome" ]]; then # If a sub-folder is being moved, find it's path without the source_root. So /home/deck/retrodeck/roms becomes retrodeck/roms
     local rd_dir_path="$(echo "$dir_to_move" | sed "s/.*\(retrodeck\/.*\)/\1/; s/\/$//")"
   else # Otherwise just set the retrodeck root folder
@@ -114,7 +114,7 @@ configurator_move_folder_dialog() {
           configurator_generic_dialog "RetroDECK Configurator - Move Folder" "The $(basename "$dir_to_move") folder is already at that location, please pick a new one."
           configurator_move_folder_dialog "$rd_dir_name"
         else
-          if [[ $(verify_space "$(echo $dir_to_move | sed 's/\/$//')" "$dest_root") ]]; then # Make sure there is enough space at the destination
+          if [[ $(verify_space "$(echo "$dir_to_move" | sed 's/\/$//')" "$dest_root") ]]; then # Make sure there is enough space at the destination
             configurator_generic_dialog "RetroDECK Configurator - Move Folder" "Moving $(basename "$dir_to_move") folder to $choice"
             unlink "$dest_root/$rd_dir_path" # In case there is already a symlink at the picked destination
             move "$dir_to_move" "$dest_root/$rd_dir_path"
@@ -168,28 +168,28 @@ changelog_dialog() {
   log d "Showing changelog dialog"
 
   if [[ "$1" == "all" ]]; then
-    > "/var/config/retrodeck/changelog-full.xml"
-    for release in $(xml sel -t -m "//component/releases/release" -v "@version" -n $rd_metainfo); do
-      echo "<h1>RetroDECK v$release</h1>" >> "/var/config/retrodeck/changelog-full.xml"
-      xml sel -t -m "//component/releases/release[@version='$release']/description" -c . $rd_metainfo | tr -s '\n' | sed 's/^\s*//' >> "/var/config/retrodeck/changelog-full.xml"
-      echo "" >> "/var/config/retrodeck/changelog-full.xml"
+    > "$XDG_CONFIG_HOME/retrodeck/changelog-full.xml"
+    for release in $(xml sel -t -m "//component/releases/release" -v "@version" -n "$rd_metainfo"); do
+      echo "<h1>RetroDECK v$release</h1>" >> "$XDG_CONFIG_HOME/retrodeck/changelog-full.xml"
+      xml sel -t -m "//component/releases/release[@version='"$release"']/description" -c . "$rd_metainfo" | tr -s '\n' | sed 's/^\s*//' >> "$XDG_CONFIG_HOME/retrodeck/changelog-full.xml"
+      echo "" >> "$XDG_CONFIG_HOME/retrodeck/changelog-full.xml"
     done
 
-    #convert_to_markdown "/var/config/retrodeck/changelog-full.xml"
+    #convert_to_markdown "$XDG_CONFIG_HOME/retrodeck/changelog-full.xml"
 
     rd_zenity --icon-name=net.retrodeck.retrodeck --text-info --width=1200 --height=720 \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Changelogs" \
-    --filename="/var/config/retrodeck/changelog-full.xml.md"
+    --filename="$XDG_CONFIG_HOME/retrodeck/changelog-full.xml.md"
   else
-    xml sel -t -m "//component/releases/release[@version='$1']/description" -c . $rd_metainfo | tr -s '\n' | sed 's/^\s*//' > "/var/config/retrodeck/changelog.xml"
+    xml sel -t -m "//component/releases/release[@version='"$1"']/description" -c . "$rd_metainfo" | tr -s '\n' | sed 's/^\s*//' > "$XDG_CONFIG_HOME/retrodeck/changelog.xml"
 
-    convert_to_markdown "/var/config/retrodeck/changelog.xml"
+    convert_to_markdown "$XDG_CONFIG_HOME/retrodeck/changelog.xml"
 
     rd_zenity --icon-name=net.retrodeck.retrodeck --text-info --width=1200 --height=720 \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Changelogs" \
-    --filename="/var/config/retrodeck/changelog.xml.md"
+    --filename="$XDG_CONFIG_HOME/retrodeck/changelog.xml.md"
   fi
 }
 
@@ -204,9 +204,9 @@ get_cheevos_token_dialog() {
   --add-password="Password")
 
   IFS='^' read -r cheevos_username cheevos_password < <(printf '%s\n' "$cheevos_info")
-  local cheevos_response=$(curl --silent --data "r=login&u=$cheevos_username&p=$cheevos_password" $RA_API_URL)
-  local cheevos_success=$(echo $cheevos_response | jq .Success | tr -d '"')
-  local cheevos_token=$(echo $cheevos_response | jq .Token | tr -d '"')
+  local cheevos_response=$(curl --silent --data "r=login&u=$cheevos_username&p=$cheevos_password" "$RA_API_URL")
+  local cheevos_success=$(echo "$cheevos_response" | jq .Success | tr -d '"')
+  local cheevos_token=$(echo "$cheevos_response" | jq .Token | tr -d '"')
   local cheevos_login_timestamp=$(date +%s)
   if [[ "$cheevos_success" == "true" ]]; then
     echo "$cheevos_username,$cheevos_token,$cheevos_login_timestamp"
@@ -235,7 +235,7 @@ desktop_mode_warning() {
         exit 1
       elif [[ $choice == "Never show this again" ]]; then
         log i "Selected: \"Never show this again\""
-        set_setting_value $rd_conf "desktop_mode_warning" "false" retrodeck "options" # Store desktop mode warning variable for future checks
+        set_setting_value "$rd_conf" "desktop_mode_warning" "false" retrodeck "options" # Store desktop mode warning variable for future checks
       fi
     else
       log i "Selected: \"Yes\""
@@ -258,7 +258,7 @@ low_space_warning() {
       --text="$message")
       if [[ $choice == "Never show this again" ]]; then
         log i "Selected: \"Never show this again\""
-        set_setting_value $rd_conf "low_space_warning" "false" retrodeck "options" # Store low space warning variable for future checks
+        set_setting_value "$rd_conf" "low_space_warning" "false" retrodeck "options" # Store low space warning variable for future checks
       fi
     fi
     log i "Selected: \"OK\""

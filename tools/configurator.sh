@@ -77,6 +77,7 @@ rd_zenity --progress --no-cancel --pulsate --auto-close \
 #       - Add RetroDECK to Steam
 #       - M3U Multi-File Validator
 #       - Repair RetroDECK paths
+#       - Change logging level
 #       - Ponzu: Remove Yuzu
 #       - Ponzu: Remove Citra
 #     - Steam Sync
@@ -156,7 +157,7 @@ configurator_welcome_dialog() {
   ;;
 
   "Steam Sync" )
-    configurator_steam_sync
+    configurator_steam_sync_dialog
   ;;
 
   "Developer Options" )
@@ -444,6 +445,7 @@ configurator_tools_dialog() {
   "Add RetroDECK to Steam" "Add RetroDECK shortcut to Steam. Steam restart required."
   "M3U Multi-File Validator" "Verify the proper structure of multi-file or multi-disc games."
   "Repair RetroDECK Paths" "Repair RetroDECK folder path configs for unexpectedly missing folders."
+  "Change Logging Level" "Change the RetroDECK logging level, for debugging purposes"
   )
 
   if [[ $(get_setting_value "$rd_conf" "kiroi_ponzu" "retrodeck" "options") == "true" ]]; then
@@ -605,6 +607,46 @@ configurator_tools_dialog() {
   "Repair RetroDECK Paths" )
     log i "Configurator: opening \"$choice\" menu"
     repair_paths
+    configurator_tools_dialog
+  ;;
+
+  "Change Logging Level" )
+    log i "Configurator: opening \"$choice\" menu"
+    choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - RetroDECK: Change Logging Level" --cancel-label="Back" \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+    --column="Choice" --column="Action" \
+    "Informational" "The default, only logs important information." \
+    "Warnings" "Additionally log warnings." \
+    "Errors" "Additionally log warnings and errors." \
+    "Debug" "Log everything, may generate a lot of logs!." \)
+
+    case $choice in
+
+    "Informational" )
+      log i "Configurator: Changing logging level to \"$choice\""
+      set_setting_value "$rd_conf" "logging_level" "info" "retrodeck" "options"
+    ;;
+
+    "Warnings" )
+      log i "Configurator: Changing logging level to \"$choice\""
+      set_setting_value "$rd_conf" "logging_level" "warn" "retrodeck" "options"
+    ;;
+
+    "Errors" )
+      log i "Configurator: Changing logging level to \"$choice\""
+      set_setting_value "$rd_conf" "logging_level" "error" "retrodeck" "options"
+    ;;
+
+    "Debug" )
+      log i "Configurator: Changing logging level to \"$choice\""
+      set_setting_value "$rd_conf" "logging_level" "debug" "retrodeck" "options"
+    ;;
+
+    "" ) # No selection made or Back button clicked
+    log i "Configurator: going back"
+    ;;
+
+    esac
     configurator_tools_dialog
   ;;
 
@@ -980,7 +1022,7 @@ configurator_portmaster_toggle_dialog(){
       --title "RetroDECK Configurator - PortMaster Visibility" \
       --text="PortMaster is now <span foreground='$purple'><b>hidden</b></span> in ES-DE.\nPlease refresh your game list or restart RetroDECK to see the changes.\n\nIn order to launch PortMaster, you can access it from:\n<span foreground='$purple'><b>Configurator -> Open Component -> PortMaster</b></span>."
     else # User clicked "Cancel"
-      configurator_tools_dialog
+      configurator_global_presets_and_settings_dialog
     fi
   else
     rd_zenity --question \
@@ -996,10 +1038,10 @@ configurator_portmaster_toggle_dialog(){
       --title "RetroDECK Configurator - PortMaster Visibility" \
       --text="PortMaster is now <span foreground='$purple'><b>visible</b></span> in ES-DE.\nPlease refresh your game list or restart RetroDECK to see the changes."
     else # User clicked "Cancel"
-      configurator_tools_dialog
+      configurator_global_presets_and_settings_dialog
     fi
   fi
-  configurator_tools_dialog
+  configurator_global_presets_and_settings_dialog
 }
 
 # This function checks and verifies BIOS files for RetroDECK.
@@ -1217,32 +1259,71 @@ configurator_about_retrodeck_dialog() {
   esac
 }
 
-configurator_steam_sync() {
-  if [[ $(get_setting_value "$rd_conf" "steam_sync" retrodeck "options") == "true" ]]; then
-    zenity --question \
-    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - RetroDECK Steam Syncronization" \
-    --text="Steam syncronization is <span foreground='$purple'><b>currently enabled</b></span>.\nDisabling Steam Sync will remove all of your favorites from Steam at the next Steam startup.\n\nDo you want to continue?\n\nTo re-add them, just reenable Steam Sync then and restart Steam."
+configurator_steam_sync_dialog() {
 
-    if [ $? == 0 ] # User clicked "Yes"
-    then
-      configurator_disable_steam_sync
-    else # User clicked "Cancel"
-      configurator_welcome_dialog
-    fi
-  else
-    zenity --question \
-    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator - RetroDECK Steam Syncronization" \
-    --text="Steam synchronization is <span foreground='$purple'><b>currently disabled</b></span>. Do you want to enable it?\n\nAll the games marked as favorites will be synchronized with Steam ROM Manager.\nRemember to restart Steam each time to see the changes.\n\n<span foreground='$purple'><b>NOTE: games with unusual characters such as &apos;/\{}&lt;&gt;* might break the sync, please refer to the Wiki for more info.</b></span>"
+  choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - Steam Sync" --cancel-label="Back" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+  --column="Choice" --column="Description" \
+  "Enable/Disable Automatic Steam Sync" "Enable or disable automatic Steam Sync, where ES-DE favorites will be synced to Steam when RetroDECK quits." \
+  "Manual Steam Sync" "Perform a one-time manual sync of ES-DE favorites to Steam." \
+  "Purge Steam Sync Shortcuts" "Perform a full Steam ROM Manager purge of all favorites, in case things have gotten messed up." )
 
-    if [ $? == 0 ]
-    then
-      configurator_enable_steam_sync
+  case $choice in
+
+  "Enable/Disable Automatic Steam Sync" )
+    log i "Configurator: opening \"$choice\" menu"
+    if [[ $(get_setting_value "$rd_conf" "steam_sync" retrodeck "options") == "true" ]]; then
+      zenity --question \
+      --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Configurator - RetroDECK Steam Syncronization" \
+      --text="Steam syncronization is <span foreground='$purple'><b>currently enabled</b></span>.\nDisabling Steam Sync will remove all of your favorites from Steam at the next Steam startup.\n\nDo you want to continue?\n\nTo re-add them, just reenable Steam Sync then and restart Steam."
+
+      if [ $? == 0 ] # User clicked "Yes"
+      then
+        configurator_disable_steam_sync
+      fi
     else
-      configurator_welcome_dialog
+      zenity --question \
+      --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Configurator - RetroDECK Steam Syncronization" \
+      --text="Steam synchronization is <span foreground='$purple'><b>currently disabled</b></span>. Do you want to enable it?\n\nAll the games marked as favorites will be synchronized with Steam ROM Manager.\nRemember to restart Steam each time to see the changes.\n\n<span foreground='$purple'><b>NOTE: games with unusual characters such as &apos;/\{}&lt;&gt;* might break the sync, please refer to the Wiki for more info.</b></span>"
+
+      if [ $? == 0 ]
+      then
+        configurator_enable_steam_sync
+      fi
     fi
-  fi
+    configurator_steam_sync_dialog
+  ;;
+
+  "Manual Steam Sync" )
+    log i "Configurator: opening \"$choice\" menu"
+    export CONFIGURATOR_GUI="zenity"
+    steam_sync
+    configurator_steam_sync_dialog
+  ;;
+
+  "Purge Steam Sync Shortcuts" )
+    log i "Configurator: opening \"$choice\" menu"
+    if [[ $(configurator_generic_question_dialog "RetroDECK Configurator - Steam Sync" "Are you sure you want to remove all Steam ROM Manager changes, including all RetroDECK shortcuts from Steam?" ) == "true" ]]; then
+      (
+      steam-rom-manager nuke
+      ) |
+      rd_zenity --progress \
+      --title="Removing all RetroDECK Steam Sync information" \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --text="<span foreground='$purple'><b>\t\t\t\tRemoving all RetroDECK-related data from Steam</b></span>\n\nPlease wait..." \
+      --pulsate --width=500 --height=150 --auto-close --no-cancel
+    fi
+    configurator_steam_sync_dialog
+  ;;
+
+  "" ) # No selection made or Back button clicked
+    log i "Configurator: going back"
+    configurator_welcome_dialog
+  ;;
+
+  esac
 }
 
 configurator_enable_steam_sync() {
@@ -1253,7 +1334,6 @@ configurator_enable_steam_sync() {
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Configurator - RetroDECK Steam Syncronization" \
       --text="Steam syncronization enabled."
-  configurator_welcome_dialog
 }
 
 configurator_disable_steam_sync() {
@@ -1276,7 +1356,6 @@ configurator_disable_steam_sync() {
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Configurator - RetroDECK Steam Syncronization" \
       --text="Steam syncronization disabled and shortcuts removed, restart Steam to apply the changes."
-  configurator_welcome_dialog
 }
 
 configurator_version_history_dialog() {

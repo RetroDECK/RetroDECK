@@ -389,8 +389,8 @@ find_emulator() {
     while IFS= read -r line; do
         command_path=$(echo "$line" | sed -n 's/.*<entry>\(.*\)<\/entry>.*/\1/p')
         # Check if the command specified by the variable 'command_path' exists and is executable
-        if [ -x "$(command -v $command_path)" ]; then
-            found_path=$command_path
+        if [ -x "$(command -v "$command_path")" ]; then
+            found_path="$command_path"
             break
         fi
     done <<< "$(echo "$emulator_section" | xmllint --xpath "//rule[@type='systempath']/entry" - 2>/dev/null)"
@@ -400,7 +400,7 @@ find_emulator() {
         while IFS= read -r line; do
             command_path=$(echo "$line" | sed -n 's/.*<entry>\(.*\)<\/entry>.*/\1/p')
             if [ -x "$command_path" ]; then
-                found_path=$command_path
+                found_path="$command_path"
                 break
             fi
         done <<< "$(echo "$emulator_section" | xmllint --xpath "//rule[@type='staticpath']/entry" - 2>/dev/null)"
