@@ -83,11 +83,11 @@ modules:
       - |
 
         # VERSION INITIALIZATION
-        # Extract the version number from the metainfo XML file
-        VERSION=$(xmlstarlet sel -t -v "/component/releases/release[1]/@version" net.retrodeck.retrodeck.metainfo.xml)
         # If the current Git branch is not 'main', append 'cooker-' to the version number
         if [[ "${GITHUB_REF_NAME}" != "main" ]]; then
-          VERSION="cooker-$VERSION"
+          VERSION="cooker-$(cat ./version)-$(cat buildid)"
+        else # Otherwise, if we're on main, use the version number as is
+          VERSION=$(cat ./version)
         fi
 
         # Check out the current Git branch
@@ -95,11 +95,6 @@ modules:
 
         # Create the retrodeck directory in the Flatpak destination
         mkdir -p ${FLATPAK_DEST}/retrodeck/
-
-        # If the version contains "cooker", append "-VERSIONPLACEHOLDER" to the version number
-        if [[ $VERSION == *"cooker"* ]]; then
-          VERSION="$VERSION-VERSIONPLACEHOLDER"
-        fi
 
         # Write the version number to the retrodeck version file
         echo $VERSION >> ${FLATPAK_DEST}/retrodeck/version

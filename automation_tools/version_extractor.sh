@@ -3,12 +3,9 @@
 # This script is intended to gather version information from various sources:
 # RetroDECK repository
 # Metainfo.xml file
-# Manifest YAML file
 # It consists of three functions, each responsible for retrieving a specific version-related data.
 
 metainfo="net.retrodeck.retrodeck.metainfo.xml"
-manifest="net.retrodeck.retrodeck.yml"
-manifest_content=$(cat "$manifest")
 
 fetch_repo_version(){
     # Getting latest RetroDECK release info
@@ -20,17 +17,9 @@ fetch_repo_version(){
 }
 
 fetch_metainfo_version(){
-    # Extract the version from the net.retrodeck.retrodeck.metainfo.xml file
-    metainfo_version=$(grep -oPm1 "(?<=<release version=\")[^\"]+" "$metainfo")
-    echo "$metainfo_version"
-}
-
-fetch_manifest_version(){
-    # Use awk to extract the value of the first iteration of VERSION variable
-    manifest_version=$(echo "$manifest_content" | awk '/VERSION=/ && !/#/ { sub(/.*VERSION=/, ""); sub(/#.*/, ""); print; exit }')
-    # Trim leading and trailing whitespace
-    manifest_version=$(echo "$manifest_version" | awk '{$1=$1;print}')
-    echo "$manifest_version"
+    # Extract the version number from the metainfo XML file
+    VERSION=$(xmlstarlet sel -t -v "/component/releases/release[1]/@version" net.retrodeck.retrodeck.metainfo.xml)
+    echo "$VERSION"
 }
 
 echo "Version extractor functions loaded"

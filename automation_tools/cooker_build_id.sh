@@ -8,3 +8,9 @@ result=$capitalized_word1$capitalized_word2
 echo $result > ${GITHUB_WORKSPACE}/buildid
 echo "BUILD_ID=$result" >> $GITHUB_ENV
 echo "VersionID is $result"
+
+source automation_tools/version_extractor.sh
+VERSION=$(fetch_metainfo_version)
+echo "$VERSION" > ${GITHUB_WORKSPACE}/version
+echo "VERSION=$VERSION" >> $GITHUB_ENV
+echo "Version is $VERSION"
