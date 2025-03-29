@@ -641,6 +641,7 @@ modules:
         path: config/gzdoom/gzdoom.sh
 
   # Pancakes
+  # Legacy: do not update
   # NOTE: if this module breaks, might be caused by SDL2 version mismatch. Check last line of this module.
   - name: Pancakes
     buildsystem: simple
