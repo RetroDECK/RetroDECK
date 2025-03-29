@@ -389,7 +389,7 @@ modules:
       url: https://github.com/Saramagrean/CWCheat-Database-Plus-
       branch: master
 
-  # PCSX2 - FROZEN UNTIL QT 6.8 UPDATE
+  # PCSX2
   # Inspired by: https://github.com/flathub/com.zettlr.Zettlr/blob/master/com.zettlr.Zettlr.yaml
   # https://pcsx2.net/downloads/
 
@@ -406,8 +406,8 @@ modules:
       - find squashfs-root/usr/ -exec sh -c 'install -Dm755 "{}" "${FLATPAK_DEST}/$(echo "{}" | sed "s|^squashfs-root/usr||")"' \;
     sources:
       - type: file
-        url: https://github.com/PCSX2/pcsx2/releases/download/v2.1.190/pcsx2-v2.1.190-linux-appimage-x64-Qt.AppImage
-        sha256: 6a83a7bc499ad4ef4940aa2df08624876b452998f897ebdb8f8d7687c9035b79
+        url: https://github.com/PCSX2/pcsx2/releases/download/v2.3.245/pcsx2-v2.3.245-linux-appimage-x64-Qt.AppImage
+        sha256: 1504fe8236c6dbadffa77a7a6287c3cce1f6e4c3f17b66b240e766d33ad87c1e
 
   - name: pcsx2-cheats
     buildsystem: simple
