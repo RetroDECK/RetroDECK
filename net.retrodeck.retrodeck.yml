@@ -83,12 +83,8 @@ modules:
       - |
 
         # VERSION INITIALIZATION
-        # If the current Git branch is not 'main', append 'cooker-' to the version number
-        if [[ "${GITHUB_REF_NAME}" != "main" ]]; then
-          VERSION="cooker-$(cat ./version)-$(cat buildid)"
-        else # Otherwise, if we're on main, use the version number as is
-          VERSION=$(cat ./version)
-        fi
+        source "automation_tools/version_extractor.sh"
+        VERSION=$(fetch_actual_version)
 
         # Check out the current Git branch
         git checkout ${GITHUB_REF_NAME}

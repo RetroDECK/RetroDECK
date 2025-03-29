@@ -106,20 +106,20 @@ jobs:
       - name: Generate Version Tag
         id: version-tag
         run: |
-          # Source the version extractor script and fetch the manifest version
+          # Source the version extractor script and fetch the actual version, including the build ID
           source automation_tools/version_extractor.sh
-          MANIFEST_VERSION="$(fetch_manifest_version)"
+          VERSION="$(fetch_actual_version)"
 
-          # Ensure the manifest version was successfully extracted
-          if [[ -z "$MANIFEST_VERSION" ]]; then
-            echo "[ERROR] Failed to extract the manifest version."
+          # Ensure the actual version was successfully extracted
+          if [[ -z "$VERSION" ]]; then
+            echo "[ERROR] Failed to extract the actual version."
             exit 1
           fi
 
           # Determine the tag based on the GitHub event context
           if [[ "$GITHUB_REF" == "refs/heads/main" ]]; then
             # Main branch tag
-            TAG="$MANIFEST_VERSION"
+            TAG="$VERSION"
             MAKE_LATEST=true
           elif [[ "$GITHUB_EVENT_NAME" == "pull_request" || "$GITHUB_EVENT_NAME" == "pull_request_target" ]]; then
             # Pull request tag, sanitize the source branch
@@ -128,7 +128,7 @@ jobs:
             MAKE_LATEST=false
           else
             # Other branches (cooker branches)
-            TAG="$MANIFEST_VERSION-${{ env.BUILD_ID }}"
+            TAG="$VERSION-${{ env.BUILD_ID }}"
             MAKE_LATEST=true
           fi
 
