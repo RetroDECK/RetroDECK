@@ -1,6 +1,6 @@
 app-id: net.retrodeck.retrodeck
 runtime: org.kde.Platform
-runtime-version: &runtime-version "6.7"
+runtime-version: &runtime-version "6.8"
 sdk: org.kde.Sdk
 base: org.electronjs.Electron2.BaseApp            # Needed for Steam ROM Manager
 base-version: "22.08"
@@ -89,8 +89,9 @@ modules:
         # Check out the current Git branch
         git checkout ${GITHUB_REF_NAME}
 
-        # Create the retrodeck directory in the Flatpak destination
+        # Prepare needed directories
         mkdir -p ${FLATPAK_DEST}/retrodeck/
+        mkdir -p ${FLATPAK_DEST}/bin/bundled-components/
 
         # Write the version number to the retrodeck version file
         echo $VERSION >> ${FLATPAK_DEST}/retrodeck/version
@@ -389,25 +390,31 @@ modules:
       url: https://github.com/Saramagrean/CWCheat-Database-Plus-
       branch: master
 
-  # PCSX2 - FROZEN UNTIL QT 6.8 UPDATE
+  # PCSX2
   # Inspired by: https://github.com/flathub/com.zettlr.Zettlr/blob/master/com.zettlr.Zettlr.yaml
   # https://pcsx2.net/downloads/
 
   - name: pcsx2
     buildsystem: simple
     build-commands:
-      # Step 1: Ensure the AppImage is executable
+      # Step 1: Move the component binary to the bin directory
+      - install -Dm755 pcsx2-qt ${FLATPAK_DEST}/bin/pcsx2-qt
+      # Step 2: Ensure the AppImage is executable
       - chmod +x *.AppImage
-      # Step 2: Extract the AppImage
+      # Step 3: Extract the AppImage
       - ./*.AppImage --appimage-extract
-      # Step 3: Use libman.sh to handle library files
-      - /app/bin/libman.sh "squashfs-root/usr/lib"
-      # Step 4: Copy the remaining extracted files to the Flatpak destination
-      - find squashfs-root/usr/ -exec sh -c 'install -Dm755 "{}" "${FLATPAK_DEST}/$(echo "{}" | sed "s|^squashfs-root/usr||")"' \;
+      # Step 4: moving the extracted AppImage to the components folder
+      - mv squashfs-root ${FLATPAK_DEST}/bin/bundled-components/pcsx2-qt
     sources:
+      - type: script
+        commands:
+          - |
+            cd /app/bin/bundled-components/pcsx2-qt/
+            ./AppRun "$@"
+        dest-filename: pcsx2-qt
       - type: file
-        url: https://github.com/PCSX2/pcsx2/releases/download/v2.1.190/pcsx2-v2.1.190-linux-appimage-x64-Qt.AppImage
-        sha256: 6a83a7bc499ad4ef4940aa2df08624876b452998f897ebdb8f8d7687c9035b79
+        url: https://github.com/PCSX2/pcsx2/releases/download/v2.3.245/pcsx2-v2.3.245-linux-appimage-x64-Qt.AppImage
+        sha256: 1504fe8236c6dbadffa77a7a6287c3cce1f6e4c3f17b66b240e766d33ad87c1e
 
   - name: pcsx2-cheats
     buildsystem: simple
@@ -556,8 +563,8 @@ modules:
       - install -Dm755 Cemu-wrapper "${FLATPAK_DEST}/bin/"
     sources:
       - type: file
-        url: https://github.com/cemu-project/Cemu/releases/download/v2.4/Cemu-2.4-x86_64.AppImage
-        sha256: 92a1f081230809bd0ac30b228f72c6d8c7aa7eaa3e56df4cf8ad54d4c9927097
+        url: https://github.com/cemu-project/Cemu/releases/download/v2.6/Cemu-2.6-x86_64.AppImage
+        sha256: 0c20c4aeb800bb13d9bab9474ef45a6f8fcde6402cad9b32ac2a1bbd03186313
       - type: script
         commands:
           - |
@@ -641,6 +648,7 @@ modules:
         path: config/gzdoom/gzdoom.sh
 
   # Pancakes
+  # Legacy: do not update
   # NOTE: if this module breaks, might be caused by SDL2 version mismatch. Check last line of this module.
   - name: Pancakes
     buildsystem: simple
@@ -679,8 +687,8 @@ modules:
       - find squashfs-root/usr/ -exec sh -c 'install -Dm755 "{}" "${FLATPAK_DEST}/$(echo "{}" | sed "s|^squashfs-root/usr||")"' \;
     sources:
       - type: file
-        url: https://github.com/xemu-project/xemu/releases/download/v0.8.5/xemu-v0.8.5-x86_64.AppImage
-        sha256: fd282e299dbc3207b8afb84059da99feffc65a86eb29d96c9108fde368d4c99e
+        url: https://github.com/xemu-project/xemu/releases/download/v0.8.45/xemu-v0.8.45-x86_64.AppImage
+        sha256: c14b7758ad3dd095f629472891b0651251b4ca32fa85bb88724ce3d4372b8833
 
   - name: xemu-dummy-hdd
     buildsystem: simple
@@ -774,8 +782,8 @@ modules:
     sources:
       - type: archive
         strip-components: 0
-        url: https://github.com/ruffle-rs/ruffle/releases/download/nightly-2024-09-17/ruffle-nightly-2024_09_17-linux-x86_64.tar.gz
-        sha256: 8a0c8ab2638dd54140b14febee0bc43e354b05fb28a29e127e4e0e44fe5c087c
+        url: https://github.com/ruffle-rs/ruffle/releases/download/nightly-2025-03-28/ruffle-nightly-2025_03_28-linux-x86_64.tar.gz
+        sha256: f3569611dddac319846c183d0c9175bc0f41d250c62a9fddffa5939417cf18f9
       - type: file
         path: config/ruffle/ruffle-rdwrapper.sh
 
