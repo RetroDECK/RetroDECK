@@ -4,11 +4,11 @@ check_network_connectivity() {
   # This function will do a basic check for network availability and return "true" if it is working.
   # USAGE: if [[ $(check_network_connectivity) == "true" ]]; then
 
-  if [[ ! -z $(wget --spider -t 1 $remote_network_target_1 | grep "HTTP response 200") ]]; then
+  if [[ ! -z $(wget --spider -t 1 "$remote_network_target_1" | grep "HTTP response 200") ]]; then
     local network_connected="true"
-  elif [[ ! -z $(wget --spider -t 1 $remote_network_target_2 | grep "HTTP response 200") ]]; then
+  elif [[ ! -z $(wget --spider -t 1 "$remote_network_target_2" | grep "HTTP response 200") ]]; then
     local network_connected="true"
-  elif [[ ! -z $(wget --spider -t 1 $remote_network_target_3 | grep "HTTP response 200") ]]; then
+  elif [[ ! -z $(wget --spider -t 1 "$remote_network_target_3" | grep "HTTP response 200") ]]; then
     local network_connected="true"
   else
     local network_connected="false"
@@ -21,7 +21,7 @@ check_desktop_mode() {
   # This function will do a basic check of if we are running in Steam Deck game mode or not, and return "true" if we are outside of game mode
   # USAGE: if [[ $(check_desktop_mode) == "true" ]]; then
 
-  if [[ ! $XDG_CURRENT_DESKTOP == "gamescope" ]]; then
+  if [[ ! "$XDG_CURRENT_DESKTOP" == "gamescope" ]]; then
     echo "true"
   else
     echo "false"
@@ -32,7 +32,7 @@ check_is_steam_deck() {
   # This function will check the internal product ID for the Steam Deck codename and return "true" if RetroDECK is running on a real Deck
   # USAGE: if [[ $(check_is_steam_deck) == "true" ]]; then
 
-  if [[ $(cat /sys/devices/virtual/dmi/id/product_name) =~ ^(Jupiter|Galileo)$ ]]; then
+  if [[ $(cat "/sys/devices/virtual/dmi/id/product_name") =~ ^(Jupiter|Galileo)$ ]]; then
     echo "true"
   else
     echo "false"
@@ -58,7 +58,7 @@ check_for_version_update() {
     fi
 
     if [[ ! "$update_ignore" == "$online_version" ]]; then
-      if [[ "$update_repo" == "RetroDECK" ]] && [[ $(sed -e 's/[\.a-z]//g' <<< $version) -le $(sed -e 's/[\.a-z]//g' <<< $online_version) ]]; then
+      if [[ "$update_repo" == "RetroDECK" ]] && [[ $(sed -e 's/[\.a-z]//g' <<< "$version") -le $(sed -e 's/[\.a-z]//g' <<< "$online_version") ]]; then
         choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK" --extra-button="Ignore this version" \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         --title "RetroDECK - New Update Available" \
@@ -66,7 +66,7 @@ check_for_version_update() {
         rc=$? # Capture return code, as "OK" button has no text value
         if [[ $rc == "1" ]]; then # If any button other than "OK" was clicked
           log i "Selected: \"OK\""
-          set_setting_value $rd_conf "update_ignore" "$online_version" retrodeck "options" # Store version to ignore for future checks
+          set_setting_value "$rd_conf" "update_ignore" "$online_version" retrodeck "options" # Store version to ignore for future checks
         fi
       elif [[ "$update_repo" == "$cooker_repository_name" ]] && [[ ! $version == $online_version ]]; then
         log i "Showing update request dialog as \"$online_version\" was found and is greater then \"$version\""
@@ -78,10 +78,10 @@ check_for_version_update() {
         if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
           if [[ $choice == "Ignore this version" ]]; then
             log i "\"Ignore this version\" selected, updating \"$rd_conf\""
-            set_setting_value $rd_conf "update_ignore" "$online_version" retrodeck "options" # Store version to ignore for future checks.
+            set_setting_value "$rd_conf" "update_ignore" "$online_version" retrodeck "options" # Store version to ignore for future checks.
           fi
         else # User clicked "Yes"
-          install_release $online_version
+          install_release "$online_version"
         fi
       fi
     fi
@@ -93,13 +93,13 @@ check_for_version_update() {
 validate_input() {
   while IFS="^" read -r input action || [[ -n "$input" ]];
   do
-    if [[ ! $input == "#"* ]] && [[ ! -z "$input" ]]; then
+    if [[ ! "$input" == "#"* ]] && [[ ! -z "$input" ]]; then
       if [[ "$input" == "$1" ]]; then
         eval "$action"
         input_validated="true"
       fi
     fi
-  done < $input_validation
+  done < "$input_validation"
 }
 
 check_version_is_older_than() {
@@ -135,7 +135,7 @@ fi
 # Perform post_update commands for current version if it is a cooker or PR
 if grep -qF "cooker" <<< "$hard_version" || grep -qF "PR" <<< "$hard_version"; then
   # If newly-installed version is a "cooker" or "PR" build, always perform post_update commands for current version
-  if [[ "$(echo $hard_version | cut -d'-' -f2)" == "$new_version" ]]; then
+  if [[ "$(echo "$hard_version" | cut -d'-' -f2)" == "$new_version" ]]; then
     is_newer_version="true"
   fi
 fi

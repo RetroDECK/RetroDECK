@@ -114,14 +114,14 @@ build_preset_list_options() {
 
   preset="$1"
   pretty_preset_name=${preset//_/ } # Preset name prettification
-  pretty_preset_name=$(echo $pretty_preset_name | awk '{for(i=1;i<=NF;i++){$i=toupper(substr($i,1,1))substr($i,2)}}1') # Preset name prettification
+  pretty_preset_name=$(echo "$pretty_preset_name" | awk '{for(i=1;i<=NF;i++){$i=toupper(substr($i,1,1))substr($i,2)}}1') # Preset name prettification
   current_preset_settings=()
   current_enabled_systems=()
   current_disabled_systems=()
   changed_systems=()
   changed_presets=()
   all_systems=()
-  local section_results=$(sed -n '/\['"$preset"'\]/, /\[/{ /\['"$preset"'\]/! { /\[/! p } }' $rd_conf | sed '/^$/d')
+  local section_results=$(sed -n '/\['"$preset"'\]/, /\[/{ /\['"$preset"'\]/! { /\[/! p } }' "$rd_conf" | sed '/^$/d')
 
   while IFS= read -r config_line
     do
@@ -133,8 +133,8 @@ build_preset_list_options() {
       elif [[ "$system_value" == "false" ]]; then
         current_disabled_systems=("${current_disabled_systems[@]}" "$system_name")
       fi
-      current_preset_settings=("${current_preset_settings[@]}" "$system_value" "$(make_name_pretty $system_name)" "$system_name")
-      echo "$system_value"^"$(make_name_pretty $system_name)"^"$system_name" >> "$godot_current_preset_settings"
+      current_preset_settings=("${current_preset_settings[@]}" "$system_value" "$(make_name_pretty "$system_name")" "$system_name")
+      echo "$system_value"^"$(make_name_pretty "$system_name")"^"$system_name" >> "$godot_current_preset_settings"
   done < <(printf '%s\n' "$section_results")
 }
 
@@ -252,7 +252,7 @@ build_preset_config() {
   log d "Applying presets: $presets_being_changed for system: $system_being_changed"
   for current_preset in $presets_being_changed
   do
-    local preset_section=$(sed -n '/\['"$current_preset"'\]/, /\[/{ /\['"$current_preset"'\]/! { /\[/! p } }' $rd_conf | sed '/^$/d')
+    local preset_section=$(sed -n '/\['"$current_preset"'\]/, /\[/{ /\['"$current_preset"'\]/! { /\[/! p } }' "$rd_conf" | sed '/^$/d')
     while IFS= read -r system_line
     do
       local read_system_name=$(get_setting_name "$system_line")
@@ -376,7 +376,7 @@ build_retrodeck_current_presets() {
   do
     if [[ (! -z "$current_setting_line") && (! "$current_setting_line" == "#"*) && (! "$current_setting_line" == "[]") ]]; then # If the line has a valid entry in it
       if [[ ! -z $(grep -o -P "^\[.+?\]$" <<< "$current_setting_line") ]]; then # If the line is a section header
-        local current_section=$(sed 's^[][]^^g' <<< $current_setting_line) # Remove brackets from section name
+        local current_section=$(sed 's^[][]^^g' <<< "$current_setting_line") # Remove brackets from section name
       else
         if [[ ! ("$current_section" == "" || "$current_section" == "paths" || "$current_section" == "options" || "$current_section" == "cheevos" || "$current_section" == "cheevos_hardcore") ]]; then
           local system_name=$(get_setting_name "$current_setting_line" "retrodeck") # Read the variable name from the current line
@@ -387,7 +387,7 @@ build_retrodeck_current_presets() {
         fi
       fi
     fi
-  done < $rd_conf
+  done < "$rd_conf"
 }
 
 fetch_all_presets() {
@@ -417,7 +417,7 @@ fetch_all_presets() {
             presets+=("$preset")
             if $pretty_output; then
               pretty_preset_name=${preset//_/ } # Preset name prettification
-              pretty_preset_name=$(echo $pretty_preset_name | awk '{for(i=1;i<=NF;i++){$i=toupper(substr($i,1,1))substr($i,2)}}1') # Preset name prettification
+              pretty_preset_name=$(echo "$pretty_preset_name" | awk '{for(i=1;i<=NF;i++){$i=toupper(substr($i,1,1))substr($i,2)}}1') # Preset name prettification
               pretty_presets+=("$pretty_preset_name")
             fi
           fi
@@ -433,7 +433,7 @@ fetch_all_presets() {
             presets+=("$preset")
             if $pretty_output; then
               pretty_preset_name=${preset//_/ } # Preset name prettification
-              pretty_preset_name=$(echo $pretty_preset_name | awk '{for(i=1;i<=NF;i++){$i=toupper(substr($i,1,1))substr($i,2)}}1') # Preset name prettification
+              pretty_preset_name=$(echo "$pretty_preset_name" | awk '{for(i=1;i<=NF;i++){$i=toupper(substr($i,1,1))substr($i,2)}}1') # Preset name prettification
               pretty_presets+=("$pretty_preset_name")
             fi
           fi
