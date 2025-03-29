@@ -556,8 +556,8 @@ modules:
       - install -Dm755 Cemu-wrapper "${FLATPAK_DEST}/bin/"
     sources:
       - type: file
-        url: https://github.com/cemu-project/Cemu/releases/download/v2.6/Cemu-2.6-x86_64.AppImage
-        sha256: 0c20c4aeb800bb13d9bab9474ef45a6f8fcde6402cad9b32ac2a1bbd03186313
+        url: https://github.com/cemu-project/Cemu/releases/download/v2.4/Cemu-2.4-x86_64.AppImage
+        sha256: 92a1f081230809bd0ac30b228f72c6d8c7aa7eaa3e56df4cf8ad54d4c9927097
       - type: script
         commands:
           - |
@@ -679,8 +679,8 @@ modules:
       - find squashfs-root/usr/ -exec sh -c 'install -Dm755 "{}" "${FLATPAK_DEST}/$(echo "{}" | sed "s|^squashfs-root/usr||")"' \;
     sources:
       - type: file
-        url: https://github.com/xemu-project/xemu/releases/download/v0.8.5/xemu-v0.8.5-x86_64.AppImage
-        sha256: fd282e299dbc3207b8afb84059da99feffc65a86eb29d96c9108fde368d4c99e
+        url: https://github.com/xemu-project/xemu/releases/download/v0.8.45/xemu-v0.8.45-x86_64.AppImage
+        sha256: c14b7758ad3dd095f629472891b0651251b4ca32fa85bb88724ce3d4372b8833
 
   - name: xemu-dummy-hdd
     buildsystem: simple
