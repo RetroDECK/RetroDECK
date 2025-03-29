@@ -774,8 +774,8 @@ modules:
     sources:
       - type: archive
         strip-components: 0
-        url: https://github.com/ruffle-rs/ruffle/releases/download/nightly-2024-09-17/ruffle-nightly-2024_09_17-linux-x86_64.tar.gz
-        sha256: 8a0c8ab2638dd54140b14febee0bc43e354b05fb28a29e127e4e0e44fe5c087c
+        url: https://github.com/ruffle-rs/ruffle/releases/download/nightly-2025-03-28/ruffle-nightly-2025_03_28-linux-x86_64.tar.gz
+        sha256: f3569611dddac319846c183d0c9175bc0f41d250c62a9fddffa5939417cf18f9
       - type: file
         path: config/ruffle/ruffle-rdwrapper.sh
 
