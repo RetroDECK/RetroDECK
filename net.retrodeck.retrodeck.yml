@@ -556,8 +556,8 @@ modules:
       - install -Dm755 Cemu-wrapper "${FLATPAK_DEST}/bin/"
     sources:
       - type: file
-        url: https://github.com/cemu-project/Cemu/releases/download/v2.4/Cemu-2.4-x86_64.AppImage
-        sha256: 92a1f081230809bd0ac30b228f72c6d8c7aa7eaa3e56df4cf8ad54d4c9927097
+        url: https://github.com/cemu-project/Cemu/releases/download/v2.6/Cemu-2.6-x86_64.AppImage
+        sha256: 0c20c4aeb800bb13d9bab9474ef45a6f8fcde6402cad9b32ac2a1bbd03186313
       - type: script
         commands:
           - |
