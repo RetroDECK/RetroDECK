@@ -117,18 +117,14 @@ jobs:
           fi
 
           # Determine the tag based on the GitHub event context
-          if [[ "$GITHUB_REF" == "refs/heads/main" ]]; then
-            # Main branch tag
-            TAG="$VERSION"
-            MAKE_LATEST=true
-          elif [[ "$GITHUB_EVENT_NAME" == "pull_request" || "$GITHUB_EVENT_NAME" == "pull_request_target" ]]; then
+          if [[ "$GITHUB_EVENT_NAME" == "pull_request" || "$GITHUB_EVENT_NAME" == "pull_request_target" ]]; then
             # Pull request tag, sanitize the source branch
             source_branch="${GITHUB_HEAD_REF//\//-}"
             TAG="PR-$source_branch-${{ github.run_id }}"
             MAKE_LATEST=false
           else
-            # Other branches (cooker branches)
-            TAG="$VERSION-${{ env.BUILD_ID }}"
+            # Other branches (cooker, main branches)
+            TAG="$VERSION"
             MAKE_LATEST=true
           fi
 
