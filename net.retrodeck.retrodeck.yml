@@ -499,10 +499,19 @@ modules:
   # RPCS3
   # https://rpcs3.net/download
 
-  - name: rpcs3
+  - name: retrodeck-rpcs3
     buildsystem: simple
     build-commands:
-      - /app/bin/basilico.sh "rpcs3"
+      # Step 1: Remove any existing manifest.json file
+      - rm -f "files/manifest.json"
+      # Step 2: Use libman.sh to manage libraries
+      - /app/bin/libman.sh "files/lib"
+      # Step 3: removing libraries folder that have been already moved
+      - rm -rf "files/lib"
+      # Step 4: Ensure binaries are executable
+      - chmod +x "files/bin/"*
+      # Step 5: Copy all remaining files to the Flatpak destination
+      - cp -r files/* "${FLATPAK_DEST}"
     sources:
       - type: archive
         url: https://github.com/RetroDECK/net.rpcs3.RPCS3/releases/latest/download/RetroDECK-Artifact.tar.gz
