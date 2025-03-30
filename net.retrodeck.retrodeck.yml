@@ -536,13 +536,7 @@ modules:
   - name: duckstation
     buildsystem: simple
     build-commands:
-      # Step 1: Ensure the AppImage is executable and extract it
-      - chmod +x *.AppImage
-      - ./*.AppImage --appimage-extract
-      # Step 2: Use libman.sh to manage libraries
-      - /app/bin/libman.sh "squashfs-root/usr/lib"
-      # Step 3: Copy remaining extracted files to the Flatpak destination
-      - find squashfs-root/usr/ -exec sh -c 'install -Dm755 "{}" "${FLATPAK_DEST}/$(echo "{}" | sed "s|^squashfs-root/usr||")"' \;
+      - /app/bin/basilico.sh "duckstation-qt"
     sources:
       - type: file
         url: https://github.com/RetroDECK/Duckstation/releases/download/preview/DuckStation-x64.AppImage
