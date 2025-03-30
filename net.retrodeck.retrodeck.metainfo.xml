@@ -87,6 +87,18 @@
                   <li>COMPRESSOR: New functionality for compression cleanup argument in both single-file and multi-file modes</li>
                   <li>CLI: Added optional "repair-paths" CLI option for fixing paths</li>
                </ul>
+               <p>Updated engines:</p>
+                  <ul>
+                     <li>Cemu</li>
+                     <li>Dolphin</li>
+                     <li>GZDoom</li>
+                     <li>PCSX2</li>
+                     <li>PrimeHack</li>
+                     <li>RPCS3</li>
+                     <li>Ruffle</li>
+                     <li>Vita3K</li>
+                     <li>xemu</li>
+                  </ul>
                <p>Bug fixes:</p>
                <ul>
                   <li>STEAM SYNC: Fixed issues with Zenity dialogs showing unnecessarily during Steam Sync</li>
