@@ -509,25 +509,16 @@ modules:
         sha256: RETRODECKRPCS3LATEST
 
   # MELONDS
-  # https://github.com/RetroDECK/net.kuribo64.melonDS
+  # https://melonds.kuribo64.net/downloads.php
 
   - name: melonds
     buildsystem: simple
     build-commands:
-      # Step 1: Remove any existing manifest.json file
-      - rm -f "files/manifest.json"
-      # Step 2: Use libman.sh to manage libraries
-      - /app/bin/libman.sh "files/lib"
-      # Step 3: removing libraries folder that have been already moved
-      - rm -rf "files/lib"
-      # Step 4: Ensure binaries are executable
-      - chmod +x "files/bin/"*
-      # Step 5: Copy all remaining files to the Flatpak destination
-      - cp -r files/* "${FLATPAK_DEST}/"
+      - /app/bin/basilico.sh "melonDS"
     sources:
       - type: archive
-        url: https://github.com/RetroDECK/net.kuribo64.melonDS/releases/latest/download/RetroDECK-melonds-Artifact.tar.gz
-        sha256: RETRODECKMELONDSLATEST
+        url: https://melonds.kuribo64.net/downloads/melonDS-appimage-x86_64.zip
+        sha256: b4b57e79ad317f8590adeff5bf73233d312886e6c726931e653033c743eb8371
 
   # Duckstation
   # Do not update: Legacy
