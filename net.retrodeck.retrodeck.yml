@@ -417,23 +417,50 @@ modules:
   # why from source: AppImage not provided, only Flatpak
   # https://github.com/RetroDECK/org.DolphinEmu.dolphin-emu
 
-  - name: retrodeck-dolphin
+  # - name: retrodeck-dolphin
+  #   buildsystem: simple
+  #   build-commands:
+  #     # Step 1: Remove any existing manifest.json file
+  #     - rm -f "files/manifest.json"
+  #     # Step 2: Use libman.sh to manage libraries
+  #     - /app/bin/libman.sh "files/lib"
+  #     # Step 3: removing libraries folder that have been already moved
+  #     - rm -rf "files/lib"
+  #     # Step 4: Ensure binaries are executable
+  #     - chmod +x "files/bin/"*
+  #     # Step 5: Copy all remaining files to the Flatpak destination
+  #     - cp -r files/* "${FLATPAK_DEST}"
+  #   sources:
+  #     - type: archive
+  #       url: https://github.com/RetroDECK/org.DolphinEmu.dolphin-emu/releases/latest/download/RetroDECK-Artifact.tar.gz
+  #       sha256: RETRODECKDOLPHINLATEST
+
+  # using an unofficial AppImage: https://github.com/pkgforge-dev/Dolphin-emu-AppImage
+  - name: dolphin
     buildsystem: simple
     build-commands:
-      # Step 1: Remove any existing manifest.json file
-      - rm -f "files/manifest.json"
-      # Step 2: Use libman.sh to manage libraries
-      - /app/bin/libman.sh "files/lib"
-      # Step 3: removing libraries folder that have been already moved
-      - rm -rf "files/lib"
-      # Step 4: Ensure binaries are executable
-      - chmod +x "files/bin/"*
-      # Step 5: Copy all remaining files to the Flatpak destination
-      - cp -r files/* "${FLATPAK_DEST}"
+      - /app/bin/basilico.sh "dolphin-emu"
+      - install -Dm755 dolphin-emu-wrapper "${FLATPAK_DEST}/bin/dolphin-emu-wrapper"
     sources:
-      - type: archive
-        url: https://github.com/RetroDECK/org.DolphinEmu.dolphin-emu/releases/latest/download/RetroDECK-Artifact.tar.gz
-        sha256: RETRODECKDOLPHINLATEST
+      - type: file
+        url: https://github.com/pkgforge-dev/Dolphin-emu-AppImage/releases/download/2503-111/Dolphin_Emulator-2503-111-anylinux.squashfs-x86_64.AppImage
+        sha256: 5aca660dd62e00de4b50e86033af265177f7a3061c78ab43ad5898bc637c2f9e
+      - type: script
+        commands:
+          - |
+            for i in {0..9}; do
+              test -S $XDG_RUNTIME_DIR/discord-ipc-$i ||
+                ln -sf {app/com.discordapp.Discord,$XDG_RUNTIME_DIR}/discord-ipc-$i;
+            done
+
+            source /app/libexec/checks.sh
+            if [[ $(check_desktop_mode) == "true" ]]; then
+                log d "Running Dolphin in Desktop Mode"
+                export QT_QPA_PLATFORM=xcb
+            fi
+
+            dolphin-emu "$@"
+        dest-filename: dolphin-emu-wrapper
 
   # PRIMEHACK
   # https://github.com/RetroDECK/io.github.shiiion.primehack
