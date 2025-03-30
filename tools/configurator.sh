@@ -115,7 +115,7 @@ configurator_welcome_dialog() {
     "Open Component" "Manually launch and configure settings for each emulator or component (for advanced users)."
     "Reset Components" "Reset a specific emulator, component or all of RetroDECK."
     "Tools" "Various tools for verifying files and BIOS, and installing optional features."
-    "Steam Sync" "Enable / Disable: Synchronization of all favorited games with Steam."
+    "Steam Sync" "Setup synchronization of all favorited games with Steam."
     "Data Management" "Move RetroDECK folders between internal storage, SD card, or a custom location, and clean out empty ROM folders or rebuild all ROM folders."
     "About RetroDECK" "View additional information, including patch notes and credits."
   )
@@ -202,7 +202,7 @@ configurator_global_presets_and_settings_dialog() {
 
   "Borders" )
     log i "Configurator: opening \"$choice\" menu"
-    if [[ $native_resolution == false ]]; then 
+    if [[ $native_resolution == false ]]; then
         rd_zenity --question --text="Borders are actually supported for ${width}x${height} resolution at the moment. This can be set in the Steam shortcut.\n\nDo you still want to continue?"
         response=$?  # Capture the exit code immediately
         if [ "$response" -eq 0 ]; then
@@ -1007,7 +1007,7 @@ configurator_update_notify_dialog() {
 }
 
 configurator_portmaster_toggle_dialog(){
-  
+
   if [[ $(get_setting_value "$rd_conf" "portmaster_show" "retrodeck" "options") == "true" ]]; then
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -1264,13 +1264,13 @@ configurator_steam_sync_dialog() {
   choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - Steam Sync" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Description" \
-  "Enable/Disable Automatic Steam Sync" "Enable or disable automatic Steam Sync, where ES-DE favorites will be synced to Steam when RetroDECK quits." \
+  "Automatic Steam Sync" "Enable or disable automatic Steam Sync, where ES-DE favorites will be synced to Steam when RetroDECK quits." \
   "Manual Steam Sync" "Perform a one-time manual sync of ES-DE favorites to Steam." \
   "Purge Steam Sync Shortcuts" "Perform a full Steam ROM Manager purge of all favorites, in case things have gotten messed up." )
 
   case $choice in
 
-  "Enable/Disable Automatic Steam Sync" )
+  "Automatic Steam Sync" )
     log i "Configurator: opening \"$choice\" menu"
     if [[ $(get_setting_value "$rd_conf" "steam_sync" retrodeck "options") == "true" ]]; then
       zenity --question \
