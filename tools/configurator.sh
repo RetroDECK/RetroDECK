@@ -615,35 +615,35 @@ configurator_tools_dialog() {
     choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - RetroDECK: Change Logging Level" --cancel-label="Back" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
     --column="Choice" --column="Action" \
-    "Informational" "The default, only logs important information." \
-    "Warnings" "Additionally log warnings." \
-    "Errors" "Additionally log warnings and errors." \
-    "Debug" "Log everything, may generate a lot of logs!." \)
+    "Level 1: Informational" "The default, only logs important information." \
+    "Level 2: Warnings" "Additionally log warnings." \
+    "Level 3: Errors" "Additionally log warnings and errors." \
+    "Level 4: Debug" "Log everything, may generate a lot of logs!.")
 
     case $choice in
 
-    "Informational" )
+    "Level 1: Informational" )
       log i "Configurator: Changing logging level to \"$choice\""
       set_setting_value "$rd_conf" "logging_level" "info" "retrodeck" "options"
     ;;
 
-    "Warnings" )
+    "Level 2: Warnings" )
       log i "Configurator: Changing logging level to \"$choice\""
       set_setting_value "$rd_conf" "logging_level" "warn" "retrodeck" "options"
     ;;
 
-    "Errors" )
+    "Level 3: Errors" )
       log i "Configurator: Changing logging level to \"$choice\""
       set_setting_value "$rd_conf" "logging_level" "error" "retrodeck" "options"
     ;;
 
-    "Debug" )
+    "Level 4: Debug" )
       log i "Configurator: Changing logging level to \"$choice\""
       set_setting_value "$rd_conf" "logging_level" "debug" "retrodeck" "options"
     ;;
 
     "" ) # No selection made or Back button clicked
-    log i "Configurator: going back"
+      log i "Configurator: going back"
     ;;
 
     esac
