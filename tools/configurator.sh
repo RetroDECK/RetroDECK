@@ -112,8 +112,8 @@ configurator_welcome_dialog() {
   log i "Configurator: opening welcome dialog"
   welcome_menu_options=(
     "Settings" "Customize your RetroDECK experience with various presets and tweaks."
-    "Open Component" "Manually launch and configure settings for each emulator or component (for advanced users)."
-    "Reset Components" "Reset a specific emulator, component or all of RetroDECK."
+    "Open Component" "Manually launch and configure settings for each component, system or emulator (for advanced users)."
+    "Reset Components" "Reset a specific component, system, emulator or all of RetroDECK."
     "Tools" "Various tools for verifying files and BIOS, and installing optional features."
     "Steam Sync" "Setup synchronization of all ES-DE favorited games with Steam via SRM."
     "Data Management" "Move RetroDECK folders between internal storage, SD card, or a custom location, and clean out empty ROM folders or rebuild all ROM folders."
@@ -383,7 +383,7 @@ configurator_power_user_warning_dialog() {
     choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="Never show this again" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Power User Warning" \
-    --text="Making manual changes to an components configuration may create serious issues, and some settings may be overwritten during RetroDECK updates or when using presets.\n\nPlease continue only if you know what you're doing.\n\nDo you want to continue?")
+    --text="Making manual changes to an component, system or emulators configuration may create serious issues, and some settings may be overwritten during RetroDECK updates or when using presets.\n\nPlease continue only if you know what you're doing.\n\nDo you want to continue?")
   fi
   rc=$? # Capture return code, as "Yes" button has no text value
   if [[ $rc == "0" ]]; then # If user clicked "Yes"
