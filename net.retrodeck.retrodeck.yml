@@ -91,7 +91,6 @@ modules:
 
         # Prepare needed directories
         mkdir -p ${FLATPAK_DEST}/retrodeck/
-        mkdir -p ${FLATPAK_DEST}/bin/bundled-components/
 
         # Write the version number to the retrodeck version file
         echo $VERSION >> ${FLATPAK_DEST}/retrodeck/version
