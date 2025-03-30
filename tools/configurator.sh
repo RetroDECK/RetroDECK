@@ -115,7 +115,7 @@ configurator_welcome_dialog() {
     "Open Component" "Manually launch and configure settings for each emulator or component (for advanced users)."
     "Reset Components" "Reset a specific emulator, component or all of RetroDECK."
     "Tools" "Various tools for verifying files and BIOS, and installing optional features."
-    "Steam Sync" "Setup synchronization of all favorited games with Steam."
+    "Steam Sync" "Setup synchronization of all ES-DE favorited games with Steam via SRM."
     "Data Management" "Move RetroDECK folders between internal storage, SD card, or a custom location, and clean out empty ROM folders or rebuild all ROM folders."
     "About RetroDECK" "View additional information, including patch notes and credits."
   )
@@ -383,7 +383,7 @@ configurator_power_user_warning_dialog() {
     choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="Never show this again" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Power User Warning" \
-    --text="Making manual changes to an emulator's configuration may create serious issues,\nand some settings may be overwitten during RetroDECK updates or when using presets.\n\nSome standalone emulator functions may not work properly outside of Desktop mode.\n\nPlease continue only if you know what you're doing.\n\nDo you want to continue?")
+    --text="Making manual changes to an components configuration may create serious issues, and some settings may be overwritten during RetroDECK updates or when using presets.\n\nPlease continue only if you know what you're doing.\n\nDo you want to continue?")
   fi
   rc=$? # Capture return code, as "Yes" button has no text value
   if [[ $rc == "0" ]]; then # If user clicked "Yes"
@@ -973,7 +973,7 @@ configurator_compression_cleanup_dialog() {
   rd_zenity --icon-name=net.retrodeck.retrodeck --question --no-wrap --cancel-label="No" --ok-label="Yes" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Configurator - RetroDECK: Compression Tool" \
-  --text="Do you want to remove old files after they are compressed?\n\nClicking \"No\" will leave all files behind which will need to be cleaned up manually and may result in game duplicates showing in the RetroDECK library.\n\nPlease make sure you have a backup of your ROMs before using automatic cleanup!"
+  --text="Do you want to remove old files after they are compressed?\n\nClicking \"No\" will leave all files behind which will need to be cleaned up manually and may result in game duplicates showing in the RetroDECK library.\n\nPlease make sure you have a backup of your ROMs before using automatic cleanup."
   local rc=$? # Capture return code, as "Yes" button has no text value
   if [[ $rc == "0" ]]; then # If user clicked "Yes"
     echo "true"
@@ -1268,9 +1268,9 @@ configurator_steam_sync_dialog() {
   choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - Steam Sync" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Description" \
-  "Automatic Steam Sync" "Enable or disable automatic Steam Sync, where ES-DE favorites will be synced to Steam when RetroDECK quits." \
+  "Automatic Steam Sync" "Enable / Disable: Automatic Steam Sync. ES-DE favorites will be synced to Steam when RetroDECK quits." \
   "Manual Steam Sync" "Perform a one-time manual sync of ES-DE favorites to Steam." \
-  "Purge Steam Sync Shortcuts" "Perform a full Steam ROM Manager purge of all favorites, in case things have gotten messed up." )
+  "Purge Steam Sync Shortcuts" "Perform a full SRM purge of all favorites in case things have gotten messed up." )
 
   case $choice in
 
@@ -1290,7 +1290,7 @@ configurator_steam_sync_dialog() {
       zenity --question \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Configurator - RetroDECK Steam Syncronization" \
-      --text="Steam synchronization is <span foreground='$purple'><b>currently disabled</b></span>. Do you want to enable it?\n\nAll the games marked as favorites will be synchronized with Steam ROM Manager.\nRemember to restart Steam each time to see the changes.\n\n<span foreground='$purple'><b>NOTE: games with unusual characters such as &apos;/\{}&lt;&gt;* might break the sync, please refer to the Wiki for more info.</b></span>"
+      --text="Steam synchronization is <span foreground='$purple'><b>currently disabled</b></span>. Do you want to enable it?\n\nAll favorited games will be synced with Steam ROM Manager.\nRemember to restart Steam to see the changes.\n\n<span foreground='$purple'><b>NOTE: Games with unusual characters in their names like &apos;/\{}&lt;&gt;* might break the sync. Check the Wiki for more information.</b></span>"
 
       if [ $? == 0 ]
       then
@@ -1398,12 +1398,12 @@ configurator_developer_dialog() {
   choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - Developer Options" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Description" \
-  "Change Multi-user mode" "Enable or disable multi-user support" \
-  "Install Specific Release" "Install any cooker release or the latest main available" \
-  "Browse the Wiki" "Browse the RetroDECK wiki online" \
-  "Install RetroDECK Starter Pack" "Install the optional RetroDECK starter pack" \
-  "Tool: USB Import" "Prepare a USB device for ROMs or import an existing collection" \
-  "Open GODOT Configurator" "Open the new Configurator made in GODOT engine")
+  "Change Multi-user mode" "Enable/Disable: Multi-user support." \
+  "Install Specific Release" "Install any cooker release or the latest main available." \
+  "Browse the Wiki" "Browse the RetroDECK wiki" \
+  "Install RetroDECK Starter Pack" "Install the optional RetroDECK starter pack." \
+  "Tool: USB Import" "Use a USB device for RetroDECK data export / import" \
+  "Open GODOT Configurator" "Open Godot Configurator")
 
   case $choice in
 
@@ -1453,7 +1453,7 @@ configurator_retrodeck_multiuser_dialog() {
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - RetroDECK Multi-user Support" \
-    --text="Multi-user support is currently enabled. Do you want to disable it?\n\nIf there is more than one user configured,\nyou will be given a choice of which to use as the single RetroDECK user.\n\nThis user's files will be moved to the default locations.\n\nOther users' files will remain in the mutli-user-data folder.\n"
+    --text="Multi-user mode is currently enabled. Do you want to disable it?\n\nIf there is more than one user configured, you will be given a choice of which user to keep as the single RetroDECK user.\n\nThis user's files will be moved to the default locations.\n\nOther users' files will remain in the mutli-user-data folder.\n"
 
     if [ $? == 0 ] # User clicked "Yes"
     then
@@ -1465,7 +1465,7 @@ configurator_retrodeck_multiuser_dialog() {
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - RetroDECK Multi-user support" \
-    --text="Multi-user support is currently disabled. Do you want to enable it?\n\nThe current user's saves and states will be backed up and then moved to the \"retrodeck/multi-user-data\" folder.\nAdditional users will automatically be stored in their own folder here as they are added."
+    --text="Multi-user mode is currently disabled. Do you want to enable it?\n\nThe current user's saves and states will be backed up and moved to the \"retrodeck/multi-user-data\" folder.\nAdditional users will automatically be stored in their own folder here as they are added."
 
     if [ $? == 0 ]
     then
@@ -1481,7 +1481,7 @@ configurator_online_update_channel_dialog() {
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - RetroDECK Change Update Branch" \
-    --text="You are currently on the production branch of RetroDECK updates. Would you like to switch to the cooker branch?\n\nAfter installing a cooker build, you may need to remove the \"stable\" branch install of RetroDECK to avoid overlap."
+    --text="You are currently on the stable branch of RetroDECK updates. Would you like to switch to the cooker branch?\n\nAfter installing a cooker build, you may need to remove the \"stable\" branch install of RetroDECK to avoid overlap."
 
     if [ $? == 0 ] # User clicked "Yes"
     then
@@ -1515,7 +1515,7 @@ configurator_usb_import_dialog() {
     done < <(df --output=size,target -h | grep "/run/media/" | grep -v "$sdcard" | awk '{$1=$1;print}')
 
     if [[ "${#external_devices[@]}" -gt 0 ]]; then
-      configurator_generic_dialog "RetroDeck Configurator - USB Import" "If you have an SD card installed that is not currently configured in RetroDECK it may show up in this list, but not be suitable for USB import.\n\nPlease select your desired drive carefully."
+      configurator_generic_dialog "RetroDeck Configurator - USB Import" "If you have an SD card installed that is not currently configured in RetroDECK, it may show up in this list but may not be suitable for USB import.\n\nPlease select your desired drive carefully."
       choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - USB Migration Tool" --cancel-label="Back" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
       --hide-column=3 --print-column=3 \
