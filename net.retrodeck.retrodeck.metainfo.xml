@@ -81,11 +81,14 @@
                   <li>BACKUP: Added backup options for core user data and full/partial backups</li>
                   <li>STEAM SYNC: Improved Zenity Configurator with new backup and steam_sync integration</li>
                   <li>STEAM SYNC: Added functionality for SRM manifest sync, including handling unfavorited games</li>
+                  <li>STEAM SYNC: Added manual sync mode</li>
+                  <li>STEAM SYNC: Added full steam resync option</li>
                   <li>BACKUP: Introduced optional userdata backup during post-update process</li>
                   <li>FRAMEWORK: New function for repairing RetroDECK paths without needing a full reset</li>
                   <li>COMPRESSOR: Updated Zenity Configurator for better multi-file compression logic</li>
                   <li>COMPRESSOR: New functionality for compression cleanup argument in both single-file and multi-file modes</li>
                   <li>CLI: Added optional "repair-paths" CLI option for fixing paths</li>
+                  <li>CONFIGURATOR: added Debug level choice menu</li>
                </ul>
                <p>Bug fixes:</p>
                <ul>
