@@ -625,21 +625,25 @@ configurator_tools_dialog() {
     "Level 1: Informational" )
       log i "Configurator: Changing logging level to \"$choice\""
       set_setting_value "$rd_conf" "logging_level" "info" "retrodeck" "options"
+      configurator_generic_dialog "RetroDECK Configurator - Change Logging Level" "The logging level has been changed to Level 1: Informational"
     ;;
 
     "Level 2: Warnings" )
       log i "Configurator: Changing logging level to \"$choice\""
       set_setting_value "$rd_conf" "logging_level" "warn" "retrodeck" "options"
+      configurator_generic_dialog "RetroDECK Configurator - Change Logging Level" "The logging level has been changed to Level 2: Warnings"
     ;;
 
     "Level 3: Errors" )
       log i "Configurator: Changing logging level to \"$choice\""
       set_setting_value "$rd_conf" "logging_level" "error" "retrodeck" "options"
+      configurator_generic_dialog "RetroDECK Configurator - Change Logging Level" "The logging level has been changed to Level 3: Errors"
     ;;
 
     "Level 4: Debug" )
       log i "Configurator: Changing logging level to \"$choice\""
       set_setting_value "$rd_conf" "logging_level" "debug" "retrodeck" "options"
+      configurator_generic_dialog "RetroDECK Configurator - Change Logging Level" "The logging level has been changed to Level 4: Debug"
     ;;
 
     "" ) # No selection made or Back button clicked
