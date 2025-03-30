@@ -104,6 +104,7 @@ modules:
 
         # LIBMAN INSTALLATION
         install -Dm755 "automation_tools/libman.sh" "/app/bin/libman.sh"
+        install -Dm755 "automation_tools/basilico.sh" "/app/bin/basilico.sh"
     sources:
       - type: dir
         path: .
