@@ -68,14 +68,13 @@ run_game() {
 
     game_basename="./$(basename "$game")"
 
-    local error="File \"$game\" not found.\n\nPlease make sure that RetroDECK's Flatpak is correctly configured to reach the given path and try again."
     # Check if realpath succeeded
     if [[ -z "$game" || ! -e "$game" ]]; then
         rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK" \
             --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
             --title "RetroDECK - File not found" \
-            --text="ERROR: $error"
-        log e "$error"
+            --text="ERROR: File \"$game\" not found.\n\nPlease make sure that RetroDECK's Flatpak is correctly configured to reach the given path and try again."
+        log e "File \"$game\" not found.\n\nPlease make sure that RetroDECK's Flatpak is correctly configured to reach the given path and try again."
         exit 1
     fi
 
@@ -103,7 +102,17 @@ run_game() {
         log d "Automatically searching for an emulator for system: $system"
 
         # Check for <altemulator> in the game block in gamelist.xml
-        altemulator=$(xmllint --recover --xpath "string(//game[path='$game_basename']/altemulator)" "$rdhome/ES-DE/gamelists/$system/gamelist.xml" 2>/dev/null)
+        altemulator=$(awk -v path="$game_basename" '
+                      /<game>/,/<\/game>/ {
+                          if ($0 ~ "<path>" path "<\/path>") found = 1
+                          if (found && $0 ~ /<altemulator>/) {
+                          gsub(/.*<altemulator>|<\/altemulator>.*/,"")
+                          print
+                          exit
+                          }
+                          if (found && $0 ~ /<\/game>/) exit
+                      }
+                      ' "$rdhome/ES-DE/gamelists/$system/gamelist.xml" 2>/dev/null)
 
         if [[ -n "$altemulator" ]]; then
 
@@ -113,9 +122,17 @@ run_game() {
         else # if no altemulator is found we search if a global one is set
 
             log d "No altemulator found in the game entry, searching for alternativeEmulator to check if a global emulator is set for the system $system"
-            alternative_emulator=$(xmllint --recover --xpath 'string(//alternativeEmulator/label)' "$rdhome/ES-DE/gamelists/$system/gamelist.xml" 2>/dev/null)
+            alternative_emulator=$(awk '
+                                   /<alternativeEmulator>/,/<\/alternativeEmulator>/ {
+                                       if ($0 ~ /<label>/) {
+                                       gsub(/.*<label>|<\/label>.*/,"")
+                                       print
+                                       exit
+                                       }
+                                   }
+                                   ' "$rdhome/ES-DE/gamelists/$system/gamelist.xml" 2>/dev/null)
             log d "Alternate emulator found in <alternativeEmulator> header: $alternative_emulator"
-            emulator=$(xmllint --recover --xpath "string(//system[platform='$system']/command[@label=\"$alternative_emulator\"])" "$es_systems" 2>/dev/null)
+            emulator=$(xmllint --recover --xpath "string(//system[name='$system']/command[@label=\"$alternative_emulator\"])" "$es_systems" 2>/dev/null)
 
         fi
 
