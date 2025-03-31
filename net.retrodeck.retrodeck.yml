@@ -103,7 +103,7 @@ modules:
 
         # LIBMAN INSTALLATION
         install -Dm755 "automation_tools/libman.sh" "/app/bin/libman.sh"
-        install -Dm755 "automation_tools/basilico.sh" "/app/bin/basilico.sh"
+        install -Dm755 "automation_tools/cook.sh" "/app/bin/cook"
     sources:
       - type: dir
         path: .
@@ -397,7 +397,7 @@ modules:
   - name: pcsx2
     buildsystem: simple
     build-commands:
-      - /app/bin/basilico.sh "pcsx2-qt"
+      - cook "pcsx2-qt"
     sources:
       - type: file
         url: https://github.com/PCSX2/pcsx2/releases/download/v2.3.245/pcsx2-v2.3.245-linux-appimage-x64-Qt.AppImage
@@ -417,50 +417,14 @@ modules:
   # why from source: AppImage not provided, only Flatpak
   # https://github.com/RetroDECK/org.DolphinEmu.dolphin-emu
 
-  # - name: retrodeck-dolphin
-  #   buildsystem: simple
-  #   build-commands:
-  #     # Step 1: Remove any existing manifest.json file
-  #     - rm -f "files/manifest.json"
-  #     # Step 2: Use libman.sh to manage libraries
-  #     - /app/bin/libman.sh "files/lib"
-  #     # Step 3: removing libraries folder that have been already moved
-  #     - rm -rf "files/lib"
-  #     # Step 4: Ensure binaries are executable
-  #     - chmod +x "files/bin/"*
-  #     # Step 5: Copy all remaining files to the Flatpak destination
-  #     - cp -r files/* "${FLATPAK_DEST}"
-  #   sources:
-  #     - type: archive
-  #       url: https://github.com/RetroDECK/org.DolphinEmu.dolphin-emu/releases/latest/download/RetroDECK-Artifact.tar.gz
-  #       sha256: RETRODECKDOLPHINLATEST
-
-  # using an unofficial AppImage: https://github.com/pkgforge-dev/Dolphin-emu-AppImage
-  - name: dolphin
+  - name: retrodeck-dolphin
     buildsystem: simple
     build-commands:
-      - /app/bin/basilico.sh "dolphin-emu"
-      - install -Dm755 dolphin-emu-wrapper "${FLATPAK_DEST}/bin/dolphin-emu-wrapper"
+      - cook "dolphin-emu-wrapper"
     sources:
-      - type: file
-        url: https://github.com/pkgforge-dev/Dolphin-emu-AppImage/releases/download/2503-111/Dolphin_Emulator-2503-111-anylinux.squashfs-x86_64.AppImage
-        sha256: 5aca660dd62e00de4b50e86033af265177f7a3061c78ab43ad5898bc637c2f9e
-      - type: script
-        commands:
-          - |
-            for i in {0..9}; do
-              test -S $XDG_RUNTIME_DIR/discord-ipc-$i ||
-                ln -sf {app/com.discordapp.Discord,$XDG_RUNTIME_DIR}/discord-ipc-$i;
-            done
-
-            source /app/libexec/checks.sh
-            if [[ $(check_desktop_mode) == "true" ]]; then
-                log d "Running Dolphin in Desktop Mode"
-                export QT_QPA_PLATFORM=xcb
-            fi
-
-            dolphin-emu "$@"
-        dest-filename: dolphin-emu-wrapper
+      - type: archive
+        url: https://github.com/RetroDECK/org.DolphinEmu.dolphin-emu/releases/latest/download/RetroDECK-Artifact.tar.gz
+        sha256: RETRODECKDOLPHINLATEST
 
   # PRIMEHACK
   # https://github.com/RetroDECK/io.github.shiiion.primehack
@@ -468,18 +432,7 @@ modules:
   - name: retrodeck-primehack
     buildsystem: simple
     build-commands:
-      # Step 1: Remove any existing manifest.json file
-      - rm -f "files/manifest.json"
-      # Step 2: Remove unnecessary files
-      - rm -rf "files/lib/pkgconfig"
-      # Step 3: Use libman.sh to manage libraries
-      - /app/bin/libman.sh "files/lib"
-      # Step 4: removing libraries folder that have been already moved
-      - rm -rf "files/lib"
-      # Step 5: Ensure binaries are executable
-      - chmod +x "files/bin/"*
-      # Step 6: Copy all remaining files to the Flatpak destination
-      - cp -r files/* "${FLATPAK_DEST}"
+      - cook "primehack-wrapper"
     sources:
       - type: archive
         url: https://github.com/RetroDECK/io.github.shiiion.primehack/releases/latest/download/RetroDECK-primehack-Artifact.tar.gz
@@ -502,16 +455,7 @@ modules:
   - name: retrodeck-rpcs3
     buildsystem: simple
     build-commands:
-      # Step 1: Remove any existing manifest.json file
-      - rm -f "files/manifest.json"
-      # Step 2: Use libman.sh to manage libraries
-      - /app/bin/libman.sh "files/lib"
-      # Step 3: removing libraries folder that have been already moved
-      - rm -rf "files/lib"
-      # Step 4: Ensure binaries are executable
-      - chmod +x "files/bin/"*
-      # Step 5: Copy all remaining files to the Flatpak destination
-      - cp -r files/* "${FLATPAK_DEST}"
+      - cook "rpcs3"
     sources:
       - type: archive
         url: https://github.com/RetroDECK/net.rpcs3.RPCS3/releases/latest/download/RetroDECK-Artifact.tar.gz
@@ -523,7 +467,7 @@ modules:
   - name: melonds
     buildsystem: simple
     build-commands:
-      - /app/bin/basilico.sh "melonDS"
+      - cook "melonDS"
     sources:
       - type: archive
         url: https://melonds.kuribo64.net/downloads/melonDS-appimage-x86_64.zip
@@ -536,7 +480,7 @@ modules:
   - name: duckstation
     buildsystem: simple
     build-commands:
-      - /app/bin/basilico.sh "duckstation-qt"
+      - cook "duckstation-qt"
     sources:
       - type: file
         url: https://github.com/RetroDECK/Duckstation/releases/download/preview/DuckStation-x64.AppImage
@@ -549,17 +493,7 @@ modules:
   - name: cemu
     buildsystem: simple
     build-commands:
-      # Step 1: Ensure the AppImage is executable and extract it
-      - chmod +x *.AppImage
-      - ./*.AppImage --appimage-extract
-      # Step 2: Remove unnecessary files causing potential issues
-      - rm -rf "squashfs-root/usr/lib/girepository-1.0"
-      # Step 3: Use libman.sh to manage libraries
-      - /app/bin/libman.sh "squashfs-root/usr/lib"
-      # Step 4: Copy remaining extracted files to the Flatpak destination
-      - find squashfs-root/usr/ -exec sh -c 'install -Dm755 "{}" "${FLATPAK_DEST}/$(echo "{}" | sed "s|^squashfs-root/usr||")"' \;
-      # Step 5: Install the wrapper script
-      - install -Dm755 Cemu-wrapper "${FLATPAK_DEST}/bin/"
+      - cook "Cemu"
     sources:
       - type: file
         url: https://github.com/cemu-project/Cemu/releases/download/v2.6/Cemu-2.6-x86_64.AppImage
@@ -577,16 +511,10 @@ modules:
         dest-filename: Cemu-wrapper
 
   # Vita3K - ROLLING RELEASE
-  - name: vita3k
+  - name: Vita3K
     buildsystem: simple
     build-commands:
-      # Copying the user icon
-      - mkdir -p ${FLATPAK_DEST}/retrodeck
-      - cp retrodeck.png ${FLATPAK_DEST}/retrodeck
-      - unzip "ubuntu-latest.zip" -d "${FLATPAK_DEST}/share/Vita3K"
-      - chmod +x "${FLATPAK_DEST}/share/Vita3K/Vita3K"
-      - rm -f "${FLATPAK_DEST}/share/Vita3K/update-vita3k.sh"
-      - ln -s ${FLATPAK_DEST}/share/Vita3K/Vita3K ${FLATPAK_DEST}/bin/Vita3K
+      - cook "Vita3K"
     sources:
       - type: file
         url: https://github.com/RetroDECK/Vita3K-bin/releases/latest/download/ubuntu-latest.zip
@@ -601,18 +529,7 @@ modules:
   - name: retrodeck-solarus
     buildsystem: simple
     build-commands:
-      # Step 1: Remove any existing manifest.json file
-      - rm -f "files/manifest.json"
-      # Step 2: Remove unnecessary files
-      - rm -rf "files/lib/debug" "files/lib/pkgconfig"
-      # Step 3: Use libman.sh to manage libraries
-      - /app/bin/libman.sh "files/lib"
-      # Step 4: removing libraries folder that have been already moved
-      - rm -rf "files/lib"
-      # Step 5: Ensure binaries are executable
-      - chmod +x "files/bin/"*
-      # Step 6: Copy all remaining files to the Flatpak destination
-      - cp -r files/* "${FLATPAK_DEST}"
+      - cook "solarus-run"
     sources:
       - type: archive
         url: https://github.com/RetroDECK/org.solarus_games.solarus.Launcher/releases/latest/download/RetroDECK-solarus-Artifact.tar.gz
@@ -625,20 +542,7 @@ modules:
   - name: retrodeck-gzdoom
     buildsystem: simple
     build-commands:
-      # Step 1: Remove any existing manifest.json file
-      - rm -f "files/manifest.json"
-      # Step 2: Remove unnecessary files
-      - rm -rf "files/lib/cmake" "files/lib/pkgconfig" "files/lib/debug"
-      # Step 3: Use libman.sh to manage libraries
-      - /app/bin/libman.sh "files/lib"
-      # Step 4: removing libraries folder that have been already moved
-      - rm -rf "files/lib"
-      # Step 5: Ensure binaries are executable
-      - chmod +x "files/bin/"*
-      # Step 6: Copy all remaining files to the Flatpak destination
-      - cp -r files/* "${FLATPAK_DEST}"
-      # Step 7: installing GZDoom wrapper
-      - install -Dm755 gzdoom.sh ${FLATPAK_DEST}/bin/gzdoom.sh
+      - cook "gzdoom"
     sources:
       - type: archive
         url: https://github.com/RetroDECK/org.zdoom.GZDoom/releases/latest/download/RetroDECK-Artifact.tar.gz
@@ -677,13 +581,7 @@ modules:
   - name: xemu
     buildsystem: simple
     build-commands:
-      # Step 1: Ensure the AppImage is executable and extract it
-      - chmod +x *.AppImage
-      - ./*.AppImage --appimage-extract
-      # Step 2: Use libman.sh to manage libraries
-      - /app/bin/libman.sh "squashfs-root/usr/lib"
-      # Step 3: Copy remaining extracted files to the Flatpak destination
-      - find squashfs-root/usr/ -exec sh -c 'install -Dm755 "{}" "${FLATPAK_DEST}/$(echo "{}" | sed "s|^squashfs-root/usr||")"' \;
+      - cook "xemu"
     sources:
       - type: file
         url: https://github.com/xemu-project/xemu/releases/download/v0.8.45/xemu-v0.8.45-x86_64.AppImage
@@ -704,12 +602,7 @@ modules:
   - name: retrodeck-mame
     buildsystem: simple
     build-commands:
-      # Step 1: Remove any existing manifest.json file
-      - rm -f files/manifest.json
-      # Step 2: Use libman.sh to manage libraries - REMOVED AS MAME DON'T BRING ANY LIBS WITH IT
-      # - /app/bin/libman.sh "files/lib"
-      # Step 3: Copy the managed libraries and all other files to the Flatpak destination
-      - cp -rn files/* ${FLATPAK_DEST}
+      - cook "mame"
     sources:
       - type: archive
         url: https://github.com/RetroDECK/org.mamedev.MAME/releases/latest/download/RetroDECK-Artifact.tar.gz
