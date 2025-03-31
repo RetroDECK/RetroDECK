@@ -462,7 +462,7 @@ modules:
         sha256: RETRODECKRPCS3LATEST
 
   # MELONDS
-  # https://melonds.kuribo64.net/downloads.php
+  # https://github.com/RetroDECK/net.kuribo64.melonDS
 
   - name: melonds
     buildsystem: simple
@@ -470,8 +470,8 @@ modules:
       - cook "melonDS"
     sources:
       - type: archive
-        url: https://melonds.kuribo64.net/downloads/melonDS-appimage-x86_64.zip
-        sha256: b4b57e79ad317f8590adeff5bf73233d312886e6c726931e653033c743eb8371
+        url: https://github.com/RetroDECK/net.kuribo64.melonDS/releases/latest/download/RetroDECK-melonds-Artifact.tar.gz
+        sha256: RETRODECKMELONDSLATEST
 
   # Duckstation
   # Do not update: Legacy
