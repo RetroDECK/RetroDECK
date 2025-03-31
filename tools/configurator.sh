@@ -245,7 +245,7 @@ configurator_global_presets_and_settings_dialog() {
   ;;
 
   "RetroAchievements: Logout" ) # This is a workaround to allow disabling cheevos without having to enter login credentials
-    local cheevos_emulators=$(sed -n '/\[cheevos\]/, /\[/{ /\[cheevos\]/! { /\[/! p } }' $rd_conf | sed '/^$/d')
+    local cheevos_emulators=$(sed -n '/\[cheevos\]/, /\[/{ /\[cheevos\]/! { /\[/! p } }' "$rd_conf" | sed '/^$/d')
     for setting_line in $cheevos_emulators; do
       emulator=$(get_setting_name "$setting_line" "retrodeck")
       set_setting_value "$rd_conf" "$emulator" "false" "retrodeck" "cheevos"
@@ -321,7 +321,7 @@ configurator_dolphin_input_textures_dialog() {
 
     if [ $? == 0 ]
     then
-      set_setting_value $dolphingfxconf "HiresTextures" "True" dolphin
+      set_setting_value "$dolphingfxconf" "HiresTextures" "True" dolphin
       (
         mkdir -p "$dolphinDynamicInputTexturesPath" && log d "Dolphin custom input textures folder created: $dolphinDynamicInputTexturesPath"
         rsync -rlD --mkpath "/app/retrodeck/extras/DynamicInputTextures/" "$dolphinDynamicInputTexturesPath/" && log d "Dolphin custom input textures folder populated: $dolphinDynamicInputTexturesPath"
@@ -361,7 +361,7 @@ configurator_primehack_input_textures_dialog() {
 
     if [ $? == 0 ]
     then
-      set_setting_value $primehackgfxconf "HiresTextures" "True" primehack
+      set_setting_value "$primehackgfxconf" "HiresTextures" "True" primehack
       (
         # TODO: unify this in a single function
         mkdir "$primehackDynamicInputTexturesPath" && log d "Primehack custom input textures folder created: $primehackDynamicInputTexturesPath"
@@ -392,7 +392,7 @@ configurator_power_user_warning_dialog() {
     if [[ $choice == "No" ]]; then
       configurator_welcome_dialog
     elif [[ $choice == "Never show this again" ]]; then
-      set_setting_value $rd_conf "power_user_warning" "false" retrodeck "options" # Store power user warning variable for future checks
+      set_setting_value "$rd_conf" "power_user_warning" "false" retrodeck "options" # Store power user warning variable for future checks
       configurator_open_emulator_dialog
     fi
   fi
@@ -489,7 +489,7 @@ configurator_tools_dialog() {
               local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
               compressible_paths=("${compressible_paths[@]}" "false" "$current_setting_name" "$current_setting_value")
             fi
-          done < <(grep -v '^\s*$' $rd_conf | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
+          done < <(grep -v '^\s*$' "$rd_conf" | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
 
           choice=$(rd_zenity \
           --list --width=1200 --height=720 \
@@ -983,7 +983,7 @@ configurator_compression_cleanup_dialog() {
 }
 
 configurator_update_notify_dialog() {
-  if [[ $(get_setting_value $rd_conf "update_check" retrodeck "options") == "true" ]]; then
+  if [[ $(get_setting_value "$rd_conf" "update_check" retrodeck "options") == "true" ]]; then
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - RetroDECK Online Update Check" \
@@ -991,7 +991,7 @@ configurator_update_notify_dialog() {
 
     if [ $? == 0 ] # User clicked "Yes"
     then
-      set_setting_value $rd_conf "update_check" "false" retrodeck "options"
+      set_setting_value "$rd_conf" "update_check" "false" retrodeck "options"
     else # User clicked "Cancel"
       configurator_tools_dialog
     fi
@@ -1003,7 +1003,7 @@ configurator_update_notify_dialog() {
 
     if [ $? == 0 ] # User clicked "Yes"
     then
-      set_setting_value $rd_conf "update_check" "true" retrodeck "options"
+      set_setting_value "$rd_conf" "update_check" "true" retrodeck "options"
     else # User clicked "Cancel"
       configurator_tools_dialog
     fi
@@ -1363,7 +1363,7 @@ configurator_disable_steam_sync() {
 }
 
 configurator_version_history_dialog() {
-  local version_array=($(xml sel -t -v '//component/releases/release/@version' -n $rd_metainfo))
+  local version_array=($(xml sel -t -v '//component/releases/release/@version' -n "$rd_metainfo"))
   local all_versions_list=()
 
   for rd_version in ${version_array[*]}; do
@@ -1449,7 +1449,7 @@ configurator_developer_dialog() {
 }
 
 configurator_retrodeck_multiuser_dialog() {
-  if [[ $(get_setting_value $rd_conf "multi_user_mode" retrodeck "options") == "true" ]]; then
+  if [[ $(get_setting_value "$rd_conf" "multi_user_mode" retrodeck "options") == "true" ]]; then
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - RetroDECK Multi-user Support" \
@@ -1477,7 +1477,7 @@ configurator_retrodeck_multiuser_dialog() {
 }
 
 configurator_online_update_channel_dialog() {
-  if [[ $(get_setting_value $rd_conf "update_repo" retrodeck "options") == "RetroDECK" ]]; then
+  if [[ $(get_setting_value "$rd_conf" "update_repo" retrodeck "options") == "RetroDECK" ]]; then
     rd_zenity --question \
     --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - RetroDECK Change Update Branch" \
@@ -1485,12 +1485,12 @@ configurator_online_update_channel_dialog() {
 
     if [ $? == 0 ] # User clicked "Yes"
     then
-      set_setting_value $rd_conf "update_repo" "$cooker_repository_name" retrodeck "options"
+      set_setting_value "$rd_conf" "update_repo" "$cooker_repository_name" retrodeck "options"
     else # User clicked "Cancel"
       configurator_developer_dialog
     fi
   else
-    set_setting_value $rd_conf "update_repo" "RetroDECK" retrodeck "options"
+    set_setting_value "$rd_conf" "update_repo" "RetroDECK" retrodeck "options"
     release_selector
   fi
 }
