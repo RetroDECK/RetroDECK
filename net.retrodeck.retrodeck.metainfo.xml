@@ -100,6 +100,7 @@
                   <li>FRAMEWORK: Fixed Configurator folder move logic to prevent errors with certain paths</li>
                   <li>FRAMEWORK: Resolved broken symlink issue for internal logging folder</li>
                   <li>CONFIGURATOR: Fixed incorrect menu navigation in Zenity Configurator</li>
+                  <li>STEAM SYNC: Fixed issue where alternative emulator settings were not respected in Steam Sync-launched games</li>
                </ul>
                <p>Developers, developers, developers:</p>
                <ul>
