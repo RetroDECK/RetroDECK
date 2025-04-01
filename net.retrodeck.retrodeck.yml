@@ -178,7 +178,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/webmproject/libvpx/archive/refs/tags/v1.13.1.tar.gz
-        commit: 00dae80465567272abd077f59355f95ac91d7809a2d3006f9ace2637dd429d14
+        sha256: 00dae80465567272abd077f59355f95ac91d7809a2d3006f9ace2637dd429d14
 
   # Steam ROM Manager - START
   # https://github.com/flathub/com.steamgriddb.steam-rom-manager
