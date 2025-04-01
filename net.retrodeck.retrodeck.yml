@@ -61,8 +61,8 @@ cleanup:
   - /src
   - '*.a'
   - '*.la'
-  - /app/bin/libman.sh
-  - /app/bin/cook.sh
+  - /app/bin/libman
+  - /app/bin/cook
 
 modules:
 
@@ -103,7 +103,7 @@ modules:
         echo "Version is $VERSION"
 
         # LIBMAN INSTALLATION
-        install -Dm755 "automation_tools/libman.sh" "/app/bin/libman.sh"
+        install -Dm755 "automation_tools/libman.sh" "/app/bin/libman"
         install -Dm755 "automation_tools/cook.sh" "/app/bin/cook"
     sources:
       - type: dir
@@ -250,8 +250,8 @@ modules:
       # Step 3: Extract the AppImage
       - chmod +x ./*.AppImage
       - ./*.AppImage --appimage-extract
-      # Step 4: Use libman.sh to manage libraries
-      - /app/bin/libman.sh "squashfs-root/usr/lib"
+      # Step 4: Use libman to manage libraries
+      - libman "squashfs-root/usr/lib"
       # Step 5: Copy remaining extracted files to the Flatpak destination
       - find squashfs-root/usr/ -exec sh -c 'install -Dm755 "{}" "${FLATPAK_DEST}/$(echo "{}" | sed "s|^squashfs-root/usr||")"' \;
     sources:
@@ -368,8 +368,8 @@ modules:
     build-commands:
       # Step 1: Remove any existing manifest.json file
       - rm -f "files/manifest.json"
-      # Step 2: Use libman.sh to manage libraries
-      - /app/bin/libman.sh "files/lib"
+      # Step 2: Use libman to manage libraries
+      - libman "files/lib"
       # Step 3: removing libraries folder that have been already moved
       - rm -rf "files/lib"
       # Step 4: Ensure binaries are executable
@@ -458,6 +458,7 @@ modules:
   - name: retrodeck-rpcs3
     buildsystem: simple
     build-commands:
+      - libman "files/lib"
       - cook "rpcs3"
     sources:
       - type: archive
@@ -493,7 +494,7 @@ modules:
   # UPDATE IT HERE
   # https://github.com/cemu-project/Cemu/releases
 
-  - name: cemu
+  - name: Cemu
     buildsystem: simple
     build-commands:
       - cook "Cemu"
@@ -514,7 +515,7 @@ modules:
         dest-filename: Cemu-wrapper
 
   # Vita3K - ROLLING RELEASE
-  - name: vita3k
+  - name: Vita3K
     buildsystem: simple
     build-commands:
       # Copying the user icon
@@ -551,6 +552,7 @@ modules:
   - name: retrodeck-gzdoom
     buildsystem: simple
     build-commands:
+      - libman "files/lib"
       - cook "gzdoom"
     sources:
       - type: archive
@@ -568,7 +570,7 @@ modules:
       # Step 1: Create the Flatpak destination directory
       - mkdir -p "${FLATPAK_DEST}"
       # Step 2: Extract and manage library files
-      - /app/bin/libman.sh "."
+      - libman "."
       # Step 3: Move and set up the binary
       - rm -rf *.dll.config
       - mv R*x* "${FLATPAK_DEST}/bin/"
@@ -649,8 +651,8 @@ modules:
     build-commands:
       # Step 1: Remove any existing manifest.json file
       - rm -f "files/manifest.json"
-      # Step 2: Use libman.sh to manage libraries
-      - /app/bin/libman.sh "files/lib"
+      # Step 2: Use libman to manage libraries
+      - libman "files/lib"
       # Step 3: Clean up source library folder
       - rm -rf "files/lib"
       # Step 4: Ensure binaries are executable
