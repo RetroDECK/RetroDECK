@@ -62,6 +62,7 @@ cleanup:
   - '*.a'
   - '*.la'
   - /app/bin/libman.sh
+  - /app/bin/cook.sh
 
 modules:
 
