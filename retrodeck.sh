@@ -89,12 +89,13 @@ if [ -f "$lockfile" ]; then
     log d "Update triggered"
     log d "Lockfile found but the version doesn't match with the config file"
     log i "Config file's version is $version but the actual version is $hard_version"
-    if grep -qF "cooker" <<< $hard_version; then # If newly-installed version is a "cooker" build
+    if grep -qF "cooker" <<< "$hard_version"; then # If newly-installed version is a "cooker" build
       log d "Newly-installed version is a \"cooker\" build"
       configurator_generic_dialog "RetroDECK Cooker Warning" "RUNNING COOKER VERSIONS OF RETRODECK CAN BE EXTREMELY DANGEROUS AND ALL OF YOUR RETRODECK DATA\n(INCLUDING BIOS FILES, BORDERS, DOWNLOADED MEDIA, GAMELISTS, MODS, ROMS, SAVES, STATES, SCREENSHOTS, TEXTURE PACKS AND THEMES)\nARE AT RISK BY CONTINUING!"
-      set_setting_value $rd_conf "update_repo" "$cooker_repository_name" retrodeck "options"
-      set_setting_value $rd_conf "update_check" "true" retrodeck "options"
-      set_setting_value $rd_conf "developer_options" "true" retrodeck "options"
+      set_setting_value "$rd_conf" "update_repo" "$cooker_repository_name" retrodeck "options"
+      set_setting_value "$rd_conf" "update_check" "true" retrodeck "options"
+      set_setting_value "$rd_conf" "developer_options" "true" retrodeck "options"
+      set_setting_value "$rd_conf" "logging_level" "debug" retrodeck "options"
       cooker_base_version=$(echo $version | cut -d'-' -f2)
       choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Upgrade" --extra-button="Don't Upgrade" --extra-button="Full Wipe and Fresh Install" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -104,7 +105,7 @@ if [ -f "$lockfile" ]; then
       if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
         if [[ $choice == "Don't Upgrade" ]]; then # If user wants to bypass the post_update.sh process this time.
           log i "Skipping upgrade process for cooker build, updating stored version in retrodeck.cfg"
-          set_setting_value $rd_conf "version" "$hard_version" retrodeck # Set version of currently running RetroDECK to updated retrodeck.cfg
+          set_setting_value "$rd_conf" "version" "$hard_version" retrodeck # Set version of currently running RetroDECK to updated retrodeck.cfg
         elif [[ $choice == "Full Wipe and Fresh Install" ]]; then # Remove all RetroDECK data and start a fresh install
           if [[ $(configurator_generic_question_dialog "RetroDECK Cooker Reset" "This is going to remove all of the data in all locations used by RetroDECK!\n\n(INCLUDING BIOS FILES, BORDERS, DOWNLOADED MEDIA, GAMELISTS, MODS, ROMS, SAVES, STATES, SCREENSHOTS, TEXTURE PACKS AND THEMES)\n\nAre you sure you want to contine?") == "true" ]]; then
             if [[ $(configurator_generic_question_dialog "RetroDECK Cooker Reset" "Are you super sure?\n\nThere is no going back from this process, everything is gonzo.\nDust in the wind.\n\nYesterdays omelette.") == "true" ]]; then
@@ -128,13 +129,14 @@ if [ -f "$lockfile" ]; then
         post_update
       fi
     else # If newly-installed version is a normal build.
-      if grep -qF "cooker" <<< $version; then # If previously installed version was a cooker build
-        cooker_base_version=$(echo $version | cut -d'-' -f2)
+      if grep -qF "cooker" <<< "$version"; then # If previously installed version was a cooker build
+        cooker_base_version=$(echo "$version" | cut -d'-' -f2)
         version=$cooker_base_version # Temporarily assign cooker base version to $version so update script can read it properly.
-        set_setting_value $rd_conf "update_repo" "RetroDECK" retrodeck "options"
-        set_setting_value $rd_conf "update_check" "false" retrodeck "options"
-        set_setting_value $rd_conf "update_ignore" "" retrodeck "options"
-        set_setting_value $rd_conf "developer_options" "false" retrodeck "options"
+        set_setting_value "$rd_conf" "update_repo" "RetroDECK" retrodeck "options"
+        set_setting_value "$rd_conf" "update_check" "false" retrodeck "options"
+        set_setting_value "$rd_conf" "update_ignore" "" retrodeck "options"
+        set_setting_value "$rd_conf" "developer_options" "false" retrodeck "options"
+        set_setting_value "$rd_conf" "logging_level" "info" retrodeck "options"
       fi
       post_update       # Executing post update script
     fi
