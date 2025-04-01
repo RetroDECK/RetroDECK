@@ -5,8 +5,6 @@ change_preset_dialog() {
   # show their current enable/disabled state and allow the user to change one or more.
   # USAGE: change_preset_dialog "$preset"
 
-  log d "Starting change_preset_dialog for preset: $preset"
-
   preset="$1"
   pretty_preset_name=${preset//_/ }  # Preset name prettification
   pretty_preset_name=$(echo "$pretty_preset_name" | awk '{for(i=1;i<=NF;i++){$i=toupper(substr($i,1,1))substr($i,2)}}1')
@@ -14,6 +12,8 @@ change_preset_dialog() {
   local section_results
   section_results=$(sed -n '/\['"$preset"'\]/, /\[/{ /\['"$preset"'\]/! { /\[/! p } }' "$rd_conf" | sed '/^$/d')
   all_emulators_in_preset=""
+
+  log d "Starting change_preset_dialog for preset: $preset"
 
   while IFS= read -r config_line; do
       system_name=$(get_setting_name "$config_line" "retrodeck")
@@ -75,7 +75,6 @@ change_preset_dialog() {
      log i "No preset choices made"
    fi
 }
-
 
 build_preset_list_options() {
   # FUNCTION: build_preset_list_options
@@ -376,4 +375,65 @@ fetch_all_presets() {
   else
     echo "${presets[@]}"
   fi
+}
+
+change_presets_cli () {
+  # This function will allow a user to change presets either individually or all for a preset class from the CLI.
+  # USAGE: change_presets_cli "$preset" "$system/all" "$on/off"
+
+  local preset="$1"
+  local system="$2"
+  local value="$3"
+  local section_results
+  section_results=$(sed -n '/\['"$preset"'\]/, /\[/{ /\['"$preset"'\]/! { /\[/! p } }' "$rd_conf" | sed '/^$/d')
+  local all_emulators_in_preset="" # A CSV string containing all emulators in a preset block
+  local all_other_emulators_in_preset="" # A CSV string containing every emulator except the one provided by the user in a preset block
+
+  log d "Changing settings for preset: $preset"
+
+  while IFS= read -r config_line; do
+    # Build a list of all emulators in the preset block
+    system_name=$(get_setting_name "$config_line" "retrodeck")
+    if [[ -n $all_emulators_in_preset ]]; then
+      all_emulators_in_preset+=","
+    fi
+    all_emulators_in_preset+="$system_name" # Build a list of all emulators in case user provides "all" as the system name
+
+    if [[ "$value" =~ (false|off) && ! "$system" == "all" ]]; then # If the user is disabling a specific emulator, check for any other already enabled and keep them enabled
+      system_value=$(get_setting_value "$rd_conf" "$system_name" "retrodeck" "$preset")
+      if [[ ! "$system_name" == "$system" && "$system_value" == "true" ]]; then
+        log d "Other system $system_name is enabled for preset $preset, retaining setting."
+        if [[ -n $all_other_emulators_in_preset ]]; then
+          all_other_emulators_in_preset+=","
+        fi
+        all_other_emulators_in_preset+="$system_name" # Build a list of all emulators that are currently enabled that aren't the one being disabled
+      fi
+    fi
+
+  done < <(printf '%s\n' "$section_results")
+
+  if [[ "$value" =~ (true|on) ]]; then # If user is enabling one or more systems in a preset
+    if [[ "$system" == "all" ]]; then
+      log d "Enabling all emualtors for preset $preset"
+      choice="$all_emulators_in_preset" # All emulators in the preset will be enabled
+    else
+      if [[ "$all_emulators_in_preset" =~ "$system" ]]; then
+        log d "Enabling preset $preset for $system"
+        choice="$system"
+      else
+        log i "Emulator $system does not support preset $preset, please check the command options and try again."
+      fi
+    fi
+  else # If user is disabling one or more systems in a preset
+    if [[ "$system" == "all" ]]; then
+      choice="" # Empty string means all systems in preset should be disabled
+    else
+      choice="$all_other_emulators_in_preset"
+    fi
+  fi
+
+  # Call make_preset_changes if the user made a selection,
+  # or if an extra button was clicked (even if the resulting choice is empty, meaning all systems are to be disabled).
+    log d "Calling make_preset_changes with choice: $choice"
+    make_preset_changes "$preset" "$choice"
 }
