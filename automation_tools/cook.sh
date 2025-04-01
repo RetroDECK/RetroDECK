@@ -41,7 +41,7 @@ install_appimage() {
 
     DEST_FOLDER="/app/bin/rd-components/$APPNAME"
     mkdir -p "$DEST_FOLDER"
-    mv squashfs-root "$DEST_FOLDER"
+    mv squashfs-root/* "$DEST_FOLDER"
 
     # Create a wrapper script to run the application
     cat <<EOF > "$WRAPPER_SCRIPT"
@@ -62,6 +62,9 @@ EOF
 # Relies on the EXTRACT_DIR variable set in the main script.
 #---------------------------------------------
 install_flatpak_artifact() {
+
+    echo "Installing flatpak artifact for \"$APPNAME\""
+
     COMPONENT_ROOT="/app/bin/rd-components/$APPNAME"
     mkdir -p "$COMPONENT_ROOT"
 
@@ -80,14 +83,15 @@ install_flatpak_artifact() {
         chmod +x "$EXTRACT_DIR/bin/"*
     fi
 
+    rm -rf "metadata"* || echo "No metadata files found, no need for removal, proceding."
+
     # Copy all extracted files to COMPONENT_ROOT
-    cp -r "$EXTRACT_DIR"/* "$COMPONENT_ROOT" 2>/dev/null
-    rm -rf "$EXTRACT_DIR"
+    cp -r "$EXTRACT_DIR"/* "$COMPONENT_ROOT"
 
     # Create a wrapper script to launch the application
     cat <<EOF > "$WRAPPER_SCRIPT"
 #!/bin/bash
-LD_LIBRARY_PATH="$COMPONENT_ROOT/lib:\$LD_LIBRARY_PATH" "$COMPONENT_ROOT/bin/$(basename "$APPNAME")" "\$@"
+LD_LIBRARY_PATH="$COMPONENT_ROOT/files/lib:$COMPONENT_ROOT/var/lib:\$LD_LIBRARY_PATH" "$COMPONENT_ROOT/files/bin/$(basename "$APPNAME")" "\$@"
 EOF
 
     chmod +x "$WRAPPER_SCRIPT"
@@ -98,15 +102,18 @@ EOF
 
 list_files(){
 
+        echo ""
         echo "Contents of the current directory:"
         ls .
+        echo ""
         if [ -d "files" ]; then
             echo "Contents of 'files' directory:"
             ls -l "files"
-
+            echo ""
             if [ -d "files/bin" ]; then
-            echo "Contents of 'files/bin' directory:"
-            ls -l "files/bin"
+                echo "Contents of 'files/bin' directory:"
+                ls -l "files/bin"
+                echo ""
             fi
         fi
 
@@ -142,7 +149,7 @@ if [ -n "$ARTIFACT_PARAM" ]; then
     else
         # Use the provided artifact file.
         if [ ! -f "$ARTIFACT_PARAM" ]; then
-            echo "Artifact file '$ARTIFACT_PARAM' does not exist."\
+            echo "Artifact file '$ARTIFACT_PARAM' does not exist."
             list_files
             exit 1
         fi
@@ -151,9 +158,9 @@ if [ -n "$ARTIFACT_PARAM" ]; then
 else
     # No artifact parameter provided; search in order.
     # 1. Check for an extracted directory artifact.
-    if [ -d "files/bin/$APPNAME" ]; then
+    if [ -f "files/bin/$APPNAME" ]; then
         ARTIFACT="extracted_dir"
-        EXTRACT_DIR="extracted"
+        EXTRACT_DIR="."
     else
         # 2. Search for an AppImage in the current directory.
         ARTIFACT=$(find . -maxdepth 1 -type f -name "*.AppImage" | head -n 1)
