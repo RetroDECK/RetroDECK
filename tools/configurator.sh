@@ -207,13 +207,12 @@ configurator_global_presets_and_settings_dialog() {
         response=$?  # Capture the exit code immediately
         if [ "$response" -eq 0 ]; then
             change_preset_dialog "borders"
-        else
-            configurator_global_presets_and_settings_dialog
         fi
     else
         change_preset_dialog "borders"
     fi
-    ;;
+    configurator_global_presets_and_settings_dialog
+  ;;
 
   "Widescreen" )
     log i "Configurator: opening \"$choice\" menu"
