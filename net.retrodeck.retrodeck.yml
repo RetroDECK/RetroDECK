@@ -422,6 +422,7 @@ modules:
     buildsystem: simple
     build-commands:
       - cook "dolphin-emu-wrapper"
+      - sed -i 's|dolphin-emu|/app/bin/rd-components/dolphin-emu-wrapper/files/bin/dolphin-emu|' "/app/bin/rd-components/dolphin-emu-wrapper/files/bin/dolphin-emu-wrapper"
     sources:
       - type: archive
         url: https://github.com/RetroDECK/org.DolphinEmu.dolphin-emu/releases/latest/download/RetroDECK-Artifact.tar.gz
