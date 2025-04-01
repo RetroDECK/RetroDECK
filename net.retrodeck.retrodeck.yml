@@ -661,8 +661,10 @@ modules:
       - cp -r files/* "${FLATPAK_DEST}"
     sources:
       - type: archive
-        url: https://github.com/RetroDECK/ES-DE/releases/latest/download/RetroDECK-ES-DE-Artifact.tar.gz
-        sha256: RETRODECKESDELATEST
+        #url: https://github.com/RetroDECK/ES-DE/releases/latest/download/RetroDECK-ES-DE-Artifact.tar.gz
+        #sha256: RETRODECKESDELATEST
+        url: https://github.com/RetroDECK/ES-DE/releases/download/feat%2Fupdate-010425.26/RetroDECK-ES-DE-Artifact.tar.gz
+        sha256: a1a56d4c6a1d47816aed3b3b8317e167c0dcd07171b22ec6f10b938c456b182f
 
   - name: retrodeck-theme
     buildsystem: simple
