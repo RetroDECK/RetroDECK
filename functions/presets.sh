@@ -13,10 +13,15 @@ change_preset_dialog() {
   current_preset_settings=()
   local section_results
   section_results=$(sed -n '/\['"$preset"'\]/, /\[/{ /\['"$preset"'\]/! { /\[/! p } }' "$rd_conf" | sed '/^$/d')
+  all_emulators_in_preset=""
 
   while IFS= read -r config_line; do
       system_name=$(get_setting_name "$config_line" "retrodeck")
       system_value=$(get_setting_value "$rd_conf" "$system_name" "retrodeck" "$preset")
+      if [[ -n $all_emulators_in_preset ]]; then
+        all_emulators_in_preset+=","
+      fi
+      all_emulators_in_preset+="$system_name" # Build a list of all emulators in case user selects "Enable All"
       # Append three values: the current enabled state, a pretty name, and the internal system name.
       current_preset_settings=("${current_preset_settings[@]}" "$system_value" "$(make_name_pretty "$system_name")" "$system_name")
   done < <(printf '%s\n' "$section_results")
@@ -38,54 +43,37 @@ change_preset_dialog() {
     --extra-button "Disable All")
 
   local rc=$?
-  local extra_action=""
 
   log d "User made a choice: $choice with return code: $rc"
+
+  if [[ "$rc" == 0 || -n "$choice" ]]; then # If the user didn't hit Cancel
+    choice_made="true"
+  fi
 
   # Handle extra button responses.
   if [ "$choice" == "Enable All" ]; then
       log d "Enable All selected"
-      # Build a comma-separated list of all internal system names.
-      all_systems=""
-      for ((i=2; i<${#current_preset_settings[@]}; i+=3)); do
-          if [ -z "$all_systems" ]; then
-              all_systems="${current_preset_settings[$i]}"
-          else
-              all_systems="$all_systems,${current_preset_settings[$i]}"
-          fi
-      done
-      choice="$all_systems"
-      extra_action="extra"
-      force_state="true"
+      # Assign the comma-separated list of all preset system names as the choice
+      choice="$all_emulators_in_preset"
   elif [ "$choice" == "Disable All" ]; then
       log d "Disable All selected"
-      # Build a comma-separated list of all internal system names.
-      all_systems=""
-      for ((i=2; i<${#current_preset_settings[@]}; i+=3)); do
-          if [ -z "$all_systems" ]; then
-              all_systems="${current_preset_settings[$i]}"
-          else
-              all_systems="$all_systems,${current_preset_settings[$i]}"
-          fi
-      done
-      choice="$all_systems"
-      extra_action="extra"
-      force_state="false"
+      # Assign empty string as choice, as all systems will be disabled
+      choice=""
   fi
 
   # Call make_preset_changes if the user made a selection,
-  # or if an extra button was clicked (even if the resulting choice is empty).
-  if [[ "$rc" == 0 || "$extra_action" == "extra" || -n "$choice" ]]; then
+  # or if an extra button was clicked (even if the resulting choice is empty, meaning all systems are to be disabled).
+   if [[ "$choice_made" == "true" ]]; then
     log d "Calling make_preset_changes with choice: $choice"
     (
-      make_preset_changes "$preset" "$choice" "$force_state"
+      make_preset_changes "$preset" "$choice"
     ) | rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
          --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
          --title "RetroDECK Configurator Utility - Presets Configuration" \
          --text="Setting up your presets, please wait..."
-  else
-    log i "No preset choices made"
-  fi
+   else
+     log i "No preset choices made"
+   fi
 }
 
 
@@ -96,7 +84,7 @@ build_preset_list_options() {
   #              The function also builds several arrays (all_systems, changed_systems, etc.) that are used in the make_preset_changes() function.
   #              This function needs to be called in the same memory space as make_preset_changes() at least once.
   # USAGE: build_preset_list_options "$preset"
-  # INPUT: 
+  # INPUT:
   #   - $1: The name of the preset.
   # OUTPUT:
   #   - $godot_current_preset_settings: A Godot temp file containing the system values, pretty system names, and system names.
@@ -138,25 +126,12 @@ build_preset_list_options() {
   done < <(printf '%s\n' "$section_results")
 }
 
-
 make_preset_changes() {
-  # This function takes a preset name ($1) and a CSV list ($2) of system names.
-  # If a third parameter is provided (force_state), it forces the specified state (true/false)
-  # for only the systems in the CSV list. Otherwise, it toggles the current state.
-  #
-  # USAGE: make_preset_changes $preset $choice [force_state]
-  #
-  # Examples:
-  # Force "borders" to be true for gba:
-  #   make_preset_changes "borders" "gba" true
-  # Force "borders" to be true for all supported systems:
-  #   make_preset_changes "borders" "all" true
-  # Toggle gba in preset "borders", this will disable the enabled and vice versa:
-  #   make_preset_changes "borders" "gba" true
-  # Toggle all in preset "borders":
-  #   make_preset_changes "borders" "all"
+  # This function will take a preset name $preset and a CSV list $choice, which contains the names of systems that have been enabled for this preset and enable them in the backend
+  # Any systems which are currently enabled and not in the CSV list $choice will instead be disabled in the backend
+  # USAGE: make_preset_changes $preset $choice
 
-  log d "Fetching incompatible presets from JSON file"
+  # Fetch incompatible presets from JSON and create a lookup list
   incompatible_presets=$(jq -r '
     .incompatible_presets | to_entries[] |
     [
@@ -167,85 +142,47 @@ make_preset_changes() {
 
   preset="$1"
   choice="$2"
-  force_state="${3:-}"
 
-  if [[ "${force_state,,}" == "on" || "${force_state,,}" == "true" ]]; then
-    force_state="true"
-  elif [[ "${force_state,,}" == "off" || "${force_state,,}" == "false" ]]; then
-    force_state="false"
-  fi
-
-  log d "Building preset list options for preset: $preset"
   build_preset_list_options "$preset"
 
   IFS="," read -ra choices <<< "$choice"
-  if [[ " ${choices[*]} " == *" all "* ]]; then
-    log d "All systems selected for preset: $preset"
-    choices=("${all_systems[@]}")
-  fi
-
-  # Use an associative array to store the new state for each emulator.
-  declare -A emulator_state
-
-  # Iterate only over the specified systems.
-  for emulator in "${choices[@]}"; do
-    if [[ -n "$force_state" ]]; then
-      new_state="$force_state"
-      log i "Forcing $preset to state: $new_state for $emulator"
-    else
-      current_state=$(get_setting_value "$rd_conf" "$emulator" "retrodeck" "$preset")
-      if [[ "$current_state" == "true" ]]; then
-        new_state="false"
-        if [[ $emulator == "all" ]]; then
-          log i "Toggling off $preset for all systems"
-        else
-          log i "Toggling off $preset for system: $emulator"
+    for emulator in "${all_systems[@]}"; do
+      if [[ " ${choices[*]} " =~ " ${emulator} " && ! " ${current_enabled_systems[*]} " =~ " ${emulator} " ]]; then
+        changed_systems=("${changed_systems[@]}" "$emulator")
+        if [[ ! " ${changed_presets[*]} " =~ " ${preset} " ]]; then
+          changed_presets=("${changed_presets[@]}" "$preset")
         fi
-      else
-        if [[ $emulator == "all" ]]; then
-          log i "Toggling on $preset for all systems"
-        else
-          new_state="true"
-          log i "Toggling on $preset for system: $emulator"
-        fi
-      fi
-    fi
-
-    emulator_state["$emulator"]="$new_state"
-    changed_systems=("${changed_systems[@]}" "$emulator")
-    [[ ! " ${changed_presets[*]} " =~ " ${preset} " ]] && changed_presets=("${changed_presets[@]}" "$preset")
-    set_setting_value "$rd_conf" "$emulator" "$new_state" "retrodeck" "$preset"
-
-    # If enabling the emulator, disable any conflicting presets.
-    if [[ "$new_state" == "true" ]]; then
-      while IFS=: read -r preset_being_checked known_incompatible_preset || [[ -n "$preset_being_checked" ]]; do
-        if [[ ! $preset_being_checked =~ ^# ]] && [[ -n "$preset_being_checked" ]]; then
-          if [[ "$preset" == "$preset_being_checked" ]] && [[ $(get_setting_value "$rd_conf" "$emulator" "retrodeck" "$known_incompatible_preset") == "true" ]]; then
-            log d "Disabling conflicting preset: $known_incompatible_preset for emulator: $emulator"
-            changed_presets=("${changed_presets[@]}" "$known_incompatible_preset")
-            set_setting_value "$rd_conf" "$emulator" "false" "retrodeck" "$known_incompatible_preset"
+        set_setting_value "$rd_conf" "$emulator" "true" "retrodeck" "$preset"
+        # Check for conflicting presets for this system
+        while IFS=: read -r preset_being_checked known_incompatible_preset || [[ -n "$preset_being_checked" ]];
+        do
+          if [[ ! $preset_being_checked == "#"* ]] && [[ ! -z "$preset_being_checked" ]]; then
+            if [[ "$preset" == "$preset_being_checked" ]]; then
+              if [[ $(get_setting_value "$rd_conf" "$emulator" "retrodeck" "$known_incompatible_preset") == "true" ]]; then
+                changed_presets=("${changed_presets[@]}" "$known_incompatible_preset")
+                set_setting_value "$rd_conf" "$emulator" "false" "retrodeck" "$known_incompatible_preset"
+              fi
+            fi
           fi
+        done < <(echo "$incompatible_presets")
+      fi
+      if [[ ! " ${choices[*]} " =~ " ${emulator} " && ! " ${current_disabled_systems[*]} " =~ " ${emulator} " ]]; then
+        changed_systems=("${changed_systems[@]}" "$emulator")
+        if [[ ! " ${changed_presets[*]} " =~ " ${preset} " ]]; then
+          changed_presets=("${changed_presets[@]}" "$preset")
         fi
-      done < <(echo "$incompatible_presets")
-    fi
-  done
-
-  # Rebuild config for all changed systems.
-  for emulator in "${changed_systems[@]}"; do
-    log d "Building preset config for changed emulator: $emulator"
-    if [[ "${emulator_state[$emulator]}" == "true" ]]; then
-      # When enabling, force a full config update (detailed settings applied).
-      build_preset_config "$emulator" "${changed_presets[*]}" true
-    else
+        set_setting_value "$rd_conf" "$emulator" "false" "retrodeck" "$preset"
+      fi
+    done
+    for emulator in "${changed_systems[@]}"; do
       build_preset_config "$emulator" "${changed_presets[*]}"
-    fi
-  done
+    done
 }
 
 build_preset_config() {
   # This function will apply one or more presets for a given system, as listed in retrodeck.cfg
   # USAGE: build_preset_config "system name" "preset class 1" "preset class 2" "preset class 3"
-  
+
   local system_being_changed="$1"
   shift
   local presets_being_changed="$*"
@@ -284,38 +221,52 @@ build_preset_config() {
                   eval defaults_file=$defaults_file
                 fi
                 local read_defaults_file="$defaults_file"
-                log d "Changing setting: $read_setting_name to $new_setting_value in $read_target_file"
+
                 if [[ "$read_system_enabled" == "true" ]]; then
                   if [[ "$new_setting_value" = \$* ]]; then
                     eval new_setting_value=$new_setting_value
                   fi
-                  if [[ "$read_config_format" == "retroarch" && ! "$retroarch_all" == "true" ]]; then # If this is a RetroArch core, generate the override file
+                  if [[ "$read_config_format" == "retroarch" && ! "$retroarch_all" == "true" ]]; then # Separate process if this is a per-system RetroArch override file
                     if [[ ! -f "$read_target_file" ]]; then
+                      log d "RetroArch per-system override file $read_target_file not found, creating and adding setting"
                       create_dir "$(realpath "$(dirname "$read_target_file")")"
                       echo "$read_setting_name = \""$new_setting_value"\"" > "$read_target_file"
                     else
                       if [[ -z $(grep -o -P "^$read_setting_name\b" "$read_target_file") ]]; then
+                        log d "RetroArch per-system override file $read_target_file does not contain setting $read_setting_name, adding and assigning value $new_setting_value"
                         add_setting "$read_target_file" "$read_setting_name" "$new_setting_value" "$read_config_format" "$section"
                       else
+                        log d "Changing setting: $read_setting_name to $new_setting_value in $read_target_file"
                         set_setting_value "$read_target_file" "$read_setting_name" "$new_setting_value" "$read_config_format" "$section"
-                      fi                    
+                      fi
                     fi
+                  elif [[ "$read_config_format" == "ppsspp" && "$read_target_file" == "$ppssppcheevosconf" ]]; then # Separate process if this is the standalone cheevos token file used by PPSSPP
+                    log d "Creating PPSSPP cheevos token file $ppssppcheevosconf"
+                    echo "$new_setting_value" > "$read_target_file"
                   else
+                    log d "Changing setting: $read_setting_name to $new_setting_value in $read_target_file"
                     set_setting_value "$read_target_file" "$read_setting_name" "$new_setting_value" "$read_config_format" "$section"
                   fi
                 else
-                  if [[ "$read_config_format" == "retroarch" && ! "$retroarch_all" == "true" ]]; then
+                  if [[ "$read_config_format" == "retroarch" && ! "$retroarch_all" == "true" ]]; then # Separate process if this is a per-system RetroArch override file
                     if [[ -f "$read_target_file" ]]; then
+                      log d "Removing setting $read_setting_name from RetroArch per-system override file $read_target_file"
                       delete_setting "$read_target_file" "$read_setting_name" "$read_config_format" "$section"
                       if [[ -z $(cat "$read_target_file") ]]; then # If the override file is empty
+                        log d "RetroArch per-system override file is empty, removing"
                         rm -f "$read_target_file"
                       fi
                       if [[ -z $(ls -1 "$(dirname "$read_target_file")") ]]; then # If the override folder is empty
+                        log d "RetroArch per-system override folder is empty, removing"
                         rmdir "$(realpath "$(dirname "$read_target_file")")"
                       fi
                     fi
+                  elif [[ "$read_config_format" == "ppsspp" && "$read_target_file" == "$ppssppcheevosconf" ]]; then # Separate process if this is the standalone cheevos token file used by PPSSPP
+                    log d "Removing PPSSPP cheevos token file $ppssppcheevosconf"
+                    rm "$read_target_file"
                   else
                     local default_setting_value=$(get_setting_value "$read_defaults_file" "$read_setting_name" "$read_config_format" "$section")
+                    log d "Changing setting: $read_setting_name to $default_setting_value in $read_target_file"
                     set_setting_value "$read_target_file" "$read_setting_name" "$default_setting_value" "$read_config_format" "$section"
                   fi
                 fi
