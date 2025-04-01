@@ -191,7 +191,7 @@ configurator_global_presets_and_settings_dialog() {
   "Rewind" "Enable / Disable: the rewind function in supported systems." \
   "Swap A/B and X/Y Buttons" "Enable / Disable: Swapped A/B and X/Y button layout in supported systems." \
   "RetroAchievements: Login" "Login the RetroAchievements in supported systems." \
-  "RetroAchievements: Logout" "Logout RetroAchievements service in ALL supported systems" \
+  "RetroAchievements: Logout" "Logout RetroAchievements service in supported systems" \
   "RetroAchievements: Hardcore Mode" "Enable / Disable: RetroAchievements Hardcore Mode (no cheats, rewind, save states, etc.) in supported systems." \
   "Universal Dynamic Input Textures: Dolphin" "Enable / Disable: Universal Dynamic Input Textures for Dolphin." \
   "Universal Dynamic Input Textures: Primehack" "Enable / Disable: Universal Dynamic Input Textures for Primehack." \
@@ -233,10 +233,11 @@ configurator_global_presets_and_settings_dialog() {
   ;;
 
   "RetroAchievements: Login" )
-    local cheevos_creds=$(get_cheevos_token_dialog)
-    if [[ ! "$cheevos_creds" == "failed" ]]; then
+    if cheevos_response=$(get_cheevos_token_dialog); then
       configurator_generic_dialog "RetroDECK Configurator Utility - RetroAchievements" "RetroAchievements login successful, please select systems you would like to enable achievements for in the next dialog."
-      IFS=',' read -r cheevos_username cheevos_token cheevos_login_timestamp < <(printf '%s\n' "$cheevos_creds")
+      cheevos_username=$(echo "$cheevos_response" | jq -r '.User')
+      cheevos_token=$(echo "$cheevos_response" | jq -r '.Token')
+      cheevos_login_timestamp=$(date +%s)
       change_preset_dialog "cheevos"
     else
       configurator_generic_dialog "RetroDECK Configurator Utility - RetroAchievements" "RetroAchievements login failed, please verify your username and password and try the process again."
@@ -244,14 +245,9 @@ configurator_global_presets_and_settings_dialog() {
     configurator_global_presets_and_settings_dialog
   ;;
 
-  "RetroAchievements: Logout" ) # This is a workaround to allow disabling cheevos without having to enter login credentials
-    local cheevos_emulators=$(sed -n '/\[cheevos\]/, /\[/{ /\[cheevos\]/! { /\[/! p } }' "$rd_conf" | sed '/^$/d')
-    for setting_line in $cheevos_emulators; do
-      emulator=$(get_setting_name "$setting_line" "retrodeck")
-      set_setting_value "$rd_conf" "$emulator" "false" "retrodeck" "cheevos"
-      build_preset_config "$emulator" "cheevos"
-    done
-    configurator_generic_dialog "RetroDECK Configurator Utility - RetroAchievements" "RetroAchievements has been disabled in all supported systems."
+  "RetroAchievements: Logout" )
+    # This is a workaround to allow disabling cheevos without having to enter login credentials
+    change_preset_dialog "cheevos"
     configurator_global_presets_and_settings_dialog
   ;;
 
