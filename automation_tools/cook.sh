@@ -9,12 +9,12 @@
 # 2. The second parameter is optional and represents the artifact.
 #    Supported artifact types are:
 #      - An extracted directory (indicated by "."), which corresponds to
-#        "artifacts-build-dir/files/bin/<AppName>"
+#        "files/bin/<AppName>"
 #      - An AppImage file (*.AppImage)
 #      - A compressed file (*.tar, *.tar.gz, *.zip)
 #
 # If no artifact parameter is provided, the script searches in the following order:
-#   a. Check if the extracted directory "artifacts-build-dir/files/bin/<AppName>" exists.
+#   a. Check if the extracted directory "files/bin/<AppName>" exists.
 #   b. Look for an AppImage file in the current directory.
 #   c. Look for a compressed file in the current directory.
 #
@@ -115,11 +115,11 @@ if [ -n "$ARTIFACT_PARAM" ]; then
     # If an artifact parameter is provided.
     if [ "$ARTIFACT_PARAM" == "." ]; then
         # If the parameter is ".", check for the extracted directory.
-        if [ -d "artifacts-build-dir/files/bin/$APPNAME" ]; then
+        if [ -d "files/bin/$APPNAME" ]; then
             ARTIFACT="extracted_dir"
-            EXTRACT_DIR="artifacts-build-dir/files"
+            EXTRACT_DIR="files"
         else
-            echo "Artifact set to current directory but 'artifacts-build-dir/files/bin/$APPNAME' not found."
+            echo "Artifact set to current directory but 'files/bin/$APPNAME' not found."
             exit 1
         fi
     else
@@ -133,9 +133,9 @@ if [ -n "$ARTIFACT_PARAM" ]; then
 else
     # No artifact parameter provided; search in order.
     # 1. Check for an extracted directory artifact.
-    if [ -d "artifacts-build-dir/files/bin/$APPNAME" ]; then
+    if [ -d "files/bin/$APPNAME" ]; then
         ARTIFACT="extracted_dir"
-        EXTRACT_DIR="artifacts-build-dir/files"
+        EXTRACT_DIR="extracted"
     else
         # 2. Search for an AppImage in the current directory.
         ARTIFACT=$(find . -maxdepth 1 -type f -name "*.AppImage" | head -n 1)
