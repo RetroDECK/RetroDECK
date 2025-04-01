@@ -96,6 +96,22 @@ EOF
     echo "Wrapper created in \"$WRAPPER_SCRIPT\""
 }
 
+list_files(){
+
+        echo "Contents of the current directory:"
+        ls .
+        if [ -d "files" ]; then
+            echo "Contents of 'files' directory:"
+            ls -l "files"
+
+            if [ -d "files/bin" ]; then
+            echo "Contents of 'files/bin' directory:"
+            ls -l "files/bin"
+            fi
+        fi
+
+}
+
 #---------------------------------------------
 # Main Script Logic
 #---------------------------------------------
@@ -120,12 +136,14 @@ if [ -n "$ARTIFACT_PARAM" ]; then
             EXTRACT_DIR="files"
         else
             echo "Artifact set to current directory but 'files/bin/$APPNAME' not found."
+            list_files
             exit 1
         fi
     else
         # Use the provided artifact file.
         if [ ! -f "$ARTIFACT_PARAM" ]; then
-            echo "Artifact file '$ARTIFACT_PARAM' does not exist."
+            echo "Artifact file '$ARTIFACT_PARAM' does not exist."\
+            list_files
             exit 1
         fi
         ARTIFACT="$ARTIFACT_PARAM"
@@ -153,7 +171,7 @@ fi
 # If no artifact was found, list the directory contents and exit.
 if [ -z "$ARTIFACT" ]; then
     echo "No artifact found in the current directory. Listing contents:"
-    ls .
+    list_files
     exit 1
 fi
 
@@ -202,7 +220,7 @@ case "$ARTIFACT" in
         ;;
     *)
         echo "Artifact '$ARTIFACT' is not supported. Listing contents:"
-        ls .
+        list_files
         exit 1
         ;;
 esac
