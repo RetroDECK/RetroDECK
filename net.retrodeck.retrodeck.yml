@@ -439,7 +439,7 @@ modules:
       # Step 2: Remove unnecessary files
       - rm -rf "files/lib/pkgconfig"
       # Step 3: Use libman.sh to manage libraries
-      - /app/bin/libman.sh "files/lib"
+      - libman "files/lib"
       # Step 4: removing libraries folder that have been already moved
       - rm -rf "files/lib"
       # Step 5: Ensure binaries are executable
