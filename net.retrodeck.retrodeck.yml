@@ -435,6 +435,7 @@ modules:
     buildsystem: simple
     build-commands:
       - cook "primehack-wrapper"
+      - sed -i 's|primehack|/app/bin/rd-components/primehack-wrapper/files/bin/primehack|' "/app/bin/rd-components/primehack-wrapper/files/bin/primehack-wrapper"
     sources:
       - type: archive
         url: https://github.com/RetroDECK/io.github.shiiion.primehack/releases/latest/download/RetroDECK-primehack-Artifact.tar.gz
