@@ -28,7 +28,7 @@ placeholders.cache
 RetroDECK*Artifact.tar.gz
 ./gits
 flathub.json
-./version
+version
 
 #   Components artifacts   #
 ############################
