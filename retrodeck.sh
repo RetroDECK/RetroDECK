@@ -205,7 +205,7 @@ while [[ $# -gt 0 ]]; do
             if [ -z "$component" ]; then
                 echo "You are about to reset one or more RetroDECK components or emulators."
                 echo -e "Available options are:\nall, $(prepare_component --list | tr ' ' ',' | sed 's/,/, /g')"
-                read -p "Please enter the component you would like to reset: " component
+                read -r -p "Please enter the component you would like to reset: " component
                 component=$(echo "$component" | tr '[:upper:]' '[:lower:]')
             fi
             log d "Resetting component: $component"
@@ -219,7 +219,7 @@ while [[ $# -gt 0 ]]; do
         --test-upgrade)
             if [[ "$2" =~ ^.+ ]]; then
                 echo "You are about to test upgrading RetroDECK from version $2 to $hard_version"
-                read -p "Enter 'y' to continue, 'n' to start RetroDECK normally: " response
+                read -r -p "Enter 'y' to continue, 'n' to start RetroDECK normally: " response
                 if [[ $response == [yY] ]]; then
                     version="$2"
                     logging_level="debug"  # Temporarily enable debug logging
@@ -289,8 +289,8 @@ while [[ $# -gt 0 ]]; do
               if [[ "$preset" == "cheevos" &&  "$value" =~ (true|on) ]]; then # Get cheevos login information
                 current_system_value=$(get_setting_value "$rd_conf" "$system" "retrodeck" "$preset")
                 if [[ "$current_system_value" == "false" || -z "$current_system_value" ]]; then
-                  read -p "Please enter your RetroAchievements username: " cheevos_username
-                  read -s -p "Please enter your RetroAchievements password: " cheevos_password
+                  read -r -p "Please enter your RetroAchievements username: " cheevos_username
+                  read -r -s -p "Please enter your RetroAchievements password: " cheevos_password
                   if cheevos_info=$(get_cheevos_token "$cheevos_username" "$cheevos_password"); then
                     cheevos_token=$(echo "$cheevos_info" | jq -r '.Token')
                     cheevos_login_timestamp=$(date +%s)
