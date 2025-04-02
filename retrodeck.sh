@@ -144,10 +144,10 @@ if [ -f "$lockfile" ]; then
       if grep -qF "cooker" <<< "$version"; then # If previously installed version was a cooker build
         cooker_base_version=$(echo "$version" | cut -d'-' -f2)
         version="$cooker_base_version" # Temporarily assign cooker base version to $version so update script can read it properly.
-        set_setting_value $rd_conf "update_repo" "RetroDECK" retrodeck "options"
-        set_setting_value $rd_conf "update_check" "false" retrodeck "options"
-        set_setting_value $rd_conf "update_ignore" "" retrodeck "options"
-        set_setting_value $rd_conf "developer_options" "false" retrodeck "options"
+        set_setting_value "$rd_conf" "update_repo" "RetroDECK" retrodeck "options"
+        set_setting_value "$rd_conf" "update_check" "false" retrodeck "options"
+        set_setting_value "$rd_conf" "update_ignore" "" retrodeck "options"
+        set_setting_value "$rd_conf" "developer_options" "false" retrodeck "options"
         set_setting_value "$rd_conf" "logging_level" "info" retrodeck "options"
       fi
       post_update       # Executing post update script
@@ -290,6 +290,8 @@ while [[ $# -gt 0 ]]; do
                 read -p "Please enter your RetroAchievements username: " cheevos_username
                 read -s -p "Please enter your RetroAchievements password: " cheevos_password
                 if cheevos_info=$(get_cheevos_token "$cheevos_username" "$cheevos_password"); then
+                  cheevos_token=$(echo "$cheevos_info" | jq -r '.Token')
+                  cheevos_login_timestamp=$(date +%s)
                   echo "RetroAchievements login succeeded, proceeding..."
                 else # login failed
                   echo "RetroAchievements login failed, please try again."
