@@ -29,6 +29,7 @@ RetroDECK*Artifact.tar.gz
 ./gits
 flathub.json
 ./version
+.shellcheckrc
 
 #   Components artifacts   #
 ############################
