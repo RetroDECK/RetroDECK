@@ -174,7 +174,7 @@ modules:
       - --enable-vp8
       - --enable-postproc
       - --enable-vp9
-      - --enable-vp9-highbitdept
+      #- --enable-vp9-highbitdept
     sources:
       - type: archive
         url: https://github.com/webmproject/libvpx/archive/refs/tags/v1.15.0.tar.gz
