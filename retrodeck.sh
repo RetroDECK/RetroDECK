@@ -287,14 +287,20 @@ while [[ $# -gt 0 ]]; do
               exit 1
             elif [[ $(fetch_all_presets | tr ' ' ',' | sed 's/,/, /g') =~ "$preset" ]]; then
               if [[ "$preset" == "cheevos" &&  "$value" =~ (true|on) ]]; then # Get cheevos login information
-                read -p "Please enter your RetroAchievements username: " cheevos_username
-                read -s -p "Please enter your RetroAchievements password: " cheevos_password
-                if cheevos_info=$(get_cheevos_token "$cheevos_username" "$cheevos_password"); then
-                  cheevos_token=$(echo "$cheevos_info" | jq -r '.Token')
-                  cheevos_login_timestamp=$(date +%s)
-                  echo "RetroAchievements login succeeded, proceeding..."
-                else # login failed
-                  echo "RetroAchievements login failed, please try again."
+                current_system_value=$(get_setting_value "$rd_conf" "$system" "retrodeck" "$preset")
+                if [[ "$current_system_value" == "false" || -z "$current_system_value" ]]; then
+                  read -p "Please enter your RetroAchievements username: " cheevos_username
+                  read -s -p "Please enter your RetroAchievements password: " cheevos_password
+                  if cheevos_info=$(get_cheevos_token "$cheevos_username" "$cheevos_password"); then
+                    cheevos_token=$(echo "$cheevos_info" | jq -r '.Token')
+                    cheevos_login_timestamp=$(date +%s)
+                    echo "RetroAchievements login succeeded, proceeding..."
+                  else # login failed
+                    echo "RetroAchievements login failed, please try again."
+                    exit 1
+                  fi
+                else
+                  echo "RetroAchivements for $system are already enabled."
                   exit 1
                 fi
               fi
