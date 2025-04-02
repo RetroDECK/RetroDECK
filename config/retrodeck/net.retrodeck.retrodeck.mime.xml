@@ -216,8 +216,6 @@
 		<glob pattern="*.phd"/>
 		<glob pattern="*.pk3"/>
 		<glob pattern="*.pk4"/>
-		<glob pattern="*.png"/>
-		<glob pattern="*.po"/>
 		<glob pattern="*.pqa"/>
 		<glob pattern="*.prc"/>
 		<glob pattern="*.prg"/>
