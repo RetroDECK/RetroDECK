@@ -177,8 +177,8 @@ modules:
       - --enable-vp9-highbitdept
     sources:
       - type: archive
-        url: https://github.com/webmproject/libvpx/archive/refs/tags/v1.13.1.tar.gz
-        sha256: 00dae80465567272abd077f59355f95ac91d7809a2d3006f9ace2637dd429d14
+        url: https://github.com/webmproject/libvpx/archive/refs/tags/v1.15.0.tar.gz
+        sha256: e935eded7d81631a538bfae703fd1e293aad1c7fd3407ba00440c95105d2011e
 
   # Steam ROM Manager - START
   # https://github.com/flathub/com.steamgriddb.steam-rom-manager
