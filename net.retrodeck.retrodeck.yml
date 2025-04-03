@@ -243,15 +243,11 @@ modules:
     build-commands:
       # Step 1: Create required directories
       - mkdir -p "${FLATPAK_DEST}/share/libretro/"
-      # Step 2: Copy RetroArch configuration files
+      # Step 2: Move RetroArch configuration files
       - cp -r ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/* "${FLATPAK_DEST}/share/libretro/"
-      # Step 3: Extract the AppImage
-      - chmod +x ./*.AppImage
-      - ./*.AppImage --appimage-extract
-      # Step 4: Use libman to manage libraries
-      - libman "squashfs-root/usr/lib"
-      # Step 5: Copy remaining extracted files to the Flatpak destination
-      - find squashfs-root/usr/ -exec sh -c 'install -Dm755 "{}" "${FLATPAK_DEST}/$(echo "{}" | sed "s|^squashfs-root/usr||")"' \;
+      - rm -rf "./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch"
+      # Step 3: cook RetroArch
+      - cook "retroarch"
     sources:
       - type: archive
         url: https://buildbot.libretro.com/stable/1.20.0/linux/x86_64/RetroArch.7z
