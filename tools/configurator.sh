@@ -1133,8 +1133,8 @@ configurator_bios_checker() {
   ) |
   rd_zenity --progress --auto-close --no-cancel \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Configurator Utility - BIOS Check in Progress" \
-    --text="This check will look for BIOS files that RetroDECK has identified as working.\n\nNot all BIOS files are required for games to work, please check the BIOS description for more information on its purpose.\n\nBIOS files not known to this tool could still function.\n\nSome more advanced emulators such as Ryujinx will have additional methods to verify that the BIOS files are in working order.\n\nRetroDECK is now checking your BIOS files, please wait...\n\n" \
+    --title "RetroDECK Configurator - BIOS Checker - Scanning" \
+    --text="The BIOS Checker is scanning for BIOS and Firmware files that RetroDECK recognizes as supported by each system.\n\nPlease note that not all BIOS files are necessary for games to work.\n\nBIOS files not recognized by this tool may still function correctly.\n\nSome emulators have additional built-in methods to verify the functionality of BIOS files.\n\n<span foreground='$purple'><b>The BIOS Checker is now scanning your BIOS files, please wait...</b></span>\n\n" \
     --width=400 --height=100
 }
 
