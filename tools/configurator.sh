@@ -910,7 +910,7 @@ configurator_compress_multiple_games_dialog() {
     local choice=$(rd_zenity \
       --list --width=1200 --height=720 --title "RetroDECK Configurator - Compression Tool" \
       --checklist --hide-column=3 --ok-label="Compress Selected" --extra-button="Compress All" \
-      --separator=$'\0' --print-column=3 \
+      --separator="^" --print-column=3 \
       --text="Choose which games to compress:" \
       --column "Compress?" \
       --column "Game" \
@@ -919,11 +919,13 @@ configurator_compress_multiple_games_dialog() {
 
     local rc=$?
     log d "User choice: $choice"
-    if [[ $rc == 0 && -n "$choice" ]]; then
-      while IFS="^" read -r game comp; do # Split Zenity choice string into compatible pairs (game^format)
-        games_to_compress+=("$game"^"$comp")
-      done <<< "$choice"
-    elif [[ -n "$choice" ]]; then
+    if [[ $rc == 0 && -n "$choice" && ! "$choice" == "Compress All" ]]; then
+      IFS='^' read -r -a temp_array <<< "$choice"
+      games_to_compress=()
+      for ((i=0; i<${#temp_array[@]}; i+=2)); do
+        games_to_compress+=("${temp_array[i]}^${temp_array[i+1]}")
+      done
+    elif [[ "$choice" == "Compress All" ]]; then
       games_to_compress=("${all_compressible_games[@]}")
     else
       configurator_compression_tool_dialog
@@ -936,6 +938,7 @@ configurator_compress_multiple_games_dialog() {
 
   local total_games=${#games_to_compress[@]}
   local games_left=$total_games
+  local threads_running=0
 
   (
   for game_line in "${games_to_compress[@]}"; do
@@ -946,13 +949,23 @@ configurator_compress_multiple_games_dialog() {
     log i "Compressing $(basename "$game") into $compression_format format"
 
     echo "#Compressing $(basename "$game") into $compression_format format.\n\n$games_left games left to compress." # Update Zenity dialog text
-    compress_game "$compression_format" "$game" "$post_compression_cleanup" "$system"
+
+    compress_game "$compression_format" "$game" "$post_compression_cleanup" "$system" & ((threads_running++))
+
+    # If running jobs reach the limit, wait for one to finish
+    if (( threads_running >= max_threads )); then
+        wait -n  # Wait for any one job to finish (requires Bash 4.3+)
+        ((threads_running--))
+    fi
 
     games_left=$(( games_left - 1 ))
     local progress=$(( 99 - (( 99 / total_games ) * games_left) ))
     log d "progress: $progress"
     echo "$progress" # Update Zenity dialog progress bar
   done
+
+  wait # wait for any straggling threads
+
   echo "100" # Close Zenity progress dialog when finished
   ) |
   rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
