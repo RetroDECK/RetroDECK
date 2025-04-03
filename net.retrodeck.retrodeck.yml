@@ -648,7 +648,7 @@ modules:
         #url: https://github.com/RetroDECK/ES-DE/releases/latest/download/RetroDECK-ES-DE-Artifact.tar.gz
         #sha256: RETRODECKESDELATEST
         url: https://github.com/RetroDECK/ES-DE/releases/download/feat%2Fupdate-030425.10/RetroDECK-ES-DE-Artifact.tar.gz
-        sha256: 30f38ad4d0fd068160b350d1882eb69fff0fb3b8be4a25b0a1d767d2d764970f
+        sha256: f4fec61b89918e4efb587c5e2a58762025cc38d02ac75e62be98091134a87fd0
 
   - name: retrodeck-theme
     buildsystem: simple
@@ -746,7 +746,7 @@ modules:
       # Removing libman and cook as they're no more needed
       - rm -f /app/bin/libman
       - rm -f /app/bin/cook
-      
+
       # Removing the retrodeck_function_wrapper.sh in non-cooker versions (aka main)
       - |
         if ! grep -q "cooker" "${FLATPAK_DEST}/retrodeck/version"; then
