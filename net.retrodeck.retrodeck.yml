@@ -846,6 +846,12 @@ modules:
       # Installing metainfo
       - install -Dm 644 net.retrodeck.retrodeck.metainfo.xml ${FLATPAK_DEST}/share/metainfo/net.retrodeck.retrodeck.metainfo.xml
 
+      # Removing the retrodeck_function_wrapper.sh in non-cooker versions (aka main)
+      - |
+        if ! grep -q "cooker" "${FLATPAK_DEST}/retrodeck/version"; then
+          rm -f "${FLATPAK_DEST}/tools/retrodeck_function_wrapper.sh"
+        fi
+
     sources:
       - type: dir
         path: .
