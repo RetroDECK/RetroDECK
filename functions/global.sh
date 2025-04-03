@@ -27,6 +27,8 @@ fi
 distro_name=$(flatpak-spawn --host grep '^ID=' /etc/os-release | cut -d'=' -f2)
 distro_version=$(flatpak-spawn --host grep '^VERSION_ID=' /etc/os-release | cut -d'=' -f2)
 gpu_info=$(flatpak-spawn --host lspci | grep -i 'vga\|3d\|2d')
+cpu_cores=$(nproc)
+max_threads=$(echo $(($(nproc) / 2)))
 
 log d "Debug mode enabled"
 log i "Initializing RetroDECK"
@@ -39,6 +41,7 @@ log i "Resolution: $width x $height"
 if [[ $native_resolution == true ]]; then
   log i "Steam Deck native resolution detected"
 fi
+log i "CPU: Using $max_threads out of $cpu_cores available CPU cores for multi-threaded operations"
 
 source /app/libexec/050_save_migration.sh
 source /app/libexec/checks.sh
