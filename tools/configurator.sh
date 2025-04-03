@@ -430,7 +430,7 @@ configurator_open_emulator_dialog() {
 configurator_tools_dialog() {
 
   local choices=(
-  "Backup Userdata" "Compress and backup RetroDECK userdata folders."
+  "Backup RetroDECK" "Compress and backup RetroDECK userdata folders."
   "BIOS Checker" "Checks and shows information about BIOS files."
   "Games Compressor" "Compress games to save space for supported systems."
   "Install: RetroDECK Controller Layouts" "Install RetroDECK controller templates into Steam."
@@ -457,25 +457,25 @@ configurator_tools_dialog() {
 
   case $choice in
 
-  "Backup Userdata" )
+  "Backup RetroDECK" )
 
     log i "Configurator: opening \"$choice\" menu"
-    configurator_generic_dialog "RetroDECK Configurator Utility - Backup Userdata" "This tool will compress one or more RetroDECK userdata folders into a single zip file.\n\nThis process can take several minutes, and the resulting zip file can be found in the ~/retrodeck/backups folder."
+    configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "This tool will compress one or more RetroDECK userdata folders into a single zip file.\n\nPlease note that this process may take several minutes.\n\n<span foreground='$purple'><b>The resulting zip file will be located in the ~/retrodeck/backups folder.</b></span>\n\n"
 
-    choice=$(rd_zenity --title "RetroDECK Configurator Utility - Backup Userdata" --info --no-wrap --ok-label="Cancel" --extra-button="Backup Core Userdata" --extra-button="Backup Some Userdata" --extra-button="Backup All Userdata" \
-    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --text="Would you like to backup some or all of the RetroDECK userdata prior to update?\n\nIf you choose \"Backup Core Userdata\" only irreplaceable files (like saves, states and gamelists) will be backed up. If you choose \"Backup Some Userdata\" you will be given a choice of which folders to backup.\n\nIf you choose \"Backup All Userdata\" then ALL data (including ROMs and downloaded media) will be backed up.\nPLEASE NOTE: A full backup may take up a large amount of space, especially if you have a lot of scraped media.")
+    choice=$(rd_zenity --title "RetroDECK Configurator Utility - Backup Userdata" --info --no-wrap --ok-label="Cancel" --extra-button="Core Backup" --extra-button="Custom Backup" --extra-button="Complete Backup" \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --text="Would you like to backup some or all of the RetroDECK userdata?\n\nChoose one of the following options:\n\n1. Core Backup: Only essential files (such as saves, states, and gamelists).\n\n2. Custom Backup: You will be given the option to select specific folders to backup.\n\n3. Complete Backup: All data, including games and downloaded media, will be backed up.\n\n<span foreground='$purple'><b>PLEASE NOTE: A complete backup may require a significant amount of space.</b></span>\n\n")
 
     local rc=$?
     if [[ $rc == "0" ]] && [[ -z "$choice" ]]; then # User selected Cancel button
       configurator_tools_dialog
     else
       case $choice in
-        "Backup Core Userdata" )
+        "Core Backup" )
           log i "User chose to backup core userdata prior to update."
           export CONFIGURATOR_GUI="zenity"
           backup_retrodeck_userdata "core"
         ;;
-        "Backup Some Userdata" )
+        "Custom Backup" )
           log i "User chose to backup custom userdata prior to update."
           while read -r config_line; do
             local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
@@ -503,7 +503,7 @@ configurator_tools_dialog() {
           export CONFIGURATOR_GUI="zenity"
           backup_retrodeck_userdata "custom" "${choices[@]}" # Expand array of choices into individual arguments
         ;;
-        "Backup All Userdata" )
+        "Complete Backup" )
           log i "User chose to backup all userdata prior to update."
           export CONFIGURATOR_GUI="zenity"
           backup_retrodeck_userdata "complete"
