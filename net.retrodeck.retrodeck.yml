@@ -61,8 +61,6 @@ cleanup:
   - /src
   - '*.a'
   - '*.la'
-  - /app/bin/libman
-  - /app/bin/cook
 
 modules:
 
@@ -786,6 +784,10 @@ modules:
 
       # Installing metainfo
       - install -Dm 644 net.retrodeck.retrodeck.metainfo.xml ${FLATPAK_DEST}/share/metainfo/net.retrodeck.retrodeck.metainfo.xml
+
+      # Removing libman and cook as they're no more needed
+      - rm -f /app/bin/libman
+      - rm -f /app/bin/cook
 
     sources:
       - type: dir
