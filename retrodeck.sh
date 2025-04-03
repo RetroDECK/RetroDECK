@@ -186,7 +186,7 @@ while [[ $# -gt 0 ]]; do
             ;;
         --compress-all)
             cli_compress_all_games "$2"
-            shift 2
+            exit 0
             ;;
         --steam-sync)
             steam_sync
