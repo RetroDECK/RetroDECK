@@ -419,18 +419,7 @@ modules:
   - name: retrodeck-primehack
     buildsystem: simple
     build-commands:
-      # Step 1: Remove any existing manifest.json file
-      - rm -f "files/manifest.json"
-      # Step 2: Remove unnecessary files
-      - rm -rf "files/lib/pkgconfig"
-      # Step 3: Use libman.sh to manage libraries
-      - libman "files/lib"
-      # Step 4: removing libraries folder that have been already moved
-      - rm -rf "files/lib"
-      # Step 5: Ensure binaries are executable
-      - chmod +x "files/bin/"*
-      # Step 6: Copy all remaining files to the Flatpak destination
-      - cp -r files/* "${FLATPAK_DEST}"
+      - cook "primehack-wrapper"
     sources:
       - type: archive
         url: https://github.com/RetroDECK/io.github.shiiion.primehack/releases/latest/download/RetroDECK-primehack-Artifact.tar.gz
