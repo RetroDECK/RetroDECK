@@ -360,16 +360,7 @@ modules:
   - name: retrodeck-ppsspp
     buildsystem: simple
     build-commands:
-      # Step 1: Remove any existing manifest.json file
-      - rm -f "files/manifest.json"
-      # Step 2: Use libman to manage libraries
-      - libman "files/lib"
-      # Step 3: removing libraries folder that have been already moved
-      - rm -rf "files/lib"
-      # Step 4: Ensure binaries are executable
-      - chmod +x "files/bin/"*
-      # Step 5: Copy all remaining files to the Flatpak destination
-      - cp -r files/* "${FLATPAK_DEST}"
+      - cook "PPSSPPSDL"
     sources:
       - type: archive
         url: https://github.com/RetroDECK/org.ppsspp.PPSSPP/releases/latest/download/RetroDECK-Artifact.tar.gz
