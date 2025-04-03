@@ -272,13 +272,22 @@ cli_compress_all_games() {
     else
       post_compression_cleanup="false"
     fi
+
     while IFS= read -r system # Find and validate all games that are able to be compressed with this compression type
     do
+      while (( $(jobs -p | wc -l) >= $max_threads )); do # Wait for a background task to finish if max_threads has been hit
+      sleep 0.1
+      done
+      (
       local compression_candidates=$(find "$roms_folder/$system" -type f -not -iname "*.txt")
       if [[ ! -z "$compression_candidates" ]]; then
         log i "Checking files for $system"
         while IFS= read -r file
         do
+          while (( $(jobs -p | wc -l) >= $max_threads )); do # Wait for a background task to finish if max_threads has been hit
+            sleep 0.1
+          done
+          (
           local compatible_compression_format=$(find_compatible_compression_format "$file")
           if [[ ! "$compatible_compression_format" == "none" ]]; then
             log i "$(basename "$file") can be compressed to $compatible_compression_format"
@@ -286,11 +295,15 @@ cli_compress_all_games() {
           else
             log w "No compatible compression format found for $(basename "$file")"
           fi
+          ) &
         done < <(printf '%s\n' "$compression_candidates")
+        wait # wait for background tasks to finish
       else
         log w "No compatible files found for compression in $system"
       fi
+      ) &
     done < <(printf '%s\n' "$compressible_systems_list")
+    wait # wait for background tasks to finish
   else
     log i "The response for post-compression file cleanup was not correct. Please try again."
   fi
