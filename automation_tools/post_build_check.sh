@@ -17,6 +17,8 @@ GLOBAL_SH_PATH="/app/libexec/global.sh"
 if ! flatpak run --command=ls "$FLATPAK_APP_ID" "$GLOBAL_SH_PATH" &> /dev/null; then
     echo "✗ global.sh not found at $GLOBAL_SH_PATH" | tee -a "$LOG_FILE"
     exit 1
+else
+    echo "✓ global.sh found at $GLOBAL_SH_PATH" | tee -a "$LOG_FILE"
 fi
 
 # Source global.sh to load the `features` variable

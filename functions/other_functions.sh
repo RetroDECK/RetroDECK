@@ -1376,12 +1376,13 @@ open_component(){
 
 add_retrodeck_to_steam(){
 
-    log i "Adding RetroDECK to Steam"
+    log i "Checking if user wants to add RetroDECK to Steam"
 
     rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
   --text="Do you want to add RetroDECK to Steam?"
     if [ $? == 0 ]; then
       (
+        log i "RetroDECK has been added to Steam"
         steam-rom-manager enable --names "RetroDECK Launcher"
         steam-rom-manager add
       ) |
@@ -1391,8 +1392,6 @@ add_retrodeck_to_steam(){
         --text="Please wait while RetroDECK is being added to Steam...\n\n"
       rd_zenity --info --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --text="RetroDECK has been added to Steam.\n\nPlease close and reopen Steam to see the changes."
     fi
-
-    log i "RetroDECK has been added to Steam"
 }
 
 repair_paths() {
@@ -1448,4 +1447,19 @@ repair_paths() {
 sanitize() {
     # Replace sequences of underscores with a single space
     echo "$1" | sed -e 's/_\{2,\}/ /g' -e 's/_/ /g' -e 's/:/ -/g' -e 's/&/and/g' -e 's%/%and%g' -e 's/  / /g'
+}
+
+get_cheevos_token() {
+  # This function will attempt to authenticate with the RA API with the supplied credentials and will return a JSON object if successful
+  # USAGE get_cheevos_token $username $password
+
+  local cheevos_api_response=$(curl --silent --data "r=login&u=$1&p=$2" "$RA_API_URL")
+  local cheevos_success=$(echo "$cheevos_api_response" | jq -r '.Success')
+  if [[ "$cheevos_success" == "true" ]]; then
+    log d "login succeeded"
+    echo "$cheevos_api_response"
+  else
+    log d "login failed"
+    return 1
+  fi
 }

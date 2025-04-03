@@ -746,6 +746,12 @@ modules:
       # Removing libman and cook as they're no more needed
       - rm -f /app/bin/libman
       - rm -f /app/bin/cook
+      
+      # Removing the retrodeck_function_wrapper.sh in non-cooker versions (aka main)
+      - |
+        if ! grep -q "cooker" "${FLATPAK_DEST}/retrodeck/version"; then
+          rm -f "${FLATPAK_DEST}/tools/retrodeck_function_wrapper.sh"
+        fi
 
     sources:
       - type: dir

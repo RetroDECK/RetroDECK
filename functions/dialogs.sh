@@ -194,7 +194,7 @@ changelog_dialog() {
 }
 
 get_cheevos_token_dialog() {
-  # This function will return a RetroAchvievements token from a valid username and password, will return "login failed" otherwise
+  # This function will return a RetroAchvievements token from a valid username and password, will return an error code otherwise
   # USAGE: get_cheevos_token_dialog
 
   local cheevos_info=$(rd_zenity --forms --title="Cheevos" \
@@ -204,14 +204,12 @@ get_cheevos_token_dialog() {
   --add-password="Password")
 
   IFS='^' read -r cheevos_username cheevos_password < <(printf '%s\n' "$cheevos_info")
-  local cheevos_response=$(curl --silent --data "r=login&u=$cheevos_username&p=$cheevos_password" "$RA_API_URL")
-  local cheevos_success=$(echo "$cheevos_response" | jq .Success | tr -d '"')
-  local cheevos_token=$(echo "$cheevos_response" | jq .Token | tr -d '"')
-  local cheevos_login_timestamp=$(date +%s)
-  if [[ "$cheevos_success" == "true" ]]; then
-    echo "$cheevos_username,$cheevos_token,$cheevos_login_timestamp"
-  else
-    echo "failed"
+  if cheevos_info=$(get_cheevos_token "$cheevos_username" "$cheevos_password"); then
+    log d "Cheevos login succeeded"
+    echo "$cheevos_info"
+  else # login failed
+    log d "Cheevos login failed"
+    return 1
   fi
 }
 

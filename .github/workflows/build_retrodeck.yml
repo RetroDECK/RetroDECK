@@ -14,6 +14,7 @@ on:
       - '*.sh'
       - 'net.retrodeck.retrodeck.yml'
       - 'net.retrodeck.retrodeck.metainfo.xml'
+      - 'tools/**'
   pull_request_target:
     types: [opened, synchronize, reopened]
     branches:
@@ -364,11 +365,12 @@ jobs:
           GITHUB_TOKEN: ${{ steps.generate-rekku-token.outputs.token }}
           header: "RetroDECK Build Artifacts"
           message: |
-            A build for this pull request has completed successfully.
-            Codenname: ${{ env.TAG }}
+            A build for this `pull request` has been produced.
+            Codename: **${{ env.TAG }}**
+
             Build artifacts can be found [here](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifact-retrodeck-artifacts) and they include:
-            - `RetroDECK Flatpak: `RetroDECK.flatpak
-            - Flatpak file SH`A256 checksum: `RetroDECK.flatpak.sha
+            - RetroDECK Flatpak: `RetroDECK.flatpak`
+            - Flatpak file SHA256 checksum: `RetroDECK.flatpak.sha`
             - Flatpak Artifact Bundle: `RetroDECKArtifact.tar.gz`, not useful for testing or end users
 
       # Rewrite Tag (for Main Branch Only)

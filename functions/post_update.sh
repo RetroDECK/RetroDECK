@@ -688,9 +688,23 @@ post_update() {
     # RetroArch reset
     if [[ "$execute_all" == "true" || " ${selected_choices[@]} " =~ " RetroArch " ]]; then
       log i "User agreed to RetroArch reset"
-      # Twice to toggle them once and then toggle them back to the original value
-      make_preset_changes "borders" "all"
-      make_preset_changes "borders" "all"
+      local currently_enabled_emulators=""
+      local current_border_settings=$(sed -n '/\[borders\]/, /\[/{ /\[borders\]/! { /\[/! p } }' "$rd_conf" | sed '/^$/d')
+
+      while IFS= read -r config_line; do
+        local system_name=$(get_setting_name "$config_line" "retrodeck")
+        local system_value=$(get_setting_value "$rd_conf" "$system_name" "retrodeck" "borders")
+        if [[ "$system_value" == "true" ]]; then
+          if [[ -n $currently_enabled_emulators ]]; then
+            currently_enabled_emulators+="," # Add comma delimiter if list has already been started
+          fi
+          currently_enabled_emulators+="$system_name" # Add emulator to list of currently enabled ones
+        fi
+      done < <(printf '%s\n' "$current_border_settings")
+      
+      # Disable all systems in the borders preset, then re-enable the ones that were previously on
+      make_preset_changes "borders" "" # Disable all systems in borders preset block
+      make_preset_changes "borders" "$currently_enabled_emulators" # Re-enable previously enabled systems in the borders preset block
     fi
 
     # Dolphin - GameCube Controller
