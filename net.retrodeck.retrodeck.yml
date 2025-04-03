@@ -160,24 +160,6 @@ modules:
         url: https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
         sha256: af986793a515d500ab2d35f8d2aecd656e764504b789b66d7e1a0b727a124c44
 
-  - name: libvpx
-    config-opts:
-      - --enable-runtime-cpu-detect
-      - --enable-shared
-      - --disable-static
-      - --enable-pic
-      - --disable-install-bins
-      - --disable-install-docs
-      - --disable-install-srcs
-      - --enable-vp8
-      - --enable-postproc
-      - --enable-vp9
-      #- --enable-vp9-highbitdept
-    sources:
-      - type: archive
-        url: https://github.com/webmproject/libvpx/archive/refs/tags/v1.15.0.tar.gz
-        sha256: e935eded7d81631a538bfae703fd1e293aad1c7fd3407ba00440c95105d2011e
-
   # Steam ROM Manager - START
   # https://github.com/flathub/com.steamgriddb.steam-rom-manager
 
