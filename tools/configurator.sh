@@ -61,7 +61,6 @@ rd_zenity --progress --no-cancel --pulsate --auto-close \
 #       - Reset All Emulators and Components
 #       - Reset RetroDECK
 #     - Tools
-#       - Backup Userdata
 #       - BIOS Checker
 #       - Games Compressor
 #         - Compress Single Game
@@ -82,18 +81,19 @@ rd_zenity --progress --no-cancel --pulsate --auto-close \
 #       - Ponzu: Remove Citra
 #     - Steam Sync
 #     - Data Management
-#       - Move all of RetroDECK
-#       - Move ROMs folder
-#       - Move BIOS folder
-#       - Move Downloaded Media folder
-#       - Move Saves folder
-#       - Move States folder
-#       - Move Themes folder
-#       - Move Screenshots folder
-#       - Move Mods folder
-#       - Move Texture Packs folder
-#       - Clean Empty ROM Folders
-#       - Rebuild All ROM Folders
+#       - Backup RetroDECK
+#       - ROMS Folder: Clean Empty Systems
+#       - ROMS Folder: Rebuild Systems
+#       - Move: All of RetroDECK
+#       - Move: ROMs folder
+#       - Move: BIOS folder
+#       - Move: Downloaded Media folder
+#       - Move: Saves folder
+#       - Move: States folder
+#       - Move: Themes folder
+#       - Move: Screenshots folder
+#       - Move: Mods folder
+#       - Move: Texture Packs folder
 #     - About RetroDECK
 #       - RetroDECK Version History
 #         - Full changelog
@@ -102,7 +102,7 @@ rd_zenity --progress --no-cancel --pulsate --auto-close \
 #     - Developer Options (Hidden)
 #       - Change Multi-user mode
 #       - Install Specific Release
-#       - Browse the wiki
+#       - Browse the Wiki
 #       - Install: RetroDECK Starter Pack
 #       - Tool: USB Import
 #
@@ -430,7 +430,6 @@ configurator_open_emulator_dialog() {
 configurator_tools_dialog() {
 
   local choices=(
-  "Backup RetroDECK" "Compress and backup RetroDECK userdata folders."
   "BIOS Checker" "Checks and shows information about BIOS files."
   "Games Compressor" "Compress games to save space for supported systems."
   "Install: RetroDECK Controller Layouts" "Install RetroDECK controller templates into Steam."
@@ -456,63 +455,6 @@ configurator_tools_dialog() {
   "${choices[@]}")
 
   case $choice in
-
-  "Backup RetroDECK" )
-
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "This tool will compress one or more RetroDECK userdata folders into a single zip file.\n\nPlease note that this process may take several minutes.\n\n<span foreground='$purple'><b>The resulting zip file will be located in the ~/retrodeck/backups folder.</b></span>\n\n"
-
-    choice=$(rd_zenity --title "RetroDECK Configurator Utility - Backup Userdata" --info --no-wrap --ok-label="Cancel" --extra-button="Core Backup" --extra-button="Custom Backup" --extra-button="Complete Backup" \
-    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --text="Would you like to backup some or all of the RetroDECK userdata?\n\nChoose one of the following options:\n\n1. Core Backup: Only essential files (such as saves, states, and gamelists).\n\n2. Custom Backup: You will be given the option to select specific folders to backup.\n\n3. Complete Backup: All data, including games and downloaded media, will be backed up.\n\n<span foreground='$purple'><b>PLEASE NOTE: A complete backup may require a significant amount of space.</b></span>\n\n")
-
-    local rc=$?
-    if [[ $rc == "0" ]] && [[ -z "$choice" ]]; then # User selected Cancel button
-      configurator_tools_dialog
-    else
-      case $choice in
-        "Core Backup" )
-          log i "User chose to backup core userdata prior to update."
-          export CONFIGURATOR_GUI="zenity"
-          backup_retrodeck_userdata "core"
-        ;;
-        "Custom Backup" )
-          log i "User chose to backup custom userdata prior to update."
-          while read -r config_line; do
-            local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
-            if [[ ! $current_setting_name =~ (rdhome|sdcard|backups_folder) ]]; then # Ignore these locations
-            log d "Adding $current_setting_name to compressible paths."
-              local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
-              compressible_paths=("${compressible_paths[@]}" "false" "$current_setting_name" "$current_setting_value")
-            fi
-          done < <(grep -v '^\s*$' "$rd_conf" | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
-
-          choice=$(rd_zenity \
-          --list --width=1200 --height=720 \
-          --checklist \
-          --separator="^" \
-          --print-column=3 \
-          --text="Please select folders to compress..." \
-          --column "Backup?" \
-          --column "Folder Name" \
-          --column "Path" \
-          "${compressible_paths[@]}")
-
-          choices=() # Expand choice string into passable array
-          IFS='^' read -ra choices <<< "$choice"
-
-          export CONFIGURATOR_GUI="zenity"
-          backup_retrodeck_userdata "custom" "${choices[@]}" # Expand array of choices into individual arguments
-        ;;
-        "Complete Backup" )
-          log i "User chose to backup all userdata prior to update."
-          export CONFIGURATOR_GUI="zenity"
-          backup_retrodeck_userdata "complete"
-        ;;
-      esac
-
-      configurator_tools_dialog
-    fi
-  ;;
 
   "BIOS Checker" )
     log i "Configurator: opening \"$choice\" menu"
@@ -669,92 +611,150 @@ configurator_data_management_dialog() {
   choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - RetroDECK: Move Tool" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" \
-  "Move all of RetroDECK" "Move the entire RetroDECK folder to a new location." \
-  "Move ROMs folder" "Move the ROMs folder to a new location." \
-  "Move BIOS folder" "Move the BIOS folder to a new location." \
-  "Move Downloaded Media folder" "Move the Downloaded Media folder to a new location." \
-  "Move Saves folder" "Move the Saves folder to a new location." \
-  "Move States folder" "Move the States folder to a new location." \
-  "Move Themes folder" "Move the Themes folder to a new location." \
-  "Move Screenshots folder" "Move the Screenshots folder to a new location." \
-  "Move Mods folder" "Move the Mods folder to a new location." \
-  "Move Texture Packs folder" "Move the Texture Packs folder to a new location" \
-  "Move Cheats folder" "Move the Cheats folder to a new location" \
-  "Move Shaders folder" "Move the Shaders folder to a new location" \
-  "Clean Empty ROM Folders" "Removes some or all of the empty ROM folders." \
-  "Rebuild All ROM Folders" "Rebuilds any missing ROM folders." )
+  "Backup RetroDECK" "Backup & Compress RetroDECK userdata folders into a zip file."  \
+  "ROMS Folder: Clean Empty Systems" "Removes some or all of the empty system folders in ROMS folder." \
+  "ROMS Folder: Rebuild Systems" "Rebuilds any missing system folders in the ROMS folder."  \
+  "Move: All of RetroDECK" "Move the entire RetroDECK folder to a new location." \
+  "Move: ROMS folder" "Move the ROMS folder to a new location." \
+  "Move: BIOS folder" "Move the BIOS folder to a new location." \
+  "Move: Downloaded Media folder" "Move the Downloaded Media folder to a new location." \
+  "Move: Saves folder" "Move the Saves folder to a new location." \
+  "Move: States folder" "Move the States folder to a new location." \
+  "Move: Themes folder" "Move the Themes folder to a new location." \
+  "Move: Screenshots folder" "Move the Screenshots folder to a new location." \
+  "Move: Mods folder" "Move the Mods folder to a new location." \
+  "Move: Texture Packs folder" "Move the Texture Packs folder to a new location" \
+  "Move: Cheats folder" "Move the Cheats folder to a new location" \
+  "Move: Shaders folder" "Move the Shaders folder to a new location" \ )
 
   case $choice in
 
-  "Move all of RetroDECK" )
+  "Backup RetroDECK" )
+
+    log i "Configurator: opening \"$choice\" menu"
+    configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "This tool will compress one or more RetroDECK userdata folders into a single zip file.\n\nPlease note that this process may take several minutes.\n\n<span foreground='$purple'><b>The resulting zip file will be located in the ~/retrodeck/backups folder.</b></span>\n\n"
+
+    choice=$(rd_zenity --title "RetroDECK Configurator - Backup Userdata" --info --no-wrap --ok-label="Cancel" --extra-button="Core Backup" --extra-button="Custom Backup" --extra-button="Complete Backup" \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --text="Would you like to backup some or all of the RetroDECK userdata?\n\nChoose one of the following options:\n\n1. Core Backup: Only essential files (such as saves, states, and gamelists).\n\n2. Custom Backup: You will be given the option to select specific folders to backup.\n\n3. Complete Backup: All data, including games and downloaded media, will be backed up.\n\n<span foreground='$purple'><b>PLEASE NOTE: A complete backup may require a significant amount of space.</b></span>\n\n")
+
+    local rc=$?
+    if [[ $rc == "0" ]] && [[ -z "$choice" ]]; then # User selected Cancel button
+      configurator_tools_dialog
+    else
+      case $choice in
+        "Core Backup" )
+          log i "User chose to backup core userdata prior to update."
+          export CONFIGURATOR_GUI="zenity"
+          backup_retrodeck_userdata "core"
+        ;;
+        "Custom Backup" )
+          log i "User chose to backup custom userdata prior to update."
+          while read -r config_line; do
+            local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
+            if [[ ! $current_setting_name =~ (rdhome|sdcard|backups_folder) ]]; then # Ignore these locations
+            log d "Adding $current_setting_name to compressible paths."
+              local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
+              compressible_paths=("${compressible_paths[@]}" "false" "$current_setting_name" "$current_setting_value")
+            fi
+          done < <(grep -v '^\s*$' "$rd_conf" | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
+
+          choice=$(rd_zenity \
+          --list --width=1200 --height=720 \
+          --checklist \
+          --separator="^" \
+          --print-column=3 \
+          --text="Please select folders to compress..." \
+          --column "Backup?" \
+          --column "Folder Name" \
+          --column "Path" \
+          "${compressible_paths[@]}")
+
+          choices=() # Expand choice string into passable array
+          IFS='^' read -ra choices <<< "$choice"
+
+          export CONFIGURATOR_GUI="zenity"
+          backup_retrodeck_userdata "custom" "${choices[@]}" # Expand array of choices into individual arguments
+        ;;
+        "Complete Backup" )
+          log i "User chose to backup all userdata prior to update."
+          export CONFIGURATOR_GUI="zenity"
+          backup_retrodeck_userdata "complete"
+        ;;
+      esac
+
+      configurator_tools_dialog
+    fi
+  ;;
+
+  "Move: All of RetroDECK" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_move_folder_dialog "rdhome"
   ;;
 
-  "Move ROMs folder" )
+  "Move: ROMS folder" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_move_folder_dialog "roms_folder"
   ;;
 
-  "Move BIOS folder" )
+  "Move: BIOS folder" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_move_folder_dialog "bios_folder"
   ;;
 
-  "Move Downloaded Media folder" )
+  "Move: Downloaded Media folder" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_move_folder_dialog "media_folder"
   ;;
 
-  "Move Saves folder" )
+  "Move: Saves folder" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_move_folder_dialog "saves_folder"
   ;;
 
-  "Move States folder" )
+  "Move: States folder" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_move_folder_dialog "states_folder"
   ;;
 
-  "Move Themes folder" )
+  "Move: Themes folder" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_move_folder_dialog "themes_folder"
   ;;
 
-  "Move Screenshots folder" )
+  "Move: Screenshots folder" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_move_folder_dialog "screenshots_folder"
   ;;
 
-  "Move Mods folder" )
+  "Move: Mods folder" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_move_folder_dialog "mods_folder"
   ;;
 
-  "Move Texture Packs folder" )
+  "Move: Texture Packs folder" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_move_folder_dialog "texture_packs_folder"
   ;;
 
-  "Move Cheats folder" )
+  "Move: Cheats folder" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_move_folder_dialog "cheats_folder"
   ;;
 
-  "Move Shaders folder" )
+  "Move: Shaders folder" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_move_folder_dialog "shaders_folder"
   ;;
 
-  "Clean Empty ROM Folders" )
+  "ROMS Folder: Clean Empty Systems" )
     log i "Configurator: opening \"$choice\" menu"
 
-    configurator_generic_dialog "RetroDECK Configurator - Clean Empty ROM Folders" "Before removing any identified empty ROM folders,\nplease make sure your ROM collection is backed up, just in case!"
-    configurator_generic_dialog "RetroDECK Configurator - Clean Empty ROM Folders" "Searching for empty rom folders, please be patient..."
+    configurator_generic_dialog "RetroDECK Configurator - Clean Empty System Folders" "Before removing any identified empty system folders,\nplease ensure your game collection is backed up, just in case!"
+    configurator_generic_dialog "RetroDECK Configurator - Clean Empty System Folders" "Searching for empty system folders, please be patient..."
     find_empty_rom_folders
 
     choice=$(rd_zenity \
-        --list --width=1200 --height=720 --title "RetroDECK Configurator - RetroDECK: Clean Empty ROM Folders" \
+        --list --width=1200 --height=720 --title "RetroDECK Configurator - RetroDECK: Clean Empty System Folders" \
         --checklist --hide-column=3 --ok-label="Remove Selected" --extra-button="Remove All" \
         --separator="," --print-column=2 \
         --text="Choose which empty ROM folders to remove:" \
@@ -769,22 +769,22 @@ configurator_data_management_dialog() {
         log i "Removing empty folder $folder"
         rm -rf "$folder"
       done
-      configurator_generic_dialog "RetroDECK Configurator - Clean Empty ROM Folders" "The removal process is complete."
+      configurator_generic_dialog "RetroDECK Configurator - Clean Empty System Folders" "The removal process is complete."
     elif [[ ! -z $choice ]]; then # User clicked "Remove All"
       for folder in "${all_empty_folders[@]}"; do
         log i "Removing empty folder $folder"
         rm -rf "$folder"
       done
-      configurator_generic_dialog "RetroDECK Configurator - Clean Empty ROM Folders" "The removal process is complete."
+      configurator_generic_dialog "RetroDECK Configurator - Clean Empty System Folders" "The removal process is complete."
     fi
 
     configurator_welcome_dialog
   ;;
 
-  "Rebuild All ROM Folders" )
+  "ROMS Folder: Rebuild Systems" )
     log i "Configurator: opening \"$choice\" menu"
     es-de --create-system-dirs
-    configurator_generic_dialog "RetroDECK Configurator - Rebuild All ROM Folders" "The rebuilding process is complete.\n\nAll missing default ROM folders will now exist in $roms_folder"
+    configurator_generic_dialog "RetroDECK Configurator - Rebuild System Folders" "The rebuilding process is complete.\n\nAll missing default system folders will now exist in $roms_folder"
     configurator_welcome_dialog
   ;;
 
