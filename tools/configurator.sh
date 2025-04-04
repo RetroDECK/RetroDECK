@@ -876,7 +876,7 @@ configurator_compress_multiple_games_dialog() {
   ) |
   rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-  --title "RetroDECK Configurator - RetroDECK: Compression Tool" --text "RetroDECK is searching for compress1ble games, please wait..."
+  --title "RetroDECK Configurator - RetroDECK: Compression Tool" --text "RetroDECK is searching for compressible games, please wait..."
 
   if [[ -s "$compressible_games_list_file" ]]; then
     mapfile -t all_compressible_games < "$compressible_games_list_file"
