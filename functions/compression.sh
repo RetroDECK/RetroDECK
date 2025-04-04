@@ -163,12 +163,20 @@ find_compatible_games() {
   log d "compression_targets: $compression_targets"
 
   while IFS= read -r system; do
+    while (( $(jobs -p | wc -l) >= $max_threads )); do # Wait for a background task to finish if max_threads has been hit
+      sleep 0.1
+    done
+    (
     log d "Checking system: $system"
     if [[ -d "$roms_folder/$system" ]]; then
       local compression_candidates
       compression_candidates=$(find "$roms_folder/$system" -type f -not -iname "*.txt")
       if [[ -n "$compression_candidates" ]]; then
         while IFS= read -r game; do
+          while (( $(jobs -p | wc -l) >= $max_threads )); do # Wait for a background task to finish if max_threads has been hit
+            sleep 0.1
+          done
+          (
           log d "Checking game: $game"
           local compatible_compression_format
           compatible_compression_format=$(find_compatible_compression_format "$game")
@@ -181,34 +189,50 @@ find_compatible_games() {
             "chd")
               if [[ "$compatible_compression_format" == "chd" ]]; then
                 log d "Game $game is compatible with CHD compression"
+                (
+                flock -x 200
                 echo "${game}^chd" >> "$output_file"
+                ) 200>"$RD_FILE_LOCK"
               fi
               ;;
             "zip")
               if [[ "$compatible_compression_format" == "zip" ]]; then
                 log d "Game $game is compatible with ZIP compression"
+                (
+                flock -x 200
                 echo "${game}^zip" >> "$output_file"
+                ) 200>"$RD_FILE_LOCK"
               fi
               ;;
             "rvz")
               if [[ "$compatible_compression_format" == "rvz" ]]; then
                 log d "Game $game is compatible with RVZ compression"
+                (
+                flock -x 200
                 echo "${game}^rvz" >> "$output_file"
+                ) 200>"$RD_FILE_LOCK"
               fi
               ;;
             "all")
               if [[ "$compatible_compression_format" != "none" ]]; then
                 log d "Game $game is compatible with $compatible_compression_format compression"
+                (
+                flock -x 200
                 echo "${game}^${compatible_compression_format}" >> "$output_file"
+                ) 200>"$RD_FILE_LOCK"
               fi
               ;;
           esac
+        ) &
         done < <(printf '%s\n' "$compression_candidates")
+        wait # wait for background tasks to finish
       fi
     else
       log d "Rom folder for $system is missing, skipping"
     fi
+    ) &
   done < <(printf '%s\n' "$compressible_systems_list")
+  wait # wait for background tasks to finish
 
   log d "Compatible games have been written to $output_file"
   cat "$output_file"
