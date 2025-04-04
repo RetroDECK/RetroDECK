@@ -763,10 +763,10 @@ post_update() {
     # Steam Sync completely rebuilt into new manifest system. Favorites may need to be nuked and, if steam_sync is enabled will be rebuilt. This is an optional step.
 
     if [[ -d "$steamsync_folder" && ! -z $(ls -1 "$steamsync_folder") ]]; then # If Steam Sync folder exists and is not empty
-      if [[ "$(configurator_generic_question_dialog "RetroDECK 0.9.2b Steam Sync Reset" "In RetroDECK 0.9.2b we upgraded our Steam Sync feature and the shortcuts in Steam may need to be rebuilt.\n\nAll of your ES-DE favorites are still unchanged.\nAny games you have favorited now will be recreated, but last-played information and custom artwork changes may be lost.\n\nIf you have added RetroDECK to Steam through our Configurator it will also be removed through this process.\nWould you like to refresh the RetroDECK Steam Sync system?")" == "true" ]]; then
+      if [[ "$(configurator_generic_question_dialog "RetroDECK 0.9.2b Steam Sync Reset" "In RetroDECK 0.9.2b, we upgraded our Steam Sync feature, which may require rebuilding the shortcuts in Steam.\n\nYour ES-DE favorites will remain unchanged. Any games you have favorited will be recreated, but last-played information and custom artwork changes may be lost.\n\nIf you added RetroDECK to Steam through our Configurator, it will also be removed during this process.\n\nWould you like to refresh the RetroDECK Steam Sync system?")" == "true" ]]; then
         steam-rom-manager nuke
         steam_sync
-        if [[ "$(configurator_generic_question_dialog "RetroDECK 0.9.2b Steam Sync Reset" "The Steam Sync reset is complete.\nIf you had previously added a RetroDECK shortcut to Steam through our tools, it would have also been removed.\n\nWould you like to add the RetroDECK shortcut now?")" == "true" ]]; then
+        if [[ "$(configurator_generic_question_dialog "RetroDECK 0.9.2b Steam Sync Reset" "The Steam Sync reset is complete.\n\nIf you had previously added a RetroDECK shortcut to Steam through the Configurator, it would have also been removed.\n\nWould you like to add the RetroDECK shortcut back now?")" == "true" ]]; then
           (
           # Add RetroDECK launcher to Steam
           steam-rom-manager enable --names "RetroDECK Launcher" >> "$srm_log" 2>&1

@@ -1142,7 +1142,7 @@ configurator_bios_checker() {
   rd_zenity --progress --auto-close --no-cancel \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - BIOS Checker - Scanning" \
-    --text="The BIOS Checker is scanning for BIOS and Firmware files that RetroDECK recognizes as supported by each system.\n\nPlease note that not all BIOS files are necessary for games to work.\n\nBIOS files not recognized by this tool may still function correctly.\n\nSome emulators have additional built-in methods to verify the functionality of BIOS files.\n\n<span foreground='$purple'><b>The BIOS Checker is now scanning your BIOS files, please wait...</b></span>\n\n" \
+    --text="The BIOS Checker is scanning for BIOS & Firmware files that RetroDECK recognizes as supported by each system.\n\nPlease note that not all BIOS & Firmware files are necessary for games to work.\n\nBIOS files not recognized by this tool may still function correctly.\n\nSome emulators have additional built-in methods to verify the functionality of BIOS & Firmware files.\n\n<span foreground='$purple'><b>The BIOS Checker is now scanning your BIOS files, please wait...</b></span>\n\n" \
     --width=400 --height=100
 }
 
@@ -1273,7 +1273,7 @@ configurator_steam_sync_dialog() {
   --column="Choice" --column="Description" \
   "Automatic Steam Sync" "Enable / Disable: Automatic Steam Sync. ES-DE favorites will be synced to Steam when RetroDECK quits." \
   "Manual Steam Sync" "Perform a one-time manual sync of ES-DE favorites to Steam." \
-  "Purge Steam Sync Shortcuts" "Perform a full SRM purge of all favorites in case things have gotten messed up." )
+  "Purge Steam Sync Shortcuts" "Performs a full Steam ROM Manager purge of all synced ES-DE favorites in Steam (in case things have gotten messed up)." )
 
   case $choice in
 
