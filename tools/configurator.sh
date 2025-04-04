@@ -73,13 +73,16 @@ rd_zenity --progress --no-cancel --pulsate --auto-close \
 #       - Install: PS3 firmware
 #       - Install: PS Vita firmware
 #       - Update Notification
-#       - Add RetroDECK to Steam
 #       - M3U Multi-File Validator
 #       - Repair RetroDECK paths
-#       - Change logging level
+#       - Change Logging Level
 #       - Ponzu: Remove Yuzu
 #       - Ponzu: Remove Citra
 #     - Steam Sync
+#       - Add RetroDECK to Steam
+#       - Automatic Steam Sync
+#       - Manual Steam Sync
+#       - Purge Steam Sync Shortcuts
 #     - Data Management
 #       - Backup RetroDECK
 #       - ROMS Folder: Clean Empty Systems
@@ -436,7 +439,6 @@ configurator_tools_dialog() {
   "Install: PS3 Firmware" "Download and Install: Playstation 3 firmware for the RPCS3 emulator."
   "Install: PS Vita Firmware" "Download and Install: PlayStation Vita firmware for the Vita3K emulator."
   "Update Notification" "Enable / Disable: Notifications for new RetroDECK versions."
-  "Add RetroDECK to Steam" "Add RetroDECK shortcut to Steam. Steam restart required."
   "M3U Multi-File Validator" "Verify the proper structure of multi-file or multi-disc games."
   "Repair RetroDECK Paths" "Repair RetroDECK folder path configs for unexpectedly missing folders."
   "Change Logging Level" "Change the RetroDECK logging level, for debugging purposes"
@@ -519,20 +521,6 @@ configurator_tools_dialog() {
   "Update Notification" )
     log i "Configurator: opening \"$choice\" menu"
     configurator_update_notify_dialog
-  ;;
-
-  "Add RetroDECK to Steam" )
-    (
-    # Add RetroDECK launcher to Steam
-    steam-rom-manager enable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
-    steam-rom-manager add >> "$srm_log" 2>&1
-    ) |
-    rd_zenity --progress \
-    --title="RetroDECK Configurator: Add RetroDECK to Steam" \
-    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --text="Adding RetroDECK launcher to Steam, please wait..." \
-    --pulsate --width=500 --height=150 --auto-close --no-cancel
-    configurator_tools_dialog
   ;;
 
   "M3U Multi-File Validator" )
@@ -1271,11 +1259,26 @@ configurator_steam_sync_dialog() {
   choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - Steam Sync" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Description" \
-  "Automatic Steam Sync" "Enable / Disable: Automatic Steam Sync. ES-DE favorites will be synced to Steam when RetroDECK quits." \
+  "Add RetroDECK to Steam" "Add RetroDECK to Steam." \
+  "Automatic Steam Sync" "Enable / Disable: Automatic Steam Sync (ES-DE favorites will be synced to Steam when RetroDECK quits)." \
   "Manual Steam Sync" "Perform a one-time manual sync of ES-DE favorites to Steam." \
-  "Purge Steam Sync Shortcuts" "Performs a full Steam ROM Manager purge of all synced ES-DE favorites in Steam (in case things have gotten messed up)." )
+  "Purge Steam Sync Shortcuts" "Performs a full Steam ROM Manager purge of all synced shortcuts in Steam (in case things have gotten messed up)." )
 
   case $choice in
+
+  "Add RetroDECK to Steam" )
+    (
+    # Add RetroDECK launcher to Steam
+    steam-rom-manager enable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
+    steam-rom-manager add >> "$srm_log" 2>&1
+    ) |
+    rd_zenity --progress \
+    --title="RetroDECK Configurator: Add RetroDECK to Steam" \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --text="Adding RetroDECK to Steam, please wait..." \
+    --pulsate --width=500 --height=150 --auto-close --no-cancel
+    configurator_tools_dialog
+  ;;
 
   "Automatic Steam Sync" )
     log i "Configurator: opening \"$choice\" menu"
