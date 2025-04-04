@@ -4,7 +4,7 @@
 # It will accept JSON objects as requests in a single FIFO request pipe ($REQUEST_PIPE)
 # and return each processed response through a unique named pipe, which MUST be created by the requesting client.
 # Each JSON object needs, at minimum a "action" element with a valid value and a "request_id" with a unique value.
-# Each processed response will be returned on a FIFO named pipe at the location "$XDG_CONFIG_HOME/retrodeck/api/response_$request_id" so that actions can be processed asynchronously
+# Each processed response will be returned on a FIFO named pipe at the location "/tmp/response_$request_id" so that actions can be processed asynchronously
 # If the response pipe does not exist when the data is done processing the response will not be sent at all, so the client must ensure that the response pipe exists when the JSON object is sent to the server!
 # The response ID can be any unique value, an example ID generation statement in Bash is            request_id="retrodeck_request_$(date +%s)_$$"
 # The server can be started, stopped or have its running status checked by calling the script like this: retrodeck_api start
@@ -75,7 +75,7 @@ run_server() {
   cleanup() {
     # Cleanup function to ensure named pipe is removed on exit
     log d "Cleaning up server resources..."
-    rm -f "$REQUEST_PIPE"
+    rm -f "$PID_FILE" "$REQUEST_PIPE"
     exit 0
   }
 
@@ -118,7 +118,7 @@ process_request() {
     return 1
   fi
 
-  local response_pipe="$rd_api_dir/response_${request_id}"
+  local response_pipe="/home/deck/.var/app/net.retrodeck.retrodeck/config/retrodeck/api/response_${request_id}"
 
   if [[ ! -p "$response_pipe" ]]; then
     echo "Error: Response pipe $response_pipe does not exist" >&2
@@ -132,19 +132,34 @@ process_request() {
 
   # Process request asynchronously
   {
+  local data
+  data=$(echo "$json_input" | jq -r '.data // empty')
+  if [[ -z "$data" ]]; then
+    echo "{\"status\":\"error\",\"message\":\"Missing required field: data\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+    return 1
+  fi
   case "$action" in
     "check_status")
       echo "{\"status\":\"success\",\"request_id\":\"$request_id\"}" > "$response_pipe"
       ;;
     "wait")
-      local data
-      data=$(echo "$json_input" | jq -r '.data // empty')
-      if [[ -z "$data" ]]; then
-        echo "{\"status\":\"error\",\"message\":\"Missing required field: data\",\"request_id\":\"$request_id\"}" > "$response_pipe"
-        return 1
-      fi
       local result=$(wait_example_function "$data")
       echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
+      ;;
+    "get")
+      case $data in
+        "compressible_games")
+          local compression_format=$(echo "$json_input" | jq -r '.format // empty')
+          if [[ -n "$compression_format" ]]; then
+            local result
+            if result=$(api_find_compatible_games "$compression_format"); then
+              echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
+            else
+              echo "{\"status\":\"error\",\"message\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
+            fi
+          fi
+          ;;
+      esac
       ;;
     *)
       echo "{\"status\":\"error\",\"message\":\"Unknown action: $action\",\"request_id\":\"$request_id\"}" > "$response_pipe"
