@@ -44,6 +44,7 @@ fi
 log i "CPU: Using $max_threads out of $cpu_cores available CPU cores for multi-threaded operations"
 
 source /app/libexec/050_save_migration.sh
+source /app/libexec/api.sh
 source /app/libexec/checks.sh
 source /app/libexec/compression.sh
 source /app/libexec/dialogs.sh
