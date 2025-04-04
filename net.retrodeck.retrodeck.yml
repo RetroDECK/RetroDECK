@@ -677,25 +677,34 @@ modules:
 
   # ES-DE
 
+  # - name: ES-DE
+  #   buildsystem: simple
+  #   build-commands:
+  #     # Step 1: Remove any existing manifest.json file
+  #     - rm -f "files/manifest.json"
+  #     # Step 2: Use libman to manage libraries
+  #     - libman "files/lib"
+  #     # Step 3: Clean up source library folder
+  #     - rm -rf "files/lib"
+  #     # Step 4: Ensure binaries are executable
+  #     - chmod +x "files/bin/"*
+  #     # Step 5: Copy all remaining files to the Flatpak destination
+  #     - cp -r files/* "${FLATPAK_DEST}"
+  #   sources:
+  #     - type: archive
+  #       #url: https://github.com/RetroDECK/ES-DE/releases/latest/download/RetroDECK-ES-DE-Artifact.tar.gz
+  #       #sha256: RETRODECKESDELATEST
+  #       url: https://github.com/RetroDECK/ES-DE/releases/download/feat%2Fupdate-030425.10/RetroDECK-ES-DE-Artifact.tar.gz
+  #       sha256: f4fec61b89918e4efb587c5e2a58762025cc38d02ac75e62be98091134a87fd0
+
   - name: ES-DE
     buildsystem: simple
     build-commands:
-      # Step 1: Remove any existing manifest.json file
-      - rm -f "files/manifest.json"
-      # Step 2: Use libman to manage libraries
-      - libman "files/lib"
-      # Step 3: Clean up source library folder
-      - rm -rf "files/lib"
-      # Step 4: Ensure binaries are executable
-      - chmod +x "files/bin/"*
-      # Step 5: Copy all remaining files to the Flatpak destination
-      - cp -r files/* "${FLATPAK_DEST}"
+      - cook "es-de"
     sources:
       - type: archive
-        #url: https://github.com/RetroDECK/ES-DE/releases/latest/download/RetroDECK-ES-DE-Artifact.tar.gz
-        #sha256: RETRODECKESDELATEST
-        url: https://github.com/RetroDECK/ES-DE/releases/download/feat%2Fupdate-030425.10/RetroDECK-ES-DE-Artifact.tar.gz
-        sha256: f4fec61b89918e4efb587c5e2a58762025cc38d02ac75e62be98091134a87fd0
+        url: https://github.com/RetroDECK/ES-DE/releases/download/feat%2Fupdate-040425.21/ES-DE_x64_RetroDECK.AppImage
+        sha256: 1f00dbbb758ea9ea05b322403793c8386e8774cd84b3e13981843ca95497fae3
 
   - name: retrodeck-theme
     buildsystem: simple
