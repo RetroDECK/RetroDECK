@@ -663,7 +663,7 @@ configurator_data_management_dialog() {
           --checklist \
           --separator="^" \
           --print-column=3 \
-          --text="Please select folders to compress..." \
+          --text="Please select the folders you wish to compress..." \
           --column "Backup?" \
           --column "Folder Name" \
           --column "Path" \
@@ -1293,7 +1293,7 @@ configurator_steam_sync_dialog() {
       zenity --question \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Configurator - RetroDECK Steam Syncronization" \
-      --text="Steam synchronization is <span foreground='$purple'><b>currently disabled</b></span>. Do you want to enable it?\n\nAll favorited games will be synced with Steam ROM Manager.\nRemember to restart Steam to see the changes.\n\n<span foreground='$purple'><b>NOTE: Games with unusual characters in their names like &apos;/\{}&lt;&gt;* might break the sync. Check the Wiki for more information.</b></span>"
+      --text="Steam synchronization is <span foreground='$purple'><b>currently disabled</b></span>. Do you want to enable it?\n\nAll favorited games will be synced with Steam ROM Manager.\nRemember to restart Steam to see the changes.\n\n<span foreground='$purple'><b>NOTE: Games with unusual characters in their names like &apos;/\{}&lt;&gt;* might break the sync. Check the RetroDECK Wiki for more information.</b></span>"
 
       if [ $? == 0 ]
       then

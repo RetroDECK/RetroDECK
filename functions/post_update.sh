@@ -47,7 +47,7 @@ post_update() {
         --checklist \
         --separator="^" \
         --print-column=3 \
-        --text="Please select folders to compress..." \
+        --text="Please select the folders you wish to compress..." \
         --column "Backup?" \
         --column "Folder Name" \
         --column "Path" \
@@ -806,7 +806,7 @@ post_update() {
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK - Upgrade Process" \
   --width=400 --height=200 \
-  --text="RetroDECK is finishing up the upgrading process, please be patient.\n\n<span foreground='$purple' size='larger'><b>NOTICE - If the process is taking too long:</b></span>\n\nSome windows might be running in the background that could require your attention: pop-ups from emulators or the upgrade itself that needs user input to continue.\n\n"
+  --text="RetroDECK is finishing up the upgrading process, please be patient.\n\n<span foreground='$purple' size='larger'><b>NOTICE - If the process is taking too long:</b></span>\n\nSome windows might be running in the background that require your attention: pop-ups from emulators or the upgrade itself that need your input to continue."
 
   conf_read
   version="$hard_version"
