@@ -399,15 +399,51 @@ modules:
       url: https://github.com/xs1l3n7x/pcsx2_cheats_collection
       branch: main
 
-  # Dolphin
+  # # Dolphin
+  # # why from source: AppImage not provided, only Flatpak
+  # # https://github.com/RetroDECK/org.DolphinEmu.dolphin-emu
+
+  # - name: retrodeck-dolphin
+  #   buildsystem: simple
+  #   build-commands:
+  #     - cook "dolphin-emu-wrapper"
+  #     - sed -i 's|dolphin-emu|/app/bin/rd-components/dolphin-emu-wrapper/files/bin/dolphin-emu|' "/app/bin/rd-components/dolphin-emu-wrapper/files/bin/dolphin-emu-wrapper"
+  #   sources:
+  #     - type: archive
+  #       url: https://github.com/RetroDECK/org.DolphinEmu.dolphin-emu/releases/latest/download/RetroDECK-Artifact.tar.gz
+  #       sha256: RETRODECKDOLPHINLATEST
+
+  # # PRIMEHACK
+  # # https://github.com/RetroDECK/io.github.shiiion.primehack
+
+  # - name: retrodeck-primehack
+  #   buildsystem: simple
+  #   build-commands:
+  #     - cook "primehack-wrapper"
+  #     # Editing the wrapper to don't call dplhin-emu but the one in the primehack wrapper
+  #     - sed -i 's|dolphin-emu|/app/bin/rd-components/primehack-wrapper/files/bin/dolphin-emu|' "/app/bin/primehack-wrapper"
+  #   sources:
+  #     - type: archive
+  #       url: https://github.com/RetroDECK/io.github.shiiion.primehack/releases/latest/download/RetroDECK-primehack-Artifact.tar.gz
+  #       sha256: RETRODECKPRIMEHACKLATEST
+
+    # Dolphin
   # why from source: AppImage not provided, only Flatpak
   # https://github.com/RetroDECK/org.DolphinEmu.dolphin-emu
 
   - name: retrodeck-dolphin
     buildsystem: simple
     build-commands:
-      - cook "dolphin-emu-wrapper"
-      - sed -i 's|dolphin-emu|/app/bin/rd-components/dolphin-emu-wrapper/files/bin/dolphin-emu|' "/app/bin/rd-components/dolphin-emu-wrapper/files/bin/dolphin-emu-wrapper"
+      # Step 1: Remove any existing manifest.json file
+      - rm -f "files/manifest.json"
+      # Step 2: Use libman.sh to manage libraries
+      - /app/bin/libman.sh "files/lib"
+      # Step 3: removing libraries folder that have been already moved
+      - rm -rf "files/lib"
+      # Step 4: Ensure binaries are executable
+      - chmod +x "files/bin/"*
+      # Step 5: Copy all remaining files to the Flatpak destination
+      - cp -r files/* "${FLATPAK_DEST}"
     sources:
       - type: archive
         url: https://github.com/RetroDECK/org.DolphinEmu.dolphin-emu/releases/latest/download/RetroDECK-Artifact.tar.gz
@@ -419,9 +455,18 @@ modules:
   - name: retrodeck-primehack
     buildsystem: simple
     build-commands:
-      - cook "primehack-wrapper"
-      # Editing the wrapper to don't call dplhin-emu but the one in the primehack wrapper
-      - sed -i 's|dolphin-emu|/app/bin/rd-components/primehack-wrapper/files/bin/dolphin-emu|' "/app/bin/primehack-wrapper"
+      # Step 1: Remove any existing manifest.json file
+      - rm -f "files/manifest.json"
+      # Step 2: Remove unnecessary files
+      - rm -rf "files/lib/pkgconfig"
+      # Step 3: Use libman.sh to manage libraries
+      - /app/bin/libman.sh "files/lib"
+      # Step 4: removing libraries folder that have been already moved
+      - rm -rf "files/lib"
+      # Step 5: Ensure binaries are executable
+      - chmod +x "files/bin/"*
+      # Step 6: Copy all remaining files to the Flatpak destination
+      - cp -r files/* "${FLATPAK_DEST}"
     sources:
       - type: archive
         url: https://github.com/RetroDECK/io.github.shiiion.primehack/releases/latest/download/RetroDECK-primehack-Artifact.tar.gz
