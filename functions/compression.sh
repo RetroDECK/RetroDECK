@@ -182,7 +182,7 @@ find_compatible_games() {
           compatible_compression_format=$(find_compatible_compression_format "$game")
           if [[ -f "${game%.*}.$compatible_compression_format" ]]; then # If a compressed version of this game already exists
             log d "Skipping $game because a $compatible_compression_format version already exists."
-            continue
+            exit
           fi
           local file_ext="${game##*.}"
           case "$compression_format" in
