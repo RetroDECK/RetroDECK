@@ -279,6 +279,11 @@ while [[ $# -gt 0 ]]; do
             open_component "${@:2}"
             exit 0
             ;;
+        --api)
+            retrodeck_api start
+            wait
+            exit $?
+            ;;
         -*)
             # Catch-all for unrecognized options starting with a dash
             log e "Error: Unknown option '$1'"

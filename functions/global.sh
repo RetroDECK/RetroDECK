@@ -92,8 +92,15 @@ features="$config/retrodeck/reference_lists/features.json"                      
 es_systems="/app/share/es-de/resources/systems/linux/es_systems.xml"                                     # ES-DE supported system list   
 es_find_rules="/app/share/es-de/resources/systems/linux/es_find_rules.xml"                               # ES-DE emulator find rules
 
+# API-related file locations
+
+rd_api_dir="$XDG_CONFIG_HOME/retrodeck/api"
+REQUEST_PIPE="$rd_api_dir/retrodeck_api_pipe"
+PID_FILE="$rd_api_dir/retrodeck_api_server.pid"
+
 # File lock file for multi-threaded write operations to the same file
-RD_FILE_LOCK="/tmp/retrodeck_file_lock"
+
+RD_FILE_LOCK="$rd_api_dir/retrodeck_file_lock"
 
 # Godot data transfer temp files
 
