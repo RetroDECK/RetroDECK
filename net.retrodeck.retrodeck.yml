@@ -420,6 +420,8 @@ modules:
     buildsystem: simple
     build-commands:
       - cook "primehack-wrapper"
+      # Editing the wrapper to don't call dplhin-emu but the one in the primehack wrapper
+      - sed -i 's|dolphin-emu|/app/bin/rd-components/primehack-wrapper/files/bin/dolphin-emu|' "/app/bin/primehack-wrapper"
     sources:
       - type: archive
         url: https://github.com/RetroDECK/io.github.shiiion.primehack/releases/latest/download/RetroDECK-primehack-Artifact.tar.gz
