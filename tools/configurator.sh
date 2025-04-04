@@ -552,10 +552,10 @@ configurator_tools_dialog() {
     choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - RetroDECK: Change Logging Level" --cancel-label="Back" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
     --column="Choice" --column="Action" \
-    "Level 1: Informational" "The default, only logs important information." \
-    "Level 2: Warnings" "Additionally log warnings." \
-    "Level 3: Errors" "Additionally log warnings and errors." \
-    "Level 4: Debug" "Log everything, may generate a lot of logs!.")
+    "Level 1: Informational" "The default setting, logs only basic important information." \
+    "Level 2: Warnings" "Logs general warnings." \
+    "Level 3: Errors" "Logs more detailed error messages." \
+    "Level 4: Debug" "Logs everything, which may generate a lot of logs.")
 
     case $choice in
 
