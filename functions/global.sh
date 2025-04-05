@@ -27,6 +27,8 @@ fi
 distro_name=$(flatpak-spawn --host grep '^ID=' /etc/os-release | cut -d'=' -f2)
 distro_version=$(flatpak-spawn --host grep '^VERSION_ID=' /etc/os-release | cut -d'=' -f2)
 gpu_info=$(flatpak-spawn --host lspci | grep -i 'vga\|3d\|2d')
+cpu_cores=$(nproc)
+max_threads=$(echo $(($(nproc) / 2)))
 
 log d "Debug mode enabled"
 log i "Initializing RetroDECK"
@@ -39,8 +41,12 @@ log i "Resolution: $width x $height"
 if [[ $native_resolution == true ]]; then
   log i "Steam Deck native resolution detected"
 fi
+log i "CPU: Using $max_threads out of $cpu_cores available CPU cores for multi-threaded operations"
 
 source /app/libexec/050_save_migration.sh
+source /app/libexec/api_data_processing.sh
+source /app/libexec/api_server.sh
+source /app/libexec/json_processing.sh
 source /app/libexec/checks.sh
 source /app/libexec/compression.sh
 source /app/libexec/dialogs.sh
@@ -88,6 +94,16 @@ main_repository_name="RetroDECK"                                                
 features="$config/retrodeck/reference_lists/features.json"                                               # A file where all the RetroDECK and component capabilities are kept for querying
 es_systems="/app/share/es-de/resources/systems/linux/es_systems.xml"                                     # ES-DE supported system list   
 es_find_rules="/app/share/es-de/resources/systems/linux/es_find_rules.xml"                               # ES-DE emulator find rules
+
+# API-related file locations
+
+rd_api_dir="$XDG_CONFIG_HOME/retrodeck/api"
+REQUEST_PIPE="$rd_api_dir/retrodeck_api_pipe"
+PID_FILE="$rd_api_dir/retrodeck_api_server.pid"
+
+# File lock file for multi-threaded write operations to the same file
+
+RD_FILE_LOCK="$rd_api_dir/retrodeck_file_lock"
 
 # Godot data transfer temp files
 
@@ -226,10 +242,8 @@ if [[ ! -f "$rd_conf" ]]; then
   chmod +rw "$rd_conf"
   log i "RetroDECK config file initialized. Contents:\n\n$(cat "$rd_conf")\n"
   conf_read # Load new variables into memory
-  #tmplog_merger # This function is tempry(?) removed
 
-# If the config file is existing i just read the variables
-else
+else # If the config file is existing i just read the variables
   log i "Loading RetroDECK config file in $rd_conf"
 
   if grep -qF "cooker" <<< "$hard_version"; then # If newly-installed version is a "cooker" build
@@ -242,11 +256,10 @@ else
 
   # Verify rdhome is where it is supposed to be.
   if [[ ! -d "$rdhome" ]]; then
-    configurator_generic_dialog "RetroDECK Setup" "The RetroDECK data folder was not found in the expected location.\nThis may happen when SteamOS is updated.\n\nPlease browse to the current location of the \"retrodeck\" folder."
+    configurator_generic_dialog "RetroDECK Setup" "The RetroDECK data folder was not found in the expected location.\nThis may happen when SteamOS is updated or if the folder was moved manually.\n\nPlease browse to the current location of the \"retrodeck\" folder."
     new_home_path=$(directory_browse "RetroDECK folder location")
     set_setting_value "$rd_conf" "rdhome" "$new_home_path" retrodeck "paths"
     conf_read
-    #tmplog_merger # This function is tempry(?) removed
     prepare_component "postmove" "retrodeck"
     prepare_component "postmove" "all"
     conf_write
@@ -266,3 +279,68 @@ retrodeck_added_favorites="$steamsync_folder/retrodeck_added_favorites.json"    
 retrodeck_removed_favorites="$steamsync_folder/retrodeck_removed_favorites.json"                                        # Temporary manifest of any games that were unfavorited in ES-DE and should be removed from Steam
 
 export GLOBAL_SOURCED=true
+
+# Check if an update has happened
+if [ -f "$lockfile" ]; then
+  if [ "$hard_version" != "$version" ]; then
+    log d "Update triggered"
+    log d "Lockfile found but the version doesn't match with the config file"
+    log i "Config file's version is $version but the actual version is $hard_version"
+    if grep -qF "cooker" <<< "$hard_version"; then # If newly-installed version is a "cooker" build
+      log d "Newly-installed version is a \"cooker\" build"
+      configurator_generic_dialog "RetroDECK Cooker Warning" "RUNNING COOKER VERSIONS OF RETRODECK CAN BE EXTREMELY DANGEROUS AND ALL OF YOUR RETRODECK DATA\n(INCLUDING BIOS FILES, BORDERS, DOWNLOADED MEDIA, GAMELISTS, MODS, ROMS, SAVES, STATES, SCREENSHOTS, TEXTURE PACKS AND THEMES)\nARE AT RISK BY CONTINUING!"
+      set_setting_value "$rd_conf" "update_repo" "$cooker_repository_name" retrodeck "options"
+      set_setting_value "$rd_conf" "update_check" "true" retrodeck "options"
+      set_setting_value "$rd_conf" "developer_options" "true" retrodeck "options"
+      set_setting_value "$rd_conf" "logging_level" "debug" retrodeck "options"
+      cooker_base_version=$(echo "$version" | cut -d'-' -f2)
+      choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Upgrade" --extra-button="Don't Upgrade" --extra-button="Full Wipe and Fresh Install" \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Cooker Upgrade" \
+      --text="You appear to be upgrading to a \"cooker\" build of RetroDECK.\n\nWould you like to perform the standard post-update process, skip the post-update process or remove ALL existing RetroDECK folders and data (including ROMs and saves) to start from a fresh install?\n\nPerforming the normal post-update process multiple times may lead to unexpected results.")
+      rc=$? # Capture return code, as "Yes" button has no text value
+      if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
+        if [[ "$choice" == "Don't Upgrade" ]]; then # If user wants to bypass the post_update.sh process this time.
+          log i "Skipping upgrade process for cooker build, updating stored version in retrodeck.cfg"
+          set_setting_value "$rd_conf" "version" "$hard_version" retrodeck # Set version of currently running RetroDECK to updated retrodeck.cfg
+        elif [[ "$choice" == "Full Wipe and Fresh Install" ]]; then # Remove all RetroDECK data and start a fresh install
+          if [[ $(configurator_generic_question_dialog "RetroDECK Cooker Reset" "This is going to remove all of the data in all locations used by RetroDECK!\n\n(INCLUDING BIOS FILES, BORDERS, DOWNLOADED MEDIA, GAMELISTS, MODS, ROMS, SAVES, STATES, SCREENSHOTS, TEXTURE PACKS AND THEMES)\n\nAre you sure you want to contine?") == "true" ]]; then
+            if [[ $(configurator_generic_question_dialog "RetroDECK Cooker Reset" "Are you super sure?\n\nThere is no going back from this process, everything is gonzo.\nDust in the wind.\n\nYesterdays omelette.") == "true" ]]; then
+              if [[ $(configurator_generic_question_dialog "RetroDECK Cooker Reset" "But are you super DUPER sure? We REAAAALLLLLYY want to make sure you know what is happening here.\n\nThe ~/retrodeck and ~/.var/app/net.retrodeck.retrodeck folders and ALL of their contents\nare about to be PERMANENTLY removed.\n\nStill sure you want to proceed?") == "true" ]]; then
+                configurator_generic_dialog "RetroDECK Cooker Reset" "Ok, if you're that sure, here we go!"
+                if [[ $(configurator_generic_question_dialog "RetroDECK Cooker Reset" "(Are you actually being serious here? Because we are...\n\nNo backsies.)") == "true" ]]; then
+                  log w "Removing RetroDECK data and starting fresh"
+                  rm -rf /var
+                  rm -rf "$HOME/retrodeck"
+                  rm -rf "$rdhome"
+                  source /app/libexec/global.sh
+                  finit
+                fi
+              fi
+            fi
+          fi
+        fi
+      else
+        log i "Performing normal upgrade process for version $cooker_base_version"
+        version="$cooker_base_version" # Temporarily assign cooker base version to $version so update script can read it properly.
+        post_update
+      fi
+    else # If newly-installed version is a normal build.
+      if grep -qF "cooker" <<< "$version"; then # If previously installed version was a cooker build
+        cooker_base_version=$(echo "$version" | cut -d'-' -f2)
+        version="$cooker_base_version" # Temporarily assign cooker base version to $version so update script can read it properly.
+        set_setting_value "$rd_conf" "update_repo" "RetroDECK" retrodeck "options"
+        set_setting_value "$rd_conf" "update_check" "false" retrodeck "options"
+        set_setting_value "$rd_conf" "update_ignore" "" retrodeck "options"
+        set_setting_value "$rd_conf" "developer_options" "false" retrodeck "options"
+        set_setting_value "$rd_conf" "logging_level" "info" retrodeck "options"
+      fi
+      post_update       # Executing post update script
+    fi
+  fi
+# Else, LOCKFILE IS NOT EXISTING (WAS REMOVED)
+# if the lock file doesn't exist at all means that it's a fresh install or a triggered reset
+else
+  log w "Lockfile not found"
+  finit             # Executing First/Force init
+fi

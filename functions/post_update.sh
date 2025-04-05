@@ -13,15 +13,15 @@ post_update() {
 
   # Optional userdata backup prior to update
 
-  choice=$(rd_zenity --title "RetroDECK Update - Backup Userdata" --info --no-wrap --ok-label="No Backup" --extra-button="Backup Core Userdata" --extra-button="Backup Some Userdata" --extra-button="Backup All Userdata" \
-    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --text="Would you like to backup some or all of the RetroDECK userdata prior to update?\n\nIf you choose \"Backup Core Userdata\" only irreplaceable files (like saves, states and gamelists) will be backed up. If you choose \"Backup Some Userdata\" you will be given a choice of which folders to backup.\n\nIf you choose \"Backup All Userdata\" then ALL data (including ROMs and downloaded media) will be backed up.\nPLEASE NOTE: A full backup may take up a large amount of space, especially if you have a lot of scraped media.")
+  choice=$(rd_zenity --title "RetroDECK Update - Backup Userdata" --info --no-wrap --ok-label="No Backup" --extra-button="Core Backup" --extra-button="Custom Backup" --extra-button="Complete Backup" \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --text="Would you like to backup some or all of the RetroDECK userdata?\n\nChoose one of the following options:\n\n1. Core Backup: Only essential files (such as saves, states, and gamelists).\n\n2. Custom Backup: You will be given the option to select specific folders to backup.\n\n3. Complete Backup: All data, including games and downloaded media, will be backed up.\n\n<span foreground='$purple'><b>PLEASE NOTE: A complete backup may require a significant amount of space.</b></span>\n\n")
 
   local rc=$?
   if [[ $rc == "0" ]] && [[ -z "$choice" ]]; then # User selected No Backup button
     log i "User chose to not backup prior to update."
   else
     case $choice in
-      "Backup Core Userdata" )
+      "Core Backup" )
         log i "User chose to backup core userdata prior to update."
         if ! backup_retrodeck_userdata "core"; then
           log d "Userdata backup failed, giving option to proceed"
@@ -31,7 +31,7 @@ post_update() {
           fi
         fi
       ;;
-      "Backup Some Userdata" )
+      "Custom Backup" )
         log i "User chose to backup some userdata prior to update."
         while read -r config_line; do
           local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
@@ -47,7 +47,7 @@ post_update() {
         --checklist \
         --separator="^" \
         --print-column=3 \
-        --text="Please select folders to compress..." \
+        --text="Please select the folders you wish to compress..." \
         --column "Backup?" \
         --column "Folder Name" \
         --column "Path" \
@@ -64,7 +64,7 @@ post_update() {
           fi
         fi
       ;;
-      "Backup All Userdata" )
+      "Complete Backup" )
         log i "User chose to backup all userdata prior to update."
         if ! backup_retrodeck_userdata "complete"; then
           log d "Userdata backup failed, giving option to proceed"
@@ -763,10 +763,10 @@ post_update() {
     # Steam Sync completely rebuilt into new manifest system. Favorites may need to be nuked and, if steam_sync is enabled will be rebuilt. This is an optional step.
 
     if [[ -d "$steamsync_folder" && ! -z $(ls -1 "$steamsync_folder") ]]; then # If Steam Sync folder exists and is not empty
-      if [[ "$(configurator_generic_question_dialog "RetroDECK 0.9.2b Steam Sync Reset" "In RetroDECK 0.9.2b we upgraded our Steam Sync feature and the shortcuts in Steam may need to be rebuilt.\n\nAll of your ES-DE favorites are still unchanged.\nAny games you have favorited now will be recreated, but last-played information and custom artwork changes may be lost.\n\nIf you have added RetroDECK to Steam through our Configurator it will also be removed through this process.\nWould you like to refresh the RetroDECK Steam Sync system?")" == "true" ]]; then
+      if [[ "$(configurator_generic_question_dialog "RetroDECK 0.9.2b Steam Sync Reset" "In RetroDECK 0.9.2b, we upgraded our Steam Sync feature, which may require rebuilding the shortcuts in Steam.\n\nYour ES-DE favorites will remain unchanged. Any games you have favorited will be recreated, but last-played information and custom artwork changes may be lost.\n\nIf you added RetroDECK to Steam through our Configurator, it will also be removed during this process.\n\nWould you like to refresh the RetroDECK Steam Sync system?")" == "true" ]]; then
         steam-rom-manager nuke
         steam_sync
-        if [[ "$(configurator_generic_question_dialog "RetroDECK 0.9.2b Steam Sync Reset" "The Steam Sync reset is complete.\nIf you had previously added a RetroDECK shortcut to Steam through our tools, it would have also been removed.\n\nWould you like to add the RetroDECK shortcut now?")" == "true" ]]; then
+        if [[ "$(configurator_generic_question_dialog "RetroDECK 0.9.2b Steam Sync Reset" "The Steam Sync reset is complete.\n\nIf you had previously added a RetroDECK shortcut to Steam through the Configurator, it would have also been removed.\n\nWould you like to add the RetroDECK shortcut back now?")" == "true" ]]; then
           (
           # Add RetroDECK launcher to Steam
           steam-rom-manager enable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
@@ -806,7 +806,7 @@ post_update() {
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK - Upgrade Process" \
   --width=400 --height=200 \
-  --text="RetroDECK is finishing up the upgrading process, please be patient.\n\n<span foreground='$purple' size='larger'><b>NOTICE - If the process is taking too long:</b></span>\n\nSome windows might be running in the background that could require your attention: pop-ups from emulators or the upgrade itself that needs user input to continue.\n\n"
+  --text="RetroDECK is finishing up the upgrading process, please be patient.\n\n<span foreground='$purple' size='larger'><b>NOTICE - If the process is taking too long:</b></span>\n\nSome windows might be running in the background that require your attention: pop-ups from emulators or the upgrade itself that need your input to continue."
 
   conf_read
   version="$hard_version"
