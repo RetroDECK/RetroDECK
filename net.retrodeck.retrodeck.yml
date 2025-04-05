@@ -702,7 +702,7 @@ modules:
     build-commands:
       - cook "es-de"
     sources:
-      - type: archive
+      - type: file
         url: https://github.com/RetroDECK/ES-DE/releases/download/feat%2Fupdate-040425.21/ES-DE_x64_RetroDECK.AppImage
         sha256: 1f00dbbb758ea9ea05b322403793c8386e8774cd84b3e13981843ca95497fae3
 
