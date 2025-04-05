@@ -709,12 +709,12 @@ modules:
   - name: retrodeck-theme
     buildsystem: simple
     build-commands:
-      - mkdir -p ${FLATPAK_DEST}/share/es-de/themes/retrodeck/
-      - mv -f * ${FLATPAK_DEST}/share/es-de/themes/retrodeck/
+      - mkdir -p ${FLATPAK_DEST}/bin/rd-components/es-de/usr/share/es-de/themes/retrodeck/
+      - mv -f * ${FLATPAK_DEST}/bin/rd-components/es-de/usr/share/es-de/themes/retrodeck/
     sources:
       - type: git
         url:  https://github.com/RetroDECK/RetroDECK-theme
-        commit: e9d20225b6a5e74bc867d7b1fb31baeaf2663dcc
+        commit: f7880bea9c41aa84b30e64a0c8b6e5d2b584a8be
 
   # RUFFLE - START - FROZEN UNTIL QT 6.8 UPDATE
   # https://github.com/ruffle-rs/ruffle/releases
@@ -751,7 +751,7 @@ modules:
       - mv -f -t ${FLATPAK_DEST}/retrodeck config/es-de/rd_prepacks
 
       # Logo, res, move graphics directory away from default location so splash can be changed after build
-      - mv -f -t ${FLATPAK_DEST}/retrodeck ${FLATPAK_DEST}/share/es-de/resources/graphics
+      - mv -f -t ${FLATPAK_DEST}/retrodeck ${FLATPAK_DEST}/bin/rd-components/es-de/usr/share/es-de/resources/graphics
       - cp -f res/splash.svg ${FLATPAK_DEST}/retrodeck/graphics/splash.svg
       - cp -f res/splash.svg ${FLATPAK_DEST}/retrodeck/graphics/splash-orig.svg
       - cp -rf res/extra_splashes/ ${FLATPAK_DEST}/retrodeck/graphics
