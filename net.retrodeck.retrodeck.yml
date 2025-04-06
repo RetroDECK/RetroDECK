@@ -427,7 +427,7 @@ modules:
   #       url: https://github.com/RetroDECK/io.github.shiiion.primehack/releases/latest/download/RetroDECK-primehack-Artifact.tar.gz
   #       sha256: RETRODECKPRIMEHACKLATEST
 
-    # Dolphin
+  # Dolphin
   # why from source: AppImage not provided, only Flatpak
   # https://github.com/RetroDECK/org.DolphinEmu.dolphin-emu
 
