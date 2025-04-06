@@ -43,6 +43,25 @@ install_appimage() {
     mkdir -p "$DEST_FOLDER"
     mv squashfs-root/* "$DEST_FOLDER"
 
+    # Symlink folders from /app/bin/rd-components/$APPNAME/usr/share to /app/share
+    SOURCE_DIR="$DEST_FOLDER/usr/share"
+    TARGET_DIR="/app/share"
+
+    if [ -d "$SOURCE_DIR" ]; then
+        for folder in "$SOURCE_DIR"/*; do
+            if [ -d "$folder" ]; then
+                folder_name=$(basename "$folder")
+                target_path="$TARGET_DIR/$folder_name"
+                if [ ! -e "$target_path" ]; then
+                    ln -s "$folder" "$target_path"
+                    echo "Symlinked $folder to $target_path"
+                else
+                    echo "Skipped $folder, $target_path already exists"
+                fi
+            fi
+        done
+    fi
+
     # Create a wrapper script to run the application
     cat <<EOF > "$WRAPPER_SCRIPT"
 #!/bin/bash
