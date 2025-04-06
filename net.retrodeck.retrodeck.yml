@@ -492,9 +492,13 @@ modules:
       - libman "files/lib"
       - cook "rpcs3"
     sources:
-      - type: archive
-        url: https://github.com/RetroDECK/net.rpcs3.RPCS3/releases/latest/download/RetroDECK-Artifact.tar.gz
-        sha256: RETRODECKRPCS3LATEST
+      # - type: archive
+      #   url: https://github.com/RetroDECK/net.rpcs3.RPCS3/releases/latest/download/RetroDECK-Artifact.tar.gz
+
+      #   sha256: RETRODECKRPCS3LATEST
+      - type: file
+        url: https://github.com/RPCS3/rpcs3-binaries-linux/releases/download/build-613212f9e15f59825f7b81abc33add7624adedd7/rpcs3-v0.0.36-17745-613212f9_linux64.AppImage
+        sha256: abb4504bd26e00f68f754617571e1489e9492660dfbdec415836ff015e741948
 
   # MELONDS
   # https://github.com/RetroDECK/net.kuribo64.melonDS
