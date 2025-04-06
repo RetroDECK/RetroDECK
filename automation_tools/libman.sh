@@ -2,7 +2,6 @@
 
 # Be aware that this script deletes the source directory after copying the files. It is intended to be used only by the flatpak builder.
 
-
 # List of user-defined libraries to exclude
 excluded_libraries=()
 
@@ -30,12 +29,6 @@ for lib in /lib64/*.so*; do
     excluded_libraries+=("$(basename "$lib")")
 done
 
-# Define target directory
-target_dir="${FLATPAK_DEST}/lib"
-
-# Define debug directory
-debug_dir="${target_dir}/debug"
-
 echo "Worry not, LibMan is here!"
 
 # Set default destination if FLATPAK_DEST is not set
@@ -45,9 +38,19 @@ fi
 
 # Check if source directory is provided
 if [ -z "$1" ]; then
-    echo "Usage: $0 <source_directory>"
+    echo "Usage: $0 <source_directory> [destination_directory]"
     exit 0
 fi
+
+# Use the second argument as the destination directory if provided
+if [ -n "$2" ]; then
+    target_dir="$2"
+else
+    target_dir="${FLATPAK_DEST}/lib"
+fi
+
+# Define debug directory
+debug_dir="${target_dir}/debug"
 
 # Ensure the target directory exists
 if ! mkdir -p "$target_dir"; then
