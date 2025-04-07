@@ -750,8 +750,10 @@ modules:
       - cp -r files/* "${FLATPAK_DEST}"
     sources:
       - type: archive
-        url: https://github.com/RetroDECK/ES-DE/releases/latest/download/RetroDECK-ES-DE-Artifact.tar.gz
-        sha256: RETRODECKESDELATEST
+        # url: https://github.com/RetroDECK/ES-DE/releases/latest/download/RetroDECK-ES-DE-Artifact.tar.gz
+        # sha256: RETRODECKESDELATEST
+        url: https://github.com/RetroDECK/ES-DE/releases/download/feat%2Fupdate-noruntime-070425.22/RetroDECK-ES-DE-Artifact.tar.gz
+        sha256: 9a47f7f33405e0683009002735d4f22da04a8dd60cc9c5d835c999f2a1e24533
 
   - name: retrodeck-theme
     buildsystem: simple
@@ -761,7 +763,7 @@ modules:
     sources:
       - type: git
         url:  https://github.com/RetroDECK/RetroDECK-theme
-        commit: e9d20225b6a5e74bc867d7b1fb31baeaf2663dcc
+        commit: 6c9565fc8335d9cd74a56ae8a2c4dafa8cf9c513
 
   # RUFFLE - START - FROZEN UNTIL QT 6.8 UPDATE
   # https://github.com/ruffle-rs/ruffle/releases
