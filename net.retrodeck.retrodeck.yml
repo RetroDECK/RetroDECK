@@ -750,8 +750,10 @@ modules:
       - cp -r files/* "${FLATPAK_DEST}"
     sources:
       - type: archive
-        url: https://github.com/RetroDECK/ES-DE/releases/latest/download/RetroDECK-ES-DE-Artifact.tar.gz
-        sha256: RETRODECKESDELATEST
+        # url: https://github.com/RetroDECK/ES-DE/releases/latest/download/RetroDECK-ES-DE-Artifact.tar.gz
+        # sha256: RETRODECKESDELATEST
+        url: https://github.com/RetroDECK/ES-DE/releases/download/feat%2Fupdate-noruntime-070425.22/RetroDECK-ES-DE-Artifact.tar.gz
+        sha256: 9a47f7f33405e0683009002735d4f22da04a8dd60cc9c5d835c999f2a1e24533
 
   - name: retrodeck-theme
     buildsystem: simple
