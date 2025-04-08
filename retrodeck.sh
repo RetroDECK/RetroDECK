@@ -299,6 +299,8 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+check_if_updated
+
 if [[ $multi_user_mode == "true" ]]; then
   multi_user_determine_current_user
 fi
