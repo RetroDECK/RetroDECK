@@ -762,24 +762,108 @@ post_update() {
     # In version 0.9.2b, the following changes were made that required config file updates/reset or other changes to the filesystem:
     # Steam Sync completely rebuilt into new manifest system. Favorites may need to be nuked and, if steam_sync is enabled will be rebuilt. This is an optional step.
 
-    if [[ -d "$steamsync_folder" && ! -z $(ls -1 "$steamsync_folder") ]]; then # If Steam Sync folder exists and is not empty
-      if [[ "$(configurator_generic_question_dialog "RetroDECK 0.9.2b Steam Sync Reset" "In RetroDECK 0.9.2b, we upgraded our Steam Sync feature, which may require rebuilding the shortcuts in Steam.\n\nYour ES-DE favorites will remain unchanged. Any games you have favorited will be recreated, but last-played information and custom artwork changes may be lost.\n\nIf you added RetroDECK to Steam through our Configurator, it will also be removed during this process.\n\nWould you like to refresh the RetroDECK Steam Sync system?")" == "true" ]]; then
-        steam-rom-manager nuke
-        steam_sync
-        if [[ "$(configurator_generic_question_dialog "RetroDECK 0.9.2b Steam Sync Reset" "The Steam Sync reset is complete.\n\nIf you had previously added a RetroDECK shortcut to Steam through the Configurator, it would have also been removed.\n\nWould you like to add the RetroDECK shortcut back now?")" == "true" ]]; then
-          (
-          # Add RetroDECK launcher to Steam
-          steam-rom-manager enable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
-          steam-rom-manager add >> "$srm_log" 2>&1
-          ) |
-          rd_zenity --progress \
-          --title="RetroDECK Configurator: Add RetroDECK to Steam" \
-          --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-          --text="Adding RetroDECK launcher to Steam, please wait..." \
-          --pulsate --width=500 --height=150 --auto-close --no-cancel
+    while true; do
+      choices=$(rd_zenity --list --checklist --title="RetroDECK Steam Sync Reset Options" \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --text="In RetroDECK 0.9.2b, we upgraded our Steam Sync feature, which may require rebuilding the shortcuts in Steam.\n\nYour ES-DE favorites will remain unchanged. Any games you have favorited will be recreated, but last-played information and custom artwork changes may be lost.\n\nIf you added RetroDECK to Steam through our Configurator, it will also be removed during this process.\n\nSelect the actions you want to perform:" \
+      --column="Select" --column="Action" --column="Description" --width="1100" --height="700" \
+      [[ -d "$steamsync_folder" && ! -z $(ls -1 "$steamsync_folder") ]] && TRUE "Refresh Steam Sync" "Rebuild the Steam Sync system, recreating shortcuts and removing outdated data" \
+      TRUE "Add RetroDECK Shortcut to Steam" "Add the RetroDECK launcher back to Steam after refreshing Steam Sync" \
+      TRUE "Regenerate ES-DE Folders" "Recreate the ES-DE system folders to ensure proper structure and functionality" \
+      --separator=":" \
+      --extra-button="Execute All" \
+      --ok-label="Execute Selected Only" \
+      --cancel-label="Execute None")
+
+      log d "User selected: $choices"
+      log d "User pressed: $?"
+
+      # Check if "Execute All" button was pressed
+      if [[ "$choices" == "Execute All" ]]; then
+        execute_all=true
+        break
+      else
+        execute_all=false
+        # Split the choices into an array
+        IFS=":" read -r -a selected_choices <<< "$choices"
+      fi
+
+      if [[ $? -eq 0 && -n "$choices" ]]; then
+        if ! rd_zenity --question --title="Confirmation" --text="Are you sure you want to proceed with only the selected options?\n\nThis might cause issues in RetroDECK"; then
+          log i "User is not sure, showing the checklist window again."
+          continue
+        else
+          log i "User confirmed to proceed with only the selected options."
+          break
         fi
       fi
+
+      if [[ $? == 0 ]]; then
+        if ! rd_zenity --question --title="Confirmation" --text="Are you sure you want to skip the Steam Sync reset process?\n\nThis might cause issues in RetroDECK"; then
+          log i "User is not sure, showing the checklist window again."
+          continue
+        else
+          log i "User confirmed to proceed without any reset."
+          break
+        fi
+      fi
+
+      break
+    done
+
+    # Execute the selected actions
+
+    # Refresh Steam Sync
+    if [[ "$execute_all" == "true" || " ${selected_choices[@]} " =~ " Refresh Steam Sync " ]]; then
+      log i "User agreed to refresh Steam Sync"
+      steam-rom-manager nuke
+      steam_sync
     fi
+
+    # Add RetroDECK Shortcut to Steam
+    if [[ "$execute_all" == "true" || " ${selected_choices[@]} " =~ " Add RetroDECK Shortcut to Steam " ]]; then
+      log i "User agreed to add RetroDECK shortcut to Steam"
+      (
+      steam-rom-manager enable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
+      steam-rom-manager add >> "$srm_log" 2>&1
+      ) |
+      rd_zenity --progress \
+      --title="RetroDECK Configurator: Add RetroDECK to Steam" \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --text="Adding RetroDECK launcher to Steam, please wait..." \
+      --pulsate --width=500 --height=150 --auto-close --no-cancel
+    fi
+
+    # Regenerate ES-DE Folders
+    if [[ "$execute_all" == "true" || " ${selected_choices[@]} " =~ " Regenerate ES-DE Folders " ]]; then
+      log i "User agreed to regenerate ES-DE folders"
+      es-de --create-system-dirs
+    fi
+  fi
+
+    # Execute the selected actions
+
+    # Refresh Steam Sync
+    if [[ "$execute_all" == "true" || " ${selected_choices[@]} " =~ " Refresh Steam Sync " ]]; then
+      log i "User agreed to refresh Steam Sync"
+      steam-rom-manager nuke
+      steam_sync
+    fi
+
+    # Add RetroDECK Shortcut to Steam
+    if [[ "$execute_all" == "true" || " ${selected_choices[@]} " =~ " Add RetroDECK Shortcut to Steam " ]]; then
+      log i "User agreed to add RetroDECK shortcut to Steam"
+      (
+      steam-rom-manager enable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
+      steam-rom-manager add >> "$srm_log" 2>&1
+      ) |
+      rd_zenity --progress \
+      --title="RetroDECK Configurator: Add RetroDECK to Steam" \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --text="Adding RetroDECK launcher to Steam, please wait..." \
+      --pulsate --width=500 --height=150 --auto-close --no-cancel
+    fi
+
   fi # end of 0.9.2b
 
   # The following commands are run every time.
