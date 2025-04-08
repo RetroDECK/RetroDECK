@@ -162,12 +162,13 @@ while [[ $# -gt 0 ]]; do
         --test-upgrade)
             if [[ "$2" =~ ^.+ ]]; then
                 read -r -p "You are about to test upgrading RetroDECK from version $2 to $hard_version. Enter 'y' to continue ot 'n' to start RetroDECK normally: (y/N) " response
-                if [[ $response == [yY] ]]; then
+                if [[ ${response,,} == "y" ]]; then
                     version="$2"
                     logging_level="debug"  # Temporarily enable debug logging
+                    log d "User replyed $response, testing upgrade from version $version"
                     shift 2
                 else
-                    shift
+                    shift 2
                 fi
             else
                 echo "Error: Invalid format. Usage: --test-upgrade <version>"
