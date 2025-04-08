@@ -765,9 +765,9 @@ post_update() {
     while true; do
       choices=$(rd_zenity --list --checklist --title="RetroDECK Steam Sync Reset Options" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --text="In RetroDECK 0.9.2b, we upgraded our Steam Sync feature, which may require rebuilding the shortcuts in Steam.\n\nYour ES-DE favorites will remain unchanged. Any games you have favorited will be recreated, but last-played information and custom artwork changes may be lost.\n\nIf you added RetroDECK to Steam through our Configurator, it will also be removed during this process.\n\nSelect the actions you want to perform:" \
+      --text="In RetroDECK 0.9.2b, we upgraded our Steam Sync feature, which may require <span foreground='$purple' size='larger'><b>rebuilding the shortcuts</b></span> in Steam.\nYour ES-DE favorites will remain unchanged. Any games you have favorited will be recreated, but <span foreground='$purple' size='larger'><b>last-played information and custom artwork changes may be lost</b></span>.\nIf you added RetroDECK to Steam through our Configurator, it will also be re-added during this process.\n\nSelect the actions you want to perform:" \
       --column="Select" --column="Action" --column="Description" --width="1100" --height="700" \
-      [[ -d "$steamsync_folder" && ! -z $(ls -1 "$steamsync_folder") ]] && TRUE "Refresh Steam Sync" "Rebuild the Steam Sync system, recreating shortcuts and removing outdated data" \
+      TRUE "Refresh Steam Sync" "Rebuild the Steam Sync system, recreating shortcuts and removing outdated data" \
       TRUE "Add RetroDECK Shortcut to Steam" "Add the RetroDECK launcher back to Steam after refreshing Steam Sync" \
       TRUE "Regenerate ES-DE Folders" "Recreate the ES-DE system folders to ensure proper structure and functionality" \
       --separator=":" \
@@ -839,7 +839,6 @@ post_update() {
       log i "User agreed to regenerate ES-DE folders"
       es-de --create-system-dirs
     fi
-  fi
 
     # Execute the selected actions
 
