@@ -161,8 +161,7 @@ while [[ $# -gt 0 ]]; do
             ;;
         --test-upgrade)
             if [[ "$2" =~ ^.+ ]]; then
-                echo "You are about to test upgrading RetroDECK from version $2 to $hard_version"
-                read -r -p "Enter 'y' to continue, 'n' to start RetroDECK normally: " response
+                read -r -p "You are about to test upgrading RetroDECK from version $2 to $hard_version. Enter 'y' to continue ot 'n' to start RetroDECK normally: (y/N) " response
                 if [[ $response == [yY] ]]; then
                     version="$2"
                     logging_level="debug"  # Temporarily enable debug logging
