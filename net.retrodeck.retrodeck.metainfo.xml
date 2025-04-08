@@ -90,6 +90,11 @@
                   <li>CLI: Added optional "repair-paths" CLI option for fixing paths</li>
                   <li>CONFIGURATOR: added Debug level choice menu</li>
                </ul>
+               <p>Updates:</p>
+               <ul>
+                  <li>ES-DE: to version 3.2.0</li>
+                  <li>RetroDECK Theme: added compatiblity with 3.2.0 and added new features: new background option and system status indicators</li>
+               </ul>
                <p>Bug fixes:</p>
                <ul>
                   <li>STEAM SYNC: Fixed issues with Zenity dialogs showing unnecessarily during Steam Sync</li>
