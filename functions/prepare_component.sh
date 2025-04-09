@@ -128,7 +128,6 @@ prepare_component() {
       log i "Prepearing Steam ROM Manager"
       log i "-----------------------------"
       
-      local srm_userdata="$XDG_CONFIG_HOME/steam-rom-manager/userData"
       create_dir -d "$srm_userdata"
       cp -fv "$config/steam-rom-manager/"*.json "$srm_userdata"
       cp -fvr "$config/steam-rom-manager/manifests" "$srm_userdata"
