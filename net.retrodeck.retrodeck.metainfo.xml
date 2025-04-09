@@ -73,27 +73,32 @@
    <project_license>GPL-3.0</project_license>
    <metadata_license>CC0-1.0</metadata_license>
    <releases>
-      <release version="0.9.2b" date="2025-03-29">
+      <release version="0.9.2b" date="2025-04-09">
          <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.9.2b</url>
             <description>
                <p>New Additions:</p>
                <ul>
                   <li>BACKUP: Added backup options for core user data and full/partial backups</li>
-                  <li>STEAM SYNC: Improved Zenity Configurator with new backup and steam_sync integration</li>
-                  <li>STEAM SYNC: Added functionality for SRM manifest sync, including handling unfavorited games</li>
+                  <li>BACKUP: backup is now prompted before any RetroDECK upgrade</li>
+                  <li>STEAM SYNC: refactored to be more lightweight</li>
                   <li>STEAM SYNC: Added manual sync mode</li>
                   <li>STEAM SYNC: Added full steam resync option</li>
+                  <li>STEAM SYNC: Added purge option</li>
+                  <li>STEAM SYNC: Added purge option</li>
                   <li>BACKUP: Introduced optional userdata backup during post-update process</li>
                   <li>FRAMEWORK: New function for repairing RetroDECK paths without needing a full reset</li>
                   <li>COMPRESSOR: Updated Zenity Configurator for better multi-file compression logic</li>
                   <li>COMPRESSOR: New functionality for compression cleanup argument in both single-file and multi-file modes</li>
                   <li>CLI: Added optional "repair-paths" CLI option for fixing paths</li>
                   <li>CONFIGURATOR: added Debug level choice menu</li>
+                  <li>CONFIGURATOR: Improved Zenity Configurator with new backup and steam_sync integration</li>
+                  <li>THEME: Added a new brighter background option</li>
+                  <li>THEME: Added system status indicators: WiFi, Bluetooth and battery status</li>
                </ul>
                <p>Updates:</p>
                <ul>
                   <li>ES-DE: to version 3.2.0</li>
-                  <li>RetroDECK Theme: added compatiblity with 3.2.0 and added new features: new background option and system status indicators</li>
+                  <li>RetroDECK Theme: added compatiblity with 3.2.0</li>
                </ul>
                <p>Bug fixes:</p>
                <ul>
@@ -115,6 +120,7 @@
                   <li>FRAMEWORK: Enhanced `find_compatible_games` logic and spelling improvements</li>
                   <li>FRAMEWORK: Refined `sanitize()` function to be moved to `other_functions.sh` for better code organization</li>
                   <li>BACKUP: Updated `backup_retrodeck_userdata` to support a more efficient "core" backup option</li>
+                  <li>API: added a new API engine useful to talk with external applications or the Godot Configurator</li>
                </ul>
             </description>
          </release>
