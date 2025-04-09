@@ -11,7 +11,7 @@ steam_sync() {
   log "i" "Starting Steam Sync"
   create_dir "$steamsync_folder"
 
-  if [ ! -f "$srm_path" ]; then
+  if [[ ! -d "$srm_userdata" ]]; then
     log "e" "Steam ROM Manager configuration not initialized! Initializing now."
     prepare_component "reset" "steam-rom-manager"
   fi
