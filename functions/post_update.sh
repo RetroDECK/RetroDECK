@@ -817,6 +817,7 @@ post_update() {
     if [[ "$execute_all" == "true" || " ${selected_choices[@]} " =~ " Refresh Steam Sync " ]]; then
       log i "User agreed to refresh Steam Sync"
       steam-rom-manager nuke
+      export CONFIGURATOR_GUI="zenity"
       steam_sync
     fi
 
@@ -846,6 +847,7 @@ post_update() {
     if [[ "$execute_all" == "true" || " ${selected_choices[@]} " =~ " Refresh Steam Sync " ]]; then
       log i "User agreed to refresh Steam Sync"
       steam-rom-manager nuke
+      export CONFIGURATOR_GUI="zenity"
       steam_sync
     fi
 

@@ -1243,6 +1243,7 @@ quit_retrodeck() {
 
   # if steam sync is on do the magic
   if [[ $(get_setting_value "$rd_conf" "steam_sync" "retrodeck" "options") == "true" ]]; then
+    export CONFIGURATOR_GUI="zenity"
     steam_sync
   fi
   log i "Shutting down RetroDECK's framework"
