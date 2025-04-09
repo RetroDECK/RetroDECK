@@ -438,8 +438,8 @@ modules:
       - cp -r files/* "${FLATPAK_DEST}"
     sources:
       - type: archive
-        url: https://github.com/RetroDECK/org.DolphinEmu.dolphin-emu/releases/latest/download/RetroDECK-Artifact.tar.gz
-        sha256: RETRODECKDOLPHINLATEST
+        url: https://github.com/RetroDECK/org.DolphinEmu.dolphin-emu/releases/download/master-13192425010/RetroDECK-Artifact.tar.gz
+        sha256: 8d0e892cecaa0eb7968f11e8d22333093737a009be73d1c541d278cd9805ec4a
 
   # PRIMEHACK
   # https://github.com/RetroDECK/io.github.shiiion.primehack
@@ -461,8 +461,8 @@ modules:
       - cp -r files/* "${FLATPAK_DEST}"
     sources:
       - type: archive
-        url: https://github.com/RetroDECK/io.github.shiiion.primehack/releases/latest/download/RetroDECK-primehack-Artifact.tar.gz
-        sha256: RETRODECKPRIMEHACKLATEST
+        url: https://github.com/RetroDECK/io.github.shiiion.primehack/releases/download/master-230724.27/RetroDECK-primehack-Artifact.tar.gz
+        sha256: 7cd20690cea20284b6b272092f79cadf6a7ca9d5b9df7cb5985cb090ff47731d
 
   # Universal Dynamic Input for Dolphin and Primehack
   - name: universal_dynamic_input
