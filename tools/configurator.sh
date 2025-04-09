@@ -425,6 +425,7 @@ configurator_open_emulator_dialog() {
 
   if [[ -n "$emulator" ]]; then
     open_component "$emulator"
+    configurator_open_emulator_dialog
   else
     configurator_welcome_dialog
   fi
@@ -627,7 +628,7 @@ configurator_data_management_dialog() {
 
     local rc=$?
     if [[ $rc == "0" ]] && [[ -z "$choice" ]]; then # User selected Cancel button
-      configurator_tools_dialog
+      configurator_data_management_dialog
     else
       case $choice in
         "Core Backup" )
@@ -670,7 +671,7 @@ configurator_data_management_dialog() {
         ;;
       esac
 
-      configurator_tools_dialog
+      configurator_data_management_dialog
     fi
   ;;
 
