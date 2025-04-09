@@ -38,7 +38,12 @@ steam_sync() {
     fi
     system=$(basename "$system_path") # Extract the folder name as the system name
     gamelist="${system_path}gamelist.xml"
-    system_favorites=$(xml sel -t -m "//game[favorite='true']" -v "path" -n "$gamelist")
+    # Use AWK instead of xmlstarlet because ES-DE can create invalid XML structures in some cases
+    system_favorites=$(awk 'BEGIN { RS="</game>"; FS="\n" }
+                            /<favorite>true<\/favorite>/ {
+                              if (match($0, /<path>([^<]+)<\/path>/, arr))
+                                print arr[1]
+     }' "$gamelist"
     while read -r game; do
       if [[ -n "$game" ]]; then # Avoid empty lines created by xmlstarlet
         local game="${game#./}" # Remove leading ./
