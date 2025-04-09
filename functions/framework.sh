@@ -539,7 +539,7 @@ get_steam_user() {
     log i "Username: $steam_username"
     log i "Name: $steam_prettyname"
 
-    if [[ ! -d "$srm_userdata" ]]; then
+    if [[ -d "$srm_userdata" ]]; then
       populate_steamuser_srm
     fi
     
