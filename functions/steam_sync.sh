@@ -43,7 +43,7 @@ steam_sync() {
                             /<favorite>true<\/favorite>/ {
                               if (match($0, /<path>([^<]+)<\/path>/, arr))
                                 print arr[1]
-     }' "$gamelist"
+     }' "$gamelist")
     while read -r game; do
       if [[ -n "$game" ]]; then # Avoid empty lines created by xmlstarlet
         local game="${game#./}" # Remove leading ./
