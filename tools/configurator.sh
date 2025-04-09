@@ -1319,6 +1319,7 @@ configurator_steam_sync_dialog() {
     if [[ $(configurator_generic_question_dialog "RetroDECK Configurator - Steam Sync" "Are you sure you want to remove all Steam ROM Manager changes, including all RetroDECK shortcuts from Steam?" ) == "true" ]]; then
       (
       steam-rom-manager nuke
+      rm -f "$retrodeck_favorites_file"
       ) |
       rd_zenity --progress \
       --title="Removing all RetroDECK Steam Sync information" \

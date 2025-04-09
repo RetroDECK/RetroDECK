@@ -127,6 +127,7 @@ while [[ $# -gt 0 ]]; do
             if [[ -n "$2" ]]; then
               if [[ "$2" == "purge" ]]; then
                 steam-rom-manager nuke
+                rm -f "$retrodeck_favorites_file"
               else
                 echo "Unknown argument \"$2\", please check the CLI help for more information."
               fi
