@@ -1278,7 +1278,7 @@ configurator_steam_tools_dialog() {
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --text="Adding RetroDECK to Steam, please wait..." \
     --pulsate --width=500 --height=150 --auto-close --no-cancel
-    configurator_tools_dialog
+    configurator_steam_tools_dialog
   ;;
 
   "Automatic Steam Sync" )
