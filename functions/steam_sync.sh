@@ -44,16 +44,21 @@ steam_sync() {
                               if (match($0, /<path>([^<]+)<\/path>/, arr))
                                 print arr[1]
      }' "$gamelist")
-    while read -r game; do
-      if [[ -n "$game" ]]; then # Avoid empty lines created by xmlstarlet
-        local game="${game#./}" # Remove leading ./
-        if [[ -f "$roms_folder/$system/$game" ]]; then # Validate file exists and isn't a stale ES-DE entry for a removed file
-          # Construct launch options with the rom path in quotes, to handle spaces
-          local launchOptions="$launch_command -s $system \"$roms_folder/$system/$game\""
-          jq --arg title "${game%.*}" --arg target "$target" --arg launchOptions "$launchOptions" \
-          '. += [{"title": $title, "target": $target, "launchOptions": $launchOptions}]' "${retrodeck_favorites_file}.new" > "${retrodeck_favorites_file}.tmp" \
-          && mv "${retrodeck_favorites_file}.tmp" "${retrodeck_favorites_file}.new"
-        fi
+    while read -r game_path; do
+      local game="${game_path#./}" # Remove leading ./
+      if [[ -f "$roms_folder/$system/$game" ]]; then # Validate file exists and isn't a stale ES-DE entry for a removed file
+        # Construct launch options with the rom path in quotes, to handle spaces
+        local game_title=$(awk -v search_path="$game_path" 'BEGIN { RS="</game>"; FS="\n" }
+                                                            /<path>/ {
+                                                            if (match($0, /<path>([^<]+)<\/path>/, path) && path[1] == search_path) {
+                                                              if (match($0, /<name>([^<]+)<\/name>/, name))
+                                                                print name[1]
+                                                              }
+                                                            }' "$gamelist")
+        local launchOptions="$launch_command -s $system \"$roms_folder/$system/$game\""
+        jq --arg title "$game_title" --arg target "$target" --arg launchOptions "$launchOptions" \
+        '. += [{"title": $title, "target": $target, "launchOptions": $launchOptions}]' "${retrodeck_favorites_file}.new" > "${retrodeck_favorites_file}.tmp" \
+        && mv "${retrodeck_favorites_file}.tmp" "${retrodeck_favorites_file}.new"
       fi
     done <<< "$system_favorites"
   done
@@ -110,7 +115,7 @@ steam_sync() {
           log d "Some new favorites added between syncs, adding new favorited games"
           # Load added favorites as manifest and run SRM add
           mv "$retrodeck_added_favorites" "$retrodeck_favorites_file"
-          steam_sync_add  
+          steam_sync_add
         fi
 
         # Make new favorites manifest the current one
