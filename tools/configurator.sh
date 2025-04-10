@@ -1309,6 +1309,7 @@ configurator_steam_tools_dialog() {
 
   "Manual Steam Sync" )
     log i "Configurator: opening \"$choice\" menu"
+    configurator_generic_dialog "RetroDeck Configurator - Manual Steam Sync" "RetroDECK will now look for any ES-DE favorites and sync them to Steam, if needed.\n\nIf Steam Sync has been run before and no favorites have been added or removed, you will be returned to the Steam Tools menu.\nIf changes are needed, you will see a progress dialog during the process."
     export CONFIGURATOR_GUI="zenity"
     steam_sync
     configurator_steam_tools_dialog
