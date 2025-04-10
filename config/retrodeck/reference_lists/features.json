@@ -842,7 +842,8 @@
       "description": "RetroDECK Framework",
       "name": "RetroDECK",
       "url": "https://retrodeck.net/",
-      "cli-arg": "--version"
+      "cli-arg": "--version",
+      "logs": "$XDG_CONFIG_HOME/retrodeck/logs/retrodeck.log"
     },
     "retroarch": {
       "description": "Libretro Multi-emulator Frontend",
@@ -851,6 +852,7 @@
       "launch": "retroarch",
       "cli-arg": "--version",
       "system": "retroarch",
+      "logs": "$logs_folder/retroarch/retroarch.log",
       "properties": [
         {
           "cheevos": true,
@@ -1045,6 +1047,7 @@
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_about/what-is-retrodeck/",
       "system": "flash",
       "launch": "ruffle-rdwrapper.sh",
+      "logs": "$XDG_CACHE_HOME/ruffle/ruffle.log",
       "cli-arg": ""
     },
     "melonds": {
@@ -1103,6 +1106,7 @@
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/vita3k/vita3k-guide/",
       "system": "psvita",
       "launch": "Vita3K",
+      "logs": "$XDG_CACHE_HOME/Vita3K/vita3k.log",
       "cli-arg": ""
     },
     "rpcs3": {
@@ -1113,6 +1117,7 @@
       "launch": "rpcs3",
       "cli-arg": "--version",
       "launch-override": "cd $(dirname $game) && rpcs3 $game",
+      "logs": "$XDG_CACHE_HOME/rpcs3/RPCS3.log",
       "properties": [
         {
           "ask_to_exit": true
@@ -1143,6 +1148,7 @@
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/dolphin-primehack/dolphin-primehack-guide/",
       "launch": "dolphin-emu-wrapper",
       "cli-arg": "--version",
+      "logs": "$XDG_DATA_HOME/dolphin-emu/dolphin.log",
       "system": [
         "gc",
         "wii"
@@ -1163,6 +1169,7 @@
       "url": "https://retrodeck.readthedocs.io/en/latest/wiki_emulator_guides/dolphin-primehack/dolphin-primehack-guide/",
       "launch": "primehack-wrapper",
       "cli-arg": "--version",
+      "logs": "$XDG_DATA_HOME/primehack/Logs/dolphin.log",
       "system": [
         "wii"
       ],
