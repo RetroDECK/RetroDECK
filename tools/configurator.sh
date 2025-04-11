@@ -1042,66 +1042,63 @@ configurator_bios_checker() {
 
     log d "Total BIOS files to check: $total_bios"
 
-    declare -a bios_checked_list
+    bios_checked_list=()
 
-    while read -r entry; do
-        # Extract the key (element name) and the fields
-        bios_file=$(echo "$entry" | jq -r '.key // "Unknown"')
-        bios_md5=$(echo "$entry" | jq -r '.value.md5 | if type=="array" then join(", ") else . end // "Unknown"')
-        bios_systems=$(echo "$entry" | jq -r '.value.system | if type=="array" then join(", ") else . end // "Unknown"')
-        bios_desc=$(echo "$entry" | jq -r '.value.description // "No description provided"')
-        required=$(echo "$entry" | jq -r '.value.required // "No"')
-        bios_paths=$(echo "$entry" | jq -r '.value.paths // "'"$bios_folder"'" | if type=="array" then join(", ") else . end')
+     while IFS=$'\t' read -r bios_file bios_systems bios_desc required bios_md5 bios_paths; do
 
-        log d "Checking entry $bios_entry"
+      # Expand any embedded shell variables (e.g. $saves_folder or $bios_folder) with their actual values
+      bios_paths=$(echo "$bios_paths" | envsubst)
 
-        # Expand any embedded shell variables (e.g. $saves_folder or $bios_folder) with their actual values
-        bios_paths=$(echo "$bios_paths" | envsubst)
+      bios_file_found="No"
+      bios_md5_matched="No"
 
-        # Skip if bios_file is empty
-        if [[ ! -z "$bios_file" ]]; then
+      IFS=', ' read -r -a paths_array <<< "$bios_paths"
+      for path in "${paths_array[@]}"; do
+        log d "Looking for $path/$bios_file"
+        if [[ ! -f "$path/$bios_file" ]]; then
+          log d "File $path/$bios_file not found"
+          break
+        else
           bios_file_found="Yes"
-          bios_md5_matched="No"
+          computed_md5=$(md5sum "$path/$bios_file" | awk '{print $1}')
 
-          IFS=', ' read -r -a paths_array <<< "$bios_paths"
-          for path in "${paths_array[@]}"; do
-            if [[ ! -f "$path/$bios_file" ]]; then
-              bios_file_found="No"
+          IFS=', ' read -ra expected_md5_array <<< "$bios_md5"
+          for expected in "${expected_md5_array[@]}"; do
+            expected=$(echo "$expected" | xargs)
+            if [ "$computed_md5" == "$expected" ]; then
+              bios_md5_matched="Yes"
               break
             fi
           done
-
-          if [[ $bios_file_found == "Yes" ]]; then
-            IFS=', ' read -r -a md5_array <<< "$bios_md5"
-            for md5 in "${md5_array[@]}"; do
-              if [[ $(md5sum "$path/$bios_file" | awk '{ print $1 }') == "$md5" ]]; then
-                bios_md5_matched="Yes"
-                break
-              fi
-            done
-          fi
-
           log d "BIOS file found: $bios_file_found, Hash matched: $bios_md5_matched"
           log d "Expected path: $path/$bios_file"
           log d "Expected MD5: $bios_md5"
         fi
+      done
 
         log d "Adding BIOS entry: \"$bios_file $bios_systems $bios_file_found $bios_md5_matched $bios_desc $bios_paths $bios_md5\" to the bios_checked_list"
 
-        if [[ $bios_checked_list != "" ]]; then
-          bios_checked_list=("${bios_checked_list[@]}"^"$bios_file^$bios_systems^$bios_file_found^$bios_md5_matched^$required^$bios_paths^$bios_desc^$bios_md5")
-        else
-          bios_checked_list=("$bios_file^$bios_systems^$bios_file_found^$bios_md5_matched^$required^$bios_paths^$bios_desc^$bios_md5")
-        fi
+        bios_checked_list=("${bios_checked_list[@]}" "$bios_file" "$bios_systems" "$bios_file_found" "$bios_md5_matched" "$required" "$bios_paths" "$bios_desc" "$bios_md5")
 
         current_bios=$((current_bios + 1))
         echo "$((current_bios * 100 / total_bios))"
 
-    done < <(jq -c '.bios | to_entries[]' "$bios_checklist")
+    done < <(jq -r '
+          .bios
+          | to_entries[]
+          | [
+              .key,
+              (.value.system | if type=="array" then join(", ") elif type=="string" then . else "Unknown" end),
+              (.value.description // "No description provided"),
+              (.value.required // "No"),
+              (.value.md5 | if type=="array" then join(", ") elif type=="string" then . else "Unknown" end),
+              (.value.paths | if type=="array" then join(", ") elif type=="string" then . else "$bios_folder" end)
+            ]
+          | @tsv
+        ' "$bios_checklist")
 
     log d "Finished checking BIOS files"
 
-    IFS="^" # Set the Internal Field Separator to ^ to split the bios_checked_list array
     rd_zenity --list --title="RetroDECK Configurator Utility - BIOS Checker" --cancel-label="Back" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
       --column "BIOS File Name" \
@@ -1112,8 +1109,7 @@ configurator_bios_checker() {
       --column "Expected Path" \
       --column "Description" \
       --column "MD5" \
-      $(printf '%s\n' "${bios_checked_list[@]}")
-    IFS=$' \t\n' # Reset the Internal Field Separator
+      "${bios_checked_list[@]}"
 
   ) |
   rd_zenity --progress --auto-close --no-cancel \
