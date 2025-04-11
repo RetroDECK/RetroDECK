@@ -840,31 +840,6 @@ post_update() {
       log i "User agreed to regenerate ES-DE folders"
       es-de --create-system-dirs
     fi
-
-    # Execute the selected actions
-
-    # Refresh Steam Sync
-    if [[ "$execute_all" == "true" || " ${selected_choices[@]} " =~ " Refresh Steam Sync " ]]; then
-      log i "User agreed to refresh Steam Sync"
-      steam-rom-manager nuke
-      export CONFIGURATOR_GUI="zenity"
-      steam_sync
-    fi
-
-    # Add RetroDECK Shortcut to Steam
-    if [[ "$execute_all" == "true" || " ${selected_choices[@]} " =~ " Add RetroDECK Shortcut to Steam " ]]; then
-      log i "User agreed to add RetroDECK shortcut to Steam"
-      (
-      steam-rom-manager enable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
-      steam-rom-manager add >> "$srm_log" 2>&1
-      ) |
-      rd_zenity --progress \
-      --title="RetroDECK Configurator: Add RetroDECK to Steam" \
-      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --text="Adding RetroDECK launcher to Steam, please wait..." \
-      --pulsate --width=500 --height=150 --auto-close --no-cancel
-    fi
-
   fi # end of 0.9.2b
 
   # The following commands are run every time.
