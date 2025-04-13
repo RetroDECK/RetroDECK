@@ -378,7 +378,7 @@ post_update() {
     log i "In version 0.8.1b, the following changes were made that required config file updates/reset or other changes to the filesystem:"
     log i "- ES-DE files were moved inside the retrodeck folder, migrating to the new structure"
     log i "- Give the user the option to reset Ryujinx, which was not properly initialized in 0.8.0b"
-    
+
     log d "ES-DE files were moved inside the retrodeck folder, migrating to the new structure"
     dir_prep "$rdhome/ES-DE/collections" "$XDG_CONFIG_HOME/ES-DE/collections"
     dir_prep "$rdhome/ES-DE/gamelists" "$XDG_CONFIG_HOME/ES-DE/gamelists"
@@ -701,7 +701,7 @@ post_update() {
           currently_enabled_emulators+="$system_name" # Add emulator to list of currently enabled ones
         fi
       done < <(printf '%s\n' "$current_border_settings")
-      
+
       # Disable all systems in the borders preset, then re-enable the ones that were previously on
       make_preset_changes "borders" "" # Disable all systems in borders preset block
       make_preset_changes "borders" "$currently_enabled_emulators" # Re-enable previously enabled systems in the borders preset block
@@ -737,7 +737,7 @@ post_update() {
     create_dir -d "$cheats_folder/PPSSPP"
     dir_prep "$cheats_folder/PPSSPP" "$XDG_CONFIG_HOME/ppsspp/PSP/Cheats"
     tar -xzf "/app/retrodeck/cheats/ppsspp.tar.gz" -C "$cheats_folder/PPSSPP" --overwrite && log i "Cheats for PPSSPP installed"
-    
+
     log i "Preparing the cheats for PCSX2..."
     create_dir "$cheats_folder/pcsx2"
     set_setting_value "$pcsx2conf" "Cheats" "$cheats_folder/pcsx2" "Folders"
@@ -761,6 +761,9 @@ post_update() {
   if [[ $(check_version_is_older_than "$version_being_updated" "0.9.2b") == "true" ]]; then
     # In version 0.9.2b, the following changes were made that required config file updates/reset or other changes to the filesystem:
     # Steam Sync completely rebuilt into new manifest system. Favorites may need to be nuked and, if steam_sync is enabled will be rebuilt. This is an optional step.
+
+    # Reset SRM first to ensure the latest configs are loaded.
+    prepare_component "reset" "steam-rom-manager"
 
     while true; do
       choices=$(rd_zenity --list --checklist --title="RetroDECK Steam Sync Reset Options" \
