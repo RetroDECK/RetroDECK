@@ -37,6 +37,7 @@ steam_sync() {
       continue
     fi
     system=$(basename "$system_path") # Extract the folder name as the system name
+    log d "Checking system $system for favorites..."
     gamelist="${system_path}gamelist.xml"
     # Use AWK instead of xmlstarlet because ES-DE can create invalid XML structures in some cases
     system_favorites=$(awk 'BEGIN { RS="</game>"; FS="\n" }
@@ -44,6 +45,8 @@ steam_sync() {
                               if (match($0, /<path>([^<]+)<\/path>/, arr))
                                 print arr[1]
      }' "$gamelist")
+    log d "Favorites found:"
+    log d "$system_favorites"
     while read -r game_path; do
       local game="${game_path#./}" # Remove leading ./
       if [[ -f "$roms_folder/$system/$game" ]]; then # Validate file exists and isn't a stale ES-DE entry for a removed file
@@ -56,9 +59,12 @@ steam_sync() {
                                                               }
                                                             }' "$gamelist")
         local launchOptions="$launch_command -s $system \"$roms_folder/$system/$game\""
+        log d "Adding entry $launchOptions to favorites manifest."
         jq --arg title "$game_title" --arg target "$target" --arg launchOptions "$launchOptions" \
         '. += [{"title": $title, "target": $target, "launchOptions": $launchOptions}]' "${retrodeck_favorites_file}.new" > "${retrodeck_favorites_file}.tmp" \
         && mv "${retrodeck_favorites_file}.tmp" "${retrodeck_favorites_file}.new"
+      else
+        log d "Game file $roms_folder/$system/$game not found, skipping..."
       fi
     done <<< "$system_favorites"
   done
