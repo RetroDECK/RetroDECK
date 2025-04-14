@@ -110,6 +110,7 @@ jobs:
           # Source the version extractor script and fetch the actual version, including the build ID
           source automation_tools/version_extractor.sh
           VERSION="$(fetch_actual_version)"
+          echo "VERSION=$VERSION"
 
           # Ensure the actual version was successfully extracted
           if [[ -z "$VERSION" ]]; then
