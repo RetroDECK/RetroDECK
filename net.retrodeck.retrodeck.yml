@@ -88,6 +88,7 @@ modules:
 
         # Check out the current Git branch
         git checkout ${GITHUB_REF_NAME}
+        echo "GitHub Ref Name is ${GITHUB_REF_NAME}"
 
         # Create the retrodeck directory in the Flatpak destination
         mkdir -p ${FLATPAK_DEST}/retrodeck/
