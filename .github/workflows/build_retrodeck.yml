@@ -14,6 +14,7 @@ on:
       - '*.sh'
       - 'net.retrodeck.retrodeck.yml'
       - 'net.retrodeck.retrodeck.metainfo.xml'
+      - 'tools/**'
   pull_request_target:
     types: [opened, synchronize, reopened]
     branches:
@@ -106,29 +107,25 @@ jobs:
       - name: Generate Version Tag
         id: version-tag
         run: |
-          # Source the version extractor script and fetch the manifest version
+          # Source the version extractor script and fetch the actual version, including the build ID
           source automation_tools/version_extractor.sh
-          MANIFEST_VERSION="$(fetch_manifest_version)"
+          VERSION="$(fetch_actual_version)"
 
-          # Ensure the manifest version was successfully extracted
-          if [[ -z "$MANIFEST_VERSION" ]]; then
-            echo "[ERROR] Failed to extract the manifest version."
+          # Ensure the actual version was successfully extracted
+          if [[ -z "$VERSION" ]]; then
+            echo "[ERROR] Failed to extract the actual version."
             exit 1
           fi
 
           # Determine the tag based on the GitHub event context
-          if [[ "$GITHUB_REF" == "refs/heads/main" ]]; then
-            # Main branch tag
-            TAG="$MANIFEST_VERSION"
-            MAKE_LATEST=true
-          elif [[ "$GITHUB_EVENT_NAME" == "pull_request" || "$GITHUB_EVENT_NAME" == "pull_request_target" ]]; then
+          if [[ "$GITHUB_EVENT_NAME" == "pull_request" || "$GITHUB_EVENT_NAME" == "pull_request_target" ]]; then
             # Pull request tag, sanitize the source branch
             source_branch="${GITHUB_HEAD_REF//\//-}"
             TAG="PR-$source_branch-${{ github.run_id }}"
             MAKE_LATEST=false
           else
-            # Other branches (cooker branches)
-            TAG="$MANIFEST_VERSION-${{ env.BUILD_ID }}"
+            # Other branches (cooker, main branches)
+            TAG="$VERSION"
             MAKE_LATEST=true
           fi
 
@@ -368,12 +365,13 @@ jobs:
           GITHUB_TOKEN: ${{ steps.generate-rekku-token.outputs.token }}
           header: "RetroDECK Build Artifacts"
           message: |
-            A build for this pull request has completed successfully.
-            Codenname: ${{ env.TAG }}
-            Build artifacts can be find [here]((https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifact-retrodeck-artifacts)) and they include:
-            - RetroDECK Flatpak: RetroDECK.flatpak
-            - Flatpak file SHA256 checksum: RetroDECK.flatpak.sha
-            - Flatpak Artifact Bundle: RetroDECKArtifact.tar.gz, not useful for testing or end users
+            A build for this `pull request` has been produced.
+            Codename: **${{ env.TAG }}**
+
+            Build artifacts can be found [here](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifact-retrodeck-artifacts) and they include:
+            - RetroDECK Flatpak: `RetroDECK.flatpak`
+            - Flatpak file SHA256 checksum: `RetroDECK.flatpak.sha`
+            - Flatpak Artifact Bundle: `RetroDECKArtifact.tar.gz`, not useful for testing or end users
 
       # Rewrite Tag (for Main Branch Only)
       - name: Clone RetroDECK repo

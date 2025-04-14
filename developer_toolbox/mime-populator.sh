@@ -4,7 +4,7 @@ ES_SYSTEMS_FILE="../ES-DE/resources/systems/linux/es_systems.xml"
 MIME_FILE="config/retrodeck/net.retrodeck.retrodeck.mime.xml"
 
 # List of extensions to ignore
-IGNORED_EXTENSIONS=". .appimage cue"
+IGNORED_EXTENSIONS=". .appimage .cue .png .po"
 
 # Check if xmlstarlet is installed
 if ! command -v xmlstarlet &> /dev/null; then

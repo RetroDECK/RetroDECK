@@ -80,8 +80,8 @@ move() {
   # Function to move a directory from one parent to another
   # USAGE: move $source_dir $dest_dir
 
-  source_dir="$(echo $1 | sed 's![^/]$!&/!')" # Add trailing slash if it is missing
-  dest_dir="$(echo $2 | sed 's![^/]$!&/!')" # Add trailing slash if it is missing
+  source_dir="$(echo "$1" | sed 's![^/]$!&/!')" # Add trailing slash if it is missing
+  dest_dir="$(echo "$2" | sed 's![^/]$!&/!')" # Add trailing slash if it is missing
 
   log d "Moving \"$source_dir\" to \"$dest_dir\""
 
@@ -147,17 +147,17 @@ update_rd_conf() {
   # STAGE 1: For current files that haven't been broken into sections yet, where every setting name is unique
 
   conf_read # Read current settings into memory
-  mv -f $rd_conf $rd_conf_backup # Backup config file before update
-  cp $rd_defaults $rd_conf # Copy defaults file into place
+  mv -f "$rd_conf" "$rd_conf_backup" # Backup config file before update
+  cp "$rd_defaults" "$rd_conf" # Copy defaults file into place
   conf_write # Write old values into new retrodeck.cfg file
 
   # STAGE 2: To handle presets sections that use duplicate setting names
 
-  generate_single_patch $rd_defaults $rd_conf_backup $rd_update_patch retrodeck # Create a patch file for differences between defaults and current user settings
-  sed -i '/change^^version/d' $rd_update_patch # Remove version line from temporary patch file
-  deploy_single_patch $rd_defaults $rd_update_patch $rd_conf # Re-apply user settings to defaults file
-  set_setting_value $rd_conf "version" "$hard_version" retrodeck # Set version of currently running RetroDECK to updated retrodeck.cfg
-  rm -f $rd_update_patch # Cleanup temporary patch file
+  generate_single_patch "$rd_defaults" "$rd_conf_backup" "$rd_update_patch" retrodeck # Create a patch file for differences between defaults and current user settings
+  sed -i '/change^^version/d' "$rd_update_patch" # Remove version line from temporary patch file
+  deploy_single_patch "$rd_defaults" "$rd_update_patch" "$rd_conf" # Re-apply user settings to defaults file
+  set_setting_value "$rd_conf" "version" "$hard_version" retrodeck # Set version of currently running RetroDECK to updated retrodeck.cfg
+  rm -f "$rd_update_patch" # Cleanup temporary patch file
   conf_read # Read all settings into memory
 
   # STAGE 3: Create new folders that were added to the shipped retrodeck.cfg, if any
@@ -196,13 +196,13 @@ update_rd_conf() {
       "\(.key):\(.value)",
       "\(.value):\(.key)"
     ] | join("\n")
-  ' $features)
+  ' "$features")
 
   while IFS= read -r current_setting_line # Read the existing retrodeck.cfg
   do
     if [[ (! -z "$current_setting_line") && (! "$current_setting_line" == "#"*) && (! "$current_setting_line" == "[]") ]]; then # If the line has a valid entry in it
       if [[ ! -z $(grep -o -P "^\[.+?\]$" <<< "$current_setting_line") ]]; then # If the line is a section header
-        local current_section=$(sed 's^[][]^^g' <<< $current_setting_line) # Remove brackets from section name
+        local current_section=$(sed 's^[][]^^g' <<< "$current_setting_line") # Remove brackets from section name
       else
         if [[ ! ("$current_section" == "" || "$current_section" == "paths" || "$current_section" == "options" || "$current_section" == "cheevos" || "$current_section" == "cheevos_hardcore") ]]; then
           local system_name=$(get_setting_name "$current_setting_line" "retrodeck") # Read the variable name from the current line
@@ -220,7 +220,7 @@ update_rd_conf() {
         fi
       fi
     fi
-  done < $rd_conf
+  done < "$rd_conf"
 }
 
 conf_read() {
@@ -252,7 +252,7 @@ conf_write() {
   do
     if [[ (! -z "$current_setting_line") && (! "$current_setting_line" == "#"*) && (! "$current_setting_line" == "[]") ]]; then # If the line has a valid entry in it
       if [[ ! -z $(grep -o -P "^\[.+?\]$" <<< "$current_setting_line") ]]; then # If the line is a section header
-        local current_section=$(sed 's^[][]^^g' <<< $current_setting_line) # Remove brackets from section name
+        local current_section=$(sed 's^[][]^^g' <<< "$current_setting_line") # Remove brackets from section name
       else
         if [[ "$current_section" == "" || "$current_section" == "paths" || "$current_section" == "options" ]]; then
           local current_setting_name=$(get_setting_name "$current_setting_line" "retrodeck") # Read the variable name from the current line
@@ -264,7 +264,7 @@ conf_write() {
         fi
       fi
     fi
-  done < $rd_conf
+  done < "$rd_conf"
   log d "retrodeck.cfg written"
 }
 
@@ -273,8 +273,8 @@ dir_prep() {
 
   # Call me with:
   # dir prep "real dir" "symlink location"
-  real="$(realpath -s $1)"
-  symlink="$(realpath -s $2)"
+  real="$(realpath -s "$1")"
+  symlink="$(realpath -s "$2")"
 
   log d "Preparing directory $symlink in $real"
 
@@ -335,7 +335,7 @@ rd_zenity() {
 
   unset CONFIGURATOR_GUI
   
-  return $status
+  return "$status"
 }
 
 update_rpcs3_firmware() {
@@ -354,8 +354,288 @@ update_vita3k_firmware() {
 }
 
 backup_retrodeck_userdata() {
+  # This function can compress one or more RetroDECK userdata folders into a single zip file for backup.
+  # The function can do a "complete" backup of all userdata including ROMs and ES-DE media, so can end up being very large.
+  # The function can also do a "core" backup of all the very important userdata files (like saves, states and gamelists) or a "custom" backup of only specified paths
+  # The function can take both folder names as defined in retrodeck.cfg or full paths as arguments for folders to backup
+  # It will also validate that all the provided paths exist and that there is enough free space to perform the backup before actually proceeding.
+  # It will also rotate backups so that there are only 3 maximum of each type (complete, core or custom)
+  # USAGE: backup_retrodeck_userdata complete
+  #        backup_retrodeck_userdata core
+  #        backup_retrodeck_userdata custom saves_folder states_folder /some/other/path
+
   create_dir "$backups_folder"
-  zip -rq9 "$backups_folder/$(date +"%0m%0d")_retrodeck_userdata.zip" "$saves_folder" "$states_folder" "$bios_folder" "$media_folder" "$themes_folder" "$rdhome/ES-DE/collections" "$rdhome/ES-DE/gamelists" "$logs_folder" "$screenshots_folder" "$mods_folder" "$texture_packs_folder" "$borders_folder" > $logs_folder/$(date +"%0m%0d")_backup_log.log
+
+  backup_date=$(date +"%0m%0d_%H%M")
+  backup_log_file="$logs_folder/${backup_date}_${backup_type}_backup_log.log"
+
+  # Check if first argument is the type
+  if [[ "$1" == "complete" || "$1" == "core" || "$1" == "custom" ]]; then
+    backup_type="$1"
+    shift # Remove the first argument
+  else
+    if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
+      configurator_generic_dialog "RetroDECK Userdata Backup" "No valid backup option chosen. Valid options are <standard> and <custom>."
+    fi
+    log e "No valid backup option chosen. Valid options are <complete>, <core> and <custom>."
+    return 1
+  fi
+
+  zip_file="$backups_folder/retrodeck_${backup_date}_${backup_type}.zip"
+
+  # Initialize paths arrays
+  paths_to_backup=()
+  declare -A config_paths # Requires an associative (dictionary) array to work
+
+  # Build array of folder names and real paths from retrodeck.cfg
+  while read -r config_line; do
+    local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
+    if [[ ! $current_setting_name =~ (rdhome|sdcard|backups_folder) ]]; then # Ignore these locations
+      local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
+      config_paths["$current_setting_name"]="$current_setting_value"
+    fi
+  done < <(grep -v '^\s*$' "$rd_conf" | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
+
+  # Determine which paths to backup
+  if [[ "$backup_type" == "complete" ]]; then
+    for folder_name in "${!config_paths[@]}"; do
+      path_value="${config_paths[$folder_name]}"
+      if [[ -e "$path_value" ]]; then
+        paths_to_backup+=("$path_value")
+        log i "Adding to backup: $folder_name = $path_value"
+      else
+        if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
+          configurator_generic_dialog "RetroDECK Userdata Backup" "The $folder_name was not found at its expected location, $path_value\nSomething may be wrong with your RetroDECK installation."
+        fi
+        log i "Warning: Path does not exist: $folder_name = $path_value"
+      fi
+    done
+
+    # Add static paths not defined in retrodeck.cfg
+    if [[ -e "$rdhome/ES-DE/collections" ]]; then
+      paths_to_backup+=("$rdhome/ES-DE/collections")
+    else
+      if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
+        configurator_generic_dialog "RetroDECK Userdata Backup" "The ES-DE collections folder was not found at its expected location, $rdhome/ES-DE/collections\nSomething may be wrong with your RetroDECK installation."
+      fi
+      log i "Warning: Path does not exist: ES-DE/collections = $rdhome/ES-DE/collections"
+    fi
+
+    if [[ -e "$rdhome/ES-DE/gamelists" ]]; then
+      paths_to_backup+=("$rdhome/ES-DE/gamelists")
+    else
+      if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
+        configurator_generic_dialog "RetroDECK Userdata Backup" "The ES-DE gamelists folder was not found at its expected location, $rdhome/ES-DE/gamelists\nSomething may be wrong with your RetroDECK installation."
+      fi
+      log i "Warning: Path does not exist: ES-DE/gamelists = $rdhome/ES-DE/gamelists"
+    fi
+
+    if [[ -e "$rdhome/ES-DE/custom_systems" ]]; then
+      paths_to_backup+=("$rdhome/ES-DE/custom_systems")
+    else
+      if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
+        configurator_generic_dialog "RetroDECK Userdata Backup" "The ES-DE custom_systems folder was not found at its expected location, $rdhome/ES-DE/custom_systems\nSomething may be wrong with your RetroDECK installation."
+      fi
+      log i "Warning: Path does not exist: ES-DE/custom_systems = $rdhome/ES-DE/custom_systems"
+    fi
+
+    # Check if we found any valid paths
+    if [[ ${#paths_to_backup[@]} -eq 0 ]]; then
+      if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
+        configurator_generic_dialog "RetroDECK Userdata Backup" "No valid userdata folders were found.\nSomething may be wrong with your RetroDECK installation."
+      fi
+      log e "Error: No valid paths found in config file"
+      return 1
+    fi
+
+  elif [[ "$backup_type" == "core" ]]; then
+    for folder_name in "${!config_paths[@]}"; do
+      if [[ $folder_name =~ (saves_folder|states_folder|logs_folder) ]]; then # Only include these paths
+        path_value="${config_paths[$folder_name]}"
+        if [[ -e "$path_value" ]]; then
+          paths_to_backup+=("$path_value")
+          log i "Adding to backup: $folder_name = $path_value"
+        else
+          if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
+            configurator_generic_dialog "RetroDECK Userdata Backup" "The $folder_name was not found at its expected location, $path_value\nSomething may be wrong with your RetroDECK installation."
+          fi
+          log i "Warning: Path does not exist: $folder_name = $path_value"
+        fi
+      fi
+    done
+
+    # Add static paths not defined in retrodeck.cfg
+    if [[ -e "$rdhome/ES-DE/collections" ]]; then
+      paths_to_backup+=("$rdhome/ES-DE/collections")
+    else
+      if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
+        configurator_generic_dialog "RetroDECK Userdata Backup" "The ES-DE collections folder was not found at its expected location, $rdhome/ES-DE/collections\nSomething may be wrong with your RetroDECK installation."
+      fi
+      log i "Warning: Path does not exist: ES-DE/collections = $rdhome/ES-DE/collections"
+    fi
+
+    if [[ -e "$rdhome/ES-DE/gamelists" ]]; then
+      paths_to_backup+=("$rdhome/ES-DE/gamelists")
+    else
+      if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
+        configurator_generic_dialog "RetroDECK Userdata Backup" "The ES-DE gamelists folder was not found at its expected location, $rdhome/ES-DE/gamelists\nSomething may be wrong with your RetroDECK installation."
+      fi
+      log i "Warning: Path does not exist: ES-DE/gamelists = $rdhome/ES-DE/gamelists"
+    fi
+
+    if [[ -e "$rdhome/ES-DE/custom_systems" ]]; then
+      paths_to_backup+=("$rdhome/ES-DE/custom_systems")
+    else
+      if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
+        configurator_generic_dialog "RetroDECK Userdata Backup" "The ES-DE custom_systems folder was not found at its expected location, $rdhome/ES-DE/custom_systems\nSomething may be wrong with your RetroDECK installation."
+      fi
+      log i "Warning: Path does not exist: ES-DE/custom_systems = $rdhome/ES-DE/custom_systems"
+    fi
+
+    # Check if we found any valid paths
+    if [[ ${#paths_to_backup[@]} -eq 0 ]]; then
+      if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
+        configurator_generic_dialog "RetroDECK Userdata Backup" "No valid userdata folders were found.\nSomething may be wrong with your RetroDECK installation."
+      fi
+      log e "Error: No valid paths found in config file"
+      return 1
+    fi
+
+  elif [[ "$backup_type" == "custom" ]]; then
+    if [[ "$#" -eq 0 ]]; then # Check if any paths were provided in the arguments
+      if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
+        configurator_generic_dialog "RetroDECK Userdata Backup" "No valid backup locations were specified. Please try again."
+      fi
+      log e "Error: No paths specified for custom backup"
+      return 1
+    fi
+
+    # Process each argument - it could be a variable name or a direct path
+    for arg in "$@"; do
+      # Check if argument is a variable name in the config
+      if [[ -n "${config_paths[$arg]}" ]]; then
+        path_value="${config_paths[$arg]}"
+        if [[ -e "$path_value" ]]; then
+          paths_to_backup+=("$path_value")
+          log i "Added to backup: $arg = $path_value"
+        else
+          if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
+            configurator_generic_dialog "RetroDECK Userdata Backup" "The $arg was not found at its expected location, $path_value.\nSomething may be wrong with your RetroDECK installation."
+          fi
+          log e "Error: Path from variable '$arg' does not exist: $path_value"
+          return 1
+        fi
+      # Otherwise treat it as a direct path
+      elif [[ -e "$arg" ]]; then
+        paths_to_backup+=("$arg")
+        log i "Added to backup: $arg"
+      else
+        if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
+          configurator_generic_dialog "RetroDECK Userdata Backup" "The path $arg was not found at its expected location.\nPlease check the path and try again."
+        fi
+        log e "Error: '$arg' is neither a valid variable name nor an existing path"
+        return 1
+      fi
+    done
+  fi
+
+  # Calculate total size of selected paths
+  log i "Calculating size of backup data..."
+
+  total_size=0
+
+  if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then # Show progress dialog if running Zenity Configurator
+    total_size_file=$(mktemp) # Create temp file for Zenity subshell data extraction
+    (
+    for path in "${paths_to_backup[@]}"; do
+      if [[ -e "$path" ]]; then
+        log d "Checking size of path $path"
+        path_size=$(du -sk "$path" 2>/dev/null | cut -f1) # Get size in KB
+        path_size=$((path_size * 1024)) # Convert to bytes for calculation
+        total_size=$((total_size + path_size))
+        echo "$total_size" > "$total_size_file"
+      fi
+    done
+    ) |
+    rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+            --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+            --title "RetroDECK Configurator Utility - Userdata Backup" \
+            --text="Verifying there is enough free space for the backup, please wait..."
+    total_size=$(cat "$total_size_file")
+    rm "$total_size_file" # Clean up temp file
+  else # If running in CLI
+    for path in "${paths_to_backup[@]}"; do
+      if [[ -e "$path" ]]; then
+        log d "Checking size of path $path"
+        path_size=$(du -sk "$path" 2>/dev/null | cut -f1) # Get size in KB
+        path_size=$((path_size * 1024)) # Convert to bytes for calculation
+        total_size=$((total_size + path_size))
+      fi
+    done
+  fi
+
+  # Get available space at destination
+  available_space=$(df -B1 "$backups_folder" | awk 'NR==2 {print $4}')
+
+  # Log sizes for reference
+  log i "Total size of backup data: $(numfmt --to=iec-i --suffix=B "$total_size")"
+  log i "Available space at destination: $(numfmt --to=iec-i --suffix=B "$available_space")"
+
+  # Check if we have enough space (using uncompressed size as a conservative estimate)
+  if [[ "$available_space" -lt "$total_size" ]]; then
+    if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
+      configurator_generic_dialog "RetroDECK Userdata Backup" "There is not enough free space to perform this backup.\n\nYou need at least $(numfmt --to=iec-i --suffix=B "$total_size"),\nplease free up some space and try again."
+    fi
+    log e "Error: Not enough space to perform backup. Need at least $(numfmt --to=iec-i --suffix=B "$total_size")"
+    return 1
+  fi
+
+  log i "Starting backup process..."
+
+  if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then # Show progress dialog if running Zenity Configurator
+    (
+      # Create zip with selected paths
+      if zip -rq9 "$zip_file" "${paths_to_backup[@]}" >> "$backup_log_file" 2>&1; then
+        # Rotate backups for the specific type
+        cd "$backups_folder" || return 1
+        ls -t *_${backup_type}.zip | tail -n +4 | xargs -r rm
+
+        final_size=$(du -h "$zip_file" | cut -f1)
+        configurator_generic_dialog "RetroDECK Userdata Backup" "The backup to $zip_file was successful, final size is $final_size.\n\nThe backups have been rotated, keeping the last 3 of the $backup_type backup type."
+        log i "Backup completed successfully: $zip_file (Size: $final_size)"
+        log i "Older backups rotated, keeping latest 3 of type $backup_type"
+
+        if [[ ! -s "$backup_log_file" ]]; then # If the backup log file is empty, meaning zip threw no errors
+          rm -f "$backup_log_file"
+        fi
+      else
+        configurator_generic_dialog "RetroDECK Userdata Backup" "Something went wrong with the backup process. Please check the log $backup_log_file for more information."
+        log i "Error: Backup failed"
+        return 1
+      fi
+    ) |
+    rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+            --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+            --title "RetroDECK Configurator Utility - Userdata Backup" \
+            --text="Compressing files into backup, please wait..."
+  else
+    if zip -rq9 "$zip_file" "${paths_to_backup[@]}" >> "$backup_log_file" 2>&1; then
+      # Rotate backups for the specific type
+      cd "$backups_folder" || return 1
+      ls -t *_${backup_type}.zip | tail -n +4 | xargs -r rm
+
+      final_size=$(du -h "$zip_file" | cut -f1)
+      log i "Backup completed successfully: $zip_file (Size: $final_size)"
+      log i "Older backups rotated, keeping latest 3 of type $backup_type"
+
+      if [[ ! -s "$backup_log_file" ]]; then # If the backup log file is empty, meaning zip threw no errors
+        rm -f "$backup_log_file"
+      fi
+    else
+      log i "Error: Backup failed"
+      return 1
+    fi
+  fi
 }
 
 make_name_pretty() {
@@ -573,9 +853,9 @@ install_retrodeck_starterpack() {
 
   ## DOOM section ##
   cp /app/retrodeck/extras/doom1.wad "$roms_folder/doom/doom1.wad" # No -f in case the user already has it
-  create_dir "/var/config/ES-DE/gamelists/doom"
-  if [[ ! -f "/var/config/ES-DE/gamelists/doom/gamelist.xml" ]]; then # Don't overwrite an existing gamelist
-    cp "/app/retrodeck/rd_prepacks/doom/gamelist.xml" "/var/config/ES-DE/gamelists/doom/gamelist.xml"
+  create_dir "$XDG_CONFIG_HOME/ES-DE/gamelists/doom"
+  if [[ ! -f "$XDG_CONFIG_HOME/ES-DE/gamelists/doom/gamelist.xml" ]]; then # Don't overwrite an existing gamelist
+    cp "/app/retrodeck/rd_prepacks/doom/gamelist.xml" "$XDG_CONFIG_HOME/ES-DE/gamelists/doom/gamelist.xml"
   fi
   create_dir "$media_folder/doom"
   unzip -oq "/app/retrodeck/rd_prepacks/doom/doom.zip" -d "$media_folder/doom/"
@@ -613,8 +893,8 @@ update_splashscreens() {
 
   log i "Updating splash screen"
 
-  rm -rf /var/config/ES-DE/resources/graphics
-  rsync -rlD --mkpath "/app/retrodeck/graphics/" "/var/config/ES-DE/resources/graphics/"
+  rm -rf "$XDG_CONFIG_HOME/ES-DE/resources/graphics"
+  rsync -rlD --mkpath "/app/retrodeck/graphics/" "$XDG_CONFIG_HOME/ES-DE/resources/graphics/"
 
 }
 
@@ -650,7 +930,7 @@ splash_screen() {
       ($current_day | tonumber) <= (.value.end_date | tonumber) and
       ($current_time | tonumber) >= (.value.start_time | tonumber) and
       ($current_time | tonumber) <= (.value.end_time | tonumber)
-    ) | .value.filename' $features)
+    ) | .value.filename' "$features")
 
   # Determine the splash file to use
   if [[ -n "$splash_screen" ]]; then
@@ -692,7 +972,7 @@ install_release() {
     mkdir -p "$rdhome/RetroDECK_Updates"
 
     # Download the flatpak file
-    wget -P "$rdhome/RetroDECK_Updates" $flatpak_url -O "$rdhome/RetroDECK_Updates/RetroDECK$iscooker.flatpak"
+    wget -P "$rdhome/RetroDECK_Updates" "$flatpak_url" -O "$rdhome/RetroDECK_Updates/RetroDECK$iscooker.flatpak"
     
     # Check if the download was successful
     if [[ $? -ne 0 ]]; then
@@ -732,13 +1012,13 @@ ponzu() {
   local executable
 
   # if the binaries are found, ponzu should be set as true into the retrodeck config
-  if [ -f "/var/data/ponzu/Citra/bin/citra-qt" ]; then
+  if [ -f "$XDG_DATA_HOME/ponzu/Citra/bin/citra-qt" ]; then
     log d "Citra binaries has already been installed, checking for updates and forcing the setting as true."
-    set_setting_value $rd_conf "akai_ponzu" "true" retrodeck "options"
+    set_setting_value "$rd_conf" "akai_ponzu" "true" retrodeck "options"
   fi
-  if [ -f "/var/data/ponzu/Yuzu/bin/yuzu" ]; then
+  if [ -f "$XDG_DATA_HOME/ponzu/Yuzu/bin/yuzu" ]; then
     log d "Yuzu binaries has already been installed, checking for updates and forcing the setting as true."
-    set_setting_value $rd_conf "kiroi_ponzu" "true" retrodeck "options"
+    set_setting_value "$rd_conf" "kiroi_ponzu" "true" retrodeck "options"
   fi
 
   # Loop through all ponzu files
@@ -747,11 +1027,11 @@ ponzu() {
     if [ -f "$ponzu_file" ]; then
       if [[ "$ponzu_file" == *itra* ]]; then
         log i "Found akai ponzu! Elaborating it"
-        data_dir="/var/data/ponzu/Citra"
+        data_dir="$XDG_DATA_HOME/ponzu/Citra"
         local message="Akai ponzu is served, enjoy"
       elif [[ "$ponzu_file" == *uzu* ]]; then
         log i "Found kiroi ponzu! Elaborating it"
-        data_dir="/var/data/ponzu/Yuzu"
+        data_dir="$XDG_DATA_HOME/ponzu/Yuzu"
         local message="Kiroi ponzu is served, enjoy"
       else
         log e "AppImage not recognized, not a ponzu ingredient!"
@@ -779,14 +1059,14 @@ ponzu() {
         chmod +x "$executable"
         chmod +x "$executable-qt"
         prepare_component "reset" "citra"
-        set_setting_value $rd_conf "akai_ponzu" "true" retrodeck "options"
+        set_setting_value "$rd_conf" "akai_ponzu" "true" retrodeck "options"
       elif [[ "$ponzu_file" == *uzu* ]]; then
         mv "$tmp_folder/usr/"** .
         executable="$data_dir/bin/yuzu"
         log d "Making $executable executable"
         chmod +x "$executable"
         prepare_component "reset" "yuzu"
-        set_setting_value $rd_conf "kiroi_ponzu" "true" retrodeck "options"
+        set_setting_value "$rd_conf" "kiroi_ponzu" "true" retrodeck "options"
       fi
       
       cd -
@@ -804,15 +1084,15 @@ ponzu_remove() {
   if [[ "$1" == "citra" ]]; then
     if [[ $(configurator_generic_question_dialog "Ponzu - Remove Citra" "Do you really want to remove Citra binaries?\n\nYour games and saves will not be deleted.") == "true" ]]; then
       log i "Ponzu: removing Citra"
-      rm -rf "/var/data/ponzu/Citra"
-      set_setting_value $rd_conf "akai_ponzu" "false" retrodeck "options"
+      rm -rf "$XDG_DATA_HOME/ponzu/Citra"
+      set_setting_value "$rd_conf" "akai_ponzu" "false" retrodeck "options"
       configurator_generic_dialog "Ponzu - Remove Citra" "Done, Citra is now removed from RetroDECK"
     fi
   elif [[ "$1" == "yuzu" ]]; then
     if [[ $(configurator_generic_question_dialog "Ponzu - Remove Yuzu" "Do you really want to remove Yuzu binaries?\n\nYour games and saves will not be deleted.") == "true" ]]; then
       log i "Ponzu: removing Yuzu"
-      rm -rf "/var/data/ponzu/Yuzu"
-      set_setting_value $rd_conf "kiroi_ponzu" "false" retrodeck "options"
+      rm -rf "$XDG_DATA_HOME/ponzu/Yuzu"
+      set_setting_value "$rd_conf" "kiroi_ponzu" "false" retrodeck "options"
       configurator_generic_dialog "Ponzu - Remove Yuzu" "Done, Yuzu is now removed from RetroDECK"
     fi
   else
@@ -835,7 +1115,7 @@ release_selector() {
     
     # Fetch the main release from the RetroDECK repository
     log d "Fetching latest main release from GitHub API for repository RetroDECK"
-    local main_release=$(curl -s https://api.github.com/repos/$git_organization_name/RetroDECK/releases/latest)
+    local main_release=$(curl -s "https://api.github.com/repos/$git_organization_name/RetroDECK/releases/latest")
 
     if [[ -z "$main_release" ]]; then
         log e "Failed to fetch the main release"
@@ -854,7 +1134,7 @@ release_selector() {
     local release_array=("Main Release" "$main_tag_name" "$main_human_readable_date")
 
     # Fetch all releases (including draft and pre-release) from the Cooker repository
-    local releases=$(curl -s https://api.github.com/repos/$git_organization_name/$cooker_repository_name/releases?per_page=100)
+    local releases=$(curl -s "https://api.github.com/repos/$git_organization_name/$cooker_repository_name/releases?per_page=100")
 
     if [[ -z "$releases" ]]; then
         log e "Failed to fetch releases or no releases available"
@@ -940,16 +1220,16 @@ release_selector() {
         log d "User confirmed installation of release $selected_tag"
 
       if echo "$selected_release" | grep -q "Main Release"; then
-        set_setting_value $rd_conf "update_repo" "$main_repository_name" retrodeck "options"
+        set_setting_value "$rd_conf" "update_repo" "$main_repository_name" retrodeck "options"
         log i "Switching to main channel"
       else
-        set_setting_value $rd_conf "update_repo" "$cooker_repository_name" retrodeck "options"
+        set_setting_value "$rd_conf" "update_repo" "$cooker_repository_name" retrodeck "options"
         log i "Switching to cooker channel"
       fi
 
         set_setting_value "$rd_conf" "branch" "$selected_branch" "retrodeck" "options"
         log d "Set branch to $selected_branch in configuration"
-        install_release $selected_tag
+        install_release "$selected_tag"
 
     else
       log d "User canceled installation"
@@ -962,22 +1242,9 @@ quit_retrodeck() {
   pkill -f "es-de"
 
   # if steam sync is on do the magic
-  if [[ $(get_setting_value "$rd_conf" "steam_sync" retrodeck "options") == "true" ]]; then
-  (
-  source /app/libexec/steam_sync.sh
-  add_to_steam "$(ls "$rdhome/ES-DE/gamelists/")"
-  ) |
-  rd_zenity --progress \
-    --title="Syncing with Steam" \
-    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --text="<span foreground='$purple'><b>\t\t\t\tSyncing favorite games with Steam</b></span>\n\n<b>NOTE: </b>This operation may take some time depending on the size of your library.\nFeel free to leave this in the background and switch to another application.\n\n" \
-    --percentage=25 \
-    --pulsate \
-    --width=500 \
-    --height=150 \
-    --auto-close \
-    --auto-kill \
-    --no-cancel
+  if [[ $(get_setting_value "$rd_conf" "steam_sync" "retrodeck" "options") == "true" ]]; then
+    export CONFIGURATOR_GUI="zenity"
+    steam_sync
   fi
   log i "Shutting down RetroDECK's framework"
   pkill -f "retrodeck"
@@ -1028,21 +1295,21 @@ retroarch_updater(){
   log i "Running RetroArch updater"
   
   # Synchronize cores from the application share directory to the RetroArch cores directory
-  rsync -rlD --mkpath "/app/share/libretro/cores/" "/var/config/retroarch/cores/" && log d "RetroArch cores updated correctly"
+  rsync -rlD --mkpath "/app/share/libretro/cores/" "$XDG_CONFIG_HOME/retroarch/cores/" && log d "RetroArch cores updated correctly"
   
   # Synchronize border overlays from the RetroDeck configuration directory to the RetroArch overlays directory
-  rsync -rlD --mkpath "/app/retrodeck/config/retroarch/borders/" "/var/config/retroarch/overlays/borders/" && log d "RetroArch overlays and borders updated correctly"
+  rsync -rlD --mkpath "/app/retrodeck/config/retroarch/borders/" "$XDG_CONFIG_HOME/retroarch/overlays/borders/" && log d "RetroArch overlays and borders updated correctly"
 }
 
 portmaster_show(){
   log d "Setting PortMaster visibility in ES-DE"
   if [ "$1" = "true" ]; then
       log d "\"$roms_folder/portmaster/PortMaster.sh\" is not found, installing it"
-      install -Dm755 "/var/data/PortMaster/PortMaster.sh" "$roms_folder/portmaster/PortMaster.sh" && log d "PortMaster is correctly showing in ES-DE"
-      set_setting_value $rd_conf "portmaster_show" "true" retrodeck "options"
+      install -Dm755 "$XDG_DATA_HOME/PortMaster/PortMaster.sh" "$roms_folder/portmaster/PortMaster.sh" && log d "PortMaster is correctly showing in ES-DE"
+      set_setting_value "$rd_conf" "portmaster_show" "true" retrodeck "options"
   elif [ "$1" = "false" ]; then
     rm -rf "$roms_folder/portmaster/PortMaster.sh" && log d "PortMaster is correctly hidden in ES-DE"
-    set_setting_value $rd_conf "portmaster_show" "false" retrodeck "options"
+    set_setting_value "$rd_conf" "portmaster_show" "false" retrodeck "options"
   else
     log e "\"$1\" is not a valid choice, quitting"
   fi
@@ -1110,12 +1377,13 @@ open_component(){
 
 add_retrodeck_to_steam(){
 
-    log i "Adding RetroDECK to Steam"
+    log i "Checking if user wants to add RetroDECK to Steam"
 
     rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" \
   --text="Do you want to add RetroDECK to Steam?"
     if [ $? == 0 ]; then
       (
+        log i "RetroDECK has been added to Steam"
         steam-rom-manager enable --names "RetroDECK Launcher"
         steam-rom-manager add
       ) |
@@ -1125,6 +1393,141 @@ add_retrodeck_to_steam(){
         --text="Please wait while RetroDECK is being added to Steam...\n\n"
       rd_zenity --info --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --text="RetroDECK has been added to Steam.\n\nPlease close and reopen Steam to see the changes."
     fi
+}
 
-    log i "RetroDECK has been added to Steam"
+repair_paths() {
+  # This function will verify that all folders defined in the [paths] section of retrodeck.cfg exist
+  # If a folder doesn't exist and is defined outside of rdhome, it will check in rdhome first and have the user browse for them manually if it isn't there either
+  # USAGE: repair_paths
+
+  invalid_path_found="false"
+
+  log i "Checking that all RetroDECK paths are valid"
+  while read -r config_line; do
+    local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
+    if [[ ! $current_setting_name =~ (rdhome|sdcard) ]]; then # Ignore these locations
+      local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
+      if [[ ! -d "$current_setting_value" ]]; then # If the folder doesn't exist as defined
+        log i "$current_setting_name does not exist as defined, config is incorrect"
+        if [[ ! -d "$rdhome/${current_setting_value#*retrodeck/}" ]]; then # If the folder doesn't exist within defined rdhome path
+          if [[ ! -d "$sdcard/${current_setting_value#*retrodeck/}" ]]; then # If the folder doesn't exist within defined sdcard path
+            log i "$current_setting_name cannot be found at any expected location, having user locate it manually"
+            configurator_generic_dialog "RetroDECK Path Repair" "The RetroDECK $current_setting_name was not found in the expected location.\nThis may happen when the folder is moved manually.\n\nPlease browse to the current location of the $current_setting_name."
+            new_path=$(directory_browse "RetroDECK $current_setting_name location")
+            set_setting_value "$rd_conf" "$current_setting_name" "$new_path" retrodeck "paths"
+            invalid_path_found="true"
+          else # Folder does exist within defined sdcard path, update accordingly
+            log i "$current_setting_name found in $sdcard/retrodeck, correcting path config"
+            new_path="$sdcard/retrodeck/${current_setting_value#*retrodeck/}"
+            set_setting_value "$rd_conf" "$current_setting_name" "$new_path" retrodeck "paths"
+            invalid_path_found="true"
+          fi
+        else # Folder does exist within defined rdhome path, update accordingly
+          log i "$current_setting_name found in $rdhome, correcting path config"
+          new_path="$rdhome/${current_setting_value#*retrodeck/}"
+          set_setting_value "$rd_conf" "$current_setting_name" "$new_path" retrodeck "paths"
+          invalid_path_found="true"
+        fi
+      fi
+    fi
+  done < <(grep -v '^\s*$' "$rd_conf" | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
+
+  if [[ $invalid_path_found == "true" ]]; then
+    log i "One or more invalid paths repaired, fixing internal RetroDECK structures"
+    conf_read
+    dir_prep "$logs_folder" "$rd_logs_folder"
+    prepare_component "postmove" "all"
+    configurator_generic_dialog "RetroDECK Path Repair" "One or more incorrectly configured paths were repaired."
+  else
+    log i "All folders were found at their expected locations"
+    configurator_generic_dialog "RetroDECK Path Repair" "All RetroDECK folders were found at their expected locations."
+  fi
+}
+
+# Function to sanitize strings for filenames
+sanitize() {
+    # Replace sequences of underscores with a single space
+    echo "$1" | sed -e 's/_\{2,\}/ /g' -e 's/_/ /g' -e 's/:/ -/g' -e 's/&/and/g' -e 's%/%and%g' -e 's/  / /g'
+}
+
+get_cheevos_token() {
+  # This function will attempt to authenticate with the RA API with the supplied credentials and will return a JSON object if successful
+  # USAGE get_cheevos_token $username $password
+
+  local cheevos_api_response=$(curl --silent --data "r=login&u=$1&p=$2" "$RA_API_URL")
+  local cheevos_success=$(echo "$cheevos_api_response" | jq -r '.Success')
+  if [[ "$cheevos_success" == "true" ]]; then
+    log d "login succeeded"
+    echo "$cheevos_api_response"
+  else
+    log d "login failed"
+    return 1
+  fi
+}
+
+check_if_updated() {
+# Check if an update has happened
+if [ -f "$lockfile" ]; then
+  if [ "$hard_version" != "$version" ]; then
+    log d "Update triggered"
+    log d "Lockfile found but the version doesn't match with the config file"
+    log i "Config file's version is $version but the actual version is $hard_version"
+    if grep -qF "cooker" <<< "$hard_version"; then # If newly-installed version is a "cooker" build
+      log d "Newly-installed version is a \"cooker\" build"
+      configurator_generic_dialog "RetroDECK Cooker Warning" "RUNNING COOKER VERSIONS OF RETRODECK CAN BE EXTREMELY DANGEROUS AND ALL OF YOUR RETRODECK DATA\n(INCLUDING BIOS FILES, BORDERS, DOWNLOADED MEDIA, GAMELISTS, MODS, ROMS, SAVES, STATES, SCREENSHOTS, TEXTURE PACKS AND THEMES)\nARE AT RISK BY CONTINUING!"
+      set_setting_value "$rd_conf" "update_repo" "$cooker_repository_name" retrodeck "options"
+      set_setting_value "$rd_conf" "update_check" "true" retrodeck "options"
+      set_setting_value "$rd_conf" "developer_options" "true" retrodeck "options"
+      set_setting_value "$rd_conf" "logging_level" "debug" retrodeck "options"
+      cooker_base_version=$(echo "$version" | cut -d'-' -f2)
+      choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Upgrade" --extra-button="Don't Upgrade" --extra-button="Full Wipe and Fresh Install" \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Cooker Upgrade" \
+      --text="You appear to be upgrading to a \"cooker\" build of RetroDECK.\n\nWould you like to perform the standard post-update process, skip the post-update process or remove ALL existing RetroDECK folders and data (including ROMs and saves) to start from a fresh install?\n\nPerforming the normal post-update process multiple times may lead to unexpected results.")
+      rc=$? # Capture return code, as "Yes" button has no text value
+      if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
+        if [[ "$choice" == "Don't Upgrade" ]]; then # If user wants to bypass the post_update.sh process this time.
+          log i "Skipping upgrade process for cooker build, updating stored version in retrodeck.cfg"
+          set_setting_value "$rd_conf" "version" "$hard_version" retrodeck # Set version of currently running RetroDECK to updated retrodeck.cfg
+        elif [[ "$choice" == "Full Wipe and Fresh Install" ]]; then # Remove all RetroDECK data and start a fresh install
+          if [[ $(configurator_generic_question_dialog "RetroDECK Cooker Reset" "This is going to remove all of the data in all locations used by RetroDECK!\n\n(INCLUDING BIOS FILES, BORDERS, DOWNLOADED MEDIA, GAMELISTS, MODS, ROMS, SAVES, STATES, SCREENSHOTS, TEXTURE PACKS AND THEMES)\n\nAre you sure you want to contine?") == "true" ]]; then
+            if [[ $(configurator_generic_question_dialog "RetroDECK Cooker Reset" "Are you super sure?\n\nThere is no going back from this process, everything is gonzo.\nDust in the wind.\n\nYesterdays omelette.") == "true" ]]; then
+              if [[ $(configurator_generic_question_dialog "RetroDECK Cooker Reset" "But are you super DUPER sure? We REAAAALLLLLYY want to make sure you know what is happening here.\n\nThe ~/retrodeck and ~/.var/app/net.retrodeck.retrodeck folders and ALL of their contents\nare about to be PERMANENTLY removed.\n\nStill sure you want to proceed?") == "true" ]]; then
+                configurator_generic_dialog "RetroDECK Cooker Reset" "Ok, if you're that sure, here we go!"
+                if [[ $(configurator_generic_question_dialog "RetroDECK Cooker Reset" "(Are you actually being serious here? Because we are...\n\nNo backsies.)") == "true" ]]; then
+                  log w "Removing RetroDECK data and starting fresh"
+                  rm -rf /var
+                  rm -rf "$HOME/retrodeck"
+                  rm -rf "$rdhome"
+                  source /app/libexec/global.sh
+                  finit
+                fi
+              fi
+            fi
+          fi
+        fi
+      else
+        log i "Performing normal upgrade process for version $cooker_base_version"
+        version="$cooker_base_version" # Temporarily assign cooker base version to $version so update script can read it properly.
+        post_update
+      fi
+    else # If newly-installed version is a normal build.
+      if grep -qF "cooker" <<< "$version"; then # If previously installed version was a cooker build
+        cooker_base_version=$(echo "$version" | cut -d'-' -f2)
+        version="$cooker_base_version" # Temporarily assign cooker base version to $version so update script can read it properly.
+        set_setting_value "$rd_conf" "update_repo" "RetroDECK" retrodeck "options"
+        set_setting_value "$rd_conf" "update_check" "false" retrodeck "options"
+        set_setting_value "$rd_conf" "update_ignore" "" retrodeck "options"
+        set_setting_value "$rd_conf" "developer_options" "false" retrodeck "options"
+        set_setting_value "$rd_conf" "logging_level" "info" retrodeck "options"
+      fi
+      post_update       # Executing post update script
+    fi
+  fi
+# Else, LOCKFILE IS NOT EXISTING (WAS REMOVED)
+# if the lock file doesn't exist at all means that it's a fresh install or a triggered reset
+else
+  log w "Lockfile not found"
+  finit             # Executing First/Force init
+fi
 }

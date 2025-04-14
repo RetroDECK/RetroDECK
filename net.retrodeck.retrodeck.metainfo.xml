@@ -73,6 +73,65 @@
    <project_license>GPL-3.0</project_license>
    <metadata_license>CC0-1.0</metadata_license>
    <releases>
+      <release version="0.9.2b" date="2025-04-14">
+         <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.9.2b</url>
+            <description>
+               <p>Additions and Updates:</p>
+               <ul>
+                  <li>BACKUP: Introduced optional backup during post-update process.</li>
+                  <li>BACKUP: Refactored to be smarter and faster.</li>
+                  <li>BACKUP: Three options: "Core", "Custom" and "Complete".</li>
+                  <li>BIOS CHECKER: Refactored to be smarter and faster.</li>
+                  <li>CLI: Added "repair-paths", "steam-sync" and "steam-sync purge" options.</li>
+                  <li>COMPRESSOR: Better multi-file compression logic and speed.</li>
+                  <li>COMPRESSOR: New functionality for compression cleanup argument in both single-file and multi-file modes.</li>
+                  <li>CONFIGURATOR: Added Logging Level Changer tool: Informational, Warnings, Errors, Debug.</li>
+                  <li>CONFIGURATOR: Added Repair Paths Tool: Repair RetroDECK paths without a full reset.</li>
+                  <li>CONFIGURATOR: Added Steam Sync Purge Tool: Removes all synced shortcuts from Steam Sync.</li>
+                  <li>CONFIGURATOR: Several functions have improved multithreading.</li>
+                  <li>ES-DE: Updated to version 3.2.0: WiFi, Bluetooth, and battery indicators.</li>
+                  <li>NEW SYSTEMS: Sega Mark III and Vircon32.</li>
+                  <li>RetroDECK THEME: Added a new Light background option.</li>
+                  <li>RetroDECK THEME: Added compatibility with 3.2.0.</li>
+                  <li>STEAM SYNC: Refactored to be smarter and faster.</li>
+                  <li>STEAM SYNC: Added "Manual" and "Automatic" Sync Modes.</li>
+                  <li>STEAM SYNC: Better handling of ES-DE's set alternative emulator per-game / global.</li>
+               </ul>
+               <p>Changes:</p>
+               <ul>
+                  <li>CONFIGURATOR: Text improvements and menu changes.</li>
+                  <li>BACKUP: New name "Backup RetroDECK".</li>
+               </ul>
+               <p>Fixes:</p>
+               <ul>
+                  <li>COMPRESSOR: Fixed multi-file compression menu flow in Zenity Configurator.</li>
+                  <li>CONFIGURATOR: Fixed incorrect menu navigation in Zenity Configurator.</li>
+                  <li>DOLPHIN: Set env QT_QPA_PLATFORM=xcb to fix Wayland Errors.</li>
+                  <li>FRAMEWORK: Corrected instances of improper realpath and basename handling with spaces.</li>
+                  <li>FRAMEWORK: Fixed Configurator folder move logic to prevent errors with certain paths.</li>
+                  <li>FRAMEWORK: Improved path cleanup handling for spaces in folder names.</li>
+                  <li>FRAMEWORK: Resolved broken symlink issue for internal logging folder.</li>
+                  <li>FRAMEWORK: Added .png and .po to MIME IGNORED_EXTENSIONS.</li>
+                  <li>FRAMEWORK: CLI arguments are processed after the first install check to prevent half-installed states.</li>
+                  <li>STEAM SYNC: Fixed issue where alternative emulator settings were not respected in Steam Sync-launched games.</li>
+                  <li>STEAM SYNC: Fixed issues with SRM user configurations and Zenity dialogs.</li>
+               </ul>
+               <p>Development:</p>
+               <ul>
+                  <li>BACKUP: Updated `backup_retrodeck_userdata` to support a more efficient "core" backup option.</li>
+                  <li>CHEEVOS: Better login / logout process and PPSSPP information.</li>
+                  <li>ENGINE: Cleaned up run_game.sh of not used functions.</li>
+                  <li>COMPRESSOR: Refactored `compress_game` function to handle post-compression cleanup argument directly.</li>
+                  <li>FRAMEWORK: Enhanced `find_compatible_games` logic and spelling improvements.</li>
+                  <li>FRAMEWORK: Fixed broken symlink issue for internal logging folder..</li>
+                  <li>FRAMEWORK: Corrected handling of spaces in realpath, basename and folder names.</li>
+                  <li>FRAMEWORK: New `repair_paths` function introduced to fix paths without a full reset.</li>
+                  <li>FRAMEWORK: Better CPU core detection.</li>
+                  <li>FRAMEWORK: Refined `sanitize()` function to be moved to `other_functions.sh` for better code organization.</li>
+                  <li>STEAM SYNC: Function `steam_sync` improved to handle unfavorited games more efficiently.</li>
+               </ul>
+            </description>
+         </release>
          <release version="0.9.1b" date="2025-03-09">
             <url>https://github.com/RetroDECK/RetroDECK/releases/tag/0.9.1b</url>
             <description>

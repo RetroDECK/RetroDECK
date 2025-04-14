@@ -141,7 +141,7 @@ get_setting_value() {
 
   "dolphin" | "duckstation" | "pcsx2" | "ppsspp" | "primehack" | "xemu" ) # For files with this syntax - setting_name = setting_value
     if [[ -z $current_section_name ]]; then
-      echo $(grep -o -P "(?<=^$current_setting_name = ).*" $1)
+      echo $(grep -o -P "(?<=^$current_setting_name = ).*" "$1")
     else
       sed -n -E '\^\['"$current_section_name"'\]^,\^\^'"$current_setting_name"'|\[^{ \^\['"$current_section_name"'\]^! { \^\^'"$current_setting_name"'^ p } }' "$1" | grep -o -P "(?<=^$current_setting_name = ).*"
     fi
@@ -337,7 +337,7 @@ generate_single_patch() {
           current_setting_name=$(get_setting_name "$escaped_setting_line" "$system")
           if [[ (-z $(sed -n -E '\^\['"$current_section"'\]|\b'"$current_section"':$^,\^\b'"$current_setting_name"'\s*?[:=]^{ \^\['"$current_section"'\]|\b'"$current_section"':$^! { \^\b'"$(sed -E 's/^[ \t]*//;' <<< "$escaped_setting_line")"'$^ p } }' "$modified_file")) ]]; then # If the same setting line is not found in the same section of the modified file...
             if [[ ! -z $(sed -n -E '\^\['"$current_section"'\]|\b'"$current_section"':$^,\^\b'"$current_setting_name"'\s*?[:=]^{ \^\['"$current_section"'\]|\b'"$current_section"':$^! { \^\b'"$current_setting_name"'\s*?[:=]^ p } }' "$modified_file") ]]; then # But the setting exists in that section, only with a different value...
-              new_setting_value=$(get_setting_value "$2" "$current_setting_name" "$system" $current_section)
+              new_setting_value=$(get_setting_value "$2" "$current_setting_name" "$system" "$current_section")
               action="change"
               echo $action"^"$current_section"^"$(sed -e 's%\\\\%\\%g' <<< "$current_setting_name")"^"$new_setting_value"^"$system >> "$patch_file"
             fi
@@ -356,7 +356,7 @@ generate_single_patch() {
           if [[ (-z $(sed -n -E '\^\s*?\b'"$(sed -E 's/^[ \t]*//' <<< "$escaped_setting_line")"'$^p' "$modified_file")) ]]; then # If the same setting line is not found in the modified file...
             current_setting_name=$(get_setting_name "$escaped_setting_line" "$system")
             if [[ ! -z $(sed -n -E '\^\s*?\b'"$current_setting_name"'\s*?[:=]^p' "$modified_file") ]]; then # But the setting exists, only with a different value...
-              new_setting_value=$(get_setting_value $2 "$current_setting_name" "$system")
+              new_setting_value=$(get_setting_value "$2" "$current_setting_name" "$system")
               action="change"
               echo $action"^"$current_section"^"$(sed -e 's%\\\\%\\%g' <<< "$current_setting_name")"^"$new_setting_value"^"$system >> "$patch_file"
             fi
@@ -381,22 +381,22 @@ generate_single_patch() {
       if [[ ! -z $(grep -o -P "^\[.+?\]$" <<< "$current_setting_line") || ! -z $(grep -o -P "^\b.+?:$" <<< "$current_setting_line") ]]; then # Capture section header lines
       if [[ $current_setting_line =~ ^\[.+\] ]]; then # If normal section line
         action="section"
-        current_section=$(sed 's^[][]^^g' <<< $current_setting_line) # Remove brackets from section name
+        current_section=$(sed 's^[][]^^g' <<< "$current_setting_line") # Remove brackets from section name
       elif [[ ! -z $(grep -o -P "^\b.+?:$" <<< "$current_setting_line") ]]; then # If RPCS3 section name
         action="section"
-        current_section=$(sed 's^:$^^' <<< $current_setting_line) # Remove colon from section name
+        current_section=$(sed 's^:$^^' <<< "$current_setting_line") # Remove colon from section name
       fi
       elif [[ (! -z $current_section) ]]; then
         current_setting_name=$(get_setting_name "$escaped_setting_line" "$4")
-        if [[ -z $(sed -n -E '\^\['"$current_section"'\]|\b'"$current_section"':$^,\^\b'"$current_setting_name"'.*^{ \^\['"$current_section"'\]|\b'"$current_section"':$^! { \^\b'"$current_setting_name"'^p } }' $1 ) ]]; then # If setting name is not found in this section of the original file...
+        if [[ -z $(sed -n -E '\^\['"$current_section"'\]|\b'"$current_section"':$^,\^\b'"$current_setting_name"'.*^{ \^\['"$current_section"'\]|\b'"$current_section"':$^! { \^\b'"$current_setting_name"'^p } }' "$1" ) ]]; then # If setting name is not found in this section of the original file...
           action="add_setting_line" # TODO: This should include the previous line, so that new lines can be inserted in the correct place rather than at the end.
-          echo $action"^"$current_section"^"$current_setting_line"^^"$4 >> $3
+          echo $action"^"$current_section"^"$current_setting_line"^^"$4 >> "$3"
         fi
       elif [[ (-z $current_section) ]]; then
         current_setting_name=$(get_setting_name "$escaped_setting_line" "$4")
-        if [[ -z $(sed -n -E '\^\s*?\b'"$current_setting_name"'\s*?[:=]^p' $1) ]]; then # If setting name is not found in the original file...
+        if [[ -z $(sed -n -E '\^\s*?\b'"$current_setting_name"'\s*?[:=]^p' "$1") ]]; then # If setting name is not found in the original file...
           action="add_setting_line" # TODO: This should include the previous line, so that new lines can be inserted in the correct place rather than at the end.
-          echo $action"^"$current_section"^"$current_setting_line"^^"$4 >> $3
+          echo $action"^"$current_section"^"$current_setting_line"^^"$4 >> "$3"
         fi
       fi
     fi
@@ -539,7 +539,7 @@ get_steam_user() {
     log i "Username: $steam_username"
     log i "Name: $steam_prettyname"
 
-    if [[ $steam_sync == "true" ]]; then
+    if [[ -d "$srm_userdata" ]]; then
       populate_steamuser_srm
     fi
     

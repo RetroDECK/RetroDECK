@@ -68,14 +68,13 @@ run_game() {
 
     game_basename="./$(basename "$game")"
 
-    local error="File \"$game\" not found.\n\nPlease make sure that RetroDECK's Flatpak is correctly configured to reach the given path and try again."
     # Check if realpath succeeded
     if [[ -z "$game" || ! -e "$game" ]]; then
         rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK" \
             --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
             --title "RetroDECK - File not found" \
-            --text="ERROR: $error"
-        log e "$error"
+            --text="ERROR: File \"$game\" not found.\n\nPlease make sure that RetroDECK's Flatpak is correctly configured to reach the given path and try again."
+        log e "File \"$game\" not found.\n\nPlease make sure that RetroDECK's Flatpak is correctly configured to reach the given path and try again."
         exit 1
     fi
 
@@ -103,7 +102,17 @@ run_game() {
         log d "Automatically searching for an emulator for system: $system"
 
         # Check for <altemulator> in the game block in gamelist.xml
-        altemulator=$(xmllint --recover --xpath "string(//game[path='$game_basename']/altemulator)" "$rdhome/ES-DE/gamelists/$system/gamelist.xml" 2>/dev/null)
+        altemulator=$(awk -v path="$game_basename" '
+                      /<game>/,/<\/game>/ {
+                          if ($0 ~ "<path>" path "<\/path>") found = 1
+                          if (found && $0 ~ /<altemulator>/) {
+                          gsub(/.*<altemulator>|<\/altemulator>.*/,"")
+                          print
+                          exit
+                          }
+                          if (found && $0 ~ /<\/game>/) exit
+                      }
+                      ' "$rdhome/ES-DE/gamelists/$system/gamelist.xml" 2>/dev/null)
 
         if [[ -n "$altemulator" ]]; then
 
@@ -113,9 +122,17 @@ run_game() {
         else # if no altemulator is found we search if a global one is set
 
             log d "No altemulator found in the game entry, searching for alternativeEmulator to check if a global emulator is set for the system $system"
-            alternative_emulator=$(xmllint --recover --xpath 'string(//alternativeEmulator/label)' "$rdhome/ES-DE/gamelists/$system/gamelist.xml" 2>/dev/null)
+            alternative_emulator=$(awk '
+                                   /<alternativeEmulator>/,/<\/alternativeEmulator>/ {
+                                       if ($0 ~ /<label>/) {
+                                       gsub(/.*<label>|<\/label>.*/,"")
+                                       print
+                                       exit
+                                       }
+                                   }
+                                   ' "$rdhome/ES-DE/gamelists/$system/gamelist.xml" 2>/dev/null)
             log d "Alternate emulator found in <alternativeEmulator> header: $alternative_emulator"
-            emulator=$(xmllint --recover --xpath "string(//system[platform='$system']/command[@label=\"$alternative_emulator\"])" "$es_systems" 2>/dev/null)
+            emulator=$(xmllint --recover --xpath "string(//system[name='$system']/command[@label=\"$alternative_emulator\"])" "$es_systems" 2>/dev/null)
 
         fi
 
@@ -348,30 +365,6 @@ handle_inject_placeholder() {
     echo "$cmd"
 }
 
-# Function to get the first available emulator in the list
-get_first_emulator() {
-    local system_name=$system
-    system_section=$(xmllint --xpath "//system[name='$system_name']" "$es_systems" 2>/dev/null)
-
-    if [ -z "$system_section" ]; then
-        log e "System not found: $system_name"
-        exit 1
-    fi
-
-    # Extract the first command and use it as the selected emulator
-    first_command=$(echo "$system_section" | xmllint --xpath "string(//command[1])" - 2>/dev/null)
-
-    if [[ -n "$first_command" ]]; then
-        # Substitute placeholders in the command
-        first_command=$(substitute_placeholders "$first_command")
-        log d "Automatically selected the first emulator: $first_command"
-        echo "$first_command"
-    else
-        log e "No command found for the system: $system_name"
-        return 1
-    fi
-}
-
 # Find the emulator path from the es_find_rules.xml file
 find_emulator() {
     local emulator_name="$1"
@@ -389,8 +382,8 @@ find_emulator() {
     while IFS= read -r line; do
         command_path=$(echo "$line" | sed -n 's/.*<entry>\(.*\)<\/entry>.*/\1/p')
         # Check if the command specified by the variable 'command_path' exists and is executable
-        if [ -x "$(command -v $command_path)" ]; then
-            found_path=$command_path
+        if [ -x "$(command -v "$command_path")" ]; then
+            found_path="$command_path"
             break
         fi
     done <<< "$(echo "$emulator_section" | xmllint --xpath "//rule[@type='systempath']/entry" - 2>/dev/null)"
@@ -400,7 +393,7 @@ find_emulator() {
         while IFS= read -r line; do
             command_path=$(echo "$line" | sed -n 's/.*<entry>\(.*\)<\/entry>.*/\1/p')
             if [ -x "$command_path" ]; then
-                found_path=$command_path
+                found_path="$command_path"
                 break
             fi
         done <<< "$(echo "$emulator_section" | xmllint --xpath "//rule[@type='staticpath']/entry" - 2>/dev/null)"
@@ -413,24 +406,6 @@ find_emulator() {
         log d "Find emulator: found emulator \"$found_path\""
         echo "$found_path"
         return 0
-    fi
-}
-
-# Function to find the emulator name from the label in es_systems.xml
-find_emulator_name_from_label() {
-    local label="$1"
-    
-    # Search for the emulator matching the label in the es_systems.xml file
-    extracted_emulator_name=$(xmllint --recover --xpath "string(//system[name='$system']/command[@label='$label']/text())" "$es_systems" 2>/dev/null | sed 's/%//g' | sed 's/EMULATOR_//g' | cut -d' ' -f1)
-    log d "Found emulator from label: $extracted_emulator_name"
-
-    emulator_command=$(find_emulator "$extracted_emulator_name")
-
-    if [[ -n "$emulator_command" ]]; then
-        echo "$emulator_command"
-    else
-        log e "Found emulator from label: emulator name not found for label: $label"
-        return 1
     fi
 }
 

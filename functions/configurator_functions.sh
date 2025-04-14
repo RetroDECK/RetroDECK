@@ -23,14 +23,14 @@ find_empty_rom_folders() {
 
     if [[ $count -eq 0 ]]; then
         # Directory is empty
-        empty_rom_folders_list=("${empty_rom_folders_list[@]}" "false" "$(realpath $dir)")
-        all_empty_folders=("${all_empty_folders[@]}" "$(realpath $dir)")
-        echo "$(realpath $dir)" >> "$godot_empty_roms_folders" # Godot data transfer temp file
+        empty_rom_folders_list=("${empty_rom_folders_list[@]}" "false" "$(realpath "$dir")")
+        all_empty_folders=("${all_empty_folders[@]}" "$(realpath "$dir")")
+        echo "$(realpath "$dir")" >> "$godot_empty_roms_folders" # Godot data transfer temp file
     elif [[ $count -eq 1 ]] && [[ "$(basename "${files[0]}")" == "systeminfo.txt" ]]; then
         # Directory contains only systeminfo.txt
-        empty_rom_folders_list=("${empty_rom_folders_list[@]}" "false" "$(realpath $dir)")
-        all_empty_folders=("${all_empty_folders[@]}" "$(realpath $dir)")
-        echo "$(realpath $dir)" >> "$godot_empty_roms_folders" # Godot data transfer temp file
+        empty_rom_folders_list=("${empty_rom_folders_list[@]}" "false" "$(realpath "$dir")")
+        all_empty_folders=("${all_empty_folders[@]}" "$(realpath "$dir")")
+        echo "$(realpath "$dir")" >> "$godot_empty_roms_folders" # Godot data transfer temp file
     elif [[ $count -eq 2 ]] && [[ "$files" =~ "systeminfo.txt" ]]; then
       contains_helper_file="false"
       for helper_file in "${all_helper_files[@]}" # Compare helper file list to dir file list
@@ -42,24 +42,23 @@ find_empty_rom_folders() {
       done
       if [[ "$contains_helper_file" == "true" ]]; then
         # Directory contains only systeminfo.txt and a helper file
-        empty_rom_folders_list=("${empty_rom_folders_list[@]}" "false" "$(realpath $dir)")
-        all_empty_folders=("${all_empty_folders[@]}" "$(realpath $dir)")
-        echo "$(realpath $dir)" >> "$godot_empty_roms_folders" # Godot data transfer temp file
+        empty_rom_folders_list=("${empty_rom_folders_list[@]}" "false" "$(realpath "$dir")")
+        all_empty_folders=("${all_empty_folders[@]}" "$(realpath "$dir")")
+        echo "$(realpath "$dir")" >> "$godot_empty_roms_folders" # Godot data transfer temp file
       fi
     fi
   done
 }
 
 configurator_check_multifile_game_structure() {
-  local folder_games=($(find $roms_folder -maxdepth 2 -mindepth 2 -type d ! -name "*.m3u" ! -name "*.ps3"))
+  local folder_games=($(find "$roms_folder" -maxdepth 2 -mindepth 2 -type d ! -name "*.m3u" ! -name "*.ps3"))
   if [[ ${#folder_games[@]} -gt 1 ]]; then
-    echo "$(find $roms_folder -maxdepth 2 -mindepth 2 -type d ! -name "*.m3u" ! -name "*.ps3")" > $logs_folder/multi_file_games_"$(date +"%Y_%m_%d_%I_%M_%p").log"
+    echo "$(find "$roms_folder" -maxdepth 2 -mindepth 2 -type d ! -name "*.m3u" ! -name "*.ps3")" > "$logs_folder"/multi_file_games_"$(date +"%Y_%m_%d_%I_%M_%p").log"
     rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - Verify Multi-file Structure" \
-    --text="The following games were found to have the incorrect folder structure:\n\n$(find $roms_folder -maxdepth 2 -mindepth 2 -type d ! -name "*.m3u" ! -name "*.ps3")\n\nIncorrect folder structure can result in failure to launch games or saves being in the incorrect location.\n\nPlease see the RetroDECK wiki for more details!\n\nYou can find this list of games in ~/retrodeck/logs"
+    --text="The following games were found to have the incorrect folder structure:\n\n$(find "$roms_folder" -maxdepth 2 -mindepth 2 -type d ! -name "*.m3u" ! -name "*.ps3")\n\nIncorrect folder structure can result in failure to launch games or saves being in the incorrect location.\n\nPlease see the RetroDECK wiki for more details!\n\nYou can find this list of games in ~/retrodeck/logs"
   else
     configurator_generic_dialog "RetroDECK Configurator - Verify Multi-file Structure" "No incorrect multi-file game folder structures found."
   fi
-  configurator_welcome_dialog
 }
