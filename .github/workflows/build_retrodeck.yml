@@ -87,9 +87,8 @@ jobs:
       - name: Install dependencies
         run: curl "https://raw.githubusercontent.com/RetroDECK/components-template/main/automation_tools/install_dependencies.sh" | bash
 
-      # Generate Build ID for Cooker Branches
+      # Generate Build ID
       - name: Generate cooker build ID
-        if: github.ref != 'refs/heads/main'
         run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/cooker_build_id.sh"
 
       # Getting branch name, this needs as PR should be managed in a different way
