@@ -26,7 +26,7 @@ fetch_metainfo_version(){
 
 fetch_actual_version(){
     # If the current Git branch is not 'main', append 'cooker-' to the version number
-    if [[ "${GITHUB_REF_NAME}" != "origin/main" ]]; then
+    if [[ "${GITHUB_REF_NAME}" != "main" ]]; then
         VERSION="cooker-$(cat ./version)-$(cat buildid)"
     else # Otherwise, if we're on main, use the version number as is
         VERSION=$(cat ./version)
