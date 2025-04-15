@@ -78,15 +78,16 @@ jobs:
           git branch
           git log -1 --oneline
 
+      #TODO: remove the no-build here after tests
       # Until we add support for Flathub-beta the artifacts creation is skipped on cooker
       - name: "Build Flatpak"
         run: |
           git config --global credential.helper store
           echo "https://${{ steps.generate-rekku-token.outputs.token }}@github.com" > ~/.git-credentials
           if [[ "$GITHUB_REF" == "refs/heads/main" ]]; then
-            /bin/bash ./retrodeck_builder.sh --cicd --no-artifacts
+            /bin/bash ./retrodeck_builder.sh --cicd --no-build
           else
-            /bin/bash ./retrodeck_builder.sh --cicd
+            /bin/bash ./retrodeck_builder.sh --cicd --no-artifacts
           fi
 
       # - name: Generate a token for Rekku
