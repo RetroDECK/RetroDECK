@@ -85,9 +85,9 @@ jobs:
           git config --global credential.helper store
           echo "https://${{ steps.generate-rekku-token.outputs.token }}@github.com" > ~/.git-credentials
           if [[ "$GITHUB_REF" == "refs/heads/main" ]]; then
-            /bin/bash ./retrodeck_builder.sh --cicd --no-build
+            /bin/bash ./retrodeck_builder.sh --cicd
           else
-            /bin/bash ./retrodeck_builder.sh --cicd --no-artifacts
+            /bin/bash ./retrodeck_builder.sh --cicd --no-artifacts --no-build
           fi
 
       # - name: Generate a token for Rekku
