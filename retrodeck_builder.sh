@@ -183,6 +183,8 @@ fi
 
 # Executing the placeholder replacement script
 source "$ROOT_FOLDER/automation_tools/manifest_placeholder_replacer.sh"
+echo "Manifest placeholders replaced done"
+echo ""
 
 # Adding the update portal permission to the cooker flatpak to allow the framework to update RetroDECK
 # This is not allowed on Flathub
