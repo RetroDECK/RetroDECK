@@ -215,7 +215,6 @@ fi
 if [[ "$NO_BUILD" != "true" ]]; then
     mkdir -vp "$ROOT_FOLDER/$REPO_FOLDER_NAME"
     mkdir -vp "$ROOT_FOLDER/$BUILD_FOLDER_NAME"
-    mkdir -vp "$OUT_FOLDER"
 else
     echo "Skipping folder creation as NO_BUILD mode is enabled."
     echo -e "The following paths should have been created:"
@@ -223,6 +222,8 @@ else
     echo "\"$ROOT_FOLDER/$BUILD_FOLDER_NAME\""
     echo ""
 fi
+
+mkdir -vp "$OUT_FOLDER"
 
 # Pass the args to Flatpak Builder
 if [[ -n "$FLATPAK_BUILD_EXTRA_ARGS" ]]; then
