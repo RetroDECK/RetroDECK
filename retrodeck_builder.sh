@@ -251,7 +251,7 @@ else
     if [[ ! -f "$OUT_FOLDER/$BUNDLE_SHA_NAME" ]]; then
         echo "fake build" > "$OUT_FOLDER/$BUNDLE_SHA_NAME"
     fi
-    if [[ ! -f "$OUT_FOLDER/$FLATPAK_BUNDLE" ]]; then
+    if [[ ! -f "$OUT_FOLDER/$FLATPAK_BUNDLE_NAME" ]]; then
         echo "fake bundle" > "$OUT_FOLDER/$FLATPAK_BUNDLE_NAME"
     fi
 fi
@@ -272,7 +272,7 @@ else
     fi
 fi
 
-# Restoring the original manifest
+echo "Restoring the original manifest"
 mv -f "$MANIFEST.bak" "$MANIFEST"
 
 echo ""
