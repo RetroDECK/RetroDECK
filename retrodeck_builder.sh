@@ -145,6 +145,7 @@ fi # Otherwise, if we're on main, use the version number as is
 # Writing version in the GitHub environment
 if [[ "$CICD" == "true" ]]; then
     echo "VERSION=$VERSION" >> $GITHUB_ENV
+    echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
 fi
 
 # Creating a version file for RetroDECK Framework to be included in the build
