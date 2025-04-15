@@ -39,7 +39,7 @@ jobs:
     runs-on: retrodeck
     outputs:
       TAG: ${{ steps.version-tag.outputs.TAG }}
-      RELEASE_BODY: "${{ needs.Build_RetroDECK.outputs.RELEASE_BODY_FILE }} || No release body found"
+      RELEASE_BODY: "${{ needs.Build_RetroDECK.outputs.RELEASE_BODY_FILE }}"
       MAKE_LATEST: ${{ steps.version-tag.outputs.MAKE_LATEST }}
       
     steps:
@@ -156,11 +156,11 @@ jobs:
           # Set the commits list as an environment variable
           echo "COMMITS_FILE=commits_list.txt" >> $GITHUB_ENV
 
-      # - name: Extract XML Description
-      #   uses: Mudlet/xmlstarlet-action@master
-      #   id: extract-description
-      #   with:
-      #     args: sel -t -v "/component/releases/release[1]/description//text()" ./net.retrodeck.retrodeck.metainfo.xml
+      - name: Extract XML Description
+        uses: Mudlet/xmlstarlet-action@master
+        id: extract-description
+        with:
+          args: sel -t -v "/component/releases/release[1]/description//text()" ./net.retrodeck.retrodeck.metainfo.xml
 
       # Generate Release Body
       - name: Generate release body text
@@ -188,7 +188,7 @@ jobs:
           cat $RELEASE_BODY_FILE
       
           # Process raw description (if needed)
-          #raw_description="${{ steps.extract-description.outputs.result }}"
+          raw_description="${{ steps.extract-description.outputs.result }}"
           
           # Convert <p> tags to markdown headers using sed
           # raw_description="${{ steps.extract-description.outputs.result }}"
@@ -207,9 +207,11 @@ jobs:
           # Append markdown content to the release body file
           echo "$markdown_description" >> $RELEASE_BODY_FILE
       
-          # Output the file path to the environment and output variables
-          echo "RELEASE_BODY_FILE=$RELEASE_BODY_FILE" >> $GITHUB_ENV
-          echo "RELEASE_BODY_FILE=$RELEASE_BODY_FILE" >> $GITHUB_OUTPUT
+          # Append the commits list to the release body
+          RELEASE_BODY_CONTENT=$(cat $RELEASE_BODY_FILE)
+          # Escape newlines for the GitHub Actions's output
+          RELEASE_BODY_CONTENT="${RELEASE_BODY_CONTENT//$'\n'/'%0A'}"
+          echo "RELEASE_BODY=$RELEASE_BODY_CONTENT" >> $GITHUB_OUTPUT
       
           echo "[DEBUG] CHECKPOINT 8"
 
@@ -222,16 +224,11 @@ jobs:
           repositories: "RetroDECK,Cooker"
           owner: "RetroDECK"
 
-      # Sometimes flatpak download fails, in this case it tries a second time
-      - name: "Set up credential helper"
-        if: steps.flatpak-download.outcome == 'failure'
-        run: |
-          git config --global credential.helper store
-          echo "https://${{ steps.generate-rekku-token.outputs.token }}@github.com" > ~/.git-credentials
-
       # Until we add support for Flathub-beta the artifacts creation is skipped on cooker
       - name: "Build Flatpak"
         run: |
+          git config --global credential.helper store
+          echo "https://${{ steps.generate-rekku-token.outputs.token }}@github.com" > ~/.git-credentials
           if [[ "$GITHUB_REF" == "refs/heads/main" ]]; then
             /bin/bash ./retrodeck_builder.sh --cicd --no-artifacts
           else
@@ -251,7 +248,7 @@ jobs:
     needs: Build_RetroDECK
     env:
       TAG: ${{ needs.Build_RetroDECK.outputs.TAG }}
-      RELEASE_BODY: "${{ needs.Build_RetroDECK.outputs.RELEASE_BODY_FILE }} || No release body found"
+      RELEASE_BODY: ${{ needs.Build_RetroDECK.outputs.RELEASE_BODY }}
       MAKE_LATEST: ${{ needs.Build_RetroDECK.outputs.MAKE_LATEST }}
     steps:
 
