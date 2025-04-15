@@ -142,8 +142,7 @@ jobs:
         id: version-tag
         run: |
 
-          # Ensure the actual version was successfully extracted
-          VERSION=$(cat version)
+          # Ensure the actual version was successfully passed from the previous job
           if [[ -z "$VERSION" ]]; then
             echo "[ERROR] Failed to read the VERSION from GitHub environmental variables."
             exit 1
