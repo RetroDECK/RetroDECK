@@ -15,11 +15,11 @@ on:
       - 'net.retrodeck.retrodeck.yml'
       - 'net.retrodeck.retrodeck.metainfo.xml'
       - 'tools/**'
-  # pull_request_target:
-  #   types: [opened, synchronize, reopened]
-  #   branches:
-  #     - cooker*
-  #     - feat/*
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+    branches:
+      - cooker*
+      - feat/*
   pull_request:
     types: [opened, synchronize, reopened]
     branches:
