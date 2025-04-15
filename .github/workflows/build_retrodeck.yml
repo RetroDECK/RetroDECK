@@ -46,8 +46,8 @@ jobs:
       # Remove Stuck Mounts
       - name: Remove stuck mounts
         run: |
-          sudo umount -f /home/ubuntu/actions-runner/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles/*
-          sudo umount -f $HOME/actions-run/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles/*
+          if [ -d "/home/ubuntu/actions-runner/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles" ]; then sudo umount -f /home/ubuntu/actions-runner/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles/*; fi
+          if [ -d "$HOME/actions-run/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles" ]; then sudo umount -f $HOME/actions-run/_work/RetroDECK/RetroDECK/.flatpak-builder/rofiles/*; fi
         continue-on-error: true
 
       # Clone Repository
@@ -83,15 +83,6 @@ jobs:
           echo "Last commit:"
           git log -1 --oneline
 
-      # Install Dependencies
-      - name: Install dependencies
-        run: curl "https://raw.githubusercontent.com/RetroDECK/components-template/main/automation_tools/install_dependencies.sh" | bash
-
-      # Generate Build ID for Cooker Branches
-      - name: Generate cooker build ID
-        if: github.ref != 'refs/heads/main'
-        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/cooker_build_id.sh"
-
       # Getting branch name, this needs as PR should be managed in a different way
       - name: Get Branch Name
         run: |
@@ -107,13 +98,10 @@ jobs:
       - name: Generate Version Tag
         id: version-tag
         run: |
-          # Source the version extractor script and fetch the actual version, including the build ID
-          source automation_tools/version_extractor.sh
-          VERSION="$(fetch_actual_version)"
 
           # Ensure the actual version was successfully extracted
           if [[ -z "$VERSION" ]]; then
-            echo "[ERROR] Failed to extract the actual version."
+            echo "[ERROR] Failed to read the VERSION from GitHub environmental variables."
             exit 1
           fi
 
@@ -134,17 +122,6 @@ jobs:
 
           echo "TAG=$TAG" >> $GITHUB_OUTPUT
           echo "MAKE_LATEST=$MAKE_LATEST" >> $GITHUB_OUTPUT
-
-      # backing up manifest in case download fails and hashes must be recalculated
-      - name: Manifest backup
-        run: "cp ${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml ${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml.bak"
-
-      - name: Run pre-build automation tasks
-        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/manifest_placeholder_replacer.sh"
-
-      - name: "Adding flatpak portal for automated updates (Cooker only)"
-        if: github.ref != 'refs/heads/main'
-        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/cooker_flatpak_portal_add.sh"
 
       # Temporary disabled as the script is broken
       # - name: "Updating release notes in metainfo"
@@ -178,7 +155,6 @@ jobs:
 
           # Set the commits list as an environment variable
           echo "COMMITS_FILE=commits_list.txt" >> $GITHUB_ENV
-
 
       # - name: Extract XML Description
       #   uses: Mudlet/xmlstarlet-action@master
@@ -246,46 +222,21 @@ jobs:
           repositories: "RetroDECK,Cooker"
           owner: "RetroDECK"
 
-      - name: "Build flatpak: download only"
-        id: flatpak-download
-        run: |
-          git config --global credential.helper store
-          echo "https://${{ steps.generate-rekku-token.outputs.token }}@github.com" > ~/.git-credentials
-          "${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
-
       # Sometimes flatpak download fails, in this case it tries a second time
-      - name: "Build flatpak: download only (retry)"
+      - name: "Set up credential helper"
         if: steps.flatpak-download.outcome == 'failure'
         run: |
           git config --global credential.helper store
           echo "https://${{ steps.generate-rekku-token.outputs.token }}@github.com" > ~/.git-credentials
-          echo "Download failed, maybe some hash changed since the build start."
-          echo "Recalculating hashes and retrying download..."
-          rm -f "{GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml"
-          cp "${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml.bak" "${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml"
-          "${GITHUB_WORKSPACE}/automation_tools/manifest_placeholder_replacer.sh"
-          "${GITHUB_WORKSPACE}/automation_tools/flatpak_build_download_only.sh"
 
-      - name: Build flatpak
-        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_only.sh"
-
-      - name: Create Bundle
-        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/flatpak_build_bundle.sh"
-
-      # TODO: Until we add support for Flathub-beta this is restricted to main
-      - name: Create Artifact for Flathub
-        if: github.ref == 'refs/heads/main'
+      # Until we add support for Flathub-beta the artifacts creation is skipped on cooker
+      - name: "Build Flatpak"
         run: |
           if [[ "$GITHUB_REF" == "refs/heads/main" ]]; then
-            artifact_name="RetroDECK-Artifact"
-            artifact_folder="retrodeck-flatpak-main"
+            /bin/bash ./retrodeck_builder.sh --cicd --no-artifacts
           else
-            artifact_name="RetroDECK-Artifact-cooker"
-            artifact_folder="retrodeck-flatpak-cooker"
+            /bin/bash ./retrodeck_builder.sh --cicd
           fi
-          tar -czf ${GITHUB_WORKSPACE}/${artifact_name}.tar.gz -C ${GITHUB_WORKSPACE}/"$artifact_folder" .
-          hash=($(sha256sum ${GITHUB_WORKSPACE}/${artifact_name}.tar.gz))
-          echo $hash > ${GITHUB_WORKSPACE}/${artifact_name}.sha
 
       # Upload artifacts for other jobs
       - name: Upload Build Artifacts
@@ -293,11 +244,7 @@ jobs:
         with:
           name: retrodeck-artifacts
           include-hidden-files: true
-          path: |
-            RetroDECK*.flatpak
-            RetroDECK*.flatpak.sha
-            RetroDECK-Artifact*.tar.gz
-            RetroDECK-Artifact*.sha
+          path: ${OUT_FOLDER}/*
 
   GitHub-publish:
     runs-on: ubuntu-latest

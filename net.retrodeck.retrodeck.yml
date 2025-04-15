@@ -82,27 +82,18 @@ modules:
     build-commands:
       - |
 
-        # VERSION INITIALIZATION
-        source "automation_tools/version_extractor.sh"
-        VERSION=$(fetch_actual_version)
-
-        # Check out the current Git branch
-        git checkout ${GITHUB_REF_NAME}
-
         # Create the retrodeck directory in the Flatpak destination
         mkdir -p ${FLATPAK_DEST}/retrodeck/
 
-        # Write the version number to the retrodeck version file
-        echo $VERSION >> ${FLATPAK_DEST}/retrodeck/version
+        # Create the version file vital for RetroDECK Framework
+        cp version ${FLATPAK_DEST}/retrodeck/version
 
         # Display the contents of the version file
         cat ${FLATPAK_DEST}/retrodeck/version
 
-        # Print the version number to the console
-        echo "Version is $VERSION"
-
         # LIBMAN INSTALLATION
         install -Dm755 "automation_tools/libman.sh" "/app/bin/libman.sh"
+
     sources:
       - type: dir
         path: .

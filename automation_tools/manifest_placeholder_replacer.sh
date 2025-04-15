@@ -38,9 +38,15 @@ set -e
 # url: This is used to calculate a dynamic URL and the value to the $calculated_url environmental variable, for use in other subsequent commands.
 
 # Define paths
-rd_manifest="${GITHUB_WORKSPACE}/net.retrodeck.retrodeck.yml"
-automation_task_list="${GITHUB_WORKSPACE}/automation_tools/automation_task_list.cfg"
-cache_file="${GITHUB_WORKSPACE}/placeholders.cache"
+if [ -z "$ROOT_FOLDER" ]; then
+  echo "Error: ROOT_FOLDER is not set. Please set it to the root directory of the cloned repository."
+  echo "You can set it by running: export ROOT_FOLDER=/path/to/repo"
+  exit 1
+fi
+
+rd_manifest="$ROOT_FOLDER/net.retrodeck.retrodeck.yml"
+automation_task_list="$ROOT_FOLDER/automation_tools/automation_task_list.cfg"
+cache_file="$ROOT_FOLDER/placeholders.cache"
 
 # Check if cache file exists
 if [ -f "$cache_file" ]; then
@@ -83,7 +89,7 @@ get_hash() {
   local hash
 
   # Check if cache should be used and if cache file exists
-  # the use_cache variable is initialized by build_retrodeck_locally only so in the pipeline it will never use cache
+  # the use_cache variable is initialized by retrodeck_builder only so in the pipeline it will never use cache
   if [ "$use_cache" == "true" ] && [ -f "$cache_file" ]; then
     # Try to retrieve hash from cache
     hash=$(grep "^$url " "$cache_file" | cut -d ' ' -f2)
