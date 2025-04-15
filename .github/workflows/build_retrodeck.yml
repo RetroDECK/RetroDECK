@@ -39,9 +39,9 @@ jobs:
     runs-on: retrodeck
     outputs:
       TAG: ${{ steps.version-tag.outputs.TAG }}
-      RELEASE_BODY: "${{ needs.Build_RetroDECK.outputs.RELEASE_BODY_FILE }}"
+      RELEASE_BODY: ${{ steps.generate-body.outputs.RELEASE_BODY }}
       MAKE_LATEST: ${{ steps.version-tag.outputs.MAKE_LATEST }}
-      
+
     steps:
       # Remove Stuck Mounts
       - name: Remove stuck mounts
@@ -66,21 +66,17 @@ jobs:
           submodules: true
 
       # Because we're using pull_request_target, we need to merge the PR code
-      - name: Merge PR Code
+      - name: Merge and Validate PR Code
         if: github.event_name == 'pull_request_target'
         run: |
+          echo "Fetching PR..."
           git fetch origin pull/${{ github.event.pull_request.number }}/head:pr
           git merge --no-ff pr || {
-            echo "Merge conflict detected. Please resolve conflicts manually.";
+            echo "Merge conflict detected.";
             exit 1;
           }
-      # In case of PR we merged the code so we want to check that is consistent
-      - name: Validate Merged Code
-        if: github.event_name == 'pull_request_target'
-        run: |
-          echo "Branch after merge:"
+          echo "Validation:"
           git branch
-          echo "Last commit:"
           git log -1 --oneline
 
       # Getting branch name, this needs as PR should be managed in a different way
@@ -100,6 +96,7 @@ jobs:
         run: |
 
           # Ensure the actual version was successfully extracted
+          VERSION=$(cat version)
           if [[ -z "$VERSION" ]]; then
             echo "[ERROR] Failed to read the VERSION from GitHub environmental variables."
             exit 1
@@ -176,7 +173,7 @@ jobs:
       
           # Append commits from the file to the release body
           if [ -f "${{ env.COMMITS_FILE }}" ]; then
-            echo "${{ env.COMMITS_FILE }}" >> $RELEASE_BODY_FILE
+            cat "${{ env.COMMITS_FILE }}" >> $RELEASE_BODY_FILE
             echo "" >> $RELEASE_BODY_FILE
           else
             echo "[ERROR] Commits file not found: ${{ env.COMMITS_FILE }}"
@@ -190,15 +187,12 @@ jobs:
           # Process raw description (if needed)
           raw_description="${{ steps.extract-description.outputs.result }}"
           
-          # Convert <p> tags to markdown headers using sed
-          # raw_description="${{ steps.extract-description.outputs.result }}"
-          markdown_description=$(echo "$raw_description" | sed -e 's|<p>|\n### |g' -e 's|</p>||g')
-
-          # Convert <li> tags to bullet points and trim spaces
-          markdown_description=$(echo "$markdown_description" | sed -e 's|<ul>||g' -e 's|</ul>||g' -e 's|<li>|- |g' -e 's|</li>||g' | awk '{$1=$1;print}')
-
-          # Remove any remaining XML tags
-          markdown_description=$(echo "$markdown_description" | sed -e 's/<[^>]*>//g')
+          # Converting the description to markdown
+          markdown_description=$(echo "$raw_description" | sed -e 's|<p>|\n### |g' \
+                                                    -e 's|</p>||g' \
+                                                    -e 's|<ul>||g' -e 's|</ul>||g' \
+                                                    -e 's|<li>|- |g' -e 's|</li>||g' \
+                                                    -e 's|<[^>]*>||g')
       
           # Debug: Print the markdown description
           echo "Markdown Description:"
