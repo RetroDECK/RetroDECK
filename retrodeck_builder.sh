@@ -42,7 +42,7 @@ for arg in "$@"; do
             ;;
         --ccache)
             echo "Enabling CCACHE mode"
-            FLATPAK_BUILDER_CCACHE="true"
+            FLATPAK_BUILDER_CCACHE="--ccache"
             ;;
         --flatpak-builder-args=*)
             FLATPAK_BUILD_EXTRA_ARGS="${arg#*=}"
@@ -91,7 +91,7 @@ REPO_FOLDER_NAME="retrodeck-repo"
 if [[ "$IS_COOKER" == "true" ]]; then
     POSTFIX="-cooker"
 fi
-BUNDLE_NAME="RetroDECK$POSTFIX.flatpak"
+FLATPAK_BUNDLE_NAME="RetroDECK$POSTFIX.flatpak"
 BUILD_FOLDER_NAME=retrodeck-flatpak$POSTFIX
 BUNDLE_SHA_NAME="$ROOT_FOLDER/RetroDECK.flatpak$POSTFIX.sha"
 FLATPAK_ARTIFACTS_NAME="RetroDECK-Artifact$POSTFIX"
@@ -197,7 +197,7 @@ fi
 
 # Checking if the user wants to use ccache, disabled in CI/CD mode
 if [[ "$CICD" != "true" ]]; then
-    if [[ "$FLATPAK_BUILDER_CCACHE" == "true" ]]; then
+    if [[ "$FLATPAK_BUILDER_CCACHE" == "--ccache" ]]; then
         if ! command -v ccache &> /dev/null; then
             echo "Compiler cache (ccache) is not installed. Install it to be able to use the cache and speed up your builds"
         else
@@ -213,7 +213,7 @@ fi
 if [[ "$NO_BUILD" != "true" ]]; then
     mkdir -vp "$ROOT_FOLDER/$REPO_FOLDER_NAME"
     mkdir -vp "$ROOT_FOLDER/$BUILD_FOLDER_NAME"
-    mkdir -cp "$OUT_FOLDER"
+    mkdir -vp "$OUT_FOLDER"
 else
     echo "Skipping folder creation as NO_BUILD mode is enabled."
     echo -e "The following paths should have been created:"
@@ -223,7 +223,10 @@ else
 fi
 
 # Pass the args to Flatpak Builder
-echo "Passing additional args to flatpak builder: $FLATPAK_BUILD_EXTRA_ARGS"
+if [[ -n "$FLATPAK_BUILD_EXTRA_ARGS" ]]; then
+    echo "Passing additional args to flatpak builder: $FLATPAK_BUILD_EXTRA_ARGS"
+    echo ""
+fi
 
 command="flatpak-builder --user --force-clean $FLATPAK_BUILD_EXTRA_ARGS \
     --install-deps-from=flathub \
@@ -234,17 +237,24 @@ command="flatpak-builder --user --force-clean $FLATPAK_BUILD_EXTRA_ARGS \
 
 # Echo the command for verification
 echo -e "Building manifest with command:\n$command"
+echo ""
 
 # Execute the build command
 if [[ "$NO_BUILD" != "true" ]]; then
     eval $command
+    # Building the bundle RetroDECK.flatpak after the download and build steps are done
+    flatpak build-bundle "$ROOT_FOLDER/$REPO_FOLDER_NAME" "$OUT_FOLDER/$FLATPAK_BUNDLE_NAME" net.retrodeck.retrodeck
+    sha256sum "$ROOT_FOLDER/$FLATPAK_BUNDLE_NAME" >> "$OUT_FOLDER/$BUNDLE_SHA_NAME"
 else
     echo "Skipping build as NO_BUILD mode is enabled."
+    echo "Generating fake artifacts for testing purposes or using the old ones if available"
+    if [[ ! -f "$OUT_FOLDER/$BUNDLE_SHA_NAME" ]]; then
+        echo "fake build" > "$OUT_FOLDER/$BUNDLE_SHA_NAME"
+    fi
+    if [[ ! -f "$OUT_FOLDER/$FLATPAK_BUNDLE" ]]; then
+        echo "fake bundle" > "$OUT_FOLDER/$FLATPAK_BUNDLE_NAME"
+    fi
 fi
-
-# Building the bundle RetroDECK.flatpak after the download and build steps are done
-flatpak build-bundle "$ROOT_FOLDER/$REPO_FOLDER_NAME" "$OUT_FOLDER/$FLATPAK_BUNDLE" net.retrodeck.retrodeck
-sha256sum "$ROOT_FOLDER/$FLATPAK_BUNDLE_NAME" > "$OUT_FOLDER/$BUNDLE_SHA_NAME"
 
 # Preparing the RetroDECK flatpak's artifacts in case we need to export them to Flathub
 if [[ "$NO_ARTIFACTS" != "true" && "$NO_BUILD" != "true" ]]; then
@@ -253,11 +263,19 @@ if [[ "$NO_ARTIFACTS" != "true" && "$NO_BUILD" != "true" ]]; then
     echo "$ARTIFACTS_HASH" > "$OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.sha"
 else
     echo "Skipping Flathub artifacts preparation due to user preference or no-build mode."
+    echo "Generating fake artifacts for testing purposes or using the old ones if available"
+    if [[ ! -f "$OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.sha" ]]; then
+        echo "foo" > "$OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.sha"
+    fi
+    if [[ ! -f "$OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.tar.gz" ]]; then
+        echo "fake artifacts" > "$OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.tar.gz"
+    fi
 fi
 
 # Restoring the original manifest
 mv -f "$MANIFEST.bak" "$MANIFEST"
 
+echo ""
 echo "RetroDECK $VERSION's build completed successfully!"
 echo "Generated files are in $OUT_FOLDER"
 ls "$OUT_FOLDER"
