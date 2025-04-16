@@ -667,7 +667,7 @@ do
       if [ $? == 0 ] #yes
       then
         path_selected=true
-        echo "$target/retrodeck"
+        echo "$target"
         break
       else
         rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" --text="Do you want to quit?"
@@ -742,20 +742,45 @@ finit() {
 
   "SD Card" )
     log i "SD Card selected"
-    if [ ! -d "$sdcard" ] # SD Card path is not existing
-    then
-      log e "SD card not found"
+    external_devices=()
+
+    while read -r size device_path; do
+      device_name=$(basename "$device_path")
+      log d "External device $device_path found"
+      external_devices=("${external_devices[@]}" "$device_name" "$size" "$device_path")
+    done < <(df --output=size,target -h | grep "/run/media/" | awk '{$1=$1;print}')
+
+    if [[ "${#external_devices[@]}" -gt 0 ]]; then # Some external storage detected
+      configurator_generic_dialog "RetroDeck Installation - SD Card" "One or more external storage devices have been detected, please choose which one you would like to install RetroDECK on."
+      choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - USB Migration Tool" --cancel-label="Back" \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+      --hide-column=3 --print-column=3 \
+      --column "Device Name" \
+      --column "Device Size" \
+      --column "path" \
+      "${external_devices[@]}")
+
+      if [[ -n "$choice" ]]; then # User chose a device
+        sdcard="$choice"
+      else # User did not make a choice
+        rm -f "$rd_conf" # Cleanup unfinished retrodeck.cfg if first install is interrupted
+        exit 2
+      fi
+    else # No external storage detected
+      log e "No external storage detected"
       rd_zenity --error --no-wrap \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK" \
       --ok-label "Browse" \
-      --text="SD Card was not found in the default location.\nPlease choose the SD Card root.\nA retrodeck folder will be created starting from the directory that you selected."
-      rdhome="$(finit_browse)" # Calling the browse function
-      if [[ -z "$rdhome" ]]; then # If user hit the cancel button
+      --text="No external storage devices could be found.\nPlease choose the location of your SD card manually.\n\nNOTE: A \"retrodeck\" folder will be created starting from the location that you select."
+      sdcard="$(finit_browse)" # Calling the browse function
+      if [[ -z "$sdcard" ]]; then # If user hit the cancel button
         rm -f "$rd_conf" # Cleanup unfinished retrodeck.cfg if first install is interrupted
         exit 2
       fi
-    elif [ ! -w "$sdcard" ] #SD card found but not writable
+    fi
+    
+    if [ ! -w "$sdcard" ] #SD card found but not writable
       then
         log e "SD card found but not writable"
         rd_zenity --error --no-wrap \
@@ -778,7 +803,8 @@ finit() {
       --title "RetroDECK" \
       --ok-label "Browse" \
       --text="Please choose the root folder for the RetroDECK data.\nA retrodeck folder will be created starting from the directory that you selected."
-      rdhome="$(finit_browse)" # Calling the browse function
+      sdcard="$(finit_browse)" # Calling the browse function
+      rdhome="$sdcard/retrodeck"
       if [[ -z "$rdhome" ]]; then # If user hit the cancel button
         rm -f "$rd_conf" # Cleanup unfinished retrodeck.cfg if first install is interrupted
         exit 2

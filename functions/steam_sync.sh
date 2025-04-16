@@ -69,34 +69,6 @@ steam_sync() {
     done <<< "$system_favorites"
   done
 
-  if [[ -f "$retrodeck_favorites_file" && -f "${retrodeck_favorites_file}.new" ]]; then
-    # Look for favorites removed between steam_sync runs, if any
-    removed_items=$(jq -n \
-      --slurpfile source "$retrodeck_favorites_file" \
-      --slurpfile target "${retrodeck_favorites_file}.new" \
-      '[$source[0][] | select(. as $item | ($target[0] | map(. == $item) | any | not))]')
-  fi
-
-  if [[ -f "$retrodeck_favorites_file" && -f "${retrodeck_favorites_file}.new" ]]; then
-    # Look for new favorites added between steam_sync runs, if any
-    added_items=$(jq -n \
-      --slurpfile source "${retrodeck_favorites_file}.new" \
-      --slurpfile target "$retrodeck_favorites_file" \
-      '[$source[0][] | select(. as $item | ($target[0] | map(. == $item) | any | not))]')
-  fi
-
-  # Check if there are any missing objects
-  if [[ "$(echo "$removed_items" | jq 'length')" -gt 0 ]]; then
-    log d "Some favorites were removed between sync, writing to $retrodeck_removed_favorites"
-    echo "$removed_items" > "$retrodeck_removed_favorites"
-  fi
-
-  # Check if any new favorites were added
-  if [[ "$(echo "$added_items" | jq 'length')" -gt 0 ]]; then
-    log d "Some new favorites were added between sync, writing to $retrodeck_added_favorites"
-    echo "$added_items" > "$retrodeck_added_favorites"
-  fi
-
   # Decide if sync needs to happen
   if [[ -f "$retrodeck_favorites_file" ]]; then # If an existing favorites manifest exists
     if [[ ! "$(cat "${retrodeck_favorites_file}.new" | jq 'length')" -gt 0 ]]; then # If all favorites were removed from all gamelists, meaning new manifest is empty
@@ -110,22 +82,9 @@ steam_sync() {
         log i "ES-DE favorites have not changed, no need to sync again"
         rm "${retrodeck_favorites_file}.new"
       else
-        log d "New and old manifests are different, running sync"
-        if [[ -f "$retrodeck_removed_favorites" ]]; then # If some favorites were removed between syncs
-          log d "Some favorites removed between syncs, removing unfavorited games"
-          # Load removed favorites as manifest and run SRM remove
-          mv "$retrodeck_removed_favorites" "$retrodeck_favorites_file"
-          steam_sync_remove
-        fi
-        if [[ -f "$retrodeck_added_favorites" ]]; then # If some new favorites were added between syncs
-          log d "Some new favorites added between syncs, adding new favorited games"
-          # Load added favorites as manifest and run SRM add
-          mv "$retrodeck_added_favorites" "$retrodeck_favorites_file"
-          steam_sync_add
-        fi
-
         # Make new favorites manifest the current one
         mv "${retrodeck_favorites_file}.new" "$retrodeck_favorites_file"
+        steam_sync_add
       fi
     fi
   elif [[ "$(cat "${retrodeck_favorites_file}.new" | jq 'length')" -gt 0 ]]; then # No existing favorites manifest was found, so check if new manifest has entries
