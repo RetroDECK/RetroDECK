@@ -216,20 +216,20 @@ jobs:
       # Generate Release Body
       - name: Generate release body text
         id: generate-body
-        env:
-          DESCRIPTION_RAW="${{ steps.extract-description.outputs.description }}"
         run: |
-
           RELEASE_BODY_FILE="release_body.md"
           echo "# Release Notes" > $RELEASE_BODY_FILE
           echo "This is a cooker snapshot based on the commit: ${{ github.repository }}@${{ github.sha }}." >> $RELEASE_BODY_FILE
           echo "On branch [${{ env.BRANCH_NAME }}](https://repo.retrodeck.net/RetroDECK/RetroDECK/src/branch/${{ env.BRANCH_NAME }})." >> $RELEASE_BODY_FILE
           echo "" >> $RELEASE_BODY_FILE
 
+          DESCRIPTION_RAW="${{ steps.extract-description.outputs.description }}"
+
           if [ -z "$DESCRIPTION_RAW" ]; then
             echo "⚠️ No release notes from metainfo." >> $RELEASE_BODY_FILE
           else
             echo "## Changes from metainfo" >> $RELEASE_BODY_FILE
+
             markdown_description=$(echo "$DESCRIPTION_RAW" | sed -E '
               s|<p>|\n### |g
               s|</p>||g
@@ -249,10 +249,10 @@ jobs:
               s|<[^>]+>||g
               s/^[[:space:]]+//g
             ')
+
             echo "$markdown_description" >> $RELEASE_BODY_FILE
           fi
 
-          echo "" >> $RELEASE_BODY_FILE
           echo "## Commits since last release" >> $RELEASE_BODY_FILE
           echo "" >> $RELEASE_BODY_FILE
 
@@ -272,6 +272,11 @@ jobs:
           else
             echo "[No commits found]" >> $RELEASE_BODY_FILE
           fi
+
+          # Output the final body
+          echo "RELEASE_BODY<<EOF" >> $GITHUB_OUTPUT
+          cat $RELEASE_BODY_FILE >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
     
       # Determine if Target Repository is Main or not, in that case is a Cooker build
       - name: Determine target repository
