@@ -97,7 +97,7 @@ Here you can read more about the beta period:
 Yes, off course! <br>
 Read up here on how to help out, there is something for everyone:
 
-[How to: Contribute to RetroDECK](https://retrodeck.readthedocs.io/en/latest/wiki_community/contibute-rd/)
+[How to: Contribute to RetroDECK](https://retrodeck.readthedocs.io/en/latest/wiki_about/contibute-retrodeck/)
 
 ## Build RetroDECK locally
 Please follow [this guide](https://retrodeck.readthedocs.io/en/latest/wiki_development/general/build-locally/).
