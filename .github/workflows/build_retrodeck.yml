@@ -200,11 +200,11 @@ jobs:
           # Set the commits list as an environment variable
           echo "COMMITS_FILE=commits_list.txt" >> $GITHUB_ENV
 
-      - name: Extract XML Description
-        uses: Mudlet/xmlstarlet-action@master
+      - name: "Extract version description from metainfo"
         id: extract-description
-        with:
-          args: sel -t -v "/component/releases/release[1]/description//text()" ./net.retrodeck.retrodeck.metainfo.xml
+        run: |
+          DESCRIPTION=$(xmlstarlet sel -t -v "/component/releases/release[1]/description//text()" ./net.retrodeck.retrodeck.metainfo.xml | tr -d '\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+          echo "description=$DESCRIPTION" >> $GITHUB_OUTPUT  
 
       # Generate Release Body
       - name: Generate release body text
@@ -232,15 +232,29 @@ jobs:
           cat $RELEASE_BODY_FILE
       
           # Process raw description (if needed)
-          raw_description="${{ steps.extract-description.outputs.result }}"
+          raw_description="${{ steps.extract-description.outputs.description }}"
           
           # Converting the description to markdown
-          markdown_description=$(echo "$raw_description" | sed -e 's|<p>|\n### |g' \
-                                                    -e 's|</p>||g' \
-                                                    -e 's|<ul>||g' -e 's|</ul>||g' \
-                                                    -e 's|<li>|- |g' -e 's|</li>||g' \
-                                                    -e 's|<[^>]*>||g')
-      
+          markdown_description=$(echo "$raw_description" | sed -E '
+            s|<p>|\n### |g
+            s|</p>||g
+            s|<ul>||g
+            s|</ul>||g
+            s|<li>|- |g
+            s|</li>||g
+            s|<b>(.*?)</b>|**\1**|g
+            s|<strong>(.*?)</strong>|**\1**|g
+            s|<i>(.*?)</i>|*\1*|g
+            s|<em>(.*?)</em>|*\1*|g
+            s|<a href="([^"]+)">([^<]+)</a>|[\2](\1)|g
+            s|&quot;|"|g
+            s|&amp;|&|g
+            s|&lt;|<|g
+            s|&gt;|>|g
+            s|<[^>]+>||g
+            s/^[[:space:]]+//g
+          ')
+
           # Debug: Print the markdown description
           echo "Markdown Description:"
           echo "$markdown_description"
@@ -272,8 +286,8 @@ jobs:
         with:
           tag: ${{ env.TAG }}
           name: "RetroDECK ${{ env.TAG }}"
-          body: ${{ env.RELEASE_BODY }}
-          artifacts: "retrodeck-artifacts/*.flatpak,retrodeck-artifacts/*.flatpak.sha,retrodeck-artifacts/*Artifact.tar.gz"
+          body: ${{ steps.generate-body.outputs.RELEASE_BODY }}
+          artifacts: "retrodeck-artifacts/**"
           allowUpdates: true
           omitBodyDuringUpdate: true
           makeLatest: ${{ env.MAKE_LATEST }}
