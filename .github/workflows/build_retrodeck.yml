@@ -204,7 +204,7 @@ jobs:
         id: extract-description
         run: |
           DESCRIPTION=$(xmlstarlet sel -t -v "/component/releases/release[1]/description//text()" ./net.retrodeck.retrodeck.metainfo.xml | tr -d '\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
-          echo "description=$DESCRIPTION" >> $GITHUB_OUTPUT  
+          echo "description=$DESCRIPTION" >> $GITHUB_OUTPUT 
 
       # Generate Release Body
       - name: Generate release body text
@@ -265,8 +265,9 @@ jobs:
           # Append the commits list to the release body
           RELEASE_BODY_CONTENT=$(cat $RELEASE_BODY_FILE)
           # Escape newlines for the GitHub Actions's output
-          RELEASE_BODY_CONTENT="${RELEASE_BODY_CONTENT//$'\n'/'%0A'}"
-          echo "RELEASE_BODY=$RELEASE_BODY_CONTENT" >> $GITHUB_OUTPUT
+          echo "RELEASE_BODY<<EOF" >> $GITHUB_OUTPUT
+          cat $RELEASE_BODY_FILE >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
       
           echo "[DEBUG] CHECKPOINT 8"
     
