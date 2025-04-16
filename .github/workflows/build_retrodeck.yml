@@ -177,56 +177,63 @@ jobs:
       # - name: "Updating release notes in metainfo"
       #   run: "automation_tools/metainfo_management.sh"
 
-      - name: Generate commit changelog
+      # Get Commits Since Last Published Release (Cooker only)
+      - name: Get commits since last published release
+        id: get-commits
+        if: github.ref != 'refs/heads/main'
         run: |
+        
+          # Get the latest published release tag
           LATEST_TAG=$(git describe --tags $(git rev-list --tags --max-count=1) 2>/dev/null || echo "")
-          LATEST_MAIN_REF=$(git tag --merged origin/main --sort=-creatordate | head -n 1 || echo "")
       
           if [ -z "$LATEST_TAG" ]; then
             echo "[INFO] No previous tag found."
             echo "- No previous release." > commits_list.txt
-            echo "- Recent commits:" >> commits_list.txt
-            git log -n 10 --pretty=format:"- %s" >> commits_list.txt
           else
             echo "[INFO] Latest tag: $LATEST_TAG"
+            echo "[DEBUG] Using tag for last release: $LATEST_TAG"
             git log ${LATEST_TAG}..HEAD --pretty=format:"- %s" > commits_list.txt
           fi
       
+          # Get the latest tag on the main branch
+          LATEST_MAIN_REF=$(git tag --merged origin/main --sort=-creatordate | head -n 1 || echo "")
+      
           if [ -z "$LATEST_MAIN_REF" ]; then
+            echo "[INFO] No tag found on main branch."
             echo "- No main release found." > commits_since_main.txt
           else
+            echo "[INFO] Latest tag on main: $LATEST_MAIN_REF"
+            echo "[DEBUG] Using tag for latest main release: $LATEST_MAIN_REF"
             git log ${LATEST_MAIN_REF}..HEAD --pretty=format:"- %s" > commits_since_main.txt
           fi
       
           echo "COMMITS_FILE=commits_list.txt" >> $GITHUB_ENV
-          echo "COMMITS_MAIN_FILE=commits_since_main.txt" >> $GITHUB_ENV    
+          echo "COMMITS_MAIN_FILE=commits_since_main.txt" >> $GITHUB_ENV
 
-      - name: Extract description from metainfo
-        id: extract_description
+      - name: "Extract version description from metainfo"
+        id: extract-description
         run: |
-          if command -v xmlstarlet &> /dev/null; then
-            DESCRIPTION=$(xmlstarlet sel -t -v "/component/releases/release[1]/description//text()" ./net.retrodeck.retrodeck.metainfo.xml | tr -d '\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
-          else
-            echo "xmlstarlet not found!"
-            DESCRIPTION=""
-          fi
-      
-          echo "description=$DESCRIPTION" >> $GITHUB_OUTPUT        
+          DESCRIPTION=$(xmlstarlet sel -t -v "/component/releases/release[1]/description//text()" ./net.retrodeck.retrodeck.metainfo.xml | tr -d '\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+          echo "description=$DESCRIPTION" >> $GITHUB_OUTPUT 
 
       # Generate Release Body
-      - name: Create release body markdown
+      - name: Generate release body text
+        id: generate-body
         run: |
           RELEASE_BODY_FILE="release_body.md"
           echo "# Release Notes" > $RELEASE_BODY_FILE
-          echo "This is a cooker snapshot based on the commit: RetroDECK/RetroDECK@${{ github.sha }}." >> $RELEASE_BODY_FILE
+          echo "This is a cooker snapshot based on the commit: ${{ github.repository }}@${{ github.sha }}." >> $RELEASE_BODY_FILE
           echo "On branch [${{ env.BRANCH_NAME }}](https://repo.retrodeck.net/RetroDECK/RetroDECK/src/branch/${{ env.BRANCH_NAME }})." >> $RELEASE_BODY_FILE
           echo "" >> $RELEASE_BODY_FILE
 
-          if [ -z "${{ steps.extract_description.outputs.description }}" ]; then
+          DESCRIPTION_RAW="${{ steps.extract-description.outputs.description }}"
+
+          if [ -z "$DESCRIPTION_RAW" ]; then
             echo "⚠️ No release notes from metainfo." >> $RELEASE_BODY_FILE
           else
             echo "## Changes from metainfo" >> $RELEASE_BODY_FILE
-            echo "${{ steps.extract_description.outputs.description }}" | sed -E '
+
+            markdown_description=$(echo "$DESCRIPTION_RAW" | sed -E '
               s|<p>|\n### |g
               s|</p>||g
               s|<ul>||g
@@ -244,18 +251,32 @@ jobs:
               s|&gt;|>|g
               s|<[^>]+>||g
               s/^[[:space:]]+//g
-            ' >> $RELEASE_BODY_FILE
+            ')
+
+            echo "$markdown_description" >> $RELEASE_BODY_FILE
           fi
 
           echo "## Commits since last release" >> $RELEASE_BODY_FILE
           echo "" >> $RELEASE_BODY_FILE
-          cat commits_list.txt >> $RELEASE_BODY_FILE
 
-          echo "" >> $RELEASE_BODY_FILE
+          if [ -f "${{ env.COMMITS_FILE }}" ]; then
+            cat "${{ env.COMMITS_FILE }}" >> $RELEASE_BODY_FILE
+            echo "" >> $RELEASE_BODY_FILE
+          else
+            echo "[No commits found]" >> $RELEASE_BODY_FILE
+          fi
+
           echo "## Commits since latest main release" >> $RELEASE_BODY_FILE
           echo "" >> $RELEASE_BODY_FILE
-          cat commits_since_main.txt >> $RELEASE_BODY_FILE
 
+          if [ -f "${{ env.COMMITS_MAIN_FILE }}" ]; then
+            cat "${{ env.COMMITS_MAIN_FILE }}" >> $RELEASE_BODY_FILE
+            echo "" >> $RELEASE_BODY_FILE
+          else
+            echo "[No commits found]" >> $RELEASE_BODY_FILE
+          fi
+
+          # Output the final body
           echo "RELEASE_BODY<<EOF" >> $GITHUB_OUTPUT
           cat $RELEASE_BODY_FILE >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
