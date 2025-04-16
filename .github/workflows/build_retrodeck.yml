@@ -114,6 +114,10 @@ jobs:
       VERSION: ${{ needs.Build_RetroDECK.outputs.VERSION }}
     steps:
 
+      # Clone Repository
+      - name: Clone RetroDECK repo
+        uses: actions/checkout@v4
+
       - name: Generate a token for Rekku
         id: generate-rekku-token
         uses: actions/create-github-app-token@v1
