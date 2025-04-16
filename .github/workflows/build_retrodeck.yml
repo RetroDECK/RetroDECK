@@ -114,6 +114,9 @@ jobs:
       VERSION: ${{ needs.Build_RetroDECK.outputs.VERSION }}
     steps:
 
+      - name: Install xmlstarlet
+        run: sudo apt-get update && sudo apt-get install -y xmlstarlet
+
       # Clone Repository
       - name: Clone RetroDECK repo
         uses: actions/checkout@v4
