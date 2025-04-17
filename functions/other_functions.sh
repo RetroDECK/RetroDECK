@@ -581,39 +581,39 @@ make_name_pretty() {
 }
 
 finit_browse() {
-# Function for choosing data directory location during first/forced init
-path_selected=false
-while [ $path_selected == false ]
-do
-  local target="$(rd_zenity --file-selection --title="Choose RetroDECK data directory location" --directory)"
-  if [[ ! -z "$target" ]]; then
-    if [[ -w "$target" ]]; then
-      rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
-      --cancel-label="No" \
-      --ok-label "Yes" \
-      --text="Your RetroDECK data folder will be:\n\n$target/retrodeck\n\nis that ok?"
-      if [ $? == 0 ] #yes
-      then
-        path_selected=true
-        echo "$target"
-        break
-      else
-        rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" --text="Do you want to quit?"
-        if [ $? == 0 ] # yes, quit
+  # Function for choosing data directory location during first/forced init
+  path_selected=false
+  while [ $path_selected == false ]
+  do
+    local target="$(rd_zenity --file-selection --title="Choose RetroDECK data directory location" --directory)"
+    if [[ ! -z "$target" ]]; then
+      if [[ -w "$target" ]]; then
+        rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
+        --cancel-label="No" \
+        --ok-label "Yes" \
+        --text="Your RetroDECK data folder will be:\n\n$target/retrodeck\n\nis that ok?"
+        if [ $? == 0 ] #yes
         then
-          quit_retrodeck
+          path_selected=true
+          echo "$target"
+          break
+        else
+          rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" --text="Do you want to quit?"
+          if [ $? == 0 ] # yes, quit
+          then
+            quit_retrodeck
+          fi
         fi
       fi
+    else
+      rd_zenity --error --no-wrap \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK" \
+      --ok-label "Quit" \
+      --text="No location was selected. Please run RetroDECK again to retry."
+      quit_retrodeck
     fi
-  else
-    rd_zenity --error --no-wrap \
-    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK" \
-    --ok-label "Quit" \
-    --text="No location was selected. Please run RetroDECK again to retry."
-    quit_retrodeck
-  fi
-done
+  done
 }
 
 finit_user_options_dialog() {
