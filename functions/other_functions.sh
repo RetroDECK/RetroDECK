@@ -1245,9 +1245,9 @@ convert_to_markdown() {
       -e '/<[^>]*>/d' > "$output_file" # Remove any other XML tags and output to .md file
 }
 
-# This function updates RetroArch by synchronizing shaders, cores, and border overlays.
-# It should be called whenever RetroArch is reset or updated.
-retroarch_updater(){
+retroarch_updater() {
+  # This function updates RetroArch by synchronizing shaders, cores, and border overlays.
+  # It should be called whenever RetroArch is reset or updated.
 
   log i "Running RetroArch updater"
   
