@@ -16,21 +16,25 @@ change_preset_dialog() {
     log d "Found component manifest $manifest_file"
 
     # Flatten JSON file into needed info to minimize jq actions
-    local json_info=$(jq -r --arg key "$preset" '
-            # First check if this file has the key we are looking for
-            if (.. | objects | select(has("presets")) | .presets[] | has($key)) then
-                {
-                    "found": true,
-                    "system_name": keys[0],
-                    "data": .[keys[0]] | {
-                        "system_friendly_name": .name,
-                        "description": .description
-                    }
-                }
-            else
-                {"found": false}
-            end
-        ' "$manifest_file")
+    local json_info=$(jq -r --arg preset "$preset" '
+                      # Grab the first top‑level key into $system_name
+                      (keys_unsorted[0]) as $system_name
+                      | .[$system_name] as $sys
+
+                      # Now test if its .presets object has our preset name
+                      | if ($sys.presets // {} | has($preset)) then
+                          {
+                            found: true,
+                            system_name: $system_name,
+                            data: {
+                              system_friendly_name: $sys.name,
+                              description: $sys.description
+                            }
+                          }
+                        else
+                          { found: false }
+                        end
+                    ' "$manifest_file")
 
     # Check if file contains the key in presets object
     if [[ $(echo "$json_info" | jq -r '.found') == "true" ]]; then
