@@ -225,11 +225,11 @@ jobs:
         run: |
           RELEASE_BODY_FILE="release_body.md"
           echo "# Release Notes" > $RELEASE_BODY_FILE
-          echo "This is a cooker snapshot based on the commit: [${{ github.repository }}@${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }})." >> $RELEASE_BODY_FILE
-          echo "On branch [${{ env.BRANCH_NAME }}](https://repo.retrodeck.net/RetroDECK/RetroDECK/src/branch/${{ env.BRANCH_NAME }})." >> $RELEASE_BODY_FILE
+          echo "This is a cooker snapshot based on [this commit](https://github.com/${{ github.repository }}/commit/${{ github.sha }}), from branch [${{ env.BRANCH_NAME }}](https://repo.retrodeck.net/RetroDECK/RetroDECK/src/branch/${{ env.BRANCH_NAME }})." >> $RELEASE_BODY_FILE
           echo "" >> $RELEASE_BODY_FILE
 
           # Append changelog from metainfo
+          echo "## Changelog" >> $RELEASE_BODY_FILE
           xmlstarlet sel -t -v "/component/releases/release[1]/description//text()" ./net.retrodeck.retrodeck.metainfo.xml \
             | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' \
             | awk 'NF' \
@@ -247,7 +247,8 @@ jobs:
           COMPARE_URL="https://github.com/${{ github.repository }}/compare/main...${{ github.sha }}"
 
           # Append comparison link to release body
-          echo "## Changes" >> $RELEASE_BODY_FILE
+          echo "" >> $RELEASE_BODY_FILE
+          echo "---" >> $RELEASE_BODY_FILE
           echo "" >> $RELEASE_BODY_FILE
           echo "[Check changes since latest main release](${COMPARE_URL})" >> $RELEASE_BODY_FILE
           echo "" >> $RELEASE_BODY_FILE
