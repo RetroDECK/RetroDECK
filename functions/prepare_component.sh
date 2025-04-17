@@ -33,39 +33,36 @@ prepare_component() {
     log i "--------------------------------"
     component_found="true"
     if [[ "$action" == "reset" ]]; then # Update the paths of all folders in retrodeck.cfg and create them
-      while read -r config_line; do
-        local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
-        if [[ ! $current_setting_name =~ (rdhome|sdcard) ]]; then # Ignore these locations
-          local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
-          log d "Red setting: $current_setting_name=$current_setting_value"
+      while IFS= read -r path_name; do
+        if [[ ! $path_name =~ (rdhome|sdcard) ]]; then # Ignore these locations
+          local path_value=$(get_setting_value "$rd_conf" "$path_name" "retrodeck" "paths")
+          log d "Read setting: $path_name=$path_value"
           # Extract the part of the setting value after "retrodeck/"
-          local relative_path="${current_setting_value#*retrodeck/}"
+          local relative_path="${path_value#*retrodeck/}"
           # Construct the new setting value
-          local new_setting_value="$rdhome/$relative_path"
-          log d "New setting: $current_setting_name=$new_setting_value"
+          local new_path_value="$rdhome/$relative_path"
+          log d "New setting: $path_name=$new_path_value"
           # Declare the global variable with the new setting value
-          declare -g "$current_setting_name=$new_setting_value"
-          log d "Setting: $current_setting_name=$current_setting_value"
-          if [[ ! $current_setting_name == "logs_folder" ]]; then # Don't create a logs folder normally, we want to maintain the current files exactly to not lose early-install logs.
-            create_dir "$new_setting_value"
+          declare -g "$path_name=$new_path_value"
+          if [[ ! $path_name == "logs_folder" ]]; then # Don't create a logs folder normally, we want to maintain the current files exactly to not lose early-install logs.
+            create_dir "$new_path_value"
           else # Log folder-specific actions
             mv "$rd_logs_folder" "$logs_folder" # Move existing logs folder from internal to userland
             ln -sf "$logs_folder" "$rd_logs_folder" # Link userland logs folder back to statically-written location
             log d "Logs folder moved to $logs_folder and linked back to $rd_logs_folder"
           fi
         fi
-      done < <(grep -v '^\s*$' "$rd_conf" | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
+      done < <(jq -r '(.paths // {}) | keys[]' "$rd_conf")
     fi
     if [[ "$action" == "postmove" ]]; then # Update the paths of any folders that came with the retrodeck folder during a move
-      while read -r config_line; do
-        local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
-        if [[ ! $current_setting_name =~ (rdhome|sdcard) ]]; then # Ignore these locations
-          local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
-          if [[ -d "$rdhome/${current_setting_value#*retrodeck/}" ]]; then # If the folder exists at the new ~/retrodeck location
-              declare -g "$current_setting_name=$rdhome/${current_setting_value#*retrodeck/}"
+      while IFS= read -r path_name; do
+        if [[ ! $path_name =~ (rdhome|sdcard) ]]; then # Ignore these locations
+          local path_value=$(get_setting_value "$rd_conf" "$path_name" "retrodeck" "paths")
+          if [[ -d "$rdhome/${path_value#*retrodeck/}" ]]; then # If the folder exists at the new ~/retrodeck location
+              declare -g "$path_name=$rdhome/${path_value#*retrodeck/}"
           fi
         fi
-      done < <(grep -v '^\s*$' "$rd_conf" | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
+      done < <(jq -r '(.paths // {}) | keys[]' "$rd_conf")
       dir_prep "$logs_folder" "$rd_logs_folder"
     fi
   fi
@@ -97,7 +94,7 @@ prepare_component() {
     log e "Supplied component $component not found, not resetting"
   else
     # Update presets for all components after any reset or move
-    if [[ ! "$component" == "retrodeck" ]]; then
+    if [[ ! "$component" =~ ^(retrodeck|es-de) ]]; then
       build_retrodeck_current_presets
     fi
   fi
