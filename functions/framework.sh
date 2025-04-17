@@ -12,7 +12,15 @@ set_setting_value() {
 
   case $4 in
 
-    "retrodeck" | "melonds" | "yuzu" | "citra" | "libretro_scummvm" )
+    "retrodeck")
+      if [[ -z "$current_section_name" ]]; then
+        jq --arg setting "$setting_name_to_change" --arg newval "$setting_value_to_change" '.[$setting] = $newval' "$1" > "$1".tmp.json && mv "$1".tmp.json "$1"
+      else
+        jq --arg section "$current_section_name" --arg setting "$setting_name_to_change" --arg newval "$setting_value_to_change" '.[$section][$setting] = $newval' "$1" > "$1".tmp.json && mv "$1".tmp.json "$1"
+      fi
+    ;;
+
+    "melonds" | "yuzu" | "citra" | "libretro_scummvm" )
       if [[ -z $current_section_name ]]; then
         sed -i 's^\^'"$setting_name_to_change"'=.*^'"$setting_name_to_change"'='"$setting_value_to_change"'^' "$1"
       else
@@ -21,7 +29,7 @@ set_setting_value() {
       if [[ "$4" == "retrodeck" && ("$current_section_name" == "" || "$current_section_name" == "paths" || "$current_section_name" == "options") ]]; then # If a RetroDECK setting is being changed, also write it to memory for immediate use
         declare -g "$setting_name_to_change=$setting_value_to_change"
       fi
-      ;;
+    ;;
 
     "retroarch" )
       if [[ -z $current_section_name ]]; then
@@ -29,7 +37,7 @@ set_setting_value() {
       else
         sed -i '\^\['"$current_section_name"'\]^,\^\^'"$setting_name_to_change"' = ^s^\^'"$setting_name_to_change"' = \".*\"^'"$setting_name_to_change"' = \"'"$setting_value_to_change"'\"^' "$1"
       fi
-      ;;
+    ;;
 
     "dolphin" | "duckstation" | "pcsx2" | "ppsspp" | "primehack" | "xemu" )
       if [[ -z $current_section_name ]]; then
@@ -37,7 +45,7 @@ set_setting_value() {
       else
         sed -i '\^\['"$current_section_name"'\]^,\^\^'"$setting_name_to_change"' =^s^\^'"$setting_name_to_change"' =.*^'"$setting_name_to_change"' = '"$setting_value_to_change"'^' "$1"
       fi
-      ;;
+    ;;
 
     "rpcs3" | "vita3k" )
        # This does not currently work for settings with a $ in them
@@ -55,7 +63,7 @@ set_setting_value() {
           sed -i '\^\['"$current_section_name"'\]^,\^\^'"$setting_name_to_change"'.*^s^\^'"$setting_name_to_change"': .*^'"$setting_name_to_change"': '"$setting_value_to_change"'^' "$1"
         fi
       fi
-      ;;
+    ;;
 
     "cemu" )
       if [[ -z "$current_section_name" ]]; then
@@ -63,7 +71,7 @@ set_setting_value() {
       else
         xml ed -L -u "//$current_section_name/$setting_name_to_change" -v "$setting_value_to_change" "$1"
       fi
-      ;;
+    ;;
     
     "mame" )
       # In this option, $current_section_name is the <system name> in the .cfg file.
@@ -74,11 +82,11 @@ set_setting_value() {
       elif [[ "$1" =~ (.cfg)$ ]]; then # If this is an XML-based MAME .cfg file
         sed -i '\^\<system name=\"'"$current_section_name"'\">^,\^<\/system>^s^'"$mame_current_value"'^'"$setting_value_to_change"'^' "$1"
       fi
-      ;;
+    ;;
 
     "es_settings" )
       sed -i 's^'"$setting_name_to_change"'" value=".*"^'"$setting_name_to_change"'" value="'"$setting_value_to_change"'"^' "$1"
-      ;;
+    ;;
 
   esac
 }
@@ -123,7 +131,15 @@ get_setting_value() {
 
   case $3 in
 
-  "retrodeck" | "melonds" | "yuzu" ) # For files with this syntax - setting_name=setting_value
+    "retrodeck")
+    if [[ -z "$current_section_name" ]]; then
+      jq -r --arg setting_name "$current_setting_name" '.[$setting_name]' "$1"
+    else
+      jq -r --arg section "$current_section_name" --arg setting_name "$current_setting_name" '.[$section][$setting_name]' "$1"
+    fi
+  ;;
+
+  "melonds" | "yuzu" ) # For files with this syntax - setting_name=setting_value
     if [[ -z $current_section_name ]]; then
       echo $(grep -o -P "(?<=^$current_setting_name=).*" "$1")
     else
