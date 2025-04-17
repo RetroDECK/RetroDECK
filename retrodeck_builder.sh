@@ -262,7 +262,7 @@ if [[ "$NO_BUILD" != "true" ]]; then
     eval $command
     # Building the bundle RetroDECK.flatpak after the download and build steps are done
     flatpak build-bundle "$ROOT_FOLDER/$REPO_FOLDER_NAME" "$OUT_FOLDER/$FLATPAK_BUNDLE_NAME" net.retrodeck.retrodeck
-    sha256sum "$ROOT_FOLDER/$FLATPAK_BUNDLE_NAME" >> "$OUT_FOLDER/$BUNDLE_SHA_NAME"
+    sha256sum "$OUT_FOLDER/$FLATPAK_BUNDLE_NAME" >> "$OUT_FOLDER/$BUNDLE_SHA_NAME"
 else
     echo "Skipping build as NO_BUILD mode is enabled."
     echo "Generating fake artifacts for testing purposes or using the old ones if available"
