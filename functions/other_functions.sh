@@ -1557,3 +1557,11 @@ else
   finit             # Executing First/Force init
 fi
 }
+
+source_component_paths() {
+  # This function will iterate the paths.sh file for every installed component and source it for use in the greater application
+  while IFS= read -r paths_file; do
+    log d "Found component paths file $paths_file"
+    source "$paths_file"
+  done < <(find "$RD_MODULES" -type f -name "paths.sh")
+}

@@ -114,6 +114,8 @@ export ESDE_APPDATA_DIR="$XDG_CONFIG_HOME/ES-DE"
 es_settings="$XDG_CONFIG_HOME/ES-DE/settings/es_settings.xml"
 es_source_logs="$XDG_CONFIG_HOME/ES-DE/logs"
 
+source_component_paths
+
 # Initialize logging location if it doesn't exist, before anything else happens
 if [ ! -d "$rd_logs_folder" ]; then
     create_dir "$rd_logs_folder"
