@@ -242,8 +242,8 @@ jobs:
           # Fetch latest main to compare against
           git fetch origin main
 
-          # Generate the list of commits since main
-          git log origin/main..HEAD --pretty=format:"- %s" > commits_since_main.txt || echo "- No commits found." > commits_since_main.txt
+          # Generate the list of commits since main (with links)
+          git log origin/main..HEAD --pretty=format:"- [%h](https://github.com/${{ github.repository }}/commit/%H) %s" > commits_since_main.txt || echo "- No commits found." > commits_since_main.txt
 
           # Save filename to environment variable if needed
           echo "COMMITS_MAIN_FILE=commits_since_main.txt" >> $GITHUB_ENV
