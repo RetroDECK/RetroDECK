@@ -16,7 +16,11 @@ set_setting_value() {
       if [[ -z "$current_section_name" ]]; then
         jq --arg setting "$setting_name_to_change" --arg newval "$setting_value_to_change" '.[$setting] = $newval' "$1" > "$1".tmp.json && mv "$1".tmp.json "$1"
       else
-        jq --arg section "$current_section_name" --arg setting "$setting_name_to_change" --arg newval "$setting_value_to_change" '.[$section][$setting] = $newval' "$1" > "$1".tmp.json && mv "$1".tmp.json "$1"
+        if jq -e --arg section "$current_section_name" '.presets | has($section)' "$rd_conf_json" > /dev/null; then # If the section is a preset
+          jq --arg section "$current_section_name" --arg setting "$setting_name_to_change" --arg newval "$setting_value_to_change" '.presets[$section][$setting] = $newval' "$1" > "$1".tmp.json && mv "$1".tmp.json "$1"
+        else
+          jq --arg section "$current_section_name" --arg setting "$setting_name_to_change" --arg newval "$setting_value_to_change" '.[$section][$setting] = $newval' "$1" > "$1".tmp.json && mv "$1".tmp.json "$1"
+        fi
       fi
     ;;
 
@@ -135,7 +139,11 @@ get_setting_value() {
     if [[ -z "$current_section_name" ]]; then
       jq -r --arg setting_name "$current_setting_name" '.[$setting_name]' "$1"
     else
-      jq -r --arg section "$current_section_name" --arg setting_name "$current_setting_name" '.[$section][$setting_name]' "$1"
+      if jq -e --arg section "$current_section_name" '.presets | has($section)' "$rd_conf_json" > /dev/null; then # If the section is a preset
+        jq -r --arg section "$current_section_name" --arg setting_name "$current_setting_name" '.presets[$section][$setting_name]' "$1"
+      else
+        jq -r --arg section "$current_section_name" --arg setting_name "$current_setting_name" '.[$section][$setting_name]' "$1"
+      fi
     fi
   ;;
 
