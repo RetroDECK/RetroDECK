@@ -317,13 +317,13 @@ backup_retrodeck_userdata() {
   declare -A config_paths # Requires an associative (dictionary) array to work
 
   # Build array of folder names and real paths from retrodeck.cfg
-  while read -r config_line; do
-    local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
-    if [[ ! $current_setting_name =~ (rdhome|sdcard|backups_folder) ]]; then # Ignore these locations
-      local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
-      config_paths["$current_setting_name"]="$current_setting_value"
+  while read -r path_name; do
+    if [[ ! $path_name =~ (rdhome|sdcard|backups_folder) ]]; then # Ignore these locations
+      local path_value=$(get_setting_value "$rd_conf" "$path_name" "retrodeck" "paths")
+      log d "Path $path_value added to potential backup list"
+      config_paths["$path_name"]="$path_value"
     fi
-  done < <(grep -v '^\s*$' "$rd_conf" | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
+  done < <(jq -r '.paths | keys[]' "$rd_conf")
 
   # Determine which paths to backup
   if [[ "$backup_type" == "complete" ]]; then
