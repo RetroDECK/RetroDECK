@@ -47,7 +47,7 @@ change_preset_dialog() {
       # Append three values: the current enabled state, a pretty name, and the internal system name.
       current_preset_settings=("${current_preset_settings[@]}" "$system_value" "$system_friendly_name" "$system_desc" "$system_name")
     fi
-  done < <(find "$RD_MODULES" -type f -name "manifest.json")
+  done < <(find "$RD_MODULES" -maxdepth 2 -mindepth 2 -type f -name "manifest.json")
 
   # Show the checklist with extra buttons for "Enable All" and "Disable All"
   choice=$(rd_zenity \

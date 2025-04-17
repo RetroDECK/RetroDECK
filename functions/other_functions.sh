@@ -581,7 +581,7 @@ make_name_pretty() {
       echo "$pretty_name"
       break
     fi
-  done < <(find "$RD_MODULES" -type f -name "manifest.json")
+  done < <(find "$RD_MODULES" -maxdepth 2 -mindepth 2 -type f -name "manifest.json")
 }
 
 finit_browse() {
@@ -1493,5 +1493,5 @@ source_component_paths() {
   while IFS= read -r paths_file; do
     log d "Found component paths file $paths_file"
     source "$paths_file"
-  done < <(find "$RD_MODULES" -type f -name "paths.sh")
+  done < <(find "$RD_MODULES" -maxdepth 2 -mindepth 2 -type f -name "paths.sh")
 }
