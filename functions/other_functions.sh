@@ -1356,34 +1356,33 @@ repair_paths() {
   invalid_path_found="false"
 
   log i "Checking that all RetroDECK paths are valid"
-  while read -r config_line; do
-    local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
-    if [[ ! $current_setting_name =~ (rdhome|sdcard) ]]; then # Ignore these locations
-      local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
-      if [[ ! -d "$current_setting_value" ]]; then # If the folder doesn't exist as defined
-        log i "$current_setting_name does not exist as defined, config is incorrect"
-        if [[ ! -d "$rdhome/${current_setting_value#*retrodeck/}" ]]; then # If the folder doesn't exist within defined rdhome path
-          if [[ ! -d "$sdcard/${current_setting_value#*retrodeck/}" ]]; then # If the folder doesn't exist within defined sdcard path
-            log i "$current_setting_name cannot be found at any expected location, having user locate it manually"
-            configurator_generic_dialog "RetroDECK Path Repair" "The RetroDECK $current_setting_name was not found in the expected location.\nThis may happen when the folder is moved manually.\n\nPlease browse to the current location of the $current_setting_name."
-            new_path=$(directory_browse "RetroDECK $current_setting_name location")
-            set_setting_value "$rd_conf" "$current_setting_name" "$new_path" retrodeck "paths"
+  while IFS= read -r path_name; do
+    if [[ ! $path_name =~ (rdhome|sdcard) ]]; then # Ignore these locations
+      local path_value=$(get_setting_value "$rd_conf" "$path_name" "retrodeck" "paths")
+      if [[ ! -d "$path_value" ]]; then # If the folder doesn't exist as defined
+        log i "$path_name does not exist as defined, config is incorrect"
+        if [[ ! -d "$rdhome/${path_value#*retrodeck/}" ]]; then # If the folder doesn't exist within defined rdhome path
+          if [[ ! -d "$sdcard/${path_value#*retrodeck/}" ]]; then # If the folder doesn't exist within defined sdcard path
+            log i "$path_name cannot be found at any expected location, having user locate it manually"
+            configurator_generic_dialog "RetroDECK Path Repair" "The RetroDECK $path_name was not found in the expected location.\nThis may happen when the folder is moved manually.\n\nPlease browse to the current location of the $path_name."
+            new_path=$(directory_browse "RetroDECK $path_name location")
+            set_setting_value "$rd_conf" "$path_name" "$new_path" retrodeck "paths"
             invalid_path_found="true"
           else # Folder does exist within defined sdcard path, update accordingly
-            log i "$current_setting_name found in $sdcard/retrodeck, correcting path config"
-            new_path="$sdcard/retrodeck/${current_setting_value#*retrodeck/}"
-            set_setting_value "$rd_conf" "$current_setting_name" "$new_path" retrodeck "paths"
+            log i "$path_name found in $sdcard/retrodeck, correcting path config"
+            new_path="$sdcard/retrodeck/${path_value#*retrodeck/}"
+            set_setting_value "$rd_conf" "$path_name" "$new_path" retrodeck "paths"
             invalid_path_found="true"
           fi
         else # Folder does exist within defined rdhome path, update accordingly
-          log i "$current_setting_name found in $rdhome, correcting path config"
-          new_path="$rdhome/${current_setting_value#*retrodeck/}"
-          set_setting_value "$rd_conf" "$current_setting_name" "$new_path" retrodeck "paths"
+          log i "$path_name found in $rdhome, correcting path config"
+          new_path="$rdhome/${path_value#*retrodeck/}"
+          set_setting_value "$rd_conf" "$path_name" "$new_path" retrodeck "paths"
           invalid_path_found="true"
         fi
       fi
     fi
-  done < <(grep -v '^\s*$' "$rd_conf" | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
+  done < <(jq -r '(.paths // {}) | keys[]' "$rd_conf")
 
   if [[ $invalid_path_found == "true" ]]; then
     log i "One or more invalid paths repaired, fixing internal RetroDECK structures"
