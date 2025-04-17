@@ -108,79 +108,11 @@ RD_FILE_LOCK="$rd_api_dir/retrodeck_file_lock"
 # Base dir for all installed RetroDECK components
 RD_MODULES="/app/retrodeck/components"
 
-# Config files for emulators with single config files
-
-duckstationconf="$XDG_CONFIG_HOME/duckstation/settings.ini"
-melondsconf="$XDG_CONFIG_HOME/melonDS/melonDS.ini"
-ryujinxconf="$XDG_CONFIG_HOME/Ryujinx/Config.json"
-xemuconf="$XDG_CONFIG_HOME/xemu/xemu.toml"
-yuzuconf="$XDG_CONFIG_HOME/yuzu/qt-config.ini"
-citraconf="$XDG_CONFIG_HOME/citra-emu/qt-config.ini"
-
 # ES-DE config files
 
 export ESDE_APPDATA_DIR="$XDG_CONFIG_HOME/ES-DE"
 es_settings="$XDG_CONFIG_HOME/ES-DE/settings/es_settings.xml"
 es_source_logs="$XDG_CONFIG_HOME/ES-DE/logs"
-
-# RetroArch config files
-
-raconf="$XDG_CONFIG_HOME/retroarch/retroarch.cfg"
-ra_core_conf="$XDG_CONFIG_HOME/retroarch/retroarch-core-options.cfg"
-ra_scummvm_conf="$XDG_CONFIG_HOME/retroarch/system/scummvm.ini"
-ra_cores_path="$XDG_CONFIG_HOME/retroarch/cores"
-
-# CEMU config files
-
-cemuconf="$XDG_CONFIG_HOME/Cemu/settings.xml"
-cemucontrollerconf="$XDG_CONFIG_HOME/Cemu/controllerProfiles/controller0.xml"
-
-# Dolphin config files
-
-dolphinconf="$XDG_CONFIG_HOME/dolphin-emu/Dolphin.ini"
-dolphingcpadconf="$XDG_CONFIG_HOME/dolphin-emu/GCPadNew.ini"
-dolphingfxconf="$XDG_CONFIG_HOME/dolphin-emu/GFX.ini"
-dolphinhkconf="$XDG_CONFIG_HOME/dolphin-emu/Hotkeys.ini"
-dolphinqtconf="$XDG_CONFIG_HOME/dolphin-emu/Qt.ini"
-dolphinDynamicInputTexturesPath="$XDG_DATA_HOME/dolphin-emu/Load/DynamicInputTextures"
-dolphinCheevosConf="$XDG_CONFIG_HOME/dolphin-emu/RetroAchievements.ini"
-
-# PCSX2 config files
-
-pcsx2conf="$XDG_CONFIG_HOME/PCSX2/inis/PCSX2.ini"
-pcsx2gsconf="$XDG_CONFIG_HOME/PCSX2/inis/GS.ini" # This file should be deprecated since moving to PCSX2-QT
-pcsx2uiconf="$XDG_CONFIG_HOME/PCSX2/inis/PCSX2_ui.ini" # This file should be deprecated since moving to PCSX2-QT
-pcsx2vmconf="$XDG_CONFIG_HOME/PCSX2/inis/PCSX2_vm.ini" # This file should be deprecated since moving to PCSX2-QT
-
-# PPSSPP-SDL config files
-
-ppssppconf="$XDG_CONFIG_HOME/ppsspp/PSP/SYSTEM/ppsspp.ini"
-ppssppcontrolsconf="$XDG_CONFIG_HOME/ppsspp/PSP/SYSTEM/controls.ini"
-ppssppcheevosconf="$XDG_CONFIG_HOME/ppsspp/PSP/SYSTEM/ppsspp_retroachievements.dat"
-
-# Primehack config files
-
-primehackconf="$XDG_CONFIG_HOME/primehack/Dolphin.ini"
-primehackgcpadconf="$XDG_CONFIG_HOME/primehack/GCPadNew.ini"
-primehackgfxconf="$XDG_CONFIG_HOME/primehack/GFX.ini"
-primehackhkconf="$XDG_CONFIG_HOME/primehack/Hotkeys.ini"
-primehackqtconf="$XDG_CONFIG_HOME/primehack/Qt.ini"
-primehackDynamicInputTexturesPath="$XDG_DATA_HOME/primehack/Load/DynamicInputTextures"
-
-# RPCS3 config files
-
-rpcs3conf="$XDG_CONFIG_HOME/rpcs3/config.yml"
-rpcs3vfsconf="$XDG_CONFIG_HOME/rpcs3/vfs.yml"
-
-# Vita3k config files
-
-vita3kconf="$XDG_CONFIG_HOME/Vita3K/config.yml"
-
-# MAME-SA config files
-
-mameconf="$XDG_CONFIG_HOME/mame/ini/mame.ini"
-mameuiconf="$XDG_CONFIG_HOME/mame/ini/ui.ini"
-mamedefconf="$XDG_CONFIG_HOME/mame/cfg/default.cfg"
 
 # Initialize logging location if it doesn't exist, before anything else happens
 if [ ! -d "$rd_logs_folder" ]; then
