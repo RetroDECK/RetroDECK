@@ -857,17 +857,20 @@ deploy_helper_files() {
   # USAGE: deploy_helper_files
 
   # Extract helper files information using jq
-  helper_files=$(jq -r '.helper_files | to_entries | map("\(.value.filename)^\(.value.location)")[]' "$features")
+  helper_files=$(jq -r '.helper_files | keys[]' "$features")
 
   # Iterate through each helper file entry
-  while IFS='^' read -r file dest; do
+  while IFS= read -r helper_file_name; do
+    current_json_object=$(jq -r --arg helper_file_name "$helper_file_name" '.helper_files[$helper_file_name]' "$features")
+    file=$(echo "$current_json_object" | jq -r '.filename')
+    dest=$(echo "$current_json_object" | jq -r '.location')
     if [[ ! -z "$file" ]] && [[ ! -z "$dest" ]]; then
       eval current_dest="$dest"
+      log d "Copying helper file $file to $current_dest"
       cp -f "$helper_files_folder/$file" "$current_dest/$file"
     fi
   done <<< "$helper_files"
 }
-
 
 splash_screen() {
   # This function will replace the RetroDECK startup splash screen with a different image if the day and time match a listing in the JSON data.
