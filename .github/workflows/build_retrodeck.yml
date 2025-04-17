@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - cooker*
-      - feat*
-      - branch/cooker*
+      # - feat*
+      # - branch/cooker*
     paths:
       - '.github/workflows/**'
       - 'automation_tools/**'
