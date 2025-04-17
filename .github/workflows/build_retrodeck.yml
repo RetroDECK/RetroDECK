@@ -229,6 +229,10 @@ jobs:
           echo "This is a cooker snapshot based on [this commit](https://github.com/${{ github.repository }}/commit/${{ github.sha }}), from branch [${{ env.BRANCH_NAME }}](https://github.com/RetroDECK/RetroDECK/tree/feat/${{ env.BRANCH_NAME }})." >> $RELEASE_BODY_FILE
           echo "" >> $RELEASE_BODY_FILE
 
+          echo "Cooker channel is provided for the community to test fixes and explore new functionality." >> $RELEASE_BODY_FILE
+          echo "Please DO NOT open issues or ask support on this build." >> $RELEASE_BODY_FILE
+          echo "" >> $RELEASE_BODY_FILE
+
           # Append changelog from metainfo
           echo "## Changelog" >> $RELEASE_BODY_FILE
           xmlstarlet sel -t -v "/component/releases/release[1]/description//text()" ./net.retrodeck.retrodeck.metainfo.xml \
