@@ -225,44 +225,38 @@ jobs:
         run: |
           RELEASE_BODY_FILE="release_body.md"
           echo "# Release Notes" > $RELEASE_BODY_FILE
-          echo "This is a cooker snapshot based on the commit: ${{ github.repository }}@${{ github.sha }}." >> $RELEASE_BODY_FILE
+          echo "This is a cooker snapshot based on the commit: [${{ github.repository }}@${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }})." >> $RELEASE_BODY_FILE
           echo "On branch [${{ env.BRANCH_NAME }}](https://repo.retrodeck.net/RetroDECK/RetroDECK/src/branch/${{ env.BRANCH_NAME }})." >> $RELEASE_BODY_FILE
           echo "" >> $RELEASE_BODY_FILE
 
+          # Append changelog from metainfo
           xmlstarlet sel -t -v "/component/releases/release[1]/description//text()" ./net.retrodeck.retrodeck.metainfo.xml \
-                    | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' \
-                    | awk 'NF' \
-                    | sed -E '
-                      s/^[[:space:]]*(.*[^[:space:]]):$/### \1/;      # Remove ";" from the titles
-                      t title
-                      s/^/- /                                         # Add "- " to the lists
-                      :title
-          ' > $RELEASE_BODY_FILE
+            | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' \
+            | awk 'NF' \
+            | sed -E '
+              s/^[[:space:]]*(.*[^[:space:]]):$/### \1/;
+              t title
+              s/^/- / 
+              :title
+            ' >> $RELEASE_BODY_FILE
 
           # Fetch latest main to compare against
           git fetch origin main
 
-          # Generate the list of commits since main (with links)
-          git log origin/main..HEAD --pretty=format:"- [%h](https://github.com/${{ github.repository }}/commit/%H) %s" > commits_since_main.txt || echo "- No commits found." > commits_since_main.txt
+          # Build comparison link
+          COMPARE_URL="https://github.com/${{ github.repository }}/compare/main...${{ github.sha }}"
 
-          # Save filename to environment variable if needed
-          echo "COMMITS_MAIN_FILE=commits_since_main.txt" >> $GITHUB_ENV
-
-          # Append section to release body
-          echo "## Commits since latest main release" >> $RELEASE_BODY_FILE
+          # Append comparison link to release body
+          echo "## Changes" >> $RELEASE_BODY_FILE
           echo "" >> $RELEASE_BODY_FILE
-
-          if [ -f "commits_since_main.txt" ]; then
-            cat commits_since_main.txt >> $RELEASE_BODY_FILE
-            echo "" >> $RELEASE_BODY_FILE
-          else
-            echo "[No commits found]" >> $RELEASE_BODY_FILE
-          fi
+          echo "[Check changes since latest main release](${COMPARE_URL})" >> $RELEASE_BODY_FILE
+          echo "" >> $RELEASE_BODY_FILE
 
           # Output the final body
           echo "RELEASE_BODY<<EOF" >> $GITHUB_OUTPUT
           cat $RELEASE_BODY_FILE >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
+
     
       # Determine if Target Repository is Main or not, in that case is a Cooker build
       - name: Determine target repository
