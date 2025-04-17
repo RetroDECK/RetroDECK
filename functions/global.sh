@@ -119,11 +119,6 @@ if [ ! -d "$rd_logs_folder" ]; then
     create_dir "$rd_logs_folder"
 fi
 
-# Initialize location of Godot temp data files, if it doesn't exist
-if [[ ! -d "$XDG_CONFIG_HOME/retrodeck/godot" ]]; then
-  create_dir "$XDG_CONFIG_HOME/retrodeck/godot"
-fi
-
 # We moved the lockfile in $XDG_CONFIG_HOME/retrodeck in order to solve issue #53 - Remove in a few versions
 if [[ -f "$HOME/retrodeck/.lock" ]]; then
   mv "$HOME/retrodeck/.lock" "$lockfile"
