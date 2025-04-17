@@ -323,7 +323,7 @@ backup_retrodeck_userdata() {
       log d "Path $path_value added to potential backup list"
       config_paths["$path_name"]="$path_value"
     fi
-  done < <(jq -r '.paths | keys[]' "$rd_conf")
+  done < <(jq -r '(.paths // {}) | keys[]' "$rd_conf")
 
   # Determine which paths to backup
   if [[ "$backup_type" == "complete" ]]; then
@@ -857,7 +857,7 @@ deploy_helper_files() {
   # USAGE: deploy_helper_files
 
   # Extract helper files information using jq
-  helper_files=$(jq -r '.helper_files | keys[]' "$features")
+  helper_files=$(jq -r '(.helper_files // {}) | keys[]' "$features")
 
   # Iterate through each helper file entry
   while IFS= read -r helper_file_name; do
