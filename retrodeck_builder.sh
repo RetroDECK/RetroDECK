@@ -103,10 +103,15 @@ fi
 
 ## INSTALLING DEPENDENCIES
 
-echo ""
-echo "Installing dependencies..."
-curl "https://raw.githubusercontent.com/RetroDECK/components-template/main/automation_tools/install_dependencies.sh" | bash
-echo ""
+if [[ "$NO_BUILD" != "true" ]]; then
+    echo ""
+    echo "Installing dependencies..."
+    curl "https://raw.githubusercontent.com/RetroDECK/components-template/main/automation_tools/install_dependencies.sh" | bash
+    echo ""
+else
+    echo "Skipping dependency installation as NO_BUILD mode is enabled. I would have installed:"
+    curl "https://raw.githubusercontent.com/RetroDECK/components-template/main/automation_tools/install_dependencies.sh" | cat
+fi
 
 ## BUILD ID GENERATION
 
