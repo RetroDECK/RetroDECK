@@ -15,11 +15,11 @@ on:
       - 'net.retrodeck.retrodeck.yml'
       - 'net.retrodeck.retrodeck.metainfo.xml'
       - 'tools/**'
-  pull_request_target:
-    types: [opened, synchronize, reopened]
-    branches:
-      - cooker*
-      - feat/*
+  # pull_request_target:
+  #   types: [opened, synchronize, reopened]
+  #   branches:
+  #     - cooker*
+  #     - feat/*
   pull_request:
     types: [opened, synchronize, reopened]
     branches:
@@ -225,7 +225,7 @@ jobs:
         run: |
           RELEASE_BODY_FILE="release_body.md"
           echo "# Release Notes" > $RELEASE_BODY_FILE
-          echo "This is a cooker snapshot based on [this commit](https://github.com/${{ github.repository }}/commit/${{ github.sha }}), from branch [${{ env.BRANCH_NAME }}](https://repo.retrodeck.net/RetroDECK/RetroDECK/src/branch/${{ env.BRANCH_NAME }})." >> $RELEASE_BODY_FILE
+          echo "This is a cooker snapshot based on [this commit](https://github.com/${{ github.repository }}/commit/${{ github.sha }}), from branch [${{ env.BRANCH_NAME }}](https://github.com/RetroDECK/RetroDECK/tree/feat/${{ env.BRANCH_NAME }})." >> $RELEASE_BODY_FILE
           echo "" >> $RELEASE_BODY_FILE
 
           # Append changelog from metainfo
