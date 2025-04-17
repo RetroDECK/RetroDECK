@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - cooker*
-      # - feat*
-      # - branch/cooker*
     paths:
       - '.github/workflows/**'
       - 'automation_tools/**'
@@ -23,9 +21,6 @@ on:
   #     - feat/*
   pull_request:
     types: [opened, synchronize, reopened]
-    # branches:
-    #   - cooker*
-    #   - feat/*
 
   workflow_dispatch:
 
