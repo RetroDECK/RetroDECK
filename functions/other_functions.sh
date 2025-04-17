@@ -580,7 +580,6 @@ make_name_pretty() {
   echo "$pretty_name"
 }
 
-
 finit_browse() {
 # Function for choosing data directory location during first/forced init
 path_selected=false
