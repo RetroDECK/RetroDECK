@@ -574,10 +574,14 @@ make_name_pretty() {
 
   local system_name="$1"
 
-  # Use jq to parse the JSON and find the pretty name
-  local pretty_name=$(jq -r --arg name "$system_name" '.system[$name].name // $name' "$features")
-
-  echo "$pretty_name"
+  # Use jq to parse the JSON and find the pretty name from the components manifest.json
+  while IFS= read -r component_manifest; do
+    if jq -e --arg system "$system_name" 'to_entries | any(.value.system == $system)' "$component_manifest" > /dev/null; then
+      local pretty_name=$(jq -r --arg name "$system_name" '.system[$name].name // $name' "$features")
+      echo "$pretty_name"
+      break
+    fi
+  done < <(find "$RD_MODULES" -type f -name "manifest.json")
 }
 
 finit_browse() {
