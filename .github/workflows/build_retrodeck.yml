@@ -15,6 +15,7 @@ on:
       - 'net.retrodeck.retrodeck.yml'
       - 'net.retrodeck.retrodeck.metainfo.xml'
       - 'tools/**'
+  # Disabled because is dangerous to execute outside code unsupervised
   # pull_request_target:
   #   types: [opened, synchronize, reopened]
   #   branches:
@@ -85,7 +86,7 @@ jobs:
           # echo "https://${{ steps.generate-rekku-token.outputs.token }}@github.com" > ~/.git-credentials
           if [[ "$GITHUB_REF" == "refs/heads/main" ]]; then
             /bin/bash ./retrodeck_builder.sh --cicd
-          else
+          else # if cooker/feat branch
             /bin/bash ./retrodeck_builder.sh --cicd --no-artifacts
           fi
 
