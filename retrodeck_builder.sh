@@ -48,6 +48,10 @@ for arg in "$@"; do
             FLATPAK_BUILD_EXTRA_ARGS="${arg#*=}"
             echo "Additional Flatpak Builder arguments: $FLATPAK_BUILD_EXTRA_ARGS"
             ;;
+        --skip-replacer)
+            echo "Skipping placeholder replacement"
+            SKIP_REPLACER="true"
+            ;;
         --help|-h)
             echo "RetroDECK Builder"
             echo ""
@@ -64,6 +68,7 @@ for arg in "$@"; do
             echo "  --force-cooker              Force cooker mode, overriding branch detection"
             echo "  --ccache                    Enable CCACHE mode for Flatpak Builder"
             echo "  --flatpak-builder-args=\"\"   Pass additional arguments to Flatpak Builder"
+            echo "  --skip-replacer             Skip placeholder replacement, useful for quicker debugging"
             echo "  --help, -h                  Display this help message"
             exit 0
             ;;
@@ -187,10 +192,14 @@ else
     export use_cache="false"
 fi
 
-# Executing the placeholder replacement script
-source "$ROOT_FOLDER/automation_tools/manifest_placeholder_replacer.sh"
-echo "Manifest placeholders replaced done"
-echo ""
+if [[ "$SKIP_REPLACER" != "true" ]]; then
+    # Executing the placeholder replacement script
+    source "$ROOT_FOLDER/automation_tools/manifest_placeholder_replacer.sh"
+    echo "Manifest placeholders replaced done"
+    echo ""
+else
+    echo "Skipping placeholder replacement as SKIP_REPLACER is enabled."
+fi
 
 # Adding the update portal permission to the cooker flatpak to allow the framework to update RetroDECK
 # This is not allowed on Flathub

@@ -86,7 +86,7 @@ jobs:
           if [[ "$GITHUB_REF" == "refs/heads/main" ]]; then
             /bin/bash ./retrodeck_builder.sh --cicd
           else
-            /bin/bash ./retrodeck_builder.sh --cicd --no-artifacts --no-build
+            /bin/bash ./retrodeck_builder.sh --cicd --no-artifacts --no-build --skip-replacer
           fi
 
       # - name: Generate a token for Rekku
