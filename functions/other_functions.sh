@@ -640,7 +640,7 @@ finit_user_options_dialog() {
 }
 
 finit() {
-# Force/First init, depending on the situation
+  # Force/First init, depending on the situation
 
   log i "Executing finit"
 
@@ -1059,139 +1059,135 @@ ponzu_remove() {
 }
 
 release_selector() {
-    # Show a progress bar
-    ( 
-        while true; do
-            echo "# Fetching all available releases from GitHub repositories... Please wait. This may take some time." ; sleep 1
-        done
-    ) | rd_zenity --progress --title="Fetching Releases" --text="Fetching releases..." --pulsate --no-cancel --auto-close --width=500 --height=150 &
-    
-    progress_pid=$!  # save process PID to kill it later
+  # Show a progress bar
+  ( 
+    while true; do
+      echo "# Fetching all available releases from GitHub repositories... Please wait. This may take some time." ; sleep 1
+    done
+  ) | rd_zenity --progress --title="Fetching Releases" --text="Fetching releases..." --pulsate --no-cancel --auto-close --width=500 --height=150 &
+  
+  progress_pid=$!  # save process PID to kill it later
 
-    log d "Fetching releases from GitHub API for repository $cooker_repository_name"
-    
-    # Fetch the main release from the RetroDECK repository
-    log d "Fetching latest main release from GitHub API for repository RetroDECK"
-    local main_release=$(curl -s "https://api.github.com/repos/$git_organization_name/RetroDECK/releases/latest")
+  log d "Fetching releases from GitHub API for repository $cooker_repository_name"
+  
+  # Fetch the main release from the RetroDECK repository
+  log d "Fetching latest main release from GitHub API for repository RetroDECK"
+  local main_release=$(curl -s "https://api.github.com/repos/$git_organization_name/RetroDECK/releases/latest")
 
-    if [[ -z "$main_release" ]]; then
-        log e "Failed to fetch the main release"
-        kill $progress_pid  # kill the progress bar
-        configurator_generic_dialog "Error" "Unable to fetch the main release. Please check your network connection or try again later."
-        return 1
-    fi
+  if [[ -z "$main_release" ]]; then
+    log e "Failed to fetch the main release"
+    kill $progress_pid  # kill the progress bar
+    configurator_generic_dialog "Error" "Unable to fetch the main release. Please check your network connection or try again later."
+    return 1
+  fi
 
-    main_tag_name=$(echo "$main_release" | jq -r '.tag_name')
-    main_published_at=$(echo "$main_release" | jq -r '.published_at')
+  main_tag_name=$(echo "$main_release" | jq -r '.tag_name')
+  main_published_at=$(echo "$main_release" | jq -r '.published_at')
 
-    # Convert published_at to human-readable format for the main release
-    main_human_readable_date=$(date -d "$main_published_at" +"%d %B %Y %H:%M")
+  # Convert published_at to human-readable format for the main release
+  main_human_readable_date=$(date -d "$main_published_at" +"%d %B %Y %H:%M")
 
-    # Add the main release as the first entry in the release array
-    local release_array=("Main Release" "$main_tag_name" "$main_human_readable_date")
+  # Add the main release as the first entry in the release array
+  local release_array=("Main Release" "$main_tag_name" "$main_human_readable_date")
 
-    # Fetch all releases (including draft and pre-release) from the Cooker repository
-    local releases=$(curl -s "https://api.github.com/repos/$git_organization_name/$cooker_repository_name/releases?per_page=100")
+  # Fetch all releases (including draft and pre-release) from the Cooker repository
+  local releases=$(curl -s "https://api.github.com/repos/$git_organization_name/$cooker_repository_name/releases?per_page=100")
 
-    if [[ -z "$releases" ]]; then
-        log e "Failed to fetch releases or no releases available"
-        kill $progress_pid  # kill the progress bar
-        configurator_generic_dialog "Error" "Unable to fetch releases. Please check your network connection or try again later."
-        return 1
-    fi
+  if [[ -z "$releases" ]]; then
+    log e "Failed to fetch releases or no releases available"
+    kill $progress_pid  # kill the progress bar
+    configurator_generic_dialog "Error" "Unable to fetch releases. Please check your network connection or try again later."
+    return 1
+  fi
 
-    # Loop through each release and add to the release array
-    while IFS= read -r release; do
-        tag_name=$(echo "$release" | jq -r '.tag_name')
-        published_at=$(echo "$release" | jq -r '.published_at')
-        draft=$(echo "$release" | jq -r '.draft')
-        prerelease=$(echo "$release" | jq -r '.prerelease')
+  # Loop through each release and add to the release array
+  while IFS= read -r release; do
+    tag_name=$(echo "$release" | jq -r '.tag_name')
+    published_at=$(echo "$release" | jq -r '.published_at')
+    draft=$(echo "$release" | jq -r '.draft')
+    prerelease=$(echo "$release" | jq -r '.prerelease')
 
-        # Classifying releases
-        if echo "$tag_name" | grep -q "PR"; then
-            status="Pull Request"
-        elif [[ "$draft" == "true" ]]; then
-            status="Draft"
-        elif [[ "$prerelease" == "true" ]]; then
-            status="Pre-release"
-        elif [[ "$cooker_repository_name" == *"Cooker"* ]]; then
-            status="Cooker"
-        else
-            status="Main"
-        fi
-
-        # Convert published_at to human-readable format, if available
-        if [[ "$published_at" != "null" ]]; then
-            human_readable_date=$(date -d "$published_at" +"%d %B %Y %H:%M")
-        else
-            human_readable_date="Not published"
-        fi
-
-        # Ensure fields are properly aligned for Zenity
-        release_array+=("$status" "$tag_name" "$human_readable_date")
-
-    done < <(echo "$releases" | jq -c '.[]' | sort -t: -k3,3r)
-
-    # kill the progress bar before opening the release list window
-    kill $progress_pid
-
-    if [[ ${#release_array[@]} -eq 0 ]]; then
-        configurator_generic_dialog "RetroDECK Updater" "No available releases found, exiting."
-        log d "No available releases found"
-        return 1
-    fi
-
-    log d "Showing available releases"
-
-    # Display releases in a Zenity list dialog with three columns
-    selected_release=$(
-      rd_zenity --list \
-        --icon-name=net.retrodeck.retrodeck \
-        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-        --title "RetroDECK Configurator Cooker Releases - Select Release" \
-        --column="Branch" --column="Release Tag" --column="Published Date" --width=1280 --height=800 \
-        --separator="|" --print-column='ALL' "${release_array[@]}"
-    )
-
-    log i "Selected release: $selected_release"
-
-    if [[ -z "$selected_release" ]]; then
-        log d "No release selected, user exited."
-        return 1
-    fi
-
-    # Parse the selected release using the pipe separator
-    IFS='|' read -r selected_branch selected_tag selected_date <<< "$selected_release"
-    selected_branch=$(echo "$selected_branch" | xargs)  # Trim any extra spaces
-    selected_tag=$(echo "$selected_tag" | xargs)
-    selected_date=$(echo "$selected_date" | xargs)
-
-    log d "Selected branch: $selected_branch, release: $selected_tag, date: $selected_date"
-
-    rd_zenity --question --icon-name=net.retrodeck.retrodeck --no-wrap \
-      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Configurator Cooker Release - Confirm Selection" \
-      --text="Are you sure you want to install the following release?\n\n$selected_branch: \"$selected_tag\"\nPublished on $selected_date?"
-
-    if [[ $? -eq 0 ]]; then
-        log d "User confirmed installation of release $selected_tag"
-
-      if echo "$selected_release" | grep -q "Main Release"; then
-        set_setting_value "$rd_conf" "update_repo" "$main_repository_name" retrodeck "options"
-        log i "Switching to main channel"
-      else
-        set_setting_value "$rd_conf" "update_repo" "$cooker_repository_name" retrodeck "options"
-        log i "Switching to cooker channel"
-      fi
-
-        set_setting_value "$rd_conf" "branch" "$selected_branch" "retrodeck" "options"
-        log d "Set branch to $selected_branch in configuration"
-        install_release "$selected_tag"
-
+    # Classifying releases
+    if echo "$tag_name" | grep -q "PR"; then
+      status="Pull Request"
+    elif [[ "$draft" == "true" ]]; then
+      status="Draft"
+    elif [[ "$prerelease" == "true" ]]; then
+      status="Pre-release"
+    elif [[ "$cooker_repository_name" == *"Cooker"* ]]; then
+      status="Cooker"
     else
-      log d "User canceled installation"
-      return 0
+      status="Main"
     fi
+
+    # Convert published_at to human-readable format, if available
+    if [[ "$published_at" != "null" ]]; then
+      human_readable_date=$(date -d "$published_at" +"%d %B %Y %H:%M")
+    else
+      human_readable_date="Not published"
+    fi
+
+    # Ensure fields are properly aligned for Zenity
+    release_array+=("$status" "$tag_name" "$human_readable_date")
+  done < <(echo "$releases" | jq -c '.[]' | sort -t: -k3,3r)
+
+  # kill the progress bar before opening the release list window
+  kill $progress_pid
+
+  if [[ ${#release_array[@]} -eq 0 ]]; then
+    configurator_generic_dialog "RetroDECK Updater" "No available releases found, exiting."
+    log d "No available releases found"
+    return 1
+  fi
+
+  log d "Showing available releases"
+
+  # Display releases in a Zenity list dialog with three columns
+  selected_release=$(
+    rd_zenity --list \
+      --icon-name=net.retrodeck.retrodeck \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Configurator Cooker Releases - Select Release" \
+      --column="Branch" --column="Release Tag" --column="Published Date" --width=1280 --height=800 \
+      --separator="|" --print-column='ALL' "${release_array[@]}"
+  )
+
+  log i "Selected release: $selected_release"
+
+  if [[ -z "$selected_release" ]]; then
+    log d "No release selected, user exited."
+    return 1
+  fi
+
+  # Parse the selected release using the pipe separator
+  IFS='|' read -r selected_branch selected_tag selected_date <<< "$selected_release"
+  selected_branch=$(echo "$selected_branch" | xargs)  # Trim any extra spaces
+  selected_tag=$(echo "$selected_tag" | xargs)
+  selected_date=$(echo "$selected_date" | xargs)
+
+  log d "Selected branch: $selected_branch, release: $selected_tag, date: $selected_date"
+
+  rd_zenity --question --icon-name=net.retrodeck.retrodeck --no-wrap \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator Cooker Release - Confirm Selection" \
+    --text="Are you sure you want to install the following release?\n\n$selected_branch: \"$selected_tag\"\nPublished on $selected_date?"
+
+  if [[ $? -eq 0 ]]; then
+    log d "User confirmed installation of release $selected_tag"
+    if echo "$selected_release" | grep -q "Main Release"; then
+      set_setting_value "$rd_conf" "update_repo" "$main_repository_name" retrodeck "options"
+      log i "Switching to main channel"
+    else
+      set_setting_value "$rd_conf" "update_repo" "$cooker_repository_name" retrodeck "options"
+      log i "Switching to cooker channel"
+    fi
+    set_setting_value "$rd_conf" "branch" "$selected_branch" "retrodeck" "options"
+    log d "Set branch to $selected_branch in configuration"
+    install_release "$selected_tag"
+  else
+    log d "User canceled installation"
+    return 0
+  fi
 }
 
 quit_retrodeck() {
@@ -1228,8 +1224,8 @@ start_retrodeck() {
   es-de
 }
 
-# Function to convert XML tags to Markdown
 convert_to_markdown() {
+  # Function to convert XML tags to Markdown
   local xml_content=$(cat "$1")
   local output_file="$1.md"
 
