@@ -23,9 +23,9 @@ on:
   #     - feat/*
   pull_request:
     types: [opened, synchronize, reopened]
-    branches:
-      - cooker*
-      - feat/*
+    # branches:
+    #   - cooker*
+    #   - feat/*
 
   workflow_dispatch:
 
