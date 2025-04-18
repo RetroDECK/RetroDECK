@@ -140,3 +140,47 @@ api_find_compatible_games() {
 
   echo "$final_json"
 }
+
+api_find_all_components() {
+  # This function will return an array of JSON objects with the names, user-friendly names and descriptions of every installed component.
+  # USAGE: api_find_all_components
+
+  # Initialize the empty JSON file meant for final output
+  all_components_obj="$(mktemp)"
+  echo '[]' > "$all_components_obj"
+
+  while IFS= read -r manifest_file; do
+    while (( $(jobs -p | wc -l) >= $max_threads )); do # Wait for a background task to finish if max_threads has been hit
+      sleep 0.1
+    done
+    (
+      json_info=$(jq -r '
+        # Grab the first top‑level key into $system_key
+        (keys_unsorted[0]) as $system_key
+        | .[$system_key] as $sys
+        | {
+            system_name: $system_key,
+            data: {
+              system_friendly_name: $sys.name,
+              description: $sys.description
+            }
+          }
+      ' "$manifest_file")
+      local system_name=$(echo "$json_info" | jq -r '.system_name' )
+      local system_friendly_name=$(echo "$json_info" | jq -r '.data.system_friendly_name')
+      local description=$(echo "$json_info" | jq -r '.data.description')
+      json_obj=$(jq -n --arg name "$system_name" --arg friendly_name "$system_friendly_name" --arg desc "$description" \
+                '{ system_name: $name, system_friendly_name: $friendly_name, description: $desc }')
+      (
+      flock -x 200
+      jq --argjson obj "$json_obj" '. + [$obj]' "$all_components_obj" > "$all_components_obj.tmp" && mv "$all_components_obj.tmp" "$all_components_obj"
+      ) 200>"$RD_FILE_LOCK"
+    ) &
+  done < <(find "$RD_MODULES" -maxdepth 2 -mindepth 2 -type f -name "manifest.json")
+  wait # Wait for background tasks to finish
+
+  local final_json=$(jq '[.[] | select(.system_name == "retrodeck")] + ([.[] | select(.system_name != "retrodeck")] | sort_by(.system_name))' "$all_components_obj") # Ensure RetroDECK is always first in the list
+  rm "$all_components_obj"
+
+  echo "$final_json"
+}
