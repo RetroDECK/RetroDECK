@@ -1495,3 +1495,39 @@ source_component_paths() {
     source "$paths_file"
   done < <(find "$RD_MODULES" -maxdepth 2 -mindepth 2 -type f -name "paths.sh")
 }
+
+parse_json_to_array() {
+  # This function will parse a set of JSON objects (which must all have the same sets of keys, but can have different values) into a given Bash array
+  # This is useful for turning API JSON output into Bash arrays that can be used in Zenity dialogs
+  # To avoid whitespace issues, the destination array must be given to this function as an argument, and will have its contents assigned directly
+  # USAGE: parse_json_to_array $destination_arry $JSON_input
+  local dest_array="$1"; shift
+  local -a temp_bash_array=()
+
+  while IFS= read -r json_value; do
+    temp_bash_array+=( "$json_value" )
+  done < <("$@" | jq -r '.[] | .[]')
+
+  eval "$dest_array=(\"\${temp_bash_array[@]}\")"
+}
+
+add_value_to_array() {
+  # This function will add a specific value to an array at given intervals
+  # This is useful if you are trying to adapt API-gathered information for Zenity checklists
+  # It will take a "source" array, insert the "value" at the given interval and assign the new array to the "dest" array name
+  # Example: You have an array that contains "retrodeck" "RetroDECK" "The RetroDECK Framework" "ppsspp" "PPSSPP" "PlayStation Portable Emulator" and want to use it in a 4-column Zenity checklist, which requires a true/false value in the first element of each data "set"
+  # You can accomplish that with the following call:
+  # USAGE: add_value_to_array source_array dest_array FALSE 3
+  local -n array_in=$1
+  local -n array_out=$2
+  local value=$3
+  local group_size=$4
+
+  array_out=()
+  for ((i=0; i<${#array_in[@]}; i++)); do
+    if (( i % group_size == 0 )); then
+      array_out+=( "$value" )
+    fi
+    array_out+=( "${array_in[i]}" )
+  done
+}
