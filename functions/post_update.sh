@@ -834,7 +834,7 @@ post_update() {
       rd_zenity --progress \
       --title="RetroDECK Configurator: Add RetroDECK to Steam" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --text="Adding RetroDECK launcher to Steam, please wait..." \
+      --text="Adding RetroDECK to Steam...\n\n<span foreground='$purple'>Please wait until the operation is finished and you need to restart Steam afterwards.</span>" \
       --pulsate --width=500 --height=150 --auto-close --no-cancel
     fi
 

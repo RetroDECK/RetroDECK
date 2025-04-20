@@ -104,7 +104,7 @@ steam_sync_add() {
     rd_zenity --progress \
     --title="Syncing with Steam" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --text="<span foreground='$purple'><b>\t\t\t\tAdding new favorited games to Steam</b></span>\n\n<b>NOTE: </b>This operation may take some time depending on the size of your library.\nFeel free to leave this in the background and switch to another application.\n\n" \
+    --text="<span foreground='$purple'><b>\t\t\t\tAdding newly favorited games to Steam</b></span>\n\n<b>NOTE: </b>This operation may take some time depending on the size of your library.\nFeel free to leave this in the background and switch to another application.\n\n" \
     --pulsate --width=500 --height=150 --auto-close --no-cancel
   else
     steam-rom-manager disable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
