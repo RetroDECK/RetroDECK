@@ -36,7 +36,7 @@
       </screenshot>
    </screenshots>
    <description>
-      <p>RetroDECK is an all-in-one retro gaming platform with built-in emulators, game engines, and systems. It's perfect for devices like the Steam Deck or Linux Desktop. RetroDECK is a self-contained app with the goal to provide everything you need for retro gaming right out of the box.</p>
+      <p>RetroDECK is an all-in-one retro gaming platform with built-in emulators, game engines, and systems. It's perfect for devices like the Steam Deck or Linux Desktop. It is a self-contained flatpak application with the goal to provide everything you need for retro gaming right out of the box. With the RetroDECK Framework, RetroENGINE and Configurator it integrates and manage various emulators, game engines and other software, allowing you to play your favorite retro games in one complete package.</p>
       <p>Why RetroDECK?</p>
       <ul>
          <li>All-in-One Convenience: Catalog, customize, and play your retro games collection from one unified app with the ES-DE Frontend.</li>
@@ -58,13 +58,14 @@
       </ul>
       <p>The RetroDECK Community:</p>
       <ul>
-         <li>Blog: https://retrodeck.readthedocs.io/en/latest/blog/</li>
+         <li>RetroDECK Blog: https://retrodeck.readthedocs.io/en/latest/blog/</li>
+         <li>RetroDECK Wiki: https://retrodeck.readthedocs.io/</li>
          <li>Bluesky: https://bsky.app/profile/retrodeck.net</li>
          <li>Discord: https://discord.gg/WDc5C9YWMx</li>
-         <li>Lemmy Community: https://lemmy.zip/c/retrodeck</li>
+         <li>Lemmy: https://lemmy.zip/c/retrodeck</li>
          <li>Matrix: https://matrix.to/#/#retrodeck:matrix.org</li>
+         <li>Reddit: https://www.reddit.com/r/retrodeck</li>
          <li>Revolt: https://rvlt.gg/StVaEc0w</li>
-         <li>Subreddit: https://www.reddit.com/r/retrodeck</li>
       </ul>
    </description>
    <branding>
