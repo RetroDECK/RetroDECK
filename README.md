@@ -35,7 +35,7 @@ For more details, check out our : [How-to: Start using RetroDECK](https://retrod
 
 RetroDECK currently supports:
 
-- Steam Deck 
+- Steam Deck (and similar devices have been reported working)
 - Linux Desktop
 
 For more information read up here:
