@@ -50,7 +50,7 @@ steam_sync() {
       log d "$system_favorites"
       while read -r game_path; do
         local game="${game_path#./}" # Remove leading ./
-        if [[ -f "$roms_folder/$system/$game" || -d "$roms_folder/$system/$game" ]]; then # Validate file/folder exists and isn't a stale ES-DE entry for a removed file
+        if [[ -f "$roms_folder/$system/$game" ]]; then # Validate file exists and isn't a stale ES-DE entry for a removed file
           # Construct launch options with the rom path in quotes, to handle spaces
           local game_title=$(awk -v search_path="$game_path" 'BEGIN { RS="</game>"; FS="\n" }
                                                               /<path>/ {
@@ -60,6 +60,20 @@ steam_sync() {
                                                                 }
                                                               }' "$gamelist")
           local launchOptions="$launch_command -s $system \"$roms_folder/$system/$game\""
+          log d "Adding entry $launchOptions to favorites manifest."
+          jq --arg title "$game_title" --arg target "$target" --arg launchOptions "$launchOptions" \
+          '. += [{"title": $title, "target": $target, "launchOptions": $launchOptions}]' "${retrodeck_favorites_file}.new" > "${retrodeck_favorites_file}.tmp" \
+          && mv "${retrodeck_favorites_file}.tmp" "${retrodeck_favorites_file}.new"
+        elif [[ -d "$roms_folder/$system/$game" && -f "$roms_folder/$system/$game/$game" ]]; then # If the favorite is an .m3u multi-disc parent folder, validate the actual .m3u file also exists
+          # Construct launch options with the rom path in quotes, to handle spaces
+          local game_title=$(awk -v search_path="$game_path" 'BEGIN { RS="</game>"; FS="\n" }
+                                                              /<path>/ {
+                                                              if (match($0, /<path>([^<]+)<\/path>/, path) && path[1] == search_path) {
+                                                                if (match($0, /<name>([^<]+)<\/name>/, name))
+                                                                  print name[1]
+                                                                }
+                                                              }' "$gamelist")
+          local launchOptions="$launch_command -s $system \"$roms_folder/$system/$game/$game\""
           log d "Adding entry $launchOptions to favorites manifest."
           jq --arg title "$game_title" --arg target "$target" --arg launchOptions "$launchOptions" \
           '. += [{"title": $title, "target": $target, "launchOptions": $launchOptions}]' "${retrodeck_favorites_file}.new" > "${retrodeck_favorites_file}.tmp" \
