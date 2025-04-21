@@ -4,7 +4,7 @@
 # It will handle the direct demands of the API requests by leveraging the rest of the RetroDECK functions.
 # Most of these functions will have been adapted from the ones built for the Zenity Configurator, with the Zenity specifics pulled out and all data passed through JSON objects.
 
-api_find_compatible_games() {
+api_find_compressible_games() {
   # Supported parameters:
   # "everything"  - All games found (regardless of format)
   # "all"         - Only user-chosen games (later selected via checklist)
@@ -33,10 +33,10 @@ api_find_compatible_games() {
   log d "Finding compatible games for compression ($1)"
   log d "compression_targets: $compression_targets"
 
-  local output_file="$(mktemp)"
+  local compressible_games_list="$(mktemp)"
 
   # Initialize the empty JSON file meant for final output
-  echo '[]' > "$output_file"
+  echo '[]' > "$compressible_games_list"
 
   while IFS= read -r system; do
     while (( $(jobs -p | wc -l) >= $max_threads )); do # Wait for a background task to finish if max_threads has been hit
@@ -64,15 +64,12 @@ api_find_compatible_games() {
               if [[ "$compatible_compression_format" == "chd" ]]; then
                 log d "Game $game is compatible with CHD compression"
                 # Build a JSON object for this game
-                json_init
-                json_add "game" "$game"
-                json_add "compression" "$compatible_compression_format"
-                # Build the complete JSON object for this game
-                json_obj=$(json_build)
+                json_obj=$(jq -n --arg game "$game" --arg compression "$compatible_compression_format" \
+                '{ game: $game, compression: $compression }')
                 # Write the final JSON object to the output file, locking it to prevent write race conditions.
                 (
                 flock -x 200
-                jq --argjson obj "$json_obj" '. + [$obj]' "$output_file" > "$output_file.tmp" && mv "$output_file.tmp" "$output_file"
+                jq --argjson obj "$json_obj" '. + [$obj]' "$compressible_games_list" > "$compressible_games_list.tmp" && mv "$compressible_games_list.tmp" "$compressible_games_list"
                 ) 200>"$RD_FILE_LOCK"
               fi
               ;;
@@ -80,15 +77,12 @@ api_find_compatible_games() {
               if [[ "$compatible_compression_format" == "zip" ]]; then
                 log d "Game $game is compatible with ZIP compression"
                 # Build a JSON object for this game.
-                json_init
-                json_add "game" "$game"
-                json_add "compression" "$compatible_compression_format"
-                # Build the complete JSON object for this game
-                json_obj=$(json_build)
+                json_obj=$(jq -n --arg game "$game" --arg compression "$compatible_compression_format" \
+                '{ game: $game, compression: $compression }')
                 # Write the final JSON object to the output file, locking it to prevent write race conditions.
                 (
                 flock -x 200
-                jq --argjson obj "$json_obj" '. + [$obj]' "$output_file" > "$output_file.tmp" && mv "$output_file.tmp" "$output_file"
+                jq --argjson obj "$json_obj" '. + [$obj]' "$compressible_games_list" > "$compressible_games_list.tmp" && mv "$compressible_games_list.tmp" "$compressible_games_list"
                 ) 200>"$RD_FILE_LOCK"
               fi
               ;;
@@ -96,15 +90,12 @@ api_find_compatible_games() {
               if [[ "$compatible_compression_format" == "rvz" ]]; then
                 log d "Game $game is compatible with ZIP compression"
                 # Build a JSON object for this game.
-                json_init
-                json_add "game" "$game"
-                json_add "compression" "$compatible_compression_format"
-                # Build the complete JSON object for this game
-                json_obj=$(json_build)
+                json_obj=$(jq -n --arg game "$game" --arg compression "$compatible_compression_format" \
+                '{ game: $game, compression: $compression }')
                 # Write the final JSON object to the output file, locking it to prevent write race conditions.
                 (
                 flock -x 200
-                jq --argjson obj "$json_obj" '. + [$obj]' "$output_file" > "$output_file.tmp" && mv "$output_file.tmp" "$output_file"
+                jq --argjson obj "$json_obj" '. + [$obj]' "$compressible_games_list" > "$compressible_games_list.tmp" && mv "$compressible_games_list.tmp" "$compressible_games_list"
                 ) 200>"$RD_FILE_LOCK"
               fi
               ;;
@@ -112,15 +103,12 @@ api_find_compatible_games() {
               if [[ "$compatible_compression_format" != "none" ]]; then
                 log d "Game $game is compatible with ZIP compression"
                 # Build a JSON object for this game.
-                json_init
-                json_add "game" "$game"
-                json_add "compression" "$compatible_compression_format"
-                # Build the complete JSON object for this game
-                json_obj=$(json_build)
+                json_obj=$(jq -n --arg game "$game" --arg compression "$compatible_compression_format" \
+                '{ game: $game, compression: $compression }')
                 # Write the final JSON object to the output file, locking it to prevent write race conditions.
                 (
                 flock -x 200
-                jq --argjson obj "$json_obj" '. + [$obj]' "$output_file" > "$output_file.tmp" && mv "$output_file.tmp" "$output_file"
+                jq --argjson obj "$json_obj" '. + [$obj]' "$compressible_games_list" > "$compressible_games_list.tmp" && mv "$compressible_games_list.tmp" "$compressible_games_list"
                 ) 200>"$RD_FILE_LOCK"
               fi
               ;;
@@ -136,7 +124,15 @@ api_find_compatible_games() {
   done < <(printf '%s\n' "$compressible_systems_list")
   wait # wait for background tasks to finish
 
-  final_json=$(cat "$output_file")
+  local final_json=$(cat "$compressible_games_list" | jq 'sort_by([
+                                                            ( .game
+                                                              | sub(".*/";"")
+                                                              | test("^[0-9]")
+                                                              | not
+                                                            ),
+                                                            ( .game | sub(".*/";"") )
+                                                          ])')
+  rm "$compressible_games_list"
 
   echo "$final_json"
 }
