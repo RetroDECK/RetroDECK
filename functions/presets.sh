@@ -8,50 +8,9 @@ change_preset_dialog() {
   local preset="$1"
   pretty_preset_name=${preset//_/ }  # Preset name prettification
   pretty_preset_name=$(echo "$pretty_preset_name" | awk '{for(i=1;i<=NF;i++){$i=toupper(substr($i,1,1))substr($i,2)}}1')
-  current_preset_settings=()
-  all_emulators_in_preset=""
 
-  # Read preset options from components manifest.json files
-  while IFS= read -r manifest_file; do
-    log d "Found component manifest $manifest_file"
-
-    # Flatten JSON file into needed info to minimize jq actions
-    local json_info=$(jq -r --arg preset "$preset" '
-                      # Grab the first top‑level key into $system_name
-                      (keys_unsorted[0]) as $system_name
-                      | .[$system_name] as $sys
-
-                      # Now test if its .presets object has our preset name
-                      | if ($sys.presets // {} | has($preset)) then
-                          {
-                            found: true,
-                            system_name: $system_name,
-                            data: {
-                              system_friendly_name: $sys.name,
-                              description: $sys.description
-                            }
-                          }
-                        else
-                          { found: false }
-                        end
-                    ' "$manifest_file")
-
-    # Check if file contains the key in presets object
-    if [[ $(echo "$json_info" | jq -r '.found') == "true" ]]; then
-      log d "Manifest file $manifest_file contains the preset $preset"
-      local system_name=$(echo "$json_info" | jq -r '.system_name')
-      local system_friendly_name=$(echo "$json_info" | jq -r '.data.system_friendly_name')
-      local system_value=$(get_setting_value "$rd_conf" "$system_name" "retrodeck" "$preset")
-      local system_desc=$(echo "$json_info" | jq -r '.data.description')
-
-      if [[ -n $all_emulators_in_preset ]]; then
-        all_emulators_in_preset+=","
-      fi
-      all_emulators_in_preset+="$system_name" # Build a list of all emulators in case user selects "Enable All"
-      # Append three values: the current enabled state, a pretty name, and the internal system name.
-      current_preset_settings=("${current_preset_settings[@]}" "$system_value" "$system_friendly_name" "$system_desc" "$system_name")
-    fi
-  done < <(find "$RD_MODULES" -maxdepth 2 -mindepth 2 -type f -name "manifest.json")
+  parse_json_to_array current_preset_settings_temp api_get_current_preset_settings cheevos
+  bash_rearranger "2 3 4 1" current_preset_settings_temp current_preset_settings
 
   # Show the checklist with extra buttons for "Enable All" and "Disable All"
   choice=$(rd_zenity \
