@@ -142,10 +142,6 @@ process_request() {
     "check_status")
       echo "{\"status\":\"success\",\"request_id\":\"$request_id\"}" > "$response_pipe"
       ;;
-    "wait")
-      local result=$(wait_example_function "$data")
-      echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
-      ;;
     "get")
       case $data in
         "compressible_games")
@@ -170,11 +166,4 @@ process_request() {
   rm -f "$response_pipe"
   } &
 
-}
-
-wait_example_function() {
-  # This is a dummy function used for API testing only. All it does is sleep for the amount of seconds provided in the "data" field of the received JSON object
-  local input="$1"
-  sleep "$1"   # Dummy implementation for demonstration
-  echo "{\"waited\":\"waited $input seconds\"}"
 }
