@@ -5,8 +5,12 @@
 # RetroDECK on your device!
 
 <p float="center">
-<img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen01.jpeg?raw=true" alt="screenshot" width="300"/>
-<img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen06.jpeg?raw=true" alt="screenshot" width="300"/>
+<img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen01.jpeg?raw=true" alt="screenshot" width="150"/>
+<img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen02.jpeg?raw=true" alt="screenshot" width="150"/>
+<img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen03.jpeg?raw=true" alt="screenshot" width="150"/>
+<img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen04.jpeg?raw=true" alt="screenshot" width="150"/>
+<img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen05.jpeg?raw=true" alt="screenshot" width="150"/>
+<img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen06.jpeg?raw=true" alt="screenshot" width="150"/>
 </p>
 
 Instead of having several different emulators, game engines, other systems and frontends on your Linux/SteamOS system you only need one: **RetroDECK**.
