@@ -45,28 +45,30 @@ steam_sync() {
                               if (match($0, /<path>([^<]+)<\/path>/, arr))
                                 print arr[1]
      }' "$gamelist")
-    log d "Favorites found:"
-    log d "$system_favorites"
-    while read -r game_path; do
-      local game="${game_path#./}" # Remove leading ./
-      if [[ -f "$roms_folder/$system/$game" ]]; then # Validate file exists and isn't a stale ES-DE entry for a removed file
-        # Construct launch options with the rom path in quotes, to handle spaces
-        local game_title=$(awk -v search_path="$game_path" 'BEGIN { RS="</game>"; FS="\n" }
-                                                            /<path>/ {
-                                                            if (match($0, /<path>([^<]+)<\/path>/, path) && path[1] == search_path) {
-                                                              if (match($0, /<name>([^<]+)<\/name>/, name))
-                                                                print name[1]
-                                                              }
-                                                            }' "$gamelist")
-        local launchOptions="$launch_command -s $system \"$roms_folder/$system/$game\""
-        log d "Adding entry $launchOptions to favorites manifest."
-        jq --arg title "$game_title" --arg target "$target" --arg launchOptions "$launchOptions" \
-        '. += [{"title": $title, "target": $target, "launchOptions": $launchOptions}]' "${retrodeck_favorites_file}.new" > "${retrodeck_favorites_file}.tmp" \
-        && mv "${retrodeck_favorites_file}.tmp" "${retrodeck_favorites_file}.new"
-      else
-        log d "Game file $roms_folder/$system/$game not found, skipping..."
-      fi
-    done <<< "$system_favorites"
+    if [[ -n "$system_favorites" ]]; then
+      log d "Favorites found:"
+      log d "$system_favorites"
+      while read -r game_path; do
+        local game="${game_path#./}" # Remove leading ./
+        if [[ -f "$roms_folder/$system/$game" || -d "$roms_folder/$system/$game" ]]; then # Validate file/folder exists and isn't a stale ES-DE entry for a removed file
+          # Construct launch options with the rom path in quotes, to handle spaces
+          local game_title=$(awk -v search_path="$game_path" 'BEGIN { RS="</game>"; FS="\n" }
+                                                              /<path>/ {
+                                                              if (match($0, /<path>([^<]+)<\/path>/, path) && path[1] == search_path) {
+                                                                if (match($0, /<name>([^<]+)<\/name>/, name))
+                                                                  print name[1]
+                                                                }
+                                                              }' "$gamelist")
+          local launchOptions="$launch_command -s $system \"$roms_folder/$system/$game\""
+          log d "Adding entry $launchOptions to favorites manifest."
+          jq --arg title "$game_title" --arg target "$target" --arg launchOptions "$launchOptions" \
+          '. += [{"title": $title, "target": $target, "launchOptions": $launchOptions}]' "${retrodeck_favorites_file}.new" > "${retrodeck_favorites_file}.tmp" \
+          && mv "${retrodeck_favorites_file}.tmp" "${retrodeck_favorites_file}.new"
+        else
+          log d "Game file $roms_folder/$system/$game not found, skipping..."
+        fi
+      done <<< "$system_favorites"
+    fi
   done
 
   # Decide if sync needs to happen
@@ -104,7 +106,7 @@ steam_sync_add() {
     rd_zenity --progress \
     --title="Syncing with Steam" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --text="<span foreground='$purple'><b>\t\t\t\tAdding newly favorited games to Steam</b></span>\n\n<b>NOTE: </b>This operation may take some time depending on the size of your library.\nFeel free to leave this in the background and switch to another application.\n\n" \
+    --text="<span foreground='$purple'><b>\t\t\t\tAdding new favorited games to Steam</b></span>\n\n<b>NOTE: </b>This operation may take some time depending on the size of your library.\nFeel free to leave this in the background and switch to another application.\n\n" \
     --pulsate --width=500 --height=150 --auto-close --no-cancel
   else
     steam-rom-manager disable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
