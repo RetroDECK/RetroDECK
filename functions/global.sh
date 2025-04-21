@@ -121,6 +121,14 @@ if [ ! -d "$rd_logs_folder" ]; then
     create_dir "$rd_logs_folder"
 fi
 
+# Initialize the API location and required files, if they don't already exist
+if [[ ! -d "$rd_api_dir" ]]; then
+  create_dir "$rd_api_dir"
+fi
+if [[ ! -e "$RD_FILE_LOCK" ]]; then
+  touch "$RD_FILE_LOCK"
+fi
+
 # We moved the lockfile in $XDG_CONFIG_HOME/retrodeck in order to solve issue #53 - Remove in a few versions
 if [[ -f "$HOME/retrodeck/.lock" ]]; then
   mv "$HOME/retrodeck/.lock" "$lockfile"
