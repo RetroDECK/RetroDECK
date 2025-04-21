@@ -35,8 +35,9 @@ For more details, check out our : [How-to: Start using RetroDECK](https://retrod
 
 RetroDECK currently supports:
 
-- Steam Deck (and similar devices have been reported working)
+- Steam Deck 
 - Linux Desktop
+- ROG Ally (and similar devices have been reported working by the community)
 
 For more information read up here:
 
