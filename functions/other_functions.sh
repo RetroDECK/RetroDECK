@@ -1531,3 +1531,30 @@ add_value_to_array() {
     array_out+=( "${array_in[i]}" )
   done
 }
+
+bash_rearranger() {
+  # This function will rerrange a given Bash array by "groups" with a given index order into a new destination array.
+  # For example if you have an array with the contents ( "four" "three" "two" "one" )
+  # You can use this function to reorder it to ( "one" "two" "three" "four" ) using the order pattern "4 3 2 1"
+  # The function also works with groups in a bash array of any length,
+  # so to change ( "after1" "before1" "after2" "before2" ) to ( "before1" "after1" "before2" "after2" ) you can use a order pattern of "2 1"
+  # The order patterns are always space-delimited groups of integers.
+  # USAGE: bash_rearranger "order pattern" "source_array_name" "dest_array_name"
+  local order_pattern="$1"
+  local -n source_array="$2"
+  local -n dest_array="$3"
+  shift 3
+
+  read -ra order <<< "$order_pattern"
+
+  dest_array=()
+
+  local group_size=${#order[@]}
+  local total_elements=${#source_array[@]}
+
+  for (( i=0; i<total_elements; i+=group_size )); do
+    for array_index in "${order[@]}"; do
+      dest_array+=( "${source_array[i + array_index - 1]}" )
+    done
+  done
+}
