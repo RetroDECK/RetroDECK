@@ -1518,10 +1518,10 @@ add_value_to_array() {
   # Example: You have an array that contains "retrodeck" "RetroDECK" "The RetroDECK Framework" "ppsspp" "PPSSPP" "PlayStation Portable Emulator" and want to use it in a 4-column Zenity checklist, which requires a true/false value in the first element of each data "set"
   # You can accomplish that with the following call:
   # USAGE: add_value_to_array source_array dest_array FALSE 3
-  local -n array_in=$1
-  local -n array_out=$2
-  local value=$3
-  local group_size=$4
+  local -n array_in="$1"
+  local -n array_out="$2"
+  local value="$3"
+  local group_size="$4"
 
   array_out=()
   for ((i=0; i<${#array_in[@]}; i++)); do
