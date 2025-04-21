@@ -4,22 +4,25 @@
 
 # RetroDECK on your device!
 
-<p float="center">
-<img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen01.jpeg?raw=true" alt="screenshot" width="150"/>
-<img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen02.jpeg?raw=true" alt="screenshot" width="150"/>
-<img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen03.jpeg?raw=true" alt="screenshot" width="150"/>
-<img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen04.jpeg?raw=true" alt="screenshot" width="150"/>
-<img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen05.jpeg?raw=true" alt="screenshot" width="150"/>
-<img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen06.jpeg?raw=true" alt="screenshot" width="150"/>
-</p>
-
-Instead of having several different emulators, game engines, other systems and frontends on your Linux/SteamOS system you only need one: **RetroDECK**.
-
 ![Flathub](https://img.shields.io/flathub/downloads/net.retrodeck.retrodeck)
 ![Flathub](https://img.shields.io/flathub/v/net.retrodeck.retrodeck)
 ![Discord](https://img.shields.io/discord/951662718102962256?label=discord)
 ![GitHub](https://img.shields.io/github/license/RetroDECK/RetroDECK)
 [![Documentation Status](https://readthedocs.org/projects/retrodeck/badge/?version=latest)](https://retrodeck.readthedocs.io/en/latest/?badge=latest)
+
+Instead of having several different emulators, game engines, other systems and frontends on your Linux/SteamOS system you only need one: **RetroDECK**.
+
+<p float="center">
+<img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen01.jpeg?raw=true" alt="screenshot" width="150"/>
+<img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen02.jpeg?raw=true" alt="screenshot" width="150"/>
+<img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen03.jpeg?raw=true" alt="screenshot" width="150"/>
+</p>
+
+<p float="center">
+<img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen04.jpeg?raw=true" alt="screenshot" width="150"/>
+<img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen05.jpeg?raw=true" alt="screenshot" width="150"/>
+<img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen06.jpeg?raw=true" alt="screenshot" width="150"/>
+</p>
 
 ---
 
@@ -110,14 +113,14 @@ Yes! Everybody is welcome to contribute in any way possible:
 
 ## Our repositories:
 
-| Name                                                                 | Description                                          |
-|----------------------------------------------------------------------|------------------------------------------------------|
-| https://github.com/RetroDECK/RetroDECK                               | Main repo where the core of the project is           |
-| https://github.com/RetroDECK/Cooker                                  | Test build publication, no code hosted here          |
-| https://github.com/RetroDECK/Wiki                                    | Wiki source code                                     |
-| https://github.com/RetroDECK/RetroDECK-website                       | Website source code                                  |
-| https://github.com/flathub/net.retrodeck.retrodeck                   | Our space in Flathub's organization                  |
-| https://github.com/orgs/RetroDECK/repositories                       | All other components under our GitHub organization   |
+| Name                                                                                   | Description                                           |
+|----------------------------------------------------------------------------------------|-------------------------------------------------------|
+| [RetroDECK/RetroDECK](https://github.com/RetroDECK/RetroDECK)                          | RetroDECK Repo: Main repo of the RetroDECK Project    |
+| [RetroDECK/Cooker](https://github.com/RetroDECK/Cooker)                                | Cooker Repo: Cooker Build publication repo            |
+| [RetroDECK/Wiki](https://github.com/RetroDECK/Wiki)                                    | Wiki Repo: RetroDECK mkdocs-material Wiki source code |
+| [RetroDECK/RetroDECK-website](https://github.com/RetroDECK/RetroDECK-website)          | Website Rep: Retrodeck.net source code                |
+| [flathub/net.retrodeck.retrodeck](https://github.com/flathub/net.retrodeck.retrodeck)  | RetroDECK's flathub repo                              |
+| [RetroDECK/repositories](https://github.com/orgs/RetroDECK/repositories)               | Full Repo lists of all components used in RetroDECK   |
 
 ---
 
