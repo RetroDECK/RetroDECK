@@ -845,6 +845,13 @@ post_update() {
     fi
   fi # end of 0.9.2b
 
+  if [[ $(check_version_is_older_than "$version_being_updated" "0.9.4b") == "true" ]]; then
+    # Between updates of ES-DE to 3.2, it looks like some required graphics files may not be created on an existing install
+    # We will use rsync to ensure that the shipped graphics and the location ES-DE is looking in are correct
+    rsync -rlD --mkpath "/app/retrodeck/graphics/" "/var/config/ES-DE/resources/graphics/"
+    dir_prep "$rdhome/ES-DE/gamelists" "$XDG_CONFIG_HOME/ES-DE/gamelists" # Fix broken symlink in case user had moved an ES-DE folder after they were consolidated into ~/retrodeck/ES-DE
+  fi
+
   # The following commands are run every time.
 
   if [[ -d "$XDG_DATA_HOME/dolphin-emu/Load/DynamicInputTextures" ]]; then # Refresh installed textures if they have been enabled
