@@ -1518,3 +1518,58 @@ source_component_functions() {
     source "$functions_file"
   done < <(find "$RD_MODULES" -maxdepth 2 -mindepth 2 -type f -name "functions.sh")
 }
+
+update_rd_conf() {
+  # This function will update the retrodeck.cfg file with any new settings which are included in the shipped defaults file.
+  # This will allow expansion of the included settings over time while keeping all existing user settings intact.
+
+  for section_name in $(jq -r '. | keys[]' "$rd_defaults"); do
+    if [[ ! "$section_name" == "version" ]]; then
+      if ! jq -e --arg section "$section_name" '. | has($section)' "$rd_conf" > /dev/null; then # If the name of the section doesn't exist at all.
+        log d "Section \"$section_name\" not found in retrodeck.cfg, creating it."
+        tmpfile=$(mktemp)
+        jq --arg section "$section_name" '. += { ($section): {} }' "$rd_conf" > "$tmpfile" && mv "$tmpfile" "$rd_conf"
+      fi
+      for setting_name in $(jq -r --arg section "$section_name" '.[$section] | keys[]' "$rd_defaults"); do
+        if jq -e --arg section "$section_name" --arg setting "$setting_name" '.[$section] | has($setting)' "$rd_conf" > /dev/null; then
+          log d "The section \"$section_name\" already contains the setting \"$setting_name\". Skipping."
+        else
+          default_setting_value=$(jq -r --arg section "$section_name" --arg setting "$setting_name" '.[$section][$setting]' "$rd_defaults")
+          log d "Adding setting \"$setting_name\" with default value '$default_setting_value' to section \"$section_name\"."
+          tmpfile=$(mktemp)
+          jq --arg section "$section_name" --arg setting "$setting_name" --arg value "$default_setting_value" \
+            '.[$section] += { ($setting): $value }' "$rd_conf" > "$tmpfile" && mv "$tmpfile" "$rd_conf"
+        fi
+      done
+    fi
+  done
+}
+
+update_component_presets() {
+  # This function will create, as needed, component entries for different presets in retrodeck.cfg
+  # This will allow us to expand the supported presets for every component in the presets section at once, creating new component entries in each named preset as needed.
+  # USAGE: update_component_presets
+
+  while IFS= read -r manifest_file; do
+    component_name=$(jq -r '. | keys[]' "$manifest_file")
+    if jq -e --arg component "$component_name" '.[$component].presets? != null' "$manifest_file" > /dev/null; then # Check if the given manifest file even has a presets section
+      for preset_name in $(jq -r --arg name "$component_name" '.[$name].presets | keys[]' "$manifest_file"); do
+        if ! jq -e --arg preset "$preset_name" '.presets | has($preset)' "$rd_conf" > /dev/null; then # If the name of the preset doesn't exist at all in retrodeck.cfg
+          log d "Preset \"$preset_name\" not found, creating it."
+          tmpfile=$(mktemp)
+          jq --arg preset "$preset_name" '.presets += { ($preset): {} }' "$rd_conf" > "$tmpfile" && mv "$tmpfile" "$rd_conf"
+        fi
+        if jq -e --arg preset "$preset_name" --arg component "$component_name" '.presets[$preset] | has($component)' "$rd_conf" > /dev/null; then
+          log d "The preset \"$preset_name\" already contains the component \"$component_name\". Skipping."
+        else
+          # Retrieve the first element of the array for the current preset name in the source file, which is the "disabled" state
+          default_preset_value=$(jq -r --arg name "$component_name" --arg preset "$preset_name" '.[$name].presets[$preset][0]' "$manifest_file")
+          log d "Adding component \"$component_name\" with default value '$default_preset_value' to preset \"$preset_name\"."
+          tmpfile=$(mktemp)
+          jq --arg preset "$preset_name" --arg component "$component_name" --arg value "$default_preset_value" \
+            '.presets[$preset] += { ($component): $value }' "$rd_conf" > "$tmpfile" && mv "$tmpfile" "$rd_conf"
+        fi
+      done
+    fi
+  done < <(find "$RD_MODULES" -maxdepth 2 -mindepth 2 -type f -name "manifest.json")
+}
