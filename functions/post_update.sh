@@ -7,6 +7,9 @@ post_update() {
 
   version_being_updated="$version"
 
+  update_rd_conf
+  update_component_presets
+
   export CONFIGURATOR_GUI="zenity"
 
   # Optional userdata backup prior to update
