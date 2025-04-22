@@ -81,19 +81,15 @@ modules:
     buildsystem: simple
     build-commands:
       - |
-
-        # VERSION INITIALIZATION
-        source "automation_tools/version_extractor.sh"
-        VERSION=$(fetch_actual_version)
-
         # Check out the current Git branch
         git checkout ${GITHUB_REF_NAME}
+        echo "GitHub Ref Name is ${GITHUB_REF_NAME}"
 
         # Create the retrodeck directory in the Flatpak destination
         mkdir -p ${FLATPAK_DEST}/retrodeck/
 
         # Write the version number to the retrodeck version file
-        echo $VERSION >> ${FLATPAK_DEST}/retrodeck/version
+        cp version ${FLATPAK_DEST}/retrodeck/version
 
         # Display the contents of the version file
         cat ${FLATPAK_DEST}/retrodeck/version
