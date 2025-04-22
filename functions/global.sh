@@ -43,22 +43,11 @@ if [[ $native_resolution == true ]]; then
 fi
 log i "CPU: Using $max_threads out of $cpu_cores available CPU cores for multi-threaded operations"
 
-source /app/libexec/050_save_migration.sh
-source /app/libexec/api_data_processing.sh
-source /app/libexec/api_server.sh
-source /app/libexec/json_processing.sh
-source /app/libexec/checks.sh
-source /app/libexec/compression.sh
-source /app/libexec/dialogs.sh
-source /app/libexec/other_functions.sh
-source /app/libexec/multi_user.sh
-source /app/libexec/framework.sh
-source /app/libexec/post_update.sh
-source /app/libexec/prepare_component.sh
-source /app/libexec/presets.sh
-source /app/libexec/configurator_functions.sh
-source /app/libexec/run_game.sh
-source /app/libexec/steam_sync.sh
+for file in /app/libexec/*.sh; do
+  if [[ -f "$file" && ! "$file" == "/app/libexec/global.sh" && ! "$file" == "/app/libexec/post_build_check.sh" ]]; then
+    source "$file"
+  fi
+done
 
 # Static variables
 rd_conf="$XDG_CONFIG_HOME/retrodeck/retrodeck.cfg"                                                            # RetroDECK config file path
@@ -114,7 +103,7 @@ export ESDE_APPDATA_DIR="$XDG_CONFIG_HOME/ES-DE"
 es_settings="$XDG_CONFIG_HOME/ES-DE/settings/es_settings.xml"
 es_source_logs="$XDG_CONFIG_HOME/ES-DE/logs"
 
-source_component_paths
+source_component_functions
 
 # Initialize logging location if it doesn't exist, before anything else happens
 if [ ! -d "$rd_logs_folder" ]; then

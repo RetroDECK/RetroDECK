@@ -290,21 +290,6 @@ dir_prep() {
   log i "$symlink is now $real"
 }
 
-rd_zenity() {
-  # This function replaces the standard 'zenity' command and filters out annoying GTK errors on Steam Deck
-  export CONFIGURATOR_GUI="zenity"
-
-  # env GDK_SCALE=1.5 \
-  #     GDK_DPI_SCALE=1.5 \
-  zenity 2> >(grep -v 'Gtk' >&2) "$@"
-
-  local status=${PIPESTATUS[0]}  # Capture the exit code of 'zenity'
-
-  unset CONFIGURATOR_GUI
-  
-  return "$status"
-}
-
 update_rpcs3_firmware() {
   create_dir "$roms_folder/ps3/tmp"
   chmod 777 "$roms_folder/ps3/tmp"
@@ -1526,12 +1511,12 @@ check_if_updated() {
   fi
 }
 
-source_component_paths() {
+source_component_functions() {
   # This function will iterate the paths.sh file for every installed component and source it for use in the greater application
-  while IFS= read -r paths_file; do
-    log d "Found component paths file $paths_file"
-    source "$paths_file"
-  done < <(find "$RD_MODULES" -maxdepth 2 -mindepth 2 -type f -name "paths.sh")
+  while IFS= read -r functions_file; do
+    log d "Found component paths file $functions_file"
+    source "$functions_file"
+  done < <(find "$RD_MODULES" -maxdepth 2 -mindepth 2 -type f -name "functions.sh")
 }
 
 parse_json_to_array() {
