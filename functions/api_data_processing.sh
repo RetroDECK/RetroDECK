@@ -137,12 +137,10 @@ api_find_compressible_games() {
   echo "$final_json"
 }
 
-api_find_all_components() {
-  # This function will return an array of JSON objects with the names, user-friendly names and descriptions of every installed component.
-  # USAGE: api_find_all_components
+api_get_all_components() {
 
   # Initialize the empty JSON file meant for final output
-  all_components_obj="$(mktemp)"
+  local all_components_obj="$(mktemp)"
   echo '[]' > "$all_components_obj"
 
   while IFS= read -r manifest_file; do
@@ -165,8 +163,8 @@ api_find_all_components() {
       local system_name=$(echo "$json_info" | jq -r '.system_name' )
       local system_friendly_name=$(echo "$json_info" | jq -r '.data.system_friendly_name')
       local description=$(echo "$json_info" | jq -r '.data.description')
-      json_obj=$(jq -n --arg name "$system_name" --arg friendly_name "$system_friendly_name" --arg desc "$description" \
-                '{ system_name: $name, system_friendly_name: $friendly_name, description: $desc }')
+      local json_obj=$(jq -n --arg name "$system_name" --arg friendly_name "$system_friendly_name" --arg desc "$description" --arg path "$(dirname "$manifest_file")" \
+                '{ system_name: $name, system_friendly_name: $friendly_name, description: $desc, path: $path }')
       (
       flock -x 200
       jq --argjson obj "$json_obj" '. + [$obj]' "$all_components_obj" > "$all_components_obj.tmp" && mv "$all_components_obj.tmp" "$all_components_obj"
