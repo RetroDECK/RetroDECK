@@ -81,6 +81,7 @@
                <p>Fixes:</p>
                <ul>
                    <li>COMPRESSOR: An issue with multi-file compression for certain formats.</li>
+                   <li>COMPRESSOR: `.nds` is no more a compressable extension.</li>
                    <li>CONFIGURATOR: Text fixes in various dialogs and menus.</li>
                </ul>
            </description>
