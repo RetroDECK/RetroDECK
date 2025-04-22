@@ -62,7 +62,7 @@ check_for_version_update() {
         choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK" --extra-button="Ignore this version" \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
         --title "RetroDECK - New Update Available" \
-        --text="There is a new version of RetroDECK available: <span foreground='$blue'><b>$online_version</b></span>.\nYou can easily update from the app store you have installed, examples: KDE Discover or Gnome Software.\n\nIf you would like to ignore this notification, click the \"Ignore this version\" button.")
+        --text="A new version of RetroDECK is available: <span foreground='$blue'><b>$online_version</b></span>.\nYou can easily update from your app store, such as KDE Discover or Gnome Software.\n\nTo ignore this notification, click the \"Ignore this version\" button.")
         rc=$? # Capture return code, as "OK" button has no text value
         if [[ $rc == "1" ]]; then # If any button other than "OK" was clicked
           log i "Selected: \"OK\""
@@ -73,7 +73,7 @@ check_for_version_update() {
         choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="Ignore this version" \
           --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
           --title "RetroDECK - New Cooker Version Available" \
-          --text="There is a more recent version of RetroDECK cooker.\nYou are running version <span foreground='$blue'><b>$hard_version</b></span>. The latest is <span foreground='$blue'><b>$online_version</b></span>.\n\nWould you like to update?\nIf you would like to ignore this notification, click the \"Ignore this version\" button.\n\nIf you would like to disable these notifications entirely: disable Online Update Checks in the Configurator.")
+          --text="A new version of RetroDECK cooker is available.\nYou are currently running version: <span foreground='$blue'><b>$hard_version</b></span>. The latest version is: <span foreground='$blue'><b>$online_version</b></span>.\n\nWould you like to update now?\nTo ignore this notification, click the \"Ignore this version\" button.\n\nTo disable these notifications entirely, turn off Online Update Checks in the Configurator")
         rc=$? # Capture return code, as "Yes" button has no text value
         if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
           if [[ $choice == "Ignore this version" ]]; then
@@ -86,7 +86,7 @@ check_for_version_update() {
       fi
     fi
   else # Unable to reach the GitHub API for some reason
-    configurator_generic_dialog "RetroDECK Online Update" "RetroDECK is unable to reach the GitHub API to perform a version check.\nIt's possible that location is being blocked by your network or ISP.\n\nIf the problem continues, you will need to disable internal checks through the Configurator\nand perform updates manually through the Discover store."
+    configurator_generic_dialog "RetroDECK can't reach the GitHub API to check for updates.\nThis might be because your network or ISP is blocking the connection or GitHub is down.\n\nIf this keeps happening, disable Update Notifications checls in the Configurator."
   fi
 }
 

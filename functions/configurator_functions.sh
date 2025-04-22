@@ -57,7 +57,7 @@ configurator_check_multifile_game_structure() {
     rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - Verify Multi-file Structure" \
-    --text="The following games were found to have the incorrect folder structure:\n\n$(find "$roms_folder" -maxdepth 2 -mindepth 2 -type d ! -name "*.m3u" ! -name "*.ps3")\n\nIncorrect folder structure can result in failure to launch games or saves being in the incorrect location.\n\nPlease see the RetroDECK wiki for more details!\n\nYou can find this list of games in ~/retrodeck/logs"
+    --text="The following games have an incorrect folder structure:\n\n$(find "$roms_folder" -maxdepth 2 -mindepth 2 -type d ! -name "*.m3u" ! -name "*.ps3")\n\nIncorrect folder structure can cause games to fail to launch or save files to be in the wrong location.\n\nPlease check the RetroDECK Wiki for more details.\n\nYou can find this list of games under <span foreground='purple'>/retrodeck/logs</span>."
   else
     configurator_generic_dialog "RetroDECK Configurator - Verify Multi-file Structure" "No incorrect multi-file game folder structures found."
   fi

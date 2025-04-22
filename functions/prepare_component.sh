@@ -117,7 +117,7 @@ prepare_component() {
         set_setting_value "$es_settings" "ROMDirectory" "$roms_folder" "es_settings"
         set_setting_value "$es_settings" "MediaDirectory" "$media_folder" "es_settings"
         set_setting_value "$es_settings" "UserThemeDirectory" "$themes_folder" "es_settings"
-        dir_prep "$rdhome/gamelists" "$XDG_CONFIG_HOME/ES-DE/gamelists"
+        dir_prep "$rdhome/ES-DE/gamelists" "$XDG_CONFIG_HOME/ES-DE/gamelists"
       fi
     fi
 

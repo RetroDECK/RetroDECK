@@ -20,7 +20,7 @@ configurator_process_complete_dialog() {
   rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Quit" --extra-button="OK" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
   --title "RetroDECK Configurator Utility - Process Complete" \
-  --text="The process of $1 is now complete.\n\nYou may need to quit and restart RetroDECK for your changes to take effect\n\nClick OK to return to the Main Menu or Quit to quit RetroDECK."
+  --text="The process of $1 is now complete.\n\nYou may need to restart RetroDECK for the changes to take effect.\n\nClick OK to return to the Main Menu or Quit to exit RetroDECK."
 
   if [ ! $? == 0 ]; then # OK button clicked
       configurator_welcome_dialog
@@ -136,14 +136,14 @@ configurator_move_folder_dialog() {
             rd_zenity --icon-name=net.retrodeck.retrodeck --error --no-wrap \
             --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
             --title "RetroDECK Configurator Utility - Move Directories" \
-            --text="The destination directory you have selected does not have enough free space for the files you are trying to move.\n\nPlease select a new destination or free up some space."
+            --text="The destination you selected does not have enough free space for the files you are trying to move.\n\nPlease choose a new destination or free up some space."
           fi
         fi
       else # If the user didn't pick any custom destination, or the destination picked is unwritable
         if [[ ! -z "$dest_root" ]]; then
           configurator_generic_dialog "RetroDECK Configurator - Move Folder" "No destination was chosen, so no files have been moved."
         else
-          configurator_generic_dialog "RetroDECK Configurator - Move Folder" "The chosen destination is not writable.\nNo files have been moved.\n\nThis can happen when trying to select a location that RetroDECK does not have permission to write.\nThis can normally be fixed by adding the desired path to the RetroDECK permissions with Flatseal."
+          configurator_generic_dialog "RetroDECK Configurator - Move Folder" "The chosen destination is not writable.\nNo files have been moved.\n\nThis can happen if RetroDECK does not have permission to write to the selected location.\nYou can usually fix this by adding the desired path to RetroDECK permissions using Flatseal."
         fi
       fi
     ;;
@@ -198,17 +198,17 @@ get_cheevos_token_dialog() {
   # USAGE: get_cheevos_token_dialog
 
   local cheevos_info=$(rd_zenity --forms --title="Cheevos" \
-  --text="Username and password." \
+  --text="Add your RetroAchievements: Username & Password." \
   --separator="^" \
   --add-entry="Username" \
   --add-password="Password")
 
   IFS='^' read -r cheevos_username cheevos_password < <(printf '%s\n' "$cheevos_info")
   if cheevos_info=$(get_cheevos_token "$cheevos_username" "$cheevos_password"); then
-    log d "Cheevos login succeeded"
+    log d "Cheevos: RetroAchievements Login Succeeded"
     echo "$cheevos_info"
   else # login failed
-    log d "Cheevos login failed"
+    log d "Cheevos: RetroAchievements Login Failed"
     return 1
   fi
 }
@@ -220,7 +220,7 @@ desktop_mode_warning() {
   # USAGE: desktop_mode_warning
 
   if [[ $(check_desktop_mode) == "true" && $desktop_mode_warning == "true" ]]; then
-    local message='You appear to be running RetroDECK in the Steam Deck'\''s Desktop mode!\n\nSome functions of RetroDECK may not work properly in Desktop mode, such as the Steam Deck'\''s normal controls.\n\nRetroDECK is best enjoyed in Game mode!\n\nDo you still want to proceed?'
+    local message='You appear to be running RetroDECK in the SteamOS <span foreground='$purple'>Desktop Mode</span>\n\nSome functions of RetroDECK may not work properly in SteamOS <span foreground='$purple'>Desktop Mode</span>.\n\nRetroDECK is best enjoyed in <span foreground='$purple'>Game mode</span> on SteamOS.\n\nDo you still want to proceed?'
     log i "Showing message:\n$message"
     choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="Never show this again" \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -248,7 +248,7 @@ low_space_warning() {
   if [[ $low_space_warning == "true" ]]; then
     local used_percent=$(df --output=pcent "$HOME" | tail -1 | tr -d " " | tr -d "%")
     if [[ "$used_percent" -ge 90 && -d "$HOME/retrodeck" ]]; then # If there is any RetroDECK data on the main drive to move
-      local message='Your main drive is over 90% full!\n\nIf your drive fills completely this can lead to data loss or system crash.\n\nPlease consider moving some RetroDECK folders to other storage locations using the Configurator.'
+      local message='Your main drive is over <span foreground='$purple'>90%</span> full!\n\nIf it fills up completely, you could lose data or experience a system crash.\n\nPlease move some RetroDECK folders to other storage locations using the Configurator or free up some space.'
       log i "Showing message:\n$message"
       choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="OK" --extra-button="Never show this again" \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \

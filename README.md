@@ -4,119 +4,133 @@
 
 # RetroDECK on your device!
 
-<p float="center">
-<img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen05.jpeg?raw=true" alt="screenshot" width="300"/>
-<img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen06.jpeg?raw=true" alt="screenshot" width="300"/>
-</p>
-
-Instead of having several different emulators, engines and frontends on your Linux/SteamOS system you only need one: RetroDECK.
-
 ![Flathub](https://img.shields.io/flathub/downloads/net.retrodeck.retrodeck)
 ![Flathub](https://img.shields.io/flathub/v/net.retrodeck.retrodeck)
 ![Discord](https://img.shields.io/discord/951662718102962256?label=discord)
 ![GitHub](https://img.shields.io/github/license/RetroDECK/RetroDECK)
 [![Documentation Status](https://readthedocs.org/projects/retrodeck/badge/?version=latest)](https://retrodeck.readthedocs.io/en/latest/?badge=latest)
 
-**The RetroDECK Wiki & FAQ**
+Instead of having several different emulators, game engines, other systems and frontends on your Linux/SteamOS system you only need one: **RetroDECK**.
 
-Please check out the these links for even more information: 
+<p float="center">
+<img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen01.jpeg?raw=true" alt="screenshot" width="150"/>
+<img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen02.jpeg?raw=true" alt="screenshot" width="150"/>
+<img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen03.jpeg?raw=true" alt="screenshot" width="150"/>
+</p>
 
-- [RetroDECK Wiki](https://retrodeck.readthedocs.io/en/latest/) 
-- [RetroDECK FAQ](https://retrodeck.readthedocs.io/en/latest/wiki_general/faq/)
+<p float="center">
+<img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen04.jpeg?raw=true" alt="screenshot" width="150"/>
+<img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen05.jpeg?raw=true" alt="screenshot" width="150"/>
+<img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen06.jpeg?raw=true" alt="screenshot" width="150"/>
+</p>
 
-# How do I start using RetroDECK?
-Basically just download it from Flathub, put your roms/games and needed bioses and just play. 
+---
 
-Read our getting started guide here:
+## What is RetroDECK?
 
-[How to: Start using RetroDECK](https://retrodeck.readthedocs.io/en/latest/wiki_general/retrodeck-start/)
+RetroDECK is an all-in-one retro gaming platform with built-in emulators, game engines, and systems. It's perfect for devices like the Steam Deck or Linux Desktop. It is a self-contained [Flatpak application](https://flathub.org/apps/net.retrodeck.retrodeck) with the goal to provide everything you need for retro gaming right out of the box. With the `RetroDECK Framework`, `RetroDECK RetroENGINE` and `RetroDECK Configurator` it integrates and manage various emulators, game engines and other software, allowing you to play your favorite retro games in one complete package.
 
-## What devices/systems does RetroDECK support: 
+### How do I start using RetroDECK?
+
+1. Download RetroDECK from Flathub.
+2. Add your ROMs/games and the necessary BIOS files.
+3. Start playing!
+
+For more details, check out our : [How-to: Start using RetroDECK](https://retrodeck.readthedocs.io/en/latest/wiki_general/retrodeck-start/)
+
+### What devices/systems does RetroDECK support: 
+
 RetroDECK currently supports:
 
-- Steam Deck
+- Steam Deck 
 - Linux Desktop
+- ROG Ally (and similar devices have been reported working by the community)
 
 For more information read up here:
 
 [Supported Systems](https://retrodeck.readthedocs.io/en/latest/wiki_general/supported-devices/)
 
-## What is RetroDECK?
-RetroDECK is an [ES-DE](https://es-de.org) powered Linux [Flatpak application](https://flathub.org/apps/net.retrodeck.retrodeck) that thanks to its `RetroDECK Framework` it builds-in and manage a variety of emulators and other software that allows you to play your favorite retro (and even not-so-retro) games in one complete package.
 
-### So what does that mean?
-It means that RetroDECK provides all the emulators, systems and a frontend. RetroDECK configures them for you and puts them into one application you can download from Flathub.
+### What Does RetroDECK Offer?
 
-By being one application RetroDECK can put all important files in one location for all the emulators, instead of having them spread out over your entire system and even add features on top to orchestrate them seamlessly.
+RetroDECK combines all the emulators, game engines, systems, and a frontend into one application available on Flathub. This centralizes all important files and seamlessly integrates additional features.
 
+RetroDECK also comes with specific features such as:
 
-### The RetroDECK Framework
-As previously mentioned, RetroDECK also adds the `RetroDECK Framework` on top of the emulators and ES-DE interface which allows deeper integrations between emulators and easier exposure to a variety of features that you otherwise need to set on a per emulator basis to create a uniformity between them.
+- **RetroDECK Framework**: Enhances emulators and the ES-DE interface for deeper integration and easier access to features.
 
-The `RetroDECK Configurator` is a `Utility` that exposes some parts of the `RetroDECK Framework` to the RetroDECK users.
+- **RetroDECK RetroENGINE**: A headless game runner for power users and developers.
 
-**What can the RetroDECK Framework and by extent the RetroDECK Configurator do?**
+- **RetroDECK Configurator**: A multi-tool utility that allows you to change various aspects of built-in systems without needing to enter each system's settings interface.
+
+### Features of the RetroDECK Framework and Configurator
 
 It can help with:
 
-- Sync your favorite games with `Steam`
-- Run your games with a simple double click from a Desktop environment thanks to the [RetroENGINE](https://retrodeck.readthedocs.io/en/latest/wiki_system_guides/retroengine/retroengine-guide/)
-- Check your `BIOS` files
-- Auto installing some free `BIOS`es
-- Compressing games
-- Easier `Texture Pack` and `Mod` management
-- File management
-- Tools for troubleshooting (Multi-File Structure Checker, Partial or full reset of functions)
-- Install prebuilt Steam Input profiles for devices like the Steam Deck and external controllers
-- Easier management of `roms`, `scraped media`, `screenshots`, `saves / states` `gamelists` and more
-- Give access to global presets that can be activated to configure things over many emulators in one go like: `RetroAchievements`
-`Borders` `Widescreen Mode` `Swaping A/B X/Y for Nintendo Games`
+- Sync your favorite games with Steam.
+- Run games with a double-click from a desktop environment using RetroENGINE.
+- Check and auto-install some BIOS files.
+- Compress games.
+- Manage Texture Packs and Mods easily.
+- File management tools.
+- Troubleshooting tools (Multi-File Structure Checker, partial or full reset of functions).
+- Install prebuilt Steam Input profiles for devices like the Steam Deck and external controllers.
+- Manage ROMs, scraped media, screenshots, saves/states, gamelists, and more.
+- Access global presets to configure multiple emulators at once, such as:
+  - RetroAchievements.
+  - Borders.
+  - Widescreen Mode.
+  - Swapping A/B X/Y for Nintendo games.
+  - and more!
 
 
 For our long term vision you can check out the following wiki page:
 [RetroDECK: Visions and Goals](https://retrodeck.readthedocs.io/en/latest/wiki_about/visions-and-goals/)
 
+--- 
+
+## Questions:
+
 ### How to get support? 
+
 Use the supports channels on [Discord](https://discord.gg/WDc5C9YWMx) `🤝-community-support` and `🆘-support`.
-### The RetroDECK community:
-[Website](https://retrodeck.net) <br/>
-[Wiki](https://retrodeck.readthedocs.io) <br/>
-[Discord](https://discord.gg/WDc5C9YWMx)<br/>
-[Lemmy](https://lemmy.zip/c/retrodeck)<br/>
-[Bluesky](https://app.bsky.cz/profile/retrodeck.net)<br/>
-[Subreddit](https://www.reddit.com/r/retrodeck)<br/>
-[Matrix](https://matrix.to/#/#retrodeck:matrix.org)
 
 ### Is RetroDECK in Beta?
-Yes, but is perfectly fine and safe for the daily use.
-Here you can read more about the beta period:
 
-[RetroDECK: Beta period](https://retrodeck.readthedocs.io/en/latest/wiki_about/what-is-retrodeck/#retrodeck-is-currently-in-in-beta)
+RetroDECK is still under development, and big updates can change or add features.
+
+It is fine for daily use, but some minor and major features are still being added before we consider it a full release. 
+
+Read more here: [RetroDECK: Beta period](https://retrodeck.readthedocs.io/en/latest/wiki_about/what-is-retrodeck/#retrodeck-is-currently-in-in-beta)
 
 ### Can I contribute to the project?
-Yes, off course! <br>
-Read up here on how to help out, there is something for everyone:
 
-[How to: Contribute to RetroDECK](https://retrodeck.readthedocs.io/en/latest/wiki_about/contibute-retrodeck/)
+Yes! Everybody is welcome to contribute in any way possible:
 
-## Build RetroDECK locally
-Please follow [this guide](https://retrodeck.readthedocs.io/en/latest/wiki_development/general/build-locally/).
+[How-to: Contribute to RetroDECK](https://retrodeck.readthedocs.io/en/latest/wiki_about/contibute-retrodeck/)
+
+---
 
 ## Our repositories:
-| Name          | Description  |
-|-------------------------------------------------------------|-----------------------------------------------------------|
-| [RetroDECK](https://github.com/RetroDECK/RetroDECK)          | This one, our main repo where the core of the project is  |
-| [Cooker](https://github.com/RetroDECK/Cooker)  | Where we publish our test build, no code is hosted here |
-| [RetroDECK/Wiki](https://github.com/RetroDECK/Wiki)  | Where our wiki source code is |
-| [RetroDECK-website](https://github.com/RetroDECK/RetroDECK-website)  | Where our website source code is |
-| [RetroDECK on Flathub](https://github.com/flathub/net.retrodeck.retrodeck) | Our little space in Flathub's organization                 |
-| [RetroDECK components](https://github.com/orgs/RetroDECK/repositories)   | All the other components can be found under our organization on GitHub |
 
-# The RetroDECK Wiki
-Please check out the [Wiki](https://retrodeck.readthedocs.io) for even more information.
+| Name                                                                                   | Description                                           |
+|----------------------------------------------------------------------------------------|-------------------------------------------------------|
+| [RetroDECK/RetroDECK](https://github.com/RetroDECK/RetroDECK)                          | RetroDECK Repo: Main repo of the RetroDECK Project    |
+| [RetroDECK/Cooker](https://github.com/RetroDECK/Cooker)                                | Cooker Repo: Cooker Build publication repo            |
+| [RetroDECK/Wiki](https://github.com/RetroDECK/Wiki)                                    | Wiki Repo: RetroDECK mkdocs-material Wiki source code |
+| [RetroDECK/RetroDECK-website](https://github.com/RetroDECK/RetroDECK-website)          | Website Rep: Retrodeck.net source code                |
+| [flathub/net.retrodeck.retrodeck](https://github.com/flathub/net.retrodeck.retrodeck)  | RetroDECK's flathub repo                              |
+| [RetroDECK/repositories](https://github.com/orgs/RetroDECK/repositories)               | Full Repo lists of all components used in RetroDECK   |
 
-## The FAQ
-The RetroDECK [FAQ](https://retrodeck.readthedocs.io/en/latest/wiki_faq/faq-rd-general/) pahes on the wiki has a vast variety of questions and answers. Please be sure to check all the FAQ pages.
+---
 
-# How to get support? 
-Use the supports channels on [Discord](https://discord.gg/WDc5C9YWMx).
+## The RetroDECK Community:
+
+- [RetroDECK Blog](https://retrodeck.readthedocs.io/en/latest/blog/)
+- [RetroDECK Wiki](https://retrodeck.readthedocs.io/)
+- [Bluesky](https://bsky.app/profile/retrodeck.net)
+- [Discord](https://discord.gg/WDc5C9YWMx)
+- [Lemmy](https://lemmy.zip/c/retrodeck)
+- [Matrix](https://matrix.to/#/#retrodeck:matrix.org)
+- [Reddit](https://www.reddit.com/r/retrodeck)
+- [Revolt](https://rvlt.gg/StVaEc0w)
