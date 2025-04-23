@@ -81,10 +81,10 @@
                <p>Fixes:</p>
                <ul>
                    <li>COMPRESSOR: An issue with multi-file compression for certain formats.</li>
-                   <li>COMPRESSOR: `.nds` is no more a compressable extension.</li>
                    <li>CONFIGURATOR: Text fixes in various dialogs and menus.</li>
                    <li>MOVE: Fixed bug in Move ES-DE Option that made ES-DE forget the gamelists location.</li>
                    <li>STEAM SYNC: Fixed .m3u file support.</li>
+                   <li>ES-DE: Fixed a bug that made .zip files hidden for NDS</li>
                </ul>
            </description>
        </release>
