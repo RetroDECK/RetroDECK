@@ -248,23 +248,25 @@ build_preset_config() {
         ;;
 
         "enable" )
-          log d "Enabling/disabling file: $read_setting_name"
           target_file=$(echo "$current_preset_object" | jq -r '.target_file')
           if [[ ! "$read_system_enabled" == "false" ]]; then
+            log d "Enabling file: $read_setting_name"
             enable_file "$read_setting_name"
           else
+            log d "Disabling file: $read_setting_name"
             disable_file "$read_setting_name"
           fi
         ;;
 
         "install" )
-          log d "Installing/removing files for preset $read_setting_name"
-          source_file=$(echo "$current_preset_object" | jq -r '.source_file')
-          target_file=$(echo "$current_preset_object" | jq -r '.target_file')
+          source_file=$(echo "$current_preset_object" | jq -r '.source')
+          target_file=$(echo "$current_preset_object" | jq -r '.destination')
           if [[ ! "$read_system_enabled" == "false" ]]; then
+            log d "Installing files for preset $read_setting_name"
             install_preset_files "$source_file" "$target_file"
           else
-            remove_preset_files "$target_file"
+            log d "Removing files for preset $read_setting_name"
+            remove_preset_files "$source_file" "$target_file"
           fi
         ;;
 
