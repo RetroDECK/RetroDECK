@@ -1551,9 +1551,10 @@ update_component_presets() {
   # USAGE: update_component_presets
 
   while IFS= read -r manifest_file; do
+    log d "Examining manifest file $manifest_file"
     component_name=$(jq -r '. | keys[]' "$manifest_file")
-    if jq -e --arg component "$component_name" '.[$component].presets? != null' "$manifest_file" > /dev/null; then # Check if the given manifest file even has a presets section
-      for preset_name in $(jq -r --arg name "$component_name" '.[$name].presets | keys[]' "$manifest_file"); do
+    if jq -e --arg component "$component_name" '.[$component].compatible_presets? != null' "$manifest_file" > /dev/null; then # Check if the given manifest file even has a presets section
+      for preset_name in $(jq -r --arg name "$component_name" '.[$name].compatible_presets | keys[]' "$manifest_file"); do
         if ! jq -e --arg preset "$preset_name" '.presets | has($preset)' "$rd_conf" > /dev/null; then # If the name of the preset doesn't exist at all in retrodeck.cfg
           log d "Preset \"$preset_name\" not found, creating it."
           tmpfile=$(mktemp)
@@ -1563,7 +1564,7 @@ update_component_presets() {
           log d "The preset \"$preset_name\" already contains the component \"$component_name\". Skipping."
         else
           # Retrieve the first element of the array for the current preset name in the source file, which is the "disabled" state
-          default_preset_value=$(jq -r --arg name "$component_name" --arg preset "$preset_name" '.[$name].presets[$preset][0]' "$manifest_file")
+          default_preset_value=$(jq -r --arg name "$component_name" --arg preset "$preset_name" '.[$name].compatible_presets[$preset][0]' "$manifest_file")
           log d "Adding component \"$component_name\" with default value '$default_preset_value' to preset \"$preset_name\"."
           tmpfile=$(mktemp)
           jq --arg preset "$preset_name" --arg component "$component_name" --arg value "$default_preset_value" \
