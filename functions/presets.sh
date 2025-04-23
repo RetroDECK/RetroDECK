@@ -9,8 +9,9 @@ change_preset_dialog() {
   pretty_preset_name=${preset//_/ }  # Preset name prettification
   pretty_preset_name=$(echo "$pretty_preset_name" | awk '{for(i=1;i<=NF;i++){$i=toupper(substr($i,1,1))substr($i,2)}}1')
 
-  parse_json_to_array current_preset_settings_temp api_get_current_preset_settings cheevos
-  bash_rearranger "2 3 4 1" current_preset_settings_temp current_preset_settings
+  parse_json_to_array current_preset_settings_raw api_get_current_preset_settings cheevos
+  keep_parts_of_array "1 2 5 6" current_preset_settings_raw current_preset_settings_filtered "6"
+  bash_rearranger "4 2 3 1" current_preset_settings_filtered current_preset_settings
 
   # Show the checklist with extra buttons for "Enable All" and "Disable All"
   choice=$(rd_zenity \
@@ -38,8 +39,7 @@ change_preset_dialog() {
   # Handle extra button responses.
   if [ "$choice" == "Enable All" ]; then
       log d "Enable All selected"
-      # Assign the comma-separated list of all preset system names as the choice
-      choice="$all_emulators_in_preset"
+      choice=$(api_get_current_preset_settings "$preset" | jq -r '[.[].system_name] | join(",")')
   elif [ "$choice" == "Disable All" ]; then
       log d "Disable All selected"
       # Assign empty string as choice, as all systems will be disabled
@@ -49,7 +49,7 @@ change_preset_dialog() {
   # Call make_preset_changes if the user made a selection,
   # or if an extra button was clicked (even if the resulting choice is empty, meaning all systems are to be disabled).
    if [[ "$choice_made" == "true" ]]; then
-    log d "Calling make_preset_changes with choice: $choice"
+    log d "Calling make_preset_changes with preset $preset and choice: $choice"
     (
       make_preset_changes "$preset" "$choice"
     ) | rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
