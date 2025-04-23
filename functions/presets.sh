@@ -83,14 +83,15 @@ build_preset_list_options() {
   do
     all_systems=("${all_systems[@]}" "$system_name")
     system_value=$(get_setting_value "$rd_conf" "$system_name" "retrodeck" "$preset")
-    if jq -e --arg system_name "$system_name" --arg system_value "$system_value" --arg preset "$preset" '.[$system_name].presets[$preset][0] == $system_value' "$RD_MODULES/$system_name/manifest.json" > /dev/null; then # The setting is set to the disabled value for this preset
+    if jq -e --arg system_name "$system_name" --arg system_value "$system_value" --arg preset "$preset" \
+        '.[$system_name].compatible_presets[$preset][0] == $system_value' "$RD_MODULES/$system_name/manifest.json" > /dev/null; then # The setting is set to the disabled value for this preset
       log d "$system_name is currently disabled for preset $preset"
       current_disabled_systems=("${current_disabled_systems[@]}" "$system_name")
     else # The setting is set to some enabled value
       log d "$system_name is currently enabled for preset $preset"
       current_enabled_systems=("${current_enabled_systems[@]}" "$system_name")
     fi
-  done < <(jq -r --arg preset "$1" '.[$preset] | keys[]' "$rd_conf")
+  done < <(jq -r --arg preset "$1" '.presets[$preset] | keys[]' "$rd_conf")
 }
 
 make_preset_changes() {
@@ -157,7 +158,7 @@ build_preset_config() {
   local presets_being_changed="$*"
   log d "Applying presets: $presets_being_changed for system: $system_being_changed"
 
-  read_config_format=$(jq -r '.config_file_format' "$RD_MODULES/$system_being_changed/presets.json")
+  read_config_format=$(jq -r --arg component "$system_being_changed" '.[$component].preset_actions.config_file_format' "$RD_MODULES/$system_being_changed/manifest.json")
   if [[ "$read_config_format" == "retroarch-all" ]]; then
     local retroarch_all="true"
     local read_config_format="retroarch"
@@ -166,22 +167,24 @@ build_preset_config() {
 
   for current_preset in $presets_being_changed
   do
-    read_setting_name="$current_preset"
-    if jq -e --arg system_being_changed "$system_being_changed" --arg preset "$current_preset" '.[$preset] | has($system_being_changed)' "$rd_conf" > /dev/null; then
+    if jq -e --arg system_being_changed "$system_being_changed" --arg preset "$current_preset" '.presets[$preset] | has($system_being_changed)' "$rd_conf" > /dev/null; then
       local read_system_enabled=$(get_setting_value "$rd_conf" "$system_being_changed" "retrodeck" "$current_preset")
       log d "Processing system: $system_being_changed with preset: $current_preset, enabled: $read_system_enabled"
       while IFS= read -r read_setting_name
       do
-        current_preset_object=$(jq -r --arg preset "$current_preset" --arg preset_name "$read_setting_name" '.[$preset][$preset_name]' "$RD_MODULES/$system_being_changed/presets.json")
+        current_preset_object=$(jq -r --arg system "$system_being_changed" --arg preset "$current_preset" --arg preset_name "$read_setting_name" \
+                                  '.[$system].preset_actions[$preset][$preset_name]' "$RD_MODULES/$system_being_changed/manifest.json")
         action=$(echo "$current_preset_object" | jq -r '.action')
-        new_setting_value=$(echo "$current_preset_object" | jq -r '.new_setting_value')
-        section=$(echo "$current_preset_object" | jq -r '.section')
-        target_file=$(echo "$current_preset_object" | jq -r '.target_file')
-        defaults_file=$(echo "$current_preset_object" | jq -r '.defaults_file')
 
         case "$action" in
 
         "change" )
+          log d "Changing config file for preset: $read_setting_name"
+          new_setting_value=$(echo "$current_preset_object" | jq -r '.new_setting_value')
+          section=$(echo "$current_preset_object" | jq -r '.section')
+          target_file=$(echo "$current_preset_object" | jq -r '.target_file')
+          defaults_file=$(echo "$current_preset_object" | jq -r '.defaults_file')
+
           if [[ "$target_file" = \$* ]]; then # Read current target file and resolve if it is a variable
             eval target_file=$target_file
             log d "Target file is a variable name. Actual target $target_file"
@@ -245,11 +248,23 @@ build_preset_config() {
         ;;
 
         "enable" )
-          log d "Enabling file: $read_setting_name"
-          if [[ "$read_system_enabled" == "true" ]]; then
+          log d "Enabling/disabling file: $read_setting_name"
+          target_file=$(echo "$current_preset_object" | jq -r '.target_file')
+          if [[ ! "$read_system_enabled" == "false" ]]; then
             enable_file "$read_setting_name"
           else
             disable_file "$read_setting_name"
+          fi
+        ;;
+
+        "install" )
+          log d "Installing/removing files for preset $read_setting_name"
+          source_file=$(echo "$current_preset_object" | jq -r '.source_file')
+          target_file=$(echo "$current_preset_object" | jq -r '.target_file')
+          if [[ ! "$read_system_enabled" == "false" ]]; then
+            install_preset_files "$source_file" "$target_file"
+          else
+            remove_preset_files "$target_file"
           fi
         ;;
 
@@ -258,7 +273,7 @@ build_preset_config() {
         ;;
 
         esac
-      done < <(jq -r --arg preset "$current_preset" '.[$preset] | keys[]' "$RD_MODULES/$system_being_changed/presets.json")
+      done < <(jq -r --arg system "$system_being_changed" --arg preset "$current_preset" '.[$system].preset_actions[$preset] | keys[]' "$RD_MODULES/$system_being_changed/manifest.json")
     fi
   done
 }
