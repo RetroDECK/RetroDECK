@@ -124,9 +124,6 @@ Yes! Everybody is welcome to contribute in any way possible:
 | [flathub/net.retrodeck.retrodeck](https://github.com/flathub/net.retrodeck.retrodeck)  | Flathub Repo: net.retrodeck.retrodeck                 |
 | [RetroDECK/repositories](https://github.com/orgs/RetroDECK/repositories)               | Full Org Repo : All other repos in RetroDECK          |
 
-
-
-
 ---
 
 ## The RetroDECK Community:
