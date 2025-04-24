@@ -132,30 +132,84 @@ process_request() {
 
   # Process request asynchronously
   {
-  local data
-  data=$(echo "$json_input" | jq -r '.data // empty')
-  if [[ -z "$data" ]]; then
-    echo "{\"status\":\"error\",\"message\":\"Missing required field: data\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+  local request_data
+  request_obj=$(echo "$json_input" | jq -r '.request // empty')
+  if [[ -z "$request_obj" ]]; then
+    echo "{\"status\":\"error\",\"message\":\"Missing required field: request\",\"request_id\":\"$request_id\"}" > "$response_pipe"
     return 1
   fi
+  local requested_data=$(echo "$request_obj" | jq -r '.requested_data')
   case "$action" in
     "check_status")
       echo "{\"status\":\"success\",\"request_id\":\"$request_id\"}" > "$response_pipe"
       ;;
     "get")
-      case $data in
+      case $requested_data in
         "compressible_games")
-          local compression_format=$(echo "$json_input" | jq -r '.format // empty')
+          local compression_format=$(echo "$request_obj" | jq -r '.format // empty')
           if [[ -n "$compression_format" ]]; then
             local result
-            if result=$(api_find_compatible_games "$compression_format"); then
+            if result=$(api_get_compressible_games "$compression_format"); then
               echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
             else
               echo "{\"status\":\"error\",\"message\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
             fi
+          else
+            echo "{\"status\":\"error\",\"message\":\"missing request value: format\",\"request_id\":\"$request_id\"}" > "$response_pipe"
           fi
           ;;
+
+        "all_components" )
+          local result
+          if result=$(api_get_all_components); then
+            echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
+          else
+            echo "{\"status\":\"error\",\"message\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
+          fi
+        ;;
+
+        "setting_value" )
+          local setting_file=$(echo "$request_obj" | jq -r '.setting_file // empty')
+          local setting_name=$(echo "$request_obj" | jq -r '.setting_name // empty')
+          local system_name=$(echo "$request_obj" | jq -r '.system_name // empty')
+          local section_name=$(echo "$request_obj" | jq -r '.section_name // empty')
+
+          if [[ -n "$setting_file" && -n "$setting_name" && -n "$system_name" ]]; then
+            local result
+            result=$(echo "{\"setting_name\":\"$setting_name\",\"setting_value\":\"$(get_setting_value "$setting_file" "$setting_name" "$system_name" "$section_name")\"}" | jq .)
+            echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
+          else
+            echo "{\"status\":\"error\",\"message\":\"missing one or more request values\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+          fi
+        ;;
       esac
+      ;;
+      "set")
+        case $requested_data in
+          "setting_value" )
+            local setting_file=$(echo "$request_obj" | jq -r '.setting_file // empty')
+            local setting_name=$(echo "$request_obj" | jq -r '.setting_name // empty')
+            local setting_value=$(echo "$request_obj" | jq -r '.setting_value //empty')
+            local system_name=$(echo "$request_obj" | jq -r '.system_name // empty')
+            local section_name=$(echo "$request_obj" | jq -r '.section_name // empty')
+            local status
+
+            if [[ -n "$setting_file" && -n "$setting_name" && -n "$setting_value" && -n "$system_name" ]]; then
+              local result
+              set_setting_value "$setting_file" "$setting_name" "$setting_value" "$system_name" "$section_name"
+              if [[ $(get_setting_value "$setting_file" "$setting_name" "$system_name" "$section_name") == "$setting_value" ]]; then # Make sure the setting actually changed
+                status="success"
+                result=$(echo "{\"setting_name\":\"$setting_name\",\"setting_value\":\"$setting_value\"}" | jq .)
+              else
+                status="failed"
+                result=$(echo "{\"response\":\"Setting value on $setting_name was not able to be changed.\"}" | jq .)
+              fi
+              echo "{\"status\":\"$status\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
+            else
+              echo "{\"status\":\"error\",\"message\":\"missing one or more request values\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+            fi
+          ;;
+        esac
       ;;
     *)
       echo "{\"status\":\"error\",\"message\":\"Unknown action: $action\",\"request_id\":\"$request_id\"}" > "$response_pipe"
@@ -165,5 +219,4 @@ process_request() {
   # Remove response pipe after writing response
   rm -f "$response_pipe"
   } &
-
 }
