@@ -4,7 +4,7 @@
    <id>net.retrodeck.retrodeck</id>
    <launchable type="desktop-id">net.retrodeck.retrodeck.desktop</launchable>
    <name>RetroDECK</name>
-   <summary>RetroDECK is an all-in-one retro gaming platform perfect for devices like the Steam Deck or full Linux Desktop</summary>
+   <summary>RetroDECK an all-in-one Retro Gaming Platform</summary>
    <developer_name>RetroDECK Team</developer_name>
    <url type="homepage">https://retrodeck.net</url>
    <url type="bugtracker">https://github.com/RetroDECK/RetroDECK/issues</url>
