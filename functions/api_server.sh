@@ -168,6 +168,16 @@ process_request() {
           fi
         ;;
 
+        "all_retrodeck_settings")
+          local result
+          result=$(cat "$rd_conf" | jq .)
+          if [[ -n "$result" ]]; then
+            echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
+          else
+            echo "{\"status\":\"error\",\"message\":\"retrodeck settings could not be read\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+          fi
+        ;;
+
         "setting_value" )
           local setting_file=$(echo "$request_obj" | jq -r '.setting_file // empty')
           local setting_name=$(echo "$request_obj" | jq -r '.setting_name // empty')
