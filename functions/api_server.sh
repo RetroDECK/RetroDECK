@@ -140,12 +140,12 @@ process_request() {
   fi
   local requested_data=$(echo "$request_obj" | jq -r '.requested_data')
   case "$action" in
-    "check_status")
+    "check_status" )
       echo "{\"status\":\"success\",\"request_id\":\"$request_id\"}" > "$response_pipe"
       ;;
-    "get")
+    "get" )
       case $requested_data in
-        "compressible_games")
+        "compressible_games" )
           local compression_format=$(echo "$request_obj" | jq -r '.format // empty')
           if [[ -n "$compression_format" ]]; then
             local result
@@ -168,7 +168,7 @@ process_request() {
           fi
         ;;
 
-        "all_retrodeck_settings")
+        "all_retrodeck_settings" )
           local result
           result=$(cat "$rd_conf" | jq .)
           if [[ -n "$result" ]]; then
@@ -192,9 +192,24 @@ process_request() {
             echo "{\"status\":\"error\",\"message\":\"missing one or more request values\",\"request_id\":\"$request_id\"}" > "$response_pipe"
           fi
         ;;
+
+        "current_preset_settings" )
+          local preset=$(echo "$request_obj" | jq -r '.preset // empty')
+
+          if [[ -n "$preset" ]]; then
+            local result
+            if result=$(api_get_current_preset_settings "$preset"); then
+              echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
+            else
+              echo "{\"status\":\"error\",\"message\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
+            fi
+          else
+            echo "{\"status\":\"error\",\"message\":\"missing request value: preset\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+          fi
+        ;;
       esac
       ;;
-      "set")
+      "set" )
         case $requested_data in
           "setting_value" )
             local setting_file=$(echo "$request_obj" | jq -r '.setting_file // empty')
@@ -221,7 +236,7 @@ process_request() {
           ;;
         esac
       ;;
-    *)
+    * )
       echo "{\"status\":\"error\",\"message\":\"Unknown action: $action\",\"request_id\":\"$request_id\"}" > "$response_pipe"
       ;;
   esac
