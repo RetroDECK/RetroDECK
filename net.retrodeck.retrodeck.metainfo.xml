@@ -4,7 +4,7 @@
    <id>net.retrodeck.retrodeck</id>
    <launchable type="desktop-id">net.retrodeck.retrodeck.desktop</launchable>
    <name>RetroDECK</name>
-   <summary>RetroDECK brings an environment to catalog and play your retro games directly on your Steam Deck</summary>
+   <summary>RetroDECK is an all-in-one retro gaming platform perfect for devices like the Steam Deck or full Linux Desktop</summary>
    <developer_name>RetroDECK Team</developer_name>
    <url type="homepage">https://retrodeck.net</url>
    <url type="bugtracker">https://github.com/RetroDECK/RetroDECK/issues</url>
@@ -36,7 +36,7 @@
       </screenshot>
    </screenshots>
    <description>
-      <p>RetroDECK is an all-in-one retro gaming platform with built-in emulators, game engines, and systems. It's perfect for devices like the Steam Deck or Linux Desktop. It is a self-contained flatpak application with the goal to provide everything you need for retro gaming right out of the box. With the RetroDECK Framework, RetroENGINE and Configurator it integrates and manage various emulators, game engines and other software, allowing you to play your favorite retro games in one complete package.</p>
+      <p>RetroDECK is an all-in-one retro gaming platform with built-in emulators, game engines, and systems. It's perfect for devices like the Steam Deck or full Linux Desktop. It is a self-contained flatpak application with the goal to provide everything you need for retro gaming right out of the box. With the RetroDECK Framework, RetroENGINE and Configurator it integrates and manage various emulators, game engines and other software, allowing you to play your favorite retro games in one complete package.</p>
       <p>Why RetroDECK?</p>
       <ul>
          <li>All-in-One Convenience: Catalog, customize, and play your retro games collection from one unified app with the ES-DE Frontend.</li>
