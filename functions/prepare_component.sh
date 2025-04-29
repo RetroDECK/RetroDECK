@@ -77,8 +77,32 @@ prepare_component() {
     cp -fv "$config/steam-rom-manager/"*.json "$srm_userdata"
     cp -fvr "$config/steam-rom-manager/manifests" "$srm_userdata"
 
+    if [[ -d "$HOME/.steam/" && -d "$HOME/.var/app/com.valvesoftware.Steam/" ]]; then # If data from both a native and flatpak Steam install exists
+      choice=$(rd_zenity --title "RetroDECK - Steam ROM Manager Reset" --question --no-wrap --cancel-label="Native" --ok-label="Flatpak" \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --text="Your system appears to have data from both a Native and Flatpak version of Steam.\n\nWhich version would you like Steam ROM Manager to sync your favorites to?")
+    fi
     log i "Updating steamDirectory and romDirectory lines in $srm_userdata/userSettings.json"
-    jq '.environmentVariables.steamDirectory = "'"$HOME"'/.steam/steam"' "$srm_userdata/userSettings.json" > "$srm_userdata/tmp.json" && mv -f "$srm_userdata/tmp.json" "$srm_userdata/userSettings.json"
+
+    if [[ -d "$HOME/.steam/" && -d "$HOME/.var/app/com.valvesoftware.Steam/" ]]; then # If data from both a native and flatpak Steam install exists
+      local steam_install_varient
+
+      choice=$(rd_zenity --title "RetroDECK - Steam ROM Manager Reset" --question --no-wrap --cancel-label="Flatpak" --ok-label="Native" \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --text="Your system appears to have data from both a Native and Flatpak version of Steam.\n\nWhich version would you like Steam ROM Manager to sync your favorites to?")
+
+      if [[ $? == "0" ]]; then
+        steam_install_varient="native"
+      else
+        steam_install_varient="flatpak"
+      fi
+    fi
+
+    if [[ -d "$HOME/.steam/" || "$steam_install_varient"== "native" ]]; then
+      jq '.environmentVariables.steamDirectory = "'"$HOME"'/.steam/steam"' "$srm_userdata/userSettings.json" > "$srm_userdata/tmp.json" && mv -f "$srm_userdata/tmp.json" "$srm_userdata/userSettings.json"
+    elif [[ -d "$HOME/.var/app/com.valvesoftware.Steam/" || "$steam_install_varient"== "flatpak" ]]; then
+      jq '.environmentVariables.steamDirectory = "'"$HOME/.var/app/com.valvesoftware.Steam/"'/.steam/steam"' "$srm_userdata/userSettings.json" > "$srm_userdata/tmp.json" && mv -f "$srm_userdata/tmp.json" "$srm_userdata/userSettings.json"
+    fi
     jq '.environmentVariables.romsDirectory = "'"$rdhome"'/.sync"' "$srm_userdata/userSettings.json" > "$srm_userdata/tmp.json" && mv -f "$srm_userdata/tmp.json" "$srm_userdata/userSettings.json"
 
     get_steam_user
@@ -92,6 +116,7 @@ prepare_component() {
 
   if [[ $component_found == "false" ]]; then
     log e "Supplied component $component not found, not resetting"
+    return 1
   else
     # Update presets for all components after any reset or move
     if [[ ! "$component" =~ ^(retrodeck|es-de) ]]; then
