@@ -161,7 +161,6 @@ api_get_all_components() {
             }
           }
       ' "$manifest_file")
-      log d "json_info: $json_info"
       local component_name=$(echo "$json_info" | jq -r '.component_name' )
       local component_friendly_name=$(echo "$json_info" | jq -r '.data.component_friendly_name // empty')
       local description=$(echo "$json_info" | jq -r '.data.description // empty')
@@ -352,4 +351,22 @@ api_get_bios_file_status() {
   done < <(jq -c '.bios | to_entries[]' "$bios_checklist")
 
   echo "$bios_files" | jq .
+}
+
+api_install_retrodeck_package() {
+
+  local package_name="$1"
+
+  case "$package_name" in
+
+    "retrodeck_controller_profile" )
+      install_retrodeck_controller_profile
+      echo "retrodeck controller profile installed"
+    ;;
+
+    * )
+      echo "unknown package name: $package_name"
+    ;;
+
+  esac
 }
