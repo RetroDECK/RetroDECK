@@ -255,6 +255,7 @@
       "mastersystem",
       "megadrive",
       "n64",
+      "nds",
       "nes",
       "ngp",
       "ngpc",
@@ -269,7 +270,6 @@
   "zip_compressable_extensions": [
     ".32x",
     ".68k",
-    ".NDS",
     ".a26",
     ".a52",
     ".a78",
