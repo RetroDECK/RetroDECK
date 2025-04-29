@@ -98,9 +98,9 @@ prepare_component() {
       fi
     fi
 
-    if [[ -d "$HOME/.steam/" || "$steam_install_varient"== "native" ]]; then
+    if [[ -d "$HOME/.steam/" || "$steam_install_varient" == "native" ]]; then
       jq '.environmentVariables.steamDirectory = "'"$HOME"'/.steam/steam"' "$srm_userdata/userSettings.json" > "$srm_userdata/tmp.json" && mv -f "$srm_userdata/tmp.json" "$srm_userdata/userSettings.json"
-    elif [[ -d "$HOME/.var/app/com.valvesoftware.Steam/" || "$steam_install_varient"== "flatpak" ]]; then
+    elif [[ -d "$HOME/.var/app/com.valvesoftware.Steam/" || "$steam_install_varient" == "flatpak" ]]; then
       jq '.environmentVariables.steamDirectory = "'"$HOME/.var/app/com.valvesoftware.Steam/"'/.steam/steam"' "$srm_userdata/userSettings.json" > "$srm_userdata/tmp.json" && mv -f "$srm_userdata/tmp.json" "$srm_userdata/userSettings.json"
     fi
     jq '.environmentVariables.romsDirectory = "'"$rdhome"'/.sync"' "$srm_userdata/userSettings.json" > "$srm_userdata/tmp.json" && mv -f "$srm_userdata/tmp.json" "$srm_userdata/userSettings.json"
