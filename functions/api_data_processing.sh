@@ -4,7 +4,7 @@
 # It will handle the direct demands of the API requests by leveraging the rest of the RetroDECK functions.
 # Most of these functions will have been adapted from the ones built for the Zenity Configurator, with the Zenity specifics pulled out and all data passed through JSON objects.
 
-api_find_compressible_games() {
+api_get_compressible_games() {
   # Supported parameters:
   # "everything"  - All games found (regardless of format)
   # "all"         - Only user-chosen games (later selected via checklist)
@@ -12,7 +12,6 @@ api_find_compressible_games() {
 
   log d "Started find_compatible_games with parameter: $1"
 
-  local target_selection="$1"
   local compression_format
 
   if [[ "$1" == "everything" ]]; then
@@ -64,7 +63,7 @@ api_find_compressible_games() {
               if [[ "$compatible_compression_format" == "chd" ]]; then
                 log d "Game $game is compatible with CHD compression"
                 # Build a JSON object for this game
-                json_obj=$(jq -n --arg game "$game" --arg compression "$compatible_compression_format" \
+                local json_obj=$(jq -n --arg game "$game" --arg compression "$compatible_compression_format" \
                 '{ game: $game, compression: $compression }')
                 # Write the final JSON object to the output file, locking it to prevent write race conditions.
                 (
@@ -77,7 +76,7 @@ api_find_compressible_games() {
               if [[ "$compatible_compression_format" == "zip" ]]; then
                 log d "Game $game is compatible with ZIP compression"
                 # Build a JSON object for this game.
-                json_obj=$(jq -n --arg game "$game" --arg compression "$compatible_compression_format" \
+                local json_obj=$(jq -n --arg game "$game" --arg compression "$compatible_compression_format" \
                 '{ game: $game, compression: $compression }')
                 # Write the final JSON object to the output file, locking it to prevent write race conditions.
                 (
@@ -90,7 +89,7 @@ api_find_compressible_games() {
               if [[ "$compatible_compression_format" == "rvz" ]]; then
                 log d "Game $game is compatible with ZIP compression"
                 # Build a JSON object for this game.
-                json_obj=$(jq -n --arg game "$game" --arg compression "$compatible_compression_format" \
+                local json_obj=$(jq -n --arg game "$game" --arg compression "$compatible_compression_format" \
                 '{ game: $game, compression: $compression }')
                 # Write the final JSON object to the output file, locking it to prevent write race conditions.
                 (
@@ -103,7 +102,7 @@ api_find_compressible_games() {
               if [[ "$compatible_compression_format" != "none" ]]; then
                 log d "Game $game is compatible with ZIP compression"
                 # Build a JSON object for this game.
-                json_obj=$(jq -n --arg game "$game" --arg compression "$compatible_compression_format" \
+                local json_obj=$(jq -n --arg game "$game" --arg compression "$compatible_compression_format" \
                 '{ game: $game, compression: $compression }')
                 # Write the final JSON object to the output file, locking it to prevent write race conditions.
                 (
@@ -124,6 +123,7 @@ api_find_compressible_games() {
   done < <(printf '%s\n' "$compressible_systems_list")
   wait # wait for background tasks to finish
 
+  # Sort the final list numerically, then alphabetically
   local final_json=$(cat "$compressible_games_list" | jq 'sort_by([
                                                             ( .game
                                                               | sub(".*/";"")
@@ -153,18 +153,21 @@ api_get_all_components() {
         (keys_unsorted[0]) as $system_key
         | .[$system_key] as $sys
         | {
-            system_name: $system_key,
+            component_name: $system_key,
             data: {
-              system_friendly_name: $sys.name,
-              description: $sys.description
+              component_friendly_name: $sys.name,
+              description: $sys.description,
+              system: $sys.system
             }
           }
       ' "$manifest_file")
-      local system_name=$(echo "$json_info" | jq -r '.system_name' )
-      local system_friendly_name=$(echo "$json_info" | jq -r '.data.system_friendly_name')
-      local description=$(echo "$json_info" | jq -r '.data.description')
-      local json_obj=$(jq -n --arg name "$system_name" --arg friendly_name "$system_friendly_name" --arg desc "$description" --arg path "$(dirname "$manifest_file")" \
-                '{ system_name: $name, system_friendly_name: $friendly_name, description: $desc, path: $path }')
+      log d "json_info: $json_info"
+      local component_name=$(echo "$json_info" | jq -r '.component_name' )
+      local component_friendly_name=$(echo "$json_info" | jq -r '.data.component_friendly_name // empty')
+      local description=$(echo "$json_info" | jq -r '.data.description // empty')
+      local system=$(echo "$json_info" | jq -r '.data.system // "none"')
+      local json_obj=$(jq -n --arg name "$component_name" --arg friendly_name "$component_friendly_name" --arg desc "$description" --arg system "$system" --arg path "$(dirname "$manifest_file")" \
+                '{ component_name: $name, component_friendly_name: $friendly_name, description: $desc, emulated_system: $system, path: $path }')
       (
       flock -x 200
       jq --argjson obj "$json_obj" '. + [$obj]' "$all_components_obj" > "$all_components_obj.tmp" && mv "$all_components_obj.tmp" "$all_components_obj"
@@ -291,4 +294,62 @@ api_get_current_preset_settings() {
     done
     echo "$current_preset_settings" | jq .
   fi
+}
+
+api_get_bios_file_status() {
+
+  local bios_files='[]'
+
+  while read -r entry; do
+    # Extract the key (element name) and the fields
+    bios_file=$(echo "$entry" | jq -r '.key // "Unknown"')
+    bios_md5=$(echo "$entry" | jq -r '.value.md5 | if type=="array" then join(", ") else . end // "Unknown"')
+    bios_systems=$(echo "$entry" | jq -r '.value.system | if type=="array" then join(", ") else . end // "Unknown"')
+    bios_desc=$(echo "$entry" | jq -r '.value.description // "No description provided"')
+    required=$(echo "$entry" | jq -r '.value.required // "No"')
+    bios_paths=$(echo "$entry" | jq -r '.value.paths // "'"$bios_folder"'" | if type=="array" then join(", ") else . end')
+
+    log d "Checking entry $bios_entry"
+
+    # Expand any embedded shell variables (e.g. $saves_folder or $bios_folder) with their actual values
+    bios_paths=$(echo "$bios_paths" | envsubst)
+
+    # Skip if bios_file is empty
+    if [[ ! -z "$bios_file" ]]; then
+      bios_file_found="Yes"
+      bios_md5_matched="No"
+
+      IFS=', ' read -r -a paths_array <<< "$bios_paths"
+      for path in "${paths_array[@]}"; do
+        if [[ ! -f "$path/$bios_file" ]]; then
+          bios_file_found="No"
+          break
+        fi
+      done
+
+      if [[ $bios_file_found == "Yes" ]]; then
+        IFS=', ' read -r -a md5_array <<< "$bios_md5"
+        for md5 in "${md5_array[@]}"; do
+          if [[ $(md5sum "$path/$bios_file" | awk '{ print $1 }') == "$md5" ]]; then
+            bios_md5_matched="Yes"
+            break
+          fi
+        done
+      fi
+
+      log d "BIOS file found: $bios_file_found, Hash matched: $bios_md5_matched"
+      log d "Expected path: $path/$bios_file"
+      log d "Expected MD5: $bios_md5"
+    fi
+
+    log d "Adding BIOS entry: \"$bios_file $bios_systems $bios_file_found $bios_md5_matched $bios_desc $bios_paths $bios_md5\" to the bios_checked_list"
+
+    local json_obj=$(jq -n --arg file "$bios_file" --arg systems "$bios_systems" --arg found "$bios_file_found" --arg md5_matched "$bios_md5_matched" \
+                          --arg desc "$bios_desc" --arg paths "$bios_paths" --arg md5 "$bios_md5" \
+                          '{ file: $file, systems: $systems, file_found: $found, md5_matched: $md5_matched, description: $desc, paths: $paths, known_md5_hashes: $md5 }')
+    bios_files=$(jq -n --argjson existing_obj "$bios_files" --argjson obj "$json_obj" '$existing_obj + [$obj]')
+
+  done < <(jq -c '.bios | to_entries[]' "$bios_checklist")
+
+  echo "$bios_files" | jq .
 }
