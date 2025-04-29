@@ -12,16 +12,16 @@
 #                                                                                                        retrodeck_api status
 
 retrodeck_api() {
-  # Handle command-line arguments
-  case "$1" in
-      start) start_server ;;
-      stop) stop_server ;;
-      status) status_server ;;
-      *)
-        echo "Usage: $0 {start|stop|status}"
-        exit 1
-        ;;
-  esac
+# Handle command-line arguments
+case "$1" in
+    start) start_server ;;
+    stop) stop_server ;;
+    status) status_server ;;
+    *)
+      echo "Usage: $0 {start|stop|status}"
+      exit 1
+      ;;
+esac
 }
 
 start_server() {
@@ -102,6 +102,7 @@ process_request() {
   local json_input="$1"
   local action
   local request_id
+  local api_version
 
   # Validate JSON format
   if ! echo "$json_input" | jq empty 2>/dev/null; then
@@ -110,11 +111,12 @@ process_request() {
   fi
 
   # Extract the action and parameters from the JSON input
-  action=$(echo "$json_input" | jq -r '.action // empty')
-  request_id=$(echo "$json_input" | jq -r '.request_id // empty')
+  action=$(jq -r '.action // empty' <<< "$json_input")
+  request_id=$(jq -r '.request_id // empty' <<< "$json_input")
+  api_version=$(jq -r '.version // empty' <<< "$json_input")
 
-  if [[ -z "$action" || -z "$request_id" ]]; then
-    echo "Invalid request: missing action or request_id" >&2
+  if [[ -z "$request_id" ]]; then
+    echo "Invalid request, missing request_id" >&2
     return 1
   fi
 
@@ -130,13 +132,18 @@ process_request() {
     return 1
   fi
 
+  if [[ -z "$api_version" ]]; then
+    echo "{\"status\":\"error\",\"message\":\"Missing required field: api_version\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+    return 1
+  fi
+
   # Process request asynchronously
   {
   local request
-  local request_obj
+  local request_data
 
-  request=$(echo "$json_input" | jq -r '.request')
-  request_obj=$(echo "$json_input" | jq -r '.data // empty')
+  request=$(jq -r '.request' <<< "$json_input")
+  request_data=$(jq -r '.data // empty' <<< "$json_input")
 
   case "$action" in
 
@@ -148,12 +155,12 @@ process_request() {
       case $request in
 
         "compressible_games" )
-          if [[ -z "$request_obj" ]]; then
+          if [[ -z "$request_data" ]]; then
             echo "{\"status\":\"error\",\"message\":\"Missing required field: data\",\"request_id\":\"$request_id\"}" > "$response_pipe"
             return 1
           fi
 
-          local compression_format=$(echo "$request_obj" | jq -r '.format // empty')
+          local compression_format=$(jq -r '.format // empty' <<< "$request_data")
           if [[ -n "$compression_format" ]]; then
             local result
             if result=$(api_get_compressible_games "$compression_format"); then
@@ -186,15 +193,15 @@ process_request() {
         ;;
 
         "setting_value" )
-          if [[ -z "$request_obj" ]]; then
+          if [[ -z "$request_data" ]]; then
             echo "{\"status\":\"error\",\"message\":\"Missing required field: data\",\"request_id\":\"$request_id\"}" > "$response_pipe"
             return 1
           fi
 
-          local setting_file=$(echo "$request_obj" | jq -r '.setting_file // empty')
-          local setting_name=$(echo "$request_obj" | jq -r '.setting_name // empty')
-          local system_name=$(echo "$request_obj" | jq -r '.system_name // empty')
-          local section_name=$(echo "$request_obj" | jq -r '.section_name // empty')
+          local setting_file=$(jq -r '.setting_file // empty' <<< "$request_data")
+          local setting_name=$(jq -r '.setting_name // empty' <<< "$request_data")
+          local system_name=$(jq -r '.system_name // empty' <<< "$request_data")
+          local section_name=$(jq -r '.section_name // empty' <<< "$request_data")
 
           if [[ -n "$setting_file" && -n "$setting_name" && -n "$system_name" ]]; then
             local result
@@ -206,13 +213,13 @@ process_request() {
         ;;
 
         "current_preset_settings" )
-          if [[ -z "$request_obj" ]]; then
+          if [[ -z "$request_data" ]]; then
             echo "{\"status\":\"error\",\"message\":\"Missing required field: data\",\"request_id\":\"$request_id\"}" > "$response_pipe"
             return 1
           fi
 
-          local preset=$(echo "$request_obj" | jq -r '.preset // empty')
-          local component=$( echo "$request_obj" | jq -r '.component // empty')
+          local preset=$(jq -r '.preset // empty' <<< "$request_data")
+          local component=$(jq -r '.component // empty' <<< "$request_data")
 
           if [[ -n "$preset" ]]; then
             local result
@@ -241,7 +248,7 @@ process_request() {
       ;;
 
     "set" )
-      if [[ -z "$request_obj" ]]; then
+      if [[ -z "$request_data" ]]; then
         echo "{\"status\":\"error\",\"message\":\"Missing required field: data\",\"request_id\":\"$request_id\"}" > "$response_pipe"
         return 1
       fi
@@ -249,11 +256,11 @@ process_request() {
       case $request in
 
         "setting_value" )
-          local setting_file=$(echo "$request_obj" | jq -r '.setting_file // empty')
-          local setting_name=$(echo "$request_obj" | jq -r '.setting_name // empty')
-          local setting_value=$(echo "$request_obj" | jq -r '.setting_value //empty')
-          local system_name=$(echo "$request_obj" | jq -r '.system_name // empty')
-          local section_name=$(echo "$request_obj" | jq -r '.section_name // empty')
+          local setting_file=$(jq -r '.setting_file // empty' <<< "$request_data")
+          local setting_name=$(jq -r '.setting_name // empty' <<< "$request_data")
+          local setting_value=$(jq -r '.setting_value //empty' <<< "$request_data")
+          local system_name=$(jq -r '.system_name // empty' <<< "$request_data")
+          local section_name=$(jq -r '.section_name // empty' <<< "$request_data")
           local status
 
           if [[ -n "$setting_file" && -n "$setting_name" && -n "$setting_value" && -n "$system_name" ]]; then
@@ -263,7 +270,7 @@ process_request() {
               status="success"
               result=$(echo "{\"setting_name\":\"$setting_name\",\"setting_value\":\"$setting_value\"}" | jq .)
             else
-              status="failed"
+              status="error"
               result=$(echo "{\"response\":\"Setting value on $setting_name was not able to be changed.\"}" | jq .)
             fi
             echo "{\"status\":\"$status\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
@@ -279,17 +286,17 @@ process_request() {
     ;;
 
     "do" )
-      if [[ -z "$request_obj" ]]; then
+      if [[ -z "$request_data" ]]; then
         echo "{\"status\":\"error\",\"message\":\"Missing required field: data\",\"request_id\":\"$request_id\"}" > "$response_pipe"
         return 1
       fi
-
+      
       case "$request" in
 
         "compress_games" )
           local post_compression_cleanup
 
-          post_compression_cleanup=$(echo "$json_input" | jq -r '.post_compression_cleanup // empty')
+          post_compression_cleanup=$(jq -r '.post_compression_cleanup // empty' <<< "$json_input")
 
           if [[ -n "$post_compression_cleanup" ]]; then
             while read -r game; do
@@ -301,17 +308,50 @@ process_request() {
               local compression_format
 
               system=$(echo "$game" | grep -oE "$roms_folder/[^/]+" | grep -oE "[^/]+$")
-              compression_format=$(jq -r --arg game_path "$game" '.[] | select(.game == $game_path) | .format' <<< "$request_obj")
+              compression_format=$(jq -r --arg game_path "$game" '.[] | select(.game == $game_path) | .format' <<< "$request_data")
 
               log i "Compressing $(basename "$game") into $compression_format format"
               compress_game "$compression_format" "$game" "$post_compression_cleanup" "$system"
               ) &
-            done <<< "$(jq -r '.[].game' <<< "$request_obj")"
+            done <<< "$(jq -r '.[].game' <<< "$request_data")"
             wait # wait for background tasks to finish
 
             echo "{\"status\":\"success\",\"result\":\"The compression process is complete\",\"request_id\":\"$request_id\"}" > "$response_pipe"
           else
             echo "{\"status\":\"error\",\"message\":\"missing request value: post_compression_cleanup\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+          fi
+        ;;
+
+        "reset_component" )
+          local component_name
+
+          component_name=$(jq -r '.component_name // empty' <<< "$request_data")
+
+          if [[ -n "$component_name" ]]; then
+            if prepare_component "reset" "$component_name"; then
+              echo "{\"status\":\"success\",\"result\":\"reset of component $component_name is complete\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+            else
+              echo "{\"status\":\"error\",\"result\":\"reset of component $component_name could not be completed\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+            fi
+          else
+            echo "{\"status\":\"error\",\"message\":\"missing request value: component_name\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+          fi
+        ;;
+
+        "install" )
+          local package_name
+          local result
+
+          package_name=$(jq -r '.package_name // empty' <<< "$request_data")
+
+          if [[ -n "$package_name" ]]; then
+            if result="$(api_install_retrodeck_package $package_name)"; then
+              echo "{\"status\":\"success\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+            else
+              echo "{\"status\":\"error\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+            fi
+          else
+            echo "{\"status\":\"error\",\"message\":\"missing request value: package_name\",\"request_id\":\"$request_id\"}" > "$response_pipe"
           fi
         ;;
 
