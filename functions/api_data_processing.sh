@@ -138,6 +138,8 @@ api_get_compressible_games() {
 }
 
 api_get_all_components() {
+  # This function will gather information about all installed components, including their name, emulated systems, user-friendly name, description and all compatible presets and their acceptable values
+  # USAGE: api_get_all_components
 
   # Initialize the empty JSON file meant for final output
   local all_components_obj="$(mktemp)"
@@ -154,19 +156,23 @@ api_get_all_components() {
         | .[$system_key] as $sys
         | {
             component_name: $system_key,
-            data: {
+            data: ( {
               component_friendly_name: $sys.name,
               description: $sys.description,
               system: $sys.system
             }
+            + (if $sys.compatible_presets? != null then {compatible_presets: $sys.compatible_presets} else {} end)
+          )
           }
       ' "$manifest_file")
-      local component_name=$(echo "$json_info" | jq -r '.component_name' )
-      local component_friendly_name=$(echo "$json_info" | jq -r '.data.component_friendly_name // empty')
-      local description=$(echo "$json_info" | jq -r '.data.description // empty')
-      local system=$(echo "$json_info" | jq -r '.data.system // "none"')
-      local json_obj=$(jq -n --arg name "$component_name" --arg friendly_name "$component_friendly_name" --arg desc "$description" --arg system "$system" --arg path "$(dirname "$manifest_file")" \
-                '{ component_name: $name, component_friendly_name: $friendly_name, description: $desc, emulated_system: $system, path: $path }')
+      local component_name=$(jq -r '.component_name' <<< "$json_info")
+      local component_friendly_name=$(jq -r '.data.component_friendly_name // empty' <<< "$json_info")
+      local description=$(jq -r '.data.description // empty' <<< "$json_info")
+      local system=$(jq -r '.data.system // "none"' <<< "$json_info")
+      local compatible_presets=$(jq -c '.data.compatible_presets // "none"' <<< "$json_info")
+      local json_obj=$(jq -n --arg name "$component_name" --arg friendly_name "$component_friendly_name" --arg desc "$description" --arg system "$system" \
+                            --argjson compatible_presets "$compatible_presets" --arg path "$(dirname "$manifest_file")" \
+                            '{ component_name: $name, component_friendly_name: $friendly_name, description: $desc, emulated_system: $system, path: $path, compatible_presets: $compatible_presets }')
       (
       flock -x 200
       jq --argjson obj "$json_obj" '. + [$obj]' "$all_components_obj" > "$all_components_obj.tmp" && mv "$all_components_obj.tmp" "$all_components_obj"
