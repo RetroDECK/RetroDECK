@@ -297,9 +297,14 @@ api_get_current_preset_settings() {
 
 api_get_bios_file_status() {
 
-  local bios_files='[]'
+  local bios_files="$(mktemp)"
+  echo '[]' > "$bios_files"
 
   while read -r entry; do
+    while (( $(jobs -p | wc -l) >= $max_threads )); do # Wait for a background task to finish if max_threads has been hit
+      sleep 0.1
+    done
+    (
     # Extract the key (element name) and the fields
     bios_file=$(echo "$entry" | jq -r '.key // "Unknown"')
     bios_md5=$(echo "$entry" | jq -r '.value.md5 | if type=="array" then join(", ") else . end // "Unknown"')
@@ -346,11 +351,26 @@ api_get_bios_file_status() {
     local json_obj=$(jq -n --arg file "$bios_file" --arg systems "$bios_systems" --arg found "$bios_file_found" --arg md5_matched "$bios_md5_matched" \
                           --arg desc "$bios_desc" --arg paths "$bios_paths" --arg md5 "$bios_md5" \
                           '{ file: $file, systems: $systems, file_found: $found, md5_matched: $md5_matched, description: $desc, paths: $paths, known_md5_hashes: $md5 }')
-    bios_files=$(jq -n --argjson existing_obj "$bios_files" --argjson obj "$json_obj" '$existing_obj + [$obj]')
-
+    (
+    flock -x 200
+    jq --argjson new_obj "$json_obj" '. + [$new_obj]' "$bios_files" > "$bios_files.tmp" && mv "$bios_files.tmp" "$bios_files"
+    ) 200>"$RD_FILE_LOCK"
+  ) &
+  wait # wait for background tasks to finish
   done < <(jq -c '.bios | to_entries[]' "$bios_checklist")
 
-  echo "$bios_files" | jq .
+  # Sort the final list numerically, then alphabetically by system name
+  local final_json=$(cat "$bios_files" | jq 'sort_by([
+                                                            ( .systems
+                                                              | sub(".*/";"")
+                                                              | test("^[0-9]")
+                                                              | not
+                                                            ),
+                                                            ( .systems | sub(".*/";"") )
+                                                          ])')
+  rm "$bios_files"
+
+  echo "$final_json"
 }
 
 api_install_retrodeck_package() {
