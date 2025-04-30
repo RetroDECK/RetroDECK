@@ -373,7 +373,35 @@ api_get_bios_file_status() {
   echo "$final_json"
 }
 
-api_install_retrodeck_package() {
+api_get_multifile_game_structure() {
+  # This function will find any files with .m3u extensions that are in a directory that does not have a name that ends in .m3u as well, which would be considered an incorrect structure for multi-file games
+  # USAGE: api_check_multifile_game_structure
+
+  local m3u_files=()
+  local problem_files
+
+  while IFS= read -r file; do
+    parent_dir=$(basename "$(dirname "$file")")
+    if [[ "$parent_dir" != *.m3u ]]; then
+        m3u_files+=("$file")
+    fi
+  done < <(find "$roms_folder" -type d -name ".*" -prune -o -type f -name "*.m3u" -print)
+
+  if [[ ${#m3u_files[@]} -gt 0 ]]; then
+    problem_files='[]'
+    for file in "${m3u_files[@]}"; do
+      local json_obj=$(jq -n --arg file "$file" '{ incorrect_file: $file }')
+      problem_files=$(jq -n --argjson existing_obj "$problem_files" --argjson new_obj "$json_obj" '$existing_obj + [$new_obj]')
+    done
+    echo "$problem_files"
+    return 1
+  else
+    echo "no multifile game structure issues found"
+    return 0
+  fi
+}
+
+api_do_install_retrodeck_package() {
 
   local package_name="$1"
 
