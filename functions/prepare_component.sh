@@ -8,7 +8,7 @@ prepare_component() {
   # An component can be called by name, by parent folder name in the $XDG_CONFIG_HOME root or use the option "all" to perform the action on all components equally
   # USAGE: prepare_component "$action" "$component" "$call_source(optional)"
 
-  if [[ "$1" == "--factory-reset" ]]; then
+  if [[ "$1" == "factory-reset" ]]; then
     log i "User requested full RetroDECK reset"
     rm -f "$lockfile" && log d "Lockfile removed"
     retrodeck
