@@ -241,6 +241,16 @@ process_request() {
           fi
         ;;
 
+        "check_multifile_structure" )
+          local result
+
+          if result="$(api_get_multifile_game_structure)"; then
+            echo "{\"status\":\"success\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+          else
+            echo "{\"status\":\"error\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
+          fi
+        ;;
+
         * )
         echo "{\"status\":\"error\",\"message\":\"Unknown request: $request\",\"request_id\":\"$request_id\"}" > "$response_pipe"
         ;;
@@ -345,7 +355,7 @@ process_request() {
           package_name=$(jq -r '.package_name // empty' <<< "$request_data")
 
           if [[ -n "$package_name" ]]; then
-            if result="$(api_install_retrodeck_package $package_name)"; then
+            if result="$(api_do_install_retrodeck_package $package_name)"; then
               echo "{\"status\":\"success\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$response_pipe"
             else
               echo "{\"status\":\"error\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$response_pipe"
