@@ -146,16 +146,16 @@ get_setting_value() {
     "retrodeck")
     if [[ -z "$current_section_name" ]]; then
       if head -n 1 "$rd_conf" | grep -qE '^\s*\{\s*$'; then # If retrodeck.cfg is new JSON format
-        jq -r --arg setting_name "$current_setting_name" '.[$setting_name]' "$1"
+        jq -r --arg setting_name "$current_setting_name" '.[$setting_name] // empty' "$1"
       else
         echo $(grep -o -P "(?<=^$current_setting_name=).*" "$1")
       fi
     else
       if head -n 1 "$rd_conf" | grep -qE '^\s*\{\s*$'; then # If retrodeck.cfg is new JSON format
         if jq -e --arg section "$current_section_name" '.presets | has($section)' "$rd_conf" > /dev/null; then # If the section is a preset
-          jq -r --arg section "$current_section_name" --arg setting_name "$current_setting_name" '.presets[$section][$setting_name]' "$1"
+          jq -r --arg section "$current_section_name" --arg setting_name "$current_setting_name" '.presets[$section][$setting_name] // empty' "$1"
         else
-          jq -r --arg section "$current_section_name" --arg setting_name "$current_setting_name" '.[$section][$setting_name]' "$1"
+          jq -r --arg section "$current_section_name" --arg setting_name "$current_setting_name" '.[$section][$setting_name] // empty' "$1"
         fi
       else
         sed -n -E '\^\['"$current_section_name"'\]^,\^\^'"$current_setting_name"'|\[^{ \^\['"$current_section_name"'\]^! { \^\^'"$current_setting_name"'^ p } }' "$1" | grep -o -P "(?<=^$current_setting_name=).*"
