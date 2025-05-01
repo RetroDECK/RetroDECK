@@ -608,3 +608,21 @@ api_do_install_retrodeck_package() {
 
   esac
 }
+
+api_do_cheevos_login() {
+  # This function will attempt to authenticate with the RA API with the supplied credentials and will return a JSON object if successful
+  # USAGE api_do_cheevos_login $username $password
+
+  local cheevos_api_response=$(curl --silent --data "r=login&u=$1&p=$2" "$RA_API_URL")
+  local cheevos_success=$(echo "$cheevos_api_response" | jq -r '.Success')
+  if [[ "$cheevos_success" == "true" ]]; then
+    log d "cheevos login succeeded"
+    cheevos_login_timestamp=$(date +%s)
+    final_response=$(jq --arg ts "$cheevos_login_timestamp" '. + {Timestamp: $ts}' <<< "$cheevos_api_response") # Add timestamp to response object
+    echo "$final_response"
+  else
+    log d "cheevos login failed"
+    echo "login failed"
+    return 1
+  fi
+}

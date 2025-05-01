@@ -384,6 +384,24 @@ process_request() {
           fi
         ;;
 
+        "cheevos_login" )
+          local cheevos_username
+          local cheevos_password
+          local result
+
+          cheevos_username=$(jq -r '.username // empty' <<< "$request_data")
+          cheevos_password=$(jq -r '.password // empty' <<< "$request_data")
+          if [[ -n "$cheevos_username" && -n "$cheevos_password" ]]; then
+            if result=$(api_do_cheevos_login "$cheevos_username" "$cheevos_password"); then
+              echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
+            else
+              echo "{\"status\":\"error\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+            fi
+          else
+            echo "{\"status\":\"error\",\"message\":\"missing value for username or password\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+          fi
+        ;;
+
         * )
         echo "{\"status\":\"error\",\"message\":\"Unknown request: $request\",\"request_id\":\"$request_id\"}" > "$response_pipe"
         ;;
