@@ -407,6 +407,190 @@ api_get_multifile_game_structure() {
   fi
 }
 
+api_set_preset_state() {
+
+  local component="$1"
+  local preset="$2"
+  local state="$3"
+
+  local current_preset_state=$(get_setting_value "$rd_conf" "$component" "retrodeck" "$preset")
+  local preset_disabled_state=$(jq -r --arg component "$component" --arg preset "$preset" '.[$component].compatible_presets[$preset].[0] // empty' "$RD_MODULES/$component/manifest.json")
+
+  if [[ -n "$current_preset_state" ]]; then # Component entry exists for given preset in retrodeck.cfg
+    if [[ -n "$preset_disabled_state" ]]; then # The disabled state for that preset for that component could be determined
+      if jq -e --arg component "$component" --arg preset "$preset" --arg state "$state" '.[$component].compatible_presets[$preset] | index($state) !=null' "$RD_MODULES/$component/manifest.json" > /dev/null; then # Validate that the desired preset state is valid for this component and preset
+        if [[ "$current_preset_state" == "$state" ]]; then # Preset is already in desired state
+          echo "component $component is already in state $state for preset $preset"
+          return 1
+        elif [[ "$state" == "$preset_disabled_state" ]]; then # Preset is being disabled and is not currently disabled
+          log d "Disabling preset $preset for component $component"
+          set_setting_value "$rd_conf" "$component" "$state" "retrodeck" "$preset"
+        else # Preset is being enabled
+          while read -r preset_key; do # Check for incompatible preset conflicts
+            local preset_key_value=$(jq -r --arg preset_key "$preset_key" '.incompatible_presets[$preset_key]' "$features")
+            if [[ "$preset_key" == "$preset" ]]; then # If incompatible key name matches desired preset
+              if jq -e --arg component "$component" --arg preset "$preset_key_value" '.presets[$preset] | has($component)' "$rd_conf" > /dev/null; then # If the incompatible preset has an entry for this component
+                incompatible_preset_disabled_state=$(jq -r --arg component "$component" --arg preset "$preset_key_value" '.[$component].compatible_presets[$preset].[0] // empty' "$RD_MODULES/$component/manifest.json")
+                incompatible_preset_current_state=$(get_setting_value "$rd_conf" "$component" "retrodeck" "$preset_key_value")
+                if [[ ! "$incompatible_preset_current_state" == "$incompatible_preset_disabled_state" ]]; then # If the incompatible preset is enabled
+                  echo "incompatible preset $preset_key_value is currently enabled, cannot enable $preset"
+                  return 1
+                fi
+              fi
+            elif [[ "$preset_key_value" == "$preset" ]]; then # If incompatible key value matches desired preset
+              if jq -e --arg component "$component" --arg preset "$preset_key" '.presets[$preset] | has($component)' "$rd_conf" > /dev/null; then # If the incompatible preset has an entry for this component
+                incompatible_preset_disabled_state=$(jq -r --arg component "$component" --arg preset "$preset_key" '.[$component].compatible_presets[$preset].[0] // empty' "$RD_MODULES/$component/manifest.json")
+                incompatible_preset_current_state=$(get_setting_value "$rd_conf" "$component" "retrodeck" "$preset_key")
+                if [[ ! "$incompatible_preset_current_state" == "$incompatible_preset_disabled_state" ]]; then # If the incompatible preset is enabled
+                  echo "incompatible preset $preset_key is currently enabled, cannot enable $preset"
+                  return 1
+                fi
+              fi
+            fi
+          done < <(jq -r '.incompatible_presets | keys[]' "$features")
+
+          if [[ "$preset" == "cheevos" ]]; then # For cheevos preset, ensure login data is available
+            if [[ -n "$cheevos_token" && -n "$cheevos_username" ]]; then
+              log d "Cheevos login info exists"
+            else
+              echo "login information for cheevos preset not available"
+              return 1
+            fi
+          fi
+
+          log d "Enabling preset $preset for component $component"
+          set_setting_value "$rd_conf" "$component" "$state" "retrodeck" "$preset" # No incompatibilities found, enabling preset
+        fi
+      else
+        echo "desired state $state for component $component preset $preset is invalid"
+        return 1
+      fi
+    else
+      echo "disabled state for component $component preset $preset could not be determined"
+      return 1
+    fi
+  else
+    echo "component $component not compatible with preset $preset"
+    return 1
+  fi
+
+  log d "Preset change passed all prechecks, continuing..."
+
+  local config_format=$(jq -r --arg component "$component" '.[$component].preset_actions.config_file_format' "$RD_MODULES/$component/manifest.json")
+  if [[ "$config_format" == "retroarch-all" ]]; then
+    local retroarch_all="true"
+    local config_format="retroarch"
+  fi
+  log d "Config file format: $config_format"
+
+  while IFS= read -r preset_setting_name; do
+    current_preset_object=$(jq -r --arg component "$component" --arg preset "$preset" --arg preset_setting_name "$preset_setting_name" \
+                                    '.[$component].preset_actions[$preset][$preset_setting_name]' "$RD_MODULES/$component/manifest.json")
+    action=$(echo "$current_preset_object" | jq -r '.action')
+
+    case "$action" in
+
+      "change" )
+        log d "Changing config file for preset: $preset_setting_name"
+        new_setting_value=$(echo "$current_preset_object" | jq -r '.new_setting_value')
+        section=$(echo "$current_preset_object" | jq -r '.section')
+        target_file=$(echo "$current_preset_object" | jq -r '.target_file')
+        defaults_file=$(echo "$current_preset_object" | jq -r '.defaults_file')
+
+        if [[ "$target_file" = \$* ]]; then # Read current target file and resolve if it is a variable
+          eval target_file=$target_file
+          log d "Target file is a variable name. Actual target $target_file"
+        fi
+        local read_target_file="$target_file"
+        if [[ "$defaults_file" = \$* ]]; then #Read current defaults file and resolve if it is a variable
+          eval defaults_file=$defaults_file
+          log d "Defaults file is a variable name. Actual defaults file $defaults_file"
+        fi
+        local read_defaults_file="$defaults_file"
+
+        if [[ ! "$state" == "$preset_disabled_state" ]]; then # Preset is being enabled
+          if [[ "$new_setting_value" = \$* ]]; then
+            eval new_setting_value=$new_setting_value
+            log d "New setting value is a variable. Actual setting value is $new_setting_value"
+          fi
+          if [[ "$read_config_format" == "retroarch" && ! "$retroarch_all" == "true" ]]; then # Separate process if this is a per-system RetroArch override file
+            if [[ ! -f "$read_target_file" ]]; then
+              log d "RetroArch per-system override file $read_target_file not found, creating and adding setting"
+              create_dir "$(realpath "$(dirname "$read_target_file")")"
+              echo "$preset_setting_name = \""$new_setting_value"\"" > "$read_target_file"
+            else
+              if [[ -z $(grep -o -P "^$preset_setting_name\b" "$read_target_file") ]]; then
+                log d "RetroArch per-system override file $read_target_file does not contain setting $preset_setting_name, adding and assigning value $new_setting_value"
+                add_setting "$read_target_file" "$preset_setting_name" "$new_setting_value" "$read_config_format" "$section"
+              else
+                log d "Changing setting: $preset_setting_name to $new_setting_value in $read_target_file"
+                set_setting_value "$read_target_file" "$preset_setting_name" "$new_setting_value" "$read_config_format" "$section"
+              fi
+            fi
+          elif [[ "$read_config_format" == "ppsspp" && "$read_target_file" == "$ppssppcheevosconf" ]]; then # Separate process if this is the standalone cheevos token file used by PPSSPP
+            log d "Creating PPSSPP cheevos token file $ppssppcheevosconf"
+            echo "$new_setting_value" > "$read_target_file"
+          else
+            log d "Changing setting: $preset_setting_name to $new_setting_value in $read_target_file"
+            set_setting_value "$read_target_file" "$preset_setting_name" "$new_setting_value" "$read_config_format" "$section"
+          fi
+        else # Preset is being disabled
+          if [[ "$read_config_format" == "retroarch" && ! "$retroarch_all" == "true" ]]; then # Separate process if this is a per-system RetroArch override file
+            if [[ -f "$read_target_file" ]]; then
+              log d "Removing setting $preset_setting_name from RetroArch per-system override file $read_target_file"
+              delete_setting "$read_target_file" "$preset_setting_name" "$read_config_format" "$section"
+              if [[ -z $(cat "$read_target_file") ]]; then # If the override file is empty
+                log d "RetroArch per-system override file is empty, removing"
+                rm -f "$read_target_file"
+              fi
+              if [[ -z $(ls -1 "$(dirname "$read_target_file")") ]]; then # If the override folder is empty
+                log d "RetroArch per-system override folder is empty, removing"
+                rmdir "$(realpath "$(dirname "$read_target_file")")"
+              fi
+            fi
+          elif [[ "$read_config_format" == "ppsspp" && "$read_target_file" == "$ppssppcheevosconf" ]]; then # Separate process if this is the standalone cheevos token file used by PPSSPP
+            log d "Removing PPSSPP cheevos token file $ppssppcheevosconf"
+            rm "$read_target_file"
+          else
+            local default_setting_value=$(get_setting_value "$read_defaults_file" "$preset_setting_name" "$read_config_format" "$section")
+            log d "Changing setting: $preset_setting_name to $default_setting_value in $read_target_file"
+            set_setting_value "$read_target_file" "$preset_setting_name" "$default_setting_value" "$read_config_format" "$section"
+          fi
+        fi
+      ;;
+
+      "enable" )
+        log d "Enabling/disabling file: $preset_setting_name"
+        target_file=$(echo "$current_preset_object" | jq -r '.target_file')
+        if [[ ! "$state" == "$preset_disabled_state" ]]; then
+          enable_file "$preset_setting_name"
+        else
+          disable_file "$preset_setting_name"
+        fi
+      ;;
+
+      "install" )
+        source_file=$(echo "$current_preset_object" | jq -r '.source')
+        target_file=$(echo "$current_preset_object" | jq -r '.destination')
+        if [[ ! "$state" == "$preset_disabled_state" ]]; then
+          log d "Installing files for preset $preset_setting_name"
+          install_preset_files "$source_file" "$target_file"
+        else
+          log d "Removing files for preset $preset_setting_name"
+          remove_preset_files "$source_file" "$target_file"
+        fi
+      ;;
+
+      * )
+        log d "Other data: $action $preset_setting_name $new_setting_value $section" # DEBUG
+      ;;
+
+    esac
+  done < <(jq -r --arg component "$component" --arg preset "$preset" '.[$component].preset_actions[$preset] | keys[]' "$RD_MODULES/$component/manifest.json")
+
+  echo "preset $preset for component $component was successfully changed to $state"
+}
+
 api_do_install_retrodeck_package() {
 
   local package_name="$1"

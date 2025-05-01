@@ -265,6 +265,25 @@ process_request() {
 
       case $request in
 
+        "preset_state" )
+          local component=$(jq -r '.component // empty' <<< "$request_data")
+          local preset=$(jq -r '.preset // empty' <<< "$request_data")
+          local state=$(jq -r '.state // empty' <<< "$request_data")
+          cheevos_username=$(jq -r '.cheevos_username // empty' <<< "$request_data")
+          cheevos_token=$(jq -r '.cheevos_token // empty' <<< "$request_data")
+
+          if [[ -n "$component" && -n "$preset" && -n "$state" ]]; then
+            local result
+            if result=$(api_set_preset_state "$component" "$preset" "$state"); then
+              echo "{\"status\":\"success\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+            else
+              echo "{\"status\":\"error\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+            fi
+          else
+            echo "{\"status\":\"error\",\"message\":\"missing one or more required request values\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+          fi
+        ;;
+
         "setting_value" )
           local setting_file=$(jq -r '.setting_file // empty' <<< "$request_data")
           local setting_name=$(jq -r '.setting_name // empty' <<< "$request_data")
