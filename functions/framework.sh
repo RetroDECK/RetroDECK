@@ -22,7 +22,17 @@ set_setting_value() {
       else
         if head -n 1 "$rd_conf" | grep -qE '^\s*\{\s*$'; then # If retrodeck.cfg is new JSON format
           if jq -e --arg section "$current_section_name" '.presets | has($section)' "$rd_conf" > /dev/null; then # If the section is a preset
-            jq --arg section "$current_section_name" --arg setting "$setting_name_to_change" --arg newval "$setting_value_to_change" '.presets[$section][$setting] = $newval' "$1" > "$1".tmp.json && mv "$1".tmp.json "$1"
+            parent_key=$(jq -r --arg section "$current_section_name" --arg setting "$setting_name_to_change" '
+                        .presets[$section]
+                        | paths(scalars)
+                        | select(.[-1] == $setting)
+                        | if length > 1 then .[-2] else $section end
+                        ' "$1") # Find parent key of supplied setting name, in case it is nested
+            if [[ "$current_section_name" == "$parent_key" ]]; then # Setting is not nested
+              jq --arg section "$current_section_name" --arg setting "$setting_name_to_change" --arg newval "$setting_value_to_change" '.presets[$section][$setting] = $newval' "$1" > "$1".tmp.json && mv "$1".tmp.json "$1"
+            else
+              jq --arg section "$current_section_name" --arg parent "$parent_key" --arg setting "$setting_name_to_change" --arg newval "$setting_value_to_change" '.presets[$section][$parent][$setting] = $newval' "$1" > "$1".tmp.json && mv "$1".tmp.json "$1"
+            fi
           else
             jq --arg section "$current_section_name" --arg setting "$setting_name_to_change" --arg newval "$setting_value_to_change" '.[$section][$setting] = $newval' "$1" > "$1".tmp.json && mv "$1".tmp.json "$1"
           fi
@@ -84,7 +94,7 @@ set_setting_value() {
         xml ed -L -u "//$current_section_name/$setting_name_to_change" -v "$setting_value_to_change" "$1"
       fi
     ;;
-    
+
     "mame" )
       # In this option, $current_section_name is the <system name> in the .cfg file.
 
@@ -135,8 +145,8 @@ get_setting_name() {
 }
 
 get_setting_value() {
-# Function for getting the current value of a setting from a config file
-# USAGE: get_setting_value $setting_file "$setting_name" $system $section (optional)
+  # Function for getting the current value of a setting from a config file
+  # USAGE: get_setting_value $setting_file "$setting_name" $system $section (optional)
 
   local current_setting_name="$2"
   local current_section_name="$4"
@@ -153,7 +163,7 @@ get_setting_value() {
     else
       if head -n 1 "$rd_conf" | grep -qE '^\s*\{\s*$'; then # If retrodeck.cfg is new JSON format
         if jq -e --arg section "$current_section_name" '.presets | has($section)' "$rd_conf" > /dev/null; then # If the section is a preset
-          jq -r --arg section "$current_section_name" --arg setting_name "$current_setting_name" '.presets[$section][$setting_name] // empty' "$1"
+          jq -r --arg section "$current_section_name" --arg setting_name "$current_setting_name" '.presets[$section] | .. | objects | select(has($setting_name)) | .[$setting_name] // empty' "$1"
         else
           jq -r --arg section "$current_section_name" --arg setting_name "$current_setting_name" '.[$section][$setting_name] // empty' "$1"
         fi
