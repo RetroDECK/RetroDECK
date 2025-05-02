@@ -1554,7 +1554,7 @@ update_component_presets() {
     log d "Examining manifest file $manifest_file"
     component_name=$(jq -r '. | keys[]' "$manifest_file")
     if jq -e --arg component "$component_name" '.[$component].compatible_presets? != null' "$manifest_file" > /dev/null; then # Check if the given manifest file even has a presets section
-      for preset_name in $(jq -r --arg name "$component_name" '.[$name].compatible_presets | keys[]' "$manifest_file"); do
+      while read -r preset_name; do # Gather non-nested entries
         if ! jq -e --arg preset "$preset_name" '.presets | has($preset)' "$rd_conf" > /dev/null; then # If the name of the preset doesn't exist at all in retrodeck.cfg
           log d "Preset \"$preset_name\" not found, creating it."
           tmpfile=$(mktemp)
@@ -1570,7 +1570,46 @@ update_component_presets() {
           jq --arg preset "$preset_name" --arg component "$component_name" --arg value "$default_preset_value" \
             '.presets[$preset] += { ($component): $value }' "$rd_conf" > "$tmpfile" && mv "$tmpfile" "$rd_conf"
         fi
-      done
+      done < <(jq -r --arg component "$component_name" '
+                                    .[$component].compatible_presets
+                                    | to_entries[]
+                                    | select(.value|type == "array")
+                                    | .key
+                                  ' "$manifest_file")
+      while read -r nested_object; do # Gather nested entries, such as RA cores
+        while read -r preset_name; do # Gather non-nested entries
+          if ! jq -e --arg preset "$preset_name" '.presets | has($preset)' "$rd_conf" > /dev/null; then # If the name of the preset doesn't exist at all in retrodeck.cfg
+            log d "Preset \"$preset_name\" not found, creating it."
+            tmpfile=$(mktemp)
+            jq --arg preset "$preset_name" '.presets += { ($preset): {} }' "$rd_conf" > "$tmpfile" && mv "$tmpfile" "$rd_conf"
+          fi
+          if ! jq -e --arg component "$component_name.cores" --arg preset "$preset_name" '.presets[$preset] | has($component)' "$rd_conf" > /dev/null; then # If there is no wrapper for the parent component for this core
+            log d "Wrapper for parent component \"$component_name\" in \"$preset_name\" not found, creating it."
+            tmpfile=$(mktemp)
+            jq --arg component "$component_name.cores" --arg preset "$preset_name" '.presets[$preset] += { ($component): {} }' "$rd_conf" > "$tmpfile" && mv "$tmpfile" "$rd_conf"
+          fi
+          if jq -e --arg preset "$preset_name" --arg component "$component_name.cores" --arg nest "$nested_object" '.presets[$preset][$component] | has($nest)' "$rd_conf" > /dev/null; then
+            log d "The preset \"$preset_name\" already contains the component \"$component_name\" core \"$nested_object\". Skipping."
+          else
+            # Retrieve the first element of the array for the current preset name in the source file, which is the "disabled" state
+            default_preset_value=$(jq -r --arg name "$component_name" --arg nest "$nested_object" --arg preset "$preset_name" '.[$name].compatible_presets[$nest][$preset][0]' "$manifest_file")
+            log d "Adding component \"$component_name\" core \"$nested_object\" with default value '$default_preset_value' to preset \"$preset_name\"."
+            tmpfile=$(mktemp)
+            jq --arg preset "$preset_name" --arg component "$component_name.cores" --arg nest "$nested_object" --arg value "$default_preset_value" \
+              '.presets[$preset][$component] += { ($nest): $value }' "$rd_conf" > "$tmpfile" && mv "$tmpfile" "$rd_conf"
+          fi
+        done < <(jq -r --arg component "$component_name" --arg nest "$nested_object" '
+                                    .[$component].compatible_presets[$nest]
+                                    | to_entries[]
+                                    | select(.value|type == "array")
+                                    | .key
+                                  ' "$manifest_file")
+      done < <(jq -r --arg component "$component_name" '
+                                  .[$component].compatible_presets
+                                  | to_entries[]
+                                  | select(.value|type == "object")
+                                  | .key
+                                ' "$manifest_file")
     fi
   done < <(find "$RD_MODULES" -maxdepth 2 -mindepth 2 -type f -name "manifest.json")
 }
