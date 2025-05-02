@@ -408,10 +408,25 @@ api_get_multifile_game_structure() {
 }
 
 api_get_component_menu_entries() {
+  # This function will find all component-specific menu entries for use in a Configurator for a given menu section
+  # Menu sections and entry information are defined in each components manifest.json file
+  # USAGE: api_get_component_menu_entries "$menu"
 
   local menu="$1"
+  local menu_items='[]'
 
+  while IFS= read -r manifest_file; do
+    if jq -e '.. | objects | select(has("configurator_menus")) | any' "$manifest_file" > /dev/null; then # Check if manifest contains the "configurator_menus" key
+      if jq -e --arg menu "$menu" 'to_entries[].value.configurator_menus | has($menu)' "$manifest_file" > /dev/null; then # Check if this manifest has entries for the menu we are looking for
+        while read -r menu_entry; do
+        json_obj=$(jq -r --arg menu "$menu" --arg menu_entry "$menu_entry" 'to_entries[].value.configurator_menus[$menu][$menu_entry]' "$manifest_file")
+        menu_items=$(jq --argjson new_obj "$json_obj" '. + [$new_obj]' <<< "$menu_items")
+        done < <(jq -r --arg menu "$menu" 'to_entries[].value.configurator_menus[$menu] | keys[]' "$manifest_file")
+      fi
+    fi
+  done < <(find "$RD_MODULES" -maxdepth 2 -mindepth 2 -type f -name "manifest.json")
 
+  echo "$menu_items"
 }
 
 api_set_preset_state() {
