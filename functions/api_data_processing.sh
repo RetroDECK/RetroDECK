@@ -181,7 +181,7 @@ api_get_all_components() {
   done < <(find "$RD_MODULES" -maxdepth 2 -mindepth 2 -type f -name "manifest.json")
   wait # Wait for background tasks to finish
 
-  local final_json=$(jq '[.[] | select(.system_name == "retrodeck")] + ([.[] | select(.system_name != "retrodeck")] | sort_by(.system_name))' "$all_components_obj") # Ensure RetroDECK is always first in the list
+  local final_json=$(jq '[.[] | select(.component_name == "retrodeck")] + ([.[] | select(.component_name != "retrodeck")] | sort_by(.component_name))' "$all_components_obj") # Ensure RetroDECK is always first in the list
   rm "$all_components_obj"
 
   echo "$final_json"
@@ -405,6 +405,13 @@ api_get_multifile_game_structure() {
     echo "no multifile game structure issues found"
     return 0
   fi
+}
+
+api_get_component_menu_entries() {
+
+  local menu="$1"
+
+
 }
 
 api_set_preset_state() {
