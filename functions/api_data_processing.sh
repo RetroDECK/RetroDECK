@@ -187,7 +187,7 @@ api_get_all_components() {
   echo "$final_json"
 }
 
-api_get_current_preset_settings() {
+api_get_current_preset_state() {
   # This function will gather the state (enabled/disabled/other) of all the systems in a given preset. An "all" argument can also be given which will check all presets for all components.
   # Optionally, a specific component can be added, which will make the function return the state of all presets for that one component
   # USAGE: api_get_current_preset_settings "$preset" ("$specific_component")
@@ -198,15 +198,42 @@ api_get_current_preset_settings() {
   local all_preset_settings='{}'
 
   if [[ "$preset" == "all" || -n "$specific_component" ]]; then
-    for preset_name in $(jq -r '.presets | keys[]' "$rd_conf"); do
+    while read -r preset_name; do
       if [[ ! -n "$specific_component" ]]; then
         if ! jq -e --arg preset_name "$preset_name" '. | has($preset_name)' <<< "$all_preset_settings" > /dev/null; then
           log d "Preset $preset_name not yet added to list, adding..."
-          all_preset_settings=$(jq --arg preset "$preset_name" '. += { ($preset): {} }' <<< "$all_preset_settings")
+          all_preset_settings=$(jq --arg preset "$preset_name" '. += { ($preset): [] }' <<< "$all_preset_settings")
         fi
-        for component in $(jq -r --arg preset "$preset_name" '.presets[$preset] | keys[]' "$rd_conf"); do
-          if ! jq -e --arg preset_name "$preset_name" --arg component_name "$component" '.[$preset_name] | has($component_name)' <<< "$all_preset_settings" > /dev/null; then
-            log d "Component $component not yet added to list, adding..."
+        while read -r component; do
+          if [[ "$component" == *".cores" ]]; then # If component is a core wrapper for a parent component
+            parent_component="${component%.cores}"
+            while read -r core; do
+              local json_info=$(jq -r --arg core "$core" '
+              # Grab the first top‑level key into $system_key
+              (keys_unsorted[0]) as $system_key
+              | .[$system_key] as $sys
+              | {
+                  system_name: $core,
+                  data: {
+                    system_friendly_name: $sys.cores.[$core].name,
+                    description: $sys.cores.[$core].description,
+                    emulated_system: $sys.cores.[$core].system,
+                    emulated_system_friendly_name: $sys.cores.[$core].system_friendly_name
+                  }
+                }
+              ' "$RD_MODULES/$parent_component/manifest.json")
+              local system_name=$(jq -c '.system_name' <<< "$json_info")
+              local system_friendly_name=$(jq -c '.data.system_friendly_name' <<< "$json_info")
+              local description=$(jq -c '.data.description' <<< "$json_info")
+              local emulated_system=$(jq -c '.data.emulated_system' <<< "$json_info")
+              local emulated_system_friendly_name=$(jq -c '.data.emulated_system_friendly_name' <<< "$json_info")
+              local preset_status=$(get_setting_value "$rd_conf" "$core" "retrodeck" "$preset_name")
+              local json_obj=$(jq -n --argjson name "$system_name" --argjson friendly_name "$system_friendly_name" --argjson desc "$description" --argjson emu_system "$emulated_system" \
+                                  --argjson emu_system_friendly "$emulated_system_friendly_name" --arg status "$preset_status" \
+                                  '{ system_name: $name, system_friendly_name: $friendly_name, description: $desc, emulated_system: $emu_system, emulated_system_friendly_name: $emu_system_friendly, status: $status }')
+              all_preset_settings=$(jq --arg preset "$preset_name" --arg component "$core" --argjson obj "$json_obj" '.[$preset] += [$obj]' <<< "$all_preset_settings")
+            done < <(jq -r --arg preset "$preset_name" --arg parent "$parent_component.cores" '.presets[$preset][$parent] | keys[]' "$rd_conf")
+          else # Component is not a core wrapper
             local json_info=$(jq -r '
               # Grab the first top‑level key into $system_key
               (keys_unsorted[0]) as $system_key
@@ -221,26 +248,57 @@ api_get_current_preset_settings() {
                   }
                 }
             ' "$RD_MODULES/$component/manifest.json")
-            local system_name=$(echo "$json_info" | jq -r '.system_name' )
-            local system_friendly_name=$(echo "$json_info" | jq -r '.data.system_friendly_name')
-            local description=$(echo "$json_info" | jq -r '.data.description')
-            local emulated_system=$(echo "$json_info" | jq -r '.data.emulated_system')
-            local emulated_system_friendly_name=$(echo "$json_info" | jq -r '.data.emulated_system_friendly_name')
-            local preset_status=$(get_setting_value "$rd_conf" "$component" "retrodeck" "$preset_name")
-            local json_obj=$(jq -n --arg name "$system_name" --arg friendly_name "$system_friendly_name" --arg desc "$description" --arg emu_system "$emulated_system" \
-                            --arg emu_system_friendly "$emulated_system_friendly_name" --arg status "$preset_status" \
+            local system_name=$(jq -c '.system_name' <<< "$json_info")
+            local system_friendly_name=$(jq -c '.data.system_friendly_name' <<< "$json_info")
+            local description=$(jq -c '.data.description' <<< "$json_info")
+            local emulated_system=$(jq -c '.data.emulated_system' <<< "$json_info")
+            local emulated_system_friendly_name=$(jq -c '.data.emulated_system_friendly_name' <<< "$json_info")
+            local preset_status=$(get_setting_value "$rd_conf" "$component" "retrodeck" "$preset_name" <<< "$json_info")
+            local json_obj=$(jq -n --argjson name "$system_name" --argjson friendly_name "$system_friendly_name" --argjson desc "$description" --argjson emu_system "$emulated_system" \
+                            --argjson emu_system_friendly "$emulated_system_friendly_name" --arg status "$preset_status" \
                             '{ system_name: $name, system_friendly_name: $friendly_name, description: $desc, emulated_system: $emu_system, emulated_system_friendly_name: $emu_system_friendly, status: $status }')
-            all_preset_settings=$(jq --arg preset "$preset_name" --arg component "$component" --argjson obj "$json_obj" '.[$preset][$component] = [$obj]' <<< "$all_preset_settings")
+            all_preset_settings=$(jq --arg preset "$preset_name" --arg component "$component" --argjson obj "$json_obj" '.[$preset] += [$obj]' <<< "$all_preset_settings")
           fi
-        done
-      else # User specified a specific component to get preset settings for
-        for component in $(jq -r --arg preset "$preset_name" '.presets[$preset] | keys[]' "$rd_conf"); do
-          if ! jq -e --arg preset_name "$preset_name" --arg component_name "$specific_component" '.[$preset_name] | has($component_name)' <<< "$all_preset_settings" > /dev/null; then
-            log d "Component $specific_component not yet added to list in preset $preset_name, adding..."
-            if ! jq -e --arg preset_name "$preset_name" '. | has($preset_name)' <<< "$all_preset_settings" > /dev/null; then
-              log d "Preset $preset_name not yet added to list, adding..."
-              all_preset_settings=$(jq --arg preset "$preset_name" '. += { ($preset): {} }' <<< "$all_preset_settings")
-            fi
+        done < <(jq -r --arg preset "$preset_name" '.presets[$preset] | keys[]' "$rd_conf")
+      else # User specified a specific component to get all preset settings for
+        local component="$specific_component"
+        if jq -e --arg preset_name "$preset_name" --arg component "$component" '.presets[$preset_name] | .. | objects | select(has($component))' "$rd_conf" > /dev/null; then
+          if ! jq -e --arg preset_name "$preset_name" '. | has($preset_name)' <<< "$all_preset_settings" > /dev/null; then
+            log d "Preset $preset_name not yet added to list, adding..."
+            all_preset_settings=$(jq --arg preset "$preset_name" '. += { ($preset): {} }' <<< "$all_preset_settings")
+          fi
+          local parent_obj=$(jq -r --arg preset "$preset_name" --arg component "$component" '.presets[$preset]
+                                                                                            | paths(scalars)
+                                                                                            | select(.[-1] == $component)
+                                                                                            | if length > 1 then .[-2] else $preset end
+                                                                                            ' "$rd_conf")
+          if [[ "$parent_obj" == *".cores" ]]; then # If component is a core wrapper for a parent component
+            parent_component="${parent_obj%.cores}"
+            local json_info=$(jq -r --arg core "$component" '
+            # Grab the first top‑level key into $system_key
+            (keys_unsorted[0]) as $system_key
+            | .[$system_key] as $sys
+            | {
+                system_name: $core,
+                data: {
+                  system_friendly_name: $sys.cores.[$core].name,
+                  description: $sys.cores.[$core].description,
+                  emulated_system: $sys.cores.[$core].system,
+                  emulated_system_friendly_name: $sys.cores.[$core].system_friendly_name
+                }
+              }
+            ' "$RD_MODULES/$parent_component/manifest.json")
+            local system_name=$(jq -c '.system_name' <<< "$json_info")
+            local system_friendly_name=$(jq -c '.data.system_friendly_name' <<< "$json_info")
+            local description=$(jq -c '.data.description' <<< "$json_info")
+            local emulated_system=$(jq -c '.data.emulated_system' <<< "$json_info")
+            local emulated_system_friendly_name=$(jq -c '.data.emulated_system_friendly_name' <<< "$json_info")
+            local preset_status=$(get_setting_value "$rd_conf" "$component" "retrodeck" "$preset_name")
+            local json_obj=$(jq -n --argjson name "$system_name" --argjson friendly_name "$system_friendly_name" --argjson desc "$description" --argjson emu_system "$emulated_system" \
+                                --argjson emu_system_friendly "$emulated_system_friendly_name" --arg status "$preset_status" \
+                                '{ system_name: $name, system_friendly_name: $friendly_name, description: $desc, emulated_system: $emu_system, emulated_system_friendly_name: $emu_system_friendly, status: $status }')
+            all_preset_settings=$(jq --arg preset "$preset_name" --arg component "$component" --argjson obj "$json_obj" '.[$preset] += [$obj]' <<< "$all_preset_settings")
+          else # Component is not a core wrapper
             local json_info=$(jq -r '
               # Grab the first top‑level key into $system_key
               (keys_unsorted[0]) as $system_key
@@ -255,24 +313,53 @@ api_get_current_preset_settings() {
                   }
                 }
             ' "$RD_MODULES/$component/manifest.json")
-            local system_name=$(echo "$json_info" | jq -r '.system_name' )
-            local system_friendly_name=$(echo "$json_info" | jq -r '.data.system_friendly_name')
-            local description=$(echo "$json_info" | jq -r '.data.description')
-            local emulated_system=$(echo "$json_info" | jq -r '.data.emulated_system')
-            local emulated_system_friendly_name=$(echo "$json_info" | jq -r '.data.emulated_system_friendly_name')
+            local system_name=$(jq -c '.system_name' <<< "$json_info")
+            local system_friendly_name=$(jq -c '.data.system_friendly_name' <<< "$json_info")
+            local description=$(jq -c '.data.description' <<< "$json_info")
+            local emulated_system=$(jq -c '.data.emulated_system' <<< "$json_info")
+            local emulated_system_friendly_name=$(jq -c '.data.emulated_system_friendly_name' <<< "$json_info")
             local preset_status=$(get_setting_value "$rd_conf" "$component" "retrodeck" "$preset_name")
-            local json_obj=$(jq -n --arg name "$system_name" --arg friendly_name "$system_friendly_name" --arg desc "$description" --arg emu_system "$emulated_system" \
-                            --arg emu_system_friendly "$emulated_system_friendly_name" --arg status "$preset_status" \
+            local json_obj=$(jq -n --argjson name "$system_name" --argjson friendly_name "$system_friendly_name" --argjson desc "$description" --argjson emu_system "$emulated_system" \
+                            --argjson emu_system_friendly "$emulated_system_friendly_name" --arg status "$preset_status" \
                             '{ system_name: $name, system_friendly_name: $friendly_name, description: $desc, emulated_system: $emu_system, emulated_system_friendly_name: $emu_system_friendly, status: $status }')
-            all_preset_settings=$(jq --arg preset "$preset_name" --arg component "$component" --argjson obj "$json_obj" '.[$preset][$component] = [$obj]' <<< "$all_preset_settings")
+            all_preset_settings=$(jq --arg preset "$preset_name" --arg component "$component" --argjson obj "$json_obj" '.[$preset] += [$obj]' <<< "$all_preset_settings")
           fi
-        done
+        fi
       fi
-    done
+    done < <(jq -r '.presets | keys[]' "$rd_conf")
     echo "$all_preset_settings" | jq .
-  else
-    for component in $(jq -r --arg preset "$preset" '.presets[$preset] | keys[]' "$rd_conf"); do
-      local json_info=$(jq -r '
+  else # User specified a preset but not component
+    while read -r component; do
+      if [[ "$component" == *".cores" ]]; then # If component is a core wrapper for a parent component
+        parent_component="${component%.cores}"
+        while read -r core; do
+          local json_info=$(jq -r --arg core "$core" '
+          # Grab the first top‑level key into $system_key
+          (keys_unsorted[0]) as $system_key
+          | .[$system_key] as $sys
+          | {
+              system_name: $core,
+              data: {
+                system_friendly_name: $sys.cores.[$core].name,
+                description: $sys.cores.[$core].description,
+                emulated_system: $sys.cores.[$core].system,
+                emulated_system_friendly_name: $sys.cores.[$core].system_friendly_name
+              }
+            }
+          ' "$RD_MODULES/$parent_component/manifest.json")
+          local system_name=$(jq -c '.system_name' <<< "$json_info")
+          local system_friendly_name=$(jq -c '.data.system_friendly_name' <<< "$json_info")
+          local description=$(jq -c '.data.description' <<< "$json_info")
+          local emulated_system=$(jq -c '.data.emulated_system' <<< "$json_info")
+          local emulated_system_friendly_name=$(jq -c '.data.emulated_system_friendly_name' <<< "$json_info")
+          local preset_status=$(get_setting_value "$rd_conf" "$core" "retrodeck" "$preset")
+          local json_obj=$(jq -n --argjson name "$system_name" --argjson friendly_name "$system_friendly_name" --argjson desc "$description" --argjson emu_system "$emulated_system" \
+                              --argjson emu_system_friendly "$emulated_system_friendly_name" --arg status "$preset_status" \
+                              '{ system_name: $name, system_friendly_name: $friendly_name, description: $desc, emulated_system: $emu_system, emulated_system_friendly_name: $emu_system_friendly, status: $status }')
+          current_preset_settings=$(jq -n --argjson existing_obj "$current_preset_settings" --argjson obj "$json_obj" '$existing_obj + [$obj]')
+        done < <(jq -r --arg preset "$preset" --arg parent "$parent_component.cores" '.presets[$preset][$parent] | keys[]' "$rd_conf")
+      else # If component is not a core wrapper
+        local json_info=$(jq -r '
         # Grab the first top‑level key into $system_key
         (keys_unsorted[0]) as $system_key
         | .[$system_key] as $sys
@@ -285,18 +372,19 @@ api_get_current_preset_settings() {
               emulated_system_friendly_name: $sys.system_friendly_name
             }
           }
-      ' "$RD_MODULES/$component/manifest.json")
-      local system_name=$(echo "$json_info" | jq -r '.system_name' )
-      local system_friendly_name=$(echo "$json_info" | jq -r '.data.system_friendly_name')
-      local description=$(echo "$json_info" | jq -r '.data.description')
-      local emulated_system=$(echo "$json_info" | jq -r '.data.emulated_system')
-      local emulated_system_friendly_name=$(echo "$json_info" | jq -r '.data.emulated_system_friendly_name')
-      local preset_status=$(get_setting_value "$rd_conf" "$component" "retrodeck" "$preset")
-      local json_obj=$(jq -n --arg name "$system_name" --arg friendly_name "$system_friendly_name" --arg desc "$description" --arg emu_system "$emulated_system" \
-                          --arg emu_system_friendly "$emulated_system_friendly_name" --arg status "$preset_status" \
-                          '{ system_name: $name, system_friendly_name: $friendly_name, description: $desc, emulated_system: $emu_system, emulated_system_friendly_name: $emu_system_friendly, status: $status }')
-      current_preset_settings=$(jq -n --argjson existing_obj "$current_preset_settings" --argjson obj "$json_obj" '$existing_obj + [$obj]')
-    done
+        ' "$RD_MODULES/$component/manifest.json")
+        local system_name=$(jq -c '.system_name' <<< "$json_info")
+        local system_friendly_name=$(jq -c '.data.system_friendly_name' <<< "$json_info")
+        local description=$(jq -c '.data.description' <<< "$json_info")
+        local emulated_system=$(jq -c '.data.emulated_system' <<< "$json_info")
+        local emulated_system_friendly_name=$(jq -c '.data.emulated_system_friendly_name' <<< "$json_info")
+        local preset_status=$(get_setting_value "$rd_conf" "$component" "retrodeck" "$preset" <<< "$json_info")
+        local json_obj=$(jq -n --argjson name "$system_name" --argjson friendly_name "$system_friendly_name" --argjson desc "$description" --argjson emu_system "$emulated_system" \
+                            --argjson emu_system_friendly "$emulated_system_friendly_name" --arg status "$preset_status" \
+                            '{ system_name: $name, system_friendly_name: $friendly_name, description: $desc, emulated_system: $emu_system, emulated_system_friendly_name: $emu_system_friendly, status: $status }')
+        current_preset_settings=$(jq -n --argjson existing_obj "$current_preset_settings" --argjson obj "$json_obj" '$existing_obj + [$obj]')
+      fi
+    done < <(jq -r --arg preset "$preset" '.presets[$preset] | keys[]' "$rd_conf")
     echo "$current_preset_settings" | jq .
   fi
 }
