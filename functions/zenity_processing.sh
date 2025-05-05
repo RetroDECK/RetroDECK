@@ -25,7 +25,13 @@ parse_json_to_array() {
 
   while IFS= read -r json_value; do
     temp_bash_array+=( "$json_value" )
-  done < <("$@" | jq -r '.[] | .[]')
+  done < <("$@" | jq -r '.[] | .[] |
+                        if type == "array" then
+                          join(",")
+                        else
+                          tostring
+                        end
+                      ') # Flatten arrays of values into a CSV string
 
   eval "$dest_array=(\"\${temp_bash_array[@]}\")"
 }
