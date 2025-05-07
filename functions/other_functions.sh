@@ -1512,11 +1512,62 @@ check_if_updated() {
 }
 
 source_component_functions() {
-  # This function will iterate the paths.sh file for every installed component and source it for use in the greater application
-  while IFS= read -r functions_file; do
-    log d "Found component paths file $functions_file"
-    source "$functions_file"
-  done < <(find "$RD_MODULES" -maxdepth 2 -mindepth 2 -type f -name "functions.sh")
+  # This function will iterate the functions.sh file for every installed component and source it for use in the greater application
+  # Specific component names can be specified, as well as the unique values of "retrodeck", "external" or "internal"
+  # The "retrodeck" option will source only the RetroDECK functions.sh file, which is typically needed to be sourced before anything else on boot
+  # The "internal" option will source components which are specifically internal to RetroDECK, such as SRM or ES-DE, but not RetroDECK itself
+  # The "external" option will source everything else, excluding the RetroDECK and internal files for speed reasons
+  # A specific component name will also be allowed, where the functions.sh file under $RD_MODULES/<component name> will be sourced.
+  # A fallback where all files are sourced when there is no component specified is also an option.
+
+  local choice="$1"
+
+  if [[ -n "$choice" ]]; then
+    case "$choice" in
+
+    "retrodeck" )
+      set -o allexport # Export all the variables found during sourcing, for use elsewhere
+      source "$RD_MODULES/retrodeck/functions.sh"
+      set +o allexport # Back to normal, otherwise every assigned variable will get exported through the rest of the run
+    ;;
+
+    "internal" )
+      set -o allexport # Export all the variables found during sourcing, for use elsewhere
+      source "$RD_MODULES/es-de/functions.sh"
+      source "$RD_MODULES/steam-rom-manager/functions.sh"
+      set +o allexport # Back to normal, otherwise every assigned variable will get exported through the rest of the run
+    ;;
+
+    "external" )
+      while IFS= read -r functions_file; do
+        if [[ ! $(basename $(dirname $functions_file)) =~ ^(retrodeck|es-de|steam-rom-manager)$ ]]; then
+          log d "Found component functions file $functions_file"
+          set -o allexport # Export all the variables found during sourcing, for use elsewhere
+          source "$functions_file"
+          set +o allexport # Back to normal, otherwise every assigned variable will get exported through the rest of the run
+        fi
+      done < <(find "$RD_MODULES" -maxdepth 2 -mindepth 2 -type f -name "functions.sh")
+    ;;
+
+    * )
+      if [[ -n $(find "$RD_MODULES/$choice" -maxdepth 1 -mindepth 1 -type f -name "functions.sh") ]]; then
+        set -o allexport # Export all the variables found during sourcing, for use elsewhere
+        source "$RD_MODULES/$choice/functions.sh"
+        set +o allexport # Back to normal, otherwise every assigned variable will get exported through the rest of the run
+      else
+        log e "functions.sh file for component $choice could not be found."
+      fi
+    ;;
+
+    esac
+  else
+    while IFS= read -r functions_file; do
+      log d "Found component functions file $functions_file"
+      set -o allexport # Export all the variables found during sourcing, for use elsewhere
+      source "$functions_file"
+      set +o allexport # Back to normal, otherwise every assigned variable will get exported through the rest of the run
+    done < <(find "$RD_MODULES" -maxdepth 2 -mindepth 2 -type f -name "functions.sh")
+  fi
 }
 
 update_rd_conf() {
