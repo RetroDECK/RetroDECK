@@ -182,13 +182,23 @@ process_request() {
           fi
         ;;
 
-        "all_retrodeck_settings" )
+        "retrodeck_settings" )
           local result
           result=$(cat "$rd_conf" | jq .)
           if [[ -n "$result" ]]; then
             echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
           else
             echo "{\"status\":\"error\",\"message\":\"retrodeck settings could not be read\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+          fi
+        ;;
+
+        "incompatible_presets" )
+          local result
+          result=$(jq -r '.incompatible_presets' $features)
+          if [[ -n "$result" ]] then
+            echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
+          else
+            echo "{\"status\":\"error\",\"message\":\"conflicting presets information could not be read\",\"request_id\":\"$request_id\"}" > "$response_pipe"
           fi
         ;;
 
