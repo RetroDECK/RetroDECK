@@ -12,16 +12,16 @@
 #                                                                                                        retrodeck_api status
 
 retrodeck_api() {
-# Handle command-line arguments
-case "$1" in
-    start) start_server ;;
-    stop) stop_server ;;
-    status) status_server ;;
-    *)
-      echo "Usage: $0 {start|stop|status}"
-      exit 1
-      ;;
-esac
+  # Handle command-line arguments
+  case "$1" in
+      start) start_server ;;
+      stop) stop_server ;;
+      status) status_server ;;
+      *)
+        echo "Usage: $0 {start|stop|status}"
+        exit 1
+        ;;
+  esac
 }
 
 start_server() {
