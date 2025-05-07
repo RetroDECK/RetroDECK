@@ -363,21 +363,27 @@ api_get_multifile_game_structure() {
 }
 
 api_get_component_menu_entries() {
-  # This function will find all component-specific menu entries for use in a Configurator for a given menu section
+  # This function will find all component-specific menu entries for use in a Configurator for a given menu section, or "all" if all entries for all menu options are desired
   # Menu sections and entry information are defined in each components manifest.json file
   # USAGE: api_get_component_menu_entries "$menu"
 
-  local menu="$1"
-  local menu_items='[]'
+  local requested_menu="$1"
+  local menu_items='{}'
 
   while IFS= read -r manifest_file; do
     if jq -e '.. | objects | select(has("configurator_menus")) | any' "$manifest_file" > /dev/null; then # Check if manifest contains the "configurator_menus" key
-      if jq -e --arg menu "$menu" 'to_entries[].value.configurator_menus | has($menu)' "$manifest_file" > /dev/null; then # Check if this manifest has entries for the menu we are looking for
-        while read -r menu_entry; do
-        json_obj=$(jq -r --arg menu "$menu" --arg menu_entry "$menu_entry" 'to_entries[].value.configurator_menus[$menu][$menu_entry]' "$manifest_file")
-        menu_items=$(jq --argjson new_obj "$json_obj" '. + [$new_obj]' <<< "$menu_items")
-        done < <(jq -r --arg menu "$menu" 'to_entries[].value.configurator_menus[$menu] | keys[]' "$manifest_file")
-      fi
+      while read -r menu; do
+        if [[ "$requested_menu" == "$menu" || "$requested_menu" == "all" ]]; then # Check if this manifest has entries for the menu we are looking for
+          if ! jq -e --arg menu "$menu" '. | has($menu)' <<< "$menu_items" > /dev/null; then
+            log d "Menu $menu not yet added to list, adding..."
+            menu_items=$(jq --arg menu "$menu" '. += { ($menu): [] }' <<< "$menu_items")
+          fi
+          while read -r menu_entry; do
+            json_obj=$(jq -r --arg menu "$menu" --arg menu_entry "$menu_entry" 'to_entries[].value.configurator_menus[$menu][$menu_entry]' "$manifest_file")
+            menu_items=$(jq --arg menu "$menu" --argjson new_obj "$json_obj" '.[$menu] += [$new_obj]' <<< "$menu_items")
+          done < <(jq -r --arg menu "$menu" 'to_entries[].value.configurator_menus[$menu] | keys[]' "$manifest_file")
+        fi
+      done < <(jq -r 'to_entries[].value.configurator_menus | keys[]' "$manifest_file")
     fi
   done < <(find "$RD_MODULES" -maxdepth 2 -mindepth 2 -type f -name "manifest.json")
 
