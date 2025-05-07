@@ -320,6 +320,28 @@ process_request() {
           fi
         ;;
 
+        "retrodeck_setting" )
+          local setting_name=$(jq -r '.setting_name // empty' <<< "$request_data")
+          local setting_value=$(jq -r '.setting_value // empty' <<< "$request_data")
+          local section_name=$(jq -r '.section_name // empty' <<< "$request_data")
+          local status
+
+          if [[ -n "$setting_name" && -n "$setting_value" && -n "$section_name" ]]; then
+            local result
+            set_setting_value "$rd_conf" "$setting_name" "$setting_value" "retrodeck" "$section_name"
+            if [[ $(get_setting_value "$rd_conf" "$setting_name" "retrodeck" "$section_name") == "$setting_value" ]]; then # Make sure the setting actually changed
+              status="success"
+              result=$(echo "{\"setting_name\":\"$setting_name\",\"setting_value\":\"$setting_value\"}" | jq .)
+            else
+              status="error"
+              result=$(echo "{\"response\":\"Setting value on $setting_name was not able to be changed.\"}" | jq .)
+            fi
+            echo "{\"status\":\"$status\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
+          else
+            echo "{\"status\":\"error\",\"message\":\"missing one or more request values\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+          fi
+        ;;
+
         * )
         echo "{\"status\":\"error\",\"message\":\"Unknown request: $request\",\"request_id\":\"$request_id\"}" > "$response_pipe"
         ;;
