@@ -252,7 +252,7 @@ process_request() {
           fi
         ;;
 
-        "check_multifile_structure" )
+        "multifile_game_structure" )
           local result
 
           if result="$(api_get_multifile_game_structure)"; then
