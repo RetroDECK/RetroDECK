@@ -205,6 +205,7 @@ process_request() {
 
           if [[ -n "$setting_file" && -n "$setting_name" && -n "$system_name" ]]; then
             local result
+            setting_file=$(echo "$setting_file" | envsubst) # Expand supplied var names, if applicable
             result=$(echo "{\"setting_name\":\"$setting_name\",\"setting_value\":\"$(get_setting_value "$setting_file" "$setting_name" "$system_name" "$section_name")\"}" | jq .)
             echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
           else
@@ -294,6 +295,7 @@ process_request() {
 
           if [[ -n "$setting_file" && -n "$setting_name" && -n "$setting_value" && -n "$system_name" ]]; then
             local result
+            setting_file=$(echo "$setting_file" | envsubst) # Expand supplied var names, if applicable
             set_setting_value "$setting_file" "$setting_name" "$setting_value" "$system_name" "$section_name"
             if [[ $(get_setting_value "$setting_file" "$setting_name" "$system_name" "$section_name") == "$setting_value" ]]; then # Make sure the setting actually changed
               status="success"
