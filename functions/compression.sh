@@ -3,15 +3,18 @@
 compress_game() {
   # Function for compressing one or more files to .chd format
   # USAGE: compress_game $format $full_path_to_input_file $cleanup_choice $system(optional)
+  local format="$1"
   local file="$2"
+  local post_compression_cleanup="$3"
+  local system="$4"
   local filename_no_path=$(basename "$file")
   local filename_no_extension="${filename_no_path%.*}"
   local filename_extension="${filename_no_path##*.}"
   local source_file=$(dirname "$(realpath "$file")")"/""$(basename "$file")"
   local dest_file=$(dirname "$(realpath "$file")")"/""$filename_no_extension"
 
-  if [[ "$1" == "chd" ]]; then
-    case "$4" in # Check platform-specific compression options
+  if [[ "$format" == "chd" ]]; then
+    case "$system" in # Check platform-specific compression options
     "psp" )
       log d "Compressing PSP game $source_file into $dest_file"
       /app/bin/chdman createdvd --hunksize 2048 -i "$source_file" -o "$dest_file".chd -c zstd
@@ -27,14 +30,14 @@ compress_game() {
       /app/bin/chdman createcd -i "$source_file" -o "$dest_file".chd
     ;;
     esac
-  elif [[ "$1" == "zip" ]]; then
+  elif [[ "$format" == "zip" ]]; then
     zip -jq9 "$dest_file".zip "$source_file"
-  elif [[ "$1" == "rvz" ]]; then
+  elif [[ "$format" == "rvz" ]]; then
     dolphin-tool convert -f rvz -b 131072 -c zstd -l 5 -i "$source_file" -o "$dest_file.rvz"
   fi
 
-  if [[ "$3" == "true" ]]; then # Remove file(s) if requested
-    if [[ -f "${file%.*}.$1" ]]; then
+  if [[ "$post_compression_cleanup" == "true" ]]; then # Remove file(s) if requested
+    if [[ -f "${file%.*}.$format" ]]; then
       log i "Performing post-compression file cleanup"
       if [[ "$file" == *".cue" ]]; then
         local cue_bin_files=$(grep -o -P "(?<=FILE \").*(?=\".*$)" "$file")
@@ -51,7 +54,7 @@ compress_game() {
         rm -f "$(realpath "$file")"
       fi
     else
-      log i "Compressed file ${file%.*}.$1 not found, skipping original file deletion"
+      log i "Compressed file ${file%.*}.$format not found, skipping original file deletion"
     fi
   fi
 }
