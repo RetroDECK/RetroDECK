@@ -63,8 +63,8 @@ api_get_compressible_games() {
               if [[ "$compatible_compression_format" == "chd" ]]; then
                 log d "Game $game is compatible with CHD compression"
                 # Build a JSON object for this game
-                local json_obj=$(jq -n --arg game "$game" --arg compression "$compatible_compression_format" \
-                '{ game: $game, compression: $compression }')
+                local json_obj=$(jq -n --arg game "$game" --arg format "$compatible_compression_format" \
+                '{ game: $game, format: $format }')
                 # Write the final JSON object to the output file, locking it to prevent write race conditions.
                 (
                 flock -x 200
@@ -76,8 +76,8 @@ api_get_compressible_games() {
               if [[ "$compatible_compression_format" == "zip" ]]; then
                 log d "Game $game is compatible with ZIP compression"
                 # Build a JSON object for this game.
-                local json_obj=$(jq -n --arg game "$game" --arg compression "$compatible_compression_format" \
-                '{ game: $game, compression: $compression }')
+                local json_obj=$(jq -n --arg game "$game" --arg format "$compatible_compression_format" \
+                '{ game: $game, format: $format }')
                 # Write the final JSON object to the output file, locking it to prevent write race conditions.
                 (
                 flock -x 200
@@ -89,8 +89,8 @@ api_get_compressible_games() {
               if [[ "$compatible_compression_format" == "rvz" ]]; then
                 log d "Game $game is compatible with ZIP compression"
                 # Build a JSON object for this game.
-                local json_obj=$(jq -n --arg game "$game" --arg compression "$compatible_compression_format" \
-                '{ game: $game, compression: $compression }')
+                local json_obj=$(jq -n --arg game "$game" --arg format "$compatible_compression_format" \
+                '{ game: $game, format: $format }')
                 # Write the final JSON object to the output file, locking it to prevent write race conditions.
                 (
                 flock -x 200
@@ -102,8 +102,8 @@ api_get_compressible_games() {
               if [[ "$compatible_compression_format" != "none" ]]; then
                 log d "Game $game is compatible with ZIP compression"
                 # Build a JSON object for this game.
-                local json_obj=$(jq -n --arg game "$game" --arg compression "$compatible_compression_format" \
-                '{ game: $game, compression: $compression }')
+                local json_obj=$(jq -n --arg game "$game" --arg format "$compatible_compression_format" \
+                '{ game: $game, format: $format }')
                 # Write the final JSON object to the output file, locking it to prevent write race conditions.
                 (
                 flock -x 200
