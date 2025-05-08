@@ -359,7 +359,7 @@ process_request() {
         "compress_games" )
           local post_compression_cleanup
 
-          post_compression_cleanup=$(jq -r '.post_compression_cleanup // empty' <<< "$json_input")
+          post_compression_cleanup=$(jq -r '.post_compression_cleanup // empty' <<< "$request_data")
 
           if [[ -n "$post_compression_cleanup" ]]; then
             while read -r game; do
@@ -371,12 +371,12 @@ process_request() {
               local compression_format
 
               system=$(echo "$game" | grep -oE "$roms_folder/[^/]+" | grep -oE "[^/]+$")
-              compression_format=$(jq -r --arg game_path "$game" '.[] | select(.game == $game_path) | .format' <<< "$request_data")
+              compression_format=$(jq -r --arg game_path "$game" '.games.[] | select(.game == $game_path) | .format' <<< "$request_data")
 
               log i "Compressing $(basename "$game") into $compression_format format"
               compress_game "$compression_format" "$game" "$post_compression_cleanup" "$system"
               ) &
-            done <<< "$(jq -r '.[].game' <<< "$request_data")"
+            done <<< "$(jq -r '.games.[].game' <<< "$request_data")"
             wait # wait for background tasks to finish
 
             echo "{\"status\":\"success\",\"result\":\"The compression process is complete\",\"request_id\":\"$request_id\"}" > "$response_pipe"
