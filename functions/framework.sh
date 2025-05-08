@@ -39,10 +39,10 @@ set_setting_value() {
         else
           sed -i '\^\['"$current_section_name"'\]^,\^\^'"$setting_name_to_change"'=^s^\^'"$setting_name_to_change"'=.*^'"$setting_name_to_change"'='"$setting_value_to_change"'^' "$1"
           if [[ "$4" == "retrodeck" && ("$current_section_name" == "" || "$current_section_name" == "paths" || "$current_section_name" == "options") ]]; then # If a RetroDECK setting is being changed, also write it to memory for immediate use
-            declare -g "$setting_name_to_change=$setting_value_to_change"
           fi
         fi
       fi
+      declare -g "$setting_name_to_change=$setting_value_to_change"
     ;;
 
     "melonds" | "yuzu" | "citra" | "libretro_scummvm" )
