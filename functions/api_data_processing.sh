@@ -267,12 +267,12 @@ api_get_bios_file_status() {
     done
     (
     # Extract the key (element name) and the fields
-    bios_file=$(echo "$entry" | jq -r '.key // "Unknown"')
-    bios_md5=$(echo "$entry" | jq -r '.value.md5 | if type=="array" then join(", ") else . end // "Unknown"')
-    bios_systems=$(echo "$entry" | jq -r '.value.system | if type=="array" then join(", ") else . end // "Unknown"')
-    bios_desc=$(echo "$entry" | jq -r '.value.description // "No description provided"')
-    required=$(echo "$entry" | jq -r '.value.required // "No"')
-    bios_paths=$(echo "$entry" | jq -r '.value.paths // "'"$bios_folder"'" | if type=="array" then join(", ") else . end')
+    bios_file=$(jq -r '.key // "Unknown"' <<< "$entry")
+    bios_md5=$(jq -r '.value.md5 | if type=="array" then join(", ") else . end // "Unknown"' <<< "$entry")
+    bios_systems=$(jq -r '.value.system | if type=="array" then join(", ") else . end // "Unknown"' <<< "$entry")
+    bios_desc=$(jq -r '.value.description // "No description provided"' <<< "$entry")
+    required=$(jq -r '.value.required // "No"' <<< "$entry")
+    bios_paths=$(jq -r '.value.paths // "'"$bios_folder"'" | if type=="array" then join(", ") else . end' <<< "$entry")
 
     log d "Checking entry $bios_entry"
 
@@ -699,7 +699,7 @@ api_do_cheevos_login() {
   # USAGE api_do_cheevos_login $username $password
 
   local cheevos_api_response=$(curl --silent --data "r=login&u=$1&p=$2" "$RA_API_URL")
-  local cheevos_success=$(echo "$cheevos_api_response" | jq -r '.Success')
+  local cheevos_success=$(jq -r '.Success' <<< "$cheevos_api_response")
   if [[ "$cheevos_success" == "true" ]]; then
     log d "cheevos login succeeded"
     cheevos_login_timestamp=$(date +%s)
