@@ -149,11 +149,20 @@
     },
     "oktoberfest": {
       "start_date": "0920",
-      "end_date": "1005",
+      "end_date": "1004",
       "start_time": "0000",
       "end_time": "2359",
       "full_start_date": "2025-09-20",
-      "full_end_date": "2025-10-05",
+      "full_end_date": "2025-10-04",
+      "filename": "placeholder.svg"
+    },
+    "tsukimi": {
+      "start_date": "1005",
+      "end_date": "1010",
+      "start_time": "0000",
+      "end_time": "2359",
+      "full_start_date": "2025-10-05",
+      "full_end_date": "2025-10-10",
       "filename": "placeholder.svg"
     },
     "halloween": {
