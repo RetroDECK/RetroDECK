@@ -108,6 +108,8 @@ modules:
       - type: dir
         path: .
 
+  # START: Internal RetroDECK tools
+
   - name: xmlstarlet
     config-opts:
       - --disable-static-libs
@@ -184,9 +186,6 @@ modules:
         url: https://github.com/mikefarah/yq/releases/download/v4.45.1/yq_linux_amd64
         sha256: 654d2943ca1d3be2024089eb4f270f4070f491a0610481d128509b2834870049
 
-  # Steam ROM Manager - START
-  # https://github.com/flathub/com.steamgriddb.steam-rom-manager
-
   - name: steam-rom-manager
     buildsystem: simple
     build-commands:
@@ -215,7 +214,7 @@ modules:
             "_amd64.deb") | .browser_download_url
           version-query: .tag_name | sub("^v"; "")
 
-  # Steam ROM Manager - END
+  # END: Internal RetroDECK tools
 
   - name: retrodeck
     buildsystem: simple
