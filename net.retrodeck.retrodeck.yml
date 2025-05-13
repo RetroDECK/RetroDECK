@@ -133,24 +133,38 @@ modules:
         url: https://github.com/rclone/rclone/releases/download/v1.69.1/rclone-v1.69.1-linux-amd64.zip
         sha256: 231841f8d8029ae6cfca932b601b3b50d0e2c3c2cb9da3166293f1c3eae7d79c
 
-  # Source: https://github.com/flathub/com.valvesoftware.Steam.Utility.steamtinkerlaunch/blob/129c9192f874405d21612d95f9749dc2bcaf8cea/modules/rsync.yml#L5
+  # Source: https://github.com/flathub/com.valvesoftware.Steam.Utility.steamtinkerlaunch/blob/master/modules/rsync.yml
   - name: rsync
     no-autogen: true
     config-opts:
-      - --prefix=${FLATPAK_DEST}
       - --with-included-popt
       - --with-included-zlib
       - --disable-debug
-      - --disable-xxhash # Unable to meet dependency -- rsync refuses to see the required xxhash.h file
     sources:
       - type: archive
-        url: https://download.samba.org/pub/rsync/src/rsync-3.2.7.tar.gz
-        sha256: 4e7d9d3f6ed10878c58c5fb724a67dacf4b6aac7340b13e488fb2dc41346f2bb
+        url: https://download.samba.org/pub/rsync/src/rsync-3.4.1.tar.gz
+        sha256: 2924bcb3a1ed8b551fc101f740b9f0fe0a202b115027647cf69850d65fd88c52
         x-checker-data:
           type: anitya
           project-id: 4217
           stable-only: true
           url-template: https://download.samba.org/pub/rsync/src/rsync-$version.tar.gz
+    modules:
+      - name: xxhash
+        no-autogen: true
+        make-install-args:
+          - PREFIX=${FLATPAK_DEST}
+          - DISPATCH=1
+        sources:
+          - type: git
+            url: https://github.com/Cyan4973/xxHash/
+            tag: v0.8.3
+            commit: e626a72bc2321cd320e953a0ccf1584cad60f363
+            x-checker-data:
+              type: anitya
+              project-id: 17583
+              stable-only: true
+              tag-template: v$version
 
   - name: jq
     buildsystem: simple
@@ -172,13 +186,6 @@ modules:
 
   # Steam ROM Manager - START
   # https://github.com/flathub/com.steamgriddb.steam-rom-manager
-
-  - name: zypak
-    sources:
-      - type: git
-        url: https://github.com/refi64/zypak
-        tag: v2022.03
-        commit: 8424c6bcf909ca2031ebc6537d324bb64772266e
 
   - name: steam-rom-manager
     buildsystem: simple
@@ -209,16 +216,6 @@ modules:
           version-query: .tag_name | sub("^v"; "")
 
   # Steam ROM Manager - END
-
-  - name: retrodeck-theme
-    buildsystem: simple
-    build-commands:
-      - mkdir -p ${FLATPAK_DEST}/share/es-de/themes/retrodeck/
-      - mv -f * ${FLATPAK_DEST}/share/es-de/themes/retrodeck/
-    sources:
-      - type: git
-        url:  https://github.com/RetroDECK/RetroDECK-theme
-        commit: 6c9565fc8335d9cd74a56ae8a2c4dafa8cf9c513
 
   - name: retrodeck
     buildsystem: simple
