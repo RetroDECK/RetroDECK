@@ -95,7 +95,7 @@ PID_FILE="$rd_api_dir/retrodeck_api_server.pid"
 RD_FILE_LOCK="$rd_api_dir/retrodeck_file_lock"
 
 # Base dir for all installed RetroDECK components
-RD_MODULES="/app/retrodeck/components"
+rd_components="/app/retrodeck/components"
 
 # ES-DE config files
 
