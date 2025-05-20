@@ -42,3 +42,4 @@ __pycache__
 
 CMakeFiles
 build
+*.afphoto~lock~
