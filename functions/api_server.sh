@@ -408,7 +408,7 @@ process_request() {
           package_name=$(jq -r '.package_name // empty' <<< "$request_data")
 
           if [[ -n "$package_name" ]]; then
-            if result="$(api_do_install_retrodeck_package $package_name)"; then
+            if result=$(api_do_install_retrodeck_package "$package_name"); then
               echo "{\"status\":\"success\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$response_pipe"
             else
               echo "{\"status\":\"error\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$response_pipe"
