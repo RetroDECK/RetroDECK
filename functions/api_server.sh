@@ -401,6 +401,23 @@ process_request() {
           fi
         ;;
 
+        "move_rd_directory" )
+          local rd_dir
+
+          rd_dir=$(jq -r ".rd_dir // empty" <<< "$request_data")
+
+          if [[ -n "$rd_dir" ]]; then
+            local result
+            if result=$(api_do_move_retrodeck_directory "$rd_dir"); then
+              echo "{\"status\":\"success\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+            else
+              echo "{\"status\":\"error\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+            fi
+          else
+            echo "{\"status\":\"error\",\"message\":\"missing request value: rd_dir\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+          fi
+        ;;
+
         "install" )
           local package_name
           local result

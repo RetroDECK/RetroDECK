@@ -711,3 +711,73 @@ api_do_cheevos_login() {
     return 1
   fi
 }
+
+api_do_move_retrodeck_directory() {
+  local rd_dir_name="$1" # The folder variable name from retrodeck.cfg
+  local dest_dir="$2"
+  local dir_to_move="$(get_setting_value "$rd_conf" "$rd_dir_name" "retrodeck" "paths")/" # The path of that folder variable
+
+  if [[ ! -n "$dir_to_move" ]]; then
+    echo "path $rd_dir_name not found in retrodeck.cfg"
+    return 1
+  fi
+
+  local source_root="$(echo "$dir_to_move" | sed -e 's/\(.*\)\/retrodeck\/.*/\1/')" # The root path of the folder, excluding retrodeck/<folder name>. So /home/deck/retrodeck/roms becomes /home/deck
+  if [[ ! "$rd_dir_name" == "rdhome" ]]; then # If a sub-folder is being moved, find it's path without the source_root. So /home/deck/retrodeck/roms becomes retrodeck/roms
+    local rd_dir_path="$(echo "$dir_to_move" | sed "s/.*\(retrodeck\/.*\)/\1/; s/\/$//")"
+  else # Otherwise just set the retrodeck root folder
+    local rd_dir_path="$(basename "$dir_to_move")"
+  fi
+
+  if [[ -d "$dir_to_move" ]]; then # If the directory selected to move already exists at the expected location pulled from retrodeck.cfg
+    if [[ "$dest" == "internal" ]]; then
+      local dest_root="$HOME"
+    elif [[ "$dest" == "sd" ]]; then
+      if [[ -d "$sdcard" ]]; then
+        local dest_root="$sdcard"
+      fi
+    elif [[ -d "$dest" ]]; then
+      local dest_root="$dest"
+    else
+      echo "a valid destination was not specified"
+      return 1
+    fi
+
+    if [[ -w "$dest_root" ]]; then # If user picked a destination and it is writable
+      if [[ (-d "$dest_root/$rd_dir_path" && ! -L "$dest_root/$rd_dir_path" && ! $rd_dir_name == "rdhome") || "$(realpath "$dir_to_move")" == "$dest_root/$rd_dir_path" ]]; then # If the user is trying to move the folder to where it already is (excluding symlinks that will be unlinked)
+        echo "the chosen retrodeck directory is already at the given destination"
+        return 1
+      else
+        if [[ $(verify_space "$(echo "$dir_to_move" | sed 's/\/$//')" "$dest_root") ]]; then # Make sure there is enough space at the destination
+          unlink "$dest_root/$rd_dir_path" # In case there is already a symlink at the picked destination
+          move "$dir_to_move" "$dest_root/$rd_dir_path"
+          if [[ -d "$dest_root/$rd_dir_path" ]]; then # If the move succeeded
+            declare -g "$rd_dir_name=$dest_root/$rd_dir_path" # Set the new path for that folder variable in retrodeck.cfg
+            if [[ "$rd_dir_name" == "rdhome" ]]; then # If the whole retrodeck folder was moved...
+              prepare_component "postmove" "retrodeck"
+            fi
+            prepare_component "postmove" "all" # Update all the appropriate emulator path settings
+            conf_write # Write the settings to retrodeck.cfg
+            if [[ -z $(ls -1 "$source_root/retrodeck") ]]; then # Cleanup empty old_path/retrodeck folder if it was left behind
+              rmdir "$source_root/retrodeck"
+            fi
+            echo "directory $rd_dir_name successfully moved to $dest_root"
+            return 0
+          else
+            echo "move failed, please check logs for more details"
+            return 1
+          fi
+        else # If there isn't enough space in the picked destination
+          echo "not enough free space at given destination"
+          return 1
+        fi
+      fi
+    else # If the user didn't pick any custom destination, or the destination picked is unwritable
+      echo "the chosen destination is not writable"
+      return 1
+    fi
+  else # The folder to move was not found at the path pulled from retrodeck.cfg
+    echo "path $dir_to_move could not be found, retrodeck.cfg paths need to be repaired"
+    return 1
+  fi
+}
