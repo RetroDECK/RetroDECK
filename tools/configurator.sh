@@ -396,24 +396,22 @@ configurator_open_emulator_dialog() {
   # If the user cancels the dialog, it calls `configurator_welcome_dialog` to return to the
   # welcome screen.
 
-  local emulator_list=()
-  while IFS= read -r emulator && IFS= read -r desc; do
-    if [[ "$emulator" != "RetroDECK" ]]; then
-      emulator_list+=("$emulator" "$desc")
-    fi
-  done < <(paste -d '\n' <(open_component --list) <(open_component --getdesc))
+  parse_json_to_array emulator_list_1 api_get_component "all"
+
+  keep_parts_of_array "2 3 5" emulator_list_1 emulator_list_2 "6"
+
+  remove_group_from_array "RetroDECK" emulator_list_2 emulator_list "3"
 
   emulator=$(rd_zenity --list \
   --title "RetroDECK Configurator Utility - Open Component" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --text="Which emulator do you want to launch?" \
-  --hide-header \
-  --column="Emulator" --column="Description" \
+  --hide-header --hide-column=3 --print-column=3\
+  --column="Emulator" --column="Description" --column="component_path"\
   "${emulator_list[@]}")
 
   if [[ -n "$emulator" ]]; then
-    open_component "$emulator"
-    configurator_open_emulator_dialog
+    /bin/bash "$emulator/component_launcher.sh"
   else
     configurator_welcome_dialog
   fi
