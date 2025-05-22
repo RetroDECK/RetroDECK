@@ -112,7 +112,7 @@ prepare_component() {
   while IFS= read -r prepare_component_file; do
     log d "Found component file $prepare_component_file"
     source "$prepare_component_file"
-  done < <(find "$RD_MODULES" -maxdepth 2 -mindepth 2 -type f -name "component_prepare.sh")
+  done < <(find "$rd_components" -maxdepth 2 -mindepth 2 -type f -name "component_prepare.sh")
 
   if [[ $component_found == "false" ]]; then
     log e "Supplied component $component not found, not resetting"
