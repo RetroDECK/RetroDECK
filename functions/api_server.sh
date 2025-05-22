@@ -12,16 +12,16 @@
 #                                                                                                        retrodeck_api status
 
 retrodeck_api() {
-  # Handle command-line arguments
-  case "$1" in
-      start) start_server ;;
-      stop) stop_server ;;
-      status) status_server ;;
-      *)
-        echo "Usage: $0 {start|stop|status}"
-        exit 1
-        ;;
-  esac
+# Handle command-line arguments
+case "$1" in
+    start) start_server ;;
+    stop) stop_server ;;
+    status) status_server ;;
+    *)
+      echo "Usage: $0 {start|stop|status}"
+      exit 1
+      ;;
+esac
 }
 
 start_server() {
@@ -137,8 +137,6 @@ process_request() {
     return 1
   fi
 
-  # Process request asynchronously
-  {
   local request
   local request_data
 
@@ -173,7 +171,7 @@ process_request() {
           fi
           ;;
 
-        "all_components" )
+        "components" )
           local result
           if result=$(api_get_all_components); then
             echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
@@ -223,7 +221,7 @@ process_request() {
           fi
         ;;
 
-        "current_preset_settings" )
+        "current_preset_state" )
           if [[ -z "$request_data" ]]; then
             echo "{\"status\":\"error\",\"message\":\"Missing required field: data\",\"request_id\":\"$request_id\"}" > "$response_pipe"
             return 1
@@ -234,10 +232,10 @@ process_request() {
 
           if [[ -n "$preset" ]]; then
             local result
-            if result=$(api_get_current_preset_settings "$preset" "$component"); then
+            if result=$(api_get_current_preset_state "$preset" "$component"); then
               echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
             else
-              echo "{\"status\":\"error\",\"message\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
+              echo "{\"status\":\"error\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$response_pipe"
             fi
           else
             echo "{\"status\":\"error\",\"message\":\"missing request value: preset\",\"request_id\":\"$request_id\"}" > "$response_pipe"
@@ -334,7 +332,7 @@ process_request() {
               result=$(echo "{\"setting_name\":\"$setting_name\",\"setting_value\":\"$setting_value\"}" | jq .)
             else
               status="error"
-              result=$(echo "{\"response\":\"Setting value on $setting_name was not able to be changed.\"}" | jq .)
+              result=$(echo "{\"response\":\"setting value on $setting_name was not able to be changed\"}" | jq .)
             fi
             echo "{\"status\":\"$status\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
           else
@@ -353,7 +351,7 @@ process_request() {
         echo "{\"status\":\"error\",\"message\":\"Missing required field: data\",\"request_id\":\"$request_id\"}" > "$response_pipe"
         return 1
       fi
-      
+
       case "$request" in
 
         "compress_games" )
@@ -403,18 +401,22 @@ process_request() {
 
         "move_rd_directory" )
           local rd_dir
+          local dest
 
           rd_dir=$(jq -r ".rd_dir // empty" <<< "$request_data")
+          dest=$(jq -r ".dest // empty" <<< "$request_data")
 
           if [[ -n "$rd_dir" ]]; then
             local result
-            if result=$(api_do_move_retrodeck_directory "$rd_dir"); then
+            if result=$(api_do_move_retrodeck_directory "$rd_dir" "$dest"); then
               echo "{\"status\":\"success\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$response_pipe"
             else
               echo "{\"status\":\"error\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$response_pipe"
             fi
-          else
+          elif [[ ! -n "$rd_dir" ]]; then
             echo "{\"status\":\"error\",\"message\":\"missing request value: rd_dir\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+          else
+            echo "{\"status\":\"error\",\"message\":\"missing request value: dest\",\"request_id\":\"$request_id\"}" > "$response_pipe"
           fi
         ;;
 
@@ -442,6 +444,7 @@ process_request() {
 
           cheevos_username=$(jq -r '.username // empty' <<< "$request_data")
           cheevos_password=$(jq -r '.password // empty' <<< "$request_data")
+
           if [[ -n "$cheevos_username" && -n "$cheevos_password" ]]; then
             if result=$(api_do_cheevos_login "$cheevos_username" "$cheevos_password"); then
               echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
@@ -466,5 +469,4 @@ process_request() {
 
   # Remove response pipe after writing response
   rm -f "$response_pipe"
-  } &
 }
