@@ -38,8 +38,6 @@ set_setting_value() {
           fi
         else
           sed -i '\^\['"$current_section_name"'\]^,\^\^'"$setting_name_to_change"'=^s^\^'"$setting_name_to_change"'=.*^'"$setting_name_to_change"'='"$setting_value_to_change"'^' "$1"
-          if [[ "$4" == "retrodeck" && ("$current_section_name" == "" || "$current_section_name" == "paths" || "$current_section_name" == "options") ]]; then # If a RetroDECK setting is being changed, also write it to memory for immediate use
-          fi
         fi
       fi
       declare -g "$setting_name_to_change=$setting_value_to_change"
@@ -145,8 +143,8 @@ get_setting_name() {
 }
 
 get_setting_value() {
-  # Function for getting the current value of a setting from a config file
-  # USAGE: get_setting_value $setting_file "$setting_name" $system $section (optional)
+# Function for getting the current value of a setting from a config file
+# USAGE: get_setting_value $setting_file "$setting_name" $system $section (optional)
 
   local current_setting_name="$2"
   local current_section_name="$4"
@@ -346,6 +344,35 @@ enable_file() {
   # NOTE: $filename can be a defined variable from global.sh or must have the full path to the file and should not have ".disabled" as a suffix
 
   mv "$(realpath "$1".disabled)" "$(realpath "$(echo "$1" | sed -e 's/\.disabled//')")"
+}
+
+install_preset_files() {
+  # This function will copy a file or complete directory from a given source to a target location.
+  # rsync is used for all file copying operations, for speed and to update files in place if needed.
+  # USAGE: install_preset_files "$source" "$target"
+  local source="$1"
+  local target="$2"
+
+  # If source or target are a directory, ensure there is a trailing slash for proper rsync functionality. Files do not need this
+  if [[ -d "$source" ]]; then
+  source="${source%/}/"
+  fi
+  if [[ -d "$target" ]]; then
+  target="${target%/}/"
+  fi
+
+  rsync -rlD --mkpath "$source" "$target"
+  log d "Preset files installed at: $target"
+}
+
+remove_preset_files() {
+  # This function will remove a single target file or directory
+  # The purpose is to remove files related to a preset which need to be present to be active and removed to be disabled, as there is no associated setting value that can be changed.
+  # USAGE: remove_preset_files "$target"
+  local target="$1"
+
+  rm -rf "$target"
+  log d "Preset files deleted: $target"
 }
 
 generate_single_patch() {
@@ -569,18 +596,18 @@ get_steam_user() {
   if [ -f "$HOME/.steam/steam/config/loginusers.vdf" ]; then
     # Extract the Steam ID of the most recent user
     export steam_id=$(awk '
-      /"users"/ {flag=1} 
-      flag && /^[ \t]*"[0-9]+"/ {id=$1} 
+      /"users"/ {flag=1}
+      flag && /^[ \t]*"[0-9]+"/ {id=$1}
       flag && /"MostRecent".*"1"/ {print id; exit}' "$HOME/.steam/steam/config/loginusers.vdf" | tr -d '"')
 
     # Extract the Steam username (AccountName)
     export steam_username=$(awk -v steam_id="$steam_id" '
-      $0 ~ steam_id {flag=1} 
+      $0 ~ steam_id {flag=1}
       flag && /"AccountName"/ {gsub(/"/, "", $2); print $2; exit}' "$HOME/.steam/steam/config/loginusers.vdf")
 
     # Extract the Steam pretty name (PersonaName)
     export steam_prettyname=$(awk -v steam_id="$steam_id" '
-      $0 ~ steam_id {flag=1} 
+      $0 ~ steam_id {flag=1}
       flag && /"PersonaName"/ {gsub(/"/, "", $2); print $2; exit}' "$HOME/.steam/steam/config/loginusers.vdf")
 
     # Log success
@@ -592,7 +619,7 @@ get_steam_user() {
     if [[ -d "$srm_userdata" ]]; then
       populate_steamuser_srm
     fi
-    
+
   else
     # Log warning if file not found
     log w "No Steam user found, proceeding" >&2
