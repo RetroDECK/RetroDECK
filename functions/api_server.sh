@@ -171,12 +171,24 @@ process_request() {
           fi
           ;;
 
-        "components" )
-          local result
-          if result=$(api_get_all_components); then
-            echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
+        "component" )
+          if [[ -z "$request_data" ]]; then
+            echo "{\"status\":\"error\",\"message\":\"Missing required field: data\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+            return 1
+          fi
+
+          local component
+          component=$(jq -r '.component // empty' <<< "$request_data")
+
+          if [[ -n "$component" ]]; then
+            local result
+            if result=$(api_get_component "$component"); then
+              echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
+            else
+              echo "{\"status\":\"error\",\"message\":\"$result\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+            fi
           else
-            echo "{\"status\":\"error\",\"message\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
+            echo "{\"status\":\"error\",\"message\":\"missing request value: component\",\"request_id\":\"$request_id\"}" > "$response_pipe"
           fi
         ;;
 

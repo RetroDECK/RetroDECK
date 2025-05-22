@@ -137,9 +137,20 @@ api_get_compressible_games() {
   echo "$final_json"
 }
 
-api_get_all_components() {
-  # This function will gather information about all installed components, including their name, emulated systems, user-friendly name, description and all compatible presets and their acceptable values
-  # USAGE: api_get_all_components
+api_get_component() {
+  local component
+  local manifest_files
+  component="$1"
+
+  if [[ "$component" == "all" ]]; then
+    manifest_files=$(find "$RD_MODULES" -maxdepth 2 -mindepth 2 -type f -name "manifest.json")
+  else # A specific component was named
+    manifest_files=$(find "$RD_MODULES/$component" -maxdepth 1 -mindepth 1 -type f -name "manifest.json")
+    if [[ ! -n "$manifest_files" ]]; then # No results were found for the given component name
+      echo "information for component $component could not be found"
+      return 1
+    fi
+  fi
 
   # Initialize the empty JSON file meant for final output
   local all_components_obj="$(mktemp)"
@@ -178,7 +189,7 @@ api_get_all_components() {
       jq --argjson obj "$json_obj" '. + [$obj]' "$all_components_obj" > "$all_components_obj.tmp" && mv "$all_components_obj.tmp" "$all_components_obj"
       ) 200>"$RD_FILE_LOCK"
     ) &
-  done < <(find "$rd_components" -maxdepth 2 -mindepth 2 -type f -name "manifest.json")
+  done < <(echo "$manifest_files")
   wait # Wait for background tasks to finish
 
   local final_json=$(jq '[.[] | select(.component_name == "retrodeck")] + ([.[] | select(.component_name != "retrodeck")] | sort_by(.component_name))' "$all_components_obj") # Ensure RetroDECK is always first in the list
