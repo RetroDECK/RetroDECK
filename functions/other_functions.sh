@@ -1873,3 +1873,20 @@ merge_directories() {
 
   log i "Merge complete!"
 }
+
+launch_command() {
+  input="$1"
+  set -- $input
+  # Get the function name and remove it from the list of arguments
+  function_name="$1"
+  shift
+
+  # Check if the function exists
+  if ! declare -f "$function_name" >/dev/null 2>&1; then
+    log e "Function \'$function_name\' not found"
+    exit 1
+  fi
+
+  # Call the function with any remaining arguments
+  "$function_name" "$@"
+}
