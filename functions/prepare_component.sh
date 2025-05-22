@@ -108,11 +108,11 @@ prepare_component() {
     get_steam_user
   fi
 
-  # Read install components framework.sh files
+  # Read install components component_prepare.sh files
   while IFS= read -r prepare_component_file; do
     log d "Found component file $prepare_component_file"
     source "$prepare_component_file"
-  done < <(find "$rd_components" -maxdepth 2 -mindepth 2 -type f -name "framework.sh")
+  done < <(find "$RD_MODULES" -maxdepth 2 -mindepth 2 -type f -name "component_prepare.sh")
 
   if [[ $component_found == "false" ]]; then
     log e "Supplied component $component not found, not resetting"
