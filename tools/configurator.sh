@@ -893,34 +893,22 @@ configurator_reset_dialog() {
 }
 
 configurator_about_retrodeck_dialog() {
+  build_zenity_menu_array choices about_retrodeck # Build Zenity bash array for given menu type
+
   choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - About RetroDECK" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
-  --column="Choice" --column="Description" \
-  "Version History" "View the version changelogs for RetroDECK" \
-  "Credits" "View the contribution credits for RetroDECK" )
+  --column="Choice" --column="Action" --column="command" --hide-column=3 --print-column=3 \
+  "${choices[@]}")
 
-  case $choice in
+  local rc="$?"
 
-  "Version History" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_version_history_dialog
-  ;;
+  if [[ "$rc" -eq 0 ]]; then # User made a selection
+    log d "choice: $choice"
 
-  "Credits" )
-    log i "Configurator: opening \"$choice\" menu"
-    rd_zenity --icon-name=net.retrodeck.retrodeck --text-info --width=1200 --height=720 \
-    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Credits" \
-    --filename="$config/retrodeck/reference_lists/retrodeck_credits.txt"
-    configurator_about_retrodeck_dialog
-  ;;
-
-  "" ) # No selection made or Back button clicked
-    log i "Configurator: going back"
+    launch_command "$choice"
+  else # User hit cancel
     configurator_welcome_dialog
-  ;;
-
-  esac
+  fi
 }
 
 configurator_steam_tools_dialog() {
