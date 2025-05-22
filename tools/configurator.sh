@@ -418,168 +418,22 @@ configurator_open_emulator_dialog() {
 }
 
 configurator_tools_dialog() {
-
-  local choices=(
-  "BIOS Checker" "Checks and shows information about BIOS files."
-  "Games Compressor" "Compress games to save space for supported systems."
-  "Install: RetroDECK Controller Layouts" "Install RetroDECK controller templates into Steam."
-  "Install: PS3 Firmware" "Download and Install: Playstation 3 firmware for the RPCS3 emulator."
-  "Install: PS Vita Firmware" "Download and Install: PlayStation Vita firmware for the Vita3K emulator."
-  "Update Notification" "Enable / Disable: Notifications for new RetroDECK versions."
-  "M3U Multi-File Validator" "Verify the proper structure of multi-file or multi-disc games."
-  "Repair RetroDECK Paths" "Repair RetroDECK folder path configs for unexpectedly missing folders."
-  "Change Logging Level" "Change the RetroDECK logging level, for debugging purposes"
-  )
-
-  if [[ $(get_setting_value "$rd_conf" "kiroi_ponzu" "retrodeck" "options") == "true" ]]; then
-    choices+=("Ponzu: Remove Yuzu" "Run Ponzu to remove Yuzu from RetroDECK. Configurations and saves will be mantained.")
-  fi
-  if [[ $(get_setting_value "$rd_conf" "akai_ponzu" "retrodeck" "options") == "true" ]]; then
-    choices+=("Ponzu: Remove Citra" "Run Ponzu to remove Citra from RetroDECK. Configurations and saves will be mantained.")
-  fi
+  build_zenity_menu_array choices tools # Build Zenity bash array for given menu type
 
   choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - Tools" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
-  --column="Choice" --column="Action" \
+  --column="Choice" --column="Action" --column="command" --hide-column=3 --print-column=3 \
   "${choices[@]}")
 
-  case $choice in
+  local rc="$?"
 
-  "BIOS Checker" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_bios_checker
-    configurator_tools_dialog
-  ;;
+  if [[ "$rc" -eq 0 ]]; then # User made a selection
+    log d "choice: $choice"
 
-  "Games Compressor" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_generic_dialog "RetroDECK Configurator - Compression Tool" "Depending on your library and compression choices, the process can sometimes take a long time.\nPlease be patient once it is started!"
-    configurator_compression_tool_dialog
-  ;;
-
-  "Install: RetroDECK Controller Layouts" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_generic_dialog "RetroDECK Configurator - Install: RetroDECK Controller Profile" "We are now offering a new official RetroDECK controller profile!\nIt is an optional component that helps you get the most out of RetroDECK with a new in-game radial menu for unified hotkeys across emulators.\n\nThe files need to be installed outside of the normal ~/retrodeck folder, so we wanted your permission before proceeding.\n\nThe files will be installed at the following shared Steam locations:\n\n$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/\n$HOME/.steam/steam/controller_base/templates"
-    if [[ $(configurator_generic_question_dialog "Install: RetroDECK Controller Profile" "Would you like to install the official RetroDECK controller profile?") == "true" ]]; then
-      install_retrodeck_controller_profile
-      configurator_generic_dialog "RetroDECK Configurator - Install: RetroDECK Controller Profile" "The RetroDECK controller profile install is complete.\nSee the Wiki for more details on how to use it to its fullest potential!"
-    fi
-    configurator_tools_dialog
-  ;;
-
-  "Install: PS3 Firmware" )
-    log i "Configurator: opening \"$choice\" menu"
-    if [[ $(check_network_connectivity) == "true" ]]; then
-      configurator_generic_dialog "RetroDECK Configurator - Install: PS3 firmware" "This tool will download firmware required by RPCS3 to emulate PS3 games.\n\nThe process will take several minutes, and the emulator will launch to finish the installation.\nPlease close RPCS3 manually once the installation is complete."
-      (
-        update_rpcs3_firmware
-      ) |
-        rd_zenity --progress --no-cancel --pulsate --auto-close \
-        --icon-name=net.retrodeck.retrodeck \
-        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-        --title="Downloading PS3 Firmware" \
-        --width=400 --height=200 \
-        --text="Dowloading and installing PS3 Firmware, please be patient.\n\n<span foreground='$purple' size='larger'><b>NOTICE - If the process is taking too long:</b></span>\n\nSome windows might be running in the background that could require your attention: pop-ups from emulators or the upgrade itself that needs user input to continue.\n\n"
-
-    else
-      configurator_generic_dialog "RetroDECK Configurator - Install: PS3 Firmware" "You do not appear to currently have Internet access, which is required by this tool. Please try again when network access has been restored."
-      configurator_tools_dialog
-    fi
-  ;;
-
-  "Install: PS Vita Firmware" )
-    if [[ $(check_network_connectivity) == "true" ]]; then
-      configurator_generic_dialog "RetroDECK Configurator - Install: PS Vita firmware" "This tool will download firmware required by Vita3K to emulate PS Vita games.\n\nThe process will take several minutes, and the emulator will launch to finish the installation.\nPlease close Vita3K manually once the installation is complete."
-      (
-        update_vita3k_firmware
-      ) |
-        rd_zenity --progress --pulsate \
-        --icon-name=net.retrodeck.retrodeck \
-        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-        --title="Downloading PS Vita Firmware" \
-        --no-cancel \
-        --auto-close
-    else
-      configurator_generic_dialog "RetroDECK Configurator - Install: PS Vita Firmware" "You do not appear to currently have Internet access, which is required by this tool. Please try again when network access has been restored."
-      configurator_tools_dialog
-    fi
-  ;;
-
-  "Update Notification" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_update_notify_dialog
-  ;;
-
-  "M3U Multi-File Validator" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_check_multifile_game_structure
-    configurator_tools_dialog
-  ;;
-
-  "Repair RetroDECK Paths" )
-    log i "Configurator: opening \"$choice\" menu"
-    repair_paths
-    configurator_tools_dialog
-  ;;
-
-  "Change Logging Level" )
-    log i "Configurator: opening \"$choice\" menu"
-    choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - RetroDECK: Change Logging Level" --cancel-label="Back" \
-    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
-    --column="Choice" --column="Action" \
-    "Level 1: Informational" "The default setting, logs only basic important information." \
-    "Level 2: Warnings" "Logs general warnings." \
-    "Level 3: Errors" "Logs more detailed error messages." \
-    "Level 4: Debug" "Logs everything, which may generate a lot of logs.")
-
-    case $choice in
-
-    "Level 1: Informational" )
-      log i "Configurator: Changing logging level to \"$choice\""
-      set_setting_value "$rd_conf" "logging_level" "info" "retrodeck" "options"
-      configurator_generic_dialog "RetroDECK Configurator - Change Logging Level" "The logging level has been changed to Level 1: Informational"
-    ;;
-
-    "Level 2: Warnings" )
-      log i "Configurator: Changing logging level to \"$choice\""
-      set_setting_value "$rd_conf" "logging_level" "warn" "retrodeck" "options"
-      configurator_generic_dialog "RetroDECK Configurator - Change Logging Level" "The logging level has been changed to Level 2: Warnings"
-    ;;
-
-    "Level 3: Errors" )
-      log i "Configurator: Changing logging level to \"$choice\""
-      set_setting_value "$rd_conf" "logging_level" "error" "retrodeck" "options"
-      configurator_generic_dialog "RetroDECK Configurator - Change Logging Level" "The logging level has been changed to Level 3: Errors"
-    ;;
-
-    "Level 4: Debug" )
-      log i "Configurator: Changing logging level to \"$choice\""
-      set_setting_value "$rd_conf" "logging_level" "debug" "retrodeck" "options"
-      configurator_generic_dialog "RetroDECK Configurator - Change Logging Level" "The logging level has been changed to Level 4: Debug"
-    ;;
-
-    "" ) # No selection made or Back button clicked
-      log i "Configurator: going back"
-    ;;
-
-    esac
-    configurator_tools_dialog
-  ;;
-
-  "Ponzu: Remove Yuzu" )
-    ponzu_remove "yuzu"
-  ;;
-
-  "Ponzu: Remove Citra" )
-    ponzu_remove "citra"
-  ;;
-
-  "" ) # No selection made or Back button clicked
-    log i "Configurator: going back"
+    launch_command "$choice"
+  else # User hit cancel
     configurator_welcome_dialog
-  ;;
-
-  esac
+  fi
 }
 
 configurator_data_management_dialog() {
