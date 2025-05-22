@@ -995,57 +995,22 @@ configurator_version_history_dialog() {
 }
 
 configurator_developer_dialog() {
+  build_zenity_menu_array choices developer_options # Build Zenity bash array for given menu type
+
   choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - Developer Options" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
-  --column="Choice" --column="Description" \
-  "Change Multi-user mode" "Enable/Disable: Multi-user support." \
-  "Install Specific Release" "Install any cooker release or the latest main available." \
-  "Browse the Wiki" "Browse the RetroDECK wiki" \
-  "Install RetroDECK Starter Pack" "Install the optional RetroDECK starter pack." \
-  "Tool: USB Import" "Use a USB device for RetroDECK data export / import" \
-  "Open GODOT Configurator" "Open Godot Configurator")
+  --column="Choice" --column="Action" --column="command" --hide-column=3 --print-column=3 \
+  "${choices[@]}")
 
-  case $choice in
+  local rc="$?"
 
-  "Change Multi-user mode" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_retrodeck_multiuser_dialog
-  ;;
+  if [[ "$rc" -eq 0 ]]; then # User made a selection
+    log d "choice: $choice"
 
-  "Install Specific Release" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_online_update_channel_dialog
-  ;;
-
-  "Browse the Wiki" )
-    log i "Configurator: opening \"$choice\" menu"
-    xdg-open "https://github.com/RetroDECK/RetroDECK/wiki"
-    configurator_developer_dialog
-  ;;
-
-  "Install RetroDECK Starter Pack" )
-    log i "Configurator: opening \"$choice\" menu"
-    if [[ $(configurator_generic_question_dialog "Install: RetroDECK Starter Pack" "The RetroDECK creators have put together a collection of classic retro games you might enjoy!\n\nWould you like to have them automatically added to your library?") == "true" ]]; then
-      install_retrodeck_starterpack
-    fi
-    configurator_developer_dialog
-  ;;
-
-  "Tool: USB Import" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_usb_import_dialog
-  ;;
-
-  "Open GODOT Configurator" )
-    log i "Configurator: opening \"$choice\" menu"
-    "godot-configurator.sh"
-  ;;
-
-  "" ) # No selection made or Back button clicked
-    log i "Configurator: going back"
+    launch_command "$choice"
+  else # User hit cancel
     configurator_welcome_dialog
-  ;;
-  esac
+  fi
 }
 
 configurator_retrodeck_multiuser_dialog() {
