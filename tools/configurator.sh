@@ -428,8 +428,7 @@ configurator_tools_dialog() {
   local rc="$?"
 
   if [[ "$rc" -eq 0 ]]; then # User made a selection
-    log d "choice: $choice"
-
+    log i "Configurator: opening \"$choice\" menu"
     launch_command "$choice"
   else # User hit cancel
     configurator_welcome_dialog
