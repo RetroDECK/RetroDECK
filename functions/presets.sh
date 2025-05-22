@@ -9,7 +9,7 @@ change_preset_dialog() {
   pretty_preset_name=${preset//_/ }  # Preset name prettification
   pretty_preset_name=$(echo "$pretty_preset_name" | awk '{for(i=1;i<=NF;i++){$i=toupper(substr($i,1,1))substr($i,2)}}1')
 
-  parse_json_to_array current_preset_settings_raw api_get_current_preset_settings cheevos
+  parse_json_to_array current_preset_settings_raw api_get_current_preset_state "$1"
   keep_parts_of_array "1 2 5 6" current_preset_settings_raw current_preset_settings_filtered "6"
   bash_rearranger "4 2 3 1" current_preset_settings_filtered current_preset_settings
 
@@ -298,6 +298,7 @@ build_retrodeck_current_presets() {
 }
 
 fetch_all_presets() {
+  # TODO: Remove, likely not needed anymore
   # This function fetches all possible presets from the presets directory
   # USAGE: fetch_all_presets [--pretty] [system_name]
 
@@ -356,7 +357,8 @@ fetch_all_presets() {
   fi
 }
 
-change_presets_cli () {
+change_presets_cli() {
+  # TODO: Rebuild for API use
   # This function will allow a user to change presets either individually or all for a preset class from the CLI.
   # USAGE: change_presets_cli "$preset" "$system/all" "$on/off"
 
