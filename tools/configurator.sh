@@ -438,7 +438,7 @@ configurator_tools_dialog() {
 configurator_data_management_dialog() {
   build_zenity_menu_array choices data_management # Build Zenity bash array for given menu type
 
-  choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - Tools" --cancel-label="Back" \
+  choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - Data Management" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --column="Choice" --column="Action" --column="command" --hide-column=3 --print-column=3 \
   "${choices[@]}")
