@@ -392,7 +392,7 @@ api_get_component_menu_entries() {
           while read -r menu_entry; do
             json_obj=$(jq -r --arg menu "$menu" --arg menu_entry "$menu_entry" 'to_entries[].value.configurator_menus[$menu][$menu_entry]' "$manifest_file")
             menu_items=$(jq --arg menu "$menu" --argjson new_obj "$json_obj" '.[$menu] += [$new_obj]' <<< "$menu_items")
-          done < <(jq -r --arg menu "$menu" 'to_entries[].value.configurator_menus[$menu] | keys[]' "$manifest_file")
+          done < <(jq -r --arg menu "$menu" 'to_entries[].value.configurator_menus[$menu] | to_entries[] | .key' "$manifest_file")
         fi
       done < <(jq -r 'to_entries[].value.configurator_menus | keys[]' "$manifest_file")
     fi
