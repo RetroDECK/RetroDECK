@@ -72,7 +72,6 @@ jobs:
           git branch
           git log -1 --oneline
 
-      #TODO: remove the no-build here after tests
       # Until we add support for Flathub-beta the artifacts creation is skipped on cooker
       - name: "Build Flatpak"
         id: build-retrodeck
