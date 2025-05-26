@@ -396,378 +396,62 @@ configurator_open_emulator_dialog() {
   # If the user cancels the dialog, it calls `configurator_welcome_dialog` to return to the
   # welcome screen.
 
-  local emulator_list=()
-  while IFS= read -r emulator && IFS= read -r desc; do
-    if [[ "$emulator" != "RetroDECK" ]]; then
-      emulator_list+=("$emulator" "$desc")
-    fi
-  done < <(paste -d '\n' <(open_component --list) <(open_component --getdesc))
+  parse_json_to_array emulator_list_1 api_get_component "all"
+
+  keep_parts_of_array "2 3 5" emulator_list_1 emulator_list_2 "6"
+
+  remove_group_from_array "RetroDECK" emulator_list_2 emulator_list "3"
 
   emulator=$(rd_zenity --list \
   --title "RetroDECK Configurator Utility - Open Component" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --text="Which emulator do you want to launch?" \
-  --hide-header \
-  --column="Emulator" --column="Description" \
+  --hide-header --hide-column=3 --print-column=3\
+  --column="Emulator" --column="Description" --column="component_path"\
   "${emulator_list[@]}")
 
   if [[ -n "$emulator" ]]; then
-    open_component "$emulator"
-    configurator_open_emulator_dialog
+    /bin/bash "$emulator/component_launcher.sh"
   else
     configurator_welcome_dialog
   fi
 }
 
 configurator_tools_dialog() {
-
-  local choices=(
-  "BIOS Checker" "Checks and shows information about BIOS files."
-  "Games Compressor" "Compress games to save space for supported systems."
-  "Install: RetroDECK Controller Layouts" "Install RetroDECK controller templates into Steam."
-  "Install: PS3 Firmware" "Download and Install: Playstation 3 firmware for the RPCS3 emulator."
-  "Install: PS Vita Firmware" "Download and Install: PlayStation Vita firmware for the Vita3K emulator."
-  "Update Notification" "Enable / Disable: Notifications for new RetroDECK versions."
-  "M3U Multi-File Validator" "Verify the proper structure of multi-file or multi-disc games."
-  "Repair RetroDECK Paths" "Repair RetroDECK folder path configs for unexpectedly missing folders."
-  "Change Logging Level" "Change the RetroDECK logging level, for debugging purposes"
-  )
-
-  if [[ $(get_setting_value "$rd_conf" "kiroi_ponzu" "retrodeck" "options") == "true" ]]; then
-    choices+=("Ponzu: Remove Yuzu" "Run Ponzu to remove Yuzu from RetroDECK. Configurations and saves will be mantained.")
-  fi
-  if [[ $(get_setting_value "$rd_conf" "akai_ponzu" "retrodeck" "options") == "true" ]]; then
-    choices+=("Ponzu: Remove Citra" "Run Ponzu to remove Citra from RetroDECK. Configurations and saves will be mantained.")
-  fi
+  build_zenity_menu_array choices tools # Build Zenity bash array for given menu type
 
   choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - Tools" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
-  --column="Choice" --column="Action" \
+  --column="Choice" --column="Action" --column="command" --hide-column=3 --print-column=3 \
   "${choices[@]}")
 
-  case $choice in
+  local rc="$?"
 
-  "BIOS Checker" )
+  if [[ "$rc" -eq 0 ]]; then # User made a selection
     log i "Configurator: opening \"$choice\" menu"
-    configurator_bios_checker
-    configurator_tools_dialog
-  ;;
-
-  "Games Compressor" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_generic_dialog "RetroDECK Configurator - Compression Tool" "Depending on your library and compression choices, the process can sometimes take a long time.\nPlease be patient once it is started!"
-    configurator_compression_tool_dialog
-  ;;
-
-  "Install: RetroDECK Controller Layouts" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_generic_dialog "RetroDECK Configurator - Install: RetroDECK Controller Profile" "We are now offering a new official RetroDECK controller profile!\nIt is an optional component that helps you get the most out of RetroDECK with a new in-game radial menu for unified hotkeys across emulators.\n\nThe files need to be installed outside of the normal ~/retrodeck folder, so we wanted your permission before proceeding.\n\nThe files will be installed at the following shared Steam locations:\n\n$HOME/.steam/steam/tenfoot/resource/images/library/controller/binding_icons/\n$HOME/.steam/steam/controller_base/templates"
-    if [[ $(configurator_generic_question_dialog "Install: RetroDECK Controller Profile" "Would you like to install the official RetroDECK controller profile?") == "true" ]]; then
-      install_retrodeck_controller_profile
-      configurator_generic_dialog "RetroDECK Configurator - Install: RetroDECK Controller Profile" "The RetroDECK controller profile install is complete.\nSee the Wiki for more details on how to use it to its fullest potential!"
-    fi
-    configurator_tools_dialog
-  ;;
-
-  "Install: PS3 Firmware" )
-    log i "Configurator: opening \"$choice\" menu"
-    if [[ $(check_network_connectivity) == "true" ]]; then
-      configurator_generic_dialog "RetroDECK Configurator - Install: PS3 firmware" "This tool will download firmware required by RPCS3 to emulate PS3 games.\n\nThe process will take several minutes, and the emulator will launch to finish the installation.\nPlease close RPCS3 manually once the installation is complete."
-      (
-        update_rpcs3_firmware
-      ) |
-        rd_zenity --progress --no-cancel --pulsate --auto-close \
-        --icon-name=net.retrodeck.retrodeck \
-        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-        --title="Downloading PS3 Firmware" \
-        --width=400 --height=200 \
-        --text="Dowloading and installing PS3 Firmware, please be patient.\n\n<span foreground='$purple' size='larger'><b>NOTICE - If the process is taking too long:</b></span>\n\nSome windows might be running in the background that could require your attention: pop-ups from emulators or the upgrade itself that needs user input to continue.\n\n"
-
-    else
-      configurator_generic_dialog "RetroDECK Configurator - Install: PS3 Firmware" "You do not appear to currently have Internet access, which is required by this tool. Please try again when network access has been restored."
-      configurator_tools_dialog
-    fi
-  ;;
-
-  "Install: PS Vita Firmware" )
-    if [[ $(check_network_connectivity) == "true" ]]; then
-      configurator_generic_dialog "RetroDECK Configurator - Install: PS Vita firmware" "This tool will download firmware required by Vita3K to emulate PS Vita games.\n\nThe process will take several minutes, and the emulator will launch to finish the installation.\nPlease close Vita3K manually once the installation is complete."
-      (
-        update_vita3k_firmware
-      ) |
-        rd_zenity --progress --pulsate \
-        --icon-name=net.retrodeck.retrodeck \
-        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-        --title="Downloading PS Vita Firmware" \
-        --no-cancel \
-        --auto-close
-    else
-      configurator_generic_dialog "RetroDECK Configurator - Install: PS Vita Firmware" "You do not appear to currently have Internet access, which is required by this tool. Please try again when network access has been restored."
-      configurator_tools_dialog
-    fi
-  ;;
-
-  "Update Notification" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_update_notify_dialog
-  ;;
-
-  "M3U Multi-File Validator" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_check_multifile_game_structure
-    configurator_tools_dialog
-  ;;
-
-  "Repair RetroDECK Paths" )
-    log i "Configurator: opening \"$choice\" menu"
-    repair_paths
-    configurator_tools_dialog
-  ;;
-
-  "Change Logging Level" )
-    log i "Configurator: opening \"$choice\" menu"
-    choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - RetroDECK: Change Logging Level" --cancel-label="Back" \
-    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
-    --column="Choice" --column="Action" \
-    "Level 1: Informational" "The default setting, logs only basic important information." \
-    "Level 2: Warnings" "Logs general warnings." \
-    "Level 3: Errors" "Logs more detailed error messages." \
-    "Level 4: Debug" "Logs everything, which may generate a lot of logs.")
-
-    case $choice in
-
-    "Level 1: Informational" )
-      log i "Configurator: Changing logging level to \"$choice\""
-      set_setting_value "$rd_conf" "logging_level" "info" "retrodeck" "options"
-      configurator_generic_dialog "RetroDECK Configurator - Change Logging Level" "The logging level has been changed to Level 1: Informational"
-    ;;
-
-    "Level 2: Warnings" )
-      log i "Configurator: Changing logging level to \"$choice\""
-      set_setting_value "$rd_conf" "logging_level" "warn" "retrodeck" "options"
-      configurator_generic_dialog "RetroDECK Configurator - Change Logging Level" "The logging level has been changed to Level 2: Warnings"
-    ;;
-
-    "Level 3: Errors" )
-      log i "Configurator: Changing logging level to \"$choice\""
-      set_setting_value "$rd_conf" "logging_level" "error" "retrodeck" "options"
-      configurator_generic_dialog "RetroDECK Configurator - Change Logging Level" "The logging level has been changed to Level 3: Errors"
-    ;;
-
-    "Level 4: Debug" )
-      log i "Configurator: Changing logging level to \"$choice\""
-      set_setting_value "$rd_conf" "logging_level" "debug" "retrodeck" "options"
-      configurator_generic_dialog "RetroDECK Configurator - Change Logging Level" "The logging level has been changed to Level 4: Debug"
-    ;;
-
-    "" ) # No selection made or Back button clicked
-      log i "Configurator: going back"
-    ;;
-
-    esac
-    configurator_tools_dialog
-  ;;
-
-  "Ponzu: Remove Yuzu" )
-    ponzu_remove "yuzu"
-  ;;
-
-  "Ponzu: Remove Citra" )
-    ponzu_remove "citra"
-  ;;
-
-  "" ) # No selection made or Back button clicked
-    log i "Configurator: going back"
+    launch_command "$choice"
+  else # User hit cancel
     configurator_welcome_dialog
-  ;;
-
-  esac
+  fi
 }
 
 configurator_data_management_dialog() {
-  choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - RetroDECK: Move Tool" --cancel-label="Back" \
+  build_zenity_menu_array choices data_management # Build Zenity bash array for given menu type
+
+  choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - Data Management" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
-  --column="Choice" --column="Action" \
-  "Backup RetroDECK" "Backup & Compress RetroDECK userdata folders into a zip file."  \
-  "ROMS Folder: Clean Empty Systems" "Removes some or all of the empty system folders in ROMS folder." \
-  "ROMS Folder: Rebuild Systems" "Rebuilds any missing system folders in the ROMS folder."  \
-  "Move: All of RetroDECK" "Move the entire RetroDECK folder to a new location." \
-  "Move: ROMS folder" "Move the ROMS folder to a new location." \
-  "Move: BIOS folder" "Move the BIOS folder to a new location." \
-  "Move: Downloaded Media folder" "Move the Downloaded Media folder to a new location." \
-  "Move: Saves folder" "Move the Saves folder to a new location." \
-  "Move: States folder" "Move the States folder to a new location." \
-  "Move: Themes folder" "Move the Themes folder to a new location." \
-  "Move: Screenshots folder" "Move the Screenshots folder to a new location." \
-  "Move: Mods folder" "Move the Mods folder to a new location." \
-  "Move: Texture Packs folder" "Move the Texture Packs folder to a new location" \
-  "Move: Cheats folder" "Move the Cheats folder to a new location" \
-  "Move: Shaders folder" "Move the Shaders folder to a new location" \ )
+  --column="Choice" --column="Action" --column="command" --hide-column=3 --print-column=3 \
+  "${choices[@]}")
 
-  case $choice in
+  local rc="$?"
 
-  "Backup RetroDECK" )
+  if [[ "$rc" -eq 0 ]]; then # User made a selection
+    log d "choice: $choice"
 
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_generic_dialog "RetroDECK Configurator - Backup Userdata" "This tool will compress one or more RetroDECK userdata folders into a single zip file.\n\nPlease note that this process may take several minutes.\n\n<span foreground='$purple'><b>The resulting zip file will be located in the ~/retrodeck/backups folder.</b></span>\n\n"
-
-    choice=$(rd_zenity --title "RetroDECK Configurator - Backup Userdata" --info --no-wrap --ok-label="Cancel" --extra-button="Core Backup" --extra-button="Custom Backup" --extra-button="Complete Backup" \
-    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --text="Would you like to backup some or all of the RetroDECK userdata?\n\nChoose one of the following options:\n\n1. Core Backup: Only essential files (such as saves, states, and gamelists).\n\n2. Custom Backup: You will be given the option to select specific folders to backup.\n\n3. Complete Backup: All data, including games and downloaded media, will be backed up.\n\n<span foreground='$purple'><b>PLEASE NOTE: A complete backup may require a significant amount of space.</b></span>\n\n")
-
-    local rc=$?
-    if [[ $rc == "0" ]] && [[ -z "$choice" ]]; then # User selected Cancel button
-      configurator_data_management_dialog
-    else
-      case $choice in
-        "Core Backup" )
-          log i "User chose to backup core userdata prior to update."
-          export CONFIGURATOR_GUI="zenity"
-          backup_retrodeck_userdata "core"
-        ;;
-        "Custom Backup" )
-          log i "User chose to backup custom userdata prior to update."
-          while read -r config_line; do
-            local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
-            if [[ ! $current_setting_name =~ (rdhome|sdcard|backups_folder) ]]; then # Ignore these locations
-            log d "Adding $current_setting_name to compressible paths."
-              local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
-              compressible_paths=("${compressible_paths[@]}" "false" "$current_setting_name" "$current_setting_value")
-            fi
-          done < <(grep -v '^\s*$' "$rd_conf" | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
-
-          choice=$(rd_zenity \
-          --list --width=1200 --height=720 \
-          --checklist \
-          --separator="^" \
-          --print-column=3 \
-          --text="Please select the folders you wish to compress..." \
-          --column "Backup?" \
-          --column "Folder Name" \
-          --column "Path" \
-          "${compressible_paths[@]}")
-
-          choices=() # Expand choice string into passable array
-          IFS='^' read -ra choices <<< "$choice"
-
-          export CONFIGURATOR_GUI="zenity"
-          backup_retrodeck_userdata "custom" "${choices[@]}" # Expand array of choices into individual arguments
-        ;;
-        "Complete Backup" )
-          log i "User chose to backup all userdata prior to update."
-          export CONFIGURATOR_GUI="zenity"
-          backup_retrodeck_userdata "complete"
-        ;;
-      esac
-
-      configurator_data_management_dialog
-    fi
-  ;;
-
-  "Move: All of RetroDECK" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_move_folder_dialog "rdhome"
-  ;;
-
-  "Move: ROMS folder" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_move_folder_dialog "roms_folder"
-  ;;
-
-  "Move: BIOS folder" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_move_folder_dialog "bios_folder"
-  ;;
-
-  "Move: Downloaded Media folder" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_move_folder_dialog "media_folder"
-  ;;
-
-  "Move: Saves folder" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_move_folder_dialog "saves_folder"
-  ;;
-
-  "Move: States folder" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_move_folder_dialog "states_folder"
-  ;;
-
-  "Move: Themes folder" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_move_folder_dialog "themes_folder"
-  ;;
-
-  "Move: Screenshots folder" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_move_folder_dialog "screenshots_folder"
-  ;;
-
-  "Move: Mods folder" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_move_folder_dialog "mods_folder"
-  ;;
-
-  "Move: Texture Packs folder" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_move_folder_dialog "texture_packs_folder"
-  ;;
-
-  "Move: Cheats folder" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_move_folder_dialog "cheats_folder"
-  ;;
-
-  "Move: Shaders folder" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_move_folder_dialog "shaders_folder"
-  ;;
-
-  "ROMS Folder: Clean Empty Systems" )
-    log i "Configurator: opening \"$choice\" menu"
-
-    configurator_generic_dialog "RetroDECK Configurator - Clean Empty System Folders" "Before removing any identified empty system folders,\nplease ensure your game collection is backed up, just in case!"
-    configurator_generic_dialog "RetroDECK Configurator - Clean Empty System Folders" "Searching for empty system folders, please be patient..."
-    find_empty_rom_folders
-
-    choice=$(rd_zenity \
-        --list --width=1200 --height=720 --title "RetroDECK Configurator - RetroDECK: Clean Empty System Folders" \
-        --checklist --hide-column=3 --ok-label="Remove Selected" --extra-button="Remove All" \
-        --separator="," --print-column=2 \
-        --text="Choose which empty ROM folders to remove:" \
-        --column "Remove?" \
-        --column "System" \
-        "${empty_rom_folders_list[@]}")
-
-    local rc=$?
-    if [[ $rc == "0" && ! -z $choice ]]; then # User clicked "Remove Selected" with at least one system selected
-      IFS="," read -ra folders_to_remove <<< "$choice"
-      for folder in "${folders_to_remove[@]}"; do
-        log i "Removing empty folder $folder"
-        rm -rf "$folder"
-      done
-      configurator_generic_dialog "RetroDECK Configurator - Clean Empty System Folders" "The removal process is complete."
-    elif [[ ! -z $choice ]]; then # User clicked "Remove All"
-      for folder in "${all_empty_folders[@]}"; do
-        log i "Removing empty folder $folder"
-        rm -rf "$folder"
-      done
-      configurator_generic_dialog "RetroDECK Configurator - Clean Empty System Folders" "The removal process is complete."
-    fi
-
+    launch_command "$choice"
+  else # User hit cancel
     configurator_welcome_dialog
-  ;;
-
-  "ROMS Folder: Rebuild Systems" )
-    log i "Configurator: opening \"$choice\" menu"
-    es-de --create-system-dirs
-    configurator_generic_dialog "RetroDECK Configurator - Rebuild System Folders" "The rebuilding process is complete.\n\nAll missing default system folders will now exist in $roms_folder"
-    configurator_welcome_dialog
-  ;;
-
-  esac
-
-  configurator_welcome_dialog
+  fi
 }
 
 configurator_compression_tool_dialog() {
@@ -1209,118 +893,41 @@ configurator_reset_dialog() {
 }
 
 configurator_about_retrodeck_dialog() {
+  build_zenity_menu_array choices about_retrodeck # Build Zenity bash array for given menu type
+
   choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - About RetroDECK" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
-  --column="Choice" --column="Description" \
-  "Version History" "View the version changelogs for RetroDECK" \
-  "Credits" "View the contribution credits for RetroDECK" )
+  --column="Choice" --column="Action" --column="command" --hide-column=3 --print-column=3 \
+  "${choices[@]}")
 
-  case $choice in
+  local rc="$?"
 
-  "Version History" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_version_history_dialog
-  ;;
+  if [[ "$rc" -eq 0 ]]; then # User made a selection
+    log d "choice: $choice"
 
-  "Credits" )
-    log i "Configurator: opening \"$choice\" menu"
-    rd_zenity --icon-name=net.retrodeck.retrodeck --text-info --width=1200 --height=720 \
-    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK Credits" \
-    --filename="$config/retrodeck/reference_lists/retrodeck_credits.txt"
-    configurator_about_retrodeck_dialog
-  ;;
-
-  "" ) # No selection made or Back button clicked
-    log i "Configurator: going back"
+    launch_command "$choice"
+  else # User hit cancel
     configurator_welcome_dialog
-  ;;
-
-  esac
+  fi
 }
 
 configurator_steam_tools_dialog() {
+  build_zenity_menu_array choices steam_tools # Build Zenity bash array for given menu type
 
   choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - Steam Tools" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
-  --column="Choice" --column="Description" \
-  "Add RetroDECK to Steam" "Add RetroDECK to Steam." \
-  "Automatic Steam Sync" "Enable / Disable: Automatic Steam Sync (ES-DE favorites will be synced to Steam when RetroDECK quits)." \
-  "Manual Steam Sync" "Perform a one-time manual sync of ES-DE favorites to Steam." \
-  "Purge Steam Sync Shortcuts" "Performs a full Steam ROM Manager purge of all synced shortcuts in Steam (in case things have gotten messed up)." )
+  --column="Choice" --column="Action" --column="command" --hide-column=3 --print-column=3 \
+  "${choices[@]}")
 
-  case $choice in
+  local rc="$?"
 
-  "Add RetroDECK to Steam" )
-    (
-    # Add RetroDECK launcher to Steam
-    steam-rom-manager enable --names "RetroDECK Launcher" >> "$srm_log" 2>&1
-    steam-rom-manager add >> "$srm_log" 2>&1
-    ) |
-    rd_zenity --progress \
-    --title="RetroDECK Configurator: Add RetroDECK to Steam" \
-    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --text="Adding RetroDECK to Steam...\n\n<span foreground='$purple'>Please wait until the operation is finished and you need to restart Steam afterwards.</span>" \
-    --pulsate --width=500 --height=150 --auto-close --no-cancel
-    configurator_steam_tools_dialog
-  ;;
+  if [[ "$rc" -eq 0 ]]; then # User made a selection
+    log d "choice: $choice"
 
-  "Automatic Steam Sync" )
-    log i "Configurator: opening \"$choice\" menu"
-    if [[ $(get_setting_value "$rd_conf" "steam_sync" retrodeck "options") == "true" ]]; then
-      zenity --question \
-      --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Configurator - RetroDECK Steam Syncronization" \
-      --text="Steam syncronization is <span foreground='$purple'><b>Currently: Enabled</b></span>.\nDisabling Steam Sync will remove all of your favorites from Steam at the next Steam startup.\n\nDo you want to continue?\n\nTo re-add them, just reenable Steam Sync then and restart Steam."
-
-      if [ $? == 0 ] # User clicked "Yes"
-      then
-        configurator_disable_steam_sync
-      fi
-    else
-      zenity --question \
-      --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Configurator - RetroDECK Steam Syncronization" \
-      --text="Steam synchronization is <span foreground='$purple'><b>Currently: Disabled</b></span>. Do you want to enable it?\n\nAll favorited games will be immediately synced with Steam ROM Manager.\nWhile this setting is enabled, RetroDECK check your ES-DE favorites when you quit the program, and update Steam using Steam ROM Manager if there were any changes.\n\nRemember to restart Steam to see the changes.\n\n<span foreground='$purple'><b>NOTE: Games with unusual characters in their names like &apos;/\{}&lt;&gt;* might break the sync. Check the RetroDECK Wiki for more information.</b></span>"
-
-      if [ $? == 0 ]
-      then
-        configurator_enable_steam_sync
-      fi
-    fi
-    configurator_steam_tools_dialog
-  ;;
-
-  "Manual Steam Sync" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_generic_dialog "RetroDeck Configurator - Manual Steam Sync" "RetroDECK will now look for any ES-DE favorites and sync them to Steam, if needed.\n\nIf Steam Sync has been run before and no favorites have been added or removed, you will be returned to the Steam Tools menu.\nIf changes are needed, you will see a progress dialog during the process."
-    export CONFIGURATOR_GUI="zenity"
-    steam_sync
-    configurator_steam_tools_dialog
-  ;;
-
-  "Purge Steam Sync Shortcuts" )
-    log i "Configurator: opening \"$choice\" menu"
-    if [[ $(configurator_generic_question_dialog "RetroDECK Configurator - Steam Sync" "Are you sure you want to remove all Steam ROM Manager changes, including all RetroDECK shortcuts from Steam?" ) == "true" ]]; then
-      (
-      steam-rom-manager nuke
-      rm -f "$retrodeck_favorites_file"
-      ) |
-      rd_zenity --progress \
-      --title="Removing all RetroDECK Steam Sync information" \
-      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --text="<span foreground='$purple'><b>\t\t\t\tRemoving all RetroDECK-related data from Steam</b></span>\n\nPlease wait..." \
-      --pulsate --width=500 --height=150 --auto-close --no-cancel
-    fi
-    configurator_steam_tools_dialog
-  ;;
-
-  "" ) # No selection made or Back button clicked
-    log i "Configurator: going back"
+    launch_command "$choice"
+  else # User hit cancel
     configurator_welcome_dialog
-  ;;
-
-  esac
+  fi
 }
 
 configurator_enable_steam_sync() {
@@ -1388,57 +995,22 @@ configurator_version_history_dialog() {
 }
 
 configurator_developer_dialog() {
+  build_zenity_menu_array choices developer_options # Build Zenity bash array for given menu type
+
   choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - Developer Options" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
-  --column="Choice" --column="Description" \
-  "Change Multi-user mode" "Enable/Disable: Multi-user support." \
-  "Install Specific Release" "Install any cooker release or the latest main available." \
-  "Browse the Wiki" "Browse the RetroDECK wiki" \
-  "Install RetroDECK Starter Pack" "Install the optional RetroDECK starter pack." \
-  "Tool: USB Import" "Use a USB device for RetroDECK data export / import" \
-  "Open GODOT Configurator" "Open Godot Configurator")
+  --column="Choice" --column="Action" --column="command" --hide-column=3 --print-column=3 \
+  "${choices[@]}")
 
-  case $choice in
+  local rc="$?"
 
-  "Change Multi-user mode" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_retrodeck_multiuser_dialog
-  ;;
+  if [[ "$rc" -eq 0 ]]; then # User made a selection
+    log d "choice: $choice"
 
-  "Install Specific Release" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_online_update_channel_dialog
-  ;;
-
-  "Browse the Wiki" )
-    log i "Configurator: opening \"$choice\" menu"
-    xdg-open "https://github.com/RetroDECK/RetroDECK/wiki"
-    configurator_developer_dialog
-  ;;
-
-  "Install RetroDECK Starter Pack" )
-    log i "Configurator: opening \"$choice\" menu"
-    if [[ $(configurator_generic_question_dialog "Install: RetroDECK Starter Pack" "The RetroDECK creators have put together a collection of classic retro games you might enjoy!\n\nWould you like to have them automatically added to your library?") == "true" ]]; then
-      install_retrodeck_starterpack
-    fi
-    configurator_developer_dialog
-  ;;
-
-  "Tool: USB Import" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_usb_import_dialog
-  ;;
-
-  "Open GODOT Configurator" )
-    log i "Configurator: opening \"$choice\" menu"
-    "godot-configurator.sh"
-  ;;
-
-  "" ) # No selection made or Back button clicked
-    log i "Configurator: going back"
+    launch_command "$choice"
+  else # User hit cancel
     configurator_welcome_dialog
-  ;;
-  esac
+  fi
 }
 
 configurator_retrodeck_multiuser_dialog() {

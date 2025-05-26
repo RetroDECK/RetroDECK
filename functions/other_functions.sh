@@ -140,131 +140,98 @@ download_file() {
     --auto-close
 }
 
-update_rd_conf() {
-  # This function will import a default retrodeck.cfg file and update it with any current settings. This will allow us to expand the file over time while retaining current user settings.
-  # USAGE: update_rd_conf
-
-  # STAGE 1: For current files that haven't been broken into sections yet, where every setting name is unique
-
-  conf_read # Read current settings into memory
-  mv -f "$rd_conf" "$rd_conf_backup" # Backup config file before update
-  cp "$rd_defaults" "$rd_conf" # Copy defaults file into place
-  conf_write # Write old values into new retrodeck.cfg file
-
-  # STAGE 2: To handle presets sections that use duplicate setting names
-
-  generate_single_patch "$rd_defaults" "$rd_conf_backup" "$rd_update_patch" retrodeck # Create a patch file for differences between defaults and current user settings
-  sed -i '/change^^version/d' "$rd_update_patch" # Remove version line from temporary patch file
-  deploy_single_patch "$rd_defaults" "$rd_update_patch" "$rd_conf" # Re-apply user settings to defaults file
-  set_setting_value "$rd_conf" "version" "$hard_version" retrodeck # Set version of currently running RetroDECK to updated retrodeck.cfg
-  rm -f "$rd_update_patch" # Cleanup temporary patch file
-  conf_read # Read all settings into memory
-
-  # STAGE 3: Create new folders that were added to the shipped retrodeck.cfg, if any
-
-  new_paths=$(awk -F= 'FNR==NR {keys[$1]=1; next} !($1 in keys)' \
-  <(grep -v '^\s*$' "$rd_conf_backup" | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f') \
-  <(grep -v '^\s*$' "$rd_conf" | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f'))
-
-  if [[ -n "$new_paths" ]]; then
-    log i "New paths found in RetroDECK config: \n $new_paths"
-    if [[ ! "$rdhome" == "/home/deck/retrodeck" ]]; then # If rdhome is not the normal internal path, set new folders to rdhome as their root
-      while read -r config_line; do
-        local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
-        local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
-        local relative_path="${current_setting_value#*retrodeck/}"
-        local new_setting_value="$rdhome/$relative_path"
-        set_setting_value "$rd_conf" "$current_setting_name" "$new_setting_value" "retrodeck" "paths"
-        create_dir "$new_setting_value"
-      done <<< "$new_paths"
-    else # rdhome is default internal location, so imported new paths are valid
-      while read -r config_line; do
-        local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
-        local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
-        create_dir "$current_setting_value"
-      done <<< "$new_paths"
-    fi
-    conf_read
-  fi
-
-  # STAGE 4: Eliminate any preset incompatibility with existing user settings and new defaults
-
-  # Fetch incompatible presets from JSON and create a lookup list
-  incompatible_presets=$(jq -r '
-    .incompatible_presets | to_entries[] |
-    [
-      "\(.key):\(.value)",
-      "\(.value):\(.key)"
-    ] | join("\n")
-  ' "$features")
-
-  while IFS= read -r current_setting_line # Read the existing retrodeck.cfg
-  do
-    if [[ (! -z "$current_setting_line") && (! "$current_setting_line" == "#"*) && (! "$current_setting_line" == "[]") ]]; then # If the line has a valid entry in it
-      if [[ ! -z $(grep -o -P "^\[.+?\]$" <<< "$current_setting_line") ]]; then # If the line is a section header
-        local current_section=$(sed 's^[][]^^g' <<< "$current_setting_line") # Remove brackets from section name
-      else
-        if [[ ! ("$current_section" == "" || "$current_section" == "paths" || "$current_section" == "options" || "$current_section" == "cheevos" || "$current_section" == "cheevos_hardcore") ]]; then
-          local system_name=$(get_setting_name "$current_setting_line" "retrodeck") # Read the variable name from the current line
-          local system_enabled=$(get_setting_value "$rd_conf" "$system_name" "retrodeck" "$current_section") # Read the variables value from active retrodeck.cfg
-          local default_setting=$(get_setting_value "$rd_defaults" "$system_name" "retrodeck" "$current_section") # Read the variable value from the retrodeck defaults
-          if [[ "$system_enabled" == "true" ]]; then
-            while IFS=: read -r preset_being_checked known_incompatible_preset; do
-              if [[ "$current_section" == "$preset_being_checked" ]]; then
-                if [[ $(get_setting_value "$rd_conf" "$system_name" "retrodeck" "$known_incompatible_preset") == "true" ]]; then
-                  set_setting_value "$rd_conf" "$system_name" "false" "retrodeck" "$current_section"
-                fi
-              fi
-            done <<< "$incompatible_presets"
-          fi
-        fi
-      fi
-    fi
-  done < "$rd_conf"
-}
-
 conf_read() {
   # This function will read the RetroDECK config file into memory
   # USAGE: conf_read
 
-  while IFS= read -r current_setting_line # Read the existing retrodeck.cfg
-  do
-    if [[ (! -z "$current_setting_line") && (! "$current_setting_line" == "#"*) && (! "$current_setting_line" == "[]") ]]; then # If the line has a valid entry in it
-      if [[ ! -z $(grep -o -P "^\[.+?\]$" <<< "$current_setting_line") ]]; then # If the line is a section header
-        local current_section=$(sed 's^[][]^^g' <<< "$current_setting_line") # Remove brackets from section name
-      else
-        if [[ "$current_section" == "" || "$current_section" == "paths" || "$current_section" == "options" ]]; then
-          local current_setting_name=$(cut -d'=' -f1 <<< "$current_setting_line" | xargs) # Extract name
-          local current_setting_value=$(cut -d'=' -f2 <<< "$current_setting_line" | xargs) # Extract value
-          declare -g "$current_setting_name=$current_setting_value" # Write the current setting name and value to memory
-          export "$current_setting_name"
+  if head -n 1 "$rd_conf" | grep -qE '^\s*\{\s*$'; then # If retrodeck.cfg is new JSON format
+    while IFS== read -r name value; do
+      #log d "Setting $name has value $value"
+      printf -v "$name" '%s' "$value"
+      export "${name}"
+    done < <(jq -r '
+      # grab standalone object version into $ver
+      .version as $ver
+      |
+      # build a new object with just version, + paths, + options
+      ({ version: $ver }
+      + (.paths   // {} )
+      + (.options // {} )
+      )
+      # turn it into ["key","value"] pairs, then "key=value"
+      | to_entries[]
+      | "\(.key)=\(.value)"
+      ' "$rd_conf")
+    else
+      while IFS= read -r current_setting_line # Read the existing retrodeck.cfg
+      do
+        if [[ (! -z "$current_setting_line") && (! "$current_setting_line" == "#"*) && (! "$current_setting_line" == "[]") ]]; then # If the line has a valid entry in it
+          if [[ ! -z $(grep -o -P "^\[.+?\]$" <<< "$current_setting_line") ]]; then # If the line is a section header
+            local current_section=$(sed 's^[][]^^g' <<< "$current_setting_line") # Remove brackets from section name
+          else
+            if [[ "$current_section" == "" || "$current_section" == "paths" || "$current_section" == "options" ]]; then
+              local current_setting_name=$(cut -d'=' -f1 <<< "$current_setting_line" | xargs) # Extract name
+              local current_setting_value=$(cut -d'=' -f2 <<< "$current_setting_line" | xargs) # Extract value
+              declare -g "$current_setting_name=$current_setting_value" # Write the current setting name and value to memory
+              export "$current_setting_name"
+            fi
+          fi
         fi
-      fi
+      done < "$rd_conf"
     fi
-  done < "$rd_conf"
+  log d "retrodeck.cfg read and loaded"
 }
 
 conf_write() {
   # This function will update the RetroDECK config file with matching variables from memory
   # USAGE: conf_write
 
-  while IFS= read -r current_setting_line # Read the existing retrodeck.cfg
-  do
-    if [[ (! -z "$current_setting_line") && (! "$current_setting_line" == "#"*) && (! "$current_setting_line" == "[]") ]]; then # If the line has a valid entry in it
-      if [[ ! -z $(grep -o -P "^\[.+?\]$" <<< "$current_setting_line") ]]; then # If the line is a section header
-        local current_section=$(sed 's^[][]^^g' <<< "$current_setting_line") # Remove brackets from section name
-      else
-        if [[ "$current_section" == "" || "$current_section" == "paths" || "$current_section" == "options" ]]; then
-          local current_setting_name=$(get_setting_name "$current_setting_line" "retrodeck") # Read the variable name from the current line
-          local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "$current_section") # Read the variables value from retrodeck.cfg
-          local memory_setting_value=$(eval "echo \$${current_setting_name}") # Read the variable names' value from memory
-          if [[ ! "$current_setting_value" == "$memory_setting_value" && ! -z "$memory_setting_value" ]]; then # If the values are different...
-            set_setting_value "$rd_conf" "$current_setting_name" "$memory_setting_value" "retrodeck" "$current_section" # Update the value in retrodeck.cfg
+  if head -n 1 "$rd_conf" | grep -qE '^\s*\{\s*$'; then # If retrodeck.cfg is new JSON format
+    local tmp jq_args=() filter
+
+    # Update version
+    jq_args+=(--arg version "$version")
+    filter='.version = $version'
+
+    # Update paths section
+    while read -r setting_name; do
+      local setting_value="${!setting_name}"
+      jq_args+=(--arg "$setting_name" "$setting_value")
+      filter+=" | .paths.$setting_name = \$$setting_name"
+    done < <(jq -r '(.paths // {}) | keys[]' "$rd_conf")
+
+    # Update options section
+    while read -r setting_name; do
+      local setting_value="${!setting_name}"
+      jq_args+=(--arg "$setting_name" "$setting_value")
+      filter+=" | .options.$setting_name = \$$setting_name"
+    done < <(jq -r '(.options // {}) | keys[]' "$rd_conf")
+
+    # Write all gathered information
+    tmp=$(mktemp)
+    jq "${jq_args[@]}" \
+      "$filter" \
+      "$rd_conf" > "$tmp" \
+      && mv "$tmp" "$rd_conf"
+    else
+      while IFS= read -r current_setting_line # Read the existing retrodeck.cfg
+      do
+        if [[ (! -z "$current_setting_line") && (! "$current_setting_line" == "#"*) && (! "$current_setting_line" == "[]") ]]; then # If the line has a valid entry in it
+          if [[ ! -z $(grep -o -P "^\[.+?\]$" <<< "$current_setting_line") ]]; then # If the line is a section header
+            local current_section=$(sed 's^[][]^^g' <<< "$current_setting_line") # Remove brackets from section name
+          else
+            if [[ "$current_section" == "" || "$current_section" == "paths" || "$current_section" == "options" ]]; then
+              local current_setting_name=$(get_setting_name "$current_setting_line" "retrodeck") # Read the variable name from the current line
+              local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "$current_section") # Read the variables value from retrodeck.cfg
+              local memory_setting_value=$(eval "echo \$${current_setting_name}") # Read the variable names' value from memory
+              if [[ ! "$current_setting_value" == "$memory_setting_value" && ! -z "$memory_setting_value" ]]; then # If the values are different...
+                set_setting_value "$rd_conf" "$current_setting_name" "$memory_setting_value" "retrodeck" "$current_section" # Update the value in retrodeck.cfg
+              fi
+            fi
           fi
         fi
-      fi
+      done < "$rd_conf"
     fi
-  done < "$rd_conf"
   log d "retrodeck.cfg written"
 }
 
@@ -323,21 +290,6 @@ dir_prep() {
   log i "$symlink is now $real"
 }
 
-rd_zenity() {
-  # This function replaces the standard 'zenity' command and filters out annoying GTK errors on Steam Deck
-  export CONFIGURATOR_GUI="zenity"
-
-  # env GDK_SCALE=1.5 \
-  #     GDK_DPI_SCALE=1.5 \
-  zenity 2> >(grep -v 'Gtk' >&2) "$@"
-
-  local status=${PIPESTATUS[0]}  # Capture the exit code of 'zenity'
-
-  unset CONFIGURATOR_GUI
-  
-  return "$status"
-}
-
 update_rpcs3_firmware() {
   create_dir "$roms_folder/ps3/tmp"
   chmod 777 "$roms_folder/ps3/tmp"
@@ -388,13 +340,13 @@ backup_retrodeck_userdata() {
   declare -A config_paths # Requires an associative (dictionary) array to work
 
   # Build array of folder names and real paths from retrodeck.cfg
-  while read -r config_line; do
-    local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
-    if [[ ! $current_setting_name =~ (rdhome|sdcard|backups_folder) ]]; then # Ignore these locations
-      local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
-      config_paths["$current_setting_name"]="$current_setting_value"
+  while read -r path_name; do
+    if [[ ! $path_name =~ (rdhome|sdcard|backups_folder) ]]; then # Ignore these locations
+      local path_value=$(get_setting_value "$rd_conf" "$path_name" "retrodeck" "paths")
+      log d "Path $path_value added to potential backup list"
+      config_paths["$path_name"]="$path_value"
     fi
-  done < <(grep -v '^\s*$' "$rd_conf" | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
+  done < <(jq -r '(.paths // {}) | keys[]' "$rd_conf")
 
   # Determine which paths to backup
   if [[ "$backup_type" == "complete" ]]; then
@@ -645,47 +597,50 @@ make_name_pretty() {
 
   local system_name="$1"
 
-  # Use jq to parse the JSON and find the pretty name
-  local pretty_name=$(jq -r --arg name "$system_name" '.system[$name].name // $name' "$features")
-
-  echo "$pretty_name"
+  # Use jq to parse the JSON and find the pretty name from the components manifest.json
+  while IFS= read -r component_manifest; do
+    if jq -e --arg system "$system_name" 'to_entries | any(.value.system == $system)' "$component_manifest" > /dev/null; then
+      local pretty_name=$(jq -r --arg name "$system_name" '.system[$name].name // $name' "$features")
+      echo "$pretty_name"
+      break
+    fi
+  done < <(find "$rd_components" -maxdepth 2 -mindepth 2 -type f -name "manifest.json")
 }
 
-
 finit_browse() {
-# Function for choosing data directory location during first/forced init
-path_selected=false
-while [ $path_selected == false ]
-do
-  local target="$(rd_zenity --file-selection --title="Choose RetroDECK data directory location" --directory)"
-  if [[ ! -z "$target" ]]; then
-    if [[ -w "$target" ]]; then
-      rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
-      --cancel-label="No" \
-      --ok-label "Yes" \
-      --text="Your RetroDECK data folder will be:\n\n$target/retrodeck\n\nis that ok?"
-      if [ $? == 0 ] #yes
-      then
-        path_selected=true
-        echo "$target"
-        break
-      else
-        rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" --text="Do you want to quit?"
-        if [ $? == 0 ] # yes, quit
+  # Function for choosing data directory location during first/forced init
+  path_selected=false
+  while [ $path_selected == false ]
+  do
+    local target="$(rd_zenity --file-selection --title="Choose RetroDECK data directory location" --directory)"
+    if [[ ! -z "$target" ]]; then
+      if [[ -w "$target" ]]; then
+        rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" \
+        --cancel-label="No" \
+        --ok-label "Yes" \
+        --text="Your RetroDECK data folder will be:\n\n$target/retrodeck\n\nis that ok?"
+        if [ $? == 0 ] #yes
         then
-          quit_retrodeck
+          path_selected=true
+          echo "$target"
+          break
+        else
+          rd_zenity --question --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --title "RetroDECK" --cancel-label="No" --ok-label "Yes" --text="Do you want to quit?"
+          if [ $? == 0 ] # yes, quit
+          then
+            quit_retrodeck
+          fi
         fi
       fi
+    else
+      rd_zenity --error --no-wrap \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK" \
+      --ok-label "Quit" \
+      --text="No location was selected. Please run RetroDECK again to retry."
+      quit_retrodeck
     fi
-  else
-    rd_zenity --error --no-wrap \
-    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-    --title "RetroDECK" \
-    --ok-label "Quit" \
-    --text="No location was selected. Please run RetroDECK again to retry."
-    quit_retrodeck
-  fi
-done
+  done
 }
 
 finit_user_options_dialog() {
@@ -712,7 +667,7 @@ finit_user_options_dialog() {
 }
 
 finit() {
-# Force/First init, depending on the situation
+  # Force/First init, depending on the situation
 
   log i "Executing finit"
 
@@ -929,17 +884,20 @@ deploy_helper_files() {
   # USAGE: deploy_helper_files
 
   # Extract helper files information using jq
-  helper_files=$(jq -r '.helper_files | to_entries | map("\(.value.filename)^\(.value.location)")[]' "$features")
+  helper_files=$(jq -r '(.helper_files // {}) | keys[]' "$features")
 
   # Iterate through each helper file entry
-  while IFS='^' read -r file dest; do
+  while IFS= read -r helper_file_name; do
+    current_json_object=$(jq -r --arg helper_file_name "$helper_file_name" '.helper_files[$helper_file_name]' "$features")
+    file=$(echo "$current_json_object" | jq -r '.filename')
+    dest=$(echo "$current_json_object" | jq -r '.location')
     if [[ ! -z "$file" ]] && [[ ! -z "$dest" ]]; then
       eval current_dest="$dest"
+      log d "Copying helper file $file to $current_dest"
       cp -f "$helper_files_folder/$file" "$current_dest/$file"
     fi
   done <<< "$helper_files"
 }
-
 
 splash_screen() {
   # This function will replace the RetroDECK startup splash screen with a different image if the day and time match a listing in the JSON data.
@@ -1128,139 +1086,135 @@ ponzu_remove() {
 }
 
 release_selector() {
-    # Show a progress bar
-    ( 
-        while true; do
-            echo "# Fetching all available releases from GitHub repositories... Please wait. This may take some time." ; sleep 1
-        done
-    ) | rd_zenity --progress --title="Fetching Releases" --text="Fetching releases..." --pulsate --no-cancel --auto-close --width=500 --height=150 &
-    
-    progress_pid=$!  # save process PID to kill it later
+  # Show a progress bar
+  ( 
+    while true; do
+      echo "# Fetching all available releases from GitHub repositories... Please wait. This may take some time." ; sleep 1
+    done
+  ) | rd_zenity --progress --title="Fetching Releases" --text="Fetching releases..." --pulsate --no-cancel --auto-close --width=500 --height=150 &
+  
+  progress_pid=$!  # save process PID to kill it later
 
-    log d "Fetching releases from GitHub API for repository $cooker_repository_name"
-    
-    # Fetch the main release from the RetroDECK repository
-    log d "Fetching latest main release from GitHub API for repository RetroDECK"
-    local main_release=$(curl -s "https://api.github.com/repos/$git_organization_name/RetroDECK/releases/latest")
+  log d "Fetching releases from GitHub API for repository $cooker_repository_name"
+  
+  # Fetch the main release from the RetroDECK repository
+  log d "Fetching latest main release from GitHub API for repository RetroDECK"
+  local main_release=$(curl -s "https://api.github.com/repos/$git_organization_name/RetroDECK/releases/latest")
 
-    if [[ -z "$main_release" ]]; then
-        log e "Failed to fetch the main release"
-        kill $progress_pid  # kill the progress bar
-        configurator_generic_dialog "Error" "Unable to fetch the main release. Please check your network connection or try again later."
-        return 1
-    fi
+  if [[ -z "$main_release" ]]; then
+    log e "Failed to fetch the main release"
+    kill $progress_pid  # kill the progress bar
+    configurator_generic_dialog "Error" "Unable to fetch the main release. Please check your network connection or try again later."
+    return 1
+  fi
 
-    main_tag_name=$(echo "$main_release" | jq -r '.tag_name')
-    main_published_at=$(echo "$main_release" | jq -r '.published_at')
+  main_tag_name=$(echo "$main_release" | jq -r '.tag_name')
+  main_published_at=$(echo "$main_release" | jq -r '.published_at')
 
-    # Convert published_at to human-readable format for the main release
-    main_human_readable_date=$(date -d "$main_published_at" +"%d %B %Y %H:%M")
+  # Convert published_at to human-readable format for the main release
+  main_human_readable_date=$(date -d "$main_published_at" +"%d %B %Y %H:%M")
 
-    # Add the main release as the first entry in the release array
-    local release_array=("Main Release" "$main_tag_name" "$main_human_readable_date")
+  # Add the main release as the first entry in the release array
+  local release_array=("Main Release" "$main_tag_name" "$main_human_readable_date")
 
-    # Fetch all releases (including draft and pre-release) from the Cooker repository
-    local releases=$(curl -s "https://api.github.com/repos/$git_organization_name/$cooker_repository_name/releases?per_page=100")
+  # Fetch all releases (including draft and pre-release) from the Cooker repository
+  local releases=$(curl -s "https://api.github.com/repos/$git_organization_name/$cooker_repository_name/releases?per_page=100")
 
-    if [[ -z "$releases" ]]; then
-        log e "Failed to fetch releases or no releases available"
-        kill $progress_pid  # kill the progress bar
-        configurator_generic_dialog "Error" "Unable to fetch releases. Please check your network connection or try again later."
-        return 1
-    fi
+  if [[ -z "$releases" ]]; then
+    log e "Failed to fetch releases or no releases available"
+    kill $progress_pid  # kill the progress bar
+    configurator_generic_dialog "Error" "Unable to fetch releases. Please check your network connection or try again later."
+    return 1
+  fi
 
-    # Loop through each release and add to the release array
-    while IFS= read -r release; do
-        tag_name=$(echo "$release" | jq -r '.tag_name')
-        published_at=$(echo "$release" | jq -r '.published_at')
-        draft=$(echo "$release" | jq -r '.draft')
-        prerelease=$(echo "$release" | jq -r '.prerelease')
+  # Loop through each release and add to the release array
+  while IFS= read -r release; do
+    tag_name=$(echo "$release" | jq -r '.tag_name')
+    published_at=$(echo "$release" | jq -r '.published_at')
+    draft=$(echo "$release" | jq -r '.draft')
+    prerelease=$(echo "$release" | jq -r '.prerelease')
 
-        # Classifying releases
-        if echo "$tag_name" | grep -q "PR"; then
-            status="Pull Request"
-        elif [[ "$draft" == "true" ]]; then
-            status="Draft"
-        elif [[ "$prerelease" == "true" ]]; then
-            status="Pre-release"
-        elif [[ "$cooker_repository_name" == *"Cooker"* ]]; then
-            status="Cooker"
-        else
-            status="Main"
-        fi
-
-        # Convert published_at to human-readable format, if available
-        if [[ "$published_at" != "null" ]]; then
-            human_readable_date=$(date -d "$published_at" +"%d %B %Y %H:%M")
-        else
-            human_readable_date="Not published"
-        fi
-
-        # Ensure fields are properly aligned for Zenity
-        release_array+=("$status" "$tag_name" "$human_readable_date")
-
-    done < <(echo "$releases" | jq -c '.[]' | sort -t: -k3,3r)
-
-    # kill the progress bar before opening the release list window
-    kill $progress_pid
-
-    if [[ ${#release_array[@]} -eq 0 ]]; then
-        configurator_generic_dialog "RetroDECK Updater" "No available releases found, exiting."
-        log d "No available releases found"
-        return 1
-    fi
-
-    log d "Showing available releases"
-
-    # Display releases in a Zenity list dialog with three columns
-    selected_release=$(
-      rd_zenity --list \
-        --icon-name=net.retrodeck.retrodeck \
-        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-        --title "RetroDECK Configurator Cooker Releases - Select Release" \
-        --column="Branch" --column="Release Tag" --column="Published Date" --width=1280 --height=800 \
-        --separator="|" --print-column='ALL' "${release_array[@]}"
-    )
-
-    log i "Selected release: $selected_release"
-
-    if [[ -z "$selected_release" ]]; then
-        log d "No release selected, user exited."
-        return 1
-    fi
-
-    # Parse the selected release using the pipe separator
-    IFS='|' read -r selected_branch selected_tag selected_date <<< "$selected_release"
-    selected_branch=$(echo "$selected_branch" | xargs)  # Trim any extra spaces
-    selected_tag=$(echo "$selected_tag" | xargs)
-    selected_date=$(echo "$selected_date" | xargs)
-
-    log d "Selected branch: $selected_branch, release: $selected_tag, date: $selected_date"
-
-    rd_zenity --question --icon-name=net.retrodeck.retrodeck --no-wrap \
-      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Configurator Cooker Release - Confirm Selection" \
-      --text="Are you sure you want to install the following release?\n\n$selected_branch: \"$selected_tag\"\nPublished on $selected_date?"
-
-    if [[ $? -eq 0 ]]; then
-        log d "User confirmed installation of release $selected_tag"
-
-      if echo "$selected_release" | grep -q "Main Release"; then
-        set_setting_value "$rd_conf" "update_repo" "$main_repository_name" retrodeck "options"
-        log i "Switching to main channel"
-      else
-        set_setting_value "$rd_conf" "update_repo" "$cooker_repository_name" retrodeck "options"
-        log i "Switching to cooker channel"
-      fi
-
-        set_setting_value "$rd_conf" "branch" "$selected_branch" "retrodeck" "options"
-        log d "Set branch to $selected_branch in configuration"
-        install_release "$selected_tag"
-
+    # Classifying releases
+    if echo "$tag_name" | grep -q "PR"; then
+      status="Pull Request"
+    elif [[ "$draft" == "true" ]]; then
+      status="Draft"
+    elif [[ "$prerelease" == "true" ]]; then
+      status="Pre-release"
+    elif [[ "$cooker_repository_name" == *"Cooker"* ]]; then
+      status="Cooker"
     else
-      log d "User canceled installation"
-      return 0
+      status="Main"
     fi
+
+    # Convert published_at to human-readable format, if available
+    if [[ "$published_at" != "null" ]]; then
+      human_readable_date=$(date -d "$published_at" +"%d %B %Y %H:%M")
+    else
+      human_readable_date="Not published"
+    fi
+
+    # Ensure fields are properly aligned for Zenity
+    release_array+=("$status" "$tag_name" "$human_readable_date")
+  done < <(echo "$releases" | jq -c '.[]' | sort -t: -k3,3r)
+
+  # kill the progress bar before opening the release list window
+  kill $progress_pid
+
+  if [[ ${#release_array[@]} -eq 0 ]]; then
+    configurator_generic_dialog "RetroDECK Updater" "No available releases found, exiting."
+    log d "No available releases found"
+    return 1
+  fi
+
+  log d "Showing available releases"
+
+  # Display releases in a Zenity list dialog with three columns
+  selected_release=$(
+    rd_zenity --list \
+      --icon-name=net.retrodeck.retrodeck \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Configurator Cooker Releases - Select Release" \
+      --column="Branch" --column="Release Tag" --column="Published Date" --width=1280 --height=800 \
+      --separator="|" --print-column='ALL' "${release_array[@]}"
+  )
+
+  log i "Selected release: $selected_release"
+
+  if [[ -z "$selected_release" ]]; then
+    log d "No release selected, user exited."
+    return 1
+  fi
+
+  # Parse the selected release using the pipe separator
+  IFS='|' read -r selected_branch selected_tag selected_date <<< "$selected_release"
+  selected_branch=$(echo "$selected_branch" | xargs)  # Trim any extra spaces
+  selected_tag=$(echo "$selected_tag" | xargs)
+  selected_date=$(echo "$selected_date" | xargs)
+
+  log d "Selected branch: $selected_branch, release: $selected_tag, date: $selected_date"
+
+  rd_zenity --question --icon-name=net.retrodeck.retrodeck --no-wrap \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator Cooker Release - Confirm Selection" \
+    --text="Are you sure you want to install the following release?\n\n$selected_branch: \"$selected_tag\"\nPublished on $selected_date?"
+
+  if [[ $? -eq 0 ]]; then
+    log d "User confirmed installation of release $selected_tag"
+    if echo "$selected_release" | grep -q "Main Release"; then
+      set_setting_value "$rd_conf" "update_repo" "$main_repository_name" retrodeck "options"
+      log i "Switching to main channel"
+    else
+      set_setting_value "$rd_conf" "update_repo" "$cooker_repository_name" retrodeck "options"
+      log i "Switching to cooker channel"
+    fi
+    set_setting_value "$rd_conf" "branch" "$selected_branch" "retrodeck" "options"
+    log d "Set branch to $selected_branch in configuration"
+    install_release "$selected_tag"
+  else
+    log d "User canceled installation"
+    return 0
+  fi
 }
 
 quit_retrodeck() {
@@ -1297,8 +1251,8 @@ start_retrodeck() {
   es-de
 }
 
-# Function to convert XML tags to Markdown
 convert_to_markdown() {
+  # Function to convert XML tags to Markdown
   local xml_content=$(cat "$1")
   local output_file="$1.md"
 
@@ -1314,9 +1268,9 @@ convert_to_markdown() {
       -e '/<[^>]*>/d' > "$output_file" # Remove any other XML tags and output to .md file
 }
 
-# This function updates RetroArch by synchronizing shaders, cores, and border overlays.
-# It should be called whenever RetroArch is reset or updated.
-retroarch_updater(){
+retroarch_updater() {
+  # This function updates RetroArch by synchronizing shaders, cores, and border overlays.
+  # It should be called whenever RetroArch is reset or updated.
 
   log i "Running RetroArch updater"
   
@@ -1429,34 +1383,33 @@ repair_paths() {
   invalid_path_found="false"
 
   log i "Checking that all RetroDECK paths are valid"
-  while read -r config_line; do
-    local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
-    if [[ ! $current_setting_name =~ (rdhome|sdcard) ]]; then # Ignore these locations
-      local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
-      if [[ ! -d "$current_setting_value" ]]; then # If the folder doesn't exist as defined
-        log i "$current_setting_name does not exist as defined, config is incorrect"
-        if [[ ! -d "$rdhome/${current_setting_value#*retrodeck/}" ]]; then # If the folder doesn't exist within defined rdhome path
-          if [[ ! -d "$sdcard/${current_setting_value#*retrodeck/}" ]]; then # If the folder doesn't exist within defined sdcard path
-            log i "$current_setting_name cannot be found at any expected location, having user locate it manually"
-            configurator_generic_dialog "RetroDECK Path Repair" "The RetroDECK $current_setting_name was not found in the expected location.\nThis may happen when the folder is moved manually.\n\nPlease browse to the current location of the $current_setting_name."
-            new_path=$(directory_browse "RetroDECK $current_setting_name location")
-            set_setting_value "$rd_conf" "$current_setting_name" "$new_path" retrodeck "paths"
+  while IFS= read -r path_name; do
+    if [[ ! $path_name =~ (rdhome|sdcard) ]]; then # Ignore these locations
+      local path_value=$(get_setting_value "$rd_conf" "$path_name" "retrodeck" "paths")
+      if [[ ! -d "$path_value" ]]; then # If the folder doesn't exist as defined
+        log i "$path_name does not exist as defined, config is incorrect"
+        if [[ ! -d "$rdhome/${path_value#*retrodeck/}" ]]; then # If the folder doesn't exist within defined rdhome path
+          if [[ ! -d "$sdcard/${path_value#*retrodeck/}" ]]; then # If the folder doesn't exist within defined sdcard path
+            log i "$path_name cannot be found at any expected location, having user locate it manually"
+            configurator_generic_dialog "RetroDECK Path Repair" "The RetroDECK $path_name was not found in the expected location.\nThis may happen when the folder is moved manually.\n\nPlease browse to the current location of the $path_name."
+            new_path=$(directory_browse "RetroDECK $path_name location")
+            set_setting_value "$rd_conf" "$path_name" "$new_path" retrodeck "paths"
             invalid_path_found="true"
           else # Folder does exist within defined sdcard path, update accordingly
-            log i "$current_setting_name found in $sdcard/retrodeck, correcting path config"
-            new_path="$sdcard/retrodeck/${current_setting_value#*retrodeck/}"
-            set_setting_value "$rd_conf" "$current_setting_name" "$new_path" retrodeck "paths"
+            log i "$path_name found in $sdcard/retrodeck, correcting path config"
+            new_path="$sdcard/retrodeck/${path_value#*retrodeck/}"
+            set_setting_value "$rd_conf" "$path_name" "$new_path" retrodeck "paths"
             invalid_path_found="true"
           fi
         else # Folder does exist within defined rdhome path, update accordingly
-          log i "$current_setting_name found in $rdhome, correcting path config"
-          new_path="$rdhome/${current_setting_value#*retrodeck/}"
-          set_setting_value "$rd_conf" "$current_setting_name" "$new_path" retrodeck "paths"
+          log i "$path_name found in $rdhome, correcting path config"
+          new_path="$rdhome/${path_value#*retrodeck/}"
+          set_setting_value "$rd_conf" "$path_name" "$new_path" retrodeck "paths"
           invalid_path_found="true"
         fi
       fi
     fi
-  done < <(grep -v '^\s*$' "$rd_conf" | awk '/^\[paths\]/{f=1;next} /^\[/{f=0} f')
+  done < <(jq -r '(.paths // {}) | keys[]' "$rd_conf")
 
   if [[ $invalid_path_found == "true" ]]; then
     log i "One or more invalid paths repaired, fixing internal RetroDECK structures"
@@ -1470,8 +1423,8 @@ repair_paths() {
   fi
 }
 
-# Function to sanitize strings for filenames
 sanitize() {
+    # Function to sanitize strings for filenames
     # Replace sequences of underscores with a single space
     echo "$1" | sed -e 's/_\{2,\}/ /g' -e 's/_/ /g' -e 's/:/ -/g' -e 's/&/and/g' -e 's%/%and%g' -e 's/  / /g'
 }
@@ -1492,68 +1445,448 @@ get_cheevos_token() {
 }
 
 check_if_updated() {
-# Check if an update has happened
-if [ -f "$lockfile" ]; then
-  if [ "$hard_version" != "$version" ]; then
-    log d "Update triggered"
-    log d "Lockfile found but the version doesn't match with the config file"
-    log i "Config file's version is $version but the actual version is $hard_version"
-    if grep -qF "cooker" <<< "$hard_version"; then # If newly-installed version is a "cooker" build
-      log d "Newly-installed version is a \"cooker\" build"
-      configurator_generic_dialog "RetroDECK Cooker Warning" "RUNNING COOKER VERSIONS OF RETRODECK CAN BE EXTREMELY DANGEROUS AND ALL OF YOUR RETRODECK DATA\n(INCLUDING BIOS FILES, BORDERS, DOWNLOADED MEDIA, GAMELISTS, MODS, ROMS, SAVES, STATES, SCREENSHOTS, TEXTURE PACKS AND THEMES)\nARE AT RISK BY CONTINUING!"
-      set_setting_value "$rd_conf" "update_repo" "$cooker_repository_name" retrodeck "options"
-      set_setting_value "$rd_conf" "update_check" "true" retrodeck "options"
-      set_setting_value "$rd_conf" "developer_options" "true" retrodeck "options"
-      set_setting_value "$rd_conf" "logging_level" "debug" retrodeck "options"
-      cooker_base_version=$(echo "$version" | cut -d'-' -f2)
-      choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Upgrade" --extra-button="Don't Upgrade" --extra-button="Full Wipe and Fresh Install" \
-      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-      --title "RetroDECK Cooker Upgrade" \
-      --text="You appear to be upgrading to a \"cooker\" build of RetroDECK.\n\nWould you like to perform the standard post-update process, skip the post-update process or remove ALL existing RetroDECK folders and data (including ROMs and saves) to start from a fresh install?\n\nPerforming the normal post-update process multiple times may lead to unexpected results.")
-      rc=$? # Capture return code, as "Yes" button has no text value
-      if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
-        if [[ "$choice" == "Don't Upgrade" ]]; then # If user wants to bypass the post_update.sh process this time.
-          log i "Skipping upgrade process for cooker build, updating stored version in retrodeck.cfg"
-          set_setting_value "$rd_conf" "version" "$hard_version" retrodeck # Set version of currently running RetroDECK to updated retrodeck.cfg
-        elif [[ "$choice" == "Full Wipe and Fresh Install" ]]; then # Remove all RetroDECK data and start a fresh install
-          if [[ $(configurator_generic_question_dialog "RetroDECK Cooker Reset" "This is going to remove all of the data in all locations used by RetroDECK!\n\n(INCLUDING BIOS FILES, BORDERS, DOWNLOADED MEDIA, GAMELISTS, MODS, ROMS, SAVES, STATES, SCREENSHOTS, TEXTURE PACKS AND THEMES)\n\nAre you sure you want to contine?") == "true" ]]; then
-            if [[ $(configurator_generic_question_dialog "RetroDECK Cooker Reset" "Are you super sure?\n\nThere is no going back from this process, everything is gonzo.\nDust in the wind.\n\nYesterdays omelette.") == "true" ]]; then
-              if [[ $(configurator_generic_question_dialog "RetroDECK Cooker Reset" "But are you super DUPER sure? We REAAAALLLLLYY want to make sure you know what is happening here.\n\nThe ~/retrodeck and ~/.var/app/net.retrodeck.retrodeck folders and ALL of their contents\nare about to be PERMANENTLY removed.\n\nStill sure you want to proceed?") == "true" ]]; then
-                configurator_generic_dialog "RetroDECK Cooker Reset" "Ok, if you're that sure, here we go!"
-                if [[ $(configurator_generic_question_dialog "RetroDECK Cooker Reset" "(Are you actually being serious here? Because we are...\n\nNo backsies.)") == "true" ]]; then
-                  log w "Removing RetroDECK data and starting fresh"
-                  rm -rf /var
-                  rm -rf "$HOME/retrodeck"
-                  rm -rf "$rdhome"
-                  source /app/libexec/global.sh
-                  finit
+  # Check if an update has happened
+  if [ -f "$lockfile" ]; then
+    if [ "$hard_version" != "$version" ]; then
+      log d "Update triggered"
+      log d "Lockfile found but the version doesn't match with the config file"
+      log i "Config file's version is $version but the actual version is $hard_version"
+      if grep -qF "cooker" <<< "$hard_version"; then # If newly-installed version is a "cooker" build
+        log d "Newly-installed version is a \"cooker\" build"
+        configurator_generic_dialog "RetroDECK Cooker Warning" "RUNNING COOKER VERSIONS OF RETRODECK CAN BE EXTREMELY DANGEROUS AND ALL OF YOUR RETRODECK DATA\n(INCLUDING BIOS FILES, BORDERS, DOWNLOADED MEDIA, GAMELISTS, MODS, ROMS, SAVES, STATES, SCREENSHOTS, TEXTURE PACKS AND THEMES)\nARE AT RISK BY CONTINUING!"
+        set_setting_value "$rd_conf" "update_repo" "$cooker_repository_name" retrodeck "options"
+        set_setting_value "$rd_conf" "update_check" "true" retrodeck "options"
+        set_setting_value "$rd_conf" "developer_options" "true" retrodeck "options"
+        set_setting_value "$rd_conf" "logging_level" "debug" retrodeck "options"
+        cooker_base_version=$(echo "$version" | cut -d'-' -f2)
+        choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Upgrade" --extra-button="Don't Upgrade" --extra-button="Full Wipe and Fresh Install" \
+        --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+        --title "RetroDECK Cooker Upgrade" \
+        --text="You appear to be upgrading to a \"cooker\" build of RetroDECK.\n\nWould you like to perform the standard post-update process, skip the post-update process or remove ALL existing RetroDECK folders and data (including ROMs and saves) to start from a fresh install?\n\nPerforming the normal post-update process multiple times may lead to unexpected results.")
+        rc=$? # Capture return code, as "Yes" button has no text value
+        if [[ $rc == "1" ]]; then # If any button other than "Yes" was clicked
+          if [[ "$choice" == "Don't Upgrade" ]]; then # If user wants to bypass the post_update.sh process this time.
+            log i "Skipping upgrade process for cooker build, updating stored version in retrodeck.cfg"
+            set_setting_value "$rd_conf" "version" "$hard_version" retrodeck # Set version of currently running RetroDECK to updated retrodeck.cfg
+          elif [[ "$choice" == "Full Wipe and Fresh Install" ]]; then # Remove all RetroDECK data and start a fresh install
+            if [[ $(configurator_generic_question_dialog "RetroDECK Cooker Reset" "This is going to remove all of the data in all locations used by RetroDECK!\n\n(INCLUDING BIOS FILES, BORDERS, DOWNLOADED MEDIA, GAMELISTS, MODS, ROMS, SAVES, STATES, SCREENSHOTS, TEXTURE PACKS AND THEMES)\n\nAre you sure you want to contine?") == "true" ]]; then
+              if [[ $(configurator_generic_question_dialog "RetroDECK Cooker Reset" "Are you super sure?\n\nThere is no going back from this process, everything is gonzo.\nDust in the wind.\n\nYesterdays omelette.") == "true" ]]; then
+                if [[ $(configurator_generic_question_dialog "RetroDECK Cooker Reset" "But are you super DUPER sure? We REAAAALLLLLYY want to make sure you know what is happening here.\n\nThe ~/retrodeck and ~/.var/app/net.retrodeck.retrodeck folders and ALL of their contents\nare about to be PERMANENTLY removed.\n\nStill sure you want to proceed?") == "true" ]]; then
+                  configurator_generic_dialog "RetroDECK Cooker Reset" "Ok, if you're that sure, here we go!"
+                  if [[ $(configurator_generic_question_dialog "RetroDECK Cooker Reset" "(Are you actually being serious here? Because we are...\n\nNo backsies.)") == "true" ]]; then
+                    log w "Removing RetroDECK data and starting fresh"
+                    rm -rf /var
+                    rm -rf "$HOME/retrodeck"
+                    rm -rf "$rdhome"
+                    source /app/libexec/global.sh
+                    finit
+                  fi
                 fi
               fi
             fi
           fi
+        else
+          log i "Performing normal upgrade process for version $cooker_base_version"
+          version="$cooker_base_version" # Temporarily assign cooker base version to $version so update script can read it properly.
+          post_update
         fi
-      else
-        log i "Performing normal upgrade process for version $cooker_base_version"
-        version="$cooker_base_version" # Temporarily assign cooker base version to $version so update script can read it properly.
-        post_update
+      else # If newly-installed version is a normal build.
+        if grep -qF "cooker" <<< "$version"; then # If previously installed version was a cooker build
+          cooker_base_version=$(echo "$version" | cut -d'-' -f2)
+          version="$cooker_base_version" # Temporarily assign cooker base version to $version so update script can read it properly.
+          set_setting_value "$rd_conf" "update_repo" "RetroDECK" retrodeck "options"
+          set_setting_value "$rd_conf" "update_check" "false" retrodeck "options"
+          set_setting_value "$rd_conf" "update_ignore" "" retrodeck "options"
+          set_setting_value "$rd_conf" "developer_options" "false" retrodeck "options"
+          set_setting_value "$rd_conf" "logging_level" "info" retrodeck "options"
+        fi
+        post_update       # Executing post update script
       fi
-    else # If newly-installed version is a normal build.
-      if grep -qF "cooker" <<< "$version"; then # If previously installed version was a cooker build
-        cooker_base_version=$(echo "$version" | cut -d'-' -f2)
-        version="$cooker_base_version" # Temporarily assign cooker base version to $version so update script can read it properly.
-        set_setting_value "$rd_conf" "update_repo" "RetroDECK" retrodeck "options"
-        set_setting_value "$rd_conf" "update_check" "false" retrodeck "options"
-        set_setting_value "$rd_conf" "update_ignore" "" retrodeck "options"
-        set_setting_value "$rd_conf" "developer_options" "false" retrodeck "options"
-        set_setting_value "$rd_conf" "logging_level" "info" retrodeck "options"
-      fi
-      post_update       # Executing post update script
     fi
+  # Else, LOCKFILE IS NOT EXISTING (WAS REMOVED)
+  # if the lock file doesn't exist at all means that it's a fresh install or a triggered reset
+  else
+    log w "Lockfile not found"
+    finit             # Executing First/Force init
   fi
-# Else, LOCKFILE IS NOT EXISTING (WAS REMOVED)
-# if the lock file doesn't exist at all means that it's a fresh install or a triggered reset
-else
-  log w "Lockfile not found"
-  finit             # Executing First/Force init
-fi
+}
+
+source_component_functions() {
+  # This function will iterate the functions.sh file for every installed component and source it for use in the greater application
+  # Specific component names can be specified, as well as the unique values of "retrodeck", "external" or "internal"
+  # The "retrodeck" option will source only the RetroDECK functions.sh file, which is typically needed to be sourced before anything else on boot
+  # The "internal" option will source components which are specifically internal to RetroDECK, such as SRM or ES-DE, but not RetroDECK itself
+  # The "external" option will source everything else, excluding the RetroDECK and internal files for speed reasons
+  # A specific component name will also be allowed, where the functions.sh file under $rd_components/<component name> will be sourced.
+  # A fallback where all files are sourced when there is no component specified is also an option.
+
+  local choice="$1"
+
+  if [[ -n "$choice" ]]; then
+    case "$choice" in
+
+    "retrodeck" )
+      set -o allexport # Export all the variables found during sourcing, for use elsewhere
+      source "$rd_components/retrodeck/functions.sh"
+      set +o allexport # Back to normal, otherwise every assigned variable will get exported through the rest of the run
+    ;;
+
+    "internal" )
+      set -o allexport # Export all the variables found during sourcing, for use elsewhere
+      source "$rd_components/es-de/functions.sh"
+      source "$rd_components/steam-rom-manager/functions.sh"
+      set +o allexport # Back to normal, otherwise every assigned variable will get exported through the rest of the run
+    ;;
+
+    "external" )
+      while IFS= read -r functions_file; do
+        if [[ ! $(basename $(dirname $functions_file)) =~ ^(retrodeck|es-de|steam-rom-manager)$ ]]; then
+          log d "Found component functions file $functions_file"
+          set -o allexport # Export all the variables found during sourcing, for use elsewhere
+          source "$functions_file"
+          set +o allexport # Back to normal, otherwise every assigned variable will get exported through the rest of the run
+        fi
+      done < <(find "$rd_components" -maxdepth 2 -mindepth 2 -type f -name "functions.sh")
+    ;;
+
+    * )
+      if [[ -n $(find "$rd_components/$choice" -maxdepth 1 -mindepth 1 -type f -name "functions.sh") ]]; then
+        set -o allexport # Export all the variables found during sourcing, for use elsewhere
+        source "$rd_components/$choice/functions.sh"
+        set +o allexport # Back to normal, otherwise every assigned variable will get exported through the rest of the run
+      else
+        log e "functions.sh file for component $choice could not be found."
+      fi
+    ;;
+
+    esac
+  else
+    while IFS= read -r functions_file; do
+      log d "Found component functions file $functions_file"
+      set -o allexport # Export all the variables found during sourcing, for use elsewhere
+      source "$functions_file"
+      set +o allexport # Back to normal, otherwise every assigned variable will get exported through the rest of the run
+    done < <(find "$rd_components" -maxdepth 2 -mindepth 2 -type f -name "functions.sh")
+  fi
+}
+
+update_rd_conf() {
+  # This function will update the retrodeck.cfg file with any new settings which are included in the shipped defaults file.
+  # This will allow expansion of the included settings over time while keeping all existing user settings intact.
+
+  for section_name in $(jq -r '. | keys[]' "$rd_defaults"); do
+    if [[ ! "$section_name" == "version" ]]; then
+      if ! jq -e --arg section "$section_name" '. | has($section)' "$rd_conf" > /dev/null; then # If the name of the section doesn't exist at all.
+        log d "Section \"$section_name\" not found in retrodeck.cfg, creating it."
+        tmpfile=$(mktemp)
+        jq --arg section "$section_name" '. += { ($section): {} }' "$rd_conf" > "$tmpfile" && mv "$tmpfile" "$rd_conf"
+      fi
+      for setting_name in $(jq -r --arg section "$section_name" '.[$section] | keys[]' "$rd_defaults"); do
+        if jq -e --arg section "$section_name" --arg setting "$setting_name" '.[$section] | has($setting)' "$rd_conf" > /dev/null; then
+          log d "The section \"$section_name\" already contains the setting \"$setting_name\". Skipping."
+        else
+          default_setting_value=$(jq -r --arg section "$section_name" --arg setting "$setting_name" '.[$section][$setting]' "$rd_defaults")
+          log d "Adding setting \"$setting_name\" with default value '$default_setting_value' to section \"$section_name\"."
+          tmpfile=$(mktemp)
+          jq --arg section "$section_name" --arg setting "$setting_name" --arg value "$default_setting_value" \
+            '.[$section] += { ($setting): $value }' "$rd_conf" > "$tmpfile" && mv "$tmpfile" "$rd_conf"
+        fi
+      done
+    fi
+  done
+}
+
+update_component_presets() {
+  # This function will create, as needed, component entries for different presets in retrodeck.cfg
+  # This will allow us to expand the supported presets for every component in the presets section at once, creating new component entries in each named preset as needed.
+  # USAGE: update_component_presets
+
+  while IFS= read -r manifest_file; do
+    log d "Examining manifest file $manifest_file"
+    component_name=$(jq -r '. | keys[]' "$manifest_file")
+    if jq -e --arg component "$component_name" '.[$component].compatible_presets? != null' "$manifest_file" > /dev/null; then # Check if the given manifest file even has a presets section
+      while read -r preset_name; do # Gather non-nested entries
+        if ! jq -e --arg preset "$preset_name" '.presets | has($preset)' "$rd_conf" > /dev/null; then # If the name of the preset doesn't exist at all in retrodeck.cfg
+          log d "Preset \"$preset_name\" not found, creating it."
+          tmpfile=$(mktemp)
+          jq --arg preset "$preset_name" '.presets += { ($preset): {} }' "$rd_conf" > "$tmpfile" && mv "$tmpfile" "$rd_conf"
+        fi
+        if jq -e --arg preset "$preset_name" --arg component "$component_name" '.presets[$preset] | has($component)' "$rd_conf" > /dev/null; then
+          log d "The preset \"$preset_name\" already contains the component \"$component_name\". Skipping."
+        else
+          # Retrieve the first element of the array for the current preset name in the source file, which is the "disabled" state
+          default_preset_value=$(jq -r --arg name "$component_name" --arg preset "$preset_name" '.[$name].compatible_presets[$preset][0]' "$manifest_file")
+          log d "Adding component \"$component_name\" with default value '$default_preset_value' to preset \"$preset_name\"."
+          tmpfile=$(mktemp)
+          jq --arg preset "$preset_name" --arg component "$component_name" --arg value "$default_preset_value" \
+            '.presets[$preset] += { ($component): $value }' "$rd_conf" > "$tmpfile" && mv "$tmpfile" "$rd_conf"
+        fi
+      done < <(jq -r --arg component "$component_name" '
+                                    .[$component].compatible_presets
+                                    | to_entries[]
+                                    | select(.value|type == "array")
+                                    | .key
+                                  ' "$manifest_file")
+      while read -r nested_object; do # Gather nested entries, such as RA cores
+        while read -r preset_name; do # Gather non-nested entries
+          if ! jq -e --arg preset "$preset_name" '.presets | has($preset)' "$rd_conf" > /dev/null; then # If the name of the preset doesn't exist at all in retrodeck.cfg
+            log d "Preset \"$preset_name\" not found, creating it."
+            tmpfile=$(mktemp)
+            jq --arg preset "$preset_name" '.presets += { ($preset): {} }' "$rd_conf" > "$tmpfile" && mv "$tmpfile" "$rd_conf"
+          fi
+          if ! jq -e --arg component "$component_name.cores" --arg preset "$preset_name" '.presets[$preset] | has($component)' "$rd_conf" > /dev/null; then # If there is no wrapper for the parent component for this core
+            log d "Wrapper for parent component \"$component_name\" in \"$preset_name\" not found, creating it."
+            tmpfile=$(mktemp)
+            jq --arg component "$component_name.cores" --arg preset "$preset_name" '.presets[$preset] += { ($component): {} }' "$rd_conf" > "$tmpfile" && mv "$tmpfile" "$rd_conf"
+          fi
+          if jq -e --arg preset "$preset_name" --arg component "$component_name.cores" --arg nest "$nested_object" '.presets[$preset][$component] | has($nest)' "$rd_conf" > /dev/null; then
+            log d "The preset \"$preset_name\" already contains the component \"$component_name\" core \"$nested_object\". Skipping."
+          else
+            # Retrieve the first element of the array for the current preset name in the source file, which is the "disabled" state
+            default_preset_value=$(jq -r --arg name "$component_name" --arg nest "$nested_object" --arg preset "$preset_name" '.[$name].compatible_presets[$nest][$preset][0]' "$manifest_file")
+            log d "Adding component \"$component_name\" core \"$nested_object\" with default value '$default_preset_value' to preset \"$preset_name\"."
+            tmpfile=$(mktemp)
+            jq --arg preset "$preset_name" --arg component "$component_name.cores" --arg nest "$nested_object" --arg value "$default_preset_value" \
+              '.presets[$preset][$component] += { ($nest): $value }' "$rd_conf" > "$tmpfile" && mv "$tmpfile" "$rd_conf"
+          fi
+        done < <(jq -r --arg component "$component_name" --arg nest "$nested_object" '
+                                    .[$component].compatible_presets[$nest]
+                                    | to_entries[]
+                                    | select(.value|type == "array")
+                                    | .key
+                                  ' "$manifest_file")
+      done < <(jq -r --arg component "$component_name" '
+                                  .[$component].compatible_presets
+                                  | to_entries[]
+                                  | select(.value|type == "object")
+                                  | .key
+                                ' "$manifest_file")
+    fi
+  done < <(find "$rd_components" -maxdepth 2 -mindepth 2 -type f -name "manifest.json")
+}
+
+install_preset_files() {
+  # This function will copy files from a source to a destination, for the purposes of making them available for a preset.
+  # An example of this purpose would be the Dynamic Input Textures for use in Dolphin or Primehack
+  # The destination path must be the FULL destination, even if it does not currently exist, not the parent directory of the destination.
+  # If the destination path does not exist it will be created.
+  # USAGE: install_preset_files "$source" "$destination"
+
+  local source="$1"
+  local dest="$2"
+
+  if [[ -d "$source" ]]; then # Ensure paths to directories always have a trailing slash
+    [[ "${source}" != */ ]] && source="${source}/"
+  elif [[ ! -f "$source" ]]; then # If given path is neither a file or folder
+    log d "Provided source $source is neither a valid file or directory"
+    return 1
+  fi
+  if [[ -d "$dest" ]]; then # Ensure paths to directories always have a trailing slash
+    [[ "${dest}" != */ ]] && dest="${dest}/"
+  fi
+
+  log d "Installing files from $source to $dest"
+  rsync -rlD --mkpath "$source" "$dest"
+}
+
+remove_preset_files() {
+  # This function will remove installed preset files from a given destination.
+  # If the source (the installed file/folder from its "shipped" location) is a file and the dest a file path to wherever it was installed when enabled, it will be removed.
+  # If the source is a file and the dest is a directory (meaning the file would have been installed into a folder with other files in it), the specific file will be removed from the dest directory.
+  # If the source is a directory and the dest is also a directory (meaning multiple files were installed somewhere), the function will compare all files in the source and remove them from the dest,
+  # meaning even if multipl preset files were installed into a location containing non-preset files, only the correct ones (the ones that exist in the "shipped" location) will be removed.
+  # In all cases, if the destination contains one or more subfolders which are empty after the files have been removed, they will be pruned as well.
+  # USAGE: remove_preset_files "$source" "$dest"
+  local source="$1"
+  local dest="$2"
+
+  if [[ ! -e "$source" ]]; then # Validate that source exists at all.
+    log d "Source location $source does not exist."
+    return 1
+  fi
+
+  local dest_root
+  if [[ -d "${dest%/}" ]]; then # Normalize destination path if it is a directory
+    dest_root="${dest%/}"
+  else
+    dest_root="$(dirname "$dest")"
+  fi
+
+  if [[ -f "$source" && -f "$dest" ]]; then # If source and dest are both single files
+    log d "Removing preset file $(basename "$source") from location $dest_root"
+    rm -f "$dest"
+    if [[ -d "$dest_root" && -z "$(ls -A "$dest_root")" ]]; then # If the parent folder of the dest file is empty, remove it
+      log d "Parent folder $dest_root is empty, removing as well..."
+      rmdir "$dest_root"
+    fi
+    return 0
+  fi
+
+  if [[ -f "$source" && -d "${dest%/}" ]]; then # If the source is a file and the dest is a directory, where the "source" file will be removed from the "dest" directory
+    log d "Removing file $(basename "$source") from destination directory $dest"
+    local base
+    local target
+    local parent_dir
+    base="$(basename "$source")"
+    target="${dest%/}/$base"
+    if [[ -f "$target" ]]; then
+      rm -f "$target"
+      parent_dir="$(dirname "$target")"
+      while [[ "$parent_dir" != "${dest%/}" && -d "$parent_dir" && -z "$(ls -A "$parent_dir")" ]]; do # Remove empty subdirs up to the dest path itself
+        log d "Parent directory $parent_dir is empty, removing as well..."
+        rmdir "$parent_dir"
+        parent_dir="$(dirname "$parent_dir")"
+      done
+    fi
+    if [[ -z "$(ls -A "${dest%/}")" ]]; then # If the dest dir itself is empty, also remove it
+      log d "Destination directory $dest is empty, removing as well..."
+      rmdir "${dest%/}"
+    fi
+    return 0
+  fi
+
+  if [[ -d "${source%/}" && -d "${dest%/}" ]]; then # If both source and dest are directories
+    log d "Removing preset files from $source located in $dest"
+    local source_dir
+    local dest_dir
+    local relative_path
+    local target
+    local parent_dir
+    source_dir="${source%/}"
+    dest_dir="${dest%/}"
+
+    while IFS= read -r -d '' source_file; do # find every file under source, remove its twin under dest
+      relative_path="${source_file#$source_dir/}"
+      target="$dest_dir/$relative_path"
+      if [[ -f "$target" ]]; then
+        log d "Preset file $target found, removing."
+        rm -f "$target"
+        parent_dir="$(dirname "$target")"
+        while [[ "$parent_dir" != "$dest_dir" &&  -d "$parent_dir" && -z "$(ls -A "$parent_dir")" ]]; do # Remove empty subdirs up to the dest path itself
+          log d "Parent directory $parent_dir is empty, removing as well..."
+          rmdir "$parent_dir"
+          parent_dir="$(dirname "$parent_dir")"
+        done
+      fi
+    done < <(find "$source_dir" -type f -print0)
+
+    if [[ -z "$(ls -A "$dest_dir")" ]]; then
+      log d "Destination directory $dest is empty, removing as well..."
+      rmdir "$dest_dir"
+    fi
+    return 0
+  fi
+
+  # If everything else fails, exit poorly
+  return 1
+}
+
+merge_directories() {
+  # This function will take 2 or more "source" folders and create a new "merged" folder combining all the source files and subfolders using symlinks
+  # Every time the function is run, it will check for the existance of all the files in all the source folders and ensure the "merged" folder is up to date, adding and removing symlinks as needed
+  # USAGE: merge_directories "$merged_dir" "$source_dir_1" "$source_dir_2" ("$more_source_dirs")
+
+  if [[ $# -lt 2 ]]; then
+      log e "Usage: merge_directories merged_dir source_dir1 [source_dir2...]"
+      return 1
+  fi
+
+  local merged_dir="$1"
+  shift  # Remove merged_dir from arguments, leaving only source dirs
+  local source_dirs=("$@")
+
+  mkdir -p "$merged_dir"
+
+  log i "Merging ${#source_dirs[@]} locations into $merged_dir"
+
+  for source_dir in "${source_dirs[@]}"; do # First scan all source directories to build the complete folder structure
+    if [[ ! -d "$source_dir" ]]; then
+      log d "Warning: Source directory $source_dir doesn't exist. Skipping."
+      continue
+    fi
+
+    find "$source_dir" -type d | while read -r dir; do # Find all subdirectories in this source
+      if [[ "$dir" == "$src_dir" ]]; then # This is the source directory itself, skip it
+        continue
+      else
+        relative_path=$(realpath --relative-to="$source_dir" "$dir")
+      fi
+
+      mkdir -p "$merged_dir/$relative_path"
+    done
+  done
+
+  local valid_files_tmp=$(mktemp) # Create a temporary file to track all valid files
+
+  log i "Creating symlinks for files..."
+  for source_dir in "${source_dirs[@]}"; do # Process files from all source directories
+    if [[ ! -d "$source_dir" ]]; then
+      log d "$source_dir does not exist, skipping..."
+      continue  # Skip non-existent directories
+    fi
+
+    find "$source_dir" -type f | while read -r file; do
+      relative_path=$(realpath --relative-to="$source_dir" "$file") # Get path relative to the source dir
+      merged_file="$merged_dir/$relative_path" # Path in the merged directory
+
+      echo "$merged_file" >> "$valid_files_tmp"
+
+      if [[ -L "$merged_file" ]]; then # If file already exists in merged location, check if it's the correct symlink
+        target=$(readlink "$merged_file")
+
+        if [[ "$target" = "$file" ]]; then # If symlink already points to this file, skip
+          log d "Existing symlink for $file already exists, skipping..."
+          continue
+        fi
+
+        if [[ -f "$target" ]]; then # Otherwise, it points to a different file, only replace if current target doesn't exist
+          log d "New target for $file exists at $target, keeping existing symlink"
+          continue  # Keep the existing symlink
+        fi
+
+        log d "Removing stale symlink $merged_file"
+        rm "$merged_file" # Remove the stale symlink
+      fi
+
+      if [[ -f "$merged_file" ]] && [[ ! -L "$merged_file" ]]; then # Skip if a real file already exists (not a symlink)
+        log w "Warning: Real file exists at $merged_file. Skipping symlink creation."
+        continue
+      fi
+
+      mkdir -p "$(dirname "$merged_file")"
+      log d "Creating new symlink for $file at $merged_file"
+      ln -sf "$file" "$merged_file"
+    done
+  done
+
+  log i "Removing stale symlinks..."
+  find "$merged_dir" -type l | while read -r symlink; do # Find and remove stale symlinks
+    if ! grep -q "^$symlink$" "$valid_files_tmp"; then # Check if this symlink is in our list of valid files
+      if [[ ! -e "$(readlink "$symlink")" ]]; then # Also verify the target doesn't exist
+        log d "Removing stale symlink: $symlink"
+        rm "$symlink"
+      fi
+    fi
+  done
+
+  rm "$valid_files_tmp"
+
+  log i "Merge complete!"
+}
+
+launch_command() {
+  input="$1"
+  set -- $input
+  # Get the function name and remove it from the list of arguments
+  function_name="$1"
+  shift
+
+  # Check if the function exists
+  if ! declare -f "$function_name" >/dev/null 2>&1; then
+    log e "Function \'$function_name\' not found"
+    exit 1
+  fi
+
+  # Call the function with any remaining arguments
+  "$function_name" "$@"
 }

@@ -157,7 +157,7 @@ while [[ $# -gt 0 ]]; do
             exit 0
             ;;
         --factory-reset)
-            prepare_component --factory-reset
+            prepare_component "factory-reset"
             exit 0
             ;;
         --test-upgrade)

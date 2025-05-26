@@ -43,22 +43,11 @@ if [[ $native_resolution == true ]]; then
 fi
 log i "CPU: Using $max_threads out of $cpu_cores available CPU cores for multi-threaded operations"
 
-source /app/libexec/050_save_migration.sh
-source /app/libexec/api_data_processing.sh
-source /app/libexec/api_server.sh
-source /app/libexec/json_processing.sh
-source /app/libexec/checks.sh
-source /app/libexec/compression.sh
-source /app/libexec/dialogs.sh
-source /app/libexec/other_functions.sh
-source /app/libexec/multi_user.sh
-source /app/libexec/framework.sh
-source /app/libexec/post_update.sh
-source /app/libexec/prepare_component.sh
-source /app/libexec/presets.sh
-source /app/libexec/configurator_functions.sh
-source /app/libexec/run_game.sh
-source /app/libexec/steam_sync.sh
+for file in /app/libexec/*.sh; do
+  if [[ -f "$file" && ! "$file" == "/app/libexec/global.sh" && ! "$file" == "/app/libexec/post_build_check.sh" ]]; then
+    source "$file"
+  fi
+done
 
 # Static variables
 rd_conf="$XDG_CONFIG_HOME/retrodeck/retrodeck.cfg"                                                            # RetroDECK config file path
@@ -105,21 +94,8 @@ PID_FILE="$rd_api_dir/retrodeck_api_server.pid"
 
 RD_FILE_LOCK="$rd_api_dir/retrodeck_file_lock"
 
-# Godot data transfer temp files
-
-godot_bios_files_checked="$XDG_CONFIG_HOME/retrodeck/godot/godot_bios_files_checked.tmp"
-godot_current_preset_settings="$XDG_CONFIG_HOME/retrodeck/godot/godot_current_preset_settings.tmp"
-godot_compression_compatible_games="$XDG_CONFIG_HOME/retrodeck/godot/godot_compression_compatible_games.tmp"
-godot_empty_roms_folders="$XDG_CONFIG_HOME/retrodeck/godot/godot_empty_roms_folders.tmp"
-
-# Config files for emulators with single config files
-
-duckstationconf="$XDG_CONFIG_HOME/duckstation/settings.ini"
-melondsconf="$XDG_CONFIG_HOME/melonDS/melonDS.ini"
-ryujinxconf="$XDG_CONFIG_HOME/Ryujinx/Config.json"
-xemuconf="$XDG_CONFIG_HOME/xemu/xemu.toml"
-yuzuconf="$XDG_CONFIG_HOME/yuzu/qt-config.ini"
-citraconf="$XDG_CONFIG_HOME/citra-emu/qt-config.ini"
+# Base dir for all installed RetroDECK components
+rd_components="/app/retrodeck/components"
 
 # ES-DE config files
 
@@ -127,64 +103,9 @@ export ESDE_APPDATA_DIR="$XDG_CONFIG_HOME/ES-DE"
 es_settings="$XDG_CONFIG_HOME/ES-DE/settings/es_settings.xml"
 es_source_logs="$XDG_CONFIG_HOME/ES-DE/logs"
 
-# RetroArch config files
-
-raconf="$XDG_CONFIG_HOME/retroarch/retroarch.cfg"
-ra_core_conf="$XDG_CONFIG_HOME/retroarch/retroarch-core-options.cfg"
-ra_scummvm_conf="$XDG_CONFIG_HOME/retroarch/system/scummvm.ini"
-ra_cores_path="$XDG_CONFIG_HOME/retroarch/cores"
-
-# CEMU config files
-
-cemuconf="$XDG_CONFIG_HOME/Cemu/settings.xml"
-cemucontrollerconf="$XDG_CONFIG_HOME/Cemu/controllerProfiles/controller0.xml"
-
-# Dolphin config files
-
-dolphinconf="$XDG_CONFIG_HOME/dolphin-emu/Dolphin.ini"
-dolphingcpadconf="$XDG_CONFIG_HOME/dolphin-emu/GCPadNew.ini"
-dolphingfxconf="$XDG_CONFIG_HOME/dolphin-emu/GFX.ini"
-dolphinhkconf="$XDG_CONFIG_HOME/dolphin-emu/Hotkeys.ini"
-dolphinqtconf="$XDG_CONFIG_HOME/dolphin-emu/Qt.ini"
-dolphinDynamicInputTexturesPath="$XDG_DATA_HOME/dolphin-emu/Load/DynamicInputTextures"
-dolphinCheevosConf="$XDG_CONFIG_HOME/dolphin-emu/RetroAchievements.ini"
-
-# PCSX2 config files
-
-pcsx2conf="$XDG_CONFIG_HOME/PCSX2/inis/PCSX2.ini"
-pcsx2gsconf="$XDG_CONFIG_HOME/PCSX2/inis/GS.ini" # This file should be deprecated since moving to PCSX2-QT
-pcsx2uiconf="$XDG_CONFIG_HOME/PCSX2/inis/PCSX2_ui.ini" # This file should be deprecated since moving to PCSX2-QT
-pcsx2vmconf="$XDG_CONFIG_HOME/PCSX2/inis/PCSX2_vm.ini" # This file should be deprecated since moving to PCSX2-QT
-
-# PPSSPP-SDL config files
-
-ppssppconf="$XDG_CONFIG_HOME/ppsspp/PSP/SYSTEM/ppsspp.ini"
-ppssppcontrolsconf="$XDG_CONFIG_HOME/ppsspp/PSP/SYSTEM/controls.ini"
-ppssppcheevosconf="$XDG_CONFIG_HOME/ppsspp/PSP/SYSTEM/ppsspp_retroachievements.dat"
-
-# Primehack config files
-
-primehackconf="$XDG_CONFIG_HOME/primehack/Dolphin.ini"
-primehackgcpadconf="$XDG_CONFIG_HOME/primehack/GCPadNew.ini"
-primehackgfxconf="$XDG_CONFIG_HOME/primehack/GFX.ini"
-primehackhkconf="$XDG_CONFIG_HOME/primehack/Hotkeys.ini"
-primehackqtconf="$XDG_CONFIG_HOME/primehack/Qt.ini"
-primehackDynamicInputTexturesPath="$XDG_DATA_HOME/primehack/Load/DynamicInputTextures"
-
-# RPCS3 config files
-
-rpcs3conf="$XDG_CONFIG_HOME/rpcs3/config.yml"
-rpcs3vfsconf="$XDG_CONFIG_HOME/rpcs3/vfs.yml"
-
-# Vita3k config files
-
-vita3kconf="$XDG_CONFIG_HOME/Vita3K/config.yml"
-
-# MAME-SA config files
-
-mameconf="$XDG_CONFIG_HOME/mame/ini/mame.ini"
-mameuiconf="$XDG_CONFIG_HOME/mame/ini/ui.ini"
-mamedefconf="$XDG_CONFIG_HOME/mame/cfg/default.cfg"
+source_component_functions "retrodeck" # Source this first as future functions will need to know these paths
+source_component_functions "internal"
+source_component_functions "external"
 
 # Initialize logging location if it doesn't exist, before anything else happens
 if [ ! -d "$rd_logs_folder" ]; then
@@ -197,11 +118,6 @@ if [[ ! -d "$rd_api_dir" ]]; then
 fi
 if [[ ! -e "$RD_FILE_LOCK" ]]; then
   touch "$RD_FILE_LOCK"
-fi
-
-# Initialize location of Godot temp data files, if it doesn't exist
-if [[ ! -d "$XDG_CONFIG_HOME/retrodeck/godot" ]]; then
-  create_dir "$XDG_CONFIG_HOME/retrodeck/godot"
 fi
 
 # We moved the lockfile in $XDG_CONFIG_HOME/retrodeck in order to solve issue #53 - Remove in a few versions

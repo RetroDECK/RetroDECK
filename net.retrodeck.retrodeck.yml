@@ -1,16 +1,16 @@
 app-id: net.retrodeck.retrodeck
-runtime: org.kde.Platform
-runtime-version: &runtime-version "6.7"
-sdk: org.kde.Sdk
+runtime: org.freedesktop.Platform
+runtime-version: '24.08'
+sdk: org.freedesktop.Sdk
 base: org.electronjs.Electron2.BaseApp            # Needed for Steam ROM Manager
-base-version: "22.08"
+base-version: "24.08"
 command: retrodeck.sh
 
 add-extensions:
   org.freedesktop.Platform.ffmpeg-full:
     directory: lib/ffmpeg
     add-ld-path: .
-    version: 23.08
+    version: '24.08'
 cleanup-commands:
   - mkdir -p ${FLATPAK_DEST}/lib/ffmpeg
 
@@ -43,6 +43,8 @@ finish-args:
   - --filesystem=~/.var/app/com.valvesoftware.Steam:rw # Steam (Flatpak)
   # PPSSPP, DOLPHIN
   - --filesystem=xdg-run/gamescope-0:ro
+  # STEAM ROM MANAGER
+  - --env=IN_FLATPAK=1
 
 cleanup:
   # ES-DE
@@ -65,10 +67,6 @@ cleanup:
 
 modules:
 
-  # dependency of: CEMU (1.0.26), DOLPHIN (1.0.27)
-  #- rd-submodules/shared-modules/libusb/libusb.json # 1.0.26
-  # we added the libusb 1.0.27 as Dolphin is breaking with 1.0.27, when bot will be aligned we can go back to the submodule
-
   # This module is used to define the RetroDECK version
   # If the version is set as cooker it will automatically generate the version tag based on the date
   # else it will just put what is written, "v" is not needed
@@ -88,15 +86,19 @@ modules:
         # Create the version file vital for RetroDECK Framework
         cp version ${FLATPAK_DEST}/retrodeck/version
 
-        # Display the contents of the version file
-        cat ${FLATPAK_DEST}/retrodeck/version
+        # Print the version number to the console
+        echo "Version is $(cat ${FLATPAK_DEST}/retrodeck/version)"
 
-        # LIBMAN INSTALLATION
-        install -Dm755 "automation_tools/libman.sh" "/app/bin/libman.sh"
+        # Initializing RO retrodeck config folder
+        mkdir -p ${FLATPAK_DEST}/retrodeck/graphics
+        mkdir -p ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/
+        mkdir -p ${FLATPAK_DEST}/retrodeck/components
 
     sources:
       - type: dir
         path: .
+
+  # START: Internal RetroDECK tools
 
   - name: xmlstarlet
     config-opts:
@@ -120,27 +122,41 @@ modules:
       - cp rclone ${FLATPAK_DEST}/bin/
     sources:
       - type: archive
-        url: https://github.com/rclone/rclone/releases/download/v1.61.1/rclone-v1.61.1-linux-amd64.zip
-        sha256: 6d6455e1cb69eb0615a52cc046a296395e44d50c0f32627ba8590c677ddf50a9
+        url: https://github.com/rclone/rclone/releases/download/v1.69.1/rclone-v1.69.1-linux-amd64.zip
+        sha256: 231841f8d8029ae6cfca932b601b3b50d0e2c3c2cb9da3166293f1c3eae7d79c
 
-  # Source: https://github.com/flathub/com.valvesoftware.Steam.Utility.steamtinkerlaunch/blob/129c9192f874405d21612d95f9749dc2bcaf8cea/modules/rsync.yml#L5
+  # Source: https://github.com/flathub/com.valvesoftware.Steam.Utility.steamtinkerlaunch/blob/master/modules/rsync.yml
   - name: rsync
     no-autogen: true
     config-opts:
-      - --prefix=${FLATPAK_DEST}
       - --with-included-popt
       - --with-included-zlib
       - --disable-debug
-      - --disable-xxhash # Unable to meet dependency -- rsync refuses to see the required xxhash.h file
     sources:
       - type: archive
-        url: https://download.samba.org/pub/rsync/src/rsync-3.2.7.tar.gz
-        sha256: 4e7d9d3f6ed10878c58c5fb724a67dacf4b6aac7340b13e488fb2dc41346f2bb
+        url: https://download.samba.org/pub/rsync/src/rsync-3.4.1.tar.gz
+        sha256: 2924bcb3a1ed8b551fc101f740b9f0fe0a202b115027647cf69850d65fd88c52
         x-checker-data:
           type: anitya
           project-id: 4217
           stable-only: true
           url-template: https://download.samba.org/pub/rsync/src/rsync-$version.tar.gz
+    modules:
+      - name: xxhash
+        no-autogen: true
+        make-install-args:
+          - PREFIX=${FLATPAK_DEST}
+          - DISPATCH=1
+        sources:
+          - type: git
+            url: https://github.com/Cyan4973/xxHash/
+            tag: v0.8.3
+            commit: e626a72bc2321cd320e953a0ccf1584cad60f363
+            x-checker-data:
+              type: anitya
+              project-id: 17583
+              stable-only: true
+              tag-template: v$version
 
   - name: jq
     buildsystem: simple
@@ -148,23 +164,20 @@ modules:
       - install -Dm755 jq-linux64 ${FLATPAK_DEST}/bin/jq
     sources:
       - type: file
-        url: https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
-        sha256: af986793a515d500ab2d35f8d2aecd656e764504b789b66d7e1a0b727a124c44
+        url: https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-linux64
+        sha256: 5942c9b0934e510ee61eb3e30273f1b3fe2590df93933a93d7c58b81d19c8ff5
 
-  # Steam ROM Manager - START
-  # https://github.com/flathub/com.steamgriddb.steam-rom-manager
-
-  - name: zypak
+  - name: yq
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 yq_linux_amd64 ${FLATPAK_DEST}/bin/yq
     sources:
-      - type: git
-        url: https://github.com/refi64/zypak
-        tag: v2022.03
-        commit: 8424c6bcf909ca2031ebc6537d324bb64772266e
+      - type: file
+        url: https://github.com/mikefarah/yq/releases/download/v4.45.1/yq_linux_amd64
+        sha256: 654d2943ca1d3be2024089eb4f270f4070f491a0610481d128509b2834870049
 
   - name: steam-rom-manager
     buildsystem: simple
-    env:
-        IN_FLATPAK: 1
     build-commands:
       - install -D run.sh ${FLATPAK_DEST}/bin/steam-rom-manager
       - bsdtar -xf srm.deb data.tar.xz
@@ -191,584 +204,7 @@ modules:
             "_amd64.deb") | .browser_download_url
           version-query: .tag_name | sub("^v"; "")
 
-  # Steam ROM Manager - END
-  
-  - name: yq
-    buildsystem: simple
-    build-commands:
-      - install -Dm755 yq_linux_amd64 ${FLATPAK_DEST}/bin/yq
-    sources:
-      - type: file
-        url: https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_amd64
-        sha256: 4ee662847c588c3ef2fec8bfb304e8739e3dbaba87ccb9a608d691c88f5b64dc
-
-  # GODOT Configurator
-  # - name: retrodeck-configurator
-  #   buildsystem: simple
-  #   build-commands:
-  #     - install -Dm755 "Godot_v4.3-stable_linux.x86_64" "${FLATPAK_DEST}/bin/godot"
-  #     - mkdir -p "${FLATPAK_DEST}/retrodeck"
-  #     - godot --headless --path "tools/configurator" --import
-  #     - godot --headless --path "tools/configurator" --export-pack "Linux/X11 64-bit" "${FLATPAK_DEST}/retrodeck/configurator.pck"
-  #     - chmod +x "${FLATPAK_DEST}/retrodeck/configurator.pck"
-  #     - echo '#!/bin/sh' > "godot-configurator.sh"
-  #     - echo 'godot --main-pack /app/retrodeck/configurator.pck' >> "godot-configurator.sh"
-  #     - install -Dm755 "godot-configurator.sh" "/app/bin/"
-  #   sources:
-  #     - type: archive
-  #       url: https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_linux.x86_64.zip
-  #       sha256: 7de56444b130b10af84d19c7e0cf63cf9e9937ee4ba94364c3b7dd114253ca21
-  #     - type: archive
-  #       url: https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.15.0.tar.gz
-  #       sha256: f5f359d6332861bd497570848fcb42520964a9e83d5e3abe397b6b6db9bcaaf4
-  #       dest: fontconfig
-  #     - type: git
-  #       url: THISREPO
-  #       branch: THISBRANCH
-        
-  # RetroArch
-  # https://retroarch.com/index.php?page=platforms
-
-  - name: retroarch
-    buildsystem: simple
-    build-commands:
-      # Step 1: Create required directories
-      - mkdir -p "${FLATPAK_DEST}/share/libretro/"
-      # Step 2: Copy RetroArch configuration files
-      - cp -r ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/* "${FLATPAK_DEST}/share/libretro/"
-      # Step 3: Extract the AppImage
-      - chmod +x ./*.AppImage
-      - ./*.AppImage --appimage-extract
-      # Step 4: Use libman.sh to manage libraries
-      - /app/bin/libman.sh "squashfs-root/usr/lib"
-      # Step 5: Copy remaining extracted files to the Flatpak destination
-      - find squashfs-root/usr/ -exec sh -c 'install -Dm755 "{}" "${FLATPAK_DEST}/$(echo "{}" | sed "s|^squashfs-root/usr||")"' \;
-    sources:
-      - type: archive
-        url: https://buildbot.libretro.com/stable/1.20.0/linux/x86_64/RetroArch.7z
-        sha256: 809b3e9f02a9849719453d0f189a0edc544ad3235c8ce75a79488e710ba9668a
-
-  # TODO: outsource me
-  - name: libbz2
-    no-autogen: true
-    make-args:
-      - --f=Makefile-libbz2_so
-      - PREFIX=${FLATPAK_DEST}
-    no-make-install: true
-    post-install: 
-      - mv libbz2.so.1.0.8 ${FLATPAK_DEST}/lib/
-      - ln -s ${FLATPAK_DEST}/lib/libbz2.so.1.0.8 ${FLATPAK_DEST}/lib/libbz2.so.1.0
-    sources:
-      - type: archive
-        url: https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz
-        sha256: ab5a03176ee106d3f0fa90e381da478ddae405918153cca248e682cd0c4a2269
-  
-  # TODO: If more are mising are here: https://github.com/flathub/org.libretro.RetroArch/tree/8c388bb84df63b3a2efb40dc3d8f78df7717059e/modules
-
-  # retroarch-cores-nightly must be earlier than retroarch-cores as it will overwrite this cores with the stable ones
-  - name: retroarch-cores-nightly
-    buildsystem: simple
-    build-commands:
-      - mkdir -p ${FLATPAK_DEST}/share/libretro/cores/      
-      - cp -r ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* ${FLATPAK_DEST}/share/libretro/cores/
-    sources:
-      - type: archive
-        url: https://buildbot.libretro.com/nightly/linux/x86_64/RetroArch_cores.7z
-        sha256: RANIGHTLYCORESPLACEHOLDER
-
-  # Citra is removed from the LibretroCores but is still available in Libretro repo
-  - name: citra-libretro-core
-    buildsystem: simple
-    build-commands:
-      - cp citra_libretro.so ${FLATPAK_DEST}/share/libretro/cores/
-    sources:
-      - type: archive
-        url: https://buildbot.libretro.com/nightly/linux/x86_64/latest/citra_libretro.so.zip
-        sha256: RACITRAPLACEHOLDER
-
-  - name: retroarch-cores
-    buildsystem: simple
-    build-commands:
-      - mkdir -p ${FLATPAK_DEST}/share/libretro/cores/      
-      - cp -rf ./RetroArch-Linux-x86_64.AppImage.home/.config/retroarch/cores/* ${FLATPAK_DEST}/share/libretro/cores/
-    sources:
-      - type: archive
-        url: https://buildbot.libretro.com/stable/1.20.0/linux/x86_64/RetroArch_cores.7z
-        sha256: 433f46ecbb3f1ae8d17b6c5fdffbd11761ce4532652d73a1d4e1f0029c175a87
-    
-  - name: retroarch-sameduck-core
-    buildsystem: simple
-    build-commands:
-      - cp -f sameduck_libretro.so ${FLATPAK_DEST}/share/libretro/cores/sameduck_libretro.so
-    sources:
-      - type: archive
-        url: https://buildbot.libretro.com/nightly/linux/x86_64/latest/sameduck_libretro.so.zip
-        sha256: SAMEDUCKSHAPLACEHOLDER
-
-  - name: retroarch-cheats
-    buildsystem: simple
-    build-commands:
-      - mkdir -p ${FLATPAK_DEST}/retrodeck/cheats
-      - tar -czf ${FLATPAK_DEST}/retrodeck/cheats/retroarch.tar.gz cht
-    sources:
-    - type: git
-      url: https://github.com/libretro/libretro-database
-      branch: master
-
-  - name: ppsspp-bios
-    buildsystem: simple
-    build-commands:
-      - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/PPSSPP
-      - cp -r assets/* ${FLATPAK_DEST}/retrodeck/extras/PPSSPP/
-    sources:
-      - type: archive
-        url: https://github.com/hrydgard/ppsspp/archive/refs/heads/master.zip
-        sha256: PPSSPPBIOSHASHPLACEHOLDER
-
-  - name: msx-bios
-    buildsystem: simple
-    build-commands:
-    - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/MSX
-    - cp -r Databases ${FLATPAK_DEST}/retrodeck/extras/MSX/Databases
-    - cp -r Machines ${FLATPAK_DEST}/retrodeck/extras/MSX/Machines
-    sources:
-      - type: archive
-        url: http://bluemsx.msxblue.com/rel_download/blueMSXv282full.zip
-        sha256: MSXBIOSHASHPLACEHOLDER
-        strip-components: 0
-  
-  - name: amiga-bios
-    buildsystem: simple
-    build-commands:
-    - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/Amiga
-    - cp -r Linux/x86-64/capsimg.so ${FLATPAK_DEST}/retrodeck/extras/Amiga/capsimg.so
-    sources:
-      - type: archive
-        url: https://github.com/rsn8887/capsimg/releases/download/1.1/Capsimg_for_Retroarch.zip
-        sha256: 16c1b511b8e1374a2b6461a66bb6f07b7d2627eb4e941fd1497a432330acaad1
-        strip-components: 0
-
-  # PPSSPP
-  # why from our artifacts: AppImage not provided, only Flatpak, requested here: https://github.com/hrydgard/ppsspp/issues/16511
-  # https://github.com/RetroDECK/org.ppsspp.PPSSPP
-
-  - name: retrodeck-ppsspp
-    buildsystem: simple
-    build-commands:
-      # Step 1: Remove any existing manifest.json file
-      - rm -f "files/manifest.json"
-      # Step 2: Use libman.sh to manage libraries
-      - /app/bin/libman.sh "files/lib"
-      # Step 3: removing libraries folder that have been already moved
-      - rm -rf "files/lib"
-      # Step 4: Ensure binaries are executable
-      - chmod +x "files/bin/"*
-      # Step 5: Copy all remaining files to the Flatpak destination
-      - cp -r files/* "${FLATPAK_DEST}"
-    sources:
-      - type: archive
-        url: https://github.com/RetroDECK/org.ppsspp.PPSSPP/releases/latest/download/RetroDECK-Artifact.tar.gz
-        sha256: RETRODECKPPSSPPLATEST
-
-  - name: ppsspp-cheats
-    buildsystem: simple
-    build-commands:
-      - mkdir -p ${FLATPAK_DEST}/retrodeck/cheats
-      - tar -czf ${FLATPAK_DEST}/retrodeck/cheats/ppsspp.tar.gz cheat.db
-    sources:
-    - type: git
-      url: https://github.com/Saramagrean/CWCheat-Database-Plus-
-      branch: master
-
-  # PCSX2 - FROZEN UNTIL QT 6.8 UPDATE
-  # Inspired by: https://github.com/flathub/com.zettlr.Zettlr/blob/master/com.zettlr.Zettlr.yaml
-  # https://pcsx2.net/downloads/
-
-  - name: pcsx2
-    buildsystem: simple
-    build-commands:
-      # Step 1: Ensure the AppImage is executable
-      - chmod +x *.AppImage
-      # Step 2: Extract the AppImage
-      - ./*.AppImage --appimage-extract
-      # Step 3: Use libman.sh to handle library files
-      - /app/bin/libman.sh "squashfs-root/usr/lib"
-      # Step 4: Copy the remaining extracted files to the Flatpak destination
-      - find squashfs-root/usr/ -exec sh -c 'install -Dm755 "{}" "${FLATPAK_DEST}/$(echo "{}" | sed "s|^squashfs-root/usr||")"' \;
-    sources:
-      - type: file
-        url: https://github.com/PCSX2/pcsx2/releases/download/v2.1.190/pcsx2-v2.1.190-linux-appimage-x64-Qt.AppImage
-        sha256: 6a83a7bc499ad4ef4940aa2df08624876b452998f897ebdb8f8d7687c9035b79
-
-  - name: pcsx2-cheats
-    buildsystem: simple
-    build-commands:
-      - mkdir -p ${FLATPAK_DEST}/retrodeck/cheats
-      - tar -czf ${FLATPAK_DEST}/retrodeck/cheats/pcsx2.tar.gz cheats
-    sources:
-    - type: git
-      url: https://github.com/xs1l3n7x/pcsx2_cheats_collection
-      branch: main
-
-  # Dolphin
-  # why from source: AppImage not provided, only Flatpak
-  # https://github.com/RetroDECK/org.DolphinEmu.dolphin-emu
-
-  - name: retrodeck-dolphin
-    buildsystem: simple
-    build-commands:
-      # Step 1: Remove any existing manifest.json file
-      - rm -f "files/manifest.json"
-      # Step 2: Use libman.sh to manage libraries
-      - /app/bin/libman.sh "files/lib"
-      # Step 3: removing libraries folder that have been already moved
-      - rm -rf "files/lib"
-      # Step 4: Ensure binaries are executable
-      - chmod +x "files/bin/"*
-      # Step 5: Copy all remaining files to the Flatpak destination
-      - cp -r files/* "${FLATPAK_DEST}"
-    sources:
-      - type: archive
-        url: https://github.com/RetroDECK/org.DolphinEmu.dolphin-emu/releases/download/master-13192425010/RetroDECK-Artifact.tar.gz
-        sha256: 8d0e892cecaa0eb7968f11e8d22333093737a009be73d1c541d278cd9805ec4a
-
-  # PRIMEHACK
-  # https://github.com/RetroDECK/io.github.shiiion.primehack
-
-  - name: retrodeck-primehack
-    buildsystem: simple
-    build-commands:
-      # Step 1: Remove any existing manifest.json file
-      - rm -f "files/manifest.json"
-      # Step 2: Remove unnecessary files
-      - rm -rf "files/lib/pkgconfig"
-      # Step 3: Use libman.sh to manage libraries
-      - /app/bin/libman.sh "files/lib"
-      # Step 4: removing libraries folder that have been already moved
-      - rm -rf "files/lib"
-      # Step 5: Ensure binaries are executable
-      - chmod +x "files/bin/"*
-      # Step 6: Copy all remaining files to the Flatpak destination
-      - cp -r files/* "${FLATPAK_DEST}"
-    sources:
-      - type: archive
-        url: https://github.com/RetroDECK/io.github.shiiion.primehack/releases/download/master-230724.27/RetroDECK-primehack-Artifact.tar.gz
-        sha256: 7cd20690cea20284b6b272092f79cadf6a7ca9d5b9df7cb5985cb090ff47731d
-
-  # Universal Dynamic Input for Dolphin and Primehack
-  - name: universal_dynamic_input
-    buildsystem: simple
-    build-commands:
-      - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/DynamicInputTextures
-      - cp -r * ${FLATPAK_DEST}/retrodeck/extras/DynamicInputTextures/
-    sources:
-      - type: git
-        url: https://github.com/Venomalia/UniversalDynamicInput.git
-        commit: UNIVERSALDYNAMICINPUTCOMMITPLACEHOLDER
-
-  # RPCS3
-  # https://rpcs3.net/download
-
-  - name: retrodeck-rpcs3
-    buildsystem: simple
-    build-commands:
-      # Step 1: Remove any existing manifest.json file
-      - rm -f "files/manifest.json"
-      # Step 2: Use libman.sh to manage libraries
-      - /app/bin/libman.sh "files/lib"
-      # Step 3: removing libraries folder that have been already moved
-      - rm -rf "files/lib"
-      # Step 4: Ensure binaries are executable
-      - chmod +x "files/bin/"*
-      # Step 5: Copy all remaining files to the Flatpak destination
-      - cp -r files/* "${FLATPAK_DEST}"
-    sources:
-      - type: archive
-        url: https://github.com/RetroDECK/net.rpcs3.RPCS3/releases/latest/download/RetroDECK-Artifact.tar.gz
-        sha256: RETRODECKRPCS3LATEST
-
-  # MELONDS
-  # https://github.com/RetroDECK/net.kuribo64.melonDS
-
-  - name: melonds
-    buildsystem: simple
-    build-commands:
-      # Step 1: Remove any existing manifest.json file
-      - rm -f "files/manifest.json"
-      # Step 2: Use libman.sh to manage libraries
-      - /app/bin/libman.sh "files/lib"
-      # Step 3: removing libraries folder that have been already moved
-      - rm -rf "files/lib"
-      # Step 4: Ensure binaries are executable
-      - chmod +x "files/bin/"*
-      # Step 5: Copy all remaining files to the Flatpak destination
-      - cp -r files/* "${FLATPAK_DEST}/"
-    sources:
-      - type: archive
-        url: https://github.com/RetroDECK/net.kuribo64.melonDS/releases/latest/download/RetroDECK-melonds-Artifact.tar.gz
-        sha256: RETRODECKMELONDSLATEST
-
-  # Duckstation
-  # Do not update: Legacy
-  # https://github.com/RetroDECK/Duckstation
-
-  - name: duckstation
-    buildsystem: simple
-    build-commands:
-      # Step 1: Ensure the AppImage is executable and extract it
-      - chmod +x *.AppImage
-      - ./*.AppImage --appimage-extract
-      # Step 2: Use libman.sh to manage libraries
-      - /app/bin/libman.sh "squashfs-root/usr/lib"
-      # Step 3: Copy remaining extracted files to the Flatpak destination
-      - find squashfs-root/usr/ -exec sh -c 'install -Dm755 "{}" "${FLATPAK_DEST}/$(echo "{}" | sed "s|^squashfs-root/usr||")"' \;
-    sources:
-      - type: file
-        url: https://github.com/RetroDECK/Duckstation/releases/download/preview/DuckStation-x64.AppImage
-        sha256: 84777a8d0fce9acfc2ffe6a8aea352bd68a8a37f5c793d328dbaa4ff5ada5e6d
-
-  # Cemu
-  # UPDATE IT HERE
-  # https://github.com/cemu-project/Cemu/releases
-
-  - name: cemu
-    buildsystem: simple
-    build-commands:
-      # Step 1: Ensure the AppImage is executable and extract it
-      - chmod +x *.AppImage
-      - ./*.AppImage --appimage-extract
-      # Step 2: Remove unnecessary files causing potential issues
-      - rm -rf "squashfs-root/usr/lib/girepository-1.0"
-      # Step 3: Use libman.sh to manage libraries
-      - /app/bin/libman.sh "squashfs-root/usr/lib"
-      # Step 4: Copy remaining extracted files to the Flatpak destination
-      - find squashfs-root/usr/ -exec sh -c 'install -Dm755 "{}" "${FLATPAK_DEST}/$(echo "{}" | sed "s|^squashfs-root/usr||")"' \;
-      # Step 5: Install the wrapper script
-      - install -Dm755 Cemu-wrapper "${FLATPAK_DEST}/bin/"
-    sources:
-      - type: file
-        url: https://github.com/cemu-project/Cemu/releases/download/v2.4/Cemu-2.4-x86_64.AppImage
-        sha256: 92a1f081230809bd0ac30b228f72c6d8c7aa7eaa3e56df4cf8ad54d4c9927097
-      - type: script
-        commands:
-          - |
-            for d in DiscordCanary Discord; do
-              for i in {0..9}; do
-                test -S $XDG_RUNTIME_DIR/discord-ipc-$i ||
-                  ln -sf {app/com.discordapp.$d,$XDG_RUNTIME_DIR}/discord-ipc-$i;
-              done
-            done
-            Cemu "$@"
-        dest-filename: Cemu-wrapper
-
-  # Vita3K - ROLLING RELEASE
-  - name: vita3k
-    buildsystem: simple
-    build-commands:
-      # Copying the user icon
-      - mkdir -p ${FLATPAK_DEST}/retrodeck
-      - cp retrodeck.png ${FLATPAK_DEST}/retrodeck
-      - unzip "ubuntu-latest.zip" -d "${FLATPAK_DEST}/share/Vita3K"
-      - chmod +x "${FLATPAK_DEST}/share/Vita3K/Vita3K"
-      - rm -f "${FLATPAK_DEST}/share/Vita3K/update-vita3k.sh"
-      - ln -s ${FLATPAK_DEST}/share/Vita3K/Vita3K ${FLATPAK_DEST}/bin/Vita3K
-    sources:
-      - type: file
-        url: https://github.com/RetroDECK/Vita3K-bin/releases/latest/download/ubuntu-latest.zip
-        sha256: RETRODECKLATESTVITA3KSHA
-      - type: file
-        path: res/retrodeck.png
-
-  # SOLARUS
-  # why from source: they only provide a snap
-  # https://github.com/RetroDECK/org.solarus_games.solarus.Launcher
-
-  - name: retrodeck-solarus
-    buildsystem: simple
-    build-commands:
-      # Step 1: Remove any existing manifest.json file
-      - rm -f "files/manifest.json"
-      # Step 2: Remove unnecessary files
-      - rm -rf "files/lib/debug" "files/lib/pkgconfig"
-      # Step 3: Use libman.sh to manage libraries
-      - /app/bin/libman.sh "files/lib"
-      # Step 4: removing libraries folder that have been already moved
-      - rm -rf "files/lib"
-      # Step 5: Ensure binaries are executable
-      - chmod +x "files/bin/"*
-      # Step 6: Copy all remaining files to the Flatpak destination
-      - cp -r files/* "${FLATPAK_DEST}"
-    sources:
-      - type: archive
-        url: https://github.com/RetroDECK/org.solarus_games.solarus.Launcher/releases/latest/download/RetroDECK-solarus-Artifact.tar.gz
-        sha256: RETRODECKSOLARUSLATEST
-
-  # GZDoom
-  # When updating remember to update all the .pk3 files from the standalone linux download
-  # https://github.com/RetroDECK/org.zdoom.GZDoom
-
-  - name: retrodeck-gzdoom
-    buildsystem: simple
-    build-commands:
-      # Step 1: Remove any existing manifest.json file
-      - rm -f "files/manifest.json"
-      # Step 2: Remove unnecessary files
-      - rm -rf "files/lib/cmake" "files/lib/pkgconfig" "files/lib/debug"
-      # Step 3: Use libman.sh to manage libraries
-      - /app/bin/libman.sh "files/lib"
-      # Step 4: removing libraries folder that have been already moved
-      - rm -rf "files/lib"
-      # Step 5: Ensure binaries are executable
-      - chmod +x "files/bin/"*
-      # Step 6: Copy all remaining files to the Flatpak destination
-      - cp -r files/* "${FLATPAK_DEST}"
-      # Step 7: installing GZDoom wrapper
-      - install -Dm755 gzdoom.sh ${FLATPAK_DEST}/bin/gzdoom.sh
-    sources:
-      - type: archive
-        url: https://github.com/RetroDECK/org.zdoom.GZDoom/releases/latest/download/RetroDECK-Artifact.tar.gz
-        sha256: RETRODECKGZDOOMLATEST
-      - type: file
-        path: config/gzdoom/gzdoom.sh
-
-  # Pancakes
-  # NOTE: if this module breaks, might be caused by SDL2 version mismatch. Check last line of this module.
-  - name: Pancakes
-    buildsystem: simple
-    build-commands:
-      # Step 1: Create the Flatpak destination directory
-      - mkdir -p "${FLATPAK_DEST}"
-      # Step 2: Extract and manage library files
-      - /app/bin/libman.sh "."
-      # Step 3: Move and set up the binary
-      - rm -rf *.dll.config
-      - mv R*x* "${FLATPAK_DEST}/bin/"
-      # This line inserts the command to export the LD_LIBRARY_PATH environment variable at the beginning of the specified file.
-      # It ensures that the /app/bin directory is included in the library search path for the executable files matching the pattern R*x*.sh.
-      - sed -i 's|#!/bin/sh|#!/bin/sh\nexport LD_LIBRARY_PATH=/app/lib:$LD_LIBRARY_PATH|' "${FLATPAK_DEST}/bin/"R*x*.sh
-      - chmod +x "${FLATPAK_DEST}/bin/"R*x*
-      # Step 4: Set up license directory and move license files
-      - mkdir -p "${FLATPAK_DEST}/retrodeck/licenses"
-      - mv LICENSE.txt THIRDPARTY.md "${FLATPAK_DEST}/retrodeck/licenses"
-    sources:
-      - type: archive
-        url: https://github.com/RetroDECK/Pancakes-bin/releases/download/1.1.0.1403-20250118/pancakes-Release-linux_x64.tar.gz
-        sha256: 6b4fee31782d8ca1def23c326f22263fda7c553ce0218d2423d39208c2bfe2f6
-
-  # XEMU
-  # https://xemu.app/docs/download/#download-for-linux
-
-  - name: xemu
-    buildsystem: simple
-    build-commands:
-      # Step 1: Ensure the AppImage is executable and extract it
-      - chmod +x *.AppImage
-      - ./*.AppImage --appimage-extract
-      # Step 2: Use libman.sh to manage libraries
-      - /app/bin/libman.sh "squashfs-root/usr/lib"
-      # Step 3: Copy remaining extracted files to the Flatpak destination
-      - find squashfs-root/usr/ -exec sh -c 'install -Dm755 "{}" "${FLATPAK_DEST}/$(echo "{}" | sed "s|^squashfs-root/usr||")"' \;
-    sources:
-      - type: file
-        url: https://github.com/xemu-project/xemu/releases/download/v0.8.5/xemu-v0.8.5-x86_64.AppImage
-        sha256: fd282e299dbc3207b8afb84059da99feffc65a86eb29d96c9108fde368d4c99e
-
-  - name: xemu-dummy-hdd
-    buildsystem: simple
-    build-commands:
-      - mkdir -p ${FLATPAK_DEST}/retrodeck/extras/XEMU
-      - mv -f "xbox_hdd.qcow2" "${FLATPAK_DEST}/retrodeck/extras/XEMU/xbox_hdd.qcow2"
-    sources:
-      - type: archive
-        url: https://github.com/mborgerson/xemu-hdd-image/releases/latest/download/xbox_hdd.qcow2.zip
-        sha256: XEMUHDDHASHPLACEHOLDER
-
-  # MAME
-
-  - name: retrodeck-mame
-    buildsystem: simple
-    build-commands:
-      # Step 1: Remove any existing manifest.json file
-      - rm -f files/manifest.json
-      # Step 2: Use libman.sh to manage libraries - REMOVED AS MAME DON'T BRING ANY LIBS WITH IT
-      # - /app/bin/libman.sh "files/lib"
-      # Step 3: Copy the managed libraries and all other files to the Flatpak destination
-      - cp -rn files/* ${FLATPAK_DEST}
-    sources:
-      - type: archive
-        url: https://github.com/RetroDECK/org.mamedev.MAME/releases/latest/download/RetroDECK-Artifact.tar.gz
-        sha256: RETRODECKMAMELATEST
-
-  # PortMaster
-
-  - name: PortMaster
-    buildsystem: simple
-    build-commands:
-      - mkdir -p "${FLATPAK_DEST}/retrodeck/PortMaster/"
-      - install -Dm755 "PortMaster" "${FLATPAK_DEST}/bin/PortMaster"
-      - install -Dm755 "harbourmaster" "${FLATPAK_DEST}/bin/harbourmaster"
-      - cp PortMaster.zip "${FLATPAK_DEST}/retrodeck/PortMaster.zip"
-    sources:
-      - type: file
-        url: https://github.com/PortsMaster/PortMaster-GUI/releases/latest/download/retrodeck.portmaster.zip
-        sha256: PORTMASTERLATESTSHA
-        dest-filename: PortMaster.zip
-      - type: script
-        commands:
-          - |
-            "/var/data/PortMaster/PortMaster.sh" "$@"
-        dest-filename: PortMaster
-      - type: script
-        commands:
-          - |
-            "/var/data/PortMaster/harbourmaster" "$@"
-        dest-filename: harbourmaster
-
-  # ES-DE
-
-  - name: ES-DE
-    buildsystem: simple
-    build-commands:
-      # Step 1: Remove any existing manifest.json file
-      - rm -f "files/manifest.json"
-      # Step 2: Use libman.sh to manage libraries
-      - /app/bin/libman.sh "files/lib"
-      # Step 3: Clean up source library folder
-      - rm -rf "files/lib"
-      # Step 4: Ensure binaries are executable
-      - chmod +x "files/bin/"*
-      # Step 5: Copy all remaining files to the Flatpak destination
-      - cp -r files/* "${FLATPAK_DEST}"
-    sources:
-      - type: archive
-        url: https://github.com/RetroDECK/ES-DE/releases/latest/download/RetroDECK-ES-DE-Artifact.tar.gz
-        sha256: RETRODECKESDELATEST
-
-  - name: retrodeck-theme
-    buildsystem: simple
-    build-commands:
-      - mkdir -p ${FLATPAK_DEST}/share/es-de/themes/retrodeck/
-      - mv -f * ${FLATPAK_DEST}/share/es-de/themes/retrodeck/
-    sources:
-      - type: git
-        url:  https://github.com/RetroDECK/RetroDECK-theme
-        commit: 6c9565fc8335d9cd74a56ae8a2c4dafa8cf9c513
-
-  # RUFFLE - START - FROZEN UNTIL QT 6.8 UPDATE
-  # https://github.com/ruffle-rs/ruffle/releases
-  
-  - name: ruffle
-    buildsystem: simple
-    build-commands:
-      - install -Dm755 ruffle "${FLATPAK_DEST}/bin/ruffle"
-      - install -Dm755 ruffle-rdwrapper.sh "${FLATPAK_DEST}/bin/ruffle-rdwrapper.sh"
-    sources:
-      - type: archive
-        strip-components: 0
-        url: https://github.com/ruffle-rs/ruffle/releases/download/nightly-2024-09-17/ruffle-nightly-2024_09_17-linux-x86_64.tar.gz
-        sha256: 8a0c8ab2638dd54140b14febee0bc43e354b05fb28a29e127e4e0e44fe5c087c
-      - type: file
-        path: config/ruffle/ruffle-rdwrapper.sh
+  # END: Internal RetroDECK tools
 
   - name: retrodeck
     buildsystem: simple
@@ -781,19 +217,11 @@ modules:
           rm -rf ${FLATPAK_DEST}/usr
         fi
 
-      # Initializing RO retrodeck config folder
-      - mkdir -p ${FLATPAK_DEST}/retrodeck
-
-      # These must be put in home folder, managed by retrodeck.sh
-      - cp config/es-de/es_settings.xml ${FLATPAK_DEST}/retrodeck/es_settings.xml
-      - mv -f -t ${FLATPAK_DEST}/retrodeck config/es-de/rd_prepacks
-
       # Logo, res, move graphics directory away from default location so splash can be changed after build
-      - mv -f -t ${FLATPAK_DEST}/retrodeck ${FLATPAK_DEST}/share/es-de/resources/graphics
       - cp -f res/splash.svg ${FLATPAK_DEST}/retrodeck/graphics/splash.svg
       - cp -f res/splash.svg ${FLATPAK_DEST}/retrodeck/graphics/splash-orig.svg
       - cp -rf res/extra_splashes/ ${FLATPAK_DEST}/retrodeck/graphics
-      - cp -f res/icon.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg        
+      - cp -f res/icon.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg
       - cp -f res/icon-configurator.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.configurator.svg
       - mv -f -t ${FLATPAK_DEST}/retrodeck res/binding_icons
       - mv -f -t ${FLATPAK_DEST}/retrodeck res/steam_grid
@@ -817,22 +245,12 @@ modules:
       # Initializing default emulator configs
       - cp -r config ${FLATPAK_DEST}/retrodeck/config/
 
-      # PICO-8 wrapper
-      - install -Dm755 ${FLATPAK_DEST}/retrodeck/config/pico-8/pico8-wrapper.sh ${FLATPAK_DEST}/bin/pico8
-
       # Creating symlinks for a prettier access
       - ln -s ${FLATPAK_DEST}/bin/retrodeck.sh ${FLATPAK_DEST}/bin/retrodeck
       - ln -s ${FLATPAK_DEST}/tools/configurator.sh ${FLATPAK_DEST}/bin/configurator
 
       # Install MIME Type
       - install -Dm 644 config/retrodeck/net.retrodeck.retrodeck.mime.xml /app/share/mime/packages/net.retrodeck.retrodeck.mime.xml
-
-      # One off to make Pancakes (and possibly other components) work with SDL2, this line is here as it must be run after LibMan
-      - | 
-        if [ ! -f "${FLATPAK_DEST}/lib/libSDL2.so" ]; then
-          echo "${FLATPAK_DEST}/lib/libSDL2.so is missing, creating symlink"
-          ln -s "/lib/x86_64-linux-gnu/libSDL2-2.0.so.0" "${FLATPAK_DEST}/lib/libSDL2.so"
-        fi
 
       # Installing metainfo
       - install -Dm 644 net.retrodeck.retrodeck.metainfo.xml ${FLATPAK_DEST}/share/metainfo/net.retrodeck.retrodeck.metainfo.xml
