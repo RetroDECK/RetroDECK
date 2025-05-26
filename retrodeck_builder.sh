@@ -238,6 +238,32 @@ else
     echo ""
 fi
 
+rm -rf components
+# Downloading the latest components
+COMPONENTS_DIR="$ROOT_FOLDER/components"
+mkdir -p "$COMPONENTS_DIR"
+
+if [[ "$IS_COOKER" == "true" ]]; then
+    echo "Downloading cooker components..."
+    # Get the latest release with "cooker" in the name
+    release_json=$(curl -s "https://api.github.com/repos/RetroDECK/components/releases" | jq '[.[] | select(.name | test("cooker"))] | sort_by(.published_at) | reverse | .[0]')
+else
+    echo "Downloading main components..."
+    # Get the latest release with "main" in the name
+    release_json=$(curl -s "https://api.github.com/repos/RetroDECK/components/releases" | jq '[.[] | select(.name | test("main"))] | sort_by(.published_at) | reverse | .[0]')
+fi
+
+if [[ -z "$release_json" || "$release_json" == "null" ]]; then
+    echo "No suitable release found in RetroDECK/components."
+    exit 1
+fi
+
+# Download assets except those with "source" in the name
+echo "$release_json" | jq -r '.assets[] | select(.name | test("source") | not) | "\(.browser_download_url) \(.name)"' | while read -r url name; do
+    echo "Downloading $name..."
+    curl -L "$url" -o "$COMPONENTS_DIR/$name"
+done
+
 mkdir -vp "$OUT_FOLDER"
 
 # Pass the args to Flatpak Builder

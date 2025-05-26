@@ -32,6 +32,7 @@ version
 .shellcheckrc
 out
 release-body.md
+components
 
 #   Components artifacts   #
 ############################
