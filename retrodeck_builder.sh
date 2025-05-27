@@ -262,6 +262,32 @@ fi
 echo "$release_json" | jq -r '.assets[] | select(.name | test("source") | not) | "\(.browser_download_url) \(.name)"' | while read -r url name; do
     echo "Downloading $name..."
     curl -L "$url" -o "$COMPONENTS_DIR/$name"
+    # Compare the component file with its .sha file if it exists
+    sha_file="$COMPONENTS_DIR/$name.sha"
+    if [[ -f "$sha_file" ]]; then
+        expected_sha=$(cat "$sha_file" | awk '{print $1}')
+        actual_sha=$(sha256sum "$COMPONENTS_DIR/$name" | awk '{print $1}')
+        if [[ "$expected_sha" == "$actual_sha" ]]; then
+            echo "SHA256 checksum for $name matches."
+        else
+            echo "WARNING: SHA256 checksum for $name does NOT match!"
+            echo "Expected: $expected_sha"
+            echo "Actual:   $actual_sha"
+            if [[ "$CICD" == "true" ]]; then
+                echo "Checksum mismatch detected in CI/CD mode. Exiting."
+                exit 1
+            else
+                read -rp "Checksum mismatch for $name. Do you want to continue? [y/N] " continue_input
+                continue_input=${continue_input:-N}
+                if [[ ! "$continue_input" =~ ^[Yy]$ ]]; then
+                    echo "Aborting due to checksum mismatch."
+                    exit 1
+                fi
+            fi
+        fi
+    else
+        echo "No SHA file found for $name, skipping checksum verification."
+    fi
 done
 
 mkdir -vp "$OUT_FOLDER"
