@@ -180,9 +180,12 @@ modules:
     buildsystem: simple
     build-commands:
       - |
+        echo "Found the following components in the components directory:"
+        ls -1 components/*.tar.gz || echo "Wait... No components found actually."
         for archive in components/*.tar.gz; do
           [ -e "$archive" ] || continue
-          tar -xzf "$archive" -C "${FLATPAK_DEST}/retrodeck/components"
+          echo "Extracting $archive..."
+          tar -xzf "$archive" -C "${FLATPAK_DEST}/retrodeck/components" && echo "Extracted $archive successfully." || echo "Failed to extract $archive."
         done
     sources:
       - type: dir
