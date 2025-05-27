@@ -455,6 +455,18 @@ api_get_empty_rom_folders() {
   fi
 }
 
+api_get_retrodeck_credits() {
+  local retrodeck_credits
+
+  if retrodeck_credits="$(jq -n --arg content "$(cat $config/retrodeck/reference_lists/retrodeck_credits.txt)" '{ "credits": $content }')"; then
+    echo "$retrodeck_credits"
+    return 0
+  else
+    echo "the retrodeck credits could not be read"
+    return 1
+  fi
+}
+
 api_set_preset_state() {
   local component="$1"
   local preset="$2"
