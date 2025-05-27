@@ -181,8 +181,8 @@ modules:
     build-commands:
       - |
         echo "Found the following components in the components directory:"
-        ls -1 components/*.tar.gz || echo "Wait... No components found actually."
-        for archive in components/*.tar.gz; do
+        ls -1 *.tar.gz || echo "Wait... No components found actually."
+        for archive in *.tar.gz; do
           [ -e "$archive" ] || continue
           echo "Extracting $archive..."
           tar -xzf "$archive" -C "${FLATPAK_DEST}/retrodeck/components" && echo "Extracted $archive successfully." || echo "Failed to extract $archive."
