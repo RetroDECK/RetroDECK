@@ -467,6 +467,23 @@ api_get_retrodeck_credits() {
   fi
 }
 
+api_get_retrodeck_versions() {
+  local retrodeck_versions_json
+  local version_array=$(xml sel -t -v '//component/releases/release/@version' -n "$rd_metainfo")
+
+  retrodeck_versions_json="$(printf '%s\n' "${version_array[@]}" | jq -R . | jq -s .)"
+
+  local final_json=$(jq -n --argjson version_array "$retrodeck_versions_json" '{ versions: $version_array}')
+
+  if [[ $(echo "$final_json" | jq 'length') -gt 0 ]]; then
+    echo "$final_json"
+    return 0
+  else
+    echo "the retrodeck version history could not be read"
+    return 1
+  fi
+}
+
 api_set_preset_state() {
   local component="$1"
   local preset="$2"
