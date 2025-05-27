@@ -170,14 +170,14 @@ cp "$MANIFEST" "$MANIFEST.bak"
 # Checking how the user wants to manage the caches
 # this exports a variable named use_cache that is used by manifest_placeholder_replacer script
 if [[ "$CICD" != "true" ]]; then
-    read -rp "Do you want to use the hashes cache? If you're unsure just say no [Y/n] " use_cache_input
-    use_cache_input=${use_cache_input:-Y}
-    if [[ "$use_cache_input" =~ ^[Yy]$ ]]; then
-        export use_cache="true"
-    else
-        export use_cache="false"
-        rm -f "placeholders.cache"
-    fi
+    # read -rp "Do you want to use the hashes cache? If you're unsure just say no [Y/n] " use_cache_input
+    # use_cache_input=${use_cache_input:-Y}
+    # if [[ "$use_cache_input" =~ ^[Yy]$ ]]; then
+    #     export use_cache="true"
+    # else
+    #     export use_cache="false"
+    #     rm -f "placeholders.cache"
+    # fi
 
     echo "Do you want to clear the build cache?"
     read -rp "Keeping the build cache can speed up the build process, but it might cause issues and should be cleared occasionally [y/N] " clear_cache_input
@@ -192,14 +192,14 @@ else
     export use_cache="false"
 fi
 
-if [[ "$SKIP_REPLACER" != "true" ]]; then
-    # Executing the placeholder replacement script
-    source "$ROOT_FOLDER/automation_tools/manifest_placeholder_replacer.sh"
-    echo "Manifest placeholders replaced done"
-    echo ""
-else
-    echo "Skipping placeholder replacement as SKIP_REPLACER is enabled."
-fi
+# if [[ "$SKIP_REPLACER" != "true" ]]; then
+#     # Executing the placeholder replacement script
+#     source "$ROOT_FOLDER/automation_tools/manifest_placeholder_replacer.sh"
+#     echo "Manifest placeholders replaced done"
+#     echo ""
+# else
+#     echo "Skipping placeholder replacement as SKIP_REPLACER is enabled."
+# fi
 
 # Adding the update portal permission to the cooker flatpak to allow the framework to update RetroDECK
 # This is not allowed on Flathub
@@ -238,57 +238,91 @@ else
     echo ""
 fi
 
-rm -rf components
 # Downloading the latest components
 COMPONENTS_DIR="$ROOT_FOLDER/components"
-mkdir -p "$COMPONENTS_DIR"
+mkdir -vp "$COMPONENTS_DIR"
 
-if [[ "$IS_COOKER" == "true" ]]; then
-    echo "Downloading cooker components..."
-    # Get the latest release with "cooker" in the name
-    release_json=$(curl -s "https://api.github.com/repos/RetroDECK/components/releases" | jq '[.[] | select(.name | test("cooker"))] | sort_by(.published_at) | reverse | .[0]')
+if [[ "$NO_BUILD" == "true" ]]; then
+    echo "Skipping components download as NO_BUILD mode is enabled."
 else
-    echo "Downloading main components..."
-    # Get the latest release with "main" in the name
-    release_json=$(curl -s "https://api.github.com/repos/RetroDECK/components/releases" | jq '[.[] | select(.name | test("main"))] | sort_by(.published_at) | reverse | .[0]')
-fi
+    # Ask user for components source if not in CI/CD
+    if [[ "$CICD" != "true" ]]; then
+        echo "You can download the latest components from RetroDECK/components repository (suggested) or provide your own components."
+        echo "If you choose to download, you can select between Cooker and Main branches."
+        echo "If you choose to provide your own components, make sure to place them in the $COMPONENTS_DIR directory."
+        echo "Select components source:"
+        echo "  1) Cooker - Default if branch is cooker or not main"
+        echo "  2) Main   - Default if branch is main"
+        echo "  3) Local  - Skip download, provide your own \"$COMPONENTS_DIR\""
+        read -rp "Enter choice [1-3]: " components_source
+        components_source=${components_source:-$(
+            if [[ "$IS_COOKER" == "true" ]]; then echo "1"; else echo "2"; fi
+        )}
+    else
+        components_source=""
+    fi
 
-if [[ -z "$release_json" || "$release_json" == "null" ]]; then
-    echo "No suitable release found in RetroDECK/components."
-    exit 1
-fi
-
-# Download assets except those with "source" in the name
-echo "$release_json" | jq -r '.assets[] | select(.name | test("source") | not) | "\(.browser_download_url) \(.name)"' | while read -r url name; do
-    echo "Downloading $name..."
-    curl -L "$url" -o "$COMPONENTS_DIR/$name"
-    # Compare the component file with its .sha file if it exists
-    sha_file="$COMPONENTS_DIR/$name.sha"
-    if [[ -f "$sha_file" ]]; then
-        expected_sha=$(cat "$sha_file" | awk '{print $1}')
-        actual_sha=$(sha256sum "$COMPONENTS_DIR/$name" | awk '{print $1}')
-        if [[ "$expected_sha" == "$actual_sha" ]]; then
-            echo "SHA256 checksum for $name matches."
-        else
-            echo "WARNING: SHA256 checksum for $name does NOT match!"
-            echo "Expected: $expected_sha"
-            echo "Actual:   $actual_sha"
-            if [[ "$CICD" == "true" ]]; then
-                echo "Checksum mismatch detected in CI/CD mode. Exiting."
-                exit 1
+    if [[ "$components_source" == "3" ]]; then
+        echo "Using local components. Please place your components in $COMPONENTS_DIR."
+        # Optionally, you could add a check here to ensure files exist
+    else
+        # Determine which release to download based on user selection or CI/CD mode
+        if [[ "$CICD" == "true" ]]; then
+            if [[ "$IS_COOKER" == "true" ]]; then
+                release_type="cooker"
             else
-                read -rp "Checksum mismatch for $name. Do you want to continue? [y/N] " continue_input
-                continue_input=${continue_input:-N}
-                if [[ ! "$continue_input" =~ ^[Yy]$ ]]; then
-                    echo "Aborting due to checksum mismatch."
-                    exit 1
-                fi
+                release_type="main"
+            fi
+        else
+            if [[ "$components_source" == "1" ]]; then
+                release_type="cooker"
+            else
+                release_type="main"
             fi
         fi
-    else
-        echo "No SHA file found for $name, skipping checksum verification."
+
+        echo "Downloading $release_type components..."
+        release_json=$(curl -s "https://api.github.com/repos/RetroDECK/components/releases" | jq "[.[] | select(.name | test(\"$release_type\"))] | sort_by(.published_at) | reverse | .[0]")
+
+        if [[ -z "$release_json" || "$release_json" == "null" ]]; then
+            echo "No suitable release found in RetroDECK/components."
+            exit 1
+        fi
+
+        echo "$release_json" | jq -r '.assets[] | select(.name | test("source") | not) | "\(.browser_download_url) \(.name)"' | while read -r url name; do
+            echo "Downloading $name..."
+            curl -L "$url" -o "$COMPONENTS_DIR/$name"
+            # Only check SHA256 for .tar.gz files
+            if [[ "$name" == *.tar.gz ]]; then
+                sha_file="$COMPONENTS_DIR/$name.sha"
+                if [[ -f "$sha_file" ]]; then
+                    expected_sha=$(cat "$sha_file" | awk '{print $1}')
+                    actual_sha=$(sha256sum "$COMPONENTS_DIR/$name" | awk '{print $1}')
+                    if [[ "$expected_sha" == "$actual_sha" ]]; then
+                        echo "SHA256 checksum for $name matches."
+                    else
+                        echo "WARNING: SHA256 checksum for $name does NOT match!"
+                        echo "Expected: $expected_sha"
+                        echo "Actual:   $actual_sha"
+                        if [[ "$CICD" == "true" ]]; then
+                            echo "Checksum mismatch detected in CI/CD mode. Exiting."
+                            exit 1
+                        else
+                            read -rp "Checksum mismatch for $name. Do you want to continue? [y/N] " continue_input
+                            continue_input=${continue_input:-N}
+                            if [[ ! "$continue_input" =~ ^[Yy]$ ]]; then
+                                echo "Aborting due to checksum mismatch."
+                                exit 1
+                            fi
+                        fi
+                    fi
+                else
+                    echo "No SHA file found for $name, skipping checksum verification."
+                fi
+            fi
+        done
     fi
-done
+fi
 
 mkdir -vp "$OUT_FOLDER"
 
