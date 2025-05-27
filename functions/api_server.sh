@@ -302,6 +302,26 @@ process_request() {
           fi
         ;;
 
+        "retrodeck_changelog" )
+          if [[ -z "$request_data" ]]; then
+            echo "{\"status\":\"error\",\"message\":\"Missing required field: version\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+            return 1
+          fi
+
+          local version=$(jq -r '.version // empty' <<< "$request_data")
+          if [[ -n "$version" ]]; then
+            local result
+
+            if result="$(api_get_retrodeck_changelog $version)"; then
+              echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
+            else
+              echo "{\"status\":\"error\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+            fi
+          else
+            echo "{\"status\":\"error\",\"message\":\"missing request value: version\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+          fi
+        ;;
+
         * )
         echo "{\"status\":\"error\",\"message\":\"Unknown request: $request\",\"request_id\":\"$request_id\"}" > "$response_pipe"
         ;;

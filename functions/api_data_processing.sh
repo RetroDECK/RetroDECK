@@ -484,6 +484,44 @@ api_get_retrodeck_versions() {
   fi
 }
 
+api_get_retrodeck_changelog() {
+  local version="$1"
+  local release_json
+  local changelogs
+
+  if [[ "$version" == "all" ]]; then
+    changelogs='[]'
+    for release in $(xml sel -t -m "//component/releases/release" -v "@version" -n "$rd_metainfo"); do
+      local changelog_xml=$(xml sel -t -m "//component/releases/release[@version='"$release"']/description" -c . "$rd_metainfo" | tr -s '\n' | sed 's/^\s*//')
+      local changelog_md=$(echo "$changelog_xml" | \
+                          sed -e 's|<p>\(.*\)</p>|## \1|g' \
+                          -e 's|<ul>||g' \
+                          -e 's|</ul>||g' \
+                          -e 's|<h1>\(.*\)</h1>|# \1|g' \
+                          -e 's|<li>\(.*\)</li>|- \1|g' \
+                          -e 's|<description>||g' \
+                          -e 's|</description>||g' \
+                          -e '/<[^>]*>/d')
+      local json_obj=$(jq -n --arg release "$release" --arg changelog "$changelog_md" '{ release: $release, changelog: $changelog }')
+      changelogs=$(jq -n --argjson existing_obj "$changelogs" --argjson new_obj "$json_obj" '$existing_obj + [$new_obj]')
+    done
+  else
+    local changelog_xml=$(xml sel -t -m "//component/releases/release[@version='"$version"']/description" -c . "$rd_metainfo" | tr -s '\n' | sed 's/^\s*//')
+    local changelog_md=$(echo "$changelog_xml" | \
+                          sed -e 's|<p>\(.*\)</p>|## \1|g' \
+                          -e 's|<ul>||g' \
+                          -e 's|</ul>||g' \
+                          -e 's|<h1>\(.*\)</h1>|# \1|g' \
+                          -e 's|<li>\(.*\)</li>|- \1|g' \
+                          -e 's|<description>||g' \
+                          -e 's|</description>||g' \
+                          -e '/<[^>]*>/d')
+    changelogs=$(jq -n --arg release "$release" --arg changelog "$changelog_md" '{ release: $release, changelog: $changelog }')
+  fi
+
+  echo "$changelogs"
+}
+
 api_set_preset_state() {
   local component="$1"
   local preset="$2"
