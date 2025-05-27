@@ -146,15 +146,19 @@ build_zenity_menu_array() {
   local -a temp_bash_array=()
   local all_menu_entries=$(api_get_component_menu_entries "$menu_name") # Collect all relevent menu objects from all components
 
-  log d "dest_array: $dest_array"
-  log d "menu_name: $menu_name"
-  log d "all_menu_entries: $all_menu_entries"
+  if [[ "$menu_name" == "settings" ]]; then # If building the Settings menu, start with all known presets
+    while read -r preset_name; do
+      local name=$(jq -r --arg preset "$preset_name" '.presets[$preset].name // empty' "$features")
+      local desc=$(jq -r --arg preset "$preset_name" '.presets[$preset].desc // empty' "$features")
+      local command="change_preset_dialog $preset_name"
+      temp_bash_array+=("$name" "$desc" "$command")
+    done < <(jq -r '.presets | to_entries[] | .key' "$features")
+  fi
 
   while read -r obj; do # Iterate through all returned menu objects
-    log d "obj: $obj"
     local name=$(jq -r '.name' <<< "$obj")
     local desc=$(jq -r '.description' <<< "$obj")
-    local command=$(jq -r '.command' <<< "$obj")
+    local command=$(jq -r '.command.zenity' <<< "$obj")
     temp_bash_array+=("$name" "$desc" "$command")
   done < <(jq -c --arg menu "$menu_name" '.[$menu].[]' <<< "$all_menu_entries")
 
