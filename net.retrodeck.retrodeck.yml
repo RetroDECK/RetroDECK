@@ -186,6 +186,13 @@ modules:
           [ -e "$archive" ] || continue
           echo "Extracting $archive..."
           tar -xzf "$archive" -C "${FLATPAK_DEST}/retrodeck/components" && echo "Extracted $archive successfully." || echo "Failed to extract $archive."
+
+          # Symlink component_launcher.sh if it exists
+          component_name="${archive%.tar.gz}"
+          launcher_path="${FLATPAK_DEST}/retrodeck/components/${component_name}/component_launcher.sh"
+          if [ -f "$launcher_path" ]; then
+            ln -sf "$launcher_path" "${FLATPAK_DEST}/bin/${component_name}"
+          fi
         done
     sources:
       - type: dir
