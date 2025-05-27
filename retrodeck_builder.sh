@@ -362,8 +362,8 @@ fi
 
 # Preparing the RetroDECK flatpak's artifacts in case we need to export them to Flathub
 if [[ "$NO_ARTIFACTS" != "true" && "$NO_BUILD" != "true" ]]; then
-    tar -czf "$ROOT_FOLDER/$FLATPAK_ARTIFACTS_NAME.tar.gz" -C "$OUT_FOLDER" .
-    ARTIFACTS_HASH=($(sha256sum $OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.tar.gz))
+    tar -czf "$OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.tar.gz" -C "$OUT_FOLDER" .
+    ARTIFACTS_HASH=($(sha256sum "$OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.tar.gz"))
     echo "$ARTIFACTS_HASH" > "$OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.sha"
 else
     echo "Skipping Flathub artifacts preparation due to user preference or no-build mode."
