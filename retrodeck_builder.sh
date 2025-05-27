@@ -289,6 +289,16 @@ else
             exit 1
         fi
 
+        # Output version info to components/components-version
+        release_name=$(echo "$release_json" | jq -r '.name')
+        release_tag=$(echo "$release_json" | jq -r '.tag_name')
+        release_url=$(echo "$release_json" | jq -r '.html_url')
+        {
+            echo "name: $release_name"
+            echo "tag: $release_tag"
+            echo "url: $release_url"
+        } > "$COMPONENTS_DIR/components-version"
+
         echo "$release_json" | jq -r '.assets[] | select(.name | test("source") | not) | "\(.browser_download_url) \(.name)"' | while read -r url name; do
             echo "Downloading $name..."
             curl -L "$url" -o "$COMPONENTS_DIR/$name"

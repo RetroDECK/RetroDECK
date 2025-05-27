@@ -194,6 +194,16 @@ modules:
             ln -sf "$launcher_path" "${FLATPAK_DEST}/bin/${component_name}"
           fi
         done
+      - |
+        # Check if component-version file exists and copy or warn
+        if [ -f component-version ]; then
+          cp component-version "${FLATPAK_DEST}/retrodeck/component-version"
+          echo "Component version file copied successfully."
+          echo "Component version:"
+          cat "${FLATPAK_DEST}/retrodeck/component-version"
+        else
+          echo "Warning: component-version file not found, skipping."
+        fi
     sources:
       - type: dir
         path: components
