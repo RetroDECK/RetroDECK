@@ -272,6 +272,16 @@ process_request() {
           fi
         ;;
 
+        "empty_rom_folders" )
+          local result
+
+          if result="$(api_get_empty_rom_folders)"; then
+            echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
+          else
+            echo "{\"status\":\"error\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+          fi
+        ;;
+
         * )
         echo "{\"status\":\"error\",\"message\":\"Unknown request: $request\",\"request_id\":\"$request_id\"}" > "$response_pipe"
         ;;

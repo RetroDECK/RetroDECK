@@ -401,6 +401,60 @@ api_get_component_menu_entries() {
   echo "$menu_items"
 }
 
+api_get_empty_rom_folders() {
+  local empty_rom_folders_list="$(mktemp)"
+  echo '[]' > "$empty_rom_folders_list"
+
+  # Extract helper file names using jq and populate the all_helper_files array
+  local all_helper_files=($(jq -r '.helper_files | to_entries | .[] | .value.filename' "$features"))
+
+  while IFS= read -r system; do
+    while (( $(jobs -p | wc -l) >= $max_threads )); do # Wait for a background task to finish if max_threads has been hit
+      sleep 0.1
+    done
+    (
+    local dir="$roms_folder/$system"
+    local files=$(ls -A1 "$dir")
+    local count=$(ls -A "$dir" | wc -l)
+    local folder_is_empty="false"
+
+    if [[ $count -eq 0 || ($count -eq 1 && "$(basename "${files[0]}")" == "systeminfo.txt") ]]; then
+        folder_is_empty="true"
+    elif [[ $count -eq 2 ]] && [[ "$files" =~ "systeminfo.txt" ]]; then
+      contains_helper_file="false"
+      for helper_file in "${all_helper_files[@]}" # Compare helper file list to dir file list
+      do
+        if [[ "$files" =~ "$helper_file" ]]; then
+          contains_helper_file="true" # Helper file was found
+          break
+        fi
+      done
+      if [[ "$contains_helper_file" == "true" ]]; then
+        folder_is_empty="true"
+      fi
+    fi
+
+    if [[ "$folder_is_empty" == "true" ]]; then
+      local json_obj=$(jq -n --arg system "$system" --arg path "$dir" '{ system: $system, path: $path }')
+      (
+      flock -x 200
+      jq --argjson new_obj "$json_obj" '. + [$new_obj]' "$empty_rom_folders_list" > "$empty_rom_folders_list.tmp" && mv "$empty_rom_folders_list.tmp" "$empty_rom_folders_list"
+      ) 200>"$RD_FILE_LOCK"
+    fi
+  ) &
+  wait # wait for background tasks to finish
+  done < <(find "$roms_folder" -mindepth 1 -maxdepth 1 -type d -printf '%f\n')
+
+  if [[ $(jq 'length' "$empty_rom_folders_list") -gt 0 ]]; then
+    local final_json=$(cat "$empty_rom_folders_list" | jq -r 'sort_by(.system)')
+    echo "$final_json"
+    return 0
+  else
+    echo "no empty rom folders found"
+    return 1
+  fi
+}
+
 api_set_preset_state() {
   local component="$1"
   local preset="$2"
