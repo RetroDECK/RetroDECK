@@ -47,10 +47,10 @@ for arg in "$@"; do
         --flatpak-builder-args=*)
             FLATPAK_BUILD_EXTRA_ARGS="${arg#*=}"
             echo "Additional Flatpak Builder arguments: $FLATPAK_BUILD_EXTRA_ARGS"
-            ;;
-        --skip-replacer)
-            echo "Skipping placeholder replacement"
-            SKIP_REPLACER="true"
+        #     ;;
+        # --skip-replacer)
+        #     echo "Skipping placeholder replacement"
+        #     SKIP_REPLACER="true"
             ;;
         --help|-h)
             echo "RetroDECK Builder"
@@ -68,7 +68,7 @@ for arg in "$@"; do
             echo "  --force-cooker              Force cooker mode, overriding branch detection"
             echo "  --ccache                    Enable CCACHE mode for Flatpak Builder"
             echo "  --flatpak-builder-args=\"\"   Pass additional arguments to Flatpak Builder"
-            echo "  --skip-replacer             Skip placeholder replacement, useful for quicker debugging"
+            #echo "  --skip-replacer             Skip placeholder replacement, useful for quicker debugging"
             echo "  --help, -h                  Display this help message"
             exit 0
             ;;
