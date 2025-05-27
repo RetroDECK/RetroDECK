@@ -24,14 +24,17 @@ parse_json_to_array() {
   local -a temp_bash_array=()
 
   while IFS= read -r json_value; do
+    log d "json_value: $json_value"
     temp_bash_array+=( "$json_value" )
-  done < <("$@" | jq -r '.[] | .[] |
-                        if type == "array" then
-                          join(",")
-                        else
-                          tostring
-                        end
-                      ') # Flatten arrays of values into a CSV string
+  done < <("$@" | jq -r '.[]
+                          | if type=="array" then .[] else . end
+                          | if type=="object" then .[] else . end
+                          | if type=="array" then
+                              join(",")
+                            else
+                              (if . == null then "" else tostring end)
+                            end
+                        ') # Flatten arrays of values into a CSV string
 
   eval "$dest_array=(\"\${temp_bash_array[@]}\")"
 }
