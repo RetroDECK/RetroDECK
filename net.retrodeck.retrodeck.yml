@@ -246,6 +246,8 @@ modules:
           rm -f "${FLATPAK_DEST}/tools/retrodeck_function_wrapper.sh"
         fi
 
+      # Fix for Dolphin
+      - ln -s "/app/retrodeck/components/dolphin/share/dolphin-emu" "/app/share/dolphin-emu"
     sources:
       - type: dir
         path: .
