@@ -193,7 +193,7 @@ modules:
           # Symlink component_launcher.sh if it exists
           launcher_path="$component_path/component_launcher.sh"
           if [ -f "$launcher_path" ]; then
-            ln -sf "$launcher_path" "${FLATPAK_DEST}/retrodeck/${component_name}"
+            ln -sf "$launcher_path" "${FLATPAK_DEST}/bin/${component_name}"
           fi
         done
       - |
