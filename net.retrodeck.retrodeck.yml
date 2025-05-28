@@ -185,13 +185,15 @@ modules:
         for archive in *.tar.gz; do
           [ -e "$archive" ] || continue
           echo "Extracting $archive..."
-          tar -xzf "$archive" -C "${FLATPAK_DEST}/retrodeck/components" && echo "Extracted $archive successfully." || echo "Failed to extract $archive."
+          component_name="${archive%.tar.gz}"
+          component_path="${FLATPAK_DEST}/retrodeck/components/${component_name}"
+          mkdir -p "$component_path"
+          tar -xzf "$archive" -C "$component_path" && echo "$archive extracted successfully in $component_path." || echo "Failed to extract $archive."
 
           # Symlink component_launcher.sh if it exists
-          component_name="${archive%.tar.gz}"
-          launcher_path="${FLATPAK_DEST}/retrodeck/components/${component_name}/component_launcher.sh"
+          launcher_path="$component_path/component_launcher.sh"
           if [ -f "$launcher_path" ]; then
-            ln -sf "$launcher_path" "${FLATPAK_DEST}/bin/${component_name}"
+            ln -sf "$launcher_path" "${FLATPAK_DEST}/retrodeck/${component_name}"
           fi
         done
       - |
