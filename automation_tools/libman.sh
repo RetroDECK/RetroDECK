@@ -1,21 +1,21 @@
 #!/bin/bash
 
 # LibMan 2.0
-# This script deduplicates files in the Flatpak build environment by replacing duplicates with symlinks.
-# It prioritizes files in /lib, then /app/retrodeck/components/shared-libs, and finally other components.
+# This script deduplicates library files in the Flatpak build environment by replacing duplicates with symlinks.
+# It prioritizes libraries in /lib, then /app/retrodeck/components/shared-libs, and finally other components.
 # Usage: Run this script in the Flatpak build environment after all components have been copied.
 
-# Dedupe files in /lib, /app/retrodeck/components/shared-libs, and /app/retrodeck/components by replacing duplicates with symlinks
+# Dedupe libraries in /lib, /app/retrodeck/components/shared-libs, and /app/retrodeck/components by replacing duplicates with symlinks
 # Priority: /lib > /app/retrodeck/components/shared-libs > other components
 
-# Collect all relevant files with null-delimited safety
+# Collect all relevant library files with null-delimited safety
 mapfile -d '' all_files < <(
-    find "${FLATPAK_DEST}/lib" -type f -print0 2>/dev/null
-    find "${FLATPAK_DEST}/retrodeck/components/shared-libs" -type f -print0 2>/dev/null
-    find "${FLATPAK_DEST}/retrodeck/components" -type f -not -path "${FLATPAK_DEST}/retrodeck/components/shared-libs/*" -print0 2>/dev/null
+    find "${FLATPAK_DEST}/lib" -type f -name '*.so*' -print0 2>/dev/null
+    find "${FLATPAK_DEST}/retrodeck/components/shared-libs" -type f -name '*.so*' -print0 2>/dev/null
+    find "${FLATPAK_DEST}/retrodeck/components" -type f -name '*.so*' -not -path "${FLATPAK_DEST}/retrodeck/components/shared-libs/*" -print0 2>/dev/null
 )
 
-# Group files by basename
+# Group library files by basename
 declare -A files_by_name
 
 for file in "${all_files[@]}"; do
