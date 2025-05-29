@@ -176,7 +176,7 @@ modules:
         sha256: 654d2943ca1d3be2024089eb4f270f4070f491a0610481d128509b2834870049
 
   # This installs all the RetroDECK components found in the components directory that is populated by retrodeck_builder.sh
-  - name: retrodeck-components
+  - name: install-components
     buildsystem: simple
     build-commands:
       - |
@@ -217,6 +217,14 @@ modules:
     sources:
       - type: dir
         path: components
+
+  - name: deduplication
+    buildsystem: simple
+    build-commands:
+      - bash libman.sh
+    sources:
+      - type: file
+        path: automation_tools/libman.sh
 
   - name: finisher
     buildsystem: simple
