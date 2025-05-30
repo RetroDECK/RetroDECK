@@ -1,12 +1,44 @@
 #!/bin/bash
 
 # LibMan 2.0
-# This script deduplicates library files in the Flatpak build environment by replacing duplicates with symlinks.
-# It prioritizes libraries in /lib, then /app/retrodeck/components/shared-libs, and finally other components.
-# Usage: Run this script in the Flatpak build environment after all components have been copied.
+# This script:
+# 1. Ensures standard versioned symlinks (like libX.so.MAJOR.MINOR and libX.so.MAJOR) exist for fully versioned libraries.
+# 2. Deduplicates library files in the Flatpak build environment by replacing duplicates with symlinks.
+# Priority: /lib > /app/retrodeck/components/shared-libs > other components.
 
-# Dedupe libraries in /lib, /app/retrodeck/components/shared-libs, and /app/retrodeck/components by replacing duplicates with symlinks
-# Priority: /lib > /app/retrodeck/components/shared-libs > other components
+set -euo pipefail
+
+echo "=== Creating standard versioned symlinks ==="
+
+# Create standard symlinks for fully versioned .so files (e.g., libQt6Core.so.6.8.3)
+find "${FLATPAK_DEST}" -type f -name '*.so.*.*' | while read -r fullver_file; do
+    dir=$(dirname "$fullver_file")
+    base=$(basename "$fullver_file")
+    
+    # Extract base name and version components
+    if [[ $base =~ ^(lib.+\.so)\.([0-9]+)\.([0-9]+)\.([0-9]+)$ ]]; then
+        base_name="${BASH_REMATCH[1]}"
+        major="${BASH_REMATCH[2]}"
+        minor="${BASH_REMATCH[3]}"
+        patch="${BASH_REMATCH[4]}"
+        
+        # Create .MAJOR.MINOR symlink
+        minor_symlink="${dir}/${base_name}.${major}.${minor}"
+        if [[ ! -e "$minor_symlink" ]]; then
+            echo "Creating symlink: $minor_symlink -> $base"
+            ln -s "$base" "$minor_symlink"
+        fi
+        
+        # Create .MAJOR symlink
+        major_symlink="${dir}/${base_name}.${major}"
+        if [[ ! -e "$major_symlink" ]]; then
+            echo "Creating symlink: $major_symlink -> $base"
+            ln -s "$base" "$major_symlink"
+        fi
+    fi
+done
+
+echo "=== Starting deduplication ==="
 
 # Collect all relevant library files with null-delimited safety
 mapfile -d '' all_files < <(
@@ -49,3 +81,5 @@ for filename in "${!files_by_name[@]}"; do
         fi
     done
 done
+
+echo "=== Done! ==="
