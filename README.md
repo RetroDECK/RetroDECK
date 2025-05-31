@@ -112,12 +112,13 @@ Yes! Everybody is welcome to contribute in any way possible:
 ---
 ## Links 
 
-### Our repositories:
+### Highlighted Repositories:
 
 | Name                                                                                   | Description                                           |
 |----------------------------------------------------------------------------------------|-------------------------------------------------------|
 | [RetroDECK/RetroDECK](https://github.com/RetroDECK/RetroDECK)                          | RetroDECK Repo: Main repo of the RetroDECK Project    |
 | [RetroDECK/Cooker](https://github.com/RetroDECK/Cooker)                                | Cooker Repo: Cooker Build publication repo            |
+| [RetroDECK/Components](https://github.com/RetroDECK/Components)                        | Components Repo: All Components live here             |
 | [RetroDECK/Wiki](https://github.com/RetroDECK/Wiki)                                    | Wiki Repo: RetroDECK mkdocs-material Wiki source code |
 | [RetroDECK/RetroDECK-website](https://github.com/RetroDECK/RetroDECK-website)          | Website Repo: Retrodeck.net source code               |
 | [RetroDECK/ES-DE](https://github.com/RetroDECK/ES-DE)                                  | ES-DE Repo: RetroDECK's light fork of ES-DE           |
