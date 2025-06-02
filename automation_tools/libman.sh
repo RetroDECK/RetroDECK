@@ -69,7 +69,7 @@ for filename in "${!files_by_name[@]}"; do
         # Compute hash
         hash=$(sha256sum "$file" | awk '{print $1}')
 
-        if [[ -z "${file_hash_map[$hash]}" ]]; then
+        if [[ ! -v file_hash_map[$hash] ]]; then
             file_hash_map[$hash]="$file"
         else
             strongest="${file_hash_map[$hash]}"
