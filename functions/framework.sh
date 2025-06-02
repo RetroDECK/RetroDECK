@@ -643,7 +643,19 @@ populate_steamuser_srm(){
 
 prepare_component(){
   local component="$1"
-  export action="$2"
+  local action="$2"
+
+  if [ "$1" == "--list" ]; then
+    # List all components that have a valid prepare_component.sh file
+    for component in $(ls "$components_folder"); do
+      if [[ -f "$components_folder/$component/prepare_component.sh" ]]; then
+        valid_components+=("$component")
+      fi
+    done
+    # Print all valid components at once
+    printf "%s\n" "${valid_components[@]}"
+    return 0
+  fi
 
   if [[ -z "$component" || -z "$action" ]]; then
     log e "Missing component or action argument"
@@ -654,6 +666,8 @@ prepare_component(){
     log e "Component $component does not have a prepare_component.sh script"
     return 1
   fi
+
+  export action
 
   source "$components_folder/$component/prepare_component.sh"
 
