@@ -264,7 +264,10 @@ else
 
     if [[ "$components_source" == "3" ]]; then
         echo "Using local components. Please place your components in $COMPONENTS_DIR."
-        # Optionally, you could add a check here to ensure files exist
+        if [[ ! -d "$COMPONENTS_DIR" ]]; then
+            echo "Error: Components directory \"$COMPONENTS_DIR\" does not exist. Please create it and add your components."
+            exit 1
+        fi
     else
         # Determine which release to download based on user selection or CI/CD mode
         if [[ "$CICD" == "true" ]]; then
