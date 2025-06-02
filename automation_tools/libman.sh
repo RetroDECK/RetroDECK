@@ -10,12 +10,12 @@ set -euo pipefail
 
 echo "=== Creating standard versioned symlinks ==="
 
-# Create standard symlinks for fully versioned .so files (e.g., libQt6Core.so.6.8.3)
+# Create standard symlinks for fully versioned .so files (e.g., libQt6Core.so.6.8.3 -> libQt6Core.so.6 and libQt6Core.so.6.8)
 find "${FLATPAK_DEST}" -type f -name '*.so.*.*' | while read -r fullver_file; do
     dir=$(dirname "$fullver_file")
     base=$(basename "$fullver_file")
     
-    # Extract base name and version components
+    # Handle .MAJOR.MINOR.PATCH
     if [[ $base =~ ^(lib.+\.so)\.([0-9]+)\.([0-9]+)\.([0-9]+)$ ]]; then
         base_name="${BASH_REMATCH[1]}"
         major="${BASH_REMATCH[2]}"
@@ -29,6 +29,19 @@ find "${FLATPAK_DEST}" -type f -name '*.so.*.*' | while read -r fullver_file; do
             ln -s "$base" "$minor_symlink"
         fi
         
+        # Create .MAJOR symlink
+        major_symlink="${dir}/${base_name}.${major}"
+        if [[ ! -e "$major_symlink" ]]; then
+            echo "Creating symlink: $major_symlink -> $base"
+            ln -s "$base" "$major_symlink"
+        fi
+
+    # Handle .MAJOR.MINOR (like libicuuc.so.73.2)
+    elif [[ $base =~ ^(lib.+\.so)\.([0-9]+)\.([0-9]+)$ ]]; then
+        base_name="${BASH_REMATCH[1]}"
+        major="${BASH_REMATCH[2]}"
+        minor="${BASH_REMATCH[3]}"
+
         # Create .MAJOR symlink
         major_symlink="${dir}/${base_name}.${major}"
         if [[ ! -e "$major_symlink" ]]; then
