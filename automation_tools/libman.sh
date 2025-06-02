@@ -82,4 +82,12 @@ for filename in "${!files_by_name[@]}"; do
     done
 done
 
+# One-off fix: ensure libopenh264.so.7 symlink exists if libopenh264.so.2.5.1 is present
+openh264_target="${FLATPAK_DEST}/lib/libopenh264.so.2.5.1"
+openh264_symlink="${FLATPAK_DEST}/lib/libopenh264.so.7"
+if [ -f "$openh264_target" ] && [ ! -e "$openh264_symlink" ]; then
+    echo "Creating symlink: libopenh264.so.7 -> libopenh264.so.2.5.1 (one-off fix)"
+    ln -s "libopenh264.so.2.5.1" "$openh264_symlink"
+fi
+
 echo "=== Done! ==="
