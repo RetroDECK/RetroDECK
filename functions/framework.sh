@@ -640,3 +640,22 @@ populate_steamuser_srm(){
       ' "$XDG_CONFIG_HOME/steam-rom-manager/userData/userConfigurations.json" > "$XDG_CONFIG_HOME/steam-rom-manager/userData/userConfigurations.json.tmp" &&
       mv "$XDG_CONFIG_HOME/steam-rom-manager/userData/userConfigurations.json.tmp" "$XDG_CONFIG_HOME/steam-rom-manager/userData/userConfigurations.json"
 }
+
+prepare_component(){
+  local component="$1"
+  export action="$2"
+
+  if [[ -z "$component" || -z "$action" ]]; then
+    log e "Missing component or action argument"
+    return 1
+  fi
+
+  if [[ ! -f "$components_folder/$component/prepare_component.sh" ]]; then
+    log e "Component $component does not have a prepare_component.sh script"
+    return 1
+  fi
+
+  source "$components_folder/$component/prepare_component.sh"
+
+  unset action # Unset action variable to avoid conflicts with other scripts
+}

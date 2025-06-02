@@ -82,6 +82,7 @@ main_repository_name="RetroDECK"                                                
 features="$config/retrodeck/reference_lists/features.json"                                               # A file where all the RetroDECK and component capabilities are kept for querying
 es_systems="/app/share/es-de/resources/systems/linux/es_systems.xml"                                     # ES-DE supported system list   
 es_find_rules="/app/share/es-de/resources/systems/linux/es_find_rules.xml"                               # ES-DE emulator find rules
+components_folder="/app/retrodeck/components/"
 
 # API-related file locations
 
