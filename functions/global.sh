@@ -51,8 +51,7 @@ done
 
 # Static variables
 rd_conf="$XDG_CONFIG_HOME/retrodeck/retrodeck.cfg"                                                            # RetroDECK config file path
-rd_conf_backup="$XDG_CONFIG_HOME/retrodeck/retrodeck.bak"                                                     # Backup of RetroDECK config file from update
-config="/app/retrodeck/config"                                                                           # folder with all the default emulator configs
+rd_conf_backup="$XDG_CONFIG_HOME/retrodeck/retrodeck.bak"                                                     # Backup of RetroDECK config file from update                                                                          # folder with all the default emulator configs
 rd_defaults="$config/retrodeck/retrodeck.cfg"                                                            # A default RetroDECK config file
 rd_update_patch="$XDG_CONFIG_HOME/retrodeck/rd_update.patch"                                                  # A static location for the temporary patch file used during retrodeck.cfg updates
 bios_checklist="$config/retrodeck/reference_lists/bios.json"                                    # A config file listing BIOS file information that can be verified
