@@ -172,26 +172,14 @@ modules:
         url: https://github.com/mikefarah/yq/releases/download/v4.45.1/yq_linux_amd64
         sha256: 654d2943ca1d3be2024089eb4f270f4070f491a0610481d128509b2834870049
 
-  - name: debug-listing-files
-    buildsystem: simple
-    build-commands:
-      - ls -lah
-      - ls components
-    sources:
-      - type: dir
-        path: .
-
   # This installs all the RetroDECK components found in the components directory that is populated by retrodeck_builder.sh
   - name: install-components
     buildsystem: simple
     build-commands:
-      - ls -lah
-      - bash install_components.sh
+      - bash automation_tools/install_components.sh
     sources:
-      - type: file
-        path: automation_tools/install_components.sh
       - type: dir
-        path: ./components
+        path: .
 
   - name: deduplication
     buildsystem: simple
