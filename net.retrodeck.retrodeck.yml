@@ -182,6 +182,7 @@ modules:
         path: automation_tools/install_components.sh
       - type: dir
         path: components
+        destination: components
 
   - name: deduplication
     buildsystem: simple

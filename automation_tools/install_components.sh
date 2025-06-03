@@ -1,14 +1,21 @@
 #!/bin/bash
 
 echo "Found the following components in the components directory:"
-ls -1 *.tar.gz || ( echo "Wait... No components found actually." && exit 1 ) 
+ls -1 components/*.tar.gz || ( echo "Wait... No components found actually." && exit 1 ) 
 
 if [ -z "$FLATPAK_DEST" ]; then
     echo "FLATPAK_DEST is not set. Please run this script inside a Flatpak build environment or export it manually."
     exit 1
 fi
 
-for archive in components/*.tar.gz; do
+shopt -s nullglob
+archives=(components/*.tar.gz)
+if [ ${#archives[@]} -eq 0 ]; then
+    echo "Error: No components found in components directory."
+    exit 1
+fi
+
+for archive in "${archives[@]}"; do
 
     component_name="$(basename "${archive%.tar.gz}")"
     component_path="${FLATPAK_DEST}/retrodeck/components/${component_name}"
