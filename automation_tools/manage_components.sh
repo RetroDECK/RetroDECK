@@ -37,6 +37,11 @@ if [[ ${#POSITIONAL_ARGS[@]} -gt 0 ]]; then
     COMPONENTS_DIR="${POSITIONAL_ARGS[0]}"
 fi
 
+if [[ "$(git rev-parse --abbrev-ref HEAD)" != "main" ]]; then
+    echo "This branch is not main, enabling cooker mode"
+    IS_COOKER="true"
+fi
+
 # Begin main script logic (was previously inside manage_components function)
 
 # Downloading the latest components
@@ -58,10 +63,10 @@ if [[ "$CICD" != "true" ]]; then
     echo "If you choose to provide your own components, they will be placed in the \"$COMPONENTS_DIR\" directory (gitignored)."
     echo ""
     echo "Select components source:"
-    echo "  1) Cooker - Default if branch is cooker or not main"
-    echo "  2) Main   - Default if branch is main"
-    echo "  3) Cloned - Grab the components from a cloned repository"
-    echo "  4) Local  - Skip download, provide your own \"$COMPONENTS_DIR\""
+    echo "  1) Cooker   - Default if branch is cooker or not main"
+    echo "  2) Main     - Default if branch is main"
+    echo "  3) Cloned   - Grab the components from a cloned repository"
+    echo "  4) Provided - Skip download, provide your own \"$COMPONENTS_DIR\""
     read -rp "Enter choice [1-4]: " components_source
     components_source=${components_source:-$(
         if [[ "$IS_COOKER" == "true" ]]; then echo "1"; else echo "2"; fi
@@ -112,7 +117,7 @@ if [[ "$components_source" == "3" ]]; then
     fi
 fi
 elif [[ "$components_source" == "4" ]]; then
-    echo "Using local components. Please place your components in $COMPONENTS_DIR."
+    echo "Using provided components in $COMPONENTS_DIR."
     if [[ ! -d "$COMPONENTS_DIR" ]]; then
         echo "Error: Components directory \"$COMPONENTS_DIR\" does not exist. Please create it and add your components."
         exit 1
