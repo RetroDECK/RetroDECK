@@ -3,9 +3,14 @@
 echo "Found the following components in the components directory:"
 ls -1 *.tar.gz || ( echo "Wait... No components found actually." && exit 1 ) 
 
-for archive in *.tar.gz; do
+if [ -z "$FLATPAK_DEST" ]; then
+    echo "FLATPAK_DEST is not set. Please run this script inside a Flatpak build environment or export it manually."
+    exit 1
+fi
 
-    component_name="${archive%.tar.gz}"
+for archive in components/*.tar.gz; do
+
+    component_name="$(basename "${archive%.tar.gz}")"
     component_path="${FLATPAK_DEST}/retrodeck/components/${component_name}"
 
     echo "-------------------------------------"
@@ -20,9 +25,10 @@ for archive in *.tar.gz; do
     # Symlink component_launcher.sh if it exists
     launcher_path="$component_path/component_launcher.sh"
     if [ -f "$launcher_path" ]; then
-    ln -sf "$launcher_path" "${FLATPAK_DEST}/bin/${component_name}" || echo "Failed to create symlink for $component_name"
+        echo "Creating symlink for $component_name from $launcher_path to ${FLATPAK_DEST}/bin/${component_name}"
+        ln -sf "$launcher_path" "${FLATPAK_DEST}/bin/${component_name}" || echo "Failed to create symlink for $component_name"
     else
-    echo "Warning: component_launcher.sh not found for $component_name, skipping symlink creation."
+        echo "Warning: component_launcher.sh not found for $component_name, skipping symlink creation."
     fi
 done
 
