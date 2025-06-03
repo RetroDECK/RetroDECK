@@ -1,13 +1,48 @@
 #!/bin/bash
 
 # This script downloads the latest components for RetroDECK from the GitHub repository.
-#         echo "No components directory found, skipping components injection."
-# It allows the user to choose between downloading from the Cooker or Main branches, or using local components.
-# It also verifies the SHA256 checksums of the downloaded files.
+# Usage: ./download_components.sh [--manual|--cicd] <components_dir>
+
+# Parse arguments
+CICD="false"
+COMPONENTS_DIR=""
+POSITIONAL_ARGS=()
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --manual)
+            CICD="false"
+            shift
+            ;;
+        --cicd)
+            CICD="true"
+            shift
+            ;;
+        -h|--help)
+            echo "Usage: $0 [--manual|--cicd] <components_dir>"
+            exit 0
+            ;;
+        -*)
+            echo "Unknown option: $1"
+            exit 1
+            ;;
+        *)
+            POSITIONAL_ARGS+=("$1")
+            shift
+            ;;
+    esac
+done
+
+if [[ ${#POSITIONAL_ARGS[@]} -gt 0 ]]; then
+    COMPONENTS_DIR="${POSITIONAL_ARGS[0]}"
+fi
 
 manage_components() {
     # Downloading the latest components
-    COMPONENTS_DIR="$1"
+    if [[ -z "$COMPONENTS_DIR" ]]; then
+        echo "Error: COMPONENTS_DIR not specified."
+        exit 1
+    fi
     mkdir -vp "$COMPONENTS_DIR"
 
     if [[ "$CICD" != "true" ]]; then
