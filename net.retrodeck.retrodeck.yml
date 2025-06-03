@@ -177,6 +177,8 @@ modules:
     buildsystem: simple
     build-commands:
       - bash install_components.sh
+      - ls -lah
+      - tree
     sources:
       - type: file
         path: automation_tools/install_components.sh
