@@ -88,6 +88,9 @@ if [[ "$components_source" == "3" ]]; then
         find "$src_dir" -mindepth 2 -maxdepth 2 -type d -name "artifacts" | while read -r artifacts_dir; do
             find "$artifacts_dir" -type f \( -name "*.tar.gz" -o -name "*.sha" \) -exec cp -v {} "$COMPONENTS_DIR/" \;
         done
+        cp "$src_dir/components_version_list.md" "$COMPONENTS_DIR/components_version_list.md" 2>/dev/null || {
+            echo "Warning: components_version_list.md file not found in $src_dir, skipping."
+        }
         echo "Components copied from $src_dir to $COMPONENTS_DIR."
         echo "Listing copied components:"
         ls -1 "$COMPONENTS_DIR"
@@ -115,7 +118,6 @@ if [[ "$components_source" == "3" ]]; then
         fi
         copy_components "$user_components_dir"
     fi
-fi
 elif [[ "$components_source" == "4" ]]; then
     echo "Using provided components in $COMPONENTS_DIR."
     if [[ ! -d "$COMPONENTS_DIR" ]]; then
