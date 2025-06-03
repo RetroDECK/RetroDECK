@@ -195,4 +195,5 @@ else
             echo "No SHA file found for $name, skipping checksum verification."
         fi
     fi
+fi
 

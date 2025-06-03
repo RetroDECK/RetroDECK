@@ -177,7 +177,6 @@ modules:
     buildsystem: simple
     build-commands:
       - ls -lah
-      - tree
       - bash install_components.sh
     sources:
       - type: file
