@@ -50,3 +50,16 @@ sudo cp -vfr "functions/"** "$app/libexec/"
 sudo cp -vfr "config/gzdoom/gzdoom.sh" "$app/bin/"
 sudo cp -vfr "config/ruffle/ruffle-rdwrapper.sh" "$app/bin/"
 sudo cp -vfr "net.retrodeck.retrodeck.metainfo.xml" "$app/share/metainfo/net.retrodeck.retrodeck.metainfo.xml"
+
+read -p "Do you also want to inject RetroDECK Components? (Y/n): " inject_components
+inject_components=${inject_components:-Y}
+if [[ "$inject_components" =~ ^[Yy]$ ]]; then
+    if [ -d "components" ]; then
+        sudo cp -vfr "components" "$app/"
+        echo "Components injected."
+    else
+        echo "No 'components' directory found to inject."
+    fi
+else
+    echo "Skipping components injection."
+fi
