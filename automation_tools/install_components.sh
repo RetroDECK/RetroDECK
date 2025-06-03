@@ -25,8 +25,16 @@ for archive in components/*.tar.gz; do
     # Symlink component_launcher.sh if it exists
     launcher_path="$component_path/component_launcher.sh"
     if [ -f "$launcher_path" ]; then
-        echo "Creating symlink for $component_name from $launcher_path to ${FLATPAK_DEST}/bin/${component_name}"
-        ln -sf "$launcher_path" "${FLATPAK_DEST}/bin/${component_name}" || echo "Failed to create symlink for $component_name"
+        # Check if FLATPAK_DEST contains 'current/active/files' (i.e., injecting into a Flatpak)
+        if [[ "$FLATPAK_DEST" == *current/active/files* ]]; then
+            # Use Flatpak's virtual path for the symlink target
+            virtual_launcher_path="/app/retrodeck/components/${component_name}/component_launcher.sh"
+            echo "Creating symlink for $component_name from $virtual_launcher_path to ${FLATPAK_DEST}/bin/${component_name} (Flatpak injection context)"
+            ln -sf "$virtual_launcher_path" "${FLATPAK_DEST}/bin/${component_name}" || echo "Failed to create symlink for $component_name"
+        else
+            echo "Creating symlink for $component_name from $launcher_path to ${FLATPAK_DEST}/bin/${component_name}"
+            ln -sf "$launcher_path" "${FLATPAK_DEST}/bin/${component_name}" || echo "Failed to create symlink for $component_name"
+        fi
     else
         echo "Warning: component_launcher.sh not found for $component_name, skipping symlink creation."
     fi
