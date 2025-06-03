@@ -100,7 +100,9 @@ jobs:
         with:
           name: retrodeck-artifacts
           include-hidden-files: true
-          path: ${{ env.OUT_FOLDER }}/*,components/components_version_list.md
+          path: |
+            ${{ env.OUT_FOLDER }}/*
+            components/components_version_list.md
 
   GitHub-publish:
     runs-on: ubuntu-latest
