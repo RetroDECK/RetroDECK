@@ -159,35 +159,40 @@ else
     } > "$COMPONENTS_DIR/components-version"
 
     echo "$release_json" | jq -r '.assets[] | select(.name | test("source") | not) | "\(.browser_download_url) \(.name)"' | while read -r url name; do
-        echo "Downloading $name..."
-        curl -L "$url" -o "$COMPONENTS_DIR/$name"
-        # Only check SHA256 for .tar.gz files
-        if [[ "$name" == *.tar.gz ]]; then
-            sha_file="$COMPONENTS_DIR/$name.sha"
-            if [[ -f "$sha_file" ]]; then
-                expected_sha=$(cat "$sha_file" | awk '{print $1}')
-                actual_sha=$(sha256sum "$COMPONENTS_DIR/$name" | awk '{print $1}')
-                if [[ "$expected_sha" == "$actual_sha" ]]; then
-                    echo "SHA256 checksum for $name matches."
+    echo "Downloading $name..."
+    curl -L "$url" -o "$COMPONENTS_DIR/$name"
+
+    # If it's a .tar.gz, try to also download and verify the .sha
+    if [[ "$name" == *.tar.gz ]]; then
+        sha_url="${url}.sha"
+        sha_file="$COMPONENTS_DIR/$name.sha"
+        
+        echo "Downloading SHA file for $name..."
+        curl -L "$sha_url" -o "$sha_file"
+        
+        if [[ -s "$sha_file" ]]; then
+            expected_sha=$(awk '{print $1}' "$sha_file")
+            actual_sha=$(sha256sum "$COMPONENTS_DIR/$name" | awk '{print $1}')
+            if [[ "$expected_sha" == "$actual_sha" ]]; then
+                echo "SHA256 checksum for $name matches."
+            else
+                echo "WARNING: SHA256 checksum for $name does NOT match!"
+                echo "Expected: $expected_sha"
+                echo "Actual:   $actual_sha"
+                if [[ "$CICD" == "true" ]]; then
+                    echo "Checksum mismatch detected in CI/CD mode. Exiting."
+                    exit 1
                 else
-                    echo "WARNING: SHA256 checksum for $name does NOT match!"
-                    echo "Expected: $expected_sha"
-                    echo "Actual:   $actual_sha"
-                    if [[ "$CICD" == "true" ]]; then
-                        echo "Checksum mismatch detected in CI/CD mode. Exiting."
+                    read -rp "Checksum mismatch for $name. Do you want to continue? [y/N] " continue_input
+                    continue_input=${continue_input:-N}
+                    if [[ ! "$continue_input" =~ ^[Yy]$ ]]; then
+                        echo "Aborting due to checksum mismatch."
                         exit 1
-                    else
-                        read -rp "Checksum mismatch for $name. Do you want to continue? [y/N] " continue_input
-                        continue_input=${continue_input:-N}
-                        if [[ ! "$continue_input" =~ ^[Yy]$ ]]; then
-                            echo "Aborting due to checksum mismatch."
-                            exit 1
-                        fi
                     fi
                 fi
-            else
-                echo "No SHA file found for $name, skipping checksum verification."
             fi
+        else
+            echo "No SHA file found for $name, skipping checksum verification."
         fi
-    done
-fi
+    fi
+
