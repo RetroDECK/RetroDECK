@@ -242,8 +242,8 @@ if [[ "$NO_BUILD" == "true" ]]; then
     echo "Skipping components download as NO_BUILD mode is enabled."
     return
 else
-    source "$ROOT_FOLDER/automation_tools/manage_components.sh"
-    manage_components --manual "$ROOT_FOLDER/components"
+    "$ROOT_FOLDER/automation_tools/manage_components.sh" --manual "$ROOT_FOLDER/components"
+
 fi
 
 
