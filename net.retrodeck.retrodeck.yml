@@ -176,6 +176,7 @@ modules:
     buildsystem: simple
     build-commands:
       - ls -lah
+      - ls components
     sources:
       - type: dir
         path: .
@@ -190,8 +191,7 @@ modules:
       - type: file
         path: automation_tools/install_components.sh
       - type: dir
-        path: components
-        destination: components
+        path: ./components
 
   - name: deduplication
     buildsystem: simple
