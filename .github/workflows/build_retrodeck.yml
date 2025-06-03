@@ -252,6 +252,10 @@ jobs:
           echo "[Check changes since latest main release](${COMPARE_URL})" >> $RELEASE_BODY_FILE
           echo "" >> $RELEASE_BODY_FILE
 
+          # Append components version list
+          cat components_version_list.md >> $RELEASE_BODY_FILE
+          echo "" >> $RELEASE_BODY_FILE
+
           # Output the final body
           echo "RELEASE_BODY<<EOF" >> $GITHUB_OUTPUT
           cat $RELEASE_BODY_FILE >> $GITHUB_OUTPUT
