@@ -242,11 +242,13 @@ if [[ "$NO_BUILD" == "true" ]]; then
     echo "Skipping components download as NO_BUILD mode is enabled."
     return
 else
-    "$ROOT_FOLDER/automation_tools/manage_components.sh" --manual "$ROOT_FOLDER/components"
-
+    if [[ $CICD == "true" ]]; then
+        echo "Running in CI/CD mode, using the components from the repository"
+        "$ROOT_FOLDER/automation_tools/manage_components.sh" --cicd "$ROOT_FOLDER/components"
+    else
+        "$ROOT_FOLDER/automation_tools/manage_components.sh" "$ROOT_FOLDER/components"
+    fi
 fi
-
-
 
 mkdir -vp "$OUT_FOLDER"
 
