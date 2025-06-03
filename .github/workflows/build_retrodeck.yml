@@ -254,12 +254,8 @@ jobs:
           echo "[Check changes since latest main release](${COMPARE_URL})" >> $RELEASE_BODY_FILE
           echo "" >> $RELEASE_BODY_FILE
 
-          #DEBUG
-          ls -lah
-          ls components
-
           # Append components version list
-          cat components/components_version_list.md >> $RELEASE_BODY_FILE
+          cat retrodeck-artifacts/components/components_version_list.md >> $RELEASE_BODY_FILE
           echo "" >> $RELEASE_BODY_FILE
 
           # Output the final body
