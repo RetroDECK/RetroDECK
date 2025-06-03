@@ -176,42 +176,10 @@ modules:
   - name: install-components
     buildsystem: simple
     build-commands:
-      - |
-        echo "Found the following components in the components directory:"
-        ls -1 *.tar.gz || echo "Wait... No components found actually."
-        for archive in *.tar.gz; do
-
-          component_name="${archive%.tar.gz}"
-          component_path="${FLATPAK_DEST}/retrodeck/components/${component_name}"
-
-          echo "-------------------------------------"
-          echo "Installing component $component_name"
-          echo "-------------------------------------"
-
-          [ -e "$archive" ] || continue
-          echo "Extracting $archive..."
-          mkdir -p "$component_path"
-          tar -xzf "$archive" -C "$component_path" && echo "$archive extracted successfully in $component_path." || echo "Failed to extract $archive."
-
-          # Symlink component_launcher.sh if it exists
-          launcher_path="$component_path/component_launcher.sh"
-          if [ -f "$launcher_path" ]; then
-            ln -sf "$launcher_path" "${FLATPAK_DEST}/bin/${component_name}" || echo "Failed to create symlink for $component_name"
-          else
-            echo "Warning: component_launcher.sh not found for $component_name, skipping symlink creation."
-          fi
-        done
-      - |
-        # Check if component-version file exists and copy or warn
-        if [ -f component-version ]; then
-          cp component-version "${FLATPAK_DEST}/retrodeck/component-version"
-          echo "Component version file copied successfully."
-          echo "Component version:"
-          cat "${FLATPAK_DEST}/retrodeck/component-version"
-        else
-          echo "Warning: component-version file not found, skipping."
-        fi
+      - bash install_components.sh
     sources:
+      - type: file
+        path: automation_tools/install_components.sh
       - type: dir
         path: components
 
