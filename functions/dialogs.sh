@@ -332,3 +332,565 @@ low_space_warning() {
     log i "Selected: \"OK\""
   fi
 }
+
+configurator_power_user_warning_dialog() {
+  if [[ $power_user_warning == "true" ]]; then
+    choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Yes" --extra-button="No" --extra-button="Never show this again" \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Power User Warning" \
+    --text="Making manual changes to an component, system or emulators configuration may create serious issues, and some settings may be overwritten during RetroDECK updates or when using presets.\n\nPlease continue only if you know what you're doing.\n\nDo you want to continue?")
+  fi
+  rc=$? # Capture return code, as "Yes" button has no text value
+  if [[ $rc == "0" ]]; then # If user clicked "Yes"
+    configurator_open_emulator_dialog
+  else # If any button other than "Yes" was clicked
+    if [[ $choice == "No" ]]; then
+      configurator_welcome_dialog
+    elif [[ $choice == "Never show this again" ]]; then
+      set_setting_value "$rd_conf" "power_user_warning" "false" retrodeck "options" # Store power user warning variable for future checks
+      configurator_open_emulator_dialog
+    fi
+  fi
+}
+
+configurator_compression_tool_dialog() {
+  configurator_generic_dialog "RetroDECK Configurator - Compression Tool" "Depending on your library and compression choices, the process can sometimes take a long time.\nPlease be patient once it is started!"
+
+  choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - RetroDECK: Compression Tool" --cancel-label="Back" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+  --column="Choice" --column="Action" \
+  "Compress Single Game" "Compress a single game into a compatible format." \
+  "Compress Multiple Games: CHD" "Compress one or more games into the CHD format." \
+  "Compress Multiple Games: ZIP" "Compress one or more games into the ZIP format." \
+  "Compress Multiple Games: RVZ" "Compress one or more games into the RVZ format." \
+  "Compress Multiple Games: All Formats" "Compress one or more games into any format." \
+  "Compress All Games" "Compress all games into compatible formats." )
+
+  case $choice in
+
+  "Compress Single Game" )
+    log i "Configurator: opening \"$choice\" menu"
+    configurator_compress_single_game_dialog
+  ;;
+
+  "Compress Multiple Games: CHD" )
+    log i "Configurator: opening \"$choice\" menu"
+    configurator_compress_multiple_games_dialog "chd"
+    configurator_compression_tool_dialog
+  ;;
+
+  "Compress Multiple Games: ZIP" )
+    log i "Configurator: opening \"$choice\" menu"
+    configurator_compress_multiple_games_dialog "zip"
+    configurator_compression_tool_dialog
+  ;;
+
+  "Compress Multiple Games: RVZ" )
+    log i "Configurator: opening \"$choice\" menu"
+    configurator_compress_multiple_games_dialog "rvz"
+    configurator_compression_tool_dialog
+  ;;
+
+  "Compress Multiple Games: All Formats" )
+    log i "Configurator: opening \"$choice\" menu"
+    configurator_compress_multiple_games_dialog "all"
+    configurator_compression_tool_dialog
+  ;;
+
+  "Compress All Games" )
+    log i "Configurator: opening \"$choice\" menu"
+    configurator_compress_multiple_games_dialog "everything"
+    configurator_compression_tool_dialog
+  ;;
+
+  "" ) # No selection made or Back button clicked
+    log i "Configurator: going back"
+    configurator_tools_dialog
+  ;;
+
+  esac
+}
+
+configurator_compress_single_game_dialog() {
+  local file=$(file_browse "Game to compress")
+  if [[ ! -z "$file" ]]; then
+    local system=$(echo "$file" | grep -oE "$roms_folder/[^/]+" | grep -oE "[^/]+$")
+    local compatible_compression_format=$(find_compatible_compression_format "$file")
+    if [[ ! $compatible_compression_format == "none" ]]; then
+      local post_compression_cleanup=$(configurator_compression_cleanup_dialog)
+      (
+      echo "# Compressing $(basename "$file") to $compatible_compression_format format" # This updates the Zenity dialog
+      log i "Compressing $(basename "$file") to $compatible_compression_format format"
+      compress_game "$compatible_compression_format" "$file" "$post_compression_cleanup" "$system"
+      ) |
+      rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --width="800" \
+      --title "RetroDECK Configurator Utility - Compression in Progress"
+      configurator_generic_dialog "RetroDECK Configurator - RetroDECK: Compression Tool" "The compression process is complete."
+      configurator_compression_tool_dialog
+
+    else
+      configurator_generic_dialog "RetroDECK Configurator - RetroDECK: Compression Tool" "The selected file does not have any compatible compression formats."
+      configurator_compression_tool_dialog
+    fi
+  else
+    configurator_compression_tool_dialog
+  fi
+}
+
+configurator_compress_multiple_games_dialog() {
+  log d "Starting to compress \"$1\""
+
+  (
+    parse_json_to_array checklist_entries api_get_compressible_games "$1"
+  ) |
+  rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+  --title "RetroDECK Configurator - RetroDECK: Compression Tool" --text "RetroDECK is searching for compressible games, please wait..."
+
+  if [[ -s "$compressible_games_list_file" ]]; then
+    mapfile -t all_compressible_games < "$compressible_games_list_file"
+    log d "Found the following games to compress: ${all_compressible_games[*]}"
+  else
+    configurator_generic_dialog "RetroDECK Configurator - Compression Tool" "No compressible files were found."
+    configurator_compression_tool_dialog
+  fi
+
+  local games_to_compress=()
+  if [[ "$1" != "everything" ]]; then
+    local checklist_entries=()
+    for line in "${all_compressible_games[@]}"; do
+      IFS="^" read -r game comp <<< "$line"
+      local short_game="${game#$roms_folder}"
+      checklist_entries+=( "TRUE" "$short_game" "$line" )
+    done
+
+    local choice=$(rd_zenity \
+      --list --width=1200 --height=720 --title "RetroDECK Configurator - Compression Tool" \
+      --checklist --hide-column=3 --ok-label="Compress Selected" --extra-button="Compress All" \
+      --separator="^" --print-column=3 \
+      --text="Choose which games to compress:" \
+      --column "Compress?" \
+      --column "Game" \
+      --column "Game Full Path and Compression Format" \
+      "${checklist_entries[@]}")
+
+    local rc=$?
+    log d "User choice: $choice"
+    if [[ $rc == 0 && -n "$choice" && ! "$choice" == "Compress All" ]]; then
+      IFS='^' read -r -a temp_array <<< "$choice"
+      games_to_compress=()
+      for ((i=0; i<${#temp_array[@]}; i+=2)); do
+        games_to_compress+=("${temp_array[i]}^${temp_array[i+1]}")
+      done
+    elif [[ "$choice" == "Compress All" ]]; then
+      games_to_compress=("${all_compressible_games[@]}")
+    else
+      configurator_compression_tool_dialog
+    fi
+  else
+    games_to_compress=("${all_compressible_games[@]}")
+  fi
+
+  local post_compression_cleanup=$(configurator_compression_cleanup_dialog)
+
+  local total_games=${#games_to_compress[@]}
+  local games_left=$total_games
+
+  (
+  for game_line in "${games_to_compress[@]}"; do
+    while (( $(jobs -p | wc -l) >= $max_threads )); do
+    sleep 0.1
+    done
+    (
+    IFS="^" read -r game compression_format <<< "$game_line"
+
+    local system
+    system=$(echo "$game" | grep -oE "$roms_folder/[^/]+" | grep -oE "[^/]+$")
+    log i "Compressing $(basename "$game") into $compression_format format"
+
+    echo "#Compressing $(basename "$game") into $compression_format format.\n\n$games_left games left to compress." # Update Zenity dialog text
+
+    compress_game "$compression_format" "$game" "$post_compression_cleanup" "$system"
+
+    games_left=$(( games_left - 1 ))
+    local progress=$(( 99 - (( 99 / total_games ) * games_left) ))
+    echo "$progress" # Update Zenity dialog progress bar
+    ) &
+  done
+  wait # wait for background tasks to finish
+  echo "100" # Close Zenity progress dialog when finished
+  ) |
+  rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck/retrodeck.svg" \
+    --width="800" \
+    --title "RetroDECK Configurator Utility - Compression in Progress"
+
+  configurator_generic_dialog "RetroDECK Configurator - Compression Tool" "The compression process is complete!"
+  configurator_compression_tool_dialog
+}
+
+configurator_compression_cleanup_dialog() {
+  rd_zenity --icon-name=net.retrodeck.retrodeck --question --no-wrap --cancel-label="No" --ok-label="Yes" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+  --title "RetroDECK Configurator - RetroDECK: Compression Tool" \
+  --text="Do you want to remove old files after they are compressed?\n\nClicking \"No\" will leave all files behind which will need to be cleaned up manually and may result in game duplicates showing in the RetroDECK library.\n\nPlease make sure you have a backup of your ROMs before using automatic cleanup."
+  local rc=$? # Capture return code, as "Yes" button has no text value
+  if [[ $rc == "0" ]]; then # If user clicked "Yes"
+    echo "true"
+  else # If "No" was clicked
+    echo "false"
+  fi
+}
+
+configurator_update_notify_dialog() {
+  if [[ $(get_setting_value "$rd_conf" "update_check" retrodeck "options") == "true" ]]; then
+    rd_zenity --question \
+    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator - RetroDECK Online Update Check" \
+    --text="Online update checks for RetroDECK are currently enabled.\n\nDo you want to disable them?"
+
+    if [ $? == 0 ] # User clicked "Yes"
+    then
+      set_setting_value "$rd_conf" "update_check" "false" retrodeck "options"
+    else # User clicked "Cancel"
+      configurator_tools_dialog
+    fi
+  else
+    rd_zenity --question \
+    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator - RetroDECK Online Update Check" \
+    --text="Online update checks for RetroDECK are currently disabled.\n\nDo you want to enable them?"
+
+    if [ $? == 0 ] # User clicked "Yes"
+    then
+      set_setting_value "$rd_conf" "update_check" "true" retrodeck "options"
+    else # User clicked "Cancel"
+      configurator_tools_dialog
+    fi
+  fi
+}
+
+configurator_portmaster_toggle_dialog(){
+
+  if [[ $(get_setting_value "$rd_conf" "portmaster_show" "retrodeck" "options") == "true" ]]; then
+    rd_zenity --question \
+    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator - PortMaster Visibility" \
+    --text="PortMaster is currently <span foreground='$purple'><b>visible</b></span> in ES-DE. Do you want to hide it?\n\nPlease note that the installed games will still be visible."
+
+    if [ $? == 0 ] # User clicked "Yes"
+    then
+      portmaster_show "false"
+      rd_zenity --info \
+      --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Configurator - PortMaster Visibility" \
+      --text="PortMaster is now <span foreground='$purple'><b>hidden</b></span> in ES-DE.\nPlease refresh your game list or restart RetroDECK to see the changes.\n\nIn order to launch PortMaster, you can access it from:\n<span foreground='$purple'><b>Configurator -> Open Component -> PortMaster</b></span>."
+    fi
+  else
+    rd_zenity --question \
+    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator - PortMaster Visibility" \
+    --text="PortMaster is currently <span foreground='$purple'><b>hidden</b></span> in ES-DE. Do you want to show it?"
+
+    if [ $? == 0 ] # User clicked "Yes"
+    then
+      portmaster_show "true"
+      rd_zenity --info \
+      --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+      --title "RetroDECK Configurator - PortMaster Visibility" \
+      --text="PortMaster is now <span foreground='$purple'><b>visible</b></span> in ES-DE.\nPlease refresh your game list or restart RetroDECK to see the changes."
+    fi
+  fi
+}
+
+configurator_bios_checker_dialog() {
+
+  log d "Starting BIOS checker"
+
+  (
+    # Read the BIOS checklist from bios.json using jq
+    total_bios=$(jq '.bios | length' "$bios_checklist")
+    current_bios=0
+
+    log d "Total BIOS files to check: $total_bios"
+
+    bios_checked_list=()
+
+     while IFS=$'\t' read -r bios_file bios_systems bios_desc required bios_md5 bios_paths; do
+
+      # Expand any embedded shell variables (e.g. $saves_folder or $bios_folder) with their actual values
+      bios_paths=$(echo "$bios_paths" | envsubst)
+
+      bios_file_found="No"
+      bios_md5_matched="No"
+
+      IFS=', ' read -r -a paths_array <<< "$bios_paths"
+      for path in "${paths_array[@]}"; do
+        log d "Looking for $path/$bios_file"
+        if [[ ! -f "$path/$bios_file" ]]; then
+          log d "File $path/$bios_file not found"
+          break
+        else
+          bios_file_found="Yes"
+          computed_md5=$(md5sum "$path/$bios_file" | awk '{print $1}')
+
+          IFS=', ' read -ra expected_md5_array <<< "$bios_md5"
+          for expected in "${expected_md5_array[@]}"; do
+            expected=$(echo "$expected" | xargs)
+            if [ "$computed_md5" == "$expected" ]; then
+              bios_md5_matched="Yes"
+              break
+            fi
+          done
+          log d "BIOS file found: $bios_file_found, Hash matched: $bios_md5_matched"
+          log d "Expected path: $path/$bios_file"
+          log d "Expected MD5: $bios_md5"
+        fi
+      done
+
+        log d "Adding BIOS entry: \"$bios_file $bios_systems $bios_file_found $bios_md5_matched $bios_desc $bios_paths $bios_md5\" to the bios_checked_list"
+
+        bios_checked_list=("${bios_checked_list[@]}" "$bios_file" "$bios_systems" "$bios_file_found" "$bios_md5_matched" "$required" "$bios_paths" "$bios_desc" "$bios_md5")
+
+        current_bios=$((current_bios + 1))
+        echo "$((current_bios * 100 / total_bios))"
+
+    done < <(jq -r '
+          .bios
+          | to_entries[]
+          | [
+              .key,
+              (.value.system | if type=="array" then join(", ") elif type=="string" then . else "Unknown" end),
+              (.value.description // "No description provided"),
+              (.value.required // "No"),
+              (.value.md5 | if type=="array" then join(", ") elif type=="string" then . else "Unknown" end),
+              (.value.paths | if type=="array" then join(", ") elif type=="string" then . else "$bios_folder" end)
+            ]
+          | @tsv
+        ' "$bios_checklist")
+
+    log d "Finished checking BIOS files"
+
+    rd_zenity --list --title="RetroDECK Configurator Utility - BIOS Checker" --no-cancel \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+      --column "BIOS File Name" \
+      --column "Systems" \
+      --column "Found" \
+      --column "Hash Matches" \
+      --column "Required" \
+      --column "Expected Path" \
+      --column "Description" \
+      --column "MD5" \
+      "${bios_checked_list[@]}"
+
+  ) |
+  rd_zenity --progress --auto-close --no-cancel \
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator - BIOS Checker - Scanning" \
+    --text="The BIOS Checker is scanning for BIOS & Firmware files that RetroDECK recognizes as supported by each system.\n\nPlease note that not all BIOS & Firmware files are necessary for games to work.\n\nBIOS files not recognized by this tool may still function correctly.\n\nSome emulators have additional built-in methods to verify the functionality of BIOS & Firmware files.\n\n<span foreground='$purple'><b>The BIOS Checker is now scanning your BIOS files, please wait...</b></span>\n\n" \
+    --width=400 --height=100
+
+  configurator_tools_dialog
+}
+
+configurator_version_history_dialog() {
+  local version_array=($(xml sel -t -v '//component/releases/release/@version' -n "$rd_metainfo"))
+  local all_versions_list=()
+
+  for rd_version in ${version_array[*]}; do
+    all_versions_list=("${all_versions_list[@]}" "RetroDECK $rd_version Changelog" "View the changes specific to version $rd_version")
+  done
+
+  choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - RetroDECK Version History" --cancel-label="Back" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+  --column="Choice" --column="Description" \
+  "Full RetroDECK Changelog" "View the list of all changes that have ever been made to RetroDECK" \
+  "${all_versions_list[@]}")
+
+  case $choice in
+
+  "Full RetroDECK Changelog" )
+    log i "Configurator: opening \"$choice\" menu"
+    changelog_dialog "all"
+  ;;
+
+  "RetroDECK"*"Changelog" )
+    log i "Configurator: opening \"$choice\" menu"
+    local version=$(echo "$choice" | sed 's/^RetroDECK \(.*\) Changelog$/\1/')
+    changelog_dialog "$version"
+  ;;
+
+  esac
+
+  configurator_about_retrodeck_dialog
+}
+
+configurator_retrodeck_multiuser_dialog() {
+  if [[ $(get_setting_value "$rd_conf" "multi_user_mode" retrodeck "options") == "true" ]]; then
+    rd_zenity --question \
+    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator - RetroDECK Multi-user Support" \
+    --text="Multi-user mode is currently enabled. Do you want to disable it?\n\nIf there is more than one user configured, you will be given a choice of which user to keep as the single RetroDECK user.\n\nThis user's files will be moved to the default locations.\n\nOther users' files will remain in the mutli-user-data folder.\n"
+
+    if [ $? == 0 ] # User clicked "Yes"
+    then
+      multi_user_disable_multi_user_mode
+    else # User clicked "Cancel"
+      configurator_developer_dialog
+    fi
+  else
+    rd_zenity --question \
+    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator - RetroDECK Multi-user support" \
+    --text="Multi-user mode is currently disabled. Do you want to enable it?\n\nThe current user's saves and states will be backed up and moved to the \"retrodeck/multi-user-data\" folder.\nAdditional users will automatically be stored in their own folder here as they are added."
+
+    if [ $? == 0 ]
+    then
+      multi_user_enable_multi_user_mode
+    else
+      configurator_developer_dialog
+    fi
+  fi
+}
+
+configurator_online_update_channel_dialog() {
+  if [[ $(get_setting_value "$rd_conf" "update_repo" retrodeck "options") == "RetroDECK" ]]; then
+    rd_zenity --question \
+    --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Configurator - RetroDECK Change Update Branch" \
+    --text="You are currently on the stable branch of RetroDECK updates. Would you like to switch to the cooker branch?\n\nAfter installing a cooker build, you may need to remove the \"stable\" branch install of RetroDECK to avoid overlap."
+
+    if [ $? == 0 ] # User clicked "Yes"
+    then
+      set_setting_value "$rd_conf" "update_repo" "$cooker_repository_name" retrodeck "options"
+    else # User clicked "Cancel"
+      configurator_developer_dialog
+    fi
+  else
+    set_setting_value "$rd_conf" "update_repo" "RetroDECK" retrodeck "options"
+    release_selector
+  fi
+}
+
+configurator_usb_import_dialog() {
+  choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - Developer Options" --cancel-label="Back" \
+  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+  --column="Choice" --column="Description" \
+  "Prepare USB device" "Create ROM and BIOS folders on a selected USB device" \
+  "Import from USB" "Import collection from a previously prepared device" )
+
+  case $choice in
+
+  "Prepare USB device" )
+    log i "Configurator: opening \"$choice\" menu"
+
+    external_devices=()
+
+    while read -r size device_path; do
+      device_name=$(basename "$device_path")
+      external_devices=("${external_devices[@]}" "$device_name" "$size" "$device_path")
+    done < <(df --output=size,target -h | grep "/run/media/" | grep -v "$sdcard" | awk '{$1=$1;print}')
+
+    if [[ "${#external_devices[@]}" -gt 0 ]]; then
+      configurator_generic_dialog "RetroDeck Configurator - USB Import" "If you have an SD card installed that is not currently configured in RetroDECK, it may show up in this list but may not be suitable for USB import.\n\nPlease select your desired drive carefully."
+      choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - USB Migration Tool" --cancel-label="Back" \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+      --hide-column=3 --print-column=3 \
+      --column "Device Name" \
+      --column "Device Size" \
+      --column "path" \
+      "${external_devices[@]}")
+
+      if [[ ! -z "$choice" ]]; then
+        create_dir "$choice/RetroDECK Import"
+        es-de --home "$choice/RetroDECK Import" --create-system-dirs
+        rm -rf "$choice/RetroDECK Import/ES-DE" # Cleanup unnecessary folder
+
+
+        # Prepare default BIOS folder subfolders
+        create_dir "$choice/RetroDECK Import/BIOS/np2kai"
+        create_dir "$choice/RetroDECK Import/BIOS/dc"
+        create_dir "$choice/RetroDECK Import/BIOS/Mupen64plus"
+        create_dir "$choice/RetroDECK Import/BIOS/quasi88"
+        create_dir "$choice/RetroDECK Import/BIOS/fbneo/samples"
+        create_dir "$choice/RetroDECK Import/BIOS/fbneo/cheats"
+        create_dir "$choice/RetroDECK Import/BIOS/fbneo/blend"
+        create_dir "$choice/RetroDECK Import/BIOS/fbneo/patched"
+        create_dir "$choice/RetroDECK Import/BIOS/citra/sysdata"
+        create_dir "$choice/RetroDECK Import/BIOS/cemu"
+        create_dir "$choice/RetroDECK Import/BIOS/pico-8/carts"
+        create_dir "$choice/RetroDECK Import/BIOS/pico-8/cdata"
+        create_dir "$choice/RetroDECK Import/BIOS/rpcs3/dev_hdd0"
+        create_dir "$choice/RetroDECK Import/BIOS/rpcs3/dev_hdd1"
+        create_dir "$choice/RetroDECK Import/BIOS/rpcs3/dev_flash"
+        create_dir "$choice/RetroDECK Import/BIOS/rpcs3/dev_flash2"
+        create_dir "$choice/RetroDECK Import/BIOS/rpcs3/dev_flash3"
+        create_dir "$choice/RetroDECK Import/BIOS/rpcs3/dev_bdvd"
+        create_dir "$choice/RetroDECK Import/BIOS/rpcs3/dev_usb000"
+        create_dir "$choice/RetroDECK Import/BIOS/Vita3K/"
+        create_dir "$choice/RetroDECK Import/BIOS/mame-sa/samples"
+        create_dir "$choice/RetroDECK Import/BIOS/gzdoom"
+      fi
+    else
+      configurator_generic_dialog "RetroDeck Configurator - USB Import" "There were no USB devices found."
+    fi
+    configurator_usb_import_dialog
+  ;;
+
+  "Import from USB" )
+    log i "Configurator: opening \"$choice\" menu"
+    external_devices=()
+
+    while read -r size device_path; do
+      if [[ -d "$device_path/RetroDECK Import/ROMs" ]]; then
+        device_name=$(basename "$device_path")
+        external_devices=("${external_devices[@]}" "$device_name" "$size" "$device_path")
+      fi
+    done < <(df --output=size,target -h | grep "/run/media/" | grep -v "$sdcard" | awk '{$1=$1;print}')
+
+    if [[ "${#external_devices[@]}" -gt 0 ]]; then
+      choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - USB Migration Tool" --cancel-label="Back" \
+      --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
+      --hide-column=3 --print-column=3 \
+      --column "Device Name" \
+      --column "Device Size" \
+      --column "path" \
+      "${external_devices[@]}")
+
+      if [[ ! -z "$choice" ]]; then
+        if [[ $(verify_space "$choice/RetroDECK Import/ROMs" "$roms_folder") == "false" || $(verify_space "$choice/RetroDECK Import/BIOS" "$bios_folder") == "false" ]]; then
+          if [[ $(configurator_generic_question_dialog "RetroDECK Configurator Utility - USB Migration Tool" "You MAY not have enough free space to import this ROM/BIOS library.\n\nThis utility only imports new additions from the USB device, so if there are a lot of the same files in both locations you are likely going to be fine\nbut we are not able to verify how much data will be transferred before it happens.\n\nIf you are unsure, please verify your available free space before continuing.\n\nDo you want to continue now?") == "true" ]]; then
+            (
+            rsync -a --mkpath "$choice/RetroDECK Import/ROMs/"* "$roms_folder"
+            rsync -a --mkpath "$choice/RetroDECK Import/BIOS/"* "$bios_folder"
+            ) |
+            rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
+            --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+            --title "RetroDECK Configurator Utility - USB Import In Progress"
+            configurator_generic_dialog "RetroDECK Configurator - USB Migration Tool" "The import process is complete!"
+          fi
+        else
+          (
+          rsync -a --mkpath "$choice/RetroDECK Import/ROMs/"* "$roms_folder"
+          rsync -a --mkpath "$choice/RetroDECK Import/BIOS/"* "$bios_folder"
+          ) |
+          rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
+          --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+          --title "RetroDECK Configurator Utility - USB Import In Progress"
+          configurator_generic_dialog "RetroDECK Configurator - USB Migration Tool" "The import process is complete!"
+        fi
+      fi
+    else
+      configurator_generic_dialog "RetroDeck Configurator - USB Import" "There were no USB devices found with an importable folder."
+    fi
+    configurator_usb_import_dialog
+  ;;
+
+  "" ) # No selection made or Back button clicked
+    log i "Configurator: going back"
+    configurator_developer_dialog
+  ;;
+  esac
+}
