@@ -160,6 +160,67 @@ configurator_move_folder_dialog() {
   fi
 }
 
+configurator_change_preset_dialog() {
+  # This function will build a list of all systems compatible with a given preset,
+  # show their current enable/disabled state and allow the user to change one or more.
+  # USAGE: change_preset_dialog "$preset"
+
+  local preset="$1"
+  pretty_preset_name=${preset//_/ }  # Preset name prettification
+  pretty_preset_name=$(echo "$pretty_preset_name" | awk '{for(i=1;i<=NF;i++){$i=toupper(substr($i,1,1))substr($i,2)}}1')
+
+  parse_json_to_array current_preset_settings_raw api_get_current_preset_state "$1"
+  keep_parts_of_array "1 2 5 6" current_preset_settings_raw current_preset_settings_filtered "6"
+  bash_rearranger "4 2 3 1" current_preset_settings_filtered current_preset_settings
+
+  # Show the checklist with extra buttons for "Enable All" and "Disable All"
+  choice=$(rd_zenity \
+    --list --width=1200 --height=720 \
+    --checklist \
+    --separator="," \
+    --hide-column=4 --print-column=4 \
+    --text="Enable $pretty_preset_name:" \
+    --column "Enabled" \
+    --column "Emulator" \
+    --column "Emulated System" \
+    --column "internal_system_name" \
+    "${current_preset_settings[@]}" \
+    --extra-button "Enable All" \
+    --extra-button "Disable All")
+
+  local rc=$?
+
+  log d "User made a choice: $choice with return code: $rc"
+
+  if [[ "$rc" == 0 || -n "$choice" ]]; then # If the user didn't hit Cancel
+    choice_made="true"
+  fi
+
+  # Handle extra button responses.
+  if [ "$choice" == "Enable All" ]; then
+      log d "Enable All selected"
+      choice=$(api_get_current_preset_settings "$preset" | jq -r '[.[].system_name] | join(",")')
+  elif [ "$choice" == "Disable All" ]; then
+      log d "Disable All selected"
+      # Assign empty string as choice, as all systems will be disabled
+      choice=""
+  fi
+
+  # Call make_preset_changes if the user made a selection,
+  # or if an extra button was clicked (even if the resulting choice is empty, meaning all systems are to be disabled).
+   if [[ "$choice_made" == "true" ]]; then
+    log d "Calling make_preset_changes with preset $preset and choice: $choice"
+    (
+      make_preset_changes "$preset" "$choice"
+    ) | rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
+         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+         --title "RetroDECK Configurator Utility - Presets Configuration" \
+         --text="Setting up your presets, please wait..."
+   else
+     log i "No preset choices made"
+   fi
+}
+
 changelog_dialog() {
   # This function will pull the changelog notes from the version it is passed (which must match the metainfo version tag) from the net.retrodeck.retrodeck.metainfo.xml file
   # The function also accepts "all" as a version, and will print the entire changelog

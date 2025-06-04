@@ -153,7 +153,7 @@ build_zenity_menu_array() {
     while read -r preset_name; do
       local name=$(jq -r --arg preset "$preset_name" '.presets[$preset].name // empty' "$features")
       local desc=$(jq -r --arg preset "$preset_name" '.presets[$preset].desc // empty' "$features")
-      local command="change_preset_dialog $preset_name"
+      local command="configurator_change_preset_dialog $preset_name"
       temp_bash_array+=("$name" "$desc" "$command")
     done < <(jq -r '.presets | to_entries[] | .key' "$features")
   fi
