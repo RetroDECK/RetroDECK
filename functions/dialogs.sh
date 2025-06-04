@@ -187,7 +187,7 @@ configurator_change_preset_dialog() {
   log d "User made a choice: $choice with return code: $rc"
 
   if [[ "$rc" == 0 || -n "$choice" ]]; then # If the user didn't hit Cancel
-    configurator_change_preset_value_dialog "$choice"
+    configurator_change_preset_value_dialog "$preset" "$choice"
   else
     log i "No preset choices made"
     configurator_global_presets_and_settings_dialog
