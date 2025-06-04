@@ -644,35 +644,44 @@ populate_steamuser_srm(){
       mv "$XDG_CONFIG_HOME/steam-rom-manager/userData/userConfigurations.json.tmp" "$XDG_CONFIG_HOME/steam-rom-manager/userData/userConfigurations.json"
 }
 
-prepare_component(){
-  local component="$1"
-  local action="$2"
+prepare_component() {
+  # This function will perform one of several actions on one or more components
+  # The actions currently include "reset" and "postmove"
+  # The "reset" action will initialize the component
+  # The "postmove" action will update the component settings after one or more RetroDECK folders were moved
+  # An component can be called by name, by parent folder name in the $XDG_CONFIG_HOME root or use the option "all" to perform the action on all components equally
+  # USAGE: prepare_component "$action" "$component" "$call_source(optional)"
 
-  if [ "$1" == "--list" ]; then
-    # List all components that have a valid prepare_component.sh file
-    for component in $(ls "$components_folder"); do
-      if [[ -f "$components_folder/$component/prepare_component.sh" ]]; then
-        valid_components+=("$component")
-      fi
-    done
-    # Print all valid components at once
-    printf "%s\n" "${valid_components[@]}"
-    return 0
+  if [[ "$1" == "factory-reset" ]]; then
+    log i "User requested full RetroDECK reset"
+    rm -f "$lockfile" && log d "Lockfile removed"
+    retrodeck
   fi
 
-  if [[ -z "$component" || -z "$action" ]]; then
-    log e "Missing component or action argument"
+  action="$1"
+  component="$2"
+  call_source="$3"
+  component_found="false"
+
+  if [[ -z "$component" ]]; then
+    echo "No components or action specified. Exiting."
+    exit 1
+  fi
+  log d "Preparing component: \"$component\", action: \"$action\""
+
+  # Read install components component_prepare.sh files
+  while IFS= read -r prepare_component_file; do
+    log d "Found component file $prepare_component_file"
+    source "$prepare_component_file"
+  done < <(find "$RD_MODULES" -maxdepth 2 -mindepth 2 -type f -name "component_prepare.sh")
+
+  if [[ $component_found == "false" ]]; then
+    log e "Supplied component $component not found, not resetting"
     return 1
+  else
+    # Update presets for all components after any reset or move
+    if [[ ! "$component" =~ ^(retrodeck|es-de) ]]; then
+      build_retrodeck_current_presets
+    fi
   fi
-
-  if [[ ! -f "$components_folder/$component/prepare_component.sh" ]]; then
-    log e "Component $component does not have a prepare_component.sh script"
-    return 1
-  fi
-
-  export action
-
-  source "$components_folder/$component/prepare_component.sh"
-
-  unset action # Unset action variable to avoid conflicts with other scripts
 }
