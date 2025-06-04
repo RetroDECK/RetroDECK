@@ -172,116 +172,22 @@ configurator_welcome_dialog() {
 }
 
 configurator_global_presets_and_settings_dialog() {
-  choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - Global: Presets & Settings" --cancel-label="Back" \
+  build_zenity_menu_array choices settings # Build Zenity bash array for given menu type
+
+  choice=$(rd_zenity --list --title="RetroDECK Configurator Utility - Global: Presets and Settings" --cancel-label="Back" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
-  --column="Choice" --column="Action" \
-  "Borders" "Enable / Disable: Borders in supported systems in RetroArch." \
-  "Widescreen" "Enable / Disable: Widescreen in supported systems." \
-  "Ask-to-Exit" "Enable / Disable: Popups that asks - Are sure you want to Quit? in supported systems." \
-  "Quick Resume" "Enable / Disable: Save state auto-save/load in supported systems." \
-  "Rewind" "Enable / Disable: the rewind function in supported systems." \
-  "Swap A/B and X/Y Buttons" "Enable / Disable: Swapped A/B and X/Y button layout in supported systems." \
-  "RetroAchievements: Login" "Login the RetroAchievements in supported systems." \
-  "RetroAchievements: Logout" "Logout RetroAchievements service in supported systems" \
-  "RetroAchievements: Hardcore Mode" "Enable / Disable: RetroAchievements Hardcore Mode (no cheats, rewind, save states, etc.) in supported systems." \
-  "Universal Dynamic Input Textures: Dolphin" "Enable / Disable: Universal Dynamic Input Textures for Dolphin." \
-  "Universal Dynamic Input Textures: Primehack" "Enable / Disable: Universal Dynamic Input Textures for Primehack." \
-  "PortMaster: Hide" "Enable / Disable: PortMaster in ES-DE."
-  )
+  --column="Choice" --column="Action" --column="command" --hide-column=3 --print-column=3 \
+  "${choices[@]}")
 
-  case $choice in
+    local rc="$?"
 
-  "Borders" )
-    log i "Configurator: opening \"$choice\" menu"
-    if [[ $native_resolution == false ]]; then
-        rd_zenity --question --text="Borders are actually supported for ${width}x${height} resolution at the moment. This can be set in the Steam shortcut.\n\nDo you still want to continue?"
-        response=$?  # Capture the exit code immediately
-        if [ "$response" -eq 0 ]; then
-            change_preset_dialog "borders"
-        fi
-    else
-        change_preset_dialog "borders"
-    fi
-    configurator_global_presets_and_settings_dialog
-  ;;
+  if [[ "$rc" -eq 0 ]]; then # User made a selection
+    log d "choice: $choice"
 
-  "Widescreen" )
-    log i "Configurator: opening \"$choice\" menu"
-    change_preset_dialog "widescreen"
-    configurator_global_presets_and_settings_dialog
-  ;;
-
-  "Ask-to-Exit" )
-    log i "Configurator: opening \"$choice\" menu"
-    change_preset_dialog "ask_to_exit"
-    configurator_global_presets_and_settings_dialog
-  ;;
-
-  "Quick Resume" )
-    change_preset_dialog "quick_resume"
-    configurator_global_presets_and_settings_dialog
-  ;;
-
-  "RetroAchievements: Login" )
-    if cheevos_response=$(get_cheevos_token_dialog); then
-      configurator_generic_dialog "RetroDECK Configurator Utility - RetroAchievements" "RetroAchievements login successful, please select systems you would like to enable achievements for in the next dialog."
-      cheevos_username=$(echo "$cheevos_response" | jq -r '.User')
-      cheevos_token=$(echo "$cheevos_response" | jq -r '.Token')
-      cheevos_login_timestamp=$(date +%s)
-      change_preset_dialog "cheevos"
-    else
-      configurator_generic_dialog "RetroDECK Configurator Utility - RetroAchievements" "RetroAchievements login failed, please verify your username and password and try the process again."
-    fi
-    configurator_global_presets_and_settings_dialog
-  ;;
-
-  "RetroAchievements: Logout" )
-    # This is a workaround to allow disabling cheevos without having to enter login credentials
-    change_preset_dialog "cheevos"
-    configurator_global_presets_and_settings_dialog
-  ;;
-
-  "RetroAchievements: Hardcore Mode" )
-    log i "Configurator: opening \"$choice\" menu"
-    change_preset_dialog "cheevos_hardcore"
-    configurator_global_presets_and_settings_dialog
-  ;;
-
-  "Rewind" )
-    log i "Configurator: opening \"$choice\" menu"
-
-    change_preset_dialog "rewind"
-    configurator_global_presets_and_settings_dialog
-  ;;
-
-  "Swap A/B and X/Y Buttons" )
-    log i "Configurator: opening \"$choice\" menu"
-
-    change_preset_dialog "abxy_button_swap"
-    configurator_global_presets_and_settings_dialog
-  ;;
-
-  "Universal Dynamic Input Textures: Dolphin" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_dolphin_input_textures_dialog
-  ;;
-
-  "Universal Dynamic Input Textures: Primehack" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_primehack_input_textures_dialog
-  ;;
-
-  "PortMaster: Hide" )
-    log i "Configurator: opening \"$choice\" menu"
-    configurator_portmaster_toggle_dialog
-  ;;
-
-  "" ) # No selection made or Back button clicked
-    log i "Configurator: going back"
+    launch_command "$choice"
+  else # User hit cancel
     configurator_welcome_dialog
-  ;;
-
-  esac
+  fi
 }
 
 configurator_dolphin_input_textures_dialog() {
