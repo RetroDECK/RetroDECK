@@ -145,7 +145,6 @@ remove_group_from_array() {
 build_zenity_menu_array() {
   local dest_array="$1"
   local menu_name="$2"
-  shift 2
   local -a temp_bash_array=()
   local all_menu_entries=$(api_get_component_menu_entries "$menu_name") # Collect all relevent menu objects from all components
 
@@ -171,7 +170,6 @@ build_zenity_menu_array() {
 build_zenity_preset_menu_array() {
   local dest_array="$1"
   local preset_name="$2"
-  shift 2
   local -a temp_bash_array=()
   local all_preset_states=$(api_get_current_preset_state "$preset_name")
 
