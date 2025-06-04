@@ -208,3 +208,45 @@ build_zenity_preset_menu_array() {
 
   eval "$dest_array=(\"\${temp_bash_array[@]}\")"
 }
+
+build_zenity_preset_value_menu_array() {
+  local dest_array="$1"
+  local preset_name="$2"
+  local component="$3"
+
+  local -a temp_bash_array=()
+
+  local base_component=$(jq -r --arg preset "$preset_name" \
+                        --arg component "$component" '.presets[$preset]
+                                                    | paths(scalars)
+                                                    | select(.[-1] == $component)
+                                                    | if length > 1 then .[-2] else $preset end
+                                                    ' "$rd_conf")
+
+  if [[ ! "$preset_name" == "$base_component" ]]; then # If component is a core
+    log d "Component $component is a core of $base_component"
+    base_component="${base_component%.cores}"
+  else
+    base_component="$component"
+  fi
+
+  while read -r preset_value; do
+    if [[ "$preset_value" == "false" ]]; then
+      local pretty_status="Disabled"
+    elif [[ "$preset_value" == "true" ]]; then
+      local pretty_status="Enabled"
+    else
+      local pretty_status=$(echo "$status" | awk '{for(i=1;i<=NF;i++){$i=toupper(substr($i,1,1))substr($i,2)}}1')
+    fi
+
+    temp_bash_array+=("$status" "$friendly_name" "$emulated_friendly_name" "$desc" "$system_name")
+  done < <(jq -r --arg component "$component" --arg parent "$base_component" --arg preset "$preset_name" '
+                                if $parent != $component then
+                                  .[$parent].compatible_presets[$component][$preset].[] // empty
+                                else
+                                  .[$component].compatible_presets[$preset].[] // empty
+                                end
+                                ' "$RD_MODULES/$base_component/manifest.json")
+
+  eval "$dest_array=(\"\${temp_bash_array[@]}\")"
+}
