@@ -171,7 +171,7 @@ build_zenity_preset_menu_array() {
   local dest_array="$1"
   local preset_name="$2"
   local -a temp_bash_array=()
-  local all_preset_states=$(api_get_current_preset_state "$preset_name")
+  local current_preset_states=$(api_get_current_preset_state "$preset_name")
 
   while read -r obj; do # Iterate through all returned menu objects
     local system_name=$(jq -r '.system_name // empty' <<< "$obj")
@@ -197,12 +197,14 @@ build_zenity_preset_menu_array() {
 
     if [[ "$status" == "$preset_disabled_state" ]]; then
       status="Disabled"
+    elif [[ "$status" == "true" ]]; then
+      status="Enabled"
     else
       status=$(echo "$status" | awk '{for(i=1;i<=NF;i++){$i=toupper(substr($i,1,1))substr($i,2)}}1')
     fi
 
     temp_bash_array+=("$status" "$friendly_name" "$emulated_friendly_name" "$desc" "$system_name")
-  done < <(jq -c --arg preset "$preset_name" '.[$preset].[]' <<< "$all_preset_states")
+  done < <(jq -c --arg preset "$preset_name" '.[$preset].[]' <<< "$current_preset_states")
 
   eval "$dest_array=(\"\${temp_bash_array[@]}\")"
 }
