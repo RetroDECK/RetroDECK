@@ -167,3 +167,22 @@ build_zenity_menu_array() {
 
   eval "$dest_array=(\"\${temp_bash_array[@]}\")"
 }
+
+build_zenity_preset_menu_array() {
+  local dest_array="$1"
+  local preset_name="$2"
+  shift 2
+  local -a temp_bash_array=()
+  local all_preset_states=$(api_get_current_preset_state "$preset_name")
+
+  while read -r obj; do # Iterate through all returned menu objects
+    local system_name=$(jq -r '.system_name' <<< "$obj")
+    local friendly_name=$(jq -r '.system_friendly_name' <<< "$obj")
+    local desc=$(jq -r '.description' <<< "$obj")
+    local emulated_friendly_name=$(jq -r '.emulated_system_friendly_name' <<< "$obj")
+    local status=$(jq -r '.status' <<< "$obj")
+    temp_bash_array+=("$status" "$friendly_name" "$emulated_friendly_name" "$desc" "$system_name")
+  done < <(jq -c --arg preset "$preset_name" '.[$preset].[]' <<< "$all_preset_states")
+
+  eval "$dest_array=(\"\${temp_bash_array[@]}\")"
+}
