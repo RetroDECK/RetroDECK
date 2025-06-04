@@ -710,7 +710,6 @@ configurator_bios_checker() {
 }
 
 configurator_reset_dialog() {
-
   # This function displays a dialog to the user for selecting components to reset.
   # It first constructs a list of available components and their descriptions by reading
   # from the features.json file.
@@ -719,22 +718,19 @@ configurator_reset_dialog() {
   # If the user selects components, it calls `prepare_component` with the selected components.
   # If the user cancels the dialog, it calls `configurator_welcome_dialog` to return to the welcome screen.
 
-  local components_list=()
-  while IFS= read -r emulator; do
-    # Extract the description and name of the current emulator using jq
-    desc=$(jq -r --arg emulator "$emulator" '.emulator[$emulator].description' "$features")
-    name=$(jq -r --arg emulator "$emulator" '.emulator[$emulator].name' "$features")
-    components_list+=("FALSE" "$emulator" "$name" "$desc")
-  done < <(prepare_component --list | tr ' ' '\n')
+  parse_json_to_array components "api_get_component" "all"
+  keep_parts_of_array "1 2 3" components components_filtered "6"
+  add_value_to_array components_filtered components_list FALSE "3"
 
   choice=$(rd_zenity --list \
   --title "RetroDECK Configurator Utility - Reset Components" --cancel-label="Cancel" \
   --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" --width=1200 --height=720 \
   --checklist --ok-label="Reset Selected" --extra-button="Reset All" --extra-button="Factory Reset" \
-  --print-column=2 \
+  --print-column=2 --hide-column=2 \
+  --separator="^" \
   --text="Which components do you want to reset?" \
   --column "Reset" \
-  --column "Emulator" --hide-column=2 \
+  --column "Emulator" \
   --column "Name" \
   --column "Description" \
   "${components_list[@]}")
@@ -770,18 +766,21 @@ configurator_reset_dialog() {
       configurator_welcome_dialog
     fi
   elif [[ -n "$choice" ]]; then
-    choice=$(echo "$choice" | tr '|' ' ')
-    log d "...and selected: ${choice// / }"
-    pretty_choice=$(echo "$choice" | tr ' ' '\n' | while read -r emulator; do
-      jq -r --arg emulator "$emulator" '.emulator[$emulator].name' "$features"
-    done | tr '\n' ',' | sed 's/,$//' | sed 's/,/, /g')
+    pretty_choices=()
+    IFS='^' read -ra choices <<< "$choice"
+    for current_choice in "${choices[@]}"; do
+      log d "current_choice: $current_choice"
+      pretty_choices+=("$(jq -r --arg component "$current_choice" '.[$component].name' "$rd_components/$current_choice/manifest.json")")
+    done
     rd_zenity --question \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
       --title "RetroDECK Configurator - Reset Components" \
-      --text="You selected the following components to be reset:\n\n${pretty_choice}\n\nDo you want to continue?"
+      --text="You selected the following components to be reset:\n\n$(printf '%s\n' ${pretty_choices[@]})\n\nDo you want to continue?"
     if [[ $? == 0 ]]; then # User clicked "Yes"
       (
-      prepare_component "reset" ${choice// / }
+      for component_to_reset in "${choices[@]}"; do
+        prepare_component "reset" "$component_to_reset"
+      done
       ) |
       rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
       --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
