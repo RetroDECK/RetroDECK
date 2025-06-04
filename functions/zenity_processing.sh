@@ -216,6 +216,8 @@ build_zenity_preset_value_menu_array() {
 
   local -a temp_bash_array=()
 
+  local preset_current_value=$(get_setting_value "$rd_conf" "$component" "retrodeck" "$preset_name")
+
   local base_component=$(jq -r --arg preset "$preset_name" \
                         --arg component "$component" '.presets[$preset]
                                                     | paths(scalars)
@@ -239,7 +241,13 @@ build_zenity_preset_value_menu_array() {
       local pretty_status=$(echo "$status" | awk '{for(i=1;i<=NF;i++){$i=toupper(substr($i,1,1))substr($i,2)}}1')
     fi
 
-    temp_bash_array+=("$status" "$friendly_name" "$emulated_friendly_name" "$desc" "$system_name")
+    if [[ "$preset_value" == "$preset_current_value" ]]; then
+      local currently_set_value="true"
+    else
+      local currently_set_value="false"
+    fi
+
+    temp_bash_array+=("$currently_set_value" "$pretty_status" "$preset_value")
   done < <(jq -r --arg component "$component" --arg parent "$base_component" --arg preset "$preset_name" '
                                 if $parent != $component then
                                   .[$parent].compatible_presets[$component][$preset].[] // empty
