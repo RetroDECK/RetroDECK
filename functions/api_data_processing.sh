@@ -253,8 +253,13 @@ api_get_current_preset_state() {
           local preset_status=$(get_setting_value "$rd_conf" "$component" "retrodeck" "$preset_name")
 
           local json_obj=$(jq -n --argjson name "$system_name" --argjson friendly_name "$system_friendly_name" --argjson desc "$description" --argjson emu_system "$emulated_system" \
-                              --argjson emu_system_friendly "$emulated_system_friendly_name" --arg status "$preset_status" \
-                              '{ system_name: $name, system_friendly_name: $friendly_name, description: $desc, emulated_system: $emu_system, emulated_system_friendly_name: $emu_system_friendly, status: $status }')
+                --argjson emu_system_friendly "$emulated_system_friendly_name" --arg status "$preset_status" --arg base_comp "$base_component" \
+                'if $base_comp == $name then
+                  { system_name: $name, system_friendly_name: $friendly_name, description: $desc, emulated_system: $emu_system, emulated_system_friendly_name: $emu_system_friendly, status: $status }
+                else
+                  { system_name: $name, parent_component: $base_comp, system_friendly_name: $friendly_name, description: $desc, emulated_system: $emu_system, emulated_system_friendly_name: $emu_system_friendly,
+                  status: $status }
+                end')
 
           preset_settings=$(jq --arg preset "$preset_name" --argjson obj "$json_obj" '.[$preset] += [$obj]' <<< "$preset_settings")
         fi
