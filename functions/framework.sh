@@ -40,7 +40,10 @@ set_setting_value() {
           sed -i '\^\['"$current_section_name"'\]^,\^\^'"$setting_name_to_change"'=^s^\^'"$setting_name_to_change"'=.*^'"$setting_name_to_change"'='"$setting_value_to_change"'^' "$1"
         fi
       fi
-      declare -g "$setting_name_to_change=$setting_value_to_change"
+      if [[ "$current_section_name" == "" || "$current_section_name" == "paths" || "$current_section_name" == "options" ]]; then
+        log d "Exporting value of setting $setting_name_to_change as $setting_value_to_change"
+        declare -g "$setting_name_to_change=$setting_value_to_change"
+      fi
     ;;
 
     "melonds" | "yuzu" | "citra" | "libretro_scummvm" )
