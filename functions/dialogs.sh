@@ -194,6 +194,42 @@ configurator_change_preset_dialog() {
   fi
 }
 
+configurator_change_preset_value_dialog() {
+  local preset="$1"
+  local component="$2"
+
+  build_zenity_preset_value_menu_array current_preset_values "$preset" "$component"
+
+  choice=$(rd_zenity \
+    --list --width=1200 --height=720 \
+    --radiolist \
+    --hide-column=3 --print-column=3 \
+    --text="Enable $pretty_preset_name:" \
+    --column "Current State" \
+    --column "Option" \
+    --column "preset_state" \
+    "${current_preset_values[@]}")
+
+  local rc=$?
+
+  log d "User made a choice: $choice with return code: $rc"
+
+  if [[ "$rc" == 0 || -n "$choice" ]]; then # If the user didn't hit Cancel
+    local preset_current_value=$(get_setting_value "$rd_conf" "$component" "retrodeck" "$preset")
+    if [[ ! "$choice" == "$preset_current_value" ]]; then
+      if result=$(api_set_preset_state "$component" "$preset" "$choice"); then
+        configurator_change_preset_dialog "$preset"
+      else
+        configurator_generic_dialog "RetroDECK Configurator - Change Preset" "The preset state could not be changed. The error message is:\n\n\"$result\"\n\nCheck the RetroDECK logs for more details."
+        configurator_change_preset_dialog "$preset"
+      fi
+    fi
+  else
+    log i "No preset choices made"
+    configurator_change_preset_dialog "$preset"
+  fi
+}
+
 changelog_dialog() {
   # This function will pull the changelog notes from the version it is passed (which must match the metainfo version tag) from the net.retrodeck.retrodeck.metainfo.xml file
   # The function also accepts "all" as a version, and will print the entire changelog
