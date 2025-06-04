@@ -176,11 +176,33 @@ build_zenity_preset_menu_array() {
   local all_preset_states=$(api_get_current_preset_state "$preset_name")
 
   while read -r obj; do # Iterate through all returned menu objects
-    local system_name=$(jq -r '.system_name' <<< "$obj")
-    local friendly_name=$(jq -r '.system_friendly_name' <<< "$obj")
-    local desc=$(jq -r '.description' <<< "$obj")
-    local emulated_friendly_name=$(jq -r '.emulated_system_friendly_name' <<< "$obj")
-    local status=$(jq -r '.status' <<< "$obj")
+    local system_name=$(jq -r '.system_name // empty' <<< "$obj")
+    local friendly_name=$(jq -r '.system_friendly_name // empty' <<< "$obj")
+    local desc=$(jq -r '.description // empty' <<< "$obj")
+    local emulated_friendly_name=$(jq -r '.emulated_system_friendly_name // empty' <<< "$obj")
+    local status=$(jq -r '.status // empty' <<< "$obj")
+    local parent_component=$(jq -r '.parent_component // empty' <<< "$obj")
+
+    if [[ -n "$parent_component" ]]; then
+      local component="$parent_component"
+    else
+      local component="$system_name"
+    fi
+
+    local preset_disabled_state=$(jq -r --arg component "$system_name" --arg parent "$parent_component" --arg preset "$preset_name" '
+                                if $parent != "" then
+                                  .[$parent].compatible_presets[$component][$preset].[0] // empty
+                                else
+                                  .[$component].compatible_presets[$preset].[0] // empty
+                                end
+                              ' "$RD_MODULES/$component/manifest.json")
+
+    if [[ "$status" == "$preset_disabled_state" ]]; then
+      status="Disabled"
+    else
+      status=$(echo "$status" | awk '{for(i=1;i<=NF;i++){$i=toupper(substr($i,1,1))substr($i,2)}}1')
+    fi
+
     temp_bash_array+=("$status" "$friendly_name" "$emulated_friendly_name" "$desc" "$system_name")
   done < <(jq -c --arg preset "$preset_name" '.[$preset].[]' <<< "$all_preset_states")
 
