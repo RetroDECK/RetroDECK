@@ -193,7 +193,7 @@ build_zenity_preset_menu_array() {
                                 else
                                   .[$component].compatible_presets[$preset].[0] // empty
                                 end
-                              ' "$RD_MODULES/$component/manifest.json")
+                              ' "$rd_components/$component/component_manifest.json")
 
     if [[ "$status" == "$preset_disabled_state" ]]; then
       status="Disabled"
@@ -254,7 +254,7 @@ build_zenity_preset_value_menu_array() {
                                 else
                                   .[$component].compatible_presets[$preset].[] // empty
                                 end
-                                ' "$RD_MODULES/$base_component/manifest.json")
+                                ' "$rd_components/$base_component/component_manifest.json")
 
   eval "$dest_array=(\"\${temp_bash_array[@]}\")"
 }

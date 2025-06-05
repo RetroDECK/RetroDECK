@@ -597,14 +597,14 @@ make_name_pretty() {
 
   local system_name="$1"
 
-  # Use jq to parse the JSON and find the pretty name from the components manifest.json
+  # Use jq to parse the JSON and find the pretty name from the components component_manifest.json
   while IFS= read -r component_manifest; do
     if jq -e --arg system "$system_name" 'to_entries | any(.value.system == $system)' "$component_manifest" > /dev/null; then
       local pretty_name=$(jq -r --arg name "$system_name" '.system[$name].name // $name' "$features")
       echo "$pretty_name"
       break
     fi
-  done < <(find "$rd_components" -maxdepth 2 -mindepth 2 -type f -name "manifest.json")
+  done < <(find "$rd_components" -maxdepth 2 -mindepth 2 -type f -name "component_manifest.json")
 }
 
 finit_browse() {
@@ -1497,12 +1497,12 @@ check_if_updated() {
 }
 
 source_component_functions() {
-  # This function will iterate the functions.sh file for every installed component and source it for use in the greater application
+  # This function will iterate the component_functions.sh file for every installed component and source it for use in the greater application
   # Specific component names can be specified, as well as the unique values of "retrodeck", "external" or "internal"
-  # The "retrodeck" option will source only the RetroDECK functions.sh file, which is typically needed to be sourced before anything else on boot
+  # The "retrodeck" option will source only the RetroDECK component_functions.sh file, which is typically needed to be sourced before anything else on boot
   # The "internal" option will source components which are specifically internal to RetroDECK, such as SRM or ES-DE, but not RetroDECK itself
   # The "external" option will source everything else, excluding the RetroDECK and internal files for speed reasons
-  # A specific component name will also be allowed, where the functions.sh file under $rd_components/<component name> will be sourced.
+  # A specific component name will also be allowed, where the component_functions.sh file under $rd_components/<component name> will be sourced.
   # A fallback where all files are sourced when there is no component specified is also an option.
 
   local choice="$1"
@@ -1512,14 +1512,14 @@ source_component_functions() {
 
     "retrodeck" )
       set -o allexport # Export all the variables found during sourcing, for use elsewhere
-      source "$rd_components/retrodeck/functions.sh"
+      source "$rd_components/retrodeck/component_functions.sh"
       set +o allexport # Back to normal, otherwise every assigned variable will get exported through the rest of the run
     ;;
 
     "internal" )
       set -o allexport # Export all the variables found during sourcing, for use elsewhere
-      source "$rd_components/es-de/functions.sh"
-      source "$rd_components/steam-rom-manager/functions.sh"
+      source "$rd_components/es-de/component_functions.sh"
+      source "$rd_components/steam-rom-manager/component_functions.sh"
       set +o allexport # Back to normal, otherwise every assigned variable will get exported through the rest of the run
     ;;
 
@@ -1531,16 +1531,16 @@ source_component_functions() {
           source "$functions_file"
           set +o allexport # Back to normal, otherwise every assigned variable will get exported through the rest of the run
         fi
-      done < <(find "$rd_components" -maxdepth 2 -mindepth 2 -type f -name "functions.sh")
+      done < <(find "$rd_components" -maxdepth 2 -mindepth 2 -type f -name "component_functions.sh")
     ;;
 
     * )
-      if [[ -n $(find "$rd_components/$choice" -maxdepth 1 -mindepth 1 -type f -name "functions.sh") ]]; then
+      if [[ -n $(find "$rd_components/$choice" -maxdepth 1 -mindepth 1 -type f -name "component_functions.sh") ]]; then
         set -o allexport # Export all the variables found during sourcing, for use elsewhere
-        source "$rd_components/$choice/functions.sh"
+        source "$rd_components/$choice/component_functions.sh"
         set +o allexport # Back to normal, otherwise every assigned variable will get exported through the rest of the run
       else
-        log e "functions.sh file for component $choice could not be found."
+        log e "component_functions.sh file for component $choice could not be found."
       fi
     ;;
 
@@ -1551,7 +1551,7 @@ source_component_functions() {
       set -o allexport # Export all the variables found during sourcing, for use elsewhere
       source "$functions_file"
       set +o allexport # Back to normal, otherwise every assigned variable will get exported through the rest of the run
-    done < <(find "$rd_components" -maxdepth 2 -mindepth 2 -type f -name "functions.sh")
+    done < <(find "$rd_components" -maxdepth 2 -mindepth 2 -type f -name "component_functions.sh")
   fi
 }
 
@@ -1647,7 +1647,7 @@ update_component_presets() {
                                   | .key
                                 ' "$manifest_file")
     fi
-  done < <(find "$rd_components" -maxdepth 2 -mindepth 2 -type f -name "manifest.json")
+  done < <(find "$rd_components" -maxdepth 2 -mindepth 2 -type f -name "component_manifest.json")
 }
 
 install_preset_files() {

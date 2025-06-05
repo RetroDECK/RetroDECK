@@ -23,7 +23,7 @@ build_preset_list_options() {
     all_systems=("${all_systems[@]}" "$system_name")
     system_value=$(get_setting_value "$rd_conf" "$system_name" "retrodeck" "$preset")
     if jq -e --arg system_name "$system_name" --arg system_value "$system_value" --arg preset "$preset" \
-        '.[$system_name].compatible_presets[$preset][0] == $system_value' "$rd_components/$system_name/manifest.json" > /dev/null; then # The setting is set to the disabled value for this preset
+        '.[$system_name].compatible_presets[$preset][0] == $system_value' "$rd_components/$system_name/component_manifest.json" > /dev/null; then # The setting is set to the disabled value for this preset
       log d "$system_name is currently disabled for preset $preset"
       current_disabled_systems=("${current_disabled_systems[@]}" "$system_name")
     else # The setting is set to some enabled value
@@ -97,7 +97,7 @@ build_preset_config() {
   local presets_being_changed="$*"
   log d "Applying presets: $presets_being_changed for system: $system_being_changed"
 
-  read_config_format=$(jq -r --arg component "$system_being_changed" '.[$component].preset_actions.config_file_format' "$rd_components/$system_being_changed/manifest.json")
+  read_config_format=$(jq -r --arg component "$system_being_changed" '.[$component].preset_actions.config_file_format' "$rd_components/$system_being_changed/component_manifest.json")
   if [[ "$read_config_format" == "retroarch-all" ]]; then
     local retroarch_all="true"
     local read_config_format="retroarch"
@@ -112,7 +112,7 @@ build_preset_config() {
       while IFS= read -r read_setting_name
       do
         current_preset_object=$(jq -r --arg system "$system_being_changed" --arg preset "$current_preset" --arg preset_name "$read_setting_name" \
-                                  '.[$system].preset_actions[$preset][$preset_name]' "$rd_components/$system_being_changed/manifest.json")
+                                  '.[$system].preset_actions[$preset][$preset_name]' "$rd_components/$system_being_changed/component_manifest.json")
         action=$(echo "$current_preset_object" | jq -r '.action')
 
         case "$action" in
@@ -214,7 +214,7 @@ build_preset_config() {
         ;;
 
         esac
-      done < <(jq -r --arg system "$system_being_changed" --arg preset "$current_preset" '.[$system].preset_actions[$preset] | keys[]' "$rd_components/$system_being_changed/manifest.json")
+      done < <(jq -r --arg system "$system_being_changed" --arg preset "$current_preset" '.[$system].preset_actions[$preset] | keys[]' "$rd_components/$system_being_changed/component_manifest.json")
     fi
   done
 }

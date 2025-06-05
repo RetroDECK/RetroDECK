@@ -143,9 +143,9 @@ api_get_component() {
   component="$1"
 
   if [[ "$component" == "all" ]]; then
-    manifest_files=$(find "$RD_MODULES" -maxdepth 2 -mindepth 2 -type f -name "manifest.json")
+    manifest_files=$(find "$rd_components" -maxdepth 2 -mindepth 2 -type f -name "component_manifest.json")
   else # A specific component was named
-    manifest_files=$(find "$RD_MODULES/$component" -maxdepth 1 -mindepth 1 -type f -name "manifest.json")
+    manifest_files=$(find "$rd_components/$component" -maxdepth 1 -mindepth 1 -type f -name "component_manifest.json")
     if [[ ! -n "$manifest_files" ]]; then # No results were found for the given component name
       echo "information for component $component could not be found"
       return 1
@@ -243,7 +243,7 @@ api_get_current_preset_state() {
                                                                       emulated_system_friendly_name: $selection.system_friendly_name
                                                                     }
                                                                   }
-                                                              ' "$rd_components/$base_component/manifest.json")
+                                                              ' "$rd_components/$base_component/component_manifest.json")
 
           local system_name=$(jq -c '.system_name' <<< "$json_info")
           local system_friendly_name=$(jq -c '.data.system_friendly_name' <<< "$json_info")
@@ -380,7 +380,7 @@ api_get_multifile_game_structure() {
 
 api_get_component_menu_entries() {
   # This function will find all component-specific menu entries for use in a Configurator for a given menu section, or "all" if all entries for all menu options are desired
-  # Menu sections and entry information are defined in each components manifest.json file
+  # Menu sections and entry information are defined in each components component_manifest.json file
   # USAGE: api_get_component_menu_entries "$menu"
 
   local requested_menu="$1"
@@ -401,7 +401,7 @@ api_get_component_menu_entries() {
         fi
       done < <(jq -r 'to_entries[].value.configurator_menus | keys[]' "$manifest_file")
     fi
-  done < <(find "$rd_components" -maxdepth 2 -mindepth 2 -type f -name "manifest.json")
+  done < <(find "$rd_components" -maxdepth 2 -mindepth 2 -type f -name "component_manifest.json")
 
   echo "$menu_items"
 }
@@ -554,7 +554,7 @@ api_set_preset_state() {
                                 else
                                   .[$component].compatible_presets[$preset].[0] // empty
                                 end
-                              ' "$rd_components/$component/manifest.json")
+                              ' "$rd_components/$component/component_manifest.json")
 
     if [[ -n "$preset_disabled_state" ]]; then # The disabled state for that preset for that component could be determined
       if jq -e --arg component "$component" \
@@ -566,7 +566,7 @@ api_set_preset_state() {
       else
         .[$component].compatible_presets[$preset] | index($state) != null
       end
-      ' "$rd_components/$component/manifest.json" > /dev/null; then # Check if requested state is a valid option
+      ' "$rd_components/$component/component_manifest.json" > /dev/null; then # Check if requested state is a valid option
         if [[ "$current_preset_state" == "$state" ]]; then # Preset is already in desired state
           echo "component $component is already in state $state for preset $preset"
           return 1
@@ -601,7 +601,7 @@ api_set_preset_state() {
                                                           else
                                                             .[$component].compatible_presets[$preset].[0] // empty
                                                           end
-                                                        ' "$rd_components/$component/manifest.json")
+                                                        ' "$rd_components/$component/component_manifest.json")
                 if [[ -n "$child_component" ]]; then
                   incompatible_preset_current_state=$(get_setting_value "$rd_conf" "$child_component" "retrodeck" "$preset_key_value")
                 else
@@ -631,7 +631,7 @@ api_set_preset_state() {
                       else
                         .[$component].compatible_presets[$preset].[0] // empty
                       end
-                    ' "$rd_components/$component/manifest.json")
+                    ' "$rd_components/$component/component_manifest.json")
                 if [[ -n "$child_component" ]]; then
                   incompatible_preset_current_state=$(get_setting_value "$rd_conf" "$child_component" "retrodeck" "$preset_key_value")
                 else
@@ -683,7 +683,7 @@ api_set_preset_state() {
                                                             else
                                                               .[$component].preset_actions.config_file_format
                                                             end
-                                                            ' "$rd_components/$component/manifest.json")
+                                                            ' "$rd_components/$component/component_manifest.json")
 
   if [[ "$config_format" == "retroarch-all" ]]; then
     local retroarch_all="true"
@@ -700,7 +700,7 @@ api_set_preset_state() {
                               .[$component].preset_actions[$core][$preset][$preset_setting_name]
                             else
                               .[$component].preset_actions[$preset][$preset_setting_name]
-                            end' "$rd_components/$component/manifest.json")
+                            end' "$rd_components/$component/component_manifest.json")
     action=$(echo "$current_preset_object" | jq -r '.action')
 
     case "$action" in
@@ -808,7 +808,7 @@ api_set_preset_state() {
                 else
                   .[$component].preset_actions[$preset] | keys[]
                 end
-                ' "$rd_components/$component/manifest.json")
+                ' "$rd_components/$component/component_manifest.json")
 
   echo "preset $preset for component $component was successfully changed to $state"
 }

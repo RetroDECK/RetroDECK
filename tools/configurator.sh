@@ -321,7 +321,7 @@ configurator_reset_dialog() {
     IFS='^' read -ra choices <<< "$choice"
     for current_choice in "${choices[@]}"; do
       log d "current_choice: $current_choice"
-      pretty_choices+=("$(jq -r --arg component "$current_choice" '.[$component].name' "$rd_components/$current_choice/manifest.json")")
+      pretty_choices+=("$(jq -r --arg component "$current_choice" '.[$component].name' "$rd_components/$current_choice/component_manifest.json")")
     done
     rd_zenity --question \
       --no-wrap --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
