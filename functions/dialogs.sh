@@ -268,17 +268,17 @@ get_cheevos_token_dialog() {
   # USAGE: get_cheevos_token_dialog
 
   local cheevos_info=$(rd_zenity --forms --title="Cheevos" \
-  --text="Add your RetroAchievements: Username & Password." \
+  --text="Username and password." \
   --separator="^" \
   --add-entry="Username" \
   --add-password="Password")
 
   IFS='^' read -r cheevos_username cheevos_password < <(printf '%s\n' "$cheevos_info")
-  if cheevos_info=$(get_cheevos_token "$cheevos_username" "$cheevos_password"); then
-    log d "Cheevos: RetroAchievements Login Succeeded"
+  if cheevos_info=$(api_do_cheevos_login "$cheevos_username" "$cheevos_password"); then
+    log d "Cheevos login succeeded"
     echo "$cheevos_info"
   else # login failed
-    log d "Cheevos: RetroAchievements Login Failed"
+    log d "Cheevos login failed"
     return 1
   fi
 }
