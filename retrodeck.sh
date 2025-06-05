@@ -235,9 +235,9 @@ while [[ $# -gt 0 ]]; do
                 if [[ "$current_system_value" == "false" || -z "$current_system_value" ]]; then
                   read -r -p "Please enter your RetroAchievements username: " cheevos_username
                   read -r -s -p "Please enter your RetroAchievements password: " cheevos_password
-                  if cheevos_info=$(get_cheevos_token "$cheevos_username" "$cheevos_password"); then
+                  if cheevos_info=$(api_do_cheevos_login "$cheevos_username" "$cheevos_password"); then
                     cheevos_token=$(echo "$cheevos_info" | jq -r '.Token')
-                    cheevos_login_timestamp=$(date +%s)
+                    cheevos_login_timestamp=$(echo "$cheevos_info" | jq -r '.Timestamp')
                     echo "RetroAchievements login succeeded, proceeding..."
                   else # login failed
                     echo "RetroAchievements login failed, please try again."
