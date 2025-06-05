@@ -1429,21 +1429,6 @@ sanitize() {
     echo "$1" | sed -e 's/_\{2,\}/ /g' -e 's/_/ /g' -e 's/:/ -/g' -e 's/&/and/g' -e 's%/%and%g' -e 's/  / /g'
 }
 
-get_cheevos_token() {
-  # This function will attempt to authenticate with the RA API with the supplied credentials and will return a JSON object if successful
-  # USAGE get_cheevos_token $username $password
-
-  local cheevos_api_response=$(curl --silent --data "r=login&u=$1&p=$2" "$RA_API_URL")
-  local cheevos_success=$(echo "$cheevos_api_response" | jq -r '.Success')
-  if [[ "$cheevos_success" == "true" ]]; then
-    log d "login succeeded"
-    echo "$cheevos_api_response"
-  else
-    log d "login failed"
-    return 1
-  fi
-}
-
 check_if_updated() {
   # Check if an update has happened
   if [ -f "$lockfile" ]; then
