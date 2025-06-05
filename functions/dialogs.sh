@@ -217,6 +217,20 @@ configurator_change_preset_value_dialog() {
   if [[ "$rc" == 0 || -n "$choice" ]]; then # If the user didn't hit Cancel
     local preset_current_value=$(get_setting_value "$rd_conf" "$component" "retrodeck" "$preset")
     if [[ ! "$choice" == "$preset_current_value" ]]; then
+      if [[ "$preset" =~ (cheevos|cheevos_hardcore) ]]; then
+        if [[ ! -n "$cheevos_username" || ! -n "$cheevos_token" ]]; then
+          log d "Cheevos not currently logged in, prompting user..."
+          if cheevos_login_info=$(get_cheevos_token_dialog); then
+            cheevos_username=$(jq -r '.User' <<< "$cheevos_login_info")
+            cheevos_token=$(jq -r '.Token' <<< "$cheevos_login_info")
+            cheevos_login_timestamp=$(jq -r '.Timestamp' <<< "$cheevos_login_info")
+          else
+            configurator_generic_dialog "RetroDECK Configurator - Change Preset" "The preset state could not be changed. The error message is:\n\n\"$result\"\n\nCheck the RetroDECK logs for more details."
+            configurator_change_preset_dialog "$preset"
+            return 1
+          fi
+        fi
+      fi
       if result=$(api_set_preset_state "$component" "$preset" "$choice"); then
         configurator_change_preset_dialog "$preset"
       else
