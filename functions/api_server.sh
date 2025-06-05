@@ -342,6 +342,7 @@ process_request() {
           local state=$(jq -r '.state // empty' <<< "$request_data")
           cheevos_username=$(jq -r '.cheevos_username // empty' <<< "$request_data")
           cheevos_token=$(jq -r '.cheevos_token // empty' <<< "$request_data")
+          cheevos_login_timestamp=$(jq -r '.cheevos_login_timestamp // empty' <<< "$request_data")
 
           if [[ -n "$component" && -n "$preset" && -n "$state" ]]; then
             local result
