@@ -646,7 +646,7 @@ api_set_preset_state() {
           done < <(jq -r '.incompatible_presets | keys[]' "$features")
 
           if [[ "$preset" == "cheevos" ]]; then # For cheevos preset, ensure login data is available
-            if [[ -n "$cheevos_token" && -n "$cheevos_username" ]]; then
+            if [[ -n "$cheevos_token" && -n "$cheevos_username" && -n "$cheevos_login_timestamp" ]]; then
               log d "Cheevos login info exists"
             else
               echo "login information for cheevos preset not available"
