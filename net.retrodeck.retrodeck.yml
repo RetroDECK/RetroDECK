@@ -15,6 +15,7 @@ cleanup-commands:
   - mkdir -p ${FLATPAK_DEST}/lib/ffmpeg
 
 finish-args:
+  - --talk-name=org.freedesktop.Flatpak
   - --socket=wayland
   - --socket=x11
   - --socket=pulseaudio
