@@ -142,11 +142,14 @@ else
 
     echo "Downloading $release_type components..."
     release_json=$(curl -s "https://api.github.com/repos/RetroDECK/components/releases" | jq "[.[] | select(.name | test(\"$release_type\"))] | sort_by(.published_at) | reverse | .[0]")
+    release_name=$(echo "$release_json" | jq -r '.name')
 
     if [[ -z "$release_json" || "$release_json" == "null" ]]; then
         echo "No suitable release found in RetroDECK/components."
         exit 1
     fi
+
+    echo "Latest release found: $release_name"
 
     # Output version info to components/components-version
     release_name=$(echo "$release_json" | jq -r '.name')

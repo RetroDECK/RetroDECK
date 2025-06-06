@@ -27,7 +27,7 @@ for archive in "${archives[@]}"; do
     [ -e "$archive" ] || continue
     echo "Extracting $archive..."
     mkdir -p "$component_path"
-    tar -xzf "$archive" -C "$component_path" && echo "$archive extracted successfully in $component_path." || echo "Failed to extract $archive."
+    tar -xzf "$archive" -C "$component_path" && echo "$archive extracted successfully in $component_path." && echo "$component_path listing:" && ls "$component_path" || echo "Failed to extract $archive."
 
     # # Symlink component_launcher.sh if it exists
     # launcher_path="$component_path/component_launcher.sh"
