@@ -27,7 +27,10 @@ for archive in "${archives[@]}"; do
     [ -e "$archive" ] || continue
     echo "Extracting $archive..."
     mkdir -p "$component_path"
-    tar -xzf "$archive" -C "$component_path" && echo "$archive extracted successfully in $component_path." && echo "$component_path listing:" && ls "$component_path" || echo "Failed to extract $archive."
+    tar -xzf "$archive" -C "$component_path" && \
+    echo "$archive extracted successfully in $component_path." && \
+    echo "$component_path listing:" && \
+    ls "$component_path" || echo "Failed to extract $archive."
 
     # # Symlink component_launcher.sh if it exists
     # launcher_path="$component_path/component_launcher.sh"
@@ -47,9 +50,19 @@ for archive in "${archives[@]}"; do
     # fi
 done
 
+echo "-------------------------------------"
+echo "  Finished installing components."
+echo "-------------------------------------"
+echo ""
+
 # Check if components_version_list.md file exists and copy or warn
 if [ -f components_version_list.md ]; then
-    cp components_version_list.md "${FLATPAK_DEST}/retrodeck/components_version_list.md"
+    found_file=$(find . -name components_version_list.md | head -n 1)
+    if [ -n "$found_file" ]; then
+        cp "$found_file" "${FLATPAK_DEST}/retrodeck/components_version_list.md"
+    else
+        echo "Warning: components_version_list.md file not found by find, skipping."
+    fi
     echo "Component version file copied successfully."
     echo "Component version:"
     cat "${FLATPAK_DEST}/retrodeck/components_version_list.md"
