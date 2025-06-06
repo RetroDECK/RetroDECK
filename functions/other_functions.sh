@@ -1512,7 +1512,7 @@ source_component_functions() {
 
     "retrodeck" )
       set -o allexport # Export all the variables found during sourcing, for use elsewhere
-      source "$rd_components/retrodeck/component_functions.sh"
+      source "$rd_components/framework/component_functions.sh"
       set +o allexport # Back to normal, otherwise every assigned variable will get exported through the rest of the run
     ;;
 
