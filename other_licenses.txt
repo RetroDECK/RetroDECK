@@ -5,9 +5,11 @@ https://retrodeck.readthedocs.io/en/latest/wiki_about/donations-licenses/
 
 If we have made some linkage errors or your license needs to be included in the projects github page please contact the RetroDECK Team on Discord or Matrix.
 
-RetroDECK generally only modifies the default configurations to the systems to fit into our folder structure (saves, bios etc..), work with Steam Input and sometime tweaks the settings with the help of the RetroDECK community to find the "best settings" for the hardware and the community likes to use.
+RetroDECK generally only modifies the default configurations to the systems to fit into our folder structure (saves, bios etc..) , work with Steam Input and sometime tweaks the settings with the help of the RetroDECK community to find the "best settings" for the hardware and the community likes to use.
 
 Note that not all of the software listed here have been added to RetroDECK proper yet, we hope to get to them in the future.
+
+For a more detailed instructions on each components tiny modification check the https://github.com/RetroDECK/components/ repo.
 
 --- Mudlet ---
 
