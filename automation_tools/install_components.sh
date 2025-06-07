@@ -24,13 +24,21 @@ for archive in "${archives[@]}"; do
     echo "Installing component $component_name"
     echo "-------------------------------------"
 
-    [ -e "$archive" ] || continue
+    # Skip if archive does not exist
+    if [ ! -e "$archive" ]; then
+        continue
+    fi
+
     echo "Extracting $archive..."
     mkdir -p "$component_path"
-    tar -xzf "$archive" -C "$component_path" && \
-    echo "$archive extracted successfully in $component_path." && \
-    echo "$component_path listing:" && \
-    ls "$component_path" || echo "Failed to extract $archive."
+
+    if tar -xzf "$archive" -C "$component_path"; then
+        echo "$archive extracted successfully in $component_path."
+        echo "Contents of $component_path:"
+        ls "$component_path"
+    else
+        echo "Failed to extract $archive."
+    fi
 
     # # Symlink component_launcher.sh if it exists
     # launcher_path="$component_path/component_launcher.sh"
@@ -54,6 +62,9 @@ echo "-------------------------------------"
 echo "  Finished installing components."
 echo "-------------------------------------"
 echo ""
+
+echo "Listing installed components in ${FLATPAK_DEST}/retrodeck/components:"
+ls -1 "${FLATPAK_DEST}/retrodeck/components" || echo "No components installed."
 
 # Check if components_version_list.md file exists and copy or warn
 if [ -f components_version_list.md ]; then
