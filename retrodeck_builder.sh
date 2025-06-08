@@ -82,12 +82,16 @@ manifest_filename="net.retrodeck.retrodeck.yml"
 
 # Determine the root folder
 if [[ -z "$ROOT_FOLDER" ]]; then
-    ROOT_FOLDER=$(find ./ .. -name "$manifest_filename" -print -quit)
-    if [[ -z "$ROOT_FOLDER" ]]; then
-        echo "Error: $manifest_filename not found."
-        exit 1
+    manifest_path=$(find . -maxdepth 1 -name "$manifest_filename" -print -quit)
+    if [[ -z "$manifest_path" ]]; then
+        # Try searching recursively if not found in current directory
+        manifest_path=$(find . -name "$manifest_filename" -print -quit)
+        if [[ -z "$manifest_path" ]]; then
+            echo "Error: $manifest_filename not found in this directory or subdirectories."
+            exit 1
+        fi
     fi
-    ROOT_FOLDER=$(dirname "$ROOT_FOLDER")
+    ROOT_FOLDER=$(realpath "$(dirname "$manifest_path")")
     echo "ROOT_FOLDER is set to $ROOT_FOLDER"
 fi
 
