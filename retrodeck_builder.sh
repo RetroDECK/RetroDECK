@@ -171,6 +171,7 @@ echo "Now building: RetroDECK $VERSION"
 echo ""
 
 MANIFEST_REWORKED="${MANIFEST%.*}.reworked.yml"
+cp -f "$MANIFEST" "$MANIFEST_REWORKED"
 
 # Checking how the user wants to manage the caches
 # this exports a variable named use_cache that is used by manifest_placeholder_replacer script
@@ -190,7 +191,19 @@ if [[ "$CICD" != "true" ]]; then
     if [[ "$clear_cache_input" =~ ^[Yy]$ ]]; then
         # User chose to clear the build cache
         echo "Clearing build cache..."
-        rm -rf "$ROOT_FOLDER/{$BUILD_FOLDER_NAME,.flatpak-builder}"
+        rm -rf "$ROOT_FOLDER/$BUILD_FOLDER_NAME" # eg: retrodeck-flatpak-cooker or retrodeck-flatpak-main
+        rm -rf "$ROOT_FOLDER/.flatpak-builder"
+        rm -rf "$ROOT_FOLDER/$REPO_FOLDER_NAME"  # eg: retrodeck-repo
+        rm -rf "$ROOT_FOLDER/buildid"
+        rm -rf "$ROOT_FOLDER/version"
+        echo "Do you want to also clear the components folder? (This will remove $ROOT_FOLDER/components)"
+        read -rp "Clear components folder? [y/N] " clear_components_input
+        clear_components_input=${clear_components_input:-N}
+        if [[ "$clear_components_input" =~ ^[Yy]$ ]]; then
+            echo "Clearing components folder..."
+            rm -rf "$ROOT_FOLDER/components"
+        fi
+        echo "Build cache cleared."
     fi
 else
     echo "Skipping cache usage prompt as CI/CD mode is enabled."
@@ -263,6 +276,14 @@ if [[ -n "$FLATPAK_BUILD_EXTRA_ARGS" ]]; then
     echo ""
 fi
 
+if [[ -f "$MANIFEST_REWORKED" ]]; then
+    echo "Using reworked manifest: $MANIFEST_REWORKED"
+else
+    echo "WARNING: Reworked manifest not found, using original manifest: $MANIFEST"
+    sleep 10
+    MANIFEST_REWORKED="$MANIFEST"
+fi
+
 command="flatpak-builder --user --force-clean $FLATPAK_BUILD_EXTRA_ARGS \
     --install-deps-from=flathub \
     --install-deps-from=flathub-beta \
@@ -270,12 +291,14 @@ command="flatpak-builder --user --force-clean $FLATPAK_BUILD_EXTRA_ARGS \
     \"$ROOT_FOLDER/$BUILD_FOLDER_NAME\" \
     \"$MANIFEST_REWORKED\""
 
-# Echo the command for verification
-echo -e "Building manifest with command:\n$command"
-echo ""
-
 # Execute the build command
 if [[ "$NO_BUILD" != "true" ]]; then
+    echo ""
+    echo "---------------------------------------"
+    echo "  Starting manifest build process..."
+    echo "---------------------------------------"
+    echo -e "Building manifest file $MANIFEST_REWORKED with command:\n$command"
+    echo ""
     eval $command
     # Building the bundle RetroDECK.flatpak after the download and build steps are done
     flatpak build-bundle "$ROOT_FOLDER/$REPO_FOLDER_NAME" "$OUT_FOLDER/$FLATPAK_BUNDLE_NAME" net.retrodeck.retrodeck
@@ -311,3 +334,34 @@ echo ""
 echo "RetroDECK $VERSION's build completed successfully!"
 echo "Generated files are in $OUT_FOLDER"
 ls "$OUT_FOLDER"
+
+echo "Do you want to install the built RetroDECK Flatpak?"
+read -rp "Install RetroDECK Flatpak? [y/N] " install_input
+install_input=${install_input:-N}
+if [[ "$install_input" =~ ^[Yy]$ ]]; then
+    if flatpak list --app | grep -q "net.retrodeck.retrodeck"; then
+        if flatpak info --user net.retrodeck.retrodeck &>/dev/null; then
+            echo "RetroDECK is installed in user mode, updating it..."
+            flatpak install -y --user "$OUT_FOLDER/$FLATPAK_BUNDLE_NAME"
+            
+        elif flatpak info --system net.retrodeck.retrodeck &>/dev/null; then
+            echo "RetroDECK is installed in system mode, updating it..."
+            flatpak install -y --system "$OUT_FOLDER/$FLATPAK_BUNDLE_NAME"
+        else
+            echo "RetroDECK is installed, but could not determine installation scope."
+        fi
+        read -rp "Install as user or system? [u/s] " install_type
+        install_type=${install_type:-u}
+        if [[ "$install_type" =~ ^[Ss]$ ]]; then
+            echo "Installing RetroDECK Flatpak system-wide..."
+            flatpak install -y --system "$OUT_FOLDER/$FLATPAK_BUNDLE_NAME"
+        else
+            echo "Installing RetroDECK Flatpak for the current user..."
+            flatpak install -y --user "$OUT_FOLDER/$FLATPAK_BUNDLE_NAME"
+        fi
+    fi
+    echo "RetroDECK Flatpak installed successfully!"
+fi
+
+echo ""
+echo "Build process completed."
