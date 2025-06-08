@@ -3,7 +3,7 @@
 echo "Welcome to RetroDECK Builder"
 echo ""
 
-## ENVIRONFENT SETUP
+## ENVIRONMENT SETUP
 
 git config protocol.file.allow always
 
@@ -78,18 +78,20 @@ for arg in "$@"; do
     esac
 done
 
+manifest_filename="net.retrodeck.retrodeck.yml"
+
 # Determine the root folder
 if [[ -z "$ROOT_FOLDER" ]]; then
-    ROOT_FOLDER=$(find ./ .. -name "net.retrodeck.retrodeck.yml" -print -quit)
+    ROOT_FOLDER=$(find ./ .. -name "$manifest_filename" -print -quit)
     if [[ -z "$ROOT_FOLDER" ]]; then
-        echo "Error: net.retrodeck.retrodeck.yml not found."
+        echo "Error: $manifest_filename not found."
         exit 1
     fi
     ROOT_FOLDER=$(dirname "$ROOT_FOLDER")
     echo "ROOT_FOLDER is set to $ROOT_FOLDER"
 fi
 
-MANIFEST="$ROOT_FOLDER/net.retrodeck.retrodeck.yml"
+MANIFEST="$ROOT_FOLDER/$manifest_filename"
 REPO_FOLDER_NAME="retrodeck-repo"
 
 # Determinating the flatpak build environment artifacts
@@ -164,8 +166,7 @@ echo "$VERSION" > $ROOT_FOLDER/version
 echo "Now building: RetroDECK $VERSION"
 echo ""
 
-# Backing up the manifest before the placeholder replacement
-cp "$MANIFEST" "$MANIFEST.bak"
+MANIFEST_REWORKED="${MANIFEST%.*}.reworked.yml"
 
 # Checking how the user wants to manage the caches
 # this exports a variable named use_cache that is used by manifest_placeholder_replacer script
@@ -204,7 +205,7 @@ fi
 # Adding the update portal permission to the cooker flatpak to allow the framework to update RetroDECK
 # This is not allowed on Flathub
 if [[ "$IS_COOKER" == "true" ]]; then
-    sed -i '/finish-args:/a \ \ - --talk-name=org.freedesktop.Flatpak' "$MANIFEST"
+    sed -i '/finish-args:/a \ \ - --talk-name=org.freedesktop.Flatpak' "$MANIFEST_REWORKED"
     echo ""
     echo "Added update portal permission to manifest"
     echo ""
@@ -263,7 +264,7 @@ command="flatpak-builder --user --force-clean $FLATPAK_BUILD_EXTRA_ARGS \
     --install-deps-from=flathub-beta \
     --repo=\"$ROOT_FOLDER/$REPO_FOLDER_NAME\" $FLATPAK_BUILDER_CCACHE\
     \"$ROOT_FOLDER/$BUILD_FOLDER_NAME\" \
-    \"$MANIFEST\""
+    \"$MANIFEST_REWORKED\""
 
 # Echo the command for verification
 echo -e "Building manifest with command:\n$command"
@@ -301,9 +302,6 @@ else
         echo "fake artifacts" > "$OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.tar.gz"
     fi
 fi
-
-echo "Restoring the original manifest"
-mv -f "$MANIFEST.bak" "$MANIFEST"
 
 echo ""
 echo "RetroDECK $VERSION's build completed successfully!"
