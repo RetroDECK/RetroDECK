@@ -140,21 +140,31 @@ else
         fi
     fi
 
-    echo "Downloading $release_type components..."
     release_json=$(curl -s "https://api.github.com/repos/RetroDECK/components/releases" | jq "[.[] | select(.name | test(\"$release_type\"))] | sort_by(.published_at) | reverse | .[0]")
     release_name=$(echo "$release_json" | jq -r '.name')
+    release_tag=$(echo "$release_json" | jq -r '.tag_name')
+    release_url=$(echo "$release_json" | jq -r '.html_url')
+    release_published_at=$(echo "$release_json" | jq -r '.published_at')
 
     if [[ -z "$release_json" || "$release_json" == "null" ]]; then
         echo "No suitable release found in RetroDECK/components."
         exit 1
     fi
 
-    echo "Latest release found: $release_name"
+    echo ""
+    echo "---------------------------"
+    echo "      Found release"
+    echo "---------------------------"
+    echo "Release Type: $release_type"
+    echo "Release Name: $release_name"
+    echo "Release Tag: $release_tag"
+    echo "Release URL: $release_url"
+    echo "Published At: $(date -d "$release_published_at" +"%d %b %Y, %H:%M:%S")"
+    echo ""
+    echo "Downloading $release_type components..."
+    echo ""
 
     # Output version info to components/components-version
-    release_name=$(echo "$release_json" | jq -r '.name')
-    release_tag=$(echo "$release_json" | jq -r '.tag_name')
-    release_url=$(echo "$release_json" | jq -r '.html_url')
     {
         echo "name: $release_name"
         echo "tag: $release_tag"
@@ -169,9 +179,6 @@ else
     if [[ "$name" == *.tar.gz ]]; then
         sha_url="${url}.sha"
         sha_file="$COMPONENTS_DIR/$name.sha"
-        
-        echo "Downloading SHA file for $name..."
-        curl -L "$sha_url" -o "$sha_file"
         
         if [[ -s "$sha_file" ]]; then
             expected_sha=$(awk '{print $1}' "$sha_file")
