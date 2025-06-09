@@ -1,7 +1,12 @@
 #!/bin/bash
 
 echo "Found the following components in the components directory:"
-ls -1 components/*.tar.gz || ( echo "Wait... No components found actually." && exit 1 ) 
+ls -1 components/*.tar.gz || ( echo "Wait... No components found actually." && exit 1 )
+
+if [ "$GITHUB_ACTIONS" = "true" ]; then
+    echo "Running in GitHub Actions, setting CICD to true."
+    CICD=true
+fi
 
 if [ -z "$FLATPAK_DEST" ]; then
     echo "FLATPAK_DEST is not set. Please run this script inside a Flatpak build environment or export it manually."
@@ -36,6 +41,16 @@ for archive in "${archives[@]}"; do
         echo "$archive extracted successfully in $component_path."
         echo "Contents of $component_path:"
         ls "$component_path"
+
+        # If running in CI/CD, delete the components folder to reclaim space
+        # This solves an issue where the  runner runs out of space and some components are not installed
+
+        if [ "$CICD" == "true" ]; then
+            echo "Running in CI/CD mode, deleting components folder to reclaim space."
+            rm -rf "$archive"
+            echo "Deleted $archive to reclaim space."
+        fi
+
     else
         echo "Failed to extract $archive."
     fi
