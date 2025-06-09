@@ -249,3 +249,12 @@ modules:
     sources:
       - type: dir
         path: .
+
+  - name: summary
+    buildsystem: simple
+    build-commands:
+      - echo "RetroDECK Flatpak build completed successfully!"
+      - echo "Version: $(cat ${FLATPAK_DEST}/retrodeck/version)"
+      - echo "Flatpak path: ${FLATPAK_DEST}"
+      - echo "Included components:"
+      - ls -1 ${FLATPAK_DEST}/retrodeck/components
