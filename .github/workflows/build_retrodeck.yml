@@ -41,7 +41,7 @@ jobs:
 
       - name: Clear caches
         if: github.event_name == 'pull_request'
-        uses: theAngularGuy/clear-cache-of-pull-request@vX.X.X
+        uses: theAngularGuy/clear-cache-of-pull-request
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
