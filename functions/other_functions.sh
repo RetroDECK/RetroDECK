@@ -1233,6 +1233,10 @@ quit_retrodeck() {
   exit
 }
 
+start_es-de(){
+  /bin/bash /app/retrodeck/components/es-de/component_launcher.sh "$@"
+}
+
 start_retrodeck() {
   get_steam_user # get steam user info
   splash_screen # Check if today has a surprise splashscreen and load it if so
@@ -1248,7 +1252,7 @@ start_retrodeck() {
   fi
 
   log i "Starting RetroDECK v$version"
-  es-de
+  start_es-de
 }
 
 convert_to_markdown() {

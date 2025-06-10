@@ -819,7 +819,7 @@ configurator_usb_import_dialog() {
 
       if [[ ! -z "$choice" ]]; then
         create_dir "$choice/RetroDECK Import"
-        es-de --home "$choice/RetroDECK Import" --create-system-dirs
+        start_es-de --home "$choice/RetroDECK Import" --create-system-dirs # TODO: this might be broken as in project-neo we are calling es-de via component_launcher that already includes --home argument
         rm -rf "$choice/RetroDECK Import/ES-DE" # Cleanup unnecessary folder
 
 
