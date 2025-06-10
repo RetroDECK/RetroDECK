@@ -3,9 +3,11 @@
 echo "Found the following components in the components directory:"
 ls -1 components/*.tar.gz || ( echo "Wait... No components found actually." && exit 1 )
 
+echo "DEBUG: GITHUB_ACTIONS is set to \"$GITHUB_ACTIONS\""
+
 if [ "$GITHUB_ACTIONS" = "true" ]; then
     echo "Running in GitHub Actions, setting CICD to true."
-    CICD=true
+    CICD="true"
 fi
 
 if [ -z "$FLATPAK_DEST" ]; then
