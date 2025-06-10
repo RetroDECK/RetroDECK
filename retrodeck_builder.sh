@@ -108,11 +108,11 @@ if [[ "$CICD" == "true" ]]; then
     echo "OUT_FOLDER=$OUT_FOLDER" >> "$GITHUB_ENV"
 fi
 
-## Use mktemp in CI/CD to store build and repo in /mnt
+## Use mktemp in CI/CD to store build and repo in /tmp
 if [[ "$CICD" == "true" ]]; then
-    echo "CI/CD mode detected: using temporary build and repo folders in /mnt."
+    echo "CI/CD mode detected: using temporary build and repo folders in /tmp."
 
-    ROOT_FOLDER_TMP=$(mktemp -d -p /mnt retrodeck-build-XXXXXX)
+    ROOT_FOLDER_TMP=$(mktemp -d -p /tmp retrodeck-build-XXXXXX)
     echo "Temporary build root: $ROOT_FOLDER_TMP"
 
     BUILD_FOLDER_NAME="$ROOT_FOLDER_TMP/retrodeck-flatpak$POSTFIX"
