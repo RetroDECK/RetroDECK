@@ -94,6 +94,20 @@ jobs:
       #     repositories: "RetroDECK,Cooker"
       #     owner: "RetroDECK"
 
+      - name: Split artifacts
+        run: |
+          for file in "${OUT_FOLDER}"/*; do
+            if [ -f "$file" ]; then
+              size_bytes=$(stat -c%s "$file")
+              if [ "$size_bytes" -ge $((2 * 1024 * 1024 * 1024)) ]; then
+                echo "Compressing and splitting $file (size: $size_bytes bytes)..."
+                gzip -c "$file" | split -b 1900M - "${file##*/}.gz.part"
+                rm -f "$file"
+                mv "${file##*/}.gz.part"* "${OUT_FOLDER}/"
+              fi
+            fi
+          done
+
       # Upload artifacts for other jobs
       # OUT_FOLDER is initialized in the retrodeck_builder.sh script
       - name: Upload Build Artifacts
