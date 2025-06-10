@@ -47,10 +47,6 @@ for arg in "$@"; do
         --flatpak-builder-args=*)
             FLATPAK_BUILD_EXTRA_ARGS="${arg#*=}"
             echo "Additional Flatpak Builder arguments: $FLATPAK_BUILD_EXTRA_ARGS"
-        #     ;;
-        # --skip-replacer)
-        #     echo "Skipping placeholder replacement"
-        #     SKIP_REPLACER="true"
             ;;
         --help|-h)
             echo "RetroDECK Builder"
@@ -68,7 +64,6 @@ for arg in "$@"; do
             echo "  --force-cooker              Force cooker mode, overriding branch detection"
             echo "  --ccache                    Enable CCACHE mode for Flatpak Builder"
             echo "  --flatpak-builder-args=\"\"   Pass additional arguments to Flatpak Builder"
-            #echo "  --skip-replacer             Skip placeholder replacement, useful for quicker debugging"
             echo "  --help, -h                  Display this help message"
             exit 0
             ;;
@@ -87,7 +82,7 @@ if [[ -z "$ROOT_FOLDER" ]]; then
         # Try searching recursively if not found in current directory
         manifest_path=$(find . -name "$manifest_filename" -print -quit)
         if [[ -z "$manifest_path" ]]; then
-            echo "Error: $manifest_filename not found in this directory or subdirectories."
+            echo "Error: $manifest_filename not found."
             exit 1
         fi
     fi
@@ -96,31 +91,48 @@ if [[ -z "$ROOT_FOLDER" ]]; then
 fi
 
 MANIFEST="$ROOT_FOLDER/$manifest_filename"
-REPO_FOLDER_NAME="retrodeck-repo"
 
-# Determinating the flatpak build environment artifacts
+# Determine cooker postfix
 if [[ "$IS_COOKER" == "true" ]]; then
     POSTFIX="-cooker"
+else
+    POSTFIX=""
 fi
+
 FLATPAK_BUNDLE_NAME="RetroDECK$POSTFIX.flatpak"
-BUILD_FOLDER_NAME=retrodeck-flatpak$POSTFIX
 BUNDLE_SHA_NAME="RetroDECK.flatpak$POSTFIX.sha"
 FLATPAK_ARTIFACTS_NAME="RetroDECK-Artifact$POSTFIX"
 OUT_FOLDER="$ROOT_FOLDER/out"
 
 if [[ "$CICD" == "true" ]]; then
-    echo "OUT_FOLDER=$OUT_FOLDER" >> $GITHUB_ENV
+    echo "OUT_FOLDER=$OUT_FOLDER" >> "$GITHUB_ENV"
+fi
+
+## Use mktemp in CI/CD to store build and repo in /tmp
+if [[ "$CICD" == "true" ]]; then
+    echo "CI/CD mode detected: using temporary build and repo folders in /tmp."
+
+    ROOT_FOLDER_TMP=$(mktemp -d -p /tmp retrodeck-build-XXXXXX)
+    echo "Temporary build root: $ROOT_FOLDER_TMP"
+
+    BUILD_FOLDER_NAME="$ROOT_FOLDER_TMP/retrodeck-flatpak$POSTFIX"
+    REPO_FOLDER_NAME="$ROOT_FOLDER_TMP/retrodeck-repo"
+
+    echo "Temporary build folder: $BUILD_FOLDER_NAME"
+    echo "Temporary repo folder: $REPO_FOLDER_NAME"
+else
+    BUILD_FOLDER_NAME="$ROOT_FOLDER/retrodeck-flatpak$POSTFIX"
+    REPO_FOLDER_NAME="$ROOT_FOLDER/retrodeck-repo"
 fi
 
 ## INSTALLING DEPENDENCIES
-
 if [[ "$NO_BUILD" != "true" ]]; then
     echo ""
     echo "Installing dependencies..."
     curl "https://raw.githubusercontent.com/RetroDECK/components-template/main/automation_tools/install_dependencies.sh" | bash
     echo ""
 else
-    echo "Skipping dependency installation as NO_BUILD mode is enabled. I would have installed:"
+    echo "Skipping dependency installation (NO_BUILD mode)."
     curl "https://raw.githubusercontent.com/RetroDECK/components-template/main/automation_tools/install_dependencies.sh" | cat
 fi
 
@@ -128,24 +140,22 @@ fi
 
 # Generate a combination of words to create a build ID eg: "PizzaSushi"
 if [[ "$IS_COOKER" == "true" ]]; then
-    echo "Cooker mode is enabled, generating a cooker-specific build ID"
+    echo "Cooker mode: generating build ID."
     word1=$(shuf -n 1 $ROOT_FOLDER/automation_tools/codename_wordlist.txt)
-    capitalized_word1="$(tr '[:lower:]' '[:upper:]' <<< ${word1:0:1})${word1:1}"
+    capitalized1="$(tr '[:lower:]' '[:upper:]' <<< ${word1:0:1})${word1:1}"
     word2=$(shuf -n 1 $ROOT_FOLDER/automation_tools/codename_wordlist.txt)
-    capitalized_word2="$(tr '[:lower:]' '[:upper:]' <<< ${word2:0:1})${word2:1}"
-
+    capitalized2="$(tr '[:lower:]' '[:upper:]' <<< ${word2:0:1})${word2:1}"
     # Exporting build ID as a variable
-    export BUILD_ID="$capitalized_word1$capitalized_word2"
+    export BUILD_ID="$capitalized1$capitalized2"
 
     # creating the ./buildid file
-    echo $BUILD_ID > $ROOT_FOLDER/buildid
+    echo "$BUILD_ID" > "$ROOT_FOLDER/buildid"
 
     # Adding the buildid to the GitHub environment variables
     if [[ "$CICD" == "true" ]]; then
         echo "BUILD_ID=$BUILD_ID" >> $GITHUB_ENV
     fi
-
-    echo "Build ID is: \"$BUILD_ID\""
+    echo "Build ID: \"$BUILD_ID\""
 fi
 
 ## VERSION EXTRACTION
@@ -176,92 +186,51 @@ cp -f "$MANIFEST" "$MANIFEST_REWORKED"
 # Checking how the user wants to manage the caches
 # this exports a variable named use_cache that is used by manifest_placeholder_replacer script
 if [[ "$CICD" != "true" ]]; then
-    # read -rp "Do you want to use the hashes cache? If you're unsure just say no [Y/n] " use_cache_input
-    # use_cache_input=${use_cache_input:-Y}
-    # if [[ "$use_cache_input" =~ ^[Yy]$ ]]; then
-    #     export use_cache="true"
-    # else
-    #     export use_cache="false"
-    #     rm -f "placeholders.cache"
-    # fi
-
     echo "Do you want to clear the build cache?"
-    read -rp "Keeping the build cache can speed up the build process, but it might cause issues and should be cleared occasionally [y/N] " clear_cache_input
-    clear_cache_input=${clear_cache_input:-N}
-    if [[ "$clear_cache_input" =~ ^[Yy]$ ]]; then
-        # User chose to clear the build cache
-        echo "Clearing build cache..."
-        rm -rf "$ROOT_FOLDER/$BUILD_FOLDER_NAME" # eg: retrodeck-flatpak-cooker or retrodeck-flatpak-main
-        rm -rf "$ROOT_FOLDER/.flatpak-builder"
-        rm -rf "$ROOT_FOLDER/$REPO_FOLDER_NAME"  # eg: retrodeck-repo
-        rm -rf "$ROOT_FOLDER/buildid"
-        rm -rf "$ROOT_FOLDER/version"
-        echo "Do you want to also clear the components folder? (This will remove $ROOT_FOLDER/components)"
-        read -rp "Clear components folder? [y/N] " clear_components_input
-        clear_components_input=${clear_components_input:-N}
-        if [[ "$clear_components_input" =~ ^[Yy]$ ]]; then
-            echo "Clearing components folder..."
-            rm -rf "$ROOT_FOLDER/components"
-        fi
+    read -rp "[y/N] " clear_cache
+    clear_cache=${clear_cache:-N}
+    if [[ "$clear_cache" =~ ^[Yy]$ ]]; then
+        rm -rf "$ROOT_FOLDER/$BUILD_FOLDER_NAME" "$ROOT_FOLDER/.flatpak-builder" "$ROOT_FOLDER/$REPO_FOLDER_NAME" "$ROOT_FOLDER/buildid" "$ROOT_FOLDER/version"
         echo "Build cache cleared."
     fi
 else
-    echo "Skipping cache usage prompt as CI/CD mode is enabled."
     export use_cache="false"
 fi
 
-# if [[ "$SKIP_REPLACER" != "true" ]]; then
-#     # Executing the placeholder replacement script
-#     source "$ROOT_FOLDER/automation_tools/manifest_placeholder_replacer.sh"
-#     echo "Manifest placeholders replaced done"
-#     echo ""
-# else
-#     echo "Skipping placeholder replacement as SKIP_REPLACER is enabled."
-# fi
-
-# Adding the update portal permission to the cooker flatpak to allow the framework to update RetroDECK
-# This is not allowed on Flathub
+# Add portal permission in cooker mode
 if [[ "$IS_COOKER" == "true" ]]; then
     sed -i '/finish-args:/a \ \ - --talk-name=org.freedesktop.Flatpak' "$MANIFEST_REWORKED"
-    echo ""
-    echo "Added update portal permission to manifest"
-    echo ""
+    echo "Added update portal permission (cooker)."
 fi
 
-## BUILD TIME
+## BUILD TIME: ccache config
 
 # Checking if the user wants to use ccache, disabled in CI/CD mode
-if [[ "$CICD" != "true" ]]; then
-    if [[ "$FLATPAK_BUILDER_CCACHE" == "--ccache" ]]; then
-        if ! command -v ccache &> /dev/null; then
-            echo "Compiler cache (ccache) is not installed. Install it to be able to use the cache and speed up your builds"
-        else
-            export CC="ccache gcc"
-            export CXX="ccache g++"
-            echo "ccache mode is enabled and configured"
-        fi
+if [[ "$CICD" != "true" && "$FLATPAK_BUILDER_CCACHE" == "--ccache" ]]; then
+    if command -v ccache &>/dev/null; then
+        export CC="ccache gcc"
+        export CXX="ccache g++"
+        echo "ccache mode enabled."
+    else
+        echo "ccache not installed, skipping."
     fi
 else
-    echo "Skipping ccache configuration as CI/CD mode is enabled."
+    echo "Skipping ccache setup."
 fi
 
 if [[ "$NO_BUILD" != "true" ]]; then
-    mkdir -vp "$ROOT_FOLDER/$REPO_FOLDER_NAME"
-    mkdir -vp "$ROOT_FOLDER/$BUILD_FOLDER_NAME"
+    mkdir -vp "$REPO_FOLDER_NAME" "$BUILD_FOLDER_NAME"
 else
-    echo "Skipping folder creation as NO_BUILD mode is enabled."
-    echo -e "The following paths should have been created:"
-    echo "\"$ROOT_FOLDER/$REPO_FOLDER_NAME\""
-    echo "\"$ROOT_FOLDER/$BUILD_FOLDER_NAME\""
-    echo ""
+    echo "Skipping folder creation (NO_BUILD)."
+    echo "\"$REPO_FOLDER_NAME\""
+    echo "\"$BUILD_FOLDER_NAME\""
 fi
 
 if [[ "$NO_BUILD" == "true" ]]; then
-    echo "Skipping components download as NO_BUILD mode is enabled."
+    echo "Skipping component download (NO_BUILD)."
     return
 else
-    if [[ $CICD == "true" ]]; then
-        echo "Running in CI/CD mode, using the components from the repository"
+    if [[ "$CICD" == "true" ]]; then
         "$ROOT_FOLDER/automation_tools/manage_components.sh" --cicd "$ROOT_FOLDER/components"
     else
         "$ROOT_FOLDER/automation_tools/manage_components.sh" "$ROOT_FOLDER/components"
@@ -270,6 +239,7 @@ fi
 
 mkdir -vp "$OUT_FOLDER"
 
+# Flatpak builder command
 # Pass the args to Flatpak Builder
 if [[ -n "$FLATPAK_BUILD_EXTRA_ARGS" ]]; then
     echo "Passing additional args to flatpak builder: $FLATPAK_BUILD_EXTRA_ARGS"
@@ -287,8 +257,8 @@ fi
 command="flatpak-builder --user --force-clean $FLATPAK_BUILD_EXTRA_ARGS \
     --install-deps-from=flathub \
     --install-deps-from=flathub-beta \
-    --repo=\"$ROOT_FOLDER/$REPO_FOLDER_NAME\" $FLATPAK_BUILDER_CCACHE\
-    \"$ROOT_FOLDER/$BUILD_FOLDER_NAME\" \
+    --repo=\"$REPO_FOLDER_NAME\" $FLATPAK_BUILDER_CCACHE \
+    \"$BUILD_FOLDER_NAME\" \
     \"$MANIFEST_REWORKED\""
 
 # Execute the build command
@@ -300,34 +270,42 @@ if [[ "$NO_BUILD" != "true" ]]; then
     echo -e "Building manifest file $MANIFEST_REWORKED with command:\n$command"
     echo ""
     eval $command
-    # Building the bundle RetroDECK.flatpak after the download and build steps are done
-    flatpak build-bundle "$ROOT_FOLDER/$REPO_FOLDER_NAME" "$OUT_FOLDER/$FLATPAK_BUNDLE_NAME" net.retrodeck.retrodeck
-    sha256sum "$OUT_FOLDER/$FLATPAK_BUNDLE_NAME" >> "$OUT_FOLDER/$BUNDLE_SHA_NAME"
-else
-    echo "Skipping build as NO_BUILD mode is enabled."
-    echo "Generating fake artifacts for testing purposes or using the old ones if available"
-    if [[ ! -f "$OUT_FOLDER/$BUNDLE_SHA_NAME" ]]; then
-        echo "fake build" > "$OUT_FOLDER/$BUNDLE_SHA_NAME"
-    fi
-    if [[ ! -f "$OUT_FOLDER/$FLATPAK_BUNDLE_NAME" ]]; then
-        echo "fake bundle" > "$OUT_FOLDER/$FLATPAK_BUNDLE_NAME"
-    fi
-fi
 
-# Preparing the RetroDECK flatpak's artifacts in case we need to export them to Flathub
-if [[ "$NO_ARTIFACTS" != "true" && "$NO_BUILD" != "true" ]]; then
+    # Cleanup before bundle
+    echo ""
+    echo "Cleaning up build and cache to free disk space before bundle..."
+    rm -rf "$BUILD_FOLDER_NAME" "$ROOT_FOLDER/.flatpak-builder"
+    df -h
+
+    # Create the Flatpak bundle
+    echo ""
+    echo "Creating the Flatpak bundle..."
+    flatpak build-bundle "$REPO_FOLDER_NAME" "$OUT_FOLDER/$FLATPAK_BUNDLE_NAME" net.retrodeck.retrodeck
+    sha256sum "$OUT_FOLDER/$FLATPAK_BUNDLE_NAME" > "$OUT_FOLDER/$BUNDLE_SHA_NAME"
+
+    # Generate final artifact archive
+    echo ""
+    echo "Generating artifacts archive..."
     tar -czf "$OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.tar.gz" -C "$OUT_FOLDER" .
     ARTIFACTS_HASH=($(sha256sum "$OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.tar.gz"))
     echo "$ARTIFACTS_HASH" > "$OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.sha"
+    echo "Artifacts archive created."
 else
-    echo "Skipping Flathub artifacts preparation due to user preference or no-build mode."
-    echo "Generating fake artifacts for testing purposes or using the old ones if available"
-    if [[ ! -f "$OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.sha" ]]; then
-        echo "foo" > "$OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.sha"
-    fi
-    if [[ ! -f "$OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.tar.gz" ]]; then
-        echo "fake artifacts" > "$OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.tar.gz"
-    fi
+    echo "Skipping build (NO_BUILD)."
+    if [[ ! -f "$OUT_FOLDER/$BUNDLE_SHA_NAME" ]]; then echo "fake build" > "$OUT_FOLDER/$BUNDLE_SHA_NAME"; fi
+    if [[ ! -f "$OUT_FOLDER/$FLATPAK_BUNDLE_NAME" ]]; then echo "fake bundle" > "$OUT_FOLDER/$FLATPAK_BUNDLE_NAME"; fi
+fi
+
+# Final cleanup in CI/CD
+if [[ "$CICD" == "true" && "$NO_BUILD" != "true" ]]; then
+    echo ""
+    echo "---------------------------------------"
+    echo "  Cleanup for CI/CD to free disk space"
+    echo "---------------------------------------"
+
+    rm -rf "$BUILD_FOLDER_NAME" "$REPO_FOLDER_NAME" "$ROOT_FOLDER_TMP"
+    rm -rf "$ROOT_FOLDER/.flatpak-builder"
+    df -h
 fi
 
 echo ""
@@ -335,31 +313,19 @@ echo "RetroDECK $VERSION's build completed successfully!"
 echo "Generated files are in $OUT_FOLDER"
 ls "$OUT_FOLDER"
 
-echo "Do you want to install the built RetroDECK Flatpak?"
-read -rp "Install RetroDECK Flatpak? [y/N] " install_input
+# Optional install prompt
+read -rp "Do you want to install RetroDECK Flatpak? [y/N] " install_input
 install_input=${install_input:-N}
 if [[ "$install_input" =~ ^[Yy]$ ]]; then
     if flatpak list --app | grep -q "net.retrodeck.retrodeck"; then
-        if flatpak info --user net.retrodeck.retrodeck &>/dev/null; then
-            echo "RetroDECK is installed in user mode, updating it..."
-            flatpak install -y --user "$OUT_FOLDER/$FLATPAK_BUNDLE_NAME"
-            
-        elif flatpak info --system net.retrodeck.retrodeck &>/dev/null; then
-            echo "RetroDECK is installed in system mode, updating it..."
-            flatpak install -y --system "$OUT_FOLDER/$FLATPAK_BUNDLE_NAME"
-        else
-            echo "RetroDECK is installed, but could not determine installation scope."
-        fi
-        read -rp "Install as user or system? [u/s] " install_type
-        install_type=${install_type:-u}
-        if [[ "$install_type" =~ ^[Ss]$ ]]; then
-            echo "Installing RetroDECK Flatpak system-wide..."
-            flatpak install -y --system "$OUT_FOLDER/$FLATPAK_BUNDLE_NAME"
-        else
-            echo "Installing RetroDECK Flatpak for the current user..."
-            flatpak install -y --user "$OUT_FOLDER/$FLATPAK_BUNDLE_NAME"
-        fi
+        echo "Updating existing installation..."
     fi
+    read -rp "Install as user or system? [u/s] " install_type
+    install_type=${install_type:-u}
+    INSTALL_SCOPE="--user"
+    [[ "$install_type" =~ ^[Ss]$ ]] && INSTALL_SCOPE="--system"
+
+    flatpak install -y $INSTALL_SCOPE "$OUT_FOLDER/$FLATPAK_BUNDLE_NAME"
     echo "RetroDECK Flatpak installed successfully!"
 fi
 
