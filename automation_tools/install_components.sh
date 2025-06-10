@@ -3,10 +3,9 @@
 echo "Found the following components in the components directory:"
 ls -1 components/*.tar.gz || ( echo "Wait... No components found actually." && exit 1 )
 
-echo "DEBUG: GITHUB_ACTIONS is set to \"$GITHUB_ACTIONS\""
-
-if [ "$GITHUB_ACTIONS" = "true" ]; then
-    echo "Running in GitHub Actions, setting CICD to true."
+CICD="false"
+if [[ "$1" == "--cicd" ]]; then
+    echo "Running in CI/CD mode (--cicd argument detected)."
     CICD="true"
 fi
 
