@@ -38,6 +38,13 @@ jobs:
       VERSION: ${{ steps.build-retrodeck.outputs.VERSION }}
 
     steps:
+
+      - name: Clear caches
+        if: github.event_name == 'pull_request'
+        uses: theAngularGuy/clear-cache-of-pull-request@vX.X.X
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
       # Remove Stuck Mounts
       - name: Remove stuck mounts
         run: |
