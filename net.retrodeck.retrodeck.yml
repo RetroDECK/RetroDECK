@@ -176,6 +176,7 @@ modules:
   - name: install-components
     buildsystem: simple
     build-commands:
+      - cat automation_tools/install_components.sh
       - bash automation_tools/install_components.sh
     sources:
       - type: dir
