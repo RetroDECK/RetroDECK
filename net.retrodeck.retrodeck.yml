@@ -4,7 +4,7 @@ runtime-version: '24.08'
 sdk: org.freedesktop.Sdk
 base: org.electronjs.Electron2.BaseApp            # Needed for Steam ROM Manager
 base-version: "24.08"
-command: retrodeck.sh
+command: retrodeck
 
 add-extensions:
   org.freedesktop.Platform.ffmpeg-full:
@@ -232,6 +232,7 @@ modules:
       # Function libraries
       - mkdir -p ${FLATPAK_DEST}/libexec
       - cp -r functions/** "${FLATPAK_DEST}/libexec/"
+      - mv "${FLATPAK_DEST}/libexec/retrodeck.sh" "${FLATPAK_DEST}/bin/retrodeck"
 
       # Desktop entries
       - install -Dm755 net.retrodeck.retrodeck.desktop ${FLATPAK_DEST}/share/applications/net.retrodeck.retrodeck.desktop
@@ -241,7 +242,6 @@ modules:
       - cp -r config ${FLATPAK_DEST}/retrodeck/config/
 
       # Creating symlinks for a prettier access
-      - ln -s ${FLATPAK_DEST}/bin/retrodeck.sh ${FLATPAK_DEST}/bin/retrodeck
       - ln -s ${FLATPAK_DEST}/tools/configurator.sh ${FLATPAK_DEST}/bin/configurator
 
       # Install MIME Type
