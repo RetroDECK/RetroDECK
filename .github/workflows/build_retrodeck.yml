@@ -100,10 +100,13 @@ jobs:
             if [ -f "$file" ]; then
               size_bytes=$(stat -c%s "$file")
               if [ "$size_bytes" -ge $((2 * 1024 * 1024 * 1024)) ]; then
-                echo "Compressing and splitting $file (size: $size_bytes bytes)..."
-                gzip -c "$file" | split -b 1900M - "${file##*/}.gz.part"
+                echo "Compressing and splitting $file (size: $size_bytes bytes) with 7z..."
+
+                # 7z automatically creates .001, .002, ... when using -v option
+                7z a -t7z -v1900m "${file}.7z" "$file"
+
+                # Remove original file if desired
                 rm -f "$file"
-                mv "${file##*/}.gz.part"* "${OUT_FOLDER}/"
               fi
             fi
           done
