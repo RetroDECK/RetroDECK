@@ -1286,7 +1286,8 @@ quit_retrodeck() {
   exit
 }
 
-start_es-de(){
+start_esde(){
+  log d "Starting ES-DE"
   /bin/bash /app/retrodeck/components/es-de/component_launcher.sh "$@"
 }
 
@@ -1305,7 +1306,7 @@ start_retrodeck() {
   fi
 
   log i "Starting RetroDECK v$version"
-  start_es-de
+  start_esde
 }
 
 convert_to_markdown() {
