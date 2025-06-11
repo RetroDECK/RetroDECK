@@ -91,6 +91,8 @@ modules:
         - type: shell
           commands:
             - sed -i 's|/usr/local|${FLATPAK_DEST}|g' makefile.common
+      post-install:
+        - mv "${FLATPAK_DEST}/bin/7za" "${FLATPAK_DEST}/bin/7z"
       cleanup:
         - /man
 
