@@ -223,9 +223,6 @@ modules:
       - mv -f -t ${FLATPAK_DEST}/retrodeck res/binding_icons
       - mv -f -t ${FLATPAK_DEST}/retrodeck res/steam_grid
 
-      # RetroDECK core script
-      - install -Dm755 retrodeck.sh ${FLATPAK_DEST}/bin/retrodeck.sh
-
       # Tools
       - mkdir -p ${FLATPAK_DEST}/tools
       - cp -r tools/*.sh ${FLATPAK_DEST}/tools
@@ -235,6 +232,7 @@ modules:
       - mkdir -p ${FLATPAK_DEST}/libexec
       - cp -r functions/** "${FLATPAK_DEST}/libexec/"
       - mv "${FLATPAK_DEST}/libexec/retrodeck.sh" "${FLATPAK_DEST}/bin/retrodeck"
+      - chmod +x "${FLATPAK_DEST}/bin/retrodeck"
 
       # Desktop entries
       - install -Dm755 net.retrodeck.retrodeck.desktop ${FLATPAK_DEST}/share/applications/net.retrodeck.retrodeck.desktop
