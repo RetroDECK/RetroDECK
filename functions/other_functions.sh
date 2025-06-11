@@ -927,10 +927,7 @@ splash_screen() {
 }
 
 install_release() {
-  # Logging the release tag and URL
   log d "Attempting to install release: $1 from repo $update_repo"
-
-  # Construct the URL for the flatpak file
 
   if [ "$(get_setting_value "$rd_conf" "update_repo" "retrodeck" "options")" == "RetroDECK" ]; then
       iscooker=""
@@ -938,45 +935,87 @@ install_release() {
       iscooker="-cooker"
   fi
 
-  local flatpak_url="https://github.com/$git_organization_name/$update_repo/releases/download/$1/RetroDECK$iscooker.flatpak"
-  log d "Constructed flatpak URL: $flatpak_url"
+  local base_url="https://github.com/$git_organization_name/$update_repo/releases/download/$1"
+  local flatpak_name="RetroDECK$iscooker.flatpak"
 
-  # Confirm installation with the user
   rd_zenity --question --icon-name=net.retrodeck.retrodeck --no-wrap \
-          --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-          --title "RetroDECK Updater" \
-          --text="$1 will be now installed.\nThe update process may take several minutes.\n\nAfter the update is complete, RetroDECK will close. When you run it again, you will be using the latest version.\n\nDo you want to continue?"
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Updater" \
+    --text="$1 will now be installed.\nThe update process may take several minutes.\n\nAfter the update is complete, RetroDECK will close. When you run it again, you will be using the latest version.\n\nDo you want to continue?"
 
-  rc=$? # Capture return code
-  if [[ $rc == "1" ]]; then # If the user clicks "Cancel"
+  rc=$?
+  if [[ $rc == "1" ]]; then
     return 0
   fi
-  
+
+  download_7z_parts() {
+    local prefix="$1"
+    local found=false
+    for i in $(seq -w 1 99); do
+      part_file="${prefix}.7z.$(printf "%03d" $i)"
+      wget -q --no-clobber "$base_url/$part_file"
+      log d "Downloading part $part_file from $base_url/$part_file"
+      if [[ -f "$part_file" ]]; then
+        log d "Downloaded $part_file"
+        found=true
+      else
+        # Stop loop if part is missing (no gap expected)
+        break
+      fi
+    done
+    [[ "$found" == true ]]
+  }
+
   (
     mkdir -p "$rdhome/RetroDECK_Updates"
+    cd "$rdhome/RetroDECK_Updates"
 
-    # Download the flatpak file
-    wget -P "$rdhome/RetroDECK_Updates" "$flatpak_url" -O "$rdhome/RetroDECK_Updates/RetroDECK$iscooker.flatpak"
-    
-    # Check if the download was successful
-    if [[ $? -ne 0 ]]; then
+    # First, try downloading a plain .flatpak file
+    wget -q "$base_url/$flatpak_name" -O "$flatpak_name"
+    log d "Downloading $flatpak_name in $base_url/$flatpak_name, this may take a while..."
+    if [[ $? -eq 0 && -s "$flatpak_name" ]]; then
+      log d "Downloaded $flatpak_name successfully."
+      flatpak_file="$flatpak_name"
+    else
+      log d "Plain .flatpak not found, trying 7z split archive download..."
+
+      rm -f RetroDECK$iscooker.flatpak.7z.*
+
+      # Attempt to download 7z split parts
+      if download_7z_parts "RetroDECK$iscooker.flatpak"; then
+        log d "7z split parts downloaded. Extracting..."
+
+        # Use 7z to extract the first part; it will handle the rest automatically
+        if 7z x "RetroDECK$iscooker.flatpak.7z.001"; then
+          flatpak_file="RetroDECK$iscooker.flatpak"
+          log d "Successfully extracted $flatpak_file"
+          log d "Folder contents after extraction:"
+          ls -l
+        else
+          log e "Failed to extract 7z split archive."
+          configurator_generic_dialog "Error" "Failed to extract the split archive. Please check the downloaded files."
+          rm -f RetroDECK$iscooker.flatpak.7z.*
+          return 1
+        fi
+      else
+        log e "No 7z split archive parts found."
+      fi
+    fi
+
+    # Final check: if flatpak file does not exist, show error and exit
+    if [[ ! -f "$flatpak_file" ]]; then
       configurator_generic_dialog "Error" "Failed to download the flatpak file. Please check the release tag and try again."
       return 1
     fi
 
-    # Remove the current version before installing the new one to avoid duplicates
     flatpak-spawn --host flatpak remove --noninteractive -y net.retrodeck.retrodeck
-    
-    # Install the new version
-    flatpak-spawn --host flatpak install --user --bundle --noninteractive -y "$rdhome/RetroDECK_Updates/RetroDECK$iscooker.flatpak"
-    
-    # Cleanup old bundles to save space
+    flatpak-spawn --host flatpak install --user --bundle --noninteractive -y "$flatpak_file"
     rm -rf "$rdhome/RetroDECK_Updates"
   ) |
   rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
-  --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
-  --title "RetroDECK Updater" \
-  --text="RetroDECK is updating to the selected version, please wait."
+    --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
+    --title "RetroDECK Updater" \
+    --text="RetroDECK is updating to the selected version, please wait."
 
   configurator_generic_dialog "RetroDECK Online Update" "The update process is now complete!\n\nRetroDECK will now quit."
   quit_retrodeck

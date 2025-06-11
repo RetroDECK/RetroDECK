@@ -67,21 +67,55 @@ ls -lah
 
 # Create the manifest for flathub
 manifest='net.retrodeck.retrodeck.yml'
-sed -n '/cleanup:/q;p' $gits_folder/RetroDECK/net.retrodeck.retrodeck.yml > $manifest
-sed -i '/^[[:space:]]*#/d' $manifest
-sed -i 's/[[:space:]]*#.*$//' $manifest
-cat << EOF >> $manifest
+sed -n '/cleanup:/q;p' "$gits_folder/RetroDECK/net.retrodeck.retrodeck.yml" > "$manifest"
+sed -i '/^[[:space:]]*#/d' "$manifest"
+sed -i 's/[[:space:]]*#.*$//' "$manifest"
+
+# Fetch the asset list from the latest release
+release_json=$(curl -s https://api.github.com/repos/RetroDECK/Artifacts/releases/latest)
+artifacts_sha_link=$(echo "$release_json" | jq -r '.assets[] | select(.name == "RetroDECK-Artifact.sha").browser_download_url')
+
+# Check if there are .7z split parts
+mapfile -t part_urls < <(echo "$release_json" | jq -r '.assets[] | select(.name | test("\\.7z\\.\\d{3}$")) | .browser_download_url')
+mapfile -t part_names < <(echo "$release_json" | jq -r '.assets[] | select(.name | test("\\.7z\\.\\d{3}$")) | .name')
+
+cat << EOF >> "$manifest"
 modules:
 
     - name: RetroDECK
       buildsystem: simple
       build-commands:
+EOF
+
+if [[ ${#part_urls[@]} -gt 0 ]]; then
+  echo "Found 7z split parts! Adding them as sources in manifest..."
+  cat << EOF >> "$manifest"
+       - 7z x RetroDECK-Artifact.7z.001 -o. || (echo "Failed to extract 7z split archive" && exit 1)
+       - cp -rn files/* /app || echo "Some files have been skipped"
+      sources:
+EOF
+  for i in "${!part_urls[@]}"; do
+    sha256=$(curl -sL "${artifacts_sha_link}" | grep "${part_names[$i]}" | cut -d' ' -f1)
+    cat << EOF >> "$manifest"
+        - type: file
+          url: ${part_urls[$i]}
+          sha256: $sha256
+          dest: RetroDECK-Artifact.${part_names[$i]##*.}
+EOF
+  done
+else
+  echo "No 7z split parts found, using .tar.gz as source in manifest..."
+  artifact_url=$(echo "$release_json" | jq -r '.assets[] | select(.name == "RetroDECK-Artifact.tar.gz").browser_download_url')
+  artifact_sha=$(curl -sL "$artifacts_sha_link")
+  cat << EOF >> "$manifest"
+       - tar -xf RetroDECK-Artifact.tar.gz -C . || (echo "Failed to extract tar.gz" && exit 1)
        - cp -rn files/* /app || echo "Some files have been skipped"
       sources:
         - type: archive
-          url: $artifacts_link
-          sha256: $(curl -sL "$artifacts_sha_link")
+          url: $artifact_url
+          sha256: $artifact_sha
 EOF
+fi
 
 # Create a flathub.json file specifying the architecture
 cat << EOF >> flathub.json
