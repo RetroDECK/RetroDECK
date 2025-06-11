@@ -82,6 +82,18 @@ mapfile -t part_names < <(echo "$release_json" | jq -r '.assets[] | select(.name
 cat << EOF >> "$manifest"
 modules:
 
+    - name: p7zip
+      no-autogen: true
+      sources:
+        - type: archive
+          url: https://github.com/p7zip-project/p7zip/archive/v17.04/p7zip-v17.04.tar.gz
+          sha256: ea029a2e21d2d6ad0a156f6679bd66836204aa78148a4c5e498fe682e77127ef
+        - type: shell
+          commands:
+            - sed -i 's|/usr/local|${FLATPAK_DEST}|g' makefile.common
+      cleanup:
+        - /man
+
     - name: RetroDECK
       buildsystem: simple
       build-commands:
