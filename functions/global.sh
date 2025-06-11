@@ -50,8 +50,8 @@ for file in /app/libexec/*.sh; do
 done
 
 # Base dir for all installed RetroDECK components
-rd_components="/app/retrodeck/components"
-rd_shared_libs="/app/retrodeck/components/shared-libs"
+export rd_components="/app/retrodeck/components"
+export rd_shared_libs="/app/retrodeck/components/shared-libs"
 
 source_component_functions "retrodeck" # Source this first as future functions will need to know these paths
 source_component_functions "internal"
