@@ -936,7 +936,9 @@ install_release() {
   fi
 
   local base_url="https://github.com/$git_organization_name/$update_repo/releases/download/$1"
-  local flatpak_name="RetroDECK$iscooker.flatpak"
+
+  # Query the release and list the assets for debugging/logging
+  local release_info=$(curl -s "https://api.github.com/repos/$git_organization_name/$update_repo/releases/tags/$1")
 
   rd_zenity --question --icon-name=net.retrodeck.retrodeck --no-wrap \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -948,68 +950,80 @@ install_release() {
     return 0
   fi
 
-  download_7z_parts() {
-    local prefix="$1"
-    local found=false
-    for i in $(seq -w 1 99); do
-      part_file="${prefix}.7z.$(printf "%03d" $i)"
-      wget -q --no-clobber "$base_url/$part_file"
-      log d "Downloading part $part_file from $base_url/$part_file"
-      if [[ -f "$part_file" ]]; then
-        log d "Downloaded $part_file"
-        found=true
-      else
-        # Stop loop if part is missing (no gap expected)
-        break
-      fi
-    done
-    [[ "$found" == true ]]
-  }
-
   (
     mkdir -p "$rdhome/RetroDECK_Updates"
     cd "$rdhome/RetroDECK_Updates"
 
-    # First, try downloading a plain .flatpak file
-    wget -q "$base_url/$flatpak_name" -O "$flatpak_name"
-    log d "Downloading $flatpak_name in $base_url/$flatpak_name, this may take a while..."
-    if [[ $? -eq 0 && -s "$flatpak_name" ]]; then
-      log d "Downloaded $flatpak_name successfully."
-      flatpak_file="$flatpak_name"
-    else
-      log d "Plain .flatpak not found, trying 7z split archive download..."
+    log d "Assets for release $1:"
+    asset_names=$(echo "$release_info" | jq -r '.assets[].browser_download_url')
+    log d "Asset filenames for release $1:"
+    assets_list=()
+    while IFS= read -r asset; do
+      log d "  $asset"
+      assets_list+=("$asset")
+    done <<< "$asset_names"
 
-      rm -f RetroDECK$iscooker.flatpak.7z.*
-
-      # Attempt to download 7z split parts
-      if download_7z_parts "RetroDECK$iscooker.flatpak"; then
-        log d "7z split parts downloaded. Extracting..."
-
-        # Use 7z to extract the first part; it will handle the rest automatically
-        if 7z x "RetroDECK$iscooker.flatpak.7z.001"; then
-          flatpak_file="RetroDECK$iscooker.flatpak"
-          log d "Successfully extracted $flatpak_file"
-          log d "Folder contents after extraction:"
-          ls -l
-        else
-          log e "Failed to extract 7z split archive."
-          configurator_generic_dialog "Error" "Failed to extract the split archive. Please check the downloaded files."
-          rm -f RetroDECK$iscooker.flatpak.7z.*
+    # Find all files matching RetroDECK*.flatpak* in the release assets and store them in a list variable
+    flatpak_assets=()
+    for asset in "${assets_list[@]}"; do
+      if [[ "$asset" == *".flatpak"* ]]; then
+        flatpak_assets+=("$asset")
+        log d "Found flatpak asset: $asset"
+        log d "downloading it to $rdhome/RetroDECK_Updates"
+        if ! wget -q -O "$rdhome/RetroDECK_Updates/$(basename "$asset")" "$asset"; then
+          log e "Failed to download $asset"
+          configurator_generic_dialog "Error" "Failed to download the flatpak file: RetroDECK update aborted.\nPlease check your network connection and try again."
+          log d "$rdhome/RetroDECK_Updates folder contents:\n$(ls -l "$rdhome/RetroDECK_Updates")"
           return 1
         fi
+      fi
+    done
+
+    # Check for any .7z or .7z.001 files in the download folder and extract them
+    local current_dir=$(pwd)
+    cd "$rdhome/RetroDECK_Updates"
+    for archive in *.7z *.7z.001; do
+      if [[ -f "$archive" ]]; then
+        log d "Found archive $archive, extracting it..."
+        if ! 7z x -aoa "$archive" && rm -f *.7z*; then
+          log e "Failed to extract $archive"
+          configurator_generic_dialog "Error" "Failed to extract the split archive: RetroDECK update aborted."
+          log d "$rdhome/RetroDECK_Updates folder contents:\n$(ls -l "$rdhome/RetroDECK_Updates")"
+          rm -rf "$rdhome/RetroDECK_Updates"
+          return 1
+        fi
+      fi
+    done
+    cd "$current_dir"
+
+    # Find the .flatpak file and verify its SHA256 checksum if a .sha file exists
+    flatpak_name="RetroDECK$iscooker.flatpak"
+    flatpak_path="$rdhome/RetroDECK_Updates/$flatpak_name"
+    sha_file="$rdhome/RetroDECK_Updates/RetroDECK.flatpak$iscooker.sha"
+
+    if [[ -f "$flatpak_path" && -f "$sha_file" ]]; then
+      log d "Found $flatpak_name and corresponding SHA file: $sha_file"
+      expected_sha=$(cat "$sha_file" | awk '{print $1}')
+      actual_sha=$(sha256sum "$flatpak_path" | awk '{print $1}')
+      if [[ "$expected_sha" != "$actual_sha" ]]; then
+        log e "SHA256 mismatch for $flatpak_name! Expected: $expected_sha, Actual: $actual_sha"
+        if [[ $(configurator_generic_question_dialog "SHA256 Mismatch" "The SHA256 checksum for $flatpak_name does not match.\nThe file may be corrupted or incomplete.\n\nDo you want to continue with the installation anyway?") != "true" ]]; then
+          rm -rf "$rdhome/RetroDECK_Updates"
+          return 1
+        fi
+        log w "User decided to continue with installation despite SHA256 mismatch for $flatpak_name"
+        log w "Expected hash: $expected_sha"
+        log w "Actual hash:   $actual_sha"
       else
-        log e "No 7z split archive parts found."
+        log d "SHA256 checksum verified for $flatpak_name"
       fi
     fi
 
-    # Final check: if flatpak file does not exist, show error and exit
-    if [[ ! -f "$flatpak_file" ]]; then
-      configurator_generic_dialog "Error" "Failed to download the flatpak file. Please check the release tag and try again."
-      return 1
-    fi
-
+    # Proceed with Flatpak update
     flatpak-spawn --host flatpak remove --noninteractive -y net.retrodeck.retrodeck
     flatpak-spawn --host flatpak install --user --bundle --noninteractive -y "$flatpak_file"
+
+    # Cleanup
     rm -rf "$rdhome/RetroDECK_Updates"
   ) |
   rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
