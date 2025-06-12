@@ -66,7 +66,8 @@
 		"sdcard": "/run/media/mmcblk0p1",
 		"states_folder": "/run/media/tim/DATA/retrodeck/states",
 		"texture_packs_folder": "/run/media/tim/DATA/retrodeck/texture_packs",
-		"themes_folder": "/run/media/tim/DATA/retrodeck/themes"
+		"themes_folder": "/run/media/tim/DATA/retrodeck/themes",
+		"rd_home_storage_path": "/run/media/tim/DATA/retrodeck/storage"
 	},
 	"quick_resume": {
 		"retroarch": true
