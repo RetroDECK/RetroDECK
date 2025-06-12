@@ -4,7 +4,7 @@ ES_SYSTEMS_FILE="../ES-DE/resources/systems/linux/es_systems.xml"
 MIME_FILE="config/retrodeck/net.retrodeck.retrodeck.mime.xml"
 
 # List of extensions to ignore
-IGNORED_EXTENSIONS=". .appimage .cue .png .po"
+IGNORED_EXTENSIONS=". .appimage .png .po .bin .conf .cue"
 
 # Check if xmlstarlet is installed
 if ! command -v xmlstarlet &> /dev/null; then
@@ -32,15 +32,21 @@ EOF
 
 # Add new <glob> elements to the MIME file
 while IFS= read -r ext; do
+    # Skip empty lines
+    [[ -z "$ext" ]] && continue
+
+    # Remove leading dot if present
+    ext="${ext#.}"
+
     # Skip ignored extensions
-    if [[ "$IGNORED_EXTENSIONS" =~ (^|[[:space:]])"$ext"($|[[:space:]]) ]]; then
-        echo "Skipping ignored extension: $ext"
+    if [[ "$IGNORED_EXTENSIONS" =~ (^|[[:space:]])".$ext"($|[[:space:]]) ]]; then
+        echo "Skipping ignored extension: .$ext"
         continue
     fi
-    
+
     # Add the <glob> element for the extension
-    echo "Adding glob pattern for extension: $ext"
-    echo "        <glob pattern=\"*$ext\"/>" >> "$MIME_FILE"
+    echo "Adding glob pattern for extension: .$ext"
+    echo "        <glob pattern=\"*.$ext\"/>" >> "$MIME_FILE"
 done < "$EXTENSIONS_FILE"
 
 # Close the XML tags
