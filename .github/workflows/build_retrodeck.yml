@@ -292,35 +292,21 @@ jobs:
             echo "REPO_NAME=Cooker" >> $GITHUB_ENV
           fi
 
-      # Publish Artifacts
-      - name: Publish Artifacts
-        uses: ncipollo/release-action@v1
-        with:
-          tag: ${{ env.TAG }}
-          name: "RetroDECK Artifacts - ${{ env.TAG }}"
-          body: "Flathub artifacts for version ${{ env.TAG }}"
-          artifacts: "retrodeck-artifacts/RetroDECK-Artifact*.tar.gz,retrodeck-artifacts/RetroDECK-Artifact*.sha"
-          allowUpdates: true
-          omitBodyDuringUpdate: true
-          makeLatest: ${{ env.MAKE_LATEST }}
-          repo: Artifacts
-          token: ${{ steps.generate-rekku-token.outputs.token }}
-
-            # Publish Release
+      # Publish Release
       - name: Publish release
         uses: ncipollo/release-action@v1
         with:
           tag: ${{ env.TAG }}
           name: "RetroDECK ${{ env.TAG }}"
           body: ${{ steps.generate-body.outputs.RELEASE_BODY }}
-          artifacts: "retrodeck-artifacts/RetroDECK-Artifact*.tar.gz,retrodeck-artifacts/RetroDECK-Artifact*.sha"
+          artifacts: "retrodeck-artifacts/*"
           allowUpdates: true
           omitBodyDuringUpdate: true
           makeLatest: ${{ env.MAKE_LATEST }}
           repo: ${{ env.REPO_NAME }}
           token: ${{ steps.generate-rekku-token.outputs.token }}
 
-      - name: Post PR comment with artifacts
+      - name: Post PR comment with artifacts link
         if: github.event_name == 'pull_request_target' || github.event_name == 'pull_request'
         uses: marocchino/sticky-pull-request-comment@v2
         with:
