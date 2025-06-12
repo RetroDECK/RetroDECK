@@ -292,8 +292,11 @@ if [[ "$NO_BUILD" != "true" ]]; then
     echo "Artifacts archive created."
 else
     echo "Skipping build (NO_BUILD)."
-    if [[ ! -f "$OUT_FOLDER/$BUNDLE_SHA_NAME" ]]; then echo "fake build" > "$OUT_FOLDER/$BUNDLE_SHA_NAME"; fi
+    # Create fake bundle, artifacts and sha if they don't exist
+    if [[ ! -f "$OUT_FOLDER/$BUNDLE_SHA_NAME" ]]; then echo "fake bundle sha" > "$OUT_FOLDER/$BUNDLE_SHA_NAME"; fi
     if [[ ! -f "$OUT_FOLDER/$FLATPAK_BUNDLE_NAME" ]]; then echo "fake bundle" > "$OUT_FOLDER/$FLATPAK_BUNDLE_NAME"; fi
+    if [[ ! -f "$OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.tar.gz" ]]; then echo "fake artifact" > "$OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.tar.gz"; fi
+    if [[ ! -f "$OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.sha" ]]; then echo "fake artifacts sha" > "$OUT_FOLDER/$FLATPAK_ARTIFACTS_NAME.sha"; fi
 fi
 
 # Final cleanup in CI/CD
