@@ -296,6 +296,11 @@ jobs:
             echo "REPO_NAME=Cooker" >> $GITHUB_ENV
           fi
 
+      - name: "[DEBUG] Listing produced artifacts"
+        run: |
+          echo "Produced artifacts:"
+          ls -lah retrodeck-artifacts/out
+
       # Publish Release
       - name: Publish release
         uses: ncipollo/release-action@v1
