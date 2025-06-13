@@ -629,19 +629,40 @@ get_steam_user() {
   fi
 }
 
-populate_steamuser_srm(){
-  # Populating SRM config with Steam Username
-      log d "Populating Steam Rom Manager config file with Steam Username"
-      jq --arg username "$steam_username" '
-        map(
-          if .userAccounts.specifiedAccounts then
-            .userAccounts.specifiedAccounts = [$username]
-          else
-            .
-          end
-        )
-      ' "$XDG_CONFIG_HOME/steam-rom-manager/userData/userConfigurations.json" > "$XDG_CONFIG_HOME/steam-rom-manager/userData/userConfigurations.json.tmp" &&
-      mv "$XDG_CONFIG_HOME/steam-rom-manager/userData/userConfigurations.json.tmp" "$XDG_CONFIG_HOME/steam-rom-manager/userData/userConfigurations.json"
+populate_steamuser_srm() {
+  config_file="$XDG_CONFIG_HOME/steam-rom-manager/userData/userConfigurations.json"
+  temp_file="${config_file}.tmp"
+
+  if [[ ! -f "$config_file" ]]; then
+    log e "Config file not found: $config_file"
+    return 1
+  fi
+
+  log d "Validating $config_file..."
+  if ! jq empty "$config_file" >/dev/null 2>&1; then
+    log e "File is not valid JSON: $config_file"
+    return 1
+  fi
+
+  log d "Applying jq transformation with username: $steam_username"
+  jq --arg username "$steam_username" '
+    map(
+      if .userAccounts.specifiedAccounts then
+        .userAccounts.specifiedAccounts = [$username]
+      else
+        .
+      end
+    )
+  ' "$config_file" > "$temp_file"
+
+  if [[ $? -eq 0 ]]; then
+    mv "$temp_file" "$config_file"
+    log i "Successfully updated $config_file"
+  else
+    log e "jq failed to write output"
+    rm -f "$temp_file"
+    return 1
+  fi
 }
 
 prepare_component() {
