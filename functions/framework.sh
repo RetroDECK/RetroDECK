@@ -669,11 +669,40 @@ prepare_component() {
   fi
   log d "Preparing component: \"$component\", action: \"$action\""
 
-  # Read install components component_prepare.sh files
-  while IFS= read -r prepare_component_file; do
-    log d "Found component file $prepare_component_file"
-    source "$prepare_component_file"
-  done < <(find "$rd_components" -maxdepth 2 -mindepth 2 -type f -name "component_prepare.sh")
+  # If component is "all", iterate over all components in $rd_components
+  if [[ "$component" == "all" ]]; then
+    for comp_dir in "$rd_components"/*; do
+      comp=$(basename "$comp_dir")
+      found_this_component="false"
+      while IFS= read -r prepare_component_file; do
+        if [[ "$(basename "$(dirname "$prepare_component_file")")" == "$comp" ]]; then
+          log d "Found component file $prepare_component_file for component $comp"
+          source "$prepare_component_file"
+          found_this_component="true"
+          component_found="true"
+        fi
+      done < <(find "$rd_components" -maxdepth 2 -mindepth 2 -type f -name "component_prepare.sh")
+      if [[ "$found_this_component" == "false" ]]; then
+        log w "Component $comp not found"
+      fi
+    done
+  else
+    # Read install components component_prepare.sh files for specified components
+    for comp in $component; do
+      found_this_component="false"
+      while IFS= read -r prepare_component_file; do
+        if [[ "$(basename "$(dirname "$prepare_component_file")")" == "$comp" ]]; then
+          log d "Found component file $prepare_component_file for component $comp"
+          source "$prepare_component_file"
+          found_this_component="true"
+          component_found="true"
+        fi
+      done < <(find "$rd_components" -maxdepth 2 -mindepth 2 -type f -name "component_prepare.sh")
+      if [[ "$found_this_component" == "false" ]]; then
+        log w "Component $comp not found"
+      fi
+    done
+  fi
 
   if [[ $component_found == "false" ]]; then
     log e "Supplied component $component not found, not resetting"
