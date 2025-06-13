@@ -47,6 +47,7 @@ sudo cp -vfr "config/"** "$app/retrodeck/config/"
 sudo cp -vfr "tools" "$app"
 sudo cp -vfr "retrodeck.sh" "$app/bin/"
 sudo cp -vfr "functions/"** "$app/libexec/"
+rm -rf "$app/libexec/retrodeck.sh"
 sudo cp -vfr "net.retrodeck.retrodeck.metainfo.xml" "$app/share/metainfo/net.retrodeck.retrodeck.metainfo.xml"
 echo ""
 
