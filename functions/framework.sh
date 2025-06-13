@@ -658,6 +658,23 @@ prepare_component() {
     retrodeck
   fi
 
+  if [[ "$1" == "--list" ]]; then
+    log i "Available components:"
+    components=()
+    for comp_dir in "$rd_components"/*; do
+      comp=$(basename "$comp_dir")
+      if [[ -f "$comp_dir/component_prepare.sh" ]]; then
+        components+=("$comp")
+      fi
+    done
+    if [[ ${#components[@]} -gt 0 ]]; then
+      # Join with comma and space
+      IFS=', ' ; echo "${components[*]}"
+      unset IFS
+    fi
+    exit 0
+  fi
+
   action="$1"
   component="$2"
   call_source="$3"
