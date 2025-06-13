@@ -9,6 +9,10 @@ set_setting_value() {
   local current_section_name=$(sed -e 's/%/\\%/g' <<< "$5")
 
   log d "Setting $setting_name_to_change=$setting_value_to_change in $1"
+  if [[ ! -f "$1" ]]; then
+    log e "File $1 does not exist, cannot set setting $setting_name_to_change"
+    return 1
+  fi
 
   case $4 in
 
