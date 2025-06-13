@@ -1326,19 +1326,6 @@ convert_to_markdown() {
       -e '/<[^>]*>/d' > "$output_file" # Remove any other XML tags and output to .md file
 }
 
-retroarch_updater() {
-  # This function updates RetroArch by synchronizing shaders, cores, and border overlays.
-  # It should be called whenever RetroArch is reset or updated.
-
-  log i "Running RetroArch updater"
-  
-  # Synchronize cores from the application share directory to the RetroArch cores directory
-  rsync -rlD --mkpath "/app/share/libretro/cores/" "$XDG_CONFIG_HOME/retroarch/cores/" && log d "RetroArch cores updated correctly"
-  
-  # Synchronize border overlays from the RetroDeck configuration directory to the RetroArch overlays directory
-  rsync -rlD --mkpath "/app/retrodeck/config/retroarch/borders/" "$XDG_CONFIG_HOME/retroarch/overlays/borders/" && log d "RetroArch overlays and borders updated correctly"
-}
-
 portmaster_show(){
   log d "Setting PortMaster visibility in ES-DE"
   if [ "$1" = "true" ]; then
