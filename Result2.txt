@@ -1,0 +1,154 @@
+./.git/hooks/applypatch-msg.sample:commitmsg="$(git rev-parse --git-path hooks/commit-msg)"
+./.git/hooks/pre-applypatch.sample:precommit="$(git rev-parse --git-path hooks/pre-commit)"
+./.git/hooks/pre-commit.sample:allownonascii=$(git config --type=bool hooks.allownonascii)
+./.git/hooks/pre-push.sample:remote="$1"
+./.git/hooks/pre-push.sample:url="$2"
+./.git/hooks/pre-push.sample:zero=$(git hash-object --stdin </dev/null | tr '[0-9a-f]' '0')
+./.git/hooks/pre-rebase.sample:publish=next
+./.git/hooks/pre-rebase.sample:basebranch="$1"
+./.git/hooks/pre-rebase.sample:not_in_master=`git rev-list --pretty=oneline ^master "$topic"`
+./.git/hooks/pre-rebase.sample:only_next_1=`git rev-list ^master "^$topic" ${publish} | sort`
+./.git/hooks/pre-rebase.sample:only_next_2=`git rev-list ^master           ${publish} | sort`
+./.git/hooks/prepare-commit-msg.sample:COMMIT_MSG_FILE=$1
+./.git/hooks/prepare-commit-msg.sample:COMMIT_SOURCE=$2
+./.git/hooks/prepare-commit-msg.sample:SHA1=$3
+./.git/hooks/push-to-checkout.sample:commit=$1
+./.git/hooks/update.sample:refname="$1"
+./.git/hooks/update.sample:oldrev="$2"
+./.git/hooks/update.sample:newrev="$3"
+./.git/hooks/update.sample:allowunannotated=$(git config --type=bool hooks.allowunannotated)
+./.git/hooks/update.sample:allowdeletebranch=$(git config --type=bool hooks.allowdeletebranch)
+./.git/hooks/update.sample:denycreatebranch=$(git config --type=bool hooks.denycreatebranch)
+./.git/hooks/update.sample:allowdeletetag=$(git config --type=bool hooks.allowdeletetag)
+./.git/hooks/update.sample:allowmodifytag=$(git config --type=bool hooks.allowmodifytag)
+./.git/hooks/update.sample:projectdesc=$(sed -e '1q' "$GIT_DIR/description")
+./.git/hooks/update.sample:zero=$(git hash-object --stdin </dev/null | tr '[0-9a-f]' '0')
+./automation_tools/flathub_push_main.sh:rd_branch="main"
+./automation_tools/flathub_push_main.sh:flathub_target_repo='flathub/net.retrodeck.retrodeck'
+./automation_tools/flathub_push_main.sh:retrodeck_repo='RetroDECK/RetroDECK'
+./automation_tools/flathub_push_main.sh:relname=$(curl -s "https://api.github.com/repos/$retrodeck_repo/releases" | jq -r '[.[] | select(.prerelease == true and (.published_at | fromdateiso8601) > 1735689600)][0].tag_name // empty')
+./automation_tools/flathub_push_main.sh:files_to_copy=('LICENSE' 'README.md' 'other_licenses.txt' 'net.retrodeck.retrodeck.yml' 'net.retrodeck.retrodeck.metainfo.xml')
+./automation_tools/flathub_push_main.sh:manifest='net.retrodeck.retrodeck.yml'
+./automation_tools/libman.sh:openh264_target="${FLATPAK_DEST}/lib/libopenh264.so.2.5.1"
+./automation_tools/libman.sh:openh264_symlink="${FLATPAK_DEST}/lib/libopenh264.so.7"
+./automation_tools/manifest_placeholder_replacer.sh:rd_manifest="$ROOT_FOLDER/net.retrodeck.retrodeck.yml"
+./automation_tools/manifest_placeholder_replacer.sh:automation_task_list="$ROOT_FOLDER/automation_tools/automation_task_list.cfg"
+./automation_tools/manifest_placeholder_replacer.sh:cache_file="$ROOT_FOLDER/placeholders.cache"
+./automation_tools/manifest_placeholder_replacer.sh:current_branch=$(get_current_branch)
+./automation_tools/manifest_placeholder_replacer.sh:current_repo_url=$(get_repo_url)
+./automation_tools/metainfo_management.sh:metainfo_version=$(fetch_metainfo_version)
+./automation_tools/metainfo_management.sh:metainfo_file="net.retrodeck.retrodeck.metainfo.xml"
+./automation_tools/metainfo_management.sh:today_date=$(date +"%Y-%m-%d")
+./automation_tools/metainfo_management.sh:release_snippet="\
+./automation_tools/metainfo_management.sh:xml_content=$(cat "$metainfo_file")
+./automation_tools/metainfo_management.sh:wiki="/tmp/wiki/Version-history:-Patch-Notes.md"
+./automation_tools/metainfo_management.sh:latest_version_notes=""
+./automation_tools/metainfo_management.sh:version_number="${latest_version_notes#*# RetroDECK }"  # Remove text before "# RetroDECK "
+./automation_tools/metainfo_management.sh:version_number="${version_number%% -*}"                # Remove text after " - "
+./automation_tools/metainfo_management.sh:sections=$(echo "$latest_version_notes" | awk '/##/ { print; }')
+./automation_tools/metainfo_management.sh:section_list=""
+./automation_tools/metainfo_management.sh:current_section=""
+./automation_tools/metainfo_management.sh:release_description="${release_snippet/RELEASE_NOTES_PLACEHOLDER/$section_list}"
+./automation_tools/metainfo_management.sh:modified_xml_content="${xml_content/<releases>/$release_description}"
+./automation_tools/post_build_check.sh:FLATPAK_APP_ID="net.retrodeck.retrodeck"
+./automation_tools/post_build_check.sh:LOG_FILE="$HOME/retrodeck-post-build-check.log"
+./automation_tools/post_build_check.sh:GLOBAL_SH_PATH="/app/libexec/global.sh"
+./automation_tools/post_build_check.sh:TIMEOUT=3
+./automation_tools/search_missing_libs.sh:missing_libs=$(flatpak run --command=sh net.retrodeck.retrodeck -c \
+./automation_tools/install_components.sh:archives=(components/*.tar.gz)
+./automation_tools/manage_components.sh:CICD="false"
+./automation_tools/manage_components.sh:COMPONENTS_DIR=""
+./automation_tools/manage_components.sh:POSITIONAL_ARGS=()
+./developer_toolbox/api_test_client.sh:rd_api_dir="$HOME/.var/app/net.retrodeck.retrodeck/config/retrodeck/api"
+./developer_toolbox/api_test_client.sh:REQUEST_PIPE="$rd_api_dir/retrodeck_api_pipe"
+./developer_toolbox/api_test_client.sh:ACTION=""
+./developer_toolbox/api_test_client.sh:TIMEOUT=5
+./developer_toolbox/cook_okonomiyaki.sh:branches=(
+./developer_toolbox/cook_okonomiyaki.sh:current_branch=$(git branch --show-current)
+./developer_toolbox/hooks/pre-commit:lint_list=(
+./developer_toolbox/lint_json.sh:json=$1
+./developer_toolbox/mime-populator.sh:MIME_FILE="config/retrodeck/net.retrodeck.retrodeck.mime.xml"
+./developer_toolbox/mime-populator.sh:IGNORED_EXTENSIONS=". .appimage .cue .png .po"
+./developer_toolbox/mime-populator.sh:EXTENSIONS_FILE=$(mktemp)
+./developer_toolbox/runtime_checker.sh:ORG="RetroDECK"
+./developer_toolbox/runtime_checker.sh:repos=$(curl -s "https://api.github.com/orgs/$ORG/repos?per_page=100" | jq -r '.[] | select(has("archived") and .archived == false) | .name')
+./developer_toolbox/inject.sh:flatpak_user_installation="$HOME/.local/share/flatpak/app/net.retrodeck.retrodeck/current/active/files"
+./developer_toolbox/inject.sh:flatpak_system_installation="/var/lib/flatpak/app/net.retrodeck.retrodeck/current/active/files"
+./developer_toolbox/inject.sh:force_user=false
+./developer_toolbox/inject.sh:force_system=false
+./developer_toolbox/inject.sh:inject_components=${inject_components:-Y}
+./functions/checks.sh:current_version_major_rev=$(sed 's/^\([0-9]*\)\..*/\1/' <<< "$current_version")
+./functions/checks.sh:new_version_major_rev=$(sed 's/^\([0-9]*\)\..*/\1/' <<< "$new_version")
+./functions/checks.sh:current_version_minor_rev=$(sed 's/^[0-9]*\.\([0-9]*\)\..*/\1/' <<< "$current_version")
+./functions/checks.sh:new_version_minor_rev=$(sed 's/^[0-9]*\.\([0-9]*\)\..*/\1/' <<< "$new_version")
+./functions/checks.sh:current_version_point_rev=$(sed 's/^[0-9]*\.[0-9]*\.\([0-9]*\).*/\1/' <<< "$current_version")
+./functions/checks.sh:new_version_point_rev=$(sed 's/^[0-9]*\.[0-9]*\.\([0-9]*\).*/\1/' <<< "$new_version")
+./functions/multi_user.sh:full_userlist=()
+./functions/multi_user.sh:full_userlist=("${full_userlist[@]}" "$user")
+./functions/multi_user.sh:chosen_user=$(rd_zenity \
+./functions/post_build_check.sh:LOG_FILE="$HOME/check.log"
+./functions/post_build_check.sh:TIMEOUT=3
+./functions/dialogs.sh:purple="#a864fc"
+./functions/dialogs.sh:blue="#6fbfff"
+./functions/global.sh:rd_logs_folder="$XDG_CONFIG_HOME/retrodeck/logs" # Static location to write all RetroDECK-related logs
+./functions/global.sh:width=$(grep -oP '\d+(?=x)' /sys/class/graphics/fb0/modes)
+./functions/global.sh:height=$(grep -oP '(?<=x)\d+' /sys/class/graphics/fb0/modes)
+./functions/global.sh:distro_name=$(flatpak-spawn --host grep '^ID=' /etc/os-release | cut -d'=' -f2)
+./functions/global.sh:distro_version=$(flatpak-spawn --host grep '^VERSION_ID=' /etc/os-release | cut -d'=' -f2)
+./functions/global.sh:gpu_info=$(flatpak-spawn --host lspci | grep -i 'vga\|3d\|2d')
+./functions/global.sh:max_threads=$(echo $(($(nproc) / 2)))
+./functions/global.sh:rd_components="/app/retrodeck/components"
+./functions/global.sh:rd_shared_libs="/app/retrodeck/components/shared-libs"
+./net.retrodeck.retrodeck.Configurator.desktop:Name=RetroDECK Configurator
+./net.retrodeck.retrodeck.Configurator.desktop:GenericName=RetroDECK Configuration Utility
+./net.retrodeck.retrodeck.Configurator.desktop:Type=Application
+./net.retrodeck.retrodeck.Configurator.desktop:Comment=A handy tool to change common RetroDECK settings
+./net.retrodeck.retrodeck.Configurator.desktop:Icon=net.retrodeck.retrodeck.configurator
+./net.retrodeck.retrodeck.Configurator.desktop:Exec=/bin/bash /app/tools/configurator.sh
+./net.retrodeck.retrodeck.Configurator.desktop:Terminal=false
+./net.retrodeck.retrodeck.Configurator.desktop:StartupNotify=false
+./net.retrodeck.retrodeck.Configurator.desktop:Keywords=multi;engine;emulator;standalone;steam;deck
+./net.retrodeck.retrodeck.Configurator.desktop:Categories=Game;Emulator;
+./net.retrodeck.retrodeck.desktop:Name=RetroDECK
+./net.retrodeck.retrodeck.desktop:GenericName=All-in-One Retro Gaming Platform
+./net.retrodeck.retrodeck.desktop:Type=Application
+./net.retrodeck.retrodeck.desktop:Comment=All-in-one emulation solution for Steam Deck and Linux desktops, making emulation easy and accessible
+./net.retrodeck.retrodeck.desktop:Icon=net.retrodeck.retrodeck
+./net.retrodeck.retrodeck.desktop:Exec=
+./net.retrodeck.retrodeck.desktop:Terminal=false
+./net.retrodeck.retrodeck.desktop:StartupNotify=false
+./net.retrodeck.retrodeck.desktop:Keywords=multi;engine;emulator;standalone;steam;deck;retro;games;roms;console;classic;gamepad;arcade
+./net.retrodeck.retrodeck.desktop:MimeType=application/retro-game;application/vnd.nintendo.snes.rom;application/x-atari-2600-rom;application/x-atari-7800-rom;application/x-atari-lynx-rom;application/x-dreamcast-rom;application/x-gameboy-color-rom;application/x-gameboy-rom;application/x-gamecube-rom;application/x-gamegear-rom;application/x-gba-rom;application/x-gd-rom-cue;application/x-genesis-32x-rom;application/x-genesis-rom;application/x-msx-rom;application/x-n64-rom;application/x-neo-geo-pocket-color-rom;application/x-neo-geo-pocket-rom;application/x-nes-rom;application/x-nintendo-3ds-rom;application/x-nintendo-ds-rom;application/x-pc-engine-rom;application/x-saturn-rom;application/x-sega-cd-rom;application/x-sega-pico-rom;application/x-sg1000-rom;application/x-sms-rom;application/x-virtual-boy-rom;application/x-wii-rom;application/x-wonderswan-color-rom;application/x-wonderswan-rom
+./net.retrodeck.retrodeck.desktop:Categories=Game;Emulator;
+./tools/configurator/icon.svg.import:importer="texture"
+./tools/configurator/icon.svg.import:uid="uid://bl1qy5krtdiyf"
+./tools/configurator/icon.svg.import:metadata={
+./tools/configurator/icon_retrodeck.svg.import:importer="texture"
+./tools/configurator/icon_retrodeck.svg.import:uid="uid://dcdlrjx1d5nu3"
+./tools/configurator/icon_retrodeck.svg.import:metadata={
+./tools/configurator/project.godot:config_version=5
+./tools/configurator/project.godot:ui_accept={
+./tools/configurator/project.godot:ui_select={
+./tools/configurator/project.godot:ui_cancel={
+./tools/configurator/project.godot:rekku_hide={
+./tools/configurator/project.godot:info={
+./tools/configurator/project.godot:quit={
+./tools/configurator/project.godot:next_tab={
+./tools/configurator/project.godot:previous_tab={
+./tools/configurator/project.godot:back_button={
+./tools/configurator/project.godot:action_button={
+./tools/configurator/project.godot:quit1={
+./tools/configurator/project.godot:quit2={
+./tools/retrodeck_function_wrapper.sh:function_name="$1"
+./retrodeck_builder.sh:manifest_filename="net.retrodeck.retrodeck.yml"
+./retrodeck_builder.sh:MANIFEST="$ROOT_FOLDER/$manifest_filename"
+./retrodeck_builder.sh:REPO_FOLDER_NAME="retrodeck-repo"
+./retrodeck_builder.sh:FLATPAK_BUNDLE_NAME="RetroDECK$POSTFIX.flatpak"
+./retrodeck_builder.sh:BUILD_FOLDER_NAME=retrodeck-flatpak$POSTFIX
+./retrodeck_builder.sh:BUNDLE_SHA_NAME="RetroDECK.flatpak$POSTFIX.sha"
+./retrodeck_builder.sh:FLATPAK_ARTIFACTS_NAME="RetroDECK-Artifact$POSTFIX"
+./retrodeck_builder.sh:OUT_FOLDER="$ROOT_FOLDER/out"
+./retrodeck_builder.sh:VERSION=$(xmlstarlet sel -t -v "/component/releases/release[1]/@version" net.retrodeck.retrodeck.metainfo.xml)
+./retrodeck_builder.sh:MANIFEST_REWORKED="${MANIFEST%.*}.reworked.yml"
+./retrodeck_builder.sh:command="flatpak-builder --user --force-clean $FLATPAK_BUILD_EXTRA_ARGS \
+./retrodeck_builder.sh:install_input=${install_input:-N}
