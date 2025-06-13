@@ -1355,55 +1355,69 @@ portmaster_show(){
 
 open_component(){
 
-  if [[ -z "$1" ]]; then
-    cmd=$(jq -r '.emulator[] | select(.ponzu != true) | .name' "$features")
-    if [[ $(get_setting_value "$rd_conf" "akai_ponzu" "retrodeck" "options") == "true" ]]; then
-      cmd+="\n$(jq -r '.emulator.citra | .name' "$features")"
-    fi
-    if [[ $(get_setting_value "$rd_conf" "kiroi_ponzu" "retrodeck" "options") == "true" ]]; then
-      cmd+="\n$(jq -r '.emulator.yuzu | .name' "$features")"
-    fi
-    echo -e "This command expects one of the following components as arguments:\n$(echo -e "$cmd")"
-    return
-  fi
+  # if [[ -z "$1" ]]; then
+  #   cmd=$(jq -r '.emulator[] | select(.ponzu != true) | .name' "$features")
+  #   if [[ $(get_setting_value "$rd_conf" "akai_ponzu" "retrodeck" "options") == "true" ]]; then
+  #     cmd+="\n$(jq -r '.emulator.citra | .name' "$features")"
+  #   fi
+  #   if [[ $(get_setting_value "$rd_conf" "kiroi_ponzu" "retrodeck" "options") == "true" ]]; then
+  #     cmd+="\n$(jq -r '.emulator.yuzu | .name' "$features")"
+  #   fi
+  #   echo -e "This command expects one of the following components as arguments:\n$(echo -e "$cmd")"
+  #   return
+  # fi
+
+  components_list(){
+      log i "Available components:"
+      components=()
+      for comp_dir in "$rd_components"/*; do
+        comp=$(basename "$comp_dir")
+        if [[ "$comp" != "framework" && -f "$comp_dir/component_launcher.sh" ]]; then
+          components+=("$comp")
+        fi
+      done
+      if [[ ${#components[@]} -gt 0 ]]; then
+        # Join with comma and space
+        IFS=',' ; echo "${components[*]}" | sed 's/,/, /g'
+        unset IFS
+      fi
+      exit 0
+  }
 
   if [[ "$1" == "--list" ]]; then
-    cmd=$(jq -r '.emulator[] | select(.ponzu != true) | .name' "$features")
-    if [[ $(get_setting_value "$rd_conf" "akai_ponzu" "retrodeck" "options") == "true" ]]; then
-      cmd+="\n$(jq -r '.emulator.citra | .name' "$features")"
-    fi
-    if [[ $(get_setting_value "$rd_conf" "kiroi_ponzu" "retrodeck" "options") == "true" ]]; then
-      cmd+="\n$(jq -r '.emulator.yuzu | .name' "$features")"
-    fi
-    echo -e "$cmd"
-    return
+    components_list
   fi
 
-  if [[ "$1" == "--getdesc" ]]; then
-    cmd=$(jq -r '.emulator[] | select(.ponzu != true) | "\(.description)"' "$features")
-    if [[ $(get_setting_value "$rd_conf" "akai_ponzu" "retrodeck" "options") == "true" ]]; then
-      cmd+="\n$(jq -r '.emulator.citra | "\(.description)"' "$features")"
-    fi
-    if [[ $(get_setting_value "$rd_conf" "kiroi_ponzu" "retrodeck" "options") == "true" ]]; then
-      cmd+="\n$(jq -r '.emulator.yuzu | "\(.description)"' "$features")"
-    fi
-    echo -e "$cmd"
-    return
-  fi
+  # TODO: do this via API?
+  # if [[ "$1" == "--getdesc" ]]; then
+  #   cmd=$(jq -r '.emulator[] | select(.ponzu != true) | "\(.description)"' "$features")
+  #   if [[ $(get_setting_value "$rd_conf" "akai_ponzu" "retrodeck" "options") == "true" ]]; then
+  #     cmd+="\n$(jq -r '.emulator.citra | "\(.description)"' "$features")"
+  #   fi
+  #   if [[ $(get_setting_value "$rd_conf" "kiroi_ponzu" "retrodeck" "options") == "true" ]]; then
+  #     cmd+="\n$(jq -r '.emulator.yuzu | "\(.description)"' "$features")"
+  #   fi
+  #   echo -e "$cmd"
+  #   return
+  # fi
 
-  launch_exists=$(jq -r --arg name "$1" '.emulator[] | select(.name == $name) | has("launch")' "$features")
-  if [[ "$launch_exists" != "true" ]]; then
+  # Check if the component_launcher.sh exists for the given component
+  if [[ -n "$1" && -f "$rd_components/$1/component_launcher.sh" ]]; then
+    "$rd_components/$1/component_launcher.sh" "${@:2}"
+    return
+  else
     echo "Error: The component '$1' cannot be opened."
+    components_list
     return 1
   fi
 
-  cmd=$(jq -r --arg name "$1" '.emulator[] | select(.name == $name and .ponzu != true) | .launch' "$features")
-  if [[ -z "$cmd" && $(get_setting_value "$rd_conf" "akai_ponzu" "retrodeck" "options") == "true" && "$1" == "citra" ]]; then
-    cmd=$(jq -r '.emulator.citra | .launch' "$features")
-  fi
-  if [[ -z "$cmd" && $(get_setting_value "$rd_conf" "kiroi_ponzu" "retrodeck" "options") == "true" && "$1" == "yuzu" ]]; then
-    cmd=$(jq -r '.emulator.yuzu | .launch' "$features")
-  fi
+  # cmd=$(jq -r --arg name "$1" '.emulator[] | select(.name == $name and .ponzu != true) | .launch' "$features")
+  # if [[ -z "$cmd" && $(get_setting_value "$rd_conf" "akai_ponzu" "retrodeck" "options") == "true" && "$1" == "citra" ]]; then
+  #   cmd=$(jq -r '.emulator.citra | .launch' "$features")
+  # fi
+  # if [[ -z "$cmd" && $(get_setting_value "$rd_conf" "kiroi_ponzu" "retrodeck" "options") == "true" && "$1" == "yuzu" ]]; then
+  #   cmd=$(jq -r '.emulator.yuzu | .launch' "$features")
+  # fi
 
   if [[ -n "$cmd" ]]; then
     eval "$cmd" "${@:2}"
