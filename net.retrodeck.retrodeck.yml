@@ -218,6 +218,7 @@ modules:
       - cp -f res/splash.svg ${FLATPAK_DEST}/retrodeck/graphics/splash.svg
       - cp -f res/splash.svg ${FLATPAK_DEST}/retrodeck/graphics/splash-orig.svg
       - cp -rf res/extra_splashes/ ${FLATPAK_DEST}/retrodeck/graphics
+      - cp -rf res/lahrs_icons/ ${FLATPAK_DEST}/retrodeck/graphics
       - cp -f res/icon.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg
       - cp -f res/icon-configurator.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.configurator.svg
       - mv -f -t ${FLATPAK_DEST}/retrodeck res/binding_icons
