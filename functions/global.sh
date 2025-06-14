@@ -25,23 +25,23 @@ else
   native_resolution=true
 fi
 system_distro_name=$(flatpak-spawn --host grep '^ID=' /etc/os-release | cut -d'=' -f2)
-distro_version=$(flatpak-spawn --host grep '^VERSION_ID=' /etc/os-release | cut -d'=' -f2)
-gpu_info=$(flatpak-spawn --host lspci | grep -i 'vga\|3d\|2d')
-cpu_cores=$(nproc)
+system_distro_version=$(flatpak-spawn --host grep '^VERSION_ID=' /etc/os-release | cut -d'=' -f2)
+system_gpu_info=$(flatpak-spawn --host lspci | grep -i 'vga\|3d\|2d')
+system_cpu_cores=$(nproc)
 max_threads=$(echo $(($(nproc) / 2)))
 
 log d "Debug mode enabled"
 log i "Initializing RetroDECK"
-log i "Running on $XDG_SESSION_DESKTOP, $XDG_SESSION_TYPE, $system_distro_name $distro_version"
+log i "Running on $XDG_SESSION_DESKTOP, $XDG_SESSION_TYPE, $system_distro_name $system_distro_version"
 if [[ -n $container ]]; then
   log i "Running inside $container environment"
 fi
-log i "GPU: $gpu_info"
+log i "GPU: $system_gpu_info"
 log i "Resolution: $width x $height"
 if [[ $native_resolution == true ]]; then
   log i "Steam Deck native resolution detected"
 fi
-log i "CPU: Using $max_threads out of $cpu_cores available CPU cores for multi-threaded operations"
+log i "CPU: Using $max_threads out of $system_cpu_cores available CPU cores for multi-threaded operations"
 
 for file in /app/libexec/*.sh; do
   if [[ -f "$file" && ! "$file" == "/app/libexec/global.sh" && ! "$file" == "/app/libexec/post_build_check.sh" ]]; then

@@ -70,7 +70,7 @@ onfigurator/res/!d
 ./developer_toolbox/cook_okonomiyaki.sh:branches=(
 ./developer_toolbox/cook_okonomiyaki.sh:current_branch=$(git branch --show-current)
 ./developer_toolbox/hooks/pre-commit:lint_list=(
-./developer_toolbzox/lint_json.sh:json=$1
+./developer_toolbox/lint_json.sh:json=$1
 ./developer_toolbox/mime-populator.sh:MIME_FILE="config/retrodeck/net.retrodeck.retrodeck.mime.xml"
 ./developer_toolbox/mime-populator.sh:IGNORED_EXTENSIONS=". .appimage .cue .png .po"
 ./developer_toolbox/mime-populator.sh:EXTENSIONS_FILE=$(mktemp)
@@ -98,9 +98,9 @@ onfigurator/res/!d
 ./functions/global.sh:width=$(grep -oP '\d+(?=x)' /sys/class/graphics/fb0/modes)
 ./functions/global.sh:height=$(grep -oP '(?<=x)\d+' /sys/class/graphics/fb0/modes)
 ./functions/global.sh:system_distro_name=$(flatpak-spawn --host grep '^ID=' /etc/os-release | cut -d'=' -f2)
-./functions/global.sh:distro_version=$(flatpak-spawn --host grep '^VERSION_ID=' /etc/os-release | cut -d'=' -f2)
-./functions/global.sh:gpu_info=$(flatpak-spawn --host lspci | grep -i 'vga\|3d\|2d')
-./functions/global.sh:cpu_cores=$(nproc)
+./functions/global.sh:system_distro_version=$(flatpak-spawn --host grep '^VERSION_ID=' /etc/os-release | cut -d'=' -f2)
+./functions/global.sh:system_gpu_info=$(flatpak-spawn --host lspci | grep -i 'vga\|3d\|2d')
+./functions/global.sh:system_cpu_cores=$(nproc)
 ./functions/global.sh:max_threads=$(echo $(($(nproc) / 2)))
 ./functions/global.sh:rd_components="/app/retrodeck/components"
 ./functions/global.sh:rd_shared_libs="/app/retrodeck/components/shared-libs"
