@@ -20,7 +20,7 @@ var rdhome: String
 var roms_folder: String
 var saves_folder: String
 var states_folder: String
-var bios_folder: String
+var rd_home_bios_path: String
 var rd_log: String
 var rd_log_folder: String
 var rd_version: String
@@ -59,14 +59,14 @@ func _ready():
 func read_values_states() -> void:
 	var config = data_handler.parse_config_to_json(config_file_path)
 	data_handler.config_save_json(config, json_file_path)
-	#rd_log_folder = config["paths"]["logs_folder"]
+	#rd_log_folder = config["paths"]["rd_home_logs_path"]
 	rd_log_folder = "/var/config/retrodeck/logs"
 	rd_log = rd_log_folder + "/retrodeck.log"
 	rdhome = config["paths"]["rdhome"]
 	roms_folder = config["paths"]["roms_folder"]
 	saves_folder = config["paths"]["saves_folder"]
 	states_folder = config["paths"]["states_folder"]
-	bios_folder = config["paths"]["bios_folder"]
+	rd_home_bios_path = config["paths"]["rd_home_bios_path"]
 	rd_version = config["version"]
 	rd_conf = extract_text(globals_sh_file_path, "rd_conf")
 	lockfile = extract_text(globals_sh_file_path, "lockfile")

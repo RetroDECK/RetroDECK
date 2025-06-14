@@ -54,19 +54,20 @@
 		"update_repo": "RetroDECK"
 	},
 	"paths": {
-		"bios_folder": "/run/media/tim/DATA/retrodeck/bios",
-		"borders_folder": "/run/media/tim/DATA/retrodeck/borders",
-		"logs_folder": "/run/media/tim/DATA/retrodeck/logs",
-		"media_folder": "/run/media/tim/DATA/retrodeck/downloaded_media",
-		"mods_folder": "/run/media/tim/DATA/retrodeck/mods",
+		"rd_home_bios_path": "/run/media/tim/DATA/retrodeck/bios",
+		"rd_home_borders_path": "/run/media/tim/DATA/retrodeck/borders",
+		"rd_home_logs_paths_path": "/run/media/tim/DATA/retrodeck/logs",
+		"rd_home_downloaded_media_path": "/run/media/tim/DATA/retrodeck/downloaded_media",
+		"rd_home_mods_path": "/run/media/tim/DATA/retrodeck/mods",
 		"rdhome": "/home/tim/retrodeck",
 		"roms_folder": "/run/media/tim/DATA/retrodeck/roms",
 		"saves_folder": "/run/media/tim/DATA/retrodeck/saves",
-		"screenshots_folder": "/run/media/tim/DATA/retrodeck/screenshots",
+		"rd_home_screenshots_path": "/run/media/tim/DATA/retrodeck/screenshots",
 		"sdcard": "/run/media/mmcblk0p1",
 		"states_folder": "/run/media/tim/DATA/retrodeck/states",
-		"texture_packs_folder": "/run/media/tim/DATA/retrodeck/texture_packs",
-		"themes_folder": "/run/media/tim/DATA/retrodeck/themes",
+		"rd_home_texture_packs_path": "/run/media/tim/DATA/retrodeck/texture_packs",
+		"rd_home_cheats_path": "/run/media/tim/DATA/retrodeck/cheats",
+		"rd_home_themes_path": "/run/media/tim/DATA/retrodeck/themes",
 		"rd_home_storage_path": "/run/media/tim/DATA/retrodeck/storage"
 	},
 	"quick_resume": {

@@ -634,7 +634,7 @@ configurator_bios_checker_dialog() {
 
      while IFS=$'\t' read -r bios_file bios_systems bios_desc required bios_md5 bios_paths; do
 
-      # Expand any embedded shell variables (e.g. $saves_folder or $bios_folder) with their actual values
+      # Expand any embedded shell variables (e.g. $saves_folder or $rd_home_bios_path) with their actual values
       bios_paths=$(echo "$bios_paths" | envsubst)
 
       bios_file_found="No"
@@ -680,7 +680,7 @@ configurator_bios_checker_dialog() {
               (.value.description // "No description provided"),
               (.value.required // "No"),
               (.value.md5 | if type=="array" then join(", ") elif type=="string" then . else "Unknown" end),
-              (.value.paths | if type=="array" then join(", ") elif type=="string" then . else "$bios_folder" end)
+              (.value.paths | if type=="array" then join(", ") elif type=="string" then . else "$rd_home_bios_path" end)
             ]
           | @tsv
         ' "$bios_checklist")
@@ -874,11 +874,11 @@ configurator_usb_import_dialog() {
       "${external_devices[@]}")
 
       if [[ ! -z "$choice" ]]; then
-        if [[ $(verify_space "$choice/RetroDECK Import/ROMs" "$roms_folder") == "false" || $(verify_space "$choice/RetroDECK Import/BIOS" "$bios_folder") == "false" ]]; then
+        if [[ $(verify_space "$choice/RetroDECK Import/ROMs" "$roms_folder") == "false" || $(verify_space "$choice/RetroDECK Import/BIOS" "$rd_home_bios_path") == "false" ]]; then
           if [[ $(configurator_generic_question_dialog "RetroDECK Configurator Utility - USB Migration Tool" "You MAY not have enough free space to import this ROM/BIOS library.\n\nThis utility only imports new additions from the USB device, so if there are a lot of the same files in both locations you are likely going to be fine\nbut we are not able to verify how much data will be transferred before it happens.\n\nIf you are unsure, please verify your available free space before continuing.\n\nDo you want to continue now?") == "true" ]]; then
             (
             rsync -a --mkpath "$choice/RetroDECK Import/ROMs/"* "$roms_folder"
-            rsync -a --mkpath "$choice/RetroDECK Import/BIOS/"* "$bios_folder"
+            rsync -a --mkpath "$choice/RetroDECK Import/BIOS/"* "$rd_home_bios_path"
             ) |
             rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
             --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -888,7 +888,7 @@ configurator_usb_import_dialog() {
         else
           (
           rsync -a --mkpath "$choice/RetroDECK Import/ROMs/"* "$roms_folder"
-          rsync -a --mkpath "$choice/RetroDECK Import/BIOS/"* "$bios_folder"
+          rsync -a --mkpath "$choice/RetroDECK Import/BIOS/"* "$rd_home_bios_path"
           ) |
           rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
           --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \

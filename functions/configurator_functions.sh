@@ -53,7 +53,7 @@ find_empty_rom_folders() {
 configurator_check_multifile_game_structure() {
   local folder_games=($(find "$roms_folder" -maxdepth 2 -mindepth 2 -type d ! -name "*.m3u" ! -name "*.ps3"))
   if [[ ${#folder_games[@]} -gt 1 ]]; then
-    echo "$(find "$roms_folder" -maxdepth 2 -mindepth 2 -type d ! -name "*.m3u" ! -name "*.ps3")" > "$logs_folder"/multi_file_games_"$(date +"%Y_%m_%d_%I_%M_%p").log"
+    echo "$(find "$roms_folder" -maxdepth 2 -mindepth 2 -type d ! -name "*.m3u" ! -name "*.ps3")" > "$rd_home_logs_path"/multi_file_games_"$(date +"%Y_%m_%d_%I_%M_%p").log"
     rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Configurator - Verify Multi-file Structure" \

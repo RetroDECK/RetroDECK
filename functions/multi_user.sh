@@ -200,7 +200,7 @@ multi_user_setup_new_user() {
     cp "$config/retroarch/retroarch-core-options.cfg" "$multi_user_data_folder/$SteamAppUser/config/retroarch/retroarch-core-options.cfg"
     set_setting_value "$raconf" "savefile_directory" "$saves_folder" "retroarch"
     set_setting_value "$raconf" "savestate_directory" "$states_folder" "retroarch"
-    set_setting_value "$raconf" "screenshot_directory" "$screenshots_folder" "retroarch"
+    set_setting_value "$raconf" "screenshot_directory" "$rd_home_screenshots_path" "retroarch"
   fi
   ln -sfT "$multi_user_data_folder/$SteamAppUser/config/retroarch/retroarch.cfg" "$XDG_CONFIG_HOME/retroarch/retroarch.cfg"
   ln -sfT "$multi_user_data_folder/$SteamAppUser/config/retroarch/retroarch-core-options.cfg" "$XDG_CONFIG_HOME/retroarch/retroarch-core-options.cfg"

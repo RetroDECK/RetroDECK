@@ -7,10 +7,10 @@
 # export LD_LIBRARY_PATH="/app/retrodeck/lib:/app/retrodeck/lib/debug:/app/retrodeck/lib/pkgconfig:$LD_LIBRARY_PATH"
 
 : "${logging_level:=info}"                  # Initializing the log level variable if not already valued, this will be actually red later from the config file                                                 
-rd_logs_folder="$XDG_CONFIG_HOME/retrodeck/logs" # Static location to write all RetroDECK-related logs
-if [ -h "$rd_logs_folder" ]; then # Check if internal logging folder is already a symlink
-  if [ ! -e "$rd_logs_folder" ]; then # Check if internal logging folder symlink is broken
-    unlink "$rd_logs_folder" # Remove broken symlink so the folder is recreated when sourcing logger.sh
+rd_xdg_config_logs_path="$XDG_CONFIG_HOME/retrodeck/logs" # Static location to write all RetroDECK-related logs
+if [ -h "$rd_xdg_config_logs_path" ]; then # Check if internal logging folder is already a symlink
+  if [ ! -e "$rd_xdg_config_logs_path" ]; then # Check if internal logging folder symlink is broken
+    unlink "$rd_xdg_config_logs_path" # Remove broken symlink so the folder is recreated when sourcing logger.sh
   fi
 fi
 source /app/libexec/logger.sh
@@ -24,7 +24,7 @@ if [[ $width -ne 1280 ]] || [[ $height -ne 800 ]]; then
 else
   native_resolution=true
 fi
-distro_name=$(flatpak-spawn --host grep '^ID=' /etc/os-release | cut -d'=' -f2)
+system_distro_name=$(flatpak-spawn --host grep '^ID=' /etc/os-release | cut -d'=' -f2)
 distro_version=$(flatpak-spawn --host grep '^VERSION_ID=' /etc/os-release | cut -d'=' -f2)
 gpu_info=$(flatpak-spawn --host lspci | grep -i 'vga\|3d\|2d')
 cpu_cores=$(nproc)
@@ -32,7 +32,7 @@ max_threads=$(echo $(($(nproc) / 2)))
 
 log d "Debug mode enabled"
 log i "Initializing RetroDECK"
-log i "Running on $XDG_SESSION_DESKTOP, $XDG_SESSION_TYPE, $distro_name $distro_version"
+log i "Running on $XDG_SESSION_DESKTOP, $XDG_SESSION_TYPE, $system_distro_name $distro_version"
 if [[ -n $container ]]; then
   log i "Running inside $container environment"
 fi
@@ -58,8 +58,8 @@ source_component_functions "internal"
 source_component_functions "external"
 
 # Initialize logging location if it doesn't exist, before anything else happens
-if [ ! -d "$rd_logs_folder" ]; then
-    create_dir "$rd_logs_folder"
+if [ ! -d "$rd_xdg_config_logs_path" ]; then
+    create_dir "$rd_xdg_config_logs_path"
 fi
 
 # Initialize the API location and required files, if they don't already exist

@@ -44,7 +44,7 @@ log() {
 
   local level="$1"          # Current message level
   local message="$2"        # Message to log
-  local logfile="${3:-$rd_logs_folder/retrodeck.log}"  # Default log file
+  local logfile="${3:-$rd_xdg_config_logs_path/retrodeck.log}"  # Default log file
   local timestamp="$(date +[%Y-%m-%d\ %H:%M:%S.%3N])"   # Timestamp
   local colorize_terminal=true
 
@@ -127,7 +127,7 @@ log() {
 # the original log file is cleared for continued logging.
 
 rotate_logs() {
-  local logfile="${1:-$rd_logs_folder/retrodeck.log}"  # Default log file
+  local logfile="${1:-$rd_xdg_config_logs_path/retrodeck.log}"  # Default log file
   local max_logs=3  # Maximum number of rotated logs to keep
 
   # Rotate existing logs

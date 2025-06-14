@@ -188,35 +188,35 @@
   "helper_files": {
     "dolphin_mods": {
       "filename": "how-to-install-dolphin-mods.txt",
-      "location": "$mods_folder/Dolphin"
+      "location": "$rd_home_mods_path/Dolphin"
     },
     "primehack_mods": {
       "filename": "how-to-install-primehack-mods.txt",
-      "location": "$mods_folder/Primehack"
+      "location": "$rd_home_mods_path/Primehack"
     },
     "mesen_textures": {
       "filename": "how-to-install-Mesen-textures.txt",
-      "location": "$texture_packs_folder/RetroArch-Mesen"
+      "location": "$rd_home_texture_packs_path/RetroArch-Mesen"
     },
     "ppsspp_textures": {
       "filename": "how-to-install-PPSSPP-textures.txt",
-      "location": "$texture_packs_folder/PPSSPP"
+      "location": "$rd_home_texture_packs_path/PPSSPP"
     },
     "pcsx2_textures": {
       "filename": "how-to-install-PCSX2-textures.txt",
-      "location": "$texture_packs_folder/PCSX2"
+      "location": "$rd_home_texture_packs_path/PCSX2"
     },
     "mupen64plus_cache_textures": {
       "filename": "how-to-install-Mupen64Plus-textures.txt",
-      "location": "$texture_packs_folder/RetroArch-Mupen64Plus/cache"
+      "location": "$rd_home_texture_packs_path/RetroArch-Mupen64Plus/cache"
     },
     "mupen64plus_hires_textures": {
       "filename": "how-to-install-Mupen64Plus-textures.txt",
-      "location": "$texture_packs_folder/RetroArch-Mupen64Plus/hires_texture"
+      "location": "$rd_home_texture_packs_path/RetroArch-Mupen64Plus/hires_texture"
     },
     "duckstation_textures": {
       "filename": "how-to-install-Duckstation-textures.txt",
-      "location": "$texture_packs_folder/Duckstation"
+      "location": "$rd_home_texture_packs_path/Duckstation"
     },
     "psvita_games": {
       "filename": "how-to-install-psvita-games.txt",

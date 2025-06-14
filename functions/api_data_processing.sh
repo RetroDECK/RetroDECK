@@ -288,11 +288,11 @@ api_get_bios_file_status() {
     bios_systems=$(jq -r '.value.system | if type=="array" then join(", ") else . end // "Unknown"' <<< "$entry")
     bios_desc=$(jq -r '.value.description // "No description provided"' <<< "$entry")
     required=$(jq -r '.value.required // "No"' <<< "$entry")
-    bios_paths=$(jq -r '.value.paths // "'"$bios_folder"'" | if type=="array" then join(", ") else . end' <<< "$entry")
+    bios_paths=$(jq -r '.value.paths // "'"$rd_home_bios_path"'" | if type=="array" then join(", ") else . end' <<< "$entry")
 
     log d "Checking entry $bios_entry"
 
-    # Expand any embedded shell variables (e.g. $saves_folder or $bios_folder) with their actual values
+    # Expand any embedded shell variables (e.g. $saves_folder or $rd_home_bios_path) with their actual values
     bios_paths=$(echo "$bios_paths" | envsubst)
 
     # Skip if bios_file is empty
