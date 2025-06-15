@@ -293,7 +293,7 @@ dir_prep() {
 update_rpcs3_firmware() {
   create_dir "$rd_home_roms_path/ps3/tmp"
   chmod 777 "$rd_home_roms_path/ps3/tmp"
-  download_file "$rpcs3_firmware" "$rd_home_roms_path/ps3/tmp/PS3UPDAT.PUP" "RPCS3 Firmware"
+  download_file "$rpcs3_firmware_url" "$rd_home_roms_path/ps3/tmp/PS3UPDAT.PUP" "RPCS3 Firmware"
   rpcs3 --installfw "$rd_home_roms_path/ps3/tmp/PS3UPDAT.PUP"
   rm -rf "$rd_home_roms_path/ps3/tmp"
 }

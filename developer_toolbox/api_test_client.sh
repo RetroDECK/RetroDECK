@@ -43,10 +43,10 @@ send_request() {
   local response
   # Write to pipe first, then read from response pipe
   echo "$request" > "$api_request_pipe"
-  response=$(timeout "$timeout" cat "$api_api_api_api_response_pipe")
+  response=$(timeout "$timeout" cat "$api_response_pipe")
 
   # Clean up response pipe
-  rm -f "$response_pipe"
+  rm -f "$api_response_pipe"
 
   # Check if we got a response
   if [[ -z "$response" ]]; then
