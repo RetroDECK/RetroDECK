@@ -220,7 +220,7 @@
     },
     "psvita_games": {
       "filename": "how-to-install-psvita-games.txt",
-      "location": "$roms_folder/psvita"
+      "location": "$rd_home_roms_path/psvita"
     },
     "custom_systems": {
       "filename": "es_systems.xml",

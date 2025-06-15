@@ -428,7 +428,7 @@ configurator_compression_tool_dialog() {
 configurator_compress_single_game_dialog() {
   local file=$(file_browse "Game to compress")
   if [[ ! -z "$file" ]]; then
-    local system=$(echo "$file" | grep -oE "$roms_folder/[^/]+" | grep -oE "[^/]+$")
+    local system=$(echo "$file" | grep -oE "$rd_home_roms_path/[^/]+" | grep -oE "[^/]+$")
     local compatible_compression_format=$(find_compatible_compression_format "$file")
     if [[ ! $compatible_compression_format == "none" ]]; then
       local post_compression_cleanup=$(configurator_compression_cleanup_dialog)
@@ -476,7 +476,7 @@ configurator_compress_multiple_games_dialog() {
     local checklist_entries=()
     for line in "${all_compressible_games[@]}"; do
       IFS="^" read -r game comp <<< "$line"
-      local short_game="${game#$roms_folder}"
+      local short_game="${game#$rd_home_roms_path}"
       checklist_entries+=( "TRUE" "$short_game" "$line" )
     done
 
@@ -521,7 +521,7 @@ configurator_compress_multiple_games_dialog() {
     IFS="^" read -r game compression_format <<< "$game_line"
 
     local system
-    system=$(echo "$game" | grep -oE "$roms_folder/[^/]+" | grep -oE "[^/]+$")
+    system=$(echo "$game" | grep -oE "$rd_home_roms_path/[^/]+" | grep -oE "[^/]+$")
     log i "Compressing $(basename "$game") into $compression_format format"
 
     echo "#Compressing $(basename "$game") into $compression_format format.\n\n$games_left games left to compress." # Update Zenity dialog text
@@ -874,10 +874,10 @@ configurator_usb_import_dialog() {
       "${external_devices[@]}")
 
       if [[ ! -z "$choice" ]]; then
-        if [[ $(verify_space "$choice/RetroDECK Import/ROMs" "$roms_folder") == "false" || $(verify_space "$choice/RetroDECK Import/BIOS" "$rd_home_bios_path") == "false" ]]; then
+        if [[ $(verify_space "$choice/RetroDECK Import/ROMs" "$rd_home_roms_path") == "false" || $(verify_space "$choice/RetroDECK Import/BIOS" "$rd_home_bios_path") == "false" ]]; then
           if [[ $(configurator_generic_question_dialog "RetroDECK Configurator Utility - USB Migration Tool" "You MAY not have enough free space to import this ROM/BIOS library.\n\nThis utility only imports new additions from the USB device, so if there are a lot of the same files in both locations you are likely going to be fine\nbut we are not able to verify how much data will be transferred before it happens.\n\nIf you are unsure, please verify your available free space before continuing.\n\nDo you want to continue now?") == "true" ]]; then
             (
-            rsync -a --mkpath "$choice/RetroDECK Import/ROMs/"* "$roms_folder"
+            rsync -a --mkpath "$choice/RetroDECK Import/ROMs/"* "$rd_home_roms_path"
             rsync -a --mkpath "$choice/RetroDECK Import/BIOS/"* "$rd_home_bios_path"
             ) |
             rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \
@@ -887,7 +887,7 @@ configurator_usb_import_dialog() {
           fi
         else
           (
-          rsync -a --mkpath "$choice/RetroDECK Import/ROMs/"* "$roms_folder"
+          rsync -a --mkpath "$choice/RetroDECK Import/ROMs/"* "$rd_home_roms_path"
           rsync -a --mkpath "$choice/RetroDECK Import/BIOS/"* "$rd_home_bios_path"
           ) |
           rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --auto-close \

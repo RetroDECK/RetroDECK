@@ -60,7 +60,7 @@
 		"rd_home_downloaded_media_path": "/run/media/tim/DATA/retrodeck/downloaded_media",
 		"rd_home_mods_path": "/run/media/tim/DATA/retrodeck/mods",
 		"rdhome": "/home/tim/retrodeck",
-		"roms_folder": "/run/media/tim/DATA/retrodeck/roms",
+		"rd_home_roms_path": "/run/media/tim/DATA/retrodeck/roms",
 		"saves_folder": "/run/media/tim/DATA/retrodeck/saves",
 		"rd_home_screenshots_path": "/run/media/tim/DATA/retrodeck/screenshots",
 		"sdcard": "/run/media/mmcblk0p1",

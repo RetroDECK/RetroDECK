@@ -74,9 +74,9 @@
       "description": "Neo Geo BIOS",
       "required": "required",
       "paths": [
-        "$roms_folder/neogeo",
-        "$roms_folder/fbneo",
-        "$roms_folder/arcade"
+        "$rd_home_roms_path/neogeo",
+        "$rd_home_roms_path/fbneo",
+        "$rd_home_roms_path/arcade"
       ]
     },
     "neocdz.zip": {
@@ -2369,7 +2369,7 @@
       "system": "apple2",
       "description": "Holds the ROM(s) for the Disk II interface",
       "paths": [
-        "$roms_folder/apple2"
+        "$rd_home_roms_path/apple2"
       ],
       "required": "required"
     },
@@ -2377,7 +2377,7 @@
       "system": "apple2",
       "description": "Contains the main BIOS ROM images for the Apple IIe system",
       "paths": [
-        "$roms_folder/apple2"
+        "$rd_home_roms_path/apple2"
       ],
       "required": "required"
     },
@@ -2385,7 +2385,7 @@
       "system": "apple2",
       "description": "Provides the ROM for the floppy disk controller itself",
       "paths": [
-        "$roms_folder/apple2"
+        "$rd_home_roms_path/apple2"
       ],
       "required": "required"
     },
@@ -2393,7 +2393,7 @@
       "system": "apple2",
       "description": "Contains the ROM images for the Votrax SC-01 speech synthesizer chip",
       "paths": [
-        "$roms_folder/apple2"
+        "$rd_home_roms_path/apple2"
       ],
       "required": "required"
     },
@@ -2401,7 +2401,7 @@
       "system": "apple2",
       "description": "Contains the ROM images for the Votrax SC-01 speech synthesizer chip",
       "paths": [
-        "$roms_folder/apple2"
+        "$rd_home_roms_path/apple2"
       ],
       "required": "required"
     },
@@ -2409,7 +2409,7 @@
       "system": "apple2",
       "description": "Apple IIGS system bios",
       "paths": [
-        "$roms_folder/apple2gs"
+        "$rd_home_roms_path/apple2gs"
       ],
       "required": "required"
     }

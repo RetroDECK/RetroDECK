@@ -291,11 +291,11 @@ dir_prep() {
 }
 
 update_rpcs3_firmware() {
-  create_dir "$roms_folder/ps3/tmp"
-  chmod 777 "$roms_folder/ps3/tmp"
-  download_file "$rpcs3_firmware" "$roms_folder/ps3/tmp/PS3UPDAT.PUP" "RPCS3 Firmware"
-  rpcs3 --installfw "$roms_folder/ps3/tmp/PS3UPDAT.PUP"
-  rm -rf "$roms_folder/ps3/tmp"
+  create_dir "$rd_home_roms_path/ps3/tmp"
+  chmod 777 "$rd_home_roms_path/ps3/tmp"
+  download_file "$rpcs3_firmware" "$rd_home_roms_path/ps3/tmp/PS3UPDAT.PUP" "RPCS3 Firmware"
+  rpcs3 --installfw "$rd_home_roms_path/ps3/tmp/PS3UPDAT.PUP"
+  rm -rf "$rd_home_roms_path/ps3/tmp"
 }
 
 update_vita3k_firmware() {
@@ -833,7 +833,7 @@ install_retrodeck_starterpack() {
   # USAGE: install_retrodeck_starterpack
 
   ## DOOM section ##
-  cp /app/retrodeck/extras/doom1.wad "$roms_folder/doom/doom1.wad" # No -f in case the user already has it
+  cp /app/retrodeck/extras/doom1.wad "$rd_home_roms_path/doom/doom1.wad" # No -f in case the user already has it
   create_dir "$XDG_CONFIG_HOME/ES-DE/gamelists/doom"
   if [[ ! -f "$XDG_CONFIG_HOME/ES-DE/gamelists/doom/gamelist.xml" ]]; then # Don't overwrite an existing gamelist
     cp "/app/retrodeck/rd_prepacks/doom/gamelist.xml" "$XDG_CONFIG_HOME/ES-DE/gamelists/doom/gamelist.xml"
@@ -1329,11 +1329,11 @@ convert_to_markdown() {
 portmaster_show(){
   log d "Setting PortMaster visibility in ES-DE"
   if [ "$1" = "true" ]; then
-      log d "\"$roms_folder/portmaster/PortMaster.sh\" is not found, installing it"
-      install -Dm755 "$XDG_DATA_HOME/PortMaster/PortMaster.sh" "$roms_folder/portmaster/PortMaster.sh" && log d "PortMaster is correctly showing in ES-DE"
+      log d "\"$rd_home_roms_path/portmaster/PortMaster.sh\" is not found, installing it"
+      install -Dm755 "$XDG_DATA_HOME/PortMaster/PortMaster.sh" "$rd_home_roms_path/portmaster/PortMaster.sh" && log d "PortMaster is correctly showing in ES-DE"
       set_setting_value "$rd_conf" "portmaster_show" "true" retrodeck "options"
   elif [ "$1" = "false" ]; then
-    rm -rf "$roms_folder/portmaster/PortMaster.sh" && log d "PortMaster is correctly hidden in ES-DE"
+    rm -rf "$rd_home_roms_path/portmaster/PortMaster.sh" && log d "PortMaster is correctly hidden in ES-DE"
     set_setting_value "$rd_conf" "portmaster_show" "false" retrodeck "options"
   else
     log e "\"$1\" is not a valid choice, quitting"

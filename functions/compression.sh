@@ -63,7 +63,7 @@ find_compatible_compression_format() {
   # This function will determine what compression format, if any, the file and system are compatible with
   # USAGE: find_compatible_compression_format "$file"
   local normalized_filename=$(echo "$1" | tr '[:upper:]' '[:lower:]')
-  local system=$(echo "$1" | grep -oE "$roms_folder/[^/]+" | grep -oE "[^/]+$")
+  local system=$(echo "$1" | grep -oE "$rd_home_roms_path/[^/]+" | grep -oE "[^/]+$")
 
   # Extract the relevant lists from the JSON file
   local chd_systems=$(jq -r '.compression_targets.chd[]' "$features")
@@ -171,9 +171,9 @@ find_compatible_games() {
     done
     (
     log d "Checking system: $system"
-    if [[ -d "$roms_folder/$system" ]]; then
+    if [[ -d "$rd_home_roms_path/$system" ]]; then
       local compression_candidates
-      compression_candidates=$(find "$roms_folder/$system" -type f -not -iname "*.txt")
+      compression_candidates=$(find "$rd_home_roms_path/$system" -type f -not -iname "*.txt")
       if [[ -n "$compression_candidates" ]]; then
         while IFS= read -r game; do
           while (( $(jobs -p | wc -l) >= $system_cpu_max_threads )); do # Wait for a background task to finish if system_cpu_max_threads has been hit
@@ -250,7 +250,7 @@ cli_compress_single_game() {
     read -p "RetroDECK will now attempt to compress your selected game. Press Enter key to continue..."
     if [[ ! -z "$file" ]]; then
       if [[ -f "$file" ]]; then
-        local system=$(echo "$file" | grep -oE "$roms_folder/[^/]+" | grep -oE "[^/]+$")
+        local system=$(echo "$file" | grep -oE "$rd_home_roms_path/[^/]+" | grep -oE "[^/]+$")
         local compatible_compression_format=$(find_compatible_compression_format "$file")
         if [[ ! $compatible_compression_format == "none" ]]; then
           log i "$(basename "$file") can be compressed to $compatible_compression_format"
@@ -306,7 +306,7 @@ cli_compress_all_games() {
       sleep 0.1
       done
       (
-      local compression_candidates=$(find "$roms_folder/$system" -type f -not -iname "*.txt")
+      local compression_candidates=$(find "$rd_home_roms_path/$system" -type f -not -iname "*.txt")
       if [[ ! -z "$compression_candidates" ]]; then
         log i "Checking files for $system"
         while IFS= read -r file

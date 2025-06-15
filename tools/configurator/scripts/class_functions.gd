@@ -17,7 +17,7 @@ var desktop_mode: String = OS.get_environment("XDG_CURRENT_DESKTOP")
 var rd_conf: String
 var lockfile: String
 var rdhome: String
-var roms_folder: String
+var rd_home_roms_path: String
 var saves_folder: String
 var states_folder: String
 var rd_home_bios_path: String
@@ -63,7 +63,7 @@ func read_values_states() -> void:
 	rd_log_folder = "/var/config/retrodeck/logs"
 	rd_log = rd_log_folder + "/retrodeck.log"
 	rdhome = config["paths"]["rdhome"]
-	roms_folder = config["paths"]["roms_folder"]
+	rd_home_roms_path = config["paths"]["rd_home_roms_path"]
 	saves_folder = config["paths"]["saves_folder"]
 	states_folder = config["paths"]["states_folder"]
 	rd_home_bios_path = config["paths"]["rd_home_bios_path"]
