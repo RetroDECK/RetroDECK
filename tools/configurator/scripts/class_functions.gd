@@ -16,7 +16,7 @@ const esde_file_path = "/var/config/ES-DE/settings/es_settings.xml"
 var desktop_mode: String = OS.get_environment("XDG_CURRENT_DESKTOP")
 var rd_conf: String
 var lockfile: String
-var rdhome: String
+var rd_home_path: String
 var rd_home_roms_path: String
 var saves_folder: String
 var states_folder: String
@@ -62,7 +62,7 @@ func read_values_states() -> void:
 	#rd_log_folder = config["paths"]["rd_home_logs_path"]
 	rd_log_folder = "/var/config/retrodeck/logs"
 	rd_log = rd_log_folder + "/retrodeck.log"
-	rdhome = config["paths"]["rdhome"]
+	rd_home_path = config["paths"]["rd_home_path"]
 	rd_home_roms_path = config["paths"]["rd_home_roms_path"]
 	saves_folder = config["paths"]["saves_folder"]
 	states_folder = config["paths"]["states_folder"]

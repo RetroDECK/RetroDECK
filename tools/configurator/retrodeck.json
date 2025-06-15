@@ -59,7 +59,7 @@
 		"rd_home_logs_paths_path": "/run/media/tim/DATA/retrodeck/logs",
 		"rd_home_downloaded_media_path": "/run/media/tim/DATA/retrodeck/downloaded_media",
 		"rd_home_mods_path": "/run/media/tim/DATA/retrodeck/mods",
-		"rdhome": "/home/tim/retrodeck",
+		"rd_home_path": "/home/tim/retrodeck",
 		"rd_home_roms_path": "/run/media/tim/DATA/retrodeck/roms",
 		"saves_folder": "/run/media/tim/DATA/retrodeck/saves",
 		"rd_home_screenshots_path": "/run/media/tim/DATA/retrodeck/screenshots",

@@ -27,7 +27,7 @@ steam_sync() {
   launch_command="run net.retrodeck.retrodeck"
   startIn=""
 
-  for system_path in "$rdhome/ES-DE/gamelists/"*/; do
+  for system_path in "$rd_home_path/ES-DE/gamelists/"*/; do
     # Skip the CLEANUP folder
     if [[ "$system_path" == *"/CLEANUP/"* ]]; then
       continue

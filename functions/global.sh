@@ -128,11 +128,11 @@ else # If the config file is existing i just read the variables
 
   conf_read
 
-  # Verify rdhome is where it is supposed to be.
-  if [[ ! -d "$rdhome" ]]; then
+  # Verify rd_home_path is where it is supposed to be.
+  if [[ ! -d "$rd_home_path" ]]; then
     configurator_generic_dialog "RetroDECK Setup" "The RetroDECK data folder was not found in the expected location.\nThis may happen when SteamOS is updated or if the folder was moved manually.\n\nPlease browse to the current location of the \"retrodeck\" folder."
     new_home_path=$(directory_browse "RetroDECK folder location")
-    set_setting_value "$rd_conf" "rdhome" "$new_home_path" retrodeck "paths"
+    set_setting_value "$rd_conf" "rd_home_path" "$new_home_path" retrodeck "paths"
     conf_read
     prepare_component "postmove" "retrodeck"
     prepare_component "postmove" "all"
@@ -140,7 +140,7 @@ else # If the config file is existing i just read the variables
   fi
 
   # Static variables dependent on $rd_conf values, need to be set after reading $rd_conf
-  multi_user_data_folder="$rdhome/multi-user-data"                                                                      # The default location of multi-user environment profiles
+  multi_user_data_folder="$rd_home_path/multi-user-data"                                                                      # The default location of multi-user environment profiles
 fi
 
 export GLOBAL_SOURCED=true

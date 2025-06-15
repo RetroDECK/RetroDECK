@@ -224,7 +224,7 @@
     },
     "custom_systems": {
       "filename": "es_systems.xml",
-      "location": "$rdhome/ES-DE/custom_systems"
+      "location": "$rd_home_path/ES-DE/custom_systems"
     }
   },
   "compression_targets": {

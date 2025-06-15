@@ -860,7 +860,7 @@ api_do_move_retrodeck_directory() {
   fi
 
   local source_root="$(echo "$dir_to_move" | sed -e 's/\(.*\)\/retrodeck\/.*/\1/')" # The root path of the folder, excluding retrodeck/<folder name>. So /home/deck/retrodeck/roms becomes /home/deck
-  if [[ ! "$rd_dir_name" == "rdhome" ]]; then # If a sub-folder is being moved, find it's path without the source_root. So /home/deck/retrodeck/roms becomes retrodeck/roms
+  if [[ ! "$rd_dir_name" == "rd_home_path" ]]; then # If a sub-folder is being moved, find it's path without the source_root. So /home/deck/retrodeck/roms becomes retrodeck/roms
     local rd_dir_path="$(echo "$dir_to_move" | sed "s/.*\(retrodeck\/.*\)/\1/; s/\/$//")"
   else # Otherwise just set the retrodeck root folder
     local rd_dir_path="$(basename "$dir_to_move")"
@@ -881,7 +881,7 @@ api_do_move_retrodeck_directory() {
     fi
 
     if [[ -w "$dest_root" ]]; then # If user picked a destination and it is writable
-      if [[ (-d "$dest_root/$rd_dir_path" && ! -L "$dest_root/$rd_dir_path" && ! $rd_dir_name == "rdhome") || "$(realpath "$dir_to_move")" == "$dest_root/$rd_dir_path" ]]; then # If the user is trying to move the folder to where it already is (excluding symlinks that will be unlinked)
+      if [[ (-d "$dest_root/$rd_dir_path" && ! -L "$dest_root/$rd_dir_path" && ! $rd_dir_name == "rd_home_path") || "$(realpath "$dir_to_move")" == "$dest_root/$rd_dir_path" ]]; then # If the user is trying to move the folder to where it already is (excluding symlinks that will be unlinked)
         echo "the chosen retrodeck directory is already at the given destination"
         return 1
       else
@@ -890,7 +890,7 @@ api_do_move_retrodeck_directory() {
           move "$dir_to_move" "$dest_root/$rd_dir_path"
           if [[ -d "$dest_root/$rd_dir_path" ]]; then # If the move succeeded
             declare -g "$rd_dir_name=$dest_root/$rd_dir_path" # Set the new path for that folder variable in retrodeck.cfg
-            if [[ "$rd_dir_name" == "rdhome" ]]; then # If the whole retrodeck folder was moved...
+            if [[ "$rd_dir_name" == "rd_home_path" ]]; then # If the whole retrodeck folder was moved...
               prepare_component "postmove" "retrodeck"
             fi
             prepare_component "postmove" "all" # Update all the appropriate emulator path settings

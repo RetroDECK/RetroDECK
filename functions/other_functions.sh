@@ -341,7 +341,7 @@ backup_retrodeck_userdata() {
 
   # Build array of folder names and real paths from retrodeck.cfg
   while read -r path_name; do
-    if [[ ! $path_name =~ (rdhome|sdcard|backups_folder) ]]; then # Ignore these locations
+    if [[ ! $path_name =~ (rd_home_path|sdcard|backups_folder) ]]; then # Ignore these locations
       local path_value=$(get_setting_value "$rd_conf" "$path_name" "retrodeck" "paths")
       log d "Path $path_value added to potential backup list"
       config_paths["$path_name"]="$path_value"
@@ -364,31 +364,31 @@ backup_retrodeck_userdata() {
     done
 
     # Add static paths not defined in retrodeck.cfg
-    if [[ -e "$rdhome/ES-DE/collections" ]]; then
-      paths_to_backup+=("$rdhome/ES-DE/collections")
+    if [[ -e "$rd_home_path/ES-DE/collections" ]]; then
+      paths_to_backup+=("$rd_home_path/ES-DE/collections")
     else
       if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
-        configurator_generic_dialog "RetroDECK Userdata Backup" "The ES-DE collections folder was not found at its expected location, $rdhome/ES-DE/collections\nSomething may be wrong with your RetroDECK installation."
+        configurator_generic_dialog "RetroDECK Userdata Backup" "The ES-DE collections folder was not found at its expected location, $rd_home_path/ES-DE/collections\nSomething may be wrong with your RetroDECK installation."
       fi
-      log i "Warning: Path does not exist: ES-DE/collections = $rdhome/ES-DE/collections"
+      log i "Warning: Path does not exist: ES-DE/collections = $rd_home_path/ES-DE/collections"
     fi
 
-    if [[ -e "$rdhome/ES-DE/gamelists" ]]; then
-      paths_to_backup+=("$rdhome/ES-DE/gamelists")
+    if [[ -e "$rd_home_path/ES-DE/gamelists" ]]; then
+      paths_to_backup+=("$rd_home_path/ES-DE/gamelists")
     else
       if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
-        configurator_generic_dialog "RetroDECK Userdata Backup" "The ES-DE gamelists folder was not found at its expected location, $rdhome/ES-DE/gamelists\nSomething may be wrong with your RetroDECK installation."
+        configurator_generic_dialog "RetroDECK Userdata Backup" "The ES-DE gamelists folder was not found at its expected location, $rd_home_path/ES-DE/gamelists\nSomething may be wrong with your RetroDECK installation."
       fi
-      log i "Warning: Path does not exist: ES-DE/gamelists = $rdhome/ES-DE/gamelists"
+      log i "Warning: Path does not exist: ES-DE/gamelists = $rd_home_path/ES-DE/gamelists"
     fi
 
-    if [[ -e "$rdhome/ES-DE/custom_systems" ]]; then
-      paths_to_backup+=("$rdhome/ES-DE/custom_systems")
+    if [[ -e "$rd_home_path/ES-DE/custom_systems" ]]; then
+      paths_to_backup+=("$rd_home_path/ES-DE/custom_systems")
     else
       if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
-        configurator_generic_dialog "RetroDECK Userdata Backup" "The ES-DE custom_systems folder was not found at its expected location, $rdhome/ES-DE/custom_systems\nSomething may be wrong with your RetroDECK installation."
+        configurator_generic_dialog "RetroDECK Userdata Backup" "The ES-DE custom_systems folder was not found at its expected location, $rd_home_path/ES-DE/custom_systems\nSomething may be wrong with your RetroDECK installation."
       fi
-      log i "Warning: Path does not exist: ES-DE/custom_systems = $rdhome/ES-DE/custom_systems"
+      log i "Warning: Path does not exist: ES-DE/custom_systems = $rd_home_path/ES-DE/custom_systems"
     fi
 
     # Check if we found any valid paths
@@ -417,31 +417,31 @@ backup_retrodeck_userdata() {
     done
 
     # Add static paths not defined in retrodeck.cfg
-    if [[ -e "$rdhome/ES-DE/collections" ]]; then
-      paths_to_backup+=("$rdhome/ES-DE/collections")
+    if [[ -e "$rd_home_path/ES-DE/collections" ]]; then
+      paths_to_backup+=("$rd_home_path/ES-DE/collections")
     else
       if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
-        configurator_generic_dialog "RetroDECK Userdata Backup" "The ES-DE collections folder was not found at its expected location, $rdhome/ES-DE/collections\nSomething may be wrong with your RetroDECK installation."
+        configurator_generic_dialog "RetroDECK Userdata Backup" "The ES-DE collections folder was not found at its expected location, $rd_home_path/ES-DE/collections\nSomething may be wrong with your RetroDECK installation."
       fi
-      log i "Warning: Path does not exist: ES-DE/collections = $rdhome/ES-DE/collections"
+      log i "Warning: Path does not exist: ES-DE/collections = $rd_home_path/ES-DE/collections"
     fi
 
-    if [[ -e "$rdhome/ES-DE/gamelists" ]]; then
-      paths_to_backup+=("$rdhome/ES-DE/gamelists")
+    if [[ -e "$rd_home_path/ES-DE/gamelists" ]]; then
+      paths_to_backup+=("$rd_home_path/ES-DE/gamelists")
     else
       if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
-        configurator_generic_dialog "RetroDECK Userdata Backup" "The ES-DE gamelists folder was not found at its expected location, $rdhome/ES-DE/gamelists\nSomething may be wrong with your RetroDECK installation."
+        configurator_generic_dialog "RetroDECK Userdata Backup" "The ES-DE gamelists folder was not found at its expected location, $rd_home_path/ES-DE/gamelists\nSomething may be wrong with your RetroDECK installation."
       fi
-      log i "Warning: Path does not exist: ES-DE/gamelists = $rdhome/ES-DE/gamelists"
+      log i "Warning: Path does not exist: ES-DE/gamelists = $rd_home_path/ES-DE/gamelists"
     fi
 
-    if [[ -e "$rdhome/ES-DE/custom_systems" ]]; then
-      paths_to_backup+=("$rdhome/ES-DE/custom_systems")
+    if [[ -e "$rd_home_path/ES-DE/custom_systems" ]]; then
+      paths_to_backup+=("$rd_home_path/ES-DE/custom_systems")
     else
       if [[ "$CONFIGURATOR_GUI" == "zenity" ]]; then
-        configurator_generic_dialog "RetroDECK Userdata Backup" "The ES-DE custom_systems folder was not found at its expected location, $rdhome/ES-DE/custom_systems\nSomething may be wrong with your RetroDECK installation."
+        configurator_generic_dialog "RetroDECK Userdata Backup" "The ES-DE custom_systems folder was not found at its expected location, $rd_home_path/ES-DE/custom_systems\nSomething may be wrong with your RetroDECK installation."
       fi
-      log i "Warning: Path does not exist: ES-DE/custom_systems = $rdhome/ES-DE/custom_systems"
+      log i "Warning: Path does not exist: ES-DE/custom_systems = $rd_home_path/ES-DE/custom_systems"
     fi
 
     # Check if we found any valid paths
@@ -689,9 +689,9 @@ finit() {
 
   "Internal Storage" ) # Internal
     log i "Internal selected"
-    rdhome="$HOME/retrodeck"
-    if [[ -L "$rdhome" ]]; then #Remove old symlink from existing install, if it exists
-      unlink "$rdhome"
+    rd_home_path="$HOME/retrodeck"
+    if [[ -L "$rd_home_path" ]]; then #Remove old symlink from existing install, if it exists
+      unlink "$rd_home_path"
     fi
   ;;
 
@@ -747,7 +747,7 @@ finit() {
         log i "Now quitting"
         quit_retrodeck
     else
-      rdhome="$sdcard/retrodeck"
+      rd_home_path="$sdcard/retrodeck"
     fi
   ;;
 
@@ -759,8 +759,8 @@ finit() {
       --ok-label "Browse" \
       --text="Please choose the root folder for the RetroDECK data.\nA retrodeck folder will be created starting from the directory that you selected."
       sdcard="$(finit_browse)" # Calling the browse function
-      rdhome="$sdcard/retrodeck"
-      if [[ -z "$rdhome" ]]; then # If user hit the cancel button
+      rd_home_path="$sdcard/retrodeck"
+      if [[ -z "$rd_home_path" ]]; then # If user hit the cancel button
         rm -f "$rd_conf" # Cleanup unfinished retrodeck.cfg if first install is interrupted
         exit 2
       fi
@@ -768,7 +768,7 @@ finit() {
 
   esac
 
-  log i "\"retrodeck\" folder will be located in \"$rdhome\""
+  log i "\"retrodeck\" folder will be located in \"$rd_home_path\""
 
   prepare_component "reset" "retrodeck" # Parse the [paths] section of retrodeck.cfg and set the value of / create all needed folders
 
@@ -825,7 +825,7 @@ finit() {
   rd_zenity --info --no-wrap \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
     --title "RetroDECK Setup Complete" \
-    --text="RetroDECK setup is complete!\n\nPlease place your <span foreground='$purple'><b>game files</b></span> in the following directory: <span foreground='$purple'><b>$rdhome/roms\n\n</b></span>and your <span foreground='$purple'><b>BIOS</b></span> files in: <span foreground='$purple'><b>$rdhome/bios\n\n</b></span>You can use the <span foreground='$purple'><b>BIOS checker tool</b></span> available trough the <span foreground='$purple'><b>RetroDECK Configurator</b></span>\nor refer to the <span foreground='$purple'><b>RetroDECK WIKI</b></span> for more information about the required BIOS files and their proper paths.\n\nYou can now start using RetroDECK."
+    --text="RetroDECK setup is complete!\n\nPlease place your <span foreground='$purple'><b>game files</b></span> in the following directory: <span foreground='$purple'><b>$rd_home_path/roms\n\n</b></span>and your <span foreground='$purple'><b>BIOS</b></span> files in: <span foreground='$purple'><b>$rd_home_path/bios\n\n</b></span>You can use the <span foreground='$purple'><b>BIOS checker tool</b></span> available trough the <span foreground='$purple'><b>RetroDECK Configurator</b></span>\nor refer to the <span foreground='$purple'><b>RetroDECK WIKI</b></span> for more information about the required BIOS files and their proper paths.\n\nYou can now start using RetroDECK."
 }
 
 install_retrodeck_starterpack() {
@@ -894,7 +894,7 @@ deploy_helper_files() {
     if [[ ! -z "$file" ]] && [[ ! -z "$dest" ]]; then
       eval current_dest="$dest"
       log d "Copying helper file $file to $current_dest"
-      cp -f "$helper_files_folder/$file" "$current_dest/$file"
+      cp -f "$helper_files_path/$file" "$current_dest/$file"
     fi
   done <<< "$helper_files"
 }
@@ -951,8 +951,8 @@ install_release() {
   fi
 
   (
-    mkdir -p "$rdhome/RetroDECK_Updates"
-    cd "$rdhome/RetroDECK_Updates"
+    mkdir -p "$rd_home_path/RetroDECK_Updates"
+    cd "$rd_home_path/RetroDECK_Updates"
 
     log d "Assets for release $1:"
     asset_names=$(echo "$release_info" | jq -r '.assets[].browser_download_url')
@@ -969,11 +969,11 @@ install_release() {
       if [[ "$asset" == *".flatpak"* ]]; then
         flatpak_assets+=("$asset")
         log d "Found flatpak asset: $asset"
-        log d "downloading it to $rdhome/RetroDECK_Updates"
-        if ! wget -q -O "$rdhome/RetroDECK_Updates/$(basename "$asset")" "$asset"; then
+        log d "downloading it to $rd_home_path/RetroDECK_Updates"
+        if ! wget -q -O "$rd_home_path/RetroDECK_Updates/$(basename "$asset")" "$asset"; then
           log e "Failed to download $asset"
           configurator_generic_dialog "Error" "Failed to download the flatpak file: RetroDECK update aborted.\nPlease check your network connection and try again."
-          log d "$rdhome/RetroDECK_Updates folder contents:\n$(ls -l "$rdhome/RetroDECK_Updates")"
+          log d "$rd_home_path/RetroDECK_Updates folder contents:\n$(ls -l "$rd_home_path/RetroDECK_Updates")"
           return 1
         fi
       fi
@@ -981,15 +981,15 @@ install_release() {
 
     # Check for any .7z or .7z.001 files in the download folder and extract them
     local current_dir=$(pwd)
-    cd "$rdhome/RetroDECK_Updates"
+    cd "$rd_home_path/RetroDECK_Updates"
     for archive in *.7z *.7z.001; do
       if [[ -f "$archive" ]]; then
         log d "Found archive $archive, extracting it..."
         if ! 7z x -aoa "$archive" && rm -f *.7z*; then
           log e "Failed to extract $archive"
           configurator_generic_dialog "Error" "Failed to extract the split archive: RetroDECK update aborted."
-          log d "$rdhome/RetroDECK_Updates folder contents:\n$(ls -l "$rdhome/RetroDECK_Updates")"
-          rm -rf "$rdhome/RetroDECK_Updates"
+          log d "$rd_home_path/RetroDECK_Updates folder contents:\n$(ls -l "$rd_home_path/RetroDECK_Updates")"
+          rm -rf "$rd_home_path/RetroDECK_Updates"
           return 1
         fi
       fi
@@ -998,8 +998,8 @@ install_release() {
 
     # Find the .flatpak file and verify its SHA256 checksum if a .sha file exists
     flatpak_name="RetroDECK$iscooker.flatpak"
-    flatpak_path="$rdhome/RetroDECK_Updates/$flatpak_name"
-    sha_file="$rdhome/RetroDECK_Updates/RetroDECK.flatpak$iscooker.sha"
+    flatpak_path="$rd_home_path/RetroDECK_Updates/$flatpak_name"
+    sha_file="$rd_home_path/RetroDECK_Updates/RetroDECK.flatpak$iscooker.sha"
 
     if [[ -f "$flatpak_path" && -f "$sha_file" ]]; then
       log d "Found $flatpak_name and corresponding SHA file: $sha_file"
@@ -1008,7 +1008,7 @@ install_release() {
       if [[ "$expected_sha" != "$actual_sha" ]]; then
         log e "SHA256 mismatch for $flatpak_name! Expected: $expected_sha, Actual: $actual_sha"
         if [[ $(configurator_generic_question_dialog "SHA256 Mismatch" "The SHA256 checksum for $flatpak_name does not match.\nThe file may be corrupted or incomplete.\n\nDo you want to continue with the installation anyway?") != "true" ]]; then
-          rm -rf "$rdhome/RetroDECK_Updates"
+          rm -rf "$rd_home_path/RetroDECK_Updates"
           return 1
         fi
         log w "User decided to continue with installation despite SHA256 mismatch for $flatpak_name"
@@ -1024,7 +1024,7 @@ install_release() {
     flatpak-spawn --host flatpak install --user --bundle --noninteractive -y "$flatpak_file"
 
     # Cleanup
-    rm -rf "$rdhome/RetroDECK_Updates"
+    rm -rf "$rd_home_path/RetroDECK_Updates"
   ) |
   rd_zenity --icon-name=net.retrodeck.retrodeck --progress --no-cancel --pulsate --auto-close \
     --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -1043,7 +1043,7 @@ ponzu() {
   log d "Checking for Ponzu"
 
   local tmp_folder="/tmp/extracted"
-  local ponzu_files=("$rdhome"/ponzu/Citra*.AppImage "$rdhome"/ponzu/citra*.AppImage "$rdhome"/ponzu/Yuzu*.AppImage "$rdhome"/ponzu/yuzu*.AppImage) 
+  local ponzu_files=("$rd_home_path"/ponzu/Citra*.AppImage "$rd_home_path"/ponzu/citra*.AppImage "$rd_home_path"/ponzu/Yuzu*.AppImage "$rd_home_path"/ponzu/yuzu*.AppImage) 
   local data_dir
   local appimage
   local executable
@@ -1111,7 +1111,7 @@ ponzu() {
       rm -rf "$tmp_folder"
     fi
   done
-  rm -rf "$rdhome/ponzu"
+  rm -rf "$rd_home_path/ponzu"
 }
 
 ponzu_remove() {
@@ -1436,18 +1436,18 @@ add_retrodeck_to_steam(){
 
 repair_paths() {
   # This function will verify that all folders defined in the [paths] section of retrodeck.cfg exist
-  # If a folder doesn't exist and is defined outside of rdhome, it will check in rdhome first and have the user browse for them manually if it isn't there either
+  # If a folder doesn't exist and is defined outside of rd_home_path, it will check in rd_home_path first and have the user browse for them manually if it isn't there either
   # USAGE: repair_paths
 
   invalid_path_found="false"
 
   log i "Checking that all RetroDECK paths are valid"
   while IFS= read -r path_name; do
-    if [[ ! $path_name =~ (rdhome|sdcard) ]]; then # Ignore these locations
+    if [[ ! $path_name =~ (rd_home_path|sdcard) ]]; then # Ignore these locations
       local path_value=$(get_setting_value "$rd_conf" "$path_name" "retrodeck" "paths")
       if [[ ! -d "$path_value" ]]; then # If the folder doesn't exist as defined
         log i "$path_name does not exist as defined, config is incorrect"
-        if [[ ! -d "$rdhome/${path_value#*retrodeck/}" ]]; then # If the folder doesn't exist within defined rdhome path
+        if [[ ! -d "$rd_home_path/${path_value#*retrodeck/}" ]]; then # If the folder doesn't exist within defined rd_home_path path
           if [[ ! -d "$sdcard/${path_value#*retrodeck/}" ]]; then # If the folder doesn't exist within defined sdcard path
             log i "$path_name cannot be found at any expected location, having user locate it manually"
             configurator_generic_dialog "RetroDECK Path Repair" "The RetroDECK $path_name was not found in the expected location.\nThis may happen when the folder is moved manually.\n\nPlease browse to the current location of the $path_name."
@@ -1460,9 +1460,9 @@ repair_paths() {
             set_setting_value "$rd_conf" "$path_name" "$new_path" retrodeck "paths"
             invalid_path_found="true"
           fi
-        else # Folder does exist within defined rdhome path, update accordingly
-          log i "$path_name found in $rdhome, correcting path config"
-          new_path="$rdhome/${path_value#*retrodeck/}"
+        else # Folder does exist within defined rd_home_path path, update accordingly
+          log i "$path_name found in $rd_home_path, correcting path config"
+          new_path="$rd_home_path/${path_value#*retrodeck/}"
           set_setting_value "$rd_conf" "$path_name" "$new_path" retrodeck "paths"
           invalid_path_found="true"
         fi
@@ -1521,7 +1521,7 @@ check_if_updated() {
                     log w "Removing RetroDECK data and starting fresh"
                     rm -rf /var
                     rm -rf "$HOME/retrodeck"
-                    rm -rf "$rdhome"
+                    rm -rf "$rd_home_path"
                     source /app/libexec/global.sh
                     finit
                   fi
