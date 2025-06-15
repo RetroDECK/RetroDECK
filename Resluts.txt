@@ -5387,7 +5387,7 @@
 ./retrodeck-flatpak-cooker/files/retrodeck/components/ruffle/component_launcher.sh:arg="$@"
 ./retrodeck-flatpak-cooker/files/retrodeck/components/ruffle/component_launcher.sh:COMPONENT_NAME="ruffle"
 ./retrodeck-flatpak-cooker/files/retrodeck/components/ruffle/component_launcher.sh:RD_MODULES="/app/retrodeck/components"
-./retrodeck-flatpak-cooker/files/retrodeck/components/ruffle/component_launcher.sh:static_invoke="--config /var/data/ruffle --save-directory $saves_folder/ruffle --fullscreen"
+./retrodeck-flatpak-cooker/files/retrodeck/components/ruffle/component_launcher.sh:static_invoke="--config /var/data/ruffle --save-directory $rd_home_saves_path/ruffle --fullscreen"
 ./retrodeck-flatpak-cooker/files/retrodeck/components/solarus/share/applications/org.solarus_games.solarus.Launcher.desktop:Type=Application
 ./retrodeck-flatpak-cooker/files/retrodeck/components/solarus/share/applications/org.solarus_games.solarus.Launcher.desktop:Name=Solarus Launcher
 ./retrodeck-flatpak-cooker/files/retrodeck/components/solarus/share/applications/org.solarus_games.solarus.Launcher.desktop:GenericName=Solarus video games player

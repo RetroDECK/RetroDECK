@@ -18,7 +18,7 @@ var rd_conf: String
 var lockfile: String
 var rd_home_path: String
 var rd_home_roms_path: String
-var saves_folder: String
+var rd_home_saves_path: String
 var states_folder: String
 var rd_home_bios_path: String
 var rd_log: String
@@ -64,7 +64,7 @@ func read_values_states() -> void:
 	rd_log = rd_log_folder + "/retrodeck.log"
 	rd_home_path = config["paths"]["rd_home_path"]
 	rd_home_roms_path = config["paths"]["rd_home_roms_path"]
-	saves_folder = config["paths"]["saves_folder"]
+	rd_home_saves_path = config["paths"]["rd_home_saves_path"]
 	states_folder = config["paths"]["states_folder"]
 	rd_home_bios_path = config["paths"]["rd_home_bios_path"]
 	rd_version = config["version"]

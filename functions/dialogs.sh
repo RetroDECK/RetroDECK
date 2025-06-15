@@ -634,7 +634,7 @@ configurator_bios_checker_dialog() {
 
      while IFS=$'\t' read -r bios_file bios_systems bios_desc required bios_md5 bios_paths; do
 
-      # Expand any embedded shell variables (e.g. $saves_folder or $rd_home_bios_path) with their actual values
+      # Expand any embedded shell variables (e.g. $rd_home_saves_path or $rd_home_bios_path) with their actual values
       bios_paths=$(echo "$bios_paths" | envsubst)
 
       bios_file_found="No"
