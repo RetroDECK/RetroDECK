@@ -17,12 +17,12 @@ source /app/libexec/logger.sh
 rotate_logs
 
 # OS detection
-width=$(grep -oP '\d+(?=x)' /sys/class/graphics/fb0/modes)
-height=$(grep -oP '(?<=x)\d+' /sys/class/graphics/fb0/modes)
-if [[ $width -ne 1280 ]] || [[ $height -ne 800 ]]; then
-  native_resolution=false
+system_display_width=$(grep -oP '\d+(?=x)' /sys/class/graphics/fb0/modes)
+system_display_height=$(grep -oP '(?<=x)\d+' /sys/class/graphics/fb0/modes)
+if [[ $system_display_width -ne 1280 ]] || [[ $system_display_height -ne 800 ]]; then
+  sd_native_resolution=false
 else
-  native_resolution=true
+  sd_native_resolution=true
 fi
 system_distro_name=$(flatpak-spawn --host grep '^ID=' /etc/os-release | cut -d'=' -f2)
 system_distro_version=$(flatpak-spawn --host grep '^VERSION_ID=' /etc/os-release | cut -d'=' -f2)
@@ -37,8 +37,8 @@ if [[ -n $container ]]; then
   log i "Running inside $container environment"
 fi
 log i "GPU: $system_gpu_info"
-log i "Resolution: $width x $height"
-if [[ $native_resolution == true ]]; then
+log i "Resolution: $system_display_width x $system_display_height"
+if [[ $sd_native_resolution == true ]]; then
   log i "Steam Deck native resolution detected"
 fi
 log i "CPU: Using $max_threads out of $system_cpu_cores available CPU cores for multi-threaded operations"
