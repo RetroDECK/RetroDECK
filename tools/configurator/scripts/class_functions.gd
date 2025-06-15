@@ -19,7 +19,7 @@ var lockfile: String
 var rd_home_path: String
 var rd_home_roms_path: String
 var rd_home_saves_path: String
-var states_folder: String
+var rd_home_states_path: String
 var rd_home_bios_path: String
 var rd_log: String
 var rd_log_folder: String
@@ -65,7 +65,7 @@ func read_values_states() -> void:
 	rd_home_path = config["paths"]["rd_home_path"]
 	rd_home_roms_path = config["paths"]["rd_home_roms_path"]
 	rd_home_saves_path = config["paths"]["rd_home_saves_path"]
-	states_folder = config["paths"]["states_folder"]
+	rd_home_states_path = config["paths"]["rd_home_states_path"]
 	rd_home_bios_path = config["paths"]["rd_home_bios_path"]
 	rd_version = config["version"]
 	rd_conf = extract_text(globals_sh_file_path, "rd_conf")

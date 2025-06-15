@@ -64,7 +64,7 @@
 		"rd_home_saves_path": "/run/media/tim/DATA/retrodeck/saves",
 		"rd_home_screenshots_path": "/run/media/tim/DATA/retrodeck/screenshots",
 		"sdcard": "/run/media/mmcblk0p1",
-		"states_folder": "/run/media/tim/DATA/retrodeck/states",
+		"rd_home_states_path": "/run/media/tim/DATA/retrodeck/states",
 		"rd_home_texture_packs_path": "/run/media/tim/DATA/retrodeck/texture_packs",
 		"rd_home_cheats_path": "/run/media/tim/DATA/retrodeck/cheats",
 		"rd_home_themes_path": "/run/media/tim/DATA/retrodeck/themes",

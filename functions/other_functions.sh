@@ -314,7 +314,7 @@ backup_retrodeck_userdata() {
   # It will also rotate backups so that there are only 3 maximum of each type (complete, core or custom)
   # USAGE: backup_retrodeck_userdata complete
   #        backup_retrodeck_userdata core
-  #        backup_retrodeck_userdata custom rd_home_saves_path states_folder /some/other/path
+  #        backup_retrodeck_userdata custom rd_home_saves_path rd_home_states_path /some/other/path
 
   create_dir "$backups_folder"
 
@@ -402,7 +402,7 @@ backup_retrodeck_userdata() {
 
   elif [[ "$backup_type" == "core" ]]; then
     for folder_name in "${!config_paths[@]}"; do
-      if [[ $folder_name =~ (rd_home_saves_path|states_folder|rd_home_logs_path) ]]; then # Only include these paths
+      if [[ $folder_name =~ (rd_home_saves_path|rd_home_states_path|rd_home_logs_path) ]]; then # Only include these paths
         path_value="${config_paths[$folder_name]}"
         if [[ -e "$path_value" ]]; then
           paths_to_backup+=("$path_value")
