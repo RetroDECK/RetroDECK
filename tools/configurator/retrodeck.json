@@ -69,6 +69,7 @@
 		"rd_home_cheats_path": "/run/media/tim/DATA/retrodeck/cheats",
 		"rd_home_themes_path": "/run/media/tim/DATA/retrodeck/themes",
 		"rd_home_shaders_path": "/run/media/tim/DATA/retrodeck/shaders",
+		"rd_home_backups_path": "/run/media/tim/DATA/retrodeck/backups",
 		"rd_home_storage_path": "/run/media/tim/DATA/retrodeck/storage"
 	},
 	"quick_resume": {

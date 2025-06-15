@@ -42,9 +42,9 @@ multi_user_enable_multi_user_mode() {
   fi
   if [[ -d "$multi_user_data_folder" && $(ls -1 "$multi_user_data_folder" | wc -l) -gt 0 ]]; then # If multi-user data folder exists from prior use and is not empty
     if [[ -d "$multi_user_data_folder/$SteamAppUser" ]]; then # Current user has an existing save folder
-      configurator_generic_dialog "RetroDECK Multi-User Mode" "The current user $SteamAppUser has an existing folder in the multi-user data folder.\n\nThe saves here are likely older than the ones currently used by RetroDECK.\n\nThe old saves will be backed up to $backups_folder and the current saves will be loaded into the multi-user data folder."
-      create_dir "$backups_folder"
-      tar -C "$multi_user_data_folder" -cahf "$backups_folder/multi-user-backup_$SteamAppUser_$(date +"%Y_%m_%d").zip" "$SteamAppUser"
+      configurator_generic_dialog "RetroDECK Multi-User Mode" "The current user $SteamAppUser has an existing folder in the multi-user data folder.\n\nThe saves here are likely older than the ones currently used by RetroDECK.\n\nThe old saves will be backed up to $rd_home_backups_path and the current saves will be loaded into the multi-user data folder."
+      create_dir "$rd_home_backups_path"
+      tar -C "$multi_user_data_folder" -cahf "$rd_home_backups_path/multi-user-backup_$SteamAppUser_$(date +"%Y_%m_%d").zip" "$SteamAppUser"
       rm -rf "$multi_user_data_folder/$SteamAppUser" # Remove stale data after backup
     fi
   fi

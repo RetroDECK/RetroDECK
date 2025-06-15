@@ -36,7 +36,7 @@ post_update() {
         log i "User chose to backup some userdata prior to update."
         while read -r config_line; do
           local current_setting_name=$(get_setting_name "$config_line" "retrodeck")
-          if [[ ! $current_setting_name =~ (rd_home_path|sdcard|backups_folder) ]]; then # Ignore these locations
+          if [[ ! $current_setting_name =~ (rd_home_path|sdcard|rd_home_backups_path) ]]; then # Ignore these locations
           log d "Adding $current_setting_name to compressible paths."
             local current_setting_value=$(get_setting_value "$rd_conf" "$current_setting_name" "retrodeck" "paths")
             compressible_paths=("${compressible_paths[@]}" "false" "$current_setting_name" "$current_setting_value")
