@@ -96,7 +96,7 @@
 ./functions/global.sh:system_distro_name=$(flatpak-spawn --host grep '^ID=' /etc/os-release | cut -d'=' -f2)
 ./functions/global.sh:system_distro_version=$(flatpak-spawn --host grep '^VERSION_ID=' /etc/os-release | cut -d'=' -f2)
 ./functions/global.sh:system_gpu_info=$(flatpak-spawn --host lspci | grep -i 'vga\|3d\|2d')
-./functions/global.sh:max_threads=$(echo $(($(nproc) / 2)))
+./functions/global.sh:system_cpu_max_threads=$(echo $(($(nproc) / 2)))
 ./functions/global.sh:rd_components="/app/retrodeck/components"
 ./functions/global.sh:rd_shared_libs="/app/retrodeck/components/shared-libs"
 ./net.retrodeck.retrodeck.Configurator.desktop:Name=RetroDECK Configurator

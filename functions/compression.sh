@@ -166,7 +166,7 @@ find_compatible_games() {
   log d "compression_targets: $compression_targets"
 
   while IFS= read -r system; do
-    while (( $(jobs -p | wc -l) >= $max_threads )); do # Wait for a background task to finish if max_threads has been hit
+    while (( $(jobs -p | wc -l) >= $system_cpu_max_threads )); do # Wait for a background task to finish if system_cpu_max_threads has been hit
       sleep 0.1
     done
     (
@@ -176,7 +176,7 @@ find_compatible_games() {
       compression_candidates=$(find "$roms_folder/$system" -type f -not -iname "*.txt")
       if [[ -n "$compression_candidates" ]]; then
         while IFS= read -r game; do
-          while (( $(jobs -p | wc -l) >= $max_threads )); do # Wait for a background task to finish if max_threads has been hit
+          while (( $(jobs -p | wc -l) >= $system_cpu_max_threads )); do # Wait for a background task to finish if system_cpu_max_threads has been hit
             sleep 0.1
           done
           (
@@ -302,7 +302,7 @@ cli_compress_all_games() {
 
     while IFS= read -r system # Find and validate all games that are able to be compressed with this compression type
     do
-      while (( $(jobs -p | wc -l) >= $max_threads )); do # Wait for a background task to finish if max_threads has been hit
+      while (( $(jobs -p | wc -l) >= $system_cpu_max_threads )); do # Wait for a background task to finish if system_cpu_max_threads has been hit
       sleep 0.1
       done
       (
@@ -311,7 +311,7 @@ cli_compress_all_games() {
         log i "Checking files for $system"
         while IFS= read -r file
         do
-          while (( $(jobs -p | wc -l) >= $max_threads )); do # Wait for a background task to finish if max_threads has been hit
+          while (( $(jobs -p | wc -l) >= $system_cpu_max_threads )); do # Wait for a background task to finish if system_cpu_max_threads has been hit
             sleep 0.1
           done
           (

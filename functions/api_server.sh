@@ -427,7 +427,7 @@ process_request() {
           fi
 
           while read -r game; do
-            while (( $(jobs -p | wc -l) >= $max_threads )); do
+            while (( $(jobs -p | wc -l) >= $system_cpu_max_threads )); do
             sleep 0.1
             done
             (

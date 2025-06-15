@@ -38,7 +38,7 @@ api_get_compressible_games() {
   echo '[]' > "$compressible_games_list"
 
   while IFS= read -r system; do
-    while (( $(jobs -p | wc -l) >= $max_threads )); do # Wait for a background task to finish if max_threads has been hit
+    while (( $(jobs -p | wc -l) >= $system_cpu_max_threads )); do # Wait for a background task to finish if system_cpu_max_threads has been hit
       sleep 0.1
     done
     (
@@ -47,7 +47,7 @@ api_get_compressible_games() {
       compression_candidates=$(find "$roms_folder/$system" -type f -not -iname "*.txt")
       if [[ -n "$compression_candidates" ]]; then
         while IFS= read -r game; do
-          while (( $(jobs -p | wc -l) >= $max_threads )); do # Wait for a background task to finish if max_threads has been hit
+          while (( $(jobs -p | wc -l) >= $system_cpu_max_threads )); do # Wait for a background task to finish if system_cpu_max_threads has been hit
             sleep 0.1
           done
           (
@@ -157,7 +157,7 @@ api_get_component() {
   echo '[]' > "$all_components_obj"
 
   while IFS= read -r manifest_file; do
-    while (( $(jobs -p | wc -l) >= $max_threads )); do # Wait for a background task to finish if max_threads has been hit
+    while (( $(jobs -p | wc -l) >= $system_cpu_max_threads )); do # Wait for a background task to finish if system_cpu_max_threads has been hit
       sleep 0.1
     done
     (
@@ -278,7 +278,7 @@ api_get_bios_file_status() {
   echo '[]' > "$bios_files"
 
   while read -r entry; do
-    while (( $(jobs -p | wc -l) >= $max_threads )); do # Wait for a background task to finish if max_threads has been hit
+    while (( $(jobs -p | wc -l) >= $system_cpu_max_threads )); do # Wait for a background task to finish if system_cpu_max_threads has been hit
       sleep 0.1
     done
     (
@@ -414,7 +414,7 @@ api_get_empty_rom_folders() {
   local all_helper_files=($(jq -r '.helper_files | to_entries | .[] | .value.filename' "$features"))
 
   while IFS= read -r system; do
-    while (( $(jobs -p | wc -l) >= $max_threads )); do # Wait for a background task to finish if max_threads has been hit
+    while (( $(jobs -p | wc -l) >= $system_cpu_max_threads )); do # Wait for a background task to finish if system_cpu_max_threads has been hit
       sleep 0.1
     done
     (

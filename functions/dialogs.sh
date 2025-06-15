@@ -514,7 +514,7 @@ configurator_compress_multiple_games_dialog() {
 
   (
   for game_line in "${games_to_compress[@]}"; do
-    while (( $(jobs -p | wc -l) >= $max_threads )); do
+    while (( $(jobs -p | wc -l) >= $system_cpu_system_cpu_max_threads )); do
     sleep 0.1
     done
     (
