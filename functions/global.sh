@@ -63,11 +63,11 @@ if [ ! -d "$rd_xdg_config_logs_path" ]; then
 fi
 
 # Initialize the API location and required files, if they don't already exist
-if [[ ! -d "$rd_api_dir" ]]; then
-  create_dir "$rd_api_dir"
+if [[ ! -d "$api_path" ]]; then
+  create_dir "$api_path"
 fi
-if [[ ! -e "$RD_FILE_LOCK" ]]; then
-  touch "$RD_FILE_LOCK"
+if [[ ! -e "$api_lockfile" ]]; then
+  touch "$api_lockfile"
 fi
 
 # We moved the lockfile in $XDG_CONFIG_HOME/retrodeck in order to solve issue #53 - Remove in a few versions

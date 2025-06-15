@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Set up paths for named pipes (same as in the server)
-rd_api_dir="$HOME/.var/app/net.retrodeck.retrodeck/config/retrodeck/api"
-REQUEST_PIPE="$rd_api_dir/retrodeck_api_pipe"
+api_path="$HOME/.var/app/net.retrodeck.retrodeck/config/retrodeck/api"
+api_request_pipe="$api_path/retrodeck_api_pipe"
 
 # Function to send a request and get a response
 send_request() {
@@ -10,19 +10,19 @@ send_request() {
   local timeout="${2:-5}"
 
   # Check if pipes exist
-  if [[ ! -p "$REQUEST_PIPE" ]]; then
-      echo "Error: Request pipe does not exist at $REQUEST_PIPE" >&2
+  if [[ ! -p "$api_request_pipe" ]]; then
+      echo "Error: Request pipe does not exist at $api_request_pipe" >&2
       echo "Make sure the API server is running." >&2
       return 1
   fi
 
   # Create a unique request ID
   local request_id="client_$(date +%s)_$$"
-  local response_pipe="$rd_api_dir/response_${request_id}"
+  local api_response_pipe="$api_path/response_${request_id}"
 
   # Create response pipe
-  mkfifo "$response_pipe"
-  chmod 600 "$response_pipe"
+  mkfifo "$api_response_pipe"
+  chmod 600 "$api_response_pipe"
 
   # Add request_id to the JSON if it doesn't have one already
   # First, validate JSON and then add the request_id
@@ -42,8 +42,8 @@ send_request() {
   # Use 'cat' instead of 'read' to capture multiline responses
   local response
   # Write to pipe first, then read from response pipe
-  echo "$request" > "$REQUEST_PIPE"
-  response=$(timeout "$timeout" cat "$response_pipe")
+  echo "$request" > "$api_request_pipe"
+  response=$(timeout "$timeout" cat "$api_api_api_api_response_pipe")
 
   # Clean up response pipe
   rm -f "$response_pipe"

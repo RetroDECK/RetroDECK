@@ -61,8 +61,8 @@
 ./automation_tools/manage_components.sh:CICD="false"
 ./automation_tools/manage_components.sh:COMPONENTS_DIR=""
 ./automation_tools/manage_components.sh:POSITIONAL_ARGS=()
-./developer_toolbox/api_test_client.sh:rd_api_dir="$HOME/.var/app/net.retrodeck.retrodeck/config/retrodeck/api"
-./developer_toolbox/api_test_client.sh:REQUEST_PIPE="$rd_api_dir/retrodeck_api_pipe"
+./developer_toolbox/api_test_client.sh:api_path="$HOME/.var/app/net.retrodeck.retrodeck/config/retrodeck/api"
+./developer_toolbox/api_test_client.sh:api_request_pipe="$api_path/retrodeck_api_pipe"
 ./developer_toolbox/api_test_client.sh:ACTION=""
 ./developer_toolbox/api_test_client.sh:TIMEOUT=5
 ./developer_toolbox/cook_okonomiyaki.sh:branches=(

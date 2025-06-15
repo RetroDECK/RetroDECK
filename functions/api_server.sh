@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # This is the main processing point for the RetroDECK API
-# It will accept JSON objects as requests in a single FIFO request pipe ($REQUEST_PIPE)
+# It will accept JSON objects as requests in a single FIFO request pipe ($api_request_pipe)
 # and return each processed response through a unique named pipe, which MUST be created by the requesting client.
 # Each JSON object needs, at minimum a "action" element with a valid value and a "request_id" with a unique value.
 # Each processed response will be returned on a FIFO named pipe at the location "/tmp/response_$request_id" so that actions can be processed asynchronously
@@ -25,33 +25,33 @@ esac
 }
 
 start_server() {
-  if [[ -f "$PID_FILE" ]] && kill -0 "$(cat "$PID_FILE")" 2>/dev/null; then
-    log d "Server is already running (PID: $(cat "$PID_FILE"))"
+  if [[ -f "$api_pid_file" ]] && kill -0 "$(cat "$api_pid_file")" 2>/dev/null; then
+    log d "Server is already running (PID: $(cat "$api_pid_file"))"
     return 1
   fi
 
-  if [[ ! -p "$REQUEST_PIPE" ]]; then # Create the request pipe if it doesn't exist.
-    mkfifo "$REQUEST_PIPE"
-    chmod 600 "$REQUEST_PIPE"
+  if [[ ! -p "$api_request_pipe" ]]; then # Create the request pipe if it doesn't exist.
+    mkfifo "$api_request_pipe"
+    chmod 600 "$api_request_pipe"
   fi
 
   run_server & # Run server in background
   local SERVER_PID=$!
-  echo "$SERVER_PID" > "$PID_FILE"
+  echo "$SERVER_PID" > "$api_pid_file"
   log d "Server started (PID: $SERVER_PID)"
 }
 
 stop_server() {
-  if [[ -f "$PID_FILE" ]]; then
+  if [[ -f "$api_pid_file" ]]; then
     local PID
-    PID=$(cat "$PID_FILE")
+    PID=$(cat "$api_pid_file")
     if kill "$PID" 2>/dev/null; then
       log d "Stopping server (PID: $PID)..."
-      rm -f "$PID_FILE" "$REQUEST_PIPE"
+      rm -f "$api_pid_file" "$api_request_pipe"
       return 0
     else
       log d "Server not running; cleaning up residual files"
-      rm -f "$PID_FILE" "$REQUEST_PIPE"
+      rm -f "$api_pid_file" "$api_request_pipe"
       return 1
     fi
   else
@@ -61,8 +61,8 @@ stop_server() {
 }
 
 status_server() {
-  if [[ -f "$PID_FILE" ]] && kill -0 "$(cat "$PID_FILE")" 2>/dev/null; then
-    log d "Server is running (PID: $(cat "$PID_FILE"))."
+  if [[ -f "$api_pid_file" ]] && kill -0 "$(cat "$api_pid_file")" 2>/dev/null; then
+    log d "Server is running (PID: $(cat "$api_pid_file"))."
   else
     log d "Server is not running."
   fi
@@ -70,12 +70,12 @@ status_server() {
 
 run_server() {
   log d "Server is running with PID $$ (Process Group $$)..."
-  log d "Request pipe: $REQUEST_PIPE"
+  log d "Request pipe: $api_request_pipe"
 
   cleanup() {
     # Cleanup function to ensure named pipe is removed on exit
     log d "Cleaning up server resources..."
-    rm -f "$PID_FILE" "$REQUEST_PIPE"
+    rm -f "$api_pid_file" "$api_request_pipe"
     exit 0
   }
 
@@ -92,7 +92,7 @@ run_server() {
         buffer="" # Clear the buffer for the next request.
       fi
     fi
-  done < "$REQUEST_PIPE"
+  done < "$api_request_pipe"
 }
 
 process_request() {
@@ -120,20 +120,20 @@ process_request() {
     return 1
   fi
 
-  local response_pipe="$rd_api_dir/response_${request_id}"
+  local api_response_pipe="$api_path/response_${request_id}"
 
-  if [[ ! -p "$response_pipe" ]]; then
-    echo "Error: Response pipe $response_pipe does not exist" >&2
+  if [[ ! -p "$api_response_pipe" ]]; then
+    echo "Error: Response pipe $api_response_pipe does not exist" >&2
     return 1
   fi
 
   if [[ -z "$action" ]]; then
-    echo "{\"status\":\"error\",\"message\":\"Missing required field: action\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+    echo "{\"status\":\"error\",\"message\":\"Missing required field: action\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
     return 1
   fi
 
   if [[ -z "$api_version" ]]; then
-    echo "{\"status\":\"error\",\"message\":\"Missing required field: api_version\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+    echo "{\"status\":\"error\",\"message\":\"Missing required field: api_version\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
     return 1
   fi
 
@@ -146,7 +146,7 @@ process_request() {
   case "$action" in
 
     "check_status" )
-      echo "{\"status\":\"success\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+      echo "{\"status\":\"success\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
       ;;
 
     "get" )
@@ -154,7 +154,7 @@ process_request() {
 
         "compressible_games" )
           if [[ -z "$request_data" ]]; then
-            echo "{\"status\":\"error\",\"message\":\"Missing required field: data\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+            echo "{\"status\":\"error\",\"message\":\"Missing required field: data\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
             return 1
           fi
 
@@ -162,18 +162,18 @@ process_request() {
           if [[ -n "$compression_format" ]]; then
             local result
             if result=$(api_get_compressible_games "$compression_format"); then
-              echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
+              echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$api_response_pipe"
             else
-              echo "{\"status\":\"error\",\"message\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
+              echo "{\"status\":\"error\",\"message\":$result,\"request_id\":\"$request_id\"}" > "$api_response_pipe"
             fi
           else
-            echo "{\"status\":\"error\",\"message\":\"missing request value: format\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+            echo "{\"status\":\"error\",\"message\":\"missing request value: format\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
           fi
           ;;
 
         "component" )
           if [[ -z "$request_data" ]]; then
-            echo "{\"status\":\"error\",\"message\":\"Missing required field: data\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+            echo "{\"status\":\"error\",\"message\":\"Missing required field: data\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
             return 1
           fi
 
@@ -183,12 +183,12 @@ process_request() {
           if [[ -n "$component" ]]; then
             local result
             if result=$(api_get_component "$component"); then
-              echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
+              echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$api_response_pipe"
             else
-              echo "{\"status\":\"error\",\"message\":\"$result\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+              echo "{\"status\":\"error\",\"message\":\"$result\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
             fi
           else
-            echo "{\"status\":\"error\",\"message\":\"missing request value: component\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+            echo "{\"status\":\"error\",\"message\":\"missing request value: component\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
           fi
         ;;
 
@@ -196,9 +196,9 @@ process_request() {
           local result
           result=$(cat "$rd_conf" | jq .)
           if [[ -n "$result" ]]; then
-            echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
+            echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$api_response_pipe"
           else
-            echo "{\"status\":\"error\",\"message\":\"retrodeck settings could not be read\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+            echo "{\"status\":\"error\",\"message\":\"retrodeck settings could not be read\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
           fi
         ;;
 
@@ -206,15 +206,15 @@ process_request() {
           local result
           result=$(jq -r '.incompatible_presets' $features)
           if [[ -n "$result" ]] then
-            echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
+            echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$api_response_pipe"
           else
-            echo "{\"status\":\"error\",\"message\":\"conflicting presets information could not be read\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+            echo "{\"status\":\"error\",\"message\":\"conflicting presets information could not be read\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
           fi
         ;;
 
         "setting_value" )
           if [[ -z "$request_data" ]]; then
-            echo "{\"status\":\"error\",\"message\":\"Missing required field: data\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+            echo "{\"status\":\"error\",\"message\":\"Missing required field: data\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
             return 1
           fi
 
@@ -227,15 +227,15 @@ process_request() {
             local result
             setting_file=$(echo "$setting_file" | envsubst) # Expand supplied var names, if applicable
             result=$(echo "{\"setting_name\":\"$setting_name\",\"setting_value\":\"$(get_setting_value "$setting_file" "$setting_name" "$system_name" "$section_name")\"}" | jq .)
-            echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
+            echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$api_response_pipe"
           else
-            echo "{\"status\":\"error\",\"message\":\"missing one or more request values\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+            echo "{\"status\":\"error\",\"message\":\"missing one or more request values\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
           fi
         ;;
 
         "current_preset_state" )
           if [[ -z "$request_data" ]]; then
-            echo "{\"status\":\"error\",\"message\":\"Missing required field: data\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+            echo "{\"status\":\"error\",\"message\":\"Missing required field: data\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
             return 1
           fi
 
@@ -245,20 +245,20 @@ process_request() {
           if [[ -n "$preset" ]]; then
             local result
             if result=$(api_get_current_preset_state "$preset" "$component"); then
-              echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
+              echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$api_response_pipe"
             else
-              echo "{\"status\":\"error\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+              echo "{\"status\":\"error\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
             fi
           else
-            echo "{\"status\":\"error\",\"message\":\"missing request value: preset\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+            echo "{\"status\":\"error\",\"message\":\"missing request value: preset\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
           fi
         ;;
 
         "bios_file_status" )
           if result=$(api_get_bios_file_status); then
-            echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
+            echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$api_response_pipe"
           else
-            echo "{\"status\":\"error\",\"message\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
+            echo "{\"status\":\"error\",\"message\":$result,\"request_id\":\"$request_id\"}" > "$api_response_pipe"
           fi
         ;;
 
@@ -266,9 +266,9 @@ process_request() {
           local result
 
           if result="$(api_get_multifile_game_structure)"; then
-            echo "{\"status\":\"success\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+            echo "{\"status\":\"success\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
           else
-            echo "{\"status\":\"error\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
+            echo "{\"status\":\"error\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$api_response_pipe"
           fi
         ;;
 
@@ -276,9 +276,9 @@ process_request() {
           local result
 
           if result="$(api_get_empty_rom_folders)"; then
-            echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
+            echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$api_response_pipe"
           else
-            echo "{\"status\":\"error\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+            echo "{\"status\":\"error\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
           fi
         ;;
 
@@ -286,9 +286,9 @@ process_request() {
           local result
 
           if result="$(api_get_retrodeck_credits)"; then
-            echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
+            echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$api_response_pipe"
           else
-            echo "{\"status\":\"error\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+            echo "{\"status\":\"error\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
           fi
         ;;
 
@@ -296,15 +296,15 @@ process_request() {
           local result
 
           if result="$(api_get_retrodeck_versions)"; then
-            echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
+            echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$api_response_pipe"
           else
-            echo "{\"status\":\"error\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+            echo "{\"status\":\"error\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
           fi
         ;;
 
         "retrodeck_changelog" )
           if [[ -z "$request_data" ]]; then
-            echo "{\"status\":\"error\",\"message\":\"Missing required field: version\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+            echo "{\"status\":\"error\",\"message\":\"Missing required field: version\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
             return 1
           fi
 
@@ -313,24 +313,24 @@ process_request() {
             local result
 
             if result="$(api_get_retrodeck_changelog $version)"; then
-              echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
+              echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$api_response_pipe"
             else
-              echo "{\"status\":\"error\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+              echo "{\"status\":\"error\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
             fi
           else
-            echo "{\"status\":\"error\",\"message\":\"missing request value: version\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+            echo "{\"status\":\"error\",\"message\":\"missing request value: version\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
           fi
         ;;
 
         * )
-        echo "{\"status\":\"error\",\"message\":\"Unknown request: $request\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+        echo "{\"status\":\"error\",\"message\":\"Unknown request: $request\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
         ;;
       esac
       ;;
 
     "set" )
       if [[ -z "$request_data" ]]; then
-        echo "{\"status\":\"error\",\"message\":\"Missing required field: data\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+        echo "{\"status\":\"error\",\"message\":\"Missing required field: data\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
         return 1
       fi
 
@@ -347,12 +347,12 @@ process_request() {
           if [[ -n "$component" && -n "$preset" && -n "$state" ]]; then
             local result
             if result=$(api_set_preset_state "$component" "$preset" "$state"); then
-              echo "{\"status\":\"success\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+              echo "{\"status\":\"success\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
             else
-              echo "{\"status\":\"error\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+              echo "{\"status\":\"error\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
             fi
           else
-            echo "{\"status\":\"error\",\"message\":\"missing one or more required request values\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+            echo "{\"status\":\"error\",\"message\":\"missing one or more required request values\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
           fi
         ;;
 
@@ -375,9 +375,9 @@ process_request() {
               status="error"
               result=$(echo "{\"response\":\"Setting value on $setting_name was not able to be changed.\"}" | jq .)
             fi
-            echo "{\"status\":\"$status\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
+            echo "{\"status\":\"$status\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$api_response_pipe"
           else
-            echo "{\"status\":\"error\",\"message\":\"missing one or more request values\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+            echo "{\"status\":\"error\",\"message\":\"missing one or more request values\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
           fi
         ;;
 
@@ -397,21 +397,21 @@ process_request() {
               status="error"
               result=$(echo "{\"response\":\"setting value on $setting_name was not able to be changed\"}" | jq .)
             fi
-            echo "{\"status\":\"$status\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
+            echo "{\"status\":\"$status\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$api_response_pipe"
           else
-            echo "{\"status\":\"error\",\"message\":\"missing one or more request values\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+            echo "{\"status\":\"error\",\"message\":\"missing one or more request values\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
           fi
         ;;
 
         * )
-        echo "{\"status\":\"error\",\"message\":\"Unknown request: $request\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+        echo "{\"status\":\"error\",\"message\":\"Unknown request: $request\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
         ;;
       esac
     ;;
 
     "do" )
       if [[ -z "$request_data" ]]; then
-        echo "{\"status\":\"error\",\"message\":\"Missing required field: data\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+        echo "{\"status\":\"error\",\"message\":\"Missing required field: data\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
         return 1
       fi
 
@@ -443,7 +443,7 @@ process_request() {
           done <<< "$(jq -r '.games.[].game' <<< "$request_data")"
           wait # wait for background tasks to finish
 
-          echo "{\"status\":\"success\",\"result\":\"The compression process is complete\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+          echo "{\"status\":\"success\",\"result\":\"The compression process is complete\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
         ;;
 
         "reset_component" )
@@ -453,12 +453,12 @@ process_request() {
 
           if [[ -n "$component_name" ]]; then
             if prepare_component "reset" "$component_name"; then
-              echo "{\"status\":\"success\",\"result\":\"reset of component $component_name is complete\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+              echo "{\"status\":\"success\",\"result\":\"reset of component $component_name is complete\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
             else
-              echo "{\"status\":\"error\",\"result\":\"reset of component $component_name could not be completed\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+              echo "{\"status\":\"error\",\"result\":\"reset of component $component_name could not be completed\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
             fi
           else
-            echo "{\"status\":\"error\",\"message\":\"missing request value: component_name\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+            echo "{\"status\":\"error\",\"message\":\"missing request value: component_name\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
           fi
         ;;
 
@@ -472,14 +472,14 @@ process_request() {
           if [[ -n "$rd_dir" ]]; then
             local result
             if result=$(api_do_move_retrodeck_directory "$rd_dir" "$dest"); then
-              echo "{\"status\":\"success\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+              echo "{\"status\":\"success\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
             else
-              echo "{\"status\":\"error\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+              echo "{\"status\":\"error\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
             fi
           elif [[ ! -n "$rd_dir" ]]; then
-            echo "{\"status\":\"error\",\"message\":\"missing request value: rd_dir\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+            echo "{\"status\":\"error\",\"message\":\"missing request value: rd_dir\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
           else
-            echo "{\"status\":\"error\",\"message\":\"missing request value: dest\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+            echo "{\"status\":\"error\",\"message\":\"missing request value: dest\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
           fi
         ;;
 
@@ -491,12 +491,12 @@ process_request() {
 
           if [[ -n "$package_name" ]]; then
             if result=$(api_do_install_retrodeck_package "$package_name"); then
-              echo "{\"status\":\"success\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+              echo "{\"status\":\"success\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
             else
-              echo "{\"status\":\"error\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+              echo "{\"status\":\"error\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
             fi
           else
-            echo "{\"status\":\"error\",\"message\":\"missing request value: package_name\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+            echo "{\"status\":\"error\",\"message\":\"missing request value: package_name\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
           fi
         ;;
 
@@ -510,26 +510,26 @@ process_request() {
 
           if [[ -n "$cheevos_username" && -n "$cheevos_password" ]]; then
             if result=$(api_do_cheevos_login "$cheevos_username" "$cheevos_password"); then
-              echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$response_pipe"
+              echo "{\"status\":\"success\",\"result\":$result,\"request_id\":\"$request_id\"}" > "$api_response_pipe"
             else
-              echo "{\"status\":\"error\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+              echo "{\"status\":\"error\",\"result\":\"$result\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
             fi
           else
-            echo "{\"status\":\"error\",\"message\":\"missing value for username or password\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+            echo "{\"status\":\"error\",\"message\":\"missing value for username or password\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
           fi
         ;;
 
         * )
-        echo "{\"status\":\"error\",\"message\":\"Unknown request: $request\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+        echo "{\"status\":\"error\",\"message\":\"Unknown request: $request\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
         ;;
       esac
     ;;
 
     * )
-      echo "{\"status\":\"error\",\"message\":\"Unknown action: $action\",\"request_id\":\"$request_id\"}" > "$response_pipe"
+      echo "{\"status\":\"error\",\"message\":\"Unknown action: $action\",\"request_id\":\"$request_id\"}" > "$api_response_pipe"
     ;;
   esac
 
   # Remove response pipe after writing response
-  rm -f "$response_pipe"
+  rm -f "$api_response_pipe"
 }

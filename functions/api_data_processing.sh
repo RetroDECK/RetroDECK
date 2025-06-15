@@ -69,7 +69,7 @@ api_get_compressible_games() {
                 (
                 flock -x 200
                 jq --argjson obj "$json_obj" '. + [$obj]' "$compressible_games_list" > "$compressible_games_list.tmp" && mv "$compressible_games_list.tmp" "$compressible_games_list"
-                ) 200>"$RD_FILE_LOCK"
+                ) 200>"$api_lockfile"
               fi
               ;;
             "zip")
@@ -82,7 +82,7 @@ api_get_compressible_games() {
                 (
                 flock -x 200
                 jq --argjson obj "$json_obj" '. + [$obj]' "$compressible_games_list" > "$compressible_games_list.tmp" && mv "$compressible_games_list.tmp" "$compressible_games_list"
-                ) 200>"$RD_FILE_LOCK"
+                ) 200>"$api_lockfile"
               fi
               ;;
             "rvz")
@@ -95,7 +95,7 @@ api_get_compressible_games() {
                 (
                 flock -x 200
                 jq --argjson obj "$json_obj" '. + [$obj]' "$compressible_games_list" > "$compressible_games_list.tmp" && mv "$compressible_games_list.tmp" "$compressible_games_list"
-                ) 200>"$RD_FILE_LOCK"
+                ) 200>"$api_lockfile"
               fi
               ;;
             "all")
@@ -108,7 +108,7 @@ api_get_compressible_games() {
                 (
                 flock -x 200
                 jq --argjson obj "$json_obj" '. + [$obj]' "$compressible_games_list" > "$compressible_games_list.tmp" && mv "$compressible_games_list.tmp" "$compressible_games_list"
-                ) 200>"$RD_FILE_LOCK"
+                ) 200>"$api_lockfile"
               fi
               ;;
           esac
@@ -187,7 +187,7 @@ api_get_component() {
       (
       flock -x 200
       jq --argjson obj "$json_obj" '. + [$obj]' "$all_components_obj" > "$all_components_obj.tmp" && mv "$all_components_obj.tmp" "$all_components_obj"
-      ) 200>"$RD_FILE_LOCK"
+      ) 200>"$api_lockfile"
     ) &
   done < <(echo "$manifest_files")
   wait # Wait for background tasks to finish
@@ -331,7 +331,7 @@ api_get_bios_file_status() {
     (
     flock -x 200
     jq --argjson new_obj "$json_obj" '. + [$new_obj]' "$bios_files" > "$bios_files.tmp" && mv "$bios_files.tmp" "$bios_files"
-    ) 200>"$RD_FILE_LOCK"
+    ) 200>"$api_lockfile"
   ) &
   wait # wait for background tasks to finish
   done < <(jq -c '.bios | to_entries[]' "$bios_checklist")
@@ -444,7 +444,7 @@ api_get_empty_rom_folders() {
       (
       flock -x 200
       jq --argjson new_obj "$json_obj" '. + [$new_obj]' "$empty_rom_folders_list" > "$empty_rom_folders_list.tmp" && mv "$empty_rom_folders_list.tmp" "$empty_rom_folders_list"
-      ) 200>"$RD_FILE_LOCK"
+      ) 200>"$api_lockfile"
     fi
   ) &
   wait # wait for background tasks to finish

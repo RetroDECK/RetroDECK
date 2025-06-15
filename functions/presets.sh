@@ -241,7 +241,7 @@ fetch_all_presets() {
   # This function fetches all possible presets from the presets directory
   # USAGE: fetch_all_presets [--pretty] [system_name]
 
-  local presets_dir="$config/retrodeck/presets"
+  local rd_config_presets_path="$config/retrodeck/presets"
   local presets=()
   local pretty_presets=()
   local pretty_output=false
@@ -255,7 +255,7 @@ fetch_all_presets() {
   fi
 
   if [[ -n "$system_name" ]]; then
-    preset_file="$presets_dir/${system_name}_presets.cfg"
+    preset_file="$rd_config_presets_path/${system_name}_presets.cfg"
     if [[ -f "$preset_file" ]]; then
       while IFS= read -r line; do
         if [[ $line =~ ^(change|enable)\^([a-zA-Z0-9_]+)\^ ]]; then
@@ -272,7 +272,7 @@ fetch_all_presets() {
       done < "$preset_file"
     fi
   else
-    for preset_file in "$presets_dir"/*_presets.cfg; do
+    for preset_file in "$rd_config_presets_path"/*_presets.cfg; do
       while IFS= read -r line; do
         if [[ $line =~ ^change\^([a-zA-Z0-9_]+)\^ ]]; then
           preset="${BASH_REMATCH[1]}"
