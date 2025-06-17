@@ -115,8 +115,13 @@ create_dir() {
     fi
   fi
 
+  if [[ -z "$1" ]]; then
+    log e "No directory specified for creation"
+    return 1
+  fi
+
   if [[ ! -d "$1" ]]; then
-    mkdir -p "$1" # Create directory if it doesn't exist
+    mkdir -p "$1" #|| log e "Failed to create directory: $1"
     log d "Created directory: $1"
   else
     log d "Directory \"$1\" already exists, skipping."
@@ -143,6 +148,8 @@ download_file() {
 conf_read() {
   # This function will read the RetroDECK config file into memory
   # USAGE: conf_read
+
+  set -o allexport # Export all the variables found during sourcing, for use elsewhere  
 
   if head -n 1 "$rd_conf" | grep -qE '^\s*\{\s*$'; then # If retrodeck.cfg is new JSON format
     while IFS== read -r name value; do
@@ -180,6 +187,7 @@ conf_read() {
       done < "$rd_conf"
     fi
   log d "retrodeck.cfg read and loaded"
+  set +o allexport # Back to normal, otherwise every assigned variable will get exported through the rest of the run
 }
 
 conf_write() {
@@ -240,6 +248,17 @@ dir_prep() {
 
   # Call me with:
   # dir prep "real dir" "symlink location"
+
+  if [[ -z "$1" ]]; then
+    log e "No real directory specified for preparation"
+    return 1
+  fi
+
+  if [[ -z "$2" ]]; then
+    log e "No symlink location specified for preparation"
+    return 1
+  fi
+
   real="$(realpath -s "$1")"
   symlink="$(realpath -s "$2")"
 
@@ -864,6 +883,7 @@ install_retrodeck_controller_profile() {
 create_lock() {
   # creating RetroDECK's lock file and writing the version in the config file
   version=$hard_version
+  log i "Creating RetroDECK lock file in $rd_lockfile"
   touch "$rd_lockfile"
   conf_write
 }
