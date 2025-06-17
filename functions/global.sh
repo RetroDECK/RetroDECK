@@ -6,7 +6,7 @@
 # now disabled as we are importing everything in /app/lib. In case we are breaking something we need to restore this approach
 # export LD_LIBRARY_PATH="/app/retrodeck/lib:/app/retrodeck/lib/debug:/app/retrodeck/lib/pkgconfig:$LD_LIBRARY_PATH"
 
-: "${logging_level:=info}"                  # Initializing the log level variable if not already valued, this will be actually red later from the config file                                                 
+: "${rd_logging_level:=info}"                  # Initializing the log level variable if not already valued, this will be actually red later from the config file                                                 
 rd_xdg_config_logs_path="$XDG_CONFIG_HOME/retrodeck/logs" # Static location to write all RetroDECK-related logs
 if [ -h "$rd_xdg_config_logs_path" ]; then # Check if internal logging folder is already a symlink
   if [ ! -e "$rd_xdg_config_logs_path" ]; then # Check if internal logging folder symlink is broken
@@ -72,7 +72,7 @@ fi
 
 # We moved the lockfile in $XDG_CONFIG_HOME/retrodeck in order to solve issue #53 - Remove in a few versions
 if [[ -f "$HOME/retrodeck/.lock" ]]; then
-  mv "$HOME/retrodeck/.lock" "$lockfile"
+  mv "$HOME/retrodeck/.lock" "$rd_lockfile"
 fi
 
 # If there is no config file I initalize the file with the the default values
@@ -82,10 +82,10 @@ if [[ ! -f "$rd_conf" ]]; then
   # if we are here means that the we are in a new installation, so the version is valorized with the hardcoded one
   # Initializing the variables
   if [[ -z "$version" ]]; then
-    if [[ -f "$lockfile" ]]; then
-      if [[ $(cat "$lockfile") == *"0.4."* ]] || [[ $(cat "$lockfile") == *"0.3."* ]] || [[ $(cat "$lockfile") == *"0.2."* ]] || [[ $(cat "$lockfile") == *"0.1."* ]]; then # If the previous version is very out of date, pre-rd_conf
+    if [[ -f "$rd_lockfile" ]]; then
+      if [[ $(cat "$rd_lockfile") == *"0.4."* ]] || [[ $(cat "$rd_lockfile") == *"0.3."* ]] || [[ $(cat "$rd_lockfile") == *"0.2."* ]] || [[ $(cat "$rd_lockfile") == *"0.1."* ]]; then # If the previous version is very out of date, pre-rd_conf
         log d "Running version workaround"
-        version=$(cat "$lockfile")
+        version=$(cat "$rd_lockfile")
       fi
     else
       version="$hard_version"

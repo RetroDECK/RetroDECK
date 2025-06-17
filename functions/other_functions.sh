@@ -864,7 +864,7 @@ install_retrodeck_controller_profile() {
 create_lock() {
   # creating RetroDECK's lock file and writing the version in the config file
   version=$hard_version
-  touch "$lockfile"
+  touch "$rd_lockfile"
   conf_write
 }
 
@@ -1490,7 +1490,7 @@ sanitize() {
 
 check_if_updated() {
   # Check if an update has happened
-  if [ -f "$lockfile" ]; then
+  if [ -f "$rd_lockfile" ]; then
     if [ "$hard_version" != "$version" ]; then
       log d "Update triggered"
       log d "Lockfile found but the version doesn't match with the config file"
@@ -1501,7 +1501,7 @@ check_if_updated() {
         set_setting_value "$rd_conf" "update_repo" "$cooker_repository_name" retrodeck "options"
         set_setting_value "$rd_conf" "update_check" "true" retrodeck "options"
         set_setting_value "$rd_conf" "developer_options" "true" retrodeck "options"
-        set_setting_value "$rd_conf" "logging_level" "debug" retrodeck "options"
+        set_setting_value "$rd_conf" "rd_logging_level" "debug" retrodeck "options"
         cooker_base_version=$(echo "$version" | cut -d'-' -f2)
         choice=$(rd_zenity --icon-name=net.retrodeck.retrodeck --info --no-wrap --ok-label="Upgrade" --extra-button="Don't Upgrade" --extra-button="Full Wipe and Fresh Install" \
         --window-icon="/app/share/icons/hicolor/scalable/apps/net.retrodeck.retrodeck.svg" \
@@ -1542,7 +1542,7 @@ check_if_updated() {
           set_setting_value "$rd_conf" "update_check" "false" retrodeck "options"
           set_setting_value "$rd_conf" "update_ignore" "" retrodeck "options"
           set_setting_value "$rd_conf" "developer_options" "false" retrodeck "options"
-          set_setting_value "$rd_conf" "logging_level" "info" retrodeck "options"
+          set_setting_value "$rd_conf" "rd_logging_level" "info" retrodeck "options"
         fi
         post_update       # Executing post update script
       fi

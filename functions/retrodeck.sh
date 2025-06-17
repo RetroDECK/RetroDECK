@@ -112,7 +112,7 @@ while [[ $# -gt 0 ]]; do
           exit 0
         ;;
         --debug)
-            logging_level="debug"
+            rd_logging_level="debug"
             shift
             ;;
         --compress-one)
@@ -165,7 +165,7 @@ while [[ $# -gt 0 ]]; do
                 read -r -p "You are about to test upgrading RetroDECK from version $2 to $hard_version. Enter 'y' to continue ot 'n' to start RetroDECK normally: (y/N) " response
                 if [[ ${response,,} == "y" ]]; then
                     version="$2"
-                    logging_level="debug"  # Temporarily enable debug logging
+                    rd_logging_level="debug"  # Temporarily enable debug logging
                     log d "User replyed $response, testing upgrade from version $version"
                     shift 2
                 else

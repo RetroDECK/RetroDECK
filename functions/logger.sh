@@ -2,7 +2,7 @@
 # It logs messages to both the terminal and a specified logfile, supporting multiple log levels.
 # The log function takes three parameters: log level, log message, and optionally the logfile. If no logfile is specified, it writes to retrodeck/logs/retrodeck.log.
 # 
-# Supported logging levels (controlled by the variable 'logging_level'):
+# Supported logging levels (controlled by the variable 'rd_logging_level'):
 # - none: No logs are produced.
 # - info: Logs informational messages (i) and errors (e).
 # - warn: Logs warnings (w), informational messages (i), and errors (e).
@@ -37,8 +37,8 @@ log() {
   export logprefix_info="[INFO]"
   export logprefix_default="[LOG]"
 
-  # Exit immediately if logging_level is "none"
-  if [[ $logging_level == "none" ]]; then
+  # Exit immediately if rd_logging_level is "none"
+  if [[ $rd_logging_level == "none" ]]; then
     return
   fi
 
@@ -59,7 +59,7 @@ log() {
 
   # Internal function to check if the message should be logged
   should_log() {
-    case "$logging_level" in
+    case "$rd_logging_level" in
       debug) return 0 ;;  # Log everything
       info) [[ "$level" == "i" || "$level" == "e" ]] && return 0 ;;
       warn) [[ "$level" != "d" ]] && return 0 ;;

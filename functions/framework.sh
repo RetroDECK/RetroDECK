@@ -679,7 +679,7 @@ prepare_component() {
 
   if [[ "$1" == "factory-reset" ]]; then
     log i "User requested full RetroDECK reset"
-    rm -f "$lockfile" && log d "Lockfile removed"
+    rm -f "$rd_lockfile" && log d "Lockfile removed"
     retrodeck
   fi
 
