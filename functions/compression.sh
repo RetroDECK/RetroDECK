@@ -195,7 +195,7 @@ find_compatible_games() {
                 (
                 flock -x 200
                 echo "${game}^chd" >> "$output_file"
-                ) 200>"$api_lockfile"
+                ) 200>"$rd_file_lock"
               fi
               ;;
             "zip")
@@ -204,7 +204,7 @@ find_compatible_games() {
                 (
                 flock -x 200
                 echo "${game}^zip" >> "$output_file"
-                ) 200>"$api_lockfile"
+                ) 200>"$rd_file_lock"
               fi
               ;;
             "rvz")
@@ -213,7 +213,7 @@ find_compatible_games() {
                 (
                 flock -x 200
                 echo "${game}^rvz" >> "$output_file"
-                ) 200>"$api_lockfile"
+                ) 200>"$rd_file_lock"
               fi
               ;;
             "all")
@@ -222,7 +222,7 @@ find_compatible_games() {
                 (
                 flock -x 200
                 echo "${game}^${compatible_compression_format}" >> "$output_file"
-                ) 200>"$api_lockfile"
+                ) 200>"$rd_file_lock"
               fi
               ;;
           esac
