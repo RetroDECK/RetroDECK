@@ -463,7 +463,7 @@ api_get_empty_rom_folders() {
 api_get_retrodeck_credits() {
   local retrodeck_credits
 
-  if retrodeck_credits="$(jq -n --arg content "$(cat $config/retrodeck/reference_lists/retrodeck_credits.txt)" '{ "credits": $content }')"; then
+  if retrodeck_credits="$(jq -n --arg content "$(cat $rd_core_files/reference_lists/retrodeck_credits.txt)" '{ "credits": $content }')"; then
     echo "$retrodeck_credits"
     return 0
   else

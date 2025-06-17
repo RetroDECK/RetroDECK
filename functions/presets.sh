@@ -241,7 +241,7 @@ fetch_all_presets() {
   # This function fetches all possible presets from the presets directory
   # USAGE: fetch_all_presets [--pretty] [system_name]
 
-  local rd_config_presets_path="$config/retrodeck/presets"
+  local rd_config_presets_path="$rd_core_files/presets"
   local presets=()
   local pretty_presets=()
   local pretty_output=false
